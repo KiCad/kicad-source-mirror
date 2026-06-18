@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 03:01+0000\n"
+"PO-Revision-Date: 2026-06-18 23:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -302,7 +302,7 @@ msgstr "Vzhľad"
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:43
 #: pcbnew/dialogs/dialog_render_job_base.cpp:75
 msgid "Follow PCB Editor"
-msgstr "Nasledovať editor DPS"
+msgstr "Nastaviť podľa editora DPS"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:352
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:724
@@ -2239,7 +2239,7 @@ msgstr "&Zrušiť"
 
 #: common/confirm.cpp:48 common/confirm.cpp:53
 msgid "&Open Anyway"
-msgstr "Aj tak &otvoriť"
+msgstr "&Otvoriť aj napriek tomu"
 
 #: common/confirm.cpp:64 common/confirm.cpp:107
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1198
@@ -2505,7 +2505,7 @@ msgstr "Webová stránka vývojárov - "
 
 #: common/dialog_about/AboutDialog_main.cpp:135
 msgid "Official KiCad library repositories - "
-msgstr "Oficiálne repozitár knižníc KiCad - "
+msgstr "Oficiálne repozitáre knižníc KiCad - "
 
 #: common/dialog_about/AboutDialog_main.cpp:142
 msgid "Bug tracker"
@@ -2754,8 +2754,8 @@ msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
-"Nahradí uložený súbor automaticky uloženou verziou. Predchádzajúci uložený "
-"obsah sa zahodí."
+"Nahradenie uloženého súboru automaticky uloženou verziou. Predchádzajúci "
+"uložený obsah bude zahodený."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
 msgid "Keep current"
@@ -4229,7 +4229,7 @@ msgstr "Zobraziť prepínač predvolieb"
 
 #: common/dialogs/git/dialog_git_commit.cpp:37
 msgid "Commit Changes"
-msgstr "Odovzdať zmeny"
+msgstr "Commit-núť zmeny"
 
 #: common/dialogs/git/dialog_git_commit.cpp:47
 #: common/dialogs/panel_embedded_files_base.cpp:36
@@ -4717,7 +4717,7 @@ msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
-"Pokiaľ je kurzor myši presunúť na obrazovku okna editora schém alebo DPS, "
+"Pokiaľ je kurzor myši presunuté na obrazovku okna editora schém alebo DPS, "
 "toto okno je presunuté do popredia."
 
 #: common/dialogs/panel_common_settings_base.cpp:184
@@ -5130,7 +5130,7 @@ msgstr "Preskočiť"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:646
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:736
 msgid "Add Anyway"
-msgstr "Pridať aj tak"
+msgstr "Pridať aj napriek tomu"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:879
 #: eeschema/dialogs/panel_sym_lib_table.cpp:924
@@ -5213,7 +5213,7 @@ msgstr "Dostupné náhrady cesty:"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:105
 msgid "This is a read-only table which shows pertinent environment variables."
 msgstr ""
-"Toto je tabuľka len na čítanie, ktorá zobrazuje príslušné premenné "
+"Toto je tabuľka iba na čítanie, ktorá zobrazuje príslušné premenné "
 "prostredia."
 
 #: common/dialogs/panel_embedded_files.cpp:54
@@ -8262,11 +8262,11 @@ msgstr "Súbor sa nenašiel počas checkout operácie."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "Merge conflict encountered."
-msgstr "Nepodarilo sa zlúčiť."
+msgstr "Vyskytol sa konflikt pri zlučovaní."
 
 #: common/git/kicad_git_errors.cpp:56
 msgid "Rebase conflict encountered."
-msgstr "Vyskytol sa konflikt pri obnovení databázy (Rebase)."
+msgstr "Vyskytol sa konflikt pri rebase."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Failed to pull changes from remote repository."
@@ -8346,7 +8346,7 @@ msgstr "Nepodarilo sa vyhľadať: %s"
 #: common/git/libgit_backend.cpp:245 common/git/libgit_backend.cpp:316
 #, c-format
 msgid "Failed to get HEAD reference: %s"
-msgstr "Nepodarilo sa získať referenciu na HEAD: %s"
+msgstr "Nepodarilo sa získať referenciu na 'HEAD': %s"
 
 #: common/git/libgit_backend.cpp:254
 #, c-format
@@ -8365,12 +8365,12 @@ msgstr "Nepodarilo sa vytvoriť commit: %s"
 
 #: common/git/libgit_backend.cpp:307 kicad/project_tree_pane.cpp:2765
 msgid "Cannot amend: the branch has no commits yet."
-msgstr "Nie je možné zmeniť: vetva ešte nemá žiadne commity."
+msgstr "Nie je možné zmeniť: vetva ešte nemá žiadne commit-y."
 
 #: common/git/libgit_backend.cpp:326
 #, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Nepodarilo sa získať HEAD commit: %s"
+msgstr "Nepodarilo sa získať 'HEAD' commit: %s"
 
 #: common/git/libgit_backend.cpp:347
 #, c-format
@@ -8380,22 +8380,22 @@ msgstr "Nepodarilo sa získať nadradený commit: %s"
 #: common/git/libgit_backend.cpp:360
 #, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "Nepodarilo sa získať strom HEAD: %s"
+msgstr "Nepodarilo sa získať strom 'HEAD' : %s"
 
 #: common/git/libgit_backend.cpp:369 common/git/libgit_backend.cpp:392
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "Nepodarilo sa zapísať index: %s"
+msgstr "Nepodarilo sa obnoviť index: %s"
 
 #: common/git/libgit_backend.cpp:383
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "Nepodarilo sa zapísať: %s"
+msgstr "Nepodarilo sa získať nadradenú stromovú štruktúru: %s"
 
 #: common/git/libgit_backend.cpp:461 kicad/project_tree_pane.cpp:3011
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "Nepodarilo sa získať commit: %s"
+msgstr "Nepodarilo sa upraviť commit: %s"
 
 #: common/git/libgit_backend.cpp:488 common/git/libgit_backend.cpp:1067
 #, c-format
@@ -8409,12 +8409,12 @@ msgstr "Nepodarilo sa pripojiť ku vzdialenému: %s"
 
 #: common/git/libgit_backend.cpp:529 common/git/libgit_backend.cpp:1258
 msgid "Could not get repository head"
-msgstr "Nepodarilo sa získať 'head' repozitára"
+msgstr "Nepodarilo sa získať 'HEAD' repozitára"
 
 #: common/git/libgit_backend.cpp:544
 #, c-format
 msgid "Could not push to remote: %s"
-msgstr "Nepodarilo sa odoslať na vzdialený: %s"
+msgstr "Nepodarilo sa push-núť na vzdialený: %s"
 
 #: common/git/libgit_backend.cpp:807
 #, c-format
@@ -8426,9 +8426,9 @@ msgid "No repository available to set up remote"
 msgstr "Nie je k dispozícii žiaden repozitár k nastaveniu ako vzdialený"
 
 #: common/git/libgit_backend.cpp:901
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "Nepodarilo sa vytvoriť vzdialený: %s"
+msgstr "Nepodarilo sa nastaviť vzdialený repozitár: %s"
 
 #: common/git/libgit_backend.cpp:933
 msgid "No repository available"
@@ -8442,7 +8442,7 @@ msgstr "Nepodarilo sa vyhľadať vetvu '%s': %s"
 #: common/git/libgit_backend.cpp:952
 #, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "Nepodarilo sa nájsť hlavičku vetvy pre '%s': %s"
+msgstr "Nepodarilo sa nájsť 'HEAD' vetvy pre '%s': %s"
 
 #: common/git/libgit_backend.cpp:966 common/git/libgit_backend.cpp:991
 #, c-format
@@ -8450,14 +8450,14 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "Nepodarilo sa prepnúť na vetvu '%s': %s"
 
 #: common/git/libgit_backend.cpp:1000
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "Nepodarilo sa vyhľadať vetvu '%s': %s"
+msgstr "Nepodarilo sa vytvoriť lokálnu vetvu '%s': %s"
 
 #: common/git/libgit_backend.cpp:1014
 #, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "Nepodarilo sa aktualizovať referenciu na HEAD pre vetvu '%s': %s"
+msgstr "Nepodarilo sa aktualizovať referenciu na 'HEAD' pre vetvu '%s': %s"
 
 #: common/git/libgit_backend.cpp:1093
 #, c-format
@@ -8490,7 +8490,7 @@ msgstr "Nepodarilo sa zanalyzovať zlúčenie"
 
 #: common/git/libgit_backend.cpp:1202
 msgid "Invalid HEAD.  Cannot merge."
-msgstr "Neplatný HEAD.  Nebolo možné zlúčiť."
+msgstr "Neplatný 'HEAD'.  Nebolo možné zlúčiť."
 
 #: common/git/libgit_backend.cpp:1228
 msgid "Could not access repository configuration"
@@ -8507,7 +8507,7 @@ msgstr "Nepodarilo sa vyhľadať cieľový commit"
 
 #: common/git/libgit_backend.cpp:1292
 msgid "Could not get tree from target commit"
-msgstr "Nepodarilo sa získať strom z cieľového commitu"
+msgstr "Nepodarilo sa získať strom z cieľového commit-u"
 
 #: common/git/libgit_backend.cpp:1342
 #, c-format
@@ -8545,92 +8545,85 @@ msgid "Merge failed: %s"
 msgstr "Nepodarilo sa zlúčiť: %s"
 
 #: common/git/libgit_backend.cpp:1468
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Nepodarilo sa získať index repozitára"
+msgstr "Nepodarilo sa načítať index repozitára po zlúčení."
 
 #: common/git/libgit_backend.cpp:1500
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "Nebolo možné zapísať súbory vykreslenia do priečinka '%s'."
+msgstr "Nebolo možné zapísať výsledok zlúčenia."
 
 #: common/git/libgit_backend.cpp:1508
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Nepodarilo sa získať 'head' repozitára"
+msgstr "Nebolo možné získať 'HEAD' repozitára."
 
 #: common/git/libgit_backend.cpp:1518
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Nepodarilo sa vyhľadať cieľový commit"
+msgstr "Nebolo možné nájsť commit-y na zlúčenie."
 
 #: common/git/libgit_backend.cpp:1527 common/git/libgit_backend.cpp:1712
 msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
-"Nebolo možné vytvoriť podpis commitu.  Nastavte používateľské meno a e-mail "
+"Nebolo možné vytvoriť podpis commit-u.  Nastavte používateľské meno a e-mail "
 "používateľa v konfigurácii gitu."
 
 #: common/git/libgit_backend.cpp:1536
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Zlúčiť prekrývajúcu sa grafiku do plôšok"
+msgstr "Zlúčiť vzdialene sledovanú vetvu do %s"
 
 #: common/git/libgit_backend.cpp:1544
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Nepodarilo sa zlúčiť commit-y"
+msgstr "Nebolo možné vytvoriť commit zo zlúčenia: %s"
 
 #: common/git/libgit_backend.cpp:1561
 msgid ""
 "Cannot pull with rebase: you have unstaged changes. Please commit or stash "
 "them before pulling."
 msgstr ""
-"Nie je možné načítať s rebase: máte unstaged zmeny. Prosím, commit-nite, "
+"Nie je možné pull-núť s rebase: máte unstaged zmeny. Prosím, commit-nite, "
 "alebo stash-nite ich pred načítaním."
 
 #: common/git/libgit_backend.cpp:1574 common/git/libgit_backend.cpp:1725
 #, c-format
 msgid "Rebase failed to start: %s"
-msgstr "Nepodarilo sa spustiť rebase: %s"
+msgstr "Nepodarilo sa vykonať rebase: %s"
 
 #: common/git/libgit_backend.cpp:1590
 #, c-format
 msgid "Rebase commit failed: %s"
-msgstr "Zlyhanie rebase commit: %s"
+msgstr "Zlyhal rebase commit: %s"
 
 #: common/git/libgit_backend.cpp:1598 common/git/libgit_backend.cpp:1764
 #, c-format
 msgid "Rebase finish failed: %s"
-msgstr "Zlyhanie ukončenia rebase: %s"
+msgstr "Zlyhalo ukončenie rebase: %s"
 
 #: common/git/libgit_backend.cpp:1633 common/git/libgit_backend.cpp:1679
 msgid "Another git operation is in progress."
 msgstr "Prebieha iná git operácia."
 
 #: common/git/libgit_backend.cpp:1641 common/git/libgit_backend.cpp:1694
-#, fuzzy
 msgid "Could not find the matching remote branch."
-msgstr "V importovanej knižnici sa nepodarilo nájsť '%s'."
+msgstr "Nepodarilo sa nájsť zodpovedajúcu vzdialenú vetvu."
 
 #: common/git/libgit_backend.cpp:1650 common/git/libgit_backend.cpp:1703
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Nebolo možné otvoriť cestu šablóny '%s'"
+msgstr "Nebolo možné načítať vzdialenú vetvu."
 
 #: common/git/libgit_backend.cpp:1659
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Nepodarilo sa odoslať na vzdialený: %s"
+msgstr "Nebolo možné obnoviť vzdialenú vetvu: %s"
 
 #: common/git/libgit_backend.cpp:1685
-#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Nie je možné zlúčiť: máte nepublikované zmeny. Prosím, commit-nite, alebo "
-"stash-nite ich pred načítaním."
+"Nie je možné vykonať rebase: máte nepublikované zmeny. Prosím, commit-nite, "
+"alebo stash-nite ich pred načítaním."
 
 #: common/git/libgit_backend.cpp:1743 common/git/libgit_backend.cpp:1754
 msgid ""
@@ -10145,9 +10138,9 @@ msgid "The library table is of wrong type"
 msgstr "Tabuľka knižnice je nesprávneho typu"
 
 #: common/libraries/library_table.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "Knižnica '%s' je len na čítanie."
+msgstr "Tabuľka knižnice '%s' je iba na čítanie"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -10181,7 +10174,7 @@ msgid ""
 "The following files will be deleted when restoring this commit:\n"
 "\n"
 msgstr ""
-"Pri obnove tohto commitu budú vymazané nasledujúce súbory:\n"
+"Pri obnove tohto commit-u budú vymazané nasledujúce súbory:\n"
 "\n"
 
 #: common/local_history.cpp:2310
@@ -10216,8 +10209,8 @@ msgid ""
 "files that are not present in the restored commit."
 msgstr ""
 "Výberom možnosti „Zachovať všetky súbory“ sa obnoví vybraný commit, ale "
-"zachovajú sa všetky existujúce súbory v adresári projektu. Výberom možnosti "
-"„Pokračovať“ sa vymažú súbory, ktoré sa v obnovenom commite nenachádzajú."
+"zachovajú sa všetky existujúce súbory v adresári projektu. Výberom možnosti „"
+"Pokračovať“ sa vymažú súbory, ktoré sa v obnovenom commit-e nenachádzajú."
 
 #: common/local_history.cpp:2322
 #, c-format
@@ -10449,7 +10442,7 @@ msgstr ""
 
 #: common/pgm_base.cpp:241
 msgid "No default editor found, you must choose one."
-msgstr "Predvolený editor nájdený, musíte si ho vybrať."
+msgstr "Predvolený editor nenájdený, musíte si ho vybrať."
 
 #: common/pgm_base.cpp:261 common/pgm_base.cpp:263
 msgid "Executable file"
@@ -10822,11 +10815,11 @@ msgstr "(Puzdrá)"
 #: common/settings/color_settings.cpp:454
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings.cpp:82
 msgid "KiCad Default"
-msgstr "KiCad Predvolené"
+msgstr "KiCad predvolené"
 
 #: common/settings/color_settings.cpp:459
 msgid "KiCad Classic"
-msgstr "KiCad Classic"
+msgstr "Klasický KiCad"
 
 #: common/startwizard/startwizard.cpp:96
 #, c-format
@@ -15377,7 +15370,7 @@ msgstr "Nastaviť priemer na 0, ak sa má použiť veľkosť bodu spojenia v sch
 #: eeschema/dialogs/dialog_line_properties_base.cpp:83
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:95
 msgid "Clear color to use Schematic Editor colors."
-msgstr "Vymazať farby pre použitie farieb schematického editora."
+msgstr "Vymazať farbu pre použitie farieb editora schém."
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
 msgid "Junction Properties"
@@ -16137,9 +16130,9 @@ msgid "Derived symbol must have a parent selected"
 msgstr "Odvodený symbol musí mať vybraný nadradený symbol"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:501
-#, fuzzy, c-format
+#, c-format
 msgid "The unit name '%s' is already in use."
-msgstr "Názov '%s' sa už používa."
+msgstr "Názov jednotky '%s' je už použitý."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:516
 msgid "Delete extra units from symbol?"
@@ -17364,7 +17357,7 @@ msgstr "Dáta schémy"
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:98
 msgid "Project is missing or read-only. Settings will not be editable."
 msgstr ""
-"Projekt chýba alebo je len na čítanie. Nastavenia nebude možné upravovať."
+"Projekt chýba alebo je iba na čítanie. Nastavenia nebude možné upravovať."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:198
 #, c-format
@@ -18897,7 +18890,7 @@ msgstr "Súkromné pre editor symbolov"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:65
 #: pcbnew/dialogs/dialog_update_pcb.cpp:42
 msgid "Changes to Be Applied"
-msgstr "Zmeny, ktoré sa majú uplatniť"
+msgstr "Zmeny, ktoré sa majú použiť"
 
 #: eeschema/dialogs/dialog_update_from_pcb.cpp:47
 msgid "Update Schematic"
@@ -22207,7 +22200,7 @@ msgstr "Nastaviť prepojenie návrhového bloku skupiny"
 #: eeschema/sch_edit_frame.cpp:179
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
 msgid "KiCad Schematic Editor"
-msgstr "Editor schém KiCad"
+msgstr "KiCad editor schém"
 
 #: eeschema/sch_edit_frame.cpp:255 eeschema/sch_edit_frame.cpp:2068
 msgid "Schematic Hierarchy"
@@ -23276,12 +23269,12 @@ msgstr ""
 "Prosím, nahláste túto chybu.  Pri overovaní štruktúry skupiny nastala chyba: "
 "%s\n"
 "\n"
-"Napriek tomu uložiť?"
+"Uložiť aj napriek tomu?"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:404
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:307
 msgid "Save Anyway"
-msgstr "Určite uložiť"
+msgstr "Uložiť aj napriek tomu"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1977
 #, c-format
@@ -26877,7 +26870,7 @@ msgstr "Editor knižnice"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:134
 msgid "KiCad Symbol Editor"
-msgstr "Editor symbolov KiCad"
+msgstr "KiCad editor symbolov"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:310
 msgid "Library changes are unsaved"
@@ -26915,7 +26908,7 @@ msgstr "Symbol %s je odvodený symbol. Grafiku symbolu nebude možné upravovať
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1085
 msgid "Library is read-only.  Changes cannot be saved to this library."
 msgstr ""
-"Knižnica je len na čítanie.  Zmeny v tejto knižnici nie je možné uložiť."
+"Knižnica je iba na čítanie.  Zmeny v tejto knižnici nie je možné uložiť."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1087
 msgid "Create an editable copy"
@@ -27092,7 +27085,7 @@ msgid ""
 "Library '%s' is read-only. Choose a different library to save the symbol "
 "'%s' to."
 msgstr ""
-"Knižnica '%s' je len na čítanie. Je potrebné vybrať inú knižnicu, do ktorej "
+"Knižnica '%s' je iba na čítanie. Je potrebné vybrať inú knižnicu, do ktorej "
 "sa má uložiť symbol '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:933
@@ -27139,7 +27132,7 @@ msgstr "Exportovať symbol"
 #: eeschema/symbol_editor/symbol_editor.cpp:1109
 #, c-format
 msgid "Library '%s' is read-only."
-msgstr "Knižnica '%s' je len na čítanie."
+msgstr "Knižnica '%s' je iba na čítanie."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1149
 #, c-format
@@ -27304,7 +27297,7 @@ msgstr "(nepodarilo sa načítať)"
 
 #: eeschema/symbol_viewer_frame.cpp:110
 msgid "KiCad Symbol Library Browser"
-msgstr "Prehliadač knižnice symbolov KiCad"
+msgstr "Prehliadač knižnice KiCad symbolov"
 
 #: eeschema/symbol_viewer_frame.cpp:171
 msgid ""
@@ -27530,9 +27523,9 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Zmeniť %s 'Vylúčiť zo zoznamu materiálu' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:892
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "Zmeniť %s 'Vylúčiť zo zoznamu materiálu' z '%s' na '%s'."
+msgstr "Zmeniť %s 'Vylúčiť z polohových súborov' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:921
 #, c-format
@@ -28012,7 +28005,7 @@ msgstr "Presunúť bod ukotvenia symbolu"
 
 #: eeschema/tools/sch_actions.cpp:472
 msgid "Push Pin Length"
-msgstr "Dĺžka pripináčika"
+msgstr "Postúpiť dĺžku vývodu"
 
 #: eeschema/tools/sch_actions.cpp:473
 msgid "Copy pin length to other pins in symbol"
@@ -28020,7 +28013,7 @@ msgstr "Skopírovať dĺžku vývodu na ďalšie vývody v symbole"
 
 #: eeschema/tools/sch_actions.cpp:479
 msgid "Push Pin Name Size"
-msgstr "Veľkosť názvu pripináčika"
+msgstr "Postúpiť veľkosť názvu vývodu"
 
 #: eeschema/tools/sch_actions.cpp:480
 msgid "Copy pin name size to other pins in symbol"
@@ -28028,7 +28021,7 @@ msgstr "Skopírovať veľkosť názvu vývodu na ďalšie vývody v symbole"
 
 #: eeschema/tools/sch_actions.cpp:486
 msgid "Push Pin Number Size"
-msgstr "Veľkosť čísla pripináčika"
+msgstr "Postúpiť veľkosť čísla vývodu"
 
 #: eeschema/tools/sch_actions.cpp:487
 msgid "Copy pin number size to other pins in symbol"
@@ -29722,15 +29715,13 @@ msgid "Reached end of sheet."
 msgstr "Dosiahnutý koniec listu."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:385
-#, fuzzy
 msgid "No matches found."
-msgstr "Žiadne šablóny nenájdené"
+msgstr "Nenašli sa žiadne zhody."
 
 #: eeschema/tools/sch_group_tool.cpp:42 eeschema/tools/sch_group_tool.cpp:68
 #: pcbnew/tools/pcb_group_tool.cpp:45 pcbnew/tools/pcb_group_tool.cpp:60
-#, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "Pridajte vybraté položky do novej skupiny"
+msgstr "Nie je možné zoskupiť niektoré vybrané položky."
 
 #: eeschema/tools/sch_group_tool.cpp:53 eeschema/tools/sch_group_tool.cpp:61
 msgid "Child items cannot be grouped separately from their parent item."
@@ -30009,7 +30000,7 @@ msgstr ""
 #: eeschema/tools/symbol_editor_control.cpp:457
 #: pcbnew/tools/footprint_editor_control.cpp:781
 msgid "No text editor selected in KiCad. Please choose one."
-msgstr "V KiCad nie je vybraný žiadny textový editor. Prosím, vyberte jeden."
+msgstr "V KiCad-e nie je vybraný žiadny textový editor. Prosím, vyberte jeden."
 
 #: eeschema/tools/symbol_editor_control.cpp:535
 #: eeschema/widgets/panel_symbol_chooser.cpp:656
@@ -30142,7 +30133,7 @@ msgstr ""
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:231
 msgid "Place Pin Anyway"
-msgstr "Umiestniť rovnako vývod"
+msgstr "Umiestniť vývod aj napriek tomu"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:449
 msgid "Repeat Pin"
@@ -31972,7 +31963,7 @@ msgstr ""
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
-msgstr "Zobrazí pomocníka a ukončí sa"
+msgstr "Zobrazí správy pomocníka a ukončí sa"
 
 #: kicad/cli/command_api_server.cpp:51
 msgid "Run the KiCad IPC API server in headless mode"
@@ -32927,9 +32918,8 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "Vykresliť vrstvy do jedného PDF súboru s viacerými stránkami"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:132
-#, fuzzy
 msgid "Suppress footprint property popups"
-msgstr "Generovať vyskakovacie okná vlastností"
+msgstr "Potlačiť vyskakovacie okná s vlastnosťami puzdra"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:195
 msgid "Cannot use more than one mode flag\n"
@@ -33584,7 +33574,7 @@ msgstr "Upraviť šablónu"
 
 #: kicad/dialogs/dialog_template_selector.cpp:292
 msgid "Open Template (Read-Only)"
-msgstr "Otvoriť šablónu (len na čítanie)"
+msgstr "Otvoriť šablónu (iba na čítanie)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:293
 msgid "Open Template Folder"
@@ -33876,7 +33866,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:172
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "Spravovať stiahnuteľné balíčky z KiCadu a z repozitárov tretích strán"
+msgstr "Spravovať stiahnuteľné balíčky z KiCad-u a z repozitárov tretích strán"
 
 #: kicad/dialogs/template_default_html.h:234
 msgid "Select a Template"
@@ -34227,7 +34217,7 @@ msgstr ""
 "Toto sa môže stať, ak sa vaša predchádzajúca relácia neočakávane skončila.\n"
 "\n"
 "Vyberte možnosť „Obnoviť“, ak chcete obnoviť tieto zmeny, alebo možnosť "
-"„Zahodiť“, ak chcete zachovať aktuálne uložené súbory."
+"'Zahodiť', ak chcete zachovať aktuálne uložené súbory."
 
 #: kicad/kicad_manager_frame.cpp:1163
 msgid "Compare Project Branches requires a project that is tracked by git."
@@ -34271,7 +34261,7 @@ msgstr "Pred %d hodinami"
 
 #: kicad/local_history_pane.cpp:179
 msgid "Restore Commit"
-msgstr "Obnoviť potvrdenie"
+msgstr "Obnoviť commit"
 
 #: kicad/menubar.cpp:60
 msgid "Clear Recent Projects"
@@ -34508,7 +34498,7 @@ msgstr "Úložisko"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:107
 msgid "Discard action"
-msgstr "Zrušiť akciu"
+msgstr "Zahodiť akciu"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:134
 msgid "Install from File..."
@@ -34649,7 +34639,7 @@ msgid ""
 "Are you sure you want to install it anyway?"
 msgstr ""
 "Táto verzia balíčka nie je kompatibilná s vašou verziou KiCad alebo "
-"platformou. Naozaj ju chcete nainštalovať?"
+"platformou. Nainštalovať ju aj napriek tomu?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:616
 #: kicad/pcm/pcm_task_manager.cpp:397
@@ -35052,9 +35042,8 @@ msgid "Initialize a new repository"
 msgstr "Inicializovať nové úložisko"
 
 #: kicad/project_tree_pane.cpp:1039
-#, fuzzy
 msgid "Configure Default Remote..."
-msgstr "Konfigurovať cesty..."
+msgstr "Konfigurovať predvolený vzdialený repozitár..."
 
 #: kicad/project_tree_pane.cpp:1040
 msgid "Set or change the default remote URL and credentials"
@@ -35064,16 +35053,15 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:1043
 msgid "Commit Project..."
-msgstr "Odovzdať projekt..."
+msgstr "Commit-núť projekt..."
 
 #: kicad/project_tree_pane.cpp:1044 kicad/project_tree_pane.cpp:1071
 msgid "Commit changes to the local repository"
-msgstr "Commitnúť zmeny do lokálneho repozitára"
+msgstr "Commit-núť zmeny do lokálneho repozitára"
 
 #: kicad/project_tree_pane.cpp:1047
-#, fuzzy
 msgid "Amend Last Commit..."
-msgstr "Posledný commit"
+msgstr "Upraviť posledný commit..."
 
 #: kicad/project_tree_pane.cpp:1048
 msgid "Rewrite the most recent commit on the current branch"
@@ -35088,18 +35076,18 @@ msgid "Pull"
 msgstr "Pull"
 
 #: kicad/project_tree_pane.cpp:1056
-#, fuzzy, c-format
+#, c-format
 msgid "Push %s to %s"
-msgstr "%s %s na %s"
+msgstr "Push-núť %s do %s"
 
 #: kicad/project_tree_pane.cpp:1057
-#, fuzzy, c-format
+#, c-format
 msgid "Pull from %s"
-msgstr "od %s"
+msgstr "Pull-núť z %s"
 
 #: kicad/project_tree_pane.cpp:1061
 msgid "Push committed local changes to remote repository"
-msgstr "Uložiť lokálne commit-nuté zmeny do vzdialeného repozitára"
+msgstr "Push-núť lokálne commit-nuté zmeny do vzdialeného repozitára"
 
 #: kicad/project_tree_pane.cpp:1065
 msgid "Pull changes from remote repository into local"
@@ -35107,7 +35095,7 @@ msgstr "Stiahnuť zmeny zo vzdialeného úložiska do lokálneho"
 
 #: kicad/project_tree_pane.cpp:1070
 msgid "Commit File..."
-msgstr "Odovzdať súbor..."
+msgstr "Commit-núť súbor..."
 
 #: kicad/project_tree_pane.cpp:1085
 msgid "Switch to branch "
@@ -35208,24 +35196,21 @@ msgid "Fetch Remote"
 msgstr "Načítať vzdialený server"
 
 #: kicad/project_tree_pane.cpp:1985
-#, fuzzy
 msgid "Configure Default Remote"
-msgstr "Nastaviť predvolený vzdialený server"
+msgstr "Konfigurovať predvolený vzdialený repozitár"
 
 #: kicad/project_tree_pane.cpp:2001
-#, fuzzy
 msgid "Failed to configure remote."
-msgstr "Nepodarilo sa vytvoriť vzdialený: %s"
+msgstr "Nepodarilo sa konfigurovať vzdialený repozitár."
 
 #: kicad/project_tree_pane.cpp:2054
-#, fuzzy
 msgid "Already up to date."
-msgstr "Už umiestnené"
+msgstr "Už je aktuálny."
 
 #: kicad/project_tree_pane.cpp:2055
-#, fuzzy, c-format
+#, c-format
 msgid "Already up to date with %s."
-msgstr "Zistené obmedzenia šírky ramena tep. prep.: %s."
+msgstr "Už je aktuálny vzhľadom na %s."
 
 #: kicad/project_tree_pane.cpp:2061
 msgid "Pulled changes (fast-forward)."
@@ -35237,14 +35222,13 @@ msgid "Pulled %s into %s (fast-forward)."
 msgstr "Prevzaté %s do %s (fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2067
-#, fuzzy
 msgid "Pulled changes."
-msgstr "Zostaviť zmeny"
+msgstr "Pull-nuté zmeny."
 
 #: kicad/project_tree_pane.cpp:2068
-#, fuzzy, c-format
+#, c-format
 msgid "Pulled %s into %s."
-msgstr "Plôška %s na %s"
+msgstr "Pull-nuté %s do %s."
 
 #: kicad/project_tree_pane.cpp:2078
 msgid ""
@@ -35257,13 +35241,12 @@ msgstr ""
 "Vaše lokálne zmeny a vzdialené zmeny sú v konflikte, takže stiahnutie bolo "
 "zrušené a nič sa nezmenilo.\n"
 "\n"
-"Môžete zahodiť svoje lokálne commity a použiť vzdialenú verziu alebo ich "
-"preformátovať na vzdialenú verziu."
+"Môžete zahodiť lokálne commit-y a použiť vzdialenú verziu alebo použiť "
+"rebase na vzdialenú verziu."
 
 #: kicad/project_tree_pane.cpp:2082
-#, fuzzy
 msgid "Pull Conflict"
-msgstr "Konflikty"
+msgstr "Konflikt pri pull-e"
 
 #: kicad/project_tree_pane.cpp:2085
 msgid "&Use Remote (discard my changes)"
@@ -35274,48 +35257,41 @@ msgid "&Rebase"
 msgstr "&Rebase"
 
 #: kicad/project_tree_pane.cpp:2092
-#, fuzzy
 msgid "Reset to the remote version."
-msgstr "Obnovte aktuálny uhol z referenčnej polohy."
+msgstr "Obnoviť na vzdialenú verziu."
 
 #: kicad/project_tree_pane.cpp:2094
-#, fuzzy
 msgid "Failed to reset to remote"
-msgstr "Nepodarilo sa nastaviť prednastavený remote."
+msgstr "Nepodarilo sa obnoviť na vzdialené"
 
 #: kicad/project_tree_pane.cpp:2101
-#, fuzzy
 msgid "Rebased your changes onto the remote."
-msgstr "Nepodarilo sa push-núť zmeny do vzdialeného repozitára."
+msgstr "Rebase zmien na vzdialenú vetvu bol dokončený."
 
 #: kicad/project_tree_pane.cpp:2103
-#, fuzzy
 msgid "Could not rebase"
-msgstr "Nebolo možné načítať súbor "
+msgstr "Nebolo možné vykonať rebase"
 
 #: kicad/project_tree_pane.cpp:2107
-#, fuzzy
 msgid "Pull cancelled."
-msgstr "Zrušené"
+msgstr "Pull zrušený."
 
 #: kicad/project_tree_pane.cpp:2116
-#, fuzzy
 msgid "Pull failed."
-msgstr "Všetky súbory"
+msgstr "Pull zlyhal."
 
 #: kicad/project_tree_pane.cpp:2117
 msgid "Failed to pull project"
 msgstr "Nepodarilo sa stiahnuť projekt"
 
 #: kicad/project_tree_pane.cpp:2151
-#, fuzzy
 msgid "Pushed to remote."
-msgstr "Nepodarilo sa načítať vzdialené"
+msgstr "Push-nuté do vzdialého repozitára."
 
 #: kicad/project_tree_pane.cpp:2152
-#, fuzzy, c-format
+#, c-format
 msgid "Pushed %s to %s."
-msgstr "Plôška %s na %s"
+msgstr "Push-nuté %s do %s."
 
 #: kicad/project_tree_pane.cpp:2165
 #, c-format
@@ -35330,65 +35306,62 @@ msgstr ""
 "Odoslať zamietnuté: lokálna vetva a %s sa rozišli.\n"
 "\n"
 "Toto sa zvyčajne stáva po úprave alebo prepísaní už odoslaného commitu. "
-"Vynútiť odoslanie, aby sa prepísala vzdialená vetva?\n"
+"Vynútiť push, aby sa prepísala vzdialená vetva?\n"
 "\n"
 "Každý, kto už stiahol predchádzajúcu verziu, bude musieť resetovať svoju "
 "kópiu."
 
 #: kicad/project_tree_pane.cpp:2171
 msgid "Force Push?"
-msgstr "Nanútiť Push?"
+msgstr "Vynútiť push?"
 
 #: kicad/project_tree_pane.cpp:2173
 msgid "&Force Push"
-msgstr "&Nanútiť Push"
+msgstr "&Vynútiť push"
 
 #: kicad/project_tree_pane.cpp:2182
-#, fuzzy
 msgid "Push failed."
-msgstr "Úloha zlyhala"
+msgstr "Push-nutie zlyhalo."
 
 #: kicad/project_tree_pane.cpp:2183
 msgid "Failed to push project"
-msgstr "Nepodarilo sa odoslať projekt"
+msgstr "Nepodarilo sa push-núť projekt"
 
 #: kicad/project_tree_pane.cpp:2541 kicad/project_tree_pane.cpp:2750
 msgid "The selected directory is not a Git project."
 msgstr "Vybraný adresár nie je projektom Git."
 
 #: kicad/project_tree_pane.cpp:2578
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"Nasledujúce pravidlá majú neuložené zmeny:\n"
+"Nasledujúce editory majú neuložené zmeny:%s\n"
 "\n"
+"Uložiť ich pred commit-nutím?"
 
 #: kicad/project_tree_pane.cpp:2581 kicad/project_tree_pane.cpp:2856
-#, fuzzy
 msgid "Unsaved Changes"
-msgstr "Vrátiť späť zmeny"
+msgstr "Neuložené zmeny"
 
 #: kicad/project_tree_pane.cpp:2584
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "Uložiť a skončiť"
+msgstr "Uložiť a commit-núť"
 
 #: kicad/project_tree_pane.cpp:2584
-#, fuzzy
 msgid "Commit &Anyway"
-msgstr "(%s aj tak commit-núť.)"
+msgstr "Commit-núť &aj napriek tomu"
 
 #: kicad/project_tree_pane.cpp:2601 kicad/project_tree_pane.cpp:2876
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save %s."
-msgstr "Nepodarilo sa načítať súbor: %s"
+msgstr "Nebolo možné uložiť %s."
 
 #: kicad/project_tree_pane.cpp:2718
 msgid "Discarding commit due to empty commit message."
-msgstr "Zahodenie commit-u kvôli prázdnej správe commit-u."
+msgstr "Zahodiť commit-u kvôli prázdnej správe commit-u."
 
 #: kicad/project_tree_pane.cpp:2724
 msgid "Discarding commit due to empty file selection."
@@ -35412,49 +35385,44 @@ msgid "Amend Published Commit?"
 msgstr "Upraviť publikovaný commit?"
 
 #: kicad/project_tree_pane.cpp:2814 kicad/project_tree_pane.cpp:2859
-#, fuzzy
 msgid "Amend &Anyway"
-msgstr "Pridať aj tak"
+msgstr "Upraviť &aj napriek tomu"
 
 #: kicad/project_tree_pane.cpp:2853
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before amending?"
 msgstr ""
-"Nasledujúce pravidlá majú neuložené zmeny:\n"
+"Nasledujúce editory majú neuložené zmeny:%s\n"
 "\n"
+"Uložiť ich pred úpravou?"
 
 #: kicad/project_tree_pane.cpp:2859
-#, fuzzy
 msgid "&Save and Amend"
-msgstr "Uložiť dosku"
+msgstr "Uložiť a upraviť"
 
 #: kicad/project_tree_pane.cpp:2993
-#, fuzzy
 msgid "Amend Last Commit"
-msgstr "Posledný commit"
+msgstr "Upraviť posledný commit"
 
 #: kicad/project_tree_pane.cpp:3001
-#, fuzzy
 msgid "Discarding amend due to empty commit message."
-msgstr "Zahodenie commit-u kvôli prázdnej správe commit-u."
+msgstr "Zahodenie úprav z dôvodu prázdnej commit správy."
 
 #: kicad/project_tree_pane.cpp:3082
-#, fuzzy
 msgid "Fetched from remote."
-msgstr "Načítať vzdialený server"
+msgstr "Fetch-nuté zo vzdialeného repozitára."
 
 #: kicad/project_tree_pane.cpp:3083
-#, fuzzy, c-format
+#, c-format
 msgid "Fetched from %s."
-msgstr "od %s"
+msgstr "Načítané z %s."
 
 #: kicad/project_tree_pane.cpp:3090
-#, fuzzy
 msgid "Fetch failed."
-msgstr "Úloha zlyhala"
+msgstr "Fetch zlyhalo."
 
 #: kicad/project_tree_traverser.cpp:212
 #, c-format
@@ -36010,7 +35978,7 @@ msgstr "Súbor s rozložením je len na čítanie."
 
 #: pagelayout_editor/pl_editor_frame.cpp:102
 msgid "KiCad Drawing Sheet Editor"
-msgstr "KiCad Editor listu výkresu"
+msgstr "KiCad editor listu výkresu"
 
 #: pagelayout_editor/pl_editor_frame.cpp:167
 msgid "coord origin: Right Bottom page corner"
@@ -37913,7 +37881,7 @@ msgstr "Charakteristická impedancia vodiča"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:113
 msgid "Applied current:"
-msgstr "Aplikovaný prúd:"
+msgstr "Použitý prúd:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:124
 msgid "Plating resistivity:"
@@ -40089,7 +40057,7 @@ msgstr "<br/>    RefDes: %s; puzdro: %s at %s na DPS."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:418
 msgid "Reannotate anyway?"
-msgstr "Aj tak prečíslovať?"
+msgstr "Prečíslovať aj napriek tomu?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:587
 #, c-format
@@ -40355,7 +40323,7 @@ msgstr "Dáta dosky"
 #: pcbnew/dialogs/dialog_board_setup.cpp:272
 msgid "Project is missing or read-only. Some settings will not be editable."
 msgstr ""
-"Chýbajúci projekt alebo je len na čítanie. Niektoré nastavenia nebudú "
+"Chýbajúci projekt alebo je iba na čítanie. Niektoré nastavenia nebudú "
 "editovateľné."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:358
@@ -40517,7 +40485,7 @@ msgstr "Tolerancia:"
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:144
 msgid "Changes to be applied:"
-msgstr "Zmeny na aplikovanie:"
+msgstr "Zmeny, ktoré sa majú použiť:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:88
 msgid "Build Changes"
@@ -42066,19 +42034,16 @@ msgstr ""
 "Pred exportom STEPu uložte dosku na platné miesto."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:441
-#, fuzzy
 msgid "Failed to reserve a temporary filename for STEP export."
-msgstr "Nepodarilo sa vytvoriť dočasný súbor '%s'"
+msgstr "Nepodarilo sa rezervovať dočasný názov súboru pre export STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:460
-#, fuzzy
 msgid "Failed to save the current board state for export."
-msgstr "Nepodarilo sa uložiť súbor knižnice symbolov '%s'."
+msgstr "Nepodarilo sa uložiť aktuálny stav dosky na export."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:473
-#, fuzzy
 msgid "Failed to stage the project file for STEP export."
-msgstr "Nepodarilo sa push-núť zmeny do vzdialeného repozitára."
+msgstr "Nepodarilo sa pripraviť súbor projektu na export STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:512
 msgid "No filename for output file"
@@ -44054,7 +44019,7 @@ msgstr "Súbor netlist neexistuje."
 #: pcbnew/dialogs/dialog_import_netlist.cpp:145
 #: pcbnew/dialogs/dialog_update_pcb.cpp:168
 msgid "Changes Applied to PCB"
-msgstr "Zmeny aplikované na DPS"
+msgstr "Zmeny použité na DPS"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:213
 #, c-format
@@ -45972,7 +45937,7 @@ msgstr "Odoslať projekt priamo"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
-msgstr "Odesílá výrobní súbory výrobci z KiCadu"
+msgstr "Odesílá výrobní súbory výrobci z KiCad-u"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:41
 msgid "Produce PCB"
@@ -46455,7 +46420,7 @@ msgstr "Použitie týchto zmien skratuje spoj %s s inými spojmi."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:921
 msgid "Apply Anyway"
-msgstr "Aj tak použiť"
+msgstr "Použiť aj napriek tomu"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:921
 msgid "Cancel Changes"
@@ -46741,15 +46706,16 @@ msgid "Unused Pads"
 msgstr "Nepoužité plôšky"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
-#, fuzzy
 msgid "Apply design block layouts to new groups"
-msgstr "Použiť rozloženie prepojeného návrhového bloku na vybranú skupinu"
+msgstr "Použitie rozložení návrhových blokov na nové skupiny"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
 msgid ""
 "For each new group created from a design block, apply the block's saved "
 "footprint placement and routing automatically."
 msgstr ""
+"Pre každú novú skupinu vytvorenú z návrhového bloku, automaticky aplikovať "
+"uložené umiestnenie puzdier a routovanie bloku."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
 msgid "Update Footprints"
@@ -48135,13 +48101,12 @@ msgid "Cancel Changes?"
 msgstr "Zrušiť zmeny?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:153
-#, fuzzy
 msgid "Show Matching Items"
-msgstr "Zobraziť zhody"
+msgstr "Zobraziť zodpovedajúce položky"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:206
 msgid "Cannot show matching items without an open project."
-msgstr ""
+msgstr "Nie je možné zobraziť zodpovedajúce položky bez otvoreného projektu."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:228
 #: pcbnew/dialogs/panel_setup_rules.cpp:246
@@ -48157,32 +48122,34 @@ msgid "ERROR:"
 msgstr "CHYBA:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "Could not scan rules text: %s"
-msgstr "Nepodarilo sa odoslať na vzdialený: %s"
+msgstr "Nebolo možné spracovať text pravidiel: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:334
 msgid "Place the cursor inside a (rule ...) block to show matching items."
 msgstr ""
+"Umiestniť kurzor do bloku (pravidla ...) pre zobrazenie zodpovedajúcich "
+"položiek."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:343
 msgid "The rule under the cursor has no name; add a name to identify it."
 msgstr ""
+"Pravidlo pod kurzorom nemá názov; pridajte názov, ktorý ho identifikuje."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' could not be located after parsing."
-msgstr "Súbor '%s' sa nepodarilo vytvoriť."
+msgstr "Nebolo možné nájsť pravidlo '%s' po spracovaní."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:382
-#, fuzzy
 msgid "DRC engine not available."
-msgstr "Netlist schémy nie je k dispozícii"
+msgstr "Jadro DRC nie je k dispozícii."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:405
 #, c-format
 msgid "Rule '%s': %zu matching item(s)."
-msgstr ""
+msgstr "Pravidlo '%s': %zu zodpovedajúcich položiek."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:995
 #, c-format
@@ -50452,15 +50419,16 @@ msgstr "%s nie je vŕtaná diera; pravidlo ignorované."
 
 #: pcbnew/drc/drc_engine.cpp:1730
 msgid "Unconditional constraint applied."
-msgstr "Bezpodmienečné obmedzenie uplatnené."
+msgstr "Bezpodmienečné obmedzenie bolo použité."
 
 #: pcbnew/drc/drc_engine.cpp:1734 pcbnew/drc/drc_engine.cpp:2174
 msgid "Unconditional rule applied."
-msgstr "Bezpodmienečné pravidlo uplatnené."
+msgstr "Bezpodmienečné pravidlo bolo použité."
 
 #: pcbnew/drc/drc_engine.cpp:1739
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "Bezpodmienečné pravidlo uplatnené; prepíše predchádzajúce obmedzenia."
+msgstr ""
+"Bezpodmienečné pravidlo bolo použité; prepíše predchádzajúce obmedzenia."
 
 #: pcbnew/drc/drc_engine.cpp:1766 pcbnew/drc/drc_engine.cpp:2179
 #, c-format
@@ -50469,15 +50437,15 @@ msgstr "Kontroluje sa podmienka pravidla '%s'."
 
 #: pcbnew/drc/drc_engine.cpp:1776
 msgid "Constraint applied."
-msgstr "Bolo použité obmedzenie."
+msgstr "Obmedzenie bolo použité."
 
 #: pcbnew/drc/drc_engine.cpp:1780 pcbnew/drc/drc_engine.cpp:2185
 msgid "Rule applied."
-msgstr "Pravidlo bolo uplatnené."
+msgstr "Pravidlo bolo použité."
 
 #: pcbnew/drc/drc_engine.cpp:1785
 msgid "Rule applied; overrides previous constraints."
-msgstr "Pravidlo uplatnené; prepíše predchádzajúce obmedzenia."
+msgstr "Pravidlo bolo použité; prepíše predchádzajúce obmedzenia."
 
 #: pcbnew/drc/drc_engine.cpp:1793
 msgid "Membership not satisfied; constraint ignored."
@@ -53045,7 +53013,7 @@ msgstr "Filtrovať podľa počtu pinov (%d)"
 
 #: pcbnew/footprint_edit_frame.cpp:126
 msgid "KiCad Footprint Editor"
-msgstr "Editor puzdier KiCad"
+msgstr "KiCad Editor puzdier"
 
 #: pcbnew/footprint_edit_frame.cpp:382
 msgid "Footprint changes are unsaved"
@@ -53068,7 +53036,7 @@ msgstr "Otvoriť v knižnici %s"
 #: pcbnew/footprint_edit_frame.cpp:852
 #, c-format
 msgid "Editing footprint from read-only library %s."
-msgstr "Upraviť puzdro z knižnice, označenej len na čítanie %s."
+msgstr "Upraviť puzdro z knižnice, označenej iba na čítanie %s."
 
 #: pcbnew/footprint_edit_frame.cpp:856
 msgid "Save as editable copy"
@@ -53245,7 +53213,7 @@ msgstr "Puzdro '%s' added to '%s'"
 
 #: pcbnew/footprint_viewer_frame.cpp:106
 msgid "KiCad Footprint Library Browser"
-msgstr "Prehliadač knižníc puzdier KiCad"
+msgstr "Prehliadač KiCad knižníc puzdier"
 
 #: pcbnew/footprint_viewer_frame.cpp:148
 msgid ""
@@ -55000,7 +54968,7 @@ msgstr "Rám textu"
 
 #: pcbnew/pcb_edit_frame.cpp:234
 msgid "KiCad PCB Editor"
-msgstr "Editor DPS KiCad"
+msgstr "KiCad Editor DPS"
 
 #: pcbnew/pcb_edit_frame.cpp:241
 msgid "Export netlist used to update schematics"
@@ -55913,8 +55881,8 @@ msgid ""
 "pads has been applied."
 msgstr ""
 "CADSTAR šablóna '%s' má rôzne nastavenia tepelného reliéfu v plôškach a "
-"prekovoch. KiCad podporuje pre obidve iba jedno jediné nastavenie. Bolo "
-"použité nastavenie pre plôšky."
+"prekovoch. KiCad podporuje pre obidve iba jedno jediné nastavenie. "
+"Nastavenie pre plôšky bolo použité."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2026
 #, c-format
@@ -56491,6 +56459,8 @@ msgid ""
 "Pad '%s' has custom shape with per-layer geometry; custom primitives not "
 "supported in padstack mode."
 msgstr ""
+"Plôška '%s' má vlastný tvar s geometriou pre jednotlivé vrstvy; vlastné "
+"základné tvary nie sú podporované v režime padstacku plôšok."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2873
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2905
@@ -58916,12 +58886,12 @@ msgstr "Vybraná položka je uzamknutá."
 
 #: pcbnew/router/router_tool.cpp:2147
 msgid "Drag Anyway"
-msgstr "Presuňte aj tak"
+msgstr "Presunúť aj napriek tomu"
 
 #: pcbnew/router/router_tool.cpp:2193 pcbnew/router/router_tool.cpp:2755
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr "(%s aj tak commit-núť.)"
+msgstr "(%s commit-núť aj napriek tomu.)"
 
 #: pcbnew/router/router_tool.cpp:2197 pcbnew/router/router_tool.cpp:2759
 msgid "Track violates DRC."
@@ -59617,7 +59587,7 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:1377
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr "Poznámka: %s je zakrytý; odstup bude aplikovaný len na otvory."
+msgstr "Poznámka: %s je zakrytý; odstup bude použitý len na otvory."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1394
 msgid "Silkscreen clearance resolution for:"
@@ -59642,7 +59612,7 @@ msgid ""
 "applied."
 msgstr ""
 "Položky nezdieľajú žiadne relevantné vrstvy. Žiadne obmedzenia "
-"'physical_clearance' nebudú aplikované."
+"'physical_clearance' nebudú použité."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1683
 msgid "Select item for constraints resolution..."
@@ -60070,6 +60040,8 @@ msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 msgstr ""
+"Puzdrá sa nedajú zrkadliť. Na ich presunutie na druhú stranu dosky, je "
+"potrebné použiť funkciu Prevrátiť."
 
 #: pcbnew/tools/edit_tool.cpp:2717 pcbnew/tools/pcb_actions.cpp:717
 msgid "Change Side / Flip"
@@ -60195,7 +60167,7 @@ msgid ""
 "library is read-only."
 msgstr ""
 "Puzdro nebolo možné pridať do vybranej knižnice ('%s'). Táto knižnica je "
-"určená len na čítanie."
+"určená iba na čítanie."
 
 #: pcbnew/tools/footprint_editor_control.cpp:465
 msgid "Change Footprint Name"
@@ -62395,7 +62367,7 @@ msgstr "Routovať spoj z opačného konca"
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
-"Commitnúť aktuálny segment a začať nový segment z najbližšieho konca "
+"Commit-núť aktuálny segment a začať nový segment z najbližšieho konca "
 "vzdušného spoja."
 
 #: pcbnew/tools/pcb_actions.cpp:2770
@@ -62498,9 +62470,8 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Zobraziť dialóg správcu pre objekty generátorov"
 
 #: pcbnew/tools/pcb_actions.cpp:2898
-#, fuzzy
 msgid "Length Tuning Settings"
-msgstr "Nastavenia vyladenia dĺžky ..."
+msgstr "Nastavenia ladenia dĺžky"
 
 #: pcbnew/tools/pcb_actions.cpp:2899
 msgid "Length Tuning Settings..."
@@ -62594,9 +62565,8 @@ msgid "Design block has no layout to place."
 msgstr "Návrhový blok nemá rozloženie na umiestnenie."
 
 #: pcbnew/tools/pcb_control.cpp:1491
-#, fuzzy
 msgid "No groups with a linked design block are selected."
-msgstr "Použiť rozloženie prepojeného návrhového bloku na vybranú skupinu"
+msgstr "Nie sú vybrané žiadne skupiny s prepojeným návrhovým blokom."
 
 #: pcbnew/tools/pcb_control.cpp:1516 pcbnew/tools/pcb_selection_tool.cpp:4749
 msgid ""
@@ -62606,24 +62576,20 @@ msgstr ""
 "na nevzťahovali."
 
 #: pcbnew/tools/pcb_control.cpp:1540
-#, fuzzy
 msgid "Applying Design Block Layouts"
-msgstr "Použiť rozloženie návrhového bloku"
+msgstr "Aplikovanie rozloženia návrhových blokov"
 
 #: pcbnew/tools/pcb_control.cpp:1571
-#, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "Návrhový blok nemá platné knižničné ID."
+msgstr "návrhový blok sa nenachádza v načítaných knižnicach"
 
 #: pcbnew/tools/pcb_control.cpp:1577
-#, fuzzy
 msgid "design block has no saved PCB layout"
-msgstr "Návrhový blok nemá rozloženie na umiestnenie."
+msgstr "návrhový blok nemá uložené rozloženie na DPS"
 
 #: pcbnew/tools/pcb_control.cpp:1608
-#, fuzzy
 msgid "could not load the design block's layout"
-msgstr "Návrhový blok %s sa nenašiel."
+msgstr "nebolo možné načítať rozloženie z návrhových blokov"
 
 #: pcbnew/tools/pcb_control.cpp:1635
 #, fuzzy
@@ -62636,49 +62602,47 @@ msgid "group is empty"
 msgstr "Výraz nie je zadaný"
 
 #: pcbnew/tools/pcb_control.cpp:1724
-#, fuzzy
 msgid "layout copy failed"
-msgstr "Nie je možné kopírovať súbor '%s'."
+msgstr "kopírovanie rozloženia zlyhalo"
 
 #: pcbnew/tools/pcb_control.cpp:1742
 #, c-format
 msgid "Applying layout to group %zu of %zu..."
-msgstr ""
+msgstr "Použitie rozloženia na skupinu %zu z %zu..."
 
 #: pcbnew/tools/pcb_control.cpp:1765
-#, fuzzy
 msgid "Apply design block layout cancelled."
-msgstr "Použiť rozloženie návrhového bloku"
+msgstr "Použitie rozloženia návrhového bloku zrušené."
 
 #: pcbnew/tools/pcb_control.cpp:1771
-#, fuzzy, c-format
+#, c-format
 msgid "Apply design block layout to %d group(s)"
-msgstr "Použiť rozloženie prepojeného návrhového bloku na vybranú skupinu"
+msgstr "Použiť rozloženie návrhového bloku na %d skupinu (skupín)"
 
 #: pcbnew/tools/pcb_control.cpp:1774
 msgid "Copied copper has no net assigned. Assign nets to connect it."
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1786
-#, fuzzy, c-format
+#, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr "Použiť rozloženie prepojeného návrhového bloku na vybranú skupinu"
+msgstr "Rozloženie návrhového bloku bolo použité na %d z %d skupinu (skupín)."
 
 #: pcbnew/tools/pcb_control.cpp:1793
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
-msgstr "Uložiť vybranú skupinu do prepojeného návrhového bloku"
+msgstr ""
+"Bolo vynechaných %d vybraných položiek, ktoré nie sú skupinami prepojenými s "
+"návrhovým blokom."
 
 #: pcbnew/tools/pcb_control.cpp:1801
-#, fuzzy
 msgid "The following groups could not be processed:"
-msgstr "Nejde otvoriť nasledujúce adresáre: \n"
+msgstr "Nebolo možné spracovať nasledujúce skupiny:"
 
 #: pcbnew/tools/pcb_control.cpp:1805
-#, fuzzy
 msgid "(unnamed group)"
-msgstr "Skupiny prepojok:"
+msgstr "(nepomenovaná skupina)"
 
 #: pcbnew/tools/pcb_control.cpp:1856
 #, c-format
@@ -62783,10 +62747,9 @@ msgid "%d 3D model(s) successfully embedded."
 msgstr "%d 3D model(ov) úspešne vložených."
 
 #: pcbnew/tools/pcb_group_tool.cpp:54
-#, fuzzy
 msgid ""
 "Footprint items cannot be grouped separately from their parent footprint."
-msgstr "Nebolo možné vygenerovať žiadny obrys extrúzie pre toto puzdro."
+msgstr "Nie je možné zoskupiť puzdro oddelene od jeho nadradeného puzdra."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2740
 msgid "Resize Table Cells"
@@ -63740,7 +63703,7 @@ msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
 msgstr ""
-"Aktuálna farebná téma je len na čítanie.  Pre úpravy farieb je potrebné "
+"Aktuálna farebná téma je iba na čítanie.  Pre úpravy farieb je potrebné "
 "vytvoriť novú tému v nastaveniach."
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
@@ -64239,6 +64202,11 @@ msgid ""
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
 msgstr ""
+"Výplne zón môžu byť nesprávne: iteratívne opätovné vyplnenie, ich nevyplnilo "
+"ani po %d pokusoch.\n"
+"\n"
+"Toto sa môže stať pri zložitých prekrývajúcich sa zónach. Zvážte "
+"zjednodušenie zón."
 
 #: pcbnew/zone_filler.cpp:1546
 msgid "Prototype zone fill enabled. Disable setting and refill?"
@@ -64414,11 +64382,11 @@ msgstr "Editor DPS KiCad (samostatný)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
-msgstr "Editor rozloženia DPS"
+msgstr "Editor návrhu DPS"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
-msgstr "Samostatný editor dosky pre KiCad dosky"
+msgstr "Samostatný editor pre KiCad dosky"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
@@ -64443,7 +64411,7 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:62
 msgid "KiCad PCB Layout Editor"
-msgstr "Editor rozloženia DPS KiCad"
+msgstr "KiCad editor návrhu DPS"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:82
 msgid "The KiCad Developers"
