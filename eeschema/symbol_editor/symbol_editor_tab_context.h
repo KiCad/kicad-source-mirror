@@ -98,6 +98,7 @@ public:
 
     const wxString& GetLibrary() const { return m_lib; }
     const wxString& GetName() const    { return m_name; }
+    void            SetName( const wxString& aName ) { m_name = aName; }
 
     /**
      * Observe the working symbol/screen.  Valid whether active or detached.

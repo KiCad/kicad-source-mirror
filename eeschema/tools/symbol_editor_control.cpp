@@ -661,6 +661,8 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
         editFrame->UpdateMsgPanel();
     }
 
+    editFrame->RenameSymbolTab( libId, LIB_ID( libName, newName ) );
+
     wxDataViewItem treeItem = libMgr.GetAdapter()->FindItem( libId );
     editFrame->UpdateLibraryTree( treeItem, libSymbol );
     editFrame->FocusOnLibId( LIB_ID( libName, newName ) );

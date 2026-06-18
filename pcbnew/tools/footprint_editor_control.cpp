@@ -545,6 +545,9 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
         }
     }
 
+    if( footprint )
+        m_frame->RenameFootprintTab( fpID, LIB_ID( libraryName, newName ) );
+
     wxDataViewItem treeItem = m_frame->GetLibTreeAdapter()->FindItem( fpID );
 
     if( footprint )

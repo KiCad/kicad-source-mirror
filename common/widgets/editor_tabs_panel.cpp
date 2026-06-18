@@ -131,6 +131,15 @@ void EDITOR_TABS_MODEL::Promote( const wxString& aKey )
 }
 
 
+void EDITOR_TABS_MODEL::Rename( const wxString& aOldKey, const wxString& aNewKey )
+{
+    const int idx = FindIndex( aOldKey );
+
+    if( idx >= 0 )
+        m_entries[idx].key = aNewKey;
+}
+
+
 bool EDITOR_TABS_MODEL::CanCloseWithoutPrompt( const wxString& aKey ) const
 {
     const int idx = FindIndex( aKey );
@@ -552,6 +561,28 @@ int EDITOR_TABS_PANEL::GetActiveTab() const
 int EDITOR_TABS_PANEL::FindTab( const wxString& aKey ) const
 {
     return m_model.FindIndex( aKey );
+}
+
+
+void EDITOR_TABS_PANEL::RenameTab( const wxString& aOldKey, const wxString& aNewKey, const wxString& aNewLabel )
+{
+    const int idx = m_model.FindIndex( aOldKey );
+
+    if( idx < 0 )
+        return;
+
+    m_model.Rename( aOldKey, aNewKey );
+
+    // The notebook page index is aligned with the model index.
+    if( idx < static_cast<int>( m_pageWindows.size() ) )
+        m_tabs->SetPageText( idx, aNewLabel );
+
+    // Keep the Ctrl+Tab order pointing at the new key.
+    for( wxString& key : m_mru )
+    {
+        if( key == aOldKey )
+            key = aNewKey;
+    }
 }
 
 

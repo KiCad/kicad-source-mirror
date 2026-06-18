@@ -1386,6 +1386,30 @@ void FOOTPRINT_EDIT_FRAME::CloseFootprintTab( const LIB_ID& aFPID )
 }
 
 
+void FOOTPRINT_EDIT_FRAME::RenameFootprintTab( const LIB_ID& aOldId, const LIB_ID& aNewId )
+{
+    if( !m_tabsPanel )
+        return;
+
+    const wxString oldLib = aOldId.GetLibNickname();
+    const wxString oldName = aOldId.GetLibItemName();
+    const wxString oldKey = oldLib + wxT( ":" ) + oldName;
+    const int      idx = m_tabsPanel->FindTab( oldKey );
+
+    if( idx < 0 )
+        return;
+
+    const wxString newLib = aNewId.GetLibNickname();
+    const wxString newName = aNewId.GetLibItemName();
+
+    if( idx < static_cast<int>( m_tabContexts.size() ) )
+        m_tabContexts[idx]->SetName( newName );
+
+    m_tabsPanel->RenameTab( oldKey, newLib + wxT( ":" ) + newName, newName );
+    UpdateTitle();
+}
+
+
 bool FOOTPRINT_EDIT_FRAME::hasDirtyInactiveInstanceTabs() const
 {
     for( const std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )

@@ -172,6 +172,12 @@ public:
     void CloseFootprintTab( const LIB_ID& aFPID );
 
     /**
+     * Update the open tab for aOldId, if any, to the renamed footprint aNewId so its label and key
+     * track the rename.
+     */
+    void RenameFootprintTab( const LIB_ID& aOldId, const LIB_ID& aNewId );
+
+    /**
      * Return the adapter object that provides the stored data.
      */
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& GetLibTreeAdapter() { return m_adapter; }

@@ -68,6 +68,11 @@ public:
     void Promote( const wxString& aKey );
 
     /**
+     * Re-key the entry for @p aOldKey to @p aNewKey, keeping its position and state.
+     */
+    void Rename( const wxString& aOldKey, const wxString& aNewKey );
+
+    /**
      * True when the document has no unsaved edits and can be closed silently.
      */
     bool CanCloseWithoutPrompt( const wxString& aKey ) const;
@@ -138,6 +143,11 @@ public:
     int  GetActiveTab() const;
     int  FindTab( const wxString& aKey ) const;
     void RefreshTabLabels();
+
+    /**
+     * Re-key the tab @p aOldKey to @p aNewKey and relabel it to @p aNewLabel. No-op if not found.
+     */
+    void RenameTab( const wxString& aOldKey, const wxString& aNewKey, const wxString& aNewLabel );
 
     const EDITOR_TABS_MODEL& Model() const { return m_model; }
 

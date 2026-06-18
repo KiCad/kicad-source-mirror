@@ -665,6 +665,25 @@ void SYMBOL_EDIT_FRAME::closeSymbolTab( const LIB_ID& aLibId )
 }
 
 
+void SYMBOL_EDIT_FRAME::RenameSymbolTab( const LIB_ID& aOldId, const LIB_ID& aNewId )
+{
+    if( !m_tabsPanel )
+        return;
+
+    const wxString oldKey = SYMBOL_EDITOR_TAB_CONTEXT::MakeTabKey( aOldId.GetLibNickname(), aOldId.GetLibItemName() );
+
+    if( SYMBOL_EDITOR_TAB_CONTEXT* ctx = symbolTabContextForKey( oldKey ) )
+    {
+        const wxString newName = aNewId.GetLibItemName();
+        const wxString newKey = SYMBOL_EDITOR_TAB_CONTEXT::MakeTabKey( aNewId.GetLibNickname(), newName );
+
+        ctx->SetName( newName );
+        m_tabsPanel->RenameTab( oldKey, newKey, newName );
+        UpdateTitle();
+    }
+}
+
+
 void SYMBOL_EDIT_FRAME::restoreSymbolTabsFromSettings()
 {
     wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "restoreSymbolTabsFromSettings enter" ) );

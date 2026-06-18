@@ -204,6 +204,12 @@ public:
 
     void DeleteSymbolFromLibrary();
 
+    /**
+     * Update the open tab for aOldId, if any, to the renamed symbol aNewId so its label and key
+     * track the rename.
+     */
+    void RenameSymbolTab( const LIB_ID& aOldId, const LIB_ID& aNewId );
+
     void CopySymbolToClipboard();
 
     void LoadSymbol( const wxString& aLibrary, const wxString& aSymbol, int Unit );
