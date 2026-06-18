@@ -129,6 +129,8 @@ protected:
     std::function<void()>                   m_acceptHandler;
     std::function<void()>                   m_escapeHandler;
 
+    LIB_ID m_preselect;
+
     std::vector<std::unique_ptr<FOOTPRINT>> m_historyFootprints;
 };
 
