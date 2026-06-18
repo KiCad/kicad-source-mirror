@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 16:16+0000\n"
+"PO-Revision-Date: 2026-06-18 17:01+0000\n"
 "Last-Translator: Jose Perez <mirror.k2@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v10/es/>\n"
 "Language: es\n"
@@ -2776,6 +2776,8 @@ msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"Mantiene tu archivo guardado junto con la versión de autoguardado separada "
+"nombrada con fecha y hora que después puedes revisar."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
 #, fuzzy
@@ -2787,10 +2789,12 @@ msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"Cierra este diálogo sin hacer ningún cambio. Los archivos autoguardados "
+"permanecerán en el disco y se ofrecerán cuando se vuelva a abrir el proyecto."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "Recuperar autoguardado"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -3222,11 +3226,11 @@ msgstr "Editar propiedades del grupo"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Un grupo no puede contenerse a sí mismo."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "No se puede añadir este grupo porque ya contiene al grupo actual."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -4015,8 +4019,9 @@ msgid "Commit message cannot be empty"
 msgstr "El mensaje de confirmación no puede estar vacío"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
+#, fuzzy
 msgid "Key passphrase:"
-msgstr ""
+msgstr "Clave de acceso:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
@@ -4026,15 +4031,15 @@ msgstr "Contraseña:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "Se requiere autenticación para acceder:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Nombre de usuario y contraseña"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "Clave SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -4662,11 +4667,16 @@ msgid "Zip archive"
 msgstr "&Descomprimir proyecto ..."
 
 #: common/dialogs/panel_common_settings_base.cpp:441
+#, fuzzy
 msgid ""
 "Incremental: maintain a hidden .history git repository with continuous "
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"Incremental: mantiene un archivo .history oculto en el repositorio git con "
+"cambios continuos. \n"
+"Zip: crea archivos Zip con marca de tiempo cuando se guarda, los archivos "
+"autoguardados usan archivos de recuperación."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
 #, fuzzy
@@ -4683,6 +4693,9 @@ msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"Proyecto: almacena copias de seguridad y archivos de autoguardado dentro del "
+"directorio del proyecto.\n"
+"Usuario: los almacena en el directorio de datos de usuario de KiCad."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -6214,6 +6227,8 @@ msgid ""
 "When enabled, KiCad will replace any existing references to built-in "
 "libraries with references to the latest version"
 msgstr ""
+"Cuando está activo, KiCad reemplazará cualquier referencia existente en las "
+"libretas integradas con las referencias a la última versión"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:62
 msgid "Start with no libraries"
@@ -7997,7 +8012,7 @@ msgstr "Fallo al crear la confirmación: %s"
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2768
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "No se puede realizar un amend: la rana no tiene ningún commit."
 
 #: common/git/libgit_backend.cpp:329
 #, fuzzy, c-format
@@ -8109,6 +8124,8 @@ msgstr "No se pudo leer «FETCH_HEAD»"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Nada para hacer un pull: el repositorio remoto no dispone de ninguna rama "
+"que coincida con la actual rama local."
 
 #: common/git/libgit_backend.cpp:1179
 msgid "Could not lookup commit"
@@ -8199,6 +8216,8 @@ msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"No se pudo crear un commit de confirmación. Establece user.name y user.email "
+"en tu configuración de git."
 
 #: common/git/libgit_backend.cpp:1530
 #, fuzzy, c-format
@@ -8266,6 +8285,8 @@ msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"El rebase generó un conflicto. Lo mejor es resolverlo desde la linea de "
+"comandos de git."
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -9607,11 +9628,11 @@ msgstr "Se produjo un error inesperado al leer la tabla de bibliotecas"
 
 #: common/local_history.cpp:1653
 msgid "Compacting local history..."
-msgstr ""
+msgstr "Compactando el historial local..."
 
 #: common/local_history.cpp:1850
 msgid "Trimming local history..."
-msgstr ""
+msgstr "Recortando el historial local..."
 
 #: common/local_history.cpp:1943
 msgid "Compacting trimmed history..."
