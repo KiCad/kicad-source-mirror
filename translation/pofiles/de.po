@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
 "PO-Revision-Date: 2026-06-18 23:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -8513,7 +8513,7 @@ msgstr "Konnte Repository-Head nicht abrufen"
 #: common/git/libgit_backend.cpp:544
 #, c-format
 msgid "Could not push to remote: %s"
-msgstr "Konnte nicht zu Remote übertragen: %s"
+msgstr "Konnte nicht zu Remote übertragen: %s (push)"
 
 #: common/git/libgit_backend.cpp:807
 #, c-format
@@ -35531,7 +35531,7 @@ msgstr "Pullen"
 #: kicad/project_tree_pane.cpp:1056
 #, c-format
 msgid "Push %s to %s"
-msgstr "%s nach %s schieben"
+msgstr "%s nach %s übertragen (push)"
 
 #: kicad/project_tree_pane.cpp:1057
 #, c-format
@@ -35540,7 +35540,7 @@ msgstr "Von %s abrufen"
 
 #: kicad/project_tree_pane.cpp:1061
 msgid "Push committed local changes to remote repository"
-msgstr "Lokal committete Änderungen auf entferntes Repository pushen"
+msgstr "Lokal committete Änderungen auf entferntes Repository übertragen (push)"
 
 #: kicad/project_tree_pane.cpp:1065
 msgid "Pull changes from remote repository into local"
@@ -35667,12 +35667,12 @@ msgstr "Bereits aktuell mit %s."
 
 #: kicad/project_tree_pane.cpp:2061
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "Abgerufene Änderungen (pull fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2062
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "%s in %s abgerufen (pull fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2067
 msgid "Pulled changes."
@@ -35741,14 +35741,13 @@ msgid "Failed to pull project"
 msgstr "Konnte Projekt nicht übertragen (pull)"
 
 #: kicad/project_tree_pane.cpp:2151
-#, fuzzy
 msgid "Pushed to remote."
-msgstr "Auf Remote geschoben (push)."
+msgstr "Auf Remote übertragen (push)."
 
 #: kicad/project_tree_pane.cpp:2152
-#, fuzzy, c-format
+#, c-format
 msgid "Pushed %s to %s."
-msgstr "%s auf %s abgelegt."
+msgstr "%s auf %s übertragen (push)."
 
 #: kicad/project_tree_pane.cpp:2165
 #, c-format
@@ -35764,7 +35763,7 @@ msgstr ""
 "auseinanderentwickelt.\n"
 "\n"
 "Das passiert normalerweise nach dem Abrufen oder dem erneuten Schreiben "
-"eines Commits, der bereits abgelegt wurde.  Push erzwingen, um Remote zu "
+"eines Commits, der bereits übertragen wurde.  Push erzwingen, um Remote zu "
 "überschreiben?\n"
 "\n"
 "Jeder, der die vorhergehende Version bereits abgerufen hat, wird seine Kopie "
