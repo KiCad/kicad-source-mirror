@@ -2679,7 +2679,17 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     circle->SetParent( aSymbol.get() );
     circle->SetPosition( center );
     circle->SetEnd( VECTOR2I( center.x + aCircle->radius.ToSchUnits(), center.y ) );
-    circle->SetStroke( STROKE_PARAMS( aCircle->width.ToSchUnits(), LINE_STYLE::SOLID ) );
+
+    if( aCircle->width.ToSchUnits() == 0 )
+    {
+        circle->SetStroke( STROKE_PARAMS( -1, LINE_STYLE::SOLID ) );
+        circle->SetFillMode( FILL_T::FILLED_SHAPE );
+    }
+    else
+    {
+        circle->SetStroke( STROKE_PARAMS( aCircle->width.ToSchUnits(), LINE_STYLE::SOLID ) );
+    }
+
     circle->SetUnit( aGateNumber );
 
     return circle;
@@ -2713,8 +2723,9 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymb
 
     rectangle->SetUnit( aGateNumber );
 
-    // Eagle rectangles are filled by definition.
+    // Eagle rectangles are filled and have vanishing line width by definition.
     rectangle->SetFillMode( FILL_T::FILLED_SHAPE );
+    rectangle->SetWidth( -1 );
 
     return rectangle;
 }
