@@ -1237,39 +1237,33 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
     targetPoly.CacheTriangulation();
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
-    std::map<EDA_GROUP*, EDA_GROUP*>   groupMap;
 
-    // For Apply Design Block Layout, grouping is handled later by RepeatLayout() using the
-    // existing target group. Do not clone groups here or we end up with duplicates.
-    const bool preserveGroups = aTargetArea->m_sourceType != PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+    // Group placement targets let RepeatLayout() reuse the existing target group, and m_groupItems
+    // flat-groups every copy into one rule-area group. Reconstructing source groups here in either
+    // case strands their members and leaves empty phantom clones behind (issue 22316).
+    const bool preserveGroups = aTargetArea->m_sourceType != PLACEMENT_SOURCE_T::GROUP_PLACEMENT
+                                && !aOpts.m_groupItems;
+
+    // Defer reconstruction until every copy is made. Cloning a source group the moment one member
+    // is copied would duplicate user groups that merely overlap the source area (issue 22316); a
+    // group is rebuilt only once all of its members have been reproduced.
+    std::vector<std::pair<BOARD_ITEM*, BOARD_ITEM*>> groupFixupPairs;
+    std::set<BOARD_ITEM*>                            reproducedSourceItems;
 
     auto fixupParentGroup =
             [&]( BOARD_ITEM* sourceItem, BOARD_ITEM* destItem )
             {
+                // The copy inherits the source's parent-group pointer but is not a member of that
+                // group; clear the dangling reference.
+                destItem->SetParentGroup( nullptr );
+
                 if( !preserveGroups )
                     return;
 
-                if( EDA_GROUP* parentGroup = sourceItem->GetParentGroup() )
-                {
-                    if( !groupMap.contains( parentGroup ) )
-                    {
-                        PCB_GROUP* newGroup = static_cast<PCB_GROUP*>(
-                                static_cast<PCB_GROUP*>( parentGroup->AsEdaItem() )->Duplicate( false ) );
-                        newGroup->GetItems().clear();
-                        newGroup->SetParentGroup( nullptr );
+                if( sourceItem->GetParentGroup() )
+                    groupFixupPairs.emplace_back( sourceItem, destItem );
 
-                        if( newGroup->Type() == PCB_GENERATOR_T )
-                        {
-                            newGroup->Rotate( VECTOR2( 0, 0 ), rot );
-                            newGroup->Move( disp );
-                        }
-
-                        groupMap[parentGroup] = newGroup;
-                        aCommit->Add( newGroup );
-                    }
-
-                    groupMap[parentGroup]->AddItem( destItem );
-                }
+                reproducedSourceItems.insert( sourceItem );
             };
 
     // Only stage changes for a target Rule Area zone if it actually belongs to the board.
@@ -1294,6 +1288,16 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
         aCommit->Modify( aTargetArea->m_zone );
         aCompatData.m_affectedItems.insert( aTargetArea->m_zone );
         aCompatData.m_groupableItems.insert( aTargetArea->m_zone );
+
+        // The source rule-area zone maps to the target zone; treat it as reproduced so a group
+        // containing it can still be rebuilt.
+        if( preserveGroups )
+        {
+            if( aRefArea->m_zone->GetParentGroup() )
+                groupFixupPairs.emplace_back( aRefArea->m_zone, aTargetArea->m_zone );
+
+            reproducedSourceItems.insert( aRefArea->m_zone );
+        }
     }
 
     if( aOpts.m_copyRouting )
@@ -1655,6 +1659,82 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
             aCompatData.m_affectedItems.insert( targetFP );
             aCompatData.m_groupableItems.insert( targetFP );
+
+            // The matched footprint maps to its target; treat it as reproduced so a group
+            // containing it can be rebuilt.
+            if( preserveGroups && refFP->GetParentGroup() )
+                groupFixupPairs.emplace_back( refFP, targetFP );
+
+            if( preserveGroups )
+                reproducedSourceItems.insert( refFP );
+        }
+    }
+
+    // Rebuild a source group only when all of its members were reproduced. A group that merely
+    // overlaps the source area keeps uncopied members, so it is left untouched rather than
+    // partially duplicated (issue 22316).
+    if( preserveGroups && !groupFixupPairs.empty() )
+    {
+        std::map<EDA_GROUP*, EDA_GROUP*> groupMap;
+        std::map<EDA_GROUP*, bool>       fullyReproducedCache;
+
+        auto groupFullyReproduced =
+                [&]( EDA_GROUP* aGroup )
+                {
+                    if( auto it = fullyReproducedCache.find( aGroup ); it != fullyReproducedCache.end() )
+                        return it->second;
+
+                    bool reproduced = true;
+
+                    for( EDA_ITEM* member : aGroup->GetItems() )
+                    {
+                        // Nested groups are not reproduced, so a parent containing one can never
+                        // be fully reproduced.
+                        if( !member->IsBOARD_ITEM()
+                            || !reproducedSourceItems.contains( static_cast<BOARD_ITEM*>( member ) ) )
+                        {
+                            reproduced = false;
+                            break;
+                        }
+                    }
+
+                    fullyReproducedCache[aGroup] = reproduced;
+                    return reproduced;
+                };
+
+        for( const auto& [sourceItem, destItem] : groupFixupPairs )
+        {
+            EDA_GROUP* parentGroup = sourceItem->GetParentGroup();
+
+            if( !parentGroup || !groupFullyReproduced( parentGroup ) )
+                continue;
+
+            if( !groupMap.contains( parentGroup ) )
+            {
+                PCB_GROUP* newGroup = static_cast<PCB_GROUP*>(
+                        static_cast<PCB_GROUP*>( parentGroup->AsEdaItem() )->Duplicate( false ) );
+                newGroup->GetItems().clear();
+                newGroup->SetParentGroup( nullptr );
+
+                if( newGroup->Type() == PCB_GENERATOR_T )
+                {
+                    newGroup->Rotate( VECTOR2( 0, 0 ), rot );
+                    newGroup->Move( disp );
+                }
+
+                groupMap[parentGroup] = newGroup;
+                aCommit->Add( newGroup );
+            }
+
+            // AddItem reparents the footprint out of any group it already belongs to; stage that
+            // group so the membership change is captured for undo.
+            if( EDA_GROUP* oldGroup = destItem->GetParentGroup() )
+            {
+                if( oldGroup != groupMap[parentGroup] )
+                    aCommit->Modify( oldGroup->AsEdaItem() );
+            }
+
+            groupMap[parentGroup]->AddItem( destItem );
         }
     }
 
