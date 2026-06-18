@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
 "PO-Revision-Date: 2026-06-18 23:02+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: The Hobbit <dasfilter@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -35727,12 +35727,10 @@ msgid "Could not rebase"
 msgstr "Rebase nicht möglich"
 
 #: kicad/project_tree_pane.cpp:2107
-#, fuzzy
 msgid "Pull cancelled."
 msgstr "Pull abgebrochen."
 
 #: kicad/project_tree_pane.cpp:2116
-#, fuzzy
 msgid "Pull failed."
 msgstr "Pull ist gescheitert."
 
@@ -42534,7 +42532,6 @@ msgid "3D Model Output File"
 msgstr "3D Modell-Ausgabedatei"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:412
-#, fuzzy
 msgid "Please save the board before exporting STEP."
 msgstr "Bitte speichern Sie die Platine vor dem STEP-Export."
 
@@ -42555,14 +42552,12 @@ msgstr ""
 "Speichern Sie die Platine an einer gültigen Stelle vor dem STEP-Export."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:441
-#, fuzzy
 msgid "Failed to reserve a temporary filename for STEP export."
 msgstr ""
 "Reservierung eines vorläufigen Dateinamens für den STEP-Export ist "
 "gescheitert."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:460
-#, fuzzy
 msgid "Failed to save the current board state for export."
 msgstr "Speichern des aktuellen Platinenstands für den Export ist gescheitert."
 
@@ -61001,7 +60996,6 @@ msgid "Heal Shapes"
 msgstr "Formen heilen"
 
 #: pcbnew/tools/edit_tool.cpp:2544
-#, fuzzy
 msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
@@ -63579,7 +63573,6 @@ msgid "Design block has no layout to place."
 msgstr "Designblock hat kein Layout das eingefügt werden könnte."
 
 #: pcbnew/tools/pcb_control.cpp:1491
-#, fuzzy
 msgid "No groups with a linked design block are selected."
 msgstr "Es sind keine Gruppen mit verknüpftem Designblock ausgewählt."
 
@@ -63591,12 +63584,10 @@ msgstr ""
 "um diese zu bearbeiten."
 
 #: pcbnew/tools/pcb_control.cpp:1540
-#, fuzzy
 msgid "Applying Design Block Layouts"
 msgstr "Designblock-Layouts verwenden"
 
 #: pcbnew/tools/pcb_control.cpp:1571
-#, fuzzy
 msgid "design block is not in the loaded libraries"
 msgstr "Designblock ist nicht in den geladenen Bibliotheken vorhanden"
 
@@ -63605,7 +63596,6 @@ msgid "design block has no saved PCB layout"
 msgstr "Designblock hat kein gespeichertes PCB-Layout"
 
 #: pcbnew/tools/pcb_control.cpp:1608
-#, fuzzy
 msgid "could not load the design block's layout"
 msgstr "Konnte das Layout des Designblocks nicht laden"
 
@@ -63620,7 +63610,6 @@ msgid "group is empty"
 msgstr "Ausdruck ist leer"
 
 #: pcbnew/tools/pcb_control.cpp:1724
-#, fuzzy
 msgid "layout copy failed"
 msgstr "Layoutkopie gescheitert"
 
