@@ -995,19 +995,22 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     AXIS_LOCK axisLock = AXIS_LOCK::NONE;
     long      lastArrowKeyAction = 0;
 
+    // The footprint editor has no DRC_TOOL, so the engine may be unavailable.
+    DRC_TOOL*                   drcTool = m_toolMgr->GetTool<DRC_TOOL>();
+    std::shared_ptr<DRC_ENGINE> drcEngine = drcTool ? drcTool->GetDRCEngine() : nullptr;
+
     // Used to test courtyard overlaps
     std::unique_ptr<DRC_INTERACTIVE_COURTYARD_CLEARANCE> drc_on_move = nullptr;
 
     if( showCourtyardConflicts )
     {
-        std::shared_ptr<DRC_ENGINE> drcEngine = m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine();
         drc_on_move.reset( new DRC_INTERACTIVE_COURTYARD_CLEARANCE( drcEngine ) );
         drc_on_move->Init( board );
     }
 
     // No-op unless RealtimeCreepage is set and the board has creepage constraints
-    std::unique_ptr<CREEPAGE_OVERLAY> creepage_on_move = std::make_unique<CREEPAGE_OVERLAY>(
-            board, m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine(), m_toolMgr->GetView() );
+    std::unique_ptr<CREEPAGE_OVERLAY> creepage_on_move =
+            std::make_unique<CREEPAGE_OVERLAY>( board, drcEngine, m_toolMgr->GetView() );
 
     auto configureAngleSnap =
             [&]( LEADER_MODE aMode )
