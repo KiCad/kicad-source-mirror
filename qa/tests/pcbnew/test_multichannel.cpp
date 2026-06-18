@@ -1686,4 +1686,89 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutRefusesDuplicatePlacementAreas, MULTICHANNE
 }
 
 
+/**
+ * Repeat layout with "group items with their target rule areas" must not duplicate unrelated
+ * user groups that merely overlap the source rule area (issue 22316).
+ *
+ * The fixture has four sheet-based rule areas ("test 1".."test 4") and three user groups
+ * ("test group A/B/C") that contain footprints and tracks.  Some of those grouped tracks fall
+ * geometrically inside the source rule area, so the copy-routing pass duplicates them.  The bug
+ * was that cloning the parent group of any single copied item produced partial "phantom" clones
+ * of the unrelated user groups.  After the fix, a source group is only reconstructed in the
+ * target when all of its members are part of the copied layout.
+ */
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutDoesNotDuplicateUnrelatedGroups, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue22316/issue22316", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->FindExistingRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Found %d rule areas",
+                                          static_cast<int>( ruleData->m_areas.size() ) ) );
+
+    BOOST_REQUIRE_EQUAL( ruleData->m_areas.size(), 4 );
+
+    RULE_AREA* refArea = nullptr;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_ruleName == wxT( "test 1" ) )
+            refArea = &ra;
+    }
+
+    BOOST_REQUIRE( refArea != nullptr );
+
+    std::set<KIID>     groupUuidsBefore;
+    std::set<wxString> userGroupNamesBefore;
+
+    for( PCB_GROUP* group : m_board->Groups() )
+    {
+        groupUuidsBefore.insert( group->m_Uuid );
+
+        if( !group->GetName().IsEmpty() )
+            userGroupNamesBefore.insert( group->GetName() );
+    }
+
+    mtTool->CheckRACompatibility( refArea->m_zone );
+
+    for( auto& [targetArea, compatData] : ruleData->m_compatMap )
+        compatData.m_doCopy = true;
+
+    ruleData->m_options.m_copyPlacement = true;
+    ruleData->m_options.m_copyRouting = true;
+    ruleData->m_options.m_copyOtherItems = true;
+    ruleData->m_options.m_groupItems = true;
+    ruleData->m_options.m_includeLockedItems = true;
+
+    int result = mtTool->RepeatLayout( TOOL_EVENT(), refArea->m_zone );
+
+    BOOST_REQUIRE( result >= 0 );
+
+    int clonedUserGroups = 0;
+
+    for( PCB_GROUP* group : m_board->Groups() )
+    {
+        bool isNew = !groupUuidsBefore.contains( group->m_Uuid );
+
+        if( isNew && userGroupNamesBefore.contains( group->GetName() ) )
+            clonedUserGroups++;
+    }
+
+    BOOST_CHECK_MESSAGE( clonedUserGroups == 0,
+                         wxString::Format( "Repeat layout cloned %d unrelated user groups "
+                                           "(issue 22316)",
+                                           clonedUserGroups ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
