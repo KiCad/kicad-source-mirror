@@ -37,8 +37,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 21:34+0000\n"
-"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
+"PO-Revision-Date: 2026-06-18 23:01+0000\n"
+"Last-Translator: Mert Gülsoy <mgulsoy@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
 "source/tr/>\n"
 "Language: tr\n"
@@ -3560,7 +3560,7 @@ msgstr "Bağlı bir ağ seçilmedi."
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
 msgid "%zu conflict(s) require resolution."
-msgstr ""
+msgstr "%zu adet çelişkinin çözümlenmesi gerekli."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:217
 #, c-format
@@ -3589,6 +3589,8 @@ msgstr "Çakışma"
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
 msgstr ""
+"Hangi tarafı tutmak istediğinizi seçerek her bir çelişkiyi çözün ve "
+"sonrasında Uygula'ya tıklayın."
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:31
 #: eeschema/erc/erc_item.cpp:38
@@ -3602,11 +3604,11 @@ msgstr "Pin adı içinde"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
-msgstr ""
+msgstr "Bizimkiler"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:64
 msgid "Theirs"
-msgstr ""
+msgstr "Onlarınki"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
 #, fuzzy
@@ -6704,11 +6706,11 @@ msgstr "Mevcut çözünürlük: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
-msgstr ""
+msgstr "Bizimkini al"
 
 #: common/diff_merge/auto_resolution.cpp:257
 msgid "Take theirs"
-msgstr ""
+msgstr "Onlarınkini al"
 
 #: common/diff_merge/auto_resolution.cpp:258
 msgid "Take ancestor"
@@ -8997,6 +8999,8 @@ msgid ""
 "Unexpected end of file at offset 0x%06zX: need 3 bytes for int3, have %zu "
 "remaining."
 msgstr ""
+"Dosya, başına göre 0x%06zX pozisyonunda beklenmedik bir şekilde sonlandı. "
+"int3 tipinde veri için 3 byte'a ihtiyaç var fakat %zu kadar veri elde var."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:227
 #, c-format
@@ -9004,21 +9008,25 @@ msgid ""
 "Unexpected end of file at offset 0x%06zX: need 4 bytes for int4, have %zu "
 "remaining."
 msgstr ""
+"Dosya, başına göre 0x%06zX pozisyonunda beklenmedik bir şekilde sonlandı. "
+"int4 tipinde veri için 4 byte'a ihtiyaç var fakat %zu kadar veri elde var."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:248
 #, c-format
 msgid "Unexpected end of file at offset 0x%06zX: need 1 byte."
 msgstr ""
+"Dosya, başına göre 0x%06zX pozisyonunda beklenmedik bir şekilde sonlandı. 1 "
+"byte'a ihtiyaç var."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:393
 #, c-format
 msgid "Unreasonable string length %d at offset 0x%06zX."
-msgstr ""
+msgstr "%d byte metin uzunluğu mantıksız. Pozisyon: 0x%06zX."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:422
 #, c-format
 msgid "Unreasonable v37 string length %d at offset 0x%06zX."
-msgstr ""
+msgstr "%d byte v37 metin uzunluğu mantıksız. Pozisyon: 0x%06zX."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:556
 #, c-format
