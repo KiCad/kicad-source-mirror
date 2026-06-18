@@ -645,6 +645,26 @@ void SYMBOL_EDIT_FRAME::closeAllSymbolTabsSilently()
 }
 
 
+void SYMBOL_EDIT_FRAME::closeSymbolTab( const LIB_ID& aLibId )
+{
+    if( !m_tabsPanel )
+        return;
+
+    const wxString key = SYMBOL_EDITOR_TAB_CONTEXT::MakeTabKey( aLibId.GetLibNickname(), aLibId.GetLibItemName() );
+
+    const int idx = m_tabsPanel->FindTab( key );
+
+    if( idx < 0 )
+        return;
+
+    // The caller already confirmed the deletion, so close without re-prompting. The panel selects a
+    // successor tab when this was the active one.
+    m_silentSymbolTabClose = true;
+    m_tabsPanel->CloseTab( idx );
+    m_silentSymbolTabClose = false;
+}
+
+
 void SYMBOL_EDIT_FRAME::restoreSymbolTabsFromSettings()
 {
     wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "restoreSymbolTabsFromSettings enter" ) );

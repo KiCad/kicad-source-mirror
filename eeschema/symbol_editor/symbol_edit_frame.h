@@ -624,6 +624,12 @@ private:
     void closeAllSymbolTabsSilently();
 
     /**
+     * Close the open tab for aLibId, if any, without prompting and leaving the other tabs open. The
+     * panel selects a successor when the closed tab was active.
+     */
+    void closeSymbolTab( const LIB_ID& aLibId );
+
+    /**
      * Capture the current view zoom/center for the active tab's snapshot.
      */
     EDITOR_TAB_CONTEXT::VIEW_SNAPSHOT captureSymbolViewSnapshot() const;

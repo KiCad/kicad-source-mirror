@@ -158,6 +158,20 @@ public:
     void LoadFootprintFromLibrary( LIB_ID aFPID );
 
     /**
+     * Prepare the editor for a new footprint, returning false if the user cancels.
+     *
+     * With tabs and a target library the new footprint opens in its own tab and the other tabs are
+     * left intact. Otherwise it falls back to the legacy single-board clear.
+     */
+    bool BeginNewFootprint( const wxString& aLibrary );
+
+    /**
+     * Close the open tab for aFPID, if any, without prompting and leaving the other tabs open. The
+     * panel selects a successor when the closed tab was active.
+     */
+    void CloseFootprintTab( const LIB_ID& aFPID );
+
+    /**
      * Return the adapter object that provides the stored data.
      */
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& GetLibTreeAdapter() { return m_adapter; }
@@ -487,6 +501,9 @@ private:
     /// Set while a full clear tears the tab strip down so the panel's close-driven re-activation does
     /// not re-borrow a tab-owned board about to be freed.
     bool                        m_suppressTabActivation;
+
+    /// While true, promptAndCloseFootprintTab() skips the unsaved-changes dialog.
+    bool m_silentFootprintTabClose;
 
 #ifdef KICAD_IPC_API
     std::unique_ptr<API_HANDLER_FOOTPRINT> m_apiHandler;

@@ -1281,7 +1281,16 @@ void SYMBOL_EDIT_FRAME::DeleteSymbolFromLibrary()
                 continue;
         }
 
-        if( GetCurSymbol() )
+        if( m_tabsPanel )
+        {
+            // Close only the tabs for the symbol being deleted and the symbols derived from it,
+            // which are removed along with it. The other open tabs stay put.
+            closeSymbolTab( libId );
+
+            for( const wxString& derivedName : derived )
+                closeSymbolTab( LIB_ID( libId.GetLibNickname().wx_str(), derivedName ) );
+        }
+        else if( GetCurSymbol() )
         {
             for( const std::shared_ptr<LIB_SYMBOL>& symbol : GetParentChain( *GetCurSymbol() ) )
             {

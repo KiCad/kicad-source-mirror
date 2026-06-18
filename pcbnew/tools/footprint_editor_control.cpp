@@ -215,13 +215,18 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
     const LIB_ID   selected = m_frame->GetTargetFPID();
     const wxString libraryName = selected.GetUniStringLibNickname();
 
-    if( !m_frame->Clear_Pcb( true ) )
+    if( !m_frame->BeginNewFootprint( libraryName ) )
         return 0;
 
     FOOTPRINT* newFootprint = m_frame->CreateNewFootprint( wxEmptyString, libraryName );
 
     if( !newFootprint )
         return 0;
+
+    // Give the new footprint a resolvable identity so it opens in its own tab instead of
+    // overwriting the active one. The legacy single-board path leaves the nickname empty.
+    if( m_frame->GetTabsPanel() && !libraryName.IsEmpty() )
+        newFootprint->SetFPID( LIB_ID( libraryName, newFootprint->GetFPID().GetLibItemName() ) );
 
     canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     m_frame->AddFootprintToBoard( newFootprint );
@@ -555,10 +560,15 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
 int FOOTPRINT_EDITOR_CONTROL::DeleteFootprint( const TOOL_EVENT& aEvent )
 {
     FOOTPRINT_EDIT_FRAME* frame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
+    const LIB_ID          fpID = frame->GetTargetFPID();
 
-    if( frame->DeleteFootprintFromLibrary( frame->GetTargetFPID(), true ) )
+    if( frame->DeleteFootprintFromLibrary( fpID, true ) )
     {
-        if( frame->GetTargetFPID() == frame->GetLoadedFPID() )
+        // Close only the deleted footprint's tab, leaving the others open. Without a tab strip, fall
+        // back to clearing the shared board when the deleted footprint is the one on screen.
+        if( frame->GetTabsPanel() )
+            frame->CloseFootprintTab( fpID );
+        else if( fpID == frame->GetLoadedFPID() )
             frame->Clear_Pcb( false );
 
         frame->SyncLibraryTree( true );

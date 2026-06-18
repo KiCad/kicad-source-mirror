@@ -114,13 +114,13 @@ END_EVENT_TABLE()
 
 
 FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_FOOTPRINT_EDITOR, wxEmptyString,
-                         wxDefaultPosition, wxDefaultSize,
-                         KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() ),
-    m_show_layer_manager_tools( true ),
-    m_tabsPanel( nullptr ),
-    m_activeTab( nullptr ),
-    m_suppressTabActivation( false )
+        PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_FOOTPRINT_EDITOR, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                             KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() ),
+        m_show_layer_manager_tools( true ),
+        m_tabsPanel( nullptr ),
+        m_activeTab( nullptr ),
+        m_suppressTabActivation( false ),
+        m_silentFootprintTabClose( false )
 {
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_aboutTitle = _HKI( "KiCad Footprint Editor" );
@@ -1279,7 +1279,7 @@ bool FOOTPRINT_EDIT_FRAME::promptAndCloseFootprintTab( int aIdx )
     if( ctx == m_activeTab && GetScreen() )
         ctx->SetModified( GetScreen()->IsContentModified() );
 
-    if( ctx->IsModified() )
+    if( ctx->IsModified() && !m_silentFootprintTabClose )
     {
         // Prompt while the closing tab is still fully live so a save reads its real board.
         wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ),
@@ -1363,6 +1363,26 @@ bool FOOTPRINT_EDIT_FRAME::promptAndCloseFootprintTab( int aIdx )
     m_tabContexts.erase( m_tabContexts.begin() + aIdx );
 
     return true;
+}
+
+
+void FOOTPRINT_EDIT_FRAME::CloseFootprintTab( const LIB_ID& aFPID )
+{
+    if( !m_tabsPanel )
+        return;
+
+    const wxString lib = aFPID.GetLibNickname();
+    const wxString name = aFPID.GetLibItemName();
+    const int      idx = m_tabsPanel->FindTab( lib + wxT( ":" ) + name );
+
+    if( idx < 0 )
+        return;
+
+    // The caller already confirmed the deletion, so close without re-prompting. The panel selects a
+    // successor when the closed tab was active.
+    m_silentFootprintTabClose = true;
+    m_tabsPanel->CloseTab( idx );
+    m_silentFootprintTabClose = false;
 }
 
 

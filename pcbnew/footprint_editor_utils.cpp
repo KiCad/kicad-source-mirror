@@ -155,6 +155,29 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
 }
 
 
+bool FOOTPRINT_EDIT_FRAME::BeginNewFootprint( const wxString& aLibrary )
+{
+    // No tab strip or target library to key a tab on, so use the legacy single-board clear.
+    if( !m_tabsPanel || aLibrary.IsEmpty() )
+        return Clear_Pcb( true );
+
+    // The new footprint opens in its own tab. Only a dirty tab-less frame board needs saving.
+    if( !activeBoardOwnedByTab() && IsContentModified() )
+    {
+        if( !HandleUnsavedChanges( this, _( "The current footprint has been modified.  Save changes?" ),
+                                   [&]() -> bool
+                                   {
+                                       return SaveFootprint( GetBoard()->Footprints().front() );
+                                   } ) )
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 void FOOTPRINT_EDIT_FRAME::centerItemIdleHandler( wxIdleEvent& aEvent )
 {
     m_treePane->GetLibTree()->CenterLibId( m_centerItemOnIdle );
