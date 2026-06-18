@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"PO-Revision-Date: 2026-06-18 17:01+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -2745,6 +2745,8 @@ msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"Zastępuje zapisany plik wersją zapisaną automatycznie. Poprzednio zapisana "
+"zawartość zostanie usunięta."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
 msgid "Keep current"
@@ -2753,6 +2755,7 @@ msgstr "Zachowaj bieżący"
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
+"Zachowuje zapisany plik bez zmian i odrzuca automatycznie zapisane zmiany."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
 msgid "Keep both"
@@ -2763,6 +2766,8 @@ msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"Zachowuje zapisany plik i zapisuje automatycznie zapisaną wersję obok niego "
+"jako osobny plik ze znacznikiem czasu, który można później przejrzeć."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
 msgid "Cancel open"
@@ -2773,6 +2778,9 @@ msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"Zamyka to okno dialogowe bez wprowadzania żadnych zmian. Automatycznie "
+"zapisane pliki pozostają na dysku i zostaną ponownie wyświetlone przy "
+"następnym otwarciu projektu."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
@@ -3207,11 +3215,11 @@ msgstr "Edycja właściwości grup"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Grupa nie może zawierać siebie samej."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "Nie można dodać tej grupy, ponieważ zawiera ona już bieżącą grupę."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -4000,7 +4008,7 @@ msgstr "Opis zmian nie może być pusty"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
-msgstr ""
+msgstr "Klucz hasła:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
@@ -4009,15 +4017,15 @@ msgstr "Hasło / token:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "Wymagana jest autoryzacja by uzyskać dostęp:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Użytkownik i hasło"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "Klucz SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -7968,37 +7976,37 @@ msgstr "Nie można było utworzyć bloku zmian: %s"
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2768
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "Nie można zmodyfikować: drzewo nie posiada jeszcze żadnych zatwierdzeń."
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Nie udało się pobrać zmian: %s"
+msgstr "Nie udało się pobrać zatwierdzenia HEAD: %s"
 
 #: common/git/libgit_backend.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Nie udało się pobrać zmian: %s"
+msgstr "Nie udało się pobrać nadrzędnego zatwierdzenia: %s"
 
 #: common/git/libgit_backend.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "Nie udało się pobrać odnośnika HEAD: %s"
+msgstr "Nie udało się pobrać drzewa HEAD: %s"
 
 #: common/git/libgit_backend.cpp:372 common/git/libgit_backend.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "Nie można zapisać indeksu: '%s'"
+msgstr "Nie udało się zresetować indeksu: %s"
 
 #: common/git/libgit_backend.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "Nie udało się zapisać drzewa: %s"
+msgstr "Nie udało się pobrać nadrzędnego drzewa: %s"
 
 #: common/git/libgit_backend.cpp:464 kicad/project_tree_pane.cpp:3013
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "Nie udało się pobrać zmian: %s"
+msgstr "Nie udało się poprawić zmian: %s"
 
 #: common/git/libgit_backend.cpp:491 common/git/libgit_backend.cpp:1065
 #, c-format
@@ -8029,9 +8037,9 @@ msgid "No repository available to set up remote"
 msgstr "Brak dostępnego repozytorium do skonfigurowania go zdalnie"
 
 #: common/git/libgit_backend.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "Nie można było utworzyć zdalnie: %s"
+msgstr "Nie udało się ustawić zdalnego repozytorium: %s"
 
 #: common/git/libgit_backend.cpp:931
 msgid "No repository available"
@@ -8053,9 +8061,9 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "Nie można przełączyć się do gałęzi '%s': %s"
 
 #: common/git/libgit_backend.cpp:998
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "Nie można przejrzeć gałęzi '%s': %s"
+msgstr "Nie udało się utworzyć lokalnej gałęzi '%s': %s"
 
 #: common/git/libgit_backend.cpp:1012
 #, c-format
@@ -8080,6 +8088,8 @@ msgstr "Nie można odczytać 'FETCH_HEAD'"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Nic do pobrania: zdalny serwer nie ma gałęzi odpowiadającej bieżącej gałęzi "
+"lokalnej."
 
 #: common/git/libgit_backend.cpp:1179
 msgid "Could not lookup commit"
@@ -8151,9 +8161,8 @@ msgid "Could not read repository index after merge."
 msgstr "Nie można odczytać indeksu repozytorium po scaleniu."
 
 #: common/git/libgit_backend.cpp:1494
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "Nie mogę zapisać plików z rysunkami w folderze '%s'."
+msgstr "Nie mogę zapisać rezultatu scalenia."
 
 #: common/git/libgit_backend.cpp:1502
 msgid "Could not get the repository head."
@@ -8168,6 +8177,8 @@ msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"Nie udało się utworzyć podpisu zatwierdzenia.  Ustaw user.name i user.email "
+"w konfiguracji Git."
 
 #: common/git/libgit_backend.cpp:1530
 #, c-format
@@ -8207,32 +8218,32 @@ msgid "Another git operation is in progress."
 msgstr "Inna operacja git jest aktualnie w trakcie."
 
 #: common/git/libgit_backend.cpp:1635 common/git/libgit_backend.cpp:1688
-#, fuzzy
 msgid "Could not find the matching remote branch."
-msgstr "Nie można odnaleźć '%s' w zaimportowanej bibliotece."
+msgstr "Nie można odnaleźć pasującej gałęzi zdalnej."
 
 #: common/git/libgit_backend.cpp:1644 common/git/libgit_backend.cpp:1697
 msgid "Could not read the remote branch."
 msgstr "Nie można odczytać zdalnej gałęzi."
 
 #: common/git/libgit_backend.cpp:1653
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Nie można wypchnąć zdalnie: %s"
+msgstr "Nie można zresetować do gałęzi zdalnej: %s"
 
 #: common/git/libgit_backend.cpp:1679
-#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Nie można scalić: istnieją nieudostępnione zmiany. Należy je zatwierdzić lub "
-"schować przed pobraniem."
+"Nie można przebazować: istnieją nieudostępnione zmiany.  Należy je wcześniej "
+"zatwierdzić lub schować."
 
 #: common/git/libgit_backend.cpp:1737 common/git/libgit_backend.cpp:1748
 msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"Rebase napotkało konflikty.  Najlepiej rozwiązać je z poziomu wiersza "
+"poleceń Git."
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -15284,9 +15295,9 @@ msgid "Derived symbol must have a parent selected"
 msgstr "Symbol pochodny musi mieć wybrany symbol nadrzędny"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "The unit name '%s' is already in use."
-msgstr "Nazwa '%s' już jest w użyciu."
+msgstr "Nazwa jednostki '%s' już jest w użyciu."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:522
 msgid "Delete extra units from symbol?"
@@ -28144,6 +28155,7 @@ msgstr "Niektóre z zaznaczonych elementów nie można zgrupować."
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 msgid "Child items cannot be grouped separately from their parent item."
 msgstr ""
+"Elementów podrzędnych nie można grupować oddzielnie od elementu nadrzędnego."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -30880,9 +30892,8 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "Rysuje zadane warstwy na pojedynczym, wielostronnym pliku PDF"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:128
-#, fuzzy
 msgid "Suppress footprint property popups"
-msgstr "Generuj wyskakujące okienka właściwości"
+msgstr "Wyłącz wyskakujące okienka właściwości footprintu"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:192
 msgid "Cannot use more than one mode flag\n"
@@ -32905,13 +32916,12 @@ msgid "Initialize a new repository"
 msgstr "Inicjuje nowe repozytorium"
 
 #: kicad/project_tree_pane.cpp:1042
-#, fuzzy
 msgid "Configure Default Remote..."
-msgstr "Konfiguracja ścieżek dostępu..."
+msgstr "Konfiguracja domyślnego repozytorium zdalnego..."
 
 #: kicad/project_tree_pane.cpp:1043
 msgid "Set or change the default remote URL and credentials"
-msgstr ""
+msgstr "Ustawia lub zmienia domyślny zdalny adres URL i dane uwierzytelniające"
 
 #: kicad/project_tree_pane.cpp:1046
 msgid "Commit Project..."
@@ -32927,7 +32937,7 @@ msgstr "Zmień ostatnie zatwierdzenie..."
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "Przepisuje ostatnie zatwierdzenie na bieżącej gałęzi"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -32943,9 +32953,9 @@ msgid "Push %s to %s"
 msgstr "Wypchnij %s do %s"
 
 #: kicad/project_tree_pane.cpp:1060
-#, fuzzy, c-format
+#, c-format
 msgid "Pull from %s"
-msgstr "z %s"
+msgstr "Pobierz z %s"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Push committed local changes to remote repository"
@@ -33059,9 +33069,8 @@ msgid "Fetch Remote"
 msgstr "Pobieranie repozytorium zdalnego"
 
 #: kicad/project_tree_pane.cpp:1988
-#, fuzzy
 msgid "Configure Default Remote"
-msgstr "Ustaw domyślne repozytorium zdalne"
+msgstr "Skonfiguruj domyślne repozytorium zdalne"
 
 #: kicad/project_tree_pane.cpp:2004
 msgid "Failed to configure remote."
@@ -33072,18 +33081,18 @@ msgid "Already up to date."
 msgstr "Obecnie aktualny."
 
 #: kicad/project_tree_pane.cpp:2058
-#, fuzzy, c-format
+#, c-format
 msgid "Already up to date with %s."
-msgstr "Rozpoznana szerokość poł. termicznego: %s."
+msgstr "Obecnie aktualne z %s."
 
 #: kicad/project_tree_pane.cpp:2064
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "Pobrane zmiany (szybkie)."
 
 #: kicad/project_tree_pane.cpp:2065
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "Pobrano %s do %s (szybkie)."
 
 #: kicad/project_tree_pane.cpp:2070
 msgid "Pulled changes."
@@ -33102,33 +33111,35 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"Zmiany lokalne i zdalne powodują konflikt, więc pobieranie zostało anulowane "
+"i nic nie zostało zmienione.\n"
+"\n"
+"Możesz odrzucić zatwierdzenia lokalne i użyć wersji zdalnej lub ponownie "
+"oprzeć zatwierdzenia na wersji zdalnej."
 
 #: kicad/project_tree_pane.cpp:2085
-#, fuzzy
 msgid "Pull Conflict"
-msgstr "Konflikty"
+msgstr "Konflikty pobrania"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Use Remote (discard my changes)"
-msgstr ""
+msgstr "Użyj zdalnej (porzuć zmiany)"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Rebase"
-msgstr ""
+msgstr "Przebazuj"
 
 #: kicad/project_tree_pane.cpp:2095
-#, fuzzy
 msgid "Reset to the remote version."
-msgstr "Przywróć aktualny kąt z pozycji odniesienia."
+msgstr "Zresetuj do wersji zdalnej."
 
 #: kicad/project_tree_pane.cpp:2097
 msgid "Failed to reset to remote"
 msgstr "Nie udało się zresetować repozytorium zdalnego"
 
 #: kicad/project_tree_pane.cpp:2104
-#, fuzzy
 msgid "Rebased your changes onto the remote."
-msgstr "Nie udało się wypchnąć zmian do zdalnego repozytorium."
+msgstr "Przebazowano twoje zmiany na zdalnym repozytorium."
 
 #: kicad/project_tree_pane.cpp:2106
 msgid "Could not rebase"
@@ -33165,14 +33176,22 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
+"Odrzucono wprowadzenie: Twoja lokalna gałąź i %s posiadają rozbieżności.\n"
+"\n"
+"Zwykle dzieje się tak po poprawieniu lub przepisaniu zatwierdzenia, które "
+"zostało już wypchnięte. Czy wymusić wypchnięcie, aby nadpisać zdalne "
+"zatwierdzenie?\n"
+"\n"
+"Każdy, kto już pobrał poprzednią wersję, będzie musiał zresetować swoją "
+"kopię."
 
 #: kicad/project_tree_pane.cpp:2174
 msgid "Force Push?"
-msgstr ""
+msgstr "Wymusić wypchnięcie?"
 
 #: kicad/project_tree_pane.cpp:2176
 msgid "&Force Push"
-msgstr ""
+msgstr "Wymuś wypchnięcie"
 
 #: kicad/project_tree_pane.cpp:2185
 msgid "Push failed."
@@ -33198,18 +33217,16 @@ msgstr ""
 "Zapisać je przed zatwierdzeniem?"
 
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2859
-#, fuzzy
 msgid "Unsaved Changes"
-msgstr "Cofnij zmiany"
+msgstr "Niezapisane zmiany"
 
 #: kicad/project_tree_pane.cpp:2587
 msgid "&Save and Commit"
 msgstr "Zapisz i zatwierdź"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "Commit &Anyway"
-msgstr "(%s i tak pozostało do zatwierdzenia.)"
+msgstr "Zatwierdź mimo to"
 
 #: kicad/project_tree_pane.cpp:2604 kicad/project_tree_pane.cpp:2879
 #, c-format
@@ -33232,15 +33249,18 @@ msgid ""
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"Ostatnie zatwierdzenie zostało już przesłane do %s.\n"
+"\n"
+"Poprawka powoduje przepisanie historii publicznej. Każdy, kto wycofał to "
+"zatwierdzenie, będzie musiał zresetować swoją kopię."
 
 #: kicad/project_tree_pane.cpp:2815
 msgid "Amend Published Commit?"
-msgstr ""
+msgstr "Czy zmienić opublikowane zatwierdzenie?"
 
 #: kicad/project_tree_pane.cpp:2817 kicad/project_tree_pane.cpp:2862
-#, fuzzy
 msgid "Amend &Anyway"
-msgstr "Dodaj mimo to"
+msgstr "Popraw mimo to"
 
 #: kicad/project_tree_pane.cpp:2856
 #, c-format
@@ -33254,19 +33274,16 @@ msgstr ""
 "Zapisać je przed wprowadzeniem zmian?"
 
 #: kicad/project_tree_pane.cpp:2862
-#, fuzzy
 msgid "&Save and Amend"
-msgstr "Zapisz jako obraz"
+msgstr "Zapis i popraw"
 
 #: kicad/project_tree_pane.cpp:2995
-#, fuzzy
 msgid "Amend Last Commit"
-msgstr "Ostatnie zmiany"
+msgstr "Popraw ostatnie zatwierdzenie"
 
 #: kicad/project_tree_pane.cpp:3003
-#, fuzzy
 msgid "Discarding amend due to empty commit message."
-msgstr "Odrzucanie zatwierdzenia z powodu pustego komunikatu opisującego."
+msgstr "Odrzucanie modyfikacji z powodu pustego komunikatu opisującego."
 
 #: kicad/project_tree_pane.cpp:3084
 msgid "Fetched from remote."
@@ -39017,9 +39034,9 @@ msgid "Run DRC"
 msgstr "Uruchom DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Elapsed: %s"
-msgstr "Reguła: %s"
+msgstr "Pozostało: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:313
 msgid "Report All Errors for Each Track"
@@ -39046,17 +39063,17 @@ msgstr "Pokazuje reguły projektowe."
 
 #: pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Elapsed: 0 s"
-msgstr ""
+msgstr "Pozostało: 0 s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:472
 #, c-format
 msgid "%1$d min %2$d s"
-msgstr ""
+msgstr "%1$d minut %2$d sekund"
 
 #: pcbnew/dialogs/dialog_drc.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f s"
-msgstr "%.2f mm"
+msgstr "%.2f s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:479
 msgid "-------- DRC canceled by user.<br><br>"
@@ -39639,34 +39656,36 @@ msgstr "Plik wyjściowy modeli 3D"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:416
 msgid "Please save the board before exporting STEP."
-msgstr ""
+msgstr "Proszę zapisać płytkę przed eksportem STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:423
 msgid ""
 "Board file not found on disk.\n"
 "Save the board before exporting STEP."
 msgstr ""
+"Plik płytki nie został znaleziony na dysku.\n"
+"Zapisz płytkę przed eksportem STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:435
 msgid ""
 "The board directory no longer exists.\n"
 "Save the board to a valid location before exporting STEP."
 msgstr ""
+"Katalog z płytką już nie istnieje.\n"
+"Zapisz płytkę w prawidłowej lokalizacji przed eksportem STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:445
-#, fuzzy
 msgid "Failed to reserve a temporary filename for STEP export."
-msgstr "Nie udało się zmienić nazwy pliku tymczasowego '%s'."
+msgstr ""
+"Nie udało się zarezerwować tymczasowej nazwy pliku by wyeksportować STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:464
-#, fuzzy
 msgid "Failed to save the current board state for export."
-msgstr "Nie można było zapisać pliku biblioteki footprintów '%s'."
+msgstr "Nie udało się zapisać aktualnego stanu płytki w celu eksportu."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:477
-#, fuzzy
 msgid "Failed to stage the project file for STEP export."
-msgstr "Nie udało się wypchnąć zmian do zdalnego repozytorium."
+msgstr "Nie udało się przygotować pliku projektu do eksportu STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:516
 msgid "No filename for output file"
@@ -41743,15 +41762,16 @@ msgstr ""
 "w programie KiCad."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:99
-#, fuzzy
 msgid "Keep KiCad layer names"
-msgstr "Zachowaj warstwy zewnętrzne"
+msgstr "Zachowaj nazwy warstw KiCad"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:100
 msgid ""
 "If checked, layers will keep their standard KiCad names instead of being "
 "renamed to the imported layer names."
 msgstr ""
+"Jeśli zaznaczono tę opcję, warstwy zachowają swoje standardowe nazwy KiCad "
+"zamiast zostać przemianowane na zaimportowane nazwy warstw."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:67
 msgid "Edit Mapping of Imported Layers"
@@ -44218,16 +44238,16 @@ msgid "Unused Pads"
 msgstr "Nieużywane pola lutownicze"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
-#, fuzzy
 msgid "Apply design block layouts to new groups"
-msgstr ""
-"Stosuje połączony układ ścieżek bloku projektowego do zaznaczonej grupy"
+msgstr "Zastosuj układy bloków projektowych do nowych grup"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
 msgid ""
 "For each new group created from a design block, apply the block's saved "
 "footprint placement and routing automatically."
 msgstr ""
+"Dla każdej nowej grupy utworzonej z bloku projektu automatycznie zastosuj "
+"zapisane rozmieszczenie i trasowanie bloku."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
 msgid "Update Footprints"
@@ -45515,13 +45535,12 @@ msgid "Cancel Changes?"
 msgstr "Anulować zmiany?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:156
-#, fuzzy
 msgid "Show Matching Items"
-msgstr "Pokaż pasujące"
+msgstr "Pokaż pasujące elementy"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:209
 msgid "Cannot show matching items without an open project."
-msgstr ""
+msgstr "Nie można wyświetlić pasujących elementów bez otwartego projektu."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:231
 #: pcbnew/dialogs/panel_setup_rules.cpp:249
@@ -45537,22 +45556,23 @@ msgid "ERROR:"
 msgstr "BŁĄD:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Could not scan rules text: %s"
-msgstr "Nie można wypchnąć zdalnie: %s"
+msgstr "Nie można przeskanować tekstu reguł: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:337
 msgid "Place the cursor inside a (rule ...) block to show matching items."
 msgstr ""
+"Umieść kursor wewnątrz bloku (rule ...), aby wyświetlić pasujące elementy."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:346
 msgid "The rule under the cursor has no name; add a name to identify it."
-msgstr ""
+msgstr "Reguła pod kursorem nie ma nazwy. Aby ją zidentyfikować, dodaj nazwę."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' could not be located after parsing."
-msgstr "Plik '%s' nie może zostać utworzony."
+msgstr "Po przeanalizowaniu nie znaleziono reguły '%s'."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:385
 msgid "DRC engine not available."
@@ -45561,7 +45581,7 @@ msgstr "Silnik DRC nie jest dostępny."
 #: pcbnew/dialogs/panel_setup_rules.cpp:408
 #, c-format
 msgid "Rule '%s': %zu matching item(s)."
-msgstr ""
+msgstr "Reguła '%s': %zu pasujących elementów."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:998
 #, c-format
@@ -53602,6 +53622,8 @@ msgid ""
 "Pad '%s' has custom shape with per-layer geometry; custom primitives not "
 "supported in padstack mode."
 msgstr ""
+"Pad '%s' ma niestandardowy kształt z różną geometrią na warstwę; "
+"niestandardowe prymitywy nie są obsługiwane w trybie stosu padów."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2877
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2909
@@ -57033,6 +57055,8 @@ msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 msgstr ""
+"Footprintów nie można odbijać lustrzanie. Używaj funkcji Odbij by przenieść "
+"je na drugą stronę płytki."
 
 #: pcbnew/tools/edit_tool.cpp:2888 pcbnew/tools/pcb_actions.cpp:674
 msgid "Change Side / Flip"
@@ -59501,9 +59525,8 @@ msgstr ""
 "na nich zadziałać."
 
 #: pcbnew/tools/pcb_control.cpp:1541
-#, fuzzy
 msgid "Applying Design Block Layouts"
-msgstr "Zastosuj układ ścieżek bloku projektowego"
+msgstr "Stosowanie układ ścieżek bloku projektowego"
 
 #: pcbnew/tools/pcb_control.cpp:1572
 msgid "design block is not in the loaded libraries"
@@ -59518,14 +59541,12 @@ msgid "could not load the design block's layout"
 msgstr "nie można załadować trasowania bloku projektowego"
 
 #: pcbnew/tools/pcb_control.cpp:1636
-#, fuzzy
 msgid "design block layout could not be loaded"
-msgstr "Ustaw układ ścieżek bloku projektowego do bieżącego obwodu drukowanego"
+msgstr "nie można załadować układu bloku projektowego"
 
 #: pcbnew/tools/pcb_control.cpp:1669
-#, fuzzy
 msgid "group has no footprints"
-msgstr "Przeglądaj footprinty"
+msgstr "grupa nie posiada footpritnów"
 
 #: pcbnew/tools/pcb_control.cpp:1708
 msgid "layout copy failed"
@@ -59534,7 +59555,7 @@ msgstr "kopiowanie trasowania nie powiodło się"
 #: pcbnew/tools/pcb_control.cpp:1723
 #, c-format
 msgid "Applying layout to group %zu of %zu..."
-msgstr ""
+msgstr "Stosowanie trasowania do grupy %zu z %zu..."
 
 #: pcbnew/tools/pcb_control.cpp:1746
 msgid "Apply design block layout cancelled."
@@ -59667,6 +59688,8 @@ msgstr "%d modeli 3D zostało poprawnie osadzonych."
 msgid ""
 "Footprint items cannot be grouped separately from their parent footprint."
 msgstr ""
+"Elementów footprintu nie można grupować oddzielnie od ich nadrzędnego "
+"footprintu."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2738
 msgid "Resize Table Cells"
@@ -61058,6 +61081,11 @@ msgid ""
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
 msgstr ""
+"Wypełnienia stref mogą być nieprawidłowe: iteracyjne wypełnienie nie zbiegło "
+"się po %d przejściach.\n"
+"\n"
+"Może się tak zdarzyć w przypadku złożonych, nakładających się stref. Rozważ "
+"uproszczenie stref."
 
 #: pcbnew/zone_filler.cpp:1498
 msgid "Prototype zone fill enabled. Disable setting and refill?"
