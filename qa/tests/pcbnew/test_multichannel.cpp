@@ -1155,4 +1155,137 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutCopiesSilkscreen, MULTICHANNEL_TE
 }
 
 
+/**
+ * Apply Design Block Layout must keep a footprint's silkscreen text when the footprint has
+ * several text items with the same string (issue 24583).
+ *
+ * A flippable switch footprint has two "${REFERENCE}" texts, one on F.SilkS and one on B.SilkS.
+ * The old code matched footprint texts by string only and stopped at the first match, so both
+ * source texts went to the same target item and the front silkscreen text was lost.
+ */
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutKeepsDuplicateSilkText, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxT( "NET1" ), 1 );
+    m_board->Add( net );
+
+    auto makeFootprint = [&]( const wxString& aRef, const VECTOR2I& aPos ) -> FOOTPRINT*
+    {
+        FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+        fp->SetFPID( LIB_ID( wxT( "TestLib" ), wxT( "SW" ) ) );
+        fp->SetReference( aRef );
+        fp->SetPosition( aPos );
+
+        // Two silkscreen texts with the same content, one on each board side.
+        for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
+        {
+            PCB_TEXT* txt = new PCB_TEXT( fp );
+            txt->SetText( wxT( "${REFERENCE}" ) );
+            txt->SetLayer( layer );
+            txt->SetPosition( aPos + VECTOR2I( 0, pcbIUScale.mmToIU( -8 ) ) );
+            fp->Add( txt );
+        }
+
+        PAD* pad = new PAD( fp );
+        pad->SetNumber( wxT( "1" ) );
+        pad->SetNet( net );
+        pad->SetPosition( aPos );
+        pad->SetSize( F_Cu, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+        pad->SetLayerSet( LSET( { F_Cu } ) );
+        fp->Add( pad );
+
+        m_board->Add( fp );
+        return fp;
+    };
+
+    auto countSilkText = [&]( FOOTPRINT* fp, PCB_LAYER_ID layer ) -> int
+    {
+        int count = 0;
+
+        for( BOARD_ITEM* item : fp->GraphicalItems() )
+        {
+            if( item->Type() == PCB_TEXT_T && item->GetLayer() == layer )
+                count++;
+        }
+
+        return count;
+    };
+
+    FOOTPRINT* refFp1 = makeFootprint( wxT( "SW1" ), VECTOR2I( 0, 0 ) );
+    FOOTPRINT* refFp2 = makeFootprint( wxT( "SW2" ), VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ) );
+
+    FOOTPRINT* destFp1 = makeFootprint( wxT( "SW3" ), VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ) );
+    FOOTPRINT* destFp2 = makeFootprint( wxT( "SW4" ), VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 50 ) ) );
+
+    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+    destGroup->SetName( wxT( "design-block-dest" ) );
+    destGroup->AddItem( destFp1 );
+    destGroup->AddItem( destFp2 );
+    m_board->Add( destGroup );
+
+    BOOST_REQUIRE_EQUAL( countSilkText( destFp1, F_SilkS ), 1 );
+    BOOST_REQUIRE_EQUAL( countSilkText( destFp1, B_SilkS ), 1 );
+
+    RULE_AREA dbRA;
+    dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+    dbRA.m_components.insert( refFp1 );
+    dbRA.m_components.insert( refFp2 );
+    dbRA.m_designBlockItems.insert( refFp1 );
+    dbRA.m_designBlockItems.insert( refFp2 );
+
+    dbRA.m_zone = new ZONE( m_board.get() );
+    dbRA.m_zone->SetIsRuleArea( true );
+    dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    dbRA.m_zone->AddPolygon(
+            KIGEOM::BoxToLineChain( BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
+                                                      VECTOR2I( pcbIUScale.mmToIU( 15 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
+
+    RULE_AREA destRA;
+    destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+    destRA.m_components.insert( destFp1 );
+    destRA.m_components.insert( destFp2 );
+
+    destRA.m_zone = new ZONE( m_board.get() );
+    destRA.m_zone->SetIsRuleArea( true );
+    destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+            BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 45 ), pcbIUScale.mmToIU( 45 ) ),
+                              VECTOR2I( pcbIUScale.mmToIU( 65 ), pcbIUScale.mmToIU( 55 ) ) ) ) );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                   .m_connectedRoutingOnly = false,
+                                   .m_copyPlacement = true,
+                                   .m_copyOtherItems = true,
+                                   .m_groupItems = false,
+                                   .m_includeLockedItems = true,
+                                   .m_anchorFp = nullptr };
+
+    wxString err;
+    int      result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts, nullptr, &err );
+    BOOST_CHECK_MESSAGE( result >= 0, wxString::Format( "RepeatLayout failed: %s", err ) );
+
+    delete dbRA.m_zone;
+    delete destRA.m_zone;
+
+    for( FOOTPRINT* destFp : { destFp1, destFp2 } )
+    {
+        BOOST_CHECK_MESSAGE( countSilkText( destFp, F_SilkS ) == 1,
+                             wxString::Format( "%s lost its F.Silkscreen reference text "
+                                               "(issue 24583): F=%d B=%d",
+                                               destFp->GetReference(), countSilkText( destFp, F_SilkS ),
+                                               countSilkText( destFp, B_SilkS ) ) );
+        BOOST_CHECK_EQUAL( countSilkText( destFp, B_SilkS ), 1 );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
