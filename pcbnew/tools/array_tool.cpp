@@ -303,10 +303,8 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                         break;
 
                     case PCB_GENERATOR_T:
-                        this_item = static_cast<PCB_GENERATOR*>( item )->DeepClone();
-                        break;
-
                     case PCB_GROUP_T:
+                        // Not DeepClone(): array copies must get fresh UUIDs, not the originals'.
                         this_item = static_cast<PCB_GROUP*>( item )->DeepDuplicate( true, &commit );
                         break;
 
