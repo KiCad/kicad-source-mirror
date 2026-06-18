@@ -1533,6 +1533,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
     std::vector<Failure> failures;
     int                  applied = 0;
     bool                 cancelled = false;
+    bool                 netlessCopperPlaced = false;
 
     std::unique_ptr<WX_PROGRESS_REPORTER> progress;
 
@@ -1629,12 +1630,27 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
                 },
                 nullptr, GENERAL_COLLECTOR::AllBoardItems );
 
-        if( dbRA.m_designBlockItems.empty() || dbRA.m_components.empty() )
+        if( dbRA.m_designBlockItems.empty() )
         {
             tempCommit.Revert();
             clearFlags();
-            outErr = _( "design block layout could not be loaded" );
+            outErr = _( "design block contains no items to apply" );
             return false;
+        }
+
+        // Footprint-free copper has no matched pads to map nets through, so it is copied as no-net.
+        bool blockHasNetlessCopper = false;
+
+        if( dbRA.m_components.empty() )
+        {
+            for( EDA_ITEM* item : dbRA.m_designBlockItems )
+            {
+                if( BOARD_ITEM* bi = dynamic_cast<BOARD_ITEM*>( item ); bi && bi->IsConnected() )
+                {
+                    blockHasNetlessCopper = true;
+                    break;
+                }
+            }
         }
 
         dbRA.m_zone = new ZONE( brd );
@@ -1661,12 +1677,14 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
                 destRA.m_components.insert( static_cast<FOOTPRINT*>( item ) );
         }
 
-        if( destRA.m_components.empty() )
+        destRA.m_group = group;
+
+        if( group->GetItems().empty() )
         {
             tempCommit.Revert();
             clearFlags();
             delete dbRA.m_zone;
-            outErr = _( "group has no footprints" );
+            outErr = _( "group is empty" );
             return false;
         }
 
@@ -1709,6 +1727,9 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
             return false;
         }
 
+        if( blockHasNetlessCopper )
+            netlessCopperPlaced = true;
+
         return true;
     };
 
@@ -1750,6 +1771,9 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
     if( applied > 0 )
     {
         sharedCommit.Push( wxString::Format( _( "Apply design block layout to %d group(s)" ), applied ) );
+
+        if( netlessCopperPlaced )
+            m_frame->ShowInfoBarMsg( _( "Copied copper has no net assigned. Assign nets to connect it." ), true );
     }
     else
     {

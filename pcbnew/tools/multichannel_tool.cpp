@@ -282,7 +282,8 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
 
     // The design-block apply target uses a scratch zone not on the board, so enclosedByArea()
     // below finds nothing. Resolve the group's items directly from the group.
-    if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && !aRuleArea->m_components.empty() )
+    if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT
+        && ( !aRuleArea->m_components.empty() || aRuleArea->m_group ) )
     {
         bool zoneOnBoard = false;
 
@@ -297,7 +298,12 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
 
         if( !zoneOnBoard )
         {
-            if( EDA_GROUP* group = ( *aRuleArea->m_components.begin() )->GetParentGroup() )
+            EDA_GROUP* group = aRuleArea->m_group;
+
+            if( !group && !aRuleArea->m_components.empty() )
+                group = ( *aRuleArea->m_components.begin() )->GetParentGroup();
+
+            if( group )
             {
                 for( EDA_ITEM* member : group->GetItems() )
                 {
@@ -883,7 +889,12 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
 
     if( aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT )
     {
-        if( aTargetArea.m_components.size() == 0 || !( *aTargetArea.m_components.begin() )->GetParentGroup() )
+        EDA_GROUP* group = aTargetArea.m_group;
+
+        if( !group && !aTargetArea.m_components.empty() )
+            group = ( *aTargetArea.m_components.begin() )->GetParentGroup();
+
+        if( !group )
         {
             if( !aExternalCommit )
                 commit.Revert();
@@ -892,8 +903,6 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
 
             return -1;
         }
-
-        EDA_GROUP* group = ( *aTargetArea.m_components.begin() )->GetParentGroup();
 
         commit.Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
 
@@ -1376,28 +1385,30 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
         if( aRefArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK )
         {
             // Remove the target group's existing generators so a re-apply replaces them.
-            if( !aTargetArea->m_components.empty() )
+            EDA_GROUP* targetGroup = aTargetArea->m_group;
+
+            if( !targetGroup && !aTargetArea->m_components.empty() )
+                targetGroup = ( *aTargetArea->m_components.begin() )->GetParentGroup();
+
+            if( targetGroup )
             {
-                if( EDA_GROUP* targetGroup = ( *aTargetArea->m_components.begin() )->GetParentGroup() )
+                std::vector<PCB_GENERATOR*> targetGenerators;
+
+                for( EDA_ITEM* member : targetGroup->GetItems() )
                 {
-                    std::vector<PCB_GENERATOR*> targetGenerators;
+                    if( member->Type() == PCB_GENERATOR_T )
+                        targetGenerators.push_back( static_cast<PCB_GENERATOR*>( member ) );
+                }
 
-                    for( EDA_ITEM* member : targetGroup->GetItems() )
-                    {
-                        if( member->Type() == PCB_GENERATOR_T )
-                            targetGenerators.push_back( static_cast<PCB_GENERATOR*>( member ) );
-                    }
-
-                    for( PCB_GENERATOR* gen : targetGenerators )
-                    {
-                        gen->RunOnChildren(
-                                [&]( BOARD_ITEM* child )
-                                {
-                                    aCommit->Remove( child );
-                                },
-                                RECURSE_MODE::RECURSE );
-                        aCommit->Remove( gen );
-                    }
+                for( PCB_GENERATOR* gen : targetGenerators )
+                {
+                    gen->RunOnChildren(
+                            [&]( BOARD_ITEM* child )
+                            {
+                                aCommit->Remove( child );
+                            },
+                            RECURSE_MODE::RECURSE );
+                    aCommit->Remove( gen );
                 }
             }
 
@@ -1667,6 +1678,13 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 void MULTICHANNEL_TOOL::fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_ITEM* aTarget,
                                   TMATCH::COMPONENT_MATCHES& aComponentMatches )
 {
+    // Copy as no-net.
+    if( aComponentMatches.empty() )
+    {
+        aTarget->SetNetCode( 0 );
+        return;
+    }
+
     auto                                     connectivity = board()->GetConnectivity();
     const std::vector<BOARD_CONNECTED_ITEM*> refConnectedPads = connectivity->GetNetItems( aRef->GetNetCode(),
                                                                                            { PCB_PAD_T } );
@@ -1701,6 +1719,17 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
                                                    const TMATCH::ISOMORPHISM_PARAMS& aParams )
 {
     using namespace TMATCH;
+
+    // Footprint-free design block has nothing to match to
+    if( aRefArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK && aRefArea->m_components.empty()
+        && aTargetArea->m_components.empty() )
+    {
+        aMatches.m_matchingComponents.clear();
+        aMatches.m_isOk = true;
+        aMatches.m_errorMsg = _( "OK" );
+        aMatches.m_mismatchReasons.clear();
+        return true;
+    }
 
     PROF_TIMER timerBuild;
     std::unique_ptr<CONNECTION_GRAPH> cgRef( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_components,

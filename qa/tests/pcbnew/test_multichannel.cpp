@@ -1288,4 +1288,338 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutKeepsDuplicateSilkText, MULTICHAN
 }
 
 
+/**
+ * Apply Design Block Layout must work for a footprint-free block, e.g. graphics-only silkscreen
+ * (issue 24592). With no footprints the copy is center-anchored and re-grouped under the target.
+ */
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutGraphicsOnlyBlock, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    auto makeSilkRect = [&]( const VECTOR2I& aStart, const VECTOR2I& aEnd ) -> PCB_SHAPE*
+    {
+        PCB_SHAPE* s = new PCB_SHAPE( m_board.get(), SHAPE_T::RECTANGLE );
+        s->SetStart( aStart );
+        s->SetEnd( aEnd );
+        s->SetLayer( F_SilkS );
+        s->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
+        m_board->Add( s );
+        return s;
+    };
+
+    // Source: footprint-free block with one silkscreen rectangle centered on origin.
+    PCB_SHAPE* srcRect = makeSilkRect( VECTOR2I( pcbIUScale.mmToIU( -2 ), pcbIUScale.mmToIU( -2 ) ),
+                                       VECTOR2I( pcbIUScale.mmToIU( 2 ), pcbIUScale.mmToIU( 2 ) ) );
+
+    // Destination: footprint-free group with one silkscreen item so the group exists.
+    PCB_SHAPE* destPlaceholder = new PCB_SHAPE( m_board.get(), SHAPE_T::SEGMENT );
+    destPlaceholder->SetStart( VECTOR2I( pcbIUScale.mmToIU( 49 ), pcbIUScale.mmToIU( 49 ) ) );
+    destPlaceholder->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 51 ), pcbIUScale.mmToIU( 49 ) ) );
+    destPlaceholder->SetLayer( F_SilkS );
+    destPlaceholder->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
+    m_board->Add( destPlaceholder );
+
+    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+    destGroup->SetName( wxT( "design-block-dest" ) );
+    destGroup->AddItem( destPlaceholder );
+    m_board->Add( destGroup );
+
+    int silkBefore = 0;
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T && item->GetLayer() == F_SilkS )
+            silkBefore++;
+    }
+
+    BOOST_REQUIRE_EQUAL( silkBefore, 2 );
+
+    RULE_AREA dbRA;
+    dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+    dbRA.m_designBlockItems.insert( srcRect ); // no footprints -> m_components stays empty
+
+    dbRA.m_zone = new ZONE( m_board.get() );
+    dbRA.m_zone->SetIsRuleArea( true );
+    dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    dbRA.m_zone->AddPolygon(
+            KIGEOM::BoxToLineChain( BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
+                                                      VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
+    dbRA.m_center = dbRA.m_zone->Outline()->COutline( 0 ).Centre();
+
+    RULE_AREA destRA;
+    destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+    destRA.m_group = destGroup; // set explicitly: no footprint to recover it from
+
+    destRA.m_zone = new ZONE( m_board.get() );
+    destRA.m_zone->SetIsRuleArea( true );
+    destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+            BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 45 ), pcbIUScale.mmToIU( 45 ) ),
+                              VECTOR2I( pcbIUScale.mmToIU( 55 ), pcbIUScale.mmToIU( 55 ) ) ) ) );
+    destRA.m_center = destRA.m_zone->Outline()->COutline( 0 ).Centre();
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                   .m_connectedRoutingOnly = false,
+                                   .m_copyPlacement = true,
+                                   .m_copyOtherItems = true,
+                                   .m_groupItems = false,
+                                   .m_includeLockedItems = true,
+                                   .m_anchorFp = nullptr };
+
+    wxString err;
+    int      result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts, nullptr, &err );
+
+    delete dbRA.m_zone;
+    delete destRA.m_zone;
+
+    BOOST_REQUIRE_MESSAGE( result >= 0, wxString::Format( "RepeatLayout failed for a footprint-free "
+                                                          "(graphics-only) design block (issue 24592): %s",
+                                                          err ) );
+
+    // The block's rectangle is copied into the target region and grouped, replacing the group's
+    // prior placeholder graphic (source + 1 copy = 2 silkscreen shapes).
+    int        silkAfter = 0;
+    PCB_SHAPE* copiedRect = nullptr;
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( item->Type() != PCB_SHAPE_T || item->GetLayer() != F_SilkS )
+            continue;
+
+        silkAfter++;
+
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+        if( shape != srcRect && shape->GetShape() == SHAPE_T::RECTANGLE )
+            copiedRect = shape;
+    }
+
+    BOOST_CHECK_MESSAGE( silkAfter == 2, wxString::Format( "Expected 2 silkscreen shapes after Apply Design Block "
+                                                           "Layout (source + 1 copy, placeholder replaced), found "
+                                                           "%d (issue 24592)",
+                                                           silkAfter ) );
+    BOOST_REQUIRE_MESSAGE( copiedRect != nullptr, "Footprint-free block graphic was not copied (issue 24592)" );
+    BOOST_CHECK_MESSAGE( copiedRect->GetParentGroup() == destGroup,
+                         "Copied block graphic was not added to the destination group (issue 24592)" );
+    BOOST_CHECK_GT( copiedRect->GetStart().x, pcbIUScale.mmToIU( 30 ) );
+}
+
+
+/**
+ * A footprint-free block may contain copper (e.g. an antenna). With no footprints there are no
+ * pads to map nets through, so copied copper comes in as no-net (issue 24592).
+ */
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutFootprintFreeCopperIsNoNet, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxT( "NET1" ), 1 );
+    m_board->Add( net );
+
+    // Source: footprint-free block with one track on a real net.
+    PCB_TRACK* srcTrack = new PCB_TRACK( m_board.get() );
+    srcTrack->SetLayer( F_Cu );
+    srcTrack->SetWidth( pcbIUScale.mmToIU( 0.25 ) );
+    srcTrack->SetStart( VECTOR2I( pcbIUScale.mmToIU( -2 ), pcbIUScale.mmToIU( 0 ) ) );
+    srcTrack->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 2 ), pcbIUScale.mmToIU( 0 ) ) );
+    srcTrack->SetNet( net );
+    m_board->Add( srcTrack );
+
+    BOOST_REQUIRE_EQUAL( srcTrack->GetNetCode(), 1 );
+
+    // Destination: footprint-free group with a placeholder so the group exists.
+    PCB_SHAPE* destPlaceholder = new PCB_SHAPE( m_board.get(), SHAPE_T::SEGMENT );
+    destPlaceholder->SetStart( VECTOR2I( pcbIUScale.mmToIU( 49 ), pcbIUScale.mmToIU( 49 ) ) );
+    destPlaceholder->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 51 ), pcbIUScale.mmToIU( 49 ) ) );
+    destPlaceholder->SetLayer( F_SilkS );
+    destPlaceholder->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
+    m_board->Add( destPlaceholder );
+
+    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+    destGroup->SetName( wxT( "design-block-dest" ) );
+    destGroup->AddItem( destPlaceholder );
+    m_board->Add( destGroup );
+
+    RULE_AREA dbRA;
+    dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+    dbRA.m_designBlockItems.insert( srcTrack ); // no footprints -> m_components stays empty
+
+    dbRA.m_zone = new ZONE( m_board.get() );
+    dbRA.m_zone->SetIsRuleArea( true );
+    dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    dbRA.m_zone->AddPolygon(
+            KIGEOM::BoxToLineChain( BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
+                                                      VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
+    dbRA.m_center = dbRA.m_zone->Outline()->COutline( 0 ).Centre();
+
+    RULE_AREA destRA;
+    destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+    destRA.m_group = destGroup;
+
+    destRA.m_zone = new ZONE( m_board.get() );
+    destRA.m_zone->SetIsRuleArea( true );
+    destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+            BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 45 ), pcbIUScale.mmToIU( 45 ) ),
+                              VECTOR2I( pcbIUScale.mmToIU( 55 ), pcbIUScale.mmToIU( 55 ) ) ) ) );
+    destRA.m_center = destRA.m_zone->Outline()->COutline( 0 ).Centre();
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                   .m_connectedRoutingOnly = false,
+                                   .m_copyPlacement = true,
+                                   .m_copyOtherItems = true,
+                                   .m_groupItems = false,
+                                   .m_includeLockedItems = true,
+                                   .m_anchorFp = nullptr };
+
+    wxString err;
+    int      result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts, nullptr, &err );
+
+    delete dbRA.m_zone;
+    delete destRA.m_zone;
+
+    BOOST_REQUIRE_MESSAGE( result >= 0, wxString::Format( "RepeatLayout failed for a footprint-free copper "
+                                                          "block (issue 24592): %s",
+                                                          err ) );
+
+    // Copied track should be in the target region, no-net, and grouped.
+    PCB_TRACK* copiedTrack = nullptr;
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track != srcTrack )
+            copiedTrack = track;
+    }
+
+    BOOST_REQUIRE_MESSAGE( copiedTrack != nullptr, "Footprint-free block track was not copied (issue 24592)" );
+    BOOST_CHECK_MESSAGE( copiedTrack->GetNetCode() == 0,
+                         wxString::Format( "Copied copper should be no-net, got net code %d "
+                                           "(issue 24592)",
+                                           copiedTrack->GetNetCode() ) );
+    BOOST_CHECK_MESSAGE( copiedTrack->GetParentGroup() == destGroup,
+                         "Copied copper was not added to the destination group (issue 24592)" );
+    BOOST_CHECK_GT( copiedTrack->GetStart().x, pcbIUScale.mmToIU( 30 ) );
+
+    // The original source track must keep its net.
+    BOOST_CHECK_EQUAL( srcTrack->GetNetCode(), 1 );
+}
+
+
+/**
+ * Re-applying a footprint-free block must replace the group's previously-copied content, not
+ * stack a fresh copy on top of it (issue 24592). The group is found via the target rule area's
+ * explicit group, since there is no member footprint to recover it from.
+ */
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutFootprintFreeReapplyReplaces, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    // Source: footprint-free block with one silkscreen rectangle centered on origin.
+    PCB_SHAPE* srcRect = new PCB_SHAPE( m_board.get(), SHAPE_T::RECTANGLE );
+    srcRect->SetStart( VECTOR2I( pcbIUScale.mmToIU( -2 ), pcbIUScale.mmToIU( -2 ) ) );
+    srcRect->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 2 ), pcbIUScale.mmToIU( 2 ) ) );
+    srcRect->SetLayer( F_SilkS );
+    srcRect->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
+    m_board->Add( srcRect );
+
+    // Destination: footprint-free group with a placeholder so the group exists.
+    PCB_SHAPE* destPlaceholder = new PCB_SHAPE( m_board.get(), SHAPE_T::SEGMENT );
+    destPlaceholder->SetStart( VECTOR2I( pcbIUScale.mmToIU( 49 ), pcbIUScale.mmToIU( 49 ) ) );
+    destPlaceholder->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 51 ), pcbIUScale.mmToIU( 49 ) ) );
+    destPlaceholder->SetLayer( F_SilkS );
+    destPlaceholder->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
+    m_board->Add( destPlaceholder );
+
+    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+    destGroup->SetName( wxT( "design-block-dest" ) );
+    destGroup->AddItem( destPlaceholder );
+    m_board->Add( destGroup );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    auto applyOnce = [&]() -> int
+    {
+        RULE_AREA dbRA;
+        dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+        dbRA.m_designBlockItems.insert( srcRect );
+
+        dbRA.m_zone = new ZONE( m_board.get() );
+        dbRA.m_zone->SetIsRuleArea( true );
+        dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+        dbRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+                BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
+                                  VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
+        dbRA.m_center = dbRA.m_zone->Outline()->COutline( 0 ).Centre();
+
+        RULE_AREA destRA;
+        destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+        destRA.m_group = destGroup;
+
+        destRA.m_zone = new ZONE( m_board.get() );
+        destRA.m_zone->SetIsRuleArea( true );
+        destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+        destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+                BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 45 ), pcbIUScale.mmToIU( 45 ) ),
+                                  VECTOR2I( pcbIUScale.mmToIU( 55 ), pcbIUScale.mmToIU( 55 ) ) ) ) );
+        destRA.m_center = destRA.m_zone->Outline()->COutline( 0 ).Centre();
+
+        REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                       .m_connectedRoutingOnly = false,
+                                       .m_copyPlacement = true,
+                                       .m_copyOtherItems = true,
+                                       .m_groupItems = false,
+                                       .m_includeLockedItems = true,
+                                       .m_anchorFp = nullptr };
+
+        int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
+
+        delete dbRA.m_zone;
+        delete destRA.m_zone;
+        return result;
+    };
+
+    BOOST_REQUIRE_MESSAGE( applyOnce() >= 0, "First apply failed (issue 24592)" );
+    BOOST_REQUIRE_MESSAGE( applyOnce() >= 0, "Second apply failed (issue 24592)" );
+
+    // After two applies there must be exactly the source rectangle plus one copy. A third
+    // rectangle would mean the second apply stacked instead of replacing.
+    int rects = 0;
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T && item->GetLayer() == F_SilkS
+            && static_cast<PCB_SHAPE*>( item )->GetShape() == SHAPE_T::RECTANGLE )
+        {
+            rects++;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( rects == 2, wxString::Format( "Re-apply stacked copies: expected 2 rectangles "
+                                                       "(source + 1 copy), found %d (issue 24592)",
+                                                       rects ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
