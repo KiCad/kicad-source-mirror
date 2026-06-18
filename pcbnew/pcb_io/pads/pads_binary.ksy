@@ -81,13 +81,36 @@ instances:
       as unsupported, so those seven boards are evidence about the container
       only.) Some v0x2026/v0x2027 boards declare 75 slots, i.e. entry_count 74.
 
-      NOT YET APPLIED IN THE READER. PADS_SDB::directoryEntryCount() still
-      returns the version-implied 73/74. Switching it moves every v0x2022 and
-      v0x2024 data_offset by 16 bytes at once, and the 81 call sites still on
-      data_offset are calibrated against the wrong value, so it can only land
-      together with moving them to payload_offset -- where the offset and the
-      section-3 overshoot both change by 16 and cancel. The origin locator below
-      reads the stored count directly instead of waiting for that migration.
+      NOT YET APPLIED IN THE READER, AND RE-CONFIRMED AS BLOCKED.
+      PADS_SDB::directoryEntryCount() still returns the version-implied 73/74.
+      Switching it moves every v0x2022 and v0x2024 data_offset by 16 bytes at
+      once, and the 81 call sites still on data_offset are calibrated against
+      the wrong value, so it can only land together with moving them to
+      payload_offset -- where the offset and the section-3 overshoot both change
+      by 16 and cancel. The origin locator below reads the stored count directly
+      instead of waiting for that migration.
+
+      Tried again on 2026-08-06, reading the stored count with the self-check
+      total_bytes == slots*16 as a guard. Still exactly 9 failures, still only on
+      those two dialects, so the blocker is live and the migration really is a
+      prerequisite rather than a stale note. The failing cases, for whoever picks
+      this up:
+
+          V2022MechanicalDecalsMatch          checked 0 against 8
+          V2022RouteNetIndexBiasDecodes       GND and PGND via nets empty
+          V2024RouteGeometryMatchesAscii      geometry mismatch
+          V2022PadNetsMatchAscii              net set mismatch
+          V2022PadGeometryMatchesAscii        pad set mismatch
+          V2024InlineTerminalsAndPadstackPairsDecode   fiducials 0 against 3
+          V2024ZeroPadstackOverridesDecode    fatal, WE-SL1 pin 2
+
+      THIS IS THE HIGHEST-LEVERAGE REMAINING WORK. An audit attributes 19 of the
+      41 parser search sites to one defect -- the declared data_offset of
+      sections 5, 8, 9, 10, 12, 14, 15 does not match where their records start,
+      which three separate code comments already note. Those 19 retire together
+      once the lead-in model is right, the way deriving payload_offset dissolved
+      four fitted constants at once. Retiring locators one at a time is mostly
+      wasted motion by comparison.
   directory_probe:
     pos: 26
     type: dir_entry
