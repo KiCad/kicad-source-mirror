@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"PO-Revision-Date: 2026-06-18 17:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -8082,7 +8082,7 @@ msgstr "Konnte Repository-Head nicht abrufen"
 #: common/git/libgit_backend.cpp:542
 #, c-format
 msgid "Could not push to remote: %s"
-msgstr "Konnte nicht zu Remote übertragen: %s"
+msgstr "Konnte nicht zu Remote übertragen: %s (push)"
 
 #: common/git/libgit_backend.cpp:805
 #, c-format
@@ -33136,7 +33136,7 @@ msgstr "Pullen"
 #: kicad/project_tree_pane.cpp:1059
 #, c-format
 msgid "Push %s to %s"
-msgstr "%s nach %s schieben"
+msgstr "%s nach %s übertragen (push)"
 
 #: kicad/project_tree_pane.cpp:1060
 #, c-format
@@ -33145,7 +33145,7 @@ msgstr "Von %s abrufen"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Push committed local changes to remote repository"
-msgstr "Lokal committete Änderungen auf entferntes Repository pushen"
+msgstr "Lokal committete Änderungen auf entferntes Repository übertragen (push)"
 
 #: kicad/project_tree_pane.cpp:1068
 msgid "Pull changes from remote repository into local"
@@ -33272,25 +33272,23 @@ msgstr "Bereits aktuell mit %s."
 
 #: kicad/project_tree_pane.cpp:2064
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "Abgerufene Änderungen (pull fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2065
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "%s in %s abgerufen (pull fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2070
-#, fuzzy
 msgid "Pulled changes."
 msgstr "Abgerufene Änderungen (Pull)."
 
 #: kicad/project_tree_pane.cpp:2071
-#, fuzzy, c-format
+#, c-format
 msgid "Pulled %s into %s."
 msgstr "%s in %s hinein abgerufen."
 
 #: kicad/project_tree_pane.cpp:2081
-#, fuzzy
 msgid ""
 "Your local changes and the remote changes conflict, so the pull was "
 "cancelled and nothing was changed.\n"
@@ -33302,30 +33300,25 @@ msgstr ""
 "der Abruf abgebrochen und nichts geändert wurde.\n"
 "\n"
 "Sie können ihre lokalen Commits verwerfen und die Remoteversion verwenden "
-"oder ihre Commits als Rebase an erster Stelle von Remote setzen."
+"oder ihre Commits auf der Remoteversion \"rebasen\"."
 
 #: kicad/project_tree_pane.cpp:2085
-#, fuzzy
 msgid "Pull Conflict"
 msgstr "Pull-Konflikt"
 
 #: kicad/project_tree_pane.cpp:2088
-#, fuzzy
 msgid "&Use Remote (discard my changes)"
-msgstr "Remote &verwenden (Meine Änderungen verwerfen)"
+msgstr "Remote &verwenden (meine Änderungen verwerfen)"
 
 #: kicad/project_tree_pane.cpp:2088
-#, fuzzy
 msgid "&Rebase"
 msgstr "&Rebase"
 
 #: kicad/project_tree_pane.cpp:2095
-#, fuzzy
 msgid "Reset to the remote version."
 msgstr "Auf die Remote-Version zurücksetzen."
 
 #: kicad/project_tree_pane.cpp:2097
-#, fuzzy
 msgid "Failed to reset to remote"
 msgstr "Zurücksetzen auf Remote ist gescheitert"
 
@@ -33353,17 +33346,16 @@ msgid "Failed to pull project"
 msgstr "Konnte Projekt nicht übertragen (pull)"
 
 #: kicad/project_tree_pane.cpp:2154
-#, fuzzy
 msgid "Pushed to remote."
-msgstr "Auf Remote geschoben (push)."
+msgstr "Auf Remote übertragen (push)."
 
 #: kicad/project_tree_pane.cpp:2155
-#, fuzzy, c-format
+#, c-format
 msgid "Pushed %s to %s."
-msgstr "%s auf %s abgelegt."
+msgstr "%s auf %s übertragen (push)."
 
 #: kicad/project_tree_pane.cpp:2168
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Push rejected: your local branch and %s have diverged.\n"
 "\n"
@@ -33375,8 +33367,8 @@ msgstr ""
 "Ablegen verweigert: Ihr lokaler Branch und %s haben sich "
 "auseinanderentwickelt.\n"
 "\n"
-"Das passiert normalerweise nach dem Abholen oder dem erneuten Schreiben "
-"eines Commits, der bereits abgelegt wurde.  Ablegen erzwingen, um Remote zu "
+"Das passiert normalerweise nach dem Abrufen oder dem erneuten Schreiben "
+"eines Commits, der bereits übertragen wurde.  Push erzwingen, um Remote zu "
 "überschreiben?\n"
 "\n"
 "Jeder, der die vorhergehende Version bereits abgerufen hat, wird seine Kopie "
@@ -33484,17 +33476,16 @@ msgstr "Verwerfe Nachbesserung aufgrund leerer Commit-Nachricht."
 
 #: kicad/project_tree_pane.cpp:3084
 msgid "Fetched from remote."
-msgstr "Von Remote abrufen (Fetch)."
+msgstr "Von Remote abgerufen (Fetch)."
 
 #: kicad/project_tree_pane.cpp:3085
-#, fuzzy, c-format
+#, c-format
 msgid "Fetched from %s."
-msgstr "Von %s abgeholt."
+msgstr "Von %s abgerufen."
 
 #: kicad/project_tree_pane.cpp:3092
-#, fuzzy
 msgid "Fetch failed."
-msgstr "Abholung gescheitert (Fetch)."
+msgstr "Abrufen gescheitert (Fetch)."
 
 #: kicad/project_tree_traverser.cpp:216
 #, c-format
@@ -44489,12 +44480,10 @@ msgid "Unused Pads"
 msgstr "Unbenutzte Pads"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
-#, fuzzy
 msgid "Apply design block layouts to new groups"
 msgstr "Designblock-Layouts auf neue Gruppen anwenden"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
-#, fuzzy
 msgid ""
 "For each new group created from a design block, apply the block's saved "
 "footprint placement and routing automatically."
@@ -45803,15 +45792,13 @@ msgid "Cancel Changes?"
 msgstr "Änderungen verwerfen?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:156
-#, fuzzy
 msgid "Show Matching Items"
 msgstr "Passende Elemente anzeigen"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:209
-#, fuzzy
 msgid "Cannot show matching items without an open project."
 msgstr ""
-"Passende Elemente können ohne geöffnetem Projekt nicht angezeigt werden."
+"Passende Elemente können ohne geöffnetes Projekt nicht angezeigt werden."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:231
 #: pcbnew/dialogs/panel_setup_rules.cpp:249
@@ -45827,7 +45814,7 @@ msgid "ERROR:"
 msgstr "FEHLER:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Could not scan rules text: %s"
 msgstr "Konnte Regeltext nicht einlesen: %s"
 
