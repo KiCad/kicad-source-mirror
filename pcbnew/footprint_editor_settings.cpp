@@ -153,7 +153,8 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                 for( const OPEN_TAB& tab : m_OpenTabs )
                 {
                     js.push_back( nlohmann::json( { { "lib", tab.m_lib.ToUTF8() },
-                                                    { "fp_name", tab.m_fpName.ToUTF8() } } ) );
+                                                    { "fp_name", tab.m_fpName.ToUTF8() },
+                                                    { "preview", tab.m_preview } } ) );
                 }
 
                 return js;
@@ -173,6 +174,10 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
                     OPEN_TAB tab;
                     tab.m_lib = entry.at( "lib" ).get<wxString>();
                     tab.m_fpName = entry.at( "fp_name" ).get<wxString>();
+
+                    // Older configs predate the preview flag and default to a permanent tab.
+                    if( entry.contains( "preview" ) )
+                        tab.m_preview = entry.at( "preview" ).get<bool>();
 
                     m_OpenTabs.push_back( std::move( tab ) );
                 }

@@ -646,9 +646,8 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
                     {
                         AddFootprintToBoard( footprint );
 
-                        // A restored tab is a real document, so promote it from preview to permanent.
                         if( m_tabsPanel )
-                            findOrCreateFootprintTab( id, false );
+                            findOrCreateFootprintTab( id, aTab.m_preview );
 
                         return true;
                     }
@@ -1620,15 +1619,21 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_OpenTabs.clear();
         cfg->m_ActiveTab.Clear();
 
-        for( const std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
+        const std::vector<EDITOR_TABS_MODEL::ENTRY>& entries = m_tabsPanel->Model().Entries();
+
+        for( size_t i = 0; i < m_tabContexts.size(); ++i )
         {
+            const FOOTPRINT_EDITOR_TAB_CONTEXT* ctx = m_tabContexts[i].get();
+
             // Instance tabs are session-only and never persisted.
             if( ctx->IsTransient() )
                 continue;
 
-            cfg->m_OpenTabs.push_back( { ctx->GetLib(), ctx->GetName() } );
+            const bool preview = i < entries.size() && entries[i].preview;
 
-            if( ctx.get() == m_activeTab )
+            cfg->m_OpenTabs.push_back( { ctx->GetLib(), ctx->GetName(), preview } );
+
+            if( ctx == m_activeTab )
                 cfg->m_ActiveTab = ctx->GetTabKey();
         }
     }

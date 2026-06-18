@@ -93,6 +93,7 @@ public:
     {
         wxString m_lib;
         wxString m_fpName;
+        bool     m_preview = false;
     };
 
     std::vector<OPEN_TAB> m_OpenTabs;
