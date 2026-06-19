@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-17 09:05+0300\n"
+"POT-Creation-Date: 2026-06-19 18:05+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5384,6 +5384,31 @@ msgid ""
 "Unexpected end of file at offset 0x%06zX: need %zu bytes, have %zu remaining."
 msgstr ""
 "Unexpected end of file at offset 0x%06zX: need %zu bytes, have %zu remaining."
+
+msgid "Short read in Eagle binary file (field out of bounds)."
+msgstr "Short read in Eagle binary file (field out of bounds)."
+
+msgid "Short read in Eagle binary file (truncated block)."
+msgstr "Short read in Eagle binary file (truncated block)."
+
+#, c-format
+msgid "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
+msgstr "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
+
+msgid "Eagle binary file has no drawing section."
+msgstr "Eagle binary file has no drawing section."
+
+msgid "Eagle binary layout is missing a board/libraries node."
+msgstr "Eagle binary layout is missing a board/libraries node."
+
+msgid "File is too small to be an Eagle binary board."
+msgstr "File is too small to be an Eagle binary board."
+
+msgid "Eagle binary schematic has no drawing section."
+msgstr "Eagle binary schematic has no drawing section."
+
+msgid "Eagle binary file has no schematic section."
+msgstr "Eagle binary file has no schematic section."
 
 #, c-format
 msgid "Invalid size %lld: too large"
@@ -22616,8 +22641,8 @@ msgstr "Render quality. Options: %s"
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr "Appearance preset. Options: %s, %s, or user-defined preset name"
 
-msgid "Colors defined in board stackup override those in preset"
-msgstr "Colors defined in board stackup override those in preset"
+msgid "Use colors defined in the board stackup instead of those in the preset"
+msgstr "Use colors defined in the board stackup instead of those in the preset"
 
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
@@ -28843,6 +28868,16 @@ msgstr "Update/reset clearance overrides"
 
 msgid "Update/reset 3D models"
 msgstr "Update/reset 3D models"
+
+msgid "Reset scale"
+msgstr "Reset scale"
+
+msgid ""
+"Reset the footprint scale to 1 when changing to a different library "
+"footprint. Unchecked: keep the existing scale."
+msgstr ""
+"Reset the footprint scale to 1 when changing to a different library "
+"footprint. Unchecked: keep the existing scale."
 
 msgid "Match pad positions"
 msgstr "Match pad positions"
@@ -35898,6 +35933,9 @@ msgstr "Footprint component type doesn't match footprint pads"
 msgid "Through hole pad has no hole"
 msgstr "Through hole pad has no hole"
 
+msgid "Footprint with pads is scaled (physical part size unchanged)"
+msgstr "Footprint with pads is scaled (physical part size unchanged)"
+
 msgid "Mirrored text on front layer"
 msgstr "Mirrored text on front layer"
 
@@ -37519,6 +37557,12 @@ msgstr "Inherited"
 
 msgid "Thermal reliefs for PTH"
 msgstr "Thermal reliefs for PTH"
+
+msgid "Scale X"
+msgstr "Scale X"
+
+msgid "Scale Y"
+msgstr "Scale Y"
 
 msgid "Not in Schematic"
 msgstr "Not in Schematic"
@@ -39484,6 +39528,10 @@ msgstr "Loading tracks..."
 msgid "Loading unicode strings..."
 msgstr "Loading unicode strings..."
 
+#, c-format
+msgid "Imported %d length-tuning pattern(s)."
+msgstr "Imported %d length-tuning pattern(s)."
+
 msgid "Loading text..."
 msgstr "Loading text..."
 
@@ -40054,25 +40102,6 @@ msgstr ""
 
 msgid "DipTrace PCB files"
 msgstr "DipTrace PCB files"
-
-msgid "Short read in Eagle binary file (field out of bounds)."
-msgstr "Short read in Eagle binary file (field out of bounds)."
-
-msgid "Short read in Eagle binary file (truncated block)."
-msgstr "Short read in Eagle binary file (truncated block)."
-
-#, c-format
-msgid "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
-msgstr "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
-
-msgid "Eagle binary file has no drawing section."
-msgstr "Eagle binary file has no drawing section."
-
-msgid "Eagle binary layout is missing a board/libraries node."
-msgstr "Eagle binary layout is missing a board/libraries node."
-
-msgid "File is too small to be an Eagle binary board."
-msgstr "File is too small to be an Eagle binary board."
 
 #, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
@@ -43360,6 +43389,26 @@ msgstr "Repeat layout"
 msgid "Copied to %d Rule Areas."
 msgstr "Copied to %d Rule Areas."
 
+msgid "Target Rule Area shares components with the reference area"
+msgstr "Target Rule Area shares components with the reference area"
+
+msgid ""
+"This target Rule Area selects the same components as the reference area. "
+"Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
+"Area a distinct sheet, component class or group."
+msgstr ""
+"This target Rule Area selects the same components as the reference area. "
+"Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
+"Area a distinct sheet, component class or group."
+
+#, c-format
+msgid ""
+"Shared components:\n"
+"%s"
+msgstr ""
+"Shared components:\n"
+"%s"
+
 #, c-format
 msgid "Reference area total components: %d"
 msgstr "Reference area total components: %d"
@@ -46004,6 +46053,17 @@ msgstr "Net '%s' is in use.  Delete anyway?"
 msgid "Delete all nets in group '%s'?"
 msgstr "Delete all nets in group '%s'?"
 
+#, c-format
+msgid ""
+"%d footprint(s) in the selection have pads. Scaling changes the drawn pad "
+"positions but not the physical part. Continue?"
+msgstr ""
+"%d footprint(s) in the selection have pads. Scaling changes the drawn pad "
+"positions but not the physical part. Continue?"
+
+msgid "Scale footprint with pads?"
+msgstr "Scale footprint with pads?"
+
 msgid "Priority"
 msgstr "Priority"
 
@@ -46393,6 +46453,9 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Colors defined in board stackup override those in preset"
+#~ msgstr "Colors defined in board stackup override those in preset"
 
 #~ msgid ""
 #~ "The goal of the IEC60664-1 is to provide guidance on designing insulation "
