@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-18 17:01+0000\n"
+"PO-Revision-Date: 2026-06-19 15:02+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -6551,9 +6551,8 @@ msgid "Graphics error during recovery"
 msgstr "Errore grafico"
 
 #: common/draw_panel_gal.cpp:241
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "Eccezione OCC creando una faccia: %s"
+msgstr "Eccezione sconosciuta durante il passaggio al backend"
 
 #: common/draw_panel_gal.cpp:416
 #, fuzzy
@@ -8056,9 +8055,9 @@ msgid "Could not create directory '%s'"
 msgstr "Impossibile creare la cartella '%s'"
 
 #: common/git/libgit_backend.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "Impossibile clonare il repository '%s'"
+msgstr "Impossibile clonare il repository '%s': %s"
 
 #: common/git/libgit_backend.cpp:197 common/git/libgit_backend.cpp:339
 #, c-format
@@ -8285,9 +8284,8 @@ msgid "Merge failed: %s"
 msgstr "Merge fallito: %s"
 
 #: common/git/libgit_backend.cpp:1462
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Impossibile ottenere l'indice del repository"
+msgstr "Impossibile leggere l'indice del repository dopo il merge."
 
 #: common/git/libgit_backend.cpp:1494
 #, fuzzy
@@ -8295,14 +8293,12 @@ msgid "Could not write the merge result."
 msgstr "Impossibile scrivere i file di tracciatura nella cartella '%s'."
 
 #: common/git/libgit_backend.cpp:1502
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Impossibile ottenere la head del repository"
+msgstr "Impossibile ottenere la head del repository."
 
 #: common/git/libgit_backend.cpp:1512
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Impossibile trovare il commit di destinazione"
+msgstr "Impossibile trovare i commit su cui fare merge."
 
 #: common/git/libgit_backend.cpp:1521 common/git/libgit_backend.cpp:1706
 msgid ""
@@ -8311,14 +8307,14 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Fondi grafiche sovrapposte nella piazzola"
+msgstr "Fai il merge del ramo di tracciamento remoto in %s"
 
 #: common/git/libgit_backend.cpp:1538
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Impossibile fare il merge dei commit"
+msgstr "Impossibile fare il merge del commit: %s"
 
 #: common/git/libgit_backend.cpp:1555
 msgid ""
@@ -8354,9 +8350,8 @@ msgid "Could not find the matching remote branch."
 msgstr "Impossibile trovare \"%s\" nella libreria importata."
 
 #: common/git/libgit_backend.cpp:1644 common/git/libgit_backend.cpp:1697
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Impossibile aprire il percorso modelli '%s'"
+msgstr "Impossibile leggere il ramo remoto."
 
 #: common/git/libgit_backend.cpp:1653
 #, fuzzy, c-format
@@ -9692,9 +9687,9 @@ msgid "The library table is of wrong type"
 msgstr "Il percorso della tabella della libreria '%s' non esiste"
 
 #: common/libraries/library_table.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "La libreria '%s' è in sola lettura."
+msgstr "La tabella librerie '%s' è in sola lettura"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -9804,7 +9799,7 @@ msgstr "%s, %s e %d di più"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:654
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:831
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -9812,9 +9807,9 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID impronta non valido in\n"
-"file: %s\n"
+"file: '%s'\n"
 "riga: %d\n"
-"scostamento: %d."
+"scostamento: %d"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:946
@@ -10215,12 +10210,9 @@ msgid "Unsupported provider capability '%s'."
 msgstr "Tipo componente non supportato '%s'."
 
 #: common/remote_provider_metadata.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse remote provider metadata: %s"
-msgstr ""
-"Impossibile analizzare i metadati del pacchetto:\n"
-"\n"
-"%s"
+msgstr "Impossibile analizzare i metadati del provider remoto: %s"
 
 #: common/remote_provider_metadata.cpp:154
 msgid "Remote provider metadata must enable web_ui_v1."
@@ -10241,12 +10233,9 @@ msgid "session_bootstrap_url must share the same origin as panel_url."
 msgstr ""
 
 #: common/remote_provider_models.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse OAuth metadata: %s"
-msgstr ""
-"Impossibile analizzare i metadati del pacchetto:\n"
-"\n"
-"%s"
+msgstr "Impossibile analizzare i metadati OAuth: %s"
 
 #: common/remote_provider_models.cpp:50
 msgid "OAuth metadata must include authorization_endpoint and token_endpoint."
@@ -14026,7 +14015,7 @@ msgstr "Cancella marcatore"
 
 #: eeschema/dialogs/dialog_erc_base.h:106 eeschema/tools/sch_actions.cpp:50
 msgid "Electrical Rules Checker"
-msgstr "Controllo Regole Elettriche (ERC)"
+msgstr "Controllo Regole Elettriche"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
@@ -16192,9 +16181,8 @@ msgid "Sign Out"
 msgstr ""
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:91
-#, fuzzy
 msgid "Metadata URL:"
-msgstr "Metadati"
+msgstr "URL metadati:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
 #, fuzzy
@@ -16214,9 +16202,8 @@ msgid "Not signed in"
 msgstr "Non specificato"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:103
-#, fuzzy
 msgid "Auth status:"
-msgstr "Stato: "
+msgstr "Stato autenticazione:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:105
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:463
