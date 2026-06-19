@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-17 09:05+0300\n"
+"POT-Creation-Date: 2026-06-19 18:05+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -42390,11 +42390,11 @@ msgstr "design block has no saved PCB layout"
 msgid "could not load the design block's layout"
 msgstr "could not load the design block's layout"
 
-msgid "design block layout could not be loaded"
-msgstr "design block layout could not be loaded"
+msgid "design block contains no items to apply"
+msgstr "design block contains no items to apply"
 
-msgid "group has no footprints"
-msgstr "group has no footprints"
+msgid "group is empty"
+msgstr "group is empty"
 
 msgid "layout copy failed"
 msgstr "layout copy failed"
@@ -42409,6 +42409,9 @@ msgstr "Apply design block layout cancelled."
 #, c-format
 msgid "Apply design block layout to %d group(s)"
 msgstr "Apply design block layout to %d group(s)"
+
+msgid "Copied copper has no net assigned. Assign nets to connect it."
+msgstr "Copied copper has no net assigned. Assign nets to connect it."
 
 #, c-format
 msgid "Applied design block layout to %d of %d group(s)."
@@ -43721,6 +43724,12 @@ msgstr "Process could not be created"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Could not create user scripting path %s."
+
+#~ msgid "design block layout could not be loaded"
+#~ msgstr "design block layout could not be loaded"
+
+#~ msgid "group has no footprints"
+#~ msgstr "group has no footprints"
 
 #~ msgid ""
 #~ "The differential pair gap at the start point does not match the "

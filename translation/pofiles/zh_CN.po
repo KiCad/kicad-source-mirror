@@ -45,7 +45,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-17 09:05+0300\n"
+"POT-Creation-Date: 2026-06-19 18:05+0300\n"
 "PO-Revision-Date: 2026-06-17 15:54+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -3383,7 +3383,7 @@ msgstr "自定义图纸宽度。"
 msgid "Export to other sheets"
 msgstr "导出到其他图纸"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:461
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:465
 #: eeschema/erc/erc_item.cpp:445 eeschema/sch_marker.cpp:378
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:138 pcbnew/pcb_marker.cpp:249
@@ -3948,7 +3948,8 @@ msgstr "作者:"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: kicad/dialogs/dialog_edit_cfg.cpp:181
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:136
-#: pcbnew/tools/multichannel_tool.cpp:1538
+#: pcbnew/tools/multichannel_tool.cpp:1729
+#: pcbnew/tools/multichannel_tool.cpp:1760
 msgid "OK"
 msgstr "确定"
 
@@ -4803,9 +4804,9 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:897
 #: eeschema/dialogs/panel_sym_lib_table.cpp:916 eeschema/project_rescue.cpp:854
 #: eeschema/sheet.cpp:807 eeschema/symbol_editor/symbol_edit_frame.cpp:1208
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1258
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2045
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2114
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1264
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2051
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2120
 #: eeschema/symbol_library_manager.cpp:766
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:878
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:897
@@ -8132,7 +8133,7 @@ msgstr "复制所选单元格内容到剪贴板"
 #: common/grid_tricks.cpp:386 common/tool/actions.cpp:344
 #: common/widgets/listbox_tricks.cpp:210
 #: eeschema/tools/sch_editor_control.cpp:2803
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1739
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1749
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:999
 #: pcbnew/tools/pcb_control.cpp:1382
@@ -8145,7 +8146,7 @@ msgstr "粘贴剪贴板内容到当前单元格"
 
 #: common/grid_tricks.cpp:388 common/tool/actions.cpp:408
 #: common/widgets/listbox_tricks.cpp:212 eeschema/tools/sch_edit_tool.cpp:2293
-#: eeschema/tools/symbol_editor_edit_tool.cpp:858
+#: eeschema/tools/symbol_editor_edit_tool.cpp:859
 #: kicad/dialogs/panel_jobset.cpp:440 kicad/project_tree_pane.cpp:1023
 #: pcbnew/dialogs/panel_setup_rules.cpp:143
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:588
@@ -9846,20 +9847,20 @@ msgstr "已创建 Zip 文件 '%s'(%s 未压缩, %s 已压缩)。"
 msgid "Open file"
 msgstr "打开文件"
 
-#: common/rc_item.cpp:442 eeschema/erc/erc_item.cpp:425
+#: common/rc_item.cpp:446 eeschema/erc/erc_item.cpp:425
 msgid "Excluded warning: "
 msgstr "已排除的警告: "
 
-#: common/rc_item.cpp:444 eeschema/erc/erc_item.cpp:427
+#: common/rc_item.cpp:448 eeschema/erc/erc_item.cpp:427
 msgid "Excluded error: "
 msgstr "已排除的错误: "
 
-#: common/rc_item.cpp:448 eeschema/erc/erc_item.cpp:431
+#: common/rc_item.cpp:452 eeschema/erc/erc_item.cpp:431
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1596
 msgid "Warning: "
 msgstr "警告: "
 
-#: common/rc_item.cpp:452 eeschema/erc/erc_item.cpp:435
+#: common/rc_item.cpp:456 eeschema/erc/erc_item.cpp:435
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1594
 msgid "Error: "
 msgstr "错误: "
@@ -10121,7 +10122,7 @@ msgstr "设计图块库表"
 #: common/startwizard/startwizard_provider_libraries.cpp:225
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:221
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1541
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1547
 #: pcbnew/footprint_edit_frame.cpp:230 pcbnew/footprint_edit_frame.cpp:1038
 msgid "Libraries"
 msgstr "库"
@@ -10435,7 +10436,7 @@ msgid "Paste item(s) from clipboard with options"
 msgstr "使用特殊粘贴选项粘贴项目"
 
 #: common/tool/actions.cpp:395 common/widgets/listbox_tricks.cpp:211
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1820
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1830
 #: pcbnew/tools/edit_tool.cpp:3425
 msgid "Duplicate"
 msgstr "创建副本"
@@ -11557,8 +11558,8 @@ msgid "Overwrite existing design block?"
 msgstr "覆盖已有设计图块?"
 
 #: common/widgets/filter_combobox.cpp:72
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1099
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1126
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1107
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1134
 msgid "Filter:"
 msgstr "筛选:"
 
@@ -14313,7 +14314,7 @@ msgid "Label can not be empty."
 msgstr "标签不能为空。"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:571
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:627
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:634
 #: eeschema/dialogs/dialog_sheet_properties.cpp:399
 #: eeschema/dialogs/dialog_symbol_properties.cpp:773 include/project.h:44
 msgid "untitled"
@@ -15058,27 +15059,27 @@ msgstr "符号必须要有一个名称。"
 msgid "Symbol name '%s' already in use in library '%s'."
 msgstr "符号名称 '%s' 在库 '%s' 中已被使用。"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:601
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:608
 #: eeschema/dialogs/dialog_symbol_properties.cpp:859
 msgid "Edit Symbol Properties"
 msgstr "编辑符号属性"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:754
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:761
 #, c-format
 msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
 msgstr "跳线引脚组 %2$d 中的引脚 '%1$s' 在此符号中不存在。"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:796
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:804
 #, c-format
 msgid "This field is inherited from '%s'."
 msgstr "该字段继承自 '%s'。"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:826
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:834
 #, c-format
 msgid "The name '%s' is already in use."
 msgstr "名称 '%s' 已被使用。"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:906
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:914
 #: eeschema/dialogs/dialog_sheet_properties.cpp:568
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 #: eeschema/dialogs/dialog_symbol_properties.cpp:951
@@ -15088,11 +15089,11 @@ msgstr "名称 '%s' 已被使用。"
 msgid "The first %d fields are mandatory."
 msgstr "首字段 %d 是必填字段。"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1099
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1107
 msgid "Add Footprint Filter"
 msgstr "添加封装筛选规则"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1126
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1134
 msgid "Edit Footprint Filter"
 msgstr "编辑封装筛选规则"
 
@@ -18715,7 +18716,7 @@ msgstr "URL"
 
 #: eeschema/eeschema.cpp:505 eeschema/eeschema.cpp:518
 #: eeschema/libraries/legacy_symbol_library.cpp:523
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1358
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 msgid "Loading Symbol Libraries"
 msgstr "加载符号库"
 
@@ -20448,7 +20449,7 @@ msgstr "创建新的库"
 
 #: eeschema/sch_base_frame.cpp:779
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1175
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1240
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1246
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "库 '%s' 已存在。"
@@ -20520,7 +20521,7 @@ msgstr "总线输入类型"
 #: eeschema/sch_bus_entry.cpp:526 eeschema/sch_junction.cpp:317
 #: eeschema/sch_label.cpp:1440 eeschema/sch_line.cpp:979
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2034 pcbnew/pad.cpp:1909
-#: pcbnew/pcb_track.cpp:2466 pcbnew/tools/pcb_control.cpp:2662
+#: pcbnew/pcb_track.cpp:2466 pcbnew/tools/pcb_control.cpp:2686
 #: pcbnew/zone.cpp:949
 msgid "Resolved Netclass"
 msgstr "已解析网络类"
@@ -21848,7 +21849,7 @@ msgstr "齐行"
 #: pcbnew/generators/pcb_tuning_pattern.h:494 pcbnew/pad.cpp:1907
 #: pcbnew/pad.cpp:3431 pcbnew/pcb_shape.cpp:719 pcbnew/pcb_shape.cpp:1058
 #: pcbnew/pcb_tablecell.cpp:289 pcbnew/pcb_track.cpp:2464
-#: pcbnew/tools/pcb_control.cpp:2659
+#: pcbnew/tools/pcb_control.cpp:2683
 #: pcbnew/widgets/pcb_properties_panel.cpp:690
 #: pcbnew/widgets/pcb_properties_panel.cpp:693
 #: pcbnew/widgets/search_handlers.cpp:227 pcbnew/zone.cpp:947
@@ -23381,9 +23382,9 @@ msgstr ""
 "是否要继续?"
 
 #: eeschema/sheet.cpp:807 eeschema/symbol_editor/symbol_edit_frame.cpp:1208
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1258
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2045
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2114
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1264
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2051
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2120
 msgid "Error saving library table."
 msgstr "保存库表时出错。"
 
@@ -24959,41 +24960,41 @@ msgstr ""
 "请确保您有写入权限, 然后重试。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1193
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1246
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1252
 msgid "Could not open the library file."
 msgstr "无法打开库文件。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1374
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1378
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1380
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1384
 #, c-format
 msgid "Loading library '%s'..."
 msgstr "正在加载 '%s' 库..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1458
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1464
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "无法将将备份保存到 '%s'。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1710
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1716
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'."
 msgstr "当前配置不包含符号库 '%s'。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1712
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1723
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1718
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1729
 msgid "Use Manage Symbol Libraries to edit the configuration."
 msgstr "使用 管理符号库 功能编辑配置。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1713
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1719
 msgid "Library not found in symbol library table."
 msgstr "在符号库表中找不到库。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1721
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1727
 #, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration."
 msgstr "当前配置中未启用封装库 '%s'。"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1724
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1730
 msgid "Symbol library not enabled."
 msgstr "符号库未启用。"
 
@@ -25956,7 +25957,7 @@ msgid "Place Power Symbols"
 msgstr "放置电源符号"
 
 #: eeschema/tools/sch_actions.cpp:492 pcbnew/tools/pcb_actions.cpp:472
-#: pcbnew/tools/pcb_control.cpp:2241
+#: pcbnew/tools/pcb_control.cpp:2265
 msgid "Place Design Block"
 msgstr "放置设计图块"
 
@@ -26339,7 +26340,7 @@ msgid ""
 msgstr "将同一位置的多个引脚转换为一个带堆叠标记的单个引脚"
 
 #: eeschema/tools/sch_actions.cpp:1009
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1473
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1483
 msgid "Explode Stacked Pin"
 msgstr "拆解堆叠引脚"
 
@@ -27084,7 +27085,7 @@ msgstr "所请求的单元已放置。"
 #: eeschema/tools/sch_drawing_tools.cpp:807
 #: eeschema/tools/sch_editor_control.cpp:3397
 #: eeschema/tools/sch_editor_control.cpp:3444 pcbnew/tools/pcb_control.cpp:1428
-#: pcbnew/tools/pcb_control.cpp:1826 pcbnew/tools/pcb_control.cpp:1882
+#: pcbnew/tools/pcb_control.cpp:1850 pcbnew/tools/pcb_control.cpp:1906
 #, c-format
 msgid "Could not find design block %s."
 msgstr "找不到设计图块 %s。"
@@ -27274,7 +27275,7 @@ msgid "Change To"
 msgstr "修改为"
 
 #: eeschema/tools/sch_edit_tool.cpp:1264
-#: eeschema/tools/symbol_editor_edit_tool.cpp:602
+#: eeschema/tools/symbol_editor_edit_tool.cpp:603
 #: pcbnew/tools/edit_tool.cpp:2554
 msgid "Rotate"
 msgstr "旋转"
@@ -27335,13 +27336,13 @@ msgid "Repeat Item"
 msgstr "创建副本"
 
 #: eeschema/tools/sch_edit_tool.cpp:2320
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1009
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1010
 #, c-format
 msgid "Edit %s Field"
 msgstr "编辑 %s 字段"
 
 #: eeschema/tools/sch_edit_tool.cpp:2324
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1011
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1012
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "编辑 '%s' 字段"
@@ -27561,7 +27562,7 @@ msgstr "未设置数据手册链接。"
 
 #: eeschema/tools/sch_inspection_tool.cpp:551
 #: pagelayout_editor/tools/pl_editor_control.cpp:161
-#: pcbnew/tools/pcb_control.cpp:2367
+#: pcbnew/tools/pcb_control.cpp:2391
 msgid "UUID"
 msgstr "UUID"
 
@@ -27711,46 +27712,46 @@ msgstr "使用展平后的符号更新库失败"
 msgid "Place Pin"
 msgstr "放置引脚"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:850
+#: eeschema/tools/symbol_editor_edit_tool.cpp:851
 #: pcbnew/tools/edit_tool.cpp:3077
 msgid "Hide Field"
 msgstr "隐藏字段"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:852
+#: eeschema/tools/symbol_editor_edit_tool.cpp:853
 #: pcbnew/tools/edit_tool.cpp:3079
 msgid "Hide Fields"
 msgstr "隐藏字段"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:854
+#: eeschema/tools/symbol_editor_edit_tool.cpp:855
 msgid "Use the Symbol Properties dialog to remove fields."
 msgstr "使用 \"符号属性\" 对话框删除字段。"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1143
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1153
 msgid "Edit Pins"
 msgstr "编辑引脚"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1190
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1200
 msgid "At least two pins are needed to convert to stacked pins"
 msgstr "转换为堆叠引脚需要至少两个引脚"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1200
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1210
 msgid "All pins must be at the same location"
 msgstr "所有引脚必须位于同一位置"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1385
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1395
 #, c-format
 msgid "Convert %zu Stacked Pins to '%s'"
 msgstr "将 %zu 个堆叠引脚转换为 '%s'"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1407
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1417
 msgid "Select a single pin with stacked notation to explode"
 msgstr "选择一个带堆叠标记的单个引脚进行拆解"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1419
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1429
 msgid "Selected pin does not have valid stacked notation"
 msgstr "所选引脚不具有有效的堆叠标记"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1488
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1498
 msgid "Symbol is not derived from another symbol."
 msgstr "符号不是从另一个符号派生的。"
 
@@ -28443,7 +28444,7 @@ msgstr "选择层: %s"
 #: pcbnew/pcb_target.cpp:156 pcbnew/pcb_text.cpp:331 pcbnew/pcb_textbox.cpp:500
 #: pcbnew/pcb_track.cpp:2338 pcbnew/pcb_track.cpp:2444
 #: pcbnew/pcb_track.cpp:3182 pcbnew/tools/board_inspection_tool.cpp:443
-#: pcbnew/tools/pcb_control.cpp:2589
+#: pcbnew/tools/pcb_control.cpp:2613
 #: pcbnew/widgets/pcb_properties_panel.cpp:660
 #: pcbnew/widgets/pcb_properties_panel.cpp:661
 #: pcbnew/widgets/pcb_properties_panel.cpp:664
@@ -37090,7 +37091,7 @@ msgstr ""
 "无法加载关联项目文件 %s"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:379 pcbnew/files.cpp:561
-#: pcbnew/tools/pcb_control.cpp:2108
+#: pcbnew/tools/pcb_control.cpp:2132
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:185
 msgid "Load PCB"
 msgstr "加载 PCB"
@@ -43060,7 +43061,7 @@ msgstr "目标 skew 延迟: "
 #: pcbnew/router/router_tool.cpp:2999 pcbnew/router/router_tool.cpp:3004
 #: pcbnew/router/router_tool.cpp:3009 pcbnew/router/router_tool.cpp:3020
 #: pcbnew/router/router_tool.cpp:3028 pcbnew/router/router_tool.cpp:3033
-#: pcbnew/tools/pcb_control.cpp:2402 pcbnew/tools/pcb_control.cpp:2411
+#: pcbnew/tools/pcb_control.cpp:2426 pcbnew/tools/pcb_control.cpp:2435
 #: pcbnew/zone.cpp:1016
 #, c-format
 msgid "(from %s)"
@@ -50655,7 +50656,7 @@ msgstr "背钻属性"
 msgid "Pad Type"
 msgstr "焊盘类型"
 
-#: pcbnew/pad.cpp:3444 pcbnew/tools/pcb_control.cpp:2594
+#: pcbnew/pad.cpp:3444 pcbnew/tools/pcb_control.cpp:2618
 msgid "Pad Shape"
 msgstr "焊盘形状"
 
@@ -54462,7 +54463,7 @@ msgstr "走线宽度: %s"
 msgid "Diff Pair Gap: %s"
 msgstr "差分对间隙: %s"
 
-#: pcbnew/router/router_tool.cpp:3018 pcbnew/tools/pcb_control.cpp:2410
+#: pcbnew/router/router_tool.cpp:3018 pcbnew/tools/pcb_control.cpp:2434
 #, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "DP 最大未耦合长度: %s"
@@ -55714,63 +55715,63 @@ msgstr "无法对选定项目进行外扩。"
 msgid "Some of the items could not be outset."
 msgstr "部分项目无法进行外扩。"
 
-#: pcbnew/tools/multichannel_tool.cpp:86
+#: pcbnew/tools/multichannel_tool.cpp:87
 msgid "(none)"
 msgstr "(无)"
 
-#: pcbnew/tools/multichannel_tool.cpp:136
-#: pcbnew/tools/multichannel_tool.cpp:1568
+#: pcbnew/tools/multichannel_tool.cpp:137
+#: pcbnew/tools/multichannel_tool.cpp:1790
 msgid "Topology mismatch"
 msgstr "拓扑结构不匹配"
 
-#: pcbnew/tools/multichannel_tool.cpp:615
+#: pcbnew/tools/multichannel_tool.cpp:664
 msgid "Select a reference Rule Area to copy from..."
 msgstr "选择要复制的参考规则域..."
 
-#: pcbnew/tools/multichannel_tool.cpp:634
+#: pcbnew/tools/multichannel_tool.cpp:683
 msgid "No Rule Areas to repeat layout to have been found."
 msgstr "没有发现需要复刻布局的规则域。"
 
-#: pcbnew/tools/multichannel_tool.cpp:730
+#: pcbnew/tools/multichannel_tool.cpp:779
 msgid "Checking Rule Area compatibility..."
 msgstr "正在检查规则域兼容性..."
 
-#: pcbnew/tools/multichannel_tool.cpp:755
+#: pcbnew/tools/multichannel_tool.cpp:804
 #, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
 msgstr "正在解析第 %d/%d 个拓扑 (%d/%d 个元件)"
 
-#: pcbnew/tools/multichannel_tool.cpp:805
+#: pcbnew/tools/multichannel_tool.cpp:854
 #, c-format
 msgid "Rule Area topologies do not match: %s"
 msgstr "规则域拓扑不匹配: %s"
 
-#: pcbnew/tools/multichannel_tool.cpp:830
-#: pcbnew/tools/multichannel_tool.cpp:891
+#: pcbnew/tools/multichannel_tool.cpp:879
+#: pcbnew/tools/multichannel_tool.cpp:943
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr "复制规则域 '%s' 和 '%s' 间的内容失败。"
 
-#: pcbnew/tools/multichannel_tool.cpp:848
+#: pcbnew/tools/multichannel_tool.cpp:902
 msgid "Target group does not have a group."
 msgstr "目标分组没有对应的分组。"
 
-#: pcbnew/tools/multichannel_tool.cpp:865
-#: pcbnew/tools/multichannel_tool.cpp:928
+#: pcbnew/tools/multichannel_tool.cpp:917
+#: pcbnew/tools/multichannel_tool.cpp:980
 msgid "Repeat layout"
 msgstr "复刻布局"
 
-#: pcbnew/tools/multichannel_tool.cpp:931
+#: pcbnew/tools/multichannel_tool.cpp:983
 #, c-format
 msgid "Copied to %d Rule Areas."
 msgstr "复制到 %d 个规则域。"
 
-#: pcbnew/tools/multichannel_tool.cpp:1574
+#: pcbnew/tools/multichannel_tool.cpp:1796
 #, c-format
 msgid "Reference area total components: %d"
 msgstr "参考规则域中的元件总数: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:1575
+#: pcbnew/tools/multichannel_tool.cpp:1797
 #, c-format
 msgid ""
 "Reference area components:\n"
@@ -55779,12 +55780,12 @@ msgstr ""
 "参考区域元件: \n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:1578
+#: pcbnew/tools/multichannel_tool.cpp:1800
 #, c-format
 msgid "Target area total components: %d"
 msgstr "目标区域元件总数: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:1579
+#: pcbnew/tools/multichannel_tool.cpp:1801
 #, c-format
 msgid ""
 "Target area components:\n"
@@ -55793,14 +55794,14 @@ msgstr ""
 "目标区域元件: \n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:1631
+#: pcbnew/tools/multichannel_tool.cpp:1853
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
 msgstr ""
 "无法自动生成任何布置区, 因为原理图中的层次图纸, 分组和元件类均不超过一个。"
 
-#: pcbnew/tools/multichannel_tool.cpp:1821
+#: pcbnew/tools/multichannel_tool.cpp:2043
 msgid "Auto-generate placement rule areas"
 msgstr "自动生成布置规则域"
 
@@ -56078,7 +56079,7 @@ msgstr "显示设计规则检查器窗口"
 msgid "Add selected design block to current board"
 msgstr "添加选中设计图块到当前电路板"
 
-#: pcbnew/tools/pcb_actions.cpp:490 pcbnew/tools/pcb_control.cpp:1790
+#: pcbnew/tools/pcb_actions.cpp:490 pcbnew/tools/pcb_control.cpp:1814
 msgid "Apply Design Block Layout"
 msgstr "应用设计图块布局"
 
@@ -57833,160 +57834,165 @@ msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr "选区包含锁定项目。请启用 '忽略锁定设置' 以对其进行操作。"
 
-#: pcbnew/tools/pcb_control.cpp:1541
+#: pcbnew/tools/pcb_control.cpp:1542
 msgid "Applying Design Block Layouts"
 msgstr "正在应用设计图块布局"
 
-#: pcbnew/tools/pcb_control.cpp:1572
+#: pcbnew/tools/pcb_control.cpp:1573
 msgid "design block is not in the loaded libraries"
 msgstr "设计图块不在已加载的库中"
 
-#: pcbnew/tools/pcb_control.cpp:1578
+#: pcbnew/tools/pcb_control.cpp:1579
 msgid "design block has no saved PCB layout"
 msgstr "设计图块中没有已保存的 PCB 布局"
 
-#: pcbnew/tools/pcb_control.cpp:1609
+#: pcbnew/tools/pcb_control.cpp:1610
 msgid "could not load the design block's layout"
 msgstr "无法加载设计图块布局"
 
-#: pcbnew/tools/pcb_control.cpp:1636
-msgid "design block layout could not be loaded"
-msgstr "无法加载设计图块布局"
+#: pcbnew/tools/pcb_control.cpp:1637
+#, fuzzy
+msgid "design block contains no items to apply"
+msgstr "设计图块中没有可放置的原理图。"
 
-#: pcbnew/tools/pcb_control.cpp:1669
-msgid "group has no footprints"
-msgstr "分组中没有封装"
+#: pcbnew/tools/pcb_control.cpp:1687
+msgid "group is empty"
+msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1708
+#: pcbnew/tools/pcb_control.cpp:1726
 msgid "layout copy failed"
 msgstr "布局复制失败"
 
-#: pcbnew/tools/pcb_control.cpp:1723
+#: pcbnew/tools/pcb_control.cpp:1744
 #, c-format
 msgid "Applying layout to group %zu of %zu..."
 msgstr "正在将布局应用到第 %zu/%zu 个分组..."
 
-#: pcbnew/tools/pcb_control.cpp:1746
+#: pcbnew/tools/pcb_control.cpp:1767
 msgid "Apply design block layout cancelled."
 msgstr "应用设计图块布局已取消。"
 
-#: pcbnew/tools/pcb_control.cpp:1752
+#: pcbnew/tools/pcb_control.cpp:1773
 #, c-format
 msgid "Apply design block layout to %d group(s)"
 msgstr "将设计图块布局应用到 %d 个分组"
 
-#: pcbnew/tools/pcb_control.cpp:1764
+#: pcbnew/tools/pcb_control.cpp:1776
+msgid "Copied copper has no net assigned. Assign nets to connect it."
+msgstr ""
+
+#: pcbnew/tools/pcb_control.cpp:1788
 #, c-format
 msgid "Applied design block layout to %d of %d group(s)."
 msgstr "已将设计图块布局应用到 %d/%d 个分组。"
 
-#: pcbnew/tools/pcb_control.cpp:1771
+#: pcbnew/tools/pcb_control.cpp:1795
 #, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
 msgstr "已跳过 %d 个并非链接到设计图块的分组的所选项目。"
 
-#: pcbnew/tools/pcb_control.cpp:1779
+#: pcbnew/tools/pcb_control.cpp:1803
 msgid "The following groups could not be processed:"
 msgstr "无法处理以下分组:"
 
-#: pcbnew/tools/pcb_control.cpp:1783
+#: pcbnew/tools/pcb_control.cpp:1807
 msgid "(unnamed group)"
 msgstr "(未命名分组)"
 
-#: pcbnew/tools/pcb_control.cpp:1834
+#: pcbnew/tools/pcb_control.cpp:1858
 #, c-format
 msgid "Design block %s does not have a board file."
 msgstr "设计图块 %s 缺少电路板文件。"
 
-#: pcbnew/tools/pcb_control.cpp:2115
+#: pcbnew/tools/pcb_control.cpp:2139
 msgid "Error loading board."
 msgstr "电路板加载出错。"
 
-#: pcbnew/tools/pcb_control.cpp:2241
+#: pcbnew/tools/pcb_control.cpp:2265
 msgid "Append Board"
 msgstr "添加电路板"
 
-#: pcbnew/tools/pcb_control.cpp:2312
+#: pcbnew/tools/pcb_control.cpp:2336
 msgid "Active Layer"
 msgstr "活动层"
 
-#: pcbnew/tools/pcb_control.cpp:2313 pcbnew/widgets/appearance_controls.cpp:385
+#: pcbnew/tools/pcb_control.cpp:2337 pcbnew/widgets/appearance_controls.cpp:385
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 #: pcbnew/zone_manager/dialog_zone_manager.cpp:89
 msgid "All Layers"
 msgstr "所有层"
 
-#: pcbnew/tools/pcb_control.cpp:2324
+#: pcbnew/tools/pcb_control.cpp:2348
 msgid "Object Snapping"
 msgstr "对象捕获"
 
-#: pcbnew/tools/pcb_control.cpp:2401
+#: pcbnew/tools/pcb_control.cpp:2425
 #, c-format
 msgid "DP Gap Constraints: %s"
 msgstr "DP 间隙约束: %s"
 
-#: pcbnew/tools/pcb_control.cpp:2445
+#: pcbnew/tools/pcb_control.cpp:2469
 msgid "Resolved Clearance"
 msgstr "已解析间距"
 
-#: pcbnew/tools/pcb_control.cpp:2456
+#: pcbnew/tools/pcb_control.cpp:2480
 msgid "Actual Clearance"
 msgstr "实际间距"
 
-#: pcbnew/tools/pcb_control.cpp:2499
+#: pcbnew/tools/pcb_control.cpp:2523
 msgid "Resolved Hole Clearance"
 msgstr "已解析孔间距"
 
-#: pcbnew/tools/pcb_control.cpp:2504
+#: pcbnew/tools/pcb_control.cpp:2528
 msgid "Actual Hole Clearance"
 msgstr "实际孔间距"
 
-#: pcbnew/tools/pcb_control.cpp:2539
+#: pcbnew/tools/pcb_control.cpp:2563
 msgid "Resolved Edge Clearance"
 msgstr "已解析边缘间距"
 
-#: pcbnew/tools/pcb_control.cpp:2544
+#: pcbnew/tools/pcb_control.cpp:2568
 msgid "Resolved Margin Clearance"
 msgstr "已解析 Margin 层间距"
 
-#: pcbnew/tools/pcb_control.cpp:2601
+#: pcbnew/tools/pcb_control.cpp:2625
 msgid "Pad Size"
 msgstr "焊盘尺寸"
 
-#: pcbnew/tools/pcb_control.cpp:2633
+#: pcbnew/tools/pcb_control.cpp:2657
 msgid "Selected Items"
 msgstr "选中项"
 
-#: pcbnew/tools/pcb_control.cpp:2719
+#: pcbnew/tools/pcb_control.cpp:2743
 msgid "Selected 2D Length"
 msgstr "选中的二维长度"
 
-#: pcbnew/tools/pcb_control.cpp:2808
+#: pcbnew/tools/pcb_control.cpp:2832
 msgid "Selected 2D Copper Area"
 msgstr "选中二维铜箔面积"
 
-#: pcbnew/tools/pcb_control.cpp:2810
+#: pcbnew/tools/pcb_control.cpp:2834
 msgid "Selected 2D Area"
 msgstr "选定的 2D 面积"
 
-#: pcbnew/tools/pcb_control.cpp:2812
+#: pcbnew/tools/pcb_control.cpp:2836
 msgid "Selected 2D Total Area"
 msgstr "选定的 2D 总面积"
 
-#: pcbnew/tools/pcb_control.cpp:2870
+#: pcbnew/tools/pcb_control.cpp:2894
 msgid "Place Board Characteristics"
 msgstr "放置电路板特性表"
 
-#: pcbnew/tools/pcb_control.cpp:2890
+#: pcbnew/tools/pcb_control.cpp:2914
 msgid "Place Board Stackup Table"
 msgstr "放置电路板叠层表"
 
-#: pcbnew/tools/pcb_control.cpp:3013
+#: pcbnew/tools/pcb_control.cpp:3037
 msgid "Embed 3D Models"
 msgstr "嵌入 3D 模型"
 
-#: pcbnew/tools/pcb_control.cpp:3014
+#: pcbnew/tools/pcb_control.cpp:3038
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
 msgstr "成功嵌入了 %d 个 3D 模型。"
@@ -59610,6 +59616,12 @@ msgstr "无法创建进程"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "无法创建用户脚本路径 %s。"
+
+#~ msgid "design block layout could not be loaded"
+#~ msgstr "无法加载设计图块布局"
+
+#~ msgid "group has no footprints"
+#~ msgstr "分组中没有封装"
 
 #, fuzzy
 #~ msgid "Design block placement failed - no footprints were placed."

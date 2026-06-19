@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-17 09:05+0300\n"
+"POT-Creation-Date: 2026-06-19 18:05+0300\n"
 "PO-Revision-Date: 2026-04-24 15:43+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v10/ta/>\n"
@@ -3365,7 +3365,7 @@ msgstr "தனிப்பயன் காகித அகலம்."
 msgid "Export to other sheets"
 msgstr "மற்ற தாள்களுக்கு ஏற்றுமதி செய்யுங்கள்"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:461
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:465
 #: eeschema/erc/erc_item.cpp:445 eeschema/sch_marker.cpp:378
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:97
 #: gerbview/widgets/gerbview_layer_widget.cpp:138 pcbnew/pcb_marker.cpp:249
@@ -3933,7 +3933,8 @@ msgstr "ஆசிரியர்:"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: kicad/dialogs/dialog_edit_cfg.cpp:181
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:136
-#: pcbnew/tools/multichannel_tool.cpp:1538
+#: pcbnew/tools/multichannel_tool.cpp:1729
+#: pcbnew/tools/multichannel_tool.cpp:1760
 msgid "OK"
 msgstr "சரி"
 
@@ -4821,9 +4822,9 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:897
 #: eeschema/dialogs/panel_sym_lib_table.cpp:916 eeschema/project_rescue.cpp:854
 #: eeschema/sheet.cpp:807 eeschema/symbol_editor/symbol_edit_frame.cpp:1208
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1258
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2045
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2114
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1264
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2051
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2120
 #: eeschema/symbol_library_manager.cpp:766
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:878
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:897
@@ -8207,7 +8208,7 @@ msgstr "தேர்ந்தெடுக்கப்பட்ட கலங்�
 #: common/grid_tricks.cpp:386 common/tool/actions.cpp:344
 #: common/widgets/listbox_tricks.cpp:210
 #: eeschema/tools/sch_editor_control.cpp:2803
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1739
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1749
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:999
 #: pcbnew/tools/pcb_control.cpp:1382
@@ -8220,7 +8221,7 @@ msgstr "தற்போதைய கலத்தில் இடைநிலை�
 
 #: common/grid_tricks.cpp:388 common/tool/actions.cpp:408
 #: common/widgets/listbox_tricks.cpp:212 eeschema/tools/sch_edit_tool.cpp:2293
-#: eeschema/tools/symbol_editor_edit_tool.cpp:858
+#: eeschema/tools/symbol_editor_edit_tool.cpp:859
 #: kicad/dialogs/panel_jobset.cpp:440 kicad/project_tree_pane.cpp:1023
 #: pcbnew/dialogs/panel_setup_rules.cpp:143
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:588
@@ -9928,20 +9929,20 @@ msgstr "சிப் காப்பகம் '%s' உருவாக்கப�
 msgid "Open file"
 msgstr "கோப்பை திற"
 
-#: common/rc_item.cpp:442 eeschema/erc/erc_item.cpp:425
+#: common/rc_item.cpp:446 eeschema/erc/erc_item.cpp:425
 msgid "Excluded warning: "
 msgstr "விலக்கப்பட்ட எச்சரிக்கை: "
 
-#: common/rc_item.cpp:444 eeschema/erc/erc_item.cpp:427
+#: common/rc_item.cpp:448 eeschema/erc/erc_item.cpp:427
 msgid "Excluded error: "
 msgstr "விலக்கப்பட்ட பிழை: "
 
-#: common/rc_item.cpp:448 eeschema/erc/erc_item.cpp:431
+#: common/rc_item.cpp:452 eeschema/erc/erc_item.cpp:431
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1596
 msgid "Warning: "
 msgstr "எச்சரிக்கை: "
 
-#: common/rc_item.cpp:452 eeschema/erc/erc_item.cpp:435
+#: common/rc_item.cpp:456 eeschema/erc/erc_item.cpp:435
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1594
 msgid "Error: "
 msgstr "பிழை: "
@@ -10206,7 +10207,7 @@ msgstr "வடிவமைப்பு தொகுதி நூலக அட்
 #: common/startwizard/startwizard_provider_libraries.cpp:225
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:221
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1541
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1547
 #: pcbnew/footprint_edit_frame.cpp:230 pcbnew/footprint_edit_frame.cpp:1038
 msgid "Libraries"
 msgstr "நூலகங்கள்"
@@ -10521,7 +10522,7 @@ msgid "Paste item(s) from clipboard with options"
 msgstr "கிளிப்போர்டிலிருந்து விருப்பங்களுடன் உருப்படி (களை) ஒட்டவும்"
 
 #: common/tool/actions.cpp:395 common/widgets/listbox_tricks.cpp:211
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1820
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1830
 #: pcbnew/tools/edit_tool.cpp:3425
 msgid "Duplicate"
 msgstr "நகல்"
@@ -11654,8 +11655,8 @@ msgid "Overwrite existing design block?"
 msgstr "இருக்கும் வடிவமைப்பு தொகுதியை மேலெழுதவா?"
 
 #: common/widgets/filter_combobox.cpp:72
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1099
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1126
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1107
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1134
 msgid "Filter:"
 msgstr "வடிகட்டி:"
 
@@ -14446,7 +14447,7 @@ msgid "Label can not be empty."
 msgstr "சிட்டை காலியாக இருக்க முடியாது."
 
 #: eeschema/dialogs/dialog_label_properties.cpp:571
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:627
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:634
 #: eeschema/dialogs/dialog_sheet_properties.cpp:399
 #: eeschema/dialogs/dialog_symbol_properties.cpp:773 include/project.h:44
 msgid "untitled"
@@ -15195,27 +15196,27 @@ msgstr "சின்னத்திற்கு ஒரு பெயர் இர
 msgid "Symbol name '%s' already in use in library '%s'."
 msgstr "குறியீட்டு பெயர் '%s' ஏற்கனவே நூலகத்தில் பயன்பாட்டில் உள்ளது '%s'."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:601
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:608
 #: eeschema/dialogs/dialog_symbol_properties.cpp:859
 msgid "Edit Symbol Properties"
 msgstr "குறியீட்டு பண்புகளைத் திருத்தவும்"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:754
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:761
 #, c-format
 msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
 msgstr "முள் '%s' ஜம்பர் முள் குழு %d இல் இந்த குறியீட்டில் இல்லை."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:796
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:804
 #, c-format
 msgid "This field is inherited from '%s'."
 msgstr "இந்தப் புலம் '%s' இலிருந்து பெறப்பட்டது."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:826
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:834
 #, c-format
 msgid "The name '%s' is already in use."
 msgstr "'%s' என்ற பெயர் ஏற்கனவே பயன்பாட்டில் உள்ளது."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:906
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:914
 #: eeschema/dialogs/dialog_sheet_properties.cpp:568
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:839
 #: eeschema/dialogs/dialog_symbol_properties.cpp:951
@@ -15225,11 +15226,11 @@ msgstr "'%s' என்ற பெயர் ஏற்கனவே பயன்ப�
 msgid "The first %d fields are mandatory."
 msgstr "முதல் %d புலங்கள் கட்டாயமாகும்."
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1099
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1107
 msgid "Add Footprint Filter"
 msgstr "தடம் வடிகட்டியைச் சேர்க்கவும்"
 
-#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1126
+#: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1134
 msgid "Edit Footprint Filter"
 msgstr "தடம் வடிப்பானைத் திருத்தவும்"
 
@@ -18916,7 +18917,7 @@ msgstr "முகவரி"
 
 #: eeschema/eeschema.cpp:505 eeschema/eeschema.cpp:518
 #: eeschema/libraries/legacy_symbol_library.cpp:523
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1358
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 msgid "Loading Symbol Libraries"
 msgstr "குறியீட்டு நூலகங்களை ஏற்றுகிறது"
 
@@ -20665,7 +20666,7 @@ msgstr "புதிய நூலகத்தை உருவாக்கவு�
 
 #: eeschema/sch_base_frame.cpp:779
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1175
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1240
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1246
 #, c-format
 msgid "Library '%s' already exists."
 msgstr "நூலகம் '%s' ஏற்கனவே உள்ளது."
@@ -20737,7 +20738,7 @@ msgstr "பச் நுழைவு வகை"
 #: eeschema/sch_bus_entry.cpp:526 eeschema/sch_junction.cpp:317
 #: eeschema/sch_label.cpp:1440 eeschema/sch_line.cpp:979
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2034 pcbnew/pad.cpp:1909
-#: pcbnew/pcb_track.cpp:2466 pcbnew/tools/pcb_control.cpp:2662
+#: pcbnew/pcb_track.cpp:2466 pcbnew/tools/pcb_control.cpp:2686
 #: pcbnew/zone.cpp:949
 msgid "Resolved Netclass"
 msgstr "தீர்க்கப்பட்ட நெட் கிளாச்"
@@ -22107,7 +22108,7 @@ msgstr "நியாயப்படுத்துதல்"
 #: pcbnew/generators/pcb_tuning_pattern.h:494 pcbnew/pad.cpp:1907
 #: pcbnew/pad.cpp:3431 pcbnew/pcb_shape.cpp:719 pcbnew/pcb_shape.cpp:1058
 #: pcbnew/pcb_tablecell.cpp:289 pcbnew/pcb_track.cpp:2464
-#: pcbnew/tools/pcb_control.cpp:2659
+#: pcbnew/tools/pcb_control.cpp:2683
 #: pcbnew/widgets/pcb_properties_panel.cpp:690
 #: pcbnew/widgets/pcb_properties_panel.cpp:693
 #: pcbnew/widgets/search_handlers.cpp:227 pcbnew/zone.cpp:947
@@ -23660,9 +23661,9 @@ msgstr ""
 "நீங்கள் தொடர விரும்புகிறீர்களா?"
 
 #: eeschema/sheet.cpp:807 eeschema/symbol_editor/symbol_edit_frame.cpp:1208
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1258
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2045
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2114
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1264
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2051
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2120
 msgid "Error saving library table."
 msgstr "நூலக அட்டவணையைச் சேமிப்பதில் பிழை."
 
@@ -25279,41 +25280,41 @@ msgstr ""
 "உங்களிடம் எழுத்து அனுமதிகள் இருப்பதை உறுதிசெய்து மீண்டும் முயற்சிக்கவும்."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1193
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1246
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1252
 msgid "Could not open the library file."
 msgstr "நூலகக் கோப்பைத் திறக்க முடியவில்லை."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1374
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1378
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1380
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1384
 #, c-format
 msgid "Loading library '%s'..."
 msgstr "நூலகத்தை ஏற்றுகிறது '%s' ..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1458
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1464
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "காப்புப்பிரதியை '%s' க்கு சேமிக்கத் தவறிவிட்டது."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1710
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1716
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'."
 msgstr "தற்போதைய உள்ளமைவில் '%s' என்ற குறியீட்டு நூலகமும் இல்லை."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1712
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1723
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1718
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1729
 msgid "Use Manage Symbol Libraries to edit the configuration."
 msgstr "உள்ளமைவைத் திருத்த குறியீட்டு நூலகங்களைப் பயன்படுத்தவும்."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1713
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1719
 msgid "Library not found in symbol library table."
 msgstr "நூலகம் சின்ன நூலக அட்டவணையில் காணப்படவில்லை."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1721
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1727
 #, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration."
 msgstr "குறியீட்டு நூலகம் '%s' தற்போதைய உள்ளமைவில் இயக்கப்படவில்லை."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1724
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1730
 msgid "Symbol library not enabled."
 msgstr "குறியீட்டு நூலகம் இயக்கப்படவில்லை."
 
@@ -26298,7 +26299,7 @@ msgid "Place Power Symbols"
 msgstr "ஆற்றல் சின்னங்களை வைக்கவும்"
 
 #: eeschema/tools/sch_actions.cpp:492 pcbnew/tools/pcb_actions.cpp:472
-#: pcbnew/tools/pcb_control.cpp:2241
+#: pcbnew/tools/pcb_control.cpp:2265
 msgid "Place Design Block"
 msgstr "வடிவமைப்புத் தொகுதியை வை"
 
@@ -26682,7 +26683,7 @@ msgid ""
 msgstr "ஒரே இடத்தில் உள்ள பல பின்களை அடுக்கப்பட்ட குறியீட்டுடன் ஒற்றை பின்னாக மாற்றவும்"
 
 #: eeschema/tools/sch_actions.cpp:1009
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1473
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1483
 msgid "Explode Stacked Pin"
 msgstr "அடுக்கப்பட்ட பின்னை வெடிக்கவும்"
 
@@ -27451,7 +27452,7 @@ msgstr "கோரப்பட்ட அலகு ஏற்கனவே வைக
 #: eeschema/tools/sch_drawing_tools.cpp:807
 #: eeschema/tools/sch_editor_control.cpp:3397
 #: eeschema/tools/sch_editor_control.cpp:3444 pcbnew/tools/pcb_control.cpp:1428
-#: pcbnew/tools/pcb_control.cpp:1826 pcbnew/tools/pcb_control.cpp:1882
+#: pcbnew/tools/pcb_control.cpp:1850 pcbnew/tools/pcb_control.cpp:1906
 #, c-format
 msgid "Could not find design block %s."
 msgstr "வடிவமைப்பு தொகுதி %s கண்டுபிடிக்க முடியவில்லை."
@@ -27641,7 +27642,7 @@ msgid "Change To"
 msgstr "மாற்றவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:1264
-#: eeschema/tools/symbol_editor_edit_tool.cpp:602
+#: eeschema/tools/symbol_editor_edit_tool.cpp:603
 #: pcbnew/tools/edit_tool.cpp:2554
 msgid "Rotate"
 msgstr "சுழற்றுங்கள்"
@@ -27711,13 +27712,13 @@ msgid "Repeat Item"
 msgstr "உருப்படியை மீண்டும் செய்யவும்"
 
 #: eeschema/tools/sch_edit_tool.cpp:2320
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1009
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1010
 #, c-format
 msgid "Edit %s Field"
 msgstr "%s புலத்தைத் திருத்து"
 
 #: eeschema/tools/sch_edit_tool.cpp:2324
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1011
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1012
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "'%s' புலத்தைத் திருத்து"
@@ -27939,7 +27940,7 @@ msgstr "தரவுத்தாள் வரையறுக்கப்பட�
 
 #: eeschema/tools/sch_inspection_tool.cpp:551
 #: pagelayout_editor/tools/pl_editor_control.cpp:161
-#: pcbnew/tools/pcb_control.cpp:2367
+#: pcbnew/tools/pcb_control.cpp:2391
 msgid "UUID"
 msgstr "Uuid"
 
@@ -28089,46 +28090,46 @@ msgstr "தட்டையான சின்னத்துடன் நூல�
 msgid "Place Pin"
 msgstr "இடத்தை வைக்கவும்"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:850
+#: eeschema/tools/symbol_editor_edit_tool.cpp:851
 #: pcbnew/tools/edit_tool.cpp:3077
 msgid "Hide Field"
 msgstr "புலம் மறைக்க"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:852
+#: eeschema/tools/symbol_editor_edit_tool.cpp:853
 #: pcbnew/tools/edit_tool.cpp:3079
 msgid "Hide Fields"
 msgstr "புலங்களை மறைக்கவும்"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:854
+#: eeschema/tools/symbol_editor_edit_tool.cpp:855
 msgid "Use the Symbol Properties dialog to remove fields."
 msgstr "புலங்களை அகற்ற குறியீட்டு பண்புகள் உரையாடலைப் பயன்படுத்தவும்."
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1143
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1153
 msgid "Edit Pins"
 msgstr "ஊசிகளைத் திருத்து"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1190
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1200
 msgid "At least two pins are needed to convert to stacked pins"
 msgstr "அடுக்கப்பட்ட பின்களாக மாற்ற குறைந்தபட்சம் இரண்டு ஊசிகள் தேவை"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1200
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1210
 msgid "All pins must be at the same location"
 msgstr "அனைத்து ஊசிகளும் ஒரே இடத்தில் இருக்க வேண்டும்"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1385
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1395
 #, c-format
 msgid "Convert %zu Stacked Pins to '%s'"
 msgstr "%zu அடுக்கப்பட்ட பின்களை '%s' ஆக மாற்றவும்"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1407
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1417
 msgid "Select a single pin with stacked notation to explode"
 msgstr "வெடிக்க, அடுக்கப்பட்ட குறிப்புடன் கூடிய ஒற்றை முள் ஒன்றைத் தேர்ந்தெடுக்கவும்"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1419
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1429
 msgid "Selected pin does not have valid stacked notation"
 msgstr "தேர்ந்தெடுக்கப்பட்ட பின்னில் சரியான அடுக்கப்பட்ட குறியீடு இல்லை"
 
-#: eeschema/tools/symbol_editor_edit_tool.cpp:1488
+#: eeschema/tools/symbol_editor_edit_tool.cpp:1498
 msgid "Symbol is not derived from another symbol."
 msgstr "அடையாளம் மற்றொரு சின்னத்திலிருந்து பெறப்படவில்லை."
 
@@ -28828,7 +28829,7 @@ msgstr "அடுக்கைத் தேர்ந்தெடுக்கவ�
 #: pcbnew/pcb_target.cpp:156 pcbnew/pcb_text.cpp:331 pcbnew/pcb_textbox.cpp:500
 #: pcbnew/pcb_track.cpp:2338 pcbnew/pcb_track.cpp:2444
 #: pcbnew/pcb_track.cpp:3182 pcbnew/tools/board_inspection_tool.cpp:443
-#: pcbnew/tools/pcb_control.cpp:2589
+#: pcbnew/tools/pcb_control.cpp:2613
 #: pcbnew/widgets/pcb_properties_panel.cpp:660
 #: pcbnew/widgets/pcb_properties_panel.cpp:661
 #: pcbnew/widgets/pcb_properties_panel.cpp:664
@@ -37680,7 +37681,7 @@ msgstr ""
 "Associated திட்டம் கோப்பு %s could not be loaded"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:379 pcbnew/files.cpp:561
-#: pcbnew/tools/pcb_control.cpp:2108
+#: pcbnew/tools/pcb_control.cpp:2132
 #: pcbnew/widgets/pcb_design_block_preview_widget.cpp:185
 msgid "Load PCB"
 msgstr "பிசிபியை ஏற்றவும்"
@@ -43752,7 +43753,7 @@ msgstr "இலக்கு வளைவு தாமதம்: "
 #: pcbnew/router/router_tool.cpp:2999 pcbnew/router/router_tool.cpp:3004
 #: pcbnew/router/router_tool.cpp:3009 pcbnew/router/router_tool.cpp:3020
 #: pcbnew/router/router_tool.cpp:3028 pcbnew/router/router_tool.cpp:3033
-#: pcbnew/tools/pcb_control.cpp:2402 pcbnew/tools/pcb_control.cpp:2411
+#: pcbnew/tools/pcb_control.cpp:2426 pcbnew/tools/pcb_control.cpp:2435
 #: pcbnew/zone.cpp:1016
 #, c-format
 msgid "(from %s)"
@@ -51522,7 +51523,7 @@ msgstr "பேக்டிரில் பண்புகள்"
 msgid "Pad Type"
 msgstr "திண்டு வகை"
 
-#: pcbnew/pad.cpp:3444 pcbnew/tools/pcb_control.cpp:2594
+#: pcbnew/pad.cpp:3444 pcbnew/tools/pcb_control.cpp:2618
 msgid "Pad Shape"
 msgstr "திண்டு வடிவம்"
 
@@ -55429,7 +55430,7 @@ msgstr "ட்ராக் அகலம்: %s"
 msgid "Diff Pair Gap: %s"
 msgstr "டிஃப் இணை இடைவெளி: %s"
 
-#: pcbnew/router/router_tool.cpp:3018 pcbnew/tools/pcb_control.cpp:2410
+#: pcbnew/router/router_tool.cpp:3018 pcbnew/tools/pcb_control.cpp:2434
 #, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "டிபி அதிகபட்சமாக இணைக்கப்படாத நீளம்: %s"
@@ -56696,64 +56697,64 @@ msgstr "தேர்ந்தெடுக்கப்பட்ட உருப�
 msgid "Some of the items could not be outset."
 msgstr "சில உருப்படிகள் தொடங்க முடியாது."
 
-#: pcbnew/tools/multichannel_tool.cpp:86
+#: pcbnew/tools/multichannel_tool.cpp:87
 msgid "(none)"
 msgstr "(எதுவுமில்லை)"
 
-#: pcbnew/tools/multichannel_tool.cpp:136
-#: pcbnew/tools/multichannel_tool.cpp:1568
+#: pcbnew/tools/multichannel_tool.cpp:137
+#: pcbnew/tools/multichannel_tool.cpp:1790
 msgid "Topology mismatch"
 msgstr "இடவியல் பொருந்தாதது"
 
-#: pcbnew/tools/multichannel_tool.cpp:615
+#: pcbnew/tools/multichannel_tool.cpp:664
 msgid "Select a reference Rule Area to copy from..."
 msgstr "நகலெடுக்க ஒரு குறிப்பு விதி பகுதியைத் தேர்ந்தெடுக்கவும் ..."
 
-#: pcbnew/tools/multichannel_tool.cpp:634
+#: pcbnew/tools/multichannel_tool.cpp:683
 msgid "No Rule Areas to repeat layout to have been found."
 msgstr "தளவமைப்பு கண்டுபிடிக்கப்பட்டதாக மீண்டும் செய்ய விதி பகுதிகள் இல்லை."
 
-#: pcbnew/tools/multichannel_tool.cpp:730
+#: pcbnew/tools/multichannel_tool.cpp:779
 msgid "Checking Rule Area compatibility..."
 msgstr "விதிப் பகுதி இணக்கத்தன்மையைச் சரிபார்க்கிறது..."
 
-#: pcbnew/tools/multichannel_tool.cpp:755
+#: pcbnew/tools/multichannel_tool.cpp:804
 #, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
 msgstr "%d இன் %d இடத்தியல் தீர்மானிக்கப்படுகிறது (%d/%d உறுப்புகள்)"
 
-#: pcbnew/tools/multichannel_tool.cpp:805
+#: pcbnew/tools/multichannel_tool.cpp:854
 #, c-format
 msgid "Rule Area topologies do not match: %s"
 msgstr "ரூல் ஏரியா டோபாலசிகள் பொருந்தவில்லை: %s"
 
-#: pcbnew/tools/multichannel_tool.cpp:830
-#: pcbnew/tools/multichannel_tool.cpp:891
+#: pcbnew/tools/multichannel_tool.cpp:879
+#: pcbnew/tools/multichannel_tool.cpp:943
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr ""
 "விதிமுறை பகுதிகள் '%s' மற்றும் '%s' இடையே விதி பகுதி உள்ளடக்கங்கள் தோல்வியடைந்தன."
 
-#: pcbnew/tools/multichannel_tool.cpp:848
+#: pcbnew/tools/multichannel_tool.cpp:902
 msgid "Target group does not have a group."
 msgstr "இலக்கு குழுவில் குழு இல்லை."
 
-#: pcbnew/tools/multichannel_tool.cpp:865
-#: pcbnew/tools/multichannel_tool.cpp:928
+#: pcbnew/tools/multichannel_tool.cpp:917
+#: pcbnew/tools/multichannel_tool.cpp:980
 msgid "Repeat layout"
 msgstr "தளவமைப்பு மீண்டும் செய்யவும்"
 
-#: pcbnew/tools/multichannel_tool.cpp:931
+#: pcbnew/tools/multichannel_tool.cpp:983
 #, c-format
 msgid "Copied to %d Rule Areas."
 msgstr "%d விதி பகுதிகளுக்கு நகலெடுக்கப்பட்டது."
 
-#: pcbnew/tools/multichannel_tool.cpp:1574
+#: pcbnew/tools/multichannel_tool.cpp:1796
 #, c-format
 msgid "Reference area total components: %d"
 msgstr "குறிப்பு வலயம் மொத்த உறுப்புகள்: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:1575
+#: pcbnew/tools/multichannel_tool.cpp:1797
 #, c-format
 msgid ""
 "Reference area components:\n"
@@ -56762,12 +56763,12 @@ msgstr ""
 "குறிப்பு பகுதி கூறுகள்: \n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:1578
+#: pcbnew/tools/multichannel_tool.cpp:1800
 #, c-format
 msgid "Target area total components: %d"
 msgstr "இலக்கு பகுதி மொத்த கூறுகள்: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:1579
+#: pcbnew/tools/multichannel_tool.cpp:1801
 #, c-format
 msgid ""
 "Target area components:\n"
@@ -56776,7 +56777,7 @@ msgstr ""
 "இலக்கு பகுதி கூறுகள்: \n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:1631
+#: pcbnew/tools/multichannel_tool.cpp:1853
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
@@ -56784,7 +56785,7 @@ msgstr ""
 "திட்டவட்டமான ஒரே ஒரு அல்லது படிநிலைத் தாள்கள், குழுக்கள் அல்லது கூறு வகுப்புகள் "
 "இல்லாததால், எந்த வேலை வாய்ப்புப் பகுதிகளையும் தானாக உருவாக்க முடியாது."
 
-#: pcbnew/tools/multichannel_tool.cpp:1821
+#: pcbnew/tools/multichannel_tool.cpp:2043
 msgid "Auto-generate placement rule areas"
 msgstr "தானாக உருவாக்கும் வேலைவாய்ப்பு விதி பகுதிகள்"
 
@@ -57063,7 +57064,7 @@ msgstr "வடிவமைப்பு விதிகள் செக்கர�
 msgid "Add selected design block to current board"
 msgstr "தற்போதைய பலகையில் தேர்ந்தெடுக்கப்பட்ட வடிவமைப்பு தொகுதியைச் சேர்க்கவும்"
 
-#: pcbnew/tools/pcb_actions.cpp:490 pcbnew/tools/pcb_control.cpp:1790
+#: pcbnew/tools/pcb_actions.cpp:490 pcbnew/tools/pcb_control.cpp:1814
 msgid "Apply Design Block Layout"
 msgstr "டிசைன் பிளாக் லேஅவுட்டைப் பயன்படுத்துங்கள்"
 
@@ -58885,172 +58886,175 @@ msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1541
+#: pcbnew/tools/pcb_control.cpp:1542
 #, fuzzy
 msgid "Applying Design Block Layouts"
 msgstr "டிசைன் பிளாக் லேஅவுட்டைப் பயன்படுத்துங்கள்"
 
-#: pcbnew/tools/pcb_control.cpp:1572
+#: pcbnew/tools/pcb_control.cpp:1573
 #, fuzzy
 msgid "design block is not in the loaded libraries"
 msgstr "வடிவமைப்பு தொகுதிக்கு செல்லுபடியாகும் நூலக ஐடி இல்லை."
 
-#: pcbnew/tools/pcb_control.cpp:1578
+#: pcbnew/tools/pcb_control.cpp:1579
 #, fuzzy
 msgid "design block has no saved PCB layout"
 msgstr "டிசைன் பிளாக்கில் வைக்க எந்த தளவமைப்பும் இல்லை."
 
-#: pcbnew/tools/pcb_control.cpp:1609
+#: pcbnew/tools/pcb_control.cpp:1610
 #, fuzzy
 msgid "could not load the design block's layout"
 msgstr "வடிவமைப்பு தொகுதி %s கண்டுபிடிக்க முடியவில்லை."
 
-#: pcbnew/tools/pcb_control.cpp:1636
+#: pcbnew/tools/pcb_control.cpp:1637
 #, fuzzy
-msgid "design block layout could not be loaded"
-msgstr "வடிவமைப்பு தொகுதி அமைப்பை தற்போதைய பலகைக்கு அமைக்கவும்"
+msgid "design block contains no items to apply"
+msgstr "டிசைன் பிளாக் வைக்க எந்த திட்டமும் இல்லை."
 
-#: pcbnew/tools/pcb_control.cpp:1669
-#, fuzzy
-msgid "group has no footprints"
-msgstr "தடம் உலாவுக"
+#: pcbnew/tools/pcb_control.cpp:1687
+msgid "group is empty"
+msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1708
+#: pcbnew/tools/pcb_control.cpp:1726
 #, fuzzy
 msgid "layout copy failed"
 msgstr "கோப்பை '%s' நகலெடுக்க முடியாது."
 
-#: pcbnew/tools/pcb_control.cpp:1723
+#: pcbnew/tools/pcb_control.cpp:1744
 #, c-format
 msgid "Applying layout to group %zu of %zu..."
 msgstr ""
 
-#: pcbnew/tools/pcb_control.cpp:1746
+#: pcbnew/tools/pcb_control.cpp:1767
 #, fuzzy
 msgid "Apply design block layout cancelled."
 msgstr "டிசைன் பிளாக் லேஅவுட்டைப் பயன்படுத்துங்கள்"
 
-#: pcbnew/tools/pcb_control.cpp:1752
+#: pcbnew/tools/pcb_control.cpp:1773
 #, fuzzy, c-format
 msgid "Apply design block layout to %d group(s)"
 msgstr ""
 "தேர்ந்தெடுக்கப்பட்ட குழுவிற்கு இணைக்கப்பட்ட வடிவமைப்பு தொகுதி அமைப்பைப் பயன்படுத்தவும்"
 
-#: pcbnew/tools/pcb_control.cpp:1764
+#: pcbnew/tools/pcb_control.cpp:1776
+msgid "Copied copper has no net assigned. Assign nets to connect it."
+msgstr ""
+
+#: pcbnew/tools/pcb_control.cpp:1788
 #, fuzzy, c-format
 msgid "Applied design block layout to %d of %d group(s)."
 msgstr ""
 "தேர்ந்தெடுக்கப்பட்ட குழுவிற்கு இணைக்கப்பட்ட வடிவமைப்பு தொகுதி அமைப்பைப் பயன்படுத்தவும்"
 
-#: pcbnew/tools/pcb_control.cpp:1771
+#: pcbnew/tools/pcb_control.cpp:1795
 #, fuzzy, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
 msgstr "தேர்ந்தெடுக்கப்பட்ட குழுவை இணைக்கப்பட்ட வடிவமைப்பு தொகுதிக்கு சேமிக்கவும்"
 
-#: pcbnew/tools/pcb_control.cpp:1779
+#: pcbnew/tools/pcb_control.cpp:1803
 #, fuzzy
 msgid "The following groups could not be processed:"
 msgstr "பின்வருவனவற்றை தானாக சேமித்த கோப்பு (களை) மீட்டெடுக்க முடியவில்லை\n"
 
-#: pcbnew/tools/pcb_control.cpp:1783
+#: pcbnew/tools/pcb_control.cpp:1807
 #, fuzzy
 msgid "(unnamed group)"
 msgstr "சம்பர் குழுக்கள்:"
 
-#: pcbnew/tools/pcb_control.cpp:1834
+#: pcbnew/tools/pcb_control.cpp:1858
 #, c-format
 msgid "Design block %s does not have a board file."
 msgstr "வடிவமைப்பு தொகுதிக்குத் %s திட்டவியல் அல்லது பலகை கோப்பு இல்லை."
 
-#: pcbnew/tools/pcb_control.cpp:2115
+#: pcbnew/tools/pcb_control.cpp:2139
 msgid "Error loading board."
 msgstr "பிழை ஏற்றுதல் போர்டு."
 
-#: pcbnew/tools/pcb_control.cpp:2241
+#: pcbnew/tools/pcb_control.cpp:2265
 msgid "Append Board"
 msgstr "போர்டு"
 
-#: pcbnew/tools/pcb_control.cpp:2312
+#: pcbnew/tools/pcb_control.cpp:2336
 msgid "Active Layer"
 msgstr "செயலில் அடுக்கு"
 
-#: pcbnew/tools/pcb_control.cpp:2313 pcbnew/widgets/appearance_controls.cpp:385
+#: pcbnew/tools/pcb_control.cpp:2337 pcbnew/widgets/appearance_controls.cpp:385
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 #: pcbnew/zone_manager/dialog_zone_manager.cpp:89
 msgid "All Layers"
 msgstr "அனைத்து அடுக்குகளும்"
 
-#: pcbnew/tools/pcb_control.cpp:2324
+#: pcbnew/tools/pcb_control.cpp:2348
 msgid "Object Snapping"
 msgstr "பொருள் ச்னாப்பிங்"
 
-#: pcbnew/tools/pcb_control.cpp:2401
+#: pcbnew/tools/pcb_control.cpp:2425
 #, c-format
 msgid "DP Gap Constraints: %s"
 msgstr "டிபி இடைவெளி கட்டுப்பாடுகள்: %s"
 
-#: pcbnew/tools/pcb_control.cpp:2445
+#: pcbnew/tools/pcb_control.cpp:2469
 msgid "Resolved Clearance"
 msgstr "தீர்க்கப்பட்ட இடைவெளி"
 
-#: pcbnew/tools/pcb_control.cpp:2456
+#: pcbnew/tools/pcb_control.cpp:2480
 msgid "Actual Clearance"
 msgstr "உண்மையான இடைவெளி"
 
-#: pcbnew/tools/pcb_control.cpp:2499
+#: pcbnew/tools/pcb_control.cpp:2523
 msgid "Resolved Hole Clearance"
 msgstr "தீர்க்கப்பட்ட துளை இடைவெளி"
 
-#: pcbnew/tools/pcb_control.cpp:2504
+#: pcbnew/tools/pcb_control.cpp:2528
 msgid "Actual Hole Clearance"
 msgstr "உண்மையான துளை இடைவெளி"
 
-#: pcbnew/tools/pcb_control.cpp:2539
+#: pcbnew/tools/pcb_control.cpp:2563
 msgid "Resolved Edge Clearance"
 msgstr "தீர்க்கப்பட்ட முனை இடைவெளி"
 
-#: pcbnew/tools/pcb_control.cpp:2544
+#: pcbnew/tools/pcb_control.cpp:2568
 msgid "Resolved Margin Clearance"
 msgstr "தீர்க்கப்பட்ட விளிம்பு இடைவெளி"
 
-#: pcbnew/tools/pcb_control.cpp:2601
+#: pcbnew/tools/pcb_control.cpp:2625
 msgid "Pad Size"
 msgstr "நிரப்பிட அளவு"
 
-#: pcbnew/tools/pcb_control.cpp:2633
+#: pcbnew/tools/pcb_control.cpp:2657
 msgid "Selected Items"
 msgstr "தேர்ந்தெடுக்கப்பட்ட உருப்படிகள்"
 
-#: pcbnew/tools/pcb_control.cpp:2719
+#: pcbnew/tools/pcb_control.cpp:2743
 msgid "Selected 2D Length"
 msgstr "தேர்ந்தெடுக்கப்பட்ட 2 டி நீளம்"
 
-#: pcbnew/tools/pcb_control.cpp:2808
+#: pcbnew/tools/pcb_control.cpp:2832
 msgid "Selected 2D Copper Area"
 msgstr "தேர்ந்தெடுக்கப்பட்ட 2 டி செப்பு பகுதி"
 
-#: pcbnew/tools/pcb_control.cpp:2810
+#: pcbnew/tools/pcb_control.cpp:2834
 msgid "Selected 2D Area"
 msgstr "தேர்ந்தெடுக்கப்பட்ட 2D பகுதி"
 
-#: pcbnew/tools/pcb_control.cpp:2812
+#: pcbnew/tools/pcb_control.cpp:2836
 msgid "Selected 2D Total Area"
 msgstr "தேர்ந்தெடுக்கப்பட்ட 2D மொத்தப் பகுதி"
 
-#: pcbnew/tools/pcb_control.cpp:2870
+#: pcbnew/tools/pcb_control.cpp:2894
 msgid "Place Board Characteristics"
 msgstr "போர்டு பண்புகளை வைக்கவும்"
 
-#: pcbnew/tools/pcb_control.cpp:2890
+#: pcbnew/tools/pcb_control.cpp:2914
 msgid "Place Board Stackup Table"
 msgstr "PAIL பலகை STACKUP அட்டவணை"
 
-#: pcbnew/tools/pcb_control.cpp:3013
+#: pcbnew/tools/pcb_control.cpp:3037
 msgid "Embed 3D Models"
 msgstr "3D மாடல்களை உட்பொதிக்கவும்"
 
-#: pcbnew/tools/pcb_control.cpp:3014
+#: pcbnew/tools/pcb_control.cpp:3038
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
 msgstr "%d 3D மாதிரி(கள்) வெற்றிகரமாக உட்பொதிக்கப்பட்டது."
@@ -60686,6 +60690,14 @@ msgstr "செயல்முறையை உருவாக்க முடி�
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "பயனர் ச்கிரிப்டிங் பாதை %s ஐ உருவாக்க முடியவில்லை."
+
+#, fuzzy
+#~ msgid "design block layout could not be loaded"
+#~ msgstr "வடிவமைப்பு தொகுதி அமைப்பை தற்போதைய பலகைக்கு அமைக்கவும்"
+
+#, fuzzy
+#~ msgid "group has no footprints"
+#~ msgstr "தடம் உலாவுக"
 
 #~ msgid ""
 #~ "The differential pair gap at the start point does not match the "
