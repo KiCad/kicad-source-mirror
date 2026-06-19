@@ -4697,9 +4697,69 @@ size_t BINARY_PARSER::locateStringPool() const
     if( !sec56 || !sec57 || sec57->totalBytes < 64 )
         return 0;
 
+    size_t poolBytes = sec57->totalBytes;
+
+    // Preferred: compute the pool's start rather than search for it. Everything after section 56
+    // is displaced by the bytes section 41 writes without declaring them -- it declares count 0
+    // and total_bytes 1, a flag, and actually holds n blocks of 188 followed by a fixed 164-byte
+    // tail, the clearance matrix. So the displacement is 164 + 188n, and stepping the blocks from
+    // a declared offset to a fixed sentinel yields it. Nothing declares a count for section 41,
+    // which is the one case where a walk is not standing in for a field that exists, so this is a
+    // bounded parse rather than a search -- see the (a)/(b)/(c) classification in pads_binary.ksy.
+    if( const SDB_SECTION* sec41 = m_sdb.Section( 41 ) )
+    {
+        constexpr size_t BLOCK = 188;
+        constexpr size_t TAIL = 164;
+        constexpr size_t MAX_BLOCKS = 4096;
+
+        size_t p = sec41->payloadOffset;
+        size_t blocks = 0;
+
+        while( blocks < MAX_BLOCKS && m_cursor.InBounds( p, TAIL ) )
+        {
+            if( m_cursor.U32At( p + 64 ) == 0x41DC62FF && m_cursor.U32At( p + 72 ) == 0x02455C20
+                && m_cursor.U32At( p + 156 ) == 0xFFFFFFFF )
+            {
+                break;
+            }
+
+            p += BLOCK;
+            ++blocks;
+        }
+
+        if( blocks > 0 && blocks < MAX_BLOCKS )
+        {
+            size_t drift = p + TAIL - sec41->payloadOffset;
+            size_t start = sec56->payloadOffset + drift + sec56->count * 16;
+
+            // A textual check alone is not enough: a wrong start can still land on text and then
+            // move section 60 and the layer stackup with it, which emits plausible garbage rather
+            // than failing. Require the index entry that closes the pool to sit immediately
+            // before it, satisfying the index's own tiling invariant -- the same relation the
+            // search below keys on, but tested at one offset rather than hunted for.
+            bool indexCloses = start >= 16 && m_cursor.InBounds( start - 16, 16 )
+                               && m_cursor.U32At( start - 15 ) + m_cursor.U16At( start - 11 ) == poolBytes;
+
+            if( indexCloses && m_cursor.InBounds( start, poolBytes ) )
+            {
+                size_t textual = 0;
+
+                for( size_t i = 0; i < poolBytes; ++i )
+                {
+                    uint8_t byte = m_data[start + i];
+
+                    if( byte == 0 || ( byte >= 32 && byte < 127 ) )
+                        ++textual;
+                }
+
+                if( textual * 100 >= poolBytes * 98 )
+                    return start + poolBytes;
+            }
+        }
+    }
+
     NoteScanLocatorUse( "stringPool" );
 
-    size_t poolBytes = sec57->totalBytes;
     size_t lo = sec56->payloadOffset > 4096 ? sec56->payloadOffset - 4096 : 0;
 
     for( size_t entry = lo; entry + 21 < m_data.size(); ++entry )
