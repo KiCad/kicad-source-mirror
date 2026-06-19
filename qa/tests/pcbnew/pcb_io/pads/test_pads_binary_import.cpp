@@ -97,7 +97,48 @@ static wxString GetAscPath( const PADS_BINARY_BOARD_INFO& aBoard )
  * Load a binary .pcb file. Returns nullptr and issues a warning if the load
  * throws, since the parser is under active development. Callers must null-check.
  */
-static std::unique_ptr<BOARD> LoadBinary( const PADS_BINARY_BOARD_INFO& aBoard )
+// Boards are loaded by name from a handful of files, and several tests reload the same 37 MB
+// design. Parsing is pure -- nothing here writes a board back -- so one parse per file is
+// enough, and sharing them takes the suite from tens of minutes to a couple. Keyed by path so
+// a test asking for a different file still gets its own.
+static std::shared_ptr<BOARD> CachedLoad( const wxString& aFilename, bool aBinary )
+{
+    static std::map<std::string, std::shared_ptr<BOARD>> cache;
+
+    std::string key = ( aBinary ? "B:" : "A:" ) + aFilename.ToStdString();
+    auto        it = cache.find( key );
+
+    if( it != cache.end() )
+        return it->second;
+
+    std::shared_ptr<BOARD> board;
+
+    try
+    {
+        if( aBinary )
+        {
+            PCB_IO_PADS_BINARY plugin;
+            board.reset( plugin.LoadBoard( aFilename, nullptr, nullptr, nullptr ) );
+        }
+        else
+        {
+            PCB_IO_PADS plugin;
+            board.reset( plugin.LoadBoard( aFilename, nullptr, nullptr, nullptr ) );
+        }
+    }
+    catch( const std::exception& )
+    {
+        board.reset();
+        cache[key] = board;
+        throw;
+    }
+
+    cache[key] = board;
+    return board;
+}
+
+
+static std::shared_ptr<BOARD> LoadBinary( const PADS_BINARY_BOARD_INFO& aBoard )
 {
     PCB_IO_PADS_BINARY plugin;
     wxString           filename = GetBinaryPath( aBoard );
@@ -105,11 +146,11 @@ static std::unique_ptr<BOARD> LoadBinary( const PADS_BINARY_BOARD_INFO& aBoard )
     BOOST_CHECK_MESSAGE( plugin.CanReadBoard( filename ),
                          aBoard.dir << " binary should be readable by PCB_IO_PADS_BINARY" );
 
-    std::unique_ptr<BOARD> board;
+    std::shared_ptr<BOARD> board;
 
     try
     {
-        board.reset( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+        board = CachedLoad( filename, true );
     }
     catch( const std::exception& e )
     {
@@ -122,18 +163,18 @@ static std::unique_ptr<BOARD> LoadBinary( const PADS_BINARY_BOARD_INFO& aBoard )
 }
 
 
-static std::unique_ptr<BOARD> LoadBinaryPath( const wxString& aFilename, const std::string& aLabel )
+static std::shared_ptr<BOARD> LoadBinaryPath( const wxString& aFilename, const std::string& aLabel )
 {
     PCB_IO_PADS_BINARY plugin;
 
     BOOST_CHECK_MESSAGE( plugin.CanReadBoard( aFilename ),
                          aLabel << " binary should be readable by PCB_IO_PADS_BINARY" );
 
-    std::unique_ptr<BOARD> board;
+    std::shared_ptr<BOARD> board;
 
     try
     {
-        board.reset( plugin.LoadBoard( aFilename, nullptr, nullptr, nullptr ) );
+        board = CachedLoad( aFilename, true );
     }
     catch( const std::exception& e )
     {
@@ -146,16 +187,16 @@ static std::unique_ptr<BOARD> LoadBinaryPath( const wxString& aFilename, const s
 }
 
 
-static std::unique_ptr<BOARD> LoadAsc( const PADS_BINARY_BOARD_INFO& aBoard )
+static std::shared_ptr<BOARD> LoadAsc( const PADS_BINARY_BOARD_INFO& aBoard )
 {
     PCB_IO_PADS plugin;
     wxString    filename = GetAscPath( aBoard );
 
-    std::unique_ptr<BOARD> board;
+    std::shared_ptr<BOARD> board;
 
     try
     {
-        board.reset( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+        board = CachedLoad( filename, false );
     }
     catch( const std::exception& e )
     {
@@ -168,14 +209,13 @@ static std::unique_ptr<BOARD> LoadAsc( const PADS_BINARY_BOARD_INFO& aBoard )
 }
 
 
-static std::unique_ptr<BOARD> LoadAscPath( const wxString& aFilename, const std::string& aLabel )
+static std::shared_ptr<BOARD> LoadAscPath( const wxString& aFilename, const std::string& aLabel )
 {
-    PCB_IO_PADS            plugin;
-    std::unique_ptr<BOARD> board;
+    std::shared_ptr<BOARD> board;
 
     try
     {
-        board.reset( plugin.LoadBoard( aFilename, nullptr, nullptr, nullptr ) );
+        board = CachedLoad( aFilename, false );
     }
     catch( const std::exception& e )
     {
@@ -399,7 +439,7 @@ static int CountEdgeCutsShapes( const BOARD* aBoard )
 }
 
 
-static size_t CountVias( const std::unique_ptr<BOARD>& aBoard )
+static size_t CountVias( const std::shared_ptr<BOARD>& aBoard )
 {
     size_t vias = 0;
 
@@ -413,7 +453,7 @@ static size_t CountVias( const std::unique_ptr<BOARD>& aBoard )
 }
 
 
-static size_t CountTraces( const std::unique_ptr<BOARD>& aBoard )
+static size_t CountTraces( const std::shared_ptr<BOARD>& aBoard )
 {
     size_t traces = 0;
 
@@ -2011,7 +2051,7 @@ BOOST_AUTO_TEST_CASE( ClusterGroups_MC4_PLUS_CSHAPE )
 {
     const PADS_BINARY_BOARD_INFO board{ "MC4_PLUS_CSHAPE", "MC4_PLUS_CSHAPE.pcb", "MC4_PLUS_CSHAPE.asc", false };
 
-    std::unique_ptr<BOARD> brd = LoadBinary( board );
+    std::shared_ptr<BOARD> brd = LoadBinary( board );
     BOOST_REQUIRE( brd != nullptr );
 
     std::map<wxString, std::set<wxString>> groupMembers;
@@ -2184,7 +2224,7 @@ BOOST_AUTO_TEST_CASE( ExactViaGeometryMatchesAscii )
 
             BOOST_CHECK_EQUAL( counts.first, counts.second );
 
-            std::unique_ptr<BOARD> ascii = LoadAscPath( GetAscPath( board ), board.dir );
+            std::shared_ptr<BOARD> ascii = LoadAscPath( GetAscPath( board ), board.dir );
 
             for( PCB_TRACK* item : ascii->Tracks() )
             {
