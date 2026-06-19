@@ -637,6 +637,10 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         BOARD_ITEM* parentGroup = GetBoard()->ResolveItem( wrapper.GetGroupId(), true );
         wrapper.GetItem()->SetParentGroup( dynamic_cast<PCB_GROUP*>( parentGroup ) );
 
+        // Restore the group's member list, which BOARD::Remove() cleared above.
+        if( PCB_GROUP* parentPcbGroup = dynamic_cast<PCB_GROUP*>( parentGroup ) )
+            parentPcbGroup->GetItems().insert( wrapper.GetItem() );
+
         if( EDA_GROUP* group = dynamic_cast<PCB_GROUP*>( wrapper.GetItem() ) )
         {
             // Items list may contain dodgy pointers, so don't use RemoveAll()

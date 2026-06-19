@@ -383,4 +383,27 @@ BOOST_AUTO_TEST_CASE( Issue23234_CustomPadstackFlip )
 }
 
 
+// Regression test for issue #24696: a grouped zone left its group after undo/redo of a fill.
+// SwapItemData() (used by undo/redo and commit revert) must not move group membership, which
+// is a structural back-reference rather than swappable item data.
+BOOST_AUTO_TEST_CASE( Issue24696_SwapItemDataKeepsGroupMembership )
+{
+    PCB_GROUP group( &m_board );
+    ZONE      live( &m_board );
+    ZONE      image( &m_board );
+
+    // Mirror the undo swap: BOARD::Remove() has already stripped the live item's group,
+    // while the undo image still carries the membership.
+    live.SetParentGroup( nullptr );
+    image.SetParentGroup( &group );
+
+    live.SwapItemData( &image );
+
+    BOOST_CHECK( live.GetParentGroup() == nullptr );
+    BOOST_CHECK( image.GetParentGroup() == &group );
+
+    image.SetParentGroup( nullptr );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

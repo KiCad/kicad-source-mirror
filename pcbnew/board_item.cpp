@@ -295,8 +295,10 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
     if( aImage == nullptr )
         return;
 
-    EDA_ITEM* parent = GetParent();
-    BOARD*    board = GetBoard();
+    EDA_ITEM*  parent = GetParent();
+    EDA_GROUP* group = GetParentGroup();
+    EDA_GROUP* imageGroup = aImage->GetParentGroup();
+    BOARD*     board = GetBoard();
 
     // Evict children from the item-by-id cache before the swap moves them to the
     // image.  The image is typically deleted after the swap (undo/redo, commit revert),
@@ -308,6 +310,10 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
 
     swapData( aImage );
     SetParent( parent );
+
+    // Group membership is a back-reference, not item data, so keep each side's own.
+    SetParentGroup( group );
+    aImage->SetParentGroup( imageGroup );
 
     if( board )
     {
