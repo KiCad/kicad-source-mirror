@@ -275,11 +275,17 @@ void BOARD_ITEM::SwapItemData( BOARD_ITEM* aImage )
     if( aImage == nullptr )
         return;
 
-    EDA_ITEM* parent = GetParent();
+    EDA_ITEM*  parent = GetParent();
+    EDA_GROUP* group = GetParentGroup();
+    EDA_GROUP* imageGroup = aImage->GetParentGroup();
 
     swapData( aImage );
 
     SetParent( parent );
+
+    // Group membership is a back-reference, not item data, so keep each side's own.
+    SetParentGroup( group );
+    aImage->SetParentGroup( imageGroup );
 }
 
 
