@@ -244,6 +244,9 @@ private:
 
     bool isOldFormat() const { return m_sdb.IsOldFormat(); }
 
+    /// End of section 57's string pool, or 0 if it cannot be identified.
+    size_t locateStringPool() const;
+
     // Both old dialects resolve a placement's decal via a direct index in the next physical
     // record rather than through a parttype-definition table (v0x2022 does have such a table,
     // but placements don't reference it); only the field's offset within that record differs.

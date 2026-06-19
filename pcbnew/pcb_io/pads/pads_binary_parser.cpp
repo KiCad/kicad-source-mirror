@@ -4673,6 +4673,62 @@ static bool viaRecordValid( const BINARY_CURSOR& aCur, size_t aTypeByte )
 }
 
 
+/**
+ * End of section 57's string pool, or 0 if it cannot be identified.
+ *
+ * The pool is not reachable by accumulation, so it is reached from its own content. The index in
+ * front of it tiles it exactly, so the entry closing the pool is the one satisfying
+ * poolOffset + length == totalBytes(57), and the pool begins just after that 16-byte entry.
+ * Checked as mostly text rather than entirely text, because attribute values embed binary.
+ *
+ * This is a search, and it is counted. Sections 60, 68 and 69 are all ultimately anchored on it,
+ * so arithmetic built on it is not structural however clean it looks -- see the (a)/(b)/(c)
+ * classification in pads_binary.ksy. Counting it here is what stops those locators reporting a
+ * retirement they have not earned.
+ */
+size_t BINARY_PARSER::locateStringPool() const
+{
+    const SDB_SECTION* sec56 = m_sdb.Section( 56 );
+    const SDB_SECTION* sec57 = m_sdb.Section( 57 );
+
+    if( !sec56 || !sec57 || sec57->totalBytes < 64 )
+        return 0;
+
+    NoteScanLocatorUse( "stringPool" );
+
+    size_t poolBytes = sec57->totalBytes;
+    size_t lo = sec56->payloadOffset > 4096 ? sec56->payloadOffset - 4096 : 0;
+
+    for( size_t entry = lo; entry + 21 < m_data.size(); ++entry )
+    {
+        uint16_t length = m_cursor.U16At( entry + 5 );
+
+        if( length == 0 || length >= 256 || m_cursor.U32At( entry + 1 ) + length != poolBytes )
+            continue;
+
+        size_t start = entry + 16;
+
+        if( start + poolBytes > m_data.size() )
+            continue;
+
+        size_t textual = 0;
+
+        for( size_t i = 0; i < poolBytes; ++i )
+        {
+            uint8_t byte = m_data[start + i];
+
+            if( byte == 0 || ( byte >= 32 && byte < 127 ) )
+                ++textual;
+        }
+
+        if( textual * 100 >= poolBytes * 98 )
+            return start + poolBytes;
+    }
+
+    return 0;
+}
+
+
 void BINARY_PARSER::parseRouteVertices()
 {
     // Section 60 identifies via instances and their net/via-definition ordinals. Sections
@@ -4725,44 +4781,99 @@ void BINARY_PARSER::parseRouteVertices()
     // strengthen the phase signal on boards with few or no vias; only type-0x0E records are
     // actually emitted below.
     static constexpr int CORNER_TYPE = 0x16;
-    uint32_t             bestPhase = 0;
-    size_t               bestScore = 0;
 
-    auto _pt_phaseScan = std::chrono::steady_clock::now();
-    for( uint32_t phase = 0; phase < stride; ++phase )
+    // Preferred path: section 60's base is arithmetic off the string pool. Sections after the
+    // pool resume at their declared sizes, so the base is the pool's end plus sections 58 and 59
+    // less a correction that is this section's own stride minus 32 -- 16 for the 48-byte old
+    // dialect records, 32 for the 64-byte modern ones. Measured across the corpus this agrees
+    // with the phase scan below wherever both resolve and is the more accurate of the two where
+    // they differ, because the scan also picks up records lying outside section 60's extent.
+    //
+    // The pool itself is found by a walk, so this is not a structural locator; locateStringPool()
+    // counts itself. What it buys is one bounded walk in place of a whole-payload phase scan.
+    std::vector<size_t> typeBytes;
+    size_t              gridOrigin = 0;
+    size_t              poolEnd = locateStringPool();
+
+    if( poolEnd != 0 )
     {
-        size_t score = 0;
+        const SDB_SECTION* sec58 = m_sdb.Section( 58 );
+        const SDB_SECTION* sec59 = m_sdb.Section( 59 );
 
-        for( size_t typeByte = scanStart + phase; typeByte + 6 <= scanEnd; typeByte += stride )
+        size_t base = poolEnd + ( sec58 ? sec58->totalBytes : 0 ) + ( sec59 ? sec59->totalBytes : 0 );
+        size_t correction = stride > 32 ? stride - 32 : 0;
+
+        if( base >= correction && m_cursor.InBounds( base - correction, entry60->count * stride ) )
         {
-            uint8_t type = m_cursor.U8At( typeByte );
+            base -= correction;
+            gridOrigin = base + stride - 4;
 
-            if( type == VIA_TYPE && viaRecordValid( m_cursor, typeByte ) )
-                ++score;
-            else if( type == CORNER_TYPE && m_cursor.U8At( typeByte + 6 ) == 1 )
-                ++score;
-        }
+            for( uint32_t rec = 0; rec < entry60->count; ++rec )
+            {
+                size_t typeByte = base + rec * stride + stride - 4;
 
-        if( score > bestScore )
-        {
-            bestScore = score;
-            bestPhase = phase;
+                if( typeByte + 6 > m_data.size() )
+                    break;
+
+                typeBytes.push_back( typeByte );
+            }
+
+            logResolvedBase( 60, "poolDerived", base, entry60->dataOffset, entry60->payloadOffset );
         }
     }
-    logParsePhase( "phaseScan", _pt_phaseScan );
 
-    if( bestScore == 0 )
+    // Fallback for the boards that declare no string pool at all -- count(56) and totalBytes(57)
+    // both zero. There is no terminator to anchor on there, and dropping their vias rather than
+    // scanning for them would lose several hundred real objects per board.
+    if( typeBytes.empty() )
+    {
+        uint32_t bestPhase = 0;
+        size_t   bestScore = 0;
+
+        auto _pt_phaseScan = std::chrono::steady_clock::now();
+        for( uint32_t phase = 0; phase < stride; ++phase )
+        {
+            size_t score = 0;
+
+            for( size_t typeByte = scanStart + phase; typeByte + 6 <= scanEnd; typeByte += stride )
+            {
+                uint8_t type = m_cursor.U8At( typeByte );
+
+                if( type == VIA_TYPE && viaRecordValid( m_cursor, typeByte ) )
+                    ++score;
+                else if( type == CORNER_TYPE && m_cursor.U8At( typeByte + 6 ) == 1 )
+                    ++score;
+            }
+
+            if( score > bestScore )
+            {
+                bestScore = score;
+                bestPhase = phase;
+            }
+        }
+        logParsePhase( "phaseScan", _pt_phaseScan );
+
+        if( bestScore == 0 )
+            return;
+
+        NoteScanLocatorUse( "viaPhase" );
+        logResolvedBase( 60, "viaPhase", scanStart + bestPhase, entry60->dataOffset,
+                         entry60->payloadOffset );
+
+        gridOrigin = scanStart + bestPhase;
+
+        for( size_t typeByte = gridOrigin; typeByte + 6 <= scanEnd; typeByte += stride )
+            typeBytes.push_back( typeByte );
+    }
+
+    if( typeBytes.empty() )
         return;
-
-    NoteScanLocatorUse( "viaPhase" );
-    logResolvedBase( 60, "viaPhase", scanStart + bestPhase, entry60->dataOffset,
-                     entry60->payloadOffset );
 
     std::set<std::pair<int32_t, int32_t>> seenVias;
     std::set<std::pair<int32_t, int32_t>> routeAnchorPoints;
 
     auto _pt_emitPass = std::chrono::steady_clock::now();
-    for( size_t typeByte = scanStart + bestPhase; typeByte + 6 <= scanEnd; typeByte += stride )
+    for( size_t typeByte : typeBytes )
     {
         uint8_t type = m_cursor.U8At( typeByte );
         bool    isVia = type == VIA_TYPE && viaRecordValid( m_cursor, typeByte );
@@ -5809,7 +5920,7 @@ void BINARY_PARSER::parseRouteVertices()
                                              static_cast<int32_t>( std::llround( track.points.back().y ) ) ) );
                     }
 
-                    size_t recordResidue = ( ( scanStart + bestPhase ) % stride + stride - 27 % stride ) % stride;
+                    size_t recordResidue = ( gridOrigin % stride + stride - 27 % stride ) % stride;
                     size_t nodeBase = entry60->dataOffset;
                     nodeBase -= ( nodeBase % stride + stride - recordResidue ) % stride;
                     size_t bestRotation = 0;
