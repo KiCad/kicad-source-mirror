@@ -247,6 +247,9 @@ private:
     /// End of section 57's string pool, or 0 if it cannot be identified.
     size_t locateStringPool() const;
 
+    /// Base of section 69's layer records, or 0 if it cannot be trusted.
+    size_t locateLayerStackupBase() const;
+
     // Both old dialects resolve a placement's decal via a direct index in the next physical
     // record rather than through a parttype-definition table (v0x2022 does have such a table,
     // but placements don't reference it); only the field's offset within that record differs.

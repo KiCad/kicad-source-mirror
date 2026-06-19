@@ -1308,17 +1308,20 @@ void BINARY_PARSER::parsePadStacks()
     std::set<size_t> usedStacks;
     size_t           extentRun = 0;
 
+    // The extent-run search below tests this at every byte offset in the file, so a linear pass
+    // over the pool each time makes the whole padstack section quadratic in the file size. The
+    // set holds exactly the diameters that pass, so the answer is unchanged.
+    std::unordered_set<int32_t> viaStackDiameters;
+
+    for( size_t i = 0; i < m_padStackPool.size(); ++i )
+    {
+        if( !m_padStackPool[i].empty() && m_padStackPool[i].front().drill > 0 )
+            viaStackDiameters.insert( maxPadDiameter[i] );
+    }
+
     auto matchesViaStack = [&]( int32_t aDiameter )
     {
-        for( size_t i = 0; i < m_padStackPool.size(); ++i )
-        {
-            if( !m_padStackPool[i].empty() && m_padStackPool[i].front().drill > 0 && maxPadDiameter[i] == aDiameter )
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return viaStackDiameters.count( aDiameter ) > 0;
     };
 
     if( entry->count >= 2 )
@@ -7169,6 +7172,114 @@ void BINARY_PARSER::parseCopperPours()
 }
 
 
+/// A NUL-terminated printable name inside an aFieldLen-byte field, the shape both undeclared
+/// record types before section 69 carry.
+static bool stackupNameOk( const std::vector<uint8_t>& aData, size_t aOffset, size_t aFieldLen )
+{
+    if( aOffset + aFieldLen > aData.size() || aData[aOffset] < 32 || aData[aOffset] >= 127 )
+        return false;
+
+    for( size_t i = 0; i < aFieldLen; ++i )
+    {
+        uint8_t byte = aData[aOffset + i];
+
+        if( byte == 0 )
+            return i > 0;
+
+        if( byte < 32 || byte >= 127 )
+            return false;
+    }
+
+    return false;
+}
+
+
+/**
+ * Base of section 69's layer records, or 0 if it cannot be trusted.
+ *
+ * Sections 65 and 66 declare a flag rather than a size -- count 0 and total_bytes 0 or 1 -- so
+ * their extent has to be walked. Nothing declares a count for them, which is the one case where
+ * a walk is not standing in for a field that exists. A single loop tries both record shapes at
+ * each offset and stops at the first that matches neither, so boards without either section
+ * consume nothing and need no directory gate.
+ *
+ * The 280-byte shape MUST be tried first: it also satisfies the 28-byte test, because its name at
+ * +8 makes +12 look like a valid short name.
+ *
+ * The result is validated before use. The discriminating part is the 12-byte lead-in immediately
+ * before record 0; a name-and-copper test alone accepts a base shifted by one whole record about
+ * 2180 times across the corpus, which is silent layer-mapping corruption rather than a visible
+ * failure. With the lead-in there are no false accepts at all, and it rejects both boards whose
+ * computed base is known to be wrong.
+ */
+size_t BINARY_PARSER::locateLayerStackupBase() const
+{
+    const SDB_SECTION* sec69 = m_sdb.Section( 69 );
+    size_t             poolEnd = locateStringPool();
+
+    if( !sec69 || sec69->count == 0 || sec69->stride == 0 || poolEnd == 0 )
+        return 0;
+
+    size_t walk = poolEnd + 1;
+
+    for( int i = 58; i <= 64; ++i )
+    {
+        if( const SDB_SECTION* sec = m_sdb.Section( i ) )
+            walk += sec->totalBytes;
+    }
+
+    constexpr size_t WALK_LIMIT = 8192;
+    const size_t     walkStart = walk;
+
+    while( walk - walkStart < WALK_LIMIT )
+    {
+        if( stackupNameOk( m_data, walk + 8, 32 ) && m_cursor.InBounds( walk + 40, 8 )
+            && m_cursor.U32At( walk + 40 ) == 0 && m_cursor.U32At( walk + 44 ) == 0 )
+        {
+            walk += 280;
+            continue;
+        }
+
+        if( m_cursor.InBounds( walk, 4 ) && m_cursor.U32At( walk ) == 0
+            && stackupNameOk( m_data, walk + 12, 16 ) )
+        {
+            walk += 28;
+            continue;
+        }
+
+        break;
+    }
+
+    for( int i = 67; i <= 68; ++i )
+    {
+        if( const SDB_SECTION* sec = m_sdb.Section( i ) )
+            walk += sec->totalBytes;
+    }
+
+    size_t base = walk + 12;
+
+    if( base < 12 || !m_cursor.InBounds( base, sec69->stride * sec69->count ) )
+        return 0;
+
+    if( ( m_cursor.U32At( base - 12 ) & 0xFF ) != 0x86 || m_cursor.U32At( base - 8 ) != 0
+        || m_cursor.U32At( base - 4 ) != 0 )
+        return 0;
+
+    if( !stackupNameOk( m_data, base, 32 ) )
+        return 0;
+
+    size_t copper = 0;
+
+    for( uint32_t j = 0; j < sec69->count; ++j )
+    {
+        if( m_cursor.I32At( base + j * sec69->stride + 56 ) > 0 )
+            ++copper;
+    }
+
+    return copper >= 2 ? base : 0;
+}
+
+
 void BINARY_PARSER::parseLayerStackup()
 {
     m_layerInfos.clear();
@@ -7189,12 +7300,19 @@ void BINARY_PARSER::parseLayerStackup()
 
     static const std::string ANCHOR = "(All layers)";
 
-    // The "(All layers)" string anchors the first record; the directory data_offset overflows
-    // the indexed region on large boards.
-    NoteScanLocatorUse( "layerStackup" );
-    size_t recordBase = findSignature( m_data, reinterpret_cast<const uint8_t*>( ANCHOR.data() ), ANCHOR.size() );
+    // Preferred path: reached by arithmetic from the string pool. It validates itself, so a board
+    // whose layout differs falls through to the signature search rather than decoding a wrong
+    // base -- which would mis-map layers silently instead of failing.
+    size_t recordBase = locateLayerStackupBase();
 
-    if( recordBase == SIGNATURE_NOT_FOUND )
+    if( recordBase == 0 )
+    {
+        NoteScanLocatorUse( "layerStackup" );
+        recordBase = findSignature( m_data, reinterpret_cast<const uint8_t*>( ANCHOR.data() ),
+                                    ANCHOR.size() );
+    }
+
+    if( recordBase == SIGNATURE_NOT_FOUND || recordBase == 0 )
         return;
 
     if( !m_cursor.InBounds( recordBase, REC_COUNT * REC_SIZE ) )
