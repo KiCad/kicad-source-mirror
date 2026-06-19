@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 21:33+0000\n"
+"PO-Revision-Date: 2026-06-19 15:02+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -3282,9 +3282,9 @@ msgid "Select base and head refs to compare."
 msgstr "Seleziona i riferimenti di base e head da comparare."
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve ref '%s' to a commit or tree."
-msgstr "Impossibile trovare il commit di destinazione"
+msgstr "Impossibile risolvere il riferimento '%s' a un commit o un albero."
 
 #: common/dialogs/dialog_git_mr_review.cpp:133
 msgid "No changes between selected refs."
@@ -3685,14 +3685,13 @@ msgstr "Risolvi i conflitti di importazione"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:363
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:48
-#, fuzzy
 msgid "Select a conflict on the left to see details."
-msgstr "Seleziona un elemento di connessione sotto il puntatore"
+msgstr "Seleziona un conflitto a sinistra per visualizzarne i dettagli."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Conflict on %s"
-msgstr "Conflitti"
+msgstr "Conflitto con %s"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
@@ -6850,14 +6849,12 @@ msgid "Move Down"
 msgstr "Sposta in basso"
 
 #: common/diff_merge/auto_resolution.cpp:251
-#, fuzzy
 msgid "Item id: "
-msgstr "Elementi:"
+msgstr "Id elemento: "
 
 #: common/diff_merge/auto_resolution.cpp:252
-#, fuzzy
 msgid "Current resolution: "
-msgstr "Risoluzione X:"
+msgstr "Risoluzione corrente: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
@@ -6898,9 +6895,8 @@ msgid "%zu property edit(s) in this resolution.\n"
 msgstr ""
 
 #: common/diff_merge/diff_job_output.cpp:88
-#, fuzzy
 msgid "Failed to render diff image\n"
-msgstr "Impossibile leggere dei dati immagine."
+msgstr "Impossibile renderizzare l'immagine diff\n"
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
@@ -6925,9 +6921,8 @@ msgid "Graphics error during recovery"
 msgstr "Errore grafico"
 
 #: common/draw_panel_gal.cpp:239
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "Eccezione OCC creando una faccia: %s"
+msgstr "Eccezione sconosciuta durante il passaggio al backend"
 
 #: common/draw_panel_gal.cpp:427
 #, fuzzy
@@ -7903,9 +7898,8 @@ msgid "Arc Start Angle"
 msgstr "Angolo iniziale"
 
 #: common/eda_shape.cpp:3554
-#, fuzzy
 msgid "Arc End Angle"
-msgstr "Angolo dell'arco:"
+msgstr "Angolo Fine Arco"
 
 #: common/eda_shape.cpp:3559 common/stroke_params.cpp:403
 #: eeschema/sch_bus_entry.cpp:710 eeschema/sch_line.cpp:1334
@@ -8492,9 +8486,9 @@ msgid "Could not create directory '%s'"
 msgstr "Impossibile creare la cartella '%s'"
 
 #: common/git/libgit_backend.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "Impossibile clonare il repository '%s'"
+msgstr "Impossibile clonare il repository '%s': %s"
 
 #: common/git/libgit_backend.cpp:194 common/git/libgit_backend.cpp:336
 #, c-format
@@ -8721,9 +8715,8 @@ msgid "Merge failed: %s"
 msgstr "Merge fallito: %s"
 
 #: common/git/libgit_backend.cpp:1468
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Impossibile ottenere l'indice del repository"
+msgstr "Impossibile leggere l'indice del repository dopo il merge."
 
 #: common/git/libgit_backend.cpp:1500
 #, fuzzy
@@ -8731,14 +8724,12 @@ msgid "Could not write the merge result."
 msgstr "Impossibile scrivere i file di tracciatura nella cartella '%s'."
 
 #: common/git/libgit_backend.cpp:1508
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Impossibile ottenere la head del repository"
+msgstr "Impossibile ottenere la head del repository."
 
 #: common/git/libgit_backend.cpp:1518
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Impossibile trovare il commit di destinazione"
+msgstr "Impossibile trovare i commit su cui fare merge."
 
 #: common/git/libgit_backend.cpp:1527 common/git/libgit_backend.cpp:1712
 msgid ""
@@ -8747,14 +8738,14 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1536
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Fondi grafiche sovrapposte nella piazzola"
+msgstr "Fai il merge del ramo di tracciamento remoto in %s"
 
 #: common/git/libgit_backend.cpp:1544
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Impossibile fare il merge dei commit"
+msgstr "Impossibile fare il merge del commit: %s"
 
 #: common/git/libgit_backend.cpp:1561
 msgid ""
@@ -8790,9 +8781,8 @@ msgid "Could not find the matching remote branch."
 msgstr "Impossibile trovare \"%s\" nella libreria importata."
 
 #: common/git/libgit_backend.cpp:1650 common/git/libgit_backend.cpp:1703
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Impossibile aprire il percorso modelli '%s'"
+msgstr "Impossibile leggere il ramo remoto."
 
 #: common/git/libgit_backend.cpp:1659
 #, fuzzy, c-format
@@ -9157,9 +9147,9 @@ msgid "DipTrace file '%s' is too large (%ld bytes)."
 msgstr ""
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading file '%s'."
-msgstr "Errore nel leggere il file."
+msgstr "Errore nel leggere il file '%s'."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:102
 #, c-format
@@ -9536,9 +9526,8 @@ msgid "Gerber: Diff"
 msgstr "File Gerber"
 
 #: common/jobs/job_gerber_export_png.cpp:52
-#, fuzzy
 msgid "Gerber Export PNG"
-msgstr "Testo C.S."
+msgstr "Esportazione Gerber PNG"
 
 #: common/jobs/job_gerber_export_png.cpp:58
 #, fuzzy
@@ -9546,9 +9535,8 @@ msgid "Gerber Export PNG Job Settings"
 msgstr "Impostazioni lavoro Esporta HPGL"
 
 #: common/jobs/job_gerber_export_png.cpp:62
-#, fuzzy
 msgid "Gerber: Export PNG"
-msgstr "Testo C.S."
+msgstr "Gerber: Esporta PNG"
 
 #: common/jobs/job_gerber_info.cpp:39
 #, fuzzy
@@ -9576,9 +9564,9 @@ msgid "Could not read layer map file '%s'"
 msgstr "Impossibile leggere il file: %s"
 
 #: common/jobs/job_import_utils.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Layer map file '%s' is not valid JSON: %s"
-msgstr "Tipo pagina '%s' non valido."
+msgstr "Il file mappa strati '%s' non è un JSON valido: %s"
 
 #: common/jobs/job_import_utils.cpp:86
 #, c-format
@@ -9593,9 +9581,9 @@ msgid "Layer map entry for '%s' must be a KiCad layer name string"
 msgstr ""
 
 #: common/jobs/job_import_utils.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write import report to '%s'\n"
-msgstr "Impossibile scrivere i file tracciatura nella cartella \"%s\"."
+msgstr "Impossibile scrivere il report di importazione in '%s'\n"
 
 #: common/jobs/job_pcb_diff.cpp:37
 #, fuzzy
@@ -9641,9 +9629,8 @@ msgid "PCB: Render"
 msgstr "C.S.: Render"
 
 #: common/jobs/job_sch_diff.cpp:37
-#, fuzzy
 msgid "Diff two schematic files"
-msgstr "File schemi elettrici PADS Logic"
+msgstr "Diff di due file schema"
 
 #: common/jobs/job_sch_diff.cpp:41
 #, fuzzy
@@ -9668,9 +9655,8 @@ msgid "Import schematic"
 msgstr "Importa schema"
 
 #: common/jobs/job_sch_import.cpp:56
-#, fuzzy
 msgid "Schematic Import Job Settings"
-msgstr "Impostazioni lavoro CRE schema"
+msgstr "Impostazioni lavori di importazione schema"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
@@ -10333,9 +10319,9 @@ msgid "The library table is of wrong type"
 msgstr "Il percorso della tabella della libreria '%s' non esiste"
 
 #: common/libraries/library_table.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "La libreria '%s' è in sola lettura."
+msgstr "La tabella librerie '%s' è in sola lettura"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -10445,7 +10431,7 @@ msgstr "%s, %s e %d di più"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:650
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:841
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
@@ -10453,9 +10439,9 @@ msgid ""
 "offset: %d"
 msgstr ""
 "ID impronta non valido in\n"
-"file: %s\n"
+"file: '%s'\n"
 "riga: %d\n"
-"scostamento: %d."
+"scostamento: %d"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:761
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:956
@@ -10857,12 +10843,9 @@ msgid "Unsupported provider capability '%s'."
 msgstr "Tipo componente non supportato '%s'."
 
 #: common/remote_provider_metadata.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse remote provider metadata: %s"
-msgstr ""
-"Impossibile analizzare i metadati del pacchetto:\n"
-"\n"
-"%s"
+msgstr "Impossibile analizzare i metadati del provider remoto: %s"
 
 #: common/remote_provider_metadata.cpp:154
 msgid "Remote provider metadata must enable web_ui_v1."
@@ -10883,12 +10866,9 @@ msgid "session_bootstrap_url must share the same origin as panel_url."
 msgstr ""
 
 #: common/remote_provider_models.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse OAuth metadata: %s"
-msgstr ""
-"Impossibile analizzare i metadati del pacchetto:\n"
-"\n"
-"%s"
+msgstr "Impossibile analizzare i metadati OAuth: %s"
 
 #: common/remote_provider_models.cpp:50
 msgid "OAuth metadata must include authorization_endpoint and token_endpoint."
@@ -10943,20 +10923,22 @@ msgid "Line length exceeded"
 msgstr "Lunghezza linea eccedente"
 
 #: common/richio.cpp:556
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot flush '%s' to disk: %s"
-msgstr "Impossibile eliminare '%s'."
+msgstr "Impossibile scaricare '%s' su disco: %s"
 
 #: common/richio.cpp:612
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to commit save of '%s': %s. The file on disk has not been modified."
-msgstr "Impossibile caricare la pagina '%s': %s"
+msgstr ""
+"Impossibile fare il commit di '%s': %s. Il file sul disco non è stato "
+"modificato."
 
 #: common/richio.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "Write failed to '%s': %s"
-msgstr "Rebase non partito: %s"
+msgstr "Scrittura non riuscita su '%s': %s"
 
 #: common/settings/bom_settings.cpp:126
 msgid "Default Editing"
@@ -14303,14 +14285,12 @@ msgid "Update Symbols from Library"
 msgstr "Aggiorna simboli da libreria"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:63
-#, fuzzy
 msgid "Filter chains by name or net..."
-msgstr "Filtra campi per nome:"
+msgstr "Filtra catene per nome o collegamento..."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:77
-#, fuzzy
 msgid "Create"
-msgstr "Crea C.S."
+msgstr "Crea"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:129
 #, c-format
@@ -14336,14 +14316,12 @@ msgid "Create Net Chain"
 msgstr "Crea nuovo foglio"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
-#, fuzzy
 msgid "Please enter a name for the net chain."
-msgstr "Inserire un nome per il repository"
+msgstr "Inserire un nome per la catena di collegamento."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:169
-#, fuzzy
 msgid "Chain name cannot contain spaces, quotes, or parentheses."
-msgstr "I nomi dei segnali non possono contenere spazi"
+msgstr "Il nome catena non può contenere spazi, virgolette o parentesi."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:178
 msgid "Connection graph not available."
@@ -14385,9 +14363,9 @@ msgid "From and To must be different components."
 msgstr "Sorgente 1 e Sorgente 2 devono essere diverse."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find component '%s' or '%s'."
-msgstr "Impossibile trovare il componente IBIS '%s'"
+msgstr "Impossibile trovare il componente '%s' o '%s'."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:401
 #, c-format
@@ -14445,9 +14423,9 @@ msgstr "Testo '%s'"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1084
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid "component %s"
-msgstr "Componenti"
+msgstr "componente %s"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1108
 #, c-format
@@ -14479,9 +14457,8 @@ msgid "Nets"
 msgstr "Piste"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:97
-#, fuzzy
 msgid "Manual endpoint selection"
-msgstr "Impossibile convertire la selezione."
+msgstr "Selezione manuale del capo"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:106
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:270
@@ -14500,14 +14477,12 @@ msgid "Find net chain path between the two components"
 msgstr "Genera solo una scheda senza componenti"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:131
-#, fuzzy
 msgid "Chain Name:"
-msgstr "Nome pin"
+msgstr "Nome catena:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:145
-#, fuzzy
 msgid "Re-detect potential net chains from the schematic"
-msgstr "Rimuovi una variante progetto esistente dallo schema."
+msgstr "Ri-individuare le potenziali catene di collegamenti dallo schema"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 msgid "Connected to database successfully"
@@ -14919,7 +14894,7 @@ msgstr "Cancella marcatore"
 
 #: eeschema/dialogs/dialog_erc_base.h:106 eeschema/tools/sch_actions.cpp:46
 msgid "Electrical Rules Checker"
-msgstr "Controllo Regole Elettriche (ERC)"
+msgstr "Controllo Regole Elettriche"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
 msgid "ERC Job Settings"
@@ -17111,9 +17086,8 @@ msgid "Sign Out"
 msgstr ""
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:91
-#, fuzzy
 msgid "Metadata URL:"
-msgstr "Metadati"
+msgstr "URL metadati:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
 #, fuzzy
@@ -17133,9 +17107,8 @@ msgid "Not signed in"
 msgstr "Non specificato"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:103
-#, fuzzy
 msgid "Auth status:"
-msgstr "Stato: "
+msgstr "Stato autenticazione:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:105
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:463
@@ -17331,9 +17304,8 @@ msgstr "Testo '%s'"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:87
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:137
-#, fuzzy
 msgid "Join values"
-msgstr "Valore finale:"
+msgstr "Valori giunzione"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:215
 #, fuzzy
@@ -17351,9 +17323,8 @@ msgid "Apply same choice to all conflicts of the same field name"
 msgstr ""
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:71
-#, fuzzy
 msgid "Join separator:"
-msgstr "Inserisci separatore"
+msgstr "Separatore giunzione:"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:75
 msgid "; "
