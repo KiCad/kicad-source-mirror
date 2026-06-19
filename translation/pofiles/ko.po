@@ -9,7 +9,7 @@
 # 박기정 <pgj0334@naver.com>, 2021.
 # hokim <teamgoodaloe@gmail.com>, 2021.
 # 강명구 <mg_@kakao.com>, 2021.
-# 서범기 <joonhoflow@naver.com>, 2021.
+# 서범기 <joonhoflow@naver.com>, 2021, 2026.
 # 박세훈 <helloworld4327@gmail.com>, 2022, 2026.
 # gurqja3810 <gurqja3810@naver.com>, 2022.
 # YunJiSang <js_7744@naver.com>, 2022, 2026.
@@ -41,8 +41,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-03-24 15:09+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2026-06-19 15:02+0000\n"
+"Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
 "source/ko/>\n"
 "Language: ko\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -2102,12 +2102,12 @@ msgstr "API에서 수정"
 #: common/api/api_plugin.cpp:58
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "'%s'의 플러그인 구성이 잘못되었습니다: %s"
 
 #: common/api/api_plugin.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "잘못된 핀 이름"
+msgstr "플러그인 런타임이 잘못되었습니다: %s"
 
 #: common/api/api_plugin.cpp:105
 #, fuzzy
