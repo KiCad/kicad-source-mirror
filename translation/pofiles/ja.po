@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-18 23:01+0000\n"
+"PO-Revision-Date: 2026-06-19 15:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -3145,9 +3145,9 @@ msgid "Select base and head refs to compare."
 msgstr "比較するBASEとHEAD refsを選択してください。"
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve ref '%s' to a commit or tree."
-msgstr "マージするコミットを検索できませんでした。"
+msgstr "リファレンス '%s' からツリーを検索できませんでした。"
 
 #: common/dialogs/dialog_git_mr_review.cpp:133
 msgid "No changes between selected refs."
@@ -32101,9 +32101,8 @@ msgid "Could not create a temporary directory for the merge.\n"
 msgstr "マージ用の一時的なディレクトリを作成できませんでした。\n"
 
 #: kicad/cli/command_git_mergedriver.cpp:141
-#, fuzzy
 msgid "Could not stage merge inputs.\n"
-msgstr "マージ結果を書き込めませんでした。"
+msgstr "マージをするためのテンポラリファイルを書き込めませんでした\n"
 
 #: kicad/cli/command_git_mergedriver.cpp:160
 msgid "Could not write merged output.\n"
