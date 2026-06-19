@@ -1216,9 +1216,15 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
     if( success )
         adapter->LoadOne( fn.GetName() );
 
-    std::string packet = fn.GetFullPath().ToStdString();
-    this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, packet );
-    this->Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
+    SyncLibraries( false );
+    SetCurLib( fn.GetName() );
+
+    if( m_treePane )
+    {
+        LIB_ID libId( fn.GetName(), wxEmptyString );
+        GetLibTree()->SelectLibId( libId );
+        GetLibTree()->CenterLibId( libId );
+    }
 
     return fn.GetFullPath();
 }
