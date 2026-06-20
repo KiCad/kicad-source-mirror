@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-05 08:01+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-06-20 21:01+0000\n"
+"Last-Translator: William Lin <unrealin01@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -2111,9 +2111,8 @@ msgstr "行程失敗，退出碼為 %d"
 
 #: common/api/api_plugin_manager.cpp:351 common/api/api_plugin_manager.cpp:691
 #: common/api/api_plugin_manager.cpp:775
-#, fuzzy
 msgid "missing plugin environment"
-msgstr "重建插件環境"
+msgstr "缺少插件環境"
 
 #: common/api/api_plugin_manager.cpp:360
 #, fuzzy, c-format
@@ -2131,9 +2130,8 @@ msgid "entrypoint '%s' is not executable"
 msgstr "目錄 '%s' 不可寫入。"
 
 #: common/api/api_plugin_manager.cpp:500
-#, fuzzy
 msgid "could not launch plugin"
-msgstr "無法使用 OpenGL"
+msgstr "無法載入插件"
 
 #: common/api/api_plugin_manager.cpp:661 common/api/api_plugin_manager.cpp:743
 #: common/api/api_plugin_manager.cpp:833
@@ -2143,9 +2141,9 @@ msgstr "錯誤代碼: %d"
 
 #: common/api/api_plugin_manager.cpp:663 common/api/api_plugin_manager.cpp:745
 #: common/api/api_plugin_manager.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "重建插件環境"
+msgstr "無法建立插件環境：%s"
 
 #: common/api/api_plugin_manager.cpp:784
 #, fuzzy
@@ -2157,9 +2155,8 @@ msgid "Background Jobs"
 msgstr "背景作業"
 
 #: common/common.cpp:351 pcbnew/dialogs/dialog_board_reannotate.cpp:290
-#, fuzzy
 msgid "unannotated footprint"
-msgstr "解鎖封裝"
+msgstr "取消標註封裝"
 
 #: common/common.cpp:541
 #, c-format
@@ -2401,9 +2398,9 @@ msgstr "無法刪符號資料夾 '%s'。"
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:498
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "找不到檔案 '%s'。"
+msgstr "找不到巢狀表格 '%s'。"
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
@@ -2711,35 +2708,32 @@ msgid ""
 msgstr "KiCad 發現上次工作階段未儲存的變更，比已儲存的專案檔案更新。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "重置為預設值"
+msgstr "復原自動存檔"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
-msgstr ""
+msgstr "使用自動存檔的版本取代已儲存的檔案。先前已儲存的版本將會遺失。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "電流"
+msgstr "保持電流"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
-msgstr ""
+msgstr "保存已儲存的檔案並捨棄自動存檔所記錄的修改。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "禁止區域"
+msgstr "保存兩者"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
-msgstr ""
+msgstr "保存已儲存的存檔並另存一份自動存檔的版本供稍後檢視。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
 #, fuzzy
