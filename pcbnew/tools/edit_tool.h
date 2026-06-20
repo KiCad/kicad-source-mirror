@@ -78,11 +78,6 @@ public:
     int Drag( const TOOL_EVENT& aEvent );
 
     /**
-     * Drag-resize an arc (and change end points of connected straight segments).
-     */
-    int DragArcTrack( const TOOL_EVENT& aTrack );
-
-    /**
      * Display properties window for the selected object.
      */
     int Properties( const TOOL_EVENT& aEvent );

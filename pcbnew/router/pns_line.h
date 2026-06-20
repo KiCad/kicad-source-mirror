@@ -237,6 +237,8 @@ public:
     void DragSegment( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false );
     void DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false, DIRECTION_45 aPreferredEndingDirection = DIRECTION_45() );
 
+    void DragArc( const VECTOR2I& aP, int aIndex );
+
     void SetRank( int aRank ) override;
     int Rank() const override;
 
