@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-18 17:01+0000\n"
+"PO-Revision-Date: 2026-06-20 21:01+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -59543,13 +59543,12 @@ msgid "could not load the design block's layout"
 msgstr "nie można załadować trasowania bloku projektowego"
 
 #: pcbnew/tools/pcb_control.cpp:1637
-#, fuzzy
 msgid "design block contains no items to apply"
-msgstr "Blok projektowy nie posiada schematu by go umieścić."
+msgstr "blok projektowy nie posiada żadnych elementów by je umieścić"
 
 #: pcbnew/tools/pcb_control.cpp:1687
 msgid "group is empty"
-msgstr ""
+msgstr "grupa jest pusta"
 
 #: pcbnew/tools/pcb_control.cpp:1726
 msgid "layout copy failed"
@@ -59572,6 +59571,8 @@ msgstr "Zastosuj układ bloku projektowego do %d grup"
 #: pcbnew/tools/pcb_control.cpp:1776
 msgid "Copied copper has no net assigned. Assign nets to connect it."
 msgstr ""
+"Skopiowany obszar miedzi nie ma przypisanej sieci. Przydziel sieć by go "
+"połączyć."
 
 #: pcbnew/tools/pcb_control.cpp:1788
 #, c-format
