@@ -398,7 +398,8 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::IsExpanderColumn( int aCol ) const
 
 wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 {
-    GetView()->SetReadOnly( aRow, aCol, IsExpanderColumn( aCol ) );
+    GetView()->SetReadOnly( aRow, aCol,
+                            IsExpanderColumn( aCol ) || rowAttributeInheritedFromSheet( m_rows[aRow], aCol ) );
     return GetValue( m_rows[aRow], aCol );
 }
 
@@ -568,6 +569,11 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
                 return INDETERMINATE_STATE;
 
             wxString refFieldValue = m_dataStore[symbolKey][m_cols[aCol].m_fieldName];
+
+            // Show the effective state when a sheet forces it on, but do not change
+            // the stored value so the symbol is never stamped on apply.
+            if( ColIsAttribute( aCol ) && attributeInheritedFromSheet( ref, m_cols[aCol].m_fieldName ) )
+                refFieldValue = wxS( "1" );
 
             if( resolveVars )
             {
@@ -960,6 +966,41 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFERENCE& 
         return aRef.GetSymbolExcludedFromSim( aVariantName ) ? wxS( "1" ) : wxS( "0" );
 
     return wxS( "0" );
+}
+
+
+bool FIELDS_EDITOR_GRID_DATA_MODEL::attributeInheritedFromSheet( const SCH_REFERENCE& aRef,
+                                                                 const wxString&      aAttributeName ) const
+{
+    const SCH_SHEET_PATH& path = aRef.GetSheetPath();
+
+    if( aAttributeName == wxS( "${DNP}" ) )
+        return path.GetDNP( m_currentVariant );
+    else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
+        return path.GetExcludedFromBoard( m_currentVariant );
+    else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
+        return path.GetExcludedFromBOM( m_currentVariant );
+    else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
+        return path.GetExcludedFromSim( m_currentVariant );
+
+    return false;
+}
+
+
+bool FIELDS_EDITOR_GRID_DATA_MODEL::rowAttributeInheritedFromSheet( const DATA_MODEL_ROW& aGroup, int aCol )
+{
+    if( !ColIsAttribute( aCol ) || aGroup.m_Refs.empty() )
+        return false;
+
+    // Lock the cell only when every symbol in the row inherits it, so a mixed group
+    // stays editable and shows the indeterminate state.
+    for( const SCH_REFERENCE& ref : aGroup.m_Refs )
+    {
+        if( !attributeInheritedFromSheet( ref, m_cols[aCol].m_fieldName ) )
+            return false;
+    }
+
+    return true;
 }
 
 
