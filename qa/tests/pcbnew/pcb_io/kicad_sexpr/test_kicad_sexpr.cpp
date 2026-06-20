@@ -311,6 +311,49 @@ BOOST_AUTO_TEST_CASE( Issue23752_AppendBoardPreservesStackupAndGrowsToSixCopperL
 
 
 /**
+ * Verify that appending a board into an existing one keeps the destination's layer names
+ * instead of overwriting them with the appended board's names, while still adding the
+ * extra copper layers the appended board needs.
+ *
+ * Regression test for #24642
+ */
+BOOST_AUTO_TEST_CASE( Issue24642_AppendBoardPreservesDestinationLayerNames )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir();
+
+    // four layer board with custom copper layer names
+    std::string destinationPath = dataPath + "issue3812.kicad_pcb";
+    // six layer board using the standard copper layer names
+    std::string sourcePath = dataPath + "issue18142.kicad_pcb";
+
+    std::map<std::string, UTF8> props;
+    props[PCB_IO_LOAD_PROPERTIES::APPEND_PRESERVE_DESTINATION_STACKUP] = "";
+
+    std::unique_ptr<BOARD> testBoard = std::make_unique<BOARD>();
+
+    kicadPlugin.LoadBoard( destinationPath, testBoard.get() );
+
+    BOOST_REQUIRE_EQUAL( testBoard->GetLayerName( F_Cu ), wxS( "Top_layer" ) );
+    BOOST_REQUIRE_EQUAL( testBoard->GetLayerName( In1_Cu ), wxS( "GND_layer" ) );
+    BOOST_REQUIRE_EQUAL( testBoard->GetLayerName( In2_Cu ), wxS( "VDD_layer" ) );
+    BOOST_REQUIRE_EQUAL( testBoard->GetLayerName( B_Cu ), wxS( "Bottom_layer" ) );
+
+    kicadPlugin.LoadBoard( sourcePath, testBoard.get(), &props );
+
+    // The destination layer names must survive the append
+    BOOST_CHECK_EQUAL( testBoard->GetLayerName( F_Cu ), wxS( "Top_layer" ) );
+    BOOST_CHECK_EQUAL( testBoard->GetLayerName( In1_Cu ), wxS( "GND_layer" ) );
+    BOOST_CHECK_EQUAL( testBoard->GetLayerName( In2_Cu ), wxS( "VDD_layer" ) );
+    BOOST_CHECK_EQUAL( testBoard->GetLayerName( B_Cu ), wxS( "Bottom_layer" ) );
+
+    // The two extra copper layers from the source board are still added
+    BOOST_CHECK( testBoard->IsLayerEnabled( In3_Cu ) );
+    BOOST_CHECK( testBoard->IsLayerEnabled( In4_Cu ) );
+    BOOST_CHECK_EQUAL( testBoard->GetCopperLayerCount(), 6 );
+}
+
+
+/**
  * Regression for the footprint-save SIGSEGV observed in KiCad 10.0.0 (introduced by
  * b335ce6e2c "Don't save netcodes to files", which switched PCB_SHAPE/PCB_TRACK/ZONE
  * serialization from writing the netcode to writing the netname).  If a footprint's
