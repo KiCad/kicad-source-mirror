@@ -1162,6 +1162,7 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( [[maybe_unused]] bool aProgress )
     auto          adapter = static_cast<FP_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
     LIB_ID        target = GetTargetFPID();
     bool          targetSelected = ( target == GetLibTree()->GetSelectedLibId() );
+    std::vector<LIB_ID>        expanded = GetLibTree()->GetExpandedLibraries();
 
     // Unselect before syncing to avoid null reference in the adapter
     // if a selected item is removed during the sync
@@ -1171,6 +1172,10 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( [[maybe_unused]] bool aProgress )
     adapter->Sync( footprints );
 
     GetLibTree()->Regenerate( true );
+
+    // Sync() collapsed the tree, so re-expand the libraries that were open before it.
+    for( const LIB_ID& libId : expanded )
+        GetLibTree()->ExpandLibId( libId );
 
     if( target.IsValid() )
     {
