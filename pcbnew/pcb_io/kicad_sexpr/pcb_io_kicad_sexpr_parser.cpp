@@ -1425,13 +1425,18 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             {
                 LSET layers = curr_item.GetLayerSet();
 
-                if( layers.test( Rescue ) )
-                {
-                    layers.set( destLayer );
-                    layers.reset( Rescue );
-                }
+                if( !layers.test( Rescue ) )
+                    return;
 
-                curr_item.SetLayerSet( layers );
+                layers.set( destLayer );
+                layers.reset( Rescue );
+
+                // Single-layer items (shapes, text) ignore non-copper layers in SetLayerSet, so
+                // move them with SetLayer. Multi-layer items keep their full set.
+                if( layers.count() == 1 )
+                    curr_item.SetLayer( destLayer );
+                else
+                    curr_item.SetLayerSet( layers );
             };
 
             for( PCB_TRACK* track : m_board->Tracks() )
@@ -1482,11 +1487,16 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             }
 
             m_undefinedLayers.clear();
+
+            // Rescued items make the board differ from disk. Mark modified so it gets re-saved.
+            m_board->SetModified();
         }
         else
         {
-            THROW_IO_ERROR( wxT( "One or more undefined undefinedLayerNames was found; "
-                                 "open the board in the PCB Editor to resolve." ) );
+            THROW_IO_ERROR( wxString::Format( _( "One or more items were found on undefined "
+                                                 "layers (%s). Open the board in the PCB Editor "
+                                                 "to resolve." ),
+                                              undefinedLayerNames ) );
         }
     }
 
