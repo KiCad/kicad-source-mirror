@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-18 23:01+0000\n"
+"PO-Revision-Date: 2026-06-20 20:01+0000\n"
 "Last-Translator: Jose Perez <mirror.k2@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
 "source/es/>\n"
@@ -2104,49 +2104,48 @@ msgid "invalid plugin configuration at '%s': %s"
 msgstr "Configuración de  plugin incorrecta en '%s':%s"
 
 #: common/api/api_plugin.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "Nombre de pin inválido"
+msgstr "runtime del plugin inválido: %s"
 
 #: common/api/api_plugin.cpp:105
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "no puede abrirse el archivo de configuración 3D"
+msgstr "no se puede leer el archivo de configuración del plugin"
 
 #: common/api/api_plugin.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "no existe el archivo de configuración 3D"
+msgstr "error en el archivo de configuración del plugin: %s"
 
 #: common/api/api_plugin.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "Valor de rango de temperatura ausente o no válido."
+msgstr "keys requeridas ausentes o inválidas: %s"
 
 #: common/api/api_plugin.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "El identificador de la biblioteca de símbolos %s no es válido."
+msgstr "El identificador %s no es válido."
 
 #: common/api/api_plugin.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "Falló la conexión a la base de datos: %s"
+msgstr "la sección de acciones es inválida: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "Opciones del complemento"
+msgstr "Acción del Plugin '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:109
 #, fuzzy, c-format
 msgid "Plugin '%s': %s"
-msgstr "Complementos (%d)"
+msgstr "Plugin '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "exited with code %d"
-msgstr "El proceso falló con el código de error %d"
+msgstr "finalizó con código %d"
 
 #: common/api/api_plugin_manager.cpp:335
 #, fuzzy
@@ -2750,32 +2749,29 @@ msgid "Add Netclass Assignment"
 msgstr "Añadir asignación de clase de nodo"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:29
-#, fuzzy
 msgid "(missing)"
-msgstr "(no se encuentra el archivo)"
+msgstr "(faltante)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:41
 msgid "File"
 msgstr "Archivo"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:42
-#, fuzzy
 msgid "Saved version"
-msgstr "Mostrar todas las versiones"
+msgstr "Versión guardada"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:43
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Gu&ardado automático:"
+msgstr "Copia autoguardada"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad encontró cambios sin guardar de su última sesión que son más recientes "
-"que los archivos de proyecto guardados."
+"KiCad encontró cambios autoguardados de su última sesión. Esto normalmente "
+"significa que KiCad se cerró inesperadamente mientras tenías cambios sin "
+"guardar."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
 #, fuzzy
@@ -3188,7 +3184,7 @@ msgstr "Márgenes"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
-msgstr ""
+msgstr "Elige las referencias la base y la cabecera para comparar."
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
 #, fuzzy, c-format
@@ -3456,11 +3452,11 @@ msgstr "Propiedades"
 
 #: common/dialogs/dialog_kicad_diff.cpp:63
 msgid "Before"
-msgstr ""
+msgstr "Antes"
 
 #: common/dialogs/dialog_kicad_diff.cpp:64
 msgid "After"
-msgstr ""
+msgstr "Después"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
 #, fuzzy
@@ -3542,7 +3538,7 @@ msgstr "Carpeta"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
-msgstr ""
+msgstr "Mas nuevo"
 
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
@@ -3580,7 +3576,7 @@ msgstr "Aviso: No hay componentes para guardar"
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
 msgid "%zu conflict(s) require resolution."
-msgstr ""
+msgstr "%zu conflicto(s) precisan resolución."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:217
 #, c-format
@@ -3588,6 +3584,8 @@ msgid ""
 "%zu conflict(s) still need a resolution. Pick Ours, Theirs, or Ancestor for "
 "each one."
 msgstr ""
+"%zu conflicto(s) todavía necesitan una resolución. Elige Nuestro, Suyo o "
+"Antepasado para cada uno."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:220
 #: common/dialogs/dialog_kicad_merge_3way_base.h:65
@@ -3609,6 +3607,8 @@ msgstr "Conflictos"
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
 msgstr ""
+"Resuelve cada conflicto eligiendo que cara mantener, entonces pincha en "
+"Aplicar."
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:31
 #: eeschema/erc/erc_item.cpp:38
@@ -3622,11 +3622,11 @@ msgstr "Nombre de pin en el interior"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
-msgstr ""
+msgstr "Nuestro"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:64
 msgid "Theirs"
-msgstr ""
+msgstr "Suyo"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
 #, fuzzy
@@ -6811,7 +6811,7 @@ msgstr "Restablecer valores predeterminados"
 #: common/diff_merge/auto_resolution.cpp:265
 #, c-format
 msgid "%zu property edit(s) in this resolution.\n"
-msgstr ""
+msgstr "%zu propiedad(es) editada(s) en esta resolución.\n"
 
 #: common/diff_merge/diff_job_output.cpp:88
 #, fuzzy
@@ -9140,7 +9140,7 @@ msgstr ""
 
 #: common/io/eagle/eagle_bin_parser.cpp:2212
 msgid "Eagle binary file has no drawing section."
-msgstr ""
+msgstr "El archivo binario de Eagle no contiene sección de dibujo."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2230
 msgid "Eagle binary layout is missing a board/libraries node."
@@ -10821,6 +10821,7 @@ msgstr "El esquema de meta datos del proveedor remoto '%s' es ilegible."
 #, c-format
 msgid "Remote provider metadata failed schema validation: %s"
 msgstr ""
+"Los metadatos del proveedor remoto fallaron en la validación del esquema: %s"
 
 #: common/remote_provider_metadata.cpp:124
 #, fuzzy, c-format
@@ -10837,21 +10838,25 @@ msgstr ""
 
 #: common/remote_provider_metadata.cpp:154
 msgid "Remote provider metadata must enable web_ui_v1."
-msgstr ""
+msgstr "Los metadatos del proveedor remoto deben habilitar web_ui_v1."
 
 #: common/remote_provider_metadata.cpp:161
 msgid ""
 "Remote provider metadata must enable direct_downloads_v1, "
 "inline_payloads_v1, or both."
 msgstr ""
+"Los metadatos del proveedor remoto deben habilitar direct_downloads_v1, "
+"inline_payloads_v1, o ambos."
 
 #: common/remote_provider_metadata.cpp:168
 msgid "Remote provider metadata must define session_bootstrap_url for oauth2."
 msgstr ""
+"Los metadatos del proveedor remoto debe definir session_bootstrap_url para "
+"oauth2."
 
 #: common/remote_provider_metadata.cpp:191
 msgid "session_bootstrap_url must share the same origin as panel_url."
-msgstr ""
+msgstr "La URL session_bootstrap_url debe tener el mismo origen que panel_url."
 
 #: common/remote_provider_models.cpp:44
 #, fuzzy, c-format
@@ -10864,16 +10869,18 @@ msgstr ""
 #: common/remote_provider_models.cpp:50
 msgid "OAuth metadata must include authorization_endpoint and token_endpoint."
 msgstr ""
+"Los metadatos de OAuth deben incluir authorization_endpoint y token_endpoint."
 
 #: common/remote_provider_models.cpp:98
 #, c-format
 msgid "Remote provider manifest schema '%s' is not readable."
-msgstr ""
+msgstr "El esquema del manifiesto del proveedor remoto '%s' no es legible."
 
 #: common/remote_provider_models.cpp:109
 #, c-format
 msgid "Remote provider manifest failed schema validation: %s"
 msgstr ""
+"El manifiesto del proveedor remoto falló en la validación del esquema: %s"
 
 #: common/remote_provider_models.cpp:147
 #, fuzzy, c-format
@@ -10886,6 +10893,8 @@ msgid ""
 "%s must use HTTPS unless allow_insecure_localhost is enabled for a loopback "
 "URL."
 msgstr ""
+"%s debe usar HTTPS a no ser que allow_insecure_localhost esté activado para "
+"una URL de loopback."
 
 #: common/richio.cpp:59 eeschema/tools/sch_drawing_tools.cpp:3328
 #, c-format
@@ -12514,7 +12523,7 @@ msgstr "Ignorar otros ajustes"
 
 #: common/widgets/editor_tabs_panel.cpp:641
 msgid "Close Tabs to the Right"
-msgstr ""
+msgstr "Cerrar Pestañas a la Derecha"
 
 #: common/widgets/editor_tabs_panel.cpp:642
 #, fuzzy
@@ -14328,7 +14337,7 @@ msgstr "Los nombres de las señales no pueden contener espacios"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:178
 msgid "Connection graph not available."
-msgstr ""
+msgstr "Gráfico de conexión no disponible."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:184
 #, fuzzy, c-format
@@ -22163,6 +22172,8 @@ msgstr ""
 #: eeschema/remote_symbol_download_manager.cpp:49
 msgid "Remote asset URL origin must match the selected provider."
 msgstr ""
+"El origen de la URL del asset remoto debe coincidir con el proveedor "
+"seleccionado."
 
 #: eeschema/remote_symbol_download_manager.cpp:66
 #, fuzzy, c-format
@@ -22171,36 +22182,38 @@ msgstr "No se pudo leer '%s'."
 
 #: eeschema/remote_symbol_download_manager.cpp:124
 msgid "Remote asset manifest declared an invalid size."
-msgstr ""
+msgstr "El manifiesto del asset remoto declaró un tamaño inválido."
 
 #: eeschema/remote_symbol_download_manager.cpp:130
 msgid "Remote asset manifest must declare sha256 for URL-based downloads."
 msgstr ""
+"El manifiesto del asset remoto debe declarar sha256 para las descargas "
+"basadas en URL."
 
 #: eeschema/remote_symbol_download_manager.cpp:139
 msgid "Remote asset exceeds the provider download limit."
-msgstr ""
+msgstr "El asset remoto supera el límite de descarga del proveedor."
 
 #: eeschema/remote_symbol_download_manager.cpp:150
 #, c-format
 msgid "Remote download failed with HTTP %d."
-msgstr ""
+msgstr "La descarga remota falló con HTTP %d."
 
 #: eeschema/remote_symbol_download_manager.cpp:156
 msgid "Remote asset content type did not match the manifest."
-msgstr ""
+msgstr "El tipo de contenido del asset remoto no coincidió con el manifiesto."
 
 #: eeschema/remote_symbol_download_manager.cpp:162
 msgid "Remote asset size did not match the manifest."
-msgstr ""
+msgstr "El tamaño del asset remoto no coincidió con el manifiesto."
 
 #: eeschema/remote_symbol_download_manager.cpp:168
 msgid "Remote asset exceeds the remaining download limit."
-msgstr ""
+msgstr "El asset remoto excedió el límite de descarga restante."
 
 #: eeschema/remote_symbol_download_manager.cpp:174
 msgid "Remote asset digest did not match the manifest."
-msgstr ""
+msgstr "El digest del asset remoto no coincidió con el manifiesto."
 
 #: eeschema/remote_symbol_import_job.cpp:52
 #, fuzzy
@@ -30109,7 +30122,7 @@ msgstr "Mueve el/los elemento/s seleccionado/s una distancia exacta"
 
 #: eeschema/tools/sch_group_tool.cpp:53 eeschema/tools/sch_group_tool.cpp:61
 msgid "Child items cannot be grouped separately from their parent item."
-msgstr ""
+msgstr "Los items hijos no pueden ser agrupados separadamente de su item padre."
 
 #: eeschema/tools/sch_group_tool.cpp:90 pcbnew/tools/pcb_group_tool.cpp:82
 msgid "Click on new member..."
@@ -30638,7 +30651,7 @@ msgstr "La carga útil comprimida estaba vacía."
 #: eeschema/widgets/panel_remote_symbol.cpp:132
 #, c-format
 msgid "Decompressed size %llu exceeds limit %llu."
-msgstr ""
+msgstr "El tamaño descomprimido %llu supera el límite %llu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:143
 #, c-format
@@ -30647,7 +30660,7 @@ msgstr "La descompresión ZSTD ha fallado: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:183
 msgid "Reload current provider page"
-msgstr ""
+msgstr "Recarga la página del proveedor actual"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:188
 #, fuzzy
@@ -30666,7 +30679,7 @@ msgstr "No se pudieron cargar los datos remotos de '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:646
 msgid "A remote provider sign-in flow is already in progress."
-msgstr ""
+msgstr "Ya hay un flujo de inicio de sesión con el proveedor remoto en proceso."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:678
 #, fuzzy
@@ -30695,6 +30708,7 @@ msgstr "Falta el identificador de sesión."
 #: eeschema/widgets/panel_remote_symbol.cpp:774
 msgid "Session identifier did not match the active provider session."
 msgstr ""
+"El identificador de sesión no coincidió con la sesión activa del proveedor."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:862
 #, fuzzy
@@ -30759,21 +30773,23 @@ msgstr "Tipo de carga útil de huella no soportado."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1389
 msgid "Remote provider metadata is not loaded."
-msgstr ""
+msgstr "Los metadatos del proveedor remoto no están cargados."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1419
 msgid ""
 "Manifest assets require asset_type, content_type, size_bytes, and "
 "download_url."
 msgstr ""
+"Los assets del manifiesto requieren asset_type, content_type, size_bytes, y "
+"download_url."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1455
 msgid "Remote provider sign-in was cancelled or failed."
-msgstr ""
+msgstr "El inicio de sesión con el proveedor remoto fue cancelado o falló."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1466
 msgid "Remote provider sign-in failed."
-msgstr ""
+msgstr "El inicio de sesión con el proveedor remoto falló."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1482
 #, fuzzy
@@ -35505,7 +35521,7 @@ msgstr "Configurar rutas..."
 
 #: kicad/project_tree_pane.cpp:1040
 msgid "Set or change the default remote URL and credentials"
-msgstr ""
+msgstr "Establece o cambia la URL remota por defecto y las credenciales"
 
 #: kicad/project_tree_pane.cpp:1043
 msgid "Commit Project..."
@@ -35522,7 +35538,7 @@ msgstr "Última confirmación"
 
 #: kicad/project_tree_pane.cpp:1048
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "Reescribe el commit más reciente en la rama actual"
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Push"
@@ -35617,6 +35633,8 @@ msgid ""
 "A Git operation is still running.\n"
 "Keep waiting, or abandon?"
 msgstr ""
+"Se está ejecutando una operación de Git.\n"
+"¿Continuar esperando o abandonar?"
 
 #: kicad/project_tree_pane.cpp:1749
 #, fuzzy
@@ -35676,12 +35694,12 @@ msgstr "Ancho de radio resuelto: %s."
 
 #: kicad/project_tree_pane.cpp:2061
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "Cambios obtenidos (avance rápido)."
 
 #: kicad/project_tree_pane.cpp:2062
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "Obtenido %s dentro de %s (avance rápido)."
 
 #: kicad/project_tree_pane.cpp:2067
 #, fuzzy
@@ -35701,6 +35719,11 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"Hay un conflicto entre tus cambios locales y los cambios remotos, por lo que "
+"se canceló el pull y no se hizo ningún cambio.\n"
+"\n"
+"Puedes descartar tus commits locales y usar la versión remota, o aplicar "
+"rebase a tus commits sobre el remoto."
 
 #: kicad/project_tree_pane.cpp:2082
 #, fuzzy
@@ -35709,11 +35732,12 @@ msgstr "Conflictos"
 
 #: kicad/project_tree_pane.cpp:2085
 msgid "&Use Remote (discard my changes)"
-msgstr ""
+msgstr "&Use Remote (descartar mis cambios)"
 
 #: kicad/project_tree_pane.cpp:2085
+#, fuzzy
 msgid "&Rebase"
-msgstr ""
+msgstr "&Rebase"
 
 #: kicad/project_tree_pane.cpp:2092
 #, fuzzy
@@ -35769,14 +35793,22 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
+"Push rechazado: tu rama local y %s han divergido.\n"
+"\n"
+"Esto suele ocurrir después de modificar (amend) o reescribir un commit que "
+"ya había sido pushado.  ¿Forzar push para sobrescribir el remoto?\n"
+"\n"
+"Cualquiera que ya haya hecho pull de la versión anterior necesitará resetear "
+"su copia."
 
 #: kicad/project_tree_pane.cpp:2171
 msgid "Force Push?"
-msgstr ""
+msgstr "¿Forzar Push?"
 
 #: kicad/project_tree_pane.cpp:2173
+#, fuzzy
 msgid "&Force Push"
-msgstr ""
+msgstr "&Force Push"
 
 #: kicad/project_tree_pane.cpp:2182
 #, fuzzy
@@ -35837,10 +35869,14 @@ msgid ""
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"El último commit ya ha sido pushado a %s.\n"
+"\n"
+"Hacer amend reescribe el historial público.  Cualquiera que haya obtenido "
+"(pull) este commit necesitará resetear su copia."
 
 #: kicad/project_tree_pane.cpp:2812
 msgid "Amend Published Commit?"
-msgstr ""
+msgstr "¿Modificar commit ya publicado?"
 
 #: kicad/project_tree_pane.cpp:2814 kicad/project_tree_pane.cpp:2859
 #, fuzzy
@@ -41899,12 +41935,12 @@ msgstr "Mostrar las reglas de diseño."
 
 #: pcbnew/dialogs/dialog_drc.cpp:518
 msgid "Elapsed: 0 s"
-msgstr ""
+msgstr "Transcurrido: 0 s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:533
-#, c-format
+#, c-format, fuzzy
 msgid "%1$d min %2$d s"
-msgstr ""
+msgstr "%1$d min %2$d s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:535
 #, fuzzy, c-format
@@ -42525,7 +42561,7 @@ msgstr "Archivo de salida de modelo 3D"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:412
 msgid "Please save the board before exporting STEP."
-msgstr ""
+msgstr "Guarda la placa antes de exportar a STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:419
 msgid ""
