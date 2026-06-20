@@ -466,4 +466,74 @@ BOOST_AUTO_TEST_CASE( TestEmbeddedFilesPersistedInHierarchy )
 }
 
 
+/**
+ * Regression for #24664: text variables in a hierarchical sheet's "Sheet file" field
+ * must be resolved when locating the file on disk, while the stored field stays raw.
+ */
+BOOST_AUTO_TEST_CASE( TestLoadSheetFileWithTextVariable )
+{
+    m_schematic->CreateDefaultScreens();
+
+    std::vector<SCH_SHEET*> topSheets = m_schematic->GetTopLevelSheets();
+    BOOST_REQUIRE( !topSheets.empty() );
+
+    SCH_SCREEN* screen = topSheets[0]->GetScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    m_project->GetTextVars()[wxT( "SUBSHEET_FILE" )] = wxT( "resolved_subsheet" );
+
+    SCH_SHEET*  subSheet = new SCH_SHEET( m_schematic.get() );
+    SCH_SCREEN* subScreen = new SCH_SCREEN( m_schematic.get() );
+    subSheet->SetName( "SubSheet" );
+    subSheet->SetScreen( subScreen );
+    subSheet->SetFileName( "${SUBSHEET_FILE}.kicad_sch" );
+    screen->Append( subSheet );
+
+    // Save the sub-sheet at the resolved path next to the main file, where the loader looks.
+    wxString mainFileName = GetTempFileName( "tv_main" );
+    mainFileName += ".kicad_sch";
+    m_tempFiles.push_back( mainFileName );
+
+    wxFileName subOnDisk( mainFileName );
+    subOnDisk.SetFullName( "resolved_subsheet.kicad_sch" );
+    wxString subFileName = subOnDisk.GetFullPath();
+    m_tempFiles.push_back( subFileName );
+    subScreen->SetFileName( subFileName );
+
+    SCH_IO_KICAD_SEXPR io;
+    BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( mainFileName, topSheets[0], m_schematic.get() ) );
+    BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( subFileName, subSheet, m_schematic.get() ) );
+
+    m_schematic->Reset();
+    SCH_SHEET* defaultSheet = m_schematic->GetTopLevelSheet( 0 );
+    SCH_SHEET* loadedSheet = nullptr;
+    BOOST_REQUIRE_NO_THROW( loadedSheet = io.LoadSchematicFile( mainFileName, m_schematic.get() ) );
+    BOOST_REQUIRE( loadedSheet != nullptr );
+
+    m_schematic->AddTopLevelSheet( loadedSheet );
+    m_schematic->RemoveTopLevelSheet( defaultSheet );
+    delete defaultSheet;
+    m_schematic->RefreshHierarchy();
+
+    SCH_SHEET* loadedSub = nullptr;
+
+    for( SCH_ITEM* item : loadedSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+        loadedSub = static_cast<SCH_SHEET*>( item );
+
+    BOOST_REQUIRE( loadedSub != nullptr );
+
+    // Stored field keeps the raw variable for portability.
+    BOOST_CHECK_EQUAL( loadedSub->GetFileName(), wxString( "${SUBSHEET_FILE}.kicad_sch" ) );
+
+    // Screen must load from the resolved file, not the literal ${...} path.
+    BOOST_REQUIRE( loadedSub->GetScreen() != nullptr );
+    BOOST_CHECK_MESSAGE( !loadedSub->GetScreen()->GetFileName().Contains( "${" ),
+                         "Sub-sheet screen filename still contains an unresolved text variable: "
+                                 + loadedSub->GetScreen()->GetFileName() );
+
+    wxFileName loadedScreenFn( loadedSub->GetScreen()->GetFileName() );
+    BOOST_CHECK_EQUAL( loadedScreenFn.GetFullName(), wxString( "resolved_subsheet.kicad_sch" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
