@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-19 15:02+0000\n"
+"PO-Revision-Date: 2026-06-20 20:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -9013,14 +9013,12 @@ msgid "File is too small to be an Eagle binary board."
 msgstr "Eagleバイナリ基板としてはファイル サイズが小さすぎます。"
 
 #: common/io/eagle/eagle_bin_parser.cpp:2380
-#, fuzzy
 msgid "Eagle binary schematic has no drawing section."
-msgstr "Eagleバイナリファイルに描画セクションが見つからない。"
+msgstr "Eagleバイナリ回路図に描画セクションが見つからない。"
 
 #: common/io/eagle/eagle_bin_parser.cpp:2385
-#, fuzzy
 msgid "Eagle binary file has no schematic section."
-msgstr "Eagleバイナリファイルに描画セクションが見つからない。"
+msgstr "Eagle バイナリ ファイルに回路図セクションが見つからない。"
 
 #: common/io/eagle/eagle_parser.cpp:284
 #, c-format
@@ -33061,7 +33059,6 @@ msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr "外観プリセット。オプション:%s,%s またはユーザー定義のプリセット名"
 
 #: kicad/cli/command_pcb_render.cpp:266
-#, fuzzy
 msgid "Use colors defined in the board stackup instead of those in the preset"
 msgstr "基板積層構造で定義された色はプリセットの色を上書きします"
 
@@ -41568,15 +41565,16 @@ msgid "Update/reset 3D models"
 msgstr "3D モデルを更新/リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:145
-#, fuzzy
 msgid "Reset scale"
-msgstr "表示をリセット"
+msgstr "スケールをリセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:146
 msgid ""
 "Reset the footprint scale to 1 when changing to a different library "
 "footprint. Unchecked: keep the existing scale."
 msgstr ""
+"別のライブラリのフットプリントに変更するときフットプリントのスケールを1に"
+"リセットします。チェックを外すと既存のスケールが維持されます。"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:150
 msgid "Match pad positions"
@@ -50803,6 +50801,8 @@ msgstr "スルーホール パッドに穴がない"
 #: pcbnew/drc/drc_item.cpp:301
 msgid "Footprint with pads is scaled (physical part size unchanged)"
 msgstr ""
+"パッド付きフットプリントはスケールされています(物理的な部品寸法は変わりませ"
+"ん)"
 
 #: pcbnew/drc/drc_item.cpp:305
 msgid "Mirrored text on front layer"
@@ -52988,15 +52988,13 @@ msgstr "PTH用のサーマルリリーフ"
 
 #: pcbnew/footprint.cpp:5087 pcbnew/widgets/pcb_properties_panel.cpp:749
 #: pcbnew/widgets/pcb_properties_panel.cpp:848
-#, fuzzy
 msgid "Scale X"
-msgstr "2倍"
+msgstr "スケール X"
 
 #: pcbnew/footprint.cpp:5091 pcbnew/widgets/pcb_properties_panel.cpp:749
 #: pcbnew/widgets/pcb_properties_panel.cpp:849
-#, fuzzy
 msgid "Scale Y"
-msgstr "2倍"
+msgstr "スケール Y"
 
 #: pcbnew/footprint.cpp:5121
 msgid "Not in Schematic"
@@ -55586,9 +55584,9 @@ msgid "Loading unicode strings..."
 msgstr "Unicode文字列を読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4625
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "配線長の調整パターン"
+msgstr "配線長の調整パターン %d 個をインポートした。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4636
 msgid "Loading text..."
@@ -60463,12 +60461,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:1829
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Shared components:\n"
 "%s"
 msgstr ""
-"目標領域のコンポーネント:\n"
+"共有されたコンポーネント:\n"
 "%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:1897
@@ -63979,9 +63977,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:794
-#, fuzzy
 msgid "Scale footprint with pads?"
-msgstr "パッドのないフットプリントを除外する"
+msgstr "パッドでフットプリントをスケールする？"
 
 #: pcbnew/widgets/search_handlers.cpp:229 pcbnew/zone.cpp:1080
 #: pcbnew/zone.cpp:2262
