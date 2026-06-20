@@ -374,7 +374,13 @@ int LIB_TREE::GetSelectedTreeNodes( std::vector<LIB_TREE_NODE*>& aSelection ) co
 
 void LIB_TREE::SelectLibId( const LIB_ID& aLibId )
 {
-    selectIfValid( m_adapter->FindItem( aLibId ) );
+    wxDataViewItem item = m_adapter->FindItem( aLibId );
+
+    // Expand the parent library so the row is visible and can be selected/scrolled to.
+    if( item.IsOk() )
+        m_tree_ctrl->ExpandAncestors( item );
+
+    selectIfValid( item );
 }
 
 

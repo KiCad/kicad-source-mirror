@@ -289,6 +289,7 @@ void PANEL_FOOTPRINT_CHOOSER::FinishSetup()
 
 void PANEL_FOOTPRINT_CHOOSER::SetPreselect( const LIB_ID& aPreselect )
 {
+    m_preselect = aPreselect;
     m_adapter->SetPreselectNode( aPreselect, 0 );
 
     if( m_tree && aPreselect.IsValid() )
@@ -326,8 +327,18 @@ void PANEL_FOOTPRINT_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
 
 void PANEL_FOOTPRINT_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
 {
+    // Freeze across both steps so the expand and the re-scroll paint as a single final
+    // state, otherwise the selected row visibly shifts and snaps back.
+    m_tree->Freeze();
+
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
         m_adapter->OpenLibs( cfg->m_LibTree.open_libs );
+
+    // OpenLibs reshuffles the tree, so re-assert the preselected footprint.
+    if( m_preselect.IsValid() )
+        m_tree->SelectLibId( m_preselect );
+
+    m_tree->Thaw();
 }
 
 
