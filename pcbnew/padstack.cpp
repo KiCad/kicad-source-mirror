@@ -628,6 +628,9 @@ void PADSTACK::SetBackdrillEndLayer( bool aTop, PCB_LAYER_ID aLayer )
     if( target )
     {
         target->end = aLayer;
+
+        if( aLayer == UNDEFINED_LAYER )
+            target->size = { 0, 0 };
     }
 }
 
