@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-20 20:01+0000\n"
+"PO-Revision-Date: 2026-06-22 01:58+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -14215,9 +14215,8 @@ msgid "Please enter a name for the net chain."
 msgstr "Proszę wprowadzić nazwę dla łańcucha sieci."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:169
-#, fuzzy
 msgid "Chain name cannot contain spaces, quotes, or parentheses."
-msgstr "Nazwy sygnałów nie mogą zawierać spacji"
+msgstr "Nazwy łańcuchów nie mogą zawierać spacji, cudzysłowa lub nawiasów."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:178
 msgid "Connection graph not available."
@@ -14378,9 +14377,8 @@ msgid "Chain Name:"
 msgstr "Nazwa łańcucha:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:145
-#, fuzzy
 msgid "Re-detect potential net chains from the schematic"
-msgstr "Usuwa istniejący wariant projektu ze schematu."
+msgstr "Ponowne wykrycie potencjalnych łańcuchów sieci ze schematu"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 msgid "Connected to database successfully"
@@ -22957,9 +22955,8 @@ msgid "Invalid DipTrace schematic magic length: %d (expected 7 or 11)."
 msgstr ""
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:306
-#, fuzzy
 msgid "Invalid DipTrace schematic file: bad magic header."
-msgstr "Nieprawidłowy nagłówek pliku Sprint Layout"
+msgstr "Nieprawidłowy plik schematu DipTrace: błędny magic header."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:320
 msgid "Invalid DipTrace schematic file: bad legacy version suffix."
@@ -27789,9 +27786,8 @@ msgstr ""
 "bibliotece"
 
 #: eeschema/tools/sch_actions.cpp:67
-#, fuzzy
 msgid "Compare Schematic with File..."
-msgstr "Zapisz na schemacie oraz do pliku"
+msgstr "Porównaj schemat z plikiem..."
 
 #: eeschema/tools/sch_actions.cpp:68
 msgid "Diff the current schematic against another .kicad_sch file"
@@ -29986,16 +29982,13 @@ msgid "Choose Schematic to Compare With"
 msgstr "Wybierz schemat"
 
 #: eeschema/tools/sch_inspection_tool.cpp:584
-#, fuzzy
 msgid "Select a KiCad s-expression schematic file (.kicad_sch)."
-msgstr "Pliki schematów S-expression programu KiCad"
+msgstr "Wybierz plik schematu S-expression programu KiCad (.kicad_sch)."
 
 #: eeschema/tools/sch_inspection_tool.cpp:602
 #: eeschema/tools/sch_inspection_tool.cpp:668
-#, fuzzy
 msgid "Select a schematic file from another project to compare."
-msgstr ""
-"Dołącza zawartość arkusza schematu z innego projektu do obecnego arkusza"
+msgstr "Wybierz plik schematu z innego projektu w celu porównania."
 
 #: eeschema/tools/sch_inspection_tool.cpp:629
 #: eeschema/tools/sch_inspection_tool.cpp:636
@@ -30011,9 +30004,9 @@ msgstr "Nie udało się załadować projektu dla %s"
 #: eeschema/tools/sch_inspection_tool.cpp:1181
 #: pcbnew/tools/board_inspection_tool.cpp:2131
 #: pcbnew/tools/board_inspection_tool.cpp:2138
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s"
-msgstr "Nie można załadować '%s'."
+msgstr "Nie można załadować %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:858
 msgid "Save the schematic before comparing against local history."
@@ -30021,9 +30014,8 @@ msgstr "Zapisuje zmiany w schemacie przed porównaniem z lokalną histrorią."
 
 #: eeschema/tools/sch_inspection_tool.cpp:869
 #: pcbnew/tools/board_inspection_tool.cpp:2183
-#, fuzzy
 msgid "No local history snapshots for this project."
-msgstr "Wyłącza integrację z Git dla tego projektu"
+msgstr "Brak migawek z historii lokalnej dla tego projektu."
 
 #: eeschema/tools/sch_inspection_tool.cpp:906
 msgid "No local history snapshots change this schematic."
@@ -55891,9 +55883,9 @@ msgid "Loading unicode strings..."
 msgstr "Wczytywanie treści Unicode..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4625
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "Wzorce dostrajania długości"
+msgstr "Zaimportowano %d wzorców dostrajania długości."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4636
 msgid "Loading text..."
@@ -60626,9 +60618,8 @@ msgid "Select a KiCad footprint library folder (ends with .pretty)."
 msgstr "Proszę wybrać plik z tabelą bibliotek footprintów."
 
 #: pcbnew/tools/footprint_editor_control.cpp:674
-#, fuzzy
 msgid "Select a different .pretty folder than the active library."
-msgstr "Przydziela inny footprint z biblioteki"
+msgstr "Wybierz inny folder .pretty niż aktywna biblioteka."
 
 #: pcbnew/tools/footprint_editor_control.cpp:833
 msgid "No datasheet found in the footprint."
@@ -64424,9 +64415,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:794
-#, fuzzy
 msgid "Scale footprint with pads?"
-msgstr "Wyklucz wszystkie footprinty które nie posiadają pól"
+msgstr "Przeskalować footprint wraz z padami?"
 
 #: pcbnew/widgets/search_handlers.cpp:229 pcbnew/zone.cpp:1080
 #: pcbnew/zone.cpp:2262
