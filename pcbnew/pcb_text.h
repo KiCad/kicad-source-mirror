@@ -99,8 +99,10 @@ public:
     VECTOR2I GetTextPos() const override;
     void     Offset( const VECTOR2I& aOffset ) override;
 
-    // Lib-frame setter for the parser. SetTextPos treats input as board frame.
+    // Lib-frame setters for the parser (board-frame setters bake the parent scale).
     void SetLibTextPos( const VECTOR2I& aPos );
+    void SetLibTextSize( const VECTOR2I& aSize );
+    void SetLibTextThickness( int aWidth );
 
     VECTOR2I GetTextSize() const override;
     void     SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize = true ) override;

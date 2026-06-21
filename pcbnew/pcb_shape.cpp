@@ -60,29 +60,9 @@ struct BOARD_ELLIPSE
 };
 
 
-// SVD of M = R(theta) * diag(sx, sy) * R(phi) * diag(a, b). Returns the board
-// ellipse's major / minor / rotation plus the parametric angle shift to apply
-// to lib start / end angles (for ELLIPSE_ARC).
-static BOARD_ELLIPSE decomposeBoardEllipse( const TRANSFORM_TRS& aXform, int aLibMajor, int aLibMinor,
-                                            const EDA_ANGLE& aLibRotation )
+// SVD of a 2x2 matrix into ellipse major / minor / rotation and the arc angle shift.
+static BOARD_ELLIPSE decompose2x2( double m00, double m01, double m10, double m11 )
 {
-    const double sx = aXform.GetScaleX();
-    const double sy = aXform.GetScaleY();
-    // Lib rotation and xform rotation use opposite signs, negate to match.
-    const double theta = -aXform.GetRotate().AsRadians();
-    const double phi = aLibRotation.AsRadians();
-    const double cTheta = std::cos( theta );
-    const double sTheta = std::sin( theta );
-    const double cPhi = std::cos( phi );
-    const double sPhi = std::sin( phi );
-    const double a = aLibMajor;
-    const double b = aLibMinor;
-
-    const double m00 = a * ( sx * cTheta * cPhi - sy * sTheta * sPhi );
-    const double m01 = -b * ( sx * cTheta * sPhi + sy * sTheta * cPhi );
-    const double m10 = a * ( sx * sTheta * cPhi + sy * cTheta * sPhi );
-    const double m11 = b * ( -sx * sTheta * sPhi + sy * cTheta * cPhi );
-
     const double A = m00 * m00 + m10 * m10;
     const double B = m00 * m01 + m10 * m11;
     const double C = m01 * m01 + m11 * m11;
@@ -133,6 +113,55 @@ static BOARD_ELLIPSE decomposeBoardEllipse( const TRANSFORM_TRS& aXform, int aLi
     out.rotation = EDA_ANGLE( std::atan2( u0y, u0x ), RADIANS_T );
     out.startShift = EDA_ANGLE( -std::atan2( v0y, v0x ), RADIANS_T );
     return out;
+}
+
+
+// Board ellipse from a lib ellipse: M = R(theta) * diag(sx, sy) * R(phi) * diag(a, b).
+static BOARD_ELLIPSE decomposeBoardEllipse( const TRANSFORM_TRS& aXform, int aLibMajor, int aLibMinor,
+                                            const EDA_ANGLE& aLibRotation )
+{
+    const double sx = aXform.GetScaleX();
+    const double sy = aXform.GetScaleY();
+    // Lib rotation and xform rotation use opposite signs, negate to match.
+    const double theta = -aXform.GetRotate().AsRadians();
+    const double phi = aLibRotation.AsRadians();
+    const double cTheta = std::cos( theta );
+    const double sTheta = std::sin( theta );
+    const double cPhi = std::cos( phi );
+    const double sPhi = std::sin( phi );
+    const double a = aLibMajor;
+    const double b = aLibMinor;
+
+    const double m00 = a * ( sx * cTheta * cPhi - sy * sTheta * sPhi );
+    const double m01 = -b * ( sx * cTheta * sPhi + sy * sTheta * cPhi );
+    const double m10 = a * ( sx * sTheta * cPhi + sy * cTheta * sPhi );
+    const double m11 = b * ( -sx * sTheta * sPhi + sy * cTheta * cPhi );
+
+    return decompose2x2( m00, m01, m10, m11 );
+}
+
+
+// Inverse of decomposeBoardEllipse: lib ellipse from a board ellipse.
+static BOARD_ELLIPSE composeLibEllipse( const TRANSFORM_TRS& aXform, double aBoardMajor, double aBoardMinor,
+                                        const EDA_ANGLE& aBoardRotation )
+{
+    const double sx = aXform.GetScaleX();
+    const double sy = aXform.GetScaleY();
+    const double theta = -aXform.GetRotate().AsRadians();
+    const double beta = aBoardRotation.AsRadians();
+
+    const double li00 = std::cos( theta ) / sx;
+    const double li01 = std::sin( theta ) / sx;
+    const double li10 = -std::sin( theta ) / sy;
+    const double li11 = std::cos( theta ) / sy;
+
+    const double e00 = aBoardMajor * std::cos( beta );
+    const double e01 = -aBoardMinor * std::sin( beta );
+    const double e10 = aBoardMajor * std::sin( beta );
+    const double e11 = aBoardMinor * std::cos( beta );
+
+    return decompose2x2( li00 * e00 + li01 * e10, li00 * e01 + li01 * e11, li10 * e00 + li11 * e10,
+                         li10 * e01 + li11 * e11 );
 }
 } // namespace
 
@@ -876,6 +905,13 @@ void PCB_SHAPE::SetWidth( int aWidth )
 }
 
 
+void PCB_SHAPE::SetLibStrokeWidth( int aWidth )
+{
+    m_stroke.SetWidth( aWidth );
+    m_hatchingDirty = true;
+}
+
+
 STROKE_PARAMS PCB_SHAPE::GetStroke() const
 {
     STROKE_PARAMS s = m_stroke;
@@ -1260,6 +1296,17 @@ void PCB_SHAPE::syncLibCoords()
                 m_libEllipseRotation = GetEllipseRotation() + xform.GetRotate();
                 m_libEllipseStartAngle = GetEllipseStartAngle();
                 m_libEllipseEndAngle = GetEllipseEndAngle();
+            }
+            else
+            {
+                // Non-uniform scale shears the ellipse, so invert the whole board ellipse to lib.
+                BOARD_ELLIPSE le = composeLibEllipse( xform, GetEllipseMajorRadius(), GetEllipseMinorRadius(),
+                                                      GetEllipseRotation() );
+                m_libEllipseMajorRadius = KiROUND( le.major );
+                m_libEllipseMinorRadius = KiROUND( le.minor );
+                m_libEllipseRotation = le.rotation;
+                m_libEllipseStartAngle = GetEllipseStartAngle() + le.startShift;
+                m_libEllipseEndAngle = GetEllipseEndAngle() + le.startShift;
             }
         }
         else

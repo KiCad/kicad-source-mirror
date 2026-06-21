@@ -82,6 +82,7 @@ set( QA_PCBNEW_SRCS
     test_pad_tenting.cpp
     test_plot_edge_cuts_drill_marks.cpp
     test_plot_pad_mask.cpp
+    test_plot_footprint_scaled_text.cpp
     test_pcb_textbox.cpp
     test_prettifier.cpp
     test_pcb_render_settings.cpp

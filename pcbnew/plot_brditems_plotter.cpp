@@ -759,6 +759,7 @@ void BRDITEMS_PLOTTER::PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, boo
     const VECTOR2I& pos = aText->GetTextPos();
 
     TEXT_ATTRIBUTES attrs = aText->GetAttributes();
+    attrs.m_Size = aText->GetTextSize();
     attrs.m_StrokeWidth = aText->GetEffectiveTextPenWidth();
     attrs.m_Angle = aText->GetDrawRotation();
     attrs.m_Multiline = false;

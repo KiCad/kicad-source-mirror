@@ -4210,4 +4210,164 @@ BOOST_AUTO_TEST_CASE( DoubleFlipIsIdentityScaledRotated )
 }
 
 
+// Stroke width and text size must survive save/reload under a footprint scale.
+BOOST_AUTO_TEST_CASE( ScalarAttributesStableAcrossSaveLoadUnderScale )
+{
+    auto       board = std::make_unique<BOARD>();
+    PAD*       pad;
+    PCB_SHAPE* seg;
+    PCB_TEXT*  txt;
+    PCB_POINT* pt;
+    FOOTPRINT* fp =
+            buildCoincidentFootprint( *board, ANGLE_0, 2.0, 2.0, VECTOR2I( 53000000, 51000000 ), pad, seg, txt, pt );
+
+    // Author board frame attributes while the 2x scale is active.
+    seg->SetWidth( 400000 );
+    txt->SetTextSize( VECTOR2I( 2000000, 1000000 ) );
+
+    const int      segWidth = seg->GetStroke().GetWidth();
+    const VECTOR2I txtSize = txt->GetTextSize();
+
+    std::filesystem::path tmp = std::filesystem::temp_directory_path() / "kicad_qa_scalar_roundtrip.kicad_pcb";
+    KI_TEST::DumpBoardToFile( *board, tmp.string() );
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.string() );
+    std::error_code        ec;
+    std::filesystem::remove( tmp, ec );
+    BOOST_REQUIRE( reloaded );
+
+    FOOTPRINT* r = reloaded->Footprints().front();
+    PCB_SHAPE* rseg = nullptr;
+    PCB_TEXT*  rtxt = nullptr;
+
+    for( BOARD_ITEM* it : r->GraphicalItems() )
+    {
+        if( it->Type() == PCB_SHAPE_T )
+            rseg = static_cast<PCB_SHAPE*>( it );
+        else if( it->Type() == PCB_TEXT_T )
+            rtxt = static_cast<PCB_TEXT*>( it );
+    }
+
+    BOOST_REQUIRE( rseg && rtxt );
+
+    BOOST_CHECK_EQUAL( rseg->GetStroke().GetWidth(), segWidth );
+    BOOST_CHECK_EQUAL( rtxt->GetTextSize().x, txtSize.x );
+    BOOST_CHECK_EQUAL( rtxt->GetTextSize().y, txtSize.y );
+}
+
+
+// Ellipse radii must survive a rebake under non-uniform scale. Uniform is the control.
+BOOST_AUTO_TEST_CASE( EllipseRadiusEditSurvivesRebakeUnderNonUniformScale )
+{
+    auto runCase = []( double aScaleX, double aScaleY )
+    {
+        BOARD      board;
+        FOOTPRINT* fp = new FOOTPRINT( &board );
+        fp->SetPosition( VECTOR2I( 50000000, 50000000 ) );
+        fp->SetTransformScale( aScaleX, aScaleY );
+        board.Add( fp );
+
+        PCB_SHAPE* ell = new PCB_SHAPE( fp, SHAPE_T::ELLIPSE );
+        ell->SetLayer( F_SilkS );
+        fp->Add( ell );
+
+        ell->SetEllipseCenter( VECTOR2I( 50000000, 50000000 ) );
+        ell->SetEllipseMajorRadius( 4000000 );
+        ell->SetEllipseMinorRadius( 1500000 );
+
+        const int majorBefore = ell->GetEllipseMajorRadius();
+        const int minorBefore = ell->GetEllipseMinorRadius();
+
+        // Any transform refresh rebakes children from the lib mirror.
+        fp->SetPosition( fp->GetPosition() + VECTOR2I( 1000000, 0 ) );
+
+        BOOST_CHECK_EQUAL( ell->GetEllipseMajorRadius(), majorBefore );
+        BOOST_CHECK_EQUAL( ell->GetEllipseMinorRadius(), minorBefore );
+    };
+
+    runCase( 2.0, 2.0 ); // control: uniform scale keeps the radii
+    runCase( 2.0, 1.0 ); // non-uniform: radii are lost on rebake
+}
+
+
+// The drawn glyph (used by rendering and DRC) must scale with the footprint.
+BOOST_AUTO_TEST_CASE( ScaledTextGlyphShapeFollowsScale )
+{
+    BOARD      board;
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetPosition( VECTOR2I( 50000000, 50000000 ) );
+    board.Add( fp );
+
+    PCB_TEXT* txt = new PCB_TEXT( fp );
+    txt->SetText( "H" );
+    txt->SetTextPos( VECTOR2I( 50000000, 50000000 ) );
+    txt->SetTextSize( VECTOR2I( 1000000, 1000000 ) );
+    txt->SetLayer( F_SilkS );
+    fp->Add( txt );
+
+    const int maxError = pcbIUScale.mmToIU( 0.01 );
+
+    SHAPE_POLY_SET glyph1x;
+    txt->TransformTextToPolySet( glyph1x, 0, maxError, ERROR_INSIDE );
+    const int height1x = glyph1x.BBox().GetHeight();
+
+    fp->SetTransformScale( 2.0, 2.0 );
+
+    SHAPE_POLY_SET glyph2x;
+    txt->TransformTextToPolySet( glyph2x, 0, maxError, ERROR_INSIDE );
+    const int height2x = glyph2x.BBox().GetHeight();
+
+    BOOST_CHECK_GT( height2x, height1x * 3 / 2 );
+}
+
+
+// Text box size, thickness, and border stroke must survive save/reload under scale.
+BOOST_AUTO_TEST_CASE( TextBoxScalarAttributesStableAcrossSaveLoadUnderScale )
+{
+    auto       board = std::make_unique<BOARD>();
+    FOOTPRINT* fp = new FOOTPRINT( board.get() );
+    fp->SetPosition( VECTOR2I( 50000000, 50000000 ) );
+    fp->SetTransformScale( 2.0, 2.0 );
+    board->Add( fp );
+
+    PCB_TEXTBOX* tb = new PCB_TEXTBOX( fp );
+    tb->SetShape( SHAPE_T::RECTANGLE );
+    tb->SetStart( VECTOR2I( 50000000, 50000000 ) );
+    tb->SetEnd( VECTOR2I( 60000000, 55000000 ) );
+    tb->SetText( wxT( "TB" ) );
+    tb->SetLayer( F_SilkS );
+    tb->SetTextSize( VECTOR2I( 2000000, 1000000 ) );
+    tb->SetTextThickness( 300000 );
+    tb->SetBorderEnabled( true );
+    tb->SetWidth( 400000 );
+    fp->Add( tb );
+
+    const VECTOR2I txtSize = tb->GetTextSize();
+    const int      txtThickness = tb->GetTextThickness();
+    const int      borderWidth = tb->GetStroke().GetWidth();
+
+    std::filesystem::path tmp = std::filesystem::temp_directory_path() / "kicad_qa_textbox_roundtrip.kicad_pcb";
+    KI_TEST::DumpBoardToFile( *board, tmp.string() );
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( tmp.string() );
+    std::error_code        ec;
+    std::filesystem::remove( tmp, ec );
+    BOOST_REQUIRE( reloaded );
+
+    FOOTPRINT*   fp2 = *reloaded->Footprints().begin();
+    PCB_TEXTBOX* tb2 = nullptr;
+
+    for( BOARD_ITEM* it : fp2->GraphicalItems() )
+    {
+        if( it->Type() == PCB_TEXTBOX_T )
+            tb2 = static_cast<PCB_TEXTBOX*>( it );
+    }
+
+    BOOST_REQUIRE( tb2 );
+
+    BOOST_CHECK_EQUAL( tb2->GetTextSize().x, txtSize.x );
+    BOOST_CHECK_EQUAL( tb2->GetTextSize().y, txtSize.y );
+    BOOST_CHECK_EQUAL( tb2->GetTextThickness(), txtThickness );
+    BOOST_CHECK_EQUAL( tb2->GetStroke().GetWidth(), borderWidth );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

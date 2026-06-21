@@ -194,6 +194,8 @@ public:
     // runtime width as before.
     void SetWidth( int aWidth ) override;
 
+    void SetLibStrokeWidth( int aWidth );
+
     void SetShape( SHAPE_T aShape ) override
     {
         EDA_SHAPE::SetShape( aShape );

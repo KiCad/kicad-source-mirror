@@ -528,6 +528,18 @@ void PCB_TEXT::SetLibTextPos( const VECTOR2I& aPos )
 }
 
 
+void PCB_TEXT::SetLibTextSize( const VECTOR2I& aSize )
+{
+    EDA_TEXT::SetTextSize( aSize );
+}
+
+
+void PCB_TEXT::SetLibTextThickness( int aWidth )
+{
+    EDA_TEXT::SetTextThickness( aWidth );
+}
+
+
 EDA_ANGLE PCB_TEXT::GetTextAngle() const
 {
     if( const FOOTPRINT* fp = GetParentFootprint() )
@@ -695,6 +707,7 @@ const SHAPE_POLY_SET& PCB_TEXT::GetKnockoutCache( const KIFONT::FONT* aFont, con
                                                   int aMaxError ) const
 {
     TEXT_ATTRIBUTES attrs = GetAttributes();
+    attrs.m_Size = GetTextSize();
     EDA_ANGLE       drawAngle = GetDrawRotation();
     VECTOR2I        drawPos = GetDrawPos();
 
@@ -763,6 +776,7 @@ void PCB_TEXT::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, 
     wxString                   shownText = GetShownText( true );
 
     attrs.m_Angle = GetDrawRotation();
+    attrs.m_Size = GetTextSize();
 
     // The polygonal shape of a text can have many basic shapes, so combining these shapes can
     // be very useful to create a final shape with a lot less vertices to speedup calculations.

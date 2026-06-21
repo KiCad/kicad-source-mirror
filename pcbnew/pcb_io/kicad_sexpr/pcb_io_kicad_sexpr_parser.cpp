@@ -3991,6 +3991,9 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 
     shape->SetStroke( stroke );
 
+    if( shape->GetParentFootprint() )
+        shape->SetLibStrokeWidth( stroke.GetWidth() );
+
     if( shape->GetShape() == SHAPE_T::ELLIPSE || shape->GetShape() == SHAPE_T::ELLIPSE_ARC )
     {
         shape->SetLibraryEllipse( ellipseCenter, ellipseMajor, ellipseMinor, ellipseRotation, ellipseStart,
@@ -4337,6 +4340,14 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT
         // then the text defaults to the parent position and moving again will double it.
         if( hasPos )
             aText->Move( parentFP->GetPosition() );
+    }
+
+    if( parentFP && !dynamic_cast<PCB_DIMENSION_BASE*>( aBaseText ) && m_requiredVersion >= FIRST_FP_AFFINE_TRANSFORM )
+    {
+        aText->SetLibTextSize( aText->GetTextSize() );
+
+        if( !aText->GetAutoThickness() )
+            aText->SetLibTextThickness( aText->GetTextThickness() );
     }
 }
 

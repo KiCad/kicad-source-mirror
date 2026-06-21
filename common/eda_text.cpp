@@ -721,6 +721,7 @@ EDA_TEXT::GetRenderCache( const KIFONT::FONT* aFont, const wxString& forResolved
             TEXT_ATTRIBUTES             attrs = GetAttributes();
 
             attrs.m_Angle = resolvedAngle;
+            attrs.m_Size = GetTextSize();
 
             font->GetLinesAsGlyphs( &m_render_cache->glyphs, forResolvedText, GetDrawPos() + aOffset, attrs,
                                     getFontMetrics() );
@@ -1160,6 +1161,8 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( bool aTriangula
     wxString                        shownText( GetShownText( true ) );
     VECTOR2I                        drawPos = GetDrawPos();
     TEXT_ATTRIBUTES                 attrs = GetAttributes();
+
+    attrs.m_Size = GetTextSize();
 
     std::vector<std::unique_ptr<KIFONT::GLYPH>>* cache = nullptr;
 
