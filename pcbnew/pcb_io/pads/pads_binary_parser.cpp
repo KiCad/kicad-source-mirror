@@ -730,21 +730,13 @@ void BINARY_PARSER::parseClusters()
         return;
 
     static constexpr size_t  REC_SIZE     = 60;
-    static constexpr size_t  LAYER_STRIDE = 152;
-    static const uint8_t     TOP_FRAME[12] = { 0, 0, 0, 0, 1, 0, 0, 0, 'T', 'o', 'p', 0 };
+    // Section 68 has no locator of its own; it sits immediately before section 69's records and
+    // is defined relative to them. Taking that base by arithmetic rather than by searching for
+    // the "Top" layer frame means a board whose stackup does not resolve emits no clusters.
+    size_t sec69Rec0 = locateLayerStackupBase();
 
-    // A second occurrence makes the locator ambiguous, so bail rather than guess.
-    if( !signatureIsUnique( m_data, TOP_FRAME, sizeof( TOP_FRAME ) ) )
+    if( sec69Rec0 == 0 )
         return;
-
-    NoteScanLocatorUse( "clusterTopFrame" );
-    size_t matchOff = findSignature( m_data, TOP_FRAME, sizeof( TOP_FRAME ) );
-
-    // Use division rather than multiplication so a malformed count cannot overflow.
-    if( matchOff < LAYER_STRIDE )
-        return;
-
-    size_t sec69Rec0 = matchOff - LAYER_STRIDE;
 
     if( sec68->count > sec69Rec0 / REC_SIZE )
         return;
@@ -4758,36 +4750,8 @@ size_t BINARY_PARSER::locateStringPool() const
         }
     }
 
-    NoteScanLocatorUse( "stringPool" );
-
-    size_t lo = sec56->payloadOffset > 4096 ? sec56->payloadOffset - 4096 : 0;
-
-    for( size_t entry = lo; entry + 21 < m_data.size(); ++entry )
-    {
-        uint16_t length = m_cursor.U16At( entry + 5 );
-
-        if( length == 0 || length >= 256 || m_cursor.U32At( entry + 1 ) + length != poolBytes )
-            continue;
-
-        size_t start = entry + 16;
-
-        if( start + poolBytes > m_data.size() )
-            continue;
-
-        size_t textual = 0;
-
-        for( size_t i = 0; i < poolBytes; ++i )
-        {
-            uint8_t byte = m_data[start + i];
-
-            if( byte == 0 || ( byte >= 32 && byte < 127 ) )
-                ++textual;
-        }
-
-        if( textual * 100 >= poolBytes * 98 )
-            return start + poolBytes;
-    }
-
+    // No terminator-search fallback. A board whose drift section 41 does not account for
+    // yields no pool, and everything anchored on it emits nothing rather than being searched for.
     return 0;
 }
 
@@ -4885,50 +4849,8 @@ void BINARY_PARSER::parseRouteVertices()
         }
     }
 
-    // Fallback for the boards that declare no string pool at all -- count(56) and totalBytes(57)
-    // both zero. There is no terminator to anchor on there, and dropping their vias rather than
-    // scanning for them would lose several hundred real objects per board.
-    if( typeBytes.empty() )
-    {
-        uint32_t bestPhase = 0;
-        size_t   bestScore = 0;
-
-        auto _pt_phaseScan = std::chrono::steady_clock::now();
-        for( uint32_t phase = 0; phase < stride; ++phase )
-        {
-            size_t score = 0;
-
-            for( size_t typeByte = scanStart + phase; typeByte + 6 <= scanEnd; typeByte += stride )
-            {
-                uint8_t type = m_cursor.U8At( typeByte );
-
-                if( type == VIA_TYPE && viaRecordValid( m_cursor, typeByte ) )
-                    ++score;
-                else if( type == CORNER_TYPE && m_cursor.U8At( typeByte + 6 ) == 1 )
-                    ++score;
-            }
-
-            if( score > bestScore )
-            {
-                bestScore = score;
-                bestPhase = phase;
-            }
-        }
-        logParsePhase( "phaseScan", _pt_phaseScan );
-
-        if( bestScore == 0 )
-            return;
-
-        NoteScanLocatorUse( "viaPhase" );
-        logResolvedBase( 60, "viaPhase", scanStart + bestPhase, entry60->dataOffset,
-                         entry60->payloadOffset );
-
-        gridOrigin = scanStart + bestPhase;
-
-        for( size_t typeByte = gridOrigin; typeByte + 6 <= scanEnd; typeByte += stride )
-            typeBytes.push_back( typeByte );
-    }
-
+    // No phase-scan fallback. A board whose pool cannot be derived emits no vias rather than
+    // having them searched for.
     if( typeBytes.empty() )
         return;
 
@@ -7358,21 +7280,11 @@ void BINARY_PARSER::parseLayerStackup()
     static constexpr size_t OFF_COPTH  = 56;
     static constexpr size_t OFF_DIEL   = 60;
 
-    static const std::string ANCHOR = "(All layers)";
-
-    // Preferred path: reached by arithmetic from the string pool. It validates itself, so a board
-    // whose layout differs falls through to the signature search rather than decoding a wrong
-    // base -- which would mis-map layers silently instead of failing.
+    // Reached by arithmetic from the string pool, and self-validating. No signature fallback: a
+    // board whose base does not resolve emits no stackup rather than having one searched for.
     size_t recordBase = locateLayerStackupBase();
 
     if( recordBase == 0 )
-    {
-        NoteScanLocatorUse( "layerStackup" );
-        recordBase = findSignature( m_data, reinterpret_cast<const uint8_t*>( ANCHOR.data() ),
-                                    ANCHOR.size() );
-    }
-
-    if( recordBase == SIGNATURE_NOT_FOUND || recordBase == 0 )
         return;
 
     if( !m_cursor.InBounds( recordBase, REC_COUNT * REC_SIZE ) )
@@ -7418,7 +7330,7 @@ void BINARY_PARSER::parseLayerStackup()
 
     // The leading "(All layers)" aggregate is a pseudo-layer that always carries usage==1;
     // demote it explicitly to avoid an extra copper entry.
-    if( !m_layerInfos.empty() && m_layerInfos.front().name == ANCHOR )
+    if( !m_layerInfos.empty() && m_layerInfos.front().name == "(All layers)" )
     {
         m_layerInfos.front().is_copper = false;
         m_layerInfos.front().required  = false;
