@@ -2295,21 +2295,26 @@ BOOST_AUTO_TEST_CASE( ViaSpanSurvivesOnlyWhenTypeSetFirst )
  */
 BOOST_AUTO_TEST_CASE( ScanLocatorRatchet )
 {
-    // Lower this as locators become structural. Do not raise it. Measured 1 on all three
-    // boards below; the value-core walk that used to fire here is now bounded to section 49.
-    // The one left on these boards is the section 60 via phase scan.
-    constexpr int MAX_SCAN_LOCATORS = 1;
-
+    // Per board, not one cap across all of them. A single maximum cannot register a retirement
+    // on any board but the worst, which is why this number sat unmoved while locators were being
+    // retired around it. Lower an entry as its board becomes structural; do not raise one.
+    //
+    // LCORE_2 and MAIS_FC are at zero: their string pool is computed from section 41's undeclared
+    // blocks, so nothing downstream of it -- section 60, the layer stackup, the clusters -- has
+    // to search. Ems4_Rev2 declares total_bytes(41) == 2 rather than 1 and carries undeclared
+    // content the section 41 walk does not model, so its pool falls back to the terminator
+    // search and everything anchored on the pool inherits that one use.
     struct BOARD_CASE
     {
         std::string dir;
         std::string file;
+        int         maxLocators;
     };
 
     const std::vector<BOARD_CASE> boards = {
-        { "Ems4_Rev2", "Ems4_Rev2.pcb" },
-        { "LCORE_2", "LCORE_2.pcb" },
-        { "MAIS_FC", "MAIS_FC.pcb" },
+        { "Ems4_Rev2", "Ems4_Rev2.pcb", 1 },
+        { "LCORE_2", "LCORE_2.pcb", 0 },
+        { "MAIS_FC", "MAIS_FC.pcb", 0 },
     };
 
     for( const BOARD_CASE& bc : boards )
@@ -2322,9 +2327,9 @@ BOOST_AUTO_TEST_CASE( ScanLocatorRatchet )
         int uses = parser.ScanLocatorUseCount();
 
         BOOST_TEST_MESSAGE( bc.file << " scan locators: " << uses );
-        BOOST_CHECK_MESSAGE( uses <= MAX_SCAN_LOCATORS,
-                             bc.file << " uses " << uses << " scan locators, above the ratchet of "
-                                     << MAX_SCAN_LOCATORS );
+        BOOST_CHECK_MESSAGE( uses <= bc.maxLocators,
+                             bc.file << " uses " << uses << " scan locators, above its ratchet of "
+                                     << bc.maxLocators );
     }
 }
 
