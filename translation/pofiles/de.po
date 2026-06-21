@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-18 23:02+0000\n"
+"PO-Revision-Date: 2026-06-22 01:58+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -3206,9 +3206,8 @@ msgstr "Kein Repository verfügbar"
 #: common/dialogs/dialog_git_mr_review.cpp:119
 #: common/dialogs/dialog_git_mr_review_base.h:58
 #: kicad/kicad_manager_frame.cpp:1165
-#, fuzzy
 msgid "Compare Branches"
-msgstr "Freiräume"
+msgstr "Zweige vergleichen"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
@@ -3262,14 +3261,12 @@ msgid "Head ref:"
 msgstr "Kopfzeilen-Umrandung"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
-#, fuzzy
 msgid "Compare"
-msgstr "Firma"
+msgstr "Vergleichen"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:48
-#, fuzzy
 msgid "Changed files (double-click to open):"
-msgstr "Befehl (doppelklicken zum Bearbeiten)"
+msgstr "Geänderte Dateien (zum Öffnen doppelklicken):"
 
 #: common/dialogs/dialog_grid_settings.cpp:81
 msgid "Grid size X out of range."
@@ -3479,16 +3476,15 @@ msgstr "Eigenschaft"
 
 #: common/dialogs/dialog_kicad_diff.cpp:63
 msgid "Before"
-msgstr ""
+msgstr "Vorher"
 
 #: common/dialogs/dialog_kicad_diff.cpp:64
 msgid "After"
-msgstr ""
+msgstr "Nachher"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
-#, fuzzy
 msgid "Filter changes…"
-msgstr "Netze filtern"
+msgstr "Änderungen filtern …"
 
 #: common/dialogs/dialog_kicad_diff.cpp:122
 #: common/diff_merge/diff_tree_grouping.cpp:37
@@ -3497,9 +3493,8 @@ msgstr "Hinzugefügt"
 
 #: common/dialogs/dialog_kicad_diff.cpp:123
 #: common/diff_merge/diff_tree_grouping.cpp:38
-#, fuzzy
 msgid "Removed"
-msgstr "Entfernen"
+msgstr "Entfernt"
 
 #: common/dialogs/dialog_kicad_diff.cpp:124
 #: common/dialogs/git/dialog_git_commit.cpp:103
@@ -3508,9 +3503,8 @@ msgid "Modified"
 msgstr "Geändert"
 
 #: common/dialogs/dialog_kicad_diff.cpp:125
-#, fuzzy
 msgid "Conflict"
-msgstr "Konflikte"
+msgstr "Konflikt"
 
 #: common/dialogs/dialog_kicad_diff.cpp:143
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:24
@@ -3528,25 +3522,22 @@ msgstr "Eigenschaften"
 
 #: common/dialogs/dialog_kicad_diff.cpp:210
 #: common/dialogs/dialog_kicad_diff.cpp:514
-#, fuzzy
 msgid "No differences detected."
-msgstr "Keine relevanten Unterschiede festgestellt."
+msgstr "Keine Unterschiede festgestellt."
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "%zu change(s) detected."
-msgstr "Keine Netze ausgewählt."
+msgstr "%zu Änderung(en) festgestellt."
 
 #: common/dialogs/dialog_kicad_diff.cpp:334
-#, fuzzy
 msgid "Show Change"
-msgstr "Ändern"
+msgstr "Änderung anzeigen"
 
 #: common/dialogs/dialog_kicad_diff.cpp:336
-#, fuzzy
 msgid "Hide Change"
-msgstr "Änderungsvorschau"
+msgstr "Änderung ausblenden"
 
 #: common/dialogs/dialog_kicad_diff.cpp:338
 #, fuzzy
@@ -3645,16 +3636,15 @@ msgstr "Innenseitiger Pinname"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
-msgstr ""
+msgstr "Unser"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:64
 msgid "Theirs"
-msgstr ""
+msgstr "Deren"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
-#, fuzzy
 msgid "Ancestor"
-msgstr "Wiederherstellen"
+msgstr "Vorfahre"
 
 #: common/dialogs/dialog_page_settings.cpp:84
 msgid "Preview Settings"
@@ -4301,7 +4291,7 @@ msgstr "Neu"
 
 #: common/dialogs/git/dialog_git_commit.cpp:112
 msgid "Deleted"
-msgstr "Entfernt"
+msgstr "Gelöscht"
 
 #: common/dialogs/git/dialog_git_commit.cpp:128
 msgid "Commit Message:"
@@ -6809,9 +6799,8 @@ msgid "Delete"
 msgstr "Entfernen"
 
 #: common/diff_merge/auto_resolution.cpp:261
-#, fuzzy
 msgid "Keep (default)"
-msgstr "Auf Standardeinstellung zurücksetzen"
+msgstr "Beibehalten (Standard)"
 
 #: common/diff_merge/auto_resolution.cpp:265
 #, c-format
@@ -6825,7 +6814,7 @@ msgstr "Fehler beim Lesen von Bilddaten."
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
-msgstr ""
+msgstr "Kollision"
 
 #: common/diff_merge/diff_tree_grouping.cpp:41
 #, fuzzy
@@ -63670,9 +63659,8 @@ msgid "design block contains no items to apply"
 msgstr "Designblock hat keinen Schaltplan der eingefügt werden könnte."
 
 #: pcbnew/tools/pcb_control.cpp:1685
-#, fuzzy
 msgid "group is empty"
-msgstr "Ausdruck ist leer"
+msgstr "Gruppe ist leer"
 
 #: pcbnew/tools/pcb_control.cpp:1724
 msgid "layout copy failed"
