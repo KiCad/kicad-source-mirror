@@ -21,9 +21,6 @@
 #define LOCALE_IO_H
 
 #include <kicommon.h>
-#include <string>
-
-class wxLocale;
 
 /**
  * Instantiate the current locale within a scope in which you are expecting
@@ -32,6 +29,9 @@ class wxLocale;
  * The constructor sets a "C" language locale option, to read/print files with floating
  * point  numbers.  The destructor insures that the default locale is restored whether an
  * exception is thrown or not.
+ *
+ * The nesting count and the process-global locale transition it drives are serialized with a
+ * mutex, so instances may safely be created and destroyed from multiple threads at once.
  */
 class KICOMMON_API LOCALE_IO
 {
@@ -39,11 +39,8 @@ public:
     LOCALE_IO();
     ~LOCALE_IO();
 
-private:
-    // The locale in use before switching to the "C" locale
-    // (the locale can be set by user, and is not always the system locale)
-    [[maybe_unused]]wxLocale* m_wxLocale;   // used when using wxLocale
-    std::string m_user_locale;              // used when using setlocale or wxSetlocale
+    LOCALE_IO( const LOCALE_IO& ) = delete;
+    LOCALE_IO& operator=( const LOCALE_IO& ) = delete;
 };
 
 #endif

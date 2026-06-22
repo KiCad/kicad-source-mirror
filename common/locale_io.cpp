@@ -20,7 +20,7 @@
 #include <locale_io.h>
 #include <wx/intl.h>
 #include <clocale>
-#include <atomic>
+#include <mutex>
 
 // When reading/writing files, we need to switch to setlocale( LC_NUMERIC, "C" ).
 // Works fine to read/write files with floating point numbers.
@@ -73,21 +73,28 @@ void KiAssertFilter( const wxString &file, int line,
 #endif
 #endif
 
-// allow for nesting of LOCALE_IO instantiations
-static std::atomic<unsigned int> locale_count( 0 );
+// Allow for nesting of LOCALE_IO instantiations.  SPICE library parsing (and other code) toggles
+// the locale from worker threads in parallel, so both the nesting count and the global locale
+// transitions it triggers must be serialized together under one mutex.  An atomic count alone is
+// not enough, since setlocale() and the wxLocale new/delete it guards mutate process-global state
+// and the heap, which corrupts when two threads transition at the same time.
+static std::mutex        locale_mutex;
+static unsigned int      locale_count = 0;
+static wxLocale*         locale_wxLocale = nullptr;
+static std::string       locale_user_locale;
 
-LOCALE_IO::LOCALE_IO() :
-        m_wxLocale( nullptr )
+LOCALE_IO::LOCALE_IO()
 {
-    // use thread safe, atomic operation
+    std::lock_guard<std::mutex> lock( locale_mutex );
+
     if( locale_count++ == 0 )
     {
 #if USE_WXLOCALE
         #define C_LANG "C"
-        m_wxLocale = new wxLocale( C_LANG, C_LANG, C_LANG, false );
+        locale_wxLocale = new wxLocale( C_LANG, C_LANG, C_LANG, false );
 #else
         // Store the user locale name, to restore this locale later, in dtor
-        m_user_locale = setlocale( LC_NUMERIC, nullptr );
+        locale_user_locale = setlocale( LC_NUMERIC, nullptr );
 #if defined( _WIN32 ) && defined( DEBUG )
         // Disable wxWidgets alerts
         wxSetAssertHandler( KiAssertFilter );
@@ -101,15 +108,16 @@ LOCALE_IO::LOCALE_IO() :
 
 LOCALE_IO::~LOCALE_IO()
 {
-    // use thread safe, atomic operation
+    std::lock_guard<std::mutex> lock( locale_mutex );
+
     if( --locale_count == 0 )
     {
         // revert to the user locale
 #if USE_WXLOCALE
-        delete m_wxLocale;      // Deleting m_wxLocale restored previous locale
-        m_wxLocale = nullptr;
+        delete locale_wxLocale;      // Deleting the wxLocale restored the previous locale
+        locale_wxLocale = nullptr;
 #else
-        setlocale( LC_NUMERIC, m_user_locale.c_str() );
+        setlocale( LC_NUMERIC, locale_user_locale.c_str() );
 #if defined( _WIN32 ) && defined( DEBUG )
         // Enable wxWidgets alerts
         wxSetDefaultAssertHandler();
