@@ -57,6 +57,7 @@ class PICKED_ITEMS_LIST;
 class LENGTH_DELAY_CALCULATION;
 class BOARD;
 class FOOTPRINT;
+class FOOTPRINT_COURTYARD_INDEX;
 class ZONE;
 class PCB_TRACK;
 class PAD;
@@ -1505,6 +1506,17 @@ public:
     };
 
 public:
+    /**
+     * Return a spatial index of footprint courtyards, building it on first use.  Lets
+     * intersectsCourtyard()-style predicates query only nearby footprints instead of scanning
+     * the whole board.  Invalidated, like the other run-time caches, by IncrementTimeStamp().
+     *
+     * Returned by shared_ptr so a caller mid-query keeps the index alive even if a concurrent
+     * IncrementTimeStamp() detaches it; the held copy simply goes stale (the FOOTPRINT* it yields
+     * follow the same invalidation contract as the other run-time caches).
+     */
+    std::shared_ptr<const FOOTPRINT_COURTYARD_INDEX> GetFootprintCourtyardIndex();
+
     // ------------ Run-time caches -------------
     mutable std::shared_mutex                             m_CachesMutex;
     // These predicate caches are written per item-pair from every DRC worker thread, so they
@@ -1536,6 +1548,9 @@ public:
     // Deflated zone outline cache for DRC area checks. Caches the deflated outline for each zone
     // to avoid repeated expensive deflation operations during collidesWithArea calls.
     mutable std::unordered_map<const ZONE*, SHAPE_POLY_SET> m_DeflatedZoneOutlineCache;
+
+    // Spatial index of footprint courtyards, built lazily by GetFootprintCourtyardIndex().
+    std::shared_ptr<const FOOTPRINT_COURTYARD_INDEX>     m_footprintCourtyardIndex;
 
     // ------------ DRC caches -------------
     std::vector<ZONE*>    m_DRCZones;

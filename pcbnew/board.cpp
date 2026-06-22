@@ -42,6 +42,7 @@
 #include <connectivity/connectivity_data.h>
 #include <convert_shape_list_to_polygon.h>
 #include <footprint.h>
+#include <footprint_courtyard_index.h>
 #include <font/outline_font.h>
 #include <length_delay_calculation/length_delay_calculation.h>
 #include <lset.h>
@@ -265,6 +266,8 @@ void BOARD::IncrementTimeStamp()
 
     m_timeStamp++;
 
+    m_footprintCourtyardIndex.reset();
+
     if( !m_IntersectsAreaCache.Empty() || !m_EnclosedByAreaCache.Empty() || !m_IntersectsCourtyardCache.Empty()
         || !m_IntersectsFCourtyardCache.Empty() || !m_IntersectsBCourtyardCache.Empty()
         || !m_IntersectsCourtyardResultCache.Empty() || !m_IntersectsFCourtyardResultCache.Empty()
@@ -304,6 +307,30 @@ void BOARD::IncrementTimeStamp()
 
         m_maxClearanceValue.reset();
     }
+}
+
+
+std::shared_ptr<const FOOTPRINT_COURTYARD_INDEX> BOARD::GetFootprintCourtyardIndex()
+{
+    {
+        std::shared_lock<std::shared_mutex> readLock( m_CachesMutex );
+
+        if( m_footprintCourtyardIndex )
+            return m_footprintCourtyardIndex;
+    }
+
+    // Build outside the lock; FOOTPRINT::GetCourtyard guards its own cache with a per-footprint
+    // mutex, so building here is safe even when it has to lazily populate that cache.  Publish under
+    // the write lock, letting the first builder win if several worker threads race here on the
+    // first courtyard predicate.
+    auto index = std::make_shared<FOOTPRINT_COURTYARD_INDEX>( this );
+
+    std::unique_lock<std::shared_mutex> writeLock( m_CachesMutex );
+
+    if( !m_footprintCourtyardIndex )
+        m_footprintCourtyardIndex = std::move( index );
+
+    return m_footprintCourtyardIndex;
 }
 
 

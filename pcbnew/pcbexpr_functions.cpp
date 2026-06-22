@@ -34,6 +34,7 @@
 #include <drc/drc_rtree.h>
 #include <drc/drc_engine.h>
 #include <footprint.h>
+#include <footprint_courtyard_index.h>
 #include <lset.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -258,30 +259,47 @@ static bool testFootprintSelector( FOOTPRINT* aFp, const wxString& aSelector )
 }
 
 
-static bool searchFootprints( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTEXT* aCtx,
-                              const std::function<bool( FOOTPRINT* )>& aFunc )
+/*
+ * Find footprints relevant to a courtyard-intersection predicate.  "A"/"B" resolve to the items
+ * under test; any other selector is matched against the footprints whose courtyard can actually
+ * reach aItem, found via the spatial index rather than a full-board scan.  A footprint the index
+ * skips would fail the same bbox test collidesWithCourtyard() applies, so the result matches a
+ * linear scan.
+ */
+static bool searchFootprintsNearItem( BOARD* aBoard, const wxString& aArg, PCBEXPR_CONTEXT* aCtx,
+                                      BOARD_ITEM* aItem,
+                                      const std::function<bool( FOOTPRINT* )>& aFunc )
 {
     if( aArg == wxT( "A" ) )
     {
         FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aCtx->GetItem( 0 ) );
-
-        if( fp && aFunc( fp ) )
-            return true;
+        return fp && aFunc( fp );
     }
     else if( aArg == wxT( "B" ) )
     {
         FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aCtx->GetItem( 1 ) );
-
-        if( fp && aFunc( fp ) )
-            return true;
-    }
-    else for( FOOTPRINT* fp : aBoard->Footprints() )
-    {
-        if( testFootprintSelector( fp, aArg ) && aFunc( fp ) )
-            return true;
+        return fp && aFunc( fp );
     }
 
-    return false;
+    bool found = false;
+
+    // Hold the index alive for the whole query; a concurrent IncrementTimeStamp() may detach the
+    // board's copy while we iterate.
+    std::shared_ptr<const FOOTPRINT_COURTYARD_INDEX> index = aBoard->GetFootprintCourtyardIndex();
+
+    index->QueryOverlapping( aItem->GetBoundingBox(),
+            [&]( FOOTPRINT* fp ) -> bool
+            {
+                if( testFootprintSelector( fp, aArg ) && aFunc( fp ) )
+                {
+                    found = true;
+                    return false;
+                }
+
+                return true;
+            } );
+
+    return found;
 }
 
 
@@ -333,7 +351,7 @@ static void intersectsCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                 std::shared_ptr<SHAPE> itemShape;
 
-                bool res = searchFootprints( board, selector, context,
+                bool res = searchFootprintsNearItem( board, selector, context, item,
                         [&]( FOOTPRINT* fp )
                         {
                             PTR_PTR_CACHE_KEY key = { fp, item };
@@ -406,7 +424,7 @@ static void intersectsFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                 std::shared_ptr<SHAPE> itemShape;
 
-                bool res = searchFootprints( board, selector, context,
+                bool res = searchFootprintsNearItem( board, selector, context, item,
                         [&]( FOOTPRINT* fp )
                         {
                             PTR_PTR_CACHE_KEY key = { fp, item };
@@ -475,7 +493,7 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                 std::shared_ptr<SHAPE> itemShape;
 
-                bool res = searchFootprints( board, selector, context,
+                bool res = searchFootprintsNearItem( board, selector, context, item,
                         [&]( FOOTPRINT* fp )
                         {
                             PTR_PTR_CACHE_KEY key = { fp, item };

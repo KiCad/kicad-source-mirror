@@ -79,6 +79,13 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %ignore BOARD::m_IntersectsBCourtyardCache;
 %ignore BOARD::m_IntersectsAreaCache;
 %ignore BOARD::m_EnclosedByAreaCache;
+%ignore BOARD::m_IntersectsCourtyardResultCache;
+%ignore BOARD::m_IntersectsFCourtyardResultCache;
+%ignore BOARD::m_IntersectsBCourtyardResultCache;
+%ignore BOARD::m_IntersectsAreaResultCache;
+%ignore BOARD::m_EnclosedByAreaResultCache;
+%ignore BOARD::GetFootprintCourtyardIndex;
+%ignore BOARD::m_footprintCourtyardIndex;
 %ignore BOARD::m_LayerExpressionCache;
 %ignore BOARD::m_CopperZoneRTreeCache;
 %ignore BOARD::m_CopperItemRTreeCache;
