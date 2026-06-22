@@ -46,7 +46,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"PO-Revision-Date: 2026-06-23 16:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
@@ -4089,7 +4089,7 @@ msgstr "连接"
 #: common/dialogs/git/dialog_git_repository_base.cpp:42
 #: common/dialogs/panel_common_settings_base.cpp:445
 msgid "Location:"
-msgstr "地址:"
+msgstr "位置:"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:49
 msgid "Connection type:"
@@ -4586,7 +4586,7 @@ msgstr "保存文件时自动创建当前工程的备份归档文件"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
 msgid "Incremental"
-msgstr "增量"
+msgstr "增量备份"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
 msgid "Zip archive"
@@ -4598,8 +4598,8 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
-"增量: 维护一个隐藏的 .history Git 仓库, 持续记录更改。\n"
-"Zip: 保存时创建带时间戳的 Zip 归档; 自动保存使用恢复文件。"
+"增量备份: 维护一个隐藏的 .history Git 仓库, 持续记录更改。\n"
+"Zip 归档: 保存时创建带时间戳的 Zip 归档; 自动保存使用恢复文件。"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
 msgid "Project directory"
@@ -30974,7 +30974,7 @@ msgstr "将位图图像转换为原理符号或 PCB 封装"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:166
 msgid "Show tools for calculating resistance, current capacity, etc."
-msgstr "显示计算电阻、电容等的工具。"
+msgstr "计算走线阻抗、载流能力等信息。"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:169
 msgid ""
