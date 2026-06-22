@@ -20,6 +20,7 @@
 
 #include "settings/json_settings.h"
 #include <regex>
+#include <set>
 #include <wx/debug.h>
 #include <wx/dir.h>
 #include <wx/filename.h>
@@ -445,6 +446,33 @@ void SETTINGS_MANAGER::loadAllColorSettings()
 
     if( colors_dir.IsOpened() )
         colors_dir.Traverse( loader );
+
+    // A user theme file can carry the same display name as a built-in theme (for example a
+    // user.json left over from an older version still named "KiCad Default"), which makes two
+    // identically-named entries appear in every theme selector. Built-ins own their names, so
+    // disambiguate any colliding user theme by appending its filename.
+    std::set<wxString> builtinNames;
+
+    for( const wxString& builtin : { COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT,
+                                     COLOR_SETTINGS::COLOR_BUILTIN_CLASSIC } )
+    {
+        if( m_color_settings.count( builtin ) )
+            builtinNames.insert( m_color_settings.at( builtin )->GetName() );
+    }
+
+    for( const std::pair<const wxString, COLOR_SETTINGS*>& entry : m_color_settings )
+    {
+        COLOR_SETTINGS* settings = entry.second;
+
+        if( entry.first != COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT
+            && entry.first != COLOR_SETTINGS::COLOR_BUILTIN_CLASSIC
+            && builtinNames.count( settings->GetName() ) )
+        {
+            // Absolute-path themes store a full path as their filename, so reduce it to a basename.
+            settings->SetName( wxString::Format( wxS( "%s (%s)" ), settings->GetName(),
+                                                 wxFileName( settings->GetFilename() ).GetName() ) );
+        }
+    }
 }
 
 
