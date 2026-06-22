@@ -997,7 +997,12 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
     for( PCB_TRACK* selected_track : selected_tracks )
     {
-        for( BOARD_CONNECTED_ITEM* connected_item : connectivity->GetConnectedItems( selected_track ) )
+        connected_tracks.insert( selected_track );
+
+        // Exclude zones so we only follow direct copper, via, and pad connections.  Zone
+        // propagation would pull in unrelated same-net tracks and rewrite their net below.
+        for( BOARD_CONNECTED_ITEM* connected_item :
+             connectivity->GetConnectedItems( selected_track, EXCLUDE_ZONES ) )
         {
             if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( connected_item ) )
                 connected_tracks.insert( track );
@@ -1642,8 +1647,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
     {
         if( changingPads.empty() || confirmPadChange( changingPads ) )
         {
-            for( PCB_TRACK* track : selected_tracks )
+            for( PCB_TRACK* track : connected_tracks )
+            {
+                if( !alg::contains( selected_tracks, track ) )
+                    commit.Modify( track );
+
                 track->SetNetCode( newNetCode );
+            }
 
             for( PAD* pad : changingPads )
             {
