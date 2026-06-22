@@ -48,7 +48,7 @@ PROJECT_TREE_TRAVERSER::PROJECT_TREE_TRAVERSER( KICAD_MANAGER_FRAME* aFrame,
 wxDirTraverseResult PROJECT_TREE_TRAVERSER::OnFile( const wxString& aSrcFilePath )
 {
     // Recursion guard for a Save As to a location inside the source project.
-    if( aSrcFilePath.StartsWith( m_newProjectDirPath + wxFileName::GetPathSeparator() ) )
+    if( aSrcFilePath.StartsWith( m_newProjectDirPath ) )
         return wxDIR_CONTINUE;
 
     wxFileName destFile( aSrcFilePath );
@@ -168,6 +168,8 @@ wxDirTraverseResult PROJECT_TREE_TRAVERSER::OnFile( const wxString& aSrcFilePath
 
 wxDirTraverseResult PROJECT_TREE_TRAVERSER::OnDir( const wxString& aSrcDirPath )
 {
+    wxUniChar pathSep = wxFileName::GetPathSeparator();
+
     // Skip the local-history git repository.
     wxFileName    srcDir = wxFileName::DirName( aSrcDirPath );
     wxArrayString dirs = srcDir.GetDirs();
@@ -176,12 +178,11 @@ wxDirTraverseResult PROJECT_TREE_TRAVERSER::OnDir( const wxString& aSrcDirPath )
         return wxDIR_IGNORE;
 
     // Recursion guard for a Save As to a location inside the source project.
-    if( aSrcDirPath.StartsWith( m_newProjectDirPath ) )
-        return wxDIR_CONTINUE;
+    if( ( aSrcDirPath + pathSep ).StartsWith( m_newProjectDirPath ) )
+        return wxDIR_IGNORE;
 
     wxFileName destDir( aSrcDirPath );
     wxString   destDirPath = destDir.GetPathWithSep();
-    wxUniChar  pathSep = wxFileName::GetPathSeparator();
 
     if( destDirPath.StartsWith( m_projectDirPath + pathSep )
       || destDirPath.StartsWith( m_projectDirPath + PROJECT_BACKUPS_DIR_SUFFIX ) )

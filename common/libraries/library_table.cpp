@@ -316,9 +316,9 @@ LIBRARY_RESULT<void> LIBRARY_TABLE::Save()
 
     // Global user data with no other recovery path: keep a rotating .bak sibling so the
     // user can recover from logical corruption outside our fsync window.
-    wxFFile existing( fn.GetFullPath(), wxT( "rb" ) );
+    wxFFile existing;
 
-    if( existing.IsOpened() )
+    if( fn.FileExists() && existing.Open( fn.GetFullPath(), wxT( "rb" ) ) )
     {
         wxFileOffset rawLen = existing.Length();
 
