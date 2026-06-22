@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"PO-Revision-Date: 2026-06-22 19:44+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -3139,14 +3139,13 @@ msgid "Select base and head refs to compare."
 msgstr "Изаберите основне и главне референце за поређење."
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve ref '%s' to a commit or tree."
-msgstr "Немогуће пронаћи комит за спајање"
+msgstr "Није могуће решити референцу '%s' у commit или стабло."
 
 #: common/dialogs/dialog_git_mr_review.cpp:133
-#, fuzzy
 msgid "No changes between selected refs."
-msgstr "Избриши"
+msgstr "Нема промена између одабраних референци."
 
 #: common/dialogs/dialog_git_mr_review.cpp:251
 #, fuzzy, c-format
@@ -3160,14 +3159,12 @@ msgstr "потребан је број за '%s'"
 #: common/dialogs/dialog_git_mr_review.cpp:359
 #: common/dialogs/dialog_git_mr_review.cpp:373
 #: common/dialogs/dialog_git_mr_review.cpp:389
-#, fuzzy
 msgid "Compare File"
-msgstr "Фајлови слика"
+msgstr "Упоредите датотеку"
 
 #: common/dialogs/dialog_git_mr_review.cpp:281
-#, fuzzy
 msgid "Could not create a temporary directory."
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Није могуће креирати привремени директоријум."
 
 #: common/dialogs/dialog_git_mr_review.cpp:322
 #: common/dialogs/dialog_git_mr_review.cpp:337
@@ -3413,13 +3410,12 @@ msgstr "Промене филтера…"
 #: common/dialogs/dialog_kicad_diff.cpp:122
 #: common/diff_merge/diff_tree_grouping.cpp:37
 msgid "Added"
-msgstr ""
+msgstr "Додато"
 
 #: common/dialogs/dialog_kicad_diff.cpp:123
 #: common/diff_merge/diff_tree_grouping.cpp:38
-#, fuzzy
 msgid "Removed"
-msgstr "Избриши"
+msgstr "Уклоњено"
 
 #: common/dialogs/dialog_kicad_diff.cpp:124
 #: common/dialogs/git/dialog_git_commit.cpp:103
@@ -3428,9 +3424,8 @@ msgid "Modified"
 msgstr "Измењено"
 
 #: common/dialogs/dialog_kicad_diff.cpp:125
-#, fuzzy
 msgid "Conflict"
-msgstr "Закључане ствари"
+msgstr "Сукоб"
 
 #: common/dialogs/dialog_kicad_diff.cpp:143
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:24
@@ -3448,30 +3443,26 @@ msgstr "Својства"
 
 #: common/dialogs/dialog_kicad_diff.cpp:210
 #: common/dialogs/dialog_kicad_diff.cpp:514
-#, fuzzy
 msgid "No differences detected."
-msgstr "Ниједан облик није изабран"
+msgstr "Нису откривене разлике."
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "%zu change(s) detected."
-msgstr "Ниједан облик није изабран"
+msgstr "Откривено је %zu промена."
 
 #: common/dialogs/dialog_kicad_diff.cpp:334
-#, fuzzy
 msgid "Show Change"
-msgstr "Промјени"
+msgstr "Прикажи промену"
 
 #: common/dialogs/dialog_kicad_diff.cpp:336
-#, fuzzy
 msgid "Hide Change"
-msgstr "Сачувај промјене?"
+msgstr "Сакриј промену"
 
 #: common/dialogs/dialog_kicad_diff.cpp:338
-#, fuzzy
 msgid "Show All Hidden"
-msgstr "Прикажи"
+msgstr "Прикажи све скривено"
 
 #: common/dialogs/dialog_kicad_diff.cpp:414
 #: common/dialogs/dialog_page_settings_base.cpp:240
@@ -3479,9 +3470,8 @@ msgid "Revision:"
 msgstr "Ревизија:"
 
 #: common/dialogs/dialog_kicad_diff.cpp:425
-#, fuzzy
 msgid "Older"
-msgstr "Директоријум"
+msgstr "Старије"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
@@ -3554,27 +3544,24 @@ msgstr ""
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:31
 #: eeschema/erc/erc_item.cpp:38
-#, fuzzy
 msgid "Conflicts"
-msgstr "Закључане ствари"
+msgstr "Сукоби"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:58
-#, fuzzy
 msgid "Pick a side"
-msgstr "Име:"
+msgstr "Изаберите страну"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
-msgstr ""
+msgstr "Наша"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:64
 msgid "Theirs"
 msgstr ""
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
-#, fuzzy
 msgid "Ancestor"
-msgstr "Опорави"
+msgstr "Предак"
 
 #: common/dialogs/dialog_page_settings.cpp:84
 msgid "Preview Settings"
@@ -6648,18 +6635,16 @@ msgid "Move Down"
 msgstr "Помјери доле ^"
 
 #: common/diff_merge/auto_resolution.cpp:251
-#, fuzzy
 msgid "Item id: "
-msgstr "Ставке:"
+msgstr "ИД ставке: "
 
 #: common/diff_merge/auto_resolution.cpp:252
-#, fuzzy
 msgid "Current resolution: "
-msgstr "X резолуција:"
+msgstr "Тренутна резолуција: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
-msgstr ""
+msgstr "Узми наше"
 
 #: common/diff_merge/auto_resolution.cpp:257
 msgid "Take theirs"
@@ -8989,24 +8974,24 @@ msgstr ""
 
 #: common/io/eagle/eagle_bin_parser.cpp:848
 msgid "Short read in Eagle binary file (field out of bounds)."
-msgstr ""
+msgstr "Кратко читање у бинарној датотеци Eagle (поље ван граница)."
 
 #: common/io/eagle/eagle_bin_parser.cpp:950
 msgid "Short read in Eagle binary file (truncated block)."
-msgstr ""
+msgstr "Кратко читање у бинарној датотеци Eagle (скраћени блок)."
 
 #: common/io/eagle/eagle_bin_parser.cpp:995
 #, c-format
 msgid "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
-msgstr ""
+msgstr "Непознати ИД бинарног блока Eagle 0x%02x%02x на офсету %zu."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2212
 msgid "Eagle binary file has no drawing section."
-msgstr ""
+msgstr "Бинарна датотека Eagle нема одељак за цртање."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2230
 msgid "Eagle binary layout is missing a board/libraries node."
-msgstr ""
+msgstr "Бинарном распореду Eagle недостаје чвор плоче/библиотека."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2331
 #, fuzzy
