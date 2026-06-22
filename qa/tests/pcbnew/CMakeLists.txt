@@ -225,6 +225,8 @@ set( QA_PCBNEW_SRCS
     pcb_io/ipc2581/test_ipc2581.cpp
     pcb_io/ipc2581/test_ipc2581_export.cpp
 
+    pcb_io/odbpp/test_odbpp_netlist.cpp
+
     group_saveload.cpp
 )
 
