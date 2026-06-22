@@ -529,12 +529,15 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
     {
         bodyStyleCount = 1;
     }
-    if( m_radioDeMorgan->GetValue() )
+    else if( m_radioDeMorgan->GetValue() )
     {
         bodyStyleCount = 2;
     }
     else if( m_radioCustom->GetValue() )
     {
+        if( !m_bodyStyleNamesGrid->CommitPendingChanges() )
+            return false;
+
         for( int ii = 0; ii < m_bodyStyleNamesGrid->GetNumberRows(); ++ii )
         {
             if( !m_bodyStyleNamesGrid->GetCellValue( ii, 0 ).IsEmpty() )
@@ -542,9 +545,9 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
         }
     }
 
-    if( bodyStyleCount == 0 )
+    if( m_radioCustom->GetValue() && bodyStyleCount < 2 )
     {
-        m_delayedErrorMessage = _( "Symbol must have at least 1 body style" );
+        m_delayedErrorMessage = _( "Custom body styles must have at least 2 entries" );
         return false;
     }
 
