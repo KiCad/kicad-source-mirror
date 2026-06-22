@@ -3175,7 +3175,14 @@ void PCB_IO_EAGLE::centerBoard()
             int desired_x = ( w - bbbox.GetWidth() )  / 2;
             int desired_y = ( h - bbbox.GetHeight() ) / 2;
 
-            m_board->Move( VECTOR2I( desired_x - bbbox.GetX(), desired_y - bbbox.GetY() ) );
+            VECTOR2I movementVector{ desired_x - bbbox.GetX(), desired_y - bbbox.GetY() };
+            m_board->Move( movementVector );
+
+            BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+            bds.SetAuxOrigin( bds.GetAuxOrigin() + movementVector );
+            bds.SetGridOrigin( bds.GetGridOrigin() + movementVector );
+
+            m_board->SetModified();
         }
     }
 }
