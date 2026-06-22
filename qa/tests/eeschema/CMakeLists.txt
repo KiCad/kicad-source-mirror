@@ -28,6 +28,8 @@ include_directories(
     # symbol_edit_frame.h (white-box tested by the tab regression tests) includes
     # <symbol_tree_pane.h>, which lives under eeschema/widgets.
     ${CMAKE_SOURCE_DIR}/eeschema/widgets
+    # dialog_sim_model.h (white-box tested for issue 23687) includes <dialog_sim_model_base.h>.
+    ${CMAKE_SOURCE_DIR}/eeschema/dialogs
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
     ${CMAKE_SOURCE_DIR}/qa
@@ -113,6 +115,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24477_http_network_loss.cpp
     test_issue24403_directive_label_i18n.cpp
     test_issue24606_derived_symbol_fields.cpp
+    test_issue23687_sim_value_field.cpp
     test_nc_pin_connectivity.cpp
     test_crossing_label.cpp
     test_eagle_plugin.cpp

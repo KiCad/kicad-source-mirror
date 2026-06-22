@@ -63,6 +63,16 @@ public:
 
     ~DIALOG_SIM_MODEL();
 
+    /**
+     * Restore an inferred passive's Value field after WriteFields().
+     *
+     * WriteFields() rewrites Value only when the model is stored in it, so opting out would leave the
+     * parked ${SIM.PARAMS} placeholder behind. This puts the original Value back verbatim. Static so
+     * it can be verified without constructing the dialog.
+     */
+    static void RestoreInferredValue( std::vector<SCH_FIELD>& aFields, const wxString& aOriginalValue,
+                                      bool aOverwritten, bool aStoredInValue );
+
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -126,6 +136,12 @@ private:
     std::vector<SCH_FIELD>&      m_fields;
 
     std::vector<EMBEDDED_FILES*> m_filesStack;
+
+    // Original Value text saved before parking the ${SIM.PARAMS} placeholder, restored verbatim if
+    // the user opts out of storing parameters in Value.
+    wxString                     m_inferredValueRestore;
+    bool                         m_inferredValueOverwritten;
+
     SIM_LIB_MGR                  m_libraryModelsMgr;
     SIM_LIB_MGR                  m_builtinModelsMgr;
     wxString                     m_prevLibrary;
