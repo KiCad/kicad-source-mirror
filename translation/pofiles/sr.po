@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"PO-Revision-Date: 2026-06-23 16:01+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -20283,9 +20283,8 @@ msgid "Checking for undefined netclasses..."
 msgstr "Попуњавање зона"
 
 #: eeschema/erc/erc_item.cpp:42
-#, fuzzy
 msgid "Conflicts"
-msgstr "Закључане ствари"
+msgstr "Сукоби"
 
 #: eeschema/erc/erc_item.cpp:43 pcbnew/dialogs/panel_edit_options_base.cpp:417
 #: pcbnew/drc/drc_item.cpp:48
