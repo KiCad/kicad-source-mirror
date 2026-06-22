@@ -28,7 +28,6 @@
 #include <macros.h>
 #include <wildcards_and_files_ext.h>
 #include <board.h>
-#include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -70,8 +69,6 @@ std::string ODB_NET_LIST::ComputePadAccessSide( BOARD* aBoard, LSET aLayerMask )
 void ODB_NET_LIST::InitPadNetPoints( BOARD*                                         aBoard,
                                      std::map<size_t, std::vector<ODB_NET_RECORD>>& aRecords )
 {
-    VECTOR2I origin = aBoard->GetDesignSettings().GetAuxOrigin();
-
     for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
@@ -100,8 +97,8 @@ void ODB_NET_LIST::InitPadNetPoints( BOARD*                                     
                                 || pad->GetAttribute() == PAD_ATTRIB::CONN;
                 net_point.is_via = false;
                 net_point.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
-                net_point.x_location = pad->GetPosition().x - origin.x;
-                net_point.y_location = origin.y - pad->GetPosition().y;
+                net_point.x_location = pad->GetPosition().x;
+                net_point.y_location = -pad->GetPosition().y;
                 net_point.x_size = pad->GetSize( PADSTACK::ALL_LAYERS ).x;
 
                 // Rule: round pads have y = 0
@@ -157,8 +154,6 @@ std::string ODB_NET_LIST::ComputeViaAccessSide( BOARD* aBoard, int top_layer, in
 void ODB_NET_LIST::InitViaNetPoints( BOARD*                                         aBoard,
                                      std::map<size_t, std::vector<ODB_NET_RECORD>>& aRecords )
 {
-    VECTOR2I origin = aBoard->GetDesignSettings().GetAuxOrigin();
-
     // Enumerate all the track segments and keep the vias
     for( auto track : aBoard->Tracks() )
     {
@@ -187,8 +182,8 @@ void ODB_NET_LIST::InitViaNetPoints( BOARD*                                     
                 net_point.is_via = true;
                 net_point.drill_radius = via->GetDrillValue();
                 net_point.mechanical = false;
-                net_point.x_location = via->GetPosition().x - origin.x;
-                net_point.y_location = origin.y - via->GetPosition().y;
+                net_point.x_location = via->GetPosition().x;
+                net_point.y_location = -via->GetPosition().y;
 
                 // via always has drill radius, Width and Height are 0
                 net_point.x_size = 0;
