@@ -25,6 +25,7 @@ endif()
 # Utility/debugging/profiling programs
 add_subdirectory( common_tools )
 add_subdirectory( pcbnew_tools )
+add_subdirectory( drc_benchmark )
 
 if( KICAD_BUILD_PEGTL_DEBUG_TOOL )
     add_subdirectory( pegtl )
