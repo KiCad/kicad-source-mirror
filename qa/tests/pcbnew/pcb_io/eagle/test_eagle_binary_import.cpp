@@ -33,6 +33,7 @@
 #include <netinfo.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
+#include <zone.h>
 
 #include <map>
 #include <set>
@@ -269,6 +270,69 @@ BOOST_AUTO_TEST_CASE( LoadV3FootprintRotationRing )
 
         BOOST_CHECK_CLOSE( step, 22.5, 0.5 );
     }
+}
+
+
+/**
+ * Regression test for unmapped Eagle layers. Layers with no automatic KiCad target
+ * (Eagle tRestrict/bRestrict/vRestrict/Measures and similar) resolve to UNSELECTED_LAYER
+ * during a headless import, where no dialog can remap them. The item loaders only
+ * skipped UNDEFINED_LAYER, so graphics on those layers were stranded on the out-of-range
+ * UNSELECTED_LAYER (-2). Restrict layers carry keepout shapes, which must survive as rule
+ * areas even though they have no graphic layer; only the genuinely unmappable graphics
+ * are dropped. boomchak and turnemoff exercise both halves.
+ */
+BOOST_AUTO_TEST_CASE( LoadDropsUnmappedLayers )
+{
+    auto invalidLayerItems = []( BOARD* board )
+    {
+        auto bad = []( PCB_LAYER_ID l ) { return (int) l < 0 || (int) l >= PCB_LAYER_ID_COUNT; };
+
+        int count = 0;
+
+        for( BOARD_ITEM* item : board->Drawings() )
+            count += bad( item->GetLayer() );
+
+        for( PCB_TRACK* track : board->Tracks() )
+            count += bad( track->GetLayer() );
+
+        for( FOOTPRINT* fp : board->Footprints() )
+        {
+            for( BOARD_ITEM* item : fp->GraphicalItems() )
+                count += bad( item->GetLayer() );
+        }
+
+        return count;
+    };
+
+    auto ruleAreas = []( BOARD* board )
+    {
+        int count = 0;
+
+        for( ZONE* zone : board->Zones() )
+            count += zone->GetIsRuleArea();
+
+        return count;
+    };
+
+    for( const char* relPath : { "plugins/eagle_binary/boomchak.brd",
+                                 "plugins/eagle_binary/turnemoff.brd" } )
+    {
+        std::unique_ptr<BOARD> board( loadBoard( relPath ) );
+
+        if( !board )
+            continue;
+
+        BOOST_CHECK_EQUAL( invalidLayerItems( board.get() ), 0 );
+    }
+
+    // turnemoff carries hundreds of via-keepout rectangles on the vRestrict layer; the
+    // unmapped-layer handling must keep them as rule areas, not drop them along with the
+    // unmappable graphics.
+    std::unique_ptr<BOARD> turnemoff( loadBoard( "plugins/eagle_binary/turnemoff.brd" ) );
+
+    if( turnemoff )
+        BOOST_CHECK_GT( ruleAreas( turnemoff.get() ), 500 );
 }
 
 

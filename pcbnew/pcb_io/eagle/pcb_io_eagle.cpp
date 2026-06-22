@@ -952,15 +952,28 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
 
             ERECT        r( gr );
             PCB_LAYER_ID layer = kicad_layer( r.layer );
+            bool         keepout = ( r.layer == EAGLE_LAYER::TRESTRICT
+                                  || r.layer == EAGLE_LAYER::BRESTRICT
+                                  || r.layer == EAGLE_LAYER::VRESTRICT );
 
-            if( layer != UNDEFINED_LAYER )
+            // A rectangle on a restrict layer is a keepout area, the same as a circle
+            // or polygon there; it takes its layer set from setKeepoutSettingsToZone(),
+            // so an unmapped layer must not drop it.
+            if( keepout || layer != UNDEFINED_LAYER )
             {
                 ZONE* zone = new ZONE( m_board );
 
                 m_board->Add( zone, ADD_MODE::APPEND );
 
-                zone->SetLayer( layer );
-                zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                if( keepout )
+                {
+                    setKeepoutSettingsToZone( zone, r.layer );
+                }
+                else
+                {
+                    zone->SetLayer( layer );
+                    zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                }
 
                 ZONE_BORDER_DISPLAY_STYLE outline_hatch = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
 
@@ -1535,7 +1548,10 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
                           || p.layer == EAGLE_LAYER::BRESTRICT
                           || p.layer == EAGLE_LAYER::VRESTRICT );
 
-    if( layer == UNDEFINED_LAYER )
+    // Keepout polygons live on the restrict layers, which have no copper/graphic
+    // KiCad target; they take their layer set from setKeepoutSettingsToZone(), so an
+    // unmapped layer must not drop them.
+    if( !keepout && layer == UNDEFINED_LAYER )
     {
         wxLogMessage( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped" ),
                                         eagle_layer_name( p.layer ),
@@ -2963,6 +2979,16 @@ void PCB_IO_EAGLE::mapEagleLayersToKicad( bool aIsLibraryCache )
         dynamic_cast<wxWindow*>( m_progressReporter )->Hide();
 
     m_layer_map = m_layer_mapping_handler( inputDescs );
+
+    // A layer the handler leaves at UNSELECTED_LAYER has no placement target: the
+    // headless default callback has no user to consult, and the item loaders only
+    // skip UNDEFINED_LAYER. Normalize it so those items are dropped rather than
+    // stranded on an out-of-range layer.
+    for( auto& [name, layer] : m_layer_map )
+    {
+        if( layer == UNSELECTED_LAYER )
+            layer = UNDEFINED_LAYER;
+    }
 
     if( m_progressReporter && dynamic_cast<wxWindow*>( m_progressReporter ))
         dynamic_cast<wxWindow*>( m_progressReporter )->Show();
