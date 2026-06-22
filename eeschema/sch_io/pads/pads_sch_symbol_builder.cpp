@@ -52,29 +52,9 @@ PADS_SCH_SYMBOL_BUILDER::~PADS_SCH_SYMBOL_BUILDER()
 
 int PADS_SCH_SYMBOL_BUILDER::toKiCadUnits( double aPadsValue ) const
 {
-    // Convert from PADS units to KiCad internal units (nanometers)
-    // PADS uses mils by default, KiCad schematic uses schIUScale.MilsToIU()
-
-    double milsValue = aPadsValue;
-
-    switch( m_params.units )
-    {
-    case UNIT_TYPE::MILS:
-        milsValue = aPadsValue;
-        break;
-
-    case UNIT_TYPE::METRIC:
-        // mm to mils: 1 mm = 39.37 mils
-        milsValue = aPadsValue * 39.3701;
-        break;
-
-    case UNIT_TYPE::INCHES:
-        // inches to mils
-        milsValue = aPadsValue * 1000.0;
-        break;
-    }
-
-    return schIUScale.MilsToIU( milsValue );
+    // PADS Logic ASCII schematics always store geometry in mils. The UNITS field selects only
+    // the design-rules unit and must not scale the schematic coordinates.
+    return schIUScale.MilsToIU( aPadsValue );
 }
 
 
