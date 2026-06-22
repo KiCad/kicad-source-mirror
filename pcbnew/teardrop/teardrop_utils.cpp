@@ -1158,8 +1158,12 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
         padOutline.SetClosed( true );
 
         // Cast the into-pad ray from the intersection well past the candidate point so a chord
-        // through the pad always produces a far-edge crossing to clamp against.
-        double   reach = effectiveDist + 2.0 * padRadius + offset;
+        // through the pad always produces a far-edge crossing to clamp against. The reach must
+        // span the longest possible chord from the entry, so use the pad's circumscribed radius
+        // rather than the minor half-axis (padRadius). On an elongated pad entered along its long
+        // axis the far edge sits up to two major half-axes away, and a reach scaled by the minor
+        // axis stops short of it, leaving farEdge == 0 and wrongly collapsing the teardrop.
+        double   reach = effectiveDist + 2.0 * pad->GetBoundingRadius() + offset;
         VECTOR2I rayEnd = intersection + VECTOR2I( KiROUND( -vecVia.x * reach ),
                                                    KiROUND( -vecVia.y * reach ) );
 
