@@ -24,6 +24,8 @@
 #include <shared_mutex>
 #include <unordered_map>
 
+#include <thread_pool.h>
+
 /**
  * A concurrent key/value cache split into independently locked shards.
  *
@@ -63,11 +65,31 @@ public:
 
     void Clear()
     {
-        for( SHARD& shard : m_shards )
+        // Clearing a node-based map frees every entry individually.  A dense board with
+        // heavy custom rules can accumulate hundreds of millions of predicate-cache entries,
+        // and that serial deallocation otherwise stalls DRC re-initialization for tens of
+        // seconds.  The shards are independent, so fan their clears across the worker pool
+        // once the cache is large enough to outweigh the scheduling overhead.
+        if( Size() < PARALLEL_CLEAR_THRESHOLD )
         {
-            std::unique_lock<std::shared_mutex> lock( shard.mutex );
-            shard.map.clear();
+            for( SHARD& shard : m_shards )
+            {
+                std::unique_lock<std::shared_mutex> lock( shard.mutex );
+                shard.map.clear();
+            }
+
+            return;
         }
+
+        thread_pool& tp = GetKiCadThreadPool();
+
+        tp.submit_loop( std::size_t( 0 ), SHARDS,
+                [this]( std::size_t aShard )
+                {
+                    std::unique_lock<std::shared_mutex> lock( m_shards[aShard].mutex );
+                    m_shards[aShard].map.clear();
+                },
+                SHARDS ).wait();
     }
 
     bool Empty() const
@@ -84,6 +106,23 @@ public:
     }
 
 private:
+    /// Entry count above which Clear() fans its per-shard deallocation across the worker pool.
+    static constexpr std::size_t PARALLEL_CLEAR_THRESHOLD = 100000;
+
+    /// Only Clear() needs this; an exact concurrent size has no sound external use, so private.
+    std::size_t Size() const
+    {
+        std::size_t total = 0;
+
+        for( const SHARD& shard : m_shards )
+        {
+            std::shared_lock<std::shared_mutex> lock( shard.mutex );
+            total += shard.map.size();
+        }
+
+        return total;
+    }
+
     struct SHARD
     {
         mutable std::shared_mutex      mutex;

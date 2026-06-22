@@ -2227,6 +2227,14 @@ void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const 
 {
     {
         std::lock_guard<std::mutex> lock( m_errorLimitsMutex );
+
+        // Providers pre-check IsErrorLimitExceeded(), but that check is racy when items
+        // are processed in parallel, letting many threads slip past the cap and overshoot
+        // it.  Enforce the per-code limit atomically here so the reported count is exact
+        // and reproducible regardless of worker scheduling.
+        if( m_errorLimits[ aItem->GetErrorCode() ] <= 0 )
+            return;
+
         m_errorLimits[ aItem->GetErrorCode() ] -= 1;
     }
 

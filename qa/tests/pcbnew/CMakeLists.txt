@@ -110,6 +110,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_backdrill_postmachining.cpp
     drc/test_drc_courtyard_invalid.cpp
     drc/test_drc_courtyard_overlap.cpp
+    drc/test_drc_error_limit.cpp
     drc/test_drc_regressions.cpp
     drc/test_drc_issue23469.cpp
     drc/test_drc_issue24525.cpp

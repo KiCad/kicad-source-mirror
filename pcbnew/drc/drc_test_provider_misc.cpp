@@ -36,6 +36,9 @@
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 
+#include <thread_pool.h>
+
+#include <atomic>
 #include <limits>
 #include <project/project_file.h>
 #include <project/tuning_profiles.h>
@@ -352,25 +355,29 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
 
 void DRC_TEST_PROVIDER_MISC::testAssertions()
 {
-    const int progressDelta = 2000;
-    int       ii = 0;
-    int       items = 0;
+    if( !m_drcEngine->HasRulesForConstraintType( ASSERTION_CONSTRAINT ) )
+        return;
 
-    auto countItems =
+    std::vector<BOARD_ITEM*> allItems;
+
+    forEachGeometryItem( {}, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
-                ++items;
+                allItems.push_back( item );
                 return true;
-            };
+            } );
 
-    auto checkAssertions =
-            [&]( BOARD_ITEM* item ) -> bool
+    std::atomic<size_t> itemsDone( 0 );
+    size_t              itemCount = allItems.size();
+
+    auto checkItem =
+            [&]( size_t idx )
             {
-                if( !reportProgress( ii++, items, progressDelta ) )
-                    return false;
-
-                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ASSERTION_FAILURE ) )
+                if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ASSERTION_FAILURE )
+                    && !m_drcEngine->IsCancelled() )
                 {
+                    BOARD_ITEM* item = allItems[idx];
+
                     m_drcEngine->ProcessAssertions( item,
                             [&]( const DRC_CONSTRAINT* c )
                             {
@@ -383,11 +390,25 @@ void DRC_TEST_PROVIDER_MISC::testAssertions()
                             } );
                 }
 
-                return true;
+                itemsDone.fetch_add( 1 );
             };
 
-    forEachGeometryItem( {}, LSET::AllLayersMask(), countItems );
-    forEachGeometryItem( {}, LSET::AllLayersMask(), checkAssertions );
+    thread_pool& tp = GetKiCadThreadPool();
+    auto         itemFutures = tp.submit_loop( 0, itemCount, checkItem, itemCount );
+
+    while( itemsDone < itemCount )
+    {
+        reportProgress( itemsDone, itemCount );
+
+        if( m_drcEngine->IsCancelled() )
+            break;
+
+        itemFutures.wait_for( std::chrono::milliseconds( 250 ) );
+    }
+
+    // Join every worker before the captured locals go out of scope, whether we finished or
+    // were cancelled.
+    itemFutures.wait();
 }
 
 
