@@ -778,9 +778,14 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
             else if( axisLock == AXIS_LOCK::VERTICAL )
                 m_cursor.x = prevPos.x;
 
-            // Find potential target sheet for dropping
-            SCH_SHEET* sheet = findTargetSheet( selection, m_cursor, selectionHasSheetPins,
-                                                selectionIsGraphicsOnly, ctrlDown );
+            // Find potential target sheet for dropping.  This relocation is only meaningful for a
+            // plain move; drag/break/slice reshape existing connections in place and must never
+            // pull items onto a sub-sheet's screen.
+            SCH_SHEET* sheet = nullptr;
+
+            if( m_mode == MOVE )
+                sheet = findTargetSheet( selection, m_cursor, selectionHasSheetPins, selectionIsGraphicsOnly,
+                                         ctrlDown );
 
             if( sheet != hoverSheet )
             {
