@@ -31,7 +31,10 @@
 #include <board.h>
 #include <footprint.h>
 #include <netinfo.h>
+#include <pcb_text.h>
 #include <pcb_track.h>
+
+#include <set>
 
 #include <wx/filename.h>
 
@@ -171,6 +174,58 @@ BOOST_AUTO_TEST_CASE( LoadV4V5DegeneratePolygons )
 
     BOOST_CHECK_GT( board->Footprints().size(), 0u );
     BOOST_CHECK_GT( board->Tracks().size(), 0u );
+}
+
+
+/**
+ * Regression test for inline long-text (0x3200) records. A text string longer than
+ * the 5-byte inline field is stored as an empty text record followed by a 0x3200
+ * longtext record carrying the full string. The decoder once had no row for 0x3200
+ * and aborted with "Unknown Eagle binary block id 0x3200"; it now folds the string
+ * onto the preceding text item. Each asserted string exceeds the inline field, so it
+ * can only originate from a 0x3200 record.
+ */
+BOOST_AUTO_TEST_CASE( LoadBinaryLongText )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24612_nova_usbbox.brd" ) );
+
+    if( !board )
+        return;
+
+    BOOST_CHECK_GT( board->Footprints().size(), 0u );
+    BOOST_CHECK_GT( board->Tracks().size(), 0u );
+
+    std::set<wxString> texts;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( PCB_TEXT* text = dynamic_cast<PCB_TEXT*>( item ) )
+            texts.insert( text->GetText() );
+    }
+
+    BOOST_CHECK( texts.count( wxS( "ASTROELEKTRONIK" ) ) );
+    BOOST_CHECK( texts.count( wxS( "Nova+ USB-Box" ) ) );
+}
+
+
+/**
+ * Regression test for an over-counted recursive subsection. This board's signal
+ * subsection declares more recursive children than the stream actually holds, so
+ * the count-driven block walk ran off the end of the block stream and reached the
+ * trailing free-text sentinel (0x1312), which is not a block and aborted the load
+ * with "Unknown Eagle binary block id". The walk now stops when it reaches the
+ * free-text section instead of treating it as another block.
+ */
+BOOST_AUTO_TEST_CASE( LoadV3RecursiveCountOverrun )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/Sigma2_e.brd" ) );
+
+    if( !board )
+        return;
+
+    BOOST_CHECK_GT( board->Footprints().size(), 0u );
+    BOOST_CHECK_GT( board->Tracks().size(), 0u );
+    BOOST_CHECK_GT( board->GetNetInfo().GetNetCount(), 1u );
 }
 
 

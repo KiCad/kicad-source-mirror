@@ -946,6 +946,16 @@ double EAGLE_BIN_PARSER::loadDouble( size_t aOffs ) const
 
 int EAGLE_BIN_PARSER::readBlock( long& aNumBlocks, EGB_NODE* aParent )
 {
+    // Over-counted subsection counts can drive the walk past the last block onto the
+    // free-text sentinel, which readNotes() owns. Returning zero here lets callers
+    // collapse the remaining phantom iterations. Checked before the 24-byte guard
+    // because the free-text section can be shorter than a block header.
+    if( m_pos + 2 <= m_buf->size() && ( *m_buf )[m_pos] == 0x13 && ( *m_buf )[m_pos + 1] == 0x12 )
+    {
+        aNumBlocks = 0;
+        return 0;
+    }
+
     if( m_pos + 24 > m_buf->size() )
         THROW_IO_ERROR( _( "Short read in Eagle binary file (truncated block)." ) );
 
@@ -1046,6 +1056,10 @@ int EAGLE_BIN_PARSER::readBlock( long& aNumBlocks, EGB_NODE* aParent )
             for( uint32_t n = 0; n < numch && aNumBlocks > 0; n++ )
             {
                 int res = readBlock( aNumBlocks, lpar );
+
+                if( res == 0 )
+                    break;
+
                 processed += res;
             }
         }
@@ -1059,6 +1073,10 @@ int EAGLE_BIN_PARSER::readBlock( long& aNumBlocks, EGB_NODE* aParent )
             for( uint32_t n = 0; n < numch && rem > 0; n++ )
             {
                 int res = readBlock( rem, lpar );
+
+                if( res == 0 )
+                    break;
+
                 aNumBlocks -= res;
                 processed += res;
             }
