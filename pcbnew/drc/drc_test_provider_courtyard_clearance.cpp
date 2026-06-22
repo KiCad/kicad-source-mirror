@@ -283,29 +283,42 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
             bool checkFront = false;
             bool checkBack = false;
 
-            constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, F_Cu );
-            clearance = constraint.GetValue().Min();
+            // checkFront/checkBack are only consulted by the pad-hole tests below, which run
+            // only when a footprint bbox overlaps the other's inflated courtyard. Evaluating the
+            // courtyard-clearance rule for every pair up front is the dominant cost on dense
+            // boards, so gate it behind the same bbox test and skip it for far-apart pairs.
+            bool padCheckPossible =
+                    ( frontA.OutlineCount() > 0 && frontA_worstCaseBBox.Intersects( fpB_bbox ) )
+                    || ( backA.OutlineCount() > 0 && backA_worstCaseBBox.Intersects( fpB_bbox ) )
+                    || ( frontB.OutlineCount() > 0 && frontB.BBoxFromCaches().Intersects( fpA_bbox ) )
+                    || ( backB.OutlineCount() > 0 && backB.BBoxFromCaches().Intersects( fpA_bbox ) );
 
-            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
-                checkFront = true;
+            if( padCheckPossible )
+            {
+                constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, F_Cu );
+                clearance = constraint.GetValue().Min();
 
-            constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpB, fpA, F_Cu );
-            clearance = constraint.GetValue().Min();
+                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+                    checkFront = true;
 
-            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
-                checkFront = true;
+                constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpB, fpA, F_Cu );
+                clearance = constraint.GetValue().Min();
 
-            constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, B_Cu );
-            clearance = constraint.GetValue().Min();
+                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+                    checkFront = true;
 
-            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
-                checkBack = true;
+                constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, B_Cu );
+                clearance = constraint.GetValue().Min();
 
-            constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpB, fpA, B_Cu );
-            clearance = constraint.GetValue().Min();
+                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+                    checkBack = true;
 
-            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
-                checkBack = true;
+                constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpB, fpA, B_Cu );
+                clearance = constraint.GetValue().Min();
+
+                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+                    checkBack = true;
+            }
 
             auto testPadAgainstCourtyards =
                     [&]( const PAD* pad, const FOOTPRINT* fp )

@@ -40,6 +40,7 @@
 #include <title_block.h>
 #include <zone_settings.h>
 #include <shared_mutex>
+#include <sharded_cache.h>
 #include <unordered_set>
 #include <project.h>
 #include <list>
@@ -126,6 +127,22 @@ struct PTR_PTR_LAYER_CACHE_KEY
     }
 };
 
+// Caches the whole-predicate result of a footprint-selector query (e.g. intersectsCourtyard)
+// for one item, so a rule set that repeats the same condition does not re-scan every footprint.
+struct ITEM_SELECTOR_LAYER_CACHE_KEY
+{
+    const BOARD_ITEM* A;
+    wxString          Selector;     // the selector argument string, compared verbatim
+    PCB_LAYER_ID      Layer;
+    int               Constraint;   // some predicates (intersectsArea) branch on the constraint
+
+    bool operator==( const ITEM_SELECTOR_LAYER_CACHE_KEY& other ) const
+    {
+        return A == other.A && Selector == other.Selector && Layer == other.Layer
+               && Constraint == other.Constraint;
+    }
+};
+
 struct LAYERS_CHECKED
 {
     LAYERS_CHECKED() :
@@ -174,6 +191,17 @@ namespace std
         {
             std::size_t seed = 0xa82de1c0;
             hash_combine( seed, k.A, k.B, k.Layer );
+            return seed;
+        }
+    };
+
+    template <>
+    struct hash<ITEM_SELECTOR_LAYER_CACHE_KEY>
+    {
+        std::size_t operator()( const ITEM_SELECTOR_LAYER_CACHE_KEY& k ) const
+        {
+            std::size_t seed = 0xa82de1c0;
+            hash_combine( seed, k.A, k.Selector, k.Layer, k.Constraint );
             return seed;
         }
     };
@@ -1479,11 +1507,20 @@ public:
 public:
     // ------------ Run-time caches -------------
     mutable std::shared_mutex                             m_CachesMutex;
-    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_IntersectsCourtyardCache;
-    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_IntersectsFCourtyardCache;
-    std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_IntersectsBCourtyardCache;
-    std::unordered_map<PTR_PTR_LAYER_CACHE_KEY, bool>     m_IntersectsAreaCache;
-    std::unordered_map<PTR_PTR_LAYER_CACHE_KEY, bool>     m_EnclosedByAreaCache;
+    // These predicate caches are written per item-pair from every DRC worker thread, so they
+    // carry their own internal sharded locks and are NOT covered by m_CachesMutex.
+    SHARDED_CACHE<PTR_PTR_CACHE_KEY, bool>                m_IntersectsCourtyardCache;
+    SHARDED_CACHE<PTR_PTR_CACHE_KEY, bool>                m_IntersectsFCourtyardCache;
+    SHARDED_CACHE<PTR_PTR_CACHE_KEY, bool>                m_IntersectsBCourtyardCache;
+    SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_IntersectsAreaCache;
+    SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_EnclosedByAreaCache;
+    // Whole-predicate result memo per item, so repeated identical courtyard conditions across a
+    // rule set resolve in O(1) instead of re-scanning every footprint each time.
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>   m_IntersectsCourtyardResultCache;
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>   m_IntersectsFCourtyardResultCache;
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>   m_IntersectsBCourtyardResultCache;
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>   m_IntersectsAreaResultCache;
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>   m_EnclosedByAreaResultCache;
     std::unordered_map< wxString, LSET >                  m_LayerExpressionCache;
     std::unordered_map<ZONE*, std::unique_ptr<DRC_RTREE>> m_CopperZoneRTreeCache;
     std::shared_ptr<DRC_RTREE>                            m_CopperItemRTreeCache;

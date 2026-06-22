@@ -1365,6 +1365,13 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     REPORT( EscapeHTML( _( "--> Assertion failed. <--" ) ) )
             };
 
+    // Within a single EvalRules call a, b, aLayer and the constraint type are fixed, so a rule
+    // condition's result depends only on its expression. Large rule sets contain many rules with
+    // identical conditions; caching by expression collapses those duplicates into one evaluation
+    // each and avoids re-running the (allocation-heavy) expression VM. Only used on the bulk path
+    // with no reporter, since the reporter path has reporting side effects.
+    std::unordered_map<wxString, bool> conditionCache;
+
     auto processConstraint =
             [&]( const DRC_ENGINE_CONSTRAINT* c )
             {
@@ -1741,7 +1748,31 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                                   EscapeHTML( c->condition->GetExpression() ) ) )
                     }
 
-                    if( c->condition->EvaluateFor( a, b, c->constraint.m_Type, aLayer, aReporter ) )
+                    bool condMatched = false;
+
+                    if( aReporter )
+                    {
+                        condMatched = c->condition->EvaluateFor( a, b, c->constraint.m_Type, aLayer,
+                                                                 aReporter );
+                    }
+                    else
+                    {
+                        const wxString& expr = c->condition->GetExpression();
+                        auto            it = conditionCache.find( expr );
+
+                        if( it != conditionCache.end() )
+                        {
+                            condMatched = it->second;
+                        }
+                        else
+                        {
+                            condMatched = c->condition->EvaluateFor( a, b, c->constraint.m_Type,
+                                                                     aLayer, nullptr );
+                            conditionCache[expr] = condMatched;
+                        }
+                    }
+
+                    if( condMatched )
                     {
                         if( aReporter )
                         {
@@ -1860,6 +1891,10 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             a = parentFootprint;
         else
             b = parentFootprint;
+
+        // a/b just changed, so conditions evaluated against the pad must not be reused for the
+        // parent footprint.
+        conditionCache.clear();
 
         auto it = m_constraintMap.find( aConstraintType );
 

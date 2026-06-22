@@ -265,17 +265,25 @@ void BOARD::IncrementTimeStamp()
 
     m_timeStamp++;
 
-    if( !m_IntersectsAreaCache.empty() || !m_EnclosedByAreaCache.empty() || !m_IntersectsCourtyardCache.empty()
-        || !m_IntersectsFCourtyardCache.empty() || !m_IntersectsBCourtyardCache.empty()
+    if( !m_IntersectsAreaCache.Empty() || !m_EnclosedByAreaCache.Empty() || !m_IntersectsCourtyardCache.Empty()
+        || !m_IntersectsFCourtyardCache.Empty() || !m_IntersectsBCourtyardCache.Empty()
+        || !m_IntersectsCourtyardResultCache.Empty() || !m_IntersectsFCourtyardResultCache.Empty()
+        || !m_IntersectsBCourtyardResultCache.Empty() || !m_IntersectsAreaResultCache.Empty()
+        || !m_EnclosedByAreaResultCache.Empty()
         || !m_LayerExpressionCache.empty() || !m_ZoneBBoxCache.empty() || m_CopperItemRTreeCache
         || m_maxClearanceValue.has_value() || !m_ItemNetclassCache.empty()
         || !m_ZonesByNameCache.empty() || !m_DeflatedZoneOutlineCache.empty() )
     {
-        m_IntersectsAreaCache.clear();
-        m_EnclosedByAreaCache.clear();
-        m_IntersectsCourtyardCache.clear();
-        m_IntersectsFCourtyardCache.clear();
-        m_IntersectsBCourtyardCache.clear();
+        m_IntersectsAreaCache.Clear();
+        m_EnclosedByAreaCache.Clear();
+        m_IntersectsCourtyardCache.Clear();
+        m_IntersectsFCourtyardCache.Clear();
+        m_IntersectsBCourtyardCache.Clear();
+        m_IntersectsCourtyardResultCache.Clear();
+        m_IntersectsFCourtyardResultCache.Clear();
+        m_IntersectsBCourtyardResultCache.Clear();
+        m_IntersectsAreaResultCache.Clear();
+        m_EnclosedByAreaResultCache.Clear();
         m_LayerExpressionCache.clear();
         m_ItemNetclassCache.clear();
         m_ZonesByNameCache.clear();

@@ -198,9 +198,16 @@ static void isPlatedFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 bool collidesWithCourtyard( BOARD_ITEM* aItem, std::shared_ptr<SHAPE>& aItemShape,
                             PCBEXPR_CONTEXT* aCtx, FOOTPRINT* aFootprint, PCB_LAYER_ID aSide )
 {
-    SHAPE_POLY_SET footprintCourtyard;
+    const SHAPE_POLY_SET& footprintCourtyard = aFootprint->GetCourtyard( aSide );
 
-    footprintCourtyard = aFootprint->GetCourtyard( aSide );
+    if( footprintCourtyard.OutlineCount() == 0 )
+        return false;
+
+    // Broad phase before the polygon-level Collide, which dominates when a rule tests a
+    // courtyard against many items (intersectsCourtyard('*') over a full board). A bbox miss
+    // cannot collide, so the expensive shape build and Collide are skipped.
+    if( !footprintCourtyard.BBox().Intersects( aItem->GetBoundingBox() ) )
+        return false;
 
     if( !aItemShape )
     {
@@ -307,35 +314,47 @@ static void intersectsCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg, context]() -> double
             {
-                BOARD*                 board = item->GetBoard();
+                BOARD*         board = item->GetBoard();
+                bool           transient = ( item->GetFlags() & ROUTER_TRANSIENT ) != 0;
+                const wxString selector = arg->AsString();
+
+                // Whole-predicate memo: the same condition repeated across many rules resolves
+                // in O(1) here instead of re-scanning every footprint.  "A"/"B" select the other
+                // item of the current pair rather than a board-wide set, so they cannot be keyed
+                // by item alone (and touch only one footprint anyway); skip the memo for those.
+                bool memoize = !transient && selector != wxT( "A" ) && selector != wxT( "B" );
+
+                ITEM_SELECTOR_LAYER_CACHE_KEY rkey{ item, selector, context->GetLayer(),
+                                                    context->GetConstraint() };
+                bool whole = false;
+
+                if( memoize && board->m_IntersectsCourtyardResultCache.Get( rkey, whole ) )
+                    return whole ? 1.0 : 0.0;
+
                 std::shared_ptr<SHAPE> itemShape;
 
-                if( searchFootprints( board, arg->AsString(), context,
+                bool res = searchFootprints( board, selector, context,
                         [&]( FOOTPRINT* fp )
                         {
                             PTR_PTR_CACHE_KEY key = { fp, item };
+                            bool              cached = false;
 
-                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
-                            {
-                                std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
+                            if( !transient && board->m_IntersectsCourtyardCache.Get( key, cached ) )
+                                return cached;
 
-                                auto i = board->m_IntersectsCourtyardCache.find( key );
-
-                                if( i != board->m_IntersectsCourtyardCache.end() )
-                                    return i->second;
-                            }
-
-                            bool res = collidesWithCourtyard( item, itemShape, context, fp, F_Cu )
+                            bool hit = collidesWithCourtyard( item, itemShape, context, fp, F_Cu )
                                     || collidesWithCourtyard( item, itemShape, context, fp, B_Cu );
 
-                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
-                            {
-                                std::unique_lock<std::shared_mutex> cacheLock( board->m_CachesMutex );
-                                board->m_IntersectsCourtyardCache[ key ] = res;
-                            }
+                            if( !transient )
+                                board->m_IntersectsCourtyardCache.Set( key, hit );
 
-                            return res;
-                        } ) )
+                            return hit;
+                        } );
+
+                if( memoize )
+                    board->m_IntersectsCourtyardResultCache.Set( rkey, res );
+
+                if( res )
                 {
                     return 1.0;
                 }
@@ -371,41 +390,45 @@ static void intersectsFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg, context]() -> double
             {
-                BOARD*                 board = item->GetBoard();
+                BOARD*         board = item->GetBoard();
+                bool           transient = ( item->GetFlags() & ROUTER_TRANSIENT ) != 0;
+                const wxString selector = arg->AsString();
+
+                // See intersectsCourtyard: "A"/"B" are pair-relative and not memoizable here.
+                bool memoize = !transient && selector != wxT( "A" ) && selector != wxT( "B" );
+
+                ITEM_SELECTOR_LAYER_CACHE_KEY rkey{ item, selector, context->GetLayer(),
+                                                    context->GetConstraint() };
+                bool whole = false;
+
+                if( memoize && board->m_IntersectsFCourtyardResultCache.Get( rkey, whole ) )
+                    return whole ? 1.0 : 0.0;
+
                 std::shared_ptr<SHAPE> itemShape;
 
-                if( searchFootprints( board, arg->AsString(), context,
+                bool res = searchFootprints( board, selector, context,
                         [&]( FOOTPRINT* fp )
                         {
                             PTR_PTR_CACHE_KEY key = { fp, item };
+                            bool              cached = false;
 
-                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
-                            {
-                                std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
-
-                                auto i = board->m_IntersectsFCourtyardCache.find( key );
-
-                                if( i != board->m_IntersectsFCourtyardCache.end() )
-                                    return i->second;
-                            }
+                            if( !transient && board->m_IntersectsFCourtyardCache.Get( key, cached ) )
+                                return cached;
 
                             PCB_LAYER_ID layerId = fp->IsFlipped() ? B_Cu : F_Cu;
 
-                            bool res = collidesWithCourtyard( item, itemShape, context, fp, layerId );
+                            bool hit = collidesWithCourtyard( item, itemShape, context, fp, layerId );
 
-                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
-                            {
-                                std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
-                                board->m_IntersectsFCourtyardCache[ key ] = res;
-                            }
+                            if( !transient )
+                                board->m_IntersectsFCourtyardCache.Set( key, hit );
 
-                            return res;
-                        } ) )
-                {
-                    return 1.0;
-                }
+                            return hit;
+                        } );
 
-                return 0.0;
+                if( memoize )
+                    board->m_IntersectsFCourtyardResultCache.Set( rkey, res );
+
+                return res ? 1.0 : 0.0;
             } );
 }
 
@@ -436,41 +459,45 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg, context]() -> double
             {
-                BOARD*                 board = item->GetBoard();
+                BOARD*         board = item->GetBoard();
+                bool           transient = ( item->GetFlags() & ROUTER_TRANSIENT ) != 0;
+                const wxString selector = arg->AsString();
+
+                // See intersectsCourtyard: "A"/"B" are pair-relative and not memoizable here.
+                bool memoize = !transient && selector != wxT( "A" ) && selector != wxT( "B" );
+
+                ITEM_SELECTOR_LAYER_CACHE_KEY rkey{ item, selector, context->GetLayer(),
+                                                    context->GetConstraint() };
+                bool whole = false;
+
+                if( memoize && board->m_IntersectsBCourtyardResultCache.Get( rkey, whole ) )
+                    return whole ? 1.0 : 0.0;
+
                 std::shared_ptr<SHAPE> itemShape;
 
-                if( searchFootprints( board, arg->AsString(), context,
+                bool res = searchFootprints( board, selector, context,
                         [&]( FOOTPRINT* fp )
                         {
                             PTR_PTR_CACHE_KEY key = { fp, item };
+                            bool              cached = false;
 
-                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
-                            {
-                                std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
+                            if( !transient && board->m_IntersectsBCourtyardCache.Get( key, cached ) )
+                                return cached;
 
-                                auto i = board->m_IntersectsBCourtyardCache.find( key );
+                            PCB_LAYER_ID layerId = fp->IsFlipped() ? F_Cu : B_Cu;
 
-                                if( i != board->m_IntersectsBCourtyardCache.end() )
-                                    return i->second;
-                            }
+                            bool hit = collidesWithCourtyard( item, itemShape, context, fp, layerId );
 
-                                PCB_LAYER_ID layerId = fp->IsFlipped() ? F_Cu : B_Cu;
+                            if( !transient )
+                                board->m_IntersectsBCourtyardCache.Set( key, hit );
 
-                                bool res = collidesWithCourtyard( item, itemShape, context, fp, layerId );
+                            return hit;
+                        } );
 
-                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
-                            {
-                                std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
-                                board->m_IntersectsBCourtyardCache[ key ] = res;
-                            }
+                if( memoize )
+                    board->m_IntersectsBCourtyardResultCache.Set( rkey, res );
 
-                            return res;
-                        } ) )
-                {
-                    return 1.0;
-                }
-
-                return 0.0;
+                return res ? 1.0 : 0.0;
             } );
 }
 
@@ -737,11 +764,24 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg, context]() -> double
             {
-                BOARD*       board = item->GetBoard();
-                PCB_LAYER_ID aLayer = context->GetLayer();
-                BOX2I        itemBBox = item->GetBoundingBox();
+                BOARD*         board = item->GetBoard();
+                PCB_LAYER_ID   aLayer = context->GetLayer();
+                bool           transient = ( item->GetFlags() & ROUTER_TRANSIENT ) != 0;
+                const wxString selector = arg->AsString();
 
-                if( searchAreas( board, arg->AsString(), context,
+                // See intersectsCourtyard: "A"/"B" are pair-relative and not memoizable here.
+                bool memoize = !transient && selector != wxT( "A" ) && selector != wxT( "B" );
+
+                ITEM_SELECTOR_LAYER_CACHE_KEY rkey{ item, selector, aLayer,
+                                                    context->GetConstraint() };
+                bool whole = false;
+
+                if( memoize && board->m_IntersectsAreaResultCache.Get( rkey, whole ) )
+                    return whole ? 1.0 : 0.0;
+
+                BOX2I itemBBox = item->GetBoundingBox();
+
+                bool res = searchAreas( board, selector, context,
                         [&]( ZONE* aArea )
                         {
                             if( !aArea || aArea == item || aArea->GetParent() == item )
@@ -779,16 +819,14 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                             if( !isTransient )
                             {
-                                std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
-
                                 for( PCB_LAYER_ID layer : testLayers.UIOrder() )
                                 {
                                     PTR_PTR_LAYER_CACHE_KEY key = { aArea, item, layer };
-                                    auto i = board->m_IntersectsAreaCache.find( key );
+                                    bool                    cached = false;
 
-                                    if( i != board->m_IntersectsAreaCache.end() )
+                                    if( board->m_IntersectsAreaCache.Get( key, cached ) )
                                     {
-                                        if( i->second )
+                                        if( cached )
                                             return true;
                                     }
                                     else
@@ -803,7 +841,6 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                                     layersToCompute.push_back( layer );
                             }
 
-                            std::vector<std::pair<PTR_PTR_LAYER_CACHE_KEY, bool>> results;
                             bool anyCollision = false;
 
                             for( PCB_LAYER_ID layer : layersToCompute )
@@ -811,27 +848,20 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                                 bool collides = collidesWithArea( item, layer, context, aArea );
 
                                 if( !isTransient )
-                                    results.push_back( { { aArea, item, layer }, collides } );
+                                    board->m_IntersectsAreaCache.Set( { aArea, item, layer },
+                                                                      collides );
 
                                 if( collides )
                                     anyCollision = true;
                             }
 
-                            if( !isTransient && !results.empty() )
-                            {
-                                std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
-
-                                for( const auto& [key, collides] : results )
-                                    board->m_IntersectsAreaCache[key] = collides;
-                            }
-
                             return anyCollision;
-                        } ) )
-                {
-                    return 1.0;
-                }
+                        } );
 
-                return 0.0;
+                if( memoize )
+                    board->m_IntersectsAreaResultCache.Set( rkey, res );
+
+                return res ? 1.0 : 0.0;
             } );
 }
 
@@ -862,12 +892,25 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg, context]() -> double
             {
-                BOARD*       board = item->GetBoard();
-                int          maxError = board->GetDesignSettings().m_MaxError;
-                PCB_LAYER_ID layer = context->GetLayer();
-                BOX2I        itemBBox = item->GetBoundingBox();
+                BOARD*         board = item->GetBoard();
+                int            maxError = board->GetDesignSettings().m_MaxError;
+                PCB_LAYER_ID   layer = context->GetLayer();
+                bool           transient = ( item->GetFlags() & ROUTER_TRANSIENT ) != 0;
+                const wxString selector = arg->AsString();
 
-                if( searchAreas( board, arg->AsString(), context,
+                // See intersectsCourtyard: "A"/"B" are pair-relative and not memoizable here.
+                bool memoize = !transient && selector != wxT( "A" ) && selector != wxT( "B" );
+
+                ITEM_SELECTOR_LAYER_CACHE_KEY rkey{ item, selector, layer,
+                                                    context->GetConstraint() };
+                bool whole = false;
+
+                if( memoize && board->m_EnclosedByAreaResultCache.Get( rkey, whole ) )
+                    return whole ? 1.0 : 0.0;
+
+                BOX2I itemBBox = item->GetBoundingBox();
+
+                bool res = searchAreas( board, selector, context,
                         [&]( ZONE* aArea )
                         {
                             if( !aArea || aArea == item || aArea->GetParent() == item )
@@ -883,19 +926,16 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                                 return false;
 
                             PTR_PTR_LAYER_CACHE_KEY key = { aArea, item, layer };
+                            bool                    cached = false;
 
-                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                            if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0
+                                && board->m_EnclosedByAreaCache.Get( key, cached ) )
                             {
-                                std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
-
-                                auto i = board->m_EnclosedByAreaCache.find( key );
-
-                                if( i != board->m_EnclosedByAreaCache.end() )
-                                    return i->second;
+                                return cached;
                             }
 
                             SHAPE_POLY_SET itemShape;
-                            bool           enclosedByArea;
+                            bool           enclosedByArea = false;
 
                             if( item->Type() == PCB_ZONE_T )
                             {
@@ -930,18 +970,15 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             }
 
                             if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
-                            {
-                                std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
-                                board->m_EnclosedByAreaCache[ key ] = enclosedByArea;
-                            }
+                                board->m_EnclosedByAreaCache.Set( key, enclosedByArea );
 
                             return enclosedByArea;
-                        } ) )
-                {
-                    return 1.0;
-                }
+                        } );
 
-                return 0.0;
+                if( memoize )
+                    board->m_EnclosedByAreaResultCache.Set( rkey, res );
+
+                return res ? 1.0 : 0.0;
             } );
 }
 
