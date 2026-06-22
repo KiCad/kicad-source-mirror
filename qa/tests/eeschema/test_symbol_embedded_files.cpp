@@ -33,9 +33,11 @@
 #include <schematic.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <project.h>
 #include <lib_id.h>
+#include <settings/settings_manager.h>
 
 #include <wx/filename.h>
 #include <wx/dir.h>
@@ -281,6 +283,103 @@ BOOST_AUTO_TEST_CASE( AssignmentPreservesEmbeddedFiles )
     EMBEDDED_FILES::EMBEDDED_FILE* destFile = dest->GetEmbeddedFile( wxS( "source.pdf" ) );
     BOOST_REQUIRE( destFile );
     BOOST_CHECK( destFile->Validate() );
+}
+
+
+/**
+ * Adding a new embedded file to a placed schematic symbol must not drop the existing files.
+ * The schematic serializes the screen's cached library symbols, while the symbol properties
+ * dialog edits the placed instance's library symbol.  SCH_SCREEN::Append must reconcile the
+ * cache with the instance even when only the embedded files changed (LIB_SYMBOL::Compare
+ * ignores them); without it the edits are lost on save.
+ */
+BOOST_AUTO_TEST_CASE( AddEmbeddedFileToPlacedSymbolSurvivesSave )
+{
+    SETTINGS_MANAGER settingsManager;
+    wxString         projectPath = wxFileName( GetTempDir(), wxS( "test_project.kicad_pro" ) ).GetFullPath();
+    settingsManager.LoadProject( projectPath.ToStdString() );
+
+    auto schematic = std::make_unique<SCHEMATIC>( nullptr );
+    schematic->SetProject( &settingsManager.Prj() );
+    schematic->Reset();
+
+    SCH_SHEET*  defaultSheet = schematic->GetTopLevelSheet( 0 );
+    SCH_SHEET*  rootSheet = new SCH_SHEET( schematic.get() );
+    SCH_SCREEN* screen = new SCH_SCREEN( schematic.get() );
+    rootSheet->SetScreen( screen );
+
+    schematic->AddTopLevelSheet( rootSheet );
+    schematic->RemoveTopLevelSheet( defaultSheet );
+    delete defaultSheet;
+
+    // Build a library symbol carrying one embedded file and place it on the sheet.
+    std::unique_ptr<LIB_SYMBOL> libSymbol = std::make_unique<LIB_SYMBOL>( wxS( "EmbeddedSymbol" ) );
+    libSymbol->GetValueField().SetText( wxS( "EmbeddedSymbol" ) );
+    libSymbol->GetReferenceField().SetText( wxS( "U" ) );
+    libSymbol->AddFile( CreateTestEmbeddedFile( wxS( "datasheet.pdf" ), "Original datasheet" ) );
+
+    SCH_SHEET_PATH rootPath;
+    rootPath.push_back( &schematic->Root() );
+    rootPath.push_back( rootSheet );
+
+    // Two instances share one cached library symbol.  This is the case that exposes the bug:
+    // removing one symbol keeps the cache entry alive, so Append must reconcile the cache
+    // through its "unchanged" branch (which is what LIB_SYMBOL::Compare reports for an
+    // embedded-file-only edit) rather than rebuilding it from scratch.
+    SCH_SYMBOL* schSymbol =
+            new SCH_SYMBOL( *libSymbol, LIB_ID( "test_lib", "EmbeddedSymbol" ), &rootPath, 0 );
+    schSymbol->SetRef( &rootPath, wxS( "U1" ) );
+    screen->Append( schSymbol );
+
+    SCH_SYMBOL* otherSymbol =
+            new SCH_SYMBOL( *libSymbol, LIB_ID( "test_lib", "EmbeddedSymbol" ), &rootPath, 0 );
+    otherSymbol->SetRef( &rootPath, wxS( "U2" ) );
+    otherSymbol->Move( VECTOR2I( 2540000, 0 ) );
+    screen->Append( otherSymbol );
+
+    // Adding a second file through the properties dialog only touches the placed instance's
+    // library symbol, mirroring what PANEL_EMBEDDED_FILES does.
+    schSymbol->GetEmbeddedFiles()->AddFile( CreateTestEmbeddedFile( wxS( "extra.pdf" ), "Newly added" ) );
+
+    BOOST_CHECK( schSymbol->GetEmbeddedFiles()->HasFile( wxS( "datasheet.pdf" ) ) );
+    BOOST_CHECK( schSymbol->GetEmbeddedFiles()->HasFile( wxS( "extra.pdf" ) ) );
+
+    // Re-add the symbol the same way the properties dialog does on OK; Append must push the
+    // instance's embedded files into the cache that is serialized.
+    BOOST_REQUIRE( screen->Remove( schSymbol ) );
+    screen->Append( schSymbol );
+
+    wxString fileName = wxFileName( GetTempDir(), wxS( "embedded_roundtrip.kicad_sch" ) ).GetFullPath();
+
+    SCH_IO_KICAD_SEXPR io;
+    io.SaveSchematicFile( fileName, rootSheet, schematic.get() );
+    BOOST_REQUIRE( wxFileExists( fileName ) );
+
+    schematic->Reset();
+    SCH_SHEET* newDefaultSheet = schematic->GetTopLevelSheet( 0 );
+    SCH_SHEET* loadedSheet = io.LoadSchematicFile( fileName, schematic.get() );
+    BOOST_REQUIRE( loadedSheet );
+
+    schematic->AddTopLevelSheet( loadedSheet );
+    schematic->RemoveTopLevelSheet( newDefaultSheet );
+    delete newDefaultSheet;
+
+    SCH_SCREEN* loadedScreen = loadedSheet->GetScreen();
+    BOOST_REQUIRE( loadedScreen );
+
+    bool foundSymbol = false;
+
+    for( const auto& [name, cachedSymbol] : loadedScreen->GetLibSymbols() )
+    {
+        if( cachedSymbol->GetName() == wxS( "EmbeddedSymbol" ) )
+        {
+            foundSymbol = true;
+            BOOST_CHECK( cachedSymbol->HasFile( wxS( "datasheet.pdf" ) ) );
+            BOOST_CHECK( cachedSymbol->HasFile( wxS( "extra.pdf" ) ) );
+        }
+    }
+
+    BOOST_CHECK( foundSymbol );
 }
 
 

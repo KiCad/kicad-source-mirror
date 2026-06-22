@@ -259,6 +259,13 @@ void SCH_SCREEN::Append( SCH_ITEM* aItem, bool aUpdateLibSymbol )
                             m_libSymbols[newName] = newLibSymbol;
                         }
                     }
+                    else
+                    {
+                        // LIB_SYMBOL::Compare ignores embedded files, so an embedded-file-only
+                        // edit leaves the cached symbol equal but stale.  Refresh the cache from
+                        // the instance so the change survives serialization.
+                        *foundSymbol->GetEmbeddedFiles() = *symbol->GetLibSymbolRef()->GetEmbeddedFiles();
+                    }
                 }
             }
         }
