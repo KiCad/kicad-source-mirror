@@ -34,6 +34,7 @@
 #include <pcb_text.h>
 #include <pcb_track.h>
 
+#include <map>
 #include <set>
 
 #include <wx/filename.h>
@@ -226,6 +227,48 @@ BOOST_AUTO_TEST_CASE( LoadV3RecursiveCountOverrun )
     BOOST_CHECK_GT( board->Footprints().size(), 0u );
     BOOST_CHECK_GT( board->Tracks().size(), 0u );
     BOOST_CHECK_GT( board->GetNetInfo().GetNetCount(), 1u );
+}
+
+
+/**
+ * Regression test for the binary rotation decode. boomchak places LED1..LED16 in a
+ * ring spaced 22.5 degrees apart. The original decoder routed every angle below 90
+ * degrees through a v3 fallback that masked the wrong nibble, collapsing LED2, LED3
+ * and LED4 onto a single 180 degree orientation; the angle is now read as the
+ * full-circle / 4096 fixed-point value the format stores for all versions.
+ */
+BOOST_AUTO_TEST_CASE( LoadV3FootprintRotationRing )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/boomchak.brd" ) );
+
+    if( !board )
+        return;
+
+    std::map<int, double> ledRot;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        long n = 0;
+
+        if( fp->GetReference().StartsWith( wxS( "LED" ) ) && fp->GetReference().Mid( 3 ).ToLong( &n ) )
+            ledRot[(int) n] = fp->GetOrientation().AsDegrees();
+    }
+
+    for( int n = 1; n < 16; n++ )
+    {
+        BOOST_REQUIRE_MESSAGE( ledRot.count( n ) && ledRot.count( n + 1 ),
+                               "expected ring footprints LED" << n << " and LED" << ( n + 1 ) );
+
+        double step = ledRot[n + 1] - ledRot[n];
+
+        while( step > 180.0 )
+            step -= 360.0;
+
+        while( step <= -180.0 )
+            step += 360.0;
+
+        BOOST_CHECK_CLOSE( step, 22.5, 0.5 );
+    }
 }
 
 

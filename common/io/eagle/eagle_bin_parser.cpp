@@ -460,6 +460,42 @@ const SCRIPT_ROW g_script[] = {
         { "layers", T_UBF, 16, BITFIELD( 1, 0, 7 ) },
         { "stop", T_BMB, 17, 0x01 },
         TERM_A } },
+    // Pads and SMDs use two record layouts distinguished only by bit 7 of the
+    // signature low byte, which the 0xFF5F/0xFF7F masks of the full-layout rows
+    // below discard. The bit-7-clear variant omits the rotation and flag words and
+    // stores the pad name inline at offset 16, exactly where the bit-7-set record
+    // keeps its rotation word, so without a dedicated row the shared offsets read
+    // the name bytes back as a bogus rotation. These bit-7-clear rows precede the
+    // masked rows so such a block binds here first; a bit-7-set block fails the
+    // match and falls through to the full-layout row. Each variant mask still
+    // ignores the same low-byte flag bits as its full-layout row (bit 5 for pads)
+    // so only bit 7 selects the layout. The absent bin_rot leaves the pad
+    // unrotated, as the variant carries no angle.
+    { EGKW_SECT_PAD,
+      0xFFDF,
+      "pad",
+      { TERM_F },
+      { TERM_S },
+      { { "shape", T_INT, 2, 1 },
+        { "x", T_INT, 4, 4 },
+        { "y", T_INT, 8, 4 },
+        { "half_drill", T_UBF, 12, BITFIELD( 2, 0, 15 ) },
+        { "half_diameter", T_UBF, 14, BITFIELD( 2, 0, 15 ) },
+        { "name", T_STR, 16, 8 },
+        TERM_A } },
+    { EGKW_SECT_SMD,
+      0xFFFF,
+      "smd",
+      { TERM_F },
+      { TERM_S },
+      { { "roundness", T_INT, 2, 1 },
+        { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
+        { "x", T_INT, 4, 4 },
+        { "y", T_INT, 8, 4 },
+        { "half_dx", T_UBF, 12, BITFIELD( 2, 0, 15 ) },
+        { "half_dy", T_UBF, 14, BITFIELD( 2, 0, 15 ) },
+        { "name", T_STR, 16, 8 },
+        TERM_A } },
     { EGKW_SECT_PAD,
       0xFF5F,
       "pad",
@@ -1730,7 +1766,19 @@ void EAGLE_BIN_PARSER::postprocRotation( EGB_NODE* aRoot )
         bool mirrored = flagSet( wxS( "mirrored" ) );
         bool spin = flagSet( wxS( "spin" ) );
 
-        long     deg = aRoot->PropLong( wxS( "bin_rot" ) );
+        long deg = aRoot->PropLong( wxS( "bin_rot" ) );
+
+        // Pins and instances store rotation as a two-bit quadrant count; every
+        // other rotatable record stores a twelve-bit angle where a full turn is
+        // 4096 units (pads and rectangles carry it in the low bits of a wider
+        // field, hence the mask).
+        double degrees;
+
+        if( aRoot->id == EGKW_SECT_PIN || aRoot->id == EGKW_SECT_INSTANCE )
+            degrees = ( deg & 0x3 ) * 90.0;
+        else
+            degrees = 360.0 * ( deg & 0x0FFF ) / 4096.0;
+
         wxString rot;
 
         if( spin )
@@ -1739,14 +1787,7 @@ void EAGLE_BIN_PARSER::postprocRotation( EGB_NODE* aRoot )
         if( mirrored )
             rot << wxS( "M" );
 
-        rot << wxS( "R" );
-
-        if( deg >= 1024 )
-            rot << wxString::Format( wxS( "%ld" ), ( 360 * deg ) / 4096 ); // v4/v5
-        else if( deg > 0 )
-            rot << wxString::Format( wxS( "%ld" ), ( deg & 0x00f0 ) * 90 ); // v3
-        else
-            rot << wxS( "0" );
+        rot << wxS( "R" ) << wxString::FromCDouble( degrees, 4 );
 
         aRoot->props[wxS( "rot" )] = rot;
     }
