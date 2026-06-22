@@ -2688,6 +2688,14 @@ std::vector<int> PAD::ViewGetLayers() const
         else
             layers.push_back( LAYER_PAD_BK_NETNAMES );
     }
+    else if( cuLayers.count() == 1 )
+    {
+        PCB_LAYER_ID layer = cuLayers.Seq().front();
+
+        layers.push_back( LAYER_PAD_COPPER_START + layer );
+        layers.push_back( LAYER_CLEARANCE_START + layer );
+        layers.push_back( LAYER_PAD_NETNAMES );
+    }
 
     // Check non-copper layers. This list should include all the layers that the
     // footprint editor allows a pad to be placed on.
