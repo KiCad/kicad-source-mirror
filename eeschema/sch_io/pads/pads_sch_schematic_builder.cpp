@@ -62,24 +62,9 @@ PADS_SCH_SCHEMATIC_BUILDER::~PADS_SCH_SCHEMATIC_BUILDER()
 
 int PADS_SCH_SCHEMATIC_BUILDER::toKiCadUnits( double aPadsValue ) const
 {
-    double milsValue = aPadsValue;
-
-    switch( m_params.units )
-    {
-    case UNIT_TYPE::MILS:
-        milsValue = aPadsValue;
-        break;
-
-    case UNIT_TYPE::METRIC:
-        milsValue = aPadsValue * 39.3701;
-        break;
-
-    case UNIT_TYPE::INCHES:
-        milsValue = aPadsValue * 1000.0;
-        break;
-    }
-
-    return schIUScale.MilsToIU( milsValue );
+    // PADS Logic ASCII schematics always store geometry in mils. The UNITS field selects only
+    // the design-rules unit and must not scale the schematic coordinates.
+    return schIUScale.MilsToIU( aPadsValue );
 }
 
 
