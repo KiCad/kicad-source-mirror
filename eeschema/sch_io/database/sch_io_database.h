@@ -26,6 +26,7 @@
 #include <sch_io/sch_io_mgr.h>
 #include <wildcards_and_files_ext.h>
 #include <optional>
+#include <unordered_set>
 
 
 class LIBRARY_MANAGER_ADAPTER;
@@ -42,6 +43,8 @@ struct DATABASE_LIB_TABLE;
  */
 class SCH_IO_DATABASE : public SCH_IO
 {
+    friend class SCH_IO_DATABASE_CYCLE_DETECTION_FIXTURE;
+
 public:
 
     SCH_IO_DATABASE();
@@ -127,6 +130,14 @@ private:
     /// Signature of the raw database rows at last materialization; used to skip rebuilding the
     /// LIB_SYMBOL cache when a re-query returns identical data.
     size_t m_cacheSignature;
+
+    /// LIB_IDs whose resolution is in flight, used to break self-referential cycles where a row's
+    /// Symbols column points back into the same database library (issue #24249).
+    std::unordered_set<wxString> m_inProgressLoads;
+
+    /// Re-entrancy guard for cacheLib(), tripped when a self-referential load routes back through
+    /// the adapter into LoadSymbol mid-build.
+    bool m_inCacheLib = false;
 
     wxString m_lastError;
 };

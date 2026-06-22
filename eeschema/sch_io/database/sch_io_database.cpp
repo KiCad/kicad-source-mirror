@@ -226,6 +226,12 @@ bool SCH_IO_DATABASE::TestConnection( wxString* aErrorMsg )
 
 void SCH_IO_DATABASE::cacheLib()
 {
+    // Guard against re-entrant cacheLib() calls. A self-referential symbol row (issue #24249)
+    // causes m_adapter->LoadSymbol to route back into SCH_IO_DATABASE::LoadSymbol, which would
+    // otherwise call cacheLib() again while it is in the middle of populating its caches.
+    if( m_inCacheLib )
+        return;
+
     long long currentTimestampSeconds = wxDateTime::Now().GetValue().GetValue() / 1000;
 
     // The materialized LIB_SYMBOL cache is expensive to rebuild for large databases because every
@@ -239,6 +245,14 @@ void SCH_IO_DATABASE::cacheLib()
     {
         return;
     }
+
+    m_inCacheLib = true;
+
+    struct CACHE_LIB_GUARD
+    {
+        bool* flag;
+        ~CACHE_LIB_GUARD() { *flag = false; }
+    } cacheLibGuard{ &m_inCacheLib };
 
     // Re-query the database (the connection layer caches results subject to its own max_age) and
     // compute a lightweight signature of the raw rows so we can skip the costly materialization
@@ -525,8 +539,43 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         LIB_ID symbolId;
         symbolId.Parse( std::any_cast<std::string>( aRow.at( aTable.symbols_col ) ) );
 
+        // A row's Symbols column may resolve back into the same database library (issue #24249,
+        // e.g. a mistyped library nickname). The adapter would route that lookup back into
+        // SCH_IO_DATABASE::LoadSymbol and re-enter loadSymbolFromRow on the same row until the
+        // stack overflows. Track in-flight LIB_IDs and skip the recursive load on re-entry.
+        struct CYCLE_GUARD
+        {
+            std::unordered_set<wxString>* set;
+            wxString                      key;
+            bool                          owns = false;
+
+            ~CYCLE_GUARD()
+            {
+                if( owns )
+                    set->erase( key );
+            }
+        } guard{ &m_inProgressLoads, {}, false };
+
+        bool cycle = false;
+
         if( symbolId.IsValid() )
-            originalSymbol = m_adapter->LoadSymbol( symbolId );
+        {
+            guard.key = symbolId.Format().wx_str();
+            guard.owns = m_inProgressLoads.insert( guard.key ).second;
+            cycle = !guard.owns;
+
+            if( cycle )
+            {
+                wxLogTrace( traceDatabase,
+                            wxT( "loadSymbolFromRow: cycle detected resolving '%s' "
+                                 "(row '%s' in table '%s'); skipping recursive load" ),
+                            symbolIdStr, aSymbolName, aTable.name );
+            }
+            else
+            {
+                originalSymbol = m_adapter->LoadSymbol( symbolId );
+            }
+        }
 
         if( originalSymbol )
         {
@@ -534,6 +583,12 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
                         symbolIdStr );
             symbol.reset( originalSymbol->Duplicate() );
             symbol->SetSourceLibId( symbolId );
+        }
+        else if( cycle )
+        {
+            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: source symbol '%s' is a "
+                                            "self-reference, will create empty symbol" ),
+                        symbolIdStr );
         }
         else if( !symbolId.IsValid() )
         {
