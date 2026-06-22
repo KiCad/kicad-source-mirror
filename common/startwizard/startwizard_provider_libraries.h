@@ -58,6 +58,21 @@ public:
 
     void ApplyDefaults() override;
 
+    /**
+     * Migrates built-in (stock) library references in an imported global library table to the
+     * current version.  Direct stock rows are removed and re-added as a single chained reference,
+     * and an existing chained reference is repointed at the latest stock table.  If the imported
+     * table referenced no stock libraries, none are added.
+     *
+     * @param aTable is the imported table to migrate in place
+     * @param aType is the table type (symbol or footprint)
+     * @param aStockPath is the (unexpanded) URI of the current stock library table
+     * @param aStockPathValid is true if aStockPath resolves to a valid table on disk
+     * @return true if the table was modified and should be saved
+     */
+    static KICOMMON_API bool MigrateBuiltInLibraries( LIBRARY_TABLE& aTable, LIBRARY_TABLE_TYPE aType,
+                                                      const wxString& aStockPath, bool aStockPathValid );
+
 private:
     std::shared_ptr<STARTWIZARD_PROVIDER_LIBRARIES_MODEL> m_model;
 };

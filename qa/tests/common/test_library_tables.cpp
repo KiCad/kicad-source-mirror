@@ -18,8 +18,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <ranges>
+#include <utility>
+#include <vector>
 
 #include <mock_pgm_base.h>
 #include <richio.h>
@@ -36,6 +40,7 @@
 #include <libraries/library_table_parser.h>
 #include <libraries/library_table_grammar.h>
 #include <settings/kicad_settings.h>
+#include <startwizard/startwizard_provider_libraries.h>
 
 
 BOOST_AUTO_TEST_SUITE( LibraryTables )
@@ -454,6 +459,112 @@ BOOST_AUTO_TEST_CASE( StockTableReferenceURIHonorsExternalDefinition )
         vars[templateVar] = savedEntry;
     else
         vars.erase( templateVar );
+}
+
+
+/// Builds an in-memory symbol library table seeded with the given user rows.
+static LIBRARY_TABLE makeImportedSymbolTable( const std::vector<std::pair<wxString, wxString>>& aUserRows )
+{
+    LIBRARY_TABLE table( true, wxEmptyString, LIBRARY_TABLE_SCOPE::GLOBAL );
+    table.SetType( LIBRARY_TABLE_TYPE::SYMBOL );
+
+    for( const auto& [nickname, uri] : aUserRows )
+    {
+        LIBRARY_TABLE_ROW& row = table.InsertRow();
+        row.SetNickname( nickname );
+        row.SetURI( uri );
+        row.SetType( wxS( "KiCad" ) );
+    }
+
+    return table;
+}
+
+
+static size_t countChainedKiCadRows( const LIBRARY_TABLE& aTable )
+{
+    return std::ranges::count_if( aTable.Rows(),
+            []( const LIBRARY_TABLE_ROW& aRow )
+            {
+                return aRow.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME
+                       && aRow.Nickname() == wxS( "KiCad" );
+            } );
+}
+
+
+/**
+ * Regression test for issue 24594. A user who removed every built-in KiCad library in the
+ * previous version selected "Import tables" + "Migrate built-in libraries"; migration must not
+ * silently add the stock libraries back into their table.
+ */
+BOOST_AUTO_TEST_CASE( MigrateBuiltInLibraries_NoStockRefsAddsNothing )
+{
+    const wxString stockPath = wxS( "${KICAD10_SYMBOL_DIR}/sym-lib-table" );
+
+    LIBRARY_TABLE table = makeImportedSymbolTable( {
+        { wxS( "MyParts" ),   wxS( "${KIPRJMOD}/../libs/MyParts.kicad_sym" ) },
+        { wxS( "MyPassives" ), wxS( "/home/user/kicad/MyPassives.kicad_sym" ) },
+    } );
+
+    const size_t rowsBefore = table.Rows().size();
+
+    bool modified = STARTWIZARD_PROVIDER_LIBRARIES::MigrateBuiltInLibraries(
+            table, LIBRARY_TABLE_TYPE::SYMBOL, stockPath, true );
+
+    BOOST_CHECK_MESSAGE( !modified, "Table with no stock references should not be modified" );
+    BOOST_CHECK_EQUAL( table.Rows().size(), rowsBefore );
+    BOOST_CHECK_EQUAL( countChainedKiCadRows( table ), 0u );
+}
+
+
+/// Direct stock rows are removed and replaced by a single chained reference to the latest stock.
+BOOST_AUTO_TEST_CASE( MigrateBuiltInLibraries_DirectStockRowsBecomeChained )
+{
+    const wxString stockPath = wxS( "${KICAD10_SYMBOL_DIR}/sym-lib-table" );
+
+    LIBRARY_TABLE table = makeImportedSymbolTable( {
+        { wxS( "Device" ),  wxS( "${KICAD9_SYMBOL_DIR}/Device.kicad_sym" ) },
+        { wxS( "MyParts" ), wxS( "${KIPRJMOD}/../libs/MyParts.kicad_sym" ) },
+    } );
+
+    bool modified = STARTWIZARD_PROVIDER_LIBRARIES::MigrateBuiltInLibraries(
+            table, LIBRARY_TABLE_TYPE::SYMBOL, stockPath, true );
+
+    BOOST_CHECK( modified );
+    BOOST_CHECK_EQUAL( countChainedKiCadRows( table ), 1u );
+
+    // The user's own row must survive and the direct stock row must be gone.
+    BOOST_CHECK( table.Row( wxS( "MyParts" ) ).has_value() );
+    BOOST_CHECK( !table.Row( wxS( "Device" ) ).has_value() );
+}
+
+
+/// An existing chained reference is repointed at the latest stock without a second one being added.
+BOOST_AUTO_TEST_CASE( MigrateBuiltInLibraries_ChainedRowMigratedInPlace )
+{
+    const wxString stockPath = wxS( "${KICAD10_SYMBOL_DIR}/sym-lib-table" );
+
+    LIBRARY_TABLE table( true, wxEmptyString, LIBRARY_TABLE_SCOPE::GLOBAL );
+    table.SetType( LIBRARY_TABLE_TYPE::SYMBOL );
+
+    LIBRARY_TABLE_ROW& chained = table.InsertRow();
+    chained.SetType( LIBRARY_TABLE_ROW::TABLE_TYPE_NAME );
+    chained.SetNickname( wxS( "KiCad" ) );
+    chained.SetURI( wxS( "${KICAD9_SYMBOL_DIR}/sym-lib-table" ) );
+
+    LIBRARY_TABLE_ROW& mine = table.InsertRow();
+    mine.SetNickname( wxS( "MyParts" ) );
+    mine.SetURI( wxS( "${KIPRJMOD}/../libs/MyParts.kicad_sym" ) );
+    mine.SetType( wxS( "KiCad" ) );
+
+    bool modified = STARTWIZARD_PROVIDER_LIBRARIES::MigrateBuiltInLibraries(
+            table, LIBRARY_TABLE_TYPE::SYMBOL, stockPath, true );
+
+    BOOST_CHECK( modified );
+    BOOST_CHECK_EQUAL( countChainedKiCadRows( table ), 1u );
+
+    auto migrated = table.Row( wxS( "KiCad" ) );
+    BOOST_REQUIRE( migrated.has_value() );
+    BOOST_CHECK_EQUAL( ( *migrated )->URI(), stockPath );
 }
 
 
