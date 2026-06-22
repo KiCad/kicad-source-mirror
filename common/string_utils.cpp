@@ -1636,6 +1636,86 @@ wxString ConvertPathToFileUri( const wxString& aPath, const PROJECT* aProject )
 
 namespace
 {
+    // Characters that carry structural meaning inside stacked pin notation and therefore must be
+    // backslash-escaped when they appear literally inside an individual pin number.
+    bool IsStackedPinSpecialChar( wxUniChar aChar )
+    {
+        return aChar == '[' || aChar == ']' || aChar == ',' || aChar == '-' || aChar == '\\';
+    }
+
+
+    // A backslash starts an escape sequence only when it precedes one of the structural characters.
+    // Any other backslash is a literal character, which keeps legacy notation that happened to use
+    // an un-escaped backslash (e.g. [A\B,C]) intact.
+    bool IsEscapeAt( const wxString& aText, size_t aIndex )
+    {
+        return aText[aIndex] == '\\' && aIndex + 1 < aText.length()
+               && IsStackedPinSpecialChar( aText[aIndex + 1] );
+    }
+
+
+    // Split the inner part of a stacked notation string on commas, honouring backslash escaping so
+    // that a literal comma in a pin number (written "\,") does not start a new item.  The returned
+    // parts are still escaped; call UnescapeStackedPinItem() to recover the literal pin number.
+    std::vector<wxString> SplitStackedPinItems( const wxString& aInner )
+    {
+        std::vector<wxString> parts;
+        wxString              current;
+
+        for( size_t i = 0; i < aInner.length(); ++i )
+        {
+            if( IsEscapeAt( aInner, i ) )
+            {
+                current << aInner[i] << aInner[i + 1];
+                ++i;
+            }
+            else if( aInner[i] == ',' )
+            {
+                parts.push_back( current );
+                current.clear();
+            }
+            else
+            {
+                current << aInner[i];
+            }
+        }
+
+        parts.push_back( current );
+        return parts;
+    }
+
+
+    int FindUnescaped( const wxString& aText, wxUniChar aChar )
+    {
+        for( size_t i = 0; i < aText.length(); ++i )
+        {
+            if( IsEscapeAt( aText, i ) )
+                ++i;
+            else if( aText[i] == aChar )
+                return static_cast<int>( i );
+        }
+
+        return wxNOT_FOUND;
+    }
+
+
+    // A backslash that does not precede a structural character is a literal and is left untouched.
+    wxString UnescapeStackedPinItem( const wxString& aItem )
+    {
+        wxString out;
+
+        for( size_t i = 0; i < aItem.length(); ++i )
+        {
+            if( IsEscapeAt( aItem, i ) )
+                out << aItem[++i];
+            else
+                out << aItem[i];
+        }
+
+        return out;
+    }
+
+
     // Extract (prefix, numericValue) where numericValue = -1 if no numeric suffix
     std::pair<wxString, long> ParseAlphaNumericPin( const wxString& pinNum )
     {
@@ -1664,6 +1744,33 @@ namespace
         return { prefix, numValue };
     }
 }
+
+wxString EscapeStackedPinItem( const wxString& aPinNumber )
+{
+    wxString escaped;
+
+    for( wxUniChar ch : aPinNumber )
+    {
+        if( IsStackedPinSpecialChar( ch ) )
+            escaped << '\\';
+
+        escaped << ch;
+    }
+
+    return escaped;
+}
+
+
+std::vector<wxString> SplitStackedPinDisplayItems( const wxString& aInner )
+{
+    std::vector<wxString> items;
+
+    for( const wxString& part : SplitStackedPinItems( aInner ) )
+        items.push_back( UnescapeStackedPinItem( part ) );
+
+    return items;
+}
+
 
 std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* aValid )
 {
@@ -1694,23 +1801,20 @@ std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* 
 
     const wxString inner = aPinName.Mid( 1, aPinName.Length() - 2 );
 
-    size_t start = 0;
-    while( start < inner.length() )
+    for( wxString part : SplitStackedPinItems( inner ) )
     {
-        size_t comma = inner.find( ',', start );
-        wxString part = ( comma == wxString::npos ) ? inner.Mid( start ) : inner.Mid( start, comma - start );
         part.Trim( true ).Trim( false );
-        if( part.empty() )
-        {
-            start = ( comma == wxString::npos ) ? inner.length() : comma + 1;
-            continue;
-        }
 
-        int dashPos = part.Find( '-' );
+        if( part.empty() )
+            continue;
+
+        // A range (e.g. A1-A4) is only recognized on an unescaped dash; an escaped dash is a
+        // literal character inside a single pin number.
+        int dashPos = FindUnescaped( part, '-' );
         if( dashPos != wxNOT_FOUND )
         {
-            wxString startTxt = part.Left( dashPos );
-            wxString endTxt   = part.Mid( dashPos + 1 );
+            wxString startTxt = UnescapeStackedPinItem( part.Left( dashPos ) );
+            wxString endTxt   = UnescapeStackedPinItem( part.Mid( dashPos + 1 ) );
             startTxt.Trim( true ).Trim( false );
             endTxt.Trim( true ).Trim( false );
 
@@ -1736,12 +1840,8 @@ std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* 
         }
         else
         {
-            expanded.push_back( part );
+            expanded.push_back( UnescapeStackedPinItem( part ) );
         }
-
-        if( comma == wxString::npos )
-            break;
-        start = comma + 1;
     }
 
     if( expanded.empty() )
@@ -1758,6 +1858,15 @@ std::vector<wxString> ExpandStackedPinNotation( const wxString& aPinName, bool* 
 int CountStackedPinNotation( const wxString& aPinName, bool* aValid )
 {
     size_t len = aPinName.length();
+
+    // An empty pin number is a single (valid) pin; guard before indexing below.
+    if( len == 0 )
+    {
+        if( aValid )
+            *aValid = true;
+
+        return 1;
+    }
 
     if( !aValid )
     {
@@ -1789,25 +1898,19 @@ int CountStackedPinNotation( const wxString& aPinName, bool* aValid )
     const wxString inner = aPinName.Mid( 1, aPinName.Length() - 2 );
 
     int count = 0;
-    size_t start = 0;
 
-    while( start < inner.length() )
+    for( wxString part : SplitStackedPinItems( inner ) )
     {
-        size_t comma = inner.find( ',', start );
-        wxString part = ( comma == wxString::npos ) ? inner.Mid( start ) : inner.Mid( start, comma - start );
         part.Trim( true ).Trim( false );
 
         if( part.empty() )
-        {
-            start = ( comma == wxString::npos ) ? inner.length() : comma + 1;
             continue;
-        }
 
-        int dashPos = part.Find( '-' );
+        int dashPos = FindUnescaped( part, '-' );
         if( dashPos != wxNOT_FOUND )
         {
-            wxString startTxt = part.Left( dashPos );
-            wxString endTxt   = part.Mid( dashPos + 1 );
+            wxString startTxt = UnescapeStackedPinItem( part.Left( dashPos ) );
+            wxString endTxt   = UnescapeStackedPinItem( part.Mid( dashPos + 1 ) );
             startTxt.Trim( true ).Trim( false );
             endTxt.Trim( true ).Trim( false );
 
@@ -1830,11 +1933,6 @@ int CountStackedPinNotation( const wxString& aPinName, bool* aValid )
             // Single pin
             ++count;
         }
-
-        if( comma == wxString::npos )
-            break;
-
-        start = comma + 1;
     }
 
     if( count == 0 )

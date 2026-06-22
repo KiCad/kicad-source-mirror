@@ -1310,6 +1310,10 @@ int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
             if( !result.IsEmpty() )
                 result += wxT(",");
 
+            // The prefix may contain characters that are structural in stacked notation (e.g. a pin
+            // numbered "foo,bar3"); escape it so it round-trips as a single pin number.
+            wxString escPrefix = EscapeStackedPinItem( prefix );
+
             // Sort numeric values for this prefix
             std::sort( numbers.begin(), numbers.end() );
 
@@ -1332,11 +1336,11 @@ int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
 
                 // Add range or single number with prefix
                 if( end > start + 1 )  // Range of 3+ numbers
-                    result += wxString::Format( wxT("%s%ld-%s%ld"), prefix, start, prefix, end );
+                    result += wxString::Format( wxT("%s%ld-%s%ld"), escPrefix, start, escPrefix, end );
                 else if( end == start + 1 )  // Two consecutive numbers
-                    result += wxString::Format( wxT("%s%ld,%s%ld"), prefix, start, prefix, end );
+                    result += wxString::Format( wxT("%s%ld,%s%ld"), escPrefix, start, escPrefix, end );
                 else  // Single number
-                    result += wxString::Format( wxT("%s%ld"), prefix, start );
+                    result += wxString::Format( wxT("%s%ld"), escPrefix, start );
 
                 i++;
             }
@@ -1347,7 +1351,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
         {
             if( !result.IsEmpty() )
                 result += wxT(",");
-            result += nonNum;
+            result += EscapeStackedPinItem( nonNum );
         }
 
         return result;

@@ -133,8 +133,11 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
     int currentHalfHeight = currentBox.y / 2;
     int currentHalfWidth = currentBox.x / 2;
 
-    // Detect if this is a stacked pin number (contains notation like [1-5] or comma-separated values)
-    bool hasStackingNotation = number.Contains( '[' ) || number.Contains( ',' );
+    // Detect if this is genuinely a stacked pin number using valid bracket notation (e.g. [1-5] or
+    // [1,2,3]).  A plain pin number that merely happens to contain a comma or bracket is not stacked
+    // and must use the single-line offset, otherwise its number is pushed out by 50 mil per comma.
+    bool stackedValid = false;
+    bool hasStackingNotation = CountStackedPinNotation( number, &stackedValid ) > 1 && stackedValid;
 
     if( verticalOrient )
     {

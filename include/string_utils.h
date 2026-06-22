@@ -507,10 +507,33 @@ KICOMMON_API std::vector<wxString> ExpandStackedPinNotation( const wxString& aPi
                                                             bool* aValid = nullptr );
 
 /**
- * Count the number of pins represented by stacked pin notation without allocating strings.
+ * Escape the characters that carry structural meaning inside stacked pin notation ('[', ']', ',',
+ * '-' and the escape character '\\' itself) so that a pin number containing one of them can be
+ * embedded literally inside a stacked notation string such as [1,foo\,bar,3].
  *
- * This is a fast alternative to ExpandStackedPinNotation().size() for cases where only
- * the count is needed.
+ * The result round-trips through ExpandStackedPinNotation(), which strips the escaping again.
+ *
+ * @param aPinNumber is the literal pin number to escape
+ * @return the escaped pin number, safe to place between the brackets of a stacked notation string
+ */
+KICOMMON_API wxString EscapeStackedPinItem( const wxString& aPinNumber );
+
+/**
+ * Split the inner part of a stacked notation string (the text between the brackets) into its
+ * individual items on unescaped commas, unescaping each item.  Range items such as "1-5" are kept
+ * intact (not expanded), which makes this suitable for building a human-readable representation of
+ * the notation.
+ *
+ * @param aInner is the bracket-stripped stacked notation content
+ * @return the individual, unescaped items in order
+ */
+KICOMMON_API std::vector<wxString> SplitStackedPinDisplayItems( const wxString& aInner );
+
+/**
+ * Count the number of pins represented by stacked pin notation.
+ *
+ * This is a lighter-weight alternative to ExpandStackedPinNotation().size() for cases where only
+ * the count is needed, as it does not materialize the individual numbers in an expanded range.
  *
  * @param aPinName is the pin name to count (may or may not use stacked notation)
  * @param aValid is optionally set to indicate whether the notation was valid

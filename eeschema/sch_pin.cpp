@@ -48,36 +48,49 @@ wxString FormatStackedPinForDisplay( const wxString& aPinNumber, int aPinLength,
     if( !aPinNumber.StartsWith( "[" ) || !aPinNumber.EndsWith( "]" ) )
         return aPinNumber;
 
+    // Escaping must never reach the user, so every display form below is built from the unescaped
+    // items.  Range notation (e.g. 1-5) is preserved rather than expanded.
+    wxString              inner = aPinNumber.Mid( 1, aPinNumber.Length() - 2 );
+    std::vector<wxString> parts = SplitStackedPinDisplayItems( inner );
+
+    if( parts.empty() )
+        return aPinNumber; // malformed; fallback
+
+    for( wxString& part : parts )
+        part.Trim( true ).Trim( false );
+
+    // Build the single-line (unescaped) form and check whether it fits along the pin.
+    wxString singleLine = "[";
+
+    for( size_t i = 0; i < parts.size(); ++i )
+    {
+        if( i > 0 )
+            singleLine += ",";
+
+        singleLine += parts[i];
+    }
+
+    singleLine += "]";
+
     const int minPinTextWidth = schIUScale.MilsToIU( 50 );
     const int maxPinTextWidth = std::max( aPinLength, minPinTextWidth );
 
     VECTOR2D fontSize( aTextSize, aTextSize );
     int      penWidth = GetPenSizeForNormal( aTextSize );
-    VECTOR2I textExtents = aFont->StringBoundaryLimits( aPinNumber, fontSize, penWidth, false, false, aFontMetrics );
+    VECTOR2I textExtents = aFont->StringBoundaryLimits( singleLine, fontSize, penWidth, false, false, aFontMetrics );
 
     if( textExtents.x <= maxPinTextWidth )
-        return aPinNumber; // Fits already
+        return singleLine; // Fits already
 
-    // Strip brackets and split by comma
-    wxString      inner = aPinNumber.Mid( 1, aPinNumber.Length() - 2 );
-    wxArrayString parts;
-    wxStringSplit( inner, parts, ',' );
-
-    if( parts.empty() )
-        return aPinNumber; // malformed; fallback
-
-    // Build multi-line representation inside braces, each line trimmed
+    // Build multi-line representation inside braces.
     wxString result = "[";
 
     for( size_t i = 0; i < parts.size(); ++i )
     {
-        wxString line = parts[i];
-        line.Trim( true ).Trim( false );
-
         if( i > 0 )
             result += "\n";
 
-        result += line;
+        result += parts[i];
     }
 
     result += "]";
