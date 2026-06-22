@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-22 19:44+0000\n"
+"PO-Revision-Date: 2026-06-23 21:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -12962,11 +12962,11 @@ msgstr "KiCad-Leiterplattendateien"
 #: common/wildcards_and_files_ext.cpp:367
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:348
 msgid "KiCad footprint files"
-msgstr "KiCad Footprintdateien"
+msgstr "KiCad-Footprintdateien"
 
 #: common/wildcards_and_files_ext.cpp:373
 msgid "KiCad footprint library paths"
-msgstr "KiCad Footprintbibliotheken Verzeichnisse"
+msgstr "KiCad-Footprintbibliotheken Verzeichnisse"
 
 #: common/wildcards_and_files_ext.cpp:380
 msgid "KiCad design block path"
@@ -36472,7 +36472,7 @@ msgstr "Layoutdatei ist schreibgeschützt."
 
 #: pagelayout_editor/pl_editor_frame.cpp:102
 msgid "KiCad Drawing Sheet Editor"
-msgstr "KiCad Zeichnungsblatteditor"
+msgstr "KiCad-Zeichnungsblatteditor"
 
 #: pagelayout_editor/pl_editor_frame.cpp:167
 msgid "coord origin: Right Bottom page corner"
@@ -53886,7 +53886,7 @@ msgstr "Nach Pinanzahl filtern (%d)"
 
 #: pcbnew/footprint_edit_frame.cpp:126
 msgid "KiCad Footprint Editor"
-msgstr "KiCad Footprinteditor"
+msgstr "KiCad-Footprinteditor"
 
 #: pcbnew/footprint_edit_frame.cpp:382
 msgid "Footprint changes are unsaved"
@@ -54096,7 +54096,7 @@ msgstr "Footprint \"%s\" hinzugefügt zu \"%s\""
 
 #: pcbnew/footprint_viewer_frame.cpp:106
 msgid "KiCad Footprint Library Browser"
-msgstr "KiCad Footprint-Bibliothekbrowser"
+msgstr "KiCad-Footprint-Bibliothekbrowser"
 
 #: pcbnew/footprint_viewer_frame.cpp:148
 msgid ""
@@ -55874,7 +55874,7 @@ msgstr "Textrahmen"
 
 #: pcbnew/pcb_edit_frame.cpp:234
 msgid "KiCad PCB Editor"
-msgstr "KiCad Leiterplatteneditor"
+msgstr "KiCad-Leiterplatteneditor"
 
 #: pcbnew/pcb_edit_frame.cpp:241
 msgid "Export netlist used to update schematics"
@@ -57758,7 +57758,7 @@ msgstr "Unerwartete Datei \"%s\" im Bibliothekspfad \"%s\" gefunden."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:343
 msgid "KiCad footprint file"
-msgstr "KiCad Footprint-Datei"
+msgstr "KiCad-Footprintdatei"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:305
 #, c-format
@@ -64320,8 +64320,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:730
 #: pcbnew/widgets/appearance_controls.cpp:2691
 msgid "Net and netclass colors are shown on all copper items"
-msgstr ""
-"Netz- und Netzklassenfarben werden auf allen Kupfergegenständen angezeigt"
+msgstr "Netz- und Netzklassenfarben werden auf allen Kupferelementen angezeigt"
 
 #: pcbnew/widgets/appearance_controls.cpp:738
 #: pcbnew/widgets/appearance_controls.cpp:2694
@@ -65461,7 +65460,7 @@ msgstr "KiCad Leiterplatteneditor (eigenständig)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
-msgstr "Leiterplatten-Layout-Editor"
+msgstr "Leiterplatten-Layouteditor"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
@@ -65489,7 +65488,7 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:62
 msgid "KiCad PCB Layout Editor"
-msgstr "KiCad Leiterplatteneditor"
+msgstr "KiCad-Leiterplatteneditor"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:82
 msgid "The KiCad Developers"
@@ -65517,15 +65516,15 @@ msgstr "KiCad-Leiterplatte"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
 msgid "KiCad Footprint"
-msgstr "KiCad Footprint"
+msgstr "KiCad-Footprint"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
 msgid "KiCad Schematic Symbol"
-msgstr "KiCad Schaltplansymbol"
+msgstr "KiCad-Schaltplansymbol"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
-msgstr "KiCad Zeichnungsblatt"
+msgstr "KiCad-Zeichnungsblatt"
 
 #~ msgid ""
 #~ "The goal of the IEC60664-1 is to provide guidance on designing insulation "
