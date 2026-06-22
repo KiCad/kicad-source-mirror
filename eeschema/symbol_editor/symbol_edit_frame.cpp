@@ -1799,8 +1799,16 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         // watcher timer will retry the reload once the dialog has closed.
         if( !IsEnabled() )
         {
-            wxLogTrace( traceLibWatch,
-                        "Deferring symbol refresh; dialog is open on the symbol editor." );
+            wxLogTrace( traceLibWatch, "Deferring symbol refresh; dialog is open on the symbol editor." );
+            break;
+        }
+        // Defensive backstop for refresh mail that did not originate from this frame's debounce
+        // timer (which already defers while a tool is active).  An interactive tool holds
+        // references into the current symbol, so replacing it here would crash; drop this refresh
+        // and let the originating watcher retry.
+        else if( !ToolStackIsEmpty() )
+        {
+            wxLogTrace( traceLibWatch, "Deferring symbol refresh; an interactive tool is active." );
             break;
         }
 

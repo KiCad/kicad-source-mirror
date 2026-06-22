@@ -927,6 +927,17 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
         return;
     }
 
+    // An interactive tool (move, draw, place pin/text) holds references into the current symbol
+    // while its event loop runs.  Reloading now would free those out from under the running tool
+    // and crash.  Restart the timer before touching the watcher timestamp so the reload is retried
+    // once the tool finishes rather than silently dropped.
+    if( !ToolStackIsEmpty() )
+    {
+        wxLogTrace( traceLibWatch, "Interactive tool active; restarting debounce timer" );
+        m_watcherDebounceTimer.StartOnce( 1000 );
+        return;
+    }
+
     wxLogTrace( traceLibWatch, "OnSymChangeDebounceTimer" );
 
     long long currentTimestamp = 0;
