@@ -70,6 +70,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
         m_frame( aFrame ),
         m_symbol( aSymbol ),
         m_fields( aFields ),
+        m_inferredValueOverwritten( false ),
         m_libraryModelsMgr( &Prj() ),
         m_builtinModelsMgr( &Prj() ),
         m_prevModel( nullptr ),
@@ -207,9 +208,13 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
         storeInValue = true;
 
-        // In case the storeInValue checkbox is turned off (if it's left on then we'll overwrite
-        // this field with the actual value):
-        FindField( m_fields, FIELD_T::VALUE )->SetText( wxT( "${SIM.PARAMS}" ) );
+        // WriteFields() only rewrites Value when storeInValue stays on, so remember the original
+        // text first to restore it verbatim if the user turns storeInValue off.
+        SCH_FIELD* valueField = FindField( m_fields, FIELD_T::VALUE );
+
+        m_inferredValueRestore = valueField->GetText();
+        m_inferredValueOverwritten = true;
+        valueField->SetText( wxT( "${SIM.PARAMS}" ) );
     }
 
     wxString libraryFilename = GetFieldValue( &m_fields, SIM_LIBRARY::LIBRARY_FIELD, true, 0 );
@@ -443,7 +448,23 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
 
     curModel().WriteFields( m_fields );
 
+    RestoreInferredValue( m_fields, m_inferredValueRestore, m_inferredValueOverwritten,
+                          model.IsStoredInValue() );
+
     return true;
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::RestoreInferredValue( std::vector<SCH_FIELD>& aFields,
+                                                const wxString& aOriginalValue, bool aOverwritten,
+                                                bool aStoredInValue )
+{
+    if( !aOverwritten || aStoredInValue )
+        return;
+
+    if( SCH_FIELD* valueField = FindField( aFields, FIELD_T::VALUE ) )
+        valueField->SetText( aOriginalValue );
 }
 
 
