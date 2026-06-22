@@ -76,6 +76,20 @@ public:
         m_items[1] = b;
     }
 
+    void SetConstraint( int aConstraint ) { m_constraint = aConstraint; }
+    void SetLayer( PCB_LAYER_ID aLayer ) { m_layer = aLayer; }
+
+    /// Rewind for reuse on the next evaluation (see LIBEVAL::CONTEXT::Reset()).
+    void Reset() override
+    {
+        LIBEVAL::CONTEXT::Reset();
+        m_constraint = 0;
+        m_layer = F_Cu;
+        m_items[0] = nullptr;
+        m_items[1] = nullptr;
+        m_typeOverrides.clear();
+    }
+
     void SetTypeOverride( const BOARD_ITEM* aItem, KICAD_T aType ) { m_typeOverrides[aItem] = aType; }
 
     KICAD_T GetEffectiveType( const BOARD_ITEM* aItem ) const;

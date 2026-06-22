@@ -77,7 +77,11 @@ const static std::vector<EXPR_TO_TEST> simpleExpressions = {
     // Parens affect precedence
     { "-(1 + (2 - 4)) * 20.8 / 2", false, VAL(10.4) },
     // Unary addition is a sign, not a leading operator
-    { "+2 - 1", false, VAL(1) }
+    { "+2 - 1", false, VAL(1) },
+    // A short-circuited || must yield a normalized 1, not the raw (nonzero) left operand, so a
+    // boolean feeding a further operator behaves the same as the non-short-circuited path.
+    { "(2 || 0) == 1", false, VAL(1) },
+    { "(7 || 0) + 5", false, VAL(6) }
 };
 
 

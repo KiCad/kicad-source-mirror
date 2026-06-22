@@ -54,15 +54,46 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
         return false;
     }
 
-    PCBEXPR_CONTEXT ctx( aConstraint, aLayer );
+    // The no-reporter path is the DRC hot path, so reuse a per-thread context rather than
+    // constructing and tearing one down for each of the millions of condition evaluations.  The
+    // reporter path is rare and keeps a throwaway context so its error-callback captures stay
+    // self-contained.  A re-entrant evaluation on the same thread (should a predicate ever
+    // evaluate a rule itself) must not reset the outer evaluation's in-flight context, so only the
+    // outermost call reuses the per-thread context; a nested one falls back to a throwaway.
+    thread_local PCBEXPR_CONTEXT     tlsCtx;
+    thread_local bool                tlsCtxBusy = false;
 
-    if( aReporter )
+    struct TLS_RELEASE
     {
-        ctx.SetErrorCallback(
-                [&]( const wxString& aMessage, int aOffset )
-                {
-                    aReporter->Report( _( "ERROR:" ) + wxS( " " ) + aMessage );
-                } );
+        bool* busy = nullptr;
+        ~TLS_RELEASE() { if( busy ) *busy = false; }
+    } tlsRelease;
+
+    std::unique_ptr<PCBEXPR_CONTEXT> ownedCtx;
+    PCBEXPR_CONTEXT*                 ctx;
+
+    if( aReporter || tlsCtxBusy )
+    {
+        ownedCtx = std::make_unique<PCBEXPR_CONTEXT>( aConstraint, aLayer );
+        ctx = ownedCtx.get();
+
+        if( aReporter )
+        {
+            ctx->SetErrorCallback(
+                    [&]( const wxString& aMessage, int aOffset )
+                    {
+                        aReporter->Report( _( "ERROR:" ) + wxS( " " ) + aMessage );
+                    } );
+        }
+    }
+    else
+    {
+        tlsCtxBusy = true;
+        tlsRelease.busy = &tlsCtxBusy;
+        tlsCtx.Reset();
+        tlsCtx.SetConstraint( aConstraint );
+        tlsCtx.SetLayer( aLayer );
+        ctx = &tlsCtx;
     }
 
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
@@ -70,22 +101,22 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
 
     // Treat teardrop areas as tracks for DRC rule matching
     if( a && a->Type() == PCB_ZONE_T && static_cast<ZONE*>( a )->IsTeardropArea() )
-        ctx.SetTypeOverride( a, PCB_TRACE_T );
+        ctx->SetTypeOverride( a, PCB_TRACE_T );
 
     if( b && b->Type() == PCB_ZONE_T && static_cast<ZONE*>( b )->IsTeardropArea() )
-        ctx.SetTypeOverride( b, PCB_TRACE_T );
+        ctx->SetTypeOverride( b, PCB_TRACE_T );
 
-    ctx.SetItems( a, b );
+    ctx->SetItems( a, b );
 
-    if( m_ucode->Run( &ctx )->AsDouble() != 0.0 )
+    if( m_ucode->Run( ctx )->AsDouble() != 0.0 )
     {
         return true;
     }
     else if( aItemB )   // Conditions are commutative
     {
-        ctx.SetItems( b, a );
+        ctx->SetItems( b, a );
 
-        if( m_ucode->Run( &ctx )->AsDouble() != 0.0 )
+        if( m_ucode->Run( ctx )->AsDouble() != 0.0 )
             return true;
     }
 

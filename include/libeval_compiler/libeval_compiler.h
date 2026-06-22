@@ -58,6 +58,14 @@
 #define TR_UOP_PUSH_VAR 1
 #define TR_UOP_PUSH_VALUE 2
 
+// Short-circuit jumps for && / ||.  They peek (do not pop) the left-hand result already on the
+// stack and, when it already decides the boolean, jump past the right-hand operand's microcode so
+// it is never executed.  This is the compile-time pruning the SSA-style evaluator performs.
+// The opcodes deliberately sit outside both TR_OP_UNARY_MASK and TR_OP_BINARY_MASK so they are
+// never misclassified as arithmetic operators by a mask test.
+#define TR_OP_JZ  0x401   // jump if top == 0 (left side of &&)
+#define TR_OP_JNZ 0x402   // jump if top != 0 (left side of ||)
+
 // This namespace is used for the lemon parser
 namespace LIBEVAL
 {
@@ -344,17 +352,34 @@ public:
 
     virtual ~CONTEXT()
     {
-        for( std::size_t i = 0; i < m_inlineUsed; ++i )
-            inlineValue( i )->~VALUE();
-
-        for( VALUE* v : m_ownedValues )
-            delete v;
+        CONTEXT::Reset();
     }
 
     // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
     // will only land us in trouble.
     CONTEXT( const CONTEXT& ) = delete;
     CONTEXT& operator=( const CONTEXT& ) = delete;
+
+    /**
+     * Release every value allocated by the previous evaluation and rewind the stack so the same
+     * CONTEXT can be reused for another Run() without being reconstructed.  This keeps the owned-
+     * value vector's buffer allocated, so a reused context performs zero heap allocation for the
+     * common evaluation.  Overrides must chain to this base after rewinding their own per-run state.
+     */
+    virtual void Reset()
+    {
+        for( std::size_t i = 0; i < m_inlineUsed; ++i )
+            inlineValue( i )->~VALUE();
+
+        m_inlineUsed = 0;
+
+        for( VALUE* v : m_ownedValues )
+            delete v;
+
+        m_ownedValues.clear();
+        m_stackPtr = 0;
+        m_errorCallback = nullptr;
+    }
 
     VALUE* AllocValue()
     {
@@ -393,6 +418,18 @@ public:
         }
 
         return m_stack[ --m_stackPtr ];
+    }
+
+    /// Peek the top of the stack without popping (used by the short-circuit jumps).
+    VALUE* Top()
+    {
+        if( m_stackPtr == 0 )
+        {
+            ReportError( _( "Malformed expression" ) );
+            return AllocValue();
+        }
+
+        return m_stack[ m_stackPtr - 1 ];
     }
 
     int SP() const
@@ -446,6 +483,12 @@ public:
         m_ucode.push_back(uop);
     }
 
+    /// Flag that this ucode contains short-circuit jumps, so Run() uses the jump-aware loop.
+    void MarkHasJumps() { m_hasJumps = true; }
+
+    /// Index of the next op to be added (used to backpatch short-circuit jump targets).
+    int GetSize() const { return static_cast<int>( m_ucode.size() ); }
+
     VALUE* Run( CONTEXT* ctx );
     wxString Dump() const;
 
@@ -461,6 +504,7 @@ public:
 
 protected:
     std::vector<UOP*> m_ucode;
+    bool              m_hasJumps = false;   // any short-circuit jumps? lets Run() skip the jump loop
 };
 
 
@@ -486,14 +530,26 @@ public:
         m_value(nullptr)
     {}
 
+    /// Bare op (used for the short-circuit jumps, whose only payload is a jump target).
+    explicit UOP( int op ) :
+        m_op( op ),
+        m_ref( nullptr ),
+        m_value( nullptr )
+    {}
+
     virtual ~UOP() = default;
 
-    void Exec( CONTEXT* ctx );
+    /// Execute the op.  Returns the next instruction index to run, or -1 to fall through to the
+    /// following instruction (the common case).
+    int Exec( CONTEXT* ctx );
+
+    void SetJumpTarget( int aTarget ) { m_jumpTarget = aTarget; }
 
     wxString Format() const;
 
 private:
     int                      m_op;
+    int                      m_jumpTarget = -1;
 
     FUNC_CALL_REF            m_func;
     std::unique_ptr<VAR_REF> m_ref;

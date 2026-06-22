@@ -179,6 +179,14 @@ wxString UOP::Format() const
         str = wxString::Format( "FCALL" );
         break;
 
+    case TR_OP_JZ:
+        str = wxString::Format( "JZ -> %d", m_jumpTarget );
+        break;
+
+    case TR_OP_JNZ:
+        str = wxString::Format( "JNZ -> %d", m_jumpTarget );
+        break;
+
     default:
         str = wxString::Format( "%s %d", formatOpName( m_op ).c_str(), m_op );
         break;
@@ -828,6 +836,10 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
     wxString                missingUnitsMsg;
     int                     missingUnitsSrcPos = 0;
 
+    // Short-circuit jumps for && / || awaiting their target backpatched once the right-hand
+    // operand's microcode has been emitted.
+    std::map<TREE_NODE*, UOP*> scJumps;
+
     if( !m_tree )
     {
         std::unique_ptr<VALUE> val = std::make_unique<VALUE>( 1.0 );
@@ -1103,6 +1115,17 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
             }
             else if( node->leaf[1] && !node->leaf[1]->isVisited )
             {
+                // The left operand's microcode is now fully emitted.  For && / || insert the
+                // short-circuit jump here, before the right operand, so the right side can be
+                // skipped at run time when the left already decides the result.
+                if( node->op == TR_OP_BOOL_AND || node->op == TR_OP_BOOL_OR )
+                {
+                    UOP* jump = new UOP( node->op == TR_OP_BOOL_AND ? TR_OP_JZ : TR_OP_JNZ );
+                    aCode->AddOp( jump );
+                    aCode->MarkHasJumps();
+                    scJumps[node] = jump;
+                }
+
                 stack.push_back( node->leaf[1] );
                 node->leaf[1]->isVisited = true;
             }
@@ -1116,6 +1139,12 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
         {
             aCode->AddOp( node->uop );
             node->uop = nullptr;
+
+            // Backpatch the matching short-circuit jump to land just past this combine op.
+            auto jumpIt = scJumps.find( node );
+
+            if( jumpIt != scJumps.end() )
+                jumpIt->second->SetJumpTarget( aCode->GetSize() );
         }
 
         stack.pop_back();
@@ -1138,10 +1167,40 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 }
 
 
-void UOP::Exec( CONTEXT* ctx )
+// Normalized boolean results pushed when && / || short-circuits, so the skipped combine op's output
+// contract (an UNSCALED numeric 1/0) is met for any enclosing operator without allocating a fresh
+// value on the hot path.  A numeric VALUE is immutable once set (only deferred values mutate on
+// read), so DRC's worker threads can share these by reference, just as numeric literals are.
+static const VALUE g_shortCircuitFalse( 0.0 );
+static const VALUE g_shortCircuitTrue( 1.0 );
+
+
+int UOP::Exec( CONTEXT* ctx )
 {
     switch( m_op )
     {
+    case TR_OP_JZ:
+        // Short-circuit && when the left side is false, then jump past the right-hand microcode.
+        if( ctx->Top()->AsDouble() == 0.0 )
+        {
+            ctx->Pop();
+            ctx->Push( const_cast<VALUE*>( &g_shortCircuitFalse ) );
+            return m_jumpTarget;
+        }
+
+        return -1;
+
+    case TR_OP_JNZ:
+        // Short-circuit || when the left side is true, then jump past the right-hand microcode.
+        if( ctx->Top()->AsDouble() != 0.0 )
+        {
+            ctx->Pop();
+            ctx->Push( const_cast<VALUE*>( &g_shortCircuitTrue ) );
+            return m_jumpTarget;
+        }
+
+        return -1;
+
     case TR_UOP_PUSH_VAR:
     {
         VALUE* value = nullptr;
@@ -1156,14 +1215,27 @@ void UOP::Exec( CONTEXT* ctx )
     }
 
     case TR_UOP_PUSH_VALUE:
-        ctx->Push( m_value.get() );
-        return;
+        // String literals contain a wxString whose internal mb_str cache is mutated by
+        // ToUTF8/utf8_str. DRC evaluates compiled rules from many threads concurrently,
+        // so push a per-thread copy to avoid racing on that cache.
+        if( m_value && m_value->GetType() == VT_STRING )
+        {
+            VALUE* copy = ctx->AllocValue();
+            copy->Set( *m_value );
+            ctx->Push( copy );
+        }
+        else
+        {
+            ctx->Push( m_value.get() );
+        }
+
+        return -1;
 
     case TR_OP_METHOD_CALL:
         if( m_func )
             m_func( ctx, m_ref.get() );
 
-        return;
+        return -1;
 
     default:
         break;
@@ -1286,7 +1358,7 @@ void UOP::Exec( CONTEXT* ctx )
         rp->Set( result );
         rp->SetUnits( resultUnits );
         ctx->Push( rp );
-        return;
+        return -1;
     }
     else if( m_op & TR_OP_UNARY_MASK )
     {
@@ -1309,8 +1381,10 @@ void UOP::Exec( CONTEXT* ctx )
         rp->Set( result );
         rp->SetUnits( resultUnits );
         ctx->Push( rp );
-        return;
+        return -1;
     }
+
+    return -1;
 }
 
 
@@ -1318,8 +1392,24 @@ VALUE* UCODE::Run( CONTEXT* ctx )
 {
     try
     {
-        for( UOP* op : m_ucode )
-            op->Exec( ctx );
+        if( m_hasJumps )
+        {
+            for( std::size_t ip = 0; ip < m_ucode.size(); )
+            {
+                int next = m_ucode[ip]->Exec( ctx );
+
+                // Backpatched jump targets are always forward, past the combine op; a non-forward
+                // or stale target would spin or read out of range, so reject it.
+                wxASSERT( next < 0 || static_cast<std::size_t>( next ) > ip );
+
+                ip = ( next < 0 ) ? ip + 1 : static_cast<std::size_t>( next );
+            }
+        }
+        else
+        {
+            for( UOP* op : m_ucode )
+                op->Exec( ctx );
+        }
     }
     catch(...)
     {
