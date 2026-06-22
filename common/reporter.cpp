@@ -311,7 +311,11 @@ REPORTER& STATUSBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity 
 {
     REPORTER::Report( aText, aSeverity );
 
-    if( m_statusBar )
+    // KiCad status bars give most fields a fixed width, so ellipsize to fit rather than let a
+    // long message (e.g. an archive entry path) be clipped mid-character.
+    if( KISTATUSBAR* kiStatusBar = dynamic_cast<KISTATUSBAR*>( m_statusBar ) )
+        kiStatusBar->SetEllipsedTextField( aText, m_position );
+    else if( m_statusBar )
         m_statusBar->SetStatusText( aText, m_position );
 
     return *this;

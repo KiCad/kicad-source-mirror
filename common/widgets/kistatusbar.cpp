@@ -372,11 +372,15 @@ void KISTATUSBAR::updateAuxFieldWidths()
     if( m_fieldWidths.empty() )
         return;
 
+    // The background job label and gauge only carry content while a job is running. When idle
+    // they must collapse to zero so they do not consume stretch reserved for the normal fields.
+    bool jobActive = m_backgroundProgressBar && m_backgroundProgressBar->IsShown();
+
     if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_LABEL ) )
-        m_fieldWidths[m_normalFieldsCount + *idx] = -2;
+        m_fieldWidths[m_normalFieldsCount + *idx] = jobActive ? -1 : 0;
 
     if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_GAUGE ) )
-        m_fieldWidths[m_normalFieldsCount + *idx] = 75;
+        m_fieldWidths[m_normalFieldsCount + *idx] = jobActive ? 75 : 0;
 
     if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_CANCEL ) )
     {

@@ -73,11 +73,13 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/app_progress_dialog.h>
 #include <widgets/kistatusbar.h>
+#include <widgets/ui_common.h>
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/dnd.h>
 #include <wx/process.h>
 #include <wx/snglinst.h>
+#include <algorithm>
 #include <atomic>
 #include <update_manager.h>
 #include <jobs/jobset.h>
@@ -379,10 +381,35 @@ void KICAD_MANAGER_FRAME::onNotebookPageCloseRequest( wxAuiNotebookEvent& evt )
 wxStatusBar* KICAD_MANAGER_FRAME::OnCreateStatusBar( int number, long style, wxWindowID id,
                                                      const wxString& name )
 {
-    return new KISTATUSBAR( number, this, id,
-                            static_cast<KISTATUSBAR::STYLE_FLAGS>(  KISTATUSBAR::NOTIFICATION_ICON
-                                                                  | KISTATUSBAR::CANCEL_BUTTON
-                                                                  | KISTATUSBAR::WARNING_ICON ) );
+    KISTATUSBAR* sb = new KISTATUSBAR( number, this, id,
+                                       static_cast<KISTATUSBAR::STYLE_FLAGS>( KISTATUSBAR::NOTIFICATION_ICON
+                                                                            | KISTATUSBAR::CANCEL_BUTTON
+                                                                            | KISTATUSBAR::WARNING_ICON ) );
+
+    size_t sbFieldCnt = static_cast<size_t>( sb->GetFieldsCount() );
+    std::vector<int> sbFieldSizes( sbFieldCnt );
+
+    for( size_t i = 0; i < sbFieldCnt; i++ )
+        sbFieldSizes[i] = sb->GetStatusWidth( static_cast<int>( i ) );
+
+    // Field 0 (the project path) is the only stretchable field so it uses all the leftover width
+    // before ellipsizing. Field 1 gets a fixed width sized to its watcher text; longer content
+    // (archive progress) is ellipsized rather than allowed to steal the path's width.
+    if( sbFieldCnt > 0 )
+        sbFieldSizes[0] = -1;
+
+    if( sbFieldCnt > 1 )
+    {
+        int margin = KIUI::GetTextSize( wxT( "XX" ), sb ).x;
+        int watcherWidth = std::max( KIUI::GetTextSize( _( "Local path: monitoring folder changes" ), sb ).x,
+                                     KIUI::GetTextSize( _( "Network path: not monitoring folder changes" ), sb ).x );
+
+        sbFieldSizes[1] = watcherWidth + margin;
+    }
+
+    sb->SetStatusWidths( sbFieldCnt, sbFieldSizes.data() );
+
+    return sb;
 }
 
 
