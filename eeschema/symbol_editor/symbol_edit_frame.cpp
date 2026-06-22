@@ -1911,11 +1911,13 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
             wxLogTrace( traceLibWatch, "Deferring symbol refresh; dialog is open on the symbol editor." );
             break;
         }
-        // Same issue exists for the move tool (SENTRY KICAD-8X8).
-        else if( m_toolManager && m_toolManager->GetTool<SYMBOL_EDITOR_MOVE_TOOL>()
-                               && m_toolManager->GetTool<SYMBOL_EDITOR_MOVE_TOOL>()->IsToolActive() )
+        // Defensive backstop for refresh mail that did not originate from this frame's debounce
+        // timer (which already defers while a tool is active).  An interactive tool holds
+        // references into the current symbol, so replacing it here would crash; drop this refresh
+        // and let the originating watcher retry.
+        else if( !ToolStackIsEmpty() )
         {
-            wxLogTrace( traceLibWatch, "Deferring symbol refresh; symbol editor is in move tool." );
+            wxLogTrace( traceLibWatch, "Deferring symbol refresh; an interactive tool is active." );
             break;
         }
 
