@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-22 05:01+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-06-23 16:01+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -7928,7 +7928,7 @@ msgstr "Datei nicht gefunden während des Checkout-Vorgangs."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Merge conflict encountered."
-msgstr "Merge-Konflikt festgestellt."
+msgstr "Zusammenführungskonflikt festgestellt."
 
 #: common/git/kicad_git_errors.cpp:60
 msgid "Rebase conflict encountered."
@@ -8155,11 +8155,11 @@ msgstr "Konnte Commit nicht auflösen"
 
 #: common/git/libgit_backend.cpp:1190
 msgid "Could not analyze merge"
-msgstr "Konnte Merge nicht untersuchen"
+msgstr "Konnte Zusammenführung nicht untersuchen"
 
 #: common/git/libgit_backend.cpp:1196
 msgid "Invalid HEAD.  Cannot merge."
-msgstr "Ungültiger HEAD.  Kann nicht mergen."
+msgstr "Ungültiger HEAD.  Kann nicht zusammenführen."
 
 #: common/git/libgit_backend.cpp:1222
 msgid "Could not access repository configuration"
@@ -8206,13 +8206,13 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
-"Kann nicht mergen: Sie haben unverarbeitete Änderungen. Bitte vor dem Pull "
-"committen oder stashen."
+"Kann nicht zusammenführen: Sie haben unverarbeitete Änderungen. Bitte vor "
+"dem Pull committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1454
 #, c-format
 msgid "Merge failed: %s"
-msgstr "Merge fehlgeschlagen: %s"
+msgstr "Zusammenführung fehlgeschlagen: %s"
 
 #: common/git/libgit_backend.cpp:1462
 msgid "Could not read repository index after merge."
@@ -12278,11 +12278,11 @@ msgstr "KiCad-Leiterplattendateien"
 #: common/wildcards_and_files_ext.cpp:365
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:338
 msgid "KiCad footprint files"
-msgstr "KiCad Footprintdateien"
+msgstr "KiCad-Footprintdateien"
 
 #: common/wildcards_and_files_ext.cpp:371
 msgid "KiCad footprint library paths"
-msgstr "KiCad Footprintbibliotheken Verzeichnisse"
+msgstr "KiCad-Footprintbibliotheken Verzeichnisse"
 
 #: common/wildcards_and_files_ext.cpp:378
 msgid "KiCad design block path"
@@ -34052,7 +34052,7 @@ msgstr "Layoutdatei ist schreibgeschützt."
 
 #: pagelayout_editor/pl_editor_frame.cpp:106
 msgid "KiCad Drawing Sheet Editor"
-msgstr "KiCad Zeichnungsblatteditor"
+msgstr "KiCad-Zeichnungsblatteditor"
 
 #: pagelayout_editor/pl_editor_frame.cpp:171
 msgid "coord origin: Right Bottom page corner"
@@ -50594,7 +50594,7 @@ msgstr "Nach Pinanzahl filtern (%d)"
 
 #: pcbnew/footprint_edit_frame.cpp:109
 msgid "KiCad Footprint Editor"
-msgstr "KiCad Footprinteditor"
+msgstr "KiCad-Footprinteditor"
 
 #: pcbnew/footprint_edit_frame.cpp:308
 msgid "Footprint changes are unsaved"
@@ -50799,7 +50799,7 @@ msgstr "Footprint \"%s\" hinzugefügt zu \"%s\""
 
 #: pcbnew/footprint_viewer_frame.cpp:110
 msgid "KiCad Footprint Library Browser"
-msgstr "KiCad Footprint-Bibliothekbrowser"
+msgstr "KiCad-Footprint-Bibliothekbrowser"
 
 #: pcbnew/footprint_viewer_frame.cpp:152
 msgid ""
@@ -52533,7 +52533,7 @@ msgstr "Textrahmen"
 
 #: pcbnew/pcb_edit_frame.cpp:234
 msgid "KiCad PCB Editor"
-msgstr "KiCad Leiterplatteneditor"
+msgstr "KiCad-Leiterplatteneditor"
 
 #: pcbnew/pcb_edit_frame.cpp:241
 msgid "Export netlist used to update schematics"
@@ -54208,7 +54208,7 @@ msgstr "Unerwartete Datei \"%s\" im Bibliothekspfad \"%s\" gefunden."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:333
 msgid "KiCad footprint file"
-msgstr "KiCad Footprint-Datei"
+msgstr "KiCad-Footprintdatei"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:307
 #, c-format
@@ -60444,8 +60444,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:730
 #: pcbnew/widgets/appearance_controls.cpp:2691
 msgid "Net and netclass colors are shown on all copper items"
-msgstr ""
-"Netz- und Netzklassenfarben werden auf allen Kupfergegenständen angezeigt"
+msgstr "Netz- und Netzklassenfarben werden auf allen Kupferelementen angezeigt"
 
 #: pcbnew/widgets/appearance_controls.cpp:738
 #: pcbnew/widgets/appearance_controls.cpp:2694
@@ -61518,7 +61517,7 @@ msgstr "KiCad Leiterplatteneditor (eigenständig)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
-msgstr "Leiterplatten-Layout-Editor"
+msgstr "Leiterplatten-Layouteditor"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
@@ -61546,7 +61545,7 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:62
 msgid "KiCad PCB Layout Editor"
-msgstr "KiCad Leiterplatteneditor"
+msgstr "KiCad-Leiterplatteneditor"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:82
 msgid "The KiCad Developers"
@@ -61574,15 +61573,15 @@ msgstr "KiCad-Leiterplatte"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
 msgid "KiCad Footprint"
-msgstr "KiCad Footprint"
+msgstr "KiCad-Footprint"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
 msgid "KiCad Schematic Symbol"
-msgstr "KiCad Schaltplansymbol"
+msgstr "KiCad-Schaltplansymbol"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
-msgstr "KiCad Zeichnungsblatt"
+msgstr "KiCad-Zeichnungsblatt"
 
 #: scripting/python_manager.cpp:135
 msgid "Process could not be created"
