@@ -818,13 +818,10 @@ bool PCB_VIA::IsBackdrilledOrPostMachined( PCB_LAYER_ID aLayer ) const
     if( secondaryDrill.size.x > 0 && secondaryDrill.start != UNDEFINED_LAYER
             && secondaryDrill.end != UNDEFINED_LAYER )
     {
-        // Check if aLayer is between start and end of secondary drill
-        for( PCB_LAYER_ID layer : LAYER_RANGE( secondaryDrill.start, secondaryDrill.end,
-                                                board->GetCopperLayerCount() ) )
-        {
-            if( layer == aLayer )
-                return true;
-        }
+        // Contains honours copper Z-order; the range iterator instead walks PCB_LAYER_ID enum
+        // order, which for a bottom-anchored span spans the wrong (top inner) layers.
+        if( LAYER_RANGE::Contains( secondaryDrill.start, secondaryDrill.end, aLayer ) )
+            return true;
     }
 
     // Check tertiary drill (backdrill from bottom)
@@ -833,13 +830,8 @@ bool PCB_VIA::IsBackdrilledOrPostMachined( PCB_LAYER_ID aLayer ) const
     if( tertiaryDrill.size.x > 0 && tertiaryDrill.start != UNDEFINED_LAYER
             && tertiaryDrill.end != UNDEFINED_LAYER )
     {
-        // Check if aLayer is between start and end of tertiary drill
-        for( PCB_LAYER_ID layer : LAYER_RANGE( tertiaryDrill.start, tertiaryDrill.end,
-                                                board->GetCopperLayerCount() ) )
-        {
-            if( layer == aLayer )
-                return true;
-        }
+        if( LAYER_RANGE::Contains( tertiaryDrill.start, tertiaryDrill.end, aLayer ) )
+            return true;
     }
 
     // Check if the layer is affected by post-machining
