@@ -334,13 +334,17 @@ class KICOMMON_API CONTEXT
 public:
     CONTEXT() :
             m_stack(),
-            m_stackPtr( 0 )
+            m_stackPtr( 0 ),
+            m_inlineUsed( 0 )
     {
-        m_ownedValues.reserve( 20 );
+        m_ownedValues.reserve( 8 );
     }
 
     virtual ~CONTEXT()
     {
+        for( std::size_t i = 0; i < m_inlineUsed; ++i )
+            inlineValue( i )->~VALUE();
+
         for( VALUE* v : m_ownedValues )
             delete v;
     }
@@ -352,6 +356,17 @@ public:
 
     VALUE* AllocValue()
     {
+        // Serve the first values from an inline buffer so the hot DRC evaluation path stays off
+        // the heap; only deeper expressions spill to individual allocations.
+        if( m_inlineUsed < INLINE_VALUE_COUNT )
+        {
+            // Advance the count only after construction so a throwing VALUE() never leaves the
+            // destructor to tear down an uninitialized slot.
+            VALUE* value = new( inlineValue( m_inlineUsed ) ) VALUE();
+            ++m_inlineUsed;
+            return value;
+        }
+
         m_ownedValues.emplace_back( new VALUE );
         return m_ownedValues.back();
     }
@@ -393,9 +408,19 @@ public:
     void ReportError( const wxString& aErrorMsg );
 
 private:
+    static constexpr std::size_t INLINE_VALUE_COUNT = 32;
+
+    VALUE* inlineValue( std::size_t aIndex )
+    {
+        return reinterpret_cast<VALUE*>( m_inlineStorage ) + aIndex;
+    }
+
     std::vector<VALUE*> m_ownedValues;
     VALUE*              m_stack[100];       // std::stack not performant enough
     int                 m_stackPtr;
+
+    alignas( VALUE ) unsigned char m_inlineStorage[INLINE_VALUE_COUNT * sizeof( VALUE )];
+    std::size_t                    m_inlineUsed;
 
     std::function<void( const wxString& aMessage, int aOffset )> m_errorCallback;
 };
