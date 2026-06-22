@@ -61,6 +61,7 @@ class DIALOG_ERC;
 class DIALOG_SYMBOL_FIELDS_TABLE;
 class RESCUER;
 class HIERARCHY_PANE;
+class API_HANDLER_COMMON;
 class API_HANDLER_SCH;
 class DIALOG_SCHEMATIC_SETUP;
 class PROGRESS_REPORTER;
@@ -1109,6 +1110,7 @@ private:
 
 #ifdef KICAD_IPC_API
     std::unique_ptr<API_HANDLER_SCH> m_apiHandler;
+    std::unique_ptr<API_HANDLER_COMMON> m_apiHandlerCommon;
 #endif
 };
 
