@@ -20,6 +20,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <board.h>
+#include <footprint.h>
+#include <pad.h>
 #include <pcb_shape.h>
 #include <pcbnew/exporters/gendrill_excellon_writer.h>
 #include <pcbnew/exporters/gendrill_gerber_writer.h>
@@ -467,6 +469,160 @@ BOOST_AUTO_TEST_CASE( OdbPpUnfilledRectangleOnSilk )
 
     // The degenerate donut_rc symbol should not appear anymore.
     BOOST_CHECK( !silkContents.Contains( wxT( "donut_rc" ) ) );
+
+    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
+
+
+namespace
+{
+PAD* AddSlotPad( FOOTPRINT* aFootprint, const VECTOR2I& aPos, PAD_ATTRIB aAttribute )
+{
+    PAD* pad = new PAD( aFootprint );
+    pad->SetAttribute( aAttribute );
+    pad->SetLayerSet( aAttribute == PAD_ATTRIB::NPTH ? PAD::UnplatedHoleMask()
+                                                     : PAD::PTHMask() );
+    pad->SetPosition( aPos );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
+    pad->SetSize( PADSTACK::ALL_LAYERS,
+                  VECTOR2I( pcbIUScale.mmToIU( 2.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+    pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
+    pad->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 1.7 ), pcbIUScale.mmToIU( 0.6 ) ) );
+    aFootprint->Add( pad );
+
+    return pad;
+}
+} // anonymous namespace
+
+
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24677
+// Plated through-hole pads with a slotted (oval) drill were dropped entirely from the
+// ODB++ drill output.  Round holes and non-plated slots exported fine, but plated slots
+// were never written to the plated drill layer.  The exporter now emits PTH slots on the
+// plated drill layer just like NPTH slots on the non-plated layer.
+BOOST_AUTO_TEST_CASE( OdbPpPlatedSlotDrill )
+{
+    wxFileName tempDir = MakeTempDir();
+    wxFileName boardFile( tempDir.GetFullPath(), wxT( "plated_slot_board.kicad_pcb" ) );
+
+    BOARD board;
+    board.SetCopperLayerCount( 2 );
+    board.SetFileName( boardFile.GetFullPath() );
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50.0 ), pcbIUScale.mmToIU( 50.0 ) ) );
+    board.Add( fp );
+
+    // A plated slot and a non-plated slot in the same design.
+    AddSlotPad( fp, VECTOR2I( pcbIUScale.mmToIU( 50.0 ), pcbIUScale.mmToIU( 50.0 ) ),
+                PAD_ATTRIB::PTH );
+    AddSlotPad( fp, VECTOR2I( pcbIUScale.mmToIU( 60.0 ), pcbIUScale.mmToIU( 50.0 ) ),
+                PAD_ATTRIB::NPTH );
+
+    wxFileName odbRoot( tempDir.GetFullPath(), wxEmptyString );
+    odbRoot.AppendDir( wxT( "odb_out" ) );
+    BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    PCB_IO_ODBPP                odbExporter;
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["sigfig"] = "4";
+    BOOST_REQUIRE_NO_THROW( odbExporter.SaveBoard( odbRoot.GetFullPath(), &board, &props ) );
+
+    auto layerDir = [&]( const wxString& aLayer )
+    {
+        wxFileName dir( odbRoot.GetFullPath(), wxEmptyString );
+        dir.AppendDir( wxT( "steps" ) );
+        dir.AppendDir( wxT( "pcb" ) );
+        dir.AppendDir( wxT( "layers" ) );
+        dir.AppendDir( aLayer );
+
+        return dir;
+    };
+
+    auto readFile = []( const wxFileName& aFile )
+    {
+        wxFFile  stream( aFile.GetFullPath(), wxT( "rb" ) );
+        wxString contents;
+        BOOST_REQUIRE( stream.ReadAll( &contents ) );
+        stream.Close();
+
+        return contents;
+    };
+
+    // ODB++ array members (e.g. drill tools) are indented, so trim before matching.
+    auto countLinesStartingWith = []( const wxString& aContents, const wxString& aPrefix )
+    {
+        int               count = 0;
+        wxStringTokenizer lines( aContents, wxT( "\n" ) );
+
+        while( lines.HasMoreTokens() )
+        {
+            wxString line = lines.GetNextToken();
+            line.Trim( false );
+
+            if( line.StartsWith( aPrefix ) )
+                count++;
+        }
+
+        return count;
+    };
+
+    auto containsOvalSymbol = []( const wxString& aContents )
+    {
+        wxStringTokenizer lines( aContents, wxT( "\n" ) );
+
+        while( lines.HasMoreTokens() )
+        {
+            wxString line = lines.GetNextToken();
+
+            // Symbol definition lines look like "$0 oval<w>x<h>".
+            if( line.StartsWith( wxT( "$" ) ) && line.Contains( wxT( "oval" ) ) )
+                return true;
+        }
+
+        return false;
+    };
+
+    // The plated slot must appear on the plated drill layer as exactly one oval pad feature,
+    // and the slot must NOT leak onto this layer as a non-plated hole.
+    wxFileName platedDir = layerDir( wxT( "drill_plated_f.cu-b.cu" ) );
+    BOOST_REQUIRE_MESSAGE( platedDir.DirExists(), "Plated drill layer should exist" );
+
+    wxFileName platedFeatures( platedDir.GetFullPath(), wxT( "features" ) );
+    BOOST_REQUIRE( platedFeatures.FileExists() );
+    wxString platedContents = readFile( platedFeatures );
+
+    BOOST_CHECK_EQUAL( countLinesStartingWith( platedContents, wxT( "P " ) ), 1 );
+    BOOST_CHECK_MESSAGE( containsOvalSymbol( platedContents ),
+                         "Plated slot should use an oval symbol" );
+
+    wxFileName platedTools( platedDir.GetFullPath(), wxT( "tools" ) );
+    BOOST_REQUIRE( platedTools.FileExists() );
+    wxString platedToolsContents = readFile( platedTools );
+    BOOST_CHECK_EQUAL( countLinesStartingWith( platedToolsContents, wxT( "TYPE=PLATED" ) ), 1 );
+    BOOST_CHECK_EQUAL( countLinesStartingWith( platedToolsContents, wxT( "TYPE=NON_PLATED" ) ), 0 );
+
+    // The non-plated slot must still appear on the non-plated drill layer (unchanged), and
+    // the plated slot must NOT leak onto it.
+    wxFileName nonPlatedDir = layerDir( wxT( "drill_non-plated_f.cu-b.cu" ) );
+    BOOST_REQUIRE_MESSAGE( nonPlatedDir.DirExists(), "Non-plated drill layer should exist" );
+
+    wxFileName nonPlatedFeatures( nonPlatedDir.GetFullPath(), wxT( "features" ) );
+    BOOST_REQUIRE( nonPlatedFeatures.FileExists() );
+    wxString nonPlatedContents = readFile( nonPlatedFeatures );
+
+    BOOST_CHECK_EQUAL( countLinesStartingWith( nonPlatedContents, wxT( "P " ) ), 1 );
+    BOOST_CHECK_MESSAGE( containsOvalSymbol( nonPlatedContents ),
+                         "Non-plated slot should still export an oval symbol" );
+
+    wxFileName nonPlatedTools( nonPlatedDir.GetFullPath(), wxT( "tools" ) );
+    BOOST_REQUIRE( nonPlatedTools.FileExists() );
+    wxString nonPlatedToolsContents = readFile( nonPlatedTools );
+    BOOST_CHECK_EQUAL( countLinesStartingWith( nonPlatedToolsContents, wxT( "TYPE=NON_PLATED" ) ),
+                       1 );
+    BOOST_CHECK_EQUAL( countLinesStartingWith( nonPlatedToolsContents, wxT( "TYPE=PLATED" ) ), 0 );
 
     wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
     wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
