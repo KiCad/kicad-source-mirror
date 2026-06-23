@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-22 05:01+0000\n"
+"PO-Revision-Date: 2026-06-23 16:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -10214,8 +10214,8 @@ msgid ""
 msgstr ""
 "KiCad が初めて起動しているか、一部の構成ファイルが見つかりません。\n"
 "\n"
-"少し時間を使って、基本的な設定を構成してみましょう。これらの設定は、いつでも"
-"「環境設定」ダイアログを開いて変更できます。"
+"少し時間を使って、基本的な設定を構成してみましょう。   これらの設定は、いつで"
+"も「環境設定」ダイアログを開いて変更できます。"
 
 #: common/startwizard/startwizard.cpp:110
 msgid "For help, please visit "
@@ -34482,8 +34482,8 @@ msgstr ""
 "コーティングとポッティングにより、クリアランスと沿面距離を短縮できます。 この"
 "計算機ではサポートされていません。\n"
 "\n"
-"製品の寿命内に容易に剥離する可能性のあるコーティング (ソルダーマスクなど) "
-"は、短縮の要因として考慮すべきではありません。"
+"製品の寿命内に容易に剥離する可能性のあるコーティング (ソルダーマスクなど) は"
+"、 短縮の要因として考慮すべきではありません。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:254
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:70
@@ -57542,7 +57542,7 @@ msgstr "すべての変更を適用するためにライブラリからフット
 
 #: pcbnew/tools/pcb_actions.cpp:996
 msgid "Migrate 3D Models..."
-msgstr "3D モデルを移行中..."
+msgstr "3D モデルを移行..."
 
 #: pcbnew/tools/pcb_actions.cpp:997
 msgid "Replace obsolete WRL 3D model references with current STEP models"
