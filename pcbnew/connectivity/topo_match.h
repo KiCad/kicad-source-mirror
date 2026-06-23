@@ -214,6 +214,7 @@ private:
 
     std::vector<COMPONENT*> findMatchingComponents( COMPONENT*                     ref,
                                                     const std::vector<COMPONENT*>& aStructuralMatches,
+                                                    const TOPOLOGY_MISMATCH_REASON& aStructuralReason,
                                                     const BACKTRACK_STAGE&         partialMatches,
                                                     std::vector<TOPOLOGY_MISMATCH_REASON>& aFailureDetails,
                                                     const std::atomic<bool>* aCancelled = nullptr );
