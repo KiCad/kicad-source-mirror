@@ -2130,10 +2130,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 item = nullptr;
 
                 while( !itemsToPlace.empty() )
-                {
-                    itemsToPlace.front().release();
-                    itemsToPlace.pop_front();
-                }
+                    itemsToPlace.erase( itemsToPlace.begin() );
             };
 
     auto prepItemForPlacement =
