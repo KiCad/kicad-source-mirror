@@ -1369,7 +1369,10 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
     wxASSERT( aItem->m_viewPrivData ); //must have a viewPrivData
 
     const BOX2I  new_bbox = aItem->ViewBBox();
-    const BOX2I* old_bbox = &aItem->m_viewPrivData->m_bbox;
+
+    // The R-tree removal below keys on the bbox the item was inserted with, so it must be
+    // copied before the m_bbox overwrite that follows rather than aliased to it.
+    const BOX2I  old_bbox = aItem->m_viewPrivData->m_bbox;
     aItem->m_viewPrivData->m_bbox = new_bbox;
 
     for( int layer : layers )
@@ -1380,7 +1383,7 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
             continue;
 
         VIEW_LAYER& l = it->second;
-        l.items->Remove( aItem, old_bbox );
+        l.items->Remove( aItem, &old_bbox );
         l.items->Insert( aItem, new_bbox );
         MarkTargetDirty( l.target );
     }
