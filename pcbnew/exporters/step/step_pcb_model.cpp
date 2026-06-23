@@ -288,6 +288,8 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
     // Allow larger angles for segments below this size
     static const double c_smallSize = pcbIUScale.mmToIU( 0.1 );
     static const double c_circleCloseGap = pcbIUScale.mmToIU( 1.0 );
+    // Minimum arc central angle to avoid converting nearly-straight segments to arcs
+    static const EDA_ANGLE c_minArcCentralAngle( 10.0, DEGREES_T );
 
     APPROX_DBG( std::cout << std::endl );
 
@@ -399,40 +401,71 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
             SHAPE_ARC arc( aSrc.CPoint( first ), aSrc.CPoint( ( first + last ) / 2 ),
                            aSrc.CPoint( last ), 0 );
 
-            if( last > aSrc.PointCount() - 3 && !dst.IsArcSegment( 0 ) )
-            {
-                // If we've found an arc at the end, but already added segments at the start, remove them.
-                int toRemove = last - ( aSrc.PointCount() - 3 );
+            // Reject arcs with small central angles as they represent nearly-straight segments.
+            // A large-radius arc through nearly-collinear points should remain as line segments.
+            EDA_ANGLE centralAngle = arc.GetCentralAngle();
 
-                while( toRemove )
+            if( std::abs( centralAngle.AsDegrees() ) < c_minArcCentralAngle.AsDegrees() )
+            {
+                APPROX_DBG( std::cout << "  Arc central angle too small: "
+                                      << centralAngle.AsDegrees() << " < "
+                                      << c_minArcCentralAngle.AsDegrees() << std::endl );
+                last = c_last_none;
+            }
+
+            // Verify that all intermediate points are close to the arc curve. This prevents
+            // falsely identifying corners as arcs.
+            for( int k = first + 1; last != c_last_none && k < last; k++ )
+            {
+                VECTOR2I pt = aSrc.CPoint( k );
+                VECTOR2I nearest = arc.NearestPoint( pt );
+                double   dist = ( VECTOR2D( pt ) - VECTOR2D( nearest ) ).EuclideanNorm();
+
+                if( dist > c_radiusDeviation )
                 {
-                    dst.RemoveShape( 0 );
-                    toRemove--;
+                    APPROX_DBG( std::cout << "  Point " << k << " too far from arc: " << dist
+                                          << " > " << c_radiusDeviation << std::endl );
+                    last = c_last_none;
                 }
             }
 
-            SHAPE_LINE_CHAIN testChain = dst;
-
-            testChain.Append( arc );
-            testChain.Append( aSrc.Slice( last, std::max( last, aSrc.PointCount() - 3 ) ) );
-            testChain.SetClosed( aSrc.IsClosed() );
-
-            if( !testChain.SelfIntersectingWithArcs() )
+            if( last != c_last_none )
             {
-                // Add arc
-                dst.Append( arc );
+                if( last > aSrc.PointCount() - 3 && !dst.IsArcSegment( 0 ) )
+                {
+                    // If we've found an arc at the end, but already added segments at the start, remove them.
+                    int toRemove = last - ( aSrc.PointCount() - 3 );
 
-                APPROX_DBG( std::cout << " Add arc start " << arc.GetP0() << " mid "
-                                      << arc.GetArcMid() << " end " << arc.GetP1() << std::endl );
+                    while( toRemove )
+                    {
+                        dst.RemoveShape( 0 );
+                        toRemove--;
+                    }
+                }
 
-                i = last + 3;
-            }
-            else
-            {
-                // Self-interference
-                last = c_last_none;
+                SHAPE_LINE_CHAIN testChain = dst;
 
-                APPROX_DBG( std::cout << " Self-intersection check failed" << std::endl );
+                testChain.Append( arc );
+                testChain.Append( aSrc.Slice( last, std::max( last, aSrc.PointCount() - 3 ) ) );
+                testChain.SetClosed( aSrc.IsClosed() );
+
+                if( !testChain.SelfIntersectingWithArcs() )
+                {
+                    // Add arc
+                    dst.Append( arc );
+
+                    APPROX_DBG( std::cout << " Add arc start " << arc.GetP0() << " mid "
+                                          << arc.GetArcMid() << " end " << arc.GetP1() << std::endl );
+
+                    i = last + 3;
+                }
+                else
+                {
+                    // Self-interference
+                    last = c_last_none;
+
+                    APPROX_DBG( std::cout << " Self-intersection check failed" << std::endl );
+                }
             }
         }
 
