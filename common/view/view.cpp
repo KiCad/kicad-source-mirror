@@ -1440,7 +1440,12 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
     wxASSERT( aItem->m_viewPrivData ); //must have a viewPrivData
 
     const BOX2I  new_bbox = aItem->ViewBBox();
-    const BOX2I& old_bbox = aItem->m_viewPrivData->m_bbox;
+
+    // The R-tree removal below keys on the bbox the item was inserted with, so it must be
+    // copied before the m_bbox overwrite that follows rather than aliased to it. Otherwise
+    // a moved item is removed with the wrong box and the R-tree falls back to a full-tree
+    // search instead of the targeted removal.
+    const BOX2I  old_bbox = aItem->m_viewPrivData->m_bbox;
 
     if( new_bbox == old_bbox )
         return;
