@@ -247,3 +247,50 @@ def test_sym_export_svg(
     # Check the number of footprints in the exported directory
     fp_files = list(Path(output_path).glob("*.svg"))
     assert len(fp_files) == num_units
+
+
+def test_sym_export_svg_from_symdir(
+    kitest: KiTestFixture,
+) -> None:
+    """
+    Regression test for https://gitlab.com/kicad/code/kicad/-/work_items/24720
+
+    "sym export svg" must accept a directory-format (.kicad_symdir) library,
+    not just a single-file .kicad_sym. The CLI's file-existence gate used to
+    reject directories outright.
+    """
+
+    input_file = kitest.get_data_file_path("cli/sym_lib_test/Amplifier_Video.v9.kicad_sym")
+    output_path = kitest.get_output_path("cli/sym_lib_test/")
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    # Build a real .kicad_symdir from the flat library via "sym upgrade".
+    symdir_path = Path(output_path) / "Amplifier_Video.export.kicad_symdir"
+    stdout, stderr, exitcode = utils.run_and_capture(
+        get_sym_upgrade_cmd(str(input_file), str(symdir_path) + "/")
+    )
+    assert exitcode == 0
+    assert symdir_path.is_dir()
+
+    # Export SVG from the DIRECTORY library. This is what the bug rejected.
+    svg_output_path = Path(output_path) / "svg_from_symdir/"
+    svg_output_path.mkdir(parents=True, exist_ok=True)
+
+    export_cmd = [
+        utils.kicad_cli(),
+        "sym",
+        "export",
+        "svg",
+        str(symdir_path),
+        "--output",
+        str(svg_output_path),
+    ]
+    stdout, stderr, exitcode = utils.run_and_capture(export_cmd)
+
+    assert exitcode == 0
+    assert stderr == ""
+    assert stdout is not None
+
+    # Same 6 unit-SVGs as the single-file export.
+    svg_files = list(svg_output_path.glob("*.svg"))
+    assert len(svg_files) == 4 + 1 + 1
