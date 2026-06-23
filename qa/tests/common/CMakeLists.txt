@@ -51,6 +51,7 @@ set( QA_COMMON_SRCS
     test_hashtables.cpp
     test_hotkey_store.cpp
     test_increment.cpp
+    test_inplace_function.cpp
     test_item_realignment.cpp
     test_ki_any.cpp
     test_library_tables.cpp
