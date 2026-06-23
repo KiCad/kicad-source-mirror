@@ -39,9 +39,13 @@
 #include <settings/settings_manager.h>
 
 #include <drc/drc_creepage_engine.h>
+#include <drc/drc_creepage_utils.h>
 
+#include <limits>
 #include <optional>
+#include <queue>
 #include <set>
+#include <vector>
 
 
 struct CREEPAGE_INCREMENTAL_FIXTURE
@@ -178,4 +182,80 @@ BOOST_FIXTURE_TEST_CASE( CreepageIncrementalEqualsFull, CREEPAGE_INCREMENTAL_FIX
         item->Move( -applied );
 
     engine.EndInteractive();
+}
+
+
+// The whole-board solver must return the same shortest creepage every time it is run on identical
+// geometry. A prior CREEPAGE_GRAPH::Solve drove its priority queue with a comparator that read the
+// live distance map, so a decrease-key reinsertion corrupted the heap and the early termination
+// could settle the target on a longer path. Each solve builds a fresh graph, so the heap layout (and
+// therefore the defect) varied per call; repeating the identical solve surfaces any reappearance of
+// the heisenbug as a divergence from the optimum.
+BOOST_FIXTURE_TEST_CASE( CreepageWholeBoardSolveDeterministic, CREEPAGE_INCREMENTAL_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "creepage/creepage", m_board );
+    BOOST_REQUIRE_MESSAGE( m_board, "Failed to load board creepage" );
+
+    PCB_LAYER_ID layer = F_Cu;
+
+    std::vector<int> netcodes;
+
+    for( const auto& [code, net] : m_board->GetNetInfo().NetsByNetcode() )
+    {
+        if( net && code > 0 )
+            netcodes.push_back( code );
+    }
+
+    CREEPAGE_ENGINE engine( *m_board );
+
+    // Find the net pair with the smallest finite creepage; that nearest pair is the one whose
+    // shortest path the solver is most likely to mis-route
+    int    bestA = -1;
+    int    bestB = -1;
+    double bestDist = std::numeric_limits<double>::infinity();
+
+    for( size_t i = 0; i < netcodes.size(); ++i )
+    {
+        for( size_t j = i + 1; j < netcodes.size(); ++j )
+        {
+            std::optional<CREEPAGE_RESULT> r =
+                    engine.SolveNetPairWholeBoard( netcodes[i], netcodes[j], layer, LARGE_CONSTRAINT );
+
+            if( r && r->m_distance < bestDist )
+            {
+                bestDist = r->m_distance;
+                bestA = netcodes[i];
+                bestB = netcodes[j];
+            }
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( bestA > 0 && bestB > 0, "No finite creepage net pair found on F_Cu" );
+
+    // Nudge the nets off their initial positions; the offset geometry is the one that exposed the
+    // heap defect on the reference board
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        if( track && track->GetNetCode() == bestA && track->IsOnLayer( layer ) )
+            track->Move( VECTOR2I( 500000, 0 ) );
+    }
+
+    // The shortest path is a property of the geometry, so every fresh-graph solve must agree
+    double lo = std::numeric_limits<double>::infinity();
+    double hi = 0.0;
+
+    for( int trial = 0; trial < 1000; ++trial )
+    {
+        std::optional<CREEPAGE_RESULT> r =
+                engine.SolveNetPairWholeBoard( bestA, bestB, layer, LARGE_CONSTRAINT );
+
+        BOOST_REQUIRE_MESSAGE( r.has_value(), "Reference solve found no path" );
+
+        lo = std::min( lo, r->m_distance );
+        hi = std::max( hi, r->m_distance );
+    }
+
+    BOOST_TEST_MESSAGE( wxString::Format( "spread lo=%.0f hi=%.0f", lo, hi ) );
+    BOOST_REQUIRE_MESSAGE( hi - lo <= 1.0,
+                           wxString::Format( "Solve is non-deterministic: lo=%.0f hi=%.0f", lo, hi ) );
 }

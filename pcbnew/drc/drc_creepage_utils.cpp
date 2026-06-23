@@ -2276,16 +2276,18 @@ double CREEPAGE_GRAPH::Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_pt
     std::unordered_map<GRAPH_NODE*, double>     distances;
     std::unordered_map<GRAPH_NODE*, GRAPH_NODE*> previous;
 
-    auto cmp = [&distances]( GRAPH_NODE* left, GRAPH_NODE* right )
-    {
-        double distLeft = distances[left];
-        double distRight = distances[right];
+    // Each heap entry carries the tentative distance captured at push time. A comparator that read
+    // the live distances map instead would let a decrease-key reinsertion silently corrupt the heap
+    // ordering, so aTo could be popped on a non-shortest path and the early break would return it.
+    using QUEUE_ITEM = std::pair<double, GRAPH_NODE*>;
 
-        if( distLeft == distRight )
-            return left > right; // Compare addresses to avoid ties.
-        return distLeft > distRight;
+    auto cmp = []( const QUEUE_ITEM& aLeft, const QUEUE_ITEM& aRight )
+    {
+        if( aLeft.first == aRight.first )
+            return aLeft.second > aRight.second; // Compare addresses to avoid ties.
+        return aLeft.first > aRight.first;
     };
-    std::priority_queue<GRAPH_NODE*, std::vector<GRAPH_NODE*>, decltype( cmp )> pq( cmp );
+    std::priority_queue<QUEUE_ITEM, std::vector<QUEUE_ITEM>, decltype( cmp )> pq( cmp );
 
     // Initialize distances to infinity for all nodes except the starting node
     for( const std::shared_ptr<GRAPH_NODE>& node : m_nodes )
@@ -2296,13 +2298,18 @@ double CREEPAGE_GRAPH::Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_pt
 
     distances[aFrom.get()] = 0.0;
     distances[aTo.get()] = std::numeric_limits<double>::infinity();
-    pq.push( aFrom.get() );
+    pq.push( { 0.0, aFrom.get() } );
 
     // Dijkstra's main loop
     while( !pq.empty() )
     {
-        GRAPH_NODE* current = pq.top();
+        auto [dist, current] = pq.top();
         pq.pop();
+
+        // A stale entry left behind by a decrease-key reinsertion; its shorter copy was already
+        // processed
+        if( dist > distances[current] )
+            continue;
 
         if( current == aTo.get() )
         {
@@ -2331,7 +2338,7 @@ double CREEPAGE_GRAPH::Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_pt
             {
                 distances[neighbor] = alt;
                 previous[neighbor] = current;
-                pq.push( neighbor );
+                pq.push( { alt, neighbor } );
             }
         }
     }
