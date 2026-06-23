@@ -264,6 +264,7 @@ bool checkCandidateNetConsistency( const std::unordered_map<int, int>& aBaseMapp
 std::vector<COMPONENT*>
 CONNECTION_GRAPH::findMatchingComponents( COMPONENT*                             aRef,
                                           const std::vector<COMPONENT*>&         aStructuralMatches,
+                                          const TOPOLOGY_MISMATCH_REASON&        aStructuralReason,
                                           const BACKTRACK_STAGE&                 partialMatches,
                                           std::vector<TOPOLOGY_MISMATCH_REASON>& aMismatchReasons,
                                           const std::atomic<bool>*               aCancelled )
@@ -348,14 +349,24 @@ CONNECTION_GRAPH::findMatchingComponents( COMPONENT*                            
 
     timerScore.Stop();
 
-    if( matches.empty() )
+    if( matches.empty() && aMismatchReasons.empty() )
     {
-        TOPOLOGY_MISMATCH_REASON reason;
-        reason.m_reference = aRef->GetParent()->GetReferenceAsString();
-        reason.m_reason = _( "No compatible component found in the target area." );
-
-        if( aMismatchReasons.empty() )
+        // No net-consistency reasons were recorded above, which means there were no structural
+        // candidates to test in the first place.  Surface the structural reason captured during
+        // precomputation so the user sees the actual connectivity difference (e.g. a pad that
+        // connects to a different number of pads because of an external loop between channels)
+        // rather than a generic "no compatible component" message.
+        if( !aStructuralReason.m_reason.IsEmpty() )
+        {
+            aMismatchReasons.push_back( aStructuralReason );
+        }
+        else
+        {
+            TOPOLOGY_MISMATCH_REASON reason;
+            reason.m_reference = aRef->GetParent()->GetReferenceAsString();
+            reason.m_reason = _( "No compatible component found in the target area." );
             aMismatchReasons.push_back( reason );
+        }
     }
 
     timerFmc.Stop();
@@ -623,6 +634,11 @@ bool CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget, COMPONENT_MAT
     size_t numRef = m_components.size();
     std::vector<std::vector<COMPONENT*>> structuralMatches( numRef );
 
+    // When a source component has no structural match at all, keep a representative reason so we
+    // can explain the actual connectivity difference rather than a generic "no compatible
+    // component" message.
+    std::vector<TOPOLOGY_MISMATCH_REASON> structuralReasons( numRef );
+
     PROF_TIMER timerPrecompute;
     {
         thread_pool& tp = GetKiCadThreadPool();
@@ -634,19 +650,32 @@ bool CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget, COMPONENT_MAT
         for( size_t i = 0; i < numRef; i++ )
         {
             futures.emplace_back( tp.submit_task(
-                    [this, i, aTarget, &structuralMatches, cancelled]()
+                    [this, i, aTarget, &structuralMatches, &structuralReasons, cancelled]()
                     {
                         if( cancelled && cancelled->load( std::memory_order_relaxed ) )
                             return;
 
                         COMPONENT* ref = m_components[i];
                         TOPOLOGY_MISMATCH_REASON reason;
+                        TOPOLOGY_MISMATCH_REASON bestReason;
 
                         for( COMPONENT* tgt : aTarget->m_components )
                         {
                             if( ref->MatchesWith( tgt, reason ) )
+                            {
                                 structuralMatches[i].push_back( tgt );
+                            }
+                            else if( bestReason.m_reason.IsEmpty() || ref->IsSameKind( *tgt ) )
+                            {
+                                // Prefer the reason from a same-kind counterpart (same prefix and
+                                // footprint) because that is the candidate the user actually expects
+                                // to match; a connectivity difference there is the meaningful failure.
+                                bestReason = reason;
+                            }
                         }
+
+                        if( structuralMatches[i].empty() )
+                            structuralReasons[i] = bestReason;
                     } ) );
         }
 
@@ -711,7 +740,8 @@ bool CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget, COMPONENT_MAT
             localReasons.clear();
             current.m_matches = aTarget->findMatchingComponents(
                     current.m_ref, structuralMatches[current.m_refIndex],
-                    current, localReasons, aParams.m_cancelled );
+                    structuralReasons[current.m_refIndex], current, localReasons,
+                    aParams.m_cancelled );
 
             timerInitMatch.Stop();
 
@@ -837,11 +867,12 @@ bool CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget, COMPONENT_MAT
             for( MRV_CANDIDATE& c : mrvCandidates )
             {
                 futures.emplace_back( tp.submit_task(
-                        [&c, aTarget, &current, &structuralMatches, cancelled]()
+                        [&c, aTarget, &current, &structuralMatches, &structuralReasons, cancelled]()
                         {
                             c.m_matches = aTarget->findMatchingComponents(
                                     c.m_cmp, structuralMatches[c.m_index],
-                                    current, c.m_reasons, cancelled );
+                                    structuralReasons[c.m_index], current, c.m_reasons,
+                                    cancelled );
                         } ) );
             }
 
@@ -854,7 +885,8 @@ bool CONNECTION_GRAPH::FindIsomorphism( CONNECTION_GRAPH* aTarget, COMPONENT_MAT
             {
                 c.m_matches = aTarget->findMatchingComponents(
                         c.m_cmp, structuralMatches[c.m_index],
-                        current, c.m_reasons, aParams.m_cancelled );
+                        structuralReasons[c.m_index], current, c.m_reasons,
+                        aParams.m_cancelled );
             }
         }
 
@@ -1110,7 +1142,9 @@ bool COMPONENT::MatchesWith( COMPONENT* b, TOPOLOGY_MISMATCH_REASON& aReason )
 
     for( int pin = 0; pin < b->GetPinCount(); pin++ )
     {
-        if( !b->m_pins[pin]->IsIsomorphic( *m_pins[pin], aReason ) )
+        // Call with the reference pin as the subject so the reason's reference/candidate match
+        // MatchesWith's own orientation (this == reference, b == candidate).
+        if( !m_pins[pin]->IsIsomorphic( *b->m_pins[pin], aReason ) )
         {
             if( aReason.m_reason.IsEmpty() )
             {

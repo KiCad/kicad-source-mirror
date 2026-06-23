@@ -1771,4 +1771,104 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutDoesNotDuplicateUnrelatedGroups, MULTICHANN
 }
 
 
+/**
+ * Two channels of the same hierarchical sheet can have genuinely different internal connectivity
+ * when one channel's hierarchical pins are externally looped together on the parent sheet
+ * (issue 24192).  In that case the topology match correctly fails, but the failure message must
+ * explain the real connectivity difference instead of a generic "no compatible component found"
+ * message that wrongly implies a missing or differently-counted part.
+ */
+BOOST_FIXTURE_TEST_CASE( TopoMatchExternalLoopReportsConnectivity, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue24192/issue24192", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->FindExistingRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+
+    BOOST_REQUIRE_EQUAL( ruleData->m_areas.size(), 2 );
+
+    RULE_AREA* refArea = nullptr;
+    RULE_AREA* targetArea = nullptr;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_ruleName.Contains( wxT( "Untitled Sheet/" ) ) )
+            refArea = &ra;
+        else if( ra.m_ruleName.Contains( wxT( "Untitled Sheet1/" ) ) )
+            targetArea = &ra;
+    }
+
+    BOOST_REQUIRE( refArea != nullptr );
+    BOOST_REQUIRE( targetArea != nullptr );
+
+    // The component counts are identical; only the internal connectivity differs.
+    BOOST_CHECK_EQUAL( refArea->m_components.size(), targetArea->m_components.size() );
+
+    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refArea->m_components,
+                                                          targetArea->m_components );
+    auto cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( targetArea->m_components,
+                                                             refArea->m_components );
+
+    TMATCH::COMPONENT_MATCHES result;
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+    bool status = cgRef->FindIsomorphism( cgTarget.get(), result, details );
+
+    // The topology genuinely differs, so matching must fail and produce a reason.
+    BOOST_CHECK( !status );
+    BOOST_REQUIRE( !details.empty() );
+
+    // Collect the reference designators that belong to each channel so we can verify the
+    // reason's reference/candidate orientation matches the ref/target areas.
+    std::set<wxString> refRefDes;
+    std::set<wxString> targetRefDes;
+
+    for( FOOTPRINT* fp : refArea->m_components )
+        refRefDes.insert( fp->GetReference() );
+
+    for( FOOTPRINT* fp : targetArea->m_components )
+        targetRefDes.insert( fp->GetReference() );
+
+    bool sawConnectivityReason = false;
+
+    for( const auto& reason : details )
+    {
+        BOOST_TEST_MESSAGE( wxString::Format( "reason: %s <-> %s: %s", reason.m_reference,
+                                              reason.m_candidate, reason.m_reason ) );
+
+        // The generic fallback message must no longer be the only thing reported; instead the
+        // connectivity difference detected by the per-pad isomorphism check must surface.
+        BOOST_CHECK( !reason.m_reason.Contains( wxT( "No compatible component found" ) ) );
+
+        if( reason.m_reason.Contains( wxT( "connects to" ) )
+            || reason.m_reason.Contains( wxT( "connectivity" ) ) )
+        {
+            sawConnectivityReason = true;
+
+            // The reference designator in the reason must come from the reference channel and
+            // the candidate from the target channel, not the other way around (codex-review).
+            BOOST_CHECK_MESSAGE( refRefDes.count( reason.m_reference ) > 0,
+                                 wxString::Format( "Reason reference '%s' should be a reference-area "
+                                                   "component", reason.m_reference ) );
+            BOOST_CHECK_MESSAGE( targetRefDes.count( reason.m_candidate ) > 0,
+                                 wxString::Format( "Reason candidate '%s' should be a target-area "
+                                                   "component", reason.m_candidate ) );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( sawConnectivityReason,
+                         "Topology mismatch message should explain the connectivity difference "
+                         "rather than report a generic missing-component error (issue 24192)" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
