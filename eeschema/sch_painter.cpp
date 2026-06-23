@@ -417,7 +417,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
                 color = otherTextItem->GetTextColor();
         }
 
-        if( color.m_text )
+        if( color.m_text && m_schematic )
             color = COLOR4D( aItem->ResolveText( *color.m_text, &m_schematic->CurrentSheet() ) );
     }
     else  /* overrideItemColors */
