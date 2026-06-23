@@ -34,6 +34,7 @@
 #include <netinfo.h>
 #include <pad.h>
 #include <padstack.h>
+#include <pcb_painter.h>
 #include <pcb_track.h>
 #include <zone.h>
 #include <zone_utils.h>
@@ -669,6 +670,24 @@ BOOST_AUTO_TEST_CASE( FilledZoneCoverageUsesFilledPolygons )
     double expected = (double) pcbIUScale.mmToIU( 2 ) * pcbIUScale.mmToIU( 2 );
     BOOST_TEST( FOOTPRINT::GetCoverageArea( zone.get(), collector ) == expected,
                 boost::test_tools::tolerance( 0.001 ) );
+}
+
+
+/**
+ * A rule area's outline must be drawn on the zone layer, which sorts above copper, so unrelated
+ * tracks and pads on the same copper layer cannot paint over it and leave a broken-looking border
+ * (issue 24688). A filled zone keeps its outline on the copper layer, beneath its own fill.
+ */
+BOOST_AUTO_TEST_CASE( RuleAreaOutlineDrawnAboveCopper )
+{
+    const int copperPass = F_Cu;
+    const int zonePass = ZONE_LAYER_FOR( F_Cu );
+
+    BOOST_TEST( KIGFX::ZoneOutlineDrawnOnLayer( true, zonePass ) );
+    BOOST_TEST( !KIGFX::ZoneOutlineDrawnOnLayer( true, copperPass ) );
+
+    BOOST_TEST( KIGFX::ZoneOutlineDrawnOnLayer( false, copperPass ) );
+    BOOST_TEST( !KIGFX::ZoneOutlineDrawnOnLayer( false, zonePass ) );
 }
 
 

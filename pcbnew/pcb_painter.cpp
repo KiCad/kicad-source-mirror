@@ -2931,6 +2931,15 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
 }
 
 
+bool KIGFX::ZoneOutlineDrawnOnLayer( bool aIsRuleArea, int aLayer )
+{
+    if( aIsRuleArea )
+        return IsZoneFillLayer( aLayer );
+
+    return !IsZoneFillLayer( aLayer );
+}
+
+
 void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
 {
     if( aLayer == LAYER_CONFLICTS_SHADOW )
@@ -2969,7 +2978,7 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
         displayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
 
     // Draw the outline
-    if( !IsZoneFillLayer( aLayer ) )
+    if( ZoneOutlineDrawnOnLayer( aZone->GetIsRuleArea(), aLayer ) )
     {
         const SHAPE_POLY_SET* outline = aZone->Outline();
         bool allowDrawOutline = aZone->GetHatchStyle() != ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER;
