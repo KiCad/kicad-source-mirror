@@ -295,7 +295,8 @@ void BOARD::IncrementTimeStamp()
         || !m_EnclosedByAreaResultCache.Empty()
         || !m_LayerExpressionCache.empty() || !m_ZoneBBoxCache.empty() || m_CopperItemRTreeCache
         || m_maxClearanceValue.has_value() || !m_ItemNetclassCache.empty()
-        || !m_ZonesByNameCache.empty() || !m_DeflatedZoneOutlineCache.empty() )
+        || !m_ZonesByNameCache.empty() || !m_DeflatedZoneOutlineCache.empty()
+        || !m_ItemFieldCache.Empty() )
     {
         m_IntersectsAreaCache.Clear();
         m_EnclosedByAreaCache.Clear();
@@ -307,6 +308,7 @@ void BOARD::IncrementTimeStamp()
         m_IntersectsBCourtyardResultCache.Clear();
         m_IntersectsAreaResultCache.Clear();
         m_EnclosedByAreaResultCache.Clear();
+        m_ItemFieldCache.Clear();
         m_LayerExpressionCache.clear();
         m_ItemNetclassCache.clear();
         m_ZonesByNameCache.clear();
