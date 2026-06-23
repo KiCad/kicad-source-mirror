@@ -1161,9 +1161,7 @@ void PCB_SHAPE::rebakeFromTransform( const TRANSFORM_TRS& xform )
         for( auto it = poly.IterateWithHoles(); it; it++ )
             poly.SetVertex( it.GetIndex(), xform.Apply( *it ) );
 
-        const BOX2I bbox = poly.OutlineCount() ? poly.BBox() : BOX2I();
-        EDA_SHAPE::SetStart( bbox.GetOrigin() );
-        EDA_SHAPE::SetEnd( bbox.GetEnd() );
+        // m_libStart/m_libEnd are not seeded for POLY, skip the start/end fall-through below.
         return;
     }
 

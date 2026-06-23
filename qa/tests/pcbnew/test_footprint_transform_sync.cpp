@@ -4557,9 +4557,8 @@ static void checkTableSane( PCB_TABLE* aTable, const VECTOR2I& aNearPos )
 }
 
 
-// A POLY textbox keeps start/end on the polygon bbox. Loaded poly cells have unseeded
-// lib start/end, so transforming those through a rotation used to overflow the int cast.
-BOOST_AUTO_TEST_CASE( PolyTextBoxStartEndTracksPolygon )
+// Rebaking a POLY cell must not transform its unseeded lib start/end, which used to overflow.
+BOOST_AUTO_TEST_CASE( PolyTextBoxRebakeDoesNotOverflowOnStaleStartEnd )
 {
     FOOTPRINT fp( nullptr );
     fp.SetPosition( VECTOR2I( 100000000, 60000000 ) );
@@ -4580,11 +4579,13 @@ BOOST_AUTO_TEST_CASE( PolyTextBoxStartEndTracksPolygon )
     tb->OverrideLibCoords( VECTOR2I( 2000000000, 2000000000 ), VECTOR2I( 2000000000, 2000000000 ) );
     fp.Add( tb, ADD_MODE::APPEND );
 
+    // Rebake through the rotation. This used to convert the stale lib start/end and overflow.
     fp.SetOrientation( EDA_ANGLE( 33.0, DEGREES_T ) );
 
+    // The polygon is rebaked to a sane, in-range size (16 x 5 mm rotated).
     const BOX2I polyBox = tb->GetPolyShape().BBox();
-    BOOST_CHECK( tb->GetStart() == polyBox.GetOrigin() );
-    BOOST_CHECK( tb->GetEnd() == polyBox.GetEnd() );
+    BOOST_CHECK( polyBox.GetWidth() > 0 && polyBox.GetWidth() < 50000000 );
+    BOOST_CHECK( polyBox.GetHeight() > 0 && polyBox.GetHeight() < 50000000 );
 }
 
 
