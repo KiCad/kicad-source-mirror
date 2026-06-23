@@ -223,6 +223,7 @@ VECTOR2I PCB_TEXTBOX::GetMinSize() const
 void PCB_TEXTBOX::SetShape( SHAPE_T aShape )
 {
     EDA_SHAPE::SetShape( aShape );
+    m_libShape = aShape;
 }
 
 
@@ -689,7 +690,7 @@ void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
 void PCB_TEXTBOX::OnFootprintTransformed()
 {
-    if( const FOOTPRINT* fp = GetParentFootprint() )
+    if( const FOOTPRINT* fp = GetParentFootprint(); fp && GetLibraryShape() == SHAPE_T::RECTANGLE )
     {
         const TRANSFORM_TRS& xform = fp->GetTransform();
         m_shape = SHAPE_T::RECTANGLE;
@@ -713,6 +714,33 @@ void PCB_TEXTBOX::OnFootprintTransformed()
     EDA_TEXT::SetTextAngle( GetTextAngle() );
     ClearRenderCache();
     ClearBoundingBoxCache();
+}
+
+
+void PCB_TEXTBOX::syncLibCoords()
+{
+    const FOOTPRINT* fp = GetParentFootprint();
+
+    // Only the axis-aligned rectangle case needs the textbox-specific inverse.
+    // Poly textboxes and standalone (non-FP) boxes use the base shape mapping.
+    if( !fp || GetShape() != SHAPE_T::RECTANGLE )
+    {
+        PCB_SHAPE::syncLibCoords();
+        return;
+    }
+
+    const TRANSFORM_TRS& xform = fp->GetTransform();
+
+    const VECTOR2I boardCenter( ( m_start.x + m_end.x ) / 2, ( m_start.y + m_end.y ) / 2 );
+    const int      boardHalfW = std::abs( m_end.x - m_start.x ) / 2;
+    const int      boardHalfH = std::abs( m_end.y - m_start.y ) / 2;
+
+    const VECTOR2I libCenter = xform.InverseApply( boardCenter );
+    const int      libHalfW = std::abs( KiROUND( boardHalfW / xform.GetScaleX() ) );
+    const int      libHalfH = std::abs( KiROUND( boardHalfH / xform.GetScaleY() ) );
+
+    m_libStart = VECTOR2I( libCenter.x - libHalfW, libCenter.y - libHalfH );
+    m_libEnd = VECTOR2I( libCenter.x + libHalfW, libCenter.y + libHalfH );
 }
 
 

@@ -203,6 +203,10 @@ protected:
 
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
+    // Inverse of OnFootprintTransformed (move center, scale half-extents, keep
+    // the box axis-aligned). A true inverse at any angle.
+    void syncLibCoords() override;
+
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
 
 protected:

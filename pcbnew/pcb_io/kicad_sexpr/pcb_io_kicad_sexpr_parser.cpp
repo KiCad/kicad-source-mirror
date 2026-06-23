@@ -4501,9 +4501,6 @@ PCB_BARCODE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_BARCODE( BOARD_ITEM* aParent )
  */
 void PCB_IO_KICAD_SEXPR_PARSER::bakeTextBoxLib( PCB_TEXTBOX* aTextBox )
 {
-    if( m_requiredVersion < FIRST_FP_AFFINE_TRANSFORM )
-        return;
-
     aTextBox->SetLibTextAngle( aTextBox->EDA_TEXT::GetTextAngle() );
 
     if( aTextBox->GetShape() == SHAPE_T::RECTANGLE )
@@ -4713,17 +4710,6 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
         aTextBox->SetMarginTop( margin );
         aTextBox->SetMarginRight( margin );
         aTextBox->SetMarginBottom( margin );
-    }
-
-    if( FOOTPRINT* parentFP = aTextBox->GetParentFootprint() )
-    {
-        // Legacy files stored FP-child coords in un-applied board frame.
-        // New format files use lib frame and don't need this manual reapply.
-        if( m_requiredVersion < FIRST_FP_AFFINE_TRANSFORM )
-        {
-            aTextBox->Rotate( { 0, 0 }, parentFP->GetOrientation() );
-            aTextBox->Move( parentFP->GetPosition() );
-        }
     }
 }
 

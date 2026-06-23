@@ -4403,4 +4403,159 @@ BOOST_AUTO_TEST_CASE( TextBoxScalarAttributesStableAcrossSaveLoadUnderScale )
 }
 
 
+// Build a 2x2 table. Call with the footprint at origin, unrotated, so the
+// cell start/end land in lib coords.
+static PCB_TABLE* buildLibTable( FOOTPRINT* aFp )
+{
+    PCB_TABLE* table = new PCB_TABLE( aFp, 0 );
+    table->SetColCount( 2 );
+    table->SetColWidth( 0, 16000000 );
+    table->SetColWidth( 1, 18000000 );
+    table->SetRowHeight( 0, 5000000 );
+    table->SetRowHeight( 1, 5000000 );
+
+    const VECTOR2I starts[4] = {
+        { -4000000, 6000000 }, { 12000000, 6000000 }, { -4000000, 11000000 }, { 12000000, 11000000 }
+    };
+    const VECTOR2I ends[4] = {
+        { 12000000, 11000000 }, { 30000000, 11000000 }, { 12000000, 16000000 }, { 30000000, 16000000 }
+    };
+
+    for( int ii = 0; ii < 4; ++ii )
+    {
+        PCB_TABLECELL* cell = new PCB_TABLECELL( table );
+        cell->SetColSpan( 1 );
+        cell->SetRowSpan( 1 );
+        cell->SetText( wxT( "x" ) );
+        cell->SetStart( starts[ii] );
+        cell->SetEnd( ends[ii] );
+        table->AddCell( cell );
+    }
+
+    return table;
+}
+
+
+// A 34x10 table fits in ~36mm. The bug blew it past 1 metre, so a loose bound catches it.
+static void checkTableSane( PCB_TABLE* aTable, const VECTOR2I& aNearPos )
+{
+    BOX2I bbox = aTable->GetBoundingBox();
+
+    BOOST_CHECK_MESSAGE( bbox.GetWidth() > 0 && bbox.GetWidth() < 50000000 && bbox.GetHeight() > 0
+                                 && bbox.GetHeight() < 50000000,
+                         "table bbox size out of range ( " << bbox.GetWidth() << ", " << bbox.GetHeight() << " )" );
+
+    VECTOR2I center = bbox.GetCenter();
+    BOOST_CHECK_MESSAGE( std::abs( center.x - aNearPos.x ) < 50000000 && std::abs( center.y - aNearPos.y ) < 50000000,
+                         "table bbox center ( " << center.x << ", " << center.y << " ) far from footprint ( "
+                                                << aNearPos.x << ", " << aNearPos.y << " )" );
+
+    // Cells must stay a distinct grid, not collapse onto each other.
+    BOOST_CHECK( aTable->GetCells()[0]->GetBoundingBox().GetCenter()
+                 != aTable->GetCells()[3]->GetBoundingBox().GetCenter() );
+}
+
+
+BOOST_AUTO_TEST_CASE( TableInRotatedFootprintStaysSane )
+{
+    for( double angle : { 0.0, 90.0, 180.0, 270.0, 33.0, 217.5 } )
+    {
+        BOARD      board;
+        FOOTPRINT* fp = new FOOTPRINT( &board );
+        board.Add( fp );
+        fp->SetPosition( VECTOR2I( 0, 0 ) );
+
+        PCB_TABLE* table = buildLibTable( fp );
+        fp->Add( table, ADD_MODE::APPEND );
+
+        fp->SetPosition( VECTOR2I( 101000000, 68000000 ) );
+        fp->SetOrientation( EDA_ANGLE( angle, DEGREES_T ) );
+
+        BOOST_TEST_CONTEXT( "orientation " << angle )
+        checkTableSane( table, VECTOR2I( 101000000, 68000000 ) );
+    }
+}
+
+
+// Non-cardinal rotation makes cells polygons, so compare the table bbox.
+BOOST_FIXTURE_TEST_CASE( TableInNonCardinalRotatedFootprintSurvivesSaveLoad, BOARD_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue18", m_board );
+
+    FOOTPRINT* fp = *m_board->Footprints().begin();
+    BOOST_REQUIRE( fp );
+
+    fp->SetPosition( VECTOR2I( 0, 0 ) );
+    fp->SetOrientation( ANGLE_0 );
+
+    PCB_TABLE* table = buildLibTable( fp );
+    fp->Add( table, ADD_MODE::APPEND );
+
+    fp->SetPosition( VECTOR2I( 12345678, -7654321 ) );
+    fp->SetOrientation( EDA_ANGLE( 33.0, DEGREES_T ) );
+
+    BOX2I bboxBefore = table->GetBoundingBox();
+
+    const std::filesystem::path savePath =
+            std::filesystem::temp_directory_path() / "table_in_rotated_scaled_fp.kicad_pcb";
+
+    KI_TEST::DumpBoardToFile( *m_board, savePath.string() );
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( savePath.string() );
+    BOOST_REQUIRE( reloaded );
+
+    FOOTPRINT* fp2 = *reloaded->Footprints().begin();
+    BOOST_REQUIRE( fp2 );
+
+    PCB_TABLE* table2 = nullptr;
+
+    for( BOARD_ITEM* item : fp2->GraphicalItems() )
+    {
+        if( item->Type() == PCB_TABLE_T )
+            table2 = static_cast<PCB_TABLE*>( item );
+    }
+
+    BOOST_REQUIRE( table2 );
+
+    BOX2I bboxAfter = table2->GetBoundingBox();
+
+    // Tolerance covers poly rounding at non-cardinal angles. The bug was off by tens of mm.
+    const int tol = 300000;
+
+    BOOST_CHECK_MESSAGE( std::abs( bboxAfter.GetOrigin().x - bboxBefore.GetOrigin().x ) <= tol
+                                 && std::abs( bboxAfter.GetOrigin().y - bboxBefore.GetOrigin().y ) <= tol
+                                 && std::abs( bboxAfter.GetWidth() - bboxBefore.GetWidth() ) <= tol
+                                 && std::abs( bboxAfter.GetHeight() - bboxBefore.GetHeight() ) <= tol,
+                         "table bbox after reload o( "
+                                 << bboxAfter.GetOrigin().x << ", " << bboxAfter.GetOrigin().y << " ) sz( "
+                                 << bboxAfter.GetWidth() << ", " << bboxAfter.GetHeight() << " ) expected o( "
+                                 << bboxBefore.GetOrigin().x << ", " << bboxBefore.GetOrigin().y << " ) sz( "
+                                 << bboxBefore.GetWidth() << ", " << bboxBefore.GetHeight() << " )" );
+}
+
+
+// Issue 24734: v10 tables in rotated footprints used to explode on load.
+// Each table must land near its footprint with a bounded size.
+BOOST_FIXTURE_TEST_CASE( LegacyEmbeddedTableInRotatedFootprintLoads, BOARD_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "embedded_table_rotated_legacy_v10", m_board );
+
+    int tableCount = 0;
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+    {
+        for( BOARD_ITEM* item : fp->GraphicalItems() )
+        {
+            if( item->Type() != PCB_TABLE_T )
+                continue;
+
+            tableCount++;
+            BOOST_TEST_CONTEXT( "footprint orientation " << fp->GetOrientation().AsDegrees() )
+            checkTableSane( static_cast<PCB_TABLE*>( item ), fp->GetPosition() );
+        }
+    }
+
+    BOOST_CHECK_EQUAL( tableCount, 5 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

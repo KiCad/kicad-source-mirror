@@ -339,7 +339,7 @@ protected:
 
     bool isMoving() const override { return IsMoving(); }
 
-    void syncLibCoords();
+    virtual void syncLibCoords();
 
     // Returns the parent footprint to use for lib/board frame conversion. Pad primitives
     // are stored pad-local so they get nullptr (the pad applies its own transform when
