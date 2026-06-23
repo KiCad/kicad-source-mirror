@@ -21,6 +21,10 @@
 
 #include <algorithm>
 
+#include <api/api_handler_sch.h>
+#include <api/api_server.h>
+#include <api/api_utils.h>
+#include <api/headless_sch_context.h>
 #include <core/json_serializers.h>
 #include <pgm_base.h>
 #include <kiface_base.h>
@@ -81,14 +85,8 @@
 #include <toolbars_sch_editor.h>
 #include <toolbars_symbol_editor.h>
 
-#if defined( KICAD_IPC_API )
-#include <api/api_handler_sch.h>
-#include <api/api_server.h>
-#include <api/api_utils.h>
-#include <api/headless_sch_context.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
-#endif
 
 #include <wx/crt.h>
 
@@ -456,7 +454,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
-#if defined( KICAD_IPC_API )
     bool HandleApiOpenDocument( const wxString& aPath,
                                 KICAD_API_SERVER* aServer,
                                 wxString* aError ) override;
@@ -464,7 +461,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     bool HandleApiCloseDocument( const wxString& aSchFileName,
                                  KICAD_API_SERVER* aServer,
                                  wxString* aError ) override;
-#endif
 
     void PreloadLibraries( KIWAY* aKiway ) override;
     void CancelPreload( bool aBlock = true ) override;
@@ -477,14 +473,12 @@ private:
     std::atomic_bool                       m_libraryPreloadInProgress;
     std::atomic_bool                       m_libraryPreloadAbort;
 
-#if defined( KICAD_IPC_API )
     void closeCurrentDocument( KICAD_API_SERVER* aServer );
 
     KIWAY*                                    m_kiway = nullptr;
     SCHEMATIC*                                m_openSchematic = nullptr;
     std::shared_ptr<HEADLESS_SCH_CONTEXT>     m_openContext;
     std::unique_ptr<API_HANDLER_SCH>          m_openHandler;
-#endif
 
 } kiface( "eeschema", KIWAY::FACE_SCH );
 
@@ -542,9 +536,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 
     start_common( aCtlBits );
 
-#if defined( KICAD_IPC_API )
     m_kiway = aKiway;
-#endif
 
     m_jobHandler = std::make_unique<EESCHEMA_JOBS_HANDLER>( aKiway );
 
@@ -868,7 +860,6 @@ bool IFACE::HandleJobConfig( JOB* aJob, wxWindow* aParent )
 }
 
 
-#if defined( KICAD_IPC_API )
 // TODO(JE) some of the below methods can probably be factored out and shared between sch/pcb
 void IFACE::closeCurrentDocument( KICAD_API_SERVER* aServer )
 {
@@ -1007,4 +998,3 @@ bool IFACE::HandleApiCloseDocument( const wxString& aSchFileName, KICAD_API_SERV
     closeCurrentDocument( aServer );
     return true;
 }
-#endif

@@ -24,6 +24,12 @@
 #include <background_jobs_monitor.h>
 #include <cli_progress_reporter.h>
 #include <confirm.h>
+#include <api/api_handler_footprint.h>
+#include <api/api_handler_pcb.h>
+#include <api/api_server.h>
+#include <api/api_utils.h>
+#include <api/headless_footprint_context.h>
+#include <api/headless_pcb_context.h>
 #include <kiface_base.h>
 #include <kiface_ids.h>
 #include <kiway_holder.h>
@@ -46,6 +52,9 @@
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
 #include <footprint.h>
+#include <board.h>
+#include <board_loader.h>
+#include <lib_id.h>
 #include <nlohmann/json.hpp>
 #include <dialogs/dialog_configure_paths.h>
 #include <dialogs/panel_grid_settings.h>
@@ -84,20 +93,6 @@
 #include <toolbars_pcb_editor.h>
 
 #include <wx/crt.h>
-
-#if defined( KICAD_IPC_API )
-#include <api/api_handler_footprint.h>
-#include <api/api_handler_pcb.h>
-#include <api/api_server.h>
-#include <api/api_utils.h>
-#include <api/headless_footprint_context.h>
-#include <api/headless_pcb_context.h>
-#include <board.h>
-#include <board_loader.h>
-#include <footprint_library_adapter.h>
-#include <lib_id.h>
-#include <project_pcb.h>
-#endif
 
 
 /**
@@ -588,7 +583,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool HandleJobConfig( JOB* aJob, wxWindow* aParent ) override;
 
-#if defined( KICAD_IPC_API )
     bool HandleApiOpenDocument( const wxString& aPath,
                                 KICAD_API_SERVER* aServer,
                                 wxString* aError ) override;
@@ -601,7 +595,6 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
     bool handleOpenFootprint( const wxString& aProjectPath, const wxString& aLibIdStr, KICAD_API_SERVER* aServer,
                               wxString* aError );
-#endif
 
     void PreloadLibraries( KIWAY* aKiway ) override;
     void ProjectChanged() override;
@@ -614,7 +607,6 @@ private:
     std::atomic_bool                     m_libraryPreloadInProgress;
     std::atomic_bool                     m_libraryPreloadAbort;
 
-#if defined( KICAD_IPC_API )
     void closeCurrentDocument( KICAD_API_SERVER* aServer );
 
     KIWAY* m_kiway = nullptr;
@@ -622,7 +614,6 @@ private:
     std::unique_ptr<API_HANDLER_PCB>            m_openHandler;
     std::shared_ptr<HEADLESS_FOOTPRINT_CONTEXT> m_openFpContext;
     std::unique_ptr<API_HANDLER_FOOTPRINT>      m_openFpHandler;
-#endif
 
 } kiface( "pcbnew", KIWAY::FACE_PCB );
 
@@ -685,9 +676,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 
     start_common( aCtlBits );
 
-#if defined( KICAD_IPC_API )
     m_kiway = aKiway;
-#endif
 
     m_jobHandler = std::make_unique<PCBNEW_JOBS_HANDLER>( aKiway );
 
@@ -847,7 +836,6 @@ bool IFACE::HandleJobConfig( JOB* aJob, wxWindow* aParent )
 }
 
 
-#if defined( KICAD_IPC_API )
 void IFACE::closeCurrentDocument( KICAD_API_SERVER* aServer )
 {
     if( m_openHandler )
@@ -1087,7 +1075,6 @@ bool IFACE::HandleApiCloseDocument( const wxString& aFileName, KICAD_API_SERVER*
     closeCurrentDocument( aServer );
     return true;
 }
-#endif
 
 
 void IFACE::PreloadLibraries( KIWAY* aKiway )

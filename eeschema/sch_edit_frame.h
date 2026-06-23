@@ -961,9 +961,7 @@ protected:
 
     void updateSelectionFilterVisbility() override;
 
-#ifdef KICAD_IPC_API
     void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
-#endif
 
 private:
     // Called when resizing the Hierarchy Navigator panel
@@ -1108,10 +1106,8 @@ private:
 
     wxChoice*                   m_currentVariantCtrl;
 
-#ifdef KICAD_IPC_API
     std::unique_ptr<API_HANDLER_SCH> m_apiHandler;
     std::unique_ptr<API_HANDLER_COMMON> m_apiHandlerCommon;
-#endif
 };
 
 

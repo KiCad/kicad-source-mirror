@@ -446,8 +446,13 @@ set( PCBNEW_CLASS_SRCS
     zone_settings_bag.cpp
     edit_zone_helpers.cpp
 
+    api/api_handler_board.cpp
+    api/api_handler_footprint.cpp
+    api/api_handler_pcb.cpp
+    api/footprint_context.cpp
     api/headless_pcb_context.cpp
     api/headless_footprint_context.cpp
+    api/pcb_context.cpp
 
     tools/array_tool.cpp
     tools/board_editor_control.cpp
@@ -535,16 +540,6 @@ set( PCBNEW_SRCS
 #extra sources from common
 set( PCBNEW_COMMON_SRCS
     )
-
-if( KICAD_IPC_API )
-    set( PCBNEW_SRCS ${PCBNEW_SRCS}
-        api/api_handler_board.cpp
-        api/api_handler_footprint.cpp
-        api/api_handler_pcb.cpp
-        api/footprint_context.cpp
-        api/pcb_context.cpp
-        )
-endif()
 
 if( WIN32 )
     if( MINGW )

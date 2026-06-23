@@ -31,6 +31,7 @@
 #include <wx/msgdlg.h>
 #include <wx/cmdline.h>
 
+#include <api/api_server.h>
 #include <common.h>
 #include <env_vars.h>
 #include <file_history.h>
@@ -63,10 +64,6 @@
 
 #include <kiplatform/app.h>
 #include <kiplatform/environment.h>
-
-#ifdef KICAD_IPC_API
-#include <api/api_server.h>
-#endif
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_base.h>
@@ -317,7 +314,6 @@ bool PGM_KICAD::OnPgmInit()
 
     GetLibraryManager().LoadGlobalTables();
 
-#ifdef KICAD_IPC_API
     // The standalone --mergetool driver is a short-lived, non-interactive
     // process; don't spin up the API server (which binds the singleton IPC
     // socket) for it — that wastes work and can contend with a running KiCad
@@ -329,7 +325,6 @@ bool PGM_KICAD::OnPgmInit()
         m_api_common_handler = std::make_unique<API_HANDLER_COMMON>();
         m_api_server->RegisterHandler( m_api_common_handler.get() );
     }
-#endif
 
     wxString projToLoad;
 
@@ -474,10 +469,8 @@ bool PGM_KICAD::OnPgmInit()
         frame->Raise();
     }
 
-#ifdef KICAD_IPC_API
     if( m_api_server )
         m_api_server->SetReadyToReply();
-#endif
 
     return true;
 }
@@ -502,9 +495,7 @@ void PGM_KICAD::OnPgmExit()
 
     Kiway.OnKiwayEnd();
 
-#ifdef KICAD_IPC_API
     m_api_server.reset();
-#endif
 
     if( m_settings_manager && m_settings_manager->IsOK() )
     {

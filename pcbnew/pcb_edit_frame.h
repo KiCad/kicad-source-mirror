@@ -63,11 +63,9 @@ class DIALOG_BOARD_SETUP;
 class PCB_DESIGN_BLOCK_PANE;
 class WX_INFOBAR;
 
-#ifdef KICAD_IPC_API
 class KICAD_API_SERVER;
 class API_HANDLER_PCB;
 class API_HANDLER_COMMON;
-#endif
 
 enum LAST_PATH_TYPE : unsigned int;
 
@@ -756,9 +754,7 @@ protected:
 
     void onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent );
 
-#ifdef KICAD_IPC_API
     void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
-#endif
 
 public:
     wxChoice* m_SelTrackWidthBox;        // a choice box to display and select current track width
@@ -837,10 +833,8 @@ private:
     std::vector<KIID> m_crossProbeFlashItems;          ///< Items to flash (by UUID)
     bool              m_crossProbeFlashing = false;    ///< Currently flashing guard
 
-#ifdef KICAD_IPC_API
     std::unique_ptr<API_HANDLER_PCB>    m_apiHandler;
     std::unique_ptr<API_HANDLER_COMMON> m_apiHandlerCommon;
-#endif
 };
 
 #endif  // __PCB_EDIT_FRAME_H__

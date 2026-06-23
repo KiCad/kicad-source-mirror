@@ -40,6 +40,9 @@
 #include <wx/tooltip.h>
 
 #include <advanced_config.h>
+#include <api/api_plugin_manager.h>
+#include <api/api_server.h>
+#include <api/python_manager.h>
 #include <app_monitor.h>
 #include <background_jobs_monitor.h>
 #include <bitmaps.h>
@@ -66,12 +69,6 @@
 
 #include <widgets/kistatusbar.h>
 #include <widgets/wx_splash.h>
-
-#ifdef KICAD_IPC_API
-#include <api/api_plugin_manager.h>
-#include <api/api_server.h>
-#include <api/python_manager.h>
-#endif
 
 #ifdef _MSC_VER
 #include <winrt/base.h>
@@ -426,9 +423,7 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aIsUnitTest )
     m_background_jobs_monitor = std::make_unique<BACKGROUND_JOBS_MONITOR>();
     m_notifications_manager = std::make_unique<NOTIFICATIONS_MANAGER>();
 
-#ifdef KICAD_IPC_API
     m_plugin_manager = std::make_unique<API_PLUGIN_MANAGER>( &App() );
-#endif
 
     // Our unit test mocks break if we continue
     // A bug caused InitPgm to terminate early in unit tests and the mocks are...simplistic
@@ -450,11 +445,9 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aIsUnitTest )
     // Load common settings from disk after setting up env vars
     GetSettingsManager().Load( commonSettings );
 
-#ifdef KICAD_IPC_API
     // If user doesn't have a saved Python interpreter, try (potentially again) to find one
     if( commonSettings->m_Api.python_interpreter.IsEmpty() )
         commonSettings->m_Api.python_interpreter = PYTHON_MANAGER::FindPythonInterpreter();
-#endif
 
     // Init user language *before* calling loadSettings, because
     // env vars could be incorrectly initialized on Linux
@@ -474,10 +467,8 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aIsUnitTest )
     // Need to create a project early for now (it can have an empty path for the moment)
     GetSettingsManager().LoadProject( "" );
 
-#ifdef KICAD_IPC_API
     if( commonSettings->m_Api.enable_server )
         m_plugin_manager->ReloadPlugins();
-#endif
 
     // This sets the maximum tooltip display duration to 10s (up from 5) but only affects
     // Windows as other platforms display tooltips while the mouse is not moving

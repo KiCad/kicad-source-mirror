@@ -1416,8 +1416,6 @@ std::vector<const PLUGIN_ACTION*> EDA_DRAW_FRAME::GetOrderedPluginActions( PLUGI
     std::vector<const PLUGIN_ACTION*> actions;
     wxCHECK( aCfg, actions );
 
-#ifdef KICAD_IPC_API
-
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
     std::vector<const PLUGIN_ACTION*> unsorted = mgr.GetActionsForScope( aScope );
     std::map<wxString, const PLUGIN_ACTION*> actionMap;
@@ -1442,15 +1440,12 @@ std::vector<const PLUGIN_ACTION*> EDA_DRAW_FRAME::GetOrderedPluginActions( PLUGI
             actions.emplace_back( action );
     }
 
-#endif
-
     return actions;
 }
 
 
 void EDA_DRAW_FRAME::AddApiPluginTools( ACTION_TOOLBAR* aToolbar )
 {
-#ifdef KICAD_IPC_API
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
 
     mgr.ButtonBindings().clear();
@@ -1472,13 +1467,11 @@ void EDA_DRAW_FRAME::AddApiPluginTools( ACTION_TOOLBAR* aToolbar )
 
         mgr.ButtonBindings().insert( { button->GetId(), action->identifier } );
     }
-#endif
 }
 
 
 void EDA_DRAW_FRAME::OnApiPluginInvoke( wxCommandEvent& aEvent )
 {
-#ifdef KICAD_IPC_API
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
 
     if( mgr.ButtonBindings().count( aEvent.GetId() ) )
@@ -1490,5 +1483,4 @@ void EDA_DRAW_FRAME::OnApiPluginInvoke( wxCommandEvent& aEvent )
 
         mgr.InvokeAction( mgr.ButtonBindings().at( aEvent.GetId() ), reporter );
     }
-#endif
 }

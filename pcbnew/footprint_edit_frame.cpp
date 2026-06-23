@@ -35,6 +35,9 @@
 #include "tools/pcb_point_editor.h"
 #include "tools/pcb_selection_tool.h"
 #include <bitmaps.h>
+#include <api/api_handler_common.h>
+#include <api/api_handler_footprint.h>
+#include <api/api_server.h>
 #include <board.h>
 #include <project/net_settings.h>
 #include <widgets/wx_infobar.h>
@@ -89,12 +92,6 @@
 
 #include <wx/filedlg.h>
 #include <wx/hyperlink.h>
-
-#ifdef KICAD_IPC_API
-#include <api/api_server.h>
-#include <api/api_handler_footprint.h>
-#include <api/api_handler_common.h>
-#endif
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_CLOSE, FOOTPRINT_EDIT_FRAME::CloseFootprintEditor )
@@ -358,7 +355,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // properly call the WX_INFOBAR without crashing on some systems.
     restoreLastFootprint();
 
-#ifdef KICAD_IPC_API
     m_apiHandler = std::make_unique<API_HANDLER_FOOTPRINT>( this );
     Pgm().GetApiServer().RegisterHandler( m_apiHandler.get() );
 
@@ -367,7 +363,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_apiHandlerCommon = std::make_unique<API_HANDLER_COMMON>();
         Pgm().GetApiServer().RegisterHandler( m_apiHandlerCommon.get() );
     }
-#endif
 
     // This displays the last footprint loaded, if any, so it must be done after restoreLastFootprint()
     ActivateGalCanvas();
@@ -1833,9 +1828,7 @@ void FOOTPRINT_EDIT_FRAME::doCloseWindow()
     GetCanvas()->SetEventDispatcher( nullptr );
     GetCanvas()->StopDrawing();
 
-#ifdef KICAD_IPC_API
     Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
-#endif
 
     if( GetLibTree() )
         GetLibTree()->ShutdownPreviews();

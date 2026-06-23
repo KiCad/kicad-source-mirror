@@ -274,10 +274,6 @@ option( KICAD_GAL_PROFILE
     "Enable profiling info for GAL"
     OFF )
 
-option( KICAD_IPC_API
-    "Enable IPC API"
-    ON )
-
 option( KICAD_IDF_TOOLS
     "Build additional idf tools"
     ON )
@@ -315,10 +311,6 @@ add_compile_definitions( $<$<BOOL:${KICAD_USE_VALGRIND}>:KICAD_USE_VALGRIND> )
 add_compile_definitions( $<$<BOOL:${KICAD_GAL_PROFILE}>:KICAD_GAL_PROFILE> )
 add_compile_definitions( $<$<BOOL:${KICAD_WIN32_VERIFY_CODESIGN}>:KICAD_WIN32_VERIFY_CODESIGN> )
 add_compile_definitions( $<$<BOOL:${KICAD_UPDATE_CHECK}>:KICAD_UPDATE_CHECK> )
-
-if( KICAD_IPC_API )
-    add_definitions( -DKICAD_IPC_API )
-endif()
 
 # Ensure DEBUG is defined for all platforms in Debug builds
 add_compile_definitions( $<$<CONFIG:Debug>:DEBUG> )
@@ -1055,9 +1047,7 @@ if( KICAD_USE_SENTRY )
     add_compile_definitions( KICAD_USE_SENTRY )
 endif()
 
-if( KICAD_IPC_API )
-    find_package( nng REQUIRED )
-endif()
+find_package( nng REQUIRED )
 
 #================================================
 # Add the doxygen target

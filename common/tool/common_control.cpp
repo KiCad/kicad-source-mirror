@@ -427,7 +427,6 @@ int COMMON_CONTROL::ReportBug( const TOOL_EVENT& aEvent )
 
 int COMMON_CONTROL::ReloadPlugins( const TOOL_EVENT& aEvent )
 {
-#ifdef KICAD_IPC_API
     if( Pgm().GetCommonSettings()->m_Api.enable_server )
     {
         std::shared_ptr<REPORTER> reporter;
@@ -437,7 +436,6 @@ int COMMON_CONTROL::ReloadPlugins( const TOOL_EVENT& aEvent )
 
         Pgm().GetPluginManager().ReloadPlugins( std::nullopt, reporter );
     }
-#endif
     return 0;
 }
 

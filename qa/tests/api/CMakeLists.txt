@@ -19,16 +19,10 @@ set( QA_API_SRCS
     test_api_module.cpp
     test_api_enums.cpp
     test_api_proto.cpp
+    test_api_e2e.cpp
+    test_api_jobs.cpp
+    test_api_wizards.cpp
     )
-
-if( KICAD_IPC_API )
-    set( QA_API_SRCS
-        ${QA_API_SRCS}
-        test_api_e2e.cpp
-        test_api_jobs.cpp
-        test_api_wizards.cpp
-    )
-endif()
 
 add_executable( qa_api
     # This is needed for the global mock objects

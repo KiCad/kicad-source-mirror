@@ -26,6 +26,7 @@
 #include <nlohmann/json.hpp>
 
 #include <advanced_config.h>
+#include <api/api_server.h>
 #include <bitmaps.h>
 #include <bitmap_store.h>
 #include <dialog_shim.h>
@@ -83,9 +84,6 @@
 #include <functional>
 #include <kiface_ids.h>
 
-#ifdef KICAD_IPC_API
-#include <api/api_server.h>
-#endif
 
 
 // Minimum window size
@@ -903,14 +901,12 @@ void EDA_BASE_FRAME::CommonSettingsChanged( int aFlags )
 
     COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
 
-#ifdef KICAD_IPC_API
     bool running = Pgm().GetApiServer().Running();
 
     if( running && !settings->m_Api.enable_server )
         Pgm().GetApiServer().Stop();
     else if( !running && settings->m_Api.enable_server )
         Pgm().GetApiServer().Start();
-#endif
 
     if( m_fileHistory )
     {
@@ -1688,9 +1684,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
         {
         }
 
-#ifdef KICAD_IPC_API
         book->AddPage( new PANEL_PLUGIN_SETTINGS( book ), _( "Plugins" ) );
-#endif
 
         book->AddPage( new PANEL_MAINTENANCE( book, this ), _( "Maintenance" ) );
 

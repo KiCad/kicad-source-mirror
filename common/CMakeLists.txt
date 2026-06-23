@@ -349,8 +349,13 @@ set( KICOMMON_SRCS
     io/io_base.cpp
     io/io_utils.cpp
 
-    api/serializable.cpp
+    api/api_handler.cpp
+    api/api_plugin.cpp
+    api/api_plugin_manager.cpp
+    api/api_server.cpp
     api/api_utils.cpp
+    api/python_manager.cpp
+    api/serializable.cpp
 
     startwizard/startwizard.cpp
     startwizard/startwizard_provider_libraries.cpp
@@ -367,17 +372,6 @@ endif()
 list( APPEND KICOMMON_SRCS
     navlib_safe_init.cpp
 )
-
-if( KICAD_IPC_API )
-    set( KICOMMON_SRCS
-        ${KICOMMON_SRCS}
-        api/api_handler.cpp
-        api/api_plugin.cpp
-        api/api_plugin_manager.cpp
-        api/api_server.cpp
-        api/python_manager.cpp
-    )
-endif()
 
 add_library( kicommon SHARED
     ${KICOMMON_SRCS}
@@ -406,6 +400,7 @@ target_link_libraries( kicommon
     core
     kiapi
     kimath
+    kinng
     kiplatform
     nlohmann_json
     nlohmann_json_schema_validator
@@ -437,12 +432,6 @@ if( KICAD_USE_SENTRY )
         sentry )
 
     set_property(SOURCE app_monitor.cpp APPEND PROPERTY COMPILE_DEFINITIONS KICAD_SENTRY_DSN="${KICAD_SENTRY_DSN}")
-endif()
-
-if( KICAD_IPC_API )
-    target_link_libraries( kicommon
-        kinng
-        )
 endif()
 
 include( ${KICAD_CMAKE_MODULE_PATH}/KiCadVersion.cmake )
@@ -909,13 +898,10 @@ if( UNIX AND NOT APPLE )
     )
 endif()
 
-    if( KICAD_IPC_API )
-    set( COMMON_SRCS
-        ${COMMON_SRCS}
-        api/api_handler_common.cpp
-        api/api_handler_editor.cpp
-    )
-endif()
+list( APPEND COMMON_SRCS
+    api/api_handler_common.cpp
+    api/api_handler_editor.cpp
+)
 
 add_library( common STATIC
     ${COMMON_SRCS}
@@ -951,6 +937,7 @@ add_dependencies( common compoundfilereader )  # used by altium_parser.cpp
 target_link_libraries( common
     libcontext
     kimath
+    kinng
     kiplatform
     kicommon
     core
@@ -976,12 +963,6 @@ target_link_libraries( common
 if( KICAD_USE_SENTRY )
     target_link_libraries( common
         sentry )
-endif()
-
-if( KICAD_IPC_API )
-    target_link_libraries( common
-        kinng
-        )
 endif()
 
 target_include_directories( common

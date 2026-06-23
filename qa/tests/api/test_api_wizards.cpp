@@ -29,7 +29,6 @@
 BOOST_AUTO_TEST_SUITE( ApiWizards )
 
 
-#ifdef KICAD_IPC_API
 BOOST_AUTO_TEST_CASE( QueryWizards )
 {
     wxFileName qaPath( KI_TEST::GetPcbnewTestDataDir() );
@@ -80,6 +79,5 @@ BOOST_AUTO_TEST_CASE( QueryWizards )
         }
     }
 }
-#endif
 
 BOOST_AUTO_TEST_SUITE_END()

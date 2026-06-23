@@ -53,6 +53,7 @@ set( KICAD_SRCS
 
 set( KICAD_CLI_SRCS
     cli/command.cpp
+    cli/command_api_server.cpp
     cli/command_jobset_run.cpp
     cli/command_pcb_export_base.cpp
     cli/command_pcb_diff.cpp
@@ -100,13 +101,6 @@ set( KICAD_CLI_SRCS
 
     jobs_runner.cpp
     )
-
-if( KICAD_IPC_API )
-    set( KICAD_CLI_SRCS
-        ${KICAD_CLI_SRCS}
-        cli/command_api_server.cpp
-    )
-endif()
 
 if( WIN32 )
     if( MINGW )

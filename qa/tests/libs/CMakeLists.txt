@@ -19,7 +19,4 @@
 
 add_subdirectory( sexpr )
 add_subdirectory( kimath )
-
-if( KICAD_IPC_API )
-    add_subdirectory( kinng )
-endif()
+add_subdirectory( kinng )

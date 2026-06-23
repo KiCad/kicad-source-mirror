@@ -42,7 +42,11 @@
 #include <pgm_base.h>
 #include <pcb_edit_frame.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
+#include <api/api_handler_common.h>
+#include <api/api_handler_pcb.h>
 #include <api/api_plugin_manager.h>
+#include <api/api_server.h>
+#include <api/api_utils.h>
 #include <geometry/geometry_utils.h>
 #include <bitmaps.h>
 #include <confirm.h>
@@ -142,13 +146,6 @@
 #include <footprint_chooser_frame.h>
 #include <toolbars_pcb_editor.h>
 #include <drc/rule_editor/dialog_drc_rule_editor.h>
-
-#ifdef KICAD_IPC_API
-#include <api/api_server.h>
-#include <api/api_handler_pcb.h>
-#include <api/api_handler_common.h>
-#include <api/api_utils.h>
-#endif
 
 #include <richio.h>
 
@@ -284,10 +281,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     ReCreateMenuBar();
 
-#ifdef KICAD_IPC_API
     wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
                     &PCB_EDIT_FRAME::onPluginAvailabilityChanged, this );
-#endif
 
     // Fetch a COPY of the config as a lot of these initializations are going to overwrite our
     // data.
@@ -528,7 +523,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Sync action plugins in case they changed since the last time the frame opened
     GetToolManager()->RunAction( ACTIONS::pluginsReload );
 
-#ifdef KICAD_IPC_API
     m_apiHandler = std::make_unique<API_HANDLER_PCB>( this );
     Pgm().GetApiServer().RegisterHandler( m_apiHandler.get() );
 
@@ -537,7 +531,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_apiHandlerCommon = std::make_unique<API_HANDLER_COMMON>();
         Pgm().GetApiServer().RegisterHandler( m_apiHandlerCommon.get() );
     }
-#endif
 
     GetCanvas()->SwitchBackend( m_canvasType );
     ActivateGalCanvas();
@@ -1581,10 +1574,8 @@ void PCB_EDIT_FRAME::doCloseWindow()
 
     GetCanvas()->StopDrawing();
 
-#ifdef KICAD_IPC_API
     Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
     wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &PCB_EDIT_FRAME::onPluginAvailabilityChanged, this );
-#endif
 
     // Clean up mode-less dialogs.
     Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs, this );
@@ -2849,14 +2840,12 @@ void PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent 
 }
 
 
-#ifdef KICAD_IPC_API
 void PCB_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
 {
     wxLogTrace( traceApi, "PCB frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
     RecreateToolbars();
     aEvt.Skip();
 }
-#endif
 
 
 void PCB_EDIT_FRAME::SwitchLayer( PCB_LAYER_ID layer )

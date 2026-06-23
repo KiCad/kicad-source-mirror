@@ -24,6 +24,7 @@
 #include <core/base64.h>
 #include <algorithm>
 #include <chrono>
+#include <api/api_plugin_manager.h>
 #include <confirm.h>
 #include <connection_graph.h>
 #include <design_block.h>
@@ -103,10 +104,6 @@
 #include <wx/mstream.h>
 #include <wx/clipbrd.h>
 #include <wx/imagpng.h>
-
-#ifdef KICAD_IPC_API
-#include <api/api_plugin_manager.h>
-#endif
 
 
 /**

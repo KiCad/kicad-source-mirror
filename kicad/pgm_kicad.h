@@ -22,11 +22,8 @@
 #define PGM_KICAD_H_
 
 #include <pgm_base.h>
-#include <bin_mod.h>
-
-#ifdef KICAD_IPC_API
 #include <api/api_handler_common.h>
-#endif
+#include <bin_mod.h>
 
 /**
  * PGM_KICAD
@@ -67,11 +64,9 @@ protected:
 
     BIN_MOD         m_bm;
 
-#ifdef KICAD_IPC_API
     // In PGM_SINGLE_TOP because PGM_BASE is in kicommon, and this can't be in the DLL
     // because it depends on things like EDA_TEXT and EDA_SHAPE that aren't in the DLL
     std::unique_ptr<API_HANDLER_COMMON> m_api_common_handler;
-#endif
 };
 
 

@@ -255,12 +255,8 @@ void SCH_EDIT_FRAME::configureToolbars()
             [this]( ACTION_TOOLBAR* aToolbar )
             {
 
-#ifdef KICAD_IPC_API
                 bool haveApiPlugins = Pgm().GetCommonSettings()->m_Api.enable_server
                                         && !Pgm().GetPluginManager().GetActionsForScope( PluginActionScope() ).empty();
-#else
-                bool haveApiPlugins = false;
-#endif
 
                 if( haveApiPlugins )
                 {

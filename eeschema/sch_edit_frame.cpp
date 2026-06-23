@@ -36,6 +36,9 @@
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/menu.h>
+#include <api/api_handler_common.h>
+#include <api/api_plugin_manager.h>
+#include <api/api_utils.h>
 #include <local_history.h>
 #include <eeschema_id.h>
 #include <executable_names.h>
@@ -117,12 +120,6 @@
 #include <wx/textdlg.h>
 #include <wx/generic/treectlg.h>
 
-
-#ifdef KICAD_IPC_API
-#include <api/api_handler_common.h>
-#include <api/api_plugin_manager.h>
-#include <api/api_utils.h>
-#endif
 
 #include <dialog_change_symbols.h>
 
@@ -214,9 +211,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     if( GetToolManager() )
         GetToolManager()->RunAction( SCH_ACTIONS::angleSnapModeChanged );
 
-#ifdef KICAD_IPC_API
     wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
-#endif
 
     m_hierarchy = new HIERARCHY_PANE( this );
 
@@ -452,7 +447,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     updateTitle();
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->ResetHistory();
 
-#ifdef KICAD_IPC_API
     m_apiHandler = std::make_unique<API_HANDLER_SCH>( this );
     Pgm().GetApiServer().RegisterHandler( m_apiHandler.get() );
 
@@ -461,7 +455,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_apiHandlerCommon = std::make_unique<API_HANDLER_COMMON>();
         Pgm().GetApiServer().RegisterHandler( m_apiHandlerCommon.get() );
     }
-#endif
 
     // Default shutdown reason until a file is loaded
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "New schematic file is unsaved" ) );
@@ -1250,10 +1243,8 @@ void SCH_EDIT_FRAME::doCloseWindow()
         Kiway().LocalHistory().RemoveAutosaveFiles( Prj().GetProjectPath(), sheetSrcs );
     }
 
-#ifdef KICAD_IPC_API
     Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
     wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
-#endif
 
     // Close modeless dialogs.  They're trouble when they get destroyed after the frame.
     Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &SCH_EDIT_FRAME::onCloseSymbolDiffDialog, this );
@@ -2856,14 +2847,12 @@ void SCH_EDIT_FRAME::updateSelectionFilterVisbility()
 }
 
 
-#ifdef KICAD_IPC_API
 void SCH_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
 {
     wxLogTrace( traceApi, "SCH frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
     RecreateToolbars();
     aEvt.Skip();
 }
-#endif
 
 
 void SCH_EDIT_FRAME::ToggleSearch()

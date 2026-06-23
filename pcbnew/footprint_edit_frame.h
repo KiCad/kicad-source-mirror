@@ -37,10 +37,8 @@ class EDITOR_TABS_PANEL;
 class FOOTPRINT_EDITOR_TAB_CONTEXT;
 class UNDO_REDO_CONTAINER;
 
-#ifdef KICAD_IPC_API
 class API_HANDLER_FOOTPRINT;
 class API_HANDLER_COMMON;
-#endif
 
 namespace PCB { struct IFACE; }     // A KIFACE coded in pcbnew.cpp
 
@@ -511,10 +509,8 @@ private:
     /// While true, promptAndCloseFootprintTab() skips the unsaved-changes dialog.
     bool m_silentFootprintTabClose;
 
-#ifdef KICAD_IPC_API
     std::unique_ptr<API_HANDLER_FOOTPRINT> m_apiHandler;
     std::unique_ptr<API_HANDLER_COMMON>    m_apiHandlerCommon;
-#endif
 };
 
 #endif      // FOOTPRINT_EDIT_FRAME_H
