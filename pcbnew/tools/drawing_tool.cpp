@@ -1594,6 +1594,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 preview.Clear();
                 m_view->Update( &preview );
 
+                // Snap guides persist in the grid helper until the tool exits, so abandoning the
+                // dimension mid-draw must clear them or they linger on screen.
+                grid.FullReset();
+
                 delete dimension;
                 dimension = nullptr;
                 step = SET_ORIGIN;
@@ -2772,6 +2776,10 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 twoPointMgr.SetEnd( aCommittedGraphics->top()->GetEnd() );
                 aCommittedGraphics->pop();
 
+                // Snap guides persist in the grid helper until the tool exits, so a mid-draw
+                // backup must clear them or they linger on screen.
+                grid.FullReset();
+
                 getViewControls()->WarpMouseCursor( twoPointMgr.GetEnd(), true );
 
                 if( PICKED_ITEMS_LIST* undo = m_frame->PopCommandFromUndoList() )
@@ -3029,6 +3037,9 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
         {
+            // Snap guides persist in the grid helper until the tool exits, so a mid-draw backup
+            // must clear them or they linger on screen.
+            grid.FullReset();
             arcManager.RemoveLastPoint();
         }
         else if( evt->IsMotion() )
@@ -3361,6 +3372,9 @@ std::unique_ptr<PCB_SHAPE> DRAWING_TOOL::drawOneBezier( const TOOL_EVENT&   aToo
         }
         else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
         {
+            // Snap guides persist in the grid helper until the tool exits, so a mid-draw backup
+            // must clear them or they linger on screen.
+            grid.FullReset();
             bezierManager.RemoveLastPoint();
 
             if( bezierManager.GetStep() < KIGFX::PREVIEW::BEZIER_GEOM_MANAGER::SET_END )
@@ -3589,6 +3603,11 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 polyGeomMgr.Reset();
                 started = false;
                 grid.ClearSkipPoint();
+
+                // Snap guides persist in the grid helper until the tool exits, so abandoning the
+                // outline mid-draw must clear them or they linger on screen.
+                grid.FullReset();
+
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
             };
@@ -3718,6 +3737,10 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                              || evt->IsAction( &ACTIONS::doDelete )
                              || evt->IsAction( &ACTIONS::undo ) ) )
         {
+            // Snap guides persist in the grid helper until the tool exits, so dropping a corner
+            // must clear them or they linger on screen.
+            grid.FullReset();
+
             if( std::optional<VECTOR2I> last = polyGeomMgr.DeleteLastCorner() )
             {
                 cursorPos = last.value();
