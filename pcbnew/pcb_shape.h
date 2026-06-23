@@ -28,6 +28,7 @@ class LINE_READER;
 class EDA_DRAW_FRAME;
 class FOOTPRINT;
 class MSG_PANEL_ITEM;
+class TRANSFORM_TRS;
 
 
 class PCB_SHAPE : public BOARD_CONNECTED_ITEM, public EDA_SHAPE
@@ -252,6 +253,8 @@ public:
 
     void RebakeFromLib();
 
+    void RebakeWithScale( double aScaleX, double aScaleY );
+
     void OverrideLibCoords( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aArcMid = VECTOR2I( 0, 0 ) )
     {
         m_libStart = aStart;
@@ -345,6 +348,8 @@ protected:
     // are stored pad-local so they get nullptr (the pad applies its own transform when
     // building the effective shape).
     const FOOTPRINT* transformFp() const;
+
+    void rebakeFromTransform( const TRANSFORM_TRS& aXform );
 
     int getMaxError() const override;
 

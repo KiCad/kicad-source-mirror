@@ -1718,9 +1718,9 @@ BOOST_AUTO_TEST_CASE( NativeEllipseTessellatesUnderNonUniformScaleRotated )
 }
 
 
-// Pad primitives are pad-local. The pad composes its own transform when building the
-// effective shape, so the parent footprint transform must not touch primitive coords.
-BOOST_AUTO_TEST_CASE( PadPrimitiveStaysPadLocalUnderUniformScale )
+// Pad primitive lib coords are pad-local and untouched by the parent FP transform, but
+// the runtime geometry derives through the footprint scale like every other shape.
+BOOST_AUTO_TEST_CASE( PadPrimitiveScalesRuntimeKeepsLibPadLocal )
 {
     FOOTPRINT fp( nullptr );
     fp.SetPosition( VECTOR2I( 0, 0 ) );
@@ -1739,12 +1739,12 @@ BOOST_AUTO_TEST_CASE( PadPrimitiveStaysPadLocalUnderUniformScale )
 
     fp.SetTransformScale( 2.0, 2.0 );
 
-    BOOST_CHECK_EQUAL( prim->GetEnd().x, 1000000 );
-    BOOST_CHECK_EQUAL( prim->GetLibraryEnd().x, 1000000 );
+    BOOST_CHECK_EQUAL( prim->GetEnd().x, 2000000 );        // runtime scales
+    BOOST_CHECK_EQUAL( prim->GetLibraryEnd().x, 1000000 ); // lib stays pad-local
 }
 
 
-BOOST_AUTO_TEST_CASE( PadPrimitiveStaysCircleUnderNonUniformScale )
+BOOST_AUTO_TEST_CASE( PadPrimitiveCircleBecomesEllipseUnderNonUniformScale )
 {
     FOOTPRINT fp( nullptr );
     fp.SetPosition( VECTOR2I( 0, 0 ) );
@@ -1760,7 +1760,7 @@ BOOST_AUTO_TEST_CASE( PadPrimitiveStaysCircleUnderNonUniformScale )
 
     fp.SetTransformScale( 2.0, 1.0 );
 
-    BOOST_CHECK_EQUAL( static_cast<int>( prim->GetShape() ), static_cast<int>( SHAPE_T::CIRCLE ) );
+    BOOST_CHECK_EQUAL( static_cast<int>( prim->GetShape() ), static_cast<int>( SHAPE_T::ELLIPSE ) );
     BOOST_CHECK_EQUAL( static_cast<int>( prim->GetLibraryShape() ), static_cast<int>( SHAPE_T::CIRCLE ) );
 }
 
@@ -1908,7 +1908,9 @@ BOOST_FIXTURE_TEST_CASE( PadPrimitiveRoundTripsAcrossSaveLoad, BOARD_FIXTURE )
 
     fp->SetTransformScale( 2.0, 1.0 );
 
-    BOOST_REQUIRE_EQUAL( static_cast<int>( prim->GetShape() ), static_cast<int>( SHAPE_T::CIRCLE ) );
+    // Runtime morphs to ELLIPSE under the non-uniform scale, lib stays a pad-local CIRCLE.
+    BOOST_REQUIRE_EQUAL( static_cast<int>( prim->GetShape() ), static_cast<int>( SHAPE_T::ELLIPSE ) );
+    BOOST_REQUIRE_EQUAL( static_cast<int>( prim->GetLibraryShape() ), static_cast<int>( SHAPE_T::CIRCLE ) );
 
     const std::filesystem::path savePath = std::filesystem::temp_directory_path() / "pad_prim_roundtrip.kicad_pcb";
 
@@ -1936,10 +1938,109 @@ BOOST_FIXTURE_TEST_CASE( PadPrimitiveRoundTripsAcrossSaveLoad, BOARD_FIXTURE )
 
     const std::shared_ptr<PCB_SHAPE>& prim2 = pad2->GetPrimitives( PADSTACK::ALL_LAYERS ).front();
 
-    BOOST_CHECK_EQUAL( static_cast<int>( prim2->GetShape() ), static_cast<int>( SHAPE_T::CIRCLE ) );
+    // The file stores pad-local lib coords, so the reloaded primitive is a CIRCLE in lib
+    // space, re-derived to an ELLIPSE by the persisted non-uniform footprint scale.
+    BOOST_CHECK_EQUAL( static_cast<int>( prim2->GetLibraryShape() ), static_cast<int>( SHAPE_T::CIRCLE ) );
+    BOOST_CHECK_EQUAL( static_cast<int>( prim2->GetShape() ), static_cast<int>( SHAPE_T::ELLIPSE ) );
 
-    const VECTOR2I delta = prim2->GetEnd() - prim2->GetStart();
-    BOOST_CHECK_EQUAL( delta.EuclideanNorm(), 1000000 );
+    const VECTOR2I libDelta = prim2->GetLibraryEnd() - prim2->GetLibraryStart();
+    BOOST_CHECK_EQUAL( libDelta.EuclideanNorm(), 1000000 );
+}
+
+
+// Syncing lib coords from runtime (as a GUI edit commit does) must not bake the footprint
+// scale into a pad primitive's lib geometry, or it double-scales on the next reload.
+BOOST_AUTO_TEST_CASE( PadPrimitiveSyncKeepsLibUnscaled )
+{
+    BOARD      board;
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    board.Add( fp );
+    fp->SetPosition( VECTOR2I( 0, 0 ) );
+
+    PAD* pad = new PAD( fp );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
+    pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 500000, 500000 ) );
+    pad->SetLayerSet( PAD::SMDMask() );
+
+    std::vector<VECTOR2I> poly = {
+        { -1000000, -1000000 }, { 1000000, -1000000 }, { 1000000, 1000000 }, { -1000000, 1000000 }
+    };
+    pad->AddPrimitivePoly( PADSTACK::ALL_LAYERS, poly, 0, true );
+    fp->Add( pad, ADD_MODE::APPEND );
+
+    const std::shared_ptr<PCB_SHAPE>& prim = pad->GetPrimitives( PADSTACK::ALL_LAYERS ).front();
+    const BOX2I                       libBefore = prim->GetLibraryPolyShape().BBox();
+
+    fp->SetTransformScale( 2.0, 1.5 );
+
+    // A GUI edit commit syncs lib from runtime; lib must stay pad-local (unscaled).
+    prim->EndEdit();
+
+    const BOX2I libAfter = prim->GetLibraryPolyShape().BBox();
+
+    BOOST_CHECK_EQUAL( libAfter.GetWidth(), libBefore.GetWidth() );
+    BOOST_CHECK_EQUAL( libAfter.GetHeight(), libBefore.GetHeight() );
+}
+
+
+// A polygon custom-pad primitive must not double-scale across save / load: the file stores
+// pad-local lib coords, so the runtime polygon size has to match before and after a reload.
+BOOST_FIXTURE_TEST_CASE( PadPolyPrimitiveRoundTripsAcrossSaveLoad, BOARD_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue18", m_board );
+
+    FOOTPRINT* fp = *m_board->Footprints().begin();
+    BOOST_REQUIRE( fp );
+
+    fp->SetOrientation( ANGLE_0 );
+    fp->SetTransformScale( 1.0, 1.0 );
+
+    PAD* pad = new PAD( fp );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
+    pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 500000, 500000 ) );
+    pad->SetPosition( fp->GetPosition() );
+    pad->SetLayerSet( PAD::SMDMask() );
+    pad->SetNumber( wxT( "77" ) );
+    fp->Add( pad, ADD_MODE::APPEND );
+
+    std::vector<VECTOR2I> poly = {
+        { -1000000, -1000000 }, { 1000000, -1000000 }, { 1000000, 1000000 }, { -1000000, 1000000 }
+    };
+    pad->AddPrimitivePoly( PADSTACK::ALL_LAYERS, poly, 0, true );
+
+    fp->SetTransformScale( 2.0, 1.5 );
+
+    const BOX2I before = pad->GetBoundingBox();
+
+    const std::filesystem::path savePath = std::filesystem::temp_directory_path() / "pad_poly_prim_roundtrip.kicad_pcb";
+
+    KI_TEST::DumpBoardToFile( *m_board, savePath.string() );
+
+    std::unique_ptr<BOARD> reloaded = KI_TEST::ReadBoardFromFileOrStream( savePath.string() );
+    BOOST_REQUIRE( reloaded );
+
+    FOOTPRINT* fp2 = *reloaded->Footprints().begin();
+    BOOST_REQUIRE( fp2 );
+
+    PAD* pad2 = nullptr;
+
+    for( PAD* p : fp2->Pads() )
+    {
+        if( p->GetNumber() == wxT( "77" ) )
+        {
+            pad2 = p;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( pad2, "custom poly pad not found after reload" );
+
+    const BOX2I after = pad2->GetBoundingBox();
+
+    BOOST_CHECK_EQUAL( after.GetWidth(), before.GetWidth() );
+    BOOST_CHECK_EQUAL( after.GetHeight(), before.GetHeight() );
 }
 
 
@@ -4456,6 +4557,60 @@ static void checkTableSane( PCB_TABLE* aTable, const VECTOR2I& aNearPos )
 }
 
 
+// A POLY textbox keeps start/end on the polygon bbox. Loaded poly cells have unseeded
+// lib start/end, so transforming those through a rotation used to overflow the int cast.
+BOOST_AUTO_TEST_CASE( PolyTextBoxStartEndTracksPolygon )
+{
+    FOOTPRINT fp( nullptr );
+    fp.SetPosition( VECTOR2I( 100000000, 60000000 ) );
+
+    PCB_TEXTBOX* tb = new PCB_TEXTBOX( &fp );
+    tb->SetShape( SHAPE_T::POLY );
+
+    SHAPE_POLY_SET poly;
+    poly.NewOutline();
+    poly.Append( VECTOR2I( -4000000, 6000000 ) );
+    poly.Append( VECTOR2I( 12000000, 6000000 ) );
+    poly.Append( VECTOR2I( 12000000, 11000000 ) );
+    poly.Append( VECTOR2I( -4000000, 11000000 ) );
+    tb->SetPolyShape( poly );
+    tb->OverrideLibPoly( poly );
+
+    // Simulate the stale, unseeded lib start/end that loaded poly cells carry.
+    tb->OverrideLibCoords( VECTOR2I( 2000000000, 2000000000 ), VECTOR2I( 2000000000, 2000000000 ) );
+    fp.Add( tb, ADD_MODE::APPEND );
+
+    fp.SetOrientation( EDA_ANGLE( 33.0, DEGREES_T ) );
+
+    const BOX2I polyBox = tb->GetPolyShape().BBox();
+    BOOST_CHECK( tb->GetStart() == polyBox.GetOrigin() );
+    BOOST_CHECK( tb->GetEnd() == polyBox.GetEnd() );
+}
+
+
+// A non-cardinally rotated table stays sane when the footprint is scaled in one axis.
+BOOST_AUTO_TEST_CASE( RotatedTableSurvivesNonUniformScale )
+{
+    for( double angle : { 0.0, 90.0, 33.0, 217.5 } )
+    {
+        BOARD      board;
+        FOOTPRINT* fp = new FOOTPRINT( &board );
+        board.Add( fp );
+        fp->SetPosition( VECTOR2I( 0, 0 ) );
+
+        PCB_TABLE* table = buildLibTable( fp );
+        fp->Add( table, ADD_MODE::APPEND );
+
+        fp->SetPosition( VECTOR2I( 101000000, 68000000 ) );
+        fp->SetOrientation( EDA_ANGLE( angle, DEGREES_T ) );
+        fp->SetTransformScale( 1.0, 2.0 );
+
+        BOOST_TEST_CONTEXT( "orientation " << angle )
+        checkTableSane( table, VECTOR2I( 101000000, 68000000 ) );
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( TableInRotatedFootprintStaysSane )
 {
     for( double angle : { 0.0, 90.0, 180.0, 270.0, 33.0, 217.5 } )
@@ -4555,6 +4710,65 @@ BOOST_FIXTURE_TEST_CASE( LegacyEmbeddedTableInRotatedFootprintLoads, BOARD_FIXTU
     }
 
     BOOST_CHECK_EQUAL( tableCount, 5 );
+}
+
+
+// A footprint scale must scale the whole table, not just the cell text.
+BOOST_AUTO_TEST_CASE( TableScalesWithFootprint )
+{
+    BOARD      board;
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    board.Add( fp );
+    fp->SetPosition( VECTOR2I( 0, 0 ) );
+
+    PCB_TABLE* table = buildLibTable( fp );
+    fp->Add( table, ADD_MODE::APPEND );
+
+    BOX2I before = table->GetBoundingBox();
+
+    fp->SetTransformScale( 2.0, 1.5 );
+
+    BOX2I after = table->GetBoundingBox();
+
+    const double wRatio = (double) after.GetWidth() / before.GetWidth();
+    const double hRatio = (double) after.GetHeight() / before.GetHeight();
+
+    BOOST_CHECK_MESSAGE( wRatio > 1.9 && wRatio < 2.1, "table width ratio " << wRatio << " expected ~2.0" );
+    BOOST_CHECK_MESSAGE( hRatio > 1.4 && hRatio < 1.6, "table height ratio " << hRatio << " expected ~1.5" );
+}
+
+
+// Scaling a footprint must scale a custom pad's primitives, not just the anchor.
+BOOST_AUTO_TEST_CASE( CustomPadShapeScalesWithFootprint )
+{
+    BOARD      board;
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    board.Add( fp );
+    fp->SetPosition( VECTOR2I( 0, 0 ) );
+
+    PAD* pad = new PAD( fp );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
+    pad->SetAnchorPadShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 500000, 500000 ) );
+    pad->SetLayerSet( PAD::SMDMask() );
+
+    std::vector<VECTOR2I> poly = {
+        { -1000000, -1000000 }, { 1000000, -1000000 }, { 1000000, 1000000 }, { -1000000, 1000000 }
+    };
+    pad->AddPrimitivePoly( PADSTACK::ALL_LAYERS, poly, 0, true );
+    fp->Add( pad, ADD_MODE::APPEND );
+
+    BOX2I before = pad->GetBoundingBox();
+
+    fp->SetTransformScale( 2.0, 1.5 );
+
+    BOX2I after = pad->GetBoundingBox();
+
+    const double wRatio = (double) after.GetWidth() / before.GetWidth();
+    const double hRatio = (double) after.GetHeight() / before.GetHeight();
+
+    BOOST_CHECK_MESSAGE( wRatio > 1.9 && wRatio < 2.1, "custom pad width ratio " << wRatio << " expected ~2.0" );
+    BOOST_CHECK_MESSAGE( hRatio > 1.4 && hRatio < 1.6, "custom pad height ratio " << hRatio << " expected ~1.5" );
 }
 
 

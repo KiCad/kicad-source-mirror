@@ -318,6 +318,14 @@ void PCB_TABLE::OnFootprintTransformed()
 }
 
 
+void PCB_TABLE::OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
+                                     const EDA_ANGLE& aParentRotate )
+{
+    for( PCB_TABLECELL* cell : m_cells )
+        cell->OnFootprintRescaled( aRatioX, aRatioY, aLinearFactor, aAnchor, aParentRotate );
+}
+
+
 void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     // FP-child path keeps cells in lib frame, the standalone path below

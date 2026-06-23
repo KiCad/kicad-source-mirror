@@ -413,6 +413,8 @@ public:
     EDA_ANGLE GetOrientation() const;
     EDA_ANGLE GetFPRelativeOrientation() const;
 
+    void GetPrimitiveLibScale( double& aScaleX, double& aScaleY ) const;
+
     // For property system
     void SetOrientationDegrees( double aOrientation )
     {
@@ -1074,6 +1076,9 @@ protected:
 
 private:
     const SHAPE_COMPOUND& buildEffectiveShape( PCB_LAYER_ID aLayer ) const;
+
+    // Scale a primitive's runtime geometry to the current footprint scale, in the pad frame.
+    void rebakePrimitiveToFootprint( PCB_SHAPE* aPrimitive ) const;
 
     struct PAD_DRAW_CACHE_DATA
     {

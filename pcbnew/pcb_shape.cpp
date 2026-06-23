@@ -928,6 +928,14 @@ void PCB_SHAPE::SetStroke( const STROKE_PARAMS& aStroke )
 }
 
 
+void PCB_SHAPE::RebakeWithScale( double aScaleX, double aScaleY )
+{
+    TRANSFORM_TRS xform;
+    xform.SetScale( aScaleX, aScaleY );
+    rebakeFromTransform( xform );
+}
+
+
 void PCB_SHAPE::RebakeFromLib()
 {
     const FOOTPRINT* fp = transformFp();
@@ -935,8 +943,13 @@ void PCB_SHAPE::RebakeFromLib()
     if( !fp )
         return;
 
-    const TRANSFORM_TRS& xform = fp->GetTransform();
-    const bool           nonUniform = xform.GetScaleX() != xform.GetScaleY();
+    rebakeFromTransform( fp->GetTransform() );
+}
+
+
+void PCB_SHAPE::rebakeFromTransform( const TRANSFORM_TRS& xform )
+{
+    const bool nonUniform = xform.GetScaleX() != xform.GetScaleY();
 
     if( m_libShape == SHAPE_T::CIRCLE )
     {
@@ -1140,6 +1153,20 @@ void PCB_SHAPE::RebakeFromLib()
         return;
     }
 
+    if( m_libShape == SHAPE_T::POLY )
+    {
+        SHAPE_POLY_SET& poly = GetPolyShape();
+        poly = m_libPoly;
+
+        for( auto it = poly.IterateWithHoles(); it; it++ )
+            poly.SetVertex( it.GetIndex(), xform.Apply( *it ) );
+
+        const BOX2I bbox = poly.OutlineCount() ? poly.BBox() : BOX2I();
+        EDA_SHAPE::SetStart( bbox.GetOrigin() );
+        EDA_SHAPE::SetEnd( bbox.GetEnd() );
+        return;
+    }
+
     EDA_SHAPE::SetStart( xform.Apply( m_libStart ) );
     EDA_SHAPE::SetEnd( xform.Apply( m_libEnd ) );
 
@@ -1148,15 +1175,6 @@ void PCB_SHAPE::RebakeFromLib()
         EDA_SHAPE::SetBezierC1( xform.Apply( m_libBezierC1 ) );
         EDA_SHAPE::SetBezierC2( xform.Apply( m_libBezierC2 ) );
         RebuildBezierToSegmentsPointsList( getMaxError() );
-    }
-
-    if( m_libShape == SHAPE_T::POLY )
-    {
-        SHAPE_POLY_SET& poly = GetPolyShape();
-        poly = m_libPoly;
-
-        for( auto it = poly.IterateWithHoles(); it; it++ )
-            poly.SetVertex( it.GetIndex(), xform.Apply( *it ) );
     }
 }
 
@@ -1175,6 +1193,9 @@ VECTOR2I PCB_SHAPE::GetLibraryArcMid() const
 
 VECTOR2I PCB_SHAPE::GetLibraryBezierC1() const
 {
+    if( GetParent() && GetParent()->Type() == PCB_PAD_T )
+        return m_libBezierC1;
+
     if( const FOOTPRINT* fp = transformFp() )
         return fp->GetTransform().InverseApply( GetBezierC1() );
 
@@ -1184,6 +1205,9 @@ VECTOR2I PCB_SHAPE::GetLibraryBezierC1() const
 
 VECTOR2I PCB_SHAPE::GetLibraryBezierC2() const
 {
+    if( GetParent() && GetParent()->Type() == PCB_PAD_T )
+        return m_libBezierC2;
+
     if( const FOOTPRINT* fp = transformFp() )
         return fp->GetTransform().InverseApply( GetBezierC2() );
 
@@ -1193,6 +1217,9 @@ VECTOR2I PCB_SHAPE::GetLibraryBezierC2() const
 
 SHAPE_POLY_SET PCB_SHAPE::GetLibraryPolyShape() const
 {
+    if( GetParent() && GetParent()->Type() == PCB_PAD_T )
+        return m_libPoly;
+
     SHAPE_POLY_SET poly = GetPolyShape();
 
     if( const FOOTPRINT* fp = transformFp() )
@@ -1279,14 +1306,26 @@ void PCB_SHAPE::SetEllipseEndAngle( const EDA_ANGLE& aA )
 
 void PCB_SHAPE::syncLibCoords()
 {
-    const FOOTPRINT* fp = transformFp();
+    TRANSFORM_TRS xform;
+    bool          hasXform = false;
+
+    if( GetParent() && GetParent()->Type() == PCB_PAD_T )
+    {
+        double sx = 1.0, sy = 1.0;
+        static_cast<const PAD*>( static_cast<const BOARD_ITEM*>( GetParent() ) )->GetPrimitiveLibScale( sx, sy );
+        xform.SetScale( sx, sy );
+        hasXform = ( sx != 1.0 || sy != 1.0 );
+    }
+    else if( const FOOTPRINT* fp = transformFp() )
+    {
+        xform = fp->GetTransform();
+        hasXform = true;
+    }
 
     if( m_shape == SHAPE_T::ELLIPSE || m_shape == SHAPE_T::ELLIPSE_ARC )
     {
-        if( fp )
+        if( hasXform )
         {
-            const TRANSFORM_TRS& xform = fp->GetTransform();
-
             m_libEllipseCenter = xform.InverseApply( GetEllipseCenter() );
 
             if( xform.IsUniformScale() )
@@ -1325,35 +1364,29 @@ void PCB_SHAPE::syncLibCoords()
 
     if( m_shape == SHAPE_T::POLY )
     {
-        if( fp )
+        m_libPoly = GetPolyShape();
+
+        if( hasXform )
         {
-            const TRANSFORM_TRS& xform = fp->GetTransform();
-
-            m_libPoly = GetPolyShape();
-
             for( auto it = m_libPoly.IterateWithHoles(); it; it++ )
                 m_libPoly.SetVertex( it.GetIndex(), xform.InverseApply( *it ) );
-        }
-        else
-        {
-            m_libPoly = GetPolyShape();
         }
 
         return;
     }
 
-    if( fp )
+    if( hasXform )
     {
-        m_libStart = fp->GetTransform().InverseApply( GetStart() );
-        m_libEnd = fp->GetTransform().InverseApply( GetEnd() );
+        m_libStart = xform.InverseApply( GetStart() );
+        m_libEnd = xform.InverseApply( GetEnd() );
 
         if( m_shape == SHAPE_T::ARC )
-            m_libArcMid = fp->GetTransform().InverseApply( GetArcMid() );
+            m_libArcMid = xform.InverseApply( GetArcMid() );
 
         if( m_shape == SHAPE_T::BEZIER )
         {
-            m_libBezierC1 = fp->GetTransform().InverseApply( GetBezierC1() );
-            m_libBezierC2 = fp->GetTransform().InverseApply( GetBezierC2() );
+            m_libBezierC1 = xform.InverseApply( GetBezierC1() );
+            m_libBezierC2 = xform.InverseApply( GetBezierC2() );
         }
     }
     else

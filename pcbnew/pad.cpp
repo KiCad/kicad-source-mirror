@@ -2442,17 +2442,43 @@ void PAD::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
+void PAD::GetPrimitiveLibScale( double& aScaleX, double& aScaleY ) const
+{
+    aScaleX = 1.0;
+    aScaleY = 1.0;
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        const TRANSFORM_TRS& xform = fp->GetTransform();
+        scaleInChildFrame( std::abs( xform.GetScaleX() ), std::abs( xform.GetScaleY() ), GetFPRelativeOrientation(),
+                           aScaleX, aScaleY );
+    }
+}
+
+
+void PAD::rebakePrimitiveToFootprint( PCB_SHAPE* aPrimitive ) const
+{
+    if( !GetParentFootprint() )
+        return;
+
+    double localSx, localSy;
+    GetPrimitiveLibScale( localSx, localSy );
+    aPrimitive->RebakeWithScale( localSx, localSy );
+}
+
+
 void PAD::OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
                                const EDA_ANGLE& aParentRotate )
 {
     // Pad size, drill, and offset auto-derive from lib-frame padstack values
-    // through the parent transform on read. The only work needed is rescaling
-    // primitive shapes (which carry their own geometry).
+    // through the parent transform on read. Custom-shape primitives carry their
+    // own geometry in the pad frame and are excluded from the read-time transform
+    // (transformFp returns null for pad children), so rescale them explicitly.
     Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
             {
                 for( const std::shared_ptr<PCB_SHAPE>& prim : Padstack().Primitives( aLayer ) )
-                    prim->OnFootprintRescaled( aRatioX, aRatioY, aLinearFactor, aAnchor, aParentRotate );
+                    rebakePrimitiveToFootprint( prim.get() );
             } );
 
     OnFootprintTransformed();
@@ -3510,8 +3536,7 @@ void PAD::AddPrimitivePoly( PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPoly, in
         item->SetFilled( aFilled );
         item->SetPolyShape( poly_outline );
         item->SetStroke( STROKE_PARAMS( aThickness, LINE_STYLE::SOLID ) );
-        item->SetParent( this );
-        m_padStack.AddPrimitive( item, aLayer );
+        AddPrimitive( aLayer, item );
     }
 
     SetDirty();
@@ -3525,8 +3550,7 @@ void PAD::AddPrimitivePoly( PCB_LAYER_ID aLayer, const std::vector<VECTOR2I>& aP
     item->SetFilled( aFilled );
     item->SetPolyPoints( aPoly );
     item->SetStroke( STROKE_PARAMS( aThickness, LINE_STYLE::SOLID ) );
-    item->SetParent( this );
-    m_padStack.AddPrimitive( item, aLayer );
+    AddPrimitive( aLayer, item );
     SetDirty();
 }
 
@@ -3570,7 +3594,8 @@ void PAD::AddPrimitive( PCB_LAYER_ID aLayer, PCB_SHAPE* aPrimitive )
     if( aPrimitive->GetShape() == SHAPE_T::POLY )
         aPrimitive->OverrideLibPoly( aPrimitive->GetPolyShape() );
 
-    aPrimitive->OnFootprintTransformed();
+    // Covers load, where the footprint scale is set before the primitives are parsed.
+    rebakePrimitiveToFootprint( aPrimitive );
 
     m_padStack.AddPrimitive( aPrimitive, aLayer );
 

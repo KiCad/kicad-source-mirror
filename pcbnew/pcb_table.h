@@ -219,6 +219,9 @@ public:
 
     void OnFootprintTransformed() override;
 
+    void OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
+                              const EDA_ANGLE& aParentRotate ) override;
+
     const BOX2I GetBoundingBox() const override;
 
     double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;

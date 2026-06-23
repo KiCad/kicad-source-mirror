@@ -747,7 +747,6 @@ void PCB_TEXTBOX::syncLibCoords()
 void PCB_TEXTBOX::OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
                                        const EDA_ANGLE& aParentRotate )
 {
-    PCB_SHAPE::OnFootprintRescaled( aRatioX, aRatioY, aLinearFactor, aAnchor, aParentRotate );
     OnFootprintTransformed();
 }
 
