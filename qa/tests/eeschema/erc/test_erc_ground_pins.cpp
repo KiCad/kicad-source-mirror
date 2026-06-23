@@ -371,6 +371,49 @@ BOOST_FIXTURE_TEST_CASE( ERCGroundPinErrorMessage, ERC_GROUND_PIN_TEST_FIXTURE )
 
 
 /**
+ * Test case: Isolator-style symbol with GND1 on "GND" net and GND2 on "Earth" net.
+ * Both are valid ground nets, so no errors should be reported.
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23565
+ */
+BOOST_FIXTURE_TEST_CASE( ERCGroundPinEarthNet, ERC_GROUND_PIN_TEST_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    KI_TEST::LoadSchematic( m_settingsManager, "ground_pin_test_earth", m_schematic );
+
+    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+    SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
+
+    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
+    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
+    settings.m_ERCSeverities[ERCE_GROUND_PIN_NOT_GROUND] = RPT_SEVERITY_ERROR;
+
+    m_schematic->ConnectionGraph()->RunERC();
+
+    ERC_TESTER tester( m_schematic.get() );
+    tester.TestGroundPins();
+
+    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+
+    ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
+
+    int groundPinErrors = 0;
+
+    for( unsigned i = 0; i < errors.GetCount(); i++ )
+    {
+        if( errors.GetItem( i )->GetErrorCode() == ERCE_GROUND_PIN_NOT_GROUND )
+        {
+            groundPinErrors++;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( groundPinErrors == 0,
+                         "Expected 0 ERCE_GROUND_PIN_NOT_GROUND errors (Earth is a valid ground net) but got "
+                         << groundPinErrors << "\n" << reportWriter.GetTextReport() );
+}
+
+
+/**
  * Comprehensive test with all ground pin related test cases.
  * This demonstrates the expected behavior of the ground pin ERC check.
  */
@@ -384,7 +427,8 @@ BOOST_FIXTURE_TEST_CASE( ERCGroundPinComprehensive, ERC_GROUND_PIN_TEST_FIXTURE 
         { "ground_pin_test_error", 1 },        // GND pin on non-ground net while symbol has ground
         { "ground_pin_test_ok", 0 },           // GND pin correctly connected
         { "ground_pin_test_mixed", 1 },        // Mixed: one correct, one incorrect
-        { "ground_pin_test_no_ground_net", 0 } // No ground net anywhere (no error triggered)
+        { "ground_pin_test_no_ground_net", 0 }, // No ground net anywhere (no error triggered)
+        { "ground_pin_test_earth", 0 }         // GND pins on GND and Earth nets (both valid ground)
     };
 
     for( const std::pair<wxString, int>& test : tests )
