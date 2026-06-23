@@ -110,6 +110,39 @@ BOOST_AUTO_TEST_CASE( OrphanLayerCheckIgnoresRescue )
 }
 
 
+/**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23744
+ *
+ * In the default ("Custom Layers" off) stackup the footprint imposes no restriction on user
+ * layers, so an item on any user-defined layer must not be reported as orphaned. The dialog
+ * previously evaluated the orphan check against a hard-coded set of only the first four user
+ * layers, which falsely flagged items on higher user layers (User_5+) and blocked unrelated
+ * edits such as modifying a 3D model.
+ */
+BOOST_AUTO_TEST_CASE( OrphanLayerCheckAllowsAllUserLayers )
+{
+    FOOTPRINT footprint( nullptr );
+
+    // User_9 is well beyond the first four user-defined layers.
+    PCB_SHAPE* userShape = new PCB_SHAPE( &footprint );
+    userShape->SetLayer( User_9 );
+    footprint.Add( userShape );
+
+    // The hard-coded "first four user layers" set wrongly excludes User_9, demonstrating the
+    // defect that the dialog guard now avoids by skipping the check entirely in default mode.
+    const LSET truncatedUserLayers =
+            LSET{ F_Cu, B_Cu } | LSET::InternalCuMask() | LSET::UserDefinedLayersMask( 4 );
+    LSET wrongOrphans = LAYER_UTILS::GetOrphanedFootprintLayers( footprint, truncatedUserLayers );
+    BOOST_TEST( wrongOrphans.test( User_9 ) );
+
+    // The correct default set permits every user-defined layer, so nothing is orphaned.
+    const LSET fullUserLayers =
+            LSET{ F_Cu, B_Cu } | LSET::InternalCuMask() | LSET::UserDefinedLayersMask();
+    LSET orphans = LAYER_UTILS::GetOrphanedFootprintLayers( footprint, fullUserLayers );
+    BOOST_TEST( orphans.none() );
+}
+
+
 BOOST_AUTO_TEST_CASE( Issue24045Footprint )
 {
     // Load the exact footprint from the issue report. It contains graphic items on the
