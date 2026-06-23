@@ -308,10 +308,10 @@ void WEBVIEW_PANEL::OnScriptMessage( wxWebViewEvent& aEvt )
 
     if( handler.IsEmpty() )
     {
-        for( auto handlerPair : m_msgHandlers )
+        for( const auto &[candidateName, candidateHandler] : m_msgHandlers )
         {
-            wxLogTrace( "webview", "No handler specified, trying: %s", handlerPair.first );
-            handlerPair.second( aEvt.GetString() );
+            wxLogTrace( "webview", "No handler specified, trying: %s", candidateName );
+            candidateHandler( aEvt.GetString() );
         }
 
         return;
