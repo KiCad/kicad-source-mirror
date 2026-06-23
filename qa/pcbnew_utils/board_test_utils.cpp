@@ -582,8 +582,14 @@ void CheckFpShape( const PCB_SHAPE* expected, const PCB_SHAPE* shape )
 
         BOOST_CHECK_EQUAL( expected->IsLocked(), shape->IsLocked() );
 
-        BOOST_CHECK_EQUAL( expected->GetStart(), shape->GetStart() );
-        BOOST_CHECK_EQUAL( expected->GetEnd(), shape->GetEnd() );
+        // Polygon start/end is a derived bounding-box cache rather than serialized geometry, and
+        // importers that build the outline directly leave it at the origin.  CheckShapePolySet
+        // below compares the authoritative polygon.
+        if( expected->GetShape() != SHAPE_T::POLY )
+        {
+            BOOST_CHECK_EQUAL( expected->GetStart(), shape->GetStart() );
+            BOOST_CHECK_EQUAL( expected->GetEnd(), shape->GetEnd() );
+        }
 
         if( expected->GetShape() == SHAPE_T::ARC )
         {
