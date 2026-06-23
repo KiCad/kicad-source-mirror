@@ -164,6 +164,11 @@ public:
     void SetGroup( ACTION_GROUP* aGroup ) { m_group = aGroup; }
     ACTION_GROUP* GetGroup() { return m_group; }
 
+#ifdef __WXMSW__
+    bool MSWHandleMessage( WXLRESULT* aResult, WXUINT aMessage, WXWPARAM aWParam,
+                           WXLPARAM aLParam ) override;
+#endif
+
 protected:
     void onCharHook( wxKeyEvent& aEvent );
 

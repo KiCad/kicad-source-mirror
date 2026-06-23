@@ -48,6 +48,10 @@
 #include <wx/dcclient.h>
 #include <wx/settings.h>
 
+#ifdef __WXMSW__
+#include <windows.h>
+#endif
+
 // Needed to handle adding the plugins to the toolbar
 // TODO (ISM): This should be better abstracted away from the toolbars
 #include <api/api_plugin_manager.h>
@@ -191,6 +195,37 @@ void ACTION_TOOLBAR_PALETTE::onCharHook( wxKeyEvent& aEvent )
     else
         aEvent.Skip();
 }
+
+
+#ifdef __WXMSW__
+bool ACTION_TOOLBAR_PALETTE::MSWHandleMessage( WXLRESULT* aResult, WXUINT aMessage,
+                                               WXWPARAM aWParam, WXLPARAM aLParam )
+{
+    // The Windows "Activate on hover" option (active window tracking) activates whatever
+    // top-level window the pointer is over. As the pointer travels from the toolbar button
+    // toward this palette it crosses the owner frame, which then steals activation and would
+    // normally deactivate and dismiss this transient popup before the user can reach it.
+    // Ignore that specific deactivation so the palette survives the trip. Dismissal by Escape,
+    // by pressing a palette button, or by switching to any other window is unaffected because
+    // those do not hand activation back to the owner frame.
+    if( aMessage == WM_ACTIVATE && LOWORD( aWParam ) == WA_INACTIVE )
+    {
+        BOOL tracking = FALSE;
+
+        if( ::SystemParametersInfo( SPI_GETACTIVEWINDOWTRACKING, 0, &tracking, 0 ) && tracking )
+        {
+            HWND      activated = reinterpret_cast<HWND>( aLParam );
+            wxWindow* owner = MSWGetOwner();
+
+            if( activated && owner && ::GetAncestor( activated, GA_ROOT ) == owner->GetHWND() )
+                return wxPopupTransientWindowBase::MSWHandleMessage( aResult, aMessage, aWParam,
+                                                                     aLParam );
+        }
+    }
+
+    return wxPopupTransientWindow::MSWHandleMessage( aResult, aMessage, aWParam, aLParam );
+}
+#endif
 
 
 ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
