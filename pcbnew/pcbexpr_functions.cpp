@@ -1394,11 +1394,24 @@ static void getFieldFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( item && item->Type() == PCB_FOOTPRINT_T )
                 {
                     FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
+                    BOARD*     board = fp->GetBoard();
+                    const wxString& fieldName = arg->AsString();
 
-                    PCB_FIELD* field = fp->GetField( arg->AsString() );
+                    // getField only depends on the item, so memoize the resolved text per
+                    // (item, field) to avoid the linear field-name search on every repeat.
+                    ITEM_FIELD_CACHE_KEY key{ item, std::hash<wxString>{}( fieldName ) };
+                    wxString             cached;
 
-                    if( field )
-                        return field->GetText();
+                    if( board && board->m_ItemFieldCache.Get( key, cached ) )
+                        return cached;
+
+                    PCB_FIELD* field = fp->GetField( fieldName );
+                    wxString   text = field ? field->GetText() : wxString();
+
+                    if( board )
+                        board->m_ItemFieldCache.Set( key, text );
+
+                    return text;
                 }
 
                 return "";

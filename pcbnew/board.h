@@ -144,6 +144,18 @@ struct ITEM_SELECTOR_LAYER_CACHE_KEY
     }
 };
 
+// Caches getField('x') text per (item, field name)
+struct ITEM_FIELD_CACHE_KEY
+{
+    const BOARD_ITEM* A;
+    std::size_t       FieldHash;
+
+    bool operator==( const ITEM_FIELD_CACHE_KEY& other ) const
+    {
+        return A == other.A && FieldHash == other.FieldHash;
+    }
+};
+
 struct LAYERS_CHECKED
 {
     LAYERS_CHECKED() :
@@ -203,6 +215,17 @@ namespace std
         {
             std::size_t seed = 0xa82de1c0;
             hash_combine( seed, k.A, k.Selector, k.Layer, k.Constraint );
+            return seed;
+        }
+    };
+
+    template <>
+    struct hash<ITEM_FIELD_CACHE_KEY>
+    {
+        std::size_t operator()( const ITEM_FIELD_CACHE_KEY& k ) const
+        {
+            std::size_t seed = 0xa82de1c0;
+            hash_combine( seed, k.A, k.FieldHash );
             return seed;
         }
     };
@@ -1526,13 +1549,12 @@ public:
     SHARDED_CACHE<PTR_PTR_CACHE_KEY, bool>                m_IntersectsBCourtyardCache;
     SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_IntersectsAreaCache;
     SHARDED_CACHE<PTR_PTR_LAYER_CACHE_KEY, bool>          m_EnclosedByAreaCache;
-    // Whole-predicate result memo per item, so repeated identical courtyard conditions across a
-    // rule set resolve in O(1) instead of re-scanning every footprint each time.
-    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>   m_IntersectsCourtyardResultCache;
-    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>   m_IntersectsFCourtyardResultCache;
-    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>   m_IntersectsBCourtyardResultCache;
-    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>   m_IntersectsAreaResultCache;
-    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>   m_EnclosedByAreaResultCache;
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_IntersectsCourtyardResultCache;
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_IntersectsFCourtyardResultCache;
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_IntersectsBCourtyardResultCache;
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_IntersectsAreaResultCache;
+    SHARDED_CACHE<ITEM_SELECTOR_LAYER_CACHE_KEY, bool>    m_EnclosedByAreaResultCache;
+    SHARDED_CACHE<ITEM_FIELD_CACHE_KEY, wxString>         m_ItemFieldCache;
     std::unordered_map< wxString, LSET >                  m_LayerExpressionCache;
     std::unordered_map<ZONE*, std::unique_ptr<DRC_RTREE>> m_CopperZoneRTreeCache;
     std::shared_ptr<DRC_RTREE>                            m_CopperItemRTreeCache;
