@@ -39,6 +39,9 @@
 #include <wx/wfstream.h>
 
 #include <http_lib/http_lib_connection.h>
+#include <libraries/library_manager.h>
+#include <libraries/symbol_library_adapter.h>
+#include <lib_symbol.h>
 #include <sch_io/http_lib/sch_io_http_lib.h>
 #include <ki_exception.h>
 
@@ -85,10 +88,20 @@ BOOST_AUTO_TEST_CASE( SubLibraryQueriesSurviveNetworkLoss )
 {
     wxFileName settings = writeUnreachableHttpLib();
 
-    SCH_IO_HTTP_LIB plugin;
+    LIBRARY_MANAGER        manager;
+    SYMBOL_LIBRARY_ADAPTER adapter( manager );
 
-    // GetSubLibraryNames previously called ensureSettings() only, then dereferenced the
-    // null connection.  It must now fail gracefully and leave the result empty.
+    SCH_IO_HTTP_LIB plugin;
+    plugin.SetLibraryManagerAdapter( &adapter );
+
+    // Opening the library caches its settings and then fails to connect, exactly as it does
+    // while a schematic referencing the library is opened with the network down.  This leaves
+    // the plugin with valid settings but a null connection, the state the tree build hit.
+    std::vector<LIB_SYMBOL*> symbols;
+    BOOST_CHECK_THROW( plugin.EnumerateSymbolLib( symbols, settings.GetFullPath() ), IO_ERROR );
+
+    // GetSubLibraryNames previously dereferenced the null connection.  It must now fail
+    // gracefully and leave the result empty.
     std::vector<wxString> names = { wxS( "stale" ) };
     BOOST_REQUIRE_NO_THROW( plugin.GetSubLibraryNames( names ) );
     BOOST_CHECK( names.empty() );
