@@ -133,11 +133,6 @@ protected:
     bool                     m_hasDefineArg;
 
     /**
-     * Whether or not the output arg is expecting a directory
-     */
-    bool                     m_outputArgExpectsDir;
-
-    /**
      * Value of the common input arg if configured
      */
     wxString                 m_argInput;
