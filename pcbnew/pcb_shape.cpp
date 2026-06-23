@@ -784,7 +784,8 @@ void PCB_SHAPE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
 void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    const FOOTPRINT* fp = GetParentFootprint();
+    // Null for pad-local primitives, which mirror directly rather than through the FP transform.
+    const FOOTPRINT* fp = transformFp();
 
     if( fp
         && ( m_libShape == SHAPE_T::SEGMENT || m_libShape == SHAPE_T::CIRCLE || m_libShape == SHAPE_T::ARC

@@ -1765,6 +1765,39 @@ BOOST_AUTO_TEST_CASE( PadPrimitiveStaysCircleUnderNonUniformScale )
 }
 
 
+// work_items/24732: a custom pad primitive is pad-local, so a flip must mirror it
+// about the pad anchor regardless of where the parent footprint sits on the board.
+BOOST_AUTO_TEST_CASE( PadPrimitiveFlipStaysPadLocal )
+{
+    BOARD      board;
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetPosition( VECTOR2I( 50000000, 30000000 ) ); // deliberately off origin
+    board.Add( fp );
+
+    PAD* pad = new PAD( fp );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CUSTOM );
+    pad->SetPosition( fp->GetPosition() );
+    fp->Add( pad, ADD_MODE::APPEND );
+
+    PCB_SHAPE* prim = new PCB_SHAPE( pad, SHAPE_T::SEGMENT );
+    prim->SetStart( VECTOR2I( 0, 0 ) );
+    prim->SetEnd( VECTOR2I( 1000000, 500000 ) );
+    pad->AddPrimitive( PADSTACK::ALL_LAYERS, prim );
+
+    fp->Flip( fp->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+
+    // Pad-local primitive mirrors about (0,0): x stays, y negates.
+    BOOST_CHECK_EQUAL( prim->GetStart().x, 0 );
+    BOOST_CHECK_EQUAL( prim->GetStart().y, 0 );
+    BOOST_CHECK_EQUAL( prim->GetEnd().x, 1000000 );
+    BOOST_CHECK_EQUAL( prim->GetEnd().y, -500000 );
+
+    // Effective and lib coords stay 1:1 for pad-local primitives.
+    BOOST_CHECK_EQUAL( prim->GetLibraryEnd().x, prim->GetEnd().x );
+    BOOST_CHECK_EQUAL( prim->GetLibraryEnd().y, prim->GetEnd().y );
+}
+
+
 BOOST_AUTO_TEST_CASE( CirclePadStaysCircularUnderNonUniformScale )
 {
     FOOTPRINT fp( nullptr );
