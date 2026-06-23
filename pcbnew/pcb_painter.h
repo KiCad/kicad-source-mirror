@@ -278,6 +278,17 @@ protected:
     int                 m_holePlatingThickness;
     int                 m_lockedShadowMargin;
 };
+
+
+/**
+ * Decide which GAL draw pass paints a zone's outline.
+ *
+ * A rule area has no fill, so its outline is drawn on the zone layer (which sorts above copper)
+ * to keep the boundary from being covered by unrelated tracks and pads. A filled zone draws its
+ * outline on the copper layer, beneath its own fill on the zone layer.
+ */
+bool ZoneOutlineDrawnOnLayer( bool aIsRuleArea, int aLayer );
+
 } // namespace KIGFX
 
 #endif /* PCB_PAINTER_H */
