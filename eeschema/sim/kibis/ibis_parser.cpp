@@ -3065,6 +3065,7 @@ bool IbisParser::readWaveform( IbisWaveform* aDest, IBIS_WAVEFORM_TYPE aType )
                 status = false;
             }
             break;
+
         case IBIS_PARSER_CONTEXT::SUBMODEL:
             switch( aType )
             {
@@ -3079,6 +3080,7 @@ bool IbisParser::readWaveform( IbisWaveform* aDest, IBIS_WAVEFORM_TYPE aType )
                 status = false;
             }
             break;
+
         default:
             wxLogMessage( "Invalid context for waveform: %i", (int) m_context );
             delete wf;
