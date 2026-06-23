@@ -635,15 +635,18 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     // String formatting functions (return strings!)
     if( name == "format" && argc >= 1 )
     {
-        auto numResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const auto& numResult = VALUE_UTILS::ToDouble( argValues[0] );
+
         if( !numResult )
             return MakeError<Value>( numResult.GetError() );
 
-        const auto value = numResult.GetValue();
-        int        decimals = 2;
+        const auto& value = numResult.GetValue();
+        int         decimals = 2;
+
         if( argc > 1 )
         {
-            auto decResult = VALUE_UTILS::ToDouble( argValues[1] );
+            const auto& decResult = VALUE_UTILS::ToDouble( argValues[1] );
+
             if( decResult )
                 decimals = static_cast<int>( decResult.GetValue() );
         }
@@ -652,26 +655,30 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     }
     else if( name == "currency" && argc >= 1 )
     {
-        auto numResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const auto& numResult = VALUE_UTILS::ToDouble( argValues[0] );
+
         if( !numResult )
             return MakeError<Value>( numResult.GetError() );
 
-        const auto amount = numResult.GetValue();
-        const auto symbol = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "$";
+        const auto& amount = numResult.GetValue();
+        const auto& symbol = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "$";
 
         return MakeValue<Value>( fmt::format( "{}{:.2f}", symbol, amount ) );
     }
     else if( name == "fixed" && argc >= 1 )
     {
-        auto numResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const auto& numResult = VALUE_UTILS::ToDouble( argValues[0] );
+
         if( !numResult )
             return MakeError<Value>( numResult.GetError() );
 
-        const auto value = numResult.GetValue();
-        int        decimals = 2;
+        const auto& value = numResult.GetValue();
+        int         decimals = 2;
+
         if( argc > 1 )
         {
-            auto decResult = VALUE_UTILS::ToDouble( argValues[1] );
+            const auto& decResult = VALUE_UTILS::ToDouble( argValues[1] );
+
             if( decResult )
                 decimals = static_cast<int>( decResult.GetValue() );
         }
@@ -682,19 +689,20 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     // Date formatting functions (return strings!)
     else if( name == "dateformat" && argc >= 1 )
     {
-        auto dateResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const auto& dateResult = VALUE_UTILS::ToDouble( argValues[0] );
+
         if( !dateResult )
             return MakeError<Value>( dateResult.GetError() );
 
-        const auto days = static_cast<int>( dateResult.GetValue() );
-        const auto format = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "ISO";
+        const auto& days = static_cast<int>( dateResult.GetValue() );
+        const auto& format = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "ISO";
 
         return MakeValue<Value>( DATE_UTILS::FormatDate( days, format ) );
     }
     else if( name == "datestring" && argc == 1 )
     {
-        auto dateStr = VALUE_UTILS::ToString( argValues[0] );
-        auto daysResult = DATE_UTILS::ParseDate( dateStr );
+        const auto& dateStr = VALUE_UTILS::ToString( argValues[0] );
+        const auto& daysResult = DATE_UTILS::ParseDate( dateStr );
 
         if( !daysResult )
             return MakeError<Value>( "Invalid date format: " + dateStr );
@@ -703,31 +711,34 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     }
     else if( name == "weekdayname" && argc == 1 )
     {
-        auto dateResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const auto& dateResult = VALUE_UTILS::ToDouble( argValues[0] );
+
         if( !dateResult )
             return MakeError<Value>( dateResult.GetError() );
 
-        const auto days = static_cast<int>( dateResult.GetValue() );
+        const auto& days = static_cast<int>( dateResult.GetValue() );
         return MakeValue<Value>( DATE_UTILS::GetWeekdayName( days ) );
     }
     else if( name == "timeformat" && argc >= 1 )
     {
-        auto timeResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const auto& timeResult = VALUE_UTILS::ToDouble( argValues[0] );
+
         if( !timeResult )
             return MakeError<Value>( timeResult.GetError() );
 
-        const auto timestamp = timeResult.GetValue();
-        const auto format = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "ISO";
+        const auto& timestamp = timeResult.GetValue();
+        const auto& format = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "ISO";
 
         return MakeValue<Value>( DATE_UTILS::FormatTime( timestamp, format ) );
     }
 
     // VCS functions (return strings!)
     // Empty results from the VCS layer mean "not in a repository" or "no data available"
-    auto vcsResult = []( const std::string& aResult ) -> std::string
-    {
-        return aResult.empty() ? "<unknown>" : aResult;
-    };
+    auto vcsResult =
+            []( const std::string& aResult ) -> std::string
+            {
+                return aResult.empty() ? "<unknown>" : aResult;
+            };
 
     if( name == "vcsidentifier" && argc <= 1 )
     {
@@ -735,7 +746,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc == 1 )
         {
-            auto lenResult = VALUE_UTILS::ToDouble( argValues[0] );
+            const auto& lenResult = VALUE_UTILS::ToDouble( argValues[0] );
 
             if( lenResult )
                 length = static_cast<int>( lenResult.GetValue() );
@@ -771,7 +782,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc >= 2 )
         {
-            auto tagsResult = VALUE_UTILS::ToDouble( argValues[1] );
+            const auto& tagsResult = VALUE_UTILS::ToDouble( argValues[1] );
 
             if( tagsResult )
                 anyTags = tagsResult.GetValue() != 0.0;
@@ -785,7 +796,7 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc == 1 )
         {
-            auto utResult = VALUE_UTILS::ToDouble( argValues[0] );
+            const auto& utResult = VALUE_UTILS::ToDouble( argValues[0] );
 
             if( utResult )
                 includeUntracked = utResult.GetValue() != 0.0;
@@ -850,12 +861,12 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     // VCS file functions (file-specific versions)
     else if( name == "vcsfileidentifier" && argc >= 1 && argc <= 2 )
     {
-        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
-        int         length = 40;
+        const std::string& filePath = VALUE_UTILS::ToString( argValues[0] );
+        int                length = 40;
 
         if( argc == 2 )
         {
-            auto lenResult = VALUE_UTILS::ToDouble( argValues[1] );
+            const auto& lenResult = VALUE_UTILS::ToDouble( argValues[1] );
 
             if( lenResult )
                 length = static_cast<int>( lenResult.GetValue() );
@@ -865,22 +876,22 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     }
     else if( name == "vcsfileauthor" && argc == 1 )
     {
-        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
+        const std::string& filePath = VALUE_UTILS::ToString( argValues[0] );
         return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetAuthor( filePath ) ) );
     }
     else if( name == "vcsfileauthoremail" && argc == 1 )
     {
-        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
+        const std::string& filePath = VALUE_UTILS::ToString( argValues[0] );
         return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetAuthorEmail( filePath ) ) );
     }
     else if( name == "vcsfilecommitter" && argc == 1 )
     {
-        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
+        const std::string& filePath = VALUE_UTILS::ToString( argValues[0] );
         return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitter( filePath ) ) );
     }
     else if( name == "vcsfilecommitteremail" && argc == 1 )
     {
-        std::string filePath = VALUE_UTILS::ToString( argValues[0] );
+        const std::string& filePath = VALUE_UTILS::ToString( argValues[0] );
         return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitterEmail( filePath ) ) );
     }
     else if( name == "vcsfilecommitdate" && argc >= 1 && argc <= 2 )
@@ -903,13 +914,13 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     // String functions (return strings!)
     else if( name == "upper" && argc == 1 )
     {
-        auto str = VALUE_UTILS::ToString( argValues[0] );
+        std::string str = VALUE_UTILS::ToString( argValues[0] );
         std::transform( str.begin(), str.end(), str.begin(), ::toupper );
         return MakeValue<Value>( str );
     }
     else if( name == "lower" && argc == 1 )
     {
-        auto str = VALUE_UTILS::ToString( argValues[0] );
+        std::string str = VALUE_UTILS::ToString( argValues[0] );
         std::transform( str.begin(), str.end(), str.begin(), ::tolower );
         return MakeValue<Value>( str );
     }
@@ -955,23 +966,25 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     if( name == "if" && argc == 3 )
     {
         // Convert only the condition to a number
-        auto conditionResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const auto& conditionResult = VALUE_UTILS::ToDouble( argValues[0] );
+
         if( !conditionResult )
             return MakeError<Value>( conditionResult.GetError() );
 
-        const auto condition = conditionResult.GetValue() != 0.0;
+        const auto& condition = conditionResult.GetValue() != 0.0;
         return MakeValue<Value>( condition ? argValues[1] : argValues[2] );
     }
 
     // E-series functions (handle value as number, series as string)
     else if( ( name == "enearest" || name == "eup" || name == "edown" ) && argc >= 1 && argc <= 2 )
     {
-        auto valueResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const auto& valueResult = VALUE_UTILS::ToDouble( argValues[0] );
+
         if( !valueResult )
             return MakeError<Value>( valueResult.GetError() );
 
-        const auto   value = valueResult.GetValue();
-        const auto   series = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "E24";
+        const auto&           value = valueResult.GetValue();
+        const auto&           series = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "E24";
         std::optional<double> result;
 
         if( name == "enearest" )
@@ -989,9 +1002,11 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
     // Mathematical functions (return numbers) - convert args to doubles first
     std::vector<double> numArgs;
+
     for( const auto& val : argValues )
     {
-        auto numResult = VALUE_UTILS::ToDouble( val );
+        const auto& numResult = VALUE_UTILS::ToDouble( val );
+
         if( !numResult )
             return MakeError<Value>( numResult.GetError() );
 
@@ -1005,9 +1020,9 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
         return MakeValue<Value>( std::accumulate( numArgs.begin(), numArgs.end(), 0.0 ) );
     else if( name == "round" && argc >= 1 )
     {
-        const auto value = numArgs[0];
-        const auto precision = argc > 1 ? static_cast<int>( numArgs[1] ) : 0;
-        const auto multiplier = std::pow( 10.0, precision );
+        const auto& value = numArgs[0];
+        const auto& precision = argc > 1 ? static_cast<int>( numArgs[1] ) : 0;
+        const auto& multiplier = std::pow( 10.0, precision );
         return MakeValue<Value>( std::round( value * multiplier ) / multiplier );
     }
     else if( name == "sqrt" && argc == 1 )
