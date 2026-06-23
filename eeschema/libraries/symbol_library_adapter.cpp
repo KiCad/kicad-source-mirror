@@ -45,12 +45,18 @@ const char* SYMBOL_LIBRARY_ADAPTER::PropNonPowerSymsOnly = "non_pwr_sym_only";
 
 LEAK_AT_EXIT<std::map<wxString, LIB_DATA>> SYMBOL_LIBRARY_ADAPTER::GlobalLibraries;
 
-std::shared_mutex SYMBOL_LIBRARY_ADAPTER::GlobalLibraryMutex;
+LEAK_AT_EXIT<std::shared_mutex> SYMBOL_LIBRARY_ADAPTER::GlobalLibraryMutex;
 
 
 SYMBOL_LIBRARY_ADAPTER::SYMBOL_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager ) :
             LIBRARY_MANAGER_ADAPTER( aManager )
 {
+}
+
+
+SYMBOL_LIBRARY_ADAPTER::~SYMBOL_LIBRARY_ADAPTER()
+{
+    evictOwnedGlobalEntries();
 }
 
 

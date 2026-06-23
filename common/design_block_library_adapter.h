@@ -37,6 +37,8 @@ class KICOMMON_API DESIGN_BLOCK_LIBRARY_ADAPTER : public LIBRARY_MANAGER_ADAPTER
 public:
     DESIGN_BLOCK_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager );
 
+    ~DESIGN_BLOCK_LIBRARY_ADAPTER() override;
+
     LIBRARY_TABLE_TYPE Type() const override { return LIBRARY_TABLE_TYPE::DESIGN_BLOCK; }
 
     static wxString GlobalPathEnvVariableName();
@@ -148,8 +150,8 @@ protected:
 
     std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries.Get(); }
     std::map<wxString, LIB_DATA>& globalLibs() const override { return GlobalLibraries.Get(); }
-    std::shared_mutex& globalLibsMutex() override { return GlobalLibraryMutex; }
-    std::shared_mutex& globalLibsMutex() const override { return GlobalLibraryMutex; }
+    std::shared_mutex& globalLibsMutex() override { return GlobalLibraryMutex.Get(); }
+    std::shared_mutex& globalLibsMutex() const override { return GlobalLibraryMutex.Get(); }
 
     void enumerateLibrary( LIB_DATA* aLib, const wxString& aUri ) override;
 
@@ -167,7 +169,9 @@ private:
     // Wrapped in LEAK_AT_EXIT to skip destruction at program exit for faster shutdown.
     static LEAK_AT_EXIT<std::map<wxString, LIB_DATA>> GlobalLibraries;
 
-    static std::shared_mutex GlobalLibraryMutex;
+    // Leaked like GlobalLibraries so adapter destructors can still lock it to evict their entries
+    // even when they run during static teardown.
+    static LEAK_AT_EXIT<std::shared_mutex> GlobalLibraryMutex;
 };
 
 

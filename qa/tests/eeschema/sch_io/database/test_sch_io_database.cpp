@@ -33,23 +33,7 @@
 #include <sch_io/database/sch_io_database.h>
 
 
-/// Earlier suites populate the process-wide static symbol library cache through transient
-/// LIBRARY_MANAGERs that are then destroyed, leaving LIB_DATA entries whose row pointers dangle.
-/// cacheLib() folds each referenced library's modify hash into its cache signature via
-/// GetLibraryModifyHash(), which would dereference those stale rows.  Drop the leftover global
-/// entries before each case so the plugin only sees libraries owned by this test.
-struct DATABASE_TEST_FIXTURE
-{
-    DATABASE_TEST_FIXTURE()
-    {
-        LIBRARY_MANAGER        manager;
-        SYMBOL_LIBRARY_ADAPTER adapter( manager );
-        adapter.GlobalTablesChanged();
-    }
-};
-
-
-BOOST_FIXTURE_TEST_SUITE( SchIoDatabase, DATABASE_TEST_FIXTURE )
+BOOST_AUTO_TEST_SUITE( SchIoDatabase )
 
 
 /**

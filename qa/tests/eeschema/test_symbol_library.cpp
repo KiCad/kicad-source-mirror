@@ -204,6 +204,53 @@ BOOST_AUTO_TEST_CASE( AsyncLoad )
     }
 }
 
+
+// A LIBRARY_MANAGER_ADAPTER caches loaded global libraries in the process-wide static
+// GlobalLibraries with raw LIBRARY_TABLE_ROW pointers into its own manager's tables.  When a
+// transient manager is destroyed those pointers dangle, and a later manager's fetchIfLoaded()
+// would return the stale entry.  The adapter destructor must evict the entries it owns.
+BOOST_AUTO_TEST_CASE( GlobalCacheEvictedOnAdapterDestruction )
+{
+    wxString loadedNickname;
+
+    {
+        LIBRARY_MANAGER manager;
+        manager.LoadGlobalTables();
+
+        Pgm().GetSettingsManager().LoadProject( "" );
+        SYMBOL_LIBRARY_ADAPTER adapter( manager );
+
+        adapter.AsyncLoad();
+        adapter.BlockUntilLoaded();
+
+        for( auto& [nickname, status] : adapter.GetLibraryStatuses() )
+        {
+            if( status.load_status == LOAD_STATUS::LOADED )
+            {
+                loadedNickname = nickname;
+                break;
+            }
+        }
+
+        if( loadedNickname.IsEmpty() )
+        {
+            BOOST_TEST_MESSAGE( "No global symbol library loaded; skipping" );
+            return;
+        }
+
+        BOOST_REQUIRE( adapter.IsLibraryLoaded( loadedNickname ) );
+    }
+
+    // The owning manager and adapter are gone.  A fresh adapter must not still see the library
+    // loaded in the global cache.  IsLibraryLoaded() reads only status, so it is safe even when
+    // the entry's row dangles: pre-fix it returns true (stale entry), post-fix false (evicted).
+    LIBRARY_MANAGER        manager2;
+    SYMBOL_LIBRARY_ADAPTER adapter2( manager2 );
+
+    BOOST_CHECK_MESSAGE( !adapter2.IsLibraryLoaded( loadedNickname ),
+                         "global cache entry must be evicted when its owning adapter is destroyed" );
+}
+
 // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23756
 // Verifies that LoadProjectTables() clears the adapter's cached LIB_DATA entries
 // before destroying the backing LIBRARY_TABLE objects. Without this, LIB_DATA::row

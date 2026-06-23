@@ -1085,6 +1085,24 @@ void LIBRARY_MANAGER_ADAPTER::GlobalTablesChanged( std::initializer_list<LIBRARY
 }
 
 
+void LIBRARY_MANAGER_ADAPTER::evictOwnedGlobalEntries()
+{
+    abortLoad();
+
+    std::unique_lock lock( globalLibsMutex() );
+
+    // Drop entries this adapter owns, identified by global_owner rather than the row pointer,
+    // which another manager could reuse at the same address after this manager frees its tables.
+    for( auto it = globalLibs().begin(); it != globalLibs().end(); )
+    {
+        if( it->second.global_owner == this )
+            it = globalLibs().erase( it );
+        else
+            ++it;
+    }
+}
+
+
 void LIBRARY_MANAGER_ADAPTER::ProjectTablesChanged( std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables )
 {
     bool me = aChangedTables.size() == 0;
@@ -1635,6 +1653,9 @@ LIBRARY_RESULT<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::loadFromScope( const wxString
                 aTarget[ row->Nickname() ].status.load_status = LOAD_STATUS::LOADING;
                 aTarget[ row->Nickname() ].row = row;
                 aTarget[ row->Nickname() ].plugin.reset( *plugin );
+
+                if( aScope == LIBRARY_TABLE_SCOPE::GLOBAL )
+                    aTarget[ row->Nickname() ].global_owner = this;
 
                 return &aTarget.at( aNickname );
             }

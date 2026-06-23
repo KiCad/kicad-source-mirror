@@ -31,6 +31,7 @@
 
 
 class LIBRARY_MANAGER;
+class LIBRARY_MANAGER_ADAPTER;
 class PROJECT;
 
 
@@ -57,6 +58,11 @@ struct KICOMMON_API LIB_DATA
     std::unique_ptr<IO_BASE> plugin;
     const LIBRARY_TABLE_ROW* row = nullptr;
     LIB_STATUS               status;
+
+    // For an entry in the process-wide globalLibs() cache, the adapter that loaded it and so owns
+    // the lifetime of row. Its destructor evicts the entry; identity is by adapter, not by the
+    // reusable row pointer.
+    const LIBRARY_MANAGER_ADAPTER* global_owner = nullptr;
 
     int                   modify_hash = -1;
     std::vector<wxString> available_fields_cache;
@@ -212,6 +218,13 @@ protected:
                                              LIBRARY_TABLE_SCOPE aScope,
                                              std::map<wxString, LIB_DATA>& aTarget,
                                              std::shared_mutex& aMutex );
+
+    /// Erases this adapter's own entries (LIB_DATA::global_owner == this) from the process-wide
+    /// globalLibs() cache. The cached LIB_DATA::row pointers reference this manager's tables, so
+    /// they must be dropped before the manager is destroyed or a later manager's fetchIfLoaded()
+    /// would dereference freed rows. Derived destructors must call this while globalLibs() is
+    /// still resolvable.
+    void evictOwnedGlobalEntries();
 
     /// Aborts any async load in progress; blocks until fully done aborting
     void abortLoad();
