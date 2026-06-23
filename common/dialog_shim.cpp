@@ -351,21 +351,38 @@ void DIALOG_SHIM::SetPosition( const wxPoint& aNewPosition )
 }
 
 
-void DIALOG_SHIM::focusParentCanvas()
+void DIALOG_SHIM::focusParentCanvas( bool aDeferUntilFrameActive )
 {
-    if( m_parentFrame )
-    {
-        wxWindow* canvas = m_parentFrame->GetToolCanvas();
+    wxWindow* toolCanvas = m_parentFrame ? m_parentFrame->GetToolCanvas() : nullptr;
+    wxWindow* target = toolCanvas ? toolCanvas : m_parent;
 
-        if( canvas )
-        {
-            canvas->SetFocus();
-            return;
-        }
-    }
+    if( !target )
+        return;
 
-    if( m_parent )
-        m_parent->SetFocus();
+    target->SetFocus();
+
+    if( !aDeferUntilFrameActive || !toolCanvas )
+        return;
+
+#ifdef __WXGTK__
+    // A quasi-modal dialog is still the active top-level window when its nested event loop exits,
+    // so the SetFocus() above is undone when the dialog is destroyed and GTK restores the frame's
+    // previously-focused widget. Re-assert focus once the event loop has settled, otherwise
+    // keyboard events keep routing to the stale owner until the mouse re-enters the canvas.
+    EDA_BASE_FRAME* frame = m_parentFrame;
+
+    frame->CallAfter(
+            [frame]()
+            {
+                // Skip if another dialog grabbed the activation in the meantime, otherwise we
+                // would raise the frame from behind a chained modal dialog.
+                if( !KIPLATFORM::UI::IsWindowActive( frame ) )
+                    return;
+
+                if( wxWindow* canvas = frame->GetToolCanvas() )
+                    canvas->SetFocus();
+            } );
+#endif
 }
 
 
@@ -1447,7 +1464,7 @@ int DIALOG_SHIM::ShowQuasiModal()
     event_loop.Run();
 
     m_qmodal_showing = false;
-    focusParentCanvas();
+    focusParentCanvas( true );
 
     return GetReturnCode();
 }

@@ -278,8 +278,12 @@ private:
      * Set focus back to the parent frame's tool canvas if available, otherwise to the
      * parent window. Prevents focus from landing on auxiliary panels like the properties
      * panel when the mouse happens to hover over them at dialog close time.
+     *
+     * @param aDeferUntilFrameActive also re-asserts the focus from an idle callback, needed only
+     *                               for the GTK quasi-modal teardown race where the dialog is
+     *                               still the active top-level window when this is called.
      */
-    void focusParentCanvas();
+    void focusParentCanvas( bool aDeferUntilFrameActive = false );
 
     std::string generateKey( const wxWindow* aWin ) const;
 
