@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -106,7 +106,7 @@ WX_PT_ENTRY_DIALOG_BASE::WX_PT_ENTRY_DIALOG_BASE( wxWindow* parent, wxWindowID i
 	bSizerButtons->Add( m_ButtonReset, 0, wxALL|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 
-	bSizerButtons->Add( 30, 0, 1, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerButtons->Add( 40, 0, 1, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,12 +25,14 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( wxWind
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Actions") ), wxVERTICAL );
 
 	m_cbRefillZones = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Refill zones before and after cleanup"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbRefillZones->SetValue(true);
 	sbSizer3->Add( m_cbRefillZones, 0, wxRIGHT|wxLEFT, 5 );
 
 
 	sbSizer3->Add( 0, 12, 1, wxEXPAND, 5 );
 
 	m_cleanShortCircuitOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Delete &tracks connecting different nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cleanShortCircuitOpt->SetValue(true);
 	m_cleanShortCircuitOpt->SetToolTip( _("remove track segments connecting nodes belonging to different nets (short circuit)") );
 
 	sbSizer3->Add( m_cleanShortCircuitOpt, 0, wxRIGHT|wxLEFT, 5 );
@@ -39,22 +41,26 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE::DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( wxWind
 	sbSizer3->Add( 0, 10, 1, wxEXPAND, 5 );
 
 	m_cleanViasOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("&Delete redundant vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cleanViasOpt->SetValue(true);
 	m_cleanViasOpt->SetToolTip( _("remove vias on through hole pads and superimposed vias") );
 
 	sbSizer3->Add( m_cleanViasOpt, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_deleteDanglingViasOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Delete vias connected on only one layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_deleteDanglingViasOpt->SetValue(true);
 	sbSizer3->Add( m_deleteDanglingViasOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	sbSizer3->Add( 0, 10, 1, wxEXPAND, 5 );
 
 	m_mergeSegmOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("&Merge co-linear tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_mergeSegmOpt->SetValue(true);
 	m_mergeSegmOpt->SetToolTip( _("merge aligned track segments, and remove null segments") );
 
 	sbSizer3->Add( m_mergeSegmOpt, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_deleteUnconnectedOpt = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Delete tracks unconnected at one end"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_deleteUnconnectedOpt->SetValue(true);
 	m_deleteUnconnectedOpt->SetToolTip( _("delete tracks having at least one dangling end") );
 
 	sbSizer3->Add( m_deleteUnconnectedOpt, 0, wxTOP|wxRIGHT|wxLEFT, 5 );

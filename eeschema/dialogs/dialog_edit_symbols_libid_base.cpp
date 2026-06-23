@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,10 +33,10 @@ DIALOG_EDIT_SYMBOLS_LIBID_BASE::DIALOG_EDIT_SYMBOLS_LIBID_BASE( wxWindow* parent
 	m_grid->SetColSize( 2, 280 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
-	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelValue( 0, _("Symbols") );
 	m_grid->SetColLabelValue( 1, _("Current Library Reference") );
 	m_grid->SetColLabelValue( 2, _("New Library Reference") );
+	m_grid->SetColLabelSize( 22 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -47,7 +47,7 @@ DIALOG_EDIT_SYMBOLS_LIBID_BASE::DIALOG_EDIT_SYMBOLS_LIBID_BASE( wxWindow* parent
 	// Label Appearance
 
 	// Cell Defaults
-	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_grid->SetMinSize( wxSize( -1,300 ) );
 
 	bSizerMain->Add( m_grid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );

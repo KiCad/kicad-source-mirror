@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,7 +10,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-#include <widgets/split_button.h>
 class STD_BITMAP_BUTTON;
 class WX_GRID;
 
@@ -25,6 +24,7 @@ class WX_GRID;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <widgets/split_button.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/grid.h>
@@ -53,7 +53,6 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 		// Virtual event handlers, override them in your derived class
 		virtual void onPageChange( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void appendRowHandler( wxCommandEvent& event ) { event.Skip(); }
-		virtual void browseLibrariesHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveDownHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void deleteRowHandler( wxCommandEvent& event ) { event.Skip(); }

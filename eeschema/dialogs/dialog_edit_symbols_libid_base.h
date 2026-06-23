@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,7 +29,6 @@ class WX_GRID;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_EDIT_SYMBOLS_LIBID_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -45,7 +44,7 @@ class DIALOG_EDIT_SYMBOLS_LIBID_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
-		// Virtual event handlers, overide them in your derived class
+		// Virtual event handlers, override them in your derived class
 		virtual void onCellBrowseLib( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void onClickOrphansButton( wxCommandEvent& event ) { event.Skip(); }
@@ -55,6 +54,7 @@ class DIALOG_EDIT_SYMBOLS_LIBID_BASE : public DIALOG_SHIM
 	public:
 
 		DIALOG_EDIT_SYMBOLS_LIBID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Library References"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_EDIT_SYMBOLS_LIBID_BASE();
 
 };

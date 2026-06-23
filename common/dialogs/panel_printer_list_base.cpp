@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,7 +19,7 @@ PANEL_PRINTER_LIST_BASE::PANEL_PRINTER_LIST_BASE( wxWindow* parent, wxWindowID i
 	wxArrayString m_choicePrinterChoices;
 	m_choicePrinter = new wxChoice( m_sbSizerPrinters->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePrinterChoices, 0 );
 	m_choicePrinter->SetSelection( 0 );
-	m_sbSizerPrinters->Add( m_choicePrinter, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_sbSizerPrinters->Add( m_choicePrinter, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerPrinterState;
 	bSizerPrinterState = new wxBoxSizer( wxHORIZONTAL );

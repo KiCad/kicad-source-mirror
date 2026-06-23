@@ -55,7 +55,7 @@ private:
      */
     bool verifyTables();
 
-    void browseLibrariesHandler( wxCommandEvent& event ) override;
+    void browseLibrariesHandler( wxCommandEvent& event );
     void appendRowHandler( wxCommandEvent& event ) override;
     void deleteRowHandler( wxCommandEvent& event ) override;
     void moveUpHandler( wxCommandEvent& event ) override;

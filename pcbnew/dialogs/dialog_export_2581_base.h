@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -58,10 +58,10 @@ class DIALOG_EXPORT_2581_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblVersion;
 		wxChoice* m_versionChoice;
 		wxCheckBox* m_cbCompress;
-		wxStaticText* m_lblBomRev;
-		wxTextCtrl* m_textBomRev;
 		wxStaticText* m_columnsLabel;
 		wxStaticLine* m_staticline2;
+		wxStaticText* m_lblBomRev;
+		wxTextCtrl* m_textBomRev;
 		wxStaticText* m_lblOEM;
 		wxChoice* m_oemRef;
 		wxStaticText* m_staticText6;
