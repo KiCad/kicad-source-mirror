@@ -26,6 +26,8 @@
 #include <string>
 #include <stack>
 
+#include <core/inplace_function.h>
+
 #include <kicommon.h>
 #include <base_units.h>
 #include <wx/intl.h>
@@ -266,14 +268,14 @@ public:
         m_valueDbl = aValue;
     }
 
-    void SetDeferredEval( std::function<double()> aLambda )
+    void SetDeferredEval( INPLACE_FUNCTION<double()> aLambda )
     {
         m_type = VT_NUMERIC;
         m_lambdaDbl = std::move( aLambda );
         m_isDeferredDbl = true;
     }
 
-    void SetDeferredEval( std::function<wxString()> aLambda )
+    void SetDeferredEval( INPLACE_FUNCTION<wxString()> aLambda )
     {
         m_type = VT_STRING;
         m_lambdaStr = std::move( aLambda );
@@ -307,11 +309,11 @@ private:
     mutable wxString          m_valueStr;               // mutable to support deferred evaluation
     bool                      m_stringIsWildcard;
 
-    mutable bool              m_isDeferredDbl;
-    std::function<double()>   m_lambdaDbl;
+    mutable bool                 m_isDeferredDbl;
+    INPLACE_FUNCTION<double()>   m_lambdaDbl;
 
-    mutable bool              m_isDeferredStr;
-    std::function<wxString()> m_lambdaStr;
+    mutable bool                 m_isDeferredStr;
+    INPLACE_FUNCTION<wxString()> m_lambdaStr;
 
     EDA_UNITS                 m_units;
 };
