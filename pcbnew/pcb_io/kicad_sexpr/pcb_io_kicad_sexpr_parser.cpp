@@ -4117,6 +4117,19 @@ PCB_REFERENCE_IMAGE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_
         }
     }
 
+    // Before 20260623 the PPI was computed from the embedded resolution but pixels/cm was
+    // truncated to an integer, so the stored scale compensated for the wrong PPI.  Re-scale
+    // to the corrected PPI to preserve the rendered size of existing boards.
+    if( m_requiredVersion < 20260623 )
+    {
+        REFERENCE_IMAGE&   refImage = bitmap->GetReferenceImage();
+        const BITMAP_BASE& image = refImage.GetImage();
+        int                legacyPPI = image.GetLegacyPPI();
+
+        if( legacyPPI > 0 && image.GetPPI() != legacyPPI )
+            refImage.SetImageScale( refImage.GetImageScale() * image.GetPPI() / legacyPPI );
+    }
+
     return bitmap.release();
 }
 

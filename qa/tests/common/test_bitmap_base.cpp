@@ -193,6 +193,10 @@ BOOST_AUTO_TEST_CASE( PPIFromNonIntegerPixelsPerCm )
 
     // 3780 PPM should give 96 PPI, not 94 (the old truncation result)
     BOOST_CHECK_EQUAL( bmp.GetPPI(), 96 );
+
+    // GetLegacyPPI() reproduces the truncated value so pre-fix designs can be migrated by
+    // the GetPPI()/GetLegacyPPI() ratio. Here that is 96/94.
+    BOOST_CHECK_EQUAL( bmp.GetLegacyPPI(), 94 );
 }
 
 

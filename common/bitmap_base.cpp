@@ -128,6 +128,27 @@ void BITMAP_BASE::updatePPI()
 }
 
 
+int BITMAP_BASE::GetLegacyPPI() const
+{
+    if( !m_originalImage )
+        return m_ppi;
+
+    // Mirror the pre-fix path, which read pixels/cm via GetOptionInt() and so truncated
+    // "37.8" to 37 before the * 2.54 multiply.
+    int dpiX = m_originalImage->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
+
+    if( dpiX > 1 )
+    {
+        if( m_originalImage->GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT ) == wxIMAGE_RESOLUTION_CM )
+            return KiROUND( dpiX * 2.54 );
+        else
+            return dpiX;
+    }
+
+    return m_ppi;
+}
+
+
 void BITMAP_BASE::ImportData( BITMAP_BASE& aItem )
 {
     *m_image = *aItem.m_image;

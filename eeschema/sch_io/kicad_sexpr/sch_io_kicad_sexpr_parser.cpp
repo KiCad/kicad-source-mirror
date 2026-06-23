@@ -3798,6 +3798,17 @@ SCH_BITMAP* SCH_IO_KICAD_SEXPR_PARSER::parseImage()
     {
         refImage.SetImageScale( refImage.GetImageScale() * refImage.GetImage().GetPPI() / 300.0 );
     }
+    else if( m_requiredVersion < 20260623 )
+    {
+        // Between the 300-PPI era and 20260623 the PPI was computed from the embedded
+        // resolution but pixels/cm was truncated to an integer, so the stored scale
+        // compensated for the wrong PPI.  Re-scale to the corrected PPI to preserve size.
+        const BITMAP_BASE& image = refImage.GetImage();
+        int                legacyPPI = image.GetLegacyPPI();
+
+        if( legacyPPI > 0 && image.GetPPI() != legacyPPI )
+            refImage.SetImageScale( refImage.GetImageScale() * image.GetPPI() / legacyPPI );
+    }
 
     return bitmap.release();
 }

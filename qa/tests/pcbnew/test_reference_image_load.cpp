@@ -24,9 +24,17 @@
 #include <kiid.h>
 #include <layer_ids.h>
 #include <pcb_reference_image.h>
+#include <reference_image.h>
+#include <bitmap_base.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
+#include <richio.h>
 #include <settings/settings_manager.h>
+
+#include <filesystem>
+#include <fstream>
+#include <sstream>
 
 namespace
 {
@@ -86,6 +94,39 @@ const std::vector<REFERENCE_IMAGE_LOAD_BOARD_TEST_CASE> ReferenceImageLoading_te
             },
     },
 };
+
+// Minimal 1x1 RGB PNG with a pHYs chunk of 3780 pixels/meter in both axes.
+// 3780 PPM -> 37.8 px/cm -> 37.8 * 2.54 = 96.012 -> 96 PPI, but the pre-fix code truncated
+// "37.8" to 37 -> 94 PPI.
+const std::vector<unsigned char> png_3780_ppm = {
+    0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52,
+    0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53,
+    0xDE, 0x00, 0x00, 0x00, 0x09, 0x70, 0x48, 0x59, 0x73, 0x00, 0x00, 0x0E, 0xC4, 0x00, 0x00, 0x0E,
+    0xC4, 0x01, 0x95, 0x2B, 0x0E, 0x1B, 0x00, 0x00, 0x00, 0x0C, 0x49, 0x44, 0x41, 0x54, 0x78, 0xDA,
+    0x63, 0xF8, 0xCF, 0xC0, 0x00, 0x00, 0x03, 0x01, 0x01, 0x00, 0xF7, 0x03, 0x41, 0x43, 0x00, 0x00,
+    0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82
+};
+
+
+std::unique_ptr<BOARD> parseBoardString( const std::string& aData )
+{
+    STRING_LINE_READER        reader( aData, wxT( "migration test board" ) );
+    PCB_IO_KICAD_SEXPR_PARSER parser( &reader, nullptr, nullptr );
+
+    return std::unique_ptr<BOARD>( dynamic_cast<BOARD*>( parser.Parse() ) );
+}
+
+
+double firstImageScale( const BOARD& aBoard )
+{
+    for( BOARD_ITEM* item : aBoard.Drawings() )
+    {
+        if( item->Type() == PCB_REFERENCE_IMAGE_T )
+            return static_cast<PCB_REFERENCE_IMAGE*>( item )->GetReferenceImage().GetImageScale();
+    }
+
+    return -1.0;
+}
 
 } // namespace
 
@@ -167,4 +208,51 @@ BOOST_FIXTURE_TEST_CASE( ReferenceImageFlipLayer, REFERENCE_IMAGE_LOAD_TEST_FIXT
     };
 
     KI_TEST::LoadAndTestBoardFile( "reference_images_load_save", true, doBoardTest );
+}
+
+
+/**
+ * A board predating the PNG pixel-density fix stored an image scale that compensated for the
+ * truncated PPI. Loading it must re-scale by the corrected/truncated PPI ratio so the rendered
+ * size is preserved, while a current-version board is loaded verbatim.
+ */
+BOOST_FIXTURE_TEST_CASE( ReferenceImagePpiScaleMigration, REFERENCE_IMAGE_LOAD_TEST_FIXTURE )
+{
+    BOARD board;
+    auto  image = std::make_unique<PCB_REFERENCE_IMAGE>( &board );
+
+    wxMemoryBuffer buffer;
+    buffer.AppendData( png_3780_ppm.data(), png_3780_ppm.size() );
+    BOOST_REQUIRE( image->GetReferenceImage().ReadImageFile( buffer ) );
+
+    BOOST_REQUIRE_EQUAL( image->GetReferenceImage().GetImage().GetPPI(), 96 );
+    BOOST_REQUIRE_EQUAL( image->GetReferenceImage().GetImage().GetLegacyPPI(), 94 );
+
+    image->GetReferenceImage().SetImageScale( 2.0 );
+    image->SetLayer( F_Cu );
+    board.Add( image.release() );
+
+    const std::string path = ( std::filesystem::temp_directory_path()
+                               / "issue23575_ppi_migration.kicad_pcb" ).string();
+    KI_TEST::DumpBoardToFile( board, path );
+
+    std::ifstream     in( path );
+    std::stringstream ss;
+    ss << in.rdbuf();
+    const std::string current = ss.str();
+
+    // Current format version: the stored scale is already correct, so it loads verbatim.
+    std::unique_ptr<BOARD> reloaded = parseBoardString( current );
+    BOOST_REQUIRE( reloaded );
+    BOOST_CHECK_CLOSE( firstImageScale( *reloaded ), 2.0, 1e-6 );
+
+    // Simulate a pre-fix file by lowering the format version below the migration cutoff.
+    std::string legacy = current;
+    const size_t pos = legacy.find( "20260623" );
+    BOOST_REQUIRE( pos != std::string::npos );
+    legacy.replace( pos, 8, "20260512" );
+
+    std::unique_ptr<BOARD> migrated = parseBoardString( legacy );
+    BOOST_REQUIRE( migrated );
+    BOOST_CHECK_CLOSE( firstImageScale( *migrated ), 2.0 * 96.0 / 94.0, 1e-3 );
 }

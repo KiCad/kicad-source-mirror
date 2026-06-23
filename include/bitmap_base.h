@@ -117,6 +117,16 @@ public:
     }
 
     /**
+     * Recompute the PPI the way it was computed before the pixels/cm truncation fix.
+     *
+     * Used only to migrate the stored image scale of pre-fix designs.  Returns the same
+     * value as GetPPI() whenever the embedded resolution has no fractional pixels/cm.
+     *
+     * @return the PPI a pre-fix KiCad would have derived from the embedded image.
+     */
+    int GetLegacyPPI() const;
+
+    /**
      * Return the orthogonal, bounding box of this object for display purposes.
      *
      * This box should be an enclosing perimeter for visible components of this object,
