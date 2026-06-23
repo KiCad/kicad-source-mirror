@@ -547,7 +547,7 @@
                     <object class="notebookpage" expanded="true">
                       <property name="bitmap"></property>
                       <property name="label">Clearances &amp;&amp; Pad Connections</property>
-                      <property name="select">0</property>
+                      <property name="select">1</property>
                       <object class="wxPanel" expanded="false">
                         <property name="BottomDockable">1</property>
                         <property name="LeftDockable">1</property>

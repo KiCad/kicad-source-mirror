@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <kicommon.h>
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
@@ -24,8 +23,9 @@ class WX_HTML_REPORT_BOX;
 #include <wx/button.h>
 #include <wx/dialog.h>
 
-///////////////////////////////////////////////////////////////////////////
+#include "kicommon.h"
 
+///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_HTML_REPORTER
@@ -47,6 +47,7 @@ class KICOMMON_API DIALOG_HTML_REPORTER : public DIALOG_SHIM
 		WX_HTML_REPORT_BOX* m_Reporter;
 
 		DIALOG_HTML_REPORTER( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Report"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
 		~DIALOG_HTML_REPORTER();
 
 };

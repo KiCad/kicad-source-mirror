@@ -2963,7 +2963,7 @@
                           <property name="style"></property>
                           <property name="subclass"></property>
                           <property name="toolbar_pane">0</property>
-                          <property name="tooltip">The minimum through-hole size. If set, this can only be reduced by custom rules.</property>
+                          <property name="tooltip">The minimum drill size. If set, this can only be reduced by custom rules.</property>
                           <property name="validator_data_type"></property>
                           <property name="validator_style">wxFILTER_NUMERIC</property>
                           <property name="validator_type">wxTextValidator</property>
