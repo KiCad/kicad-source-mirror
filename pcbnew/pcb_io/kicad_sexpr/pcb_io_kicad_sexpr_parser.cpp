@@ -6222,6 +6222,10 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
                 for( auto it = poly.IterateWithHoles(); it; it++ )
                     poly.SetVertex( it.GetIndex(), xform.InverseApply( *it ) );
+
+                // Hatch lines were cached in board frame; rebuild in lib frame so the
+                // footprint transform is not applied to them twice on render.
+                zone->HatchBorder();
             }
 
             footprint->Add( zone, ADD_MODE::APPEND, true );

@@ -1,0 +1,14 @@
+(version 1)
+(rule silk_over_via
+    (constraint silk_clearance (min 0.09mm))
+    (severity error)
+#    (condition "A.Type == '*Text' && B.Type == 'Via'"))
+#     (condition "A.Layer == 'F.Silkscreen' && B.Type == 'Via'"))
+     (condition "A.Layer == 'F.Silkscreen' "))
+	
+	
+(rule "Allow connector silk to intersect board edge"
+    (constraint silk_clearance)
+    (severity ignore)
+    (condition "A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'"))
+

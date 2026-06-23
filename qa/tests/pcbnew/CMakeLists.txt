@@ -59,6 +59,7 @@ set( QA_PCBNEW_SRCS
     test_footprint_realignment.cpp
     test_footprint_transform_sync.cpp
     test_footprint_rescue_layer.cpp
+    test_issue24735.cpp
     test_fp_lib_load_save.cpp
     test_io_mgr.cpp
     test_ellipse_roundtrip.cpp

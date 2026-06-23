@@ -1,0 +1,1541 @@
+(kicad_pcb
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(general
+		(thickness 1.6)
+		(legacy_teardrops no)
+	)
+	(paper "A3")
+	(layers
+		(0 "F.Cu" signal)
+		(2 "B.Cu" signal)
+		(13 "F.Paste" user)
+		(15 "B.Paste" user)
+		(5 "F.SilkS" user "F.Silkscreen")
+		(7 "B.SilkS" user "B.Silkscreen")
+		(1 "F.Mask" user)
+		(3 "B.Mask" user)
+		(17 "Dwgs.User" user "User.Drawings")
+		(19 "Cmts.User" user "User.Comments")
+		(21 "Eco1.User" user "User.Eco1")
+		(25 "Edge.Cuts" user)
+		(27 "Margin" user)
+		(31 "F.CrtYd" user "F.Courtyard")
+		(29 "B.CrtYd" user "B.Courtyard")
+		(35 "F.Fab" user)
+		(33 "B.Fab" user)
+	)
+	(setup
+		(stackup
+			(layer "F.SilkS"
+				(type "Top Silk Screen")
+			)
+			(layer "F.Paste"
+				(type "Top Solder Paste")
+			)
+			(layer "F.Mask"
+				(type "Top Solder Mask")
+				(color "Green")
+				(thickness 0.01)
+			)
+			(layer "F.Cu"
+				(type "copper")
+				(thickness 0.035)
+			)
+			(layer "dielectric 1"
+				(type "core")
+				(thickness 1.51)
+				(material "FR4")
+				(epsilon_r 4.5)
+				(loss_tangent 0.02)
+			)
+			(layer "B.Cu"
+				(type "copper")
+				(thickness 0.035)
+			)
+			(layer "B.Mask"
+				(type "Bottom Solder Mask")
+				(color "Green")
+				(thickness 0.01)
+			)
+			(layer "B.Paste"
+				(type "Bottom Solder Paste")
+			)
+			(layer "B.SilkS"
+				(type "Bottom Silk Screen")
+			)
+			(copper_finish "None")
+			(dielectric_constraints no)
+		)
+		(pad_to_mask_clearance 0)
+		(allow_soldermask_bridges_in_footprints no)
+		(tenting
+			(front yes)
+			(back yes)
+		)
+		(covering
+			(front no)
+			(back no)
+		)
+		(plugging
+			(front no)
+			(back no)
+		)
+		(capping no)
+		(filling no)
+		(pcbplotparams
+			(layerselection 0x00000000_00000000_5555555d_5755f5ff)
+			(plot_on_all_layers_selection 0x00000000_00000000_00000000_02000000)
+			(disableapertmacros no)
+			(usegerberextensions no)
+			(usegerberattributes yes)
+			(usegerberadvancedattributes yes)
+			(creategerberjobfile yes)
+			(dashed_line_dash_ratio 12)
+			(dashed_line_gap_ratio 3)
+			(svgprecision 6)
+			(plotframeref no)
+			(mode 1)
+			(useauxorigin no)
+			(pdf_front_fp_property_popups yes)
+			(pdf_back_fp_property_popups yes)
+			(pdf_metadata yes)
+			(pdf_single_document yes)
+			(dxfpolygonmode yes)
+			(dxfimperialunits yes)
+			(dxfusepcbnewfont yes)
+			(psnegative no)
+			(psa4output no)
+			(plot_black_and_white yes)
+			(sketchpadsonfab no)
+			(plotpadnumbers no)
+			(hidednponfab no)
+			(sketchdnponfab yes)
+			(crossoutdnponfab yes)
+			(subtractmaskfromsilk no)
+			(outputformat 4)
+			(mirror no)
+			(drillshape 0)
+			(scaleselection 0)
+			(outputdirectory "production")
+		)
+	)
+	(variants
+		(variant
+			(name "var1")
+		)
+		(variant
+			(name "var2")
+		)
+	)
+	(footprint "0IBF_Mechanik:MountingHole_3.2mm_M3_4mm-iso"
+		(layer "F.Cu")
+		(uuid "3fc97193-41fd-4584-a503-164447946883")
+		(at 17.5 35)
+		(descr "Mounting Hole 3.2mm, no annular, M3, 4mm Isolierung")
+		(tags "mounting hole 3.2mm no annular m3 4mm Isolierring")
+		(property "Reference" "H8"
+			(at 0 -3.75 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "2e3825f7-a6a0-41ff-aea4-541c835a1318")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 0 3.75 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2113054f-83b9-4715-9c2e-4121ea536470")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c3d20705-5cbb-436e-bac5-aa864c690abc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "afe8b9fb-3528-4aed-b885-0cb542d5f39e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Field4" "${REFERENCE}"
+			(at 0.3 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "20b374eb-c0b5-4fc3-a570-df79fcd42355")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "MountingHole*")
+		(path "/ff30941b-b1db-4f03-953e-8e99575ace64")
+		(sheetname "/")
+		(sheetfile "issue24735.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins)
+			)
+		)
+		(attr exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "9df4f9a2-fd1f-4f9a-881e-c41a1b2a0ae1")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "b5ea554a-1261-4ced-a763-3628ce6ab3a7")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 4.1 0)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "41745747-e2ee-4344-acaa-fff9abd90aaa")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "ea5421d6-0827-4458-9ef3-3f21e7eb5c94")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "ebcaaf02-d2eb-41bd-b59a-f6360abb614e")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start -1.9 0)
+					(mid -1.343502 1.343503)
+					(end 0 1.9)
+				)
+				(arc
+					(start 0 3.4)
+					(mid -2.404163 2.404163)
+					(end -3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "c1323de1-703c-4d37-aa83-99849cf7e3fd")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start 1.9 0)
+					(mid 1.343502 -1.343503)
+					(end 0 -1.9)
+				)
+				(arc
+					(start 0 -3.4)
+					(mid 2.404163 -2.404163)
+					(end 3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "7e583289-0bd0-46b9-8757-d87396b4ed61")
+		)
+		(pad "" np_thru_hole circle
+			(at 0 0)
+			(size 3.2 3.2)
+			(drill 3.2)
+			(layers "*.Cu" "*.Mask")
+			(uuid "de5cb440-1d76-4c6f-bcd1-e09a01b94d19")
+		)
+		(zone
+			(layers "F.Cu" "B.Cu")
+			(uuid "589d3b80-9d39-46c0-ac88-9953200b2e2d")
+			(hatch edge 0.508)
+			(connect_pads
+				(clearance 0)
+			)
+			(min_thickness 0.254)
+			(keepout
+				(tracks not_allowed)
+				(vias allowed)
+				(pads allowed)
+				(copperpour not_allowed)
+				(footprints not_allowed)
+			)
+			(placement
+				(enabled no)
+				(sheetname "")
+			)
+			(fill
+				(thermal_gap 0.508)
+				(thermal_bridge_width 0.508)
+				(island_removal_mode 0)
+			)
+			(polygon
+				(pts
+					(xy 21.554884 35) (xy 21.535532 34.604313) (xy 21.477659 34.212402) (xy 21.38182 33.82801) (xy 21.248927 33.454804)
+					(xy 21.08025 33.096347) (xy 20.877399 32.756061) (xy 20.64231 32.437194) (xy 20.377227 32.14279)
+					(xy 20.08468 31.875658) (xy 19.767462 31.638349) (xy 19.428601 31.433127) (xy 19.071331 31.261952)
+					(xy 18.699062 31.126457) (xy 18.315348 31.027936) (xy 17.923851 30.967329) (xy 17.528308 30.945215)
+					(xy 17.132495 30.961804) (xy 16.740191 31.016939) (xy 16.355138 31.110093) (xy 15.981014 31.240377)
+					(xy 15.621388 31.406547) (xy 15.279695 31.607018) (xy 14.959194 31.839875) (xy 14.662946 32.102896)
+					(xy 14.393779 32.393571) (xy 14.15426 32.709124) (xy 13.946678 33.046545) (xy 13.773013 33.402611)
+					(xy 13.634922 33.773925) (xy 13.533725 34.156942) (xy 13.470386 34.548006) (xy 13.445511 34.943385)
+					(xy 13.459337 35.339304) (xy 13.511732 35.731984) (xy 13.602195 36.117678) (xy 13.729864 36.492702)
+					(xy 13.89352 36.853479) (xy 14.0916 37.196564) (xy 14.322214 37.518682) (xy 14.583161 37.816759)
+					(xy 14.871949 38.087949) (xy 15.185823 38.329665) (xy 15.521786 38.539598) (xy 15.876631 38.715745)
+					(xy 16.246972 38.856424) (xy 16.629273 38.960293) (xy 17.019886 39.02636) (xy 17.415081 39.053995)
+					(xy 17.811087 39.042933) (xy 18.204123 38.993281) (xy 18.590439 38.905512) (xy 18.966346 38.780465)
+					(xy 19.328256 38.619332) (xy 19.672715 38.423652) (xy 19.996436 38.195292) (xy 20.296327 37.936433)
+					(xy 20.569527 37.649545) (xy 20.813428 37.337366) (xy 21.025701 37.002877) (xy 21.204321 36.64927)
+					(xy 21.347582 36.27992) (xy 21.454118 35.898353) (xy 21.52291 35.508212) (xy 21.553303 35.113219)
+				)
+			)
+		)
+		(variant
+			(name "var2")
+			(exclude_from_bom no)
+		)
+		(embedded_fonts no)
+	)
+	(footprint "0IBF_Mechanik:MountingHole_3.2mm_M3_4mm-iso"
+		(layer "F.Cu")
+		(uuid "5e1232cc-d3a4-4ba8-a84a-e8e7ab019300")
+		(at 17.5 25.75)
+		(descr "Mounting Hole 3.2mm, no annular, M3, 4mm Isolierung")
+		(tags "mounting hole 3.2mm no annular m3 4mm Isolierring")
+		(property "Reference" "H7"
+			(at 0 -3.75 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "55134b9b-4d74-4e8c-aa00-e015f188e64c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 0 3.75 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "27bc7012-3a94-40a9-bd1f-a04a20886ba0")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "37a8bb76-df34-4c9a-b072-e5ed9d88d9fd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "81c719e7-9fdd-4dde-8d2d-d3de51c4af87")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Field4" "${REFERENCE}"
+			(at 0.3 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "2c9f44b0-818d-4df7-93da-e29d2e1ead45")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "MountingHole*")
+		(path "/5c09d325-5819-4492-a5ab-a2d3b8c19b95")
+		(sheetname "/")
+		(sheetfile "issue24735.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins)
+			)
+		)
+		(attr exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "dc7d785d-9ee7-45a8-abec-d4739f4ba8f3")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "c8125c41-1a2f-485d-a0d0-ddf4a80d0def")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 4.1 0)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "599cd858-c612-4a0d-998e-e1cf86d6b692")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "af86de3a-601a-445a-91e9-deb30fad67e7")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "a165bcc3-1c9f-406c-a4ea-a7930719c480")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start -1.9 0)
+					(mid -1.343502 1.343503)
+					(end 0 1.9)
+				)
+				(arc
+					(start 0 3.4)
+					(mid -2.404163 2.404163)
+					(end -3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "68d642b8-eef2-4d06-ab90-fd3a5f049ab9")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start 1.9 0)
+					(mid 1.343502 -1.343503)
+					(end 0 -1.9)
+				)
+				(arc
+					(start 0 -3.4)
+					(mid 2.404163 -2.404163)
+					(end 3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "31decbdd-3a90-402a-a6ec-790baa805df4")
+		)
+		(pad "" np_thru_hole circle
+			(at 0 0)
+			(size 3.2 3.2)
+			(drill 3.2)
+			(layers "*.Cu" "*.Mask")
+			(uuid "793759f4-23e4-466c-a902-89cba88ffe38")
+		)
+		(zone
+			(layers "F.Cu" "B.Cu")
+			(uuid "5406679b-a95d-48e6-9175-92261392c8d0")
+			(hatch edge 0.508)
+			(connect_pads
+				(clearance 0)
+			)
+			(min_thickness 0.254)
+			(keepout
+				(tracks not_allowed)
+				(vias allowed)
+				(pads allowed)
+				(copperpour not_allowed)
+				(footprints not_allowed)
+			)
+			(placement
+				(enabled no)
+				(sheetname "")
+			)
+			(fill
+				(thermal_gap 0.508)
+				(thermal_bridge_width 0.508)
+				(island_removal_mode 0)
+			)
+			(polygon
+				(pts
+					(xy 21.554884 25.75) (xy 21.535532 25.354313) (xy 21.477659 24.962402) (xy 21.38182 24.57801) (xy 21.248927 24.204804)
+					(xy 21.08025 23.846347) (xy 20.877399 23.506061) (xy 20.64231 23.187194) (xy 20.377227 22.89279)
+					(xy 20.08468 22.625658) (xy 19.767462 22.388349) (xy 19.428601 22.183127) (xy 19.071331 22.011952)
+					(xy 18.699062 21.876457) (xy 18.315348 21.777936) (xy 17.923851 21.717329) (xy 17.528308 21.695215)
+					(xy 17.132495 21.711804) (xy 16.740191 21.766939) (xy 16.355138 21.860093) (xy 15.981014 21.990377)
+					(xy 15.621388 22.156547) (xy 15.279695 22.357018) (xy 14.959194 22.589875) (xy 14.662946 22.852896)
+					(xy 14.393779 23.143571) (xy 14.15426 23.459124) (xy 13.946678 23.796545) (xy 13.773013 24.152611)
+					(xy 13.634922 24.523925) (xy 13.533725 24.906942) (xy 13.470386 25.298006) (xy 13.445511 25.693385)
+					(xy 13.459337 26.089304) (xy 13.511732 26.481984) (xy 13.602195 26.867678) (xy 13.729864 27.242702)
+					(xy 13.89352 27.603479) (xy 14.0916 27.946564) (xy 14.322214 28.268682) (xy 14.583161 28.566759)
+					(xy 14.871949 28.837949) (xy 15.185823 29.079665) (xy 15.521786 29.289598) (xy 15.876631 29.465745)
+					(xy 16.246972 29.606424) (xy 16.629273 29.710293) (xy 17.019886 29.77636) (xy 17.415081 29.803995)
+					(xy 17.811087 29.792933) (xy 18.204123 29.743281) (xy 18.590439 29.655512) (xy 18.966346 29.530465)
+					(xy 19.328256 29.369332) (xy 19.672715 29.173652) (xy 19.996436 28.945292) (xy 20.296327 28.686433)
+					(xy 20.569527 28.399545) (xy 20.813428 28.087366) (xy 21.025701 27.752877) (xy 21.204321 27.39927)
+					(xy 21.347582 27.02992) (xy 21.454118 26.648353) (xy 21.52291 26.258212) (xy 21.553303 25.863219)
+				)
+			)
+		)
+		(variant
+			(name "var2")
+			(exclude_from_bom no)
+		)
+		(embedded_fonts no)
+	)
+	(footprint "0IBF_Mechanik:MountingHole_3.2mm_M3_4mm-iso"
+		(layer "F.Cu")
+		(uuid "69716a31-9b10-45f6-8795-4f81466f4254")
+		(at 36 35)
+		(descr "Mounting Hole 3.2mm, no annular, M3, 4mm Isolierung")
+		(tags "mounting hole 3.2mm no annular m3 4mm Isolierring")
+		(property "Reference" "H12"
+			(at 0 -3.75 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "37219342-fa57-46ab-94f8-4c737db1e744")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 0 3.75 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "57c7689a-6b7d-41d4-a4f0-5b779bee43cd")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c5a04b40-3440-4e5e-b635-cfa39718a7c6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "3fccd787-2aa3-42c6-917f-28729a8f2244")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Field4" "${REFERENCE}"
+			(at 0.3 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c2133d28-171d-408c-ae30-2427847fba06")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "MountingHole*")
+		(path "/0a5c2d71-ed1f-41d5-8d9c-0301edd0e77c")
+		(sheetname "/")
+		(sheetfile "issue24735.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins)
+			)
+		)
+		(attr exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "eec4d41d-ad1b-4e82-8e77-75f1c1891793")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "2151f000-9ae9-469b-84ca-6eaccb85be33")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 4.1 0)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "2cfc83dc-5d34-49e9-9c75-fa8b6eca56c0")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "dd140229-3349-430d-8009-9d43cf1f40b9")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "7a3c0ff6-3031-40e2-95a3-f9b565efae92")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start -1.9 0)
+					(mid -1.343502 1.343503)
+					(end 0 1.9)
+				)
+				(arc
+					(start 0 3.4)
+					(mid -2.404163 2.404163)
+					(end -3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "90e91535-81c4-4073-bc65-1747d90a23ce")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start 1.9 0)
+					(mid 1.343502 -1.343503)
+					(end 0 -1.9)
+				)
+				(arc
+					(start 0 -3.4)
+					(mid 2.404163 -2.404163)
+					(end 3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "5f46b25f-f2e8-4774-b4ba-81f569e7a0a6")
+		)
+		(pad "" np_thru_hole circle
+			(at 0 0)
+			(size 3.2 3.2)
+			(drill 3.2)
+			(layers "*.Cu" "*.Mask")
+			(uuid "13532df4-337b-4f56-a5d5-c92273f62613")
+		)
+		(zone
+			(layers "F.Cu" "B.Cu")
+			(uuid "136c7b31-ab36-41f7-ba3d-1b5ce00c593b")
+			(hatch edge 0.508)
+			(connect_pads
+				(clearance 0)
+			)
+			(min_thickness 0.254)
+			(keepout
+				(tracks not_allowed)
+				(vias allowed)
+				(pads allowed)
+				(copperpour not_allowed)
+				(footprints not_allowed)
+			)
+			(placement
+				(enabled no)
+				(sheetname "")
+			)
+			(fill
+				(thermal_gap 0.508)
+				(thermal_bridge_width 0.508)
+				(island_removal_mode 0)
+			)
+			(polygon
+				(pts
+					(xy 40.054884 35) (xy 40.035532 34.604313) (xy 39.977659 34.212402) (xy 39.88182 33.82801) (xy 39.748927 33.454804)
+					(xy 39.58025 33.096347) (xy 39.377399 32.756061) (xy 39.14231 32.437194) (xy 38.877227 32.14279)
+					(xy 38.58468 31.875658) (xy 38.267462 31.638349) (xy 37.928601 31.433127) (xy 37.571331 31.261952)
+					(xy 37.199062 31.126457) (xy 36.815348 31.027936) (xy 36.423851 30.967329) (xy 36.028308 30.945215)
+					(xy 35.632495 30.961804) (xy 35.240191 31.016939) (xy 34.855138 31.110093) (xy 34.481014 31.240377)
+					(xy 34.121388 31.406547) (xy 33.779695 31.607018) (xy 33.459194 31.839875) (xy 33.162946 32.102896)
+					(xy 32.893779 32.393571) (xy 32.65426 32.709124) (xy 32.446678 33.046545) (xy 32.273013 33.402611)
+					(xy 32.134922 33.773925) (xy 32.033725 34.156942) (xy 31.970386 34.548006) (xy 31.945511 34.943385)
+					(xy 31.959337 35.339304) (xy 32.011732 35.731984) (xy 32.102195 36.117678) (xy 32.229864 36.492702)
+					(xy 32.39352 36.853479) (xy 32.5916 37.196564) (xy 32.822214 37.518682) (xy 33.083161 37.816759)
+					(xy 33.371949 38.087949) (xy 33.685823 38.329665) (xy 34.021786 38.539598) (xy 34.376631 38.715745)
+					(xy 34.746972 38.856424) (xy 35.129273 38.960293) (xy 35.519886 39.02636) (xy 35.915081 39.053995)
+					(xy 36.311087 39.042933) (xy 36.704123 38.993281) (xy 37.090439 38.905512) (xy 37.466346 38.780465)
+					(xy 37.828256 38.619332) (xy 38.172715 38.423652) (xy 38.496436 38.195292) (xy 38.796327 37.936433)
+					(xy 39.069527 37.649545) (xy 39.313428 37.337366) (xy 39.525701 37.002877) (xy 39.704321 36.64927)
+					(xy 39.847582 36.27992) (xy 39.954118 35.898353) (xy 40.02291 35.508212) (xy 40.053303 35.113219)
+				)
+			)
+		)
+		(variant
+			(name "var2")
+			(exclude_from_bom no)
+		)
+		(embedded_fonts no)
+	)
+	(footprint "0IBF_Mechanik:MountingHole_3.2mm_M3_4mm-iso"
+		(layer "F.Cu")
+		(uuid "93ccc9cd-9043-4d64-8208-d4d486fde3e1")
+		(at 36 25.75)
+		(descr "Mounting Hole 3.2mm, no annular, M3, 4mm Isolierung")
+		(tags "mounting hole 3.2mm no annular m3 4mm Isolierring")
+		(property "Reference" "H11"
+			(at 0 -3.75 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "0ffe7b08-148a-4599-bb1e-869b498942d7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 0 3.75 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f725d270-526e-4c4e-982c-64ba4356a622")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "164d4240-581e-4d0a-855c-7cc028a603ac")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c6ee90f7-579a-4cbe-badc-f4b1bd44ce86")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Field4" "${REFERENCE}"
+			(at 0.3 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c3dc95fb-7c36-4d3d-8c6a-7bd710275e54")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "MountingHole*")
+		(path "/29ea35d1-2a52-4c53-a9f1-75e5be4b8199")
+		(sheetname "/")
+		(sheetfile "issue24735.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins)
+			)
+		)
+		(attr exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "3d8c4969-7b8c-46dc-a3b2-c777b672294e")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "cf6244f6-2836-4817-a33f-d8223d812bbe")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 4.1 0)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "580c3930-0a8f-433e-8d7c-c7fcf2f0b219")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "6c1d97c3-ccbe-4263-b4a3-7bbdb785eb3d")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "d605d84b-3831-4ea9-a030-8f07d54375cb")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start -1.9 0)
+					(mid -1.343502 1.343503)
+					(end 0 1.9)
+				)
+				(arc
+					(start 0 3.4)
+					(mid -2.404163 2.404163)
+					(end -3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "a1a6bf3e-20f1-4f62-bc8c-b0547b2558d4")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start 1.9 0)
+					(mid 1.343502 -1.343503)
+					(end 0 -1.9)
+				)
+				(arc
+					(start 0 -3.4)
+					(mid 2.404163 -2.404163)
+					(end 3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "c38ec6b4-34f4-4152-aa05-c43ef892c879")
+		)
+		(pad "" np_thru_hole circle
+			(at 0 0)
+			(size 3.2 3.2)
+			(drill 3.2)
+			(layers "*.Cu" "*.Mask")
+			(uuid "156456e5-e0c1-40a6-bc52-b03123a61ecd")
+		)
+		(zone
+			(layers "F.Cu" "B.Cu")
+			(uuid "463a3ebd-e03f-4767-8455-b790d8793f20")
+			(hatch edge 0.508)
+			(connect_pads
+				(clearance 0)
+			)
+			(min_thickness 0.254)
+			(keepout
+				(tracks not_allowed)
+				(vias allowed)
+				(pads allowed)
+				(copperpour not_allowed)
+				(footprints not_allowed)
+			)
+			(placement
+				(enabled no)
+				(sheetname "")
+			)
+			(fill
+				(thermal_gap 0.508)
+				(thermal_bridge_width 0.508)
+				(island_removal_mode 0)
+			)
+			(polygon
+				(pts
+					(xy 40.054884 25.75) (xy 40.035532 25.354313) (xy 39.977659 24.962402) (xy 39.88182 24.57801) (xy 39.748927 24.204804)
+					(xy 39.58025 23.846347) (xy 39.377399 23.506061) (xy 39.14231 23.187194) (xy 38.877227 22.89279)
+					(xy 38.58468 22.625658) (xy 38.267462 22.388349) (xy 37.928601 22.183127) (xy 37.571331 22.011952)
+					(xy 37.199062 21.876457) (xy 36.815348 21.777936) (xy 36.423851 21.717329) (xy 36.028308 21.695215)
+					(xy 35.632495 21.711804) (xy 35.240191 21.766939) (xy 34.855138 21.860093) (xy 34.481014 21.990377)
+					(xy 34.121388 22.156547) (xy 33.779695 22.357018) (xy 33.459194 22.589875) (xy 33.162946 22.852896)
+					(xy 32.893779 23.143571) (xy 32.65426 23.459124) (xy 32.446678 23.796545) (xy 32.273013 24.152611)
+					(xy 32.134922 24.523925) (xy 32.033725 24.906942) (xy 31.970386 25.298006) (xy 31.945511 25.693385)
+					(xy 31.959337 26.089304) (xy 32.011732 26.481984) (xy 32.102195 26.867678) (xy 32.229864 27.242702)
+					(xy 32.39352 27.603479) (xy 32.5916 27.946564) (xy 32.822214 28.268682) (xy 33.083161 28.566759)
+					(xy 33.371949 28.837949) (xy 33.685823 29.079665) (xy 34.021786 29.289598) (xy 34.376631 29.465745)
+					(xy 34.746972 29.606424) (xy 35.129273 29.710293) (xy 35.519886 29.77636) (xy 35.915081 29.803995)
+					(xy 36.311087 29.792933) (xy 36.704123 29.743281) (xy 37.090439 29.655512) (xy 37.466346 29.530465)
+					(xy 37.828256 29.369332) (xy 38.172715 29.173652) (xy 38.496436 28.945292) (xy 38.796327 28.686433)
+					(xy 39.069527 28.399545) (xy 39.313428 28.087366) (xy 39.525701 27.752877) (xy 39.704321 27.39927)
+					(xy 39.847582 27.02992) (xy 39.954118 26.648353) (xy 40.02291 26.258212) (xy 40.053303 25.863219)
+				)
+			)
+		)
+		(variant
+			(name "var2")
+			(exclude_from_bom no)
+		)
+		(embedded_fonts no)
+	)
+	(footprint "0IBF_Mechanik:MountingHole_3.2mm_M3_4mm-iso"
+		(layer "F.Cu")
+		(uuid "b8820c65-e831-4952-babf-9531d3ab93af")
+		(at 26.75 35)
+		(descr "Mounting Hole 3.2mm, no annular, M3, 4mm Isolierung")
+		(tags "mounting hole 3.2mm no annular m3 4mm Isolierring")
+		(property "Reference" "H10"
+			(at 0 -3.75 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "a68b6b98-911c-4635-9b58-f6b6e5bf7558")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 0 3.75 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "dc265f22-68a1-4445-add4-ddc32189aaa6")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f284b366-da68-4eca-baa4-92ce2fbf76d3")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e7245e6f-165a-41c8-8686-d5228be8b5a9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Field4" "${REFERENCE}"
+			(at 0.3 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "20272893-e5ea-443f-80b3-1688599d20e0")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "MountingHole*")
+		(path "/02875f25-5266-4e52-88b8-b2f4169487b9")
+		(sheetname "/")
+		(sheetfile "issue24735.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins)
+			)
+		)
+		(attr exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "669feaec-3445-4893-b52b-53fd74ef72b8")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "505f66aa-6872-476b-9231-9b319a43d456")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 4.1 0)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "96233215-9553-4168-b8e9-9c5cbeca3f17")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "34750e76-29ee-4c07-9a74-7c64f8e5e827")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "aa6c9e73-90c5-4c37-934c-edb48dd3a45a")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start -1.9 0)
+					(mid -1.343502 1.343503)
+					(end 0 1.9)
+				)
+				(arc
+					(start 0 3.4)
+					(mid -2.404163 2.404163)
+					(end -3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "72737257-d343-4fc1-a843-5cc8c0ec369d")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start 1.9 0)
+					(mid 1.343502 -1.343503)
+					(end 0 -1.9)
+				)
+				(arc
+					(start 0 -3.4)
+					(mid 2.404163 -2.404163)
+					(end 3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "84f8b5fa-6b72-4a8f-a0d1-9b766618f9d5")
+		)
+		(pad "" np_thru_hole circle
+			(at 0 0)
+			(size 3.2 3.2)
+			(drill 3.2)
+			(layers "*.Cu" "*.Mask")
+			(uuid "3942ce32-de48-4685-95a2-a39e63df8fb6")
+		)
+		(zone
+			(layers "F.Cu" "B.Cu")
+			(uuid "b2bc4411-12fa-4504-b337-393d4f37ffb6")
+			(hatch edge 0.508)
+			(connect_pads
+				(clearance 0)
+			)
+			(min_thickness 0.254)
+			(keepout
+				(tracks not_allowed)
+				(vias allowed)
+				(pads allowed)
+				(copperpour not_allowed)
+				(footprints not_allowed)
+			)
+			(placement
+				(enabled no)
+				(sheetname "")
+			)
+			(fill
+				(thermal_gap 0.508)
+				(thermal_bridge_width 0.508)
+				(island_removal_mode 0)
+			)
+			(polygon
+				(pts
+					(xy 30.804884 35) (xy 30.785532 34.604313) (xy 30.727659 34.212402) (xy 30.63182 33.82801) (xy 30.498927 33.454804)
+					(xy 30.33025 33.096347) (xy 30.127399 32.756061) (xy 29.89231 32.437194) (xy 29.627227 32.14279)
+					(xy 29.33468 31.875658) (xy 29.017462 31.638349) (xy 28.678601 31.433127) (xy 28.321331 31.261952)
+					(xy 27.949062 31.126457) (xy 27.565348 31.027936) (xy 27.173851 30.967329) (xy 26.778308 30.945215)
+					(xy 26.382495 30.961804) (xy 25.990191 31.016939) (xy 25.605138 31.110093) (xy 25.231014 31.240377)
+					(xy 24.871388 31.406547) (xy 24.529695 31.607018) (xy 24.209194 31.839875) (xy 23.912946 32.102896)
+					(xy 23.643779 32.393571) (xy 23.40426 32.709124) (xy 23.196678 33.046545) (xy 23.023013 33.402611)
+					(xy 22.884922 33.773925) (xy 22.783725 34.156942) (xy 22.720386 34.548006) (xy 22.695511 34.943385)
+					(xy 22.709337 35.339304) (xy 22.761732 35.731984) (xy 22.852195 36.117678) (xy 22.979864 36.492702)
+					(xy 23.14352 36.853479) (xy 23.3416 37.196564) (xy 23.572214 37.518682) (xy 23.833161 37.816759)
+					(xy 24.121949 38.087949) (xy 24.435823 38.329665) (xy 24.771786 38.539598) (xy 25.126631 38.715745)
+					(xy 25.496972 38.856424) (xy 25.879273 38.960293) (xy 26.269886 39.02636) (xy 26.665081 39.053995)
+					(xy 27.061087 39.042933) (xy 27.454123 38.993281) (xy 27.840439 38.905512) (xy 28.216346 38.780465)
+					(xy 28.578256 38.619332) (xy 28.922715 38.423652) (xy 29.246436 38.195292) (xy 29.546327 37.936433)
+					(xy 29.819527 37.649545) (xy 30.063428 37.337366) (xy 30.275701 37.002877) (xy 30.454321 36.64927)
+					(xy 30.597582 36.27992) (xy 30.704118 35.898353) (xy 30.77291 35.508212) (xy 30.803303 35.113219)
+				)
+			)
+		)
+		(variant
+			(name "var2")
+			(exclude_from_bom no)
+		)
+		(embedded_fonts no)
+	)
+	(footprint "0IBF_Mechanik:MountingHole_3.2mm_M3_4mm-iso"
+		(layer "F.Cu")
+		(uuid "f2b38e99-fb97-4735-9a4b-814344456785")
+		(at 26.75 25.75)
+		(descr "Mounting Hole 3.2mm, no annular, M3, 4mm Isolierung")
+		(tags "mounting hole 3.2mm no annular m3 4mm Isolierring")
+		(property "Reference" "H9"
+			(at 0 -3.75 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "704a9bc5-1df4-4b18-8416-77569e91903f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 0 3.75 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "e4605988-3676-42f4-989a-fb641226337c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6e615168-ae52-458f-b344-644f42222635")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "c217c0c1-63f0-44a6-964c-b6fd05ae92aa")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Field4" "${REFERENCE}"
+			(at 0.3 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "94ea57c1-d386-417f-84bf-663caa884083")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "MountingHole*")
+		(path "/9f0a11db-1ccf-4d3e-8af9-87ca9a745007")
+		(sheetname "/")
+		(sheetfile "issue24735.kicad_sch")
+		(units
+			(unit
+				(name "A")
+				(pins)
+			)
+		)
+		(attr exclude_from_bom)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "27302c33-65d7-42cc-9084-0e20f48fb9b0")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "e2a07a08-e022-457a-8ee5-0a792d66285e")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 4.1 0)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(fill no)
+			(layer "F.CrtYd")
+			(uuid "406065a5-3727-40f8-8e0f-a59bf6e114ad")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 1.9 0)
+			(stroke
+				(width 0.2)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "025c2d96-e5a9-4d6a-8989-3490ee89f0dc")
+		)
+		(fp_circle
+			(center 0 0)
+			(end 3.4 0)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.Fab")
+			(uuid "93229856-3238-4e64-b0a2-d18d2ab1475e")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start -1.9 0)
+					(mid -1.343502 1.343503)
+					(end 0 1.9)
+				)
+				(arc
+					(start 0 3.4)
+					(mid -2.404163 2.404163)
+					(end -3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "29d7501f-705d-4608-af98-50607cd4e69a")
+		)
+		(fp_poly
+			(pts
+				(arc
+					(start 1.9 0)
+					(mid 1.343502 -1.343503)
+					(end 0 -1.9)
+				)
+				(arc
+					(start 0 -3.4)
+					(mid 2.404163 -2.404163)
+					(end 3.4 0)
+				)
+			)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(fill yes)
+			(layer "F.Fab")
+			(uuid "82879780-d236-4389-a13e-a2d8f0dadd20")
+		)
+		(pad "" np_thru_hole circle
+			(at 0 0)
+			(size 3.2 3.2)
+			(drill 3.2)
+			(layers "*.Cu" "*.Mask")
+			(uuid "7f128210-cb42-49a5-b785-d72066638585")
+		)
+		(zone
+			(layers "F.Cu" "B.Cu")
+			(uuid "f6dc9880-c251-4fab-967f-58f2c8d77346")
+			(hatch edge 0.508)
+			(connect_pads
+				(clearance 0)
+			)
+			(min_thickness 0.254)
+			(keepout
+				(tracks not_allowed)
+				(vias allowed)
+				(pads allowed)
+				(copperpour not_allowed)
+				(footprints not_allowed)
+			)
+			(placement
+				(enabled no)
+				(sheetname "")
+			)
+			(fill
+				(thermal_gap 0.508)
+				(thermal_bridge_width 0.508)
+				(island_removal_mode 0)
+			)
+			(polygon
+				(pts
+					(xy 30.804884 25.75) (xy 30.785532 25.354313) (xy 30.727659 24.962402) (xy 30.63182 24.57801) (xy 30.498927 24.204804)
+					(xy 30.33025 23.846347) (xy 30.127399 23.506061) (xy 29.89231 23.187194) (xy 29.627227 22.89279)
+					(xy 29.33468 22.625658) (xy 29.017462 22.388349) (xy 28.678601 22.183127) (xy 28.321331 22.011952)
+					(xy 27.949062 21.876457) (xy 27.565348 21.777936) (xy 27.173851 21.717329) (xy 26.778308 21.695215)
+					(xy 26.382495 21.711804) (xy 25.990191 21.766939) (xy 25.605138 21.860093) (xy 25.231014 21.990377)
+					(xy 24.871388 22.156547) (xy 24.529695 22.357018) (xy 24.209194 22.589875) (xy 23.912946 22.852896)
+					(xy 23.643779 23.143571) (xy 23.40426 23.459124) (xy 23.196678 23.796545) (xy 23.023013 24.152611)
+					(xy 22.884922 24.523925) (xy 22.783725 24.906942) (xy 22.720386 25.298006) (xy 22.695511 25.693385)
+					(xy 22.709337 26.089304) (xy 22.761732 26.481984) (xy 22.852195 26.867678) (xy 22.979864 27.242702)
+					(xy 23.14352 27.603479) (xy 23.3416 27.946564) (xy 23.572214 28.268682) (xy 23.833161 28.566759)
+					(xy 24.121949 28.837949) (xy 24.435823 29.079665) (xy 24.771786 29.289598) (xy 25.126631 29.465745)
+					(xy 25.496972 29.606424) (xy 25.879273 29.710293) (xy 26.269886 29.77636) (xy 26.665081 29.803995)
+					(xy 27.061087 29.792933) (xy 27.454123 29.743281) (xy 27.840439 29.655512) (xy 28.216346 29.530465)
+					(xy 28.578256 29.369332) (xy 28.922715 29.173652) (xy 29.246436 28.945292) (xy 29.546327 28.686433)
+					(xy 29.819527 28.399545) (xy 30.063428 28.087366) (xy 30.275701 27.752877) (xy 30.454321 27.39927)
+					(xy 30.597582 27.02992) (xy 30.704118 26.648353) (xy 30.77291 26.258212) (xy 30.803303 25.863219)
+				)
+			)
+		)
+		(variant
+			(name "var2")
+			(exclude_from_bom no)
+		)
+		(embedded_fonts no)
+	)
+	(gr_rect
+		(start 0 0)
+		(end 137.820774 162.003201)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "Edge.Cuts")
+		(uuid "7c29852d-8ecc-4ee3-9b0b-772d8e3bf41f")
+	)
+	(gr_text "the six mounting hole footprints contain a embedded rule area \n(to prevent copper near the drilled hole)\n\nThis rule area is falsely displayed (false position) if the design is the first time opened with kicad v11.\n\n"
+		(at 3 -4 0)
+		(layer "F.SilkS")
+		(uuid "27d78e3a-c445-454a-a260-191b484a26c0")
+		(effects
+			(font
+				(size 4 4)
+			)
+			(justify left bottom)
+		)
+	)
+	(embedded_fonts no)
+)
