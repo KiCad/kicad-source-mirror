@@ -1392,7 +1392,10 @@ int ERC_TESTER::TestGroundPins()
             []( const wxString& txt )
             {
                 wxString upper = txt.Upper();
-                return upper.Contains( wxT( "GND" ) );
+
+                return upper.Contains( wxT( "GND" ) )
+                       || upper == wxT( "EARTH" ) || upper.StartsWith( wxT( "EARTH_" ) )
+                       || upper == wxT( "VSS" ) || upper == wxT( "VSSA" );
             };
 
     for( const SCH_SHEET_PATH& sheet : m_sheetList )
