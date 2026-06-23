@@ -3672,7 +3672,7 @@ void SCH_EDIT_TOOL::FixERCError( const std::shared_ptr<RC_ITEM>& aERCItem )
 
         if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
         {
-            DIALOG_CHANGE_SYMBOLS dlg( frame, symbol, DIALOG_CHANGE_SYMBOLS::MODE::CHANGE );
+            DIALOG_CHANGE_SYMBOLS dlg( frame, symbol, DIALOG_CHANGE_SYMBOLS::MODE::UPDATE );
             dlg.ShowQuasiModal();
         }
     }
