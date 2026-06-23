@@ -2417,7 +2417,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                             result = wxEmptyString;
                     }
 
-                    *token = result;
+                    *token = std::move( result );
                     return true;
                 }
                 else if( token->StartsWith( wxT( "PIN_NAME" ) ) )
@@ -2441,10 +2441,11 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                     {
                         if( !altList.IsEmpty() )
                             altList += wxT( ", " );
+
                         altList += altName;
                     }
 
-                    *token = altList;
+                    *token = std::move( altList );
                     return true;
                 }
 
@@ -2457,10 +2458,11 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                 else if( token->StartsWith( wxT( "SHORT_NET_NAME" ) ) )
                 {
                     wxString netName = conn->LocalName();
+
                     if( netName.Lower().StartsWith( wxT( "unconnected" ) ) )
                         *token = wxT( "NC" );
                     else
-                        *token = netName;
+                        *token = std::move( netName );
                 }
                 else if( token->StartsWith( wxT( "NET_NAME" ) ) )
                 {
