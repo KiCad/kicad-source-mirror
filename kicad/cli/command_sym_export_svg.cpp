@@ -27,6 +27,7 @@
 #include <wx/crt.h>
 
 #include <macros.h>
+#include <wx/dir.h>
 #include <wx/tokenzr.h>
 
 
@@ -79,7 +80,8 @@ int CLI::SYM_EXPORT_SVG_COMMAND::doPerform( KIWAY& aKiway )
     svgJob->m_includeHiddenFields = m_argParser.get<bool>( ARG_INC_HIDDEN_FIELDS );
     svgJob->m_includeHiddenPins = m_argParser.get<bool>( ARG_INC_HIDDEN_PINS );
 
-    if( !wxFile::Exists( svgJob->m_libraryPath ) )
+    // A symbol library may be a single .kicad_sym file or a .kicad_symdir directory.
+    if( !wxFile::Exists( svgJob->m_libraryPath ) && !wxDir::Exists( svgJob->m_libraryPath ) )
     {
         wxFprintf( stderr, _( "Symbol file does not exist or is not accessible\n" ) );
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
