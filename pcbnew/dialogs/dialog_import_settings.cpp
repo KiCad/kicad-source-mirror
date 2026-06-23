@@ -108,7 +108,13 @@ bool DIALOG_IMPORT_SETTINGS::TransferDataToWindow()
 
 void DIALOG_IMPORT_SETTINGS::OnBrowseClicked( wxCommandEvent& event )
 {
-    wxFileName fn = m_frame->GetBoard()->GetFileName();
+    // Honor a path the user has already entered; fall back to the board's location
+    // when the field is empty or its directory no longer exists.
+    wxString   currentPath = m_filePathCtrl->GetValue();
+    wxFileName fn( currentPath.IsEmpty() ? m_frame->GetBoard()->GetFileName() : currentPath );
+
+    if( !fn.DirExists() )
+        fn = m_frame->GetBoard()->GetFileName();
 
     wxFileDialog dlg( this, _( "Import Settings From" ), fn.GetPath(), fn.GetFullName(),
                       FILEEXT::PcbFileWildcard(),
