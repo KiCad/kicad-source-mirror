@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
 "PO-Revision-Date: 2026-06-23 21:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -3251,14 +3251,12 @@ msgid "Could not extract %s from %s."
 msgstr "Konnte keine Bilddatei von \"%s\" laden."
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:25
-#, fuzzy
 msgid "Base ref:"
-msgstr "Basisname"
+msgstr "Basisref.:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:32
-#, fuzzy
 msgid "Head ref:"
-msgstr "Kopfzeilen-Umrandung"
+msgstr "Kopfref.:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
 msgid "Compare"
@@ -6761,14 +6759,12 @@ msgid "Move Down"
 msgstr "Nach unten bewegen"
 
 #: common/diff_merge/auto_resolution.cpp:251
-#, fuzzy
 msgid "Item id: "
-msgstr "Elemente:"
+msgstr "Element-ID: "
 
 #: common/diff_merge/auto_resolution.cpp:252
-#, fuzzy
 msgid "Current resolution: "
-msgstr "X-Auflösung:"
+msgstr "Aktuelle Lösung: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
@@ -32776,14 +32772,12 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_mergetool.cpp:94
-#, fuzzy
 msgid "'Ours' file"
-msgstr "Ausgabedatei"
+msgstr "\"Unseres\" Datei"
 
 #: kicad/cli/command_mergetool.cpp:98
-#, fuzzy
 msgid "'Theirs' file"
-msgstr "Netzlisten-Datei:"
+msgstr "\"Ihres\" Datei"
 
 #: kicad/cli/command_mergetool.cpp:103
 msgid "Output path; extension picks the document type"
@@ -35749,9 +35743,8 @@ msgid "Failed to reset to remote"
 msgstr "Zurücksetzen auf Remote ist gescheitert"
 
 #: kicad/project_tree_pane.cpp:2101
-#, fuzzy
 msgid "Rebased your changes onto the remote."
-msgstr "Ihre Änderungen wurden als Rebase auf dem Remote erstellt."
+msgstr "Ihre Änderungen wurden auf dem Remote rebased."
 
 #: kicad/project_tree_pane.cpp:2103
 msgid "Could not rebase"
@@ -35862,7 +35855,7 @@ msgid ""
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
-"Der letzte Commit wurde bereits zu %s gepusht.\n"
+"Der letzte Commit wurde bereits zu %s übertragen (push).\n"
 "\n"
 "Nachbessern schreibt den öffentlichen Verlauf neu.  Jeder, der diesen Commit "
 "abgeholt hat, wird seine Kopie zurücksetzen müssen."
@@ -42604,9 +42597,8 @@ msgid "Failed to save the current board state for export."
 msgstr "Speichern des aktuellen Platinenstands für den Export ist gescheitert."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:473
-#, fuzzy
 msgid "Failed to stage the project file for STEP export."
-msgstr "Vorbereitung der Projektdatei für den STEP-Export ist gescheitert."
+msgstr "Die Projektdatei konnte nicht für den STEP-Export vorbereitet werden."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:512
 msgid "No filename for output file"
@@ -48772,31 +48764,28 @@ msgid "Could not scan rules text: %s"
 msgstr "Konnte Regeltext nicht einlesen: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:334
-#, fuzzy
 msgid "Place the cursor inside a (rule ...) block to show matching items."
 msgstr ""
-"Platzieren Sie den Zeiger innerhalb eines (Regel ...) Blocks, um "
+"Platzieren Sie den Cursor innerhalb eines (Regel ...) Blocks, um "
 "übereinstimmende Elemente anzuzeigen."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:343
-#, fuzzy
 msgid "The rule under the cursor has no name; add a name to identify it."
 msgstr ""
-"Die Regel unter dem Zeiger hat keinen Namen; fügen Sie einen Namen zur "
-"Identifizierung hinzu."
+"Die Regel unter dem Zeiger hat keinen Namen; fügen Sie einen Namen hinzu, um "
+"sie zu bezeichnen."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' could not be located after parsing."
-msgstr "Regel \"%s\" konnte nach dem Parsen nicht lokalisiert werden."
+msgstr "Regel \"%s\" konnte nach dem Parsen nicht gefunden werden."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:382
-#, fuzzy
 msgid "DRC engine not available."
 msgstr "DRC nicht verfügbar."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s': %zu matching item(s)."
 msgstr "Regel \"%s\": %zu passende(s) Element(e)."
 
@@ -57398,13 +57387,14 @@ msgid "Unable to locate padstack %s in file %s\n"
 msgstr "Kann Padstack %s nicht in Datei %s finden\n"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2800
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Pad '%s' has custom shape with per-layer geometry; custom primitives not "
 "supported in padstack mode."
 msgstr ""
-"Pad \"%s\" hat benutzerdefinierte Form mit einer Geometrie pro Lage; "
-"benutzerdefinierte Primitive werden im Padstack-Modus nicht unterstützt."
+"Das Pad \"%s\" hat eine benutzerdefinierte Form mit ebenenspezifischer "
+"Geometrie; benutzerdefinierte Grundformen werden im Padstack-Modus nicht "
+"unterstützt."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2873
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2905
@@ -63654,9 +63644,8 @@ msgid "could not load the design block's layout"
 msgstr "Konnte das Layout des Designblocks nicht laden"
 
 #: pcbnew/tools/pcb_control.cpp:1635
-#, fuzzy
 msgid "design block contains no items to apply"
-msgstr "Designblock hat keinen Schaltplan der eingefügt werden könnte."
+msgstr "Designblock enthält keine Elemente die angewendet werden können"
 
 #: pcbnew/tools/pcb_control.cpp:1685
 msgid "group is empty"
@@ -63667,12 +63656,11 @@ msgid "layout copy failed"
 msgstr "Layoutkopie gescheitert"
 
 #: pcbnew/tools/pcb_control.cpp:1742
-#, fuzzy, c-format
+#, c-format
 msgid "Applying layout to group %zu of %zu..."
 msgstr "Layout auf Gruppe %zu von %zu anwenden ..."
 
 #: pcbnew/tools/pcb_control.cpp:1765
-#, fuzzy
 msgid "Apply design block layout cancelled."
 msgstr "\"Designblock-Layout verwenden\" abgebrochen."
 
@@ -63684,6 +63672,8 @@ msgstr "Designblock-Layout auf %d Gruppe(n) anwenden"
 #: pcbnew/tools/pcb_control.cpp:1774
 msgid "Copied copper has no net assigned. Assign nets to connect it."
 msgstr ""
+"Das kopierte Kupfer ist keinem Netz zugeordnet. Zum Verbinden muss ein Netz "
+"zugewiesen sein."
 
 #: pcbnew/tools/pcb_control.cpp:1786
 #, c-format
@@ -63691,7 +63681,7 @@ msgid "Applied design block layout to %d of %d group(s)."
 msgstr "Designblock-Layout auf %d von %d Gruppe(n) angewendet."
 
 #: pcbnew/tools/pcb_control.cpp:1793
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
 msgstr ""
@@ -63699,12 +63689,10 @@ msgstr ""
 "verknüpften Gruppen sind."
 
 #: pcbnew/tools/pcb_control.cpp:1801
-#, fuzzy
 msgid "The following groups could not be processed:"
 msgstr "Die folgenden Gruppen konnten nicht verarbeitet werden:"
 
 #: pcbnew/tools/pcb_control.cpp:1805
-#, fuzzy
 msgid "(unnamed group)"
 msgstr "(unbenannte Gruppe)"
 
@@ -63811,12 +63799,11 @@ msgid "%d 3D model(s) successfully embedded."
 msgstr "%d 3D-Modell(e) erfolgreich eingebettet."
 
 #: pcbnew/tools/pcb_group_tool.cpp:54
-#, fuzzy
 msgid ""
 "Footprint items cannot be grouped separately from their parent footprint."
 msgstr ""
-"Footprintelemente können nicht separat von ihrem Eltern-Footprint gruppiert "
-"werden."
+"Footprintelemente können nicht getrennt von ihrem übergeordnetem Footprint "
+"gruppiert werden."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2740
 msgid "Resize Table Cells"
