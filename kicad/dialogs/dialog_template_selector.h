@@ -156,6 +156,7 @@ private:
     enum class DialogState { Initial, Preview, MRUWithPreview };
 
     void SetState( DialogState aState );
+    void EnsurePreviewSplit();
     void BuildMRUList();
     void BuildTemplateList();
     void ApplyFilter();
@@ -187,6 +188,8 @@ private:
 
     WEBVIEW_PANEL*                               m_webviewPanel;
     bool                                         m_loadingExternalHtml;
+
+    int                                          m_previewSashPos;
 };
 
 #endif
