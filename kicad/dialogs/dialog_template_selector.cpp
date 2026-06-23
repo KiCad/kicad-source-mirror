@@ -491,7 +491,8 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
         m_refreshTimer( this ),
         m_watcher( nullptr ),
         m_webviewPanel( nullptr ),
-        m_loadingExternalHtml( false )
+        m_loadingExternalHtml( false ),
+        m_previewSashPos( 0 )
 {
     // The base class now provides the UI structure via wxFormBuilder.
     // Configure the scrolled windows.
@@ -499,9 +500,7 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
     m_scrolledTemplates->SetScrollRate( 0, 25 );
     m_scrolledTemplates->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
 
-    // Override minimum sizes to allow dialog shrinking (base class Fit() sets large sizes)
-    m_scrolledTemplates->SetMinSize( FromDIP( wxSize( 300, 300 ) ) );
-    m_panelTemplates->SetMinSize( FromDIP( wxSize( 500, 500 ) ) );
+    m_scrolledTemplates->SetMinSize( FromDIP( wxSize( 200, 200 ) ) );
 
     // Configure the search control
     m_searchCtrl->ShowSearchButton( true );
@@ -561,6 +560,24 @@ DIALOG_TEMPLATE_SELECTOR::~DIALOG_TEMPLATE_SELECTOR()
 }
 
 
+void DIALOG_TEMPLATE_SELECTOR::EnsurePreviewSplit()
+{
+    if( m_splitter->IsSplit() )
+        return;
+
+    int sashPos = m_previewSashPos;
+
+    // Fall back to a third of the available width the first time the preview is shown
+    if( sashPos <= 0 )
+    {
+        int width = m_splitter->GetClientSize().GetWidth();
+        sashPos = width > 0 ? width / 3 : FromDIP( 300 );
+    }
+
+    m_splitter->SplitVertically( m_panelTemplates, m_panelPreview, sashPos );
+}
+
+
 void DIALOG_TEMPLATE_SELECTOR::SetState( DialogState aState )
 {
     m_state = aState;
@@ -569,20 +586,27 @@ void DIALOG_TEMPLATE_SELECTOR::SetState( DialogState aState )
     {
     case DialogState::Initial:
         m_panelMRU->Show();
-        m_panelPreview->Hide();
         m_btnBack->Enable( false );
+
+        if( m_splitter->IsSplit() )
+        {
+            // Remember the sash so reselecting a template restores the user's layout
+            m_previewSashPos = m_splitter->GetSashPosition();
+            m_splitter->Unsplit( m_panelPreview );
+        }
+
         break;
 
     case DialogState::Preview:
         m_panelMRU->Hide();
-        m_panelPreview->Show();
         m_btnBack->Enable( true );
+        EnsurePreviewSplit();
         break;
 
     case DialogState::MRUWithPreview:
         m_panelMRU->Show();
-        m_panelPreview->Show();
         m_btnBack->Enable( true );
+        EnsurePreviewSplit();
         break;
     }
 

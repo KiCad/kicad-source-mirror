@@ -45,7 +45,12 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	bSizerMRU->Fit( m_panelMRU );
 	m_mainContent->Add( m_panelMRU, 0, wxEXPAND|wxALL, 5 );
 
-	m_panelTemplates = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_splitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE|wxSP_NOBORDER|wxSP_3DSASH );
+	m_splitter->SetSashGravity( 0.35 );
+	m_splitter->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::m_splitterOnIdle ), NULL, this );
+	m_splitter->SetMinimumPaneSize( 200 );
+
+	m_panelTemplates = new wxPanel( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerTemplates;
 	bSizerTemplates = new wxBoxSizer( wxVERTICAL );
 
@@ -76,9 +81,7 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	m_panelTemplates->SetSizer( bSizerTemplates );
 	m_panelTemplates->Layout();
 	bSizerTemplates->Fit( m_panelTemplates );
-	m_mainContent->Add( m_panelTemplates, 1, wxEXPAND|wxALL, 5 );
-
-	m_panelPreview = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelPreview = new wxPanel( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panelPreview->Hide();
 
 	wxBoxSizer* bSizerPreview;
@@ -91,7 +94,8 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	m_panelPreview->SetSizer( bSizerPreview );
 	m_panelPreview->Layout();
 	bSizerPreview->Fit( m_panelPreview );
-	m_mainContent->Add( m_panelPreview, 2, wxEXPAND|wxALL, 5 );
+	m_splitter->SplitVertically( m_panelTemplates, m_panelPreview, 300 );
+	m_mainContent->Add( m_splitter, 1, wxEXPAND|wxALL, 5 );
 
 
 	bmainSizer->Add( m_mainContent, 1, wxEXPAND, 5 );
@@ -187,11 +191,11 @@ TEMPLATE_WIDGET_BASE::TEMPLATE_WIDGET_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bSizerText;
 	bSizerText = new wxBoxSizer( wxVERTICAL );
 
-    m_titleLabel = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_titleLabel = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_titleLabel->Wrap( -1 );
 	bSizerText->Add( m_titleLabel, 0, wxBOTTOM, 0 );
 
-    m_descLabel = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_descLabel = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_descLabel->Wrap( -1 );
 	bSizerText->Add( m_descLabel, 0, wxEXPAND, 0 );
 
