@@ -50,6 +50,7 @@
 #include <pcb_track.h>
 #include <pgm_base.h>
 #include <project_pcb.h>
+#include <scoped_set_reset.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
 #include <zone.h>
@@ -1212,16 +1213,41 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
 
     if( m_inFpChangeTimerEvent )
     {
-    wxLogTrace( traceLibWatch, "Restarting debounce timer" );
+        wxLogTrace( traceLibWatch, "Restarting debounce timer" );
         m_watcherDebounceTimer.StartOnce( 3000 );
+        return;
+    }
+
+    // If the frame is currently disabled then a quasi-modal/modal dialog is open on top of it (for
+    // example the footprint properties dialog).  Reloading the footprint now would delete the items
+    // the dialog is editing and crash on dialog close.  Defer the reload until the dialog is gone.
+    if( !IsEnabled() )
+    {
+        wxLogTrace( traceLibWatch, "Frame disabled (dialog open); restarting debounce timer" );
+        m_watcherDebounceTimer.StartOnce( 1000 );
+        return;
+    }
+
+    // An interactive tool (move, draw, place) holds references into the current footprint while its
+    // event loop runs.  Reloading now would free those out from under the running tool and crash.
+    // Restart the timer before touching the watcher timestamp so the reload is retried once the tool
+    // finishes rather than silently dropped.
+    if( !ToolStackIsEmpty() )
+    {
+        wxLogTrace( traceLibWatch, "Interactive tool active; restarting debounce timer" );
+        m_watcherDebounceTimer.StartOnce( 1000 );
+        return;
     }
 
     wxLogTrace( traceLibWatch, "OnFpChangeDebounceTimer" );
 
-    // Disable logging to avoid spurious messages and check if the file has changed
-    wxLog::EnableLogging( false );
-    wxDateTime lastModified = m_watcherFileName.GetModificationTime();
-    wxLog::EnableLogging( true );
+    wxDateTime lastModified;
+
+    {
+        // Silence spurious OS messages while checking if the file has changed
+        wxLogNull silence;
+        lastModified = m_watcherFileName.GetModificationTime();
+    }
 
     if( lastModified == m_watcherLastModified || !lastModified.IsValid() )
         return;
@@ -1238,7 +1264,7 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
     if( !fp || !adapter )
         return;
 
-    m_inFpChangeTimerEvent = true;
+    SCOPED_SET_RESET<bool> inTimerEvent( m_inFpChangeTimerEvent, true );
 
     if( !GetScreen()->IsContentModified()
         || IsOK( this, _( "The library containing the current footprint has changed.\n"
@@ -1284,6 +1310,4 @@ void PCB_BASE_FRAME::OnFpChangeDebounceTimer( wxTimerEvent& aEvent )
             DisplayError( this, ioe.What() );
         }
     }
-
-    m_inFpChangeTimerEvent = false;
 }
