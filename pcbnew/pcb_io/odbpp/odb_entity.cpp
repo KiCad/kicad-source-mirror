@@ -1250,10 +1250,10 @@ void ODB_STEP_ENTITY::InitEdaData()
 
         for( int i = 0; i < (int) fp->Pads().size(); ++i )
         {
-            PAD*  pad = fp->Pads()[i];
-            auto& eda_net = m_edaData.GetNet( pad->GetNetCode() );
+            PAD*           pad = fp->Pads()[i];
+            EDA_DATA::NET& eda_net = m_edaData.GetNet( pad->GetNetCode() );
 
-            auto& subnet = eda_net.AddSubnet<EDA_DATA::SUB_NET_TOEPRINT>(
+            EDA_DATA::SUB_NET_TOEPRINT& subnet = eda_net.AddSubnet<EDA_DATA::SUB_NET_TOEPRINT>(
                     &m_edaData,
                     fp->IsFlipped() ? EDA_DATA::SUB_NET_TOEPRINT::SIDE::BOTTOM
                                     : EDA_DATA::SUB_NET_TOEPRINT::SIDE::TOP,
@@ -1270,8 +1270,7 @@ void ODB_STEP_ENTITY::InitEdaData()
 
             toep.m_center = ODB::AddXY( pad->GetPosition() );
 
-            toep.m_rot = ODB::Double2String(
-                    ( ANGLE_360 - pad->GetOrientation() ).Normalize().AsDegrees() );
+            toep.m_rot = ODB::Double2String( ( ANGLE_360 - pad->GetOrientation() ).Normalize().AsDegrees() );
 
             if( pad->IsFlipped() )
                 toep.m_mirror = wxT( "M" );
@@ -1282,7 +1281,7 @@ void ODB_STEP_ENTITY::InitEdaData()
 
     for( PCB_TRACK* track : m_board->Tracks() )
     {
-        auto&              eda_net = m_edaData.GetNet( track->GetNetCode() );
+        EDA_DATA::NET&     eda_net = m_edaData.GetNet( track->GetNetCode() );
         EDA_DATA::SUB_NET* subnet = nullptr;
 
         if( track->Type() == PCB_VIA_T )
@@ -1297,11 +1296,12 @@ void ODB_STEP_ENTITY::InitEdaData()
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
         {
-            auto& eda_net = m_edaData.GetNet( zone->GetNetCode() );
-            auto& subnet = eda_net.AddSubnet<EDA_DATA::SUB_NET_PLANE>( &m_edaData,
-                                                                       EDA_DATA::SUB_NET_PLANE::FILL_TYPE::SOLID,
-                                                                       EDA_DATA::SUB_NET_PLANE::CUTOUT_TYPE::EXACT,
-                                                                       0 );
+            EDA_DATA::NET&           eda_net = m_edaData.GetNet( zone->GetNetCode() );
+            EDA_DATA::SUB_NET_PLANE& subnet = eda_net.AddSubnet<EDA_DATA::SUB_NET_PLANE>(
+                    &m_edaData,
+                    EDA_DATA::SUB_NET_PLANE::FILL_TYPE::SOLID,
+                    EDA_DATA::SUB_NET_PLANE::CUTOUT_TYPE::EXACT,
+                    0 );
             m_plugin->GetPlaneSubnetMap().emplace( std::piecewise_construct,
                                                    std::forward_as_tuple( layer, zone ),
                                                    std::forward_as_tuple( &subnet ) );
@@ -1342,14 +1342,10 @@ void ODB_STEP_ENTITY::GenerateProfileFile( ODB_TREE_WRITER& writer )
     SHAPE_POLY_SET board_outline;
 
     if( !m_board->GetBoardPolygonOutlines( board_outline, true ) )
-    {
         wxLogError( "Failed to get board outline" );
-    }
 
     if( !m_profile->AddContour( board_outline, 0 ) )
-    {
         wxLogError( "Failed to add polygon to profile" );
-    }
 
     m_profile->GenerateProfileFeatures( fileproxy.GetStream() );
 }
