@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-22 19:44+0000\n"
+"PO-Revision-Date: 2026-06-24 10:53+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -3148,9 +3148,9 @@ msgid "No changes between selected refs."
 msgstr "Нема промена између одабраних референци."
 
 #: common/dialogs/dialog_git_mr_review.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "No diff handler for '%s'."
-msgstr "потребан је број за '%s'"
+msgstr "Нема обрађивача разлика за '%s'."
 
 #: common/dialogs/dialog_git_mr_review.cpp:252
 #: common/dialogs/dialog_git_mr_review.cpp:281
@@ -3494,12 +3494,11 @@ msgstr "Референца:"
 #: common/dialogs/dialog_kicad_diff_base.cpp:37
 #: pcbnew/tools/multichannel_tool.cpp:82
 msgid "(none)"
-msgstr ""
+msgstr "(ниједна)"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:33
-#, fuzzy
 msgid "Comparison:"
-msgstr "Предузеће:"
+msgstr "Поређење:"
 
 #: common/dialogs/dialog_kicad_diff_base.h:61
 msgid "Compare Files"
@@ -3559,7 +3558,7 @@ msgstr "Наша"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:64
 msgid "Theirs"
-msgstr ""
+msgstr "Њихово"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
 msgid "Ancestor"
@@ -8992,18 +8991,16 @@ msgid "Eagle binary layout is missing a board/libraries node."
 msgstr "Бинарном распореду Eagle недостаје чвор плоче/библиотека."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2390
-#, fuzzy
 msgid "File is too small to be an Eagle binary board."
-msgstr "Архивирани фајл \"%s\""
+msgstr "Датотека је премала да би била бинарна плоча Eagle-а."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2439
 msgid "Eagle binary schematic has no drawing section."
-msgstr ""
+msgstr "Бинарна шема програма Eagle нема одељак за цртање."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2444
-#, fuzzy
 msgid "Eagle binary file has no schematic section."
-msgstr "Симбол '%s' већ постоји у библиотеци '%s'"
+msgstr "Бинарна датотека Eagle нема шематски део."
 
 #: common/io/eagle/eagle_parser.cpp:284
 #, c-format
@@ -9554,105 +9551,86 @@ msgid "Buses"
 msgstr "Магистрале"
 
 #: common/layer_id.cpp:73
-#, fuzzy
 msgid "Bus junctions"
-msgstr "Додај поље"
+msgstr "Мрежни сабирни чворови"
 
 #: common/layer_id.cpp:74
-#, fuzzy
 msgid "Junctions"
-msgstr "Величина текста:"
+msgstr "Сабирни чворови"
 
 #: common/layer_id.cpp:75 eeschema/toolbars_sch_editor.cpp:120
 #: eeschema/widgets/panel_sch_selection_filter.cpp:231
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:38
 #: eeschema/widgets/search_handlers.cpp:417
-#, fuzzy
 msgid "Labels"
-msgstr "Попуњавање зона"
+msgstr "Ознаке"
 
 #: common/layer_id.cpp:76
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:45
-#, fuzzy
 msgid "Global labels"
-msgstr "Попуњавање зона"
+msgstr "Глобалне ознаке"
 
 #: common/layer_id.cpp:77
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:48
-#, fuzzy
 msgid "Hierarchical labels"
-msgstr "Попуњавање зона"
+msgstr "Хијерархијске ознаке"
 
 #: common/layer_id.cpp:78 eeschema/sch_symbol.cpp:4234
-#, fuzzy
 msgid "Pin numbers"
-msgstr "Име чиоде"
+msgstr "Број ножица"
 
 #: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:4238
-#, fuzzy
 msgid "Pin names"
-msgstr "Име чиоде"
+msgstr "Имена ножица"
 
 #: common/layer_id.cpp:80
-#, fuzzy
 msgid "Symbol references"
-msgstr "Симбол"
+msgstr "Референце симбола"
 
 #: common/layer_id.cpp:81
-#, fuzzy
 msgid "Symbol values"
-msgstr "Име симбола"
+msgstr "Вредности симбола"
 
 #: common/layer_id.cpp:82
-#, fuzzy
 msgid "Symbol fields"
 msgstr "Поља симбола"
 
 #: common/layer_id.cpp:83
-#, fuzzy
 msgid "Sheet references"
-msgstr "Окрени референцу"
+msgstr "Референце на листовима"
 
 #: common/layer_id.cpp:84
-#, fuzzy
 msgid "Net class references"
-msgstr "Нова библиотека"
+msgstr "Референце мрежних класа"
 
 #: common/layer_id.cpp:85
-#, fuzzy
 msgid "Rule areas"
-msgstr "Додај поље"
+msgstr "Област правила"
 
 #: common/layer_id.cpp:86
-#, fuzzy
 msgid "Symbol body outlines"
-msgstr "Тијело"
+msgstr "Обриси тела симбола"
 
 #: common/layer_id.cpp:87
-#, fuzzy
 msgid "Symbol body fills"
-msgstr "Поља симбола"
+msgstr "Попуњавање тела симбола"
 
 #: common/layer_id.cpp:88
-#, fuzzy
 msgid "Shape fills"
-msgstr "фајл не постоји"
+msgstr "Облик испуњава"
 
 #: common/layer_id.cpp:89
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
-#, fuzzy
 msgid "Schematic text && graphics"
-msgstr "Додјела шеме"
+msgstr "Шематски текст и графика"
 
 #: common/layer_id.cpp:90
-#, fuzzy
 msgid "Symbol private text && graphics"
-msgstr "Додјела шеме"
+msgstr "Симбол приватног текста и графике"
 
 #: common/layer_id.cpp:91
-#, fuzzy
 msgid "Schematic text && graphics backgrounds"
-msgstr "Додјела шеме"
+msgstr "Шематски текст и графичке позадине"
 
 #: common/layer_id.cpp:92 eeschema/widgets/panel_sch_selection_filter.cpp:232
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:30
@@ -9660,9 +9638,8 @@ msgid "Pins"
 msgstr "Ножице"
 
 #: common/layer_id.cpp:93
-#, fuzzy
 msgid "Sheet borders"
-msgstr "Име:"
+msgstr "Границе листова"
 
 #: common/layer_id.cpp:94
 msgid "Sheet backgrounds"
@@ -9754,9 +9731,8 @@ msgid "Net color highlight"
 msgstr "Истакнута боја мреже"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Drag net collisions"
-msgstr "Нема конекције"
+msgstr "Колизије мреже приликом превлачења"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:155
 msgid "Selection highlight"
@@ -9775,27 +9751,23 @@ msgid "Operating point currents"
 msgstr "Струје радне тачке"
 
 #: common/layer_id.cpp:124
-#, fuzzy
 msgid "Footprints front"
-msgstr "претражи текст"
+msgstr "Предњи део отиска"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Footprints back"
-msgstr "претражи текст"
+msgstr "Последњи део отиска"
 
 #: common/layer_id.cpp:127
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:34
-#, fuzzy
 msgid "Reference designators"
-msgstr "Референца"
+msgstr "Означивач референци"
 
 #: common/layer_id.cpp:128
-#, fuzzy
 msgid "Footprint text"
-msgstr "претражи текст"
+msgstr "Текст отиска"
 
 #: common/layer_id.cpp:129
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
@@ -9804,42 +9776,35 @@ msgstr "претражи текст"
 #: pcbnew/widgets/appearance_controls.cpp:337
 #: pcbnew/widgets/panel_selection_filter.cpp:223
 #: pcbnew/widgets/panel_selection_filter_base.cpp:37
-#, fuzzy
 msgid "Tracks"
-msgstr "Попуњавање зона"
+msgstr "Стазе"
 
 #: common/layer_id.cpp:130
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:38
-#, fuzzy
 msgid "Through vias"
-msgstr "Прикажи"
+msgstr "Потпуне вије"
 
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
-#, fuzzy
 msgid "Blind vias"
-msgstr "Слепе/закопане вие"
+msgstr "Слепе вије"
 
 #: common/layer_id.cpp:132
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:59
-#, fuzzy
 msgid "Buried vias"
-msgstr "Слепе/закопане вие"
+msgstr "Закопане вије"
 
 #: common/layer_id.cpp:133
-#, fuzzy
 msgid "Micro-vias"
-msgstr "Стави Microvia"
+msgstr "Микро вије"
 
 #: common/layer_id.cpp:134
-#, fuzzy
 msgid "Via holes"
-msgstr "Попуњавање зона"
+msgstr "Рупе вија"
 
 #: common/layer_id.cpp:135
-#, fuzzy
 msgid "Via hole walls"
-msgstr "Попуњавање зона"
+msgstr "Зидови рупе вије"
 
 #: common/layer_id.cpp:136
 #, fuzzy
@@ -9860,39 +9825,32 @@ msgstr "Симбол"
 #: pcbnew/widgets/appearance_controls.cpp:735
 #: pcbnew/widgets/appearance_controls.cpp:2693
 #: pcbnew/widgets/search_handlers.cpp:536
-#, fuzzy
 msgid "Ratsnest"
-msgstr "Прикажи"
+msgstr "Ратснест"
 
 #: common/layer_id.cpp:140
-#, fuzzy
 msgid "DRC warnings"
-msgstr "ERC упозорење"
+msgstr "ДРЦ упозорења"
 
 #: common/layer_id.cpp:141
-#, fuzzy
 msgid "DRC errors"
-msgstr "ERC грешка"
+msgstr "ДРЦ грешке"
 
 #: common/layer_id.cpp:142
-#, fuzzy
 msgid "DRC shapes"
-msgstr "Облик"
+msgstr "ДРЦ облици"
 
 #: common/layer_id.cpp:143
-#, fuzzy
 msgid "DRC exclusions"
-msgstr "Избриши"
+msgstr "ДРЦ искључења"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "DRC marker shadows"
-msgstr "претражи текст"
+msgstr "ДРЦ маркер сенке"
 
 #: common/layer_id.cpp:145
-#, fuzzy
 msgid "DRC highlighted"
-msgstr "Чисто"
+msgstr "ДРЦ истакнути елементи"
 
 #: common/layer_id.cpp:153
 #, fuzzy
@@ -10173,53 +10131,53 @@ msgid "Library %s not found"
 msgstr "Библиотека \"%s\" није пронађена."
 
 #: common/libraries/library_table.cpp:75
-#, fuzzy, c-format
+#, c-format
 msgid "The library table path '%s' does not exist"
-msgstr "Задата путања не постоји"
+msgstr "Путања табеле библиотеке '%s' не постоји"
 
 #: common/libraries/library_table.cpp:94
-#, fuzzy
 msgid "The library table is of wrong type"
-msgstr "Задата путања не постоји"
+msgstr "Табела библиотеке је погрешног типа"
 
 #: common/libraries/library_table.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "Библиотека \"%s\" није пронађена."
+msgstr "Табела библиотеке '%s' је само за читање"
 
 #: common/libraries/library_table_parser.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "An unexpected error occurred while reading library table %s "
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Дошло је до неочекиване грешке приликом читања табеле библиотеке %s "
 
 #: common/libraries/library_table_parser.cpp:186
 #: common/libraries/library_table_parser.cpp:233
 #, c-format
 msgid "Syntax error at line %zu, column %zu"
-msgstr ""
+msgstr "Грешка у синтакси у реду %zu, колони %zu"
 
 #: common/libraries/library_table_parser.cpp:219
-#, fuzzy
 msgid "An unexpected error occurred while reading library table"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Дошло је до неочекиване грешке приликом читања табеле библиотеке"
 
 #: common/local_history.cpp:1663
 msgid "Compacting local history..."
-msgstr ""
+msgstr "Сажимање локалне историје..."
 
 #: common/local_history.cpp:1860
 msgid "Trimming local history..."
-msgstr ""
+msgstr "Скраћивање локалне историје..."
 
 #: common/local_history.cpp:1953
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "Сажимање скраћене историје..."
 
 #: common/local_history.cpp:2299
 msgid ""
 "The following files will be deleted when restoring this commit:\n"
 "\n"
 msgstr ""
+"Следеће датотеке ће бити обрисане приликом враћања ове измене:\n"
+"\n"
 
 #: common/local_history.cpp:2310
 #, c-format
@@ -10227,23 +10185,24 @@ msgid ""
 "\n"
 "... and %zu more files\n"
 msgstr ""
+"\n"
+"... и још %zu датотека\n"
 
 #: common/local_history.cpp:2314
 msgid "Delete Files during Restore"
-msgstr ""
+msgstr "Избришите датотеке током враћања у претходно стање"
 
 #: common/local_history.cpp:2316
 msgid "Proceed"
-msgstr ""
+msgstr "Настави"
 
 #: common/local_history.cpp:2316
-#, fuzzy
 msgid "Keep All Files"
-msgstr "Све датотеке"
+msgstr "Задржи све датотеке"
 
 #: common/local_history.cpp:2316 eeschema/files-io.cpp:646
 msgid "Abort"
-msgstr ""
+msgstr "Прекини"
 
 #: common/local_history.cpp:2318
 msgid ""
@@ -10251,21 +10210,25 @@ msgid ""
 "existing files in the project directory. Choosing 'Proceed' will delete "
 "files that are not present in the restored commit."
 msgstr ""
+"Избор опције „Задржи све датотеке“ вратиће изабрани commit, али ће задржати "
+"све постојеће датотеке у директоријуму пројекта. Избор опције „Настави“ "
+"обрисаће датотеке које нису присутне у враћеном commit-у."
 
 #: common/local_history.cpp:2322
 #, c-format
 msgid ""
 "Files removed by 'Proceed' are archived to %s and can be recovered manually."
 msgstr ""
+"Датотеке уклоњене опцијом „Настави“ архивирају се у %s и могу се ручно "
+"опоравити."
 
 #: common/local_history.cpp:2558
 msgid "Cannot restore - the following files are open by another user:"
-msgstr ""
+msgstr "Није могуће вратити - следеће датотеке је отворио други корисник:"
 
 #: common/local_history.cpp:2560
-#, fuzzy
 msgid "Restore Failed"
-msgstr "Job фајлови"
+msgstr "Враћање није успело"
 
 #: common/netclass.cpp:331 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1245 pcbnew/zone.cpp:1098
@@ -10275,95 +10238,103 @@ msgstr "%s и %s"
 
 #: common/netclass.cpp:337 pcbnew/component_classes/component_class.cpp:72
 #: pcbnew/zone.cpp:1104
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %s"
-msgstr "%s и %s"
+msgstr "%s, %s и %s"
 
 #: common/netclass.cpp:344 pcbnew/component_classes/component_class.cpp:77
 #: pcbnew/zone.cpp:1111
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s and %d more"
-msgstr "%s и %s"
+msgstr "%s, %s и још %d"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:650
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:841
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
-msgstr "%s у \"%s\", линија %d, помак %d"
+msgstr ""
+"Неважећи ИД отиска у\n"
+"датотеци: '%s'\n"
+"линији: %d\n"
+"померај: %d"
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:761
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
-msgstr "%s у \"%s\", линија %d, помак %d"
+msgstr ""
+"Неважећи ИД lib_id-а у\n"
+"датотеци: '%s'\n"
+"линији: %d\n"
+"помак: %d"
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:111
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:112
 msgid "Cannot parse time stamp in symbol section of netlist."
-msgstr ""
+msgstr "Не могу да анализирам временску ознаку у одељку симбола нетлисте."
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:121
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:122
 msgid "Cannot parse footprint name in symbol section of netlist."
-msgstr ""
+msgstr "Није могуће анализирати назив отиска у одељку симбола нетлисте."
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:135
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:136
-#, fuzzy
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr "Попуњавање зона"
+msgstr "Није могуће анализирати ознаку референце у одељку симбола нетлисте."
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:145
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:146
 msgid "Cannot parse value in symbol section of netlist."
-msgstr ""
+msgstr "Није могуће анализирати вредност у одељку симбола нетлисте."
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:182
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:183
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr ""
+msgstr "Није могуће анализирати назив пина у одељку симбола мреже нетлисте."
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:191
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:192
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr ""
+msgstr "Не може се анализирати назив мреже у одељку симбола мреже листе мрежа."
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:239
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:240
 #, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr ""
+msgstr "Не могу да пронађем симбол %s у одељку филтера отиска нетлисте."
 
 #: common/netlist_reader/netlist_reader.cpp:185
 #: pcbnew/netlist_reader/netlist_reader.cpp:191
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid footprint ID in\n"
 "file: '%s'\n"
 "line: %d"
-msgstr "%s у \"%s\", линија %d, помак %d"
+msgstr ""
+"Неважећи ИД отиска у\n"
+"датотеци: '%s'\n"
+"линији: %d"
 
 #: common/notifications_manager.cpp:91
-#, fuzzy
 msgid "View Details"
-msgstr "Класа 1"
+msgstr "Прикажи детаље"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
 msgstr "Откажи"
 
 #: common/notifications_manager.cpp:153
-#, fuzzy
 msgid "Notifications"
-msgstr "Вертикално"
+msgstr "Обавештења"
 
 #: common/notifications_manager.cpp:178
 msgid "There are no notifications available"
@@ -10371,101 +10342,87 @@ msgstr "Нема доступних обавештења"
 
 #: common/oauth/oauth_loopback_server.cpp:126
 msgid "Missing HTTP method in callback request."
-msgstr ""
+msgstr "Недостаје HTTP метод у захтеву за повратни позив."
 
 #: common/oauth/oauth_loopback_server.cpp:134
 msgid "Missing callback URL in request."
-msgstr ""
+msgstr "Недостаје URL за повратни позив у захтеву."
 
 #: common/oauth/oauth_loopback_server.cpp:145
 msgid "Unexpected callback path."
-msgstr ""
+msgstr "Неочекивана путања повратног позива."
 
 #: common/oauth/oauth_loopback_server.cpp:153
 msgid "OAuth callback state did not match."
-msgstr ""
+msgstr "Стање повратног позива OAuth се није подударало."
 
 #: common/oauth/oauth_loopback_server.cpp:163
 msgid "Authorization server returned an OAuth error."
-msgstr ""
+msgstr "Сервер за ауторизацију је вратио OAuth грешку."
 
 #: common/oauth/oauth_loopback_server.cpp:171
 msgid "Missing authorization code in callback."
-msgstr ""
+msgstr "Недостаје ауторизациони код у повратном позиву."
 
 #: common/page_info.cpp:44
-#, fuzzy
 msgid "A5 148 x 210mm"
-msgstr "A5 148x210mm"
+msgstr "A5 148 x 210mm"
 
 #: common/page_info.cpp:45
-#, fuzzy
 msgid "A4 210 x 297mm"
-msgstr "A4 210x297mm"
+msgstr "A4 210 x 297mm"
 
 #: common/page_info.cpp:46
-#, fuzzy
 msgid "A3 297 x 420mm"
-msgstr "A3 297x420mm"
+msgstr "A3 297 x 420mm"
 
 #: common/page_info.cpp:47
-#, fuzzy
 msgid "A2 420 x 594mm"
-msgstr "A2 420x594mm"
+msgstr "A2 420 x 594mm"
 
 #: common/page_info.cpp:48
-#, fuzzy
 msgid "A1 594 x 841mm"
-msgstr "A1 594x841mm"
+msgstr "A1 594 x 841mm"
 
 #: common/page_info.cpp:49
-#, fuzzy
 msgid "A0 841 x 1189mm"
-msgstr "A0 841x1189mm"
+msgstr "A0 841 x 1189mm"
 
 #: common/page_info.cpp:50
-#, fuzzy
 msgid "A 8.5 x 11in"
-msgstr "A 8.5x11in"
+msgstr "A 8.5 x 11in"
 
 #: common/page_info.cpp:51
-#, fuzzy
 msgid "B 11 x 17in"
-msgstr "B 11x17in"
+msgstr "B 11 x 17in"
 
 #: common/page_info.cpp:52
-#, fuzzy
 msgid "C 17 x 22in"
-msgstr "C 17x22in"
+msgstr "C 17 x 22in"
 
 #: common/page_info.cpp:53
-#, fuzzy
 msgid "D 22 x 34in"
-msgstr "D 22x34in"
+msgstr "D 22 x 34in"
 
 #: common/page_info.cpp:54
-#, fuzzy
 msgid "E 34 x 44in"
-msgstr "E 34x44in"
+msgstr "E 34 x 44in"
 
 #: common/page_info.cpp:58
 msgid "User (Custom)"
 msgstr "Кориснички дефинисано"
 
 #: common/page_info.cpp:60
-#, fuzzy
 msgid "US Letter 8.5 x 11in"
-msgstr "USLetter 8.5x11in"
+msgstr "US Letter 8.5 x 11in"
 
 #: common/page_info.cpp:61
-#, fuzzy
 msgid "US Legal 8.5 x 14in"
-msgstr "USLegal 8.5x14in"
+msgstr "US Legal 8.5 x 14in"
 
 #: common/page_info.cpp:62
-#, fuzzy
 msgid "US Ledger 11 x 17in"
-msgstr "USLedger 11x17in"
+msgstr "US Ledger 11 x 17in"
 
 #: common/paths.cpp:565
 #, c-format
@@ -10476,48 +10433,51 @@ msgid ""
 "2. Make sure no other antivirus software interferes with KiCad\n"
 "3. Make sure you have correct permissions set up"
 msgstr ""
+"KiCad није могао да користи „%s“.\n"
+"\n"
+"1. Онемогућите „Контролисани приступ фасциклама“ у подешавањима Windows-а "
+"или групним политикама.\n"
+"2. Уверите се да ниједан други антивирусни софтвер не омета KiCad.\n"
+"3. Уверите се да имате исправно подешене дозволе"
 
 #: common/pgm_base.cpp:238
 msgid "No default editor found, you must choose one."
 msgstr "Није пронађен подразумевани уређивач, мораш га изабрати."
 
 #: common/pgm_base.cpp:258 common/pgm_base.cpp:260
-#, fuzzy
 msgid "Executable file"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Извршна датотека"
 
 #: common/pgm_base.cpp:270
-#, fuzzy
 msgid "Select Preferred Editor"
-msgstr "Изабери"
+msgstr "Изаберите Преферирани уређивач"
 
 #: common/pgm_base.cpp:361
 msgid "Environment variable HOME is empty.  Unable to continue."
-msgstr ""
+msgstr "Променљива окружења HOME је празна.  Није могуће наставити."
 
 #: common/pgm_base.cpp:576
 msgid "This language is not supported by the operating system."
-msgstr ""
+msgstr "Овај језик није подржан од стране оперативног система."
 
 #: common/pgm_base.cpp:627 common/pgm_base.cpp:668
 msgid "The KiCad language file for this language is not installed."
-msgstr ""
+msgstr "KiCad језичка датотека за овај језик није инсталирана."
 
 #: common/pgm_base.cpp:884 common/pgm_base.cpp:897
-#, fuzzy
 msgid "Loading Design Block Libraries"
-msgstr "Учитавање библиотека симбола"
+msgstr "Учитавање библиотека блокова дизајна"
 
 #: common/pin_numbers.cpp:125
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:350
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:362 pcbnew/zones.h:58
 msgid "none"
-msgstr ""
+msgstr "ниједан"
 
 #: common/plotters/PDF_plotter.cpp:830 common/plotters/PDF_plotter.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Страница 1"
+msgstr "Страница %s"
 
 #: common/plotters/PDF_plotter.cpp:832 common/plotters/PDF_plotter.cpp:837
 #, fuzzy, c-format
@@ -10543,7 +10503,7 @@ msgstr "Грешка у креирању датотеке '%s'."
 
 #: common/project/net_settings.cpp:68 pcbnew/board.cpp:149
 msgid "This is the default net class."
-msgstr ""
+msgstr "Ово је подразумевана мрежна класа."
 
 #: common/project/project_archiver.cpp:87
 #: common/project/project_archiver.cpp:120 kicad/pcm/pcm_task_manager.cpp:341
@@ -10616,7 +10576,7 @@ msgstr "Грешка у архивирању датотеке '%s'."
 #: common/project/project_archiver.cpp:357
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr ""
+msgstr "Направљена је zip архива '%s' (%s декомпримована, %s компресована)."
 
 #: common/properties/pg_editors.cpp:642
 #: common/widgets/grid_text_button_helpers.cpp:251
@@ -10646,49 +10606,51 @@ msgstr "Грешка: "
 
 #: common/remote_provider_client.cpp:287
 msgid "Sign in required for this provider."
-msgstr ""
+msgstr "Пријава је обавезна за овог добављача."
 
 #: common/remote_provider_client.cpp:329
 msgid "Provider metadata does not include a session bootstrap URL."
-msgstr ""
+msgstr "Метаподаци добављача не укључују URL адресу за покретање сесије."
 
 #: common/remote_provider_client.cpp:352
 msgid "Bootstrap response did not include a nonce URL."
-msgstr ""
+msgstr "Одговор Bootstrap-а није садржао URL адресу типа nonce."
 
 #: common/remote_provider_client.cpp:371
 msgid "Bootstrap nonce URL origin does not match the bootstrap endpoint."
 msgstr ""
+"Порекло URL-а једнократног коришћења Bootstrap-а не подудара се са крајњом "
+"тачком Bootstrap-а."
 
 #: common/remote_provider_client.cpp:407
 #, c-format
 msgid "Remote provider request failed with HTTP %d."
-msgstr ""
+msgstr "Захтев за удаљеним провајдером није успео са HTTP %d."
 
 #: common/remote_provider_client.cpp:432
 #, c-format
 msgid "Remote provider returned invalid JSON: %s"
-msgstr ""
+msgstr "Удаљени провајдер је вратио неважећи JSON: %s"
 
 #: common/remote_provider_client.cpp:453
 #, c-format
 msgid "Remote provider returned invalid token JSON: %s"
-msgstr ""
+msgstr "Удаљени провајдер је вратио неважећи JSON токена: %s"
 
 #: common/remote_provider_client.cpp:485
 #, c-format
 msgid "Remote provider token response was incomplete: %s"
-msgstr ""
+msgstr "Одговор на токен удаљеног провајдера је био непотпун: %s"
 
 #: common/remote_provider_metadata.cpp:53
 #, c-format
 msgid "Remote provider metadata schema '%s' is not readable."
-msgstr ""
+msgstr "Шема метаподатака удаљеног добављача \"%s\" није читљива."
 
 #: common/remote_provider_metadata.cpp:64
 #, c-format
 msgid "Remote provider metadata failed schema validation: %s"
-msgstr ""
+msgstr "Валидација шеме метаподатака удаљеног добављача није успела: %s"
 
 #: common/remote_provider_metadata.cpp:124
 #, fuzzy, c-format
@@ -10702,17 +10664,21 @@ msgstr "Немогуће креирати %s"
 
 #: common/remote_provider_metadata.cpp:154
 msgid "Remote provider metadata must enable web_ui_v1."
-msgstr ""
+msgstr "Метаподаци удаљеног добављача морају да омогуће web_ui_v1."
 
 #: common/remote_provider_metadata.cpp:161
 msgid ""
 "Remote provider metadata must enable direct_downloads_v1, "
 "inline_payloads_v1, or both."
 msgstr ""
+"Метаподаци удаљеног добављача морају да омогуће direct_downloads_v1, "
+"inline_payloads_v1 или оба."
 
 #: common/remote_provider_metadata.cpp:168
 msgid "Remote provider metadata must define session_bootstrap_url for oauth2."
 msgstr ""
+"Метаподаци удаљеног добављача морају дефинисати session_bootstrap_url за "
+"oauth2."
 
 #: common/remote_provider_metadata.cpp:191
 msgid "session_bootstrap_url must share the same origin as panel_url."
