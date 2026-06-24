@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-23 16:01+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-06-24 22:01+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -4196,15 +4196,15 @@ msgstr "Git-Repository"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Git Branch Switch"
-msgstr "Git-Branch wechseln"
+msgstr "Git-Zweig-Wechsel"
 
 #: common/dialogs/git/dialog_git_switch.cpp:62
 msgid "Select or enter a branch name:"
-msgstr "Branch-Namen auswählen oder eingeben:"
+msgstr "Zweignamen auswählen oder eingeben:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:68
 msgid "Branch"
-msgstr "Branch"
+msgstr "Zweig"
 
 #: common/dialogs/git/dialog_git_switch.cpp:69
 msgid "Last Commit"
@@ -7892,7 +7892,7 @@ msgstr "Änderungen konnten nicht committet werden."
 
 #: common/git/kicad_git_errors.cpp:42
 msgid "Failed to merge branches."
-msgstr "Branches konnten nicht gemergt werden."
+msgstr "Zweige konnten nicht zusammengeführt werden."
 
 #: common/git/kicad_git_errors.cpp:45
 msgid "Failed to clone repository."
@@ -7908,15 +7908,15 @@ msgstr "Authentifizierung für Remote-Repository fehlgeschlagen."
 
 #: common/git/kicad_git_errors.cpp:50
 msgid "Branch not found."
-msgstr "Branch nicht gefunden."
+msgstr "Zweig nicht gefunden."
 
 #: common/git/kicad_git_errors.cpp:51
 msgid "Failed to create branch."
-msgstr "Branch konnte nicht erstellt werden."
+msgstr "Zweig konnte nicht erstellt werden."
 
 #: common/git/kicad_git_errors.cpp:52
 msgid "Failed to delete branch."
-msgstr "Branch konnte nicht gelöscht werden."
+msgstr "Zweig konnte nicht gelöscht werden."
 
 #: common/git/kicad_git_errors.cpp:55 common/git/libgit_backend.cpp:1328
 msgid "Failed to perform checkout operation."
@@ -7947,7 +7947,7 @@ msgstr ""
 
 #: common/git/kicad_git_errors.cpp:65
 msgid "No upstream branch configured."
-msgstr "Kein Upstream-Branch eingestellt."
+msgstr "Kein Upstream-Zweig eingestellt."
 
 #: common/git/kicad_git_errors.cpp:67
 msgid "Failed to establish connection with remote repository."
@@ -8034,7 +8034,7 @@ msgstr "Konnte Commit nicht erstellen: %s"
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2768
 msgid "Cannot amend: the branch has no commits yet."
-msgstr "Konnte nicht abändern: Bisher noch keine Commits im Branch."
+msgstr "Konnte nicht abändern: Bisher noch keine Commits im Zweig."
 
 #: common/git/libgit_backend.cpp:329
 #, c-format
@@ -8106,27 +8106,27 @@ msgstr "Kein Repository verfügbar"
 #: common/git/libgit_backend.cpp:939
 #, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "Konnte Branch \"%s\": %s nicht auflösen"
+msgstr "Konnte Zweig \"%s\": %s nicht auflösen"
 
 #: common/git/libgit_backend.cpp:950
 #, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "Konnte Branch-Head für \"%s\" nicht finden: %s"
+msgstr "Konnte Zweig-Kopf für \"%s\" nicht finden: %s"
 
 #: common/git/libgit_backend.cpp:964 common/git/libgit_backend.cpp:989
 #, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "Fehler beim Wechsel zu Branch \"%s\": %s"
+msgstr "Fehler beim Wechsel zu Zweig \"%s\": %s"
 
 #: common/git/libgit_backend.cpp:998
 #, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "Konnte lokalen Branch \"%s\": %s nicht erstellen"
+msgstr "Konnte lokalen Zweig \"%s\": %s nicht erstellen"
 
 #: common/git/libgit_backend.cpp:1012
 #, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "Konnte HEAD-Referenz für Branch \"%s\" nicht aktualisieren: %s"
+msgstr "Konnte KOPF-Referenz für Zweig \"%s\" nicht aktualisieren: %s"
 
 #: common/git/libgit_backend.cpp:1087
 #, c-format
@@ -8146,7 +8146,7 @@ msgstr "Konnte \"FETCH_HEAD\" nicht lesen"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
-"Es gibt nichts abzurufen: der Remote hat keinen Branch, der zum aktuellen, "
+"Es gibt nichts abzurufen: der Remote hat keinen Zweig, der zum aktuellen, "
 "lokalen Branch passt."
 
 #: common/git/libgit_backend.cpp:1179
@@ -8277,16 +8277,16 @@ msgstr "Eine andere Git-Operation wird gerade ausgeführt."
 
 #: common/git/libgit_backend.cpp:1635 common/git/libgit_backend.cpp:1688
 msgid "Could not find the matching remote branch."
-msgstr "Konnte den passenden Remote-Branch nicht finden."
+msgstr "Konnte den passenden Remote-Zweig nicht finden."
 
 #: common/git/libgit_backend.cpp:1644 common/git/libgit_backend.cpp:1697
 msgid "Could not read the remote branch."
-msgstr "Konnte den Remote-Branch nicht lesen."
+msgstr "Konnte den Remote-Zweig nicht lesen."
 
 #: common/git/libgit_backend.cpp:1653
 #, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Konnte nicht zu Remote-Branch zurücksetzen: %s"
+msgstr "Konnte nicht zu Remote-Zweig zurücksetzen: %s"
 
 #: common/git/libgit_backend.cpp:1679
 msgid ""
@@ -8356,7 +8356,7 @@ msgstr ""
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1000
 #: pcbnew/tools/edit_tool.cpp:3042 pcbnew/tools/edit_tool.cpp:3085
 msgid "Delete"
-msgstr "Entfernen"
+msgstr "Löschen"
 
 #: common/grid_tricks.cpp:389
 msgid "Clear contents of selected cells"
@@ -33124,7 +33124,7 @@ msgstr "Letzten Commit nachbessern ..."
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Rewrite the most recent commit on the current branch"
-msgstr "Den neuesten Commit im aktuellen Branch überschreiben"
+msgstr "Den neuesten Commit im aktuellen Zweig überschreiben"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -33159,7 +33159,7 @@ msgstr "Datei committen ..."
 
 #: kicad/project_tree_pane.cpp:1088
 msgid "Switch to branch "
-msgstr "Wechsel zu Branch "
+msgstr "Wechsel zu Zweig "
 
 #: kicad/project_tree_pane.cpp:1093
 msgid "Other..."
@@ -33167,11 +33167,11 @@ msgstr "Andere ..."
 
 #: kicad/project_tree_pane.cpp:1094
 msgid "Switch to a different branch"
-msgstr "Zu einem anderen Branch wechseln"
+msgstr "Zu einem anderen Zweig wechseln"
 
 #: kicad/project_tree_pane.cpp:1097
 msgid "Switch to Branch"
-msgstr "Zum Branch wechseln"
+msgstr "Zum Zweig wechseln"
 
 #: kicad/project_tree_pane.cpp:1103
 msgid "Enable Git Integration"
@@ -33363,7 +33363,7 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
-"Ablegen verweigert: Ihr lokaler Branch und %s haben sich "
+"Ablegen verweigert: Ihr lokaler Zweig und %s haben sich "
 "auseinanderentwickelt.\n"
 "\n"
 "Das passiert normalerweise nach dem Abrufen oder dem erneuten Schreiben "
@@ -38457,7 +38457,7 @@ msgstr "Elemente nach Netz filtern:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:64
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:85
 msgid "Filter items by net class:"
-msgstr "Gefilterte Elemente nach Netzklasse:"
+msgstr "Elemente nach Netzklasse filtern:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:105
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:78
@@ -47884,7 +47884,7 @@ msgstr "Prüfe %s Wärmefallen-Stegbreite: %s."
 #: pcbnew/drc/drc_engine.cpp:1418
 #, c-format
 msgid "Checking %s solder mask expansion: %s."
-msgstr "Lötstoppmaskenerweiterung %s wird geprüft: %s."
+msgstr "Prüfe %s Lötstoppmaskenerweiterung: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1424
 #, c-format
@@ -47904,17 +47904,17 @@ msgstr "Prüfe %s min. Steganzahl: %s."
 #: pcbnew/drc/drc_engine.cpp:1442
 #, c-format
 msgid "Checking %s zone connection: %s."
-msgstr "Zonenverbindung %s wird geprüft: %s."
+msgstr "Prüfe %s Zonenverbindung: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1465
 #, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "Leiterbahnbreite %s wird geprüft: opt %s."
+msgstr "Prüfe %s Leiterbahnbreite: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1471
 #, c-format
 msgid "Checking %s track width: min %s."
-msgstr "Leiterbahnbreite %s wird geprüft: min %s."
+msgstr "Prüfe %s Leiterbahnbreite: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1479
 #, c-format
@@ -47924,22 +47924,22 @@ msgstr "Prüfe %s Restring-Breite: min %s."
 #: pcbnew/drc/drc_engine.cpp:1487
 #, c-format
 msgid "Checking %s via diameter: opt %s."
-msgstr "Via-Durchmesser %s wird geprüft: opt %s."
+msgstr "Prüfe %s Via-Durchmesser: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1493
 #, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "Via-Durchmesser %s wird geprüft: min %s."
+msgstr "Prüfe %s Via-Durchmesser: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1502
 #, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "Lochgröße %s wird geprüft: opt %s."
+msgstr "Prüfe %s Lochgröße: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1508
 #, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "Lochgröße %s wird geprüft: min %s."
+msgstr "Prüfe %s Lochgröße: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1518
 #, c-format
@@ -47959,18 +47959,18 @@ msgstr "Prüfe %s Freiraum: min %s."
 #: pcbnew/drc/drc_engine.cpp:1540
 #, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "Lochabstand %s wird geprüft: min %s."
+msgstr "Prüfe %s Lochabstand: min %s."
 
 #: pcbnew/drc/drc_engine.cpp:1546 pcbnew/drc/drc_engine.cpp:1568
 #: pcbnew/drc/drc_engine.cpp:2138
 #, c-format
 msgid "Checking %s."
-msgstr "%s wird geprüft."
+msgstr "Prüfe %s."
 
 #: pcbnew/drc/drc_engine.cpp:1552
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
-msgstr "%s wird geprüft: min %s; opt %s; max %s."
+msgstr "Prüfe %s: min %s; opt %s; max %s."
 
 #: pcbnew/drc/drc_engine.cpp:1578
 msgid "Netclass clearances apply only between copper items."
