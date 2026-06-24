@@ -30,6 +30,7 @@
 #include <trace_helpers.h>
 #include <widgets/std_bitmap_button.h>
 #include <wx/dirdlg.h>
+#include <wx/log.h>
 
 
 class PANEL_STARTWIZARD_SETTINGS : public PANEL_STARTWIZARD_SETTINGS_BASE
