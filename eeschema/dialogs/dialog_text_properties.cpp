@@ -89,6 +89,11 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_ITE
 
     m_textCtrl->SetEOLMode( wxSTC_EOL_LF );
 
+    // Wrapping is display-only and does not insert newlines into the stored text.
+    m_textCtrl->SetWrapMode( wxSTC_WRAP_WORD );
+    m_textCtrl->SetWrapVisualFlags( wxSTC_WRAPVISUALFLAG_END );
+    m_textCtrl->SetWrapIndentMode( wxSTC_WRAPINDENT_INDENT );
+
 #ifdef _WIN32
     // Without this setting, on Windows, some esoteric unicode chars create display issue
     // in a wxStyledTextCtrl.

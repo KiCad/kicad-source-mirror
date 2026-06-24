@@ -240,6 +240,15 @@ void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
     stc_ctrl()->SetMarginWidth( 0, 0 ); // Symbol margin
     stc_ctrl()->SetMarginWidth( 1, 0 ); // Line-number margin
     stc_ctrl()->SetEOLMode( wxSTC_EOL_LF );
+
+    if( !m_singleLine )
+    {
+        // Wrapping is display-only and does not insert newlines into the stored text.
+        stc_ctrl()->SetWrapMode( wxSTC_WRAP_WORD );
+        stc_ctrl()->SetWrapVisualFlags( wxSTC_WRAPVISUALFLAG_END );
+        stc_ctrl()->SetWrapIndentMode( wxSTC_WRAPINDENT_INDENT );
+    }
+
     stc_ctrl()->AutoCompSetMaxWidth( 25 );
     stc_ctrl()->AutoCompSetIgnoreCase( m_ignoreCase );
     stc_ctrl()->UsePopUp( 0 );

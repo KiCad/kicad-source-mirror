@@ -66,6 +66,11 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
 
     m_MultiLineText->SetEOLMode( wxSTC_EOL_LF );
 
+    // Wrapping is display-only and does not insert newlines into the stored text.
+    m_MultiLineText->SetWrapMode( wxSTC_WRAP_WORD );
+    m_MultiLineText->SetWrapVisualFlags( wxSTC_WRAPVISUALFLAG_END );
+    m_MultiLineText->SetWrapIndentMode( wxSTC_WRAPINDENT_INDENT );
+
 #ifdef _WIN32
     // Without this setting, on Windows, some esoteric unicode chars create display issue
     // in a wxStyledTextCtrl.

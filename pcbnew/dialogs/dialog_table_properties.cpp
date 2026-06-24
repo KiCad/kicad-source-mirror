@@ -87,6 +87,7 @@ DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame, P
             }
             else
             {
+                attr->SetRenderer( new wxGridCellAutoWrapStringRenderer );
                 attr->SetEditor( new GRID_CELL_STC_EDITOR(
                         true, false,
                         [this, cell]( wxStyledTextEvent& aEvent, SCINTILLA_TRICKS* aScintillaTricks )

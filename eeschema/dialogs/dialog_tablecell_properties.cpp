@@ -50,6 +50,11 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame
 
     m_cellText->SetEOLMode( wxSTC_EOL_LF );
 
+    // Wrapping is display-only and does not insert newlines into the stored text.
+    m_cellText->SetWrapMode( wxSTC_WRAP_WORD );
+    m_cellText->SetWrapVisualFlags( wxSTC_WRAPVISUALFLAG_END );
+    m_cellText->SetWrapIndentMode( wxSTC_WRAPINDENT_INDENT );
+
 #ifdef _WIN32
     // Without this setting, on Windows, some esoteric unicode chars create display issue
     // in a wxStyledTextCtrl.
