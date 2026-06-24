@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-23 16:01+0000\n"
+"PO-Revision-Date: 2026-06-24 22:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -5207,7 +5207,7 @@ msgstr "グリッド2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:1090
 msgid "Grid Overrides"
-msgstr "グリッドのオーバーライド"
+msgstr "グリッドの上書き"
 
 #: common/dialogs/panel_grid_settings_base.cpp:122
 msgid "Connected items:"
@@ -30052,7 +30052,7 @@ msgid ""
 "when used"
 msgstr ""
 "図面用紙へのパスを指定します。設定するとプロジェクトで定義している図面用紙を"
-"オーバーライドします"
+"上書きします"
 
 #: kicad/cli/command.cpp:220
 msgid ""
@@ -30060,8 +30060,8 @@ msgid ""
 "multiple variables.\n"
 "Use in the format of '--define-var key=value' or '-D key=value'"
 msgstr ""
-"プロジェクト変数をオーバーライドまたは追加します。複数回使用して複数の変数を"
-"宣言できます。\n"
+"プロジェクト変数を上書きまたは追加します。複数回使用して複数の変数を宣言でき"
+"ます。\n"
 "'--define-var key=value' または '-D key=value' の形式で使用します"
 
 #: kicad/cli/command.cpp:235
@@ -38906,7 +38906,7 @@ msgstr "基板製造用の属性を更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
 msgid "Update clearance overrides"
-msgstr "クリアランスのオーバーライドを更新"
+msgstr "クリアランスの上書きを更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
 msgid "Update 3D models"
@@ -38999,7 +38999,7 @@ msgstr "基板製造用の属性を更新/リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:139
 msgid "Update/reset clearance overrides"
-msgstr "クリアランスのオーバーライドの更新／リセット"
+msgstr "クリアランスの上書きの更新／リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
 msgid "Update/reset 3D models"
@@ -40128,7 +40128,7 @@ msgstr "ジャンパーピングループ:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:376
 msgid "Clearance Overrides && Pad Connections"
-msgstr "クリアランスのオーバーライドとパッド接続"
+msgstr "クリアランスの上書きとパッド接続"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:389
 msgid ""
@@ -40284,7 +40284,7 @@ msgstr ""
 "す。\n"
 "負値の場合、ステンシルの開口部のサイズはパッドのサイズより小さくなります。\n"
 "この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブでパッドごと"
-"にオーバーライドできます。"
+"に上書きできます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:423
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:232
@@ -40305,7 +40305,7 @@ msgstr "「コートヤードがない」のDRC違反を発生させない"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:976
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1093
 msgid "Clearance Overrides"
-msgstr "クリアランスのオーバーライド"
+msgstr "クリアランスの上書き"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:443
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:875
@@ -42384,7 +42384,7 @@ msgstr "パッドの凸包"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:910
 msgid "Thermal Relief Overrides"
-msgstr "サーマルリリーフ オーバーライド"
+msgstr "サーマルリリーフ 上書き"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:918
 msgid "Relief gap:"
@@ -47198,17 +47198,17 @@ msgstr "基板の穴間最小クリアランス: %s."
 #: pcbnew/drc/drc_engine.cpp:1214
 #, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "%s のローカルオーバーライド; ゾーン接続: %s."
+msgstr "%s のローカル上書き; ゾーン接続: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1231
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "%s のローカルオーバーライド; サーマルリリーフ ギャップ: %s."
+msgstr "%s のローカル上書き; サーマルリリーフ ギャップ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1248
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "%s のローカルオーバーライド; サーマルスポーク幅: %s."
+msgstr "%s のローカル上書き; サーマルスポーク幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1257
 #, c-format
@@ -47774,7 +47774,7 @@ msgstr "ルール: %s"
 
 #: pcbnew/drc/drc_item.cpp:524
 msgid "Local override"
-msgstr "ローカル オーバーライド"
+msgstr "ローカル 上書き"
 
 #: pcbnew/drc/drc_rule.h:203
 #, c-format
@@ -48128,23 +48128,23 @@ msgstr "パッド %s"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:258
 #, c-format
 msgid "%s has clearance override."
-msgstr "%s はクリアランスをオーバーライドしています。"
+msgstr "%s はクリアランスを上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:265
 #, c-format
 msgid "%s has solder mask expansion override."
-msgstr "%s はハンダマスクの拡張をオーバーライドしています。"
+msgstr "%s はハンダマスクの拡張を上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:273
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:280
 #, c-format
 msgid "%s has solder paste clearance override."
-msgstr "%s はハンダペーストのクリアランスをオーバーライドしています。"
+msgstr "%s はハンダペーストのクリアランスを上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:287
 #, c-format
 msgid "%s has zone connection override."
-msgstr "%s はゾーンの接続をオーバーライドしています。"
+msgstr "%s はゾーンの接続を上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:294
 #, c-format
@@ -48154,17 +48154,17 @@ msgstr "%s はサーマルリリーフ ギャップが異なります。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:301
 #, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr "%s はサーマルリリーフ スポーク幅をオーバーライドしています。"
+msgstr "%s はサーマルリリーフ スポーク幅を上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:307
 #, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "%s はサーマルリリーフ スポークの角度をオーバーライドしています。"
+msgstr "%s はサーマルリリーフ スポークの角度を上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:313
 #, c-format
 msgid "%s has zone knockout setting override."
-msgstr "%s はゾーンの切り抜きをオーバーライドしています。"
+msgstr "%s はゾーンの切り抜きを上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:325
 #, c-format
@@ -48450,23 +48450,23 @@ msgstr "フットプリントのスタックアップが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:866
 msgid "Pad clearance overridden."
-msgstr "パッドのクリアランスをオーバーライドしています。"
+msgstr "パッドのクリアランスを上書きされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:873
 msgid "Solder mask expansion overridden."
-msgstr "ハンダマスクの拡張をオーバーライドしています。"
+msgstr "ハンダマスクの拡張を上書きされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:881
 msgid "Solder paste absolute clearance overridden."
-msgstr "ハンダペーストの絶対クリアランスをオーバーライドしています。"
+msgstr "ハンダペーストの絶対クリアランスを上書きされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:888
 msgid "Solder paste relative clearance overridden."
-msgstr "ハンダペーストの相対クリアランスをオーバーライドしています。"
+msgstr "ハンダペーストの相対クリアランスを上書きされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:895
 msgid "Zone connection overridden."
-msgstr "導体ゾーンへの接続をオーバーライドしています。"
+msgstr "導体ゾーンへの接続を上書きされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:900
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:905
@@ -49909,7 +49909,7 @@ msgstr "コートヤード要件から免除"
 
 #: pcbnew/footprint.cpp:4949 pcbnew/pad.cpp:3765
 msgid "Clearance Override"
-msgstr "クリアランスのオーバーライド"
+msgstr "クリアランスの上書き"
 
 #: pcbnew/footprint.cpp:4953 pcbnew/pad.cpp:3773
 msgid "Solderpaste Margin Override"
