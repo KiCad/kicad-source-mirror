@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-24 10:53+0000\n"
+"PO-Revision-Date: 2026-06-25 12:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -4489,15 +4489,15 @@ msgstr "Git-Repository"
 
 #: common/dialogs/git/dialog_git_switch.cpp:50
 msgid "Git Branch Switch"
-msgstr "Git-Branch wechseln"
+msgstr "Git-Zweig-Wechsel"
 
 #: common/dialogs/git/dialog_git_switch.cpp:58
 msgid "Select or enter a branch name:"
-msgstr "Branch-Namen auswählen oder eingeben:"
+msgstr "Zweignamen auswählen oder eingeben:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:64
 msgid "Branch"
-msgstr "Branch"
+msgstr "Zweig"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 msgid "Last Commit"
@@ -6790,7 +6790,7 @@ msgstr ""
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:996
 #: pcbnew/tools/edit_tool.cpp:2871 pcbnew/tools/edit_tool.cpp:2914
 msgid "Delete"
-msgstr "Entfernen"
+msgstr "Löschen"
 
 #: common/diff_merge/auto_resolution.cpp:261
 msgid "Keep (default)"
@@ -8304,7 +8304,7 @@ msgstr "Änderungen konnten nicht committet werden."
 
 #: common/git/kicad_git_errors.cpp:38
 msgid "Failed to merge branches."
-msgstr "Branches konnten nicht gemergt werden."
+msgstr "Zweige konnten nicht zusammengeführt werden."
 
 #: common/git/kicad_git_errors.cpp:41
 msgid "Failed to clone repository."
@@ -8320,15 +8320,15 @@ msgstr "Authentifizierung für Remote-Repository fehlgeschlagen."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Branch not found."
-msgstr "Branch nicht gefunden."
+msgstr "Zweig nicht gefunden."
 
 #: common/git/kicad_git_errors.cpp:47
 msgid "Failed to create branch."
-msgstr "Branch konnte nicht erstellt werden."
+msgstr "Zweig konnte nicht erstellt werden."
 
 #: common/git/kicad_git_errors.cpp:48
 msgid "Failed to delete branch."
-msgstr "Branch konnte nicht gelöscht werden."
+msgstr "Zweig konnte nicht gelöscht werden."
 
 #: common/git/kicad_git_errors.cpp:51 common/git/libgit_backend.cpp:1334
 msgid "Failed to perform checkout operation."
@@ -8359,7 +8359,7 @@ msgstr ""
 
 #: common/git/kicad_git_errors.cpp:61
 msgid "No upstream branch configured."
-msgstr "Kein Upstream-Branch eingestellt."
+msgstr "Kein Upstream-Zweig eingestellt."
 
 #: common/git/kicad_git_errors.cpp:63
 msgid "Failed to establish connection with remote repository."
@@ -8446,7 +8446,7 @@ msgstr "Konnte Commit nicht erstellen: %s"
 
 #: common/git/libgit_backend.cpp:307 kicad/project_tree_pane.cpp:2765
 msgid "Cannot amend: the branch has no commits yet."
-msgstr "Konnte nicht abändern: Bisher noch keine Commits im Branch."
+msgstr "Konnte nicht abändern: Bisher noch keine Commits im Zweig."
 
 #: common/git/libgit_backend.cpp:326
 #, c-format
@@ -8518,27 +8518,27 @@ msgstr "Kein Repository verfügbar"
 #: common/git/libgit_backend.cpp:941
 #, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "Konnte Branch \"%s\": %s nicht auflösen"
+msgstr "Konnte Zweig \"%s\": %s nicht auflösen"
 
 #: common/git/libgit_backend.cpp:952
 #, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "Konnte Branch-Head für \"%s\" nicht finden: %s"
+msgstr "Konnte Zweig-Kopf für \"%s\" nicht finden: %s"
 
 #: common/git/libgit_backend.cpp:966 common/git/libgit_backend.cpp:991
 #, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "Fehler beim Wechsel zu Branch \"%s\": %s"
+msgstr "Fehler beim Wechsel zu Zweig \"%s\": %s"
 
 #: common/git/libgit_backend.cpp:1000
 #, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "Konnte lokalen Branch \"%s\": %s nicht erstellen"
+msgstr "Konnte lokalen Zweig \"%s\": %s nicht erstellen"
 
 #: common/git/libgit_backend.cpp:1014
 #, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "Konnte HEAD-Referenz für Branch \"%s\" nicht aktualisieren: %s"
+msgstr "Konnte KOPF-Referenz für Zweig \"%s\" nicht aktualisieren: %s"
 
 #: common/git/libgit_backend.cpp:1093
 #, c-format
@@ -8558,7 +8558,7 @@ msgstr "Konnte \"FETCH_HEAD\" nicht lesen"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
-"Es gibt nichts abzurufen: der Remote hat keinen Branch, der zum aktuellen, "
+"Es gibt nichts abzurufen: der Remote hat keinen Zweig, der zum aktuellen, "
 "lokalen Branch passt."
 
 #: common/git/libgit_backend.cpp:1185
@@ -8689,16 +8689,16 @@ msgstr "Eine andere Git-Operation wird gerade ausgeführt."
 
 #: common/git/libgit_backend.cpp:1641 common/git/libgit_backend.cpp:1694
 msgid "Could not find the matching remote branch."
-msgstr "Konnte den passenden Remote-Branch nicht finden."
+msgstr "Konnte den passenden Remote-Zweig nicht finden."
 
 #: common/git/libgit_backend.cpp:1650 common/git/libgit_backend.cpp:1703
 msgid "Could not read the remote branch."
-msgstr "Konnte den Remote-Branch nicht lesen."
+msgstr "Konnte den Remote-Zweig nicht lesen."
 
 #: common/git/libgit_backend.cpp:1659
 #, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Konnte nicht zu Remote-Branch zurücksetzen: %s"
+msgstr "Konnte nicht zu Remote-Zweig zurücksetzen: %s"
 
 #: common/git/libgit_backend.cpp:1685
 msgid ""
@@ -34782,6 +34782,8 @@ msgstr ""
 #: kicad/kicad_manager_frame.cpp:1177
 msgid "Compare Project Branches requires a project that is tracked by git."
 msgstr ""
+"\"Projektzweige vergleichen\" erfordert ein Projekt, das von Git erfasst "
+"wird."
 
 #: kicad/kicad_manager_frame.cpp:1235
 msgid "Edit File in Text Editor"
@@ -34904,9 +34906,8 @@ msgid "Edit advanced settings"
 msgstr "Erweiterte Einstellungen bearbeiten"
 
 #: kicad/menubar.cpp:235
-#, fuzzy
 msgid "Compare Project Branches..."
-msgstr "Projekt committen ..."
+msgstr "Projektzweige vergleichen ..."
 
 #: kicad/menubar.cpp:236
 msgid "Review the file changes between two git refs in the current project"
@@ -35628,7 +35629,7 @@ msgstr "Letzten Commit nachbessern ..."
 
 #: kicad/project_tree_pane.cpp:1048
 msgid "Rewrite the most recent commit on the current branch"
-msgstr "Den neuesten Commit im aktuellen Branch überschreiben"
+msgstr "Den neuesten Commit im aktuellen Zweig überschreiben"
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Push"
@@ -35663,7 +35664,7 @@ msgstr "Datei committen ..."
 
 #: kicad/project_tree_pane.cpp:1085
 msgid "Switch to branch "
-msgstr "Wechsel zu Branch "
+msgstr "Wechsel zu Zweig "
 
 #: kicad/project_tree_pane.cpp:1090
 msgid "Other..."
@@ -35671,11 +35672,11 @@ msgstr "Andere ..."
 
 #: kicad/project_tree_pane.cpp:1091
 msgid "Switch to a different branch"
-msgstr "Zu einem anderen Branch wechseln"
+msgstr "Zu einem anderen Zweig wechseln"
 
 #: kicad/project_tree_pane.cpp:1094
 msgid "Switch to Branch"
-msgstr "Zum Branch wechseln"
+msgstr "Zum Zweig wechseln"
 
 #: kicad/project_tree_pane.cpp:1100
 msgid "Enable Git Integration"
@@ -35859,7 +35860,7 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
-"Ablegen verweigert: Ihr lokaler Branch und %s haben sich "
+"Ablegen verweigert: Ihr lokaler Zweig und %s haben sich "
 "auseinanderentwickelt.\n"
 "\n"
 "Das passiert normalerweise nach dem Abrufen oder dem erneuten Schreiben "
