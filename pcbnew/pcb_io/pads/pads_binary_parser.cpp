@@ -4721,7 +4721,20 @@ size_t BINARY_PARSER::locateStringPool() const
 
         if( blocks > 0 && blocks < MAX_BLOCKS )
         {
-            size_t drift = p + TAIL - sec41->payloadOffset;
+            // The tail is not always the end of the region. On boards that carry them, an array
+            // of 44-byte records follows it, and the drift includes them. Walking those records
+            // by their own shape takes the derivation from 453 boards to 474.
+            constexpr size_t RULE_REC = 44;
+
+            size_t after = p + TAIL;
+
+            while( m_cursor.InBounds( after, RULE_REC ) && m_cursor.U32At( after ) == 0
+                   && m_cursor.U32At( after + 32 ) == 0xFFFFFFFF )
+            {
+                after += RULE_REC;
+            }
+
+            size_t drift = after - sec41->payloadOffset;
             size_t start = sec56->payloadOffset + drift + sec56->count * 16;
 
             // A textual check alone is not enough: a wrong start can still land on text and then
