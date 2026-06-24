@@ -209,6 +209,13 @@ void TOOL_ACTION::SetHotKey( int aKeycode, int aKeycodeAlt )
 }
 
 
+bool TOOL_ACTION::IsHotKeyUserBound( int aMatchedHotKey ) const
+{
+    return ( m_hotKey == aMatchedHotKey && m_hotKey != m_defaultHotKey )
+           || ( m_hotKeyAlt == aMatchedHotKey && m_hotKeyAlt != m_defaultHotKeyAlt );
+}
+
+
 std::string TOOL_ACTION::GetToolName() const
 {
     int dotCount = std::count( m_name.begin(), m_name.end(), '.' );

@@ -503,23 +503,15 @@ bool WIDGET_HOTKEY_LIST::resolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
         return true;
 
     TOOL_ACTION* conflictingAction = conflictingHotKey->m_Actions[ 0 ];
-    wxString msg = wxString::Format( _( "'%s' is already assigned to '%s' in section '%s'. "
-                                        "Are you sure you want to change its assignment?" ),
-                                     KeyNameFromKeyCode( aKey ),
-                                     conflictingAction->GetFriendlyName(),
-                                     HOTKEY_STORE::GetSectionName( conflictingAction ) );
+    wxString     msg = wxString::Format( _( "'%s' is already assigned to '%s' in section '%s'. "
+                                                "Both bindings are kept, but only one runs per key "
+                                                "press. Continue?" ),
+                                         KeyNameFromKeyCode( aKey ), conflictingAction->GetFriendlyName(),
+                                         HOTKEY_STORE::GetSectionName( conflictingAction ) );
 
-    KICAD_MESSAGE_DIALOG dlg( GetParent(), msg, _( "Confirm change" ), wxYES_NO | wxNO_DEFAULT );
+    KICAD_MESSAGE_DIALOG dlg( GetParent(), msg, _( "Hotkey conflict" ), wxYES_NO | wxNO_DEFAULT );
 
-    if( dlg.ShowModal() == wxID_YES )
-    {
-        // Reset the other hotkey
-        conflictingHotKey->m_EditKeycode = 0;
-        updateFromClientData();
-        return true;
-    }
-
-    return false;
+    return dlg.ShowModal() == wxID_YES;
 }
 
 

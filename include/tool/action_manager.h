@@ -27,7 +27,9 @@
 #include <map>
 #include <string>
 #include <set>
+#include <vector>
 
+#include <frame_type.h>
 #include <tool/selection_conditions.h>
 
 class TOOL_BASE;
@@ -129,6 +131,19 @@ public:
      * @return True if there was an action associated with the hotkey, false otherwise.
      */
     bool RunHotKey( int aHotKey ) const;
+
+    /**
+     * Return the action-name namespace prefix (e.g. "pcbnew.", "eeschema.") shared by the
+     * actions native to a given frame, or an empty string when the frame has no namespace.
+     */
+    static std::string FrameNamespacePrefix( FRAME_T aFrameType );
+
+    /**
+     * Reorder global actions sharing a hotkey so that one native to the given frame is tried
+     * first when the user has bound the matched slot away from its default.
+     */
+    static void PromoteUserBoundFrameAction( std::vector<const TOOL_ACTION*>& aGlobalActions, FRAME_T aFrameType,
+                                             int aMatchedHotKey );
 
     /**
      * Return the hot key associated with a given action or 0 if there is none.

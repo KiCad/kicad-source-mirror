@@ -346,6 +346,14 @@ public:
     void SetHotKey( int aKeycode, int aKeycodeAlt = 0 );
 
     /**
+     * Return true if the matched hotkey slot (primary or alternate) holds a
+     * value different from its compile-time default. See
+     * ACTION_MANAGER::RunHotKey for how this drives same-key dispatch
+     * tiebreaking. See https://gitlab.com/kicad/code/kicad/-/issues/5916.
+     */
+    bool IsHotKeyUserBound( int aMatchedHotKey ) const;
+
+    /**
      * Return the unique id of the TOOL_ACTION object.
      *
      * It is valid only after registering the TOOL_ACTION by #ACTION_MANAGER.

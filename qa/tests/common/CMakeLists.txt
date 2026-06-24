@@ -28,6 +28,7 @@ set( QA_COMMON_SRCS
 
     test_angle_item.cpp
 
+    test_action_manager.cpp
     test_array_axis.cpp
     test_atomic_save.cpp
     test_backup_settings.cpp
