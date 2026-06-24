@@ -2900,3 +2900,125 @@ BOOST_FIXTURE_TEST_CASE( RegressionApiSubsetFillPanelized, ZONE_FILL_TEST_FIXTUR
     BOOST_REQUIRE( bds.m_DRCEngine );
     BOOST_CHECK( bds.m_DRCEngine->RulesValid() );
 }
+
+
+// Issue 23790: overlapping same-net zones must merge across a notch a higher-priority
+// different-net zone carved into the higher-priority same-net zone.
+BOOST_FIXTURE_TEST_CASE( RegressionSameNetMergeAroundHigherPriorityZone, ZONE_FILL_TEST_FIXTURE )
+{
+    // The reconciliation only runs inside the iterative refill.
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    struct ScopeGuard { bool& ref; bool orig; ~ScopeGuard() { ref = orig; } }
+        guard{ cfg.m_ZoneFillIterativeRefill, cfg.m_ZoneFillIterativeRefill };
+    cfg.m_ZoneFillIterativeRefill = true;
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue23790/issue23790", m_board );
+    KI_TEST::FillZones( m_board.get() );
+
+    const PCB_LAYER_ID layer = F_Cu;
+    const int          margin = pcbIUScale.mmToIU( 0.05 );
+
+    std::map<int, SHAPE_POLY_SET> mergedByNet;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetIsRuleArea() || !zone->HasFilledPolysForLayer( layer ) )
+            continue;
+
+        mergedByNet[zone->GetNetCode()].BooleanAdd( *zone->GetFilledPolysList( layer ) );
+    }
+
+    // Areas legitimately free of this net's copper: keepouts and higher-priority
+    // different-net fills (grown by a clearance allowance).
+    auto buildLegitVoids =
+            [&]( const ZONE* aLower, const ZONE* aHigher ) -> SHAPE_POLY_SET
+            {
+                SHAPE_POLY_SET voids;
+                int            allowance = pcbIUScale.mmToIU( 0.6 );
+
+                for( ZONE* other : m_board->Zones() )
+                {
+                    if( !other->GetLayerSet().Contains( layer ) )
+                        continue;
+
+                    if( other->GetIsRuleArea() )
+                    {
+                        if( other->GetDoNotAllowZoneFills() )
+                            voids.BooleanAdd( *other->Outline() );
+
+                        continue;
+                    }
+
+                    if( other->GetNetCode() == aLower->GetNetCode()
+                            || other->GetAssignedPriority() <= aLower->GetAssignedPriority()
+                            || other->GetAssignedPriority() <= aHigher->GetAssignedPriority()
+                            || !other->HasFilledPolysForLayer( layer ) )
+                    {
+                        continue;
+                    }
+
+                    SHAPE_POLY_SET fill = *other->GetFilledPolysList( layer );
+                    fill.Inflate( allowance, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+                    voids.BooleanAdd( fill );
+                }
+
+                return voids;
+            };
+
+    std::vector<ZONE*> zones;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() && zone->GetNetCode() > 0 && zone->GetLayerSet().Contains( layer ) )
+            zones.push_back( zone );
+    }
+
+    int checkedPairs = 0;
+
+    for( size_t i = 0; i < zones.size(); ++i )
+    {
+        for( size_t j = i + 1; j < zones.size(); ++j )
+        {
+            ZONE* a = zones[i];
+            ZONE* b = zones[j];
+
+            if( a->GetNetCode() != b->GetNetCode() )
+                continue;
+
+            SHAPE_POLY_SET overlap = *a->Outline();
+            overlap.BooleanIntersection( *b->Outline() );
+
+            if( overlap.OutlineCount() == 0 )
+                continue;
+
+            const ZONE* lower = a->GetAssignedPriority() <= b->GetAssignedPriority() ? a : b;
+            const ZONE* higher = ( lower == a ) ? b : a;
+
+            overlap.BooleanSubtract( buildLegitVoids( lower, higher ) );
+
+            // Stay clear of outer-boundary min-width rounding.
+            overlap.Deflate( margin, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, ARC_HIGH_DEF );
+
+            if( overlap.OutlineCount() == 0 )
+                continue;
+
+            SHAPE_POLY_SET uncovered = overlap;
+            uncovered.BooleanSubtract( mergedByNet[a->GetNetCode()] );
+
+            double uncoveredArea =
+                    uncovered.Area() / ( pcbIUScale.IU_PER_MM * (double) pcbIUScale.IU_PER_MM );
+
+            BOOST_CHECK_MESSAGE( uncoveredArea < 0.01,
+                    wxString::Format( "Same-net zones (priorities %d and %d) left %.4f mm^2 of "
+                                      "their overlap unfilled; overlapping same-net zones must "
+                                      "merge (issue 23790).",
+                                      a->GetAssignedPriority(), b->GetAssignedPriority(),
+                                      uncoveredArea ) );
+            checkedPairs++;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( checkedPairs >= 2,
+                         wxString::Format( "Expected at least two overlapping same-net zone pairs "
+                                           "to exercise the merge, found %d.", checkedPairs ) );
+}

@@ -1026,14 +1026,73 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     // slower task from claiming the same freed area.
     const bool iterativeRefill = ADVANCED_CFG::GetCfg().m_ZoneFillIterativeRefill;
 
-    if( iterativeRefill && !zonesWithRemovedIslandLayers.empty() )
+    // The initial fill subtracts a higher-priority same-net zone's outline, but
+    // refillZoneFromCache() subtracts its actual fill; seed the refill with overlapping
+    // lower zones so they reclaim any notch the higher zone left unfilled (issue 23790).
+    std::set<std::pair<ZONE*, PCB_LAYER_ID>> sameNetOverlapSeeds;
+
+    if( iterativeRefill )
+    {
+        LSET boardCu = LSET::AllCuMask( m_board->GetCopperLayerCount() );
+
+        // Bucket by net so each lower zone scans only its own net.
+        std::map<int, std::vector<ZONE*>> zonesByNet;
+
+        forEachBoardAndFootprintZone(
+                m_board,
+                [&]( ZONE* zone )
+                {
+                    if( !zone->GetIsRuleArea() && !zone->IsTeardropArea() )
+                        zonesByNet[zone->GetNetCode()].push_back( zone );
+                } );
+
+        for( ZONE* lowerZone : aZones )
+        {
+            if( lowerZone->GetIsRuleArea() || lowerZone->IsTeardropArea() )
+                continue;
+
+            auto netIt = zonesByNet.find( lowerZone->GetNetCode() );
+
+            if( netIt == zonesByNet.end() )
+                continue;
+
+            LSET lowerLayers = lowerZone->GetLayerSet() & boardCu;
+
+            for( ZONE* higherZone : netIt->second )
+            {
+                if( higherZone == lowerZone
+                        || higherZone->GetAssignedPriority() <= lowerZone->GetAssignedPriority() )
+                    continue;
+
+                if( !lowerZone->GetBoundingBox().Intersects( higherZone->GetBoundingBox() ) )
+                    continue;
+
+                LSET sharedLayers = lowerLayers & higherZone->GetLayerSet();
+
+                for( PCB_LAYER_ID layer : sharedLayers.Seq() )
+                {
+                    // Without a higher-zone fill in the snapshot the lower zone would pour
+                    // through the higher zone's outline.
+                    if( lowerZone->HasFilledPolysForLayer( layer )
+                            && higherZone->HasFilledPolysForLayer( layer ) )
+                    {
+                        sameNetOverlapSeeds.insert( { lowerZone, layer } );
+                    }
+                }
+            }
+        }
+    }
+
+    if( iterativeRefill
+            && ( !zonesWithRemovedIslandLayers.empty() || !sameNetOverlapSeeds.empty() ) )
     {
         const int maxIterations = 8;
         bool      progressReported = false;
         bool      hitIterationLimit = false;
 
-        // Seed: zone-layer pairs whose fills changed due to initial island removal.
+        // Seed: island-removal changes plus same-net overlap reclaims (see above).
         std::set<std::pair<ZONE*, PCB_LAYER_ID>> changedZoneLayers( zonesWithRemovedIslandLayers );
+        changedZoneLayers.insert( sameNetOverlapSeeds.begin(), sameNetOverlapSeeds.end() );
 
         auto cached_refill_tessellate_lambda = [&]( const std::pair<ZONE*, PCB_LAYER_ID>& aFillItem ) -> int
         {
@@ -1106,7 +1165,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 if( m_progressReporter )
                 {
                     m_progressReporter->AdvancePhase();
-                    m_progressReporter->Report( _( "Refilling zones after island removal..." ) );
+                    m_progressReporter->Report( _( "Refilling overlapping zones..." ) );
                     m_progressReporter->KeepRefreshing();
                 }
 
