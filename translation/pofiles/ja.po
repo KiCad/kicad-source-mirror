@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-23 21:01+0000\n"
+"PO-Revision-Date: 2026-06-24 10:53+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -5491,7 +5491,7 @@ msgstr "グリッド2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:1086
 msgid "Grid Overrides"
-msgstr "グリッドのオーバーライド"
+msgstr "グリッドの上書き"
 
 #: common/dialogs/panel_grid_settings_base.cpp:122
 msgid "Connected items:"
@@ -16103,9 +16103,8 @@ msgid "Delete extra units from symbol?"
 msgstr "シンボルから余計なユニットを削除しますか？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:544
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "シンボルには少なくとも1つのボディ スタイルが必要です"
+msgstr "カスタム ボディ スタイルには少なくとも2つのエントリが必要です"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
 msgid "Delete extra body styles from symbol?"
@@ -18134,26 +18133,20 @@ msgid "Model"
 msgstr "モデル"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:247
-#, fuzzy
 msgid "Decomposition:"
-msgstr "X 位置:"
+msgstr "モード分解:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:251
-#, fuzzy
 msgid "Whole device"
-msgstr "ネット全体"
+msgstr "デバイス全体"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:251
-#, fuzzy
 msgid "Repeat per unit"
-msgstr "繰り返し回数"
+msgstr "ユニット毎に繰り返す"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:257
-#, fuzzy
 msgid "Shared model pins:"
-msgstr ""
-"共有されたコンポーネント:\n"
-"%s"
+msgstr "共有されたモデル ピン:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:281
 msgid "Symbol Pin"
@@ -21629,6 +21622,8 @@ msgid ""
 "Symbol '%s' uses repeat-per-unit decomposition, which requires a named "
 "subcircuit model."
 msgstr ""
+"シンボル '%s' は ユニット毎に繰り返す モード分解を使用しているので、 名前付き"
+"の サブ回路 モデルが必要です。"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:709
 #, c-format
@@ -26222,14 +26217,14 @@ msgid "Number of bits"
 msgstr "ビット数"
 
 #: eeschema/sim/sim_model_multiunit.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has a malformed Sim.Pins entry '%s'."
-msgstr "シンボル '%s' はライブラリ '%s' で変更されています"
+msgstr "シンボル '%s' は Sim.Pinエントリ に不正な形の '%s' があります。"
 
 #: eeschema/sim/sim_model_multiunit.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' maps pin '%s' to both '%s' and '%s'."
-msgstr "シンボル '%s' はシンボル ライブラリ '%s' にマップされました。"
+msgstr "シンボル '%s' はピン '%s' を '%s' と '%s' の両方にマッピングされています。"
 
 #: eeschema/sim/sim_model_multiunit.cpp:195
 #, c-format
@@ -26237,40 +26232,46 @@ msgid ""
 "Repeat-per-unit decomposition does not support model '%s' because it has "
 "subcircuit parameters."
 msgstr ""
+"ユニット毎に繰り返す モード分解で '%s' をパラメータに持つ名前付きの サブ回路 "
+"をサポートしていません。"
 
 #: eeschema/sim/sim_model_multiunit.cpp:218
 #, c-format
 msgid "Shared pin '%s' is not a pin of model '%s'."
-msgstr ""
+msgstr "共有されたピン '%s' は、モデル '%s' のピンではありません。"
 
 #: eeschema/sim/sim_model_multiunit.cpp:245
 #, c-format
 msgid "Unit %d maps to unknown pin '%s' of model '%s'."
-msgstr ""
+msgstr "ユニットで %d個、 不明なピン '%s' としてモデル '%s' にマッピングされます。"
 
 #: eeschema/sim/sim_model_multiunit.cpp:254
 #, c-format
 msgid "Unit %d maps model pin '%s' to both symbol pins '%s' and '%s'."
 msgstr ""
+"ユニットで %d個、 モデル ピン '%s' をシンボル ピン '%s' と '%s' にマッピング"
+"されます。"
 
 #: eeschema/sim/sim_model_multiunit.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Shared pin '%s' is not connected on any unit."
-msgstr "ピン %s がグランド ネットに接続されていません"
+msgstr "共有されたピン '%s' はどこにも接続されていません。"
 
 #: eeschema/sim/sim_model_multiunit.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Shared pin '%s' resolves to more than one net."
-msgstr "配線上にある複数のラベルを確認中..."
+msgstr "共有されたピン ’%s’ は複数のネットで決定されます。"
 
 #: eeschema/sim/sim_model_multiunit.cpp:320
 #, c-format
 msgid "Model '%s' pin '%s' is neither shared nor assigned to any unit."
 msgstr ""
+"モデル '%s' のピン '%s' は共有されていないのでどのユニットにも割り当てられて"
+"いません。"
 
 #: eeschema/sim/sim_model_multiunit.cpp:357
 msgid "Repeat-per-unit decomposition produced no instances."
-msgstr ""
+msgstr "ユニット毎に繰り返す モード分解 で、インスタンスが生成されませんでした。"
 
 #: eeschema/sim/sim_plot_tab.cpp:464
 #, c-format
@@ -31947,7 +31948,7 @@ msgid ""
 "when used"
 msgstr ""
 "図面用紙へのパスを指定します。設定するとプロジェクトで定義している図面用紙を"
-"オーバーライドします"
+"上書きします"
 
 #: kicad/cli/command.cpp:220
 msgid ""
@@ -31955,8 +31956,8 @@ msgid ""
 "multiple variables.\n"
 "Use in the format of '--define-var key=value' or '-D key=value'"
 msgstr ""
-"プロジェクト変数をオーバーライドまたは追加します。複数回使用して複数の変数を"
-"宣言できます。\n"
+"プロジェクト変数を上書きまたは追加します。複数回使用して複数の変数を宣言でき"
+"ます。\n"
 "'--define-var key=value' または '-D key=value' の形式で使用します"
 
 #: kicad/cli/command.cpp:235
@@ -41547,7 +41548,7 @@ msgstr "基板製造用の属性を更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
 msgid "Update clearance overrides"
-msgstr "クリアランスのオーバーライドを更新"
+msgstr "クリアランスの上書きを更新"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Update 3D models"
@@ -41640,7 +41641,7 @@ msgstr "基板製造用の属性を更新/リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:139
 msgid "Update/reset clearance overrides"
-msgstr "クリアランスのオーバーライドの更新／リセット"
+msgstr "クリアランスの上書きの更新／リセット"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
 msgid "Update/reset 3D models"
@@ -42892,7 +42893,7 @@ msgstr "ジャンパーピングループ:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:376
 msgid "Clearance Overrides && Pad Connections"
-msgstr "クリアランスのオーバーライドとパッド接続"
+msgstr "クリアランスの上書きとパッド接続"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:389
 msgid ""
@@ -43048,7 +43049,7 @@ msgstr ""
 "す。\n"
 "負値の場合、ステンシルの開口部のサイズはパッドのサイズより小さくなります。\n"
 "この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブでパッドごと"
-"にオーバーライドできます。"
+"に上書きできます。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:423
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:228
@@ -43069,7 +43070,7 @@ msgstr "「コートヤードがない」のDRC違反を発生させない"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:986
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1103
 msgid "Clearance Overrides"
-msgstr "クリアランスのオーバーライド"
+msgstr "クリアランスの上書き"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:443
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:885
@@ -45132,7 +45133,7 @@ msgstr "パッドの凸包"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:920
 msgid "Thermal Relief Overrides"
-msgstr "サーマルリリーフ オーバーライド"
+msgstr "サーマルリリーフ 上書き"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:928
 msgid "Relief gap:"
@@ -50322,17 +50323,17 @@ msgstr "基板の穴間最小クリアランス: %s."
 #: pcbnew/drc/drc_engine.cpp:1220
 #, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "%s のローカルオーバーライド; ゾーン接続: %s."
+msgstr "%s のローカル上書き; ゾーン接続: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1237
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
-msgstr "%s のローカルオーバーライド; サーマルリリーフ ギャップ: %s."
+msgstr "%s のローカル上書き; サーマルリリーフ ギャップ: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1254
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "%s のローカルオーバーライド; サーマルスポーク幅: %s."
+msgstr "%s のローカル上書き; サーマルスポーク幅: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1263
 #, c-format
@@ -50915,7 +50916,7 @@ msgstr "ルール: %s"
 
 #: pcbnew/drc/drc_item.cpp:540
 msgid "Local override"
-msgstr "ローカル オーバーライド"
+msgstr "ローカル 上書き"
 
 #: pcbnew/drc/drc_rule.h:211
 #, c-format
@@ -51270,23 +51271,23 @@ msgstr "パッド %s"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:268
 #, c-format
 msgid "%s has clearance override."
-msgstr "%s はクリアランスをオーバーライドしています。"
+msgstr "%s はクリアランスを上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:275
 #, c-format
 msgid "%s has solder mask expansion override."
-msgstr "%s はハンダマスクの拡張をオーバーライドしています。"
+msgstr "%s はハンダマスクの拡張を上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:283
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:290
 #, c-format
 msgid "%s has solder paste clearance override."
-msgstr "%s はハンダペーストのクリアランスをオーバーライドしています。"
+msgstr "%s はハンダペーストのクリアランスを上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:297
 #, c-format
 msgid "%s has zone connection override."
-msgstr "%s はゾーンの接続をオーバーライドしています。"
+msgstr "%s はゾーンの接続を上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:304
 #, c-format
@@ -51296,17 +51297,17 @@ msgstr "%s はサーマルリリーフ ギャップが異なります。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:311
 #, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr "%s はサーマルリリーフ スポーク幅をオーバーライドしています。"
+msgstr "%s はサーマルリリーフ スポーク幅を上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:317
 #, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "%s はサーマルリリーフ スポークの角度をオーバーライドしています。"
+msgstr "%s はサーマルリリーフ スポークの角度を上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:323
 #, c-format
 msgid "%s has zone knockout setting override."
-msgstr "%s はゾーンの切り抜きをオーバーライドしています。"
+msgstr "%s はゾーンの切り抜きを上書きしています。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:335
 #, c-format
@@ -51592,23 +51593,23 @@ msgstr "フットプリントのスタックアップが異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:877
 msgid "Pad clearance overridden."
-msgstr "パッドのクリアランスをオーバーライドしています。"
+msgstr "パッドのクリアランスを上書きされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:884
 msgid "Solder mask expansion overridden."
-msgstr "ハンダマスクの拡張をオーバーライドしています。"
+msgstr "ハンダマスクの拡張を上書きされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:892
 msgid "Solder paste absolute clearance overridden."
-msgstr "ハンダペーストの絶対クリアランスをオーバーライドしています。"
+msgstr "ハンダペーストの絶対クリアランスを上書きされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:899
 msgid "Solder paste relative clearance overridden."
-msgstr "ハンダペーストの相対クリアランスをオーバーライドしています。"
+msgstr "ハンダペーストの相対クリアランスを上書きされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:906
 msgid "Zone connection overridden."
-msgstr "導体ゾーンへの接続をオーバーライドしています。"
+msgstr "導体ゾーンへの接続を上書きされました。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:911
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:916
@@ -53093,7 +53094,7 @@ msgstr "コートヤード要件から免除"
 
 #: pcbnew/footprint.cpp:5138 pcbnew/pad.cpp:4134
 msgid "Clearance Override"
-msgstr "クリアランスのオーバーライド"
+msgstr "クリアランスの上書き"
 
 #: pcbnew/footprint.cpp:5142 pcbnew/pad.cpp:4142
 msgid "Solderpaste Margin Override"
