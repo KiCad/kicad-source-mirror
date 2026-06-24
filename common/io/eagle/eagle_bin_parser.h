@@ -141,6 +141,7 @@ private:
     // Schematic assembly, split into ordered steps. resolveSchLibraries returns the
     // library list that resegmentSchSheets needs to resolve part references.
     void postProcessSchematic( EGB_NODE* aRoot );
+    void postprocRequiredAttrs( EGB_NODE* aRoot );
     void postprocSchAttrs( EGB_NODE* aRoot );
     void renameSchSections( EGB_NODE* aSchematic );
     std::vector<EGB_NODE*> resolveSchLibraries( EGB_NODE* aSchematic );

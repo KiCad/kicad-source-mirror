@@ -311,8 +311,10 @@ const SCRIPT_ROW g_script[] = {
         { "maxy", T_INT, 10, 2 },
         { "name", T_STR, 16, 8 },
         TERM_A } },
+    // The package low byte is flags, not a layout selector, so match on the high byte alone;
+    // real libraries set bit 3 and bit 6 the bit-5-only mask rejected.
     { EGKW_SECT_PACKAGE,
-      0xFFDF,
+      0xFF00,
       "package",
       { TERM_F },
       { { 2, 2, SS_RECURSIVE, nullptr }, TERM_S },
@@ -341,8 +343,10 @@ const SCRIPT_ROW g_script[] = {
       { TERM_F },
       { { 2, 2, SS_RECURSIVE, nullptr }, TERM_S },
       { { "minx", T_INT, 4, 2 }, { "miny", T_INT, 6, 2 }, { "maxx", T_INT, 8, 2 }, { "maxy", T_INT, 10, 2 }, TERM_A } },
+    // The polygon low byte carries pour/rank flags, not a layout selector, so match on
+    // the high byte alone (real boards set bit 6 and others the narrow mask rejected).
     { EGKW_SECT_POLYGON,
-      0xFFF7,
+      0xFF00,
       "polygon",
       { TERM_F },
       { { 2, 2, SS_DIRECT, nullptr }, TERM_S },
@@ -415,8 +419,10 @@ const SCRIPT_ROW g_script[] = {
         { "radius", T_INT, 12, 4 },
         { "half_width", T_INT, 20, 4 },
         TERM_A } },
+    // The rectangle low byte is all flags; match on the high byte alone so the flag bits
+    // real boards set (0xa8, 0x8c, 0xa0) bind here instead of aborting the load.
     { EGKW_SECT_RECTANGLE,
-      0xFF5F,
+      0xFF00,
       "rectangle",
       { TERM_F },
       { TERM_S },
@@ -447,8 +453,10 @@ const SCRIPT_ROW g_script[] = {
         { "half_diameter", T_UBF, 12, BITFIELD( 2, 0, 15 ) },
         { "half_drill", T_UBF, 12, BITFIELD( 2, 0, 15 ) },
         TERM_A } },
+    // The via low byte is flags (the matched layout is identical for every value), so match
+    // on the high byte alone; real boards set bit 5 and others the bit-7-only mask rejected.
     { EGKW_SECT_VIA,
-      0xFF7F,
+      0xFF00,
       "via",
       { TERM_F },
       { TERM_S },
@@ -461,16 +469,16 @@ const SCRIPT_ROW g_script[] = {
         { "stop", T_BMB, 17, 0x01 },
         TERM_A } },
     // Pads and SMDs use two record layouts distinguished only by bit 7 of the
-    // signature low byte, which the 0xFF5F/0xFF7F masks of the full-layout rows
-    // below discard. The bit-7-clear variant omits the rotation and flag words and
-    // stores the pad name inline at offset 16, exactly where the bit-7-set record
-    // keeps its rotation word, so without a dedicated row the shared offsets read
-    // the name bytes back as a bogus rotation. These bit-7-clear rows precede the
-    // masked rows so such a block binds here first; a bit-7-set block fails the
-    // match and falls through to the full-layout row. Each variant mask still
-    // ignores the same low-byte flag bits as its full-layout row (bit 5 for pads)
-    // so only bit 7 selects the layout. The absent bin_rot leaves the pad
-    // unrotated, as the variant carries no angle.
+    // signature low byte, which the full-layout rows below discard along with the
+    // other low-byte flag bits. The bit-7-clear variant omits the rotation and flag
+    // words and stores the pad name inline at offset 16, exactly where the bit-7-set
+    // record keeps its rotation word, so without a dedicated row the shared offsets
+    // read the name bytes back as a bogus rotation. These bit-7-clear rows precede
+    // the masked rows so such a block binds here first; a bit-7-set block fails the
+    // match and falls through to the full-layout row. The bit-7-clear masks (0xFFDF
+    // pad, 0xFF80 smd) and the full-layout masks (0xFF5F pad, 0xFF00 smd) all ignore
+    // the low-byte flag bits real boards set, so only bit 7 selects the layout. The
+    // absent bin_rot leaves the pad unrotated, as the variant carries no angle.
     { EGKW_SECT_PAD,
       0xFFDF,
       "pad",
@@ -484,7 +492,7 @@ const SCRIPT_ROW g_script[] = {
         { "name", T_STR, 16, 8 },
         TERM_A } },
     { EGKW_SECT_SMD,
-      0xFFFF,
+      0xFF80,
       "smd",
       { TERM_F },
       { TERM_S },
@@ -513,7 +521,7 @@ const SCRIPT_ROW g_script[] = {
         { "name", T_STR, 19, 5 },
         TERM_A } },
     { EGKW_SECT_SMD,
-      0xFF7F,
+      0xFF00,
       "smd",
       { TERM_F },
       { TERM_S },
@@ -726,8 +734,10 @@ const SCRIPT_ROW g_script[] = {
         { "spin", T_UBF, 16, BITFIELD( 2, 14, 14 ) },
         { "textfield", T_STR, 18, 5 },
         TERM_A } },
+    // The attribute low byte is flags like the other text-family records, so match on the
+    // high byte alone (real boards set bit 5, which the bit-7-only mask rejected).
     { EGKW_SECT_ATTRIBUTE,
-      0xFF7F,
+      0xFF00,
       "attribute",
       { TERM_F },
       { TERM_S },
@@ -1576,7 +1586,9 @@ void EAGLE_BIN_PARSER::postprocWires( EGB_NODE* aRoot )
             // reader needs the endpoints plus a "curve" (the swept angle).
             arcDecode( aRoot, -1, lineType );
 
-            if( aRoot->HasProp( wxS( "Delta" ) ) )
+            // A zero swept angle is a straight segment; emitting curve="0" would abort the
+            // shared wire reader in ConvertArcCenter, so leave the wire uncurved.
+            if( aRoot->HasProp( wxS( "Delta" ) ) && aRoot->PropLong( wxS( "Delta" ) ) != 0 )
                 aRoot->props[wxS( "curve" )] = aRoot->Prop( wxS( "Delta" ) );
         }
     }
@@ -1612,7 +1624,9 @@ void EAGLE_BIN_PARSER::postprocArcs( EGB_NODE* aRoot )
 
         arcDecode( aRoot, arcType, -1 );
 
-        if( aRoot->HasProp( wxS( "Delta" ) ) )
+        // A zero swept angle is a straight segment; emitting curve="0" would abort the
+        // shared reader in ConvertArcCenter, so leave it uncurved.
+        if( aRoot->HasProp( wxS( "Delta" ) ) && aRoot->PropLong( wxS( "Delta" ) ) != 0 )
             aRoot->props[wxS( "curve" )] = aRoot->Prop( wxS( "Delta" ) );
     }
 
@@ -2056,6 +2070,8 @@ void EAGLE_BIN_PARSER::postprocNames( EGB_NODE* aLibraries, EGB_NODE* aElements 
     // and package a unique non-empty name, then rewrite each element's numeric
     // library/package references to those names so footprint lookup succeeds.
 
+    std::map<wxString, int> seenLibs;
+
     for( size_t li = 0; li < aLibraries->children.size(); li++ )
     {
         EGB_NODE* lib = aLibraries->children[li].get();
@@ -2071,6 +2087,13 @@ void EAGLE_BIN_PARSER::postprocNames( EGB_NODE* aLibraries, EGB_NODE* aElements 
 
         if( libName.IsEmpty() )
             libName = wxString::Format( wxS( "lib%zu" ), li + 1 );
+
+        // A board can embed several single-package libraries Eagle named after their sole
+        // component, so library names repeat. The reader keys footprints by (library, package)
+        // and rejects a duplicate pair, so disambiguate repeated library names the same way
+        // package names are disambiguated below.
+        if( int& libCount = seenLibs[libName]; libCount++ > 0 )
+            libName = wxString::Format( wxS( "%s_%d" ), libName, libCount );
 
         lib->props[wxS( "name" )] = libName;
 
@@ -2327,6 +2350,9 @@ void EAGLE_BIN_PARSER::postProcess( EGB_NODE* aRoot, const DRC_CTX& aDrc )
 
     postprocRotation( aRoot );
 
+    // Backfill XML-required attributes (frame columns) shared with the schematic path.
+    postprocRequiredAttrs( aRoot );
+
     // Custom element attributes decode without a name and would abort the shared
     // reader; prune them after every naming pass has had a chance to backfill one.
     postprocAttributes( aRoot );
@@ -2400,6 +2426,17 @@ std::unique_ptr<wxXmlDocument> EAGLE_BIN_PARSER::Parse( const std::vector<uint8_
     EGB_NODE* drawing = m_root->children.empty() ? nullptr : m_root->children.front().get();
     bool      isSchematic = drawing && drawing->FindChildById( EGKW_SECT_SCHEMA ) != nullptr;
 
+    // EAGLE_DOC requires a version attribute on the <eagle> root for every drawing kind
+    // (board, schematic and standalone library). Synthesize one from the drawing's binary
+    // version bytes; the value only feeds behavioural gating that already tolerates a coarse
+    // version.
+    if( drawing != nullptr )
+    {
+        long v1 = drawing->HasProp( wxS( "v1" ) ) ? drawing->PropLong( wxS( "v1" ) ) : 5;
+        long v2 = drawing->HasProp( wxS( "v2" ) ) ? drawing->PropLong( wxS( "v2" ) ) : 0;
+        m_root->props[wxS( "version" )] = wxString::Format( wxS( "%ld.%ld" ), v1, v2 );
+    }
+
     if( isSchematic )
     {
         // Long names/values are stored as 0x7F references into the trailing
@@ -2443,13 +2480,6 @@ void EAGLE_BIN_PARSER::postProcessSchematic( EGB_NODE* aRoot )
     if( schematic == nullptr )
         THROW_IO_ERROR( _( "Eagle binary file has no schematic section." ) );
 
-    // EAGLE_DOC requires a version attribute on the <eagle> root. Synthesize one
-    // from the drawing's binary version bytes; the value only feeds behavioural
-    // gating that already tolerates a coarse version.
-    long v1 = drawing->HasProp( wxS( "v1" ) ) ? drawing->PropLong( wxS( "v1" ) ) : 5;
-    long v2 = drawing->HasProp( wxS( "v2" ) ) ? drawing->PropLong( wxS( "v2" ) ) : 0;
-    aRoot->props[wxS( "version" )] = wxString::Format( wxS( "%ld.%ld" ), v1, v2 );
-
     // The schema section becomes the XML <schematic> element.
     schematic->name = wxS( "schematic" );
 
@@ -2462,6 +2492,7 @@ void EAGLE_BIN_PARSER::postProcessSchematic( EGB_NODE* aRoot )
     postprocFreeText( aRoot );
     postprocTextContent( aRoot );
     postprocRotation( aRoot );
+    postprocRequiredAttrs( aRoot );
     postprocSchAttrs( aRoot );
     postprocUnits( aRoot );
     renameSchSections( schematic );
@@ -2499,6 +2530,21 @@ wxString EAGLE_BIN_PARSER::nameByOrdinal( const std::vector<EGB_NODE*>& aList, l
 }
 
 
+void EAGLE_BIN_PARSER::postprocRequiredAttrs( EGB_NODE* aRoot )
+{
+    // The shared XML reader marks <frame columns> #REQUIRED. Frames appear in boards,
+    // schematics and library symbols alike, so rename the binary "cols" field on every
+    // drawing kind rather than only the schematic path. The board path prunes its own
+    // nameless attributes, so the <attribute> name backfill stays in postprocSchAttrs.
+    aRoot->ForEach(
+            [&]( EGB_NODE* aNode )
+            {
+                if( aNode->id == EGKW_SECT_FRAME && aNode->HasProp( wxS( "cols" ) ) )
+                    aNode->props[wxS( "columns" )] = aNode->Prop( wxS( "cols" ) );
+            } );
+}
+
+
 void EAGLE_BIN_PARSER::postprocSchAttrs( EGB_NODE* aRoot )
 {
     // Normalize per-element attributes to their XML names/values before the unit
@@ -2506,9 +2552,6 @@ void EAGLE_BIN_PARSER::postprocSchAttrs( EGB_NODE* aRoot )
     aRoot->ForEach(
             [&]( EGB_NODE* aNode )
             {
-                if( aNode->id == EGKW_SECT_FRAME && aNode->HasProp( wxS( "cols" ) ) )
-                    aNode->props[wxS( "columns" )] = aNode->Prop( wxS( "cols" ) );
-
                 // A placed <attribute> carries its key in the text field; the reader
                 // needs it as the required name attribute.
                 if( aNode->id == EGKW_SECT_ATTRIBUTE && !aNode->HasProp( wxS( "name" ) ) )
