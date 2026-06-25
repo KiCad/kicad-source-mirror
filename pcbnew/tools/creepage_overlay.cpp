@@ -171,7 +171,6 @@ void CREEPAGE_OVERLAY::Start( const std::vector<BOARD_ITEM*>& aMovingItems )
     if( !m_overlay )
     {
         m_overlay = m_view->MakeOverlay();
-        m_view->Add( m_overlay.get() );
     }
 
     m_active = true;
