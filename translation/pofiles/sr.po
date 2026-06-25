@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-24 22:01+0000\n"
+"PO-Revision-Date: 2026-06-26 08:01+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -10356,19 +10356,16 @@ msgid "Save As..."
 msgstr "Сачувај као..."
 
 #: common/tool/actions.cpp:103
-#, fuzzy
 msgid "Save current document to another location"
-msgstr "Сачувај копију симбола"
+msgstr "Сачувај тренутни документ на другу локацију"
 
 #: common/tool/actions.cpp:109
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "Сачувај копију као..."
+msgstr "Сачувај копију..."
 
 #: common/tool/actions.cpp:110
-#, fuzzy
 msgid "Save a copy of the current document to another location"
-msgstr "Сачувај копију симбола"
+msgstr "Сачувај копију тренутног документа на другу локацију"
 
 #: common/tool/actions.cpp:116
 msgid "Save All"
@@ -10383,23 +10380,20 @@ msgid "Revert"
 msgstr "Врати"
 
 #: common/tool/actions.cpp:124
-#, fuzzy
 msgid "Throw away changes"
-msgstr "Увијек прикажи"
+msgstr "Одбаци промене"
 
 #: common/tool/actions.cpp:131
-#, fuzzy
 msgid "Page Settings..."
-msgstr "Поставке странице"
+msgstr "Подешавања странице..."
 
 #: common/tool/actions.cpp:132
 msgid "Settings for paper size and title block info"
-msgstr ""
+msgstr "Подешавања за величину папира и информација у насловном блоку"
 
 #: common/tool/actions.cpp:140
-#, fuzzy
 msgid "Print..."
-msgstr "&Пројект..."
+msgstr "Штампај..."
 
 #: common/tool/actions.cpp:146
 #, fuzzy
