@@ -2513,20 +2513,29 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     if( sheetsPasted )
     {
-        // The full schematic hierarchy need to be update before assigning new annotation and
-        // page numbers.
+        // The full schematic hierarchy need to be update before assigning new annotation and page numbers.
         m_frame->Schematic().RefreshHierarchy();
 
-        // Update page numbers: Find next free numeric page number
+        // Update sheet instance page and virtual page numbers to ensure annotation works correctly.
         for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
         {
             for( SCH_SHEET_PATH& pastedSheet : pastedSheets[sheetPath] )
             {
+                // Find next free string page number for the sheet instance.
                 int      page = 1;
                 wxString pageNum = wxString::Format( "%d", page );
 
                 while( hierarchy.PageNumberExists( pageNum ) )
                     pageNum = wxString::Format( "%d", ++page );
+
+                int virtualPageNumber = page;
+
+                // The virtual page and sheet instance page numbers do not necessarily track. Increment by one
+                // to ensure the annotation sheet paths all have unique virtual page numbers.
+                if( page == hierarchy.GetLastVirtualPageNumber() )
+                    virtualPageNumber = hierarchy.GetLastVirtualPageNumber() + 1;
+
+                pastedSheet.SetVirtualPageNumber( virtualPageNumber );
 
                 SCH_SHEET_INSTANCE sheetInstance;
 
@@ -2555,6 +2564,20 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 for( const KIID_PATH& instancePath : instancesToRemove )
                     sheet->RemoveInstance( instancePath );
+
+                // The sheet paths for the annotation code where copied in updatePastedSheets() when the virtual
+                // page number was still 1.  Set the virtual page number in the copied sheet paths.
+                for( auto&[path, refs] : pastedSymbols )
+                {
+                    for( SCH_REFERENCE& ref : refs )
+                    {
+                        if( ref.GetSheetPath() == pastedSheet )
+                        {
+                            ref.GetSheetPath().SetVirtualPageNumber( virtualPageNumber );
+                            ref.SetSheetNumber( virtualPageNumber );
+                        }
+                    }
+                }
             }
         }
 
