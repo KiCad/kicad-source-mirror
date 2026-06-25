@@ -31,6 +31,7 @@
 #include <thread>
 #include <wx/filename.h>
 #include <hash.h>
+#include <mmh3_hash.h>
 #include <set>
 #include <unordered_set>
 #include <core/kicad_algo.h>
@@ -416,6 +417,10 @@ void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aParent )
 {
     std::lock_guard<KISPINLOCK> lock( m_board->GetConnectivity()->GetLock() );
+
+    // Keyed on knockout geometry only; valid for this fill's passes (pre-knockout fill is rebuilt
+    // below).
+    m_refillResultCache.clear();
 
     // The fill evaluates thermal-relief and clearance rules through the board's DRC engine on
     // worker threads.  Interactive callers always supply an initialized engine, but headless
@@ -4119,6 +4124,30 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
 
     forEachBoardAndFootprintZone( m_board, collectZoneKnockout );
 
+    // Refill output is a pure function of the (fill-constant) pre-knockout fill and these
+    // knockouts; hash them and skip the subtract + min-width prune below on a cache hit.
+    // Order-preserving combine, not XOR: diff-net (inflated/pruned) and same-net knockouts must
+    // stay distinct in the key.
+    HASH_128  diffNetHash = diffNetKnockouts.GetHash();
+    HASH_128  sameNetHash = sameNetKnockouts.GetHash();
+    MMH3_HASH refillHash( 0xA9917E5D );
+    refillHash.addData( reinterpret_cast<const uint8_t*>( diffNetHash.Value64 ),
+                        sizeof( diffNetHash.Value64 ) );
+    refillHash.addData( reinterpret_cast<const uint8_t*>( sameNetHash.Value64 ),
+                        sizeof( sameNetHash.Value64 ) );
+    HASH_128 knockoutHash = refillHash.digest();
+
+    {
+        std::lock_guard<std::mutex> lock( m_cacheMutex );
+        auto                        it = m_refillResultCache.find( cacheKey );
+
+        if( it != m_refillResultCache.end() && it->second.first == knockoutHash )
+        {
+            aFillPolys = it->second.second;
+            return true;
+        }
+    }
+
     // Keepout zones are not collected here because they are already baked into the cached
     // pre-knockout fill.  They were subtracted before the initial deflate/inflate min-width
     // cycle so the cached fill already reflects keepout boundaries (issue 23515).
@@ -4138,6 +4167,11 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
         aFillPolys.BooleanSubtract( sameNetKnockouts );
 
     aFillPolys.Fracture();
+
+    {
+        std::lock_guard<std::mutex> lock( m_cacheMutex );
+        m_refillResultCache[cacheKey] = { knockoutHash, aFillPolys };
+    }
 
     return true;
 }
