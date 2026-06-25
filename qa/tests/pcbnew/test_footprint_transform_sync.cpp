@@ -2357,6 +2357,30 @@ BOOST_AUTO_TEST_CASE( ZoneBoundingBoxIsBoardFrameForFPChild )
 }
 
 
+BOOST_AUTO_TEST_CASE( CachedZoneBoundingBoxIsBoardFrameForFPChild )
+{
+    // Footprint-owned zone: the cached fast-path box must be the board-frame outline, not the
+    // raw lib-frame outline, or DRC/culling gets a box at the wrong place.
+    BOARD board;
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetPosition( VECTOR2I( 50000000, 30000000 ) );
+    board.Add( fp, ADD_MODE::APPEND );
+
+    ZONE* zone = new ZONE( fp );
+    seedSquareLibOutline( zone );
+    fp->Add( zone, ADD_MODE::APPEND );
+
+    zone->CacheBoundingBox();
+    BOX2I bbox = zone->GetBoundingBox();
+
+    BOOST_CHECK_MESSAGE( bbox.GetCenter().x > 49000000 && bbox.GetCenter().x < 51000000
+                                 && bbox.GetCenter().y > 29000000 && bbox.GetCenter().y < 31000000,
+                         "cached bbox centre ( " << bbox.GetCenter().x << ", " << bbox.GetCenter().y
+                                          << " ) expected near board ( 50000000, 30000000 )" );
+}
+
+
 BOOST_AUTO_TEST_CASE( ZoneSmoothedPolyForFPRuleAreaIsBoardFrame )
 {
     // Keepout knockout source must be board frame so it carves at the FP position.

@@ -209,6 +209,9 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone, PCB_LAYER_ID aLayer )
     m_netinfo                 = aZone.m_netinfo;
     m_area                    = aZone.m_area;
     m_outlinearea             = aZone.m_outlinearea;
+
+    // Fresh outline; lock-free bbox cache starts invalid.
+    m_bboxCacheTimeStamp.store( -1, std::memory_order_relaxed );
 }
 
 
@@ -734,18 +737,24 @@ bool ZONE::IsOnLayer( PCB_LAYER_ID aLayer ) const
 }
 
 
+BOX2I ZONE::computeBoundingBox() const
+{
+    if( GetParentFootprint() )
+        return GetBoardOutline().BBox();
+
+    return m_Poly->BBox();
+}
+
+
 const BOX2I ZONE::GetBoundingBox() const
 {
-    auto computeBBox = [&]() -> BOX2I
-    {
-        if( GetParentFootprint() )
-            return GetBoardOutline().BBox();
-
-        return m_Poly->BBox();
-    };
-
     if( const BOARD* board = GetBoard() )
     {
+        // Lock-free fast path, valid while the board timestamp matches what we cached for.
+        // Skips the caches mutex that otherwise serializes every fill worker.
+        if( m_bboxCacheTimeStamp.load( std::memory_order_acquire ) == board->GetTimeStamp() )
+            return m_bboxCache;
+
         std::unordered_map<const ZONE*, BOX2I>& cache = board->m_ZoneBBoxCache;
 
         {
@@ -757,7 +766,7 @@ const BOX2I ZONE::GetBoundingBox() const
                 return cacheIter->second;
         }
 
-        BOX2I bbox = computeBBox();
+        BOX2I bbox = computeBoundingBox();
 
         {
             std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
@@ -767,15 +776,28 @@ const BOX2I ZONE::GetBoundingBox() const
         return bbox;
     }
 
-    return computeBBox();
+    return computeBoundingBox();
 }
 
 
 void ZONE::CacheBoundingBox()
 {
-    // GetBoundingBox() will cache it for us, and there's no sense duplicating the somewhat tricky
-    // locking code.
-    GetBoundingBox();
+    const BOARD* board = GetBoard();
+    BOX2I        bbox = computeBoundingBox();
+
+    if( board )
+    {
+        // Board cache, for callers that read it directly.
+        {
+            std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
+            board->m_ZoneBBoxCache[this] = bbox;
+        }
+
+        // Per-zone lock-free copy.  Single-threaded per zone, so box-before-timestamp (release)
+        // suffices for the acquiring reader in GetBoundingBox().
+        m_bboxCache = bbox;
+        m_bboxCacheTimeStamp.store( board->GetTimeStamp(), std::memory_order_release );
+    }
 }
 
 
@@ -1202,6 +1224,10 @@ void ZONE::Move( const VECTOR2I& offset )
         if( it != GetBoard()->m_ZoneBBoxCache.end() )
             it->second.Move( offset );
     }
+
+    // Move doesn't bump the board timestamp, so invalidate the lock-free copy rather than race
+    // readers by mutating it.  GetBoundingBox() falls back to the board cache (moved above).
+    m_bboxCacheTimeStamp.store( -1, std::memory_order_release );
 }
 
 

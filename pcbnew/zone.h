@@ -1035,6 +1035,13 @@ protected:
     double                    m_area;              // The filled zone area
     double                    m_outlinearea;       // The outline zone area
 
+    /// Compute the bbox from scratch.  Shared so the cached value can't diverge from the live one.
+    BOX2I computeBoundingBox() const;
+
+    /// Lock-free bbox cache, valid while m_bboxCacheTimeStamp matches the board timestamp.
+    mutable BOX2I             m_bboxCache;
+    mutable std::atomic<int>  m_bboxCacheTimeStamp{ -1 };
+
 };
 
 
