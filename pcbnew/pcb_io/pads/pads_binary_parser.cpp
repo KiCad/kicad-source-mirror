@@ -4728,8 +4728,13 @@ size_t BINARY_PARSER::locateStringPool() const
 
             size_t after = p + TAIL;
 
-            while( m_cursor.InBounds( after, RULE_REC ) && m_cursor.U32At( after ) == 0
-                   && m_cursor.U32At( after + 32 ) == 0xFFFFFFFF )
+            // The record appears in two phases -- some runs lead with a zero word and some with
+            // the first pointer -- which puts its 0xFFFFFFFF field at +32 or +28. Accepting
+            // either takes the derivation from 474 boards to 479; requiring one phase alone
+            // scores 474 and 452.
+            while( m_cursor.InBounds( after, RULE_REC )
+                   && ( m_cursor.U32At( after + 32 ) == 0xFFFFFFFF
+                        || m_cursor.U32At( after + 28 ) == 0xFFFFFFFF ) )
             {
                 after += RULE_REC;
             }
