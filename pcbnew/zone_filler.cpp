@@ -23,10 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <atomic>
 #include <cmath>
 #include <functional>
 #include <future>
+#include <thread>
 #include <wx/filename.h>
 #include <hash.h>
 #include <set>
@@ -805,138 +807,86 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     thread_pool&      tp = GetKiCadThreadPool();
     std::atomic<bool> cancelled = false;
 
-    auto waitForFutures =
-            [&]( std::vector<std::future<int>>& aFutures, std::vector<int>* aResults = nullptr )
+    // Walk the dependency DAG without wave barriers, which would idle the whole pool on the
+    // slowest fill in each wave.  Release an item's successors the instant its fill publishes
+    // and tessellate inline, keeping the pool saturated.  A fill only reads the outlines and
+    // published fills of its dependencies, so releasing on completion is safe.
+    auto run_fill_waves =
+            [&]( const std::vector<std::pair<ZONE*, PCB_LAYER_ID>>& aFillItems, auto&& aFillFn,
+                 auto&& aTessFn, auto&& aHasDependency, bool aAnyDependencies )
             {
-                if( aResults )
-                    aResults->clear();
+                const size_t count = aFillItems.size();
 
-                for( auto& future : aFutures )
+                if( count == 0 )
+                    return;
+
+                std::vector<std::vector<size_t>> successors( count );
+                std::vector<std::atomic<int>>    inDegree( count );
+
+                for( size_t i = 0; i < count; ++i )
+                    inDegree[i].store( 0, std::memory_order_relaxed );
+
+                // Skip the O(N²) dependency scan when the caller guarantees no deps.
+                if( aAnyDependencies )
                 {
-                    while( future.wait_for( std::chrono::milliseconds( 100 ) )
-                            != std::future_status::ready )
+                    for( size_t i = 0; i < count; ++i )
                     {
-                        if( m_progressReporter )
+                        for( size_t j = 0; j < count; ++j )
                         {
-                            m_progressReporter->KeepRefreshing();
+                            if( i == j )
+                                continue;
 
-                            if( m_progressReporter->IsCancelled() )
-                                cancelled = true;
+                            if( aHasDependency( aFillItems[j], aFillItems[i] ) )
+                            {
+                                successors[i].push_back( j );
+                                inDegree[j].fetch_add( 1, std::memory_order_relaxed );
+                            }
                         }
                     }
+                }
 
-                    int result = future.get();
+                std::atomic<int> remaining( (int) count );
 
-                    if( aResults )
-                        aResults->push_back( result );
+                std::function<void( size_t )> process;
+                process =
+                        [&]( size_t idx )
+                        {
+                            int filled = aFillFn( aFillItems[idx] );
+
+                            // Release dependents; their fills read this one's now-published result.
+                            for( size_t succ : successors[idx] )
+                            {
+                                if( inDegree[succ].fetch_sub( 1, std::memory_order_acq_rel ) == 1 )
+                                    tp.detach_task( [&process, succ]() { process( succ ); } );
+                            }
+
+                            if( filled != 0 && !cancelled.load() )
+                                aTessFn( aFillItems[idx] );
+
+                            remaining.fetch_sub( 1, std::memory_order_acq_rel );
+                        };
+
+                // Seed the pool with every dependency-free item.
+                for( size_t i = 0; i < count; ++i )
+                {
+                    if( inDegree[i].load( std::memory_order_relaxed ) == 0 )
+                        tp.detach_task( [&process, i]() { process( i ); } );
+                }
+
+                // Drain the DAG, keeping the UI responsive and honoring cancellation.
+                while( remaining.load( std::memory_order_acquire ) > 0 )
+                {
+                    if( m_progressReporter )
+                    {
+                        m_progressReporter->KeepRefreshing();
+
+                        if( m_progressReporter->IsCancelled() )
+                            cancelled = true;
+                    }
+
+                    std::this_thread::sleep_for( std::chrono::milliseconds( 20 ) );
                 }
             };
-
-    struct FILL_DAG
-    {
-        std::vector<std::vector<size_t>> successors;
-        std::vector<int>                 inDegree;
-        std::vector<size_t>              currentWave;
-    };
-
-    auto build_fill_dag = [&]( const std::vector<std::pair<ZONE*, PCB_LAYER_ID>>& aFillItems, auto&& aHasDependency,
-                               bool aAnyDependencies ) -> FILL_DAG
-    {
-        FILL_DAG dag;
-
-        dag.successors.resize( aFillItems.size() );
-        dag.inDegree.assign( aFillItems.size(), 0 );
-        dag.currentWave.reserve( aFillItems.size() );
-
-        // Skip the O(N²) dependency scan when the caller guarantees no deps.
-        // All items become the initial wave.
-        if( aAnyDependencies )
-        {
-            for( size_t i = 0; i < aFillItems.size(); ++i )
-            {
-                for( size_t j = 0; j < aFillItems.size(); ++j )
-                {
-                    if( i == j )
-                        continue;
-
-                    if( aHasDependency( aFillItems[j], aFillItems[i] ) )
-                    {
-                        dag.successors[i].push_back( j );
-                        dag.inDegree[j]++;
-                    }
-                }
-            }
-        }
-
-        for( size_t i = 0; i < aFillItems.size(); ++i )
-        {
-            if( dag.inDegree[i] == 0 )
-                dag.currentWave.push_back( i );
-        }
-
-        return dag;
-    };
-
-    auto run_fill_waves = [&]( const std::vector<std::pair<ZONE*, PCB_LAYER_ID>>& aFillItems, auto&& aFillFn,
-                               auto&& aTessFn, auto&& aHasDependency, bool aAnyDependencies )
-    {
-        FILL_DAG dag = build_fill_dag( aFillItems, aHasDependency, aAnyDependencies );
-
-        while( !dag.currentWave.empty() && !cancelled.load() )
-        {
-            std::vector<std::future<int>> fillFutures;
-            std::vector<int>              fillResults;
-
-            fillFutures.reserve( dag.currentWave.size() );
-
-            for( size_t idx : dag.currentWave )
-            {
-                fillFutures.emplace_back( tp.submit_task(
-                        [&aFillFn, &aFillItems, idx]()
-                        {
-                            return aFillFn( aFillItems[idx] );
-                        } ) );
-            }
-
-            waitForFutures( fillFutures, &fillResults );
-
-            std::vector<std::future<int>> tessFutures;
-
-            tessFutures.reserve( dag.currentWave.size() );
-
-            for( size_t ii = 0; ii < fillResults.size(); ++ii )
-            {
-                if( fillResults[ii] == 0 )
-                    continue;
-
-                size_t idx = dag.currentWave[ii];
-
-                tessFutures.emplace_back( tp.submit_task(
-                        [&aTessFn, &aFillItems, idx]()
-                        {
-                            return aTessFn( aFillItems[idx] );
-                        } ) );
-            }
-
-            waitForFutures( tessFutures );
-
-            if( cancelled.load() )
-                break;
-
-            std::vector<size_t> nextWave;
-
-            for( size_t idx : dag.currentWave )
-            {
-                for( size_t succ : dag.successors[idx] )
-                {
-                    if( --dag.inDegree[succ] == 0 )
-                        nextWave.push_back( succ );
-                }
-            }
-
-            dag.currentWave = std::move( nextWave );
-        }
-    };
 
     run_fill_waves( toFill, fill_lambda, tesselate_lambda, fill_item_dependency, true );
 

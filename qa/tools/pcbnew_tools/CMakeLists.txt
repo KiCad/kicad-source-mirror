@@ -28,6 +28,8 @@ add_executable( qa_pcbnew_tools
 
     tools/pcb_parser/pcb_parser_tool.cpp
 
+    tools/fill_bench/fill_bench_tool.cpp
+
     tools/polygon_generator/polygon_generator.cpp
 
     tools/polygon_triangulation/polygon_triangulation.cpp

@@ -25,6 +25,7 @@
 #ifndef CLASS_BOARD_H_
 #define CLASS_BOARD_H_
 
+#include <atomic>
 #include <board_item_container.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <embedded_files.h>
@@ -343,7 +344,7 @@ public:
 
     void IncrementTimeStamp();
 
-    int GetTimeStamp() const { return m_timeStamp; }
+    int GetTimeStamp() const { return m_timeStamp.load( std::memory_order_acquire ); }
 
     /**
      * Find out if the board is being used to hold a single footprint for editing/viewing.
@@ -1532,7 +1533,7 @@ private:
 
     /// What is this board being used for
     BOARD_USE           m_boardUse;
-    int                 m_timeStamp;                // actually a modification counter
+    std::atomic<int>    m_timeStamp;                // actually a modification counter
 
     wxString            m_fileName;
 
