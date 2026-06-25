@@ -65,9 +65,11 @@ set( QA_PCBNEW_SRCS
     test_io_mgr.cpp
     test_ellipse_roundtrip.cpp
     test_custom_pad_primitive_roundtrip.cpp
+    test_active_layer_update.cpp
     test_lset.cpp
     test_meander_corner_radius.cpp
     test_odb_dimension_export.cpp
+    test_pcb_control_rehatch.cpp
     test_pns_basics.cpp
     test_pad_flashing.cpp
     test_pad_numbering.cpp
