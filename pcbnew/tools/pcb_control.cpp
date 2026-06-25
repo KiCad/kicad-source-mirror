@@ -2929,25 +2929,33 @@ int PCB_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_CONTROL::rehatchBoardItem( BOARD_ITEM* aItem )
+void PCB_CONTROL::rehatchBoardItem( KIGFX::VIEW* aView, BOARD_ITEM* aItem )
 {
-    if( aItem->Type() == PCB_SHAPE_T )
-    {
-        static_cast<PCB_SHAPE*>( aItem )->UpdateHatching();
+    if( aItem->Type() != PCB_SHAPE_T )
+        return;
 
-        if( view() )
-            view()->Update( aItem );
-    }
+    PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( aItem );
+
+    // Re-caching every non-hatched shape on each edit stalls commits on dense boards.
+    if( !shape->IsHatchedFill() )
+        return;
+
+    shape->UpdateHatching();
+
+    if( aView )
+        aView->Update( aItem );
 }
 
 
 int PCB_CONTROL::RehatchShapes( const TOOL_EVENT& aEvent )
 {
+    KIGFX::VIEW* view = this->view();
+
     for( FOOTPRINT* footprint : board()->Footprints() )
-        footprint->RunOnChildren( std::bind( &PCB_CONTROL::rehatchBoardItem, this, _1 ), NO_RECURSE );
+        footprint->RunOnChildren( std::bind( &PCB_CONTROL::rehatchBoardItem, view, _1 ), NO_RECURSE );
 
     for( BOARD_ITEM* item : board()->Drawings() )
-        rehatchBoardItem( item );
+        rehatchBoardItem( view, item );
 
     return 0;
 }

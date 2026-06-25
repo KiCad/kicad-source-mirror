@@ -57,9 +57,11 @@ set( QA_PCBNEW_SRCS
     test_footprint_rescue_layer.cpp
     test_fp_lib_load_save.cpp
     test_io_mgr.cpp
+    test_active_layer_update.cpp
     test_lset.cpp
     test_meander_corner_radius.cpp
     test_odb_dimension_export.cpp
+    test_pcb_control_rehatch.cpp
     test_pns_basics.cpp
     test_pad_flashing.cpp
     test_pad_numbering.cpp

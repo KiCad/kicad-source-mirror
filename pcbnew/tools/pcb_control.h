@@ -121,6 +121,9 @@ public:
 
     int RehatchShapes( const TOOL_EVENT& aEvent );
 
+    /// Regenerate and redraw an item's hatching, skipping non-hatched shapes. Static for testing.
+    static void rehatchBoardItem( KIGFX::VIEW* aView, BOARD_ITEM* aItem );
+
     // Drag and drop
     int DdAppendBoard( const TOOL_EVENT& aEvent );
     int DdAddLibrary( const TOOL_EVENT& aEvent );
@@ -159,8 +162,6 @@ private:
 
     bool placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aAnchorAtOrigin, bool aReannotateDuplicates,
                           bool aSkipMove );
-
-    void rehatchBoardItem( BOARD_ITEM* aItem );
 
 private:
     PCB_BASE_FRAME*                         m_frame;

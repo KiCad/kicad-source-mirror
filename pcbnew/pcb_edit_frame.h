@@ -298,6 +298,10 @@ public:
      */
     void SetActiveLayer( PCB_LAYER_ID aLayer, bool aForceRedraw );
 
+    /// View update flags an item needs when the active layer changes. Static for testing.
+    static int activeLayerUpdateFlags( const BOARD_ITEM* aItem, PCB_LAYER_ID aOldLayer,
+                                       PCB_LAYER_ID aNewLayer, HIGH_CONTRAST_MODE aContrastMode );
+
     void OnDisplayOptionsChanged() override;
 
     /**
