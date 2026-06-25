@@ -27,6 +27,7 @@
 #include <vector>
 #include <zone.h>
 #include <geometry/shape_poly_set.h>
+#include <hash_128.h>
 
 class PROGRESS_REPORTER;
 class BOARD;
@@ -214,6 +215,11 @@ private:
     // Cache of pre-knockout fills for iterative refill optimization (issue 21746)
     // Key: (zone pointer, layer), Value: fill polygon before higher-priority zone knockout
     std::map<std::pair<const ZONE*, PCB_LAYER_ID>, SHAPE_POLY_SET> m_preKnockoutFillCache;
+
+    // Refill result keyed by (zone, layer); value is the knockout-geometry hash + cached fill.
+    // Hit lets an unchanged-knockout zone skip the refill subtract + prune.  Cleared each Fill().
+    std::map<std::pair<const ZONE*, PCB_LAYER_ID>, std::pair<HASH_128, SHAPE_POLY_SET>>
+                                                                   m_refillResultCache;
     mutable std::mutex                                             m_cacheMutex;
 };
 
