@@ -1619,6 +1619,134 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutFootprintFreeReapplyReplaces, MUL
 
 
 /**
+ * Applying a design block layout must not delete routing owned by another group. When several
+ * instances of the same block overlap (e.g. stacked right after Update PCB) the target area
+ * encloses a sibling instance's traces. Removing them made each apply wipe the previously applied
+ * instance's routing, so only the last instance kept its layout (issue 24767). Loose, ungrouped
+ * routing in the target area must still be replaced.
+ */
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutKeepsOtherGroupRouting, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxT( "NET1" ), 1 );
+    m_board->Add( net );
+
+    // Source block: one track centered on origin.
+    PCB_TRACK* srcTrack = new PCB_TRACK( m_board.get() );
+    srcTrack->SetLayer( F_Cu );
+    srcTrack->SetWidth( pcbIUScale.mmToIU( 0.25 ) );
+    srcTrack->SetStart( VECTOR2I( pcbIUScale.mmToIU( -2 ), 0 ) );
+    srcTrack->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 2 ), 0 ) );
+    srcTrack->SetNet( net );
+    m_board->Add( srcTrack );
+
+    // Destination group with a placeholder so the group exists.
+    PCB_SHAPE* destPlaceholder = new PCB_SHAPE( m_board.get(), SHAPE_T::SEGMENT );
+    destPlaceholder->SetStart( VECTOR2I( pcbIUScale.mmToIU( 49 ), pcbIUScale.mmToIU( 49 ) ) );
+    destPlaceholder->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 51 ), pcbIUScale.mmToIU( 49 ) ) );
+    destPlaceholder->SetLayer( F_SilkS );
+    destPlaceholder->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
+    m_board->Add( destPlaceholder );
+
+    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+    destGroup->SetName( wxT( "design-block-dest" ) );
+    destGroup->AddItem( destPlaceholder );
+    m_board->Add( destGroup );
+
+    // A sibling instance's track, inside the destination area but owned by another group.
+    PCB_TRACK* siblingTrack = new PCB_TRACK( m_board.get() );
+    siblingTrack->SetLayer( F_Cu );
+    siblingTrack->SetWidth( pcbIUScale.mmToIU( 0.25 ) );
+    siblingTrack->SetStart( VECTOR2I( pcbIUScale.mmToIU( 47 ), pcbIUScale.mmToIU( 47 ) ) );
+    siblingTrack->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 49 ), pcbIUScale.mmToIU( 47 ) ) );
+    m_board->Add( siblingTrack );
+
+    PCB_GROUP* siblingGroup = new PCB_GROUP( m_board.get() );
+    siblingGroup->SetName( wxT( "design-block-sibling" ) );
+    siblingGroup->AddItem( siblingTrack );
+    m_board->Add( siblingGroup );
+
+    // Loose, ungrouped routing inside the destination area, which still gets replaced.
+    PCB_TRACK* looseTrack = new PCB_TRACK( m_board.get() );
+    looseTrack->SetLayer( F_Cu );
+    looseTrack->SetWidth( pcbIUScale.mmToIU( 0.25 ) );
+    looseTrack->SetStart( VECTOR2I( pcbIUScale.mmToIU( 47 ), pcbIUScale.mmToIU( 53 ) ) );
+    looseTrack->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 49 ), pcbIUScale.mmToIU( 53 ) ) );
+    m_board->Add( looseTrack );
+
+    RULE_AREA dbRA;
+    dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+    dbRA.m_designBlockItems.insert( srcTrack );
+
+    dbRA.m_zone = new ZONE( m_board.get() );
+    dbRA.m_zone->SetIsRuleArea( true );
+    dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    dbRA.m_zone->AddPolygon(
+            KIGEOM::BoxToLineChain( BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
+                                                      VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
+    dbRA.m_center = dbRA.m_zone->Outline()->COutline( 0 ).Centre();
+
+    RULE_AREA destRA;
+    destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+    destRA.m_group = destGroup;
+
+    destRA.m_zone = new ZONE( m_board.get() );
+    destRA.m_zone->SetIsRuleArea( true );
+    destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+            BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 45 ), pcbIUScale.mmToIU( 45 ) ),
+                              VECTOR2I( pcbIUScale.mmToIU( 55 ), pcbIUScale.mmToIU( 55 ) ) ) ) );
+    destRA.m_center = destRA.m_zone->Outline()->COutline( 0 ).Centre();
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                   .m_connectedRoutingOnly = false,
+                                   .m_copyPlacement = true,
+                                   .m_copyOtherItems = true,
+                                   .m_groupItems = false,
+                                   .m_includeLockedItems = true,
+                                   .m_anchorFp = nullptr };
+
+    wxString err;
+    int      result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts, nullptr, &err );
+
+    delete dbRA.m_zone;
+    delete destRA.m_zone;
+
+    BOOST_REQUIRE_MESSAGE( result >= 0, wxString::Format( "RepeatLayout failed: %s", err ) );
+
+    // Pointers to removed tracks are deleted, so count survivors by location instead.
+    int siblingTracks = 0;
+    int looseTracks = 0;
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        int y = track->GetStart().y;
+
+        if( y > pcbIUScale.mmToIU( 46 ) && y < pcbIUScale.mmToIU( 48 ) )
+            siblingTracks++;
+        else if( y > pcbIUScale.mmToIU( 52 ) && y < pcbIUScale.mmToIU( 54 ) )
+            looseTracks++;
+    }
+
+    BOOST_CHECK_MESSAGE( siblingTracks == 1,
+                         wxString::Format( "Sibling group routing was deleted (issue 24767): found %d, expected 1",
+                                           siblingTracks ) );
+    BOOST_CHECK_MESSAGE( looseTracks == 0,
+                         wxString::Format( "Loose routing in the target area should be replaced: found %d, expected 0",
+                                           looseTracks ) );
+}
+
+
+/**
  * Repeat layout must refuse a target Rule Area that resolves to the same components as the
  * reference area (issue 22318). The repro board has four placement rule areas all bound to the
  * same sheet "/test sheet 1/", so each resolves to the identical footprint set; copying one onto

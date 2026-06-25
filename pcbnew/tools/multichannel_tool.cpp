@@ -1332,6 +1332,13 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( aRefArea->m_designBlockItems.count( item ) )
                 continue;
 
+            // Design block apply (target has a group): don't remove routing owned by another
+            // group, or applying to stacked instances wipes the previous instance's traces.
+            if( aTargetArea->m_group && item->GetParentGroup() && item->GetParentGroup() != aTargetArea->m_group )
+            {
+                continue;
+            }
+
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
 
