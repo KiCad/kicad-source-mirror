@@ -46,8 +46,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-24 22:01+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-06-26 08:01+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -25440,24 +25440,24 @@ msgstr ""
 #: eeschema/tools/backannotate.cpp:305
 #, c-format
 msgid "Footprint '%s' has no assigned symbol."
-msgstr "封装 '%s' 没有分配的符号。"
+msgstr "封装「%s」没有分配的符号。"
 
 #: eeschema/tools/backannotate.cpp:381
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "封装 '%s' 和 '%s' 链接到相同的符号。"
+msgstr "封装「%s」和「%s」链接到了相同的符号。"
 
 #: eeschema/tools/backannotate.cpp:443
 #, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr "找不到 '%s' 封装的符号。"
+msgstr "找不到封装为「%s」的符号。"
 
 #: eeschema/tools/backannotate.cpp:472
 #, c-format
 msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
-msgstr "封装 '%s'未在PCB上呈现。原理图中的相应符号必须手动删除 (如果需要)。"
+msgstr "封装「%s」未在PCB上呈现。原理图中的相应符号必须手动删除 (如果需要)。"
 
 #: eeschema/tools/backannotate.cpp:485
 msgid "Re-linking footprints requires a fully annotated schematic."
@@ -25483,53 +25483,53 @@ msgstr "false"
 #: eeschema/tools/backannotate.cpp:825
 #, c-format
 msgid "Change %s reference designator to '%s'."
-msgstr "将 %s 的位号改为 '%s'。"
+msgstr "将 %s 的位号改为 「%s」。"
 
 #: eeschema/tools/backannotate.cpp:839
 #, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
-msgstr "将 %s 的封装分配从 '%s' 替换为 '%s'。"
+msgstr "将 %s 的封装分配从「%s」替换为「%s」。"
 
 #: eeschema/tools/backannotate.cpp:854
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "将 %s 的值由 '%s' 更改为 '%s'。"
+msgstr "将 %s 的值由「%s」更改为「%s」。"
 
 #: eeschema/tools/backannotate.cpp:868
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "将 %s 的 '不作装配 (DNP)' 特性由 '%s' 更改为 '%s'。"
+msgstr "将 %s 的「不作装配 (DNP)」特性由「%s」更改为「%s」。"
 
 #: eeschema/tools/backannotate.cpp:882
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "将 %s 的 '从物料清单中移除' 特性由 '%s' 更改为 '%s'。"
+msgstr "将 %s 的「从物料清单中移除」特性由「%s」更改为「%s」。"
 
 #: eeschema/tools/backannotate.cpp:896
 #, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "将 %s 的 '从定位文件中排除' 特性从 '%s' 更改为 '%s'。"
+msgstr "将 %s 的「从定位文件中排除」特性从「%s」更改为「%s」。"
 
 #: eeschema/tools/backannotate.cpp:925
 #, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "找不到 %s 引脚 '%s'。"
+msgstr "找不到 %s 引脚「%s」。"
 
 # 可能会出现语序问题。待测试。
 #: eeschema/tools/backannotate.cpp:968
 #, c-format
 msgid "Change %s field '%s' value to '%s'."
-msgstr "将 %s 的字段 '%s' 的值更改为 '%s'。"
+msgstr "将 %s 的字段「%s」的值更改为「%s」。"
 
 #: eeschema/tools/backannotate.cpp:983
 #, c-format
 msgid "Add %s field '%s' with value '%s'."
-msgstr "为 %1$s 添加值为 '%3$s' 的字段 '%2$s'。"
+msgstr "为 %1$s 添加值为「%3$s」的字段「%2$s」。"
 
 #: eeschema/tools/backannotate.cpp:1014
 #, c-format
 msgid "Delete %s field '%s.'"
-msgstr "删除 %s 的字段 '%s'。"
+msgstr "删除 %s 的字段「%s」。"
 
 #: eeschema/tools/backannotate.cpp:1281
 #, c-format
@@ -25576,7 +25576,7 @@ msgstr "交换 %s 的引脚 %s 与 %s 以匹配 PCB。"
 #: eeschema/tools/backannotate.cpp:1424 eeschema/tools/backannotate.cpp:1462
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "将引脚 %s 网络 %s 的标签由 '%s' 更改为 '%s'。"
+msgstr "将引脚 %s 网络 %s 的标签由「%s」更改为「%s」。"
 
 #: eeschema/tools/backannotate.cpp:1442
 #, c-format
@@ -25586,7 +25586,7 @@ msgstr "无法将网络 %s 更改为 %s, 因为它受电源引脚驱动。"
 #: eeschema/tools/backannotate.cpp:1488
 #, c-format
 msgid "Add label '%s' to %s pin %s net."
-msgstr "添加标签 '%s' 到引脚%s网 %s。"
+msgstr "添加标签「%s」到引脚 %s 的网络 %s。"
 
 #: eeschema/tools/rule_area_create_helper.cpp:69
 msgid "Draw Rule Area"
