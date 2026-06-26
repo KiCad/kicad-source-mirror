@@ -213,6 +213,12 @@ private:
      */
     bool breakTieBySymbolUuid( COMPONENT* aRef, std::vector<COMPONENT*>& aMatches ) const;
 
+    /**
+     * Break a tie by footprint value when the symbol UUID can't, e.g. identical parts that
+     * only differ by value like NC_0 vs NO_1.
+     */
+    bool breakTieByValue( COMPONENT* aRef, std::vector<COMPONENT*>& aMatches ) const;
+
     void sortByPinCount();
 
 

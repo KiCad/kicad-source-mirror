@@ -406,6 +406,11 @@ void CONNECTION_GRAPH::breakTie( COMPONENT* aRef, std::vector<COMPONENT*>& aMatc
         wxLogTrace( traceTopoMatchDetail, wxT( "Broke tie with symbol UUID match for %s" ),
                     aRef->GetParent()->GetReferenceAsString() );
     }
+    else if( breakTieByValue( aRef, aMatches ) )
+    {
+        wxLogTrace( traceTopoMatchDetail, wxT( "Broke tie with footprint value match for %s" ),
+                    aRef->GetParent()->GetReferenceAsString() );
+    }
     // TODO: other tie breakers can be added, e.g. based on position or reference designators,
     // just waiting for actual user test cases
     else
@@ -413,6 +418,44 @@ void CONNECTION_GRAPH::breakTie( COMPONENT* aRef, std::vector<COMPONENT*>& aMatc
         wxLogTrace( traceTopoMatchDetail, wxT( "No tie breakers worked for %s, leaving match order alone." ),
                     aRef->GetParent()->GetReferenceAsString() );
     }
+}
+
+
+bool CONNECTION_GRAPH::breakTieByValue( COMPONENT* aRef, std::vector<COMPONENT*>& aMatches ) const
+{
+    FOOTPRINT* refFp = aRef ? aRef->GetParent() : nullptr;
+
+    if( !refFp )
+        return false;
+
+    const wxString refValue = refFp->GetValue();
+
+    if( refValue.IsEmpty() )
+        return false;
+
+    int valueHitCount = 0;
+    int uniqueMatchIdx = -1;
+
+    for( size_t i = 0; i < aMatches.size(); i++ )
+    {
+        if( aMatches[i]->GetParent()->GetValue() == refValue )
+        {
+            if( uniqueMatchIdx < 0 )
+                uniqueMatchIdx = static_cast<int>( i );
+
+            valueHitCount++;
+        }
+    }
+
+    // Only one candidate may share the value for it to disambiguate the tie. Several same-value
+    // candidates (e.g. a bank of identical decoupling caps) tell us nothing.
+    if( valueHitCount == 1 )
+    {
+        std::rotate( aMatches.begin(), aMatches.begin() + uniqueMatchIdx, aMatches.begin() + uniqueMatchIdx + 1 );
+        return true;
+    }
+
+    return false;
 }
 
 
