@@ -739,6 +739,13 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
                     xmembers->AddChild( xmember = node( wxT( "member" ) ) );
                     xmember->AddAttribute( wxT( "uuid" ), member->m_Uuid.AsString() );
                 }
+                else if( member->Type() == SCH_GROUP_T )
+                {
+                    // Emit nested groups so the board side can rebuild the nesting.
+                    XNODE* xmember;
+                    xmembers->AddChild( xmember = node( wxT( "member" ) ) );
+                    xmember->AddAttribute( wxT( "uuid" ), member->m_Uuid.AsString() );
+                }
                 else if( member->Type() == SCH_SHEET_T )
                 {
                     SCH_SHEET_PATH              subSheetPath = sheet;

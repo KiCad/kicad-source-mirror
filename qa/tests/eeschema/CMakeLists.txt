@@ -180,6 +180,7 @@ set( QA_EESCHEMA_SRCS
     test_netlist_exporter_xml_chain_gating.cpp
     test_netlist_exporter_xml_stacked.cpp
     test_netlist_exporter_xml_terminal_pins.cpp
+    test_netlist_exporter_xml_nested_groups.cpp
     test_resolve_drivers.cpp
     test_saveas_copy_subsheets.cpp
     test_update_items_connectivity.cpp
