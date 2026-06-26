@@ -42,6 +42,7 @@
 #include <algorithm>
 #include <wx/button.h>
 #include <wx/clipbrd.h>
+#include <wx/display.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>
@@ -306,8 +307,8 @@ PANEL_SYMBOL_CHOOSER::~PANEL_SYMBOL_CHOOSER()
         // Save any changes to column widths, etc.
         m_adapter->SaveSettings();
 
-        cfg->m_SymChooserPanel.width = GetParent()->GetSize().x;
-        cfg->m_SymChooserPanel.height = GetParent()->GetSize().y;
+        cfg->m_SymChooserPanel.width = GetParent()->ToDIP( GetParent()->GetSize().x );
+        cfg->m_SymChooserPanel.height = GetParent()->ToDIP( GetParent()->GetSize().y );
 
         cfg->m_SymChooserPanel.sash_pos_h = m_hsplitter->GetSashPosition();
 
@@ -415,8 +416,19 @@ void PANEL_SYMBOL_CHOOSER::FinishSetup()
 
         EESCHEMA_SETTINGS::PANEL_SYM_CHOOSER& panelCfg = cfg->m_SymChooserPanel;
 
-        int w = panelCfg.width > 40 ? panelCfg.width : horizPixelsFromDU( 440 );
-        int h = panelCfg.height > 40 ? panelCfg.height : horizPixelsFromDU( 340 );
+        // The persisted size is stored in DIP so it is independent of the monitor it was saved
+        // on. Restoring raw pixels would scale the window by the DPI ratio when reopened on a
+        // different-scale display, producing a window that spills across monitors.
+        int w = panelCfg.width > 40 ? GetParent()->FromDIP( panelCfg.width ) : horizPixelsFromDU( 440 );
+        int h = panelCfg.height > 40 ? GetParent()->FromDIP( panelCfg.height ) : horizPixelsFromDU( 340 );
+
+        // Cap to the work area so a stale pre-DIP setting cannot reopen the window across monitors.
+        if( int display = wxDisplay::GetFromWindow( GetParent() ); display != wxNOT_FOUND )
+        {
+            wxRect workArea = wxDisplay( display ).GetClientArea();
+            w = std::min( w, workArea.GetWidth() );
+            h = std::min( h, workArea.GetHeight() );
+        }
 
         GetParent()->SetSize( wxSize( w, h ) );
         GetParent()->Layout();
