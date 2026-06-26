@@ -2994,6 +2994,7 @@ void PROJECT_TREE_PANE::onGitAmendCommit( wxCommandEvent& aEvent )
                            modifiedFiles );
     dlg.SetTitle( _( "Amend Last Commit" ) );
     dlg.SetCommitMessage( headMessage );
+    dlg.SetFileSelectionRequired( false );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
