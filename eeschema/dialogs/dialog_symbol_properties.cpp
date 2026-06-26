@@ -581,6 +581,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     m_fieldsGrid->Layout();
     Layout();
+    m_fieldsGrid->SetMinVisibleRows( this, 4 );
 
     return true;
 }

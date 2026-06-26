@@ -483,6 +483,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     m_itemsGrid->SetRowLabelSize( 0 );
 
     Layout();
+    m_itemsGrid->SetMinVisibleRows( this, 4 );
     m_initialized = true;
 
     return true;

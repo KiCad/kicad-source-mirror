@@ -87,6 +87,54 @@ void WX_GRID::CellEditorTransformSizeRect( wxRect& aRect )
 }
 
 
+int WX_GRID::CapHeightToVisibleRows( int aMinHeight, int aHeaderHeight,
+                                     const std::vector<int>& aRowHeights, int aMaxRows )
+{
+    if( aMaxRows < 0 )
+        return aMinHeight;
+
+    int rowsHeight = aHeaderHeight;
+    int count = std::min( aMaxRows, (int) aRowHeights.size() );
+
+    for( int row = 0; row < count; ++row )
+        rowsHeight += aRowHeights[row];
+
+    return std::min( aMinHeight, rowsHeight );
+}
+
+
+void WX_GRID::SetMinVisibleRows( wxWindow* aDialog, int aMinRows )
+{
+    aDialog->Layout();
+
+    std::vector<int> rowHeights;
+    rowHeights.reserve( GetNumberRows() );
+
+    int allRowsHeight = GetColLabelSize();
+
+    for( int row = 0; row < GetNumberRows(); ++row )
+    {
+        rowHeights.push_back( GetRowSize( row ) );
+        allRowsHeight += rowHeights.back();
+    }
+
+    // Floor the grid at a few rows, then re-derive the dialog's minimum so it can be shrunk down to
+    // that floor with the grid scrolling past it.
+    SetMinSize( wxSize( GetMinSize().x, CapHeightToVisibleRows( allRowsHeight, GetColLabelSize(),
+                                                               rowHeights, aMinRows ) ) );
+
+    aDialog->SetMinSize( wxDefaultSize );
+    aDialog->InvalidateBestSize();
+    aDialog->SetMinSize( aDialog->GetBestSize() );
+
+    // Open tall enough to show every row; Show() clamps the result to the monitor work area.
+    int grow = allRowsHeight - GetSize().y;
+
+    if( grow > 0 )
+        aDialog->SetSize( aDialog->GetSize().x, aDialog->GetSize().y + grow );
+}
+
+
 wxColour getBorderColour()
 {
     KIGFX::COLOR4D bg = wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK );

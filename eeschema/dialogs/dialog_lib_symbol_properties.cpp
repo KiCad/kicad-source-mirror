@@ -418,6 +418,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     m_embeddedFiles->TransferDataToWindow();
 
+    m_grid->SetMinVisibleRows( this, 4 );
+
     return true;
 }
 

@@ -290,13 +290,35 @@ public:
      * Grids that have column sizes automatically set to fill the available width don't want
      * to shrink afterwards (because wxGrid reports the aggregate column size as the bestSize.
      *
-     * @param aSize
+     * @param aXPct fraction of the best width to advertise as the minimum.
+     * @param aYPct fraction of the best height to advertise as the minimum.
      */
     void OverrideMinSize( double aXPct, double aYPct )
     {
         wxSize size = DoGetBestSize();
         m_minSizeOverride = wxSize( KiROUND( size.x * aXPct ), KiROUND( size.y * aYPct ) );
     }
+
+    /**
+     * Floor this grid at aMinRows visible rows and grow aDialog so it opens tall enough to show
+     * every current row.  The small floor keeps the dialog shrinkable (the grid scrolls past it)
+     * while the grow shows all the data when there is room; DIALOG_SHIM::Show() then clamps the
+     * grown size to the monitor work area.  Call after the rows are populated, e.g. at the end of
+     * TransferDataToWindow.
+     */
+    void SetMinVisibleRows( wxWindow* aDialog, int aMinRows );
+
+    /**
+     * Height of aMaxRows data rows plus the column-label header, never more than aMinHeight.  Kept
+     * a pure function so the row-floor policy is testable without a live grid.
+     *
+     * @param aMinHeight the full-content height; the result never exceeds it.
+     * @param aHeaderHeight the height of the column-label header.
+     * @param aRowHeights the height of each data row.
+     * @param aMaxRows the row cap, or a negative value to return aMinHeight unchanged.
+     */
+    static int CapHeightToVisibleRows( int aMinHeight, int aHeaderHeight,
+                                       const std::vector<int>& aRowHeights, int aMaxRows );
 
     wxSize DoGetBestSize() const override
     {
