@@ -112,6 +112,15 @@ public:
         return wxString::FromUTF8( "☆ " );
     }
 
+    /// Upper bound for a persisted column width; larger values are treated as corrupt settings.
+    /// Set well above any plausible multi-monitor span so only true corruption is rejected.
+    static constexpr int MAX_COL_WIDTH = 100000;
+
+    /**
+     * @return true if @p aWidth is a plausible persisted column width, false if it is corrupt.
+     */
+    static bool IsValidColumnWidth( int aWidth );
+
 public:
     /**
      * Destructor. Do NOT delete this class manually; it is reference-counted
