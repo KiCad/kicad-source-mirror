@@ -20,8 +20,10 @@
  */
 
 #include <widgets/panel_footprint_chooser.h>
+#include <algorithm>
 #include <wx/button.h>
 #include <wx/clipbrd.h>
+#include <wx/display.h>
 #include <wx/log.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
@@ -199,8 +201,8 @@ PANEL_FOOTPRINT_CHOOSER::~PANEL_FOOTPRINT_CHOOSER()
         // Save any changes to column widths, etc.
         m_adapter->SaveSettings();
 
-        cfg->m_FootprintChooser.width = GetParent()->GetSize().x;
-        cfg->m_FootprintChooser.height = GetParent()->GetSize().y;
+        cfg->m_FootprintChooser.width = GetParent()->ToDIP( GetParent()->GetSize().x );
+        cfg->m_FootprintChooser.height = GetParent()->ToDIP( GetParent()->GetSize().y );
         cfg->m_FootprintChooser.sash_h = m_hsplitter->GetSashPosition();
 
         if( m_vsplitter )
@@ -259,8 +261,19 @@ void PANEL_FOOTPRINT_CHOOSER::FinishSetup()
 
         PCBNEW_SETTINGS::FOOTPRINT_CHOOSER& cfg = settings->m_FootprintChooser;
 
-        int w = cfg.width < 40 ? horizPixelsFromDU( 440 ) : cfg.width;
-        int h = cfg.height < 40 ? horizPixelsFromDU( 340 ) : cfg.height;
+        // The persisted size is stored in DIP so it is independent of the monitor it was saved
+        // on. Restoring raw pixels would scale the window by the DPI ratio when reopened on a
+        // different-scale display, producing a window that spills across monitors.
+        int w = cfg.width > 40 ? GetParent()->FromDIP( cfg.width ) : horizPixelsFromDU( 440 );
+        int h = cfg.height > 40 ? GetParent()->FromDIP( cfg.height ) : horizPixelsFromDU( 340 );
+
+        // Cap to the work area so a stale pre-DIP setting cannot reopen the window across monitors.
+        if( int display = wxDisplay::GetFromWindow( GetParent() ); display != wxNOT_FOUND )
+        {
+            wxRect workArea = wxDisplay( display ).GetClientArea();
+            w = std::min( w, workArea.GetWidth() );
+            h = std::min( h, workArea.GetHeight() );
+        }
 
         GetParent()->SetSize( wxSize( w, h ) );
         GetParent()->Layout();
