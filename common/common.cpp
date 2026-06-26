@@ -470,22 +470,24 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
             // If the user has the older location defined, that will be matched
             // first above.  But if they do not, this will ensure that their board still
             // displays correctly
-            else if( strVarName.Contains( "KISYS3DMOD" ) || strVarName.Matches( "KICAD*_3DMODEL_DIR" ) )
+            else if( strVarName.Contains( "KISYS3DMOD" )
+                     || ENV_VAR::IsVersionedEnvVar( strVarName, "3DMODEL_DIR" ) )
             {
                 if( getVersionedEnvVar( "KICAD*_3DMODEL_DIR", strResult ) )
                     expanded = true;
             }
-            else if( strVarName.Matches( "KICAD*_SYMBOL_DIR" ) )
+            else if( strVarName == "KICAD_SYMBOL_DIR"
+                     || ENV_VAR::IsVersionedEnvVar( strVarName, "SYMBOL_DIR" ) )
             {
                 if( getVersionedEnvVar( "KICAD*_SYMBOL_DIR", strResult ) )
                     expanded = true;
             }
-            else if( strVarName.Matches( "KICAD*_FOOTPRINT_DIR" ) )
+            else if( ENV_VAR::IsVersionedEnvVar( strVarName, "FOOTPRINT_DIR" ) )
             {
                 if( getVersionedEnvVar( "KICAD*_FOOTPRINT_DIR", strResult ) )
                     expanded = true;
             }
-            else if( strVarName.Matches( "KICAD*_3RD_PARTY" ) )
+            else if( ENV_VAR::IsVersionedEnvVar( strVarName, "3RD_PARTY" ) )
             {
                 if( getVersionedEnvVar( "KICAD*_3RD_PARTY", strResult ) )
                     expanded = true;
@@ -510,10 +512,11 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
             {
                 auto isVersionedWildcard =
                         strVarName.Contains( wxT( "KISYS3DMOD" ) )
-                        || strVarName.Matches( wxT( "KICAD*_3DMODEL_DIR" ) )
-                        || strVarName.Matches( wxT( "KICAD*_SYMBOL_DIR" ) )
-                        || strVarName.Matches( wxT( "KICAD*_FOOTPRINT_DIR" ) )
-                        || strVarName.Matches( wxT( "KICAD*_3RD_PARTY" ) );
+                        || strVarName == wxT( "KICAD_SYMBOL_DIR" )
+                        || ENV_VAR::IsVersionedEnvVar( strVarName, wxT( "3DMODEL_DIR" ) )
+                        || ENV_VAR::IsVersionedEnvVar( strVarName, wxT( "SYMBOL_DIR" ) )
+                        || ENV_VAR::IsVersionedEnvVar( strVarName, wxT( "FOOTPRINT_DIR" ) )
+                        || ENV_VAR::IsVersionedEnvVar( strVarName, wxT( "3RD_PARTY" ) );
 
                 if( isVersionedWildcard )
                 {

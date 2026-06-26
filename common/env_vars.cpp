@@ -22,6 +22,7 @@
 #include <settings/environment.h>
 #include <core/kicad_algo.h>
 
+#include <algorithm>
 #include <map>
 
 #include <wx/regex.h>
@@ -83,6 +84,22 @@ wxString ENV_VAR::GetVersionedEnvVarName( const wxString& aBaseName )
 }
 
 
+bool ENV_VAR::IsVersionedEnvVar( const wxString& aName, const wxString& aBaseName )
+{
+    static const wxString prefix = wxS( "KICAD" );
+    const wxString        suffix = wxS( "_" ) + aBaseName;
+
+    if( !aName.StartsWith( prefix ) || !aName.EndsWith( suffix ) )
+        return false;
+
+    wxString version = aName.Mid( prefix.length(), aName.length() - prefix.length() - suffix.length() );
+
+    return !version.IsEmpty()
+           && std::all_of( version.begin(), version.end(),
+                           []( wxUniChar c ) { return wxIsdigit( c ); } );
+}
+
+
 std::optional<wxString> ENV_VAR::GetVersionedEnvVarValue( const ENV_VAR_MAP& aMap,
                                                           const wxString& aBaseName )
 {
@@ -91,11 +108,9 @@ std::optional<wxString> ENV_VAR::GetVersionedEnvVarValue( const ENV_VAR_MAP& aMa
     if( aMap.count( exactMatch ) )
         return aMap.at( exactMatch ).GetValue();
 
-    wxString partialMatch = wxString::Format( "KICAD*_%s", aBaseName );
-
     for( const auto& [k, v] : aMap )
     {
-        if( k.Matches( partialMatch ) )
+        if( ENV_VAR::IsVersionedEnvVar( k, aBaseName ) )
             return v.GetValue();
     }
 
