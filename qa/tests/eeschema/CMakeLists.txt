@@ -167,6 +167,7 @@ set( QA_EESCHEMA_SRCS
     test_remote_symbol_load_from_payload.cpp
     test_backannotate_unit_swap.cpp
     test_netlist_exporter_xml_stacked.cpp
+    test_netlist_exporter_xml_nested_groups.cpp
     test_resolve_drivers.cpp
     test_saveas_copy_subsheets.cpp
     test_update_items_connectivity.cpp

@@ -1910,6 +1910,43 @@ bool BOARD_NETLIST_UPDATER::updateGroups( NETLIST& aNetlist )
 
             m_reporter->Report( msg, RPT_SEVERITY_ACTION );
         }
+
+        // A group member may be another group's uuid (a nested group).  Restore that
+        // parent/child relationship on the board.
+        for( const KIID& member : netlistGroup->members )
+        {
+            PCB_GROUP* childGroup = nullptr;
+
+            for( PCB_GROUP* candidate : m_board->Groups() )
+            {
+                if( candidate->m_Uuid == member )
+                {
+                    childGroup = candidate;
+                    break;
+                }
+            }
+
+            if( !childGroup || childGroup == pcbGroup || childGroup->GetParentGroup() == pcbGroup )
+            {
+                continue;
+            }
+
+            if( m_isDryRun )
+            {
+                msg.Printf( _( "Add group '%s' to group '%s'." ), EscapeHTML( childGroup->GetName() ),
+                            EscapeHTML( pcbGroup->GetName() ) );
+            }
+            else
+            {
+                msg.Printf( _( "Added group '%s' to group '%s'." ), EscapeHTML( childGroup->GetName() ),
+                            EscapeHTML( pcbGroup->GetName() ) );
+                m_commit.Modify( pcbGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+                m_commit.Modify( childGroup->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+                pcbGroup->AddItem( childGroup );
+            }
+
+            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+        }
     }
 
     return true;
