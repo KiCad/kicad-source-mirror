@@ -40,6 +40,7 @@ class wxWindow;
 class EDA_ITEM;
 class FOOTPRINT;
 class PCB_GROUP;
+class NETINFO_ITEM;
 
 struct REPEAT_LAYOUT_OPTIONS
 {
@@ -120,6 +121,16 @@ public:
     void GeneratePotentialRuleAreas();
     void FindExistingRuleAreas();
     int  CheckRACompatibility( ZONE* aRefZone );
+
+    /**
+     * Remap auto-generated nets (Net-(...), unconnected-...) of a design block that was appended
+     * for layout matching onto fresh private nets, so they cannot fuse by name with same-named
+     * nets that belong to different parts on the board (issue 24767). Returns the created nets so
+     * the caller can remove them after the temporary block is reverted.
+     */
+    static std::vector<NETINFO_ITEM*> IsolateDesignBlockAutoNets( BOARD*                               aBoard,
+                                                                  const std::set<FOOTPRINT*>&          aFootprints,
+                                                                  const std::unordered_set<EDA_ITEM*>& aItems );
 
 private:
     void setTransitions() override;
