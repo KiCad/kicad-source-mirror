@@ -43,6 +43,7 @@
 #include <widgets/grid_icon_text_helpers.h>
 #include <widgets/grid_text_helpers.h>
 #include <widgets/layer_box_selector.h>
+#include <widgets/widget_hotkey_list.h>
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
 
@@ -120,6 +121,25 @@ private:
     {
         int code = PCB_ACTIONS::LayerIDToAction( aLayer )->GetHotKey();
         return AddHotkeyName( wxS( "" ), code, IS_COMMENT );
+    }
+
+    // Return the selectable layer whose layer-switch hotkey matches aKeyCode, or UNDEFINED_LAYER.
+    // Only copper layers (the left column) carry a switch action and a displayed hotkey.
+    PCB_LAYER_ID layerForHotKey( long aKeyCode ) const
+    {
+        if( aKeyCode == 0 )
+            return UNDEFINED_LAYER;
+
+        for( PCB_LAYER_ID layer : m_layersIdLeftColumn )
+        {
+            if( TOOL_ACTION* action = PCB_ACTIONS::LayerIDToAction( layer );
+                action && action->GetHotKey() == aKeyCode )
+            {
+                return layer;
+            }
+        }
+
+        return UNDEFINED_LAYER;
     }
 
     void buildList();
@@ -208,7 +228,28 @@ void PCB_ONE_LAYER_SELECTOR::OnMouseMove( wxUpdateUIEvent& aEvent )
 void PCB_ONE_LAYER_SELECTOR::onCharHook( wxKeyEvent& event )
 {
     if( event.GetKeyCode() == WXK_ESCAPE )
+    {
         Close();
+        return;
+    }
+
+    // The hotkeys shown in the layer list are the global layer-switch shortcuts; pressing one
+    // here selects that layer and closes the dialog, matching the displayed annotations.
+    PCB_LAYER_ID layer = layerForHotKey( WIDGET_HOTKEY_LIST::MapKeypressToKeycode( event ) );
+
+    if( layer != UNDEFINED_LAYER )
+    {
+        m_layerSelected = layer;
+
+        if( IsQuasiModal() )
+            EndQuasiModal( 1 );
+        else
+            EndDialog( 1 );
+
+        return;
+    }
+
+    event.Skip();
 }
 
 
