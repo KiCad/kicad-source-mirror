@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-26 08:01+0000\n"
+"PO-Revision-Date: 2026-06-27 10:01+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -10433,9 +10433,8 @@ msgid "Add Items"
 msgstr "Предмети:"
 
 #: common/tool/actions.cpp:217
-#, fuzzy
 msgid "Add items to group"
-msgstr "Избор филтера"
+msgstr "Додајте ставке у групу"
 
 #: common/tool/actions.cpp:223
 #, fuzzy
@@ -10443,87 +10442,72 @@ msgid "Remove Items"
 msgstr "Помјери"
 
 #: common/tool/actions.cpp:224
-#, fuzzy
 msgid "Remove items from group"
-msgstr "Избор филтера"
+msgstr "Уклони ставке из групе"
 
 #: common/tool/actions.cpp:230
-#, fuzzy
 msgid "Enter Group"
-msgstr "Групиши по"
+msgstr "Приступи групи"
 
 #: common/tool/actions.cpp:231
-#, fuzzy
 msgid "Enter the group to edit items"
-msgstr "Остале странице"
+msgstr "Уђите у групу да бисте изменили ставке"
 
 #: common/tool/actions.cpp:237
-#, fuzzy
 msgid "Leave Group"
-msgstr "Групиши по"
+msgstr "Напусти групу"
 
 #: common/tool/actions.cpp:238
-#, fuzzy
 msgid "Leave the current group"
-msgstr "Избриши"
+msgstr "Напусти тренутну групу"
 
 #: common/tool/actions.cpp:256
-#, fuzzy
 msgid "Cancel current tool"
-msgstr "Струја"
+msgstr "Откажи тренутни алат"
 
 #: common/tool/actions.cpp:264
-#, fuzzy
 msgid "Finish"
-msgstr "Фински"
+msgstr "Заврши"
 
 #: common/tool/actions.cpp:265
-#, fuzzy
 msgid "Finish current tool"
-msgstr "Струја"
+msgstr "Завршите тренутни алат"
 
 #: common/tool/actions.cpp:273
-#, fuzzy
 msgid "Show Context Menu"
-msgstr "Прикажи иконице у менију"
+msgstr "Прикажи контекстни мени"
 
 #: common/tool/actions.cpp:274
 msgid "Perform the right-mouse-button action"
-msgstr ""
+msgstr "Извршите радњу десним тастером миша"
 
 #: common/tool/actions.cpp:314
-#, fuzzy
 msgid "Cut selected item(s) to clipboard"
-msgstr "Копирај"
+msgstr "Исеци изабране ставке у клипборд"
 
 #: common/tool/actions.cpp:325
-#, fuzzy
 msgid "Copy selected item(s) to clipboard"
-msgstr "Копирај"
+msgstr "Копирај изабране ставке на клипборд"
 
 #: common/tool/actions.cpp:334
-#, fuzzy
 msgid "Copy as Text"
-msgstr "Подешавање странице..."
+msgstr "Копирај као текст"
 
 #: common/tool/actions.cpp:335
-#, fuzzy
 msgid "Copy selected item(s) to clipboard as text"
-msgstr "Копирај"
+msgstr "Копирај изабране ставке на клипборд као текст"
 
 #: common/tool/actions.cpp:345
-#, fuzzy
 msgid "Paste item(s) from clipboard"
-msgstr "Копирај"
+msgstr "Налепи ставке са клипборда"
 
 #: common/tool/actions.cpp:354
-#, fuzzy
 msgid "Set selection mode to use rectangle"
-msgstr "Исцртај правоугаоник за одабир"
+msgstr "Подесите режим селекције да користи правоугаоник"
 
 #: common/tool/actions.cpp:362
 msgid "Lasso"
-msgstr ""
+msgstr "Ласо"
 
 #: common/tool/actions.cpp:363
 msgid "Set selection mode to use polygon lasso"
@@ -10612,184 +10596,156 @@ msgid "Right-justify fields and text items"
 msgstr ""
 
 #: common/tool/actions.cpp:446 eeschema/sch_edit_frame.cpp:2693
-#, fuzzy
 msgid "Expand All"
-msgstr "Поља"
+msgstr "Прошири све"
 
 #: common/tool/actions.cpp:452 eeschema/sch_edit_frame.cpp:2694
-#, fuzzy
 msgid "Collapse All"
-msgstr "Пронађи и замјени"
+msgstr "Скупи све"
 
 #: common/tool/actions.cpp:460 eeschema/tools/sch_tool_base.h:239
 #: pcbnew/tools/edit_tool.cpp:3523
-#, fuzzy
 msgid "Increment"
-msgstr "Вријеме:"
+msgstr "Повећање"
 
 #: common/tool/actions.cpp:461
-#, fuzzy
 msgid "Increment the selected item(s)"
-msgstr "Избриши"
+msgstr "Повећајте изабране ставке"
 
 #: common/tool/actions.cpp:466
-#, fuzzy
 msgid "Increment Primary"
-msgstr "Вријеме:"
+msgstr "Повећај примарни"
 
 #: common/tool/actions.cpp:467
-#, fuzzy
 msgid "Increment the primary field of the selected item(s)"
-msgstr "Појасни избор"
+msgstr "Повећајте примарно поље изабраних ставки"
 
 #: common/tool/actions.cpp:473
-#, fuzzy
 msgid "Decrement Primary"
-msgstr "Вријеме:"
+msgstr "Уманџи примарни"
 
 #: common/tool/actions.cpp:474
-#, fuzzy
 msgid "Decrement the primary field of the selected item(s)"
-msgstr "Избриши"
+msgstr "Смањите вредност примарног поља изабране ставке (или ставки)"
 
 #: common/tool/actions.cpp:480
-#, fuzzy
 msgid "Increment Secondary"
-msgstr "Вријеме:"
+msgstr "Инкрементирај секундарне"
 
 #: common/tool/actions.cpp:481
-#, fuzzy
 msgid "Increment the secondary field of the selected item(s)"
-msgstr "Појасни избор"
+msgstr "Повећајте секундарно поље изабраних ставки"
 
 #: common/tool/actions.cpp:487
 msgid "Decrement Secondary"
-msgstr ""
+msgstr "Умањи секундарни"
 
 #: common/tool/actions.cpp:488
-#, fuzzy
 msgid "Decrement the secondary field of the selected item(s)"
-msgstr "Појасни избор"
+msgstr "Смањи секундарно поље изабраних ставки"
 
 #: common/tool/actions.cpp:494
-#, fuzzy
 msgid "Select Column(s)"
-msgstr "Изабери"
+msgstr "Изаберите колону(е)"
 
 #: common/tool/actions.cpp:495
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "Изаберите целу колону(е) која садржи тренутно изабрану(е) ћелију(е)"
 
 #: common/tool/actions.cpp:501
-#, fuzzy
 msgid "Select Row(s)"
-msgstr "Изабери"
+msgstr "Изаберите ред(ове)"
 
 #: common/tool/actions.cpp:502
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "Изаберите комплетне редове који садрже тренутно изабране ћелије"
 
 #: common/tool/actions.cpp:508
-#, fuzzy
 msgid "Select Table"
-msgstr "Изабери све"
+msgstr "Изаберите табелу"
 
 #: common/tool/actions.cpp:509
-#, fuzzy
 msgid "Select parent table of selected cell(s)"
-msgstr "Избриши"
+msgstr "Изаберите надређену табелу изабраних ћелија"
 
 #: common/tool/actions.cpp:515 include/tool/edit_table_tool_base.h:161
-#, fuzzy
 msgid "Add Row Above"
-msgstr "Додај"
+msgstr "Додајте ред изнад"
 
 #: common/tool/actions.cpp:516
-#, fuzzy
 msgid "Insert a new table row above the selected cell(s)"
-msgstr "Попуњавање зона"
+msgstr "Уметни нови ред табеле изнад изабраних ћелија"
 
 #: common/tool/actions.cpp:522 include/tool/edit_table_tool_base.h:213
-#, fuzzy
 msgid "Add Row Below"
-msgstr "Додај"
+msgstr "Додајте ред испод"
 
 #: common/tool/actions.cpp:523
 msgid "Insert a new table row below the selected cell(s)"
-msgstr ""
+msgstr "Уметните нови ред табеле испод изабране ћелије (или ћелија)."
 
 #: common/tool/actions.cpp:529 include/tool/edit_table_tool_base.h:264
-#, fuzzy
 msgid "Add Column Before"
-msgstr "Додај"
+msgstr "Додај колону пре"
 
 #: common/tool/actions.cpp:530
 msgid "Insert a new table column before the selected cell(s)"
-msgstr ""
+msgstr "Уметни нову колону испред изабраних ћелија"
 
 #: common/tool/actions.cpp:536 include/tool/edit_table_tool_base.h:315
-#, fuzzy
 msgid "Add Column After"
-msgstr "Додај"
+msgstr "Додај колону након"
 
 #: common/tool/actions.cpp:537
-#, fuzzy
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "Попуњавање зона"
+msgstr "Уметните нову колону након изабране ћелије (или ћелија)"
 
 #: common/tool/actions.cpp:543
-#, fuzzy
 msgid "Delete Row(s)"
-msgstr "Избриши"
+msgstr "Обриши ред(ове)"
 
 #: common/tool/actions.cpp:544
-#, fuzzy
 msgid "Delete rows containing the currently selected cell(s)"
-msgstr "Избриши"
+msgstr "Обриши редове који садрже тренутно изабране ћелије"
 
 #: common/tool/actions.cpp:550
-#, fuzzy
 msgid "Delete Column(s)"
-msgstr "Изабери"
+msgstr "Обриши колону(е)"
 
 #: common/tool/actions.cpp:551
 msgid "Delete columns containing the currently selected cell(s)"
-msgstr ""
+msgstr "Обриши колоне које садрже тренутно изабране ћелије"
 
 #: common/tool/actions.cpp:557 include/tool/edit_table_tool_base.h:544
-#, fuzzy
 msgid "Merge Cells"
-msgstr "Креирање зона"
+msgstr "Споји ћелије"
 
 #: common/tool/actions.cpp:558
 msgid "Turn selected table cells into a single cell"
-msgstr ""
+msgstr "Претворите изабране ћелије табеле у једну ћелију"
 
 #: common/tool/actions.cpp:564 include/tool/edit_table_tool_base.h:585
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "Раздвоји ћелије"
 
 #: common/tool/actions.cpp:565
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "Спојене ћелије табеле претворите назад у одвојене ћелије."
 
 #: common/tool/actions.cpp:572
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:392
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:280
-#, fuzzy
 msgid "Edit Table..."
-msgstr "Уреди вриједност..."
+msgstr "Уреди табелу..."
 
 #: common/tool/actions.cpp:579 eeschema/tools/sch_edit_table_tool.cpp:120
 #: pcbnew/tools/pcb_edit_table_tool.cpp:161
-#, fuzzy
 msgid "Export Table to CSV"
-msgstr "Симбол"
+msgstr "Извези табелу у ЦСВ"
 
 #: common/tool/actions.cpp:580
-#, fuzzy
 msgid "Export Table to CSV..."
-msgstr "Симбол"
+msgstr "Извези табелу у CSV..."
 
 #: common/tool/actions.cpp:581
 msgid "Export table contents to CSV file with resolved text variables"
