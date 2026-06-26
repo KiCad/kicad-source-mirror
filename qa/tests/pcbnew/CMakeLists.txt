@@ -106,6 +106,7 @@ set( QA_PCBNEW_SRCS
     test_tracks_cleaner.cpp
     test_triangulation.cpp
     test_multichannel.cpp
+    test_pns_tuning_path_through_pad.cpp
     test_variant.cpp
     test_text_variable_resolution.cpp
     test_zone.cpp
