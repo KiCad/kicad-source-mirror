@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-14 05:43+0000\n"
-"Last-Translator: Stavro Mueller <stavr00@gmail.com>\n"
+"PO-Revision-Date: 2026-06-27 10:01+0000\n"
+"Last-Translator: Gingko Biloba <from_weblate@gingko.ovh>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/kicad/v10/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -3234,7 +3234,7 @@ msgstr "Editer Propriétés de Groupe"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Un groupe ne peut se contenir lui-même."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
@@ -9777,7 +9777,7 @@ msgstr ""
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:140
 msgid "Cannot parse reference designator in symbol section of netlist."
 msgstr ""
-"Impossible de lire la la référence dans la section composant de la netliste."
+"Impossible de lire la référence dans la section “symboles” de la netlist."
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:149
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:150
