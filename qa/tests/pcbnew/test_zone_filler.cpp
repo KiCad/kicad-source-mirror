@@ -3877,3 +3877,45 @@ BOOST_FIXTURE_TEST_CASE( RegressionSameNetTouchingZonesCorner, ZONE_FILL_TEST_FI
     BOOST_CHECK_MESSAGE( uncovered < 0.01,
                          wxString::Format( "%.4f mm^2 unfilled at the shared edge", uncovered ) );
 }
+
+
+// The iterative refill must keep the pad and via clearance holes of a zone overlapped by two
+// higher-priority same-net zones and a higher-priority zone on another net (issue 25670).
+BOOST_FIXTURE_TEST_CASE( RegressionIterativeRefillKeepsClearanceHoles, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+
+    struct ScopeGuard
+    {
+        bool& ref;
+        bool  orig;
+        ~ScopeGuard() { ref = orig; }
+    } guard{ cfg.m_ZoneFillIterativeRefill, cfg.m_ZoneFillIterativeRefill };
+
+    cfg.m_ZoneFillIterativeRefill = true;
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue25670/issue25670", m_board );
+    KI_TEST::FillZones( m_board.get() );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    int                    zoneViolations = 0;
+
+    // The board also carries a pad-to-via spacing error that is unrelated to the fill
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
+            {
+                if( aItem->GetErrorCode() != DRCE_CLEARANCE && aItem->GetErrorCode() != DRCE_SHORTING_ITEMS )
+                    return;
+
+                BOARD_ITEM* itemA = m_board->ResolveItem( aItem->GetMainItemID() );
+                BOARD_ITEM* itemB = m_board->ResolveItem( aItem->GetAuxItemID() );
+
+                if( dynamic_cast<ZONE*>( itemA ) || dynamic_cast<ZONE*>( itemB ) )
+                    zoneViolations++;
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    BOOST_CHECK_EQUAL( zoneViolations, 0 );
+}
