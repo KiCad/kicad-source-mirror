@@ -2095,4 +2095,222 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchCollidingAutoNetName, MULTICHANNEL_TEST_FIXTUR
 }
 
 
+/**
+ * Four single-pad footprints, identical except for their value (NC_0 / NC_1 / NO_0 / NO_1), used
+ * to pair arbitrarily and swap NC with NO. The value breaks the tie. Regression test for the
+ * "design blocks swap the schematic-to-PCB link" report.
+ */
+BOOST_FIXTURE_TEST_CASE( TopoMatchTieBreaksIdenticalPartsByValue, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    const LIB_ID receptacleId( wxT( "Don-Con" ), wxT( "Mill-Max-Pin_Receptacle" ) );
+
+    // Unique net per footprint, so the four are a topological tie and only the value differs.
+    auto makeReceptacle = [&]( const wxString& aRef, const wxString& aValue, bool aWithSymbolPath ) -> FOOTPRINT*
+    {
+        FOOTPRINT* fp = new FOOTPRINT( board.get() );
+        fp->SetFPID( receptacleId );
+        fp->SetReference( aRef );
+        fp->SetValue( aValue );
+
+        if( aWithSymbolPath )
+        {
+            KIID_PATH path;
+            path.push_back( KIID() );
+            fp->SetPath( path );
+        }
+
+        NETINFO_ITEM* net = new NETINFO_ITEM( board.get(), wxString::Format( "net_%s", aRef ) );
+        board->Add( net );
+
+        PAD* pad = new PAD( fp );
+        pad->SetNumber( wxT( "1" ) );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+        pad->SetLayerSet( LSET( { F_Cu } ) );
+        pad->SetNet( net );
+        fp->Add( pad );
+
+        board->Add( fp );
+        return fp;
+    };
+
+    // Block source: no symbol path (as after AppendBoard). Fixed order keeps the test deterministic.
+    FOOTPRINT* refNC0 = makeReceptacle( wxT( "J3" ), wxT( "NC_0" ), false );
+    FOOTPRINT* refNC1 = makeReceptacle( wxT( "J5" ), wxT( "NC_1" ), false );
+    FOOTPRINT* refNO0 = makeReceptacle( wxT( "J6" ), wxT( "NO_0" ), false );
+    FOOTPRINT* refNO1 = makeReceptacle( wxT( "J7" ), wxT( "NO_1" ), false );
+
+    // Target refdes order is the reverse of value order, so a refdes fallback would swap NC and NO.
+    FOOTPRINT* tgtNO1 = makeReceptacle( wxT( "J20" ), wxT( "NO_1" ), true );
+    FOOTPRINT* tgtNO0 = makeReceptacle( wxT( "J21" ), wxT( "NO_0" ), true );
+    FOOTPRINT* tgtNC1 = makeReceptacle( wxT( "J22" ), wxT( "NC_1" ), true );
+    FOOTPRINT* tgtNC0 = makeReceptacle( wxT( "J23" ), wxT( "NC_0" ), true );
+
+    auto cgRef = std::make_unique<CONNECTION_GRAPH>();
+    cgRef->AddFootprint( refNC0, VECTOR2I( 0, 0 ) );
+    cgRef->AddFootprint( refNC1, VECTOR2I( 0, 0 ) );
+    cgRef->AddFootprint( refNO0, VECTOR2I( 0, 0 ) );
+    cgRef->AddFootprint( refNO1, VECTOR2I( 0, 0 ) );
+    cgRef->BuildConnectivity();
+
+    auto cgTarget = std::make_unique<CONNECTION_GRAPH>();
+    cgTarget->AddFootprint( tgtNO1, VECTOR2I( 0, 0 ) );
+    cgTarget->AddFootprint( tgtNO0, VECTOR2I( 0, 0 ) );
+    cgTarget->AddFootprint( tgtNC1, VECTOR2I( 0, 0 ) );
+    cgTarget->AddFootprint( tgtNC0, VECTOR2I( 0, 0 ) );
+    cgTarget->BuildConnectivity();
+
+    TMATCH::COMPONENT_MATCHES                     result;
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+    bool                                          status = cgRef->FindIsomorphism( cgTarget.get(), result, details );
+
+    BOOST_CHECK( status );
+    BOOST_CHECK_EQUAL( result.size(), 4 );
+
+    // Each reference must match the same-value target.
+    for( const auto& [refFp, targetFp] : result )
+    {
+        BOOST_TEST_MESSAGE( wxString::Format( "%s (%s) -> %s (%s)", refFp->GetReference(), refFp->GetValue(),
+                                              targetFp->GetReference(), targetFp->GetValue() ) );
+
+        BOOST_CHECK_EQUAL( refFp->GetValue(), targetFp->GetValue() );
+    }
+}
+
+
+/**
+ * Same identical footprints, but run through the full Apply Design Block Layout. The destination
+ * is placed as a mirror of the block, and applying must un-mirror it rather than keep the swap.
+ */
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutUnmirrorsIdenticalReceptacles, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    auto makeReceptacle = [&]( const wxString& aRef, const wxString& aValue, const VECTOR2I& aPos,
+                               bool aWithSymbolPath ) -> FOOTPRINT*
+    {
+        FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+        fp->SetFPID( LIB_ID( wxT( "Don-Con" ), wxT( "Mill-Max-Pin_Receptacle" ) ) );
+        fp->SetReference( aRef );
+        fp->SetValue( aValue );
+        fp->SetPosition( aPos );
+
+        if( aWithSymbolPath )
+        {
+            KIID_PATH path;
+            path.push_back( KIID() );
+            fp->SetPath( path );
+        }
+
+        NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxString::Format( "net_%s", aRef ) );
+        m_board->Add( net );
+
+        PAD* pad = new PAD( fp );
+        pad->SetNumber( wxT( "1" ) );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+        pad->SetLayerSet( LSET( { F_Cu } ) );
+        pad->SetNet( net );
+        pad->SetPosition( aPos );
+        fp->Add( pad );
+
+        m_board->Add( fp );
+        return fp;
+    };
+
+    auto mm = []( double a, double b )
+    {
+        return VECTOR2I( pcbIUScale.mmToIU( a ), pcbIUScale.mmToIU( b ) );
+    };
+
+    // Signed area of NC_0, NC_1, NO_0. Same sign as the block is correct, opposite sign is a mirror.
+    auto chirality = []( const VECTOR2I& aNC0, const VECTOR2I& aNC1, const VECTOR2I& aNO0 ) -> double
+    {
+        return (double) ( aNC1.x - aNC0.x ) * ( aNO0.y - aNC0.y ) - (double) ( aNC1.y - aNC0.y ) * ( aNO0.x - aNC0.x );
+    };
+
+    // Block source: the reference arrangement, no symbol path (as after AppendBoard).
+    FOOTPRINT* srcNC0 = makeReceptacle( wxT( "J3" ), wxT( "NC_0" ), mm( 0, 0 ), false );
+    FOOTPRINT* srcNC1 = makeReceptacle( wxT( "J5" ), wxT( "NC_1" ), mm( 0, 7.9 ), false );
+    FOOTPRINT* srcNO0 = makeReceptacle( wxT( "J6" ), wxT( "NO_0" ), mm( -3.58, 2.28 ), false );
+    FOOTPRINT* srcNO1 = makeReceptacle( wxT( "J7" ), wxT( "NO_1" ), mm( 3.58, 5.62 ), false );
+
+    const double srcChir = chirality( srcNC0->GetPosition(), srcNC1->GetPosition(), srcNO0->GetPosition() );
+
+    // Destination placed as a mirror (NO_0 / NO_1 reflected across the NC axis).
+    FOOTPRINT* dstNC0 = makeReceptacle( wxT( "J8" ), wxT( "NC_0" ), mm( 40, 40 ), true );
+    FOOTPRINT* dstNC1 = makeReceptacle( wxT( "J9" ), wxT( "NC_1" ), mm( 40, 47.9 ), true );
+    FOOTPRINT* dstNO0 = makeReceptacle( wxT( "J10" ), wxT( "NO_0" ), mm( 43.58, 42.28 ), true );
+    FOOTPRINT* dstNO1 = makeReceptacle( wxT( "J11" ), wxT( "NO_1" ), mm( 36.42, 45.62 ), true );
+
+    BOOST_REQUIRE_LT( srcChir * chirality( dstNC0->GetPosition(), dstNC1->GetPosition(), dstNO0->GetPosition() ), 0.0 );
+
+    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+    destGroup->SetName( wxT( "Pin receptacles for safety switch" ) );
+
+    for( FOOTPRINT* fp : { dstNC0, dstNC1, dstNO0, dstNO1 } )
+        destGroup->AddItem( fp );
+
+    m_board->Add( destGroup );
+
+    RULE_AREA dbRA;
+    dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+
+    for( FOOTPRINT* fp : { srcNC0, srcNC1, srcNO0, srcNO1 } )
+    {
+        dbRA.m_components.insert( fp );
+        dbRA.m_designBlockItems.insert( fp );
+    }
+
+    dbRA.m_zone = new ZONE( m_board.get() );
+    dbRA.m_zone->SetIsRuleArea( true );
+    dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    dbRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain( BOX2I::ByCorners( mm( -6, -3 ), mm( 6, 11 ) ) ) );
+
+    RULE_AREA destRA;
+    destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+
+    for( FOOTPRINT* fp : { dstNC0, dstNC1, dstNO0, dstNO1 } )
+        destRA.m_components.insert( fp );
+
+    destRA.m_zone = new ZONE( m_board.get() );
+    destRA.m_zone->SetIsRuleArea( true );
+    destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain( BOX2I::ByCorners( mm( 33, 37 ), mm( 47, 51 ) ) ) );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = false,
+                                   .m_connectedRoutingOnly = false,
+                                   .m_copyPlacement = true,
+                                   .m_copyOtherItems = false,
+                                   .m_groupItems = false,
+                                   .m_includeLockedItems = true,
+                                   .m_anchorFp = nullptr };
+
+    int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
+    BOOST_REQUIRE_MESSAGE( result >= 0, "RepeatLayout failed" );
+
+    delete dbRA.m_zone;
+    delete destRA.m_zone;
+
+    const double dstChir = chirality( dstNC0->GetPosition(), dstNC1->GetPosition(), dstNO0->GetPosition() );
+
+    BOOST_TEST_MESSAGE(
+            wxString::Format( "block chirality %.0f, destination chirality after apply %.0f", srcChir, dstChir ) );
+
+    BOOST_CHECK_MESSAGE( srcChir * dstChir > 0.0, "Applied layout left the receptacles mirrored (NC/NO swapped)" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
