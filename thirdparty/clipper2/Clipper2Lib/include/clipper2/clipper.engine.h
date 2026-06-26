@@ -1,29 +1,20 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  22 November 2023                                                *
-* Website   :  http://www.angusj.com                                           *
-* Copyright :  Angus Johnson 2010-2023                                         *
+* Date      :  17 September 2024                                               *
+* Website   :  https://www.angusj.com                                          *
+* Copyright :  Angus Johnson 2010-2024                                         *
 * Purpose   :  This is the main polygon clipping module                        *
-* License   :  http://www.boost.org/LICENSE_1_0.txt                            *
+* License   :  https://www.boost.org/LICENSE_1_0.txt                           *
 *******************************************************************************/
 
 #ifndef CLIPPER_ENGINE_H
 #define CLIPPER_ENGINE_H
 
-#include <cstdlib>
-#include <stdint.h> //#541
-#include <iostream>
+#include "clipper2/clipper.core.h"
 #include <queue>
-#include <vector>
 #include <functional>
-#include <numeric>
 #include <memory>
 
-#include "clipper2/clipper.core.h"
-
-#ifdef None
-#undef None
-#endif
 namespace Clipper2Lib {
 
 	struct Scanline;
@@ -35,13 +26,13 @@ namespace Clipper2Lib {
 	struct HorzSegment;
 
 	//Note: all clipping operations except for Difference are commutative.
-	enum class ClipType { None, Intersection, Union, Difference, Xor };
+	enum class ClipType { NoClip, Intersection, Union, Difference, Xor };
 
 	enum class PathType { Subject, Clip };
-	enum class JoinWith { None, Left, Right };
+	enum class JoinWith { NoJoin, Left, Right };
 
 	enum class VertexFlags : uint32_t {
-		None = 0, OpenStart = 1, OpenEnd = 2, LocalMax = 4, LocalMin = 8
+		Empty = 0, OpenStart = 1, OpenEnd = 2, LocalMax = 4, LocalMin = 8
 	};
 
 	constexpr enum VertexFlags operator &(enum VertexFlags a, enum VertexFlags b)
@@ -58,7 +49,7 @@ namespace Clipper2Lib {
 		Point64 pt;
 		Vertex* next = nullptr;
 		Vertex* prev = nullptr;
-		VertexFlags flags = VertexFlags::None;
+		VertexFlags flags = VertexFlags::Empty;
 	};
 
 	struct OutPt {
@@ -134,7 +125,7 @@ namespace Clipper2Lib {
 		Vertex* vertex_top = nullptr;
 		LocalMinima* local_min = nullptr;  // the bottom of an edge 'bound' (also Vatti)
 		bool is_left_bound = false;
-		JoinWith join_with = JoinWith::None;
+		JoinWith join_with = JoinWith::NoJoin;
 	};
 
 	struct LocalMinima {
@@ -170,7 +161,7 @@ namespace Clipper2Lib {
 	};
 
 #ifdef USINGZ
-		typedef std::function<void(const Point64& e1bot, const Point64& e1top,
+	typedef std::function<void(const Point64& e1bot, const Point64& e1top,
 		const Point64& e2bot, const Point64& e2top, Point64& pt)> ZCallback64;
 
 	typedef std::function<void(const PointD& e1bot, const PointD& e1top,
@@ -200,7 +191,7 @@ namespace Clipper2Lib {
 
 	class ClipperBase {
 	private:
-		ClipType cliptype_ = ClipType::None;
+		ClipType cliptype_ = ClipType::NoClip;
 		FillRule fillrule_ = FillRule::EvenOdd;
 		FillRule fillpos = FillRule::Positive;
 		int64_t bot_y_ = 0;
@@ -213,7 +204,7 @@ namespace Clipper2Lib {
 		std::vector<Vertex*> vertex_lists_;
 		std::priority_queue<int64_t> scanline_list_;
 		IntersectNodeList intersect_nodes_;
-    HorzSegmentList horz_seg_list_;
+        HorzSegmentList horz_seg_list_;
 		std::vector<HorzJoin> horz_join_list_;
 		void Reset();
 		inline void InsertScanline(int64_t y);
@@ -233,7 +224,7 @@ namespace Clipper2Lib {
 		inline bool PopHorz(Active *&e);
 		inline OutPt* StartOpenPath(Active &e, const Point64& pt);
 		inline void UpdateEdgeIntoAEL(Active *e);
-		OutPt* IntersectEdges(Active &e1, Active &e2, const Point64& pt);
+		void IntersectEdges(Active &e1, Active &e2, const Point64& pt);
 		inline void DeleteFromAEL(Active &e);
 		inline void AdjustCurrXAndCopyToSEL(const int64_t top_y);
 		void DoIntersections(const int64_t top_y);
@@ -346,6 +337,7 @@ namespace Clipper2Lib {
 		Path64 polygon_;
 	public:
 		explicit PolyPath64(PolyPath64* parent = nullptr) : PolyPath(parent) {}
+		explicit PolyPath64(PolyPath64* parent, const Path64& path) : PolyPath(parent) { polygon_ = path; }
 
 		~PolyPath64() {
 			childs_.resize(0);
@@ -366,10 +358,7 @@ namespace Clipper2Lib {
 
 		PolyPath64* AddChild(const Path64& path) override
 		{
-			auto p = std::make_unique<PolyPath64>(this);
-			auto* result = childs_.emplace_back(std::move(p)).get();
-			result->polygon_ = path;
-			return result;
+			return childs_.emplace_back(std::make_unique<PolyPath64>(this, path)).get();
 		}
 
 		void Clear() override
@@ -404,6 +393,19 @@ namespace Clipper2Lib {
 			scale_ = parent ? parent->scale_ : 1.0;
 		}
 
+		explicit PolyPathD(PolyPathD* parent, const Path64& path) : PolyPath(parent)
+		{
+			scale_ = parent ? parent->scale_ : 1.0;
+			int error_code = 0;
+			polygon_ = ScalePath<double, int64_t>(path, scale_, error_code);
+		}
+
+		explicit PolyPathD(PolyPathD* parent, const PathD& path) : PolyPath(parent)
+		{
+			scale_ = parent ? parent->scale_ : 1.0;
+			polygon_ = path;
+		}
+
 		~PolyPathD() {
 			childs_.resize(0);
 		}
@@ -426,19 +428,12 @@ namespace Clipper2Lib {
 
 		PolyPathD* AddChild(const Path64& path) override
 		{
-			int error_code = 0;
-			auto p = std::make_unique<PolyPathD>(this);
-			PolyPathD* result = childs_.emplace_back(std::move(p)).get();
-			result->polygon_ = ScalePath<double, int64_t>(path, scale_, error_code);
-			return result;
+			return childs_.emplace_back(std::make_unique<PolyPathD>(this, path)).get();
 		}
 
 		PolyPathD* AddChild(const PathD& path)
 		{
-			auto p = std::make_unique<PolyPathD>(this);
-			PolyPathD* result = childs_.emplace_back(std::move(p)).get();
-			result->polygon_ = path;
-			return result;
+			return childs_.emplace_back(std::make_unique<PolyPathD>(this, path)).get();
 		}
 
 		void Clear() override
@@ -533,7 +528,7 @@ namespace Clipper2Lib {
 	public:
 		explicit ClipperD(int precision = 2) : ClipperBase()
 		{
-			CheckPrecision(precision, error_code_);
+			CheckPrecisionRange(precision, error_code_);
 			// to optimize scaling / descaling precision
 			// set the scale to a power of double's radix (2) (#25)
 			scale_ = std::pow(std::numeric_limits<double>::radix,
