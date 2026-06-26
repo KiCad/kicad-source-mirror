@@ -1995,4 +1995,104 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchExternalLoopReportsConnectivity, MULTICHANNEL_
 }
 
 
+/**
+ * Issue 24767: three copies of one design block, but apply works for only two of them.
+ * The block's auto net name Net-(D3-A) clashes with a same name net on a different part in
+ * the copy. They get merged, the matcher then drops them, and the wiring no longer matches.
+ * Isolating the block's auto nets before matching lets every copy apply.
+ */
+BOOST_FIXTURE_TEST_CASE( TopoMatchCollidingAutoNetName, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    auto addNet = [&]( const wxString& aName ) -> int
+    {
+        NETINFO_ITEM* net = new NETINFO_ITEM( board.get(), aName );
+        board->Add( net );
+        return net->GetNetCode();
+    };
+
+    const int netGnd = addNet( wxT( "GND" ) );
+    const int netP3V3 = addNet( wxT( "+3V3" ) );
+    const int netCollide = addNet( wxT( "Net-(D3-A)" ) ); // shared name, lands on a different part
+    const int netRefY = addNet( wxT( "Net-(D4-A)" ) );    // block other LED anode
+    const int netTgtX = addNet( wxT( "Net-(D2-A)" ) );    // copy other LED anode
+
+    LIB_ID ledAId( wxT( "TestLib" ), wxT( "LED_A" ) );
+    LIB_ID ledBId( wxT( "TestLib" ), wxT( "LED_B" ) );
+    LIB_ID resId( wxT( "TestLib" ), wxT( "R" ) );
+
+    auto addPad = [&]( FOOTPRINT* fp, const wxString& aNum, int aNet )
+    {
+        PAD* pad = new PAD( fp );
+        pad->SetNumber( aNum );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+        pad->SetLayerSet( LSET( { F_Cu } ) );
+        pad->SetNetCode( aNet );
+        fp->Add( pad );
+    };
+
+    auto addFp = [&]( const LIB_ID& aId, const wxString& aRef ) -> FOOTPRINT*
+    {
+        FOOTPRINT* fp = new FOOTPRINT( board.get() );
+        fp->SetFPID( aId );
+        fp->SetReference( aRef );
+        board->Add( fp );
+        return fp;
+    };
+
+    // One LED plus its series resistor. The LED anode net is the one that can clash.
+    auto addLedAndRes = [&]( const LIB_ID& aLedId, const wxString& aLedRef, const wxString& aResRef, int aAnodeNet,
+                             std::set<FOOTPRINT*>& aSet )
+    {
+        FOOTPRINT* led = addFp( aLedId, aLedRef );
+        addPad( led, wxT( "1" ), netGnd );
+        addPad( led, wxT( "2" ), aAnodeNet );
+        aSet.insert( led );
+
+        FOOTPRINT* res = addFp( resId, aResRef );
+        addPad( res, wxT( "1" ), aAnodeNet );
+        addPad( res, wxT( "2" ), netP3V3 );
+        aSet.insert( res );
+    };
+
+    // The block: LED_A is D3 on the clashing net, LED_B is D4 on its own net.
+    std::set<FOOTPRINT*> refFps;
+    addLedAndRes( ledAId, wxT( "D3" ), wxT( "R27" ), netCollide, refFps );
+    addLedAndRes( ledBId, wxT( "D4" ), wxT( "R30" ), netRefY, refFps );
+
+    // The copy: same parts, but the clashing name now sits on LED_B (D3), a different part.
+    std::set<FOOTPRINT*> tgtFps;
+    addLedAndRes( ledAId, wxT( "D2" ), wxT( "R1" ), netTgtX, tgtFps );
+    addLedAndRes( ledBId, wxT( "D3" ), wxT( "R2" ), netCollide, tgtFps );
+
+    // The fix gives the block's auto nets private names so they cannot clash with the copy.
+    std::unordered_set<EDA_ITEM*> refItems( refFps.begin(), refFps.end() );
+    MULTICHANNEL_TOOL::IsolateDesignBlockAutoNets( board.get(), refFps, refItems );
+
+    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refFps, tgtFps );
+    auto cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( tgtFps, refFps );
+
+    TMATCH::COMPONENT_MATCHES                     result;
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+    bool                                          status = cgRef->FindIsomorphism( cgTarget.get(), result, details );
+
+    if( !status )
+    {
+        for( const auto& reason : details )
+        {
+            BOOST_TEST_MESSAGE( wxString::Format( "Mismatch: %s to %s: %s", reason.m_reference, reason.m_candidate,
+                                                  reason.m_reason ) );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( status, "Topology match failed even after isolating the block's auto nets "
+                                 "(issue 24767)" );
+    BOOST_CHECK_EQUAL( result.size(), refFps.size() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -30,6 +30,8 @@
 #include <pcbexpr_evaluator.h>
 
 #include <zone.h>
+#include <board.h>
+#include <netinfo.h>
 #include <board_design_settings.h>
 #include <geometry/convex_hull.h>
 #include <geometry/shape_utils.h>
@@ -1793,6 +1795,70 @@ void MULTICHANNEL_TOOL::fixupNet( BOARD_CONNECTED_ITEM* aRef, BOARD_CONNECTED_IT
             }
         }
     }
+}
+
+
+std::vector<NETINFO_ITEM*> MULTICHANNEL_TOOL::IsolateDesignBlockAutoNets( BOARD*                      aBoard,
+                                                                          const std::set<FOOTPRINT*>& aFootprints,
+                                                                          const std::unordered_set<EDA_ITEM*>& aItems )
+{
+    std::vector<NETINFO_ITEM*>   created;
+    std::map<int, NETINFO_ITEM*> remap;
+    int                          counter = 0;
+
+    // Auto-generated names are tied to a reference designator, so a block's Net-(D3-A) collides
+    // with a different part's Net-(D3-A) on the board. Named/power nets are intentional and left
+    // alone so the topology matcher keeps excluding real global rails.
+    auto isAutoName = []( const wxString& aName )
+    {
+        return aName.StartsWith( wxT( "Net-(" ) ) || aName.StartsWith( wxT( "unconnected-" ) );
+    };
+
+    auto remapItem = [&]( BOARD_CONNECTED_ITEM* aItem )
+    {
+        int code = aItem->GetNetCode();
+
+        if( code <= 0 )
+            return;
+
+        NETINFO_ITEM* oldNet = aBoard->FindNet( code );
+
+        if( !oldNet || !isAutoName( oldNet->GetNetname() ) )
+            return;
+
+        auto it = remap.find( code );
+
+        if( it == remap.end() )
+        {
+            wxString name;
+
+            do
+            {
+                name = wxString::Format( wxT( "__dbapply_%d_%d" ), code, counter++ );
+            } while( aBoard->FindNet( name ) );
+
+            NETINFO_ITEM* newNet = new NETINFO_ITEM( aBoard, name );
+            aBoard->Add( newNet );
+            created.push_back( newNet );
+            it = remap.emplace( code, newNet ).first;
+        }
+
+        aItem->SetNet( it->second );
+    };
+
+    for( FOOTPRINT* fp : aFootprints )
+    {
+        for( PAD* pad : fp->Pads() )
+            remapItem( pad );
+    }
+
+    for( EDA_ITEM* item : aItems )
+    {
+        if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+            remapItem( bci );
+    }
+
+    return created;
 }
 
 

@@ -50,6 +50,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <footprint.h>
 #include <pad.h>
+#include <netinfo.h>
 #include <layer_pairs.h>
 #include <pcb_group.h>
 #include <pcb_layer_presentation.h>
@@ -1711,10 +1712,23 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
                                           .m_includeLockedItems = true,
                                           .m_anchorFp = nullptr };
 
+        // Give the appended block's auto-generated nets a private namespace so they cannot fuse by
+        // name with a different part's net on the board, which would corrupt the topology match
+        // (issue 24767). Reverted with the temporary block, so the private nets are removed below.
+        std::vector<NETINFO_ITEM*> isolatedNets =
+                MULTICHANNEL_TOOL::IsolateDesignBlockAutoNets( brd, dbRA.m_components, dbRA.m_designBlockItems );
+
         wxString repeatErr;
         int      result = mct->RepeatLayout( aEvent, dbRA, destRA, options, &sharedCommit, &repeatErr );
 
         tempCommit.Revert();
+
+        for( NETINFO_ITEM* net : isolatedNets )
+        {
+            brd->Remove( net );
+            delete net;
+        }
+
         clearFlags();
         delete dbRA.m_zone;
         delete destRA.m_zone;
