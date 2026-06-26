@@ -355,7 +355,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( !( aCommitFlags & SKIP_UNDO ) )
             {
-                ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::DELETED );
+                UNDO_REDO   status = boardItem->Type() == PCB_FIELD_T ? UNDO_REDO::CHANGED : UNDO_REDO::DELETED;
+                ITEM_PICKER itemWrapper( nullptr, boardItem, status );
                 itemWrapper.SetLink( entry.m_copy );
                 entry.m_copy = nullptr;   // We've transferred ownership to the undo list
                 undoList.PushItem( itemWrapper );
@@ -379,6 +380,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             {
             case PCB_FIELD_T:
                 static_cast<PCB_FIELD*>( boardItem )->SetVisible( false );
+
+                if( view )
+                    view->Update( boardItem );
+
                 break;
 
             case PCB_TEXT_T:
@@ -437,8 +442,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 break;
             }
 
-            // The item has been removed from the board; it is now owned by undo/redo.
-            boardItem->SetFlags( UR_TRANSIENT );
+            // Removed items are owned by undo/redo, but a hidden field still belongs to its footprint
+            if( boardItem->Type() != PCB_FIELD_T )
+                boardItem->SetFlags( UR_TRANSIENT );
+
             break;
         }
 
