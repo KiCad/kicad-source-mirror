@@ -982,7 +982,7 @@ bool LIBRARY_MANAGER::IsPcmManagedRow( const LIBRARY_TABLE_ROW& aRow )
 
     wxString varName = uri.SubString( 2, end - 1 );
 
-    return varName.Matches( wxS( "KICAD*_3RD_PARTY" ) );
+    return ENV_VAR::IsVersionedEnvVar( varName, wxS( "3RD_PARTY" ) );
 }
 
 

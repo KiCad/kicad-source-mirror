@@ -66,12 +66,26 @@ namespace ENV_VAR
     KICOMMON_API wxString GetVersionedEnvVarName( const wxString& aBaseName );
 
     /**
+     * Test whether a name is a versioned KiCad environment variable for the given base,
+     * i.e. KICAD followed by one or more digits and then _<aBaseName> (KICAD8_FOOTPRINT_DIR).
+     *
+     * Unlike a glob such as "KICAD*_FOOTPRINT_DIR", this rejects user-defined names that merely
+     * share the suffix, like KICAD_USER_FOOTPRINT_DIR, so they are never silently treated as a
+     * built-in library path.
+     *
+     * @param aName is the variable name to test.
+     * @param aBaseName is the suffix, like FOOTPRINT_DIR.
+     */
+    KICOMMON_API bool IsVersionedEnvVar( const wxString& aName, const wxString& aBaseName );
+
+    /**
      * Attempt to retrieve the value of a versioned environment variable, such as
      * KICAD8_TEMPLATE_DIR.
      *
      * If this value exists in the map, it will be returned.  If not, the map will be searched
-     * for keys matching KICAD*_<aBaseName>, and the first match's value will be returned.  If
-     * there are no matches, std::nullopt will be returned.
+     * for keys that are versioned variants of <aBaseName> (@see IsVersionedEnvVar), and the
+     * first match's value will be returned.  If there are no matches, std::nullopt will be
+     * returned.
      *
      * @param aMap is an #ENV_VAR_MAP (@see environment.h).
      * @param aBaseName is the suffix for the environment variable (@see GetVersionedEnvVarName).

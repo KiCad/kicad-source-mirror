@@ -27,6 +27,7 @@
 #include <vector>
 #include <common.h>
 #include <env_paths.h>
+#include <env_vars.h>
 #include <jobs/job_export_pcb_stats.h>
 #include <pgm_base.h>
 #include <settings/environment.h>
@@ -540,6 +541,137 @@ BOOST_AUTO_TEST_CASE( UndefinedReferenceLeavesLiteralMarker )
 
     // Restore so the fixture destructor sees a known state.
     wxSetEnv( wxS( "KICAD_QA_INNER" ), innerPath );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+/**
+ * Regression test for KiCad GitLab issue #24460.
+ *
+ * The expander has a compatibility fallback that resolves an unset versioned library var
+ * (e.g. KICAD7_FOOTPRINT_DIR on a v10 install) to the current install's library directory.
+ * That fallback was gated on the glob "KICAD*_FOOTPRINT_DIR", which also matches user-defined
+ * names such as KICAD_USER_FOOTPRINT_DIR.  When such a user var was not present in the process
+ * environment, the expander silently rewrote ${KICAD_USER_FOOTPRINT_DIR} to the stock footprint
+ * directory, so the library loaded from the wrong (empty) location with no error.
+ */
+struct VersionedEnvVarFallbackFixture
+{
+    wxString                versionedName;
+    wxString                stockDir;
+    std::optional<wxString> oldVersioned;
+    std::optional<wxString> oldUser;
+    std::optional<wxString> oldLegacy;
+
+    VersionedEnvVarFallbackFixture()
+    {
+        versionedName = ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) );
+        stockDir = wxString::FromUTF8(
+                ( std::filesystem::temp_directory_path() / "kicad-qa-24460-stock.pretty" ).generic_string() );
+
+        wxString existing;
+
+        if( wxGetEnv( versionedName, &existing ) )
+            oldVersioned = existing;
+
+        if( wxGetEnv( wxS( "KICAD_USER_FOOTPRINT_DIR" ), &existing ) )
+            oldUser = existing;
+
+        if( wxGetEnv( wxS( "KICAD5_FOOTPRINT_DIR" ), &existing ) )
+            oldLegacy = existing;
+
+        // The current install advertises a stock footprint directory; a stale user var and an
+        // older versioned var are both absent.
+        wxSetEnv( versionedName, stockDir );
+        wxUnsetEnv( wxS( "KICAD_USER_FOOTPRINT_DIR" ) );
+        wxUnsetEnv( wxS( "KICAD5_FOOTPRINT_DIR" ) );
+    }
+
+    ~VersionedEnvVarFallbackFixture()
+    {
+        auto restore = [&]( const wxString& aName, const std::optional<wxString>& aOld )
+        {
+            if( aOld )
+                wxSetEnv( aName, *aOld );
+            else
+                wxUnsetEnv( aName );
+        };
+
+        restore( versionedName, oldVersioned );
+        restore( wxS( "KICAD_USER_FOOTPRINT_DIR" ), oldUser );
+        restore( wxS( "KICAD5_FOOTPRINT_DIR" ), oldLegacy );
+    }
+};
+
+BOOST_FIXTURE_TEST_SUITE( VersionedEnvVarFallback, VersionedEnvVarFallbackFixture )
+
+BOOST_AUTO_TEST_CASE( UserVarIsNotTreatedAsVersionedLibraryDir )
+{
+    const wxString uri = wxS( "${KICAD_USER_FOOTPRINT_DIR}/conn_custom.pretty" );
+
+    wxString expanded = ExpandEnvVarSubstitutions( uri, nullptr );
+
+    // An unresolved user var must stay literal, never the stock library directory.
+    BOOST_CHECK_EQUAL( expanded, uri );
+    BOOST_CHECK( !expanded.Contains( stockDir ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( LegacyVersionedVarStillResolvesToCurrentDir )
+{
+    BOOST_REQUIRE( wxS( "KICAD5_FOOTPRINT_DIR" ) != versionedName );
+
+    wxString expanded =
+            ExpandEnvVarSubstitutions( wxS( "${KICAD5_FOOTPRINT_DIR}/conn_custom.pretty" ), nullptr );
+
+    BOOST_CHECK_EQUAL( expanded, stockDir + wxS( "/conn_custom.pretty" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( DeprecatedUnversionedAliasStillResolves )
+{
+    // KICAD_SYMBOL_DIR is a documented deprecated alias for the versioned symbol dir; it must
+    // still fall back to the current install even though it carries no version digits.
+    wxString symbolName = ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) );
+    std::optional<wxString> oldSymbol;
+    std::optional<wxString> oldAlias;
+    wxString                existing;
+
+    if( wxGetEnv( symbolName, &existing ) )
+        oldSymbol = existing;
+
+    if( wxGetEnv( wxS( "KICAD_SYMBOL_DIR" ), &existing ) )
+        oldAlias = existing;
+
+    wxSetEnv( symbolName, stockDir );
+    wxUnsetEnv( wxS( "KICAD_SYMBOL_DIR" ) );
+
+    wxString expanded =
+            ExpandEnvVarSubstitutions( wxS( "${KICAD_SYMBOL_DIR}/Device.kicad_sym" ), nullptr );
+
+    BOOST_CHECK_EQUAL( expanded, stockDir + wxS( "/Device.kicad_sym" ) );
+
+    if( oldSymbol )
+        wxSetEnv( symbolName, *oldSymbol );
+    else
+        wxUnsetEnv( symbolName );
+
+    if( oldAlias )
+        wxSetEnv( wxS( "KICAD_SYMBOL_DIR" ), *oldAlias );
+    else
+        wxUnsetEnv( wxS( "KICAD_SYMBOL_DIR" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( IsVersionedEnvVarPredicate )
+{
+    BOOST_CHECK( ENV_VAR::IsVersionedEnvVar( wxS( "KICAD7_FOOTPRINT_DIR" ), wxS( "FOOTPRINT_DIR" ) ) );
+    BOOST_CHECK( ENV_VAR::IsVersionedEnvVar( wxS( "KICAD10_FOOTPRINT_DIR" ), wxS( "FOOTPRINT_DIR" ) ) );
+
+    BOOST_CHECK( !ENV_VAR::IsVersionedEnvVar( wxS( "KICAD_USER_FOOTPRINT_DIR" ), wxS( "FOOTPRINT_DIR" ) ) );
+    BOOST_CHECK( !ENV_VAR::IsVersionedEnvVar( wxS( "KICAD_FOOTPRINT_DIR" ), wxS( "FOOTPRINT_DIR" ) ) );
+    BOOST_CHECK( !ENV_VAR::IsVersionedEnvVar( wxS( "KICAD7_SYMBOL_DIR" ), wxS( "FOOTPRINT_DIR" ) ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
