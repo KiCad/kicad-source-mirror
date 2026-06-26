@@ -49,15 +49,23 @@ public:
 
     std::vector<wxString> GetSelectedFiles() const;
 
+    /// When false, OK is allowed with no files selected (e.g. amending only the message).
+    void SetFileSelectionRequired( bool aRequired );
+
     void OnTextChanged( wxCommandEvent& event );
     void OnItemChecked( wxListEvent& event );
     void OnItemUnchecked( wxListEvent& event );
 
 private:
+    /// Enable the OK button only when there is both a message and at least one selected file.
+    void updateOkButton();
+
     wxTextCtrl* m_commitMessageTextCtrl;
     wxTextCtrl* m_authorTextCtrl;
     wxListCtrl* m_listCtrl;
     wxButton* m_okButton;
+
+    bool m_requireFiles = true;
 
     git_repository* m_repo;
     wxString m_defaultAuthorName;

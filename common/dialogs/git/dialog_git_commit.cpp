@@ -167,21 +167,37 @@ DIALOG_GIT_COMMIT::DIALOG_GIT_COMMIT( wxWindow* parent, git_repository* repo,
     m_repo = repo;
     m_defaultAuthorName = defaultAuthorName;
     m_defaultAuthorEmail = defaultAuthorEmail;
+
+    updateOkButton();
+}
+
+
+void DIALOG_GIT_COMMIT::SetFileSelectionRequired( bool aRequired )
+{
+    m_requireFiles = aRequired;
+    updateOkButton();
+}
+
+
+void DIALOG_GIT_COMMIT::updateOkButton()
+{
+    bool hasMessage = !m_commitMessageTextCtrl->GetValue().IsEmpty();
+    bool needFiles = m_requireFiles && GetSelectedFiles().empty();
+
+    m_okButton->Enable( hasMessage && !needFiles );
+
+    if( !hasMessage )
+        m_okButton->SetToolTip( _( "Commit message cannot be empty" ) );
+    else if( needFiles )
+        m_okButton->SetToolTip( _( "Select at least one file to commit" ) );
+    else
+        m_okButton->SetToolTip( wxEmptyString );
 }
 
 
 void DIALOG_GIT_COMMIT::OnTextChanged( wxCommandEvent& aEvent )
 {
-    if( m_commitMessageTextCtrl->GetValue().IsEmpty() )
-    {
-        m_okButton->Disable();
-        m_okButton->SetToolTip( _( "Commit message cannot be empty" ) );
-    }
-    else
-    {
-        m_okButton->Enable();
-        m_okButton->SetToolTip( wxEmptyString );
-    }
+    updateOkButton();
 }
 
 
@@ -252,6 +268,8 @@ void DIALOG_GIT_COMMIT::OnItemChecked( wxListEvent& aEvent )
                 m_listCtrl->CheckItem( item, true );
         }
     }
+
+    updateOkButton();
 }
 
 
@@ -269,4 +287,6 @@ void DIALOG_GIT_COMMIT::OnItemUnchecked( wxListEvent& aEvent )
                 m_listCtrl->CheckItem( item, false );
         }
     }
+
+    updateOkButton();
 }
