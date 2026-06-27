@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-17 21:34+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2026-06-28 19:01+0000\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
 "Language: cs\n"
@@ -41304,7 +41304,7 @@ msgstr ": OK"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:25
 msgid "Update all footprints on board"
-msgstr "Aktualizovat všechny pouzdra na desce"
+msgstr "Aktualizovat všechna pouzdra na desce"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:28
 msgid "Update selected footprint(s)"
@@ -51330,9 +51330,9 @@ msgid "Net chain '%s' has no copper return path on reference layer '%s'."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid " (net '%s')"
-msgstr "Text '%s'"
+msgstr " (síť '%s')"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:214
 #, c-format
@@ -62310,9 +62310,8 @@ msgid "design block contains no items to apply"
 msgstr "Návrhový blok nemá žádné schéma k umístění."
 
 #: pcbnew/tools/pcb_control.cpp:1685
-#, fuzzy
 msgid "group is empty"
-msgstr "Výraz je prázdný"
+msgstr "skupina je prázdná"
 
 #: pcbnew/tools/pcb_control.cpp:1724
 #, fuzzy
