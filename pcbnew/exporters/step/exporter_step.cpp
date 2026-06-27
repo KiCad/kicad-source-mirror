@@ -268,7 +268,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
             const PADSTACK::DRILL_PROPS& secondaryDrill = padstack.SecondaryDrill();
             const PADSTACK::DRILL_PROPS& tertiaryDrill = padstack.TertiaryDrill();
 
-            // Process secondary drill (typically bottom backdrill)
+            // Process secondary drill slot (backdrill side is given by its own start layer)
             if( secondaryDrill.size.x > 0 )
             {
                 SHAPE_SEGMENT backdrillShape( pad->GetPosition(), pad->GetPosition(),
@@ -299,7 +299,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
                 }
             }
 
-            // Process tertiary drill (typically top backdrill)
+            // Process tertiary drill slot (backdrill side is given by its own start layer)
             if( tertiaryDrill.size.x > 0 )
             {
                 SHAPE_SEGMENT backdrillShape( pad->GetPosition(), pad->GetPosition(),
@@ -794,7 +794,7 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, const VECTOR2D& aOrigi
         const PADSTACK::DRILL_PROPS& secondaryDrill = padstack.SecondaryDrill();
         const PADSTACK::DRILL_PROPS& tertiaryDrill = padstack.TertiaryDrill();
 
-        // Process secondary drill (typically bottom backdrill)
+        // Process secondary drill slot (backdrill side is given by its own start layer)
         if( secondaryDrill.size.x > 0 )
         {
             SHAPE_SEGMENT backdrillShape( via->GetPosition(), via->GetPosition(),
@@ -825,7 +825,7 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, const VECTOR2D& aOrigi
             }
         }
 
-        // Process tertiary drill (typically top backdrill)
+        // Process tertiary drill slot (backdrill side is given by its own start layer)
         if( tertiaryDrill.size.x > 0 )
         {
             SHAPE_SEGMENT backdrillShape( via->GetPosition(), via->GetPosition(),

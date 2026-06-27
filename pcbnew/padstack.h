@@ -520,6 +520,23 @@ public:
     void SetBackdrillEndLayer( bool aTop, PCB_LAYER_ID aLayer );
 
 private:
+    /**
+     * Return the drill slot holding the top (@p aTop true) or bottom backdrill, identified by its
+     * start layer (F_Cu for top, B_Cu for bottom) rather than by slot position, so layouts written
+     * by KiCad 10.0 - which stored the top backdrill in the tertiary slot - are read correctly.
+     * Returns nullptr when that side is absent.
+     */
+    const DRILL_PROPS* findBackdrillDrill( bool aTop ) const;
+    DRILL_PROPS*       findBackdrillDrill( bool aTop );
+
+    /// Return the slot to write a backdrill side into, reusing the slot already holding that side
+    /// or otherwise the canonical slot (top -> secondary, bottom -> tertiary).
+    DRILL_PROPS& backdrillWriteSlot( bool aTop );
+
+    /// Clear every slot whose start layer marks it as the given backdrill side, so a malformed
+    /// padstack with the side duplicated across both slots is fully cleared.
+    void clearBackdrillSide( bool aTop );
+
     void packCopperLayer( PCB_LAYER_ID aLayer, kiapi::board::types::PadStack& aProto ) const;
 
     bool unpackCopperLayer( const kiapi::board::types::PadStackLayer& aProto );
