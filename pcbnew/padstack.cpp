@@ -18,6 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <utility> // std::as_const
+
 #include <convert_basic_shapes_to_polygon.h> // RECT_CHAMFER_POSITIONS
 #include "padstack.h"
 #include <api/api_enums.h>
@@ -462,32 +464,73 @@ bool PADSTACK::Deserialize( const google::protobuf::Any& aContainer )
 }
 
 
+// A backdrill's side is identified by its start layer (F_Cu = top, B_Cu = bottom), not by which
+// drill slot it occupies. Reads scan both slots so a board written by KiCad 10.0 - which stored the
+// top backdrill in the tertiary slot - is understood, and writes always stamp the start layer so a
+// backdrill saved here is read back correctly by older KiCad. Presence is keyed on the drill size.
+const PADSTACK::DRILL_PROPS* PADSTACK::findBackdrillDrill( bool aTop ) const
+{
+    PCB_LAYER_ID side = aTop ? F_Cu : B_Cu;
+
+    if( m_secondaryDrill.size.x > 0 && m_secondaryDrill.start == side )
+        return &m_secondaryDrill;
+
+    if( m_tertiaryDrill.size.x > 0 && m_tertiaryDrill.start == side )
+        return &m_tertiaryDrill;
+
+    return nullptr;
+}
+
+
+PADSTACK::DRILL_PROPS* PADSTACK::findBackdrillDrill( bool aTop )
+{
+    return const_cast<DRILL_PROPS*>( std::as_const( *this ).findBackdrillDrill( aTop ) );
+}
+
+
+PADSTACK::DRILL_PROPS& PADSTACK::backdrillWriteSlot( bool aTop )
+{
+    if( DRILL_PROPS* existing = findBackdrillDrill( aTop ) )
+        return *existing;
+
+    DRILL_PROPS& home = aTop ? m_secondaryDrill : m_tertiaryDrill;
+    DRILL_PROPS& other = aTop ? m_tertiaryDrill : m_secondaryDrill;
+    PCB_LAYER_ID otherSide = aTop ? B_Cu : F_Cu;
+
+    // Displace to the other slot only when the canonical home is already taken by the opposite
+    // side, which happens when extending a backdrill on a board written by KiCad 10.0.
+    if( home.size.x > 0 && home.start == otherSide )
+        return other;
+
+    return home;
+}
+
+
+void PADSTACK::clearBackdrillSide( bool aTop )
+{
+    PCB_LAYER_ID side = aTop ? F_Cu : B_Cu;
+
+    if( m_secondaryDrill.start == side )
+        m_secondaryDrill.size = { 0, 0 };
+
+    if( m_tertiaryDrill.start == side )
+        m_tertiaryDrill.size = { 0, 0 };
+}
+
+
 BACKDRILL_MODE PADSTACK::GetBackdrillMode() const
 {
-    bool hasSecondary = m_secondaryDrill.size.x > 0;
-    bool hasTertiary = m_tertiaryDrill.size.x > 0;
+    bool hasTop = findBackdrillDrill( true ) != nullptr;
+    bool hasBottom = findBackdrillDrill( false ) != nullptr;
 
-    if( !hasSecondary && !hasTertiary )
-        return BACKDRILL_MODE::NO_BACKDRILL;
-
-    if( hasSecondary && hasTertiary )
+    if( hasTop && hasBottom )
         return BACKDRILL_MODE::BACKDRILL_BOTH;
 
-    if( hasSecondary )
-    {
-        if( m_secondaryDrill.start == F_Cu )
-            return BACKDRILL_MODE::BACKDRILL_TOP;
-
-        return BACKDRILL_MODE::BACKDRILL_BOTTOM;
-    }
-
-    if( hasTertiary )
-    {
-        if( m_tertiaryDrill.start == B_Cu )
-            return BACKDRILL_MODE::BACKDRILL_BOTTOM;
-
+    if( hasTop )
         return BACKDRILL_MODE::BACKDRILL_TOP;
-    }
+
+    if( hasBottom )
+        return BACKDRILL_MODE::BACKDRILL_BOTTOM;
 
     return BACKDRILL_MODE::NO_BACKDRILL;
 }
@@ -495,143 +538,76 @@ BACKDRILL_MODE PADSTACK::GetBackdrillMode() const
 
 void PADSTACK::SetBackdrillMode( BACKDRILL_MODE aMode )
 {
-    auto initDrill = [this]( DRILL_PROPS& aDrill, PCB_LAYER_ID aStart )
+    auto apply = [this]( bool aTop, bool aWant )
     {
-        if( aDrill.size.x <= 0 )
+        if( aWant )
         {
-            aDrill.size = m_drill.size * 1.1; // Backdrill slightly larger than main drill
-            aDrill.shape = PAD_DRILL_SHAPE::CIRCLE;
-            aDrill.start = aStart;
-            aDrill.end = aStart;
+            DRILL_PROPS& drill = backdrillWriteSlot( aTop );
+            drill.start = aTop ? F_Cu : B_Cu;
+            drill.shape = PAD_DRILL_SHAPE::CIRCLE;
+
+            if( drill.size.x <= 0 )
+                drill.size = m_drill.size * 1.1; // Backdrill slightly larger than main drill
         }
         else
         {
-            aDrill.start = aStart;
+            clearBackdrillSide( aTop );
         }
     };
-    if( aMode == BACKDRILL_MODE::NO_BACKDRILL || aMode == BACKDRILL_MODE::BACKDRILL_BOTTOM )
-    {
-        m_tertiaryDrill.size = { 0, 0 };
-    }
 
-    if( aMode == BACKDRILL_MODE::NO_BACKDRILL || aMode == BACKDRILL_MODE::BACKDRILL_TOP )
-    {
-        m_secondaryDrill.size = { 0, 0 };
-    }
-
-    if( aMode == BACKDRILL_MODE::BACKDRILL_BOTTOM || aMode == BACKDRILL_MODE::BACKDRILL_BOTH )
-    {
-        m_secondaryDrill.start = B_Cu;
-
-        if( m_secondaryDrill.size.x > 0 ) { /* ok */ }
-        else initDrill( m_secondaryDrill, B_Cu );
-    }
-
-    if( aMode == BACKDRILL_MODE::BACKDRILL_TOP || aMode == BACKDRILL_MODE::BACKDRILL_BOTH )
-    {
-        m_tertiaryDrill.start = F_Cu;
-
-        if( m_tertiaryDrill.size.x > 0 ) { /* ok */ }
-        else initDrill( m_tertiaryDrill, F_Cu );
-    }
+    apply( true, aMode == BACKDRILL_MODE::BACKDRILL_TOP || aMode == BACKDRILL_MODE::BACKDRILL_BOTH );
+    apply( false, aMode == BACKDRILL_MODE::BACKDRILL_BOTTOM || aMode == BACKDRILL_MODE::BACKDRILL_BOTH );
 }
 
 
 std::optional<int> PADSTACK::GetBackdrillSize( bool aTop ) const
 {
-    if( m_secondaryDrill.size.x > 0 )
-    {
-        if( aTop && m_secondaryDrill.start == F_Cu ) return m_secondaryDrill.size.x;
-        if( !aTop && m_secondaryDrill.start == B_Cu ) return m_secondaryDrill.size.x;
-    }
-    if( m_tertiaryDrill.size.x > 0 )
-    {
-        if( aTop && m_tertiaryDrill.start == F_Cu ) return m_tertiaryDrill.size.x;
-        if( !aTop && m_tertiaryDrill.start == B_Cu ) return m_tertiaryDrill.size.x;
-    }
+    if( const DRILL_PROPS* drill = findBackdrillDrill( aTop ) )
+        return drill->size.x;
+
     return std::nullopt;
 }
 
 
 void PADSTACK::SetBackdrillSize( bool aTop, std::optional<int> aSize )
 {
-    DRILL_PROPS* target = nullptr;
-
-    if( aTop )
-    {
-        if( m_secondaryDrill.start == F_Cu ) target = &m_secondaryDrill;
-        else if( m_tertiaryDrill.start == F_Cu ) target = &m_tertiaryDrill;
-    }
-    else
-    {
-        if( m_secondaryDrill.start == B_Cu ) target = &m_secondaryDrill;
-        else if( m_tertiaryDrill.start == B_Cu ) target = &m_tertiaryDrill;
-    }
-
-    if( !target )
-    {
-        if( m_secondaryDrill.size.x <= 0 ) target = &m_secondaryDrill;
-        else if( m_tertiaryDrill.size.x <= 0 ) target = &m_tertiaryDrill;
-    }
-
-    if( !target )
-    {
-        if( aTop ) target = &m_tertiaryDrill;
-        else target = &m_secondaryDrill;
-    }
-
     if( aSize.has_value() )
     {
-        target->size = { *aSize, *aSize };
-        target->shape = PAD_DRILL_SHAPE::CIRCLE;
-        target->start = aTop ? F_Cu : B_Cu;
-        if( target->end == UNDEFINED_LAYER ) target->end = UNDEFINED_LAYER;
+        DRILL_PROPS& target = backdrillWriteSlot( aTop );
+        target.size = { *aSize, *aSize };
+        target.shape = PAD_DRILL_SHAPE::CIRCLE;
+        target.start = aTop ? F_Cu : B_Cu;
     }
     else
     {
-        target->size = { 0, 0 };
+        clearBackdrillSide( aTop );
     }
 }
 
 
 PCB_LAYER_ID PADSTACK::GetBackdrillEndLayer( bool aTop ) const
 {
-    if( m_secondaryDrill.size.x > 0 )
-    {
-        if( aTop && m_secondaryDrill.start == F_Cu ) return m_secondaryDrill.end;
-        if( !aTop && m_secondaryDrill.start == B_Cu ) return m_secondaryDrill.end;
-    }
-    if( m_tertiaryDrill.size.x > 0 )
-    {
-        if( aTop && m_tertiaryDrill.start == F_Cu ) return m_tertiaryDrill.end;
-        if( !aTop && m_tertiaryDrill.start == B_Cu ) return m_tertiaryDrill.end;
-    }
+    if( const DRILL_PROPS* drill = findBackdrillDrill( aTop ) )
+        return drill->end;
+
     return UNDEFINED_LAYER;
 }
 
 
 void PADSTACK::SetBackdrillEndLayer( bool aTop, PCB_LAYER_ID aLayer )
 {
-    DRILL_PROPS* target = nullptr;
-
-    if( aTop )
+    // A backdrill with no must-cut layer does not exist (matching the via layer sanitizer), so
+    // clearing the must-cut clears the side rather than leaving a sizeful drill with no end.
+    if( aLayer == UNDEFINED_LAYER )
     {
-        if( m_secondaryDrill.start == F_Cu ) target = &m_secondaryDrill;
-        else if( m_tertiaryDrill.start == F_Cu ) target = &m_tertiaryDrill;
-    }
-    else
-    {
-        if( m_secondaryDrill.start == B_Cu ) target = &m_secondaryDrill;
-        else if( m_tertiaryDrill.start == B_Cu ) target = &m_tertiaryDrill;
+        clearBackdrillSide( aTop );
+        return;
     }
 
-    if( target )
-    {
-        target->end = aLayer;
+    DRILL_PROPS& target = backdrillWriteSlot( aTop );
 
-        if( aLayer == UNDEFINED_LAYER )
-            target->size = { 0, 0 };
-    }
+    target.end = aLayer;
+    target.start = aTop ? F_Cu : B_Cu;
 }
 
 void PADSTACK::Serialize( google::protobuf::Any& aContainer ) const
