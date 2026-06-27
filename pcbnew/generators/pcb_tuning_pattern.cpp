@@ -560,6 +560,18 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
 
     m_settings.m_netClass = track->GetEffectiveNetClass();
 
+    auto getTimeDomainTuningEnabled = [this, aBoard]()
+    {
+        const std::shared_ptr<TUNING_PROFILES> tuningParams =
+                aBoard->GetProject()->GetProjectFile().TuningProfileParameters();
+        const TUNING_PROFILE& profile = tuningParams->GetTuningProfile( m_settings.m_netClass->GetTuningProfile() );
+
+        if( profile.m_EnableTimeDomainTuning )
+            return true;
+
+        return false;
+    };
+
     if( !m_settings.m_overrideCustomRules )
     {
         PNS::SEGMENT  pnsItem;
@@ -589,7 +601,7 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
             }
             else if( track->GetEffectiveNetClass()->HasTuningProfile() )
             {
-                m_settings.m_isTimeDomain = true;
+                m_settings.m_isTimeDomain = getTimeDomainTuningEnabled();
                 aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
             }
         }
@@ -626,7 +638,7 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
                 }
                 else if( track->GetEffectiveNetClass()->HasTuningProfile() )
                 {
-                    m_settings.m_isTimeDomain = true;
+                    m_settings.m_isTimeDomain = getTimeDomainTuningEnabled();
                     aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
                 }
             }
