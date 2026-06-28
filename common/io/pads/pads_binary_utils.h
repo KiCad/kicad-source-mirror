@@ -259,13 +259,12 @@ inline bool HasSdbMagic( const std::vector<uint8_t>& aData, uint8_t aMagic1 )
 
 
 /**
- * Validate a PADS SDB footer at @p aFooterStart, the ASCII GUID at
- * @p aFooterStart + 4 followed by the stored size-check.
+ * Validate a PADS SDB footer at @p aFooterStart: the ASCII GUID followed by an
+ * absolute back-pointer to the serialized container-item array.
  *
- * Throws IO_ERROR when the buffer is too small or the GUID does not match. The
- * size-check (u32 after the GUID) should equal @p aFooterStart; a mismatch is a
- * corruption hint, not fatal, so it is logged rather than thrown. The GUID
- * differs per format, so the caller supplies it.
+ * Throws IO_ERROR when the buffer is too small, the GUID does not match, or the
+ * back-pointer cannot address the array's four-byte count before the footer.
+ * The GUID differs per format, so the caller supplies it.
  */
 void ValidateSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart, const char* aGuid,
                         size_t aGuidLen );

@@ -44,7 +44,7 @@ namespace PADS_IO
  *   [Directory] N x 16 B @ +10  one entry per database controller's record stream. N is read
  *               from entry 1, which describes the table itself; see directoryEntryCount().
  *   [Sections]  the controllers' payloads, laid out contiguously in index order.
- *   [Footer]    46 B  GUID + a stored size check.
+ *   [Footer]    42 B  GUID + container-item-array back-pointer.
  *
  * Supported versions: 0x2021, 0x2022, 0x2024, 0x2025, 0x2026, 0x2027.
  */
@@ -172,7 +172,7 @@ private:
     static constexpr uint8_t MAGIC0 = 0x00;
     static constexpr uint8_t MAGIC1 = 0xFF;
     static constexpr int     HEADER_SIZE = 10;
-    static constexpr int     FOOTER_SIZE = 46;
+    static constexpr int     FOOTER_SIZE = 42;
     static constexpr int     DIR_ENTRY_SIZE = 16;
 
     /// Fixed part of section 3's over-declaration, on top of the directory itself.

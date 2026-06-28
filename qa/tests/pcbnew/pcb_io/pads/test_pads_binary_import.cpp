@@ -2122,6 +2122,36 @@ BOOST_AUTO_TEST_CASE( SdbContainerDecode )
 }
 
 
+BOOST_AUTO_TEST_CASE( SdbFooterStoresContainerItemBackPointer )
+{
+    static constexpr char GUID[] = "{2FE18320-6448-11d1-A412-000000000000}";
+    static constexpr size_t GUID_LENGTH = sizeof( GUID ) - 1;
+
+    std::vector<uint8_t> bytes( 128, 0 );
+    const size_t         footerStart = bytes.size() - GUID_LENGTH - sizeof( uint32_t );
+    const uint32_t       containerItemsOffset = 24;
+
+    std::copy_n( reinterpret_cast<const uint8_t*>( GUID ), GUID_LENGTH,
+                 bytes.begin() + static_cast<std::ptrdiff_t>( footerStart ) );
+
+    for( size_t i = 0; i < sizeof( containerItemsOffset ); ++i )
+        bytes[footerStart + GUID_LENGTH + i] = static_cast<uint8_t>( containerItemsOffset >> ( i * 8 ) );
+
+    BOOST_REQUIRE_NO_THROW( PADS_IO::ValidateSdbFooter( bytes, footerStart, GUID, GUID_LENGTH ) );
+
+    // The offset is a size_t on a public entry point, so a near-SIZE_MAX value must be rejected
+    // rather than wrap the length sum back inside the buffer and reach the memcmp
+    BOOST_CHECK_THROW( PADS_IO::ValidateSdbFooter( bytes, SIZE_MAX - 8, GUID, GUID_LENGTH ),
+                       IO_ERROR );
+    BOOST_CHECK_THROW( PADS_IO::ValidateSdbFooter( bytes, SIZE_MAX, GUID, GUID_LENGTH ), IO_ERROR );
+
+    // A buffer shorter than the footer itself must not underflow the remaining-bytes arithmetic
+    std::vector<uint8_t> tiny( 2, 0 );
+
+    BOOST_CHECK_THROW( PADS_IO::ValidateSdbFooter( tiny, 0, GUID, GUID_LENGTH ), IO_ERROR );
+}
+
+
 /**
  * The board-setup block is reached by arithmetic on two declared counts, not by sweeping
  * section 1 for a field-range signature. The origin lives at that base +60/+64 and shifts

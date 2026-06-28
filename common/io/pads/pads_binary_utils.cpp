@@ -25,25 +25,26 @@
 
 #include <cstring>
 
-#include <wx/log.h>
-
 namespace PADS_IO
 {
 
 void ValidateSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart, const char* aGuid,
                         size_t aGuidLen )
 {
-    if( aFooterStart + 4 + aGuidLen + 4 > aData.size() )
+    // Subtract rather than add so a near-SIZE_MAX offset cannot wrap past the check
+    if( aData.size() < 4 || aGuidLen > aData.size() - 4
+        || aFooterStart > aData.size() - aGuidLen - 4 )
+    {
         THROW_IO_ERROR( "PADS binary file too small for the footer" );
+    }
 
-    if( std::memcmp( &aData[aFooterStart + 4], aGuid, aGuidLen ) != 0 )
+    if( std::memcmp( &aData[aFooterStart], aGuid, aGuidLen ) != 0 )
         THROW_IO_ERROR( "Invalid PADS binary footer GUID" );
 
-    uint32_t stored = getU32LE( aData, aFooterStart + 4 + aGuidLen );
-    uint32_t expected = static_cast<uint32_t>( aFooterStart );
+    uint32_t containerItemsOffset = getU32LE( aData, aFooterStart + aGuidLen );
 
-    if( stored != expected )
-        wxLogWarning( "PADS binary footer size mismatch: stored=%u, expected=%u", stored, expected );
+    if( containerItemsOffset > aFooterStart || aFooterStart - containerItemsOffset < 4 )
+        THROW_IO_ERROR( "Invalid PADS binary container-item back-pointer" );
 }
 
 } // namespace PADS_IO

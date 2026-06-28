@@ -710,8 +710,9 @@ void BINARY_PARSER::parsePartPlacements()
 
 void BINARY_PARSER::parseClusters()
 {
-    // A part cluster is a fixed 60-byte record, name@+0 (char[16], NUL-padded), in cluster
-    // order, so a record's 1-based ordinal IS the CLSTID the +108 field references. Membership
+    // A part cluster is a fixed 60-byte record, id@+0 and name@+4 (char[16], NUL-padded), in
+    // cluster order. The stored id and the record's 1-based ordinal both equal the CLSTID the
+    // +108 field references. Membership
     // is captured during parsePartPlacements. The old 96-byte placement layout has no room for
     // the +108 CLSTID, so old-format boards carry no clusters.
     //
@@ -720,7 +721,7 @@ void BINARY_PARSER::parseClusters()
     // the 16-byte directory cannot reproduce. sec68 abuts the sec69 layer table, so the table is
     // located by a structural anchor: layer record 1 is always the "Top" copper layer, framed
     // [u32 0][u32 1][char[16] "Top"]. That 12-byte pattern is unique per file, and
-    // cluster_base = sec69_rec0 - sec68.count*60.
+    // cluster_base = sec69_rec0 - sec69_lead_in(12) - sec68.count*60.
     if( isOldFormat() )
         return;
 
@@ -738,19 +739,21 @@ void BINARY_PARSER::parseClusters()
     if( sec69Rec0 == 0 )
         return;
 
-    if( sec68->count > sec69Rec0 / REC_SIZE )
+    constexpr size_t SEC69_LEAD_IN = 12;
+
+    if( sec69Rec0 < SEC69_LEAD_IN || sec68->count > ( sec69Rec0 - SEC69_LEAD_IN ) / REC_SIZE )
         return;
 
-    size_t base = sec69Rec0 - static_cast<size_t>( sec68->count ) * REC_SIZE;
+    size_t base = sec69Rec0 - SEC69_LEAD_IN - static_cast<size_t>( sec68->count ) * REC_SIZE;
 
     for( uint32_t i = 0; i < sec68->count; ++i )
     {
         SDB_RECORD  rec = m_sdb.RecordAt( base + i * REC_SIZE );
-        std::string name = rec.Str( 0, 16 );
+        std::string name = rec.Str( 4, 16 );
 
-        // A misaligned base would read non-cluster bytes; a printable name plus the record's
-        // constant fields confirm the run, so emit nothing rather than fabricate empty groups.
-        if( name.empty() || rec.I32( 24 ) != 0 || rec.I32( 32 ) != 1 || rec.I32( 36 ) != 0 )
+        // A misaligned base would read non-cluster bytes. The stored ordinal and printable name
+        // confirm the run without constraining retained state fields that vary among boards.
+        if( rec.U32( 0 ) != i + 1 || name.empty() )
         {
             m_clusters.clear();
             return;
@@ -3850,7 +3853,7 @@ void BINARY_PARSER::parseMetadataRegion()
     if( m_originFound )
         return;
 
-    // The DFT region sits between the last section payload and the 46-byte footer.
+    // The DFT region sits between the last section payload and the serialized container-item array.
     // The directory ends where section 1's payload begins (section 0 carries none).
     const SDB_SECTION* firstSection = getSection( 1 );
     size_t             dirEnd = firstSection ? firstSection->dataOffset : 0;
@@ -3864,13 +3867,14 @@ void BINARY_PARSER::parseMetadataRegion()
             lastDataEnd = std::max<size_t>( lastDataEnd, entry->End() );
     }
 
-    constexpr size_t FOOTER_BYTES = 46;
+    constexpr size_t FOOTER_BYTES = 42;
     size_t           footerStart = m_data.size() - FOOTER_BYTES;
+    size_t           containerItemsOffset = m_cursor.U32At( m_data.size() - 4 );
 
-    if( lastDataEnd >= footerStart )
+    if( containerItemsOffset > footerStart || lastDataEnd >= containerItemsOffset )
         return;
 
-    parseDftConfig( dirEnd, footerStart );
+    parseDftConfig( dirEnd, containerItemsOffset );
 }
 
 
@@ -4674,6 +4678,8 @@ static bool viaRecordValid( const BINARY_CURSOR& aCur, size_t aTypeByte )
  * The pool is not reachable by accumulation, so it is reached from its own content. The index in
  * front of it tiles it exactly, so the entry closing the pool is the one satisfying
  * poolOffset + length == totalBytes(57), and the pool begins just after that 16-byte entry.
+ * Older code decoded the record one byte early, treating its last three bytes as padding and
+ * the high byte of the preceding record metadata as the pool's first byte.
  * Checked as mostly text rather than entirely text, because attribute values embed binary.
  *
  * This is a search, and it is counted. Sections 60, 68 and 69 are all ultimately anchored on it,
@@ -4740,7 +4746,7 @@ size_t BINARY_PARSER::locateStringPool() const
             }
 
             size_t drift = after - sec41->payloadOffset;
-            size_t start = sec56->payloadOffset + drift + sec56->count * 16;
+            size_t start = sec56->payloadOffset + drift + sec56->count * 16 + 1;
 
             // A textual check alone is not enough: a wrong start can still land on text and then
             // move section 60 and the layer stackup with it, which emits plausible garbage rather
@@ -4748,7 +4754,7 @@ size_t BINARY_PARSER::locateStringPool() const
             // before it, satisfying the index's own tiling invariant -- the same relation the
             // search below keys on, but tested at one offset rather than hunted for.
             bool indexCloses = start >= 16 && m_cursor.InBounds( start - 16, 16 )
-                               && m_cursor.U32At( start - 15 ) + m_cursor.U16At( start - 11 ) == poolBytes;
+                               && m_cursor.U32At( start - 16 ) + m_cursor.U16At( start - 12 ) == poolBytes;
 
             if( indexCloses && m_cursor.InBounds( start, poolBytes ) )
             {
@@ -4768,9 +4774,49 @@ size_t BINARY_PARSER::locateStringPool() const
         }
     }
 
-    // No terminator-search fallback. A board whose drift section 41 does not account for
-    // yields no pool, and everything anchored on it emits nothing rather than being searched for.
-    return 0;
+    // Some section-41 dialects cannot yet be walked structurally. Bound the fallback to the
+    // neighborhood before section 56 and require the pool-closing index invariant plus the
+    // pool's measured character distribution. More than one match is ambiguous and rejected.
+    NoteScanLocatorUse( "stringPool" );
+
+    constexpr size_t SEARCH_BACK = 4096;
+    constexpr size_t FOOTER_BYTES = 42;
+
+    size_t lowerBound = sec56->payloadOffset > SEARCH_BACK ? sec56->payloadOffset - SEARCH_BACK : 0;
+    size_t scanEnd = m_data.size() > FOOTER_BYTES ? m_data.size() - FOOTER_BYTES : 0;
+    size_t candidate = 0;
+
+    if( scanEnd < poolBytes + 16 )
+        return 0;
+
+    for( size_t entry = lowerBound; entry + 16 + poolBytes <= scanEnd; ++entry )
+    {
+        uint16_t length = m_cursor.U16At( entry + 4 );
+
+        if( length == 0 || length >= 256 || m_cursor.U32At( entry ) + length != poolBytes )
+            continue;
+
+        size_t start = entry + 16;
+        size_t textual = 0;
+
+        for( size_t i = 0; i < poolBytes; ++i )
+        {
+            uint8_t byte = m_data[start + i];
+
+            if( byte == 0 || ( byte >= 32 && byte < 127 ) )
+                ++textual;
+        }
+
+        if( textual * 100 < poolBytes * 98 )
+            continue;
+
+        if( candidate != 0 )
+            return 0;
+
+        candidate = start;
+    }
+
+    return candidate != 0 ? candidate + poolBytes : 0;
 }
 
 
@@ -4812,12 +4858,11 @@ void BINARY_PARSER::parseRouteVertices()
     // net costs a few million extra byte comparisons -- unmeasurable next to file I/O -- and removes
     // the boundary dependency entirely instead of shifting it to a different guess.
     const SDB_SECTION* firstSection = getSection( 1 );
-    constexpr size_t   FOOTER_BYTES = 46;
 
     size_t scanStart = firstSection ? firstSection->dataOffset : entry60->dataOffset;
-    size_t scanEnd = m_data.size() > FOOTER_BYTES ? m_data.size() - FOOTER_BYTES : m_data.size();
+    size_t scanEnd = m_data.size() >= 4 ? m_cursor.U32At( m_data.size() - 4 ) : m_data.size();
 
-    if( scanStart >= scanEnd || scanEnd - scanStart < stride )
+    if( scanEnd > m_data.size() || scanStart >= scanEnd || scanEnd - scanStart < stride )
         return;
 
     // Find the phase K in [0, stride) that maximizes the count of matching via/corner-shaped
@@ -4829,8 +4874,10 @@ void BINARY_PARSER::parseRouteVertices()
 
     // Preferred path: section 60's base is arithmetic off the string pool. Sections after the
     // pool resume at their declared sizes, so the base is the pool's end plus sections 58 and 59
-    // less a correction that is this section's own stride minus 32 -- 16 for the 48-byte old
-    // dialect records, 32 for the 64-byte modern ones. Measured across the corpus this agrees
+    // less a correction that is this section's own stride minus 31 -- 17 for the 48-byte old
+    // dialect records, 33 for the 64-byte modern ones. This is the logical record-grid origin,
+    // one byte before section 60's physical range; the range is a one-byte rotated ring.
+    // Measured across the corpus this agrees
     // with the phase scan below wherever both resolve and is the more accurate of the two where
     // they differ, because the scan also picks up records lying outside section 60's extent.
     //
@@ -4846,7 +4893,7 @@ void BINARY_PARSER::parseRouteVertices()
         const SDB_SECTION* sec59 = m_sdb.Section( 59 );
 
         size_t base = poolEnd + ( sec58 ? sec58->totalBytes : 0 ) + ( sec59 ? sec59->totalBytes : 0 );
-        size_t correction = stride > 32 ? stride - 32 : 0;
+        size_t correction = stride > 31 ? stride - 31 : 0;
 
         if( base >= correction && m_cursor.InBounds( base - correction, entry60->count * stride ) )
         {
@@ -7220,7 +7267,7 @@ size_t BINARY_PARSER::locateLayerStackupBase() const
     if( !sec69 || sec69->count == 0 || sec69->stride == 0 || poolEnd == 0 )
         return 0;
 
-    size_t walk = poolEnd + 1;
+    size_t walk = poolEnd;
 
     for( int i = 58; i <= 64; ++i )
     {
