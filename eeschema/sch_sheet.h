@@ -644,6 +644,9 @@ protected:
     /**
      * Get the sheetpath of this sheet.  NB: REQUIRES that the current sheet hierarchy contains
      * the given sheet.
+     *
+     * @todo Verify if this function is actually used correctly.  Technically findSelf() should reture a list of
+     *       #SCH_SHEET_PATH objects in a complex hierarcy.
      */
     SCH_SHEET_PATH findSelf() const;
 

@@ -884,8 +884,7 @@ void SCH_SHEET_PATH::CheckForMissingSymbolInstances( const wxString& aProjectNam
 
             // Legacy schematics that are not shared do not contain separate instance data.
             // The symbol reference and unit are saved in the reference field and unit entries.
-            if( ( LastScreen()->GetRefCount() <= 1 ) &&
-                ( LastScreen()->GetFileFormatVersionAtLoad() <= 20200310 ) )
+            if( !IsSharedPath() && ( LastScreen()->GetFileFormatVersionAtLoad() <= 20200310 ) )
             {
                 SCH_FIELD* refField = symbol->GetField( FIELD_T::REFERENCE );
                 symbolInstance.m_Reference = refField->GetShownText( this, true );
@@ -992,6 +991,24 @@ void SCH_SHEET_PATH::MakeFilePathRelativeToParentSheet()
                      "\n    sheet '%s' file name '%s'." ),
                 screen->GetFileName(), parentScreen->GetFileName(), PathHumanReadable(),
                 Last()->GetFileName() );
+}
+
+
+bool SCH_SHEET_PATH::IsSharedPath() const
+{
+    SCH_SHEET_PATH tmp = *this;
+
+    while( !tmp.empty() )
+    {
+        wxCHECK2( tmp.LastScreen(), continue );
+
+        if( tmp.LastScreen()->GetRefCount() > 1 )
+            return true;
+
+        tmp.pop_back();
+    }
+
+    return false;
 }
 
 

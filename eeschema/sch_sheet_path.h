@@ -521,6 +521,19 @@ public:
 
     void CheckForMissingSymbolInstances( const wxString& aProjectName );
 
+    /**
+     * Determine if this sheet path is shared in a complex hierarchy.
+     *
+     * In order to properly determine if a given sheet in a sheet path is shared multiple times, each
+     * sheet in the path must be check all the way up to the root sheet.  This is necessary because
+     * when schematics are loaded, only the first instance of a sheet on the way down the hierarchy
+     * gets a reference count greater than one.  This means that all sheets below the highest sheet
+     * path level that is shared are implicitly shared as well.
+     *
+     * @return True if the sheet path is shared.  Otherwise false.
+     */
+    bool IsSharedPath() const;
+
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
     bool operator!=( const SCH_SHEET_PATH& d1 ) const { return !( *this == d1 ) ; }

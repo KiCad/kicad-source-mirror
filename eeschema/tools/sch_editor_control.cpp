@@ -2350,6 +2350,8 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( SCH_SHEET* aSheet, const S
     if( aSheet->GetScreen() == nullptr )
         return sheetPath; // We can only really set the page number but not load any items
 
+    bool isSharedPath = sheetPath.IsSharedPath();
+
     for( SCH_ITEM* item : aSheet->GetScreen()->Items() )
     {
         if( item->IsConnectable() )
@@ -2364,9 +2366,15 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( SCH_SHEET* aSheet, const S
             // Only do this once if the symbol is shared across multiple sheets.
             if( !m_pastedSymbols.count( symbol ) )
             {
+                if( !isSharedPath )
+                    const_cast<KIID&>( symbol->m_Uuid ) = KIID();
+
                 for( SCH_PIN* pin : symbol->GetPins() )
                 {
-                    const_cast<KIID&>( pin->m_Uuid ) = KIID();
+                    // Only update the UUID if the symbol is not in a shared sheet.
+                    if( !isSharedPath )
+                        const_cast<KIID&>( pin->m_Uuid ) = KIID();
+
                     pin->SetConnectivityDirty();
                 }
             }
@@ -2382,9 +2390,14 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( SCH_SHEET* aSheet, const S
             // Make sure pins get a new UUID and set the dirty connectivity flag.
             if( !aPastedSheets->ContainsSheet( subsheet ) )
             {
+                if( !isSharedPath )
+                    const_cast<KIID&>( subsheet->m_Uuid ) = KIID();
+
                 for( SCH_SHEET_PIN* pin : subsheet->GetPins() )
                 {
-                    const_cast<KIID&>( pin->m_Uuid ) = KIID();
+                    if( !isSharedPath )
+                        const_cast<KIID&>( pin->m_Uuid ) = KIID();
+
                     pin->SetConnectivityDirty();
                 }
             }

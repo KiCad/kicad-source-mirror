@@ -685,9 +685,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
         // Check to see if the symbol associated with this row has more than one instance.
         if( const SCH_SYMBOL* symbol = ref.GetSymbol() )
         {
-            screen = static_cast<const SCH_SCREEN*>( symbol->GetParent() );
-
-            isSharedInstance = ( screen && ( screen->GetRefCount() > 1 ) );
+            isSharedInstance = ref.GetSheetPath().IsSharedPath();
             sharedSymbol = symbol;
         }
 
