@@ -214,6 +214,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     }
 
 
+    // Modify() appends to m_entries, so collect first and stage after the loop.
+    std::vector<std::pair<EDA_GROUP*, BASE_SCREEN*>> removedItemGroups;
+
     for( COMMIT_LINE& entry : m_entries )
     {
         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( entry.m_item );
@@ -222,8 +225,11 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         wxCHECK2( schItem, continue );
 
         if( changeType == CHT_REMOVE && schItem->GetParentGroup() )
-            Modify( schItem->GetParentGroup()->AsEdaItem(), entry.m_screen );
+            removedItemGroups.emplace_back( schItem->GetParentGroup(), entry.m_screen );
     }
+
+    for( const auto& [group, screen] : removedItemGroups )
+        Modify( group->AsEdaItem(), screen );
 
     for( COMMIT_LINE& entry : m_entries )
     {
