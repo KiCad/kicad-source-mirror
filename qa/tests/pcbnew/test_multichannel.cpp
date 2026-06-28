@@ -1156,6 +1156,135 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutCopiesSilkscreen, MULTICHANNEL_TE
 
 
 /**
+ * Apply Design Block Layout maps block footprints to their placed instances by symbol instance
+ * UUID when the board's net topology no longer matches the block (issue: a board wire makes the
+ * two non isomorphic, which used to abort with "No compatible component found in the target area").
+ */
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutMatchesBySymbolPathWhenTopologyDiffers, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() );
+
+    NETINFO_ITEM* shared = new NETINFO_ITEM( m_board.get(), wxT( "Net-(J1-Pin_1)" ) );
+    m_board->Add( shared );
+
+    auto makeFootprint = [&]( const wxString& aRef, const VECTOR2I& aPos, const KIID& aSymbolUuid,
+                              NETINFO_ITEM* aNet ) -> FOOTPRINT*
+    {
+        FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+        fp->SetFPID( LIB_ID( wxT( "TestLib" ), wxT( "Receptacle" ) ) );
+        fp->SetReference( aRef );
+        fp->SetPosition( aPos );
+
+        // Symbol instance UUID, the link between a block footprint and its placed instance
+        KIID_PATH path;
+        path.push_back( aSymbolUuid );
+        fp->SetPath( path );
+
+        PAD* pad = new PAD( fp );
+        pad->SetNumber( wxT( "1" ) );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+        pad->SetPosition( aPos );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+        pad->SetLayerSet( LSET( { F_Cu } ) );
+
+        if( aNet )
+            pad->SetNet( aNet );
+
+        fp->Add( pad );
+        m_board->Add( fp );
+        return fp;
+    };
+
+    KIID symA, symB;
+
+    // Block source: both receptacles unconnected, so each pad has zero connections
+    FOOTPRINT* refFpA = makeFootprint( wxT( "J5" ), VECTOR2I( 0, 0 ), symA, nullptr );
+    FOOTPRINT* refFpB = makeFootprint( wxT( "J6" ), VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ), symB, nullptr );
+
+    // Board instance: same symbol instances, but a board wire ties both pads onto one net
+    FOOTPRINT* destFpA =
+            makeFootprint( wxT( "J1" ), VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ), symA, shared );
+    FOOTPRINT* destFpB =
+            makeFootprint( wxT( "J2" ), VECTOR2I( pcbIUScale.mmToIU( 80 ), pcbIUScale.mmToIU( 80 ) ), symB, shared );
+
+    // Precondition: topology matching fails, so the symbol path fallback is what rescues the apply
+    {
+        std::set<FOOTPRINT*>      refSet{ refFpA, refFpB };
+        std::set<FOOTPRINT*>      destSet{ destFpA, destFpB };
+        auto                      cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refSet, destSet );
+        auto                      cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( destSet, refSet );
+        TMATCH::COMPONENT_MATCHES topoOnly;
+        std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+        BOOST_REQUIRE_MESSAGE( !cgRef->FindIsomorphism( cgTarget.get(), topoOnly, details ),
+                               "Test precondition broken: areas are net isomorphic" );
+    }
+
+    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+    destGroup->SetName( wxT( "design-block-dest" ) );
+    destGroup->AddItem( destFpA );
+    destGroup->AddItem( destFpB );
+    m_board->Add( destGroup );
+
+    RULE_AREA dbRA;
+    dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+    dbRA.m_components.insert( refFpA );
+    dbRA.m_components.insert( refFpB );
+    dbRA.m_designBlockItems.insert( refFpA );
+    dbRA.m_designBlockItems.insert( refFpB );
+    dbRA.m_zone = new ZONE( m_board.get() );
+    dbRA.m_zone->SetIsRuleArea( true );
+    dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    dbRA.m_zone->AddPolygon(
+            KIGEOM::BoxToLineChain( BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
+                                                      VECTOR2I( pcbIUScale.mmToIU( 15 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
+
+    RULE_AREA destRA;
+    destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+    destRA.m_components.insert( destFpA );
+    destRA.m_components.insert( destFpB );
+    destRA.m_group = destGroup;
+    destRA.m_zone = new ZONE( m_board.get() );
+    destRA.m_zone->SetIsRuleArea( true );
+    destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+            BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 40 ) ),
+                              VECTOR2I( pcbIUScale.mmToIU( 90 ), pcbIUScale.mmToIU( 90 ) ) ) ) );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                   .m_connectedRoutingOnly = false,
+                                   .m_copyPlacement = true,
+                                   .m_copyOtherItems = true,
+                                   .m_groupItems = false,
+                                   .m_includeLockedItems = true,
+                                   .m_anchorFp = nullptr };
+
+    int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
+
+    delete dbRA.m_zone;
+    delete destRA.m_zone;
+
+    BOOST_CHECK_MESSAGE( result >= 0, "Apply Design Block Layout aborted even though the symbol instance paths "
+                                      "give an unambiguous mapping (No compatible component regression)" );
+
+    // Correct pairing (J5->J1, J6->J2) reproduces the source 10mm spacing, a swap would give -10mm
+    VECTOR2I delta = destFpB->GetPosition() - destFpA->GetPosition();
+    BOOST_CHECK_MESSAGE( delta == VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ),
+                         wxString::Format( "Destination relative placement wrong, expected "
+                                           "(10mm,0) got (%d,%d) IU",
+                                           delta.x, delta.y ) );
+}
+
+
+/**
  * Apply Design Block Layout must keep a footprint's silkscreen text when the footprint has
  * several text items with the same string (issue 24583).
  *
