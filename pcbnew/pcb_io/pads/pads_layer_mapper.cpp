@@ -66,11 +66,13 @@ PADS_LAYER_MAPPER::PADS_LAYER_MAPPER() :
     m_layerNameMap["bottom paste"] = PADS_LAYER_TYPE::PASTE_BOTTOM;
 
     m_layerNameMap["assembly top"] = PADS_LAYER_TYPE::ASSEMBLY_TOP;
+    m_layerNameMap["assembly drawing top"] = PADS_LAYER_TYPE::ASSEMBLY_TOP;
     m_layerNameMap["top assembly"] = PADS_LAYER_TYPE::ASSEMBLY_TOP;
     m_layerNameMap["assy top"] = PADS_LAYER_TYPE::ASSEMBLY_TOP;
     m_layerNameMap["component outline top"] = PADS_LAYER_TYPE::ASSEMBLY_TOP;
 
     m_layerNameMap["assembly bottom"] = PADS_LAYER_TYPE::ASSEMBLY_BOTTOM;
+    m_layerNameMap["assembly drawing bottom"] = PADS_LAYER_TYPE::ASSEMBLY_BOTTOM;
     m_layerNameMap["bottom assembly"] = PADS_LAYER_TYPE::ASSEMBLY_BOTTOM;
     m_layerNameMap["assy bottom"] = PADS_LAYER_TYPE::ASSEMBLY_BOTTOM;
     m_layerNameMap["component outline bottom"] = PADS_LAYER_TYPE::ASSEMBLY_BOTTOM;
@@ -82,6 +84,7 @@ PADS_LAYER_MAPPER::PADS_LAYER_MAPPER() :
 
     m_layerNameMap["documentation"] = PADS_LAYER_TYPE::DOCUMENTATION;
     m_layerNameMap["doc"] = PADS_LAYER_TYPE::DOCUMENTATION;
+    m_layerNameMap["drill drawing"] = PADS_LAYER_TYPE::DRILL_DRAWING;
 }
 
 

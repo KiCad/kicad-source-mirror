@@ -56,7 +56,7 @@ public:
 
     const IO_FILE_DESC GetBoardFileDesc() const override;
     const IO_FILE_DESC GetLibraryDesc() const override;
-    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
+    long long          GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     bool CanReadBoard( const wxString& aFileName ) const override;
     bool CanReadLibrary( const wxString& aFileName ) const override;
@@ -68,8 +68,8 @@ public:
     DefaultLayerMappingCallback( const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
 
 private:
-    int          scaleSize( double aVal ) const;
-    int          scaleCoord( double aVal, bool aIsX ) const;
+    int scaleSize( double aVal ) const;
+    int scaleCoord( double aVal, bool aIsX ) const;
 
     /// Scale a board point to a KiCad position, applying the per-axis origin and the Y-flip.
     VECTOR2I     scalePoint( double aX, double aY ) const;
@@ -93,6 +93,7 @@ private:
     void loadClusterGroups();
 
     void loadBoardOutline();
+    void loadGraphicLines();
     void setBoardOutlineArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev, const PADS_IO::ARC_POINT& aCurr );
     void loadTracksAndVias();
     void loadTexts();
@@ -107,21 +108,21 @@ private:
     void reportStatistics();
     void clearLoadingState();
 
-    std::map<wxString, PCB_LAYER_ID>   m_layerMap;
+    std::map<wxString, PCB_LAYER_ID> m_layerMap;
 
     // Valid only during LoadBoard, cleared by clearLoadingState().
-    BOARD*                              m_loadBoard = nullptr;
+    BOARD*                             m_loadBoard = nullptr;
     const PADS_IO::BINARY_PARSER*      m_parser = nullptr;
-    PADS_UNIT_CONVERTER                 m_unitConverter;
-    PADS_LAYER_MAPPER                   m_layerMapper;
-    std::vector<PADS_LAYER_INFO>        m_layerInfos;
-    double                              m_scaleFactor = 0.0;
-    double                              m_originX = 0.0;
-    double                              m_originY = 0.0;
+    PADS_UNIT_CONVERTER                m_unitConverter;
+    PADS_LAYER_MAPPER                  m_layerMapper;
+    std::vector<PADS_LAYER_INFO>       m_layerInfos;
+    double                             m_scaleFactor = 0.0;
+    double                             m_originX = 0.0;
+    double                             m_originY = 0.0;
     int                                m_minObjectSize = 1000;
-    std::map<std::string, std::string>  m_pinToNetMap;
+    std::map<std::string, std::string> m_pinToNetMap;
 
     // One footprint per parser part index, so loadClusterGroups() can resolve the
     // part-index-keyed cluster membership to a footprint.
-    std::vector<FOOTPRINT*>             m_partFootprints;
+    std::vector<FOOTPRINT*> m_partFootprints;
 };

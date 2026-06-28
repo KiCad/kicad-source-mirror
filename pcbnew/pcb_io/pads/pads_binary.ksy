@@ -8,12 +8,10 @@
 #
 # Units: BASIC = 1/38100 mil. Angles are stored as degrees * 1,800,000.
 #
-# The directory entry count is STORED (directory entry 1's count, less one), not
-# implied by the version: v0x2021, v0x2022 and v0x2024 have 73 entries and only
-# v0x2025 onward have 74. Section payloads are laid out contiguously in directory
-# order, but the accumulated offset must be corrected by the section-3
-# over-declaration -- see `dir_entry`. The file ends with the footer GUID and a
-# u32 back-pointer to the serialized container-item array.
+# The controller-slot count is stored directly in directory entry 1. PADS reads
+# that many 16-byte slots from file offset 6, so the offset-10 directory view has
+# num_directory-1 full 16-byte entries and one final 12-byte entry. The file ends
+# with the footer GUID and a u32 back-pointer to the container-item array.
 
 meta:
   id: pads_pcb_binary
@@ -25,66 +23,6 @@ meta:
     - microsoft_cfb
 
 doc: The purpose of this field is not known.
-params:
-  - id: section41_num_clearance_records
-    type: u4
-  - id: section41_clearance_record_size
-    type: u4
-  - id: section41_num_layer_clearance_records
-    type: u4
-  - id: section41_num_rule_relation_prefixes
-    type: u4
-  - id: section41_num_high_speed_records
-    type: u4
-  - id: section41_num_per_layer_rule_matrices
-    type: u4
-  - id: section41_num_layers
-    type: u4
-  - id: section41_num_route_records
-    type: u4
-  - id: section41_route_record_size
-    type: u4
-  - id: section41_num_diff_pair_records
-    type: u4
-  - id: section41_num_section49_prefix_words
-    type: u4
-  - id: section49_storage_offset
-    type: u4
-    doc: validated physical start of section 49 after any rule-stream overhang
-  - id: section49_physical_offset
-    type: u4
-    doc: physical start of section 49 before any section-41 rule-stream overhang
-  - id: string_pool_offset
-    type: u4
-    doc: validated section-57 pool start from its terminating index entry
-  - id: section52_uses_legacy_tokens
-    type: u1
-  - id: section65_66_num_saved_relationship_links
-    type: u4
-  - id: section65_66_num_compact_net_classes
-    type: u4
-  - id: section65_66_num_net_classes
-    type: u4
-  - id: layer_table_offset
-    type: u4
-    doc: validated section-69 layer-record base
-  - id: post_layer_offset
-    type: u4
-    doc: validated start of the post-layer database stream
-  - id: num_extended_layer_states
-    type: u4
-  - id: preferences_base_size
-    type: u4
-  - id: num_error_conflicts
-    type: u4
-  - id: num_font_faces
-    type: u4
-  - id: font_stride
-    type: u4
-
-# These parameters are outputs of the bounded structural locators documented
-# above. The file does not serialize the rule-array counts or physical late-
-# stream offsets; explicit inputs avoid byte searches and corpus-fitted constants.
 seq:
   - id: magic
     contents: [0x00, 0xff]
@@ -100,79 +38,59 @@ seq:
       through v0x2026 use 0, and v0x2027 uses 0/1/2.
   - id: header_padding
     contents: [0, 0, 0, 0]
-    doc: four zero padding bytes; zero on 90 of 90 unique corpus files
+    doc: |
+      Four zero bytes. The PADS loader first consumes the three u16 header words,
+      then reads the controller-directory memory image starting at file offset 6.
+      These bytes therefore become the unused +0 word of controller slot 0; the
+      visible count/extent pairs begin at file offset 10. Zero on all 597 unique
+      binaries in the four-root corpus.
   - id: directory
-    type: dir_entry
+    type: 'dir_entry(_index + 1 < num_directory)'
     repeat: expr
     repeat-expr: 'num_directory'
     doc: |
-      entry_count x 16-byte directory entries from offset 10. Each section's
-      payload begins at HEADER(10) + entry_count*16 + sum(prior total_bytes),
-      MINUS the section-3 over-declaration (see `payload_offset` below).
-      sec0 has no region.
+      A four-byte-shifted view of the controller slots PADS reads from offset 6.
+      The first num_directory-1 views are 16 bytes because they include the next
+      slot's zero word; the final view is 12 bytes and ends exactly at
+      loader_stream_start. Flat
+      controllers use `total_bytes` as their serialized byte extent. Paged
+      controllers use the same word as a count of 12-byte descriptors stored in
+      section 26; their serialized extent is the sum of descriptor record counts
+      times the version-specific controller stride.
+  - id: physical_body
+    type: physical_file_body
+    size: 'footer.cntr_item_back_ptr - loader_stream_start'
+    doc: |
+      Exact sequential ownership of every database byte after the shifted
+      controller directory and before the OLE container-item array. Logical
+      circular-array views remain root instances and never determine this
+      stream's boundaries.
+  - id: physical_container_items
+    type: cntr_item_array
+    size: '_io.size - 42 - footer.cntr_item_back_ptr'
+    doc: serialized OLE container-item array at the footer back-pointer
+  - id: physical_footer
+    type: footer
+    doc: final 42-byte MFC document footer
 
 instances:
   num_directory:
-    value: '(_root.directory_probe.count - 1)'
+    value: _root.directory_probe.count
     doc: |
-      The entry count is STORED, not implied by the version. Directory entry 1
-      describes the section table itself -- stride 16, one slot per controller --
-      and declares one slot more than is written, the same in-memory-versus-
-      written over-declaration section 3 makes. So the written count is its
-      declared count less one.
-
-      This makes v0x2022 and v0x2024 73-entry files, NOT 74: the extra controller
-      arrived in v0x2025. Verified on all 90 scoped files by *PCB* board-setup
-      block alignment -- with the stored count every file lands on a 48-byte
-      boundary, where a 73/74 version table leaves v0x2022 and v0x2024 off by 32.
-
-      Guard before trusting it: section1.total_bytes == section1.count * 16.
-      That guard holds on 90 of 90 scoped corpus boards, so the
-      directory always declares its own byte size and the count can be read
-      without a version branch at all.
-
-      Re-measured on the scoped corpus, the stored count by version is
-
-          0x2021   73    17 boards
-          0x2022   73     5 boards
-          0x2024   73     2 boards
-          0x2025   74     1 board
-          0x2026   74    12 boards
-          0x2027   74    53 boards
-
-      NOT YET APPLIED IN THE READER, AND RE-CONFIRMED AS BLOCKED.
-      PADS_SDB::directoryEntryCount() still returns the version-implied 73/74.
-      Switching it moves every v0x2022 and v0x2024 data_offset by 16 bytes at
-      once, and the 81 call sites still on data_offset are calibrated against
-      the wrong value, so it can only land together with moving them to
-      payload_offset -- where the offset and the section-3 overshoot both change
-      by 16 and cancel. The origin locator below reads the stored count directly
-      instead of waiting for that migration.
-
-      Tried again on 2026-08-06, reading the stored count with the self-check
-      total_bytes == slots*16 as a guard. Still exactly 9 failures, still only on
-      those two dialects, so the blocker is live and the migration really is a
-      prerequisite rather than a stale note. The failing cases, for whoever picks
-      this up:
-
-          V2022MechanicalDecalsMatch          checked 0 against 8
-          V2022RouteNetIndexBiasDecodes       GND and PGND via nets empty
-          V2024RouteGeometryMatchesAscii      geometry mismatch
-          V2022PadNetsMatchAscii              net set mismatch
-          V2022PadGeometryMatchesAscii        pad set mismatch
-          V2024InlineTerminalsAndPadstackPairsDecode   fiducials 0 against 3
-          V2024ZeroPadstackOverridesDecode    fatal, WE-SL1 pin 2
-
-      THIS IS THE HIGHEST-LEVERAGE REMAINING WORK. An audit attributes 19 of the
-      41 parser search sites to one defect -- the declared data_offset of
-      sections 5, 8, 9, 10, 12, 14, 15 does not match where their records start,
-      which three separate code comments already note. Those 19 retire together
-      once the lead-in model is right, the way deriving payload_offset dissolved
-      four fitted constants at once. Retiring locators one at a time is mostly
-      wasted motion by comparison.
+      Stored controller-slot count, used directly. The prior `count - 1` claim
+      came from treating the loader's offset-6 memory-image read as an offset-10
+      array read. Full-corpus values: v0x2017=73; v0x2019/v0x2021/v0x2022/v0x2024=74;
+      v0x2025/v0x2026/v0x2027=75. Directory entry 1 satisfies
+      `total_bytes == count * 16` on every corpus binary.
+  loader_stream_start:
+    value: '6 + num_directory * 16'
+    doc: |
+      CArchive cursor after the loader reads the directory memory image. Because
+      that read begins at offset 6, the offset-10 shifted directory view ends
+      with a 12-byte final entry at this same cursor. Flat tag 2 begins here.
   directory_probe:
     pos: 26
-    type: dir_entry
+    type: 'dir_entry(true)'
     doc: directory entry 1, read early because it carries the entry count
   footer:
     pos: '_io.size - 42'
@@ -181,74 +99,116 @@ instances:
   container_items:
     pos: footer.cntr_item_back_ptr
     type: cntr_item_array
+    size: '_io.size - 42 - footer.cntr_item_back_ptr'
     doc: root serialized OLE container-item array, reached by the footer back-pointer
   view_state_records:
-    pos: '10 + num_directory * 16'
+    pos: loader_stream_start
     type: sec2_view_state_array
     size: directory[2].total_bytes
     doc: section 2 records are physically written before section 1
   board_setup:
-    pos: '10 + num_directory * 16 + directory[2].total_bytes'
+    pos: 'loader_stream_start - 12 + directory[2].total_bytes'
     type: sec1_board_setup
     size: directory[1].total_bytes
+    doc: rotated section-1 logical view; its first 12 bytes precede the physical tag-2/tag-3 controller cursor
   section3_serialized_size:
-    value: 'directory[3].total_bytes - (num_directory * 16 + 48)'
-    doc: section 3's directory size is its in-memory image; the directory and 48-byte database header are not serialized again
+    value: directory[3].total_bytes
+    doc: exact physical tag-3 controller extent read by the loader
   board_parameters:
-    pos: '10 + num_directory * 16 + directory[2].total_bytes + directory[1].total_bytes'
-    type: sec3_board_params
+    pos: 'loader_stream_start + directory[2].total_bytes'
+    type: sec3_physical_controller
     size: section3_serialized_size
-    doc: section 3 omits the already-written directory and 48-byte database header from its image
+    doc: complete physical tag-3 database/board-parameter controller image
+  section4_physical_offset:
+    value: 'loader_stream_start + directory[2].total_bytes + directory[3].total_bytes'
+    doc: exact loader cursor for the flat tag-4 controller
+  flat_controllers_4_24:
+    pos: section4_physical_offset
+    type: flat_controller_storage_4_24
+    size: 'directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes + directory[8].total_bytes + directory[9].total_bytes + directory[10].total_bytes + directory[11].total_bytes + directory[12].total_bytes + directory[13].total_bytes + directory[14].total_bytes + directory[15].total_bytes + directory[16].total_bytes + directory[17].total_bytes + directory[18].total_bytes + directory[19].total_bytes + directory[20].total_bytes + directory[21].total_bytes + directory[22].total_bytes + directory[23].total_bytes + directory[24].total_bytes'
+    doc: exact physical flat-controller partition for tags 4 through 24
   section4_offset:
-    value: '10 + num_directory * 16 + directory[2].total_bytes + directory[1].total_bytes + section3_serialized_size'
+    value: 'section4_physical_offset - 44'
+    doc: logical fixed-record view; these controllers serialize their first 44 bytes at the physical ring tail
   padstack_definitions:
-    pos: section4_offset
+    pos: 'section4_physical_offset - (version == 0x2022 ? 20 : version <= 0x2021 ? 24 : 28)'
     type: sec4_padstack_array
     size: directory[4].total_bytes
+    doc: versioned logical padstack grid; physical marker is +24 through v0x2021 and +28 thereafter
+  pad_layer_controller_header:
+    pos: 'section4_physical_offset - (version == 0x2022 ? 20 : version <= 0x2021 ? 24 : 28) + directory[4].total_bytes'
+    type: saved_pad_layer_controller_header
+    doc: saved section-5 controller state between the rotated padstack grid and the first layer row
   pad_layer_shapes:
-    pos: 'section4_offset + directory[4].total_bytes'
+    pos: 'section4_physical_offset + directory[4].total_bytes + (version == 0x2022 ? 44 : -4)'
     type: sec5_pad_layer_array
     size: directory[5].total_bytes
+    doc: per-padstack layer rows after the versioned serialized controller lead-in
   text_objects:
-    pos: 'section4_offset + directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes'
-    type: sec8_text_array
-    size: directory[8].total_bytes
-  text_and_drawing_bridge:
-    pos: 'section4_offset + directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes + directory[8].total_bytes'
+    pos: 'section4_physical_offset + directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes - (version == 0x2017 ? 28 : 36)'
+    type: sec8_text_ring
+    size: 'directory[8].total_bytes + (version == 0x2017 ? 28 : 36)'
+    if: directory[8].count > 0
+    doc: direct circular text-record view; metadata in record K+1 owns geometry in record K
+  text_string_pool:
+    pos: 'section4_physical_offset + directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes + directory[8].total_bytes'
     type: sec9
     size: directory[9].total_bytes
+    if: directory[9].total_bytes > 0
+    doc: direct section-9 indexed string-pool allocation
   drawing_objects:
-    pos: 'section4_offset + directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes + directory[8].total_bytes + directory[9].total_bytes'
-    type: sec10_drawing_array
+    pos: section10_physical_offset
+    type: sec10_drawing_physical
     size: directory[10].total_bytes
   graphic_piece_headers:
-    pos: 'section4_offset + directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes + directory[8].total_bytes + directory[9].total_bytes + directory[10].total_bytes'
-    type: sec11_piece_array
+    pos: section11_physical_offset
+    type: sec11_piece_physical
     size: directory[11].total_bytes
   graphic_vertices:
-    pos: 'section4_offset + directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes + directory[8].total_bytes + directory[9].total_bytes + directory[10].total_bytes + directory[11].total_bytes'
+    pos: section12_physical_offset
     type: sec12_vertex_array
     size: directory[12].total_bytes
+  section10_physical_offset:
+    value: 'section4_physical_offset + directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes + directory[8].total_bytes + directory[9].total_bytes'
+    doc: direct loader cursor for the circular section-10 drawing-owner controller
+  section11_physical_offset:
+    value: 'section10_physical_offset + directory[10].total_bytes'
+    doc: direct loader cursor for the circular section-11 graphic-piece controller
+  section12_physical_offset:
+    value: 'section11_physical_offset + directory[11].total_bytes'
+    doc: direct loader cursor for the fixed section-12 vertex array
+  section13_physical_offset:
+    value: 'section12_physical_offset + directory[12].total_bytes'
+    doc: direct loader cursor for the flat section-13 graphic-parameter array
   section13_offset:
     value: 'section4_offset + directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes + directory[8].total_bytes + directory[9].total_bytes + directory[10].total_bytes + directory[11].total_bytes + directory[12].total_bytes'
   hatch_segments:
-    pos: section13_offset
+    pos: section13_physical_offset
     type: sec13_hatch_array
     size: directory[13].total_bytes
     if: directory[13].count > 0
-    doc: complete 20-byte copper-pour hatch segment array
+    doc: complete flat 20-byte graphic-parameter array used by arcs and copper-pour hatch segments
   section14_offset:
     value: 'section13_offset + directory[13].total_bytes'
   decal_terminal_descriptors:
-    pos: section14_offset
+    pos: section14_offset + 44
     type: sec14_terminal_descriptor_array
     size: directory[14].total_bytes
-    doc: complete PARTDECAL terminal-run descriptor array
+    doc: |
+      Complete physical PARTDECAL terminal-run descriptor array. The nominal
+      loader boundary is 44 bytes before record zero; each descriptor starts at
+      its decal name and directly carries the terminal and padstack cursors used
+      by the reader.
   section15_offset:
     value: 'section14_offset + directory[14].total_bytes'
   section15_logical_offset:
-    value: 'section15_offset + (version <= 0x2019 ? 60 : num_directory * 16 + 48)'
-    doc: legacy records follow a 60-byte rotated descriptor tail; modern records follow the serialized database-header image omitted from section 3
+    value: 'section15_offset + (version <= 0x2019 ? 60 : 44)'
+    doc: legacy records begin 16 bytes into the physical controller ring; modern records begin at the physical controller start
+  legacy_terminal_controller_prefix:
+    pos: 'section15_offset + 44'
+    type: saved_terminal_controller_prefix
+    if: version <= 0x2019
+    doc: legacy saved tag-15 state before the terminal-slot ring
   decal_terminal_slots:
     pos: section15_logical_offset
     type: decal_terminal_slot_array
@@ -256,11 +216,15 @@ instances:
     doc: section 15 terminal records followed by mixed decal controller and object-dictionary storage units
   section16_offset:
     value: 'section15_offset + directory[15].total_bytes'
-  parttype_aux_records:
-    pos: section16_offset
-    type: parttype_aux_array
+  decal_padstack_pairs:
+    pos: section16_offset + 44
+    type: decal_padstack_pair_array
     size: directory[16].total_bytes
-    doc: eight-byte PARTTYPE auxiliary index/state records
+    doc: |
+      Per-terminal padstack mappings begin at the physical section-16 boundary,
+      section16_offset+44 in the rotated logical view. The pair cursor is the
+      owning descriptor's +88 word. Its count is in the following descriptor at
+      +32 for 100-byte descriptors and +20 for 112-byte descriptors.
   section17_offset:
     value: 'section16_offset + directory[16].total_bytes'
   parttypes:
@@ -292,6 +256,11 @@ instances:
   section20_logical_offset:
     value: 'section20_offset + (version <= 0x2019 ? 48 : 44)'
     doc: legacy SIGPIN records have one additional rotated four-byte word before their first pin ordinal
+  legacy_sigpin_final_record_tail:
+    pos: 'section20_offset + 44'
+    type: legacy_sigpin_final_record_tail
+    if: 'version <= 0x2019 and directory[20].count > 0'
+    doc: final four bytes of the rotated legacy SIGPIN ring's last record
   parttype_signal_pins:
     pos: section20_logical_offset
     type: parttype_sigpin_array
@@ -316,181 +285,466 @@ instances:
     doc: complete placed-part array; directory count equals the live placement count
   section23_offset:
     value: 'section22_offset + directory[22].total_bytes'
-  nets:
+    doc: nominal circular-array boundary, 44 bytes before the physical tag-23 cursor
+  legacy_net_controller_prefix:
     pos: section23_offset
+    type: saved_net_controller_prefix
+    if: version <= 0x2022
+    doc: saved tag-23 controller prefix before the legacy net-record array
+  nets:
+    pos: 'version <= 0x2022 ? section23_offset + 44 : section23_offset'
     type: net_record_array
     size: directory[23].total_bytes
     if: directory[23].count > 0
-    doc: named nets followed by the unassigned-obstacles sentinel where present
+    doc: |
+      Named nets followed by the unassigned-obstacles sentinel where present.
+      Through v0x2022 the 144-byte logical record view begins 20 bytes after the
+      physical section-23 boundary and wraps within that controller: its first
+      20 physical bytes are the final record's tail. The directory count is
+      exact; bytes in section 24 are not extra net records. Modern records use
+      the nominal boundary directly because their logical view begins 44 bytes
+      before the physical tag-23 cursor.
   section24_offset:
     value: 'section23_offset + directory[23].total_bytes'
+  section24_controller_prefix:
+    pos: 'section24_offset + (version <= 0x2022 ? 44 : 0)'
+    type: saved_connection_controller_prefix
+    doc: saved section-24 controller state before the rotated connection-record ring
+  empty_route_chain_controller_state:
+    pos: 'section24_offset + 8'
+    type: empty_route_chain_controller_state
+    if: 'version >= 0x2024 and directory[24].count == 0'
+    doc: retained allocator/list state occupying the terminal-head slot of an empty modern connection controller
   route_chains:
-    pos: section24_offset
-    type: route_chain_array
-    size: directory[24].total_bytes
+    pos: 'version <= 0x2022 ? section24_offset + 60 : section24_offset + 8'
+    type: 'route_chain_array(directory[24].count, version >= 0x2024 ? 1 : 0)'
+    size: 'directory[24].total_bytes + (version >= 0x2024 ? 36 : 0)'
     if: directory[24].count > 0
-    doc: one 68-byte topology record per net connection
+    doc: |
+      Logical 68-byte topology array. Through v0x2022 record zero starts 16
+      bytes after the physical section-24 boundary; the physical prefix is the
+      final record's 16-byte tail. Modern record zero starts 36 bytes before
+      that boundary. The directory count is the edge count: count full records
+      are followed by the final edge's 36-byte topology head, ending exactly at
+      the physical controller boundary. Both positions follow directly from
+      the controller's fixed circular-array rotation.
   section25_offset:
-    value: 'section24_offset + directory[24].total_bytes'
+    value: 'loader_stream_start + directory[2].total_bytes + directory[3].total_bytes + directory[4].total_bytes + directory[5].total_bytes + directory[6].total_bytes + directory[7].total_bytes + directory[8].total_bytes + directory[9].total_bytes + directory[10].total_bytes + directory[11].total_bytes + directory[12].total_bytes + directory[13].total_bytes + directory[14].total_bytes + directory[15].total_bytes + directory[16].total_bytes + directory[17].total_bytes + directory[18].total_bytes + directory[19].total_bytes + directory[20].total_bytes + directory[21].total_bytes + directory[22].total_bytes + directory[23].total_bytes + directory[24].total_bytes'
   route_allocator_controller:
     pos: section25_offset
     type: route_allocator_controller
-    size: 'directory[25].total_bytes + 44'
-    doc: route-object allocator/controller state; its final 44 bytes occupy the nominal section-26 prefix
+    size: directory[25].total_bytes
+    doc: global route-controller state, including the four section-26 allocator page-group counts
   section26_offset:
     value: 'section25_offset + directory[25].total_bytes'
   route_object_ranges:
-    pos: 'section26_offset + 44'
+    pos: section26_offset
     type: route_object_range_array
     size: directory[26].total_bytes
-    doc: allocator ranges begin after the rotated 44-byte controller tail
+    doc: |
+      Section-26 descriptor directory. Its prefix holds four variable-size
+      NumOrdMdl descriptor groups. Its suffix is partitioned, without inspecting
+      contents, by the page counts in directory controllers 65, 66, 45, 46, 47,
+      48, 41, 42, and (when present) 74.
+  section61_allocator_descriptor_offset:
+    value: 'section26_offset + (route_allocator_controller.allocator20_page_count + route_allocator_controller.allocator48_page_count + route_allocator_controller.allocator88_page_count) * 12'
+    doc: direct start of the fourth section-26 prefix group; its runtime object stride is 56 bytes
+  section61_allocator_page_descriptors:
+    pos: section61_allocator_descriptor_offset
+    type: 'page_descriptor_group(route_allocator_controller.allocator56_page_count)'
+    if: route_allocator_controller.allocator56_page_count > 0
+    doc: |
+      Page descriptors for section-61 nodes. For every page except the last,
+      the following descriptor's record_count is the current page's serialized
+      count; the final page owns the remaining directory[61].count records.
   section27_offset:
     value: 'section26_offset + directory[26].total_bytes'
   route_layer_object_counts:
-    pos: 'section27_offset + 44'
+    pos: section27_offset
     type: route_layer_object_count_array
     size: directory[27].total_bytes
     doc: per-copper-layer route-object counts; their sum is the section-29 handle count
   section29_offset:
     value: 'section27_offset + directory[27].total_bytes + directory[28].total_bytes'
   route_object_handles:
-    pos: 'section29_offset + 44'
+    pos: section29_offset
     type: route_object_handle_array
     size: directory[29].total_bytes
     doc: route-object handles grouped by the preceding per-layer counts
   section41_offset:
-    value: 'section29_offset + 44 + directory[29].total_bytes'
-    doc: sections 30 through 40 are empty on all 90 corpus files; the design-rule controller follows the rotated section-29 handle vector directly
-  design_rule_stream:
+    value: 'section29_offset + directory[29].total_bytes'
+    doc: |
+      Physical start of paged controller 41. Its record count is the sum of the
+      `record_count` fields in controller 41's section-26 page descriptors, and
+      its stride is 180 bytes in v0x2017 and 188 bytes thereafter. PADS then reads
+      paged controllers in order 41, 42, 45, 46, 47, 48. No controller header,
+      candidate layout, or content discriminator occurs between these arrays.
+  page_descriptor_suffix_offset:
+    value: 'section26_offset + directory[26].total_bytes - (directory[65].total_bytes + directory[66].total_bytes + directory[45].total_bytes + directory[46].total_bytes + directory[47].total_bytes + directory[48].total_bytes + directory[41].total_bytes + directory[42].total_bytes + (num_directory > 74 ? directory[74].total_bytes : 0)) * 12'
+    doc: |
+      The section-26 descriptor suffix is partitioned in the loader's exact
+      controller order: 65, 66, 45, 46, 47, 48, 41, 42, and optional 74.
+      Each directory total_bytes is a descriptor count here, not a byte extent.
+  section65_page_descriptors:
+    pos: page_descriptor_suffix_offset
+    type: 'page_descriptor_group(directory[65].total_bytes)'
+    if: directory[65].total_bytes > 0
+  section66_page_descriptors:
+    pos: 'page_descriptor_suffix_offset + directory[65].total_bytes * 12'
+    type: 'page_descriptor_group(directory[66].total_bytes)'
+    if: directory[66].total_bytes > 0
+  section45_page_descriptors:
+    pos: 'page_descriptor_suffix_offset + (directory[65].total_bytes + directory[66].total_bytes) * 12'
+    type: 'page_descriptor_group(directory[45].total_bytes)'
+    if: directory[45].total_bytes > 0
+  section46_page_descriptors:
+    pos: 'page_descriptor_suffix_offset + (directory[65].total_bytes + directory[66].total_bytes + directory[45].total_bytes) * 12'
+    type: 'page_descriptor_group(directory[46].total_bytes)'
+    if: directory[46].total_bytes > 0
+  section47_page_descriptors:
+    pos: 'page_descriptor_suffix_offset + (directory[65].total_bytes + directory[66].total_bytes + directory[45].total_bytes + directory[46].total_bytes) * 12'
+    type: 'page_descriptor_group(directory[47].total_bytes)'
+    if: directory[47].total_bytes > 0
+  section48_page_descriptors:
+    pos: 'page_descriptor_suffix_offset + (directory[65].total_bytes + directory[66].total_bytes + directory[45].total_bytes + directory[46].total_bytes + directory[47].total_bytes) * 12'
+    type: 'page_descriptor_group(directory[48].total_bytes)'
+    if: directory[48].total_bytes > 0
+  section41_page_descriptors:
+    pos: 'page_descriptor_suffix_offset + (directory[65].total_bytes + directory[66].total_bytes + directory[45].total_bytes + directory[46].total_bytes + directory[47].total_bytes + directory[48].total_bytes) * 12'
+    type: 'page_descriptor_group(directory[41].total_bytes)'
+    if: directory[41].total_bytes > 0
+  section42_page_descriptors:
+    pos: 'page_descriptor_suffix_offset + (directory[65].total_bytes + directory[66].total_bytes + directory[45].total_bytes + directory[46].total_bytes + directory[47].total_bytes + directory[48].total_bytes + directory[41].total_bytes) * 12'
+    type: 'page_descriptor_group(directory[42].total_bytes)'
+    if: directory[42].total_bytes > 0
+  section74_page_descriptors:
+    pos: 'page_descriptor_suffix_offset + (directory[65].total_bytes + directory[66].total_bytes + directory[45].total_bytes + directory[46].total_bytes + directory[47].total_bytes + directory[48].total_bytes + directory[41].total_bytes + directory[42].total_bytes) * 12'
+    type: 'page_descriptor_group(directory[74].total_bytes)'
+    if: num_directory > 74 and directory[74].total_bytes > 0
+  section41_record_count:
+    value: 'directory[41].total_bytes > 0 ? section41_page_descriptors.total_records : 0'
+  section42_record_count:
+    value: 'directory[42].total_bytes > 0 ? section42_page_descriptors.total_records : 0'
+  section45_record_count:
+    value: 'directory[45].total_bytes > 0 ? section45_page_descriptors.total_records : 0'
+  section46_record_count:
+    value: 'directory[46].total_bytes > 0 ? section46_page_descriptors.total_records : 0'
+  section47_record_count:
+    value: 'directory[47].total_bytes > 0 ? section47_page_descriptors.total_records : 0'
+  section48_record_count:
+    value: 'directory[48].total_bytes > 0 ? section48_page_descriptors.total_records : 0'
+  section65_record_count:
+    value: 'directory[65].total_bytes > 0 ? section65_page_descriptors.total_records : 0'
+  section66_record_count:
+    value: 'directory[66].total_bytes > 0 ? section66_page_descriptors.total_records : 0'
+  section74_record_count:
+    value: 'num_directory > 74 and directory[74].total_bytes > 0 ? section74_page_descriptors.total_records : 0'
+    doc: |
+      Serialized 276-byte object count from the section-26 page descriptors.
+      Six files contain 54 records. Directory[74].count is zero because this
+      paged controller's flat count field is not its saved page occupancy.
+  section41_pages:
     pos: section41_offset
-    type: 'section41_design_rule_stream(section41_num_clearance_records, section41_clearance_record_size, section41_num_layer_clearance_records, section41_num_rule_relation_prefixes, section41_num_high_speed_records, section41_num_per_layer_rule_matrices, section41_num_layers, section41_num_route_records, section41_route_record_size, section41_num_diff_pair_records, section41_num_section49_prefix_words)'
-    doc: complete section-41 controller and typed rule arrays
-  section49_storage:
-    pos: section49_storage_offset
-    type: section49_storage_array
-    size: 'section49_physical_offset + directory[49].total_bytes - section49_storage_offset'
-  section50_relationships:
+    type: section41_paged_controller
+  section42_offset:
+    value: 'section41_offset + section41_record_count * (version == 0x2017 ? 180 : 188)'
+  section42_pages:
+    pos: section42_offset
+    type: section42_paged_controller
+  section45_offset:
+    value: 'section42_offset + section42_record_count * 80'
+  section45_pages:
+    pos: section45_offset
+    type: section45_paged_controller
+  section46_offset:
+    value: 'section45_offset + section45_record_count * (version == 0x2017 ? 116 : 124)'
+  section46_pages:
+    pos: section46_offset
+    type: section46_paged_controller
+  section46_live_record_count:
+    value: section46_pages.num_live
+    doc: |
+      Live tag-46 heap records after PADS converts the saved heap. A source slot
+      is free when bit 31 of its first word is set; conversion also discards a
+      slot with a null saved via-type-set handle. Only retained destination
+      slots receive a following tag-51 state word.
+  section47_offset:
+    value: 'section46_offset + section46_record_count * (version <= 0x2019 ? 32 : 40)'
+  section47_pages:
+    pos: section47_offset
+    type: section47_paged_controller
+  section48_offset:
+    value: 'section47_offset + section47_record_count * 24'
+  section48_pages:
+    pos: section48_offset
+    type: section48_paged_controller
+  section48_diff_pair_records:
+    pos: 'section48_offset - 8'
+    type: section48_diff_pair_record_array
+    if: version >= 0x2024 and section48_record_count > 0
+    doc: logical 864-byte section-48 slots; the physical controller ring begins eight bytes into record zero
+  section49_physical_offset:
+    value: 'section48_offset + section48_record_count * (version <= 0x2019 ? 48 : (version <= 0x2022 ? 856 : 864))'
+    doc: exact start after the six paged controllers; no scan or candidate selection
+  section49_relationships:
+    pos: section49_physical_offset
+    type: section49_relationship_stream
+    size: directory[49].total_bytes
+    doc: |
+      Two counted relationship arrays per live signal. Records repeat to the
+      controller's declared byte end. This yields directory[23].count - 1
+      records on 571 corpus binaries and directory[23].count records on 26.
+      In the full-count dialect, relationship record ordinal is the section-23
+      record ordinal and the unassigned-obstacles slot is retained. In the
+      count-minus-one dialect, records follow named live-net order and omit it.
+  section46_route_rule_states:
     pos: 'section49_physical_offset + directory[49].total_bytes'
-    type: section50_relationship_array
-    size: directory[50].total_bytes
+    type: 'section46_route_rule_state_array(section46_live_record_count)'
+    doc: |
+      FUN_00830840 selects tag 51 and reads one four-byte state for every
+      record loaded from paged controller 46. This count is serialized in the
+      tag-46 page descriptors; no content marker or downstream offset is used.
+  section51_physical_offset:
+    value: 'section49_physical_offset + directory[49].total_bytes + section46_live_record_count * 4'
   section51_relationships:
-    pos: 'section49_physical_offset + directory[49].total_bytes + directory[50].total_bytes'
+    pos: section51_physical_offset
     type: section51_relationship_array
     size: directory[51].total_bytes
-  sections52_55_legacy_tokens:
-    pos: 'section49_physical_offset + directory[49].total_bytes + directory[50].total_bytes + directory[51].total_bytes'
-    type: legacy_objrel_token_array
-    size: 'directory[52].total_bytes + directory[53].total_bytes + directory[54].total_bytes + directory[55].total_bytes'
-    if: section52_uses_legacy_tokens != 0
+  section50_physical_offset:
+    value: 'section51_physical_offset + directory[51].total_bytes'
+  section50_relationships:
+    pos: section50_physical_offset
+    type: section50_relationship_array
+    size: directory[50].total_bytes
+  section52_physical_offset:
+    value: 'section50_physical_offset + directory[50].total_bytes'
   section52_outline_owners:
-    pos: 'section49_physical_offset + directory[49].total_bytes + directory[50].total_bytes + directory[51].total_bytes'
+    pos: section52_physical_offset
     type: sec52_outline_owner_array
     size: directory[52].total_bytes
-    if: section52_uses_legacy_tokens == 0
   section53_outline_pieces:
-    pos: 'section49_physical_offset + directory[49].total_bytes + directory[50].total_bytes + directory[51].total_bytes + directory[52].total_bytes'
+    pos: 'section52_physical_offset + directory[52].total_bytes'
     type: sec53_outline_piece_array
     size: directory[53].total_bytes
-    if: section52_uses_legacy_tokens == 0
   section54_outline_vertices:
-    pos: 'section49_physical_offset + directory[49].total_bytes + directory[50].total_bytes + directory[51].total_bytes + directory[52].total_bytes + directory[53].total_bytes'
+    pos: 'section52_physical_offset + directory[52].total_bytes + directory[53].total_bytes'
     type: sec54_outline_vertex_array
     size: directory[54].total_bytes
-    if: section52_uses_legacy_tokens == 0
   section55_outline_arcs:
-    pos: 'section49_physical_offset + directory[49].total_bytes + directory[50].total_bytes + directory[51].total_bytes + directory[52].total_bytes + directory[53].total_bytes + directory[54].total_bytes'
+    pos: 'section52_physical_offset + directory[52].total_bytes + directory[53].total_bytes + directory[54].total_bytes'
     type: sec55_outline_arc_array
     size: directory[55].total_bytes
-    if: section52_uses_legacy_tokens == 0
+  section56_physical_offset:
+    value: 'section52_physical_offset + directory[52].total_bytes + directory[53].total_bytes + directory[54].total_bytes + directory[55].total_bytes'
   string_index:
-    pos: 'string_pool_offset - directory[56].count * 16'
+    pos: section56_physical_offset
     type: string_index_array
-    size: 'directory[56].count * 16'
+    size: directory[56].total_bytes
+  string_pool_offset:
+    value: 'section56_physical_offset + directory[56].total_bytes'
+    doc: exact section-57 start in loader order; no string-content search
   string_pool:
     pos: string_pool_offset
     type: string_pool_contents
     size: directory[57].total_bytes
-  section60_record_stride:
-    value: 'directory[60].total_bytes / directory[60].count'
-  late_route_overlap:
-    value: 'section60_record_stride - 32'
+  section58_physical_offset:
+    value: 'string_pool_offset + directory[57].total_bytes'
   section59_physical_offset:
-    value: 'string_pool_offset + directory[57].total_bytes - late_route_overlap'
+    value: 'section58_physical_offset + directory[58].total_bytes'
+  section59_route_headers:
+    pos: section59_physical_offset
+    type: 'sec59_route_header_ring(directory[59].count, directory[59].count > 0 ? directory[59].total_bytes / directory[59].count : 0, version == 0x2024 ? 12 : version >= 0x2025 ? 4 : 16)'
+    size: directory[59].total_bytes
+    if: directory[59].count > 0
+    doc: direct circular route-header view; no marker scan or phase selection
   sections59_64:
     pos: section59_physical_offset
-    type: 'sections59_64_stream(directory[59].count, directory[59].total_bytes / directory[59].count, directory[60].count, section60_record_stride, directory[61].count, directory[62].count, directory[62].total_bytes / directory[62].count, directory[63].count, directory[64].count)'
+    type: 'sections59_64_stream(directory[59].count, directory[59].count > 0 ? directory[59].total_bytes / directory[59].count : 0, directory[60].count, directory[60].count > 0 ? directory[60].total_bytes / directory[60].count : 0, directory[61].count, directory[62].count, directory[62].count > 0 ? directory[62].total_bytes / directory[62].count : 0, directory[63].count, directory[64].count)'
+    size: 'directory[59].total_bytes + directory[60].total_bytes + directory[61].total_bytes + directory[62].total_bytes + directory[63].total_bytes + directory[64].total_bytes'
   section65_66_physical_offset:
     value: 'section59_physical_offset + directory[59].total_bytes + directory[60].total_bytes + directory[61].total_bytes + directory[62].total_bytes + directory[63].total_bytes + directory[64].total_bytes'
-  section65_66_archive:
+  section65_pages:
     pos: section65_66_physical_offset
-    type: 'section65_66_archive(late_route_overlap, section65_66_num_saved_relationship_links, section65_66_num_compact_net_classes, section65_66_num_net_classes)'
+    type: section65_saved_group_record
+    repeat: expr
+    repeat-expr: section65_record_count
+    doc: saved GROUP objects counted by tag-65 page descriptors
+  section66_physical_offset:
+    value: 'section65_66_physical_offset + section65_record_count * 28'
+  section66_pages:
+    pos: section66_physical_offset
+    type:
+      switch-on: version <= 0x2022
+      cases:
+        true: section65_66_compact_net_class
+        false: section65_66_net_class
+    repeat: expr
+    repeat-expr: section66_record_count
+    doc: section-66 paged net-class records
   section67_physical_offset:
-    value: 'layer_table_offset - 12 - directory[68].total_bytes - directory[67].total_bytes'
+    value: 'section66_physical_offset + section66_record_count * (version <= 0x2022 ? 28 : 280)'
   section67_relationships:
     pos: section67_physical_offset
     type: sec67_design_rule_relationship_array
     size: directory[67].total_bytes
   section68_clusters:
-    pos: 'layer_table_offset - 12 - directory[68].total_bytes'
+    pos: 'section67_physical_offset + directory[67].total_bytes'
     type: cluster_record_array
     size: directory[68].total_bytes
-  section69_controller_leadin:
-    pos: 'layer_table_offset - 12'
+  section69_physical_offset:
+    value: 'section67_physical_offset + directory[67].total_bytes + directory[68].total_bytes'
+  section69_physical_storage:
+    pos: section69_physical_offset
+    size: '12 + directory[69].total_bytes'
+    doc: exact loader-owned bytes for the 12-byte lead-in and flat controller 69 records
+  section69_controller_leadin_state:
+    pos: section69_physical_offset
     type: section69_controller_leadin
   section69_layers:
-    pos: layer_table_offset
-    type: 'sec69_layer_record_array(version <= 0x2021 ? 6 : version == 0x2022 ? 8 : 12)'
-    size: directory[69].total_bytes
+    pos: 'section69_physical_offset + 12'
+    type: 'sec69_layer_record_array(version <= 0x2021 ? 6 : version == 0x2022 ? 8 : 12, directory[69].count)'
+    doc: logical layer records after the fixed controller lead-in
+  section70_physical_offset:
+    value: 'section69_physical_offset + 12 + directory[69].total_bytes'
+  section70_state:
+    pos: section70_physical_offset
+    type: section70_serialized_layer_state
+    size: 4
+  section71_physical_offset:
+    value: 'section70_physical_offset + 4'
+  section71_preferences:
+    pos: section71_physical_offset
+    type: 'global_display_preferences(directory[71].total_bytes - 4)'
+    size: 'directory[71].total_bytes - 4'
+  section72_physical_offset:
+    value: 'section70_physical_offset + directory[71].total_bytes'
+  section72_error_conflicts:
+    pos: section72_physical_offset
+    type: saved_error_conflict_record
+    repeat: expr
+    repeat-expr: directory[72].count
+  section73_physical_offset:
+    value: 'section72_physical_offset + directory[72].total_bytes'
+  section73_font_faces:
+    pos: section73_physical_offset
+    type:
+      switch-on: 'num_directory <= 73 or directory[73].count == 0 ? 0 : directory[73].total_bytes / directory[73].count'
+      cases:
+        40: saved_font_face_record_v40
+        52: saved_font_face_record
+    repeat: expr
+    repeat-expr: 'num_directory > 73 ? directory[73].count : 0'
+    if: num_directory > 73
+  section74_physical_offset:
+    value: 'section73_physical_offset + (num_directory > 73 ? directory[73].total_bytes : 0)'
+  section74_pages:
+    pos: section74_physical_offset
+    type: extended_layer_state_record
+    repeat: expr
+    repeat-expr: section74_record_count
+    if: num_directory > 74
   post_layer_database:
-    pos: post_layer_offset
-    type: 'post_layer_database_stream(num_extended_layer_states, preferences_base_size, num_error_conflicts, num_font_faces, font_stride)'
+    pos: 'section74_physical_offset + section74_record_count * 276'
+    type: post_layer_database_stream
+    size: 'footer.cntr_item_back_ptr - (section74_physical_offset + section74_record_count * 276)'
 
 types:
+  physical_file_body:
+    doc: |
+      Physical loader order from tag 2 through the embedded post-layer
+      database. Every extent comes from a serialized directory value, page
+      descriptor count, live-slot predicate, or the footer back-pointer. This
+      nonoverlapping ownership view is deliberately raw where logical circular
+      records cross controller boundaries; the root's overlapping typed
+      instances assign those same bytes their field-level meanings. These
+      storage leaves are not unparsed/unknown gaps.
+    seq:
+      - id: flat_controllers_2_27
+        size: '_root.directory[2].total_bytes + _root.directory[3].total_bytes + _root.directory[4].total_bytes + _root.directory[5].total_bytes + _root.directory[6].total_bytes + _root.directory[7].total_bytes + _root.directory[8].total_bytes + _root.directory[9].total_bytes + _root.directory[10].total_bytes + _root.directory[11].total_bytes + _root.directory[12].total_bytes + _root.directory[13].total_bytes + _root.directory[14].total_bytes + _root.directory[15].total_bytes + _root.directory[16].total_bytes + _root.directory[17].total_bytes + _root.directory[18].total_bytes + _root.directory[19].total_bytes + _root.directory[20].total_bytes + _root.directory[21].total_bytes + _root.directory[22].total_bytes + _root.directory[23].total_bytes + _root.directory[24].total_bytes + _root.directory[25].total_bytes + _root.directory[26].total_bytes + _root.directory[27].total_bytes'
+        doc: exact physical storage for flat controllers 2 through 27
+      - id: flat_controller_28
+        size: _root.directory[28].total_bytes
+        doc: tag-28 controller; zero-length on every corpus file
+      - id: flat_controller_29
+        size: _root.directory[29].total_bytes
+        doc: route-object handles grouped by tag-27 layer counts
+      - id: paged_controller_41
+        size: '_root.section41_record_count * (_root.version == 0x2017 ? 180 : 188)'
+        doc: clearance-rule records counted by tag-41 page descriptors
+      - id: paged_controller_42
+        size: '_root.section42_record_count * 80'
+        doc: high-speed-rule records counted by tag-42 page descriptors
+      - id: paged_controller_45
+        size: '_root.section45_record_count * (_root.version == 0x2017 ? 116 : 124)'
+        doc: per-layer rule records counted by tag-45 page descriptors
+      - id: paged_controller_46
+        size: '_root.section46_record_count * (_root.version <= 0x2019 ? 32 : 40)'
+        doc: route-rule heap slots counted by tag-46 page descriptors
+      - id: paged_controller_47
+        size: '_root.section47_record_count * 24'
+        doc: route-rule relationship records counted by tag-47 page descriptors
+      - id: paged_controller_48
+        size: '_root.section48_record_count * (_root.version <= 0x2019 ? 48 : (_root.version <= 0x2022 ? 856 : 864))'
+        doc: differential-pair slots counted by tag-48 page descriptors
+      - id: flat_controller_49
+        size: _root.directory[49].total_bytes
+        doc: two counted relationship arrays for each serialized signal
+      - id: section46_route_rule_states
+        size: '_root.section46_live_record_count * 4'
+        doc: one saved tag-51 state word per live tag-46 route-rule slot
+      - id: flat_controller_51
+        size: _root.directory[51].total_bytes
+        doc: tag-51 relationship controller storage
+      - id: flat_controller_50
+        size: _root.directory[50].total_bytes
+        doc: tag-50 relationship controller storage
+      - id: flat_controllers_52_64
+        size: '_root.directory[52].total_bytes + _root.directory[53].total_bytes + _root.directory[54].total_bytes + _root.directory[55].total_bytes + _root.directory[56].total_bytes + _root.directory[57].total_bytes + _root.directory[58].total_bytes + _root.directory[59].total_bytes + _root.directory[60].total_bytes + _root.directory[61].total_bytes + _root.directory[62].total_bytes + _root.directory[63].total_bytes + _root.directory[64].total_bytes'
+        doc: pours, string storage, and route/object arrays in loader order
+      - id: paged_controller_65
+        size: '_root.section65_record_count * 28'
+        doc: saved GROUP records counted by tag-65 page descriptors
+      - id: paged_controller_66
+        size: '_root.section66_record_count * (_root.version <= 0x2022 ? 28 : 280)'
+        doc: saved net-class records counted by tag-66 page descriptors
+      - id: flat_controller_67
+        size: _root.directory[67].total_bytes
+        doc: design-rule relationship records
+      - id: flat_controller_68
+        size: _root.directory[68].total_bytes
+        doc: named part-cluster records
+      - id: flat_controller_69
+        size: '12 + _root.directory[69].total_bytes'
+        doc: 12-byte layer-controller lead-in followed by physical layer records
+      - id: serialized_controllers_70_71
+        size: _root.directory[71].total_bytes
+        doc: one four-byte tag-70 state followed by the versioned tag-71 preference object
+      - id: flat_controller_72
+        size: _root.directory[72].total_bytes
+        doc: saved error-conflict records
+      - id: flat_controller_73
+        size: '_root.num_directory > 73 ? _root.directory[73].total_bytes : 0'
+        doc: saved font-face records
+      - id: paged_controller_74
+        size: '_root.num_directory > 74 ? _root.section74_record_count * 276 : 0'
+        doc: extended-layer records counted by tag-74 section-26 page descriptors
+      - id: post_layer_database
+        type: post_layer_database_stream
+        size: '_io.size - _io.pos'
+        doc: nested database/controller stream ending at the footer back-pointer
+
 
   # =========================================================================
   # CONTAINER
   # =========================================================================
   post_layer_database_stream:
-    params:
-      - id: num_extended_layer_states
-        type: u4
-      - id: preferences_base_size
-        type: u4
-      - id: num_error_conflicts
-        type: u4
-      - id: num_font_faces
-        type: u4
-      - id: font_stride
-        type: u4
     doc: |
-      Complete located post-layer controller stream through the final Strings
-      data pages. Optional 276-byte extended ODBLayer records precede the flat
-      section-70/71/72/73 state, followed by the nested PowerSYS
-      database, six Reuse controllers, eleven Attribute controllers, two direct
-      geometry lists, and the Strings header/data allocators. Controller order,
-      IDs, and fixed-object strides come directly from the sdb500 reader.
+      Trailing PowerSYS database, six Reuse controllers, eleven Attribute
+      controllers, two direct geometry lists, and the Strings header/data
+      allocators. Sections 70 through 74 are parsed before this type in their
+      actual loader order. Controller order, IDs, and fixed-object strides come
+      directly from the sdb500 reader.
     seq:
-      - id: extended_layer_states
-        type: extended_layer_state_record
-        repeat: expr
-        repeat-expr: num_extended_layer_states
-      - id: layer_controller_state
-        type: section70_serialized_layer_state
-      - id: display_preferences
-        type: global_display_preferences(preferences_base_size)
-        size: preferences_base_size - 4
-      - id: error_conflicts
-        type: saved_error_conflict_record
-        repeat: expr
-        repeat-expr: num_error_conflicts
-      - id: font_faces
-        type:
-          switch-on: font_stride
-          cases:
-            40: saved_font_face_record_v40
-            52: saved_font_face_record
-        repeat: expr
-        repeat-expr: num_font_faces
       - id: database_header
         type: embedded_database_header
       - id: reuse_entity
@@ -533,8 +787,33 @@ types:
         type: legacy_misc_geometry_controller
       - id: strings
         type: legacy_string_controller
+    instances:
+      consumed_all:
+        value: _io.eof
+        doc: true only when the structured trailing database reaches the container-item back-pointer exactly
 
   global_display_preferences:
+    params:
+      - id: base_size
+        type: u4
+    seq:
+      - id: legacy_preference_words
+        type: u4
+        repeat: expr
+        repeat-expr: 23
+        if: base_size == 92
+        doc: |
+          Complete 92-byte v0x2017 global-preference object copied by the flat
+          reader; 23 retained display, viewport, layer-selection, and editor-state words
+      - id: modern_preferences
+        type: 'modern_global_display_preferences(base_size)'
+        if: base_size > 96
+    instances:
+      consumed_all:
+        value: _io.eof
+        doc: true only when the versioned preference structure consumes all section-71 bytes
+
+  modern_global_display_preferences:
     params:
       - id: base_size
         type: u4
@@ -569,17 +848,16 @@ types:
       - id: code_page
         type: u4
         doc: Windows character-set/code-page state; initialized from GetACP
-      - id: configuration_count
+      - id: display_configuration_state
         type: u4
-        valid:
-          max: 10
+        doc: saved display-configuration selection/state word; not an array count
       - id: display_configurations
-        type: 'global_display_configuration((base_size - 108) / 10)'
+        type: 'global_display_configuration((base_size - 104) / 10)'
         repeat: expr
         repeat-expr: 10
       - id: default_font_face_handle
         type: u4
-        doc: tagged ODBFontFace handle; 0x49000000 on 87 scoped files and zero on three
+        doc: tagged ODBFontFace handle; low byte is the saved font ordinal (0..7), or zero when unset
 
   section70_serialized_layer_state:
     doc: |
@@ -598,9 +876,8 @@ types:
     doc: Fixed-capacity named global display/viewport configuration slot
     seq:
       - id: name_storage
-        type: strz
         size: 84
-        encoding: ASCII
+        doc: NUL-padded ASCII for live named slots; unused capacity retains arbitrary bytes
       - id: viewport_rectangle
         type: rect_i32
       - id: configuration_flags
@@ -609,12 +886,11 @@ types:
 
   extended_layer_state_record:
     doc: |
-      Optional 276-byte ODBLayer extension serialized before section 70. Three
-      scoped files contain 37 records. The earlier `saved_view` interpretation
-      was false: tag ordering places these records before the global preference
-      object, and their tail holds saved layer handles plus a fixed layer name.
-      The 204-byte prefix contains eleven display-controller words, three exact
-      P_STDBFontFace-shaped font slots, and font-selection state.
+      Optional 276-byte ODBLayer extension serialized after section 73. Six
+      scoped files contain 54 records. The earlier placement before section 70
+      was a circular cancellation: the same downstream PowerSYS gap supplied
+      the record count, so moving these bytes upstream still reached EOF. Their
+      tail holds saved layer handles plus fixed layer-name and retained state.
     seq:
       - id: display_controller_state
         type: u4
@@ -644,7 +920,7 @@ types:
         type: u4
         repeat: expr
         repeat-expr: 5
-        doc: retained ODBLayer object capacity; zero in all 37 scoped records, not alignment padding
+        doc: retained ODBLayer object capacity; zero in all 54 scoped records, not alignment padding
 
   saved_font_face_record:
     doc: |
@@ -739,8 +1015,9 @@ types:
       byte directory are written by DBS_Database::WriteDB before its live
       controller streams. `controller_slot_count` is the byte-directory length.
     seq:
-      - id: outer_controller_index
+      - id: power_sys_archive_tag
         type: u4
+        doc: saved MFC archive tag preceding the newly named PowerSYS class; never a file offset
       - id: title
         type: legacy_short_mfc_string
       - id: database_version
@@ -826,7 +1103,7 @@ types:
   serialized_normal_page_list:
     doc: |
       Counted tail list of normal 64 KiB database allocator pages. A list ends
-      exactly at the container-item back-pointer on every one of the 90 unique
+      exactly at the container-item back-pointer on every one of the 597 unique
       corpus files. Its count word is immediately followed by `count` page
       frames. All pages except the final page carry 65,520 live bytes; the final
       page may be partially occupied.
@@ -1277,14 +1554,16 @@ types:
         type: u4
     doc: |
       Controller-specific variable-member allocation blocks. Block size and
-      field layout are exact for every page in the scoped corpus. Slots released
-      before save retain allocator free-list links in their first field; that
-      retained content is state, not padding.
+      field layout are exact for every page in the scoped corpus. MiscGeom pages
+      are raw word-addressed allocator storage rather than fixed objects. Slots
+      released before save retain allocator free-list links in their first
+      field; that retained content is state, not padding.
     seq:
       - id: member_values
         type:
           switch-on: controller_id
           cases:
+            0xffffffff: saved_misc_geometry_allocator_word
             0: saved_reuse_entity_variable_member
             1: saved_reuse_membership_variable_member
             2: saved_reuse_membership_variable_member
@@ -1303,6 +1582,17 @@ types:
             109: saved_attribute_value_variable_member
             110: saved_attribute_inheritance_variable_member
         repeat: eos
+
+  saved_misc_geometry_allocator_word:
+    doc: |
+      One 32-bit word from DBC_MiscGeomCtl's saved ObjPage payload. These pages
+      hold variable-size DBD_MiscGeomData side objects, including arc/graphic
+      state and allocator free-list links, so the page is word-addressed rather
+      than divided into a fixed record stride. All 296 pages in the scoped
+      corpus tile exactly into 885,388 words.
+    seq:
+      - id: value_or_free_link
+        type: u4
 
   saved_modern_variable_member_owner:
     doc: 'Allocation backlink added in v0x2024: owning fixed-record ordinal and retained/free state'
@@ -1563,29 +1853,18 @@ types:
         doc: free-slot contents or unused capacity retaining prior bytes; never file padding
 
   dir_entry:
+    params:
+      - id: has_trailing_slot_word
+        type: bool
     doc: |
-      16-byte directory entry.
+      Four-byte-shifted controller-slot view: three live u32 fields followed by
+      the next slot's zero leading word. The final view has no trailing word.
 
-      `total_bytes` is the controller's IN-MEMORY footprint, not the bytes it
-      wrote, and `count` is likewise the container's capacity for some sections
-      and the live record count for others. Two consequences, both verified
-      corpus-wide:
-
-      * Section 3 over-declares by `entry_count*16 + 48` -- the directory plus a
-        48-byte header, written once as the FILE header and never repeated in
-        section 3's payload. Every section after 3 therefore accumulates that
-        much too high. The corrected value is
-
-            payload_offset = data_offset - (entry_count*16 + 48)   for i > 3
-
-        i.e. 1232 on 74-entry files and 1216 on 73-entry ones. Verified by the
-        fixed section arrays on all 90 scoped corpus files.
-
-      * Section 1 over-declares by exactly one entry (see `entry_count`).
-
-      `total_bytes / count` IS the real record stride where both are non-zero,
-      and should be preferred over a per-version constant -- it distinguishes the
-      100-byte old and 112-byte new decal records with no version branch.
+      The field named `total_bytes` by the importer is controller-dependent. For
+      flat controllers it is the exact CArchive byte count. For paged controllers
+      41, 42, 45, 46, 47, 48, 65, 66, and 74 it is the number of section-26 page
+      descriptors. The page descriptors, not directory arithmetic or decoded
+      content, give those controllers' physical byte extents.
     seq:
       - id: count
         type: u4
@@ -1603,19 +1882,20 @@ types:
           offsets.
       - id: base_pointer_high_padding
         contents: [0, 0, 0, 0]
+        if: has_trailing_slot_word
         doc: |
           Zero high word/padding for the 32-bit in-memory base pointer. Zero in
-          every directory entry on 90 of 90 unique corpus files.
+          every directory entry on all 597 unique corpus files.
 
   # =========================================================================
   # SECTION 56/57 -- the attribute string index and its pool
   # =========================================================================
   string_index_entry:
     doc: |
-      A 16-byte index record pointing into section 57's string pool. The index
-      begins inside section 56, after that section's live records, and runs up to
-      the pool itself; the directory's section 56/57 boundary falls in the middle
-      of it, so the two must be decoded together.
+      A 16-byte section-56 index record pointing into section 57's string pool.
+      Section 56 starts after section 55 in loader order and has the exact byte
+      extent declared by directory[56]. Section 57 starts immediately afterward
+      and has the exact byte extent declared by directory[57].
 
       The layout is proved by an exact tiling invariant across the whole table:
 
@@ -1626,36 +1906,10 @@ types:
       starts at pool offset 25, immediately after
       `DFT_CONFIGURATION\0PARENT\0`.
 
-      LOCATING THE POOL. Do not accumulate to it and do not scan for it. The
-      terminator entry -- the one satisfying
-
-          pool_offset + length == section57.total_bytes
-
-      is unique, and the pool begins 16 bytes past its true start:
-
-          pool_start = terminator_entry_offset + 16
-          pool_end   = pool_start + section57.total_bytes
-
-      The old pseudo-entry started one byte before this type, decoded its offset
-      at +1, and consequently placed the pool at pseudo-entry +16. That included
-      the high byte of the preceding record metadata as pool content. Expressed
-      against that obsolete origin the correction is +17; expressed against this
-      complete 16-byte type it is the ordinary +16 with no intervening padding.
-
-      This resolves all 89 scoped files with a nonempty pool; the remaining file
-      has no section-57 pool. Two guards must NOT be added:
-
-        * requiring the back-walk to reach entry 0 -- locating the pool never
-          needs entry 0, and insisting on it rejects valid terminators wherever
-          the tiling has a gap (score falls to 34/163);
-        * requiring the pool to be entirely printable -- attribute values embed
-          binary, e.g. CANFILTER-001's pool is 99.92% printable with bytes like
-          `04 e4 6e 12` inside `750000 N + 0 Y 0 0 <bin> NUMBER_2`. A 98%
-          threshold takes the score from 155 to 162.
-
-      The one board that still misses, TMS1mmX19, has its last entry ending at
-      36651 against a declared pool length of 36703 -- 52 bytes of pool tail
-      indexed by no entry, which a small slack accepts.
+      The tiling describes record semantics only. It does not locate or validate
+      either section boundary. Some files have unindexed retained bytes at the
+      beginning or end of section 57, and attribute values may contain binary
+      controller bytes rather than printable text.
     seq:
       - id: pool_offset
         type: u4
@@ -1694,10 +1948,10 @@ types:
 
   cntr_item_array:
     doc: |
-      Serialized OLE container items. The array count is zero on all 90 corpus
-      files. The populated representation below is retained from serializer
-      analysis, but no scoped corpus file exercises it. Each populated item is an MFC COleClientItem carrying a
-      length-delimited Microsoft Compound File Binary document and PADS view state.
+      Serialized OLE container items. The array count is zero on 594 of 597
+      unique corpus binaries; three contain one populated item. Each item is an
+      MFC COleClientItem carrying a length-delimited Microsoft Compound File
+      Binary document and PADS view state.
     seq:
       - id: count
         type: u4
@@ -1725,6 +1979,10 @@ types:
         repeat: expr
         repeat-expr: count
         doc: serialized embedded OLE items
+    instances:
+      consumed_all:
+        value: _io.eof
+        doc: true only when the container-item stream reaches the fixed footer exactly
 
   powerpcb_cntr_item:
     doc: |
@@ -1732,8 +1990,8 @@ types:
       MFC COleClientItem::Serialize (mfc140 ordinal 13091); the remaining view
       fields come from the PADS override at PowerUI500.dll 0x10519300.
 
-      No scoped corpus file contains an item. Field meanings and framing come
-      from the MFC and PADS serializer implementations.
+      Three scoped corpus binaries contain one item. Field meanings and framing
+      also agree with the MFC and PADS serializer implementations.
     seq:
       - id: ole_item_format_version
         type: u4
@@ -1811,9 +2069,9 @@ types:
         type: u4
         doc: |
           Absolute file offset of the serialized CPowerPCBCntrItem array. At
-          that offset is a u32 item count. On all 90 corpus files the count is
-          zero and the pointer targets the four bytes immediately before the
-          footer GUID. This is not a size or checksum.
+          that offset is a u32 item count. It is zero on 594 corpus files; three
+          files store one embedded Microsoft Compound File item. This is not a
+          size or checksum.
 
   # =========================================================================
   # SECTION 0 — file-global object header (no data region)
@@ -1836,7 +2094,7 @@ types:
         doc: serialized controller arena base; nonzero on the address-chain corpus file
       - id: base_pointer_high_padding
         contents: [0, 0, 0, 0]
-        doc: zero high word of the 32-bit arena pointer on 90 of 90 corpus files
+        doc: zero high word of the 32-bit arena pointer on all 597 unique corpus files
 
   # =========================================================================
   # SECTION 1 — board setup / view-state header (single 1200-B blob)
@@ -1855,9 +2113,9 @@ types:
   # count, so the "variable-length prefix" that used to force a search was in the
   # directory all along.
   #
-  # Measured over all 90 scoped boards: directory[2].count equals the observed
-  # prefix length in 48-byte units on 90/90. 74 boards have no prefix; the rest
-  # run 1..22 records and every one matches its declared count exactly.
+  # Measured over all 597 scoped boards: directory[2].count equals the observed
+  # prefix length in 48-byte units on 597/597. 539 boards have no prefix; the
+  # rest run 1..136 records and every one matches its declared count exactly.
   #
   # Against the field-range search this replaces (SCALE / BACKUPTIME / REAL WIDTH
   # / ALLSIGONOFF / REFNAMESIZE swept byte-by-byte over section 1): they agree on
@@ -1871,7 +2129,7 @@ types:
     seq:
       - id: legacy_aux_record_count
         type: u4
-        doc: off0 legacy auxiliary-controller live record count; nonzero on 17 scoped files
+        doc: off0 legacy auxiliary-controller state/count word; interpretation varies with the section-1 dialect
       - id: legacy_aux_record_bytes
         type: u4
         doc: |
@@ -1880,7 +2138,7 @@ types:
           a nonzero allocation value with count zero.
       - id: legacy_aux_memory_base
         type: u4
-        doc: off8 serialized 32-bit allocator base; zero on all 90 scoped files
+        doc: off8 serialized 32-bit allocator base; zero on 595 scoped files and a retained process address on two
       - id: user_grid
         type: s4
         doc: off12 USERGRID (X; Y assumed equal)
@@ -1964,7 +2222,7 @@ types:
         doc: off116 CONCOL
       - id: zero120
         contents: [0, 0, 0, 0]
-        doc: off120 zero on 90 of 90 unique corpus files
+        doc: off120 alignment/state word; zero on all 597 unique corpus binaries
       - id: feature_flags
         type: u4
         doc: off124 0x094D4000 constant (DB-version/capability flags)
@@ -1997,7 +2255,7 @@ types:
   # SECTION 2 — persisted editor view records
   # =========================================================================
   # Written before section 1 despite its directory index. The directory is
-  # exact on the corpus: total_bytes == count * 48 for all 90 unique files.
+  # exact on the corpus: total_bytes == count * 48 for all 597 unique files.
   sec2_view_state:
     doc: 48-byte persisted editor viewport/object-view record
     seq:
@@ -2037,47 +2295,102 @@ types:
         repeat: eos
 
   # =========================================================================
-  # SECTION 3 — board-parameter image (declared footprint minus directory/header)
+  # SECTION 3 — complete physical database/board-parameter controller image
   # =========================================================================
-  # The directory declares 3928/3932 bytes in modern files, but only 2696/2700
-  # bytes are written: directory_bytes + 48 were already emitted at file start.
-  # Default-valued state dominates, but no broad range is padding.
+  # The loader reads directory[3].total_bytes exactly. Logical board-parameter
+  # views overlap retained directory/database-header state; physical framing does
+  # not subtract that overlap. Default-valued state is serialized state, not padding.
+  sec3_physical_controller:
+    doc: |
+      Complete flat tag-3 controller image. Its prefix is the physical overlap
+      with section 1: section-1 logical bytes 12..end. The overlap length is
+      therefore directory[1].total_bytes - 12 on every version, derived solely
+      from the serialized section-1 extent. The versioned board-parameter image
+      follows immediately and consumes the remainder of directory[3].total_bytes.
+    seq:
+      - id: board_setup_overlap_tail
+        size: _root.directory[1].total_bytes - 12
+        doc: section-1 logical bytes 12..end, physically shared by the circular controller views
+      - id: parameters
+        type: sec3_board_params
+        size-eos: true
+
   sec3_board_params:
     doc: version-selected section 3 board-parameter serialization
     seq:
-      - id: modern
+      - id: common
         type: sec3_board_params_modern
         size-eos: true
-        if: _root.version >= 0x2025
-      - id: legacy
-        type: sec3_board_params_legacy
-        size-eos: true
-        if: _root.version < 0x2025
 
-  sec3_board_params_legacy:
+  flat_controller_storage_4_24:
     doc: |
-      Legacy v0x2017..v0x2024 written board-parameter image: declared footprint
-      minus directory_bytes+48, yielding 1,380 bytes in v0x2017/v0x2019 and
-      1,392 bytes in v0x2021..v0x2024.
-      It contains the same PCB general-parameter, display-palette, DRC-default,
-      and embedded via-stack state as the modern layout, but fields after the
-      fixed-flag table move by dialect. Kept as typed 32-bit serialized state
-      words until the seven-file legacy sample can support a safe field split;
-      zero words are disabled/default settings, not padding.
+      Physical loader-order storage for flat tags 4..24. Several logical
+      fixed-record arrays are rotated left by 44 bytes across adjacent tag
+      boundaries; the root's typed logical views expose their fields while this
+      stream records the exact non-overlapping physical partition.
     seq:
-      - id: parameter_state_words
-        type: u4
-        repeat: eos
+      - id: padstack_storage
+        size: _root.directory[4].total_bytes
+      - id: pad_layer_storage
+        size: _root.directory[5].total_bytes
+      - id: text_controller_storage_6
+        size: _root.directory[6].total_bytes
+      - id: text_controller_storage_7
+        size: _root.directory[7].total_bytes
+      - id: text_object_storage
+        size: _root.directory[8].total_bytes
+      - id: text_drawing_bridge_storage
+        size: _root.directory[9].total_bytes
+      - id: drawing_owner_storage
+        size: _root.directory[10].total_bytes
+      - id: graphic_piece_storage
+        size: _root.directory[11].total_bytes
+      - id: graphic_vertex_storage
+        size: _root.directory[12].total_bytes
+      - id: hatch_storage
+        size: _root.directory[13].total_bytes
+      - id: decal_descriptor_storage
+        size: _root.directory[14].total_bytes
+      - id: decal_terminal_storage
+        size: _root.directory[15].total_bytes
+      - id: parttype_aux_storage
+        size: _root.directory[16].total_bytes
+      - id: parttype_storage
+        size: _root.directory[17].total_bytes
+      - id: parttype_gate_storage
+        size: _root.directory[18].total_bytes
+      - id: parttype_pin_storage
+        size: _root.directory[19].total_bytes
+      - id: parttype_signal_storage
+        size: _root.directory[20].total_bytes
+      - id: compact_pin_name_storage
+        size: _root.directory[21].total_bytes
+      - id: placement_storage
+        size: _root.directory[22].total_bytes
+      - id: net_storage
+        size: _root.directory[23].total_bytes
+      - id: route_chain_storage
+        size: _root.directory[24].total_bytes
 
   sec3_board_params_modern:
+    doc: |
+      Common board-parameter field order. v0x2017/v0x2019 carry eight additional
+      palette words, shifting the named fields by +32; v0x2021..v0x2024 carry
+      four, shifting them by +16. v0x2019 ends after ARPTOMLAYER, v0x2017 after
+      ARDTOPLAYER, and v0x2021 after VIAPFLAG. v0x2022/v0x2024 append FLOWFLAGS;
+      v0x2025+ append five fixed auxiliary selector buffers. The two paired
+      v0x2017 exports place twelve nondefault named parameters from HATCHGRID
+      through STMINSPOKES at these shifted offsets; the serialized extents fix
+      the v0x2017/v0x2019 tail truncations.
     seq:
       - id: display_palette_words
         type: u4
         repeat: expr
-        repeat-expr: 208
+        repeat-expr: '_root.version < 0x2021 ? 216 : (_root.version < 0x2025 ? 212 : 208)'
         doc: |
-          0..831 persisted 16-by-52-byte display/palette table. Default-zero on
-          all 66 scoped files using this modern layout; serialized state, not
+          0..831 persisted 16-by-52-byte display/palette table. Sparse layer or
+          display selectors are nonzero on 20 of the 590 v0x2021+ corpus files;
+          the other 570 save the default all-zero state. Serialized state, not
           alignment padding.
       - id: fbgcol
         type: s4
@@ -2101,9 +2414,10 @@ types:
         repeat: expr
         repeat-expr: 32
         doc: |
-          860..987 version-dependent board-parameter extension. Default-zero on
-          all 66 scoped files using this modern layout; zero denotes default
-          state and is not alignment padding.
+          860..987 version-dependent board-parameter extension. Nonzero on 48
+          of the 590 v0x2021+ corpus files: old layouts use the first four words
+          for size/extent values, while v0x2025+ stores a sparse 17-word option
+          vector. Zero denotes default state and is not alignment padding.
       - id: table_len
         type: s4
         doc: '988 = 8 (length marker for the 0x102/0x101 table below)'
@@ -2262,43 +2576,56 @@ types:
       - id: ardtom
         type: s4
         doc: 1376 ARDTOM
+        if: _root.version != 0x2019
       - id: ardtom_layer
         type: s4
         doc: 1380 ARDTOMLAYER
+        if: _root.version != 0x2019
       - id: ardtop
         type: s4
         doc: 1384 ARDTOP
+        if: _root.version != 0x2019
       - id: ardtop_layer
         type: s4
         doc: 1388 ARDTOPLAYER
+        if: _root.version != 0x2019
       - id: viap_spacing
         type: s4
         doc: 1392 VIAPSPACING
+        if: _root.version >= 0x2021
       - id: viap_shape
         type: s4
         doc: 1396 VIAPSHAPE
+        if: _root.version >= 0x2021
       - id: viap_to_trace
         type: s4
         doc: 1400 VIAPTOTRACE
+        if: _root.version >= 0x2021
       - id: viap_fill
         type: s4
         doc: 1404 VIAPFILL
+        if: _root.version >= 0x2021
       - id: viap_word_a
         type: u4
         doc: 1408 via-pattern packed word A (VIAPSHSIG name-handle)
+        if: _root.version >= 0x2021
       - id: viap_word_b
         type: u4
         doc: 1412 via-pattern packed word B (high byte 0x0E const)
+        if: _root.version >= 0x2021
       - id: viap_flag
         type: s4
         doc: 1416 VIAPFLAG
+        if: _root.version >= 0x2021
       - id: flow_flags
         type: s4
         doc: 1420 FLOWFLAGS
+        if: _root.version >= 0x2022
       - id: auxiliary_name_buffers
         type: fixed_path_storage
         repeat: expr
         repeat-expr: 4
+        if: _root.version >= 0x2025
         doc: |
           1424..2463 first four fixed 260-byte auxiliary/CAM selector buffers.
       - id: final_auxiliary_name_buffer
@@ -2306,6 +2633,7 @@ types:
         size-eos: true
         encoding: ASCII
         terminator: 0
+        if: _root.version >= 0x2025
         doc: |
           Truncated fifth auxiliary/CAM selector buffer: 232 bytes in v0x2025,
           236 in v0x2026/v0x2027. Seven large designs populate these five
@@ -2369,7 +2697,7 @@ types:
         doc: '+48 rotation = deg*1800000 (only 0 / 90deg)'
       - id: sec5_index
         type: u4
-        doc: '+52 cumulative start row into sec5 pad-shape table'
+        doc: '+52 cumulative start row into sec5 pad-shape table when layer_count > 0; retained cursor or 0xFFFFFFFF empty-list sentinel otherwise'
       - id: marker
         type: u1
         doc: '+56 0xFE = valid padstack record'
@@ -2378,91 +2706,261 @@ types:
         enum: pad_shape
         doc: '+57 shape'
       - id: layer_count
-        type: u2
+        type: u1
         doc: '+58 number of sec5 layer entries this padstack owns'
-      - id: housekeeping
+      - id: drill_start_layer
+        type: u1
+        doc: '+59 optional blind/buried drill start; zero means a through drill'
+      - id: drill_end_layer
+        type: u1
+        doc: '+60 optional blind/buried drill end; zero means a through drill'
+      - id: trailing_state
+        size: 3
+
+  sec4_padstack_v2022:
+    seq:
+      - id: object_state
+        size: 20
+      - id: pad_width
         type: s4
-        doc: '+60 back-link / checksum'
+      - id: drill
+        type: s4
+      - id: fin_length
+        type: s4
+      - id: corner_radius
+        type: s4
+      - id: finger_state
+        type: s4
+      - id: angle_raw
+        type: s4
+      - id: sec5_index
+        type: u4
+        doc: cumulative start row into sec5 when layer_count > 0; retained cursor or empty-list sentinel otherwise
+      - id: marker
+        type: u1
+      - id: shape_code
+        type: u1
+        enum: pad_shape
+      - id: layer_count
+        type: u1
+      - id: drill_start_layer
+        type: u1
+      - id: drill_end_layer
+        type: u1
+      - id: trailing_state
+        size: 3
+
+  sec4_padstack_legacy:
+    seq:
+      - id: object_state
+        size: 24
+      - id: pad_width
+        type: s4
+      - id: drill
+        type: s4
+      - id: fin_length
+        type: s4
+      - id: corner_radius
+        type: s4
+      - id: angle_raw
+        type: s4
+      - id: sec5_index
+        type: u4
+        doc: cumulative start row into sec5 when layer_count > 0; retained cursor or empty-list sentinel otherwise
+      - id: marker
+        type: u1
+      - id: shape_code
+        type: u1
+        enum: pad_shape
+      - id: layer_count
+        type: u1
+      - id: trailing_state
+        type: u1
 
   sec4_padstack_array:
     seq:
-      - id: modern_records
-        type: sec4_padstack
+      - id: records
+        type:
+          switch-on: '_root.directory[4].total_bytes / _root.directory[4].count'
+          cases:
+            52: sec4_padstack_legacy
+            56: sec4_padstack_v2022
+            64: sec4_padstack
         repeat: eos
-        if: _root.directory[4].total_bytes / _root.directory[4].count == 64
-      - id: legacy_state_words
+
+  saved_pad_layer_controller_header:
+    doc: |
+      Saved tag-5 controller header. Its serialized size is 20 bytes through
+      v0x2021, 64 bytes in v0x2022, and 24 bytes thereafter. It occupies the
+      exact bridge between the rotated tag-4 padstack grid and the first tag-5
+      layer row; these words are retained controller/list state, not padding.
+    seq:
+      - id: legacy_zero_controller_state
         type: u4
-        repeat: eos
-        if: _root.directory[4].total_bytes / _root.directory[4].count != 64
-        doc: v0x2017..v0x2022 52/56-byte padstack dialect state
+        valid: 0
+        if: _root.version <= 0x2021
+      - id: legacy_saved_controller_flags
+        type: u4
+        if: _root.version <= 0x2021
+        doc: zero or 2 in the scoped legacy dialect
+      - id: legacy_zero_controller_tail
+        type: u4
+        repeat: expr
+        repeat-expr: 3
+        valid: 0
+        if: _root.version <= 0x2021
+      - id: saved_controller_flags
+        type: u4
+        doc: zero or 2; 2 marks retained initialized controller state
+        if: _root.version >= 0x2022
+      - id: zero_controller_state
+        type: u4
+        repeat: expr
+        repeat-expr: 4
+        valid: 0
+        if: _root.version >= 0x2022
+      - id: v2022_saved_allocator_handle
+        type: u4
+        if: _root.version == 0x2022
+        doc: fixed 0x0028b1f8 in all eight scoped v2022 records
+      - id: v2022_zero_allocator_state0
+        type: u4
+        repeat: expr
+        repeat-expr: 4
+        valid: 0
+        if: _root.version == 0x2022
+      - id: v2022_saved_capacity
+        type: u4
+        if: _root.version == 0x2022
+        doc: fixed saved capacity 0x2ff in the scoped v2022 dialect
+      - id: v2022_saved_list_handle
+        type: u4
+        if: _root.version == 0x2022
+        doc: fixed saved list handle 0x001ff98c in the scoped v2022 dialect
+      - id: v2022_zero_allocator_state1
+        type: u4
+        repeat: expr
+        repeat-expr: 4
+        valid: 0
+        if: _root.version == 0x2022
+      - id: modern_saved_controller_handle
+        type: u4
+        if: _root.version >= 0x2024
+        doc: per-file saved tag-5 controller handle/counter; nonzero in every modern corpus file
 
   # =========================================================================
   # SECTION 5 — per-padstack pad-shape layer table
   # =========================================================================
   # Flat array of 24-B rows. sec4[k] owns rows [sec4[k].sec5_index, +layer_count).
   # Rows [0, firstStart~80) are a global default prefix.
-  sec5_pad_layer:
+  sec5_pad_layer_v20:
+    doc: |
+      Legacy 20-byte per-padstack layer row. The selector and shape are the
+      first two bytes; dimensions begin at +4. Earlier schema revisions shifted
+      these meanings by eight bytes. Values at +16 are angles in degrees times
+      1,800,000. The C++ importer and paired pad-geometry exports consume this
+      exact phase.
     seq:
-      - id: dim_b
-        type: s4
-        doc: '+0 corner radius / mask delta (shape-dependent; raw geom in tail rows)'
-      - id: shape_param
-        type: u4
-        doc: '+4 shape-class parameter word + flags, NOT a coord (81000000=thermal)'
-      - id: layer
+      - id: layer_selector
         type: u1
-        doc: '+8 PADS layer id (0 top,21/23/27/28 silk/mask/paste,254/255 special)'
-      - id: shape_class
+        doc: '+0 PADS layer id; 0 top/default, 255 bottom/all, 21/23/27/28 documentation layers'
+      - id: shape_code
         type: u1
-        doc: '+9 {0,1,2,3,4,6,8} pad-entry class (2=primary copper pad)'
-      - id: layer_seq
-        type: s2
-        doc: '+10 signed sequence index within stack (usually 0)'
+        doc: '+1 pad-shape code; 0 OF, 1 RF, 2 round, 3 square, with 4..9 retained auxiliary shapes'
+      - id: layer_state
+        type: u2
+        doc: '+2 saved layer-row flags/controller state'
       - id: size_a
         type: s4
-        doc: '+12 pad dimension A (width / diameter)'
+        doc: '+4 pad dimension A (width or diameter) in BASIC units'
       - id: size_b
         type: s4
-        doc: '+16 pad dimension B (height); 0 for round/square'
-      - id: default_extra
-        type: u4
-        doc: '+20 0x04000000|radius on layer255/shape2 rows, else 0'
+        doc: '+8 pad dimension B; zero for round/square rows'
+      - id: shape_parameter_or_offset
+        type: s4
+        doc: '+12 shape-dependent offset/radius; 0x04000000|radius marks the default/thermal form'
+      - id: angle
+        type: s4
+        doc: '+16 shape angle in degrees times 1,800,000'
+
+  sec5_pad_layer_v24:
+    doc: |
+      Modern 24-byte per-padstack layer row. v0x2022 associates each selector
+      after record zero with the preceding row's +4/+8 geometry carrier; later
+      dialects use the same row. This is a serialized circular-controller
+      association, not a content-selected phase.
+    seq:
+      - id: layer_selector
+        type: u1
+        doc: '+0 PADS layer id; 0 top/default, 255 bottom/all, and numbered documentation/copper layers'
+      - id: shape_code
+        type: u1
+        doc: '+1 pad-shape code; 0 OF, 1 RF, 2 round, 3 square, with 4..9 retained auxiliary shapes'
+      - id: layer_state
+        type: u2
+        doc: '+2 saved layer-row flags/controller state'
+      - id: size_a
+        type: s4
+        doc: '+4 pad dimension A (width or diameter) in BASIC units'
+      - id: size_b
+        type: s4
+        doc: '+8 pad dimension B; zero for round/square rows'
+      - id: shape_parameter_or_offset
+        type: s4
+        doc: '+12 shape-dependent offset/radius; 0x04000000|radius marks the default/thermal form'
+      - id: corner_radius_or_aux_dimension
+        type: s4
+        doc: '+16 corner radius or shape-specific auxiliary dimension in BASIC units'
+      - id: angle
+        type: s4
+        doc: '+20 shape angle in degrees times 1,800,000'
 
   sec5_pad_layer_array:
     seq:
+      - id: legacy_records
+        type: sec5_pad_layer_v20
+        repeat: eos
+        if: _root.directory[5].total_bytes / _root.directory[5].count == 20
       - id: modern_records
-        type: sec5_pad_layer
+        type: sec5_pad_layer_v24
         repeat: eos
         if: _root.directory[5].total_bytes / _root.directory[5].count == 24
-      - id: legacy_state_words
-        type: u4
-        repeat: eos
-        if: _root.directory[5].total_bytes / _root.directory[5].count != 24
-        doc: v0x2017/v0x2019/v0x2021 20-byte pad-layer dialect state
 
   # =========================================================================
   # SECTION 8 — TEXT / label table
   # =========================================================================
-  # 72 B header records (marker 0xFFFE@4, reserved0@16) then a packed C-string
-  # pool. The text-header stream spans the sec5 tail; the string pool spills
-  # into sec9. Free-text metadata lags geometry by one slot: text K's geometry
-  # is in rec K; its string offset, layer and tag are in rec K+1.
+  # Circular fixed array: 64 B in v0x2017, 72 B thereafter. Physical section 8
+  # starts 28/36 bytes into the logical record ring. Metadata lags geometry by
+  # one slot: record K+1 owns record K's geometry. Section 9 is the indexed
+  # packed C-string allocation; str_offset is relative to its physical start.
+  # Footprint field presentation uses the same controller without a pool string:
+  # modern placement +96 directly names its first section-8 geometry record, whose
+  # coordinates are local to the footprint. Metadata record K+1 association word
+  # +12 uses high byte 0x08 and a low-24-bit section-8 ordinal to link geometry K
+  # to the next field geometry. High byte 0x16 terminates a placement list (low 24
+  # bits = placement ordinal); 0x0E terminates at a decal field list (low 24 bits =
+  # decal ordinal). A chain reached from placement +96 must terminate with 0x16;
+  # encountering a decal terminator there is a broken ownership link. In metadata
+  # +24, byte 2 identifies the standard field: low
+  # five bits 2 mean Ref.Des. and 3 mean Part Type/value; bit 5 is visibility.
+  # Presentation bits 24 and 28 both set mean centered horizontally and
+  # vertically; otherwise horizontal is left and bit 29 selects UP rather than
+  # DOWN vertical justification. Free board text has
+  # association word zero and uses the lagged metadata/string relationship above.
   sec8_text_header:
     seq:
       - id: object_id_0
         type: s4
         doc: '+0 idx0 object id / hash'
-      - id: marker
-        type: u2
-        doc: '+4 idx1 record-type marker == 0xFFFE'
-      - id: pad0
-        type: u2
+      - id: record_marker_or_retained_link
+        type: u4
+        doc: '+4 live-record marker 0x0000FFFE; free/capacity slots retain a process-local object link'
       - id: str_offset
         type: s4
         doc: '+8 idx2 string-pool byte offset (belongs to text K-1)'
       - id: flags
         type: u4
-        doc: '+12 idx3 justification / mirror (packed)'
+        doc: '+12 idx3 field-list association described above; zero for free board text'
       - id: text_state0
         type: s4
         doc: '+16 idx4 text-controller state; normally zero'
@@ -2471,7 +2969,7 @@ types:
         doc: '+20 idx5 high16 = strlen+1 (drill-table subtype)'
       - id: layer_field
         type: u4
-        doc: '+24 idx6 low16=layer/LEVEL, high16=0x0020 marks TEXT object'
+        doc: '+24 idx6 packed LEVEL, justification, mirror, and field-presentation state; metadata byte 2 low five bits identify Ref.Des. (2) or Part Type (3), and bit 5 is visibility; free text low16 is layer and high16=0x0020'
       - id: tag
         type: u4
         doc: '+28 idx7 free-text tag 0x48FE0000 / 0x49000000'
@@ -2495,7 +2993,7 @@ types:
         doc: '+52 idx13 rotation / secondary offset (0 / 162e6 / 324e6)'
       - id: text_state1
         type: s4
-        doc: '+56 idx14 text geometry state; normally zero'
+        doc: '+56 idx14 footprint-field mirror state (0/1); free-text geometry state is normally zero'
       - id: bbox_x
         type: s4
         doc: '+60 idx15 first-glyph corner X (RAW)'
@@ -2506,37 +3004,89 @@ types:
         type: s4
         doc: '+68 idx17 object id / hash'
 
-  sec8_text_array:
+  sec8_text_header_legacy:
     seq:
-      - id: records
-        type: sec8_text_header
-        repeat: eos
-        if: _root.directory[8].total_bytes / _root.directory[8].count == 72
-      - id: v2017_state_words
+      - id: object_id_0
+        type: s4
+      - id: record_marker_or_retained_link
         type: u4
-        repeat: eos
-        if: _root.directory[8].total_bytes / _root.directory[8].count == 64
+        doc: '+4 live-record marker 0x0000FFFE; free/capacity slots retain a process-local object link'
+      - id: str_offset
+        type: u4
+        doc: '+8 byte offset into physical section 9; belongs to geometry K-1'
+      - id: flags
+        type: u4
+      - id: text_state0
+        type: s4
+      - id: str_len_field
+        type: u4
+      - id: layer_field
+        type: u4
+        doc: '+24 low byte layer; high16 0x0020 marks free board text'
+      - id: height
+        type: s4
+      - id: line_width
+        type: s4
+      - id: origin_x
+        type: s4
+      - id: origin_y
+        type: s4
+      - id: rot_aux
+        type: s4
+      - id: text_state1
+        type: s4
+      - id: bbox_x
+        type: s4
+      - id: bbox_y
+        type: s4
+      - id: object_id_1
+        type: s4
+
+  sec8_text_metadata_modern:
+    seq:
+      - id: bytes
+        size: 36
+        doc: modern record K+1 metadata fields +0..+35 for geometry K
+
+  sec8_text_metadata_legacy:
+    seq:
+      - id: bytes
+        size: 28
+        doc: v0x2017 record K+1 metadata fields +0..+27 for geometry K
+
+  sec8_text_ring:
+    seq:
+      - id: modern_records
+        type: sec8_text_header
+        repeat: expr
+        repeat-expr: _root.directory[8].count
+        if: _root.version != 0x2017
+      - id: modern_final_metadata
+        type: sec8_text_metadata_modern
+        if: _root.version != 0x2017
+      - id: legacy_records
+        type: sec8_text_header_legacy
+        repeat: expr
+        repeat-expr: _root.directory[8].count
+        if: _root.version == 0x2017
+      - id: legacy_final_metadata
+        type: sec8_text_metadata_legacy
+        if: _root.version == 0x2017
 
   # =========================================================================
-  # SECTION 9 — string-pool tail + phase-shifted head of sec10 DRW/LINES array
+  # SECTION 9 — text string-pool allocation
   # =========================================================================
-  # A slice of one contiguous stream spanning sec8->sec10: a C-string pool tail
-  # (continues sec8) then a fixed 1148-B head of the sec10 112-byte DRW/LINES
-  # record array. The cut lands mid-string and mid-record.
   sec9:
     doc: |
-      sec9 = string_pool_tail (variable; ends at the first 00 FF 00 00, the start
-      of the first DRW record) + lines_array_head (constant 1148 B). The pool/DRW
-      split is content-dependent. The C-string pool tail continues sec8's pool;
-      the remaining 1148 B is the phase-shifted head of the sec10 *LINES* (DRW)
-      112-byte record array, whose records continue byte-for-byte into sec10 with
-      a continuous obj_index.
+      Exact section-9 allocation. Live strings are packed NUL-terminated ASCII;
+      section-8 str_offset fields address bytes relative to this region's direct
+      physical start. Remaining allocator capacity is retained zero storage.
+      Section 10 begins only after this complete declared byte extent; no DRW
+      record bytes belong to section 9.
     seq:
-      - id: string_and_drawing_bytes
+      - id: allocated_string_bytes
         size-eos: true
-        doc: |
-          whole sec9 region; split at the first 00 FF 00 00 into the C-string
-          pool tail then the 1148-B DRW/LINES array head.
+        doc: packed string bytes plus zero-filled unused allocator capacity
 
   sec10_drw_record:
     doc: |
@@ -2556,33 +3106,34 @@ types:
       - id: marker
         type: u2
         doc: '+0 0xFFFE'
-      - id: pad
+      - id: saved_state
         type: u2
-        doc: '+2 0'
+        doc: '+2 saved object-state halfword; normally 0, value 31 on six live DRW records, and reused by non-live capacity slots'
       - id: sentinel
         type: s4
         doc: '+4 0xFFFFFFFF (-1)'
       - id: obj_index
         type: s4
-        doc: '+8 global object index (continuous sec9->sec10)'
+        doc: '+8 first section-11 piece of the previous circular owner record'
       - id: index2
         type: s4
-        doc: '+12 secondary index (into a sibling vertex/list table)'
+        doc: '+12 first section-12 vertex of the previous circular owner record'
       - id: index3
         type: s4
-        doc: '+16 zero for filled-copper owners; nonzero on keepout owners'
+        doc: '+16 first section-13 arc parameter of the previous circular owner record'
       - id: zero0
         type: s4
+        valid: 0
         doc: '+20 = 0'
       - id: flag6
         type: s4
-        doc: '+24 small enum (1); not the layer'
+        doc: '+24 section-11 piece count of the previous circular owner record'
       - id: flag7
         type: u4
-        doc: '+28 flags; 0, 3, 0x00020003 for copper/graphics; 1 or 10 on keepout owners'
-      - id: zero1
+        doc: '+28 packed previous-owner type; low16 item enum (0 LINES, 1 BOARD, 3 COPPER, 10 KEEPOUT), high16 flags'
+      - id: retained_owner_state
         type: u4
-        doc: '+32 = 0'
+        doc: '+32 saved owner state; normally zero, but live nonzero handles occur in the corpus'
       - id: heap_handle
         type: u4
         doc: '+36 heap/object handle, +0x41/record (handle)'
@@ -2590,10 +3141,8 @@ types:
         type: u4
         doc: '+40 0x80000000'
       - id: handle_str
-        type: strz
-        encoding: ASCII
         size: 40
-        doc: '+44 inline "DRW#######" object handle, zero-padded to +84'
+        doc: '+44 inline "DRW#######" for live objects; unused capacity retains arbitrary bytes'
       - id: block_tag
         type: u4
         doc: '+84 class tag; 0x00004900 (v0x2025/v0x2027 filled-copper owner), 0x00004D00 (v0x2026 filled-copper owner), 0 (keepout / board-outline owner)'
@@ -2603,16 +3152,122 @@ types:
         repeat-expr: 6
         doc: '+88 x0,y0,x1,y1,x2,y2 RAW (x0/y0 = *LINES* insertion point)'
 
-  sec10_drawing_array:
+  sec10_drw_record_head:
     seq:
-      - id: records
-        type: sec10_drw_record
-        repeat: eos
-        if: _root.directory[10].total_bytes / _root.directory[10].count == 112
-      - id: legacy_state_words
+      - id: marker
+        type: u2
+      - id: saved_state
+        type: u2
+      - id: previous_link
+        type: s4
+      - id: previous_piece_start
+        type: s4
+      - id: previous_vertex_start
+        type: s4
+      - id: previous_arc_start
+        type: s4
+      - id: retained_zero
+        type: s4
+        valid: 0
+      - id: previous_piece_count_or_class
+        type: s4
+      - id: subtype
         type: u4
-        repeat: eos
-        if: _root.directory[10].total_bytes / _root.directory[10].count == 100
+      - id: retained_state
+        type: u4
+        repeat: expr
+        repeat-expr: 3
+
+  sec10_drw_record_tail:
+    seq:
+      - id: name_storage
+        size: 40
+      - id: block_tag
+        type: u4
+      - id: origin_x_raw
+        type: s4
+      - id: origin_y_raw
+        type: s4
+      - id: bbox_min_x_raw
+        type: s4
+      - id: bbox_min_y_raw
+        type: s4
+      - id: bbox_max_x_raw
+        type: s4
+      - id: bbox_max_y_raw
+        type: s4
+
+  sec10_legacy_record:
+    seq:
+      - id: head
+        type: sec10_legacy_record_head
+      - id: tail
+        type: sec10_legacy_record_tail
+
+  sec10_legacy_record_head:
+    seq:
+      - id: marker
+        type: u2
+      - id: saved_state
+        type: u2
+      - id: previous_link
+        type: s4
+      - id: previous_piece_start
+        type: s4
+      - id: previous_vertex_start
+        type: s4
+      - id: previous_arc_start
+        type: s4
+      - id: retained_owner_state
+        type: s4
+      - id: previous_piece_count_or_class
+        type: s4
+      - id: subtype
+        type: u4
+        doc: '+28 packed previous-owner drawing subtype and flags'
+
+  sec10_legacy_record_tail:
+    seq:
+      - id: name_storage
+        size: 40
+      - id: block_tag
+        type: u4
+      - id: origin_and_bbox_state
+        type: s4
+        repeat: expr
+        repeat-expr: 6
+
+  sec10_drawing_physical:
+    doc: |
+      Circular fixed array. The writer rotates the logical record bytes left by
+      68 within this controller: physical storage is the last record's tail,
+      records 0..count-2, then the last record's head. No byte belongs to section
+      9 or 11. Record R[(i+1) mod count] carries R[i]'s piece/vertex/arc cursors.
+    seq:
+      - id: modern_last_record_tail
+        type: sec10_drw_record_tail
+        if: _root.version >= 0x2024
+      - id: modern_records
+        type: sec10_drw_record
+        repeat: expr
+        repeat-expr: _root.directory[10].count - 1
+        if: _root.version >= 0x2024
+      - id: modern_last_record_head
+        type: sec10_drw_record_head
+        if: _root.version >= 0x2024
+      - id: legacy_last_record_tail
+        type: sec10_legacy_record_tail
+        if: _root.version <= 0x2022
+        doc: logical bytes 32..99 of the final 100-byte legacy owner record
+      - id: legacy_records
+        type: sec10_legacy_record
+        repeat: expr
+        repeat-expr: _root.directory[10].count - 1
+        if: _root.version <= 0x2022
+      - id: legacy_last_record_head
+        type: sec10_legacy_record_head
+        if: _root.version <= 0x2022
+        doc: logical bytes 0..31 of the final 100-byte legacy owner record
 
   # =========================================================================
   # SECTION 11 — graphic-piece header table + inline board-outline vertices
@@ -2623,7 +3278,7 @@ types:
   #
   # Dimensions are not a dedicated section; each DIM* item is a *LINES* DRW owner
   # whose sub-pieces appear here. For those sub-pieces the +0 word (sub_flag |
-  # byte1<<8 = low-u16 of field0) is a piece-type enum: 6162 BASPNT, 6156 ARWLN1,
+  # byte1_or_next_level<<8 = low-u16 of field0) is a piece-type enum: 6162 BASPNT, 6156 ARWLN1,
   # 6157 ARWLN2, 6158 ARWHD1, 6159 ARWHD2, 6160 EXTLN1, 6161 EXTLN2; the +4 flags
   # word is the per-dimension group flag (matches the ASC piece flags column). The
   # sub-piece vertices land in sec12 in ASC order (BASPNT1 BASPNT2 ARWLN1 ARWHD1
@@ -2632,50 +3287,112 @@ types:
     seq:
       - id: sub_flag
         type: u1
-        doc: '+0 piece sub-flag enum {0,1,2,4} (fill/mirror/draw-order)'
-      - id: byte1
+        doc: '+0 previous-piece shape flag; value 2 marks the preceding LINES piece as CIRCLE'
+      - id: byte1_or_next_level
         type: u1
-        doc: '+1 0x01 on DRW piece headers'
+        doc: |
+          +1 role-dependent carrier byte. For LINES and COPPER graphic piece K,
+          piece K+1 stores K's ASCII LEVEL here. The direct owner piece_start and
+          piece_count ranges therefore determine every layer without inspecting
+          geometry. Verified against the 5,281-piece level-25 mechanical drawing
+          and level-26 RobotCub silkscreen in MAIS_L_02, plus every COPPER object in
+          paired DC1096B, Ems4_Rev2, and MC4_PLUS_CSHAPE exports. For DIM
+          sub-pieces it is the high byte of the u16 piece-type enum.
       - id: type_or_handle_high
         type: u2
         doc: '+2 piece-type or object-handle high bits'
       - id: flags
         type: s4
         doc: '+4 -1 default; 0x800/0x1000 keepout-restriction bits; small ints = ordinal/parent'
-      - id: zero
+      - id: piece_state
         type: s4
-        doc: '+8 constant 0 (head/tail discriminator)'
+        doc: '+8 saved piece state; values 0 through 3 occur in live corpus records'
       - id: width
         type: s4
         doc: '+12 pen width, BASIC'
       - id: corners
         type: s4
-        doc: '+16 vertex/corner count of the piece'
+        doc: '+16 vertex/corner count; one-corner LINES point records are valid but have no drawable segment'
 
-  sec11_piece_array:
+  sec11_piece_head:
     seq:
-      - id: records
+      - id: sub_flag
+        type: u1
+      - id: byte1_or_next_level
+        type: u1
+      - id: type_or_handle_high
+        type: u2
+      - id: flags
+        type: s4
+
+  sec11_piece_head_modern:
+    seq:
+      - id: head
+        type: sec11_piece_head
+      - id: retained_piece_state
+        type: s4
+
+  sec11_piece_tail:
+    seq:
+      - id: width
+        type: s4
+      - id: corners
+        type: s4
+
+  sec11_piece_hdr_legacy:
+    seq:
+      - id: head
+        type: sec11_piece_head
+      - id: width
+        type: s4
+      - id: corners
+        type: s4
+
+  sec11_piece_physical:
+    doc: |
+      Circular fixed array rotated right by its record head: twelve bytes for
+      modern 20-byte records, eight for legacy 16-byte records. Physical storage
+      is record 0's tail, records 1..count-1, then record 0's head. This phase is
+      independently fixed by ASCII BOARD corner counts; the former +8 phase
+      produced plausible records but assigned the next piece to every owner.
+    seq:
+      - id: modern_last_record_tail
+        type: sec11_piece_tail
+        if: _root.version >= 0x2025
+      - id: modern_records
         type: sec11_piece_hdr
-        repeat: eos
-        if: _root.directory[11].total_bytes / _root.directory[11].count == 20
-      - id: legacy_state_words
-        type: u4
-        repeat: eos
-        if: _root.directory[11].total_bytes / _root.directory[11].count == 16
+        repeat: expr
+        repeat-expr: _root.directory[11].count - 1
+        if: _root.version >= 0x2025
+      - id: modern_last_record_head
+        type: sec11_piece_head_modern
+        if: _root.version >= 0x2025
+      - id: legacy_last_record_tail
+        type: sec11_piece_tail
+        if: _root.version <= 0x2024
+        doc: logical record 0's width and corner count
+      - id: legacy_records
+        type: sec11_piece_hdr_legacy
+        repeat: expr
+        repeat-expr: _root.directory[11].count - 1
+        if: _root.version <= 0x2024
+      - id: legacy_last_record_head
+        type: sec11_piece_head
+        if: _root.version <= 0x2024
 
   sec12_graphic_vertex:
     doc: |
-      Section-12 fixed 12-byte graphic vertex. All 90 corpus files satisfy
+      Section-12 fixed 12-byte graphic vertex. All 597 corpus files satisfy
       total_bytes == count * 12. Coordinates are DESIGN-local for the owning
       section-11 graphic piece and are not origin shifted.
     seq:
-      - id: marker
-        type: s4
-        doc: -1 = contour vertex; {0,1,2,3} = corner/arc-type code
       - id: x_design
         type: s4
       - id: y_design
         type: s4
+      - id: arc_ordinal
+        type: s4
+        doc: -1 = straight contour vertex; nonnegative = owner-local arc ordinal
 
   sec12_vertex_array:
     seq:
@@ -2684,25 +3401,29 @@ types:
         repeat: eos
 
   # =========================================================================
-  # SECTION 13 — copper-pour hatch-fill geometry
+  # SECTION 13 — graphic arc parameters / copper-pour hatch geometry
   # =========================================================================
-  # The entire directory payload is a 20-byte segment array: 38,268 records in
-  # 527 populated files; 70 files are empty. The former 112-byte stack-extent
-  # tail was a directory-overdeclaration phase error. Coordinates are pour-local.
+  # The entire directory payload is a 20-byte geometry-parameter array. Graphic
+  # owners address arc bounding boxes directly as arc_start + vertex.arc_ordinal;
+  # copper-pour owners address the same-width rows as hatch segments.
   sec13_hatch_seg:
-    doc: 20-B copper-pour hatch-fill line segment (pour-LOCAL coords)
+    doc: 20-byte graphic parameter; four coordinates plus retained type-specific state
     seq:
       - id: x1
         type: s4
+        doc: arc bbox xmin, or hatch-segment x1
       - id: y1
         type: s4
+        doc: arc bbox ymin, or hatch-segment y1
       - id: layer_marker
         type: s4
-        doc: 'BASE-900*layer (BASE=-117962100), layer 0..3 = the 4 copper layers'
+        doc: arc bbox xmax, or hatch layer marker BASE-900*layer
       - id: x2
         type: s4
+        doc: arc bbox ymax, or hatch-segment x2
       - id: y2
         type: s4
+        doc: retained arc state, or hatch-segment y2
 
   sec13_hatch_array:
     seq:
@@ -2713,13 +3434,12 @@ types:
   # =========================================================================
   # SECTION 14 — PARTDECAL terminal-run descriptors
   # =========================================================================
-  # Modern 112-byte descriptors carry sentinel 0xFFFE at +108; legacy files use
-  # the 100-byte prefix. Both keep the decal name at +44.
-  # Start index into the sec15 terminal-position pool is i32 @+0. The terminal
-  # count for descriptor K is stored in descriptor K+1 @+4 (one-record lag). The
-  # same lagged count stream also appears across sections 13 and 12 for decals
-  # without a section-14 descriptor. Descriptor/count reads may cross directory
-  # section boundaries.
+  # Physical descriptors start at the decal name, 44 bytes after the nominal
+  # section boundary. Both dialects carry sentinel 0xFFFE at +64, the section-15
+  # terminal cursor/count at +68/+72, and the section-16 per-pin padstack
+  # cursor/count at +44/+88. Modern records are 112 bytes; legacy records are
+  # 100 bytes. Reading at the nominal boundary produces a plausible but false
+  # one-record-lag view of these fields.
   sec14_terminal_descriptor_array:
     seq:
       - id: modern_records
@@ -2733,50 +3453,81 @@ types:
 
   sec14_terminal_desc_v112:
     seq:
-      - id: sec15_start
-        type: s4
-        doc: '+0 first terminal index in sec15 pool'
-      - id: lagged_prev_terminal_count
-        type: s4
-        doc: '+4 terminal count for previous descriptor/name'
-      - id: payload
-        size: 36
-        doc: '+8..+43 descriptor payload / handles'
       - id: decal_name
-        type: strz
-        encoding: ASCII
         size: 44
-        doc: '+44 decal name'
-      - id: descriptor_state
-        size: 20
-        doc: '+88..+107 descriptor tail / bbox flags'
+        doc: '+0 NUL-padded ASCII decal name for live descriptors; free slots retain arbitrary bytes'
+      - id: sec16_padstack_cursor
+        type: s4
+        doc: '+44 first record in the section-16 per-terminal padstack map'
+      - id: descriptor_state0
+        size: 16
+        doc: '+48..+63 saved decal-controller links and state'
       - id: sentinel
         type: u2
-        doc: '+108 0xFFFE (may cross section boundary)'
+        doc: '+64 0xFFFE for a live descriptor'
       - id: flag_b
         type: u2
-        doc: '+110 flag high half'
+        doc: '+66 saved descriptor flags'
+      - id: sec15_start
+        type: s4
+        doc: '+68 first terminal index in the section-15 terminal pool'
+      - id: terminal_count
+        type: s4
+        doc: '+72 number of section-15 terminals owned by this decal'
+      - id: descriptor_state1
+        size: 12
+        doc: '+76..+87 saved terminal-controller links and state'
+      - id: sec16_padstack_count
+        type: s4
+        doc: '+88 number of section-16 per-terminal padstack records'
+      - id: descriptor_state2
+        size: 20
+        doc: '+92..+111 saved modern descriptor capacity and state'
+    instances:
+      sec15_zero_based_start:
+        value: sec15_start
+        doc: zero-based first owned section-15 terminal slot
 
   sec14_terminal_desc_v100:
     doc: legacy 100-byte PARTDECAL terminal-run descriptor
     seq:
+      - id: decal_name
+        size: 44
+        doc: '+0 NUL-padded ASCII decal name for live descriptors; free slots retain arbitrary bytes'
+      - id: sec16_padstack_cursor
+        type: s4
+        doc: '+44 first record in the section-16 per-terminal padstack map'
+      - id: descriptor_state0
+        size: 16
+        doc: '+48..+63 saved legacy decal-controller links and state'
+      - id: sentinel
+        type: u2
+        doc: '+64 0xFFFE for a live descriptor'
+      - id: flag_b
+        type: u2
+        doc: '+66 saved descriptor flags'
       - id: sec15_start
         type: s4
-        doc: '+0 first terminal index in the legacy terminal pool'
-      - id: lagged_prev_terminal_count
+        doc: |
+          +68 first terminal cursor in the legacy section-15 pool. Positive
+          v2017/v2019 values are one-based pool ordinals; zero selects the
+          shared first slot used by built-in via decals.
+      - id: terminal_count
         type: s4
-        doc: '+4 terminal count for the previous descriptor/name'
-      - id: descriptor_payload
-        size: 36
-        doc: '+8..+43 descriptor indexes, handles, and controller state'
-      - id: decal_name
-        type: strz
-        encoding: ASCII
-        size: 44
-        doc: '+44 decal name'
-      - id: descriptor_state
+        doc: '+72 number of section-15 terminals owned by this decal'
+      - id: descriptor_state1
         size: 12
-        doc: '+88..+99 legacy descriptor tail'
+        doc: '+76..+87 saved terminal-controller links and state'
+      - id: sec16_padstack_count
+        type: s4
+        doc: '+88 number of section-16 per-terminal padstack records'
+      - id: descriptor_state2
+        size: 8
+        doc: '+92..+99 saved legacy descriptor capacity and state'
+    instances:
+      sec15_zero_based_start:
+        value: '_root.version <= 0x2019 and sec15_start > 0 ? sec15_start - 1 : sec15_start'
+        doc: decoded zero-based first owned section-15 terminal slot
 
   # =========================================================================
   # SECTION 15 — PARTDECAL terminal and controller storage
@@ -2785,9 +3536,10 @@ types:
   # and 0x2019, 36 bytes thereafter. Units hold terminal geometry or mixed
   # decal-controller/object-dictionary state. Modern files place terminal units
   # first, but their suffix is variable and is not a fixed 33-unit trailer.
-  # Legacy files can also place controller units before geometry and start after a
-  # 60-byte rotated descriptor tail. Modern units start after the database
-  # header/directory image omitted from section 3, num_directory*16 + 48 bytes.
+  # Legacy files start after a 60-byte rotated descriptor tail, 16 bytes into the
+  # physical controller ring. Modern units start after the 44-byte logical-view
+  # displacement, exactly at the physical controller start. The largest serialized
+  # terminal cursor plus count equals directory[15].count on every corpus file.
   decal_terminal_slot_array:
     seq:
       - id: records
@@ -2846,26 +3598,38 @@ types:
         type: s4
         doc: '+16 NMYLOC in terminal units; object state in suffix units'
 
+  saved_terminal_controller_prefix:
+    doc: |
+      Four saved tag-15 controller words serialized before the v2017/v2019
+      terminal-slot ring. These are retained list/object state, not padding.
+    seq:
+      - id: zero_saved_controller_words
+        type: u4
+        repeat: expr
+        repeat-expr: 4
+        valid: 0
+
   # =========================================================================
-  # SECTION 16 — PARTTYPE auxiliary index/state table
+  # SECTION 16 — per-terminal padstack mapping ring
   # =========================================================================
-  # The entire declared payload is count x 8 bytes (4,088 records on 90 files).
-  # The former 224-byte spilled-PARTTYPE interpretation was measured at the raw
-  # directory-overdeclared offset and crossed into section 17.
-  parttype_aux_array:
+  # The entire declared payload is count x 8 bytes at the physical controller
+  # boundary and maps each decal terminal ordinal to a section-4 padstack
+  # ordinal. The former 224-byte spilled-PARTTYPE interpretation crossed into
+  # section 17.
+  decal_padstack_pair_array:
     seq:
       - id: records
-        type: parttype_aux_record
+        type: decal_padstack_pair
         repeat: eos
 
-  parttype_aux_record:
+  decal_padstack_pair:
     seq:
-      - id: object_index_or_handle
+      - id: terminal_ordinal
+        type: s4
+        doc: zero selects the decal-wide default; positive values select that one-based terminal ordinal
+      - id: padstack_ordinal
         type: u4
-        doc: PARTTYPE/decal object ordinal; saved object handle in allocator-state entries
-      - id: state_or_ordinal
-        type: u4
-        doc: auxiliary PARTTYPE state, count, or ordinal; zero in 17,733 records
+        doc: zero-based ordinal into the section-4 padstack array
 
   # =========================================================================
   # SECTION 17 — PARTTYPE definitions
@@ -2891,32 +3655,44 @@ types:
         size: 44
         doc: '+0..+43 terminal cursors, object ordinals, handles, and serialization state'
       - id: name_storage
-        type: str
         size: 36
-        encoding: ASCII
-        doc: '+44 PARTTYPE NAME in declaration order; NUL-padded unless all 36 bytes are used'
+        doc: '+44 PARTTYPE NAME in live records; retained capacity can contain arbitrary bytes'
       - id: parttype_link_state
-        size: 32
-        doc: '+80..+111 decal selection, heap links, and duplicated definition indexes'
-      - id: retained_object_capacity
-        size: 112
-        doc: '+112..+223 retained PARTTYPE object capacity; live state, not file padding'
+        size: 16
+        doc: '+80..+95 heap links and duplicated definition indexes'
+      - id: decal_selection_slots
+        type: parttype_decal_selection_slot
+        repeat: expr
+        repeat-expr: 16
+        doc: |
+          +96..+223 fixed-capacity alternate-decal vector. Live slots repeat
+          the same nonnegative section-14 decal ordinal in both words; the first
+          nonmatching/negative slot terminates the live selection list and the
+          remaining slots retain allocator state.
 
   parttype_record_v208:
     seq:
       - id: parttype_controller_state
         size: 44
       - id: name_storage
-        type: str
         size: 36
-        encoding: ASCII
-        doc: '+44 legacy PARTTYPE NAME in declaration order'
+        doc: '+44 legacy PARTTYPE NAME in live records; retained capacity can contain arbitrary bytes'
       - id: parttype_link_state
-        size: 16
-        doc: '+80..+95 legacy decal selection and definition links'
+        size: 32
+        doc: '+80..+111 legacy definition links and controller state'
+      - id: primary_decal_ordinal
+        type: s4
+        doc: '+112 zero-based section-14 decal ordinal; negative means no decal selection'
       - id: retained_object_capacity
-        size: 112
-        doc: '+96..+207 retained legacy PARTTYPE object capacity; not file padding'
+        size: 92
+        doc: '+116..+207 retained legacy PARTTYPE object capacity; not file padding'
+
+  parttype_decal_selection_slot:
+    seq:
+      - id: decal_ordinal
+        type: s4
+      - id: decal_ordinal_duplicate
+        type: s4
 
   # =========================================================================
   # SECTION 18 — final PARTTYPE metadata and gate-definition stream
@@ -2924,7 +3700,7 @@ types:
   # The nominal section boundary lands at the start of the final rotated
   # PARTTYPE metadata. Its 44-byte prefix is followed by one 8-byte gate record
   # per directory[18] item. The gate array therefore ends exactly 44 bytes into
-  # nominal section 19 on all 90 corpus files.
+  # nominal section 19 on all 597 corpus files.
   parttype_final_metadata:
     seq:
       - id: obj_ordinal
@@ -2939,10 +3715,10 @@ types:
         type: u1
         doc: ASCII PARTTYPE FLAGS for the final definition
       - id: part_type
-        type: str
-        encoding: ASCII
         size: 3
-        doc: ASCII PARTTYPE TYPE for the final definition, such as UND, CON, JUM, CAP, or RES
+        doc: |
+          Three-byte PARTTYPE type code on modern files. Legacy v0x2017/v0x2019
+          place the code later in this rotated record, so retain these bytes raw.
       - id: gates
         type: s4
         doc: ASCII PARTTYPE GATES for the final definition
@@ -3132,7 +3908,17 @@ types:
   # =========================================================================
   # Every directory record is a live placement. Correcting section 3's serialized
   # size removes the former apparent 11-record tail.
+  # Controlled PADS Layout V10 exports from the exact loaded binaries confirm the
+  # direct view: v0x2021 Dexter_MotorCtrl is 284/284 REFDES and v0x2026
+  # parallella-rf is 162/162, with no extra or missing names. Older ASCII files
+  # paired by basename can describe a different board revision and must not be
+  # used to infer free slots or a second placement stream.
   # v2021/22 and older use the 96-byte prefix; v2024+ append 16 bytes.
+  # Association state is one-record lagged: modern record N+1
+  # +4/+17 selects record N's PARTTYPE/alternate, while legacy record N+1 +24
+  # selects record N's decal. The last selector continues into the following
+  # controller's 44-byte rotated metadata; it does not wrap to record zero.
+  # Geometry and reference designators are not lagged.
   part_placement_array:
     seq:
       - id: modern_records
@@ -3151,7 +3937,7 @@ types:
         doc: '+0 always 0 for real records (valid marker)'
       - id: decal_index
         type: s4
-        doc: '+4 decal/footprint pool index (shared by same-footprint parts)'
+        doc: '+4 parttype index for the preceding placement in the record ring on modern dialects'
       - id: decal_index2
         type: s4
         doc: '+8 secondary geometry/decal index'
@@ -3163,10 +3949,10 @@ types:
         doc: '+16 mostly 32; side/flags enum, sometimes a handle'
       - id: object_id
         type: s4
-        doc: '+20 global object id (shared sequence)'
+        doc: '+20 legacy parttype/controller index; placement object ID is the record ordinal'
       - id: sentinel_m1
         type: s4
-        doc: '+24 -1'
+        doc: '+24 legacy decal index for the preceding placement in the record ring'
       - id: link0
         type: s4
         doc: '+28 -1 or 0'
@@ -3213,13 +3999,13 @@ types:
         doc: '+92 0xFFFE in simple files'
       - id: instance_val
         type: s4
-        doc: '+96 signed small per-instance value'
+        doc: '+96 nonnegative value is the direct section-8 ordinal of the first field-presentation record; negative values mark placements with no saved field presentation'
       - id: handle2
         type: u4
         doc: '+100 per-instance serial/handle (handle)'
-      - id: zero
+      - id: trailing_object_handle
         type: s4
-        doc: '+104 0'
+        doc: '+104 normally zero; retained saved object handles occur in allocated records'
       - id: cluster_id
         type: s4
         doc: |
@@ -3233,6 +4019,7 @@ types:
         type: s4
       - id: decal_index
         type: s4
+        doc: retained controller state; legacy decal selection is the next record's +24 word
       - id: decal_index2
         type: s4
       - id: instance_index
@@ -3241,8 +4028,10 @@ types:
         type: s4
       - id: object_id
         type: s4
+        doc: legacy parttype/controller index; placement object ID is the record ordinal
       - id: sentinel_m1
         type: s4
+        doc: decal index for the preceding placement in the record ring
       - id: link0
         type: s4
       - id: link1
@@ -3290,10 +4079,8 @@ types:
         type: u4
         doc: '+0 stored 1-based CLSTID; equals this record ordinal plus one'
       - id: name
-        type: strz
-        encoding: ASCII
         size: 16
-        doc: '+4 cluster NAME, NUL-padded'
+        doc: '+4 cluster NAME in live records; retained/free records can contain arbitrary bytes'
       - id: x_raw
         type: s4
         doc: '+20 XLOC RAW; design = raw - origin_x (BASIC = 1/38100 mil)'
@@ -3343,9 +4130,98 @@ types:
         repeat: eos
         if: _root.directory[23].total_bytes / _root.directory[23].count == 416
       - id: v144_records
-        type: net_record_v144
-        repeat: eos
+        type: 'legacy_net_record_ring(_root.directory[23].count)'
         if: _root.directory[23].total_bytes / _root.directory[23].count == 144
+
+  saved_net_controller_prefix:
+    doc: |
+      Eleven saved tag-23 controller words between the rotated placement grid
+      and the v2017..v2022 net-record array. They retain controller/list state
+      and are not alignment padding.
+    seq:
+      - id: saved_controller_words
+        type: u4
+        repeat: expr
+        repeat-expr: 11
+
+  legacy_sigpin_final_record_tail:
+    doc: |
+      The v2017 56-byte SIGPIN array is rotated 48 bytes past its nominal tag-20
+      boundary. This word is bytes +52..+55 of the final record's fixed-capacity
+      signal-name slot. Both populated scoped rings retain 0x001d1168 here. When
+      tag 20 is empty, physical +44 belongs to the following tag-21 compact-name
+      or tag-22 placement controller and is not a SIGPIN field.
+    seq:
+      - id: retained_signal_name_capacity_tail
+        type: u4
+
+  legacy_net_record_v144:
+    seq:
+      - id: head
+        type: legacy_net_record_head
+      - id: tail
+        type: legacy_net_record_tail
+
+  legacy_net_record_head:
+    seq:
+      - id: anchor_part_idx
+        type: s4
+        doc: '+0 0-based index into section 22 of a member part'
+      - id: anchor_pin
+        type: s4
+        doc: '+4 terminal/pin number on anchor part'
+      - id: sec24_start
+        type: s4
+        doc: |
+          +8 index of one section-24 edge in this signal component. Components
+          are not contiguous in record order and this need not be their lowest
+          edge index; following the edge's union-find component yields the
+          complete signal. Treating it as a range start omitted the $2N171 and
+          PSTAGE-002 PX1 components in paired v0x2021 exports.
+      - id: name_slot
+        size: 48
+        doc: |
+          +12 ASCII NUL-terminated net name. The section-23 directory count is
+          the exact number of active legacy records.
+      - id: net_controller_state0
+        size: 24
+        doc: '+60..+83 serialized legacy net-controller state'
+      - id: net_class_owner_handle
+        type: u4
+        doc: '+84 saved section-66 class handle; zero when the net has no class'
+      - id: net_class_membership_state
+        type: u4
+        doc: '+88 retained class-membership state'
+      - id: conn_count
+        type: s4
+        doc: '+92 number of connections (= section-24 entries for this net)'
+      - id: net_controller_state1
+        size: 28
+        doc: '+96..+123 serialized legacy net-controller state'
+
+  legacy_net_record_tail:
+    seq:
+      - id: net_controller_state2
+        size: 20
+        doc: '+124..+143 serialized legacy net-controller state'
+
+  legacy_net_record_ring:
+    params:
+      - id: num_records
+        type: u4
+    doc: |
+      Legacy section-23 circular array. Logical record zero begins at physical
+      +20: the physical prefix is the final record's 20-byte tail, followed by
+      records zero through count-2 and the final record's 124-byte head.
+    seq:
+      - id: final_record_tail
+        type: legacy_net_record_tail
+      - id: complete_records
+        type: legacy_net_record_v144
+        repeat: expr
+        repeat-expr: num_records - 1
+      - id: final_record_head
+        type: legacy_net_record_head
 
   net_record_v144:
     seq:
@@ -3360,21 +4236,31 @@ types:
         doc: '+56 raw PADS SIGFLAG'
       - id: conn_count
         type: s4
-        doc: '+60 number of connections (= section-24 entries for this net)'
+        doc: |
+          +60 saved pin-edge count for this signal's connection component; this
+          is corroborating state, not a contiguous section-24 extent. A zero-edge
+          $$$ autoroute placeholder owns no pin even though its retained anchor
+          fields duplicate a named signal. All 46 zero-edge $$$ records in the
+          scoped corpus share such a named anchor; none is an independent signal.
       - id: anchor_part_idx
         type: s4
-        doc: '+64 0-based index into section 22 of a member part'
+        doc: |
+          +64 0-based index into section 22 of a member part. For zero-edge $$$
+          placeholders this is retained alias state, not signal membership.
       - id: anchor_pin
         type: s4
-        doc: '+68 terminal/pin number on anchor part'
+        doc: |
+          +68 terminal/pin number on the anchor part. Named connected signals and
+          named singleton signals own this pin; zero-edge $$$ placeholders do not.
       - id: sec24_start
         type: s4
-        doc: '+72 cumulative start index into section-24 chain topology'
-      - id: name
-        type: strz
-        encoding: ASCII
+        doc: '+72 index of one section-24 edge in this signal component; components are not contiguous in record order'
+      - id: name_slot
         size: 48
-        doc: '+76 net name, NUL-terminated'
+        doc: |
+          +76 ASCII NUL-terminated net name. Names beginning $$$ are PADS
+          autoroute aliases/placeholders; a named signal wins when both retain
+          the same anchor or section-24 component.
       - id: ser_index
         type: s4
         doc: '+124 serialized object index/handle'
@@ -3439,61 +4325,263 @@ types:
   # =========================================================================
   # SECTION 24 — route chain / pin-pair connection topology
   # =========================================================================
-  # Every directory record is live. Sum(net.conn_count) equals section-24 count
-  # on paired exports. Record zero is a zero-initialized topology root; remaining
-  # records carry a 0xFE high-byte marker plus low flag bits at +28, and
-  # 0x0000FFFE at +60. The previous +20/+52
-  # layout was shifted eight bytes and created a false 17-record slack tail.
-  route_chain_array:
+  # The directory count is the number of live undirected edges between placed-
+  # part terminal identities. Modern record zero is the topology root. Edge K
+  # takes its placement-object indices from full record K at +60/+64 and its
+  # terminal ordinals and topology expression from record K+1 at +0..+20. The
+  # final record K+1 is a 36-byte head at the end of the physical controller;
+  # no guessed wrap, content-selected closing edge, or fallback is involved.
+  # Unioning these edges forms one component per electrical signal. Each modern
+  # net record's anchor_part_idx/anchor_pin identifies its component directly;
+  # sec24_start is a member edge, not a contiguous block boundary. $$$ records
+  # are PADS autoroute aliases and can anchor the same component as its named
+  # signal. Records carry a 0xFE high-byte state at +20 and 0x0000FFFE at +52.
+  saved_connection_controller_prefix:
+    doc: |
+      Saved tag-24 controller prefix before the circular connection array: four
+      retained words through v0x2022 and two words thereafter. The following
+      logical connection record begins immediately after this prefix.
     seq:
-      - id: records
-        type: route_chain_record
-        repeat: eos
+      - id: legacy_saved_controller_links
+        type: u4
+        repeat: expr
+        repeat-expr: 4
+        if: _root.version <= 0x2022
+        doc: four saved process-local topology/list links; usually nonzero and file-specific
+      - id: modern_zero_controller_words
+        type: u4
+        repeat: expr
+        repeat-expr: 2
+        valid: 0
+        if: _root.version >= 0x2024
 
-  route_chain_record:
+  empty_route_chain_controller_state:
+    doc: |
+      Modern empty connection controllers retain the fixed 36-byte terminal
+      head occupied by the final topology node in a nonempty ring. Ten of the
+      thirteen scoped records are initialized to zero. Three retain allocator
+      state: state0=2, free-list head=-1, capacity=32, list tail=-1, and a
+      saved allocator handle. One of those also retains -1 in both saved links.
+      These words are controller state, not padding.
     seq:
-      - id: node_a
+      - id: saved_controller_state0
+        type: u4
+      - id: saved_free_list_head
         type: s4
-        doc: '+0 topology node index (endpoint A)'
-      - id: node_b
+      - id: saved_capacity
+        type: u4
+      - id: saved_controller_state1
+        type: u4
+      - id: saved_list_tail
         type: s4
-        doc: '+4 topology node index (endpoint B)'
-      - id: link_c
+      - id: saved_link_a
         type: s4
-        doc: '+8 linked node index (next/alt traversal)'
-      - id: link_d
+      - id: saved_link_b
         type: s4
-        doc: '+12 linked node index'
-      - id: link_next
+      - id: saved_allocator_handle
+        type: u4
+      - id: saved_controller_state2
+        type: u4
+
+  route_chain_array:
+    params:
+      - id: num_edges
+        type: u4
+      - id: is_modern
+        type: u1
+    seq:
+      - id: modern_records
+        type: 'route_chain_record(_index)'
+        repeat: expr
+        repeat-expr: num_edges
+        if: is_modern != 0
+      - id: modern_final_edge_head
+        type: 'route_chain_edge_head(num_edges)'
+        if: is_modern != 0
+      - id: legacy_records
+        type: legacy_route_chain_record
+        repeat: expr
+        repeat-expr: num_edges
+        if: is_modern == 0
+
+  route_chain_edge_head:
+    params:
+      - id: record_index
+        type: u4
+    seq:
+      - id: ordinal_a
         type: s4
-        doc: '+16 linked node index (unique per record = next pointer)'
-      - id: route_chain_state0
-        size: 8
-        doc: '+20..+27 route-chain link/controller state'
+        doc: '+0 terminal ordinal paired with the preceding full record endpoint A'
+      - id: ordinal_b
+        type: s4
+        doc: '+4 terminal ordinal paired with the preceding full record endpoint B'
+      - id: topology_ref_a
+        type: s4
+        valid:
+          expr: '_ >= 0 ? _ <= _root.directory[24].count : -_ - 1 < _root.directory[22].count'
+        doc: |
+          +8 first input of the final edge's topology expression. Nonnegative
+          values are section-24 node ordinals. Negative value -(N+1) is direct
+          section-22 placement leaf N and equals the preceding full record's
+          endpoint_object_a when that input is a leaf.
+      - id: topology_ref_b
+        type: s4
+        valid:
+          expr: '_ >= 0 ? _ <= _root.directory[24].count : -_ - 1 < _root.directory[22].count'
+        doc: |
+          +12 second final-edge input, using the same section-24-node or
+          section-22-placement-leaf encoding as +8 and the preceding full
+          record's endpoint_object_b for a leaf.
+      - id: topology_ref_c
+        type: s4
+        valid:
+          expr: '_ >= 0 ? _ <= _root.directory[24].count : -_ <= _root.directory[23].count'
+        doc: |
+          +16 final-edge output. Nonnegative values are section-24 node
+          ordinals. Negative value -(N+1) completes named section-23 signal N.
       - id: marker
         type: u4
-        doc: '+28 topology-root state on record zero; later records have high byte 0xFE and low route flags'
-      - id: route_chain_state1
+        valid:
+          expr: '(_ & 0xffffffc0) == 0xfe000000'
+      - id: route_chain_state0
         size: 12
-        doc: '+32..+43 route-chain controller state'
+        doc: '+24..+35 final edge topology-controller state'
+
+  route_chain_record:
+    params:
+      - id: record_index
+        type: u4
+    seq:
+      - id: ordinal_a
+        type: s4
+        doc: '+0 terminal ordinal for the preceding full record endpoint A'
+      - id: ordinal_b
+        type: s4
+        doc: '+4 terminal ordinal for the preceding full record endpoint B'
+      - id: topology_ref_a
+        type: s4
+        valid:
+          expr: '_ >= 0 ? _ <= _root.directory[24].count : -_ - 1 < _root.directory[22].count'
+        doc: |
+          +8 first input of the following edge's topology expression.
+          Nonnegative values are section-24 node ordinals. Negative value
+          -(N+1) is direct section-22 placement leaf N and equals the preceding
+          full record's endpoint_object_a when that input is a leaf.
+      - id: topology_ref_b
+        type: s4
+        valid:
+          expr: '_ >= 0 ? _ <= _root.directory[24].count : -_ - 1 < _root.directory[22].count'
+        doc: |
+          +12 second topology-expression input, using the same nonnegative
+          section-24-node / negative section-22-placement-leaf encoding as +8;
+          a leaf equals the preceding full record's endpoint_object_b.
+      - id: topology_ref_c
+        type: s4
+        valid:
+          expr: '_ >= 0 ? _ <= _root.directory[24].count : -_ <= _root.directory[23].count'
+        doc: |
+          +16 topology-expression output. Nonnegative values are section-24
+          node ordinals. Negative values are completed signal-component IDs in
+          declaration order: -(N+1) closes named section-23 signal N. Values
+          beyond the placement count are therefore signal IDs, not an extra
+          placement-leaf namespace.
+      - id: marker
+        type: u4
+        valid:
+          expr: 'record_index == 0 or (_ & 0xffffffc0) == 0xfe000000'
+        doc: |
+          +20 topology-root state on modern record zero; modern later records
+          have high byte 0xFE and low route flags. Legacy dialects store a
+          traversal ordinal/state value instead.
+      - id: route_chain_state0
+        size: 12
+        doc: '+24..+35 route-chain controller state'
       - id: end_x1
         type: s4
-        doc: '+44 optional RAW endpoint X (else 0)'
+        doc: '+36 optional RAW endpoint X (else 0)'
       - id: end_y1
         type: s4
-        doc: '+48 optional RAW endpoint Y (else 0)'
+        doc: '+40 optional RAW endpoint Y (else 0)'
       - id: end_x2
         type: s4
-        doc: '+52 optional RAW endpoint X (else 0)'
+        doc: '+44 optional RAW endpoint X (else 0)'
       - id: end_y2
         type: s4
-        doc: '+56 optional RAW endpoint Y (else 0)'
+        doc: '+48 optional RAW endpoint Y (else 0)'
       - id: flag_fffe
         type: u4
-        doc: '+60 == 0x0000FFFE'
+        valid:
+          expr: '(_ & 0xffff) == 0xfffe'
+        doc: |
+          +52 modern endpoint-state word whose low half is 0xFFFE; its high
+          half retains controller flags. Legacy dialects use traversal state.
       - id: route_chain_state2
         type: s4
-        doc: '+64 route-chain controller state'
+        doc: '+56 route-chain controller state'
+      - id: endpoint_object_a
+        type: u4
+        doc: '+60 zero-based section-22 placement-object index for endpoint A; ordinal is the following topology head +0'
+      - id: endpoint_object_b
+        type: u4
+        doc: '+64 zero-based section-22 placement-object index for endpoint B; ordinal is the following topology head +4'
+
+  legacy_route_chain_record:
+    doc: |
+      v0x2017..v0x2022 connection edge. This is the same saved controller
+      field cycle as the modern record, rotated by sixteen bytes: the endpoint
+      objects and terminal ordinals occupy one record, rather than pairing the
+      objects with the following record's head. The marker and endpoint flag
+      validate all 10,011 declared legacy records in the scoped corpus.
+    seq:
+      - id: flag_fffe
+        type: u4
+        valid:
+          expr: '(_ & 0xffff) == 0xfffe'
+        doc: '+0 endpoint-state word; low half is the serialized 0xFFFE flag'
+      - id: route_chain_state2
+        type: s4
+        doc: '+4 route-chain controller state'
+      - id: endpoint_object_a
+        type: u4
+        doc: '+8 serialized placement-object identifier for endpoint A'
+      - id: endpoint_object_b
+        type: u4
+        doc: '+12 serialized placement-object identifier for endpoint B'
+      - id: ordinal_a
+        type: u4
+        doc: '+16 terminal ordinal on endpoint A'
+      - id: ordinal_b
+        type: u4
+        doc: '+20 terminal ordinal on endpoint B'
+      - id: topology_ref_a
+        type: s4
+        doc: '+24 first saved topology-expression input/link'
+      - id: topology_ref_b
+        type: s4
+        doc: '+28 second saved topology-expression input/link'
+      - id: topology_ref_c
+        type: s4
+        doc: '+32 saved topology-expression output/link'
+      - id: marker
+        type: u4
+        valid:
+          expr: '(_ & 0xffffffc0) == 0xfe000000'
+        doc: '+36 route-chain marker with low route flags'
+      - id: route_chain_state0
+        size: 12
+        doc: '+40..+51 topology-controller state'
+      - id: end_x1
+        type: s4
+        doc: '+52 optional RAW endpoint X, otherwise zero'
+      - id: end_y1
+        type: s4
+        doc: '+56 optional RAW endpoint Y, otherwise zero'
+      - id: end_x2
+        type: s4
+        doc: '+60 optional RAW endpoint X, otherwise zero'
+      - id: end_y2
+        type: s4
+        doc: '+64 optional RAW endpoint Y, otherwise zero'
 
   # =========================================================================
   # SECTIONS 25–29 — rotated route-object allocator tables
@@ -3511,9 +4599,27 @@ types:
       These are live controller words, not padding: the leading counters and
       flags vary with route-object population and retained allocator state.
     seq:
-      - id: controller_state_words
+      - id: controller_state_prefix
+        type: u4
+        repeat: expr
+        repeat-expr: 45
+        doc: retained global route/controller state through byte +179
+      - id: allocator20_page_count
+        type: u2
+        doc: '+180 number of section-26 descriptors for the runtime 20-byte allocator'
+      - id: allocator48_page_count
+        type: u2
+        doc: '+182 number of section-26 descriptors for the runtime 48-byte allocator'
+      - id: allocator88_page_count
+        type: u2
+        doc: '+184 number of section-26 descriptors for the runtime 88-byte allocator'
+      - id: allocator56_page_count
+        type: u2
+        doc: '+186 number of section-26 descriptors for the runtime 56-byte section-61 node allocator'
+      - id: controller_state_suffix
         type: u4
         repeat: eos
+        doc: retained route/controller state following the page-group counts
 
   route_object_range_array:
     seq:
@@ -3522,7 +4628,10 @@ types:
         repeat: eos
 
   route_object_range:
-    doc: 12-byte allocator range describing a span of route objects
+    doc: |
+      12-byte page descriptor. The loader reads `record_count * controller_stride`
+      bytes for this page. `allocation_begin` and `allocation_end` are saved RAM
+      addresses used only to rebuild the allocator; neither is a file offset.
     seq:
       - id: allocation_begin
         type: u4
@@ -3530,15 +4639,30 @@ types:
       - id: allocation_end
         type: u4
         doc: saved process address immediately after the allocator span
-      - id: range_state
+      - id: record_count
         type: u4
-        doc: small live-count/type state; observed range 0..0xFFFF
+        doc: exact number of serialized fixed-stride records in this page
+
+  page_descriptor_group:
+    params:
+      - id: num_descriptors
+        type: u4
+    seq:
+      - id: first
+        type: route_object_range
+      - id: remaining
+        type: 'page_descriptor_group(num_descriptors - 1)'
+        if: num_descriptors > 1
+    instances:
+      total_records:
+        value: '(first.record_count + (num_descriptors > 1 ? remaining.total_records : 0)).as<u4>'
+        doc: exact serialized record count summed from this controller's pages
 
   route_layer_object_count_array:
     doc: |
       One u32 route-object count per copper layer. The directory count is the
       number of copper layers (2, 4, 6, 8, 10, or 12 in this corpus), and the
-      sum of these values equals directory[29].count on all 90 files.
+      sum of these values equals directory[29].count on all 597 unique files.
     seq:
       - id: object_counts
         type: u4
@@ -3549,8 +4673,12 @@ types:
       Flat route-object handle vector. Handles are saved process addresses,
       commonly 8-byte aligned on the modern allocator and spaced on a 56-byte
       object grid. Partition the vector into copper-layer groups using the
-      section-27 counts. The former fixed 297-word template tail was a phase
-      error caused by reading at the raw, directory-overdeclared offset.
+      section-27 counts. Section 25's fourth page-group count identifies the
+      section-26 descriptor group for the 56-byte section-61 node allocator.
+      A handle's page and 56-byte ordinal identify its section-61 record without
+      searching. This direct relation resolves every nonzero section-29 handle
+      on all 597 corpus binaries. The former fixed 297-word template tail was a
+      phase error caused by reading at the raw, directory-overdeclared offset.
     seq:
       - id: object_handles
         type: u4
@@ -3558,14 +4686,95 @@ types:
         doc: saved route-object process address; never a file offset
 
   # =========================================================================
-  # SECTION 41 UNDECLARED PREFIX — design-rule controller page
+  # PAGED CONTROLLERS 41, 42, 45, 46, 47, 48
   # =========================================================================
-  # The section-41 directory entry is a presence/state flag, not this page's
-  # serialized length. The page begins at the nominal section-41 boundary. Its
-  # clearance framing is 48 + N*180 or 48 + N*188 bytes. Optional legacy
-  # layer-clearance and relationship records precede HIGH_SPEED_RULE. Compact
-  # per-layer matrices and ROUTE_RULE records follow; the surrounding stream
-  # supplies their counts before reaching the DIF_PAIR array and section 49.
+  # Each controller's directory total_bytes is its number of section-26 page
+  # descriptors. Each descriptor supplies the exact record count for one page.
+  # PADS writes page payloads in controller order 41,42,45,46,47,48.
+  section41_paged_controller:
+    seq:
+      - id: records
+        type:
+          switch-on: _root.version
+          cases:
+            0x2017: section41_clearance_record_v180
+            _: section41_clearance_record
+        repeat: expr
+        repeat-expr: '_root.section41_record_count'
+
+  section42_paged_controller:
+    seq:
+      - id: records
+        type: section41_high_speed_rule_record
+        repeat: expr
+        repeat-expr: '_root.section42_record_count'
+
+  section45_paged_controller:
+    seq:
+      - id: records
+        size: '_root.version == 0x2017 ? 116 : 124'
+        repeat: expr
+        repeat-expr: '_root.section45_record_count'
+        doc: fixed-stride layer-rule objects for this allocator page
+
+  section46_paged_controller:
+    seq:
+      - id: record_chain
+        type: 'section46_record_chain(_root.section46_record_count)'
+        if: _root.section46_record_count > 0
+    instances:
+      num_live:
+        value: '(_root.section46_record_count > 0 ? record_chain.num_live : 0).as<u4>'
+
+  section46_record_chain:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: record
+        type: section46_heap_record
+        if: num_records == 1
+      - id: left
+        type: 'section46_record_chain(num_records / 2)'
+        if: num_records > 1
+      - id: right
+        type: 'section46_record_chain(num_records - num_records / 2)'
+        if: num_records > 1
+    instances:
+      num_live:
+        value: '(num_records == 1 ? (record.saved_rule_handle < 0x80000000 and record.saved_via_type_set_handle != 0 ? 1 : 0) : left.num_live + right.num_live).as<u4>'
+
+  section46_heap_record:
+    doc: |
+      Route-rule heap slot. The source heap walker skips negative first words.
+      Its conversion callback also drops null saved via-type-set handles before
+      the tag-51 state reader walks the destination heap. The zero/zero slot in
+      add-on_14_05_05_15_06_12 is therefore retained source capacity, not live.
+    seq:
+      - id: saved_rule_handle
+        type: u4
+      - id: saved_via_type_set_handle
+        type: u4
+      - id: route_rule_fields
+        size: '_root.version <= 0x2019 ? 24 : 32'
+
+  section47_paged_controller:
+    seq:
+      - id: records
+        size: 24
+        repeat: expr
+        repeat-expr: '_root.section47_record_count'
+        doc: fixed-stride via-rule objects for this allocator page
+
+  section48_paged_controller:
+    seq:
+      - id: records
+        size: '_root.version <= 0x2019 ? 48 : (_root.version <= 0x2022 ? 856 : 864)'
+        repeat: expr
+        repeat-expr: '_root.section48_record_count'
+        doc: fixed-stride differential-pair rule objects for this allocator page
+
+  # Retained while downstream consumers migrate to the page-framed types above.
   section41_design_rule_stream:
     params:
       - id: num_clearance_records
@@ -3672,13 +4881,11 @@ types:
         doc: design-rule page controller state; zero in the common layout
 
   section41_clearance_record:
-    doc: >
-      188-byte clearance rule. The first 38 values are common. Word +160 is the
-      39th clearance value when nonnegative, or the first ownership-metadata word
-      when negative; DC2317A demonstrates the latter dialect. The remaining
-      24-byte metadata tail is common, so both layouts are reachable without an
-      impossible size-based switch between two 188-byte types.
+    doc: 188-byte clearance rule with a 12-byte selector/handle header, 38 values, and 24 bytes of state
     seq:
+      - id: layer_selector
+        type: u4
+        doc: zero for global rules; nonzero layer ordinal for layer-specific rules
       - id: saved_rule_handle
         type: u4
         doc: process-local rule relationship handle; never a file offset
@@ -3689,17 +4896,16 @@ types:
         type: s4
         repeat: expr
         repeat-expr: 38
-        doc: first 38 CLEARANCE_RULE values in ASCII declaration order and BASIC units
-      - id: final_value_or_metadata
-        type: s4
-        doc: nonnegative 39th clearance value, or negative first ownership-metadata word in the 38-value dialect
+        doc: CLEARANCE_RULE values in ASCII declaration order and BASIC units
       - id: rule_metadata_tail
         size: 24
         doc: common live rule ownership, width, and controller metadata; not padding
 
   section41_clearance_record_v180:
-    doc: 180-byte v0x2017/v0x2019 clearance rule with 39 values and a 16-byte ownership trailer
+    doc: 180-byte v0x2017/v0x2019 clearance rule with 38 values and a 16-byte ownership trailer
     seq:
+      - id: layer_selector
+        type: u4
       - id: saved_rule_handle
         type: u4
       - id: rule_state
@@ -3707,7 +4913,7 @@ types:
       - id: clearance_values
         type: s4
         repeat: expr
-        repeat-expr: 39
+        repeat-expr: 38
         doc: CLEARANCE_RULE values in BASIC units
       - id: rule_metadata
         size: 16
@@ -3861,8 +5067,10 @@ types:
         doc: legacy combined maximum-via/controller state word
 
   section41_diff_pair_record:
-    doc: 864-byte DIF_PAIR rule object; paired ASCII MAX_LENGTH, GAP, obstacle limits, and WIDTH match exactly
+    doc: 864-byte DIF_PAIR rule slot; active slots join member handles to section-23 nets
     seq:
+      - id: controller_state
+        size: 12
       - id: saved_member_handle_a
         type: u4
         doc: saved process-local relationship handle for the first member net
@@ -3875,32 +5083,90 @@ types:
       - id: rule_matrix
         type: f8
         repeat: expr
-        repeat-expr: 69
-        doc: diff-pair rule values; element 0 is MAX_LENGTH and element 1 is GAP in paired exports; -1.0 means inherit
-      - id: max_obstacle_size
+        repeat-expr: 70
+        doc: diff-pair rule values; element 0 is MAX_LENGTH, element 1 inherited GAP, and element 3 GAP override
+      - id: inherited_width
         type: s4
-        doc: ASCII MAX_OBSTACLE_SIZE
-      - id: max_obstacle_number
+      - id: width_state
         type: s4
-        doc: ASCII MAX_OBSTACLE_NUMBER
-      - id: width
+      - id: width_override
         type: s4
-        doc: ASCII WIDTH
       - id: retained_allocator_capacity
-        size: 268
+        size: 260
         doc: allocator capacity, mostly 0xff free bytes but sometimes retaining live rule values; never file padding
-      - id: ownership_handle
-        type: u4
-        doc: saved owner relationship handle
-      - id: ownership_state
-        type: u4
-      - id: object_reference_index
-        type: u4
-        doc: reference index in the owning design-rule object table
+
+  section48_diff_pair_record_array:
+    seq:
+      - id: records
+        type: section41_diff_pair_record
+        repeat: expr
+        repeat-expr: _root.section48_record_count
 
   # =========================================================================
   # SECTION 49 — route-object relationship stream
   # =========================================================================
+  section49_relationship_stream:
+    seq:
+      - id: signal_records
+        type: section49_signal_relationships
+        repeat: eos
+
+  section49_signal_relationships:
+    doc: |
+      Connectivity lists owned by one live section-23 signal/net object. Record
+      order is the live section-23 net order. Forward object IDs tagged 0x3c
+      name section-60 route-junction ordinals; their tagged 0x18 values name
+      section-24 route-chain ordinals. This declared graph assigns route
+      junctions to nets without geometry search.
+    seq:
+      - id: forward_relationships
+        type: section49_relationship_array(1)
+      - id: reverse_relationships
+        type: section49_relationship_array(0)
+
+  section46_route_rule_state_array:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: states
+        type: s4
+        repeat: expr
+        repeat-expr: num_records
+        doc: per-route-rule saved state; -2 marks an unassigned rule
+
+  section49_relationship_array:
+    params:
+      - id: is_forward
+        type: u1
+    seq:
+      - id: num_relationships
+        type: u4
+      - id: relationships
+        type: section49_relationship(is_forward)
+        repeat: expr
+        repeat-expr: num_relationships
+
+  section49_relationship:
+    params:
+      - id: is_forward
+        type: u1
+    seq:
+      - id: object_id
+        type: u4
+        valid:
+          expr: '(_ & 0xff000000) == (is_forward != 0 ? 0x3c000000 : 0x18000000) and (_ & 0x00ffffff) < (is_forward != 0 ? _root.directory[60].count : _root.directory[24].count)'
+        doc: saved tagged object identifier; 0x3c identifies a section-60 junction ordinal
+      - id: num_values
+        type: u4
+      - id: values
+        type: u4
+        valid:
+          expr: '(_ & 0xff000000) == (is_forward != 0 ? 0x18000000 : 0x3c000000) and (_ & 0x00ffffff) < (is_forward != 0 ? _root.directory[24].count : _root.directory[60].count)'
+        repeat: expr
+        repeat-expr: num_values
+        doc: saved tagged relationship members; 0x18 identifies section-24 route-chain ordinals
+
   # At the corrected late-section phase, every populated payload is a sequence
   # of four-byte storage words. The high byte tags a section-24 route-chain
   # ordinal (0x18), a section-60 route-junction ordinal (0x3c), a literal/count
@@ -4387,10 +5653,10 @@ types:
         type: u2
         doc: outline/name state bits; observed values distinguish POUROUT/HATOUT/VOIDOUT states
       - id: name
-        type: str
         size: 14
-        encoding: ASCII
-        doc: NUL-padded POR... or ANP... outline name
+        doc: |
+          Retained 14-byte outline-name storage. Live records contain NUL-padded
+          POR... or ANP... ASCII names; free/capacity records may retain arbitrary bytes.
       - id: outline_type
         type: u4
         doc: type enum in the high byte; 0x32 POUROUT, 0x33 HATOUT, 0x34 VOIDOUT, others related outline types
@@ -4447,11 +5713,87 @@ types:
         doc: ASC signed sweep angle
 
   # =========================================================================
-  # SECTION 59 — heap-object array overlaid on the string-pool tail
+  # SECTION 59 — circular route-style/header object array
   # =========================================================================
-  # Its first 32 bytes in the modern dialect, or first 16 bytes in the legacy
-  # dialect, overlay the final string-pool bytes. The remaining records end
-  # exactly at section 60.
+  sec59_route_header_ring:
+    params:
+      - id: num_records
+        type: u4
+      - id: record_stride
+        type: u4
+      - id: logical_phase
+        type: u4
+    doc: |
+      Circular record array. Logical record zero begins at physical +12 in
+      v0x2024, +4 in v0x2025 and later, and +16 through v0x2022. These phases
+      follow directly from the versioned serialized class layout.
+    seq:
+      - id: final_record_tail
+        size: logical_phase
+      - id: complete_records
+        type:
+          switch-on: _root.version
+          cases:
+            0x2024: sec59_route_header_v2024
+            0x2025: sec59_route_header_modern
+            0x2026: sec59_route_header_modern
+            0x2027: sec59_route_header_modern
+            _: sec59_route_header_legacy
+        repeat: expr
+        repeat-expr: num_records - 1
+      - id: final_record_head
+        size: record_stride - logical_phase
+
+  sec59_route_header_modern:
+    seq:
+      - id: self_handle
+        type: u4
+      - id: link_handle
+        type: u4
+      - id: class_tag
+        type: u4
+        doc: 0x2001 route style/header; other values are allocator object classes
+      - id: half_width
+        type: s4
+      - id: layer_index
+        type: u4
+      - id: relationship_state
+        type: u4
+      - id: flags
+        type: u4
+      - id: trailing_state
+        type: u4
+
+  sec59_route_header_v2024:
+    seq:
+      - id: class_tag
+        type: u4
+      - id: half_width
+        type: s4
+      - id: layer_index
+        type: u4
+      - id: relationship_state
+        type: u4
+      - id: flags
+        type: u4
+      - id: trailing_state
+        size: 12
+
+  sec59_route_header_legacy:
+    seq:
+      - id: half_width
+        type: s4
+      - id: layer_index
+        type: u4
+      - id: relationship_state
+        type: u4
+      - id: node_a_handle
+        type: u4
+      - id: node_b_handle
+        type: u4
+      - id: flags
+        type: u4
+
   sections59_64_stream:
     params:
       - id: num_heap_objects
@@ -4482,22 +5824,28 @@ types:
             32: sec59_heap_obj_v32
         repeat: expr
         repeat-expr: num_heap_objects
+        if: num_heap_objects > 0
       - id: route_junctions
         type: 'sec60_route_junction_ring(num_route_junctions, route_junction_stride)'
+        if: num_route_junctions > 0
       - id: object_handles
         type: sec61_object_handle
         repeat: expr
         repeat-expr: num_object_handles
+        if: num_object_handles > 0
       - id: route_objects
         type: 'sec62_route_object_ring(num_route_objects, route_object_stride)'
+        if: num_route_objects > 0
       - id: route_layers
         type: sec63_route_layer
         repeat: expr
         repeat-expr: num_route_layers
+        if: num_route_layers > 0
       - id: route_cells
         type: sec64_route_coord_pool
         repeat: expr
         repeat-expr: num_route_cells
+        if: num_route_cells > 0
 
   sec59_heap_obj_v32:
     doc: modern 32-byte heap-object record; no board geometry
@@ -4541,23 +5889,24 @@ types:
   # =========================================================================
   # SECTION 60 — route-junction records
   # =========================================================================
-  # The physical section is the logical record array rotated left by one byte:
-  # physical byte zero is logical byte one, and the physical final byte closes
-  # logical record zero. The field grid therefore starts one byte before the
-  # physical range. Both dialects share
-  # tail-relative fields: X=stride-31, Y=stride-27, via definition=stride-7,
-  # type=stride-4, and net index=stride-3.
+  # The physical section begins at logical record zero's X field: byte 33 in
+  # modern 64-byte records and byte 17 in legacy 48-byte records. The prefix
+  # before X is rotated to the physical end. Both dialects share
+  # tail-relative fields: X=stride-31, Y=stride-27, section-29 route-object
+  # handle=stride-23, via definition=stride-7, type=stride-4, and net
+  # index=stride-3. Head bytes +1/+2 carry the previous logical junction's
+  # route-transition layers; mask each with 0x1f because bit 0x20 is saved state.
   sec60_route_junction_ring:
     params:
       - id: num_records
         type: u4
       - id: record_stride
         type: u4
-    doc: one-byte-left-rotated physical storage for the logical junction records
+    doc: X-field-left-rotated physical storage for the logical junction records
     seq:
       - id: first_record_tail
-        size: record_stride - 1
-        doc: logical record zero bytes 1 through record_stride-1
+        type: sec60_route_junction_tail
+        doc: logical record zero from X through its final byte
       - id: subsequent_records
         type:
           switch-on: record_stride
@@ -4567,23 +5916,95 @@ types:
         repeat: expr
         repeat-expr: num_records - 1
       - id: first_record_head
+        type:
+          switch-on: record_stride
+          cases:
+            64: sec60_route_junction_head_v33
+            48: sec60_route_junction_head_v17
+        doc: logical record zero state preceding X, rotated to the physical end
+
+  sec60_route_junction_head_v33:
+    seq:
+      - id: previous_junction_class_state
         type: u1
-        doc: logical record zero byte 0, rotated to the physical end
+        doc: 0x17 for a preceding 0x0e junction that carries a physical via
+      - id: previous_transition_start_layer_raw
+        type: u1
+        doc: previous logical junction's routed start layer in low five bits; bit 0x02 marks a physical via and bit 0x20 is saved state
+      - id: previous_transition_end_layer_raw
+        type: u1
+        doc: previous logical junction's routed end layer in low five bits; bit 0x20 is saved state
+      - id: previous_transition_flags
+        type: u1
+      - id: object_link_state
+        size: 29
+        doc: saved junction object links, allocator handles, and state preceding coordinates
+    instances:
+      previous_carries_physical_via:
+        value: 'previous_junction_class_state == 0x17 and (previous_transition_start_layer_raw & 0x02) != 0'
+        doc: distinguishes a physical via from other 0x0e layer-transition junctions
+
+  sec60_route_junction_head_v17:
+    seq:
+      - id: previous_junction_class_state
+        type: u1
+      - id: previous_transition_start_layer_raw
+        type: u1
+      - id: previous_transition_end_layer_raw
+        type: u1
+      - id: previous_transition_flags
+        type: u1
+      - id: object_link_state
+        size: 13
+    instances:
+      previous_carries_physical_via:
+        value: 'previous_junction_class_state == 0x17 and (previous_transition_start_layer_raw & 0x02) != 0'
+
+  sec60_route_junction_tail:
+    doc: common final 31 bytes of a legacy or modern route-junction record
+    seq:
+      - id: x_raw
+        type: s4
+      - id: y_raw
+        type: s4
+      - id: route_object_handle
+        type: u4
+        doc: nonzero value joins section 29 and its section-27 layer group
+      - id: relationship_state
+        size: 12
+      - id: via_definition_index
+        type: u1
+      - id: pre_type_state
+        type: u2
+      - id: junction_type
+        type: u1
+      - id: net_index
+        type: u2
+      - id: trailing_state
+        type: u1
 
   sec60_route_junction_v64:
     doc: modern 64-byte route-junction/via record
     seq:
       - id: object_state
-        size: 33
-        doc: serialized object handles, links and state before the coordinates
+        type: sec60_route_junction_head_v33
+        doc: serialized object handles, links, and the preceding junction's route transition
       - id: x_raw
         type: s4
         doc: RAW X coordinate
       - id: y_raw
         type: s4
         doc: RAW Y coordinate
+      - id: route_object_handle
+        type: u4
+        doc: |
+          Saved route-object handle. Zero means no layer object; every nonzero
+          value is present in section 29. Section-27 group counts therefore
+          assign this junction's copper layer directly. This join holds for all
+          154,405 nonzero values in 327,291 section-60 records across the 597
+          unique corpus binaries, including v0x2017 and v0x2019.
       - id: relationship_state
-        size: 16
+        size: 12
         doc: route-chain links and role flags
       - id: via_definition_index
         type: u1
@@ -4601,13 +6022,16 @@ types:
     doc: legacy 48-byte route-junction/via record
     seq:
       - id: object_state
-        size: 17
+        type: sec60_route_junction_head_v17
       - id: x_raw
         type: s4
       - id: y_raw
         type: s4
+      - id: route_object_handle
+        type: u4
+        doc: nonzero value joins section 29 and its section-27 layer group
       - id: relationship_state
-        size: 16
+        size: 12
       - id: via_definition_index
         type: u1
       - id: pre_type_state
@@ -4625,13 +6049,25 @@ types:
   # Direct 12-byte records. The old 64-byte logical framing was a false phase
   # imposed by the accumulated directory offset.
   sec61_object_handle:
-    doc: 12-byte route object-handle / bookkeeping record; no geometry
+    doc: |
+      12-byte route allocator node. Its own handle is implicit from its page in
+      section61_allocator_page_descriptors and its 56-byte page ordinal;
+      section-29 stores those handles in per-layer groups, with zero representing
+      a null allocator handle. The first two words are saved graph links and the
+      third is an object-class tag; no geometry is stored here. For a route-object
+      node, walking incoming references breadth-first to the first depth containing
+      section-60 junction handles yields that object's section-49 signal; multiple
+      signals at that depth are corrupt. Bit 0x00800000 selects the single node that introduces each
+      section-62 route object. Walking section-29 by the section-27 per-layer
+      counts and selecting this bit produces exactly section-62.count nodes on
+      every corpus file. That sequence assigns route layers to section-62's
+      cell-consumption order [last object, object 0, ..., object n-2].
     seq:
-      - id: state
+      - id: previous_handle
         type: u4
-      - id: object_handle
+      - id: next_handle
         type: u4
-      - id: relationship_handle
+      - id: class_tag
         type: u4
 
   # =========================================================================
@@ -4639,7 +6075,7 @@ types:
   # =========================================================================
   # The section is a ring rotated left by 32 physical bytes: physical +0 is the
   # final record's 32-byte tail, logical record 0 starts at physical +32, and the
-  # final record's head closes the section. Modern logical records are 48 bytes;
+  # final record's remaining head closes the section. Modern logical records are 48 bytes;
   # legacy records are 36. width = quarter_width*4.
   sec62_route_object_v48:
     seq:
@@ -4661,18 +6097,22 @@ types:
       - id: quarter_width
         type: s4
         doc: '+20 route_width = quarter_width * 4, BASIC'
-      - id: y_raw
+      - id: bound_lo
         type: s4
-        doc: '+24 endpoint Y (RAW; not a routed vertex)'
-      - id: x_raw
+        doc: '+24 cached low variable-axis bound of the complete route/jumper/via object'
+      - id: bound_hi
         type: s4
-        doc: '+28 endpoint X (RAW; not a routed vertex)'
+        doc: '+28 cached high variable-axis bound of the complete route/jumper/via object'
       - id: flags
         type: u4
-        doc: '+32 object flag bits (THERMAL/TEARDROP family)'
-      - id: type_enum
-        type: s4
-        doc: '+36 small bounded enum (1..~12)'
+        doc: |
+          +32 PADS ROUTE flags. Bit 0x100 is the serialized jumper-object bit and
+          bit 0x1000 is the via/special-object bit used by the flat reader and
+          ASCII ROUTE writer. Remaining bits preserve thermal, teardrop, and
+          routing state. Ordinary routed copper has both class bits clear.
+      - id: cell_count
+        type: u4
+        doc: '+36 exact number of section-64 cells owned by this object'
       - id: ptr_b
         type: u4
         doc: '+40 pointer, usually 0'
@@ -4691,10 +6131,15 @@ types:
         doc: route_width = quarter_width * 4, BASIC
       - id: bound_lo
         type: s4
+        doc: cached low variable-axis bound of the complete route/jumper/via object
       - id: bound_hi
         type: s4
+        doc: cached high variable-axis bound of the complete route/jumper/via object
       - id: style
         type: u4
+        doc: |
+          PADS ROUTE flags; 0x100 selects a jumper object and 0x1000 selects a
+          via/special object. Ordinary routed copper has both class bits clear.
       - id: cell_count
         type: u4
       - id: relationship_handle
@@ -4712,7 +6157,7 @@ types:
     doc: 32-byte-left-rotated physical section-62 record ring
     seq:
       - id: final_record_tail
-        size: record_stride - 32
+        size: 32
       - id: preceding_records
         type:
           switch-on: record_stride
@@ -4722,7 +6167,7 @@ types:
         repeat: expr
         repeat-expr: num_records - 1
       - id: final_record_head
-        size: 32
+        size: record_stride - 32
 
   sec63_route_layer:
     doc: serialized route-layer ordinal; the array is a permutation of active layer indices
@@ -4733,69 +6178,85 @@ types:
   # =========================================================================
   # SECTION 64 — route coordinate pool
   # =========================================================================
-  # Direct 12-byte compressed route cells. The three coordinates encode two
-  # points sharing one axis: (x1,y)-(x2,y), or the transposed form selected for
-  # the file. Section-62 cell_count values sum to section64.count.
+  # Direct 12-byte geometry cells. For an ordinary section-62 route object, the
+  # three values encode two points sharing one axis. The per-layer section-69
+  # routing direction selects their order: V stores direct
+  # (first_major,shared_minor)=(X,Y); H and NO_PREFERENCE store the transposed
+  # form. Jumper (flags&0x100) and via/special (flags&0x1000) objects use their
+  # owned cells for auxiliary object geometry/state instead of routed-copper
+  # polylines. An ordinary object whose only cell has identical first/second
+  # major values is a retained route endpoint, not a copper segment. Section-62
+  # cell_count values partition this pool exactly.
   sec64_route_coord_pool:
     seq:
-      - id: first_major
+      - id: first_major_or_aux_word0
         type: s4
-      - id: shared_minor
+      - id: shared_minor_or_aux_word1
         type: s4
-      - id: second_major
+      - id: second_major_or_aux_word2
         type: s4
 
-  section65_66_saved_controller_v16:
-    doc: legacy optional rule/class archive controller; four saved process-local links
-    seq:
-      - id: saved_links
-        type: u4
-        repeat: expr
-        repeat-expr: 4
-
-  section65_66_saved_controller_v32:
-    doc: modern optional rule/class archive controller; eight saved process-local links
-    seq:
-      - id: saved_links
-        type: u4
-        repeat: expr
-        repeat-expr: 8
-
-  section65_66_saved_relationship_link:
+  section65_saved_group_record:
     doc: |
-      Eight saved process-local links associated with one section-67 design-rule
-      relationship. The sole scoped file using this dialect has exactly one
-      32-byte link record per section-67 relationship. These values are runtime
-      pointers/handles, never file offsets or geometry.
+      28-byte saved GROUP object. Tag-65 contains 34 records in 33 unique corpus
+      files. All 28 records with paired exports reproduce the ASCII GROUP DATA
+      names exactly; observed names include BUS_H, DDR3_ADDR_CTRL1/2, Group1, and
+      OUT. The first three words retain the
+      group's process-local list state. The final 16-byte fixed-capacity string
+      stores the NUL-terminated group name; bytes after the terminator are retained
+      string-slot state, not file padding. The OUT records demonstrate this: their
+      tail retains three 0x00037cf8 words while the active name remains OUT.
     seq:
-      - id: saved_links
-        type: u4
-        repeat: expr
-        repeat-expr: 8
-
-  section65_66_compact_net_class:
-    doc: 28-byte compact named-class object used by the two RFE_EYEBROW files
-    seq:
-      - id: cleared_state
+      - id: saved_group_state
         type: u4
         valid: 0
-        repeat: expr
-        repeat-expr: 3
-      - id: name
+        doc: serialized group controller state; zero on every corpus record
+      - id: saved_member_head_handle
+        type: u4
+        doc: process-local group member-list head; null when no saved list is retained
+      - id: saved_member_tail_handle
+        type: u4
+        doc: process-local group member-list tail; null when no saved list is retained
+      - id: name_storage
         type: strz
         encoding: ASCII
         size: 16
+        doc: active GROUP name followed by retained fixed-slot capacity
+
+  section65_66_compact_net_class:
+    doc: |
+      28-byte saved-class object used through v0x2022. SI5338-EVB proves the
+      fixed eight-byte name and saved class handle: its 40 section-23 members
+      reference this handle at legacy net-record +84, and section-67 clearance
+      relationships reference the same handle on layers 1, 3, and 6.
+    seq:
+      - id: class_state
+        type: u4
+      - id: saved_class_handle
+        type: u4
+      - id: name
+        type: str
+        encoding: ASCII
+        size: 8
+      - id: saved_previous_handle
+        type: u4
+      - id: saved_next_handle
+        type: u4
+      - id: retained_state
+        type: u4
 
   section65_66_net_class:
     doc: |
       280-byte saved net-class object. Present only when directory section 66's
-      one-byte in-memory-presence value is set. All 60 scoped records have an
-      inline 48-byte name and cleared retained membership capacity. The final
-      two words remain live controller state and are not padding.
+      page descriptors retain records. All 148 modern corpus records have an
+      inline 48-byte name. The 216-byte object body retains membership/rule-list
+      capacity: most words are zero, while four records retain live handles or
+      rule values. The final two words are serialized controller state, not
+      padding; the last word is zero on 14 records and 0x80000000 on 134.
     seq:
       - id: class_flags
         type: u4
-        doc: zero or 0x40000000 in the scoped corpus
+        doc: zero, 0x40000000, or 0x80000000 in the corpus
       - id: saved_class_handle
         type: u4
         doc: process-local net-class object handle; null on the terminal class in the MMSP pair
@@ -4803,48 +6264,16 @@ types:
         type: strz
         encoding: ASCII
         size: 48
-      - id: cleared_membership_capacity
+      - id: retained_membership_and_rule_state
         type: u4
-        valid: 0
         repeat: expr
         repeat-expr: 54
-        doc: retained member-link capacity, cleared on every scoped record
+        doc: saved member-list and rule-object capacity; zero where no state is retained
       - id: saved_controller_handle
         type: u4
       - id: controller_state
         type: u4
-        valid: 0x80000000
-
-  section65_66_archive:
-    params:
-      - id: controller_size
-        type: u4
-      - id: num_saved_relationship_links
-        type: u4
-      - id: num_compact_net_classes
-        type: u4
-      - id: num_net_classes
-        type: u4
-    doc: complete optional section-65/66 saved rule/class archive
-    seq:
-      - id: controller
-        type:
-          switch-on: controller_size
-          cases:
-            16: section65_66_saved_controller_v16
-            32: section65_66_saved_controller_v32
-      - id: saved_relationship_links
-        type: section65_66_saved_relationship_link
-        repeat: expr
-        repeat-expr: num_saved_relationship_links
-      - id: compact_net_classes
-        type: section65_66_compact_net_class
-        repeat: expr
-        repeat-expr: num_compact_net_classes
-      - id: net_classes
-        type: section65_66_net_class
-        repeat: expr
-        repeat-expr: num_net_classes
+        doc: zero or 0x80000000 serialized object state
 
   # =========================================================================
   # SECTION 67 — design-rule relationship graph
@@ -4852,7 +6281,7 @@ types:
   # Physical storage rotates the logical relationship record right by one u32:
   # rule_kind is written first, followed by the saved relationship handle, two
   # scope type/reference pairs, and layer/state. This layout validates every
-  # section-67 record in all 90 scoped files; the former seven-coordinate
+  # section-67 record in all 597 unique corpus files; the former seven-coordinate
   # interpretation was a phase error.
   sec67_design_rule_relationship:
     seq:
@@ -4864,7 +6293,9 @@ types:
         doc: saved process-local relationship handle
       - id: scope_a_type
         type: u4
-        doc: first scope type (default, NET, NET_CLASS, or saved class dialect)
+        doc: |
+          first scope enum; observed values are 3 default, 0x17/0x18 object scopes,
+          0x41 saved-class dialect, 0x42 net class, and 0x4a extended object scope
       - id: scope_a_reference
         type: u4
         doc: first saved scope reference; 0x03000000 sentinel for default scope
@@ -4914,8 +6345,10 @@ types:
   # and by their exact corpus framing.
   # STACKUP SOURCE: layer_thickness@+52 and copper_thickness@+56 are BASIC units;
   # dielectric f4@+60 is the dielectric constant.
-  # usage@+148==1 marks an active copper layer (count == .asc MAXIMUMLAYER). Locate the
-  # 31-record array by the inline string "(All layers)", NOT directory data_offset.
+  # The board-setup MAXIMUMLAYER field gives the active copper-record count after
+  # the aggregate record. Retained records beyond that count can keep nonzero
+  # copper thicknesses. The array starts 12 bytes after section 69's direct
+  # physical controller boundary.
   sec69_layer_record:
     params:
       - id: num_colors_misc
@@ -4923,11 +6356,8 @@ types:
     doc: version-sized layer definition + physical stackup + display-color record
     seq:
       - id: name
-        type: str
         size: 24
-        encoding: ASCII
-        terminator: 0
-        doc: '+0 layer name ("(All layers)","Top","Solder Mask Top",...); AEA-001 has zeroed initial L bytes in its Layer_N names but retains the same field and stride'
+        doc: '+0 NUL-padded layer name in live records; final retained-capacity records can contain arbitrary bytes'
       - id: layer_state0
         type: s4
         doc: '+24 layer-controller state; normally zero'
@@ -4936,7 +6366,11 @@ types:
         doc: '+28 layer-controller state; normally zero'
       - id: routing_dir
         type: s4
-        doc: '+32 ROUTING_DIRECTION 0=H 1=V 2=NO_PREFERENCE'
+        doc: |
+          +32 ROUTING_DIRECTION: 0=H, 1=V, 2=NO_PREFERENCE, 3=45, 4=-45. Section-64
+          route cells on this layer use (shared_minor, first_major/second_major)
+          as (X,Y) for H/NO_PREFERENCE/45/-45 and
+          (first_major/second_major, shared_minor) for V.
       - id: assoc_silk
         type: s4
         doc: '+36 ASSOCIATED_SILK_SCREEN doc-layer # (-1 none)'
@@ -4986,24 +6420,43 @@ types:
         doc: remaining per-element display colors; 6 slots through v0x2021, 8 in v0x2022, 12 from v0x2024
       - id: flags
         type: s4
-        doc: '+140 packed attribute bitfield (bits0-2 routable/visible/selectable)'
+        doc: '+116 through v0x2021, +124 in v0x2022, +140 thereafter; packed attribute bitfield (bits0-2 routable/visible/selectable)'
       - id: layer_state2
         type: s4
-        doc: '+144 layer-controller state; final record may retain allocator contents'
-      - id: usage
+        doc: '+120 through v0x2021, +128 in v0x2022, +144 thereafter; layer-controller state; final record may retain allocator contents'
+      - id: next_layer_type
         type: s4
-        doc: '+148 1=routing-used(==MAXIMUMLAYER), 0=unused/drill, 2..6=doc subtype'
+        enum: layer_type
+        doc: |
+          +124 through v0x2021, +132 in v0x2022, +148 thereafter. Final word is
+          the following record's ASCII LAYER_TYPE: 0=UNASSIGNED,
+          1=ROUTING, 2=DRILL, 3=SILK_SCREEN, 4=PASTE_MASK, 5=SOLDER_MASK,
+          6=ASSEMBLY. The final physical record has no successor, so this word is
+          retained carrier state. Verified against paired exports for DC607A,
+          Ems4_Rev2, and MC4_PLUS_CSHAPE; the one-record lag reproduces every
+          layer type, including customized layer numbering.
 
   sec69_layer_record_array:
     params:
       - id: num_colors_misc
         type: u4
+      - id: num_records
+        type: u4
     seq:
       - id: records
         type: 'sec69_layer_record(num_colors_misc)'
-        repeat: eos
+        repeat: expr
+        repeat-expr: num_records
 
 enums:
+  layer_type:
+    0: unassigned
+    1: routing
+    2: drill
+    3: silk_screen
+    4: paste_mask
+    5: solder_mask
+    6: assembly
   pad_shape:
     0: of    # oblong / oval finger
     1: rf    # rectangular finger

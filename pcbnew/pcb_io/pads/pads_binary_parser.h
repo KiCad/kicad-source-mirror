@@ -45,33 +45,33 @@ namespace PADS_IO
  */
 enum class SECTION : int
 {
-    BoardSetup     = 1,    // view-state / origin header
-    PadStacks      = 4,    // padstack definitions (64 B/rec)
-    PadShapes      = 5,    // per-padstack pad-shape layer table
-    FreeText       = 8,    // free-text / label table + string pool
-    StringPool     = 9,    // string-pool tail + DRW array head
-    DrwItems       = 10,   // LINES/DRW drawing-object array (112 B)
-    GraphicPieces  = 11,   // graphic-piece header + inline outline coords (20 B)
-    Vertices       = 12,   // graphic-piece vertex pool (12 B)
-    DecalLibrary   = 13,   // per-decal block table + trailing library padstack-index table
-    DecalHeader    = 14,   // PARTDECAL definition table (112 B)
-    TerminalPool   = 15,   // decal terminal position table (36 B)
-    ParttypeDefs   = 17,   // parttype/footprint defs (224 B)
-    PartPins       = 19,   // PARTTYPE pin-definition table (88 B)
-    Placements     = 22,   // part placements (112 B)
-    Nets           = 23,   // net records (424 B)
-    Connections    = 24,   // pin-pair topology records (68 B)
-    ClearanceRules = 49,   // clearance/design-rule heap
-    PourTokensA    = 52,   // pour-relation token streams
-    PourTokensB    = 53,
-    PourTokensC    = 54,
-    PourTokensD    = 55,   // pour arc records (16 B)
-    Vias           = 60,   // route-junction / via records (64 B)
+    BoardSetup = 1,      // view-state / origin header
+    PadStacks = 4,       // padstack definitions (64 B/rec)
+    PadShapes = 5,       // per-padstack pad-shape layer table
+    FreeText = 8,        // free-text / label table + string pool
+    StringPool = 9,      // string-pool tail + DRW array head
+    DrwItems = 10,       // LINES/DRW drawing-object array (112 B)
+    GraphicPieces = 11,  // graphic-piece header + inline outline coords (20 B)
+    Vertices = 12,       // graphic-piece vertex pool (12 B)
+    DecalLibrary = 13,   // per-decal block table + trailing library padstack-index table
+    DecalHeader = 14,    // PARTDECAL definition table (112 B)
+    TerminalPool = 15,   // decal terminal position table (36 B)
+    ParttypeDefs = 17,   // parttype/footprint defs (224 B)
+    PartPins = 19,       // PARTTYPE pin-definition table (88 B)
+    Placements = 22,     // part placements (112 B)
+    Nets = 23,           // net records (424 B)
+    Connections = 24,    // pin-pair topology records (68 B)
+    ClearanceRules = 49, // clearance/design-rule heap
+    PourTokensA = 52,    // pour-relation token streams
+    PourTokensB = 53,
+    PourTokensC = 54,
+    PourTokensD = 55,  // pour arc records (16 B)
+    Vias = 60,         // route-junction / via records (64 B)
     RouteObjects = 62, // routed-subpath descriptors (48 B)
     RouteLayers = 63,  // active copper-layer ordinals (2 B)
     RouteCells = 64,   // routed-subpath point cells (12 B)
-    Clusters       = 68,   // part-cluster (*CLUSTER*) controller (60 B/rec)
-    LayerTable     = 69,   // ODBLayer physical-stackup table (152 B/rec)
+    Clusters = 68,     // part-cluster (*CLUSTER*) controller (60 B/rec)
+    LayerTable = 69,   // ODBLayer physical-stackup table (152 B/rec)
 };
 
 /**
@@ -85,15 +85,15 @@ struct BIN_NET_CLASS_DEF
 {
     std::string              name;
     std::vector<std::string> nets;
-    std::vector<int>         ruleLayers;  // layers carrying a clearance rule (0 = all layers)
+    std::vector<int>         ruleLayers; // layers carrying a clearance rule (0 = all layers)
 
     // Per-class rule values, positionally joined to the type-66 clearance edge by declaration
     // order. All in BASIC units. hasRuleValues is false when the value and edge counts disagree.
-    int  clearance     = 0;
-    int  trackWidth    = 0;
+    int  clearance = 0;
+    int  trackWidth = 0;
     int  minTrackWidth = 0;
     int  maxTrackWidth = 0;
-    int  viaClearance  = 0;
+    int  viaClearance = 0;
     bool hasRuleValues = false;
 };
 
@@ -106,25 +106,12 @@ struct ARC_VERTEX
     int32_t attr = 0;
 };
 
-/// One DRW drawing-item bbox, made origin-relative, used to match a board-outline vertex run.
-struct ARC_DRAWING_ITEM
-{
-    int32_t originX = 0;
-    int32_t originY = 0;
-    int64_t localMinX = 0;
-    int64_t localMinY = 0;
-    int64_t localMaxX = 0;
-    int64_t localMaxY = 0;
-    int64_t span = 0;
-    bool    preferred = false;
-};
-
 /// One type-66 net-class rule edge: its owner pointer, rule-detail page, full rule pointer
 /// (declaration order within a page), layer and file offset.
 struct NET_CLASS_RULE_EDGE
 {
     uint32_t owner = 0;
-    uint32_t page = 0;
+    uint32_t ruleKind = 0;
     uint32_t rulePtr = 0;
     int      layer = 0;
     size_t   off = 0;
@@ -139,7 +126,7 @@ struct NET_CLASS_RULE_EDGE
 struct PART_CLUSTER
 {
     std::string name;
-    int         id = 0;   // 1-based ordinal; equals the sec22 +108 CLSTID reference
+    int         id = 0; // 1-based ordinal; equals the sec22 +108 CLSTID reference
 };
 
 /**
@@ -172,36 +159,35 @@ public:
      */
     static bool IsBinaryPadsFile( const wxString& aFileName );
 
-    const PARAMETERS& GetParameters() const { return m_parameters; }
-    const std::vector<PART>& GetParts() const { return m_parts; }
-    const std::vector<NET>& GetNets() const { return m_nets; }
-    const std::vector<BIN_NET_CLASS_DEF>& GetNetClasses() const { return m_netClasses; }
-    const std::vector<DIFF_PAIR_DEF>& GetDiffPairs() const { return m_diffPairs; }
-    const std::vector<ROUTE>& GetRoutes() const { return m_routes; }
-    const std::vector<TEXT>& GetTexts() const { return m_texts; }
-    const std::vector<POUR>& GetPours() const { return m_pours; }
-    const std::vector<KEEPOUT>& GetKeepouts() const { return m_keepouts; }
-    const std::vector<COPPER_SHAPE>& GetCopperShapes() const { return m_copper_shapes; }
-    const std::vector<DIMENSION>& GetDimensions() const { return m_dimensions; }
-    const std::vector<POLYLINE>& GetBoardOutlines() const { return m_boardOutlines; }
+    const PARAMETERS&                        GetParameters() const { return m_parameters; }
+
+    const std::vector<PART>&                 GetParts() const { return m_parts; }
+    const std::vector<NET>&                  GetNets() const { return m_nets; }
+    const std::vector<BIN_NET_CLASS_DEF>&    GetNetClasses() const { return m_netClasses; }
+    const std::vector<DIFF_PAIR_DEF>&        GetDiffPairs() const { return m_diffPairs; }
+    const std::vector<ROUTE>&                GetRoutes() const { return m_routes; }
+    const std::vector<TEXT>&                 GetTexts() const { return m_texts; }
+    const std::vector<POUR>&                 GetPours() const { return m_pours; }
+    const std::vector<KEEPOUT>&              GetKeepouts() const { return m_keepouts; }
+    const std::vector<COPPER_SHAPE>&         GetCopperShapes() const { return m_copper_shapes; }
+    const std::vector<GRAPHIC_LINE>&         GetGraphicLines() const { return m_graphicLines; }
+    const std::vector<DIMENSION>&            GetDimensions() const { return m_dimensions; }
+    const std::vector<POLYLINE>&             GetBoardOutlines() const { return m_boardOutlines; }
     const std::map<std::string, PART_DECAL>& GetPartDecals() const { return m_decals; }
 
     // Part clusters and the per-part membership map. The membership key is an index into
     // GetParts(); the value is the 1-based CLSTID, which equals the GetClusters() ordinal.
     const std::vector<PART_CLUSTER>& GetClusters() const { return m_clusters; }
-    const std::map<size_t, int>& GetPartClusterIds() const { return m_partClusterId; }
+    const std::map<size_t, int>&     GetPartClusterIds() const { return m_partClusterId; }
 
-    int GetLayerCount() const { return m_parameters.layer_count; }
+    int      GetLayerCount() const { return m_parameters.layer_count; }
     uint16_t GetVersion() const { return m_version; }
-    bool IsBasicUnits() const { return true; }
-
-    double GetDefaultViaSize() const { return m_defaultViaSize; }
-    double GetDefaultViaDrill() const { return m_defaultViaDrill; }
+    bool     IsBasicUnits() const { return true; }
 
     std::vector<LAYER_INFO> GetLayerInfos() const;
 
     int32_t GetSec12BaseForTest() const { return m_sec12Base; }
-
+    size_t  GetNetConnectionEndpointCountForTest() const { return m_netConnectionEndpoints.size(); }
     std::set<std::string> GetPadStackShapesForTest() const
     {
         std::set<std::string> shapes;
@@ -220,40 +206,18 @@ public:
         return fetchOwnerLoop( aName, 200, aOut );
     }
 
-    /**
-     * Number of objects or sections located by byte-pattern scanning rather than by a
-     * deterministic offset derived from the section directory during the last Parse().
-     * Zero means the decode was fully structural. Mirrors DipTrace's
-     * PCB_PARSER::ScanLocatorUseCount().
-     *
-     * The container rules that let a scan be retired are in pads_binary.ksy; the ones
-     * still counted here are the sections whose written length is not yet derived.
-     */
-    int ScanLocatorUseCount() const { return m_scanLocatorUses; }
-
-    void NoteScanLocatorUse( const char* aWhich ) const
-    {
-        ++m_scanLocatorUses;
-
-        if( getenv( "KICAD_PADS_SECBASE" ) )
-            fprintf( stderr, "SCANLOC %s\n", aWhich );
-    }
-
 private:
-    static constexpr int32_t  ANGLE_SCALE = 1800000;
+    static constexpr int32_t ANGLE_SCALE = 1800000;
 
     bool isOldFormat() const { return m_sdb.IsOldFormat(); }
 
-    /// End of section 57's string pool, or 0 if it cannot be identified.
-    size_t locateStringPool() const;
-
-    /// Base of section 69's layer records, or 0 if it cannot be trusted.
-    size_t locateLayerStackupBase() const;
+    /// Base of section 69's layer records after its fixed controller lead-in.
+    size_t layerStackupBase() const;
 
     // Both old dialects resolve a placement's decal via a direct index in the next physical
     // record rather than through a parttype-definition table (v0x2022 does have such a table,
     // but placements don't reference it); only the field's offset within that record differs.
-    bool usesDirectDecalChain() const { return m_version == 0x2021 || m_version == 0x2022; }
+    bool usesDirectDecalChain() const { return m_version <= 0x2022; }
 
     // The SECTION overload forwards to the int form so a constant section reads by role; the
     // int form serves callers that iterate a computed directory index.
@@ -262,11 +226,7 @@ private:
 
     void parseBoardSetup();
     void parsePartPlacements();
-    void recoverOmittedPlacements();
 
-    // Old-format (v0x2017-2022) omitted-placement recovery via a bounded 0xFEFF section scan;
-    // the scored new-format locator does not resolve the v2021 decal-index lag.
-    void recoverOmittedPlacementsOld();
 
     // Build a PART from a placement record's refdes and its coordinate, rotation and side fields.
     PART makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff, int aAngleOff, int aNameOff,
@@ -276,20 +236,17 @@ private:
     void parseDecalNameTable();
     void parseDecalNameTableOld();
     void parsePartTypeTable();
-    void parseBoardOutlineDrwOrigin();
-    void parseBoardOutline();
-    bool parseArcBoardOutline();
-    std::vector<ARC_DRAWING_ITEM> collectArcDrawingItems();
-    int64_t findArcParameterTable( const std::vector<ARC_VERTEX>& aVerts, const std::vector<size_t>& aArcIdx );
+    void parseBoardOutlineDirect();
+    void parseGraphicLines();
     void parseNetNames();
     void parseNetNamesNew();
     void parseNetNamesOld();
-    void parseNetNamesDirect();
     void parseNetConnectionsNew();
+    std::map<uint32_t, size_t> parseRouteJunctionNets() const;
 
-    // Offsets of the v0x2021 serialized net table in dense-index order. The table starts eight
-    // 144-byte records ahead of section 23's declared dataOffset and runs through the section's
-    // own records; a record's position in this sequence IS the net ordinal that route and via
+    // Offsets of the legacy serialized net table in dense-index order. Its logical ring starts
+    // 20 bytes after section 23's physical cursor; a record's position in this sequence IS the
+    // net ordinal that route and via
     // records reference, so the sequence must stay unfiltered even where a record is unusable.
     std::vector<size_t> oldNetRecordOffsets() const;
 
@@ -307,33 +264,28 @@ private:
 
     // Group nets by their +188 net-class pointer for membership, name each class from the
     // 0x118 name table, and read per-class clearance-rule layers from the type-66 rule table.
-    void parseNetClasses();
+    void                             parseNetClasses();
     std::vector<NET_CLASS_RULE_EDGE> collectNetClassRuleEdges( const std::set<uint32_t>& aOwnerSet );
-    void applyNetClassClearances( const std::vector<NET_CLASS_RULE_EDGE>& aEdges,
-                                  const std::map<uint32_t, size_t>& aOwnerOrdinal );
+    void                             applyNetClassClearances( const std::vector<NET_CLASS_RULE_EDGE>& aEdges,
+                                                              const std::map<uint32_t, size_t>&       aOwnerOrdinal );
 
     // Recover serialized differential pairs from the sec49 MFC heap. Member nets are the
     // self-pointers at +12/+16, joined to a net name via m_netSelfPtrToName. Inherit-default
     // pairs are not serialized, so coverage is limited to override pairs. v0x2027 only.
     void parseDiffPairs();
-    void parseMetadataRegion();
-    void parseDftConfig( size_t aStart, size_t aEnd );
     void parseRouteVertices();
     void parseTextRecords();
     void parseTerminals();
-    void parseTerminalsOld();
 
     // Synthesize a placeholder terminal layout for every decal that has no terminals yet but
     // carries a recorded count in m_decalTerminalCount. Positions are not separately indexed
     // for these, so the layout is correct in count only.
-    void synthesizePlaceholderTerminals();
 
     void assignDefaultPadStacks();
 
     // Recover the per-pin pad-stack assignment from the section-15 tail (pin, ref) pair pool.
     // Descriptor decals are sliced by the section-14 descriptor table; the de-duplicated
     // library decals by the section-13 0x4D00 table. Each ref indexes m_padStackPool.
-    void parsePerPinPadstacks();
 
     // Apply one decal's (pin, ref) pair slice: pin 0 sets the decal default, pin>0 overrides
     // that terminal. Shared by the descriptor and library passes.
@@ -348,62 +300,59 @@ private:
     // leader sub-pieces. Must run after buildOwnerRuns and parseTextRecords, which it consumes.
     void parseDimensions();
 
-    // Decode the sec69 layer-definition + physical-stackup table (31 records of 152 bytes),
-    // located by the inline string "(All layers)" because the directory data_offset overflows
-    // the indexed region on large boards. Verified on v0x2027 only; older dialects keep the
-    // synthesized fallback.
+    // Decode the versioned section-69 layer-definition and physical-stackup table from its
+    // directly framed physical controller.
     void parseLayerStackup();
 
     void linkPartsToDecals();
 
-    // Structural shape -> sec12 vertex link.
-    //
-    // The owner stream is a phase-shift-aware marker-walk over [sec8.dataOffset, sec10 end):
-    // 112-byte records accepted on u16@+0 in {0xFFFE,0xFFFF}, u16@+2 == 0, a >=2-char ASCII
-    // name at +44 and an in-range cursor triple, so it is not the sec10 fixed grid. Owner
-    // R[i]'s run cursors live in the FOLLOWING record R[i+1] (a one-record lag); the last
-    // owner's cursors are carried by the next physical record (the trailing terminator slot).
+    // Structural shape -> section-12 vertex link. Section 10 is a declared circular fixed array,
+    // rotated left 68 bytes within its own extent. Owner R[i]'s cursors and item kind live in
+    // R[(i+1) mod count]; no marker search or cross-controller walk participates.
     struct OWNER_RUN
     {
-        int32_t pieceStart  = 0;   // R[i+1] @ +8
-        int32_t vertexStart = 0;   // R[i+1] @ +12, cumulative sec12 corner cursor
-        int32_t arcStart    = 0;   // R[i+1] @ +16
-        int32_t pieceCount  = 0;   // R[i+1] @ +24
-        size_t  ownOffset   = 0;   // R[i]'s own absolute file offset (this owner's header record)
+        int32_t  pieceStart = 0;  // R[i+1] @ +8
+        int32_t  vertexStart = 0; // R[i+1] @ +12, cumulative sec12 corner cursor
+        int32_t  arcStart = 0;    // R[i+1] @ +16
+        int32_t  pieceCount = 0;  // R[i+1] @ +24
+        uint32_t itemKind = 0;    // R[i+1] @ +28: low 16 bits are the item enum; high 16 are flags
+        uint32_t ownerIndex = 0;  // R[i]'s index in the rotated section-10 record ring
     };
 
     // Owner DRW name -> lagged run, keyed by the +44 name. Built once by buildOwnerRuns().
     std::map<std::string, OWNER_RUN> m_ownerRuns;
 
-    // Logical-to-physical sec12 base = directory_rows - clean_rows, where clean rows are the
-    // contiguous valid 12-byte prefix before the per-save heap tail. A vertex's physical sec12
-    // row is vertexStart - base.
-    int32_t m_sec12Base      = 0;
+    // Section 12 is a direct fixed array. The retained base member is zero and exists only for
+    // the focused parser regression accessor.
+    int32_t m_sec12Base = 0;
     int32_t m_sec12CleanRows = 0;
 
     void buildOwnerRuns();
     void computeSec12Base();
 
+    uint8_t     ringU8( const SDB_SECTION& aSection, size_t aRotation, size_t aStride, uint32_t aIndex,
+                        size_t aField ) const;
+    uint32_t    ringU32( const SDB_SECTION& aSection, size_t aRotation, size_t aStride, uint32_t aIndex,
+                         size_t aField ) const;
+    int32_t     ringI32( const SDB_SECTION& aSection, size_t aRotation, size_t aStride, uint32_t aIndex,
+                         size_t aField ) const;
+    std::string ringStr( const SDB_SECTION& aSection, size_t aRotation, size_t aStride, uint32_t aIndex, size_t aField,
+                         size_t aLength ) const;
+
     bool sec12Vertex( int32_t aRow, int32_t& aX, int32_t& aY, int32_t& aAttr ) const;
 
-    // Fetch the closed polygon for an owner starting at its vertexStart cursor, consuming
-    // vertices until the run returns to the start point. Returns the design-coordinate vertices
-    // (excluding the duplicate close point) and true on a clean closure; false when no run
-    // exists, the cursor is out of the clean prefix, or the run does not close within aMaxVerts.
+    // Fetch the closed polygon declared by the owner's vertexStart and its first piece's exact
+    // corner count. Returns the design-coordinate vertices excluding the serialized closing
+    // point. The repeated first point validates the declared range; it does not delimit it.
     bool fetchOwnerLoop( const std::string& aName, size_t aMaxVerts, std::vector<VECTOR2I>& aOut ) const;
 
     // A circular piece (PADS' COPCIR convention) stores exactly two diametrically opposite
-    // endpoints, not a closed loop -- fetchOwnerLoop's closure search never terminates cleanly
-    // for one (whatever immediately follows in the vertex pool belongs to the next owner, not
-    // a repeat of this owner's own first point). Returns the two points directly; the caller is
+    // endpoints, not a closed loop, so its declared corner count is two rather than a polygon's
+    // closing-point-inclusive count. Returns the two points directly; the caller is
     // expected to cross-check the derived circle (center = midpoint, radius = half the span)
     // against the owner's own declared bbox, since two arbitrary adjacent points are not enough
     // signal on their own.
     bool fetchOwnerCirclePoints( const std::string& aName, VECTOR2I& aP0, VECTOR2I& aP1 ) const;
-
-    // DFT format parsers
-    std::map<std::string, std::string> parseDftDotPadded( size_t aPos, size_t aEnd ) const;
-    std::map<std::string, std::string> parseDftNullSeparated( size_t aPos, size_t aEnd ) const;
 
     bool isValidNetName( const std::string& aName ) const;
 
@@ -413,46 +362,38 @@ private:
     double toBasicAngle( int32_t aRawAngle ) const;
 
     // Owns the file bytes and decodes the container; the section readers work through it.
-    PADS_SDB             m_sdb;
-
-    /// Counts scan-located objects for ScanLocatorUseCount(); mutable so the locators that
-    /// still scan can report from const paths.
-    mutable int          m_scanLocatorUses = 0;
+    PADS_SDB m_sdb;
 
     // m_data aliases the SDB's bytes for the absolute-offset readers; m_cursor follows it.
     // Both are declared after m_sdb so their references bind to its live buffer.
     const std::vector<uint8_t>& m_data = m_sdb.Bytes();
     BINARY_CURSOR               m_cursor{ m_data };
 
-    uint16_t             m_version = 0;
+    uint16_t m_version = 0;
 
-    // Coordinate origin from DFT_CONFIGURATION (may be overwritten by parseDftConfig)
+    // Coordinate origin from the serialized board-setup block.
     int32_t m_originX = 0;
     int32_t m_originY = 0;
     bool    m_originFound = false;
 
     // Board outline DRW absolute origin from section 9 LINE item records. Section 11 board
     // outline vertices are DRW-relative and need this offset to reach binary absolute.
-    int32_t m_boardDrwOriginX = 0;
-    int32_t m_boardDrwOriginY = 0;
-    bool    m_boardDrwOriginFound = false;
 
     // Default via dimensions extracted from section 4 pad stacks
-    double m_defaultViaSize  = 0.0;
-    double m_defaultViaDrill = 0.0;
-
     // Pad stack cache indexed by section 4 record number
     std::map<int, std::vector<PAD_STACK_LAYER>> m_padStackCache;
 
-    // Extended section-4 pad-stack pool, 0-based from the true pool start (sec4.dataOffset
-    // minus the de-duplicated library head the directory does not index). The section-15 tail
-    // (pin, ref) pairs index this pool directly.
+    // Section-4 pad-stack pool, 0-based from its versioned logical ring start. Section-16
+    // (terminal, padstack) pairs index this pool directly.
     std::vector<std::vector<PAD_STACK_LAYER>> m_padStackPool;
-    std::map<int, size_t>                     m_viaStackByIndex;
+    std::vector<std::pair<int, int>>          m_padStackDrillSpans;
 
     // Part index -> parttype index from the NEXT section 22 record (@+4 with +1 block lag).
     // Indexes into m_partTypeDecalIndex.
     std::map<size_t, uint32_t> m_partTypeIndex;
+
+    // Placement index -> first section-8 field-presentation record from section 22 +96.
+    std::map<size_t, int32_t> m_partFieldStart;
 
     // Part index -> zero-based alternate decal selector from the NEXT placement record @+17.
     std::map<size_t, uint8_t> m_partDecalAlternate;
@@ -461,22 +402,22 @@ private:
     // is selected from the NEXT 96 B placement record's @+56 field. Indexes m_decalNameTable.
     std::map<size_t, uint32_t> m_partDecalIndex;
 
-    // Parttype-definition table (sec17.dataOffset - 1232, 224 B records). Each parttype carries
-    // a decal_index at payload +96 that indexes m_decalNameTable.
+    // Parttype-definition logical ring, 44 bytes before section 17's physical cursor. Each
+    // modern parttype carries a decal index at +96; v0x2022 carries it at +112.
     std::vector<int32_t> m_partTypeDecalIndex;
 
     // All decal indices for each parttype: primary, then alternates. New-format parttype records
     // store duplicate index pairs at +96/+100, +104/+108, ... until -1.
     std::vector<std::vector<int32_t>> m_partTypeDecalIndices;
 
-    // The parttype's own alias name (payload +44, non-v2022 dialects only), parallel to
+    // The parttype's own alias name at logical +44, parallel to
     // m_partTypeDecalIndex. This is the *PARTTYPE name a part references directly -- often a
     // manufacturer part number -- distinct from the physical decal it resolves to.
     std::vector<std::string> m_partTypeNames;
 
-    // Complete decal-name table (sec14.dataOffset - 1188, 112 B records, NAME @ +0), indexed by
-    // a parttype's decal_index. Includes vias, connectors and mounting holes that section 10
-    // lacks. table[0] is always JMPVIA_AAAAA.
+    // Complete section-14 logical decal table, whose record-zero NAME lands at the physical
+    // cursor. Includes vias, connectors and mounting holes that section 10 lacks. table[0] is
+    // always JMPVIA_AAAAA.
     std::vector<std::string> m_decalNameTable;
 
     // Decal name -> terminal count (+72 of the decal-name header record). Covers
@@ -510,7 +451,7 @@ private:
 
     // The serialized placement object ID is the nominal section-22 record ordinal plus 11.
     // Keep the object identity separate from m_parts order because invalid directory records
-    // are skipped and omitted placements are recovered later.
+    // do not produce imported parts.
     std::map<uint32_t, size_t> m_placementObjectToPart;
 
     // Net name -> its net-class object pointer (record +188); zero/absent for unclassed nets.
@@ -526,28 +467,28 @@ private:
     std::vector<DIFF_PAIR_DEF> m_diffPairs;
 
     // Output data, same structs as the ASCII parser.
-    PARAMETERS                          m_parameters;
-    std::vector<PART>                   m_parts;
-    std::vector<NET>                    m_nets;
-    std::vector<ROUTE>                  m_routes;
-    std::vector<TEXT>                   m_texts;
-    std::vector<POUR>                   m_pours;
-    std::vector<KEEPOUT>                m_keepouts;
-    std::vector<COPPER_SHAPE>           m_copper_shapes;
-    std::vector<DIMENSION>              m_dimensions;
-    std::vector<POLYLINE>               m_boardOutlines;
-    std::map<std::string, PART_DECAL>   m_decals;
+    PARAMETERS                        m_parameters;
+    std::vector<PART>                 m_parts;
+    std::vector<NET>                  m_nets;
+    std::vector<ROUTE>                m_routes;
+    std::vector<TEXT>                 m_texts;
+    std::vector<POUR>                 m_pours;
+    std::vector<KEEPOUT>              m_keepouts;
+    std::vector<COPPER_SHAPE>         m_copper_shapes;
+    std::vector<GRAPHIC_LINE>         m_graphicLines;
+    std::vector<DIMENSION>            m_dimensions;
+    std::vector<POLYLINE>             m_boardOutlines;
+    std::map<std::string, PART_DECAL> m_decals;
 
     // Part clusters in table order; index+1 is the CLSTID.
-    std::vector<PART_CLUSTER>          m_clusters;
+    std::vector<PART_CLUSTER> m_clusters;
 
     // Part index -> 1-based CLSTID from the placement record's +108 field. Recorded for the new
     // 112-byte layout only; -1/absent = unclustered.
-    std::map<size_t, int>              m_partClusterId;
+    std::map<size_t, int> m_partClusterId;
 
-    // sec69 physical stackup. Empty when the table could not be located, in which case
-    // GetLayerInfos() synthesizes a fallback.
-    std::vector<LAYER_INFO>             m_layerInfos;
+    // Directly framed section-69 physical stackup.
+    std::vector<LAYER_INFO> m_layerInfos;
 };
 
 } // namespace PADS_IO

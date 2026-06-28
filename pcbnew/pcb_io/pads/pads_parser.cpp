@@ -1147,6 +1147,12 @@ void PARSER::parseSectionVIA( std::ifstream& aStream )
                 def.has_mask_back = true;
         }
 
+        if( def.drill_start > 0 && def.drill_end > 0 )
+        {
+            min_layer = std::min( def.drill_start, def.drill_end );
+            max_layer = std::max( def.drill_start, def.drill_end );
+        }
+
         // Determine layer span and via type
         if( min_layer <= max_layer )
         {

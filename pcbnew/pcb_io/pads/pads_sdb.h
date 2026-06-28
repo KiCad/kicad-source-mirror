@@ -40,47 +40,33 @@ namespace PADS_IO
  * file offsets.
  *
  * File anatomy:
- *   [Header]    10 B  magic 00 FF, version u16 @ +2.
- *   [Directory] N x 16 B @ +10  one entry per database controller's record stream. N is read
- *               from entry 1, which describes the table itself; see directoryEntryCount().
- *   [Sections]  the controllers' payloads, laid out contiguously in index order.
+ *   [Header]     6 B  magic 00 FF, version u16 @ +2, subversion u16 @ +4.
+ *   [Directory] N x 16 B memory image @ +6. The shifted field view begins at +10; see
+ *               directoryEntryCount().
+ *   [Sections]  flat and paged controller payloads in loader order.
  *   [Footer]    42 B  GUID + container-item-array back-pointer.
  *
- * Supported versions: 0x2021, 0x2022, 0x2024, 0x2025, 0x2026, 0x2027.
+ * Supported versions: 0x2017, 0x2019, 0x2021, 0x2022, 0x2024, 0x2025, 0x2026, 0x2027.
  */
 
 /**
  * One directory section: a single database controller's serialized record stream.
  *
  * @c stride is the nominal fixed stride (totalBytes/count) when both are non-zero.
- * @c dataOffset is the absolute file offset of the payload, accumulated across
- * preceding sections.
  */
 struct SDB_SECTION
 {
     int      index = 0;
     uint32_t count = 0;
     uint32_t totalBytes = 0;
-    uint32_t dataOffset = 0;
     uint32_t stride = 0;
 
-    /// Where the payload really starts.
-    ///
-    /// Section 3 declares its in-memory size, which counts the section directory and a 48-byte
-    /// header that are written once as the file header and never repeated in its payload. So
-    /// @c dataOffset, which accumulates declared sizes, overshoots by that amount for every
-    /// section after it. Verified on all 91 corpus files: the decal-name table's JMPVIA_AAAAA
-    /// signature lands on section 14's @c payloadOffset + 44 -- its record's own name field --
-    /// on every one of them.
-    ///
-    /// Readers are being migrated onto this one at a time, each verified against the corpus,
-    /// because the scattered -1188 / -1232 / (count - 11) * 112 constants elsewhere already
-    /// cancel the same overshoot; switching a reader means deleting its constant in the same
-    /// edit. Do not swap them wholesale -- an attempt to do so broke every old-format board.
-    uint32_t payloadOffset = 0;
+    uint32_t physicalOffset = 0;
+    uint32_t physicalBytes = 0;
+    uint32_t physicalCount = 0;
+    uint32_t physicalLiveCount = 0;
 
     bool     IsEmpty() const { return totalBytes == 0; }
-    uint32_t End() const { return dataOffset + totalBytes; }
 };
 
 /**
@@ -99,11 +85,10 @@ public:
     int32_t DesignX( int32_t aRaw ) const { return aRaw - m_originX; }
     int32_t DesignY( int32_t aRaw ) const { return aRaw - m_originY; }
 
-    /// Absolute file offset of the *PCB* board-setup parameter block PADS_SDB::locateOrigin
-    /// found (the origin sits at HeaderBase()+60/+64). Other fields in that same block (e.g.
-    /// MAXIMUMLAYER at +16) need this, not a section's directory-declared dataOffset, for the
-    /// same reason the origin does: the block's true start is displaced from that offset by a
-    /// per-file amount.
+    /// Absolute file offset of the *PCB* board-setup parameter block read by PADS_SDB
+    /// (the origin sits at HeaderBase()+60/+64). Other fields in that same block (e.g.
+    /// MAXIMUMLAYER at +16) need this for the same reason the origin does: section 1 is a rotated
+    /// logical view over the physical section-2/3 controller stream.
     uint32_t HeaderBase() const { return m_headerBase; }
 
 private:
@@ -131,7 +116,7 @@ public:
     PADS_SDB& operator=( const PADS_SDB& ) = delete;
 
     /**
-     * Validate the header and footer, parse the section directory, and locate the
+     * Validate the header and footer, parse the section directory, and derive the
      * coordinate origin. Throws IO_ERROR on a malformed or unsupported file.
      */
     void Load( std::vector<uint8_t> aBytes );
@@ -142,21 +127,13 @@ public:
     static bool IsSupportedVersion( uint16_t aVersion );
 
     uint16_t                    Version() const { return m_version; }
-    bool                        IsOldFormat() const { return m_version == 0x2021 || m_version == 0x2022; }
+    bool                        IsOldFormat() const { return m_version <= 0x2022; }
     const std::vector<uint8_t>& Bytes() const { return m_data; }
     const BINARY_CURSOR&        Cursor() const { return m_cursor; }
     const SDB_COORDS&           Coords() const { return m_coords; }
 
     size_t             SectionCount() const { return m_sections.size(); }
     const SDB_SECTION* Section( int aIndex ) const;
-
-    /// A reader for record @p aIndex of @p aSection, treating the section as a run of
-    /// fixed-stride @p aStride records. The caller must stay within the section; field
-    /// reads remain bounds-checked against the file.
-    SDB_RECORD Record( const SDB_SECTION& aSection, uint32_t aIndex, uint32_t aStride ) const
-    {
-        return SDB_RECORD( m_cursor, aSection.dataOffset + aIndex * aStride );
-    }
 
     /// A reader positioned at an absolute file offset, for walking a pool or byte region
     /// rather than a section's fixed-stride records.
@@ -165,8 +142,9 @@ public:
 private:
     void parseHeader();
     void parseDirectory();
+    void parsePhysicalFraming();
     void verifyFooter() const;
-    void locateOrigin();
+    void readBoardSetup();
     int  directoryEntryCount() const;
 
     static constexpr uint8_t MAGIC0 = 0x00;
@@ -174,9 +152,6 @@ private:
     static constexpr int     HEADER_SIZE = 10;
     static constexpr int     FOOTER_SIZE = 42;
     static constexpr int     DIR_ENTRY_SIZE = 16;
-
-    /// Fixed part of section 3's over-declaration, on top of the directory itself.
-    static constexpr int     SECTION3_HEADER_BYTES = 48;
 
     /// Stride of the section 2 view-state records that precede the board-setup block.
     static constexpr int     VIEW_STATE_RECORD_BYTES = 48;

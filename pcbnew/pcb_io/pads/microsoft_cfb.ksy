@@ -9,6 +9,12 @@ meta:
 seq:
   - id: header
     type: cfb_header
+  - id: sectors
+    size: sector_size
+    repeat: eos
+    doc: |
+      Complete physical CFB sector storage. FAT and directory instances below
+      provide typed views; each byte remains owned once by its serialized sector.
 
 instances:
   sector_size:

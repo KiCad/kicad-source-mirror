@@ -24,6 +24,7 @@
 #include <pcb_io/pads/pcb_io_pads_binary.h>
 #include <pcb_io/pads/pcb_io_pads.h>
 #include <pcb_io/pads/pads_binary_parser.h>
+#include <pcb_io/pads/pads_parser.h>
 #include <pcb_io/pads/pads_sdb.h>
 #include <io/pads/pads_binary_utils.h>
 #include <io/pads/pads_common.h>
@@ -45,9 +46,12 @@
 #include <netclass.h>
 #include <project/net_settings.h>
 #include <algorithm>
+#include <array>
+#include <chrono>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <functional>
 #include <iomanip>
 #include <map>
 #include <optional>
@@ -58,6 +62,7 @@
 #include <vector>
 
 #include <wx/filename.h>
+#include <wx/ffile.h>
 
 
 struct PADS_BINARY_BOARD_INFO
@@ -70,14 +75,14 @@ struct PADS_BINARY_BOARD_INFO
 
 
 static const PADS_BINARY_BOARD_INFO PADS_BINARY_BOARDS[] = {
-    { "TMS1mmX19",        "TMS1mmX19.pcb",        "TMS1mmX19.asc",        false },
-    { "MC4_PLUS_CSHAPE",  "MC4_PLUS_CSHAPE.pcb",  "MC4_PLUS_CSHAPE.asc",  false },
-    { "MC2_PLUS_REV1",    "MC2_PLUS_REV1.pcb",    "MC2_PLUS_REV1.asc",    true  },
-    { "Ems4_Rev2",        "Ems4_Rev2.pcb",        "Ems4_Rev2.asc",        false },
-    { "LCORE_4",          "LCORE_4.pcb",          "LCORE_4.asc",          false },
-    { "LCORE_2",          "LCORE_2.pcb",          "LCORE_2.asc",          false },
-    { "Dexter_MotorCtrl", "Dexter_MotorCtrl.pcb", "Dexter_MotorCtrl.asc", true  },
-    { "MAIS_FC",          "MAIS_FC.pcb",          "MAIS_FC.asc",          true  },
+    { "TMS1mmX19", "TMS1mmX19.pcb", "TMS1mmX19.asc", false },
+    { "MC4_PLUS_CSHAPE", "MC4_PLUS_CSHAPE.pcb", "MC4_PLUS_CSHAPE.asc", false },
+    { "MC2_PLUS_REV1", "MC2_PLUS_REV1.pcb", "MC2_PLUS_REV1.asc", true },
+    { "Ems4_Rev2", "Ems4_Rev2.pcb", "Ems4_Rev2.asc", false },
+    { "LCORE_4", "LCORE_4.pcb", "LCORE_4.asc", false },
+    { "LCORE_2", "LCORE_2.pcb", "LCORE_2.asc", false },
+    { "Dexter_MotorCtrl", "Dexter_MotorCtrl.pcb", "Dexter_MotorCtrl.asc", true },
+    { "MAIS_FC", "MAIS_FC.pcb", "MAIS_FC.asc", true },
 };
 
 
@@ -98,9 +103,8 @@ static wxString GetAscPath( const PADS_BINARY_BOARD_INFO& aBoard )
  * throws, since the parser is under active development. Callers must null-check.
  */
 // Boards are loaded by name from a handful of files, and several tests reload the same 37 MB
-// design. Parsing is pure -- nothing here writes a board back -- so one parse per file is
-// enough, and sharing them takes the suite from tens of minutes to a couple. Keyed by path so
-// a test asking for a different file still gets its own.
+// design. Share one parse per file and stage binary inputs because importing saved design rules
+// beside the source file would otherwise modify corpus fixtures.
 static std::shared_ptr<BOARD> CachedLoad( const wxString& aFilename, bool aBinary )
 {
     static std::map<std::string, std::shared_ptr<BOARD>> cache;
@@ -117,8 +121,22 @@ static std::shared_ptr<BOARD> CachedLoad( const wxString& aFilename, bool aBinar
     {
         if( aBinary )
         {
+            static const std::filesystem::path stagedRoot =
+                    std::filesystem::temp_directory_path()
+                    / ( "kicad_pads_binary_cached_"
+                        + std::to_string( std::chrono::steady_clock::now().time_since_epoch().count() ) );
+            const std::filesystem::path source( aFilename.ToStdString() );
+            const std::filesystem::path stagedDirectory =
+                    stagedRoot / std::to_string( std::hash<std::string>{}( key ) );
+            const std::filesystem::path stagedPath = stagedDirectory / source.filename();
+
+            std::filesystem::create_directories( stagedDirectory );
+            std::filesystem::copy_file( source, stagedPath, std::filesystem::copy_options::overwrite_existing );
+            std::filesystem::permissions( stagedPath, std::filesystem::perms::owner_write,
+                                          std::filesystem::perm_options::add );
+
             PCB_IO_PADS_BINARY plugin;
-            board.reset( plugin.LoadBoard( aFilename, nullptr, nullptr, nullptr ) );
+            board.reset( plugin.LoadBoard( wxString::FromUTF8( stagedPath.string() ), nullptr, nullptr, nullptr ) );
         }
         else
         {
@@ -517,7 +535,7 @@ static std::vector<std::string> CanonicalGeometryRows( const BOARD* aBoard )
     {
         for( PAD* pad : fp->Pads() )
         {
-            const VECTOR2I drill = pad->GetDrillSize();
+            const VECTOR2I     drill = pad->GetDrillSize();
             std::ostringstream row;
 
             row << "PAD " << std::quoted( fp->GetReference().ToStdString() ) << " "
@@ -561,9 +579,15 @@ static std::vector<std::string> CanonicalGeometryRows( const BOARD* aBoard )
         }
         else
         {
+            VECTOR2I start = track->GetStart();
+            VECTOR2I end = track->GetEnd();
+
+            if( std::tie( end.x, end.y ) < std::tie( start.x, start.y ) )
+                std::swap( start, end );
+
             row << "TRACK " << std::quoted( track->GetNetname().ToStdString() ) << " "
-                << static_cast<int>( track->GetLayer() ) << " " << track->GetStart().x << " " << track->GetStart().y
-                << " " << track->GetEnd().x << " " << track->GetEnd().y << " " << track->GetWidth();
+                << static_cast<int>( track->GetLayer() ) << " " << start.x << " " << start.y << " " << end.x << " "
+                << end.y << " " << track->GetWidth();
         }
 
         rows.push_back( row.str() );
@@ -687,6 +711,82 @@ BOOST_AUTO_TEST_CASE( CanonicalGeometryRowsCoverPadsTracksAndVias )
 }
 
 
+BOOST_AUTO_TEST_CASE( RouteObjectClassDoesNotDependOnCachedBounds )
+{
+    const wxString source = GetBinaryPath( PADS_BINARY_BOARDS[4] );
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( source, bytes ) );
+
+    PADS_IO::PADS_SDB sdb;
+    sdb.Load( bytes );
+
+    const PADS_IO::SDB_SECTION* objects = sdb.Section( 62 );
+    BOOST_REQUIRE( objects != nullptr );
+    BOOST_REQUIRE_GT( objects->physicalCount, 0u );
+    BOOST_REQUIRE( objects->stride == 36 || objects->stride == 48 );
+
+    auto writeRingU32 = [&]( size_t aLogicalOffset, uint32_t aValue )
+    {
+        for( size_t byte = 0; byte < 4; ++byte )
+        {
+            size_t physical = objects->physicalOffset + aLogicalOffset % objects->physicalBytes;
+            bytes.at( physical ) = static_cast<uint8_t>( aValue >> ( byte * 8 ) );
+            ++aLogicalOffset;
+        }
+    };
+
+    const size_t boundLoOffset = objects->stride == 36 ? 12 : 24;
+    const size_t boundHiOffset = objects->stride == 36 ? 16 : 28;
+
+    for( uint32_t index = 0; index < objects->physicalCount; ++index )
+    {
+        const size_t base = 32 + static_cast<size_t>( index ) * objects->stride;
+        writeRingU32( base + boundLoOffset, 0x12345678 );
+        writeRingU32( base + boundHiOffset, 0x76543210 );
+    }
+
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_pads_route_bounds_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".pcb" );
+
+    {
+        wxFFile file( tempPath, wxS( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( bytes.data(), bytes.size() ), bytes.size() );
+    }
+
+    using ROUTE_ROW = std::tuple<std::string, int, double, std::vector<std::pair<double, double>>>;
+    auto routeRows = []( const PADS_IO::BINARY_PARSER& aParser )
+    {
+        std::vector<ROUTE_ROW> rows;
+
+        for( const PADS_IO::ROUTE& route : aParser.GetRoutes() )
+        {
+            for( const PADS_IO::TRACK& track : route.tracks )
+            {
+                std::vector<std::pair<double, double>> points;
+
+                for( const PADS_IO::ARC_POINT& point : track.points )
+                    points.emplace_back( point.x, point.y );
+
+                rows.emplace_back( route.net_name, track.layer, track.width, std::move( points ) );
+            }
+        }
+
+        return rows;
+    };
+
+    PADS_IO::BINARY_PARSER baseline;
+    PADS_IO::BINARY_PARSER changedBounds;
+    baseline.Parse( source );
+    changedBounds.Parse( tempPath );
+    wxRemoveFile( tempPath );
+
+    BOOST_CHECK( routeRows( changedBounds ) == routeRows( baseline ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( BinaryFileDetection )
 {
     PCB_IO_PADS_BINARY binaryPlugin;
@@ -719,99 +819,99 @@ BOOST_AUTO_TEST_CASE( AsciiFileRejection )
 }
 
 
-#define BINARY_LOAD_TEST( name, idx )                                       \
-    BOOST_AUTO_TEST_CASE( BasicLoad_##name )                                \
-    {                                                                       \
-        auto board = LoadBinary( PADS_BINARY_BOARDS[idx] );                 \
-                                                                            \
-        if( board )                                                         \
-            BOOST_CHECK( board->Footprints().size() > 0 );                  \
+#define BINARY_LOAD_TEST( name, idx )                                                                                  \
+    BOOST_AUTO_TEST_CASE( BasicLoad_##name )                                                                           \
+    {                                                                                                                  \
+        auto board = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                            \
+                                                                                                                       \
+        if( board )                                                                                                    \
+            BOOST_CHECK( board->Footprints().size() > 0 );                                                             \
     }
 
-BINARY_LOAD_TEST( TMS1mmX19,        0 )
-BINARY_LOAD_TEST( MC4_PLUS_CSHAPE,  1 )
-BINARY_LOAD_TEST( MC2_PLUS_REV1,    2 )
-BINARY_LOAD_TEST( Ems4_Rev2,        3 )
-BINARY_LOAD_TEST( LCORE_4,          4 )
-BINARY_LOAD_TEST( LCORE_2,          5 )
+BINARY_LOAD_TEST( TMS1mmX19, 0 )
+BINARY_LOAD_TEST( MC4_PLUS_CSHAPE, 1 )
+BINARY_LOAD_TEST( MC2_PLUS_REV1, 2 )
+BINARY_LOAD_TEST( Ems4_Rev2, 3 )
+BINARY_LOAD_TEST( LCORE_4, 4 )
+BINARY_LOAD_TEST( LCORE_2, 5 )
 BINARY_LOAD_TEST( Dexter_MotorCtrl, 6 )
-BINARY_LOAD_TEST( MAIS_FC,          7 )
+BINARY_LOAD_TEST( MAIS_FC, 7 )
 
 
-#define FOOTPRINT_COUNT_TEST( name, idx )                                                   \
-    BOOST_AUTO_TEST_CASE( FootprintCount_##name )                                           \
-    {                                                                                       \
-        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                   \
-                                                                                            \
-        if( !bin )                                                                          \
-            return;                                                                         \
-                                                                                            \
-        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                     \
-                                                                                            \
+#define FOOTPRINT_COUNT_TEST( name, idx )                                                                              \
+    BOOST_AUTO_TEST_CASE( FootprintCount_##name )                                                                      \
+    {                                                                                                                  \
+        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                              \
+                                                                                                                       \
+        if( !bin )                                                                                                     \
+            return;                                                                                                    \
+                                                                                                                       \
+        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                                                 \
+                                                                                                                       \
         CheckCountWithTolerance( #name " footprints", bin->Footprints().size(), asc->Footprints().size(),              \
-                                 PADS_BINARY_BOARDS[idx].differentRevision );               \
+                                 PADS_BINARY_BOARDS[idx].differentRevision );                                          \
     }
 
-FOOTPRINT_COUNT_TEST( TMS1mmX19,        0 )
-FOOTPRINT_COUNT_TEST( MC4_PLUS_CSHAPE,  1 )
-FOOTPRINT_COUNT_TEST( MC2_PLUS_REV1,    2 )
-FOOTPRINT_COUNT_TEST( Ems4_Rev2,        3 )
-FOOTPRINT_COUNT_TEST( LCORE_4,          4 )
-FOOTPRINT_COUNT_TEST( LCORE_2,          5 )
+FOOTPRINT_COUNT_TEST( TMS1mmX19, 0 )
+FOOTPRINT_COUNT_TEST( MC4_PLUS_CSHAPE, 1 )
+FOOTPRINT_COUNT_TEST( MC2_PLUS_REV1, 2 )
+FOOTPRINT_COUNT_TEST( Ems4_Rev2, 3 )
+FOOTPRINT_COUNT_TEST( LCORE_4, 4 )
+FOOTPRINT_COUNT_TEST( LCORE_2, 5 )
 FOOTPRINT_COUNT_TEST( Dexter_MotorCtrl, 6 )
-FOOTPRINT_COUNT_TEST( MAIS_FC,          7 )
+FOOTPRINT_COUNT_TEST( MAIS_FC, 7 )
 
 
-#define NET_COUNT_TEST( name, idx )                                                         \
-    BOOST_AUTO_TEST_CASE( NetCount_##name )                                                 \
-    {                                                                                       \
-        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                   \
-                                                                                            \
-        if( !bin )                                                                          \
-            return;                                                                         \
-                                                                                            \
-        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                     \
-                                                                                            \
-        CheckCountWithTolerance( #name " nets", bin->GetNetCount(), asc->GetNetCount(),     \
-                                 PADS_BINARY_BOARDS[idx].differentRevision );               \
+#define NET_COUNT_TEST( name, idx )                                                                                    \
+    BOOST_AUTO_TEST_CASE( NetCount_##name )                                                                            \
+    {                                                                                                                  \
+        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                              \
+                                                                                                                       \
+        if( !bin )                                                                                                     \
+            return;                                                                                                    \
+                                                                                                                       \
+        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                                                 \
+                                                                                                                       \
+        CheckCountWithTolerance( #name " nets", bin->GetNetCount(), asc->GetNetCount(),                                \
+                                 PADS_BINARY_BOARDS[idx].differentRevision );                                          \
     }
 
-NET_COUNT_TEST( TMS1mmX19,        0 )
-NET_COUNT_TEST( MC4_PLUS_CSHAPE,  1 )
-NET_COUNT_TEST( MC2_PLUS_REV1,    2 )
-NET_COUNT_TEST( Ems4_Rev2,        3 )
-NET_COUNT_TEST( LCORE_4,          4 )
-NET_COUNT_TEST( LCORE_2,          5 )
+NET_COUNT_TEST( TMS1mmX19, 0 )
+NET_COUNT_TEST( MC4_PLUS_CSHAPE, 1 )
+NET_COUNT_TEST( MC2_PLUS_REV1, 2 )
+NET_COUNT_TEST( Ems4_Rev2, 3 )
+NET_COUNT_TEST( LCORE_4, 4 )
+NET_COUNT_TEST( LCORE_2, 5 )
 NET_COUNT_TEST( Dexter_MotorCtrl, 6 )
-NET_COUNT_TEST( MAIS_FC,          7 )
+NET_COUNT_TEST( MAIS_FC, 7 )
 
 
-#define NET_NAMES_EXACT_TEST( name, idx )                                                   \
-    BOOST_AUTO_TEST_CASE( NetNamesExact_##name )                                            \
-    {                                                                                       \
-        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                   \
-                                                                                            \
-        if( !bin )                                                                          \
-            return;                                                                         \
-                                                                                            \
-        auto binNames = BoardNetNames( bin.get() );                                         \
-        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                     \
-        auto ascNames = BoardNetNames( asc.get() );                                         \
-                                                                                            \
-        std::set<wxString> missing;                                                         \
+#define NET_NAMES_EXACT_TEST( name, idx )                                                                              \
+    BOOST_AUTO_TEST_CASE( NetNamesExact_##name )                                                                       \
+    {                                                                                                                  \
+        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                              \
+                                                                                                                       \
+        if( !bin )                                                                                                     \
+            return;                                                                                                    \
+                                                                                                                       \
+        auto binNames = BoardNetNames( bin.get() );                                                                    \
+        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                                                 \
+        auto ascNames = BoardNetNames( asc.get() );                                                                    \
+                                                                                                                       \
+        std::set<wxString> missing;                                                                                    \
         std::set_difference( ascNames.begin(), ascNames.end(), binNames.begin(), binNames.end(),                       \
                              std::inserter( missing, missing.begin() ) );                                              \
-                                                                                            \
-        std::set<wxString> extra;                                                           \
+                                                                                                                       \
+        std::set<wxString> extra;                                                                                      \
         std::set_difference( binNames.begin(), binNames.end(), ascNames.begin(), ascNames.end(),                       \
                              std::inserter( extra, extra.begin() ) );                                                  \
-                                                                                            \
+                                                                                                                       \
         BOOST_CHECK_MESSAGE( missing.empty(), #name " missing binary nets: " << JoinNetSet( missing ) );               \
         BOOST_CHECK_MESSAGE( extra.empty(), #name " extra binary nets: " << JoinNetSet( extra ) );                     \
     }
 
 NET_NAMES_EXACT_TEST( MC4_PLUS_CSHAPE, 1 )
-NET_NAMES_EXACT_TEST( Ems4_Rev2,       3 )
+NET_NAMES_EXACT_TEST( Ems4_Rev2, 3 )
 
 
 // The section-62/64 route stream is present on routed boards and absent on unrouted boards.
@@ -819,12 +919,12 @@ NET_NAMES_EXACT_TEST( Ems4_Rev2,       3 )
 // these smoke tests keep the older in-tree corpus exercising both structural cases.
 #define ROUTED_TRACKS_TEST( name, idx )                                                                                \
     BOOST_AUTO_TEST_CASE( RoutedTracks_##name )                                                                        \
-    {                                                                                       \
-        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                   \
-                                                                                            \
-        if( !bin )                                                                          \
-            return;                                                                         \
-                                                                                            \
+    {                                                                                                                  \
+        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                              \
+                                                                                                                       \
+        if( !bin )                                                                                                     \
+            return;                                                                                                    \
+                                                                                                                       \
         BOOST_CHECK_GT( CountTraces( bin ), 0u );                                                                      \
     }
 
@@ -1091,6 +1191,9 @@ BOOST_AUTO_TEST_CASE( BoardOutlineCorrectOrAbsent )
 {
     for( const PADS_BINARY_BOARD_INFO& info : PADS_BINARY_BOARDS )
     {
+        if( info.differentRevision )
+            continue;
+
         auto bin = LoadBinary( info );
         auto asc = LoadAsc( info );
 
@@ -1112,11 +1215,11 @@ BOOST_AUTO_TEST_CASE( BoardOutlineCorrectOrAbsent )
         double tolY = std::max( 400000.0, ascBox.GetHeight() * 0.02 );
 
         BOOST_CHECK_MESSAGE( std::abs( binBox.GetWidth() - ascBox.GetWidth() ) < tolX,
-                info.dir << " board outline width: binary=" << binBox.GetWidth()
-                         << " asc=" << ascBox.GetWidth() << " (wrong outline shipped)" );
+                             info.dir << " board outline width: binary=" << binBox.GetWidth()
+                                      << " asc=" << ascBox.GetWidth() << " (wrong outline shipped)" );
         BOOST_CHECK_MESSAGE( std::abs( binBox.GetHeight() - ascBox.GetHeight() ) < tolY,
-                info.dir << " board outline height: binary=" << binBox.GetHeight()
-                         << " asc=" << ascBox.GetHeight() << " (wrong outline shipped)" );
+                             info.dir << " board outline height: binary=" << binBox.GetHeight()
+                                      << " asc=" << ascBox.GetHeight() << " (wrong outline shipped)" );
 
         // Size alone is translation-invariant, so also pin the binary outline relative
         // to the binary footprints (a shared frame, unlike the ASC importer which uses a
@@ -1133,7 +1236,7 @@ BOOST_AUTO_TEST_CASE( BoardOutlineCorrectOrAbsent )
             grown.Inflate( std::max( binBox.GetWidth(), binBox.GetHeight() ) );
 
             BOOST_CHECK_MESSAGE( grown.Contains( fpBox.GetCenter() ),
-                    info.dir << " board outline at " << binBox.GetCenter()
+                                 info.dir << " board outline at " << binBox.GetCenter()
                                           << " does not enclose the footprint cloud centered at " << fpBox.GetCenter()
                                           << " (outline mispositioned)" );
         }
@@ -1141,46 +1244,46 @@ BOOST_AUTO_TEST_CASE( BoardOutlineCorrectOrAbsent )
 }
 
 
-#define STRUCTURAL_INTEGRITY_TEST( name, idx )                              \
-    BOOST_AUTO_TEST_CASE( StructuralIntegrity_##name )                      \
-    {                                                                       \
-        auto board = LoadBinary( PADS_BINARY_BOARDS[idx] );                 \
-                                                                            \
-        if( !board )                                                        \
-            return;                                                         \
-                                                                            \
-        RunStructuralChecks( PADS_BINARY_BOARDS[idx], board.get() );        \
+#define STRUCTURAL_INTEGRITY_TEST( name, idx )                                                                         \
+    BOOST_AUTO_TEST_CASE( StructuralIntegrity_##name )                                                                 \
+    {                                                                                                                  \
+        auto board = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                            \
+                                                                                                                       \
+        if( !board )                                                                                                   \
+            return;                                                                                                    \
+                                                                                                                       \
+        RunStructuralChecks( PADS_BINARY_BOARDS[idx], board.get() );                                                   \
     }
 
-#define ZONE_COUNT_TEST( name, idx )                                                        \
-    BOOST_AUTO_TEST_CASE( ZoneCount_##name )                                                \
-    {                                                                                       \
-        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                   \
-                                                                                            \
-        if( !bin )                                                                          \
-            return;                                                                         \
-                                                                                            \
-        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                     \
-                                                                                            \
-        size_t binZones = bin->Zones().size();                                              \
-        size_t ascZones = asc->Zones().size();                                              \
-                                                                                            \
-        if( PADS_BINARY_BOARDS[idx].differentRevision )                                    \
-        {                                                                                   \
+#define ZONE_COUNT_TEST( name, idx )                                                                                   \
+    BOOST_AUTO_TEST_CASE( ZoneCount_##name )                                                                           \
+    {                                                                                                                  \
+        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                              \
+                                                                                                                       \
+        if( !bin )                                                                                                     \
+            return;                                                                                                    \
+                                                                                                                       \
+        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                                                 \
+                                                                                                                       \
+        size_t binZones = bin->Zones().size();                                                                         \
+        size_t ascZones = asc->Zones().size();                                                                         \
+                                                                                                                       \
+        if( PADS_BINARY_BOARDS[idx].differentRevision )                                                                \
+        {                                                                                                              \
             BOOST_WARN_MESSAGE( binZones > 0, #name " binary zone count: " << binZones << " (different revision)" );   \
-        }                                                                                   \
-        else                                                                                \
-        {                                                                                   \
-            BOOST_WARN_MESSAGE( binZones == ascZones,                                      \
+        }                                                                                                              \
+        else                                                                                                           \
+        {                                                                                                              \
+            BOOST_WARN_MESSAGE( binZones == ascZones,                                                                  \
                                 #name " zone count: binary=" << binZones << " asc=" << ascZones );                     \
-        }                                                                                   \
+        }                                                                                                              \
     }
 
-ZONE_COUNT_TEST( MC4_PLUS_CSHAPE,  1 )
-ZONE_COUNT_TEST( Ems4_Rev2,        3 )
-ZONE_COUNT_TEST( LCORE_4,          4 )
-ZONE_COUNT_TEST( LCORE_2,          5 )
-ZONE_COUNT_TEST( MAIS_FC,          7 )
+ZONE_COUNT_TEST( MC4_PLUS_CSHAPE, 1 )
+ZONE_COUNT_TEST( Ems4_Rev2, 3 )
+ZONE_COUNT_TEST( LCORE_4, 4 )
+ZONE_COUNT_TEST( LCORE_2, 5 )
+ZONE_COUNT_TEST( MAIS_FC, 7 )
 
 
 BOOST_AUTO_TEST_CASE( ZoneCountExact_MC4_PLUS_CSHAPE )
@@ -1192,46 +1295,100 @@ BOOST_AUTO_TEST_CASE( ZoneCountExact_MC4_PLUS_CSHAPE )
     // parser has its own unrelated, pre-existing bug (it reads far more "*POUROUT*"-adjacent
     // lines than there are real pours, most filtered downstream but not audited closely enough
     // to reconstruct a reliable total), so its zone count is not a trustworthy oracle for this
-    // comparison. 49 = 15 real copper shapes + 34 pours the binary pour decoder (parseCopperPours,
-    // verified independently earlier this session) finds for this board.
+    // comparison. Two shapes are on copper layer 4; the other thirteen retain their serialized
+    // documentation layers as filled graphics. 36 = 2 copper shapes + 9 keepouts + 25 pours.
     auto bin = LoadBinary( PADS_BINARY_BOARDS[1] );
 
     BOOST_REQUIRE( bin );
-    BOOST_CHECK_EQUAL( bin->Zones().size(), 49 );
+    BOOST_CHECK_EQUAL( bin->Zones().size(), 36 );
+    BOOST_CHECK_EQUAL( std::count_if( bin->Drawings().begin(), bin->Drawings().end(),
+                                      []( const BOARD_ITEM* aItem )
+                                      {
+                                          const PCB_SHAPE* shape = dynamic_cast<const PCB_SHAPE*>( aItem );
+                                          return shape && shape->GetShape() == SHAPE_T::POLY && shape->IsSolidFill();
+                                      } ),
+                       13 );
 }
 
 
 BOOST_AUTO_TEST_CASE( ZoneCountExact_Ems4_Rev2 )
 {
     // See ZoneCountExact_MC4_PLUS_CSHAPE for why asc->Zones() is not used as the reference.
-    // 34 of this board's 39 real COPPER shapes are recovered (verified by name, zero false
-    // positives; the remaining 5 are a distinct, not yet root-caused gap), plus 28 pours.
+    // The binary importer recovers all 39 real COPPER owners. Four are on copper layers; the
+    // other 35 retain their silkscreen/paste/custom layers as filled graphics.
     auto bin = LoadBinary( PADS_BINARY_BOARDS[3] );
 
     BOOST_REQUIRE( bin );
-    BOOST_CHECK_EQUAL( bin->Zones().size(), 62 );
+    BOOST_CHECK_EQUAL( bin->Zones().size(), 32 );
+    BOOST_CHECK_EQUAL( std::count_if( bin->Drawings().begin(), bin->Drawings().end(),
+                                      []( const BOARD_ITEM* aItem )
+                                      {
+                                          const PCB_SHAPE* shape = dynamic_cast<const PCB_SHAPE*>( aItem );
+                                          return shape && shape->GetShape() == SHAPE_T::POLY && shape->IsSolidFill();
+                                      } ),
+                       35 );
+}
+
+
+BOOST_AUTO_TEST_CASE( CopperShapeLevelsUseSerializedSuccessorField )
+{
+    struct EXPECTED_LEVEL
+    {
+        size_t      board;
+        std::string name;
+        int         level;
+    };
+
+    const std::vector<EXPECTED_LEVEL> expected = {
+        { 1, "DRW68014421", 4 },
+        { 1, "DRW62739568", 26 },
+        { 3, "DRW55434270", 1 },
+        { 3, "DRW28145516", 22 },
+        { 3, "DRW81324514", 24 },
+    };
+
+    std::map<size_t, std::shared_ptr<PADS_IO::BINARY_PARSER>> parsers;
+
+    for( const EXPECTED_LEVEL& item : expected )
+    {
+        auto& parser = parsers[item.board];
+
+        if( !parser )
+        {
+            parser = std::make_shared<PADS_IO::BINARY_PARSER>();
+            wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/"
+                                + PADS_BINARY_BOARDS[item.board].dir + "/"
+                                + PADS_BINARY_BOARDS[item.board].binaryFile;
+            parser->Parse( filename );
+        }
+
+        auto shape = std::find_if( parser->GetCopperShapes().begin(), parser->GetCopperShapes().end(),
+                                   [&]( const PADS_IO::COPPER_SHAPE& aShape )
+                                   {
+                                       return aShape.name == item.name;
+                                   } );
+
+        BOOST_REQUIRE( shape != parser->GetCopperShapes().end() );
+        BOOST_CHECK_EQUAL( shape->layer, item.level );
+    }
 }
 
 
 BOOST_AUTO_TEST_CASE( ZoneCountExact_LCORE_4 )
 {
     auto bin = LoadBinary( PADS_BINARY_BOARDS[4] );
-    auto asc = LoadAsc( PADS_BINARY_BOARDS[4] );
 
     BOOST_REQUIRE( bin );
-    BOOST_REQUIRE( asc );
-    BOOST_CHECK_EQUAL( bin->Zones().size(), asc->Zones().size() );
+    BOOST_CHECK_EQUAL( bin->Zones().size(), 4 ); // 2 KEEPOUT, 2 POUROUT
 }
 
 
 BOOST_AUTO_TEST_CASE( ZoneCountExact_LCORE_2 )
 {
     auto bin = LoadBinary( PADS_BINARY_BOARDS[5] );
-    auto asc = LoadAsc( PADS_BINARY_BOARDS[5] );
 
     BOOST_REQUIRE( bin );
-    BOOST_REQUIRE( asc );
-    BOOST_CHECK_EQUAL( bin->Zones().size(), asc->Zones().size() );
+    BOOST_CHECK_EQUAL( bin->Zones().size(), 4 ); // 2 KEEPOUT, 2 POUROUT
 }
 
 
@@ -1263,32 +1420,32 @@ static bool HasFreeText( const BOARD* aBoard, const wxString& aText )
 }
 
 
-#define FREE_TEXT_COUNT_TEST( name, idx )                                                       \
-    BOOST_AUTO_TEST_CASE( FreeTextCount_##name )                                                \
-    {                                                                                           \
-        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                       \
-                                                                                                \
-        if( !bin )                                                                              \
-            return;                                                                             \
-                                                                                                \
-        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                         \
-                                                                                                \
-        size_t binTexts = CountFreeTexts( bin.get() );                                          \
-        size_t ascTexts = CountFreeTexts( asc.get() );                                          \
-                                                                                                \
-        BOOST_WARN_MESSAGE( binTexts == ascTexts,                                               \
+#define FREE_TEXT_COUNT_TEST( name, idx )                                                                              \
+    BOOST_AUTO_TEST_CASE( FreeTextCount_##name )                                                                       \
+    {                                                                                                                  \
+        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                              \
+                                                                                                                       \
+        if( !bin )                                                                                                     \
+            return;                                                                                                    \
+                                                                                                                       \
+        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                                                 \
+                                                                                                                       \
+        size_t binTexts = CountFreeTexts( bin.get() );                                                                 \
+        size_t ascTexts = CountFreeTexts( asc.get() );                                                                 \
+                                                                                                                       \
+        BOOST_WARN_MESSAGE( binTexts == ascTexts,                                                                      \
                             #name " free text count: binary=" << binTexts << " asc=" << ascTexts                       \
-                                   << " (text extraction incomplete)" );                        \
+                                                              << " (text extraction incomplete)" );                    \
     }
 
-FREE_TEXT_COUNT_TEST( TMS1mmX19,        0 )
-FREE_TEXT_COUNT_TEST( MC4_PLUS_CSHAPE,  1 )
-FREE_TEXT_COUNT_TEST( MC2_PLUS_REV1,    2 )
-FREE_TEXT_COUNT_TEST( Ems4_Rev2,        3 )
-FREE_TEXT_COUNT_TEST( LCORE_4,          4 )
-FREE_TEXT_COUNT_TEST( LCORE_2,          5 )
+FREE_TEXT_COUNT_TEST( TMS1mmX19, 0 )
+FREE_TEXT_COUNT_TEST( MC4_PLUS_CSHAPE, 1 )
+FREE_TEXT_COUNT_TEST( MC2_PLUS_REV1, 2 )
+FREE_TEXT_COUNT_TEST( Ems4_Rev2, 3 )
+FREE_TEXT_COUNT_TEST( LCORE_4, 4 )
+FREE_TEXT_COUNT_TEST( LCORE_2, 5 )
 FREE_TEXT_COUNT_TEST( Dexter_MotorCtrl, 6 )
-FREE_TEXT_COUNT_TEST( MAIS_FC,          7 )
+FREE_TEXT_COUNT_TEST( MAIS_FC, 7 )
 
 
 /**
@@ -1297,23 +1454,23 @@ FREE_TEXT_COUNT_TEST( MAIS_FC,          7 )
  * reproduces the ASCII free-text count exactly, so lock it in with a hard check
  * to catch regressions. Boards still under development stay on BOOST_WARN above.
  */
-#define FREE_TEXT_EXACT_TEST( name, idx )                                                       \
-    BOOST_AUTO_TEST_CASE( FreeTextExact_##name )                                                \
-    {                                                                                           \
-        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                       \
-                                                                                                \
-        if( !bin )                                                                              \
-            return;                                                                             \
-                                                                                                \
-        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                         \
-                                                                                                \
-        BOOST_CHECK_EQUAL( CountFreeTexts( bin.get() ), CountFreeTexts( asc.get() ) );          \
+#define FREE_TEXT_EXACT_TEST( name, idx )                                                                              \
+    BOOST_AUTO_TEST_CASE( FreeTextExact_##name )                                                                       \
+    {                                                                                                                  \
+        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                              \
+                                                                                                                       \
+        if( !bin )                                                                                                     \
+            return;                                                                                                    \
+                                                                                                                       \
+        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                                                 \
+                                                                                                                       \
+        BOOST_CHECK_EQUAL( CountFreeTexts( bin.get() ), CountFreeTexts( asc.get() ) );                                 \
     }
 
 FREE_TEXT_EXACT_TEST( TMS1mmX19, 0 )
 FREE_TEXT_EXACT_TEST( Ems4_Rev2, 3 )
-FREE_TEXT_EXACT_TEST( LCORE_4,   4 )
-FREE_TEXT_EXACT_TEST( LCORE_2,   5 )
+FREE_TEXT_EXACT_TEST( LCORE_4, 4 )
+FREE_TEXT_EXACT_TEST( LCORE_2, 5 )
 
 
 BOOST_AUTO_TEST_CASE( FreeTextRejectsClusterNames_MC4_PLUS_CSHAPE )
@@ -1330,28 +1487,68 @@ BOOST_AUTO_TEST_CASE( FreeTextRejectsClusterNames_MC4_PLUS_CSHAPE )
 }
 
 
-#define PAD_COUNT_TEST( name, idx )                                                             \
-    BOOST_AUTO_TEST_CASE( PadCount_##name )                                                     \
-    {                                                                                           \
-        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                       \
-                                                                                                \
-        if( !bin )                                                                              \
-            return;                                                                             \
-                                                                                                \
-        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                         \
-                                                                                                \
-        size_t binPads = 0;                                                                     \
-        size_t ascPads = 0;                                                                     \
-                                                                                                \
-        for( FOOTPRINT* fp : bin->Footprints() )                                                \
-            binPads += fp->Pads().size();                                                       \
-                                                                                                \
-        for( FOOTPRINT* fp : asc->Footprints() )                                                \
-            ascPads += fp->Pads().size();                                                       \
-                                                                                                \
-        BOOST_WARN_MESSAGE( binPads == ascPads,                                                 \
+BOOST_AUTO_TEST_CASE( FreeTextUsesDeclaredSection8Ring )
+{
+    wxString source = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/LCORE_2/LCORE_2.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( source, bytes ) );
+
+    PADS_IO::PADS_SDB sdb;
+    sdb.Load( bytes );
+
+    const PADS_IO::SDB_SECTION* texts = sdb.Section( 8 );
+    BOOST_REQUIRE( texts != nullptr );
+    BOOST_REQUIRE( texts->physicalOffset >= 180 );
+    BOOST_REQUIRE( texts->physicalBytes >= 108 );
+
+    const size_t ringBase = texts->physicalOffset - 36;
+    const size_t decoyBase = texts->physicalOffset - 180;
+    std::copy_n( bytes.begin() + ringBase, 144, bytes.begin() + decoyBase );
+
+    PADS_IO::BINARY_PARSER baseline;
+    baseline.Parse( source );
+
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_pads_text_decoy_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".pcb" );
+
+    {
+        wxFFile file( tempPath, wxS( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( bytes.data(), bytes.size() ), bytes.size() );
+    }
+
+    PADS_IO::BINARY_PARSER withDecoy;
+    withDecoy.Parse( tempPath );
+    wxRemoveFile( tempPath );
+
+    BOOST_CHECK_EQUAL( withDecoy.GetTexts().size(), baseline.GetTexts().size() );
+}
+
+
+#define PAD_COUNT_TEST( name, idx )                                                                                    \
+    BOOST_AUTO_TEST_CASE( PadCount_##name )                                                                            \
+    {                                                                                                                  \
+        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                              \
+                                                                                                                       \
+        if( !bin )                                                                                                     \
+            return;                                                                                                    \
+                                                                                                                       \
+        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                                                 \
+                                                                                                                       \
+        size_t binPads = 0;                                                                                            \
+        size_t ascPads = 0;                                                                                            \
+                                                                                                                       \
+        for( FOOTPRINT * fp : bin->Footprints() )                                                                      \
+            binPads += fp->Pads().size();                                                                              \
+                                                                                                                       \
+        for( FOOTPRINT * fp : asc->Footprints() )                                                                      \
+            ascPads += fp->Pads().size();                                                                              \
+                                                                                                                       \
+        BOOST_WARN_MESSAGE( binPads == ascPads,                                                                        \
                             #name " pad count: binary=" << binPads << " asc=" << ascPads                               \
-                                   << " (part-to-decal linking incomplete)" );                  \
+                                                        << " (part-to-decal linking incomplete)" );                    \
     }
 
 /**
@@ -1365,65 +1562,65 @@ BOOST_AUTO_TEST_CASE( FreeTextRejectsClusterNames_MC4_PLUS_CSHAPE )
  * equal the ASCII pad count. This proves the chain is content-correct, not merely that
  * aggregate totals happen to line up.
  */
-#define PER_FOOTPRINT_CONTENT_TEST( name, idx, maxNameWrong, maxCountWrong )                 \
-    BOOST_AUTO_TEST_CASE( PerFootprintContent_##name )                                       \
-    {                                                                                       \
-        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                   \
-                                                                                            \
-        if( !bin )                                                                          \
-            return;                                                                         \
-                                                                                            \
-        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                     \
-                                                                                            \
-        std::map<wxString, FOOTPRINT*> ascByRef;                                            \
-                                                                                            \
-        for( FOOTPRINT* fp : asc->Footprints() )                                            \
-            ascByRef[fp->GetReference()] = fp;                                              \
-                                                                                            \
-        int resolved = 0, nameWrong = 0, countWrong = 0;                                    \
-        wxString wrongRefs;                                                                 \
-                                                                                            \
-        for( FOOTPRINT* fp : bin->Footprints() )                                            \
-        {                                                                                   \
-            wxString binDecal = fp->GetFPID().GetLibItemName().wx_str();                    \
-                                                                                            \
-            if( binDecal == fp->GetReference() )                                            \
-                continue; /* unresolved placement (absent from section 22) */               \
-                                                                                            \
-            auto it = ascByRef.find( fp->GetReference() );                                  \
-                                                                                            \
-            if( it == ascByRef.end() )                                                      \
-                continue;                                                                   \
-                                                                                            \
-            resolved++;                                                                     \
-                                                                                            \
-            if( binDecal != it->second->GetFPID().GetLibItemName().wx_str() )               \
-            {                                                                               \
-                nameWrong++;                                                                 \
+#define PER_FOOTPRINT_CONTENT_TEST( name, idx, maxNameWrong, maxCountWrong )                                           \
+    BOOST_AUTO_TEST_CASE( PerFootprintContent_##name )                                                                 \
+    {                                                                                                                  \
+        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                              \
+                                                                                                                       \
+        if( !bin )                                                                                                     \
+            return;                                                                                                    \
+                                                                                                                       \
+        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                                                 \
+                                                                                                                       \
+        std::map<wxString, FOOTPRINT*> ascByRef;                                                                       \
+                                                                                                                       \
+        for( FOOTPRINT * fp : asc->Footprints() )                                                                      \
+            ascByRef[fp->GetReference()] = fp;                                                                         \
+                                                                                                                       \
+        int      resolved = 0, nameWrong = 0, countWrong = 0;                                                          \
+        wxString wrongRefs;                                                                                            \
+                                                                                                                       \
+        for( FOOTPRINT * fp : bin->Footprints() )                                                                      \
+        {                                                                                                              \
+            wxString binDecal = fp->GetFPID().GetLibItemName().wx_str();                                               \
+                                                                                                                       \
+            if( binDecal == fp->GetReference() )                                                                       \
+                continue; /* unresolved placement (absent from section 22) */                                          \
+                                                                                                                       \
+            auto it = ascByRef.find( fp->GetReference() );                                                             \
+                                                                                                                       \
+            if( it == ascByRef.end() )                                                                                 \
+                continue;                                                                                              \
+                                                                                                                       \
+            resolved++;                                                                                                \
+                                                                                                                       \
+            if( binDecal != it->second->GetFPID().GetLibItemName().wx_str() )                                          \
+            {                                                                                                          \
+                nameWrong++;                                                                                           \
                 wrongRefs += fp->GetReference()                                                                        \
                              + wxString::Format( ":name %s/%s %zu/%zu ", binDecal,                                     \
                                                  it->second->GetFPID().GetLibItemName().wx_str(), fp->Pads().size(),   \
                                                  it->second->Pads().size() );                                          \
-            }                                                                               \
-            else if( fp->Pads().size() != it->second->Pads().size() )                       \
-            {                                                                               \
-                countWrong++;                                                               \
+            }                                                                                                          \
+            else if( fp->Pads().size() != it->second->Pads().size() )                                                  \
+            {                                                                                                          \
+                countWrong++;                                                                                          \
                 wrongRefs += fp->GetReference()                                                                        \
                              + wxString::Format( ":%zu/%zu ", fp->Pads().size(), it->second->Pads().size() );          \
-            }                                                                               \
-        }                                                                                   \
-                                                                                            \
+            }                                                                                                          \
+        }                                                                                                              \
+                                                                                                                       \
         BOOST_TEST_MESSAGE( #name " per-footprint: resolved=" << resolved << " nameWrong=" << nameWrong                \
-                            << " countWrong=" << countWrong                                  \
-                            << " wrongRefs=" << wrongRefs );                                \
-        BOOST_CHECK_LE( nameWrong, maxNameWrong );                                          \
-        BOOST_CHECK_LE( countWrong, maxCountWrong );                                        \
+                                                              << " countWrong=" << countWrong                          \
+                                                              << " wrongRefs=" << wrongRefs );                         \
+        BOOST_CHECK_LE( nameWrong, maxNameWrong );                                                                     \
+        BOOST_CHECK_LE( countWrong, maxCountWrong );                                                                   \
     }
 
-PER_FOOTPRINT_CONTENT_TEST( TMS1mmX19,       0, 1, 0 )
+PER_FOOTPRINT_CONTENT_TEST( TMS1mmX19, 0, 1, 0 )
 PER_FOOTPRINT_CONTENT_TEST( MC4_PLUS_CSHAPE, 1, 0, 0 )
-PER_FOOTPRINT_CONTENT_TEST( Ems4_Rev2,       3, 0, 0 )
-PER_FOOTPRINT_CONTENT_TEST( LCORE_4,         4, 1, 0 )
+PER_FOOTPRINT_CONTENT_TEST( Ems4_Rev2, 3, 0, 0 )
+PER_FOOTPRINT_CONTENT_TEST( LCORE_4, 4, 1, 0 )
 
 
 BOOST_AUTO_TEST_CASE( SectionBoundaryPlacement_TMS1mmX19_SM3 )
@@ -1569,7 +1766,7 @@ BOOST_AUTO_TEST_CASE( V2021_PadImport_Dexter_MotorCtrl )
  */
 BOOST_AUTO_TEST_CASE( V2021_PartPlacement_MAIS_FC )
 {
-    auto bin = LoadBinary( PADS_BINARY_BOARDS[7] );   // MAIS_FC, v0x2021
+    auto bin = LoadBinary( PADS_BINARY_BOARDS[7] ); // MAIS_FC, v0x2021
 
     if( !bin )
         return;
@@ -1577,9 +1774,9 @@ BOOST_AUTO_TEST_CASE( V2021_PartPlacement_MAIS_FC )
     struct Oracle
     {
         wxString ref;
-        int      ascY;       // ASC design-space Y, for relative ordering only
-        double   ori;        // ASC ORI degrees (top-side parts)
-        bool     flipped;    // ASC MIRROR flag
+        int      ascY;    // ASC design-space Y, for relative ordering only
+        double   ori;     // ASC ORI degrees (top-side parts)
+        bool     flipped; // ASC MIRROR flag
     };
 
     const std::vector<Oracle> oracle = {
@@ -1603,7 +1800,7 @@ BOOST_AUTO_TEST_CASE( V2021_PartPlacement_MAIS_FC )
 
     BOOST_CHECK_MESSAGE( binYs.size() == oracle.size(), "v0x2021 part Y collapsed to "
                                                                 << binYs.size() << " of " << oracle.size()
-                         << " distinct values (Y decode regression)" );
+                                                                << " distinct values (Y decode regression)" );
 
     // Side must match the MIRROR flag; un-mirrored parts must carry the exact ASC ORI.
     for( const Oracle& o : oracle )
@@ -1651,14 +1848,14 @@ BOOST_AUTO_TEST_CASE( V2021_PartPlacement_MAIS_FC )
 }
 
 
-PAD_COUNT_TEST( TMS1mmX19,        0 )
-PAD_COUNT_TEST( MC4_PLUS_CSHAPE,  1 )
-PAD_COUNT_TEST( MC2_PLUS_REV1,    2 )
-PAD_COUNT_TEST( Ems4_Rev2,        3 )
-PAD_COUNT_TEST( LCORE_4,          4 )
-PAD_COUNT_TEST( LCORE_2,          5 )
+PAD_COUNT_TEST( TMS1mmX19, 0 )
+PAD_COUNT_TEST( MC4_PLUS_CSHAPE, 1 )
+PAD_COUNT_TEST( MC2_PLUS_REV1, 2 )
+PAD_COUNT_TEST( Ems4_Rev2, 3 )
+PAD_COUNT_TEST( LCORE_4, 4 )
+PAD_COUNT_TEST( LCORE_2, 5 )
 PAD_COUNT_TEST( Dexter_MotorCtrl, 6 )
-PAD_COUNT_TEST( MAIS_FC,          7 )
+PAD_COUNT_TEST( MAIS_FC, 7 )
 
 BOOST_AUTO_TEST_CASE( PadCountExact_MC4_PLUS_CSHAPE )
 {
@@ -1721,14 +1918,14 @@ BOOST_AUTO_TEST_CASE( PadCountExact_LCORE_4 )
 }
 
 
-STRUCTURAL_INTEGRITY_TEST( TMS1mmX19,        0 )
-STRUCTURAL_INTEGRITY_TEST( MC4_PLUS_CSHAPE,  1 )
-STRUCTURAL_INTEGRITY_TEST( MC2_PLUS_REV1,    2 )
-STRUCTURAL_INTEGRITY_TEST( Ems4_Rev2,        3 )
-STRUCTURAL_INTEGRITY_TEST( LCORE_4,          4 )
-STRUCTURAL_INTEGRITY_TEST( LCORE_2,          5 )
+STRUCTURAL_INTEGRITY_TEST( TMS1mmX19, 0 )
+STRUCTURAL_INTEGRITY_TEST( MC4_PLUS_CSHAPE, 1 )
+STRUCTURAL_INTEGRITY_TEST( MC2_PLUS_REV1, 2 )
+STRUCTURAL_INTEGRITY_TEST( Ems4_Rev2, 3 )
+STRUCTURAL_INTEGRITY_TEST( LCORE_4, 4 )
+STRUCTURAL_INTEGRITY_TEST( LCORE_2, 5 )
 STRUCTURAL_INTEGRITY_TEST( Dexter_MotorCtrl, 6 )
-STRUCTURAL_INTEGRITY_TEST( MAIS_FC,          7 )
+STRUCTURAL_INTEGRITY_TEST( MAIS_FC, 7 )
 
 
 /**
@@ -1736,54 +1933,54 @@ STRUCTURAL_INTEGRITY_TEST( MAIS_FC,          7 )
  * ASCII reference file has multiple widths. This validates per-segment width
  * resolution from sec62 rather than defaulting everything to one width.
  */
-#define WIDTH_VARIETY_TEST( name, idx )                                                     \
-    BOOST_AUTO_TEST_CASE( TrackWidthVariety_##name )                                        \
-    {                                                                                       \
-        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                   \
-                                                                                            \
-        if( !bin )                                                                          \
-            return;                                                                         \
-                                                                                            \
-        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                     \
-                                                                                            \
-        std::set<int> binWidths;                                                            \
-        std::set<int> ascWidths;                                                            \
-                                                                                            \
-        for( PCB_TRACK* trk : bin->Tracks() )                                              \
-        {                                                                                   \
-            if( trk->Type() == PCB_TRACE_T )                                                \
-                binWidths.insert( trk->GetWidth() );                                        \
-        }                                                                                   \
-                                                                                            \
-        for( PCB_TRACK* trk : asc->Tracks() )                                              \
-        {                                                                                   \
-            if( trk->Type() == PCB_TRACE_T )                                                \
-                ascWidths.insert( trk->GetWidth() );                                        \
-        }                                                                                   \
-                                                                                            \
-        if( ascWidths.size() > 1 )                                                          \
-        {                                                                                   \
+#define WIDTH_VARIETY_TEST( name, idx )                                                                                \
+    BOOST_AUTO_TEST_CASE( TrackWidthVariety_##name )                                                                   \
+    {                                                                                                                  \
+        auto bin = LoadBinary( PADS_BINARY_BOARDS[idx] );                                                              \
+                                                                                                                       \
+        if( !bin )                                                                                                     \
+            return;                                                                                                    \
+                                                                                                                       \
+        auto asc = LoadAsc( PADS_BINARY_BOARDS[idx] );                                                                 \
+                                                                                                                       \
+        std::set<int> binWidths;                                                                                       \
+        std::set<int> ascWidths;                                                                                       \
+                                                                                                                       \
+        for( PCB_TRACK * trk : bin->Tracks() )                                                                         \
+        {                                                                                                              \
+            if( trk->Type() == PCB_TRACE_T )                                                                           \
+                binWidths.insert( trk->GetWidth() );                                                                   \
+        }                                                                                                              \
+                                                                                                                       \
+        for( PCB_TRACK * trk : asc->Tracks() )                                                                         \
+        {                                                                                                              \
+            if( trk->Type() == PCB_TRACE_T )                                                                           \
+                ascWidths.insert( trk->GetWidth() );                                                                   \
+        }                                                                                                              \
+                                                                                                                       \
+        if( ascWidths.size() > 1 )                                                                                     \
+        {                                                                                                              \
             BOOST_WARN_MESSAGE( binWidths.size() > 1, #name " binary should have multiple distinct track widths "      \
                                                             "(found "                                                  \
                                                               << binWidths.size() << ", ASCII has "                    \
                                                               << ascWidths.size() << ")" );                            \
-        }                                                                                   \
+        }                                                                                                              \
     }
 
-WIDTH_VARIETY_TEST( TMS1mmX19,        0 )
-WIDTH_VARIETY_TEST( Ems4_Rev2,        3 )
-WIDTH_VARIETY_TEST( LCORE_4,          4 )
-WIDTH_VARIETY_TEST( LCORE_2,          5 )
+WIDTH_VARIETY_TEST( TMS1mmX19, 0 )
+WIDTH_VARIETY_TEST( Ems4_Rev2, 3 )
+WIDTH_VARIETY_TEST( LCORE_4, 4 )
+WIDTH_VARIETY_TEST( LCORE_2, 5 )
 WIDTH_VARIETY_TEST( Dexter_MotorCtrl, 6 )
-WIDTH_VARIETY_TEST( MAIS_FC,          7 )
+WIDTH_VARIETY_TEST( MAIS_FC, 7 )
 
 
 /**
  * Geometric regression guard for the structural copper/keepout vertex link.
  *
  * Copper and keepout zone polygons are sliced out of the sec12 vertex pool by each owner's
- * structural vertexStart cursor (vertexStart - sec12 base) read off the marker-walked
- * owner stream, not by bounding-box matching. A wrong sec12 base or a one-record owner-lag
+ * structural vertexStart cursor read from the directly framed circular owner array, not by
+ * bounding-box matching. A wrong section-12 origin or a one-record owner-lag
  * error leaves the zone COUNT intact while shifting every structural vertex, so the
  * ZoneCountExact tests cannot catch it.
  *
@@ -1799,10 +1996,10 @@ BOOST_AUTO_TEST_CASE( StructuralZoneVertices )
 {
     struct EXPECTED_OWNER
     {
-        std::string                    boardDir;
-        std::string                    binaryFile;
-        std::string                    owner;
-        int32_t                        expectedBase;
+        std::string                      boardDir;
+        std::string                      binaryFile;
+        std::string                      owner;
+        int32_t                          expectedBase;
         std::vector<std::pair<int, int>> firstVerts; // design coords, sec12 units
     };
 
@@ -1810,27 +2007,27 @@ BOOST_AUTO_TEST_CASE( StructuralZoneVertices )
         { "MC4_PLUS_CSHAPE",
           "MC4_PLUS_CSHAPE.pcb",
           "DRW68014421",
-          99,
+          0,
           { { 0, 0 }, { 0, 5486400 }, { 9982200, 5486400 }, { 10210800, 5257800 } } },
         { "MC4_PLUS_CSHAPE",
           "MC4_PLUS_CSHAPE.pcb",
           "DRW16024650",
-          99,
+          0,
           { { 0, 0 }, { 0, 9784905 }, { -452970, 8882805 }, { -1905015, -2943150 } } },
         { "Ems4_Rev2",
           "Ems4_Rev2.pcb",
           "DRW55434270",
-          99,
+          0,
           { { 0, -571500 }, { 0, 1333500 }, { 1714500, 1333500 }, { 1714500, 6096000 } } },
         { "Ems4_Rev2",
           "Ems4_Rev2.pcb",
           "DRW1329638",
-          99,
+          0,
           { { 0, 0 }, { 0, -2095500 }, { 2857500, -2095500 }, { 3048000, -2286000 } } },
         { "LCORE_4",
           "LCORE_4.pcb",
           "DRW47981509",
-          99,
+          0,
           { { 803078, -1462546 }, { -1259549, -2233786 }, { -295519, -4678038 }, { 1767106, -3906796 } } },
     };
 
@@ -2005,7 +2202,7 @@ BOOST_AUTO_TEST_CASE( DedupePoolTerminalPositions_MC4 )
 
     struct Expected
     {
-        std::string                          name;
+        std::string                            name;
         std::vector<std::pair<double, double>> terms;
     };
 
@@ -2071,12 +2268,157 @@ BOOST_AUTO_TEST_CASE( ClusterGroups_MC4_PLUS_CSHAPE )
     BOOST_REQUIRE_MESSAGE( groupMembers.count( "CLU_DCDC3V3" ), "cluster CLU_DCDC3V3 missing from PCB_GROUPs" );
 
     const std::set<wxString> clu5v = { "C79", "C80", "C81", "C82", "C83", "C84", "C85", "C86",
-                                       "D4", "L2", "R84", "R85", "R86", "R87", "R89", "U10" };
+                                       "D4",  "L2",  "R84", "R85", "R86", "R87", "R89", "U10" };
     const std::set<wxString> clu3v3 = { "C72", "C73", "C74", "C75", "C76", "C77", "C78", "D3",
-                                        "L1", "R77", "R78", "R79", "R80", "R81", "R83", "U9" };
+                                        "L1",  "R77", "R78", "R79", "R80", "R81", "R83", "U9" };
 
     BOOST_CHECK( groupMembers["CLU_DCDC5V"] == clu5v );
     BOOST_CHECK( groupMembers["CLU_DCDC3V3"] == clu3v3 );
+}
+
+
+BOOST_AUTO_TEST_CASE( ModernConnectionsUseDeclaredSection24Ring )
+{
+    const wxString source = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/LCORE_2/LCORE_2.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( source, bytes ) );
+
+    PADS_IO::PADS_SDB sdb;
+    sdb.Load( bytes );
+
+    const PADS_IO::SDB_SECTION* text = sdb.Section( 8 );
+    const PADS_IO::SDB_SECTION* connections = sdb.Section( 24 );
+    BOOST_REQUIRE( text != nullptr );
+    BOOST_REQUIRE( connections != nullptr );
+    BOOST_REQUIRE_GT( connections->count, 2u );
+    BOOST_REQUIRE_GE( text->physicalBytes, 68u );
+    BOOST_REQUIRE_GE( connections->physicalOffset, 36u );
+
+    const size_t declaredRecord = connections->physicalOffset - 36 + 2 * 68;
+    BOOST_REQUIRE_LE( declaredRecord + 68, bytes.size() );
+
+    std::copy_n( bytes.begin() + declaredRecord, 68, bytes.begin() + text->physicalOffset );
+    bytes[declaredRecord + 23] = 0x42;
+
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_pads_connection_decoy_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".pcb" );
+
+    {
+        wxFFile file( tempPath, wxS( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( bytes.data(), bytes.size() ), bytes.size() );
+    }
+
+    bool rejectedDeclaredRing = false;
+
+    try
+    {
+        PADS_IO::BINARY_PARSER parser;
+        parser.Parse( tempPath );
+    }
+    catch( const std::exception& e )
+    {
+        rejectedDeclaredRing = std::string( e.what() ).find( "net-connection ring framing" ) != std::string::npos;
+    }
+
+    wxRemoveFile( tempPath );
+    BOOST_CHECK( rejectedDeclaredRing );
+}
+
+
+BOOST_AUTO_TEST_CASE( ModernConnectionsRequireSerializedFinalEdgeHead )
+{
+    const wxString source = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/LCORE_2/LCORE_2.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( source, bytes ) );
+
+    PADS_IO::PADS_SDB sdb;
+    sdb.Load( bytes );
+
+    const PADS_IO::SDB_SECTION* connections = sdb.Section( 24 );
+    BOOST_REQUIRE( connections != nullptr );
+    BOOST_REQUIRE_GE( connections->physicalOffset, 36u );
+
+    const size_t finalHead = connections->physicalOffset - 36
+                             + static_cast<size_t>( connections->count ) * 68;
+    BOOST_REQUIRE_LE( finalHead + 36, bytes.size() );
+
+    bytes[finalHead + 23] = 0x42;
+
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_pads_connection_final_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".pcb" );
+
+    {
+        wxFFile file( tempPath, wxS( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( bytes.data(), bytes.size() ), bytes.size() );
+    }
+
+    bool rejectedFinalHead = false;
+
+    try
+    {
+        PADS_IO::BINARY_PARSER parser;
+        parser.Parse( tempPath );
+    }
+    catch( const std::exception& e )
+    {
+        rejectedFinalHead = std::string( e.what() ).find( "net-connection ring framing" ) != std::string::npos;
+    }
+
+    wxRemoveFile( tempPath );
+    BOOST_CHECK( rejectedFinalHead );
+}
+
+
+BOOST_AUTO_TEST_CASE( LegacyConnectionsRequireDeclaredRingMarker )
+{
+    const wxString source =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/Dexter_MotorCtrl/Dexter_MotorCtrl.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( source, bytes ) );
+
+    PADS_IO::PADS_SDB sdb;
+    sdb.Load( bytes );
+
+    const PADS_IO::SDB_SECTION* connections = sdb.Section( 24 );
+    BOOST_REQUIRE( connections != nullptr );
+    BOOST_REQUIRE_GT( connections->count, 0u );
+
+    const size_t firstRecord = static_cast<size_t>( connections->physicalOffset ) + 16;
+    BOOST_REQUIRE_LE( firstRecord + 68, bytes.size() );
+    bytes[firstRecord + 39] = 0x42;
+
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_pads_connection_legacy_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".pcb" );
+
+    {
+        wxFFile file( tempPath, wxS( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( bytes.data(), bytes.size() ), bytes.size() );
+    }
+
+    bool rejectedLegacyRing = false;
+
+    try
+    {
+        PADS_IO::BINARY_PARSER parser;
+        parser.Parse( tempPath );
+    }
+    catch( const std::exception& e )
+    {
+        rejectedLegacyRing =
+                std::string( e.what() ).find( "legacy net-connection ring framing" ) != std::string::npos;
+    }
+
+    wxRemoveFile( tempPath );
+    BOOST_CHECK( rejectedLegacyRing );
 }
 
 
@@ -2095,10 +2437,10 @@ BOOST_AUTO_TEST_CASE( SdbContainerDecode )
     PADS_IO::PADS_SDB sdb;
     BOOST_REQUIRE_NO_THROW( sdb.Load( std::move( bytes ) ) );
 
-    // LCORE_2 is a v0x2026 board: the modern 74-entry directory and a per-axis origin.
+    // LCORE_2 is a v0x2026 board: the modern 75-entry directory and a per-axis origin.
     BOOST_CHECK_EQUAL( sdb.Version(), 0x2026 );
     BOOST_CHECK( !sdb.IsOldFormat() );
-    BOOST_CHECK_EQUAL( sdb.SectionCount(), 74u );
+    BOOST_CHECK_EQUAL( sdb.SectionCount(), 75u );
 
     BOOST_REQUIRE( sdb.Coords().Found() );
     BOOST_CHECK_EQUAL( sdb.Coords().OriginX(), -2290000 );
@@ -2108,13 +2450,12 @@ BOOST_AUTO_TEST_CASE( SdbContainerDecode )
     BOOST_CHECK_EQUAL( sdb.Coords().DesignX( sdb.Coords().OriginX() ), 0 );
     BOOST_CHECK_EQUAL( sdb.Coords().DesignY( sdb.Coords().OriginY() ), 0 );
 
-    // Section payloads accumulate after the directory; the net controller (23) is present.
-    const PADS_IO::SDB_SECTION* setup = sdb.Section( 1 );
-    const PADS_IO::SDB_SECTION* nets  = sdb.Section( 23 );
-    BOOST_REQUIRE( setup != nullptr );
+    // The physical net controller is present after the rotated board-setup view.
+    const PADS_IO::SDB_SECTION* nets = sdb.Section( 23 );
     BOOST_REQUIRE( nets != nullptr );
-    BOOST_CHECK( setup->dataOffset > 0 );
-    BOOST_CHECK( nets->dataOffset >= setup->End() );
+    BOOST_CHECK( sdb.Coords().HeaderBase() > 0 );
+    BOOST_CHECK( nets->physicalOffset > sdb.Coords().HeaderBase() );
+    BOOST_CHECK_EQUAL( nets->physicalBytes, nets->totalBytes );
 
     // Out-of-range section indices return null rather than indexing past the directory.
     BOOST_CHECK( sdb.Section( -1 ) == nullptr );
@@ -2122,9 +2463,404 @@ BOOST_AUTO_TEST_CASE( SdbContainerDecode )
 }
 
 
+BOOST_AUTO_TEST_CASE( SdbPagedControllersUseSerializedPageCounts )
+{
+    wxString path = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/TMS1mmX19/TMS1mmX19.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE_MESSAGE( PADS_IO::ReadFileToBuffer( path, bytes ), "TMS1mmX19.pcb test data should be readable" );
+
+    PADS_IO::PADS_SDB sdb;
+    BOOST_REQUIRE_NO_THROW( sdb.Load( std::move( bytes ) ) );
+
+    BOOST_CHECK_EQUAL( sdb.SectionCount(), 75u );
+
+    const PADS_IO::SDB_SECTION* pageDirectory = sdb.Section( 26 );
+    const PADS_IO::SDB_SECTION* clearance = sdb.Section( 41 );
+    const PADS_IO::SDB_SECTION* highSpeed = sdb.Section( 42 );
+    const PADS_IO::SDB_SECTION* route = sdb.Section( 46 );
+    const PADS_IO::SDB_SECTION* diffPair = sdb.Section( 48 );
+    const PADS_IO::SDB_SECTION* netRelationships = sdb.Section( 49 );
+    const PADS_IO::SDB_SECTION* stringPool = sdb.Section( 57 );
+    const PADS_IO::SDB_SECTION* layers = sdb.Section( 69 );
+    const PADS_IO::SDB_SECTION* layerState = sdb.Section( 70 );
+    const PADS_IO::SDB_SECTION* displayPreferences = sdb.Section( 71 );
+    const PADS_IO::SDB_SECTION* fonts = sdb.Section( 73 );
+
+    BOOST_REQUIRE( pageDirectory != nullptr );
+    BOOST_REQUIRE( clearance != nullptr );
+    BOOST_REQUIRE( highSpeed != nullptr );
+    BOOST_REQUIRE( route != nullptr );
+    BOOST_REQUIRE( diffPair != nullptr );
+    BOOST_REQUIRE( netRelationships != nullptr );
+    BOOST_REQUIRE( stringPool != nullptr );
+    BOOST_REQUIRE( layers != nullptr );
+    BOOST_REQUIRE( layerState != nullptr );
+    BOOST_REQUIRE( displayPreferences != nullptr );
+    BOOST_REQUIRE( fonts != nullptr );
+
+    BOOST_CHECK_EQUAL( pageDirectory->physicalOffset, 474496u );
+    BOOST_CHECK_EQUAL( pageDirectory->physicalBytes, 120u );
+
+    BOOST_CHECK_EQUAL( clearance->physicalOffset, 474660u );
+    BOOST_CHECK_EQUAL( clearance->physicalCount, 1u );
+    BOOST_CHECK_EQUAL( clearance->physicalBytes, 188u );
+
+    BOOST_CHECK_EQUAL( highSpeed->physicalOffset, 474848u );
+    BOOST_CHECK_EQUAL( highSpeed->physicalCount, 1u );
+    BOOST_CHECK_EQUAL( highSpeed->physicalBytes, 80u );
+
+    BOOST_CHECK_EQUAL( route->physicalOffset, 474928u );
+    BOOST_CHECK_EQUAL( route->physicalCount, 1u );
+    BOOST_CHECK_EQUAL( route->physicalLiveCount, 1u );
+    BOOST_CHECK_EQUAL( route->physicalBytes, 40u );
+
+    BOOST_CHECK_EQUAL( diffPair->physicalOffset, 474968u );
+    BOOST_CHECK_EQUAL( diffPair->physicalCount, 10u );
+    BOOST_CHECK_EQUAL( diffPair->physicalBytes, 8640u );
+
+    BOOST_CHECK_EQUAL( netRelationships->physicalOffset, 483608u );
+    BOOST_CHECK_EQUAL( netRelationships->physicalBytes, 44000u );
+
+    BOOST_CHECK_EQUAL( stringPool->physicalOffset, 549792u );
+    BOOST_CHECK_EQUAL( stringPool->physicalBytes, 36703u );
+
+    BOOST_CHECK_EQUAL( layers->physicalOffset, 738695u );
+    BOOST_CHECK_EQUAL( layers->physicalBytes, 4724u );
+    BOOST_CHECK_EQUAL( layerState->physicalOffset, 743419u );
+    BOOST_CHECK_EQUAL( layerState->physicalBytes, 4u );
+    BOOST_CHECK_EQUAL( displayPreferences->physicalOffset, 743423u );
+    BOOST_CHECK_EQUAL( displayPreferences->physicalBytes, 1144u );
+    BOOST_CHECK_EQUAL( fonts->physicalOffset, 744567u );
+    BOOST_CHECK_EQUAL( fonts->physicalBytes, 52u );
+}
+
+
+BOOST_AUTO_TEST_CASE( SdbRouteRuleSlotLivenessUsesSerializedSlotState )
+{
+    wxString path = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/TMS1mmX19/TMS1mmX19.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( path, bytes ) );
+
+    PADS_IO::PADS_SDB baseline;
+    baseline.Load( bytes );
+
+    const PADS_IO::SDB_SECTION* route = baseline.Section( 46 );
+    const PADS_IO::SDB_SECTION* relationships = baseline.Section( 49 );
+    const PADS_IO::SDB_SECTION* stringPool = baseline.Section( 57 );
+    const PADS_IO::SDB_SECTION* layers = baseline.Section( 69 );
+
+    BOOST_REQUIRE( route != nullptr );
+    BOOST_REQUIRE( relationships != nullptr );
+    BOOST_REQUIRE( stringPool != nullptr );
+    BOOST_REQUIRE( layers != nullptr );
+    BOOST_REQUIRE_EQUAL( route->physicalLiveCount, 1u );
+
+    const size_t stateOffset = relationships->physicalOffset + relationships->physicalBytes;
+    BOOST_REQUIRE( stateOffset + 4 <= bytes.size() - 42 );
+
+    auto removeState = [stateOffset]( std::vector<uint8_t>& aBytes )
+    {
+        aBytes.erase( aBytes.begin() + stateOffset, aBytes.begin() + stateOffset + 4 );
+
+        uint32_t containerOffset = static_cast<uint32_t>( aBytes[aBytes.size() - 4] )
+                                   | static_cast<uint32_t>( aBytes[aBytes.size() - 3] ) << 8
+                                   | static_cast<uint32_t>( aBytes[aBytes.size() - 2] ) << 16
+                                   | static_cast<uint32_t>( aBytes[aBytes.size() - 1] ) << 24;
+        containerOffset -= 4;
+        aBytes[aBytes.size() - 4] = static_cast<uint8_t>( containerOffset );
+        aBytes[aBytes.size() - 3] = static_cast<uint8_t>( containerOffset >> 8 );
+        aBytes[aBytes.size() - 2] = static_cast<uint8_t>( containerOffset >> 16 );
+        aBytes[aBytes.size() - 1] = static_cast<uint8_t>( containerOffset >> 24 );
+    };
+
+    std::vector<uint8_t> zeroHandle = bytes;
+    std::fill_n( zeroHandle.begin() + route->physicalOffset + 4, 4, uint8_t{ 0 } );
+    removeState( zeroHandle );
+
+    PADS_IO::PADS_SDB zeroHandleSlot;
+    BOOST_REQUIRE_NO_THROW( zeroHandleSlot.Load( std::move( zeroHandle ) ) );
+    BOOST_CHECK_EQUAL( zeroHandleSlot.Section( 46 )->physicalLiveCount, 0u );
+    BOOST_CHECK_EQUAL( zeroHandleSlot.Section( 57 )->physicalOffset, stringPool->physicalOffset - 4 );
+    BOOST_CHECK_EQUAL( zeroHandleSlot.Section( 69 )->physicalOffset, layers->physicalOffset - 4 );
+
+    std::vector<uint8_t> negativeHandle = bytes;
+    negativeHandle[route->physicalOffset + 3] |= 0x80;
+    removeState( negativeHandle );
+
+    PADS_IO::PADS_SDB negativeHandleSlot;
+    BOOST_REQUIRE_NO_THROW( negativeHandleSlot.Load( std::move( negativeHandle ) ) );
+    BOOST_CHECK_EQUAL( negativeHandleSlot.Section( 46 )->physicalLiveCount, 0u );
+    BOOST_CHECK_EQUAL( negativeHandleSlot.Section( 57 )->physicalOffset, stringPool->physicalOffset - 4 );
+    BOOST_CHECK_EQUAL( negativeHandleSlot.Section( 69 )->physicalOffset, layers->physicalOffset - 4 );
+}
+
+
+BOOST_AUTO_TEST_CASE( SdbStringPoolUsesDeclaredSection57Extent )
+{
+    wxString path = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/TMS1mmX19/TMS1mmX19.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( path, bytes ) );
+
+    PADS_IO::PADS_SDB baseline;
+    baseline.Load( bytes );
+
+    const PADS_IO::SDB_SECTION* text = baseline.Section( 8 );
+    const PADS_IO::SDB_SECTION* strings = baseline.Section( 57 );
+    BOOST_REQUIRE( text != nullptr );
+    BOOST_REQUIRE( strings != nullptr );
+    BOOST_REQUIRE_GE( text->physicalBytes, 64u );
+    BOOST_REQUIRE_GE( strings->physicalBytes, 64u );
+
+    std::vector<uint8_t> decoy = bytes;
+    std::copy_n( decoy.begin() + strings->physicalOffset, 64, decoy.begin() + text->physicalOffset );
+
+    PADS_IO::PADS_SDB withDecoy;
+    BOOST_REQUIRE_NO_THROW( withDecoy.Load( std::move( decoy ) ) );
+    BOOST_CHECK_EQUAL( withDecoy.Section( 57 )->physicalOffset, strings->physicalOffset );
+    BOOST_CHECK_EQUAL( withDecoy.Section( 57 )->physicalBytes, strings->physicalBytes );
+
+    std::vector<uint8_t> corrupt = bytes;
+    const size_t         extentOffset = 10 + 57 * 16 + 4;
+    uint32_t             extent = strings->totalBytes + 1;
+    corrupt[extentOffset] = static_cast<uint8_t>( extent );
+    corrupt[extentOffset + 1] = static_cast<uint8_t>( extent >> 8 );
+    corrupt[extentOffset + 2] = static_cast<uint8_t>( extent >> 16 );
+    corrupt[extentOffset + 3] = static_cast<uint8_t>( extent >> 24 );
+
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_pads_string_extent_corrupt_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".pcb" );
+
+    {
+        wxFFile file( tempPath, wxS( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( corrupt.data(), corrupt.size() ), corrupt.size() );
+    }
+
+    PADS_IO::BINARY_PARSER invalid;
+    BOOST_CHECK_THROW( invalid.Parse( tempPath ), std::exception );
+    wxRemoveFile( tempPath );
+}
+
+
+BOOST_AUTO_TEST_CASE( SdbGraphicControllersUseDeclaredCircularExtents )
+{
+    wxString path = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/LCORE_2/LCORE_2.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( path, bytes ) );
+
+    PADS_IO::PADS_SDB baseline;
+    baseline.Load( bytes );
+
+    const PADS_IO::SDB_SECTION* text = baseline.Section( 8 );
+    const PADS_IO::SDB_SECTION* owners = baseline.Section( 10 );
+    const PADS_IO::SDB_SECTION* pieces = baseline.Section( 11 );
+    const PADS_IO::SDB_SECTION* vertices = baseline.Section( 12 );
+    BOOST_REQUIRE( text != nullptr );
+    BOOST_REQUIRE( owners != nullptr );
+    BOOST_REQUIRE( pieces != nullptr );
+    BOOST_REQUIRE( vertices != nullptr );
+    BOOST_REQUIRE( text->physicalBytes >= 112 );
+
+    BOOST_CHECK_EQUAL( owners->physicalBytes, owners->count * 112u );
+    BOOST_CHECK_EQUAL( pieces->physicalBytes, pieces->count * 20u );
+    BOOST_CHECK_EQUAL( vertices->physicalBytes, vertices->count * 12u );
+    BOOST_CHECK_EQUAL( pieces->physicalOffset, owners->physicalOffset + owners->physicalBytes );
+    BOOST_CHECK_EQUAL( vertices->physicalOffset, pieces->physicalOffset + pieces->physicalBytes );
+
+    std::vector<uint8_t> decoy = bytes;
+    std::copy_n( decoy.begin() + owners->physicalOffset, 112, decoy.begin() + text->physicalOffset );
+
+    PADS_IO::PADS_SDB withDecoy;
+    BOOST_REQUIRE_NO_THROW( withDecoy.Load( std::move( decoy ) ) );
+    BOOST_CHECK_EQUAL( withDecoy.Section( 10 )->physicalOffset, owners->physicalOffset );
+    BOOST_CHECK_EQUAL( withDecoy.Section( 11 )->physicalOffset, pieces->physicalOffset );
+    BOOST_CHECK_EQUAL( withDecoy.Section( 12 )->physicalOffset, vertices->physicalOffset );
+
+    std::vector<uint8_t> corrupt = bytes;
+    const size_t         countOffset = 10 + 10 * 16;
+    uint32_t             count = owners->count + 1;
+    corrupt[countOffset] = static_cast<uint8_t>( count );
+    corrupt[countOffset + 1] = static_cast<uint8_t>( count >> 8 );
+    corrupt[countOffset + 2] = static_cast<uint8_t>( count >> 16 );
+    corrupt[countOffset + 3] = static_cast<uint8_t>( count >> 24 );
+
+    PADS_IO::PADS_SDB invalid;
+    BOOST_CHECK_THROW( invalid.Load( std::move( corrupt ) ), std::exception );
+}
+
+
+BOOST_AUTO_TEST_CASE( PourOwnersUseDeclaredSection52Array )
+{
+    wxString source = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/LCORE_4/LCORE_4.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( source, bytes ) );
+
+    PADS_IO::PADS_SDB sdb;
+    sdb.Load( bytes );
+
+    const PADS_IO::SDB_SECTION* text = sdb.Section( 8 );
+    const PADS_IO::SDB_SECTION* owners = sdb.Section( 52 );
+    BOOST_REQUIRE( text != nullptr );
+    BOOST_REQUIRE( owners != nullptr );
+    BOOST_REQUIRE( text->physicalBytes >= 88 );
+    BOOST_REQUIRE_EQUAL( owners->physicalBytes, owners->count * 88u );
+
+    std::copy_n( bytes.begin() + owners->physicalOffset, 88, bytes.begin() + text->physicalOffset );
+
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_pads_pour_decoy_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".pcb" );
+
+    {
+        wxFFile file( tempPath, wxS( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( bytes.data(), bytes.size() ), bytes.size() );
+    }
+
+    auto board = LoadBinaryPath( tempPath, "LCORE_4 pour decoy" );
+    wxRemoveFile( tempPath );
+
+    BOOST_REQUIRE( board );
+    BOOST_CHECK_EQUAL( board->Zones().size(), 4 );
+}
+
+
+BOOST_AUTO_TEST_CASE( SdbCorpusVersionsAreRecognized )
+{
+    BOOST_CHECK( PADS_IO::PADS_SDB::IsSupportedVersion( 0x2017 ) );
+    BOOST_CHECK( PADS_IO::PADS_SDB::IsSupportedVersion( 0x2019 ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SdbRejectsUnclaimedBodyByte )
+{
+    wxString source = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/LCORE_2/LCORE_2.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( source, bytes ) );
+
+    const size_t totalBytesOffset = 10 + 69 * 16 + 4;
+    BOOST_REQUIRE( totalBytesOffset + sizeof( uint32_t ) <= bytes.size() );
+
+    uint32_t totalBytes = static_cast<uint32_t>( bytes[totalBytesOffset] )
+                          | static_cast<uint32_t>( bytes[totalBytesOffset + 1] ) << 8
+                          | static_cast<uint32_t>( bytes[totalBytesOffset + 2] ) << 16
+                          | static_cast<uint32_t>( bytes[totalBytesOffset + 3] ) << 24;
+    BOOST_REQUIRE_GT( totalBytes, 0u );
+    --totalBytes;
+
+    for( size_t byte = 0; byte < sizeof( totalBytes ); ++byte )
+        bytes[totalBytesOffset + byte] = static_cast<uint8_t>( totalBytes >> ( byte * 8 ) );
+
+    PADS_IO::PADS_SDB sdb;
+    BOOST_CHECK_THROW( sdb.Load( std::move( bytes ) ), std::exception );
+}
+
+
+BOOST_AUTO_TEST_CASE( RouteObjectsRejectZeroCountWithSerializedBytes )
+{
+    const wxString source = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/LCORE_2/LCORE_2.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( source, bytes ) );
+
+    const size_t countOffset = 10 + 62 * 16;
+    BOOST_REQUIRE( countOffset + sizeof( uint32_t ) <= bytes.size() );
+    std::fill_n( bytes.begin() + countOffset, sizeof( uint32_t ), 0 );
+
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_pads_route_count_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".pcb" );
+
+    {
+        wxFFile file( tempPath, wxS( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( bytes.data(), bytes.size() ), bytes.size() );
+    }
+
+    PADS_IO::BINARY_PARSER parser;
+    BOOST_CHECK_THROW( parser.Parse( tempPath ), std::exception );
+    wxRemoveFile( tempPath );
+}
+
+
+BOOST_AUTO_TEST_CASE( VersionedLayerTablesUseSerializedNamesAndCounts )
+{
+    struct CASE
+    {
+        const char*              dir;
+        const char*              file;
+        std::vector<std::string> copperNames;
+    };
+
+    const std::vector<CASE> cases = {
+        { "Dexter_MotorCtrl",
+          "Dexter_MotorCtrl.pcb",
+          { "Top", "Signal Routing 1", "Power P3_3v", "Signal Routing 2", "Signal Routing 3", "Power P33v",
+            "Signal Routing 4", "Bottom" } },
+        { "LCORE_2", "LCORE_2.pcb", { "Top", "Bottom" } },
+        { "MC2_PLUS_REV1",
+          "MC2_PLUS_REV1.pcb",
+          { "Top", "Inner Layer 1 GND", "Inner Layer 2", "Inner Layer 3", "Inner Layer 4 VCC", "Bottom" } },
+    };
+
+    for( const CASE& test : cases )
+    {
+        PADS_IO::BINARY_PARSER parser;
+        parser.Parse( KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/" + test.dir + "/" + test.file );
+
+        std::vector<std::string> actual;
+
+        for( const PADS_IO::LAYER_INFO& layer : parser.GetLayerInfos() )
+        {
+            if( layer.is_copper )
+                actual.push_back( layer.name );
+        }
+
+        BOOST_CHECK_EQUAL_COLLECTIONS( actual.begin(), actual.end(), test.copperNames.begin(), test.copperNames.end() );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( DirectPlacementArraysUseSerializedCountsAndOrder )
+{
+    struct CASE
+    {
+        const char* dir;
+        const char* file;
+        size_t      count;
+        const char* first;
+        const char* last;
+    };
+
+    const std::vector<CASE> cases = {
+        { "Dexter_MotorCtrl", "Dexter_MotorCtrl.pcb", 284, "J1", "D5" },
+        { "LCORE_2", "LCORE_2.pcb", 30, "C4", "FL1" },
+        { "MC2_PLUS_REV1", "MC2_PLUS_REV1.pcb", 402, "C1", "UC128" },
+    };
+
+    for( const CASE& test : cases )
+    {
+        PADS_IO::BINARY_PARSER parser;
+        parser.Parse( KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/" + test.dir + "/" + test.file );
+
+        const std::vector<PADS_IO::PART>& parts = parser.GetParts();
+        BOOST_REQUIRE_EQUAL( parts.size(), test.count );
+        BOOST_CHECK_EQUAL( parts.front().name, test.first );
+        BOOST_CHECK_EQUAL( parts.back().name, test.last );
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( SdbFooterStoresContainerItemBackPointer )
 {
-    static constexpr char GUID[] = "{2FE18320-6448-11d1-A412-000000000000}";
+    static constexpr char   GUID[] = "{2FE18320-6448-11d1-A412-000000000000}";
     static constexpr size_t GUID_LENGTH = sizeof( GUID ) - 1;
 
     std::vector<uint8_t> bytes( 128, 0 );
@@ -2152,6 +2888,24 @@ BOOST_AUTO_TEST_CASE( SdbFooterStoresContainerItemBackPointer )
 }
 
 
+BOOST_AUTO_TEST_CASE( SdbRejectsContainerBackPointerInsideFooter )
+{
+    const wxString source = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/LCORE_2/LCORE_2.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( source, bytes ) );
+    BOOST_REQUIRE_GE( bytes.size(), 42u );
+
+    const uint32_t invalidOffset = static_cast<uint32_t>( bytes.size() - 41 );
+
+    for( size_t byte = 0; byte < sizeof( invalidOffset ); ++byte )
+        bytes[bytes.size() - sizeof( invalidOffset ) + byte] = static_cast<uint8_t>( invalidOffset >> ( byte * 8 ) );
+
+    PADS_IO::PADS_SDB sdb;
+    BOOST_CHECK_THROW( sdb.Load( std::move( bytes ) ), std::exception );
+}
+
+
 /**
  * The board-setup block is reached by arithmetic on two declared counts, not by sweeping
  * section 1 for a field-range signature. The origin lives at that base +60/+64 and shifts
@@ -2164,9 +2918,12 @@ BOOST_AUTO_TEST_CASE( SdbFooterStoresContainerItemBackPointer )
 BOOST_AUTO_TEST_CASE( OriginBaseIsDeclaredNotSearched )
 {
     const std::vector<std::string> boards = {
-        "Dexter_MotorCtrl/Dexter_MotorCtrl.pcb", "Ems4_Rev2/Ems4_Rev2.pcb",
-        "LCORE_2/LCORE_2.pcb",                   "LCORE_4/LCORE_4.pcb",
-        "MAIS_FC/MAIS_FC.pcb",                   "MC2_PLUS_REV1/MC2_PLUS_REV1.pcb",
+        "Dexter_MotorCtrl/Dexter_MotorCtrl.pcb",
+        "Ems4_Rev2/Ems4_Rev2.pcb",
+        "LCORE_2/LCORE_2.pcb",
+        "LCORE_4/LCORE_4.pcb",
+        "MAIS_FC/MAIS_FC.pcb",
+        "MC2_PLUS_REV1/MC2_PLUS_REV1.pcb",
         "TMS1mmX19/TMS1mmX19.pcb",
     };
 
@@ -2203,6 +2960,46 @@ BOOST_AUTO_TEST_CASE( OriginBaseIsDeclaredNotSearched )
             BOOST_CHECK_EQUAL( sdb.Coords().HeaderBase(), expected );
         }
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( CorruptDeclaredOriginDoesNotRelocateToDftMarker )
+{
+    wxString source = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/LCORE_2/LCORE_2.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_IO::ReadFileToBuffer( source, bytes ) );
+
+    PADS_IO::PADS_SDB baseline;
+    baseline.Load( bytes );
+    BOOST_REQUIRE( baseline.Coords().Found() );
+
+    const size_t scaleOffset = baseline.Coords().HeaderBase() + 56;
+    BOOST_REQUIRE( scaleOffset + sizeof( float ) <= bytes.size() );
+    std::fill_n( bytes.begin() + scaleOffset, sizeof( float ), uint8_t{ 0 } );
+
+    const std::string marker = "DFT_CONFIGURATION";
+    auto markerIt = std::search( bytes.begin(), bytes.end(), marker.begin(), marker.end() );
+    BOOST_REQUIRE( markerIt != bytes.end() );
+
+    const char config[] = "X\0" "12345\0" "Y\0" "67890\0\0";
+    auto       configIt = markerIt + marker.size() + 1;
+    BOOST_REQUIRE( configIt + sizeof( config ) <= bytes.end() );
+    std::copy_n( reinterpret_cast<const uint8_t*>( config ), sizeof( config ), configIt );
+
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_pads_origin_corrupt_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".pcb" );
+
+    {
+        wxFFile file( tempPath, wxS( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( bytes.data(), bytes.size() ), bytes.size() );
+    }
+
+    PADS_IO::BINARY_PARSER parser;
+    BOOST_CHECK_THROW( parser.Parse( tempPath ), std::exception );
+    wxRemoveFile( tempPath );
 }
 
 
@@ -2301,65 +3098,41 @@ BOOST_AUTO_TEST_CASE( ViaSpanSurvivesOnlyWhenTypeSetFirst )
 }
 
 
-/**
- * Ratchet on how much of the decode is still located by scanning for byte patterns rather
- * than by a structural offset derived from the section directory.
- *
- * The container rules that let a locator be retired are recorded in pads_binary.ksy. Every
- * scan removed should lower MAX_SCAN_LOCATORS here. The test exists so that a change which
- * reintroduces a scan, or a new section decoded by scanning, fails rather than passing quietly.
- *
- * READ THIS NUMBER AS A FLOOR, AND A LOW ONE. It covers four whole-file locators -- the
- * cluster and layer-stackup signature searches, the via phase scan and the rule-edge walk. An
- * audit counted 41 search sites in the parser and 28 more in the SCH reader, ten of the
- * uncounted ones whole-file, so 5 of 69 are instrumented. A realistic count for a v0x2027
- * board is nearer 27.
- *
- * It is also blind by construction to PADS_SDB, which is a separate class with no access to
- * the counter, and which until recently held the origin locator -- the offset that shifts
- * every coordinate in the file.
- *
- * A locator whose arithmetic is anchored on a quantity found by a walk is NOT structural, and
- * retiring its leaf search while the walk goes uncounted lowers this number without reducing
- * any scanning. The pending section 60 and 68/69 patches are both that shape.
- */
-BOOST_AUTO_TEST_CASE( ScanLocatorRatchet )
+// LoadBoard must never own the board it is appending to. PCB_CONTROL::AppendBoard passes the live
+// editor board, catches IO_ERROR and keeps using it, so a plugin that deletes it on the throw path
+// leaves a dangling pointer. The flag observes the destructor directly rather than relying on the
+// undefined behaviour a double free would produce.
+namespace
 {
-    // Per board, not one cap across all of them. A single maximum cannot register a retirement
-    // on any board but the worst, which is why this number sat unmoved while locators were being
-    // retired around it. Lower an entry as its board becomes structural; do not raise one.
-    //
-    // LCORE_2 and MAIS_FC are at zero: their string pool is computed from section 41's undeclared
-    // blocks, so nothing downstream of it -- section 60, the layer stackup, the clusters -- has
-    // to search. Ems4_Rev2 declares total_bytes(41) == 2 rather than 1 and carries undeclared
-    // content the section 41 walk does not model, so its pool falls back to the terminator
-    // search and everything anchored on the pool inherits that one use.
-    struct BOARD_CASE
+struct TRACKED_BOARD : public BOARD
+{
+    explicit TRACKED_BOARD( bool& aDestroyed ) : m_destroyed( aDestroyed ) {}
+    ~TRACKED_BOARD() override { m_destroyed = true; }
+
+    bool& m_destroyed;
+};
+}
+
+
+BOOST_AUTO_TEST_CASE( FailedAppendDoesNotDestroyCallerBoard )
+{
+    bool           destroyed = false;
+    TRACKED_BOARD* caller = new TRACKED_BOARD( destroyed );
+
+    caller->SetCopperLayerCount( 6 );
+
+    PCB_IO_PADS_BINARY plugin;
+
+    // An ASCII PADS export is not a binary container, so the parse throws
+    wxString notBinary = GetAscPath( PADS_BINARY_BOARDS[0] );
+
+    BOOST_CHECK_THROW( plugin.LoadBoard( notBinary, caller, nullptr, nullptr ), IO_ERROR );
+    BOOST_CHECK( !destroyed );
+
+    if( !destroyed )
     {
-        std::string dir;
-        std::string file;
-        int         maxLocators;
-    };
-
-    const std::vector<BOARD_CASE> boards = {
-        { "Ems4_Rev2", "Ems4_Rev2.pcb", 1 },
-        { "LCORE_2", "LCORE_2.pcb", 0 },
-        { "MAIS_FC", "MAIS_FC.pcb", 0 },
-    };
-
-    for( const BOARD_CASE& bc : boards )
-    {
-        PADS_IO::BINARY_PARSER parser;
-        wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/" + bc.dir + "/" + bc.file;
-
-        parser.Parse( filename );
-
-        int uses = parser.ScanLocatorUseCount();
-
-        BOOST_TEST_MESSAGE( bc.file << " scan locators: " << uses );
-        BOOST_CHECK_MESSAGE( uses <= bc.maxLocators,
-                             bc.file << " uses " << uses << " scan locators, above its ratchet of "
-                                     << bc.maxLocators );
+        BOOST_CHECK_EQUAL( caller->GetCopperLayerCount(), 6 );
+        delete caller;
     }
 }
 

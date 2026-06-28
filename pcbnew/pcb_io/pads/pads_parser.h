@@ -392,6 +392,7 @@ struct PART_DECAL
     std::vector<ATTRIBUTE> attributes;
     std::vector<TERMINAL> terminals;
     std::map<int, std::vector<PAD_STACK_LAYER>> pad_stacks;
+    std::map<int, std::pair<int, int>> drill_spans;
 };
 
 struct SIGPIN
@@ -554,6 +555,7 @@ struct LAYER_INFO
     double               layer_thickness = 0.0;     ///< Dielectric, BASIC units
     double               copper_thickness = 0.0;    ///< Copper foil, BASIC units
     double               dielectric_constant = 0.0; ///< Er
+    int                  routing_direction = -1;    ///< 0=horizontal, 1=vertical, 2=no preference
 };
 
 struct REUSE_NET

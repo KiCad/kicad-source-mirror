@@ -1,17 +1,17 @@
-(version 1)
+(version 2)
 
-(rule "DiffPair_TXN2_TXP2_gap"
+(rule "DiffPair_D1_gap"
   (condition "A.NetName == 'TXN2' && B.NetName == 'TXP2'")
   (constraint clearance (min 0.2032mm)))
 
-(rule "DiffPair_TXP1_TXN1_gap"
+(rule "DiffPair_D2_gap"
   (condition "A.NetName == 'TXP1' && B.NetName == 'TXN1'")
   (constraint clearance (min 0.2032mm)))
 
-(rule "DiffPair_RXN1_RXP1_gap"
+(rule "DiffPair_D3_gap"
   (condition "A.NetName == 'RXN1' && B.NetName == 'RXP1'")
   (constraint clearance (min 0.2032mm)))
 
-(rule "DiffPair_RXP2_RXN2_gap"
+(rule "DiffPair_D4_gap"
   (condition "A.NetName == 'RXP2' && B.NetName == 'RXN2'")
   (constraint clearance (min 0.2032mm)))
