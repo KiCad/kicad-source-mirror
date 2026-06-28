@@ -192,7 +192,7 @@ struct NAME_TABLE
 };
 
 /**
- * Reader for the PADS Logic binary .sch format (magic 00 FE, version 0x000D).
+ * Reader for the PADS Logic binary .sch format (magic 00 FE, versions 0x000C and 0x000D).
  *
  * The decode is driven by the serialized record structure: stride-136 part-instance records
  * (symbols), the 8-byte vertex pools tiled by the stride-40 split-header chain (wires, with the
@@ -204,6 +204,12 @@ class PADS_SCH_BINARY_READER
 {
 public:
     PADS_SCH_BINARY_READER() = default;
+
+    /// Return true if @p aData has a complete PADS Logic binary header and family magic.
+    static bool IsBinaryFamily( const std::vector<uint8_t>& aData );
+
+    /// Return true if @p aVersion is supported by this reader.
+    static bool IsSupportedVersion( uint16_t aVersion );
 
     /// Return true if @p aData is a PADS Logic binary schematic.
     static bool IsBinarySch( const std::vector<uint8_t>& aData );

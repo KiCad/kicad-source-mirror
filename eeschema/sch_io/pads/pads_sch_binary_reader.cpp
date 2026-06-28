@@ -63,7 +63,9 @@ using PADS_IO::STRIDE_RUN;
 using PADS_IO::extendStrideRun;
 
 static constexpr uint8_t  MAGIC1 = 0xFE;
-static constexpr uint16_t VERSION = 0x000D;
+static constexpr uint16_t VERSION_12 = 0x000C;
+static constexpr uint16_t VERSION_13 = 0x000D;
+static constexpr size_t   HEADER_SIZE = 32;
 static constexpr size_t   DATA_STREAM_OFFSET = 0x250;
 
 // Schematic page coordinates are stored as a biased half-mil u16:
@@ -150,17 +152,29 @@ uint32_t POOL_DIRECTORY::Count( int aPool ) const
 }
 
 
-bool PADS_SCH_BINARY_READER::IsBinarySch( const std::vector<uint8_t>& aData )
+bool PADS_SCH_BINARY_READER::IsBinaryFamily( const std::vector<uint8_t>& aData )
 {
-    if( aData.size() < DATA_STREAM_OFFSET )
+    if( aData.size() < HEADER_SIZE )
         return false;
 
     // Shared container magic with the `.pcb` reader; only the second magic byte and the version
     // differ between the two PADS SDB formats.
-    if( !PADS_IO::HasSdbMagic( aData, MAGIC1 ) )
+    return PADS_IO::HasSdbMagic( aData, MAGIC1 );
+}
+
+
+bool PADS_SCH_BINARY_READER::IsSupportedVersion( uint16_t aVersion )
+{
+    return aVersion == VERSION_12 || aVersion == VERSION_13;
+}
+
+
+bool PADS_SCH_BINARY_READER::IsBinarySch( const std::vector<uint8_t>& aData )
+{
+    if( aData.size() < DATA_STREAM_OFFSET || !IsBinaryFamily( aData ) )
         return false;
 
-    return BINARY_CURSOR( aData ).U16At( 2 ) == VERSION;
+    return IsSupportedVersion( BINARY_CURSOR( aData ).U16At( 2 ) );
 }
 
 
