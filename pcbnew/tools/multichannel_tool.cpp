@@ -1862,6 +1862,65 @@ std::vector<NETINFO_ITEM*> MULTICHANNEL_TOOL::IsolateDesignBlockAutoNets( BOARD*
 }
 
 
+// A placed design block or repeated sheet stamps the originating symbol instance UUID into each
+// footprint's path. When that linkage is complete and unique it is an authoritative one to one
+// mapping, independent of net topology. Returns false (and leaves aResult untouched) unless it
+// yields a full pad compatible bijection, so callers can fall back to topology matching.
+static bool matchBySymbolInstancePath( const std::set<FOOTPRINT*>& aRef, const std::set<FOOTPRINT*>& aTarget,
+                                       TMATCH::COMPONENT_MATCHES& aResult )
+{
+    if( aRef.empty() || aRef.size() != aTarget.size() )
+        return false;
+
+    auto symbolUuid = []( const FOOTPRINT* aFp ) -> KIID
+    {
+        const KIID_PATH& path = aFp->GetPath();
+        return path.empty() ? niluuid : path.back();
+    };
+
+    std::map<KIID, FOOTPRINT*> targetByUuid;
+
+    for( FOOTPRINT* fp : aTarget )
+    {
+        KIID uuid = symbolUuid( fp );
+
+        // A missing or duplicated UUID (copy paste, hand built group) is not a clean instance link
+        if( uuid == niluuid || !targetByUuid.emplace( uuid, fp ).second )
+            return false;
+    }
+
+    TMATCH::COMPONENT_MATCHES result;
+    std::set<FOOTPRINT*>      used;
+
+    for( FOOTPRINT* refFp : aRef )
+    {
+        KIID uuid = symbolUuid( refFp );
+
+        if( uuid == niluuid )
+            return false;
+
+        auto it = targetByUuid.find( uuid );
+
+        if( it == targetByUuid.end() )
+            return false;
+
+        FOOTPRINT* targetFp = it->second;
+
+        // Routing and placement copy only makes sense between pad compatible footprints
+        if( refFp->GetFPID() != targetFp->GetFPID() || refFp->Pads().size() != targetFp->Pads().size() )
+            return false;
+
+        if( !used.insert( targetFp ).second )
+            return false;
+
+        result[refFp] = targetFp;
+    }
+
+    aResult = std::move( result );
+    return true;
+}
+
+
 bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,
                                                    RULE_AREA_COMPAT_DATA& aMatches,
                                                    const TMATCH::ISOMORPHISM_PARAMS& aParams )
@@ -1926,6 +1985,19 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
 
     wxLogTrace( traceMultichannelTool, wxT( "FindIsomorphism: %s, result=%d" ),
                 timerIso.to_string(), status ? 1 : 0 );
+
+    // Net topology can legitimately differ between a design block and its placed instance once the
+    // user edits connectivity on the board (a wire tying two block pads onto one net, etc.). Fall
+    // back to the symbol instance linkage, which still gives the correct mapping in that case. Skip
+    // it on a cancelled scan so cancellation is not mistaken for a topology miss.
+    const bool cancelled = aParams.m_cancelled && aParams.m_cancelled->load( std::memory_order_relaxed );
+
+    if( !status && !cancelled
+        && matchBySymbolInstancePath( aRefArea->m_components, aTargetArea->m_components,
+                                      aMatches.m_matchingComponents ) )
+    {
+        status = true;
+    }
 
     aMatches.m_isOk = status;
 
