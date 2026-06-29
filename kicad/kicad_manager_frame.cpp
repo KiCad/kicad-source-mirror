@@ -1006,7 +1006,8 @@ bool KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 
         if( dlg.ShowModal() == wxID_YES )
         {
-            Kiway().LocalHistory().RestoreCommit( Prj().GetProjectPath(), head, this );
+            // The dialog above is the confirmation, skip RestoreCommit's own prompt.
+            Kiway().LocalHistory().RestoreCommit( Prj().GetProjectPath(), head, this, false );
         }
         else
         {
