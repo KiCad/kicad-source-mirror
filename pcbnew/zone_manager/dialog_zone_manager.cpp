@@ -107,6 +107,8 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
 
     if( m_modelZonesOverview->GetCount() )
         SelectZoneTableItem( m_modelZonesOverview->GetItem( 0 ) );
+    else
+        m_panelZoneProperties->SetZone( nullptr );
 
     Layout();
     m_MainBoxSizer->Fit( this );
