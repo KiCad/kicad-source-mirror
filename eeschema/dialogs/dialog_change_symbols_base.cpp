@@ -184,6 +184,9 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_resetAttributes = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset symbol attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_resetAttributes, 0, wxBOTTOM|wxRIGHT, 5 );
 
+	m_resetPinMapOverrides = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset pin map overrides"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_resetPinMapOverrides, 0, wxBOTTOM|wxRIGHT, 5 );
+
 	m_resetCustomPower = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset custom power symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_resetCustomPower, 0, wxBOTTOM|wxRIGHT, 10 );
 

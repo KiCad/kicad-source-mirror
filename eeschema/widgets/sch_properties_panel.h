@@ -107,5 +107,5 @@ protected:
     static std::set<wxString> m_currentPinMapPinNumbers;
     wxPGChoices               m_nets;
 
-    wxButton*                 m_editPinMapButton;
+    wxButton* m_editPinMapButton;
 };

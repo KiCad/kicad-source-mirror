@@ -123,6 +123,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
     m_resetAttributes->SetValue(        ( m_mode == MODE::CHANGE ) ? true  : false );
     m_resetPinTextVisibility->SetValue( ( m_mode == MODE::CHANGE ) ? true  : false );
     m_resetAlternatePin->SetValue(      ( m_mode == MODE::CHANGE ) ? true  : false );
+    m_resetPinMapOverrides->SetValue( ( m_mode == MODE::CHANGE ) ? true : false );
 
     m_messagePanel->SetLazyUpdate( true );
     m_messagePanel->SetFileName( Prj().GetProjectPath() + wxT( "report.txt" ) );
@@ -422,6 +423,7 @@ void DIALOG_CHANGE_SYMBOLS::checkAll( bool aCheck )
     m_resetFieldPositions->SetValue( aCheck );
     m_resetPinTextVisibility->SetValue( aCheck );
     m_resetAlternatePin->SetValue( aCheck );
+    m_resetPinMapOverrides->SetValue( aCheck );
     m_resetAttributes->SetValue( aCheck );
     m_resetCustomPower->SetValue( aCheck );
 }
@@ -657,7 +659,24 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit, const std::map<S
         std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
         SCH_SCREEN*                 screen = symbol_change_info.m_Instances[0].LastScreen();
 
+        const bool keepPinMaps = !m_resetPinMapOverrides->IsChecked();
+
+        PIN_MAP_SET                       savedPinMaps;
+        std::vector<ASSOCIATED_FOOTPRINT> savedAssociations;
+
+        if( keepPinMaps && symbol->GetLibSymbolRef() )
+        {
+            savedPinMaps = symbol->GetLibSymbolRef()->GetPinMaps();
+            savedAssociations = symbol->GetLibSymbolRef()->GetAssociatedFootprints();
+        }
+
         symbol->SetLibSymbol( flattenedSymbol.release() );
+
+        if( keepPinMaps && symbol->GetLibSymbolRef() )
+        {
+            symbol->GetLibSymbolRef()->SetPinMaps( savedPinMaps );
+            symbol->GetLibSymbolRef()->SetAssociatedFootprints( savedAssociations );
+        }
 
         if( m_resetAttributes->GetValue() )
         {
@@ -823,6 +842,12 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit, const std::map<S
                     }
                 }
             }
+        }
+
+        if( m_resetPinMapOverrides->IsChecked() )
+        {
+            for( const SCH_SHEET_PATH& instance : symbol_change_info.m_Instances )
+                symbol->SetPinMapOverride( PIN_MAP_INSTANCE_OVERRIDE(), &instance );
         }
 
         frame->GetCanvas()->GetView()->Update( symbol );

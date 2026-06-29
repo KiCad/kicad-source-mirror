@@ -19,9 +19,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <confirm.h>
+#include <footprint.h>
 #include <footprint_library_adapter.h>
 #include <kiface_base.h>
+#include <libraries/library_manager.h>
+#include <pad.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
@@ -29,6 +31,10 @@
 #include <settings/cvpcb_settings.h>
 #include <display_footprints_frame.h>
 #include <kiface_ids.h>
+
+#include <memory>
+#include <optional>
+#include <set>
 #include <project_pcb.h>
 
 namespace CV {
@@ -57,6 +63,48 @@ int testFootprintLink( const wxString& aFootprint, PROJECT* aProject )
         return KIFACE_TEST_FOOTPRINT_LINK_NO_FOOTPRINT;
 
     return 0;
+}
+
+
+void getFootprintPadNumbers( const wxString& aFootprint, PROJECT* aProject, std::set<wxString>& aPadNumbers )
+{
+    LIB_ID fpID;
+
+    if( fpID.Parse( aFootprint ) >= 0 )
+        return;
+
+    if( std::optional<LIBRARY_MANAGER_ADAPTER*> mgr =
+                Pgm().GetLibraryManager().Adapter( LIBRARY_TABLE_TYPE::FOOTPRINT ) )
+    {
+        ( *mgr )->BlockUntilLoaded();
+    }
+
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( aProject );
+
+    if( !adapter )
+        return;
+
+    adapter->LoadOne( fpID.GetLibNickname() );
+
+    std::unique_ptr<FOOTPRINT> footprint;
+
+    // This runs across the kiface boundary, so let nothing escape into the caller's ERC loop.
+    try
+    {
+        footprint.reset( adapter->LoadFootprint( fpID, false ) );
+    }
+    catch( ... )
+    {
+    }
+
+    if( !footprint )
+        return;
+
+    for( const PAD* pad : footprint->Pads() )
+    {
+        if( !pad->GetNumber().IsEmpty() )
+            aPadNumbers.insert( pad->GetNumber() );
+    }
 }
 
 
@@ -99,6 +147,8 @@ static struct IFACE : public KIFACE_BASE
         {
         case KIFACE_TEST_FOOTPRINT_LINK:
             return (void*) testFootprintLink;
+
+        case KIFACE_FOOTPRINT_PAD_NUMBERS: return (void*) getFootprintPadNumbers;
 
         default:
             return nullptr;

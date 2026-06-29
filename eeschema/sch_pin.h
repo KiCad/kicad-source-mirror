@@ -159,9 +159,9 @@ public:
     /// Outcome of pin-to-pad resolution (issue #2282).
     enum class PAD_RESOLUTION
     {
-        MAPPED,    ///< An explicit map entry (or instance edit) supplied the pad number.
-        IDENTITY,  ///< No entry, but the footprint has a pad whose number equals the pin number.
-        UNMAPPED   ///< No entry and the footprint has no matching pad.
+        MAPPED,   ///< An explicit map entry (or instance edit) supplied the pad number.
+        IDENTITY, ///< No entry, but the footprint has a pad whose number equals the pin number.
+        UNMAPPED  ///< No entry and the footprint has no matching pad.
     };
 
     /**
@@ -185,14 +185,12 @@ public:
      * @return the resolved pad number (possibly a bracketed stacked list), or empty when UNMAPPED
      */
     wxString GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet, const wxString& aVariantName,
-                                    const LIB_ID& aFootprintLibId,
-                                    const std::set<wxString>* aFootprintPadNumbers,
+                                    const LIB_ID& aFootprintLibId, const std::set<wxString>* aFootprintPadNumbers,
                                     PAD_RESOLUTION* aState = nullptr ) const;
 
     /// Convenience overload using the parent symbol's current (variant-scoped) Footprint field
     /// and no loaded footprint (two-state form).
-    wxString GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet,
-                                    const wxString& aVariantName = wxEmptyString ) const;
+    wxString GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet, const wxString& aVariantName = wxEmptyString ) const;
 
     void SetNumber( const wxString& aNumber );
 
@@ -464,7 +462,7 @@ protected:
     wxString                m_operatingPoint;
 
     /// Render-only original number for a pad-remapped pin; see GetRemappedFromNumber().  Not saved.
-    wxString                m_remappedFromNumber;
+    wxString m_remappedFromNumber;
 
     bool                    m_isDangling;
 

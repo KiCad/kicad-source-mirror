@@ -42,10 +42,9 @@ bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::Schematic
 
 /// Pack/unpack a pin-to-pad map instance override to/from its protobuf form (issue #2282).
 void PackPinMapOverride( kiapi::schematic::types::PinMapInstanceOverride* aOutput,
-                         const PIN_MAP_INSTANCE_OVERRIDE& aOverride );
+                         const PIN_MAP_INSTANCE_OVERRIDE&                 aOverride );
 
-PIN_MAP_INSTANCE_OVERRIDE UnpackPinMapOverride(
-        const kiapi::schematic::types::PinMapInstanceOverride& aInput );
+PIN_MAP_INSTANCE_OVERRIDE UnpackPinMapOverride( const kiapi::schematic::types::PinMapInstanceOverride& aInput );
 
 bool PackSheet( kiapi::schematic::types::SheetSymbol* aOutput, const SCH_SHEET* aInput,
                 const SCH_SHEET_PATH& aPath );

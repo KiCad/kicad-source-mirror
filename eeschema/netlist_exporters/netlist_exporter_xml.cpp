@@ -1281,6 +1281,18 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             if( refText[0] == wxChar( '#' ) )
                 continue;
 
+            // Emit the resolved footprint pad number(s), not the raw symbol pin number, so a
+            // remapped pin's net lands on the right pad when the board reads this netlist
+            // (issue #2282).  Shared with the PIN_INFO path via resolvePadNumbers.
+            std::vector<wxString> nums = resolvePadNumbers( netNode.m_Pin, netNode.m_Sheet );
+
+            // An unmapped pin contributes no pad, so skip it and do not open an empty net for it.
+            if( nums.empty() )
+                continue;
+
+            wxString baseName = netNode.m_Pin->GetShownName();
+            wxString pinType = netNode.m_Pin->GetCanonicalElectricalTypeName();
+
             if( !added )
             {
                 netCodeTxt.Printf( wxT( "%d" ), i + 1 );
@@ -1292,18 +1304,6 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
                 added = true;
             }
-
-            // Emit the resolved footprint pad number(s), not the raw symbol pin number, so a
-            // remapped pin's net lands on the right pad when the board reads this netlist
-            // (issue #2282).  Shared with the PIN_INFO path via resolvePadNumbers.
-            std::vector<wxString> nums = resolvePadNumbers( netNode.m_Pin, netNode.m_Sheet );
-            wxString              baseName = netNode.m_Pin->GetShownName();
-            wxString              pinType = netNode.m_Pin->GetCanonicalElectricalTypeName();
-
-            wxLogTrace( traceStackedPins,
-                        wxString::Format( "XML: net='%s' ref='%s' base='%s' shownNum='%s' expand=%zu",
-                                          net_record->m_Name, refText, baseName,
-                                          netNode.m_Pin->GetShownNumber(), nums.size() ) );
 
             for( const wxString& num : nums )
             {
@@ -1322,9 +1322,6 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                     && ( net_record->m_Nodes.size() == 1 || allNetPinsStacked ) )
                 {
                     typeAttr += wxT( "+no_connect" );
-                    wxLogTrace( traceStackedPins,
-                                wxString::Format( "XML: marking node ref='%s' pin='%s' as no_connect",
-                                                  refText, num ) );
                 }
 
                 xnode->AddAttribute( wxT( "pintype" ), typeAttr );

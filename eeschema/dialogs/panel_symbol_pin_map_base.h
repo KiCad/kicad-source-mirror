@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
 class WX_GRID;
 
 #include <wx/colour.h>
@@ -18,10 +19,11 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
-#include <wx/button.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 
@@ -36,13 +38,13 @@ class PANEL_SYMBOL_PIN_MAP_BASE : public wxPanel
 
 	protected:
 		WX_GRID* m_grid;
-		wxButton* m_addFootprintButton;
-		wxButton* m_removeFootprintButton;
+		STD_BITMAP_BUTTON* m_addMapButton;
+		STD_BITMAP_BUTTON* m_removeMapButton;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
-		virtual void OnAddFootprint( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemoveFootprint( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddMap( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveMap( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

@@ -728,8 +728,7 @@ public:
      * Mirrors SetDNP: with no sheet/variant the base override is set; otherwise the override is
      * stored on the variant record for the sheet path.
      */
-    void SetPinMapOverride( const PIN_MAP_INSTANCE_OVERRIDE& aOverride,
-                            const SCH_SHEET_PATH* aInstance = nullptr,
+    void SetPinMapOverride( const PIN_MAP_INSTANCE_OVERRIDE& aOverride, const SCH_SHEET_PATH* aInstance = nullptr,
                             const wxString& aVariantName = wxEmptyString );
 
     /**
@@ -739,7 +738,7 @@ public:
      * never have to special-case multi-unit delegation.
      */
     PIN_MAP_INSTANCE_OVERRIDE GetPinMapOverride( const SCH_SHEET_PATH* aInstance = nullptr,
-                                                 const wxString& aVariantName = wxEmptyString ) const;
+                                                 const wxString&       aVariantName = wxEmptyString ) const;
 
     void SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) override;
@@ -1049,7 +1048,7 @@ private:
 
     /// Return unit 1's pin-map override for a unit that delegates to it (issue #2282).
     PIN_MAP_INSTANCE_OVERRIDE resolveDelegatedPinMapOverride( const SCH_SHEET_PATH& aSheet,
-                                                              const wxString& aVariantName ) const;
+                                                              const wxString&       aVariantName ) const;
 
 private:
     VECTOR2I    m_pos;
@@ -1083,7 +1082,7 @@ private:
 
     /// Base (no-variant) pin-to-pad map override applied when no variant override exists for the
     /// sheet path (issue #2282).
-    PIN_MAP_INSTANCE_OVERRIDE              m_pinMapOverride;
+    PIN_MAP_INSTANCE_OVERRIDE m_pinMapOverride;
 
     /**
      * Define the hierarchical path and reference of the symbol.

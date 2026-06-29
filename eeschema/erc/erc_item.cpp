@@ -172,20 +172,20 @@ ERC_ITEM ERC_ITEM::fieldNameWhitespace( ERCE_FIELD_NAME_WHITESPACE,
         wxT( "field_name_whitespace" ) );
 
 ERC_ITEM ERC_ITEM::pinMapBadPad( ERCE_PIN_MAP_BAD_PAD,
-        _HKI( "Pin map references a pad that does not exist on the footprint" ),
-        wxT( "pin_map_bad_pad" ) );
+                                 _HKI( "Pin map references a pad that does not exist on the footprint" ),
+                                 wxT( "pin_map_bad_pad" ) );
 
 ERC_ITEM ERC_ITEM::pinMapUnmappedPin( ERCE_PIN_MAP_UNMAPPED_PIN,
-        _HKI( "Connected pin is not mapped to any footprint pad" ),
-        wxT( "pin_map_unmapped_pin" ) );
+                                      _HKI( "Connected pin is not mapped to any footprint pad" ),
+                                      wxT( "pin_map_unmapped_pin" ) );
 
 ERC_ITEM ERC_ITEM::pinMapDuplicatePad( ERCE_PIN_MAP_DUPLICATE_PAD,
-        _HKI( "Two symbol pins are mapped to the same footprint pad" ),
-        wxT( "pin_map_duplicate_pad" ) );
+                                       _HKI( "Two symbol pins are mapped to the same footprint pad" ),
+                                       wxT( "pin_map_duplicate_pad" ) );
 
 ERC_ITEM ERC_ITEM::pinMapStalePin( ERCE_PIN_MAP_STALE_PIN,
-        _HKI( "Pin map references a pin number that no longer exists on the symbol" ),
-        wxT( "pin_map_stale_pin" ) );
+                                   _HKI( "Pin map references a pin number that no longer exists on the symbol" ),
+                                   wxT( "pin_map_stale_pin" ) );
 
 ERC_ITEM ERC_ITEM::unresolvedVariable( ERCE_UNRESOLVED_VARIABLE,
         _HKI( "Unresolved text variable" ),
@@ -260,76 +260,33 @@ ERC_ITEM ERC_ITEM::unconnectedWireEndpoint( ERCE_UNCONNECTED_WIRE_ENDPOINT,
         wxT( "unconnected_wire_endpoint" ) );
 
 std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
-        {
-                ERC_ITEM::heading_connections,
-                ERC_ITEM::pinNotConnected,
-                ERC_ITEM::pinNotDriven,
-                ERC_ITEM::powerpinNotDriven,
-                ERC_ITEM::noConnectConnected,
-                ERC_ITEM::noConnectDangling,
-                ERC_ITEM::labelDangling,
-                ERC_ITEM::isolatedPinLabel,
-                ERC_ITEM::singleGlobalLabel,
-                ERC_ITEM::sameLocalGlobalLabel,
-                ERC_ITEM::sameLocalGlobalPower,
-                ERC_ITEM::wireDangling,
-                ERC_ITEM::busEntryNeeded,
-                ERC_ITEM::endpointOffGrid,
-                ERC_ITEM::fourWayJunction,
-                ERC_ITEM::labelMultipleWires,
-                ERC_ITEM::unconnectedWireEndpoint,
+        { ERC_ITEM::heading_connections, ERC_ITEM::pinNotConnected, ERC_ITEM::pinNotDriven, ERC_ITEM::powerpinNotDriven,
+          ERC_ITEM::noConnectConnected, ERC_ITEM::noConnectDangling, ERC_ITEM::labelDangling,
+          ERC_ITEM::isolatedPinLabel, ERC_ITEM::singleGlobalLabel, ERC_ITEM::sameLocalGlobalLabel,
+          ERC_ITEM::sameLocalGlobalPower, ERC_ITEM::wireDangling, ERC_ITEM::busEntryNeeded, ERC_ITEM::endpointOffGrid,
+          ERC_ITEM::fourWayJunction, ERC_ITEM::labelMultipleWires, ERC_ITEM::unconnectedWireEndpoint,
 
-                ERC_ITEM::heading_conflicts,
-                ERC_ITEM::duplicateReference,
-                ERC_ITEM::pinTableWarning,
-                ERC_ITEM::differentUnitValue,
-                ERC_ITEM::differentUnitFootprint,
-                ERC_ITEM::differentUnitNet,
-                ERC_ITEM::duplicateSheetName,
-                ERC_ITEM::hierLabelMismatch,
-                ERC_ITEM::multipleNetNames,
-                ERC_ITEM::busDefinitionConflict,
-                ERC_ITEM::busToBusConflict,
-                ERC_ITEM::busToNetConflict,
-                ERC_ITEM::netNotBusMember,
-                ERC_ITEM::groundPinNotGround,
+          ERC_ITEM::heading_conflicts, ERC_ITEM::duplicateReference, ERC_ITEM::pinTableWarning,
+          ERC_ITEM::differentUnitValue, ERC_ITEM::differentUnitFootprint, ERC_ITEM::differentUnitNet,
+          ERC_ITEM::duplicateSheetName, ERC_ITEM::hierLabelMismatch, ERC_ITEM::multipleNetNames,
+          ERC_ITEM::busDefinitionConflict, ERC_ITEM::busToBusConflict, ERC_ITEM::busToNetConflict,
+          ERC_ITEM::netNotBusMember, ERC_ITEM::groundPinNotGround,
 
-                ERC_ITEM::heading_misc,
-                ERC_ITEM::stackedPinName,
-                ERC_ITEM::fieldNameWhitespace,
-                ERC_ITEM::pinMapBadPad,
-                ERC_ITEM::pinMapUnmappedPin,
-                ERC_ITEM::pinMapDuplicatePad,
-                ERC_ITEM::pinMapStalePin,
-                ERC_ITEM::unannotated,
-                ERC_ITEM::unresolvedVariable,
-                ERC_ITEM::undefinedNetclass,
-                ERC_ITEM::simulationModelIssues,
-                ERC_ITEM::similarLabels,
-                ERC_ITEM::similarPower,
-                ERC_ITEM::similarLabelAndPower,
-                // Commented out until the logic for this element is coded
-                // TODO: Add bus label syntax checking
-                //                 ERC_ITEM::busLabelSyntax,
-                ERC_ITEM::libSymbolIssues,
-                ERC_ITEM::libSymbolMismatch,
-                ERC_ITEM::footprintLinkIssues,
-                ERC_ITEM::footprintFilters,
-                ERC_ITEM::extraUnits,
-                ERC_ITEM::missingUnits,
-                ERC_ITEM::missingInputPin,
-                ERC_ITEM::missingBidiPin,
-                ERC_ITEM::missingPowerInputPin,
+          ERC_ITEM::heading_misc, ERC_ITEM::stackedPinName, ERC_ITEM::fieldNameWhitespace, ERC_ITEM::pinMapBadPad,
+          ERC_ITEM::pinMapUnmappedPin, ERC_ITEM::pinMapDuplicatePad, ERC_ITEM::pinMapStalePin, ERC_ITEM::unannotated,
+          ERC_ITEM::unresolvedVariable, ERC_ITEM::undefinedNetclass, ERC_ITEM::simulationModelIssues,
+          ERC_ITEM::similarLabels, ERC_ITEM::similarPower, ERC_ITEM::similarLabelAndPower,
+          // Commented out until the logic for this element is coded
+          // TODO: Add bus label syntax checking
+          //                 ERC_ITEM::busLabelSyntax,
+          ERC_ITEM::libSymbolIssues, ERC_ITEM::libSymbolMismatch, ERC_ITEM::footprintLinkIssues,
+          ERC_ITEM::footprintFilters, ERC_ITEM::extraUnits, ERC_ITEM::missingUnits, ERC_ITEM::missingInputPin,
+          ERC_ITEM::missingBidiPin, ERC_ITEM::missingPowerInputPin,
 
-                // ERC_ITEM types with no user-editable severities
-                // NOTE: this MUST be the last grouping in the list!
-                ERC_ITEM::heading_internal,
-                ERC_ITEM::duplicatePinError,
-                ERC_ITEM::pinTableWarning,
-                ERC_ITEM::pinTableError,
-                ERC_ITEM::genericWarning,
-                ERC_ITEM::genericError
-        } );
+          // ERC_ITEM types with no user-editable severities
+          // NOTE: this MUST be the last grouping in the list!
+          ERC_ITEM::heading_internal, ERC_ITEM::duplicatePinError, ERC_ITEM::pinTableWarning, ERC_ITEM::pinTableError,
+          ERC_ITEM::genericWarning, ERC_ITEM::genericError } );
 
 
 std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
@@ -387,10 +344,10 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_UNCONNECTED_WIRE_ENDPOINT: return std::make_shared<ERC_ITEM>( unconnectedWireEndpoint );
     case ERCE_STACKED_PIN_SYNTAX:      return std::make_shared<ERC_ITEM>( stackedPinName );
     case ERCE_FIELD_NAME_WHITESPACE:   return std::make_shared<ERC_ITEM>( fieldNameWhitespace );
-    case ERCE_PIN_MAP_BAD_PAD:         return std::make_shared<ERC_ITEM>( pinMapBadPad );
-    case ERCE_PIN_MAP_UNMAPPED_PIN:    return std::make_shared<ERC_ITEM>( pinMapUnmappedPin );
-    case ERCE_PIN_MAP_DUPLICATE_PAD:   return std::make_shared<ERC_ITEM>( pinMapDuplicatePad );
-    case ERCE_PIN_MAP_STALE_PIN:       return std::make_shared<ERC_ITEM>( pinMapStalePin );
+    case ERCE_PIN_MAP_BAD_PAD: return std::make_shared<ERC_ITEM>( pinMapBadPad );
+    case ERCE_PIN_MAP_UNMAPPED_PIN: return std::make_shared<ERC_ITEM>( pinMapUnmappedPin );
+    case ERCE_PIN_MAP_DUPLICATE_PAD: return std::make_shared<ERC_ITEM>( pinMapDuplicatePad );
+    case ERCE_PIN_MAP_STALE_PIN: return std::make_shared<ERC_ITEM>( pinMapStalePin );
     case ERCE_UNSPECIFIED:
     default:
         wxFAIL_MSG( wxS( "Unknown ERC error code" ) );

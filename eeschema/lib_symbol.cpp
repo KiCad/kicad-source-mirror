@@ -1390,8 +1390,6 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetPins() const
 }
 
 
-
-
 const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle, bool aIgnoreHiddenFields,
                                             bool aIgnoreLabelsOnInvisiblePins ) const
 {

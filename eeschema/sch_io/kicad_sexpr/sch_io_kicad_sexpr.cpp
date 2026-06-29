@@ -782,9 +782,9 @@ static void formatPinMapOverride( OUTPUTFORMATTER* aOut, const PIN_MAP_INSTANCE_
     switch( aOverride.m_Mode )
     {
     case PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT: mode = "library_default"; break;
-    case PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP:       mode = "named_map";       break;
-    case PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY:      mode = "identity";        break;
-    case PIN_MAP_OVERRIDE_MODE::DELEGATE_TO_UNIT_1:  mode = "delegate";        break;
+    case PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP: mode = "named_map"; break;
+    case PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY: mode = "identity"; break;
+    case PIN_MAP_OVERRIDE_MODE::DELEGATE_TO_UNIT_1: mode = "delegate"; break;
     }
 
     aOut->Print( "(pin_map_override (mode %s)", mode );
@@ -794,8 +794,7 @@ static void formatPinMapOverride( OUTPUTFORMATTER* aOut, const PIN_MAP_INSTANCE_
 
     for( const PIN_MAP_ENTRY& edit : aOverride.m_Edits )
     {
-        aOut->Print( "(edit %s %s)",
-                     aOut->Quotew( edit.m_PinNumber ).c_str(),
+        aOut->Print( "(edit %s %s)", aOut->Quotew( edit.m_PinNumber ).c_str(),
                      aOut->Quotew( edit.m_PadNumber ).c_str() );
     }
 

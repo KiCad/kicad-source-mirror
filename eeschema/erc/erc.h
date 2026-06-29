@@ -70,15 +70,14 @@ public:
     int TestDuplicateSheetNames( bool aCreateMarker );
 
     /**
-     * Check pin-to-pad maps (issue #2282) for stale pin references and duplicate pad targets.
-     *
-     * The footprint-dependent checks (bad-pad and unmapped-connected-pin) are skipped here
-     * because eeschema cannot load footprint pad data; the board-side netlist updater is their
-     * mirror.  Drops a SCH_MARKER at the symbol body per violation.
+     * Check pin-to-pad maps (issue #2282): stale pin references, duplicate pad targets, bad pads
+     * and unmapped connected pins.  Footprint pad numbers come from the cvpcb kiface (aCvPcb), so
+     * the footprint-dependent checks (bad-pad, unmapped-connected-pin) run here when it is
+     * available.  Drops a SCH_MARKER at the symbol body per violation.
      *
      * @return the number of violations found.
      */
-    int TestPinMap();
+    int TestPinMap( KIFACE* aCvPcb, PROJECT* aProject );
 
     /**
      * Check for any unresolved text variable references.

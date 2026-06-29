@@ -560,6 +560,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
+    helper->SetKiway( m_kiway );
+
     bool res = helper->WriteNetlist( outPath, netlistOption, *m_reporter );
 
     if( !res )

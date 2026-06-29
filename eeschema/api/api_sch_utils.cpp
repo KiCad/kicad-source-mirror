@@ -103,11 +103,11 @@ std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer
 
 
 void PackPinMapOverride( kiapi::schematic::types::PinMapInstanceOverride* aOutput,
-                         const PIN_MAP_INSTANCE_OVERRIDE& aOverride )
+                         const PIN_MAP_INSTANCE_OVERRIDE&                 aOverride )
 {
     aOutput->Clear();
-    aOutput->set_mode( ToProtoEnum<PIN_MAP_OVERRIDE_MODE,
-                                   kiapi::schematic::types::PinMapOverrideMode>( aOverride.m_Mode ) );
+    aOutput->set_mode(
+            ToProtoEnum<PIN_MAP_OVERRIDE_MODE, kiapi::schematic::types::PinMapOverrideMode>( aOverride.m_Mode ) );
     aOutput->set_active_map_name( aOverride.m_ActiveMapName.ToUTF8() );
 
     for( const PIN_MAP_ENTRY& edit : aOverride.m_Edits )
@@ -119,8 +119,7 @@ void PackPinMapOverride( kiapi::schematic::types::PinMapInstanceOverride* aOutpu
 }
 
 
-PIN_MAP_INSTANCE_OVERRIDE UnpackPinMapOverride(
-        const kiapi::schematic::types::PinMapInstanceOverride& aInput )
+PIN_MAP_INSTANCE_OVERRIDE UnpackPinMapOverride( const kiapi::schematic::types::PinMapInstanceOverride& aInput )
 {
     PIN_MAP_INSTANCE_OVERRIDE override;
     override.m_Mode = FromProtoEnum<PIN_MAP_OVERRIDE_MODE>( aInput.mode() );
@@ -128,8 +127,7 @@ PIN_MAP_INSTANCE_OVERRIDE UnpackPinMapOverride(
 
     for( const kiapi::schematic::types::PinMapEntry& e : aInput.edits() )
     {
-        override.m_Edits.push_back( { wxString::FromUTF8( e.pin_number() ),
-                                      wxString::FromUTF8( e.pad_number() ) } );
+        override.m_Edits.push_back( { wxString::FromUTF8( e.pin_number() ), wxString::FromUTF8( e.pad_number() ) } );
     }
 
     return override;

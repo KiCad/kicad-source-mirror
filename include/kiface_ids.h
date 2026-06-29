@@ -54,7 +54,12 @@ enum KIFACE_ADDR_ID : int
     KIFACE_TEST_FOOTPRINT_LINK,
     KIFACE_TEST_FOOTPRINT_LINK_NO_LIBRARY,
     KIFACE_TEST_FOOTPRINT_LINK_LIBRARY_NOT_ENABLED,
-    KIFACE_TEST_FOOTPRINT_LINK_NO_FOOTPRINT
+    KIFACE_TEST_FOOTPRINT_LINK_NO_FOOTPRINT,
+
+    /// Function pointer type: void (*)( const wxString& aFootprint, PROJECT* aProject,
+    ///                                  std::set<wxString>& aPadNumbers )
+    /// Fills aPadNumbers with the numbered pads of aFootprint.
+    KIFACE_FOOTPRINT_PAD_NUMBERS
 };
 
 #endif // KIFACE_IDS

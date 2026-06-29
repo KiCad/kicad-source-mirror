@@ -62,7 +62,7 @@ struct HTTP_LIB_PART
     std::string              keywords;
     std::vector<std::string> fp_filters;
 
-    std::vector<std::pair<std::string, std::tuple<std::string, bool>>>   fields;
+    std::vector<std::pair<std::string, std::tuple<std::string, bool>>> fields;
 
     /// Legacy flat MR !2540 pin assignment table (read for one release; issue #2282).
     std::unordered_map<wxString, std::vector<wxString>> pin_map;

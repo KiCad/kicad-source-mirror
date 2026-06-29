@@ -127,10 +127,10 @@ private:
     wxString          m_default_footprint;
 
     // Filter parameters
-    int                  m_pin_count;
-    wxArrayString        m_filters;
-    bool                 m_zero_filter;
-    std::vector<LIB_ID>  m_always_included;
+    int                 m_pin_count;
+    wxArrayString       m_filters;
+    bool                m_zero_filter;
+    std::vector<LIB_ID> m_always_included;
 
     KIWAY*            m_kiway;
 

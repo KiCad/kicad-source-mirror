@@ -25,8 +25,13 @@
 
 #include <trace_helpers.h>
 #include <connection_graph.h>
+#include <kiface_ids.h>
+#include <kiway.h>
+#include <lib_id.h>
+#include <sch_pin.h>
 #include <sch_reference_list.h>
 #include <sch_screen.h>
+#include <sch_symbol.h>
 #include <schematic.h>
 
 
@@ -151,7 +156,6 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
         // Collect all pins for this reference designator by searching the entire design for
         // other parts with the same reference designator.
         findAllUnitsOfSymbol( aSymbol, aSheetPath, pins, aKeepUnconnectedPins );
-        wxLogTrace( traceStackedPins, "CreatePinList(multi): ref='%s' pins=%zu", aSymbol->GetRef( &aSheetPath ), pins.size() );
     }
 
     else // GetUnitCount() <= 1 means one part per package
@@ -194,22 +198,67 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
 }
 
 
-std::vector<wxString> NETLIST_EXPORTER_BASE::resolvePadNumbers( const SCH_PIN* aPin,
-                                                               const SCH_SHEET_PATH& aSheetPath ) const
+std::vector<wxString> NETLIST_EXPORTER_BASE::resolvePadNumbers( const SCH_PIN*        aPin,
+                                                                const SCH_SHEET_PATH& aSheetPath ) const
 {
-    // The single resolution kernel for every netlist path (issue #2282): map the symbol pin to its
-    // effective pad(s) and expand any bracketed stacked target.  Both the PIN_INFO path
-    // (appendResolvedPins) and the XML net-tree path (makeListOfNets) route through here so they
-    // cannot drift; an unmapped pin resolves to its own number (assumed identity).
+    // Shared resolution kernel for all netlist paths (issue #2282) so they cannot drift.
     const wxString variantName = m_schematic ? m_schematic->GetCurrentVariant() : wxString();
+
+    if( m_kiway )
+    {
+        if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( aPin->GetParentSymbol() ) )
+        {
+            wxString fpText = symbol->GetFootprintFieldText( true, &aSheetPath, false, variantName );
+            LIB_ID   fpId;
+
+            if( !fpText.IsEmpty() && fpId.Parse( fpText, true ) < 0 )
+            {
+                const std::set<wxString>& pads = footprintPads( fpId.GetUniStringLibId() );
+
+                if( !pads.empty() )
+                {
+                    SCH_PIN::PAD_RESOLUTION state = SCH_PIN::PAD_RESOLUTION::MAPPED;
+                    wxString pad = aPin->GetEffectivePadNumber( aSheetPath, variantName, fpId, &pads, &state );
+
+                    if( state == SCH_PIN::PAD_RESOLUTION::UNMAPPED )
+                        return {};
+
+                    return ExpandStackedPinNotation( pad );
+                }
+            }
+        }
+    }
 
     return ExpandStackedPinNotation( aPin->GetEffectivePadNumber( aSheetPath, variantName ) );
 }
 
 
+const std::set<wxString>& NETLIST_EXPORTER_BASE::footprintPads( const wxString& aFootprintId ) const
+{
+    auto it = m_footprintPadCache.find( aFootprintId );
+
+    if( it != m_footprintPadCache.end() )
+        return it->second;
+
+    std::set<wxString>& pads = m_footprintPadCache[aFootprintId];
+
+    if( m_kiway && !aFootprintId.IsEmpty() )
+    {
+        if( KIFACE* cvpcb = m_kiway->KiFACE( KIWAY::FACE_CVPCB ) )
+        {
+            typedef void ( *PAD_NUMBERS_FN_PTR )( const wxString&, PROJECT*, std::set<wxString>& );
+
+            if( auto fetch = (PAD_NUMBERS_FN_PTR) cvpcb->IfaceOrAddress( KIFACE_FOOTPRINT_PAD_NUMBERS ) )
+                fetch( aFootprintId, &m_schematic->Project(), pads );
+        }
+    }
+
+    return pads;
+}
+
+
 void NETLIST_EXPORTER_BASE::appendResolvedPins( std::vector<PIN_INFO>& aPins, const SCH_PIN* aPin,
-                                                const SCH_SHEET_PATH& aSheetPath,
-                                                const wxString& aNetName )
+                                                const SCH_SHEET_PATH& aSheetPath, const wxString& aNetName )
 {
     const wxString baseName = aPin->GetShownName();
 
@@ -256,9 +305,8 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins( std::vector<PIN_INFO>& aPins )
             // the same pad on *different* nets - must survive so it stays visible and is flagged
             // by ERC (issue #2282).  Shared multi-unit pins and jumpers carry the same source pin
             // number, so they still collapse below as before.
-            if( aPins[idxBest].netName != aPins[jj].netName
-                && !aPins[idxBest].srcPin.IsEmpty() && !aPins[jj].srcPin.IsEmpty()
-                && aPins[idxBest].srcPin != aPins[jj].srcPin )
+            if( aPins[idxBest].netName != aPins[jj].netName && !aPins[idxBest].srcPin.IsEmpty()
+                && !aPins[jj].srcPin.IsEmpty() && aPins[idxBest].srcPin != aPins[jj].srcPin )
             {
                 continue;
             }

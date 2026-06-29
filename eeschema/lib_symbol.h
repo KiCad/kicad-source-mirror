@@ -223,10 +223,7 @@ public:
     PIN_MAP_SET&       PinMaps() { return m_pinMaps; }
     void               SetPinMaps( const PIN_MAP_SET& aPinMaps ) { m_pinMaps = aPinMaps; }
 
-    const std::vector<ASSOCIATED_FOOTPRINT>& GetAssociatedFootprints() const
-    {
-        return m_associatedFootprints;
-    }
+    const std::vector<ASSOCIATED_FOOTPRINT>& GetAssociatedFootprints() const { return m_associatedFootprints; }
 
     void SetAssociatedFootprints( std::vector<ASSOCIATED_FOOTPRINT> aList )
     {
@@ -924,10 +921,7 @@ private:
 
     /// @return true when this symbol defines its own pin-map bundle (either named maps or
     ///         associated footprints), so the bundle is not inherited from the parent.
-    bool definesOwnPinMapBundle() const
-    {
-        return !m_pinMaps.IsEmpty() || !m_associatedFootprints.empty();
-    }
+    bool definesOwnPinMapBundle() const { return !m_pinMaps.IsEmpty() || !m_associatedFootprints.empty(); }
 
     void cacheSearchTerms();
     void cachePinCount();
@@ -963,7 +957,7 @@ private:
                                             ///< names accepted).
 
     /// Named pin-to-pad maps owned by this symbol (issue #2282).
-    PIN_MAP_SET         m_pinMaps;
+    PIN_MAP_SET m_pinMaps;
 
     /// Footprints associated with this symbol, each tied to a named pin map.  Coupled with
     /// m_pinMaps for inheritance.

@@ -402,13 +402,9 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
             parsePinNumbers( symbol );
             break;
 
-        case T_associated_footprints:
-            parseAssociatedFootprints( symbol );
-            break;
+        case T_associated_footprints: parseAssociatedFootprints( symbol ); break;
 
-        case T_pin_maps:
-            parsePinMaps( symbol );
-            break;
+        case T_pin_maps: parsePinMaps( symbol ); break;
 
         case T_exclude_from_sim:
             symbol->SetExcludedFromSim( parseBool() );
@@ -1125,9 +1121,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseAssociatedFootprints( std::unique_ptr<LIB_S
                 NeedRIGHT();
                 break;
 
-            default:
-                Expecting( "map" );
-                break;
+            default: Expecting( "map" ); break;
             }
         }
 
@@ -1140,8 +1134,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseAssociatedFootprints( std::unique_ptr<LIB_S
 
 void SCH_IO_KICAD_SEXPR_PARSER::parsePinMaps( std::unique_ptr<LIB_SYMBOL>& aSymbol )
 {
-    wxCHECK_RET( CurTok() == T_pin_maps,
-                 "Cannot parse " + GetTokenString( CurTok() ) + " as a pin_maps token." );
+    wxCHECK_RET( CurTok() == T_pin_maps, "Cannot parse " + GetTokenString( CurTok() ) + " as a pin_maps token." );
 
     /**
      * (pin_maps
@@ -1242,10 +1235,10 @@ PIN_MAP_INSTANCE_OVERRIDE SCH_IO_KICAD_SEXPR_PARSER::parsePinMapOverride()
             switch( token )
             {
             case T_library_default: override.m_Mode = PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT; break;
-            case T_named_map:       override.m_Mode = PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP;        break;
-            case T_identity:        override.m_Mode = PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY;       break;
-            case T_delegate:        override.m_Mode = PIN_MAP_OVERRIDE_MODE::DELEGATE_TO_UNIT_1;   break;
-            default:                Expecting( "library_default, named_map, identity, or delegate" );
+            case T_named_map: override.m_Mode = PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP; break;
+            case T_identity: override.m_Mode = PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY; break;
+            case T_delegate: override.m_Mode = PIN_MAP_OVERRIDE_MODE::DELEGATE_TO_UNIT_1; break;
+            default: Expecting( "library_default, named_map, identity, or delegate" );
             }
 
             NeedRIGHT();
@@ -1280,8 +1273,7 @@ PIN_MAP_INSTANCE_OVERRIDE SCH_IO_KICAD_SEXPR_PARSER::parsePinMapOverride()
             break;
         }
 
-        default:
-            Expecting( "mode, map, or edit" );
+        default: Expecting( "mode, map, or edit" );
         }
     }
 
@@ -3557,9 +3549,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             NeedRIGHT();
             break;
 
-        case T_pin_map_override:
-            symbol->SetPinMapOverride( parsePinMapOverride() );
-            break;
+        case T_pin_map_override: symbol->SetPinMapOverride( parsePinMapOverride() ); break;
 
         case T_locked:
             symbol->SetLocked( parseBool() );
@@ -3819,9 +3809,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
                                     break;
                                 }
 
-                                case T_pin_map_override:
-                                    variant.m_PinMapOverride = parsePinMapOverride();
-                                    break;
+                                case T_pin_map_override: variant.m_PinMapOverride = parsePinMapOverride(); break;
 
                                 default:
                                     Expecting( "dnp, exclude_from_sim, field, in_bom, in_pos_files, name, "

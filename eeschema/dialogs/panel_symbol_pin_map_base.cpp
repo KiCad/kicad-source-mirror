@@ -5,6 +5,7 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
 #include "widgets/wx_grid.h"
 
 #include "panel_symbol_pin_map_base.h"
@@ -47,11 +48,15 @@ PANEL_SYMBOL_PIN_MAP_BASE::PANEL_SYMBOL_PIN_MAP_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addFootprintButton = new wxButton( this, wxID_ANY, _("Add Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonSizer->Add( m_addFootprintButton, 0, wxRIGHT, 5 );
+	m_addMapButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_addMapButton->SetToolTip( _("Add pin map") );
 
-	m_removeFootprintButton = new wxButton( this, wxID_ANY, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonSizer->Add( m_removeFootprintButton, 0, 0, 5 );
+	bButtonSizer->Add( m_addMapButton, 0, wxALL, 5 );
+
+	m_removeMapButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_removeMapButton->SetToolTip( _("Remove pin map") );
+
+	bButtonSizer->Add( m_removeMapButton, 0, wxALL, 5 );
 
 
 	bPanelSizer->Add( bButtonSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -63,15 +68,15 @@ PANEL_SYMBOL_PIN_MAP_BASE::PANEL_SYMBOL_PIN_MAP_BASE( wxWindow* parent, wxWindow
 
 	// Connect Events
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SYMBOL_PIN_MAP_BASE::OnSizeGrid ), NULL, this );
-	m_addFootprintButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYMBOL_PIN_MAP_BASE::OnAddFootprint ), NULL, this );
-	m_removeFootprintButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYMBOL_PIN_MAP_BASE::OnRemoveFootprint ), NULL, this );
+	m_addMapButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYMBOL_PIN_MAP_BASE::OnAddMap ), NULL, this );
+	m_removeMapButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYMBOL_PIN_MAP_BASE::OnRemoveMap ), NULL, this );
 }
 
 PANEL_SYMBOL_PIN_MAP_BASE::~PANEL_SYMBOL_PIN_MAP_BASE()
 {
 	// Disconnect Events
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SYMBOL_PIN_MAP_BASE::OnSizeGrid ), NULL, this );
-	m_addFootprintButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYMBOL_PIN_MAP_BASE::OnAddFootprint ), NULL, this );
-	m_removeFootprintButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYMBOL_PIN_MAP_BASE::OnRemoveFootprint ), NULL, this );
+	m_addMapButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYMBOL_PIN_MAP_BASE::OnAddMap ), NULL, this );
+	m_removeMapButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYMBOL_PIN_MAP_BASE::OnRemoveMap ), NULL, this );
 
 }

@@ -2875,8 +2875,8 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         if( m_schematic )
         {
             const wxString original = symbolPin->GetShownNumber();
-            const wxString effective = symbolPin->GetEffectivePadNumber(
-                    m_schematic->CurrentSheet(), m_schematic->GetCurrentVariant() );
+            const wxString effective =
+                    symbolPin->GetEffectivePadNumber( m_schematic->CurrentSheet(), m_schematic->GetCurrentVariant() );
 
             if( effective != original )
             {

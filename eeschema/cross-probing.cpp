@@ -348,8 +348,7 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
 
             // Highlight the resolved pad(s) in pcbnew (issue #2282); a mapped pin may target more
             // than one pad via stacked notation, so highlight all of them.
-            wxString effective = pin->GetEffectivePadNumber( GetCurrentSheet(),
-                                                             Schematic().GetCurrentVariant() );
+            wxString effective = pin->GetEffectivePadNumber( GetCurrentSheet(), Schematic().GetCurrentVariant() );
 
             for( const wxString& pad : ExpandStackedPinNotation( effective ) )
             {
@@ -485,12 +484,10 @@ void SCH_EDIT_FRAME::SendCrossProbeClearHighlight()
 }
 
 
-bool findSymbolsAndPins(
-        const SCH_SHEET_LIST& aSchematicSheetList, const SCH_SHEET_PATH& aSheetPath,
-        std::unordered_map<wxString, std::vector<SCH_REFERENCE>>&             aSyncSymMap,
-        std::unordered_map<wxString, std::unordered_map<wxString, SCH_PIN*>>& aSyncPinMap,
-        const wxString&                                                       aVariantName = wxEmptyString,
-        bool                                                                  aRecursive = false )
+bool findSymbolsAndPins( const SCH_SHEET_LIST& aSchematicSheetList, const SCH_SHEET_PATH& aSheetPath,
+                         std::unordered_map<wxString, std::vector<SCH_REFERENCE>>&             aSyncSymMap,
+                         std::unordered_map<wxString, std::unordered_map<wxString, SCH_PIN*>>& aSyncPinMap,
+                         const wxString& aVariantName = wxEmptyString, bool aRecursive = false )
 {
     if( aRecursive )
     {
@@ -500,8 +497,7 @@ bool findSymbolsAndPins(
             if( candidate == aSheetPath || !candidate.IsContainedWithin( aSheetPath ) )
                 continue;
 
-            findSymbolsAndPins( aSchematicSheetList, candidate, aSyncSymMap, aSyncPinMap,
-                                aVariantName, aRecursive );
+            findSymbolsAndPins( aSchematicSheetList, candidate, aSyncSymMap, aSyncPinMap, aVariantName, aRecursive );
         }
     }
 
@@ -1065,6 +1061,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         NETLIST_EXPORTER_KICAD exporter( &Schematic() );
         STRING_FORMATTER formatter;
 
+        exporter.SetKiway( &Kiway() );
         exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
 
         payload = formatter.GetString();

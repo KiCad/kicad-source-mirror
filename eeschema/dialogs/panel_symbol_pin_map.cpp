@@ -19,6 +19,7 @@
 
 #include "panel_symbol_pin_map.h"
 
+#include <algorithm>
 #include <map>
 #include <set>
 
@@ -27,39 +28,33 @@
 #include <wx/textdlg.h>
 #include <wx/wupdlock.h>
 
+#include <bitmaps.h>
+#include <confirm.h>
+#include <dialog_shim.h>
 #include <grid_tricks.h>
+#include <kiface_ids.h>
+#include <kiplatform/ui.h>
+#include <kiway.h>
+#include <kiway_holder.h>
 #include <lib_id.h>
 #include <lib_symbol.h>
 #include <sch_pin.h>
 #include <string_utils.h>
+#include <widgets/grid_text_button_helpers.h>
+#include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
-
-
-/// Pad-cell colours for live validation.  Malformed bracketed syntax is flagged red; a syntactically
-/// valid pad that cannot be confirmed against a footprint (footprints are not loadable in eeschema)
-/// is left at the default colour rather than guessed.
-static const wxColour PIN_MAP_CELL_DEFAULT = wxColour( 255, 255, 255 );
-static const wxColour PIN_MAP_CELL_INVALID = wxColour( 255, 190, 190 );
 
 
 // Menu ids carved out of the GRID_TRICKS client range so they coexist with the base cut/copy/paste.
 enum
 {
     PIN_MAP_MENU_RESET_COLUMN = GRIDTRICKS_FIRST_CLIENT_ID,
-    PIN_MAP_MENU_COPY_FROM_FIRST,
-    // Leave a wide gap so the copy-source range (one id per footprint column) cannot collide with
-    // the bind range (one id per named map).
-    PIN_MAP_MENU_BIND_FIRST = PIN_MAP_MENU_COPY_FROM_FIRST + 1000
+    PIN_MAP_MENU_RENAME,
+    PIN_MAP_MENU_COPY_FROM_FIRST
 };
 
 
-/**
- * Grid context-menu helper for the pin-map grid (issue #2282).
- *
- * Inherits cut/copy/paste/select-all from GRID_TRICKS and adds the pin-map-specific column actions:
- * reset a footprint column to 1:1, copy another column's pads into it, and bind it to an existing
- * named map.
- */
+/// Pin-map grid context menu: adds reset-to-1:1 and copy-from-column to GRID_TRICKS.
 class PIN_MAP_GRID_TRICKS : public GRID_TRICKS
 {
 public:
@@ -76,12 +71,12 @@ protected:
 
         m_menuCol = col;
         m_copyFromCols.clear();
-        m_bindNames.clear();
 
         if( col >= PANEL_SYMBOL_PIN_MAP::FIXED_COLS )
         {
+            menu.Append( PIN_MAP_MENU_RENAME, _( "Rename Map..." ) );
             menu.Append( PIN_MAP_MENU_RESET_COLUMN,
-                         wxString::Format( _( "Reset '%s' to 1:1" ), m_panel->GetColumnFootprintLabel( col ) ) );
+                         wxString::Format( _( "Reset '%s' to 1:1" ), m_panel->GetColumnMapName( col ) ) );
 
             wxMenu* copyMenu = new wxMenu;
             int     copyId = PIN_MAP_MENU_COPY_FROM_FIRST;
@@ -91,7 +86,7 @@ protected:
                 if( other == col )
                     continue;
 
-                copyMenu->Append( copyId, m_panel->GetColumnFootprintLabel( other ) );
+                copyMenu->Append( copyId, m_panel->GetColumnMapName( other ) );
                 m_copyFromCols[copyId] = other;
                 ++copyId;
             }
@@ -100,21 +95,6 @@ protected:
                 menu.Append( wxID_ANY, _( "Copy From..." ), copyMenu );
             else
                 delete copyMenu;
-
-            wxMenu* bindMenu = new wxMenu;
-            int     bindId = PIN_MAP_MENU_BIND_FIRST;
-
-            for( const wxString& name : m_panel->GetMapNames() )
-            {
-                bindMenu->Append( bindId, name );
-                m_bindNames[bindId] = name;
-                ++bindId;
-            }
-
-            if( bindMenu->GetMenuItemCount() > 0 )
-                menu.Append( wxID_ANY, _( "Bind to Existing Map..." ), bindMenu );
-            else
-                delete bindMenu;
 
             menu.AppendSeparator();
         }
@@ -130,13 +110,13 @@ protected:
         {
             m_panel->ResetColumnToIdentity( m_menuCol );
         }
+        else if( id == PIN_MAP_MENU_RENAME )
+        {
+            m_panel->RenameColumn( m_menuCol );
+        }
         else if( m_copyFromCols.count( id ) )
         {
             m_panel->CopyColumn( m_copyFromCols[id], m_menuCol );
-        }
-        else if( m_bindNames.count( id ) )
-        {
-            m_panel->BindColumnToMap( m_menuCol, m_bindNames[id] );
         }
         else
         {
@@ -148,7 +128,6 @@ private:
     PANEL_SYMBOL_PIN_MAP*   m_panel;
     int                     m_menuCol = -1;
     std::map<int, int>      m_copyFromCols;
-    std::map<int, wxString> m_bindNames;
 };
 
 
@@ -167,16 +146,19 @@ PANEL_SYMBOL_PIN_MAP::PANEL_SYMBOL_PIN_MAP( wxWindow* aParent ) :
     m_grid->SetColLabelValue( 1, _( "Symbol Pin" ) );
     m_grid->SetColLabelValue( 2, _( "Name" ) );
 
+    m_addMapButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_removeMapButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+
     m_gridTricks = std::make_unique<PIN_MAP_GRID_TRICKS>( m_grid, this );
     m_grid->PushEventHandler( m_gridTricks.get() );
 
     m_grid->Bind( wxEVT_GRID_CELL_CHANGED, &PANEL_SYMBOL_PIN_MAP::onCellChanged, this );
+    m_grid->Bind( wxEVT_GRID_LABEL_LEFT_DCLICK, &PANEL_SYMBOL_PIN_MAP::onLabelDClick, this );
 }
 
 
 PANEL_SYMBOL_PIN_MAP::~PANEL_SYMBOL_PIN_MAP()
 {
-    // GRID_TRICKS was pushed as an event handler; pop it before it is destroyed.
     m_grid->PopEventHandler();
 }
 
@@ -246,24 +228,48 @@ void PANEL_SYMBOL_PIN_MAP::rebuildGrid()
 {
     wxWindowUpdateLocker lock( m_grid );
 
-    const int wantCols = FIXED_COLS + (int) m_associations.size();
+    const std::vector<PIN_MAP>& maps = m_pinMaps.GetAll();
+    const int                   wantCols = FIXED_COLS + (int) maps.size();
 
     if( m_grid->GetNumberCols() > wantCols )
         m_grid->DeleteCols( wantCols, m_grid->GetNumberCols() - wantCols );
     else if( m_grid->GetNumberCols() < wantCols )
         m_grid->AppendCols( wantCols - m_grid->GetNumberCols() );
 
-    for( size_t ii = 0; ii < m_associations.size(); ++ii )
-    {
-        const wxString fpName = m_associations[ii].m_FootprintLibId.GetUniStringLibId();
-        m_grid->SetColLabelValue( FIXED_COLS + (int) ii, wxString::Format( _( "Pad on %s" ), fpName ) );
-    }
+    for( size_t ii = 0; ii < maps.size(); ++ii )
+        m_grid->SetColLabelValue( FIXED_COLS + (int) ii, maps[ii].GetName() );
 
     if( m_grid->GetNumberRows() > 0 )
         m_grid->DeleteRows( 0, m_grid->GetNumberRows() );
 
-    if( !m_pinNumbers.empty() )
-        m_grid->AppendRows( (int) m_pinNumbers.size() );
+    m_grid->AppendRows( (int) m_pinNumbers.size() + 1 );
+
+    m_grid->SetCellSize( 0, 0, 1, FIXED_COLS );
+    m_grid->SetCellValue( 0, 0, _( "Footprint" ) );
+    m_grid->SetReadOnly( 0, 0 );
+
+    DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) );
+
+    for( size_t col = 0; col < maps.size(); ++col )
+    {
+        wxString footprint;
+
+        for( const ASSOCIATED_FOOTPRINT& assoc : m_associations )
+        {
+            if( assoc.m_MapName == maps[col].GetName() )
+            {
+                footprint = assoc.m_FootprintLibId.GetUniStringLibId();
+                break;
+            }
+        }
+
+        m_grid->SetCellValue( 0, FIXED_COLS + (int) col, footprint );
+
+        if( dlg )
+            m_grid->SetCellEditor( 0, FIXED_COLS + (int) col, new GRID_CELL_FPID_EDITOR( dlg, wxEmptyString ) );
+        else
+            m_grid->SetReadOnly( 0, FIXED_COLS + (int) col );
+    }
 
     std::vector<wxString> pinNames( m_pinNumbers.size() );
     std::vector<int>      pinUnits( m_pinNumbers.size(), 0 );
@@ -289,40 +295,38 @@ void PANEL_SYMBOL_PIN_MAP::rebuildGrid()
 
     for( size_t row = 0; row < m_pinNumbers.size(); ++row )
     {
+        const int      gridRow = (int) row + 1;
         const wxString unit =
                 pinUnits[row] > 0 ? wxString::Format( wxT( "%d" ), pinUnits[row] ) : wxString( wxT( "-" ) );
 
-        m_grid->SetCellValue( (int) row, 0, unit );
-        m_grid->SetCellValue( (int) row, 1, m_pinNumbers[row] );
-        m_grid->SetCellValue( (int) row, 2, pinNames[row] );
+        m_grid->SetCellValue( gridRow, 0, unit );
+        m_grid->SetCellValue( gridRow, 1, m_pinNumbers[row] );
+        m_grid->SetCellValue( gridRow, 2, pinNames[row] );
 
-        m_grid->SetReadOnly( (int) row, 0 );
-        m_grid->SetReadOnly( (int) row, 1 );
-        m_grid->SetReadOnly( (int) row, 2 );
+        m_grid->SetReadOnly( gridRow, 0 );
+        m_grid->SetReadOnly( gridRow, 1 );
+        m_grid->SetReadOnly( gridRow, 2 );
 
-        for( size_t col = 0; col < m_associations.size(); ++col )
+        for( size_t col = 0; col < maps.size(); ++col )
         {
             wxString pad = m_pinNumbers[row];
 
-            if( const PIN_MAP* map = m_pinMaps.FindByName( m_associations[col].m_MapName ) )
-            {
-                if( map->HasEntry( m_pinNumbers[row] ) )
-                    pad = map->GetPadNumber( m_pinNumbers[row] );
-            }
+            if( maps[col].HasEntry( m_pinNumbers[row] ) )
+                pad = maps[col].GetPadNumber( m_pinNumbers[row] );
 
-            m_grid->SetCellValue( (int) row, FIXED_COLS + (int) col, pad );
+            m_grid->SetCellValue( gridRow, FIXED_COLS + (int) col, pad );
         }
     }
 
     validateAllCells();
     adjustGridColumns();
-    m_removeFootprintButton->Enable( !m_associations.empty() );
+    m_removeMapButton->Enable( !maps.empty() );
 }
 
 
 void PANEL_SYMBOL_PIN_MAP::validateAllCells()
 {
-    for( int row = 0; row < m_grid->GetNumberRows(); ++row )
+    for( int row = 1; row < m_grid->GetNumberRows(); ++row )
     {
         for( int col = FIXED_COLS; col < m_grid->GetNumberCols(); ++col )
             ValidateCell( row, col );
@@ -332,79 +336,97 @@ void PANEL_SYMBOL_PIN_MAP::validateAllCells()
 
 void PANEL_SYMBOL_PIN_MAP::ValidateCell( int aRow, int aCol )
 {
-    if( aRow < 0 || aRow >= m_grid->GetNumberRows() || aCol < FIXED_COLS || aCol >= m_grid->GetNumberCols() )
+    if( aRow < 1 || aRow >= m_grid->GetNumberRows() || aCol < FIXED_COLS || aCol >= m_grid->GetNumberCols() )
         return;
 
     const wxString pad = m_grid->GetCellValue( aRow, aCol );
 
-    // A blank pad means the pin resolves 1:1 by identity, which is always valid.  Footprint pad
-    // existence cannot be checked here because eeschema cannot load FOOTPRINT objects, so a
-    // syntactically valid pad is left at the default colour rather than guessed.  Malformed
-    // bracketed stacked syntax is the one thing we can flag, via ExpandStackedPinNotation.
-    bool valid = true;
+    // A blank pad means the pin resolves 1:1 by identity, which is always valid.  Malformed bracketed
+    // stacked syntax is flagged red.  A syntactically valid pad absent from the map's footprints is
+    // flagged yellow.
+    bool                  valid = true;
+    std::vector<wxString> expanded;
 
     if( !pad.IsEmpty() )
-        ExpandStackedPinNotation( pad, &valid );
+        expanded = ExpandStackedPinNotation( pad, &valid );
 
-    m_grid->SetCellBackgroundColour( aRow, aCol, valid ? PIN_MAP_CELL_DEFAULT : PIN_MAP_CELL_INVALID );
+    const wxColour defaultColour = m_grid->GetDefaultCellBackgroundColour();
+    wxColour       background = defaultColour;
+
+    if( !valid )
+    {
+        background.Set( 255, 190, 190 );
+    }
+    else if( !expanded.empty() )
+    {
+        const size_t                index = (size_t) ( aCol - FIXED_COLS );
+        const std::vector<PIN_MAP>& maps = m_pinMaps.GetAll();
+
+        if( index < maps.size() )
+        {
+            std::set<wxString> pads;
+
+            for( const ASSOCIATED_FOOTPRINT& assoc : m_associations )
+            {
+                if( assoc.m_MapName != maps[index].GetName() )
+                    continue;
+
+                const std::set<wxString>& fpPads = padNumbersFor( assoc.m_FootprintLibId.GetUniStringLibId() );
+                pads.insert( fpPads.begin(), fpPads.end() );
+            }
+
+            if( !pads.empty()
+                && std::any_of( expanded.begin(), expanded.end(),
+                                [&]( const wxString& p )
+                                {
+                                    return !pads.count( p );
+                                } ) )
+            {
+                background.Set( 250, 230, 150 );
+            }
+        }
+    }
+
+    if( background != defaultColour && KIPLATFORM::UI::IsDarkTheme() )
+        background = background.ChangeLightness( 50 );
+
+    m_grid->SetCellBackgroundColour( aRow, aCol, background );
 }
 
 
 void PANEL_SYMBOL_PIN_MAP::onCellChanged( wxGridEvent& aEvent )
 {
-    const int row = aEvent.GetRow();
-    const int col = aEvent.GetCol();
-
-    // Keep columns bound to the same named map in sync, so an edit on one shared column is not lost
-    // when harvestGrid() merges them (issue #2282).  SetCellValue does not re-fire this event.
-    if( col >= FIXED_COLS )
+    if( aEvent.GetRow() == 0 && aEvent.GetCol() >= FIXED_COLS )
     {
-        const size_t index = (size_t) ( col - FIXED_COLS );
-
-        if( index < m_associations.size() && !m_associations[index].m_MapName.IsEmpty() )
-        {
-            const wxString mapName = m_associations[index].m_MapName;
-            const wxString value = m_grid->GetCellValue( row, col );
-
-            for( size_t other = 0; other < m_associations.size(); ++other )
-            {
-                if( (int) other + FIXED_COLS == col )
-                    continue;
-
-                if( m_associations[other].m_MapName == mapName )
-                {
-                    m_grid->SetCellValue( row, FIXED_COLS + (int) other, value );
-                    ValidateCell( row, FIXED_COLS + (int) other );
-                }
-            }
-        }
+        applyColumnFootprint( aEvent.GetCol(), m_grid->GetCellValue( 0, aEvent.GetCol() ) );
+        aEvent.Skip();
+        return;
     }
 
-    ValidateCell( row, col );
+    ValidateCell( aEvent.GetRow(), aEvent.GetCol() );
     m_grid->ForceRefresh();
     aEvent.Skip();
 }
 
 
-wxString PANEL_SYMBOL_PIN_MAP::GetColumnFootprintLabel( int aCol ) const
+void PANEL_SYMBOL_PIN_MAP::onLabelDClick( wxGridEvent& aEvent )
 {
-    const size_t index = (size_t) ( aCol - FIXED_COLS );
-
-    if( index >= m_associations.size() )
-        return wxEmptyString;
-
-    return m_associations[index].m_FootprintLibId.GetUniStringLibId();
+    if( aEvent.GetCol() >= FIXED_COLS )
+        RenameColumn( aEvent.GetCol() );
+    else
+        aEvent.Skip();
 }
 
 
-std::vector<wxString> PANEL_SYMBOL_PIN_MAP::GetMapNames() const
+wxString PANEL_SYMBOL_PIN_MAP::GetColumnMapName( int aCol ) const
 {
-    std::vector<wxString> names;
+    const size_t                index = (size_t) ( aCol - FIXED_COLS );
+    const std::vector<PIN_MAP>& maps = m_pinMaps.GetAll();
 
-    for( const PIN_MAP& map : m_pinMaps.GetAll() )
-        names.push_back( map.GetName() );
+    if( index >= maps.size() )
+        return wxEmptyString;
 
-    return names;
+    return maps[index].GetName();
 }
 
 
@@ -413,7 +435,7 @@ void PANEL_SYMBOL_PIN_MAP::ResetColumnToIdentity( int aCol )
     if( !m_grid->CommitPendingChanges() || aCol < FIXED_COLS || aCol >= m_grid->GetNumberCols() )
         return;
 
-    for( int row = 0; row < m_grid->GetNumberRows(); ++row )
+    for( int row = 1; row < m_grid->GetNumberRows(); ++row )
     {
         m_grid->SetCellValue( row, aCol, m_grid->GetCellValue( row, 1 ) );
         ValidateCell( row, aCol );
@@ -434,7 +456,7 @@ void PANEL_SYMBOL_PIN_MAP::CopyColumn( int aSrcCol, int aDstCol )
     if( aDstCol < FIXED_COLS || aDstCol >= m_grid->GetNumberCols() )
         return;
 
-    for( int row = 0; row < m_grid->GetNumberRows(); ++row )
+    for( int row = 1; row < m_grid->GetNumberRows(); ++row )
     {
         m_grid->SetCellValue( row, aDstCol, m_grid->GetCellValue( row, aSrcCol ) );
         ValidateCell( row, aDstCol );
@@ -444,47 +466,114 @@ void PANEL_SYMBOL_PIN_MAP::CopyColumn( int aSrcCol, int aDstCol )
 }
 
 
-void PANEL_SYMBOL_PIN_MAP::BindColumnToMap( int aCol, const wxString& aMapName )
+void PANEL_SYMBOL_PIN_MAP::RenameColumn( int aCol )
 {
     if( !m_grid->CommitPendingChanges() || aCol < FIXED_COLS || aCol >= m_grid->GetNumberCols() )
         return;
 
-    const size_t index = (size_t) ( aCol - FIXED_COLS );
+    const wxString oldName = GetColumnMapName( aCol );
 
-    if( index >= m_associations.size() )
+    if( oldName.IsEmpty() )
         return;
 
-    // Harvest first so an in-progress edit on the rebound column is not lost, then point the
-    // association at the chosen map and rebuild so the column shows that map's pads.
+    wxTextEntryDialog dlg( this, _( "Map name:" ), _( "Rename Map" ), oldName );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    const wxString newName = dlg.GetValue().Trim().Trim( false );
+
+    if( newName.IsEmpty() || newName == oldName )
+        return;
+
+    if( m_pinMaps.FindByName( newName ) )
+    {
+        wxMessageBox( wxString::Format( _( "A pin map named '%s' already exists." ), newName ), _( "Rename Map" ),
+                      wxOK | wxICON_ERROR, this );
+        return;
+    }
+
     harvestGrid();
 
-    const PIN_MAP* target = m_pinMaps.FindByName( aMapName );
+    if( PIN_MAP* map = m_pinMaps.FindByName( oldName ) )
+        map->SetName( newName );
 
-    if( !target )
-        return;
-
-    const wxString oldMapName = m_associations[index].m_MapName;
-    m_associations[index].m_MapName = aMapName;
-
-    // Drop the previous map if it was unique to this column so the set does not accumulate orphans.
-    if( !oldMapName.IsEmpty() && oldMapName != aMapName )
+    for( ASSOCIATED_FOOTPRINT& assoc : m_associations )
     {
-        bool stillUsed = false;
-
-        for( const ASSOCIATED_FOOTPRINT& assoc : m_associations )
-        {
-            if( assoc.m_MapName == oldMapName )
-            {
-                stillUsed = true;
-                break;
-            }
-        }
-
-        if( !stillUsed )
-            m_pinMaps.Remove( oldMapName );
+        if( assoc.m_MapName == oldName )
+            assoc.m_MapName = newName;
     }
 
     rebuildGrid();
+}
+
+
+void PANEL_SYMBOL_PIN_MAP::applyColumnFootprint( int aCol, const wxString& aFootprintId )
+{
+    const wxString mapName = GetColumnMapName( aCol );
+
+    if( mapName.IsEmpty() )
+        return;
+
+    auto currentFootprint = [&]() -> wxString
+    {
+        for( const ASSOCIATED_FOOTPRINT& a : m_associations )
+        {
+            if( a.m_MapName == mapName )
+                return a.m_FootprintLibId.GetUniStringLibId();
+        }
+
+        return wxEmptyString;
+    };
+
+    wxString fpid = aFootprintId;
+    fpid.Trim().Trim( false );
+
+    LIB_ID fpId;
+
+    if( !fpid.IsEmpty() && fpId.Parse( fpid ) >= 0 )
+    {
+        wxMessageBox( _( "Invalid footprint identifier." ), _( "Assign Footprint" ), wxOK | wxICON_ERROR, this );
+        m_grid->SetCellValue( 0, aCol, currentFootprint() );
+        return;
+    }
+
+    for( const ASSOCIATED_FOOTPRINT& a : m_associations )
+    {
+        if( a.m_MapName != mapName && a.m_FootprintLibId == fpId && !fpid.IsEmpty() )
+        {
+            wxMessageBox( _( "That footprint is already assigned to another pin map." ), _( "Assign Footprint" ),
+                          wxOK | wxICON_INFORMATION, this );
+            m_grid->SetCellValue( 0, aCol, currentFootprint() );
+            return;
+        }
+    }
+
+    m_associations.erase( std::remove_if( m_associations.begin(), m_associations.end(),
+                                          [&]( const ASSOCIATED_FOOTPRINT& a )
+                                          {
+                                              return a.m_MapName == mapName;
+                                          } ),
+                          m_associations.end() );
+
+    if( !fpid.IsEmpty() )
+    {
+        ASSOCIATED_FOOTPRINT assoc;
+        assoc.m_FootprintLibId = fpId;
+        assoc.m_MapName = mapName;
+        m_associations.push_back( std::move( assoc ) );
+
+        m_grid->SetCellValue( 0, aCol, fpId.GetUniStringLibId() );
+    }
+    else
+    {
+        m_grid->SetCellValue( 0, aCol, wxEmptyString );
+    }
+
+    for( int row = 1; row < m_grid->GetNumberRows(); ++row )
+        ValidateCell( row, aCol );
+
+    m_grid->ForceRefresh();
 }
 
 
@@ -515,31 +604,31 @@ void PANEL_SYMBOL_PIN_MAP::adjustGridColumns()
 
 void PANEL_SYMBOL_PIN_MAP::harvestGrid()
 {
-    // Rebuild the set from the grid.  Several columns can share one named map (a single pinout
-    // used by more than one footprint); merge those columns into the same PIN_MAP so an edit made
-    // through one shared column is not overwritten by another column that left a cell blank.
-    m_pinMaps = PIN_MAP_SET();
+    // Preserve maps no footprint references so a free-standing map survives a round-trip.
+    // Associations are kept as-is and edited separately.
+    std::vector<wxString> names;
 
-    for( size_t col = 0; col < m_associations.size(); ++col )
+    for( const PIN_MAP& map : m_pinMaps.GetAll() )
+        names.push_back( map.GetName() );
+
+    PIN_MAP_SET rebuilt;
+
+    for( size_t col = 0; col < names.size(); ++col )
     {
-        const wxString mapName = m_associations[col].m_MapName;
-
-        if( mapName.IsEmpty() )
-            continue;
-
-        PIN_MAP* existing = m_pinMaps.FindByName( mapName );
-        PIN_MAP  map = existing ? *existing : PIN_MAP( mapName );
+        PIN_MAP map( names[col] );
 
         for( size_t row = 0; row < m_pinNumbers.size(); ++row )
         {
-            const wxString pad = m_grid->GetCellValue( (int) row, FIXED_COLS + (int) col );
+            const wxString pad = m_grid->GetCellValue( (int) row + 1, FIXED_COLS + (int) col );
 
-            if( !pad.IsEmpty() )
+            if( !pad.IsEmpty() && pad != m_pinNumbers[row] )
                 map.SetEntry( m_pinNumbers[row], pad );
         }
 
-        m_pinMaps.AddOrReplace( std::move( map ) );
+        rebuilt.AddOrReplace( std::move( map ) );
     }
+
+    m_pinMaps = std::move( rebuilt );
 }
 
 
@@ -557,85 +646,97 @@ wxString PANEL_SYMBOL_PIN_MAP::makeUniqueMapName() const
 }
 
 
-void PANEL_SYMBOL_PIN_MAP::OnAddFootprint( wxCommandEvent& aEvent )
+const std::set<wxString>& PANEL_SYMBOL_PIN_MAP::padNumbersFor( const wxString& aFootprintId )
+{
+    auto it = m_footprintPads.find( aFootprintId );
+
+    if( it != m_footprintPads.end() )
+        return it->second;
+
+    std::set<wxString>& pads = m_footprintPads[aFootprintId];
+
+    if( aFootprintId.IsEmpty() )
+        return pads;
+
+    if( KIWAY_HOLDER* holder = dynamic_cast<KIWAY_HOLDER*>( wxGetTopLevelParent( this ) ) )
+    {
+        if( KIFACE* cvpcb = holder->Kiway().KiFACE( KIWAY::FACE_CVPCB ) )
+        {
+            typedef void ( *PAD_NUMBERS_FN_PTR )( const wxString&, PROJECT*, std::set<wxString>& );
+
+            if( auto fetch = (PAD_NUMBERS_FN_PTR) cvpcb->IfaceOrAddress( KIFACE_FOOTPRINT_PAD_NUMBERS ) )
+                fetch( aFootprintId, &holder->Prj(), pads );
+        }
+    }
+
+    return pads;
+}
+
+
+void PANEL_SYMBOL_PIN_MAP::OnAddMap( wxCommandEvent& aEvent )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
 
     harvestGrid();
-
-    wxTextEntryDialog dlg( this, _( "Footprint library identifier (e.g. Library:Footprint):" ), _( "Add Footprint" ) );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    const wxString text = dlg.GetValue().Trim().Trim( false );
-
-    if( text.IsEmpty() )
-        return;
-
-    LIB_ID fpId;
-
-    if( fpId.Parse( text ) >= 0 )
-    {
-        wxMessageBox( _( "Invalid footprint identifier." ), _( "Add Footprint" ), wxOK | wxICON_ERROR, this );
-        return;
-    }
-
-    ASSOCIATED_FOOTPRINT assoc;
-    assoc.m_FootprintLibId = fpId;
-    assoc.m_MapName = makeUniqueMapName();
-
-    PIN_MAP map( assoc.m_MapName );
-
-    for( const wxString& pin : m_pinNumbers )
-        map.SetEntry( pin, pin );
-
-    m_pinMaps.AddOrReplace( std::move( map ) );
-    m_associations.push_back( std::move( assoc ) );
-
+    m_pinMaps.AddOrReplace( PIN_MAP( makeUniqueMapName() ) );
     rebuildGrid();
 }
 
 
-void PANEL_SYMBOL_PIN_MAP::OnRemoveFootprint( wxCommandEvent& aEvent )
+void PANEL_SYMBOL_PIN_MAP::OnRemoveMap( wxCommandEvent& aEvent )
 {
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    harvestGrid();
+    const std::vector<PIN_MAP>& maps = m_pinMaps.GetAll();
+
+    if( maps.empty() )
+        return;
 
     int col = m_grid->GetGridCursorCol();
 
     if( col < FIXED_COLS )
     {
-        if( m_associations.empty() )
+        if( maps.size() > 1 )
+        {
+            wxMessageBox( _( "Click a pin map column to choose which map to remove." ), _( "Remove Pin Map" ),
+                          wxOK | wxICON_INFORMATION, this );
             return;
+        }
 
-        col = m_grid->GetNumberCols() - 1;
+        col = FIXED_COLS;
     }
 
     const size_t index = (size_t) ( col - FIXED_COLS );
 
-    if( index >= m_associations.size() )
+    if( index >= maps.size() )
         return;
 
-    const wxString mapName = m_associations[index].m_MapName;
-    m_associations.erase( m_associations.begin() + index );
+    const wxString mapName = maps[index].GetName();
 
-    bool stillUsed = false;
+    bool hasAssociation = std::any_of( m_associations.begin(), m_associations.end(),
+                                       [&]( const ASSOCIATED_FOOTPRINT& a )
+                                       {
+                                           return a.m_MapName == mapName;
+                                       } );
 
-    for( const ASSOCIATED_FOOTPRINT& assoc : m_associations )
+    if( hasAssociation
+        && !IsOK( this, wxString::Format( _( "Remove pin map '%s' and its footprint association?" ), mapName ) ) )
     {
-        if( assoc.m_MapName == mapName )
-        {
-            stillUsed = true;
-            break;
-        }
+        return;
     }
 
-    if( !stillUsed )
-        m_pinMaps.Remove( mapName );
+    harvestGrid();
+
+    m_pinMaps.Remove( mapName );
+
+    m_associations.erase( std::remove_if( m_associations.begin(), m_associations.end(),
+                                          [&]( const ASSOCIATED_FOOTPRINT& a )
+                                          {
+                                              return a.m_MapName == mapName;
+                                          } ),
+                          m_associations.end() );
 
     rebuildGrid();
 }

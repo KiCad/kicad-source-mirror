@@ -222,6 +222,7 @@ private:
 static const wxString PIN_MAP_GROUP = _HKI( "Pin Map" );
 static const wxString PIN_MAP_FOOTPRINT_PROP = wxS( "Pin Map Footprint" );
 static const wxString PIN_MAP_MODE_PROP = wxS( "Pin Map Mode" );
+static const wxString PIN_MAP_NAME_PROP = wxS( "Pin Map Name" );
 
 
 /**
@@ -281,7 +282,7 @@ public:
 
     bool Writeable( INSPECTABLE* aObject ) const override { return false; }
 
-    void setter( void* obj, wxAny& v ) override { }
+    void setter( void* obj, wxAny& v ) override {}
 
     wxAny getter( const void* obj ) const override
     {
@@ -378,12 +379,114 @@ public:
         {
         case PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT:
         case PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP:
-        case PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY:
-            return wxAny( static_cast<int>( override.m_Mode ) );
+        case PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY: return wxAny( static_cast<int>( override.m_Mode ) );
 
-        default:
-            return wxAny( static_cast<int>( PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT ) );
+        default: return wxAny( static_cast<int>( PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT ) );
         }
+    }
+};
+
+
+class SCH_SYMBOL_PIN_MAP_NAME_PROPERTY : public PROPERTY_BASE
+{
+public:
+    SCH_SYMBOL_PIN_MAP_NAME_PROPERTY() :
+            PROPERTY_BASE( PIN_MAP_NAME_PROP )
+    {
+    }
+
+    size_t OwnerHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
+    size_t BaseHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
+    size_t TypeHash() const override { return TYPE_HASH( int ); }
+
+    static std::vector<wxString> MapNames( const SCH_SYMBOL* aSymbol )
+    {
+        std::vector<wxString> names;
+
+        if( const LIB_SYMBOL* lib = aSymbol->GetLibSymbolRef().get() )
+        {
+            for( const PIN_MAP& map : lib->GetEffectivePinMaps().GetAll() )
+                names.push_back( map.GetName() );
+        }
+
+        return names;
+    }
+
+    static wxPGChoices BuildChoices( const SCH_SYMBOL* aSymbol )
+    {
+        wxPGChoices                 choices;
+        const std::vector<wxString> names = MapNames( aSymbol );
+
+        for( size_t ii = 0; ii < names.size(); ++ii )
+            choices.Add( names[ii], (int) ii );
+
+        return choices;
+    }
+
+    void setter( void* obj, wxAny& v ) override
+    {
+        int value = 0;
+
+        if( !v.GetAs( &value ) )
+            return;
+
+        SCH_SYMBOL*                 symbol = reinterpret_cast<SCH_SYMBOL*>( obj );
+        const std::vector<wxString> names = MapNames( symbol );
+
+        if( value < 0 || value >= (int) names.size() )
+            return;
+
+        const SCH_SHEET_PATH* sheetPath = nullptr;
+        wxString              variantName;
+
+        if( symbol->Schematic() )
+        {
+            sheetPath = &symbol->Schematic()->CurrentSheet();
+            variantName = symbol->Schematic()->GetCurrentVariant();
+        }
+
+        PIN_MAP_INSTANCE_OVERRIDE override = symbol->GetPinMapOverride( sheetPath, variantName );
+        override.m_Mode = PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP;
+        override.m_ActiveMapName = names[value];
+        symbol->SetPinMapOverride( override, sheetPath, variantName );
+    }
+
+    wxAny getter( const void* obj ) const override
+    {
+        const SCH_SYMBOL* symbol = reinterpret_cast<const SCH_SYMBOL*>( obj );
+
+        const SCH_SHEET_PATH* sheetPath = nullptr;
+        wxString              variantName;
+
+        if( symbol->Schematic() )
+        {
+            sheetPath = &symbol->Schematic()->CurrentSheet();
+            variantName = symbol->Schematic()->GetCurrentVariant();
+        }
+
+        PIN_MAP_INSTANCE_OVERRIDE override = symbol->GetPinMapOverride( sheetPath, variantName );
+
+        wxString active;
+
+        if( override.m_Mode == PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP )
+            active = override.m_ActiveMapName;
+
+        const std::vector<wxString> names = MapNames( symbol );
+
+        // A stale named-map reference falls back to the library default for display, matching resolution.
+        if( std::find( names.begin(), names.end(), active ) == names.end() )
+        {
+            if( const ASSOCIATED_FOOTPRINT* fp = activeAssociatedFootprint( symbol ) )
+                active = fp->m_MapName;
+        }
+
+        for( size_t ii = 0; ii < names.size(); ++ii )
+        {
+            if( names[ii] == active )
+                return wxAny( (int) ii );
+        }
+
+        return wxAny( 0 );
     }
 };
 
@@ -402,8 +505,8 @@ static const wxString PIN_MAP_ENTRY_PREFIX = wxS( "Pin " );
  * Read-only per-pin row of the effective pin->pad table (issue #2282).
  *
  * One property is registered per distinct symbol pin number; its value is the effective pad the pin
- * resolves to for the current sheet and variant.  An unmapped pin (identity resolution) is shown as
- * "<pad> (unmapped)" so a reviewer can see at a glance which pins the active map actually remaps.
+ * resolves to for the current sheet and variant.  A pin that is not remapped resolves 1:1 and is
+ * shown as "<pad> (identity)", so a reviewer can see at a glance which pins the active map remaps.
  */
 class SCH_SYMBOL_PIN_MAP_ENTRY_PROPERTY : public PROPERTY_BASE
 {
@@ -448,7 +551,7 @@ public:
             wxString pad = pin->GetEffectivePadNumber( *sheetPath, variantName );
 
             if( pad == m_pinNumber )
-                return wxAny( wxString::Format( _( "%s (unmapped)" ), pad ) );
+                return wxAny( wxString::Format( _( "%s (identity)" ), pad ) );
 
             return wxAny( pad );
         }
@@ -757,6 +860,27 @@ void SCH_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
                         []( INSPECTABLE* ) -> wxPGChoices
                         {
                             return SCH_SYMBOL_PIN_MAP_MODE_PROPERTY::BuildChoices();
+                        } );
+    }
+
+    if( !m_propMgr.GetProperty( TYPE_HASH( SCH_SYMBOL ), PIN_MAP_NAME_PROP ) )
+    {
+        m_propMgr.AddProperty( new SCH_SYMBOL_PIN_MAP_NAME_PROPERTY(), groupPinMap )
+                .SetAvailableFunc(
+                        []( INSPECTABLE* aObject )
+                        {
+                            const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( aObject );
+
+                            return symbol && symbolHasAssociatedFootprint( aObject )
+                                   && SCH_SYMBOL_PIN_MAP_NAME_PROPERTY::MapNames( symbol ).size() > 1;
+                        } )
+                .SetChoicesFunc(
+                        []( INSPECTABLE* aObject ) -> wxPGChoices
+                        {
+                            if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( aObject ) )
+                                return SCH_SYMBOL_PIN_MAP_NAME_PROPERTY::BuildChoices( symbol );
+
+                            return wxPGChoices();
                         } );
     }
 

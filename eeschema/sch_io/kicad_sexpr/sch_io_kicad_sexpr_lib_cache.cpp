@@ -663,8 +663,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePinMapData( LIB_SYMBOL* aSymbol, OUTPUTFO
 
             for( const PIN_MAP_ENTRY& entry : map.GetEntries() )
             {
-                aFormatter.Print( "(entry %s %s)",
-                                  aFormatter.Quotew( entry.m_PinNumber ).c_str(),
+                aFormatter.Print( "(entry %s %s)", aFormatter.Quotew( entry.m_PinNumber ).c_str(),
                                   aFormatter.Quotew( entry.m_PadNumber ).c_str() );
             }
 

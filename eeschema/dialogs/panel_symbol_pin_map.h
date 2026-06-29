@@ -20,7 +20,9 @@
 #ifndef PANEL_SYMBOL_PIN_MAP_H
 #define PANEL_SYMBOL_PIN_MAP_H
 
+#include <map>
 #include <memory>
+#include <set>
 #include <vector>
 #include <wx/string.h>
 
@@ -32,14 +34,12 @@ class PIN_MAP_GRID_TRICKS;
 
 
 /**
- * Composed widget that edits a symbol's named pin maps and the footprints they
- * are associated with.
+ * Composed widget that edits a symbol's named pin maps and the footprint each is bound to.
  *
- * The grid lists every logical pin of the symbol as a row.  The leading columns
- * describe the pin (unit, number, name) and one trailing column per associated
- * footprint carries the pad that the pin resolves to under that footprint's map.
- * Editing a pad cell rewrites the corresponding PIN_MAP entry; the leading
- * columns are read-only.
+ * Each grid column is a named pin map.  Row 0 binds a footprint to the map; the remaining rows
+ * are the symbol's logical pins, whose cells carry the pad each pin maps to.  A cell left at its
+ * pin number is identity and is not stored.  The leading columns (unit, number, name) are
+ * read-only.
  */
 class PANEL_SYMBOL_PIN_MAP : public PANEL_SYMBOL_PIN_MAP_BASE
 {
@@ -80,25 +80,28 @@ public:
     /// Copy every pad value from column \a aSrcCol into column \a aDstCol.
     void CopyColumn( int aSrcCol, int aDstCol );
 
-    /// Point the association behind \a aCol at the existing named map \a aMapName.
-    void BindColumnToMap( int aCol, const wxString& aMapName );
+    /// Prompt for a new name for column \a aCol's map and update every reference to it.
+    void RenameColumn( int aCol );
 
-    /// @return the footprint label shown for pad column \a aCol, for menu captions.
-    wxString GetColumnFootprintLabel( int aCol ) const;
-
-    /// @return the names of every map currently in the working set, for the bind menu.
-    std::vector<wxString> GetMapNames() const;
+    /// @return the map name shown for pad column \a aCol, for menu captions.
+    wxString GetColumnMapName( int aCol ) const;
 
     /// Re-evaluate the colour of pad cell (aRow, aCol) from its current contents.
     void ValidateCell( int aRow, int aCol );
 
 protected:
-    void OnAddFootprint( wxCommandEvent& aEvent ) override;
-    void OnRemoveFootprint( wxCommandEvent& aEvent ) override;
+    void OnAddMap( wxCommandEvent& aEvent ) override;
+    void OnRemoveMap( wxCommandEvent& aEvent ) override;
     void OnSizeGrid( wxSizeEvent& aEvent ) override;
 
 private:
     void onCellChanged( wxGridEvent& aEvent );
+
+    /// Double-clicking a map column's header opens its rename dialog.
+    void onLabelDClick( wxGridEvent& aEvent );
+
+    /// Bind (or clear, when empty) the footprint entered in column \a aCol's footprint cell.
+    void applyColumnFootprint( int aCol, const wxString& aFootprintId );
 
     /// Rebuild the whole grid from the working model.
     void rebuildGrid();
@@ -115,11 +118,15 @@ private:
     /// @return a map name not already used by m_pinMaps.
     wxString makeUniqueMapName() const;
 
-    LIB_SYMBOL*                          m_symbol;
-    std::vector<wxString>                m_pinNumbers; // one per grid row, logical numbers
-    PIN_MAP_SET                          m_pinMaps;
-    std::vector<ASSOCIATED_FOOTPRINT>    m_associations;
-    std::unique_ptr<PIN_MAP_GRID_TRICKS> m_gridTricks;
+    /// @return the pad number strings of aFootprintId.
+    const std::set<wxString>& padNumbersFor( const wxString& aFootprintId );
+
+    LIB_SYMBOL*                            m_symbol;
+    std::vector<wxString>                  m_pinNumbers; // one per grid row, logical numbers
+    PIN_MAP_SET                            m_pinMaps;
+    std::vector<ASSOCIATED_FOOTPRINT>      m_associations;
+    std::unique_ptr<PIN_MAP_GRID_TRICKS>   m_gridTricks;
+    std::map<wxString, std::set<wxString>> m_footprintPads;
 };
 
 #endif // PANEL_SYMBOL_PIN_MAP_H

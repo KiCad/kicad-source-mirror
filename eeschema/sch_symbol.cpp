@@ -1285,8 +1285,8 @@ bool SCH_SYMBOL::GetDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVaria
 }
 
 
-void SCH_SYMBOL::SetPinMapOverride( const PIN_MAP_INSTANCE_OVERRIDE& aOverride,
-                                    const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
+void SCH_SYMBOL::SetPinMapOverride( const PIN_MAP_INSTANCE_OVERRIDE& aOverride, const SCH_SHEET_PATH* aInstance,
+                                    const wxString& aVariantName )
 {
     if( !aInstance || aVariantName.IsEmpty() )
     {
@@ -1316,7 +1316,7 @@ void SCH_SYMBOL::SetPinMapOverride( const PIN_MAP_INSTANCE_OVERRIDE& aOverride,
 
 
 PIN_MAP_INSTANCE_OVERRIDE SCH_SYMBOL::GetPinMapOverride( const SCH_SHEET_PATH* aInstance,
-                                                        const wxString& aVariantName ) const
+                                                         const wxString&       aVariantName ) const
 {
     PIN_MAP_INSTANCE_OVERRIDE result = m_pinMapOverride;
 
@@ -1337,7 +1337,7 @@ PIN_MAP_INSTANCE_OVERRIDE SCH_SYMBOL::GetPinMapOverride( const SCH_SHEET_PATH* a
 
 
 PIN_MAP_INSTANCE_OVERRIDE SCH_SYMBOL::resolveDelegatedPinMapOverride( const SCH_SHEET_PATH& aSheet,
-                                                                     const wxString& aVariantName ) const
+                                                                      const wxString&       aVariantName ) const
 {
     if( !Schematic() )
         return PIN_MAP_INSTANCE_OVERRIDE();
@@ -1849,6 +1849,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
     bool updateDNP = true;
     bool updateOtherFields = true;
     bool updatePins = true;
+    bool updatePinMapOverride = true;
 
     if( aProperty )
     {
@@ -1857,11 +1858,13 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
         updateExclFromBOM = aProperty->Name() == _HKI( "Exclude From Bill of Materials" );
         updateExclFromPosFiles = aProperty->Name() == _HKI( "Exclude From Position Files" );
         updateDNP = aProperty->Name() == _HKI( "Do not Populate" );
+        updatePinMapOverride = aProperty->Name() == wxS( "Pin Map Mode" ) || aProperty->Name() == wxS( "Pin Map Name" );
         updateOtherFields = false;
         updatePins = false;
     }
 
-    if( !updateValue && !updateExclFromBOM && !updateExclFromBoard && !updateExclFromPosFiles && !updateDNP && !updateOtherFields && !updatePins )
+    if( !updateValue && !updateExclFromBOM && !updateExclFromBoard && !updateExclFromPosFiles && !updateDNP
+        && !updateOtherFields && !updatePins && !updatePinMapOverride )
     {
         return;
     }
@@ -1941,6 +1944,10 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                 if( updateDNP )
                     otherUnit->SetDNP( GetDNP( &aSourceSheet, aVariantName ), &sheet, aVariantName );
 
+                if( updatePinMapOverride )
+                    otherUnit->SetPinMapOverride( GetPinMapOverride( &aSourceSheet, aVariantName ), &sheet,
+                                                  aVariantName );
+
                 if( updatePins )
                 {
                     for( const std::unique_ptr<SCH_PIN>& model_pin : m_pins )
@@ -1977,8 +1984,7 @@ SCH_PIN* SCH_SYMBOL::GetPin( const wxString& aNumber ) const
 }
 
 
-SCH_PIN* SCH_SYMBOL::GetPinByEffectivePadNumber( const wxString& aPadNumber,
-                                                 const SCH_SHEET_PATH* aSheet,
+SCH_PIN* SCH_SYMBOL::GetPinByEffectivePadNumber( const wxString& aPadNumber, const SCH_SHEET_PATH* aSheet,
                                                  const wxString& aVariantName ) const
 {
     if( !aSheet )
@@ -1986,8 +1992,7 @@ SCH_PIN* SCH_SYMBOL::GetPinByEffectivePadNumber( const wxString& aPadNumber,
 
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
-        for( const wxString& pad : ExpandStackedPinNotation(
-                     pin->GetEffectivePadNumber( *aSheet, aVariantName ) ) )
+        for( const wxString& pad : ExpandStackedPinNotation( pin->GetEffectivePadNumber( *aSheet, aVariantName ) ) )
         {
             if( pad == aPadNumber )
                 return pin.get();

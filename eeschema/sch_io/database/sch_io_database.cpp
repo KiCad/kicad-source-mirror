@@ -660,8 +660,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
                 }
                 else if( !footprintsList.IsEmpty() )
                 {
-                    std::unordered_map<wxString, std::vector<wxString>> assignments =
-                            ParseLegacyPinAssignments( json );
+                    std::unordered_map<wxString, std::vector<wxString>> assignments = ParseLegacyPinAssignments( json );
 
                     if( !assignments.empty() )
                     {
@@ -689,8 +688,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         {
             // Surface a malformed pin-map payload to the user instead of silently dropping it; the
             // symbol still loads without the map (issue #2282).
-            wxLogError( _( "Error parsing pin map for database symbol '%s': %s" ),
-                        aSymbolName, e.what() );
+            wxLogError( _( "Error parsing pin map for database symbol '%s': %s" ), aSymbolName, e.what() );
         }
     }
 
