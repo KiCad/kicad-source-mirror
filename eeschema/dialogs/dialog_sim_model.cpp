@@ -839,6 +839,8 @@ void DIALOG_SIM_MODEL<T>::updateModelCodeTab( SIM_MODEL* aModel )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::updatePinAssignments( SIM_MODEL* aModel, bool aForceRefreshFromModel )
 {
+    m_pinAssignmentsGrid->CommitPendingChanges( true );
+
     if( m_pinAssignmentsGrid->GetNumberRows() == 0 )
     {
         m_pinAssignmentsGrid->AppendRows( (int) m_sortedPartPins.size() );
