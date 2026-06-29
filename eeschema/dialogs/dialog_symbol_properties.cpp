@@ -447,14 +447,7 @@ SCH_EDIT_FRAME* DIALOG_SYMBOL_PROPERTIES::GetParent()
 
 void DIALOG_SYMBOL_PROPERTIES::SelectPinMapPage()
 {
-    for( size_t page = 0; page < m_notebook1->GetPageCount(); ++page )
-    {
-        if( m_notebook1->GetPage( page ) == m_pinMapPage )
-        {
-            m_notebook1->SetSelection( page );
-            return;
-        }
-    }
+    m_forcePinMapPage = true;
 }
 
 
@@ -603,6 +596,18 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_fieldsGrid->Layout();
     Layout();
     m_fieldsGrid->SetMinVisibleRows( this, 4 );
+
+    if( m_forcePinMapPage )
+    {
+        for( size_t page = 0; page < m_notebook1->GetPageCount(); ++page )
+        {
+            if( m_notebook1->GetPage( page ) == m_pinMapPage )
+            {
+                m_notebook1->SetSelection( page );
+                break;
+            }
+        }
+    }
 
     return true;
 }

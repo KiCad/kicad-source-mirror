@@ -113,6 +113,7 @@ private:
     SCH_PIN_TABLE_DATA_MODEL* m_dataModel;
     PANEL_EMBEDDED_FILES*     m_embeddedFiles;
     PANEL_SYMBOL_PIN_MAP*     m_pinMapPanel;
+    bool                      m_forcePinMapPage = false;
 };
 
 #endif // DIALOG_SYMBOL_PROPERTIES_H
