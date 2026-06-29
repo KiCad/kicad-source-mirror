@@ -157,8 +157,8 @@ private:
                                bool aIsBus = false );
     SCH_JUNCTION* loadJunction( const std::unique_ptr<EJUNCTION>&  aJunction );
     SCH_TEXT*     loadPlainText( const std::unique_ptr<ETEXT>& aSchText );
-    void          loadFrame( const std::unique_ptr<EFRAME>& aFrame,
-                             std::vector<SCH_ITEM*>& aItems );
+    void          loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector<SCH_ITEM*>& aItems,
+                             SCH_LAYER_ID aLayer = LAYER_NOTES );
 
     bool          loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol,
                               std::unique_ptr<LIB_SYMBOL>& aSymbol,
