@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-18 23:01+0000\n"
+"PO-Revision-Date: 2026-06-29 22:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -3152,7 +3152,7 @@ msgstr "Odstupy"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
-msgstr ""
+msgstr "Vybrať základnú a HEAD referenciu na porovnanie."
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
 #, fuzzy, c-format
@@ -3422,11 +3422,11 @@ msgstr "Vlastnosť"
 
 #: common/dialogs/dialog_kicad_diff.cpp:63
 msgid "Before"
-msgstr ""
+msgstr "Predtým"
 
 #: common/dialogs/dialog_kicad_diff.cpp:64
 msgid "After"
-msgstr ""
+msgstr "Potom"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
 #, fuzzy
@@ -3508,7 +3508,7 @@ msgstr "Priečinok"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
-msgstr ""
+msgstr "Novší"
 
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
@@ -3548,7 +3548,7 @@ msgstr "Žiadna súčiastka na uložeenie."
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
 msgid "%zu conflict(s) require resolution."
-msgstr ""
+msgstr "%zu konfliktov vyžaduje riešenie."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:217
 #, c-format
@@ -3556,6 +3556,8 @@ msgid ""
 "%zu conflict(s) still need a resolution. Pick Ours, Theirs, or Ancestor for "
 "each one."
 msgstr ""
+"%zu konflikt(ov) stále vyžadujú riešenie. Pre každý z nich vyberte možnosť "
+"Náš, Ich alebo Predchodca."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:220
 #: common/dialogs/dialog_kicad_merge_3way_base.h:65
@@ -3577,6 +3579,8 @@ msgstr "Konflikty"
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
 msgstr ""
+"Každý konflikt vyriešte výberom strany, ktorú si ponecháte, a potom kliknite "
+"na tlačidlo Použiť."
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:31
 #: eeschema/erc/erc_item.cpp:38
@@ -3590,11 +3594,11 @@ msgstr "Názov vývodu vnútri"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
-msgstr ""
+msgstr "Náš"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:64
 msgid "Theirs"
-msgstr ""
+msgstr "Ich"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
 #, fuzzy
@@ -6689,7 +6693,7 @@ msgstr "X rozlíšenie:"
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
-msgstr ""
+msgstr "Prevziať si naše"
 
 #: common/diff_merge/auto_resolution.cpp:257
 #, fuzzy
@@ -6703,7 +6707,7 @@ msgstr "Umiestniť kotvu"
 
 #: common/diff_merge/auto_resolution.cpp:259
 msgid "Property-level merge"
-msgstr ""
+msgstr "Zlúčenie na úrovni vlastníctva"
 
 #: common/diff_merge/auto_resolution.cpp:260 common/grid_tricks.cpp:400
 #: common/tool/actions.cpp:404 common/widgets/listbox_tricks.cpp:208
@@ -6725,7 +6729,7 @@ msgstr "(Predvolené)"
 #: common/diff_merge/auto_resolution.cpp:265
 #, c-format
 msgid "%zu property edit(s) in this resolution.\n"
-msgstr ""
+msgstr "%zu úprav vlastností v tomto riešení.\n"
 
 #: common/diff_merge/diff_job_output.cpp:88
 #, fuzzy
@@ -6734,7 +6738,7 @@ msgstr "Nepodarilo sa načítať dáta obrázku."
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
-msgstr ""
+msgstr "Kolízia"
 
 #: common/diff_merge/diff_tree_grouping.cpp:41
 #, fuzzy
@@ -8969,7 +8973,7 @@ msgstr "Nie je možné zapísať protokol do súboru '%s'."
 #: common/io/diptrace/diptrace_binary_reader.cpp:63
 #, c-format
 msgid "DipTrace file '%s' is too large (%ld bytes)."
-msgstr ""
+msgstr "Súbor DipTrace '%s' je príliš veľký (%ld bajtov)."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:85
 #, fuzzy, c-format
@@ -9024,24 +9028,24 @@ msgstr ""
 
 #: common/io/eagle/eagle_bin_parser.cpp:884
 msgid "Short read in Eagle binary file (field out of bounds)."
-msgstr ""
+msgstr "Krátke čítanie v binárnom súbore Eagle (pole mimo hraníc)."
 
 #: common/io/eagle/eagle_bin_parser.cpp:996
 msgid "Short read in Eagle binary file (truncated block)."
-msgstr ""
+msgstr "Krátke čítanie v binárnom súbore Eagle (skrátený blok)."
 
 #: common/io/eagle/eagle_bin_parser.cpp:1041
 #, c-format
 msgid "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
-msgstr ""
+msgstr "Neznáme ID binárneho bloku Eagle 0x%02x%02x s posunom %zu."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2271
 msgid "Eagle binary file has no drawing section."
-msgstr ""
+msgstr "Binárny súbor Eagle neobsahuje sekciu kresby."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2289
 msgid "Eagle binary layout is missing a board/libraries node."
-msgstr ""
+msgstr "Binárnemu návrhu Eagle chýba uzol doska/knižnica."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2390
 #, fuzzy
@@ -9050,7 +9054,7 @@ msgstr "Súbor '%s' je príliš malý na to, aby to bol Sprint Layout súbor"
 
 #: common/io/eagle/eagle_bin_parser.cpp:2439
 msgid "Eagle binary schematic has no drawing section."
-msgstr ""
+msgstr "Binárna schéma Eagle neobsahuje sekciu výkresu."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2444
 #, fuzzy
@@ -9429,11 +9433,13 @@ msgid ""
 "Layer map file '%s' must be a JSON object mapping source layer names to "
 "KiCad layer names"
 msgstr ""
+"Súbor s mapovaním vrstiev '%s' musí byť JSON mapujúci názvy zdrojových "
+"vrstiev na názvy vrstiev KiCad"
 
 #: common/jobs/job_import_utils.cpp:97
 #, c-format
 msgid "Layer map entry for '%s' must be a KiCad layer name string"
-msgstr ""
+msgstr "Záznam mapovania vrstvy pre '%s' musí byť reťazec s názvom vrstvy KiCad"
 
 #: common/jobs/job_import_utils.cpp:187
 #, fuzzy, c-format
@@ -12369,7 +12375,7 @@ msgstr "Ignorovať ďalšie snímky"
 
 #: common/widgets/editor_tabs_panel.cpp:641
 msgid "Close Tabs to the Right"
-msgstr ""
+msgstr "Zatvoriť karty vpravo"
 
 #: common/widgets/editor_tabs_panel.cpp:642
 #, fuzzy
@@ -20408,7 +20414,7 @@ msgstr "Schematický súbor sa pri uložení prevedie do nového formátu."
 
 #: eeschema/eeschema_jobs_handler.cpp:1510
 msgid "Could not establish a project for the import\n"
-msgstr ""
+msgstr "Nebolo možné vytvoriť projekt pre import\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1545 pcbnew/pcbnew_jobs_handler.cpp:2988
 #, c-format
@@ -20459,7 +20465,7 @@ msgstr "Nepodarilo sa načítať stránku '%s': %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:2058 pcbnew/pcbnew_jobs_handler.cpp:3850
 msgid "Unsupported document kind for this dispatcher.\n"
-msgstr ""
+msgstr "Nepodporovaný druh dokumentu pre tento handler.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2109
 #, fuzzy
@@ -20469,12 +20475,15 @@ msgstr "Nepodarilo sa načítať schému\n"
 #: eeschema/eeschema_jobs_handler.cpp:2124
 msgid "sch merge requires each input to have a single top-level sheet\n"
 msgstr ""
+"zlúčenie schém vyžaduje, aby každý vstup mal jeden hárok vrchnej úrovne\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2144 pcbnew/pcbnew_jobs_handler.cpp:3351
 msgid ""
 "--interactive requires a GUI KiCad process; the console kicad-cli cannot "
 "open dialogs.\n"
 msgstr ""
+"--interaktívne - vyžaduje spustené grafické rozhranie KiCad ale konzola "
+"kicad-cli nedokáže otvoriť dialógové okná.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2179
 #, fuzzy
@@ -20486,11 +20495,13 @@ msgid ""
 "Merge contains hierarchical sheet structure changes that sch merge cannot "
 "apply\n"
 msgstr ""
+"Zlúčenie obsahuje zmeny hierarchickej štruktúry hárkov, ktoré pri zlúčení "
+"schém nie je možné použiť\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2230
 #, c-format
 msgid "Cannot flatten sub-sheets with duplicate basename '%s'\n"
-msgstr ""
+msgstr "Nemožno urovnať podlisty s duplicitným základným názvom '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2287
 #, fuzzy, c-format
@@ -20505,7 +20516,7 @@ msgstr "Nepodarilo sa zapísať: %s"
 #: eeschema/eeschema_jobs_handler.cpp:2352 pcbnew/pcbnew_jobs_handler.cpp:3552
 #, c-format
 msgid "Merge completed with %zu unresolved conflict(s) in %s\n"
-msgstr ""
+msgstr "Zlúčenie dokončené s %zu nevyriešenými konfliktmi v %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2375 kicad/cli/command_mergetool.cpp:117
 #: pcbnew/pcbnew_jobs_handler.cpp:3877
@@ -20522,6 +20533,7 @@ msgstr "Súbor knižnice symbolov „%s“ sa nepodarilo uložiť"
 #, c-format
 msgid "Symbol library merge completed with %zu unresolved conflict(s) in %s\n"
 msgstr ""
+"Zlúčenie knižnice symbolov dokončené s %zu nevyriešenými konfliktmi v %s\n"
 
 #: eeschema/eeschema_settings.cpp:68 eeschema/tools/sch_actions.cpp:1175
 msgid "Net Navigator"
@@ -21730,6 +21742,8 @@ msgid ""
 "Symbol '%s' uses repeat-per-unit decomposition, which requires a named "
 "subcircuit model."
 msgstr ""
+"Symbol '%s' používa opakovaný rozklad jednotky, ktorý vyžaduje pomenovaný "
+"model podobvodu."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:709
 #, c-format
@@ -26297,21 +26311,24 @@ msgid ""
 "Repeat-per-unit decomposition does not support model '%s' because it has "
 "subcircuit parameters."
 msgstr ""
+"Rozklad s opakovaním na jednotku nepodporuje model '%s', pretože má "
+"parametre ako podobvod."
 
 #: eeschema/sim/sim_model_multiunit.cpp:218
 #, c-format
 msgid "Shared pin '%s' is not a pin of model '%s'."
-msgstr ""
+msgstr "Zdieľaný vývod '%s' nie je vývod modelu '%s'."
 
 #: eeschema/sim/sim_model_multiunit.cpp:245
 #, c-format
 msgid "Unit %d maps to unknown pin '%s' of model '%s'."
-msgstr ""
+msgstr "Jednotka %d mapuje neznámy vývod '%s' modelu '%s'."
 
 #: eeschema/sim/sim_model_multiunit.cpp:254
 #, c-format
 msgid "Unit %d maps model pin '%s' to both symbol pins '%s' and '%s'."
 msgstr ""
+"Jednotka %d mapuje modelový vývod '%s' na oba symbolové vývody '%s' a '%s'."
 
 #: eeschema/sim/sim_model_multiunit.cpp:290
 #, fuzzy, c-format
@@ -26326,11 +26343,11 @@ msgstr "Kontrolujú sa označenia na viacerých spojoch..."
 #: eeschema/sim/sim_model_multiunit.cpp:320
 #, c-format
 msgid "Model '%s' pin '%s' is neither shared nor assigned to any unit."
-msgstr ""
+msgstr "Vývod modelu '%s' '%s' nie je zdieľaný ani priradený žiadnej jednotke."
 
 #: eeschema/sim/sim_model_multiunit.cpp:357
 msgid "Repeat-per-unit decomposition produced no instances."
-msgstr ""
+msgstr "Opakovaný rozklad jednotky nepriniesol žiadne inštancie."
 
 #: eeschema/sim/sim_plot_tab.cpp:464
 #, c-format
@@ -27753,7 +27770,7 @@ msgstr "Uložiť do schémy a súboru"
 
 #: eeschema/tools/sch_actions.cpp:68
 msgid "Diff the current schematic against another .kicad_sch file"
-msgstr ""
+msgstr "Rozdiely aktuálnej schémy s iným .kicad_sch súborom"
 
 #: eeschema/tools/sch_actions.cpp:74
 #, fuzzy
@@ -27763,7 +27780,7 @@ msgstr "Zlučovanie lokálnej histórie..."
 #: eeschema/tools/sch_actions.cpp:75
 msgid ""
 "Diff the current schematic against the most recent local-history snapshot"
-msgstr ""
+msgstr "Rozdiely medzi aktuálnou schémou a najnovšou snímkou lokálnej histórie"
 
 #: eeschema/tools/sch_actions.cpp:81
 msgid "Show Bus Syntax Help"
@@ -29962,7 +29979,7 @@ msgstr "Zakázať integráciu Git pre tento projekt"
 
 #: eeschema/tools/sch_inspection_tool.cpp:906
 msgid "No local history snapshots change this schematic."
-msgstr ""
+msgstr "Žiadne snímky z lokálnej histórie túto schému nemenia."
 
 #: eeschema/tools/sch_inspection_tool.cpp:1095
 #: eeschema/tools/sch_inspection_tool.cpp:1240
@@ -30170,7 +30187,7 @@ msgstr "Výber knižnice na prezeranie"
 
 #: eeschema/tools/symbol_editor_control.cpp:1098
 msgid "Choose Library to Compare With"
-msgstr ""
+msgstr "Vybrať knižnicu pre porovnanie"
 
 #: eeschema/tools/symbol_editor_control.cpp:1111
 #, fuzzy
@@ -32110,6 +32127,8 @@ msgstr "Formát výstupu: png, text, alebo json (predvolené: png)"
 msgid ""
 "Output file path; required for png/svg, otherwise prints to stdout if omitted"
 msgstr ""
+"Cesta k výstupnému súboru; povinné pre png/svg, ak sa vynechá, bude sa "
+"vypisovať na stout"
 
 #: kicad/cli/command_diff_base.h:81
 #, fuzzy
@@ -32120,7 +32139,7 @@ msgstr "Nastaviť iba výstupný kód (0=identický, 1=rôzny), žiadny výstup"
 
 #: kicad/cli/command_diff_base.h:108
 msgid "--output is required for png/svg formats\n"
-msgstr ""
+msgstr "--výstup je povinný pre formáty png/svg\n"
 
 #: kicad/cli/command_fp.h:31
 msgid "Footprint and Footprint Libraries"
@@ -32316,15 +32335,17 @@ msgid ""
 "Internal git merge-driver hook (configured automatically by KiCad's git "
 "integration; not intended for direct use)."
 msgstr ""
+"Interný hook ovládača zlúčenia Gitu (automaticky konfigurovaný integráciou "
+"Gitu v KiCade; nie je určený na priame použitie)."
 
 #: kicad/cli/command_git_mergedriver.cpp:57
 msgid "Document kind: pcb, sch, sym, or fp"
-msgstr ""
+msgstr "Typ dokumentu: pcb, sch, sym alebo fp"
 
 #: kicad/cli/command_git_mergedriver.cpp:105
 #, c-format
 msgid "Unknown --kind '%s' (expected pcb, sch, sym, or fp)\n"
-msgstr ""
+msgstr "Neznámy --druh '%s' (očakáva sa pcb, sch, sym alebo fp)\n"
 
 #: kicad/cli/command_git_mergedriver.cpp:121
 #, fuzzy
@@ -32349,6 +32370,8 @@ msgstr "Importovať súbor DPS iného formátu ako KiCad do formátu KiCad"
 #: kicad/cli/command_import.cpp:50
 msgid "Input file(s) to import; each is autodetected as a board or schematic"
 msgstr ""
+"Vstupné súbory na import; každý je automaticky detegovaný ako doska alebo "
+"schéma"
 
 #: kicad/cli/command_import.cpp:57
 msgid ""
@@ -32356,12 +32379,17 @@ msgid ""
 "<stem>.kicad_pcb and/or <stem>.kicad_sch beside it. Defaults to the first "
 "input's name in the current directory."
 msgstr ""
+"Výstupná cesta k projektu stem; vytvorí <stem>.kicad_pro plus importovaný "
+"<stem>.kicad_pcb a/alebo <stem>.kicad_sch vedľa neho. Predvolene sa použije "
+"názov prvého vstupu v aktuálnom adresári."
 
 #: kicad/cli/command_import.cpp:64
 msgid ""
 "JSON file mapping source layer names to KiCad layer names for imported "
 "boards; unmapped layers use the automatic best-guess"
 msgstr ""
+"JSON súbor mapujúci názvy zdrojových vrstiev na názvy vrstiev KiCad pre "
+"importované dosky; nemapované vrstvy použijú automatický najlepší odhad"
 
 #: kicad/cli/command_import.cpp:77
 #, fuzzy
