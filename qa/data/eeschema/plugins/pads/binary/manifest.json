@@ -114,26 +114,28 @@
         "explicit_tiedot",
         "power_symbol_+5V",
         "ground_symbol_GND",
+        "local_net_labels_@TERM",
         "global_offpage_reference_GLOBAL_LINK",
         "bus_alias_BATCHC_BUS_ALIAS",
         "bus_members_BUS0_BUS1_BUS2"
       ],
-      "provenance": "Created from fixture-owned PADS Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND; PADS then saved native v13 and exported every Logic 9.0 section. Crossing wires have distinct CROSS_H/CROSS_V signals, T_NET has one tiedot and three branches, +5V and GND use installed PADS system symbols, GLOBAL_LINK uses the PADS off-page/global symbol, and BATCHC_BUS_ALIAS contains BUS0, BUS1, and BUS2. No third-party design content"
+      "provenance": "Created from fixture-owned PADS Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND; PADS then saved native v13 and exported every Logic 9.0 section. Crossing wires have distinct CROSS_H/CROSS_V signals, T_NET has one tiedot and three branches, +5V and GND use installed PADS system symbols, and the re-export retains net-name terminals as @TERM records, PADS Logic's local-label representation. GLOBAL_LINK uses the PADS off-page/global symbol, and BATCHC_BUS_ALIAS contains BUS0, BUS1, and BUS2. No third-party design content"
     },
     {
       "binary": "multisheet_connectivity.sch",
       "ascii": "multisheet_connectivity.txt",
-      "binary_sha256": "5df53b97d63e51bf5257d91d67596ce29ce244571fc131634d270d77e2a8cdad",
-      "ascii_sha256": "ad1e2d39c0497cbb555dc946900b308b4f03095431bb7606b712efb26ce2c94e",
+      "binary_sha256": "247e5188d3aac9c3f41b304c10bf96013d78b421c5795fa6b5f2edb8b2248461",
+      "ascii_sha256": "b88357bf85a70a595808c126486949bda0e0397ac2a238552f592b8a5ab1a059",
       "pads_binary_version": "0x000D",
       "features": [
         "two_numbered_sheets",
-        "sheet_names_CHILD_A_CHILD_B",
+        "duplicate_sheet_names_DUP/SAFE:*",
+        "unsafe_sheet_name_characters_slash_colon_asterisk",
         "matching_cross_sheet_offpage_reference_CROSS_SHEET",
         "per_sheet_connectivity",
         "per_sheet_bus_alias"
       ],
-      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4 after resetting to a new design. The import reported NO ERRORS FOUND, PADS saved native v13, and its all-section Logic 9.0 re-export contains sheets [1]CHILD_A and [2]CHILD_B with matching CROSS_SHEET off-page/global references. Each sheet also retains the controlled connectivity and bus structures. No third-party design content"
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4 after resetting to a new design. The import reported NO ERRORS FOUND, PADS saved native v13, and its all-section Logic 9.0 re-export retains duplicate sheet names exactly as [1]DUP/SAFE:* and [2]DUP/SAFE:*. Slash, colon, and asterisk were not normalized. Both sheets retain matching CROSS_SHEET off-page/global references and the controlled connectivity and bus structures. No third-party design content"
     },
     {
       "binary": "symbol_primitives.sch",
@@ -156,8 +158,8 @@
     {
       "binary": "pin_styles.sch",
       "ascii": "pin_styles.txt",
-      "binary_sha256": "8853b816cbc081f3bb0f3402dc225697d8f90798604890795af4294dff9e978d",
-      "ascii_sha256": "e3fd3c8485dc5fc7ab134c2c857d7f6eb8b761819fab9faec4d7e66184e37610",
+      "binary_sha256": "b76498f952e006063e2abe90ad6f240b7efafeeee7b2167f1c1543a042c848ba",
+      "ascii_sha256": "35784ead966f0dd2726a307bf3cc42fbdfe26f9a917d55238c32890fac10d5a1",
       "pads_binary_version": "0x000D",
       "features": [
         "referenced_custom_part",
@@ -168,10 +170,11 @@
         "inverted_pin_decal",
         "clock_pin_decal",
         "hidden_pin_name",
+        "hidden_pin_number",
         "pin_names_and_numbers",
         "hidden_signal_pin"
       ],
-      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND; native save and all-section Logic 9.0 re-export retained placed part U2, pin electrical types L/S/U/P, PINB inversion, PCLK clock marking, hidden-name flag 128, names, numbers, and SIGPIN 8 VCC_HIDDEN. No third-party design content"
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND; native save and all-section Logic 9.0 re-export retained placed part U2, pin electrical types L/S/U/P, PINB inversion, PCLK clock marking, names, numbers, and SIGPIN 8 VCC_HIDDEN. Independent visibility is retained: pin 3 has number text height/width 0/0 while its name text remains 100/10; pin 7 separately carries hidden-name flag 128. No third-party design content"
     },
     {
       "binary": "multigate.sch",

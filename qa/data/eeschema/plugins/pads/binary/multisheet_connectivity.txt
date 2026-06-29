@@ -641,7 +641,7 @@ MATCH_LENGTH_TOLERANCE	200
 "Revision" 
 "Scale" 
 
-*SHT*   1 [1]CHILD_A -1 $$$NONE
+*SHT*   1 [1]DUP/SAFE:* -1 $$$NONE
 *CAE*        GENERAL PARAMETERS FOR THE SHEET"
 
 SCALE        3.765          Scale of window expansion
@@ -1810,7 +1810,7 @@ PART-TYPE
 *NETNAMES*
 
 
-*SHT*   2 [2]CHILD_B -1 $$$NONE
+*SHT*   2 [2]DUP/SAFE:* -1 $$$NONE
 *CAE*        GENERAL PARAMETERS FOR THE SHEET"
 
 SCALE        3.765          Scale of window expansion
