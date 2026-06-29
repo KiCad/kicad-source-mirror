@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-19 15:02+0000\n"
+"PO-Revision-Date: 2026-06-29 22:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -9213,11 +9213,8 @@ msgid "Eagle binary layout is missing a board/libraries node."
 msgstr ""
 
 #: common/io/eagle/eagle_bin_parser.cpp:2390
-#, fuzzy
 msgid "File is too small to be an Eagle binary board."
-msgstr ""
-"Il file '%s'\n"
-"non sembra essere un file progetto KiCad."
+msgstr "Il file è troppo piccolo per essere un binario Eagle."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2439
 msgid "Eagle binary schematic has no drawing section."
@@ -17639,8 +17636,8 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
-"Utile per aggiungere simboli per impronte come allineatori\n"
-"e loghi che non si desidera vedere nell'esportazione DIBA"
+"Utile per aggiungere simboli per impronte come allineatori e\n"
+"loghi che non si desidera vedere nell'esportazione distinta di base"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:76
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:177
@@ -18422,11 +18419,8 @@ msgid "Repeat per unit"
 msgstr "Conteggio ripetizione"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:257
-#, fuzzy
 msgid "Shared model pins:"
-msgstr ""
-"Componenti area obiettivo:\n"
-"%s"
+msgstr "Pin modello condiviso:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:281
 msgid "Symbol Pin"
@@ -18663,9 +18657,9 @@ msgstr "Impossibile eliminare la variante predefinita."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2999
 #: eeschema/sch_edit_frame.cpp:3120
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Description for '%s'"
-msgstr "Modifica descrizione lavoro"
+msgstr "Modifica descrizione per '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -20042,14 +20036,14 @@ msgid "Potential"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Name '%s' contains invalid characters."
-msgstr "Il simbolo %s contiene il carattere non valido '%c'"
+msgstr "Il nome %s contiene caratteri non validi."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "%d net chain(s)"
-msgstr ": (nessun cambiamento)"
+msgstr "%d catena(e) di net"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:242
 #, c-format
@@ -20062,9 +20056,9 @@ msgid "Net chain on row %zu cannot have an empty name."
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Net chain name '%s' contains invalid characters."
-msgstr "Il simbolo %s contiene il carattere non valido '%c'"
+msgstr "Il nome catena di net '%s' contiene caratteri non validi."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:365
 #, fuzzy, c-format
@@ -20084,9 +20078,9 @@ msgid "Net Chain Classes"
 msgstr "Netclass"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:390
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate class name '%s' on row %zu."
-msgstr "Nome NETCLASS '%s' duplicato."
+msgstr "Nome classe '%s' duplicato sulla riga %zu."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:618
 #, fuzzy, c-format
@@ -20121,9 +20115,8 @@ msgid "That class name is empty or already in use."
 msgstr "Nome netclass già in uso."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:705
-#, fuzzy
 msgid "Rename net chain class:"
-msgstr "Netclass risolta"
+msgstr "Rinomina classe catena net:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:705
 #: eeschema/dialogs/panel_setup_net_chains.cpp:716
@@ -20323,9 +20316,8 @@ msgid "Symbol Library Tables"
 msgstr "Tabelle librerie di simboli"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:201
-#, fuzzy
 msgid "Unable to load library table."
-msgstr "Impossibile caricare la libreria\n"
+msgstr "Impossibile caricare la tabella libreria."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:424
 msgid "folder with .kicad_sym files"
@@ -20640,9 +20632,9 @@ msgstr "Errore durante l'importazione: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1642
 #: eeschema/eeschema_jobs_handler.cpp:1649
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving imported schematic: %s\n"
-msgstr "Errore analizzando lo schema Altium: %s"
+msgstr "Errore salvando lo schema importato: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1655
 #, fuzzy, c-format
@@ -20655,9 +20647,9 @@ msgstr "Salvataggio riuscito della scheda importata in '%s'\n"
 #: eeschema/eeschema_jobs_handler.cpp:1959 pcbnew/pcbnew_jobs_handler.cpp:3250
 #: pcbnew/pcbnew_jobs_handler.cpp:3256 pcbnew/pcbnew_jobs_handler.cpp:3734
 #: pcbnew/pcbnew_jobs_handler.cpp:3740
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s\n"
-msgstr "Fallito caricamento di \"%s\"."
+msgstr "Impossibile caricare %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1841
 #: eeschema/eeschema_jobs_handler.cpp:1847
@@ -20666,9 +20658,9 @@ msgstr "Fallito caricamento di \"%s\"."
 #: pcbnew/pcbnew_jobs_handler.cpp:3595 pcbnew/pcbnew_jobs_handler.cpp:3808
 #: pcbnew/pcbnew_jobs_handler.cpp:3819 pcbnew/pcbnew_jobs_handler.cpp:3933
 #: pcbnew/pcbnew_jobs_handler.cpp:3939
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s: %s\n"
-msgstr "Impossibile caricare la pagina '%s': %s"
+msgstr "Impossibile caricare %s: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2058 pcbnew/pcbnew_jobs_handler.cpp:3850
 msgid "Unsupported document kind for this dispatcher.\n"
@@ -20706,14 +20698,14 @@ msgid "Cannot flatten sub-sheets with duplicate basename '%s'\n"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:2287
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged schematic: %s\n"
-msgstr "Fallito il salvataggio dello schema \"%s\""
+msgstr "Impossibile salvare schema unito: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2334 pcbnew/pcbnew_jobs_handler.cpp:3472
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged project file: %s\n"
-msgstr "Fallita scrittura albero: %s"
+msgstr "Impossibile salvare file progetto unito: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2352 pcbnew/pcbnew_jobs_handler.cpp:3552
 #, c-format
@@ -20722,14 +20714,13 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:2375 kicad/cli/command_mergetool.cpp:117
 #: pcbnew/pcbnew_jobs_handler.cpp:3877
-#, fuzzy
 msgid "--output is required\n"
-msgstr "Lo spazio minimo è necessario"
+msgstr "--output necessario\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2465
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged symbol library: %s\n"
-msgstr "Fallito salvataggio file libreria simboli \"%s\"."
+msgstr "Impossibile salvare libreria simboli unita: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2480
 #, c-format
@@ -20864,7 +20855,7 @@ msgstr "Quattro elementi connessi a %d,%d"
 
 #: eeschema/erc/erc.cpp:967
 msgid "Pin with 'no connection' type is connected"
-msgstr "Pin di tipo 'non connesso' connesso"
+msgstr "Il pin di tipo 'non connesso' è connesso"
 
 #: eeschema/erc/erc.cpp:1199
 #, c-format
@@ -20872,9 +20863,9 @@ msgid "Pins of type %s and %s are connected"
 msgstr "I pin di tipo %s e %s sono connessi"
 
 #: eeschema/erc/erc.cpp:1409
-#, fuzzy, c-format
+#, c-format
 msgid "Pins of type %s and %s are connected via net chain %s"
-msgstr "I pin di tipo %s e %s sono connessi"
+msgstr "I pin di tipo %s e %s sono connessi attraverso la catena di net %s"
 
 #: eeschema/erc/erc.cpp:1458
 #, c-format
@@ -22561,9 +22552,9 @@ msgid "[no schematic loaded]"
 msgstr "[nessuno schema caricato]"
 
 #: eeschema/sch_edit_frame.cpp:2106
-#, fuzzy, c-format
+#, c-format
 msgid "Net chain members: %s"
-msgstr "Il bus non ha membri"
+msgstr "Membri catena di net: %s"
 
 #: eeschema/sch_edit_frame.cpp:2114
 #, c-format
