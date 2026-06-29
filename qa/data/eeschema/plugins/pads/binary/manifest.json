@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "generator": {
+    "application": "PADS Logic VX.2.4",
+    "build_timestamp": "2018-08-20T12:27:54",
+    "ahp_build": 11282995
+  },
+  "save_settings": {
+    "binary": "native PADS Logic Schematic Files (*.sch)",
+    "ascii": "PADS Logic 9.0; all sections selected"
+  },
+  "fixtures": [
+    {
+      "binary": "minimal_v13.sch",
+      "ascii": "minimal_v13.txt",
+      "binary_sha256": "49ce8ceab7ea84fa155426152bf6c9ba00e0e2c33f501c49223d59f626949785",
+      "ascii_sha256": "99e96950c3376a5f247c95e82395ed035793eb2a23bd1cdea42fa4c48dcf7461",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "single_sheet",
+        "two_pin_resistor",
+        "single_wire",
+        "named_net"
+      ],
+      "provenance": "Created from a new empty design in PADS Logic VX.2.4 using only misc:RES-RESN1; no third-party design content"
+    },
+    {
+      "binary": "placement_transform.sch",
+      "ascii": "placement_transform.txt",
+      "binary_sha256": "7acb3ab843269c2b6fcb693f2c1214c93d4daa41b3262809b4d928a7cd5b3e3e",
+      "ascii_sha256": "7b9f64eeec61728270a7656ca6cf19cf7002977a85b62ee70bf8bf82966a5772",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "part_rotation_0",
+        "part_rotation_90",
+        "part_rotation_180",
+        "part_rotation_270",
+        "part_x_mirror"
+      ],
+      "provenance": "Created in PADS Logic VX.2.4 by duplicating the fixture resistor and applying Rotate 90 and X Mirror commands; the ASCII part records contain transform tuples 0/0, 90/0, 0/3, 90/3, and 90/2; no third-party design content"
+    },
+    {
+      "binary": "fields.sch",
+      "ascii": "fields.txt",
+      "binary_sha256": "ddabdaa9ed30b13c4aabfb4af0adba914997a048ea41a6cdb6a204c4298607a7",
+      "ascii_sha256": "55ed7922b142c93fa6d0270bac1ece1e1485f6751dce31291aa0d40babc5aa19",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "reference_field",
+        "value_field",
+        "user_attribute_override",
+        "field_visibility",
+        "field_rotation_90",
+        "field_justification_right_up",
+        "field_size_14pt",
+        "field_bold"
+      ],
+      "provenance": "Created in PADS Logic VX.2.4 from the fixture resistor; added and displayed userfield=override-value, hid the part-type field, and changed the value field to 90 degrees, 14 pt, bold, right/up justification; no third-party design content"
+    },
+    {
+      "binary": "connectors.sch",
+      "ascii": "connectors.txt",
+      "binary_sha256": "cb0edc094eb1ad58021c21a8dab81dcf4b7204d6d7281e8b96dabdda36c4aa22",
+      "ascii_sha256": "c538c7cfc60aad92834c92e89a7685c2620ab977d88dc1e6797db90f1ed695db",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "connector_part_CON_26P_ED",
+        "connector_reference_prefix_P",
+        "connector_26_pins",
+        "connector_description_field",
+        "connector_placement"
+      ],
+      "provenance": "Created in PADS Logic VX.2.4 using only the installed connect:CON-26P-ED library part, placed as P1-1 with its Description field (26 PIN EDGE CONNECTOR); no third-party design content"
+    },
+    {
+      "binary": "text_encoding.sch",
+      "ascii": "text_encoding.txt",
+      "binary_sha256": "3ba949f6f501109bc52c331e00709a1f255aeb33982dbc8a7b9fc5fa38490157",
+      "ascii_sha256": "3ffe1bbe4ee10372c642e98c5da2d1449d8efd286f81b5465a2240d6244acb15",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "free_text_ascii",
+        "non_ascii_editor_input_normalized_on_save"
+      ],
+      "provenance": "Created in PADS Logic VX.2.4 with free text entered as ASCII_TEXT cafe followed by Windows Alt+0233; the editor displayed e-acute, but native save and Logic 9.0 ASCII export normalized it to '='; documents that this input is not preserved; no third-party design content"
+    },
+    {
+      "binary": "page_graphics.sch",
+      "ascii": "page_graphics.txt",
+      "binary_sha256": "e119fdcdb564d393c02c18730094fe40546f794173ba5f943943108fd8aa8278",
+      "ascii_sha256": "db2ea0858fcd5df3da99baa4276472b6c1b5bb0f8cda6da2e81029ea5d03768a",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "page_line",
+        "page_polygon",
+        "page_circle",
+        "page_arc",
+        "page_filled_polygon",
+        "page_text",
+        "title_block_fields",
+        "page_size_B"
+      ],
+      "provenance": "Created from fixture-owned PADS Logic 9.0 ASCII in PADS Logic VX.2.4; the BATCHB_PAGE_GRAPHICS group contains OPEN, CLOSED, CIRCLE, arc-encoded OPEN, COPCLS, and embedded text records, and the sheet retains the built-in SIZEB title block and page size. PADS reported NO ERRORS FOUND on the final import, then saved native binary and exported all ASCII sections; no third-party design content"
+    },
+    {
+      "binary": "connectivity_topology.sch",
+      "ascii": "connectivity_topology.txt",
+      "binary_sha256": "ba8909733070239a9b60918e813c97acd01c63d9d8d22ab8f739b8137b02f09a",
+      "ascii_sha256": "260942ec81a1b857bf53e129019f7f34974b26c679c584d9455340ef9a6897ec",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "crossing_independent_wires",
+        "three_way_junction",
+        "explicit_tiedot",
+        "power_symbol_+5V",
+        "ground_symbol_GND",
+        "global_offpage_reference_GLOBAL_LINK",
+        "bus_alias_BATCHC_BUS_ALIAS",
+        "bus_members_BUS0_BUS1_BUS2"
+      ],
+      "provenance": "Created from fixture-owned PADS Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND; PADS then saved native v13 and exported every Logic 9.0 section. Crossing wires have distinct CROSS_H/CROSS_V signals, T_NET has one tiedot and three branches, +5V and GND use installed PADS system symbols, GLOBAL_LINK uses the PADS off-page/global symbol, and BATCHC_BUS_ALIAS contains BUS0, BUS1, and BUS2. No third-party design content"
+    },
+    {
+      "binary": "multisheet_connectivity.sch",
+      "ascii": "multisheet_connectivity.txt",
+      "binary_sha256": "5df53b97d63e51bf5257d91d67596ce29ce244571fc131634d270d77e2a8cdad",
+      "ascii_sha256": "ad1e2d39c0497cbb555dc946900b308b4f03095431bb7606b712efb26ce2c94e",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "two_numbered_sheets",
+        "sheet_names_CHILD_A_CHILD_B",
+        "matching_cross_sheet_offpage_reference_CROSS_SHEET",
+        "per_sheet_connectivity",
+        "per_sheet_bus_alias"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4 after resetting to a new design. The import reported NO ERRORS FOUND, PADS saved native v13, and its all-section Logic 9.0 re-export contains sheets [1]CHILD_A and [2]CHILD_B with matching CROSS_SHEET off-page/global references. Each sheet also retains the controlled connectivity and bus structures. No third-party design content"
+    },
+    {
+      "binary": "symbol_primitives.sch",
+      "ascii": "symbol_primitives.txt",
+      "binary_sha256": "e223e01e682662e875bc6b52d4df09a9182ca51b7ce9d6065ec18d25485feefc",
+      "ascii_sha256": "d051aaf29b498848f43c9977fe52c6d3a073cb279ddddfffbb12bf2300b30cb7",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "referenced_custom_cae_decal",
+        "symbol_line",
+        "symbol_closed_polygon",
+        "symbol_circle",
+        "symbol_arc",
+        "symbol_filled_polygon",
+        "symbol_embedded_text",
+        "named_input_output_pins"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. The BATCHB_PRIMITIVES decal is referenced by placed part U1; its header declares one embedded-text record. A clean import reported NO ERRORS FOUND, and native save plus all-section Logic 9.0 re-export retained five graphical primitives, EMBEDDED_TEXT, and two named pins. No third-party design content"
+    },
+    {
+      "binary": "pin_styles.sch",
+      "ascii": "pin_styles.txt",
+      "binary_sha256": "8853b816cbc081f3bb0f3402dc225697d8f90798604890795af4294dff9e978d",
+      "ascii_sha256": "e3fd3c8485dc5fc7ab134c2c857d7f6eb8b761819fab9faec4d7e66184e37610",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "referenced_custom_part",
+        "input_pin",
+        "output_pin",
+        "passive_pin",
+        "power_pin",
+        "inverted_pin_decal",
+        "clock_pin_decal",
+        "hidden_pin_name",
+        "pin_names_and_numbers",
+        "hidden_signal_pin"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND; native save and all-section Logic 9.0 re-export retained placed part U2, pin electrical types L/S/U/P, PINB inversion, PCLK clock marking, hidden-name flag 128, names, numbers, and SIGPIN 8 VCC_HIDDEN. No third-party design content"
+    },
+    {
+      "binary": "multigate.sch",
+      "ascii": "multigate.txt",
+      "binary_sha256": "6686236b8fe8e4642c11b2a39c66870fd263c42d39d25065a4b2caa096547c81",
+      "ascii_sha256": "1336aaba58814feb7e1d482ad1817ff85580c79ec242a98df8afdba809daacf4",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "referenced_custom_multigate_part",
+        "two_placed_units_U3-A_U3-B",
+        "gate_pin_counts_7_and_2",
+        "distinct_special_gate_decal",
+        "gate_swap_flag",
+        "pin_swap_group_1",
+        "signal_pin_15_VCC_HIDDEN"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. The source follows production-observed asymmetric multi-gate syntax and uses only fixture-owned decals. A clean new-design import reported NO ERRORS FOUND; native v13 save and all-section Logic 9.0 re-export retained U3-A and U3-B, gate pin counts 7 and 2, the distinct BATCHD_SPECIAL_GATE decal, gate swap flag 1, pin swap group 1, and SIGPIN 15 VCC_HIDDEN. No third-party design content"
+    }
+  ]
+}
