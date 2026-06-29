@@ -90,6 +90,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.plot",
             &m_PcbLastPath[LAST_PATH_PLOT], "" ) );
 
+    m_params.emplace_back( new PARAM_PATH( "pcbnew.last_paths.step", &m_PcbLastPath[LAST_PATH_STEP], "" ) );
+
     m_params.emplace_back( new PARAM<wxString>( "schematic.legacy_lib_dir",
             &m_LegacyLibDir, "" ) );
 

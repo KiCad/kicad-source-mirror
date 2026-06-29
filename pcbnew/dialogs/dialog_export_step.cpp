@@ -117,6 +117,8 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
         m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
         SetupStandardButtons( { { wxID_OK,     _( "Export" ) },
                                 { wxID_CANCEL, _( "Close" )  } } );
+
+        OptOut( m_outputFileName );
     }
     else
     {
@@ -184,12 +186,16 @@ bool DIALOG_EXPORT_STEP::TransferDataToWindow()
 {
     if( !m_job )
     {
-        if( m_outputFileName->GetValue().IsEmpty() )
+        wxString lastPath = m_editFrame->GetLastPath( LAST_PATH_STEP );
+
+        if( lastPath.IsEmpty() )
         {
             wxFileName brdFile( m_editFrame->GetBoard()->GetFileName() );
             brdFile.SetExt( wxT( "step" ) );
-            m_outputFileName->SetValue( brdFile.GetFullPath() );
+            lastPath = brdFile.GetFullPath();
         }
+
+        m_outputFileName->SetValue( lastPath );
 
         wxString currentVariant = m_editFrame->GetBoard()->GetCurrentVariant();
 
@@ -545,6 +551,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             if( wxMessageBox( msg, _( "STEP/GLTF Export" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
                 return;
         }
+
+        m_editFrame->SetLastPath( LAST_PATH_STEP, fn.GetFullPath() );
 
         wxFileName appK2S( wxStandardPaths::Get().GetExecutablePath() );
     #ifdef __WXMAC__

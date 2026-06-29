@@ -80,6 +80,7 @@ enum LAST_PATH_TYPE : unsigned int
     LAST_PATH_VRML,
     LAST_PATH_SPECCTRADSN,
     LAST_PATH_PLOT,
+    LAST_PATH_STEP,
 
     LAST_PATH_SIZE
 };
