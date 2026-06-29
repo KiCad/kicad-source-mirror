@@ -183,8 +183,11 @@ public:
     /** Return the current head commit hash. */
     wxString GetHeadHash( const wxString& aProjectPath );
 
-    /** Restore the project files to the state recorded by the given commit hash. */
-    bool RestoreCommit( const wxString& aProjectPath, const wxString& aHash, wxWindow* aParent = nullptr );
+    /** Restore the project files to the state recorded by the given commit hash.  When aConfirm
+     *  is true a yes/no prompt is shown before any file is overwritten, callers that have already
+     *  asked the user (the startup recovery prompt) pass false to avoid a double prompt. */
+    bool RestoreCommit( const wxString& aProjectPath, const wxString& aHash, wxWindow* aParent = nullptr,
+                        bool aConfirm = true );
 
     /** Show a dialog allowing the user to choose a snapshot to restore. */
     void ShowRestoreDialog( const wxString& aProjectPath, wxWindow* aParent );
