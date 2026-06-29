@@ -45,6 +45,7 @@ set( QA_PCBNEW_SRCS
     test_board_statistics.cpp
     test_cam_backdrill.cpp
     test_clip_line_to_pad.cpp
+    test_clip_line_to_via.cpp
     test_component_classes.cpp
     test_generator_load_save.cpp
     test_graphics_load_save.cpp
@@ -121,6 +122,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_orientation.cpp
     drc/test_drc_lengths.cpp
     drc/test_drc_tuner_agreement.cpp
+    drc/test_drc_skew_arc.cpp
     drc/test_drc_unconnected_items_exclusion_loss.cpp
     drc/test_drc_via_dangling.cpp
     drc/test_drc_keepout_disallow.cpp

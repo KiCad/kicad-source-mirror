@@ -517,10 +517,6 @@ void LENGTH_DELAY_CALCULATION::mergeLines(
 
         LENGTH_DELAY_CALCULATION_ITEM* lineToMerge = *startItems.begin();
 
-        // Don't merge if line is an arc
-        if( !lineToMerge->GetLine().CArcs().empty() )
-            return;
-
         // Don't merge if lines are on different layers
         if( aPrimaryItem->GetStartLayer() != lineToMerge->GetStartLayer() )
             return;
@@ -568,34 +564,29 @@ void LENGTH_DELAY_CALCULATION::mergeLines(
 void LENGTH_DELAY_CALCULATION::mergeShapeLineChains( SHAPE_LINE_CHAIN& aPrimary, const SHAPE_LINE_CHAIN& aSecondary,
                                                      const MERGE_POINT aMergePoint )
 {
+    // Append carries the arcs across and drops the shared point. Orient the
+    // secondary so its joining end meets the primary.
     if( aMergePoint == MERGE_POINT::START )
     {
-        if( aSecondary.GetPoint( 0 ) == aPrimary.GetPoint( 0 ) )
-        {
-            for( auto itr = aSecondary.CPoints().begin() + 1; itr != aSecondary.CPoints().end(); ++itr )
-                aPrimary.Insert( 0, *itr );
-        }
-        else
-        {
-            wxASSERT( aSecondary.CLastPoint() == aPrimary.GetPoint( 0 ) );
+        // Secondary joins the primary's start, so build secondary + primary.
+        SHAPE_LINE_CHAIN merged =
+                ( aSecondary.GetPoint( 0 ) == aPrimary.GetPoint( 0 ) ) ? aSecondary.Reverse() : aSecondary;
 
-            for( auto itr = aSecondary.CPoints().rbegin() + 1; itr != aSecondary.CPoints().rend(); ++itr )
-                aPrimary.Insert( 0, *itr );
-        }
+        wxASSERT( merged.CLastPoint() == aPrimary.GetPoint( 0 ) );
+
+        merged.Append( aPrimary );
+        aPrimary = merged;
     }
     else
     {
         if( aSecondary.GetPoint( 0 ) == aPrimary.CLastPoint() )
         {
-            for( auto itr = aSecondary.CPoints().begin() + 1; itr != aSecondary.CPoints().end(); ++itr )
-                aPrimary.Append( *itr );
+            aPrimary.Append( aSecondary );
         }
         else
         {
             wxASSERT( aSecondary.CLastPoint() == aPrimary.CLastPoint() );
-
-            for( auto itr = aSecondary.CPoints().rbegin() + 1; itr != aSecondary.CPoints().rend(); ++itr )
-                aPrimary.Append( *itr );
+            aPrimary.Append( aSecondary.Reverse() );
         }
     }
 }
