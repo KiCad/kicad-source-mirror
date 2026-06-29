@@ -460,7 +460,13 @@ bool DIALOG_SHIM::Show( bool show )
             Centre();
         }
 
-        if( wxDisplay::GetFromWindow( this ) == wxNOT_FOUND )
+        // Re-center if the title bar would land on no display. Testing a point inside the title
+        // bar (not the window corner) ignores the negative border offset of maximized windows.
+        wxPoint grabPoint = GetPosition();
+        grabPoint.x += GetSize().x / 2;
+        grabPoint.y += FromDIP( 15 );
+
+        if( wxDisplay::GetFromPoint( grabPoint ) == wxNOT_FOUND )
             Centre();
 
         m_userPositioned = false;
