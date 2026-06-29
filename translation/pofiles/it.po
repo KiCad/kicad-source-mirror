@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-19 15:02+0000\n"
+"PO-Revision-Date: 2026-06-30 09:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -16606,8 +16606,8 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
-"Utile per aggiungere simboli per impronte come allineatori\n"
-"e loghi che non si desidera vedere nell'esportazione DIBA"
+"Utile per aggiungere simboli per impronte come allineatori e\n"
+"loghi che non si desidera vedere nell'esportazione distinta di base"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:55
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
@@ -17632,9 +17632,9 @@ msgstr "Impossibile eliminare la variante predefinita."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2998
 #: eeschema/sch_edit_frame.cpp:3084
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Description for '%s'"
-msgstr "Modifica descrizione lavoro"
+msgstr "Modifica descrizione per '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -19119,9 +19119,8 @@ msgid "Symbol Library Tables"
 msgstr "Tabelle librerie di simboli"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:201
-#, fuzzy
 msgid "Unable to load library table."
-msgstr "Impossibile caricare la libreria\n"
+msgstr "Impossibile caricare la tabella libreria."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:424
 msgid "folder with .kicad_sym files"
@@ -19526,7 +19525,7 @@ msgstr "Quattro elementi connessi a %d,%d"
 
 #: eeschema/erc/erc.cpp:970
 msgid "Pin with 'no connection' type is connected"
-msgstr "Pin di tipo 'non connesso' connesso"
+msgstr "Il pin di tipo 'non connesso' è connesso"
 
 #: eeschema/erc/erc.cpp:1194
 #, c-format
