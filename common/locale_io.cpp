@@ -80,7 +80,9 @@ void KiAssertFilter( const wxString &file, int line,
 // and the heap, which corrupts when two threads transition at the same time.
 static std::mutex        locale_mutex;
 static unsigned int      locale_count = 0;
+#if USE_WXLOCALE
 static wxLocale*         locale_wxLocale = nullptr;
+#endif
 static std::string       locale_user_locale;
 
 LOCALE_IO::LOCALE_IO()
