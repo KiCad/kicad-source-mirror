@@ -116,6 +116,16 @@ void PANEL_ZONE_PROPERTIES::SetZone( ZONE* aZone )
 
     m_zone = aZone;
     m_settings = m_zonesSettingsBag.GetZoneSettings( aZone );
+
+    if( !m_settings )
+    {
+        m_isTeardrop = false;
+        m_tcZoneName->ChangeValue( wxEmptyString );
+        Enable( false );
+        return;
+    }
+
+    Enable( true );
     m_isTeardrop = m_settings->m_TeardropType != TEARDROP_TYPE::TD_NONE;
 
     TransferZoneSettingsToWindow();
@@ -247,12 +257,17 @@ void PANEL_ZONE_PROPERTIES::OnCornerSmoothingSelection( wxCommandEvent& event )
 
 void PANEL_ZONE_PROPERTIES::OnZoneNameChanged( wxCommandEvent& aEvent )
 {
+    if( !m_settings )
+        return;
+
     // Propagate all the way out so that the MODEL_ZONES_OVERVIEW can pick it up
     m_settings->m_Name = m_tcZoneName->GetValue();
-    m_zonesSettingsBag.GetZoneSettings( m_zone )->m_Name = m_settings->m_Name;
 
     if( m_zone )
+    {
+        m_zonesSettingsBag.GetZoneSettings( m_zone )->m_Name = m_settings->m_Name;
         m_zone->SetZoneName( m_settings->m_Name );
+    }
 
     wxCommandEvent* evt = new wxCommandEvent( EVT_ZONE_NAME_UPDATE );
     wxQueueEvent( m_parent, evt );
