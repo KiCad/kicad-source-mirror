@@ -89,7 +89,8 @@ std::vector<CHANGED_FILE> CompareRefs( git_repository* aRepo,
         return result;
 
     git_diff*        diff = nullptr;
-    git_diff_options opts = GIT_DIFF_OPTIONS_INIT;
+    git_diff_options opts;
+    git_diff_options_init( &opts, GIT_DIFF_OPTIONS_VERSION );
 
     if( git_diff_tree_to_tree( &diff, aRepo, baseTree.get(), headTree.get(), &opts ) != 0 )
     {
@@ -101,7 +102,8 @@ std::vector<CHANGED_FILE> CompareRefs( git_repository* aRepo,
     GitDiffPtr diffPtr( diff );
 
     // Find renames so the UI can show "renamed from X" instead of (REMOVED+ADDED).
-    git_diff_find_options findOpts = GIT_DIFF_FIND_OPTIONS_INIT;
+    git_diff_find_options findOpts;
+    git_diff_find_options_init( &findOpts, GIT_DIFF_FIND_OPTIONS_VERSION );
     findOpts.flags = GIT_DIFF_FIND_RENAMES | GIT_DIFF_FIND_COPIES;
     git_diff_find_similar( diff, &findOpts );
 
