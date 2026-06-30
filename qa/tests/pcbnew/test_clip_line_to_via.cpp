@@ -158,12 +158,10 @@ BOOST_AUTO_TEST_CASE( Merge_DoesNotDropArcLength )
         LENGTH_DELAY_CALCULATION_ITEM s;
         s.SetLine( straight );
         s.SetLayers( F_Cu );
-        s.SetWidth( 200000 );
 
         LENGTH_DELAY_CALCULATION_ITEM c;
         c.SetLine( arcChain );
         c.SetLayers( F_Cu );
-        c.SetWidth( 200000 );
 
         items.push_back( s );
         items.push_back( c );
