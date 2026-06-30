@@ -64,6 +64,13 @@ private:
 class TEMPLATE_WIDGET : public TEMPLATE_WIDGET_BASE
 {
 public:
+    enum class CATEGORY
+    {
+        USER,
+        SYSTEM,
+        BROWSED
+    };
+
     TEMPLATE_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* aDialog );
 
     /**
@@ -81,12 +88,12 @@ public:
     void SetDescription( const wxString& aDescription );
     wxString GetDescription() const { return m_description; }
 
-    /**
-     * Set whether this template widget represents a user template
-     * @param aIsUser true if this is a user template (can be edited/duplicated)
-     */
-    void SetIsUserTemplate( bool aIsUser ) { m_isUserTemplate = aIsUser; }
-    bool IsUserTemplate() const { return m_isUserTemplate; }
+    void SetCategory( CATEGORY aCategory ) { m_category = aCategory; }
+    CATEGORY GetCategory() const { return m_category; }
+
+    // Convenience shim retained for callers that only care whether the template
+    // sits in the user-writable directory (controls edit/duplicate availability).
+    bool IsUserTemplate() const { return m_category == CATEGORY::USER; }
 
 protected:
     void OnMouse( wxMouseEvent& event );
@@ -105,7 +112,7 @@ protected:
     wxWindow*                 m_parent;
     wxPanel*                  m_panel;
     bool                      m_selected;
-    bool                      m_isUserTemplate;
+    CATEGORY                  m_category;
     wxString                  m_description;
 
     PROJECT_TEMPLATE*         m_currTemplate;
@@ -119,7 +126,8 @@ public:
                               const wxString& aUserTemplatesPath,
                               const wxString& aSystemTemplatesPath,
                               const wxString& aDefaultTemplatesPath,
-                              const std::vector<wxString>& aRecentTemplates );
+                              const std::vector<wxString>& aRecentTemplates,
+                              const wxString& aBrowsedTemplatesPath = wxEmptyString );
 
     ~DIALOG_TEMPLATE_SELECTOR();
 
@@ -130,6 +138,9 @@ public:
     void SelectTemplateByPath( const wxString& aPath );
     void SelectTemplateByPath( const wxString& aPath, bool aKeepMRUVisible );
     wxString GetUserTemplatesPath() const { return m_userTemplatesPath; }
+
+    /// Last directory chosen via the "Browse..." button so the caller can persist it.
+    wxString GetBrowsedTemplatesPath() const { return m_browsedTemplatesPath; }
 
     void SetProjectToEdit( const wxString& aPath ) { m_projectToEdit = aPath; }
     void RefreshTemplateList();
@@ -161,6 +172,13 @@ private:
     wxString ExtractDescription( const wxFileName& aHtmlFile );
     void ShowWelcomeHtml();
     void EnsureWebViewCreated();
+    void onBrowseClicked( wxCommandEvent& aEvent ) override;
+    void onClearBrowsedClicked( wxCommandEvent& aEvent ) override;
+    void updateBrowsedPathLabel();
+
+    /// Returns true if the browsed path is empty or duplicates one of the standard
+    /// template directories (after normalization).
+    bool browsedPathIsDuplicate() const;
 
     DialogState                                  m_state;
     TEMPLATE_WIDGET*                             m_selectedWidget;
@@ -169,6 +187,7 @@ private:
     wxString                                     m_userTemplatesPath;
     wxString                                     m_systemTemplatesPath;
     wxString                                     m_defaultTemplatesPath;
+    wxString                                     m_browsedTemplatesPath;
     std::vector<wxString>                        m_recentTemplates;
 
     std::vector<std::unique_ptr<PROJECT_TEMPLATE>> m_templates;

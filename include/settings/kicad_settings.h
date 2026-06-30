@@ -84,6 +84,9 @@ public:
 
     std::vector<wxString> m_RecentTemplates;
     int                   m_TemplateFilterChoice = 0;
+    // Most recently browsed external template directory (restored in the template selector
+    // so users can keep using templates from arbitrary locations across sessions).
+    wxString              m_BrowsedTemplatesPath;
 
     /// Overrides for libraries in read-only nested tables.
     /// Outer key is normalized table file path, inner key is library nickname.

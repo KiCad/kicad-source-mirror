@@ -22,11 +22,11 @@
 #include <wx/panel.h>
 #include <wx/srchctrl.h>
 #include <wx/choice.h>
-#include <wx/splitter.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/splitter.h>
 #include <wx/dialog.h>
 #include <wx/statbmp.h>
 
@@ -48,6 +48,9 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		wxPanel* m_panelTemplates;
 		wxSearchCtrl* m_searchCtrl;
 		wxChoice* m_filterChoice;
+		wxButton* m_browseButton;
+		wxButton* m_clearBrowseButton;
+		wxStaticText* m_browsedPathLabel;
 		wxScrolledWindow* m_scrolledTemplates;
 		wxBoxSizer* m_sizerTemplateList;
 		wxPanel* m_panelPreview;
@@ -62,6 +65,8 @@ class DIALOG_TEMPLATE_SELECTOR_BASE : public DIALOG_SHIM
 		virtual void OnSearchCtrlCancel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSearchCtrl( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFilterChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onClearBrowsedClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBackClicked( wxCommandEvent& event ) { event.Skip(); }
 
 
