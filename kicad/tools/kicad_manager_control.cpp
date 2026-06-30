@@ -227,6 +227,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     wxPoint  templateWindowPos;
     wxSize   templateWindowSize;
     wxString projectToEdit;
+    wxString browsedTemplatesPath;
 
     RunMainStack(
             [&]()
@@ -234,12 +235,14 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
                 DIALOG_TEMPLATE_SELECTOR ps( m_frame, settings->m_TemplateWindowPos,
                                              settings->m_TemplateWindowSize, userTemplatesPath,
                                              systemTemplatesPath, defaultTemplatesPath,
-                                             settings->m_RecentTemplates );
+                                             settings->m_RecentTemplates,
+                                             settings->m_BrowsedTemplatesPath );
 
                 result = ps.ShowModal();
                 templateWindowPos = ps.GetPosition();
                 templateWindowSize = ps.GetSize();
                 projectToEdit = ps.GetProjectToEdit();
+                browsedTemplatesPath = ps.GetBrowsedTemplatesPath();
 
                 PROJECT_TEMPLATE* templ = ps.GetSelectedTemplate();
 
@@ -253,6 +256,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 
     settings->m_TemplateWindowPos = templateWindowPos;
     settings->m_TemplateWindowSize = templateWindowSize;
+    settings->m_BrowsedTemplatesPath = browsedTemplatesPath;
 
     // Check if user wants to edit a template instead of creating new project
     if( result == wxID_APPLY )

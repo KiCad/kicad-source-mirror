@@ -61,11 +61,31 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	m_searchCtrl->ShowCancelButton( true );
 	bSizerTemplates->Add( m_searchCtrl, 0, wxEXPAND|wxALL, 5 );
 
-	wxString m_filterChoiceChoices[] = { _("All Templates"), _("User Templates"), _("System Templates") };
+	wxString m_filterChoiceChoices[] = { _("All Templates"), _("User Templates"), _("System Templates"), _("Other Templates") };
 	int m_filterChoiceNChoices = sizeof( m_filterChoiceChoices ) / sizeof( wxString );
 	m_filterChoice = new wxChoice( m_panelTemplates, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_filterChoiceNChoices, m_filterChoiceChoices, 0 );
 	m_filterChoice->SetSelection( 0 );
 	bSizerTemplates->Add( m_filterChoice, 0, wxALL, 5 );
+
+	wxBoxSizer* bSizerBrowse;
+	bSizerBrowse = new wxBoxSizer( wxHORIZONTAL );
+
+	m_browseButton = new wxButton( m_panelTemplates, wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_browseButton->SetToolTip( _("Browse for templates in another directory") );
+
+	bSizerBrowse->Add( m_browseButton, 0, wxALL, 5 );
+
+	m_clearBrowseButton = new wxButton( m_panelTemplates, wxID_ANY, _("Clear"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_clearBrowseButton->SetToolTip( _("Stop showing templates from the browsed directory") );
+
+	bSizerBrowse->Add( m_clearBrowseButton, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+	m_browsedPathLabel = new wxStaticText( m_panelTemplates, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0|wxST_ELLIPSIZE_START );
+	m_browsedPathLabel->Wrap( -1 );
+	bSizerBrowse->Add( m_browsedPathLabel, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	bSizerTemplates->Add( bSizerBrowse, 0, wxEXPAND, 0 );
 
 	m_scrolledTemplates = new wxScrolledWindow( m_panelTemplates, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 	m_scrolledTemplates->SetScrollRate( 0, 10 );
@@ -133,6 +153,8 @@ DIALOG_TEMPLATE_SELECTOR_BASE::DIALOG_TEMPLATE_SELECTOR_BASE( wxWindow* parent, 
 	m_searchCtrl->Connect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnSearchCtrl ), NULL, this );
 	m_searchCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnSearchCtrl ), NULL, this );
 	m_filterChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnFilterChanged ), NULL, this );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onBrowseClicked ), NULL, this );
+	m_clearBrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onClearBrowsedClicked ), NULL, this );
 	m_btnBack->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnBackClicked ), NULL, this );
 }
 
@@ -143,6 +165,8 @@ DIALOG_TEMPLATE_SELECTOR_BASE::~DIALOG_TEMPLATE_SELECTOR_BASE()
 	m_searchCtrl->Disconnect( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnSearchCtrl ), NULL, this );
 	m_searchCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnSearchCtrl ), NULL, this );
 	m_filterChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnFilterChanged ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onBrowseClicked ), NULL, this );
+	m_clearBrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::onClearBrowsedClicked ), NULL, this );
 	m_btnBack->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEMPLATE_SELECTOR_BASE::OnBackClicked ), NULL, this );
 
 }
