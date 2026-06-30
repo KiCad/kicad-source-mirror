@@ -43,6 +43,8 @@ public:
 
     void Popup( const wxString& aTitle, const wxArrayString& aItems, int aSelection );
 
+    bool Show( bool aShow ) override;
+
 protected:
     bool TryBefore( wxEvent& aEvent ) override;
 

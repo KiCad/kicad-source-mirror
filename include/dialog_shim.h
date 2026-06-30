@@ -197,6 +197,13 @@ protected:
     void finishDialogSettings();
 
     /**
+     * Shrink the dialog's minimum and current size down to the work area of the display it
+     * occupies, so a dialog whose content is larger than the monitor still fits and its bottom
+     * controls stay reachable. Only shrinks; never grows.
+     */
+    void clampToWorkArea();
+
+    /**
      * Set the dialog to the given dimensions in "dialog units". These are units equivalent
      * to 4* the average character width and 8* the average character height, allowing a dialog
      * to be sized in a way that scales it with the system font.

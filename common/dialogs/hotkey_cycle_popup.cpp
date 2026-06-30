@@ -24,6 +24,8 @@
 #include <dialogs/hotkey_cycle_popup.h>
 #include <eda_draw_frame.h>
 
+#include <wx/utils.h>
+
 #ifdef __WXGTK__
 #define LIST_BOX_H_PADDING 20
 #define LIST_BOX_V_PADDING 8
@@ -105,8 +107,32 @@ void HOTKEY_CYCLE_POPUP::Popup( const wxString& aTitle, const wxArrayString& aIt
     m_showTimer->StartOnce( SHOW_TIME_MS );
 
     Show( true );
-    Centre();
     SetFocus();
+}
+
+
+bool HOTKEY_CYCLE_POPUP::Show( bool aShow )
+{
+#ifdef __WXGTK__
+    // On Wayland, window positions cannot be changed after mapping. DIALOG_SHIM::Show() calls
+    // Raise() -> gtk_window_present() before wxDialog::Show(), prematurely mapping the window so
+    // the compositor places it at its default position instead of centered on the parent. Centre
+    // before mapping and bypass DIALOG_SHIM::Show() since this transient popup needs no geometry
+    // save/restore.
+    if( aShow && wxGetEnv( wxT( "WAYLAND_DISPLAY" ), nullptr ) )
+    {
+        clampToWorkArea();
+        Centre();
+        return wxDialog::Show( true );
+    }
+#endif
+
+    bool ret = DIALOG_SHIM::Show( aShow );
+
+    if( aShow )
+        Centre();
+
+    return ret;
 }
 
 

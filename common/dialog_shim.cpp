@@ -318,6 +318,37 @@ void DIALOG_SHIM::finishDialogSettings()
 }
 
 
+void DIALOG_SHIM::clampToWorkArea()
+{
+    // A dialog not yet mapped onto a monitor reports no display, so fall back to the parent's
+    // monitor rather than blindly clamping against display zero on a multi-head setup.
+    int displayIdx = wxDisplay::GetFromWindow( this );
+
+    if( displayIdx == wxNOT_FOUND && m_parent )
+        displayIdx = wxDisplay::GetFromWindow( m_parent );
+
+    if( displayIdx == wxNOT_FOUND )
+        displayIdx = 0;
+
+    wxSize workArea = wxDisplay( (unsigned int) displayIdx ).GetClientArea().GetSize();
+
+    if( workArea.x <= 0 || workArea.y <= 0 )
+        return;
+
+    wxSize minSize = GetMinSize();
+    wxSize clampedMin( std::min( minSize.x, workArea.x ), std::min( minSize.y, workArea.y ) );
+
+    if( clampedMin != minSize )
+        SetMinSize( clampedMin );
+
+    wxSize size = GetSize();
+    wxSize clampedSize( std::min( size.x, workArea.x ), std::min( size.y, workArea.y ) );
+
+    if( clampedSize != size )
+        SetSize( clampedSize );
+}
+
+
 void DIALOG_SHIM::setSizeInDU( int x, int y )
 {
     wxSize sz( x, y );

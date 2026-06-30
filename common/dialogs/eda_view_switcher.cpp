@@ -23,6 +23,8 @@
 
 #include <dialogs/eda_view_switcher.h>
 
+#include <wx/utils.h>
+
 
 #ifdef __WXGTK__
 #define LIST_BOX_H_PADDING 20
@@ -71,14 +73,27 @@ bool EDA_VIEW_SWITCHER::Show( bool aShow )
     if( !aShow )
         m_receivingEvents = false;
 
+#ifdef __WXGTK__
+    // On Wayland, window positions cannot be changed after mapping. DIALOG_SHIM::Show() calls
+    // Raise() -> gtk_window_present() before wxDialog::Show(), prematurely mapping the window so
+    // the compositor places it at its default position instead of centered on the parent. Centre
+    // before mapping and bypass DIALOG_SHIM::Show() since this transient popup needs no geometry
+    // save/restore.
+    if( aShow && wxGetEnv( wxT( "WAYLAND_DISPLAY" ), nullptr ) )
+    {
+        clampToWorkArea();
+        Centre();
+        m_receivingEvents = true;
+        return wxDialog::Show( true );
+    }
+#endif
+
     bool ret = DIALOG_SHIM::Show( aShow );
 
     if( aShow )
     {
-        m_receivingEvents = true;
-
-        // Force the dialog to always be centered over the window
         Centre();
+        m_receivingEvents = true;
     }
 
     return ret;
