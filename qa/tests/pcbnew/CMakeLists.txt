@@ -376,6 +376,7 @@ set( PCBNEW_ZONE_TESTS
 :ZoneLayerSpecificRules\
 :RegressionZoneFillMinWidthAfterKnockout\
 :RegressionSameNetOverlappingZones\
+:RegressionSameNetZoneFillScheduler\
 :RegressionDiffNetOverlappingZones\
 :RegressionThermalReliefsToNowhere\
 :OffCenterTeardropSymmetry\
@@ -463,6 +464,7 @@ set( PCBNEW_EXCLUDED_FROM_OTHER
 :!ZoneLayerSpecificRules\
 :!RegressionZoneFillMinWidthAfterKnockout\
 :!RegressionSameNetOverlappingZones\
+:!RegressionSameNetZoneFillScheduler\
 :!RegressionDiffNetOverlappingZones\
 :!RegressionThermalReliefsToNowhere\
 :!OffCenterTeardropSymmetry\

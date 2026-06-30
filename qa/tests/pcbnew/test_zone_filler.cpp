@@ -3501,3 +3501,45 @@ BOOST_FIXTURE_TEST_CASE( RegressionSameNetMergeAroundHigherPriorityZone, ZONE_FI
                          wxString::Format( "Expected at least two overlapping same-net zone pairs "
                                            "to exercise the merge, found %d.", checkedPairs ) );
 }
+
+
+// Issue 24758: this board is densely tiled with same-net zones, so the zone-fill dependency-DAG
+// scheduler builds a large successor graph.  The scheduler returned once its logical work counter
+// reached zero while detached worker tasks -- which captured the successor/in-degree vectors by
+// reference -- were still in flight, dereferencing the freed locals inside ZONE_FILLER::Fill.
+// Filling repeatedly drives that window; under AddressSanitizer the use-after-free is reported
+// deterministically without the fix.
+BOOST_FIXTURE_TEST_CASE( RegressionSameNetZoneFillScheduler, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    struct ScopeGuard { bool& ref; bool orig; ~ScopeGuard() { ref = orig; } }
+        guard{ cfg.m_ZoneFillIterativeRefill, cfg.m_ZoneFillIterativeRefill };
+    cfg.m_ZoneFillIterativeRefill = true;
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue24758/issue24758", m_board );
+
+    const PCB_LAYER_ID layer = F_Cu;
+
+    for( int pass = 0; pass < 64; ++pass )
+    {
+        BOOST_REQUIRE_NO_THROW( KI_TEST::FillZones( m_board.get() ) );
+
+        // Every same-net pour must come back with copper; a torn-down scheduler also corrupts
+        // or drops fills, so assert the result is usable on every pass.
+        SHAPE_POLY_SET merged;
+
+        for( ZONE* zone : m_board->Zones() )
+        {
+            if( zone->GetIsRuleArea() || !zone->HasFilledPolysForLayer( layer ) )
+                continue;
+
+            std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
+
+            BOOST_REQUIRE( fill != nullptr );
+            merged.BooleanAdd( *fill );
+        }
+
+        BOOST_CHECK_MESSAGE( merged.Area() > 0.0,
+                             wxString::Format( "Fill pass %d produced no copper.", pass ) );
+    }
+}
