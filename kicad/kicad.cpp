@@ -270,6 +270,16 @@ bool PGM_KICAD::OnPgmInit()
     KICAD_MANAGER_FRAME*  managerFrame  = nullptr;
     MERGETOOL_FRAME*      mergetoolFrame = nullptr;
 
+    // Editor frames register their API handlers in their constructors, so the API server must
+    // be live before any frame is built.  The short-lived --mergetool driver skips it to avoid
+    // contending for the singleton IPC socket.
+    if( appType != FRAME_MERGETOOL )
+    {
+        m_api_server = std::make_unique<KICAD_API_SERVER>();
+        m_api_common_handler = std::make_unique<API_HANDLER_COMMON>();
+        m_api_server->RegisterHandler( m_api_common_handler.get() );
+    }
+
     if( appType == FRAME_MERGETOOL )
     {
         MERGETOOL_PATHS paths{ parser.GetParam( 0 ), parser.GetParam( 1 ),
@@ -313,18 +323,6 @@ bool PGM_KICAD::OnPgmInit()
     KICAD_SETTINGS* settings = static_cast<KICAD_SETTINGS*>( PgmSettings() );
 
     GetLibraryManager().LoadGlobalTables();
-
-    // The standalone --mergetool driver is a short-lived, non-interactive
-    // process; don't spin up the API server (which binds the singleton IPC
-    // socket) for it — that wastes work and can contend with a running KiCad
-    // instance's socket.  All other launches, including --frame standalone
-    // editors, keep the API server so automation clients can connect.
-    if( appType != FRAME_MERGETOOL )
-    {
-        m_api_server = std::make_unique<KICAD_API_SERVER>();
-        m_api_common_handler = std::make_unique<API_HANDLER_COMMON>();
-        m_api_server->RegisterHandler( m_api_common_handler.get() );
-    }
 
     wxString projToLoad;
 
