@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-30 09:01+0000\n"
+"PO-Revision-Date: 2026-07-01 17:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -5420,7 +5420,7 @@ msgstr "Posúvanie a zväčšovanie"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:35
 msgid "Center and warp cursor on zoom"
-msgstr "Vycentrovanie a posun kurzora na zväčšenie"
+msgstr "Vycentrovať na kurzor pri priblížení/oddialení"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:36
 msgid "Center the cursor on screen when zooming."
@@ -6683,7 +6683,7 @@ msgstr "Nastavenie zobrazenia"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:23
 #: pcbnew/tools/zone_filler_tool.cpp:292
 msgid "Editing Options"
-msgstr "Úprava možností"
+msgstr "Možnosti úprav"
 
 #: common/eda_base_frame.cpp:1581 common/eda_base_frame.cpp:1591
 #: common/eda_base_frame.cpp:1616 common/eda_base_frame.cpp:1630
@@ -18557,7 +18557,7 @@ msgstr "Veľkosť symbolu vývodu:"
 #: eeschema/erc/erc_item.cpp:41
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:967
 msgid "Connections"
-msgstr "Spojenia"
+msgstr "Pripojenie"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:136
 msgid "Junction dot size:"
@@ -20207,7 +20207,7 @@ msgstr "Kresby do schránky"
 #: eeschema/menubar.cpp:116 pcbnew/menubar_pcb_editor.cpp:111
 #: pcbnew/pcb_edit_frame.cpp:240
 msgid "Netlist..."
-msgstr "Zoznam sietí..."
+msgstr "Netlist..."
 
 #: eeschema/menubar.cpp:117
 msgid "Symbols..."
@@ -22207,7 +22207,7 @@ msgstr "Zarovnanie"
 #: pcbnew/zone.cpp:2014 pcbnew/zone_manager/dialog_zone_manager_base.cpp:46
 #: pcbnew/zone_manager/model_zones_overview.h:74
 msgid "Net"
-msgstr "Síť"
+msgstr "Spoj"
 
 #: eeschema/sch_label.cpp:1574 eeschema/sch_line.cpp:922
 #: eeschema/sch_rule_area.cpp:405
@@ -31417,7 +31417,7 @@ msgstr "Popis úlohy"
 
 #: kicad/dialogs/panel_jobset.cpp:73
 msgid "Source"
-msgstr "Zdroj"
+msgstr "Prúdový výstup (source)"
 
 #: kicad/dialogs/panel_jobset.cpp:156
 msgid "No output messages"
@@ -37690,7 +37690,7 @@ msgstr "Vrstvy editora dosky"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:116
 msgid "Physical Stackup"
-msgstr "Fyzická štruktúra"
+msgstr "Fyzická skladba vrstiev"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
 msgid "Board Finish"
@@ -41403,7 +41403,7 @@ msgstr "Zrušiť výber všetkých"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:51
 msgid "Board layers and physical stackup"
-msgstr "Vrstvy dosky a fyzická štruktúra vrstiev"
+msgstr "Vrstvy dosky a fyzická skladba vrstiev"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 msgid "Solder mask/paste defaults"
@@ -41836,7 +41836,7 @@ msgstr "Typ výplne:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:132
 #: pcbnew/zone.cpp:1927
 msgid "Solid fill"
-msgstr "Pevná výplň"
+msgstr "Plná výplň"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:132
 #: pcbnew/zone.cpp:1928
@@ -41855,12 +41855,12 @@ msgstr "Šírka šrafovania:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:163
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:222
 msgid "Hatch gap:"
-msgstr "Medzera poklopu:"
+msgstr "Rozostup šrafovania:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:174
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:233
 msgid "Smoothing effort:"
-msgstr "Vyhlazovacie úsilie:"
+msgstr "Stupeň vyhladenia:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:176
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:235
@@ -41880,7 +41880,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:186
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:242
 msgid "Smoothing amount:"
-msgstr "Vyrovnávacie množstvo:"
+msgstr "Množstvo vyhladenia:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:188
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:244
@@ -43422,7 +43422,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:71
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:155
 msgid "Outline display:"
-msgstr "Obrysový displej:"
+msgstr "Zobrazenie obrysu:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
@@ -44918,7 +44918,7 @@ msgstr "Táto vrstva je povinná a nemôže byť zakázaná"
 #: pcbnew/dialogs/panel_setup_layers.cpp:143
 #: pcbnew/dialogs/panel_setup_layers.cpp:349
 msgid "Off-board, testing"
-msgstr "Mimo plavby, testovanie"
+msgstr "Mimo dosky, testovanie"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:153
 msgid "If you want a fabrication layer for the front side of the board"
@@ -45035,7 +45035,7 @@ msgstr "Mimo dosky, predná strana"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:539
 msgid "Off-board, back"
-msgstr "Mimo dosky, zadný"
+msgstr "Mimo dosky, zadná strana"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:545
 msgid ""
@@ -47090,7 +47090,7 @@ msgstr "Odstupy && Prepojenia plôšok"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:185
 msgid "Display Overrides"
-msgstr "Prepísanie zobrazenia"
+msgstr "Spôsob zobrazenia"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:196
 msgid "Hatched fill"
@@ -47562,7 +47562,7 @@ msgstr "Kontroluje sa pravidlo uplatnenia '%s'."
 
 #: pcbnew/drc/drc_item.cpp:43 pcbnew/zone.cpp:2144
 msgid "Electrical"
-msgstr "Elektrický"
+msgstr "Elektrické"
 
 #: pcbnew/drc/drc_item.cpp:44
 msgid "Design for Manufacturing"
@@ -51318,7 +51318,7 @@ msgstr "Odstránený variant '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2437
 msgid "Update Netlist"
-msgstr "Aktualizovať zoznam sietí"
+msgstr "Aktualizovať netlist"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2461
 #, c-format
@@ -51935,7 +51935,7 @@ msgstr "KiCad Editor DPS"
 
 #: pcbnew/pcb_edit_frame.cpp:241
 msgid "Export netlist used to update schematics"
-msgstr "Exportovať zoznam sietí použitý na aktualizáciu schém"
+msgstr "Exportovať netlist použitý na aktualizáciu schém"
 
 #: pcbnew/pcb_edit_frame.cpp:550
 msgid "New PCB file is unsaved"
@@ -55761,7 +55761,7 @@ msgstr "Exportovať zoznam spojov dosky"
 
 #: pcbnew/tools/board_editor_control.cpp:667
 msgid "KiCad board netlist files"
-msgstr "KiCad netlist súbory dosky"
+msgstr "Súbory netlistu dosky KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:774
 #, c-format
@@ -57806,7 +57806,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1237
 msgid "Import Netlist..."
-msgstr "Importovať zoznam sietí..."
+msgstr "Importovať netlist..."
 
 #: pcbnew/tools/pcb_actions.cpp:1238
 msgid "Read netlist and update board connectivity"
@@ -59073,6 +59073,7 @@ msgstr "Použiť rozloženie návrhového bloku na %d skupinu (skupín)"
 #: pcbnew/tools/pcb_control.cpp:1776
 msgid "Copied copper has no net assigned. Assign nets to connect it."
 msgstr ""
+"Skopírovaná meď nemá priradený žiadny spoj. Priraďte spoj na jej pripojenie."
 
 #: pcbnew/tools/pcb_control.cpp:1788
 #, c-format
@@ -60522,7 +60523,7 @@ msgstr "Názov zdroja"
 
 #: pcbnew/zone.cpp:2079
 msgid "Hatch Orientation"
-msgstr "Orientácia šrafúry"
+msgstr "Orientácia šrafovania"
 
 #: pcbnew/zone.cpp:2094
 msgid "Cannot be less than zone minimum width"
@@ -60534,7 +60535,7 @@ msgstr "Šírka šrafovania"
 
 #: pcbnew/zone.cpp:2106
 msgid "Hatch Gap"
-msgstr "Medzera šrafúry"
+msgstr "Medzera šrafovania"
 
 #: pcbnew/zone.cpp:2113
 msgid "Hatch Minimum Hole Ratio"
