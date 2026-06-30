@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-28 19:01+0000\n"
+"PO-Revision-Date: 2026-07-01 17:01+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
@@ -2094,9 +2094,9 @@ msgid "missing or invalid required keys: %s"
 msgstr "Chybějící nebo neplatná hodnota rozsahu teplot."
 
 #: common/api/api_plugin.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "Identifikátor knihovny symbolů %s není platný."
+msgstr "identifikátor '%s' je neplatný"
 
 #: common/api/api_plugin.cpp:201
 #, fuzzy, c-format
