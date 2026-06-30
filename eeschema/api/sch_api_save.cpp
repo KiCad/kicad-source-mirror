@@ -202,9 +202,13 @@ bool SaveSchematicCopy( SCHEMATIC& aSchematic, PROJECT& aProject, const wxString
     if( !schematicFileName.IsOk() || !schematicFileName.IsDirWritable() )
         return false;
 
-    SCH_SHEET* rootSheet = &aSchematic.Root();
+    SCH_SHEET*  rootSheet = &aSchematic.Root();
+    SCH_SCREEN* rootScreen = aSchematic.RootScreen();
 
-    if( schematicFileName.GetFullPath() == aSchematic.RootScreen()->GetFileName() )
+    if( !rootScreen )
+        return false;
+
+    if( schematicFileName.GetFullPath() == rootScreen->GetFileName() )
         return SaveSchematic( aSchematic, aProject );
 
     if( !SaveSheetToFile( rootSheet, aSchematic, schematicFileName.GetFullPath() ) )
