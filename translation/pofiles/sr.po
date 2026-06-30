@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-27 10:01+0000\n"
+"PO-Revision-Date: 2026-06-30 09:01+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -10396,50 +10396,43 @@ msgid "Print..."
 msgstr "Штампај..."
 
 #: common/tool/actions.cpp:146
-#, fuzzy
 msgid "Plot..."
-msgstr "&Пројект..."
+msgstr "Исцртавање..."
 
 #: common/tool/actions.cpp:153
-#, fuzzy
 msgid "Close the current editor"
-msgstr "Текстуални едитор"
+msgstr "Затворите тренутни уређивач"
 
 #: common/tool/actions.cpp:202 eeschema/sch_design_block_utils.cpp:423
 #: eeschema/sch_design_block_utils.cpp:649
 #: eeschema/tools/sch_group_tool.cpp:210 pcbnew/pcb_design_block_utils.cpp:472
 #: pcbnew/pcb_design_block_utils.cpp:610 pcbnew/tools/pcb_group_tool.cpp:224
-#, fuzzy
 msgid "Group Items"
-msgstr "Групиши по имену"
+msgstr "Групиши ставке"
 
 #: common/tool/actions.cpp:203
 msgid "Group the selected items so that they are treated as a single item"
-msgstr ""
+msgstr "Групишите изабране ставке тако да се третирају као једна ставка"
 
 #: common/tool/actions.cpp:209 common/tool/group_tool.cpp:187
-#, fuzzy
 msgid "Ungroup Items"
-msgstr "Групиши по"
+msgstr "Разгрупишите ставке"
 
 #: common/tool/actions.cpp:210
-#, fuzzy
 msgid "Ungroup any selected groups"
-msgstr "ниједна библиотека није изабрана"
+msgstr "Разгрупишите изабране групе"
 
 #: common/tool/actions.cpp:216
-#, fuzzy
 msgid "Add Items"
-msgstr "Предмети:"
+msgstr "Додај ставке"
 
 #: common/tool/actions.cpp:217
 msgid "Add items to group"
 msgstr "Додајте ставке у групу"
 
 #: common/tool/actions.cpp:223
-#, fuzzy
 msgid "Remove Items"
-msgstr "Помјери"
+msgstr "Уклони ставке"
 
 #: common/tool/actions.cpp:224
 msgid "Remove items from group"
@@ -10511,89 +10504,76 @@ msgstr "Ласо"
 
 #: common/tool/actions.cpp:363
 msgid "Set selection mode to use polygon lasso"
-msgstr ""
+msgstr "Подесите режим селекције да користи полигонски ласо"
 
 #: common/tool/actions.cpp:373
-#, fuzzy
 msgid "Select all items on screen"
-msgstr "Изабери"
+msgstr "Изаберите све ставке на екрану"
 
 #: common/tool/actions.cpp:379
-#, fuzzy
 msgid "Unselect All"
-msgstr "Изабери све ћелије"
+msgstr "Поништи све"
 
 #: common/tool/actions.cpp:380
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Изабери"
+msgstr "Поништи избор свих ставки на екрану"
 
 #: common/tool/actions.cpp:386
-#, fuzzy
 msgid "Paste Special..."
-msgstr "Залијепи"
+msgstr "Специјално лепљење..."
 
 #: common/tool/actions.cpp:387
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr "Копирај"
+msgstr "Налепи ставке са клипборда са опцијама"
 
 #: common/tool/actions.cpp:395 common/widgets/listbox_tricks.cpp:211
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1830
 #: pcbnew/tools/edit_tool.cpp:3425
-#, fuzzy
 msgid "Duplicate"
-msgstr "Удуплај:"
+msgstr "Дуплирај"
 
 #: common/tool/actions.cpp:396
-#, fuzzy
 msgid "Duplicates the selected item(s)"
-msgstr "Избриши"
+msgstr "Дуплирајте изабране ставке"
 
 #: common/tool/actions.cpp:409
-#, fuzzy
 msgid "Delete selected item(s)"
-msgstr "Избриши"
+msgstr "Обриши изабране ставке"
 
 #: common/tool/actions.cpp:416
-#, fuzzy
 msgid "Interactive Delete Tool"
-msgstr "Поставке..."
+msgstr "Интерактивни алат за брисање"
 
 #: common/tool/actions.cpp:417
-#, fuzzy
 msgid "Delete clicked items"
-msgstr "Избриши"
+msgstr "Избришите ставке на које сте кликнули"
 
 #: common/tool/actions.cpp:425 eeschema/tools/sch_edit_tool.cpp:3366
 #: pcbnew/tools/edit_tool.cpp:2787
-#, fuzzy
 msgid "Left Justify"
-msgstr "X позиција"
+msgstr "Лево поравнање"
 
 #: common/tool/actions.cpp:426
 msgid "Left-justify fields and text items"
-msgstr ""
+msgstr "Лево поравнање поља и текстуалних елемената"
 
 #: common/tool/actions.cpp:432 eeschema/tools/sch_edit_tool.cpp:3368
 #: pcbnew/tools/edit_tool.cpp:2789
-#, fuzzy
 msgid "Center Justify"
-msgstr "X позиција"
+msgstr "Поравнање по средини"
 
 #: common/tool/actions.cpp:433
 msgid "Center-justify fields and text items"
-msgstr ""
+msgstr "Поравнај поља и текстуалне ставке по центру"
 
 #: common/tool/actions.cpp:439 eeschema/tools/sch_edit_tool.cpp:3370
 #: pcbnew/tools/edit_tool.cpp:2791
-#, fuzzy
 msgid "Right Justify"
-msgstr "X позиција"
+msgstr "Поравнање удесно"
 
 #: common/tool/actions.cpp:440
 msgid "Right-justify fields and text items"
-msgstr ""
+msgstr "Поравнајте поља и текстуалне ставке удесно"
 
 #: common/tool/actions.cpp:446 eeschema/sch_edit_frame.cpp:2693
 msgid "Expand All"
@@ -10750,48 +10730,51 @@ msgstr "Извези табелу у CSV..."
 #: common/tool/actions.cpp:581
 msgid "Export table contents to CSV file with resolved text variables"
 msgstr ""
+"Извези садржај табеле у CSV датотеку са израчунатим текстуалним променљивим"
 
 #: common/tool/actions.cpp:592
-#, fuzzy
 msgid "Keep Arc Center, Adjust Radius"
-msgstr "Центар круга (%s, %s), полупречник %s"
+msgstr "Задржите центар лука, подесите радијус"
 
 #: common/tool/actions.cpp:593
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
 msgstr ""
+"Пребаците режим уређивања лука да бисте задржали центар, подесили "
+"полупречник и крајње тачке"
 
 #: common/tool/actions.cpp:599
 msgid "Keep Arc Endpoints or Direction of Starting Point"
-msgstr ""
+msgstr "Задржите крајње тачке лука или смер почетне тачке"
 
 #: common/tool/actions.cpp:600
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
 msgstr ""
+"Промените режим уређивања лука да бисте задржали крајње тачке или да бисте "
+"задржали правац друге тачке"
 
 #: common/tool/actions.cpp:606
-#, fuzzy
 msgid "Keep Arc Radius and Center, adjust angle"
-msgstr "Центар круга (%s, %s), полупречник %s"
+msgstr "Задржите радијус и центар лука, подесите угао"
 
 #: common/tool/actions.cpp:607
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
 msgstr ""
+"Пребаците режим уређивања лука на одржавање радијуса када се крајње тачке "
+"померају"
 
 #: common/tool/actions.cpp:614
-#, fuzzy
 msgid "Cycle Arc Editing Mode"
-msgstr "Помак позиције:"
+msgstr "Режим уређивања кружног лука"
 
 #: common/tool/actions.cpp:615
 msgid "Switch to a different method of editing arcs"
-msgstr ""
+msgstr "Пређите на други метод уређивања лукова"
 
 #: common/tool/actions.cpp:623
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Прикажи"
+msgstr "Прикажи/сакриј панел за претрагу"
 
 #: common/tool/actions.cpp:631 eeschema/dialogs/dialog_sch_find.cpp:33
 #: eeschema/dialogs/dialog_sch_find_base.cpp:122
@@ -10804,92 +10787,76 @@ msgid "Find and Replace"
 msgstr "Пронађи и замјени"
 
 #: common/tool/actions.cpp:647 pcbnew/dialogs/dialog_find_base.cpp:111
-#, fuzzy
 msgid "Find Next"
-msgstr "Пронађи"
+msgstr "Пронађи следеће"
 
 #: common/tool/actions.cpp:655 pcbnew/dialogs/dialog_find_base.cpp:116
-#, fuzzy
 msgid "Find Previous"
-msgstr "Преглед"
+msgstr "Пронађи претходни"
 
 #: common/tool/actions.cpp:663
-#, fuzzy
 msgid "Find Next Marker"
-msgstr "Маркер није пронађен"
+msgstr "Пронађите следећи маркер"
 
 #: common/tool/actions.cpp:669
-#, fuzzy
 msgid "Replace and Find Next"
-msgstr "Стави текст"
+msgstr "Замените и пронађите следеће"
 
 #: common/tool/actions.cpp:675 eeschema/dialogs/dialog_sch_find_base.cpp:132
-#, fuzzy
 msgid "Replace All"
-msgstr "Пронађи и замјени"
+msgstr "Замени све"
 
 #: common/tool/actions.cpp:688
-#, fuzzy
 msgid "Previous Marker"
-msgstr "Маркер није пронађен"
+msgstr "Претходни маркер"
 
 #: common/tool/actions.cpp:694
-#, fuzzy
 msgid "Next Marker"
-msgstr "Маркер није пронађен"
+msgstr "Следећи маркер"
 
 #: common/tool/actions.cpp:700
-#, fuzzy
 msgid "Exclude Marker"
-msgstr "Маркер није пронађен"
+msgstr "Изузми маркер"
 
 #: common/tool/actions.cpp:701
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "Означи тренутно кршење у прозору за проверу као изузетак"
 
 #: common/tool/actions.cpp:714 kicad/pcm/dialogs/dialog_pcm_base.cpp:131
-#, fuzzy
 msgid "Refresh"
-msgstr "&Освјежи"
+msgstr "Освежи"
 
 #: common/tool/actions.cpp:726 pcbnew/zone_manager/zone_preview_canvas.cpp:142
-#, fuzzy
 msgid "Zoom to Fit"
-msgstr "Умањити"
+msgstr "Зумирајте да се уклопи"
 
 #: common/tool/actions.cpp:727
 msgid "Zoom to worksheet area if exists or edited object"
-msgstr ""
+msgstr "Зумирај на област радног листа ако постоји или је објекат уређен"
 
 #: common/tool/actions.cpp:734
-#, fuzzy
 msgid "Zoom to All Objects"
-msgstr "Нема објеката"
+msgstr "Зумирај на све објекте"
 
 #: common/tool/actions.cpp:735
-#, fuzzy
 msgid "Zoom to all objects on screen"
-msgstr "Изабери"
+msgstr "Зумирајте на све објекте на екрану"
 
 #: common/tool/actions.cpp:741
-#, fuzzy
 msgid "Zoom to items currently selected"
-msgstr "Текстуални едитор"
+msgstr "Увећај на тренутно изабране ставке"
 
 #: common/tool/actions.cpp:742
-#, fuzzy
 msgid "Zoom to Selected Objects"
-msgstr "Нема објеката"
+msgstr "Зумирај на изабране објекте"
 
 #: common/tool/actions.cpp:754
-#, fuzzy
 msgid "Zoom In at Cursor"
-msgstr "Умањити"
+msgstr "Увећај ка курсору"
 
 #: common/tool/actions.cpp:766
-#, fuzzy
 msgid "Zoom Out at Cursor"
-msgstr "Умањити"
+msgstr "Удаљи од курсора"
 
 #: common/tool/actions.cpp:772 common/widgets/mathplot.cpp:1415
 #: pcbnew/dialogs/panel_setup_rules.cpp:151
@@ -10904,169 +10871,144 @@ msgid "Zoom Out"
 msgstr "Умањити"
 
 #: common/tool/actions.cpp:784
-#, fuzzy
 msgid "Zoom In Horizontally"
-msgstr "Хоризонтално"
+msgstr "Хоризонтално зумирајте"
 
 #: common/tool/actions.cpp:785
-#, fuzzy
 msgid "Zoom in horizontally the plot area"
-msgstr "Хоризонтално"
+msgstr "Увећајте хоризонтално подручје штампања"
 
 #: common/tool/actions.cpp:791
-#, fuzzy
 msgid "Zoom Out Horizontally"
-msgstr "Хоризонтално"
+msgstr "Умањи приказ хоризонтално"
 
 #: common/tool/actions.cpp:792
-#, fuzzy
 msgid "Zoom out horizontally the plot area"
-msgstr "Хоризонтално"
+msgstr "Хоризонтално смањите област штампања"
 
 #: common/tool/actions.cpp:798
-#, fuzzy
 msgid "Zoom In Vertically"
-msgstr "Вертикално"
+msgstr "Повећај вертикално"
 
 #: common/tool/actions.cpp:799
-#, fuzzy
 msgid "Zoom in vertically the plot area"
-msgstr "Вертикално"
+msgstr "Вертикално увећајте област штампања"
 
 #: common/tool/actions.cpp:805
-#, fuzzy
 msgid "Zoom Out Vertically"
-msgstr "Вертикално"
+msgstr "Умањи вертикално"
 
 #: common/tool/actions.cpp:806
-#, fuzzy
 msgid "Zoom out vertically the plot area"
-msgstr "Вертикално"
+msgstr "Вертикално смањите област штампања"
 
 #: common/tool/actions.cpp:814 common/widgets/mathplot.cpp:1417
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "Центар"
+msgstr "Центрирај на курсор"
 
 #: common/tool/actions.cpp:822
-#, fuzzy
 msgid "Zoom to Selection Area"
-msgstr "Појасни избор"
+msgstr "Зумирајте изабрану област"
 
 #: common/tool/actions.cpp:823
 msgid "Zoom to an area selection created by a mouse drag"
-msgstr ""
+msgstr "Увећај приказ на област изабрану превлачењем миша"
 
 #: common/tool/actions.cpp:831 common/widgets/mathplot.cpp:1410
 msgid "Undo Last Zoom"
-msgstr ""
+msgstr "Поништи последњи зум"
 
 #: common/tool/actions.cpp:832 common/widgets/mathplot.cpp:1411
 msgid "Return zoom to level prior to last zoom action"
-msgstr ""
+msgstr "Врати зумирање на ниво пре последње акције зумирања"
 
 #: common/tool/actions.cpp:838 common/widgets/mathplot.cpp:1412
-#, fuzzy
 msgid "Redo Last Zoom"
-msgstr "Избриши"
+msgstr "Понови последњи зум"
 
 #: common/tool/actions.cpp:839 common/widgets/mathplot.cpp:1413
 msgid "Return zoom to level prior to last zoom undo"
-msgstr ""
+msgstr "Врати увећање на ниво пре последњег поништавања увећања"
 
 #: common/tool/actions.cpp:854
-#, fuzzy
 msgid "Pan to Center Selected Objects"
-msgstr "Избриши"
+msgstr "Помери да би се центрирали изабрани објекти"
 
 #: common/tool/actions.cpp:861
-#, fuzzy
 msgid "Cursor Up"
-msgstr "Курсор"
+msgstr "Курсор горе"
 
 #: common/tool/actions.cpp:870
-#, fuzzy
 msgid "Cursor Down"
-msgstr "Опције показивача"
+msgstr "Курсор надоле"
 
 #: common/tool/actions.cpp:879
-#, fuzzy
 msgid "Cursor Left"
-msgstr "Курсор"
+msgstr "Курсор лево"
 
 #: common/tool/actions.cpp:888
-#, fuzzy
 msgid "Cursor Right"
-msgstr "Десно"
+msgstr "Курсор десно"
 
 #: common/tool/actions.cpp:898
-#, fuzzy
 msgid "Cursor Up Fast"
-msgstr "Опције показивача"
+msgstr "Брзо померање курсора нагоре"
 
 #: common/tool/actions.cpp:907
-#, fuzzy
 msgid "Cursor Down Fast"
-msgstr "Опције показивача"
+msgstr "Брзо померање курсора надоле"
 
 #: common/tool/actions.cpp:916
-#, fuzzy
 msgid "Cursor Left Fast"
-msgstr "Опције показивача"
+msgstr "Курсор брзо лево"
 
 #: common/tool/actions.cpp:925
-#, fuzzy
 msgid "Cursor Right Fast"
-msgstr "Облик курсора:"
+msgstr "Курсор удесно брзо"
 
 #: common/tool/actions.cpp:935
 msgid "Click"
-msgstr ""
+msgstr "Кликните"
 
 #: common/tool/actions.cpp:936
 msgid "Performs left mouse button click"
-msgstr ""
+msgstr "Врши клик левим тастером миша"
 
 #: common/tool/actions.cpp:946
 msgid "Double-click"
-msgstr ""
+msgstr "Двапут кликните"
 
 #: common/tool/actions.cpp:947
 msgid "Performs left mouse button double-click"
 msgstr "Извршава дупли клик левим дугметом миша"
 
 #: common/tool/actions.cpp:960
-#, fuzzy
 msgid "Pin Library"
-msgstr "Библиотека"
+msgstr "Пинуј библиотеку"
 
 #: common/tool/actions.cpp:961
 msgid "Keep the library at the top of the list"
 msgstr "Држи библиотеку на врху листе"
 
 #: common/tool/actions.cpp:966
-#, fuzzy
 msgid "Unpin Library"
-msgstr "Библиотека"
+msgstr "Отклони пиновану библиотеку"
 
 #: common/tool/actions.cpp:967
 msgid "No longer keep the library at the top of the list"
 msgstr "Немој више држати библиотеку на врху листе"
 
 #: common/tool/actions.cpp:972
-#, fuzzy
 msgid "Library Tree"
-msgstr "Нова библиотека"
+msgstr "Дрво библиотека"
 
 #: common/tool/actions.cpp:979
-#, fuzzy
 msgid "Hide Library Tree"
-msgstr "Нова библиотека"
+msgstr "Сакриј дрво библиотека"
 
 #: common/tool/actions.cpp:985
-#, fuzzy
 msgid "Focus Library Tree Search Field"
-msgstr "Додај поље"
+msgstr "Фокус на поље за претрагу библиотечког стабла"
 
 #: common/tool/actions.cpp:993
 msgid "Pan Up"
