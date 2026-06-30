@@ -1599,6 +1599,10 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     {
         connNames.emplace( selectedName );
 
+        // Highlight both label forms together: {MIXED_BUS} and its expansion {FOO BAR HAM EGGS}.
+        for( const wxString& equivalent : connectionGraph->GetEquivalentBusNames( selectedName ) )
+            connNames.emplace( equivalent );
+
         if( CONNECTION_SUBGRAPH* sg = connectionGraph->FindSubgraphByName( selectedName, sheetPath ) )
         {
             if( m_highlightBusMembers )
@@ -1622,12 +1626,15 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         // Place all bus names that are connected to the selected net in the set, regardless of
         // their sheet. This ensures that nets that are connected to a bus on a different sheet
         // get their buses highlighted as well.
-        for( CONNECTION_SUBGRAPH* sg : connectionGraph->GetAllSubgraphs( selectedName ) )
+        for( const wxString& connName : std::vector<wxString>( connNames.begin(), connNames.end() ) )
         {
-            for( const auto& [_, bus_sgs] : sg->GetBusParents() )
+            for( CONNECTION_SUBGRAPH* sg : connectionGraph->GetAllSubgraphs( connName ) )
             {
-                for( CONNECTION_SUBGRAPH* bus_sg : bus_sgs )
-                    connNames.emplace( bus_sg->GetNetName() );
+                for( const auto& [_, bus_sgs] : sg->GetBusParents() )
+                {
+                    for( CONNECTION_SUBGRAPH* bus_sg : bus_sgs )
+                        connNames.emplace( bus_sg->GetNetName() );
+                }
             }
         }
         wxLogTrace( "KICAD_SCH_HIGHLIGHT", "UpdateNetHighlighting: connNames after connection='%zu'", connNames.size() );

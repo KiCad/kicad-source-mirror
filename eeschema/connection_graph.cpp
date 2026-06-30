@@ -4965,6 +4965,91 @@ CONNECTION_GRAPH::GetAllSubgraphs( const wxString& aNetName ) const
 }
 
 
+std::vector<wxString> CONNECTION_GRAPH::GetEquivalentBusNames( const wxString& aBusName ) const
+{
+    std::vector<wxString> equivalents;
+
+    // Split off the sheet-path prefix. A literal '/' is always the hierarchy separator here, since
+    // slashes in member names are escaped as "{slash}". Re-attached to results so they match the
+    // net-name map keys.
+    wxString path;
+    wxString group = aBusName;
+    size_t   lastSlash = aBusName.find_last_of( '/' );
+
+    if( lastSlash != wxString::npos )
+    {
+        path = aBusName.Left( lastSlash + 1 );
+        group = aBusName.Mid( lastSlash + 1 );
+    }
+
+    wxString              prefix;
+    std::vector<wxString> members;
+
+    if( !NET_SETTINGS::ParseBusGroup( UnescapeString( group ), &prefix, &members ) )
+        return equivalents;
+
+    // A named-group prefix ("BUS{A B}") renames the members, so it is not aliasable.
+    if( !prefix.IsEmpty() )
+        return equivalents;
+
+    // ParseBusGroup escapes spaces as "\ " and leaves net-name escapes in place; BUS_ALIAS stores
+    // members verbatim. Undo both so the two compare in the same form.
+    for( wxString& member : members )
+    {
+        member.Replace( wxT( "\\ " ), wxT( " " ) );
+        member = UnescapeString( member );
+    }
+
+    // A single-member name may itself be an alias ("{MIXED_BUS}"); expand it and don't re-emit it.
+    wxString selfAlias;
+
+    if( members.size() == 1 )
+    {
+        auto aliasIt = m_bus_alias_cache.find( members[0] );
+
+        if( aliasIt != m_bus_alias_cache.end() )
+        {
+            selfAlias = members[0];
+            members = aliasIt->second->Members();
+        }
+    }
+
+    // Re-escape members back to net-name form so the label matches the connection-graph keys.
+    wxString expandedLabel = path + wxT( "{" );
+
+    for( size_t i = 0; i < members.size(); ++i )
+    {
+        if( i > 0 )
+            expandedLabel += wxT( " " );
+
+        wxString escaped = EscapeString( members[i], CTX_NETNAME );
+        escaped.Replace( wxT( " " ), wxT( "\\ " ) );
+        expandedLabel += escaped;
+    }
+
+    expandedLabel += wxT( "}" );
+
+    if( expandedLabel != aBusName )
+        equivalents.push_back( expandedLabel );
+
+    // Match aliases by member set; bus connectivity is order-independent, so compare as multisets.
+    std::multiset<wxString> memberSet( members.begin(), members.end() );
+
+    for( const auto& [aliasName, alias] : m_bus_alias_cache )
+    {
+        if( aliasName == selfAlias || alias->Members().size() != members.size() )
+            continue;
+
+        std::multiset<wxString> aliasMembers( alias->Members().begin(), alias->Members().end() );
+
+        if( memberSet == aliasMembers )
+            equivalents.push_back( path + wxT( "{" ) + aliasName + wxT( "}" ) );
+    }
+
+    return equivalents;
+}
+
+
 int CONNECTION_GRAPH::RunERC()
 {
     int error_count = 0;

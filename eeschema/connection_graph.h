@@ -549,6 +549,17 @@ public:
     const std::vector<CONNECTION_SUBGRAPH*>& GetAllSubgraphs( const wxString& aNetName ) const;
 
     /**
+     * Map a bus group name between its alias and expanded forms ({MIXED_BUS} <-> {FOO BAR HAM EGGS}).
+     *
+     * Any sheet-path prefix on the input is preserved on the results so they resolve against the
+     * graph's net-name map.
+     *
+     * @param aBusName is the bus group name, optionally sheet-path qualified.
+     * @return the equivalent bus names, empty if none.
+     */
+    std::vector<wxString> GetEquivalentBusNames( const wxString& aBusName ) const;
+
+    /**
      * Return the fully-resolved netname for a given subgraph.
      *
      * @param aSubGraph Reference to the subgraph.

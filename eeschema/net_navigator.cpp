@@ -216,9 +216,16 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
     wxCHECK( connectionGraph, /* void */ );
 
     std::set<CONNECTION_SUBGRAPH*> subgraphs;
+    std::set<wxString> netNamesToSearch;
 
+    netNamesToSearch.insert( aNetName );
+
+    for( const wxString& equivalent : connectionGraph->GetEquivalentBusNames( aNetName ) )
+        netNamesToSearch.insert( equivalent );
+
+    for( const wxString& netName : netNamesToSearch )
     {
-        const std::vector<CONNECTION_SUBGRAPH*>& tmp = connectionGraph->GetAllSubgraphs( aNetName );
+        const std::vector<CONNECTION_SUBGRAPH*>& tmp = connectionGraph->GetAllSubgraphs( netName );
         subgraphs.insert( tmp.begin(), tmp.end() );
     }
 
