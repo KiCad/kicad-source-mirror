@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-28 19:01+0000\n"
+"PO-Revision-Date: 2026-06-30 23:01+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -2115,9 +2115,9 @@ msgid "missing or invalid required keys: %s"
 msgstr "Chybějící nebo neplatná hodnota rozsahu teplot."
 
 #: common/api/api_plugin.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "Identifikátor knihovny symbolů %s není platný."
+msgstr "identifikátor '%s' je neplatný"
 
 #: common/api/api_plugin.cpp:194
 #, fuzzy, c-format
@@ -3434,16 +3434,15 @@ msgstr "Vlastnosti"
 
 #: common/dialogs/dialog_kicad_diff.cpp:63
 msgid "Before"
-msgstr ""
+msgstr "Před"
 
 #: common/dialogs/dialog_kicad_diff.cpp:64
 msgid "After"
-msgstr ""
+msgstr "Po"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
-#, fuzzy
 msgid "Filter changes…"
-msgstr "Filtr sítí"
+msgstr "Filtrovat změny…"
 
 #: common/dialogs/dialog_kicad_diff.cpp:122
 #: common/diff_merge/diff_tree_grouping.cpp:37
@@ -3452,9 +3451,8 @@ msgstr "Přidal"
 
 #: common/dialogs/dialog_kicad_diff.cpp:123
 #: common/diff_merge/diff_tree_grouping.cpp:38
-#, fuzzy
 msgid "Removed"
-msgstr "Smazat"
+msgstr "Odstraněno"
 
 #: common/dialogs/dialog_kicad_diff.cpp:124
 #: common/dialogs/git/dialog_git_commit.cpp:103
@@ -3463,9 +3461,8 @@ msgid "Modified"
 msgstr "Upraveno"
 
 #: common/dialogs/dialog_kicad_diff.cpp:125
-#, fuzzy
 msgid "Conflict"
-msgstr "Konflikty"
+msgstr "Konflikt"
 
 #: common/dialogs/dialog_kicad_diff.cpp:143
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:24
@@ -3514,13 +3511,12 @@ msgid "Revision:"
 msgstr "Revize:"
 
 #: common/dialogs/dialog_kicad_diff.cpp:425
-#, fuzzy
 msgid "Older"
-msgstr "Složka"
+msgstr "Starší"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
-msgstr ""
+msgstr "Novější"
 
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
@@ -3541,14 +3537,12 @@ msgid "(none)"
 msgstr "(žádné)"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:33
-#, fuzzy
 msgid "Comparison:"
-msgstr "Společnost:"
+msgstr "Porovnání:"
 
 #: common/dialogs/dialog_kicad_diff_base.h:61
-#, fuzzy
 msgid "Compare Files"
-msgstr "Soubory obrázku"
+msgstr "Porovat soubory"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:129
 #, fuzzy
@@ -8986,9 +8980,9 @@ msgid "DipTrace file '%s' is too large (%ld bytes)."
 msgstr ""
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading file '%s'."
-msgstr "Chyba čtení souboru."
+msgstr "Chyba čtení souboru '%s'."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:102
 #, c-format
@@ -10803,9 +10797,9 @@ msgid ""
 msgstr "Načtení stránky '%s' selhalo: %s"
 
 #: common/richio.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "Write failed to '%s': %s"
-msgstr "Přeskládání se nepodařilo spustit: %s"
+msgstr "Zápis do '%s' selhal: %s"
 
 #: common/settings/bom_settings.cpp:126
 msgid "Default Editing"
@@ -19727,9 +19721,9 @@ msgid "Potential"
 msgstr "Exponenciální"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Name '%s' contains invalid characters."
-msgstr "Symbol %s obsahuje neplatný znak '%c'"
+msgstr "Název '%s' obsahuje neplatné znaky."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:224
 #, fuzzy, c-format
@@ -20335,9 +20329,9 @@ msgstr "Importovaná deska byla úspěšně uložena do '%s'\n"
 #: eeschema/eeschema_jobs_handler.cpp:1959 pcbnew/pcbnew_jobs_handler.cpp:3250
 #: pcbnew/pcbnew_jobs_handler.cpp:3256 pcbnew/pcbnew_jobs_handler.cpp:3734
 #: pcbnew/pcbnew_jobs_handler.cpp:3740
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s\n"
-msgstr "Nepodařilo se načíst '%s'."
+msgstr "Nepodařilo se načíst %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1841
 #: eeschema/eeschema_jobs_handler.cpp:1847
@@ -20346,9 +20340,9 @@ msgstr "Nepodařilo se načíst '%s'."
 #: pcbnew/pcbnew_jobs_handler.cpp:3595 pcbnew/pcbnew_jobs_handler.cpp:3808
 #: pcbnew/pcbnew_jobs_handler.cpp:3819 pcbnew/pcbnew_jobs_handler.cpp:3933
 #: pcbnew/pcbnew_jobs_handler.cpp:3939
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s: %s\n"
-msgstr "Načtení stránky '%s' selhalo: %s"
+msgstr "Nepodařilo se načíst %s: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2058 pcbnew/pcbnew_jobs_handler.cpp:3850
 msgid "Unsupported document kind for this dispatcher.\n"
@@ -23909,9 +23903,9 @@ msgid "Bezier Curve, %d points"
 msgstr "Bezierova křivka, %d bodů"
 
 #: eeschema/sch_shape.cpp:464
-#, fuzzy, c-format
+#, c-format
 msgid "Ellipse, %s x %s"
-msgstr "%s, %s a %s"
+msgstr "Elipsa, %s x %s"
 
 #: eeschema/sch_shape.cpp:469
 #, c-format
@@ -31853,9 +31847,9 @@ msgstr ""
 
 #: kicad/cli/command_gerber_convert_png.cpp:147
 #: kicad/cli/command_gerber_info.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid units: %s\n"
-msgstr "Zadány neplatné jednotky\n"
+msgstr "Neplatné jednotky: %s\n"
 
 #: kicad/cli/command_gerber_convert_png.cpp:158
 msgid ""
@@ -31987,14 +31981,14 @@ msgid "At least one input file is required\n"
 msgstr "Je vyžadována nejméně jedna velikost mřížky."
 
 #: kicad/cli/command_import.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create output directory: %s\n"
-msgstr "Nelze vytvořit adresář '%s'"
+msgstr "Nelze vytvořit výstupní adresář: %s\n"
 
 #: kicad/cli/command_import.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create project: %s\n"
-msgstr "Nelze sloučit comity"
+msgstr "Nelze vytvořit projekt: %s\n"
 
 #: kicad/cli/command_import.cpp:199
 #, c-format
@@ -32014,9 +32008,9 @@ msgid "No inputs could be imported\n"
 msgstr "Žádný 3D model nebude importován."
 
 #: kicad/cli/command_import.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Created project '%s'\n"
-msgstr "Vytvořit nový projekt"
+msgstr "Vytvořen projekt '%s'\n"
 
 #: kicad/cli/command_import.cpp:236
 #, fuzzy, c-format
@@ -52988,9 +52982,9 @@ msgid "no wizard selected"
 msgstr "žádný zvolený průvodce"
 
 #: pcbnew/footprint_wizard_frame.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "3D Viewer [%s]"
-msgstr "3D prohlížeč"
+msgstr "3D prohlížeč [%s]"
 
 #: pcbnew/generate_footprint_info.cpp:45
 msgid "Documentation"
@@ -53034,9 +53028,9 @@ msgid "current length"
 msgstr "aktuální délka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2065
-#, fuzzy, c-format
+#, c-format
 msgid "Net: %s"
-msgstr "Síť:"
+msgstr "Síť: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2127
 #, fuzzy, c-format
@@ -57949,9 +57943,8 @@ msgid "Loading Footprint Libraries"
 msgstr "Načítání knihoven pouzder"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:528
-#, fuzzy
 msgid "Failed to load board"
-msgstr "Nepodařilo se načíst desku\n"
+msgstr "Nepodařilo se načíst desku"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:599
 #, c-format
@@ -63957,9 +63950,9 @@ msgid "Offset Y"
 msgstr "Posun Y"
 
 #: pcbnew/zone_manager/dialog_zone_manager.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "Delete zone '%s'?"
-msgstr "Smazat zóny?"
+msgstr "Smazat zónu '%s'?"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:74
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:79
