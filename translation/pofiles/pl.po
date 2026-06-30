@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-22 01:58+0000\n"
+"PO-Revision-Date: 2026-06-30 23:01+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -18268,26 +18268,20 @@ msgid "Model"
 msgstr "Model"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:247
-#, fuzzy
 msgid "Decomposition:"
-msgstr "Pozycja X:"
+msgstr "Rozłóż:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:251
-#, fuzzy
 msgid "Whole device"
-msgstr "Element Spice:"
+msgstr "Na całym elemencie"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:251
-#, fuzzy
 msgid "Repeat per unit"
-msgstr "Liczba powtórzeń"
+msgstr "Powtórz co jednostkę"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:257
-#, fuzzy
 msgid "Shared model pins:"
-msgstr ""
-"Komponentów na obszarze docelowym: \n"
-"%s"
+msgstr "Piny współdzielonego modelu:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:281
 msgid "Symbol Pin"
@@ -26380,14 +26374,14 @@ msgid "Number of bits"
 msgstr "Liczba bitów"
 
 #: eeschema/sim/sim_model_multiunit.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has a malformed Sim.Pins entry '%s'."
-msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'"
+msgstr "Symbol '%s' posiada błędny wpis symulacji. Wejście pinu '%s'."
 
 #: eeschema/sim/sim_model_multiunit.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' maps pin '%s' to both '%s' and '%s'."
-msgstr "Symbol %s zmapowany do biblioteki symboli '%s'."
+msgstr "Symbol '%s' mapuje pin '%s' zarówno do '%s' jak i '%s'."
 
 #: eeschema/sim/sim_model_multiunit.cpp:195
 #, c-format
@@ -26412,14 +26406,14 @@ msgid "Unit %d maps model pin '%s' to both symbol pins '%s' and '%s'."
 msgstr ""
 
 #: eeschema/sim/sim_model_multiunit.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Shared pin '%s' is not connected on any unit."
-msgstr "Pin %s nie jest połączony z siecią masy"
+msgstr "Współdzielony pin '%s' nie jest połączony z żadną jednostką."
 
 #: eeschema/sim/sim_model_multiunit.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Shared pin '%s' resolves to more than one net."
-msgstr "Sprawdzanie czy etykiety nie łączą więcej niż jedno połączenie..."
+msgstr "Współdzielony pin '%s' wskazuje na więcej niż jedną sieć."
 
 #: eeschema/sim/sim_model_multiunit.cpp:320
 #, c-format
