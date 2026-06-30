@@ -161,8 +161,9 @@ void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aModel, std::vector<DS_DATA_ITEM*>
 {
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
-    m_out->Print( "(kicad_wks (version %d) (generator \"pl_editor\") (generator_version %s)",
+    m_out->Print( "(kicad_wks (version %d) (generator %s) (generator_version %s)",
                   SEXPR_WORKSHEET_FILE_VERSION,
+                  m_out->Quotew( aModel->GetGenerator() ).c_str(),
                   m_out->Quotew( GetMajorMinorVersion() ).c_str() );
 
     for( DS_DATA_ITEM* item : aItemsList )
@@ -203,8 +204,9 @@ void DS_DATA_MODEL_IO::Format( DS_DATA_MODEL* aSheet ) const
 {
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
-    m_out->Print( "(kicad_wks (version %d) (generator \"pl_editor\") (generator_version %s)",
+    m_out->Print( "(kicad_wks (version %d) (generator %s) (generator_version %s)",
                   SEXPR_WORKSHEET_FILE_VERSION,
+                  m_out->Quotew( aSheet->GetGenerator() ).c_str(),
                   m_out->Quotew( GetMajorMinorVersion() ).c_str() );
 
     // Setup

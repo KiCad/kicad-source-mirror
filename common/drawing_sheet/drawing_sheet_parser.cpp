@@ -206,6 +206,9 @@ void DRAWING_SHEET_PARSER::Parse( DS_DATA_MODEL* aLayout )
     parseHeader( token );
     aLayout->SetFileFormatVersionAtLoad( m_requiredVersion );
 
+    // Sheets predating the generator token, or a reused model, must not inherit a stale generator.
+    aLayout->SetGenerator( wxT( "pl_editor" ) );
+
     auto checkVersion =
             [&]()
             {
@@ -224,8 +227,8 @@ void DRAWING_SHEET_PARSER::Parse( DS_DATA_MODEL* aLayout )
         switch( token )
         {
         case T_generator:
-            // (generator "genname"); we don't care about it at the moment.
             NeedSYMBOL();
+            aLayout->SetGenerator( FromUTF8() );
             NeedRIGHT();
             break;
 

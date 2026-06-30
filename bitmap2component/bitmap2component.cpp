@@ -24,11 +24,16 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <memory>
 #include <string>
 #include <vector>
 #include <kiid.h>
 
 #include <build_version.h>
+#include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
+#include <io/kicad/kicad_io_utils.h>
+#include <io/kicad/sexpr_file_versions.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <potracelib.h>
@@ -161,9 +166,10 @@ void BITMAPCONV_INFO::outputDataHeader( const wxString& aBrdLayerName )
     case FOOTPRINT_FMT:
         // fields text size = 1.5 mm
         // fields text thickness = 1.5 / 5 = 0.3mm
-        m_Data += fmt::format( "(footprint \"{}\" (version 20221018) (generator \"bitmap2component\") (generator_version \"{}\")\n"
+        m_Data += fmt::format( "(footprint \"{}\" (version {}) (generator \"bitmap2component\") (generator_version \"{}\")\n"
                                "  (layer \"F.Cu\")\n",
                                m_CmpName.c_str(),
+                               SEXPR_FOOTPRINT_FILE_VERSION,
                                GetMajorMinorVersion().ToStdString() );
 
         m_Data += fmt::format( "  (attr board_only exclude_from_pos_files exclude_from_bom)\n" );
@@ -182,15 +188,11 @@ void BITMAPCONV_INFO::outputDataHeader( const wxString& aBrdLayerName )
         break;
 
     case DRAWING_SHEET_FMT:
-        m_Data += fmt::format( "(kicad_wks (version 20220228) (generator \"bitmap2component\") (generator_version \"{}\")\n",
-                               GetMajorMinorVersion().ToStdString() );
-        m_Data += "  (setup (textsize 1.5 1.5)(linewidth 0.15)(textlinewidth 0.15)\n";
-        m_Data += "  (left_margin 10)(right_margin 10)(top_margin 10)(bottom_margin 10))\n";
-        m_Data += "  (polygon (name \"\") (pos 0 0) (linewidth 0.01)\n";
         break;
 
     case SYMBOL_FMT:
-        m_Data += fmt::format( "(kicad_symbol_lib (version 20220914) (generator \"bitmap2component\") (generator_version \"{}\")\n",
+        m_Data += fmt::format( "(kicad_symbol_lib (version {}) (generator \"bitmap2component\") (generator_version \"{}\")\n",
+                               SEXPR_SYMBOL_LIB_FILE_VERSION,
                                GetMajorMinorVersion().ToStdString() );
         KI_FALLTHROUGH;
 
@@ -244,7 +246,6 @@ void BITMAPCONV_INFO::outputDataEnd()
         break;
 
     case DRAWING_SHEET_FMT:
-        m_Data += "  )\n)\n";
         break;
 
     case SYMBOL_PASTE_FMT:
@@ -316,29 +317,6 @@ void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN& aPolygon, const wxStri
         break;
 
     case DRAWING_SHEET_FMT:
-        m_Data += "    (pts";
-
-        // Internal units = micron, file unit = mm
-        jj = 1;
-
-        for( ii = 0; ii < aPolygon.PointCount(); ii++ )
-        {
-            currpoint = aPolygon.CPoint( ii );
-            m_Data += fmt::format( " (xy {:.3f} {:.3f})",
-                                   ( currpoint.x - offsetX ) / PL_IU_PER_MM,
-                                   ( currpoint.y - offsetY ) / PL_IU_PER_MM );
-
-            if( jj++ > 4 )
-            {
-                jj = 0;
-                m_Data += "\n     ";
-            }
-        }
-
-        // Close polygon
-        m_Data += fmt::format( " (xy {:.3f} {:.3f}) )\n",
-                              ( startpoint.x - offsetX ) / PL_IU_PER_MM,
-                              ( startpoint.y - offsetY ) / PL_IU_PER_MM );
         break;
 
     case SYMBOL_FMT:
@@ -381,12 +359,19 @@ void BITMAPCONV_INFO::createOutputData( const wxString& aLayer )
     // polyset_holes is the set of holes inside polyset_areas outlines
     SHAPE_POLY_SET polyset_holes;
 
+    // For DRAWING_SHEET_FMT, collect all output polygons so we can serialize
+    // them through DS_DATA_MODEL instead of writing hardcoded S-expression strings.
+    SHAPE_POLY_SET outputPolygons;
+
     potrace_dpoint_t( *c )[3];
 
-    // The layer name has meaning only for .kicad_mod files.
-    // For these files the header creates 2 invisible texts: value and ref
-    // (needed but not useful) on silk screen layer
-    outputDataHeader( "F.SilkS" );
+    if( m_Format != DRAWING_SHEET_FMT )
+    {
+        // The layer name has meaning only for .kicad_mod files.
+        // For these files the header creates 2 invisible texts: value and ref
+        // (needed but not useful) on silk screen layer
+        outputDataHeader( "F.SilkS" );
+    }
 
     bool main_outline = true;
 
@@ -466,11 +451,19 @@ void BITMAPCONV_INFO::createOutputData( const wxString& aLayer )
                 // Convert polygon with holes to a unique polygon
                 polyset_areas.Fracture();
 
-                // Output current resulting polygon(s)
-                for( int ii = 0; ii < polyset_areas.OutlineCount(); ii++ )
+                if( m_Format == DRAWING_SHEET_FMT )
                 {
-                    SHAPE_LINE_CHAIN& poly = polyset_areas.Outline( ii );
-                    outputOnePolygon( poly, aLayer );
+                    // Collect polygons for serialization through DS_DATA_MODEL
+                    for( int ii = 0; ii < polyset_areas.OutlineCount(); ii++ )
+                        outputPolygons.AddOutline( polyset_areas.Outline( ii ) );
+                }
+                else
+                {
+                    for( int ii = 0; ii < polyset_areas.OutlineCount(); ii++ )
+                    {
+                        SHAPE_LINE_CHAIN& poly = polyset_areas.Outline( ii );
+                        outputOnePolygon( poly, aLayer );
+                    }
                 }
 
                 polyset_areas.RemoveAllContours();
@@ -482,8 +475,69 @@ void BITMAPCONV_INFO::createOutputData( const wxString& aLayer )
         paths = paths->next;
     }
 
-    outputDataEnd();
+    if( m_Format == DRAWING_SHEET_FMT )
+    {
+        createDrawingSheetData( outputPolygons );
+    }
+    else
+    {
+        outputDataEnd();
+    }
 }
+
+
+void BITMAPCONV_INFO::createDrawingSheetData( SHAPE_POLY_SET& aPolyset )
+{
+    DS_DATA_MODEL model;
+    model.SetGenerator( wxT( "bitmap2component" ) );
+    model.SetLeftMargin( 10 );
+    model.SetRightMargin( 10 );
+    model.SetTopMargin( 10 );
+    model.SetBottomMargin( 10 );
+    model.m_DefaultTextSize = VECTOR2D( 1.5, 1.5 );
+    model.m_DefaultLineWidth = 0.15;
+    model.m_DefaultTextThickness = 0.15;
+
+    auto polyItem = std::make_unique<DS_DATA_ITEM_POLYGONS>();
+    polyItem->m_Name = wxEmptyString;
+    polyItem->SetStart( 0, 0, RB_CORNER );
+    polyItem->m_LineWidth = 0.01;
+
+    int offsetX = KiROUND( m_PixmapWidth / 2.0 * m_ScaleX );
+    int offsetY = KiROUND( m_PixmapHeight / 2.0 * m_ScaleY );
+
+    for( int ii = 0; ii < aPolyset.OutlineCount(); ii++ )
+    {
+        SHAPE_LINE_CHAIN& poly = aPolyset.Outline( ii );
+
+        if( poly.PointCount() == 0 )
+            continue;
+
+        for( int jj = 0; jj < poly.PointCount(); jj++ )
+        {
+            VECTOR2I pt = poly.CPoint( jj );
+            polyItem->AppendCorner( VECTOR2D( ( pt.x - offsetX ) / PL_IU_PER_MM,
+                                              ( pt.y - offsetY ) / PL_IU_PER_MM ) );
+        }
+
+        // Close polygon by repeating the first point
+        VECTOR2I startPt = poly.CPoint( 0 );
+        polyItem->AppendCorner( VECTOR2D( ( startPt.x - offsetX ) / PL_IU_PER_MM,
+                                          ( startPt.y - offsetY ) / PL_IU_PER_MM ) );
+        polyItem->CloseContour();
+    }
+
+    if( polyItem->GetPolyCount() > 0 )
+        model.Append( polyItem.release() );
+
+    wxString output;
+    model.SaveInString( &output );
+
+    std::string result = output.ToStdString();
+    KICAD_FORMAT::Prettify( result );
+    m_Data += result;
+}
+
 
 // a helper function to calculate a square value
 inline double square( double x )

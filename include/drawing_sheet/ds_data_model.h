@@ -56,6 +56,9 @@ public:
     int GetFileFormatVersionAtLoad() { return m_fileFormatVersionAtLoad; }
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
 
+    const wxString& GetGenerator() const { return m_generator; }
+    void SetGenerator( const wxString& aGenerator ) { m_generator = aGenerator; }
+
     double GetLeftMargin() { return m_leftMargin; }
     void SetLeftMargin( double aMargin ) { m_leftMargin = aMargin; }
 
@@ -185,6 +188,7 @@ private:
                                       // first time DS_DRAW_ITEM_LIST::BuildDrawItemsList is run
                                       // (useful mainly for drawing sheet editor)
     int      m_fileFormatVersionAtLoad;
+    wxString m_generator;             // Tool name written in the generator field
     double   m_leftMargin;            // the left page margin in mm
     double   m_rightMargin;           // the right page margin in mm
     double   m_topMargin;             // the top page margin in mm

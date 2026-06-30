@@ -1060,6 +1060,11 @@ add_subdirectory( doxygen )
 configure_file( ${PROJECT_SOURCE_DIR}/cmake/config.h.cmake
     ${CMAKE_BINARY_DIR}/config.h )
 
+# Generate the shared S-expression file-format version header for standalone tools
+# (bitmap2component) that cannot link pcbnew/eeschema. The values are extracted from the
+# authoritative ledgers so they can never drift.
+include( ${KICAD_CMAKE_MODULE_PATH}/WriteSexprVersionHeader.cmake )
+
 
 #================================================
 # "make uninstall" rules

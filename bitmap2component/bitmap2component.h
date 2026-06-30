@@ -83,6 +83,12 @@ private:
      * Polygon coordinates are expected scaled by the polygon extraction function
      */
     void outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const wxString& aBrdLayerName );
+
+    /**
+     * Generate drawing sheet output using the DS_DATA_MODEL serialization
+     * instead of hardcoded S-expression fragments.
+     */
+    void createDrawingSheetData( SHAPE_POLY_SET& aPolyset );
 };
 
 #endif  // BITMAP2COMPONENT_H
