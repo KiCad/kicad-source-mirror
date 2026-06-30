@@ -29,8 +29,6 @@ EDA_VIEW_SWITCHER_BASE::EDA_VIEW_SWITCHER_BASE( wxWindow* parent, wxWindowID id,
 	this->SetSizer( bSizerMain );
 	this->Layout();
 	bSizerMain->Fit( this );
-
-	this->Centre( wxBOTH );
 }
 
 EDA_VIEW_SWITCHER_BASE::~EDA_VIEW_SWITCHER_BASE()
