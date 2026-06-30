@@ -891,6 +891,12 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
 
                     std::this_thread::sleep_for( std::chrono::milliseconds( 20 ) );
                 }
+
+                // remaining hits zero inside the final task, before it has unwound.  The detached
+                // tasks capture process/successors/inDegree by reference, so we must let every
+                // worker fully exit before those locals leave scope or a straggler dereferences
+                // freed state (issue 24758).
+                tp.wait();
             };
 
     run_fill_waves( toFill, fill_lambda, tesselate_lambda, fill_item_dependency, true );
