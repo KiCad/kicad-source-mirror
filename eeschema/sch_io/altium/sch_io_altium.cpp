@@ -4608,7 +4608,8 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
 
         if( !storageFile )
         {
-            m_errorMessages.emplace( wxString::Format( _( "Embedded file %s not found in storage." ),
+            m_errorMessages.emplace( wxString::Format( _( "Embedded file '%s' not found in "
+                                                          "storage." ),
                                                        elem.filename ),
                                      RPT_SEVERITY_ERROR );
             return;
@@ -4621,12 +4622,43 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
         wxZlibInputStream   zlibInputStream( fileStream );
         wxFFileOutputStream outputStream( storagePath );
         outputStream.Write( zlibInputStream );
-        outputStream.Close();
 
-        if( !refImage.ReadImageFile( storagePath ) )
+        // wxFFileOutputStream::IsOk() reports the closed stream as not-ok, so capture the write
+        // result before closing.
+        const bool writeOk = outputStream.IsOk();
+        const bool closeOk = outputStream.Close();
+
+        if( storagePath.IsEmpty() || !writeOk || !closeOk )
         {
-            m_errorMessages.emplace( wxString::Format( _( "Error reading image %s." ), storagePath ),
-                                     RPT_SEVERITY_ERROR );
+            m_errorMessages.emplace(
+                    wxString::Format( _( "Could not write a temporary file while extracting the "
+                                         "embedded image '%s'." ),
+                                     elem.filename ),
+                    RPT_SEVERITY_ERROR );
+
+            if( !storagePath.IsEmpty() )
+                wxRemoveFile( storagePath );
+
+            return;
+        }
+
+        bool readOk;
+
+        {
+            // wxImage emits its own log spam on a failed read; we report our own errors instead.
+            wxLogNull noLog;
+            readOk = refImage.ReadImageFile( storagePath );
+        }
+
+        if( !readOk )
+        {
+            m_errorMessages.emplace(
+                    wxString::Format( _( "Failed to read embedded image '%s'. "
+                                         "The image data may be corrupt or in an "
+                                         "unsupported format." ),
+                                     elem.filename ),
+                    RPT_SEVERITY_ERROR );
+            wxRemoveFile( storagePath );
             return;
         }
 
@@ -4637,15 +4669,30 @@ void SCH_IO_ALTIUM::ParseImage( const std::map<wxString, wxString>& aProperties 
     {
         if( !wxFileExists( elem.filename ) )
         {
-            m_errorMessages.emplace( wxString::Format( _( "File not found %s." ), elem.filename ),
-                                     RPT_SEVERITY_ERROR );
+            m_errorMessages.emplace(
+                    wxString::Format( _( "Could not find image file '%s'. The file "
+                                         "path may be specific to a different operating "
+                                         "system." ),
+                                     elem.filename ),
+                    RPT_SEVERITY_ERROR );
             return;
         }
 
-        if( !refImage.ReadImageFile( elem.filename ) )
+        bool readOk;
+
         {
-            m_errorMessages.emplace( wxString::Format( _( "Error reading image %s." ), elem.filename ),
-                                     RPT_SEVERITY_ERROR );
+            wxLogNull noLog;
+            readOk = refImage.ReadImageFile( elem.filename );
+        }
+
+        if( !readOk )
+        {
+            m_errorMessages.emplace(
+                    wxString::Format( _( "Failed to read image file '%s'. The image "
+                                         "may be corrupt or in an unsupported "
+                                         "format." ),
+                                     elem.filename ),
+                    RPT_SEVERITY_ERROR );
             return;
         }
     }
