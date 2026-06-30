@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-29 22:01+0000\n"
+"PO-Revision-Date: 2026-06-30 23:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -5733,7 +5733,7 @@ msgstr "Posúvanie a zväčšovanie"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:35
 msgid "Center and warp cursor on zoom"
-msgstr "Vycentrovanie a posun kurzora na zväčšenie"
+msgstr "Vycentrovať na kurzor pri priblížení/oddialení"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:36
 msgid "Center the cursor on screen when zooming."
@@ -7063,7 +7063,7 @@ msgstr "Nastavenie zobrazenia"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:23
 #: pcbnew/tools/zone_filler_tool.cpp:288
 msgid "Editing Options"
-msgstr "Úprava možností"
+msgstr "Možnosti úprav"
 
 #: common/eda_base_frame.cpp:1573 common/eda_base_frame.cpp:1583
 #: common/eda_base_frame.cpp:1608 common/eda_base_frame.cpp:1622
@@ -13868,8 +13868,8 @@ msgstr ""
 "* `%P`: absolútna cesta k adresáru projektu, bez koncovej lomky\n"
 "\n"
 "**Poznámka:** parameter výstupného súboru `%O` nezahŕňa príponu súboru. "
-"KiCad sa pokúsi pridať príslušné rozšírenie do príkazového riadka "
-"automaticky, ale rozšírenie môže byť potrebné pridať ručne.\n"
+"KiCad sa pokúsi pridať príslušné prípony do príkazového riadka automaticky, "
+"ale rozšírenie môže byť potrebné pridať ručne.\n"
 "\n"
 "Python je odporúčaný nástroj pre skripty generátora zoznamu materiálu, ale "
 "možno použiť aj iné nástroje.\n"
@@ -13879,8 +13879,8 @@ msgstr ""
 "Formát príkazového riadka pre skript Python je v tvare:\n"
 "\n"
 "```\n"
-"python <názov súboru skriptu> <vstupný názov súboru> <výstupný názov "
-"súboru>\n"
+"python <názov súboru skriptu> <vstupný názov súboru> <výstupný názov súboru>"
+"\n"
 "```\n"
 "\n"
 "Ak je v systéme Windows požadovaný skript generátora pre zoznam materiálu "
@@ -23757,7 +23757,7 @@ msgstr "Zarovnanie"
 #: pcbnew/zone.cpp:2257 pcbnew/zone_manager/dialog_zone_manager_base.cpp:46
 #: pcbnew/zone_manager/model_zones_overview.h:70
 msgid "Net"
-msgstr "Síť"
+msgstr "Spoj"
 
 #: eeschema/sch_label.cpp:1567 eeschema/sch_line.cpp:960
 #: eeschema/sch_rule_area.cpp:401
@@ -32412,11 +32412,13 @@ msgid ""
 "Could not import '%s': a board and a schematic have already been imported "
 "for this project\n"
 msgstr ""
+"Nebolo možné importovať '%s': doska a schéma už boli importované pre tento "
+"projekt\n"
 
 #: kicad/cli/command_import.cpp:204
 #, c-format
 msgid "No board or schematic importer recognizes the file: %s\n"
-msgstr ""
+msgstr "Žiadny importér dosky ani schémy nerozpoznáva súbor: %s\n"
 
 #: kicad/cli/command_import.cpp:214
 #, fuzzy
@@ -32469,11 +32471,17 @@ msgid ""
 "GUI kicad binary for any unresolved conflicts where available, and writes "
 "the merged file."
 msgstr ""
+"Trojcestný ovládač zlúčenia pre 'git mergetool'. Podľa prípony výstupného "
+"súboru rozpozná DPS, schému alebo prvok knižnice, pri nevyriešených "
+"konfliktoch (ak je to možné) otvorí dialóg riešenia konfliktov v GUI "
+"aplikácii KiCad a zapíše zlúčený súbor."
 
 #: kicad/cli/command_mergetool.cpp:89
 msgid ""
 "Common-ancestor file (.kicad_pcb, .kicad_sch, .kicad_sym, or .kicad_mod)"
 msgstr ""
+"Súbor spoločného predchodcu (.kicad_pcb, .kicad_sch, .kicad_sym alebo "
+".kicad_mod)"
 
 #: kicad/cli/command_mergetool.cpp:94
 #, fuzzy
@@ -32487,7 +32495,7 @@ msgstr "Súbor Netlist:"
 
 #: kicad/cli/command_mergetool.cpp:103
 msgid "Output path; extension picks the document type"
-msgstr ""
+msgstr "Výstupná cesta; príponu vyberá typ dokumentu"
 
 #: kicad/cli/command_mergetool.cpp:126
 #, c-format
@@ -32495,10 +32503,12 @@ msgid ""
 "Unsupported output extension '%s'. "
 "Expected .kicad_pcb, .kicad_sch, .kicad_sym, or .kicad_mod\n"
 msgstr ""
+"Nepodporovaná výstupná prípona '%s'. Očakávané prípony .kicad_pcb, "
+".kicad_sch, .kicad_sym alebo .kicad_mod\n"
 
 #: kicad/cli/command_mergetool.cpp:141
 msgid "Cannot find the main kicad binary alongside kicad-cli.\n"
-msgstr ""
+msgstr "Nepodarilo sa nájsť hlavný binárny súbor kicad vedľa kicad-cli\n"
 
 #: kicad/cli/command_mergetool.cpp:166
 #, fuzzy, c-format
@@ -32508,6 +32518,8 @@ msgstr "Nepodarilo sa načítať '%s'."
 #: kicad/cli/command_pcb_diff.cpp:28
 msgid "Diff two .kicad_pcb files and emit JSON, text, PNG, or SVG"
 msgstr ""
+"Porovnať dva súbory .kicad_pcb a vygenerovať rozdiely vo formáte JSON, text, "
+"PNG alebo SVG"
 
 #: kicad/cli/command_pcb_diff.cpp:29
 #, fuzzy
@@ -33248,6 +33260,8 @@ msgid ""
 "JSON file mapping source layer names to KiCad layer names; unmapped layers "
 "use the automatic best-guess"
 msgstr ""
+"Súbor JSON mapujúci názvy zdrojových vrstiev na názvy vrstiev KiCad; "
+"nemapované vrstvy použijú automatický najlepší odhad"
 
 #: kicad/cli/command_pcb_import.cpp:111 kicad/cli/command_sch_import.cpp:89
 #, c-format
@@ -33412,6 +33426,8 @@ msgstr "Schémy"
 #: kicad/cli/command_sch_diff.cpp:28
 msgid "Diff two .kicad_sch files and emit JSON, text, PNG, or SVG"
 msgstr ""
+"Porovnať dva súbory .kicad_sch a vygenerovať rozdiely vo formáte JSON, text, "
+"PNG alebo SVG"
 
 #: kicad/cli/command_sch_diff.cpp:29
 #, fuzzy
@@ -33631,6 +33647,7 @@ msgstr "formát informácií o verzii (plain, commit, about)"
 #, c-format
 msgid "Invalid output format '%s' (expected 'json', 'text', 'png', or 'svg')\n"
 msgstr ""
+"Neplatný výstupný formát '%s' (očakávané 'json', 'text', 'png' alebo 'svg')\n"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
 msgid "Destination:"
@@ -34376,6 +34393,7 @@ msgstr ""
 #: kicad/kicad_manager_frame.cpp:1177
 msgid "Compare Project Branches requires a project that is tracked by git."
 msgstr ""
+"Porovnanie vetiev projektu vyžaduje projekt, ktorý je sledovaný systémom Git."
 
 #: kicad/kicad_manager_frame.cpp:1235
 msgid "Edit File in Text Editor"
@@ -34507,6 +34525,7 @@ msgstr "Odovzdať projekt..."
 #: kicad/menubar.cpp:236
 msgid "Review the file changes between two git refs in the current project"
 msgstr ""
+"Zobraziť zmeny súborov medzi dvoma Git referenciami v aktuálnom projekte"
 
 #: kicad/menubar.cpp:241
 msgid "Edit Local File..."
@@ -34527,6 +34546,8 @@ msgid ""
 "No mergetool handler for output '%s'.\n"
 "Output extension must be .kicad_pcb, .kicad_sch, .kicad_sym, or .kicad_mod."
 msgstr ""
+"Pre výstup '%s' neexistuje mergetool manipulátor.\n"
+"Prípona výstupu musí byť .kicad_pcb, .kicad_sch, .kicad_sym alebo .kicad_mod."
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
@@ -38338,6 +38359,56 @@ msgid ""
 "- IIIa: Standard FR4, CEM-1, Brominated Epoxy (175V <= CTI < 400V)\n"
 "- IIIb: PEEK, PI, PF (100V <= CTI < 175V)\n"
 msgstr ""
+"Cieľom normy IEC 60664-1 je poskytnúť usmernenia pre návrh izolácie výrobkov "
+"pripojených k elektrickej sieti.\n"
+"\n"
+"Táto kalkulačka však nepokrýva nasledujúce prípady:\n"
+"\n"
+"- Pri frekvenciách vyšších ako 30 kHz sa izolačné vlastnosti zhoršujú. Týmto "
+"prípadom sa venuje norma IEC 60664-4.\n"
+"- Ak sa na ochranu pred znečistením používa konformný povlak (conformal "
+"coating) alebo zalievacia hmota (potting) a sú splnené všetky podmienky "
+"normy IEC 60664-3, môžu sa minimálne vzdušné odstupy (clearance) aj "
+"povrchové odstupy (creepage) znížiť. Spájkovacia maska sa zvyčajne "
+"nepovažuje za konformný povlak.\n"
+"- Izolácia prostredníctvom kvapalín, stlačeného vzduchu alebo plynov iných "
+"než vzduch nespadá do rozsahu normy IEC 60664.\n"
+"- Minimálne povrchové odstupy (creepage distance) nemožno stanoviť pri "
+"trvalo vodivom znečistení (stupeň znečistenia PD4).\n"
+"\n"
+"Kategóriu prepätia (OVC) možno určiť nasledovne:\n"
+"\n"
+"- OVC I: Zariadenia pripojené k obvodom, v ktorých sú prijaté opatrenia na "
+"obmedzenie prechodných prepätí na primerane nízku úroveň.\n"
+"- OVC II: Zariadenia pripojené k elektrickej sieti prostredníctvom zásuviek "
+"alebo zástrčiek, napríklad domáce spotrebiče a prenosné náradie.\n"
+"- OVC III: Zariadenia tvoriace súčasť pevnej elektrickej inštalácie, "
+"napríklad vypínače, ističe, rozvádzače, klimatizačné jednotky a trvalo "
+"inštalované priemyselné zariadenia.\n"
+"- OVC IV: Zariadenia inštalované na začiatku elektrickej inštalácie, "
+"napríklad elektromery, primárne ochranné prvky proti nadprúdu alebo "
+"zariadenia pripojené priamo k distribučnej sieti.\n"
+"\n"
+"Stupeň znečistenia (PD) možno určiť nasledovne:\n"
+"\n"
+"- PD1: Utesnené zariadenia alebo zariadenia používané v čistom laboratórnom "
+"prostredí (nevodivé znečistenie).\n"
+"- PD2: Bežné vnútorné komerčné prostredie (nevodivé znečistenie, pričom sa "
+"môže príležitostne vyskytnúť dočasná vodivosť spôsobená kondenzáciou).\n"
+"- PD3: Priemyselné prostredie alebo vlhké priestory (vodivé znečistenie "
+"alebo nevodivé znečistenie, ktoré sa vplyvom očakávanej kondenzácie stáva "
+"vodivým).\n"
+"- PD4: Vonkajšie prostredie alebo nechránené zariadenia (trvalo vodivé "
+"znečistenie).\n"
+"\n"
+"Skupiny izolačných materiálov (Len informatívne. Konečné výpočty si vždy "
+"overte u výrobcu alebo dodávateľa materiálu.)\n"
+"\n"
+"- I: PTFE, PE, PA, PP, PVC, ABS (CTI ≥ 600 V)\n"
+"- II: PBT, PS, nebromovaná epoxidová živica (400 V ≤ CTI < 600 V)\n"
+"- IIIa: Štandardné FR4, CEM-1, bromovaná epoxidová živica (175 V ≤ CTI < 400 "
+"V)\n"
+"- IIIb: PEEK, PI, PF (100 V ≤ CTI < 175 V)\n"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:68
 msgid "KiCad Calculator Tools"
@@ -41809,6 +41880,8 @@ msgid ""
 "Reset the footprint scale to 1 when changing to a different library "
 "footprint. Unchecked: keep the existing scale."
 msgstr ""
+"Pri zmene na iné knižničné puzdro obnoviť mierku puzdra na 1. Nezaškrtnuté: "
+"zachovať existujúcu mierku."
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:150
 msgid "Match pad positions"
@@ -44683,7 +44756,7 @@ msgstr "Typ výplne:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:132
 #: pcbnew/zone.cpp:2112
 msgid "Solid fill"
-msgstr "Pevná výplň"
+msgstr "Plná výplň"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:132
 #: pcbnew/zone.cpp:2113
@@ -44702,12 +44775,12 @@ msgstr "Šírka šrafovania:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:163
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:222
 msgid "Hatch gap:"
-msgstr "Medzera poklopu:"
+msgstr "Rozostup šrafovania:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:174
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:233
 msgid "Smoothing effort:"
-msgstr "Vyhlazovacie úsilie:"
+msgstr "Stupeň vyhladenia:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:176
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:235
@@ -44727,7 +44800,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:186
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:242
 msgid "Smoothing amount:"
-msgstr "Vyrovnávacie množstvo:"
+msgstr "Množstvo vyhladenia:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:188
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:244
@@ -45618,14 +45691,14 @@ msgstr "Možnosti Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:229
 msgid "Use Protel filename extensions"
-msgstr "Použite prípony súborov Protel"
+msgstr "Použiť prípony súborov Protel"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:230
 msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
 msgstr ""
-"Použite rozšírenia Protel Gerber (.GBL, .GTL atď.)\n"
+"Použiť prípony Protel Gerber (.GBL, .GTL atď.)\n"
 "Už sa neodporúča. Oficiálna prípona je .gbr"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:235
@@ -46316,7 +46389,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:71
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:155
 msgid "Outline display:"
-msgstr "Obrysový displej:"
+msgstr "Zobrazenie obrysu:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:86
 msgid "Distance between parallel lines used for hatching the area"
@@ -49050,6 +49123,90 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"### Príklady\n"
+"\n"
+"\n"
+"    (verzia 2)\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # Väčšia izolačná vzdialenosť medzi vodičmi HV\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.hasNetclass('HV') && B.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       # Väčšia izolačná vzdialenosť pre netienené HV vodiče\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.hasNetclass('HV') && !A.enclosedByArea('Shield*')\"))\n"
+"\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       # Širšie tepelné prepojenia\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"    # Celková dĺžka všetkých spojov v reťazci sietí SIG_A\n"
+"    (rule sig_group_length\n"
+"       (constraint net_chain_length (min 40mm) (max 60mm))\n"
+"       (condition \"A.Net.NetChain == 'SIG_A'\") )\n"
+"\n"
+"\n"
+"    # Celkové oneskorenie šírenia signálu vo všetkých spojoch reťazca "
+"CLK_GRP\n"
+"    (rule sig_group_delay\n"
+"       (constraint net_chain_length (min 180ps) (max 220ps) (time_domain "
+"yes))\n"
+"       (condition \"A.Net.NetChain == 'CLK_GRP'\") )\n"
+"\n"
+"\n"
+"    # --- Pravidlá pre reťazce sietí: viacero sietí prechádzajúcich cez "
+"sériové pasívne súčiastky ---\n"
+"\n"
+"\n"
+"    # Rovnaký efekt ako sig_group_length, ale s použitím inNetChain().\n"
+"    (rule \"DDR_DQ chain length\"\n"
+"       (constraint net_chain_length (min 40mm) (max 60mm))\n"
+"       (condition \"A.inNetChain('DDR_DQ*')\") )\n"
+"\n"
+"\n"
+"    # Odbočky z hlavnej vetvy ľubovoľného DDR reťazca nesmú byť dlhšie ako 2 "
+"mm.\n"
+"    (rule \"DDR stub length\"\n"
+"       (constraint stub_length (max 2mm))\n"
+"       (condition \"A.inNetChain('DDR_*')\") )\n"
+"\n"
+"\n"
+"    # Každý reťazec v triede HighSpeed musí mať neprerušenú návratovú cestu "
+"na vrstve B.Cu.\n"
+"    (rule \"HS return path\"\n"
+"       (constraint return_path (layer \"B.Cu\"))\n"
+"       (condition \"A.inNetChainClass('HighSpeed')\") )\n"
+"\n"
+"\n"
+"    # Menšia izolačná vzdialenosť pre všetky siete patriace do reťazca.\n"
+"    (rule \"chain members tighter clearance\"\n"
+"       (constraint clearance (min 0.2mm))\n"
+"       (condition \"A.hasNetChain()\") )\n"
+"<br><br>\n"
+"\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_6notes.h:2
 #, fuzzy
@@ -50191,7 +50348,7 @@ msgstr "Odstupy && Prepojenia plôšok"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:185
 msgid "Display Overrides"
-msgstr "Prepísanie zobrazenia"
+msgstr "Spôsob zobrazenia"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:196
 msgid "Hatched fill"
@@ -50663,7 +50820,7 @@ msgstr "Kontroluje sa pravidlo uplatnenia '%s'."
 
 #: pcbnew/drc/drc_item.cpp:39 pcbnew/zone.cpp:2427
 msgid "Electrical"
-msgstr "Elektrický"
+msgstr "Elektrické"
 
 #: pcbnew/drc/drc_item.cpp:40
 msgid "Design for Manufacturing"
@@ -50895,6 +51052,7 @@ msgstr "Dĺžka spoja mimo rozsahu"
 msgid ""
 "Net chain routed without continuous copper on the required reference layer"
 msgstr ""
+"Reťazenie spoja vedené bez súvislej medi na požadovanej referenčnej vrstve"
 
 #: pcbnew/drc/drc_item.cpp:272
 msgid "Skew between tracks out of range"
@@ -50927,6 +51085,7 @@ msgstr "Plôška s priechodzím otvorom nemá žiadný otvor"
 #: pcbnew/drc/drc_item.cpp:301
 msgid "Footprint with pads is scaled (physical part size unchanged)"
 msgstr ""
+"Puzdro s plôškami je škálované (veľkosť fyzickej súčiastky sa nezmenila)"
 
 #: pcbnew/drc/drc_item.cpp:305
 msgid "Mirrored text on front layer"
@@ -51757,17 +51916,20 @@ msgstr "Kontrolujú sa návrhové obmedzenia dĺžok..."
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:775
 #, c-format
 msgid "Stub length (%s) out of range for net chain '%s'."
-msgstr ""
+msgstr "Dĺžka pahýľa (%s) je mimo rozsahu pre reťazenie spoja '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:818
 #, c-format
 msgid "Stub length (%s) out of range for net chain '%s' on net '%s'."
 msgstr ""
+"Dĺžka pahýľa (%s) je mimo rozsahu pre reťazenie spoja '%s' na spoji '%s'."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:1013
 #, c-format
 msgid "Net chain '%s' has no copper return path on reference layer '%s'."
 msgstr ""
+"Reťazenie spoja '%s' nemá na referenčnej vrstve '%s' žiadnu spätnú cestu z "
+"medi."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:1017
 #, fuzzy, c-format
@@ -52402,6 +52564,8 @@ msgstr "Podmienky"
 #: pcbnew/edit_zone_helpers.cpp:41
 msgid "Edit copper-thieving parameters in the Properties panel."
 msgstr ""
+"Upraviť parametre vyrovnávacieho vyplnenia medenej plochy v paneli "
+"Vlastnosti."
 
 #: pcbnew/edit_zone_helpers.cpp:88
 msgid "Edit Zone Properties"
@@ -53463,7 +53627,7 @@ msgstr "Upraviť ladiaci tvar"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1951
 #, c-format
 msgid "%s | %s"
-msgstr ""
+msgstr "%s | %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2055
 msgid "current skew"
@@ -53982,6 +54146,8 @@ msgstr "Oneskorenie spoja"
 #, c-format
 msgid "Net chain assignment '%s' on net '%s' cleared by netlist update."
 msgstr ""
+"Priradenie reťazenie spoja '%s' na spoji '%s' bolo vymazané aktualizáciou "
+"netlistu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:185
 #, c-format
@@ -55735,19 +55901,19 @@ msgstr "Solidworks PCB súbory"
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:75
 #, c-format
 msgid "Autotrax import, line %d: %s"
-msgstr ""
+msgstr "Autotrax import, riadok %d: %s"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:112
 msgid "insufficient track fields"
-msgstr ""
+msgstr "nedostatočné množstvo polí spoja"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:137
 msgid "insufficient arc fields"
-msgstr ""
+msgstr "nedostatočné množstvo polí oblúka"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:162
 msgid "insufficient via fields"
-msgstr ""
+msgstr "nedostatočné množstvo polí prekovu"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:187
 #, fuzzy
@@ -55756,7 +55922,7 @@ msgstr "Nedostatočné oprávnenia na čítanie súboru '%s'."
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:219
 msgid "insufficient fill fields"
-msgstr ""
+msgstr "nedostatočné množstvo polí výplne"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:243
 #, fuzzy
@@ -55780,7 +55946,7 @@ msgstr "'%s' nie je platné puzdro."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.h:62
 msgid "Protel Autotrax / Easytrax PCB files"
-msgstr ""
+msgstr "Súbory Protel Autotrax / Easytrax PCB"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:94
 msgid ""
@@ -56223,20 +56389,20 @@ msgstr "CADSTAR PCB archívne súbory"
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1070
 #, c-format
 msgid "DipTrace parse error at offset 0x%06zX: %s"
-msgstr ""
+msgstr "Spracovanie DipTrace zlyhalo na offsete 0x%06zX: %s"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1156
 #, c-format
 msgid "DipTrace: invalid magic length %u (expected 7 or 11)"
-msgstr ""
+msgstr "DipTrace: neplatná kontrolná dĺžka %u (očakávaná 7 alebo 11)"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1164
 msgid "DipTrace: not a valid .dip board file (bad magic)"
-msgstr ""
+msgstr "DipTrace: neplatný súbor dosky .dip (zlá kontrolná suma)"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1181
 msgid "DipTrace: invalid legacy board version suffix"
-msgstr ""
+msgstr "DipTrace: neplatná prípona staršej verzie dosky"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1224
 #, fuzzy, c-format
@@ -56251,56 +56417,57 @@ msgstr "Import DipTrace: neplatný počet zberníc %d."
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1363
 #, c-format
 msgid "DipTrace: invalid pattern-name group count %d at offset 0x%06zX"
-msgstr ""
+msgstr "DipTrace: neplatný počet skupín s názvami vzorov %d na offsete 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1376
 #, c-format
 msgid "DipTrace: invalid pattern-name block count %d"
-msgstr ""
+msgstr "DipTrace: neplatný počet blokov s názvami vzoru %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1393
 #, c-format
 msgid "DipTrace: invalid pattern-style group count %d at offset 0x%06zX"
-msgstr ""
+msgstr "DipTrace: neplatný počet skupín so štýlmi vzorov %d na offsete 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1415
 #, c-format
 msgid "DipTrace: invalid pattern-style entry count %d"
-msgstr ""
+msgstr "DipTrace: neplatný počet položiek so štýlmi vzoru %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1435
 #, c-format
 msgid "DipTrace: invalid implicit pattern-style entry count %d"
-msgstr ""
+msgstr "DipTrace: neplatný implicitný počet položiek so štýlom vzoru %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1518
 #, c-format
 msgid "DipTrace: invalid design-rule extra count %d"
-msgstr ""
+msgstr "DipTrace: neplatný dodatočný počet návrhových pravidiel %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1546
 #, c-format
 msgid "DipTrace: invalid ruleset transition marker at 0x%06zX"
-msgstr ""
+msgstr "DipTrace: neplatné označenie prechodu sady pravidiel na 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1864
 msgid "DipTrace: no validated component boundaries found"
-msgstr ""
+msgstr "DipTrace: nenašli sa žiadne overené hranice komponentov"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:2112
 #, c-format
 msgid "DipTrace: invalid component flag byte %u at boundary 0x%06zX"
-msgstr ""
+msgstr "DipTrace: neplatný príznak komponentu %u na hranici 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3342
 #, c-format
 msgid "DipTrace: text object [%d] parse error: %s"
-msgstr ""
+msgstr "DipTrace: chyba spracovania [%d] textového objektu: %s"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3423
 #, c-format
 msgid "DipTrace import: invalid net name for net index %d at offset 0x%06zX."
 msgstr ""
+"Import DipTrace: neplatný názov spoja pre index spoja %d na offsete 0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3710
 #, c-format
@@ -56308,6 +56475,8 @@ msgid ""
 "DipTrace import: invalid route-chain node count %d for net '%s' at offset "
 "0x%06zX."
 msgstr ""
+"Import DipTrace: neplatný počet uzlov spoja %d pre spoj '%s' na offsete "
+"0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3727
 #, c-format
@@ -56315,6 +56484,8 @@ msgid ""
 "DipTrace import: route-chain node count %d for net '%s' overruns record at "
 "offset 0x%06zX."
 msgstr ""
+"Import DipTrace: počet uzlov spoja %d pre spoj '%s' prekročil záznam na "
+"offsete 0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:4452
 #, c-format
@@ -56322,21 +56493,23 @@ msgid ""
 "DipTrace import: invalid copper-pour zone header after font preamble at "
 "offset 0x%06zX."
 msgstr ""
+"Import DipTrace: neplatná hlavička zóny výplne medi za preambulou písma na "
+"offsete 0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:4946
 #, c-format
 msgid "DipTrace: outline traversal aborted after %zu steps (%zu vertices)"
-msgstr ""
+msgstr "DipTrace: obrys prerušený po %zu krokoch (%zu vrcholov)"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:5517
 #, c-format
 msgid "DipTrace: net index %d maps to multiple net names (%s, %s)"
-msgstr ""
+msgstr "DipTrace: index spoja %d je mapovaný na viacero názvov spojov (%s, %s)"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:5525
 #, c-format
 msgid "DipTrace: duplicate net metadata for net index %d"
-msgstr ""
+msgstr "DipTrace: duplicitné metadáta spoja pre spoj s indexom %d"
 
 #: pcbnew/pcb_io/diptrace/pcb_io_diptrace.cpp:116
 #, c-format
@@ -56344,6 +56517,8 @@ msgid ""
 "DipTrace import: could not write design rules to '%s'; imported board is "
 "missing DipTrace-specific clearance rules."
 msgstr ""
+"Import DipTrace: nepodarilo sa zapísať pravidlá návrhu do '%s'; importovanej "
+"doske chýbajú pravidlá pre vyčistenie špecifické pre DipTrace."
 
 #: pcbnew/pcb_io/diptrace/pcb_io_diptrace.h:39
 #, fuzzy
@@ -56414,7 +56589,7 @@ msgstr "Ignorovaný kruh, pretože Eagle vrstva '%s' (%d) nebola zmapovaná"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:133
 msgid "Eagle PCB files (6.x XML and pre-v6 binary)"
-msgstr ""
+msgstr "Súbory Eagle PCB (6.x XML a binárne súbory staršie ako v6)"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:139
 msgid "Eagle ver. 6.x XML library files"
@@ -56995,6 +57170,8 @@ msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"Na nedefinovaných vrstvách (%s) sa našla jedna alebo viacero položiek. Pre "
+"vyriešenie problému otvorte dosku v editore PCB."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1629
 #, c-format
@@ -58558,7 +58735,7 @@ msgstr "Súbor dosky nebol aktualizovaný\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:2952
 #, c-format
 msgid "No PCB importer recognizes the file format of '%s'\n"
-msgstr ""
+msgstr "Žiadny importér PCB nerozpoznáva formát súboru '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3019
 #, c-format
@@ -58566,6 +58743,8 @@ msgid ""
 "Layer map entry '%s' -> '%s' names an unknown KiCad layer; using automatic "
 "mapping instead"
 msgstr ""
+"Položka mapovania vrstiev '%s' -> '%s' pomenúva neznámu vrstvu KiCad; "
+"namiesto toho je použité automatické mapovanie"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3026
 #, c-format
@@ -58573,6 +58752,8 @@ msgid ""
 "Layer map entry '%s' -> '%s' is not a permitted target for this layer; using "
 "automatic mapping instead"
 msgstr ""
+"Položka mapovania vrstiev '%s' -> '%s' nie je povoleným cieľom pre túto "
+"vrstvu; namiesto toho je použité automatické mapovanie"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3041
 #, c-format
@@ -58580,12 +58761,16 @@ msgid ""
 "No KiCad layer mapping for required source layer '%s'; its items will not be "
 "imported"
 msgstr ""
+"Žiadne mapovanie vrstiev KiCad pre požadovanú zdrojovú vrstvu '%s'; jej "
+"položky nebudú importované"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3058
 msgid ""
 "A layer map was provided, but this importer does not support layer "
 "remapping; it will be ignored"
 msgstr ""
+"Bola poskytnutá mapa vrstiev, ale tento importér nepodporuje premapovanie "
+"vrstiev; bude ignorovaná"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3070
 msgid "Failed to load board\n"
@@ -58597,6 +58782,8 @@ msgid ""
 "Layer map entry '%s' does not match any source layer in the imported file; "
 "it will be ignored"
 msgstr ""
+"Položka mapovania vrstiev „%s“ sa nezhoduje so žiadnou zdrojovou vrstvou v "
+"importovanom súbore; bude ignorovaná"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3093
 #, c-format
@@ -58610,7 +58797,7 @@ msgstr "Nepodarilo sa načítať dosku\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3385
 msgid "Merge applier failed to produce a board\n"
-msgstr ""
+msgstr "Aplikátoru zlúčenia sa nepodarilo vytvoriť dosku\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3398
 #, fuzzy, c-format
@@ -58647,6 +58834,8 @@ msgid ""
 "Single-file fp merge produced multiple footprints; refusing to collapse into "
 "one .kicad_mod\n"
 msgstr ""
+"Zlúčenie fp jednoho súboru vytvorilo viacero puzdier; zamieta sa zbaliť ich "
+"do jedného .kicad_mod súboru\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:4089
 #, fuzzy, c-format
@@ -58658,6 +58847,7 @@ msgstr "Nepodarilo sa uložiť súbor knižnice puzdier '%s'."
 msgid ""
 "Footprint library merge completed with %zu unresolved conflict(s) in %s\n"
 msgstr ""
+"Zlúčenie knižnice puzdier dokončené s %zu nevyriešenými konfliktmi v %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:106
 msgid "Multiple Layers"
@@ -59879,7 +60069,7 @@ msgstr "Kontrolujú sa puzdrá dosky voči knižnici..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:2215
 msgid "No local history snapshots change this board."
-msgstr ""
+msgstr "Žiadne snimky z lokálnej histórie túto dosku nemenia."
 
 #: pcbnew/tools/board_inspection_tool.cpp:2428
 msgid "Select a footprint for a footprint associations report."
@@ -59972,23 +60162,23 @@ msgstr "Lokálny súbor"
 #: pcbnew/tools/diff_phase_skew_tool.cpp:1346
 #, c-format
 msgid "Net %s has multiple simulation electrical source pads"
-msgstr ""
+msgstr "Spoj %s má viacero simulačných elektrických zdrojov"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:1350
 #, c-format
 msgid "Differential pair %s / %s is missing start and / or end pads"
-msgstr ""
+msgstr "Diferenciálnemu páru %s / %s chýbajú začiatočné a/alebo koncové plôšky"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:1354
 #: pcbnew/tools/diff_phase_skew_tool.cpp:1358
 #, c-format
 msgid "Net %s is missing electrical simulation source pad"
-msgstr ""
+msgstr "Spoju %s chýba zdrojová plôška elektrickej simulácie"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:1395
 #: pcbnew/tools/diff_phase_skew_tool.cpp:1462
 msgid "Phase skew initial selection failed"
-msgstr ""
+msgstr "Počiatočný výber pre fázový posun zlyhal"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:1410
 #, fuzzy
@@ -60332,7 +60522,7 @@ msgstr "Výber knižnice na prezeranie"
 
 #: pcbnew/tools/footprint_editor_control.cpp:654
 msgid "Choose .pretty Folder to Compare With"
-msgstr ""
+msgstr "Vyberte priečinok .pretty na porovnanie"
 
 #: pcbnew/tools/footprint_editor_control.cpp:667
 #, fuzzy
@@ -60533,6 +60723,10 @@ msgid ""
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
+"Táto cieľová oblasť pravidiel vyberá rovnaké komponenty ako referenčná "
+"oblasť. Opakovanie rozloženia nemôže kopírovať oblasť pravidiel do seba. "
+"Každej oblasti pravidiel umiestnenia priraďte samostatný hárok, triedu "
+"komponentov alebo skupinu."
 
 #: pcbnew/tools/multichannel_tool.cpp:1829
 #, fuzzy, c-format
@@ -60790,13 +60984,12 @@ msgid "Draw Filled Zones"
 msgstr "Kresliť vyplnené zóny"
 
 #: pcbnew/tools/pcb_actions.cpp:347
-#, fuzzy
 msgid "Draw Copper Thieving Zone"
-msgstr "Medená zóna"
+msgstr "Kresliť zónu s vyrovnávacím vyplnením medi"
 
 #: pcbnew/tools/pcb_actions.cpp:348
 msgid "Add a non-electrical thieving zone for plating-balance copper"
-msgstr ""
+msgstr "Pridať neelektrickú vyrovnávaciu medenú zónu pre rovnomerné pokovovanie"
 
 #: pcbnew/tools/pcb_actions.cpp:359
 msgid "Place Vias"
@@ -62118,7 +62311,7 @@ msgstr "Pilník Non-KiCad Board..."
 
 #: pcbnew/tools/pcb_actions.cpp:2268
 msgid "Diff the current PCB against another .kicad_pcb file"
-msgstr ""
+msgstr "Porovnať aktuálnu dosky plošných spojov s iným súborom .kicad_pcb"
 
 #: pcbnew/tools/pcb_actions.cpp:2274
 #, fuzzy
@@ -62128,6 +62321,8 @@ msgstr "Zlučovanie lokálnej histórie..."
 #: pcbnew/tools/pcb_actions.cpp:2275
 msgid "Diff the current PCB against the most recent local-history snapshot"
 msgstr ""
+"Porovnanie aktuálnej dosky plošných spojov s najnovšou snímkou lokálnej "
+"histórie"
 
 #: pcbnew/tools/pcb_actions.cpp:2281
 msgid "Show Footprint Associations"
@@ -62672,7 +62867,7 @@ msgstr "Exportovať puzdro do editora"
 
 #: pcbnew/tools/pcb_actions.cpp:2943 pcbnew/tools/pcb_actions.cpp:2944
 msgid "Show relative skew of diff pair tracks"
-msgstr ""
+msgstr "Zobraziť relatívny rozdiel dĺžok spojov diferenciálneho páru"
 
 #: pcbnew/tools/pcb_control.cpp:153 pcbnew/tools/pcb_control.cpp:183
 msgid "Add Footprint Library"
@@ -62791,6 +62986,7 @@ msgstr "Použiť rozloženie návrhového bloku na %d skupinu (skupín)"
 #: pcbnew/tools/pcb_control.cpp:1774
 msgid "Copied copper has no net assigned. Assign nets to connect it."
 msgstr ""
+"Skopírovaná meď nemá priradený žiadny spoj. Priraďte spoj na jej pripojenie."
 
 #: pcbnew/tools/pcb_control.cpp:1786
 #, c-format
@@ -62826,6 +63022,8 @@ msgstr "Pri načítavaní dosky nastala chyba."
 #, c-format
 msgid "Board changed from %d to %d copper layers, stackup updated."
 msgstr ""
+"Doska sa zmenila z %d na %d medených vrstiev, skladba vrstiev bola "
+"aktualizovaná."
 
 #: pcbnew/tools/pcb_control.cpp:2281
 msgid "Append Board"
@@ -64106,6 +64304,8 @@ msgid ""
 "%d footprint(s) in the selection have pads. Scaling changes the drawn pad "
 "positions but not the physical part. Continue?"
 msgstr ""
+"%d puzdier vo výbere má kontaktné plôšky. Zmena mierky zmení polohy "
+"nakreslených kontaktných plôšok, ale nie fyzickú časť. Pokračovať?"
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:794
 #, fuzzy
@@ -64256,7 +64456,7 @@ msgstr "Rezistivita medi:"
 
 #: pcbnew/zone.cpp:2123
 msgid "Squares"
-msgstr ""
+msgstr "Štvorce"
 
 #: pcbnew/zone.cpp:2269
 msgid "Keepout"
@@ -64292,7 +64492,7 @@ msgstr "Názov zdroja"
 
 #: pcbnew/zone.cpp:2322
 msgid "Hatch Orientation"
-msgstr "Orientácia šrafúry"
+msgstr "Orientácia šrafovania"
 
 #: pcbnew/zone.cpp:2337
 msgid "Cannot be less than zone minimum width"
@@ -64304,7 +64504,7 @@ msgstr "Šírka šrafovania"
 
 #: pcbnew/zone.cpp:2349
 msgid "Hatch Gap"
-msgstr "Medzera šrafúry"
+msgstr "Medzera šrafovania"
 
 #: pcbnew/zone.cpp:2356
 msgid "Hatch Minimum Hole Ratio"
@@ -64325,7 +64525,7 @@ msgstr "Ladiaci tvar"
 
 #: pcbnew/zone.cpp:2381
 msgid "Thieving Element Size"
-msgstr ""
+msgstr "Veľkosť vyrovnávacej medenej plochy"
 
 #: pcbnew/zone.cpp:2391
 #, fuzzy
@@ -64339,7 +64539,7 @@ msgstr "Šírka čiary"
 
 #: pcbnew/zone.cpp:2405
 msgid "Thieving Stagger"
-msgstr ""
+msgstr "Šachovnicové rozmiestnenie"
 
 #: pcbnew/zone.cpp:2410
 #, fuzzy
