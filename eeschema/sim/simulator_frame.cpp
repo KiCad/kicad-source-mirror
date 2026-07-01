@@ -399,6 +399,43 @@ void SIMULATOR_FRAME::ReloadSimulator( const wxString& aSimCommand, unsigned aSi
 }
 
 
+void SIMULATOR_FRAME::destroyTabPlot( SIM_TAB* aSimTab )
+{
+    wxString oldPlotName = aSimTab->GetSpicePlotName();
+
+    if( oldPlotName.IsEmpty() )
+        return;
+
+    // A run may report a plot that another tab still owns (e.g. an FFT deriving from a TRAN plot,
+    // or an aborted run that produced nothing new).  Never destroy such a shared plot; just forget
+    // this tab's reference to it.
+    if( m_ui->IsPlotOwnedByOtherTab( aSimTab, oldPlotName ) )
+    {
+        aSimTab->SetSpicePlotName( wxEmptyString );
+        return;
+    }
+
+    // A noise run produces a pair of plots (odd spectral density noiseN, even integrated noiseN+1).
+    // Destroy both regardless of which of the pair the tab happened to record.
+    long noiseNumber = 0;
+
+    if( oldPlotName.StartsWith( wxS( "noise" ) ) && oldPlotName.Mid( 5 ).ToLong( &noiseNumber ) )
+    {
+        long spectral = ( noiseNumber % 2 == 0 ) ? noiseNumber - 1 : noiseNumber;
+
+        m_simulator->Command( wxString::Format( wxT( "destroy noise%ld" ), spectral ).ToStdString() );
+        m_simulator->Command(
+                wxString::Format( wxT( "destroy noise%ld" ), spectral + 1 ).ToStdString() );
+    }
+    else
+    {
+        m_simulator->Command( "destroy " + oldPlotName.ToStdString() );
+    }
+
+    aSimTab->SetSpicePlotName( wxEmptyString );
+}
+
+
 void SIMULATOR_FRAME::StartSimulation()
 {
     SIM_TAB* simTab = m_ui->GetCurrentSimTab();
@@ -421,6 +458,10 @@ void SIMULATOR_FRAME::StartSimulation()
         }
         else
         {
+            // Free the tab's previous FFT plot before recomputing; destroyTabPlot() leaves the
+            // shared TRAN plot it derives from untouched.
+            destroyTabPlot( simTab );
+
             m_simulator->Command( "setplot " + tranSpicePlot.ToStdString() );
 
             wxArrayString commands = wxSplit( simTab->GetSimCommand(), '\n' );
@@ -466,6 +507,11 @@ void SIMULATOR_FRAME::StartSimulation()
     if( simulatorLock.owns_lock() )
     {
         m_simFinished = false;
+
+        // Free this tab's previous plot only once the rerun is committed, so a failed netlist or
+        // a busy simulator leaves the existing results intact.  Other tabs' plots must survive
+        // (e.g. an FFT consumes a prior TRAN plot).
+        destroyTabPlot( simTab );
 
         m_ui->OnSimUpdate();
         m_simulator->Run();
@@ -855,6 +901,12 @@ void SIMULATOR_FRAME::onUpdateSim( wxCommandEvent& aEvent )
 
     if( simulatorLock.owns_lock() )
     {
+        // Tuner drags and multi-run steps rerun through here without going through
+        // StartSimulation(), so free the prior plot to keep repeated updates from leaking.  A
+        // multi-run step's data is already copied into m_multiRunState before the next step.
+        if( SIM_TAB* simTab = m_ui->GetCurrentSimTab() )
+            destroyTabPlot( simTab );
+
         m_ui->OnSimUpdate();
         m_simulator->Run();
     }

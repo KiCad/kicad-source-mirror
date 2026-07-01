@@ -3540,6 +3540,13 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
         simulator()->Command( "print all" );
     }
 
+    // Non-plottable analyses (op, pz, tf, sens, disto) still create an ngspice plot; record its
+    // name so a rerun can destroy it instead of leaking the vectors.  Plottable tabs already
+    // stored their (possibly noise-adjusted) plot name above.  A shared/stale plot name is caught
+    // when destroying, not here.
+    if( aFinal && !SIM_TAB::IsPlottable( simType ) )
+        simTab->SetSpicePlotName( simulator()->CurrentPlotName() );
+
     if( storeMultiRun )
     {
         m_multiRunState.storePending = false;
