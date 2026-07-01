@@ -36,6 +36,7 @@ class SCH_SCREEN;
 class LIB_SYMBOL;
 class SCH_PIN;
 class SCH_BASE_FRAME;
+class SCH_EDIT_FRAME;
 class DS_PROXY_VIEW_ITEM;
 
 
@@ -108,6 +109,13 @@ public:
     void DisplaySheet( const SCH_SCREEN* aScreen );
     void DisplaySymbol( LIB_SYMBOL* aSymbol );
 
+    /**
+     * Update the drawing sheet proxy's page number and first-page flag from the current
+     * edit frame state. Call this after any operation that may have temporarily modified
+     * screen page numbers (e.g., save) to ensure the drawing sheet renders correctly.
+     */
+    void RefreshDrawingSheetPageInfo();
+
     void SetScale( double aScale, VECTOR2D aAnchor = { 0, 0 } ) override;
 
     /**
@@ -124,6 +132,13 @@ private:
                                 // to know the sheet path name when drawing the drawing sheet
 
     std::unique_ptr<DS_PROXY_VIEW_ITEM> m_drawingSheet;
+
+    /**
+     * Set the drawing-sheet proxy's page number, count and title-block fields from the frame's
+     * current sheet. The first-page flag is taken from the current sheet path rather than the
+     * screen because save temporarily overwrites screen page numbers for serialization.
+     */
+    void syncDrawingSheetToCurrentSheet( SCH_EDIT_FRAME* aFrame );
 };
 
 }; // namespace

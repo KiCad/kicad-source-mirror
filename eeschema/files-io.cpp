@@ -54,6 +54,7 @@
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
+#include <sch_draw_panel.h>
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <sch_file_versions.h>
 #include <sch_line.h>
@@ -1469,6 +1470,21 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
         if( !GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
             SetStatusText( backupReporter.GetMessages(), 0 );
+    }
+
+    // Restore the virtual page numbers that were modified during save. When saving, screens are
+    // assigned page number 1 (single use) or 0 (multiple uses) for serialization purposes.
+    // We restore all screens here, not just the current one, because other code paths (e.g.
+    // ERC tree model, temporary sheet switches) may read any screen's virtual page number.
+    for( const SCH_SHEET_PATH& sheet : Schematic().Hierarchy() )
+        sheet.LastScreen()->SetVirtualPageNumber( sheet.GetVirtualPageNumber() );
+
+    SetSheetNumberAndCount();
+
+    if( GetCanvas() && GetCanvas()->GetView() )
+    {
+        GetCanvas()->GetView()->RefreshDrawingSheetPageInfo();
+        GetCanvas()->Refresh();
     }
 
     updateTitle();
