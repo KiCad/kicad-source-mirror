@@ -185,6 +185,11 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
 
     sheetList.AnnotatePowerSymbols();
 
+    if( sheetList.AllSheetPageNumbersEmpty() )
+        sheetList.SetInitialPageNumbers();
+    else
+        sheetList.RepairPageNumbers();
+
     schematic->ConnectionGraph()->Reset();
 
     TOOL_MANAGER* toolManager = new TOOL_MANAGER;

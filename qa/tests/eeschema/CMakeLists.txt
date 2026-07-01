@@ -104,6 +104,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24072_symbol_arc_edit_mode.cpp
     test_issue24290_local_labels_across_top_sheets.cpp
     test_issue24409_cli_hierarchical_instances.cpp
+    test_issue24760_plot_page_numbers.cpp
     test_issue24663_sheet_dnp_fields.cpp
     test_issue24360_root_sheetname.cpp
     test_issue24217_cli_variant_export.cpp

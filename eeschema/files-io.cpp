@@ -441,11 +441,19 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // update some of the needed schematic settings such as drawing defaults
         LoadProjectSettings();
 
-        // It's possible the schematic parser fixed errors due to bugs so warn the user
-        // that the schematic has been fixed (modified).
         SCH_SHEET_LIST sheetList = Schematic().Hierarchy();
 
-        if( sheetList.IsModified() )
+        bool repairedPageNumbers = false;
+
+        if( sheetList.AllSheetPageNumbersEmpty() )
+            sheetList.SetInitialPageNumbers();
+        else
+            repairedPageNumbers = sheetList.RepairPageNumbers();
+
+        // It's possible the schematic parser fixed errors due to bugs, or that we reassigned
+        // duplicate or blank sheet page numbers, so warn the user that the schematic has been
+        // fixed (modified).
+        if( sheetList.IsModified() || repairedPageNumbers )
         {
             DisplayInfoMessage( this,
                                 _( "An error was found when loading the schematic that has "
@@ -453,9 +461,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                                    "repair the broken file or it may not be usable with other "
                                    "versions of KiCad." ) );
         }
-
-        if( sheetList.AllSheetPageNumbersEmpty() )
-            sheetList.SetInitialPageNumbers();
 
         UpdateFileHistory( fullFileName );
 
@@ -736,6 +741,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         Schematic().ConnectionGraph()->Reset();
 
         SetScreen( GetCurrentSheet().LastScreen() );
+
+        // Repaired page numbers changed in-memory sheet instances; flag the schematic so the
+        // fixed numbering can be saved instead of silently reverting on the next load.
+        if( repairedPageNumbers )
+            OnModify();
 
         wxLogTrace( traceSchCurrentSheet,
                    "After SetScreen: Current sheet path='%s', size=%zu",

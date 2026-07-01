@@ -800,6 +800,18 @@ public:
     void SetInitialPageNumbers();
 
     /**
+     * Assign valid page numbers to sheet paths whose stored page number is missing or collides
+     * with an earlier sheet.
+     *
+     * Existing, unique numeric page numbers and any non-numeric page numbers are preserved so
+     * user-chosen numbering is respected.  Blank sheets and the second and subsequent sheets
+     * sharing a number are reassigned to the next unused positive integer.
+     *
+     * @return true if any page number was changed.
+     */
+    bool RepairPageNumbers();
+
+    /**
      * Attempt to add new symbol instances for all symbols in this list of sheet paths prefixed
      * with \a aPrefixSheetPath.
      *

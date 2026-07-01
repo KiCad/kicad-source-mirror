@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <set>
+
 #include <refdes_utils.h>
 #include <hash.h>
 #include <sch_screen.h>
@@ -1665,6 +1667,60 @@ void SCH_SHEET_LIST::SetInitialPageNumbers()
         instance.SetPageNumber( tmp );
         pageNumber += 1;
     }
+}
+
+
+bool SCH_SHEET_LIST::RepairPageNumbers()
+{
+    // A page number is claimed by the first sheet in the list that uses it.  Any sheet with an
+    // empty page number, or one repeating a number an earlier sheet already claimed, is reassigned
+    // to the lowest unused positive integer.  The stored string is compared as-is, so custom
+    // schemes (e.g. "A", "1.1") are preserved when unique.  Every distinct existing page number is
+    // reserved up front so a reassignment never steals a number a later, non-conflicting sheet
+    // already holds.
+    std::set<wxString> reservedPageIds;
+
+    for( const SCH_SHEET_PATH& instance : *this )
+    {
+        if( instance.Last()->IsVirtualRootSheet() )
+            continue;
+
+        const wxString pageNumber = instance.GetPageNumber();
+
+        if( !pageNumber.IsEmpty() )
+            reservedPageIds.insert( pageNumber );
+    }
+
+    std::set<wxString> assignedPageIds;
+    bool               modified = false;
+    long               nextPage = 1;
+
+    for( SCH_SHEET_PATH& instance : *this )
+    {
+        if( instance.Last()->IsVirtualRootSheet() )
+            continue;
+
+        const wxString pageNumber = instance.GetPageNumber();
+
+        // Keep the first sheet to claim a given page number.
+        if( !pageNumber.IsEmpty() && assignedPageIds.insert( pageNumber ).second )
+            continue;
+
+        wxString pageStr = wxString::Format( wxT( "%ld" ), nextPage );
+
+        while( reservedPageIds.count( pageStr ) || assignedPageIds.count( pageStr ) )
+        {
+            nextPage++;
+            pageStr = wxString::Format( wxT( "%ld" ), nextPage );
+        }
+
+        instance.SetPageNumber( pageStr );
+        assignedPageIds.insert( pageStr );
+        nextPage++;
+        modified = true;
+    }
+
+    return modified;
 }
 
 
