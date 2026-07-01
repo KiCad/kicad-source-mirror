@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-30 23:01+0000\n"
+"PO-Revision-Date: 2026-07-02 00:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -3132,42 +3132,39 @@ msgid "Status"
 msgstr "Stav"
 
 #: common/dialogs/dialog_git_mr_review.cpp:49
-#, fuzzy
 msgid "Old Path"
-msgstr "Nájsť ďalšie"
+msgstr "Stará cesta"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
-#, fuzzy
 msgid "No git repository available."
-msgstr "Nie je k dispozícii žiadny repozitár"
+msgstr "Nie je k dispozícii žiadny git repozitár."
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 #: common/dialogs/dialog_git_mr_review.cpp:103
 #: common/dialogs/dialog_git_mr_review.cpp:119
 #: common/dialogs/dialog_git_mr_review_base.h:58
 #: kicad/kicad_manager_frame.cpp:1179
-#, fuzzy
 msgid "Compare Branches"
-msgstr "Odstupy"
+msgstr "Porovnať vetvy"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
 msgstr "Vybrať základnú a HEAD referenciu na porovnanie."
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve ref '%s' to a commit or tree."
-msgstr "Nepodarilo sa vyhľadať cieľový commit"
+msgstr ""
+"Nebolo možné preložiť referenciu '%s' na commit alebo stromovú štruktúru."
 
 #: common/dialogs/dialog_git_mr_review.cpp:133
-#, fuzzy
 msgid "No changes between selected refs."
-msgstr "Odrezať rohy medzi vybranými čiarami"
+msgstr "Žiadna zmena medzi vybranými referenciami."
 
 #: common/dialogs/dialog_git_mr_review.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "No diff handler for '%s'."
-msgstr "potrebujete číslo pre '%s'"
+msgstr "Žiaden rozdielový manipulátor pre '%s'."
 
 #: common/dialogs/dialog_git_mr_review.cpp:252
 #: common/dialogs/dialog_git_mr_review.cpp:281
@@ -3176,42 +3173,36 @@ msgstr "potrebujete číslo pre '%s'"
 #: common/dialogs/dialog_git_mr_review.cpp:359
 #: common/dialogs/dialog_git_mr_review.cpp:373
 #: common/dialogs/dialog_git_mr_review.cpp:389
-#, fuzzy
 msgid "Compare File"
-msgstr "Kompatibilní"
+msgstr "Porovnať súbor"
 
 #: common/dialogs/dialog_git_mr_review.cpp:281
-#, fuzzy
 msgid "Could not create a temporary directory."
-msgstr "Nepodarilo sa vytvoriť dočasný výstupný adresár."
+msgstr "Nebolo možné vytvoriť dočasný výstupný adresár."
 
 #: common/dialogs/dialog_git_mr_review.cpp:322
 #: common/dialogs/dialog_git_mr_review.cpp:337
 #: common/dialogs/dialog_git_mr_review.cpp:357
 #: common/dialogs/dialog_git_mr_review.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Could not extract %s from %s."
-msgstr "Obrázok sa nepodarilo načítať z '%s'."
+msgstr "Nebolo možné extrahovať %s z %s."
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:25
-#, fuzzy
 msgid "Base ref:"
-msgstr "Základný názov"
+msgstr "Základná referencia:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:32
-#, fuzzy
 msgid "Head ref:"
-msgstr "Ohraničenie hlavičky"
+msgstr "Referencia Head:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
-#, fuzzy
 msgid "Compare"
-msgstr "Spoločnosť:"
+msgstr "Porovnať"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:48
-#, fuzzy
 msgid "Changed files (double-click to open):"
-msgstr "Príkaz (upraviť dvojitým kliknutím)"
+msgstr "Zmenené súbory (otvorenie dvojitým kliknutím):"
 
 #: common/dialogs/dialog_grid_settings.cpp:81
 msgid "Grid size X out of range."
@@ -3429,9 +3420,8 @@ msgid "After"
 msgstr "Potom"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
-#, fuzzy
 msgid "Filter changes…"
-msgstr "Filtrovať spoje"
+msgstr "Filtrovať zmeny…"
 
 #: common/dialogs/dialog_kicad_diff.cpp:122
 #: common/diff_merge/diff_tree_grouping.cpp:37
@@ -3440,9 +3430,8 @@ msgstr "Pridané"
 
 #: common/dialogs/dialog_kicad_diff.cpp:123
 #: common/diff_merge/diff_tree_grouping.cpp:38
-#, fuzzy
 msgid "Removed"
-msgstr "Odstrániť"
+msgstr "Odstránené"
 
 #: common/dialogs/dialog_kicad_diff.cpp:124
 #: common/dialogs/git/dialog_git_commit.cpp:103
@@ -3451,9 +3440,8 @@ msgid "Modified"
 msgstr "Upravené"
 
 #: common/dialogs/dialog_kicad_diff.cpp:125
-#, fuzzy
 msgid "Conflict"
-msgstr "Konflikty"
+msgstr "Konflikt"
 
 #: common/dialogs/dialog_kicad_diff.cpp:143
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:24
@@ -3471,30 +3459,26 @@ msgstr "Vlastnosti"
 
 #: common/dialogs/dialog_kicad_diff.cpp:210
 #: common/dialogs/dialog_kicad_diff.cpp:514
-#, fuzzy
 msgid "No differences detected."
-msgstr "Nezistili sa žiadne relevantné rozdiely."
+msgstr "Nezistili sa žiadne rozdiely."
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "%zu change(s) detected."
-msgstr "Žiadne spoje nie sú vybrané."
+msgstr "%zu zistených zmien."
 
 #: common/dialogs/dialog_kicad_diff.cpp:334
-#, fuzzy
 msgid "Show Change"
-msgstr "Zmeniť"
+msgstr "Zobraziť zmenu"
 
 #: common/dialogs/dialog_kicad_diff.cpp:336
-#, fuzzy
 msgid "Hide Change"
-msgstr "Zostaviť zmeny"
+msgstr "Skryť zmenu"
 
 #: common/dialogs/dialog_kicad_diff.cpp:338
-#, fuzzy
 msgid "Show All Hidden"
-msgstr "Zobraziť všetky spoje"
+msgstr "Zobraziť všetko skryté"
 
 #: common/dialogs/dialog_kicad_diff.cpp:414
 #: common/dialogs/dialog_page_settings_base.cpp:240
@@ -3502,9 +3486,8 @@ msgid "Revision:"
 msgstr "Revízia:"
 
 #: common/dialogs/dialog_kicad_diff.cpp:425
-#, fuzzy
 msgid "Older"
-msgstr "Priečinok"
+msgstr "Staršie"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
@@ -19631,7 +19614,7 @@ msgstr "Veľkosť symbolu vývodu:"
 #: eeschema/erc/erc_item.cpp:37
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:977
 msgid "Connections"
-msgstr "Spojenia"
+msgstr "Pripojenie"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:136
 msgid "Junction dot size:"
@@ -21594,7 +21577,7 @@ msgstr "Kresby do schránky"
 #: eeschema/menubar.cpp:114 pcbnew/menubar_pcb_editor.cpp:120
 #: pcbnew/pcb_edit_frame.cpp:237
 msgid "Netlist..."
-msgstr "Zoznam sietí..."
+msgstr "Netlist..."
 
 #: eeschema/menubar.cpp:115
 msgid "Symbols..."
@@ -33893,7 +33876,7 @@ msgstr "Popis úlohy"
 #: kicad/dialogs/panel_jobset.cpp:73
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:85 pcbnew/pad.cpp:3705
 msgid "Source"
-msgstr "Zdroj"
+msgstr "Prúdový výstup (source)"
 
 #: kicad/dialogs/panel_jobset.cpp:156
 msgid "No output messages"
@@ -34773,7 +34756,7 @@ msgstr "Autor"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:294
 msgid "Maintainer"
-msgstr "Správce"
+msgstr "Správca"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:298
 msgid "Resources"
@@ -40481,7 +40464,7 @@ msgstr "Vrstvy editora dosky"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:116
 msgid "Physical Stackup"
-msgstr "Fyzická štruktúra"
+msgstr "Fyzická skladba vrstiev"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
 msgid "Board Finish"
@@ -44318,7 +44301,7 @@ msgstr "Zrušiť výber všetkých"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:51
 msgid "Board layers and physical stackup"
-msgstr "Vrstvy dosky a fyzická štruktúra vrstiev"
+msgstr "Vrstvy dosky a fyzická skladba vrstiev"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 msgid "Solder mask/paste defaults"
@@ -45033,15 +45016,16 @@ msgid "Net name:"
 msgstr "Názov spoja:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:81
-#, fuzzy
 msgid ""
 "Simulation\n"
 "Electrical type:"
-msgstr "Elektrický typ:"
+msgstr ""
+"Elektrický typ\n"
+"simulácie:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:85 pcbnew/pad.cpp:3706
 msgid "Sink"
-msgstr ""
+msgstr "Prúdový vstup (sink)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:102
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:288
@@ -48012,7 +47996,7 @@ msgstr "Táto vrstva je povinná a nemôže byť zakázaná"
 #: pcbnew/dialogs/panel_setup_layers.cpp:139
 #: pcbnew/dialogs/panel_setup_layers.cpp:345
 msgid "Off-board, testing"
-msgstr "Mimo plavby, testovanie"
+msgstr "Mimo dosky, testovanie"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:149
 msgid "If you want a fabrication layer for the front side of the board"
@@ -48129,7 +48113,7 @@ msgstr "Mimo dosky, predná strana"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:535
 msgid "Off-board, back"
-msgstr "Mimo dosky, zadný"
+msgstr "Mimo dosky, zadná strana"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:541
 msgid ""
@@ -54699,7 +54683,7 @@ msgstr "Odstránený variant '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2473
 msgid "Update Netlist"
-msgstr "Aktualizovať zoznam sietí"
+msgstr "Aktualizovať netlist"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2613
 #, c-format
@@ -55046,9 +55030,8 @@ msgid "Pad Number"
 msgstr "Číslo plôšky"
 
 #: pcbnew/pad.cpp:3836
-#, fuzzy
 msgid "Simulation Electrical Type"
-msgstr "Zobraziť typy elektrických pinov"
+msgstr "Elektrický typ simulácie"
 
 #: pcbnew/pad.cpp:3878
 msgid "Corner Radius Ratio"
@@ -55307,7 +55290,7 @@ msgstr "KiCad Editor DPS"
 
 #: pcbnew/pcb_edit_frame.cpp:238
 msgid "Export netlist used to update schematics"
-msgstr "Exportovať zoznam sietí použitý na aktualizáciu schém"
+msgstr "Exportovať netlist použitý na aktualizáciu schém"
 
 #: pcbnew/pcb_edit_frame.cpp:539
 msgid "New PCB file is unsaved"
@@ -59473,7 +59456,7 @@ msgstr "Exportovať zoznam spojov dosky"
 
 #: pcbnew/tools/board_editor_control.cpp:672
 msgid "KiCad board netlist files"
-msgstr "KiCad netlist súbory dosky"
+msgstr "Súbory netlistu dosky KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:734
 #, c-format
@@ -60989,7 +60972,9 @@ msgstr "Kresliť zónu s vyrovnávacím vyplnením medi"
 
 #: pcbnew/tools/pcb_actions.cpp:348
 msgid "Add a non-electrical thieving zone for plating-balance copper"
-msgstr "Pridať neelektrickú vyrovnávaciu medenú zónu pre rovnomerné pokovovanie"
+msgstr ""
+"Pridať neelektrickú zónu vyrovnávacieho vyplnenia na vyváženie rovnomernosti "
+"pokovovania plôch"
 
 #: pcbnew/tools/pcb_actions.cpp:359
 msgid "Place Vias"
@@ -61682,7 +61667,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1287
 msgid "Import Netlist..."
-msgstr "Importovať zoznam sietí..."
+msgstr "Importovať netlist..."
 
 #: pcbnew/tools/pcb_actions.cpp:1288
 msgid "Read netlist and update board connectivity"
@@ -64450,9 +64435,8 @@ msgid "Zone '%s' %s %s, priority %d"
 msgstr "Zóna '%s' %s %s, priorita %d"
 
 #: pcbnew/zone.cpp:2114
-#, fuzzy
 msgid "Copper thieving"
-msgstr "Rezistivita medi:"
+msgstr "Medené vyrovnávacie vyplnenie"
 
 #: pcbnew/zone.cpp:2123
 msgid "Squares"
@@ -64519,32 +64503,28 @@ msgid "Smoothing Amount"
 msgstr "Miera vyhladzovania"
 
 #: pcbnew/zone.cpp:2376
-#, fuzzy
 msgid "Thieving Pattern"
-msgstr "Ladiaci tvar"
+msgstr "Vzor vyr. vyplnenia"
 
 #: pcbnew/zone.cpp:2381
 msgid "Thieving Element Size"
-msgstr "Veľkosť vyrovnávacej medenej plochy"
+msgstr "Veľkosť vzoru"
 
 #: pcbnew/zone.cpp:2391
-#, fuzzy
 msgid "Thieving Gap"
-msgstr "Tepelná medzera"
+msgstr "Medzera vzoru"
 
 #: pcbnew/zone.cpp:2397
-#, fuzzy
 msgid "Thieving Line Width"
-msgstr "Šírka čiary"
+msgstr "Šírka čiary vyplnenia"
 
 #: pcbnew/zone.cpp:2405
 msgid "Thieving Stagger"
 msgstr "Šachovnicové rozmiestnenie"
 
 #: pcbnew/zone.cpp:2410
-#, fuzzy
 msgid "Thieving Orientation"
-msgstr "Orientácia textu"
+msgstr "Orientácia vzoru"
 
 #: pcbnew/zone.cpp:2416
 msgid "Remove Islands"
