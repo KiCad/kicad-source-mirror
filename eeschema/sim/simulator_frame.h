@@ -212,6 +212,9 @@ private:
 
     void showNetlistErrors( const WX_STRING_REPORTER& aReporter );
 
+    /// Free a tab's previous ngspice plot (and its noise companion) so reruns don't leak.
+    void destroyTabPlot( SIM_TAB* aSimTab );
+
     bool canCloseWindow( wxCloseEvent& aEvent ) override;
     void doCloseWindow() override;
 
