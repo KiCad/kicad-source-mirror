@@ -136,7 +136,6 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     m_drawingSheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );
     m_drawingSheet->SetColorLayer( LAYER_SCHEMATIC_DRAWINGSHEET );
     m_drawingSheet->SetPageBorderColorLayer( LAYER_SCHEMATIC_PAGE_LIMITS );
-    m_drawingSheet->SetIsFirstPage( aScreen->GetVirtualPageNumber() == 1 );
 
     wxString currentVariant = aScreen->Schematic()->GetCurrentVariant();
     wxString variantDesc = aScreen->Schematic()->GetVariantDescription( currentVariant );
@@ -149,11 +148,15 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
 
         wxCHECK( editFrame, /* void */ );
 
-        m_drawingSheet->SetSheetName( TO_UTF8( editFrame->GetScreenDesc() ) );
-        m_drawingSheet->SetSheetPath( TO_UTF8( editFrame->GetFullScreenDesc() ) );
+        // The title block metadata (sheet name/path, first-page flag) is derived from the
+        // current sheet, so the screen being displayed must be the current sheet's screen.
+        wxCHECK( editFrame->GetCurrentSheet().LastScreen() == aScreen, /* void */ );
+
+        syncDrawingSheetToCurrentSheet( editFrame );
     }
     else
     {
+        m_drawingSheet->SetIsFirstPage( aScreen->GetVirtualPageNumber() == 1 );
         m_drawingSheet->SetSheetName( "" );
         m_drawingSheet->SetSheetPath( "" );
     }
@@ -207,6 +210,43 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     // Allow tools to add anything they require to the view (such as the selection VIEW_GROUP)
     if( m_frame && m_frame->GetToolManager() )
         m_frame->GetToolManager()->ResetTools( TOOL_BASE::REDRAW );
+}
+
+
+void SCH_VIEW::syncDrawingSheetToCurrentSheet( SCH_EDIT_FRAME* aFrame )
+{
+    SCH_SCREEN* screen = aFrame->GetScreen();
+
+    wxCHECK( screen, /* void */ );
+
+    m_drawingSheet->SetPageNumber( TO_UTF8( screen->GetPageNumber() ) );
+    m_drawingSheet->SetSheetCount( screen->GetPageCount() );
+    m_drawingSheet->SetFileName( TO_UTF8( screen->GetFileName() ) );
+
+    // Use the sheet path's virtual page number rather than the screen's, because the screen's
+    // value can be stale after operations like save that temporarily overwrite all screen page
+    // numbers for serialization.
+    m_drawingSheet->SetIsFirstPage( aFrame->GetCurrentSheet().GetVirtualPageNumber() == 1 );
+    m_drawingSheet->SetSheetName( TO_UTF8( aFrame->GetScreenDesc() ) );
+    m_drawingSheet->SetSheetPath( TO_UTF8( aFrame->GetFullScreenDesc() ) );
+}
+
+
+void SCH_VIEW::RefreshDrawingSheetPageInfo()
+{
+    if( !m_drawingSheet )
+        return;
+
+    if( m_frame && m_frame->IsType( FRAME_SCH ) )
+    {
+        SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+        if( !editFrame )
+            return;
+
+        syncDrawingSheetToCurrentSheet( editFrame );
+        Update( m_drawingSheet.get(), KIGFX::REPAINT );
+    }
 }
 
 

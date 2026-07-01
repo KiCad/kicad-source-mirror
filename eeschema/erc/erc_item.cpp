@@ -379,12 +379,15 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
 
                 if( aSheet != curSheet )
                 {
-                    schEditFrame->SetCurrentSheet( aSheet );
+                    // Use the schematic-level setter to avoid the view side effects of
+                    // SCH_EDIT_FRAME::SetCurrentSheet, which recreates the drawing sheet
+                    // proxy with potentially stale page number state.
+                    schEditFrame->Schematic().SetCurrentSheet( aSheet );
                     aSheet.UpdateAllScreenReferences();
                     {
                         desc = aCurrItem->GetItemDescription( m_editFrame, true );
                     }
-                    schEditFrame->SetCurrentSheet( curSheet );
+                    schEditFrame->Schematic().SetCurrentSheet( curSheet );
                     curSheet.UpdateAllScreenReferences();
                 }
                 else

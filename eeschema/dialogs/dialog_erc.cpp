@@ -580,6 +580,7 @@ void DIALOG_ERC::redrawDrawPanel()
 {
     WINDOW_THAWER thawer( m_parent );
 
+    m_parent->GetCanvas()->GetView()->RefreshDrawingSheetPageInfo();
     m_parent->GetCanvas()->Refresh();
 }
 

@@ -1096,6 +1096,7 @@ void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
                    aSheet.size() );
 
         Schematic().SetCurrentSheet( aSheet );
+        SetSheetNumberAndCount();
         GetCanvas()->DisplaySheet( aSheet.LastScreen() );
     }
 }
@@ -2132,6 +2133,12 @@ void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
         m_toolManager->RunAction( ACTIONS::selectionClear );
 
     SCH_BASE_FRAME::SetScreen( aScreen );
+
+    // SetSheetNumberAndCount() dereferences the current sheet's screen, which is absent on the
+    // unload paths that pass a null screen.
+    if( aScreen )
+        SetSheetNumberAndCount();
+
     GetCanvas()->DisplaySheet( static_cast<SCH_SCREEN*>( aScreen ) );
 
     if( m_toolManager )
