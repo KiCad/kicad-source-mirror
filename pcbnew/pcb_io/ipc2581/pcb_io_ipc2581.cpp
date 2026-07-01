@@ -3633,7 +3633,10 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
                 }
                 else
                 {
-                    elements[aTrack->GetLayer()][aTrack->GetNetCode()].push_back( aTrack );
+                    // A track with exposed copper also occupies the mask layer, so distribute
+                    // it across its full layer set the same way pads and zones are handled.
+                    for( PCB_LAYER_ID layer : aTrack->GetLayerSet().Seq() )
+                        elements[layer][aTrack->GetNetCode()].push_back( aTrack );
                 }
             } );
 
@@ -3648,10 +3651,16 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
 
     for( BOARD_ITEM* item : m_board->Drawings() )
     {
+        int netcode = 0;
+
         if( BOARD_CONNECTED_ITEM* conn_it = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
-            elements[conn_it->GetLayer()][conn_it->GetNetCode()].push_back( conn_it );
-        else
-            elements[item->GetLayer()][0].push_back( item );
+            netcode = conn_it->GetNetCode();
+
+        // A graphic item can belong to several layers at once (e.g. a copper shape that also
+        // opens the solder mask), so distribute it across its whole layer set rather than
+        // only its primary layer.
+        for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+            elements[layer][netcode].push_back( item );
     }
 
     for( FOOTPRINT* fp : m_board->Footprints() )
@@ -3866,12 +3875,26 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
     auto add_track =
             [&]( PCB_TRACK* track )
             {
+                // The mask-layer copy of an exposed track includes the solder mask expansion,
+                // matching the plotted artwork.  Note that vias must not take this path:
+                // PCB_VIA::GetWidth() requires a layer argument.
+                auto maskAdjustedWidth =
+                        [&]( const PCB_TRACK* aTrack )
+                        {
+                            int width = aTrack->GetWidth();
+
+                            if( IsSolderMaskLayer( aLayer ) )
+                                width += 2 * aTrack->GetSolderMaskExpansion();
+
+                            return width;
+                        };
+
                 if( track->Type() == PCB_TRACE_T )
                 {
                     PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
                     shape.SetStart( track->GetStart() );
                     shape.SetEnd( track->GetEnd() );
-                    shape.SetWidth( track->GetWidth() );
+                    shape.SetWidth( maskAdjustedWidth( track ) );
                     addShape( specialNode, shape );
                 }
                 else if( track->Type() == PCB_ARC_T )
@@ -3879,7 +3902,7 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                     PCB_ARC* arc = static_cast<PCB_ARC*>( track );
                     PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
                     shape.SetArcGeometry( arc->GetStart(), arc->GetMid(), arc->GetEnd() );
-                    shape.SetWidth( arc->GetWidth() );
+                    shape.SetWidth( maskAdjustedWidth( arc ) );
                     addShape( specialNode, shape );
                 }
                 else
@@ -3962,6 +3985,19 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
     auto add_shape =
             [&] ( PCB_SHAPE* shape )
             {
+                std::optional<PCB_SHAPE> maskShape;
+
+                if( IsSolderMaskLayer( aLayer ) && shape->HasSolderMask()
+                    && IsExternalCopperLayer( shape->GetLayer() ) )
+                {
+                    // The mask-layer copy of an exposed copper shape grows its stroke width
+                    // by the solder mask expansion, matching BRDITEMS_PLOTTER::PlotShape().
+                    maskShape.emplace( *shape );
+                    maskShape->SetWidth(
+                            std::max( shape->GetWidth() + 2 * shape->GetSolderMaskExpansion(), 0 ) );
+                    shape = &maskShape.value();
+                }
+
                 FOOTPRINT* fp = shape->GetParentFootprint();
 
                 if( fp )
@@ -3990,7 +4026,9 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                 {
                     wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
 
-                    if( shape->GetNetCode() > 0 )
+                    // The net only belongs on the copper feature; the mask copy of a netted
+                    // copper shape must not carry a net attribute.
+                    if( shape->GetNetCode() > 0 && IsCopperLayer( aLayer ) )
                         addAttribute( tempSetNode,  "net", genString( shape->GetNetname(), "NET" ) );
 
                     wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
