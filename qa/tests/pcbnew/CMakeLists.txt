@@ -90,6 +90,7 @@ set( QA_PCBNEW_SRCS
     test_teardrop_uuid.cpp
     test_tracks_cleaner.cpp
     test_triangulation.cpp
+    test_tuning_pattern_layer.cpp
     test_multichannel.cpp
     test_variant.cpp
     test_zone.cpp

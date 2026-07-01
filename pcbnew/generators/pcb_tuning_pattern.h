@@ -515,7 +515,7 @@ protected:
         std::swap( *this, *static_cast<PCB_TUNING_PATTERN*>( aImage ) );
     }
 
-    bool recoverBaseline( PNS::ROUTER* aRouter );
+    bool recoverBaseline( PNS::ROUTER* aRouter, int aPNSLayer );
 
     bool baselineValid();
 
