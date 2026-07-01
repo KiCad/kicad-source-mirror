@@ -494,22 +494,68 @@ void PROPERTIES_PANEL::onShow( wxShowEvent& aEvent )
 
 void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
 {
-    // m_grid->IsAnyModified() doesn't work for the first modification
-    if( aEvent.GetKeyCode() == WXK_TAB && !aEvent.ShiftDown() )
+    if( aEvent.GetKeyCode() == WXK_TAB
+        && ( aEvent.GetModifiers() == wxMOD_NONE || aEvent.GetModifiers() == wxMOD_SHIFT ) )
     {
-        wxVariant oldValue;
-
-        if( wxPGProperty* prop = m_grid->GetSelectedProperty() )
-            oldValue = prop->GetValue();
-
+        // wxPropertyGrid hard-codes Tab to focus the current editor and then navigate out of
+        // the grid, so it never steps between properties.  Intercept Tab here to commit any
+        // pending edit and move selection to the next (or previous, with Shift) editable
+        // property, wrapping around at the ends.
         m_grid->CommitChangesFromEditor();
 
-        // If there was no change, treat it as a navigation key
-        if( wxPGProperty* prop = m_grid->GetSelectedProperty() )
+        const bool forward = !aEvent.ShiftDown();
+
+        auto isTabStop =
+                []( wxPGProperty* aProp )
+                {
+                    return aProp && !aProp->IsCategory() && aProp->IsVisible() && aProp->IsEnabled()
+                           && !aProp->HasFlag( wxPG_PROP_READONLY ) && aProp->GetEditorClass();
+                };
+
+        auto findTarget =
+                [&]( wxPropertyGridIterator aIt )
+                {
+                    while( !aIt.AtEnd() )
+                    {
+                        if( isTabStop( aIt.GetProperty() ) )
+                            return aIt.GetProperty();
+
+                        if( forward )
+                            aIt.Next();
+                        else
+                            aIt.Prev();
+                    }
+
+                    return static_cast<wxPGProperty*>( nullptr );
+                };
+
+        wxPGProperty* current = m_grid->GetSelectedProperty();
+        wxPGProperty* target = nullptr;
+
+        if( current )
         {
-            if( prop->GetValue() == oldValue )
-                aEvent.Skip();
+            wxPropertyGridIterator it = m_grid->GetIterator( wxPG_ITERATE_VISIBLE, current );
+
+            if( forward )
+                it.Next();
+            else
+                it.Prev();
+
+            target = findTarget( it );
         }
+
+        // Wrap around (or pick a starting property if nothing is selected)
+        if( !target )
+        {
+            wxPropertyGridIterator it = m_grid->GetIterator( wxPG_ITERATE_VISIBLE,
+                                                             forward ? wxTOP : wxBOTTOM );
+            target = findTarget( it );
+        }
+
+        if( target )
+            m_grid->SelectProperty( target, true );
+        else
+            aEvent.Skip();
 
         return;
     }
