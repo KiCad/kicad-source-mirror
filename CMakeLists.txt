@@ -1091,6 +1091,12 @@ list( APPEND CMAKE_CTEST_ARGUMENTS "--output-on-failure" )
 # 'CMakeLists.txt' files to process
 #================================================
 
+# Desktop application identifiers, shared by resource metadata generation and the
+# runtime Wayland app_id in kicommon (must be visible before both subdirectories).
+if( UNIX AND NOT APPLE )
+    include( ${KICAD_CMAKE_MODULE_PATH}/KiCadAppNames.cmake )
+endif()
+
 # Binaries ( CMake targets )
 add_subdirectory( api )
 add_subdirectory( resources )

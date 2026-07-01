@@ -398,6 +398,31 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aIsUnitTest )
     App().SetVendorName(  wxT( "KiCad" ) );
     App().SetAppName( pgm_name );
 
+#if wxCHECK_VERSION( 3, 3, 1 ) && defined( __WXGTK__ ) && defined( KICAD_DESKTOP_APP_NAME )
+    // wxGTK feeds the class name to gdk_wayland_window_set_application_id(), so setting it
+    // to the installed desktop file basename lets Wayland compositors resolve the correct
+    // window icon and launch feedback. The prefix varies by build (regular, Flatpak, Nightly)
+    // and is supplied by CMake. The main manager keeps the bare app name; the other GUI apps
+    // are prefixed. Executables without a desktop file (pl_editor, kicad-cli) are left alone.
+    wxString desktopId;
+
+    if( pgm_name == wxT( "kicad" ) )
+    {
+        desktopId = wxT( KICAD_DESKTOP_APP_NAME );
+    }
+    else if( pgm_name == wxT( "eeschema" ) || pgm_name == wxT( "pcbnew" )
+             || pgm_name == wxT( "gerbview" ) || pgm_name == wxT( "bitmap2component" )
+             || pgm_name == wxT( "pcb_calculator" ) )
+    {
+        // pcb_calculator installs as pcbcalculator to satisfy freedesktop naming rules.
+        wxString appName = pgm_name == wxT( "pcb_calculator" ) ? wxT( "pcbcalculator" ) : pgm_name;
+        desktopId = wxString( wxT( KICAD_DESKTOP_APP_PREFIX ) ) + wxT( "." ) + appName;
+    }
+
+    if( !desktopId.IsEmpty() )
+        App().SetClassName( desktopId );
+#endif
+
     // Analyze the command line & initialize the binary path
     wxString tmp;
     SetLanguagePath();
