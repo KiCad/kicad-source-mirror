@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-30 09:01+0000\n"
+"PO-Revision-Date: 2026-07-01 17:01+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -11015,64 +11015,52 @@ msgid "Pan Up"
 msgstr "Помери приказ на горе"
 
 #: common/tool/actions.cpp:1001
-#, fuzzy
 msgid "Pan Down"
-msgstr "Доле"
+msgstr "Камера надоле"
 
 #: common/tool/actions.cpp:1009
-#, fuzzy
 msgid "Pan Left"
-msgstr "Лијево"
+msgstr "Камера улево"
 
 #: common/tool/actions.cpp:1017
-#, fuzzy
 msgid "Pan Right"
-msgstr "Десно"
+msgstr "Камера удесно"
 
 #: common/tool/actions.cpp:1027
-#, fuzzy
 msgid "Switch to Fast Grid 1"
-msgstr "Додај лук"
+msgstr "Пребаци на брзу мрежу 1"
 
 #: common/tool/actions.cpp:1034
-#, fuzzy
 msgid "Switch to Fast Grid 2"
-msgstr "Додај лук"
+msgstr "Пребаци на брзу мрежу 2"
 
 #: common/tool/actions.cpp:1041
-#, fuzzy
 msgid "Cycle Fast Grid"
-msgstr "Додај лук"
+msgstr "Пребаци брзу мрежу"
 
 #: common/tool/actions.cpp:1048
-#, fuzzy
 msgid "Switch to Next Grid"
-msgstr "Пројект"
+msgstr "Пребаци на следећу мрежу"
 
 #: common/tool/actions.cpp:1055
-#, fuzzy
 msgid "Switch to Previous Grid"
-msgstr "Пројект"
+msgstr "Пребаци на претходну мрежу"
 
 #: common/tool/actions.cpp:1061 common/tool/common_tools.cpp:640
-#, fuzzy
 msgid "Grid Origin"
-msgstr "Изабери језик"
+msgstr "Центар мреже"
 
 #: common/tool/actions.cpp:1062
-#, fuzzy
 msgid "Place the grid origin point"
-msgstr "Изабери језик"
+msgstr "Поставите почетну тачку мреже"
 
 #: common/tool/actions.cpp:1071
-#, fuzzy
 msgid "Reset Grid Origin"
-msgstr "Изабери језик"
+msgstr "Reset Grid center"
 
 #: common/tool/actions.cpp:1081
-#, fuzzy
 msgid "Show Grid"
-msgstr "Прикажи"
+msgstr "Прикажи мрежу"
 
 #: common/tool/actions.cpp:1082
 #, fuzzy
@@ -11134,33 +11122,28 @@ msgid "Select Columns..."
 msgstr "Изабери"
 
 #: common/tool/actions.cpp:1154
-#, fuzzy
 msgid "Switch units"
-msgstr "Промјени јединице"
+msgstr "Пребаците јединице"
 
 #: common/tool/actions.cpp:1155
-#, fuzzy
 msgid "Switch between imperial and metric units"
-msgstr "Поставке..."
+msgstr "Пребацивање између империјалних и метричких јединица"
 
 #: common/tool/actions.cpp:1161
-#, fuzzy
 msgid "Polar Coordinates"
-msgstr "Опције приказивања"
+msgstr "Поларне координате"
 
 #: common/tool/actions.cpp:1162
 msgid "Switch between polar and cartesian coordinate systems"
 msgstr "Мењај између поларног и декартовог координатниг система"
 
 #: common/tool/actions.cpp:1171
-#, fuzzy
 msgid "Reset Local Coordinates"
-msgstr "Опције приказивања"
+msgstr "Ресетуј локалне координате"
 
 #: common/tool/actions.cpp:1178
-#, fuzzy
 msgid "Always Show Crosshairs"
-msgstr "Прикажи"
+msgstr "Увек приказуј крст нишана"
 
 #: common/tool/actions.cpp:1179
 msgid "Display crosshairs even when not drawing objects"
@@ -11168,7 +11151,7 @@ msgstr "Прикажи крст чак и кад не црташ објекте"
 
 #: common/tool/actions.cpp:1186
 msgid "Use small crosshairs aligned at 0 and 90 degrees"
-msgstr ""
+msgstr "Користите мале крстиће поравнате под углом од 0 и 90 степени"
 
 #: common/tool/actions.cpp:1192
 msgid "Full-Window Crosshairs"
@@ -11177,19 +11160,22 @@ msgstr "Крст преко целог екрана"
 #: common/tool/actions.cpp:1193
 msgid "Display full-window crosshairs aligned at 0 and 90 degrees"
 msgstr ""
+"Приказ крстастих нишана преко целог прозора поравнатих под угловима од 0 и "
+"90 степени"
 
 #: common/tool/actions.cpp:1199
 msgid "45 Degree Crosshairs"
-msgstr ""
+msgstr "Нишански крст од 45 степени"
 
 #: common/tool/actions.cpp:1200
 msgid "Display full-window crosshairs aligned at 45 and 135 degrees"
 msgstr ""
+"Приказ крстастих нишана преко целог прозора поравнатих под угловима од 45 и "
+"135 степени"
 
 #: common/tool/actions.cpp:1207
-#, fuzzy
 msgid "Inactive Layer View Mode"
-msgstr "Креирање слојева"
+msgstr "Режим приказа неактивног слоја"
 
 #: common/tool/actions.cpp:1208
 msgid "Toggle inactive layers between normal and dimmed"
