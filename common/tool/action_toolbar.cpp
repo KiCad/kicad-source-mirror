@@ -237,14 +237,24 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
           [&]( wxDPIChangedEvent& aEvent )
           {
 #ifdef __WXMSW__
-              // Update values which are normally only initialized in wxAuiToolBar::Create
-              // FromDIP is no-op on backends other than wxMSW
-              m_toolPacking = FromDIP( 2 );
-              m_toolBorderPadding = FromDIP( 3 );
+              // Update values which are normally only initialized in wxAuiToolBar::Create.
+              // FromDIP is no-op on backends other than wxMSW.
+              SetToolPacking( FromDIP( 2 ) );
+              SetToolBorderPadding( FromDIP( 3 ) );
 
               wxSize margin_lt = FromDIP( wxSize( 5, 5 ) );
               wxSize margin_rb = FromDIP( wxSize( 2, 2 ) );
               SetMargins( margin_lt.x, margin_lt.y, margin_rb.x, margin_rb.y );
+
+              // Re-realize the toolbar to recalculate all item sizes with the new DPI.
+              // This fixes excessive button padding when moving windows between displays
+              // with different DPI scaling factors.
+              if( GetToolCount() > 0 )
+              {
+                  UpdateControlWidths();
+                  InvalidateBestSize();
+                  KiRealize();
+              }
 #endif
 
               aEvent.Skip();
