@@ -644,8 +644,8 @@ MATCH_LENGTH_TOLERANCE	200
 *SHT*   1 $$$NONE -1 $$$NONE
 *CAE*        GENERAL PARAMETERS FOR THE SHEET"
 
-SCALE        3.324          Scale of window expansion
-WINDOWCENTER 0      5855    Point defining the center of the window
+SCALE        3.325          Scale of window expansion
+WINDOWCENTER 4813   5855    Point defining the center of the window
 BITCS0       0              system status bits
 BITCS1       0              system status bits
 BITCS2       0              system status bits
@@ -1159,15 +1159,15 @@ R1           RES-RESN1        -2400 9100    0 0 100 10 100 10 3 9 2 0 0 0
 "Default Font"
 300 100 0 4 100 10 0 "Default Font"
 REF-DES
-310 200 0 3 194 10 0 "Bold Verdana"
+310 200 90 3 194 10 0 "Bold Verdana"
 PART-TYPE
-300 -200 0 6 100 10 1 "Default Font"
+300 -200 0 3 194 10 9 "Bold Verdana"
 userfield
 "Sim.Analog.Model" 
 "Sim.Analog.Order" Model$
 "Sim.Analog.Prefix" R
 "Description" SURFACE MOUNT CERAMIC RESONATOR 3.4 X 7.4 MM
-"Part Number" ield-value
+"Part Number" field-value
 "Manufacturer #1" IPC SM-782 STD.
 "Cost" 
 "PCB DECAL" RESN1

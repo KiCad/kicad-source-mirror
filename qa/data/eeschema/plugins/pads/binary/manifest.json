@@ -42,20 +42,21 @@
     {
       "binary": "fields.sch",
       "ascii": "fields.txt",
-      "binary_sha256": "ddabdaa9ed30b13c4aabfb4af0adba914997a048ea41a6cdb6a204c4298607a7",
-      "ascii_sha256": "55ed7922b142c93fa6d0270bac1ece1e1485f6751dce31291aa0d40babc5aa19",
+      "binary_sha256": "500c657cf9b44384dd50f95abe53d1e15d1cf92f53d32881c15f92e2433e5b6b",
+      "ascii_sha256": "312b7aa688690f143f57940ee8a3d8a6b4e04e799d8e012973d310be1c57570f",
       "pads_binary_version": "0x000D",
       "features": [
         "reference_field",
         "value_field",
         "user_attribute_override",
-        "field_visibility",
-        "field_rotation_90",
-        "field_justification_right_up",
-        "field_size_14pt",
-        "field_bold"
+        "hidden_user_field",
+        "rotated_value_field_90_deg",
+        "value_field_top_right_justification",
+        "value_field_14_point",
+        "value_field_bold",
+        "complete_part_number_override"
       ],
-      "provenance": "Created in PADS Logic VX.2.4 from the fixture resistor; added and displayed userfield=override-value, hid the part-type field, and changed the value field to 90 degrees, 14 pt, bold, right/up justification; no third-party design content"
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4 after resetting to a new design. The clean import reported NO ERRORS FOUND; native v13 save and all-section Logic 9.0 re-export retain the PART-TYPE/value field as angle 90, top-right justification code 3, PADS 14-point height 194, and Bold Verdana. The custom userfield retains display flag 9, whose hidden bit is 8, while its override-value remains present. The Part Number override is the complete field-value string. No third-party design content"
     },
     {
       "binary": "connectors.sch",
@@ -64,8 +65,8 @@
       "ascii_sha256": "c538c7cfc60aad92834c92e89a7685c2620ab977d88dc1e6797db90f1ed695db",
       "pads_binary_version": "0x000D",
       "features": [
-        "connector_part_CON_26P_ED",
-        "connector_reference_prefix_P",
+        "connector_part_con_26p_ed",
+        "connector_reference_prefix_p",
         "connector_26_pins",
         "connector_description_field",
         "connector_placement"
@@ -79,10 +80,11 @@
       "ascii_sha256": "3ffe1bbe4ee10372c642e98c5da2d1449d8efd286f81b5465a2240d6244acb15",
       "pads_binary_version": "0x000D",
       "features": [
-        "free_text_ascii",
-        "non_ascii_editor_input_normalized_on_save"
+        "ascii_free_text",
+        "editor_high_bit_input_normalized_to_ascii_equals",
+        "normalization_limit_not_import_coverage"
       ],
-      "provenance": "Created in PADS Logic VX.2.4 with free text entered as ASCII_TEXT cafe followed by Windows Alt+0233; the editor displayed e-acute, but native save and Logic 9.0 ASCII export normalized it to '='; documents that this input is not preserved; no third-party design content"
+      "provenance": "Normalization-limit evidence created in PADS Logic VX.2.4 with free text entered as ASCII_TEXT cafe followed by Windows Alt+0233. The editor displayed e-acute, but native save and Logic 9.0 ASCII export stored ascii-text cafe=. This pair proves loss/normalization in PADS and contains no retained high-bit character, so it is not high-bit importer coverage. No third-party design content"
     },
     {
       "binary": "page_graphics.sch",
@@ -98,7 +100,7 @@
         "page_filled_polygon",
         "page_text",
         "title_block_fields",
-        "page_size_B"
+        "page_size_b"
       ],
       "provenance": "Created from fixture-owned PADS Logic 9.0 ASCII in PADS Logic VX.2.4; the BATCHB_PAGE_GRAPHICS group contains OPEN, CLOSED, CIRCLE, arc-encoded OPEN, COPCLS, and embedded text records, and the sheet retains the built-in SIZEB title block and page size. PADS reported NO ERRORS FOUND on the final import, then saved native binary and exported all ASCII sections; no third-party design content"
     },
@@ -112,12 +114,12 @@
         "crossing_independent_wires",
         "three_way_junction",
         "explicit_tiedot",
-        "power_symbol_+5V",
-        "ground_symbol_GND",
-        "local_net_labels_@TERM",
-        "global_offpage_reference_GLOBAL_LINK",
-        "bus_alias_BATCHC_BUS_ALIAS",
-        "bus_members_BUS0_BUS1_BUS2"
+        "power_symbol_5v",
+        "ground_symbol_gnd",
+        "local_net_labels_term",
+        "global_offpage_reference",
+        "bus_alias",
+        "bus_members"
       ],
       "provenance": "Created from fixture-owned PADS Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND; PADS then saved native v13 and exported every Logic 9.0 section. Crossing wires have distinct CROSS_H/CROSS_V signals, T_NET has one tiedot and three branches, +5V and GND use installed PADS system symbols, and the re-export retains net-name terminals as @TERM records, PADS Logic's local-label representation. GLOBAL_LINK uses the PADS off-page/global symbol, and BATCHC_BUS_ALIAS contains BUS0, BUS1, and BUS2. No third-party design content"
     },
@@ -129,13 +131,13 @@
       "pads_binary_version": "0x000D",
       "features": [
         "two_numbered_sheets",
-        "duplicate_sheet_names_DUP/SAFE:*",
-        "unsafe_sheet_name_characters_slash_colon_asterisk",
-        "matching_cross_sheet_offpage_reference_CROSS_SHEET",
+        "duplicate_sheet_base_name",
+        "sheet_base_name_with_slash_colon_asterisk",
+        "matching_cross_sheet_offpage_reference",
         "per_sheet_connectivity",
         "per_sheet_bus_alias"
       ],
-      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4 after resetting to a new design. The import reported NO ERRORS FOUND, PADS saved native v13, and its all-section Logic 9.0 re-export retains duplicate sheet names exactly as [1]DUP/SAFE:* and [2]DUP/SAFE:*. Slash, colon, and asterisk were not normalized. Both sheets retain matching CROSS_SHEET off-page/global references and the controlled connectivity and bus structures. No third-party design content"
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4 after resetting to a new design. The import reported NO ERRORS FOUND, PADS saved native v13, and its all-section Logic 9.0 re-export retains the duplicate user-visible/base name DUP/SAFE:* on both sheets. PADS serializes that base name with numeric sheet prefixes as [1]DUP/SAFE:* and [2]DUP/SAFE:*. Slash, colon, and asterisk were not normalized. Both sheets retain matching CROSS_SHEET off-page/global references and the controlled connectivity and bus structures. No third-party design content"
     },
     {
       "binary": "symbol_primitives.sch",
@@ -184,12 +186,12 @@
       "pads_binary_version": "0x000D",
       "features": [
         "referenced_custom_multigate_part",
-        "two_placed_units_U3-A_U3-B",
+        "two_placed_units",
         "gate_pin_counts_7_and_2",
         "distinct_special_gate_decal",
         "gate_swap_flag",
         "pin_swap_group_1",
-        "signal_pin_15_VCC_HIDDEN"
+        "signal_pin_15_vcc_hidden"
       ],
       "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. The source follows production-observed asymmetric multi-gate syntax and uses only fixture-owned decals. A clean new-design import reported NO ERRORS FOUND; native v13 save and all-section Logic 9.0 re-export retained U3-A and U3-B, gate pin counts 7 and 2, the distinct BATCHD_SPECIAL_GATE decal, gate swap flag 1, pin swap group 1, and SIGPIN 15 VCC_HIDDEN. No third-party design content"
     }
