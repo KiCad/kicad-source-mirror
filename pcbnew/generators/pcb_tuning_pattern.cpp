@@ -975,7 +975,7 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
             success &= removeToBaseline( router, pnslayer, *m_baseLineCoupled );
 
         if( !success )
-            recoverBaseline( router );
+            recoverBaseline( router, pnslayer );
     }
 
     const std::vector<GENERATOR_PNS_CHANGES>& allPnsChanges = aTool->GetRouterChanges();
@@ -1001,13 +1001,13 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
 }
 
 
-bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
+bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter, int aPNSLayer )
 {
     PNS::SOLID queryItem;
 
     SHAPE_LINE_CHAIN* chain = static_cast<SHAPE_LINE_CHAIN*>( getOutline().Clone() );
     queryItem.SetShape( chain );        // PNS::SOLID takes ownership
-    queryItem.SetLayer( m_layer );
+    queryItem.SetLayer( aPNSLayer );
 
     int lineWidth = 0;
 
@@ -1048,18 +1048,18 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
         NETINFO_ITEM* recoverNet = GetBoard()->FindNet( m_lastNetName );
         PNS::LINE     recoverLine;
 
-        recoverLine.SetLayer( m_layer );
+        recoverLine.SetLayer( aPNSLayer );
         recoverLine.SetWidth( lineWidth );
         recoverLine.Line() = *m_baseLine;
         recoverLine.SetNet( recoverNet );
         branch->Add( recoverLine, false );
 
-    if( m_tuningMode == DIFF_PAIR )
+        if( m_tuningMode == DIFF_PAIR )
         {
             NETINFO_ITEM* recoverCoupledNet = GetBoard()->DpCoupledNet( recoverNet );
             PNS::LINE recoverLineCoupled;
 
-            recoverLineCoupled.SetLayer( m_layer );
+            recoverLineCoupled.SetLayer( aPNSLayer );
             recoverLineCoupled.SetWidth( lineWidth );
             recoverLineCoupled.Line() = *m_baseLineCoupled;
             recoverLineCoupled.SetNet( recoverCoupledNet );
@@ -2341,7 +2341,7 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     if( m_tuningMode == DIFF_PAIR_SKEW )
     {
-        constraint = drcEngine->EvalRules( SKEW_CONSTRAINT, primaryItem, coupledItem, m_layer );
+        constraint = drcEngine->EvalRules( SKEW_CONSTRAINT, primaryItem, coupledItem, GetLayer() );
 
         if( constraint.IsNull() || m_settings.m_overrideCustomRules )
         {
@@ -2364,10 +2364,10 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     else
     {
         // Prefer chain-level constraint if available
-        constraint = drcEngine->EvalRules( NET_CHAIN_LENGTH_CONSTRAINT, primaryItem, coupledItem, m_layer );
+        constraint = drcEngine->EvalRules( NET_CHAIN_LENGTH_CONSTRAINT, primaryItem, coupledItem, GetLayer() );
 
         if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
-            constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, primaryItem, coupledItem, m_layer );
+            constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, primaryItem, coupledItem, GetLayer() );
 
         if( constraint.IsNull() || m_settings.m_overrideCustomRules )
         {

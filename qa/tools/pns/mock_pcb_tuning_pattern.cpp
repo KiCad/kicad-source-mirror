@@ -254,7 +254,7 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
 }
 
 
-bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
+bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter, int aPNSLayer )
 {
     return true;
 }
