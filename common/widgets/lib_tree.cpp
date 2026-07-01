@@ -1011,24 +1011,24 @@ void LIB_TREE::onItemContextMenu( wxDataViewEvent& aEvent )
 
     m_previewDisabled = true;
 
+    // Select the item under the cursor before showing the context menu. On some platforms
+    // (notably macOS), right-clicking does not automatically change the selection.
+    wxDataViewItem item = aEvent.GetItem();
+
+    if( item.IsOk() )
+    {
+        m_tree_ctrl->SetFocus();
+
+        if( !m_tree_ctrl->IsSelected( item ) )
+        {
+            m_tree_ctrl->UnselectAll();
+            m_tree_ctrl->Select( item );
+            wxSafeYield();
+        }
+    }
+
     if( TOOL_INTERACTIVE* tool = m_adapter->GetContextMenuTool() )
     {
-        if( !GetCurrentTreeNode() )
-        {
-            wxPoint pos = m_tree_ctrl->ScreenToClient( wxGetMousePosition() );
-
-            wxDataViewItem    item;
-            wxDataViewColumn* col;
-            m_tree_ctrl->HitTest( pos, item, col );
-
-            if( item.IsOk() )
-            {
-                m_tree_ctrl->SetFocus();
-                m_tree_ctrl->Select( item );
-                wxSafeYield();
-            }
-        }
-
         tool->Activate();
         tool->GetManager()->VetoContextMenuMouseWarp();
         tool->GetToolMenu().ShowContextMenu();
