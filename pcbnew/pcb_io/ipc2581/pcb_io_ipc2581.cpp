@@ -1422,31 +1422,37 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
         int width = std::abs( aShape.GetRectangleWidth() );
         int height = std::abs( aShape.GetRectangleHeight() );
         int stroke_width = aShape.GetStroke().GetWidth();
-        int corner_radius = aShape.GetCornerRadius();
-
-        wxXmlNode* rect_node = appendNode( special_node, "RectRound" );
-        addLineDesc( rect_node, aShape.GetStroke().GetWidth(), aShape.GetStroke().GetLineStyle(), true );
-
-        // RectRound rounds only the corners whose flag is set. KiCad rounds all four when the
-        // rectangle carries a corner radius, so drive the flags off the radius rather than the
-        // fill mode. A filled rect is grown by the stroke width the same as before.
-        wxString cornerFlag = corner_radius > 0 ? "true" : "false";
-        addAttribute( rect_node, "upperRight", cornerFlag );
-        addAttribute( rect_node, "upperLeft", cornerFlag );
-        addAttribute( rect_node, "lowerRight", cornerFlag );
-        addAttribute( rect_node, "lowerLeft", cornerFlag );
+        int radius = aShape.GetCornerRadius();
 
         if( aShape.GetFillMode() != FILL_T::NO_FILL )
         {
+            // IPC2581 does not allow strokes on filled elements, so fold the stroke into the
+            // body; the round stroke joins also round the corners by half the stroke width.
             width += stroke_width;
             height += stroke_width;
+            radius += stroke_width / 2;
         }
+
+        // A rectangle with square corners must be a RectCenter: RectRound requires at least
+        // one rounded corner (IPC-2581C 3.5.9.14).
+        wxXmlNode* rect_node = appendNode( special_node, radius > 0 ? "RectRound" : "RectCenter" );
+
+        if( aShape.GetFillMode() == FILL_T::NO_FILL )
+            addLineDesc( rect_node, stroke_width, aShape.GetStroke().GetLineStyle(), true );
 
         addFillDesc( rect_node, aShape.GetFillMode() );
 
         addAttribute( rect_node, "width", floatVal( m_scale * width ) );
         addAttribute( rect_node, "height", floatVal( m_scale * height ) );
-        addAttribute( rect_node, "radius", floatVal( m_scale * corner_radius ) );
+
+        if( radius > 0 )
+        {
+            addAttribute( rect_node, "radius", floatVal( m_scale * radius ) );
+            addAttribute( rect_node, "upperRight", "true" );
+            addAttribute( rect_node, "upperLeft", "true" );
+            addAttribute( rect_node, "lowerRight", "true" );
+            addAttribute( rect_node, "lowerLeft", "true" );
+        }
 
         break;
     }
