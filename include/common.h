@@ -100,6 +100,17 @@ KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const std::functi
 KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject, int aFlags = 0 );
 
 /**
+ * Normalize a file path so its text variables survive ExpandTextVars.
+ *
+ * ExpandTextVars treats \${ and \@{ as escape sequences, so a Windows path like
+ * "subdir\${REVISION}.csv" leaves the variable unexpanded. Callers that expand text
+ * variables in a user-entered file path must run the path through this first so the
+ * backslash reads as a separator, not an escape. Backslashes not immediately preceding a
+ * text variable are left untouched.
+ */
+KICOMMON_API wxString NormalizeFilePathForTextVars( const wxString& aPath );
+
+/**
  * Lex-scan @p aSource and return every `${...}` reference that appears, without
  * resolving. Nested references are captured at every nesting level.
  *

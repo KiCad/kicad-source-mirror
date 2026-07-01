@@ -1553,7 +1553,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
         return;
     }
 
-    path = ExpandTextVars( path, &textResolver );
+    path = ExpandTextVars( NormalizeFilePathForTextVars( path ), &textResolver );
     path = ExpandEnvVarSubstitutions( path, &Prj() );
 
     wxFileName outputFile = wxFileName::FileName( path );

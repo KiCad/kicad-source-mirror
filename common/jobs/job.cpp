@@ -109,14 +109,7 @@ wxString JOB::ResolveOutputPath( const wxString& aPath, bool aPathIsDirectory, P
                 return false;
             };
 
-    wxString outPath = aPath;
-
-    // Normalize backslash path separators to forward slashes before expanding text variables.
-    // ExpandTextVars treats \${ as an escape sequence, which misinterprets Windows paths like
-    // "subdir\${REVISION}_file.txt" where the backslash is a path separator, not an escape.
-    outPath.Replace( wxT( "\\" ), wxT( "/" ) );
-
-    outPath = ExpandTextVars( outPath, &textResolver );
+    wxString outPath = ExpandTextVars( NormalizeFilePathForTextVars( aPath ), &textResolver );
 
     if( !m_tempOutputDirectory.IsEmpty() )
     {

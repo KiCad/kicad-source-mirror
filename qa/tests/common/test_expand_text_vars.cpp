@@ -211,6 +211,54 @@ BOOST_AUTO_TEST_CASE( ForwardSlashBeforeVariableExpands )
 BOOST_AUTO_TEST_SUITE_END()
 
 
+// Issue 24776: user-entered file paths with a text variable immediately after a backslash
+// separator (e.g. the Symbol Fields Table BOM export path "Output\BoM\${PROJECTNAME}.csv")
+// must expand. Callers route the path through NormalizeFilePathForTextVars before ExpandTextVars.
+BOOST_FIXTURE_TEST_SUITE( NormalizeFilePathForTextVarsTests, ExpandTextVarsFixture )
+
+BOOST_AUTO_TEST_CASE( BackslashSeparatorBeforeVarExpands )
+{
+    wxString path = NormalizeFilePathForTextVars( wxT( "Output\\BoM\\${VAR}_file.csv" ) );
+    wxString result = ExpandTextVars( path, &resolver );
+
+    // Only the backslash immediately before the variable is rewritten to a separator; the
+    // variable expands and the earlier literal backslash is preserved.
+    BOOST_CHECK_MESSAGE( !result.Contains( wxT( "<<<ESC_DOLLAR:" ) ),
+                         "Variable after backslash separator should expand, not escape. Got: " + result );
+    BOOST_CHECK( result == wxT( "Output\\BoM/value_file.csv" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( MultipleVarsAfterBackslashSeparators )
+{
+    wxString path = NormalizeFilePathForTextVars( wxT( "Output\\BoM\\${X}_V${Y}.csv" ) );
+    wxString result = ExpandTextVars( path, &resolver );
+
+    BOOST_CHECK( result == wxT( "Output\\BoM/5_V2.csv" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ForwardSlashPathUnchanged )
+{
+    wxString path = NormalizeFilePathForTextVars( wxT( "Output/BoM/${VAR}.csv" ) );
+    wxString result = ExpandTextVars( path, &resolver );
+
+    BOOST_CHECK( result == wxT( "Output/BoM/value.csv" ) );
+}
+
+
+// Backslashes that do not immediately precede a text variable are a legitimate part of the
+// filename (notably on POSIX) and must survive normalization unchanged.
+BOOST_AUTO_TEST_CASE( NonVariableBackslashesArePreserved )
+{
+    wxString path = NormalizeFilePathForTextVars( wxT( "Output\\BoM\\literal.csv" ) );
+
+    BOOST_CHECK( path == wxT( "Output\\BoM\\literal.csv" ) );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
 // Issue 23599: JOB::ResolveOutputPath must expand text variables even when preceded by backslash
 // path separators. This suite tests the fix in ResolveOutputPath that normalizes backslashes
 // before calling ExpandTextVars.

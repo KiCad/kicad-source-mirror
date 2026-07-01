@@ -67,6 +67,20 @@ wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject, int a
 }
 
 
+wxString NormalizeFilePathForTextVars( const wxString& aPath )
+{
+    wxString path = aPath;
+
+    // ExpandTextVars treats \${ and \@{ as escape sequences, which misinterprets Windows paths
+    // like "subdir\${REVISION}.csv" where the backslash is a path separator, not an escape. Only
+    // the ambiguous separator is rewritten so legitimate backslashes elsewhere are preserved.
+    path.Replace( wxT( "\\${" ), wxT( "/${" ) );
+    path.Replace( wxT( "\\@{" ), wxT( "/@{" ) );
+
+    return path;
+}
+
+
 wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxString* )>* aResolver, int aFlags,
                          int aDepth )
 {
