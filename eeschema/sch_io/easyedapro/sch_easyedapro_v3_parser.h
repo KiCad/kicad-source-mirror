@@ -30,6 +30,14 @@
 #include "sch_easyedapro_parser.h"
 
 
+namespace EASYEDAPRO
+{
+/// Map an EasyEDA "HORIZ_VERT" alignment token to a KiCad justify code (0 top/left, 1 center, 2 bottom/right).
+int AlignToFontV( const wxString& aAlign );
+int AlignToFontH( const wxString& aAlign );
+} // namespace EASYEDAPRO
+
+
 class SCH_EASYEDAPRO_V3_PARSER
 {
 public:

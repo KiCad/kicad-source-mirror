@@ -30,6 +30,10 @@
 #include "pcb_io_easyedapro_parser.h"
 
 
+class PCB_TEXT;
+class BOARD_ITEM_CONTAINER;
+
+
 class PCB_IO_EASYEDAPRO_V3_PARSER
 {
 public:
@@ -52,6 +56,8 @@ private:
     PCB_IO_EASYEDAPRO_PARSER m_v2Parser;
 
     std::unique_ptr<PAD> createV3PAD( FOOTPRINT* aFootprint, const EASYEDAPRO::V3_ROW& aRow );
+
+    PCB_TEXT* createV3Text( BOARD_ITEM_CONTAINER* aContainer, const EASYEDAPRO::V3_ROW& aRow );
 };
 
 

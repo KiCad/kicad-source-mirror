@@ -412,13 +412,11 @@ PCB_IO_EASYEDAPRO_PARSER::ParsePoly( BOARD_ITEM_CONTAINER* aContainer, nlohmann:
 
                 if( aClosed )
                 {
-                    std::unique_ptr<PCB_SHAPE> shape =
-                            std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::POLY );
-
-                    wxASSERT( chain.PointCount() > 2 );
-
                     if( chain.PointCount() > 2 )
                     {
+                        std::unique_ptr<PCB_SHAPE> shape =
+                                std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::POLY );
+
                         chain.SetClosed( true );
                         shape->SetFilled( true );
                         shape->SetPolyShape( chain );

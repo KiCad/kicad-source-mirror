@@ -270,7 +270,9 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
     }
 
     const std::vector<EASYEDAPRO::PRJ_SHEET>& prjSchematicSheets = prjSchIt->second.sheets;
-    const int                                  schSheetsCount = prjSchematicSheets.size();
+
+    bool rootAssigned = false;
+    int  subSheetIndex = 0;
 
     for( const EASYEDAPRO::PRJ_SHEET& prjSheet : prjSchematicSheets )
     {
@@ -285,59 +287,15 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
 
         wxString sheetId = wxString::Format( "%d", prjSheet.id );
 
-        if( schSheetsCount > 1 )
+        // The first page fills the root sheet so no empty index sheet is left behind;
+        // any remaining pages become subsheets hanging off the root.
+        if( !rootAssigned )
         {
-            wxString sheetBaseName = sheetId + wxS( "_" )
-                                     + EscapeString( prjSheet.name, CTX_FILENAME );
-
-            wxFileName sheetFname( aFileName );
-            sheetFname.SetFullName( sheetBaseName + wxS( "." )
-                                    + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
-
-            wxFileName relSheetPath( sheetFname );
-            relSheetPath.MakeRelativeTo( rootFname.GetPath() );
-
-            std::unique_ptr<SCH_SHEET> subSheet = std::make_unique<SCH_SHEET>( aSchematic );
-            subSheet->SetFileName( relSheetPath.GetFullPath() );
-            subSheet->SetName( prjSheet.name );
-
-            SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
-            screen->SetFileName( sheetFname.GetFullPath() );
-            screen->SetPageNumber( sheetId );
-            subSheet->SetScreen( screen );
-
-            int sheetIndex = std::max( prjSheet.id - 1, 0 );
-
-            VECTOR2I pos;
-            pos.x = schIUScale.MilsToIU( 200 );
-            pos.y = schIUScale.MilsToIU( 200 )
-                    + ( subSheet->GetSize().y + schIUScale.MilsToIU( 200 ) ) * sheetIndex;
-
-            subSheet->SetPosition( pos );
-
             SCH_SHEET_PATH sheetPath;
             sheetPath.push_back( rootSheet );
-            sheetPath.push_back( subSheet.get() );
             sheetPath.SetPageNumber( sheetId );
             aSchematic->SetCurrentSheet( sheetPath );
 
-            try
-            {
-                parser.ParseSchematic( aSchematic, subSheet.get(), project, symbols, blobs,
-                                       *pageRawDoc, libName );
-            }
-            catch( nlohmann::json::exception& e )
-            {
-                wxLogWarning( wxString::Format(
-                        _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
-                        prjSheet.uuid, e.what() ) );
-                continue;
-            }
-
-            rootSheet->GetScreen()->Append( subSheet.release() );
-        }
-        else
-        {
             try
             {
                 parser.ParseSchematic( aSchematic, rootSheet, project, symbols, blobs,
@@ -348,8 +306,61 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
                 wxLogWarning( wxString::Format(
                         _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
                         prjSheet.uuid, e.what() ) );
+                continue;
             }
+
+            rootSheet->SetName( prjSheet.name );
+            rootSheet->GetScreen()->SetPageNumber( sheetId );
+            rootAssigned = true;
+            continue;
         }
+
+        wxString sheetBaseName = sheetId + wxS( "_" ) + EscapeString( prjSheet.name, CTX_FILENAME );
+
+        wxFileName sheetFname( aFileName );
+        sheetFname.SetFullName( sheetBaseName + wxS( "." )
+                                + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
+
+        wxFileName relSheetPath( sheetFname );
+        relSheetPath.MakeRelativeTo( rootFname.GetPath() );
+
+        std::unique_ptr<SCH_SHEET> subSheet = std::make_unique<SCH_SHEET>( aSchematic );
+        subSheet->SetFileName( relSheetPath.GetFullPath() );
+        subSheet->SetName( prjSheet.name );
+
+        SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
+        screen->SetFileName( sheetFname.GetFullPath() );
+        screen->SetPageNumber( sheetId );
+        subSheet->SetScreen( screen );
+
+        VECTOR2I pos;
+        pos.x = schIUScale.MilsToIU( 200 );
+        pos.y = schIUScale.MilsToIU( 200 )
+                + ( subSheet->GetSize().y + schIUScale.MilsToIU( 200 ) ) * subSheetIndex;
+
+        subSheet->SetPosition( pos );
+
+        SCH_SHEET_PATH sheetPath;
+        sheetPath.push_back( rootSheet );
+        sheetPath.push_back( subSheet.get() );
+        sheetPath.SetPageNumber( sheetId );
+        aSchematic->SetCurrentSheet( sheetPath );
+
+        try
+        {
+            parser.ParseSchematic( aSchematic, subSheet.get(), project, symbols, blobs,
+                                   *pageRawDoc, libName );
+        }
+        catch( nlohmann::json::exception& e )
+        {
+            wxLogWarning( wxString::Format(
+                    _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
+                    prjSheet.uuid, e.what() ) );
+            continue;
+        }
+
+        rootSheet->GetScreen()->Append( subSheet.release() );
+        subSheetIndex++;
     }
 
     IO_RELEASER<SCH_IO> schPlugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );

@@ -94,19 +94,21 @@ static LINE_STYLE ConvertStrokeStyle( const nlohmann::json& aStyle )
 }
 
 
-static int AlignToFontV( const wxString& aAlign )
+int EASYEDAPRO::AlignToFontV( const wxString& aAlign )
 {
     if( aAlign.Contains( wxS( "TOP" ) ) )
         return 0;
 
-    if( aAlign.Contains( wxS( "CENTER" ) ) || aAlign.Contains( wxS( "MIDDLE" ) ) )
+    // Vertical centering is always spelled MIDDLE; CENTER is the horizontal token, so
+    // matching it here would mis-align e.g. CENTER_BOTTOM.
+    if( aAlign.Contains( wxS( "MIDDLE" ) ) )
         return 1;
 
     return 2; // BOTTOM
 }
 
 
-static int AlignToFontH( const wxString& aAlign )
+int EASYEDAPRO::AlignToFontH( const wxString& aAlign )
 {
     if( aAlign.StartsWith( wxS( "LEFT" ) ) )
         return 0;

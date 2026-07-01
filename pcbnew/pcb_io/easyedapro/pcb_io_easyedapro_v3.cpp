@@ -137,35 +137,27 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
 
     for( const auto& [uuid, rawDoc] : adapter.GetRawDocs( wxS( "FOOTPRINT" ) ) )
     {
-        FOOTPRINT* footprint = parser.ParseFootprint( project, uuid, blobs, rawDoc );
+        std::unique_ptr<FOOTPRINT> footprint( parser.ParseFootprint( project, uuid, blobs, rawDoc ) );
 
         if( !footprint )
             continue;
 
-        wxString fpTitle = uuid;
+        wxString              fpTitle = uuid;
+        std::string           uuidKey = std::string( uuid.ToUTF8() );
+        const nlohmann::json& fpMetas = project.at( "footprints" );
 
-        try
+        if( fpMetas.contains( uuidKey ) )
         {
-            std::string uuidKey = std::string( uuid.ToUTF8() );
+            const nlohmann::json& fpMeta = fpMetas.at( uuidKey );
 
-            if( project.contains( "footprints" ) && project.at( "footprints" ).contains( uuidKey ) )
-            {
-                const nlohmann::json& fpMeta = project.at( "footprints" ).at( uuidKey );
-
-                if( fpMeta.contains( "display_title" ) )
-                    fpTitle = EASYEDAPRO::V3GetString( fpMeta, "display_title", fpTitle );
-                else if( fpMeta.contains( "title" ) )
-                    fpTitle = EASYEDAPRO::V3GetString( fpMeta, "title", fpTitle );
-            }
-        }
-        catch( ... )
-        {
+            if( fpMeta.contains( "display_title" ) )
+                fpTitle = EASYEDAPRO::V3GetString( fpMeta, "display_title", fpTitle );
+            else if( fpMeta.contains( "title" ) )
+                fpTitle = EASYEDAPRO::V3GetString( fpMeta, "title", fpTitle );
         }
 
-        LIB_ID fpID = EASYEDAPRO::ToKiCadLibID( fpLibName, fpTitle );
-        footprint->SetFPID( fpID );
-
-        footprints.emplace( uuid, footprint );
+        footprint->SetFPID( EASYEDAPRO::ToKiCadLibID( fpLibName, fpTitle ) );
+        footprints.emplace( uuid, std::move( footprint ) );
     }
 
     const EASYEDAPRO::V3_DOC_RAW* pcbRawDoc = adapter.FindRawDoc( wxS( "PCB" ), pcbToLoad );

@@ -840,4 +840,60 @@ BOOST_AUTO_TEST_CASE( PluginLoadPowerSymbolsKeepValueAndVisibility )
 }
 
 
+/**
+ * The first EasyEDA page must fill the root sheet instead of leaving an empty
+ * index sheet above the real pages.
+ */
+BOOST_AUTO_TEST_CASE( PluginLoadFillsRootSheetWithFirstPage )
+{
+    wxString tempDir = wxFileName::CreateTempFileName( "easyedapro_v3_import" );
+    BOOST_REQUIRE( wxRemoveFile( tempDir ) );
+    BOOST_REQUIRE( wxMkdir( tempDir ) );
+
+    wxFileName projectFile( tempDir, "easyedapro_v3_test", "kicad_pro" );
+    wxFileName archiveFile( tempDir, "sample", "epro2" );
+    BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
+
+    Pgm().GetSettingsManager().LoadProject( projectFile.GetFullPath().ToStdString() );
+
+    SCHEMATIC schematic( nullptr );
+    schematic.SetProject( &Pgm().GetSettingsManager().Prj() );
+
+    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
+    SCH_SHEET* rootSheet = plugin->LoadSchematicFile( archiveFile.GetFullPath(), &schematic );
+    BOOST_REQUIRE( rootSheet );
+    schematic.RefreshHierarchy();
+
+    int rootSymbols = 0;
+
+    for( SCH_ITEM* item : rootSheet->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        (void) item, rootSymbols++;
+
+    // The root screen must carry real schematic content, not just sub-sheet links.
+    BOOST_CHECK( rootSymbols > 0 );
+    BOOST_CHECK( !rootSheet->GetScreen()->GetPageNumber().IsEmpty() );
+
+    BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
+}
+
+
+/**
+ * The vertical alignment mapping must read only the vertical token. CENTER is the
+ * horizontal token, so a bare CENTER match used to turn e.g. CENTER_BOTTOM into
+ * center-justified text.
+ */
+BOOST_AUTO_TEST_CASE( AlignTokenMapsToJustify )
+{
+    BOOST_CHECK_EQUAL( EASYEDAPRO::AlignToFontV( wxS( "CENTER_TOP" ) ), 0 );
+    BOOST_CHECK_EQUAL( EASYEDAPRO::AlignToFontV( wxS( "CENTER_MIDDLE" ) ), 1 );
+    BOOST_CHECK_EQUAL( EASYEDAPRO::AlignToFontV( wxS( "CENTER_BOTTOM" ) ), 2 );
+    BOOST_CHECK_EQUAL( EASYEDAPRO::AlignToFontV( wxS( "LEFT_BOTTOM" ) ), 2 );
+    BOOST_CHECK_EQUAL( EASYEDAPRO::AlignToFontV( wxS( "RIGHT_MIDDLE" ) ), 1 );
+
+    BOOST_CHECK_EQUAL( EASYEDAPRO::AlignToFontH( wxS( "CENTER_BOTTOM" ) ), 1 );
+    BOOST_CHECK_EQUAL( EASYEDAPRO::AlignToFontH( wxS( "LEFT_BOTTOM" ) ), 0 );
+    BOOST_CHECK_EQUAL( EASYEDAPRO::AlignToFontH( wxS( "RIGHT_TOP" ) ), 2 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

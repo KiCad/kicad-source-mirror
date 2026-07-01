@@ -65,6 +65,10 @@ PCB_IO_EASYEDAPRO_V3_PARSER::PCB_IO_EASYEDAPRO_V3_PARSER( BOARD*             aBo
 }
 
 
+static void V3AlignText( EDA_TEXT* text, int align );
+static int  V3AlignToOriginCode( const wxString& aAlign );
+
+
 std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       aFootprint,
                                                                  const V3_ROW&   aRow )
 {
@@ -167,7 +171,8 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       
 
             pad->SetSize( PADSTACK::ALL_LAYERS,
                           PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size ) );
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+            pad->SetShape( PADSTACK::ALL_LAYERS,
+                           size.x == size.y ? PAD_SHAPE::CIRCLE : PAD_SHAPE::OVAL );
         }
         else if( padType == wxS( "OVAL" ) )
         {
@@ -209,6 +214,57 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       
     pad->SetThermalSpokeAngle( ANGLE_90 );
 
     return pad;
+}
+
+
+PCB_TEXT* PCB_IO_EASYEDAPRO_V3_PARSER::createV3Text( BOARD_ITEM_CONTAINER*     aContainer,
+                                                     const EASYEDAPRO::V3_ROW& aRow )
+{
+    int          layer = V3GetInt( aRow.inner, "layerId", 3 );
+    PCB_LAYER_ID klayer = m_v2Parser.LayerToKi( layer );
+
+    VECTOR2D location;
+    location.x = V3GetDouble( aRow.inner, "x" );
+    location.y = V3GetDouble( aRow.inner, "y" );
+
+    wxString string = V3GetString( aRow.inner, "text" );
+    wxString font = V3GetString( aRow.inner, "fontFamily", wxS( "default" ) );
+
+    double height = V3GetDouble( aRow.inner, "fontSize", 45.0 );
+    double strokew = V3GetDouble( aRow.inner, "strokeWidth", 6.0 );
+
+    wxString originStr = V3GetString( aRow.inner, "origin", wxS( "LEFT_BOTTOM" ) );
+    int      align = V3AlignToOriginCode( originStr );
+    double   angle = V3GetDouble( aRow.inner, "angle" );
+    int      inverted = V3GetBool( aRow.inner, "reverse" ) ? 1 : 0;
+    int      mirror = V3GetBool( aRow.inner, "mirror" ) ? 1 : 0;
+
+    PCB_TEXT* text = new PCB_TEXT( aContainer );
+
+    text->SetText( string );
+    text->SetLayer( klayer );
+    text->SetPosition( PCB_IO_EASYEDAPRO_PARSER::ScalePos( location ) );
+    text->SetIsKnockout( inverted );
+    text->SetTextThickness( PCB_IO_EASYEDAPRO_PARSER::ScaleSize( strokew ) );
+    text->SetTextSize( VECTOR2D( PCB_IO_EASYEDAPRO_PARSER::ScaleSize( height * 0.6 ),
+                                 PCB_IO_EASYEDAPRO_PARSER::ScaleSize( height * 0.7 ) ) );
+
+    if( font != wxS( "default" ) )
+        text->SetFont( KIFONT::FONT::GetFont( font ) );
+
+    V3AlignText( text, align );
+
+    if( IsBackLayer( klayer ) ^ !!mirror )
+    {
+        text->SetMirrored( true );
+        text->SetTextAngleDegrees( -angle );
+    }
+    else
+    {
+        text->SetTextAngleDegrees( angle );
+    }
+
+    return text;
 }
 
 
@@ -407,6 +463,9 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_V3_PARSER::ParseFootprint( const nlohmann::json& aP
                 bbox.Merge( contour.BBox() );
             }
 
+            if( bbox.GetSize().x == 0 || bbox.GetSize().y == 0 )
+                continue;
+
             VECTOR2D scale( PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size.x ) / bbox.GetSize().x,
                             PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size.y ) / bbox.GetSize().y );
 
@@ -545,6 +604,10 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_V3_PARSER::ParseFootprint( const nlohmann::json& aP
                     footprint->Add( bitmap.release(), ADD_MODE::APPEND );
                 }
             }
+        }
+        else if( row.type == wxS( "STRING" ) )
+        {
+            footprint->Add( createV3Text( footprint, row ), ADD_MODE::APPEND );
         }
     }
 
@@ -1096,52 +1159,7 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
         }
         else if( row.type == wxS( "STRING" ) )
         {
-            int          layer = V3GetInt( row.inner, "layerId", 3 );
-            PCB_LAYER_ID klayer = m_v2Parser.LayerToKi( layer );
-
-            VECTOR2D location;
-            location.x = V3GetDouble( row.inner, "x" );
-            location.y = V3GetDouble( row.inner, "y" );
-
-            wxString string = V3GetString( row.inner, "text" );
-            wxString font = V3GetString( row.inner, "fontFamily", wxS( "default" ) );
-
-            double height = V3GetDouble( row.inner, "fontSize", 45.0 );
-            double strokew = V3GetDouble( row.inner, "strokeWidth", 6.0 );
-
-            wxString originStr = V3GetString( row.inner, "origin", wxS( "LEFT_BOTTOM" ) );
-            int    align = V3AlignToOriginCode( originStr );
-            double angle = V3GetDouble( row.inner, "angle" );
-            int    inverted = V3GetBool( row.inner, "reverse" ) ? 1 : 0;
-            int    mirror = V3GetBool( row.inner, "mirror" ) ? 1 : 0;
-
-            PCB_TEXT* text = new PCB_TEXT( aBoard );
-
-            text->SetText( string );
-            text->SetLayer( klayer );
-            text->SetPosition( PCB_IO_EASYEDAPRO_PARSER::ScalePos( location ) );
-            text->SetIsKnockout( inverted );
-            text->SetTextThickness( PCB_IO_EASYEDAPRO_PARSER::ScaleSize( strokew ) );
-            text->SetTextSize( VECTOR2D(
-                    PCB_IO_EASYEDAPRO_PARSER::ScaleSize( height * 0.6 ),
-                    PCB_IO_EASYEDAPRO_PARSER::ScaleSize( height * 0.7 ) ) );
-
-            if( font != wxS( "default" ) )
-                text->SetFont( KIFONT::FONT::GetFont( font ) );
-
-            V3AlignText( text, align );
-
-            if( IsBackLayer( klayer ) ^ !!mirror )
-            {
-                text->SetMirrored( true );
-                text->SetTextAngleDegrees( -angle );
-            }
-            else
-            {
-                text->SetTextAngleDegrees( angle );
-            }
-
-            aBoard->Add( text, ADD_MODE::APPEND );
+            aBoard->Add( createV3Text( aBoard, row ), ADD_MODE::APPEND );
         }
         else if( row.type == wxS( "COMPONENT" ) )
         {
@@ -1262,6 +1280,9 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
 
                 bbox.Merge( contour.BBox() );
             }
+
+            if( bbox.GetSize().x == 0 || bbox.GetSize().y == 0 )
+                continue;
 
             VECTOR2D scale( PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size.x ) / bbox.GetSize().x,
                             PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size.y ) / bbox.GetSize().y );

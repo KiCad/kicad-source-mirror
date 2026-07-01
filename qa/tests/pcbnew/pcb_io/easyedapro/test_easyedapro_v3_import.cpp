@@ -40,7 +40,7 @@
 BOOST_AUTO_TEST_SUITE( EasyedaproV3Import )
 
 
-BOOST_AUTO_TEST_CASE( BoardLoadNoAssertions )
+BOOST_AUTO_TEST_CASE( BoardLoadImportsInnerLayers )
 {
     wxString dataPath = wxString::FromUTF8(
             KI_TEST::GetPcbnewTestDataDir()
@@ -57,6 +57,12 @@ BOOST_AUTO_TEST_CASE( BoardLoadNoAssertions )
 
     BOOST_CHECK( board->Footprints().size() > 0 );
     BOOST_CHECK( board->GetNetCount() > 0 );
+
+    // A 4-layer board whose inner and back copper carry their EasyEDA names.
+    BOOST_CHECK_EQUAL( board->GetCopperLayerCount(), 4 );
+    BOOST_CHECK_EQUAL( board->GetLayerName( In1_Cu ), wxString( wxS( "Inner1" ) ) );
+    BOOST_CHECK_EQUAL( board->GetLayerName( In2_Cu ), wxString( wxS( "Inner2" ) ) );
+    BOOST_CHECK_EQUAL( board->GetLayerName( B_Cu ), wxString( wxS( "Bottom Layer" ) ) );
 }
 
 
