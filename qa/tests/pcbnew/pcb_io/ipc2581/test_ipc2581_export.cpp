@@ -42,6 +42,7 @@
 #include <board_stackup_manager/board_stackup.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_shape.h>
 #include <pcb_track.h>
 #include <base_units.h>
 
@@ -51,6 +52,7 @@
 #include <wx/process.h>
 #include <wx/txtstrm.h>
 
+#include <cmath>
 #include <fstream>
 #include <sstream>
 
@@ -907,6 +909,313 @@ BOOST_AUTO_TEST_CASE( ExposedPadPasteRespected_Issue24318 )
     BOOST_CHECK_MESSAGE(
             maskRegion.find( "<PinRef componentRef=\"R1\" pin=\"2\"" ) != std::string::npos,
             "SMD copper pad without explicit F.Mask must get an implicit F.Mask opening" );
+}
+
+
+/**
+ * Read an exported file's full contents into a std::string.
+ */
+static std::string ReadFile( const wxString& aPath )
+{
+    std::ifstream file( aPath.ToStdString() );
+    return std::string( ( std::istreambuf_iterator<char>( file ) ),
+                        std::istreambuf_iterator<char>() );
+}
+
+
+/**
+ * Extract the text of the first LayerFeature block for a given layer reference.
+ * Returns an empty string when no such LayerFeature exists.
+ */
+static std::string LayerFeatureRegion( const std::string& aXml, const std::string& aLayerRef )
+{
+    const std::string open = "<LayerFeature layerRef=\"" + aLayerRef + "\"";
+    size_t start = aXml.find( open );
+
+    if( start == std::string::npos )
+        return std::string();
+
+    size_t end = aXml.find( "</LayerFeature>", start );
+
+    if( end == std::string::npos )
+        return std::string();
+
+    return aXml.substr( start, end - start );
+}
+
+
+/**
+ * Test that a rounded gr_rect keeps its corner radius on export (Issue #24754).
+ *
+ * The exporter used to emit a RectRound with all corner flags off and a radius of
+ * stroke_width/2, discarding the shape's real corner radius. A gr_rect with a 0.75 mm corner
+ * radius must round its corners and carry that radius in the RectRound primitive.
+ */
+BOOST_AUTO_TEST_CASE( GrRectCornerRadius_Issue24754 )
+{
+    BOARD board;
+    board.SetCopperLayerCount( 2 );
+
+    PCB_SHAPE* rect = new PCB_SHAPE( &board, SHAPE_T::RECTANGLE );
+    rect->SetLayer( Edge_Cuts );
+    rect->SetStart( VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) );
+    rect->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 11.5 ), pcbIUScale.mmToIU( 17 ) ) );
+    rect->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.05 ), LINE_STYLE::SOLID ) );
+    rect->SetFilled( false );
+    rect->SetCornerRadius( pcbIUScale.mmToIU( 0.75 ) );
+    board.Add( rect );
+
+    wxString tempPath = CreateTempFile();
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "4";
+
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, &board, &props ) );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    std::string xml = ReadFile( tempPath );
+
+    // The RectRound must round its corners and carry the 0.75 mm radius, not stroke_width/2.
+    size_t rectPos = xml.find( "<RectRound" );
+    BOOST_REQUIRE_MESSAGE( rectPos != std::string::npos, "Export should contain a RectRound" );
+
+    std::string rectNode = xml.substr( rectPos, xml.find( '>', rectPos ) - rectPos );
+
+    BOOST_CHECK_MESSAGE( rectNode.find( "radius=\"0.750\"" ) != std::string::npos,
+                         "Rounded gr_rect must export its 0.75 mm corner radius. Node: "
+                         + rectNode );
+    BOOST_CHECK_MESSAGE( rectNode.find( "upperRight=\"true\"" ) != std::string::npos
+                         && rectNode.find( "lowerLeft=\"true\"" ) != std::string::npos,
+                         "Rounded gr_rect must set its corner flags. Node: " + rectNode );
+    BOOST_CHECK_MESSAGE( rectNode.find( "radius=\"0.025\"" ) == std::string::npos,
+                         "Corner radius must not collapse to stroke_width/2. Node: " + rectNode );
+}
+
+
+/**
+ * Test that a back-only masked through-hole pad gets no F.Mask opening (Issue #24753).
+ *
+ * A pad on *.Cu with an explicit B.Mask (and no F.Mask) must not be added to the F.Mask
+ * LayerFeature. The implicit-mask heuristic only applies when the pad authors no mask side.
+ */
+BOOST_AUTO_TEST_CASE( BackOnlyMaskNoFrontOpening_Issue24753 )
+{
+    BOARD board;
+    board.SetCopperLayerCount( 2 );
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetReference( wxT( "J29" ) );
+    fp->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ) );
+    board.Add( fp );
+
+    // Through-hole pad masked on the back only: *.Cu + B.Mask, deliberately no F.Mask.
+    PAD* pad = new PAD( fp );
+    pad->SetNumber( wxT( "1" ) );
+    pad->SetAttribute( PAD_ATTRIB::PTH );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
+    pad->SetSize( PADSTACK::ALL_LAYERS,
+                  VECTOR2I( pcbIUScale.mmToIU( 2.5 ), pcbIUScale.mmToIU( 4.0 ) ) );
+    pad->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 1.65 ), pcbIUScale.mmToIU( 1.65 ) ) );
+    pad->SetLayerSet( LSET( { F_Cu, B_Cu, B_Mask } ) );
+    fp->Add( pad );
+
+    wxString tempPath = CreateTempFile();
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "4";
+
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, &board, &props ) );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    std::string xml = ReadFile( tempPath );
+
+    // The pad must appear on B.Mask (authored) but never on F.Mask.
+    std::string fMask = LayerFeatureRegion( xml, "F.Mask" );
+    BOOST_CHECK_MESSAGE(
+            fMask.find( "<PinRef componentRef=\"J29\" pin=\"1\"" ) == std::string::npos,
+            "Back-only masked pad must not appear on F.Mask layer feature" );
+
+    std::string bMask = LayerFeatureRegion( xml, "B.Mask" );
+    BOOST_CHECK_MESSAGE(
+            bMask.find( "<PinRef componentRef=\"J29\" pin=\"1\"" ) != std::string::npos,
+            "Back-only masked pad should appear on B.Mask layer feature" );
+}
+
+
+/**
+ * Test that a roundrect pad's mask aperture shrinks its radius with its size (Issue #24751).
+ *
+ * A roundrect pad with a negative mask margin has a smaller mask aperture, and its corner
+ * radius must shrink by the per-side margin too. The exporter used to reuse the copper radius,
+ * and the shape-dict key ignored the layer/expansion so the mask referenced the copper shape.
+ */
+BOOST_AUTO_TEST_CASE( RoundRectMaskRadius_Issue24751 )
+{
+    BOARD board;
+    board.SetCopperLayerCount( 2 );
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetReference( wxT( "R1" ) );
+    fp->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 40 ) ) );
+    board.Add( fp );
+
+    PAD* pad = new PAD( fp );
+    pad->SetNumber( wxT( "1" ) );
+    pad->SetAttribute( PAD_ATTRIB::SMD );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
+    pad->SetSize( PADSTACK::ALL_LAYERS,
+                  VECTOR2I( pcbIUScale.mmToIU( 0.45 ), pcbIUScale.mmToIU( 0.30 ) ) );
+    pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS, 0.3333333333 );
+    pad->SetLayerSet( LSET( { F_Cu, F_Mask } ) );
+    pad->SetLocalSolderMaskMargin( pcbIUScale.mmToIU( -0.05 ) );
+    fp->Add( pad );
+
+    wxString tempPath = CreateTempFile();
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "4";
+
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, &board, &props ) );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    std::string xml = ReadFile( tempPath );
+
+    // Copper roundrect radius is 0.10 mm; with a -0.05 mm per-side margin the mask aperture is
+    // 0.35 x 0.20 with radius 0.05 mm. Both distinct primitives must be present.
+    BOOST_CHECK_MESSAGE( xml.find( "radius=\"0.10\"" ) != std::string::npos,
+                         "Copper roundrect should keep its 0.10 mm radius" );
+    BOOST_CHECK_MESSAGE( xml.find( "radius=\"0.050\"" ) != std::string::npos,
+                         "Mask roundrect aperture must shrink its radius to 0.05 mm" );
+    BOOST_CHECK_MESSAGE( xml.find( "width=\"0.350\"" ) != std::string::npos,
+                         "Mask roundrect aperture should be 0.35 mm wide" );
+}
+
+
+/**
+ * Test that a multi-layer footprint graphic is emitted on every layer (Issue #24752).
+ *
+ * An fp_poly on F.Cu + F.Mask used to export only on its primary layer (F.Cu). KiCad plots it
+ * on both, so the F.Mask copy must be present too.
+ */
+BOOST_AUTO_TEST_CASE( MultiLayerFootprintGraphic_Issue24752 )
+{
+    BOARD board;
+    board.SetCopperLayerCount( 2 );
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetReference( wxT( "G1" ) );
+    fp->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 30 ) ) );
+    board.Add( fp );
+
+    PCB_SHAPE* poly = new PCB_SHAPE( fp, SHAPE_T::POLY );
+    poly->SetLayerSet( LSET( { F_Cu, F_Mask } ) );
+    poly->SetFilled( true );
+    poly->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+
+    SHAPE_POLY_SET polySet;
+    polySet.NewOutline();
+    polySet.Append( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 30 ) );
+    polySet.Append( pcbIUScale.mmToIU( 31 ), pcbIUScale.mmToIU( 30 ) );
+    polySet.Append( pcbIUScale.mmToIU( 31 ), pcbIUScale.mmToIU( 31 ) );
+    polySet.Append( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 31 ) );
+    poly->SetPolyShape( polySet );
+    fp->Add( poly );
+
+    wxString tempPath = CreateTempFile();
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "4";
+
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, &board, &props ) );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    std::string xml = ReadFile( tempPath );
+
+    // The polygon graphic must show up under both F.Cu and F.Mask.
+    std::string fCu = LayerFeatureRegion( xml, "F.Cu" );
+    std::string fMask = LayerFeatureRegion( xml, "F.Mask" );
+
+    BOOST_CHECK_MESSAGE( fCu.find( "UserPrimitiveRef" ) != std::string::npos,
+                         "Footprint graphic should be present on F.Cu" );
+    BOOST_CHECK_MESSAGE( fMask.find( "UserPrimitiveRef" ) != std::string::npos,
+                         "Multi-layer footprint graphic must also appear on F.Mask" );
+}
+
+
+/**
+ * Test that the per-layer solder mask margin expands the exported mask primitive
+ * (Issue #24749).
+ *
+ * The standard-primitive cache was keyed on pad geometry alone, so the copper
+ * primitive (no expansion) processed first was reused verbatim for the mask
+ * layer, dropping the solder mask margin. A 1.0 mm circular pad with a 0.5 mm
+ * mask margin must therefore export a 2.0 mm mask circle, not a 1.0 mm one.
+ */
+BOOST_AUTO_TEST_CASE( SolderMaskMarginExpandsMaskPrimitive_Issue24749 )
+{
+    BOARD board;
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetReference( wxT( "FID4" ) );
+    fp->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ) );
+    board.Add( fp );
+
+    PAD* pad = new PAD( fp );
+    pad->SetNumber( wxT( "1" ) );
+    pad->SetAttribute( PAD_ATTRIB::SMD );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetSize( PADSTACK::ALL_LAYERS,
+                  VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+    pad->SetLayerSet( LSET( { F_Cu, F_Mask } ) );
+    pad->SetLocalSolderMaskMargin( pcbIUScale.mmToIU( 0.5 ) );
+    fp->Add( pad );
+
+    wxString tempPath = CreateTempFile();
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "4";
+
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, &board, &props ) );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    std::ifstream xmlFile( tempPath.ToStdString() );
+    BOOST_REQUIRE( xmlFile.is_open() );
+
+    std::string xml( ( std::istreambuf_iterator<char>( xmlFile ) ),
+                     std::istreambuf_iterator<char>() );
+
+    // Resolve the primitive id referenced by the F.Mask padstack entry, then confirm
+    // that primitive's circle diameter is the mask-expanded 2.0 mm, not the 1.0 mm copper size.
+    const std::string maskRef = "<PadstackPadDef layerRef=\"F.Mask\"";
+    size_t maskDefPos = xml.find( maskRef );
+    BOOST_REQUIRE_MESSAGE( maskDefPos != std::string::npos,
+                           "F.Mask padstack pad definition should be present" );
+
+    size_t refPos = xml.find( "StandardPrimitiveRef id=\"", maskDefPos );
+    BOOST_REQUIRE( refPos != std::string::npos );
+    refPos += std::string( "StandardPrimitiveRef id=\"" ).size();
+    size_t refEnd = xml.find( '"', refPos );
+    std::string maskPrimId = xml.substr( refPos, refEnd - refPos );
+
+    std::string entry = "<EntryStandard id=\"" + maskPrimId + "\"";
+    size_t entryPos = xml.find( entry );
+    BOOST_REQUIRE_MESSAGE( entryPos != std::string::npos,
+                           "Mask primitive EntryStandard should be defined" );
+
+    size_t diaPos = xml.find( "diameter=\"", entryPos );
+    BOOST_REQUIRE( diaPos != std::string::npos );
+    diaPos += std::string( "diameter=\"" ).size();
+    size_t diaEnd = xml.find( '"', diaPos );
+    double diameter = std::stod( xml.substr( diaPos, diaEnd - diaPos ) );
+
+    BOOST_CHECK_MESSAGE( std::abs( diameter - 2.0 ) < 1e-4,
+                         "F.Mask primitive diameter should be 2.0 mm (1.0 mm pad + 0.5 mm "
+                         "margin per side), got " << diameter );
 }
 
 
