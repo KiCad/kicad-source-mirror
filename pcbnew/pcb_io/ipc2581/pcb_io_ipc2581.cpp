@@ -600,7 +600,14 @@ size_t PCB_IO_IPC2581::lineHash( int aWidth, LINE_STYLE aDashType )
 
 size_t PCB_IO_IPC2581::shapeHash( const PCB_SHAPE& aShape )
 {
-    return hash_fp_item( &aShape, HASH_POS | REL_COORD );
+    size_t hash = hash_fp_item( &aShape, HASH_POS | REL_COORD );
+
+    // hash_fp_item does not distinguish rectangles by their corner radius, so two rects that
+    // differ only in radius would otherwise share one primitive.
+    if( aShape.GetShape() == SHAPE_T::RECTANGLE )
+        hash_combine( hash, aShape.GetCornerRadius() );
+
+    return hash;
 }
 
 
@@ -909,7 +916,23 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
 
 void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAYER_ID aLayer )
 {
+    int      maxError = m_board->GetDesignSettings().m_MaxError;
+    wxString name;
+    VECTOR2I expansion{ 0, 0 };
+
+    // Mask and paste margins are stored per side, so query the actual layer rather than the
+    // front default or a back aperture would be grown by the front margin.
+    if( LSET( { F_Mask, B_Mask } ).Contains( aLayer ) )
+        expansion.x = expansion.y = 2 * aPad.GetSolderMaskExpansion( aLayer );
+
+    if( LSET( { F_Paste, B_Paste } ).Contains( aLayer ) )
+        expansion = 2 * aPad.GetSolderPasteMargin( aLayer );
+
+    // The mask and paste apertures are the copper shape grown by a per-layer margin, so a pad
+    // needs a distinct primitive per expansion. Fold the expansion into the dict key or the
+    // copper shape would be shared with the (differently sized) mask/paste apertures.
     size_t hash = hash_fp_item( &aPad, 0 );
+    hash_combine( hash, expansion.x, expansion.y );
     auto   iter = m_std_shape_dict.find( hash );
 
     if( iter != m_std_shape_dict.end() )
@@ -918,16 +941,6 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
         addAttribute( shape_node,  "id", iter->second );
         return;
     }
-
-    int      maxError = m_board->GetDesignSettings().m_MaxError;
-    wxString name;
-    VECTOR2I expansion{ 0, 0 };
-
-    if( LSET( { F_Mask, B_Mask } ).Contains( aLayer ) )
-        expansion.x = expansion.y = 2 * aPad.GetSolderMaskExpansion( PADSTACK::ALL_LAYERS );
-
-    if( LSET( { F_Paste, B_Paste } ).Contains( aLayer ) )
-        expansion = 2 * aPad.GetSolderPasteMargin( PADSTACK::ALL_LAYERS );
 
     switch( aPad.GetShape( PADSTACK::ALL_LAYERS ) )
     {
@@ -989,8 +1002,17 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PAD& aPad, PCB_LAY
         VECTOR2D pad_size = aPad.GetSize( PADSTACK::ALL_LAYERS ) + expansion;
         addAttribute( roundrect_node,  "width", floatVal( m_scale * pad_size.x ) );
         addAttribute( roundrect_node,  "height", floatVal( m_scale * pad_size.y ) );
-        roundrect_node->AddAttribute( "radius",
-                                      floatVal( m_scale * aPad.GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS ) ) );
+
+        // A mask/paste aperture is the copper roundrect grown by the per-side margin, which
+        // also grows the corner radius by that margin (Minkowski sum with a disk). expansion
+        // carries twice the per-side margin. Asymmetric paste margins are not a true Minkowski
+        // sum, so follow the plotter and use the larger component, then clamp the radius to the
+        // aperture's half-extent so a shrunk aperture cannot yield an over-rounded shape.
+        int base_radius = aPad.GetRoundRectCornerRadius( PADSTACK::ALL_LAYERS );
+        int radius_margin = std::max( expansion.x, expansion.y ) / 2;
+        int max_radius = std::max( 0, KiROUND( std::min( pad_size.x, pad_size.y ) / 2.0 ) );
+        int radius = std::clamp( base_radius + radius_margin, 0, max_radius );
+        roundrect_node->AddAttribute( "radius", floatVal( m_scale * radius ) );
         addAttribute( roundrect_node,  "upperRight", "true" );
         addAttribute( roundrect_node,  "upperLeft", "true" );
         addAttribute( roundrect_node,  "lowerRight", "true" );
@@ -1225,24 +1247,23 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
         int width = std::abs( aShape.GetRectangleWidth() );
         int height = std::abs( aShape.GetRectangleHeight() );
         int stroke_width = aShape.GetStroke().GetWidth();
+        int corner_radius = aShape.GetCornerRadius();
 
         wxXmlNode* rect_node = appendNode( special_node, "RectRound" );
         addLineDesc( rect_node, aShape.GetStroke().GetWidth(), aShape.GetStroke().GetLineStyle(),
                      true );
 
-        if( aShape.GetFillMode() == FILL_T::NO_FILL )
+        // RectRound rounds only the corners whose flag is set. KiCad rounds all four when the
+        // rectangle carries a corner radius, so drive the flags off the radius rather than the
+        // fill mode. A filled rect is grown by the stroke width the same as before.
+        wxString cornerFlag = corner_radius > 0 ? "true" : "false";
+        addAttribute( rect_node,  "upperRight", cornerFlag );
+        addAttribute( rect_node,  "upperLeft", cornerFlag );
+        addAttribute( rect_node,  "lowerRight", cornerFlag );
+        addAttribute( rect_node,  "lowerLeft", cornerFlag );
+
+        if( aShape.GetFillMode() != FILL_T::NO_FILL )
         {
-            addAttribute( rect_node,  "upperRight", "false" );
-            addAttribute( rect_node,  "upperLeft", "false" );
-            addAttribute( rect_node,  "lowerRight", "false" );
-            addAttribute( rect_node,  "lowerLeft", "false" );
-        }
-        else
-        {
-            addAttribute( rect_node,  "upperRight", "true" );
-            addAttribute( rect_node,  "upperLeft", "true" );
-            addAttribute( rect_node,  "lowerRight", "true" );
-            addAttribute( rect_node,  "lowerLeft", "true" );
             width += stroke_width;
             height += stroke_width;
         }
@@ -1251,7 +1272,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
 
         addAttribute( rect_node,  "width", floatVal( m_scale * width ) );
         addAttribute( rect_node,  "height", floatVal( m_scale * height ) );
-        addAttribute( rect_node,  "radius", floatVal( m_scale * ( stroke_width / 2.0 ) ) );
+        addAttribute( rect_node,  "radius", floatVal( m_scale * corner_radius ) );
 
         break;
     }
@@ -3575,8 +3596,13 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
         for( PCB_FIELD* field : fp->GetFields() )
             elements[field->GetLayer()][0].push_back( field );
 
+        // A graphic can live on several layers at once (e.g. copper + mask). KiCad plots it on
+        // each, so emit it on every layer in its set rather than only its primary layer.
         for( BOARD_ITEM* item : fp->GraphicalItems() )
-            elements[item->GetLayer()][0].push_back( item );
+        {
+            for( PCB_LAYER_ID layer : item->GetLayerSet().Seq() )
+                elements[layer][0].push_back( item );
+        }
 
         for( PAD* pad : fp->Pads() )
         {
@@ -3590,14 +3616,22 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
 
             // Some SMD pad definitions omit the mask layer even though their copper needs a
             // mask opening. Add those implicit mask features on the corresponding copper side.
+            // This only applies when the pad authors no mask side at all. A pad that carries a
+            // mask on one side only (e.g. *.Cu + B.Mask) has intentionally suppressed the other,
+            // so it must not receive an implicit opening there.
             // Solder paste is intentionally NOT added here. Absence of F.Paste/B.Paste in the
             // pad's layer set means "no paste" and must be respected, e.g. for thermal/exposed
             // pads whose stencil apertures are modeled as separate paste-only pads.
-            if( pad->IsOnLayer( F_Cu ) && pad->FlashLayer( F_Cu ) && !pad->IsOnLayer( F_Mask ) )
-                elements[F_Mask][pad->GetNetCode()].push_back( pad );
+            bool hasAuthoredMask = pad->IsOnLayer( F_Mask ) || pad->IsOnLayer( B_Mask );
 
-            if( pad->IsOnLayer( B_Cu ) && pad->FlashLayer( B_Cu ) && !pad->IsOnLayer( B_Mask ) )
-                elements[B_Mask][pad->GetNetCode()].push_back( pad );
+            if( !hasAuthoredMask )
+            {
+                if( pad->IsOnLayer( F_Cu ) && pad->FlashLayer( F_Cu ) )
+                    elements[F_Mask][pad->GetNetCode()].push_back( pad );
+
+                if( pad->IsOnLayer( B_Cu ) && pad->FlashLayer( B_Cu ) )
+                    elements[B_Mask][pad->GetNetCode()].push_back( pad );
+            }
         }
     }
 
