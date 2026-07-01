@@ -32,6 +32,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <view/view.h>
+#include <view/view_group.h>
 
 using namespace KIGFX;
 
@@ -51,6 +52,23 @@ BOOST_AUTO_TEST_CASE( HideAndSetVisibleTolerateNullItem )
 
     // Reaching this point without crashing is the assertion.
     BOOST_TEST( true );
+}
+
+
+BOOST_AUTO_TEST_CASE( ViewGroupRejectsNullItem )
+{
+    // Issue #24778: a re-entrant ExitGroup() during SCH_SELECTION_TOOL::EnterGroup() left the
+    // group overlay with a null (stale) member. VIEW_GROUP stored it, then the next repaint
+    // dereferenced it in ViewBBox()/ViewDraw(). Add() must drop a null the same way the VIEW
+    // mutators do.
+    VIEW_GROUP group;
+
+    group.Add( nullptr );
+
+    BOOST_TEST( group.GetSize() == 0u );
+
+    // Without the guard this iterated m_groupItems[0] on a null item and crashed.
+    group.ViewBBox();
 }
 
 

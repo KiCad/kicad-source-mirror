@@ -60,6 +60,9 @@ wxString VIEW_GROUP::GetClass() const
 
 void VIEW_GROUP::Add( VIEW_ITEM* aItem )
 {
+    if( !aItem )
+        return;
+
     m_groupItems.push_back( aItem );
 }
 
