@@ -29,6 +29,7 @@
 #include <lib_symbol.h>
 #include <sch_screen.h>
 #include <undo_redo_container.h>
+#include <widgets/editor_tabs_panel.h>
 
 #include <settings/json_settings_internals.h>
 
@@ -262,6 +263,30 @@ BOOST_AUTO_TEST_CASE( FreeTransientUndoCommandsSparesLiveSymbol )
 
     liveSymbol.reset();
     BOOST_CHECK_EQUAL( dtorCount, 2 );
+}
+
+
+/// Saving a library clears the dirty state on both stores that drive the tab strip: the context's
+/// screen flag (read on repaint) and the strip model entry (read on close).  A save that cleared only
+/// the screen left the model starred, so the asterisk persisted until the next stray repaint.
+BOOST_AUTO_TEST_CASE( ClearTabModifiedStateSyncsContextAndModel )
+{
+    std::unique_ptr<SYMBOL_BUFFER> buf = makeBuffer( wxS( "LMR16006" ) );
+
+    SYMBOL_EDITOR_TAB_CONTEXT ctx( wxS( "proj_lib_01" ), wxS( "LMR16006" ), buf.get() );
+    ctx.GetScreen()->SetContentModified();
+
+    EDITOR_TABS_MODEL model;
+    model.OpenDocument( ctx.GetTabKey(), /*asPreview*/ false );
+    model.MarkModified( ctx.GetTabKey(), true );
+
+    BOOST_REQUIRE( ctx.IsModified() );
+    BOOST_REQUIRE( model.Entries()[0].modified );
+
+    SYMBOL_EDIT_FRAME::clearTabModifiedState( ctx, model );
+
+    BOOST_CHECK( !ctx.IsModified() );
+    BOOST_CHECK( !model.Entries()[0].modified );
 }
 
 

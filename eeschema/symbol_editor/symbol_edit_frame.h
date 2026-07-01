@@ -40,6 +40,7 @@ class LIB_SYMBOL_LIBRARY_MANAGER;
 class SYMBOL_EDITOR_SETTINGS;
 class SYMBOL_EDITOR_TAB_CONTEXT;
 class EDITOR_TABS_PANEL;
+class EDITOR_TABS_MODEL;
 class EDA_LIST_DIALOG;
 class UNDO_REDO_CONTAINER;
 
@@ -115,6 +116,12 @@ public:
      * Clear the unsaved-edits flag on every tab in a saved library so its dirty indicator clears.
      */
     void clearSymbolTabsModifiedForLibrary( const wxString& aLibrary );
+
+    /**
+     * Clear a tab's dirty state on both the context (read on repaint) and the strip model (read on
+     * close), keeping the two stores that diverge after a save in agreement.
+     */
+    static void clearTabModifiedState( SYMBOL_EDITOR_TAB_CONTEXT& aContext, EDITOR_TABS_MODEL& aModel );
 
     /**
      * Free a detached context's undo/redo, which the frame's own teardown path never reaches.

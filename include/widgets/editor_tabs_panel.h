@@ -151,6 +151,12 @@ public:
 
     const EDITOR_TABS_MODEL& Model() const { return m_model; }
 
+    /**
+     * Mutable access to the dirty/preview model for hosts that clear several tabs at once and repaint
+     * the strip themselves with a single RefreshTabLabels().
+     */
+    EDITOR_TABS_MODEL& MutableModel() { return m_model; }
+
 private:
     void onPageChanged( wxAuiNotebookEvent& aEvent );
     void onPageClose( wxAuiNotebookEvent& aEvent );

@@ -307,6 +307,17 @@ void SYMBOL_EDIT_FRAME::clearSymbolTabUndoRedo( SYMBOL_EDITOR_TAB_CONTEXT& aCont
 }
 
 
+void SYMBOL_EDIT_FRAME::clearTabModifiedState( SYMBOL_EDITOR_TAB_CONTEXT& aContext,
+                                               EDITOR_TABS_MODEL&         aModel )
+{
+    // An active tab's screen aliases the frame's current screen, so this clears the live flag too.
+    if( SCH_SCREEN* screen = aContext.GetScreen() )
+        screen->SetContentModified( false );
+
+    aModel.MarkModified( aContext.GetTabKey(), false );
+}
+
+
 void SYMBOL_EDIT_FRAME::clearSymbolTabsModifiedForLibrary( const wxString& aLibrary )
 {
     for( const std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
@@ -314,10 +325,16 @@ void SYMBOL_EDIT_FRAME::clearSymbolTabsModifiedForLibrary( const wxString& aLibr
         if( ctx->GetLibrary() != aLibrary )
             continue;
 
-        // An active tab's screen aliases the frame's current screen, so this clears the live flag too.
-        if( SCH_SCREEN* screen = ctx->GetScreen() )
+        if( m_tabsPanel )
+            clearTabModifiedState( *ctx, m_tabsPanel->MutableModel() );
+        else if( SCH_SCREEN* screen = ctx->GetScreen() )
             screen->SetContentModified( false );
     }
+
+    // The strip queries the dirty flag only on repaint, so without this the cleared asterisk lingers
+    // until the next stray paint event reaches the tab the user was on.
+    if( m_tabsPanel )
+        m_tabsPanel->RefreshTabLabels();
 }
 
 
