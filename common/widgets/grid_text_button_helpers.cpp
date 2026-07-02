@@ -246,7 +246,7 @@ protected:
 
         if( filename.IsEmpty() || filename == wxT( "~" ) )
         {
-            FILEDLG_HOOK_EMBED_FILE customize;
+            FILEDLG_HOOK_EMBED_FILE customize( true, EMBED_FILE_CONTEXT::DATASHEET );
 
             wxFileDialog openFileDialog( this, _( "Open file" ), "", "", _( "All Files" ) + wxT( " (*.*)|*.*" ),
                                          wxFD_OPEN | wxFD_FILE_MUST_EXIST );
@@ -384,7 +384,7 @@ protected:
 
         if( !m_fileFilter.IsEmpty() )
         {
-            FILEDLG_HOOK_EMBED_FILE customize( false );
+            FILEDLG_HOOK_EMBED_FILE customize( false, EMBED_FILE_CONTEXT::MODEL_3D );
             wxFileDialog dlg( m_dlg, _( "Select a File" ), fn.GetPath(), fn.GetFullName(),
                               m_fileFilter, wxFD_FILE_MUST_EXIST | wxFD_OPEN );
 

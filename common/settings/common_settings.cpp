@@ -386,6 +386,15 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "do_not_show_again.migrate_wrl_prompt",
             &m_DoNotShowAgain.migrate_wrl_prompt, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "embed_file_defaults.datasheet", &m_EmbedFileDefaults.datasheet, true ) );
+
+    m_params.emplace_back(
+            new PARAM<bool>( "embed_file_defaults.drawing_sheet", &m_EmbedFileDefaults.drawing_sheet, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "embed_file_defaults.model_3d", &m_EmbedFileDefaults.model_3d, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "embed_file_defaults.sim_model", &m_EmbedFileDefaults.sim_model, false ) );
+
     m_params.emplace_back( new PARAM_LIST<wxString>( "system.extra_3d_search_dirs",
             &m_Extra3DSearchDirs, {} ) );
 
