@@ -443,17 +443,23 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_pinMapPanel->SetSymbol( m_libEntry );
     m_pinMapPanel->TransferDataToWindow();
 
+    // Always open on the General page, unless the caller explicitly asked for the Pin Map
+    // tab (the Edit Pin Map button).  This overrides DIALOG_SHIM's remembered-tab restore.
+    int targetPage = 0;
+
     if( m_forcePinMapPage )
     {
         for( size_t page = 0; page < m_NoteBook->GetPageCount(); ++page )
         {
             if( m_NoteBook->GetPage( page ) == m_pinMapPage )
             {
-                m_NoteBook->SetSelection( page );
+                targetPage = (int) page;
                 break;
             }
         }
     }
+
+    m_NoteBook->ChangeSelection( targetPage );
 
     return true;
 }

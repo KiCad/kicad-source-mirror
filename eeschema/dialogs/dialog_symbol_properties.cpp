@@ -597,17 +597,23 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     Layout();
     m_fieldsGrid->SetMinVisibleRows( this, 4 );
 
+    // Always open on the General page, unless the caller explicitly asked for the Pin Map
+    // tab (the Edit Pin Map button).  This overrides DIALOG_SHIM's remembered-tab restore.
+    int targetPage = 0;
+
     if( m_forcePinMapPage )
     {
         for( size_t page = 0; page < m_notebook1->GetPageCount(); ++page )
         {
             if( m_notebook1->GetPage( page ) == m_pinMapPage )
             {
-                m_notebook1->SetSelection( page );
+                targetPage = (int) page;
                 break;
             }
         }
     }
+
+    m_notebook1->ChangeSelection( targetPage );
 
     return true;
 }
