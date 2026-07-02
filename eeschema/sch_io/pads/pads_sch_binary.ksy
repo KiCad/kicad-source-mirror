@@ -6,7 +6,7 @@ meta:
   encoding: ASCII
   file-extension: sch
   imports:
-    - /microsoft_cfb
+    - microsoft_cfb
 
 seq:
   - id: header
@@ -41,8 +41,9 @@ types:
       - id: format_flags
         type: u2
         valid: 1
-      - id: header_word_06
+      - id: application_header_word_06
         type: u2
+        doc: Application-owned header value passed through the derived database reader.
       - id: reserved_zero_08
         contents: [0, 0, 0, 0, 0, 0, 0, 0]
       - id: database_identifier
@@ -60,8 +61,9 @@ types:
       - id: format_flags
         type: u2
         valid: 0
-      - id: header_word_06
+      - id: application_header_word_06
         type: u2
+        doc: Application-owned header value passed through the derived database reader.
       - id: reserved_zero_08
         contents: [0, 0, 0, 0, 0, 0, 0, 0]
       - id: database_identifier
