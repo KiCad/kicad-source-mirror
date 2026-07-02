@@ -614,9 +614,9 @@ const SCRIPT_ROW g_script[] = {
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
         { "spin", T_UBF, 16, BITFIELD( 2, 14, 14 ) },
-        { "textfield", T_STR, 18, 5 },
+        { "textfield", T_STR, 18, 6 },
         TERM_A } },
-    // A text-family record whose inline 5-byte string did not fit spills the full
+    // A text-family record whose inline 6-byte string did not fit spills the full
     // string into a trailing 0x3200 record, with the bytes from offset 2 onward.
     { EGKW_SECT_LONGTEXT, 0xFFFF, "longtext", { TERM_F }, { TERM_S }, { { "textfield", T_STR, 2, 22 }, TERM_A } },
     { EGKW_SECT_NETBUSLABEL,
@@ -632,7 +632,7 @@ const SCRIPT_ROW g_script[] = {
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
         { "spin", T_UBF, 16, BITFIELD( 2, 14, 14 ) },
-        { "textfield", T_STR, 18, 5 },
+        { "textfield", T_STR, 18, 6 },
         TERM_A } },
     { EGKW_SECT_SMASHEDNAME,
       0xFF00,
@@ -647,7 +647,7 @@ const SCRIPT_ROW g_script[] = {
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
         { "spin", T_UBF, 16, BITFIELD( 2, 14, 14 ) },
-        { "textfield", T_STR, 18, 5 },
+        { "textfield", T_STR, 18, 6 },
         TERM_A } },
     { EGKW_SECT_SMASHEDVALUE,
       0xFF00,
@@ -662,7 +662,7 @@ const SCRIPT_ROW g_script[] = {
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
         { "spin", T_UBF, 16, BITFIELD( 2, 14, 14 ) },
-        { "textfield", T_STR, 18, 5 },
+        { "textfield", T_STR, 18, 6 },
         TERM_A } },
     { EGKW_SECT_PACKAGEVARIANT,
       0xFF7F,
@@ -717,7 +717,7 @@ const SCRIPT_ROW g_script[] = {
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
         { "spin", T_UBF, 16, BITFIELD( 2, 14, 14 ) },
-        { "textfield", T_STR, 18, 5 },
+        { "textfield", T_STR, 18, 6 },
         TERM_A } },
     { EGKW_SECT_SMASHEDGATE,
       0xFF7F,
@@ -732,7 +732,7 @@ const SCRIPT_ROW g_script[] = {
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
         { "spin", T_UBF, 16, BITFIELD( 2, 14, 14 ) },
-        { "textfield", T_STR, 18, 5 },
+        { "textfield", T_STR, 18, 6 },
         TERM_A } },
     // The attribute low byte is flags like the other text-family records, so match on the
     // high byte alone (real boards set bit 5, which the bit-7-only mask rejected).
@@ -749,7 +749,7 @@ const SCRIPT_ROW g_script[] = {
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
         { "spin", T_UBF, 16, BITFIELD( 2, 14, 14 ) },
-        { "textfield", T_STR, 18, 5 },
+        { "textfield", T_STR, 18, 6 },
         TERM_A } },
     { EGKW_SECT_ATTRIBUTEVALUE,
       0xFF7F,
@@ -784,7 +784,7 @@ const SCRIPT_ROW g_script[] = {
         { "bin_rot", T_UBF, 16, BITFIELD( 2, 0, 11 ) },
         { "mirrored", T_UBF, 16, BITFIELD( 2, 12, 12 ) },
         { "spin", T_UBF, 16, BITFIELD( 2, 14, 14 ) },
-        { "textfield", T_STR, 18, 5 },
+        { "textfield", T_STR, 18, 6 },
         TERM_A } },
 
     // unknown leaves
@@ -1900,7 +1900,7 @@ bool EAGLE_BIN_PARSER::isLongTextHost( int aId ) const
 
 void EAGLE_BIN_PARSER::postprocLongText( EGB_NODE* aRoot )
 {
-    // A text-family record with a string too long for its 5-byte inline field is
+    // A text-family record with a string too long for its 6-byte inline field is
     // immediately followed by exactly one 0x3200 record carrying the full string.
     // Fold that string back onto the preceding text sibling and drop the record;
     // the XML schema has no standalone longtext element. A longtext with no valid

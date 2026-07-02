@@ -336,4 +336,43 @@ BOOST_AUTO_TEST_CASE( LoadDropsUnmappedLayers )
 }
 
 
+/**
+ * Regression test for the six-byte inline text field. Eagle stores a text-family
+ * record's string in the final six bytes of its 24-byte block; the decoder read
+ * only five, so the six-character ">VALUE" arrived as ">VALU". That truncated
+ * string missed the ">VALUE" special case and fell through to the generic variable
+ * substitution, producing the unresolvable "${VALU}" placeholder the DRC flagged.
+ * blink1_b1a places ">VALUE" on several footprints, so a correct decode routes each
+ * into the footprint value field and never emits the truncated placeholder.
+ */
+BOOST_AUTO_TEST_CASE( LoadRoutesSmashedValueText )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/blink1_b1a.brd" ) );
+
+    if( !board )
+        return;
+
+    auto footprintTexts = [&]()
+    {
+        std::set<wxString> texts;
+
+        for( FOOTPRINT* fp : board->Footprints() )
+        {
+            texts.insert( fp->Value().GetText() );
+
+            for( BOARD_ITEM* item : fp->GraphicalItems() )
+            {
+                if( PCB_TEXT* text = dynamic_cast<PCB_TEXT*>( item ) )
+                    texts.insert( text->GetText() );
+            }
+        }
+
+        return texts;
+    }();
+
+    BOOST_CHECK( !footprintTexts.count( wxS( "${VALU}" ) ) );
+    BOOST_CHECK( !footprintTexts.count( wxS( ">VALU" ) ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
