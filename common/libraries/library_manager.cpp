@@ -30,6 +30,7 @@
 #include <paths.h>
 #include <pgm_base.h>
 #include <richio.h>
+#include <string_utils.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
 
@@ -1224,6 +1225,8 @@ std::vector<wxString> LIBRARY_MANAGER_ADAPTER::GetLibraryNames() const
         if( loaded )
             ret.emplace_back( nickname );
     }
+
+    StrNumSort( ret, CASE_SENSITIVITY::INSENSITIVE );
 
     wxLogTrace( traceLibraries, "GetLibraryNames: returning %zu of %zu libraries", ret.size(), rows.size() );
     return ret;

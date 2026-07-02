@@ -126,6 +126,11 @@ wxArrayString SYMBOL_LIBRARY_MANAGER::GetLibraryNames() const
         res.Add( row->Nickname() );
     }
 
+    res.Sort( []( const wxString& lhs, const wxString& rhs ) -> int
+              {
+                  return StrNumCmp( lhs, rhs, true );
+              } );
+
     return res;
 }
 
