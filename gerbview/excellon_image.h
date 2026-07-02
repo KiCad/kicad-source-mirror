@@ -176,6 +176,7 @@ private:
     bool Select_Tool( char*& text );
     bool Execute_EXCELLON_G_Command( char*& text );
     bool Execute_Drill_Command( char*& text );
+    bool Execute_Repeat_Command( char*& text );
 
     /**
      * Read an Altium-specific FILE_FORMAT=X:X attribute that specifies the length

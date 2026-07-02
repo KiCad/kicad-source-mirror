@@ -511,6 +511,10 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName, EXCELLON_DEFAULTS
                 Execute_EXCELLON_G_Command( text );
                 break;
 
+            case 'R': // Repeat hole command R#(X#Y#)
+                Execute_Repeat_Command( text );
+                break;
+
             case 'X':
             case 'Y':               // command like X12550Y19250
                 Execute_Drill_Command(text);
@@ -895,6 +899,47 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
         }
     }
 
+    return true;
+}
+
+
+bool EXCELLON_IMAGE::Execute_Repeat_Command( char*& text )
+{
+    // Excellon repeat hole command R#(X#Y#)
+    // Repeat the last hole # times, adding the given incremental X and Y step
+    // each time, using the currently selected tool.
+    int count = CodeNumber( text ); // reads the count, advances past R and the digits
+
+    if( count <= 0 )
+        return false;
+
+    VECTOR2I startPos = m_CurrentPos;
+    bool     saveRelative = m_Relative;
+
+    m_Relative = true;
+    VECTOR2I step = ReadXYCoord( text, true ) - startPos;
+    m_Relative = saveRelative;
+    m_CurrentPos = startPos;
+
+    D_CODE* tool = GetDCODE( m_Current_Tool );
+
+    if( !tool )
+    {
+        AddMessageToList( wxString::Format( _( "Tool %d not defined" ), m_Current_Tool ) );
+        return false;
+    }
+
+    for( int ii = 0; ii < count; ++ii )
+    {
+        m_CurrentPos += step;
+
+        GERBER_DRAW_ITEM* gbritem = new GERBER_DRAW_ITEM( this );
+        AddItemToList( gbritem );
+        fillFlashedGBRITEM( gbritem, tool->m_ApertType, tool->m_Num_Dcode, m_CurrentPos, tool->m_Size, false );
+        StepAndRepeatItem( *gbritem );
+    }
+
+    m_PreviousPos = m_CurrentPos;
     return true;
 }
 
