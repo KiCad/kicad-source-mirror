@@ -37,6 +37,7 @@
 
 #include <map>
 #include <set>
+#include <vector>
 
 #include <wx/filename.h>
 
@@ -76,6 +77,19 @@ struct EAGLE_BINARY_IMPORT_FIXTURE
         }
 
         return board;
+    }
+
+    static std::vector<ZONE*> copperPours( BOARD* aBoard )
+    {
+        std::vector<ZONE*> pours;
+
+        for( ZONE* zone : aBoard->Zones() )
+        {
+            if( !zone->GetIsRuleArea() && IsCopperLayer( zone->GetFirstLayer() ) )
+                pours.push_back( zone );
+        }
+
+        return pours;
     }
 };
 
@@ -372,6 +386,51 @@ BOOST_AUTO_TEST_CASE( LoadRoutesSmashedValueText )
 
     BOOST_CHECK( !footprintTexts.count( wxS( "${VALU}" ) ) );
     BOOST_CHECK( !footprintTexts.count( wxS( ">VALU" ) ) );
+}
+
+
+/**
+ * Regression test for copper pour polygons. Eagle stores a polygon outline as a chain
+ * of connected wire segments, but the XML reader expects <vertex> nodes; the binary
+ * decoder emitted the raw wires, so loadPolygon() saw zero vertices and dropped every
+ * pour ("less than 3 vertices"). The decoder now rebuilds the vertices from the segment
+ * start points. boomchak carries two signal pours on copper (Eagle layers 1 and 16).
+ */
+BOOST_AUTO_TEST_CASE( LoadV3CopperPourPolygons )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/boomchak.brd" ) );
+
+    if( !board )
+        return;
+
+    std::vector<ZONE*> pours = copperPours( board.get() );
+
+    BOOST_REQUIRE_GE( pours.size(), 2u );
+
+    // A pour rebuilt from segment start points must yield a single closed outline with at
+    // least three corners; a botched conversion would collapse it or leave it empty.
+    for( ZONE* zone : pours )
+    {
+        BOOST_CHECK_EQUAL( zone->Outline()->OutlineCount(), 1 );
+        BOOST_CHECK_GE( zone->GetNumCorners(), 3 );
+    }
+}
+
+
+/**
+ * Regression test for issue 24812. This 5.12 Professional board's two copper pours were
+ * reported missing after import because their outline wire segments were never rebuilt as
+ * vertices. The board is not license-clean and is not committed, so this loads only when
+ * the sample is present locally.
+ */
+BOOST_AUTO_TEST_CASE( LoadIssue24812CopperPours )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24812_vertice_error.brd" ) );
+
+    if( !board )
+        return;
+
+    BOOST_CHECK_GE( copperPours( board.get() ).size(), 2u );
 }
 
 

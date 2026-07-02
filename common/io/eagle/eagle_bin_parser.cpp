@@ -1635,6 +1635,45 @@ void EAGLE_BIN_PARSER::postprocArcs( EGB_NODE* aRoot )
 }
 
 
+void EAGLE_BIN_PARSER::postprocPolygons( EGB_NODE* aRoot )
+{
+    // Eagle stores a polygon outline as a chain of connected wire segments, but the
+    // XML reader wants the outline as <vertex> nodes. Replace each direct wire child
+    // with a vertex at the segment start point, carrying the segment's curvature as
+    // the vertex-to-next curve. Runs after postprocWires/postprocArcs have populated
+    // the endpoints and curve, and before postprocUnits scales the coordinates.
+    if( aRoot->id == EGKW_SECT_POLYGON )
+    {
+        std::vector<std::unique_ptr<EGB_NODE>> rebuilt;
+
+        for( auto& child : aRoot->children )
+        {
+            if( child->id != EGKW_SECT_LINE )
+            {
+                rebuilt.push_back( std::move( child ) );
+                continue;
+            }
+
+            auto vertex = std::make_unique<EGB_NODE>();
+            vertex->name = wxS( "vertex" );
+            vertex->parent = aRoot;
+            vertex->props[wxS( "x" )] = child->Prop( wxS( "x1" ) );
+            vertex->props[wxS( "y" )] = child->Prop( wxS( "y1" ) );
+
+            if( child->HasProp( wxS( "curve" ) ) )
+                vertex->props[wxS( "curve" )] = child->Prop( wxS( "curve" ) );
+
+            rebuilt.push_back( std::move( vertex ) );
+        }
+
+        aRoot->children = std::move( rebuilt );
+    }
+
+    for( const auto& child : aRoot->children )
+        postprocPolygons( child.get() );
+}
+
+
 void EAGLE_BIN_PARSER::postprocVias( EGB_NODE* aRoot )
 {
     if( aRoot->id == EGKW_SECT_VIA )
@@ -2367,6 +2406,7 @@ void EAGLE_BIN_PARSER::postProcess( EGB_NODE* aRoot, const DRC_CTX& aDrc )
 
     postprocWires( aRoot );
     postprocArcs( aRoot );
+    postprocPolygons( aRoot );
     postprocVias( aRoot );
     postprocCircles( aRoot );
     postprocSmd( aRoot );
@@ -2532,6 +2572,7 @@ void EAGLE_BIN_PARSER::postProcessSchematic( EGB_NODE* aRoot )
     postprocLongText( aRoot );
     postprocWires( aRoot );
     postprocArcs( aRoot );
+    postprocPolygons( aRoot );
     postprocCircles( aRoot );
     postprocFreeText( aRoot );
     postprocTextContent( aRoot );

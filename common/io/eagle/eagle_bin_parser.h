@@ -159,6 +159,7 @@ private:
     void postprocContactRefs( EGB_NODE* aSignals, EGB_NODE* aElements, EGB_NODE* aLibraries );
     void postprocWires( EGB_NODE* aRoot );
     void postprocArcs( EGB_NODE* aRoot );
+    void postprocPolygons( EGB_NODE* aRoot );
     void postprocVias( EGB_NODE* aRoot );
     void postprocUnits( EGB_NODE* aRoot );
     void postprocCircles( EGB_NODE* aRoot );
