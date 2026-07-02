@@ -12,6 +12,7 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/polygon_triangulation.h>
+#include <geometry/geometry_predicates.h>
 #include <trigo.h>
 #include <thread>
 #include <chrono>
@@ -1141,6 +1142,202 @@ BOOST_AUTO_TEST_CASE( CacheTriangulation_AfterUpdateTriangulationDataHash )
 
     BOOST_TEST( polySet.IsTriangulationUpToDate() );
     BOOST_TEST( polySet.TriangulatedPolyCount() > 0 );
+}
+
+namespace
+{
+double meshMinAngleDeg( const SHAPE_POLY_SET::TRIANGULATED_POLYGON& aTri )
+{
+    double minAngle = 180.0;
+
+    for( const auto& tri : aTri.Triangles() )
+    {
+        minAngle = std::min( minAngle, GEOM_TEST::TriangleMinAngleDeg( tri.GetPoint( 0 ),
+                                                                       tri.GetPoint( 1 ),
+                                                                       tri.GetPoint( 2 ) ) );
+    }
+
+    return minAngle;
+}
+
+
+double meshArea( const SHAPE_POLY_SET::TRIANGULATED_POLYGON& aTri )
+{
+    double area = 0.0;
+
+    for( const auto& tri : aTri.Triangles() )
+        area += tri.Area();
+
+    return area;
+}
+
+
+bool meshHasEdge( const SHAPE_POLY_SET::TRIANGULATED_POLYGON& aTri, int aU, int aV )
+{
+    for( const auto& tri : aTri.Triangles() )
+    {
+        bool hasU = tri.a == aU || tri.b == aU || tri.c == aU;
+        bool hasV = tri.a == aV || tri.b == aV || tri.c == aV;
+
+        if( hasU && hasV )
+            return true;
+    }
+
+    return false;
+}
+
+
+int meshSpikeyCount( const SHAPE_POLY_SET::TRIANGULATED_POLYGON& aTri )
+{
+    int count = 0;
+
+    for( const auto& tri : aTri.Triangles() )
+    {
+        VECTOR2I a = tri.GetPoint( 0 ), b = tri.GetPoint( 1 ), c = tri.GetPoint( 2 );
+
+        if( KIGEOM::IsSliverTriangle( a, b, c ) )
+            count++;
+    }
+
+    return count;
+}
+} // namespace
+
+
+BOOST_AUTO_TEST_CASE( RefineFlipsNonDelaunayDiagonal )
+{
+    // Vertex 3 lies inside the circumcircle of 0-1-2, so diagonal 0-2 is non-Delaunay and must
+    // flip to 1-3.
+    SHAPE_POLY_SET::TRIANGULATED_POLYGON tp( 0 );
+    tp.AddVertex( VECTOR2I( 0, 0 ) );
+    tp.AddVertex( VECTOR2I( 10000, 0 ) );
+    tp.AddVertex( VECTOR2I( 10000, 10000 ) );
+    tp.AddVertex( VECTOR2I( 2000, 8000 ) );
+    tp.AddTriangle( 0, 1, 2 );
+    tp.AddTriangle( 0, 2, 3 );
+
+    double beforeAngle = meshMinAngleDeg( tp );
+    double beforeArea  = meshArea( tp );
+
+    tp.Refine();
+
+    BOOST_CHECK_EQUAL( tp.GetTriangleCount(), 2u );
+    BOOST_CHECK_CLOSE( meshArea( tp ), beforeArea, 0.001 );
+    BOOST_CHECK_GT( meshMinAngleDeg( tp ), beforeAngle );
+
+    BOOST_CHECK( meshHasEdge( tp, 0, 1 ) );
+    BOOST_CHECK( meshHasEdge( tp, 1, 2 ) );
+    BOOST_CHECK( meshHasEdge( tp, 2, 3 ) );
+    BOOST_CHECK( meshHasEdge( tp, 0, 3 ) );
+
+    BOOST_CHECK( !meshHasEdge( tp, 0, 2 ) );
+    BOOST_CHECK( meshHasEdge( tp, 1, 3 ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( RefinePrefersFewerSliversOverDelaunay )
+{
+    // Diagonal 0-2 is Delaunay-legal but produces a sliver; 1-3 produces none. Refine must prefer
+    // the fewer-sliver diagonal over the Delaunay one.
+    SHAPE_POLY_SET::TRIANGULATED_POLYGON tp( 0 );
+    tp.AddVertex( VECTOR2I( 0, 0 ) );
+    tp.AddVertex( VECTOR2I( 284000, 42000 ) );
+    tp.AddVertex( VECTOR2I( 276000, 68000 ) );
+    tp.AddVertex( VECTOR2I( 38000, 126000 ) );
+    tp.AddTriangle( 0, 1, 2 );
+    tp.AddTriangle( 0, 2, 3 );
+
+    // Precondition: 0-2 is Delaunay-legal, so a Delaunay-only refine would not touch it.
+    BOOST_REQUIRE( KIGEOM::InCircleDelaunayLegal( VECTOR2I( 0, 0 ), VECTOR2I( 284000, 42000 ),
+                                                  VECTOR2I( 276000, 68000 ),
+                                                  VECTOR2I( 38000, 126000 ) ) );
+    BOOST_REQUIRE_EQUAL( meshSpikeyCount( tp ), 1 );
+
+    double beforeArea = meshArea( tp );
+
+    tp.Refine();
+
+    BOOST_CHECK_EQUAL( tp.GetTriangleCount(), 2u );
+    BOOST_CHECK_CLOSE( meshArea( tp ), beforeArea, 0.001 );
+    BOOST_CHECK_EQUAL( meshSpikeyCount( tp ), 0 );
+    BOOST_CHECK( !meshHasEdge( tp, 0, 2 ) );
+    BOOST_CHECK( meshHasEdge( tp, 1, 3 ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( RefineLeavesDelaunayMeshUnchanged )
+{
+    // An already-Delaunay square triangulation must be a fixed point: no spurious flips that
+    // would churn the mesh or, worse, oscillate.
+    SHAPE_POLY_SET::TRIANGULATED_POLYGON tp( 0 );
+    tp.AddVertex( VECTOR2I( 0, 0 ) );
+    tp.AddVertex( VECTOR2I( 10000, 0 ) );
+    tp.AddVertex( VECTOR2I( 10000, 10000 ) );
+    tp.AddVertex( VECTOR2I( 0, 10000 ) );
+    tp.AddTriangle( 0, 1, 2 );
+    tp.AddTriangle( 0, 2, 3 );
+
+    double beforeArea = meshArea( tp );
+
+    tp.Refine();
+
+    BOOST_CHECK_EQUAL( tp.GetTriangleCount(), 2u );
+    BOOST_CHECK_CLOSE( meshArea( tp ), beforeArea, 0.001 );
+    BOOST_CHECK( meshHasEdge( tp, 0, 2 ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( PredicatesHandleFullCoordinateRange )
+{
+    // The 4e9 nm width exceeds a 32-bit difference; a->b->c is counter-clockwise and must read so.
+    VECTOR2I a( -2000000000, 0 );
+    VECTOR2I b( 2000000000, 0 );
+    VECTOR2I c( 2000000000, 1000 );
+
+    BOOST_CHECK_EQUAL( KIGEOM::OrientationSign( a, b, c ), 1 );
+    BOOST_CHECK_EQUAL( KIGEOM::OrientationSign( a, c, b ), -1 );
+
+    // The same triangle is a needle; the sliver must still register at this span.
+    BOOST_CHECK( KIGEOM::IsSliverTriangle( a, b, c ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( RefinePreservesNonManifoldEdge )
+{
+    // Three triangles share edge 0-1, as a hole-bridge pinch produces. That non-manifold edge must
+    // act as a boundary and never flip.
+    SHAPE_POLY_SET::TRIANGULATED_POLYGON tp( 0 );
+    tp.AddVertex( VECTOR2I( 0, 0 ) );
+    tp.AddVertex( VECTOR2I( 100000, 0 ) );
+    tp.AddVertex( VECTOR2I( 50000, 30000 ) );
+    tp.AddVertex( VECTOR2I( 50000, -30000 ) );
+    tp.AddVertex( VECTOR2I( 50000, 60000 ) );
+    tp.AddTriangle( 0, 1, 2 );
+    tp.AddTriangle( 0, 1, 3 );
+    tp.AddTriangle( 0, 1, 4 );
+
+    std::vector<int> before;
+
+    for( const auto& tri : tp.Triangles() )
+    {
+        before.push_back( tri.a );
+        before.push_back( tri.b );
+        before.push_back( tri.c );
+    }
+
+    tp.Refine();
+
+    std::vector<int> after;
+
+    for( const auto& tri : tp.Triangles() )
+    {
+        after.push_back( tri.a );
+        after.push_back( tri.b );
+        after.push_back( tri.c );
+    }
+
+    BOOST_CHECK( before == after );
+    BOOST_CHECK( meshHasEdge( tp, 0, 1 ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

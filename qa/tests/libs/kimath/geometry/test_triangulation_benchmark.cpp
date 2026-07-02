@@ -19,11 +19,15 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <geometry/shape_poly_set.h>
+#include <geometry/geometry_predicates.h>
 #include <core/profile.h>
+
+#include "geom_test_utils.h"
 #include <nlohmann/json.hpp>
 
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <map>
@@ -69,6 +73,20 @@ struct ZONE_STATS
     double      stddevTriArea    = 0.0;
     int         spikeyTriangles  = 0;
     double      spikeyRatio      = 0.0;
+
+    // Regularity metrics. minAngle percentiles describe the tail of thin triangles; the
+    // worst 1% (p1) is the sliver signal, p50 the typical shape. Angles are degrees.
+    double      minAnglePctl1    = 0.0;
+    double      minAnglePctl5    = 0.0;
+    double      minAnglePctl50   = 0.0;
+    int         trisBelow5Deg    = 0;
+    int         trisBelow10Deg   = 0;
+    int         trisBelow15Deg   = 0;
+    double      meanRadiusRatio  = 0.0;
+
+    // Per-triangle minimum interior angles, retained so the global run can aggregate
+    // corpus-wide percentiles rather than averaging per-zone summaries.
+    std::vector<double> minAngles;
 };
 
 
@@ -82,6 +100,10 @@ struct BASELINE_ZONE
     double      stddevTriArea   = 0.0;
     int         spikeyTriangles = 0;
     double      originalArea    = 0.0;
+    double      minAnglePctl1   = 0.0;
+    double      minAnglePctl5   = 0.0;
+    int         trisBelow10Deg  = 0;
+    int64_t     timeUs          = 0;
 };
 
 
@@ -127,8 +149,17 @@ struct ZONE_COMPARISON
     double curStddev        = 0.0;
     double baseCoverage     = 0.0;
     double curCoverage      = 0.0;
+    double baseMinAngleP5   = 0.0;
+    double curMinAngleP5    = 0.0;
+    int    baseBelow10Deg   = 0;
+    int    curBelow10Deg    = 0;
+    int64_t baseTimeUs      = 0;
+    int64_t curTimeUs       = 0;
 
     double spikeyDeltaPp() const { return ( curSpikeyRatio - baseSpikeyRatio ) * 100.0; }
+
+    // Positive means the current run's worst-tail triangles opened up (more regular).
+    double minAngleP5DeltaDeg() const { return curMinAngleP5 - baseMinAngleP5; }
 
     double triangleDeltaPct() const
     {
@@ -144,6 +175,15 @@ struct ZONE_COMPARISON
             return curStddev == 0.0 ? 0.0 : 100.0;
 
         return ( curStddev - baseStddev ) / baseStddev * 100.0;
+    }
+
+    double timeDeltaPct() const
+    {
+        if( baseTimeUs == 0 )
+            return curTimeUs == 0 ? 0.0 : 100.0;
+
+        return static_cast<double>( curTimeUs - baseTimeUs ) / static_cast<double>( baseTimeUs )
+               * 100.0;
     }
 };
 
@@ -204,6 +244,10 @@ BASELINE_DATA LoadBaseline( const fs::path& aJsonPath )
                     zone.stddevTriArea   = zoneJson.value( "stddev_triangle_area_nm2", 0.0 );
                     zone.spikeyTriangles = zoneJson.value( "spikey_triangles", 0 );
                     zone.originalArea    = zoneJson.value( "original_area_nm2", 0.0 );
+                    zone.minAnglePctl1   = zoneJson.value( "min_angle_p1_deg", 0.0 );
+                    zone.minAnglePctl5   = zoneJson.value( "min_angle_p5_deg", 0.0 );
+                    zone.trisBelow10Deg  = zoneJson.value( "tris_below_10deg", 0 );
+                    zone.timeUs          = zoneJson.value( "time_us", (int64_t) 0 );
                     board.zones.push_back( zone );
                 }
             }
@@ -291,6 +335,46 @@ bool ParsePolyFile( const fs::path& aPath, BOARD_ENTRY& aBoard )
 }
 
 
+// Number of cold re-triangulations timed per zone; the median rejects scheduler jitter.
+constexpr int TIMING_ITERATIONS = 5;
+
+
+// Radius ratio 2r/R normalized to [0,1]; 1.0 is equilateral, 0.0 is degenerate.
+double TriangleRadiusRatio( const VECTOR2I& a, const VECTOR2I& b, const VECTOR2I& c )
+{
+    double ab = a.Distance( b );
+    double bc = b.Distance( c );
+    double ca = c.Distance( a );
+
+    double s = ( ab + bc + ca ) / 2.0;
+
+    if( s <= 0.0 || ab <= 0.0 || bc <= 0.0 || ca <= 0.0 )
+        return 0.0;
+
+    double area = std::sqrt( std::max( 0.0, s * ( s - ab ) * ( s - bc ) * ( s - ca ) ) );
+
+    return 8.0 * area * area / ( s * ab * bc * ca );
+}
+
+
+// Linear-interpolated percentile over a pre-sorted ascending vector.
+double Percentile( const std::vector<double>& aSorted, double aPct )
+{
+    if( aSorted.empty() )
+        return 0.0;
+
+    if( aSorted.size() == 1 )
+        return aSorted.front();
+
+    double rank = aPct / 100.0 * static_cast<double>( aSorted.size() - 1 );
+    size_t lo   = static_cast<size_t>( std::floor( rank ) );
+    size_t hi   = static_cast<size_t>( std::ceil( rank ) );
+    double frac = rank - static_cast<double>( lo );
+
+    return aSorted[lo] + frac * ( aSorted[hi] - aSorted[lo] );
+}
+
+
 ZONE_STATS ComputeZoneStats( ZONE_ENTRY& aZone )
 {
     ZONE_STATS stats;
@@ -300,10 +384,26 @@ ZONE_STATS ComputeZoneStats( ZONE_ENTRY& aZone )
     stats.vertexCount  = aZone.vertexCount;
     stats.originalArea = aZone.polySet.Area();
 
-    PROF_TIMER timer;
+    // Cold-cache timing: aZone.polySet is not triangulated until after this loop, so each copy
+    // starts with an invalid cache and the timer captures a full re-triangulation, never a cache
+    // hit. Report the median across iterations to reject scheduler jitter.
+    std::vector<int64_t> timings;
+
+    for( int iter = 0; iter < TIMING_ITERATIONS; iter++ )
+    {
+        SHAPE_POLY_SET cold( aZone.polySet );
+
+        PROF_TIMER timer;
+        cold.CacheTriangulation();
+        timer.Stop();
+        timings.push_back( static_cast<int64_t>( timer.msecs() * 1000.0 ) );
+    }
+
+    std::sort( timings.begin(), timings.end() );
+    stats.timeUs = timings[timings.size() / 2];
+
+    // Populate the zone's own cache once for the geometry walk below.
     aZone.polySet.CacheTriangulation();
-    timer.Stop();
-    stats.timeUs = static_cast<int64_t>( timer.msecs() * 1000.0 );
 
     std::vector<double> triAreas;
 
@@ -336,6 +436,8 @@ ZONE_STATS ComputeZoneStats( ZONE_ENTRY& aZone )
         stats.stddevTriArea = std::sqrt( sumSqDiff / static_cast<double>( triAreas.size() ) );
     }
 
+    double radiusRatioSum = 0.0;
+
     for( unsigned int i = 0; i < aZone.polySet.TriangulatedPolyCount(); i++ )
     {
         const auto* triPoly = aZone.polySet.TriangulatedPolygon( static_cast<int>( i ) );
@@ -346,20 +448,36 @@ ZONE_STATS ComputeZoneStats( ZONE_ENTRY& aZone )
             VECTOR2I pb = tri.GetPoint( 1 );
             VECTOR2I pc = tri.GetPoint( 2 );
 
-            double ab = pa.Distance( pb );
-            double bc = pb.Distance( pc );
-            double ca = pc.Distance( pa );
-
-            double longest  = std::max( { ab, bc, ca } );
-            double shortest = std::min( { ab, bc, ca } );
-
-            if( shortest > 0.0 && longest / shortest > 10.0 )
+            if( KIGEOM::IsSliverTriangle( pa, pb, pc ) )
                 stats.spikeyTriangles++;
+
+            double minAngle = GEOM_TEST::TriangleMinAngleDeg( pa, pb, pc );
+            stats.minAngles.push_back( minAngle );
+
+            if( minAngle < 5.0 )
+                stats.trisBelow5Deg++;
+
+            if( minAngle < 10.0 )
+                stats.trisBelow10Deg++;
+
+            if( minAngle < 15.0 )
+                stats.trisBelow15Deg++;
+
+            radiusRatioSum += TriangleRadiusRatio( pa, pb, pc );
         }
     }
 
     if( stats.triangleCount > 0 )
-        stats.spikeyRatio = static_cast<double>( stats.spikeyTriangles ) / stats.triangleCount;
+    {
+        stats.spikeyRatio      = static_cast<double>( stats.spikeyTriangles ) / stats.triangleCount;
+        stats.meanRadiusRatio  = radiusRatioSum / stats.triangleCount;
+
+        std::vector<double> sorted = stats.minAngles;
+        std::sort( sorted.begin(), sorted.end() );
+        stats.minAnglePctl1  = Percentile( sorted, 1.0 );
+        stats.minAnglePctl5  = Percentile( sorted, 5.0 );
+        stats.minAnglePctl50 = Percentile( sorted, 50.0 );
+    }
 
     return stats;
 }
@@ -381,6 +499,13 @@ nlohmann::json ZoneStatsToJson( const ZONE_STATS& aStats )
     j["stddev_triangle_area_nm2"] = aStats.stddevTriArea;
     j["spikey_triangles"]         = aStats.spikeyTriangles;
     j["spikey_ratio"]             = aStats.spikeyRatio;
+    j["min_angle_p1_deg"]         = aStats.minAnglePctl1;
+    j["min_angle_p5_deg"]         = aStats.minAnglePctl5;
+    j["min_angle_p50_deg"]        = aStats.minAnglePctl50;
+    j["tris_below_5deg"]          = aStats.trisBelow5Deg;
+    j["tris_below_10deg"]         = aStats.trisBelow10Deg;
+    j["tris_below_15deg"]         = aStats.trisBelow15Deg;
+    j["mean_radius_ratio"]        = aStats.meanRadiusRatio;
     return j;
 }
 
@@ -396,6 +521,9 @@ ZONE_COMPARISON CompareZone( const std::string& aSource, const ZONE_STATS& aCurr
     cmp.curSpikeyRatio  = aCurrent.spikeyRatio;
     cmp.curStddev       = aCurrent.stddevTriArea;
     cmp.curCoverage     = aCurrent.areaCoverage;
+    cmp.curMinAngleP5   = aCurrent.minAnglePctl5;
+    cmp.curBelow10Deg   = aCurrent.trisBelow10Deg;
+    cmp.curTimeUs       = aCurrent.timeUs;
 
     if( !aBaseline )
     {
@@ -407,6 +535,9 @@ ZONE_COMPARISON CompareZone( const std::string& aSource, const ZONE_STATS& aCurr
     cmp.baseSpikeyRatio = aBaseline->spikeyRatio;
     cmp.baseStddev      = aBaseline->stddevTriArea;
     cmp.baseCoverage    = aBaseline->areaCoverage;
+    cmp.baseMinAngleP5  = aBaseline->minAnglePctl5;
+    cmp.baseBelow10Deg  = aBaseline->trisBelow10Deg;
+    cmp.baseTimeUs      = aBaseline->timeUs;
 
     bool coverageBroke = aCurrent.originalArea > 0.0
                          && ( aCurrent.areaCoverage < 0.99 || aCurrent.areaCoverage > 1.01 );
@@ -419,21 +550,54 @@ ZONE_COMPARISON CompareZone( const std::string& aSource, const ZONE_STATS& aCurr
         return cmp;
     }
 
-    double spikeyDeltaPp    = cmp.spikeyDeltaPp();
-    double triangleDeltaPct = cmp.triangleDeltaPct();
-    double stddevDeltaPct   = cmp.stddevDeltaPct();
+    // Lexicographic classification honoring the project priority speed > regularity > count.
+    // The first axis that moves beyond its noise threshold decides the verdict; lower-priority
+    // axes are only consulted when every higher-priority axis is unchanged. This prevents a
+    // regularity or count win from masking a speed regression.
+    struct AXIS
+    {
+        double delta;      // signed change, current minus baseline
+        double threshold;  // magnitude below which the axis counts as unchanged
+        bool   lowerBetter;
+    };
 
-    bool hasRegression  = spikeyDeltaPp > 1.0 || triangleDeltaPct > 5.0 || stddevDeltaPct > 10.0;
-    bool hasImprovement = spikeyDeltaPp < -1.0 || triangleDeltaPct < -5.0 || stddevDeltaPct < -10.0;
+    // Regularity blends p5 min-angle (want higher) and sub-10 degree count (want lower) into a
+    // single signed score where positive is worse, matching the lowerBetter axes.
+    double regressScore = ( cmp.baseMinAngleP5 - cmp.curMinAngleP5 )
+                          + ( cmp.curBelow10Deg - cmp.baseBelow10Deg )
+                                    / std::max( 1.0, static_cast<double>( cmp.baseTriangles ) )
+                                    * 100.0;
 
-    if( hasRegression && !hasImprovement )
-        cmp.type = CHANGE_TYPE::REGRESSION;
-    else if( hasImprovement && !hasRegression )
-        cmp.type = CHANGE_TYPE::IMPROVEMENT;
-    else if( hasRegression && hasImprovement )
-        cmp.type = spikeyDeltaPp > 0.0 ? CHANGE_TYPE::REGRESSION : CHANGE_TYPE::IMPROVEMENT;
-    else
-        cmp.type = CHANGE_TYPE::UNCHANGED;
+    // Per-zone timing under ~100 us is dominated by scheduler jitter, so a percent delta there is
+    // meaningless; below the floor the speed axis is neutralized and the verdict falls through to
+    // regularity then count. Aggregate speed is judged corpus-wide (total time), not per zone.
+    constexpr int64_t SPEED_FLOOR_US = 100;
+    bool speedMeasurable = std::max( cmp.baseTimeUs, cmp.curTimeUs ) >= SPEED_FLOOR_US;
+
+    std::vector<AXIS> axes = {
+        { speedMeasurable ? cmp.timeDeltaPct() : 0.0, 15.0, true },  // speed (slower is worse)
+        { regressScore,                                1.0, true },  // regularity (positive worse)
+        { cmp.triangleDeltaPct(),                      5.0, true },  // count (more tris is worse)
+    };
+
+    cmp.type = CHANGE_TYPE::UNCHANGED;
+
+    for( const AXIS& axis : axes )
+    {
+        double signedWorse = axis.lowerBetter ? axis.delta : -axis.delta;
+
+        if( signedWorse > axis.threshold )
+        {
+            cmp.type = CHANGE_TYPE::REGRESSION;
+            break;
+        }
+
+        if( signedWorse < -axis.threshold )
+        {
+            cmp.type = CHANGE_TYPE::IMPROVEMENT;
+            break;
+        }
+    }
 
     return cmp;
 }
@@ -457,7 +621,11 @@ std::string FormatZoneDetail( const ZONE_COMPARISON& aCmp )
     std::ostringstream ss;
     ss << "  " << aCmp.source << " " << aCmp.layer << " \"" << aCmp.net << "\"" << "\n";
     ss << std::fixed << std::setprecision( 1 );
-    ss << "    spikey: " << ( aCmp.baseSpikeyRatio * 100.0 ) << "% -> "
+    ss << "    time: " << FormatSign( aCmp.timeDeltaPct(), "%" );
+    ss << "  minAngleP5: " << aCmp.baseMinAngleP5 << " -> " << aCmp.curMinAngleP5
+       << " deg (" << FormatSign( aCmp.minAngleP5DeltaDeg(), "deg" ) << ")";
+    ss << "  <10deg: " << aCmp.baseBelow10Deg << " -> " << aCmp.curBelow10Deg;
+    ss << "\n    spikey: " << ( aCmp.baseSpikeyRatio * 100.0 ) << "% -> "
        << ( aCmp.curSpikeyRatio * 100.0 ) << "% (" << FormatSign( aCmp.spikeyDeltaPp(), "pp" )
        << ")";
     ss << "  triangles: " << aCmp.baseTriangles << " -> " << aCmp.curTriangles
@@ -542,7 +710,7 @@ void OutputComparisonReport( const BASELINE_DATA& aBaseline,
         report << "  (none)\n";
 
     report << "\nREGRESSIONS: " << regressions.size() << " zones"
-           << " (spikey >+1pp, triangles >+5%, or stddev >+10%)\n";
+           << " (lexicographic: speed >+5%, else regularity worse, else triangles >+5%)\n";
 
     int shown = 0;
 
@@ -640,10 +808,20 @@ BOOST_AUTO_TEST_CASE( BenchmarkAllExtractedPolygons )
 
     BOOST_TEST_MESSAGE( "Found " << polyFiles.size() << " polygon files" );
 
+    // Stamp the report with the experimental variant under test (set by the harness / an env
+    // var when A/B testing an algorithm change against the recorded baseline).
+    if( const char* variant = std::getenv( "KICAD_TRI_VARIANT" ) )
+        BOOST_TEST_MESSAGE( "Variant: " << variant );
+
     int    totalTriangles = 0;
     int    totalSpikeyTri = 0;
     int    totalZones     = 0;
+    int    totalBelow10   = 0;
     double totalTimeUs    = 0.0;
+
+    // Corpus-wide min-angle percentiles are computed from every triangle rather than by
+    // averaging per-zone summaries, so one huge zone cannot dominate the tail statistics.
+    std::vector<double> globalMinAngles;
 
     std::vector<ZONE_COMPARISON>    comparisons;
 
@@ -697,6 +875,9 @@ BOOST_AUTO_TEST_CASE( BenchmarkAllExtractedPolygons )
             boardTriangles += stats.triangleCount;
             boardSpikey    += stats.spikeyTriangles;
             boardTimeUs    += static_cast<double>( stats.timeUs );
+            totalBelow10   += stats.trisBelow10Deg;
+            globalMinAngles.insert( globalMinAngles.end(), stats.minAngles.begin(),
+                                    stats.minAngles.end() );
             totalZones++;
         }
 
@@ -711,7 +892,15 @@ BOOST_AUTO_TEST_CASE( BenchmarkAllExtractedPolygons )
                                          ? 100.0 * totalSpikeyTri / totalTriangles
                                          : 0.0 )
                         << "%)" );
-    BOOST_TEST_MESSAGE( "Total time: " << totalTimeUs / 1000.0 << " ms" );
+
+    std::sort( globalMinAngles.begin(), globalMinAngles.end() );
+    BOOST_TEST_MESSAGE( "Global min-angle deg  p1: " << Percentile( globalMinAngles, 1.0 )
+                        << "  p5: " << Percentile( globalMinAngles, 5.0 )
+                        << "  p50: " << Percentile( globalMinAngles, 50.0 )
+                        << "  (<10deg: " << totalBelow10 << " = "
+                        << ( totalTriangles > 0 ? 100.0 * totalBelow10 / totalTriangles : 0.0 )
+                        << "%)" );
+    BOOST_TEST_MESSAGE( "Total time (median-per-zone sum): " << totalTimeUs / 1000.0 << " ms" );
 
     if( baseline.valid )
         OutputComparisonReport( baseline, comparisons, totalTriangles, totalSpikeyTri, totalZones );
@@ -761,9 +950,9 @@ BOOST_AUTO_TEST_CASE( UpdateTriangulationStatus, * boost::unit_test::disabled() 
         int    boardSpikey    = 0;
         double boardTimeUs    = 0.0;
 
-        for( size_t zi = 0; zi < board.zones.size(); zi++ )
+        for( ZONE_ENTRY& zone : board.zones )
         {
-            ZONE_STATS stats = ComputeZoneStats( board.zones[zi] );
+            ZONE_STATS stats = ComputeZoneStats( zone );
             zonesJson.push_back( ZoneStatsToJson( stats ) );
 
             boardTriangles += stats.triangleCount;

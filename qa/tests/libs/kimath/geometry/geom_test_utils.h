@@ -321,6 +321,21 @@ inline bool SegmentsHaveSameEndPoints( const SEG& aSeg1, const SEG& aSeg2 )
            || ( aSeg1.A == aSeg2.B && aSeg1.B == aSeg2.A );
 }
 
+
+/// The smallest interior angle of a triangle, in degrees; near zero for a sliver.
+inline double TriangleMinAngleDeg( const VECTOR2I& a, const VECTOR2I& b, const VECTOR2I& c )
+{
+    auto angleAt = []( const VECTOR2I& v, const VECTOR2I& p, const VECTOR2I& q )
+    {
+        VECTOR2D u( p.x - v.x, p.y - v.y );
+        VECTOR2D w( q.x - v.x, q.y - v.y );
+
+        return std::atan2( std::abs( u.x * w.y - u.y * w.x ), u.x * w.x + u.y * w.y ) * 180.0 / M_PI;
+    };
+
+    return std::min( { angleAt( a, b, c ), angleAt( b, c, a ), angleAt( c, a, b ) } );
+}
+
 } // namespace GEOM_TEST
 
 

@@ -44,6 +44,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstdlib>
 #include <deque>
 #include <cmath>
 #include <vector>
@@ -62,12 +63,22 @@
 #if defined( __MINGW32__ )
     #define TRIANGULATESIMPLIFICATIONLEVEL 50
     #define TRIANGULATEMINIMUMAREA 1000
+    #define TRIANGULATEDELAUNAYREFINE true
 #else
     #define TRIANGULATESIMPLIFICATIONLEVEL ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel
     #define TRIANGULATEMINIMUMAREA ADVANCED_CFG::GetCfg().m_TriangulateMinimumArea
+    #define TRIANGULATEDELAUNAYREFINE ADVANCED_CFG::GetCfg().m_TriangulateDelaunayRefine
 #endif
 
 #define TRIANGULATE_TRACE "triangulate"
+
+
+/// Whether the sliver-minimizing flip post-pass runs, from the TriangulateDelaunayRefine setting.
+static inline bool triangulationRefineEnabled()
+{
+    return TRIANGULATEDELAUNAYREFINE;
+}
+
 
 class POLYGON_TRIANGULATION : public VERTEX_SET
 {
@@ -154,6 +165,10 @@ public:
             wxLogTrace( TRIANGULATE_TRACE, "Tesselation with holes failed, logging remaining vertices" );
             logRemaining();
         }
+        else if( triangulationRefineEnabled() )
+        {
+            m_result.Refine();
+        }
 
         m_vertices.clear();
         return retval;
@@ -207,6 +222,10 @@ public:
             {
                 wxLogTrace( TRIANGULATE_TRACE, "Tesselation failed, logging remaining vertices" );
                 logRemaining();
+            }
+            else if( triangulationRefineEnabled() )
+            {
+                m_result.Refine();
             }
 
             m_vertices.clear();

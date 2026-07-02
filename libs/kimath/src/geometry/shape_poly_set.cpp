@@ -41,6 +41,7 @@
 #include <array>
 
 #include <clipper2/clipper.h>
+#include <geometry/geometry_predicates.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/polygon_triangulation.h>
 #include <geometry/seg.h>                    // for SEG, OPT_VECTOR2I
@@ -3593,6 +3594,190 @@ SHAPE_POLY_SET::TRIANGULATED_POLYGON& SHAPE_POLY_SET::TRIANGULATED_POLYGON::oper
         tri.parent = this;
 
     return *this;
+}
+
+
+void SHAPE_POLY_SET::TRIANGULATED_POLYGON::Refine()
+{
+    const size_t triCount = m_triangles.size();
+
+    // Indices are int; skip an implausibly huge mesh rather than overflow.
+    if( triCount < 2 || triCount > static_cast<size_t>( std::numeric_limits<int>::max() ) / 6 )
+        return;
+
+    const int halfEdgeCount = static_cast<int>( 3 * triCount );
+
+    // heVertex[3k+j] is vertex j of triangle k.
+    std::vector<int> heVertex( halfEdgeCount );
+
+    for( size_t k = 0; k < triCount; k++ )
+    {
+        heVertex[3 * k + 0] = m_triangles[k].a;
+        heVertex[3 * k + 1] = m_triangles[k].b;
+        heVertex[3 * k + 2] = m_triangles[k].c;
+    }
+
+    auto nextInTriangle = []( int aEdge ) { return aEdge - aEdge % 3 + ( aEdge + 1 ) % 3; };
+
+    // An untwinned edge is a polygon boundary and must never flip. Slots are never tombstoned so
+    // probe chains stay intact.
+    std::vector<int> twin( halfEdgeCount, -1 );
+
+    int tableSize = 1;
+
+    while( tableSize < halfEdgeCount * 2 )
+        tableSize <<= 1;
+
+    const uint32_t    tableMask = static_cast<uint32_t>( tableSize - 1 );
+    std::vector<int>  slotEdge( tableSize, -1 );
+
+    // A non-manifold edge (three or more triangles, e.g. a hole-bridge pinch) is retired so no
+    // triangle straddling it can flip.
+    std::vector<char> retired( tableSize, 0 );
+    std::vector<int>  toVisit;
+    std::vector<char> queued( halfEdgeCount, 0 );
+
+    for( int edge = 0; edge < halfEdgeCount; edge++ )
+    {
+        int      from    = heVertex[edge];
+        int      to      = heVertex[nextInTriangle( edge )];
+        uint32_t keyLow  = static_cast<uint32_t>( from < to ? from : to );
+        uint32_t keyHigh = static_cast<uint32_t>( from < to ? to : from );
+        uint32_t slot    = ( ( keyLow * 0x9e3779b1u ) ^ ( keyHigh * 0x85ebca6bu ) ) & tableMask;
+        bool     handled = false;
+
+        while( slotEdge[slot] != -1 )
+        {
+            int      other     = slotEdge[slot];
+            int      otherFrom = heVertex[other];
+            int      otherTo   = heVertex[nextInTriangle( other )];
+            uint32_t otherLow  = static_cast<uint32_t>( otherFrom < otherTo ? otherFrom : otherTo );
+            uint32_t otherHigh = static_cast<uint32_t>( otherFrom < otherTo ? otherTo : otherFrom );
+
+            if( otherLow == keyLow && otherHigh == keyHigh )
+            {
+                if( retired[slot] )
+                {
+                    // Non-manifold; stays a boundary.
+                }
+                else if( twin[other] == -1 )
+                {
+                    twin[edge]    = other;
+                    twin[other]   = edge;
+                    queued[other] = 1;
+                    toVisit.push_back( other );
+                }
+                else
+                {
+                    // Third half-edge here: retire the edge and unlink the pair already formed.
+                    int mate      = twin[other];
+                    twin[other]   = -1;
+                    twin[mate]    = -1;
+                    retired[slot] = 1;
+                }
+
+                handled = true;
+                break;
+            }
+
+            slot = ( slot + 1 ) & tableMask;
+        }
+
+        if( !handled )
+            slotEdge[slot] = edge;
+    }
+
+    while( !toVisit.empty() )
+    {
+        int edge = toVisit.back();
+        toVisit.pop_back();
+        queued[edge] = 0;
+
+        int twinEdge = twin[edge];
+
+        if( twinEdge == -1 )
+            continue;
+
+        int tri     = edge - edge % 3;
+        int twinTri = twinEdge - twinEdge % 3;
+
+        int apexAEdge      = tri + ( edge + 2 ) % 3;
+        int sharedEndEdge  = tri + ( edge + 1 ) % 3;
+        int apexBEdge      = twinTri + ( twinEdge + 2 ) % 3;
+        int twinSharedEdge = twinTri + ( twinEdge + 1 ) % 3;
+
+        int apexA      = heVertex[apexAEdge];
+        int sharedFrom = heVertex[edge];
+        int sharedTo   = heVertex[sharedEndEdge];
+        int apexB      = heVertex[apexBEdge];
+
+        const VECTOR2I& apexAPt      = m_vertices[apexA];
+        const VECTOR2I& sharedFromPt = m_vertices[sharedFrom];
+        const VECTOR2I& sharedToPt   = m_vertices[sharedTo];
+        const VECTOR2I& apexBPt      = m_vertices[apexB];
+
+        // A non-convex quad would flip a triangle outside the polygon.
+        if( KIGEOM::OrientationSign( apexAPt, sharedFromPt, apexBPt ) <= 0 )
+            continue;
+
+        if( KIGEOM::OrientationSign( apexAPt, apexBPt, sharedToPt ) <= 0 )
+            continue;
+
+        // Prefer the diagonal with fewer slivers, Delaunay breaks ties. Each flip lowers
+        // (slivers, then -min-angle) lexicographically, so the loop terminates.
+        bool legal = KIGEOM::InCircleDelaunayLegal( apexAPt, sharedFromPt, sharedToPt, apexBPt );
+
+        int curSlivers = KIGEOM::IsSliverTriangle( apexAPt, sharedFromPt, sharedToPt )
+                         + KIGEOM::IsSliverTriangle( apexBPt, sharedToPt, sharedFromPt );
+
+        // Nothing to gain when already Delaunay and neither triangle is a sliver.
+        if( legal && curSlivers == 0 )
+            continue;
+
+        int flipSlivers = KIGEOM::IsSliverTriangle( apexAPt, sharedFromPt, apexBPt )
+                          + KIGEOM::IsSliverTriangle( apexAPt, apexBPt, sharedToPt );
+
+        bool doFlip = ( flipSlivers != curSlivers ) ? ( flipSlivers < curSlivers ) : !legal;
+
+        if( !doFlip )
+            continue;
+
+        heVertex[edge]     = apexB;
+        heVertex[twinEdge] = apexA;
+
+        int apexBOuterTwin = twin[apexBEdge];
+        int apexAOuterTwin = twin[apexAEdge];
+
+        twin[edge] = apexBOuterTwin;
+
+        if( apexBOuterTwin != -1 )
+            twin[apexBOuterTwin] = edge;
+
+        twin[twinEdge] = apexAOuterTwin;
+
+        if( apexAOuterTwin != -1 )
+            twin[apexAOuterTwin] = twinEdge;
+
+        twin[apexAEdge] = apexBEdge;
+        twin[apexBEdge] = apexAEdge;
+
+        // The flip may have made the quad's four outer edges illegal.
+        for( int outer : { edge, twinEdge, sharedEndEdge, twinSharedEdge } )
+        {
+            if( twin[outer] != -1 && !queued[outer] )
+            {
+                queued[outer] = 1;
+                toVisit.push_back( outer );
+            }
+        }
+    }
+
+    std::deque<TRI> refined;
+
+    for( size_t i = 0; i < triCount; i++ )
+        refined.emplace_back( heVertex[3 * i + 0], heVertex[3 * i + 1], heVertex[3 * i + 2], this );
+
+    m_triangles = std::move( refined );
 }
 
 

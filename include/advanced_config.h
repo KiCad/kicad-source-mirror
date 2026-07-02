@@ -669,6 +669,17 @@ public:
     bool m_EnableCacheFriendlyFracture;
 
     /**
+     * Refine each triangulation toward the constrained Delaunay triangulation with a
+     * boundary-preserving edge-flip post-pass, trading a little triangulation time for far fewer
+     * sliver triangles.
+     *
+     * Setting name: "TriangulateDelaunayRefine"
+     * Valid values: 0 or 1
+     * Default value: 1
+     */
+    bool m_TriangulateDelaunayRefine;
+
+    /**
      * Log IPC API requests and responses
      *
      * Setting name: "EnableAPILogging"

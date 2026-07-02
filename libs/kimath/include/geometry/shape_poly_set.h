@@ -158,6 +158,13 @@ public:
             c = m_vertices[ tri.c ];
         }
 
+        /**
+         * Refine this triangulation in place with boundary-preserving Lawson edge flips,
+         * minimizing the number of sliver triangles and, on ties, maximizing the minimum angle.
+         * Adds and removes no vertices or triangles.
+         */
+        void Refine();
+
         TRIANGULATED_POLYGON& operator=( const TRIANGULATED_POLYGON& aOther );
 
         // Move assignment operator.
