@@ -363,11 +363,14 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                     secondary_drill_size = topDrill.size.x;
                     tertiary_drill_size = bottomDrill.size.x;
 
-                    if( topDrill.end != UNDEFINED_LAYER && bottomDrill.end != UNDEFINED_LAYER )
+                    bool top = topDrill.end != UNDEFINED_LAYER && topDrill.size.x > 0;
+                    bool bottom = bottomDrill.end != UNDEFINED_LAYER && bottomDrill.size.x > 0;
+
+                    if( top && bottom )
                         backdrill_dir = BACKDRILL_MODE::BACKDRILL_BOTH;
-                    else if( bottomDrill.end != UNDEFINED_LAYER )
+                    else if( bottom )
                         backdrill_dir = BACKDRILL_MODE::BACKDRILL_BOTTOM;
-                    else if( topDrill.end != UNDEFINED_LAYER )
+                    else if( top )
                         backdrill_dir = BACKDRILL_MODE::BACKDRILL_TOP;
                     else
                         backdrill_dir = BACKDRILL_MODE::NO_BACKDRILL;
@@ -581,7 +584,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
         {
             m_backdrillChoice->SetSelection( static_cast<int>( backdrill_dir ) );
 
-            if( backdrill_dir == BACKDRILL_MODE::BACKDRILL_TOP || backdrill_dir == BACKDRILL_MODE::BACKDRILL_BOTH )
+            if( backdrill_dir == BACKDRILL_MODE::BACKDRILL_BOTTOM || backdrill_dir == BACKDRILL_MODE::BACKDRILL_BOTH )
             {
                 if( tertiary_drill_size_mixed )
                     m_backdrillBackSize.SetValue( INDETERMINATE_STATE );
@@ -590,10 +593,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
             }
             else
             {
-                m_backdrillFrontSize.SetValue( wxEmptyString );
+                m_backdrillBackSize.SetValue( wxEmptyString );
             }
 
-            if( backdrill_dir == BACKDRILL_MODE::BACKDRILL_BOTTOM || backdrill_dir == BACKDRILL_MODE::BACKDRILL_BOTH )
+            if( backdrill_dir == BACKDRILL_MODE::BACKDRILL_TOP || backdrill_dir == BACKDRILL_MODE::BACKDRILL_BOTH )
             {
                 if( secondary_drill_size_mixed )
                     m_backdrillFrontSize.SetValue( INDETERMINATE_STATE );
@@ -602,7 +605,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
             }
             else
             {
-                m_backdrillBackSize.SetValue( wxEmptyString );
+                m_backdrillFrontSize.SetValue( wxEmptyString );
             }
 
         }
