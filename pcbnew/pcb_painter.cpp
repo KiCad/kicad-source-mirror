@@ -2931,9 +2931,9 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
 }
 
 
-bool KIGFX::ZoneOutlineDrawnOnLayer( bool aIsRuleArea, int aLayer )
+bool KIGFX::ZoneOutlineDrawnOnLayer( bool aOutlineOnly, int aLayer )
 {
-    if( aIsRuleArea )
+    if( aOutlineOnly )
         return IsZoneFillLayer( aLayer );
 
     return !IsZoneFillLayer( aLayer );
@@ -2977,8 +2977,12 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
     if( aZone->IsTeardropArea() )
         displayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
 
+    // A zone whose only visual is its outline (rule area, or outline-only display) draws it on
+    // the zone layer, above copper, so tracks and pads can't paint over it.
+    bool outlineOnly = aZone->GetIsRuleArea() || displayMode == ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE;
+
     // Draw the outline
-    if( ZoneOutlineDrawnOnLayer( aZone->GetIsRuleArea(), aLayer ) )
+    if( ZoneOutlineDrawnOnLayer( outlineOnly, aLayer ) )
     {
         const SHAPE_POLY_SET* outline = aZone->Outline();
         bool allowDrawOutline = aZone->GetHatchStyle() != ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER;

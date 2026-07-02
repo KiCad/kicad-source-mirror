@@ -281,11 +281,11 @@ protected:
 /**
  * Decide which GAL draw pass paints a zone's outline.
  *
- * A rule area has no fill, so its outline is drawn on the zone layer (which sorts above copper)
- * to keep the boundary from being covered by unrelated tracks and pads. A filled zone draws its
- * outline on the copper layer, beneath its own fill on the zone layer.
+ * When the outline is the zone's only visual (rule area, or outline-only display) it is drawn on
+ * the zone layer, which sorts above copper, so tracks and pads can't paint over it. A zone shown
+ * filled draws its outline on the copper layer, beneath its own fill on the zone layer.
  */
-bool ZoneOutlineDrawnOnLayer( bool aIsRuleArea, int aLayer );
+bool ZoneOutlineDrawnOnLayer( bool aOutlineOnly, int aLayer );
 
 } // namespace KIGFX
 
