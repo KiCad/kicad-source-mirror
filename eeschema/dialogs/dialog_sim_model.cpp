@@ -1304,7 +1304,7 @@ void DIALOG_SIM_MODEL<T>::onBrowseButtonClick( wxCommandEvent& aEvent )
 
     wxString                path = s_mruPath.IsEmpty() ? Prj().GetProjectPath() : s_mruPath;
     wxFileDialog            dlg( this, _( "Browse Models" ), path );
-    FILEDLG_HOOK_EMBED_FILE customize( false );
+    FILEDLG_HOOK_EMBED_FILE customize( false, EMBED_FILE_CONTEXT::SIM_MODEL );
 
     dlg.SetCustomizeHook( customize );
 

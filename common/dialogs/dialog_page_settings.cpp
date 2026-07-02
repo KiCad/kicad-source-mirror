@@ -704,7 +704,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     }
 
     // Display a file picker dialog
-    FILEDLG_HOOK_EMBED_FILE customize;
+    FILEDLG_HOOK_EMBED_FILE customize( true, EMBED_FILE_CONTEXT::DRAWING_SHEET );
     wxFileDialog fileDialog( this, _( "Drawing Sheet File" ), path, name, FILEEXT::DrawingSheetFileWildcard(),
                              wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 

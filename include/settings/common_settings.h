@@ -169,6 +169,15 @@ public:
         bool migrate_wrl_prompt;
     };
 
+    // Sticky "Embed file" choice, remembered per file-picker context.
+    struct EMBED_FILE_DEFAULTS
+    {
+        bool datasheet;
+        bool drawing_sheet;
+        bool model_3d;
+        bool sim_model;
+    };
+
     struct PACKAGE_MANAGER
     {
         int sash_pos;
@@ -237,18 +246,19 @@ private:
                                   std::vector<LEGACY_3D_SEARCH_PATH>& aSearchPaths );
 
 public:
-    APPEARANCE        m_Appearance;
-    AUTO_BACKUP       m_Backup;
-    ENVIRONMENT       m_Env;
-    INPUT             m_Input;
-    SPACEMOUSE        m_SpaceMouse;
-    GRAPHICS          m_Graphics;
-    SESSION           m_Session;
-    SYSTEM            m_System;
-    DO_NOT_SHOW_AGAIN m_DoNotShowAgain;
-    PACKAGE_MANAGER   m_PackageManager;
-    GIT               m_Git;
-    API               m_Api;
+    APPEARANCE          m_Appearance;
+    AUTO_BACKUP         m_Backup;
+    ENVIRONMENT         m_Env;
+    INPUT               m_Input;
+    SPACEMOUSE          m_SpaceMouse;
+    GRAPHICS            m_Graphics;
+    SESSION             m_Session;
+    SYSTEM              m_System;
+    DO_NOT_SHOW_AGAIN   m_DoNotShowAgain;
+    EMBED_FILE_DEFAULTS m_EmbedFileDefaults;
+    PACKAGE_MANAGER     m_PackageManager;
+    GIT                 m_Git;
+    API                 m_Api;
 
     /// Extra directories to search for 3D models, added by the user through
     /// the 3D model migration dialog.  Persists across sessions.
