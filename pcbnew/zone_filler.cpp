@@ -382,6 +382,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
     // Keyed on knockout geometry only; valid for this fill's passes (pre-knockout fill is rebuilt
     // below).
     m_refillResultCache.clear();
+    m_preHatchSolidFillCache.clear();
 
     // The fill evaluates thermal-relief and clearance rules through the board's DRC engine on
     // worker threads.  Interactive callers always supply an initialized engine, but headless
@@ -3048,6 +3049,21 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
             ringsToProtect.BooleanAdd( disc );
         }
 
+        // The refiller needs the un-hatched extent to re-border zones it later carves (issue 24758).
+        if( ADVANCED_CFG::GetCfg().m_ZoneFillIterativeRefill )
+        {
+            SHAPE_POLY_SET solid = aFillPolys.CloneDropTriangulation();
+
+            if( half_min_width - epsilon > epsilon )
+                solid.Inflate( half_min_width - epsilon, cornerStrategy, m_maxError, true );
+
+            solid.BooleanIntersection( aMaxExtents );
+            solid.BooleanSubtract( clearanceHoles );
+
+            std::lock_guard<std::mutex> lock( m_cacheMutex );
+            m_preHatchSolidFillCache[{ aZone, aLayer }] = solid;
+        }
+
         if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys, ringsToProtect ) )
             return false;
     }
@@ -4385,6 +4401,34 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
 
     if( sameNetKnockouts.OutlineCount() > 0 )
         aFillPolys.BooleanSubtract( sameNetKnockouts );
+
+    // The cache was hatched before these knockouts, so restore the border the carve cut through
+    // with a min-width ring, bounded by the un-hatched extent to stay clearance-safe (issue 24758).
+    if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+    {
+        SHAPE_POLY_SET solidExtent;
+
+        {
+            std::lock_guard<std::mutex> lock( m_cacheMutex );
+            auto                        sit = m_preHatchSolidFillCache.find( cacheKey );
+
+            if( sit != m_preHatchSolidFillCache.end() )
+                solidExtent = sit->second;
+        }
+
+        SHAPE_POLY_SET knockouts = diffNetKnockouts;
+        knockouts.Append( sameNetKnockouts );
+
+        if( solidExtent.OutlineCount() > 0 && knockouts.OutlineCount() > 0 )
+        {
+            SHAPE_POLY_SET border = knockouts;
+            border.Inflate( aZone->GetMinThickness(), CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
+            border.BooleanSubtract( knockouts );
+            border.BooleanIntersection( solidExtent );
+
+            aFillPolys.BooleanAdd( border );
+        }
+    }
 
     aFillPolys.Fracture();
 
