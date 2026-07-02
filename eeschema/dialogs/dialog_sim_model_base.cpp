@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -259,7 +259,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerDecomposition->Add( m_sharedPinsLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_sharedPinsText = new wxTextCtrl( m_pinAssignmentsPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerDecomposition->Add( m_sharedPinsText, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	bSizerDecomposition->Add( m_sharedPinsText, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizer10->Add( bSizerDecomposition, 0, wxEXPAND, 5 );
