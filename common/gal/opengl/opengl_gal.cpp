@@ -179,7 +179,31 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     if( !imgPtr )
         return std::numeric_limits< GLuint >::max();
 
-    const wxImage& imgData = *imgPtr;
+    wxImage imgData = *imgPtr;
+
+    // Check if the image exceeds the maximum texture size supported by the GPU
+    GLint maxTextureSize;
+    glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize );
+
+    int imgWidth = imgData.GetWidth();
+    int imgHeight = imgData.GetHeight();
+
+    if( imgWidth > maxTextureSize || imgHeight > maxTextureSize )
+    {
+        // Scale down the image to fit within the maximum texture size while preserving
+        // the aspect ratio
+        double scaleX = static_cast<double>( maxTextureSize ) / imgWidth;
+        double scaleY = static_cast<double>( maxTextureSize ) / imgHeight;
+        double scale = std::min( scaleX, scaleY );
+
+        int newWidth = std::clamp( KiROUND( imgWidth * scale ), 1, maxTextureSize );
+        int newHeight = std::clamp( KiROUND( imgHeight * scale ), 1, maxTextureSize );
+
+        imgData = imgData.Scale( newWidth, newHeight, wxIMAGE_QUALITY_HIGH );
+
+        if( !imgData.IsOk() )
+            return std::numeric_limits< GLuint >::max();
+    }
 
     bmp.w = imgData.GetSize().x;
     bmp.h = imgData.GetSize().y;
@@ -200,7 +224,7 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 
     if( imgData.HasAlpha() || imgData.HasMask() )
     {
-        bmp.size = bmp.w * bmp.h * 4;
+        bmp.size = static_cast<size_t>( bmp.w ) * bmp.h * 4;
         auto buf = std::make_unique<uint8_t[]>( bmp.size );
 
         uint8_t* dstP = buf.get();
@@ -248,7 +272,7 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     }
     else
     {
-        bmp.size = bmp.w * bmp.h * 3;
+        bmp.size = static_cast<size_t>( bmp.w ) * bmp.h * 3;
 
         uint8_t* srcP = imgData.GetData();
 
@@ -265,8 +289,10 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     bmp.accessTime = currentTime;
 
 #ifndef DISABLE_BITMAP_CACHE
-    if( ( m_cacheLru.size() + 1 > m_cacheMaxElements || m_cacheSize + bmp.size > m_cacheMaxSize )
-        && !m_cacheLru.empty() )
+    // A single oversized bitmap can exceed the whole cache budget, so evict until it fits or the
+    // cache is drained
+    while( ( m_cacheLru.size() + 1 > m_cacheMaxElements || m_cacheSize + bmp.size > m_cacheMaxSize )
+           && !m_cacheLru.empty() )
     {
         KIID toRemove( 0 );
         auto toRemoveLru = m_cacheLru.end();
