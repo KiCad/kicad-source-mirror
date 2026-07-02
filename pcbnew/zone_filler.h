@@ -202,6 +202,9 @@ private:
     // Key: (zone pointer, layer), Value: fill polygon before higher-priority zone knockout
     std::map<std::pair<const ZONE*, PCB_LAYER_ID>, SHAPE_POLY_SET> m_preKnockoutFillCache;
 
+    // Un-hatched extent per (zone, layer); lets the refiller re-border carved hatch zones (#24758).
+    std::map<std::pair<const ZONE*, PCB_LAYER_ID>, SHAPE_POLY_SET> m_preHatchSolidFillCache;
+
     // Refill result keyed by (zone, layer); value is the knockout-geometry hash + cached fill.
     // Hit lets an unchanged-knockout zone skip the refill subtract + prune.  Cleared each Fill().
     std::map<std::pair<const ZONE*, PCB_LAYER_ID>, std::pair<HASH_128, SHAPE_POLY_SET>>

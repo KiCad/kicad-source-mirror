@@ -3330,3 +3330,83 @@ BOOST_FIXTURE_TEST_CASE( RegressionSameNetZoneFillScheduler, ZONE_FILL_TEST_FIXT
                              wxString::Format( "Fill pass %d produced no copper.", pass ) );
     }
 }
+
+
+// Issue 24758: a hatch zone must keep its solid border where a higher-priority zone carves into
+// it, not run the mesh into the carved edge.  Board issue24758 carves net-B zones into net-A hatch.
+BOOST_FIXTURE_TEST_CASE( RegressionHatchBorderAroundOverlap, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue24758/issue24758", m_board );
+    KI_TEST::FillZones( m_board.get() );
+
+    const PCB_LAYER_ID layer = F_Cu;
+
+    auto outlineNoArcs =
+            []( ZONE* z )
+            {
+                SHAPE_POLY_SET o = *z->Outline();
+                o.ClearArcs();
+                return o;
+            };
+
+    int checkedPairs = 0;
+
+    for( ZONE* hatch : m_board->Zones() )
+    {
+        if( hatch->GetIsRuleArea() || hatch->GetFillMode() != ZONE_FILL_MODE::HATCH_PATTERN
+                || !hatch->HasFilledPolysForLayer( layer ) )
+        {
+            continue;
+        }
+
+        SHAPE_POLY_SET hatchOutline = outlineNoArcs( hatch );
+        SHAPE_POLY_SET fill = *hatch->GetFilledPolysList( layer );
+
+        for( ZONE* other : m_board->Zones() )
+        {
+            if( other == hatch || other->GetIsRuleArea() || !other->GetLayerSet().Contains( layer )
+                    || other->GetAssignedPriority() <= hatch->GetAssignedPriority() )
+            {
+                continue;
+            }
+
+            SHAPE_POLY_SET carved = outlineNoArcs( other );
+            carved.BooleanIntersection( hatchOutline );
+
+            // Need real claimed area to have a border to test.
+            if( carved.Area() < pcbIUScale.mmToIU( 0.1 ) * (double) pcbIUScale.mmToIU( 0.1 ) )
+                continue;
+
+            // Ring past the clearance void: solid with the border, ~half hatch holes without it.
+            SHAPE_POLY_SET outer = carved;
+            outer.Inflate( pcbIUScale.mmToIU( 0.35 ), CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+
+            SHAPE_POLY_SET inner = carved;
+            inner.Inflate( pcbIUScale.mmToIU( 0.20 ), CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+
+            SHAPE_POLY_SET band = outer;
+            band.BooleanSubtract( inner );
+            band.BooleanIntersection( hatchOutline );
+
+            if( band.Area() <= 0 )
+                continue;
+
+            SHAPE_POLY_SET covered = band;
+            covered.BooleanIntersection( fill );
+
+            double coverage = covered.Area() / band.Area();
+            checkedPairs++;
+
+            BOOST_CHECK_MESSAGE( coverage >= 0.85,
+                    wxString::Format( "Hatch zone %s carved by %s: border ring only %.0f%% filled; "
+                                      "the hatch border was not re-established around the carved "
+                                      "area (issue 24758).",
+                                      hatch->GetZoneName(), other->GetZoneName(),
+                                      coverage * 100.0 ) );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( checkedPairs >= 3,
+                         wxString::Format( "Expected at least three carved hatch borders to check, "
+                                           "found %d.", checkedPairs ) );
+}
