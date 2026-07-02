@@ -1750,11 +1750,6 @@ void PCB_VIA::SanitizeLayers()
                         aDrill.end = UNDEFINED_LAYER;
                 }
 
-                // A must-cut equal to the entry layer is a zero-depth backdrill, which is not
-                // manufacturable. The drill exporter requires the must-cut to be strictly deeper.
-                if( aDrill.start != UNDEFINED_LAYER && aDrill.start == aDrill.end )
-                    aDrill.end = UNDEFINED_LAYER;
-
                 // A backdrill side with no must-cut layer does not exist.
                 if( aDrill.end == UNDEFINED_LAYER )
                     aDrill.size = { 0, 0 };
