@@ -168,6 +168,7 @@ private:
     void postprocLongText( EGB_NODE* aRoot );
     void postprocTextContent( EGB_NODE* aRoot );
     void postprocRotation( EGB_NODE* aRoot );
+    void postprocPins( EGB_NODE* aRoot );
     bool isRotatable( int aId ) const;
     bool isLongTextHost( int aId ) const;
 

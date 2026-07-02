@@ -1811,6 +1811,43 @@ void EAGLE_BIN_PARSER::postprocRotation( EGB_NODE* aRoot )
 }
 
 
+void EAGLE_BIN_PARSER::postprocPins( EGB_NODE* aRoot )
+{
+    // The XML pin reader takes length/direction/visible/function as Eagle enum names, but
+    // the binary stores them as the ordinals below (order per Eagle's DTD). Translate them
+    // or the reader silently falls back to its defaults (long/io/both/none), losing the
+    // real pin geometry and electrical type.
+    static const wxString c_length[] = { wxS( "point" ), wxS( "short" ), wxS( "middle" ), wxS( "long" ) };
+    static const wxString c_direction[] = { wxS( "nc" ),  wxS( "in" ),  wxS( "out" ), wxS( "io" ), wxS( "oc" ),
+                                            wxS( "pwr" ), wxS( "pas" ), wxS( "hiz" ), wxS( "sup" ) };
+    static const wxString c_visible[] = { wxS( "off" ), wxS( "pad" ), wxS( "pin" ), wxS( "both" ) };
+    static const wxString c_function[] = { wxS( "none" ), wxS( "dot" ), wxS( "clk" ), wxS( "dotclk" ) };
+
+    auto mapField = [&]( EGB_NODE* aNode, const wxString& aKey, const wxString* aTable, size_t aCount )
+    {
+        if( !aNode->HasProp( aKey ) )
+            return;
+
+        long idx = aNode->PropLong( aKey );
+
+        if( idx >= 0 && idx < (long) aCount )
+            aNode->props[aKey] = aTable[idx];
+    };
+
+    aRoot->ForEach(
+            [&]( EGB_NODE* aNode )
+            {
+                if( aNode->id != EGKW_SECT_PIN )
+                    return;
+
+                mapField( aNode, wxS( "length" ), c_length, sizeof( c_length ) / sizeof( c_length[0] ) );
+                mapField( aNode, wxS( "direction" ), c_direction, sizeof( c_direction ) / sizeof( c_direction[0] ) );
+                mapField( aNode, wxS( "visible" ), c_visible, sizeof( c_visible ) / sizeof( c_visible[0] ) );
+                mapField( aNode, wxS( "function" ), c_function, sizeof( c_function ) / sizeof( c_function[0] ) );
+            } );
+}
+
+
 void EAGLE_BIN_PARSER::postprocFreeText( EGB_NODE* aRoot )
 {
     switch( aRoot->id )
@@ -2483,6 +2520,13 @@ void EAGLE_BIN_PARSER::postProcessSchematic( EGB_NODE* aRoot )
     // The schema section becomes the XML <schematic> element.
     schematic->name = wxS( "schematic" );
 
+    // The shared XML reader builds its layer-number map from drawing/layers, and the
+    // schematic wire reader keys wire-vs-graphic on that map (layer 91 is Nets). Wrap the
+    // decoded layer records the same way the board path does, or every net wire falls to
+    // the LAYER_NOTES default and imports as a graphic line.
+    EGB_NODE* layers = drawing->AddChild( EGKW_SECT_LAYERS, wxS( "layers" ) );
+    postprocLayers( drawing, layers );
+
     // Normalize geometry and text attributes shared with the board path before
     // the tree is restructured (these passes match on section id, not name).
     postprocLongText( aRoot );
@@ -2494,6 +2538,7 @@ void EAGLE_BIN_PARSER::postProcessSchematic( EGB_NODE* aRoot )
     postprocRotation( aRoot );
     postprocRequiredAttrs( aRoot );
     postprocSchAttrs( aRoot );
+    postprocPins( aRoot );
     postprocUnits( aRoot );
     renameSchSections( schematic );
 
