@@ -28,6 +28,7 @@
 #include <optional>
 #include <set>
 #include <wx/log.h>
+#include <wx/utils.h>
 #include <trigo.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
@@ -658,6 +659,21 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     bool lastCtrlDown = false;
 
+    // When items are pasted via Ctrl+V, the Ctrl key is still held when the move tool
+    // starts. Ctrl disables grid snapping, so the pasted items would track off-grid.
+    // The synthetic move action event carries no modifier bits, so query the live
+    // keyboard state and ignore Ctrl until the user releases and re-presses it.
+    bool pasteHoldingCtrl = false;
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->HasFlag( IS_PASTED ) )
+        {
+            pasteHoldingCtrl = wxGetKeyState( WXK_CONTROL );
+            break;
+        }
+    }
+
     Activate();
 
     // Must be done after Activate() so that it gets set into the correct context
@@ -698,9 +714,21 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
         m_frame->GetCanvas()->SetCurrentCursor( currentCursor );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         bool ctrlDown = evt->Modifier( MD_CTRL );
+
+        // Only real input events carry modifier state; the synthetic move action does not.
+        bool hasModifierState = evt->Category() == TC_MOUSE || evt->Category() == TC_KEYBOARD;
+
+        if( pasteHoldingCtrl && hasModifierState && !ctrlDown )
+            pasteHoldingCtrl = false;
+
+        // The paste-held Ctrl only masks grid snapping.  Ctrl also forces a graphics-only drop
+        // into a sheet, and that gesture must still honor a physically-held key.
+        bool gridSnapDisabled = ctrlDown && !pasteHoldingCtrl;
+
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !gridSnapDisabled );
+
         lastCtrlDown = ctrlDown;
 
         if( evt->IsAction( &SCH_ACTIONS::restartMove )
