@@ -906,8 +906,12 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
 
     int namePenWidth = settings->GetDefaultPenWidth();
     int numPenWidth  = settings->GetDefaultPenWidth();
-    int name_offset = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + namePenWidth;
-    int num_offset  = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + numPenWidth;
+
+    // Include the painter's clearance (PIN_LAYOUT_CACHE::getPinTextOffset()) so plotted pin text
+    // sits where it's drawn on screen, not a few mils closer to the pin.
+    int pinTextOffset = schIUScale.MilsToIU( KiROUND( 24 * getRenderSettings( aPlotter )->m_TextOffsetRatio ) );
+    int name_offset = pinTextOffset + schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + namePenWidth;
+    int num_offset  = pinTextOffset + schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + numPenWidth;
 
     COLOR4D nameColor = settings->GetLayerColor( LAYER_PINNAM );
     COLOR4D numColor  = settings->GetLayerColor( LAYER_PINNUM );
@@ -978,42 +982,49 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                     return;
                 }
 
-                int textSize = GetNumberTextSize();
-                int lineSpacing = KiROUND( textSize * 1.3 );
+                const int              textSize = GetNumberTextSize();
+                const int              lineSpacing = KiROUND( textSize * 1.3 );
+                const int              numLines = (int) lines.size();
+                const bool             verticalText = ( angle == ANGLE_VERTICAL );
                 const KIFONT::METRICS& metrics = GetFontMetrics();
 
-                // Measure line widths for brace spacing
+                // Centre each line and align the stacked block's edge to the anchor, matching the
+                // on-screen painter (PIN_LAYOUT_CACHE) so stacked numbers plot where they're drawn.
+                int firstLineCentre;
+
+                switch( vAlign )
+                {
+                case GR_TEXT_V_ALIGN_BOTTOM:
+                    firstLineCentre = -( 2 * numLines - 1 ) * lineSpacing / 2;
+                    break;
+                case GR_TEXT_V_ALIGN_TOP:
+                    firstLineCentre = lineSpacing / 2;
+                    break;
+                default: // GR_TEXT_V_ALIGN_CENTER
+                    firstLineCentre = -( numLines - 1 ) * lineSpacing / 2;
+                    break;
+                }
+
+                firstLineCentre += verticalText ? anchorX : anchorY;
+
+                // Plot each line centred; track the widest for brace spacing.
                 int maxLineWidth = 0;
-                for( const wxString& rawLine : lines )
-                {
-                    wxString trimmed = rawLine; trimmed.Trim(true).Trim(false);
-                    VECTOR2I ext = font->StringBoundaryLimits( trimmed, VECTOR2D( textSize, textSize ),
-                                                               GetPenSizeForNormal( textSize ), false, false, metrics );
-                    if( ext.x > maxLineWidth )
-                        maxLineWidth = ext.x;
-                }
 
-                // Determine starting position
-                int startX = anchorX;
-                int startY = anchorY;
+                for( int i = 0; i < numLines; ++i )
+                {
+                    wxString l = lines[i];
+                    l.Trim( true ).Trim( false );
 
-                if( angle == ANGLE_VERTICAL )
-                {
-                    int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
-                    startX -= totalWidth;
-                }
-                else
-                {
-                    int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
-                    startY -= totalHeight;
-                }
+                    VECTOR2I ext = font->StringBoundaryLimits( l, VECTOR2D( textSize, textSize ),
+                                                               GetPenSizeForNormal( textSize ), false,
+                                                               false, metrics );
+                    maxLineWidth = std::max( maxLineWidth, ext.x );
 
-                for( size_t i = 0; i < lines.size(); ++i )
-                {
-                    wxString l = lines[i]; l.Trim( true ).Trim( false );
-                    int lx = startX + ( angle == ANGLE_VERTICAL ? (int) i * lineSpacing : 0 );
-                    int ly = startY + ( angle == ANGLE_VERTICAL ? 0 : (int) i * lineSpacing );
-                    plotSimpleText( lx, ly, angle, GR_TEXT_H_ALIGN_CENTER, vAlign, l, textSize, numPenWidth, numColor );
+                    int stack = firstLineCentre + i * lineSpacing;
+                    int lx = verticalText ? stack : anchorX;
+                    int ly = verticalText ? anchorY : stack;
+                    plotSimpleText( lx, ly, angle, GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, l,
+                                    textSize, numPenWidth, numColor );
                 }
 
                 // Now draw braces emulating SCH_PAINTER brace geometry
@@ -1053,16 +1064,16 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                         };
 
                 aPlotter->SetCurrentLineWidth( numPenWidth );
-                int braceWidth = textSize / 3;
-                int extraHeight = textSize / 3; // extend beyond text block
 
-                if( angle == ANGLE_VERTICAL )
+                const int braceWidth = textSize / 3;
+                const int extraHeight = textSize / 3; // extend beyond text block
+                const int braceSpacing = maxLineWidth / 2 + braceWidth;
+                const int blockSpan = ( numLines - 1 ) * lineSpacing;
+
+                if( verticalText )
                 {
-                    // Lines spaced horizontally, braces horizontal (above & below)
-                    int totalWidth = ( (int) lines.size() - 1 ) * lineSpacing;
-                    VECTOR2I braceStart( startX - 2 * extraHeight, anchorY );
-                    VECTOR2I braceEnd( startX + totalWidth + extraHeight, anchorY );
-                    int braceSpacing = maxLineWidth / 2 + braceWidth;
+                    VECTOR2I braceStart( firstLineCentre - 2 * extraHeight, anchorY );
+                    VECTOR2I braceEnd( firstLineCentre + blockSpan, anchorY );
 
                     VECTOR2I topStart = braceStart;     topStart.y -= braceSpacing;
                     VECTOR2I topEnd   = braceEnd;       topEnd.y   -= braceSpacing;
@@ -1074,11 +1085,8 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                 }
                 else
                 {
-                    // Lines spaced vertically, braces vertical (left & right)
-                    int totalHeight = ( (int) lines.size() - 1 ) * lineSpacing;
-                    VECTOR2I braceStart( anchorX, startY - 2 * extraHeight );
-                    VECTOR2I braceEnd( anchorX, startY + totalHeight + extraHeight );
-                    int braceSpacing = maxLineWidth / 2 + braceWidth;
+                    VECTOR2I braceStart( anchorX, firstLineCentre - 2 * extraHeight );
+                    VECTOR2I braceEnd( anchorX, firstLineCentre + blockSpan );
 
                     VECTOR2I leftTop = braceStart;   leftTop.x  -= braceSpacing;
                     VECTOR2I leftBot = braceEnd;     leftBot.x  -= braceSpacing;
