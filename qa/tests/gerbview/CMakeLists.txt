@@ -27,6 +27,9 @@ set( QA_GERBVIEW_SRCS
     test_aperture_macro.cpp
     test_excellon_repeat.cpp
 
+    # Gerbview-specific tests
+    test_step_and_repeat.cpp
+
     # Shared between programs, but dependent on the BIU
     ${CMAKE_SOURCE_DIR}/qa/tests/common/test_format_units.cpp
 )

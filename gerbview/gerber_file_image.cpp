@@ -244,6 +244,9 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
 
     m_DisplayOffset.x = m_DisplayOffset.y = 0;
     m_DisplayRotation = ANGLE_0;
+
+    m_SRBlockCollecting = false;
+    m_SRBlockStartIdx = 0;
 }
 
 
@@ -308,6 +311,11 @@ int GERBER_FILE_IMAGE::GetDcodesCount()
  */
 void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
 {
+    // When collecting items for a block-level SR replication, individual item
+    // replication is deferred until the SR block is closed.
+    if( m_SRBlockCollecting )
+        return;
+
     if( GetLayerParams().m_XRepeatCount < 2 && GetLayerParams().m_YRepeatCount < 2 )
         return; // Nothing to repeat
 
@@ -329,6 +337,47 @@ void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
                                        GetLayerParams().m_StepForRepeatMetric );
             dupItem->MoveXY( move_vector );
             AddItemToList( dupItem );
+        }
+    }
+}
+
+
+void GERBER_FILE_IMAGE::FinishStepAndRepeatBlock()
+{
+    if( !m_SRBlockCollecting )
+        return;
+
+    m_SRBlockCollecting = false;
+
+    const GERBER_LAYER& params = GetLayerParams();
+
+    if( params.m_XRepeatCount < 2 && params.m_YRepeatCount < 2 )
+        return;
+
+    int blockSize = static_cast<int>( m_drawings.size() ) - m_SRBlockStartIdx;
+
+    if( blockSize <= 0 )
+        return;
+
+    // Replicate the entire collected block for each SR copy (skipping the 0,0 original)
+    for( int ii = 0; ii < params.m_XRepeatCount; ii++ )
+    {
+        for( int jj = 0; jj < params.m_YRepeatCount; jj++ )
+        {
+            if( jj == 0 && ii == 0 )
+                continue;
+
+            VECTOR2I move_vector;
+            move_vector.x = scaletoIU( ii * params.m_StepForRepeat.x, params.m_StepForRepeatMetric );
+            move_vector.y = scaletoIU( jj * params.m_StepForRepeat.y, params.m_StepForRepeatMetric );
+
+            for( int kk = 0; kk < blockSize; kk++ )
+            {
+                GERBER_DRAW_ITEM* dupItem =
+                        new GERBER_DRAW_ITEM( *m_drawings[m_SRBlockStartIdx + kk] );
+                dupItem->MoveXY( move_vector );
+                AddItemToList( dupItem );
+            }
         }
     }
 }
