@@ -2336,6 +2336,10 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
             return;
     }
 
+    // A zero-alpha color renders as an opaque artifact on some backends, so skip the glyphs.
+    // The selection anchor below must still draw so a selected transparent item stays visible.
+    bool transparentColor = !drawingShadows && color.a <= 0.0;
+
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
     m_gal->SetHoverColor( color );
@@ -2348,7 +2352,12 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
     attrs.m_Angle = aText->GetDrawRotation();
     attrs.m_StrokeWidth = KiROUND( getTextThickness( aText ) );
 
-    if( drawingShadows && font->IsOutline() )
+    if( transparentColor )
+    {
+        // Clear any hover URL so a hidden item leaves no stale clickable region behind.
+        aText->SetActiveUrl( wxString() );
+    }
+    else if( drawingShadows && font->IsOutline() )
     {
         // Trying to draw glyph-shaped shadows on outline text is a fool's errand.  Just box it.
         // Use GetBoundingBox() which correctly handles multiline text dimensions.
@@ -2606,6 +2615,8 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
     if( drawingShadows && !( aTextBox->IsBrightened() || aTextBox->IsSelected() ) )
         return;
 
+    bool transparentColor = !drawingShadows && color.a <= 0.0;
+
     m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
     m_gal->SetHoverColor( color );
@@ -2623,7 +2634,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
     {
         // Do not fill the shape in B&W print mode, to avoid to visible items
         // inside the shape
-        if( aTextBox->IsSolidFill() && !m_schSettings.PrintBlackAndWhiteReq() )
+        if( !transparentColor && aTextBox->IsSolidFill() && !m_schSettings.PrintBlackAndWhiteReq() )
         {
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
@@ -2634,7 +2645,10 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed )
     }
     else if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES || aLayer == LAYER_PRIVATE_NOTES )
     {
-        drawText();
+        if( transparentColor )
+            aTextBox->SetActiveUrl( wxString() );
+        else
+            drawText();
 
         if( aTextBox->Type() != SCH_TABLECELL_T && borderWidth > 0 )
         {
@@ -3030,6 +3044,10 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             return;
     }
 
+    // A zero-alpha color renders as an opaque artifact on some backends, so skip the glyphs.
+    // The selection anchor and umbilical line below must still draw for a transparent field.
+    bool transparentColor = !drawingShadows && color.a <= 0.0;
+
     SCH_SHEET_PATH* sheetPath = nullptr;
     wxString        variant;
 
@@ -3087,7 +3105,11 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     m_gal->SetFillColor( color );
     m_gal->SetHoverColor( color );
 
-    if( drawingShadows && getFont( aField )->IsOutline() )
+    if( transparentColor )
+    {
+        // Skip glyph rendering; the anchor/umbilical drawing below still runs.
+    }
+    else if( drawingShadows && getFont( aField )->IsOutline() )
     {
         // Trying to draw glyph-shaped shadows on outline text is a fool's errand.  Just box it.
         VECTOR2I textpos = bbox.Centre();
@@ -3168,8 +3190,11 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
                             bbox.GetBottom() - bbox.GetHeight() / 6.0 );
         }
 
-        if( parent->IsSymbolLikePowerLocalLabel() && aField->GetId() == FIELD_T::VALUE )
+        if( !transparentColor && parent->IsSymbolLikePowerLocalLabel()
+                && aField->GetId() == FIELD_T::VALUE )
+        {
             drawLocalPowerIcon( pos, size, rotated, color, drawingShadows, aField->IsBrightened() );
+        }
     }
 
     // Draw anchor or umbilical line.  The umbilical line shows independent motion of a field
@@ -3228,28 +3253,35 @@ void SCH_PAINTER::draw( const SCH_GLOBALLABEL* aLabel, int aLayer, bool aDimmed 
         return;
     }
 
-    std::vector<VECTOR2I> pts;
-    std::deque<VECTOR2D> pts2;
+    // Skip the flag shape when transparent, but still delegate to the SCH_TEXT draw so it can
+    // clear any stale hover URL on the now-hidden label.
+    bool transparentColor = !drawingShadows && color.a <= 0.0;
 
-    aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
-
-    for( const VECTOR2I& p : pts )
-        pts2.emplace_back( VECTOR2D( p.x, p.y ) );
-
-    m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getLineWidth( aLabel, drawingShadows ) );
-    m_gal->SetStrokeColor( color );
-
-    if( drawingShadows )
+    if( !transparentColor )
     {
-        m_gal->SetIsFill( eeconfig()->m_Selection.fill_shapes );
-        m_gal->SetFillColor( color );
-        m_gal->DrawPolygon( pts2 );
-    }
-    else
-    {
-        m_gal->SetIsFill( false );
-        m_gal->DrawPolyline( pts2 );
+        std::vector<VECTOR2I> pts;
+        std::deque<VECTOR2D> pts2;
+
+        aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
+
+        for( const VECTOR2I& p : pts )
+            pts2.emplace_back( VECTOR2D( p.x, p.y ) );
+
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( getLineWidth( aLabel, drawingShadows ) );
+        m_gal->SetStrokeColor( color );
+
+        if( drawingShadows )
+        {
+            m_gal->SetIsFill( eeconfig()->m_Selection.fill_shapes );
+            m_gal->SetFillColor( color );
+            m_gal->DrawPolygon( pts2 );
+        }
+        else
+        {
+            m_gal->SetIsFill( false );
+            m_gal->DrawPolyline( pts2 );
+        }
     }
 
     draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer, false );
@@ -3291,6 +3323,8 @@ void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer, bool aDimmed )
         return;
     }
 
+    // Transparency is handled by the delegated SCH_TEXT draw, which also keeps the anchor visible
+    // for a selected local label.
     draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer, false );
 }
 
@@ -3330,20 +3364,27 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer, bool aDimmed )
         return;
     }
 
-    std::vector<VECTOR2I> i_pts;
-    std::deque<VECTOR2D>  d_pts;
+    // Skip the flag shape when transparent, but still delegate to the SCH_TEXT draw so it can
+    // clear any stale hover URL on the now-hidden label.
+    bool transparentColor = !drawingShadows && color.a <= 0.0;
 
-    aLabel->CreateGraphicShape( &m_schSettings, i_pts, (VECTOR2I)aLabel->GetTextPos() );
+    if( !transparentColor )
+    {
+        std::vector<VECTOR2I> i_pts;
+        std::deque<VECTOR2D>  d_pts;
 
-    for( const VECTOR2I& i_pt : i_pts )
-        d_pts.emplace_back( VECTOR2D( i_pt.x, i_pt.y ) );
+        aLabel->CreateGraphicShape( &m_schSettings, i_pts, (VECTOR2I)aLabel->GetTextPos() );
 
-    m_gal->SetIsFill( true );
-    m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
-    m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getLineWidth( aLabel, drawingShadows ) );
-    m_gal->SetStrokeColor( color );
-    m_gal->DrawPolyline( d_pts );
+        for( const VECTOR2I& i_pt : i_pts )
+            d_pts.emplace_back( VECTOR2D( i_pt.x, i_pt.y ) );
+
+        m_gal->SetIsFill( true );
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( getLineWidth( aLabel, drawingShadows ) );
+        m_gal->SetStrokeColor( color );
+        m_gal->DrawPolyline( d_pts );
+    }
 
     draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer, aDimmed );
 }
@@ -3384,6 +3425,9 @@ void SCH_PAINTER::draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer, bool aDim
 
         return;
     }
+
+    if( !drawingShadows && color.a <= 0.0 )
+        return;
 
     std::vector<VECTOR2I> pts;
     std::deque<VECTOR2D> pts2;
