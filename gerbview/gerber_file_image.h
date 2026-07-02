@@ -260,9 +260,22 @@ public:
      * after creating a new gerber item that must be repeated
      * (i.e when m_XRepeatCount or m_YRepeatCount are > 1)
      *
+     * When an SR block is active (m_SRBlockCollecting is true), this is a no-op
+     * because items are collected and replicated as a whole block when the SR
+     * block is closed.
+     *
      * @param aItem = the item to repeat
      */
     void StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem );
+
+    /**
+     * Called when an SR block is closed (%SR*%).
+     *
+     * Per the Gerber specification (section 4.12), all objects within an SR
+     * statement must be collected first, then the combined block replicated
+     * as a unit. This function performs that bulk replication.
+     */
+    void FinishStepAndRepeatBlock();
 
     /**
      * Display information about image parameters in the status bar.
@@ -463,6 +476,12 @@ public:
 
     GERBER_LAYER      m_GBRLayerParams; // hold params for the current gerber layer
     GERBER_DRAW_ITEMS m_drawings;       // linked list of Gerber Items to draw
+
+    bool               m_SRBlockCollecting;              // true when inside an SR block with
+                                                         // repeat count > 1; items are collected
+                                                         // and replicated as a whole block
+    int                m_SRBlockStartIdx;                // index into m_drawings where the
+                                                         // current SR block begins
 
     ///< Parameters used only to draw (display) items on this layer.
     ///< Do not change actual coordinates/orientation

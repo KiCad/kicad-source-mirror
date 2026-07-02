@@ -335,6 +335,9 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
         }
     }
 
+    // Flush any unclosed SR block
+    FinishStepAndRepeatBlock();
+
     fclose( m_Current_File );
 
     m_InUse = true;

@@ -537,9 +537,12 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         break;
 
     case STEP_AND_REPEAT:   // command SR, like %SRX3Y2I5.0J2*%
+        // Close any previously active SR block before starting a new one
+        FinishStepAndRepeatBlock();
+
         m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Start a new Gerber layer
         GetLayerParams().m_StepForRepeat.x = 0.0;
-        GetLayerParams().m_StepForRepeat.x = 0.0;       // offset for Step and Repeat command
+        GetLayerParams().m_StepForRepeat.y = 0.0;       // offset for Step and Repeat command
         GetLayerParams().m_XRepeatCount = 1;
         GetLayerParams().m_YRepeatCount = 1;            // The repeat count
         GetLayerParams().m_StepForRepeatMetric = m_GerbMetric;  // the step units
@@ -572,6 +575,14 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
                 aText++;
                 break;
             }
+        }
+
+        // If repeat count > 1 on either axis, begin collecting items for
+        // block-level replication per Gerber spec section 4.12
+        if( GetLayerParams().m_XRepeatCount > 1 || GetLayerParams().m_YRepeatCount > 1 )
+        {
+            m_SRBlockCollecting = true;
+            m_SRBlockStartIdx = static_cast<int>( m_drawings.size() );
         }
 
         break;
