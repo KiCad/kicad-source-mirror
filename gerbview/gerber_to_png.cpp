@@ -21,6 +21,7 @@
 #include "gerber_file_image.h"
 #include "gerber_draw_item.h"
 #include "dcode.h"
+#include "aperture_macro.h"
 #include "excellon_image.h"
 #include "excellon_defaults.h"
 #include <convert_basic_shapes_to_polygon.h>
@@ -115,6 +116,7 @@ void RenderItem( GERBER_DRAW_ITEM* aItem, PNG_PLOTTER& aPlotter, const KIGFX::CO
 {
     SHAPE_POLY_SET itemPoly;
     bool           needsFlashOffset = false;
+    bool           alreadyInABCoordinates = false;
 
     if( aItem->m_ShapeAsPolygon.OutlineCount() > 0 )
     {
@@ -168,9 +170,27 @@ void RenderItem( GERBER_DRAW_ITEM* aItem, PNG_PLOTTER& aPlotter, const KIGFX::CO
 
         if( dcode )
         {
-            dcode->ConvertShapeToPolygon( aItem );
-            itemPoly = dcode->m_Polygon;
-            needsFlashOffset = true;
+            if( dcode->m_ApertType == APT_MACRO )
+            {
+                APERTURE_MACRO* macro = dcode->GetMacro();
+
+                if( macro )
+                {
+                    // Aperture macro polygons are returned in absolute AB coordinates, matching
+                    // GERBVIEW_PAINTER::drawApertureMacro().  Do not offset/transform them again.
+                    if( aItem->m_AbsolutePolygon.OutlineCount() == 0 )
+                        aItem->m_AbsolutePolygon = *macro->GetApertureMacroShape( aItem, aItem->m_Start );
+
+                    itemPoly = aItem->m_AbsolutePolygon;
+                    alreadyInABCoordinates = true;
+                }
+            }
+            else
+            {
+                dcode->ConvertShapeToPolygon( aItem );
+                itemPoly = dcode->m_Polygon;
+                needsFlashOffset = true;
+            }
         }
     }
 
@@ -190,7 +210,12 @@ void RenderItem( GERBER_DRAW_ITEM* aItem, PNG_PLOTTER& aPlotter, const KIGFX::CO
         pts.reserve( outline.PointCount() );
 
         for( int j = 0; j < outline.PointCount(); j++ )
-            pts.push_back( aItem->GetABPosition( outline.CPoint( j ) + offset ) );
+        {
+            if( alreadyInABCoordinates )
+                pts.push_back( outline.CPoint( j ) );
+            else
+                pts.push_back( aItem->GetABPosition( outline.CPoint( j ) + offset ) );
+        }
 
         if( pts.size() >= 3 )
             aPlotter.PlotPoly( pts, FILL_T::FILLED_SHAPE, 0 );

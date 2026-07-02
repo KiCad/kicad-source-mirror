@@ -1,0 +1,16 @@
+G04 Minimal aperture macro transform regression for gerber convert png*
+G04 The macro triangle should point toward the small normal-aperture dot*
+G04 PNG export used to apply GetABPosition twice for GBR_SPOT_MACRO*
+%FSLAX46Y46*%
+%MOMM*%
+%LPD*%
+%AMTRIANGLEUP*
+4,1,3,-0.600,-0.600,0.600,-0.600,0.100,0.600,-0.600,-0.600,0*
+%
+%ADD10TRIANGLEUP*%
+%ADD11C,0.150*%
+D10*
+X0Y0D03*
+D11*
+X0Y900000D03*
+M02*
