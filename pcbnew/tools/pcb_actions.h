@@ -242,9 +242,6 @@ public:
     /// Decrease width of currently drawn line
     static TOOL_ACTION decWidth;
 
-    /// Switch posture when drawing arc
-    static TOOL_ACTION arcPosture;
-
     /// Switch between dimension arrow directions
     static TOOL_ACTION changeDimensionArrows;
 

@@ -431,12 +431,6 @@ TOOL_ACTION PCB_ACTIONS::decWidth( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Decrease Line Width" )
         .FriendlyName( _( "Decrease Line Width" ) ) );
 
-TOOL_ACTION PCB_ACTIONS::arcPosture( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveDrawing.arcPosture" )
-        .Scope( AS_CONTEXT )
-        .DefaultHotkey( '/' )
-        .LegacyHotkeyName( "Switch Track Posture" )
-        .FriendlyName( _( "Switch Arc Posture" ) ) );
 
 TOOL_ACTION PCB_ACTIONS::changeDimensionArrows( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.changeDimensionArrows" )

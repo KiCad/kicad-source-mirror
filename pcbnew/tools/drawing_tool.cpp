@@ -268,7 +268,7 @@ bool DRAWING_TOOL::Init()
     // tool-specific actions
     ctxMenu.AddItem( PCB_ACTIONS::closeOutline,          canCloseOutline, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint,       canUndoPoint, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::arcPosture,            arcToolActive, 200 );
+    ctxMenu.AddItem( ACTIONS::arcPosture,                arcToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::spacingIncrease,       tuningToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::spacingDecrease,       tuningToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::amplIncrease,          tuningToolActive, 200 );
@@ -3134,7 +3134,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 }
             }
         }
-        else if( evt->IsAction( &PCB_ACTIONS::arcPosture ) )
+        else if( evt->IsAction( &ACTIONS::arcPosture ) )
         {
             arcManager.ToggleClockwise();
         }

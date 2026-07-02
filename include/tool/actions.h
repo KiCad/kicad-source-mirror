@@ -265,6 +265,7 @@ public:
     // Internal
     static TOOL_ACTION updateMenu;
     static TOOL_ACTION activatePointEditor;
+    static TOOL_ACTION arcPosture;
     static TOOL_ACTION cycleArcEditMode;
     static TOOL_ACTION pointEditorArcKeepCenter;
     static TOOL_ACTION pointEditorArcKeepEndpoint;

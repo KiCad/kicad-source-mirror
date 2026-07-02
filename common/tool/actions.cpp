@@ -603,6 +603,14 @@ TOOL_ACTION ACTIONS::pointEditorArcKeepRadius( TOOL_ACTION_ARGS()
         .Tooltip( _( "Switch arc editing mode to maintaining radius when endpoint are moved" ) )
         .Parameter( ARC_EDIT_MODE::KEEP_CENTER_ENDS_ADJUST_ANGLE ) );
 
+TOOL_ACTION ACTIONS::arcPosture( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveDrawing.arcPosture" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '/' )
+        .LegacyHotkeyName( "Switch Track Posture" )
+        .FriendlyName( _( "Switch Arc Posture" ) )
+        .Tooltip( _( "Switch arc posture between clockwise and counter-clockwise" ) ) );
+
 TOOL_ACTION ACTIONS::cycleArcEditMode( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.cycleArcEditMode" )
         .Scope( AS_GLOBAL )
