@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-30 09:01+0000\n"
+"PO-Revision-Date: 2026-07-02 19:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -124,7 +124,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -8107,7 +8107,7 @@ msgstr "Fallita creazione commit: %s"
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2768
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "Impossibile modificare: il ramo non ha ancora commit."
 
 #: common/git/libgit_backend.cpp:329
 #, fuzzy, c-format
@@ -8219,6 +8219,8 @@ msgstr "Impossibile leggere 'FETCH_HEAD'"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Niente per cui fare pull: il repository remoto non ha alcun ramo "
+"corrispondente al ramo locale corrente."
 
 #: common/git/libgit_backend.cpp:1179
 msgid "Could not lookup commit"
@@ -20884,9 +20886,9 @@ msgid "Downloaded symbol payload was not a KiCad symbol library."
 msgstr "Simbolo %s non trovato nella tabella librerie di simboli."
 
 #: eeschema/remote_symbol_import_job.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded symbol payload did not include expected symbol '%s'."
-msgstr "Il contenuto del simbolo non include il simbolo atteso."
+msgstr "Il payload del simbolo scaricato non includeva il simbolo atteso '%s'."
 
 #: eeschema/remote_symbol_import_job.cpp:104
 #: eeschema/remote_symbol_import_utils.cpp:117
@@ -20906,9 +20908,9 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "Impossibile accedere al plugin simboli KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "Impossibile salvare il simbolo scaricato."
+msgstr "Impossibile salvare il simbolo scaricato: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
 #, fuzzy
@@ -22149,7 +22151,7 @@ msgstr "Impossibile creare il percorso di libreria simboli '%s'."
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:863
 #, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "Genitore per il simbolo esteso %s non trovato nella libreria '%s'."
+msgstr "Nessun genitore per il simbolo esteso %s trovato nella libreria '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:260
 #, c-format
@@ -22177,7 +22179,7 @@ msgstr "Il simbolo %s contiene il carattere non valido '%c'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:360
 msgid "Invalid library identifier"
-msgstr "ID di libreria di simboli non valido"
+msgstr "Identificatore di libreria non valido"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:468
 msgid "Invalid parent symbol name"
@@ -22286,9 +22288,8 @@ msgid "Invalid symbol library ID"
 msgstr "ID libreria di simboli non valido"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3979
-#, fuzzy
 msgid "Missing sheet name property"
-msgstr "Argomento nome foglio mancante a %s."
+msgstr "Proprietà nome foglio mancante"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3985
 #, fuzzy
