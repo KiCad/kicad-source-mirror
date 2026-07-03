@@ -36,6 +36,19 @@
 #include <string_utils.h>
 #include <trigo.h>
 
+// Re-throw a child-node parse failure with the enclosing element added to the message. The
+// leaf error only names the offending node type (e.g. "PT"), which is ambiguous in a large
+// archive; prefixing the specific child and its parent section locates the failure.
+[[noreturn]] static void reThrowWithParentContext( const IO_ERROR& aError, XNODE* aChildNode,
+                                                   XNODE* aParentNode )
+{
+    // TRANSLATORS: %s are, in order, the underlying error message, the child XML node name,
+    // and the enclosing (parent) XML node name.
+    THROW_IO_ERROR( wxString::Format( _( "%s (whilst parsing '%s' in '%s')" ), aError.Problem(),
+                                      aChildNode->GetName(), aParentNode->GetName() ) );
+}
+
+
 // Ratio derived from CADSTAR default font. See doxygen comment in cadstar_archive_parser.h
 const double CADSTAR_ARCHIVE_PARSER::TXT_HEIGHT_RATIO = ( 24.0 - 5.0 ) / 24.0;
 
@@ -2663,8 +2676,16 @@ std::vector<CADSTAR_ARCHIVE_PARSER::POINT> CADSTAR_ARCHIVE_PARSER::ParseAllChild
         if( cNode->GetName() == wxT( "PT" ) )
         {
             POINT pt;
-            //TODO try.. catch + throw again with more detailed error information
-            pt.Parse( cNode, aContext );
+
+            try
+            {
+                pt.Parse( cNode, aContext );
+            }
+            catch( const IO_ERROR& e )
+            {
+                reThrowWithParentContext( e, cNode, aNode );
+            }
+
             retVal.push_back( pt );
         }
         else if( aTestAllChildNodes )
@@ -2697,8 +2718,16 @@ std::vector<CADSTAR_ARCHIVE_PARSER::VERTEX> CADSTAR_ARCHIVE_PARSER::ParseAllChil
         if( VERTEX::IsVertex( cNode ) )
         {
             VERTEX vertex;
-            //TODO try.. catch + throw again with more detailed error information
-            vertex.Parse( cNode, aContext );
+
+            try
+            {
+                vertex.Parse( cNode, aContext );
+            }
+            catch( const IO_ERROR& e )
+            {
+                reThrowWithParentContext( e, cNode, aNode );
+            }
+
             retVal.push_back( vertex );
         }
         else if( aTestAllChildNodes )
@@ -2723,8 +2752,16 @@ std::vector<CADSTAR_ARCHIVE_PARSER::CUTOUT> CADSTAR_ARCHIVE_PARSER::ParseAllChil
         if( cNode->GetName() == wxT( "CUTOUT" ) )
         {
             CUTOUT cutout;
-            //TODO try.. catch + throw again with more detailed error information
-            cutout.Parse( cNode, aContext );
+
+            try
+            {
+                cutout.Parse( cNode, aContext );
+            }
+            catch( const IO_ERROR& e )
+            {
+                reThrowWithParentContext( e, cNode, aNode );
+            }
+
             retVal.push_back( cutout );
         }
         else if( aTestAllChildNodes )

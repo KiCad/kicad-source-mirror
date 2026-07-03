@@ -30,6 +30,9 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_arc.h> // For SHAPE_ARC::DefaultAccuracyForPCB()
 
+#include <ki_exception.h>
+#include <xnode.h>
+
 
 BOOST_AUTO_TEST_SUITE( CadstartArchiveParser )
 
@@ -137,6 +140,28 @@ BOOST_AUTO_TEST_CASE( AppendToChain )
         }
     }
 
+}
+
+/**
+ * A malformed child node deep in the archive must surface an error that identifies the
+ * enclosing section, not just the leaf node, so the failure can be located in a large design.
+ */
+BOOST_AUTO_TEST_CASE( ParseChildErrorContext )
+{
+    XNODE parent( wxXML_ELEMENT_NODE, wxT( "VERTICES" ) );
+
+    // A "PT" node missing its required coordinate attributes triggers a parse failure.
+    new XNODE( &parent, wxXML_ELEMENT_NODE, wxT( "PT" ) );
+
+    auto messageMentionsSection =
+            []( const IO_ERROR& aError ) -> bool
+            {
+                return aError.What().Contains( wxT( "VERTICES" ) );
+            };
+
+    BOOST_CHECK_EXCEPTION(
+            CADSTAR_ARCHIVE_PARSER::ParseAllChildPoints( &parent, nullptr, true ),
+            IO_ERROR, messageMentionsSection );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
