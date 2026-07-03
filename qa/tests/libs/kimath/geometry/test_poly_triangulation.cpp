@@ -1340,4 +1340,121 @@ BOOST_AUTO_TEST_CASE( RefinePreservesNonManifoldEdge )
     BOOST_CHECK( meshHasEdge( tp, 0, 1 ) );
 }
 
+
+BOOST_AUTO_TEST_CASE( DecimateRemovesCollinearRun )
+{
+    // A square subdivided into many exactly-collinear points must triangulate down to the two
+    // triangles the plain square produces; the subdivision points carry no geometry.
+    SHAPE_LINE_CHAIN chain;
+    const int size = 1000000;
+    const int steps = 20;
+
+    for( int i = 0; i < steps; i++ )
+        chain.Append( i * size / steps, 0 );
+
+    for( int i = 0; i < steps; i++ )
+        chain.Append( size, i * size / steps );
+
+    for( int i = 0; i < steps; i++ )
+        chain.Append( size - i * size / steps, size );
+
+    for( int i = 0; i < steps; i++ )
+        chain.Append( 0, size - i * size / steps );
+
+    chain.SetClosed( true );
+
+    TRIANGULATION_TEST_FIXTURE fixture;
+    auto triangulator = fixture.CreateTriangulator();
+    BOOST_REQUIRE( triangulator->TesselatePolygon( chain, nullptr ) );
+
+    BOOST_CHECK_EQUAL( fixture.GetResult().GetTriangleCount(), 2u );
+    BOOST_CHECK_CLOSE( meshArea( fixture.GetResult() ), (double) size * size, 1e-6 );
+}
+
+
+BOOST_AUTO_TEST_CASE( DecimateKeepsVerticesBeyondBand )
+{
+    // Teeth of amplitude just past the simplification level must all survive.  The teeth are
+    // tiny and the valley deep, so the area budget alone would let every one go: only the band
+    // test can hold them, which is what this pins.
+    SHAPE_LINE_CHAIN chain;
+    const int amp = TRIANGULATESIMPLIFICATIONLEVEL * 2;
+    const int halfPitch = 25000;
+    const int teeth = 10;
+
+    for( int i = 0; i <= teeth * 2; i++ )
+        chain.Append( i * halfPitch, ( i % 2 ) ? amp : 0 );
+
+    chain.Append( teeth * 2 * halfPitch, -5000000 );
+    chain.Append( 0, -5000000 );
+    chain.SetClosed( true );
+
+    TRIANGULATION_TEST_FIXTURE fixture;
+    auto triangulator = fixture.CreateTriangulator();
+    BOOST_REQUIRE( triangulator->TesselatePolygon( chain, nullptr ) );
+
+    BOOST_CHECK_EQUAL( fixture.GetResult().GetTriangleCount(),
+                       static_cast<size_t>( chain.PointCount() ) - 2 );
+}
+
+
+BOOST_AUTO_TEST_CASE( DecimateKeepsFractureBridges )
+{
+    // Fracturing bakes the hole into the outline through a zero-width corridor whose feet
+    // split an outline edge into exactly-collinear pieces.  With the outline edges subdivided
+    // there is a real run to collapse, so decimation runs on the fractured ring: it must fold
+    // the subdivided edges away (triangle count near the plain four-corner result) yet never
+    // cross the corridor and seal the hole (area preserved).
+    const int    size = 1000000;
+    const int    steps = 25;
+    SHAPE_LINE_CHAIN outline;
+
+    for( int i = 0; i < steps; i++ )
+        outline.Append( i * size / steps, 0 );
+
+    for( int i = 0; i < steps; i++ )
+        outline.Append( size, i * size / steps );
+
+    for( int i = 0; i < steps; i++ )
+        outline.Append( size - i * size / steps, size );
+
+    for( int i = 0; i < steps; i++ )
+        outline.Append( 0, size - i * size / steps );
+
+    outline.SetClosed( true );
+
+    SHAPE_LINE_CHAIN hole;
+    hole.Append( 400000, 400000 );
+    hole.Append( 400000, 600000 );
+    hole.Append( 600000, 600000 );
+    hole.Append( 600000, 400000 );
+    hole.SetClosed( true );
+
+    SHAPE_POLY_SET poly;
+    poly.AddOutline( outline );
+    poly.AddHole( hole );
+
+    const double area = poly.Area();
+
+    poly.Fracture();
+    poly.CacheTriangulation( false );
+
+    double meshTotal = 0.0;
+    size_t triangles = 0;
+
+    for( unsigned i = 0; i < poly.TriangulatedPolyCount(); i++ )
+    {
+        triangles += poly.TriangulatedPolygon( i )->GetTriangleCount();
+
+        for( const auto& tri : poly.TriangulatedPolygon( i )->Triangles() )
+            meshTotal += tri.Area();
+    }
+
+    BOOST_CHECK_CLOSE( meshTotal, area, 1e-6 );
+
+    // The 100 subdivision points carry no geometry; without decimation the fractured ring
+    // keeps them all and the mesh is an order of magnitude larger.
+    BOOST_CHECK_LT( triangles, 20u );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

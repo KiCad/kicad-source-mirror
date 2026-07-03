@@ -158,6 +158,9 @@ public:
 
         outerRing->updateList();
 
+        if( VERTEX* decimated = decimateList( outerRing ) )
+            outerRing = decimated;
+
         auto retval = earcutList( outerRing );
 
         if( !retval )
@@ -216,6 +219,9 @@ public:
         }
         else
         {
+            if( VERTEX* decimated = decimateList( firstVertex ) )
+                firstVertex = decimated;
+
             auto retval = earcutList( firstVertex );
 
             if( !retval )
@@ -549,6 +555,165 @@ private:
 
         if( count )
             return retval;
+
+        return nullptr;
+    }
+
+    /**
+     * Replace near-collinear runs with a single chord.  Returns the new list head, or nullptr
+     * if nothing was removed.
+     *
+     * A run is absorbed only when every vertex deviates from the chord by at most the
+     * simplification level and the spanned triangle contains no other vertex.  Empty triangles
+     * are what guarantee no self-intersection: a segment can cross the new chord without
+     * crossing the edges it replaces only if an endpoint lies inside that triangle, so this
+     * keeps fracture bridges intact.  Requires a z-sorted list; run after updateList().
+     */
+    VERTEX* decimateList( VERTEX* aStart )
+    {
+        if( !aStart || aStart->next == aStart->prev )
+            return nullptr;
+
+        const double eps = TRIANGULATESIMPLIFICATIONLEVEL;
+        const double epsSq = eps * eps;
+
+        // Caps the quadratic chord re-validation as a run grows.
+        constexpr size_t kMaxRun = 256;
+
+        size_t  ringSize = 1;
+        VERTEX* head = aStart;
+
+        // The sentinel is never absorbed; anchor it at the lexicographic max, a hull corner
+        // no valid decimation would remove.
+        for( VERTEX* v = head->next; v != head; v = v->next )
+        {
+            ++ringSize;
+
+            if( v->x > aStart->x || ( v->x == aStart->x && v->y > aStart->y ) )
+                aStart = v;
+        }
+
+        if( ringSize < 8 )
+            return nullptr;
+
+        // Cumulative signed-area budget bounds net drift even when every removal cuts the same
+        // way.  Absolute term caps large rings to the QA coverage tolerance; relative term
+        // keeps small rings honest.
+        const double areaBudget = std::min( std::abs( aStart->area() ) * 2e-4, 2.5e8 );
+        double       areaUsed = 0.0;
+
+        auto inBand =
+                []( const VERTEX* p, const VERTEX* a, const VERTEX* b, double aEpsSq )
+                {
+                    double dx = b->x - a->x;
+                    double dy = b->y - a->y;
+                    double vx = p->x - a->x;
+                    double vy = p->y - a->y;
+                    double lenSq = dx * dx + dy * dy;
+                    double dot = dx * vx + dy * vy;
+
+                    if( lenSq <= 0.0 )
+                        return vx * vx + vy * vy <= aEpsSq;
+
+                    if( dot < 0.0 || dot > lenSq )
+                        return false;
+
+                    double cross = dx * vy - dy * vx;
+
+                    return cross * cross <= aEpsSq * lenSq;
+                };
+
+        // Boundary-inclusive, mirroring isEar(): fracture-bridge feet land on the triangle
+        // boundary and reject the removal.
+        auto triangleIsEmpty =
+                [this]( VERTEX* aA, VERTEX* aB, VERTEX* aC )
+                {
+                    VERTEX* a = aA;
+                    VERTEX* c = aC;
+
+                    // inTriangle() assumes the negative-area winding isEar() queries with.
+                    if( area( aA, aB, aC ) > 0 )
+                        std::swap( a, c );
+
+                    const double minTX = std::min( a->x, std::min( aB->x, c->x ) );
+                    const double minTY = std::min( a->y, std::min( aB->y, c->y ) );
+                    const double maxTX = std::max( a->x, std::max( aB->x, c->x ) );
+                    const double maxTY = std::max( a->y, std::max( aB->y, c->y ) );
+
+                    const uint32_t minZ = zOrder( minTX, minTY );
+                    const uint32_t maxZ = zOrder( maxTX, maxTY );
+
+                    for( VERTEX* p = aB->nextZ; p && p->z <= maxZ; p = p->nextZ )
+                    {
+                        if( p != aA && p != aC && p->inTriangle( *a, *aB, *c ) )
+                            return false;
+                    }
+
+                    for( VERTEX* p = aB->prevZ; p && p->z >= minZ; p = p->prevZ )
+                    {
+                        if( p != aA && p != aC && p->inTriangle( *a, *aB, *c ) )
+                            return false;
+                    }
+
+                    return true;
+                };
+
+        std::vector<const VERTEX*> absorbed;
+        absorbed.reserve( kMaxRun );
+
+        size_t  removed = 0;
+        VERTEX* anchor = aStart;
+
+        do
+        {
+            VERTEX* end = anchor->next;
+            absorbed.clear();
+
+            while( end != aStart && absorbed.size() < kMaxRun && ringSize - removed >= 4 )
+            {
+                VERTEX* tryEnd = end->next;
+
+                // A degenerate chord would leave coordinate-duplicate neighbors behind.
+                if( *anchor == *tryEnd )
+                    break;
+
+                if( !triangleIsEmpty( anchor, end, tryEnd ) )
+                    break;
+
+                double delta = 0.5 * area( anchor, end, tryEnd );
+
+                if( std::abs( areaUsed + delta ) > areaBudget )
+                    break;
+
+                // Re-validate the whole run against the grown chord, so acceptance never
+                // depends on removal order.
+                bool ok = inBand( end, anchor, tryEnd, epsSq );
+
+                for( const VERTEX* v : absorbed )
+                {
+                    if( !ok )
+                        break;
+
+                    ok = inBand( v, anchor, tryEnd, epsSq );
+                }
+
+                if( !ok )
+                    break;
+
+                areaUsed += delta;
+                absorbed.push_back( end );
+                end->remove();
+                ++removed;
+                end = tryEnd;
+            }
+
+            anchor = end;
+        } while( anchor != aStart );
+
+        wxLogTrace( TRIANGULATE_TRACE, "Removed %zu points in decimateList", removed );
+
+        if( removed )
+            return aStart;
 
         return nullptr;
     }
