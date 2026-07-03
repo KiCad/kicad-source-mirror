@@ -22,7 +22,6 @@ set( PCAD2PCBNEW_SRCS
     pcad_text.cpp
         pcad_via.cpp
         pcad_via_shape.cpp
-    s_expr_loader.cpp
     )
 
 add_library( pcad2kicadpcb STATIC ${PCAD2PCBNEW_SRCS} )

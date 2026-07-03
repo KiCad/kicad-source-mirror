@@ -749,6 +749,9 @@ set( COMMON_IO_SRCS
     # DipTrace
     io/diptrace/diptrace_binary_reader.cpp
 
+    # P-CAD
+    io/pcad/s_expr_loader.cpp
+
     io/csv.cpp
     )
 

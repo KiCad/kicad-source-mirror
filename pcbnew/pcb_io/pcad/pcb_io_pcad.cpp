@@ -25,7 +25,7 @@
 
 #include <pcad/pcb_io_pcad.h>
 #include <pcad/pcad_pcb.h>
-#include <pcad/s_expr_loader.h>
+#include <io/pcad/s_expr_loader.h>
 #include <io/io_utils.h>
 
 #include <board.h>

@@ -19,110 +19,16 @@
 
 #include <sch_io/pcad/pcad_sch_parser.h>
 
-#include <dsnlexer.h>
+#include <io/pcad/s_expr_loader.h>
 #include <xnode.h>
 #include <macros.h>
 
 #include <wx/xml/xml.h>
 #include <wx/string.h>
-#include <wx/wxcrt.h>
-
-#include <stdexcept>
-#include <cstring>
 
 
 namespace PCAD_SCH
 {
-
-static const char ACCEL_ASCII_KEYWORD[] = "ACCEL_ASCII";
-
-
-// ---------------------------------------------------------------------------
-// File loading: P-Cad ASCII → wxXmlDocument using DSNLEXER (same as PCB side)
-// ---------------------------------------------------------------------------
-
-static void loadXml( const wxString& aFilename, wxXmlDocument& aDoc )
-{
-    char line[sizeof( ACCEL_ASCII_KEYWORD )];
-
-    FILE* fp = wxFopen( aFilename, wxT( "rt" ) );
-
-    if( !fp )
-        THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'" ), aFilename ) );
-
-    if( !fgets( line, sizeof( line ), fp )
-        || memcmp( line, ACCEL_ASCII_KEYWORD, sizeof( ACCEL_ASCII_KEYWORD ) - 1 ) != 0 )
-    {
-        fclose( fp );
-        THROW_IO_ERROR( wxString::Format( _( "'%s' is not a P-CAD ASCII file" ), aFilename ) );
-    }
-
-    fseek( fp, 0, SEEK_SET );
-
-    static KEYWORD emptyKeywords[1] = {};
-    // DSNLEXER takes ownership of fp and closes it
-    DSNLEXER lexer( emptyKeywords, 0, nullptr, fp, aFilename );
-    wxCSConv  conv( wxT( "windows-1251" ) );
-
-    XNODE* root = new XNODE( wxXML_ELEMENT_NODE, wxT( "pcad" ) );
-    XNODE* cur  = root;
-
-    int tok;
-
-    while( ( tok = lexer.NextTok() ) != DSN_EOF )
-    {
-        if( tok == DSN_RIGHT )
-        {
-            cur = cur->GetParent();
-
-            if( !cur )
-                THROW_IO_ERROR( _( "Unexpected ')' in P-CAD file" ) );
-        }
-        else if( tok == DSN_LEFT )
-        {
-            tok = lexer.NextTok();
-            XNODE* child = new XNODE( wxXML_ELEMENT_NODE,
-                                      wxString( lexer.CurText(), conv ) );
-            cur->AddChild( child );
-            cur = child;
-        }
-        else if( cur != root )
-        {
-            wxString val( lexer.CurText(), conv );
-
-            if( tok == DSN_STRING )
-            {
-                wxString existing;
-
-                if( cur->GetAttribute( wxT( "Name" ), &existing ) )
-                {
-                    cur->DeleteAttribute( wxT( "Name" ) );
-                    cur->AddAttribute( wxT( "Name" ), existing + wxT( ' ' ) + val );
-                }
-                else
-                {
-                    cur->AddAttribute( wxT( "Name" ), val );
-                }
-            }
-            else if( !val.IsEmpty() )
-            {
-                wxString content = cur->GetNodeContent() + wxT( ' ' ) + val;
-                wxXmlNode* textNode = cur->GetChildren();
-
-                // Find or create text child
-                while( textNode && textNode->GetType() != wxXML_TEXT_NODE )
-                    textNode = textNode->GetNext();
-
-                if( textNode )
-                    textNode->SetContent( content );
-                else
-                    cur->AddChild( new wxXmlNode( wxXML_TEXT_NODE, wxEmptyString, content ) );
-            }
-        }
-    }
-
-    aDoc.SetRoot( root );
-}
 
 
 // ---------------------------------------------------------------------------
@@ -227,7 +133,7 @@ static bool parsePt( XNODE* aNode, double& aX, double& aY )
 void PCAD_SCH_PARSER::LoadFromFile( const wxString& aFilename, SCHEMATIC& aSchematic )
 {
     wxXmlDocument doc;
-    loadXml( aFilename, doc );
+    PCAD2KICAD::LoadInputFile( aFilename, &doc );
 
     XNODE* root = static_cast<XNODE*>( doc.GetRoot() );
 

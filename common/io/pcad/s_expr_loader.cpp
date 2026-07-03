@@ -18,7 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <pcad/s_expr_loader.h>
+#include <io/pcad/s_expr_loader.h>
 
 #include <dsnlexer.h>
 #include <macros.h>
