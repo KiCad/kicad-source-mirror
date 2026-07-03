@@ -43,6 +43,7 @@ set( QA_COMMON_SRCS
     test_eda_shape.cpp
     test_eda_text.cpp
     test_editor_tabs_panel.cpp
+    test_unit_binder.cpp
     test_wx_grid.cpp
     test_embedded_file_compress.cpp
     test_expand_text_vars.cpp

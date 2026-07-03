@@ -368,6 +368,36 @@ void UNIT_BINDER::delayedFocusHandler( wxCommandEvent& )
 }
 
 
+UNIT_BINDER::RANGE_BOUND UNIT_BINDER::ConvertRangeBound( const EDA_IU_SCALE& aIuScale,
+                                                        EDA_UNITS aBoundUnits, double aBound,
+                                                        EDA_UNITS aDisplayUnits,
+                                                        EDA_DATA_TYPE aDataType )
+{
+    // StringFromValue scales the user value once per dimension (twice for area, thrice for
+    // volume), so invert that same chain to bring the bound into internal units.
+    int conversions = 1;
+
+    switch( aDataType )
+    {
+    case EDA_DATA_TYPE::AREA:     conversions = 2; break;
+    case EDA_DATA_TYPE::VOLUME:   conversions = 3; break;
+    case EDA_DATA_TYPE::UNITLESS: conversions = 0; break;
+    default:                      conversions = 1; break;
+    }
+
+    double boundIU = aBound;
+
+    for( int i = 0; i < conversions; ++i )
+        boundIU = FromUserUnit( aIuScale, aBoundUnits, boundIU );
+
+    // GetText has no UNITLESS label, so asking for units text would assert
+    bool addUnitsText = aDataType != EDA_DATA_TYPE::UNITLESS;
+
+    return { boundIU,
+             StringFromValue( aIuScale, aDisplayUnits, boundIU, addUnitsText, aDataType ) };
+}
+
+
 bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
 {
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
@@ -379,14 +409,15 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
         return true;
     }
 
-    // TODO: Validate() does not currently support m_dataType being anything other than DISTANCE
     // Note: aMin and aMax are not always given in internal units
-    if( GetValue() < FromUserUnit( *m_iuScale, aUnits, aMin ) )
+    RANGE_BOUND minBound = ConvertRangeBound( *m_iuScale, aUnits, aMin, m_units, m_dataType );
+    RANGE_BOUND maxBound = ConvertRangeBound( *m_iuScale, aUnits, aMax, m_units, m_dataType );
+
+    if( GetValue() < minBound.internalUnits )
     {
-        double val_min_iu = FromUserUnit( *m_iuScale, aUnits, aMin );
         m_errorMessage = wxString::Format( _( "%s must be at least %s." ),
                                            valueDescriptionFromLabel( m_label ),
-                                           StringFromValue( *m_iuScale, m_units, val_min_iu, true ) );
+                                           minBound.displayText );
 
         textEntry->SelectAll();
 
@@ -396,12 +427,11 @@ bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
         return false;
     }
 
-    if( GetValue() > FromUserUnit( *m_iuScale, aUnits, aMax ) )
+    if( GetValue() > maxBound.internalUnits )
     {
-        double val_max_iu = FromUserUnit( *m_iuScale, aUnits, aMax );
         m_errorMessage = wxString::Format( _( "%s must be less than %s." ),
                                            valueDescriptionFromLabel( m_label ),
-                                           StringFromValue( *m_iuScale, m_units, val_max_iu, true ) );
+                                           maxBound.displayText );
 
         textEntry->SelectAll();
 

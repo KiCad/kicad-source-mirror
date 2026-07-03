@@ -179,6 +179,33 @@ public:
      */
     virtual bool Validate( double aMin, double aMax, EDA_UNITS aUnits = EDA_UNITS::UNSCALED );
 
+    /**
+     * A range bound converted to internal units together with its user-facing display string.
+     */
+    struct RANGE_BOUND
+    {
+        double   internalUnits;
+        wxString displayText;
+    };
+
+    /**
+     * Convert a range bound and format its display string honoring @p aDataType.
+     *
+     * Area and volume bounds scale by the square and cube of the unit factor respectively, and
+     * the display string carries the matching data type (so it reads "mm²" rather than "mm").
+     * Kept static and free of any control state so the range validation math can be exercised
+     * without constructing wx widgets.
+     *
+     * @param aIuScale the internal units scale.
+     * @param aBoundUnits the units the bound is expressed in (UNSCALED for internal units).
+     * @param aBound the bound value in @p aBoundUnits.
+     * @param aDisplayUnits the units the display string should be rendered in.
+     * @param aDataType the measurement type governing conversion power and units label.
+     */
+    static RANGE_BOUND ConvertRangeBound( const EDA_IU_SCALE& aIuScale, EDA_UNITS aBoundUnits,
+                                          double aBound, EDA_UNITS aDisplayUnits,
+                                          EDA_DATA_TYPE aDataType );
+
     void SetLabel( const wxString& aLabel );
 
     /**
