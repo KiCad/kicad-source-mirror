@@ -106,6 +106,7 @@
     "units": 1
   },
   "template": {
+    "browsed_path": "",
     "filter": 0,
     "last_used": "",
     "recent_templates": [],

@@ -126,6 +126,7 @@ public:
      *  Open dialog to import PADS Logic schematic and PCB files.
      */
     void OnImportPadsProjectFiles( wxCommandEvent& event );
+    void OnImportPcadProjectFiles( wxCommandEvent& event );
 
     /**
      *  Open dialog to import gEDA/gaf schematic and PCB files.

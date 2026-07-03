@@ -176,6 +176,10 @@
     "show_import_issues": true,
     "units": 1
   },
+  "tabs": {
+    "active": "",
+    "open": []
+  },
   "window": {
     "aui_state": null,
     "cursor": {

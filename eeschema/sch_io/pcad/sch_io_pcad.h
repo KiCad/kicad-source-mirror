@@ -24,6 +24,7 @@
 #include <sch_io/sch_io_mgr.h>
 
 #include <map>
+#include <memory>
 
 class SCH_SCREEN;
 class SCH_SHEET;
@@ -35,6 +36,8 @@ namespace PCAD_SCH
 struct SHEET;
 struct SCHEMATIC;
 }
+
+struct LIB_SYMBOL_STORE;
 
 /**
  * A SCH_IO derivation for loading P-CAD 2006 ASCII schematic files (.SCH).
@@ -61,7 +64,9 @@ public:
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;
 
-    int GetModifyHash() const override { return 0; }
+    bool CanReadLibrary( const wxString& aFileName ) const override;
+
+    int GetModifyHash() const override { return m_modifyHash; }
 
     SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                   SCH_SHEET*             aAppendToMe  = nullptr,
@@ -83,10 +88,19 @@ public:
 private:
     static wxString getLibName( const ::SCHEMATIC* aSchematic, const wxString& aFileName );
 
+    /// Parse the library file once and serve cache-owned symbols, invalidated
+    /// by path or file timestamp changes.
+    void ensureLoadedLibrary( const wxString& aLibraryPath );
+
     void populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aSheet,
                          const PCAD_SCH::SCHEMATIC& aPcad, double aPageH,
-                         const std::map<wxString, LIB_SYMBOL*>& aLibSymbols,
-                         const wxString& aLibName );
+                         const LIB_SYMBOL_STORE& aLibSymbols, const wxString& aLibName );
+
+    wxString  m_cachePath;
+    long long m_cacheTimestamp = 0;
+    int       m_modifyHash = 0;
+
+    std::map<wxString, std::unique_ptr<LIB_SYMBOL>> m_libCache;
 };
 
 #endif // SCH_IO_PCAD_H

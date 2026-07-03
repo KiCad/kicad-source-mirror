@@ -53,6 +53,12 @@
     "sort_mode": 0,
     "width": -1
   },
+  "diff_phase_skew": {
+    "negative_color": "rgb(255, 0, 0)",
+    "positive_color": "rgb(0, 0, 255)",
+    "unknown_color": "rgb(128, 128, 128)",
+    "zero_color": "rgb(255, 255, 255)"
+  },
   "editing": {
     "allow_free_pads": false,
     "arc_edit_mode": 0,

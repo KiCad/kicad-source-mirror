@@ -72,8 +72,8 @@ struct TEXT_STYLE
     }
 };
 
-/// A positioned text: free sheet text, wire/bus display names, pin name/designator
-/// texts and attribute values all share this shape.
+/// A positioned text.  Free sheet text, wire/bus display names, pin
+/// name/designator texts and attribute values all share this shape.
 struct TEXT_ITEM
 {
     wxString text;
@@ -90,8 +90,7 @@ struct PIN
     wxString  pinNum;             // symbol pin ordinal inside the symbolDef
     wxString  defaultPinDes;      // default pad designator when no compDef mapping exists
     double    x = 0, y = 0;       // body attachment point, mils
-    double    rotation = 0;       // 0/90/180/270 CCW
-    bool      isFlipped = false;
+    double    rotation = 0;       // 0/90/180/270 CCW; already encodes any flip
     double    pinLength = 300.0;  // mils - P-CAD default
     wxString  outsideEdgeStyle;   // Dot, Clock, ...
     wxString  insideEdgeStyle;
@@ -145,8 +144,7 @@ struct IEEE_SYMBOL
 struct ATTR
 {
     wxString  name;
-    wxString  value;
-    TEXT_ITEM placement;
+    TEXT_ITEM placement;      // carries the attribute value as its text
 };
 
 struct SYMBOL_DEF
@@ -162,8 +160,8 @@ struct SYMBOL_DEF
     std::vector<ATTR>        attrs;
 };
 
-/// (compPin "padDes" ...) inside a compDef: maps a symbol pin ordinal to the
-/// physical pad designator and carries the electrical type.
+/// A (compPin "padDes" ...) inside a compDef, mapping a symbol pin ordinal to
+/// the physical pad designator and carrying the electrical type.
 struct COMP_PIN
 {
     wxString padDes;              // node Name attribute - the pad designator
@@ -197,7 +195,6 @@ struct COMP_INST
 struct WIRE
 {
     std::vector<std::pair<double, double>> pts;   // mils; a wire line may be a polyline
-    double    width = 10.0;
     wxString  netName;
     bool      dispName = false;
     TEXT_ITEM label;              // net-name label placement when dispName is set
@@ -244,8 +241,8 @@ struct SYMBOL_INST
     std::vector<ATTR> attrs;      // per-instance RefDes/Value/... placements
 };
 
-/// A placed title-block field: the name references a fieldDef whose value is
-/// the displayed text.
+/// A placed title-block field whose name references the fieldDef holding the
+/// displayed text.
 struct FIELD_PLACEMENT
 {
     wxString  name;
@@ -279,7 +276,6 @@ struct SCHEMATIC
 {
     double workspaceWidth = 17000.0;      // mils
     double workspaceHeight = 11000.0;     // mils
-    bool   isMetric = false;              // (fileUnits ...) - default unit for bare numbers
 
     std::vector<TEXT_STYLE>                textStyles;
     std::map<wxString, const TEXT_STYLE*>  textStylesByName;
@@ -343,6 +339,7 @@ private:
     // Measurement-aware value parsing.  A bare number uses the file default
     // (fileUnits); an explicit suffix ("1.5mm", "0.198 mm") always wins.
     double      toMils( const wxString& aValue ) const;
+    std::vector<std::pair<double, double>> collectPts( XNODE* aNode ) const;
     bool        parsePt( XNODE* aNode, double& aX, double& aY ) const;
     bool        parsePtNode( XNODE* aPtNode, double& aX, double& aY ) const;
     double      childDouble( XNODE* aNode, const wxString& aTag, double aDefault = 0.0 ) const;

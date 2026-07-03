@@ -38,6 +38,15 @@
     "sort_mode": 0,
     "width": -1
   },
+  "export_image": {
+    "height": 0,
+    "lock_aspect_ratio": true,
+    "resolution_units": 0,
+    "size_units": 0,
+    "width": 0,
+    "x_resolution": 300.0,
+    "y_resolution": 300.0
+  },
   "find_replace": {
     "find_history": [],
     "find_string": "",

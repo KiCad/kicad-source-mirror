@@ -30,6 +30,7 @@
     "show_op_voltages": true,
     "show_page_limits": true,
     "show_pin_alt_icons": true,
+    "show_remapped_pin_numbers": true,
     "show_sexpr_file_convert_warning": true,
     "show_sheet_filename_case_sensitivity_dialog": true
   },

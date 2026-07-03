@@ -48,7 +48,8 @@ public:
         EASYEDAPRO,
         LTSPICE,
         PADS,
-        DIPTRACE
+        DIPTRACE,
+        PCAD
     };
 
     wxString             m_inputFile;

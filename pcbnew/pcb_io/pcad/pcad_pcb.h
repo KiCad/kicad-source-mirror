@@ -27,6 +27,8 @@
 #include <pcad/pcad_callbacks.h>
 #include <pcad/pcad_footprint.h>
 
+class REPORTER;
+
 #include <map>
 #include <set>
 #include <wx/arrstr.h>
@@ -85,6 +87,12 @@ public:
 
     std::map<int, TLAYER>   m_LayersMap;        // flexible layers mapping
     mutable std::set<int>   m_reportedLayers;   // unknown layers already warned about
+
+public:
+    void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
+
+private:
+    REPORTER* m_reporter = nullptr;
     int                     m_SizeX;
     int                     m_SizeY;
 

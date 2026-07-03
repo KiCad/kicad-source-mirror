@@ -41,7 +41,8 @@ XNODE* PCAD_SCH_PARSER::FindChild( XNODE* aNode, const wxString& aTag )
 
     for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
     {
-        if( child->GetName() == aTag )
+        // case-insensitive like the board importer's FindNode
+        if( child->GetName().IsSameAs( aTag, false ) )
             return child;
     }
 
@@ -98,14 +99,15 @@ double PCAD_SCH_PARSER::toMils( const wxString& aValue ) const
     if( str.IsEmpty() )
         return 0.0;
 
-    bool isMm = m_isMetric;
+    bool     isMm = m_isMetric;
+    wxString lower = str.Lower();
 
-    if( str.EndsWith( wxT( "mm" ) ) )
+    if( lower.EndsWith( wxT( "mm" ) ) )
     {
         isMm = true;
         str.RemoveLast( 2 );
     }
-    else if( str.EndsWith( wxT( "mil" ) ) || str.EndsWith( wxT( "Mil" ) ) )
+    else if( lower.EndsWith( wxT( "mil" ) ) )
     {
         isMm = false;
         str.RemoveLast( 3 );
@@ -134,7 +136,8 @@ static std::vector<wxString> splitMeasureTokens( const wxString& aContent )
     {
         wxString tok = tokenizer.GetNextToken();
 
-        if( !result.empty() && ( tok == wxT( "mm" ) || tok.CmpNoCase( wxT( "mil" ) ) == 0 ) )
+        if( !result.empty()
+            && ( tok.CmpNoCase( wxT( "mm" ) ) == 0 || tok.CmpNoCase( wxT( "mil" ) ) == 0 ) )
             result.back() += tok;
         else
             result.push_back( tok );
@@ -196,19 +199,42 @@ static double childAngle( XNODE* aNode, const wxString& aTag, double aDefault = 
 }
 
 
+std::vector<std::pair<double, double>> PCAD_SCH_PARSER::collectPts( XNODE* aNode ) const
+{
+    std::vector<std::pair<double, double>> pts;
+
+    for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
+    {
+        if( child->GetName() == wxT( "pt" ) )
+        {
+            double x = 0, y = 0;
+
+            if( parsePtNode( child, x, y ) )
+                pts.emplace_back( x, y );
+        }
+    }
+
+    return pts;
+}
+
+
 JUSTIFY PCAD_SCH_PARSER::parseJustify( const wxString& aValue )
 {
-    if( aValue == wxT( "LowerLeft" ) )   return JUSTIFY::LOWER_LEFT;
-    if( aValue == wxT( "LowerCenter" ) ) return JUSTIFY::LOWER_CENTER;
-    if( aValue == wxT( "LowerRight" ) )  return JUSTIFY::LOWER_RIGHT;
-    if( aValue == wxT( "UpperLeft" ) )   return JUSTIFY::UPPER_LEFT;
-    if( aValue == wxT( "UpperCenter" ) ) return JUSTIFY::UPPER_CENTER;
-    if( aValue == wxT( "UpperRight" ) )  return JUSTIFY::UPPER_RIGHT;
-    if( aValue == wxT( "Center" ) )      return JUSTIFY::CENTER;
-    if( aValue == wxT( "Right" ) )       return JUSTIFY::RIGHT;
-    if( aValue == wxT( "Left" ) )        return JUSTIFY::LEFT;
+    static const std::map<wxString, JUSTIFY> justifyMap = {
+        { wxT( "LowerLeft" ),   JUSTIFY::LOWER_LEFT },
+        { wxT( "LowerCenter" ), JUSTIFY::LOWER_CENTER },
+        { wxT( "LowerRight" ),  JUSTIFY::LOWER_RIGHT },
+        { wxT( "UpperLeft" ),   JUSTIFY::UPPER_LEFT },
+        { wxT( "UpperCenter" ), JUSTIFY::UPPER_CENTER },
+        { wxT( "UpperRight" ),  JUSTIFY::UPPER_RIGHT },
+        { wxT( "Center" ),      JUSTIFY::CENTER },
+        { wxT( "Right" ),       JUSTIFY::RIGHT },
+        { wxT( "Left" ),        JUSTIFY::LEFT },
+    };
 
-    return JUSTIFY::LOWER_LEFT;
+    auto it = justifyMap.find( aValue );
+
+    return it == justifyMap.end() ? JUSTIFY::LOWER_LEFT : it->second;
 }
 
 
@@ -230,8 +256,6 @@ void PCAD_SCH_PARSER::LoadFromFile( const wxString& aFilename, SCHEMATIC& aSchem
     if( XNODE* header = FindChild( root, wxT( "asciiHeader" ) ) )
         parseHeader( header, aSchematic );
 
-    m_isMetric = aSchematic.isMetric;
-
     parseFieldSets( root, aSchematic );
 
     for( XNODE* node = root->GetChildren(); node; node = node->GetNext() )
@@ -249,11 +273,22 @@ void PCAD_SCH_PARSER::LoadFromFile( const wxString& aFilename, SCHEMATIC& aSchem
     for( const TEXT_STYLE& ts : aSchematic.textStyles )
         aSchematic.textStylesByName[ts.name] = &ts;
 
+    // primary names win over originalName aliases on collision
     for( const SYMBOL_DEF& sd : aSchematic.symbolDefs )
+    {
         aSchematic.symbolDefsByName[sd.name] = &sd;
 
+        if( !sd.originalName.IsEmpty() )
+            aSchematic.symbolDefsByName.emplace( sd.originalName, &sd );
+    }
+
     for( const COMP_DEF& cd : aSchematic.compDefs )
+    {
         aSchematic.compDefsByName[cd.name] = &cd;
+
+        if( !cd.originalName.IsEmpty() )
+            aSchematic.compDefsByName.emplace( cd.originalName, &cd );
+    }
 
     for( const COMP_INST& ci : aSchematic.compInsts )
         aSchematic.compInstsByRef[ci.refDes] = &ci;
@@ -262,9 +297,7 @@ void PCAD_SCH_PARSER::LoadFromFile( const wxString& aFilename, SCHEMATIC& aSchem
 
 void PCAD_SCH_PARSER::parseHeader( XNODE* aNode, SCHEMATIC& aSchematic )
 {
-    wxString units = childStr( aNode, wxT( "fileUnits" ) );
-
-    aSchematic.isMetric = ( units.CmpNoCase( wxT( "mm" ) ) == 0 );
+    m_isMetric = ( childStr( aNode, wxT( "fileUnits" ) ).CmpNoCase( wxT( "mm" ) ) == 0 );
 }
 
 
@@ -433,13 +466,10 @@ void PCAD_SCH_PARSER::parseCompDef( XNODE* aNode, COMP_DEF& aCompDef )
 
             wxString symName = childStr( child, wxT( "symbolName" ) );
 
-            if( part >= 1 && !symName.IsEmpty() )
-            {
-                if( part >= static_cast<long>( aCompDef.attachedSymbols.size() ) )
-                    aCompDef.attachedSymbols.resize( part + 1 );
-
+            // parts beyond the declared unit count are never instantiated, and
+            // clamping keeps a corrupt partNum from forcing a huge allocation
+            if( part >= 1 && part <= aCompDef.numParts && !symName.IsEmpty() )
                 aCompDef.attachedSymbols[part] = symName;
-            }
         }
         else if( tag == wxT( "attachedPattern" ) )
         {
@@ -471,7 +501,6 @@ PIN PCAD_SCH_PARSER::parsePin( XNODE* aNode )
     pin.defaultPinDes = childStr( aNode, wxT( "defaultPinDes" ) );
     parsePt( aNode, pin.x, pin.y );
     pin.rotation = childAngle( aNode, wxT( "rotation" ) );
-    pin.isFlipped = childFlag( aNode, wxT( "isFlipped" ) );
     pin.pinLength = childDouble( aNode, wxT( "pinLength" ), 300.0 );
     pin.outsideEdgeStyle = childStr( aNode, wxT( "outsideEdgeStyle" ) );
     pin.insideEdgeStyle = childStr( aNode, wxT( "insideEdgeStyle" ) );
@@ -513,17 +542,7 @@ LINE PCAD_SCH_PARSER::parseLine( XNODE* aNode )
 {
     LINE line;
 
-    for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
-    {
-        if( child->GetName() == wxT( "pt" ) )
-        {
-            double x = 0, y = 0;
-
-            if( parsePtNode( child, x, y ) )
-                line.pts.emplace_back( x, y );
-        }
-    }
-
+    line.pts = collectPts( aNode );
     line.width = childDouble( aNode, wxT( "width" ), 10.0 );
 
     wxString style = childStr( aNode, wxT( "style" ) );
@@ -564,18 +583,7 @@ ARC PCAD_SCH_PARSER::parseTriplePointArc( XNODE* aNode )
 {
     ARC arc;
 
-    std::vector<std::pair<double, double>> pts;
-
-    for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
-    {
-        if( child->GetName() == wxT( "pt" ) )
-        {
-            double x = 0, y = 0;
-
-            if( parsePtNode( child, x, y ) )
-                pts.emplace_back( x, y );
-        }
-    }
+    std::vector<std::pair<double, double>> pts = collectPts( aNode );
 
     arc.width = childDouble( aNode, wxT( "width" ), 10.0 );
 
@@ -615,16 +623,7 @@ POLY PCAD_SCH_PARSER::parsePoly( XNODE* aNode )
 {
     POLY poly;
 
-    for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
-    {
-        if( child->GetName() == wxT( "pt" ) )
-        {
-            double x = 0, y = 0;
-
-            if( parsePtNode( child, x, y ) )
-                poly.pts.emplace_back( x, y );
-        }
-    }
+    poly.pts = collectPts( aNode );
 
     return poly;
 }
@@ -659,10 +658,7 @@ IEEE_SYMBOL PCAD_SCH_PARSER::parseIeeeSymbol( XNODE* aNode )
 {
     IEEE_SYMBOL sym;
 
-    wxString kind = aNode->GetNodeContent().Trim( true ).Trim( false );
-
-    if( kind.IsEmpty() )
-        kind = aNode->GetAttribute( wxT( "Name" ) );
+    wxString kind = NodeText( aNode );
 
     if( kind == wxT( "Adder" ) )           sym.kind = IEEE_KIND::ADDER;
     else if( kind == wxT( "Amplifier" ) )  sym.kind = IEEE_KIND::AMPLIFIER;
@@ -695,11 +691,9 @@ ATTR PCAD_SCH_PARSER::parseAttr( XNODE* aNode )
     // The quoted attribute name and quoted value are concatenated by the
     // loader; the name is the first word, the value everything after it.
     attr.name = nameAttr.BeforeFirst( ' ' );
-    attr.value = nameAttr.AfterFirst( ' ' );
-    attr.value.Trim( true ).Trim( false );
 
     attr.placement = parseText( aNode );
-    attr.placement.text = attr.value;
+    attr.placement.text = nameAttr.AfterFirst( ' ' ).Trim( true ).Trim( false );
 
     return attr;
 }
@@ -838,6 +832,16 @@ void PCAD_SCH_PARSER::parseFieldSets( XNODE* aNode, SCHEMATIC& aSchematic )
         return;
     }
 
+    // fieldSets live under designInfo; recursing only through the container
+    // nodes skips the geometry that dominates large files
+    const wxString& tag = aNode->GetName();
+
+    if( tag != wxT( "www.lura.sk" ) && tag != wxT( "schematicDesign" )
+        && tag != wxT( "schDesignHeader" ) && tag != wxT( "designInfo" ) )
+    {
+        return;
+    }
+
     for( XNODE* child = static_cast<XNODE*>( aNode->GetChildren() ); child;
          child = static_cast<XNODE*>( child->GetNext() ) )
     {
@@ -857,18 +861,7 @@ WIRE PCAD_SCH_PARSER::parseWire( XNODE* aNode )
 
     if( XNODE* lineNode = FindChild( aNode, wxT( "line" ) ) )
     {
-        for( XNODE* lc = lineNode->GetChildren(); lc; lc = lc->GetNext() )
-        {
-            if( lc->GetName() == wxT( "pt" ) )
-            {
-                double x = 0, y = 0;
-
-                if( parsePtNode( lc, x, y ) )
-                    wire.pts.emplace_back( x, y );
-            }
-        }
-
-        wire.width = childDouble( lineNode, wxT( "width" ), 10.0 );
+        wire.pts = collectPts( lineNode );
 
         if( XNODE* netRef = FindChild( lineNode, wxT( "netNameRef" ) ) )
             wire.netName = NodeText( netRef );
@@ -897,18 +890,7 @@ BUS PCAD_SCH_PARSER::parseBus( XNODE* aNode )
     BUS bus;
 
     bus.name = aNode->GetAttribute( wxT( "Name" ) );
-
-    for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
-    {
-        if( child->GetName() == wxT( "pt" ) )
-        {
-            double x = 0, y = 0;
-
-            if( parsePtNode( child, x, y ) )
-                bus.pts.emplace_back( x, y );
-        }
-    }
-
+    bus.pts = collectPts( aNode );
     bus.dispName = childFlag( aNode, wxT( "dispName" ) );
 
     if( XNODE* textNode = FindChild( aNode, wxT( "text" ) ) )

@@ -146,6 +146,10 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
                      _( "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)" ),
                      ID_IMPORT_PADS_PROJECT, BITMAPS::import_project );
 
+    importMenu->Add( _( "P-CAD Project..." ),
+                     _( "Import P-CAD ASCII schematic and board" ),
+                     ID_IMPORT_PCAD_PROJECT, BITMAPS::import_project );
+
     importMenu->Add( _( "gEDA / Lepton EDA Project..." ),
                      _( "Import gEDA or Lepton EDA schematic and PCB layout" ),
                      ID_IMPORT_GEDA_PROJECT,

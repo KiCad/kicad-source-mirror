@@ -28,6 +28,7 @@
 #include <pcad/pcad_via.h>
 
 #include <board.h>
+#include <reporter.h>
 #include <common.h>
 #include <xnode.h>
 
@@ -84,9 +85,17 @@ wxString PCAD_PCB::GetLayerNetNameRef( int aPCadLayer ) const
 
 void PCAD_PCB::reportUnknownLayer( int aPCadLayer ) const
 {
-    if( m_reportedLayers.insert( aPCadLayer ).second )
-        wxLogWarning( _( "Unknown PCad layer %u mapped to the drawings layer" ),
-                      unsigned( aPCadLayer ) );
+    if( !m_reportedLayers.insert( aPCadLayer ).second )
+        return;
+
+    wxString msg = wxString::Format( _( "Undefined P-CAD layer %u substituted with the "
+                                        "drawings layer." ),
+                                     unsigned( aPCadLayer ) );
+
+    if( m_reporter )
+        m_reporter->Report( msg, RPT_SEVERITY_WARNING );
+    else
+        wxLogWarning( msg );
 }
 
 

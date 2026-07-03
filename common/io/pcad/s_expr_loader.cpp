@@ -21,8 +21,11 @@
 #include <io/pcad/s_expr_loader.h>
 
 #include <dsnlexer.h>
+#include <memory>
 #include <macros.h>
 #include <xnode.h>
+
+#include <algorithm>
 
 #include <wx/ffile.h>
 #include <wx/string.h>
@@ -36,61 +39,78 @@ static const char ACCEL_ASCII_KEYWORD[] = "ACCEL_ASCII";
 
 // P-CAD text values may span lines inside one quoted string, but DSNLEXER
 // scans strings within a single line.  Escape raw line breaks inside quoted
-// strings so the lexer's escape handling reconstructs them.  The scan mirrors
-// the lexer's rules: a quote opens a string only at a token boundary (some
-// writers emit unescaped quotes inside bare tokens), and inside a string a
-// backslash consumes the following character, so an escaped quote does not
-// terminate it.
+// strings so the lexer's escape handling reconstructs them; CR is dropped so
+// CRLF files yield the same text the old text-mode reader produced.  The scan
+// mirrors the lexer's rules.  A quote opens a string only at a token boundary
+// (some writers emit unescaped quotes inside bare tokens), and inside a
+// string a backslash consumes the following character, so an escaped quote
+// does not terminate it.
 static void escapeStringLineBreaks( std::string& aContent )
 {
     std::string result;
-    result.reserve( aContent.size() );
-
-    bool inString = false;
-    char prev = ' ';
+    bool        modified = false;
+    bool        inString = false;
+    bool        atBoundary = true;
 
     for( size_t i = 0; i < aContent.size(); i++ )
     {
         char c = aContent[i];
 
+        if( !modified && ( c == '\n' || c == '\r' ) && inString )
+        {
+            // first in-string line break; switch to rewriting from here on
+            result.assign( aContent, 0, i );
+            modified = true;
+        }
+
         if( inString )
         {
             if( c == '\\' && i + 1 < aContent.size() )
             {
-                result += c;
-                result += aContent[++i];
-                prev = aContent[i];
+                if( modified )
+                {
+                    result += c;
+                    result += aContent[i + 1];
+                }
+
+                ++i;
                 continue;
             }
 
             if( c == '"' )
             {
+                // a closing quote also ends the token, so a quote directly
+                // after it starts a new string
                 inString = false;
+                atBoundary = true;
             }
             else if( c == '\n' )
             {
                 result += "\\n";
-                prev = c;
                 continue;
             }
             else if( c == '\r' )
             {
-                result += "\\r";
-                prev = c;
                 continue;
             }
         }
-        else if( c == '"' && ( prev == ' ' || prev == '\t' || prev == '\n' || prev == '\r'
-                               || prev == '(' || prev == ')' ) )
+        else if( c == '"' && atBoundary )
         {
             inString = true;
         }
+        else
+        {
+            // NUL counts as whitespace to DSNLEXER
+            atBoundary = ( c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '('
+                           || c == ')' || c == '\0' );
+        }
 
-        result += c;
-        prev = c;
+        if( modified )
+            result += c;
     }
 
-    aContent.swap( result );
+    if( modified )
+        aContent.swap( result );
 }
 
 
@@ -115,9 +135,18 @@ bool FileMatchesFormat( const wxString& aFileName, const std::string& aSection )
     if( aSection.empty() )
         return true;
 
-    // Stream the rest of the file looking for the section token, keeping an
-    // overlap so a match split across reads is still found.
-    std::string window;
+    // Writers emit the design sections at the start of a line; anchoring the
+    // search there keeps a section name quoted inside a text value from
+    // matching.  A file holds exactly one design section, so seeing the
+    // sibling section rejects the file without reading to the end.
+    const std::string wanted = "\n(" + aSection;
+    const std::string sibling = ( aSection == "pcbDesign" ) ? "\n(schematicDesign"
+                                                            : "\n(pcbDesign";
+
+    const size_t overlap = std::max( wanted.size(), sibling.size() );
+
+    // seed with a line break so a section directly after the header matches
+    std::string window = "\n";
     char        buf[64 * 1024];
 
     for( ;; )
@@ -127,13 +156,18 @@ bool FileMatchesFormat( const wxString& aFileName, const std::string& aSection )
         if( got == 0 || got == static_cast<size_t>( wxInvalidOffset ) )
             return false;
 
+        // normalize CRLF so the line anchor matches either ending
         window.append( buf, got );
+        window.erase( std::remove( window.begin(), window.end(), '\r' ), window.end() );
 
-        if( window.find( aSection ) != std::string::npos )
+        if( window.find( wanted ) != std::string::npos )
             return true;
 
-        if( window.size() > aSection.size() )
-            window.erase( 0, window.size() - aSection.size() );
+        if( window.find( sibling ) != std::string::npos )
+            return false;
+
+        if( window.size() > overlap )
+            window.erase( 0, window.size() - overlap );
     }
 }
 
@@ -148,7 +182,7 @@ void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
     wxFFile file( aFileName, wxT( "rb" ) );
 
     if( !file.IsOpened() )
-        THROW_IO_ERROR( wxT( "Unable to open file: " ) + aFileName );
+        THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'." ), aFileName ) );
 
     std::string fileContent;
 
@@ -156,24 +190,27 @@ void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
         wxFileOffset length = file.Length();
 
         if( length <= 0 )
-            THROW_IO_ERROR( wxT( "Unable to read file: " ) + aFileName );
+            THROW_IO_ERROR( wxString::Format( _( "Cannot read file '%s'." ), aFileName ) );
 
         fileContent.resize( static_cast<size_t>( length ) );
 
         if( file.Read( fileContent.data(), fileContent.size() ) != fileContent.size() )
-            THROW_IO_ERROR( wxT( "Unable to read file: " ) + aFileName );
+            THROW_IO_ERROR( wxString::Format( _( "Cannot read file '%s'." ), aFileName ) );
     }
 
     // check file format; the first line starts with "ACCEL_ASCII" with optional
     // stuff on the same line after that.
     if( fileContent.compare( 0, sizeof( ACCEL_ASCII_KEYWORD ) - 1, ACCEL_ASCII_KEYWORD ) != 0 )
-        THROW_IO_ERROR( wxT( "Unknown file type" ) );
+        THROW_IO_ERROR( wxString::Format( _( "'%s' is not a P-CAD ASCII file." ), aFileName ) );
 
     escapeStringLineBreaks( fileContent );
 
     DSNLEXER lexer( empty_keywords, 0, nullptr, fileContent, aFileName );
 
-    iNode = new XNODE( wxXML_ELEMENT_NODE, wxT( "www.lura.sk" ) );
+    // owns the tree on every throw path until it is handed to the document
+    std::unique_ptr<XNODE> root( new XNODE( wxXML_ELEMENT_NODE, wxT( "www.lura.sk" ) ) );
+
+    iNode = root.get();
 
     while( ( tok = lexer.NextTok() ) != DSN_EOF )
     {
@@ -183,7 +220,8 @@ void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
 
             // this will happen if there are more right parens than left
             if( !iNode )
-                THROW_IO_ERROR( wxT( "Unexpected right paren" ) );
+                THROW_IO_ERROR( wxString::Format( _( "Unbalanced parentheses in '%s'." ),
+                                                  aFileName ) );
         }
         else if( tok == DSN_LEFT )
         {
@@ -223,8 +261,11 @@ void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
         }
     }
 
-    if( iNode )
-        aXmlDoc->SetRoot( iNode );
+    // more left parens than right means the file was truncated mid-save
+    if( iNode != root.get() )
+        THROW_IO_ERROR( wxString::Format( _( "Unbalanced parentheses in '%s'." ), aFileName ) );
+
+    aXmlDoc->SetRoot( root.release() );
 }
 
 } // namespace PCAD2KICAD

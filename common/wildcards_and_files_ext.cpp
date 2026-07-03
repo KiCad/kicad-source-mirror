@@ -299,6 +299,12 @@ wxString FILEEXT::EagleFilesWildcard()
 }
 
 
+wxString FILEEXT::PcadFilesWildcard()
+{
+    return _( "P-CAD ASCII files" ) + AddFileExtListToFilter( { "sch", "pcb" } );
+}
+
+
 wxString FILEEXT::PADSProjectFilesWildcard()
 {
     return _( "PADS ASCII files" ) + AddFileExtListToFilter( { "asc", "txt" } );

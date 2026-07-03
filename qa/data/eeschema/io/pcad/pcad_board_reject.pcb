@@ -1,0 +1,11 @@
+ACCEL_ASCII "pcad_board_reject.pcb"
+
+(asciiHeader
+  (asciiVersion 3 0)
+  (fileUnits mil)
+)
+(pcbDesign "QA_Board"
+  (pcbDesignHeader
+    (workspaceSize 10000.0 8000.0)
+  )
+)

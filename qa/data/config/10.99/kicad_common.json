@@ -31,6 +31,12 @@
     "update_check_prompt": false,
     "zone_fill_warning": false
   },
+  "embed_file_defaults": {
+    "datasheet": true,
+    "drawing_sheet": true,
+    "model_3d": false,
+    "sim_model": false
+  },
   "environment": {
     "vars": null
   },

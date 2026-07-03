@@ -52,7 +52,7 @@ bool PCB_IO_PCAD::CanReadBoard( const wxString& aFileName ) const
 {
     // P-CAD ASCII saves are extension-agnostic, and schematics share the same
     // ACCEL_ASCII container, so detect by content.
-    return PCAD2KICAD::FileMatchesFormat( aFileName, "(pcbDesign" );
+    return PCAD2KICAD::FileMatchesFormat( aFileName, "pcbDesign" );
 }
 
 
@@ -70,6 +70,8 @@ BOARD* PCB_IO_PCAD::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
         m_board->SetFileName( aFileName );
 
     PCAD_PCB pcb( m_board );
+
+    pcb.SetReporter( m_reporter );
 
     LoadInputFile( aFileName, &xmlDoc );
     pcb.ParseBoard( nullptr, &xmlDoc, wxT( "PCB" ) );

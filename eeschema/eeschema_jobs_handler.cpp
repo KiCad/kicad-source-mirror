@@ -1500,6 +1500,7 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
     case JOB_SCH_IMPORT::FORMAT::LTSPICE:    fileType = SCH_IO_MGR::SCH_LTSPICE;         break;
     case JOB_SCH_IMPORT::FORMAT::PADS:       fileType = SCH_IO_MGR::SCH_PADS;            break;
     case JOB_SCH_IMPORT::FORMAT::DIPTRACE:   fileType = SCH_IO_MGR::SCH_DIPTRACE;        break;
+    case JOB_SCH_IMPORT::FORMAT::PCAD:       fileType = SCH_IO_MGR::SCH_PCAD;            break;
     }
 
     if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )

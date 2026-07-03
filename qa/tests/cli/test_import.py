@@ -53,6 +53,19 @@ def get_pads_test_file() -> str:
     return pads_file if os.path.exists( pads_file ) else None
 
 
+def get_pcad_test_files() -> tuple:
+    """Paths to the P-CAD schematic and board test files, or (None, None)."""
+    sch = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "eeschema", "io",
+                        "pcad", "pcad_feature_test.sch" )
+    pcb = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "pcbnew", "plugins",
+                        "pcad", "pcad_4layer_glyph_test_ascii.PCB" )
+
+    if os.path.exists( sch ) and os.path.exists( pcb ):
+        return sch, pcb
+
+    return None, None
+
+
 def get_eagle_test_file() -> str:
     """Get path to an Eagle schematic test file from the QA test data directory."""
     eagle_file = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "eeschema", "io",
@@ -189,3 +202,23 @@ class TestImportLinkedProject:
         # The project should reference the produced board and sheet.
         assert project.get( "boards" ), "project boards[] should list the imported board"
         assert project.get( "sheets" ), "project sheets[] should list the imported schematic"
+
+
+@pytest.mark.skipif( get_pcad_test_files() == ( None, None ),
+                     reason="P-CAD test files not available" )
+class TestImportPcadProject:
+    """Test importing a P-CAD schematic and board pair"""
+
+    def test_import_pcad_pair_linked( self, kitest: KiTestFixture ):
+        """P-CAD schematic + board inputs are content-detected and linked into one project"""
+        sch_file, pcb_file = get_pcad_test_files()
+        stem = get_project_stem( kitest, "pcad_pair", "design" )
+
+        command = [ utils.kicad_cli(), "import", sch_file, pcb_file, "-o", str( stem ) ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+        assert stem.with_suffix( ".kicad_pro" ).exists()
+        assert stem.with_suffix( ".kicad_sch" ).exists()
+        assert stem.with_suffix( ".kicad_pcb" ).exists()

@@ -188,6 +188,14 @@ void KICAD_MANAGER_FRAME::OnImportCadstarArchiveFiles( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::OnImportPcadProjectFiles( wxCommandEvent& event )
+{
+    ImportNonKiCadProject( _( "Import P-CAD Project Files" ), FILEEXT::PcadFilesWildcard(),
+                           { "sch", "SCH" }, { "pcb", "PCB" }, SCH_IO_MGR::SCH_PCAD,
+                           PCB_IO_MGR::PCAD );
+}
+
+
 void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 {
     ImportNonKiCadProject( _( "Import Eagle Project Files" ), FILEEXT::EagleFilesWildcard(), { "sch" },

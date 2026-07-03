@@ -42,6 +42,18 @@ def get_output_path( kitest: KiTestFixture, test_name: str, filename: str ) -> P
     return output_path
 
 
+def get_pcad_test_file() -> str:
+    """Get path to a P-CAD schematic test file from the QA test data directory."""
+    test_data_dir = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "eeschema",
+                                  "io", "pcad" )
+    pcad_file = os.path.join( test_data_dir, "pcad_feature_test.sch" )
+
+    if os.path.exists( pcad_file ):
+        return pcad_file
+
+    return None
+
+
 def get_eagle_test_file() -> str:
     """Get path to an Eagle schematic test file from the QA test data directory."""
     test_data_dir = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "eeschema",
@@ -181,3 +193,48 @@ class TestSchImportEagle:
         assert "statistics" in report
         assert "symbols" in report["statistics"]
         assert "sheets" in report["statistics"]
+
+
+@pytest.mark.skipif( get_pcad_test_file() is None,
+                     reason="P-CAD schematic test file not available" )
+class TestSchImportPcad:
+    """Test P-CAD schematic import"""
+
+    def test_import_pcad_file( self, kitest: KiTestFixture ):
+        """Test importing a P-CAD schematic with an explicit format"""
+        pcad_file = get_pcad_test_file()
+        output_path = get_output_path( kitest, "pcad", "imported.kicad_sch" )
+
+        command = [
+            utils.kicad_cli(),
+            "sch", "import",
+            "--format", "pcad",
+            pcad_file,
+            "-o", str( output_path )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+        assert output_path.exists()
+
+        with open( output_path, "r" ) as f:
+            assert "(kicad_sch" in f.read( 100 )
+
+    def test_import_pcad_auto_detect( self, kitest: KiTestFixture ):
+        """P-CAD detection is content-based, not extension-based"""
+        pcad_file = get_pcad_test_file()
+        output_path = get_output_path( kitest, "pcad", "auto_detected.kicad_sch" )
+
+        command = [
+            utils.kicad_cli(),
+            "sch", "import",
+            pcad_file,
+            "-o", str( output_path )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+        assert "P-CAD" in stdout
+        assert output_path.exists()

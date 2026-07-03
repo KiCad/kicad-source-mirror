@@ -1,4 +1,5 @@
 {
+  "active_tab": "",
   "appearance": {
     "color_theme": "_builtin_default",
     "custom_toolbars": false
@@ -73,6 +74,7 @@
   "meta": {
     "version": 1
   },
+  "open_tabs": [],
   "pin_table": {
     "crossprobe_on_selection": true
   },

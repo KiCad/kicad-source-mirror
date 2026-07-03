@@ -43,7 +43,6 @@
 #include <sch_text.h>
 #include <schematic.h>
 #include <stroke_params.h>
-#include <string_utils.h>
 #include <title_block.h>
 #include <wildcards_and_files_ext.h>
 
@@ -51,6 +50,17 @@
 #include <wx/regex.h>
 
 #include <cmath>
+#include <memory>
+#include <set>
+
+
+// All library symbols built from one parsed file.  Definition names are the
+// unique lookup keys; the LIB_SYMBOL names are de-duplicated display names.
+struct LIB_SYMBOL_STORE
+{
+    std::map<wxString, std::unique_ptr<LIB_SYMBOL>> byCompDef;
+    std::map<wxString, std::unique_ptr<LIB_SYMBOL>> bySymbolDef;
+};
 
 
 namespace
@@ -118,21 +128,7 @@ bool isAutoNetName( const wxString& aName )
     if( aName.IsEmpty() )
         return true;
 
-    bool allDigits = true;
-
-    for( wxUniChar c : aName )
-    {
-        if( !wxIsdigit( c ) )
-        {
-            allDigits = false;
-            break;
-        }
-    }
-
-    if( allDigits )
-        return true;
-
-    static wxRegEx autoNet( wxT( "^NET[0-9]+$" ), wxRE_ICASE );
+    static wxRegEx autoNet( wxT( "^(NET)?[0-9]+$" ), wxRE_ICASE );
 
     return autoNet.Matches( aName );
 }
@@ -205,6 +201,21 @@ void applyJustify( EDA_TEXT* aText, JUSTIFY aJustify, bool aFlipped )
 }
 
 
+// P-CAD font cell height to KiCad glyph height, with a legible fallback for
+// degenerate styles.
+int textSizeFromStyle( const PCAD_SCH::TEXT_STYLE* aStyle, int aDefault )
+{
+    if( !aStyle )
+        return aDefault;
+
+    const PCAD_SCH::FONT& font = aStyle->EffectiveFont();
+    double ratio = font.isTrueType ? TRUETYPE_HEIGHT_TO_SIZE : STROKE_HEIGHT_TO_SIZE;
+    int    size = toIU( font.height * ratio );
+
+    return size > 0 ? size : aDefault;
+}
+
+
 // Apply a P-CAD text style (font size, weight, slant) and the per-item
 // justification and rotation to a KiCad text object.
 void applyTextStyle( EDA_TEXT* aText, const PCAD_SCH::TEXT_ITEM& aItem,
@@ -212,7 +223,6 @@ void applyTextStyle( EDA_TEXT* aText, const PCAD_SCH::TEXT_ITEM& aItem,
 {
     const PCAD_SCH::TEXT_STYLE* style = aPcad.FindTextStyle( aItem.styleRef );
 
-    double heightMils = 100.0;
     double widthMils = 10.0;
     bool   isBold = false;
     bool   isItalic = false;
@@ -220,18 +230,13 @@ void applyTextStyle( EDA_TEXT* aText, const PCAD_SCH::TEXT_ITEM& aItem,
     if( style )
     {
         const PCAD_SCH::FONT& font = style->EffectiveFont();
-        double ratio = font.isTrueType ? TRUETYPE_HEIGHT_TO_SIZE : STROKE_HEIGHT_TO_SIZE;
 
-        heightMils = font.height * ratio;
         widthMils = font.strokeWidth;
         isBold = font.isBold;
         isItalic = font.isItalic;
     }
 
-    int size = toIU( heightMils );
-
-    if( size <= 0 )
-        size = toIU( 50.0 );
+    int size = textSizeFromStyle( style, toIU( 100.0 * STROKE_HEIGHT_TO_SIZE ) );
 
     aText->SetTextSize( VECTOR2I( size, size ) );
 
@@ -252,6 +257,12 @@ void applyTextStyle( EDA_TEXT* aText, const PCAD_SCH::TEXT_ITEM& aItem,
         aText->SetTextAngle( EDA_ANGLE( 0.0, DEGREES_T ) );
 
     applyJustify( aText, aItem.justify, aItem.isFlipped );
+
+    if( rot == 180 || rot == 270 )
+    {
+        aText->SetHorizJustify( GetFlippedAlignment( aText->GetHorizJustify() ) );
+        aText->SetVertJustify( GetFlippedAlignment( aText->GetVertJustify() ) );
+    }
 }
 
 
@@ -278,18 +289,25 @@ ELECTRICAL_PINTYPE mapPinType( const wxString& aPcadType )
     // "Pasive" is the historical P-CAD spelling; Altium exports write "Passive".
     if( aPcadType == wxT( "Passive" ) || aPcadType == wxT( "Pasive" ) )
         return ELECTRICAL_PINTYPE::PT_PASSIVE;
+
     if( aPcadType == wxT( "Input" ) )
         return ELECTRICAL_PINTYPE::PT_INPUT;
+
     if( aPcadType == wxT( "Output" ) )
         return ELECTRICAL_PINTYPE::PT_OUTPUT;
+
     if( aPcadType == wxT( "Bidirectional" ) )
         return ELECTRICAL_PINTYPE::PT_BIDI;
+
     if( aPcadType == wxT( "Power" ) )
         return ELECTRICAL_PINTYPE::PT_POWER_IN;
+
     if( aPcadType == wxT( "ThreeState" ) )
         return ELECTRICAL_PINTYPE::PT_TRISTATE;
+
     if( aPcadType == wxT( "OpenH" ) )
         return ELECTRICAL_PINTYPE::PT_OPENEMITTER;
+
     if( aPcadType == wxT( "OpenL" ) )
         return ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
 
@@ -430,6 +448,39 @@ std::vector<SCH_SHAPE*> buildIeeeShapes( const IEEE_SYMBOL& aSym, int aWidthIU, 
 }
 
 
+// Both the symbol and sheet paths build arcs the same way; the Y-flip in the
+// caller's transform mirrors the angles.
+template <typename XFORM>
+SCH_SHAPE* buildArcShape( const PCAD_SCH::ARC& aArc, int aWidthIU, SCH_LAYER_ID aLayer,
+                          XFORM aXform )
+{
+    auto* shape = new SCH_SHAPE( aArc.sweepAngle >= 360.0 ? SHAPE_T::CIRCLE : SHAPE_T::ARC,
+                                 aLayer );
+    int      radius = toIU( aArc.radius );
+    VECTOR2I center = aXform( aArc.x, aArc.y );
+
+    if( shape->GetShape() == SHAPE_T::CIRCLE )
+    {
+        shape->SetCenter( center );
+        shape->SetEnd( center + VECTOR2I( radius, 0 ) );
+    }
+    else
+    {
+        double startRad = -aArc.startAngle * M_PI / 180.0;
+        VECTOR2I start( center.x + KiROUND( radius * std::cos( startRad ) ),
+                        center.y + KiROUND( radius * std::sin( startRad ) ) );
+        shape->SetCenter( center );
+        shape->SetStart( start );
+        shape->SetArcAngleAndEnd( EDA_ANGLE( -aArc.sweepAngle, DEGREES_T ) );
+    }
+
+    shape->SetFillMode( FILL_T::NO_FILL );
+    shape->SetStroke( STROKE_PARAMS( aWidthIU, LINE_STYLE::SOLID ) );
+
+    return shape;
+}
+
+
 LINE_STYLE mapLineStyle( LINE_KIND aKind )
 {
     switch( aKind )
@@ -450,16 +501,7 @@ const PCAD_SCH::SYMBOL_DEF* findSymbolDef( const PCAD_SCH::SCHEMATIC& aPcad,
 {
     auto it = aPcad.symbolDefsByName.find( aName );
 
-    if( it != aPcad.symbolDefsByName.end() )
-        return it->second;
-
-    for( const SYMBOL_DEF& sd : aPcad.symbolDefs )
-    {
-        if( sd.originalName == aName )
-            return &sd;
-    }
-
-    return nullptr;
+    return it == aPcad.symbolDefsByName.end() ? nullptr : it->second;
 }
 
 
@@ -504,30 +546,12 @@ void addSymbolDefToLibSymbol( LIB_SYMBOL* aSymbol, const PCAD_SCH::SYMBOL_DEF& a
 
     for( const ARC& arc : aDef.arcs )
     {
-        auto* shape = new SCH_SHAPE( arc.sweepAngle >= 360.0 ? SHAPE_T::CIRCLE : SHAPE_T::ARC,
-                                     LAYER_DEVICE );
-        int      radius = toIU( arc.radius );
-        VECTOR2I center( symX( arc.x ), symY( arc.y ) );
-
-        if( shape->GetShape() == SHAPE_T::CIRCLE )
-        {
-            shape->SetCenter( center );
-            shape->SetEnd( center + VECTOR2I( radius, 0 ) );
-        }
-        else
-        {
-            // Y-flip mirrors angles
-            double startRad = -arc.startAngle * M_PI / 180.0;
-            VECTOR2I start( center.x + KiROUND( radius * std::cos( startRad ) ),
-                            center.y + KiROUND( radius * std::sin( startRad ) ) );
-            shape->SetCenter( center );
-            shape->SetStart( start );
-            shape->SetArcAngleAndEnd( EDA_ANGLE( -arc.sweepAngle, DEGREES_T ) );
-        }
-
-        shape->SetFillMode( FILL_T::NO_FILL );
-        shape->SetStroke( STROKE_PARAMS( arc.width > 0 ? toIU( arc.width ) : defaultWidth,
-                                         LINE_STYLE::SOLID ) );
+        SCH_SHAPE* shape = buildArcShape( arc, arc.width > 0 ? toIU( arc.width ) : defaultWidth,
+                                          LAYER_DEVICE,
+                                          []( double x, double y )
+                                          {
+                                              return VECTOR2I( symX( x ), symY( y ) );
+                                          } );
         shape->SetUnit( aUnit );
         aSymbol->AddDrawItem( shape );
     }
@@ -639,25 +663,12 @@ void addSymbolDefToLibSymbol( LIB_SYMBOL* aSymbol, const PCAD_SCH::SYMBOL_DEF& a
                                      : ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
         }
 
-        const PCAD_SCH::TEXT_STYLE* desStyle = aPcad.FindTextStyle( pin.pinDesText.styleRef );
-        const PCAD_SCH::TEXT_STYLE* nameStyle = aPcad.FindTextStyle( pin.pinNameText.styleRef );
-
-        auto styleSize =
-                []( const PCAD_SCH::TEXT_STYLE* aStyle, int aDefault )
-                {
-                    if( !aStyle )
-                        return aDefault;
-
-                    const PCAD_SCH::FONT& font = aStyle->EffectiveFont();
-                    double ratio = font.isTrueType ? TRUETYPE_HEIGHT_TO_SIZE
-                                                   : STROKE_HEIGHT_TO_SIZE;
-                    int    size = toIU( font.height * ratio );
-
-                    return size > 0 ? size : aDefault;
-                };
-
-        schPin->SetNumberTextSize( styleSize( desStyle, pinTextSize ) );
-        schPin->SetNameTextSize( styleSize( nameStyle, pinTextSize ) );
+        schPin->SetNumberTextSize(
+                textSizeFromStyle( aPcad.FindTextStyle( pin.pinDesText.styleRef ),
+                                   pinTextSize ) );
+        schPin->SetNameTextSize(
+                textSizeFromStyle( aPcad.FindTextStyle( pin.pinNameText.styleRef ),
+                                   pinTextSize ) );
 
         if( aShowPinDes )
             *aShowPinDes |= pin.showPinDes;
@@ -701,14 +712,29 @@ wxString libSymbolName( const PCAD_SCH::COMP_DEF& aDef )
 }
 
 
+// Component and symbol definitions can share display names (e.g. merged
+// libraries reusing an originalName); make each placed name unique.
+wxString uniqueSymbolName( const wxString& aName, std::set<wxString>& aUsedNames )
+{
+    wxString name = aName;
+    int      suffix = 2;
+
+    while( !aUsedNames.insert( name ).second )
+        name = wxString::Format( wxT( "%s_%d" ), aName, suffix++ );
+
+    return name;
+}
+
+
 // Build a complete LIB_SYMBOL (all units) from a component definition.
 LIB_SYMBOL* buildLibSymbolFromCompDef( const PCAD_SCH::COMP_DEF& aDef,
                                        const PCAD_SCH::SCHEMATIC& aPcad,
-                                       const wxString& aLibName )
+                                       const wxString& aLibName,
+                                       const wxString& aSymbolName )
 {
-    auto* sym = new LIB_SYMBOL( libSymbolName( aDef ) );
+    auto* sym = new LIB_SYMBOL( aSymbolName );
 
-    sym->SetLibId( LIB_ID( aLibName, libSymbolName( aDef ) ) );
+    sym->SetLibId( LIB_ID( aLibName, aSymbolName ) );
     sym->SetUnitCount( aDef.numParts > 0 ? aDef.numParts : 1, false );
 
     bool showPinDes = false;
@@ -752,16 +778,22 @@ LIB_SYMBOL* buildLibSymbolFromCompDef( const PCAD_SCH::COMP_DEF& aDef,
 }
 
 
-// Fallback for files that carry symbolDefs without component definitions.
-LIB_SYMBOL* buildLibSymbolFromSymbolDef( const PCAD_SCH::SYMBOL_DEF& aDef,
-                                         const PCAD_SCH::SCHEMATIC& aPcad,
-                                         const wxString& aLibName )
+wxString symbolDefDisplayName( const PCAD_SCH::SYMBOL_DEF& aDef )
 {
     wxString name = !aDef.originalName.IsEmpty() ? aDef.originalName : aDef.name;
     name.Replace( wxT( " " ), wxT( "_" ) );
+    return name;
+}
 
-    auto* sym = new LIB_SYMBOL( name );
-    sym->SetLibId( LIB_ID( aLibName, name ) );
+
+// Fallback for files that carry symbolDefs without component definitions.
+LIB_SYMBOL* buildLibSymbolFromSymbolDef( const PCAD_SCH::SYMBOL_DEF& aDef,
+                                         const PCAD_SCH::SCHEMATIC& aPcad,
+                                         const wxString& aLibName,
+                                         const wxString& aSymbolName )
+{
+    auto* sym = new LIB_SYMBOL( aSymbolName );
+    sym->SetLibId( LIB_ID( aLibName, aSymbolName ) );
 
     bool showPinDes = false;
     bool showPinName = false;
@@ -790,6 +822,48 @@ SYMBOL_ORIENTATION_T symOrientation( double aRotDeg )
     case 270: return SYM_ORIENT_270;
     default:  return SYM_ORIENT_0;
     }
+}
+
+
+LIB_SYMBOL_STORE buildLibSymbols( const PCAD_SCH::SCHEMATIC& aPcad, const wxString& aLibName )
+{
+    LIB_SYMBOL_STORE   store;
+    std::set<wxString> usedNames;
+    std::set<wxString> attachedNames;
+
+    for( const PCAD_SCH::COMP_DEF& cd : aPcad.compDefs )
+    {
+        for( const wxString& attached : cd.attachedSymbols )
+        {
+            if( !attached.IsEmpty() )
+                attachedNames.insert( attached );
+        }
+
+        if( store.byCompDef.count( cd.name ) )
+            continue;
+
+        wxString name = uniqueSymbolName( libSymbolName( cd ), usedNames );
+
+        store.byCompDef[cd.name].reset( buildLibSymbolFromCompDef( cd, aPcad, aLibName, name ) );
+    }
+
+    // symbolDefs never referenced by a compDef still need a library symbol so
+    // netlist-less files import
+    for( const PCAD_SCH::SYMBOL_DEF& sd : aPcad.symbolDefs )
+    {
+        if( attachedNames.count( sd.name ) || attachedNames.count( sd.originalName ) )
+            continue;
+
+        if( store.bySymbolDef.count( sd.name ) )
+            continue;
+
+        wxString name = uniqueSymbolName( symbolDefDisplayName( sd ), usedNames );
+
+        store.bySymbolDef[sd.name].reset(
+                buildLibSymbolFromSymbolDef( sd, aPcad, aLibName, name ) );
+    }
+
+    return store;
 }
 
 
@@ -854,7 +928,7 @@ bool SCH_IO_PCAD::CanReadSchematicFile( const wxString& aFileName ) const
 {
     // P-CAD ASCII saves are extension-agnostic, and boards share the same
     // ACCEL_ASCII container, so detect by content.
-    return PCAD2KICAD::FileMatchesFormat( aFileName, "(schematicDesign" );
+    return PCAD2KICAD::FileMatchesFormat( aFileName, "schematicDesign" );
 }
 
 
@@ -879,7 +953,7 @@ wxString SCH_IO_PCAD::getLibName( const ::SCHEMATIC* aSchematic, const wxString&
 
 void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aSheet,
                                   const PCAD_SCH::SCHEMATIC& aPcad, double aPageH,
-                                  const std::map<wxString, LIB_SYMBOL*>& aLibSymbols,
+                                  const LIB_SYMBOL_STORE& aLibSymbols,
                                   const wxString& aLibName )
 {
     auto xform =
@@ -899,7 +973,6 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
         }
     }
 
-    // Buses
     for( const BUS& b : aSheet.buses )
     {
         for( size_t i = 0; i + 1 < b.pts.size(); i++ )
@@ -934,15 +1007,31 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
         VECTOR2I pos = xform( e.x, e.y );
         int      step = toIU( BUS_ENTRY_SIZE_MILS );
         VECTOR2I size;
+        bool     towardBusIsX;
 
+        // orient gives only the toward-bus axis; the slant along the other
+        // axis is not stored, so try both diagonals against the bus geometry
         if( e.orient == wxT( "Left" ) )
+        {
             size = VECTOR2I( -step, step );
+            towardBusIsX = true;
+        }
         else if( e.orient == wxT( "Right" ) )
+        {
             size = VECTOR2I( step, step );
+            towardBusIsX = true;
+        }
         else if( e.orient == wxT( "Up" ) )
+        {
+            // P-CAD Y-up "Up" is -Y after the KiCad flip
             size = VECTOR2I( step, -step );
+            towardBusIsX = false;
+        }
         else
+        {
             size = VECTOR2I( step, step );
+            towardBusIsX = false;
+        }
 
         const BUS* bus = nullptr;
 
@@ -978,7 +1067,8 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
                         return false;
                     };
 
-            VECTOR2I altSize( size.x, -size.y );
+            VECTOR2I altSize = towardBusIsX ? VECTOR2I( size.x, -size.y )
+                                            : VECTOR2I( -size.x, size.y );
 
             if( !touchesBus( pos + size ) && touchesBus( pos + altSize ) )
                 size = altSize;
@@ -989,12 +1079,11 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
         aScreen->Append( entry );
     }
 
-    // Junctions
     for( const JUNCTION& j : aSheet.junctions )
         aScreen->Append( new SCH_JUNCTION( xform( j.x, j.y ) ) );
 
-    // Ports: P-CAD ports connect nets across sheets, which is KiCad global
-    // label semantics.
+    // P-CAD ports connect nets across sheets, which is KiCad global label
+    // semantics.
     for( const PORT& p : aSheet.ports )
     {
         if( p.netNameRef.IsEmpty() )
@@ -1031,14 +1120,14 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
         labelledNets.insert( w.netName );
     }
 
-    // Preserve user-assigned net names that are never displayed: place a label
+    // Preserve user-assigned net names that are never displayed with a label
     // at the first junction of the net.  Auto-generated names are dropped.
     for( const JUNCTION& j : aSheet.junctions )
     {
-        if( j.netName.IsEmpty() || isAutoNetName( j.netName ) )
+        if( j.netName.IsEmpty() || labelledNets.count( j.netName ) )
             continue;
 
-        if( labelledNets.count( j.netName ) )
+        if( isAutoNetName( j.netName ) )
             continue;
 
         auto* label = new SCH_LABEL( xform( j.x, j.y ), j.netName );
@@ -1061,7 +1150,6 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
         aScreen->Append( text );
     }
 
-    // Free text
     for( const TEXT_ITEM& t : aSheet.texts )
     {
         if( t.text.IsEmpty() )
@@ -1072,7 +1160,6 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
         aScreen->Append( text );
     }
 
-    // Sheet graphics
     for( const LINE& ln : aSheet.lines )
     {
         if( ln.pts.size() < 2 )
@@ -1090,29 +1177,9 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
 
     for( const ARC& arc : aSheet.arcs )
     {
-        auto* shape = new SCH_SHAPE( arc.sweepAngle >= 360.0 ? SHAPE_T::CIRCLE : SHAPE_T::ARC,
-                                     LAYER_NOTES );
-        int      radius = toIU( arc.radius );
-        VECTOR2I center = xform( arc.x, arc.y );
-
-        if( shape->GetShape() == SHAPE_T::CIRCLE )
-        {
-            shape->SetCenter( center );
-            shape->SetEnd( center + VECTOR2I( radius, 0 ) );
-        }
-        else
-        {
-            double startRad = -arc.startAngle * M_PI / 180.0;
-            VECTOR2I start( center.x + KiROUND( radius * std::cos( startRad ) ),
-                            center.y + KiROUND( radius * std::sin( startRad ) ) );
-            shape->SetCenter( center );
-            shape->SetStart( start );
-            shape->SetArcAngleAndEnd( EDA_ANGLE( -arc.sweepAngle, DEGREES_T ) );
-        }
-
-        shape->SetFillMode( FILL_T::NO_FILL );
-        shape->SetStroke( STROKE_PARAMS( toIU( arc.width ), LINE_STYLE::SOLID ) );
-        aScreen->Append( shape );
+        aScreen->Append( buildArcShape( arc,
+                                        arc.width > 0 ? toIU( arc.width ) : toIU( 10.0 ),
+                                        LAYER_NOTES, xform ) );
     }
 
     for( const POLY& poly : aSheet.polys )
@@ -1134,7 +1201,6 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
             aScreen->Append( shape );
     }
 
-    // Component instances
     for( const SYMBOL_INST& inst : aSheet.symbols )
     {
         const COMP_INST* compInst = nullptr;
@@ -1155,44 +1221,32 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
             auto cdIt = aPcad.compDefsByName.find( compRef );
 
             if( cdIt != aPcad.compDefsByName.end() )
-            {
                 compDef = cdIt->second;
-            }
-            else
-            {
-                // compRef may address the definition by original name
-                for( const COMP_DEF& cd : aPcad.compDefs )
-                {
-                    if( cd.originalName == compRef )
-                    {
-                        compDef = &cd;
-                        break;
-                    }
-                }
-            }
         }
 
-        wxString libKey;
+        const LIB_SYMBOL* libSym = nullptr;
 
         if( compDef )
         {
-            libKey = libSymbolName( *compDef );
-        }
-        else
-        {
-            // No netlist entry: fall back to the raw symbolDef
-            const SYMBOL_DEF* symDef = findSymbolDef( aPcad, inst.symbolRef );
+            auto libIt = aLibSymbols.byCompDef.find( compDef->name );
 
-            if( symDef )
+            if( libIt != aLibSymbols.byCompDef.end() )
+                libSym = libIt->second.get();
+        }
+
+        if( !libSym )
+        {
+            // without a netlist entry the raw symbolDef is the only reference
+            if( const SYMBOL_DEF* symDef = findSymbolDef( aPcad, inst.symbolRef ) )
             {
-                libKey = !symDef->originalName.IsEmpty() ? symDef->originalName : symDef->name;
-                libKey.Replace( wxT( " " ), wxT( "_" ) );
+                auto libIt = aLibSymbols.bySymbolDef.find( symDef->name );
+
+                if( libIt != aLibSymbols.bySymbolDef.end() )
+                    libSym = libIt->second.get();
             }
         }
 
-        auto libIt = aLibSymbols.find( libKey );
-
-        if( libIt == aLibSymbols.end() )
+        if( !libSym )
         {
             if( m_reporter )
             {
@@ -1204,10 +1258,8 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
             continue;
         }
 
-        const LIB_SYMBOL* libSym = libIt->second;
-
         auto* symbol = new SCH_SYMBOL();
-        symbol->SetLibId( LIB_ID( aLibName, libKey ) );
+        symbol->SetLibId( libSym->GetLibId() );
         symbol->SetUnit( inst.partNum );
         symbol->SetLibSymbol( new LIB_SYMBOL( *libSym ) );
         symbol->SetPosition( xform( inst.x, inst.y ) );
@@ -1337,49 +1389,15 @@ SCH_SHEET* SCH_IO_PCAD::LoadSchematicFile( const wxString& aFileName, ::SCHEMATI
         page.SetHeightMils( KiROUND( pcad.workspaceHeight ) );
     }
 
-    const double pageH = pcad.workspaceHeight;
+    // The Y-flip must use the height of the page actually selected so items
+    // stay put relative to the sheet frame when the size snaps to B or A.
+    const double pageH = page.GetHeightMils();
 
     // --- Library symbols -------------------------------------------------------
 
     const wxString libName = getLibName( aSchematic, aFileName );
 
-    std::map<wxString, LIB_SYMBOL*> libSymbols;
-
-    for( const PCAD_SCH::COMP_DEF& cd : pcad.compDefs )
-    {
-        wxString key = libSymbolName( cd );
-
-        if( !libSymbols.count( key ) )
-            libSymbols[key] = buildLibSymbolFromCompDef( cd, pcad, libName );
-    }
-
-    // symbolDefs never referenced by a compDef still need a library symbol so
-    // netlist-less files import.
-    for( const PCAD_SCH::SYMBOL_DEF& sd : pcad.symbolDefs )
-    {
-        wxString key = !sd.originalName.IsEmpty() ? sd.originalName : sd.name;
-        key.Replace( wxT( " " ), wxT( "_" ) );
-
-        bool referenced = false;
-
-        for( const PCAD_SCH::COMP_DEF& cd : pcad.compDefs )
-        {
-            for( const wxString& attached : cd.attachedSymbols )
-            {
-                if( attached == sd.name || attached == sd.originalName )
-                {
-                    referenced = true;
-                    break;
-                }
-            }
-
-            if( referenced )
-                break;
-        }
-
-        if( !referenced && !libSymbols.count( key ) )
-            libSymbols[key] = buildLibSymbolFromSymbolDef( sd, pcad, libName );
-    }
+    LIB_SYMBOL_STORE libSymbols = buildLibSymbols( pcad, libName );
 
     // --- Sheets ----------------------------------------------------------------
 
@@ -1400,6 +1418,8 @@ SCH_SHEET* SCH_IO_PCAD::LoadSchematicFile( const wxString& aFileName, ::SCHEMATI
         const int sheetSymbolStep = toIU( 1500.0 );
         int       sheetIndex = 1;
 
+        std::set<wxString> usedFileNames;
+
         for( size_t i = 1; i < pcad.sheets.size(); i++ )
         {
             const PCAD_SCH::SHEET& psheet = pcad.sheets[i];
@@ -1412,9 +1432,16 @@ SCH_SHEET* SCH_IO_PCAD::LoadSchematicFile( const wxString& aFileName, ::SCHEMATI
             if( sheetName.IsEmpty() )
                 sheetName = wxString::Format( wxT( "Sheet%d" ), psheet.sheetNum );
 
+            // sheet names can repeat and can carry path separators; the screen
+            // file name must be a unique plain file name
+            wxString fileBase;
+
+            for( wxUniChar c : sheetName )
+                fileBase += wxIsalnum( c ) ? c : wxUniChar( '_' );
+
+            fileBase = uniqueSymbolName( fileBase, usedFileNames );
+
             wxFileName subFilename( newFilename );
-            wxString   fileBase = sheetName;
-            fileBase.Replace( wxT( " " ), wxT( "_" ) );
             subFilename.SetName( subFilename.GetName() + wxT( "-" ) + fileBase );
 
             subScreen->SetFileName( subFilename.GetFullPath() );
@@ -1473,15 +1500,9 @@ SCH_SHEET* SCH_IO_PCAD::LoadSchematicFile( const wxString& aFileName, ::SCHEMATI
         screens[i]->SetPageSettings( page );
         screens[i]->SetTitleBlock( titleBlock );
 
-        for( const auto& [name, sym] : libSymbols )
-            screens[i]->AddLibSymbol( new LIB_SYMBOL( *sym ) );
-
         if( i < pcad.sheets.size() )
             populateScreen( screens[i], pcad.sheets[i], pcad, pageH, libSymbols, libName );
     }
-
-    for( auto& [name, sym] : libSymbols )
-        delete sym;
 
     // --- Hierarchy bookkeeping for headless and CLI consumers -------------------
 
@@ -1506,24 +1527,53 @@ SCH_SHEET* SCH_IO_PCAD::LoadSchematicFile( const wxString& aFileName, ::SCHEMATI
 }
 
 
-void SCH_IO_PCAD::EnumerateSymbolLib( wxArrayString& aSymbolNameList,
-                                      const wxString& aLibraryPath,
-                                      const std::map<std::string, UTF8>* aProperties )
+void SCH_IO_PCAD::ensureLoadedLibrary( const wxString& aLibraryPath )
 {
+    wxFileName fn( aLibraryPath );
+    long long  timestamp = fn.FileExists() ? fn.GetModificationTime().GetValue().GetValue() : 0;
+
+    if( m_cachePath == aLibraryPath && m_cacheTimestamp == timestamp )
+        return;
+
+    m_libCache.clear();
+    m_cachePath.clear();
+
     PCAD_SCH::SCHEMATIC pcad;
     PCAD_SCH::PCAD_SCH_PARSER parser;
     parser.LoadFromFile( aLibraryPath, pcad );
 
-    if( !pcad.compDefs.empty() )
-    {
-        for( const PCAD_SCH::COMP_DEF& cd : pcad.compDefs )
-            aSymbolNameList.Add( libSymbolName( cd ) );
-    }
-    else
-    {
-        for( const PCAD_SCH::SYMBOL_DEF& sd : pcad.symbolDefs )
-            aSymbolNameList.Add( !sd.originalName.IsEmpty() ? sd.originalName : sd.name );
-    }
+    LIB_SYMBOL_STORE store = buildLibSymbols( pcad, getLibName( nullptr, aLibraryPath ) );
+
+    for( auto& [key, sym] : store.byCompDef )
+        m_libCache[sym->GetName()] = std::move( sym );
+
+    for( auto& [key, sym] : store.bySymbolDef )
+        m_libCache[sym->GetName()] = std::move( sym );
+
+    m_cachePath = aLibraryPath;
+    m_cacheTimestamp = timestamp;
+    m_modifyHash++;
+}
+
+
+bool SCH_IO_PCAD::CanReadLibrary( const wxString& aFileName ) const
+{
+    // no extension gate; like the schematic check, detection is by content
+    // because P-CAD saves are extension-agnostic.  Any non-board ACCEL file
+    // can serve as a symbol source.
+    return PCAD2KICAD::FileMatchesFormat( aFileName, "" )
+           && !PCAD2KICAD::FileMatchesFormat( aFileName, "pcbDesign" );
+}
+
+
+void SCH_IO_PCAD::EnumerateSymbolLib( wxArrayString& aSymbolNameList,
+                                      const wxString& aLibraryPath,
+                                      const std::map<std::string, UTF8>* aProperties )
+{
+    ensureLoadedLibrary( aLibraryPath );
+
+    for( const auto& [name, sym] : m_libCache )
+        aSymbolNameList.Add( name );
 }
 
 
@@ -1531,48 +1581,19 @@ void SCH_IO_PCAD::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                       const wxString& aLibraryPath,
                                       const std::map<std::string, UTF8>* aProperties )
 {
-    PCAD_SCH::SCHEMATIC pcad;
-    PCAD_SCH::PCAD_SCH_PARSER parser;
-    parser.LoadFromFile( aLibraryPath, pcad );
+    ensureLoadedLibrary( aLibraryPath );
 
-    const wxString libName = getLibName( nullptr, aLibraryPath );
-
-    if( !pcad.compDefs.empty() )
-    {
-        for( const PCAD_SCH::COMP_DEF& cd : pcad.compDefs )
-            aSymbolList.push_back( buildLibSymbolFromCompDef( cd, pcad, libName ) );
-    }
-    else
-    {
-        for( const PCAD_SCH::SYMBOL_DEF& sd : pcad.symbolDefs )
-            aSymbolList.push_back( buildLibSymbolFromSymbolDef( sd, pcad, libName ) );
-    }
+    for( const auto& [name, sym] : m_libCache )
+        aSymbolList.push_back( sym.get() );
 }
 
 
 LIB_SYMBOL* SCH_IO_PCAD::LoadSymbol( const wxString& aLibraryPath, const wxString& aPartName,
                                      const std::map<std::string, UTF8>* aProperties )
 {
-    PCAD_SCH::SCHEMATIC pcad;
-    PCAD_SCH::PCAD_SCH_PARSER parser;
-    parser.LoadFromFile( aLibraryPath, pcad );
+    ensureLoadedLibrary( aLibraryPath );
 
-    const wxString libName = getLibName( nullptr, aLibraryPath );
+    auto it = m_libCache.find( aPartName );
 
-    for( const PCAD_SCH::COMP_DEF& cd : pcad.compDefs )
-    {
-        if( libSymbolName( cd ) == aPartName || cd.name == aPartName
-            || cd.originalName == aPartName )
-        {
-            return buildLibSymbolFromCompDef( cd, pcad, libName );
-        }
-    }
-
-    for( const PCAD_SCH::SYMBOL_DEF& sd : pcad.symbolDefs )
-    {
-        if( sd.name == aPartName || sd.originalName == aPartName )
-            return buildLibSymbolFromSymbolDef( sd, pcad, libName );
-    }
-
-    return nullptr;
+    return it == m_libCache.end() ? nullptr : it->second.get();
 }
