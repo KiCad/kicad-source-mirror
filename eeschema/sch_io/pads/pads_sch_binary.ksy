@@ -6,7 +6,7 @@ meta:
   encoding: ASCII
   file-extension: sch
   imports:
-    - microsoft_cfb
+    - /microsoft_cfb
 
 seq:
   - id: header
@@ -29,6 +29,8 @@ instances:
   version:
     pos: 2
     type: u2
+    valid:
+      any-of: [0x000c, 0x000d]
 
 types:
   header_v12:
