@@ -176,6 +176,11 @@ public:
     /// Calling user is responsible for resetting the effective netclass calculation caches
     void ClearNetColorAssignments();
 
+    /// @brief Retarget netclass patterns and net colors after a path prefix changes (sheet rename).
+    /// Rewrites any entry whose net path starts with aOldPrefix to use aNewPrefix. Returns true and
+    /// clears the caches if anything changed.
+    bool RenameNetPathPrefix( const wxString& aOldPrefix, const wxString& aNewPrefix );
+
     /// @brief Assign a net chain to a named class (used by inNetChainClass() DRC scope).
     void SetNetChainClass( const wxString& aChain, const wxString& aClass )
     {

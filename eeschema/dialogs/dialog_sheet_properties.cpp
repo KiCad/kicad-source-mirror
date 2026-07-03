@@ -37,6 +37,8 @@
 #include <sch_io/sch_io.h>
 #include <sch_sheet.h>
 #include <schematic.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 #include <bitmaps.h>
 #include <eeschema_settings.h>
 #include <settings/color_settings.h>
@@ -370,8 +372,18 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
     m_fields->GetField( FIELD_T::SHEET_NAME )->SetText( newSheetname );
 
+    // Net names embed the sheet path, so retarget netclass/color assignments on a rename.
+    SCH_SHEET_PATH renamedPath = m_frame->GetCurrentSheet();
+    renamedPath.push_back( m_sheet );
+    wxString oldNetPrefix = renamedPath.PathHumanReadable( true, false, true );
+
     m_sheet->SetName( newSheetname );
     m_sheet->SetFileName( newRelativeFilename );
+
+    wxString newNetPrefix = renamedPath.PathHumanReadable( true, false, true );
+
+    if( oldNetPrefix != newNetPrefix )
+        m_frame->Prj().GetProjectFile().NetSettings()->RenameNetPathPrefix( oldNetPrefix, newNetPrefix );
 
     // change all field positions from relative to absolute
     for( SCH_FIELD& m_field : *m_fields)

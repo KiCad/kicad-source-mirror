@@ -514,4 +514,46 @@ BOOST_AUTO_TEST_CASE( CopyFromSelfIsNoop )
 }
 
 
+// Regression guard for issue 24823: a sheet rename must retarget netclass pattern and net color
+// assignments from the old sheet path to the new one.
+BOOST_AUTO_TEST_CASE( RenameNetPathPrefixRetargetsAssignments )
+{
+    NET_SETTINGS settings( nullptr, "" );
+
+    std::shared_ptr<NETCLASS>                     highSpeed = std::make_shared<NETCLASS>( wxS( "HighSpeed" ), false );
+    std::map<wxString, std::shared_ptr<NETCLASS>> classes;
+    classes[wxS( "HighSpeed" )] = highSpeed;
+    settings.SetNetclasses( classes );
+
+    settings.SetNetclassPatternAssignment( wxS( "/Sheet1/CLK" ), wxS( "HighSpeed" ) );
+    settings.SetNetclassPatternAssignment( wxS( "/Sheet1/DATA*" ), wxS( "HighSpeed" ) );
+    settings.SetNetclassPatternAssignment( wxS( "/Sheet1/Sub/EN" ), wxS( "HighSpeed" ) );
+    settings.SetNetclassPatternAssignment( wxS( "/Other/RST" ), wxS( "HighSpeed" ) );
+    settings.SetNetclassPatternAssignment( wxS( "/Sheet10/BUS" ), wxS( "HighSpeed" ) );
+    settings.SetNetColorAssignment( wxS( "/Sheet1/CLK" ), KIGFX::COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+
+    BOOST_REQUIRE( resolvesToNetclass( settings, wxS( "/Sheet1/CLK" ), wxS( "HighSpeed" ) ) );
+    BOOST_REQUIRE( !resolvesToNetclass( settings, wxS( "/Sheet2/CLK" ), wxS( "HighSpeed" ) ) );
+
+    BOOST_CHECK( settings.RenameNetPathPrefix( wxS( "/Sheet1/" ), wxS( "/Sheet2/" ) ) );
+
+    // Nets under the renamed sheet now resolve at the new path, including the wildcard and the
+    // deeper net, and no longer at the old one.
+    BOOST_CHECK( resolvesToNetclass( settings, wxS( "/Sheet2/CLK" ), wxS( "HighSpeed" ) ) );
+    BOOST_CHECK( resolvesToNetclass( settings, wxS( "/Sheet2/DATA0" ), wxS( "HighSpeed" ) ) );
+    BOOST_CHECK( resolvesToNetclass( settings, wxS( "/Sheet2/Sub/EN" ), wxS( "HighSpeed" ) ) );
+    BOOST_CHECK( !resolvesToNetclass( settings, wxS( "/Sheet1/CLK" ), wxS( "HighSpeed" ) ) );
+
+    // Unrelated and same-prefix-sibling patterns are untouched.
+    BOOST_CHECK( resolvesToNetclass( settings, wxS( "/Other/RST" ), wxS( "HighSpeed" ) ) );
+    BOOST_CHECK( resolvesToNetclass( settings, wxS( "/Sheet10/BUS" ), wxS( "HighSpeed" ) ) );
+
+    const std::map<wxString, KIGFX::COLOR4D>& colors = settings.GetNetColorAssignments();
+    BOOST_CHECK( colors.count( wxS( "/Sheet2/CLK" ) ) == 1 );
+    BOOST_CHECK( colors.count( wxS( "/Sheet1/CLK" ) ) == 0 );
+
+    BOOST_CHECK( !settings.RenameNetPathPrefix( wxS( "/Nope/" ), wxS( "/Nada/" ) ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
