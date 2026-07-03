@@ -155,6 +155,7 @@ set( QA_COMMON_SRCS
     # Project file tests
     test_project_file.cpp
     test_net_settings.cpp
+    test_component_class_settings.cpp
     test_project_local_settings.cpp
     test_remote_provider_metadata.cpp
     test_remote_provider_client.cpp

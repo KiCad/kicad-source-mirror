@@ -170,9 +170,8 @@ COMPONENT_CLASS_SETTINGS::loadAssignment( const nlohmann::json& aJson )
 
 bool COMPONENT_CLASS_SETTINGS::operator==( const COMPONENT_CLASS_SETTINGS& aOther ) const
 {
-    // TODO: Implement this
-    throw;
-    //return true;
+    return m_enableSheetComponentClasses == aOther.m_enableSheetComponentClasses
+           && m_componentClassAssignments == aOther.m_componentClassAssignments;
 }
 
 

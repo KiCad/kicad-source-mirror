@@ -88,6 +88,17 @@ public:
     /// Returns the DRC rules language for this component class assignment
     wxString GetAssignmentInDRCLanguage() const;
 
+    bool operator==( const COMPONENT_CLASS_ASSIGNMENT_DATA& aOther ) const
+    {
+        return m_componentClass == aOther.m_componentClass && m_conditions == aOther.m_conditions
+               && m_conditionsOperator == aOther.m_conditionsOperator;
+    }
+
+    bool operator!=( const COMPONENT_CLASS_ASSIGNMENT_DATA& aOther ) const
+    {
+        return !operator==( aOther );
+    }
+
 protected:
     /// The name of the component class for this assignment rule
     wxString m_componentClass;
