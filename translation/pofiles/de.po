@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-06-24 22:01+0000\n"
+"PO-Revision-Date: 2026-07-04 02:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -43,7 +43,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -31653,7 +31653,7 @@ msgstr "Verfügbare Textvariablen:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
-msgstr "Kommando-ausführen-Auftragseinstellungen exportieren"
+msgstr "Kommando \"Auftragseinstellungen\" ausführen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:296
 msgid "Edit Template"
@@ -33326,7 +33326,7 @@ msgstr "Zurücksetzen auf Remote ist gescheitert"
 
 #: kicad/project_tree_pane.cpp:2104
 msgid "Rebased your changes onto the remote."
-msgstr "Ihre Änderungen wurden auf dem Remote rebased."
+msgstr "Ihre Änderungen wurden auf dem Remote als neue Basis übernommen."
 
 #: kicad/project_tree_pane.cpp:2106
 msgid "Could not rebase"
