@@ -1781,18 +1781,34 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     auto pair = m_altiumComponents.insert( { aIndex, altiumSymbol } );
     const ASCH_SYMBOL& elem = pair.first->second;
 
-    // TODO: this is a hack until we correctly apply all transformations to every element
-    wxString name = wxString::Format( "%s_%d%s_%s_%s",
-                                      sheetName,
-                                      elem.orientation,
-                                      elem.isMirrored ? "_mirrored" : "",
-                                      elem.libreference,
-                                      elem.sourcelibraryname );
+    wxString name;
+    LIB_ID   libId;
 
-    if( elem.displaymodecount > 1 )
-        name << '_' << elem.displaymode;
+    if( !elem.sourcelibraryname.IsEmpty() && !elem.libreference.IsEmpty() )
+    {
+        // The part comes from an Altium library that project import registers in the symbol
+        // library table, so address it by its real library id and let the placement transform
+        // ride on the SCH_SYMBOL rather than baking it into a unique name. Altium stores Windows
+        // paths, so split the source library name accordingly.
+        name = elem.libreference;
+        libId = AltiumToKiCadLibID( wxFileName( elem.sourcelibraryname, wxPATH_WIN ).GetName(),
+                                    name );
+    }
+    else
+    {
+        // TODO: this is a hack until we correctly apply all transformations to every element
+        name = wxString::Format( "%s_%d%s_%s_%s",
+                                 sheetName,
+                                 elem.orientation,
+                                 elem.isMirrored ? "_mirrored" : "",
+                                 elem.libreference,
+                                 elem.sourcelibraryname );
 
-    LIB_ID libId = AltiumToKiCadLibID( getLibName(), name );
+        if( elem.displaymodecount > 1 )
+            name << '_' << elem.displaymode;
+
+        libId = AltiumToKiCadLibID( getLibName(), name );
+    }
 
     LIB_SYMBOL* ksymbol = new LIB_SYMBOL( wxEmptyString );
     ksymbol->SetName( name );
@@ -1827,14 +1843,6 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
         orientation += SYMBOL_ORIENTATION_T::SYM_MIRROR_Y;
 
     symbol->SetOrientation( orientation );
-
-    // If Altium has defined a library from which we have the part,
-    // use this as the designated source library.
-    if( !elem.sourcelibraryname.IsEmpty() )
-    {
-        wxFileName fn( elem.sourcelibraryname );
-        libId.SetLibNickname( fn.GetName() );
-    }
 
     symbol->SetLibId( libId );
 
@@ -4888,8 +4896,10 @@ void SCH_IO_ALTIUM::ParseImplementation( const std::map<wxString, wxString>& aPr
     if( aSymbol.size() == 0 && !elem.isCurrent )
         return;
 
-    // For IntLibs we want to use the same lib name for footprints
-    wxString libName = m_isIntLib ? m_libName : elem.libname;
+    // For IntLibs we want to use the same lib name for footprints. Otherwise the model data
+    // file names the source PcbLib as a Windows path; take its base name so the footprint id
+    // matches the nickname project import registers in the footprint library table.
+    wxString libName = m_isIntLib ? m_libName : wxFileName( elem.libname, wxPATH_WIN ).GetName();
 
     wxArrayString fpFilters;
     fpFilters.Add( wxString::Format( wxS( "*%s*" ), elem.name ) );
