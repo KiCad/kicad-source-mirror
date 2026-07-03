@@ -21,6 +21,7 @@
 
 #include <3d-viewer/3d_canvas/eda_3d_canvas.h>
 #include <3d-viewer/3d_rendering/track_ball.h>
+#include <wx/toplevel.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 
@@ -53,7 +54,17 @@ void SPNAV_VIEWER_PLUGIN::SetFocus( bool aFocus )
 
 void SPNAV_VIEWER_PLUGIN::onPollTimer( wxTimerEvent& )
 {
-    if( m_driver && m_focused )
+    if( !m_driver || !m_focused )
+        return;
+
+    wxTopLevelWindow* topLevel = m_canvas
+            ? dynamic_cast<wxTopLevelWindow*>( wxGetTopLevelParent( m_canvas ) )
+            : nullptr;
+
+    // The Linux spnav backend drains a process-global event queue.  Guard polling
+    // with the top-level window activation state so a stale focus latch cannot let
+    // an inactive editor keep consuming SpaceMouse events after another editor opens.
+    if( !topLevel || topLevel->IsActive() )
         m_driver->Poll();
 }
 
