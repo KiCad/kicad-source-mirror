@@ -58,6 +58,11 @@
 #include <widgets/kistatusbar.h>
 #include <project_pcb.h>
 #include <footprint_library_adapter.h>
+#include <pcb_io/pcb_io_mgr.h>
+#include <pgm_base.h>
+#include <libraries/library_manager.h>
+#include <libraries/library_table.h>
+#include <wx/filename.h>
 #include <wx/log.h>
 
 /* Execute a remote command sent via a socket on port KICAD_PCB_PORT_SERVICE_NUMBER
@@ -645,6 +650,114 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         }
 
         break;
+
+    case MAIL_ADD_LOCAL_LIB:
+    {
+        std::stringstream ss( payload );
+        std::string       file;
+
+        LIBRARY_MANAGER&              manager = Pgm().GetLibraryManager();
+        FOOTPRINT_LIBRARY_ADAPTER*    adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
+        std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                                                LIBRARY_TABLE_SCOPE::PROJECT );
+
+        wxCHECK_RET( optTable.has_value(), "Could not load footprint lib table." );
+        LIBRARY_TABLE* table = optTable.value();
+
+        wxString projectPath = Prj().GetProjectPath();
+
+        // First line of payload is the source project directory.
+        std::string srcProjDir;
+        std::getline( ss, srcProjDir, '\n' );
+
+        wxString              srcProjectPath = wxString::FromUTF8( srcProjDir );
+        std::vector<wxString> toLoad;
+
+        while( std::getline( ss, file, '\n' ) )
+        {
+            if( file.empty() )
+                continue;
+
+            wxFileName             fn( wxString::FromUTF8( file ) );
+            PCB_IO_MGR::PCB_FILE_T type = PCB_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
+
+            if( type == PCB_IO_MGR::FILE_TYPE_NONE )
+            {
+                wxLogTrace( "KIWAY", "Unknown file type: %s", fn.GetFullPath() );
+                continue;
+            }
+
+            // Only libraries that live under the source project are relocated; a plain path
+            // prefix would also match a sibling directory sharing the project name's stem.
+            wxFileName relFn( fn );
+            bool       isProjectLocal =
+                    !srcProjectPath.IsEmpty() && relFn.MakeRelativeTo( srcProjectPath )
+                    && !relFn.IsAbsolute()
+                    && !relFn.GetFullPath().StartsWith( wxS( ".." ) );
+
+            wxString libTableUri;
+
+            if( isProjectLocal )
+            {
+                // Copy a project-local library into the KiCad project directory and reference it
+                // with a project-relative path so the fp-lib-table stays portable.
+                if( !fn.FileExists() )
+                    continue;
+
+                wxFileName projectFn( projectPath, fn.GetFullName() );
+
+                if( fn.GetFullPath() != projectFn.GetFullPath() && !projectFn.FileExists()
+                    && !wxCopyFile( fn.GetFullPath(), projectFn.GetFullPath(), false ) )
+                {
+                    wxLogError( _( "Error copying footprint library '%s'." ), fn.GetFullPath() );
+                    continue;
+                }
+
+                libTableUri = wxS( "${KIPRJMOD}/" ) + fn.GetFullName();
+            }
+            else
+            {
+                // External library referenced by absolute path. Preserve the original path.
+                libTableUri = fn.GetFullPath();
+            }
+
+            if( !table->HasRow( fn.GetName() ) )
+            {
+                LIBRARY_TABLE_ROW& row = table->InsertRow();
+                row.SetNickname( fn.GetName() );
+                row.SetURI( libTableUri );
+                row.SetType( PCB_IO_MGR::ShowType( type ) );
+                toLoad.emplace_back( fn.GetName() );
+            }
+        }
+
+        if( !toLoad.empty() )
+        {
+            bool success = true;
+
+            table->Save().map_error(
+                        [&]( const LIBRARY_ERROR& aError )
+                        {
+                            wxLogError( wxT( "Error saving project library table:\n\n" ) + aError.message );
+                            success = false;
+                        } );
+
+            if( success )
+            {
+                manager.AbortAsyncLoads();
+                manager.LoadProjectTables( { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+
+                for( const wxString& nick : toLoad )
+                    adapter->LoadOne( nick );
+            }
+        }
+
+        Kiway().ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload );
+        Kiway().ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload );
+        Kiway().ExpressMail( FRAME_FOOTPRINT_VIEWER, MAIL_RELOAD_LIB, payload );
+
+        break;
+    }
 
     case MAIL_CROSS_PROBE:
         ExecuteRemoteCommand( payload.c_str() );

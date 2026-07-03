@@ -52,6 +52,7 @@ set( QA_EESCHEMA_SRCS
     ${CMAKE_SOURCE_DIR}/qa/tests/common/test_array_options.cpp
 
     sch_io/altium/test_altium_parser_sch.cpp
+    sch_io/altium/test_altium_sch_import.cpp
     sch_io/database/test_sch_io_database_cycle.cpp
     sch_io/pads/test_pads_sch_parser.cpp
     sch_io/pads/test_pads_sch_import.cpp
