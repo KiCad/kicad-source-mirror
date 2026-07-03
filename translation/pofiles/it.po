@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-07-03 08:03+0000\n"
+"PO-Revision-Date: 2026-07-04 09:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -26137,7 +26137,7 @@ msgstr "Pin condiviso '%s' non connesso a nessuna unità."
 #: eeschema/sim/sim_model_multiunit.cpp:296
 #, c-format
 msgid "Shared pin '%s' resolves to more than one net."
-msgstr "Il PIN condiviso '%s' corrisponde a più di una net."
+msgstr "Il pin condiviso '%s' corrisponde a più di una net."
 
 #: eeschema/sim/sim_model_multiunit.cpp:320
 #, c-format
