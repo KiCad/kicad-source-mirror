@@ -23,10 +23,16 @@
 #include <vector>
 #include <algorithm>
 #include <limits>
+#include <base_units.h>
 #include <pcb_shape.h>
 #include <geometry/circle.h>
 
 #include <nanoflann.hpp>
+
+
+// Near-collinear segment ends closer than this are treated as rounding noise and welded
+// together.  Larger gaps are assumed to be real features (slots, necks) and left alone.
+static const int WELD_GAP_TOLERANCE = pcbIUScale.mmToIU( 0.01 );
 
 
 struct PCB_SHAPE_ENDPOINTS_ADAPTOR
@@ -177,6 +183,25 @@ void ConnectBoardShapes( std::vector<PCB_SHAPE*>& aShapeList, int aChainingEpsil
 
                     success = true;
                 }
+            }
+
+            // Near-collinear facets have no real corner to extend to, so weld the closest ends
+            // together, but only for a hairline gap (rounding noise) so real thin features survive
+            if( !success && d[idx] <= SEG::Square( WELD_GAP_TOLERANCE ) )
+            {
+                VECTOR2I mid = ( ( i0 == 0 ? seg0.A : seg0.B ) + ( i1 == 0 ? seg1.A : seg1.B ) ) / 2;
+
+                if( i0 == 0 )
+                    aPrevShape->SetStart( mid );
+                else
+                    aPrevShape->SetEnd( mid );
+
+                if( i1 == 0 )
+                    aShape->SetStart( mid );
+                else
+                    aShape->SetEnd( mid );
+
+                success = true;
             }
         }
         else if( ( shape0 == SHAPE_T::ARC && shape1 == SHAPE_T::SEGMENT )
