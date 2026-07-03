@@ -20,6 +20,10 @@
 #ifndef FOOTPRINT_EDIT_FRAME_H
 #define FOOTPRINT_EDIT_FRAME_H
 
+#include <functional>
+#include <memory>
+#include <vector>
+
 #include <pcb_base_frame.h>
 #include <pcb_base_edit_frame.h>
 #include <pcb_io/pcb_io_mgr.h>
@@ -53,6 +57,22 @@ public:
      *         frame, if exists
      */
     static const wxChar* GetFootprintEditorFrameName();
+
+    /**
+     * Replace the tab context at @p aSlot with @p aNew, running @p aInstallSuccessor before the
+     * displaced context is destroyed.
+     *
+     * @p aInstallSuccessor repoints the canvas VIEW at the incoming board; the displaced board must
+     * outlive it, otherwise VIEW::Clear() dereferences items from a freed board.
+     *
+     * Exposed for unit testing of the reuse ordering.
+     *
+     * @return the raw pointer to the newly installed context.
+     */
+    static FOOTPRINT_EDITOR_TAB_CONTEXT* placeReusedTabContext(
+            std::vector<std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>>& aContexts, int aSlot,
+            std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT> aNew,
+            const std::function<void()>& aInstallSuccessor );
 
     ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;

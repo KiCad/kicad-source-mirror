@@ -21,10 +21,14 @@
 
 #include <memory>
 
+#include <functional>
+#include <vector>
+
 #include <board.h>
 #include <footprint.h>
 #include <lib_id.h>
 
+#include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <footprint_editor_tab_context.h>
 
@@ -43,7 +47,59 @@ static std::unique_ptr<BOARD> makeFpHolder( const wxString& aLib, const wxString
 }
 
 
+/// A BOARD that bumps a counter on destruction, to observe when a displaced tab's board is freed
+class INSTRUMENTED_BOARD : public BOARD
+{
+public:
+    explicit INSTRUMENTED_BOARD( int* aDtorCounter ) : m_dtorCounter( aDtorCounter ) {}
+
+    ~INSTRUMENTED_BOARD() override
+    {
+        if( m_dtorCounter )
+            ( *m_dtorCounter )++;
+    }
+
+private:
+    int* m_dtorCounter;
+};
+
+
 BOOST_AUTO_TEST_SUITE( FootprintEditorTabs )
+
+
+/// Reusing a preview tab must install the successor board before the displaced board is freed, so the
+/// canvas VIEW never clears items from a destroyed board.
+BOOST_AUTO_TEST_CASE( ReusedPreviewTabBoardOutlivesInstall )
+{
+    int dtorCount = 0;
+
+    auto oldBoard = std::make_unique<INSTRUMENTED_BOARD>( &dtorCount );
+    oldBoard->SetBoardUse( BOARD_USE::FPHOLDER );
+
+    std::vector<std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>> contexts;
+    contexts.push_back( std::make_unique<FOOTPRINT_EDITOR_TAB_CONTEXT>( wxS( "Lib" ), wxS( "A" ),
+                                                                        std::move( oldBoard ) ) );
+
+    auto newCtx = std::make_unique<FOOTPRINT_EDITOR_TAB_CONTEXT>(
+            wxS( "Lib" ), wxS( "B" ), makeFpHolder( wxS( "Lib" ), wxS( "B" ) ) );
+    FOOTPRINT_EDITOR_TAB_CONTEXT* newRaw = newCtx.get();
+
+    int dtorCountDuringInstall = -1;
+
+    FOOTPRINT_EDITOR_TAB_CONTEXT* installed = FOOTPRINT_EDIT_FRAME::placeReusedTabContext(
+            contexts, 0, std::move( newCtx ),
+            [&]() { dtorCountDuringInstall = dtorCount; } );
+
+    // The displaced board is still alive while the successor is installed, and freed only afterwards.
+    BOOST_CHECK_EQUAL( dtorCountDuringInstall, 0 );
+    BOOST_CHECK_EQUAL( dtorCount, 1 );
+
+    // The slot holds the successor, stays index-aligned, and is returned raw.
+    BOOST_REQUIRE_EQUAL( contexts.size(), 1u );
+    BOOST_CHECK_EQUAL( contexts[0].get(), newRaw );
+    BOOST_CHECK_EQUAL( installed, newRaw );
+    BOOST_CHECK_EQUAL( contexts[0]->GetName(), wxS( "B" ) );
+}
 
 
 BOOST_AUTO_TEST_CASE( ContextIdentityAndDirty )

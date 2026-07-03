@@ -1126,8 +1126,8 @@ FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( const LIB_ID& aLibId, bool aAsPr
 
     if( reuseSlot >= 0 && reuseSlot < static_cast<int>( m_tabContexts.size() ) )
     {
-        // The move-assign below destroys the reused slot's context and its board. If it is the active
-        // tab, tear the document down while that board is still alive so the move-assign is safe.
+        // Tear the active document down while the outgoing board is still alive, before it is
+        // displaced and freed.
         if( m_tabContexts[reuseSlot].get() == m_activeTab )
         {
             if( m_toolManager )
@@ -1137,17 +1137,37 @@ FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( const LIB_ID& aLibId, bool aAsPr
             m_activeTab = nullptr;
         }
 
+        // Drop the frame's alias so borrowBoardNonDestructive cannot delete the displaced board while
+        // placeReusedTabContext still owns it.
         if( m_pcb == m_tabContexts[reuseSlot]->GetBoard() )
             m_pcb = nullptr;
 
-        m_tabContexts[reuseSlot] = std::move( ctx );
-    }
-    else
-    {
-        m_tabContexts.push_back( std::move( ctx ) );
+        return placeReusedTabContext( m_tabContexts, reuseSlot, std::move( ctx ),
+                                      [&]() { m_tabsPanel->AddTab( key, name, aAsPreview ); } );
     }
 
+    m_tabContexts.push_back( std::move( ctx ) );
+
     m_tabsPanel->AddTab( key, name, aAsPreview );
+
+    return raw;
+}
+
+
+FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::placeReusedTabContext(
+        std::vector<std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>>& aContexts, int aSlot,
+        std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT> aNew,
+        const std::function<void()>& aInstallSuccessor )
+{
+    // Hold the displaced context, and its still-displayed board, alive across aInstallSuccessor, which
+    // repoints the canvas VIEW at the incoming board. Freeing the old board first would leave
+    // VIEW::Clear() dereferencing items from a destroyed board.
+    std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT> displaced = std::move( aContexts[aSlot] );
+    aContexts[aSlot] = std::move( aNew );
+
+    FOOTPRINT_EDITOR_TAB_CONTEXT* raw = aContexts[aSlot].get();
+
+    aInstallSuccessor();
 
     return raw;
 }
