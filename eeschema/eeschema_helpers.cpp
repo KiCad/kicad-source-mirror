@@ -27,6 +27,7 @@
 #include <schematic.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
+#include <sch_file_versions.h>
 #include <sch_label.h>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
@@ -197,6 +198,16 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
         sheetList.SetInitialPageNumbers();
     else
         sheetList.RepairPageNumbers();
+
+    // A schematic written by an older version can lose the junctions that Eeschema implies from
+    // merged colinear wires, which shows up as connectivity errors.  The GUI editor repairs this on
+    // load; the headless/CLI loader must do the same before connectivity is calculated.  It is
+    // limited to pre-current files (the current version writes those junctions on save, so running
+    // it on a current file could silently connect an intentional crossing) and to callers that
+    // actually want connectivity.
+    if( aCalculateConnectivity
+        && schematic->RootScreen()->GetFileFormatVersionAtLoad() < SEXPR_SCHEMATIC_FILE_VERSION )
+        schematic->FixupJunctionsAfterImport();
 
     schematic->ConnectionGraph()->Reset();
 

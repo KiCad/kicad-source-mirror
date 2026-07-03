@@ -791,7 +791,17 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // TODO: (RFB) This really needs to be put inside the Load() function of the SCH_IO_KICAD_LEGACY
     // I can't put it right now because of the extra code that is above to convert legacy bus-bus
     // entries to bus wires
-    if( schFileType == SCH_IO_MGR::SCH_LEGACY )
+    //
+    // A native s-expression schematic written by an older version can drop the junctions implied
+    // by merged colinear wires, so the fixup also runs for pre-current native files.  It is limited
+    // to older files because the current version writes those junctions on save; running it on a
+    // current file could silently connect an intentional wire crossing and mask an
+    // ERCE_LABEL_MULTIPLE_WIRES violation.  It is idempotent and only adds needed junctions.
+    bool nativeNeedsFixup = schFileType == SCH_IO_MGR::SCH_KICAD
+                            && Schematic().RootScreen()->GetFileFormatVersionAtLoad()
+                                       < SEXPR_SCHEMATIC_FILE_VERSION;
+
+    if( schFileType == SCH_IO_MGR::SCH_LEGACY || nativeNeedsFixup )
         Schematic().FixupJunctionsAfterImport();
 
     SyncView();
