@@ -37,8 +37,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-07-03 08:03+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-07-04 09:01+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -3197,9 +3197,8 @@ msgid "Old Path"
 msgstr "Alter Pfad"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
-#, fuzzy
 msgid "No git repository available."
-msgstr "Kein Repository verfügbar"
+msgstr "Kein git-Repository verfügbar."
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 #: common/dialogs/dialog_git_mr_review.cpp:103
@@ -3214,19 +3213,18 @@ msgid "Select base and head refs to compare."
 msgstr ""
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve ref '%s' to a commit or tree."
-msgstr "Abrufen der zu zusammenführenden git Commits ist fehlgeschlagen."
+msgstr "Referenz \"%s\" konnte keinem Commit oder Baum zugeordnet werden."
 
 #: common/dialogs/dialog_git_mr_review.cpp:133
-#, fuzzy
 msgid "No changes between selected refs."
-msgstr "Ecken zwischen ausgewählten Linien wegschneiden"
+msgstr "Keine Änderungen zwischen den ausgewählten Referenzen."
 
 #: common/dialogs/dialog_git_mr_review.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "No diff handler for '%s'."
-msgstr "benötige eine Zahl für \"%s\""
+msgstr "Es gibt für \"%s\" keinen Vergleichshandler."
 
 #: common/dialogs/dialog_git_mr_review.cpp:252
 #: common/dialogs/dialog_git_mr_review.cpp:281
@@ -3246,9 +3244,9 @@ msgstr "Temporäres Verzeichnis kann nicht erstellt werden."
 #: common/dialogs/dialog_git_mr_review.cpp:337
 #: common/dialogs/dialog_git_mr_review.cpp:357
 #: common/dialogs/dialog_git_mr_review.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Could not extract %s from %s."
-msgstr "Konnte keine Bilddatei von \"%s\" laden."
+msgstr "Konnte %s nicht aus %s extrahieren."
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:25
 msgid "Base ref:"
@@ -3560,9 +3558,8 @@ msgstr ""
 
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
-#, fuzzy
 msgid "Select a change in the tree to view details"
-msgstr "Die Standard-Remote-URL und Zugangsdaten einstellen oder ändern"
+msgstr "Um Details an zu zeigen eine Änderung im Baum auswählen"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:25
 #: pcbnew/dialogs/dialog_text_properties.cpp:121
@@ -3611,14 +3608,13 @@ msgstr "Importkonflikte auflösen"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:363
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:48
-#, fuzzy
 msgid "Select a conflict on the left to see details."
-msgstr "Wählt ein Verbindungselement unter dem Zeiger"
+msgstr "Links einen Konflikt auswählen um Details an zu zeigen."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Conflict on %s"
-msgstr "Konflikte"
+msgstr "Konflikt bzgl. %s"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
@@ -6802,9 +6798,8 @@ msgid "%zu property edit(s) in this resolution.\n"
 msgstr ""
 
 #: common/diff_merge/diff_job_output.cpp:88
-#, fuzzy
 msgid "Failed to render diff image\n"
-msgstr "Fehler beim Lesen von Bilddaten."
+msgstr "Konnte Vergleichsgrafik nicht rendern\n"
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
@@ -9509,14 +9504,14 @@ msgid "Could not open layer map file '%s'"
 msgstr "Konnte die Bibliotheksdatei \"%s\" nicht finden"
 
 #: common/jobs/job_import_utils.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read layer map file '%s'"
-msgstr "Konnte Datei \"%s\" nicht lesen."
+msgstr "Konnte Lagenkartendatei \"%s\" nicht lesen"
 
 #: common/jobs/job_import_utils.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Layer map file '%s' is not valid JSON: %s"
-msgstr "Seitentyp \"%s\" ist ungültig."
+msgstr "Lagenkartendatei \"%s\" ist kein gültiges JSON: %s"
 
 #: common/jobs/job_import_utils.cpp:86
 #, c-format
@@ -9579,9 +9574,8 @@ msgid "PCB: Render"
 msgstr "PCB: Rendern"
 
 #: common/jobs/job_sch_diff.cpp:37
-#, fuzzy
 msgid "Diff two schematic files"
-msgstr "PADS Logic-Schaltplandateien"
+msgstr "Zwei Schaltplandateien vergleichen"
 
 #: common/jobs/job_sch_diff.cpp:41
 #, fuzzy
@@ -9606,9 +9600,8 @@ msgid "Import schematic"
 msgstr "Schaltplanimport"
 
 #: common/jobs/job_sch_import.cpp:56
-#, fuzzy
 msgid "Schematic Import Job Settings"
-msgstr "Schaltplan-ERC-Auftragseinstellungen"
+msgstr "Schaltplanimport-Auftragseinstellungen"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
@@ -18397,9 +18390,8 @@ msgid "Decomposition:"
 msgstr "X Position:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:251
-#, fuzzy
 msgid "Whole device"
-msgstr "Spice-Anweisungen:"
+msgstr "Ganzes Bauelement"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:251
 #, fuzzy
@@ -18407,11 +18399,8 @@ msgid "Repeat per unit"
 msgstr "Anzahl Wiederholungen"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:257
-#, fuzzy
 msgid "Shared model pins:"
-msgstr ""
-"Zielbereich-Komponenten:\n"
-"%s"
+msgstr "Mehrfach verw. Modellpins:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:281
 msgid "Symbol Pin"
@@ -26314,7 +26303,7 @@ msgstr ""
 
 #: eeschema/sim/kibis/kibis.cpp:1606
 msgid "Invalid model type for a device"
-msgstr "Ungültiger Modelltyp für ein Gerät"
+msgstr "Ungültiger Modelltyp für ein Bauelement"
 
 #: eeschema/sim/kibis/kibis.cpp:1805 eeschema/sim/kibis/kibis.cpp:1852
 msgid "Number of cycles should be greater than 0."
@@ -30333,9 +30322,8 @@ msgid "Failed to load %s"
 msgstr "Fehler beim Laden von \"%s\"."
 
 #: eeschema/tools/sch_inspection_tool.cpp:858
-#, fuzzy
 msgid "Save the schematic before comparing against local history."
-msgstr "Änderungen am Schaltplan vor dem Schließen speichern?"
+msgstr "Schaltplan vor Vergleich mit lokalem Verlauf speichern."
 
 #: eeschema/tools/sch_inspection_tool.cpp:869
 #: pcbnew/tools/board_inspection_tool.cpp:2183
@@ -32525,9 +32513,8 @@ msgid "Footprint and Footprint Libraries"
 msgstr "Footprint und Footprint-Bibliotheken"
 
 #: kicad/cli/command_fp_diff.cpp:28
-#, fuzzy
 msgid "Diff two .pretty footprint library directories"
-msgstr "gEDA / Lepton EDA PCB Footprint-Bibliotheksverzeichnis"
+msgstr "Zwei .pretty-Footprint-Bibliotheksverzeichnisse vergleiche"
 
 #: kicad/cli/command_fp_diff.cpp:29
 #, fuzzy
@@ -32745,9 +32732,10 @@ msgid "Could not write merged output.\n"
 msgstr "Konnte Zusammenführungsergebnis nicht schreiben."
 
 #: kicad/cli/command_import.cpp:47
-#, fuzzy
 msgid "Import non-KiCad board and/or schematic files into a new KiCad project"
-msgstr "Nicht-KiCad-PCB-Datei in KiCad-Format importieren"
+msgstr ""
+"Nicht-KiCad-Platine und/oder Schaltplandateien in neues KiCad-Projekt "
+"importieren"
 
 #: kicad/cli/command_import.cpp:50
 msgid "Input file(s) to import; each is autodetected as a board or schematic"
@@ -33929,9 +33917,8 @@ msgstr ""
 "Python-Skripten erzeugt wurde"
 
 #: kicad/cli/command_sch_import.cpp:40
-#, fuzzy
 msgid "Import a non-KiCad schematic file to KiCad format"
-msgstr "Nicht-KiCad-PCB-Datei in KiCad-Format importieren"
+msgstr "Nicht-KiCad-Schaltplandatei in KiCad-Format importieren"
 
 #: kicad/cli/command_sch_import.cpp:44
 #, fuzzy
@@ -60787,10 +60774,8 @@ msgid "Save the board before comparing against local history."
 msgstr "Prüfe Platinen-Footprints gegen Bibliothek ..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:2215
-#, fuzzy
 msgid "No local history snapshots change this board."
-msgstr ""
-"Lokal ist ein neuerer Snapshot des Verlaufs verfügbar. Wiederherstellen?"
+msgstr "Keien kokal Verlaufs-Snapshots verändern diese Platine."
 
 #: pcbnew/tools/board_inspection_tool.cpp:2428
 msgid "Select a footprint for a footprint associations report."
@@ -65060,9 +65045,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:794
-#, fuzzy
 msgid "Scale footprint with pads?"
-msgstr "Footprints ohne Pads ausschließen"
+msgstr "Footprints inkl. Pads skalieren?"
 
 #: pcbnew/widgets/search_handlers.cpp:229 pcbnew/zone.cpp:1080
 #: pcbnew/zone.cpp:2262
