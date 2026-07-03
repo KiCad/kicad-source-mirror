@@ -47,17 +47,16 @@ static int executeViaShell( const wxString& aCmd, wxString& aOutput )
     process.Redirect();
 
 #ifdef __WXMSW__
-    const wxString shell = wxS( "cmd.exe" );
-    const wxString shellFlag = wxS( "/c" );
-#else
-    const wxString shell = wxS( "/bin/sh" );
-    const wxString shellFlag = wxS( "-c" );
-#endif
-
-    const wchar_t* argv[] = { shell.wc_str(), shellFlag.wc_str(), aCmd.wc_str(), nullptr };
-
+    // The argv-array form of wxExecute re-escapes embedded double quotes on Windows
+    // (see wxExecuteImpl in wxWidgets' src/msw/utilsexc.cpp), breaking quoted executable
+    // paths with spaces. The string form passes the command line straight to CreateProcess
+    // without modification. This mirrors the production code in runSpecialExecute.
     int result = static_cast<int>(
-            wxExecute( const_cast<wchar_t**>( argv ), wxEXEC_SYNC, &process ) );
+            wxExecute( wxS( "cmd.exe /c " ) + aCmd, wxEXEC_SYNC, &process ) );
+#else
+    const wchar_t* argv[] = { wxS( "/bin/sh" ), wxS( "-c" ), aCmd.wc_str(), nullptr };
+    int result = static_cast<int>( wxExecute( argv, wxEXEC_SYNC, &process ) );
+#endif
 
     wxInputStream* inputStream = process.GetInputStream();
 
@@ -181,6 +180,28 @@ BOOST_AUTO_TEST_CASE( CommandWithSingleQuotes )
                          "Should handle single quotes in output, got: " + output );
 #endif
 }
+
+
+#ifdef __WXMSW__
+BOOST_AUTO_TEST_CASE( CommandWithQuotedArgument )
+{
+    // Regression test for a Windows-only bug where a user-supplied command containing
+    // double-quoted arguments with spaces was corrupted by the argv-array form of wxExecute,
+    // which re-escapes embedded " as \" (see wxExecuteImpl in wxWidgets' src/msw/utilsexc.cpp).
+    // cmd.exe does not honour backslash-escaped quotes, so this broke any quoted executable
+    // path containing spaces (e.g. "C:\Program Files\KiCad\10.0\bin\python.exe" --version).
+    // Under the buggy code path, cmd.exe's `echo` would emit \"hello world\"; with the fix
+    // (string form of wxExecute), the user's quoting is preserved and the output contains
+    // the original "hello world".
+    wxString cmd = wxS( "echo \"hello world\"" );
+    wxString output;
+    int      result = executeViaShell( cmd, output );
+
+    BOOST_CHECK_EQUAL( result, 0 );
+    BOOST_CHECK_MESSAGE( output.Contains( wxS( "\"hello world\"" ) ),
+                         "Quoted argument should pass through verbatim, got: " + output );
+}
+#endif
 
 
 BOOST_AUTO_TEST_SUITE_END()
