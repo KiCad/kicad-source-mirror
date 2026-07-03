@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-07-02 00:01+0000\n"
+"PO-Revision-Date: 2026-07-03 08:03+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:54
@@ -11689,9 +11689,8 @@ msgid "Show Grid"
 msgstr "Прикажи мрежу"
 
 #: common/tool/actions.cpp:1078
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr "Бијела и смеђа"
+msgstr "Прикажи позадинску мрежу у прозору за уређивање"
 
 #: common/tool/actions.cpp:1087
 msgid "Enables item-specific grids that override the current grid"
@@ -11705,14 +11704,12 @@ msgid "Edit grid definitions"
 msgstr "Изабери језик"
 
 #: common/tool/actions.cpp:1101
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "Изабери језик"
+msgstr "Почетак мреже..."
 
 #: common/tool/actions.cpp:1102
-#, fuzzy
 msgid "Set the grid origin point"
-msgstr "Изабери језик"
+msgstr "Подесите почетну тачку мреже"
 
 #: common/tool/actions.cpp:1116
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:57
@@ -11738,14 +11735,12 @@ msgstr "милс"
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:36
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:45
 #: pcbnew/pcb_dimension.cpp:1996
-#, fuzzy
 msgid "Millimeters"
-msgstr "Милиметар"
+msgstr "Милиметри"
 
 #: common/tool/actions.cpp:1143
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Изабери"
+msgstr "Изабери колоне..."
 
 #: common/tool/actions.cpp:1150
 msgid "Switch units"
@@ -11808,9 +11803,8 @@ msgid "Toggle inactive layers between normal and dimmed"
 msgstr "Пребацуј између нормалног и затамњеног приказа неактивних слојева"
 
 #: common/tool/actions.cpp:1212
-#, fuzzy
 msgid "Inactive Layer View Mode (3-state)"
-msgstr "Креирање слојева"
+msgstr "Режим приказа неактивног слоја (3 стања)"
 
 #: common/tool/actions.cpp:1213
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
@@ -11818,15 +11812,13 @@ msgstr ""
 "Врти између нормалног, затамњеног и скривеног приказа неактивних слојева"
 
 #: common/tool/actions.cpp:1219
-#, fuzzy
 msgid "Draw Bounding Boxes"
-msgstr "Опције цртања"
+msgstr "Исцртај граничне оквире"
 
 #: common/tool/actions.cpp:1226 pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
-#, fuzzy
 msgid "Select item(s)"
-msgstr "Изабери"
+msgstr "Изаберите ставку/ставке"
 
 #: common/tool/actions.cpp:1237
 msgid "Measure Tool"
@@ -11837,9 +11829,8 @@ msgid "Interactively measure distance between points"
 msgstr "Интерактивно измјерите растојање између тачака"
 
 #: common/tool/actions.cpp:1257
-#, fuzzy
 msgid "Switch to Project Manager"
-msgstr "Име:"
+msgstr "Пређи на менаџер пројекта"
 
 #: common/tool/actions.cpp:1258
 #, fuzzy
