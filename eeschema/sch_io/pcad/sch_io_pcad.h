@@ -55,7 +55,8 @@ public:
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "P-CAD schematic files" ), { "SCH", "sch" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "P-CAD schematic and library files" ),
+                                      { "SCH", "sch", "LIA", "lia" } );
     }
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;

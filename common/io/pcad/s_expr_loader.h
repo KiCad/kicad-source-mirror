@@ -25,12 +25,22 @@
 #ifndef S_EXPR_LOADER_H_
 #define S_EXPR_LOADER_H_
 
+#include <string>
+
 class wxString;
 class wxXmlDocument;
 
 namespace PCAD2KICAD
 {
     void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc );
+
+    /**
+     * Check that a file is ACCEL_ASCII and, when @a aSection is not empty,
+     * that it contains the given section token (e.g. "(pcbDesign" or
+     * "(schematicDesign").  P-CAD ASCII saves are extension-agnostic, so
+     * format detection is by content.
+     */
+    bool FileMatchesFormat( const wxString& aFileName, const std::string& aSection );
 }
 
 #endif    // S_EXPR_LOADER_H_

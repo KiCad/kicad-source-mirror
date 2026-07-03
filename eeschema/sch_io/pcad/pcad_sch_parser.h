@@ -244,6 +244,14 @@ struct SYMBOL_INST
     std::vector<ATTR> attrs;      // per-instance RefDes/Value/... placements
 };
 
+/// A placed title-block field: the name references a fieldDef whose value is
+/// the displayed text.
+struct FIELD_PLACEMENT
+{
+    wxString  name;
+    TEXT_ITEM placement;
+};
+
 struct SHEET
 {
     wxString                 name;
@@ -259,6 +267,7 @@ struct SHEET
     std::vector<ARC>         arcs;
     std::vector<POLY>        polys;
     std::vector<IEEE_SYMBOL> ieeeSymbols;
+    std::vector<FIELD_PLACEMENT> fields;
 };
 
 struct TITLE_SHEET
@@ -326,7 +335,7 @@ private:
 
     void parseNetlist( XNODE* aNode, SCHEMATIC& aSchematic );
     void parseSchematicDesign( XNODE* aNode, SCHEMATIC& aSchematic );
-    void parseTitleSheet( XNODE* aNode, SCHEMATIC& aSchematic );
+    void parseFieldSets( XNODE* aNode, SCHEMATIC& aSchematic );
     void parseSheet( XNODE* aNode, SHEET& aSheet );
     WIRE parseWire( XNODE* aNode );
     BUS  parseBus( XNODE* aNode );

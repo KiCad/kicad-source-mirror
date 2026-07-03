@@ -36,12 +36,19 @@
 namespace PCAD2KICAD {
 
 
+// Some writers reference layer numbers outside the layerDef table (typically
+// unused zero-size pad shape slots).  Falling back keeps the rest of the
+// design importable instead of aborting the whole file.
+
 PCB_LAYER_ID PCAD_PCB::GetKiCadLayer( int aPCadLayer ) const
 {
     auto it = m_LayersMap.find( aPCadLayer );
 
     if( it == m_LayersMap.end() )
-        THROW_IO_ERROR( wxString::Format( _( "Unknown PCad layer %u" ), unsigned( aPCadLayer ) ) );
+    {
+        reportUnknownLayer( aPCadLayer );
+        return Dwgs_User;
+    }
 
     return it->second.KiCadLayer;
 }
@@ -52,7 +59,10 @@ LAYER_TYPE_T PCAD_PCB::GetLayerType( int aPCadLayer ) const
     auto it = m_LayersMap.find( aPCadLayer );
 
     if( it == m_LayersMap.end() )
-        THROW_IO_ERROR( wxString::Format( _( "Unknown PCad layer %u" ), unsigned( aPCadLayer ) ) );
+    {
+        reportUnknownLayer( aPCadLayer );
+        return LAYER_TYPE_NONSIGNAL;
+    }
 
     return it->second.layerType;
 }
@@ -63,9 +73,20 @@ wxString PCAD_PCB::GetLayerNetNameRef( int aPCadLayer ) const
     auto it = m_LayersMap.find( aPCadLayer );
 
     if( it == m_LayersMap.end() )
-        THROW_IO_ERROR( wxString::Format( _( "Unknown PCad layer %u" ), unsigned( aPCadLayer ) ) );
+    {
+        reportUnknownLayer( aPCadLayer );
+        return wxEmptyString;
+    }
 
     return it->second.netNameRef;
+}
+
+
+void PCAD_PCB::reportUnknownLayer( int aPCadLayer ) const
+{
+    if( m_reportedLayers.insert( aPCadLayer ).second )
+        wxLogWarning( _( "Unknown PCad layer %u mapped to the drawings layer" ),
+                      unsigned( aPCadLayer ) );
 }
 
 

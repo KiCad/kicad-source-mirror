@@ -24,9 +24,9 @@
 #include <macros.h>
 #include <xnode.h>
 
+#include <wx/ffile.h>
 #include <wx/string.h>
 #include <wx/xml/xml.h>
-#include <wx/wxcrt.h>
 
 namespace PCAD2KICAD {
 
@@ -34,30 +34,144 @@ static KEYWORD empty_keywords[1] = {};
 static const char ACCEL_ASCII_KEYWORD[] = "ACCEL_ASCII";
 
 
+// P-CAD text values may span lines inside one quoted string, but DSNLEXER
+// scans strings within a single line.  Escape raw line breaks inside quoted
+// strings so the lexer's escape handling reconstructs them.  The scan mirrors
+// the lexer's rules: a quote opens a string only at a token boundary (some
+// writers emit unescaped quotes inside bare tokens), and inside a string a
+// backslash consumes the following character, so an escaped quote does not
+// terminate it.
+static void escapeStringLineBreaks( std::string& aContent )
+{
+    std::string result;
+    result.reserve( aContent.size() );
+
+    bool inString = false;
+    char prev = ' ';
+
+    for( size_t i = 0; i < aContent.size(); i++ )
+    {
+        char c = aContent[i];
+
+        if( inString )
+        {
+            if( c == '\\' && i + 1 < aContent.size() )
+            {
+                result += c;
+                result += aContent[++i];
+                prev = aContent[i];
+                continue;
+            }
+
+            if( c == '"' )
+            {
+                inString = false;
+            }
+            else if( c == '\n' )
+            {
+                result += "\\n";
+                prev = c;
+                continue;
+            }
+            else if( c == '\r' )
+            {
+                result += "\\r";
+                prev = c;
+                continue;
+            }
+        }
+        else if( c == '"' && ( prev == ' ' || prev == '\t' || prev == '\n' || prev == '\r'
+                               || prev == '(' || prev == ')' ) )
+        {
+            inString = true;
+        }
+
+        result += c;
+        prev = c;
+    }
+
+    aContent.swap( result );
+}
+
+
+bool FileMatchesFormat( const wxString& aFileName, const std::string& aSection )
+{
+    wxFFile file( aFileName, wxT( "rb" ) );
+
+    if( !file.IsOpened() )
+        return false;
+
+    char header[sizeof( ACCEL_ASCII_KEYWORD )];
+
+    if( file.Read( header, sizeof( header ) - 1 )
+        != static_cast<size_t>( sizeof( header ) - 1 ) )
+    {
+        return false;
+    }
+
+    if( memcmp( header, ACCEL_ASCII_KEYWORD, sizeof( ACCEL_ASCII_KEYWORD ) - 1 ) != 0 )
+        return false;
+
+    if( aSection.empty() )
+        return true;
+
+    // Stream the rest of the file looking for the section token, keeping an
+    // overlap so a match split across reads is still found.
+    std::string window;
+    char        buf[64 * 1024];
+
+    for( ;; )
+    {
+        size_t got = file.Read( buf, sizeof( buf ) );
+
+        if( got == 0 || got == static_cast<size_t>( wxInvalidOffset ) )
+            return false;
+
+        window.append( buf, got );
+
+        if( window.find( aSection ) != std::string::npos )
+            return true;
+
+        if( window.size() > aSection.size() )
+            window.erase( 0, window.size() - aSection.size() );
+    }
+}
+
+
 void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
 {
-    char      line[sizeof( ACCEL_ASCII_KEYWORD )];
-    int       tok;
+    int       tok = 0;
     XNODE*    iNode = nullptr, *cNode = nullptr;
     wxString  str, propValue, content;
     wxCSConv  conv( wxT( "windows-1251" ) );
 
-    FILE* fp = wxFopen( aFileName, wxT( "rt" ) );
+    wxFFile file( aFileName, wxT( "rb" ) );
 
-    if( !fp )
+    if( !file.IsOpened() )
         THROW_IO_ERROR( wxT( "Unable to open file: " ) + aFileName );
 
-    // check file format
-    if( !fgets( line, sizeof( line ), fp )
-        // first line starts with "ACCEL_ASCII" with optional stuff on same line after that.
-        || memcmp( line, ACCEL_ASCII_KEYWORD, sizeof(ACCEL_ASCII_KEYWORD)-1 ) )
+    std::string fileContent;
+
+    {
+        wxFileOffset length = file.Length();
+
+        if( length <= 0 )
+            THROW_IO_ERROR( wxT( "Unable to read file: " ) + aFileName );
+
+        fileContent.resize( static_cast<size_t>( length ) );
+
+        if( file.Read( fileContent.data(), fileContent.size() ) != fileContent.size() )
+            THROW_IO_ERROR( wxT( "Unable to read file: " ) + aFileName );
+    }
+
+    // check file format; the first line starts with "ACCEL_ASCII" with optional
+    // stuff on the same line after that.
+    if( fileContent.compare( 0, sizeof( ACCEL_ASCII_KEYWORD ) - 1, ACCEL_ASCII_KEYWORD ) != 0 )
         THROW_IO_ERROR( wxT( "Unknown file type" ) );
 
-    // rewind the file
-    fseek( fp, 0, SEEK_SET );
+    escapeStringLineBreaks( fileContent );
 
-    // lexer now owns fp, will close on exception or return
-    DSNLEXER lexer( empty_keywords, 0, nullptr, fp,  aFileName );
+    DSNLEXER lexer( empty_keywords, 0, nullptr, fileContent, aFileName );
 
     iNode = new XNODE( wxXML_ELEMENT_NODE, wxT( "www.lura.sk" ) );
 
@@ -110,10 +224,7 @@ void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc )
     }
 
     if( iNode )
-    {
         aXmlDoc->SetRoot( iNode );
-        //aXmlDoc->Save( wxT( "test.xml" ) );
-    }
 }
 
 } // namespace PCAD2KICAD

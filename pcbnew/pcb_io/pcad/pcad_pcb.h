@@ -28,6 +28,7 @@
 #include <pcad/pcad_footprint.h>
 
 #include <map>
+#include <set>
 #include <wx/arrstr.h>
 
 class BOARD;
@@ -80,7 +81,10 @@ public:
     PCAD_COMPONENTS_ARRAY   m_PcbComponents;    // PCB footprints,Lines,Routes,Texts, .... and so on
     PCAD_NETS_ARRAY         m_PcbNetlist;       // net objects collection
     wxString                m_DefaultMeasurementUnit;
+    void reportUnknownLayer( int aPCadLayer ) const;
+
     std::map<int, TLAYER>   m_LayersMap;        // flexible layers mapping
+    mutable std::set<int>   m_reportedLayers;   // unknown layers already warned about
     int                     m_SizeX;
     int                     m_SizeY;
 

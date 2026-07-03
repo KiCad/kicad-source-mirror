@@ -23,6 +23,8 @@
 #include <sch_io/pcad/sch_io_pcad.h>
 #include <sch_io/pcad/pcad_sch_parser.h>
 
+#include <io/pcad/s_expr_loader.h>
+
 #include <lib_id.h>
 #include <lib_symbol.h>
 #include <page_info.h>
@@ -850,21 +852,9 @@ SCH_IO_PCAD::~SCH_IO_PCAD()
 
 bool SCH_IO_PCAD::CanReadSchematicFile( const wxString& aFileName ) const
 {
-    wxFileName fn( aFileName );
-
-    if( fn.GetExt().Upper() != wxT( "SCH" ) )
-        return false;
-
-    FILE* fp = wxFopen( aFileName, wxT( "rt" ) );
-
-    if( !fp )
-        return false;
-
-    char line[16];
-    bool ok = ( fgets( line, sizeof( line ), fp ) != nullptr )
-              && ( memcmp( line, "ACCEL_ASCII", 11 ) == 0 );
-    fclose( fp );
-    return ok;
+    // P-CAD ASCII saves are extension-agnostic, and boards share the same
+    // ACCEL_ASCII container, so detect by content.
+    return PCAD2KICAD::FileMatchesFormat( aFileName, "(schematicDesign" );
 }
 
 
@@ -1056,6 +1046,19 @@ void SCH_IO_PCAD::populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aS
         aScreen->Append( label );
 
         labelledNets.insert( j.netName );
+    }
+
+    // Placed title-block fields render as plain text with the field value
+    for( const FIELD_PLACEMENT& f : aSheet.fields )
+    {
+        auto it = aPcad.titleSheet.fields.find( f.name );
+
+        if( it == aPcad.titleSheet.fields.end() || it->second.IsEmpty() )
+            continue;
+
+        auto* text = new SCH_TEXT( xform( f.placement.x, f.placement.y ), it->second );
+        applyTextStyle( text, f.placement, aPcad );
+        aScreen->Append( text );
     }
 
     // Free text
@@ -1430,9 +1433,45 @@ SCH_SHEET* SCH_IO_PCAD::LoadSchematicFile( const wxString& aFileName, ::SCHEMATI
         }
     }
 
+    TITLE_BLOCK titleBlock;
+
+    {
+        const std::map<wxString, wxString>& fields = pcad.titleSheet.fields;
+        int  commentIdx = 0;
+
+        auto get =
+                [&fields]( const wxString& aName ) -> wxString
+                {
+                    auto it = fields.find( aName );
+                    return it == fields.end() ? wxString() : it->second;
+                };
+
+        titleBlock.SetTitle( get( wxT( "Title" ) ) );
+        titleBlock.SetDate( get( wxT( "Date" ) ) );
+        titleBlock.SetRevision( get( wxT( "Revision" ) ) );
+
+        wxString company = get( wxT( "Company Name" ) );
+
+        if( company.IsEmpty() )
+            company = get( wxT( "Organization" ) );
+
+        titleBlock.SetCompany( company );
+
+        for( const wxChar* name : { wxT( "Author" ), wxT( "Drawn By" ), wxT( "Checked By" ),
+                                    wxT( "Approved By" ), wxT( "Engineer" ),
+                                    wxT( "Drawing Number" ) } )
+        {
+            wxString value = get( name );
+
+            if( !value.IsEmpty() && commentIdx < 9 )
+                titleBlock.SetComment( commentIdx++, wxString( name ) + wxT( ": " ) + value );
+        }
+    }
+
     for( size_t i = 0; i < screens.size(); i++ )
     {
         screens[i]->SetPageSettings( page );
+        screens[i]->SetTitleBlock( titleBlock );
 
         for( const auto& [name, sym] : libSymbols )
             screens[i]->AddLibSymbol( new LIB_SYMBOL( *sym ) );

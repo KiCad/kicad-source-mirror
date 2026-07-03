@@ -50,10 +50,9 @@ PCB_IO_PCAD::~PCB_IO_PCAD()
 
 bool PCB_IO_PCAD::CanReadBoard( const wxString& aFileName ) const
 {
-    if( !PCB_IO::CanReadBoard( aFileName ) )
-        return false;
-
-    return IO_UTILS::fileStartsWithPrefix( aFileName, wxT( "ACCEL_ASCII" ), false );
+    // P-CAD ASCII saves are extension-agnostic, and schematics share the same
+    // ACCEL_ASCII container, so detect by content.
+    return PCAD2KICAD::FileMatchesFormat( aFileName, "(pcbDesign" );
 }
 
 

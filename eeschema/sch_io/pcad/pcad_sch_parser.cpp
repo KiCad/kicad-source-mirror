@@ -232,6 +232,8 @@ void PCAD_SCH_PARSER::LoadFromFile( const wxString& aFilename, SCHEMATIC& aSchem
 
     m_isMetric = aSchematic.isMetric;
 
+    parseFieldSets( root, aSchematic );
+
     for( XNODE* node = root->GetChildren(); node; node = node->GetNext() )
     {
         const wxString& tag = node->GetName();
@@ -746,9 +748,6 @@ void PCAD_SCH_PARSER::parseSchematicDesign( XNODE* aNode, SCHEMATIC& aSchematic 
                     aSchematic.workspaceHeight = h;
             }
         }
-
-        if( XNODE* titleSheet = FindChild( header, wxT( "titleSheet" ) ) )
-            parseTitleSheet( titleSheet, aSchematic );
     }
 
     for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
@@ -770,41 +769,79 @@ void PCAD_SCH_PARSER::parseSchematicDesign( XNODE* aNode, SCHEMATIC& aSchematic 
 
 
 // ---------------------------------------------------------------------------
-// (titleSheet "name" scale ... (fieldSetRef ...))  Field values come from the
-// design-level (fieldSet (fieldDef "Name" "Value") ...) definitions.
+// (fieldSet "name" (fieldDef "Name" "Value") ...) under (designInfo ...).
+// The loader concatenates the quoted name and value into one string, and
+// standard field names contain spaces, so split on the longest known name.
 // ---------------------------------------------------------------------------
 
-void PCAD_SCH_PARSER::parseTitleSheet( XNODE* aNode, SCHEMATIC& aSchematic )
+static const wxChar* const TITLE_FIELD_NAMES[] = {
+    wxT( "Approved By" ),
+    wxT( "Checked By" ),
+    wxT( "Company Name" ),
+    wxT( "Current Date" ),
+    wxT( "Current Time" ),
+    wxT( "Drawing Number" ),
+    wxT( "Drawn By" ),
+    wxT( "Sheet Number" ),
+    wxT( "Number Of Sheets" ),
+    wxT( "Variant Description" ),
+    wxT( "Variant Name" ),
+};
+
+
+static bool splitFieldDef( const wxString& aBoth, wxString& aName, wxString& aValue )
 {
-    // fieldDef name/value pairs live under the titleSheet's design node siblings
-    // (fieldSet ...); walk up to the design header parent and scan.
-    XNODE* design = aNode->GetParent();
-
-    while( design && design->GetName() != wxT( "schematicDesign" ) )
-        design = design->GetParent();
-
-    if( !design )
-        return;
-
-    for( XNODE* child = design->GetChildren(); child; child = child->GetNext() )
+    for( const wxChar* known : TITLE_FIELD_NAMES )
     {
-        if( child->GetName() != wxT( "fieldSet" ) )
-            continue;
+        if( aBoth == known )
+        {
+            aName = known;
+            aValue.clear();
+            return true;
+        }
 
-        for( XNODE* field = child->GetChildren(); field; field = field->GetNext() )
+        if( aBoth.StartsWith( wxString( known ) + wxT( ' ' ) ) )
+        {
+            aName = known;
+            aValue = aBoth.Mid( aName.length() + 1 );
+            return true;
+        }
+    }
+
+    aName = aBoth.BeforeFirst( ' ' );
+    aValue = aBoth.AfterFirst( ' ' );
+    return !aName.IsEmpty();
+}
+
+
+void PCAD_SCH_PARSER::parseFieldSets( XNODE* aNode, SCHEMATIC& aSchematic )
+{
+    if( aNode->GetName() == wxT( "fieldSet" ) )
+    {
+        for( XNODE* field = aNode->GetChildren(); field; field = field->GetNext() )
         {
             if( field->GetName() != wxT( "fieldDef" ) )
                 continue;
 
-            // (fieldDef "Name" "Value") - loader concatenates to "Name Value"
             wxString both = field->GetAttribute( wxT( "Name" ) );
-            wxString name = both.BeforeFirst( ' ' );
-            wxString value = both.AfterFirst( ' ' );
-            value.Trim( true ).Trim( false );
+            wxString name, value;
 
-            if( !name.IsEmpty() && !value.IsEmpty() )
-                aSchematic.titleSheet.fields[name] = value;
+            if( splitFieldDef( both, name, value ) )
+            {
+                value.Trim( true ).Trim( false );
+
+                if( !value.IsEmpty() )
+                    aSchematic.titleSheet.fields[name] = value;
+            }
         }
+
+        return;
+    }
+
+    for( XNODE* child = static_cast<XNODE*>( aNode->GetChildren() ); child;
+         child = static_cast<XNODE*>( child->GetNext() ) )
+    {
+        parseFieldSets( child, aSchematic );
     }
 }
 
@@ -995,6 +1032,15 @@ void PCAD_SCH_PARSER::parseSheet( XNODE* aNode, SHEET& aSheet )
         else if( tag == wxT( "ieeeSymbol" ) )
         {
             aSheet.ieeeSymbols.push_back( parseIeeeSymbol( child ) );
+        }
+        else if( tag == wxT( "field" ) )
+        {
+            FIELD_PLACEMENT field;
+            field.name = child->GetAttribute( wxT( "Name" ) );
+            field.placement = parseText( child );
+
+            if( !field.name.IsEmpty() )
+                aSheet.fields.push_back( std::move( field ) );
         }
     }
 }
