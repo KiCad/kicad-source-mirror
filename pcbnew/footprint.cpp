@@ -64,6 +64,7 @@
 #include <pcb_textbox.h>
 #include <pcb_track.h>
 #include <pcb_barcode.h>
+#include <name_validation.h>
 #include <refdes_utils.h>
 #include <string_utils.h>
 #include <view/view.h>
@@ -2918,18 +2919,15 @@ bool FOOTPRINT::IsLibNameValid( const wxString & aName )
 
 const wxChar* FOOTPRINT::StringLibNameInvalidChars( bool aUserReadable )
 {
-    // This list of characters is also duplicated in validators.cpp and
-    // lib_id.cpp
-    // TODO: Unify forbidden character lists - Warning, invalid filename characters are not the same
-    // as invalid LIB_ID characters.  We will need to separate the FP filenames from FP names before this
-    // can be unified
-    static const wxChar invalidChars[] = wxT("%$<>\t\n\r\"\\/:");
+    // Filename rules are a superset of LIB_ID rules; the machine-readable list is the shared
+    // source of truth, while the human-readable spelling stays local.
+    static const wxString invalidChars = GetLibFilenameForbiddenChars();
     static const wxChar invalidCharsReadable[] = wxT("% $ < > 'tab' 'return' 'line feed' \\ \" / :");
 
     if( aUserReadable )
         return invalidCharsReadable;
     else
-        return invalidChars;
+        return invalidChars.wc_str();
 }
 
 

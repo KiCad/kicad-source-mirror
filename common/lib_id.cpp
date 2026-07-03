@@ -27,6 +27,23 @@
 #include <ki_exception.h>
 #include <macros.h>     // TO_UTF8()
 #include <lib_id.h>
+#include <name_validation.h>
+
+
+const wxString& GetLibIdForbiddenChars()
+{
+    static const wxString chars = wxS( "<>\"\\:\t\n\r" );
+    return chars;
+}
+
+
+const wxString& GetLibFilenameForbiddenChars()
+{
+    // Filenames additionally forbid these path and format characters, which a LIB_ID name
+    // is allowed to contain.
+    static const wxString chars = GetLibIdForbiddenChars() + wxS( "%$/" );
+    return chars;
+}
 
 
 static int checkLibNickname( const UTF8& aField )
@@ -204,29 +221,7 @@ UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, bool aLib )
 
 bool LIB_ID::isLegalChar( unsigned aUniChar )
 {
-    bool const space_allowed = true;
-    bool const illegal_filename_chars_allowed = false;
-
-    switch( aUniChar )
-    {
-    case ':':
-    case '\t':
-    case '\n':
-    case '\r':
-        return false;
-
-    case '\\':
-    case '<':
-    case '>':
-    case '"':
-        return illegal_filename_chars_allowed;
-
-    case ' ':
-        return space_allowed;
-
-    default:
-        return true;
-    }
+    return GetLibIdForbiddenChars().Find( wxUniChar( aUniChar ) ) == wxNOT_FOUND;
 }
 
 
