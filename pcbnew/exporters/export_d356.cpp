@@ -119,7 +119,9 @@ void IPC356D_WRITER::build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD
             rk.netname = pad->GetNetname();
             rk.pin = pad->GetNumber();
             rk.refdes = footprint->GetReference();
-            rk.midpoint = false; // XXX MAYBE need to be computed (how?)
+            // A named pad is a component terminal (end-net point); an unnamed copper
+            // feature is only reachable mid-net, so it is a midpoint per IPC-D-356A
+            rk.midpoint = rk.pin.IsEmpty();
             const VECTOR2I& drill = pad->GetDrillSize();
             rk.drill = std::min( drill.x, drill.y );
             rk.hole = (rk.drill != 0);
@@ -223,8 +225,12 @@ static void build_via_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
             rk.y_size = 0; // Round so height = 0
             rk.rotation = 0;
 
+            // the value indicates which sides are *not* accessible
+            rk.soldermask = 0;
+
             if( via->IsTented( F_Mask ) )
                 rk.soldermask |= 1;
+
             if( via->IsTented( B_Mask ) )
                 rk.soldermask |= 2;
 
