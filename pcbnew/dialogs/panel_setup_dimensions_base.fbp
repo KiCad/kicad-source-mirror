@@ -622,7 +622,7 @@
               <property name="border">5</property>
               <property name="colspan">2</property>
               <property name="column">3</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxLEFT</property>
               <property name="row">1</property>
               <property name="rowspan">1</property>
               <object class="wxCheckBox" expanded="true">
