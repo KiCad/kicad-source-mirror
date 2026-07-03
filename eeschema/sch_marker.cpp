@@ -294,9 +294,10 @@ std::vector<int> SCH_MARKER::ViewGetLayers() const
     {
         switch( Schematic()->ErcSettings().GetSeverity( m_rcItem->GetErrorCode() ) )
         {
+        case SEVERITY::RPT_SEVERITY_IGNORE:  return {};
+        case SEVERITY::RPT_SEVERITY_WARNING: layers[0] = LAYER_ERC_WARN; break;
         default:
         case SEVERITY::RPT_SEVERITY_ERROR:   layers[0] = LAYER_ERC_ERR;  break;
-        case SEVERITY::RPT_SEVERITY_WARNING: layers[0] = LAYER_ERC_WARN; break;
         }
     }
 
