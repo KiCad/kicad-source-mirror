@@ -395,9 +395,11 @@ FOOTPRINT_LIBRARY_ADAPTER::SAVE_T FOOTPRINT_LIBRARY_ADAPTER::SaveFootprint( cons
         }
         catch( IO_ERROR& e )
         {
+            // Re-throw rather than returning SAVE_SKIPPED; swallowing a write failure (read-only
+            // file, full disk) would report a successful save while the file is unchanged.
             wxLogTrace( traceLibraries, "SaveFootprint: error saving %s: %s",
                         aFootprint->GetFPIDAsString(), e.What() );
-            return SAVE_SKIPPED;
+            throw;
         }
 
         {

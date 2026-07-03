@@ -203,8 +203,11 @@ void FOOTPRINT_EDITOR_CONTROL::tryToSaveFootprintInLibrary( FOOTPRINT&    aFootp
             LIB_ID fpid = aFootprint.GetFPID();
             fpid.SetLibNickname( aTargetLib.GetLibNickname() );
             aFootprint.SetFPID( fpid );
-            m_frame->SaveFootprint( &aFootprint );
-            m_frame->ClearModify();
+
+            // Clear the modified flag only on a successful save, else the edits are silently
+            // lost (issue #23850).
+            if( m_frame->SaveFootprint( &aFootprint ) )
+                m_frame->ClearModify();
         }
     }
 }

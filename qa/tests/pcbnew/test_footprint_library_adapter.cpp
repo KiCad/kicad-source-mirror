@@ -17,10 +17,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <filesystem>
+#include <memory>
 
+#ifdef __unix__
+#include <unistd.h>
+#endif
+
+#include <qa_utils/wx_utils/unit_test_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
+
+#include <board.h>
+#include <footprint.h>
 #include <footprint_library_adapter.h>
 #include <libraries/library_manager.h>
+#include <libraries/library_table.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 
 namespace
@@ -40,6 +52,27 @@ public:
     {
         m_libraries[aNickname].status.load_status = LOAD_STATUS::LOAD_ERROR;
     }
+
+    /**
+     * Seed a loaded library backed by a real plugin so SaveFootprint() reaches the plugin
+     * write instead of bailing out as "not loaded".  The row is owned here to outlive the
+     * adapter's use of it.
+     */
+    void SeedLoadedLibrary( const wxString& aNickname, const wxString& aUri )
+    {
+        m_row = std::make_unique<LIBRARY_TABLE_ROW>();
+        m_row->SetNickname( aNickname );
+        m_row->SetType( wxS( "KiCad" ) );
+        m_row->SetURI( aUri );
+
+        LIB_DATA& data = m_libraries[aNickname];
+        data.status.load_status = LOAD_STATUS::LOADED;
+        data.plugin = std::make_unique<PCB_IO_KICAD_SEXPR>();
+        data.row = m_row.get();
+    }
+
+private:
+    std::unique_ptr<LIBRARY_TABLE_ROW> m_row;
 };
 
 } // namespace
@@ -67,6 +100,57 @@ BOOST_AUTO_TEST_CASE( IsFootprintLibWritableHandlesFailedLoad )
 
     // A library that was never even attempted must also be safe.
     BOOST_CHECK_EQUAL( adapter.IsFootprintLibWritable( wxS( "NeverSeen" ) ), false );
+}
+
+
+/**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23850
+ *
+ * A read-only target .kicad_mod inside a writable directory made the adapter swallow the
+ * plugin's IO_ERROR and return SAVE_SKIPPED, so the editor reported success and lost the
+ * user's edits.  SaveFootprint() must now let the IO_ERROR propagate.
+ */
+BOOST_AUTO_TEST_CASE( SaveFootprintReadOnlyFilePropagatesError )
+{
+#ifdef __unix__
+    // The superuser ignores mode bits, so a read-only file stays writable and this path
+    // cannot be exercised.
+    if( ::geteuid() == 0 )
+    {
+        BOOST_TEST_MESSAGE( "Skipping read-only footprint save test when running as root." );
+        return;
+    }
+#endif
+
+    // FootprintSave validates the whole containing directory as a library, so it needs a
+    // private directory no unrelated .kicad_mod can pollute.
+    KI_TEST::TEMPORARY_DIRECTORY tmpLib( "kicad_qa_adapter_save_readonly", ".pretty" );
+
+    LIBRARY_MANAGER                manager;
+    TEST_FOOTPRINT_LIBRARY_ADAPTER adapter( manager );
+
+    const wxString nickname = wxS( "scratch" );
+    adapter.SeedLoadedLibrary( nickname, tmpLib.GetPath().string() );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    FOOTPRINT* fp = new FOOTPRINT( board.get() );
+    board->Add( fp );
+    fp->SetFPID( LIB_ID( nickname, wxS( "readonly_fp" ) ) );
+
+    BOOST_REQUIRE( adapter.SaveFootprint( nickname, fp ) == FOOTPRINT_LIBRARY_ADAPTER::SAVE_OK );
+
+    auto savedFile = tmpLib.GetPath() / "readonly_fp.kicad_mod";
+    BOOST_REQUIRE( std::filesystem::exists( savedFile ) );
+
+    // Mark only the file read-only, mirroring the issue; the directory stays writable so the
+    // writability gate still passes and TEMPORARY_DIRECTORY can unlink it.
+    std::filesystem::permissions( savedFile,
+                                  std::filesystem::perms::owner_write | std::filesystem::perms::group_write
+                                          | std::filesystem::perms::others_write,
+                                  std::filesystem::perm_options::remove );
+
+    BOOST_CHECK_THROW( adapter.SaveFootprint( nickname, fp ), IO_ERROR );
 }
 
 
