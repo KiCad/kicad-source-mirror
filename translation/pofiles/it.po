@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-29 22:01+0000\n"
+"PO-Revision-Date: 2026-07-03 08:03+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -126,7 +126,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -6891,7 +6891,7 @@ msgstr "Reimposta al predefinito"
 #: common/diff_merge/auto_resolution.cpp:265
 #, c-format
 msgid "%zu property edit(s) in this resolution.\n"
-msgstr ""
+msgstr "%zu modifiche della proprietà in questa risoluzione.\n"
 
 #: common/diff_merge/diff_job_output.cpp:88
 msgid "Failed to render diff image\n"
@@ -6899,7 +6899,7 @@ msgstr "Impossibile renderizzare l'immagine diff\n"
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
-msgstr ""
+msgstr "Collisione"
 
 #: common/diff_merge/diff_tree_grouping.cpp:41
 #, fuzzy
@@ -7683,7 +7683,7 @@ msgstr "Poligono"
 #: common/eda_shape.cpp:469 common/eda_shape.cpp:1463 common/eda_shape.cpp:3394
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:213
 msgid "Ellipse"
-msgstr ""
+msgstr "Ellisse"
 
 #: common/eda_shape.cpp:470 common/eda_shape.cpp:1464 common/eda_shape.cpp:3395
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:229
@@ -8537,7 +8537,7 @@ msgstr "Fallita creazione commit: %s"
 
 #: common/git/libgit_backend.cpp:307 kicad/project_tree_pane.cpp:2765
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "Impossibile modificare: il ramo non ha ancora commit."
 
 #: common/git/libgit_backend.cpp:326
 #, fuzzy, c-format
@@ -8649,6 +8649,8 @@ msgstr "Impossibile leggere 'FETCH_HEAD'"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Niente per cui fare pull: il repository remoto non ha alcun ramo "
+"corrispondente al ramo locale corrente."
 
 #: common/git/libgit_backend.cpp:1185
 msgid "Could not lookup commit"
@@ -13631,12 +13633,17 @@ msgid ""
 "Net chain rebuild failed: %s.  The schematic may have stale chain data; "
 "reload to recover."
 msgstr ""
+"Ricostruzione della catena di net non riuscita: %s. Lo schema potrebbe "
+"contenere dati di catena obsoleti; ricaricare per ripristinare."
 
 #: eeschema/connection_graph.cpp:3780
 msgid ""
 "Net chain rebuild failed with an unknown error.  The schematic may have "
 "stale chain data; reload to recover."
 msgstr ""
+"La ricostruzione della catena di rete non è riuscita a causa di un errore "
+"sconosciuto. Lo schema potrebbe contenere dati obsoleti relativi alla "
+"catena; ricaricarlo per ripristinarlo."
 
 #: eeschema/connection_graph.cpp:5105
 #, c-format
@@ -14344,13 +14351,12 @@ msgstr "Selezionare almeno una opzione dall'elenco %s."
 #: eeschema/dialogs/dialog_create_net_chain.cpp:222
 #: eeschema/dialogs/dialog_create_net_chain_base.h:79
 #: eeschema/tools/sch_editor_control.cpp:1924
-#, fuzzy
 msgid "Create Net Chain"
-msgstr "Crea nuovo foglio"
+msgstr "Crea catena di net"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
 msgid "Please enter a name for the net chain."
-msgstr "Inserire un nome per la catena di collegamento."
+msgstr "Inserire un nome per la catena di net."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:169
 msgid "Chain name cannot contain spaces, quotes, or parentheses."
@@ -14361,19 +14367,17 @@ msgid "Connection graph not available."
 msgstr ""
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "A net chain named '%s' already exists."
-msgstr "Un elemento con denominazione '%s' esiste già."
+msgstr "Una catena di net con nome '%s' esiste già."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:197
-#, fuzzy
 msgid "Failed to create the net chain."
-msgstr "Fallita creazione del tag."
+msgstr "Fallita creazione della catena di net."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:222
-#, fuzzy
 msgid "Failed to create the manual net chain."
-msgstr "Fallita creazione del branch."
+msgstr "Fallita creazione della catena di net manuale."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
 #, fuzzy
@@ -20061,9 +20065,9 @@ msgid "Net chain name '%s' contains invalid characters."
 msgstr "Il nome catena di net '%s' contiene caratteri non validi."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate net chain name '%s' on row %zu."
-msgstr "Elemento duplicato per l'ID %d e sequenza %d nella riga %zu."
+msgstr "Nome catena di net duplicato '%s' alla riga %zu."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:382
 #, c-format
@@ -22221,9 +22225,9 @@ msgid "Downloaded symbol payload was not a KiCad symbol library."
 msgstr "Simbolo %s non trovato nella tabella librerie di simboli."
 
 #: eeschema/remote_symbol_import_job.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded symbol payload did not include expected symbol '%s'."
-msgstr "Il contenuto del simbolo non include il simbolo atteso."
+msgstr "Il payload del simbolo scaricato non includeva il simbolo atteso '%s'."
 
 #: eeschema/remote_symbol_import_job.cpp:104
 #: eeschema/remote_symbol_import_utils.cpp:117
@@ -22243,9 +22247,9 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "Impossibile accedere al plugin simboli KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "Impossibile salvare il simbolo scaricato."
+msgstr "Impossibile salvare il simbolo scaricato: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
 #, fuzzy
@@ -23096,9 +23100,9 @@ msgid "KiCad database library files"
 msgstr "File librerie di db di KiCad"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported DipTrace schematic format version %d."
-msgstr "Versione RPC non supportata: %d."
+msgstr "Formato schema DipTrace versione %d non supportato."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:284
 #, c-format
@@ -23111,9 +23115,8 @@ msgid "Invalid DipTrace schematic magic length: %d (expected 7 or 11)."
 msgstr ""
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:306
-#, fuzzy
 msgid "Invalid DipTrace schematic file: bad magic header."
-msgstr "Nome simbolo genitore non valido"
+msgstr "File schema DipTrace non valido: magic header non corretto."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:320
 msgid "Invalid DipTrace schematic file: bad legacy version suffix."
@@ -23125,9 +23128,9 @@ msgid "Invalid DipTrace schematic sheet count: %d."
 msgstr ""
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid text style count: %d."
-msgstr "Stringa di testo non valida"
+msgstr "Conteggio stili di testo non valido: %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:455
 #, fuzzy, c-format
@@ -23141,9 +23144,11 @@ msgid "DipTrace import: invalid bus count %d."
 msgstr ""
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s"
-msgstr "Impossibile aggiungere dai componente"
+msgstr ""
+"Importazione DipTrace: impossibile analizzare il componente %zu alla "
+"posizione 0x%06zX: %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:706
 #, c-format
@@ -23241,9 +23246,8 @@ msgid "Open canceled by user."
 msgstr "Apertura annullata dall'utente."
 
 #: eeschema/sch_io/diptrace/sch_io_diptrace.h:54
-#, fuzzy
 msgid "DipTrace schematic files"
-msgstr "File schemi elettrici LTspice"
+msgstr "File schemi elettrici DipTrace"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:636
 #, c-format
@@ -23631,7 +23635,7 @@ msgstr "Impossibile creare il percorso di libreria simboli '%s'."
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:898
 #, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "Genitore per il simbolo esteso %s non trovato nella libreria '%s'."
+msgstr "Nessun genitore per il simbolo esteso %s trovato nella libreria '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:261
 #, c-format
@@ -23659,7 +23663,7 @@ msgstr "Il simbolo %s contiene il carattere non valido '%c'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:361
 msgid "Invalid library identifier"
-msgstr "ID di libreria di simboli non valido"
+msgstr "Identificatore di libreria non valido"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:469
 msgid "Invalid parent symbol name"
@@ -23749,9 +23753,8 @@ msgid "Empty sheet pin name"
 msgstr "Nome pin foglio vuoto"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3007
-#, fuzzy
 msgid "Schematic polyline has too few points"
-msgstr "La forma non ha punti."
+msgstr "La polilinea dello schema ha troppo pochi punti"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3105
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3118
@@ -23768,19 +23771,16 @@ msgid "Invalid symbol library ID"
 msgstr "ID libreria di simboli non valido"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4108
-#, fuzzy
 msgid "Missing sheet name property"
-msgstr "Argomento nome foglio mancante a %s."
+msgstr "Proprietà nome foglio mancante"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4114
-#, fuzzy
 msgid "Missing sheet file property"
-msgstr "Argomento nome foglio mancante a %s."
+msgstr "Proprietà file foglio mancante"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5401
-#, fuzzy
 msgid "Invalid table: no cells defined"
-msgstr "Formato mappa non valido\n"
+msgstr "Tabella non valida: nessuna cella definita"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5620
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7685
@@ -24260,9 +24260,9 @@ msgid "Bezier Curve, %d points"
 msgstr "Curva di Bezier, %d punti"
 
 #: eeschema/sch_shape.cpp:464
-#, fuzzy, c-format
+#, c-format
 msgid "Ellipse, %s x %s"
-msgstr "%s, %s e %s"
+msgstr "Ellisse, %s x %s"
 
 #: eeschema/sch_shape.cpp:469
 #, c-format
@@ -26098,14 +26098,14 @@ msgid "Number of bits"
 msgstr "Numero di bit"
 
 #: eeschema/sim/sim_model_multiunit.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' has a malformed Sim.Pins entry '%s'."
-msgstr "Simbolo '%s' modificato nella libreria '%s'"
+msgstr "Il simbolo '%s' ha una voce Sim.Pins non valida '%s'."
 
 #: eeschema/sim/sim_model_multiunit.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' maps pin '%s' to both '%s' and '%s'."
-msgstr "Symbolo %s mappato alla libreria di simboli \"%s\"."
+msgstr "Il simbolo '%s' mappa il pin '%s' sia su '%s' che su '%s'."
 
 #: eeschema/sim/sim_model_multiunit.cpp:195
 #, c-format
@@ -26130,14 +26130,14 @@ msgid "Unit %d maps model pin '%s' to both symbol pins '%s' and '%s'."
 msgstr ""
 
 #: eeschema/sim/sim_model_multiunit.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Shared pin '%s' is not connected on any unit."
-msgstr "Pin %s non connesso al collegamento di massa"
+msgstr "Pin condiviso '%s' non connesso a nessuna unità."
 
 #: eeschema/sim/sim_model_multiunit.cpp:296
-#, fuzzy, c-format
+#, c-format
 msgid "Shared pin '%s' resolves to more than one net."
-msgstr "Controllo esistenza etichette a più di un filo..."
+msgstr "Il PIN condiviso '%s' corrisponde a più di una net."
 
 #: eeschema/sim/sim_model_multiunit.cpp:320
 #, c-format
@@ -26756,12 +26756,13 @@ msgstr ""
 "<b>Il rettangolo grafico ha dimensione 0</b> in posizione <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:467
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Graphic ellipse has null or negative radii</b> at location <b>(%s, %s)</"
 "b>."
 msgstr ""
-"<b>Il rettangolo grafico ha dimensione 0</b> in posizione <b>(%s, %s)</b>."
+"<b>Ellisse grafica con raggi nulli o negativi</b> in posizione <b>(%s, %s)</"
+"b>."
 
 #: eeschema/symbol_checker.cpp:478
 #, fuzzy, c-format
@@ -29194,7 +29195,7 @@ msgstr "Seleziona un parametro da regolare"
 
 #: eeschema/tools/sch_actions.cpp:1879
 msgid "User-defined Signals..."
-msgstr "Segnali personalizzati"
+msgstr "Segnali personalizzati..."
 
 #: eeschema/tools/sch_actions.cpp:1880
 msgid "Add, edit or delete user-defined simulation signals"
@@ -29221,14 +29222,12 @@ msgid "Remove an existing design variant from the schematic."
 msgstr "Rimuovi una variante progetto esistente dallo schema."
 
 #: eeschema/tools/sch_actions.cpp:1904
-#, fuzzy
 msgid "Edit Variant Description..."
-msgstr "Modifica descrizione lavoro"
+msgstr "Modifica descrizione variante..."
 
 #: eeschema/tools/sch_actions.cpp:1905
-#, fuzzy
 msgid "Edit the description of an existing design variant."
-msgstr "Modifica il file script in un editor di testo"
+msgstr "Modifica la descrizione di una variante di progettazione esistente."
 
 #: eeschema/tools/sch_align_tool.cpp:60
 msgid "Align"
@@ -29642,9 +29641,9 @@ msgstr "Impossibile stondare le linee selezionate."
 
 #: eeschema/tools/sch_editor_control.cpp:1886
 #: eeschema/tools/sch_selection_tool.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Create Net Chain between %s:%s and %s:%s"
-msgstr "La larghezza testo deve essere tra %s e %s."
+msgstr "Crea una catena di net tra %s:%s e %s:%s"
 
 #: eeschema/tools/sch_editor_control.cpp:2513 pcbnew/tools/pcb_control.cpp:1187
 msgid ""
@@ -29700,9 +29699,8 @@ msgid "Reached end of sheet."
 msgstr "Raggiunta la fine del foglio."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:385
-#, fuzzy
 msgid "No matches found."
-msgstr "Nessun modello trovato"
+msgstr "Nessuna corrispondenza trovata."
 
 #: eeschema/tools/sch_group_tool.cpp:42 eeschema/tools/sch_group_tool.cpp:68
 #: pcbnew/tools/pcb_group_tool.cpp:45 pcbnew/tools/pcb_group_tool.cpp:60
