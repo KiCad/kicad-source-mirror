@@ -90,6 +90,26 @@ struct SMESH
 };
 
 
+/**
+ * Test whether the three face indices of a triangle all reference valid vertices.
+ *
+ * Malformed mesh data can carry indices past the end of the vertex array; consuming
+ * them would read out of bounds and produce corrupt geometry, so callers skip any
+ * triangle this rejects.
+ *
+ * @param aFaceIdx      Face index array (@ref SMESH::m_FaceIdx).
+ * @param aTriangleIdx  Offset of the triangle's first index into @p aFaceIdx.
+ * @param aVertexCount  Number of vertices available (@ref SMESH::m_VertexSize).
+ */
+inline bool IsTriangleInRange( const unsigned int* aFaceIdx, unsigned int aTriangleIdx,
+                               unsigned int aVertexCount )
+{
+    return aFaceIdx[aTriangleIdx + 0] < aVertexCount
+        && aFaceIdx[aTriangleIdx + 1] < aVertexCount
+        && aFaceIdx[aTriangleIdx + 2] < aVertexCount;
+}
+
+
 /// Store the a model based on meshes and materials
 struct S3DMODEL
 {
