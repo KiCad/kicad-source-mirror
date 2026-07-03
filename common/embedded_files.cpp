@@ -71,7 +71,7 @@ EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( const wxFileName& aName,
     if( HasFile( aName.GetFullName() ) )
     {
         if( !aOverwrite )
-            return m_files[aName.GetFullName()];
+            return m_files[aName.GetFullName()].get();
 
         m_files.erase( aName.GetFullName() );
     }
@@ -84,7 +84,7 @@ EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( const wxFileName& aName,
 
     wxFileOffset length = file.GetLength();
 
-    std::unique_ptr<EMBEDDED_FILE> efile = std::make_unique<EMBEDDED_FILE>();
+    std::shared_ptr<EMBEDDED_FILE> efile = std::make_shared<EMBEDDED_FILE>();
     efile->name = aName.GetFullName();
     efile->decompressedData.resize( length );
 
@@ -128,37 +128,49 @@ EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( const wxFileName& aName,
 
     efile->is_valid = true;
 
-    EMBEDDED_FILE* result = efile.release();
-    m_files[aName.GetFullName()] = result;
+    EMBEDDED_FILE* result = efile.get();
+    m_files[aName.GetFullName()] = std::move( efile );
 
     if( m_fileAddedCallback )
         m_fileAddedCallback( result );
 
-    return m_files[aName.GetFullName()];
+    return result;
 }
 
 
 void EMBEDDED_FILES::AddFile( EMBEDDED_FILE* aFile )
 {
-    m_files.insert( { aFile->name, aFile } );
+    AddFile( std::shared_ptr<EMBEDDED_FILE>( aFile ) );
+}
 
-    if( m_fileAddedCallback )
-        m_fileAddedCallback( aFile );
+
+void EMBEDDED_FILES::AddFile( std::shared_ptr<EMBEDDED_FILE> aFile )
+{
+    if( !aFile )
+        return;
+
+    wxString name = aFile->name;
+    auto [it, inserted] = m_files.emplace( std::move( name ), std::move( aFile ) );
+
+    // Fire the callback only when the file was actually inserted; std::map::emplace silently
+    // drops duplicates and we must not announce a stored pointer that no longer matches what
+    // the collection holds.
+    if( inserted && m_fileAddedCallback )
+        m_fileAddedCallback( it->second.get() );
 }
 
 
 // Remove a file from the collection
 void EMBEDDED_FILES::RemoveFile( const wxString& name, bool aErase )
 {
+    // aErase is retained for API compatibility; with shared_ptr ownership the map entry
+    // release will free the underlying file when no other collection still references it.
+    (void) aErase;
+
     auto it = m_files.find( name );
 
     if( it != m_files.end() )
-    {
-        if( aErase )
-            delete it->second;
-
         m_files.erase( it );
-    }
 }
 
 
@@ -167,14 +179,9 @@ void EMBEDDED_FILES::ClearEmbeddedFonts()
     for( auto it = m_files.begin(); it != m_files.end(); )
     {
         if( it->second->type == EMBEDDED_FILE::FILE_TYPE::FONT )
-        {
-            delete it->second;
             it = m_files.erase( it );
-        }
         else
-        {
             ++it;
-        }
     }
 }
 
@@ -634,41 +641,54 @@ EMBEDDED_FILES& EMBEDDED_FILES::operator=(EMBEDDED_FILES&& other) noexcept
 
 
 // Copy constructor
+//
+// Shares ownership of the underlying EMBEDDED_FILE payloads via shared_ptr so that cloning a
+// container that transitively holds embedded files (e.g. a FOOTPRINT being snapshotted into the
+// undo stack) does not duplicate large blobs such as embedded 3D models.  Mutations applied
+// through raw EMBEDDED_FILE* pointers obtained from one collection will be visible to other
+// collections that share the same shared_ptr; callers that require an isolated mutable copy
+// should construct a new EMBEDDED_FILE explicitly.
 EMBEDDED_FILES::EMBEDDED_FILES( const EMBEDDED_FILES& other ) :
+        m_files( other.m_files ),
+        m_fontFiles( other.m_fontFiles ),
+        m_fileAddedCallback( other.m_fileAddedCallback ),
         m_embedFonts( other.m_embedFonts )
 {
-    for( const auto& [name, file] : other.m_files )
-        m_files[name] = new EMBEDDED_FILE( *file );
-
-    m_fontFiles = other.m_fontFiles;
-    m_fileAddedCallback = other.m_fileAddedCallback;
 }
 
 
 EMBEDDED_FILES::EMBEDDED_FILES( const EMBEDDED_FILES& other, bool aDeepCopy ) :
+        m_fileAddedCallback( other.m_fileAddedCallback ),
         m_embedFonts( other.m_embedFonts )
 {
     if( aDeepCopy )
     {
+        // True deep copy is requested.  Allocate a fresh EMBEDDED_FILE for each entry so that
+        // subsequent mutations through this collection cannot affect the source collection.
         for( const auto& [name, file] : other.m_files )
-            m_files[name] = new EMBEDDED_FILE( *file );
+            m_files[name] = std::make_shared<EMBEDDED_FILE>( *file );
 
         m_fontFiles = other.m_fontFiles;
     }
-
-    m_fileAddedCallback = other.m_fileAddedCallback;
 }
 
 
 // Copy assignment operator
+//
+// Assignment performs a deep copy (in contrast to the copy constructor, which shares ownership
+// of payloads).  Assignment is used by callers such as FOOTPRINT::operator= and
+// LIB_SYMBOL::operator= where the destination is a live, separately editable object that may
+// later mutate EMBEDDED_FILE fields through raw pointers; aliasing would let those mutations
+// silently bleed into the source.  The cheap-clone path for FOOTPRINT::Clone() goes through the
+// copy constructor instead.
 EMBEDDED_FILES& EMBEDDED_FILES::operator=( const EMBEDDED_FILES& other )
 {
     if( this != &other )
     {
-        ClearEmbeddedFiles();
+        m_files.clear();
 
         for( const auto& [name, file] : other.m_files )
-            m_files[name] = new EMBEDDED_FILE( *file );
+            m_files[name] = std::make_shared<EMBEDDED_FILE>( *file );
 
         m_fontFiles = other.m_fontFiles;
         m_fileAddedCallback = other.m_fileAddedCallback;
