@@ -35,6 +35,7 @@
 #include <connectivity/connectivity_data.h>
 #include <core/profile.h>
 #include <drc/drc_engine.h>
+#include <mmh3_hash.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
@@ -113,6 +114,10 @@ static int fill_bench_main_func( int argc, char** argv )
     unsigned long long outlineCount = 0;
     unsigned long long vertexCount = 0;
 
+    // Order-sensitive so two runs match only when the fill is byte-identical, not merely
+    // equal in area.
+    MMH3_HASH streamHash( 0x5A4F4E45 );
+
     for( ZONE* zone : board->Zones() )
     {
         for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
@@ -124,11 +129,19 @@ static int fill_bench_main_func( int argc, char** argv )
             totalArea += polys->Area();
             outlineCount += (unsigned long long) polys->OutlineCount();
             vertexCount += (unsigned long long) polys->FullPointCount();
+
+            for( auto it = polys->CIterateWithHoles(); it; ++it )
+            {
+                streamHash.add( it->x );
+                streamHash.add( it->y );
+            }
         }
     }
 
+    HASH_128 digest = streamHash.digest();
+
     std::cout << "FillSummary area=" << std::fixed << totalArea << " outlines=" << outlineCount
-              << " vertices=" << vertexCount << std::endl;
+              << " vertices=" << vertexCount << " streamhash=" << digest.ToString() << std::endl;
 
     return KI_TEST::RET_CODES::OK;
 }

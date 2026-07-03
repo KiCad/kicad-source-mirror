@@ -348,6 +348,7 @@ ZONE_FILLER::ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit ) :
         m_worstClearance( 0 )
 {
     m_maxError = aBoard->GetDesignSettings().m_MaxError;
+    m_zoneKnockoutSlack = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_ExtraClearance ) + m_maxError;
 
     // To enable add "DebugZoneFiller=1" to kicad_advanced settings file.
     m_debugZoneFiller = ADVANCED_CFG::GetCfg().m_DebugZoneFiller;
@@ -362,6 +363,37 @@ ZONE_FILLER::~ZONE_FILLER()
 void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
     m_progressReporter = aReporter;
+}
+
+
+// Every read of another zone's fill must gate on this one predicate, or a read races the
+// writer and the fill is non-deterministic.  Reach spans the knockout inflation and apron.
+bool ZONE_FILLER::zoneKnockoutMayInteract( const ZONE* aZone, const ZONE* aKnockout ) const
+{
+    int reach = m_worstClearance + m_zoneKnockoutSlack + aZone->GetMinThickness();
+
+    if( m_board->GetDesignSettings().m_ZoneKeepExternalFillets )
+    {
+        for( const ZONE* zone : { aZone, aKnockout } )
+        {
+            if( zone->GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_CHAMFER
+                    || zone->GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_FILLET )
+            {
+                reach += (int) zone->GetCornerRadius();
+            }
+        }
+    }
+
+    BOX2I bbox = aZone->GetBoundingBox();
+    bbox.Inflate( reach );
+
+    if( !bbox.Intersects( aKnockout->GetBoundingBox() ) )
+        return false;
+
+    SHAPE_POLY_SET zoneOutline = aZone->GetBoardOutline();
+    SHAPE_POLY_SET knockoutOutline = aKnockout->GetBoardOutline();
+
+    return zoneOutline.Collide( &knockoutOutline, reach );
 }
 
 
@@ -742,17 +774,8 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 if( aOtherZone->SameNet( aZone ) )
                     return false;
 
-                // A higher priority zone is found: if we intersect and it's not filled yet
-                // then we have to wait.
-                BOX2I inflatedBBox = aZone->GetBoundingBox();
-                inflatedBBox.Inflate( m_worstClearance );
-
-                if( !inflatedBBox.Intersects( aOtherZone->GetBoundingBox() ) )
-                    return false;
-
-                SHAPE_POLY_SET aOutline = aZone->GetBoardOutline();
-                SHAPE_POLY_SET bOutline = aOtherZone->GetBoardOutline();
-                return aOutline.Collide( &bOutline, m_worstClearance );
+                // Must be the same gate the knockout reads use, or the read races the writer.
+                return zoneKnockoutMayInteract( aZone, aOtherZone );
             };
 
     auto check_fill_dependency =
@@ -1140,8 +1163,17 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                         continue;
                     }
 
-                    if( !zone->GetBoundingBox().Intersects( bbox ) )
+                    // Same gate as the initial fill keeps the refill's knockout set identical;
+                    // same-net candidates interact through connectivity, not a knockout.
+                    if( zone != changedZone && !changedZone->SameNet( zone ) )
+                    {
+                        if( !zoneKnockoutMayInteract( zone, changedZone ) )
+                            continue;
+                    }
+                    else if( !zone->GetBoundingBox().Intersects( bbox ) )
+                    {
                         continue;
+                    }
 
                     auto fillItem = std::make_pair( zone, changedLayer );
 
@@ -2505,36 +2537,32 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 if( !aKnockout->GetLayerSet().test( aLayer ) )
                     return;
 
-                if( aKnockout->GetBoundingBox().Intersects( zone_boundingbox ) )
+                if( aKnockout->GetIsRuleArea() )
                 {
-                    if( aKnockout->GetIsRuleArea() )
+                    if( aKnockout->GetBoundingBox().Intersects( zone_boundingbox )
+                            && aKnockout->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
                     {
-                        if( aKnockout->GetDoNotAllowZoneFills() && !aZone->IsTeardropArea() )
-                        {
-                            // Keepouts use outline with no clearance
-                            aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, m_maxError, ERROR_OUTSIDE,
-                                                                          nullptr );
-                        }
+                        // Keepouts use outline with no clearance
+                        aKnockout->TransformSmoothedOutlineToPolygon( aHoles, 0, m_maxError, ERROR_OUTSIDE,
+                                                                      nullptr );
                     }
-                    else
-                    {
-                        if( aKnockout->HigherPriority( aZone ) && !aKnockout->SameNet( aZone ) )
-                        {
-                            int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone, aKnockout,
-                                                                      aLayer ) );
+                }
+                else if( aKnockout->HigherPriority( aZone ) && !aKnockout->SameNet( aZone )
+                         && zoneKnockoutMayInteract( aZone, aKnockout ) )
+                {
+                    int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone, aKnockout,
+                                                              aLayer ) );
 
-                            gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout, aLayer ) );
+                    gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aKnockout, aLayer ) );
 
-                            // Negative clearance permits zones to short
-                            if( gap < 0 )
-                                return;
+                    // Negative clearance permits zones to short
+                    if( gap < 0 )
+                        return;
 
-                            SHAPE_POLY_SET poly;
-                            aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin, m_maxError,
-                                                                ERROR_OUTSIDE );
-                            aHoles.Append( poly );
-                        }
-                    }
+                    SHAPE_POLY_SET poly;
+                    aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin, m_maxError,
+                                                        ERROR_OUTSIDE );
+                    aHoles.Append( poly );
                 }
             };
 
@@ -2573,9 +2601,6 @@ void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     int extra_margin = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_ExtraClearance );
 
-    BOX2I zone_boundingbox = aZone->GetBoundingBox();
-    zone_boundingbox.Inflate( m_worstClearance + extra_margin );
-
     auto evalRulesForItems =
             [&bds]( DRC_CONSTRAINT_T aConstraint, const BOARD_ITEM* a, const BOARD_ITEM* b,
                     PCB_LAYER_ID aEvalLayer ) -> int
@@ -2601,24 +2626,22 @@ void ZONE_FILLER::buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_
                 if( !aKnockout->GetLayerSet().test( aLayer ) )
                     return;
 
-                if( aKnockout->GetBoundingBox().Intersects( zone_boundingbox ) )
+                if( aKnockout->HigherPriority( aZone ) && !aKnockout->SameNet( aZone )
+                        && zoneKnockoutMayInteract( aZone, aKnockout ) )
                 {
-                    if( aKnockout->HigherPriority( aZone ) && !aKnockout->SameNet( aZone ) )
-                    {
-                        int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
-                                                                   aZone, aKnockout, aLayer ) );
+                    int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
+                                                               aZone, aKnockout, aLayer ) );
 
-                        gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone,
-                                                                 aKnockout, aLayer ) );
+                    gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone,
+                                                             aKnockout, aLayer ) );
 
-                        if( gap < 0 )
-                            return;
+                    if( gap < 0 )
+                        return;
 
-                        SHAPE_POLY_SET poly;
-                        aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin,
-                                                             m_maxError, ERROR_OUTSIDE );
-                        aHoles.Append( poly );
-                    }
+                    SHAPE_POLY_SET poly;
+                    aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin,
+                                                         m_maxError, ERROR_OUTSIDE );
+                    aHoles.Append( poly );
                 }
             };
 
@@ -4301,8 +4324,17 @@ bool ZONE_FILLER::refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_P
                 if( !otherZone->HigherPriority( aZone ) )
                     return;
 
-                if( !otherZone->GetBoundingBox().Intersects( zoneBBox ) )
+                // Same gate as the initial fill so the refill's knockout set matches; same-net
+                // fills are subtracted un-inflated, so a plain bbox test suffices.
+                if( otherZone->SameNet( aZone ) )
+                {
+                    if( !otherZone->GetBoundingBox().Intersects( zoneBBox ) )
+                        return;
+                }
+                else if( !zoneKnockoutMayInteract( aZone, otherZone ) )
+                {
                     return;
+                }
 
                 // Resolve the fill to use: from the snapshot when provided, otherwise the live fill.
                 // The snapshot ensures all parallel tasks in a wave read a consistent pre-wave state

@@ -39,6 +39,9 @@
 #include <advanced_config.h>
 #include <connectivity/connectivity_data.h>
 #include <teardrop/teardrop.h>
+#include <project/net_settings.h>
+#include <netclass.h>
+#include <netinfo.h>
 #include <cmath>
 
 
@@ -3622,4 +3625,76 @@ BOOST_FIXTURE_TEST_CASE( RegressionHatchBorderAroundOverlap, ZONE_FILL_TEST_FIXT
     BOOST_CHECK_MESSAGE( checkedPairs >= 3,
                          wxString::Format( "Expected at least three carved hatch borders to check, "
                                            "found %d.", checkedPairs ) );
+}
+
+
+// A pair separated by more than the clearance but less than the knockout reach used to fill
+// unordered, so the knocked-out copper depended on which task finished first.
+BOOST_FIXTURE_TEST_CASE( ZoneFillDependencyKnockoutMargin, ZONE_FILL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    const int              clearance = pcbIUScale.mmToIU( 2 );
+
+    // Also the board's worst clearance, so the separation below lands between the worst
+    // clearance and the knockout reach.
+    bds.m_NetSettings->GetDefaultNetclass()->SetClearance( clearance );
+
+    NETINFO_ITEM* netA = new NETINFO_ITEM( m_board.get(), wxT( "NET_A" ), 1 );
+    NETINFO_ITEM* netB = new NETINFO_ITEM( m_board.get(), wxT( "NET_B" ), 2 );
+    m_board->Add( netA );
+    m_board->Add( netB );
+
+    // Separation lands inside the max-error part of the reach, so the gate's error term and
+    // the fill ordering are both exercised.
+    const int extraMargin = pcbIUScale.mmToIU( ADVANCED_CFG::GetCfg().m_ExtraClearance );
+    const int maxError = bds.m_MaxError;
+    const int sep = clearance + extraMargin + maxError / 2;
+    const int ax = pcbIUScale.mmToIU( 100 ) + sep;
+
+    ZONE* zoneA = new ZONE( m_board.get() );
+    zoneA->SetLayer( F_Cu );
+    zoneA->SetNet( netA );
+    zoneA->SetAssignedPriority( 0 );
+    zoneA->AppendCorner( VECTOR2I( ax, 0 ), -1 );
+    zoneA->AppendCorner( VECTOR2I( ax + pcbIUScale.mmToIU( 2 ), 0 ), -1 );
+    zoneA->AppendCorner( VECTOR2I( ax + pcbIUScale.mmToIU( 2 ), pcbIUScale.mmToIU( 10 ) ), -1 );
+    zoneA->AppendCorner( VECTOR2I( ax, pcbIUScale.mmToIU( 10 ) ), -1 );
+    m_board->Add( zoneA );
+
+    // The sawtooth keeps this fill busy long enough that, without a dependency edge, the
+    // small zone (seeded first) reliably fills before this fill publishes.
+    ZONE* zoneB = new ZONE( m_board.get() );
+    zoneB->SetLayer( F_Cu );
+    zoneB->SetNet( netB );
+    zoneB->SetAssignedPriority( 1 );
+    zoneB->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 1 ), 0 ), -1 );
+    zoneB->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 100 ), 0 ), -1 );
+    zoneB->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 100 ) ), -1 );
+    zoneB->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 100 ) ), -1 );
+
+    for( int ii = 0; ii < 1000; ++ii )
+    {
+        int yTop = pcbIUScale.mmToIU( 100 ) - ii * pcbIUScale.mmToIU( 0.1 );
+
+        zoneB->AppendCorner( VECTOR2I( 0, yTop - pcbIUScale.mmToIU( 0.05 ) ), -1 );
+        zoneB->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 1 ), yTop - pcbIUScale.mmToIU( 0.1 ) ), -1 );
+    }
+
+    m_board->Add( zoneB );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    std::shared_ptr<SHAPE_POLY_SET> fillA = zoneA->GetFilledPolysList( F_Cu );
+    std::shared_ptr<SHAPE_POLY_SET> fillB = zoneB->GetFilledPolysList( F_Cu );
+
+    BOOST_REQUIRE( fillA && fillA->OutlineCount() > 0 );
+    BOOST_REQUIRE( fillB && fillB->OutlineCount() > 0 );
+
+    // Threshold sits between the knocked-out gap and the un-knocked outline separation, so the
+    // check distinguishes an ordered fill from a raced one.
+    BOOST_CHECK_MESSAGE( !fillA->Collide( fillB.get(), clearance + extraMargin + maxError * 3 / 4 ),
+                         "Lower-priority zone filled before the higher-priority knockout was "
+                         "published; the fill depends on thread scheduling." );
 }

@@ -83,6 +83,13 @@ private:
     void buildDifferentNetZoneClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                           SHAPE_POLY_SET& aHoles );
 
+    /**
+     * Test whether aKnockout's fill can knock out any part of aZone's fill.  Every reader of
+     * another zone's fill must gate on this same predicate; see the implementation for why and
+     * for the reach rationale.
+     */
+    bool zoneKnockoutMayInteract( const ZONE* aZone, const ZONE* aKnockout ) const;
+
     void subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                       SHAPE_POLY_SET& aRawFill );
 
@@ -209,6 +216,9 @@ private:
 
     int                   m_maxError;
     int                   m_worstClearance;
+
+    // ExtraClearance plus max approximation error, part of the knockout reach
+    int                   m_zoneKnockoutSlack;
 
     bool                  m_debugZoneFiller;
 
