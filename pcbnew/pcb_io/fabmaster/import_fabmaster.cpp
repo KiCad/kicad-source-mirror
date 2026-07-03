@@ -2185,13 +2185,26 @@ bool FABMASTER::Process()
 }
 
 
+/**
+ * Allegro area "shapes" that carry no net and must not become copper fills.  These map to
+ * KiCad rule areas rather than pours; the mapping is applied in loadZone().
+ */
+static bool isRuleAreaClass( const std::string& aClass )
+{
+    return aClass == "ROUTE KEEPOUT" || aClass == "VIA KEEPOUT" || aClass == "PACKAGE KEEPOUT"
+           || aClass == "ROUTE KEEPIN" || aClass == "PACKAGE KEEPIN"
+           || aClass == "CONSTRAINT REGION";
+}
+
+
 bool FABMASTER::loadZones( BOARD* aBoard )
 {
     for( auto& zone : zones )
     {
         checkpoint();
 
-        if( IsCopperLayer( getLayer( zone->layer ) ) || zone->layer == "ALL" )
+        if( isRuleAreaClass( zone->lclass ) || IsCopperLayer( getLayer( zone->layer ) )
+            || zone->layer == "ALL" )
         {
             loadZone( aBoard, zone );
         }
@@ -2230,6 +2243,10 @@ bool FABMASTER::loadZones( BOARD* aBoard )
     for( auto zone1 : aBoard->Zones() )
     {
         if( zone1->GetNetCode() > 0 )
+            continue;
+
+        // Rule areas legitimately have no net; they are not orphaned fills awaiting a match.
+        if( zone1->GetIsRuleArea() )
             continue;
 
         SHAPE_LINE_CHAIN& outline1 = zone1->Outline()->Outline( 0 );
@@ -3596,6 +3613,10 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
 
     if( aLine->layer == "ALL" )
         zone->SetLayerSet( aBoard->GetLayerSet() & LSET::AllCuMask() );
+    else if( aLine->layer == "OUTER_LAYERS" )
+        zone->SetLayerSet( aBoard->GetLayerSet() & LSET::ExternalCuMask() );
+    else if( aLine->layer == "INNER_PLANE_LAYERS" || aLine->layer == "INNER_SIGNAL_LAYERS" )
+        zone->SetLayerSet( aBoard->GetLayerSet() & LSET::InternalCuMask() );
     else
         zone->SetLayer( layer );
 
@@ -3606,15 +3627,32 @@ bool FABMASTER::loadZone( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
     zone->SetDoNotAllowFootprints( false );
     zone->SetDoNotAllowZoneFills( false );
 
-    if( aLine->lclass == "ROUTE KEEPOUT")
+    if( aLine->lclass == "ROUTE KEEPOUT" )
     {
+        // A bare Allegro route keepout excludes all routing objects, not just tracks.
         zone->SetIsRuleArea( true );
         zone->SetDoNotAllowTracks( true );
+        zone->SetDoNotAllowVias( true );
+        zone->SetDoNotAllowPads( true );
+        zone->SetDoNotAllowZoneFills( true );
     }
-    else if( aLine->lclass == "VIA KEEPOUT")
+    else if( aLine->lclass == "VIA KEEPOUT" )
     {
         zone->SetIsRuleArea( true );
         zone->SetDoNotAllowVias( true );
+    }
+    else if( aLine->lclass == "PACKAGE KEEPOUT" )
+    {
+        zone->SetIsRuleArea( true );
+        zone->SetDoNotAllowFootprints( true );
+    }
+    else if( aLine->lclass == "ROUTE KEEPIN" || aLine->lclass == "PACKAGE KEEPIN"
+             || aLine->lclass == "CONSTRAINT REGION" )
+    {
+        // KiCad has no keepin or constraint-region concept.  Keep the shape as a named rule
+        // area with no restrictions so it survives import without becoming unconnected copper.
+        zone->SetIsRuleArea( true );
+        zone->SetZoneName( wxString::FromUTF8( aLine->lclass.c_str() ) );
     }
     else
     {

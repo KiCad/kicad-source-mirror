@@ -244,4 +244,73 @@ BOOST_AUTO_TEST_CASE( PadStackSmdPad )
 }
 
 
+/**
+ * Test that Allegro area "shapes" (keepouts, keepins and constraint regions) are imported
+ * as KiCad rule areas rather than unconnected copper fill zones.
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/7732
+ *
+ * In Allegro these areas carry no net.  Importing them as copper fill zones silently
+ * creates shorts.  Each Allegro area class maps to a distinct rule-area restriction:
+ *   ROUTE KEEPOUT   -> no tracks, vias, pads or zone fills
+ *   VIA KEEPOUT     -> no vias
+ *   PACKAGE KEEPOUT -> no footprints
+ *   ROUTE/PACKAGE KEEPIN and CONSTRAINT REGION -> named marker with no restrictions
+ *     (KiCad has no equivalent, so the shape is preserved without producing copper)
+ *
+ * The test file mirrors the reporter's board and contains 5 route keepouts, 5 via keepouts,
+ * 3 package keepouts, 1 route keepin, 1 package keepin and 8 constraint regions.
+ */
+BOOST_AUTO_TEST_CASE( AreaClassesImportedAsRuleAreas )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/fabmaster/cds2f_issue7732_shape_pads2.txt";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    m_fabmasterPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+
+    int routeKeepouts = 0;
+    int viaKeepouts = 0;
+    int footprintKeepouts = 0;
+    int markerAreas = 0;
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( !zone->GetIsRuleArea() )
+            continue;
+
+        if( zone->GetDoNotAllowFootprints() && !zone->GetDoNotAllowTracks()
+            && !zone->GetDoNotAllowVias() )
+        {
+            footprintKeepouts++;
+        }
+        else if( zone->GetDoNotAllowTracks() && zone->GetDoNotAllowVias()
+                 && zone->GetDoNotAllowPads() && zone->GetDoNotAllowZoneFills() )
+        {
+            routeKeepouts++;
+        }
+        else if( zone->GetDoNotAllowVias() && !zone->GetDoNotAllowTracks()
+                 && !zone->GetDoNotAllowFootprints() )
+        {
+            viaKeepouts++;
+        }
+        else if( !zone->GetDoNotAllowTracks() && !zone->GetDoNotAllowVias()
+                 && !zone->GetDoNotAllowPads() && !zone->GetDoNotAllowFootprints()
+                 && !zone->GetDoNotAllowZoneFills() )
+        {
+            markerAreas++;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( routeKeepouts, 5 );
+    BOOST_CHECK_EQUAL( viaKeepouts, 5 );
+    BOOST_CHECK_EQUAL( footprintKeepouts, 3 );
+
+    // 1 route keepin + 1 package keepin + 8 constraint regions
+    BOOST_CHECK_EQUAL( markerAreas, 10 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
