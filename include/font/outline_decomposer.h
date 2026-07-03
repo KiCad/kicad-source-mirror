@@ -59,6 +59,10 @@ struct GLYPH_DATA
     // Cache of the triangulation data.  We'll use this as a hint for triangulating the actual
     // OUTLINE_GLYPHs.
     std::vector<std::unique_ptr<SHAPE_POLY_SET::TRIANGULATED_POLYGON>> m_TriangulationData;
+
+    // Glyphs with no outline (e.g. a space) legitimately decompose to zero contours, so cache
+    // occupancy can't key off m_Contours alone.
+    bool m_Loaded = false;
 };
 
 

@@ -43,23 +43,30 @@ static wxString getTestFontPath( const wxString& aFileName )
 }
 
 
+static KIFONT::OUTLINE_FONT* loadTestOutlineFont( const wxString& aFontName,
+                                                  const wxString& aFileName )
+{
+    wxString fontPath = getTestFontPath( aFileName );
+    BOOST_REQUIRE( wxFileExists( fontPath ) );
+
+    std::vector<wxString> embeddedFonts{ fontPath };
+    KIFONT::FONT*         font = KIFONT::FONT::GetFont( aFontName, false, false, &embeddedFonts );
+
+    BOOST_REQUIRE( font );
+    BOOST_REQUIRE( font->IsOutline() );
+
+    return static_cast<KIFONT::OUTLINE_FONT*>( font );
+}
+
+
 // Legacy "symbol" fonts place their glyphs in the U+F000..U+F0FF private-use range and carry no
 // Unicode charmap that maps Basic Latin, so forcing the Unicode charmap maps every character to
 // .notdef and text renders as tofu boxes. Drive the full load-and-shape path and confirm such a
 // font resolves the symbol charmap and produces distinct ASCII glyphs.
 BOOST_AUTO_TEST_CASE( SymbolFontRendersAsciiGlyphs )
 {
-    wxString fontPath = getTestFontPath( wxT( "symbol_pua_test.ttf" ) );
-    BOOST_REQUIRE( wxFileExists( fontPath ) );
-
-    std::vector<wxString> embeddedFonts{ fontPath };
-    KIFONT::FONT*         font = KIFONT::FONT::GetFont( wxT( "KiCadSymbolTest" ), false, false,
-                                                        &embeddedFonts );
-
-    BOOST_REQUIRE( font );
-    BOOST_REQUIRE( font->IsOutline() );
-
-    KIFONT::OUTLINE_FONT* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
+    KIFONT::OUTLINE_FONT* outline = loadTestOutlineFont( wxT( "KiCadSymbolTest" ),
+                                                         wxT( "symbol_pua_test.ttf" ) );
     FT_Face               face = outline->GetFace();
 
     // A Unicode charmap would mean fontconfig substituted a different font, or the symbol charmap
@@ -87,23 +94,41 @@ BOOST_AUTO_TEST_CASE( SymbolFontRendersAsciiGlyphs )
 // A normal Unicode font must keep its Unicode charmap and still map Basic Latin directly.
 BOOST_AUTO_TEST_CASE( UnicodeFontKeepsUnicodeCharmap )
 {
-    wxString fontPath = getTestFontPath( wxT( "NotoSans-Regular.ttf" ) );
-    BOOST_REQUIRE( wxFileExists( fontPath ) );
-
-    std::vector<wxString> embeddedFonts{ fontPath };
-    KIFONT::FONT*         font = KIFONT::FONT::GetFont( wxT( "Noto Sans" ), false, false,
-                                                        &embeddedFonts );
-
-    BOOST_REQUIRE( font );
-    BOOST_REQUIRE( font->IsOutline() );
-
-    KIFONT::OUTLINE_FONT* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
+    KIFONT::OUTLINE_FONT* outline = loadTestOutlineFont( wxT( "Noto Sans" ),
+                                                         wxT( "NotoSans-Regular.ttf" ) );
     FT_Face               face = outline->GetFace();
 
     BOOST_REQUIRE( face );
     BOOST_REQUIRE( face->charmap );
     BOOST_CHECK_EQUAL( face->charmap->encoding, FT_ENCODING_UNICODE );
     BOOST_CHECK( FT_Get_Char_Index( face, 'A' ) != 0 );
+}
+
+
+// FreeType clears the shared glyph slot before the font driver validates the glyph index, so a
+// failed FT_Load_Glyph leaves an empty outline that decomposes to nothing. The failure must be
+// reported so the caller can draw a placeholder box instead of silently rendering an invisible
+// glyph. Prove the guard by loading a valid glyph, then requesting an out-of-range index.
+BOOST_AUTO_TEST_CASE( FailedGlyphLoadReported )
+{
+    KIFONT::OUTLINE_FONT* outline = loadTestOutlineFont( wxT( "Noto Sans" ),
+                                                         wxT( "NotoSans-Regular.ttf" ) );
+    FT_Face               face = outline->GetFace();
+
+    BOOST_REQUIRE( face );
+
+    unsigned int validIndex = FT_Get_Char_Index( face, 'A' );
+    BOOST_REQUIRE( validIndex != 0 );
+
+    std::vector<KIFONT::CONTOUR> contours;
+    BOOST_CHECK( outline->LoadGlyphContours( validIndex, contours ) );
+    BOOST_CHECK( !contours.empty() );
+
+    // face->num_glyphs is one past the last valid index, so this load must fail. Without the
+    // guard the failure was swallowed and the glyph silently rendered as nothing.
+    std::vector<KIFONT::CONTOUR> staleContours;
+    BOOST_CHECK( !outline->LoadGlyphContours( (unsigned int) face->num_glyphs, staleContours ) );
+    BOOST_CHECK( staleContours.empty() );
 }
 
 

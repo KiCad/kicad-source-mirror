@@ -118,6 +118,25 @@ public:
     const FT_Face& GetFace() const { return m_face; }
 
     /**
+     * Load a single glyph into the shared FreeType slot and decompose its outline into
+     * line-chain contours.
+     *
+     * FreeType clears the slot before the font driver runs, so a failed load leaves an empty or
+     * partially parsed outline that would silently render nothing. Return false in that case so
+     * the caller can substitute a placeholder box instead.
+     *
+     * Not thread safe. The internal caller already holds m_freeTypeMutex; any other caller must
+     * guarantee exclusive access to the FreeType library. Public only so tests can exercise the
+     * failure contract.
+     *
+     * @param aGlyphIndex FreeType index of the glyph to load.
+     * @param aContours receives the decomposed contours; left empty on failure and for glyphs
+     *                  with no outline (e.g. a space).
+     * @return true if the glyph loaded and decomposed cleanly, false otherwise.
+     */
+    bool LoadGlyphContours( unsigned int aGlyphIndex, std::vector<CONTOUR>& aContours ) const;
+
+    /**
      * Select the charmap used to map characters to glyphs for @p aFace.
      *
      * Prefers a Unicode charmap, but legacy "symbol" fonts place their glyphs in the
@@ -126,12 +145,6 @@ public:
      * and the font renders instead of producing .notdef boxes.
      */
     static void SelectCharmap( FT_Face aFace );
-
-#if 0
-    void RenderToOpenGLCanvas( KIGFX::OPENGL_FREETYPE& aTarget, const wxString& aString,
-                               const VECTOR2D& aSize, const wxPoint& aPosition,
-                               const EDA_ANGLE& aAngle, bool aMirror ) const;
-#endif
 
 protected:
     FT_Error loadFace( const wxString& aFontFileName, int aFaceIndex );
