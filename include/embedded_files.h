@@ -21,6 +21,7 @@
 
 #include <cstdint>
 #include <map>
+#include <memory>
 #include <set>
 
 #include <wx/string.h>
@@ -88,11 +89,7 @@ public:
     EMBEDDED_FILES( const EMBEDDED_FILES& other );
     EMBEDDED_FILES( const EMBEDDED_FILES& other, bool aDeepCopy );
 
-    virtual ~EMBEDDED_FILES()
-    {
-        for( auto& file : m_files )
-            delete file.second;
-    }
+    virtual ~EMBEDDED_FILES() = default;
 
     using FILE_ADDED_CALLBACK = std::function<void( EMBEDDED_FILE* )>;
 
@@ -115,9 +112,16 @@ public:
     EMBEDDED_FILE* AddFile( const wxFileName& aName, bool aOverwrite );
 
     /**
-     * Append a file to the collection.
+     * Append a file to the collection.  Ownership of @p aFile is transferred to the collection.
      */
     void AddFile( EMBEDDED_FILE* aFile );
+
+    /**
+     * Append a file (already managed by a shared_ptr) to the collection.  Allows multiple
+     * collections to share ownership of the same underlying file payload, avoiding deep copies
+     * of large embedded blobs such as 3D models when footprints are cloned for undo snapshots.
+     */
+    void AddFile( std::shared_ptr<EMBEDDED_FILE> aFile );
 
     /**
      * Remove a file from the collection and frees the memory.
@@ -220,10 +224,19 @@ public:
     {
         auto it = m_files.find( aName );
 
-        return it == m_files.end() ? nullptr : it->second;
+        return it == m_files.end() ? nullptr : it->second.get();
     }
 
-    const std::map<wxString, EMBEDDED_FILE*>& EmbeddedFileMap() const
+    /**
+     * Provide an iterable view of the file collection.
+     *
+     * The map stores files via shared_ptr so that the copy constructor (used by Clone()) can
+     * share ownership of payloads, keeping transient snapshots cheap.  Copy assignment, in
+     * contrast, performs a deep copy so callers that mutate file fields through raw pointers
+     * after assignment cannot affect the source.  Callers that need a guaranteed-unique mutable
+     * copy from a const-ref source must allocate a new EMBEDDED_FILE explicitly.
+     */
+    const std::map<wxString, std::shared_ptr<EMBEDDED_FILE>>& EmbeddedFileMap() const
     {
         return m_files;
     }
@@ -234,12 +247,10 @@ public:
 
     void ClearEmbeddedFiles( bool aDeleteFiles = true )
     {
-        for( auto& file : m_files )
-        {
-            if( aDeleteFiles )
-                delete file.second;
-        }
-
+        // aDeleteFiles is retained for API compatibility; with shared_ptr ownership the map
+        // entries are released either way.  Other holders of the same shared_ptr keep the
+        // underlying EMBEDDED_FILE alive.
+        (void) aDeleteFiles;
         m_files.clear();
     }
 
@@ -269,9 +280,9 @@ public:
     EMBEDDED_FILES& operator=( const EMBEDDED_FILES& other );
 
 private:
-    std::map<wxString, EMBEDDED_FILE*> m_files;
-    std::vector<wxString>              m_fontFiles;
-    FILE_ADDED_CALLBACK                m_fileAddedCallback;
+    std::map<wxString, std::shared_ptr<EMBEDDED_FILE>> m_files;
+    std::vector<wxString>                              m_fontFiles;
+    FILE_ADDED_CALLBACK                                m_fileAddedCallback;
 
 protected:
     bool m_embedFonts = false; ///< If set, fonts will be embedded in the element on save.

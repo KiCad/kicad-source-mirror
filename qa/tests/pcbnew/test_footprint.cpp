@@ -21,8 +21,10 @@
 #include <qa_utils/geometry/geometry.h>
 
 #include <board.h>
+#include <embedded_files.h>
 #include <geometry/shape_utils.h>
 #include <footprint.h>
+#include <mmh3_hash.h>
 #include <pcb_shape.h>
 
 
@@ -145,5 +147,56 @@ BOOST_AUTO_TEST_CASE( FootprintCourtyardAndHull )
         assertHullMatch( expectedHull );
     }
 }
+
+
+// Regression test for GitLab issue #24345.  Cloning a footprint with embedded files (3D models,
+// fonts, etc.) must not duplicate the embedded payloads.  BOARD_NETLIST_UPDATER clones each
+// footprint up to four times per "Update PCB from schematic" pass, so deep-copying embedded
+// data per clone blows up memory on boards with hundreds of footprints carrying large
+// (multi-megabyte) embedded 3D models.
+BOOST_AUTO_TEST_CASE( FootprintCloneSharesEmbeddedFiles )
+{
+    BOARD     board;
+    FOOTPRINT fp( &board );
+
+    auto* file = new EMBEDDED_FILES::EMBEDDED_FILE();
+    file->name = wxS( "model.step" );
+    file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::MODEL;
+
+    // Keep the test payload small so the suite stays fast, but use enough data to exercise
+    // the compression/encode path.
+    std::string payload( 4096, 'k' );
+    file->decompressedData.assign( payload.begin(), payload.end() );
+
+    MMH3_HASH hash( EMBEDDED_FILES::Seed() );
+    hash.add( file->decompressedData );
+    file->data_hash = hash.digest().ToString();
+
+    BOOST_REQUIRE( EMBEDDED_FILES::CompressAndEncode( *file ) == EMBEDDED_FILES::RETURN_CODE::OK );
+
+    fp.AddFile( file );
+
+    EMBEDDED_FILES::EMBEDDED_FILE* originalFile = fp.GetEmbeddedFile( wxS( "model.step" ) );
+    BOOST_REQUIRE( originalFile );
+
+    // Clone the footprint several times, mimicking the BOARD_NETLIST_UPDATER undo-snapshot
+    // pattern.  Each clone must reference the same payload, not allocate a fresh copy.
+    std::vector<std::unique_ptr<FOOTPRINT>> clones;
+
+    for( int ii = 0; ii < 4; ++ii )
+    {
+        clones.emplace_back( static_cast<FOOTPRINT*>( fp.Clone() ) );
+        EMBEDDED_FILES::EMBEDDED_FILE* cloneFile =
+                clones.back()->GetEmbeddedFile( wxS( "model.step" ) );
+        BOOST_REQUIRE( cloneFile );
+        BOOST_CHECK_EQUAL( cloneFile, originalFile );
+    }
+
+    // Releasing all clones must leave the source footprint's embedded file intact.
+    clones.clear();
+    BOOST_CHECK( fp.HasFile( wxS( "model.step" ) ) );
+    BOOST_CHECK_EQUAL( fp.GetEmbeddedFile( wxS( "model.step" ) ), originalFile );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
