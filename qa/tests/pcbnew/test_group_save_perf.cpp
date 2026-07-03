@@ -30,24 +30,28 @@
  * PCB_IO_KICAD_SEXPR::format(PCB_GROUP*) previously rebuilt a local
  * std::unordered_set<EDA_ITEM*> from the board's full item-by-id cache once per
  * group.  With G groups and N board items the save was O(G * N).  This test
- * builds boards with the same item count but increasing group counts and
+ * saves boards with the same shape count but very different group counts and
  * verifies the save cost scales roughly linearly with the group count rather
  * than quadratically.
  */
 
 #include <algorithm>
-#include <chrono>
+#include <cstddef>
 #include <filesystem>
+#include <limits>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <board.h>
+#include <core/profile.h>
 #include <lset.h>
 #include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcbnew_utils/board_file_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
 
 
 namespace
@@ -55,18 +59,28 @@ namespace
 
 /**
  * Build a board with a fixed number of PCB_SHAPE objects and a configurable
- * number of groups, each of which owns a small slice of those shapes.
+ * number of groups.
  *
- * Total board item count stays the same across runs so any scaling we see
- * comes from the group count, not from item count.
+ * Shapes are assigned to groups round-robin so every group owns at least one
+ * shape when aGroupCount <= aTotalShapes.  An item can only belong to one
+ * group at a time, so a wrapping slice scheme would re-parent shapes and
+ * silently empty out earlier groups.
  */
 std::unique_ptr<BOARD> buildBoardWithGroups( std::size_t aGroupCount, std::size_t aTotalShapes )
 {
     auto board = std::make_unique<BOARD>();
     board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
 
-    std::vector<PCB_SHAPE*> shapes;
-    shapes.reserve( aTotalShapes );
+    std::vector<PCB_GROUP*> groups;
+    groups.reserve( aGroupCount );
+
+    for( std::size_t g = 0; g < aGroupCount; ++g )
+    {
+        PCB_GROUP* group = new PCB_GROUP( board.get() );
+        group->SetName( wxString::Format( wxT( "G%zu" ), g ) );
+        board->Add( group );
+        groups.push_back( group );
+    }
 
     for( std::size_t i = 0; i < aTotalShapes; ++i )
     {
@@ -77,44 +91,34 @@ std::unique_ptr<BOARD> buildBoardWithGroups( std::size_t aGroupCount, std::size_
         shape->SetLayer( F_SilkS );
         shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), LINE_STYLE::SOLID ) );
         board->Add( shape );
-        shapes.push_back( shape );
-    }
 
-    if( aGroupCount == 0 )
-        return board;
-
-    std::size_t perGroup = std::max<std::size_t>( 1, aTotalShapes / aGroupCount );
-
-    for( std::size_t g = 0; g < aGroupCount; ++g )
-    {
-        PCB_GROUP* group = new PCB_GROUP( board.get() );
-        group->SetName( wxString::Format( wxT( "G%zu" ), g ) );
-
-        std::size_t first = ( g * perGroup ) % aTotalShapes;
-
-        for( std::size_t k = 0; k < perGroup; ++k )
-            group->AddItem( shapes[( first + k ) % aTotalShapes] );
-
-        board->Add( group );
+        if( !groups.empty() )
+            groups[i % groups.size()]->AddItem( shape );
     }
 
     return board;
 }
 
 
-double saveBoardSeconds( BOARD& aBoard )
+/**
+ * Build a board, save it once and return the save time in seconds.
+ *
+ * The board is built and destroyed inside the call so only one board is alive
+ * per measurement and heap state stays comparable between measurements.
+ */
+double saveBoardSeconds( const std::filesystem::path& aDir, std::size_t aGroupCount,
+                         std::size_t aTotalShapes )
 {
-    namespace fs = std::filesystem;
-    const fs::path savePath = fs::temp_directory_path() / "qa_group_save_perf.kicad_pcb";
+    auto board = buildBoardWithGroups( aGroupCount, aTotalShapes );
 
-    auto start = std::chrono::steady_clock::now();
-    KI_TEST::DumpBoardToFile( aBoard, savePath.string() );
-    auto end = std::chrono::steady_clock::now();
+    const std::filesystem::path savePath =
+            aDir / ( "groups" + std::to_string( aGroupCount ) + ".kicad_pcb" );
 
-    std::error_code ec;
-    fs::remove( savePath, ec );
+    PROF_TIMER timer;
+    KI_TEST::DumpBoardToFile( *board, savePath.string() );
+    timer.Stop();
 
-    return std::chrono::duration<double>( end - start ).count();
+    return timer.msecs() / 1000.0;
 }
 
 } // namespace
@@ -124,11 +128,11 @@ BOOST_AUTO_TEST_SUITE( GroupSavePerformance )
 
 
 /**
- * Save boards with the same total item count but very different group counts.
+ * Save boards with the same shape count but very different group counts.
  *
  * Pre-fix, the format() of each group rebuilt a pointer set scanning the full
- * item-by-id cache, so doubling the group count more than doubled the save
- * time even though the underlying serialised output grew only linearly.
+ * item-by-id cache, so the per-group cost grew with the board's item count and
+ * the total cost grew quadratically in the group count.
  *
  * We check that scaling is sub-quadratic with a generous margin so the test is
  * robust against debug builds, CI noise and slow VMs while still failing if
@@ -136,47 +140,48 @@ BOOST_AUTO_TEST_SUITE( GroupSavePerformance )
  */
 BOOST_AUTO_TEST_CASE( SaveScalesLinearlyWithGroupCount )
 {
-    constexpr std::size_t kTotalShapes = 4000;
+    constexpr std::size_t kTotalShapes = 5000;
 
-    // Warm up the allocator / disk cache so the first measurement is not
-    // dominated by one-shot setup costs.
-    {
-        auto warm = buildBoardWithGroups( 50, kTotalShapes );
-        (void) saveBoardSeconds( *warm );
-    }
+    KI_TEST::TEMPORARY_DIRECTORY tempDir( "group_save_perf", "" );
 
-    auto board100 = buildBoardWithGroups( 100, kTotalShapes );
-    auto board1000 = buildBoardWithGroups( 1000, kTotalShapes );
-    auto board5000 = buildBoardWithGroups( 5000, kTotalShapes );
+    // Warm up the save path (allocators, formatter, disk cache) so the first
+    // measurement is not dominated by one-shot setup costs.
+    (void) saveBoardSeconds( tempDir.GetPath(), 10, 100 );
 
-    double t100 = saveBoardSeconds( *board100 );
-    double t1000 = saveBoardSeconds( *board1000 );
-    double t5000 = saveBoardSeconds( *board5000 );
+    // Take the best of two runs per configuration so a scheduler stall during
+    // a single save cannot fail the test on a loaded CI machine.
+    auto bestSave =
+            [&]( std::size_t aGroupCount )
+            {
+                double best = std::numeric_limits<double>::infinity();
+
+                for( int run = 0; run < 2; ++run )
+                {
+                    best = std::min( best, saveBoardSeconds( tempDir.GetPath(), aGroupCount,
+                                                             kTotalShapes ) );
+                }
+
+                return best;
+            };
+
+    double t100 = bestSave( 100 );
+    double t5000 = bestSave( 5000 );
 
     BOOST_TEST_MESSAGE( "Save time (s)  100 groups : " << t100 );
-    BOOST_TEST_MESSAGE( "Save time (s) 1000 groups : " << t1000 );
     BOOST_TEST_MESSAGE( "Save time (s) 5000 groups : " << t5000 );
 
     // Use a 5 ms floor so very fast runs do not produce huge ratios from
     // measurement jitter.
     const double floorSec = 0.005;
-    double       baseline = std::max( t100, floorSec );
+    double       ratio = t5000 / std::max( t100, floorSec );
 
-    double ratio1000 = t1000 / baseline;
-    double ratio5000 = t5000 / baseline;
+    BOOST_TEST_MESSAGE( "Ratio (5000 / 100): " << ratio );
 
-    BOOST_TEST_MESSAGE( "Ratio (1000 / 100): " << ratio1000 );
-    BOOST_TEST_MESSAGE( "Ratio (5000 / 100): " << ratio5000 );
-
-    // Quadratic scaling between 100 and 5000 groups would be ~2500x.  Linear
-    // would be ~50x.  Empirically, the unfixed code on a debug build hits ~145x
-    // and the fixed code stays under ~5x.  Allow up to 60x to absorb CI noise
-    // while still catching the regression with a comfortable margin.
-    BOOST_CHECK_LT( ratio5000, 60.0 );
-
-    // 1000 / 100 should be ~10x linearly; allow up to 30x.  Unfixed code hits
-    // ~8x here too, but the absolute time difference (60ms vs 1.5s) is large.
-    BOOST_CHECK_LT( ratio1000, 30.0 );
+    // Linear scaling in the group count gives a small single-digit ratio here
+    // because the serialised output is dominated by the shared 5000 shapes.
+    // The unfixed O(Groups * BoardItems) code rescans the full item cache for
+    // each of the 5000 groups and lands far above this bound.
+    BOOST_CHECK_LT( ratio, 20.0 );
 }
 
 

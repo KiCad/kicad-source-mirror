@@ -2672,28 +2672,18 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
     // skip the validation in that case and trust the member pointers.
     //
     // BOARD::IsItemIndexedById() probes the board's inverse pointer index without dereferencing
-    // the candidate, so it is safe to call on a possibly-dangling member.  Rebuilding a local
-    // pointer set per group was O(BoardItems) and made saving O(Groups * BoardItems).
-    auto isIndexedByBoard =
-            [this]( const EDA_ITEM* aItem )
-            {
-                return m_board->IsItemIndexedById( static_cast<const BOARD_ITEM*>( aItem ) );
-            };
+    // the candidate, so it is safe to call on a possibly-dangling member.
+    bool validateAgainstBoard = m_board && m_board->IsItemIndexedById( aGroup );
 
-    bool validateAgainstBoard = m_board && isIndexedByBoard( aGroup );
+    memberIds.Alloc( aGroup->GetItems().size() );
 
-    if( validateAgainstBoard )
+    for( EDA_ITEM* member : aGroup->GetItems() )
     {
-        for( EDA_ITEM* member : aGroup->GetItems() )
+        if( !validateAgainstBoard
+                || m_board->IsItemIndexedById( static_cast<const BOARD_ITEM*>( member ) ) )
         {
-            if( isIndexedByBoard( member ) )
-                memberIds.Add( member->m_Uuid.AsString() );
-        }
-    }
-    else
-    {
-        for( EDA_ITEM* member : aGroup->GetItems() )
             memberIds.Add( member->m_Uuid.AsString() );
+        }
     }
 
     if( memberIds.empty() )
