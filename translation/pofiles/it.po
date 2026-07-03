@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-07-02 19:01+0000\n"
+"PO-Revision-Date: 2026-07-04 02:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -22269,9 +22269,8 @@ msgid "Empty sheet pin name"
 msgstr "Nome pin foglio vuoto"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2941
-#, fuzzy
 msgid "Schematic polyline has too few points"
-msgstr "La forma non ha punti."
+msgstr "La polilinea dello schema ha troppo pochi punti"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3030
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3043
@@ -22292,14 +22291,12 @@ msgid "Missing sheet name property"
 msgstr "Proprietà nome foglio mancante"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3985
-#, fuzzy
 msgid "Missing sheet file property"
-msgstr "Argomento nome foglio mancante a %s."
+msgstr "Proprietà file foglio mancante"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5079
-#, fuzzy
 msgid "Invalid table: no cells defined"
-msgstr "Formato mappa non valido\n"
+msgstr "Tabella non valida: nessuna cella definita"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5204
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7000
@@ -27383,7 +27380,7 @@ msgstr "Seleziona un parametro da regolare"
 
 #: eeschema/tools/sch_actions.cpp:1762
 msgid "User-defined Signals..."
-msgstr "Segnali personalizzati"
+msgstr "Segnali personalizzati..."
 
 #: eeschema/tools/sch_actions.cpp:1763
 msgid "Add, edit or delete user-defined simulation signals"
@@ -27410,14 +27407,12 @@ msgid "Remove an existing design variant from the schematic."
 msgstr "Rimuovi una variante progetto esistente dallo schema."
 
 #: eeschema/tools/sch_actions.cpp:1787
-#, fuzzy
 msgid "Edit Variant Description..."
-msgstr "Modifica descrizione lavoro"
+msgstr "Modifica descrizione variante..."
 
 #: eeschema/tools/sch_actions.cpp:1788
-#, fuzzy
 msgid "Edit the description of an existing design variant."
-msgstr "Modifica il file script in un editor di testo"
+msgstr "Modifica la descrizione di una variante di progettazione esistente."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -27863,9 +27858,8 @@ msgid "Reached end of sheet."
 msgstr "Raggiunta la fine del foglio."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:389
-#, fuzzy
 msgid "No matches found."
-msgstr "Nessun modello trovato"
+msgstr "Nessuna corrispondenza trovata."
 
 #: eeschema/tools/sch_group_tool.cpp:46 eeschema/tools/sch_group_tool.cpp:72
 #: pcbnew/tools/pcb_group_tool.cpp:49 pcbnew/tools/pcb_group_tool.cpp:64
