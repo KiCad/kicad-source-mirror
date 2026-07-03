@@ -164,8 +164,10 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     if( selection == wxNOT_FOUND )
         selection = 0;
 
+    // Do NOT call wxSafeYield() here. It disables all top-level windows while it runs, which
+    // greys out the search control and drops keystrokes mid-filter. The update locker and
+    // virtual-list refresh below keep the list consistent without a yield.
     DeselectAll();
-    wxSafeYield();
     wxWindowUpdateLocker freeze( this );
     DeleteAllItems();
 
