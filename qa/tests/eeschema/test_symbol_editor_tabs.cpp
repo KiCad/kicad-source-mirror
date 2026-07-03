@@ -85,6 +85,14 @@ struct SYMBOL_EDITOR_TABS_TEST_FIXTURE
     {
         SYMBOL_EDIT_FRAME::freeTransientUndoCommands( aList, aLiveSymbol );
     }
+
+    /// Expose the library-tree visibility guard under test
+    static bool libTreeAutoHiddenForSchematicEdit( bool aWasFromSchematic, bool aRestorePending,
+                                                   bool aTreeShownNow )
+    {
+        return SYMBOL_EDIT_FRAME::libTreeAutoHiddenForSchematicEdit( aWasFromSchematic,
+                                                                     aRestorePending, aTreeShownNow );
+    }
 };
 
 
@@ -287,6 +295,31 @@ BOOST_AUTO_TEST_CASE( ClearTabModifiedStateSyncsContextAndModel )
 
     BOOST_CHECK( !ctx.IsModified() );
     BOOST_CHECK( !model.Entries()[0].modified );
+}
+
+
+/// The library tree is auto-hidden while editing a symbol from the schematic (issue #23543). The
+/// pending-restore flag must track that auto-hide so SaveSettings reinstates the tree, must survive
+/// a chained schematic edit that finds the tree already hidden, and must not resurrect a tree the
+/// user deliberately hid (a user toggle clears the flag before it reaches this helper).
+BOOST_AUTO_TEST_CASE( LibTreeAutoHiddenRestoreAcrossSchematicEdit )
+{
+    // First schematic edit with the tree visible schedules its restore.
+    BOOST_CHECK( libTreeAutoHiddenForSchematicEdit( false, false, true ) );
+
+    // First schematic edit with the tree already hidden (no pending restore) schedules nothing.
+    BOOST_CHECK( !libTreeAutoHiddenForSchematicEdit( false, false, false ) );
+
+    // Chained schematic edit finds the tree auto-hidden by the previous one; the pending restore
+    // must survive rather than drop.
+    BOOST_CHECK( libTreeAutoHiddenForSchematicEdit( true, true, false ) );
+
+    // A tree hidden without a pending restore (user toggled it off) stays unscheduled through a
+    // chained edit, so SaveSettings will not resurrect it.
+    BOOST_CHECK( !libTreeAutoHiddenForSchematicEdit( true, false, false ) );
+
+    // A visible tree always schedules a restore regardless of the prior pending state.
+    BOOST_CHECK( libTreeAutoHiddenForSchematicEdit( true, false, true ) );
 }
 
 

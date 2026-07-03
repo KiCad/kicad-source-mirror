@@ -121,7 +121,8 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                         LIB_EDIT_FRAME_NAME ),
         m_unitSelectBox( nullptr ),
         m_bodyStyleSelectBox( nullptr ),
-        m_isSymbolFromSchematic( false )
+        m_isSymbolFromSchematic( false ),
+        m_libTreeAutoHiddenForSchematicEdit( false )
 {
     m_SyncPinEdit = false;
 
@@ -392,7 +393,33 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
     GetGalDisplayOptions().m_axesEnabled = true;
 
+    // The library tree is hidden while editing a symbol from the schematic. Force it visible in the
+    // serialized AUI layout so the user's preference survives a restart, but only touch the pane
+    // metadata (not ToggleLibraryTree) to avoid a mid-session repaint/flicker and a spurious tree
+    // width capture below.
+    wxAuiPaneInfo& treePane = m_auimgr.GetPane( m_treePane );
+    wxAuiPaneInfo& filterPane = m_auimgr.GetPane( wxS( "SelectionFilter" ) );
+
+    const bool treeShown = treePane.IsShown();
+    const bool filterShown = filterPane.IsShown();
+
+    // Gate on the pending-restore flag alone, not the active-tab schematic state, which is cleared
+    // when a schematic tab closes while the tree stays auto-hidden.
+    const bool forceTreeShown = m_libTreeAutoHiddenForSchematicEdit && !treeShown;
+
+    if( forceTreeShown )
+    {
+        treePane.Show( true );
+        updateSelectionFilterVisbility();
+    }
+
     SCH_BASE_FRAME::SaveSettings( GetSettings() );
+
+    if( forceTreeShown )
+    {
+        treePane.Show( treeShown );
+        filterPane.Show( filterShown );
+    }
 
     m_settings->m_ShowPinElectricalType  = GetRenderSettings()->m_ShowPinsElectricalType;
     m_settings->m_ShowHiddenPins = GetRenderSettings()->m_ShowHiddenPins;
@@ -849,6 +876,10 @@ void SYMBOL_EDIT_FRAME::ToggleProperties()
 
 void SYMBOL_EDIT_FRAME::ToggleLibraryTree()
 {
+    // An explicit toggle makes the live visibility authoritative, so drop any pending restore that
+    // LoadSymbolFromSchematic's auto-hide left behind.
+    m_libTreeAutoHiddenForSchematicEdit = false;
+
     wxAuiPaneInfo& treePane = m_auimgr.GetPane( m_treePane );
     treePane.Show( !IsLibraryTreeShown() );
     updateSelectionFilterVisbility();
@@ -2056,6 +2087,19 @@ SELECTION& SYMBOL_EDIT_FRAME::GetCurrentSelection()
 }
 
 
+bool SYMBOL_EDIT_FRAME::libTreeAutoHiddenForSchematicEdit( bool aWasFromSchematic,
+                                                           bool aRestorePending, bool aTreeShownNow )
+{
+    // Auto-hiding a visible tree schedules its restore. A chained schematic edit finds the tree
+    // already auto-hidden, so keep the pending restore rather than dropping it. An explicit user
+    // toggle clears the flag elsewhere, so a tree hidden without a pending restore stays that way.
+    if( aTreeShownNow )
+        return true;
+
+    return aWasFromSchematic && aRestorePending;
+}
+
+
 void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 {
     std::unique_ptr<LIB_SYMBOL> symbol = aSymbol->GetLibSymbolRef()->Flatten();
@@ -2134,8 +2178,19 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     ReCreateMenuBar();
     RecreateToolbars();
 
+    // Auto-hide the tree while editing a schematic symbol, remembering to restore it in SaveSettings
+    // so the user's preference survives a restart. Hide via the pane directly, not ToggleLibraryTree,
+    // which would treat this as a user toggle and drop the pending restore.
+    m_libTreeAutoHiddenForSchematicEdit = libTreeAutoHiddenForSchematicEdit(
+            m_isSymbolFromSchematic, m_libTreeAutoHiddenForSchematicEdit, IsLibraryTreeShown() );
+
     if( IsLibraryTreeShown() )
-        ToggleLibraryTree();
+    {
+        m_auimgr.GetPane( m_treePane ).Show( false );
+        updateSelectionFilterVisbility();
+        m_auimgr.Update();
+        Refresh();
+    }
 
     UpdateTitle();
     RebuildSymbolUnitAndBodyStyleLists();

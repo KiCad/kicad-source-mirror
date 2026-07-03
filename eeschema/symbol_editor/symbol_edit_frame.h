@@ -135,6 +135,14 @@ public:
     static void freeTransientUndoCommands( UNDO_REDO_CONTAINER& aList, const LIB_SYMBOL* aLiveSymbol );
 
     /**
+     * Resolve whether the library tree's auto-hide for a schematic edit still needs restoring on
+     * save. A chained schematic edit finds the tree already auto-hidden and keeps the pending
+     * restore; a tree hidden by an explicit user toggle carries no pending restore.
+     */
+    static bool libTreeAutoHiddenForSchematicEdit( bool aWasFromSchematic, bool aRestorePending,
+                                                   bool aTreeShownNow );
+
+    /**
      * Return the LIB_ID of the library or symbol selected in the symbol tree.
      */
     LIB_ID GetTreeLIBID( int* aUnit = nullptr ) const;
@@ -735,6 +743,10 @@ private:
 
     ///< Flag if the symbol being edited was loaded directly from a schematic.
     bool        m_isSymbolFromSchematic;
+
+    ///< True while a schematic-edit auto-hide of the library tree still needs restoring on save.
+    bool        m_libTreeAutoHiddenForSchematicEdit;
+
     KIID        m_schematicSymbolUUID;
 
      ///< RefDes of the symbol (only valid if symbol was loaded from schematic)
