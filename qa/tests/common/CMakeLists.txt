@@ -26,6 +26,8 @@ set( QA_COMMON_SRCS
 
     wximage_test_utils.cpp
 
+    test_3d_model_triangle.cpp
+
     test_angle_item.cpp
 
     test_action_manager.cpp

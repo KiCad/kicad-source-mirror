@@ -2480,8 +2480,7 @@ void RENDER_3D_RAYTRACE_BASE::addModels( CONTAINER_3D& aDstContainer, const S3DM
                     wxASSERT( idx1 < mesh.m_VertexSize );
                     wxASSERT( idx2 < mesh.m_VertexSize );
 
-                    if( ( idx0 < mesh.m_VertexSize ) && ( idx1 < mesh.m_VertexSize )
-                      && ( idx2 < mesh.m_VertexSize ) )
+                    if( IsTriangleInRange( mesh.m_FaceIdx, faceIdx, mesh.m_VertexSize ) )
                     {
                         const SFVEC3F& v0 = mesh.m_Positions[idx0];
                         const SFVEC3F& v1 = mesh.m_Positions[idx1];
