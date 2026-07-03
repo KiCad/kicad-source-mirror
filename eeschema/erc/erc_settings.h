@@ -254,10 +254,17 @@ private:
     int                      m_severities;
     std::vector<SCH_MARKER*> m_filteredMarkers;
 
+    int                      m_errorCount;
+    int                      m_warningCount;
+    int                      m_exclusionCount;
+
 public:
     SHEETLIST_ERC_ITEMS_PROVIDER( SCHEMATIC* aSchematic ) :
             m_schematic( aSchematic ),
-            m_severities( 0 )
+            m_severities( 0 ),
+            m_errorCount( 0 ),
+            m_warningCount( 0 ),
+            m_exclusionCount( 0 )
     { }
 
     // We own at least one list of raw pointers.  Don't let the compiler fill in copy c'tors that
@@ -277,7 +284,20 @@ public:
 
     void DeleteItem( int aIndex, bool aDeep ) override;
 
+    /**
+     * Set the exclusion state of a marker while keeping the cached severity counts in sync.
+     *
+     * @param aExcluded true to exclude the marker, false to restore it.
+     * @param aComment optional exclusion comment.
+     */
+    void SetMarkerExcluded( SCH_MARKER* aMarker, bool aExcluded,
+                            const wxString& aComment = wxEmptyString );
+
 private:
 
     void visitMarkers( std::function<void( SCH_MARKER* )> aVisitor ) const;
+
+    SEVERITY markerSeverity( SCH_MARKER* aMarker ) const;
+
+    void adjustCount( SEVERITY aSeverity, int aDelta );
 };

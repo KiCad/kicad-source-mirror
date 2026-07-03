@@ -388,7 +388,13 @@ void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, 
     if( !m_enableHyperlinks )
     {
         m_view->ClearColumns();
-        m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
+
+        int width = m_view->GetClientSize().GetWidth() - WX_DATAVIEW_WINDOW_PADDING;
+
+        if( width <= 0 )
+            width = 600;
+
+        m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, width );
     }
 
     ExpandAll();

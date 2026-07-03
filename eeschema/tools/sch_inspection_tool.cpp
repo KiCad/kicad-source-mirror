@@ -264,18 +264,10 @@ int SCH_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
 
     wxCHECK( dlg, 0 );
 
-    // Let the ERC dialog handle it since it has more update hassles to worry about
-    // Note that if marker is nullptr the dialog will exclude whichever marker is selected
-    // in the dialog itself
+    // Let the ERC dialog handle it since it owns the marker provider's cached counts and view
+    // updates. If marker is nullptr the dialog excludes whichever marker is selected in the
+    // dialog itself.
     dlg->ExcludeMarker( marker );
-
-    if( marker != nullptr )
-    {
-        marker->SetExcluded( true );
-        m_frame->GetCanvas()->GetView()->Update( marker );
-        m_frame->GetCanvas()->Refresh();
-        m_frame->OnModify();
-    }
 
     return 0;
 }

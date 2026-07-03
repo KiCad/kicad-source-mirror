@@ -390,25 +390,44 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER*
 }
 
 
+SEVERITY SHEETLIST_ERC_ITEMS_PROVIDER::markerSeverity( SCH_MARKER* aMarker ) const
+{
+    if( aMarker->IsExcluded() )
+        return RPT_SEVERITY_EXCLUSION;
+
+    return m_schematic->ErcSettings().GetSeverity( aMarker->GetRCItem()->GetErrorCode() );
+}
+
+
+void SHEETLIST_ERC_ITEMS_PROVIDER::adjustCount( SEVERITY aSeverity, int aDelta )
+{
+    switch( aSeverity )
+    {
+    case RPT_SEVERITY_ERROR:     m_errorCount += aDelta;     break;
+    case RPT_SEVERITY_WARNING:   m_warningCount += aDelta;   break;
+    case RPT_SEVERITY_EXCLUSION: m_exclusionCount += aDelta; break;
+    default:                                                 break;
+    }
+}
+
+
 void SHEETLIST_ERC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
 {
     m_severities = aSeverities;
 
     m_filteredMarkers.clear();
-
-    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+    m_errorCount = 0;
+    m_warningCount = 0;
+    m_exclusionCount = 0;
 
     visitMarkers(
             [&]( SCH_MARKER* aMarker )
             {
-                SEVERITY markerSeverity;
+                SEVERITY severity = markerSeverity( aMarker );
 
-                if( aMarker->IsExcluded() )
-                    markerSeverity = RPT_SEVERITY_EXCLUSION;
-                else
-                    markerSeverity = settings.GetSeverity( aMarker->GetRCItem()->GetErrorCode() );
+                adjustCount( severity, 1 );
 
-                if( markerSeverity & m_severities )
+                if( severity & m_severities )
                     m_filteredMarkers.push_back( aMarker );
             } );
 
@@ -434,21 +453,14 @@ int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity ) const
 
     int count = 0;
 
-    const ERC_SETTINGS& settings = m_schematic->ErcSettings();
+    if( aSeverity & RPT_SEVERITY_ERROR )
+        count += m_errorCount;
 
-    visitMarkers(
-            [&]( SCH_MARKER* aMarker )
-            {
-                SEVERITY markerSeverity;
+    if( aSeverity & RPT_SEVERITY_WARNING )
+        count += m_warningCount;
 
-                if( aMarker->IsExcluded() )
-                    markerSeverity = RPT_SEVERITY_EXCLUSION;
-                else
-                    markerSeverity = settings.GetSeverity( aMarker->GetRCItem()->GetErrorCode() );
-
-                if( ( markerSeverity & aSeverity ) > 0 )
-                    count++;
-            } );
+    if( aSeverity & RPT_SEVERITY_EXCLUSION )
+        count += m_exclusionCount;
 
     return count;
 }
@@ -468,10 +480,30 @@ std::shared_ptr<RC_ITEM> SHEETLIST_ERC_ITEMS_PROVIDER::GetItem( int aIndex ) con
 }
 
 
+void SHEETLIST_ERC_ITEMS_PROVIDER::SetMarkerExcluded( SCH_MARKER* aMarker, bool aExcluded,
+                                                     const wxString& aComment )
+{
+    // Toggling the exclusion moves the marker between the exclusion bucket and its error/warning
+    // bucket, so the cached counts must follow the transition. Route the mutation through here so
+    // the old severity is captured before the marker flips.
+    if( aMarker->IsExcluded() == aExcluded )
+    {
+        aMarker->SetExcluded( aExcluded, aComment );
+        return;
+    }
+
+    adjustCount( markerSeverity( aMarker ), -1 );
+    aMarker->SetExcluded( aExcluded, aComment );
+    adjustCount( markerSeverity( aMarker ), 1 );
+}
+
+
 void SHEETLIST_ERC_ITEMS_PROVIDER::DeleteItem( int aIndex, bool aDeep )
 {
     SCH_MARKER* marker = m_filteredMarkers[ aIndex ];
     m_filteredMarkers.erase( m_filteredMarkers.begin() + aIndex );
+
+    adjustCount( markerSeverity( marker ), -1 );
 
     if( aDeep )
     {
