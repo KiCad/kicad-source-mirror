@@ -34,9 +34,9 @@
 #include <project_pcb.h>
 #include <wx/msgdlg.h>
 #include "project.h"
-#include "kiway.h"
 #include "3d_cache/3d_cache.h"
 #include "filename_resolver.h"
+#include "export_idf.h"
 
 
 #include <base_units.h>     // to define pcbIUScale.FromMillimeter(x)
@@ -50,20 +50,157 @@ static FILENAME_RESOLVER* resolver;
 
 
 /**
+ * Convert a single Edge_Cuts graphic into IDF segments and append them to @p aLines.
+ *
+ * Shared between the board outline and footprint cutout emitters so both encode identical
+ * geometry into the #BOARD_OUTLINE section.
+ */
+static void idf_append_shape( PCB_SHAPE* aGraphic, double aScale, double aOffX, double aOffY,
+                              std::list<IDF_SEGMENT*>& aLines )
+{
+    IDF_POINT sp, ep;                   // start and end points from KiCad item
+
+    switch( aGraphic->GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+    {
+        if( aGraphic->GetStart() == aGraphic->GetEnd() )
+            break;
+
+        sp.x = aGraphic->GetStart().x * aScale + aOffX;
+        sp.y = -aGraphic->GetStart().y * aScale + aOffY;
+        ep.x = aGraphic->GetEnd().x * aScale + aOffX;
+        ep.y = -aGraphic->GetEnd().y * aScale + aOffY;
+        aLines.push_back( new IDF_SEGMENT( sp, ep ) );
+
+        break;
+    }
+
+    case SHAPE_T::RECTANGLE:
+    {
+        if( aGraphic->GetStart() == aGraphic->GetEnd() )
+            break;
+
+        // IDF Y is up-positive, so mirror KiCad's down-positive Y like the other shapes do
+        double top = -aGraphic->GetStart().y * aScale + aOffY;
+        double left = aGraphic->GetStart().x * aScale + aOffX;
+        double bottom = -aGraphic->GetEnd().y * aScale + aOffY;
+        double right = aGraphic->GetEnd().x * aScale + aOffX;
+
+        IDF_POINT corners[4];
+        corners[0] = IDF_POINT( left, top );
+        corners[1] = IDF_POINT( right, top );
+        corners[2] = IDF_POINT( right, bottom );
+        corners[3] = IDF_POINT( left, bottom );
+
+        aLines.push_back( new IDF_SEGMENT( corners[0], corners[1] ) );
+        aLines.push_back( new IDF_SEGMENT( corners[1], corners[2] ) );
+        aLines.push_back( new IDF_SEGMENT( corners[2], corners[3] ) );
+        aLines.push_back( new IDF_SEGMENT( corners[3], corners[0] ) );
+        break;
+    }
+
+    case SHAPE_T::ARC:
+    {
+        if( aGraphic->GetCenter() == aGraphic->GetStart() )
+            break;
+
+        sp.x = aGraphic->GetCenter().x * aScale + aOffX;
+        sp.y = -aGraphic->GetCenter().y * aScale + aOffY;
+        ep.x = aGraphic->GetStart().x * aScale + aOffX;
+        ep.y = -aGraphic->GetStart().y * aScale + aOffY;
+        aLines.push_back( new IDF_SEGMENT( sp, ep, -aGraphic->GetArcAngle().AsDegrees(), true ) );
+
+        break;
+    }
+
+    case SHAPE_T::CIRCLE:
+    {
+        if( aGraphic->GetRadius() == 0 )
+            break;
+
+        sp.x = aGraphic->GetCenter().x * aScale + aOffX;
+        sp.y = -aGraphic->GetCenter().y * aScale + aOffY;
+        ep.x = sp.x - aGraphic->GetRadius() * aScale;
+        ep.y = sp.y;
+
+        // Circles must always have an angle of +360 deg. to appease
+        // quirky MCAD implementations of IDF.
+        aLines.push_back( new IDF_SEGMENT( sp, ep, 360.0, true ) );
+
+        break;
+    }
+
+    case SHAPE_T::POLY:
+    {
+        if( !aGraphic->IsPolyShapeValid() )
+            break;
+
+        // Holes within an outline have no IDF representation; each outline is its own loop
+        const SHAPE_POLY_SET& polySet = aGraphic->GetPolyShape();
+
+        for( int ii = 0; ii < polySet.OutlineCount(); ++ii )
+        {
+            const SHAPE_LINE_CHAIN& chain = polySet.COutline( ii );
+
+            for( int jj = 0; jj < chain.PointCount(); ++jj )
+            {
+                const VECTOR2I& start = chain.CPoint( jj );
+                const VECTOR2I& end = chain.CPoint( ( jj + 1 ) % chain.PointCount() );
+
+                if( start == end )
+                    continue;
+
+                sp.x = start.x * aScale + aOffX;
+                sp.y = -start.y * aScale + aOffY;
+                ep.x = end.x * aScale + aOffX;
+                ep.y = -end.y * aScale + aOffY;
+                aLines.push_back( new IDF_SEGMENT( sp, ep ) );
+            }
+        }
+
+        break;
+    }
+
+    case SHAPE_T::BEZIER:
+    {
+        aGraphic->RebuildBezierToSegmentsPointsList();
+
+        const std::vector<VECTOR2I>& pts = aGraphic->GetBezierPoints();
+
+        for( size_t ii = 1; ii < pts.size(); ++ii )
+        {
+            if( pts[ii - 1] == pts[ii] )
+                continue;
+
+            sp.x = pts[ii - 1].x * aScale + aOffX;
+            sp.y = -pts[ii - 1].y * aScale + aOffY;
+            ep.x = pts[ii].x * aScale + aOffX;
+            ep.y = -pts[ii].y * aScale + aOffY;
+            aLines.push_back( new IDF_SEGMENT( sp, ep ) );
+        }
+
+        break;
+    }
+
+    default:
+        break;
+    }
+}
+
+
+/**
  * Retrieve line segment information from the edge layer and compiles the data into a form
  * which can be output as an IDFv3 compliant #BOARD_OUTLINE section.
  */
 static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
 {
     double scale = aIDFBoard.GetUserScale();
-    IDF_POINT sp, ep;                   // start and end points from KiCad item
     std::list< IDF_SEGMENT* > lines;    // IDF intermediate form of KiCad graphical item
     IDF_OUTLINE* outline = nullptr;     // graphical items forming an outline or cutout
 
-    // NOTE: IMPLEMENTATION
-    // If/when component cutouts are allowed, we must implement them separately. Cutouts
-    // must be added to the board outline section and not to the Other Outline section.
-    // The footprint cutouts should be handled via the idf_export_footprint() routine.
+    // Footprint cutouts are emitted separately by idf_export_footprint(); like board cutouts they
+    // belong in the board outline section rather than the Other Outline section.
 
     double offX, offY;
     aIDFBoard.GetUserOffset( offX, offY );
@@ -74,90 +211,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
         if( item->Type() != PCB_SHAPE_T || item->GetLayer() != Edge_Cuts )
             continue;
 
-        PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( item );
-
-        switch( graphic->GetShape() )
-        {
-        case SHAPE_T::SEGMENT:
-        {
-            if( graphic->GetStart() == graphic->GetEnd() )
-                break;
-
-            sp.x = graphic->GetStart().x * scale + offX;
-            sp.y = -graphic->GetStart().y * scale + offY;
-            ep.x = graphic->GetEnd().x * scale + offX;
-            ep.y = -graphic->GetEnd().y * scale + offY;
-            IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep );
-
-            if( seg )
-                lines.push_back( seg );
-
-            break;
-        }
-
-        case SHAPE_T::RECTANGLE:
-        {
-            if( graphic->GetStart() == graphic->GetEnd() )
-                break;
-
-            double top = graphic->GetStart().y * scale + offY;
-            double left = graphic->GetStart().x * scale + offX;
-            double bottom = graphic->GetEnd().y * scale + offY;
-            double right = graphic->GetEnd().x * scale + offX;
-
-            IDF_POINT corners[4];
-            corners[0] = IDF_POINT( left, top );
-            corners[1] = IDF_POINT( right, top );
-            corners[2] = IDF_POINT( right, bottom );
-            corners[3] = IDF_POINT( left, bottom );
-
-            lines.push_back( new IDF_SEGMENT( corners[0], corners[1] ) );
-            lines.push_back( new IDF_SEGMENT( corners[1], corners[2] ) );
-            lines.push_back( new IDF_SEGMENT( corners[2], corners[3] ) );
-            lines.push_back( new IDF_SEGMENT( corners[3], corners[0] ) );
-            break;
-        }
-
-        case SHAPE_T::ARC:
-        {
-            if( graphic->GetCenter() == graphic->GetStart() )
-                break;
-
-            sp.x = graphic->GetCenter().x * scale + offX;
-            sp.y = -graphic->GetCenter().y * scale + offY;
-            ep.x = graphic->GetStart().x * scale + offX;
-            ep.y = -graphic->GetStart().y * scale + offY;
-            IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep, -graphic->GetArcAngle().AsDegrees(), true );
-
-            if( seg )
-                lines.push_back( seg );
-
-            break;
-        }
-
-        case SHAPE_T::CIRCLE:
-        {
-            if( graphic->GetRadius() == 0 )
-                break;
-
-            sp.x = graphic->GetCenter().x * scale + offX;
-            sp.y = -graphic->GetCenter().y * scale + offY;
-            ep.x = sp.x - graphic->GetRadius() * scale;
-            ep.y = sp.y;
-
-            // Circles must always have an angle of +360 deg. to appease
-            // quirky MCAD implementations of IDF.
-            IDF_SEGMENT* seg = new IDF_SEGMENT( sp, ep, 360.0, true );
-
-            if( seg )
-                lines.push_back( seg );
-
-            break;
-        }
-
-        default:
-            break;
-        }
+        idf_append_shape( static_cast<PCB_SHAPE*>( item ), scale, offX, offY, lines );
     }
 
     // if there is no outline then use the bounding box
@@ -196,6 +250,9 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
         aIDFBoard.AddBoardOutline( outline );
         outline = nullptr;
     }
+
+    // an open loop on the final iteration leaves an allocated but empty outline behind
+    delete outline;
 
     return;
 
@@ -294,14 +351,6 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
             crefdes = "NOREFDES";
     }
 
-    // TODO: If footprint cutouts are supported we must add code here
-    // for( EDA_ITEM* item = aFootprint->GraphicalItems();  item != NULL;  item = item->Next() )
-    // {
-    //     if( item->Type() != PCB_SHAPE_T || item->GetLayer() != Edge_Cuts )
-    //         continue;
-    //     code to export cutouts
-    // }
-
     // Export pads
     double  drill, x, y;
     double  scale = aIDFBoard.GetUserScale();
@@ -312,6 +361,35 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
     double dx, dy;
 
     aIDFBoard.GetUserOffset( dx, dy );
+
+    // Footprint Edge_Cuts graphics are board cutouts. IDF has no per-component cutout, so they are
+    // appended to the board outline section where any loop after the first is treated as a cutout.
+    std::list<IDF_SEGMENT*> cutoutLines;
+
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
+    {
+        if( item->Type() != PCB_SHAPE_T || item->GetLayer() != Edge_Cuts )
+            continue;
+
+        idf_append_shape( static_cast<PCB_SHAPE*>( item ), scale, dx, dy, cutoutLines );
+    }
+
+    // GetOutline() consumes at least one segment per call, so this terminates even on open loops.
+    while( !cutoutLines.empty() )
+    {
+        IDF_OUTLINE* cutout = new IDF_OUTLINE;
+        IDF3::GetOutline( cutoutLines, *cutout );
+
+        if( cutout->empty() )
+        {
+            delete cutout;
+            continue;
+        }
+
+        // ownership transfers only on success
+        if( !aIDFBoard.AddBoardOutline( cutout ) )
+            delete cutout;
+    }
 
     for( auto pad : aFootprint->Pads() )
     {
@@ -596,17 +674,24 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 /**
  * Generate IDFv3 compliant board (*.emn) and library (*.emp) files representing the user's
  * PCB design.
+ *
+ * Split out from PCB_EDIT_FRAME::Export_IDF3 so it can be driven headlessly (unit tests, CLI)
+ * with an explicitly supplied 3D model resolver and no GUI error reporting.
  */
-bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
-                                  bool aUseThou, double aXRef, double aYRef,
-                                  bool aIncludeUnspecified, bool aIncludeDNP )
+bool ExportBoardToIDF3( BOARD* aPcb, const wxString& aFullFileName, bool aUseThou, double aXRef,
+                        double aYRef, bool aIncludeUnspecified, bool aIncludeDNP,
+                        FILENAME_RESOLVER* aResolver, wxString* aErrorMsg )
 {
+    // idf_export_footprint dereferences the resolver for every 3D model, so a null one
+    // must fail up front rather than crash mid-export
+    wxCHECK( aResolver, false );
+
     IDF3_BOARD idfBoard( IDF3::CAD_ELEC );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
 
-    resolver = PROJECT_PCB::Get3DCacheManager( &Prj() )->GetResolver();
+    resolver = aResolver;
 
     bool ok = true;
     double scale = pcbIUScale.MM_PER_IU;   // we must scale internal units to mm for IDF
@@ -649,27 +734,46 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
 
         if( !idfBoard.WriteFile( aFullFileName, idfUnit, false ) )
         {
-            wxString msg;
-            msg << _( "IDF Export Failed:\n" ) << From_UTF8( idfBoard.GetError().c_str() );
-            wxMessageBox( msg );
+            if( aErrorMsg )
+                *aErrorMsg = From_UTF8( idfBoard.GetError().c_str() );
 
             ok = false;
         }
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg;
-        msg << _( "IDF Export Failed:\n" ) << ioe.What();
-        wxMessageBox( msg );
+        if( aErrorMsg )
+            *aErrorMsg = ioe.What();
 
         ok = false;
     }
     catch( const std::exception& e )
     {
-        wxString msg;
-        msg << _( "IDF Export Failed:\n" ) << From_UTF8( e.what() );
-        wxMessageBox( msg );
+        if( aErrorMsg )
+            *aErrorMsg = From_UTF8( e.what() );
+
         ok = false;
+    }
+
+    return ok;
+}
+
+
+bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
+                                  bool aUseThou, double aXRef, double aYRef,
+                                  bool aIncludeUnspecified, bool aIncludeDNP )
+{
+    FILENAME_RESOLVER* res = PROJECT_PCB::Get3DCacheManager( &Prj() )->GetResolver();
+    wxString           errorMsg;
+
+    bool ok = ExportBoardToIDF3( aPcb, aFullFileName, aUseThou, aXRef, aYRef, aIncludeUnspecified,
+                                 aIncludeDNP, res, &errorMsg );
+
+    if( !ok )
+    {
+        wxString msg;
+        msg << _( "IDF Export Failed:\n" ) << errorMsg;
+        wxMessageBox( msg );
     }
 
     return ok;

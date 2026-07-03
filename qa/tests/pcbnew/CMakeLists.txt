@@ -95,6 +95,7 @@ set( QA_PCBNEW_SRCS
     test_libeval_compiler.cpp
     test_reference_image_load.cpp
     test_gencad_export.cpp
+    test_idf_export.cpp
     test_step_model_color_transfer.cpp
     test_board_netlist_updater_nested_groups.cpp
     test_step_export_modified_board.cpp
