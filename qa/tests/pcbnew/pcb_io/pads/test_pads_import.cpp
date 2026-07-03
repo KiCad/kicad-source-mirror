@@ -1837,4 +1837,80 @@ BOOST_AUTO_TEST_CASE( Issue23856_TextAndPadOrientation )
 }
 
 
+/**
+ * Verify that RT/ST thermal relief pad-stack entries map the PADS thermal-relief
+ * geometry onto KiCad pad overrides (issue #23392): a THERMAL zone connection, a
+ * spoke-width override, and, when the relief outer diameter exceeds the pad size, a
+ * thermal-gap override derived as (outer - pad_size) / 2. Reliefs whose outer diameter
+ * equals the pad size carry no gap and must leave the gap override unset.
+ */
+BOOST_AUTO_TEST_CASE( Issue23392_ThermalReliefGap )
+{
+    PCB_IO_PADS plugin;
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23393/demo.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+    BOOST_REQUIRE( board != nullptr );
+
+    auto findFP = [&]( const wxString& aRef ) -> FOOTPRINT*
+    {
+        for( FOOTPRINT* fp : board->Footprints() )
+        {
+            if( fp->GetReference() == aRef )
+                return fp;
+        }
+
+        return nullptr;
+    };
+
+    const int tolerance = 5000;  // 5 um
+
+    // L1 carries an RT relief whose outer diameter (4110000) exceeds the pad size
+    // (3750000), so every pad gets a THERMAL connection, a spoke-width override, and a
+    // gap override of (4110000 - 3750000) / 2 scaled to internal units.
+    {
+        FOOTPRINT* l1 = findFP( "L1" );
+        BOOST_REQUIRE_MESSAGE( l1, "L1 footprint should be imported" );
+        BOOST_REQUIRE( !l1->Pads().empty() );
+
+        for( PAD* pad : l1->Pads() )
+        {
+            BOOST_CHECK_MESSAGE( pad->GetLocalZoneConnection() == ZONE_CONNECTION::THERMAL,
+                    "L1 pad " << pad->GetNumber().ToStdString()
+                        << " should have THERMAL zone connection" );
+
+            std::optional<int> spoke = pad->GetLocalThermalSpokeWidthOverride();
+            BOOST_REQUIRE_MESSAGE( spoke.has_value(),
+                    "L1 pad " << pad->GetNumber().ToStdString()
+                        << " should have a spoke-width override" );
+            BOOST_CHECK_MESSAGE( std::abs( spoke.value() - 1000000 ) < tolerance,
+                    "L1 pad " << pad->GetNumber().ToStdString() << " spoke width "
+                        << spoke.value() << " should be ~1000000 nm" );
+
+            std::optional<int> gap = pad->GetLocalThermalGapOverride();
+            BOOST_REQUIRE_MESSAGE( gap.has_value(),
+                    "L1 pad " << pad->GetNumber().ToStdString()
+                        << " should have a thermal gap override" );
+            BOOST_CHECK_MESSAGE( std::abs( gap.value() - 120000 ) < tolerance,
+                    "L1 pad " << pad->GetNumber().ToStdString() << " thermal gap "
+                        << gap.value() << " should be ~120000 nm" );
+        }
+    }
+
+    // E1 carries an RT relief whose outer diameter equals the pad size, so it must have a
+    // THERMAL connection but NO gap override.
+    {
+        FOOTPRINT* e1 = findFP( "E1" );
+        BOOST_REQUIRE_MESSAGE( e1, "E1 footprint should be imported" );
+        BOOST_REQUIRE( !e1->Pads().empty() );
+
+        PAD* pad = e1->Pads().front();
+        BOOST_CHECK_MESSAGE( pad->GetLocalZoneConnection() == ZONE_CONNECTION::THERMAL,
+                "E1 pad should have THERMAL zone connection" );
+        BOOST_CHECK_MESSAGE( !pad->GetLocalThermalGapOverride().has_value(),
+                "E1 pad should NOT have a thermal gap override (outer == pad size)" );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

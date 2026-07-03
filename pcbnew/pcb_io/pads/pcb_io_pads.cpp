@@ -833,6 +833,17 @@ void PCB_IO_PADS::loadFootprints()
                                         decalScaler( layer_def.thermal_spoke_width ) );
                             }
 
+                            if( layer_def.thermal_outer_diameter > layer_def.sizeA )
+                            {
+                                double gap = ( layer_def.thermal_outer_diameter - layer_def.sizeA ) / 2.0;
+                                int    scaledGap = decalScaler( gap );
+
+                                // An override of 0 reads as "inherit the zone gap", so only
+                                // apply it when the relief gap survives rounding to nm.
+                                if( scaledGap > 0 )
+                                    pad->SetLocalThermalGapOverride( scaledGap );
+                            }
+
                             if( layer_def.thermal_spoke_orientation != 0.0 )
                             {
                                 pad->SetThermalSpokeAngleDegrees(
