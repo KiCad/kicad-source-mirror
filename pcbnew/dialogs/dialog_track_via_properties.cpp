@@ -1019,7 +1019,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
     if( m_vias )
     {
-        // TODO: This needs to move into the via class, not the dialog
+        // Marshal UI values into optionals; the malformed-data checks themselves live on
+        // PCB_VIA::ValidateViaParameters so they can be reused and unit tested.
 
         std::optional<int> viaDiameter;
 
