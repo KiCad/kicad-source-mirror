@@ -38,6 +38,7 @@
 #include <sch_symbol.h>
 #include <sch_pin.h>
 #include <sch_label.h>
+#include <sch_line.h>
 #include <sch_sheet_path.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
@@ -369,4 +370,85 @@ BOOST_AUTO_TEST_CASE( PinNameTagStripped )
     BOOST_CHECK_EQUAL( ncNames.count( wxS( "IN" ) ), 2 );
     BOOST_CHECK_EQUAL( ncNames.count( wxS( "GND" ) ), 1 );
     BOOST_CHECK_EQUAL( ncNames.count( wxS( "NC" ) ), 1 );
+}
+
+
+/**
+ * Verify that a detached Eagle net label snaps onto its wire by perpendicular projection,
+ * preserving its position along the wire.
+ *
+ * Regression test for issue #24810.  Eagle lets a net label float off its wire.  On import
+ * KiCad relocates such a label onto the wire, but the old snap only considered the wire's
+ * two endpoints and midpoint, so a label offset perpendicular from a long wire slid far
+ * along it (e.g. 11 mm) and parallel labels piled onto the wire centre.  The fixture's net
+ * has a 40 mm horizontal wire (80->120 mm) with a label 2.54 mm above it at x=90 mm; the
+ * label must land at x=90 mm on the wire, not at an endpoint or the 100 mm midpoint.
+ */
+BOOST_AUTO_TEST_CASE( DetachedLabelProjectsOntoWire )
+{
+    const wxFileName eagleFn = getEagleTestSchematic( "eagle-import-testfile.sch" );
+    BOOST_REQUIRE( wxFileExists( eagleFn.GetFullPath() ) );
+
+    std::unique_ptr<SCHEMATIC> schematic;
+    loadEagleSchematic( eagleFn, wxS( "eagle_detached_label" ), schematic );
+
+    SCH_LABEL_BASE* detached = nullptr;
+    SCH_SCREEN*     screen = nullptr;
+
+    for( const SCH_SHEET_PATH& sheetPath : schematic->BuildSheetListSortedByPageNumbers() )
+    {
+        SCH_SCREEN* sheetScreen = sheetPath.LastScreen();
+
+        if( !sheetScreen )
+            continue;
+
+        for( SCH_ITEM* item : sheetScreen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+        {
+            if( static_cast<SCH_LABEL_BASE*>( item )->GetText() == wxS( "DETACHEDLABEL" ) )
+            {
+                detached = static_cast<SCH_LABEL_BASE*>( item );
+                screen   = sheetScreen;
+            }
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( detached, "DETACHEDLABEL global label not imported" );
+
+    // Positions carry an import-time sheet translation, so all checks are made relative to
+    // the wire's own endpoints.
+    const VECTOR2I labelPos = detached->GetPosition();
+    SEG            wire;
+    double         wireDist = std::numeric_limits<double>::max();
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
+    {
+        SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+        if( !line->IsWire() )
+            continue;
+
+        SEG    seg( line->GetStartPoint(), line->GetEndPoint() );
+        double d = seg.Distance( labelPos );
+
+        if( d < wireDist )
+        {
+            wireDist = d;
+            wire     = seg;
+        }
+    }
+
+    // The label must be on the wire.
+    BOOST_CHECK_MESSAGE( wireDist <= schIUScale.MilsToIU( 1 ),
+                         "Label is " << ( wireDist / schIUScale.IU_PER_MM )
+                                     << " mm from its wire" );
+
+    // The wire is 40 mm long and the label sat 10 mm from the left end.  Perpendicular
+    // projection preserves that; the old endpoint/midpoint snap would put it at 0 mm
+    // (endpoint) or 20 mm (midpoint) from the left end.
+    const VECTOR2I  leftEnd = wire.A.x <= wire.B.x ? wire.A : wire.B;
+    const double    offsetMM = std::abs( labelPos.x - leftEnd.x ) / (double) schIUScale.IU_PER_MM;
+
+    BOOST_CHECK_MESSAGE( std::abs( offsetMM - 10.0 ) < 1.0,
+                         "Label projected to " << offsetMM
+                                               << " mm from the wire's left end, expected 10 mm" );
 }

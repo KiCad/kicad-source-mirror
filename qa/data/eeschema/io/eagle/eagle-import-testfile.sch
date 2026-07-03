@@ -13295,6 +13295,12 @@ Eagle used think lines and no line ending to emulate a filled arc. Kicad expands
 </bus>
 </busses>
 <nets>
+<net name="DETACHEDLABEL" class="0">
+<segment>
+<wire x1="80" y1="100" x2="120" y2="100" width="0.1524" layer="91"/>
+<label x="90" y="102.54" size="1.778" layer="95"/>
+</segment>
+</net>
 <net name="+5V" class="0">
 <segment>
 <pinref part="R1" gate="G$1" pin="2"/>

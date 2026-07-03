@@ -1827,30 +1827,13 @@ SCH_IO_EAGLE::findNearestLinePoint( const VECTOR2I&         aPoint,
 
     double d, mindistance = std::numeric_limits<double>::max();
 
-    // Find the nearest start, middle or end of a line from the list of lines.
+    // Project the label onto the closest wire.  Snapping to the perpendicular foot keeps a
+    // detached Eagle label at its position along the wire; snapping only to the wire's
+    // endpoints or midpoint would slide it far along a long wire and pile parallel labels
+    // onto the same point.
     for( const SEG& line : aLines )
     {
-        VECTOR2I testpoint = line.A;
-        d = aPoint.Distance( testpoint );
-
-        if( d < mindistance )
-        {
-            mindistance  = d;
-            nearestPoint = testpoint;
-            nearestLine  = &line;
-        }
-
-        testpoint = line.Center();
-        d = aPoint.Distance( testpoint );
-
-        if( d < mindistance )
-        {
-            mindistance  = d;
-            nearestPoint = testpoint;
-            nearestLine  = &line;
-        }
-
-        testpoint = line.B;
+        VECTOR2I testpoint = line.NearestPoint( aPoint );
         d = aPoint.Distance( testpoint );
 
         if( d < mindistance )
