@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
 "PO-Revision-Date: 2026-07-04 09:01+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -34089,7 +34089,7 @@ msgstr "Verfügbare Textvariablen:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.h:58
 msgid "Execute Command Job Settings"
-msgstr "Kommando-ausführen-Auftragseinstellungen exportieren"
+msgstr "Kommando \"Auftragseinstellungen\" ausführen"
 
 #: kicad/dialogs/dialog_template_selector.cpp:292
 msgid "Edit Template"
