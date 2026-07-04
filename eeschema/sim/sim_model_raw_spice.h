@@ -67,6 +67,9 @@ public:
     void AssignSymbolPinNumberToModelPin( const std::string& aModelPinName,
                                           const wxString& aSymbolPinNumber ) override;
 
+    std::vector<wxString> GetSpiceIncludes( const SPICE_ITEM& aItem, SCHEMATIC* aSchematic,
+                                            REPORTER& aReporter ) const override;
+
 private:
     static std::vector<PARAM::INFO> makeParamInfos();
     bool requiresSpiceModelLine( const SPICE_ITEM& aItem ) const override { return false; }

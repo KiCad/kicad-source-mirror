@@ -147,6 +147,18 @@ void SIM_MODEL_RAW_SPICE::AssignSymbolPinNumberToModelPin( const std::string& aM
 }
 
 
+std::vector<wxString> SIM_MODEL_RAW_SPICE::GetSpiceIncludes( const SPICE_ITEM& aItem, SCHEMATIC* aSchematic,
+                                                             REPORTER& aReporter ) const
+{
+    wxString path = GetParam( static_cast<int>( SPICE_PARAM::LIB ) ).value;
+
+    if( path.IsEmpty() )
+        return {};
+
+    return { path };
+}
+
+
 std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_RAW_SPICE::makeParamInfos()
 {
     std::vector<PARAM::INFO> paramInfos;

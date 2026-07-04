@@ -21,7 +21,10 @@
 #include <sim/sim_model_ibis.h>
 #include <sim/sim_library_ibis.h>
 #include <fmt/core.h>
+#include <paths.h>
 #include <wx/filename.h>
+#include <wx/file.h>
+#include <wx/log.h>
 #include <kiway.h>
 #include <schematic.h>
 #include "sim_lib_mgr.h"
@@ -248,6 +251,30 @@ SIM_MODEL_IBIS::SIM_MODEL_IBIS( TYPE aType ) :
 void SIM_MODEL_IBIS::SwitchSingleEndedDiff( bool aDiff )
 {
     SetIOMode( aDiff ? IBIS_IO_MODE::DIFFERENTIAL : IBIS_IO_MODE::SINGLE_ENDED );
+}
+
+
+std::vector<wxString> SIM_MODEL_IBIS::GetSpiceIncludes( const SPICE_ITEM& aItem, SCHEMATIC* aSchematic,
+                                                        REPORTER& aReporter ) const
+{
+    wxFileName cacheFn;
+    cacheFn.AssignDir( PATHS::GetUserCachePath() );
+    cacheFn.AppendDir( wxT( "ibis" ) );
+    cacheFn.SetFullName( aItem.refName + wxT( ".cache" ) );
+
+    wxFile cacheFile( cacheFn.GetFullPath(), wxFile::write );
+
+    if( !cacheFile.IsOpened() )
+        wxLogError( _( "Could not open file '%s' to write IBIS model" ), cacheFn.GetFullPath() );
+
+    const SPICE_GENERATOR_IBIS& spiceGenerator = static_cast<const SPICE_GENERATOR_IBIS&>( SpiceGenerator() );
+
+    wxString    cacheFilepath = cacheFn.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR );
+    std::string modelData = spiceGenerator.IbisDevice( aItem, aSchematic, cacheFilepath, aReporter );
+
+    cacheFile.Write( wxString( modelData ) );
+
+    return { cacheFn.GetFullPath() };
 }
 
 

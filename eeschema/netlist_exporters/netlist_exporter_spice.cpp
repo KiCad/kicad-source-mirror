@@ -23,7 +23,6 @@
 #include <netlist_exporter_spice.h>
 #include <sim/spice_circuit_model.h>
 #include <sim/sim_library_spice.h>
-#include <sim/sim_model_raw_spice.h>
 #include <common.h>
 #include <confirm.h>
 #include <pgm_base.h>
@@ -686,39 +685,10 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
     else
         aItem.modelName = modelName;
 
-    // FIXME: Don't have special cases for raw Spice models and KIBIS.
-    if( auto rawSpiceModel = dynamic_cast<const SIM_MODEL_RAW_SPICE*>( aItem.model ) )
-    {
-        int      libParamIndex = static_cast<int>( SIM_MODEL_RAW_SPICE::SPICE_PARAM::LIB );
-        wxString path = rawSpiceModel->GetParam( libParamIndex ).value;
-
-        if( !path.IsEmpty() )
-            m_rawIncludes.insert( path );
-    }
-    else if( auto ibisModel = dynamic_cast<const SIM_MODEL_IBIS*>( aItem.model ) )
-    {
-        wxFileName cacheFn;
-        cacheFn.AssignDir( PATHS::GetUserCachePath() );
-        cacheFn.AppendDir( wxT( "ibis" ) );
-        cacheFn.SetFullName( aSymbol.GetRef( &aSheet ) + wxT( ".cache" ) );
-
-        wxFile cacheFile( cacheFn.GetFullPath(), wxFile::write );
-
-        if( !cacheFile.IsOpened() )
-        {
-            wxLogError( _( "Could not open file '%s' to write IBIS model" ),
-                        cacheFn.GetFullPath() );
-        }
-
-        auto spiceGenerator = static_cast<const SPICE_GENERATOR_IBIS&>( ibisModel->SpiceGenerator() );
-
-        wxString    cacheFilepath = cacheFn.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR );
-        std::string modelData = spiceGenerator.IbisDevice( aItem, m_schematic,
-                                                           cacheFilepath, aReporter );
-
-        cacheFile.Write( wxString( modelData ) );
-        m_rawIncludes.insert( cacheFn.GetFullPath() );
-    }
+    // Each model type contributes its own external `.include` files (raw-Spice libraries, IBIS
+    // device caches, ...) so the exporter stays agnostic to the concrete model.
+    for( const wxString& include : aItem.model->GetSpiceIncludes( aItem, m_schematic, aReporter ) )
+        m_rawIncludes.insert( include );
 }
 
 

@@ -100,6 +100,9 @@ public:
 
     const std::string& GetSeriesPartnerPin() const { return m_partnerPin; }
 
+    std::vector<wxString> GetSpiceIncludes( const SPICE_ITEM& aItem, SCHEMATIC* aSchematic,
+                                            REPORTER& aReporter ) const override;
+
     bool m_enableDiff;
 
 private:
