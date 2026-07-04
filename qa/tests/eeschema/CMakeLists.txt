@@ -89,6 +89,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24314_power_flag_designators.cpp
     test_annotation_units_integration.cpp
     test_connectivity_algo.cpp
+    test_bus_migration_gate.cpp
     test_issue18119_bus_hierarchy.cpp
     test_issue18299_bus_member_rename.cpp
     test_issue23840_bus_group_to_vector.cpp

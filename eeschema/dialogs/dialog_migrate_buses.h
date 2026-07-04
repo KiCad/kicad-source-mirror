@@ -43,6 +43,14 @@ public:
     DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent );
     ~DIALOG_MIGRATE_BUSES();
 
+    /**
+     * Multiple differently-named labels on a single bus subgraph were only permitted before
+     * KiCad 6.0.  A file saved in the 6.0+ s-expression format cannot store that ambiguity, so a
+     * nonzero migration count reported for such a file is a transient artifact of connectivity
+     * recalculation rather than persisted data and must not re-prompt the user on every load.
+     */
+    static bool ShouldPrompt( int aFileFormatVersionAtLoad, size_t aBusesNeedingMigration );
+
 private:
     void loadGraphData();
 

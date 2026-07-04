@@ -750,9 +750,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                    GetCurrentSheet().Path().AsString(),
                    GetCurrentSheet().size() );
 
-        // Migrate conflicting bus definitions
-        // TODO(JE) This should only run once based on schematic file version
-        if( Schematic().ConnectionGraph()->GetBusesNeedingMigration().size() > 0 )
+        // Migrate conflicting bus definitions, but only for files old enough to store them.
+        SCH_SCREEN* schRootScreen = Schematic().RootScreen();
+        int         schFileVersion = schRootScreen ? schRootScreen->GetFileFormatVersionAtLoad() : 0;
+
+        if( DIALOG_MIGRATE_BUSES::ShouldPrompt(
+                    schFileVersion, Schematic().ConnectionGraph()->GetBusesNeedingMigration().size() ) )
         {
             DIALOG_MIGRATE_BUSES dlg( this );
             dlg.ShowQuasiModal();

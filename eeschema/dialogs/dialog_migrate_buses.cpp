@@ -57,6 +57,14 @@
  */
 
 
+bool DIALOG_MIGRATE_BUSES::ShouldPrompt( int aFileFormatVersionAtLoad, size_t aBusesNeedingMigration )
+{
+    // Legacy .sch files report format version 0 and no s-expression schematic predates 20200310,
+    // so anything at or above that boundary already went through the one-time bus migration.
+    return aBusesNeedingMigration > 0 && aFileFormatVersionAtLoad < 20200310;
+}
+
+
 DIALOG_MIGRATE_BUSES::DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent )
         : DIALOG_MIGRATE_BUSES_BASE( aParent ), m_frame( aParent ), m_selected_index( 0 )
 {
