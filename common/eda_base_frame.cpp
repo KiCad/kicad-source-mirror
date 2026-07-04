@@ -575,7 +575,7 @@ void EDA_BASE_FRAME::onUpdateUI( wxUpdateUIEvent& aEvent )
 
 
 void EDA_BASE_FRAME::HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAME* aFrame,
-                                          ACTION_CONDITIONS aCond )
+                                          ACTION_CONDITIONS& aCond )
 {
     bool       checkRes  = false;
     bool       enableRes = true;

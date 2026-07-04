@@ -194,7 +194,7 @@ public:
      * @param aCond are the #UI SELECTION_CONDITIONS used
      */
     static void HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAME* aFrame,
-                                     ACTION_CONDITIONS aCond );
+                                     ACTION_CONDITIONS& aCond );
 
     virtual void OnMove( wxMoveEvent& aEvent )
     {
