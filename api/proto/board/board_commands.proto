@@ -302,8 +302,10 @@ message ImportNetlistResponse
  */
 
 // Refills some or all zones on the board.
-// This is a blocking operation; it will return Empty immediately, but KiCad will return
-// ApiStatusCode.AS_BUSY to all future API requests until the zone fill has completed.
+// When zones is empty and a board editor is running, all zones are refilled in the background:
+// Empty is returned immediately and KiCad returns ApiStatusCode.AS_BUSY to all future API
+// requests until the fill completes.  When specific zones are given, or in headless sessions,
+// the fill runs synchronously and the response is not sent until it has completed.
 message RefillZones
 {
   kiapi.common.types.DocumentSpecifier board = 1;

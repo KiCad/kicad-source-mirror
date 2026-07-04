@@ -31,10 +31,12 @@
 #include <board_commit.h>
 #include <board_connected_item.h>
 #include <board_design_settings.h>
+#include <core/kicad_algo.h>
 #include <footprint.h>
 #include <kicad_clipboard.h>
 #include <netinfo.h>
 #include <pad.h>
+#include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
 #include <pcb_group.h>
 #include <pcb_reference_image.h>
@@ -65,10 +67,13 @@
 #include <netlist_reader/board_netlist_updater.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <project.h>
+#include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
+#include <tools/zone_filler_tool.h>
 #include <zone.h>
+#include <zone_filler.h>
 
 #include <api/common/types/base_types.pb.h>
 #include <connectivity/connectivity_data.h>
@@ -1535,17 +1540,79 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( const HANDLER_CONTEXT<
     if( aCtx.Request.zones().empty() )
     {
         TOOL_MANAGER* mgr = toolManager();
-        frame()->CallAfter( [mgr]()
-                            {
-                                mgr->RunAction( PCB_ACTIONS::zoneFillAll );
-                            } );
+
+        if( frame() )
+        {
+            frame()->CallAfter( [mgr]()
+                                {
+                                    mgr->RunAction( PCB_ACTIONS::zoneFillAll );
+                                } );
+        }
+        else
+        {
+            // Headless sessions have no event loop to defer to; fill synchronously through the
+            // same tool the CLI jobs use.
+            if( !mgr->FindTool( ZONE_FILLER_TOOL_NAME ) )
+                mgr->RegisterTool( new ZONE_FILLER_TOOL );
+
+            mgr->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, nullptr, true );
+        }
     }
     else
     {
-        // TODO
-        ApiResponseStatus e;
-        e.set_status( ApiStatusCode::AS_UNIMPLEMENTED );
-        return tl::unexpected( e );
+        std::vector<ZONE*> toFill;
+
+        for( const types::KIID& id : aCtx.Request.zones() )
+        {
+            std::optional<BOARD_ITEM*> item = getItemById( KIID( id.value() ) );
+
+            if( !item || ( *item )->Type() != PCB_ZONE_T )
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( fmt::format( "zone with ID {} not found on the board", id.value() ) );
+                return tl::unexpected( e );
+            }
+
+            ZONE* zone = static_cast<ZONE*>( *item );
+
+            // The filler silently skips rule areas, which would turn this into a false success
+            if( zone->GetIsRuleArea() )
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( fmt::format( "zone with ID {} is a rule area and cannot be filled",
+                                                  id.value() ) );
+                return tl::unexpected( e );
+            }
+
+            // A repeated id would enqueue concurrent fill tasks for the same zone
+            if( !alg::contains( toFill, zone ) )
+                toFill.push_back( zone );
+        }
+
+        std::unique_ptr<COMMIT> commit = createCommit();
+        ZONE_FILLER             filler( board(), commit.get() );
+
+        if( !filler.Fill( toFill ) )
+        {
+            commit->Revert();
+
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_UNKNOWN );
+            e.set_error_message( "zone fill failed" );
+            return tl::unexpected( e );
+        }
+
+        commit->Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
+        board()->BuildConnectivity();
+        toolManager()->PostEvent( EVENTS::ConnectivityChangedEvent );
+
+        if( frame() )
+        {
+            frame()->GetCanvas()->RedrawRatsnest();
+            frame()->GetCanvas()->Refresh();
+        }
     }
 
     return Empty();

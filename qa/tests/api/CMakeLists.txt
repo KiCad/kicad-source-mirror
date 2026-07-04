@@ -20,6 +20,7 @@ set( QA_API_SRCS
     test_api_enums.cpp
     test_api_proto.cpp
     test_api_e2e.cpp
+    test_api_handler_pcb.cpp
     test_api_jobs.cpp
     test_api_wizards.cpp
     )

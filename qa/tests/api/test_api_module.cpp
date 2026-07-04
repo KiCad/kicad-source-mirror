@@ -21,6 +21,7 @@
 #include <wx/app.h>
 
 #include <mock_pgm_base.h>
+#include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <qa_utils/wx_utils/wx_assert.h>
@@ -47,6 +48,10 @@ bool init_unit_test()
 
         Pgm().InitPgm( true, true );
         Pgm().GetSettingsManager().LoadProject( "" );
+
+        // Board commits read PCBNEW_SETTINGS from the program settings manager, which the
+        // pcbnew kiface registers in a real session
+        Pgm().GetSettingsManager().RegisterSettings( new PCBNEW_SETTINGS, false );
     }
 
     return ok;
