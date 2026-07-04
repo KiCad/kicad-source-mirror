@@ -587,9 +587,11 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM*>& aItems,
                                                        CONVERT_STRATEGY aStrategy )
 {
-    // TODO: This code has a somewhat-similar purpose to ConvertOutlineToPolygon but is slightly
-    // different, so this remains a separate algorithm.  It might be nice to analyze the dfiferences
-    // in requirements and refactor this.
+    // This intentionally does not delegate to ConvertOutlineToPolygon.  That routine accepts only
+    // PCB_SHAPEs, so the tracks in this tool's heterogeneous selection would need throwaway shapes
+    // built for them.  It also fails the whole conversion on any unclosed contour and resolves an
+    // outline/hole hierarchy, whereas this tool is best-effort, silently dropping chains that fail
+    // to close and emitting only flat top-level outlines.
 
     // Using a large epsilon here to allow for sloppy drawing can cause the algorithm to miss very
     // short segments in a converted bezier.  So use an epsilon only large enough to cover for
