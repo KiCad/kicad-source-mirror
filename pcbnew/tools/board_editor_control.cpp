@@ -1830,6 +1830,9 @@ int BOARD_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
     newZone->UnFill();
     zoneSettings.ExportSetting( *newZone );
 
+    if( !newZone->GetZoneName().IsEmpty() )
+        newZone->SetZoneName( board()->GetUniqueZoneName( newZone->GetZoneName() ) );
+
     // If the new zone is on the same layer(s) as the initial zone,
     // offset it a bit so it can more easily be picked.
     if( oldZone->GetLayerSet() == zoneSettings.m_Layers )

@@ -2002,6 +2002,15 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
             }
 
             item->SetParent( board() );
+
+            // A pasted zone must not reuse a name already on the board (issue 23131)
+            if( item->Type() == PCB_ZONE_T )
+            {
+                ZONE* zone = static_cast<ZONE*>( item );
+
+                if( !zone->GetZoneName().IsEmpty() )
+                    zone->SetZoneName( board()->GetUniqueZoneName( zone->GetZoneName() ) );
+            }
         }
 
         // Update item attributes if needed
