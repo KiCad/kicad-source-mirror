@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-07-04 09:01+0000\n"
+"PO-Revision-Date: 2026-07-05 17:01+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -6717,23 +6717,23 @@ msgstr "Element id: "
 
 #: common/diff_merge/auto_resolution.cpp:252
 msgid "Current resolution: "
-msgstr "Bieżąca rozdzielczość: "
+msgstr "Bieżące rozwiązanie: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
-msgstr ""
+msgstr "Weź nasze"
 
 #: common/diff_merge/auto_resolution.cpp:257
 msgid "Take theirs"
-msgstr ""
+msgstr "Weź ich"
 
 #: common/diff_merge/auto_resolution.cpp:258
 msgid "Take ancestor"
-msgstr ""
+msgstr "Weź przodka"
 
 #: common/diff_merge/auto_resolution.cpp:259
 msgid "Property-level merge"
-msgstr ""
+msgstr "Scalanie na poziomie właściwości"
 
 #: common/diff_merge/auto_resolution.cpp:260 common/grid_tricks.cpp:400
 #: common/tool/actions.cpp:404 common/widgets/listbox_tricks.cpp:208
@@ -6748,14 +6748,13 @@ msgid "Delete"
 msgstr "Usuń"
 
 #: common/diff_merge/auto_resolution.cpp:261
-#, fuzzy
 msgid "Keep (default)"
-msgstr "Resetuj do domyślnych"
+msgstr "Zachowaj (domyślnie)"
 
 #: common/diff_merge/auto_resolution.cpp:265
 #, c-format
 msgid "%zu property edit(s) in this resolution.\n"
-msgstr ""
+msgstr "%zu edycji właściwości w tym rozwiązaniu.\n"
 
 #: common/diff_merge/diff_job_output.cpp:88
 msgid "Failed to render diff image\n"
@@ -6763,12 +6762,11 @@ msgstr "Nie można wyrenderować obrazu zmian\n"
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
-msgstr ""
+msgstr "Kolizja"
 
 #: common/diff_merge/diff_tree_grouping.cpp:41
-#, fuzzy
 msgid "Duplicate ID"
-msgstr "Powiel"
+msgstr "Powielony ID"
 
 #: common/draw_panel_gal.cpp:228 common/draw_panel_gal.cpp:664
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -7545,13 +7543,12 @@ msgstr "Wielokąt"
 #: common/eda_shape.cpp:469 common/eda_shape.cpp:1463 common/eda_shape.cpp:3394
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:213
 msgid "Ellipse"
-msgstr ""
+msgstr "Elipsa"
 
 #: common/eda_shape.cpp:470 common/eda_shape.cpp:1464 common/eda_shape.cpp:3395
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:229
-#, fuzzy
 msgid "Elliptical Arc"
-msgstr "Rozdziel łuk"
+msgstr "Łuk eliptyczny"
 
 #: common/eda_shape.cpp:1448
 msgid "Pad Number Box"
