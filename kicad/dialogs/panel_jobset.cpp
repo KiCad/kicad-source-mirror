@@ -431,7 +431,9 @@ JOBS_GRID_TRICKS::JOBS_GRID_TRICKS( PANEL_JOBSET* aParent, WX_GRID* aGrid ) :
 
 void JOBS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
-    wxArrayInt selectedRows = m_grid->GetSelectedRows();
+    // Snapshot the selection, PopupMenu() below can lose it before doPopupSelection() runs
+    m_selectedRows = m_grid->GetSelectedRows();
+    wxArrayInt& selectedRows = m_selectedRows;
 
     menu.Append( JOB_DESCRIPTION, _( "Edit Job Description" ) );
     menu.Append( JOB_PROPERTIES, _( "Edit Job Settings..." ) );
@@ -450,7 +452,7 @@ void JOBS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
 void JOBS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 {
-    wxArrayInt selectedRows = m_grid->GetSelectedRows();
+    wxArrayInt& selectedRows = m_selectedRows;
 
     if( event.GetId() == JOB_DESCRIPTION )
     {
