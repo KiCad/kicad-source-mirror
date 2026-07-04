@@ -267,8 +267,7 @@ void D_CODE::DrawFlashedPolygon( const GERBER_DRAW_ITEM* aParent, wxDC* aDC,
         return;
 
     int pointCount = m_Polygon.VertexCount();
-    std::vector<VECTOR2I> points;
-    points.reserve( pointCount );
+    std::vector<VECTOR2I> points( pointCount );
 
     for( int ii = 0; ii < pointCount; ii++ )
     {
@@ -279,10 +278,6 @@ void D_CODE::DrawFlashedPolygon( const GERBER_DRAW_ITEM* aParent, wxDC* aDC,
 
     GRClosedPoly( aDC, pointCount, &points[0], aFilled, aColor );
 }
-
-
-// TODO(snh): Remove the hard-coded count
-#define SEGS_CNT 64     // number of segments to approximate a circle
 
 
 // A helper function for D_CODE::ConvertShapeToPolygon().   Add a hole to a polygon
@@ -330,49 +325,24 @@ void D_CODE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent )
 
     case APT_OVAL:
     {
-        m_Polygon.NewOutline();
-        int delta, radius;
+        // Use the shared tessellator so flashed ovals follow the same size-and-accuracy
+        // convention as circle apertures and drawn oval segments.
+        int arc_to_seg_error = gerbIUScale.mmToIU( 0.005 );    // Allow 5 microns
+        VECTOR2I delta;
+        int      width;
 
-        // we create an horizontal oval shape. then rotate if needed
         if( m_Size.x > m_Size.y )   // horizontal oval
         {
-            delta = ( m_Size.x - m_Size.y ) / 2;
-            radius = m_Size.y / 2;
+            delta = VECTOR2I( ( m_Size.x - m_Size.y ) / 2, 0 );
+            width = m_Size.y;
         }
         else   // vertical oval
         {
-            delta  = (m_Size.y - m_Size.x) / 2;
-            radius = m_Size.x / 2;
+            delta = VECTOR2I( 0, ( m_Size.y - m_Size.x ) / 2 );
+            width = m_Size.x;
         }
 
-        currpos.y  = radius;
-        initialpos = currpos;
-        m_Polygon.Append( VECTOR2I( currpos ) );
-
-        // build the right arc of the shape
-        unsigned ii = 0;
-
-        for( ; ii <= SEGS_CNT / 2; ii++ )
-        {
-            currpos = initialpos;
-            RotatePoint( currpos, ANGLE_360 * ii / SEGS_CNT );
-            currpos.x += delta;
-            m_Polygon.Append( VECTOR2I( currpos ) );
-        }
-
-        // build the left arc of the shape
-        for( ii = SEGS_CNT / 2; ii <= SEGS_CNT; ii++ )
-        {
-            currpos = initialpos;
-            RotatePoint( currpos, ANGLE_360 * ii / SEGS_CNT );
-            currpos.x -= delta;
-            m_Polygon.Append( currpos );
-        }
-
-        m_Polygon.Append( initialpos );      // close outline
-
-        if( m_Size.y > m_Size.x )                   // vertical oval, rotate polygon.
-            m_Polygon.Rotate( ANGLE_90 );
+        TransformOvalToPolygon( m_Polygon, -delta, delta, width, arc_to_seg_error, ERROR_INSIDE );
 
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );
     }

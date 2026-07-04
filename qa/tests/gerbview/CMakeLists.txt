@@ -21,6 +21,7 @@ set( QA_GERBVIEW_SRCS
     test_module.cpp
 
     test_aperture_macro.cpp
+    test_dcode.cpp
     test_excellon_repeat.cpp
 
     # Gerbview-specific tests
