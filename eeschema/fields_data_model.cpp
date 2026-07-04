@@ -939,9 +939,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& 
 
 bool FIELDS_EDITOR_GRID_DATA_MODEL::isAttribute( const wxString& aFieldName )
 {
-    return aFieldName == wxS( "${DNP}" )
-           || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
-           || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" )
+    return aFieldName == wxS( "${DNP}" ) || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
+           || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) || aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_SIM}" );
 }
 
@@ -960,6 +959,9 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFERENCE& 
 
     if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
         return aRef.GetSymbolExcludedFromSim( aVariantName ) ? wxS( "1" ) : wxS( "0" );
+
+    if( aAttributeName == wxS( "${EXCLUDE_FROM_POS_FILES}" ) )
+        return aRef.GetSymbolExcludedFromPosFiles( aVariantName ) ? wxS( "1" ) : wxS( "0" );
 
     return wxS( "0" );
 }
@@ -1059,6 +1061,11 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_REFERENCE&  aRef,
     {
         attrChanged = aRef.GetSymbolExcludedFromSim( aVariantName ) != newValue;
         aRef.SetSymbolExcludedFromSim( newValue, aVariantName );
+    }
+    else if( aAttributeName == wxS( "${EXCLUDE_FROM_POS_FILES}" ) )
+    {
+        attrChanged = aRef.GetSymbolExcludedFromPosFiles( aVariantName ) != newValue;
+        aRef.SetSymbolExcludedFromPosFiles( newValue, aVariantName );
     }
 
     return attrChanged;

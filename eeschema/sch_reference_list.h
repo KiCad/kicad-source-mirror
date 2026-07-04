@@ -230,11 +230,13 @@ public:
     bool GetSymbolExcludedFromBOM( const wxString& aVariant = wxEmptyString ) const;
     bool GetSymbolExcludedFromSim( const wxString& aVariant = wxEmptyString ) const;
     bool GetSymbolExcludedFromBoard() const;
+    bool GetSymbolExcludedFromPosFiles( const wxString& aVariant = wxEmptyString ) const;
 
     void SetSymbolDNP( bool aEnable, const wxString& aVariant = wxEmptyString );
     void SetSymbolExcludedFromBOM( bool aEnable, const wxString& aVariant = wxEmptyString );
     void SetSymbolExcludedFromSim( bool aEnable, const wxString& aVariant = wxEmptyString );
     void SetSymbolExcludedFromBoard( bool aEnable );
+    void SetSymbolExcludedFromPosFiles( bool aEnable, const wxString& aVariant = wxEmptyString );
 
 private:
     wxString formatRefStr( int aNumber ) const;
