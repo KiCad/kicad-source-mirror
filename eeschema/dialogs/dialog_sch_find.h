@@ -48,6 +48,7 @@ protected:
     // Handlers for DIALOG_SCH_FIND_BASE events.
     void OnClose( wxCloseEvent& aEvent ) override;
     void OnCancel( wxCommandEvent& aEvent ) override;
+    void OnCharHook( wxKeyEvent& aEvent ) override;
     void OnSearchForSelect( wxCommandEvent& aEvent ) override;
     void OnSearchForText( wxCommandEvent& aEvent ) override;
     void OnSearchForEnter( wxCommandEvent& event ) override;

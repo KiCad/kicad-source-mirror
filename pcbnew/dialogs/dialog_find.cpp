@@ -119,6 +119,18 @@ void DIALOG_FIND::onFindPreviousClick( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_FIND::OnCharHook( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_F3 )
+    {
+        FindNext( aEvent.ShiftDown() );
+        return;
+    }
+
+    DIALOG_SHIM::OnCharHook( aEvent );
+}
+
+
 void DIALOG_FIND::onSearchAgainClick( wxCommandEvent& aEvent )
 {
     m_upToDate = false;
