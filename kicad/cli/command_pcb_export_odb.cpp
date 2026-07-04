@@ -54,6 +54,8 @@ CLI::PCB_EXPORT_ODB_COMMAND::PCB_EXPORT_ODB_COMMAND() :
             .help( std::string( "Units" ) )
             .choices( "mm", "in" );
 
+    m_argParser.add_argument( ARG_CHECK_ZONES ).help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) ).flag();
+
     addVariantsArg();
 }
 
@@ -77,6 +79,7 @@ int CLI::PCB_EXPORT_ODB_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     job->m_precision = m_argParser.get<int>( ARG_PRECISION );
+    job->m_checkZonesBeforeExport = m_argParser.get<bool>( ARG_CHECK_ZONES );
 
     wxString units = From_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
 
