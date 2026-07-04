@@ -79,7 +79,16 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
                 else
                 {
                     for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
+                    {
                         visit( item, sheetPath );
+
+                        item->RunOnChildren(
+                                [&]( SCH_ITEM* aChild )
+                                {
+                                    visit( aChild, sheetPath );
+                                },
+                                RECURSE_MODE::NO_RECURSE );
+                    }
                 }
             };
 
