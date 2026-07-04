@@ -29,6 +29,9 @@
 #include <wx/xml/xml.h>
 #include <wx/string.h>
 #include <wx/tokenzr.h>
+#include <wx/xlocale.h>
+
+#include <cmath>
 
 
 namespace PCAD_SCH
