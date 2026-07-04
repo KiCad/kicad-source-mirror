@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-03-18 20:46+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-07-04 09:01+0000\n"
+"Last-Translator: \"Triyan W. Nugroho\" <triyan.wn@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
 "source/id/>\n"
 "Language: id\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:54
 #: common/dialogs/panel_embedded_files.cpp:392
@@ -30,7 +30,7 @@ msgstr "Semua Berkas"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:339
 msgid "Build board outline"
-msgstr "Buat garis besar papan sirkuit"
+msgstr "Bangun garis luar papan sirkuit"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:575
 msgid "Create layers"
@@ -45,13 +45,13 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Garis besar footprint hilang atau salah format. Jalankan Pemeriksa Footprint "
+"Garis luar footprint hilang atau salah format. Jalankan Pemeriksa Footprint "
 "untuk analisis lengkap."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1028
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Garis besar papan sirkuit hilang atau salah format. Jalankan DRC untuk "
+"Garis luar papan sirkuit hilang atau salah format. Jalankan DRC untuk "
 "analisis lengkap."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:311
@@ -64,7 +64,7 @@ msgstr "Buat zona"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1316
 msgid "Build Tech layers"
-msgstr "Bangun lapisan Teknologi"
+msgstr "Bangun lapisan Tech"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1393
 #, c-format
@@ -377,9 +377,8 @@ msgid "Render current view using Raytracing"
 msgstr "Render tampilan saat ini menggunakan Raytracing"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
-#, fuzzy
 msgid "Show parts without 3D model"
-msgstr "Tampilkan pad dalam mode garis besar"
+msgstr "Tampilkan bagian-bagian tanpa model 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
 msgid "Display a placeholder for footprints with missing 3D models"
@@ -2079,9 +2078,8 @@ msgid "invalid plugin runtime: %s"
 msgstr "Nama pin tidak valid"
 
 #: common/api/api_plugin.cpp:105
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "Tidak dapat mengakses konfigurasi repositori"
+msgstr "tidak dapat membaca berkas konfigurasi plugin"
 
 #: common/api/api_plugin.cpp:125
 #, fuzzy, c-format
