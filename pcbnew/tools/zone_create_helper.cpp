@@ -95,6 +95,9 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     zoneInfo.m_Netcode = highlightedNets.empty() ? -1 : *highlightedNets.begin();
     zoneInfo.SetIsRuleArea( m_params.m_keepout );
 
+    // A new zone starts unnamed, do not inherit the last drawn zone's name (issue 23131)
+    zoneInfo.m_Name = wxEmptyString;
+
     if( m_params.m_thieving )
     {
         zoneInfo.m_FillMode = ZONE_FILL_MODE::COPPER_THIEVING;

@@ -36,9 +36,13 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_zoneNameLabel = new wxStaticText( this, wxID_ANY, _("Zone name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_zoneNameLabel->Wrap( -1 );
+	m_zoneNameLabel->SetToolTip( _("A unique name for this zone, used to identify it in DRC rules") );
+
 	gbSizer8->Add( m_zoneNameLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_tcZoneName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tcZoneName->SetToolTip( _("A unique name for this zone, used to identify it in DRC rules") );
+
 	gbSizer8->Add( m_tcZoneName, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 	m_netLabel = new wxStaticText( this, wxID_ANY, _("Net name:"), wxDefaultPosition, wxDefaultSize, 0 );

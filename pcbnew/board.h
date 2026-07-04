@@ -424,6 +424,13 @@ public:
 
     const ZONES& Zones() const { return m_zones; }
 
+    /**
+     * Return a name based on aBaseName that is not used by any other zone or rule area on
+     * the board. An empty or already-unique name is returned unchanged. aExclude is skipped
+     * during the search, used when renaming an existing zone so it does not collide with itself.
+     */
+    wxString GetUniqueZoneName( const wxString& aBaseName, const ZONE* aExclude = nullptr ) const;
+
     const GENERATORS& Generators() const { return m_generators; }
 
     PCB_BOARD_OUTLINE*       BoardOutline() { return m_boardOutline; }

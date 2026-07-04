@@ -780,6 +780,8 @@ public:
     EDA_ITEM* Clone() const override;
     ZONE* Clone( PCB_LAYER_ID aLayer ) const;
 
+    BOARD_ITEM* Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit = nullptr ) const override;
+
     /**
      * @return true if the zone is a teardrop area
      */

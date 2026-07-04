@@ -66,6 +66,7 @@ private:
     ZONE_SETTINGS      m_zonesettings;    ///< the working copy of zone settings
     ZONE_SETTINGS*     m_ptr;             ///< the pointer to the zone settings of the zone to edit
     bool               m_isFpEditor;
+    wxString           m_originalName; ///< name the dialog opened with, to detect edits
 
     CONVERT_SETTINGS*  m_convertSettings;
     wxRadioButton*     m_rbCenterline;
@@ -351,6 +352,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
 
     m_cbLocked->SetValue( m_zonesettings.m_Locked );
     m_tcName->SetValue( m_zonesettings.m_Name );
+    m_originalName = m_zonesettings.m_Name;
 
     switch( m_zonesettings.m_ZoneBorderDisplayStyle )
     {
@@ -522,6 +524,10 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
     m_zonesettings.m_ZonePriority = 0;  // for a keepout, this param is not used.
 
     m_zonesettings.m_Name = m_tcName->GetValue();
+
+    // Only enforce uniqueness when the user actually changed the name (issue 23131)
+    if( m_board && m_zonesettings.m_Name != m_originalName )
+        m_zonesettings.m_Name = m_board->GetUniqueZoneName( m_zonesettings.m_Name );
 
     *m_ptr = m_zonesettings;
     return true;

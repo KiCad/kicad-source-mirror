@@ -1292,6 +1292,57 @@ void BOARD::FixupEmbeddedData()
 }
 
 
+wxString BOARD::GetUniqueZoneName( const wxString& aBaseName, const ZONE* aExclude ) const
+{
+    if( aBaseName.IsEmpty() )
+        return aBaseName;
+
+    auto inUse = [&]( const wxString& aName )
+    {
+        for( const ZONE* zone : m_zones )
+        {
+            if( zone != aExclude && zone->GetZoneName() == aName )
+                return true;
+        }
+
+        return false;
+    };
+
+    if( !inUse( aBaseName ) )
+        return aBaseName;
+
+    // Strip a trailing _<number> so repeated copies increment the root (foo_1 -> foo_2),
+    // instead of stacking suffixes (foo_1_1_1).
+    wxString root = aBaseName;
+
+    if( aBaseName.Find( '_' ) != wxNOT_FOUND )
+    {
+        wxString suffix = aBaseName.AfterLast( '_' );
+        bool     allDigits = !suffix.IsEmpty();
+
+        for( wxUniChar ch : suffix )
+        {
+            if( !wxIsdigit( ch ) )
+            {
+                allDigits = false;
+                break;
+            }
+        }
+
+        if( allDigits )
+            root = aBaseName.BeforeLast( '_' );
+    }
+
+    for( int i = 1;; ++i )
+    {
+        wxString candidate = wxString::Format( wxT( "%s_%d" ), root, i );
+
+        if( !inUse( candidate ) )
+            return candidate;
+    }
+}
+
+
 void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity )
 {
     if( aBoardItem == nullptr )

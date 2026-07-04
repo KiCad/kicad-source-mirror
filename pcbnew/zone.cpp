@@ -229,6 +229,23 @@ ZONE* ZONE::Clone( PCB_LAYER_ID aLayer ) const
 }
 
 
+BOARD_ITEM* ZONE::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit ) const
+{
+    BOARD_ITEM* dupe = BOARD_ITEM::Duplicate( addToParentGroup, aCommit );
+
+    if( const BOARD* board = GetBoard() )
+    {
+        ZONE* newZone = static_cast<ZONE*>( dupe );
+
+        // Give the copy its own name so it does not collide with the original (issue 23131)
+        if( !newZone->GetZoneName().IsEmpty() )
+            newZone->SetZoneName( board->GetUniqueZoneName( newZone->GetZoneName(), newZone ) );
+    }
+
+    return dupe;
+}
+
+
 void ZONE::Serialize( google::protobuf::Any& aContainer ) const
 {
     using namespace kiapi::board;

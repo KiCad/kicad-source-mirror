@@ -420,6 +420,9 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
 
     m_settings->m_Name = m_tcZoneName->GetValue();
 
+    if( BOARD* board = m_frame->GetBoard() )
+        m_settings->m_Name = board->GetUniqueZoneName( m_settings->m_Name, m_zone );
+
     // Avoid clobbering theiving zone properties
     if( m_settings->m_FillMode != ZONE_FILL_MODE::COPPER_THIEVING )
     {
