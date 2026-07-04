@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-06-30 23:01+0000\n"
+"PO-Revision-Date: 2026-07-04 09:01+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -3154,9 +3154,8 @@ msgid "Status"
 msgstr "Status"
 
 #: common/dialogs/dialog_git_mr_review.cpp:49
-#, fuzzy
 msgid "Old Path"
-msgstr "Wyszukaj następny"
+msgstr "Poprzednia ścieżka"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 msgid "No git repository available."
@@ -3167,13 +3166,12 @@ msgstr "Brak dostępnego repozytorium git."
 #: common/dialogs/dialog_git_mr_review.cpp:119
 #: common/dialogs/dialog_git_mr_review_base.h:58
 #: kicad/kicad_manager_frame.cpp:1179
-#, fuzzy
 msgid "Compare Branches"
-msgstr "Prześwity"
+msgstr "Porównaj gałęzie"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
-msgstr ""
+msgstr "Wybierz odnośniki base i head, aby je porównać."
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
 #, c-format
@@ -3437,11 +3435,11 @@ msgstr "Właściwość"
 
 #: common/dialogs/dialog_kicad_diff.cpp:63
 msgid "Before"
-msgstr ""
+msgstr "Przed"
 
 #: common/dialogs/dialog_kicad_diff.cpp:64
 msgid "After"
-msgstr ""
+msgstr "Za"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
 msgid "Filter changes…"
@@ -3522,12 +3520,12 @@ msgstr "Folder"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
-msgstr ""
+msgstr "Nowszy"
 
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
 msgid "Select a change in the tree to view details"
-msgstr ""
+msgstr "Wybierz zmianę w widoku drzewa by wyświetlić szczegóły"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:25
 #: pcbnew/dialogs/dialog_text_properties.cpp:121
@@ -3559,7 +3557,7 @@ msgstr "Nie wybrano połączonych sieci."
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
 msgid "%zu conflict(s) require resolution."
-msgstr ""
+msgstr "%zu konfliktów wymaga rozwiązania."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:217
 #, c-format
@@ -3567,6 +3565,8 @@ msgid ""
 "%zu conflict(s) still need a resolution. Pick Ours, Theirs, or Ancestor for "
 "each one."
 msgstr ""
+"%zu konfliktów nadal wymaga rozwiązania. Dla każdego z nich wybierz opcję "
+"Nasz, Ich lub Przodek."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:220
 #: common/dialogs/dialog_kicad_merge_3way_base.h:65
@@ -3587,6 +3587,8 @@ msgstr "Konflikt w %s"
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
 msgstr ""
+"Rozwiąż każdy konflikt wybierając którą stronę chcesz zachować, następnie "
+"kliknij Zastosuj."
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:31
 #: eeschema/erc/erc_item.cpp:38
@@ -3600,16 +3602,15 @@ msgstr "Nazwa pinu wewnątrz"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
-msgstr ""
+msgstr "Nasz"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:64
 msgid "Theirs"
-msgstr ""
+msgstr "Ich"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
-#, fuzzy
 msgid "Ancestor"
-msgstr "Przywróć"
+msgstr "Przodek"
 
 #: common/dialogs/dialog_page_settings.cpp:84
 msgid "Preview Settings"
