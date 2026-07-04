@@ -156,10 +156,30 @@ JSON_SETTINGS* SETTINGS_MANAGER::registerSettings( JSON_SETTINGS* aSettings, boo
 }
 
 
+// Color settings writes are owned by SaveColorSettings and project file writes by SaveProject or
+// UnloadProject, so the manager must never write either on its own.  Project local settings stay
+// eligible; they carry view state that should persist even when the project is not saved.
+static bool managerMayAutoSave( JSON_SETTINGS* aSettings )
+{
+    return !dynamic_cast<COLOR_SETTINGS*>( aSettings ) && !dynamic_cast<PROJECT_FILE*>( aSettings );
+}
+
+
+// Load() can run late in the application lifecycle, so pending in-memory edits are flushed first
+// or the stale on-disk copy would clobber them.  Objects that have never been synchronized with
+// their file are never flushed; for those a store mismatch only means the object has not been
+// populated yet, and writing it out would replace the file with construction state.
+static void reloadFromFile( JSON_SETTINGS* aSettings, const wxString& aPath )
+{
+    if( aSettings->IsFileSynced() && managerMayAutoSave( aSettings ) )
+        aSettings->SaveToFile( aPath );
+
+    aSettings->LoadFromFile( aPath );
+}
+
+
 void SETTINGS_MANAGER::Load()
 {
-    // TODO(JE) We should check for dirty settings here and write them if so, because
-    // Load() could be called late in the application lifecycle
     std::vector<JSON_SETTINGS*> toLoad;
 
     // Cache a copy of raw pointers; m_settings may be modified during the load loop
@@ -170,7 +190,7 @@ void SETTINGS_MANAGER::Load()
                     } );
 
     for( JSON_SETTINGS* settings : toLoad )
-        settings->LoadFromFile( GetPathForSettingsFile( settings ) );
+        reloadFromFile( settings, GetPathForSettingsFile( settings ) );
 }
 
 
@@ -183,7 +203,7 @@ void SETTINGS_MANAGER::Load( JSON_SETTINGS* aSettings )
                             } );
 
     if( it != m_settings.end() )
-        ( *it )->LoadFromFile( GetPathForSettingsFile( it->get() ) );
+        reloadFromFile( it->get(), GetPathForSettingsFile( it->get() ) );
 }
 
 
@@ -191,17 +211,8 @@ void SETTINGS_MANAGER::Save()
 {
     for( auto&& settings : m_settings )
     {
-        // Never automatically save color settings, caller should use SaveColorSettings
-        if( dynamic_cast<COLOR_SETTINGS*>( settings.get() ) )
+        if( !managerMayAutoSave( settings.get() ) )
             continue;
-
-        // Never automatically save project file, caller should use SaveProject or UnloadProject
-        // We do want to save the project local settings, though because they are generally view
-        // settings that should persist even if the project is not saved
-        if( dynamic_cast<PROJECT_FILE*>( settings.get() ) )
-        {
-            continue;
-        }
 
         settings->SaveToFile( GetPathForSettingsFile( settings.get() ) );
     }
@@ -241,6 +252,10 @@ void SETTINGS_MANAGER::FlushAndRelease( JSON_SETTINGS* aSettings, bool aSave )
 
         JSON_SETTINGS* tmp = it->get(); // We use a temporary to suppress a Clang warning
         size_t         typeHash = typeid( *tmp ).hash_code();
+
+        // Releasing the common settings would otherwise leave the cached pointer dangling
+        if( tmp == m_common_settings )
+            m_common_settings = nullptr;
 
         if( m_app_settings_cache.count( typeHash ) )
             m_app_settings_cache.erase( typeHash );

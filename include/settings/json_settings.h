@@ -142,6 +142,12 @@ public:
     virtual bool SaveToFile( const wxString& aDirectory = "", bool aForce = false );
 
     /**
+     * @return true once the in-memory store has been synchronized with an on-disk file, either
+     *         by loading an existing file or by a successful save
+     */
+    bool IsFileSynced() const { return m_fileSynced; }
+
+    /**
      * Resets all parameters to default values.  Does NOT write to file or update underlying JSON.
      */
     void ResetToDefaults();
@@ -345,6 +351,9 @@ protected:
 
     /// True if the JSON data store has been written to since the last file write
     bool m_modified;
+
+    /// True once the store has been synchronized with an on-disk file (loaded or saved)
+    bool m_fileSynced;
 
     /// Whether or not to delete legacy file after migration
     bool m_deleteLegacyAfterMigration;
