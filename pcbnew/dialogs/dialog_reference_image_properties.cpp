@@ -180,7 +180,9 @@ void DIALOG_REFERENCE_IMAGE_PROPERTIES::onScaleChanged( wxCommandEvent& aEvent )
     if( scale <= 0 )
         return;
 
-    m_imageEditor->SetScale( scale );
+    // Update the preview and size fields, but leave the scale field alone.  SetScale()
+    // would rewrite it and send the caret back to the start on every keystroke.
+    m_imageEditor->UpdateImageScale( scale );
     VECTOR2I size = m_imageEditor->GetImageSize();
     m_width.ChangeDoubleValue( size.x );
     m_height.ChangeDoubleValue( size.y );
