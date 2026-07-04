@@ -260,7 +260,7 @@ std::vector<wxString> SIM_MODEL_IBIS::GetSpiceIncludes( const SPICE_ITEM& aItem,
     wxFileName cacheFn;
     cacheFn.AssignDir( PATHS::GetUserCachePath() );
     cacheFn.AppendDir( wxT( "ibis" ) );
-    cacheFn.SetFullName( aItem.refName + wxT( ".cache" ) );
+    cacheFn.SetFullName( aItem.refName + ".cache" );
 
     wxFile cacheFile( cacheFn.GetFullPath(), wxFile::write );
 
