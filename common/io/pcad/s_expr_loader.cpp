@@ -29,6 +29,7 @@
 
 #include <wx/ffile.h>
 #include <wx/string.h>
+#include <wx/translation.h>
 #include <wx/xml/xml.h>
 
 namespace PCAD2KICAD {
