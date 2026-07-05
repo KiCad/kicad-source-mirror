@@ -750,24 +750,37 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                    GetCurrentSheet().Path().AsString(),
                    GetCurrentSheet().size() );
 
-        // Migrate conflicting bus definitions, but only for files old enough to store them.
-        SCH_SCREEN* schRootScreen = Schematic().RootScreen();
-        int         schFileVersion = schRootScreen ? schRootScreen->GetFileFormatVersionAtLoad() : 0;
-
-        if( DIALOG_MIGRATE_BUSES::ShouldPrompt(
-                    schFileVersion, Schematic().ConnectionGraph()->GetBusesNeedingMigration().size() ) )
-        {
-            DIALOG_MIGRATE_BUSES dlg( this );
-            dlg.ShowQuasiModal();
-            OnModify();
-        }
-
         SCH_COMMIT dummy( this );
 
         progressReporter.Report( _( "Updating connections..." ) );
         progressReporter.KeepRefreshing();
 
         RecalculateConnections( &dummy, GLOBAL_CLEANUP, &progressReporter );
+
+        // Migrate conflicting bus definitions, but only for files old enough to store them.
+        // The connection graph must be rebuilt first so GetBusesNeedingMigration() can see the
+        // conflicting subgraphs; the earlier Reset() clears them.
+        SCH_SCREEN* schRootScreen = Schematic().RootScreen();
+        int         schFileVersion = schRootScreen ? schRootScreen->GetFileFormatVersionAtLoad() : 0;
+
+        if( DIALOG_MIGRATE_BUSES::ShouldPrompt(
+                    schFileVersion, Schematic().ConnectionGraph()->GetBusesNeedingMigration().size() ) )
+        {
+            progressReporter.Hide();
+
+            // The rebuild below frees the subgraphs the dialog caches, and a progress update can
+            // dispatch queued UI events into its still-bound handlers, so destroy the dialog first.
+            {
+                DIALOG_MIGRATE_BUSES dlg( this );
+                dlg.ShowQuasiModal();
+            }
+
+            OnModify();
+            progressReporter.Show();
+
+            // Relabeling the conflicting buses changes connectivity, so rebuild it.
+            RecalculateConnections( &dummy, GLOBAL_CLEANUP, &progressReporter );
+        }
 
         if( schematic.HasSymbolFieldNamesWithWhiteSpace() )
         {
