@@ -31,8 +31,12 @@
 #include <eeschema/sch_io/altium/altium_parser_sch.h>
 #include <eeschema/sch_text.h>
 #include <layer_ids.h>
+#include <project/net_settings.h>
 #include <validators.h>
 #include <wx/filename.h>
+
+#include <set>
+#include <vector>
 
 // Function declarations of private methods to test
 int ReadKiCadUnitFrac( const std::map<wxString, wxString>& aProps,
@@ -42,6 +46,10 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
                          ASCH_RECORD_ORIENTATION orientation );
 
 void AdjustTextForSymbolOrientation( SCH_TEXT* aText, const ASCH_SYMBOL& aSymbol );
+
+wxString AltiumWrapBusLabel( const wxString& aText );
+
+wxString AltiumDeriveSheetName( const wxString& aFilename, const std::set<wxString>& aExistingNames );
 
 
 struct ALTIUM_PARSER_SCH_FIXTURE
@@ -379,5 +387,56 @@ BOOST_AUTO_TEST_CASE( TextOrientationCompensation )
         }
     }
 }
+
+
+/**
+ * Guard the exact transform SCH_IO_ALTIUM::PostProcessBusLabels() applies to a scalar net
+ * label found on a bus line (issue #20707).  Plain labels must become single-member bus
+ * groups so KiCad connects them to the bus; anything already a bus label is left untouched.
+ */
+BOOST_AUTO_TEST_CASE( BusLabelWrapping )
+{
+    BOOST_CHECK_EQUAL( AltiumWrapBusLabel( wxT( "I2C" ) ), wxT( "{I2C}" ) );
+    BOOST_CHECK_EQUAL( AltiumWrapBusLabel( wxT( "SPI" ) ), wxT( "{SPI}" ) );
+    BOOST_CHECK_EQUAL( AltiumWrapBusLabel( wxT( "MOSI" ) ), wxT( "{MOSI}" ) );
+
+    // Already-formatted bus labels pass through unchanged (no double wrapping).
+    BOOST_CHECK_EQUAL( AltiumWrapBusLabel( wxT( "{SPI}" ) ), wxT( "{SPI}" ) );
+    BOOST_CHECK_EQUAL( AltiumWrapBusLabel( wxT( "DATA[0..7]" ) ), wxT( "DATA[0..7]" ) );
+    BOOST_CHECK_EQUAL( AltiumWrapBusLabel( wxT( "I2C{I2C}" ) ), wxT( "I2C{I2C}" ) );
+
+    // A net name with spaces or commas must stay a single bus member, not fan out into
+    // several.  The wrapped form must parse back to exactly one member.
+    for( const wxString& name : { wxT( "Net 1" ), wxT( "A,B" ) } )
+    {
+        wxString              wrapped = AltiumWrapBusLabel( name );
+        std::vector<wxString> members;
+
+        BOOST_CHECK( NET_SETTINGS::ParseBusGroup( wrapped, nullptr, &members ) );
+        BOOST_CHECK_EQUAL( members.size(), 1u );
+    }
+}
+
+
+/**
+ * Guard the name derivation SCH_IO_ALTIUM::EnsureSheetSymbolNames() applies to sheet symbols
+ * that arrive without a SHEET_NAME record.  The name comes from the filename, with a numeric
+ * suffix to disambiguate collisions.
+ */
+BOOST_AUTO_TEST_CASE( SheetNameDerivation )
+{
+    BOOST_CHECK_EQUAL( AltiumDeriveSheetName( wxT( "power.SchDoc" ), {} ), wxT( "power" ) );
+    BOOST_CHECK_EQUAL( AltiumDeriveSheetName( wxT( "my_sheet.SchDoc" ), {} ), wxT( "my_sheet" ) );
+    BOOST_CHECK_EQUAL( AltiumDeriveSheetName( wxT( "" ), {} ), wxT( "Sheet" ) );
+
+    std::set<wxString> existing = { wxT( "power" ) };
+    BOOST_CHECK_EQUAL( AltiumDeriveSheetName( wxT( "power.SchDoc" ), existing ), wxT( "power_1" ) );
+
+    existing.insert( wxT( "power_1" ) );
+    BOOST_CHECK_EQUAL( AltiumDeriveSheetName( wxT( "power.SchDoc" ), existing ), wxT( "power_2" ) );
+
+    BOOST_CHECK_EQUAL( AltiumDeriveSheetName( wxT( "" ), { wxT( "Sheet" ) } ), wxT( "Sheet_1" ) );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
