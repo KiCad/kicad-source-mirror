@@ -41,6 +41,7 @@
 #include <wx/dir.h>
 #include <wx/log.h>
 
+#include <memory>
 #include <stdexcept>
 #include <algorithm>
 
@@ -314,28 +315,35 @@ bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, const wxS
 
 bool NGSPICE::LoadNetlist( const std::string& aNetlist )
 {
-    LOCALE_IO          c_locale;       // ngspice works correctly only with C locale
-    std::vector<char*> lines;
-    std::stringstream  ss( aNetlist );
+    LOCALE_IO         c_locale; // ngspice works correctly only with C locale
+    std::stringstream ss( aNetlist );
 
-    m_netlist.erase();
+    // Own the deck as strings so a bad_alloc mid-build cannot leak or leave m_netlist
+    // half-populated.  ngSpice_Circ only reads the array during the call, so plain string
+    // storage is sufficient and avoids manual strdup/free.
+    std::vector<std::string> ownedLines;
+    std::string              netlist;
 
     for( std::string line; std::getline( ss, line ); )
     {
-        lines.push_back( strdup( line.data() ) );
-        m_netlist += line;
-        m_netlist += '\n';
+        netlist += line;
+        netlist += '\n';
+        ownedLines.push_back( std::move( line ) );
     }
+
+    std::vector<char*> lines;
+    lines.reserve( ownedLines.size() + 1 );
+
+    for( std::string& line : ownedLines )
+        lines.push_back( line.data() );
 
     lines.push_back( nullptr ); // sentinel, as requested in ngSpice_Circ description
 
+    m_netlist = std::move( netlist );
+
     Command( "remcirc" );
-    bool success = !m_ngSpice_Circ( lines.data() );
 
-    for( char* line : lines )
-        free( line );
-
-    return success;
+    return !m_ngSpice_Circ( lines.data() );
 }
 
 
