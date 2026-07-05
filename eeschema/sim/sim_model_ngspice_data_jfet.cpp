@@ -61,14 +61,17 @@ void NGSPICE_MODEL_INFO_MAP::addJFET()
     modelInfos[MODEL_TYPE::JFET].modelParams.emplace_back( "vk", 406, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Ionization knee voltage" );
 
     // Instance parameters
+    // Defaults mirror the ngspice jfet device (jfetset.c area/m, jfettemp.c dtemp). off/ic and the
+    // ic-vds/ic-vgs initial conditions carry no static default, and temp tracks the circuit
+    // temperature, so those stay empty.
     modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "off",  5, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Device initially off", true );
     modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "ic",  4, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT_VECTOR, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial VDS,VGS vector", true );
-    modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "m",  8, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "", "", "Parallel multiplier", true );
-    modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "area",  1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "", "", "Area factor", true );
+    modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "m",  8, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "1", "", "Parallel multiplier", true );
+    modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "area",  1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "1", "", "Area factor", true );
     modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "ic-vds",  2, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial D-S voltage", true );
     modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "ic-vgs",  3, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial G-S volrage", true );
     modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "temp",  6, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::PRINCIPAL, "", "", "Instance temperature", true );
-    modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "dtemp",  7, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instance temperature difference", true );
+    modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "dtemp",  7, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Instance temperature difference", true );
     modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "drain-node",  301, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of drain node", true );
     modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "gate-node",  302, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of gate node", true );
     modelInfos[MODEL_TYPE::JFET].instanceParams.emplace_back( "source-node",  303, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of source node", true );
@@ -140,14 +143,17 @@ void NGSPICE_MODEL_INFO_MAP::addJFET()
     modelInfos[MODEL_TYPE::JFET2].modelParams.emplace_back( "gs", 302, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Source conductance" );
     modelInfos[MODEL_TYPE::JFET2].modelParams.emplace_back( "tnom", 104, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "27", "27", "Measurement temperature" );
     // Instance parameters
+    // Defaults mirror the ngspice jfet2 device (jfet2set.c area/m, jfet2temp.c dtemp). off/ic and
+    // the ic-vds/ic-vgs initial conditions carry no static default, and temp tracks the circuit
+    // temperature, so those stay empty.
     modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "off", 5, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_BOOL, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Device initially off", true );
     modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "ic", 4, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT_VECTOR, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial VDS,VGS vector", true );
-    modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "m", 8, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "", "", "Parallel Multiplier", true );
-    modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "area", 1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "", "", "Area factor", true );
+    modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "m", 8, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "1", "", "Parallel Multiplier", true );
+    modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "area", 1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "1", "", "Area factor", true );
     modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "ic-vds", 2, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial D-S voltage", true );
     modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "ic-vgs", 3, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial G-S volrage", true );
     modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "temp", 6, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::PRINCIPAL, "", "", "Instance temperature", true );
-    modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "dtemp", 7, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instance temperature difference", true );
+    modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "dtemp", 7, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Instance temperature difference", true );
     modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "drain-node", 301, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of drain node", true );
     modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "gate-node", 302, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of gate node", true );
     modelInfos[MODEL_TYPE::JFET2].instanceParams.emplace_back( "source-node", 303, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of source node", true );

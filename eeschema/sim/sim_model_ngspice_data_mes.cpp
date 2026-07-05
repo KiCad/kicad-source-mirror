@@ -48,9 +48,12 @@ void NGSPICE_MODEL_INFO_MAP::addMES()
     modelInfos[MODEL_TYPE::MES].modelParams.emplace_back( "kf",  115, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::NOISE, "NaN", "NaN", "Flicker noise coefficient" );
     modelInfos[MODEL_TYPE::MES].modelParams.emplace_back( "af",  116, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::NOISE, "NaN", "NaN", "Flicker noise exponent" );
     // Instance parameters
+    // Defaults mirror the ngspice mes device (messetup.c area/m). off is a bare flag and
+    // icvds/icvgs derive from node voltages in mesgetic.c, so those stay empty. The m id is the
+    // mesdefs.h MES_M value, distinct from area's MES_AREA.
     modelInfos[MODEL_TYPE::MES].instanceParams.emplace_back( "off",  5, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_BOOL, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Device initially off", true );
-    modelInfos[MODEL_TYPE::MES].instanceParams.emplace_back( "m",  1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "", "", "Parallel Multiplier", true );
-    modelInfos[MODEL_TYPE::MES].instanceParams.emplace_back( "area",  1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "", "", "Area factor", true );
+    modelInfos[MODEL_TYPE::MES].instanceParams.emplace_back( "m",  8, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "1", "", "Parallel Multiplier", true );
+    modelInfos[MODEL_TYPE::MES].instanceParams.emplace_back( "area",  1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "1", "", "Area factor", true );
     modelInfos[MODEL_TYPE::MES].instanceParams.emplace_back( "icvds",  2, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial D-S voltage", true );
     modelInfos[MODEL_TYPE::MES].instanceParams.emplace_back( "icvgs",  3, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial G-S voltage", true );
     modelInfos[MODEL_TYPE::MES].instanceParams.emplace_back( "dnode",  201, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of drain node", true );
@@ -149,15 +152,19 @@ void NGSPICE_MODEL_INFO_MAP::addMES()
     modelInfos[MODEL_TYPE::MESA].modelParams.emplace_back( "gs", 302, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::DC, "1.79769e+308", "1.79769e+308", "Source conductance" );
     modelInfos[MODEL_TYPE::MESA].modelParams.emplace_back( "vcrit", 305, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Critical voltage" );
     // Instance parameters
+    // Defaults mirror the ngspice mesa device (mesasetup.c length/width/m/dtemp). The instance
+    // multiplier default is 1.0 (mesasetup.c MESAm); 2.5 is the model-level m and does not belong
+    // here. td/ts default to the circuit temperature plus dtemp, off is a bare flag, and
+    // icvds/icvgs derive from node voltages in mesagetic.c, so those stay empty.
     modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "off", 8, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_BOOL, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Device initially off", true );
-    modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "m", 12, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "2.5", "2.5", "Parallel Multiplier", true );
-    modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "l", 1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "m", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "", "", "Length of device", true );
-    modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "w", 2, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "m", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "", "", "Width of device", true );
+    modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "m", 12, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "1", "", "Parallel Multiplier", true );
+    modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "l", 1, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "m", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "1e-06", "", "Length of device", true );
+    modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "w", 2, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "m", SIM_MODEL::PARAM::CATEGORY::GEOMETRY, "2e-05", "", "Width of device", true );
     modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "icvds", 3, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial D-S voltage", true );
     modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "icvgs", 4, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Initial G-S voltage", true );
     modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "td", 5, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instance drain temperature", true );
     modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "ts", 6, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instance source temperature", true );
-    modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "dtemp", 11, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Instance temperature difference", true );
+    modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "dtemp", 11, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "°C", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "", "Instance temperature difference", true );
     modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "dnode", 201, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of drain node", true );
     modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "gnode", 202, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of gate node", true );
     modelInfos[MODEL_TYPE::MESA].instanceParams.emplace_back( "snode", 203, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_INT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "", "", "Number of source node", true );

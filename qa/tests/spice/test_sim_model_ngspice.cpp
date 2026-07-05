@@ -28,6 +28,18 @@ public:
     TEST_SIM_MODEL_NGSPICE_FIXTURE() :
             SIM_MODEL_NGSPICE( TYPE::NONE )
     {}
+
+    static std::string defaultOf( MODEL_TYPE aType, const std::string& aName )
+    {
+        for( const SIM_MODEL::PARAM::INFO& param : ModelInfo( aType ).instanceParams )
+        {
+            if( param.name == aName )
+                return param.defaultValue;
+        }
+
+        BOOST_FAIL( ModelInfo( aType ).name << " instance parameter not found: " << aName );
+        return {};
+    }
 };
 
 
@@ -96,6 +108,76 @@ BOOST_AUTO_TEST_CASE( ParamDuplicates )
             }
         }
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( HfetInstanceParamDefaults )
+{
+    // Guards the HFET1 defaults restored from the ngspice 46 source after they had been lost
+    // to empty strings; the per-parameter rationale lives in sim_model_ngspice_data_hfet.cpp.
+
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET1, "l" ), "1e-06" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET1, "w" ), "2e-05" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET1, "m" ), "1" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET1, "dtemp" ), "0" );
+
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET1, "off" ), "" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET1, "icvds" ), "" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET1, "icvgs" ), "" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET1, "temp" ), "" );
+}
+
+
+BOOST_AUTO_TEST_CASE( FetInstanceParamDefaults )
+{
+    // Guards the geometry/multiplier/dtemp defaults sourced from the ngspice 46 setup/temp code for
+    // the remaining FET devices, mirroring the HFET1 guard above. Per-parameter rationale lives in
+    // the sim_model_ngspice_data_{hfet,mes,jfet}.cpp files.
+
+    // HFET2 tracks the HFET1 geometry defaults (hfet2setup.c, hfet2temp.c).
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET2, "l" ), "1e-06" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET2, "w" ), "2e-05" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET2, "m" ), "1" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET2, "dtemp" ), "0" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET2, "icvds" ), "" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::HFET2, "temp" ), "" );
+
+    // MES is area-scaled (messetup.c).
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::MES, "area" ), "1" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::MES, "m" ), "1" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::MES, "icvds" ), "" );
+
+    // The MES m id must be the mesdefs.h MES_M value, distinct from area's id, or id-keyed lookups
+    // conflate the multiplier with the area factor.
+    const std::vector<SIM_MODEL::PARAM::INFO>& mesParams = ModelInfo( MODEL_TYPE::MES ).instanceParams;
+
+    auto mesM = std::find_if( mesParams.begin(), mesParams.end(),
+                              []( const SIM_MODEL::PARAM::INFO& aParam )
+                              {
+                                  return aParam.name == "m";
+                              } );
+
+    BOOST_REQUIRE( mesM != mesParams.end() );
+    BOOST_CHECK_EQUAL( mesM->id, 8u );
+
+    // MESA restores geometry/dtemp and the instance multiplier (mesasetup.c).
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::MESA, "l" ), "1e-06" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::MESA, "w" ), "2e-05" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::MESA, "m" ), "1" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::MESA, "dtemp" ), "0" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::MESA, "td" ), "" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::MESA, "ts" ), "" );
+
+    // JFET/JFET2 are area-scaled (jfetset.c/jfet2set.c, jfettemp.c/jfet2temp.c).
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::JFET, "area" ), "1" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::JFET, "m" ), "1" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::JFET, "dtemp" ), "0" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::JFET, "temp" ), "" );
+
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::JFET2, "area" ), "1" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::JFET2, "m" ), "1" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::JFET2, "dtemp" ), "0" );
+    BOOST_CHECK_EQUAL( defaultOf( MODEL_TYPE::JFET2, "temp" ), "" );
 }
 
 
