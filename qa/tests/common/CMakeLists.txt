@@ -44,6 +44,7 @@ set( QA_COMMON_SRCS
     test_design_block_io.cpp
     test_eda_shape.cpp
     test_eda_text.cpp
+    test_wx_dataviewctrl.cpp
     test_embedded_file_compress.cpp
     test_expand_text_vars.cpp
     test_file_history.cpp

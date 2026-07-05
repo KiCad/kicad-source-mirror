@@ -174,3 +174,34 @@ void WX_DATAVIEWCTRL::CancelPendingEnsureVisible()
     EnsureVisible( wxDataViewItem( nullptr ) );
 #endif
 }
+
+
+WX_DATAVIEWCTRL::~WX_DATAVIEWCTRL()
+{
+    // The canceller captures this control, so drop it before the model can outlive us.
+    if( m_ensureVisibleCanceller && GetModel() )
+        GetModel()->RemoveNotifier( m_ensureVisibleCanceller );
+}
+
+
+bool WX_DATAVIEWCTRL::AssociateModel( wxDataViewModel* aModel )
+{
+    // Drop the old canceller before it can fire against the new model.
+    if( m_ensureVisibleCanceller && GetModel() )
+    {
+        GetModel()->RemoveNotifier( m_ensureVisibleCanceller );
+        m_ensureVisibleCanceller = nullptr;
+    }
+
+    bool ret = wxDataViewCtrl::AssociateModel( aModel );
+
+    // Skip on failed association, else the notifier capturing this control would dangle.
+    if( ret && aModel )
+    {
+        m_ensureVisibleCanceller =
+                new WX_ENSURE_VISIBLE_CANCELLER( [this]() { CancelPendingEnsureVisible(); } );
+        aModel->AddNotifier( m_ensureVisibleCanceller );
+    }
+
+    return ret;
+}
