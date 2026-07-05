@@ -1537,10 +1537,15 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( const HANDLER_CONTEXT<
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
+    TOOL_MANAGER* mgr = toolManager();
+
+    // A frame's tool manager always carries the zone filler tool; headless sessions start with a
+    // bare tool manager and register it on first use, like the CLI jobs do.
+    if( !mgr->FindTool( ZONE_FILLER_TOOL_NAME ) )
+        mgr->RegisterTool( new ZONE_FILLER_TOOL );
+
     if( aCtx.Request.zones().empty() )
     {
-        TOOL_MANAGER* mgr = toolManager();
-
         if( frame() )
         {
             frame()->CallAfter( [mgr]()
@@ -1552,9 +1557,6 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( const HANDLER_CONTEXT<
         {
             // Headless sessions have no event loop to defer to; fill synchronously through the
             // same tool the CLI jobs use.
-            if( !mgr->FindTool( ZONE_FILLER_TOOL_NAME ) )
-                mgr->RegisterTool( new ZONE_FILLER_TOOL );
-
             mgr->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, nullptr, true );
         }
     }
@@ -1605,14 +1607,9 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( const HANDLER_CONTEXT<
         }
 
         commit->Push( _( "Fill Zone(s)" ), SKIP_CONNECTIVITY | ZONE_FILL_OP );
-        board()->BuildConnectivity();
-        toolManager()->PostEvent( EVENTS::ConnectivityChangedEvent );
 
-        if( frame() )
-        {
-            frame()->GetCanvas()->RedrawRatsnest();
-            frame()->GetCanvas()->Refresh();
-        }
+        // Push skipped connectivity, so run the same post-fill refresh as the interactive fill
+        mgr->GetTool<ZONE_FILLER_TOOL>()->PostFillRefresh( frame() == nullptr );
     }
 
     return Empty();

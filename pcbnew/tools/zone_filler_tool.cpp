@@ -97,8 +97,7 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRep
         commit.Revert();
     }
 
-    rebuildConnectivity();
-    refresh();
+    PostFillRefresh();
 
     m_fillInProgress = false;
     m_filler.reset( nullptr );
@@ -180,15 +179,10 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aRepo
         commit.Revert();
     }
 
-    rebuildConnectivity( aHeadless );
+    PostFillRefresh( aHeadless );
 
-    if( !aHeadless )
-    {
-        refresh();
-
-        if( m_filler->IsDebug() )
-            frame->UpdateUserInterface();
-    }
+    if( !aHeadless && m_filler->IsDebug() )
+        frame->UpdateUserInterface();
 
     m_fillInProgress = false;
     m_filler.reset( nullptr );
@@ -272,8 +266,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     else
         commit.Revert();
 
-    rebuildConnectivity();
-    refresh();
+    PostFillRefresh();
 
     if( GetRunningMicroSecs() - startTime > 3000000 )   // 3 seconds
     {
@@ -364,8 +357,7 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
         commit.Revert();
     }
 
-    rebuildConnectivity();
-    refresh();
+    PostFillRefresh();
 
     m_fillInProgress = false;
     m_filler.reset( nullptr );
@@ -444,6 +436,15 @@ PROGRESS_REPORTER* ZONE_FILLER_TOOL::GetProgressReporter()
         return m_filler->GetProgressReporter();
     else
         return nullptr;
+}
+
+
+void ZONE_FILLER_TOOL::PostFillRefresh( bool aHeadless )
+{
+    rebuildConnectivity( aHeadless );
+
+    if( !aHeadless )
+        refresh();
 }
 
 

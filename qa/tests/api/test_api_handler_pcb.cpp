@@ -34,6 +34,7 @@
 #include <api/common/types/base_types.pb.h>
 
 #include <board.h>
+#include <connectivity/connectivity_data.h>
 #include <settings/settings_manager.h>
 #include <zone.h>
 
@@ -138,6 +139,38 @@ BOOST_AUTO_TEST_CASE( RefillZonesSubset )
     BOOST_CHECK( in1Cu->IsFilled() );
     BOOST_CHECK( !bCu->IsFilled() );
     BOOST_CHECK( !in2Cu->IsFilled() );
+}
+
+
+BOOST_AUTO_TEST_CASE( RefillZonesSubsetRebuildsConnectivity )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    unfillAll( board );
+
+    // Baseline ratsnest with every zone empty; the GND planes are unfilled so their pads still
+    // ratsnest together.
+    board->BuildConnectivity();
+    const unsigned baseline = board->GetConnectivity()->GetUnconnectedCount( false );
+    BOOST_REQUIRE_MESSAGE( baseline > 0, "expected an unconnected baseline with zones empty" );
+
+    API_HANDLER_PCB           handler( m_context );
+    kiapi::common::ApiRequest request = makeRefillRequest( board, { F_CU_ZONE, IN1_CU_ZONE } );
+    API_RESULT                result = handler.Handle( request );
+
+    BOOST_REQUIRE_MESSAGE( result.has_value(),
+                           "RefillZones returned status " << result.error().status() << ": "
+                                                          << result.error().error_message() );
+
+    const unsigned afterFill = board->GetConnectivity()->GetUnconnectedCount( false );
+
+    // Filling the GND planes bridges GND pads that previously ratsnested, so the unconnected
+    // count drops.  Push cleared the ratsnest, so if the handler skipped the connectivity
+    // rebuild this would read zero instead of the reduced-but-nonzero count.
+    BOOST_CHECK_MESSAGE( afterFill > 0, "connectivity was cleared, not rebuilt, after the fill" );
+    BOOST_CHECK_MESSAGE( afterFill < baseline,
+                         "filling the GND planes should reduce the unconnected count ("
+                                 << afterFill << " vs baseline " << baseline << ")" );
 }
 
 

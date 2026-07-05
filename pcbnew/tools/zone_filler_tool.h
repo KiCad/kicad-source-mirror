@@ -49,6 +49,16 @@ public:
     void CheckAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter = nullptr );
     void FillAllZones( wxWindow* aCaller, PROGRESS_REPORTER* aReporter = nullptr, bool aHeadless = false );
 
+    /**
+     * Run the shared post-fill refresh once a fill commit has been pushed with connectivity
+     * updates skipped.
+     *
+     * Rebuilds connectivity and, unless \a aHeadless, repaints the ratsnest along with the
+     * remove-unconnected vias and pads that a plain canvas refresh would leave stale.  Callers
+     * with no frame attached (e.g. the headless IPC API handler) must pass true.
+     */
+    void PostFillRefresh( bool aHeadless = false );
+
     int ZoneFill( const TOOL_EVENT& aEvent );
     int ZoneFillAll( const TOOL_EVENT& aEvent );
     int ZoneFillDirty( const TOOL_EVENT& aEvent );
