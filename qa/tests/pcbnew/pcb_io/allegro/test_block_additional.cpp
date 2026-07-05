@@ -244,6 +244,27 @@ static void TestCutiePiV166_PS_C50H340M700N( const BLOCK_BASE& aBlock )
 
 
 /**
+ * A V17.4 0x36 definition table built from sub-code 0x05 records. Each record is a fixed
+ * 28 bytes, so the slot array consumes exactly 100 * 28 bytes; reading any extra field per
+ * record walks off the end of the block and desyncs every object that follows.
+ */
+static void TestMIMXRT1170_0x36_X05DefTable( const BLOCK_BASE& aBlock )
+{
+    BOOST_REQUIRE( aBlock.GetBlockType() == 0x36 );
+
+    const auto& blk = static_cast<const BLOCK<BLK_0x36_DEF_TABLE>&>( aBlock ).GetData();
+
+    BOOST_TEST( blk.m_Code == 0x05 );
+    BOOST_TEST( blk.m_NumItems == 100 );
+    BOOST_TEST( blk.m_Count == 83 );
+
+    // Only the populated slots are retained, and every one is an X05 record
+    BOOST_REQUIRE( blk.m_Items.size() == 83 );
+    BOOST_TEST( std::holds_alternative<BLK_0x36_DEF_TABLE::X05>( blk.m_Items.front() ) );
+}
+
+
+/**
  * The registry of additional block tests, keyed by board name and block offset.
  *
  * The test function takes the parsed block as an argument, and can perform any additional
@@ -266,6 +287,9 @@ static const std::unordered_map<BLOCK_TEST_KEY, BLOCK_TEST_FUNC> additionalBlock
     { { "parallella_v163",            0x000368c8 }, TestParallellaV163_PS_56X55RT },
     { { "parallella_v163",            0x0002cc08 }, TestParallellaV163_PS_28C128N },
     { { "parallella_v163",            0x0002e168 }, TestParallellaV163_PS_P65X1P7SLT },
+
+    // 0x36 definition tables
+    { { "MIMXRT1170_EVKB",            0x00cce25c }, TestMIMXRT1170_0x36_X05DefTable },
 };
 // clang-format on
 
