@@ -929,6 +929,8 @@ protected:
      */
     bool doAutoSave() override;
 
+    bool canRunAutoSave() const override;
+
     void configureToolbars() override;
 
     void doReCreateMenuBar() override;

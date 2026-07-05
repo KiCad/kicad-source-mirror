@@ -381,6 +381,11 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
             wxLogTrace( traceAutoSave, wxT( "Starting auto save timer." ) );
             m_autoSaveTimer->Start( GetAutoSaveInterval() * 1000, wxTIMER_ONE_SHOT );
             m_autoSavePending = true;
+
+            // A fresh cycle starts here (a prior snapshot completed or an explicit save cleared
+            // the pending state), so drop any deferral streak left over from that cycle; otherwise
+            // its stale start time could force the next snapshot to run mid-interaction.
+            m_autoSaveDeferredSince = wxInvalidDateTime;
         }
         else if( m_autoSaveTimer->IsRunning() )
         {
@@ -409,8 +414,18 @@ void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
         return;
     }
 
-    if( !doAutoSave() )
+    // When the save is deferred (an interactive operation is in progress) keep the timer armed so
+    // a later tick retries.  Maintaining m_autoSavePending here preserves the "pending == timer
+    // running" invariant that ProcessEvent() relies on to avoid re-arming the timer on every event.
+    if( !doAutoSave() && isAutoSaveRequired() && GetAutoSaveInterval() > 0 )
+    {
         m_autoSaveTimer->Start( GetAutoSaveInterval() * 1000, wxTIMER_ONE_SHOT );
+        m_autoSavePending = true;
+    }
+    else
+    {
+        m_autoSavePending = false;
+    }
 }
 
 
@@ -500,8 +515,36 @@ void EDA_BASE_FRAME::CheckForAutosaveFiles( const wxString& aProjectPath, const 
 
 bool EDA_BASE_FRAME::doAutoSave()
 {
+    // Defer the snapshot if the user is mid-interaction.  Serializing a large document on the
+    // UI thread freezes the editor for seconds; deferring keeps the dirty flags set so the
+    // rescheduled timer tick will pick the work up once the operation completes.  To avoid
+    // starving the snapshot when the user parks in an interactive tool, the deferral is bounded
+    // and the save is forced once it has been outstanding for longer than the cap.
+    if( !canRunAutoSave() )
+    {
+        wxDateTime now = wxDateTime::Now();
+
+        if( !m_autoSaveDeferredSince.IsValid() )
+            m_autoSaveDeferredSince = now;
+
+        wxTimeSpan maxDeferral = wxTimeSpan::Seconds( std::max( 60, GetAutoSaveInterval() * 12 ) );
+
+        if( now - m_autoSaveDeferredSince < maxDeferral )
+        {
+            wxLogTrace( traceAutoSave, wxT( "Deferring auto save; an interactive operation is in progress." ) );
+            return false;
+        }
+
+        wxLogTrace( traceAutoSave, wxT( "Auto save deferral exceeded; saving despite interactive operation." ) );
+    }
+
+    // The deferral is resolved (either the user went idle or the cap forced the snapshot), so the
+    // cycle is now consumed regardless of the saver outcome.  The snapshot is best effort: a
+    // droppable cycle (a prior autosave still writing) is recaptured by the next edit's OnModify,
+    // so clear the flags here rather than re-arming on the saver result, which would poll forever
+    // in degenerate states such as no registered savers.
+    m_autoSaveDeferredSince = wxInvalidDateTime;
     m_autoSaveRequired = false;
-    m_autoSavePending = false;
 
     COMMON_SETTINGS* cs = Pgm().GetCommonSettings();
 
@@ -512,14 +555,9 @@ bool EDA_BASE_FRAME::doAutoSave()
         return true;
 
     if( cs->m_Backup.format == BACKUP_FORMAT::INCREMENTAL )
-    {
-        Kiway().LocalHistory().RunRegisteredSaversAndCommit( Prj().GetProjectPath(),
-                                                             wxS( "Autosave" ) );
-    }
+        Kiway().LocalHistory().RunRegisteredSaversAndCommit( Prj().GetProjectPath(), wxS( "Autosave" ) );
     else
-    {
         Kiway().LocalHistory().RunRegisteredSaversAsAutosaveFiles( Prj().GetProjectPath() );
-    }
 
     return true;
 }

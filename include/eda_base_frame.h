@@ -43,6 +43,7 @@
 #include <nlohmann/json_fwd.hpp>
 
 #include <wx/aui/aui.h>
+#include <wx/datetime.h>
 #include <layer_ids.h>
 #include <frame_type.h>
 #include <hotkeys_basic.h>
@@ -681,6 +682,20 @@ protected:
     virtual bool doAutoSave();
 
     /**
+     * Return true when it is safe to run an autosave snapshot right now.
+     *
+     * The autosave serializes the whole document on the UI thread, which can take
+     * several seconds on large designs.  Doing that while the user is mid-interaction
+     * (routing a track, dragging items, editing points) freezes the UI and causes the
+     * deferred input to be misinterpreted.  Derived frames override this to defer the
+     * snapshot until the interactive operation finishes; the timer is rescheduled when
+     * this returns false so no edits are lost.
+     *
+     * @return true if an autosave may run now, false to defer it to a later timer tick.
+     */
+    virtual bool canRunAutoSave() const { return true; }
+
+    /**
      * Check for autosave files newer than their source files for the given project.
      * If found, present the user with the recovery dialog so they can pick what to
      * do with each file (restore, keep current, or keep both as a sibling copy).
@@ -833,6 +848,11 @@ private:
     bool                    m_autoSaveRequired;
     wxTimer*                m_autoSaveTimer;
     bool                    m_autoSavePermissionError;
+
+    // Wall-clock of the first autosave deferred by canRunAutoSave(), or an invalid time when no
+    // deferral is outstanding.  Used to bound how long an interactive operation may starve the
+    // snapshot so a long routing session can't leave the document unsnapshotted forever.
+    wxDateTime              m_autoSaveDeferredSince;
 
     int                     m_undoRedoCountMax;  // undo/Redo command Max depth
 
