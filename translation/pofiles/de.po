@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-07-04 09:01+0000\n"
+"PO-Revision-Date: 2026-07-05 17:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -3609,7 +3609,7 @@ msgstr "Importkonflikte auflösen"
 #: common/dialogs/dialog_kicad_merge_3way.cpp:363
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:48
 msgid "Select a conflict on the left to see details."
-msgstr "Links einen Konflikt auswählen um Details an zu zeigen."
+msgstr "Links einen Konflikt auswählen, um Details anzuzeigen."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:371
 #, c-format
