@@ -71,10 +71,33 @@ public:
     {
         using namespace boost::unit_test;
 
-        // Detach the reporter before m_reporter destructs.  SetReporter blocks
-        // until any in-flight bg callback that holds the reporter has returned.
+        // The NGSPICE instance is a singleton that outlives this fixture, so a background
+        // simulation left running would call back into m_reporter after it is destroyed and
+        // bleed state into the next test case.  Halt it and wait for the background thread to
+        // settle, then detach the reporter (SetReporter blocks until any in-flight callback
+        // returns).  Guard the whole sequence because a destructor must never throw.
         if( m_simulator )
-            m_simulator->SetReporter( nullptr );
+        {
+            try
+            {
+                if( m_simulator->IsRunning() )
+                {
+                    m_simulator->Stop();
+
+                    // Bounded wait so a wedged bg_halt fails the test instead of hanging QA.
+                    for( int i = 0; i < 200 && m_simulator->IsRunning(); ++i )
+                        wxMilliSleep( 10 );
+
+                    BOOST_CHECK_MESSAGE( !m_simulator->IsRunning(),
+                                         "Timed out waiting for ngspice to stop during teardown" );
+                }
+
+                m_simulator->SetReporter( nullptr );
+            }
+            catch( ... )
+            {
+            }
+        }
 
         test_case::id_t id = framework::current_test_case().p_id;
         test_results    results = results_collector.results( id );
@@ -116,11 +139,14 @@ public:
 
         m_abort = false;
 
-        // Our simulator is actually Ngspice.
         NGSPICE* ngspice = dynamic_cast<NGSPICE*>( m_simulator.get() );
         BOOST_REQUIRE( ngspice );
 
         ngspice->SetReporter( m_reporter.get() );
+
+        // Free vectors from any previous simulation to reduce memory pressure.
+        // The NGSPICE instance is a singleton shared across all test cases.
+        ngspice->Clean();
 
         wxFFile  file( netlistPath, "rt" );
         wxString netlist;
@@ -128,7 +154,6 @@ public:
         BOOST_REQUIRE( file.IsOpened() );
         file.ReadAll( &netlist );
 
-        //ngspice->Init();
         ngspice->Command( "set ngbehavior=ps" );
         ngspice->Command( "setseed 1" );
         BOOST_REQUIRE( ngspice->LoadNetlist( std::string( netlist.ToUTF8() ) ) );
@@ -184,7 +209,6 @@ public:
 
         // We need to make sure that the number of points always the same.
         ngspice->Command( "linearize" );
-
 
         // Debug info.
 
