@@ -68,27 +68,7 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
     wxProcess process;
     process.Redirect();
 
-    // wxExecute with a plain string argument calls execvp() directly on Unix, bypassing the
-    // shell. This means glob expansion, pipes, and other shell features don't work for direct
-    // binaries. Wrap the command in the platform shell so shell features work consistently.
-    //
-    // On Windows we use the string form of wxExecute ("cmd.exe /c " + cmd): the argv-array form
-    // of wxExecute re-escapes embedded double quotes as \" (see wxExecuteImpl in wxWidgets'
-    // src/msw/utilsexc.cpp), which cmd.exe does not understand, breaking any quoted executable
-    // path containing spaces. The string form passes the command line straight to CreateProcess
-    // without modification, preserving the user's original quoting.
-    // On Unix we use the argv-array form invoking /bin/sh -c, where the shell re-parses the
-    // joined command line and backslash-escaping is valid.
-#ifdef __WXMSW__
-    // static cast required because wx uses `long` which is 64-bit on Linux but 32-bit on Windows
-    int result = static_cast<int>(
-            wxExecute( wxS( "cmd.exe /c " ) + cmd, wxEXEC_SYNC, &process ) );
-#else
-    const wchar_t* argv[] = { wxS( "/bin/sh" ), wxS( "-c" ), cmd.wc_str(), nullptr };
-
-    // static cast required because wx uses `long` which is 64-bit on Linux but 32-bit on Windows
-    int result = static_cast<int>( wxExecute( argv, wxEXEC_SYNC, &process ) );
-#endif
+    int result = ExecuteCommandThroughShell( cmd, &process );
 
     wxInputStream* inputStream = process.GetInputStream();
     wxInputStream* errorStream = process.GetErrorStream();

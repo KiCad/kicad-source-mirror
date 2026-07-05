@@ -258,6 +258,34 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
 }
 
 
+int ExecuteCommandThroughShell( const wxString& aCommand, wxProcess* aProcess )
+{
+#ifdef __WXMSW__
+    // The array form of wxExecute is unusable with cmd.exe. wx joins the argv elements back into a
+    // single command line, wrapping any element containing spaces in double quotes and escaping
+    // embedded quotes with backslashes. cmd.exe does not understand backslash-escaped quotes and
+    // applies its own quote-stripping rules to the /c argument, which mangles absolute paths that
+    // contain spaces or quotes. Build the command line ourselves and let cmd.exe's /s rule strip
+    // exactly the outer quote pair, passing everything between through verbatim. /d disables any
+    // AutoRun registry commands so job execution is not machine-dependent.
+    wxString shellCmd = wxS( "cmd.exe /d /s /c \"" ) + aCommand + wxS( "\"" );
+
+    return static_cast<int>( wxExecute( shellCmd, wxEXEC_SYNC, aProcess ) );
+#else
+    // Invoke /bin/sh -c so glob expansion, pipes, and other shell features work. The string form of
+    // wxExecute would call execvp() directly, bypassing the shell. Hold the wchar buffers in named
+    // locals so the argv pointers stay valid on wxUSE_UNICODE_UTF8 builds where wc_str() is a temp.
+    wxWCharBuffer shell = wxString( wxS( "/bin/sh" ) ).wc_str();
+    wxWCharBuffer flag = wxString( wxS( "-c" ) ).wc_str();
+    wxWCharBuffer command = aCommand.wc_str();
+
+    const wchar_t* argv[] = { shell.data(), flag.data(), command.data(), nullptr };
+
+    return static_cast<int>( wxExecute( argv, wxEXEC_SYNC, aProcess ) );
+#endif
+}
+
+
 bool OpenPDF( const wxString& file )
 {
     wxString msg;
