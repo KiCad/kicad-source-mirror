@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-07-05 17:01+0000\n"
+"PO-Revision-Date: 2026-07-06 11:10+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -12705,47 +12705,40 @@ msgid "KiCad s-expression schematic files"
 msgstr "KiCad s-expression шематске датотеке"
 
 #: common/wildcards_and_files_ext.cpp:286
-#, fuzzy
 msgid "Altium Project files"
-msgstr "Пројект"
+msgstr "Датотеке Altium пројекта"
 
 #: common/wildcards_and_files_ext.cpp:292
-#, fuzzy
 msgid "CADSTAR Archive files"
-msgstr "Архивирани фајл \"%s\""
+msgstr "CADSTAR архивске датотеке"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "Eagle XML files"
 msgstr "Eagle XML фајлови"
 
 #: common/wildcards_and_files_ext.cpp:304
-#, fuzzy
 msgid "PADS ASCII files"
-msgstr "SPICE netlist фајл"
+msgstr "PADS ASCII датотеке"
 
 #: common/wildcards_and_files_ext.cpp:310
-#, fuzzy
 msgid "gEDA / Lepton EDA project files"
-msgstr "Архивирати све пројектне фајлове"
+msgstr "gEDA / Lepton ЕДА пројектне датотеке"
 
 #: common/wildcards_and_files_ext.cpp:316
-#, fuzzy
 msgid "OrcadPCB2 netlist files"
-msgstr "KiCad netlist фајлови"
+msgstr "OrcadPCB2 датотека мреже листе"
 
 #: common/wildcards_and_files_ext.cpp:323
 msgid "KiCad netlist files"
 msgstr "KiCad netlist фајлови"
 
 #: common/wildcards_and_files_ext.cpp:329
-#, fuzzy
 msgid "Allegro netlist files"
-msgstr "KiCad netlist фајлови"
+msgstr "Аллегро датотека мрежних листа"
 
 #: common/wildcards_and_files_ext.cpp:336
-#, fuzzy
 msgid "PADS netlist files"
-msgstr "SPICE netlist фајл"
+msgstr "PADS датотека мрежних листа"
 
 #: common/wildcards_and_files_ext.cpp:342
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -12759,15 +12752,13 @@ msgid "EasyEDA (JLCEDA) Pro files"
 msgstr "EasyEDA (JLCEDA) Pro фајлови"
 
 #: common/wildcards_and_files_ext.cpp:354
-#, fuzzy
 msgid "DipTrace files"
-msgstr "Zip фајлови"
+msgstr "DipTrace датотеке"
 
 #: common/wildcards_and_files_ext.cpp:360
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:338
-#, fuzzy
 msgid "KiCad printed circuit board files"
-msgstr "Пројект"
+msgstr "Датотеке штампаних плоча за KiCad"
 
 #: common/wildcards_and_files_ext.cpp:367
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:348
@@ -12775,9 +12766,8 @@ msgid "KiCad footprint files"
 msgstr "KiCad footprint фајлови"
 
 #: common/wildcards_and_files_ext.cpp:373
-#, fuzzy
 msgid "KiCad footprint library paths"
-msgstr "библиотека"
+msgstr "Путање до библиотека отисака у програму KiCad"
 
 #: common/wildcards_and_files_ext.cpp:380
 msgid "KiCad design block path"
