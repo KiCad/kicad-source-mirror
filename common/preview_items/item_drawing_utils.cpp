@@ -41,7 +41,7 @@ void KIGFX::DrawDashedLine( GAL& aGal, const SEG& aSeg, double aDashSize )
 
     // Endpoints may overflow int32 when an item is dragged past the coordinate limit, wrapping
     // an int length negative and spinning the dash loop forever. Measure in double precision.
-    const VECTOR2D segVec( aSeg.B.x - aSeg.A.x, aSeg.B.y - aSeg.A.y );
+    const VECTOR2D segVec( double( aSeg.B.x ) - aSeg.A.x, double( aSeg.B.y ) - aSeg.A.y );
     const double   segLen = segVec.EuclideanNorm();
 
     // Draw solid when the cycle is degenerate, sub-pixel, or would emit too many dashes; the
@@ -55,7 +55,7 @@ void KIGFX::DrawDashedLine( GAL& aGal, const SEG& aSeg, double aDashSize )
         return;
     }
 
-    const BOX2I clip = BOX2I::ByCorners( aSeg.A, aSeg.B );
+    const BOX2I clip = BOX2ISafe( VECTOR2D( aSeg.A.x, aSeg.A.y ), segVec );
 
     const double theta = atan2( aSeg.B.y - aSeg.A.y, aSeg.B.x - aSeg.A.x );
 
