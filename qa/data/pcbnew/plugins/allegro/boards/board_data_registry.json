@@ -261,6 +261,20 @@
                 }
             ]
         },
+        "MIMXRT1170_EVKB": {
+            "formatVersion": "17.4",
+            "url": "https://www.nxp.com/design/design-center/development-boards-and-designs/MIMXRT1170-EVKB",
+            "license": "NXP design files",
+            "description": "0x36 definition table with a code 0x05 record list; the only known 0x05 sub-record in the test corpus",
+            "blocks": [
+                {
+                    "type": "0x36",
+                    "offset": "0x00cce25c",
+                    "comment": "Def table, 100 slots / 83 filled X05 records of 28 bytes each",
+                    "extraBlockTest": true
+                }
+            ]
+        },
         "parallella_v163": {
             "formatVersion": "16.3",
             "url": "https://github.com/parallella/parallella-hw",

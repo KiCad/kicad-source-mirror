@@ -2148,8 +2148,9 @@ struct BLK_0x36_DEF_TABLE
     {
         std::array<uint8_t, 28> m_Unknown;
 
-        // This is in Nvidia Jetson (17.4), not in EVK BaseBoard (17.2)
-        COND_GE<FMT_VER::V_174, uint32_t> m_Unknown2;
+        // The trailing word first appears in 17.5. On 17.4 the record is 28 bytes, and
+        // reading a phantom word here overruns every slot and desyncs the object stream.
+        COND_GE<FMT_VER::V_175, uint32_t> m_Unknown2;
     };
 
     struct X06
