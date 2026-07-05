@@ -693,11 +693,14 @@ BOOST_AUTO_TEST_CASE( WholeDeviceGoldenNetlist )
 // generator must start each netlist clean.  An externally defined subcircuit name (opamp) must be
 // emitted verbatim every time, and a KiCad-defined .model name (the Gummel-Poon NPN) must not drift
 // run to run.  Either failure means a reused exporter leaks model-name state across exports.
+// The parallel_caps fixture is the schematic from https://gitlab.com/kicad/code/kicad/-/issues/20238
+// with C1 replaced by two parallel caps sharing one library diode.  Re-running the simulation
+// renamed the included .model reference to DIODE1#1, so the diode became undefined and the sim broke.
 BOOST_AUTO_TEST_CASE( RepeatedExportIsDeterministic )
 {
     LOCALE_IO dummy;
 
-    const std::vector<wxString> fixtures = { wxS( "opamp" ), wxS( "npn_ce_amp" ) };
+    const std::vector<wxString> fixtures = { wxS( "opamp" ), wxS( "npn_ce_amp" ), wxS( "parallel_caps" ) };
 
     for( const wxString& fixture : fixtures )
     {
@@ -735,6 +738,31 @@ BOOST_AUTO_TEST_CASE( RepeatedExportIsDeterministic )
             Cleanup();
         }
     }
+}
+
+
+// The model-name uniquifier must record every accepted name so later collisions are detected, and
+// Clear() must forget them so a reused exporter starts each netlist clean.
+BOOST_AUTO_TEST_CASE( NameGeneratorUniqueness )
+{
+    NAME_GENERATOR gen;
+
+    std::string first = gen.Generate( "model_A" );
+    BOOST_CHECK_EQUAL( first, "model_A" );
+
+    std::string second = gen.Generate( "model_A" );
+    BOOST_CHECK_EQUAL( second, "model_A#1" );
+
+    std::string third = gen.Generate( "model_A" );
+    BOOST_CHECK_EQUAL( third, "model_A#2" );
+
+    std::string different = gen.Generate( "model_B" );
+    BOOST_CHECK_EQUAL( different, "model_B" );
+
+    gen.Clear();
+
+    std::string afterClear = gen.Generate( "model_A" );
+    BOOST_CHECK_EQUAL( afterClear, "model_A" );
 }
 
 

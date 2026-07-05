@@ -1,0 +1,11 @@
+(kicad_pcb (version 20221018) (generator pcbnew)
+  (general
+    (thickness 1.6)
+  )
+  (paper "A4")
+  (layers
+    (0 "F.Cu" signal)
+    (31 "B.Cu" signal)
+  )
+  (net 0 "")
+)
