@@ -329,6 +329,8 @@ BOOST_AUTO_TEST_CASE( IsPcmManagedRow_URITemplateMatching )
           wxS( "Legacy versioned 3RD_PARTY template should still match the wildcard" ) },
         { wxS( "${KICAD10_3RD_PARTY}/footprints/bar/bar.pretty" ), true,
           wxS( "Footprint library using 3RD_PARTY template should match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}/design_blocks/baz/baz.kicad_blocks" ), true,
+          wxS( "Design block library using 3RD_PARTY template should match" ) },
         { wxS( "${KICAD_USER_LIB}/symbols/test.kicad_sym" ), false,
           wxS( "Row using a different env var must not be flagged as PCM-managed" ) },
         { wxS( "${KIPRJMOD}/libs/local.kicad_sym" ), false,
@@ -339,6 +341,32 @@ BOOST_AUTO_TEST_CASE( IsPcmManagedRow_URITemplateMatching )
           wxS( "Malformed empty var name must not match" ) },
         { wxS( "${KICAD10_3RD_PARTY_EXTRA}/foo" ), false,
           wxS( "Similar-but-different var name must not match" ) },
+        // Issue #23476: a user who repurposes KICADn_3RD_PARTY to point at their own
+        // library collection adds libraries directly under that root (no PCM category
+        // folder). Such rows must not be treated as PCM-managed or auto-remove deletes
+        // them.
+        { wxS( "${KICAD10_3RD_PARTY}/mylib.kicad_sym" ), false,
+          wxS( "User library directly under repurposed 3RD_PARTY root must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}/MyLibs/mylib.kicad_sym" ), false,
+          wxS( "User library under a non-PCM subfolder of 3RD_PARTY must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}/eagle/imported.pretty" ), false,
+          wxS( "User footprint library under a non-PCM subfolder must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}/symbols" ), false,
+          wxS( "3RD_PARTY/symbols with no nested package must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}/symbols/mylib.kicad_sym" ), false,
+          wxS( "User symbol library directly in symbols folder (no package level) must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}symbols/foo/foo.kicad_sym" ), false,
+          wxS( "Missing separator after env var must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}/design_blocks/baz/baz.kicad_dbl" ), false,
+          wxS( "Wrong design-block library extension must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}/symbols/foo/foo.txt" ), false,
+          wxS( "Non-library file in PCM symbols tree must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}\\symbols\\foo\\foo.kicad_sym" ), false,
+          wxS( "Backslash-separated URI is never emitted by PCM and must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}/symbols//foo.kicad_sym" ), false,
+          wxS( "Empty package-id component must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY}/symbols/foo/.kicad_sym" ), false,
+          wxS( "Extension-only leaf with empty library stem must not match" ) },
     };
 
     for( const CASE& c : cases )
