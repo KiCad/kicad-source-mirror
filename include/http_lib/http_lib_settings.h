@@ -58,11 +58,16 @@ struct HTTP_LIB_PART
 
     std::time_t lastCached = 0;
 
+    bool        detailsLoaded = false;
+
     std::string              desc;
     std::string              keywords;
     std::vector<std::string> fp_filters;
 
-    std::vector<std::pair<std::string, std::tuple<std::string, bool>>> fields;
+    /// Field content keyed by name, holding the text value and its schematic visibility.
+    using field_type = std::tuple<std::string, bool>;
+
+    std::vector<std::pair<std::string, field_type>> fields;
 
     /// Legacy flat MR !2540 pin assignment table (read for one release; issue #2282).
     std::unordered_map<wxString, std::vector<wxString>> pin_map;

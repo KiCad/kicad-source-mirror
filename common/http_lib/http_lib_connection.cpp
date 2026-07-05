@@ -219,6 +219,62 @@ void setPartIdNameAndMetadata( const nlohmann::json& aPart_json, HTTP_LIB_PART& 
 }
 
 
+// The API is loosely specified and some servers return the exclusion flags and field
+// visibility as native JSON booleans rather than strings, so accept either form.
+static bool jsonBoolField( const nlohmann::json& aValue, bool aDefault )
+{
+    if( aValue.is_boolean() )
+        return aValue.get<bool>();
+
+    if( aValue.is_string() )
+        return boolFromString( aValue.get<std::string>(), aDefault );
+
+    return aDefault;
+}
+
+
+bool setPartExtendedData( const nlohmann::json& aPartJson, HTTP_LIB_PART& aPart )
+{
+    if( aPartJson.contains( "symbolIdStr" ) && aPartJson.at( "symbolIdStr" ).is_string() )
+        aPart.symbolIdStr = aPartJson.at( "symbolIdStr" ).get<std::string>();
+
+    if( aPartJson.contains( "exclude_from_bom" ) )
+        aPart.exclude_from_bom = jsonBoolField( aPartJson.at( "exclude_from_bom" ), false );
+
+    if( aPartJson.contains( "exclude_from_board" ) )
+        aPart.exclude_from_board = jsonBoolField( aPartJson.at( "exclude_from_board" ), false );
+
+    if( aPartJson.contains( "exclude_from_sim" ) )
+        aPart.exclude_from_sim = jsonBoolField( aPartJson.at( "exclude_from_sim" ), false );
+
+    if( !aPartJson.contains( "fields" ) || !aPartJson.at( "fields" ).is_object() )
+        return false;
+
+    aPart.fields.clear();
+
+    for( const auto& field : aPartJson.at( "fields" ).items() )
+    {
+        const nlohmann::json& properties = field.value();
+
+        if( !properties.is_object() || !properties.contains( "value" )
+            || !properties.at( "value" ).is_string() )
+        {
+            continue;
+        }
+
+        std::string value = properties.at( "value" ).get<std::string>();
+        bool        visible = true;
+
+        if( properties.contains( "visible" ) )
+            visible = jsonBoolField( properties.at( "visible" ), true );
+
+        aPart.fields.emplace_back( field.key(), std::make_tuple( value, visible ) );
+    }
+
+    return true;
+}
+
+
 bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& aFetchedPart )
 {
     if( !IsValidEndpoint() )
@@ -254,41 +310,12 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
             return false;
 
         nlohmann::ordered_json response = nlohmann::ordered_json::parse( res );
-        std::string    key = "";
-        std::string    value = "";
 
         // get a timestamp for caching
         aFetchedPart.lastCached = std::time( nullptr );
 
         setPartIdNameAndMetadata( response, aFetchedPart );
-
-        aFetchedPart.symbolIdStr = response.at( "symbolIdStr" );
-
-        // initially assume no exclusion
-        std::string exclude;
-
-        if( response.contains( "exclude_from_bom" ) )
-        {
-            // if key value doesn't exists default to false
-            exclude = response.at( "exclude_from_bom" );
-            aFetchedPart.exclude_from_bom = boolFromString( exclude, false );
-        }
-
-        // initially assume no exclusion
-        if( response.contains( "exclude_from_board" ) )
-        {
-            // if key value doesn't exists default to false
-            exclude = response.at( "exclude_from_board" );
-            aFetchedPart.exclude_from_board = boolFromString( exclude, false );
-        }
-
-        // initially assume no exclusion
-        if( response.contains( "exclude_from_sim" ) )
-        {
-            // if key value doesn't exists default to false
-            exclude = response.at( "exclude_from_sim" );
-            aFetchedPart.exclude_from_sim = boolFromString( exclude, false );
-        }
+        setPartExtendedData( response, aFetchedPart );
 
         // parse optional pin assignments (legacy flat form; issue #2282)
         aFetchedPart.pin_map.clear();
@@ -300,32 +327,9 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
         aFetchedPart.named_pin_maps = ParsePinMapSet( response );
         aFetchedPart.associated_footprints = ParseAssociatedFootprints( response );
 
-        // remove previously loaded fields
-        aFetchedPart.fields.clear();
-
-        // Extract available fields
-        for( const auto& field : response.at( "fields" ).items() )
-        {
-            bool visible = true;
-
-            // name of the field
-            key = field.key();
-
-            // this is a dict
-            auto& properties = field.value();
-
-            value = properties.at( "value" );
-
-            // check if user wants to display field in schematic
-            if( properties.contains( "visible" ) )
-            {
-                std::string vis = properties.at( "visible" );
-                visible = boolFromString( vis, true );
-            }
-
-            // Add field to fields list
-            aFetchedPart.fields.push_back( std::make_pair( key, std::make_tuple( value, visible ) ) );
-        }
+        // Reaching the per-part endpoint means we have the full record, even if the
+        // server returned no fields for this part; otherwise it would be re-fetched forever.
+        aFetchedPart.detailsLoaded = true;
     }
     catch( const std::exception& e )
     {
@@ -367,13 +371,21 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory, std::ve
 
         for( nlohmann::json& item : response )
         {
-            //PART result;
             HTTP_LIB_PART part;
 
             setPartIdNameAndMetadata( item, part );
 
-            // add to cache
+            // Some servers include the full field set in the category listing; when they do,
+            // the chooser can show field content without a per-part fetch.
+            part.detailsLoaded = setPartExtendedData( item, part );
+
             m_cache[part.name] = std::make_tuple( part.id, aCategory.id );
+
+            if( part.detailsLoaded )
+            {
+                part.lastCached = std::time( nullptr );
+                m_cachedParts[part.id] = part;
+            }
 
             aParts.emplace_back( std::move( part ) );
         }

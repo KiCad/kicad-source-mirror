@@ -22,11 +22,24 @@
 
 #include <any>
 #include <boost/algorithm/string.hpp>
+#include <json_common.h>
 
 #include "http_lib/http_lib_settings.h"
 #include <kicad_curl/kicad_curl_easy.h>
 
 extern const char* const traceHTTPLib;
+
+
+/**
+ * Parse the exclusion flags and field content from a part's JSON record into @p aPart.
+ *
+ * The category listing and per-part detail endpoints share this shape but the listing may
+ * omit the fields; parsing is tolerant of missing keys and of flags encoded as either JSON
+ * strings or native booleans.
+ *
+ * @return true if the record carried a fields object (the part's full detail is present).
+ */
+bool setPartExtendedData( const nlohmann::json& aPartJson, HTTP_LIB_PART& aPart );
 
 
 class HTTP_LIB_CONNECTION
