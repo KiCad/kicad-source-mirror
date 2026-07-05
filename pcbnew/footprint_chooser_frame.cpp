@@ -126,7 +126,7 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
             // Escape handler
             [this]()
             {
-                DismissModal( false );
+                doCloseWindow();
             } );
 
     frameSizer->Add( m_chooserPanel, 1, wxEXPAND );
@@ -269,13 +269,8 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
-    // Work around assertion firing when we try to LockCtx on a hidden 3D canvas during dtor
-    wxCloseEvent dummy;
-    m_preview3DCanvas->Show();
-    m_preview3DCanvas->OnCloseWindow( dummy );
-
-    // Ensure view and data used by the preview panel are cleared before deleting other items
-    static_cast<FOOTPRINT_PREVIEW_PANEL*>( m_chooserPanel->GetViewerPanel()->GetPreviewPanel() )->ClearViewAndData();
+    // Idempotent; normally already ran from OnOK() or doCloseWindow() before DismissModal.
+    quiescePreview();
 
     // Disconnect board, which is owned by FOOTPRINT_PREVIEW_PANEL.
     m_pcb = nullptr;
@@ -309,6 +304,45 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
 
         if( m_filterByPinCount )
             cfg->m_FootprintChooser.filter_on_pin_count = m_filterByPinCount->GetValue();
+    }
+}
+
+
+void FOOTPRINT_CHOOSER_FRAME::quiescePreview()
+{
+    if( m_quiesced )
+        return;
+
+    m_quiesced = true;
+
+    // Running this teardown before DismissModal() ensures the preview cannot
+    // receive further paint or timer events during KIWAY_PLAYER::ShowModal()'s
+    // post-loop wxSafeYield() while the frame is hidden but not yet destroyed.
+
+    // Work around assertion firing when we try to LockCtx on a hidden 3D canvas
+    if( m_preview3DCanvas )
+    {
+        m_preview3DCanvas->Show();
+
+        wxCloseEvent dummy;
+        m_preview3DCanvas->OnCloseWindow( dummy );
+        m_preview3DCanvas->SetEvtHandlerEnabled( false );
+    }
+
+    if( m_chooserPanel )
+    {
+        FOOTPRINT_PREVIEW_WIDGET* viewerPanel = m_chooserPanel->GetViewerPanel();
+
+        if( viewerPanel )
+        {
+            if( FOOTPRINT_PREVIEW_PANEL* previewPanel =
+                    static_cast<FOOTPRINT_PREVIEW_PANEL*>( viewerPanel->GetPreviewPanel() ) )
+            {
+                previewPanel->GetCanvas()->StopDrawing();
+                previewPanel->GetCanvas()->SetEvtHandlerEnabled( false );
+                previewPanel->ClearViewAndData();
+            }
+        }
     }
 }
 
@@ -441,6 +475,10 @@ bool FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
 
 void FOOTPRINT_CHOOSER_FRAME::doCloseWindow()
 {
+    // Tear down the preview canvases before DismissModal() so nothing can paint
+    // or timer-fire into them during the post-loop wxSafeYield().
+    quiescePreview();
+
     // Only dismiss a modal frame once, so that the return values set by
     // the prior DismissModal() are not bashed for ShowModal().
     if( !IsDismissed() )
@@ -700,7 +738,16 @@ void FOOTPRINT_CHOOSER_FRAME::OnPaint( wxPaintEvent& aEvent )
 
 void FOOTPRINT_CHOOSER_FRAME::OnOK( wxCommandEvent& aEvent )
 {
+    // A queued accept event can still fire during the post-loop wxSafeYield()
+    // after Escape/Cancel already dismissed the frame; don't bash that result.
+    if( IsDismissed() )
+        return;
+
     LIB_ID fpID = m_chooserPanel->GetSelectedLibId();
+
+    // Tear down the preview canvases before DismissModal() so nothing can paint
+    // or timer-fire into them during the post-loop wxSafeYield().
+    quiescePreview();
 
     if( fpID.IsValid() )
     {
@@ -848,6 +895,12 @@ void FOOTPRINT_CHOOSER_FRAME::onFpViewReq( wxCommandEvent& event )
 
 void FOOTPRINT_CHOOSER_FRAME::updateViews()
 {
+    // A selection event queued before dismissal can still dispatch during the
+    // post-loop wxSafeYield().  The 3D canvas stays IsShown() after quiescePreview()
+    // released its GL context, so reloading it here would touch torn-down state.
+    if( m_quiesced )
+        return;
+
     EDA_3D_VIEWER_FRAME* viewer3D = Get3DViewerFrame();
 
     if( m_preview3DCanvas->IsShown() )
