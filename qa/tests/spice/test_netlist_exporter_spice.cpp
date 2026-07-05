@@ -24,8 +24,10 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/results_collector.hpp> // To check if the current test failed (to be moved?).
 #include <test_netlist_exporter_spice.h>
+#include <netlist_exporter_spice.h>
 #include <sim/simulator_reporter.h>
 #include <mock_pgm_base.h>
+#include <reporter.h>
 #include <locale_io.h>
 
 
@@ -283,6 +285,83 @@ BOOST_AUTO_TEST_CASE( LegacyOpamp )
     TestTranPoint( 500e-6, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
     TestTranPoint( 750e-6, { { "V(/in)", -500e-3 }, { "V(/out)", -1 } } );
     TestTranPoint( 1e-3, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
+}
+
+
+// The simulator builds one SPICE_CIRCUIT_MODEL and exports from it repeatedly, so the model-name
+// generator must start each netlist clean.  An externally defined subcircuit name (opamp) must be
+// emitted verbatim every time, and a KiCad-defined .model name (the Gummel-Poon NPN) must not drift
+// run to run.  Either failure means a reused exporter leaks model-name state across exports.
+// The parallel_caps fixture is the schematic from https://gitlab.com/kicad/code/kicad/-/issues/20238
+// with C1 replaced by two parallel caps sharing one library diode.  Re-running the simulation
+// renamed the included .model reference to DIODE1#1, so the diode became undefined and the sim broke.
+BOOST_AUTO_TEST_CASE( RepeatedExportIsDeterministic )
+{
+    LOCALE_IO dummy;
+
+    const std::vector<wxString> fixtures = { wxS( "opamp" ), wxS( "npn_ce_amp" ), wxS( "parallel_caps" ) };
+
+    for( const wxString& fixture : fixtures )
+    {
+        BOOST_TEST_CONTEXT( "Fixture: " << fixture )
+        {
+            LoadSchematic( SchematicQAPath( fixture ) );
+
+            NETLIST_EXPORTER_SPICE exporter( m_schematic.get() );
+
+            auto exportOnce =
+                    [&]() -> wxString
+                    {
+                        wxString           path = GetNetlistPath( true );
+                        WX_STRING_REPORTER reporter;
+
+                        BOOST_REQUIRE( exporter.WriteNetlist( path, GetNetlistOptions(), reporter ) );
+
+                        wxFFile  file( path, "rt" );
+                        BOOST_REQUIRE( file.IsOpened() );
+
+                        wxString netlist;
+                        file.ReadAll( &netlist );
+                        file.Close();
+
+                        return netlist;
+                    };
+
+            wxString first = exportOnce();
+            wxString second = exportOnce();
+
+            BOOST_TEST_INFO( "First export:\n" << first );
+            BOOST_TEST_INFO( "Second export:\n" << second );
+            BOOST_CHECK_EQUAL( first, second );
+
+            Cleanup();
+        }
+    }
+}
+
+
+// The model-name uniquifier must record every accepted name so later collisions are detected, and
+// Clear() must forget them so a reused exporter starts each netlist clean.
+BOOST_AUTO_TEST_CASE( NameGeneratorUniqueness )
+{
+    NAME_GENERATOR gen;
+
+    std::string first = gen.Generate( "model_A" );
+    BOOST_CHECK_EQUAL( first, "model_A" );
+
+    std::string second = gen.Generate( "model_A" );
+    BOOST_CHECK_EQUAL( second, "model_A#1" );
+
+    std::string third = gen.Generate( "model_A" );
+    BOOST_CHECK_EQUAL( third, "model_A#2" );
+
+    std::string different = gen.Generate( "model_B" );
+    BOOST_CHECK_EQUAL( different, "model_B" );
+
+    gen.Clear();
+
+    std::string afterClear = gen.Generate( "model_A" );
+    BOOST_CHECK_EQUAL( afterClear, "model_A" );
 }
 
 

@@ -56,7 +56,9 @@ std::string NAME_GENERATOR::Generate( const std::string& aProposedName )
     std::string name = aProposedName;
     int         ii = 1;
 
-    while( m_names.contains( name ) )
+    // insert() both tests for the collision and records the accepted name, so subsequent calls
+    // actually see previously generated names.
+    while( !m_names.insert( name ).second )
         name = fmt::format( "{}#{}", aProposedName, ii++ );
 
     return name;
@@ -131,6 +133,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
 
     m_nets.clear();
     m_items.clear();
+    m_modelNameGenerator.Clear();
     m_referencesAlreadyFound.Clear();
     m_libParts.clear();
 
