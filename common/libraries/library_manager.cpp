@@ -962,11 +962,15 @@ wxString LIBRARY_MANAGER::ExpandURI( const wxString& aShortURI, const PROJECT& a
 
 bool LIBRARY_MANAGER::IsPcmManagedRow( const LIBRARY_TABLE_ROW& aRow )
 {
-    // PCM_LIB_TRAVERSER always stores URIs that begin with the versioned
-    // ${KICADn_3RD_PARTY} env var token. Any row whose URI does not start with that
-    // token was not added by PCM and must not be auto-removed even if its expanded
-    // absolute path happens to live inside the 3RD_PARTY directory via a different
-    // env var.
+    // PCM_LIB_TRAVERSER stores URIs of the form
+    //     ${KICADn_3RD_PARTY}/<category>/<pkgid>/<name>.<ext>
+    // where <category> is one of the fixed PCM content folders. Matching this full
+    // template is what uniquely identifies a PCM-added row. Matching only the leading
+    // ${KICADn_3RD_PARTY} token is not sufficient because users routinely repurpose
+    // that env var to point at their own library collection (as they did with
+    // KICAD8_3RD_PARTY in earlier versions). A row the user added by hand under their
+    // repurposed 3RD_PARTY directory must never be treated as PCM-managed, or the
+    // auto-remove pass would silently delete it.
     const wxString& uri = aRow.URI();
 
     if( !uri.StartsWith( wxS( "${" ) ) )
@@ -979,7 +983,56 @@ bool LIBRARY_MANAGER::IsPcmManagedRow( const LIBRARY_TABLE_ROW& aRow )
 
     wxString varName = uri.SubString( 2, end - 1 );
 
-    return ENV_VAR::IsVersionedEnvVar( varName, wxS( "3RD_PARTY" ) );
+    if( !ENV_VAR::IsVersionedEnvVar( varName, wxS( "3RD_PARTY" ) ) )
+        return false;
+
+    // PCM_LIB_TRAVERSER always joins the URI with '/', so the token must be followed by a
+    // forward slash; a backslash or missing separator (e.g. "${KICAD10_3RD_PARTY}symbols/...")
+    // was never emitted by PCM.
+    if( end + 1 >= uri.length() || uri[end + 1] != wxS( '/' ) )
+        return false;
+
+    // PCM_LIB_TRAVERSER nests libraries at least as <category>/<pkgid>/<library>, so there
+    // must be a category folder, at least one package-id folder, and a library leaf, with no
+    // empty components. A user library placed directly under the repurposed 3RD_PARTY root
+    // (or in a same-named folder with no package level) does not match.
+    wxArrayString parts = wxSplit( uri.Mid( end + 2 ), '/', '\0' );
+
+    if( parts.size() < 3 )
+        return false;
+
+    for( const wxString& part : parts )
+    {
+        if( part.IsEmpty() )
+            return false;
+    }
+
+    wxString category = parts[0];
+    wxString leaf = parts.Last();
+
+    // The leaf must carry the category-appropriate library extension over a non-empty stem;
+    // a bare extension (e.g. a hidden ".kicad_sym") is never a PCM library and matching it
+    // would let the auto-remove pass delete an unrelated file in a same-named folder.
+    auto hasLibExtension = [&leaf]( const wxString& aExt )
+    {
+        return leaf.length() > aExt.length() && leaf.EndsWith( aExt );
+    };
+
+    if( category == wxS( "symbols" ) )
+        return hasLibExtension( wxS( ".kicad_sym" ) );
+
+    if( category == wxS( "footprints" ) )
+        return hasLibExtension( wxS( ".pretty" ) );
+
+    if( category == wxS( "design_blocks" ) )
+    {
+        static const wxString designBlockExt =
+                wxString::Format( wxS( ".%s" ), FILEEXT::KiCadDesignBlockLibPathExtension );
+
+        return hasLibExtension( designBlockExt );
+    }
+
+    return false;
 }
 
 
