@@ -19,6 +19,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <gestfich.h>
+
 #include <wx/process.h>
 #include <wx/txtstrm.h>
 #include <wx/filename.h>
@@ -34,25 +36,15 @@ BOOST_AUTO_TEST_SUITE( JobsRunner )
 
 
 /**
- * Helper that mirrors the shell-wrapping execution pattern used in JOBS_RUNNER::runSpecialExecute.
- * Returns the exit code and captures stdout into aOutput.
+ * Drive the production ExecuteCommandThroughShell (the exact function jobsets use) and capture its
+ * stdout so the shell-wrapping behaviour is tested directly rather than through a copy.
  */
 static int executeViaShell( const wxString& aCmd, wxString& aOutput )
 {
     wxProcess process;
     process.Redirect();
 
-#ifdef __WXMSW__
-    // The argv-array form of wxExecute re-escapes embedded double quotes on Windows
-    // (see wxExecuteImpl in wxWidgets' src/msw/utilsexc.cpp), breaking quoted executable
-    // paths with spaces. The string form passes the command line straight to CreateProcess
-    // without modification. This mirrors the production code in runSpecialExecute.
-    int result = static_cast<int>(
-            wxExecute( wxS( "cmd.exe /c " ) + aCmd, wxEXEC_SYNC, &process ) );
-#else
-    const wchar_t* argv[] = { wxS( "/bin/sh" ), wxS( "-c" ), aCmd.wc_str(), nullptr };
-    int result = static_cast<int>( wxExecute( argv, wxEXEC_SYNC, &process ) );
-#endif
+    int result = ExecuteCommandThroughShell( aCmd, &process );
 
     wxInputStream* inputStream = process.GetInputStream();
 
@@ -187,8 +179,7 @@ BOOST_AUTO_TEST_CASE( CommandWithQuotedArgument )
     // cmd.exe does not honour backslash-escaped quotes, so this broke any quoted executable
     // path containing spaces (e.g. "C:\Program Files\KiCad\10.0\bin\python.exe" --version).
     // Under the buggy code path, cmd.exe's `echo` would emit \"hello world\"; with the fix
-    // (string form of wxExecute), the user's quoting is preserved and the output contains
-    // the original "hello world".
+    // the user's quoting is preserved and the output contains the original "hello world".
     wxString cmd = wxS( "echo \"hello world\"" );
     wxString output;
     int      result = executeViaShell( cmd, output );
@@ -198,6 +189,69 @@ BOOST_AUTO_TEST_CASE( CommandWithQuotedArgument )
                          "Quoted argument should pass through verbatim, got: " + output );
 }
 #endif
+
+
+/**
+ * Regression for https://gitlab.com/kicad/code/kicad/-/issues/24226
+ *
+ * An absolute path containing spaces, quoted by the user, must reach the interpreter intact. The
+ * old array-form invocation on Windows let wxExecute backslash-escape the quotes and cmd.exe then
+ * mangled the path. Run an interpreter located at a spaced absolute path against a script that
+ * prints a sentinel and verify the sentinel comes back.
+ */
+BOOST_AUTO_TEST_CASE( AbsolutePathWithSpaces )
+{
+    wxString baseDir = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
+                       + wxS( "kicad test 24226 " ) + wxString::Format( wxS( "%d" ), (int) getpid() );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( baseDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    wxString sentinel = wxS( "SENTINEL_24226" );
+
+    // A second spaced absolute path passed as an argument exercises the nested-quote shape
+    // cmd /d /s /c ""exe path" "arg path"". The script only emits the sentinel when it receives
+    // this argument intact, so argument quoting is validated, not just the executable path.
+    wxString argPath = baseDir + wxFileName::GetPathSeparator() + wxS( "script input.txt" );
+    wxFile   argFile;
+    BOOST_REQUIRE( argFile.Create( argPath, true ) );
+    argFile.Close();
+
+    wxFile script;
+
+#ifdef __WXMSW__
+    // Write a batch file at a spaced absolute path and invoke it through its quoted absolute path.
+    wxString scriptPath = baseDir + wxFileName::GetPathSeparator() + wxS( "print sentinel.bat" );
+    BOOST_REQUIRE( script.Create( scriptPath, true ) );
+    BOOST_REQUIRE( script.Write( wxS( "@echo off\r\nif \"%~1\"==\"" ) + argPath + wxS( "\" echo " )
+                                 + sentinel + wxS( "\r\n" ) ) );
+    script.Close();
+
+    wxString cmd = wxS( "\"" ) + scriptPath + wxS( "\" \"" ) + argPath + wxS( "\"" );
+#else
+    // Write a shell script at a spaced absolute path and invoke it through its quoted absolute path.
+    wxString scriptPath = baseDir + wxFileName::GetPathSeparator() + wxS( "print sentinel.sh" );
+    BOOST_REQUIRE( script.Create( scriptPath, true ) );
+    BOOST_REQUIRE( script.Write( wxS( "#!/bin/sh\n[ \"$1\" = \"" ) + argPath + wxS( "\" ] && echo " )
+                                 + sentinel + wxS( "\n" ) ) );
+    script.Close();
+    BOOST_REQUIRE( wxFileName( scriptPath ).SetPermissions( wxPOSIX_USER_READ | wxPOSIX_USER_WRITE
+                                                            | wxPOSIX_USER_EXECUTE ) );
+
+    wxString cmd = wxS( "\"" ) + scriptPath + wxS( "\" \"" ) + argPath + wxS( "\"" );
+#endif
+
+    wxString output;
+    int      result = executeViaShell( cmd, output );
+
+    BOOST_CHECK_EQUAL( result, 0 );
+    BOOST_CHECK_MESSAGE( output.Contains( sentinel ),
+                         "Quoted absolute paths with spaces should reach the interpreter intact, "
+                         "got: " + output );
+
+    wxRemoveFile( argPath );
+    wxRemoveFile( scriptPath );
+    wxRmdir( baseDir );
+}
 
 
 BOOST_AUTO_TEST_SUITE_END()

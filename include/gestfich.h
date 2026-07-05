@@ -82,6 +82,20 @@ KICOMMON_API int ExecuteFile( const wxString& aEditorName,
                               wxProcess* aCallback = nullptr, bool aFileForKicad = true );
 
 /**
+ * Run a user-supplied command line through the platform shell so glob expansion, pipes, and
+ * other shell features work consistently.
+ *
+ * On Windows the command is wrapped as cmd.exe /d /s /c "<cmd>" so that absolute paths containing
+ * spaces or quotes survive cmd.exe's quote handling intact. On POSIX the command is handed to
+ * /bin/sh -c as a single argument.
+ *
+ * @param aCommand the command line exactly as entered by the user.
+ * @param aProcess an optional wxProcess for the call; pass a Redirect()ed process to capture output.
+ * @return the process exit code, or -1 if the command could not be executed.
+ */
+KICOMMON_API int ExecuteCommandThroughShell( const wxString& aCommand, wxProcess* aProcess = nullptr );
+
+/**
  * Add un " to the start and the end of string (if not already done).
  *
  * @param string string to modify.
