@@ -99,6 +99,29 @@ int countZonesByNameInRuleArea( BOARD* aBoard, const wxString& aZoneName, const 
 }
 
 
+int countZonesByNamePrefixInRuleArea( BOARD* aBoard, const wxString& aBaseName, const RULE_AREA& aRuleArea )
+{
+    int count = 0;
+
+    for( const ZONE* zone : aBoard->Zones() )
+    {
+        if( zone == aRuleArea.m_zone )
+            continue;
+
+        const wxString& name = zone->GetZoneName();
+
+        // A copied zone may get a _<n> suffix for uniqueness (issue 23131).
+        if( name != aBaseName && !name.StartsWith( aBaseName + wxT( "_" ) ) )
+            continue;
+
+        if( aRuleArea.m_zone->Outline()->Contains( zone->Outline()->COutline( 0 ).Centre() ) )
+            count++;
+    }
+
+    return count;
+}
+
+
 BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE )
 {
     using TMATCH::CONNECTION_GRAPH;
@@ -507,7 +530,9 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutRespectsZoneLayerSetsForOtherItems, MULTICH
     BOOST_REQUIRE( copyBStatus >= 0 );
 
     // SourceA and DestA both include F.Cu+B.Cu, so this multilayer zone should copy.
-    BOOST_CHECK_EQUAL( countZonesByNameInRuleArea( m_board.get(), wxT( "MultilayerZoneFrontAndOne" ), *destA ), 1 );
+    // The copy is renamed for uniqueness (issue 23131), so match the base name as a prefix.
+    BOOST_CHECK_EQUAL( countZonesByNamePrefixInRuleArea( m_board.get(), wxT( "MultilayerZoneFrontAndOne" ), *destA ),
+                       1 );
 
     // SourceB only includes F.Cu, so this F.Cu+B.Cu zone should not copy to DestB.
     BOOST_CHECK_EQUAL( countZonesByNameInRuleArea( m_board.get(), wxT( "MultilayerZoneSourceBLayerMismatch" ), *destB ),
