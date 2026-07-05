@@ -746,11 +746,6 @@ public:
         if( !aRow )
             return {};
 
-        // A pending EnsureVisible() may hold a deferred pointer to the item (or its now-empty
-        // parent group) we are about to free.  Cancel it so the control's idle handler does not
-        // dereference freed memory.
-        m_parent.m_netsList->CancelPendingEnsureVisible();
-
         std::unique_ptr<LIST_ITEM> i = std::move( **aRow );
 
         LIST_ITEM* parent = i->Parent();
@@ -812,10 +807,8 @@ public:
 
     void deleteAllItems()
     {
-        // A pending EnsureVisible() may hold a deferred pointer to an item we are about to
-        // free.  Cancel it so the control's idle handler does not dereference freed memory.
-        m_parent.m_netsList->CancelPendingEnsureVisible();
-
+        // BeforeReset() drives the canceller, dropping any deferred EnsureVisible before the
+        // clear frees items it may point at.
         BeforeReset();
         m_items.clear();
         AfterReset();

@@ -20,7 +20,60 @@
 #ifndef WX_DATAVIEWCTRL_H_
 #define WX_DATAVIEWCTRL_H_
 
+#include <functional>
+#include <utility>
+
 #include <wx/dataview.h>
+
+/**
+ * A wxDataViewModelNotifier that runs a callback whenever the model removes items or resets.
+ *
+ * WX_DATAVIEWCTRL installs one so a deferred EnsureVisible (see
+ * WX_DATAVIEWCTRL::CancelPendingEnsureVisible) drops automatically as the model frees items,
+ * rather than relying on every model-mutation site to cancel it by hand.
+ */
+class WX_ENSURE_VISIBLE_CANCELLER : public wxDataViewModelNotifier
+{
+public:
+    explicit WX_ENSURE_VISIBLE_CANCELLER( std::function<void()> aOnItemsRemoved ) :
+            m_onItemsRemoved( std::move( aOnItemsRemoved ) )
+    {
+    }
+
+    bool ItemAdded( const wxDataViewItem&, const wxDataViewItem& ) override { return true; }
+    bool ItemChanged( const wxDataViewItem& ) override { return true; }
+    bool ValueChanged( const wxDataViewItem&, unsigned int ) override { return true; }
+    void Resort() override {}
+
+    bool ItemDeleted( const wxDataViewItem&, const wxDataViewItem& ) override
+    {
+        m_onItemsRemoved();
+        return true;
+    }
+
+    bool ItemsDeleted( const wxDataViewItem&, const wxDataViewItemArray& ) override
+    {
+        m_onItemsRemoved();
+        return true;
+    }
+
+    // BeforeReset fires while items are still live; Cleared covers AfterReset and direct clears.
+    bool BeforeReset() override
+    {
+        m_onItemsRemoved();
+        return true;
+    }
+
+    bool Cleared() override
+    {
+        m_onItemsRemoved();
+        return true;
+    }
+
+private:
+    std::function<void()> m_onItemsRemoved;
+};
+
 
 /**
  * Extension of the wxDataViewCtrl to include some helper functions for working with items.
@@ -33,6 +86,14 @@ class WX_DATAVIEWCTRL : public wxDataViewCtrl
 public:
     // Just take all constructors
     using wxDataViewCtrl::wxDataViewCtrl;
+
+    ~WX_DATAVIEWCTRL() override;
+
+    /**
+     * Install a WX_ENSURE_VISIBLE_CANCELLER on @p aModel so deferred scrolls are dropped
+     * automatically when it frees items, then associate it as usual.
+     */
+    bool AssociateModel( wxDataViewModel* aModel ) override;
 
     /**
      * Get the previous item in list order.
@@ -77,11 +138,15 @@ public:
      * On GTK, wxDataViewCtrl::EnsureVisible() records the target item and re-scrolls to it
      * during the next idle cycle (in OnInternalIdle).  If the model is rebuilt and the
      * underlying item is freed before that idle runs, OnInternalIdle dereferences the stale
-     * pointer in ExpandAncestors and crashes.  Callers that free model items must invoke this
-     * before the rebuild so the deferred reference is replaced by an invalid item, which the
-     * idle handler skips.  This is a no-op on platforms that do not defer the scroll.
+     * pointer in ExpandAncestors and crashes.  The installed WX_ENSURE_VISIBLE_CANCELLER invokes
+     * this automatically when the model frees items, so call sites normally do not need to.  This
+     * is a no-op on platforms that do not defer the scroll.
      */
     void CancelPendingEnsureVisible();
+
+private:
+    // Owned by the associated model; null when no model is associated.
+    wxDataViewModelNotifier* m_ensureVisibleCanceller = nullptr;
 };
 
 
