@@ -789,6 +789,7 @@ set( COMMON_SRCS
 	${FONT_SRCS}
     ${COMMON_IMPORT_GFX_SRCS}
     ${COMMON_TRANSLINE_CALCULATION_SRCS}
+    track_width_calculations.cpp
     base_screen.cpp
     bin_mod.cpp
     bitmap_base.cpp

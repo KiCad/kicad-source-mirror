@@ -31,6 +31,7 @@
 #include <calculator_panels/panel_track_width.h>
 #include <pcb_calculator_settings.h>
 #include <string_utils.h>
+#include <track_width_calculations.h>
 #include <units_scales.h>
 
 #include <widgets/unit_selector.h>
@@ -41,7 +42,7 @@ wxString tracks_width_versus_current_formula =
 
 extern double DoubleFromString( const wxString& TextValue );
 
-// The IPC2221 formula used to calculate track width is valid only for copper material
+// The track width formula is valid only for copper material
 const double copper_resistivity = 1.72e-8;
 
 
@@ -396,51 +397,24 @@ void PANEL_TRACK_WIDTH::TWUpdateModeDisplay()
     GetSizer()->Layout();
 }
 
-/* calculate track width for external or internal layers
- *
- * Imax = 0.048 * dT^0.44 * A^0.725 for external layer
- * Imax = 0.024 * dT^0.44 * A^0.725 for internal layer
- * with A = area = aThickness * trackWidth ( in mils )
- * and dT = temperature rise in degree C
- * Of course we want to know trackWidth
- */
+// Calculate track width for external or internal layers using the IPC-2152 based Brooks & Adam
+// fit. Widths and thicknesses are passed in internal units (meters) and converted to mils for the
+// closed-form equation, which is expressed in mils and amperes.
 double PANEL_TRACK_WIDTH::TWCalculateWidth( double aCurrent, double aThickness, double aDeltaT_C,
                                             bool aUseInternalLayer )
 {
-    // Appropriate scale for requested layer.
-    double scale = aUseInternalLayer ? 0.024 : 0.048;
+    double widthMils = TRACK_WIDTH_CALCULATIONS::WidthFromCurrent(
+            aCurrent, aThickness / UNIT_MIL, aDeltaT_C, aUseInternalLayer );
 
-    // aThickness is given in normalize units (in meters) and we need mil
-    aThickness /= UNIT_MIL;
-
-    /* formula is Imax = scale * dT^0.44 * A^0.725
-     * or
-     * log(Imax) = log(scale) + 0.44*log(dT) +(0.725*(log(aThickness) + log(trackWidth))
-     * log(trackWidth) * 0.725 = log(Imax) - log(scale) - 0.44*log(dT) - 0.725*log(aThickness)
-     */
-    double dtmp = log( aCurrent ) - log( scale ) - 0.44 * log( aDeltaT_C ) - 0.725 * log( aThickness );
-    dtmp /= 0.725;
-    double trackWidth = exp( dtmp );
-
-    trackWidth *= UNIT_MIL;     // We are using normalize units (sizes in meters) and we have mil
-    return trackWidth;          // in meters
+    return widthMils * UNIT_MIL;    // Convert back to internal units (meters)
 }
 
 
 double PANEL_TRACK_WIDTH::TWCalculateCurrent( double aWidth, double aThickness, double aDeltaT_C,
                                               bool aUseInternalLayer )
 {
-    // Appropriate scale for requested layer.
-    double scale = aUseInternalLayer ? 0.024 : 0.048;
-
-    // Convert thickness and width to mils.
-    aThickness /= UNIT_MIL;
-    aWidth     /= UNIT_MIL;
-
-    double area    = aThickness * aWidth;
-    double current = scale * pow( aDeltaT_C, 0.44 ) * pow( area, 0.725 );
-
-    return current;
+    return TRACK_WIDTH_CALCULATIONS::CurrentFromWidth( aWidth / UNIT_MIL, aThickness / UNIT_MIL,
+                                                       aDeltaT_C, aUseInternalLayer );
 }
 
 
