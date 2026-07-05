@@ -1090,52 +1090,8 @@ void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent& event )
     // opening a context menu)
     OnMouseMoveCamera( event );
 
-    if( !event.Dragging() && ( m_3d_render_raytracing != nullptr ) )
-    {
-        RAY mouseRay = getRayAtCurrentMousePosition();
-
-        BOARD_ITEM* intersectedBoardItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
-
-        if( intersectedBoardItem )
-        {
-            FOOTPRINT* footprint = nullptr;
-
-            switch( intersectedBoardItem->Type() )
-            {
-            case PCB_FOOTPRINT_T:
-                footprint = static_cast<FOOTPRINT*>( intersectedBoardItem );
-                break;
-
-            case PCB_PAD_T:
-                footprint = static_cast<PAD*>( intersectedBoardItem )->GetParentFootprint();
-                break;
-
-            case PCB_FIELD_T:
-                footprint = static_cast<PCB_FIELD*>( intersectedBoardItem )->GetParentFootprint();
-                break;
-
-            default:
-                break;
-            }
-
-            if( footprint )
-            {
-                // We send a message (by ExpressMail) to the board and schematic editor, but only
-                // if the manager of this canvas is a EDA_3D_VIEWER_FRAME, because only this
-                // kind of frame has ExpressMail stuff
-                EDA_3D_VIEWER_FRAME* frame = dynamic_cast<EDA_3D_VIEWER_FRAME*>( GetParent() );
-
-                if( frame )
-                {
-                    std::string command = fmt::format( "$SELECT: 0,F{}",
-                                        EscapeString( footprint->GetReference(), CTX_IPC ).ToStdString() );
-
-                    frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, command, frame );
-                    frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, command, frame );
-                }
-            }
-        }
-    }
+    // Selection/deselection is handled on button release in OnLeftUp, so a click-drag
+    // used to rotate the view does not change the current selection
 }
 
 
@@ -1143,6 +1099,8 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
 {
     if( m_camera_is_moving )
         return;
+
+    bool wasRotating = m_mouse_is_moving;
 
     if( m_mouse_is_moving )
     {
@@ -1165,6 +1123,47 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
 
     m_3d_render_opengl->handleGizmoMouseInput( scaledMouseX, scaledMouseY );
     m_3d_render_opengl->updateGizmoSelection( m_camera.GetRotationMatrix() );
+
+    bool gizmoClicked = m_3d_render_opengl->getSelectedGizmoSphere() != SPHERES_GIZMO::GizmoSphereSelection::None;
+
+    // A plain click that missed the orientation gizmo: cross-probe the clicked footprint,
+    // or clear the selection when clicking empty space. A click-drag rotation or a click
+    // on the gizmo leaves the current selection untouched.
+    if( !wasRotating && !gizmoClicked && m_3d_render_raytracing != nullptr )
+    {
+        RAY         mouseRay = getRayAtCurrentMousePosition();
+        BOARD_ITEM* intersectedBoardItem = m_3d_render_raytracing->IntersectBoardItem( mouseRay );
+        FOOTPRINT*  footprint = nullptr;
+
+        if( intersectedBoardItem )
+        {
+            switch( intersectedBoardItem->Type() )
+            {
+            case PCB_FOOTPRINT_T: footprint = static_cast<FOOTPRINT*>( intersectedBoardItem ); break;
+
+            case PCB_PAD_T: footprint = static_cast<PAD*>( intersectedBoardItem )->GetParentFootprint(); break;
+
+            case PCB_FIELD_T: footprint = static_cast<PCB_FIELD*>( intersectedBoardItem )->GetParentFootprint(); break;
+
+            default: break;
+            }
+        }
+
+        // We send a message (by ExpressMail) to the board and schematic editor, but only
+        // if the manager of this canvas is a EDA_3D_VIEWER_FRAME, because only this
+        // kind of frame has ExpressMail stuff
+        if( EDA_3D_VIEWER_FRAME* frame = dynamic_cast<EDA_3D_VIEWER_FRAME*>( GetParent() ) )
+        {
+            std::string command = "$SELECT: 0,";
+
+            if( footprint )
+                command += fmt::format( "F{}", EscapeString( footprint->GetReference(), CTX_IPC ).ToStdString() );
+
+            frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SELECTION, command, frame );
+            frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SELECTION, command, frame );
+        }
+    }
+
     Refresh();
 }
 
