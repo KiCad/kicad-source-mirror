@@ -247,11 +247,11 @@ protected:
      * Optimises the via layers. Ensures that vias that are routed through only on one layer do not count towards total
      * length calculations.
      */
-    static void
-    optimiseVias( const std::vector<LENGTH_DELAY_CALCULATION_ITEM*>&                            aVias,
-                  std::vector<LENGTH_DELAY_CALCULATION_ITEM*>&                                  aLines,
-                  std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>>&       aLinesPositionMap,
-                  const std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>>& aPadsPositionMap );
+    void optimiseVias(
+            const std::vector<LENGTH_DELAY_CALCULATION_ITEM*>&                            aVias,
+            std::vector<LENGTH_DELAY_CALCULATION_ITEM*>&                                  aLines,
+            std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>>&       aLinesPositionMap,
+            const std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>>& aPadsPositionMap ) const;
 
     /**
      * Merges any lines (traces) that are contiguous, on one layer, and with no junctions

@@ -27,6 +27,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <footprint.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_circle.h>
 #include <geometry/circle.h>
@@ -617,7 +618,7 @@ void LENGTH_DELAY_CALCULATION::optimiseTracesInPads( const std::vector<LENGTH_DE
 void LENGTH_DELAY_CALCULATION::optimiseVias(
         const std::vector<LENGTH_DELAY_CALCULATION_ITEM*>& aVias, std::vector<LENGTH_DELAY_CALCULATION_ITEM*>& aLines,
         std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>>&       aLinesPositionMap,
-        const std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>>& aPadsPositionMap )
+        const std::map<VECTOR2I, std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>>& aPadsPositionMap ) const
 {
     for( LENGTH_DELAY_CALCULATION_ITEM* via : aVias )
     {
@@ -627,13 +628,11 @@ void LENGTH_DELAY_CALCULATION::optimiseVias(
 
         const VECTOR2I viaPos = pcbVia->GetPosition();
 
-        // Check for exact position match (fast path)
         auto exactMatch = aLinesPositionMap.find( viaPos );
 
         if( exactMatch != aLinesPositionMap.end() )
             connectedLines.insert( exactMatch->second.begin(), exactMatch->second.end() );
 
-        // Check for off-center connections
         int maxRadius = 0;
 
         pcbVia->Padstack().ForEachUniqueLayer(
@@ -647,7 +646,7 @@ void LENGTH_DELAY_CALCULATION::optimiseVias(
         for( const auto& [pos, lineSet] : aLinesPositionMap )
         {
             if( pos == viaPos )
-                continue; // already handled
+                continue;
 
             if( ( pos - viaPos ).SquaredEuclideanNorm() > maxRadiusSq )
                 continue;
@@ -662,69 +661,57 @@ void LENGTH_DELAY_CALCULATION::optimiseVias(
             }
         }
 
-        if( connectedLines.empty() )
+        const PAD* coincidentPad = nullptr;
+
+        for( PAD* pad : m_board->GetConnectivity()->GetConnectedPads( pcbVia ) )
         {
-            // No connected lines - this via is floating. Set both layers to the same
-            via->SetLayers( via->GetVia()->GetLayer(), via->GetVia()->GetLayer() );
+            coincidentPad = pad;
+            break;
         }
-        else if( connectedLines.size() == 1 )
+
+        LSET spanLayers;
+
+        for( const LENGTH_DELAY_CALCULATION_ITEM* lineItem : connectedLines )
+            spanLayers.set( lineItem->GetStartLayer() );
+
+        if( coincidentPad )
         {
-            // This is either a via stub, or a via-in-pad
-            bool               isViaInPad = false;
-            const PCB_LAYER_ID lineLayer = ( *connectedLines.begin() )->GetStartLayer();
+            PCB_LAYER_ID padSideLayer;
 
-            auto padItr = aPadsPositionMap.find( via->GetVia()->GetPosition() );
-
-            if( padItr != aPadsPositionMap.end() )
+            if( coincidentPad->GetAttribute() == PAD_ATTRIB::SMD || coincidentPad->GetAttribute() == PAD_ATTRIB::CONN )
             {
-                // This could be a via-in-pad - check for overlapping pads which are not on the line layer
-                const std::unordered_set<LENGTH_DELAY_CALCULATION_ITEM*>& pads = padItr->second;
-
-                if( pads.size() == 1 )
-                {
-                    const LENGTH_DELAY_CALCULATION_ITEM* padItem = *pads.begin();
-
-                    if( !padItem->GetPad()->Padstack().LayerSet().Contains( lineLayer ) )
-                    {
-                        // This is probably a via-in-pad
-                        isViaInPad = true;
-                        via->SetLayers( lineLayer, padItem->GetStartLayer() );
-                    }
-                }
+                padSideLayer = *coincidentPad->Padstack().LayerSet().CuStack().begin();
+            }
+            else
+            {
+                padSideLayer = coincidentPad->GetParentFootprint()->GetLayer();
             }
 
-            if( !isViaInPad )
-            {
-                // This is a via stub - make its electrical length 0
-                via->SetLayers( lineLayer, lineLayer );
-            }
+            spanLayers.set( padSideLayer );
+        }
+
+        wxLogTrace( wxT( "PNS_TUNE" ),
+                    wxT( "optimiseVias: via@(%d,%d) connectedLines=%zu coincidentPad=%d "
+                         "spanLayerCount=%d" ),
+                    viaPos.x, viaPos.y, connectedLines.size(), coincidentPad ? 1 : 0,
+                    static_cast<int>( spanLayers.count() ) );
+
+        const LSEQ cuStack = spanLayers.CuStack();
+
+        if( cuStack.empty() )
+        {
+            // Nothing connects to this via
+            via->SetLayers( pcbVia->GetLayer(), pcbVia->GetLayer() );
+        }
+        else if( cuStack.size() == 1 )
+        {
+            // Stub via
+            via->SetLayers( cuStack.front(), cuStack.front() );
         }
         else
         {
-            // This via has more than one track ending at it. Calculate the connected layer span (which may be shorter
-            // than the overall via span)
-            LSET layers;
-
-            for( const LENGTH_DELAY_CALCULATION_ITEM* lineItem : connectedLines )
-                layers.set( lineItem->GetStartLayer() );
-
-            LSEQ cuStack = layers.CuStack();
-
-            PCB_LAYER_ID firstLayer = UNDEFINED_LAYER;
-            PCB_LAYER_ID lastLayer = UNDEFINED_LAYER;
-
-            for( PCB_LAYER_ID layer : cuStack )
-            {
-                if( firstLayer == UNDEFINED_LAYER )
-                    firstLayer = layer;
-                else
-                    lastLayer = layer;
-            }
-
-            if( lastLayer == UNDEFINED_LAYER )
-                via->SetLayers( firstLayer, firstLayer );
-            else
-                via->SetLayers( firstLayer, lastLayer );
+            // Signal transitions layers
+            via->SetLayers( cuStack.front(), cuStack.back() );
         }
     }
 }
