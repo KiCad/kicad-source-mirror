@@ -89,6 +89,15 @@ private:
     void doCloseWindow() override;
     void closeFootprintChooser( wxCommandEvent& aEvent );
 
+    /**
+     * Stop the preview canvases and release their GPU/board state before the
+     * modal loop exits.  Must run before DismissModal() so that paint/idle/timer
+     * events delivered during KIWAY_PLAYER::ShowModal()'s post-loop wxSafeYield()
+     * cannot touch the preview after its backing data has been torn down.
+     * Idempotent; safe to call multiple times and from the destructor.
+     */
+    void quiescePreview();
+
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh ) const override;
 
@@ -142,6 +151,8 @@ private:
     // window that isn't yet visible will return false to AcceptsFocus().  So we must delay
     // the initial-focus SetFocus() call to the first paint event.
     bool                     m_firstPaintEvent;
+
+    bool                     m_quiesced = false;
 };
 
 #endif  // FOOTPRINT_CHOOSER_FRAME_H
