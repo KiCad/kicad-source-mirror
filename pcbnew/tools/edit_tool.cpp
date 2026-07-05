@@ -126,6 +126,50 @@ static const std::vector<KICAD_T> connectedTypes = { PCB_TRACE_T, PCB_ARC_T, PCB
 static const std::vector<KICAD_T> routableTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, PCB_FOOTPRINT_T };
 
 
+// Types with no Mirror() override, which would fall through to the warning-dialog
+// BOARD_ITEM::Mirror. Free pads are handled specially by the tool but not by PCB_GROUP::Mirror.
+static const std::vector<KICAD_T> nonMirrorableTypes = {
+    PCB_FOOTPRINT_T, PCB_PAD_T, PCB_TARGET_T, PCB_REFERENCE_IMAGE_T,
+};
+
+
+// A group is mirrorable only if none of its members hit BOARD_ITEM::Mirror.
+static bool groupMirrorable( const PCB_GROUP* aGroup )
+{
+    bool ok = true;
+
+    aGroup->RunOnChildren(
+            [&]( BOARD_ITEM* aChild )
+            {
+                if( aChild->IsType( nonMirrorableTypes ) )
+                    ok = false;
+            },
+            RECURSE_MODE::RECURSE );
+
+    return ok;
+}
+
+
+// True if at least one selected item can be mirrored. A group counts only if all its members can.
+static bool selectionMirrorable( const SELECTION& aSelection )
+{
+    for( EDA_ITEM* item : aSelection )
+    {
+        if( item->Type() == PCB_GROUP_T )
+        {
+            if( groupMirrorable( static_cast<PCB_GROUP*>( item ) ) )
+                return true;
+        }
+        else if( item->IsType( EDIT_TOOL::MirrorableItems ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 EDIT_TOOL::EDIT_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractiveEdit" ),
         m_selectionTool( nullptr ),
@@ -154,14 +198,9 @@ static std::shared_ptr<CONDITIONAL_MENU> makeMirrorRotateMenu( TOOL_INTERACTIVE*
     auto canMirror = []( const SELECTION& aSelection )
     {
         if( SELECTION_CONDITIONS::OnlyTypes( padTypes )( aSelection ) )
-        {
             return false;
-        }
 
-        if( SELECTION_CONDITIONS::HasTypes( groupTypes )( aSelection ) )
-            return true;
-
-        return SELECTION_CONDITIONS::HasTypes( EDIT_TOOL::MirrorableItems )( aSelection );
+        return selectionMirrorable( aSelection );
     };
 
     menu->AddItem( PCB_ACTIONS::rotateCcw, SELECTION_CONDITIONS::NotEmpty );
@@ -667,6 +706,8 @@ bool EDIT_TOOL::Init()
             return false;
         }
 
+        // Gates the whole "Mirror / Rotate" submenu, so keep it open for any group. Rotate works
+        // on a group with footprints, only the mirror items inside disable (see makeMirrorRotateMenu).
         if( SELECTION_CONDITIONS::HasTypes( groupTypes )( aSelection ) )
             return true;
 
@@ -2471,6 +2512,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                                                                             : FLIP_DIRECTION::LEFT_RIGHT;
 
     int skippedFootprints = 0;
+    int skippedGroups = 0;
 
     for( EDA_ITEM* item : selection )
     {
@@ -2479,6 +2521,13 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             if( item->Type() == PCB_FOOTPRINT_T )
                 skippedFootprints++;
 
+            continue;
+        }
+
+        // Skip groups that hold non-mirrorable items, else the rest would tear away from them.
+        if( item->Type() == PCB_GROUP_T && !groupMirrorable( static_cast<PCB_GROUP*>( item ) ) )
+        {
+            skippedGroups++;
             continue;
         }
 
@@ -2543,6 +2592,11 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     {
         frame()->ShowInfoBarMsg( _( "Footprints cannot be mirrored. Use Flip to move them to "
                                     "the other side of the board." ) );
+    }
+    else if( skippedGroups > 0 && !m_dragging )
+    {
+        frame()->ShowInfoBarMsg( _( "Groups containing footprints or other items that cannot be "
+                                    "mirrored were skipped." ) );
     }
 
     if( selection.IsHover() && !m_dragging )

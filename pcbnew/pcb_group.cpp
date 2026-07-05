@@ -386,6 +386,21 @@ void PCB_GROUP::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
 void PCB_GROUP::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
+    // Footprints have no mirror, only flip. If the group holds one, leave the whole group alone
+    // rather than mirror the rest and tear it apart.
+    bool hasFootprint = false;
+
+    RunOnChildren(
+            [&]( BOARD_ITEM* aChild )
+            {
+                if( aChild->Type() == PCB_FOOTPRINT_T )
+                    hasFootprint = true;
+            },
+            RECURSE_MODE::RECURSE );
+
+    if( hasFootprint )
+        return;
+
     for( EDA_ITEM* item : m_items )
         static_cast<BOARD_ITEM*>( item )->Mirror( aCentre, aFlipDirection );
 }
