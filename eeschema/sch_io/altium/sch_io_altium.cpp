@@ -39,6 +39,7 @@
 #include <sch_pin.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
+#include <sch_connection.h>
 #include <sch_symbol.h>
 #include <sch_junction.h>
 #include <sch_line.h>
@@ -77,6 +78,12 @@
 #define HARNESS_PORT_COLOR_DEFAULT_OUTLINE    COLOR4D( 0.56078431372549020, \
                                                        0.61960784313725492, \
                                                        0.78823529411764703, 1.0 )
+
+
+// Pure label/name transforms shared with the QA suite; see AltiumWrapBusLabel and
+// AltiumDeriveSheetName below.
+wxString AltiumWrapBusLabel( const wxString& aText );
+wxString AltiumDeriveSheetName( const wxString& aFilename, const std::set<wxString>& aExistingNames );
 
 
 static const VECTOR2I GetRelativePosition( const VECTOR2I& aPosition, const SCH_SYMBOL* aSymbol )
@@ -448,19 +455,12 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicProject( SCHEMATIC* aSchematic, const std
         // to sheet symbols within a parent). Derive a name from the Altium filename.
         if( sheet->GetName().Trim().empty() )
         {
-            wxString baseName = wxFileName( fn ).GetName();
-            baseName.Replace( wxT( "/" ), wxT( "_" ) );
-
-            wxString           sheetName = baseName;
             std::set<wxString> existingNames;
 
             for( auto& [path, existing] : sheets )
                 existingNames.insert( existing->GetName() );
 
-            for( int ii = 1; existingNames.count( sheetName ); ++ii )
-                sheetName = baseName + wxString::Format( wxT( "_%d" ), ii );
-
-            sheet->SetName( sheetName );
+            sheet->SetName( AltiumDeriveSheetName( fn.GetFullPath(), existingNames ) );
         }
 
         m_sheetPath.SetPageNumber( pageNo );
@@ -1020,6 +1020,120 @@ void SCH_IO_ALTIUM::CreateAliases()
 }
 
 
+wxString AltiumWrapBusLabel( const wxString& aText )
+{
+    // Altium marks bus membership by geometry alone (a scalar label placed on a bus line);
+    // KiCad needs the same label expressed as a single-member bus group to make the
+    // connection.  Already-formatted bus labels are left untouched.
+    if( SCH_CONNECTION::IsBusLabel( aText ) )
+        return aText;
+
+    // Spaces and commas separate members inside a bus group, so a multi-word net name would
+    // otherwise fan out into several members.  Quote such names so the bus-group reader in
+    // NET_SETTINGS::ParseBusGroup keeps the whole name as a single member.
+    if( aText.Contains( wxT( " " ) ) || aText.Contains( wxT( "," ) ) )
+        return wxT( "{\"" ) + aText + wxT( "\"}" );
+
+    return wxT( "{" ) + aText + wxT( "}" );
+}
+
+
+wxString AltiumDeriveSheetName( const wxString& aFilename, const std::set<wxString>& aExistingNames )
+{
+    wxString baseName = wxFileName( aFilename ).GetName();
+    baseName.Replace( wxT( "/" ), wxT( "_" ) );
+
+    if( baseName.Trim().empty() )
+        baseName = wxT( "Sheet" );
+
+    wxString sheetName = baseName;
+
+    for( int ii = 1; aExistingNames.count( sheetName ); ++ii )
+        sheetName = baseName + wxString::Format( wxT( "_%d" ), ii );
+
+    return sheetName;
+}
+
+
+void SCH_IO_ALTIUM::PostProcessBusLabels()
+{
+    SCH_SCREEN* screen = getCurrentScreen();
+    wxCHECK( screen, /* void */ );
+
+    bool hasBusLines = false;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
+    {
+        SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+        if( line->IsBus() )
+        {
+            hasBusLines = true;
+            break;
+        }
+    }
+
+    if( !hasBusLines )
+        return;
+
+    // Collect labels that need wrapping, then modify them after iteration to avoid
+    // modifying the R-tree during traversal.
+    std::vector<SCH_LABEL*> labelsToWrap;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_LABEL_T ) )
+    {
+        SCH_LABEL* label = static_cast<SCH_LABEL*>( item );
+
+        if( SCH_CONNECTION::IsBusLabel( label->GetText() ) )
+            continue;
+
+        for( SCH_ITEM* busItem : screen->Items().Overlapping( SCH_LINE_T, label->GetBoundingBox() ) )
+        {
+            SCH_LINE* busLine = static_cast<SCH_LINE*>( busItem );
+
+            if( busLine->IsBus() && busLine->HitTest( label->GetPosition() ) )
+            {
+                labelsToWrap.push_back( label );
+                break;
+            }
+        }
+    }
+
+    for( SCH_LABEL* label : labelsToWrap )
+        label->SetText( AltiumWrapBusLabel( label->GetText() ) );
+}
+
+
+void SCH_IO_ALTIUM::EnsureSheetSymbolNames()
+{
+    SCH_SCREEN* screen = getCurrentScreen();
+    wxCHECK( screen, /* void */ );
+
+    std::set<wxString> existingNames;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+        if( !sheet->GetName().Trim().empty() )
+            existingNames.insert( sheet->GetName() );
+    }
+
+    for( auto& [idx, sheet] : m_sheets )
+    {
+        if( !sheet->GetName().Trim().empty() )
+            continue;
+
+        SCH_FIELD* filenameField = sheet->GetField( FIELD_T::SHEET_FILENAME );
+        wxString   filename = filenameField ? filenameField->GetText() : wxString();
+        wxString   sheetName = AltiumDeriveSheetName( filename, existingNames );
+
+        sheet->SetName( sheetName );
+        existingNames.insert( sheetName );
+    }
+}
+
+
 void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
 {
     // Load path may be different from the project path.
@@ -1297,6 +1411,9 @@ void SCH_IO_ALTIUM::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
 
     CreateAliases();
 
+    // Wrap any remaining net labels sitting on bus lines in curly braces
+    PostProcessBusLabels();
+
     if( reader.HasParsingError() )
         THROW_IO_ERROR( "stream was not parsed correctly!" );
 
@@ -1377,6 +1494,12 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
     // Handle Ports
     for( const ASCH_PORT& port : m_altiumPortsCurrentSheet )
         ParsePort( port );
+
+    // Bus labels are wrapped in ParseAdditional() after CreateAliases() has had a chance to
+    // append harness suffixes; doing it here would prematurely mark labels as bus groups.
+
+    // Assign default names to any sheet symbols that didn't get a SHEET_NAME record
+    EnsureSheetSymbolNames();
 
     m_altiumPortsCurrentSheet.clear();
     m_altiumComponents.clear();
@@ -1491,6 +1614,12 @@ void SCH_IO_ALTIUM::ParseASCIISchematic( const wxString& aFileName )
 
     // Add the aliases used for harnesses
     CreateAliases();
+
+    // Wrap net labels sitting on bus lines in curly braces so KiCad recognizes them
+    PostProcessBusLabels();
+
+    // Assign default names to any sheet symbols that didn't get a SHEET_NAME record
+    EnsureSheetSymbolNames();
 
     m_altiumHarnesses.clear();
     m_altiumPortsCurrentSheet.clear();
