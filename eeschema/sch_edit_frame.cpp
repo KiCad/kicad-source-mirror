@@ -95,6 +95,7 @@
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_navigate_tool.h>
+#include <tools/sch_selection_tool.h>
 #include <tools/sch_find_replace_tool.h>
 #include <trace_helpers.h>
 #include <unordered_set>
@@ -3210,4 +3211,26 @@ bool SCH_EDIT_FRAME::doAutoSave()
 {
     // Delegate to base auto-save behavior (commits pending local history) for now.
     return EDA_BASE_FRAME::doAutoSave();
+}
+
+
+bool SCH_EDIT_FRAME::canRunAutoSave() const
+{
+    // Serializing the schematic on the UI thread freezes the editor; defer it while the user
+    // is mid-operation (any tool other than passive selection or point editing is active) so
+    // the snapshot waits for the timer to retry once the edit finishes.
+    TOOL_MANAGER* mgr = GetToolManager();
+
+    if( !mgr )
+        return true;
+
+    TOOL_BASE*        currentTool = mgr->GetCurrentTool();
+    SCH_POINT_EDITOR* pointEditor = mgr->GetTool<SCH_POINT_EDITOR>();
+
+    // The point editor is the active tool whenever a point-editable item is selected, even while
+    // idle, so it is safe to snapshot unless a drag is actively mutating the model.
+    if( currentTool == pointEditor )
+        return pointEditor && !pointEditor->IsDragging();
+
+    return currentTool == mgr->GetTool<SCH_SELECTION_TOOL>();
 }

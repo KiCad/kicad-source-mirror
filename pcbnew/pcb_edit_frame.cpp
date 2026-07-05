@@ -2680,36 +2680,61 @@ void PCB_EDIT_FRAME::ProjectChanged()
 }
 
 
-bool PCB_EDIT_FRAME::CanAcceptApiCommands()
+bool PCB_EDIT_FRAME::interactiveOperationInProgress() const
 {
-    TOOL_BASE* currentTool = GetToolManager()->GetCurrentTool();
+    TOOL_MANAGER* mgr = GetToolManager();
+
+    if( !mgr )
+        return false;
+
+    TOOL_BASE* currentTool = mgr->GetCurrentTool();
 
     // When a single item that can be point-edited is selected, the point editor
     // tool will be active instead of the selection tool.  It blocks undo/redo
     // while the user is actually dragging points around, though, so we can use
-    // this as an initial check to prevent API actions when points are being edited.
+    // this as an initial check.
     if( UndoRedoBlocked() )
-        return false;
+        return true;
 
-    // Don't allow any API use while the user is using a tool that could
-    // modify the model in the middle of the message stream
-    if( currentTool != GetToolManager()->GetTool<PCB_SELECTION_TOOL>() &&
-        currentTool != GetToolManager()->GetTool<PCB_POINT_EDITOR>() )
+    // A tool other than passive selection or point editing is actively modifying
+    // the model (drawing, dragging, routing, etc.).
+    if( currentTool != mgr->GetTool<PCB_SELECTION_TOOL>()
+        && currentTool != mgr->GetTool<PCB_POINT_EDITOR>() )
     {
-        return false;
+        return true;
     }
 
-    ZONE_FILLER_TOOL* zoneFillerTool = m_toolManager->GetTool<ZONE_FILLER_TOOL>();
+    if( ZONE_FILLER_TOOL* zoneFillerTool = mgr->GetTool<ZONE_FILLER_TOOL>();
+        zoneFillerTool && zoneFillerTool->IsBusy() )
+    {
+        return true;
+    }
 
-    if( zoneFillerTool->IsBusy() )
-        return false;
+    if( ROUTER_TOOL* routerTool = mgr->GetTool<ROUTER_TOOL>();
+        routerTool && routerTool->RoutingInProgress() )
+    {
+        return true;
+    }
 
-    ROUTER_TOOL* routerTool = m_toolManager->GetTool<ROUTER_TOOL>();
+    return false;
+}
 
-    if( routerTool && routerTool->RoutingInProgress() )
+
+bool PCB_EDIT_FRAME::CanAcceptApiCommands()
+{
+    if( interactiveOperationInProgress() )
         return false;
 
     return EDA_BASE_FRAME::CanAcceptApiCommands();
+}
+
+
+bool PCB_EDIT_FRAME::canRunAutoSave() const
+{
+    // Serializing a large board on the UI thread freezes the editor; never do it while the
+    // user is mid-operation or the deferred input gets misinterpreted (e.g. a routed track
+    // ending where the cursor lands once the editor unfreezes).
+    return !interactiveOperationInProgress();
 }
 
 
