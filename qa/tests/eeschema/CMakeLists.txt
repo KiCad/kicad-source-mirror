@@ -114,6 +114,7 @@ set( QA_EESCHEMA_SRCS
     test_issue16915_bus_netclass.cpp
     test_issue24220_hierarchical_bus_netclass.cpp
     test_issue24477_http_network_loss.cpp
+    test_issue23023_http_fields.cpp
     test_issue24403_directive_label_i18n.cpp
     test_issue24297_http_migrate.cpp
     test_issue24606_derived_symbol_fields.cpp
