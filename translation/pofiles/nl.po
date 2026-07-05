@@ -14,13 +14,14 @@
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Robin Janssens <robin@robinjanssens.net>, 2025, 2026.
 # Herman van der Vaart <vaarttuig@gmail.com>, 2026.
+# Steyn <steyn.guelen@me.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-03-19 00:23+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-07-06 11:09+0000\n"
+"Last-Translator: Steyn <steyn.guelen@me.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
 "source/nl/>\n"
 "Language: nl\n"
@@ -28,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -397,12 +398,10 @@ msgid "Render current view using Raytracing"
 msgstr "Huidige weergave renderen door middel van raytracen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
-#, fuzzy
 msgid "Show parts without 3D model"
-msgstr "Pads in contourmodus weergeven"
+msgstr "Onderdelen zonder 3d model laten zien"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
-#, fuzzy
 msgid "Display a placeholder for footprints with missing 3D models"
 msgstr "De volledige footprint lijst weergeven (zonder filter)"
 
@@ -2099,42 +2098,41 @@ msgstr "Wijziging door API"
 #: common/api/api_plugin.cpp:58
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "Ongeldige plugin configuratie bij '%s': %s"
 
 #: common/api/api_plugin.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "Ongeldige pinnaam"
+msgstr "Ongeldige plugin tijd: %s"
 
 #: common/api/api_plugin.cpp:105
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "Kan instellingen van repository niet ophalen"
+msgstr "Kan instellingen van plugin niet ophalen"
 
 #: common/api/api_plugin.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "Configuratiefout"
+msgstr "Fout in plugin configuratiebestand: %s"
 
 #: common/api/api_plugin.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "Temperatuurbereik is ongeldig."
+msgstr "Ontbrekende of ongeldige benodigde sleutels: %s"
 
 #: common/api/api_plugin.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "Symboolbibliotheek-ID %s is niet geldig."
+msgstr "Identificatie %s is niet geldig."
 
 #: common/api/api_plugin.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "Databaseverbinding mislukt: %s"
+msgstr "Sectie \"Acties\" is ongeldig: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "Plug-in-opties"
+msgstr "Plugin acties: '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:109
 #, fuzzy, c-format
