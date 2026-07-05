@@ -24,12 +24,71 @@
 #include <boost/test/unit_test.hpp>
 
 #include <aperture_macro.h>
+#include <am_primitive.h>
+#include <am_param.h>
 #include <dcode.h>
 #include <gerber_draw_item.h>
 #include <gerber_file_image.h>
+#include <geometry/shape_poly_set.h>
 
 
 BOOST_AUTO_TEST_SUITE( GerbviewApertureMacro )
+
+
+namespace
+{
+
+/**
+ * Build a single AMP_CIRCLE primitive of the given diameter (mm) and return the segment count
+ * of its tessellated outline. Drives the real conversion path used when flashing an
+ * aperture-macro circle.
+ */
+int circlePrimitiveSegmentCount( double aDiameterMm )
+{
+    APERTURE_MACRO macro;
+    AM_PRIMITIVE   prim( true, AMP_CIRCLE );
+
+    auto pushValue =
+            []( AM_PRIMITIVE& aPrim, double aValue )
+            {
+                AM_PARAM param;
+                param.PushOperator( PUSHVALUE, aValue );
+                aPrim.m_Params.push_back( param );
+            };
+
+    // exposure ON, diameter, center x, center y
+    pushValue( prim, 1.0 );
+    pushValue( prim, aDiameterMm );
+    pushValue( prim, 0.0 );
+    pushValue( prim, 0.0 );
+
+    SHAPE_POLY_SET buffer;
+    prim.ConvertBasicShapeToPolygon( &macro, buffer );
+
+    BOOST_REQUIRE_GT( buffer.OutlineCount(), 0 );
+
+    // The conversion closes the outline by repeating the first point.
+    return buffer.Outline( 0 ).PointCount() - 1;
+}
+
+} // namespace
+
+
+// Guards against regressing to a fixed segment count independent of the circle size.
+BOOST_AUTO_TEST_CASE( CirclePrimitiveTessellationScalesWithSize )
+{
+    int smallCount = circlePrimitiveSegmentCount( 0.2 );
+    int largeCount = circlePrimitiveSegmentCount( 20.0 );
+
+    // A larger circle needs more segments to hold the same maximum deviation.
+    BOOST_CHECK_GT( largeCount, smallCount );
+
+    // Both counts follow the TransformCircleToPolygon convention of a multiple of 8 segments
+    // with an 8-segment floor.
+    BOOST_CHECK_GE( smallCount, 8 );
+    BOOST_CHECK_EQUAL( smallCount % 8, 0 );
+    BOOST_CHECK_EQUAL( largeCount % 8, 0 );
+}
 
 
 /**

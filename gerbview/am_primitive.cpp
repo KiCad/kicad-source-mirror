@@ -430,19 +430,16 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( APERTURE_MACRO* aApertMacro,
 
         VECTOR2I  center = mapPt( m_Params[2].GetValueFromMacro( aApertMacro ), m_Params[3].GetValueFromMacro( aApertMacro ),
                                   m_GerbMetric );
-        VECTOR2I  corner;
 
-        const int seg_per_circle = 64;   // Number of segments to approximate a circle
-        EDA_ANGLE delta = ANGLE_360 / seg_per_circle;
+        // Use the shared tessellator rather than a fixed segment count so macro circles keep
+        // the same maximum deviation as circle apertures.
+        int arc_to_seg_error = gerbIUScale.mmToIU( 0.005 );    // Allow 5 microns
 
-        for( EDA_ANGLE angle = ANGLE_0; angle < ANGLE_360; angle += delta )
-        {
-            corner.x   = radius;
-            corner.y   = 0;
-            RotatePoint( corner, angle );
-            corner += center;
-            aBuffer.push_back( corner );
-        }
+        SHAPE_LINE_CHAIN circle;
+        TransformCircleToPolygon( circle, center, radius, arc_to_seg_error, ERROR_INSIDE );
+
+        for( const VECTOR2I& pt : circle.CPoints() )
+            aBuffer.push_back( pt );
 
         break;
     }
