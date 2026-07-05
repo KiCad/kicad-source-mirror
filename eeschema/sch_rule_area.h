@@ -158,6 +158,15 @@ public:
     /// @return The resolved netclass (if any), and the SCH_ITEM providing the declaration.
     const std::vector<std::pair<wxString, SCH_ITEM*>> GetResolvedNetclasses( const SCH_SHEET_PATH* aSheetPath ) const;
 
+    /// Return true when the rule area exists only as a container for attached directive labels.
+    /// This requires at least one attached directive and no design effect of its own (no DNP and
+    /// no exclude-from flags set).
+    bool IsDirectiveLabelOnlyArea() const
+    {
+        return !m_directives.empty() && !m_DNP && !m_excludedFromSim && !m_excludedFromBOM
+               && !m_excludedFromBoard;
+    }
+
     /// Get the message panel info for the rule area.
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

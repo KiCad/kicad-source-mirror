@@ -165,6 +165,7 @@ set( QA_EESCHEMA_SRCS
     test_sch_netclass.cpp
     test_sch_pin.cpp
     test_sch_rule_area_destruction.cpp
+    test_sch_rule_area_directive_visibility.cpp
     test_sch_rtree.cpp
     test_sch_reference_list.cpp
     test_sch_screen.cpp

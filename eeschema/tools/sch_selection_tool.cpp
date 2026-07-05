@@ -49,6 +49,7 @@
 #include <sch_group.h>
 #include <sch_marker.h>
 #include <sch_no_connect.h>
+#include <sch_rule_area.h>
 #include <sch_sheet_pin.h>
 #include <sch_table.h>
 #include <tool/tool_event.h>
@@ -4034,6 +4035,17 @@ bool SCH_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos
     case SCH_DIRECTIVE_LABEL_T:
         if( !m_frame->eeconfig()->m_Appearance.show_directive_labels )
             return false;
+
+        break;
+
+    case SCH_RULE_AREA_T:
+        // A rule area that exists solely to carry directive labels is hidden along with those
+        // labels, so it must not remain selectable while invisible.
+        if( !m_frame->eeconfig()->m_Appearance.show_directive_labels
+                && static_cast<const SCH_RULE_AREA*>( aItem )->IsDirectiveLabelOnlyArea() )
+        {
+            return false;
+        }
 
         break;
 

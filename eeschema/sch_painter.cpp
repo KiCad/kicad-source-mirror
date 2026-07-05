@@ -48,6 +48,7 @@
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_shape.h>
+#include <sch_rule_area.h>
 #include <sch_marker.h>
 #include <sch_no_connect.h>
 #include <sch_sheet.h>
@@ -2043,6 +2044,16 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
 
     if( aShape->IsPrivate() && !m_schSettings.m_IsSymbolEditor )
         return;
+
+    // A rule area that exists solely to carry attached directive labels follows the visibility of
+    // those labels.  Rule areas which also apply DNP or exclude-from rules always remain visible
+    // since they have a design effect of their own.
+    if( aShape->Type() == SCH_RULE_AREA_T && !eeconfig()->m_Appearance.show_directive_labels
+            && !aShape->IsSelected() )
+    {
+        if( static_cast<const SCH_RULE_AREA*>( aShape )->IsDirectiveLabelOnlyArea() )
+            return;
+    }
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
