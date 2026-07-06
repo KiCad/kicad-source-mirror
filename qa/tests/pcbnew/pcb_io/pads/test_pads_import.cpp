@@ -1413,13 +1413,16 @@ BOOST_AUTO_TEST_CASE( Issue23393_NetClassImport )
 
 
 /**
- * Verify that route arcs (CW/CCW) from PADS are imported as proper semicircles.
+ * Verify that a PADS route arc (CW/CCW) is imported as one arc spanning the two
+ * neighbouring corners, with no straight remnant.
  *
- * Issue #23540: route arcs specified with only CW/CCW direction (no explicit
- * center/radius) were imported with degenerate geometry because the arc
- * midpoint was computed from zero center and zero radius.
+ * Issues #23540 / #23612: a route arc is stored as three corners where the middle
+ * corner is the arc center. The arc begins on the preceding corner and ends on the
+ * following one. Treating the center corner as an ordinary vertex produced a
+ * half-length arc to the center plus a straight track from the center to the pad,
+ * so the curved track rendered as two straight lines to the pad.
  */
-BOOST_AUTO_TEST_CASE( Issue23540_RouteArcSemicircle )
+BOOST_AUTO_TEST_CASE( Issue23612_RouteArcSpansNeighbours )
 {
     PCB_IO_PADS plugin;
 
@@ -1430,7 +1433,8 @@ BOOST_AUTO_TEST_CASE( Issue23540_RouteArcSemicircle )
 
     BOOST_REQUIRE( board != nullptr );
 
-    int arcCount = 0;
+    int      arcCount = 0;
+    PCB_ARC* routeArc = nullptr;
 
     for( PCB_TRACK* trk : board->Tracks() )
     {
@@ -1439,6 +1443,7 @@ BOOST_AUTO_TEST_CASE( Issue23540_RouteArcSemicircle )
 
         PCB_ARC* arc = static_cast<PCB_ARC*>( trk );
         arcCount++;
+        routeArc = arc;
 
         EDA_ANGLE angle = arc->GetAngle();
         double absDeg = std::abs( angle.AsDegrees() );
@@ -1452,7 +1457,6 @@ BOOST_AUTO_TEST_CASE( Issue23540_RouteArcSemicircle )
 
         // In PADS the CW arc from left to right goes upward. After the Y-axis
         // flip to KiCad coordinates, "upward on screen" means smaller Y values.
-        // The arc midpoint Y must be less than both endpoint Y values.
         int chordY = ( start.y + end.y ) / 2;
 
         BOOST_CHECK_MESSAGE( mid.y < chordY,
@@ -1460,8 +1464,22 @@ BOOST_AUTO_TEST_CASE( Issue23540_RouteArcSemicircle )
                 "chord center Y=" << chordY );
     }
 
-    BOOST_CHECK_MESSAGE( arcCount >= 1,
-            "expected at least 1 PCB_ARC from route CW/CCW arc, got " << arcCount );
+    BOOST_REQUIRE_MESSAGE( arcCount == 1,
+            "expected exactly 1 PCB_ARC from route CW/CCW arc, got " << arcCount );
+
+    // The arc's net carries only the arc: treating the center corner as a vertex
+    // leaves a straight track from the center to the pad on the same net.
+    int straightOnArcNet = 0;
+
+    for( PCB_TRACK* trk : board->Tracks() )
+    {
+        if( trk->Type() == PCB_TRACE_T && trk->GetNetCode() == routeArc->GetNetCode() )
+            straightOnArcNet++;
+    }
+
+    BOOST_CHECK_MESSAGE( straightOnArcNet == 0,
+            "route arc net should contain no straight track remnant, got "
+            << straightOnArcNet );
 }
 
 
