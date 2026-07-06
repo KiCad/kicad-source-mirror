@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-07-02 19:01+0000\n"
+"PO-Revision-Date: 2026-07-06 11:09+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
@@ -58362,7 +58362,7 @@ msgstr "Pokusí se dokončit aktuální trasu k nejbližšímu konci vzdušného
 
 #: pcbnew/tools/pcb_actions.cpp:2682
 msgid "Route Selected"
-msgstr "Trasovat vybrané"
+msgstr "Táhnout spoj z vybrané"
 
 #: pcbnew/tools/pcb_actions.cpp:2683
 msgid "Sequentially route selected items from ratsnest anchor."
@@ -58370,7 +58370,7 @@ msgstr "Postupně trasuje vybrané položky od kotvy vzdušného spoje."
 
 #: pcbnew/tools/pcb_actions.cpp:2691
 msgid "Route Selected From Other End"
-msgstr "Trasovat vybrané od druhého konce"
+msgstr "Táhnout spoj z druhého konce"
 
 #: pcbnew/tools/pcb_actions.cpp:2692
 msgid "Sequentially route selected items from other end of ratsnest anchor."
