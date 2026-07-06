@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 18:05+0300\n"
-"PO-Revision-Date: 2026-07-04 02:01+0000\n"
+"PO-Revision-Date: 2026-07-06 11:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -8206,8 +8206,8 @@ msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
-"Kann nicht zusammenführen: Sie haben unverarbeitete Änderungen. Bitte vor "
-"dem Pull committen oder stashen."
+"Kann nicht zusammenführen: Sie haben Änderungen, die nicht zum Commit "
+"vorgemerkt sind (staged). Bitte vor dem Pull committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1454
 #, c-format
@@ -8253,8 +8253,8 @@ msgid ""
 "Cannot pull with rebase: you have unstaged changes. Please commit or stash "
 "them before pulling."
 msgstr ""
-"Pull mit Rebase nicht möglich: Sie haben unverarbeitete Änderungen. Bitte "
-"vor dem Pull committen oder stashen."
+"Pull mit Rebase nicht möglich: Sie haben Änderungen, die nicht zum Commit "
+"vorgemerkt sind (staged). Bitte vor dem Pull committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1568 common/git/libgit_backend.cpp:1719
 #, c-format
@@ -8292,8 +8292,8 @@ msgstr "Konnte nicht zu Remote-Zweig zurücksetzen: %s"
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Rebase nicht möglich: Sie haben unverarbeitete Änderungen.  Bitte zuvor "
-"committen oder stashen."
+"Rebase nicht möglich: Sie haben Änderungen, nicht zum Commit vorgemerkt sind "
+"(staged).  Bitte zuvor committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1737 common/git/libgit_backend.cpp:1748
 msgid ""
