@@ -237,7 +237,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Restore auto-saved</property>
+                <property name="label">Restore Auto-saved</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
@@ -312,7 +312,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Keep current</property>
+                <property name="label">Keep Current</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
@@ -387,7 +387,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label">Keep both</property>
+                <property name="label">Keep Both</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
@@ -472,7 +472,7 @@
                 <property name="gripper">0</property>
                 <property name="hidden">0</property>
                 <property name="id">wxID_CANCEL</property>
-                <property name="label">Cancel open</property>
+                <property name="label">Cancel Open</property>
                 <property name="margins"></property>
                 <property name="markup">0</property>
                 <property name="max_size"></property>
