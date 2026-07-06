@@ -1,0 +1,26 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "aaaaaaaa-1111-2222-3333-444444444444")
+	(paper "A4")
+	(lib_symbols
+	)
+	(hierarchical_label "D[0..1]"
+		(shape bidirectional)
+		(at 50.8 50.8 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "bbbbbbbb-1111-2222-3333-444444444444")
+	)
+	(sheet_instances
+		(path "/"
+			(page "")
+		)
+	)
+)
