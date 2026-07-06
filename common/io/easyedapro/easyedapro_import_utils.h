@@ -21,9 +21,11 @@
 #ifndef EASYEDAPRO_IMPORT_UTILS_H_
 #define EASYEDAPRO_IMPORT_UTILS_H_
 
+#include <map>
 #include <set>
 #include <wx/stream.h>
 #include <wx/string.h>
+#include <io/easyedapro/easyedapro_parser.h>
 #include <lib_id.h>
 #include <nlohmann/json_fwd.hpp>
 
@@ -41,16 +43,14 @@ wxString ShortenLibName( wxString aProjectName );
 
 LIB_ID ToKiCadLibID( const wxString& aLibName, const wxString& aLibReference );
 
-std::vector<IMPORT_PROJECT_DESC> ProjectToSelectorDialog( const nlohmann::json& aProject,
-                                                          bool                  aPcbOnly = false,
+std::vector<IMPORT_PROJECT_DESC> ProjectToSelectorDialog( const nlohmann::json& aProject, bool aPcbOnly = false,
                                                           bool                  aSchOnly = false );
 
 nlohmann::json FindJsonFile( const wxString& aZipFileName, const std::set<wxString>& aFileNames );
 
 nlohmann::json ReadProjectOrDeviceFile( const wxString& aZipFileName );
 
-void IterateZipFiles(
-        const wxString&                                                         aFileName,
+void IterateZipFiles( const wxString&                                                         aFileName,
         std::function<bool( const wxString&, const wxString&, wxInputStream& )> aCallback );
 
 std::vector<nlohmann::json> ParseJsonLines( wxInputStream& aInput, const wxString& aSource );
@@ -59,8 +59,7 @@ std::vector<nlohmann::json> ParseJsonLines( wxInputStream& aInput, const wxStrin
  * Multiple document types (e.g. footprint and PCB) can be put into a single file, separated by
  * empty line.
  */
-std::vector<std::vector<nlohmann::json>> ParseJsonLinesWithSeparation( wxInputStream&  aInput,
-                                                                       const wxString& aSource );
+std::vector<std::vector<nlohmann::json>> ParseJsonLinesWithSeparation( wxInputStream& aInput, const wxString& aSource );
 
 std::map<wxString, wxString> AnyMapToStringMap( const std::map<wxString, nlohmann::json>& aInput );
 
@@ -72,6 +71,13 @@ std::map<wxString, wxString> AnyMapToStringMap( const std::map<wxString, nlohman
  * symbols / footprints / devices maps are also populated from their META rows.
  */
 nlohmann::json BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& aParser, bool aIncludeLibraryMetadata = true );
+
+std::map<wxString, BLOB> BuildV3BlobMap( const V3_DOC_PARSER& aParser );
+
+wxString GetV3LibraryItemTitle( const nlohmann::json& aMetadata, const wxString& aUuid );
+
+std::map<wxString, wxString> BuildV3LibraryItemMap( const V3_DOC_PARSER& aParser, const char* aIndexKey,
+                                                    const wxString& aDocType );
 
 } // namespace EASYEDAPRO
 

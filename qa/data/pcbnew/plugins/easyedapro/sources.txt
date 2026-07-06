@@ -26,6 +26,7 @@ Project: LS2K0300Core (EasyEDA Pro v3 sample)
 
 Files:
 ProProject_LS2K0300Core_2025-11-14.epro2
+LS2K0300_Footprint_2025-11-14.elibz2
 
 License: Provided by contributor for QA import compatibility testing
 Link: Internal test sample provided with the EasyEDA Pro v3 importer contribution

@@ -47,6 +47,12 @@ static std::string ToStdString( const wxString& aStr )
 }
 
 
+static wxString ToWxString( const std::string& aStr )
+{
+    return wxString::FromUTF8( aStr.c_str() );
+}
+
+
 static nlohmann::json EmptyV3ProjectIndex()
 {
     nlohmann::json project = nlohmann::json::object();
@@ -596,4 +602,105 @@ nlohmann::json EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& 
     }
 
     return project;
+}
+
+
+std::map<wxString, EASYEDAPRO::BLOB> EASYEDAPRO::BuildV3BlobMap( const V3_DOC_PARSER& aParser )
+{
+    std::map<wxString, BLOB> blobs;
+
+    for( const auto& [blobDocUuid, rawDoc] : aParser.GetRawDocs( wxS( "BLOB" ) ) )
+    {
+        for( const V3_ROW& row : rawDoc.rows )
+        {
+            if( row.type != wxS( "BLOB" ) )
+                continue;
+
+            try
+            {
+                BLOB blob;
+                blob.objectId = V3GetString( row.outer, "id" );
+                blob.url = V3GetString( row.inner, "content" );
+                blobs[blob.objectId] = blob;
+            }
+            catch( nlohmann::json::exception& e )
+            {
+                wxLogWarning( wxString::Format( _( "EasyEDA Pro v3 blob in '%s' was skipped due to parse error: %s" ),
+                                                blobDocUuid, e.what() ) );
+            }
+        }
+    }
+
+    return blobs;
+}
+
+
+wxString EASYEDAPRO::GetV3LibraryItemTitle( const nlohmann::json& aMetadata, const wxString& aUuid )
+{
+    wxString title = EASYEDAPRO::V3GetString( aMetadata, "display_title" );
+
+    if( title.empty() )
+        title = EASYEDAPRO::V3GetString( aMetadata, "title" );
+
+    if( title.empty() )
+        title = aUuid;
+
+    return title;
+}
+
+
+static void InsertV3LibraryItem( std::map<wxString, wxString>& aNameToUuid, const wxString& aName,
+                                 const wxString& aUuid )
+{
+    wxString uniqueBase = aName;
+
+    if( uniqueBase.empty() )
+        uniqueBase = aUuid;
+
+    wxString uniqueName = uniqueBase;
+
+    if( aNameToUuid.contains( uniqueName ) )
+    {
+        uniqueBase += wxS( "_" ) + aUuid.Left( 8 );
+        uniqueName = uniqueBase;
+    }
+
+    int suffix = 2;
+    while( aNameToUuid.contains( uniqueName ) )
+        uniqueName = uniqueBase + wxString::Format( wxS( "_%d" ), suffix++ );
+
+    aNameToUuid[uniqueName] = aUuid;
+}
+
+
+std::map<wxString, wxString> EASYEDAPRO::BuildV3LibraryItemMap( const V3_DOC_PARSER& aParser, const char* aIndexKey,
+                                                                const wxString& aDocType )
+{
+    std::map<wxString, wxString> titlesByUuid;
+    const nlohmann::json&        index = aParser.GetLibraryIndex();
+
+    if( index.is_object() && index.contains( aIndexKey ) && index.at( aIndexKey ).is_object() )
+    {
+        for( const auto& [uuidKey, metadata] : index.at( aIndexKey ).items() )
+        {
+            wxString uuid = V3GetString( metadata, "uuid", ToWxString( uuidKey ) );
+            titlesByUuid[uuid] = GetV3LibraryItemTitle( metadata, uuid );
+        }
+    }
+
+    std::map<wxString, wxString> nameToUuid;
+
+    for( const auto& [uuid, rawDoc] : aParser.GetRawDocs( aDocType ) )
+    {
+        (void) rawDoc;
+
+        wxString name = uuid;
+
+        if( auto it = titlesByUuid.find( uuid ); it != titlesByUuid.end() )
+            name = it->second;
+
+        InsertV3LibraryItem( nameToUuid, name, uuid );
+    }
+
+    return nameToUuid;
 }

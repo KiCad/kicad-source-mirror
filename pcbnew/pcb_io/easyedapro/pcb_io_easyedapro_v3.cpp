@@ -47,15 +47,120 @@ PCB_IO_EASYEDAPRO_V3::PCB_IO_EASYEDAPRO_V3() :
 }
 
 
+PCB_IO_EASYEDAPRO_V3::~PCB_IO_EASYEDAPRO_V3() = default;
+
+
+const EASYEDAPRO::V3_DOC_PARSER& PCB_IO_EASYEDAPRO_V3::getCachedLibraryParser( const wxString& aLibraryPath ) const
+{
+    long long timestamp = GetLibraryTimestamp( aLibraryPath );
+
+    if( !m_cachedLibraryParser || m_cachedLibraryPath != aLibraryPath || m_cachedLibraryTimestamp != timestamp )
+    {
+        m_cachedLibraryParser = std::make_unique<EASYEDAPRO::V3_DOC_PARSER>( aLibraryPath );
+        m_cachedLibraryParser->LoadLibrary();
+        m_cachedLibraryPath = aLibraryPath;
+        m_cachedLibraryTimestamp = timestamp;
+    }
+
+    return *m_cachedLibraryParser;
+}
+
+
 bool PCB_IO_EASYEDAPRO_V3::CanReadBoard( const wxString& aFileName ) const
 {
     return EASYEDAPRO::V3_DOC_PARSER::IsV3Archive( aFileName );
 }
 
 
+bool PCB_IO_EASYEDAPRO_V3::CanReadLibrary( const wxString& aFileName ) const
+{
+    if( !PCB_IO::CanReadLibrary( aFileName ) )
+        return false;
+
+    return EASYEDAPRO::V3_DOC_PARSER::IsV3Library( aFileName, wxS( "FOOTPRINT" ) );
+}
+
+
+long long PCB_IO_EASYEDAPRO_V3::GetLibraryTimestamp( const wxString& aLibraryPath ) const
+{
+    wxFileName fileName( aLibraryPath );
+
+    if( !fileName.FileExists() )
+        return 0;
+
+    wxDateTime modified = fileName.GetModificationTime();
+
+    if( !modified.IsValid() )
+        return 0;
+
+    return modified.GetTicks();
+}
+
+
+void PCB_IO_EASYEDAPRO_V3::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
+                                               bool aBestEfforts, const std::map<std::string, UTF8>* aProperties )
+{
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = getCachedLibraryParser( aLibraryPath );
+
+    std::map<wxString, wxString> footprintMap =
+            EASYEDAPRO::BuildV3LibraryItemMap( v3, "footprints", wxS( "FOOTPRINT" ) );
+
+    for( const auto& [name, uuid] : footprintMap )
+        aFootprintNames.Add( name );
+}
+
+
+FOOTPRINT* PCB_IO_EASYEDAPRO_V3::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                                bool aKeepUUID, const std::map<std::string, UTF8>* aProperties )
+{
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
+
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = getCachedLibraryParser( aLibraryPath );
+
+    std::map<wxString, wxString> footprintMap =
+            EASYEDAPRO::BuildV3LibraryItemMap( v3, "footprints", wxS( "FOOTPRINT" ) );
+
+    auto fpIt = footprintMap.find( aFootprintName );
+
+    if( fpIt == footprintMap.end() )
+        return nullptr;
+
+    const EASYEDAPRO::V3_DOC_RAW* rawDoc = v3.FindRawDoc( wxS( "FOOTPRINT" ), fpIt->second );
+
+    if( !rawDoc )
+        return nullptr;
+
+    PCB_IO_EASYEDAPRO_V3_PARSER parser( nullptr, nullptr );
+    FOOTPRINT*                  footprint = nullptr;
+
+    try
+    {
+        footprint = parser.ParseFootprint( nlohmann::json::object(), fpIt->second, EASYEDAPRO::BuildV3BlobMap( v3 ),
+                                           *rawDoc );
+    }
+    catch( nlohmann::json::exception& e )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Cannot load footprint '%s' from '%s': %s" ), aFootprintName, aLibraryPath,
+                                          e.what() ) );
+    }
+
+    if( !footprint )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Cannot load footprint '%s' from '%s'" ), aFootprintName, aLibraryPath ) );
+    }
+
+    footprint->SetFPID( EASYEDAPRO::ToKiCadLibID( wxEmptyString, aFootprintName ) );
+    footprint->Reference().SetVisible( true );
+    footprint->Value().SetText( aFootprintName );
+    footprint->Value().SetVisible( true );
+    footprint->AutoPositionFields();
+
+    return footprint;
+}
+
+
 BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                                        const std::map<std::string, UTF8>* aProperties,
-                                        PROJECT* aProject )
+                                        const std::map<std::string, UTF8>* aProperties, PROJECT* aProject )
 {
     ignore_unused( aProject );
 
@@ -97,8 +202,8 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
         }
         else if( m_choose_project_handler )
         {
-            std::vector<IMPORT_PROJECT_DESC> chosen = m_choose_project_handler(
-                    EASYEDAPRO::ProjectToSelectorDialog( project, true, false ) );
+            std::vector<IMPORT_PROJECT_DESC> chosen =
+                    m_choose_project_handler( EASYEDAPRO::ProjectToSelectorDialog( project, true, false ) );
 
             if( !chosen.empty() )
                 pcbToLoad = chosen[0].PCBId;
@@ -114,21 +219,7 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
 
     PCB_IO_EASYEDAPRO_V3_PARSER parser( nullptr, nullptr );
 
-    std::map<wxString, EASYEDAPRO::BLOB> blobs;
-
-    for( const auto& [uuid, rawDoc] : adapter.GetRawDocs( wxS( "BLOB" ) ) )
-    {
-        for( const EASYEDAPRO::V3_ROW& row : rawDoc.rows )
-        {
-            if( row.type != wxS( "BLOB" ) )
-                continue;
-
-            EASYEDAPRO::BLOB blob;
-            blob.objectId = EASYEDAPRO::V3GetString( row.outer, "id" );
-            blob.url = EASYEDAPRO::V3GetString( row.inner, "content" );
-            blobs[blob.objectId] = blob;
-        }
-    }
+    std::map<wxString, EASYEDAPRO::BLOB> blobs = EASYEDAPRO::BuildV3BlobMap( adapter );
 
     wxFileName fp( aFileName );
     wxString   fpLibName = EASYEDAPRO::ShortenLibName( fp.GetName() );
@@ -142,19 +233,12 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
         if( !footprint )
             continue;
 
-        wxString              fpTitle = uuid;
         std::string           uuidKey = std::string( uuid.ToUTF8() );
         const nlohmann::json& fpMetas = project.at( "footprints" );
+        wxString              fpTitle = uuid;
 
         if( fpMetas.contains( uuidKey ) )
-        {
-            const nlohmann::json& fpMeta = fpMetas.at( uuidKey );
-
-            if( fpMeta.contains( "display_title" ) )
-                fpTitle = EASYEDAPRO::V3GetString( fpMeta, "display_title", fpTitle );
-            else if( fpMeta.contains( "title" ) )
-                fpTitle = EASYEDAPRO::V3GetString( fpMeta, "title", fpTitle );
-        }
+            fpTitle = EASYEDAPRO::GetV3LibraryItemTitle( fpMetas.at( uuidKey ), uuid );
 
         footprint->SetFPID( EASYEDAPRO::ToKiCadLibID( fpLibName, fpTitle ) );
         footprints.emplace( uuid, std::move( footprint ) );
@@ -164,8 +248,7 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
 
     if( !pcbRawDoc )
     {
-        THROW_IO_ERROR( wxString::Format( _( "PCB document '%s' not found in '%s'" ),
-                                          pcbToLoad, aFileName ) );
+        THROW_IO_ERROR( wxString::Format( _( "PCB document '%s' not found in '%s'" ), pcbToLoad, aFileName ) );
     }
 
     std::multimap<wxString, EASYEDAPRO::POURED> poured; // Empty - v3 parser extracts from raw doc

@@ -27,11 +27,19 @@
 #include <io/common/plugin_common_choose_project.h>
 #include <pcb_io/pcb_io.h>
 
+#include <memory>
+
+namespace EASYEDAPRO
+{
+class V3_DOC_PARSER;
+}
+
 
 class PCB_IO_EASYEDAPRO_V3 : public PCB_IO, public PROJECT_CHOOSER_PLUGIN
 {
 public:
     PCB_IO_EASYEDAPRO_V3();
+    ~PCB_IO_EASYEDAPRO_V3() override;
 
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
@@ -40,16 +48,32 @@ public:
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro v3 files" ), { "epro2" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro v3 files" ), { "elibz2" } );
     }
 
     bool CanReadBoard( const wxString& aFileName ) const override;
 
-    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const std::map<std::string, UTF8>* aProperties = nullptr,
-                      PROJECT* aProject = nullptr ) override;
+    bool CanReadLibrary( const wxString& aFileName ) const override;
 
-    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override { return 0; }
+    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
+                      const std::map<std::string, UTF8>* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
+
+    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
+
+    void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath, bool aBestEfforts,
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
+    FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, bool aKeepUUID = false,
+                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
+
+private:
+    const EASYEDAPRO::V3_DOC_PARSER& getCachedLibraryParser( const wxString& aLibraryPath ) const;
+
+    mutable wxString                                   m_cachedLibraryPath;
+    mutable long long                                  m_cachedLibraryTimestamp = -1;
+    mutable std::unique_ptr<EASYEDAPRO::V3_DOC_PARSER> m_cachedLibraryParser;
 };
 
 

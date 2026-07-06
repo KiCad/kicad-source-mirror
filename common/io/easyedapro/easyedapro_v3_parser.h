@@ -103,13 +103,31 @@ public:
     static bool IsV3Archive( const wxString& aFileName );
 
     /**
+     * Return true if @a aFileName looks like an EasyEDA Pro v3 library archive.
+     *
+     * Detection requires a .elibz2 extension with a ZIP containing symbol2.json or
+     * footprint2.json and at least one .elibu document file.  When @a aRequiredDocType is
+     * set, the .elibu document file must also contain that document type.
+     */
+    static bool IsV3Library( const wxString& aFileName, const wxString& aRequiredDocType = wxEmptyString );
+
+    /**
      * Load all v3 docs from the archive.
      *
      * @throw IO_ERROR on malformed v3 archives or parse failures.
      */
     void Load();
 
+    /**
+     * Load all v3 docs from a library archive.
+     *
+     * @throw IO_ERROR on malformed v3 library archives or parse failures.
+     */
+    void LoadLibrary();
+
     const nlohmann::json& GetProject2() const { return m_project2; }
+
+    const nlohmann::json& GetLibraryIndex() const { return m_libraryIndex; }
 
     const std::map<wxString, V3_DOC_RAW>& GetRawDocs( const wxString& aDocType ) const;
 
@@ -120,6 +138,7 @@ public:
 private:
     wxString m_fileName;
     nlohmann::json m_project2;
+    nlohmann::json m_libraryIndex;
     std::map<wxString, std::map<wxString, V3_DOC_RAW>> m_rawDocs;
     int m_skippedCount = 0;
 };

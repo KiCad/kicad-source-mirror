@@ -42,8 +42,8 @@
 #include <wx/zipstrm.h>
 
 
-using EASYEDAPRO::V3_ROW;
 using EASYEDAPRO::V3_DOC_RAW;
+using EASYEDAPRO::V3_ROW;
 
 
 static std::string ToStdString( const wxString& aStr )
@@ -359,8 +359,155 @@ static void ParseEpruStream( wxInputStream& aInput, const wxString& aSource,
 }
 
 
-static std::vector<V3_DOC_RAW> ParseV3DocsFromArchive( const wxString& aFileName,
-                                                       nlohmann::json& aProject2 )
+struct V3_LIBRARY_CONTENTS
+{
+    bool               hasIndex = false;
+    bool               hasElibu = false;
+    std::set<wxString> docTypes;
+};
+
+
+static bool HasValidV3LibraryContents( const V3_LIBRARY_CONTENTS& aContents, const wxString& aRequiredDocType )
+{
+    if( !aContents.hasIndex || !aContents.hasElibu )
+        return false;
+
+    if( aRequiredDocType.empty() )
+        return true;
+
+    return aContents.docTypes.contains( aRequiredDocType );
+}
+
+
+static void ScanEpruDocTypes( wxInputStream& aInput, const wxString& aSource, std::set<wxString>& aDocTypes )
+{
+    wxTextInputStream txt( aInput, wxS( " " ), wxConvUTF8 );
+    int               currentLine = 1;
+
+    while( aInput.CanRead() )
+    {
+        wxString rawLine = txt.ReadLine();
+
+        if( rawLine.empty() )
+        {
+            currentLine++;
+            continue;
+        }
+
+        if( rawLine.Last() == '|' )
+            rawLine.RemoveLast();
+
+        int sepPos = rawLine.Find( wxS( "||" ) );
+
+        if( sepPos < 0 )
+        {
+            currentLine++;
+            continue;
+        }
+
+        wxString outerStr = rawLine.Left( sepPos );
+        wxString innerStr = rawLine.Mid( sepPos + 2 );
+
+        try
+        {
+            nlohmann::json outer = nlohmann::json::parse( ToStdString( outerStr ) );
+
+            if( GetString( outer, "type" ) == wxS( "DOCHEAD" ) && !innerStr.empty() )
+            {
+                nlohmann::json inner = nlohmann::json::parse( ToStdString( innerStr ) );
+                wxString       docType = ParseDocType( inner );
+
+                if( !docType.empty() )
+                    aDocTypes.insert( docType );
+            }
+        }
+        catch( nlohmann::json::exception& e )
+        {
+            THROW_IO_ERROR(
+                    wxString::Format( _( "JSON error in '%s' at line %d: %s" ), aSource, currentLine, e.what() ) );
+        }
+
+        currentLine++;
+    }
+}
+
+
+static nlohmann::json ReadJsonEntry( wxInputStream& aInput, const wxString& aEntryName )
+{
+    wxMemoryOutputStream mem;
+    mem << aInput;
+
+    wxStreamBuffer* buf = mem.GetOutputStreamBuffer();
+    std::string     jsonStr( static_cast<const char*>( buf->GetBufferStart() ), buf->GetBufferSize() );
+
+    try
+    {
+        return nlohmann::json::parse( jsonStr );
+    }
+    catch( nlohmann::json::exception& e )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "JSON error reading '%s': %s" ), aEntryName, e.what() ) );
+    }
+}
+
+
+static void MergeLibraryIndex( nlohmann::json& aTarget, nlohmann::json&& aIndex )
+{
+    if( !aIndex.is_object() )
+        return;
+
+    for( auto& [key, value] : aIndex.items() )
+    {
+        if( aTarget.contains( key ) && aTarget[key].is_object() && value.is_object() )
+        {
+            for( auto& [itemKey, itemValue] : value.items() )
+                aTarget[key][itemKey] = std::move( itemValue );
+        }
+        else if( !aTarget.contains( key ) || !value.is_object() || !value.empty() )
+        {
+            aTarget[key] = std::move( value );
+        }
+    }
+}
+
+
+static V3_LIBRARY_CONTENTS ScanV3LibraryArchive( const wxString& aFileName, const wxString& aRequiredDocType )
+{
+    V3_LIBRARY_CONTENTS contents;
+
+    std::shared_ptr<wxZipEntry> entry;
+    wxFFileInputStream          in( aFileName );
+    wxZipInputStream            zip( in );
+
+    if( !zip.IsOk() )
+        THROW_IO_ERROR( wxString::Format( _( "Cannot read ZIP archive '%s'" ), aFileName ) );
+
+    while( entry.reset( zip.GetNextEntry() ), entry.get() != NULL )
+    {
+        wxString entryName = entry->GetName();
+        wxString baseName = entryName.AfterLast( '\\' ).AfterLast( '/' ).Lower();
+
+        if( baseName == wxS( "symbol2.json" ) || baseName == wxS( "footprint2.json" ) )
+        {
+            contents.hasIndex = true;
+        }
+        else if( baseName.EndsWith( wxS( ".elibu" ) ) )
+        {
+            contents.hasElibu = true;
+
+            if( !aRequiredDocType.empty() )
+                ScanEpruDocTypes( zip, entryName, contents.docTypes );
+        }
+
+        if( HasValidV3LibraryContents( contents, aRequiredDocType ) )
+            break;
+    }
+
+    return contents;
+}
+
+
+static std::vector<V3_DOC_RAW> ParseV3DocsFromArchive( const wxString& aFileName, nlohmann::json& aProject2 )
 {
     std::vector<V3_DOC_RAW> docs;
 
@@ -381,24 +528,9 @@ static std::vector<V3_DOC_RAW> ParseV3DocsFromArchive( const wxString& aFileName
 
         if( baseName.CmpNoCase( wxS( "project2.json" ) ) == 0 )
         {
-            wxMemoryOutputStream mem;
-            mem << zip;
-
-            wxStreamBuffer* buf = mem.GetOutputStreamBuffer();
-            wxString jsonStr = wxString::FromUTF8( static_cast<const char*>( buf->GetBufferStart() ),
-                                                   buf->GetBufferSize() );
-
-            try
-            {
-                aProject2 = nlohmann::json::parse( ToStdString( jsonStr ) );
+            aProject2 = ReadJsonEntry( zip, entryName );
                 hasProject2 = true;
             }
-            catch( nlohmann::json::exception& e )
-            {
-                THROW_IO_ERROR( wxString::Format( _( "JSON error reading '%s': %s" ),
-                                                  entryName, e.what() ) );
-            }
-        }
         else if( baseName.Lower().EndsWith( wxS( ".epru" ) ) )
         {
             hasEpru = true;
@@ -408,10 +540,58 @@ static std::vector<V3_DOC_RAW> ParseV3DocsFromArchive( const wxString& aFileName
 
     if( !hasProject2 || !hasEpru )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 project. "
+        THROW_IO_ERROR( wxString::Format( _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 project. "
                    "Cannot find project2.json and .epru documents." ),
                 aFileName ) );
+    }
+
+    return docs;
+}
+
+
+static std::vector<V3_DOC_RAW> ParseV3DocsFromLibraryArchive( const wxString& aFileName, nlohmann::json& aLibraryIndex )
+{
+    std::vector<V3_DOC_RAW> docs;
+    V3_LIBRARY_CONTENTS     contents;
+
+    std::shared_ptr<wxZipEntry> entry;
+    wxFFileInputStream          in( aFileName );
+    wxZipInputStream            zip( in );
+
+    if( !zip.IsOk() )
+        THROW_IO_ERROR( wxString::Format( _( "Cannot read ZIP archive '%s'" ), aFileName ) );
+
+    aLibraryIndex = nlohmann::json::object();
+
+    while( entry.reset( zip.GetNextEntry() ), entry.get() != NULL )
+    {
+        wxString entryName = entry->GetName();
+        wxString baseName = entryName.AfterLast( '\\' ).AfterLast( '/' );
+        wxString lowerBaseName = baseName.Lower();
+
+        if( lowerBaseName == wxS( "symbol2.json" ) || lowerBaseName == wxS( "footprint2.json" ) )
+        {
+            nlohmann::json index = ReadJsonEntry( zip, entryName );
+
+            MergeLibraryIndex( aLibraryIndex, std::move( index ) );
+
+            contents.hasIndex = true;
+        }
+        else if( lowerBaseName.EndsWith( wxS( ".elibu" ) ) )
+        {
+            contents.hasElibu = true;
+            ParseEpruStream( zip, entryName, docs );
+
+            for( const V3_DOC_RAW& doc : docs )
+                contents.docTypes.insert( doc.docType );
+        }
+    }
+
+    if( !HasValidV3LibraryContents( contents, wxEmptyString ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 library. "
+                                             "Cannot find symbol2.json or footprint2.json and .elibu documents." ),
+                                          aFileName ) );
     }
 
     return docs;
@@ -473,10 +653,30 @@ bool V3_DOC_PARSER::IsV3Archive( const wxString& aFileName )
 }
 
 
+bool V3_DOC_PARSER::IsV3Library( const wxString& aFileName, const wxString& aRequiredDocType )
+{
+    wxFileName fn( aFileName );
+
+    if( fn.GetExt().Lower() != wxS( "elibz2" ) )
+        return false;
+
+    try
+    {
+        V3_LIBRARY_CONTENTS contents = ScanV3LibraryArchive( aFileName, aRequiredDocType );
+        return HasValidV3LibraryContents( contents, aRequiredDocType );
+    }
+    catch( ... )
+    {
+        return false;
+    }
+}
+
+
 void V3_DOC_PARSER::Load()
 {
     m_rawDocs.clear();
     m_project2 = nlohmann::json();
+    m_libraryIndex = nlohmann::json();
     m_skippedCount = 0;
 
     std::vector<V3_DOC_RAW> rawDocs = ParseV3DocsFromArchive( m_fileName, m_project2 );
@@ -488,6 +688,18 @@ void V3_DOC_PARSER::Load()
 }
 
 
+void V3_DOC_PARSER::LoadLibrary()
+{
+    m_rawDocs.clear();
+    m_project2 = nlohmann::json();
+    m_libraryIndex = nlohmann::json();
+    m_skippedCount = 0;
+
+    std::vector<V3_DOC_RAW> rawDocs = ParseV3DocsFromLibraryArchive( m_fileName, m_libraryIndex );
+
+    for( V3_DOC_RAW& raw : rawDocs )
+        m_rawDocs[raw.docType][raw.uuid] = std::move( raw );
+}
 
 
 const std::map<wxString, V3_DOC_RAW>& V3_DOC_PARSER::GetRawDocs( const wxString& aDocType ) const

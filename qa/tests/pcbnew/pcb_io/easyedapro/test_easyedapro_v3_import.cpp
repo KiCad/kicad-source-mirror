@@ -33,11 +33,55 @@
 #include <pcbnew/pcb_io/pcb_io_mgr.h>
 
 #include <board.h>
+#include <footprint.h>
 
 #include <memory>
 
 
 BOOST_AUTO_TEST_SUITE( EasyedaproV3Import )
+
+
+static wxString getEasyEdaProV3SymbolLibPath()
+{
+    return wxString::FromUTF8( KI_TEST::GetTestDataRootDir() + "eeschema/plugins/easyedapro/LS2K0300_Symbol.elibz2" );
+}
+
+
+static wxString getEasyEdaProV3FootprintLibPath()
+{
+    return wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir()
+                               + "plugins/easyedapro/LS2K0300_Footprint_2025-11-14.elibz2" );
+}
+
+
+BOOST_AUTO_TEST_CASE( FootprintLibraryCanReadOnlyFootprintElibz2 )
+{
+    IO_RELEASER<PCB_IO> plugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::EASYEDAPRO_V3 ) );
+    BOOST_REQUIRE( plugin );
+
+    BOOST_CHECK( plugin->CanReadLibrary( getEasyEdaProV3FootprintLibPath() ) );
+    BOOST_CHECK( !plugin->CanReadLibrary( getEasyEdaProV3SymbolLibPath() ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( FootprintLibraryEnumeratesAndLoadsElibz2 )
+{
+    IO_RELEASER<PCB_IO> plugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::EASYEDAPRO_V3 ) );
+    BOOST_REQUIRE( plugin );
+
+    wxArrayString footprintNames;
+    BOOST_REQUIRE_NO_THROW( plugin->FootprintEnumerate( footprintNames, getEasyEdaProV3FootprintLibPath(), false ) );
+
+    BOOST_REQUIRE_EQUAL( footprintNames.GetCount(), 1 );
+    BOOST_CHECK_EQUAL( footprintNames[0], wxString( wxS( "BGA-286_17x17_12.0x12.0mm" ) ) );
+
+    std::unique_ptr<FOOTPRINT> footprint(
+            plugin->FootprintLoad( getEasyEdaProV3FootprintLibPath(), wxS( "BGA-286_17x17_12.0x12.0mm" ) ) );
+
+    BOOST_REQUIRE( footprint );
+    BOOST_CHECK_EQUAL( footprint->GetFPID().GetLibItemName(), UTF8( "BGA-286_17x17_12.0x12.0mm" ) );
+    BOOST_CHECK_EQUAL( footprint->Pads().size(), 286 );
+}
 
 
 BOOST_AUTO_TEST_CASE( BoardLoadImportsInnerLayers )

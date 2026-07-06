@@ -53,6 +53,8 @@
 
 #include <wx/filefn.h>
 #include <wx/filename.h>
+#include <wx/wfstream.h>
+#include <wx/zipstrm.h>
 
 
 namespace
@@ -60,15 +62,129 @@ namespace
 
 static wxString getEasyEdaProV3ArchivePath()
 {
-    return wxString::FromUTF8(
-            KI_TEST::GetTestDataRootDir()
+    return wxString::FromUTF8( KI_TEST::GetTestDataRootDir()
             + "pcbnew/plugins/easyedapro/ProProject_LS2K0300Core_2025-11-14.epro2" );
+}
+
+
+static void writeZipEntry( wxZipOutputStream& aZip, const wxString& aName, const std::string& aContent )
+{
+    aZip.PutNextEntry( aName );
+    aZip.Write( aContent.data(), aContent.size() );
+    aZip.CloseEntry();
+}
+
+
+static wxString makeTempElibz2Path( const wxString& aPrefix )
+{
+    wxString tempPath = wxFileName::CreateTempFileName( aPrefix );
+    wxRemoveFile( tempPath );
+
+    wxFileName fn( tempPath );
+    fn.SetExt( wxS( "elibz2" ) );
+
+    return fn.GetFullPath();
+}
+
+
+static void writeV3LibraryArchive( const wxString& aPath, const std::string& aSymbolIndex,
+                                   const std::string& aFootprintIndex, const std::string& aElibu )
+{
+    wxFFileOutputStream out( aPath );
+    BOOST_REQUIRE( out.IsOk() );
+
+    wxZipOutputStream zip( out, -1, wxConvUTF8 );
+
+    if( !aSymbolIndex.empty() )
+        writeZipEntry( zip, wxS( "symbol2.json" ), aSymbolIndex );
+
+    if( !aFootprintIndex.empty() )
+        writeZipEntry( zip, wxS( "footprint2.json" ), aFootprintIndex );
+
+    writeZipEntry( zip, wxS( "library.elibu" ), aElibu );
 }
 
 } // namespace
 
 
 BOOST_AUTO_TEST_SUITE( EasyEdaProV3Import )
+
+
+BOOST_AUTO_TEST_CASE( LibraryIndexMergeKeepsSymbolAndFootprintNames )
+{
+    wxString archivePath = makeTempElibz2Path( wxS( "easyedapro_v3_mixed" ) );
+
+    const std::string symbolIndex = R"({
+        "devices": {},
+        "symbols": {
+            "sym_uuid": { "uuid": "sym_uuid", "display_title": "SymbolName" }
+        },
+        "footprints": {},
+        "panelLibs": {}
+    })";
+
+    const std::string footprintIndex = R"({
+        "devices": {},
+        "symbols": {},
+        "footprints": {
+            "fp_uuid": { "uuid": "fp_uuid", "display_title": "FootprintName" }
+        },
+        "panelLibs": {}
+    })";
+
+    const std::string elibu = "{\"type\":\"DOCHEAD\"}||{\"docType\":\"SYMBOL\",\"uuid\":\"sym_uuid\"}|\n"
+                              "{\"type\":\"DOCHEAD\"}||{\"docType\":\"FOOTPRINT\",\"uuid\":\"fp_uuid\"}|\n";
+
+    writeV3LibraryArchive( archivePath, symbolIndex, footprintIndex, elibu );
+
+    EASYEDAPRO::V3_DOC_PARSER parser( archivePath );
+    BOOST_REQUIRE_NO_THROW( parser.LoadLibrary() );
+
+    std::map<wxString, wxString> symbols = EASYEDAPRO::BuildV3LibraryItemMap( parser, "symbols", wxS( "SYMBOL" ) );
+    std::map<wxString, wxString> footprints =
+            EASYEDAPRO::BuildV3LibraryItemMap( parser, "footprints", wxS( "FOOTPRINT" ) );
+
+    BOOST_CHECK_EQUAL( symbols.at( wxS( "SymbolName" ) ), wxString( wxS( "sym_uuid" ) ) );
+    BOOST_CHECK_EQUAL( footprints.at( wxS( "FootprintName" ) ), wxString( wxS( "fp_uuid" ) ) );
+
+    BOOST_CHECK( wxRemoveFile( archivePath ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( LibraryItemDuplicateNamesKeepUuidDisambiguator )
+{
+    wxString archivePath = makeTempElibz2Path( wxS( "easyedapro_v3_dupes" ) );
+
+    const std::string symbolIndex = R"({
+        "devices": {},
+        "symbols": {
+            "aaaaaaaa0001": { "uuid": "aaaaaaaa0001", "display_title": "DUP" },
+            "aaaaaaaa0002": { "uuid": "aaaaaaaa0002", "display_title": "DUP" },
+            "aaaaaaaa0003": { "uuid": "aaaaaaaa0003", "display_title": "DUP" }
+        },
+        "footprints": {},
+        "panelLibs": {}
+    })";
+
+    const std::string elibu = "{\"type\":\"DOCHEAD\"}||{\"docType\":\"SYMBOL\",\"uuid\":\"aaaaaaaa0001\"}|\n"
+                              "{\"type\":\"DOCHEAD\"}||{\"docType\":\"SYMBOL\",\"uuid\":\"aaaaaaaa0002\"}|\n"
+                              "{\"type\":\"DOCHEAD\"}||{\"docType\":\"SYMBOL\",\"uuid\":\"aaaaaaaa0003\"}|\n";
+
+    writeV3LibraryArchive( archivePath, symbolIndex, std::string(), elibu );
+
+    EASYEDAPRO::V3_DOC_PARSER parser( archivePath );
+    BOOST_REQUIRE_NO_THROW( parser.LoadLibrary() );
+
+    std::map<wxString, wxString> symbols = EASYEDAPRO::BuildV3LibraryItemMap( parser, "symbols", wxS( "SYMBOL" ) );
+
+    BOOST_REQUIRE_EQUAL( symbols.size(), 3 );
+    BOOST_CHECK( symbols.contains( wxS( "DUP" ) ) );
+    BOOST_CHECK( symbols.contains( wxS( "DUP_aaaaaaaa" ) ) );
+    BOOST_CHECK( symbols.contains( wxS( "DUP_aaaaaaaa_2" ) ) );
+    BOOST_CHECK( !symbols.contains( wxS( "DUP_2" ) ) );
+
+    BOOST_CHECK( wxRemoveFile( archivePath ) );
+}
 
 
 BOOST_AUTO_TEST_CASE( BuildProjectIndexHasSchematicSheets )

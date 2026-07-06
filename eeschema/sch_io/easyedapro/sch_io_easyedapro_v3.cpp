@@ -49,10 +49,40 @@
 #include <wx/log.h>
 
 
+static long long getFileTimestamp( const wxString& aFileName )
+{
+    wxFileName fileName( aFileName );
+
+    if( fileName.IsFileReadable() && fileName.GetModificationTime().IsValid() )
+        return fileName.GetModificationTime().GetValue().GetValue();
+
+    return 0;
+}
+
+
 SCH_IO_EASYEDAPRO_V3::SCH_IO_EASYEDAPRO_V3() :
         SCH_IO( wxS( "EasyEDA Pro (JLCEDA) Schematic v3" ) )
 {
     m_reporter = &WXLOG_REPORTER::GetInstance();
+}
+
+
+SCH_IO_EASYEDAPRO_V3::~SCH_IO_EASYEDAPRO_V3() = default;
+
+
+const EASYEDAPRO::V3_DOC_PARSER& SCH_IO_EASYEDAPRO_V3::getCachedLibraryParser( const wxString& aLibraryPath ) const
+{
+    long long timestamp = getFileTimestamp( aLibraryPath );
+
+    if( !m_cachedLibraryParser || m_cachedLibraryPath != aLibraryPath || m_cachedLibraryTimestamp != timestamp )
+    {
+        m_cachedLibraryParser = std::make_unique<EASYEDAPRO::V3_DOC_PARSER>( aLibraryPath );
+        m_cachedLibraryParser->LoadLibrary();
+        m_cachedLibraryPath = aLibraryPath;
+        m_cachedLibraryTimestamp = timestamp;
+    }
+
+    return *m_cachedLibraryParser;
 }
 
 
@@ -62,8 +92,119 @@ bool SCH_IO_EASYEDAPRO_V3::CanReadSchematicFile( const wxString& aFileName ) con
 }
 
 
-SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
-                                                    SCHEMATIC* aSchematic,
+bool SCH_IO_EASYEDAPRO_V3::CanReadLibrary( const wxString& aFileName ) const
+{
+    if( !SCH_IO::CanReadLibrary( aFileName ) )
+        return false;
+
+    return EASYEDAPRO::V3_DOC_PARSER::IsV3Library( aFileName, wxS( "SYMBOL" ) );
+}
+
+
+void SCH_IO_EASYEDAPRO_V3::EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
+                                               const std::map<std::string, UTF8>* aProperties )
+{
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
+
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = getCachedLibraryParser( aLibraryPath );
+
+    std::map<wxString, wxString> symbolMap = EASYEDAPRO::BuildV3LibraryItemMap( v3, "symbols", wxS( "SYMBOL" ) );
+
+    for( const auto& [name, uuid] : symbolMap )
+        aSymbolNameList.Add( name );
+}
+
+
+void SCH_IO_EASYEDAPRO_V3::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList, const wxString& aLibraryPath,
+                                               const std::map<std::string, UTF8>* aProperties )
+{
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
+
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = getCachedLibraryParser( aLibraryPath );
+
+    std::map<wxString, wxString> symbolMap = EASYEDAPRO::BuildV3LibraryItemMap( v3, "symbols", wxS( "SYMBOL" ) );
+
+    std::map<wxString, EASYEDAPRO::BLOB> blobs = EASYEDAPRO::BuildV3BlobMap( v3 );
+
+    wxFileName libFileName( aLibraryPath );
+    wxString   libName = EASYEDAPRO::ShortenLibName( libFileName.GetName() );
+
+    SCH_EASYEDAPRO_V3_PARSER parser( nullptr, nullptr );
+
+    for( const auto& [symbolName, uuid] : symbolMap )
+    {
+        const EASYEDAPRO::V3_DOC_RAW* rawDoc = v3.FindRawDoc( wxS( "SYMBOL" ), uuid );
+
+        if( !rawDoc )
+            continue;
+
+        try
+        {
+            EASYEDAPRO::SYM_INFO symInfo = parser.ParseSymbol( *rawDoc, {}, blobs );
+
+            if( !symInfo.libSymbol )
+                continue;
+
+            symInfo.libSymbol->SetLibId( EASYEDAPRO::ToKiCadLibID( libName, symbolName ) );
+            symInfo.libSymbol->SetName( symbolName );
+            aSymbolList.push_back( symInfo.libSymbol.release() );
+        }
+        catch( nlohmann::json::exception& e )
+        {
+            wxLogWarning(
+                    wxString::Format( _( "EasyEDA Pro v3 symbol '%s' in '%s' was skipped due to parse error: %s" ),
+                                      symbolName, aLibraryPath, e.what() ) );
+        }
+    }
+}
+
+
+LIB_SYMBOL* SCH_IO_EASYEDAPRO_V3::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                                              const std::map<std::string, UTF8>* aProperties )
+{
+    FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
+
+    const EASYEDAPRO::V3_DOC_PARSER& v3 = getCachedLibraryParser( aLibraryPath );
+
+    std::map<wxString, wxString> symbolMap = EASYEDAPRO::BuildV3LibraryItemMap( v3, "symbols", wxS( "SYMBOL" ) );
+
+    auto symIt = symbolMap.find( aAliasName );
+
+    if( symIt == symbolMap.end() )
+        return nullptr;
+
+    const EASYEDAPRO::V3_DOC_RAW* rawDoc = v3.FindRawDoc( wxS( "SYMBOL" ), symIt->second );
+
+    if( !rawDoc )
+        return nullptr;
+
+    SCH_EASYEDAPRO_V3_PARSER parser( nullptr, nullptr );
+    EASYEDAPRO::SYM_INFO     symInfo;
+
+    try
+    {
+        symInfo = parser.ParseSymbol( *rawDoc, {}, EASYEDAPRO::BuildV3BlobMap( v3 ) );
+    }
+    catch( nlohmann::json::exception& e )
+    {
+        THROW_IO_ERROR(
+                wxString::Format( _( "Cannot load symbol '%s' from '%s': %s" ), aAliasName, aLibraryPath, e.what() ) );
+    }
+
+    if( !symInfo.libSymbol )
+        return nullptr;
+
+    wxFileName libFileName( aLibraryPath );
+    wxString   libName = EASYEDAPRO::ShortenLibName( libFileName.GetName() );
+
+    symInfo.libSymbol->SetLibId( EASYEDAPRO::ToKiCadLibID( libName, aAliasName ) );
+    symInfo.libSymbol->SetName( aAliasName );
+
+    return symInfo.libSymbol.release();
+}
+
+
+SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
                                                     SCH_SHEET* aAppendToMe,
                                                     const std::map<std::string, UTF8>* aProperties )
 {
@@ -75,8 +216,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
 
     if( aAppendToMe )
     {
-        wxCHECK_MSG( aSchematic->IsValid(), nullptr,
-                     wxS( "Can't append to a schematic with no root!" ) );
+        wxCHECK_MSG( aSchematic->IsValid(), nullptr, wxS( "Can't append to a schematic with no root!" ) );
 
         rootSheet = aAppendToMe;
     }
@@ -116,8 +256,8 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
     }
     else if( m_choose_project_handler )
     {
-        std::vector<IMPORT_PROJECT_DESC> chosen = m_choose_project_handler(
-                EASYEDAPRO::ProjectToSelectorDialog( project, false, true ) );
+        std::vector<IMPORT_PROJECT_DESC> chosen =
+                m_choose_project_handler( EASYEDAPRO::ProjectToSelectorDialog( project, false, true ) );
 
         if( !chosen.empty() )
             schematicToLoad = chosen[0].SchematicId;
@@ -134,8 +274,8 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
 
     if( prjSchIt == prjSchematics.end() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Schematic document '%s' not found in '%s'" ),
-                                          schematicToLoad, aFileName ) );
+        THROW_IO_ERROR(
+                wxString::Format( _( "Schematic document '%s' not found in '%s'" ), schematicToLoad, aFileName ) );
     }
 
     wxFileName sourceName( aFileName );
@@ -146,8 +286,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
     wxString rootBaseName = EscapeString( prjSchIt->second.name, CTX_FILENAME );
 
     wxFileName rootFname( aFileName );
-    rootFname.SetFullName( rootBaseName + wxS( "." )
-                           + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
+    rootFname.SetFullName( rootBaseName + wxS( "." ) + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
 
     rootSheet->SetName( prjSchIt->second.name );
     rootSheet->SetFileName( rootFname.GetFullPath() );
@@ -172,35 +311,12 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Failed to parse EasyEDA Pro v3 symbol/device metadata: %s" ),
-                                          e.what() ) );
+        THROW_IO_ERROR(
+                wxString::Format( _( "Failed to parse EasyEDA Pro v3 symbol/device metadata: %s" ), e.what() ) );
     }
 
     std::map<wxString, EASYEDAPRO::SYM_INFO> symbols;
-    std::map<wxString, EASYEDAPRO::BLOB>     blobs;
-
-    for( const auto& [blobDocUuid, rawDoc] : v3.GetRawDocs( wxS( "BLOB" ) ) )
-    {
-        for( const EASYEDAPRO::V3_ROW& row : rawDoc.rows )
-        {
-            if( row.type != wxS( "BLOB" ) )
-                continue;
-
-            try
-            {
-                EASYEDAPRO::BLOB blob;
-                blob.objectId = EASYEDAPRO::V3GetString( row.outer, "id" );
-                blob.url = EASYEDAPRO::V3GetString( row.inner, "content" );
-                blobs[blob.objectId] = blob;
-            }
-            catch( nlohmann::json::exception& e )
-            {
-                wxLogWarning( wxString::Format(
-                        _( "EasyEDA Pro v3 blob in '%s' was skipped due to parse error: %s" ),
-                        blobDocUuid, e.what() ) );
-            }
-        }
-    }
+    std::map<wxString, EASYEDAPRO::BLOB>     blobs = EASYEDAPRO::BuildV3BlobMap( v3 );
 
     for( const auto& [symbolUuid, rawDoc] : v3.GetRawDocs( wxS( "SYMBOL" ) ) )
     {
@@ -245,8 +361,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
         }
         catch( nlohmann::json::exception& e )
         {
-            wxLogWarning( wxString::Format(
-                    _( "EasyEDA Pro v3 symbol '%s' was skipped due to parse error: %s" ),
+            wxLogWarning( wxString::Format( _( "EasyEDA Pro v3 symbol '%s' was skipped due to parse error: %s" ),
                     symbolUuid, e.what() ) );
             continue;
         }
@@ -298,13 +413,12 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
 
             try
             {
-                parser.ParseSchematic( aSchematic, rootSheet, project, symbols, blobs,
-                                       *pageRawDoc, libName );
+                parser.ParseSchematic( aSchematic, rootSheet, project, symbols, blobs, *pageRawDoc, libName );
             }
             catch( nlohmann::json::exception& e )
             {
-                wxLogWarning( wxString::Format(
-                        _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
+                wxLogWarning(
+                        wxString::Format( _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
                         prjSheet.uuid, e.what() ) );
                 continue;
             }
@@ -335,8 +449,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
 
         VECTOR2I pos;
         pos.x = schIUScale.MilsToIU( 200 );
-        pos.y = schIUScale.MilsToIU( 200 )
-                + ( subSheet->GetSize().y + schIUScale.MilsToIU( 200 ) ) * subSheetIndex;
+        pos.y = schIUScale.MilsToIU( 200 ) + ( subSheet->GetSize().y + schIUScale.MilsToIU( 200 ) ) * subSheetIndex;
 
         subSheet->SetPosition( pos );
 
@@ -348,13 +461,12 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
 
         try
         {
-            parser.ParseSchematic( aSchematic, subSheet.get(), project, symbols, blobs,
-                                   *pageRawDoc, libName );
+            parser.ParseSchematic( aSchematic, subSheet.get(), project, symbols, blobs, *pageRawDoc, libName );
         }
         catch( nlohmann::json::exception& e )
         {
-            wxLogWarning( wxString::Format(
-                    _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
+            wxLogWarning(
+                    wxString::Format( _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
                     prjSheet.uuid, e.what() ) );
             continue;
         }
@@ -390,8 +502,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
     {
         if( symInfo.libSymbol )
         {
-            schPlugin->SaveSymbol( libFileName.GetFullPath(), symInfo.libSymbol.release(),
-                                   &properties );
+            schPlugin->SaveSymbol( libFileName.GetFullPath(), symInfo.libSymbol.release(), &properties );
         }
     }
 

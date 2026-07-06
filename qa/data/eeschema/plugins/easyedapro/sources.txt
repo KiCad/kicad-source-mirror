@@ -1,0 +1,7 @@
+Project: LS2K0300 EasyEDA Pro v3 symbol library
+
+Files:
+LS2K0300_Symbol.elibz2
+
+License: Provided by contributor for QA import compatibility testing
+Link: Internal test sample provided with the EasyEDA Pro v3 importer contribution
