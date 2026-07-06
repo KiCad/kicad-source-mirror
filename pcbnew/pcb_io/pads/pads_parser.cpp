@@ -24,6 +24,7 @@
 #include <iostream>
 #include <algorithm>
 #include <climits>
+#include <cmath>
 #include <cstdlib>
 #include <limits>
 #include <wx/log.h>
@@ -1825,6 +1826,9 @@ void PARSER::parseSectionROUTES( std::ifstream& aStream )
     double last_plane_connection_width = 0;
     bool last_plane_on_copper = false;
     std::string default_via_name;
+    bool has_pending_arc_center = false;
+    ARC_POINT pending_arc_center;
+    std::string pending_arc_dir;
 
     while( readLine( aStream, line ) )
     {
@@ -1840,6 +1844,7 @@ void PARSER::parseSectionROUTES( std::ifstream& aStream )
                  }
 
                  prev_is_plane_connection = false;
+                 has_pending_arc_center = false;
 
                  std::istringstream iss( line );
                  std::string token;
@@ -2095,18 +2100,52 @@ void PARSER::parseSectionROUTES( std::ifstream& aStream )
             }
         }
 
-        // If an arc direction was specified, mark this as an arc point
-        // The arc center will be calculated from the previous and next points
+        // A corner carrying an arc direction is the arc's center, not a track vertex.
+        // Per the PADS ASCII spec the arc begins on the preceding corner and ends on
+        // the following one, curving around this corner. Defer it and attach explicit
+        // geometry to the next corner.
         if( !arc_dir.empty() )
         {
-            // For route arcs, we need previous point to calculate arc parameters
-            // The arc goes from previous point to this point with given direction
-            // PADS uses CW/CCW to indicate arc direction
-            // We'll store a placeholder arc and the loader will need to compute it
-            pt.is_arc = true;
+            pending_arc_center = pt;
+            pending_arc_dir = arc_dir;
+            has_pending_arc_center = true;
+            continue;
+        }
 
-            // Delta angle sign indicates direction: positive = CCW, negative = CW
-            pt.arc.delta_angle = ( arc_dir == "CCW" ) ? 90.0 : -90.0;
+        if( has_pending_arc_center )
+        {
+            has_pending_arc_center = false;
+
+            if( in_track && !current_track.points.empty() )
+            {
+                const ARC_POINT& arc_start = current_track.points.back();
+                double dx0 = arc_start.x - pending_arc_center.x;
+                double dy0 = arc_start.y - pending_arc_center.y;
+                double start_angle = std::atan2( dy0, dx0 );
+                double end_angle =
+                        std::atan2( pt.y - pending_arc_center.y, pt.x - pending_arc_center.x );
+                double sweep = end_angle - start_angle;
+
+                // atan2 differences land in (-2pi, 2pi); pull the sweep onto the arc's
+                // side so the winding matches the recorded direction.
+                if( pending_arc_dir == "CCW" )
+                {
+                    while( sweep <= 0.0 )
+                        sweep += 2.0 * M_PI;
+                }
+                else
+                {
+                    while( sweep >= 0.0 )
+                        sweep -= 2.0 * M_PI;
+                }
+
+                pt.is_arc = true;
+                pt.arc.cx = pending_arc_center.x;
+                pt.arc.cy = pending_arc_center.y;
+                pt.arc.radius = std::sqrt( dx0 * dx0 + dy0 * dy0 );
+                pt.arc.start_angle = start_angle * 180.0 / M_PI;
+                pt.arc.delta_angle = sweep * 180.0 / M_PI;
+            }
         }
 
         // Per PADS spec: Layer 0 means "unrouted portion" - these are NOT physical tracks.
