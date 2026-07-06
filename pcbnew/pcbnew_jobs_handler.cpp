@@ -2651,6 +2651,16 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
     if( !m_reporter )
         m_reporter = &reporter;
 
+    if( job->m_checkZonesBeforeExport )
+    {
+        TOOL_MANAGER* toolManager = getToolManager( brd );
+
+        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
+    }
+
     DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( *job, brd, nullptr, m_progressReporter, m_reporter );
 
     if( m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )

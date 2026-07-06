@@ -75,6 +75,7 @@
 #include <dialogs/dialog_import_choose_project.h>
 #include <tools/pcb_actions.h>
 #include <tools/board_editor_control.h>
+#include <tools/zone_filler_tool.h>
 #include <board_commit.h>
 #include <reporter.h>
 #include <zone_filler.h>
@@ -1289,6 +1290,9 @@ int BOARD_EDITOR_CONTROL::GenerateODBPPFiles( const TOOL_EVENT& aEvent )
 
     if( dlg.ShowModal() != wxID_OK )
         return 0;
+
+    // Refill zones if they are out-of-date so the export matches the current layout.
+    m_toolMgr->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( m_frame );
 
     JOB_EXPORT_PCB_ODB job;
 
