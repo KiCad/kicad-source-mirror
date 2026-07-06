@@ -1,0 +1,196 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <boost/test/unit_test.hpp>
+#include <qa_utils/wx_utils/unit_test_utils.h>
+
+#include <sch_io/pads/pads_sch_sdb.h>
+
+#include <fstream>
+#include <iterator>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+using PADS_SCH_BINARY::PADS_SCH_SDB;
+
+namespace
+{
+
+static std::vector<uint8_t> loadBinary( const std::string& aPath )
+{
+    std::ifstream file( aPath, std::ios::binary );
+
+    if( !file )
+        throw std::runtime_error( "Cannot open test fixture: " + aPath );
+
+    return { std::istreambuf_iterator<char>( file ), std::istreambuf_iterator<char>() };
+}
+
+
+static std::vector<uint8_t> loadPublicFixture()
+{
+    return loadBinary( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/minimal_v13.sch" );
+}
+
+
+static void putU32( std::vector<uint8_t>& aBytes, size_t aOffset, uint32_t aValue )
+{
+    aBytes.at( aOffset ) = static_cast<uint8_t>( aValue );
+    aBytes.at( aOffset + 1 ) = static_cast<uint8_t>( aValue >> 8 );
+    aBytes.at( aOffset + 2 ) = static_cast<uint8_t>( aValue >> 16 );
+    aBytes.at( aOffset + 3 ) = static_cast<uint8_t>( aValue >> 24 );
+}
+
+
+static bool errorContains( const IO_ERROR& aError, const std::string& aNeedle1, const std::string& aNeedle2 )
+{
+    std::string message = aError.What().ToStdString();
+    return message.find( aNeedle1 ) != std::string::npos && message.find( aNeedle2 ) != std::string::npos;
+}
+
+} // namespace
+
+
+BOOST_AUTO_TEST_SUITE( PadsSchBinarySdb )
+
+
+BOOST_AUTO_TEST_CASE( PublicV13Container )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    PADS_SCH_SDB         sdb;
+    sdb.Load( bytes );
+
+    BOOST_CHECK( PADS_SCH_SDB::HasFamilyMagic( bytes ) );
+    BOOST_CHECK( PADS_SCH_SDB::IsSupportedVersion( 0x000C ) );
+    BOOST_CHECK( PADS_SCH_SDB::IsSupportedVersion( 0x000D ) );
+    BOOST_CHECK( !PADS_SCH_SDB::IsSupportedVersion( 0x1234 ) );
+    BOOST_CHECK_EQUAL( sdb.Version(), 0x000D );
+    BOOST_CHECK_EQUAL( sdb.Pools().size(), 20 );
+    BOOST_CHECK_EQUAL( sdb.PayloadOffset(), 0x250 );
+    BOOST_CHECK_LT( sdb.FooterOffset(), sdb.Bytes().size() );
+    BOOST_CHECK_EQUAL( sdb.Cursor().Size(), sdb.Bytes().size() );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsShortHeader )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    bytes.resize( 31 );
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D", "0x1F" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsBadMagic )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    bytes[1] ^= 1;
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D", "0x1" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsUnsupportedVersion )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    bytes[2] = 0x34;
+    bytes[3] = 0x12;
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x1234", "0x2" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsBadFooterGuid )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    size_t               footer = bytes.size() - 42;
+    bytes[footer] ^= 1;
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           [footer]( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D", wxString::Format( "0x%zX", footer ).ToStdString() );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsBadFooterBackPointer )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    size_t               pointerOffset = bytes.size() - 4;
+    putU32( bytes, pointerOffset, static_cast<uint32_t>( bytes.size() + 1 ) );
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           [pointerOffset]( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D",
+                                                     wxString::Format( "0x%zX", pointerOffset ).ToStdString() );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsPoolCountAboveCapacity )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    constexpr size_t     countOffset = 0x20 + 8;
+    putU32( bytes, countOffset, 589 );
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D", "0x28" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsUsedBytesForEmptyPool )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    constexpr size_t     descriptor = 0x20 + 9 * 28;
+    putU32( bytes, descriptor + 12, 1 );
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D", "0x128" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_SUITE_END()
