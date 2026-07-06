@@ -166,6 +166,7 @@ SYMBOL_SEARCH_HANDLER::SYMBOL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
     m_columns.emplace_back( _HKI( "Excl. Sim" ),            2, wxLIST_FORMAT_CENTER );
     m_columns.emplace_back( _HKI( "Excl. BOM" ),            2, wxLIST_FORMAT_CENTER );
     m_columns.emplace_back( _HKI( "Excl. Board" ),          2, wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Excl. Pos Files" ), 2, wxLIST_FORMAT_CENTER );
     m_columns.emplace_back( _HKI( "DNP" ),                  2, wxLIST_FORMAT_CENTER );
     m_columns.emplace_back( _HKI( "Library Link" ),         8, wxLIST_FORMAT_LEFT );
     m_columns.emplace_back( _HKI( "Library Description" ), 10, wxLIST_FORMAT_LEFT );
@@ -240,10 +241,12 @@ wxString SYMBOL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int a
     else if( aCol == 8 )
         return sym->ResolveExcludedFromBoard() ? wxS( "X" ) : wxS( " " );
     else if( aCol == 9 )
-        return sym->ResolveDNP( aHit.sheetPath, m_frame->Schematic().GetCurrentVariant() ) ? wxS( "X" ) : wxS( " " );
+        return sym->ResolveExcludedFromPosFiles() ? wxS( "X" ) : wxS( " " );
     else if( aCol == 10 )
-        return sym->GetLibId().Format();
+        return sym->ResolveDNP( aHit.sheetPath, m_frame->Schematic().GetCurrentVariant() ) ? wxS( "X" ) : wxS( " " );
     else if( aCol == 11 )
+        return sym->GetLibId().Format();
+    else if( aCol == 12 )
         return sym->GetShownDescription();
 
     return wxEmptyString;

@@ -979,6 +979,14 @@ bool SCH_REFERENCE::GetSymbolExcludedFromBoard() const
 }
 
 
+bool SCH_REFERENCE::GetSymbolExcludedFromPosFiles( const wxString& aVariant ) const
+{
+    wxCHECK( m_rootSymbol, false );
+
+    return m_rootSymbol->GetExcludedFromPosFiles( &m_sheetPath, aVariant );
+}
+
+
 wxString SCH_REFERENCE::formatRefStr( int aNumber ) const
 {
     // To avoid a risk of duplicate, for power symbols the ref number is 0nnn instead of nnn.
@@ -1019,6 +1027,14 @@ void SCH_REFERENCE::SetSymbolExcludedFromBoard( bool aEnable )
     wxCHECK( m_rootSymbol, /* void */ );
 
     m_rootSymbol->SetExcludedFromBoard( aEnable );
+}
+
+
+void SCH_REFERENCE::SetSymbolExcludedFromPosFiles( bool aEnable, const wxString& aVariant )
+{
+    wxCHECK( m_rootSymbol, /* void */ );
+
+    m_rootSymbol->SetExcludedFromPosFiles( aEnable, &m_sheetPath, aVariant );
 }
 
 
