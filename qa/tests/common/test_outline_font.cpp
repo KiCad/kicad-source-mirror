@@ -47,6 +47,22 @@ static wxString getTestFontPath( const wxString& aFileName )
 }
 
 
+static KIFONT::OUTLINE_FONT* loadTestOutlineFont( const wxString& aFontName,
+                                                  const wxString& aFileName )
+{
+    wxString fontPath = getTestFontPath( aFileName );
+    BOOST_REQUIRE( wxFileExists( fontPath ) );
+
+    std::vector<wxString> embeddedFonts{ fontPath };
+    KIFONT::FONT*         font = KIFONT::FONT::GetFont( aFontName, false, false, &embeddedFonts );
+
+    BOOST_REQUIRE( font );
+    BOOST_REQUIRE( font->IsOutline() );
+
+    return static_cast<KIFONT::OUTLINE_FONT*>( font );
+}
+
+
 // Legacy "symbol" fonts place their glyphs in the U+F000..U+F0FF private-use range and carry no
 // Unicode charmap that maps Basic Latin, so forcing the Unicode charmap maps every character to
 // .notdef and text renders as tofu boxes. Drive the full load-and-shape path and confirm such a
@@ -108,6 +124,35 @@ BOOST_AUTO_TEST_CASE( UnicodeFontKeepsUnicodeCharmap )
     BOOST_REQUIRE( face->charmap );
     BOOST_CHECK_EQUAL( face->charmap->encoding, FT_ENCODING_UNICODE );
     BOOST_CHECK( FT_Get_Char_Index( face, 'A' ) != 0 );
+}
+
+
+// The line spacing multiplier is FT_Face::height / FT_Face::units_per_EM. Both fields are integers,
+// so an integer division truncated the fractional font-height ratio (and produced 0 for fonts with
+// height < units_per_EM), leaving multiline text with lines too close together or overlapping. Drive
+// GetInterline and confirm the fractional ratio survives. NotoSans has height 1362 over 1000 units,
+// so the true 1.362 ratio truncated to 1.
+BOOST_AUTO_TEST_CASE( InterlinePreservesFractionalFontHeight )
+{
+    KIFONT::OUTLINE_FONT* outline = loadTestOutlineFont( wxT( "Noto Sans" ),
+                                                         wxT( "NotoSans-Regular.ttf" ) );
+    FT_Face               face = outline->GetFace();
+
+    BOOST_REQUIRE( face );
+    BOOST_REQUIRE_GT( face->units_per_EM, 0 );
+    BOOST_REQUIRE_GT( face->height, face->units_per_EM );
+
+    const double           glyphHeight = 10000.0;
+    const KIFONT::METRICS& metrics = KIFONT::METRICS::Default();
+
+    double ratio = static_cast<double>( face->height ) / static_cast<double>( face->units_per_EM );
+    double expected = metrics.GetInterline( glyphHeight * ratio );
+
+    BOOST_CHECK_CLOSE( outline->GetInterline( glyphHeight, metrics ), expected, 1e-6 );
+
+    // The integer-division bug truncated the ratio to 1.0, so the correct spacing must exceed it.
+    BOOST_CHECK_GT( outline->GetInterline( glyphHeight, metrics ),
+                    metrics.GetInterline( glyphHeight ) );
 }
 
 
