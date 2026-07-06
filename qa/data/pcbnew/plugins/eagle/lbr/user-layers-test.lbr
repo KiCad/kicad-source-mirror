@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE eagle SYSTEM "eagle.dtd">
+<eagle version="7.7.0">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no"/>
+<setting verticaltext="up"/>
+</settings>
+<grid distance="0.1" unitdist="inch" unit="inch"/>
+<layers>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="3" fill="1" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="9" visible="yes" active="yes"/>
+<layer number="160" name="UserEco1" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="161" name="UserEco2" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="162" name="User.Drawings" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="163" name="Margin" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="170" name="User.1" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="171" name="User.2" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="172" name="User.3" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="173" name="User.4" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="174" name="User.5" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="175" name="User.6" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="176" name="User.7" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="177" name="User.8" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="178" name="User.9" color="7" fill="1" visible="yes" active="yes"/>
+</layers>
+<library>
+<packages>
+<package name="USER_LAYERS_TEST">
+<smd name="1" x="0" y="0" dx="0.5" dy="0.5" layer="1"/>
+<wire x1="-5" y1="5" x2="5" y2="5" width="0.1" layer="160"/>
+<wire x1="-5" y1="7" x2="5" y2="7" width="0.1" layer="161"/>
+<wire x1="-5" y1="9" x2="5" y2="9" width="0.1" layer="162"/>
+<wire x1="-5" y1="11" x2="5" y2="11" width="0.1" layer="163"/>
+<wire x1="-5" y1="13" x2="5" y2="13" width="0.1" layer="170"/>
+<wire x1="-5" y1="15" x2="5" y2="15" width="0.1" layer="171"/>
+<wire x1="-5" y1="17" x2="5" y2="17" width="0.1" layer="172"/>
+<wire x1="-5" y1="19" x2="5" y2="19" width="0.1" layer="173"/>
+<wire x1="-5" y1="21" x2="5" y2="21" width="0.1" layer="174"/>
+<wire x1="-5" y1="23" x2="5" y2="23" width="0.1" layer="175"/>
+<wire x1="-5" y1="25" x2="5" y2="25" width="0.1" layer="176"/>
+<wire x1="-5" y1="27" x2="5" y2="27" width="0.1" layer="177"/>
+<wire x1="-5" y1="29" x2="5" y2="29" width="0.1" layer="178"/>
+</package>
+</packages>
+<symbols>
+<symbol name="USER_LAYERS_TEST">
+<pin name="1" x="0" y="0" length="short"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="USER_LAYERS_TEST">
+<gates>
+<gate name="G$1" symbol="USER_LAYERS_TEST" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="USER_LAYERS_TEST">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+</connects>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+</drawing>
+</eagle>
