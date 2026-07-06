@@ -25,17 +25,17 @@ DIALOG_AUTOSAVE_RECOVERY_BASE::DIALOG_AUTOSAVE_RECOVERY_BASE( wxWindow* parent, 
 	wxBoxSizer* bButtonSizer;
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_btnRestore = new wxButton( this, wxID_ANY, _("Restore auto-saved"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnRestore = new wxButton( this, wxID_ANY, _("Restore Auto-saved"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnRestore->SetToolTip( _("Replaces your saved file with the auto-saved version. The previous saved content is discarded.") );
 
 	bButtonSizer->Add( m_btnRestore, 0, wxALL, 5 );
 
-	m_btnKeepCurrent = new wxButton( this, wxID_ANY, _("Keep current"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnKeepCurrent = new wxButton( this, wxID_ANY, _("Keep Current"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnKeepCurrent->SetToolTip( _("Keeps your saved file as-is and discards the auto-saved changes.") );
 
 	bButtonSizer->Add( m_btnKeepCurrent, 0, wxALL, 5 );
 
-	m_btnKeepBoth = new wxButton( this, wxID_ANY, _("Keep both"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnKeepBoth = new wxButton( this, wxID_ANY, _("Keep Both"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btnKeepBoth->SetToolTip( _("Keeps your saved file and writes the auto-saved version alongside it as a separate timestamped file you can review later.") );
 
 	bButtonSizer->Add( m_btnKeepBoth, 0, wxALL, 5 );
@@ -43,7 +43,7 @@ DIALOG_AUTOSAVE_RECOVERY_BASE::DIALOG_AUTOSAVE_RECOVERY_BASE( wxWindow* parent, 
 
 	bButtonSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_btnCancel = new wxButton( this, wxID_CANCEL, _("Cancel open"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnCancel = new wxButton( this, wxID_CANCEL, _("Cancel Open"), wxDefaultPosition, wxDefaultSize, 0 );
 
 	m_btnCancel->SetDefault();
 	m_btnCancel->SetToolTip( _("Closes this dialog without making any changes. The auto-saved files stay on disk and will be offered again next time you open the project.") );
