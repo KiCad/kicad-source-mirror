@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-07-04 09:01+0000\n"
+"PO-Revision-Date: 2026-07-06 11:10+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -13641,7 +13641,7 @@ msgid ""
 "Net chain rebuild failed with an unknown error.  The schematic may have "
 "stale chain data; reload to recover."
 msgstr ""
-"La ricostruzione della catena di rete non è riuscita a causa di un errore "
+"La ricostruzione della catena di net non è riuscita a causa di un errore "
 "sconosciuto. Lo schema potrebbe contenere dati obsoleti relativi alla "
 "catena; ricaricarlo per ripristinarlo."
 
@@ -14509,9 +14509,8 @@ msgid "To:"
 msgstr "Alto:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:121
-#, fuzzy
 msgid "Find net chain path between the two components"
-msgstr "Genera solo una scheda senza componenti"
+msgstr "Trova il percorso della catena di net tra i due componenti"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:131
 msgid "Chain Name:"
@@ -14519,7 +14518,7 @@ msgstr "Nome catena:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:145
 msgid "Re-detect potential net chains from the schematic"
-msgstr "Ri-individuare le potenziali catene di collegamenti dallo schema"
+msgstr "Ri-individua le potenziali catene di net dallo schema"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 msgid "Connected to database successfully"
@@ -17568,9 +17567,8 @@ msgstr "Definizioni alias di bus"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:351
 #: eeschema/dialogs/panel_setup_net_chains.cpp:359
 #: eeschema/dialogs/panel_setup_net_chains.cpp:367
-#, fuzzy
 msgid "Net Chains"
-msgstr "Netclass"
+msgstr "Catene di net"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:142
 #: pcbnew/dialogs/dialog_board_setup.cpp:152
@@ -20057,7 +20055,7 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_net_chains.cpp:349
 #, c-format
 msgid "Net chain on row %zu cannot have an empty name."
-msgstr ""
+msgstr "La catena di net alla riga %zu non può avere nome vuoto."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:357
 #, c-format
@@ -20077,9 +20075,8 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_net_chains.cpp:384
 #: eeschema/dialogs/panel_setup_net_chains.cpp:392
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:185
-#, fuzzy
 msgid "Net Chain Classes"
-msgstr "Netclass"
+msgstr "Classi catene di net"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:390
 #, c-format
@@ -20087,14 +20084,13 @@ msgid "Duplicate class name '%s' on row %zu."
 msgstr "Nome classe '%s' duplicato sulla riga %zu."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:618
-#, fuzzy, c-format
+#, c-format
 msgid "Delete net chain '%s'?"
-msgstr "Cancellare tutti i collegamenti nel gruppo \"%s\"?"
+msgstr "Cancellare la catena di net '%s'?"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:619
-#, fuzzy
 msgid "Delete Net Chain"
-msgstr "Elimina pin fogli"
+msgstr "Elimina catena di net"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:653
 #, c-format
@@ -20102,9 +20098,8 @@ msgid "Member Nets (%zu)"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:672
-#, fuzzy
 msgid "New net chain class name:"
-msgstr "Nuovo nome tema:"
+msgstr "Nuovo nome della classe catena di net:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:672
 #: eeschema/dialogs/panel_setup_net_chains.cpp:682
@@ -20120,7 +20115,7 @@ msgstr "Nome netclass già in uso."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:705
 msgid "Rename net chain class:"
-msgstr "Rinomina classe catena net:"
+msgstr "Rinomina classe catena di net:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:705
 #: eeschema/dialogs/panel_setup_net_chains.cpp:716
@@ -20133,6 +20128,8 @@ msgstr "Rinomina i file"
 msgid ""
 "Delete net chain class '%s'?  Chains assigned to it will become unclassified."
 msgstr ""
+"Eliminare la classe catena di net '%s'? Le net assegnate ad essa "
+"diventeranno non classificate."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:747
 #, fuzzy
@@ -20146,9 +20143,8 @@ msgid "Members"
 msgstr "Membri"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:60
-#, fuzzy
 msgid "Net Chain Class"
-msgstr "Netclass"
+msgstr "Classe catena di net"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:62
 #, fuzzy
@@ -20176,9 +20172,8 @@ msgid "Class Name"
 msgstr "Nome base"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:164
-#, fuzzy
 msgid "Add a new net chain class"
-msgstr "Aggiungi nuovo campo"
+msgstr "Aggiungi una nuova classe catena di net"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:169
 msgid "Rename the selected class (updates every chain that uses it)"
