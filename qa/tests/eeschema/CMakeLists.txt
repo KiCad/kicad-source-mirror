@@ -100,6 +100,7 @@ set( QA_EESCHEMA_SRCS
     test_issue23840_bus_group_to_vector.cpp
     test_issue20173_paste_subsheet.cpp
     test_issue21401_paste_pin_numbers.cpp
+    test_issue21798_bus_sheet_copy.cpp
     test_issue22286_pin_alternate.cpp
     test_issue22620_group_annotation.cpp
     test_issue24335_group_move_ancestor.cpp

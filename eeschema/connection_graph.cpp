@@ -2063,10 +2063,11 @@ void CONNECTION_GRAPH::processSubGraphs()
         // Test subgraphs with weak drivers for net name conflicts and fix them
         unsigned suffix = 1;
 
+        wxString base_name = connection->Name();
+
         auto create_new_name =
-                [&suffix]( SCH_CONNECTION* aConn ) -> wxString
+                [&suffix, &base_name]( SCH_CONNECTION* aConn ) -> wxString
                 {
-                    wxString newName;
                     wxString suffixStr = std::to_wstring( suffix );
 
                     // For group buses with a prefix, we can add the suffix to the prefix.
@@ -2082,20 +2083,52 @@ void CONNECTION_GRAPH::processSubGraphs()
                         // Use BusPrefix length to skip past any formatting markers
                         // in the prefix (e.g. ~{RESET}) rather than AfterFirst('{')
                         // which would split at a formatting brace.
-                        wxString members = aConn->Name().Mid( aConn->BusPrefix().length() );
+                        wxString members = base_name.Mid( aConn->BusPrefix().length() );
 
+                        wxString newName;
                         newName << prefix << wxT( "_" ) << suffixStr << members;
 
                         aConn->ConfigureFromLabel( newName );
                     }
                     else
                     {
-                        newName << aConn->Name() << wxT( "_" ) << suffixStr;
+                        // Reset to the unsuffixed base so retries generate base_1, base_2, ...
+                        // instead of stacking suffixes onto the previous attempt.
                         aConn->SetSuffix( wxString( wxT( "_" ) ) << suffixStr );
                     }
 
                     suffix++;
-                    return newName;
+                    return aConn->Name();
+                };
+
+        // Promote a weakly-driven sheet-pin subgraph to a strong driver so that it is considered
+        // below for propagation/merging.  A sheet pin sharing its (path-less) name with a global
+        // label on the same sheet would then be treated as if it had a matching local label, so we
+        // skip the promotion in that case to avoid a false merge.
+        auto promote_sheet_pin_driver =
+                [&]()
+                {
+                    if( !subgraph->m_driver || subgraph->m_driver->Type() != SCH_SHEET_PIN_T )
+                        return;
+
+                    wxString global_name = connection->Name( true );
+                    auto     kk          = m_net_name_to_subgraphs_map.find( global_name );
+
+                    if( kk != m_net_name_to_subgraphs_map.end() )
+                    {
+                        for( const CONNECTION_SUBGRAPH* candidate : kk->second )
+                        {
+                            if( candidate->m_sheet == sheet )
+                            {
+                                wxLogTrace( ConnTrace,
+                                            wxS( "%ld (%s) skipped for promotion due to potential conflict" ),
+                                            subgraph->m_code, connection->Name() );
+                                return;
+                            }
+                        }
+                    }
+
+                    subgraph->m_strong_driver = true;
                 };
 
         if( !subgraph->m_strong_driver )
@@ -2131,52 +2164,14 @@ void CONNECTION_GRAPH::processSubGraphs()
                 m_net_name_to_subgraphs_map[new_name].emplace_back( subgraph );
 
                 name = new_name;
+
+                // The renamed sheet pin still drives its own bus members through the hierarchy, so
+                // it must be promoted for propagation to reach them (issue #21798).
+                promote_sheet_pin_driver();
             }
             else if( subgraph->m_driver )
             {
-                // If there is no conflict, promote sheet pins to be strong drivers so that they
-                // will be considered below for propagation/merging.
-
-                // It is possible for this to generate a conflict if the sheet pin has the same
-                // name as a global label on the same sheet, because global merging will then treat
-                // this subgraph as if it had a matching local label.  So, for those cases, we
-                // don't apply this promotion
-
-                if( subgraph->m_driver->Type() == SCH_SHEET_PIN_T )
-                {
-                    bool     conflict    = false;
-                    wxString global_name = connection->Name( true );
-                    auto     kk          = m_net_name_to_subgraphs_map.find( global_name );
-
-                    if( kk != m_net_name_to_subgraphs_map.end() )
-                    {
-                        // A global will conflict if it is on the same sheet as this subgraph, since
-                        // it would be connected by implicit local label linking
-                        std::vector<CONNECTION_SUBGRAPH*>& candidates = kk->second;
-
-                        for( const CONNECTION_SUBGRAPH* candidate : candidates )
-                        {
-                            if( candidate->m_sheet == sheet )
-                                conflict = true;
-                        }
-                    }
-
-                    if( conflict )
-                    {
-                        wxLogTrace( ConnTrace, wxS( "%ld (%s) skipped for promotion due to potential conflict" ),
-                                    subgraph->m_code, name );
-                    }
-                    else
-                    {
-                        UNITS_PROVIDER unitsProvider( schIUScale, EDA_UNITS::MM );
-
-                        wxLogTrace( ConnTrace, wxS( "%ld (%s) weakly driven by unique sheet pin %s, promoting" ),
-                                    subgraph->m_code, name,
-                                    subgraph->m_driver->GetItemDescription( &unitsProvider, true ) );
-
-                        subgraph->m_strong_driver = true;
-                    }
-                }
+                promote_sheet_pin_driver();
             }
         }
 
