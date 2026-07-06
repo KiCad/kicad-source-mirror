@@ -52,6 +52,7 @@
 #include <project/net_settings.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <netclass.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <geometry/eda_angle.h>
 #include <geometry/shape_arc.h>
 #include <pcb_group.h>
@@ -563,6 +564,43 @@ void PCB_IO_PADS::loadFootprints()
         {
             const PADS_IO::PART_DECAL& decal = decal_it->second;
 
+            // Turn a rectangular pad into a roundrect or chamfered rect from the PADS corner
+            // radius.  aDefaultRound keeps the shape rounded (0.25 ratio) when the decal gives
+            // no radius, as PADS RC/OC pads are rounded by definition; S and RF stay square.
+            auto applyCornerRadius = [&]( const PADS_IO::PAD_STACK_LAYER& layer_def, PAD* pad,
+                                          PCB_LAYER_ID kicad_layer, const VECTOR2I& aSize,
+                                          bool aDefaultRound )
+            {
+                if( layer_def.corner_radius > 0 )
+                {
+                    int    min_dim = std::min( aSize.x, aSize.y );
+                    double radius = decalScaler( layer_def.corner_radius );
+                    double ratio = ( min_dim > 0 ) ? std::min( radius / min_dim, 0.5 ) : 0.25;
+
+                    if( layer_def.chamfered )
+                    {
+                        pad->SetShape( kicad_layer, PAD_SHAPE::CHAMFERED_RECT );
+                        pad->SetRoundRectRadiusRatio( kicad_layer, 0.0 );
+                        pad->SetChamferRectRatio( kicad_layer, ratio );
+                        pad->SetChamferPositions( kicad_layer, RECT_CHAMFER_ALL );
+                    }
+                    else
+                    {
+                        pad->SetShape( kicad_layer, PAD_SHAPE::ROUNDRECT );
+                        pad->SetRoundRectRadiusRatio( kicad_layer, ratio );
+                    }
+                }
+                else if( aDefaultRound )
+                {
+                    pad->SetShape( kicad_layer, PAD_SHAPE::ROUNDRECT );
+                    pad->SetRoundRectRadiusRatio( kicad_layer, 0.25 );
+                }
+                else
+                {
+                    pad->SetShape( kicad_layer, PAD_SHAPE::RECTANGLE );
+                }
+            };
+
             auto convertPadShape = [&]( const PADS_IO::PAD_STACK_LAYER& layer_def,
                                         PAD* pad, PCB_LAYER_ID kicad_layer ) {
                 const std::string& shape = layer_def.shape;
@@ -577,8 +615,12 @@ void PCB_IO_PADS::loadFootprints()
                 }
                 else if( shape == "S" || shape == "ST" )
                 {
-                    pad->SetShape( kicad_layer, PAD_SHAPE::RECTANGLE );
-                    pad->SetSize( kicad_layer, VECTOR2I( size.x, size.x ) );
+                    // The via pad-stack parser leaves sizeB unset for square pads, so take
+                    // the single populated dimension for both sides of the square.
+                    int      side = ( layer_def.sizeB > 0 ) ? size.x : size.y;
+                    VECTOR2I sq_size( side, side );
+                    applyCornerRadius( layer_def, pad, kicad_layer, sq_size, false );
+                    pad->SetSize( kicad_layer, sq_size );
                 }
                 else if( shape == "O" || shape == "OT" )
                 {
@@ -587,7 +629,7 @@ void PCB_IO_PADS::loadFootprints()
                 }
                 else if( shape == "RF" )
                 {
-                    pad->SetShape( kicad_layer, PAD_SHAPE::RECTANGLE );
+                    applyCornerRadius( layer_def, pad, kicad_layer, size, false );
                     pad->SetSize( kicad_layer, size );
                 }
                 else if( shape == "OF" )
@@ -597,21 +639,8 @@ void PCB_IO_PADS::loadFootprints()
                 }
                 else if( shape == "RC" || shape == "OC" )
                 {
-                    pad->SetShape( kicad_layer, PAD_SHAPE::ROUNDRECT );
+                    applyCornerRadius( layer_def, pad, kicad_layer, size, true );
                     pad->SetSize( kicad_layer, size );
-
-                    if( layer_def.corner_radius > 0 && size.x > 0 )
-                    {
-                        double min_dim = std::min( size.x, size.y );
-                        double radius = decalScaler( layer_def.corner_radius );
-                        double ratio = ( min_dim > 0 ) ? ( radius / min_dim ) : 0.25;
-                        ratio = std::min( ratio, 0.5 );
-                        pad->SetRoundRectRadiusRatio( kicad_layer, ratio );
-                    }
-                    else
-                    {
-                        pad->SetRoundRectRadiusRatio( kicad_layer, 0.25 );
-                    }
                 }
                 else
                 {
@@ -755,6 +784,16 @@ void PCB_IO_PADS::loadFootprints()
                     // front and back shapes differ.
                     if( has_explicit_layers )
                     {
+                        // The corner radius and chamfer flag change the resulting KiCad
+                        // shape, so fold them into the comparison key; otherwise two
+                        // same-code entries differing only in corner would stay NORMAL and
+                        // leak the front rounding onto the back copper.
+                        auto shapeKey = []( const PADS_IO::PAD_STACK_LAYER& aLayerDef )
+                        {
+                            return aLayerDef.shape + "|" + std::to_string( aLayerDef.corner_radius )
+                                   + "|" + std::to_string( aLayerDef.chamfered );
+                        };
+
                         std::string front_shape;
                         std::string back_shape;
 
@@ -772,9 +811,9 @@ void PCB_IO_PADS::loadFootprints()
                             PCB_LAYER_ID mapped = mapPadsLayer( layer_def.layer );
 
                             if( mapped == F_Cu && front_shape.empty() )
-                                front_shape = layer_def.shape;
+                                front_shape = shapeKey( layer_def );
                             else if( mapped == B_Cu && back_shape.empty() )
-                                back_shape = layer_def.shape;
+                                back_shape = shapeKey( layer_def );
                         }
 
                         // Only switch to FRONT_INNER_BACK when the pad shape itself

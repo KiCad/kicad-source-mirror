@@ -41,6 +41,7 @@
 #include <pcb_dimension.h>
 #include <project/net_settings.h>
 #include <board_stackup_manager/board_stackup.h>
+#include <map>
 #include <set>
 
 
@@ -2007,6 +2008,79 @@ BOOST_AUTO_TEST_CASE( Issue23241_V5DecalTerminals )
     BOOST_CHECK_EQUAL( it->second.terminals.back().name, "34" );
     BOOST_CHECK_EQUAL( sop_it->second.terminals.front().name, "1" );
     BOOST_CHECK_EQUAL( sop_it->second.terminals.back().name, "16" );
+}
+
+
+/**
+ * Verify RF (rectangular finger) pads carrying a PADS corner radius import as
+ * roundrect rather than plain rectangle (issue 23297).
+ *
+ * R1 (RESC1005X40N) uses "RF 0.000 900000 0 105000": 900000-unit finger, so the
+ * roundrect ratio is 105000 / 900000 = 0.1167.  D1 (SOT95P280X100-6N) uses
+ * "RF 0.000 1650000 0 225000" over an 825000 height, so the ratio is the radius
+ * over the shorter side, 225000 / 825000 = 0.2727.  Scaling is linear so the
+ * ratios are unit-independent.
+ */
+BOOST_AUTO_TEST_CASE( Issue23297_RfPadCornerRadius )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23297.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    const double tolerance = 0.005;
+
+    struct EXPECTED
+    {
+        int    padCount;
+        double ratio;
+    };
+
+    const std::map<wxString, EXPECTED> expected = {
+        { wxT( "R1" ), { 2, 105000.0 / 900000.0 } },
+        { wxT( "D1" ), { 6, 225000.0 / 825000.0 } },
+    };
+
+    int checkedRefs = 0;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        auto it = expected.find( fp->GetReference() );
+
+        if( it == expected.end() )
+            continue;
+
+        checkedRefs++;
+
+        int roundRectCount = 0;
+
+        for( PAD* pad : fp->Pads() )
+        {
+            BOOST_CHECK_MESSAGE( pad->GetShape( F_Cu ) == PAD_SHAPE::ROUNDRECT,
+                    fp->GetReference() << " pad " << pad->GetNumber()
+                        << " should import as roundrect" );
+
+            if( pad->GetShape( F_Cu ) != PAD_SHAPE::ROUNDRECT )
+                continue;
+
+            BOOST_CHECK_MESSAGE(
+                    std::abs( pad->GetRoundRectRadiusRatio( F_Cu ) - it->second.ratio ) < tolerance,
+                    fp->GetReference() << " pad " << pad->GetNumber() << " ratio "
+                        << pad->GetRoundRectRadiusRatio( F_Cu ) << " should be ~" << it->second.ratio );
+
+            roundRectCount++;
+        }
+
+        BOOST_CHECK_MESSAGE( roundRectCount == it->second.padCount,
+                fp->GetReference() << " should have " << it->second.padCount
+                    << " roundrect pads, got " << roundRectCount );
+    }
+
+    BOOST_CHECK_MESSAGE( checkedRefs == (int) expected.size(),
+            "expected R1 and D1 footprints to be imported, found " << checkedRefs );
 }
 
 
