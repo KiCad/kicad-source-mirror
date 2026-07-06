@@ -132,4 +132,33 @@ BOOST_AUTO_TEST_CASE( FailedGlyphLoadReported )
 }
 
 
+// The line spacing multiplier is FT_Face::height / FT_Face::units_per_EM. Both fields are integers,
+// so an integer division truncated the fractional font-height ratio (and produced 0 for fonts with
+// height < units_per_EM), leaving multiline text with lines too close together or overlapping. Drive
+// GetInterline and confirm the fractional ratio survives. NotoSans has height 1362 over 1000 units,
+// so the true 1.362 ratio truncated to 1.
+BOOST_AUTO_TEST_CASE( InterlinePreservesFractionalFontHeight )
+{
+    KIFONT::OUTLINE_FONT* outline = loadTestOutlineFont( wxT( "Noto Sans" ),
+                                                         wxT( "NotoSans-Regular.ttf" ) );
+    FT_Face               face = outline->GetFace();
+
+    BOOST_REQUIRE( face );
+    BOOST_REQUIRE_GT( face->units_per_EM, 0 );
+    BOOST_REQUIRE_GT( face->height, face->units_per_EM );
+
+    const double           glyphHeight = 10000.0;
+    const KIFONT::METRICS& metrics = KIFONT::METRICS::Default();
+
+    double ratio = static_cast<double>( face->height ) / static_cast<double>( face->units_per_EM );
+    double expected = metrics.GetInterline( glyphHeight * ratio );
+
+    BOOST_CHECK_CLOSE( outline->GetInterline( glyphHeight, metrics ), expected, 1e-6 );
+
+    // The integer-division bug truncated the ratio to 1.0, so the correct spacing must exceed it.
+    BOOST_CHECK_GT( outline->GetInterline( glyphHeight, metrics ),
+                    metrics.GetInterline( glyphHeight ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

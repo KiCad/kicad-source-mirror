@@ -177,8 +177,11 @@ double OUTLINE_FONT::GetInterline( double aGlyphHeight, const METRICS& aFontMetr
 {
     double glyphToFontHeight = 1.0;
 
-    if( GetFace()->units_per_EM )
-        glyphToFontHeight = GetFace()->height / GetFace()->units_per_EM;
+    // Both FreeType metrics are integers, so the ratio must be computed in floating point.
+    // Truncated integer division collapsed the spacing to zero for fonts with height < units_per_EM.
+    if( GetFace() && GetFace()->units_per_EM > 0 && GetFace()->height > 0 )
+        glyphToFontHeight = static_cast<double>( GetFace()->height )
+                            / static_cast<double>( GetFace()->units_per_EM );
 
     return aFontMetrics.GetInterline( aGlyphHeight * glyphToFontHeight );
 }
