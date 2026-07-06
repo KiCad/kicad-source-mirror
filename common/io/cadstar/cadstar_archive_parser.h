@@ -54,6 +54,15 @@
 #define THROW_PARSING_IO_ERROR( param, location ) \
     THROW_IO_ERROR( wxString::Format( _( "Unable to parse '%s' in '%s'" ), param, location ) )
 
+// Warning variants that log instead of throwing, allowing import to continue
+// when encountering unknown nodes from newer CADSTAR versions
+
+#define WARN_UNKNOWN_NODE_IO_ERROR( nodename, location ) \
+    wxLogWarning( wxString::Format( _( "Unknown node '%s' in '%s'" ), nodename, location ) )
+
+#define WARN_UNKNOWN_PARAMETER_IO_ERROR( param, location ) \
+    wxLogWarning( wxString::Format( _( "Unknown Parameter '%s' in '%s'" ), param, location ) )
+
 //=================================
 // MACRO DEFINITIONS
 //=================================
@@ -301,7 +310,7 @@ public:
         LINECODE_ID ID;
         wxString    Name;
         long        Width;
-        LINESTYLE   Style;
+        LINESTYLE   Style = LINESTYLE::SOLID;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -1324,20 +1333,23 @@ public:
 
     /**
      * @param aNode
-     * @throw IO_ERROR if a child node was found
+     *
+     * Logs a warning (does not throw) if an unexpected child node was found.
      */
     static void CheckNoChildNodes( XNODE* aNode );
 
     /**
      * @param aNode
-     * @throw IO_ERROR if a node adjacent to aNode was found
+     *
+     * Logs a warning (does not throw) if an unexpected node adjacent to aNode was found.
      */
     static void CheckNoNextNodes( XNODE* aNode );
 
     /**
      * @param aNode with a child node containing an EVALUE
      * @param aValueToParse
-     * @throw IO_ERROR if unable to parse or node is not an EVALUE
+     *
+     * Logs a warning (does not throw) if the child node is not an EVALUE.
      */
     static void ParseChildEValue( XNODE* aNode, PARSER_CONTEXT* aContext, EVALUE& aValueToParse );
 
@@ -1348,9 +1360,11 @@ public:
      * @param aTestAllChildNodes
      * @param aExpectedNumPoints if UNDEFINED_VALUE (i.e. -1), this is check is disabled
      * @return std::vector containing all POINT objects
+     *
+     * Logs a warning (does not throw) if aTestAllChildNodes is true and one of the child nodes
+     * is not a valid POINT object.
      * @throw IO_ERROR if one of the following:
      *         - Unable to parse a POINT object
-     *         - aTestAllChildNodes is true and one of the child nodes is not a valid POINT object
      *         - aExpectedNumPoints is non-negative and the number of POINT objects found is
      *           different
      */
@@ -1365,9 +1379,10 @@ public:
      * @param aTestAllChildNodes
      * @param aExpectedNumPoints if -1, this is check is disabled
      * @return std::vector containing all VERTEX objects
-     * @throw IO_ERROR if one of the following:
-     *         - Unable to parse a VERTEX object
-     *         - aTestAllChildNodes is true and one of the child nodes is not a valid VERTEX object
+     *
+     * Logs a warning (does not throw) if aTestAllChildNodes is true and one of the child nodes
+     * is not a valid VERTEX object.
+     * @throw IO_ERROR if unable to parse a VERTEX object
      */
     static std::vector<VERTEX> ParseAllChildVertices( XNODE* aNode, PARSER_CONTEXT* aContext,
                                                       bool aTestAllChildNodes = false );
@@ -1379,9 +1394,10 @@ public:
      * @param aTestAllChildNodes
      * @param aExpectedNumPoints if -1, this is check is disabled
      * @return std::vector containing all CUTOUT objects
-     * @throw IO_ERROR if one of the following:
-     *         - Unable to parse a CUTOUT object
-     *         - aTestAllChildNodes is true and one of the child nodes is not a valid CUTOUT object
+     *
+     * Logs a warning (does not throw) if aTestAllChildNodes is true and one of the child nodes
+     * is not a valid CUTOUT object.
+     * @throw IO_ERROR if unable to parse a CUTOUT object
      */
     static std::vector<CUTOUT> ParseAllChildCutouts( XNODE* aNode, PARSER_CONTEXT* aContext,
                                                      bool aTestAllChildNodes = false );
