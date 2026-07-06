@@ -145,7 +145,7 @@ int JOBS_RUNNER::runSpecialCopyFiles( const JOB_SPECIAL_COPYFILES* aJob, PROJECT
     wxFileName destFn( aJob->GetFullOutputPath( aProject ) );
 
     if( !aJob->m_dest.IsEmpty() )
-        destFn.AppendDir( aJob->m_dest );
+        destFn.AppendDir( ExpandEnvVarSubstitutions( aJob->m_dest, aProject ) );
 
     wxString errors;
     bool     success = CopyFilesOrDirectory( sourceFn.GetFullPath(), destFn.GetFullPath(), aJob->m_overwriteDest,
