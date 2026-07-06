@@ -1,0 +1,18 @@
+* CPL (Coupled Multiconductor Line) model library for testing
+* Tests both braced expressions and bare numeric multi-parameter values
+
+* Mixed bare numeric and braced expression parameters (the problematic case from issue 22105)
+.model PLINE_MIXED CPL length=1 R=1 0 1 L={L11} {L12} {L22} G=0 0 0 C={C11} {C12} {C22}
+
+* Braced expression first, then a bare value within the same parameter
+.model PLINE_BRACE_FIRST CPL length=1 R={R11} 0 {R22} L=1e-9 {L12} 1e-9
+
+* All braced expression parameters (worked before the fix)
+.model PLINE_BRACED CPL length={Len} R={R11} {R12} {R22} L={L11} {L12} {L22} G={G11} {G12} {G22} C={C11} {C12} {C22}
+
+* All bare numeric parameters
+.model PLINE_NUMERIC CPL length=0.01 R=1 0 1 L=1e-9 0 1e-9 G=0 0 0 C=1e-12 0 1e-12
+
+* Minimal CPL model with no parameters
+.model PLINE_EMPTY CPL
+

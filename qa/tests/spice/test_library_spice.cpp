@@ -24,10 +24,14 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <eeschema_test_utils.h>
 #include <sim/sim_library_spice.h>
+#include <sim/sim_model_spice_fallback.h>
 
 #include <boost/algorithm/string/case_conv.hpp>
 #include <fmt/core.h>
 #include <locale_io.h>
+
+#include <map>
+#include <string>
 
 
 class TEST_SIM_LIBRARY_SPICE_FIXTURE
@@ -1576,6 +1580,54 @@ BOOST_AUTO_TEST_CASE( InvalidBinaryFile )
     // The library should have no valid models since it's not a valid SPICE file
     const std::vector<SIM_LIBRARY::MODEL> models = m_library->GetModels();
     BOOST_CHECK_EQUAL( models.size(), 0 );
+}
+
+
+// A CPL (Coupled Multiconductor Line) model whose parameters mix bare numeric multi-values with
+// braced expressions, e.g. "R=1 0 1 L={L11} {L12} {L22} ...", used to hang the parser (issue
+// #22105) or, once the hang was fixed, drop values once a parameter switched between the braced and
+// bare forms.  CPL has no native KiCad type, so each model lands as RAWSPICE carrying its whole
+// line as raw code; assert every model line survives parsing intact.
+BOOST_AUTO_TEST_CASE( CplModels )
+{
+    LOCALE_IO toggle;
+
+    LoadLibrary( "cpl_models" );
+
+    std::map<std::string, std::string> spiceByName;
+
+    for( const auto& [modelName, model] : m_library->GetModels() )
+    {
+        BOOST_TEST_CONTEXT( "CPL model: " << modelName )
+        {
+            // A CPL model has no native KiCad type, so it is passed through as raw SPICE.
+            BOOST_CHECK( model.GetType() == SIM_MODEL::TYPE::RAWSPICE );
+
+            auto* fallback = dynamic_cast<const SIM_MODEL_SPICE_FALLBACK*>( &model );
+            BOOST_REQUIRE( fallback );
+            spiceByName[modelName] = fallback->GetSpiceCode();
+        }
+    }
+
+    auto codeContains =
+            [&]( const std::string& aName, const std::string& aFragment )
+            {
+                auto it = spiceByName.find( aName );
+                BOOST_REQUIRE( it != spiceByName.end() );
+                BOOST_CHECK( it->second.find( aFragment ) != std::string::npos );
+            };
+
+    BOOST_REQUIRE_EQUAL( spiceByName.size(), 5 );
+
+    // The exact multi-parameter line from the issue must round-trip unmangled.
+    codeContains( "PLINE_MIXED", "R=1 0 1 L={L11} {L12} {L22} G=0 0 0 C={C11} {C12} {C22}" );
+
+    // A parameter that starts braced and then goes bare (and vice versa) must keep both.
+    codeContains( "PLINE_BRACE_FIRST", "R={R11} 0 {R22} L=1e-9 {L12} 1e-9" );
+
+    codeContains( "PLINE_BRACED", "R={R11} {R12} {R22}" );
+    codeContains( "PLINE_NUMERIC", "R=1 0 1 L=1e-9 0 1e-9" );
+    codeContains( "PLINE_EMPTY", "PLINE_EMPTY CPL" );
 }
 
 

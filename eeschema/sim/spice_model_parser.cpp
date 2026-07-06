@@ -51,6 +51,7 @@ namespace SIM_MODEL_SPICE_PARSER
     template <typename Rule> struct spiceUnitSelector : std::false_type {};
 
     template <> struct spiceUnitSelector<dotModelAko> : std::true_type {};
+    template <> struct spiceUnitSelector<dotModelCPL> : std::true_type {};
     template <> struct spiceUnitSelector<dotModel> : std::true_type {};
     template <> struct spiceUnitSelector<modelName> : std::true_type {};
     template <> struct spiceUnitSelector<dotModelType> : std::true_type {};
@@ -104,6 +105,13 @@ bool SPICE_MODEL_PARSER::ReadType( const SIM_LIBRARY_SPICE& aLibrary, const std:
             }
 
             *aType = sourceModel->GetType();
+            return true;
+        }
+        else if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModelCPL>() )
+        {
+            // CPL (Coupled Multiconductor Line) has no native KiCad model type.
+            // Treat it as raw SPICE so the code is passed through to ngspice.
+            *aType = SIM_MODEL::TYPE::RAWSPICE;
             return true;
         }
         else if( node->is_type<SIM_MODEL_SPICE_PARSER::dotModel>() )
