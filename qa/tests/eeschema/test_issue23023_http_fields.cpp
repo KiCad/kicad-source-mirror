@@ -35,6 +35,8 @@
 #include <algorithm>
 #include <tuple>
 
+#include <wx/arrstr.h> // for MSVC to see std::vector<wxString> is exported from wx
+
 #include <json_common.h>
 #include <http_lib/http_lib_connection.h>
 #include <http_lib/http_lib_settings.h>
