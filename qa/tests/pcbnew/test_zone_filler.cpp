@@ -3698,3 +3698,54 @@ BOOST_FIXTURE_TEST_CASE( ZoneFillDependencyKnockoutMargin, ZONE_FILL_TEST_FIXTUR
                          "Lower-priority zone filled before the higher-priority knockout was "
                          "published; the fill depends on thread scheduling." );
 }
+
+
+/**
+ * Test for issue 24312: two zone-fill lobes left kissing at a sub-min-width point.
+ *
+ * The deflate separates two nearby lobes; connect_nearby_polys is supposed to bridge
+ * them so the re-inflation produces a full min-width connection.  Near-coincident
+ * vertices left by Fracture/Deflate corrupted the ear test, the bridge anchor was
+ * missed, and the lobes re-touched only at a sliver narrower than the minimum
+ * connection width, tripping a connection_width DRC.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionZoneFillNarrowBridge, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue24312/issue24312", m_board );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    // Force connection-width severity so the regression assertion does not silently
+    // weaken if the reproduction project is updated to ignore this code.
+    bds.m_DRCSeverities[ DRCE_CONNECTION_WIDTH ] = SEVERITY::RPT_SEVERITY_ERROR;
+
+    KI_TEST::FillZones( m_board.get() );
+
+    std::vector<DRC_ITEM> violations;
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
+            {
+                if( aItem->GetErrorCode() == DRCE_CONNECTION_WIDTH )
+                    violations.push_back( *aItem );
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    if( !violations.empty() )
+    {
+        UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
+
+        std::map<KIID, EDA_ITEM*> itemMap;
+        m_board->FillItemMap( itemMap );
+
+        for( const DRC_ITEM& item : violations )
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+    }
+
+    BOOST_CHECK_MESSAGE( violations.empty(),
+                         wxString::Format( "Zone fill produced %zu connection_width violations; "
+                                           "expected 0 (issue 24312).",
+                                           violations.size() ) );
+}
