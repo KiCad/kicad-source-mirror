@@ -52,7 +52,6 @@ public:
     double GetYResolution() const { return m_yResolution; }
 
 private:
-    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     void OnLockToggle( wxCommandEvent& aEvent );
