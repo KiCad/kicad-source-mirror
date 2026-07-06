@@ -1472,9 +1472,15 @@ void ODB_STEP_ENTITY::MakeLayerEntity()
     for( BOARD_ITEM* item : m_board->Drawings() )
     {
         if( BOARD_CONNECTED_ITEM* conn_it = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
-            elements[conn_it->GetLayer()][conn_it->GetNetCode()].push_back( conn_it );
+        {
+            for( PCB_LAYER_ID layer : conn_it->GetLayerSet() )
+                elements[layer][conn_it->GetNetCode()].push_back( conn_it );
+        }
         else
-            elements[item->GetLayer()][0].push_back( item );
+        {
+            for( PCB_LAYER_ID layer : item->GetLayerSet() )
+                elements[layer][0].push_back( item );
+        }
     }
 
     for( FOOTPRINT* fp : m_board->Footprints() )
@@ -1483,7 +1489,10 @@ void ODB_STEP_ENTITY::MakeLayerEntity()
             elements[field->GetLayer()][0].push_back( field );
 
         for( BOARD_ITEM* item : fp->GraphicalItems() )
-            elements[item->GetLayer()][0].push_back( item );
+        {
+            for( PCB_LAYER_ID layer : item->GetLayerSet() )
+                elements[layer][0].push_back( item );
+        }
 
         for( PAD* pad : fp->Pads() )
         {
