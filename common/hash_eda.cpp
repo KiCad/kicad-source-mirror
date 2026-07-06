@@ -115,7 +115,7 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
                 hash_combine( ret, pad->GetSize( aLayer ).x, pad->GetSize( aLayer ).y );
                 hash_combine( ret, pad->GetOffset( aLayer ).x, pad->GetOffset( aLayer ).y );
 
-                switch( pad->GetShape( PADSTACK::ALL_LAYERS ) )
+                switch( pad->GetShape( aLayer ) )
                 {
                 case PAD_SHAPE::CHAMFERED_RECT:
                     hash_combine( ret, pad->GetChamferPositions( aLayer ) );
