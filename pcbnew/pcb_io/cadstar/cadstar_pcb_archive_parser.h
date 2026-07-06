@@ -99,7 +99,7 @@ public:
     {
         MATERIAL_ID         ID;
         wxString            Name;
-        MATERIAL_LAYER_TYPE Type;
+        MATERIAL_LAYER_TYPE Type = MATERIAL_LAYER_TYPE::NON_ELECTRICAL;
         EVALUE              Permittivity;
         EVALUE              LossTangent;
         EVALUE              Resistivity; ///< x10^-8 ohm*metre
@@ -281,7 +281,7 @@ public:
 
     struct CADSTAR_PAD_SHAPE : PARSER
     {
-        PAD_SHAPE_TYPE ShapeType;
+        PAD_SHAPE_TYPE ShapeType       = PAD_SHAPE_TYPE::CIRCLE;
         long           Size            = UNDEFINED_VALUE;
         long           LeftLength      = UNDEFINED_VALUE;
         long           RightLength     = UNDEFINED_VALUE;
@@ -297,6 +297,7 @@ public:
     {
         LAYER_ID  LayerID;
         CADSTAR_PAD_SHAPE Shape;
+        bool      HasShape = false; ///< False when the shape node was unknown and skipped
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -327,6 +328,7 @@ public:
     {
         LAYER_ID  LayerID;
         CADSTAR_PAD_SHAPE Shape;
+        bool      HasShape = false; ///< False when the shape node was unknown and skipped
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
@@ -606,7 +608,7 @@ public:
                               ///< "DIMENSION_ARROWCLOSEDFILLED"
             };
 
-            STYLE ArrowStyle;  ///< Subnode="ARROWSTYLE"
+            STYLE ArrowStyle = STYLE::OPEN;  ///< Subnode="ARROWSTYLE"
             long  UpperAngle = 0;  ///< token="ARROWANGLEA"
             long  LowerAngle = 0;  ///< token="ARROWANGLEB"
             long  ArrowLength = 0; ///< The length of the angled lines that make up the arrow head
@@ -638,7 +640,7 @@ public:
                         ///< the text is) DIMENSION_EXTERNAL
             };
 
-            STYLE Style;
+            STYLE Style = STYLE::INSIDE;
             long  TextGap;    ///< Specifies the gap between the text and the end of the line
             long  TextOffset; ///< Specifies how far above the line the text is (doesn't have
                               ///< an effect on actual position!)
@@ -682,8 +684,8 @@ public:
             };
 
             TYPE        Type;
-            LINECODE_ID LineCodeID; ///< param0
-            STYLE       Style;      ///< Subnode="DIMLINETYPE"
+            LINECODE_ID LineCodeID;            ///< param0
+            STYLE       Style = STYLE::INTERNAL; ///< Subnode="DIMLINETYPE"
 
             POINT Start;  ///< [point1]
             POINT End;    ///< [point2]

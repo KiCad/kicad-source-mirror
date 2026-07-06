@@ -27,6 +27,7 @@
 #include <cadstar_pcb_archive_parser.h>
 #include <macros.h>
 #include <progress_reporter.h>
+#include <wx/log.h>
 #include <wx/translation.h>
 
 
@@ -122,7 +123,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse( bool aLibrary )
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "[root]" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "[root]" ) );
         }
 
         checkPoint();
@@ -157,7 +158,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::ASSIGNMENTS::Parse( XNODE* aNode, PARSER_CONTEX
         else if( cNode->GetName() == wxT( "SPCCLASSEDITATTRIBSETTINGS" ) )
             SpacingclassEditAttributeSettings = true;
         else
-            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
     }
 }
 
@@ -212,7 +213,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYERDEFS::Parse( XNODE* aNode, PARSER_CONTEXT*
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( nodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( nodeName, aNode->GetName() );
         }
     }
 }
@@ -247,7 +248,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::RULESET::Parse( XNODE* aNode, PARSER_CONTEXT* a
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( nodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( nodeName, aNode->GetName() );
         }
     }
 }
@@ -310,7 +311,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::CODEDEFS_PCB::Parse( XNODE* aNode, PARSER_CONTE
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( nodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( nodeName, aNode->GetName() );
         }
     }
 }
@@ -339,7 +340,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::MATERIAL::Parse( XNODE* aNode, PARSER_CONTEXT* 
     }
     else
     {
-        THROW_UNKNOWN_PARAMETER_IO_ERROR( sType, wxString::Format( wxT( "MATERIAL %s" ), Name ) );
+        WARN_UNKNOWN_PARAMETER_IO_ERROR( sType, wxString::Format( wxT( "MATERIAL %s" ), Name ) );
     }
 
     XNODE* iNode = aNode->GetChildren();
@@ -368,7 +369,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::MATERIAL::Parse( XNODE* aNode, PARSER_CONTEXT* 
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( nodeName, wxString::Format( wxT( "MATERIAL %s" ), Name ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( nodeName, wxString::Format( wxT( "MATERIAL %s" ), Name ) );
         }
     }
 }
@@ -418,14 +419,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode, PARSER_CONTEXT* aCo
                         }
                         else
                         {
-                            THROW_UNKNOWN_PARAMETER_IO_ERROR( embedsValue,
+                            WARN_UNKNOWN_PARAMETER_IO_ERROR( embedsValue,
                                                               wxString::Format( wxT( "LAYER %s -> EMBEDS" ),
                                                                                 Name ) );
                         }
                     }
                     else
                     {
-                        THROW_UNKNOWN_NODE_IO_ERROR( childOfTempNode->GetName(),
+                        WARN_UNKNOWN_NODE_IO_ERROR( childOfTempNode->GetName(),
                                                      wxString::Format( wxT( "LAYER %s->MAKE" ),
                                                                        Name ) );
                     }
@@ -457,14 +458,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode, PARSER_CONTEXT* aCo
                 }
                 else
                 {
-                    THROW_UNKNOWN_PARAMETER_IO_ERROR( bias,
+                    WARN_UNKNOWN_PARAMETER_IO_ERROR( bias,
                                                       wxString::Format( wxT( "LAYER %s -> BIAS" ),
                                                                         Name ) );
                 }
             }
             else
             {
-                THROW_UNKNOWN_NODE_IO_ERROR( tempNodeName, wxString::Format( wxT( "LAYER %s" ),
+                WARN_UNKNOWN_NODE_IO_ERROR( tempNodeName, wxString::Format( wxT( "LAYER %s" ),
                                                                              Name ) );
             }
         }
@@ -572,13 +573,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode, PARSER_CONTEXT* aCo
             }
             else
             {
-                THROW_UNKNOWN_PARAMETER_IO_ERROR( sSubType, wxString::Format( wxT( "LAYER %s %s" ),
+                WARN_UNKNOWN_PARAMETER_IO_ERROR( sSubType, wxString::Format( wxT( "LAYER %s %s" ),
                                                                               Name, cNodeName ) );
             }
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxString::Format( wxT( "LAYER %s" ), Name ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, wxString::Format( wxT( "LAYER %s" ), Name ) );
         }
     }
 }
@@ -615,7 +616,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPERCODE::Parse( XNODE* aNode, PARSER_CONTEXT
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
         }
     }
 }
@@ -654,7 +655,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::Parse( XNODE* aNode, PARSER_CONTEX
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
     }
 }
@@ -662,6 +663,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::Parse( XNODE* aNode, PARSER_CONTEX
 
 bool CADSTAR_PCB_ARCHIVE_PARSER::CADSTAR_PAD_SHAPE::IsPadShape( XNODE* aNode )
 {
+    if( !aNode )
+        return false;
+
     wxString aNodeName = aNode->GetName();
 
     if( aNodeName == wxT( "ANNULUS" ) || aNodeName == wxT( "BULLET" ) || aNodeName == wxT( "ROUND" )
@@ -734,7 +738,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::CADSTAR_PAD_SHAPE::Parse( XNODE* aNode, PARSER_
             }
             else
             {
-                THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
+                WARN_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
             }
 
             CheckNoNextNodes( aNode->GetChildren() );
@@ -754,12 +758,20 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADREASSIGN::Parse( XNODE* aNode, PARSER_CONTEX
 
     LayerID = GetXmlAttributeIDString( aNode, 0 );
 
-    if( CADSTAR_PAD_SHAPE::IsPadShape( aNode->GetChildren() ) )
-        Shape.Parse( aNode->GetChildren(), aContext );
-    else
-        THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
+    XNODE* shapeNode = aNode->GetChildren();
 
-    CheckNoNextNodes( aNode->GetChildren() );
+    if( CADSTAR_PAD_SHAPE::IsPadShape( shapeNode ) )
+    {
+        Shape.Parse( shapeNode, aContext );
+        HasShape = true;
+    }
+    else
+    {
+        wxString found = shapeNode ? shapeNode->GetName() : wxString( "(empty)" );
+        WARN_UNKNOWN_NODE_IO_ERROR( found, aNode->GetName() );
+    }
+
+    CheckNoNextNodes( shapeNode );
 }
 
 
@@ -803,7 +815,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADCODE::Parse( XNODE* aNode, PARSER_CONTEXT* a
                 else if( subNodeName == wxT( "OVERSIZE" ) )
                     DrillOversize = GetXmlAttributeIDLong( subNode, 0 );
                 else
-                    THROW_UNKNOWN_NODE_IO_ERROR( subNode->GetName(), location );
+                    WARN_UNKNOWN_NODE_IO_ERROR( subNode->GetName(), location );
             }
         }
         else if( cNodeName == wxT( "DRILLLENGTH" ) )
@@ -826,11 +838,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADCODE::Parse( XNODE* aNode, PARSER_CONTEXT* a
         {
             PADREASSIGN reassign;
             reassign.Parse( cNode, aContext );
-            Reassigns.insert( std::make_pair( reassign.LayerID, reassign.Shape ) );
+
+            if( reassign.HasShape )
+                Reassigns.insert( std::make_pair( reassign.LayerID, reassign.Shape ) );
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
         }
     }
 }
@@ -842,12 +856,20 @@ void CADSTAR_PCB_ARCHIVE_PARSER::VIAREASSIGN::Parse( XNODE* aNode, PARSER_CONTEX
 
     LayerID = GetXmlAttributeIDString( aNode, 0 );
 
-    if( CADSTAR_PAD_SHAPE::IsPadShape( aNode->GetChildren() ) )
-        Shape.Parse( aNode->GetChildren(), aContext );
-    else
-        THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
+    XNODE* shapeNode = aNode->GetChildren();
 
-    CheckNoNextNodes( aNode->GetChildren() );
+    if( CADSTAR_PAD_SHAPE::IsPadShape( shapeNode ) )
+    {
+        Shape.Parse( shapeNode, aContext );
+        HasShape = true;
+    }
+    else
+    {
+        wxString found = shapeNode ? shapeNode->GetName() : wxString( "(empty)" );
+        WARN_UNKNOWN_NODE_IO_ERROR( found, aNode->GetName() );
+    }
+
+    CheckNoNextNodes( shapeNode );
 }
 
 
@@ -889,18 +911,20 @@ void CADSTAR_PCB_ARCHIVE_PARSER::VIACODE::Parse( XNODE* aNode, PARSER_CONTEXT* a
                 if( subNodeName == wxT( "OVERSIZE" ) )
                     DrillOversize = GetXmlAttributeIDLong( subNode, 0 );
                 else
-                    THROW_UNKNOWN_NODE_IO_ERROR( subNode->GetName(), location );
+                    WARN_UNKNOWN_NODE_IO_ERROR( subNode->GetName(), location );
             }
         }
         else if( cNodeName == wxT( "VIAREASSIGN" ) )
         {
             VIAREASSIGN reassign;
             reassign.Parse( cNode, aContext );
-            Reassigns.insert( std::make_pair( reassign.LayerID, reassign.Shape ) );
+
+            if( reassign.HasShape )
+                Reassigns.insert( std::make_pair( reassign.LayerID, reassign.Shape ) );
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
         }
     }
 }
@@ -926,7 +950,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYERPAIR::Parse( XNODE* aNode, PARSER_CONTEXT*
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), location );
+            WARN_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), location );
         }
 
         CheckNoNextNodes( aNode->GetChildren() );
@@ -1000,7 +1024,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TECHNOLOGY_SECTION::Parse( XNODE* aNode, PARSER
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "TECHNOLOGY" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "TECHNOLOGY" ) );
         }
     }
 }
@@ -1068,7 +1092,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_COPPER::Parse( XNODE* aNode, PARSER_C
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
         }
     }
 }
@@ -1116,14 +1140,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_AREA::Parse( XNODE* aNode, PARSER_CON
                 else if( xmlAttribute->GetValue() == wxT( "NO_VIAS" ) )
                     NoVias = true;
                 else
-                    THROW_UNKNOWN_PARAMETER_IO_ERROR( xmlAttribute->GetValue(), location );
+                    WARN_UNKNOWN_PARAMETER_IO_ERROR( xmlAttribute->GetValue(), location );
             }
 
             CheckNoChildNodes( cNode );
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
         }
     }
 }
@@ -1159,7 +1183,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD_EXITS::Parse( XNODE* aNode, PARSER_CONTEXT*
         else if( xmlAttribute->GetValue() == wxT( "SW" ) )
             SouthWest = true;
         else
-            THROW_UNKNOWN_PARAMETER_IO_ERROR( xmlAttribute->GetValue(), wxT( "EXITS" ) );
+            WARN_UNKNOWN_PARAMETER_IO_ERROR( xmlAttribute->GetValue(), wxT( "EXITS" ) );
     }
 
     CheckNoChildNodes( aNode );
@@ -1197,7 +1221,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_PAD::Parse( XNODE* aNode, PARSER_CONT
         else if( cNodeName == wxT( "PT" ) )
             Position.Parse( cNode, aContext );
         else
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
     }
 }
 
@@ -1232,7 +1256,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::ARROW::Parse( XNODE* aNode, PARSER_C
             else if( arrowStyleStr == wxT( "DIMENSION_ARROWCLOSEDFILLED" ) )
                 ArrowStyle = STYLE::CLOSED_FILLED;
             else
-                THROW_UNKNOWN_PARAMETER_IO_ERROR( arrowStyleStr, cNodeName );
+                WARN_UNKNOWN_PARAMETER_IO_ERROR( arrowStyleStr, cNodeName );
         }
         else if( cNodeName == wxT( "ARROWANGLEA" ) )
         {
@@ -1241,12 +1265,12 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::ARROW::Parse( XNODE* aNode, PARSER_C
         }
         else if( cNodeName == wxT( "ARROWANGLEB" ) )
         {
-            UpperAngle            = GetXmlAttributeIDLong( cNode, 0 );
+            LowerAngle            = GetXmlAttributeIDLong( cNode, 0 );
             lowerAngleInitialised = true;
         }
         else
         {
-            THROW_UNKNOWN_PARAMETER_IO_ERROR( cNodeName, wxT( "DIMARROW" ) );
+            WARN_UNKNOWN_PARAMETER_IO_ERROR( cNodeName, wxT( "DIMARROW" ) );
         }
     }
 
@@ -1271,8 +1295,17 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::TEXTFORMAT::Parse( XNODE* aNode,
 
     XNODE* cNode = aNode->GetChildren();
 
-    if( !cNode || cNode->GetName() != wxT( "TXTSTYLE" ) )
-        THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "DIMTEXT" ) );
+    if( !cNode )
+    {
+        WARN_UNKNOWN_NODE_IO_ERROR( wxT( "(empty)" ), wxT( "DIMTEXT" ) );
+        return;
+    }
+
+    if( cNode->GetName() != wxT( "TXTSTYLE" ) )
+    {
+        WARN_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "DIMTEXT" ) );
+        return;
+    }
 
     wxString styleStr = GetXmlAttributeIDString( cNode, 0 );
 
@@ -1281,7 +1314,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::TEXTFORMAT::Parse( XNODE* aNode,
     else if( styleStr == wxT( "DIMENSION_EXTERNAL" ) )
         Style = STYLE::OUTSIDE;
     else
-        THROW_UNKNOWN_PARAMETER_IO_ERROR( styleStr, wxT( "TXTSTYLE" ) );
+        WARN_UNKNOWN_PARAMETER_IO_ERROR( styleStr, wxT( "TXTSTYLE" ) );
 
     CheckNoNextNodes( cNode );
 }
@@ -1318,7 +1351,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::EXTENSION_LINE::Parse( XNODE* aNode,
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "EXTLINE" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "EXTLINE" ) );
         }
     }
 
@@ -1382,7 +1415,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::LINE::Parse( XNODE* aNode, PARSER_CO
             else if( styleStr == wxT( "DIMENSION_EXTERNAL" ) )
                 Style = STYLE::EXTERNAL;
             else
-                THROW_UNKNOWN_PARAMETER_IO_ERROR( styleStr, cNodeName );
+                WARN_UNKNOWN_PARAMETER_IO_ERROR( styleStr, cNodeName );
         }
         else if( noOfPoints < requiredNoOfPoints && cNodeName == wxT( "PT" ) )
         {
@@ -1401,7 +1434,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::LINE::Parse( XNODE* aNode, PARSER_CO
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
     }
 
@@ -1448,9 +1481,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode, PARSER_CONTEXT*
         { wxT( "DIMENSION_ANGULAR" ),    SUBTYPE::ANGULAR } };
 
     if( subTypeMap.find( subTypeStr ) == subTypeMap.end() )
-        THROW_UNKNOWN_PARAMETER_IO_ERROR( subTypeStr, aNode->GetName() );
-
-    Subtype   = subTypeMap[subTypeStr];
+    {
+        WARN_UNKNOWN_PARAMETER_IO_ERROR( subTypeStr, aNode->GetName() );
+        Subtype = SUBTYPE::ORTHOGONAL;
+    }
+    else
+    {
+        Subtype = subTypeMap[subTypeStr];
+    }
     Precision = GetXmlAttributeIDLong( aNode, 3 );
 
     XNODE* cNode = aNode->GetChildren();
@@ -1522,7 +1560,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode, PARSER_CONTEXT*
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
     }
 }
@@ -1591,13 +1629,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode, PARSER_CONTEXT
                 }
                 else
                 {
-                    THROW_UNKNOWN_NODE_IO_ERROR( dimensionNode->GetName(), cNodeName );
+                    WARN_UNKNOWN_NODE_IO_ERROR( dimensionNode->GetName(), cNodeName );
                 }
             }
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
     }
 
@@ -1632,7 +1670,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LIBRARY::Parse( XNODE* aNode, PARSER_CONTEXT* a
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
 
         aContext->CheckPointCallback();
@@ -1683,7 +1721,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::CADSTAR_BOARD::Parse( XNODE* aNode, PARSER_CONT
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
         }
     }
 }
@@ -1738,7 +1776,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::AREA::Parse( XNODE* aNode, PARSER_CONTEXT* aCon
                 else if( xmlAttribute->GetValue() == wxT( "NO_VIAS" ) )
                     NoVias = true;
                 else
-                    THROW_UNKNOWN_PARAMETER_IO_ERROR( xmlAttribute->GetValue(), location );
+                    WARN_UNKNOWN_PARAMETER_IO_ERROR( xmlAttribute->GetValue(), location );
             }
 
             CheckNoChildNodes( cNode );
@@ -1763,7 +1801,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::AREA::Parse( XNODE* aNode, PARSER_CONTEXT* aCon
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
         }
     }
 }
@@ -1793,7 +1831,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PIN_ATTRIBUTE::Parse( XNODE* aNode, PARSER_CONT
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
     }
 }
@@ -1832,7 +1870,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADEXCEPTION::Parse( XNODE* aNode, PARSER_CONTE
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
     }
 }
@@ -1924,7 +1962,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode, PARSER_CONTEXT*
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
     }
 
@@ -1947,7 +1985,7 @@ CADSTAR_PCB_ARCHIVE_PARSER::TESTLAND_SIDE CADSTAR_PCB_ARCHIVE_PARSER::ParseTestl
     else if( side == wxT( "BOTH_SIDES" ) )
         return TESTLAND_SIDE::BOTH;
     else
-        THROW_UNKNOWN_PARAMETER_IO_ERROR( side, aNode->GetName() );
+        WARN_UNKNOWN_PARAMETER_IO_ERROR( side, aNode->GetName() );
 
     return TESTLAND_SIDE::NONE;
 }
@@ -1986,7 +2024,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::JUNCTION_PCB::Parse( XNODE* aNode,
         else if( cNode->GetName() == wxT( "TRUNKREF" ) )
             TrunkID = GetXmlAttributeIDString( cNode, 0 );
         else
-            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
     }
 }
 
@@ -2018,7 +2056,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::VIA::Parse( XNODE* aNode, PARSER_CONTE
         else if( cNode->GetName() == wxT( "TRUNKREF" ) )
             TrunkID = GetXmlAttributeIDString( cNode, 0 );
         else
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
     }
 }
 
@@ -2087,7 +2125,7 @@ XNODE* CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE_VERTEX::Parse( XNODE* aNode,
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( nextNode->GetName(), wxT( "ROUTE" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( nextNode->GetName(), wxT( "ROUTE" ) );
         }
 
         prevNode = nextNode;
@@ -2129,7 +2167,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE::Parse( XNODE* aNode, PARSER_CON
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "ROUTE" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "ROUTE" ) );
         }
     }
 }
@@ -2168,7 +2206,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::CONNECTION_PCB::Parse( XNODE* aNode,
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "CONN" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "CONN" ) );
         }
     }
 }
@@ -2221,7 +2259,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::Parse( XNODE* aNode, PARSER_CONTEXT* a
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "NET" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "NET" ) );
         }
     }
 }
@@ -2298,7 +2336,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::POURING::Parse( XNODE* aNode, PARSER_
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "POURING" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "POURING" ) );
         }
     }
 }
@@ -2352,7 +2390,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::Parse( XNODE* aNode, PARSER_CONTEXT* 
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "TEMPLATE" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "TEMPLATE" ) );
         }
     }
 }
@@ -2383,7 +2421,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::COPPER_TERM::Parse( XNODE* aNod
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
     }
 }
@@ -2413,7 +2451,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::Parse( XNODE* aNode, PARSER_CON
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "NETREF" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "NETREF" ) );
         }
     }
 }
@@ -2469,7 +2507,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::Parse( XNODE* aNode, PARSER_CONTEXT* aC
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "TEMPLATE" ) );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, wxT( "TEMPLATE" ) );
         }
     }
 }
@@ -2520,7 +2558,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DRILL_TABLE::Parse( XNODE* aNode, PARSER_CONTEX
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
     }
 }
@@ -2546,9 +2584,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode, PARSER_CONTEXT* aC
             wxString nsString = GetXmlAttributeIDString( cNode, 0 );
 
             if( netSynchMap.find( nsString ) == netSynchMap.end() )
-                THROW_UNKNOWN_PARAMETER_IO_ERROR( nsString, aNode->GetName() );
-
-            NetSynch       = netSynchMap[nsString];
+            {
+                WARN_UNKNOWN_PARAMETER_IO_ERROR( nsString, aNode->GetName() );
+                NetSynch = NETSYNCH::WARNING;
+            }
+            else
+            {
+                NetSynch = netSynchMap[nsString];
+            }
             netSynchParsed = true;
         }
         else if( cNodeName == wxT( "GROUP" ) )
@@ -2637,7 +2680,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode, PARSER_CONTEXT* aC
                 }
                 else
                 {
-                    THROW_UNKNOWN_NODE_IO_ERROR( dimensionNode->GetName(), cNodeName );
+                    WARN_UNKNOWN_NODE_IO_ERROR( dimensionNode->GetName(), cNodeName );
                 }
             }
 
@@ -2660,7 +2703,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode, PARSER_CONTEXT* aC
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
+            WARN_UNKNOWN_NODE_IO_ERROR( cNodeName, aNode->GetName() );
         }
 
         aContext->CheckPointCallback();

@@ -28,6 +28,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h>
+#include <pcbnew/pcb_io/cadstar/cadstar_pcb_archive_parser.h>
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 #include <board.h>
@@ -35,6 +36,7 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <zone.h>
+#include <wx/log.h>
 
 
 struct CADSTAR_IMPORT_FIXTURE
@@ -145,6 +147,45 @@ BOOST_AUTO_TEST_CASE( CadstarRevision7FormatImport )
     BOOST_CHECK( foundRouteCodeWidth );
 
     delete board;
+}
+
+
+/**
+ * A PADREASSIGN/VIAREASSIGN whose shape node is unknown (e.g. from a newer CADSTAR version)
+ * must warn and continue rather than throwing, and must not report a (default-circle) shape so
+ * the caller can skip the bogus reassignment instead of corrupting the pad geometry.
+ */
+BOOST_AUTO_TEST_CASE( UnknownReassignShapeIsSkipped )
+{
+    wxLogNull suppress;
+
+    XNODE padReassign( wxXML_ELEMENT_NODE, wxT( "PADREASSIGN" ) );
+    padReassign.AddAttribute( wxT( "attr0" ), wxT( "TOP" ) );
+    padReassign.AddChild( new XNODE( wxXML_ELEMENT_NODE, wxT( "FUTURE_SHAPE" ) ) );
+
+    CADSTAR_PCB_ARCHIVE_PARSER::PADREASSIGN          padParser;
+    CADSTAR_PCB_ARCHIVE_PARSER::PARSER_CONTEXT       ctx;
+
+    BOOST_CHECK_NO_THROW( padParser.Parse( &padReassign, &ctx ) );
+    BOOST_CHECK( !padParser.HasShape );
+
+    XNODE viaReassign( wxXML_ELEMENT_NODE, wxT( "VIAREASSIGN" ) );
+    viaReassign.AddAttribute( wxT( "attr0" ), wxT( "TOP" ) );
+    viaReassign.AddChild( new XNODE( wxXML_ELEMENT_NODE, wxT( "FUTURE_SHAPE" ) ) );
+
+    CADSTAR_PCB_ARCHIVE_PARSER::VIAREASSIGN viaParser;
+
+    BOOST_CHECK_NO_THROW( viaParser.Parse( &viaReassign, &ctx ) );
+    BOOST_CHECK( !viaParser.HasShape );
+
+    // An empty reassignment (no shape child at all) must not crash either
+    XNODE emptyReassign( wxXML_ELEMENT_NODE, wxT( "PADREASSIGN" ) );
+    emptyReassign.AddAttribute( wxT( "attr0" ), wxT( "TOP" ) );
+
+    CADSTAR_PCB_ARCHIVE_PARSER::PADREASSIGN emptyParser;
+
+    BOOST_CHECK_NO_THROW( emptyParser.Parse( &emptyReassign, &ctx ) );
+    BOOST_CHECK( !emptyParser.HasShape );
 }
 
 
