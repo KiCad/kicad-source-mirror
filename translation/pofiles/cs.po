@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-23 14:42-0700\n"
-"PO-Revision-Date: 2026-07-03 08:02+0000\n"
+"PO-Revision-Date: 2026-07-06 11:09+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -12823,9 +12823,8 @@ msgid "EasyEDA (JLCEDA) Pro files"
 msgstr "EasyEDA (JLCEDA) Pro soubory"
 
 #: common/wildcards_and_files_ext.cpp:354
-#, fuzzy
 msgid "DipTrace files"
-msgstr "Zip soubory"
+msgstr "soubory DipTrace"
 
 #: common/wildcards_and_files_ext.cpp:360
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:338
@@ -22757,14 +22756,14 @@ msgid "KiCad database library files"
 msgstr "Soubory databázové knihovny KiCad"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported DipTrace schematic format version %d."
-msgstr "Nepodporovaná verze RPC %d."
+msgstr "Schéma DipTrace v nepodporované verzi formátu %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:284
 #, c-format
 msgid "DipTrace import: unexpected error at offset 0x%06zX: %s"
-msgstr ""
+msgstr "DipTrace import: neočekávaná chyba na pozici 0x%06zX: %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:298
 #, c-format
@@ -33127,13 +33126,12 @@ msgid "Import a non-KiCad schematic file to KiCad format"
 msgstr "Importovat soubor DPS jiný než KiCad do formátu KiCad"
 
 #: kicad/cli/command_sch_import.cpp:44
-#, fuzzy
 msgid ""
 "Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
 "ltspice, pads, diptrace (default: auto)"
 msgstr ""
-"Nápověda formátu vstupu: auto, pads, altium, eagle, cadstar, fabmaster, "
-"pcad, solidworks (výchozí: auto)"
+"Nápověda formátu vstupu: auto, altium, eagle, cadstar, easyeda, easyedapro, "
+"ltspice, pads, diptrace (výchozí: auto)"
 
 #: kicad/cli/command_sch_upgrade.cpp:31
 msgid "Upgrade the schematic file's format to the latest one"
@@ -33817,9 +33815,8 @@ msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "Importovat soubory projektu gEDA / Lepton EDA"
 
 #: kicad/import_project.cpp:230
-#, fuzzy
 msgid "Import DipTrace Project Files"
-msgstr "Import souborů projektu Eagle"
+msgstr "Importovat soubory DipTrace projektu"
 
 #: kicad/jobs_runner.cpp:247
 #, c-format
@@ -34059,14 +34056,12 @@ msgid "Import gEDA or Lepton EDA schematic and PCB layout"
 msgstr "Importovat schéma a rozložení DPS gEDA nebo Lepton EDA"
 
 #: kicad/menubar.cpp:154
-#, fuzzy
 msgid "DipTrace Project..."
-msgstr "Otevřít projekt..."
+msgstr "DipTrace Projekt..."
 
 #: kicad/menubar.cpp:155
-#, fuzzy
 msgid "Import DipTrace schematic and PCB (*.dch, *.dip)"
-msgstr "Import CADSTAR archívu schématu a DPS (*.csa, *.cpa)"
+msgstr "Import DipTrace schématu a DPS (*.dch, *.dip)"
 
 #: kicad/menubar.cpp:184
 msgid "Edit Advanced Config..."
@@ -55785,9 +55780,9 @@ msgid "DipTrace import: invalid outline vertex count %d."
 msgstr "Úplný počet pouzder: %d."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1264
-#, fuzzy, c-format
+#, c-format
 msgid "DipTrace import: invalid layer count %d."
-msgstr "Úplný počet pouzder: %d."
+msgstr "DipTrace import: neplatný počet vrstev %d."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1363
 #, c-format
@@ -62086,7 +62081,7 @@ msgstr "Pokusí se dokončit aktuální trasu k nejbližšímu konci vzdušného
 
 #: pcbnew/tools/pcb_actions.cpp:2778
 msgid "Route Selected"
-msgstr "Trasovat vybrané"
+msgstr "Táhnout spoj z vybrané"
 
 #: pcbnew/tools/pcb_actions.cpp:2779
 msgid "Sequentially route selected items from ratsnest anchor."
@@ -62094,7 +62089,7 @@ msgstr "Postupně trasuje vybrané položky od kotvy vzdušného spoje."
 
 #: pcbnew/tools/pcb_actions.cpp:2787
 msgid "Route Selected From Other End"
-msgstr "Trasovat vybrané od druhého konce"
+msgstr "Táhnout spoj z druhého konce"
 
 #: pcbnew/tools/pcb_actions.cpp:2788
 msgid "Sequentially route selected items from other end of ratsnest anchor."
