@@ -602,6 +602,12 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
 
     // Stores pairs of (anchor, item) where anchor == 0 -> SEG.A, anchor == 1 -> SEG.B
     std::map<VECTOR2I, std::vector<std::pair<int, EDA_ITEM*>>> connections;
+
+    // Canonical key each (item, anchor) endpoint was filed under.  Re-running findInsertionPoint()
+    // during the walk is order-dependent and could resolve to a different bucket once the map is
+    // fully populated, so the walk reuses these stored keys instead.
+    std::map<std::pair<EDA_ITEM*, int>, VECTOR2I> connectionKeys;
+
     std::deque<EDA_ITEM*> toCheck;
 
     auto closeEnough =
@@ -630,8 +636,15 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
         if( std::optional<SEG> seg = getStartEndPoints( item ) )
         {
             toCheck.push_back( item );
-            connections[findInsertionPoint( seg->A )].emplace_back( std::make_pair( 0, item ) );
-            connections[findInsertionPoint( seg->B )].emplace_back( std::make_pair( 1, item ) );
+
+            VECTOR2I keyA = findInsertionPoint( seg->A );
+            VECTOR2I keyB = findInsertionPoint( seg->B );
+
+            connections[keyA].emplace_back( std::make_pair( 0, item ) );
+            connections[keyB].emplace_back( std::make_pair( 1, item ) );
+
+            connectionKeys[{ item, 0 }] = keyA;
+            connectionKeys[{ item, 1 }] = keyB;
         }
     }
 
@@ -714,29 +727,34 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
                     }
                 };
 
+        // Walk by anchor index rather than by point.  MCAD splines leave sub-chainingEpsilon gaps
+        // at the junctions, so neighbouring endpoints do not compare equal and a point-based lookup
+        // would dead-end the walk; connectionKeys maps each (item, anchor) back to the bucket it was
+        // filed under.
+
         // aDirection == true for walking "right" and appending to the end of points
         // false for walking "left" and prepending to the beginning
-        std::function<void( EDA_ITEM*, const VECTOR2I&, bool )> process =
-                [&]( EDA_ITEM* aItem, const VECTOR2I& aAnchor, bool aDirection )
+        std::function<void( EDA_ITEM*, int, bool )> process =
+                [&]( EDA_ITEM* aItem, int aAnchor, bool aDirection )
                 {
                     if( aItem->GetFlags() & SKIP_STRUCT )
                         return;
 
                     aItem->SetFlags( SKIP_STRUCT );
 
-                    insert( aItem, aAnchor, aDirection );
-
                     std::optional<SEG> anchors = getStartEndPoints( aItem );
                     wxASSERT( anchors );
 
-                    VECTOR2I nextAnchor = ( aAnchor == anchors->A ) ? anchors->B : anchors->A;
+                    insert( aItem, aAnchor == 0 ? anchors->A : anchors->B, aDirection );
 
-                    for( std::pair<int, EDA_ITEM*> pair : connections[nextAnchor] )
+                    int nextAnchor = 1 - aAnchor;
+
+                    for( std::pair<int, EDA_ITEM*> pair : connections[connectionKeys.at( { aItem, nextAnchor } )] )
                     {
                         if( pair.second == aItem )
                             continue;
 
-                        process( pair.second, nextAnchor, aDirection );
+                        process( pair.second, pair.first, aDirection );
                     }
                 };
 
@@ -749,22 +767,24 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
         if( !candidate->IsType( { PCB_ARC_T, PCB_SHAPE_LOCATE_ARC_T } ) )
             insert( candidate, anchors->A, true );
 
-        process( candidate, anchors->B, true );
+        process( candidate, 1, true );
 
         // check for any candidates on the "left"
         EDA_ITEM* left = nullptr;
+        int       leftAnchor = 0;
 
-        for( std::pair<int, EDA_ITEM*> possibleLeft : connections[anchors->A] )
+        for( std::pair<int, EDA_ITEM*> possibleLeft : connections[connectionKeys.at( { candidate, 0 } )] )
         {
             if( possibleLeft.second != candidate )
             {
                 left = possibleLeft.second;
+                leftAnchor = possibleLeft.first;
                 break;
             }
         }
 
         if( left )
-            process( left, anchors->A, false );
+            process( left, leftAnchor, false );
 
         if( outline.PointCount() < 3
                 || !closeEnough( outline.GetPoint( 0 ), outline.GetPoint( -1 ), chainingEpsilon ) )

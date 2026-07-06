@@ -32,6 +32,8 @@ class PCB_BASE_FRAME;
 
 class CONVERT_TOOL : public PCB_TOOL_BASE
 {
+    friend class CONVERT_TOOL_TEST_FIXTURE;
+
 public:
     CONVERT_TOOL();
     virtual ~CONVERT_TOOL();
