@@ -1374,12 +1374,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     // with no reporter, since the reporter path has reporting side effects.
     std::unordered_map<wxString, bool> conditionCache;
 
-    auto processConstraint =
+    auto reportConstraintHeader =
             [&]( const DRC_ENGINE_CONSTRAINT* c )
             {
-                bool implicit = c->parentRule && c->parentRule->IsImplicit();
-
                 REPORT( "" )
+
+                bool implicit = c->parentRule && c->parentRule->IsImplicit();
 
                 switch( c->constraint.m_Type )
                 {
@@ -1579,26 +1579,71 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 default:
                     REPORT( wxString::Format( _( "Checking %s." ), EscapeHTML( c->constraint.GetName() ) ) )
                 }
+            };
+
+    auto checkCondition =
+            [&]( const DRC_ENGINE_CONSTRAINT* c, REPORTER* r )
+            {
+                bool condMatched = false;
+
+                if( r )
+                {
+                    condMatched = c->condition->EvaluateFor( a, b, c->constraint.m_Type, aLayer, r );
+                }
+                else
+                {
+                    const wxString& expr = c->condition->GetExpression();
+                    auto            it = conditionCache.find( expr );
+
+                    if( it != conditionCache.end() )
+                    {
+                        condMatched = it->second;
+                    }
+                    else
+                    {
+                        condMatched = c->condition->EvaluateFor( a, b, c->constraint.m_Type, aLayer, r );
+                        conditionCache[expr] = condMatched;
+                    }
+                }
+
+                return condMatched;
+            };
+
+    auto processConstraint =
+            [&]( const DRC_ENGINE_CONSTRAINT* c )
+            {
+                bool implicit = c->parentRule && c->parentRule->IsImplicit();
+
+                if( implicit && c->parentRule->GetImplicitSource() == DRC_IMPLICIT_SOURCE::NET_CLASS )
+                {
+                    if( c->constraint.m_Type == CLEARANCE_CONSTRAINT )
+                    {
+                        if( a_is_non_copper || b_is_non_copper )
+                        {
+                            reportConstraintHeader( c );
+                            REPORT( _( "Netclass clearances apply only between copper items." ) )
+                            return;
+                        }
+                    }
+
+                    if( !checkCondition( c, nullptr ) )
+                        return;
+                }
+
+                reportConstraintHeader( c );
 
                 if( c->constraint.m_Type == CLEARANCE_CONSTRAINT )
                 {
-                    if( a_is_non_copper || b_is_non_copper )
+                    if( a_is_non_copper )
                     {
-                        if( implicit )
-                        {
-                            REPORT( _( "Netclass clearances apply only between copper items." ) )
-                        }
-                        else if( a_is_non_copper )
-                        {
-                            REPORT( wxString::Format( _( "%s contains no copper.  Rule ignored." ),
-                                                      EscapeHTML( a->GetItemDescription( this, true ) ) ) )
-                        }
-                        else if( b_is_non_copper )
-                        {
-                            REPORT( wxString::Format( _( "%s contains no copper.  Rule ignored." ),
-                                                      EscapeHTML( b->GetItemDescription( this, true ) ) ) )
-                        }
-
+                        REPORT( wxString::Format( _( "%s contains no copper.  Constraint ignored." ),
+                                                  EscapeHTML( a->GetItemDescription( this, true ) ) ) )
+                        return;
+                    }
+                    else if( b_is_non_copper )
+                    {
+                        REPORT( wxString::Format( _( "%s contains no copper.  Constraint ignored." ),
+                                                  EscapeHTML( b->GetItemDescription( this, true ) ) ) )
                         return;
                     }
                 }
@@ -1769,27 +1814,12 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                                   EscapeHTML( c->condition->GetExpression() ) ) )
                     }
 
-                    bool condMatched = false;
+                    bool condMatched;
 
-                    if( aReporter )
-                    {
-                        condMatched = c->condition->EvaluateFor( a, b, c->constraint.m_Type, aLayer, aReporter );
-                    }
+                    if( implicit && c->parentRule->GetImplicitSource() == DRC_IMPLICIT_SOURCE::NET_CLASS )
+                        condMatched = true;
                     else
-                    {
-                        const wxString& expr = c->condition->GetExpression();
-                        auto            it = conditionCache.find( expr );
-
-                        if( it != conditionCache.end() )
-                        {
-                            condMatched = it->second;
-                        }
-                        else
-                        {
-                            condMatched = c->condition->EvaluateFor( a, b, c->constraint.m_Type, aLayer, nullptr );
-                            conditionCache[expr] = condMatched;
-                        }
-                    }
+                        condMatched = checkCondition( c, aReporter );
 
                     if( condMatched )
                     {
