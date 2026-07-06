@@ -30,11 +30,13 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <pcb_shape.h>
 #include <netinfo.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
 
 #include <map>
+#include <vector>
 #include <wx/filename.h>
 
 
@@ -225,6 +227,117 @@ BOOST_AUTO_TEST_CASE( TextJustification )
 
     // Two instances of "G  SDA SCL V+" on F.SilkS (one per connector)
     BOOST_CHECK_EQUAL( topPinLabelCount, 2 );
+}
+
+
+/**
+ * Verify that Eagle user-layer numbers 160-163 and 170-178 map to the expected KiCad
+ * layers when importing footprints from a library.
+ *
+ * Test for https://gitlab.com/kicad/code/kicad/-/issues/18766
+ *
+ * The test library contains a footprint with wires on Eagle layers 160-161 (existing
+ * Eco1/Eco2 mapping), 162 (User.Drawings), 163 (Margin), and 170-178 (User.1-User.9).
+ * Each wire is at a distinct Y-offset so we can match which Eagle layer mapped to which
+ * KiCad layer by checking the line's position.
+ */
+BOOST_AUTO_TEST_CASE( UserLayerMapping )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/eagle/lbr/user-layers-test.lbr";
+
+    BOOST_REQUIRE_MESSAGE( wxFileName::FileExists( dataPath ),
+                           "Test library file not found: " + dataPath );
+
+    PCB_IO_EAGLE eaglePlugin;
+
+    FOOTPRINT* fp = nullptr;
+
+    try
+    {
+        fp = eaglePlugin.FootprintLoad( dataPath, wxT( "USER_LAYERS_TEST" ), false, nullptr );
+    }
+    catch( const IO_ERROR& e )
+    {
+        BOOST_FAIL( "IO_ERROR loading Eagle footprint: " + e.What().ToStdString() );
+    }
+    catch( const std::exception& e )
+    {
+        BOOST_FAIL( std::string( "Exception loading Eagle footprint: " ) + e.what() );
+    }
+
+    std::unique_ptr<FOOTPRINT> guard( fp );
+
+    BOOST_REQUIRE( fp );
+
+    // Each wire in the test library is on a unique Eagle layer at a unique Y-offset (mm).
+    // Wires are 10mm long (x=-5 to x=5) and spaced 2mm apart starting at y=5mm.
+    struct LAYER_CHECK
+    {
+        int          yOffsetNm;  // Y-offset in nanometers
+        PCB_LAYER_ID expectedLayer;
+        const char*  description;
+    };
+
+    // Y is negated because KiCad's Y axis is inverted relative to Eagle's
+    // clang-format off
+    std::vector<LAYER_CHECK> checks = {
+        {  -5000000, Eco1_User,  "Eagle 160 -> Eco1.User" },
+        {  -7000000, Eco2_User,  "Eagle 161 -> Eco2.User" },
+        {  -9000000, Dwgs_User,  "Eagle 162 -> Dwgs.User" },
+        { -11000000, Margin,     "Eagle 163 -> Margin" },
+        { -13000000, User_1,     "Eagle 170 -> User.1" },
+        { -15000000, User_2,     "Eagle 171 -> User.2" },
+        { -17000000, User_3,     "Eagle 172 -> User.3" },
+        { -19000000, User_4,     "Eagle 173 -> User.4" },
+        { -21000000, User_5,     "Eagle 174 -> User.5" },
+        { -23000000, User_6,     "Eagle 175 -> User.6" },
+        { -25000000, User_7,     "Eagle 176 -> User.7" },
+        { -27000000, User_8,     "Eagle 177 -> User.8" },
+        { -29000000, User_9,     "Eagle 178 -> User.9" },
+    };
+    // clang-format on
+
+    // Collect all segment shapes keyed by Y midpoint (exact nm).
+    // Test wires are horizontal and at integer mm offsets, so midpoints are exact.
+    std::map<int, PCB_LAYER_ID> linesByY;
+
+    for( BOARD_ITEM* item : fp->GraphicalItems() )
+    {
+        if( item->Type() != PCB_SHAPE_T )
+            continue;
+
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+        if( shape->GetShape() != SHAPE_T::SEGMENT )
+            continue;
+
+        int yMid = ( shape->GetStart().y + shape->GetEnd().y ) / 2;
+
+        // A duplicate Y would let a stray segment mask a mis-imported wire.
+        BOOST_CHECK_MESSAGE( linesByY.emplace( yMid, shape->GetLayer() ).second,
+                             "Duplicate segment at y=" + std::to_string( yMid ) + "nm" );
+    }
+
+    BOOST_CHECK_EQUAL( linesByY.size(), checks.size() );
+
+    for( const LAYER_CHECK& check : checks )
+    {
+        auto it = linesByY.find( check.yOffsetNm );
+
+        BOOST_CHECK_MESSAGE( it != linesByY.end(),
+                             std::string( check.description )
+                                     + " - no line found at y=" + std::to_string( check.yOffsetNm )
+                                     + "nm" );
+
+        if( it != linesByY.end() )
+        {
+            BOOST_CHECK_MESSAGE( it->second == check.expectedLayer,
+                                 std::string( check.description )
+                                         + " - expected layer " + std::to_string( check.expectedLayer )
+                                         + " but got " + std::to_string( it->second ) );
+        }
+    }
 }
 
 

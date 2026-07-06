@@ -3107,6 +3107,41 @@ std::tuple<PCB_LAYER_ID, LSET, bool> PCB_IO_EAGLE::defaultKicadLayer( int aEagle
         kiLayer = Eco2_User;
         break;
 
+    case EAGLE_LAYER::USERDRAWINGS:
+        kiLayer = Dwgs_User;
+        break;
+    case EAGLE_LAYER::USERMARGIN:
+        kiLayer = Margin;
+        break;
+
+    case EAGLE_LAYER::USER1:
+        kiLayer = User_1;
+        break;
+    case EAGLE_LAYER::USER2:
+        kiLayer = User_2;
+        break;
+    case EAGLE_LAYER::USER3:
+        kiLayer = User_3;
+        break;
+    case EAGLE_LAYER::USER4:
+        kiLayer = User_4;
+        break;
+    case EAGLE_LAYER::USER5:
+        kiLayer = User_5;
+        break;
+    case EAGLE_LAYER::USER6:
+        kiLayer = User_6;
+        break;
+    case EAGLE_LAYER::USER7:
+        kiLayer = User_7;
+        break;
+    case EAGLE_LAYER::USER8:
+        kiLayer = User_8;
+        break;
+    case EAGLE_LAYER::USER9:
+        kiLayer = User_9;
+        break;
+
     // these will also appear in the ratsnest, so there's no need for a warning
     case EAGLE_LAYER::UNROUTED:
         kiLayer = Dwgs_User;

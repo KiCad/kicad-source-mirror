@@ -1435,7 +1435,18 @@ struct EAGLE_LAYER : public EAGLE_BASE
         INFO        = 97,
         GUIDE       = 98,
         USERLAYER1  = 160,
-        USERLAYER2  = 161
+        USERLAYER2  = 161,
+        USERDRAWINGS = 162,
+        USERMARGIN  = 163,
+        USER1       = 170,
+        USER2       = 171,
+        USER3       = 172,
+        USER4       = 173,
+        USER5       = 174,
+        USER6       = 175,
+        USER7       = 176,
+        USER8       = 177,
+        USER9       = 178
     };
 };
 
