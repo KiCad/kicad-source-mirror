@@ -22,7 +22,9 @@
 
 #include <algorithm>
 #include <base_units.h>
+#include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_data_model.h>
+#include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <page_info.h>
 #include <text_var_dependency.h>
@@ -157,6 +159,39 @@ BOOST_AUTO_TEST_CASE( DestructorAutoUnregisters )
     // Proxy destructor must clean up the index so no dangling pointer remains
     // for a future invalidation to match against.
     BOOST_CHECK_EQUAL( tracker.Index().ItemCount(), 0u );
+}
+
+
+BOOST_AUTO_TEST_CASE( RepeatedTextKeepsAllInstancesWithNegativeStep )
+{
+    // Regression: a repeated text used to lose every copy when the step was
+    // negative, because IsInsidePage() tested a phantom end point anchored to
+    // the bottom-right corner (text has no real end point). See #24309.
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
+    model.ClearList();
+
+    DS_DATA_ITEM_TEXT* text = new DS_DATA_ITEM_TEXT( wxT( "1" ) );
+    text->SetStart( 60.0, 60.0, LT_CORNER );
+    text->m_RepeatCount = 8;
+    text->m_IncrementLabel = 1;
+    text->m_IncrementVector = VECTOR2D( -5.0, -5.0 );
+    model.Append( text );
+
+    PAGE_INFO   page;
+    TITLE_BLOCK tb;
+
+    DS_DRAW_ITEM_LIST drawList( unityScale );
+    drawList.BuildDrawItemsList( page, tb );
+
+    int textCount = 0;
+
+    for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+    {
+        if( item->Type() == WSG_TEXT_T )
+            textCount++;
+    }
+
+    BOOST_CHECK_EQUAL( textCount, 8 );
 }
 
 
