@@ -172,6 +172,7 @@ set( QA_COMMON_SRCS
 
     # Job tests
     test_job_export_pcb_variants.cpp
+    test_job_export_sch_bom.cpp
     test_job_export_sch_plot.cpp
     test_job_sch_erc.cpp
     test_jobs_runner.cpp

@@ -32,6 +32,12 @@ public:
     wxString GetDefaultDescription() const override;
     wxString GetSettingsDialogTitle() const override;
 
+    // The variant the dialog works with. First list entry, or empty for default.
+    wxString GetSelectedVariant() const;
+
+    // Store a single dialog selection. Replaces the list so it cannot grow.
+    void SetSelectedVariant( const wxString& aVariant );
+
     // Basic options
     wxString m_filename;
 

@@ -587,15 +587,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
     sch->Project().ApplyTextVars( aJob->GetVarOverrides() );
 
-    wxString currentVariant;
+    wxString currentVariant = aBomJob->GetSelectedVariant();
 
-    if( !aBomJob->m_variantNames.empty() )
-    {
-        currentVariant = aBomJob->m_variantNames.front();
-
-        if( currentVariant != wxS( "all" ) )
-            sch->SetCurrentVariant( currentVariant );
-    }
+    if( !currentVariant.IsEmpty() && currentVariant != wxS( "all" ) )
+        sch->SetCurrentVariant( currentVariant );
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;

@@ -24,7 +24,7 @@
 
 
 JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
-    JOB( "bom", false),
+    JOB( "bom", false ),
     m_filename(),
 
     m_fieldDelimiter(),
@@ -85,6 +85,24 @@ JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
     m_params.emplace_back( new JOB_PARAM_LIST<wxString>( "variant_names",
                                                          &m_variantNames,
                                                          m_variantNames ) );
+}
+
+
+wxString JOB_EXPORT_SCH_BOM::GetSelectedVariant() const
+{
+    if( !m_variantNames.empty() )
+        return m_variantNames.front();
+
+    return wxEmptyString;
+}
+
+
+void JOB_EXPORT_SCH_BOM::SetSelectedVariant( const wxString& aVariant )
+{
+    m_variantNames.clear();
+
+    if( !aVariant.IsEmpty() )
+        m_variantNames.push_back( aVariant );
 }
 
 
