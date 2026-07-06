@@ -1058,7 +1058,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::CONNECTION_SCH::Parse( XNODE* aNode, P
         }
         else if( cNodeName == wxT( "PATH" ) )
         {
-            Path = ParseAllChildPoints( cNode, aContext, true );
+            Path = ParseAllChildVertices( cNode, aContext, true );
         }
         else if( cNodeName == wxT( "GROUPREF" ) )
         {
