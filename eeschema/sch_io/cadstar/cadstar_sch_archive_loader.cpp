@@ -1268,11 +1268,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
             // Connections in CADSTAR are always implied between symbols even if the route
             // doesn't start and end exactly at the connection points
-            if( conn.Path.size() < 1 || conn.Path.front() != start )
-                conn.Path.insert( conn.Path.begin(), start );
+            if( conn.Path.size() < 1 || conn.Path.front().End != start )
+                conn.Path.insert( conn.Path.begin(), VERTEX( VERTEX_TYPE::VT_POINT, start ) );
 
-            if( conn.Path.size() < 2 || conn.Path.back() != end )
-                conn.Path.push_back( end );
+            if( conn.Path.size() < 2 || conn.Path.back().End != end )
+                conn.Path.push_back( VERTEX( VERTEX_TYPE::VT_POINT, end ) );
 
             bool      firstPt  = true;
             bool      secondPt = false;
@@ -1281,8 +1281,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
             SHAPE_LINE_CHAIN wireChain; // Create a temp. line chain representing the connection
 
-            for( const POINT& pt : conn.Path )
-                wireChain.Append( getKiCadPoint( pt ) );
+            auto cadstarToKicadPoint = [this]( const VECTOR2I& aPoint ) -> VECTOR2I
+            {
+                return getKiCadPoint( aPoint );
+            };
+
+            for( const VERTEX& vertex : conn.Path )
+                vertex.AppendToChain( &wireChain, cadstarToKicadPoint, ARC_ACCURACY );
 
             // AUTO-FIX SHEET PINS
             //--------------------

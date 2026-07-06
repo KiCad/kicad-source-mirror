@@ -414,11 +414,11 @@ public:
 
         struct CONNECTION_SCH : CADSTAR_ARCHIVE_PARSER::NET::CONNECTION ///< "CONN" nodename
         {
-            LAYER_ID           LayerID; ///< Sheet on which the connection is drawn
-            std::vector<POINT> Path;
-            GROUP_ID           GroupID = wxEmptyString;
-            REUSEBLOCKREF      ReuseBlockRef;
-            LINECODE_ID        ConnectionLineCode;
+            LAYER_ID            LayerID; ///< Sheet on which the connection is drawn
+            std::vector<VERTEX> Path;
+            GROUP_ID            GroupID = wxEmptyString;
+            REUSEBLOCKREF       ReuseBlockRef;
+            LINECODE_ID         ConnectionLineCode;
 
             void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
