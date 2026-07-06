@@ -82,6 +82,7 @@ public:
 
 protected:
     void OnBoardChanged( wxCommandEvent& event );
+    void OnCharHook( wxKeyEvent& aEvent ) override;
 
 private:
     void onTextEnter( wxCommandEvent& event ) override;
