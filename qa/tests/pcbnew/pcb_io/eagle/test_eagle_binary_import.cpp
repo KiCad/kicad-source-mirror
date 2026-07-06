@@ -31,6 +31,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <netinfo.h>
+#include <pad.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
 #include <zone.h>
@@ -431,6 +432,58 @@ BOOST_AUTO_TEST_CASE( LoadIssue24812CopperPours )
         return;
 
     BOOST_CHECK_GE( copperPours( board.get() ).size(), 2u );
+}
+
+
+/**
+ * Regression test for issue 24827. Eagle 4.x pad and SMD records carry the same
+ * rotation word and offset-19 name as the 5.x layout, but their signature clears
+ * the bits that distinguished the two layouts, so every pad bound the Eagle 3.x
+ * short row and read an empty name. Contactrefs resolve to a pad by name, so all
+ * of an element's pads collapsed onto whichever signal was written last, wiring
+ * every multi-pin part to a single net. brenner57e is a 4.x board; a correct
+ * decode names each pad and keeps its signals distinct. The board is not
+ * license-clean and is not committed, so this loads only when present locally.
+ */
+BOOST_AUTO_TEST_CASE( LoadIssue24827PadNamesAndSignals )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24827_brenner57e.brd" ) );
+
+    if( !board )
+        return;
+
+    BOOST_REQUIRE_GT( board->Footprints().size(), 0u );
+
+    int padsWithNumber = 0;
+    int padsWithoutNumber = 0;
+    int multiPinPartsWithDistinctNets = 0;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        std::set<int> nets;
+
+        for( PAD* pad : fp->Pads() )
+        {
+            if( pad->GetNumber().IsEmpty() )
+                padsWithoutNumber++;
+            else
+                padsWithNumber++;
+
+            nets.insert( pad->GetNetCode() );
+        }
+
+        if( fp->Pads().size() > 1 && nets.size() > 1 )
+            multiPinPartsWithDistinctNets++;
+    }
+
+    // The pad-name decode is the whole fix: every through-hole pad in this board
+    // carries a numeric name, so an empty-name pad means the short row still won.
+    BOOST_CHECK_GT( padsWithNumber, 0 );
+    BOOST_CHECK_EQUAL( padsWithoutNumber, 0 );
+
+    // With names restored the contactref keys no longer collide, so multi-pin parts
+    // spread across several signals instead of collapsing onto one.
+    BOOST_CHECK_GT( multiPinPartsWithDistinctNets, 0 );
 }
 
 

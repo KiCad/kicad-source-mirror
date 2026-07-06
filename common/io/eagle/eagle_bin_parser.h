@@ -192,6 +192,7 @@ private:
 
     const std::vector<uint8_t>* m_buf = nullptr; ///< file contents, not owned
     size_t                      m_pos = 0;       ///< current read cursor
+    int                         m_majorVer = 5;  ///< format major version from the drawing header
 
     std::unique_ptr<EGB_NODE> m_root;
 

@@ -468,17 +468,14 @@ const SCRIPT_ROW g_script[] = {
         { "layers", T_UBF, 16, BITFIELD( 1, 0, 7 ) },
         { "stop", T_BMB, 17, 0x01 },
         TERM_A } },
-    // Pads and SMDs use two record layouts distinguished only by bit 7 of the
-    // signature low byte, which the full-layout rows below discard along with the
-    // other low-byte flag bits. The bit-7-clear variant omits the rotation and flag
-    // words and stores the pad name inline at offset 16, exactly where the bit-7-set
-    // record keeps its rotation word, so without a dedicated row the shared offsets
-    // read the name bytes back as a bogus rotation. These bit-7-clear rows precede
-    // the masked rows so such a block binds here first; a bit-7-set block fails the
-    // match and falls through to the full-layout row. The bit-7-clear masks (0xFFDF
-    // pad, 0xFF80 smd) and the full-layout masks (0xFF5F pad, 0xFF00 smd) all ignore
-    // the low-byte flag bits real boards set, so only bit 7 selects the layout. The
-    // absent bin_rot leaves the pad unrotated, as the variant carries no angle.
+    // Eagle 3.x pads and SMDs omit the rotation and flag words and store the pad name
+    // inline at offset 16, exactly where a v4/v5 record keeps its rotation word, so
+    // without a dedicated row the shared offsets read the name bytes back as a bogus
+    // rotation. These short rows precede the full-layout rows so a v3 block binds here
+    // first. A v4/v5 block can share the low-byte flag bits these masks ignore, so
+    // readBlock() consults these rows only for v3 files; every v4/v5 pad falls through
+    // to the full-layout row below, which decodes the rotation and reads the name at
+    // offset 19. The absent bin_rot leaves the v3 pad unrotated, as it carries no angle.
     { EGKW_SECT_PAD,
       0xFFDF,
       "pad",
@@ -792,6 +789,24 @@ const SCRIPT_ROW g_script[] = {
     { 0x2d84, 0xFFFF, nullptr, { TERM_F }, { TERM_S }, { TERM_A } },
     { 0, 0, nullptr, { TERM_F }, { TERM_S }, { TERM_A } } // end of table
 };
+
+
+// The short pad/SMD rows read the name inline at offset 16; the full-layout rows read
+// it at 19. That inline-name layout is the Eagle 3.x form, so recognize it from the row
+// itself rather than duplicating the mask constants.
+bool isV3InlineNamePadRow( const SCRIPT_ROW* aRow )
+{
+    if( aRow->cmd != EGKW_SECT_PAD && aRow->cmd != EGKW_SECT_SMD )
+        return false;
+
+    for( const ATTR* at = aRow->attrs; at->name != nullptr; at++ )
+    {
+        if( strcmp( at->name, "name" ) == 0 )
+            return at->offs == 16;
+    }
+
+    return false;
+}
 } // namespace
 
 
@@ -1041,6 +1056,13 @@ int EAGLE_BIN_PARSER::readBlock( long& aNumBlocks, EGB_NODE* aParent )
 
         if( match )
         {
+            // A v4/v5 pad can clear the same low-byte flag bits the short-row mask
+            // ignores, so it would bind the Eagle 3.x inline-name layout and read an
+            // empty name (and lose its rotation). Only v3 files carry that layout; let
+            // newer files fall through to the full-layout row.
+            if( m_majorVer > 3 && isV3InlineNamePadRow( row ) )
+                continue;
+
             sc = row;
             break;
         }
@@ -2491,6 +2513,11 @@ std::unique_ptr<wxXmlDocument> EAGLE_BIN_PARSER::Parse( const std::vector<uint8_
 
     if( aBytes.size() < 24 )
         THROW_IO_ERROR( _( "File is too small to be an Eagle binary board." ) );
+
+    // The drawing header's major version selects the pad/SMD record layout, so it
+    // must be known before readBlock() decodes any pad. It lives at a fixed offset
+    // in the first block; the same value is surfaced as the drawing v1 attribute.
+    m_majorVer = loadS32( 8, 1 );
 
     m_root = std::make_unique<EGB_NODE>();
     m_root->id = 0;
