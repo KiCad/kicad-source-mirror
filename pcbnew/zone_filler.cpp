@@ -92,7 +92,8 @@ public:
 class VERTEX_CONNECTOR : protected VERTEX_SET
 {
 public:
-    VERTEX_CONNECTOR( const BOX2I& aBBox, const SHAPE_POLY_SET& aPolys, int aDist ) : VERTEX_SET( 0 )
+    VERTEX_CONNECTOR( const BOX2I& aBBox, const SHAPE_POLY_SET& aPolys, int aDist ) :
+            VERTEX_SET( ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel )
     {
         SetBoundingBox( aBBox );
         VERTEX* tail = nullptr;
