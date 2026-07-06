@@ -195,4 +195,48 @@ BOOST_AUTO_TEST_CASE( RepeatedTextKeepsAllInstancesWithNegativeStep )
 }
 
 
+static std::vector<wxString> repeatTexts( const wxString& aBase, int aCount, int aLabelStep )
+{
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
+    model.ClearList();
+
+    DS_DATA_ITEM_TEXT* text = new DS_DATA_ITEM_TEXT( aBase );
+    text->SetStart( 60.0, 60.0, LT_CORNER );
+    text->m_RepeatCount = aCount;
+    text->m_IncrementLabel = aLabelStep;
+    text->m_IncrementVector = VECTOR2D( 2.0, 2.0 );
+    model.Append( text );
+
+    PAGE_INFO   page;
+    TITLE_BLOCK tb;
+
+    DS_DRAW_ITEM_LIST drawList( unityScale );
+    drawList.BuildDrawItemsList( page, tb );
+
+    std::vector<wxString> out;
+
+    for( DS_DRAW_ITEM_BASE* item = drawList.GetFirst(); item; item = drawList.GetNext() )
+    {
+        if( item->Type() == WSG_TEXT_T )
+            out.push_back( static_cast<DS_DRAW_ITEM_TEXT*>( item )->GetText() );
+    }
+
+    return out;
+}
+
+
+BOOST_AUTO_TEST_CASE( RepeatedLabelStepsLettersAndNumbersCleanly )
+{
+    // A trailing letter must roll z -> aa, never into punctuation, and a
+    // trailing multi-digit number must carry (19 -> 20, not 110).
+    const std::vector<wxString> letters = repeatTexts( wxT( "y" ), 5, 1 );
+    const std::vector<wxString> expLetters = { wxT( "y" ), wxT( "z" ), wxT( "aa" ), wxT( "ab" ), wxT( "ac" ) };
+    BOOST_CHECK_EQUAL_COLLECTIONS( letters.begin(), letters.end(), expLetters.begin(), expLetters.end() );
+
+    const std::vector<wxString> numbers = repeatTexts( wxT( "19" ), 3, 1 );
+    const std::vector<wxString> expNumbers = { wxT( "19" ), wxT( "20" ), wxT( "21" ) };
+    BOOST_CHECK_EQUAL_COLLECTIONS( numbers.begin(), numbers.end(), expNumbers.begin(), expNumbers.end() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

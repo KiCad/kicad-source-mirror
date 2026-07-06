@@ -45,6 +45,7 @@
  */
 
 #include <gr_text.h>
+#include <increment.h>
 #include <math/util.h>      // for KiROUND
 #include <view/view.h>
 #include <title_block.h>
@@ -621,17 +622,16 @@ int DS_DATA_ITEM_TEXT::GetPenSizeIU()
 
 void DS_DATA_ITEM_TEXT::IncrementLabel( int aIncr )
 {
-    int last = m_TextBase.Len() -1;
+    STRING_INCREMENTER incrementer;
+    incrementer.SetSkipIOSQXZ( false );      // step through every letter
+    incrementer.SetAlphabeticMaxIndex( -1 ); // no upper bound on label length
 
-    wxChar lbchar = m_TextBase[last];
-    m_FullText = m_TextBase;
-    m_FullText.RemoveLast();
-
-    if( lbchar >= '0' &&  lbchar <= '9' )
-        // A number is expected:
-        m_FullText << (int)( aIncr + lbchar - '0' );
+    // Step the rightmost letter or number, carrying within its own type so a
+    // letter rolls z -> aa instead of running into punctuation.
+    if( std::optional<wxString> stepped = incrementer.Increment( m_TextBase, aIncr, 0 ) )
+        m_FullText = *stepped;
     else
-        m_FullText << (wxChar) ( aIncr + lbchar );
+        m_FullText = m_TextBase;
 }
 
 
