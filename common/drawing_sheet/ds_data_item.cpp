@@ -342,7 +342,13 @@ bool DS_DATA_ITEM::IsInsidePage( int ii ) const
 {
     DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
 
-    for( const VECTOR2D& pos : { GetStartPos( ii ), GetEndPos( ii ) } )
+    std::vector<VECTOR2D> corners = { GetStartPos( ii ) };
+
+    // Text and bitmap have no real end point, so only test it for lines and rects.
+    if( GetType() == DS_SEGMENT || GetType() == DS_RECT )
+        corners.push_back( GetEndPos( ii ) );
+
+    for( const VECTOR2D& pos : corners )
     {
         if( model.m_RB_Corner.x < pos.x || model.m_LT_Corner.x > pos.x )
             return false;
