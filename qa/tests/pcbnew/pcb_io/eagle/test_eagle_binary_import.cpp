@@ -487,4 +487,41 @@ BOOST_AUTO_TEST_CASE( LoadIssue24827PadNamesAndSignals )
 }
 
 
+/**
+ * Regression test for the pad shapes in issue 24827. The binary stores a pad's shape
+ * as an ordinal, but the shared XML reader matches it by name and falls back to round
+ * for anything else, so every through-hole pad imported as a circle. The ordinal maps
+ * one-to-one to the reader's shape names: brenner57e's 0207 resistors carry octagon
+ * pads (imported as chamfered rectangles) and its TO-92 transistors oblong pads
+ * (imported as ovals), which also pins down the mapping direction. Local-only, like
+ * the sibling test.
+ */
+BOOST_AUTO_TEST_CASE( LoadIssue24827PadShapes )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24827_brenner57e.brd" ) );
+
+    if( !board )
+        return;
+
+    auto shapeOf = [&]( const wxString& aRef ) -> PAD_SHAPE
+    {
+        for( FOOTPRINT* fp : board->Footprints() )
+        {
+            if( fp->GetReference() == aRef && !fp->Pads().empty() )
+                return fp->Pads().front()->GetShape( PADSTACK::ALL_LAYERS );
+        }
+
+        return PAD_SHAPE::CIRCLE;
+    };
+
+    // R10 is an 0207 resistor (Eagle octagon pads); Q2 is a TO-92 transistor (oblong).
+    // Both decoded to circles while the shape ordinal was ignored, and swapping the
+    // mapping would trade their shapes.
+    BOOST_CHECK_EQUAL( static_cast<int>( shapeOf( wxS( "R10" ) ) ),
+                       static_cast<int>( PAD_SHAPE::CHAMFERED_RECT ) );
+    BOOST_CHECK_EQUAL( static_cast<int>( shapeOf( wxS( "Q2" ) ) ),
+                       static_cast<int>( PAD_SHAPE::OVAL ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

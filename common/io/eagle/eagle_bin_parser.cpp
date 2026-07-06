@@ -1773,6 +1773,34 @@ void EAGLE_BIN_PARSER::postprocSmd( EGB_NODE* aRoot )
 }
 
 
+void EAGLE_BIN_PARSER::postprocPadShapes( EGB_NODE* aRoot )
+{
+    // The binary stores the pad shape as an ordinal, but the shared XML reader
+    // matches it by name (square | round | octagon | long | offset) and silently
+    // treats anything else as round, so every through-hole pad imported round. The
+    // ordinal follows the same order the reader enumerates the names, verified on real
+    // boards: resistor pads (2) draw as octagons and TO-92/diode/DIP pads (3) as
+    // oblongs in Eagle. Rewrite the ordinal into that name; an out-of-range value is
+    // dropped so the reader's own round default applies rather than a wrong shape.
+    if( aRoot->id == EGKW_SECT_PAD && aRoot->HasProp( wxS( "shape" ) ) )
+    {
+        static const std::map<long, wxString> names = {
+            { 0, wxS( "square" ) }, { 1, wxS( "round" ) }, { 2, wxS( "octagon" ) },
+            { 3, wxS( "long" ) }, { 4, wxS( "offset" ) } };
+
+        auto it = names.find( aRoot->PropLong( wxS( "shape" ) ) );
+
+        if( it != names.end() )
+            aRoot->props[wxS( "shape" )] = it->second;
+        else
+            aRoot->props.erase( wxS( "shape" ) );
+    }
+
+    for( const auto& child : aRoot->children )
+        postprocPadShapes( child.get() );
+}
+
+
 void EAGLE_BIN_PARSER::postprocDimensions( EGB_NODE* aRoot )
 {
     if( aRoot->id == EGKW_SECT_PAD || aRoot->id == EGKW_SECT_HOLE || aRoot->id == EGKW_SECT_VIA
@@ -2432,6 +2460,7 @@ void EAGLE_BIN_PARSER::postProcess( EGB_NODE* aRoot, const DRC_CTX& aDrc )
     postprocVias( aRoot );
     postprocCircles( aRoot );
     postprocSmd( aRoot );
+    postprocPadShapes( aRoot );
     postprocDimensions( aRoot );
 
     // Resolve long-text names before contactrefs copy element and pad names,

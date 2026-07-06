@@ -164,6 +164,7 @@ private:
     void postprocUnits( EGB_NODE* aRoot );
     void postprocCircles( EGB_NODE* aRoot );
     void postprocSmd( EGB_NODE* aRoot );
+    void postprocPadShapes( EGB_NODE* aRoot );
     void postprocDimensions( EGB_NODE* aRoot );
     void postprocFreeText( EGB_NODE* aRoot );
     void postprocLongText( EGB_NODE* aRoot );
