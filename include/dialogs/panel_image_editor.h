@@ -46,6 +46,10 @@ public:
 
     double GetScale() const;
     void   SetScale( double aScale );
+
+    // Apply a scale to the working image without rewriting the scale text field.
+    void UpdateImageScale( double aScale );
+
     VECTOR2I GetImageSize() const;
     wxTextCtrl* GetScaleCtrl() const { return m_textCtrlScale; }
 
