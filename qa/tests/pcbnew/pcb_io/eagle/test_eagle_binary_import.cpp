@@ -32,6 +32,7 @@
 #include <footprint.h>
 #include <netinfo.h>
 #include <pad.h>
+#include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
 #include <zone.h>
@@ -521,6 +522,61 @@ BOOST_AUTO_TEST_CASE( LoadIssue24827PadShapes )
                        static_cast<int>( PAD_SHAPE::CHAMFERED_RECT ) );
     BOOST_CHECK_EQUAL( static_cast<int>( shapeOf( wxS( "Q2" ) ) ),
                        static_cast<int>( PAD_SHAPE::OVAL ) );
+}
+
+/**
+ * Regression test for the curved-wire arcs in issue 24827. A curved wire stores its
+ * arc center as three bytes interleaved with the endpoint fields; the decoder combined
+ * them with a byte bias that neither recovered the stored byte nor formed a valid
+ * 24-bit value, so the center landed far from the body. The TO-92 transistor outlines
+ * were the visible casualty: Q2's rounded back flattened and IC3's sides caved inward.
+ * Both packages draw their silk body as concentric arcs of one circle, so a correct
+ * decode leaves every body arc sharing a center and radius.
+ */
+BOOST_AUTO_TEST_CASE( LoadIssue24827CurvedWireArcs )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24827_brenner57e.brd" ) );
+
+    if( !board )
+        return;
+
+    auto bodyArcs = [&]( const wxString& aRef )
+    {
+        std::vector<PCB_SHAPE*> arcs;
+
+        for( FOOTPRINT* fp : board->Footprints() )
+        {
+            if( fp->GetReference() != aRef )
+                continue;
+
+            for( BOARD_ITEM* item : fp->GraphicalItems() )
+            {
+                PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+
+                if( shape && shape->GetShape() == SHAPE_T::ARC && shape->GetLayer() == F_SilkS )
+                    arcs.push_back( shape );
+            }
+        }
+
+        return arcs;
+    };
+
+    // A scattered center is exactly the flattened/indented arc symptom, so require the
+    // body arcs of each transistor to stay concentric to a fraction of the body radius.
+    for( const wxString& ref : { wxS( "Q2" ), wxS( "IC3" ) } )
+    {
+        std::vector<PCB_SHAPE*> arcs = bodyArcs( ref );
+        BOOST_REQUIRE_GT( arcs.size(), 1u );
+
+        VECTOR2I center = arcs.front()->GetCenter();
+
+        for( PCB_SHAPE* arc : arcs )
+        {
+            int dist = ( arc->GetCenter() - center ).EuclideanNorm();
+            BOOST_CHECK_MESSAGE( dist < pcbIUScale.mmToIU( 0.5 ),
+                                 ref << " silk arc center is " << dist / 1e6 << " mm off the body center" );
+        }
+    }
 }
 
 

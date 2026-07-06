@@ -1393,11 +1393,6 @@ void EAGLE_BIN_PARSER::arcDecode( EGB_NODE* aElem, int aArcType, int aLineType )
         return num;
     };
 
-    auto fixOneByte = []( long num ) -> long
-    {
-        return num < 0 ? num + 0x80 : num;
-    };
-
     auto setLong = [&]( const wxString& aKey, long aVal )
     {
         aElem->props[aKey] = wxString::Format( wxS( "%ld" ), aVal );
@@ -1419,9 +1414,19 @@ void EAGLE_BIN_PARSER::arcDecode( EGB_NODE* aElem, int aArcType, int aLineType )
         long x2 = fixThreeByte( aElem->PropLong( wxS( "arc_x2" ) ), arcFlags & 0x08 );
         long y2 = fixThreeByte( aElem->PropLong( wxS( "arc_y2" ) ), arcFlags & 0x10 );
 
-        long c = fixOneByte( aElem->PropLong( wxS( "arc_c1" ) ) )
-                 + 256 * fixOneByte( aElem->PropLong( wxS( "arc_c2" ) ) )
-                 + 256L * 256 * fixOneByte( aElem->PropLong( wxS( "arc_c3" ) ) );
+        // The center is stored as three bytes interleaved with the endpoint fields
+        // (offsets 7, 11, 15), so it cannot be read as a contiguous field. Reassemble
+        // it as the little-endian 24-bit signed value loadS32() produces for the
+        // endpoints, then reconcile its sign with the negflags bit the same way. The
+        // low byte of each decoded field is the stored byte; masking recovers it
+        // whether the field was read as signed or not.
+        long c = ( aElem->PropLong( wxS( "arc_c1" ) ) & 0xFF )
+                 | ( ( aElem->PropLong( wxS( "arc_c2" ) ) & 0xFF ) << 8 )
+                 | ( ( aElem->PropLong( wxS( "arc_c3" ) ) & 0xFF ) << 16 );
+
+        if( c & 0x800000 )
+            c -= 0x1000000;
+
         c = fixThreeByte( c, arcFlags & 0x01 );
 
         setLong( wxS( "x1" ), x1 );
