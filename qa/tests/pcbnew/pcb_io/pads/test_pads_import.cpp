@@ -22,6 +22,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcb_io/pads/pcb_io_pads.h>
+#include <pcb_io/pads/pads_parser.h>
 #include <layer_ids.h>
 #include <padstack.h>
 #include <board.h>
@@ -1928,6 +1929,78 @@ BOOST_AUTO_TEST_CASE( Issue23392_ThermalReliefGap )
         BOOST_CHECK_MESSAGE( !pad->GetLocalThermalGapOverride().has_value(),
                 "E1 pad should NOT have a thermal gap override (outer == pad size)" );
     }
+}
+
+
+/**
+ * Issue 23241: PADS V5.0 part import drops every other part.
+ *
+ * V5.0 text/label entries use 2 lines (value + name) while V9+ uses 3 lines
+ * (value + font + name). Reading 3 lines per label in V5.0 format consumes
+ * the next part's header line, causing alternating parts to be dropped.
+ */
+BOOST_AUTO_TEST_CASE( Issue23241_V5Parts )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23241/partsandattr.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    // The file contains parts on both layers. Verify the specific parts mentioned
+    // in the bug report are present.
+    std::set<wxString> refDes;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+        refDes.insert( fp->GetReference() );
+
+    BOOST_CHECK_MESSAGE( refDes.count( wxT( "J1" ) ), "J1 should be present" );
+    BOOST_CHECK_MESSAGE( refDes.count( wxT( "J2" ) ), "J2 should be present" );
+    BOOST_CHECK_MESSAGE( refDes.count( wxT( "J3" ) ), "J3 should be present" );
+    BOOST_CHECK_MESSAGE( refDes.count( wxT( "J4" ) ), "J4 should be present" );
+    BOOST_CHECK_MESSAGE( refDes.count( wxT( "J5" ) ), "J5 should be present" );
+    BOOST_CHECK_MESSAGE( refDes.count( wxT( "U1" ) ), "U1 should be present" );
+    BOOST_CHECK_MESSAGE( refDes.count( wxT( "U2" ) ), "U2 should be present" );
+    BOOST_CHECK_MESSAGE( refDes.count( wxT( "U3" ) ), "U3 should be present" );
+    BOOST_CHECK_MESSAGE( refDes.count( wxT( "U4" ) ), "U4 should be present" );
+}
+
+
+/**
+ * Issue 23241: verify the V5.0 parser reads decal terminals correctly.
+ *
+ * V5.0 terminal lines have no pin number (4 tokens), while V9+ has
+ * a pin number (5 tokens). Both formats must produce valid terminals.
+ */
+BOOST_AUTO_TEST_CASE( Issue23241_V5DecalTerminals )
+{
+    PADS_IO::PARSER parser;
+
+    wxString filename =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23241/partsandattr.asc";
+
+    parser.Parse( filename );
+
+    const auto& decals = parser.GetPartDecals();
+
+    auto it = decals.find( "104130-6" );
+    BOOST_REQUIRE_MESSAGE( it != decals.end(), "104130-6 decal should exist" );
+    BOOST_REQUIRE_EQUAL( it->second.terminals.size(), 34u );
+
+    auto sop_it = decals.find( "SOP16" );
+    BOOST_REQUIRE_MESSAGE( sop_it != decals.end(), "SOP16 decal should exist" );
+    BOOST_REQUIRE_EQUAL( sop_it->second.terminals.size(), 16u );
+
+    // V5.0 terminals carry no pin number, so the parser synthesizes sequential
+    // names 1..N. Empty or duplicate names would break pad-to-net mapping, which
+    // a bare count check cannot catch.
+    BOOST_CHECK_EQUAL( it->second.terminals.front().name, "1" );
+    BOOST_CHECK_EQUAL( it->second.terminals.back().name, "34" );
+    BOOST_CHECK_EQUAL( sop_it->second.terminals.front().name, "1" );
+    BOOST_CHECK_EQUAL( sop_it->second.terminals.back().name, "16" );
 }
 
 
