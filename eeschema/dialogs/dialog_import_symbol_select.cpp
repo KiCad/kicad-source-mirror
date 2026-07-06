@@ -32,6 +32,42 @@
 #include <wx/dataview.h>
 
 
+namespace
+{
+
+/// Item data flag stored in the row's wxUIntPtr to mark derived (non-root) symbols.
+constexpr wxUIntPtr ROW_DATA_DERIVED = 1;
+
+/// Model column carrying the symbol name; only this column is italicized (checkbox is column 0).
+constexpr unsigned int SYMBOL_COLUMN = 1;
+
+
+/**
+ * Custom store that italicizes the name of rows tagged with ROW_DATA_DERIVED.
+ *
+ * Mirrors the convention used by the symbol library tree (see
+ * LIB_TREE_MODEL_ADAPTER::GetAttr) where derived/aliased symbols are shown
+ * in italics.
+ */
+class IMPORT_SYMBOL_LIST_STORE : public wxDataViewListStore
+{
+public:
+    bool GetAttrByRow( unsigned int aRow, unsigned int aCol,
+                       wxDataViewItemAttr& aAttr ) const override
+    {
+        if( aCol == SYMBOL_COLUMN && GetItemData( GetItem( aRow ) ) == ROW_DATA_DERIVED )
+        {
+            aAttr.SetItalic( true );
+            return true;
+        }
+
+        return false;
+    }
+};
+
+} // namespace
+
+
 DIALOG_IMPORT_SYMBOL_SELECT::DIALOG_IMPORT_SYMBOL_SELECT( SYMBOL_EDIT_FRAME* aParent,
                                                           const wxString& aFilePath,
                                                           const wxString& aDestLibrary,
@@ -45,6 +81,12 @@ DIALOG_IMPORT_SYMBOL_SELECT::DIALOG_IMPORT_SYMBOL_SELECT( SYMBOL_EDIT_FRAME* aPa
 {
     wxFileName fn( aFilePath );
     SetTitle( wxString::Format( _( "Import Symbols from %s" ), fn.GetFullName() ) );
+
+    // Replace the default store with our italicizing variant before adding columns
+    // so the columns are bound to the new model.
+    IMPORT_SYMBOL_LIST_STORE* store = new IMPORT_SYMBOL_LIST_STORE();
+    m_symbolList->AssociateModel( store );
+    store->DecRef();
 
     m_symbolList->AppendToggleColumn( wxEmptyString, wxDATAVIEW_CELL_ACTIVATABLE, 30 );
     m_symbolList->AppendIconTextColumn( _( "Symbol" ), wxDATAVIEW_CELL_INERT, 250 );
@@ -200,16 +242,16 @@ void DIALOG_IMPORT_SYMBOL_SELECT::refreshList()
             wxBitmap bmp = KiBitmap( BITMAPS::small_warning );
             icon.CopyFromBitmap( bmp );
         }
-        else if( !info->m_parentName.IsEmpty() )
-        {
-            wxBitmap bmp = KiBitmap( BITMAPS::tree_nosel );
-            icon.CopyFromBitmap( bmp );
-        }
+        // Derived (non-root) symbols are indicated by italic text via the custom
+        // store's GetAttrByRow override, matching the symbol library tree.
 
         wxDataViewIconText iconText( name, icon );
         data.push_back( wxVariant( iconText ) );
 
-        m_symbolList->AppendItem( data );
+        // Tag derived (non-root) rows so the store italicizes them, matching the
+        // convention used by the symbol library tree.
+        wxUIntPtr rowData = info->m_parentName.IsEmpty() ? 0 : ROW_DATA_DERIVED;
+        m_symbolList->AppendItem( data, rowData );
         index++;
     }
 
