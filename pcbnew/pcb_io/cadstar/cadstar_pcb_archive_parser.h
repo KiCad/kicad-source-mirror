@@ -989,9 +989,11 @@ public:
         };
 
         struct ROUTE_VERTEX ///< Two sibbling nodes: first node being "ROUTEWIDTH" and
-                            ///< next node being a VERTEX (e.g. PT, CWARC, etc.)
+                            ///< next node being a VERTEX (e.g. PT, CWARC, etc.). In older
+                            ///< CADSTAR formats (e.g. Revision 7), ROUTEWIDTH may be omitted.
         {
-            long   RouteWidth;
+            long   RouteWidth = 0;
+            bool   RouteWidthIsExplicit = true; ///< False if ROUTEWIDTH was not specified in file
             bool   TeardropAtStart = false;
             bool   TeardropAtEnd = false;
             long   TeardropAtStartAngle = 0;

@@ -2037,11 +2037,23 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::COPPER_TERMINAL::Parse( XNODE* aNode,
 XNODE* CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE_VERTEX::Parse( XNODE* aNode,
                                                                  PARSER_CONTEXT* aContext )
 {
-    wxASSERT( aNode->GetName() == wxT( "ROUTEWIDTH" ) );
+    XNODE* prevNode     = aNode;
+    XNODE* nextNode     = aNode->GetNext();
+    bool   vertexParsed = false;
 
-    RouteWidth      = GetXmlAttributeIDLong( aNode, 0 );
-    XNODE* prevNode = aNode;
-    XNODE* nextNode = aNode->GetNext();
+    if( aNode->GetName() == wxT( "ROUTEWIDTH" ) )
+    {
+        RouteWidth = GetXmlAttributeIDLong( aNode, 0 );
+    }
+    else
+    {
+        // CADSTAR Revision 7 routes may omit ROUTEWIDTH and start directly with the vertex; the
+        // width is derived later from the connection's route code.
+        wxASSERT( VERTEX::IsVertex( aNode ) );
+        RouteWidthIsExplicit = false;
+        Vertex.Parse( aNode, aContext );
+        vertexParsed = true;
+    }
 
     for( ; nextNode; nextNode = nextNode->GetNext() )
     {
@@ -2061,7 +2073,13 @@ XNODE* CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE_VERTEX::Parse( XNODE* aNode,
         }
         else if( VERTEX::IsVertex( nextNode ) )
         {
+            // A ROUTEWIDTH record holds a single vertex. Encountering another one (with no
+            // intervening ROUTEWIDTH) marks the start of the next Revision 7 vertex record.
+            if( vertexParsed )
+                return prevNode;
+
             Vertex.Parse( nextNode, aContext );
+            vertexParsed = true;
         }
         else if( nextNode->GetName() == wxT( "ROUTEWIDTH" ) )
         {
@@ -2098,8 +2116,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE::Parse( XNODE* aNode, PARSER_CON
             startPointParsed = true;
             StartPoint.Parse( cNode, aContext );
         }
-        else if( cNodeName == wxT( "ROUTEWIDTH" ) )
+        else if( cNodeName == wxT( "ROUTEWIDTH" ) || VERTEX::IsVertex( cNode ) )
         {
+            // A route vertex normally starts with ROUTEWIDTH, but CADSTAR Revision 7 files may
+            // omit it and start directly with the vertex; ROUTE_VERTEX::Parse handles both and
+            // consumes any trailing FIX/teardrop metadata, returning the last node it consumed.
             ROUTE_VERTEX rtVert;
             cNode = rtVert.Parse( cNode, aContext );
             RouteVertices.push_back( rtVert );
