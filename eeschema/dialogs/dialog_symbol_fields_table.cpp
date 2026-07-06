@@ -271,9 +271,17 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     m_variantListBox->Set( parent->Schematic().GetVariantNamesForUI() );
 
-    if( !m_parent->Schematic().GetCurrentVariant().IsEmpty() )
+    // A job keeps its own variant, otherwise follow the schematic.
+    wxString variantToSelect;
+
+    if( m_job )
+        variantToSelect = m_job->GetSelectedVariant();
+    else
+        variantToSelect = m_parent->Schematic().GetCurrentVariant();
+
+    if( !variantToSelect.IsEmpty() )
     {
-        int toSelect = m_variantListBox->FindString( m_parent->Schematic().GetCurrentVariant() );
+        int toSelect = m_variantListBox->FindString( variantToSelect );
 
         if( toSelect == wxNOT_FOUND )
             m_variantListBox->SetSelection( 0 );
@@ -295,7 +303,10 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_hash_key = TO_UTF8( GetTitle() );
 
     // Set the current variant for highlighting variant-specific field values
-    m_dataModel->SetCurrentVariant( m_parent->Schematic().GetCurrentVariant() );
+    if( m_job )
+        m_dataModel->SetCurrentVariant( getSelectedVariant() );
+    else
+        m_dataModel->SetCurrentVariant( m_parent->Schematic().GetCurrentVariant() );
 
     SetInitialFocus( m_grid );
     m_grid->ClearSelection();
@@ -1640,10 +1651,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
                 m_job->m_fieldsGroupBy.emplace_back( modelField.name );
         }
 
-        wxString selectedVariant = getSelectedVariant();
-
-        if( !selectedVariant.IsEmpty() )
-            m_job->m_variantNames.push_back( selectedVariant );
+        m_job->SetSelectedVariant( getSelectedVariant() );
 
         EndModal( wxID_OK );
     }
