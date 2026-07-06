@@ -180,6 +180,7 @@ private:
     void loadLibraryPads( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
     void loadComponentAttributes( const COMPONENT& aComponent, FOOTPRINT* aFootprint );
     void loadNetTracks( const NET_ID& aCadstarNetID, const NET_PCB::ROUTE& aCadstarRoute,
+                        long aDefaultRouteWidth,
                         long aStartWidth = std::numeric_limits<long>::max(),
                         long aEndWidth = std::numeric_limits<long>::max() );
 
