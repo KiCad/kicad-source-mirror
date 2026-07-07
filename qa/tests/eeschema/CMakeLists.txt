@@ -86,6 +86,7 @@ set( QA_EESCHEMA_SRCS
     erc/test_erc_lib_symbol_mismatch.cpp
     erc/test_erc_lib_symbol_field_position.cpp
     erc/test_erc_footprint_filters.cpp
+    erc/test_erc_text_var_issue24442.cpp
 
     test_schematic_text_var_reactive.cpp
     test_annotation_refdes_tracker_units.cpp

@@ -162,6 +162,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_skew.cpp
     drc/test_drc_component_classes.cpp
     drc/test_drc_incorrect_text_mirror.cpp
+    drc/test_drc_text_var_issue24442.cpp
     drc/test_drc_starved_thermal.cpp
     drc/test_drc_orientation.cpp
     drc/test_drc_lengths.cpp
