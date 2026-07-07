@@ -1163,7 +1163,7 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, &dummyTrack, nullptr,
                                              m_startLayer, &constraint ) )
         {
-            trackWidth = std::max( trackWidth, constraint.m_Value.Opt() );
+            trackWidth = std::max( trackWidth, constraint.m_Value.PinnedOpt() );
             found = true;
 
             if( trackWidth == constraint.m_Value.Opt() )
@@ -1260,8 +1260,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, &dummyTrack,
                                              &coupledTrack, m_startLayer, &constraint ) )
         {
-            diffPairGap = std::max( diffPairGap, constraint.m_Value.Opt() );
-            diffPairViaGap = std::max( diffPairViaGap, constraint.m_Value.Opt() );
+            diffPairGap = std::max( diffPairGap, constraint.m_Value.PinnedOpt() );
+            diffPairViaGap = std::max( diffPairViaGap, constraint.m_Value.PinnedOpt() );
 
             if( diffPairGap == constraint.m_Value.Opt() )
                 aSizes.SetDiffPairGapSource( constraint.m_RuleName );

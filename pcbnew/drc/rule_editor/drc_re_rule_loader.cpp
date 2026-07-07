@@ -232,16 +232,18 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
         if( trackWidth )
         {
-            double opt = toMM( trackWidth->GetValue().Opt() );
+            double opt = toMM( trackWidth->GetValue().PinnedOpt() );
             double min = toMM( trackWidth->GetValue().Min() );
+
             data->SetOptWidth( opt );
             data->SetWidthTolerance( opt - min );
         }
 
         if( diffGap )
         {
-            double opt = toMM( diffGap->GetValue().Opt() );
+            double opt = toMM( diffGap->GetValue().PinnedOpt() );
             double min = toMM( diffGap->GetValue().Min() );
+
             data->SetOptGap( opt );
             data->SetGapTolerance( opt - min );
         }
@@ -285,7 +287,7 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
 
         if( trackWidth )
         {
-            double opt = toMM( trackWidth->GetValue().Opt() );
+            double opt = toMM( trackWidth->GetValue().PinnedOpt() );
             double min = toMM( trackWidth->GetValue().Min() );
 
             data->SetOptWidth( opt );
@@ -309,8 +311,9 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
         if( length )
         {
             double minMM = toMM( length->GetValue().Min() );
-            double optMM = toMM( length->GetValue().Opt() );
+            double optMM = toMM( length->GetValue().PinnedOpt() );
             double maxMM = toMM( length->GetValue().Max() );
+
             data->SetOptimumLength( optMM );
             data->SetTolerance( ( maxMM - minMM ) / 2.0 );
         }
@@ -332,8 +335,9 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
         if( length )
         {
             double minMM = toMM( length->GetValue().Min() );
-            double optMM = toMM( length->GetValue().Opt() );
+            double optMM = toMM( length->GetValue().PinnedOpt() );
             double maxMM = toMM( length->GetValue().Max() );
+
             data->SetOptimumLength( optMM );
             data->SetTolerance( ( maxMM - minMM ) / 2.0 );
         }

@@ -29,6 +29,7 @@ public:
     T Min() const { return m_hasMin ? m_min : 0; };
     T Max() const { return m_hasMax ? m_max : std::numeric_limits<T>::max(); };
     T Opt() const { return m_hasOpt ? m_opt : Min(); };
+    T PinnedOpt() const { return std::max<T>( Min(), std::min<T>( Max(), Opt() ) ) ; }
 
     bool HasMin() const { return m_hasMin; }
     bool HasMax() const { return m_hasMax; }
