@@ -1220,7 +1220,8 @@ void CONNECTION_GRAPH::AddFootprint( FOOTPRINT* aFp, const VECTOR2I& aOffset )
 
 std::unique_ptr<CONNECTION_GRAPH>
 CONNECTION_GRAPH::BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps,
-                                         const std::set<FOOTPRINT*>& aOtherChannelFps )
+                                         const std::set<FOOTPRINT*>& aOtherChannelFps,
+                                         const std::unordered_set<int>& aGlobalNets )
 {
     auto cgraph = std::make_unique<CONNECTION_GRAPH>();
     VECTOR2I ref(0, 0);
@@ -1253,11 +1254,9 @@ CONNECTION_GRAPH::BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps,
         }
     }
 
-    // Exclude a net from topology comparison only when it forms a real internal connection (two
-    // or more pads) in BOTH sets.  This drops global rails (GND, VCC) while keeping single-pad
-    // boundary nets, such as an applied design block's daisy-chain output feeding the target
-    // instance's inputs, whose asymmetric exclusion would otherwise break the isomorphism.
-    std::unordered_set<int> externalNets;
+    // Caller-supplied global rails, plus the pairwise fallback: nets with >=2 pads in both channels.
+    // Single-pad boundary nets stay in the comparison; excluding them asymmetrically breaks the match.
+    std::unordered_set<int> externalNets = aGlobalNets;
 
     for( const auto& [netCode, localCount] : localNetPadCounts )
     {

@@ -2467,4 +2467,243 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutUnmirrorsIdenticalReceptacles, MU
 }
 
 
+/**
+ * Issue 24019: a global rail with an uneven per-channel pad count (a config strap tied to GND in
+ * some instances, another rail in others) must be excluded from the topology comparison for every
+ * pairing, not just the targets that carry two or more pads on it, or isomorphic channels fail to
+ * match.  Channel 3 straps to +3V3, leaving one lone GND pad; channel 2 must still match it.
+ */
+BOOST_FIXTURE_TEST_CASE( CheckRACompatGlobalRailAcrossChannels, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    auto addNet = [&]( const wxString& aName ) -> int
+    {
+        NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), aName );
+        m_board->Add( net );
+        return net->GetNetCode();
+    };
+
+    const int netGnd = addNet( wxT( "GND" ) );
+    const int netVcc = addNet( wxT( "+3V3" ) );
+
+    const LIB_ID icId( wxT( "TestLib" ), wxT( "SOT-23-6" ) );
+    const LIB_ID rId( wxT( "TestLib" ), wxT( "R_0402" ) );
+
+    // Each channel is an IC (OUT + GND) and a config resistor strapped to a rail: GND in channels
+    // 1 and 2, +3V3 in channel 3.  That strap difference is intentional and must not defeat the match.
+    auto makeChannel = [&]( int aIdx, int aStrapNet ) -> ZONE*
+    {
+        const int netOut = addNet( wxString::Format( wxT( "Net-(U%d-OUT)" ), aIdx ) );
+        const int netCfg = addNet( wxString::Format( wxT( "Net-(U%d-CFG)" ), aIdx ) );
+
+        auto addPad = [&]( FOOTPRINT* aFp, const wxString& aNumber, int aNetCode )
+        {
+            PAD* pad = new PAD( aFp );
+            pad->SetNumber( aNumber );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+            pad->SetSize( PADSTACK::ALL_LAYERS,
+                          VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+            pad->SetLayerSet( LSET( { F_Cu } ) );
+            pad->SetNetCode( aNetCode );
+            aFp->Add( pad );
+        };
+
+        FOOTPRINT* ic = new FOOTPRINT( m_board.get() );
+        ic->SetFPID( icId );
+        ic->SetReference( wxString::Format( wxT( "U%d" ), aIdx ) );
+        m_board->Add( ic );
+        addPad( ic, wxT( "1" ), netOut );
+        addPad( ic, wxT( "2" ), netGnd );
+
+        FOOTPRINT* r = new FOOTPRINT( m_board.get() );
+        r->SetFPID( rId );
+        r->SetReference( wxString::Format( wxT( "R%d" ), aIdx ) );
+        m_board->Add( r );
+        addPad( r, wxT( "1" ), netCfg );
+        addPad( r, wxT( "2" ), aStrapNet );
+
+        ZONE* zone = new ZONE( m_board.get() );
+        m_board->Add( zone );
+
+        return zone;
+    };
+
+    std::vector<std::pair<int, int>> channelStraps = { { 1, netGnd }, { 2, netGnd }, { 3, netVcc } };
+    std::vector<ZONE*>               zones;
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    RULE_AREAS_DATA* ruleData = mtTool->GetData();
+    ruleData->m_areas.reserve( channelStraps.size() );
+
+    for( const auto& [idx, strap] : channelStraps )
+    {
+        ZONE* zone = makeChannel( idx, strap );
+        zones.push_back( zone );
+
+        RULE_AREA ra;
+        ra.m_zone = zone;
+        ra.m_ruleName = wxString::Format( wxT( "Channel %d" ), idx );
+
+        for( FOOTPRINT* fp : m_board->Footprints() )
+        {
+            if( fp->GetReference() == wxString::Format( wxT( "U%d" ), idx )
+                || fp->GetReference() == wxString::Format( wxT( "R%d" ), idx ) )
+            {
+                ra.m_components.insert( fp );
+            }
+        }
+
+        ruleData->m_areas.push_back( ra );
+    }
+
+    // Before the fix, channel 3's lone GND pad hid the rail from that pairing and the match failed.
+    int status = mtTool->CheckRACompatibility( zones[1] );
+    BOOST_REQUIRE_EQUAL( status, 0 );
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_zone == zones[1] )
+            continue;
+
+        auto it = ruleData->m_compatMap.find( &ra );
+        BOOST_REQUIRE( it != ruleData->m_compatMap.end() );
+
+        for( const wxString& reason : it->second.m_mismatchReasons )
+            BOOST_TEST_MESSAGE( wxString::Format( "%s: %s", ra.m_ruleName, reason ) );
+
+        BOOST_CHECK_MESSAGE( it->second.m_isOk,
+                             wxString::Format( "Channel 2 must match %s", ra.m_ruleName ) );
+    }
+}
+
+
+/**
+ * A duplicate rule area over a channel's footprints must not make that channel's own nets look
+ * global.  Channels 1 and 2 genuinely differ on a local net, so the match must still fail even with
+ * a second area covering channel 1.
+ */
+BOOST_FIXTURE_TEST_CASE( CheckRACompatOverlappingAreaKeepsLocalNet, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    auto addNet = [&]( const wxString& aName ) -> int
+    {
+        NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), aName );
+        m_board->Add( net );
+        return net->GetNetCode();
+    };
+
+    const int netGnd = addNet( wxT( "GND" ) );
+
+    const LIB_ID icId( wxT( "TestLib" ), wxT( "SOT-23-6" ) );
+    const LIB_ID rId( wxT( "TestLib" ), wxT( "R_0402" ) );
+
+    auto addPad = [&]( FOOTPRINT* aFp, const wxString& aNumber, int aNetCode )
+    {
+        PAD* pad = new PAD( aFp );
+        pad->SetNumber( aNumber );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+        pad->SetLayerSet( LSET( { F_Cu } ) );
+        pad->SetNetCode( aNetCode );
+        aFp->Add( pad );
+    };
+
+    auto makeFp = [&]( const LIB_ID& aFpId, const wxString& aRef ) -> FOOTPRINT*
+    {
+        FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+        fp->SetFPID( aFpId );
+        fp->SetReference( aRef );
+        m_board->Add( fp );
+        return fp;
+    };
+
+    // Channel 1: U1 pad 1 and R1 pad 1 share a per-channel net, giving that net two internal pads.
+    const int netLocal1 = addNet( wxT( "Net-(U1-SIG)" ) );
+    FOOTPRINT* u1 = makeFp( icId, wxT( "U1" ) );
+    addPad( u1, wxT( "1" ), netLocal1 );
+    addPad( u1, wxT( "2" ), netGnd );
+    FOOTPRINT* r1 = makeFp( rId, wxT( "R1" ) );
+    addPad( r1, wxT( "1" ), netLocal1 );
+    addPad( r1, wxT( "2" ), netGnd );
+
+    // Channel 2: U2 pad 1 is on its own net, so R2 does not share it -- a real difference from
+    // channel 1 that must be reported as a mismatch.
+    const int netLocal2a = addNet( wxT( "Net-(U2-SIG)" ) );
+    const int netLocal2b = addNet( wxT( "Net-(R2-SIG)" ) );
+    FOOTPRINT* u2 = makeFp( icId, wxT( "U2" ) );
+    addPad( u2, wxT( "1" ), netLocal2a );
+    addPad( u2, wxT( "2" ), netGnd );
+    FOOTPRINT* r2 = makeFp( rId, wxT( "R2" ) );
+    addPad( r2, wxT( "1" ), netLocal2b );
+    addPad( r2, wxT( "2" ), netGnd );
+
+    ZONE* zone1 = new ZONE( m_board.get() );
+    m_board->Add( zone1 );
+    ZONE* zone2 = new ZONE( m_board.get() );
+    m_board->Add( zone2 );
+    ZONE* zoneDup = new ZONE( m_board.get() );
+    m_board->Add( zoneDup );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    RULE_AREAS_DATA* ruleData = mtTool->GetData();
+    ruleData->m_areas.reserve( 3 );
+
+    RULE_AREA ra1;
+    ra1.m_zone = zone1;
+    ra1.m_ruleName = wxT( "Channel 1" );
+    ra1.m_components = { u1, r1 };
+    ruleData->m_areas.push_back( ra1 );
+
+    RULE_AREA ra2;
+    ra2.m_zone = zone2;
+    ra2.m_ruleName = wxT( "Channel 2" );
+    ra2.m_components = { u2, r2 };
+    ruleData->m_areas.push_back( ra2 );
+
+    // A second rule area over channel 1's footprints.  Counting it as a distinct channel would make
+    // Net-(U1-SIG) look global (two areas carry it) and hide the difference from channel 2.
+    RULE_AREA raDup;
+    raDup.m_zone = zoneDup;
+    raDup.m_ruleName = wxT( "Channel 1 duplicate" );
+    raDup.m_components = { u1, r1 };
+    ruleData->m_areas.push_back( raDup );
+
+    int status = mtTool->CheckRACompatibility( zone1 );
+    BOOST_REQUIRE_EQUAL( status, 0 );
+
+    RULE_AREA* channel2 = nullptr;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_zone == zone2 )
+            channel2 = &ra;
+    }
+
+    BOOST_REQUIRE( channel2 != nullptr );
+
+    auto it = ruleData->m_compatMap.find( channel2 );
+    BOOST_REQUIRE( it != ruleData->m_compatMap.end() );
+
+    BOOST_CHECK_MESSAGE( !it->second.m_isOk,
+                         "Channel 1 and channel 2 differ on a local net and must not match; an "
+                         "overlapping rule area must not hide that net by marking it global" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
