@@ -521,6 +521,25 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
     m_parent->SetTitleBlock( m_tb );
 
+    // The dialog is being accepted, so it is now safe to drop the embedded worksheets the user
+    // approved removing while switching sheets. Skip the one that ended up selected.
+    if( m_embeddedFiles && !m_embeddedSheetsToRemove.empty() )
+    {
+        wxString embeddedPrefix = wxString::FromUTF8( FILEEXT::KiCadUriPrefix ) + wxT( "://" );
+        wxString finalEmbeddedName;
+
+        if( fileName.StartsWith( embeddedPrefix ) )
+            finalEmbeddedName = fileName.Mid( embeddedPrefix.length() );
+
+        for( const wxString& name : m_embeddedSheetsToRemove )
+        {
+            if( name != finalEmbeddedName )
+                m_embeddedFiles->RemoveFile( name );
+        }
+
+        m_embeddedSheetsToRemove.clear();
+    }
+
     return onSavePageSettings();
 }
 
@@ -690,6 +709,15 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     wxString   path = m_projectPath;
     wxString   msg;
 
+    // Check if the current worksheet is embedded so we can offer to remove it later
+    wxString currentWksFileName = GetWksFileName();
+    wxString embeddedPrefix = wxString::FromUTF8( FILEEXT::KiCadUriPrefix ) + wxT( "://" );
+    bool     currentIsEmbedded = currentWksFileName.StartsWith( embeddedPrefix );
+    wxString currentEmbeddedName;
+
+    if( currentIsEmbedded )
+        currentEmbeddedName = currentWksFileName.Mid( embeddedPrefix.length() );
+
     if( fn.IsAbsolute() )
     {
         path = fn.GetPath();
@@ -734,13 +762,18 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 
     wxString fileName = fileDialog.GetPath();
     wxString shortFileName;
+    wxString newEmbeddedName;
 
     if( m_embeddedFiles && customize.GetEmbed() )
     {
         fn.Assign( fileName );
         EMBEDDED_FILES::EMBEDDED_FILE* result = m_embeddedFiles->AddFile( fn, true );
         shortFileName = result->GetLink();
+        newEmbeddedName = result->name;
         fileName = m_embeddedFiles->GetTemporaryFileName( result->name ).GetFullPath();
+
+        // Re-embedding a file that was queued for removal cancels that removal
+        m_embeddedSheetsToRemove.erase( newEmbeddedName );
     }
     else if( !m_projectPath.IsEmpty() && fileName.StartsWith( m_projectPath ) )
     {
@@ -764,6 +797,20 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
                                                fileName ),
                              msg );
         return;
+    }
+
+    // Now that the new sheet has loaded, offer to remove the previously embedded worksheet
+    // if we are switching to a different file. The removal is deferred until the dialog is
+    // accepted so that cancelling does not orphan the still-referenced worksheet.
+    if( m_embeddedFiles && currentIsEmbedded && !currentEmbeddedName.IsEmpty()
+        && currentEmbeddedName != newEmbeddedName )
+    {
+        if( IsOK( this, wxString::Format(
+                            _( "Remove the previously embedded drawing sheet file '%s'?" ),
+                            currentEmbeddedName ) ) )
+        {
+            m_embeddedSheetsToRemove.insert( currentEmbeddedName );
+        }
     }
 
     delete m_drawingSheet;

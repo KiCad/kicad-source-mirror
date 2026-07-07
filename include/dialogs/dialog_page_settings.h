@@ -20,6 +20,8 @@
 #ifndef _DIALOG_PAGES_SETTINGS_H_
 #define _DIALOG_PAGES_SETTINGS_H_
 
+#include <set>
+
 #include <page_info.h>
 #include <title_block.h>
 #include <widgets/unit_binder.h>
@@ -132,6 +134,10 @@ protected:
     double             m_iuPerMils;
     EMBEDDED_FILES*    m_embeddedFiles; // the embedded files reference from the parent
     FILENAME_RESOLVER* m_filenameResolver;
+
+    // Embedded worksheets the user approved removing, deferred until the dialog is accepted
+    // so a cancel cannot orphan the worksheet reference
+    std::set<wxString> m_embeddedSheetsToRemove;
 
 private:
     UNIT_BINDER m_customSizeX;
