@@ -31,12 +31,36 @@
 
 #include <nlohmann/json.hpp>
 
-#include <kiplatform/io.h>
+#include <wx/filename.h>
 
 
 static constexpr uint32_t GLB_MAGIC = 0x46546C67;      // "glTF" in little-endian
 static constexpr uint32_t GLB_CHUNK_JSON = 0x4E4F534A;  // "JSON" in little-endian
 static constexpr int      GLTF_LINES_MODE = 1;
+
+
+// Writes to a sibling temp file and renames it over aFilePath, so a crash or failed write can
+// never leave a partially-written (and therefore corrupt) GLB behind.
+static bool atomicWriteFile( const wxString& aFilePath, const uint8_t* aData, size_t aSize )
+{
+    wxFileName tmpFn( aFilePath );
+    tmpFn.SetName( tmpFn.GetName() + wxT( ".tmp" ) );
+    wxString tmpPath = tmpFn.GetFullPath();
+
+    {
+        std::ofstream tmpFile( tmpPath.ToStdString(), std::ios::binary | std::ios::trunc );
+
+        if( !tmpFile.is_open() )
+            return false;
+
+        tmpFile.write( reinterpret_cast<const char*>( aData ), static_cast<std::streamsize>( aSize ) );
+
+        if( !tmpFile.good() )
+            return false;
+    }
+
+    return wxRenameFile( tmpPath, aFilePath, true );
+}
 
 
 bool FixGlbLinesPrimitives( const wxString& aFilePath )
@@ -254,5 +278,5 @@ bool FixGlbLinesPrimitives( const wxString& aFilePath )
                         fileData.begin() + totalLength );
 
     // Replace the file atomically so a partial write or crash can never leave a corrupt GLB.
-    return KIPLATFORM::IO::AtomicWriteFile( aFilePath, outData.data(), outData.size() );
+    return atomicWriteFile( aFilePath, outData.data(), outData.size() );
 }
