@@ -20,6 +20,8 @@
 #ifndef GAL_OPENGL_RESOURCES_H___
 #define GAL_OPENGL_RESOURCES_H___
 
+#include <gal/gal.h>
+
 #define BITMAP_FONT_USE_SPANS
 
 namespace KIGFX {
@@ -31,7 +33,8 @@ namespace KIGFX {
             unsigned int width, height;
             unsigned int char_border;
             unsigned int spacing;
-            unsigned char pixels[1024 * 1024 * 3];
+            // Height must match the atlas in bitmap_font_img.c
+            unsigned char pixels[1024 * 1071 * 3];
         };
 
         struct FONT_INFO_TYPE
@@ -57,10 +60,10 @@ namespace KIGFX {
             float advance;
         };
 
-        extern FONT_IMAGE_TYPE font_image;
+        extern GAL_API FONT_IMAGE_TYPE font_image;
         extern FONT_INFO_TYPE  font_information;
 
-        const FONT_GLYPH_TYPE* LookupGlyph( unsigned int aCodePoint );
+        GAL_API const FONT_GLYPH_TYPE* LookupGlyph( unsigned int aCodePoint );
 
     }
 

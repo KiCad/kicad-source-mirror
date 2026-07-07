@@ -314,7 +314,8 @@ class Glyph(NamedTuple):
             elif s[0] == "name":
                 pname = s[1]
 
-        if pname == "~":
+        # An unnamed metric pin is "~" in KiCad 8/9 and "" from KiCad 10 on.
+        if pname in ("~", ""):
             pname = "P" if point.x <= 0 else "S"
         return pname, point
 

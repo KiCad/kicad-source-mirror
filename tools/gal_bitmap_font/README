@@ -3,6 +3,15 @@ Creating bitmap fonts for GAL
 Maciej Suminski <maciej.suminski@cern.ch>
 12.04.2016
 
+Adding a few glyphs
+-------------------
+To add individual glyphs the base font lacks (symbols, arrows) without
+regenerating the whole atlas, run add_sdf_glyphs.py. It rasterizes the missing
+glyphs from Noto, converts them to the atlas SDF encoding, and appends them in a
+new shelf-band so the existing atlas stays byte-identical. Edit its SOURCES map
+to choose codepoints, then update the pixels[] height it prints in
+common/gal/opengl/gl_resources.h.
+
 To create a new bitmap font atlas for Graphics Abstraction Layer, follow these steps:
 
  * Download Bitmap Font Generator [1] (runs well under wine)

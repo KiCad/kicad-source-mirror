@@ -2803,7 +2803,8 @@ skipcodes 32 0
 skipcodes 160 0
 
 // Box Drawing (2500-257F)
-skipcodes 128 0
++ BOX_LIGHT_H  # 2500 COLLINEAR constraint
+skipcodes 127 0
 
 // Block Elements (2580-259F)
 skipcodes 32 0
@@ -2910,16 +2911,25 @@ skipcodes 32 0
 + TRIANGLE_RA
 
 // Miscellaneous Symbols (2600-26FF)
-skipcodes 256 0
+skipcodes 160 0
++ WARN_TRIANGLE  # 26A0 WARNING SIGN
++ HV_TRIANGLE  # 26A1 HIGH VOLTAGE SIGN
+skipcodes 94 0
 
 // Dingbats (2700-27BF)
-skipcodes 192 0
+skipcodes 5 0
++ CHECK_MARK  # 2705 WHITE HEAVY CHECK MARK
+skipcodes 72 0
++ CROSS_BOX  # 274E NEGATIVE SQUARED CROSS MARK
+skipcodes 113 0
 
 // Miscellaneous Mathematical Symbols A (27C0-27EF)
 skipcodes 48 0
 
 // Supplemental Arrows A (27F0-27FF)
-skipcodes 16 0
+skipcodes 7 0
++ ARROW_LR_LONG  # 27F7 LONG LEFT RIGHT ARROW
+skipcodes 8 0
 
 // Braille Patterns (2800-28FF)
 skipcodes 256 0
