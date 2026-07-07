@@ -249,6 +249,9 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             {} ) );
 
+    // Let the save drop removed colors instead of merging them back in
+    m_params.back()->SetClearUnknownKeys();
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "net_chain_classes",
             [&]() -> nlohmann::json
             {
