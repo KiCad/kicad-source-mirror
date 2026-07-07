@@ -2469,6 +2469,35 @@ void SCH_EDITOR_CONTROL::prunePastedSymbolInstances()
 }
 
 
+const LIB_SYMBOL* SCH_EDITOR_CONTROL::ChoosePasteLibSymbol( const SCH_SCREEN* aClipboardScreen,
+                                                            const SCH_SCREEN* aDestScreen,
+                                                            const wxString&   aLibSymbolName )
+{
+    // The clipboard's cached library symbol is a matched pair with the pasted instance, so it
+    // must win over the destination's same-named cache. Pasting from the destination cache would
+    // silently remap the instance to a different definition and drop in-place edits such as
+    // renumbered pins (issue 21401) or a changed power type (issue 22162). Fall back to the
+    // destination cache only when the clipboard carries no copy.
+    if( aClipboardScreen )
+    {
+        auto clipIt = aClipboardScreen->GetLibSymbols().find( aLibSymbolName );
+
+        if( clipIt != aClipboardScreen->GetLibSymbols().end() )
+            return clipIt->second;
+    }
+
+    if( aDestScreen )
+    {
+        auto destIt = aDestScreen->GetLibSymbols().find( aLibSymbolName );
+
+        if( destIt != aDestScreen->GetLibSymbols().end() )
+            return destIt->second;
+    }
+
+    return nullptr;
+}
+
+
 int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wxWindow::FindFocus() );
@@ -2737,52 +2766,15 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            // The library symbol gets set from the cached library symbols in the current
-            // schematic not the symbol libraries.  The cached library symbol may have
-            // changed from the original library symbol which would cause the copy to
-            // be incorrect.
             SCH_SCREEN* currentScreen = m_frame->GetScreen();
 
             wxCHECK2( currentScreen, continue );
 
-            // First get the library symbol from the clipboard (if available)
-            auto clipIt = tempScreen->GetLibSymbols().find( symbol->GetSchSymbolLibraryName() );
-            LIB_SYMBOL* clipLibSymbol = ( clipIt != tempScreen->GetLibSymbols().end() )
-                                                ? clipIt->second
-                                                : nullptr;
+            const LIB_SYMBOL* source = ChoosePasteLibSymbol( tempScreen, currentScreen,
+                                                             symbol->GetSchSymbolLibraryName() );
 
-            // Then check the current screen
-            auto it = currentScreen->GetLibSymbols().find( symbol->GetSchSymbolLibraryName() );
-            auto end = currentScreen->GetLibSymbols().end();
-
-            LIB_SYMBOL* libSymbol = nullptr;
-
-            if( it != end && clipLibSymbol )
-            {
-                // Both exist - check if power types match. If they differ (e.g., one is
-                // local power and the other is global power), use the clipboard version
-                // to preserve the copied symbol's power type.
-                if( clipLibSymbol->IsLocalPower() != it->second->IsLocalPower()
-                    || clipLibSymbol->IsGlobalPower() != it->second->IsGlobalPower() )
-                {
-                    libSymbol = new LIB_SYMBOL( *clipLibSymbol );
-                }
-                else
-                {
-                    libSymbol = new LIB_SYMBOL( *it->second );
-                }
-            }
-            else if( it != end )
-            {
-                libSymbol = new LIB_SYMBOL( *it->second );
-            }
-            else if( clipLibSymbol )
-            {
-                libSymbol = new LIB_SYMBOL( *clipLibSymbol );
-            }
-
-            if( libSymbol )
-                symbol->SetLibSymbol( libSymbol );
+            if( source )
+                symbol->SetLibSymbol( new LIB_SYMBOL( *source ) );
 
             // If the symbol is already in the schematic we have to always keep the annotations. The exception
             // is if the user has chosen to remove them.
@@ -2828,7 +2820,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
                 {
                     // Ignore symbols from a non-existant library.
-                    if( libSymbol )
+                    if( source )
                     {
                         SCH_REFERENCE schReference( symbol, sheetPath );
                         schReference.SetSheetNumber( sheetPath.GetPageNumberAsInt() );

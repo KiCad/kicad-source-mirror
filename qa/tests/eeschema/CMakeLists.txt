@@ -28,6 +28,9 @@ include_directories(
     # symbol_edit_frame.h (white-box tested by the tab regression tests) includes
     # <symbol_tree_pane.h>, which lives under eeschema/widgets.
     ${CMAKE_SOURCE_DIR}/eeschema/widgets
+    # sch_tool_base.h (pulled in by tools/sch_editor_control.h) includes the bare
+    # <symbol_edit_frame.h>, which lives under eeschema/symbol_editor.
+    ${CMAKE_SOURCE_DIR}/eeschema/symbol_editor
     # dialog_sim_model.h (white-box tested for issue 23687) includes <dialog_sim_model_base.h>.
     ${CMAKE_SOURCE_DIR}/eeschema/dialogs
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
@@ -96,6 +99,7 @@ set( QA_EESCHEMA_SRCS
     test_issue18299_bus_member_rename.cpp
     test_issue23840_bus_group_to_vector.cpp
     test_issue20173_paste_subsheet.cpp
+    test_issue21401_paste_pin_numbers.cpp
     test_issue22286_pin_alternate.cpp
     test_issue22620_group_annotation.cpp
     test_issue24335_group_move_ancestor.cpp

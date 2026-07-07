@@ -27,6 +27,8 @@
 #include <status_popup.h>
 
 class SCH_EDIT_FRAME;
+class SCH_SCREEN;
+class LIB_SYMBOL;
 
 /**
  * Handle actions specific to the schematic editor.
@@ -119,6 +121,23 @@ public:
     int CopyAsText( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
     int Duplicate( const TOOL_EVENT& aEvent );
+
+    /**
+     * Choose which cached library symbol a pasted instance should adopt.
+     *
+     * The clipboard and destination screens may both cache a same-named library symbol that
+     * differs (e.g. pins renumbered or power type changed in place). The clipboard copy is a
+     * matched pair with the pasted instance, so it must win to preserve the copied edits; the
+     * destination cache is only a fallback when the clipboard carries no copy.
+     *
+     * @param aClipboardScreen Screen holding the clipboard's cached library symbols.
+     * @param aDestScreen      Destination schematic screen.
+     * @param aLibSymbolName   Cached library symbol name to look up in both screens.
+     * @return Non-owning pointer to the chosen source symbol, or nullptr if neither has it.
+     */
+    static const LIB_SYMBOL* ChoosePasteLibSymbol( const SCH_SCREEN* aClipboardScreen,
+                                                   const SCH_SCREEN* aDestScreen,
+                                                   const wxString&   aLibSymbolName );
 
     int EditWithSymbolEditor( const TOOL_EVENT& aEvent );
     int ShowCvpcb( const TOOL_EVENT& aEvent );
