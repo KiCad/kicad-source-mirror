@@ -164,8 +164,8 @@ void LIB_SYMBOL::cacheSearchTerms()
 
     // Order matters, see SEARCH_TERM_CACHE_INDEX
     m_searchTermsCache.emplace_back( SEARCH_TERM( GetLibNickname(), 4 ) );
-    m_searchTermsCache.emplace_back( SEARCH_TERM( GetName(), 8 ) );
-    m_searchTermsCache.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16 ) );
+    m_searchTermsCache.emplace_back( SEARCH_TERM( GetName(), 8, true ) );
+    m_searchTermsCache.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16, true ) );
 
     wxStringTokenizer keywordTokenizer( GetShownKeyWords(), " \t\r\n", wxTOKEN_STRTOK );
 

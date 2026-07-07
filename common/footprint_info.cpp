@@ -70,8 +70,8 @@ std::vector<SEARCH_TERM>& FOOTPRINT_INFO::GetSearchTerms()
     m_searchTerms.reserve( 6 );
 
     m_searchTerms.emplace_back( SEARCH_TERM( GetLibNickname(), 4 ) );
-    m_searchTerms.emplace_back( SEARCH_TERM( GetName(), 8 ) );
-    m_searchTerms.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16 ) );
+    m_searchTerms.emplace_back( SEARCH_TERM( GetName(), 8, true ) );
+    m_searchTerms.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16, true ) );
 
     wxStringTokenizer keywordTokenizer( GetKeywords(), " \t\r\n", wxTOKEN_STRTOK );
 
