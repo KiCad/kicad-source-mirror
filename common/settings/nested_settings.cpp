@@ -22,6 +22,7 @@
 
 #include <settings/json_settings_internals.h>
 #include <settings/nested_settings.h>
+#include <settings/parameters.h>
 #include <locale_io.h>
 
 
@@ -135,6 +136,20 @@ bool NESTED_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
     try
     {
         bool modified = Store();
+
+        // Params that own their subtree need to be able to delete keys. The parent
+        // merge only adds and updates, so clear the old copy from the baseline first.
+        for( const PARAM_BASE* param : m_params )
+        {
+            if( !param->ClearUnknownKeys() )
+                continue;
+
+            nlohmann::json::json_pointer ptr =
+                    JSON_SETTINGS_INTERNALS::PointerFromString( m_path + "." + param->GetJsonPath() );
+
+            if( m_parent->m_internals->m_original.contains( ptr ) )
+                m_parent->m_internals->m_original[ptr] = nlohmann::json::object();
+        }
 
         auto jsonObjectInParent = m_parent->GetJson( m_path );
 
