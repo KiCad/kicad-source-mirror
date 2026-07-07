@@ -78,8 +78,8 @@ void ANGLE_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
         {
             anglePoints.push_back( &point );
 
-            EDIT_POINT* prev = points->Previous( point );
-            EDIT_POINT* next = points->Next( point );
+            EDIT_POINT* prev = points->Previous( point, false );
+            EDIT_POINT* next = points->Next( point, false );
 
             if( prev )
                 anglePoints.push_back( prev );
@@ -110,8 +110,8 @@ void ANGLE_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
 
     for( const EDIT_POINT* pt : anglePoints )
     {
-        EDIT_POINT* prev = points->Previous( *pt );
-        EDIT_POINT* next = points->Next( *pt );
+        EDIT_POINT* prev = points->Previous( *pt, false );
+        EDIT_POINT* next = points->Next( *pt, false );
 
         if( !( prev && next ) )
             continue;
