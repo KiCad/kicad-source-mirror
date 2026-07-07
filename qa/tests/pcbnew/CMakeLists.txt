@@ -86,6 +86,7 @@ set( QA_PCBNEW_SRCS
     test_plot_controller.cpp
     test_shape_corner_radius.cpp
     test_shape_hatch_knockout.cpp
+    test_connect_board_shapes.cpp
     test_pcb_grid_helper.cpp
     test_save_load.cpp
     test_stacked_pin_netlist.cpp
