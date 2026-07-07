@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-07-06 11:09+0000\n"
+"PO-Revision-Date: 2026-07-07 21:22+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -4044,9 +4044,8 @@ msgid "Commit message cannot be empty"
 msgstr "Commit-Nachricht darf nicht leer sein"
 
 #: common/dialogs/git/dialog_git_commit.cpp:196
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Mindestens eine Eigenschaft für die Rückwärts-Annotation auswählen."
+msgstr "Mindestens eine Datei zum Committen auswählenen"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
@@ -37785,11 +37784,9 @@ msgid "Custom Rules"
 msgstr "Benutzerdefinierte Regeln"
 
 #: pcbnew/cross-probing.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying footprint library '%s'."
-msgstr ""
-"Bei dem Versuch, den Footprint %s aus der Bibliothek \"%s\" zu laden, ist "
-"ein Fehler aufgetreten."
+msgstr "Fehler beim Kopieren der Footprintbibliothek \"%s\"."
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:243
 msgid "Barcode Error"
