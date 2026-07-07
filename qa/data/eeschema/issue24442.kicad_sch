@@ -1,0 +1,69 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+	(paper "A4")
+	(lib_symbols)
+	(text "${ERC_ERROR start_of_text}"
+		(exclude_from_sim no)
+		(at 50 50 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb01")
+	)
+	(text "Fill in: ${ERC_ERROR placeholder_text}"
+		(exclude_from_sim no)
+		(at 50 60 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb02")
+	)
+	(text "${ERC_WARNING this_is_warning} trailing"
+		(exclude_from_sim no)
+		(at 50 70 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb03")
+	)
+	(text "prefix ${ERC_WARNING embedded_warning} suffix"
+		(exclude_from_sim no)
+		(at 50 80 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb04")
+	)
+	(text "literal: \\${ERC_ERROR not_a_real_error}"
+		(exclude_from_sim no)
+		(at 50 90 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb05")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

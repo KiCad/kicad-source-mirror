@@ -406,50 +406,63 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
     auto testAssertion =
             [&]( BOARD_ITEM* item, const wxString& text, const VECTOR2I& pos, int layer )
             {
-                static wxRegEx warningExpr( wxS( "^\\$\\{DRC_WARNING\\s*([^}]*)\\}(.*)$" ) );
-                static wxRegEx errorExpr( wxS( "^\\$\\{DRC_ERROR\\s*([^}]*)\\}(.*)$" ) );
+                // Match anywhere in the text so users can embed ${DRC_ERROR ...}
+                // or ${DRC_WARNING ...} inside placeholder strings rather than
+                // only at the start of the field.  The leading "(^|[^\\\\])"
+                // group requires the marker to start the string or follow a
+                // non-backslash, so `\${DRC_ERROR ...}` stays inert; the
+                // captured message is group 2.
+                static wxRegEx warningExpr( wxS( "(^|[^\\\\])\\$\\{DRC_WARNING\\s*([^}]*)\\}" ) );
+                static wxRegEx errorExpr( wxS( "(^|[^\\\\])\\$\\{DRC_ERROR\\s*([^}]*)\\}" ) );
 
-                if( warningExpr.Matches( text ) )
-                {
-                    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_WARNING ) )
-                    {
-                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_GENERIC_WARNING );
-                        wxString                  drcText = warningExpr.GetMatch( text, 1 );
+                auto reportEach =
+                        [&]( wxRegEx& aExpr, int aErrorCode )
+                        {
+                            // Return true if any token of this kind was *matched*, even when
+                            // the per-code error limit had already been exceeded.  The caller
+                            // uses the return value to suppress an unrelated
+                            // DRCE_UNRESOLVED_VARIABLE marker; if we let the limit-exceeded
+                            // case fall through to false we'd raise the wrong error.
+                            bool     found = false;
+                            wxString remaining = text;
 
-                        if( item )
-                            drcItem->SetItems( item );
-                        else
-                            drcText += _( " (in drawing sheet)" );
+                            while( aExpr.Matches( remaining ) )
+                            {
+                                found = true;
 
-                        drcItem->SetErrorMessage( drcText );
+                                if( !m_drcEngine->IsErrorLimitExceeded( aErrorCode ) )
+                                {
+                                    wxString drcText = aExpr.GetMatch( remaining, 2 );
 
-                        reportViolation( drcItem, pos, layer );
-                    }
+                                    std::shared_ptr<DRC_ITEM> drcItem =
+                                            DRC_ITEM::Create( aErrorCode );
 
-                    return true;
-                }
+                                    if( item )
+                                        drcItem->SetItems( item );
+                                    else
+                                        drcText += _( " (in drawing sheet)" );
 
-                if( errorExpr.Matches( text ) )
-                {
-                    if( !m_drcEngine->IsErrorLimitExceeded( DRCE_GENERIC_ERROR ) )
-                    {
-                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_GENERIC_ERROR );
-                        wxString                  drcText = errorExpr.GetMatch( text, 1 );
+                                    drcItem->SetErrorMessage( drcText );
 
-                        if( item )
-                            drcItem->SetItems( item );
-                        else
-                            drcText += _( " (in drawing sheet)" );
+                                    reportViolation( drcItem, pos, layer );
+                                }
 
-                        drcItem->SetErrorMessage( drcText );
+                                size_t start = 0;
+                                size_t len = 0;
 
-                        reportViolation( drcItem, pos, layer );
-                    }
+                                if( !aExpr.GetMatch( &start, &len, 0 ) || len == 0 )
+                                    break;
 
-                    return true;
-                }
+                                remaining = remaining.Mid( start + len );
+                            }
 
-                return false;
+                            return found;
+                        };
+
+                bool foundWarning = reportEach( warningExpr, DRCE_GENERIC_WARNING );
+                bool foundError = reportEach( errorExpr, DRCE_GENERIC_ERROR );
+
+                return foundWarning || foundError;
             };
 
     forEachGeometryItem( itemTypes, LSET::AllLayersMask(),
@@ -470,18 +483,23 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
 
                 if( EDA_TEXT* textItem = dynamic_cast<EDA_TEXT*>( item ) )
                 {
-                    wxString result = ExpandEnvVarSubstitutions( textItem->GetShownText( true ),
-                                                                 nullptr /*project already done*/ );
-
-                    if( result.Matches( wxT( "*${*}*" ) ) )
+                    // A matched ${DRC_ERROR}/${DRC_WARNING} is the intended signal; the resolved
+                    // text still carries a literal ${...}, so flag the unresolved variable only
+                    // when no marker fired (matching the drawing-sheet path below).
+                    if( testAssertion( item, textItem->GetText(), item->GetPosition(),
+                                       item->GetLayer() ) )
+                    {
+                        // Don't run unresolved test
+                    }
+                    else if( ExpandEnvVarSubstitutions( textItem->GetShownText( true ),
+                                                        nullptr /*project already done*/ )
+                                     .Matches( wxT( "*${*}*" ) ) )
                     {
                         auto drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                         drcItem->SetItems( item );
 
                         reportViolation( drcItem, item->GetPosition(), item->GetLayer() );
                     }
-
-                    testAssertion( item, textItem->GetText(), item->GetPosition(), item->GetLayer() );
                 }
 
                 return true;
