@@ -23,6 +23,7 @@
 #include <cstdio> // snprintf
 #include <stack>
 #include <ranges>
+#include <vector>
 
 #include <wx/filename.h>
 #include <wx/mstream.h>
@@ -253,41 +254,46 @@ void PDF_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 {
     wxASSERT( m_workFile );
 
+    std::vector<int> pattern;
+
     switch( aLineStyle )
     {
     case LINE_STYLE::DASH:
-        fmt::println( m_workFile, "[{} {}] 0 d",
-                      (int) GetDashMarkLenIU( aLineWidth ),
-                      (int) GetDashGapLenIU( aLineWidth ) );
+        pattern = { (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) };
         break;
 
     case LINE_STYLE::DOT:
-        fmt::println( m_workFile, "[{} {}] 0 d",
-                      (int) GetDotMarkLenIU( aLineWidth ),
-                      (int) GetDashGapLenIU( aLineWidth ) );
+        pattern = { (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) };
         break;
 
     case LINE_STYLE::DASHDOT:
-        fmt::println( m_workFile, "[{} {} {} {}] 0 d",
-                      (int) GetDashMarkLenIU( aLineWidth ),
-                      (int) GetDashGapLenIU( aLineWidth ),
-                      (int) GetDotMarkLenIU( aLineWidth ),
-                      (int) GetDashGapLenIU( aLineWidth ) );
+        pattern = { (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) };
         break;
 
     case LINE_STYLE::DASHDOTDOT:
-        fmt::println( m_workFile, "[{} {} {} {} {} {}] 0 d",
-                      (int) GetDashMarkLenIU( aLineWidth ),
-                      (int) GetDashGapLenIU( aLineWidth ),
-                      (int) GetDotMarkLenIU( aLineWidth ),
-                      (int) GetDashGapLenIU( aLineWidth ),
-                      (int) GetDotMarkLenIU( aLineWidth ),
-                      (int) GetDashGapLenIU( aLineWidth ) );
+        pattern = { (int) GetDashMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ),
+                    (int) GetDotMarkLenIU( aLineWidth ), (int) GetDashGapLenIU( aLineWidth ) };
         break;
 
     default:
-        fmt::println( m_workFile, "[] 0 d\n" );
+        break;
     }
+
+    // A PDF dash array whose elements sum to zero is illegal and makes strict viewers
+    // (Adobe Acrobat, Evince) abort rendering of the remaining page content. This happens
+    // when a dashed item is plotted with a zero pen width, e.g. a border-less filled shape
+    // whose stroke is dotted. Fall back to a solid line in that case.
+    bool allZero = std::all_of( pattern.begin(), pattern.end(), []( int v ) { return v == 0; } );
+
+    if( pattern.empty() || allZero )
+    {
+        fmt::println( m_workFile, "[] 0 d" );
+        return;
+    }
+
+    fmt::println( m_workFile, "[{}] 0 d", fmt::join( pattern, " " ) );
 }
 
 

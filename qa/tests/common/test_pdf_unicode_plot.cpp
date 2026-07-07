@@ -775,4 +775,108 @@ BOOST_AUTO_TEST_CASE( StrokeFontWordSpacingMatchesGlyphAdvance )
     MaybeRemoveFile( pdfPath );
 }
 
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23843
+// A border-less filled shape with a dashed/dotted stroke is plotted with a zero pen width.
+// PDF_PLOTTER::SetDash then computed every dash element from that zero width, emitting an
+// all-zero dash array "[0 0] 0 d". Such an array is illegal in PDF and makes strict viewers
+// (Adobe Acrobat, Evince) abort rendering of the rest of the page, dropping the shape fill,
+// the page background and any junction dots that follow. SetDash must fall back to a solid
+// line "[] 0 d" when the requested pattern degenerates to all zeros.
+BOOST_AUTO_TEST_CASE( SetDashZeroWidthNoIllegalDashArray )
+{
+    wxString pdfPath = getTempPdfPath( "kicad_pdf_zero_dash" );
+
+    PDF_PLOTTER plotter;
+    SIMPLE_RENDER_SETTINGS renderSettings;
+
+    plotter.SetRenderSettings( &renderSettings );
+    BOOST_REQUIRE( plotter.OpenFile( pdfPath ) );
+    plotter.SetViewport( VECTOR2I( 0, 0 ), 1.0, 1.0, false );
+    BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ), wxT( "DashTest" ) ) );
+
+    // Reproduce the border-less dotted filled rectangle from the issue: a dotted dash style
+    // with a zero pen width, followed by the filled (no-outline) rectangle itself. Exercise
+    // every dashed style so a regression in any of them is caught.
+    plotter.SetColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+
+    for( LINE_STYLE style : { LINE_STYLE::DASH, LINE_STYLE::DOT, LINE_STYLE::DASHDOT,
+                              LINE_STYLE::DASHDOTDOT } )
+    {
+        plotter.SetDash( 0, style );
+    }
+
+    plotter.SetDash( 0, LINE_STYLE::DOT );
+    plotter.Rect( VECTOR2I( 50000, 50000 ), VECTOR2I( 70000, 60000 ), FILL_T::FILLED_SHAPE, 0 );
+
+    plotter.EndPlot();
+
+    std::string buffer;
+    BOOST_REQUIRE( ReadPdfWithDecompressedStreams( pdfPath, buffer ) );
+    BOOST_CHECK( buffer.rfind( "%PDF", 0 ) == 0 );
+
+    // No illegal all-zero dash array may be present anywhere in the content stream, for any
+    // of the dashed styles.
+    for( const char* illegalPattern : { "[0 0] 0 d", "[0 0 0 0] 0 d", "[0 0 0 0 0 0] 0 d" } )
+    {
+        BOOST_CHECK_MESSAGE( buffer.find( illegalPattern ) == std::string::npos,
+                             "PDF contains an illegal all-zero dash array (" << illegalPattern
+                             << "), which breaks strict viewers" );
+    }
+
+    // The zero-width dashed styles must have degenerated to a solid line.
+    BOOST_CHECK_MESSAGE( buffer.find( "[] 0 d" ) != std::string::npos,
+                         "Zero-width dashed style should fall back to a solid dash array" );
+
+    // The fill operator for the rectangle must still be emitted.
+    BOOST_CHECK_MESSAGE( buffer.find( " re f" ) != std::string::npos
+                                 || buffer.find( "re\nf" ) != std::string::npos,
+                         "Filled rectangle should still be plotted" );
+
+    MaybeRemoveFile( pdfPath );
+}
+
+
+// Companion to SetDashZeroWidthNoIllegalDashArray: the solid-line fallback must apply only to the
+// degenerate all-zero case. A normal non-zero pen width must still emit a real dashed array, so a
+// fix that collapsed every dashed style to solid would regress here.
+BOOST_AUTO_TEST_CASE( SetDashNonZeroWidthKeepsDashArray )
+{
+    wxString pdfPath = getTempPdfPath( "kicad_pdf_nonzero_dash" );
+
+    PDF_PLOTTER plotter;
+    SIMPLE_RENDER_SETTINGS renderSettings;
+
+    plotter.SetRenderSettings( &renderSettings );
+    BOOST_REQUIRE( plotter.OpenFile( pdfPath ) );
+    plotter.SetViewport( VECTOR2I( 0, 0 ), 1.0, 1.0, false );
+    BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ), wxT( "DashTest" ) ) );
+
+    plotter.SetColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+    plotter.SetDash( 10000, LINE_STYLE::DASH );
+    plotter.MoveTo( VECTOR2I( 50000, 50000 ) );
+    plotter.FinishTo( VECTOR2I( 70000, 50000 ) );
+
+    plotter.EndPlot();
+
+    std::string buffer;
+    BOOST_REQUIRE( ReadPdfWithDecompressedStreams( pdfPath, buffer ) );
+
+    // The dash array elements scale with the pen width, so a non-zero width yields a real,
+    // non-zero pattern. Find the emitted array and confirm it is neither the solid fallback
+    // "[]" nor the all-zero degenerate form.
+    size_t dashPos = buffer.find( "] 0 d" );
+    BOOST_REQUIRE_MESSAGE( dashPos != std::string::npos, "No dash array was emitted" );
+
+    size_t openPos = buffer.rfind( '[', dashPos );
+    BOOST_REQUIRE( openPos != std::string::npos && openPos < dashPos );
+
+    std::string dashArray = buffer.substr( openPos, dashPos - openPos + 1 );
+
+    BOOST_CHECK_MESSAGE( dashArray.find_first_of( "123456789" ) != std::string::npos,
+                         "Non-zero dashed style should emit a real, non-zero dash array, got "
+                                 << dashArray );
+    BOOST_CHECK_MESSAGE( dashArray != "[]",
+                         "A non-zero pen width must not fall back to the solid line" );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
