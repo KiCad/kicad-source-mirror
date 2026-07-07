@@ -147,6 +147,9 @@ private:
                           SCH_COMMIT* aCommit, int& aXBendCount, int& aYBendCount,
                           const EE_GRID_HELPER& aGrid );
 
+    ///< Slide a group of dragged sheet pins along the sheet border so they keep their spacing.
+    void spreadMovingSheetPinGroups( const SCH_SELECTION& aSelection );
+
     ///< Handle tool action events during the move operation
     bool handleMoveToolActions( const TOOL_EVENT* aEvent, SCH_COMMIT* aCommit,
                                 const SCH_SELECTION& aSelection );
@@ -193,6 +196,9 @@ private:
     // A map of sheet pins to the line-endings (true == start) they're connected to.  Sheet
     // pins are constrained in their movement so their attached lines must be too.
     std::map<SCH_SHEET_PIN*, std::pair<SCH_LINE*, bool>> m_specialCaseSheetPins;
+
+    // Each dragged sheet pin's distance along its sheet border at drag start.
+    std::map<SCH_SHEET_PIN*, long long> m_sheetPinDragArc;
 };
 
 #endif //KICAD_SCH_MOVE_TOOL_H
