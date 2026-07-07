@@ -1969,11 +1969,68 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
         }
     }
 
+    // A global rail connects >=2 pads in more than one channel; find them across all areas so the
+    // exclusion is the same for every target, not just the one being matched against.
+    std::unordered_map<int, std::vector<const RULE_AREA*>> netInternalAreas;
+
+    for( const RULE_AREA& area : m_areas.m_areas )
+    {
+        std::unordered_map<int, int> areaNetPadCounts;
+
+        for( const FOOTPRINT* fp : area.m_components )
+        {
+            for( const PAD* pad : fp->Pads() )
+            {
+                if( pad->GetNetCode() > 0 )
+                    areaNetPadCounts[pad->GetNetCode()]++;
+            }
+        }
+
+        for( const auto& [netCode, padCount] : areaNetPadCounts )
+        {
+            if( padCount >= 2 )
+                netInternalAreas[netCode].push_back( &area );
+        }
+    }
+
+    // Require two component-disjoint areas so overlapping rule areas can't make a per-channel net
+    // look global.
+    auto disjoint =
+            []( const RULE_AREA* aA, const RULE_AREA* aB )
+            {
+                for( FOOTPRINT* fp : aA->m_components )
+                {
+                    if( aB->m_components.count( fp ) )
+                        return false;
+                }
+
+                return true;
+            };
+
+    std::unordered_set<int> globalNets;
+
+    for( const auto& [netCode, areas] : netInternalAreas )
+    {
+        for( size_t i = 0; i < areas.size() && !globalNets.count( netCode ); i++ )
+        {
+            for( size_t j = i + 1; j < areas.size(); j++ )
+            {
+                if( disjoint( areas[i], areas[j] ) )
+                {
+                    globalNets.insert( netCode );
+                    break;
+                }
+            }
+        }
+    }
+
     PROF_TIMER timerBuild;
     std::unique_ptr<CONNECTION_GRAPH> cgRef( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_components,
-                                                                                       aTargetArea->m_components ) );
+                                                                                       aTargetArea->m_components,
+                                                                                       globalNets ) );
     std::unique_ptr<CONNECTION_GRAPH> cgTarget( CONNECTION_GRAPH::BuildFromFootprintSet( aTargetArea->m_components,
-                                                                                         aRefArea->m_components ) );
+                                                                                         aRefArea->m_components,
+                                                                                         globalNets ) );
     timerBuild.Stop();
 
     wxLogTrace( traceMultichannelTool, wxT( "Graph construction: %s (%d + %d components)" ),

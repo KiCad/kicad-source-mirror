@@ -28,6 +28,7 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <unordered_set>
 #include <optional>
 
 #include <wx/string.h>
@@ -196,8 +197,16 @@ public:
     bool   FindIsomorphism( CONNECTION_GRAPH* target, COMPONENT_MATCHES& result,
                             std::vector<TOPOLOGY_MISMATCH_REASON>& aFailureDetails,
                             const ISOMORPHISM_PARAMS& aParams = {} );
+    /**
+     * @param aFps             the channel whose graph is built.
+     * @param aOtherChannelFps the channel it is matched against, used to spot a rail shared by both.
+     * @param aGlobalNets      netcodes already known to be global rails; excluded regardless of
+     *                         their pad count in @p aFps, so a rail with a single pad in this
+     *                         channel is still ignored consistently across targets.
+     */
     static std::unique_ptr<CONNECTION_GRAPH> BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps,
-                                                                     const std::set<FOOTPRINT*>& aOtherChannelFps = {} );
+                                                                     const std::set<FOOTPRINT*>& aOtherChannelFps = {},
+                                                                     const std::unordered_set<int>& aGlobalNets = {} );
     std::vector<COMPONENT*> &Components() { return m_components; }
 
 private:
