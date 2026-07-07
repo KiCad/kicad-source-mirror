@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-07-02 19:01+0000\n"
+"PO-Revision-Date: 2026-07-08 03:35+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -15229,9 +15229,8 @@ msgid "Delete extra units from symbol?"
 msgstr "シンボルから余計なユニットを削除しますか？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "シンボルには少なくとも1つのボディ スタイルが必要です"
+msgstr "カスタム ボディ スタイルには少なくとも2つのエントリが必要です"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:556
 msgid "Delete extra body styles from symbol?"
@@ -25377,12 +25376,12 @@ msgid "Add Symbol Library"
 msgstr "シンボル ライブラリを追加"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1216
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"ライブラリ ファイル '%s' を作成できません。\n"
+"ライブラリ ファイル '%s' を上書きできません。\n"
 "書き込み権限を確認して、再度試してください。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1224
@@ -26869,9 +26868,8 @@ msgid "Set the exclude from board attribute"
 msgstr "[部品表から除外]の属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1098
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "[シミュレーションから除外]の属性を設定"
+msgstr "部品位置情報ファイルから除外する属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1104
 msgid "Set the do not populate attribute"
@@ -30887,7 +30885,6 @@ msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr "外観プリセット。オプション:%s,%s またはユーザー定義のプリセット名"
 
 #: kicad/cli/command_pcb_render.cpp:266
-#, fuzzy
 msgid "Use colors defined in the board stackup instead of those in the preset"
 msgstr "基板積層構造で定義された色はプリセットの色を上書きします"
 
@@ -37296,9 +37293,9 @@ msgid "Custom Rules"
 msgstr "カスタム ルール"
 
 #: pcbnew/cross-probing.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying footprint library '%s'."
-msgstr "フットプリント %s をライブラリ %s から読み込み中にエラー。"
+msgstr "フットプリント ライブラリをコピー中にエラー '%s' 。"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:243
 msgid "Barcode Error"
@@ -47551,9 +47548,8 @@ msgid "Items not allowed"
 msgstr "アイテム禁止"
 
 #: pcbnew/drc/drc_item.cpp:64
-#, fuzzy
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "Edge.Cutsのレイヤー上の文字(もしくは寸法)"
+msgstr "Edge.Cuts レイヤー上の文字またはグラフィックス"
 
 #: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
@@ -52476,9 +52472,9 @@ msgid "Loading unicode strings..."
 msgstr "Unicode文字列を読み込み中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4629
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "配線長の調整パターン"
+msgstr "配線長の調整パターン %d 個をインポートした。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4640
 msgid "Loading text..."
@@ -53617,6 +53613,8 @@ msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"未定義レイヤー(%s)に1つ以上のアイテムがありました。解決するためPCB エディター"
+"で基板を開いてください。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1587
 #, c-format
@@ -54944,9 +54942,8 @@ msgid "Loading Footprint Libraries"
 msgstr "フットプリント ライブラリを読み込み中"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:455
-#, fuzzy
 msgid "Failed to load board"
-msgstr "基板の読み取りに失敗しました\n"
+msgstr "基板の読み取りに失敗しました"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:527
 #, c-format
@@ -55250,9 +55247,9 @@ msgstr ""
 "+/- で終わっている差動ペアに属しているネットの名前かどうか確認して下さい。"
 
 #: pcbnew/router/pns_dragger.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drag arc tracks of %.1f degrees or greater."
-msgstr "曲線トラックのサイズを %sより大きく変更できません。"
+msgstr "%.1f 度以上の円弧配線をドラッグできません。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1109
 #: pcbnew/router/pns_kicad_iface.cpp:1225 pcbnew/router/router_tool.cpp:919
@@ -56949,9 +56946,8 @@ msgid "Copied to %d Rule Areas."
 msgstr "%d 個 ルール 領域にコピーしました。"
 
 #: pcbnew/tools/multichannel_tool.cpp:1960
-#, fuzzy
 msgid "Target Rule Area shares components with the reference area"
-msgstr "配置ルール領域でコンポーネントをグループ化する"
+msgstr "対象 ルール 領域でリファレンス 領域とコンポーネントを共有する"
 
 #: pcbnew/tools/multichannel_tool.cpp:1963
 msgid ""
@@ -56959,14 +56955,18 @@ msgid ""
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
+"この対象 ルール 領域はリファレンス 領域と同じコンポーネントを選択します。繰り"
+"返しレイアウトではルール 領域を自身にコピーすることはできません。各配置"
+"ルール 領域毎に別々のシート、コンポーネントクラス、またはグループを指定してく"
+"ださい。"
 
 #: pcbnew/tools/multichannel_tool.cpp:1966
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Shared components:\n"
 "%s"
 msgstr ""
-"対象領域のコンポーネント:\n"
+"共有されたコンポーネント:\n"
 "%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2047
@@ -57320,9 +57320,8 @@ msgid "Toggle the exclude from bill of materials attribute"
 msgstr "[部品表から除外]の設定を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:579
-#, fuzzy
 msgid "Toggle the exclude from position files attribute"
-msgstr "[シミュレーションから除外]の属性を切り替え"
+msgstr "部品位置情報ファイルから除外の属性を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:587
 msgid ""
