@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-03 08:03+0000\n"
+"PO-Revision-Date: 2026-07-08 03:35+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -8877,9 +8877,9 @@ msgid "Error reading file."
 msgstr "ファイル読み込み中のエラー。"
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "%s (whilst parsing '%s' in '%s')"
-msgstr "見つからないノード '%s' ( '%s' 中)"
+msgstr "解析エラー '%s' (子ノード '%s'、親ノード '%s')"
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2485
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:315
@@ -9093,9 +9093,9 @@ msgid "'%s' is not a P-CAD ASCII file."
 msgstr "'%s' は PADS Logic アスキーファイルではありません。"
 
 #: common/io/pcad/s_expr_loader.cpp:224 common/io/pcad/s_expr_loader.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Unbalanced parentheses in '%s'."
-msgstr "'%s' を解釈出来ません ('%s' 中)"
+msgstr "括弧文字が'%s' 中で不均衡。"
 
 #: common/jobs/job.cpp:82
 msgid "Job Settings"
@@ -10199,9 +10199,9 @@ msgid "Restore Failed"
 msgstr "復元に失敗しました"
 
 #: common/local_history.cpp:2281
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "リモート バージョンにリセットします。"
+msgstr "プロジェクトを版数 %s に復元しますか？"
 
 #: common/local_history.cpp:2283
 #, fuzzy
@@ -20121,9 +20121,8 @@ msgid "A pin map named '%s' already exists."
 msgstr "ネット チェーン名 '%s' はすでに存在します。"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:536
-#, fuzzy
 msgid "Invalid footprint identifier."
-msgstr "不正なフットプリントが指定されました"
+msgstr "不正なフットプリント識別子です。"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:545
 #, fuzzy
@@ -20140,9 +20139,9 @@ msgid "Remove Pin Map"
 msgstr "信号を削除"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Remove pin map '%s' and its footprint association?"
-msgstr "すべてのフットプリント関連付けを削除"
+msgstr "ピンマップ '%s'のすべてのフットプリント関連付けを削除しますか？"
 
 #: eeschema/dialogs/panel_symbol_pin_map_base.cpp:52
 #, fuzzy
@@ -20572,15 +20571,16 @@ msgid "Pin map '%s' references unknown symbol pin '%s'"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol pins '%s' and '%s' both map to pad '%s'"
-msgstr ""
-"シンボル '%s' はピン '%s' を '%s' と '%s' の両方にマッピングされています。"
+msgstr "シンボル ピン '%s' と '%s' は '%s' のパッドに両方ともマッピングします"
 
 #: eeschema/erc/erc.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Pin map '%s' references pad '%s' not present on footprint '%s'"
-msgstr "コンポーネント %s パッド %s がフットプリント %s に見つかりません\n"
+msgstr ""
+"ピン マップ '%s' ではパッド リファレンス '%s' がフットプリント '%s' に見つか"
+"りません"
 
 #: eeschema/erc/erc.cpp:374
 #, fuzzy, c-format
@@ -40188,9 +40188,9 @@ msgid "Custom Rules"
 msgstr "カスタム ルール"
 
 #: pcbnew/cross-probing.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying footprint library '%s'."
-msgstr "フットプリント %s をライブラリ %s から読み込み中にエラー。"
+msgstr "フットプリント ライブラリをコピー中にエラー '%s' 。"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:239
 msgid "Barcode Error"
