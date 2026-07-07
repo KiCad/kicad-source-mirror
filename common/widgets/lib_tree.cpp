@@ -907,6 +907,28 @@ void LIB_TREE::onHoverTimer( wxTimerEvent& aEvent )
 
 void LIB_TREE::onTreeCharHook( wxKeyEvent& aKeyStroke )
 {
+    // Bare Left/Right collapse/expand the focused node. Consume them here so they
+    // do not fall through to the global cursorLeft/cursorRight canvas actions. This
+    // is the tree-only hook, so the search box keeps normal caret movement.
+    if( aKeyStroke.GetModifiers() == wxMOD_NONE
+        && ( aKeyStroke.GetKeyCode() == WXK_LEFT || aKeyStroke.GetKeyCode() == WXK_RIGHT ) )
+    {
+        wxDataViewItem sel = m_tree_ctrl->GetSelection();
+
+        if( !sel.IsOk() )
+            sel = m_adapter->GetCurrentDataViewItem();
+
+        if( sel.IsOk() )
+        {
+            if( aKeyStroke.GetKeyCode() == WXK_RIGHT )
+                m_tree_ctrl->Expand( sel );
+            else
+                m_tree_ctrl->Collapse( sel );
+        }
+
+        return;
+    }
+
     onQueryCharHook( aKeyStroke );
 
     if( aKeyStroke.GetSkipped() )
