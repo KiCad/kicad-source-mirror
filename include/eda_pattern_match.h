@@ -42,15 +42,21 @@ static const int EDA_PATTERN_NOT_FOUND = wxNOT_FOUND;
  */
 struct KICOMMON_API SEARCH_TERM
 {
-    SEARCH_TERM( const wxString& aText, int aScore ) :
+    SEARCH_TERM( const wxString& aText, int aScore, bool aIsName = false ) :
             Text( aText ),
             Score( aScore ),
-            Normalized( false )
+            Normalized( false ),
+            IsName( aIsName )
     {}
 
     wxString Text;
     int      Score;
     bool     Normalized;
+
+    /// True if this term is the item's own name or LIB_ID rather than an incidental field
+    /// (keyword, description, footprint, etc).  Only these terms can promote a node into the
+    /// exact-match sort tier; see EDA_COMBINED_MATCHER::ScoreTerms.
+    bool     IsName;
 };
 
 

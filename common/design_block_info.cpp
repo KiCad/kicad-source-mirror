@@ -69,8 +69,8 @@ std::vector<SEARCH_TERM> DESIGN_BLOCK_INFO::GetSearchTerms()
     std::vector<SEARCH_TERM> terms;
 
     terms.emplace_back( SEARCH_TERM( GetLibNickname(), 4 ) );
-    terms.emplace_back( SEARCH_TERM( GetName(), 8 ) );
-    terms.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16 ) );
+    terms.emplace_back( SEARCH_TERM( GetName(), 8, true ) );
+    terms.emplace_back( SEARCH_TERM( GetLIB_ID().Format(), 16, true ) );
 
     wxStringTokenizer keywordTokenizer( GetKeywords(), " \t\r\n", wxTOKEN_STRTOK );
 
