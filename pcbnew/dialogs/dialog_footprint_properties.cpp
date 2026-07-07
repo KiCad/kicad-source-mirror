@@ -26,6 +26,7 @@
 #include <board_design_settings.h>
 #include <board.h>
 #include <footprint.h>
+#include <eda_group.h>
 #include <confirm.h>
 #include <dialogs/dialog_text_entry.h>
 #include <filename_resolver.h>
@@ -568,6 +569,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
         if( board )
             board->UncacheItemById( existing->m_Uuid );
 
+        if( EDA_GROUP* parentGroup = existing->GetParentGroup() )
+            parentGroup->RemoveItem( existing );
+
         delete existing;
     }
 
@@ -605,6 +609,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
         m_footprint->Add( newField );
         view->Add( newField );
+
+        if( EDA_GROUP* parentGroup = newField->GetParentGroup() )
+            parentGroup->AddItem( newField );
 
         if( newField->IsSelected() )
         {
