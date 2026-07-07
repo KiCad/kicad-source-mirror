@@ -93,6 +93,7 @@ PCB_TEXT& PCB_TEXT::operator=( const PCB_TEXT& aOther )
     BOARD_ITEM::operator=( aOther );
     EDA_TEXT::operator=( aOther );
     m_knockout_cache.reset();
+    m_libTextAngle = aOther.m_libTextAngle;
 
     return *this;
 }

@@ -284,8 +284,8 @@ private:
     void orientFootprintAndText( FOOTPRINT* aFootprint, const EELEMENT& e, const EATTR* aNameAttr,
                                  const EATTR* aValueAttr );
 
-    void orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_TEXT* aFPText,
-                       const EATTR* aAttr );
+    void orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_TEXT* aFPText, const EATTR* aAttr,
+                       double aTextDefAngle = 0.0, bool aTextDefMirror = false, bool aTextDefSpin = false );
 
 
     /// move the BOARD into the center of the page
