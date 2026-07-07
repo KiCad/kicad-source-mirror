@@ -366,7 +366,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 {
     savePresetsToSchematic();
-    m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
 
     EESCHEMA_SETTINGS::PANEL_SYMBOL_FIELDS_TABLE& cfg = m_parent->eeconfig()->m_FieldEditorPanel;
 
@@ -1398,6 +1397,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSaveAndContinue( wxCommandEvent& aEvent )
 {
     if( TransferDataFromWindow() )
     {
+        m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
         m_parent->SaveProject();
         ClearModify();
     }
@@ -1587,6 +1587,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 
     // close the file before we tell the user it's done with the info modal :workflow meme:
     out.Close();
+
+    if( m_schSettings.m_BomExportFileName != m_outputFileName->GetValue() )
+    {
+        m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
+        m_parent->OnModify();
+    }
+
     msg.Printf( _( "Wrote BOM output to '%s'" ), outputFile.GetFullPath() );
     DisplayInfoMessage( this, msg );
 }
@@ -1595,9 +1602,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 void DIALOG_SYMBOL_FIELDS_TABLE::OnCancel( wxCommandEvent& aEvent )
 {
     if( m_job )
+    {
         EndModal( wxID_CANCEL );
+    }
     else
+    {
+        // Discard any unsaved edit in the output filename field
+        m_outputFileName->SetValue( m_schSettings.m_BomExportFileName );
         Close();
+    }
 }
 
 
@@ -1657,6 +1670,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
     }
     else
     {
+        if( m_schSettings.m_BomExportFileName != m_outputFileName->GetValue() )
+        {
+            m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
+            m_parent->OnModify();
+        }
+
         Close();
     }
 }
