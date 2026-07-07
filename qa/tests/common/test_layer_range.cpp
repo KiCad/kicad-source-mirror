@@ -95,6 +95,74 @@ BOOST_AUTO_TEST_CASE( PartialRangeReverse )
     BOOST_CHECK_EQUAL_COLLECTIONS( result.begin(), result.end(), expected.begin(), expected.end() );
 }
 
+BOOST_AUTO_TEST_CASE( FromBackToInner )
+{
+    // Backdrill-from-bottom walks physically upward from B_Cu through the inner stack.
+    // Even though B_Cu's numeric id (2) is less than any inner layer's, the iterator must
+    // reverse so that the stack is traversed in physical order.
+    LAYER_RANGE               range( B_Cu, In2_Cu, 4 );
+    std::vector<PCB_LAYER_ID> expected = { B_Cu, In2_Cu };
+    std::vector<PCB_LAYER_ID> result;
+
+    for( auto layer : range )
+    {
+        result.push_back( layer );
+    }
+
+    BOOST_CHECK_EQUAL_COLLECTIONS( result.begin(), result.end(), expected.begin(), expected.end() );
+}
+
+BOOST_AUTO_TEST_CASE( FromBackToInnerSixLayer )
+{
+    LAYER_RANGE               range( B_Cu, In2_Cu, 6 );
+    std::vector<PCB_LAYER_ID> expected = { B_Cu, In4_Cu, In3_Cu, In2_Cu };
+    std::vector<PCB_LAYER_ID> result;
+
+    for( auto layer : range )
+    {
+        result.push_back( layer );
+    }
+
+    BOOST_CHECK_EQUAL_COLLECTIONS( result.begin(), result.end(), expected.begin(), expected.end() );
+}
+
+BOOST_AUTO_TEST_CASE( SizeMatchesIteration )
+{
+    // size() must match how many layers the iterator yields, even when B_Cu is an endpoint.
+    struct Case
+    {
+        PCB_LAYER_ID start;
+        PCB_LAYER_ID stop;
+        int          layer_count;
+        size_t       expected;
+    };
+
+    const Case cases[] = {
+        { F_Cu,   B_Cu,   2, 2 },
+        { F_Cu,   B_Cu,   4, 4 },
+        { F_Cu,   In1_Cu, 4, 2 },
+        { In1_Cu, B_Cu,   6, 5 },
+        { In3_Cu, F_Cu,   6, 4 },
+        { B_Cu,   In2_Cu, 4, 2 },
+        { B_Cu,   In2_Cu, 6, 4 },
+    };
+
+    for( const Case& c : cases )
+    {
+        LAYER_RANGE range( c.start, c.stop, c.layer_count );
+        size_t      counted = 0;
+
+        for( auto layer : range )
+        {
+            (void) layer;
+            ++counted;
+        }
+
+        BOOST_CHECK_EQUAL( range.size(), c.expected );
+        BOOST_CHECK_EQUAL( counted, c.expected );
+    }
+}
+
 BOOST_AUTO_TEST_CASE( InvalidLayerThrowsException )
 {
     BOOST_CHECK_THROW( LAYER_RANGE( F_Mask, B_Cu, 4 ), std::invalid_argument );
