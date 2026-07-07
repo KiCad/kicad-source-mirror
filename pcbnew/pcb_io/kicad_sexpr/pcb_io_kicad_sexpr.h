@@ -32,6 +32,7 @@
 #include <richio.h>
 #include <string>
 #include <optional>
+#include <unordered_set>
 #include <layer_ids.h>
 #include <zone_settings.h>
 #include <lset.h>
@@ -515,6 +516,12 @@ protected:
     int                    m_ctl;
 
     std::function<bool( wxString aTitle, int aIcon, wxString aMsg, wxString aAction )> m_queryUserCallback;
+
+    // Lazily-built set of pointers held by m_board, used to validate PCB_GROUP members
+    // against use-after-free.  Built once per board rather than once per group; see
+    // format( const PCB_GROUP* ).
+    mutable const BOARD*                           m_groupValidPtrsBoard = nullptr;
+    mutable std::unordered_set<const BOARD_ITEM*>  m_groupValidPtrs;
 };
 
 #endif  // PCB_IO_KICAD_SEXPR_H_

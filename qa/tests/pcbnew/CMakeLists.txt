@@ -53,6 +53,7 @@ set( QA_PCBNEW_SRCS
     test_graphics_import_mgr.cpp
     test_group_load_save.cpp
     test_group_mirror.cpp
+    test_group_save_perf.cpp
     test_history_autosave.cpp
     test_footprint.cpp
     test_footprint_library_adapter.cpp

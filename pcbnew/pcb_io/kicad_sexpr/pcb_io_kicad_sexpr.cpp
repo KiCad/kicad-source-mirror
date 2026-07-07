@@ -2453,24 +2453,31 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
     // applies when the group itself is part of m_board; for groups created off-board (e.g. a
     // DeepClone() used by the clipboard) the cache contains the originals, not our clones, so
     // skip the validation in that case and trust the member pointers.
-    bool                                validateAgainstBoard = false;
-    std::unordered_set<const EDA_ITEM*> validPtrs;
+    //
+    // m_groupValidPtrs is rebuilt once per board rather than once per group; formatting scaled
+    // as O(Groups * BoardItems) when the pointer set was rebuilt inside this function.
+    bool validateAgainstBoard = false;
 
     if( m_board )
     {
-        const auto& cache = m_board->GetItemByIdCache();
+        if( m_groupValidPtrsBoard != m_board )
+        {
+            m_groupValidPtrs.clear();
 
-        for( const auto& [uuid, item] : cache )
-            validPtrs.insert( item );
+            for( const auto& [uuid, item] : m_board->GetItemByIdCache() )
+                m_groupValidPtrs.insert( item );
 
-        validateAgainstBoard = validPtrs.count( aGroup ) > 0;
+            m_groupValidPtrsBoard = m_board;
+        }
+
+        validateAgainstBoard = m_groupValidPtrs.count( aGroup ) > 0;
     }
 
     if( validateAgainstBoard )
     {
         for( EDA_ITEM* member : aGroup->GetItems() )
         {
-            if( validPtrs.count( member ) )
+            if( m_groupValidPtrs.count( static_cast<const BOARD_ITEM*>( member ) ) )
                 memberIds.Add( member->m_Uuid.AsString() );
         }
     }
