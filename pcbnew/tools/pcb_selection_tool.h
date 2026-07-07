@@ -222,11 +222,11 @@ public:
     void FilterCollectorForLockedItems( GENERAL_COLLECTOR& aCollector );
 
     /**
-     * If the most recent FilterCollectorForLockedItems call removed at least one item,
-     * show an InfoBar warning prompting the user to enable Override Locks.  No-op
-     * otherwise.
+     * If the most recent FilterCollectorForLockedItems call filtered a locked item, show an
+     * InfoBar warning prompting the user to enable Override locks and return true.  The caller
+     * should stop the action in that case.  Return false otherwise.
      */
-    void ReportFilteredLockedItems();
+    bool ReportFilteredLockedItems();
 
     /**
      * In general we don't want to select both a parent and any of it's children.  This includes
@@ -539,6 +539,9 @@ private:
     bool                     m_isFootprintEditor;
 
     PCB_SELECTION            m_selection;            // Current state of selection
+
+    PCB_SELECTION m_blockedSelection; // Empty selection returned when locked items
+                                      // block an action, real selection stays intact
 
     PCB_SELECTION_FILTER_OPTIONS m_filter;
 

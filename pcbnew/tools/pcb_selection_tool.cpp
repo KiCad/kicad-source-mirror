@@ -820,6 +820,15 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
 
         aClientFilter( VECTOR2I(), collector, this );
 
+        // Locked items were filtered with Override locks off. Keep the selection and return an
+        // empty one so the action does nothing. The banner then prompts to enable the override.
+        if( m_lockedItemsFiltered )
+        {
+            m_frame->GetCanvas()->ForceRefresh();
+            m_blockedSelection.Clear();
+            return m_blockedSelection;
+        }
+
         for( EDA_ITEM* item : collector )
         {
             if( itemDispositions.count( item ) )
@@ -4742,7 +4751,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 }
 
 
-void PCB_SELECTION_TOOL::ReportFilteredLockedItems()
+bool PCB_SELECTION_TOOL::ReportFilteredLockedItems()
 {
     if( m_lockedItemsFiltered && m_frame )
     {
@@ -4750,6 +4759,8 @@ void PCB_SELECTION_TOOL::ReportFilteredLockedItems()
                                         "Enable 'Override locks' to operate on them." ),
                                      true );
     }
+
+    return m_lockedItemsFiltered;
 }
 
 

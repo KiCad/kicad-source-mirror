@@ -488,6 +488,9 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeItems( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    if( m_selectionTool->ReportFilteredLockedItems() )
+        return 0;
+
     // Need at least 3 items to distribute - one at each end and at least on in the middle
     if( selection.Size() < 3 )
         return 0;

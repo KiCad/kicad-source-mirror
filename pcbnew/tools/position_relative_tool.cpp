@@ -116,6 +116,9 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    if( m_selectionTool->ReportFilteredLockedItems() )
+        return 0;
+
     if( selection.Empty() )
         return 0;
 
@@ -175,6 +178,9 @@ int POSITION_RELATIVE_TOOL::InteractiveOffset( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
+
+    if( m_selectionTool->ReportFilteredLockedItems() )
+        return 0;
 
     if( selection.Empty() )
         return 0;

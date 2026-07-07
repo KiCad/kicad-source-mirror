@@ -1353,7 +1353,8 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
-    m_selectionTool->ReportFilteredLockedItems();
+    if( m_selectionTool->ReportFilteredLockedItems() )
+        return 0;
 
     if( selection.Size() < 2 )
     {

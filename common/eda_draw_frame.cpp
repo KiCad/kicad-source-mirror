@@ -231,7 +231,19 @@ void EDA_DRAW_FRAME::configureToolbars()
             [this]( ACTION_TOOLBAR* aToolbar )
             {
                 if( !m_overrideLocksCb )
+                {
                     m_overrideLocksCb = new wxCheckBox( aToolbar, ID_ON_OVERRIDE_LOCKS, _( "Override locks" ) );
+
+                    // Clicking the checkbox takes focus off the canvas, so return it
+                    m_overrideLocksCb->Bind( wxEVT_CHECKBOX,
+                                             [this]( wxCommandEvent& aEvent )
+                                             {
+                                                 if( m_canvas )
+                                                     m_canvas->SetFocus();
+
+                                                 aEvent.Skip();
+                                             } );
+                }
 
                 aToolbar->Add( m_overrideLocksCb );
             };

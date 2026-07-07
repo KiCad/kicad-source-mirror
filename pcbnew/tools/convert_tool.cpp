@@ -1419,6 +1419,9 @@ int CONVERT_TOOL::OutsetItems( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    if( m_selectionTool->ReportFilteredLockedItems() )
+        return 0;
+
     BOARD_COMMIT commit( this );
 
     for( EDA_ITEM* item : selection )
