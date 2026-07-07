@@ -139,11 +139,7 @@
 	(footprint "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm"
 		(layer "F.Cu")
 		(uuid "a34a3371-7d2e-4c04-b138-bdb0e8535b1f")
-		(transform
-			(translate 121.52 62.137349)
-			(rotate -90)
-			(scale 1 1)
-		)
+		(at 121.52 62.137349 -90)
 		(descr "CP, Radial series, Radial, pin pitch=3.50mm, diameter=8mm, height=12mm, Electrolytic Capacitor")
 		(tags "CP Radial series Radial pin pitch 3.50mm diameter 8mm height 12mm Electrolytic Capacitor")
 		(property "Reference" "C4"
