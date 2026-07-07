@@ -22,6 +22,8 @@
 
 #include <sch_io/pads/pads_sch_sdb.h>
 
+#include <nlohmann/json.hpp>
+
 #include <fstream>
 #include <iterator>
 #include <stdexcept>
@@ -86,6 +88,19 @@ BOOST_AUTO_TEST_CASE( PublicV13Container )
     BOOST_CHECK_EQUAL( sdb.PayloadOffset(), 0x250 );
     BOOST_CHECK_LT( sdb.FooterOffset(), sdb.Bytes().size() );
     BOOST_CHECK_EQUAL( sdb.Cursor().Size(), sdb.Bytes().size() );
+
+    BOOST_CHECK_EQUAL( sdb.Pools()[0].allocatedBytes, 588 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[0].count, 21 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[0].usedBytes, 588 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[0].handle, 140233272 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[3].allocatedBytes, 49152 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[3].count, 1 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[3].usedBytes, 48 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[3].handle, 140233872 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[9].allocatedBytes, 1280 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[9].count, 0 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[9].usedBytes, 0 );
+    BOOST_CHECK_EQUAL( sdb.Pools()[9].handle, 179219184 );
 }
 
 
@@ -132,6 +147,35 @@ BOOST_AUTO_TEST_CASE( RejectsUnsupportedVersion )
 }
 
 
+BOOST_AUTO_TEST_CASE( RejectsBadV13FormatFlags )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    bytes[4] = 1;
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D", "0x4" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsBadV12FormatFlags )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    bytes[2] = 0x0C;
+    bytes[4] = 0;
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000C", "0x4" );
+                           } );
+}
+
+
 BOOST_AUTO_TEST_CASE( RejectsBadFooterGuid )
 {
     std::vector<uint8_t> bytes = loadPublicFixture();
@@ -163,17 +207,17 @@ BOOST_AUTO_TEST_CASE( RejectsBadFooterBackPointer )
 }
 
 
-BOOST_AUTO_TEST_CASE( RejectsPoolCountAboveCapacity )
+BOOST_AUTO_TEST_CASE( RejectsUsedBytesAboveAllocation )
 {
     std::vector<uint8_t> bytes = loadPublicFixture();
-    constexpr size_t     countOffset = 0x20 + 8;
-    putU32( bytes, countOffset, 589 );
+    constexpr size_t     usedBytesOffset = 0x20 + 12;
+    putU32( bytes, usedBytesOffset, 589 );
 
     PADS_SCH_SDB sdb;
     BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
                            []( const IO_ERROR& e )
                            {
-                               return errorContains( e, "v0x000D", "0x28" );
+                               return errorContains( e, "v0x000D", "0x2C" );
                            } );
 }
 

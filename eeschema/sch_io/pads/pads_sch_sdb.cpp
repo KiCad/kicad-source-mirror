@@ -41,7 +41,7 @@ namespace
     constexpr char     FOOTER_GUID[] = "{F4997D70-AF8A-11D0-A373-000000000000}";
     constexpr size_t   FOOTER_GUID_SIZE = 38;
 
-    constexpr size_t POOL_CAPACITY_OFFSET = 4;
+    constexpr size_t POOL_ALLOCATED_BYTES_OFFSET = 4;
     constexpr size_t POOL_COUNT_OFFSET = 8;
     constexpr size_t POOL_USED_BYTES_OFFSET = 12;
     constexpr size_t POOL_HANDLE_OFFSET = 16;
@@ -98,7 +98,7 @@ void PADS_SCH_SDB::parseHeader()
     uint16_t expectedRevision = m_version == VERSION_12 ? 1 : 0;
 
     if( m_cursor.U16At( 4 ) != expectedRevision )
-        throwAt( 4, "invalid version-specific PADS Logic header revision" );
+        throwAt( 4, "invalid version-specific PADS Logic format flags" );
 
     m_payloadOffset = PAYLOAD_OFFSET;
 }
@@ -115,13 +115,13 @@ void PADS_SCH_SDB::parseDirectory()
         PADS_IO::SDB_RECORD record( m_cursor, offset );
         SCH_SDB_POOL&       pool = m_pools[i];
 
-        pool.capacity = record.U32( POOL_CAPACITY_OFFSET );
+        pool.allocatedBytes = record.U32( POOL_ALLOCATED_BYTES_OFFSET );
         pool.count = record.U32( POOL_COUNT_OFFSET );
         pool.usedBytes = record.U32( POOL_USED_BYTES_OFFSET );
         pool.handle = record.U32( POOL_HANDLE_OFFSET );
 
-        if( pool.count > pool.capacity )
-            throwAt( offset + POOL_COUNT_OFFSET, "pool object count exceeds capacity" );
+        if( pool.usedBytes > pool.allocatedBytes )
+            throwAt( offset + POOL_USED_BYTES_OFFSET, "pool serialized bytes exceed allocation" );
 
         if( pool.count == 0 && pool.usedBytes != 0 )
             throwAt( offset + POOL_USED_BYTES_OFFSET, "empty pool has serialized bytes" );

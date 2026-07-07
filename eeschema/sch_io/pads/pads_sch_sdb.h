@@ -31,7 +31,7 @@ namespace PADS_SCH_BINARY
 
 struct SCH_SDB_POOL
 {
-    uint32_t capacity = 0;
+    uint32_t allocatedBytes = 0;
     uint32_t count = 0;
     uint32_t usedBytes = 0;
     uint32_t handle = 0;
