@@ -2336,7 +2336,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
             conn = aText->Connection();
 
         if( conn && conn->IsBus() )
-            color = getRenderColor( aText, LAYER_BUS, drawingShadows );
+            color = getRenderColor( aText, LAYER_BUS, drawingShadows, aDimmed );
     }
 
     if( !( aText->IsVisible() || aText->IsForceVisible() ) )
