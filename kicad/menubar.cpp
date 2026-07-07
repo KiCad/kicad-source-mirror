@@ -104,7 +104,7 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     ACTION_CONDITIONS historyCond;
     historyCond.Enable( [&]( const SELECTION& )
     {
-        return Pgm().GetCommonSettings()->m_System.local_history_enabled
+        return Pgm().GetCommonSettings()->AutosaveUsesLocalHistory()
                && Kiway().LocalHistory().HistoryExists( Prj().GetProjectPath() );
     } );
     RegisterUIUpdateHandler( restoreItem->GetId(), historyCond );

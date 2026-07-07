@@ -147,7 +147,6 @@ public:
 
     struct SYSTEM
     {
-        bool local_history_enabled;
         int local_history_debounce;
         wxString text_editor;
         wxString file_explorer;
@@ -223,6 +222,18 @@ public:
      * Creates the built-in environment variables and sets their default values
      */
     void InitializeEnvironment();
+
+    /**
+     * The backup format is the single switch that selects the autosave mechanism: the
+     * incremental format records git local history while the zip format falls back to
+     * legacy recovery files.  Either mechanism requires backups to be enabled.
+     *
+     * @return true when autosave should commit to the git local history.
+     */
+    bool AutosaveUsesLocalHistory() const
+    {
+        return m_Backup.enabled && m_Backup.format == BACKUP_FORMAT::INCREMENTAL;
+    }
 
 private:
     bool migrateSchema0to1();

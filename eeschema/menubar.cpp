@@ -124,7 +124,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
             []( const SELECTION& )
             {
                 COMMON_SETTINGS* cs = Pgm().GetCommonSettings();
-                return cs && cs->m_Backup.enabled && cs->m_Backup.format == BACKUP_FORMAT::INCREMENTAL;
+                return cs && cs->AutosaveUsesLocalHistory();
             } );
     RegisterUIUpdateHandler( historyItem->GetId(), historyCond );
 

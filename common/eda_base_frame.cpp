@@ -445,11 +445,6 @@ static wxString buildRecoveredFileName( const wxFileName& aSrcFn, const wxDateTi
 
 void EDA_BASE_FRAME::CheckForAutosaveFiles( const wxString& aProjectPath, const std::vector<wxString>& aExtensions )
 {
-    COMMON_SETTINGS* cs = Pgm().GetCommonSettings();
-
-    if( cs->m_Backup.format != BACKUP_FORMAT::ZIP )
-        return;
-
     auto stale = Kiway().LocalHistory().FindStaleAutosaveFiles( aProjectPath, aExtensions );
 
     if( stale.empty() )
@@ -550,7 +545,7 @@ bool EDA_BASE_FRAME::doAutoSave()
     if( cs->m_Backup.location == BACKUP_LOCATION::PROJECT_DIR && Prj().IsReadOnly() )
         return true;
 
-    if( cs->m_Backup.format == BACKUP_FORMAT::INCREMENTAL )
+    if( cs->AutosaveUsesLocalHistory() )
         Kiway().LocalHistory().RunRegisteredSaversAndCommit( Prj().GetProjectPath(), wxS( "Autosave" ) );
     else
         Kiway().LocalHistory().RunRegisteredSaversAsAutosaveFiles( Prj().GetProjectPath() );
@@ -954,7 +949,7 @@ void EDA_BASE_FRAME::CommonSettingsChanged( int aFlags )
         m_fileHistory->SetMaxFiles( (unsigned) std::max( 0, historySize ) );
     }
 
-    if( Pgm().GetCommonSettings()->m_Backup.enabled )
+    if( Pgm().GetCommonSettings()->AutosaveUsesLocalHistory() )
         Kiway().LocalHistory().Init( Prj().GetProjectPath() );
 
     GetBitmapStore()->ThemeChanged();

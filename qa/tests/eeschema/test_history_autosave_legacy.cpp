@@ -19,9 +19,11 @@
 
 #include <boost/test/unit_test.hpp>
 #include <local_history.h>
+#include <pgm_base.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <schematic.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 
@@ -31,6 +33,17 @@
 #include <wx/stdpaths.h>
 
 BOOST_AUTO_TEST_SUITE( SchHistoryAutosave )
+
+template <typename T>
+struct SCOPED_SETTING_OVERRIDE
+{
+    SCOPED_SETTING_OVERRIDE( T& aRef, T aValue ) : m_ref( aRef ), m_original( aRef ) { aRef = aValue; }
+    ~SCOPED_SETTING_OVERRIDE() { m_ref = m_original; }
+
+    T& m_ref;
+    T  m_original;
+};
+
 
 struct HISTORY_AUTOSAVE_FIXTURE
 {
@@ -80,6 +93,35 @@ BOOST_FIXTURE_TEST_CASE( SavesLegacySheetIntoHistoryPath, HISTORY_AUTOSAVE_FIXTU
     BOOST_CHECK( !wxFileName( fileData[0].relativePath ).IsAbsolute() );
     BOOST_CHECK( !fileData[0].content.empty() );
     BOOST_CHECK( fileData[0].prettify );
+}
+
+// A clean sheet must still be captured while local history is active (backups on, format
+// incremental).  The manual-save flow clears the dirty flag before the saver runs, so
+// filtering on it here would drop the whole snapshot -- the regression that left .history
+// stale for users on the Zip backup format (issue 24773).
+BOOST_FIXTURE_TEST_CASE( CleanSheetStillSavedWhenLocalHistoryEnabled, HISTORY_AUTOSAVE_FIXTURE )
+{
+    COMMON_SETTINGS* cs = Pgm().GetCommonSettings();
+    BOOST_REQUIRE( cs );
+
+    SCOPED_SETTING_OVERRIDE<bool>          backupOn( cs->m_Backup.enabled, true );
+    SCOPED_SETTING_OVERRIDE<BACKUP_FORMAT> incrementalFormat( cs->m_Backup.format,
+                                                             BACKUP_FORMAT::INCREMENTAL );
+
+    std::vector<SCH_SHEET*> sheets = m_schematic->GetTopLevelSheets();
+    BOOST_REQUIRE( !sheets.empty() );
+
+    SCH_SHEET* sheet = sheets[0];
+    BOOST_REQUIRE( sheet->GetScreen() != nullptr );
+
+    sheet->SetFileName( wxS( "clean/clean.kicad_sch" ) );
+    sheet->GetScreen()->SetFileName( wxS( "clean/clean.kicad_sch" ) );
+    sheet->GetScreen()->SetContentModified( false );
+
+    std::vector<HISTORY_FILE_DATA> fileData;
+    m_schematic->SaveToHistory( m_settingsManager.Prj().GetProjectPath(), fileData );
+
+    BOOST_CHECK_EQUAL( fileData.size(), 1 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

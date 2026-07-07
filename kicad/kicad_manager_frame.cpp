@@ -819,7 +819,8 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
         // Wait for any in-flight autosave so the HEAD check below isn't racing it.
         Kiway().LocalHistory().WaitForPendingSave();
 
-        if( !projPath.IsEmpty() && Kiway().LocalHistory().HistoryExists( projPath ) )
+        if( Pgm().GetCommonSettings()->AutosaveUsesLocalHistory()
+                && !projPath.IsEmpty() && Kiway().LocalHistory().HistoryExists( projPath ) )
         {
             if( Kiway().LocalHistory().HeadNewerThanLastSave( projPath ) )
             {
@@ -835,7 +836,8 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
 
         m_active_project = false;
         // Enforce local history size limit (if enabled) once all pending saves/backups are done.
-        if( Pgm().GetCommonSettings() && Pgm().GetCommonSettings()->m_Backup.enabled )
+        if( Pgm().GetCommonSettings()
+                && Pgm().GetCommonSettings()->AutosaveUsesLocalHistory() )
         {
             unsigned long long int limit = Pgm().GetCommonSettings()->m_Backup.limit_total_size;
 
@@ -991,7 +993,8 @@ bool KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() );
 
-    if( Kiway().LocalHistory().HeadNewerThanLastSave( Prj().GetProjectPath() ) )
+    if( Pgm().GetCommonSettings()->AutosaveUsesLocalHistory()
+            && Kiway().LocalHistory().HeadNewerThanLastSave( Prj().GetProjectPath() ) )
     {
         wxString head = Kiway().LocalHistory().GetHeadHash( Prj().GetProjectPath() );
 

@@ -75,6 +75,20 @@ struct SCOPED_BACKUP_LOCATION_OVERRIDE
 };
 
 
+struct SCOPED_BACKUP_FORMAT_OVERRIDE
+{
+    explicit SCOPED_BACKUP_FORMAT_OVERRIDE( BACKUP_FORMAT& aFormat ) :
+            m_format( aFormat ), m_original( aFormat )
+    {
+    }
+
+    ~SCOPED_BACKUP_FORMAT_OVERRIDE() { m_format = m_original; }
+
+    BACKUP_FORMAT& m_format;
+    BACKUP_FORMAT  m_original;
+};
+
+
 // Load a project into the settings manager and unload it on destruction, keeping the global
 // active-project state isolated even when a test aborts partway through.
 struct SCOPED_PROJECT_LOAD
@@ -636,6 +650,97 @@ BOOST_AUTO_TEST_CASE( FirstManualSaveAlwaysCommitsOnFreshProject )
 
     wxString head = history.GetHeadHash( path );
     BOOST_CHECK_MESSAGE( !head.IsEmpty(), "manual save on a fresh project must commit even when staged matches disk" );
+
+    history.UnregisterSaver( &history );
+}
+
+
+// With backups enabled but the format set to Zip, autosave uses legacy recovery files, so the
+// incremental git-commit path must be a no-op rather than extending a history the user switched
+// off (issue 24773).
+BOOST_AUTO_TEST_CASE( ZipFormatSkipsIncrementalAutosave )
+{
+    LIBGIT2_SCOPE libgit;
+
+    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    BACKUP_FORMAT& format = Pgm().GetCommonSettings()->m_Backup.format;
+    SCOPED_BACKUP_FORMAT_OVERRIDE restoreFormat( format );
+    format = BACKUP_FORMAT::ZIP;
+
+    SCOPED_TEMP_DIR project( wxS( "kicad_qa_zip_skips_incremental" ) );
+    const wxString& path = project.Path();
+
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "p.kicad_pro" ), wxS( "{}\n" ) );
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "p.kicad_pcb" ),
+                   wxS( "(kicad_pcb (version 20240108))\n" ) );
+
+    LOCAL_HISTORY history;
+
+    auto saver = []( const wxString&, std::vector<HISTORY_FILE_DATA>& aFileData )
+    {
+        HISTORY_FILE_DATA entry;
+        entry.relativePath = wxS( "p.kicad_pcb" );
+        entry.content = "(kicad_pcb (version 20240108) (edited yes))\n";
+        aFileData.push_back( std::move( entry ) );
+    };
+
+    history.RegisterSaver( &history, saver );
+
+    BOOST_REQUIRE( history.RunRegisteredSaversAndCommit( path, wxS( "Autosave" ), wxEmptyString ) );
+    history.WaitForPendingSave();
+
+    BOOST_CHECK_MESSAGE( history.GetHeadHash( path ).IsEmpty(),
+                         "zip backup format must not create incremental autosave commits" );
+
+    history.UnregisterSaver( &history );
+}
+
+
+// The Zip backup format must reliably write legacy recovery files on autosave so a crash does
+// not lose work between manual saves (issue 24773).
+BOOST_AUTO_TEST_CASE( ZipFormatWritesRecoveryFiles )
+{
+    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    BACKUP_FORMAT& format = Pgm().GetCommonSettings()->m_Backup.format;
+    SCOPED_BACKUP_FORMAT_OVERRIDE restoreFormat( format );
+    format = BACKUP_FORMAT::ZIP;
+
+    BACKUP_LOCATION& location = Pgm().GetCommonSettings()->m_Backup.location;
+    SCOPED_BACKUP_LOCATION_OVERRIDE restoreLocation( location );
+    location = BACKUP_LOCATION::PROJECT_DIR;
+
+    SCOPED_TEMP_DIR project( wxS( "kicad_qa_zip_recovery_files" ) );
+    const wxString& path = project.Path();
+    const wxString  sep = wxFileName::GetPathSeparator();
+
+    writeTextFile( path + sep + wxS( "p.kicad_pro" ), wxS( "{}\n" ) );
+
+    SETTINGS_MANAGER&   mgr = Pgm().GetSettingsManager();
+    SCOPED_PROJECT_LOAD loadedProject( mgr, path + sep + wxS( "p.kicad_pro" ) );
+
+    LOCAL_HISTORY history;
+
+    auto saver = []( const wxString&, std::vector<HISTORY_FILE_DATA>& aFileData )
+    {
+        HISTORY_FILE_DATA entry;
+        entry.relativePath = wxS( "p.kicad_pcb" );
+        entry.content = "(kicad_pcb (version 20240108) (edited yes))\n";
+        aFileData.push_back( std::move( entry ) );
+    };
+
+    history.RegisterSaver( &history, saver );
+
+    BOOST_REQUIRE( history.RunRegisteredSaversAsAutosaveFiles( path ) );
+
+    wxString autosavePath = path + sep + wxS( "_autosave-p.kicad_pcb" );
+    BOOST_CHECK_MESSAGE( wxFileExists( autosavePath ),
+                         "zip backup format must write autosave recovery files" );
 
     history.UnregisterSaver( &history );
 }

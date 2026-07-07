@@ -101,7 +101,6 @@
     "file_history_size": 9,
     "language": "Default",
     "local_history_debounce": 5,
-    "local_history_enabled": true,
     "pdf_viewer_name": "",
     "text_editor": "",
     "use_system_pdf_viewer": true,
