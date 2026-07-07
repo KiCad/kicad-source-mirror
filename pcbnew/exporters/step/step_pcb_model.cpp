@@ -141,6 +141,8 @@
 #include <RWGltf_CafWriter.hxx>
 #include <StlAPI_Writer.hxx>
 
+#include "glb_utils.h"
+
 #if OCC_VERSION_HEX >= 0x070700
 #include <VrmlAPI_CafReader.hxx>
 #include <RWPly_CafWriter.hxx>
@@ -4043,6 +4045,16 @@ bool STEP_PCB_MODEL::WriteGLTF( const wxString& aFileName )
 
     if( success )
     {
+        // OCCT 7.9+ can produce LINES primitives with odd index counts for degenerate
+        // BSpline edges, violating the glTF spec and causing Blender import failures. A
+        // failure here leaves the original writer output intact, so warn and keep going.
+        if( !FixGlbLinesPrimitives( wxString( tmpGltfname ) ) )
+        {
+            m_reporter->Report( _( "Could not post-process GLB line primitives; the exported "
+                                   "model may not import in strict glTF viewers." ),
+                                RPT_SEVERITY_WARNING );
+        }
+
         // Preserve the permissions of the current file
         KIPLATFORM::IO::DuplicatePermissions( fn.GetFullPath(), tmpGltfname );
 

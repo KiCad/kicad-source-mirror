@@ -50,6 +50,7 @@ set( QA_PCBNEW_SRCS
     test_component_classes.cpp
     test_via_validation.cpp
     test_generator_load_save.cpp
+    test_glb_utils.cpp
     test_graphics_load_save.cpp
     test_graphics_import_mgr.cpp
     test_group_load_save.cpp
