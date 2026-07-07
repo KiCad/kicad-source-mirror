@@ -161,9 +161,6 @@ bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2
     VECTOR2I  startPoint( radius * cos( startAngle.AsRadians() ), radius * sin( startAngle.AsRadians() ) );
     SHAPE_ARC arc( center, startPoint + center, endAngle - startAngle );
 
-    VECTOR2I arcStart = arc.GetP0();
-    VECTOR2I arcEnd = arc.GetP1();
-
     INTERSECTABLE_GEOM geom1 = segment;
     INTERSECTABLE_GEOM geom2 = arc;
 
@@ -171,17 +168,10 @@ bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2
     INTERSECTION_VISITOR  visitor( geom2, rawPoints );
     std::visit( visitor, geom1 );
 
-    // Filter out intersections where a segment endpoint coincides with an
-    // arc endpoint, matching the endpoint exclusion in segments_intersect.
+    // A path is allowed to end on the arc, so an intersection at either endpoint is a touch,
+    // not a crossing. Only interior crossings count. Tolerance absorbs solver rounding.
     std::vector<VECTOR2I> filtered;
 
-    // arcStart and arcEnd are reconstructed from the arc angles via cos/sin and
-    // truncated to integer, so they land a couple of IU away from the stored
-    // corner coordinates of an adjoining edge. The intersection solver rounds
-    // similarly. An exact equality test therefore misses the shared corner where
-    // a segment endpoint meets the arc endpoint and reports a phantom crossing,
-    // which rejects legitimate creepage paths threading the gap between two
-    // adjacent slot end caps. Compare with a small rounding-scale tolerance.
     const VECTOR2I::extended_type tolerance = 50;
     const VECTOR2I::extended_type toleranceSq = tolerance * tolerance;
 
@@ -192,10 +182,7 @@ bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2
 
     for( const VECTOR2I& ip : rawPoints )
     {
-        bool atSharedEndpoint = ( coincident( ip, arcStart ) || coincident( ip, arcEnd ) )
-                                && ( coincident( ip, p1 ) || coincident( ip, p2 ) );
-
-        if( !atSharedEndpoint )
+        if( !coincident( ip, p1 ) && !coincident( ip, p2 ) )
             filtered.push_back( ip );
     }
 
@@ -470,7 +457,7 @@ std::vector<PATH_CONNECTION> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_ARC& aS2, do
 
     for( const PATH_CONNECTION& pc : this->Paths( csc, aMaxWeight, aMaxSquaredWeight ) )
     {
-        EDA_ANGLE pointAngle = aS2.AngleBetweenStartAndEnd( pc.a2 - arcCenter );
+        EDA_ANGLE pointAngle = aS2.AngleBetweenStartAndEnd( pc.a2 );
 
         if( pointAngle <= aS2.GetEndAngle() )
             result.push_back( pc );
@@ -520,7 +507,7 @@ std::vector<PATH_CONNECTION> BE_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, doubl
     for( const PATH_CONNECTION& pc : this->Paths( BE_SHAPE_CIRCLE( aS2.GetPos(), aS2.GetRadius() ),
                                                   aMaxWeight, aMaxSquaredWeight ) )
     {
-        EDA_ANGLE pointAngle = aS2.AngleBetweenStartAndEnd( pc.a2 - arcCenter );
+        EDA_ANGLE pointAngle = aS2.AngleBetweenStartAndEnd( pc.a2 );
 
         if( pointAngle <= aS2.GetEndAngle() )
             result.push_back( pc );
@@ -529,7 +516,7 @@ std::vector<PATH_CONNECTION> BE_SHAPE_ARC::Paths( const BE_SHAPE_ARC& aS2, doubl
     for( const PATH_CONNECTION& pc : BE_SHAPE_CIRCLE( this->GetPos(), this->GetRadius() )
                                           .Paths( aS2, aMaxWeight, aMaxSquaredWeight ) )
     {
-        EDA_ANGLE pointAngle = this->AngleBetweenStartAndEnd( pc.a2 - arcCenter );
+        EDA_ANGLE pointAngle = this->AngleBetweenStartAndEnd( pc.a1 );
 
         if( pointAngle <= this->GetEndAngle() )
             result.push_back( pc );
@@ -1895,13 +1882,30 @@ bool segmentIntersectsCircle( const VECTOR2I& p1, const VECTOR2I& p2, const VECT
     INTERSECTION_VISITOR visitor( geom2, intersectionPoints );
     std::visit( visitor, geom1 );
 
+    // A path is allowed to end on the circle, so an intersection at either endpoint is a
+    // touch, not a crossing. Only interior crossings count.
+    const VECTOR2I::extended_type toleranceSq = 50 * 50;
+
+    auto coincident = [&]( const VECTOR2I& a, const VECTOR2I& b )
+    {
+        return ( a - b ).SquaredEuclideanNorm() <= toleranceSq;
+    };
+
+    std::vector<VECTOR2I> filtered;
+
+    for( const VECTOR2I& ip : intersectionPoints )
+    {
+        if( !coincident( ip, p1 ) && !coincident( ip, p2 ) )
+            filtered.push_back( ip );
+    }
+
     if( aIntersectPoints )
     {
-        for( VECTOR2I& point : intersectionPoints )
+        for( VECTOR2I& point : filtered )
             aIntersectPoints->push_back( point );
     }
 
-    return intersectionPoints.size() > 0;
+    return filtered.size() > 0;
 }
 
 bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
@@ -2850,31 +2854,13 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
                 {
                     std::vector<const BOARD_ITEM*> IgnoreForTest;
 
-                    // For CIRCLE and ARC shapes the candidate path ends ON the shape's
-                    // boundary at a tangent point. segmentIntersectsCircle has no
-                    // endpoint exclusion, and segmentIntersectsArc only excludes when
-                    // the shared point is also an arc endpoint, so a tangent point
-                    // lying mid-arc registers as an intersection. Without suppressing
-                    // the parent here, the tangent path is wrongly rejected and
-                    // Dijkstra is forced onto a longer route around the obstacle
-                    // (issue #24286).
-                    //
-                    // POINT shapes don't need suppression because segments_intersect
-                    // excludes shared segment endpoints, so paths ending at a POINT
-                    // already get correct exclusion from its parent's other edges.
-                    if( shape1->GetType() == CREEP_SHAPE::TYPE::CIRCLE
-                        || shape1->GetType() == CREEP_SHAPE::TYPE::ARC )
-                    {
-                        IgnoreForTest.push_back( shape1->GetParent() );
-                    }
+                    // Don't ignore the whole parent board item for arc/circle ends. The
+                    // tangent touch is already handled by the endpoint exclusion in
+                    // segmentIntersectsArc/Circle (issue #24286). A rounded slot is a single
+                    // PCB_SHAPE, so ignoring the parent would exempt every other edge of the
+                    // same slot and let a path cut across it.
 
-                    if( shape2->GetType() == CREEP_SHAPE::TYPE::CIRCLE
-                        || shape2->GetType() == CREEP_SHAPE::TYPE::ARC )
-                    {
-                        IgnoreForTest.push_back( shape2->GetParent() );
-                    }
-
-                    // Also ignore each CU shape's own parent for the endpoint-inside-track
+                    // Ignore each CU shape's own parent for the endpoint-inside-track
                     // test so we don't reject paths that touch the track's own edge.
                     if( shape1->IsConductive() )
                         IgnoreForTest.push_back( shape1->GetParent() );
