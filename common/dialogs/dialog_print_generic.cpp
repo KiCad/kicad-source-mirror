@@ -23,6 +23,7 @@
 #include <printout.h>
 #include <pgm_base.h>
 #include <confirm.h>
+#include <printing.h>
 
 #include <wx/print.h>
 #include <wx/printdlg.h>
@@ -309,6 +310,7 @@ void DIALOG_PRINT_GENERIC::onPrintButtonClick( wxCommandEvent& event )
         else
         {
             *s_printData = printer.GetPrintDialogData().GetPrintData();
+            KIPLATFORM::PRINTING::ResetPrintToFilePath( *s_printData );
         }
     }
 

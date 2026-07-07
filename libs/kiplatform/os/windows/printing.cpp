@@ -19,6 +19,9 @@
 
 #include <printing.h>
 
+#include <wx/print.h>
+#include <wx/cmndata.h>
+
 #ifndef __MINGW32__
 #include <windows.h>
 #include <algorithm>
@@ -450,3 +453,16 @@ namespace PRINTING
 } // namespace KIPLATFORM
 
 #endif
+
+namespace KIPLATFORM
+{
+namespace PRINTING
+{
+    // Windows keeps the print-to-file destination in the wx-level filename, so clearing it
+    // is sufficient here.
+    void ResetPrintToFilePath( wxPrintData& aData )
+    {
+        aData.SetFilename( wxEmptyString );
+    }
+} // namespace PRINTING
+} // namespace KIPLATFORM
