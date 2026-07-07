@@ -37,6 +37,7 @@
 #include <pcb_track.h>
 #include <generators/pcb_tuning_pattern.h>
 #include <common.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcbnew_utils/board_construction_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -498,6 +499,71 @@ BOOST_AUTO_TEST_CASE( DeepDuplicateGeneratorMembersAreDeepCopied )
 
     delete dupGenerator;
     delete dupGroup;
+}
+
+
+/**
+ * PCB_IO_KICAD_SEXPR caches a board-item pointer set to validate PCB_GROUP members against
+ * use-after-free (see format( const PCB_GROUP* )). If a caller reuses the same plugin instance
+ * to save the same BOARD* more than once, a save after a group's membership changed must
+ * reflect the current membership, not one cached from an earlier save on the same instance.
+ */
+BOOST_AUTO_TEST_CASE( GroupMembershipReflectsChangesAcrossReusedInstanceSaves )
+{
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    PCB_TEXT* text0 = new PCB_TEXT( board.get() );
+    text0->SetText( wxT( "member-0" ) );
+    board->Add( text0 );
+
+    PCB_TEXT* text1 = new PCB_TEXT( board.get() );
+    text1->SetText( wxT( "member-1" ) );
+    board->Add( text1 );
+
+    PCB_GROUP* group = new PCB_GROUP( board.get() );
+    group->AddItem( text0 );
+    group->AddItem( text1 );
+    board->Add( group );
+
+    PCB_IO_KICAD_SEXPR io;
+
+    auto firstPath = std::filesystem::temp_directory_path() / "group_reuse_before.kicad_pcb";
+    io.SaveBoard( firstPath.string(), board.get() );
+
+    // Same instance, same BOARD*: add a brand new item to both the board and the group without
+    // removing anything, so this only exercises the "gained a member" half of the bug (the
+    // "lost a member, stale pointer still validates" half is not reliably testable here: the
+    // allocator is free to reuse a just-freed item's address for the next allocation, which
+    // would make a dangling cache entry accidentally validate against the wrong new item).
+    PCB_TEXT* text2 = new PCB_TEXT( board.get() );
+    text2->SetText( wxT( "member-2" ) );
+    board->Add( text2 );
+    group->AddItem( text2 );
+
+    auto secondPath = std::filesystem::temp_directory_path() / "group_reuse_after.kicad_pcb";
+    io.SaveBoard( secondPath.string(), board.get() );
+
+    std::unique_ptr<BOARD> reloaded = ::KI_TEST::ReadBoardFromFileOrStream( secondPath.string() );
+
+    BOOST_REQUIRE_EQUAL( reloaded->Groups().size(), 1 );
+
+    PCB_GROUP* reloadedGroup = static_cast<PCB_GROUP*>( reloaded->Groups().front() );
+
+    // The second save must reflect the membership as of the second save (text0, text1, text2),
+    // not the membership cached from the first save (text0, text1 only; text2 did not exist yet).
+    BOOST_CHECK_EQUAL( reloadedGroup->GetItems().size(), 3u );
+
+    std::set<wxString> memberUuids;
+
+    for( EDA_ITEM* member : reloadedGroup->GetItems() )
+        memberUuids.insert( member->m_Uuid.AsString() );
+
+    BOOST_CHECK_MESSAGE( memberUuids.count( text0->m_Uuid.AsString() ),
+                         "Reloaded group is missing text0, present in both saves" );
+    BOOST_CHECK_MESSAGE( memberUuids.count( text1->m_Uuid.AsString() ),
+                         "Reloaded group is missing text1, present in both saves" );
+    BOOST_CHECK_MESSAGE( memberUuids.count( text2->m_Uuid.AsString() ),
+                         "Reloaded group is missing text2, added before the second save only" );
 }
 
 
