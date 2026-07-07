@@ -154,7 +154,7 @@
 				(pins "1" "2")
 			)
 		)
-		(attr smd)
+		(attr smd dnp)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start -0.711252 -1.36)
@@ -731,6 +731,7 @@
 		)
 		(variant
 			(name "Variant A")
+			(dnp yes)
 		)
 		(embedded_fonts no)
 		(model "${KICAD8_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_3640_9110Metric.wrl"
