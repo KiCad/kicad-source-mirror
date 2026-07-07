@@ -1521,7 +1521,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::UpdateSymbolFields( const TOOL_EVENT& aEvent )
     if( !symbol )
         return 0;
 
-    if( !symbol->IsDerived() )
+    if( !symbol->CanUpdateFieldsFromParent() )
     {
         m_frame->ShowInfoBarError( _( "Symbol is not derived from another symbol." ) );
     }

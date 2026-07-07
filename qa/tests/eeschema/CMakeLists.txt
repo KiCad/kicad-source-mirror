@@ -148,6 +148,7 @@ set( QA_EESCHEMA_SRCS
     test_label_bus_connectivity.cpp
     test_label_bounding_box.cpp
     test_lib_part.cpp
+    test_issue23743_sync_derived_fields.cpp
     test_ee_grid_helper.cpp
     test_netlist_exporter_kicad.cpp
     test_issue24330_netlist_pin_truncation.cpp

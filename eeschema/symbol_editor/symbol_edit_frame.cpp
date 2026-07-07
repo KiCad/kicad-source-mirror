@@ -531,6 +531,12 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return IsSymbolEditable();
             };
 
+    auto canUpdateFieldsCond =
+            [this]( const SELECTION& )
+            {
+                return IsSymbolEditable() && m_symbol && m_symbol->CanUpdateFieldsFromParent();
+            };
+
     auto symbolModifiedCondition =
             [this]( const SELECTION& sel )
             {
@@ -688,7 +694,7 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::runERC,               ENABLE( haveSymbolCond ) );
     mgr->SetConditions( SCH_ACTIONS::pinTable,             ENABLE( isEditableCond && haveSymbolCond ) );
     mgr->SetConditions( SCH_ACTIONS::editSymbolPinMaps, ENABLE( isEditableCond && haveSymbolCond ) );
-    mgr->SetConditions( SCH_ACTIONS::updateSymbolFields,   ENABLE( isEditableCond && haveSymbolCond ) );
+    mgr->SetConditions( SCH_ACTIONS::updateSymbolFields,   ENABLE( canUpdateFieldsCond ) );
     mgr->SetConditions( SCH_ACTIONS::cycleBodyStyle,       ENABLE( multiBodyStyleModeCond ) );
 
     mgr->SetConditions( SCH_ACTIONS::toggleSyncedPinsMode, ACTION_CONDITIONS().Enable( multiUnitModeCond ).Check( syncedPinsModeCond ) );
