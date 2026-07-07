@@ -96,6 +96,19 @@ public:
     static bool ShouldDropAutoRepeat( int aKeyCode, wxLongLong aNowMs, bool aKeyIsDown,
                                       int& aLastKey, wxLongLong& aLastTimeMs );
 
+    /**
+     * Pure decision on whether a cursor offset from a drag origin has crossed the drag threshold.
+     *
+     * Used both to detect an in-press drag and to tell a fast click-drag apart from a genuine
+     * double-click. A move beyond the threshold on either axis counts as a drag.
+     *
+     * @param aOffset  screen-space cursor movement from the drag origin.
+     * @param aDragMinX drag activation threshold on the X axis in screen pixels.
+     * @param aDragMinY drag activation threshold on the Y axis in screen pixels.
+     * @return true when the movement exceeds the threshold on either axis.
+     */
+    static bool IsPastDragThreshold( const VECTOR2D& aOffset, int aDragMinX, int aDragMinY );
+
 private:
     /// Handles mouse related events (click, motion, dragging).
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );

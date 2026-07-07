@@ -210,6 +210,12 @@ KIGFX::VIEW* TOOL_DISPATCHER::getView()
 }
 
 
+bool TOOL_DISPATCHER::IsPastDragThreshold( const VECTOR2D& aOffset, int aDragMinX, int aDragMinY )
+{
+    return abs( aOffset.x ) > aDragMinX || abs( aOffset.y ) > aDragMinY;
+}
+
+
 bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion )
 {
     BUTTON_STATE* st = m_buttons[aIndex];
@@ -222,6 +228,24 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
     bool up = false, down = false;
     bool dblClick = type == st->dblClickEvent;
     bool state = st->GetState();
+
+    if( dblClick )
+    {
+        // If the mouse moved significantly between clicks, this is a fast click-drag, not a
+        // double-click. Demote to a regular mouse-down so drag detection works normally.
+        VECTOR2D offset = m_lastMousePosScreen - st->dragOriginScreen;
+
+        if( IsPastDragThreshold( offset, m_sysDragMinX, m_sysDragMinY ) )
+        {
+            dblClick = false;
+            down = true;
+
+            // Treat this as a fresh press so a stale pressed state from a missed button-up
+            // does not keep the previous drag origin.
+            st->pressed = false;
+            st->dragging = false;
+        }
+    }
 
     if( !dblClick )
     {
@@ -280,7 +304,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 #endif
             VECTOR2D offset = m_lastMousePosScreen - st->dragOriginScreen;
 
-            if( abs( offset.x ) > m_sysDragMinX || abs( offset.y ) > m_sysDragMinY )
+            if( IsPastDragThreshold( offset, m_sysDragMinX, m_sysDragMinY ) )
                 st->dragging = true;
 
         }
