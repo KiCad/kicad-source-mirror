@@ -559,7 +559,20 @@ int LIB_TREE_MODEL_ADAPTER::GetItemCount() const
     int n = 0;
 
     for( const std::unique_ptr<LIB_TREE_NODE>& lib: m_tree.m_Children )
-        n += lib->m_Children.size();
+    {
+        if( m_filter )
+        {
+            for( const std::unique_ptr<LIB_TREE_NODE>& child : lib->m_Children )
+            {
+                if( (*m_filter)( *child ) )
+                    n++;
+            }
+        }
+        else
+        {
+            n += lib->m_Children.size();
+        }
+    }
 
     return n;
 }
