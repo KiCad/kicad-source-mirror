@@ -1444,7 +1444,7 @@ bool KIBIS_PIN::writeSpiceDriver( std::string& aDest, const std::string& aName, 
         }
         else
         {
-            if( wfPairs.size() > 2 || accuracy <= KIBIS_ACCURACY::LEVEL_2 )
+            if( wfPairs.size() > 2 )
             {
                 Report( _( "Model has more than 2 waveform pairs, using the first two." ),
                         RPT_SEVERITY_WARNING );
