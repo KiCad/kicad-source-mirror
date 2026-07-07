@@ -24,6 +24,13 @@
 #include <algorithm>
 #include <memory>
 
+#include <wx/print.h>
+#include <wx/cmndata.h>
+
+#if wxUSE_GTKPRINT
+#include <wx/gtk/print.h>
+#endif
+
 namespace
 {
 struct PrintData
@@ -225,6 +232,20 @@ namespace PRINTING
     PRINT_RESULT PrintPDF( const std::string& aFile )
     {
         return PrintPDF( aFile, true );
+    }
+
+    void ResetPrintToFilePath( wxPrintData& aData )
+    {
+        aData.SetFilename( wxEmptyString );
+
+#if wxUSE_GTKPRINT
+        // The temporary destination lives in the native GtkPrintSettings output URI, which the
+        // wx-level filename does not track, so it has to be unset directly.
+        wxGtkPrintNativeData* nativeData = dynamic_cast<wxGtkPrintNativeData*>( aData.GetNativeData() );
+
+        if( nativeData && nativeData->GetPrintConfig() )
+            gtk_print_settings_unset( nativeData->GetPrintConfig(), GTK_PRINT_SETTINGS_OUTPUT_URI );
+#endif
     }
 
 } // namespace PRINTING

@@ -23,6 +23,8 @@
 #include <string>
 #include <wx/translation.h>
 
+class wxPrintData;
+
 #define PRINTING_TRACE "KICAD_PRINT"
 namespace KIPLATFORM
 {
@@ -54,6 +56,16 @@ namespace PRINTING
     }
 
     PRINT_RESULT PrintPDF( const std::string& aFile );
+
+    /**
+     * Clear any leftover "print to file" destination from @a aData.
+     *
+     * On GTK the native print settings retain the output URI chosen after a print-to-file
+     * operation (a temporary /tmp/gtkprintXXXXXX path). Left in place it becomes the default
+     * destination the next time the print dialog is opened. Clearing it here is required
+     * because the wx-level filename does not track the native GtkPrintSettings output URI.
+     */
+    void ResetPrintToFilePath( wxPrintData& aData );
 }
 } // namespace KIPLATFORM
 

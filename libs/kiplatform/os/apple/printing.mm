@@ -19,6 +19,9 @@
 
 #include <printing.h>
 
+#include <wx/print.h>
+#include <wx/cmndata.h>
+
 #import <AppKit/AppKit.h>
 #import <PDFKit/PDFKit.h>
 
@@ -90,6 +93,11 @@ PRINT_RESULT PrintPDF( const std::string& aFile, bool fit_to_page)
 PRINT_RESULT PrintPDF(const std::string& aFile)
 {
     return PrintPDF(aFile, true);
+}
+
+void ResetPrintToFilePath( wxPrintData& aData )
+{
+    aData.SetFilename( wxEmptyString );
 }
 
 } // namespace PRINTING
