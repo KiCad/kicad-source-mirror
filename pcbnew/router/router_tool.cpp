@@ -1261,7 +1261,29 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
                 PCB_LAYER_ID otherEndLayerPcbId = m_iface->GetBoardLayerFromPNSLayer( otherEndLayers.Start() );
                 const std::optional<int> pairedLayerPns = m_router->Sizes().PairedLayer( m_router->GetCurrentLayer() );
 
-                if( currentLayer == otherEndLayerPcbId && pairedLayerPns.has_value() )
+                const PNS_LAYER_RANGE allCopperLayers( m_iface->GetPNSLayerFromBoardLayer( F_Cu ),
+                                                       m_iface->GetPNSLayerFromBoardLayer( B_Cu ) );
+
+                // A through anchor connects on every copper layer, so it names no single target.
+                // Test the hole rather than the copper range, which segmented padstacks
+                // (FRONT_INNER_BACK, custom) can report as a single layer.
+                const bool otherEndIsThrough =
+                        otherEndLayers == allCopperLayers
+                        || ( otherEndItem && otherEndItem->HasHole()
+                             && otherEndItem->Hole()->Layers() == allCopperLayers );
+
+                if( otherEndIsThrough )
+                {
+                    // Honour the user's layer pair; the anchor span start is always the top
+                    // copper layer and would ignore it. Constrained anchors fall through below.
+                    if( currentLayer == pairBottom )
+                        targetLayer = pairTop;
+                    else if( currentLayer == pairTop )
+                        targetLayer = pairBottom;
+                    else
+                        targetLayer = pairTop;
+                }
+                else if( currentLayer == otherEndLayerPcbId && pairedLayerPns.has_value() )
                 {
                     // Closest ratsnest layer is the same as the active layer - assume the via is being placed for
                     // other routing reasons and switch the layer
