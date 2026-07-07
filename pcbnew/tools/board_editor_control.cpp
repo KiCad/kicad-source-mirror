@@ -2163,6 +2163,9 @@ int BOARD_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    if( selectionTool->ReportFilteredLockedItems() )
+        return 0;
+
     std::set<wxString> netNames;
     std::set<int>      netCodes;
 
