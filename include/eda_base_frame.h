@@ -702,8 +702,9 @@ protected:
      * Cancel leaves every autosave on disk so the dialog can offer it again next
      * open.  The open always proceeds either way.
      *
-     * Only meaningful when BACKUP_FORMAT::ZIP is selected.  In INCREMENTAL mode the
-     * user recovers via the Local History restore dialog instead.
+     * Recovery files are only written while the backup format is Zip, but any left over
+     * from a prior session are always offered here regardless of the current format.  In
+     * incremental mode the user otherwise recovers via the Local History restore dialog.
      *
      * @param aProjectPath path to the project directory.
      * @param aExtensions  Only autosave files whose source has one of these

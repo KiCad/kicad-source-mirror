@@ -2395,7 +2395,7 @@ void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY
     // avoids spurious _autosave-* files.  In INCREMENTAL mode the manual-save flow
     // clears dirty flags before calling here, so filtering would skip the whole
     // snapshot.  Git's diff-against-HEAD check rejects no-op commits there anyway.
-    bool filterClean = Pgm().GetCommonSettings()->m_Backup.format == BACKUP_FORMAT::ZIP;
+    bool filterClean = !Pgm().GetCommonSettings()->AutosaveUsesLocalHistory();
 
     for( const SCH_SHEET_PATH& path : sheetList )
     {

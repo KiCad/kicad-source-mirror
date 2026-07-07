@@ -329,8 +329,6 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "graphics.antialiasing_mode",
             &m_Graphics.aa_mode, 2, 0, 2 ) );
 
-    m_params.emplace_back( new PARAM<bool>( "system.local_history_enabled",
-            &m_System.local_history_enabled, true ) );
     m_params.emplace_back( new PARAM<int>( "system.local_history_debounce",
             &m_System.local_history_debounce, 5, 0, 100000 ) );
 

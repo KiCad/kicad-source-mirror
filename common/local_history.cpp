@@ -190,15 +190,15 @@ static bool commitSnapshotForProject( const wxString& aProjectPath, const std::v
                                       const wxString& aTitle );
 
 
-// Single point of control: incremental git history is active only when the user
-// has selected BACKUP_FORMAT::INCREMENTAL.  In zip mode we leave any pre-existing
-// .history dormant on disk and skip all write/commit operations so we do not
-// keep extending a history the user has switched off.  Read-only paths
-// (HistoryExists, RestoreCommit, ShowRestoreDialog) intentionally bypass this
-// gate so users can still browse dormant history after switching back.
-static bool formatUsesIncrementalHistory()
+// Single point of control: git local history is active only when backups are enabled and
+// the backup format is incremental.  In zip mode we leave any pre-existing .history
+// dormant on disk and skip all write/commit operations so we do not keep extending a
+// history the user has switched off.  Read-only paths (HistoryExists, RestoreCommit,
+// ShowRestoreDialog) intentionally bypass this gate so users can still browse dormant
+// history after switching back.
+static bool localHistoryEnabled()
 {
-    return Pgm().GetCommonSettings()->m_Backup.format == BACKUP_FORMAT::INCREMENTAL;
+    return Pgm().GetCommonSettings()->AutosaveUsesLocalHistory();
 }
 
 
@@ -246,7 +246,7 @@ void LOCAL_HISTORY::NoteFileChange( const wxString& aFile )
 {
     wxFileName fn( aFile );
 
-    if( fn.GetFullName() == wxS( "fp-info-cache" ) || !Pgm().GetCommonSettings()->m_Backup.enabled )
+    if( fn.GetFullName() == wxS( "fp-info-cache" ) || !localHistoryEnabled() )
         return;
 
     m_pendingFiles.insert( fn.GetFullPath() );
@@ -293,15 +293,9 @@ void LOCAL_HISTORY::ClearAllSavers()
 bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle,
                                                   const wxString& aTagFileType )
 {
-    if( !Pgm().GetCommonSettings()->m_Backup.enabled )
+    if( !localHistoryEnabled() )
     {
-        wxLogTrace( traceAutoSave, wxS("Autosave disabled, returning" ) );
-        return true;
-    }
-
-    if( !formatUsesIncrementalHistory() )
-    {
-        wxLogTrace( traceAutoSave, wxS("[history] Backup format is ZIP; skipping git commit" ) );
+        wxLogTrace( traceAutoSave, wxS( "Local history disabled, returning" ) );
         return true;
     }
 
@@ -906,7 +900,7 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
     if( !isProjectDirectory( aProjectPath ) )
         return false;
 
-    if( !Pgm().GetCommonSettings()->m_Backup.enabled || !formatUsesIncrementalHistory() )
+    if( !localHistoryEnabled() )
         return true;
 
     wxString hist = historyPath( aProjectPath );
@@ -1142,8 +1136,7 @@ static bool commitSnapshotForProject( const wxString& aProjectPath, const std::v
 
 bool LOCAL_HISTORY::CommitSnapshot( const std::vector<wxString>& aFiles, const wxString& aTitle )
 {
-    if( aFiles.empty() || !Pgm().GetCommonSettings()->m_Backup.enabled
-        || !formatUsesIncrementalHistory() )
+    if( aFiles.empty() || !localHistoryEnabled() )
     {
         return true;
     }
@@ -1231,14 +1224,8 @@ static void collectProjectFiles( const wxString& aProjectPath, std::vector<wxStr
 
 bool LOCAL_HISTORY::CommitFullProjectSnapshot( const wxString& aProjectPath, const wxString& aTitle )
 {
-    if( !isProjectDirectory( aProjectPath ) || !Pgm().GetCommonSettings()->m_Backup.enabled )
+    if( !isProjectDirectory( aProjectPath ) || !localHistoryEnabled() )
         return false;
-
-    if( !formatUsesIncrementalHistory() )
-    {
-        wxLogTrace( traceAutoSave, wxS("[history] Backup format is ZIP; skipping full snapshot" ) );
-        return true;
-    }
 
     std::vector<wxString> files;
     collectProjectFiles( aProjectPath, files );
@@ -1257,7 +1244,7 @@ bool LOCAL_HISTORY::HistoryExists( const wxString& aProjectPath )
 
 bool LOCAL_HISTORY::TagSave( const wxString& aProjectPath, const wxString& aFileType )
 {
-    if( !Pgm().GetCommonSettings()->m_Backup.enabled || !formatUsesIncrementalHistory() )
+    if( !localHistoryEnabled() )
         return true;
 
     if( !isProjectDirectory( aProjectPath ) )
@@ -1369,7 +1356,7 @@ bool LOCAL_HISTORY::HeadNewerThanLastSave( const wxString& aProjectPath )
 bool LOCAL_HISTORY::CommitDuplicateOfLastSave( const wxString& aProjectPath, const wxString& aFileType,
                                                const wxString& aMessage )
 {
-    if( !Pgm().GetCommonSettings()->m_Backup.enabled || !formatUsesIncrementalHistory() )
+    if( !localHistoryEnabled() )
         return true;
 
     if( !isProjectDirectory( aProjectPath ) )

@@ -3193,7 +3193,7 @@ void PCB_EDIT_FRAME::ProjectChanged()
                     // See SCHEMATIC::SaveToHistory: the dirty check is only valid in ZIP
                     // mode.  In INCREMENTAL mode the manual-save flow clears the dirty
                     // flag before the saver runs, so filtering would drop the snapshot.
-                    bool filterClean = Pgm().GetCommonSettings()->m_Backup.format == BACKUP_FORMAT::ZIP;
+                    bool filterClean = !Pgm().GetCommonSettings()->AutosaveUsesLocalHistory();
 
                     if( filterClean && !IsContentModified() )
                         return;
