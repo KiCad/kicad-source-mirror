@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-06 11:09+0000\n"
+"PO-Revision-Date: 2026-07-07 21:22+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -4337,9 +4337,8 @@ msgid "Commit message cannot be empty"
 msgstr "Commit-Nachricht darf nicht leer sein"
 
 #: common/dialogs/git/dialog_git_commit.cpp:192
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Mindestens eine Eigenschaft für die Rückwärts-Annotation auswählen."
+msgstr "Mindestens eine Datei zum Committen auswählenen"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:69
 msgid "Key passphrase:"
@@ -8993,9 +8992,9 @@ msgid "Error reading file."
 msgstr "Fehler beim Lesen der Datei."
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "%s (whilst parsing '%s' in '%s')"
-msgstr "Fehlender Knoten \"%s\" in \"%s\""
+msgstr "%s (beim Parsen von \"%s\" in \" %s\")"
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2485
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:315
@@ -9219,9 +9218,9 @@ msgid "'%s' is not a P-CAD ASCII file."
 msgstr "\"%s\" ist keine gültige PADS Logic-ASCII-Datei."
 
 #: common/io/pcad/s_expr_loader.cpp:224 common/io/pcad/s_expr_loader.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Unbalanced parentheses in '%s'."
-msgstr "Kann \"%s\" in \"%s\" nicht parsen"
+msgstr "Unvollständige Klammern in \"%s\"."
 
 #: common/jobs/job.cpp:82
 msgid "Job Settings"
@@ -10331,9 +10330,9 @@ msgid "Restore Failed"
 msgstr "Wiederherstellung fehlgeschlagen"
 
 #: common/local_history.cpp:2281
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Auf die Remote-Version zurücksetzen."
+msgstr "Das Projekt auf Version von %s zurücksetzen?"
 
 #: common/local_history.cpp:2283
 #, fuzzy
@@ -20417,9 +20416,8 @@ msgid "A pin map named '%s' already exists."
 msgstr "Eine Netzkette namens \"%s\" existiert bereits."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:536
-#, fuzzy
 msgid "Invalid footprint identifier."
-msgstr "Kein gültiger Footprint angegeben"
+msgstr "Ungültige Footprint-ID."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:545
 #, fuzzy
@@ -20437,9 +20435,9 @@ msgid "Remove Pin Map"
 msgstr "Signal entfernen"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Remove pin map '%s' and its footprint association?"
-msgstr "Alle Footprintzuordnungen entfernen"
+msgstr "Pinzuordnung \"%s\" und zugehörige Footprintzuordnung entfernen?"
 
 #: eeschema/dialogs/panel_symbol_pin_map_base.cpp:52
 #, fuzzy
@@ -20866,9 +20864,9 @@ msgid "Pin map '%s' references unknown symbol pin '%s'"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol pins '%s' and '%s' both map to pad '%s'"
-msgstr "Das Symbol \"%s\" ordnet Pin \"%s\" sowohl \"%s\" als auch \"%s\" zu."
+msgstr "Symbolpins \"%s\" und \"%s\" sind beide Pad \"%s\" zugeordnet"
 
 #: eeschema/erc/erc.cpp:324
 #, c-format
@@ -20876,9 +20874,10 @@ msgid "Pin map '%s' references pad '%s' not present on footprint '%s'"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "Pin '%s' is connected but maps to no pad on footprint '%s'"
-msgstr "Pin %s ist sowohl mit %s, als auch mit %s verbunden"
+msgstr ""
+"Pin \"%s\" ist verbunden, jedoch keinem Pad im Footprint \"%s\" zugeordnet"
 
 #: eeschema/erc/erc.cpp:413 eeschema/erc/erc.cpp:432
 #: pcbnew/drc/drc_test_provider_misc.cpp:446
@@ -21231,9 +21230,8 @@ msgid "Field name has leading or trailing whitespace"
 msgstr "Der Feldname beginnt oder endet mit Leerzeichen"
 
 #: eeschema/erc/erc_item.cpp:175
-#, fuzzy
 msgid "Pin map references a pad that does not exist on the footprint"
-msgstr "Pad \"%s\" in Jumperpad-Gruppe %d existiert in diesem Footprint nicht."
+msgstr "Pinzuordnung verweist auf ein Pad, das im Footprint nicht vorhanden ist"
 
 #: eeschema/erc/erc_item.cpp:179
 msgid "Connected pin is not mapped to any footprint pad"
@@ -21795,14 +21793,12 @@ msgid "Pin maps differ."
 msgstr "%s weicht ab."
 
 #: eeschema/lib_symbol.cpp:2291
-#, fuzzy
 msgid "Associated footprint count differs."
-msgstr "Assoziieren von Footprints nach Referenz"
+msgstr "Anzahl zugewiesener Footprints weicht ab."
 
 #: eeschema/lib_symbol.cpp:2299
-#, fuzzy
 msgid "Associated footprints differ."
-msgstr "Footprint zuordnen"
+msgstr "Zugewiesene Footprints weichen ab."
 
 #: eeschema/lib_symbol.cpp:2308
 msgid "Symbol keywords differ."
@@ -22926,11 +22922,12 @@ msgid "Embedded file '%s' not found in storage."
 msgstr "Eingebettete Datei %s nicht im Speicher gefunden."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4771
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not write a temporary file while extracting the embedded image '%s'."
 msgstr ""
-"Konnte kein temporäres Verzeichnis für die Zusammenführung erstellen.\n"
+"Während des Extrahierens des eingebetteten Bildes \"%s\" konnte keine "
+"temporäre Datei geschrieben werden."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4793
 #, c-format
@@ -24087,9 +24084,9 @@ msgid "Empty P-CAD document"
 msgstr ""
 
 #: eeschema/sch_io/pcad/sch_io_pcad.cpp:1254
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol definition '%s' for '%s' not found."
-msgstr "Symbolbibliothek \"%s\" nicht gefunden."
+msgstr "Symboldefinition \"%s\" für \"%s\" wurde nicht gefunden."
 
 #: eeschema/sch_io/pcad/sch_io_pcad.h:56
 #, fuzzy
@@ -29071,9 +29068,8 @@ msgid "Symbol Properties..."
 msgstr "Symboleigenschaften ..."
 
 #: eeschema/tools/sch_actions.cpp:1070
-#, fuzzy
 msgid "Symbol Pin Maps..."
-msgstr "Symbol-Pin"
+msgstr "Symbol-Pin-Zuordnungen ..."
 
 #: eeschema/tools/sch_actions.cpp:1071
 msgid "Edit the symbol's pin-to-pad maps and associated footprints"
@@ -31182,9 +31178,8 @@ msgid "Identity"
 msgstr "Stückzahl"
 
 #: eeschema/widgets/sch_properties_panel.cpp:496
-#, fuzzy
 msgid "Effective Pin Map"
-msgstr "Effektive %s:"
+msgstr "Tatsächliche Pinzuordnung"
 
 #: eeschema/widgets/sch_properties_panel.cpp:554
 #, c-format
@@ -31192,9 +31187,8 @@ msgid "%s (identity)"
 msgstr ""
 
 #: eeschema/widgets/sch_properties_panel.cpp:584
-#, fuzzy
 msgid "Edit Pin Map..."
-msgstr "Pins bearbeiten"
+msgstr "Pinzuordnungen bearbeiten ..."
 
 #: eeschema/widgets/sch_properties_panel.cpp:1122
 #: pcbnew/widgets/pcb_properties_panel.cpp:967
@@ -34411,9 +34405,8 @@ msgid "Other Templates"
 msgstr "Benutzervorlagen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
-#, fuzzy
 msgid "Browse for templates in another directory"
-msgstr "in Verzeichnis der Vorlage hinzugefügt werden."
+msgstr "In anderem Verzeichnis nach Vorlagen suchen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
 msgid "Stop showing templates from the browsed directory"
@@ -40741,11 +40734,9 @@ msgid "Custom Rules"
 msgstr "Benutzerdefinierte Regeln"
 
 #: pcbnew/cross-probing.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying footprint library '%s'."
-msgstr ""
-"Bei dem Versuch, den Footprint %s aus der Bibliothek \"%s\" zu laden, ist "
-"ein Fehler aufgetreten."
+msgstr "Fehler beim Kopieren der Footprintbibliothek \"%s\"."
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:239
 msgid "Barcode Error"
