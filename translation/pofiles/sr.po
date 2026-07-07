@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-07-06 11:09+0000\n"
+"PO-Revision-Date: 2026-07-07 21:23+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -3967,9 +3967,8 @@ msgid "Commit message cannot be empty"
 msgstr "Комит порука не може бити празна"
 
 #: common/dialogs/git/dialog_git_commit.cpp:196
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Изабери фајл за уградњу"
+msgstr "Изаберите бар једну датотеку за уношење (commit)"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
@@ -12128,19 +12127,16 @@ msgid "KiCad design block path"
 msgstr "KiCad design block путања"
 
 #: common/wildcards_and_files_ext.cpp:385
-#, fuzzy
 msgid "KiCad design block library paths"
-msgstr "библиотека"
+msgstr "Kicad путање до библиотека дизајн блокова"
 
 #: common/wildcards_and_files_ext.cpp:392
-#, fuzzy
 msgid "Drawing sheet files"
-msgstr "Опције цртања"
+msgstr "Датотеке листова цртежа"
 
 #: common/wildcards_and_files_ext.cpp:400
-#, fuzzy
 msgid "KiCad symbol footprint link files"
-msgstr "KiCad footprint фајлови"
+msgstr "KiCad датотеке за повезивање симбола и отисака"
 
 #: common/wildcards_and_files_ext.cpp:408 gerbview/files.cpp:66
 msgid "Drill files"
@@ -12159,32 +12155,28 @@ msgid "CSV Files"
 msgstr "CSV фајлови"
 
 #: common/wildcards_and_files_ext.cpp:433
-#, fuzzy
 msgid "CSV/TSV Files"
-msgstr "CSV фајлови"
+msgstr "CSV/TSV датотеке"
 
 #: common/wildcards_and_files_ext.cpp:439
-#, fuzzy
 msgid "Portable document format files"
-msgstr "Попуњавање зона"
+msgstr "Датотеке у формату Portable Document Format (PDF)"
 
 #: common/wildcards_and_files_ext.cpp:445
 msgid "PostScript files"
 msgstr "PostScript фајлови"
 
 #: common/wildcards_and_files_ext.cpp:451
-#, fuzzy
 msgid "Json files"
-msgstr "Job фајлови"
+msgstr "JSON датотеке"
 
 #: common/wildcards_and_files_ext.cpp:457
 msgid "Report files"
 msgstr "Report фајлови"
 
 #: common/wildcards_and_files_ext.cpp:463
-#, fuzzy
 msgid "Component placement files"
-msgstr "Footprint place фајлови"
+msgstr "Датотеке са положајима компоненти"
 
 #: common/wildcards_and_files_ext.cpp:469
 msgid "VRML and X3D files"
@@ -12326,33 +12318,29 @@ msgid "Apply, Save Schematic && Continue"
 msgstr "Примени, сачувај шему и настави"
 
 #: cvpcb/cvpcb_mainframe.cpp:229
-#, fuzzy
 msgid "Symbol to footprint changes are unsaved"
-msgstr "Симбол: Додјеле отисака"
+msgstr "Измене везане за симболе и отиске нису сачуване"
 
 #: cvpcb/cvpcb_mainframe.cpp:399
 msgid "Symbol to Footprint links have been modified. Save changes?"
 msgstr "Линкови симбола и подножја су измењени. Сачувај промене?"
 
 #: cvpcb/cvpcb_mainframe.cpp:637 cvpcb/tools/cvpcb_association_tool.cpp:208
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint."
-msgstr "\"%s\" није валидан LIB_ID."
+msgstr "„%s” није исправан отисак."
 
 #: cvpcb/cvpcb_mainframe.cpp:814
-#, fuzzy
 msgid "Pin Count"
-msgstr "Дужина чиоде:"
+msgstr "Број пинова"
 
 #: cvpcb/cvpcb_mainframe.cpp:840
-#, fuzzy
 msgid "Search Text"
-msgstr "претражи текст"
+msgstr "Текст за претрагу"
 
 #: cvpcb/cvpcb_mainframe.cpp:844
-#, fuzzy
 msgid "No Filtering"
-msgstr "Филтер"
+msgstr "Без филтрирања"
 
 #: cvpcb/cvpcb_mainframe.cpp:846
 #, c-format
@@ -12360,9 +12348,9 @@ msgid "Filtered by %s"
 msgstr "Филтрирано од стране %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Недостаје.\n"
+msgstr ": %i одговарајући отисак"
 
 #: cvpcb/cvpcb_mainframe.cpp:860
 #, c-format
@@ -12375,26 +12363,29 @@ msgid "Library location: %s"
 msgstr "Локација библиотеке: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:905
-#, fuzzy
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
-msgstr "Попуњавање зона"
+msgstr ""
+"У тренутној табели библиотека отисака није наведена ниједна библиотека "
+"отисака."
 
 #: cvpcb/cvpcb_mainframe.cpp:906
 msgid "Configuration Error"
 msgstr "Грешка у конфигурисању"
 
 #: cvpcb/cvpcb_mainframe.cpp:910
-#, fuzzy
 msgid "Load Footprint Libraries"
-msgstr "Учитавање  "
+msgstr "Учитај библиотеке отисака"
 
 #: cvpcb/cvpcb_mainframe.cpp:983
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading schematic.\n"
 "%s"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr ""
+"Грешка при учитавању шеме.\n"
+"\n"
+"%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:47
 #, c-format
@@ -12409,39 +12400,33 @@ msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "Уређивач текста није изабран у KiCad-у. Молим изаберите га."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:215
-#, fuzzy
 msgid "Footprint Association File"
-msgstr "фајл не постоји"
+msgstr "Датотека асоцијације отиска"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists in list."
-msgstr "\"%s\" већ постоји."
+msgstr "Датотека „%s” већ постоји на списку."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
-#, fuzzy
 msgid "Footprint association files:"
-msgstr "фајл не постоји"
+msgstr "Датотеке асоцијације отиска:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
-#, fuzzy
 msgid "Add association file"
-msgstr "фајл не постоји"
+msgstr "Додај датотеку асоцијације"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:53
-#, fuzzy
 msgid "Edit association file"
-msgstr "фајл не постоји"
+msgstr "Уреди датотеку асоцијација"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:61
-#, fuzzy
 msgid "Remove association file"
-msgstr "Избриши"
+msgstr "Уклони датотеку асоцијације"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
-#, fuzzy
 msgid "Ref"
-msgstr "Црвена:"
+msgstr "Реф"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:39
 msgid "Schematic assignment"
@@ -12465,46 +12450,44 @@ msgstr ""
 "Молим изаберите доделу."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
-#, fuzzy
 msgid "Footprint Assignment Conflicts"
-msgstr "Додјела шеме"
+msgstr "Сукоби при додели отисака"
 
 #: cvpcb/display_footprints_frame.cpp:73
 #: pcbnew/toolbars_footprint_viewer.cpp:121
-#, fuzzy
 msgid "Footprint Viewer"
-msgstr "претражи текст"
+msgstr "Прегледач отисака"
 
 #: cvpcb/display_footprints_frame.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint ID '%s' is not valid."
-msgstr "Попуњавање зона"
+msgstr "Идентификатор отиска „%s” није исправан."
 
 #: cvpcb/display_footprints_frame.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' is not in the footprint library table."
-msgstr "Попуњавање зона"
+msgstr "Библиотека „%s” се не налази у табели библиотека отисака."
 
 #: cvpcb/display_footprints_frame.cpp:301
 #: cvpcb/display_footprints_frame.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found."
-msgstr "Попуњавање зона"
+msgstr "Отисак „%s” није пронађен."
 
 #: cvpcb/display_footprints_frame.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprint: %s"
-msgstr "Грешка у учитавању фонта '%s'."
+msgstr "Грешка при учитавању отиска: %s"
 
 #: cvpcb/display_footprints_frame.cpp:378 pcbnew/footprint.cpp:2209
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint: %s"
-msgstr "Попуњавање зона"
+msgstr "Отисак: %s"
 
 #: cvpcb/display_footprints_frame.cpp:406
-#, fuzzy, c-format
+#, c-format
 msgid "Lib: %s"
-msgstr "Попуњавање зона"
+msgstr "Библ.: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:118
 msgid ""
@@ -12513,34 +12496,40 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
+"Неки од додељених отисака су застарели уноси без имена библиотека. Да ли "
+"желите да KiCad покуша да их конвертује у нови потребни LIB_ID формат? (Ако "
+"одговорите са не, онда ће ове доделе бити обрисане и мораћете их поново "
+"ручно доделити.)"
 
 #: cvpcb/readwrite_dlgs.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' <b>not found</b> in any library.\n"
-msgstr "Попуњавање зона"
+msgstr ""
+"Отисак '%s' компоненте '%s' <b>није пронађен</b> ни у једној библиотеци.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
-msgstr "Попуњавање зона"
+msgstr "Отисак '%s' компоненте '%s' пронађен је у <b>више</b> библиотека.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:167
-#, fuzzy
 msgid "First check your footprint library table entries."
-msgstr "Попуњавање зона"
+msgstr ""
+"Прво проверите уносе у табели библиотека отисака (footprint library table)."
 
 #: cvpcb/readwrite_dlgs.cpp:169
-#, fuzzy
 msgid "Problematic Footprint Library Tables"
-msgstr "Креирање зона"
+msgstr "Проблематичне табеле библиотека отисака"
 
 #: cvpcb/readwrite_dlgs.cpp:177
-#, fuzzy
 msgid ""
 "The following errors occurred attempting to convert the footprint "
 "assignments:\n"
 "\n"
-msgstr "Грешка: "
+msgstr ""
+"Дошло је до следећих грешака приликом покушаја конверзије додељених "
+"отисака:\n"
+"\n"
 
 #: cvpcb/readwrite_dlgs.cpp:180
 msgid ""
@@ -12548,204 +12537,184 @@ msgid ""
 "You will need to reassign them manually if you want them to be updated "
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
+"\n"
+"Мораћете ручно да их поново доделите ако желите да се исправно ажурирају "
+"приликом следећег увоза нетлисте у Pcbnew."
 
 #: cvpcb/readwrite_dlgs.cpp:306
 msgid "Schematic saved"
 msgstr "Шема је сачувана"
 
 #: cvpcb/toolbars_cvpcb.cpp:89
-#, fuzzy
 msgid "Footprint Filters:"
-msgstr "Додај поље"
+msgstr "Филтери отиска:"
 
 #: cvpcb/toolbars_cvpcb.cpp:123
-#, fuzzy
 msgid "Footprint filters"
-msgstr "Додај поље"
+msgstr "Филтери отиска"
 
 #: cvpcb/toolbars_cvpcb.cpp:124
-#, fuzzy
 msgid "Footprint filtering controls"
-msgstr "Додај поље"
+msgstr "Контроле за филтрирање отиска"
 
 #: cvpcb/toolbars_display_footprints.cpp:50
 #: eeschema/symbol_editor/toolbars_symbol_editor.cpp:76
 #: eeschema/toolbars_sch_editor.cpp:85 gerbview/toolbars_gerber.cpp:62
 #: pcbnew/toolbars_footprint_editor.cpp:69
 #: pcbnew/toolbars_footprint_viewer.cpp:85 pcbnew/toolbars_pcb_editor.cpp:168
-#, fuzzy
 msgid "Crosshair modes"
-msgstr "Десно"
+msgstr "Режими нишанске ознаке"
 
 #: cvpcb/tools/cvpcb_actions.cpp:48
-#, fuzzy
 msgid "View Selected Footprint"
-msgstr "Попуњавање зона"
+msgstr "Прикажи изабрани отисак"
 
 #: cvpcb/tools/cvpcb_actions.cpp:56
-#, fuzzy
 msgid "Manage Footprint Association Files..."
-msgstr "Сачувај као .csv фајл"
+msgstr "Управљање датотекама асоцијације отисака..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:57
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprints based on symbol values."
 msgstr ""
+"Измените листу датотека за повезивање отисака. Ове датотеке се користе за "
+"аутоматско додељивање отисака на основу вредности симбола."
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
-#, fuzzy
 msgid "Save to Schematic"
-msgstr "Додјела шеме"
+msgstr "Сачувај у шему"
 
 #: cvpcb/tools/cvpcb_actions.cpp:66
-#, fuzzy
 msgid "Save footprint assignments in 'footprint' fields of schematic symbols"
-msgstr "Претражи"
+msgstr "Сачувај доделе отисака у пољима „ отисак” симбола на шеми"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Додјела шеме"
+msgstr "Сачувај у шему и датотеку"
 
 #: cvpcb/tools/cvpcb_actions.cpp:75
 msgid ""
 "Save footprint assignments in 'footprint' fields of schematic symbols and "
 "then save schematic files"
 msgstr ""
+"Сачувајте додељене отиске у пољима за отиске симбола на шеми, а затим "
+"сачувајте датотеке шеме"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
-#, fuzzy
 msgid "Select Next Unassigned Symbol"
-msgstr "Симбол"
+msgstr "Изабери следећи недодељени симбол"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
-#, fuzzy
 msgid "Select next symbol with no footprint assignment"
-msgstr "Симбол: Додјеле отисака"
+msgstr "Изабери следећи симбол без додељеног отиска"
 
 #: cvpcb/tools/cvpcb_actions.cpp:107
-#, fuzzy
 msgid "Select Previous Unassigned Symbol"
-msgstr "Симбол"
+msgstr "Изабери претходни недодељени симбол"
 
 #: cvpcb/tools/cvpcb_actions.cpp:108
-#, fuzzy
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Симбол: Додјеле отисака"
+msgstr "Изабери претходни симбол без додељеног отиска"
 
 #: cvpcb/tools/cvpcb_actions.cpp:119
-#, fuzzy
 msgid "Assign Footprint"
-msgstr "Промјена облика курсора"
+msgstr "Додели отисак"
 
 #: cvpcb/tools/cvpcb_actions.cpp:125
-#, fuzzy
 msgid "Automatically Assign Footprints"
-msgstr "Недостаје.\n"
+msgstr "Аутоматско додељивање отисака"
 
 #: cvpcb/tools/cvpcb_actions.cpp:126
-#, fuzzy
 msgid "Assign footprints automatically using a footprint association file"
-msgstr "Избор филтера..."
+msgstr "Аутоматски доделите отиске помоћу датотеке за повезивање отисака"
 
 #: cvpcb/tools/cvpcb_actions.cpp:133
-#, fuzzy
 msgid "Delete Footprint Assignment"
-msgstr "Симбол: Додјеле отисака"
+msgstr "Уклони доделу отиска"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
-#, fuzzy
 msgid "Delete All Footprint Assignments"
-msgstr "Симбол: Додјеле отисака"
+msgstr "Обриши сва додељивања отисака"
 
 #: cvpcb/tools/cvpcb_actions.cpp:146
-#, fuzzy
 msgid "Use symbol footprint filters"
-msgstr "Избриши поље"
+msgstr "Користите филтере отисака симбола"
 
 #: cvpcb/tools/cvpcb_actions.cpp:147
 msgid "Filter footprint list by footprint filters defined in the symbol"
-msgstr ""
+msgstr "Филтрирај листу отисака према филтерима отисака дефинисаним у симболу"
 
 #: cvpcb/tools/cvpcb_actions.cpp:156
-#, fuzzy
 msgid "Filter by pin count"
-msgstr "Попуњавање зона"
+msgstr "Филтрирај према броју пинова"
 
 #: cvpcb/tools/cvpcb_actions.cpp:157
-#, fuzzy
 msgid "Filter footprint list by pin count"
-msgstr "Попуњавање зона"
+msgstr "Филтрирај листу отисака према броју пинова"
 
 #: cvpcb/tools/cvpcb_actions.cpp:166
-#, fuzzy
 msgid "Filter by library"
-msgstr "Изабери библиотеку"
+msgstr "Филтрирај према библиотеци"
 
 #: cvpcb/tools/cvpcb_actions.cpp:167
-#, fuzzy
 msgid "Filter footprint list by library"
-msgstr "Учитавање  "
+msgstr "Филтрирај листу отисака према библиотеци"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:255
-#, fuzzy
 msgid "Delete all associations?"
-msgstr "Избриши"
+msgstr "Избрисати све везе?"
 
 #: eeschema/annotate.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s (unit %s)."
-msgstr "Попуњавање зона"
+msgstr "Уклоњена ознака за %s (јединица %s)."
 
 #: eeschema/annotate.cpp:90
-#, fuzzy, c-format
+#, c-format
 msgid "Cleared annotation for %s."
-msgstr "Чисто"
+msgstr "Уклоњена ознака за %s."
 
 #: eeschema/annotate.cpp:176
-#, fuzzy
 msgid "Delete Annotation"
-msgstr "Чисто"
+msgstr "Обриши ознаку"
 
 #: eeschema/annotate.cpp:295
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr ""
+msgstr "Пронађено је и замењено %d дуплираних временских ознака."
 
 #: eeschema/annotate.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s (unit %s) from %s to %s."
-msgstr "Попуњавање зона"
+msgstr "Ажурирано %s (јединица %s) са %s на %s."
 
 #: eeschema/annotate.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s from %s to %s."
-msgstr "Попуњавање зона"
+msgstr "Ажурирано %s са %s на %s."
 
 #: eeschema/annotate.cpp:469
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s (unit %s) as %s."
-msgstr "Попуњавање зона"
+msgstr "Означено %s (јединица %s) као %s."
 
 #: eeschema/annotate.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s."
-msgstr "Попуњавање зона"
+msgstr "Означено %s као %s."
 
 #: eeschema/annotate.cpp:493
-#, fuzzy
 msgid "Annotation complete."
-msgstr "Чисто"
+msgstr "Анотација је завршена."
 
 #: eeschema/api/api_handler_sch.cpp:259
 msgid "Added items via API"
 msgstr ""
 
 #: eeschema/api/api_handler_sch.cpp:277 pcbnew/api/api_handler_pcb.cpp:549
-#, fuzzy
 msgid "Created items via API"
-msgstr "Креирање зона"
+msgstr "Ставке креиране путем API-ја"
 
 #: eeschema/bom_plugins.cpp:47
 #, c-format
@@ -12754,28 +12723,30 @@ msgid ""
 "%s\n"
 "not found. Script not available."
 msgstr ""
+"Датотека скрипте:\n"
+"%s\n"
+"није пронађена. Скрипта није доступна."
 
 #: eeschema/connection_graph.cpp:3698
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
+"И %s и %s су повезани са истим елементима; %s ће се користити у нетлисти."
 
 #: eeschema/connection_graph.cpp:3930
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr ""
+msgstr "Мрежа %s је графички повезана са магистралом %s, али није њен члан"
 
 #: eeschema/connection_graph.cpp:4268 eeschema/erc/erc_item.cpp:243
-#, fuzzy
 msgid "Unconnected wire endpoint"
-msgstr "Додај поље"
+msgstr "Неповезан крај жице"
 
 #: eeschema/connection_graph.cpp:4292
-#, fuzzy
 msgid "Unconnected wire to bus entry"
-msgstr "Додај поље"
+msgstr "Жица која није повезана са улазом сабирнице"
 
 #: eeschema/connection_graph.cpp:4662
 #, c-format
@@ -12783,16 +12754,19 @@ msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
+"Хијерархијска ознака „%s” на основном листу не може се повезати са "
+"непостојећим надређеним листом"
 
 #: eeschema/connection_graph.cpp:4728
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr ""
+msgstr "Прикључак листа %s нема одговарајућу хијерархијску ознаку унутар листа"
 
 #: eeschema/connection_graph.cpp:4745
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
+"Хијерархијска ознака %s нема одговарајући извод листа на надређеном листу"
 
 #: eeschema/cross-probing.cpp:167
 #, c-format
@@ -12800,9 +12774,9 @@ msgid "%s pin %s found"
 msgstr "%s пин %s пронађен"
 
 #: eeschema/cross-probing.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "%s found but pin %s not found"
-msgstr "%s пронађен али %s није пронађен"
+msgstr "%s пронађен, али пин %s није пронађен"
 
 #: eeschema/cross-probing.cpp:173
 #, c-format
@@ -12817,20 +12791,17 @@ msgid "%s not found"
 msgstr "%s није пронађен"
 
 #: eeschema/cross-probing.cpp:243
-#, fuzzy
 msgid "Highlighted net:"
-msgstr "компонента"
+msgstr "Истакнута мрежа:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:112
-#, fuzzy
 msgid "Annotation Messages:"
-msgstr "Ротација:"
+msgstr "Поруке са напоменама:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:115
 #: eeschema/dialogs/dialog_annotate.cpp:260
-#, fuzzy
 msgid "Annotate"
-msgstr "Окрени:"
+msgstr "Додај напомене"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
@@ -12839,67 +12810,57 @@ msgstr "Окрени:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:25
 msgid "Scope"
-msgstr ""
+msgstr "Обим"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:42
-#, fuzzy
 msgid "Entire schematic"
-msgstr "Додјела шеме"
+msgstr "Комплетна шема"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:46
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:50
-#, fuzzy
 msgid "Current sheet only"
-msgstr "Струја"
+msgstr "Само тренутни лист"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:49
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:187
-#, fuzzy
 msgid "Selection"
-msgstr "Рефлекције"
+msgstr "Тренутни избор"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:52
-#, fuzzy
 msgid "Recurse into subsheets"
-msgstr "Крај линије"
+msgstr "Уђи у подлистове"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:60
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:49
-#, fuzzy
 msgid "Order"
-msgstr "Редослијед:"
+msgstr "Редослед"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:65
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:62
-#, fuzzy
 msgid "Sort symbols by &X position"
-msgstr "Сортирај компоненте по &X позицији"
+msgstr "Сортирај симболе према &X-позицији"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:78
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:74
-#, fuzzy
 msgid "Sort symbols by &Y position"
-msgstr "Сортирај компоненте по &Y позицији"
+msgstr "Сортирај симболе према &Y-позицији"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:93
-#, fuzzy
 msgid "Keep existing annotations"
-msgstr "Референца"
+msgstr "Задржи постојећу анотацију"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:96
 msgid "Reset existing annotations"
-msgstr ""
+msgstr "Ресетуј постојећу анотацију"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
-#, fuzzy
 msgid "Regroup symbol units"
-msgstr "Симбол"
+msgstr "Прегрупиши јединице симбола"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:106
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:86
-#, fuzzy
 msgid "Numbering"
-msgstr "Нумерисање:"
+msgstr "Нумерисање"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:113
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:101
@@ -12909,22 +12870,20 @@ msgstr "Користи први слободан број након:"
 #: eeschema/dialogs/dialog_annotate_base.cpp:120
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:107
 msgid "First free after sheet number X 100"
-msgstr ""
+msgstr "Први слободан после листа број X 100"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:123
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:110
 msgid "First free after sheet number X 1000"
-msgstr ""
+msgstr "Први слободан након листа број X 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:146
-#, fuzzy
 msgid "Clear Annotation"
-msgstr "Чисто"
+msgstr "Брисање ознаке"
 
 #: eeschema/dialogs/dialog_annotate_base.h:86
-#, fuzzy
 msgid "Annotate Schematic"
-msgstr "Додјела шеме"
+msgstr "Означи шему"
 
 #: eeschema/dialogs/dialog_bom.cpp:85 kicad/dialogs/panel_jobset_base.cpp:207
 #: pcbnew/dialogs/dialog_gendrill.cpp:79
@@ -12935,14 +12894,15 @@ msgid "Generate"
 msgstr "Генериши"
 
 #: eeschema/dialogs/dialog_bom.cpp:167
-#, fuzzy
 msgid "(file missing)"
-msgstr "Недостаје.\n"
+msgstr "(датотека недостаје)"
 
 #: eeschema/dialogs/dialog_bom.cpp:244
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
 msgstr ""
+"Изабрана скрипта за генерисање спецификације материјала (BOM) %s није "
+"пронађена."
 
 #: eeschema/dialogs/dialog_bom.cpp:249
 #, c-format
@@ -12953,72 +12913,71 @@ msgid ""
 "\t%s\n"
 "\t%s"
 msgstr ""
+"\n"
+"\n"
+"Претражено:\n"
+"\t%s\n"
+"\t%s"
 
 #: eeschema/dialogs/dialog_bom.cpp:296
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr ""
+msgstr "Генерисање BOM-а захтева потпуно анотирану шему."
 
 #: eeschema/dialogs/dialog_bom.cpp:301
-#, fuzzy
 msgid "Failed to create file."
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Креирање датотеке није успело."
 
 #: eeschema/dialogs/dialog_bom.cpp:337 eeschema/dialogs/dialog_bom_base.cpp:45
-#, fuzzy
 msgid "Generator nickname:"
-msgstr "фајл не постоји"
+msgstr "Надимак генератора:"
 
 #: eeschema/dialogs/dialog_bom.cpp:337
-#, fuzzy
 msgid "Add Generator"
-msgstr "Додај поље"
+msgstr "Додај генератор"
 
 #: eeschema/dialogs/dialog_bom.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Nickname '%s' already in use."
-msgstr "Име'%s' је већ у употреби."
+msgstr "Надимак „%s” се већ користи."
 
 #: eeschema/dialogs/dialog_bom.cpp:375
 #: eeschema/dialogs/dialog_export_netlist.cpp:900
-#, fuzzy
 msgid "Generator File"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Датотека генератора"
 
 #: eeschema/dialogs/dialog_bom.cpp:394
-#, fuzzy
 msgid "Generator file name not found."
-msgstr "Фајл није пронађен."
+msgstr "Име датотеке генератора није пронађено."
 
 #: eeschema/dialogs/dialog_bom.cpp:415
-#, fuzzy
 msgid "Bill of Materials Generation Help"
-msgstr "Сачувај &Као..."
+msgstr "Помоћ при генерисању спецификације материјала"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
 msgid "BOM generator scripts:"
-msgstr ""
+msgstr "Скрипте за генерисање BOM-а:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 msgid "Add a new BOM generator and its command line to the list"
 msgstr ""
+"Додајте нови генератор спецификације материјала (BOM) и његову командну "
+"линију на листу"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:76
-#, fuzzy
 msgid "Edit the script file in the text editor"
-msgstr "Текстуални едитор"
+msgstr "Измените скрипт-датотеку у уређивачу текста"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:84
 msgid "Remove the current generator script from list"
-msgstr ""
+msgstr "Уклоните тренутну скрипту генератора са листе"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:94
 msgid "Command line running the generator:"
-msgstr ""
+msgstr "Командна линија за покретање генератора:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:103
-#, fuzzy
 msgid "Show console window"
-msgstr "Прикажи"
+msgstr "Прикажи прозор конзоле"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:104
 msgid ""
@@ -13026,15 +12985,19 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
+"Подразумевано, командна линија се покреће са скривеним прозором конзоле, а "
+"излаз се преусмерава на информативни екран.\n"
+"Подесите ову опцију да бисте приказали прозор извршене команде."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr ""
+"Врати листу скрипти за генерисање спецификације материјала (BOM) на "
+"подразумеване поставке"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
-#, fuzzy
 msgid "Bill of Materials"
-msgstr "Сачувај &Као..."
+msgstr "Списак материјала"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -13118,27 +13081,107 @@ msgid ""
 "Double quotes (`\"`) around the arguments are recommended in case filenames "
 "contain spaces or special characters.\n"
 msgstr ""
+"# 1. Сажетак\n"
+"\n"
+"Алат за спецификацију материјала (BOM) прави спецификацију материјала која "
+"садржи списак свих компоненти у пројекту.\n"
+"\n"
+"Алат користи спољну скрипту за генерисање спецификације материјала у жељеном "
+"излазном формату. Избором друге скрипте мења се начин форматирања "
+"спецификације материјала.\n"
+"\n"
+"Генерисање спецификације материјала је детаљније описано у приручнику за "
+"Уређивач шеме.\n"
+"\n"
+"# 2. Употреба\n"
+"\n"
+"Изаберите скрипту за генерисање у списку **Скрипте за генерисање "
+"спецификације материјала**. Подаци о изабраном генератору приказани су на "
+"десној страни дијалога.\n"
+"\n"
+"Кликом на дугме **Генериши** прави се датотека спецификације материјала "
+"помоћу изабраног генератора.\n"
+"\n"
+"Подразумевана подешавања нуде неколико скрипти за генерисање, мада су уз "
+"KiCad инсталиране и неке додатне скрипте које се могу додати у списак помоћу "
+"дугмета **+**.\n"
+"\n"
+"**Напомена:** На систему Windows постоји додатна опција **Прикажи прозор "
+"конзоле**. Када је ова опција искључена, генератори спецификације материјала "
+"покрећу се у скривеном прозору конзоле, а сав излаз се преусмерава и "
+"приказује у дијалогу. Када је ова опција укључена, генератори спецификације "
+"материјала покрећу се у видљивом прозору конзоле.\n"
+"\n"
+"# 3. Прилагођени генератори и командне линије\n"
+"\n"
+"KiCad интерно прави привремену netlist датотеку у XML формату која садржи "
+"информације о свим компонентама у пројекту. Скрипта за генерисање "
+"спецификације материјала претвара ову међудатотеку мреже веза у жељени "
+"излазни формат. KiCad покреће скрипте за генерисање спецификације материјала "
+"у складу са командном линијом унетом на дну дијалога за спецификацију "
+"материјала.\n"
+"\n"
+"Формат командне линије прихвата параметре за називе датотека. Сваки "
+"параметар за форматирање замењује се путањом или именом датотеке специфичним "
+"за пројекат. Подржани параметри за форматирање су:\n"
+"\n"
+" * `%I`: апсолутна путања и назив међудатотеке мреже веза, која представља "
+"улаз за генератор спецификације материјала\n"
+"\n"
+" * `%O`: апсолутна путања и назив излазне датотеке спецификације материјала "
+"(без наставка датотеке)\n"
+"\n"
+" * `%B`: основни назив излазне датотеке спецификације материјала (без "
+"наставка датотеке)\n"
+"\n"
+" * `%P`: апсолутна путања директоријума пројекта, без завршне косе црте\n"
+"\n"
+"**Напомена:** Параметар излазне датотеке `%O` не укључује наставак датотеке. "
+"KiCad ће покушати да аутоматски дода одговарајући наставак у командну "
+"линију, али ће у неким случајевима наставак можда морати да се дода ручно.\n"
+"\n"
+"Python је препоручени алат за писање скрипти за генерисање спецификације "
+"материјала, али се могу користити и други алати.\n"
+"\n"
+"## Примери командних линија за Python скрипте\n"
+"\n"
+"Формат командне линије за Python скрипту је:\n"
+"python <назив датотеке скрипте> <улазна датотека> <излазна датотека>\n"
+"\n"
+"\n"
+"На систему Windows, ако је жељена скрипта за генерисање CSV спецификације "
+"материјала `C:\\Users\\username\\kicad\\my_python_script.py`, командна "
+"линија би била:\n"
+"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
+"\n"
+"\n"
+"На систему Linux, ако је жељена скрипта за генерисање CSV спецификације "
+"материјала `/home/username/kicad/my_python_script.py`, командна линија би "
+"била:\n"
+"\n"
+"python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
+"\n"
+"Препоручује се употреба двоструких наводника (`\"`) око аргумената, у "
+"случају да називи датотека садрже размаке или посебне знакове.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:56
-#, fuzzy
 msgid "Change all symbols in schematic"
-msgstr "Симбол"
+msgstr "Промени све симболе на шеми"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:57
 #: eeschema/dialogs/dialog_change_symbols.cpp:459
-#, fuzzy
 msgid "Change Symbols"
-msgstr "Симбол у кеш меморији:"
+msgstr "Промени симболе"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:60
-#, fuzzy
 msgid "Change symbols matching reference designator:"
-msgstr "Референца"
+msgstr "Промени симболе који одговарају референтној ознаци:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:61
-#, fuzzy
 msgid "Change symbols matching value:"
-msgstr "Поља"
+msgstr "Промени симболе који одговарају вредности:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:62
 #, fuzzy
@@ -37386,14 +37429,12 @@ msgid "mi/h"
 msgstr ""
 
 #: pcbnew/api/api_handler_pcb.cpp:550
-#, fuzzy
 msgid "Modified items via API"
-msgstr "Креирање зона"
+msgstr "Ставке измењене путем API-ја"
 
 #: pcbnew/api/api_handler_pcb.cpp:789
-#, fuzzy
 msgid "Deleted items via API"
-msgstr "Избриши"
+msgstr "Ставке обрисане путем API-ја"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:884
 #, fuzzy
