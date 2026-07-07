@@ -1542,6 +1542,102 @@ void LIB_SYMBOL::CopyFields( std::vector<SCH_FIELD>& aList )
 }
 
 
+void LIB_SYMBOL::SyncFieldsFromParent( const LIB_FIELD_SYNC_OPTIONS& aOptions )
+{
+    std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock();
+
+    if( !parent )
+        return;
+
+    std::unique_ptr<LIB_SYMBOL> flattenedParent = parent->Flatten();
+
+    auto selected =
+            [&]( const wxString& aFieldName )
+            {
+                return aOptions.m_updateAllFields
+                       || aOptions.m_updateFields.count( aFieldName ) > 0;
+            };
+
+    std::vector<SCH_FIELD> fields;
+    std::vector<SCH_FIELD> result;
+    CopyFields( fields );
+
+    for( SCH_FIELD& field : fields )
+    {
+        bool       copy = true;
+        SCH_FIELD* parentField = nullptr;
+
+        if( selected( field.GetName() ) )
+        {
+            if( field.IsMandatory() )
+                parentField = flattenedParent->GetField( field.GetId() );
+            else
+                parentField = flattenedParent->GetField( field.GetName() );
+
+            if( parentField )
+            {
+                bool resetText = parentField->GetText().IsEmpty() ? aOptions.m_resetEmptyText
+                                                                  : aOptions.m_resetText;
+
+                if( resetText )
+                    field.SetText( parentField->GetText() );
+
+                if( aOptions.m_resetVisibility )
+                {
+                    field.SetVisible( parentField->IsVisible() );
+                    field.SetNameShown( parentField->IsNameShown() );
+                }
+
+                if( aOptions.m_resetEffects )
+                {
+                    // SetAttributes() also overwrites the visible bit and position, so save
+                    // and restore them here.
+                    bool     visible = field.IsVisible();
+                    VECTOR2I pos = field.GetPosition();
+
+                    field.SetAttributes( *parentField );
+
+                    field.SetVisible( visible );
+                    field.SetPosition( pos );
+                }
+
+                if( aOptions.m_resetPositions )
+                    field.SetTextPos( parentField->GetTextPos() );
+            }
+            else if( aOptions.m_removeExtraFields )
+            {
+                copy = false;
+            }
+        }
+
+        if( copy )
+            result.emplace_back( std::move( field ) );
+    }
+
+    std::vector<SCH_FIELD*> parentFields;
+
+    flattenedParent->GetFields( parentFields );
+
+    for( SCH_FIELD* parentField : parentFields )
+    {
+        if( !selected( parentField->GetName() ) )
+            continue;
+
+        if( !GetField( parentField->GetName() ) )
+        {
+            result.emplace_back( this, FIELD_T::USER );
+            SCH_FIELD* newField = &result.back();
+
+            newField->SetName( parentField->GetCanonicalName() );
+            newField->SetText( parentField->GetText() );
+            newField->SetAttributes( *parentField );   // Includes visible bit and position
+        }
+    }
+
+    SetFields( result );
+}
+
+
 int LIB_SYMBOL::GetNextFieldOrdinal() const
 {
     int ordinal = 42; // Arbitrarily larger than any mandatory FIELD_T id

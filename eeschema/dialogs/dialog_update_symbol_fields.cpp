@@ -18,7 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <core/kicad_algo.h>
 #include <dialog_update_symbol_fields.h>
 #include <lib_symbol.h>
 #include <symbol_edit_frame.h>
@@ -126,98 +125,33 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
 
     commit.Modify( m_symbol, m_editFrame->GetScreen() );
 
-    // Create the set of fields to be updated
-    m_updateFields.clear();
+    LIB_FIELD_SYNC_OPTIONS options;
+
+    // The dialog drives the field set explicitly; an empty selection updates nothing.
+    options.m_updateAllFields = false;
 
     for( unsigned i = 0; i < m_fieldsBox->GetCount(); ++i )
     {
         if( m_fieldsBox->IsChecked( i ) )
-            m_updateFields.insert( m_fieldsBox->GetString( i ) );
+            options.m_updateFields.insert( m_fieldsBox->GetString( i ) );
     }
 
-    std::unique_ptr<LIB_SYMBOL> flattenedParent = m_symbol->GetParent().lock()->Flatten();
-
-    bool removeExtras = m_removeExtraBox->GetValue();
-    bool resetVis = m_resetFieldVisibilities->GetValue();
-    bool resetEffects = m_resetFieldEffects->GetValue();
-    bool resetPositions = m_resetFieldPositions->GetValue();
-
-    std::vector<SCH_FIELD> fields;
-    std::vector<SCH_FIELD> result;
-    m_symbol->CopyFields( fields );
-
-    for( SCH_FIELD& field : fields )
+    // Mandatory rows show translated names, but SyncFieldsFromParent() matches on canonical
+    // names, so add those too or a non-English UI would never update mandatory fields.
+    for( FIELD_T fieldId : MANDATORY_FIELDS )
     {
-        bool       copy = true;
-        SCH_FIELD* parentField = nullptr;
-
-        if( alg::contains( m_updateFields, field.GetName() ) )
-        {
-            if( field.IsMandatory() )
-                parentField = flattenedParent->GetField( field.GetId() );
-            else
-                parentField = flattenedParent->GetField( field.GetName() );
-
-            if( parentField )
-            {
-                bool resetText = parentField->GetText().IsEmpty() ? m_resetEmptyFields->GetValue()
-                                                                  : m_resetFieldText->GetValue();
-
-                if( resetText )
-                    field.SetText( parentField->GetText() );
-
-                if( resetVis )
-                {
-                    field.SetVisible( parentField->IsVisible() );
-                    field.SetNameShown( parentField->IsNameShown() );
-                }
-
-                if( resetEffects )
-                {
-                    // Careful: the visible bit and position are also set by SetAttributes()
-                    bool    visible = field.IsVisible();
-                    VECTOR2I pos = field.GetPosition();
-
-                    field.SetAttributes( *parentField );
-
-                    field.SetVisible( visible );
-                    field.SetPosition( pos );
-                }
-
-                if( resetPositions )
-                    field.SetTextPos( parentField->GetTextPos() );
-            }
-            else if( removeExtras )
-            {
-                copy = false;
-            }
-        }
-
-        if( copy )
-            result.emplace_back( std::move( field ) );
+        if( m_fieldsBox->IsChecked( m_mandatoryFieldListIndexes[fieldId] ) )
+            options.m_updateFields.insert( GetCanonicalFieldName( fieldId ) );
     }
 
-    std::vector<SCH_FIELD*> parentFields;
+    options.m_removeExtraFields = m_removeExtraBox->GetValue();
+    options.m_resetVisibility   = m_resetFieldVisibilities->GetValue();
+    options.m_resetEffects      = m_resetFieldEffects->GetValue();
+    options.m_resetPositions    = m_resetFieldPositions->GetValue();
+    options.m_resetText         = m_resetFieldText->GetValue();
+    options.m_resetEmptyText    = m_resetEmptyFields->GetValue();
 
-    flattenedParent->GetFields( parentFields );
-
-    for( SCH_FIELD* parentField : parentFields )
-    {
-        if( !alg::contains( m_updateFields, parentField->GetName() ) )
-            continue;
-
-        if( !m_symbol->GetField( parentField->GetName() ) )
-        {
-            result.emplace_back( m_symbol, FIELD_T::USER );
-            SCH_FIELD* newField = &result.back();
-
-            newField->SetName( parentField->GetCanonicalName() );
-            newField->SetText( parentField->GetText() );
-            newField->SetAttributes( *parentField );   // Includes visible bit and position
-        }
-    }
-
-    m_symbol->SetFields( result );
+    m_symbol->SyncFieldsFromParent( options );
 
     commit.Push( _( "Update Symbol Fields" ) );
     m_editFrame->RebuildView();

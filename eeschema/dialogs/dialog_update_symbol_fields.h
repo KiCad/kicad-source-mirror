@@ -60,9 +60,6 @@ private:
     SYMBOL_EDIT_FRAME* m_editFrame;
     LIB_SYMBOL*        m_symbol;
 
-    /// Set of field names that should have values updated.
-    std::set<wxString>     m_updateFields;
-
     /// Index in the list control for each MANDATORY_FIELD type
     std::map<FIELD_T, int> m_mandatoryFieldListIndexes;
 };

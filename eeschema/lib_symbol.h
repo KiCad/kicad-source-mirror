@@ -32,6 +32,7 @@
 #include <sch_field.h>
 #include <sch_pin.h>
 #include <lib_tree_item.h>
+#include <set>
 #include <vector>
 #include <core/multivector.h>
 #include <default_values.h>
@@ -70,6 +71,39 @@ struct LIB_SYMBOL_UNIT
     int m_unit;                       ///< The unit number.
     int m_bodyStyle;                  ///< The alternate body style of the unit.
     std::vector<SCH_ITEM*> m_items;   ///< The items unique to this unit and alternate body style.
+};
+
+
+/**
+ * Options controlling how a derived symbol's fields are reconciled with its parent.
+ *
+ * @see LIB_SYMBOL::SyncFieldsFromParent
+ */
+struct LIB_FIELD_SYNC_OPTIONS
+{
+    /// Reconcile every field.  When false only the names in m_updateFields are touched.
+    bool m_updateAllFields = true;
+
+    /// Field names to reconcile when m_updateAllFields is false.
+    std::set<wxString> m_updateFields;
+
+    /// Drop fields not present in the parent.
+    bool m_removeExtraFields = false;
+
+    /// Copy parent visibility and name-shown flags.
+    bool m_resetVisibility = false;
+
+    /// Copy parent text effects (font, justification, etc.) but keep local visibility/position.
+    bool m_resetEffects = false;
+
+    /// Copy parent field positions.
+    bool m_resetPositions = false;
+
+    /// Copy parent text when the parent value is non-empty.
+    bool m_resetText = false;
+
+    /// Copy parent text even when the parent value is empty.
+    bool m_resetEmptyText = false;
 };
 
 
@@ -304,6 +338,22 @@ public:
      * Create a copy of the SCH_FIELDs, sorted in ordinal order.
      */
     void CopyFields( std::vector<SCH_FIELD>& aList );
+
+    /**
+     * Reconcile this derived symbol's fields with those of its (flattened) parent.
+     *
+     * Existing fields are updated in place according to \a aOptions, fields the parent
+     * has but this symbol lacks are added, and (optionally) fields not present in the
+     * parent are dropped.  Does nothing when the symbol has no parent.
+     */
+    void SyncFieldsFromParent( const LIB_FIELD_SYNC_OPTIONS& aOptions );
+
+    /**
+     * @return true when SyncFieldsFromParent() can do something, i.e. the symbol is derived
+     * from a resolvable parent.  Shared by the "Update Symbol Fields" action's enable
+     * condition and its tool handler so the two never disagree.
+     */
+    bool CanUpdateFieldsFromParent() const { return IsDerived(); }
 
     /**
      * Add a field.  Takes ownership of the pointer.
