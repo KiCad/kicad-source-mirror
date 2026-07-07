@@ -971,7 +971,10 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         m_menuActive = true;
 
         if( wxWindow* frame = dynamic_cast<wxWindow*>( m_frame ) )
-            frame->PopupMenu( menu.get() );
+        {
+	    // By providing an explicit position, wx engages its screen clamp mechanism
+            frame->PopupMenu( menu.get(), frame->ScreenToClient( KIPLATFORM::UI::GetMousePosition() ) );
+        }
 
         // Warp the cursor if a menu item was selected
         if( menu->GetSelected() >= 0 )
