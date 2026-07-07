@@ -269,7 +269,13 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
     {
         SCH_SCREEN* screen = sheet.LastScreen();
 
-        for( SCH_ITEM* item : screen->Items().OfType( SCH_LOCATE_ANY_T ) )
+        // Snapshot before iterating: the loop body appends SCH_MARKERs to this same screen,
+        // and screen->Items() is a live view over the screen's RTree, so mutating it while
+        // the range-for above walks it can reorder nodes and skip not-yet-visited items.
+        std::vector<SCH_ITEM*> items( screen->Items().OfType( SCH_LOCATE_ANY_T ).begin(),
+                                      screen->Items().OfType( SCH_LOCATE_ANY_T ).end() );
+
+        for( SCH_ITEM* item : items )
         {
             if( item->Type() == SCH_SYMBOL_T )
             {
