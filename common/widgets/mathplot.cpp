@@ -2089,13 +2089,24 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
     // J.L.Blanco @ Aug 2007: Added double buffer support
     if( m_enableDoubleBuffer )
     {
-        if( m_last_lx != m_scrX || m_last_ly != m_scrY )
+        // Allocate the backing bitmap in physical pixels and tag it with the window's DPI
+        // scale factor so fonts and primitives rendered through the memory DC keep their
+        // logical size once blitted to the DPI-aware paint DC. Without this, axis tick
+        // labels and legends shrink proportionally to the display scale on HiDPI displays.
+        const double scale = GetDPIScaleFactor();
+        const int    physX = static_cast<int>( std::round( m_scrX * scale ) );
+        const int    physY = static_cast<int>( std::round( m_scrY * scale ) );
+
+        if( !m_buff_bmp || m_last_lx != physX || m_last_ly != physY
+                || m_buff_bmp->GetScaleFactor() != scale )
         {
+            m_buff_dc.SelectObject( wxNullBitmap );
             delete m_buff_bmp;
-            m_buff_bmp = new wxBitmap( m_scrX, m_scrY );
+            m_buff_bmp = new wxBitmap( physX, physY );
+            m_buff_bmp->SetScaleFactor( scale );
             m_buff_dc.SelectObject( *m_buff_bmp );
-            m_last_lx   = m_scrX;
-            m_last_ly   = m_scrY;
+            m_last_lx = physX;
+            m_last_ly = physY;
         }
 
         targetDC = &m_buff_dc;
