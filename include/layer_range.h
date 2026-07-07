@@ -20,6 +20,7 @@
 #include <layer_ids.h>
 
 #include <algorithm>
+#include <cstdlib>
 
 #ifndef LAYER_RANGE_H
 #define LAYER_RANGE_H
@@ -84,7 +85,12 @@ private:
             if( start & 1 || stop & 1 )
                 throw std::invalid_argument( "Only works for copper layers" );
 
-            if( stop == B_Cu || m_stop >= m_current )
+            // B_Cu has a lower numeric id than any inner layer, but is physically below them.
+            // When iterating from B_Cu toward an inner layer we must walk the stack in reverse
+            // so the B_Cu special-case in next_layer() produces the correct physical order.
+            if( m_current == B_Cu && m_stop != B_Cu )
+                m_reverse = true;
+            else if( stop == B_Cu || m_stop >= m_current )
                 m_reverse = false;
             else
                 m_reverse = true;
@@ -157,10 +163,25 @@ public:
 
     size_t size() const
     {
-        if( m_start == B_Cu )
-            return m_layer_count;
-        else
-            return ( m_stop - m_start ) / 2 + 1;
+        // Map a copper layer to its physical position in the stack so that size() matches the
+        // iterator's traversal instead of the enum's numeric ordering (F_Cu=0, B_Cu=2, In1_Cu=4,
+        // In2_Cu=6, ...).  F_Cu sits at position 0, each In<N>_Cu at position N, and B_Cu at the
+        // bottom of whatever stackup the caller specified.
+        auto ordinal = [this]( PCB_LAYER_ID aLayer ) -> int
+        {
+            if( aLayer == F_Cu )
+                return 0;
+
+            if( aLayer == B_Cu )
+                return m_layer_count - 1;
+
+            return static_cast<int>( aLayer ) / 2 - 1;
+        };
+
+        int start = ordinal( m_start );
+        int stop  = ordinal( m_stop );
+
+        return static_cast<size_t>( std::abs( start - stop ) + 1 );
     }
 };
 
