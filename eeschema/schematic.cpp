@@ -2295,8 +2295,10 @@ void SCHEMATIC::RenameVariant( const wxString& aOldName, const wxString& aNewNam
         descriptions.erase( aOldName );
     }
 
+    // Retarget through SetCurrentVariant so the whole-schematic cache/text-var invalidation runs;
+    // otherwise ${VARIANT} text on off-sheet items keeps its stale render cache after the rename.
     if( m_currentVariant == aOldName )
-        m_currentVariant = aNewName;
+        SetCurrentVariant( aNewName );
 
     SCH_SCREENS allScreens( m_rootSheet );
     allScreens.RenameVariant( aOldName, aNewName, aCommit );

@@ -3207,6 +3207,156 @@ void SCH_EDIT_FRAME::RemoveVariant()
 }
 
 
+bool SCH_EDIT_FRAME::validateNewVariantName( const wxString& aName, const wxString& aExcludeName )
+{
+    if( aName.IsEmpty() )
+    {
+        GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ), 10000, wxICON_ERROR );
+        return false;
+    }
+
+    if( aName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+    {
+        GetInfoBar()->ShowMessageFor(
+                wxString::Format( _( "'%s' is a reserved variant name." ), GetDefaultVariantName() ),
+                10000, wxICON_ERROR );
+        return false;
+    }
+
+    for( const wxString& existingName : Schematic().GetVariantNames() )
+    {
+        if( existingName.CmpNoCase( aName ) == 0 && existingName.CmpNoCase( aExcludeName ) != 0 )
+        {
+            GetInfoBar()->ShowMessageFor(
+                    wxString::Format( _( "Variant '%s' already exists." ), existingName ),
+                    10000, wxICON_ERROR );
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+void SCH_EDIT_FRAME::RenameVariant()
+{
+    wxArrayString choices = Schematic().GetVariantNamesForUI();
+
+    // Default variant cannot be renamed.
+    choices.RemoveAt( 0 );
+
+    if( choices.IsEmpty() )
+    {
+        GetInfoBar()->ShowMessageFor( _( "No variants to rename." ), 10000, wxICON_INFORMATION );
+        return;
+    }
+
+    wxSingleChoiceDialog selDlg( this,
+                                 _( "Select variant to rename:" ) + wxS( "                " ),
+                                 _( "Rename Design Variant" ), choices );
+    selDlg.Layout();
+
+    if( selDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString oldName = selDlg.GetStringSelection();
+
+    if( oldName.IsEmpty() )
+        return;
+
+    wxTextEntryDialog nameDlg( this, _( "Enter new variant name:" ),
+                               _( "Rename Design Variant" ), oldName,
+                               wxOK | wxCANCEL | wxCENTER );
+
+    if( nameDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString newName = nameDlg.GetValue().Trim().Trim( false );
+
+    if( newName == oldName )
+        return;
+
+    if( !validateNewVariantName( newName, oldName ) )
+        return;
+
+    // The model retargets the current variant to the new name, so capture whether the toolbar was
+    // showing the variant being renamed before the rename runs.
+    bool wasCurrent = Schematic().GetCurrentVariant() == oldName;
+
+    SCH_COMMIT commit( this );
+    Schematic().RenameVariant( oldName, newName, &commit );
+
+    if( !commit.Empty() )
+        commit.Push( wxString::Format( _( "Rename variant '%s' to '%s'" ), oldName, newName ) );
+
+    // The registry entry changes even when no symbol carries an override, so always mark dirty.
+    OnModify();
+
+    UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+
+    // The renamed label just disappeared from the control, so a plain repopulate falls back to the
+    // default selection.  Re-selecting the new name resyncs the toolbar and (via SetCurrentVariant)
+    // repaints ${VARIANT} text; a non-current rename needs no redraw.
+    if( wasCurrent )
+        SetCurrentVariant( newName );
+}
+
+
+void SCH_EDIT_FRAME::CopyVariant()
+{
+    wxArrayString choices = Schematic().GetVariantNamesForUI();
+
+    // Default variant cannot be copied.
+    choices.RemoveAt( 0 );
+
+    if( choices.IsEmpty() )
+    {
+        GetInfoBar()->ShowMessageFor( _( "No variants to copy." ), 10000, wxICON_INFORMATION );
+        return;
+    }
+
+    wxSingleChoiceDialog selDlg( this,
+                                 _( "Select variant to copy:" ) + wxS( "                " ),
+                                 _( "Copy Design Variant" ), choices );
+    selDlg.Layout();
+
+    if( selDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString sourceName = selDlg.GetStringSelection();
+
+    if( sourceName.IsEmpty() )
+        return;
+
+    wxTextEntryDialog nameDlg( this, _( "Enter name for the copied variant:" ),
+                               _( "Copy Design Variant" ),
+                               sourceName + wxS( "_copy" ),
+                               wxOK | wxCANCEL | wxCENTER );
+
+    if( nameDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString newName = nameDlg.GetValue().Trim().Trim( false );
+
+    if( !validateNewVariantName( newName, wxEmptyString ) )
+        return;
+
+    SCH_COMMIT commit( this );
+    Schematic().CopyVariant( sourceName, newName, &commit );
+
+    if( !commit.Empty() )
+        commit.Push( wxString::Format( _( "Copy variant '%s' to '%s'" ), sourceName, newName ) );
+
+    // The new registry entry changes project state even when no symbol carries an override.
+    OnModify();
+
+    UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
+
+    // Switching to the freshly-created variant already refreshes properties and redraws.
+    SetCurrentVariant( newName );
+}
+
+
 bool SCH_EDIT_FRAME::doAutoSave()
 {
     // Delegate to base auto-save behavior (commits pending local history) for now.

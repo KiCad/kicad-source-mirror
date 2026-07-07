@@ -1911,4 +1911,16 @@ TOOL_ACTION SCH_ACTIONS::editVariantDescription( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Edit Variant Description..." ) )
         .Tooltip( _( "Edit the description of an existing design variant." ) ) );
 
+TOOL_ACTION SCH_ACTIONS::renameVariant( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.renameVariant" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Rename Design Variant..." ) )
+        .Tooltip( _( "Rename an existing design variant." ) ) );
+
+TOOL_ACTION SCH_ACTIONS::copyVariant( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.copyVariant" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Copy Design Variant..." ) )
+        .Tooltip( _( "Create a copy of an existing design variant." ) ) );
+
 // clang-format on

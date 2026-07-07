@@ -344,6 +344,8 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     submenuVariants->Add( SCH_ACTIONS::addVariant );
     submenuVariants->Add( SCH_ACTIONS::removeVariant );
     submenuVariants->Add( SCH_ACTIONS::editVariantDescription );
+    submenuVariants->Add( SCH_ACTIONS::renameVariant );
+    submenuVariants->Add( SCH_ACTIONS::copyVariant );
     toolsMenu->Add( submenuVariants );
 
     toolsMenu->AppendSeparator();
