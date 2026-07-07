@@ -33,6 +33,7 @@
 
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#include <X11/Xutil.h>
 #endif
 
 #ifdef GDK_WINDOWING_WAYLAND
@@ -175,6 +176,78 @@ void KIPLATFORM::UI::StabilizeWindowPosition( wxWindow* aWindow )
 
     if( widget && GTK_IS_WINDOW( widget ) )
         gtk_window_set_gravity( GTK_WINDOW( widget ), GDK_GRAVITY_STATIC );
+}
+
+
+static const char* const WM_CLASS_DATA_KEY = "kicad-wm-class";
+
+
+// Re-assert our application id on the widget's window.  Bound to "realize" and "map" because GTK
+// writes WM_CLASS from the program class when it realizes the window, so ours must be applied
+// afterwards to survive; the Wayland application id additionally requires a mapped surface.  The
+// id is read from the widget's object data so its lifetime is not tied to the signal closures.
+static void setWindowClassHint( GtkWidget* aWidget, gpointer )
+{
+    const char* id = static_cast<const char*>( g_object_get_data( G_OBJECT( aWidget ),
+                                                                  WM_CLASS_DATA_KEY ) );
+
+    if( !id || !*id )
+        return;
+
+    GdkWindow* window = gtk_widget_get_window( aWidget );
+
+    if( !window )
+        return;
+
+#ifdef GDK_WINDOWING_X11
+    if( GDK_IS_X11_WINDOW( window ) )
+    {
+        // wxGTK sets res_class from the app display name; overwrite both WM_CLASS fields with
+        // the desktop id so the window manager matches us to our installed .desktop launcher.
+        if( XClassHint* hints = XAllocClassHint() )
+        {
+            hints->res_name  = const_cast<char*>( id );
+            hints->res_class = const_cast<char*>( id );
+
+            XSetClassHint( GDK_WINDOW_XDISPLAY( window ), GDK_WINDOW_XID( window ), hints );
+            XFree( hints );
+        }
+    }
+#endif
+
+#if defined( GDK_WINDOWING_WAYLAND ) && GTK_CHECK_VERSION( 3, 24, 22 )
+    // Covers wx < 3.3.1, which never propagates the class name to the Wayland application id.
+    if( GDK_IS_WAYLAND_WINDOW( window ) && gtk_check_version( 3, 24, 22 ) == nullptr )
+        gdk_wayland_window_set_application_id( window, id );
+#endif
+}
+
+
+void KIPLATFORM::UI::SetWMClass( wxWindow* aWindow, const wxString& aClass )
+{
+    if( !aWindow || aClass.IsEmpty() )
+        return;
+
+    GtkWidget* widget = static_cast<GtkWidget*>( aWindow->GetHandle() );
+
+    if( !widget )
+        return;
+
+    // Own a single copy of the id on the widget; it is freed when the widget is destroyed.  The
+    // signal handlers read it back from here rather than capturing it, so repeated calls stay safe.
+    g_object_set_data_full( G_OBJECT( widget ), WM_CLASS_DATA_KEY, g_strdup( aClass.utf8_str() ),
+                            g_free );
+
+    // Guard against stacking duplicate handlers if this is called more than once for a widget.
+    g_signal_handlers_disconnect_by_func( widget, reinterpret_cast<void*>( setWindowClassHint ),
+                                          nullptr );
+
+    g_signal_connect_after( widget, "realize", G_CALLBACK( setWindowClassHint ), nullptr );
+    g_signal_connect_after( widget, "map", G_CALLBACK( setWindowClassHint ), nullptr );
+
+    // Apply immediately for windows already realized when this is called.
+    if( gtk_widget_get_realized( widget ) )
+        setWindowClassHint( widget, nullptr );
 }
 
 

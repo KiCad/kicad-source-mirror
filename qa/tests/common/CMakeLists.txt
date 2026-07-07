@@ -42,6 +42,7 @@ set( QA_COMMON_SRCS
     test_commit.cpp
     test_coroutine.cpp
     test_design_block_io.cpp
+    test_desktop_app_id.cpp
     test_eda_shape.cpp
     test_eda_text.cpp
     test_editor_tabs_panel.cpp
@@ -238,6 +239,14 @@ set_source_files_properties( test_remote_provider_metadata.cpp test_remote_provi
         test_translation_format_strings.cpp PROPERTIES
         COMPILE_DEFINITIONS "QA_SRC_ROOT=(\"${CMAKE_SOURCE_DIR}\")"
         )
+
+# Give the desktop-id test the same launcher identifiers pgm_base.cpp is built with so it can
+# assert the exact ids, matching regular and Flatpak prefixes.
+if( UNIX AND NOT APPLE )
+    set_property( SOURCE test_desktop_app_id.cpp APPEND PROPERTY COMPILE_DEFINITIONS
+        KICAD_DESKTOP_APP_NAME="${KICAD_APP_NAME}"
+        KICAD_DESKTOP_APP_PREFIX="${KICAD_APP_PREFIX}" )
+endif()
 
 if( KICAD_TEST_DATABASE_LIBRARIES )
     set_source_files_properties( test_database.cpp PROPERTIES

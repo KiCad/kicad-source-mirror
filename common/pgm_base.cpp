@@ -317,6 +317,28 @@ void PGM_BASE::HideSplash()
 }
 
 
+wxString PGM_BASE::DesktopAppIdForProgram( const wxString& aPgmName )
+{
+#if defined( __WXGTK__ ) && defined( KICAD_DESKTOP_APP_NAME )
+    // The prefix varies by build (regular, Flatpak, Nightly) and is supplied by CMake. The main
+    // manager keeps the bare app name; the other GUI apps are prefixed.
+    if( aPgmName == wxT( "kicad" ) )
+        return wxT( KICAD_DESKTOP_APP_NAME );
+
+    if( aPgmName == wxT( "eeschema" ) || aPgmName == wxT( "pcbnew" )
+        || aPgmName == wxT( "gerbview" ) || aPgmName == wxT( "bitmap2component" )
+        || aPgmName == wxT( "pcb_calculator" ) )
+    {
+        // pcb_calculator installs as pcbcalculator to satisfy freedesktop naming rules.
+        wxString appName = aPgmName == wxT( "pcb_calculator" ) ? wxT( "pcbcalculator" ) : aPgmName;
+        return wxString( wxT( KICAD_DESKTOP_APP_PREFIX ) ) + wxT( "." ) + appName;
+    }
+#endif
+
+    return wxEmptyString;
+}
+
+
 bool PGM_BASE::InitPgm( bool aHeadless, bool aIsUnitTest )
 {
 #if defined( __WXMAC__ )
@@ -398,29 +420,15 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aIsUnitTest )
     App().SetVendorName(  wxT( "KiCad" ) );
     App().SetAppName( pgm_name );
 
-#if wxCHECK_VERSION( 3, 3, 1 ) && defined( __WXGTK__ ) && defined( KICAD_DESKTOP_APP_NAME )
-    // wxGTK feeds the class name to gdk_wayland_window_set_application_id(), so setting it
-    // to the installed desktop file basename lets Wayland compositors resolve the correct
-    // window icon and launch feedback. The prefix varies by build (regular, Flatpak, Nightly)
-    // and is supplied by CMake. The main manager keeps the bare app name; the other GUI apps
-    // are prefixed. Executables without a desktop file (pl_editor, kicad-cli) are left alone.
-    wxString desktopId;
+    m_desktopAppId = DesktopAppIdForProgram( pgm_name );
 
-    if( pgm_name == wxT( "kicad" ) )
-    {
-        desktopId = wxT( KICAD_DESKTOP_APP_NAME );
-    }
-    else if( pgm_name == wxT( "eeschema" ) || pgm_name == wxT( "pcbnew" )
-             || pgm_name == wxT( "gerbview" ) || pgm_name == wxT( "bitmap2component" )
-             || pgm_name == wxT( "pcb_calculator" ) )
-    {
-        // pcb_calculator installs as pcbcalculator to satisfy freedesktop naming rules.
-        wxString appName = pgm_name == wxT( "pcb_calculator" ) ? wxT( "pcbcalculator" ) : pgm_name;
-        desktopId = wxString( wxT( KICAD_DESKTOP_APP_PREFIX ) ) + wxT( "." ) + appName;
-    }
-
-    if( !desktopId.IsEmpty() )
-        App().SetClassName( desktopId );
+#if defined( __WXGTK__ ) && defined( KICAD_DESKTOP_APP_NAME )
+    // On wx >= 3.3.1 wxGTK feeds the class name to gdk_wayland_window_set_application_id(),
+    // which lets Wayland compositors resolve the correct window icon and launch feedback. The
+    // X11 WM_CLASS is applied per window in EDA_BASE_FRAME instead, because wxGTK derives it
+    // from the (human-facing) app display name and would otherwise not match the launcher.
+    if( !m_desktopAppId.IsEmpty() )
+        App().SetClassName( m_desktopAppId );
 #endif
 
     // Analyze the command line & initialize the binary path

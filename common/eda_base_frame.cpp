@@ -170,6 +170,8 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     // to be called before any other hook for wxCloseEvent, which is necessary.
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_BASE_FRAME::windowClosing ) );
 
+    KIPLATFORM::UI::SetWMClass( this, Pgm().GetDesktopAppId() );
+
     initExitKey();
 }
 

@@ -255,6 +255,25 @@ namespace KIPLATFORM
          * controls do not exhibit this race.
          */
         void CancelPendingScroll( wxDataViewCtrl* aCtrl );
+
+        /**
+         * Tag a top-level window with the freedesktop application id of its installed
+         * launcher, setting the X11 WM_CLASS and, on Wayland, the surface application id.
+         *
+         * wxGTK derives the X11 res_class from the human-facing application display name and
+         * only feeds the Wayland application id (from the class name) on wx >= 3.3.1.  Neither
+         * matches the installed .desktop launcher, so a taskbar that groups by WM_CLASS
+         * mis-associates the windows with an unrelated application (wrong icon, name, and
+         * group).  Setting the id explicitly restores the association.  No-op on MSW and macOS,
+         * where the application identity comes from the AppUserModelID / bundle identifier.
+         *
+         * May be called before the window is realized; the GTK backend defers applying the hint
+         * to the realize/map signals, and also applies it immediately if already realized.
+         *
+         * @param aWindow is the top-level window to tag
+         * @param aClass is the desktop application id, e.g. org.kicad.kicad
+         */
+        void SetWMClass( wxWindow* aWindow, const wxString& aClass );
     }
 }
 

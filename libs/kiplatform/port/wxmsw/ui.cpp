@@ -229,3 +229,10 @@ void KIPLATFORM::UI::CancelPendingScroll( wxDataViewCtrl* aCtrl )
 {
     // Not needed on this platform; the native control does not race on model resets.
 }
+
+
+void KIPLATFORM::UI::SetWMClass( wxWindow* aWindow, const wxString& aClass )
+{
+    // WM_CLASS is an X11/Wayland concept; taskbar identity on Windows is driven by the
+    // AppUserModelID (see KIPLATFORM::ENV::SetAppDetailsForWindow).
+}

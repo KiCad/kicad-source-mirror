@@ -272,3 +272,9 @@ void KIPLATFORM::UI::CancelPendingScroll( wxDataViewCtrl* aCtrl )
 {
     // Not needed on this platform; the native control does not race on model resets.
 }
+
+
+void KIPLATFORM::UI::SetWMClass( wxWindow* aWindow, const wxString& aClass )
+{
+    // Not applicable on macOS; the bundle identifier provides the application identity.
+}
