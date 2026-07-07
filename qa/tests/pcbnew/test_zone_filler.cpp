@@ -2392,6 +2392,67 @@ BOOST_FIXTURE_TEST_CASE( MultiTrackSharedInsideJunctionNoSelfIntersection,
 }
 
 
+/// Regression for #24426: short radial pad-via tracks still need teardrops.
+/// Covers round and rotated elongated pads with curved and straight teardrop edges.
+BOOST_FIXTURE_TEST_CASE( CloseViaShortRadialTrackTeardrop, ZONE_FILL_TEST_FIXTURE )
+{
+    auto runVariant = [&]( const wxString& aFixture, bool aCurvedEdges )
+    {
+        KI_TEST::LoadBoard( m_settingsManager, aFixture, m_board );
+
+        for( PCB_TRACK* track : m_board->Tracks() )
+        {
+            if( track->Type() == PCB_VIA_T )
+                static_cast<PCB_VIA*>( track )->SetTeardropCurved( aCurvedEdges );
+        }
+
+        for( FOOTPRINT* footprint : m_board->Footprints() )
+        {
+            for( PAD* pad : footprint->Pads() )
+                pad->SetTeardropCurved( aCurvedEdges );
+        }
+
+        TOOL_MANAGER toolMgr;
+        toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+        KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+        toolMgr.RegisterTool( dummyTool );
+
+        BOARD_COMMIT     commit( dummyTool );
+        TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+        teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+        if( !commit.Empty() )
+            commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+        int      teardropCount = 0;
+        VECTOR2I padPos = ( *m_board->Footprints().begin() )->Pads()[0]->GetPosition();
+        bool     padHasTeardrop = false;
+
+        for( ZONE* zone : m_board->Zones() )
+        {
+            if( !zone->IsTeardropArea() )
+                continue;
+
+            teardropCount++;
+
+            if( zone->Outline()->Contains( padPos ) )
+                padHasTeardrop = true;
+        }
+
+        BOOST_CHECK_MESSAGE( padHasTeardrop,
+                             wxString::Format( "Expected the pad-anchored teardrop on the short track joining the "
+                                               "pad and the close via in %s, got %d teardrop(s) (curved=%s)",
+                                               aFixture, teardropCount, aCurvedEdges ? "yes" : "no" ) );
+    };
+
+    runVariant( "teardrop_close_via", true );
+    runVariant( "teardrop_close_via", false );
+    runVariant( "teardrop_close_via_rotated_pad", true );
+    runVariant( "teardrop_close_via_rotated_pad", false );
+}
+
+
 /**
  * Test for issue 23515: Zone fills have random pieces missing near keepout boundaries.
  *
