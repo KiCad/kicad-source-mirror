@@ -122,9 +122,12 @@ BOOST_AUTO_TEST_CASE( RefillZonesSubset )
     kiapi::common::ApiRequest request = makeRefillRequest( board, { F_CU_ZONE, IN1_CU_ZONE } );
     API_RESULT                result = handler.Handle( request );
 
-    BOOST_REQUIRE_MESSAGE( result.has_value(),
-                           "RefillZones returned status " << result.error().status() << ": "
-                                                          << result.error().error_message() );
+    if( !result.has_value() )
+    {
+        BOOST_FAIL( "RefillZones returned status " << result.error().status() << ": "
+                                                    << result.error().error_message() );
+    }
+
     BOOST_CHECK_EQUAL( result->status().status(), kiapi::common::ApiStatusCode::AS_OK );
 
     ZONE* fCu   = zoneByUuid( board, F_CU_ZONE );
@@ -158,9 +161,11 @@ BOOST_AUTO_TEST_CASE( RefillZonesSubsetRebuildsConnectivity )
     kiapi::common::ApiRequest request = makeRefillRequest( board, { F_CU_ZONE, IN1_CU_ZONE } );
     API_RESULT                result = handler.Handle( request );
 
-    BOOST_REQUIRE_MESSAGE( result.has_value(),
-                           "RefillZones returned status " << result.error().status() << ": "
-                                                          << result.error().error_message() );
+    if( !result.has_value() )
+    {
+        BOOST_FAIL( "RefillZones returned status " << result.error().status() << ": "
+                                                    << result.error().error_message() );
+    }
 
     const unsigned afterFill = board->GetConnectivity()->GetUnconnectedCount( false );
 
@@ -184,9 +189,12 @@ BOOST_AUTO_TEST_CASE( RefillZonesAllHeadless )
     kiapi::common::ApiRequest request = makeRefillRequest( board, {} );
     API_RESULT                result = handler.Handle( request );
 
-    BOOST_REQUIRE_MESSAGE( result.has_value(),
-                           "RefillZones returned status " << result.error().status() << ": "
-                                                          << result.error().error_message() );
+    if( !result.has_value() )
+    {
+        BOOST_FAIL( "RefillZones returned status " << result.error().status() << ": "
+                                                    << result.error().error_message() );
+    }
+
     BOOST_CHECK_EQUAL( result->status().status(), kiapi::common::ApiStatusCode::AS_OK );
 
     // With no frame the empty-zones request must fill everything synchronously
