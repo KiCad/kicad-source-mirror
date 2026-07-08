@@ -75,6 +75,9 @@
 #include <wx/msgdlg.h>
 
 
+using SCOPED_DRAW_MODE = SCOPED_SET_RESET<SCH_DRAWING_TOOLS::MODE>;
+
+
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
         m_lastSheetPinType( LABEL_FLAG_SHAPE::L_INPUT ),
@@ -97,7 +100,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextboxStroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_mruPath( wxEmptyString ),
         m_lastAutoLabelRotateOnPlacement( false ),
-        m_drawingRuleArea( false ),
+        m_mode( MODE::NONE ),
         m_inDrawingTool( false )
 {
 }
@@ -113,24 +116,34 @@ bool SCH_DRAWING_TOOLS::Init()
                 return m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root();
             };
 
+    // some interactive drawing tools can undo the last point
+    auto canUndoPoint =
+            [this]( const SELECTION& aSel )
+            {
+                return (   m_mode == MODE::ARC
+                        || m_mode == MODE::RULE_AREA );
+            };
+
     auto inDrawingRuleArea =
             [this]( const SELECTION& aSel )
             {
-                return m_drawingRuleArea;
+                return m_mode == MODE::RULE_AREA;
             };
 
     auto inDrawingArc =
             [this]( const SELECTION& aSel )
             {
-                return m_drawingArc;
+                return m_mode == MODE::ARC;
             };
 
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
+
+    // clang-format off
     ctxMenu.AddItem( SCH_ACTIONS::leaveSheet,      belowRootSheetCondition, 150 );
     ctxMenu.AddItem( SCH_ACTIONS::closeOutline,    inDrawingRuleArea,       200 );
-    ctxMenu.AddItem( SCH_ACTIONS::deleteLastPoint, inDrawingRuleArea,       200 );
+    ctxMenu.AddItem( SCH_ACTIONS::deleteLastPoint, canUndoPoint,            200 );
     ctxMenu.AddItem( ACTIONS::arcPosture,          inDrawingArc,            200 );
-    ctxMenu.AddItem( SCH_ACTIONS::deleteLastPoint, inDrawingArc,            200 );
+    // clang-format on
 
     return true;
 }
@@ -2850,7 +2863,7 @@ int SCH_DRAWING_TOOLS::DrawArc( const TOOL_EVENT& aEvent )
         return 0;
 
     REENTRANCY_GUARD       guard( &m_inDrawingTool );
-    SCOPED_SET_RESET<bool> scopedDrawMode( m_drawingArc, true );
+    SCOPED_DRAW_MODE       scopedDrawMode( m_mode, MODE::ARC );
 
     SCHEMATIC*            schematic = getModel<SCHEMATIC>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -3070,7 +3083,7 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
         return 0;
 
     REENTRANCY_GUARD       guard( &m_inDrawingTool );
-    SCOPED_SET_RESET<bool> scopedDrawMode( m_drawingRuleArea, true );
+    SCOPED_DRAW_MODE       scopedDrawMode( m_mode, MODE::RULE_AREA );
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );

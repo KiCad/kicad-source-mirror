@@ -42,6 +42,14 @@ class DIALOG_SYNC_SHEET_PINS;
 class SCH_DRAWING_TOOLS : public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
+    ///< The possible drawing modes of @ref SCH_DRAWING_TOOLS
+    enum class MODE
+    {
+        NONE,
+        ARC,
+        RULE_AREA,
+    };
+
     SCH_DRAWING_TOOLS();
     ~SCH_DRAWING_TOOLS() override { }
 
@@ -116,8 +124,7 @@ private:
     STROKE_PARAMS              m_lastTextboxStroke;
     wxString                   m_mruPath;
     bool                       m_lastAutoLabelRotateOnPlacement;
-    bool                       m_drawingRuleArea;
-    bool                       m_drawingArc;
+    MODE                       m_mode;
 
     bool                                    m_inDrawingTool; // Re-entrancy guard
     std::unique_ptr<STATUS_TEXT_POPUP>      m_statusPopup;
