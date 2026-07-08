@@ -759,6 +759,10 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
+    // Always ensure that we are unregistered even in a close without graceful doCloseWindow()
+    if( GetBoard() )
+        Kiway().LocalHistory().UnregisterSaver( GetBoard() );
+
     // PCB_BASE_FRAME's dtor deletes m_pcb; canvas children outlive it.  Drop
     // every cached TEXT_VAR_TRACKER* before the tracker is freed.
     detachTextVarTracker();
