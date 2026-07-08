@@ -48,8 +48,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-06-25 12:01+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2026-07-08 16:57+0000\n"
+"Last-Translator: 向阳阳 <hinata.hoshino@foxmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -26741,13 +26741,13 @@ msgid "Add Symbol Library"
 msgstr "添加符号库"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1300
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"无法创建库文件 \"%s\"。\n"
-"请确保您有写入权限, 然后重试。"
+"无法覆盖库文件 \"%s\"。\n"
+"请确保您有写入权限，然后重试。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1308
 #, c-format
@@ -28366,9 +28366,8 @@ msgid "Set the exclude from board attribute"
 msgstr "设置「不在 PCB 中进行绘制」特性"
 
 #: eeschema/tools/sch_actions.cpp:1216
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "设置「不参与电路仿真」特性"
+msgstr "设置为“从坐标文件中排除”"
 
 #: eeschema/tools/sch_actions.cpp:1222
 msgid "Set the do not populate attribute"
@@ -46037,7 +46036,7 @@ msgstr "孔环:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:387
 msgid "Protection features:"
-msgstr "保护功能:"
+msgstr "阻焊覆盖:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:426
 msgid "Backdrill:"
@@ -47514,8 +47513,8 @@ msgid ""
 "Tented: vias are covered with solder mask.\n"
 "Not tented: vias are not covered with solder mask."
 msgstr ""
-"帐篷式封孔 (过孔盖油): 使用阻焊覆盖过孔。\n"
-"不进行封孔 (过孔开窗): 不使用阻焊覆盖过孔。"
+"过孔盖油: 使用阻焊覆盖过孔。\n"
+"过孔开窗: 不使用阻焊覆盖过孔。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
 msgid "Solder Paste Settings"
@@ -49907,7 +49906,7 @@ msgstr "不允许的项目"
 
 #: pcbnew/drc/drc_item.cpp:60
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "Edge.Cuts 层上的文本或图形"
+msgstr "Edge.Cuts 层上的文本或图形项"
 
 #: pcbnew/drc/drc_item.cpp:64
 msgid "Clearance violation"
@@ -54853,9 +54852,9 @@ msgid "Loading unicode strings..."
 msgstr "正在加载 unicode 字符串..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4625
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "长度调整规则"
+msgstr "导入了%d条长度调整规则。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4636
 msgid "Loading text..."
@@ -56101,7 +56100,7 @@ msgstr "未定义层警告"
 msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
-msgstr ""
+msgstr "找到了多个项目在未定义的层%s上。在PCB编辑器中打开电路板解决此问题。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1629
 #, c-format
@@ -57288,11 +57287,11 @@ msgstr "来自电路板叠层"
 
 #: pcbnew/pcb_track.cpp:2893
 msgid "Tented"
-msgstr "帐篷式封孔 (过孔盖油)"
+msgstr "过孔盖油"
 
 #: pcbnew/pcb_track.cpp:2894
 msgid "Not tented"
-msgstr "不进行封孔 (过孔开窗)"
+msgstr "过孔开窗"
 
 #: pcbnew/pcb_track.cpp:2899
 msgid "Covered"
@@ -57489,9 +57488,8 @@ msgid "Loading Footprint Libraries"
 msgstr "正在加载封装库"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:528
-#, fuzzy
 msgid "Failed to load board"
-msgstr "电路板加载失败\n"
+msgstr "电路板加载失败"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:599
 #, c-format
@@ -58805,7 +58803,7 @@ msgstr "未定义 'diff_pair_uncoupled' 约束。"
 #: pcbnew/tools/board_inspection_tool.cpp:1377
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr "注意: %s 已使用帐篷式封孔 (过孔盖油); 间距仅适用于孔。"
+msgstr "注意: %s 工艺为过孔盖油，间距仅应用于过孔钻孔上。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1394
 msgid "Silkscreen clearance resolution for:"
@@ -59961,9 +59959,8 @@ msgid "Toggle the exclude from bill of materials attribute"
 msgstr "切换 '从物料清单中移除' 特性"
 
 #: pcbnew/tools/pcb_actions.cpp:603
-#, fuzzy
 msgid "Toggle the exclude from position files attribute"
-msgstr "切换 '不参与电路仿真' 特性"
+msgstr "切换 '从坐标文件中排除' 属性"
 
 #: pcbnew/tools/pcb_actions.cpp:608
 msgid "Find by Properties..."
@@ -62104,71 +62101,71 @@ msgstr "来自规则"
 
 #: pcbnew/via_protection_ui_mixin.h:115
 msgid "Type I-a (tented top)"
-msgstr "Type I-a (顶部帐篷式封孔)"
+msgstr "顶层盖油 (Type I-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:116
 msgid "Type I-b (tented both sides)"
-msgstr "Type I-b (双面帐篷式封孔)"
+msgstr "双面盖油 (Type I-b)"
 
 #: pcbnew/via_protection_ui_mixin.h:117
 msgid "Type I-a (tented bottom)"
-msgstr "Type I-a (底部帐篷式封孔)"
+msgstr "底层盖油 (Type I-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:118
 msgid "Type II-a (covered and tented top)"
-msgstr "Type II-a (顶部帐篷式封孔 + 覆孔)"
+msgstr "顶层封孔盖油 (Type II-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:119
 msgid "Type II-b (covered and tented both sides)"
-msgstr "Type II-b (双面帐篷式封孔 + 覆孔)"
+msgstr "双面封孔盖油 (Type II-b)"
 
 #: pcbnew/via_protection_ui_mixin.h:120
 msgid "Type II-a (covered and tented bottom)"
-msgstr "Type II-a (底部帐篷式封孔 + 覆孔)"
+msgstr "底层封孔盖油 (Type II-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:121
 msgid "Type III-a (plugged top)"
-msgstr "Type III-a (顶部塞孔)"
+msgstr "顶层塞树脂 (Type III-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:122
 msgid "Type III-b (plugged both sides)"
-msgstr "Type III-b (双面塞孔)"
+msgstr "双面塞树脂 (Type III-b)"
 
 #: pcbnew/via_protection_ui_mixin.h:123
 msgid "Type III-a (plugged bottom)"
-msgstr "Type III-a (底部塞孔)"
+msgstr "底层塞树脂 (Type III-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:124
 msgid "Type IV-a (plugged and tented top)"
-msgstr "Type IV-a (顶部帐篷式封孔 + 塞孔)"
+msgstr "顶层塞树脂 + 盖油 (Type IV-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:125
 msgid "Type IV-b (plugged and tented both sides)"
-msgstr "Type IV-b (双面帐篷式封孔 + 塞孔)"
+msgstr "双面塞树脂 + 盖油 (Type IV-b)"
 
 #: pcbnew/via_protection_ui_mixin.h:126
 msgid "Type IV-a (plugged and tented bottom)"
-msgstr "Type IV-a (底部帐篷式封孔 + 塞孔)"
+msgstr "底层塞树脂 + 盖油 (Type IV-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:127
 msgid "Type V (filled)"
-msgstr "V 型 (实心)"
+msgstr "填孔 (Type V)"
 
 #: pcbnew/via_protection_ui_mixin.h:128
 msgid "Type VI-a (filled and tented top)"
-msgstr "Type VI-a (顶部帐篷式封孔 + 填孔)"
+msgstr "填孔 + 顶层盖油 (Type VI-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:129
 msgid "Type VI-b (filled and tented both sides)"
-msgstr "Type VI-b (双面帐篷式封孔 + 填孔)"
+msgstr "填孔 + 双面盖油 (Type VI-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:130
 msgid "Type VI-a (filled and tented bottom)"
-msgstr "Type VI-a (底部帐篷式封孔 + 填孔)"
+msgstr "填孔 + 底层盖油 (Type VI-a)"
 
 #: pcbnew/via_protection_ui_mixin.h:131
 msgid "Type VII (filled and capped)"
-msgstr "Type VII ((填孔 + 盖孔)"
+msgstr "填孔 + 电镀填平 (Type VII)"
 
 #: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Show tracks"
