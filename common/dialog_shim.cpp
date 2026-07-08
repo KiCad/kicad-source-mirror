@@ -314,6 +314,21 @@ void DIALOG_SHIM::finishDialogSettings()
 }
 
 
+wxRect ClampRectToDisplay( const wxRect& aRect, const wxRect& aClientArea )
+{
+    wxRect rect = aRect;
+
+    // A window can never be larger than the display that holds it.
+    rect.width = std::min( rect.width, aClientArea.width );
+    rect.height = std::min( rect.height, aClientArea.height );
+
+    rect.x = std::clamp( rect.x, aClientArea.x, aClientArea.GetRight() - rect.width + 1 );
+    rect.y = std::clamp( rect.y, aClientArea.y, aClientArea.GetBottom() - rect.height + 1 );
+
+    return rect;
+}
+
+
 void DIALOG_SHIM::clampToWorkArea()
 {
     // A dialog not yet mapped onto a monitor reports no display, so fall back to the parent's
@@ -326,22 +341,27 @@ void DIALOG_SHIM::clampToWorkArea()
     if( displayIdx == wxNOT_FOUND )
         displayIdx = 0;
 
-    wxSize workArea = wxDisplay( (unsigned int) displayIdx ).GetClientArea().GetSize();
+    wxRect clientArea = wxDisplay( (unsigned int) displayIdx ).GetClientArea();
 
-    if( workArea.x <= 0 || workArea.y <= 0 )
+    if( clientArea.width <= 0 || clientArea.height <= 0 )
         return;
 
+    // The minimum size must shrink first, otherwise SetSize() below cannot honour a cap that
+    // is smaller than a stale minimum restored from a larger monitor.
     wxSize minSize = GetMinSize();
-    wxSize clampedMin( std::min( minSize.x, workArea.x ), std::min( minSize.y, workArea.y ) );
+    wxSize clampedMin( std::min( minSize.x, clientArea.width ),
+                       std::min( minSize.y, clientArea.height ) );
 
     if( clampedMin != minSize )
         SetMinSize( clampedMin );
 
-    wxSize size = GetSize();
-    wxSize clampedSize( std::min( size.x, workArea.x ), std::min( size.y, workArea.y ) );
+    // Cap the size to the work area and pull the whole dialog back on-screen. Geometry restored
+    // from a different (possibly higher-DPI) monitor can otherwise land off-screen or oversized.
+    wxRect current( GetPosition(), GetSize() );
+    wxRect clamped = ClampRectToDisplay( current, clientArea );
 
-    if( clampedSize != size )
-        SetSize( clampedSize );
+    if( clamped != current )
+        SetSize( clamped.x, clamped.y, clamped.width, clamped.height, 0 );
 }
 
 
@@ -501,8 +521,8 @@ bool DIALOG_SHIM::Show( bool show )
         m_userPositioned = false;
         m_userResized = false;
 
-        // A dialog whose content is taller or wider than the monitor must still fit on it; clamp
-        // here, after the minimum has been (re)established above, so the cap is not overwritten.
+        // Cap size and pull the dialog back on-screen here, after the minimum has been
+        // (re)established above, so the clamp is not overwritten.
         clampToWorkArea();
 
         KIPLATFORM::UI::EnsureVisible( this );

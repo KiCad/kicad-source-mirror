@@ -45,6 +45,21 @@ class wxDataViewEvent;
 
 
 /**
+ * Constrain a window rectangle so it fits entirely within a display's client area.
+ *
+ * The size is capped to the client area, then the top-left corner is pulled back so the
+ * whole rectangle is visible (the corner is preferred over the bottom-right edge so the
+ * title bar stays reachable).  Used to tame geometry restored from a different, possibly
+ * higher-DPI, monitor that would otherwise land off-screen or oversized.
+ *
+ * @param aRect       The window rectangle to constrain, in screen coordinates.
+ * @param aClientArea The target display's client (work) area, in screen coordinates.
+ * @return The constrained rectangle.
+ */
+KICOMMON_API wxRect ClampRectToDisplay( const wxRect& aRect, const wxRect& aClientArea );
+
+
+/**
  * Dialog helper object to sit in the inheritance tree between wxDialog and any class written
  * by wxFormBuilder.
  *
@@ -193,9 +208,13 @@ protected:
     void finishDialogSettings();
 
     /**
-     * Shrink the dialog's minimum and current size down to the work area of the display it
-     * occupies, so a dialog whose content is larger than the monitor still fits and its bottom
-     * controls stay reachable. Only shrinks; never grows.
+     * Constrain the dialog's minimum size, size and position to the work area of the display
+     * it occupies, so a dialog whose content or restored geometry is larger than the monitor
+     * still fits, its bottom controls stay reachable, and it never lands off-screen.
+     *
+     * Geometry restored from a different monitor, or inflated by the per-monitor DPI rescale
+     * that fires when the dialog moves to the saved monitor, can otherwise leave the dialog
+     * off-screen or larger than the display with no way to shrink it. Only shrinks; never grows.
      */
     void clampToWorkArea();
 
