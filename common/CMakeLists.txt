@@ -875,6 +875,7 @@ set( COMMON_SRCS
     tool/library_editor_control.cpp
     tool/picker_tool.cpp
     tool/point_editor_behavior.cpp
+    tool/arc_draw_behavior.cpp
     tool/properties_tool.cpp
     tool/selection.cpp
     tool/selection_tool.cpp
