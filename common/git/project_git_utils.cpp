@@ -161,4 +161,18 @@ wxString PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir( const wxString& aUs
 #endif
 }
 
+
+bool PROJECT_GIT_UTILS::IsWithinProjectPath( const wxString& aAbsPath, const wxString& aProjectPath )
+{
+    if( aProjectPath.IsEmpty() )
+        return false;
+
+    wxString projectPath = aProjectPath;
+
+    if( !projectPath.EndsWith( wxT( "/" ) ) && !projectPath.EndsWith( wxT( "\\" ) ) )
+        projectPath += wxT( "/" );
+
+    return aAbsPath.StartsWith( projectPath );
+}
+
 } // namespace KIGIT

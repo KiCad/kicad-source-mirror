@@ -2664,7 +2664,7 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
         }
 
         // Do not commit files outside the project directory
-        if( !absPath.StartsWith( projectPath ) )
+        if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( absPath, projectPath ) )
             continue;
 
         // Skip lock files
@@ -2921,7 +2921,7 @@ void PROJECT_TREE_PANE::onGitAmendCommit( wxCommandEvent& aEvent )
 #endif
         }
 
-        if( !absPath.StartsWith( projectPath ) )
+        if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( absPath, projectPath ) )
             continue;
 
         if( fn.GetExt().CmpNoCase( FILEEXT::LockFileExtension ) == 0 )
@@ -2974,6 +2974,13 @@ void PROJECT_TREE_PANE::onGitAmendCommit( wxCommandEvent& aEvent )
                         const char*           path = delta->new_file.path ? delta->new_file.path : delta->old_file.path;
 
                         if( !path )
+                            continue;
+
+                        // Skip files from the previous commit that live outside the
+                        // current project directory (issue #15910).
+                        wxString absPath = repoWorkDir + wxString::FromUTF8( path );
+
+                        if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( absPath, projectPath ) )
                             continue;
 
                         int flag = GIT_STATUS_INDEX_MODIFIED;

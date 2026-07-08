@@ -30,6 +30,8 @@
 #include <git/git_backend.h>
 #include <git/libgit_backend.h>
 #include <git/kicad_git_common.h>
+#include <git/git_status_handler.h>
+#include <git/project_git_utils.h>
 #include <git/git_init_handler.h>
 #include <git/git_pull_handler.h>
 #include <git/git_push_handler.h>
@@ -293,6 +295,158 @@ long GIT_BACKEND_FIXTURE::s_counter = 0;
 
 
 BOOST_FIXTURE_TEST_SUITE( LibgitBackend, GIT_BACKEND_FIXTURE )
+
+
+/**
+ * The commit/amend checklists scope files to the project directory so that
+ * unrelated files elsewhere in the repository do not leak into the commit
+ * (issue #15910).  IsWithinProjectPath is the single scope predicate shared by
+ * every checklist path in the project manager.
+ */
+BOOST_AUTO_TEST_CASE( IsWithinProjectPath_ScopesToProjectDirectory )
+{
+    const wxString project = wxT( "/repo/proj/" );
+
+    // Files inside the project directory are in scope.
+    BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/proj/proj.kicad_sch" ), project ) );
+    BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/proj/sub/board.kicad_pcb" ), project ) );
+
+    // Files elsewhere in the repository are not.
+    BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/outside.txt" ), project ) );
+    BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/other/f.txt" ), project ) );
+
+    // A sibling whose name merely shares the project's prefix must not match.
+    BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/proj-extra/f.txt" ), project ) );
+
+    // The predicate normalizes a missing trailing separator before comparing, so the
+    // prefix collision above is still rejected when the caller omits the separator.
+    BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/proj/f.txt" ), wxT( "/repo/proj" ) ) );
+    BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/proj-extra/f.txt" ),
+                                                                 wxT( "/repo/proj" ) ) );
+
+    // An empty project path matches nothing rather than the whole repository.
+    BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/proj/f.txt" ), wxEmptyString ) );
+}
+
+
+/**
+ * Regression for issue #15910: the Amend Last Commit checklist is seeded from a
+ * tree diff of the previous commit.  Files that commit touched outside the
+ * current project directory must be filtered out with IsWithinProjectPath,
+ * exactly as the amend handler does, instead of leaking into the dialog.
+ */
+BOOST_AUTO_TEST_CASE( AmendFileList_ExcludesFilesOutsideProject )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    // The commit to be amended touches both a project-subdir file and an outside file, so
+    // the HEAD-vs-parent diff contains one in-scope and one out-of-scope path.
+    wxFileName::Mkdir( repoPath() + wxFileName::GetPathSeparator() + wxT( "proj" ), wxS_DIR_DEFAULT,
+                       wxPATH_MKDIR_FULL );
+    {
+        std::ofstream f( ( repoPath() + wxFileName::GetPathSeparator() + wxT( "proj/proj.kicad_sch" ) ).ToStdString() );
+        f << "sch\n";
+    }
+    {
+        std::ofstream f( ( repoPath() + wxFileName::GetPathSeparator() + wxT( "outside.txt" ) ).ToStdString() );
+        f << "unrelated\n";
+    }
+
+    {
+        git_index* index = nullptr;
+        BOOST_TEST_REQUIRE( git_repository_index( &index, repo ) == 0 );
+        git_index_add_bypath( index, "proj/proj.kicad_sch" );
+        git_index_add_bypath( index, "outside.txt" );
+        git_index_write( index );
+
+        git_oid treeOid;
+        git_index_write_tree( &treeOid, index );
+        git_index_free( index );
+
+        git_tree* tree = nullptr;
+        BOOST_TEST_REQUIRE( git_tree_lookup( &tree, repo, &treeOid ) == 0 );
+
+        git_signature* sig = nullptr;
+        git_signature_now( &sig, TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+
+        git_reference* headRefForParent = nullptr;
+        git_repository_head( &headRefForParent, repo );
+
+        git_commit* parent = nullptr;
+        git_reference_peel( (git_object**) &parent, headRefForParent, GIT_OBJECT_COMMIT );
+        git_reference_free( headRefForParent );
+
+        const git_commit* parents[1] = { parent };
+        git_oid           commitOid;
+        git_commit_create( &commitOid, repo, "HEAD", sig, sig, nullptr, "touch both", tree, 1, parents );
+
+        git_commit_free( parent );
+        git_signature_free( sig );
+        git_tree_free( tree );
+    }
+
+    KIGIT_COMMON common( repo );
+    common.SetProjectDir( repoPath() + wxFileName::GetPathSeparator() );
+
+    GIT_STATUS_HANDLER statusHandler( &common );
+    wxString           repoWorkDir = statusHandler.GetWorkingDirectory();
+    wxString projectPath = repoWorkDir + wxT( "proj" ) + wxFileName::GetPathSeparator();
+
+    std::map<wxString, int> modifiedFiles;
+
+    // Mirror the amend handler's diff-merge (HEAD vs parent), including the scope filter.
+    git_reference* headRef = nullptr;
+    BOOST_TEST_REQUIRE( git_repository_head( &headRef, repo ) == GIT_OK );
+
+    git_commit* lastCommit = nullptr;
+    git_reference_peel( (git_object**) &lastCommit, headRef, GIT_OBJECT_COMMIT );
+
+    git_commit* parentCommit = nullptr;
+    git_commit_parent( &parentCommit, lastCommit, 0 );
+
+    git_tree* parentTree = nullptr;
+    git_tree* lastTree = nullptr;
+    git_commit_tree( &parentTree, parentCommit );
+    git_commit_tree( &lastTree, lastCommit );
+
+    git_diff* diff = nullptr;
+    git_diff_tree_to_tree( &diff, repo, parentTree, lastTree, nullptr );
+
+    size_t deltas = git_diff_num_deltas( diff );
+
+    for( size_t ii = 0; ii < deltas; ++ii )
+    {
+        const git_diff_delta* delta = git_diff_get_delta( diff, ii );
+        const char*           path = delta->new_file.path ? delta->new_file.path : delta->old_file.path;
+
+        if( !path )
+            continue;
+
+        wxString absPath = repoWorkDir + wxString::FromUTF8( path );
+
+        if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( absPath, projectPath ) )
+            continue;
+
+        modifiedFiles[wxString::FromUTF8( path )] |= GIT_STATUS_INDEX_MODIFIED;
+    }
+
+    BOOST_CHECK_MESSAGE( modifiedFiles.count( wxT( "outside.txt" ) ) == 0,
+                         "outside.txt must not leak into the amend checklist" );
+    BOOST_CHECK_MESSAGE( modifiedFiles.count( wxT( "proj/proj.kicad_sch" ) ) == 1,
+                         "the project file should still appear in the amend checklist" );
+
+    git_diff_free( diff );
+    git_tree_free( lastTree );
+    git_tree_free( parentTree );
+    git_commit_free( parentCommit );
+    git_commit_free( lastCommit );
+    git_reference_free( headRef );
+    git_repository_free( repo );
+}
+
 
 
 /**
