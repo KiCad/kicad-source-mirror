@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-08 16:57+0000\n"
+"PO-Revision-Date: 2026-07-08 23:40+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -14101,38 +14101,33 @@ msgid "Create Net Chain"
 msgstr "Креирај мрежни ланац"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
-#, fuzzy
 msgid "Please enter a name for the net chain."
-msgstr "Попуњавање зона"
+msgstr "Молимо вас да унесете име за мрежни ланац."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:169
-#, fuzzy
 msgid "Chain name cannot contain spaces, quotes, or parentheses."
-msgstr "Име промјенљиве не може бити празно."
+msgstr "Име ланца не сме да садржи размаке, наводнике ни заграде."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:178
 msgid "Connection graph not available."
-msgstr ""
+msgstr "Граф веза није доступан."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "A net chain named '%s' already exists."
-msgstr "Библитека са надимком '%s' већ постоји."
+msgstr "Мрежни ланац са именом „%s” већ постоји."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:197
-#, fuzzy
 msgid "Failed to create the net chain."
-msgstr "Грешка у прављењу ознаке."
+msgstr "Није успело креирање мрежног ланца."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:222
-#, fuzzy
 msgid "Failed to create the manual net chain."
-msgstr "Грешка у прављењу гране."
+msgstr "Није успело креирање ручног мрежног ланца."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
-#, fuzzy
 msgid "Please select both a From and To component."
-msgstr "KiCad netlist фајлови"
+msgstr "Молимо вас да изаберете обе компоненте „од” и „до”."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
@@ -14140,18 +14135,17 @@ msgstr "KiCad netlist фајлови"
 #: eeschema/dialogs/dialog_create_net_chain.cpp:406
 #: eeschema/dialogs/dialog_create_net_chain.cpp:439
 #: eeschema/dialogs/dialog_create_net_chain.cpp:513
-#, fuzzy
 msgid "Find Path"
-msgstr "Пронађи"
+msgstr "Пронађи путању"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
 msgid "From and To must be different components."
-msgstr ""
+msgstr "„Од” и „До” морају бити различите компоненте."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find component '%s' or '%s'."
-msgstr "Немогуће пронаћи %s пин '%s'."
+msgstr "Није пронађена компонента „%s” или „%s”."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:401
 #, c-format
@@ -14160,15 +14154,21 @@ msgid ""
 "\n"
 "Would you like to force-create a manual chain link between these components?"
 msgstr ""
+"Није пронађена путања ланца мреже између %s и %s кроз компоненте за "
+"пролазак.\n"
+"\n"
+"Да ли желите да присилно креирате ручну везу ланца између ових компоненти?"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:438
 msgid "Selected components have no connected pins to anchor a manual chain."
 msgstr ""
+"Изабране компоненте немају повезане пинове који могу да буду сидро за ручни "
+"ланац."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:470
 #, c-format
 msgid "Showing manual chain between %s and %s. Use Refresh to restore all."
-msgstr ""
+msgstr "Приказује се ручни ланац између %s и %s. Освежите да бисте вратили све."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:510
 #, c-format
@@ -14176,6 +14176,8 @@ msgid ""
 "All %zu net chain paths between %s and %s are already committed as net "
 "chains."
 msgstr ""
+"Све %zu путање мрежних ланаца између %s и %s су већ потврђене као мрежни "
+"ланци."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:546
 #, c-format
