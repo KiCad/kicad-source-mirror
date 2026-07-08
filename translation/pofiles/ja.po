@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-08 03:35+0000\n"
+"PO-Revision-Date: 2026-07-08 16:57+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -4262,9 +4262,8 @@ msgid "Commit message cannot be empty"
 msgstr "コミット メッセージは空欄にできません"
 
 #: common/dialogs/git/dialog_git_commit.cpp:192
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "バック アノテートするには少なくとも一つのプロパティを選択"
+msgstr "コミットするファイルを一つ以上選択"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:69
 msgid "Key passphrase:"
@@ -9083,12 +9082,12 @@ msgid "Loading file canceled by user."
 msgstr "ユーザーによってファイルの読み込みがキャンセルされました。"
 
 #: common/io/pcad/s_expr_loader.cpp:194 common/io/pcad/s_expr_loader.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read file '%s'."
-msgstr "ファイル '%s' を開くことができません。"
+msgstr "ファイル '%s' を読み取れません。"
 
 #: common/io/pcad/s_expr_loader.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a P-CAD ASCII file."
 msgstr "'%s' は PADS Logic アスキーファイルではありません。"
 
@@ -10204,15 +10203,16 @@ msgid "Restore the project to the version from %s?"
 msgstr "プロジェクトを版数 %s に復元しますか？"
 
 #: common/local_history.cpp:2283
-#, fuzzy
 msgid "Restore Version"
-msgstr "セッションの復元"
+msgstr "版数復元"
 
 #: common/local_history.cpp:2286
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
 msgstr ""
+"復元を元に戻せるよう、 まず現在のファイルをバックアップします。 この版数に含"
+"まれていないファイルは変更されません。"
 
 #: common/netclass.cpp:331 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1236 pcbnew/zone.cpp:1137
@@ -12575,18 +12575,18 @@ msgid "Restore Defaults"
 msgstr "デフォルト値を復元"
 
 #: common/widgets/widget_hotkey_list.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Both bindings are kept, "
 "but only one runs per key press. Continue?"
 msgstr ""
-"'%s' はすでに '%s' のセクション '%s' へ割り当てられています。本当に現在の割り"
-"当てを変更してもよろしいですか？"
+"'%s' はすでに '%s' のセクション '%s' へ割り当てられています。 両方の"
+"キーバインドは保持されますが、 キーを押すたびに実行されるのは片方のみです。 "
+"続行しますか?"
 
 #: common/widgets/widget_hotkey_list.cpp:512
-#, fuzzy
 msgid "Hotkey conflict"
-msgstr "ホットキー リスト"
+msgstr "ホットキー 衝突"
 
 #: common/widgets/widget_hotkey_list.cpp:525
 msgid "Command"
@@ -12729,9 +12729,8 @@ msgid "Eagle XML files"
 msgstr "Eagle XML ファイル"
 
 #: common/wildcards_and_files_ext.cpp:304
-#, fuzzy
 msgid "P-CAD ASCII files"
-msgstr "PADS ASCII ファイル"
+msgstr "P-CAD アスキーファイル"
 
 #: common/wildcards_and_files_ext.cpp:310
 msgid "PADS ASCII files"
@@ -14076,9 +14075,8 @@ msgid "Update/reset symbol attributes"
 msgstr "シンボルの属性を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
-#, fuzzy
 msgid "Update/reset pin map overrides"
-msgstr "クリアランスの上書きの更新／リセット"
+msgstr "ピン マップの上書きの更新／リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:193
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:158
@@ -16410,9 +16408,8 @@ msgstr "ピン接続"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:563
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:337
 #: eeschema/widgets/sch_properties_panel.cpp:222
-#, fuzzy
 msgid "Pin Map"
-msgstr "ピン名"
+msgstr "ピン マップ"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:576
 msgid "Edit Simulation Model..."
@@ -19143,9 +19140,8 @@ msgid "S&how hidden pins"
 msgstr "非表示ピンを表示 (&h)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
-#, fuzzy
 msgid "Show original pin numbers when remapped"
-msgstr "ピン番号を表示/非表示"
+msgstr "再マッピング時にオリジナルピン番号を表示"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:117
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:38
@@ -20091,9 +20087,8 @@ msgid "Reset Libraries"
 msgstr "ライブラリをリセット"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:77
-#, fuzzy
 msgid "Rename Map..."
-msgstr "ファイル名を変更..."
+msgstr "マップ名を変更..."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:79
 #, fuzzy, c-format
@@ -20105,38 +20100,34 @@ msgid "Copy From..."
 msgstr ""
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:479
-#, fuzzy
 msgid "Map name:"
-msgstr "領域名:"
+msgstr "マップ名:"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:479
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:491
-#, fuzzy
 msgid "Rename Map"
-msgstr "名前を変更"
+msgstr "マップ名を変更"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "A pin map named '%s' already exists."
-msgstr "ネット チェーン名 '%s' はすでに存在します。"
+msgstr "ピン マップ名 '%s' はすでに存在します。"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:536
 msgid "Invalid footprint identifier."
 msgstr "不正なフットプリント識別子です。"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:545
-#, fuzzy
 msgid "That footprint is already assigned to another pin map."
-msgstr "ユニット %d 内で、この位置にはすでに他のピンがあります。"
+msgstr "そのフットプリントは、 すでに他のピン マップに割り当てられています。"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:703
 msgid "Click a pin map column to choose which map to remove."
-msgstr ""
+msgstr "ピン マップの列をクリックして、 削除する対象を選択してください。"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:703
-#, fuzzy
 msgid "Remove Pin Map"
-msgstr "信号を削除"
+msgstr "ピン マップを削除"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:725
 #, c-format
@@ -20144,14 +20135,12 @@ msgid "Remove pin map '%s' and its footprint association?"
 msgstr "ピンマップ '%s'のすべてのフットプリント関連付けを削除しますか？"
 
 #: eeschema/dialogs/panel_symbol_pin_map_base.cpp:52
-#, fuzzy
 msgid "Add pin map"
-msgstr "ピンを追加"
+msgstr "ピン マップを追加"
 
 #: eeschema/dialogs/panel_symbol_pin_map_base.cpp:57
-#, fuzzy
 msgid "Remove pin map"
-msgstr "信号を削除"
+msgstr "ピン マップを削除"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:42
 msgid "Project Field Name Templates"
@@ -20568,7 +20557,7 @@ msgstr "未接続"
 #: eeschema/erc/erc.cpp:262
 #, c-format
 msgid "Pin map '%s' references unknown symbol pin '%s'"
-msgstr ""
+msgstr "ピン マップ '%s' は不明なシンボル ピン '%s' をリファレンスしています"
 
 #: eeschema/erc/erc.cpp:290
 #, c-format
@@ -20583,9 +20572,11 @@ msgstr ""
 "りません"
 
 #: eeschema/erc/erc.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "Pin '%s' is connected but maps to no pad on footprint '%s'"
-msgstr "ピン %s が %s と %s の両方に接続されています"
+msgstr ""
+"ピン %s は接続されているが フットプリント '%s' 上のパッドにマッピングされてい"
+"ません"
 
 #: eeschema/erc/erc.cpp:413 eeschema/erc/erc.cpp:432
 #: pcbnew/drc/drc_test_provider_misc.cpp:446
@@ -20726,9 +20717,8 @@ msgid "Checking sheet names..."
 msgstr "シート名を確認中..."
 
 #: eeschema/erc/erc.cpp:2500
-#, fuzzy
 msgid "Checking pin maps..."
-msgstr "ピンを確認中..."
+msgstr "ピン マップを確認中..."
 
 #: eeschema/erc/erc.cpp:2507
 msgid "Checking conflicts..."
@@ -20926,22 +20916,20 @@ msgid "Field name has leading or trailing whitespace"
 msgstr "フィールド名の末尾か先頭(または両方)に空白文字を含んでいます"
 
 #: eeschema/erc/erc_item.cpp:175
-#, fuzzy
 msgid "Pin map references a pad that does not exist on the footprint"
-msgstr ""
-"ピン '%s' (ジャンパー パッド グループ %d )はこのシンボルに存在しません。"
+msgstr "ピン マップはフットプリント上に存在しないパッドをリファレンスしています"
 
 #: eeschema/erc/erc_item.cpp:179
 msgid "Connected pin is not mapped to any footprint pad"
-msgstr ""
+msgstr "接続されているピンはどのフットプリントパッドにもマッピングされていません"
 
 #: eeschema/erc/erc_item.cpp:183
 msgid "Two symbol pins are mapped to the same footprint pad"
-msgstr ""
+msgstr "2つのシンボルピンが同じフットプリント パッドにマッピングされています"
 
 #: eeschema/erc/erc_item.cpp:187
 msgid "Pin map references a pin number that no longer exists on the symbol"
-msgstr ""
+msgstr "ピン マップはシンボルから無くなったピン番号をリファレンスしています"
 
 #: eeschema/erc/erc_item.cpp:191 pcbnew/drc/drc_item.cpp:216
 #: pcbnew/drc/drc_rule_parser.cpp:89
@@ -21478,24 +21466,20 @@ msgid "Footprint filters differ."
 msgstr "フットプリント フィルターが異なります。"
 
 #: eeschema/lib_symbol.cpp:2274
-#, fuzzy
 msgid "Pin map count differs."
-msgstr "ピンの数が異なります。"
+msgstr "ピン マップの数が異なります。"
 
 #: eeschema/lib_symbol.cpp:2282
-#, fuzzy
 msgid "Pin maps differ."
-msgstr "%s は異なります。"
+msgstr "ピン マップ が異なります。"
 
 #: eeschema/lib_symbol.cpp:2291
-#, fuzzy
 msgid "Associated footprint count differs."
-msgstr "リファレンスでフットプリントを関連付け"
+msgstr "関連付けらたフットプリント数が異なります。"
 
 #: eeschema/lib_symbol.cpp:2299
-#, fuzzy
 msgid "Associated footprints differ."
-msgstr "フットプリントを関連付け"
+msgstr "関連付けられたフットプリントが違います。"
 
 #: eeschema/lib_symbol.cpp:2308
 msgid "Symbol keywords differ."
@@ -22605,15 +22589,15 @@ msgid "Port %s has no connections."
 msgstr "ポート '%s' には接続がありません。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4748
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file '%s' not found in storage."
-msgstr "ストレージに埋め込まれたファイル '%s' が見つかりません。"
+msgstr "埋め込まれたファイル '%s' がストレージに見つかりません。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4771
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not write a temporary file while extracting the embedded image '%s'."
-msgstr "マージ用の一時的なディレクトリを作成できませんでした。\n"
+msgstr "埋め込みイメージ '%s'を抽出中に、 一時ファイルを書き込めませんでした。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4793
 #, c-format
@@ -22621,6 +22605,8 @@ msgid ""
 "Failed to read embedded image '%s'. The image data may be corrupt or in an "
 "unsupported format."
 msgstr ""
+"埋め込み画像 '%s'の読み取りに失敗しました。 画像データが破損しているか、 "
+"サポートされていない形式である可能性があります。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4810
 #, c-format
@@ -22628,6 +22614,8 @@ msgid ""
 "Could not find image file '%s'. The file path may be specific to a different "
 "operating system."
 msgstr ""
+"画像ファイル '%s' が見つかりませんでした。 ファイル パスは異なる"
+"オペレーティングシステム固有のものである可能性があります。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4828
 #, c-format
@@ -22635,6 +22623,8 @@ msgid ""
 "Failed to read image file '%s'. The image may be corrupt or in an "
 "unsupported format."
 msgstr ""
+"埋め込み画像 '%s'の読み取りに失敗しました。 画像が破損しているか、 サポートさ"
+"れていない形式である可能性があります。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5624
 #, c-format
@@ -22931,9 +22921,9 @@ msgstr ""
 "んでした (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:691
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing pin map for database symbol '%s': %s"
-msgstr "データベース テーブル %s の読み取り中にエラーが発生しました: %s"
+msgstr "データベース シンボル '%s' の解析中にエラーが発生しました: %s"
 
 #: eeschema/sch_io/database/sch_io_database.h:55
 msgid "KiCad database library files"
@@ -23734,22 +23724,20 @@ msgstr "PADS Logic ライブラリ ファイル"
 
 #: eeschema/sch_io/pcad/pcad_sch_parser.cpp:256
 msgid "Empty P-CAD document"
-msgstr ""
+msgstr "空のP-CADドキュメント"
 
 #: eeschema/sch_io/pcad/sch_io_pcad.cpp:1254
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol definition '%s' for '%s' not found."
-msgstr "シンボル ライブラリー '%s' が見つかりません。"
+msgstr "シンボル定義 '%s' が '%s' で見つかりません。"
 
 #: eeschema/sch_io/pcad/sch_io_pcad.h:56
-#, fuzzy
 msgid "P-CAD schematic files"
-msgstr "PADS Logic 回路図ファイル"
+msgstr "P-CAD 回路図ファイル"
 
 #: eeschema/sch_io/pcad/sch_io_pcad.h:61
-#, fuzzy
 msgid "P-CAD schematic and library files"
-msgstr "PADS Logic ライブラリ ファイル"
+msgstr "P-CAD 回路図 と ライブラリ ファイル"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:49 pcbnew/pcb_io/pcb_io_mgr.cpp:55
 #, c-format
@@ -28679,13 +28667,12 @@ msgid "Symbol Properties..."
 msgstr "シンボルのプロパティ..."
 
 #: eeschema/tools/sch_actions.cpp:1070
-#, fuzzy
 msgid "Symbol Pin Maps..."
-msgstr "シンボルのピン"
+msgstr "シンボル ピン マップ..."
 
 #: eeschema/tools/sch_actions.cpp:1071
 msgid "Edit the symbol's pin-to-pad maps and associated footprints"
-msgstr ""
+msgstr "シンボルのピンとパッドのマッピングとフットプリントの関連付けを編集"
 
 #: eeschema/tools/sch_actions.cpp:1077
 msgid "Pin Table..."
@@ -30700,14 +30687,12 @@ msgstr ""
 "従って再アノテーションします。"
 
 #: eeschema/widgets/sch_properties_panel.cpp:321
-#, fuzzy
 msgid "Library default"
-msgstr "ライブラリのパス"
+msgstr "ライブラリのデフォルト"
 
 #: eeschema/widgets/sch_properties_panel.cpp:322
-#, fuzzy
 msgid "Named map"
-msgstr "名前"
+msgstr "名付けられたマップ"
 
 #: eeschema/widgets/sch_properties_panel.cpp:323
 #, fuzzy
@@ -30725,9 +30710,8 @@ msgid "%s (identity)"
 msgstr ""
 
 #: eeschema/widgets/sch_properties_panel.cpp:584
-#, fuzzy
 msgid "Edit Pin Map..."
-msgstr "パッドを編集..."
+msgstr "ピン マップを編集..."
 
 #: eeschema/widgets/sch_properties_panel.cpp:1122
 #: pcbnew/widgets/pcb_properties_panel.cpp:967
@@ -30747,7 +30731,6 @@ msgid "Excl. Board"
 msgstr "基板から除外"
 
 #: eeschema/widgets/search_handlers.cpp:169
-#, fuzzy
 msgid "Excl. Pos Files"
 msgstr "部品位置情報ファイル から除外"
 
@@ -33624,13 +33607,12 @@ msgid "Import a non-KiCad schematic file to KiCad format"
 msgstr "KiCad以外の回路図ファイルをKiCad形式にインポートする"
 
 #: kicad/cli/command_sch_import.cpp:44
-#, fuzzy
 msgid ""
 "Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
 "ltspice, pads, diptrace, pcad (default: auto)"
 msgstr ""
-"入力フォーマットのヒント: auto, Altium, Eagle, CADSTAR, EasyEda, EasyEdaPro, "
-"LTSpice, pads, DipTrace(デフォルト: auto)"
+"入力フォーマットのヒント: auto, Altium, EAGLE, Cadstar, EasyEda, EasyEdaPro, "
+"LTSpice, Pads, DipTrace, pcad(デフォルト: auto)"
 
 #: kicad/cli/command_sch_upgrade.cpp:31
 msgid "Upgrade the schematic file's format to the latest one"
@@ -33865,9 +33847,8 @@ msgid "Select Templates Directory"
 msgstr "テンプレート ディレクトリの選択"
 
 #: kicad/dialogs/dialog_template_selector.cpp:1380
-#, fuzzy
 msgid "(no other directory)"
-msgstr "入力ディレクトリ"
+msgstr "(他のディレクトリではない)"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
 msgid "Recent project templates"
@@ -33886,18 +33867,16 @@ msgid "System Templates"
 msgstr "システム テンプレート"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:64
-#, fuzzy
 msgid "Other Templates"
-msgstr "ユーザー テンプレート"
+msgstr "その他の テンプレート"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
-#, fuzzy
 msgid "Browse for templates in another directory"
-msgstr "このテンプレートのディレクトリ内。"
+msgstr "別のディレクトリのテンプレートを参照する"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
 msgid "Stop showing templates from the browsed directory"
-msgstr ""
+msgstr "閲覧したディレクトリからテンプレートの表示を停止"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:125
 msgid "Go Back"
@@ -34330,9 +34309,8 @@ msgid "Import CADSTAR Archive Project Files"
 msgstr "CADSTAR アーカイブ プロジェクト ファイルをインポート"
 
 #: kicad/import_project.cpp:193
-#, fuzzy
 msgid "Import P-CAD Project Files"
-msgstr "PADS プロジェクトファイルをインポート"
+msgstr "P-CADプロジェクトファイルをインポート"
 
 #: kicad/import_project.cpp:201
 msgid "Import Eagle Project Files"
@@ -34592,14 +34570,12 @@ msgstr ""
 "PADS Logic 回路図とPADS ASCII プリント基板(*.asc, *.txt)をインポートします"
 
 #: kicad/menubar.cpp:149
-#, fuzzy
 msgid "P-CAD Project..."
-msgstr "PADS プロジェクト..."
+msgstr "P-CADプロジェクト..."
 
 #: kicad/menubar.cpp:150
-#, fuzzy
 msgid "Import P-CAD ASCII schematic and board"
-msgstr "EAGLE CAD XML 回路図と基板図をインポートします"
+msgstr "P-CAD アスキー 回路図と基板図をインポートします"
 
 #: kicad/menubar.cpp:153
 msgid "gEDA / Lepton EDA Project..."
@@ -50390,9 +50366,8 @@ msgstr "ゾーン名:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:39
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:44
-#, fuzzy
 msgid "A unique name for this zone, used to identify it in DRC rules"
-msgstr "このゾーンに対する DRC で識別するための固有名"
+msgstr "このゾーンに対する DRC で識別・使用するためのゾーン固有の名前"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:76
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -53610,9 +53585,9 @@ msgstr ""
 "す"
 
 #: pcbnew/footprint_libraries_utils.cpp:838
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' could not be saved to library '%s'."
-msgstr "フットプリント '%s' がライブラリ'%s'に見つかりません"
+msgstr "フットプリント '%s' をライブラリ'%s' に保存出来ません。"
 
 #: pcbnew/footprint_libraries_utils.cpp:869
 #: pcbnew/footprint_viewer_frame.cpp:738
@@ -57543,7 +57518,7 @@ msgstr "PADSバイナリープリント基板のインポート開始"
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:91
 #, c-format
 msgid "Undefined P-CAD layer %u substituted with the drawings layer."
-msgstr ""
+msgstr "未定義P-CADレイヤー %u を作画レイヤーに置き換えた。"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:887
 msgid "KiCad only supports 32 signal layers."
@@ -60521,7 +60496,7 @@ msgstr ""
 msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
-msgstr ""
+msgstr "フットプリントやその他ミラーできないアイテムを含むグループは無視されました。"
 
 #: pcbnew/tools/edit_tool.cpp:2771 pcbnew/tools/pcb_actions.cpp:717
 msgid "Change Side / Flip"
@@ -64641,9 +64616,8 @@ msgid "Removing isolated copper islands..."
 msgstr "孤立した導体部分を削除中..."
 
 #: pcbnew/zone_filler.cpp:1193
-#, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "すべてのゾーンを塗り直し..."
+msgstr "重複するゾーンを充填しています..."
 
 #: pcbnew/zone_filler.cpp:1360
 #, c-format
