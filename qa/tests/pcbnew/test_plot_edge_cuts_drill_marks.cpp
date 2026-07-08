@@ -25,6 +25,7 @@
 #include <pad.h>
 #include <pcbplot.h>
 #include <plotters/plotter_gerber.h>
+#include <plotters/plotters_pslike.h>
 #include <pcb_plot_params.h>
 #include <layer_ids.h>
 #include <lset.h>
@@ -91,6 +92,61 @@ BOOST_AUTO_TEST_CASE( NoDrillFlashesOnEdgeCuts )
 
     BOOST_CHECK_MESSAGE( flashes == 0,
                          "Edge_Cuts gerber unexpectedly contains " << flashes << " drill-mark flash(es) (#24416)" );
+}
+
+// Regression for #24867: plotting Edge_Cuts alone to SVG with Actual Size drill
+// marks must still emit the drill marks (the fab drill-map workflow). Same input
+// as NoDrillFlashesOnEdgeCuts above, but the opposite outcome is expected because
+// SVG is a documentation format, not fab output.
+BOOST_AUTO_TEST_CASE( DrillMarksPlottedOnEdgeCutsSvg )
+{
+    const int padDia = pcbIUScale.mmToIU( 1.4 );
+    const int drill = pcbIUScale.mmToIU( 0.8 );
+
+    BOARD board;
+    auto  footprint = std::make_unique<FOOTPRINT>( &board );
+    footprint->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50.0 ), pcbIUScale.mmToIU( 50.0 ) ) );
+
+    auto pad = new PAD( footprint.get() );
+    pad->SetAttribute( PAD_ATTRIB::PTH );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( padDia, padDia ) );
+    pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
+    pad->SetDrillSize( VECTOR2I( drill, drill ) );
+    pad->SetLayerSet( LSET::AllCuMask() | LSET( { F_Mask, B_Mask } ) ); // THT pad: NOT on Edge_Cuts
+    pad->SetPosition( footprint->GetPosition() );
+    footprint->Add( pad );
+    board.Add( footprint.release() );
+
+    SVG_PLOTTER            plotter;
+    SIMPLE_RENDER_SETTINGS renderSettings;
+    plotter.SetRenderSettings( &renderSettings );
+
+    wxString svgPath = wxFileName::CreateTempFileName( wxT( "kicad_svg_24867" ) );
+    BOOST_REQUIRE( !svgPath.IsEmpty() );
+    BOOST_REQUIRE( plotter.OpenFile( svgPath ) );
+    plotter.SetViewport( VECTOR2I( 0, 0 ), pcbIUScale.IU_PER_MILS / 10, 1.0, false );
+    BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ) ) );
+
+    PCB_PLOT_PARAMS plotOpts;
+    plotOpts.SetFormat( PLOT_FORMAT::SVG );
+    plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE ); // Actual Size
+
+    PlotBoardLayers( &board, &plotter, LSEQ{ Edge_Cuts }, plotOpts );
+    BOOST_REQUIRE( plotter.EndPlot() );
+
+    wxFFile file( svgPath, wxT( "rb" ) );
+    BOOST_REQUIRE( file.IsOpened() );
+    wxString contents;
+    BOOST_REQUIRE( file.ReadAll( &contents ) );
+    file.Close();
+    wxRemoveFile( svgPath );
+
+    std::string buf = contents.ToStdString();
+    std::regex  circleRe( R"(<circle\b)" ); // the drill mark is the only circle on Edge_Cuts
+    long circles = std::distance( std::sregex_iterator( buf.begin(), buf.end(), circleRe ), std::sregex_iterator() );
+
+    BOOST_CHECK_MESSAGE( circles >= 1, "Edge_Cuts SVG is missing the drill-mark circle (#24867)" );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
