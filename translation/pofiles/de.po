@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-07 21:22+0000\n"
+"PO-Revision-Date: 2026-07-08 16:57+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -3211,7 +3211,7 @@ msgstr "Zweige vergleichen"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
-msgstr ""
+msgstr "Zu vergleichende Basis und Kopf auswählen."
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
 #, c-format
@@ -3553,7 +3553,7 @@ msgstr "Verzeichnis"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
-msgstr ""
+msgstr "Neuer"
 
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
@@ -3590,7 +3590,7 @@ msgstr "Keine verbundenen Netze ausgewählt."
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
 msgid "%zu conflict(s) require resolution."
-msgstr ""
+msgstr "%zu Konflikt/-e muss/müssen gelöst werden."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:217
 #, c-format
@@ -3598,6 +3598,8 @@ msgid ""
 "%zu conflict(s) still need a resolution. Pick Ours, Theirs, or Ancestor for "
 "each one."
 msgstr ""
+"%zu Konflikt/-e muss/müssen zuvor gelöst werden. Für jeden User, Deren order "
+"Vorfahre wählen."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:220
 #: common/dialogs/dialog_kicad_merge_3way_base.h:65
@@ -3618,6 +3620,8 @@ msgstr "Konflikt bzgl. %s"
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
 msgstr ""
+"Jeden Konflikt durch Auswahl, welche Seite Sie beibehalten werden soll, "
+"lösen und anschließend auf \"Übernehmen\" klicken."
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:31
 #: eeschema/erc/erc_item.cpp:38
@@ -6765,19 +6769,19 @@ msgstr "Aktuelle Lösung: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
-msgstr ""
+msgstr "Nimm Unser"
 
 #: common/diff_merge/auto_resolution.cpp:257
 msgid "Take theirs"
-msgstr ""
+msgstr "Nimm Deren"
 
 #: common/diff_merge/auto_resolution.cpp:258
 msgid "Take ancestor"
-msgstr ""
+msgstr "Nimm Vorfahre"
 
 #: common/diff_merge/auto_resolution.cpp:259
 msgid "Property-level merge"
-msgstr ""
+msgstr "Auf Eigenschaftenebene zusammenführen"
 
 #: common/diff_merge/auto_resolution.cpp:260 common/grid_tricks.cpp:400
 #: common/tool/actions.cpp:404 common/widgets/listbox_tricks.cpp:208
@@ -6798,7 +6802,7 @@ msgstr "Beibehalten (Standard)"
 #: common/diff_merge/auto_resolution.cpp:265
 #, c-format
 msgid "%zu property edit(s) in this resolution.\n"
-msgstr ""
+msgstr "%zu Eigenschaftenänderungen in dieser Auflösung.\n"
 
 #: common/diff_merge/diff_job_output.cpp:88
 msgid "Failed to render diff image\n"
@@ -33054,7 +33058,7 @@ msgstr "\"Unseres\" Datei"
 
 #: kicad/cli/command_mergetool.cpp:98
 msgid "'Theirs' file"
-msgstr "\"Ihres\" Datei"
+msgstr "\"Deren\" Datei"
 
 #: kicad/cli/command_mergetool.cpp:103
 msgid "Output path; extension picks the document type"
