@@ -379,6 +379,7 @@ set( PCBNEW_ZONE_TESTS
 :RegressionShallowArcZoneFill\
 :RegressionIterativeRefillRespectsKeepouts\
 :RegressionTHPadInnerLayerFlashing\
+:RegressionThermalReliefAnnularRing45\
 :RegressionRoundRectTeardropGeometry\
 :OvalPadTeardropGeometry\
 :LargeCircleTeardropGeometry\
