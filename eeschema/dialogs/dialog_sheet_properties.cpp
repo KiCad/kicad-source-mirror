@@ -39,6 +39,7 @@
 #include <schematic.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <template_fieldnames.h>
 #include <bitmaps.h>
 #include <eeschema_settings.h>
 #include <settings/color_settings.h>
@@ -532,7 +533,8 @@ void DIALOG_SHEET_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
             if( i == event.GetRow() )
                 continue;
 
-            if( newName.CmpNoCase( m_grid->GetCellValue( i, FDC_NAME ) ) == 0 )
+            if( FieldNamesAreDuplicates( newName, m_grid->GetCellValue( i, FDC_NAME ),
+                                         SHEET_MANDATORY_FIELDS ) )
             {
                 DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ), newName ) );
                 event.Veto();

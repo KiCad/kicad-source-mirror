@@ -19,6 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <template_fieldnames.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
 #include <widgets/std_bitmap_button.h>
@@ -724,13 +725,22 @@ void DIALOG_LABEL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
     else if( event.GetCol() == FDC_NAME )
     {
         wxString newName = event.GetString();
+        bool     isGlobalLabel = m_currentLabel->Type() == SCH_GLOBAL_LABEL_T;
 
         for( int i = 0; i < m_grid->GetNumberRows(); ++i )
         {
             if( i == event.GetRow() )
                 continue;
 
-            if( newName.CmpNoCase( m_grid->GetCellValue( i, FDC_NAME ) ) == 0 )
+            wxString existing = m_grid->GetCellValue( i, FDC_NAME );
+
+            // Only global labels have a mandatory field (Intersheet References).  Hierarchical,
+            // regular, and directive labels carry only user fields, which compare case-sensitively.
+            bool duplicate = isGlobalLabel
+                    ? FieldNamesAreDuplicates( newName, existing, GLOBALLABEL_MANDATORY_FIELDS )
+                    : FieldNamesAreDuplicates( newName, existing, {} );
+
+            if( duplicate )
             {
                 DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ),
                                                       newName ) );
