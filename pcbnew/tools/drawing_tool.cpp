@@ -48,6 +48,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <pcb_barcode.h>
 #include <tools/tool_event_utils.h>
+#include <tool/arc_draw_behavior.h>
 #include <tools/zone_create_helper.h>
 #include <tools/zone_filler_tool.h>
 #include <view/view.h>
@@ -2871,30 +2872,6 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 /**
  * Update an arc PCB_SHAPE from the current state of an Arc Geometry Manager.
  */
-static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER& aMgr,
-                                          PCB_SHAPE& aArc )
-{
-    VECTOR2I vec = aMgr.GetOrigin();
-
-    aArc.SetCenter( vec );
-
-    if( aMgr.GetSubtended() < ANGLE_0 )
-    {
-        vec = aMgr.GetStartRadiusEnd();
-        aArc.SetStart( vec );
-        vec = aMgr.GetEndRadiusEnd();
-        aArc.SetEnd( vec );
-    }
-    else
-    {
-        vec = aMgr.GetEndRadiusEnd();
-        aArc.SetStart( vec );
-        vec = aMgr.GetStartRadiusEnd();
-        aArc.SetEnd( vec );
-    }
-}
-
-
 bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                             std::optional<VECTOR2D> aStartingPoint )
 {
@@ -2912,16 +2889,12 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
     }
 
-    // Arc geometric construction manager
-    KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
-
-    // Arc drawing assistant overlay
-    KIGFX::PREVIEW::ARC_ASSISTANT arcAsst( arcManager, pcbIUScale, m_frame->GetUserUnits() );
+    ARC_DRAW_BEHAVIOR arcBehavior( pcbIUScale, m_frame->GetUserUnits() );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCB_SELECTION preview;
     m_view->Add( &preview );
-    m_view->Add( &arcAsst );
+    m_view->Add( &arcBehavior.GetAssistant() );
     PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     auto setCursor =
@@ -3033,22 +3006,22 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 started = true;
             }
 
-            arcManager.AddPoint( cursorPos, true );
+            arcBehavior.AddPoint( cursorPos );
         }
         else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
         {
             // Snap guides persist in the grid helper until the tool exits, so a mid-draw backup
             // must clear them or they linger on screen.
             grid.FullReset();
-            arcManager.RemoveLastPoint();
+            arcBehavior.RemoveLastPoint();
         }
         else if( evt->IsMotion() )
         {
             // set angle snap
-            arcManager.SetAngleSnap( angleSnap != LEADER_MODE::DIRECT );
+            arcBehavior.SetAngleSnap( angleSnap != LEADER_MODE::DIRECT );
 
             // update, but don't step the manager state
-            arcManager.AddPoint( cursorPos, false );
+            arcBehavior.SetCursorPosition( cursorPos );
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
@@ -3080,7 +3053,9 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
-            if( arcManager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_START )
+            const KIGFX::PREVIEW::ARC_GEOM_MANAGER& geomMgr = arcBehavior.GetManager();
+
+            if( geomMgr.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_START )
             {
                 graphic->SetArcAngleAndEnd( ANGLE_90 );
                 frame()->OnEditItemRequest( graphic );
@@ -3089,8 +3064,8 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 break;
             }
             // Don't show the edit panel if we can't represent the arc with it
-            else if( ( arcManager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_ANGLE )
-                    && ( arcManager.GetStartRadiusEnd() != arcManager.GetEndRadiusEnd() ) )
+            else if( ( geomMgr.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_ANGLE )
+                     && ( geomMgr.GetStartRadiusEnd() != geomMgr.GetEndRadiusEnd() ) )
             {
                 frame()->OnEditItemRequest( graphic );
                 m_view->Update( &preview );
@@ -3136,12 +3111,12 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsAction( &ACTIONS::arcPosture ) )
         {
-            arcManager.ToggleClockwise();
+            arcBehavior.ToggleClockwise();
         }
         else if( evt->IsAction( &ACTIONS::updateUnits ) )
         {
-            arcAsst.SetUnits( frame()->GetUserUnits() );
-            m_view->Update( &arcAsst );
+            arcBehavior.SetUnits( frame()->GetUserUnits() );
+            m_view->Update( &arcBehavior.GetAssistant() );
             evt->SetPassEvent();
         }
         else if( started && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
@@ -3154,15 +3129,16 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             evt->SetPassEvent();
         }
 
-        if( arcManager.IsComplete() )
+        if( arcBehavior.IsComplete() )
         {
             break;
         }
-        else if( arcManager.HasGeometryChanged() )
+        else if( arcBehavior.HasGeometryChanged() )
         {
-            updateArcFromConstructionMgr( arcManager, *graphic );
+            arcBehavior.ApplyToShape( *graphic );
             m_view->Update( &preview );
-            m_view->Update( &arcAsst );
+            m_view->Update( &arcBehavior.GetAssistant() );
+            arcBehavior.ClearGeometryChanged();
 
             if( started )
                 frame()->SetMsgPanel( graphic );
@@ -3172,7 +3148,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     }
 
     preview.Remove( graphic );
-    m_view->Remove( &arcAsst );
+    m_view->Remove( &arcBehavior.GetAssistant() );
     m_view->Remove( &preview );
 
     if( selection().Empty() )
