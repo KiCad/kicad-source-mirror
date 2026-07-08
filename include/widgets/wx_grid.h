@@ -362,6 +362,11 @@ protected:
     void onCellEditorShown( wxGridEvent& aEvent );
     void onCellEditorHidden( wxGridEvent& aEvent );
 
+#ifdef __WXMSW__
+    /// Force the one-time selection-highlight redraw once the grid is actually on screen.
+    void onIdleRefreshHighlight( wxIdleEvent& aEvent );
+#endif
+
     void onDPIChanged(wxDPIChangedEvent& event);
 
     UNITS_PROVIDER* getUnitsProvider( int aCol ) const
@@ -396,10 +401,6 @@ protected:
 
     bool                       m_gridWidthsDirty = true;
     int                        m_gridWidth = 0;
-
-#ifdef __WXMSW__
-    bool                       m_firstSelectionRefreshDone = false;
-#endif
 
     ROW_ICON_PROVIDER*         m_rowIconProvider;
 };
