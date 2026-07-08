@@ -30,6 +30,7 @@
 #include <advanced_config.h>
 #include <render_settings.h>
 #include <trigo.h>
+#include <math/util.h>
 #include <font/font.h>
 #include <font/stroke_font.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -499,10 +500,59 @@ BOOST_AUTO_TEST_CASE( PlotOutlineFontEmbedding )
     MaybeRemoveFile( pdfPath );
 }
 
-// Test tab handling in PDF text output (issue #22606).
-// When text contains tab characters, each tab should advance to the next tab stop.
-// We verify that text with tabs produces different glyph positions than without tabs.
-BOOST_AUTO_TEST_CASE( PlotTextWithTabs )
+// Extract the device-space X translation of every stroke-font text block ("... cm BT") in a
+// decompressed PDF content stream, in stream order.  The stroke plotter emits each rendered word
+// as "q a b c d e f cm BT ...", where the 5th number (e) is the text-matrix X origin.
+static std::vector<double> ExtractStrokeTextOriginsX( const std::string& aBuffer )
+{
+    std::vector<double> origins;
+    size_t              pos = 0;
+
+    while( ( pos = aBuffer.find( "cm BT", pos ) ) != std::string::npos )
+    {
+        std::string head = aBuffer.substr( 0, pos );
+        std::vector<double> nums;
+
+        for( size_t end = head.size(); end > 0 && nums.size() < 6; )
+        {
+            size_t start = head.find_last_not_of( " \n\r\t", end - 1 );
+
+            if( start == std::string::npos )
+                break;
+
+            size_t tokStart = head.find_last_of( " \n\r\t", start );
+            tokStart = ( tokStart == std::string::npos ) ? 0 : tokStart + 1;
+
+            try
+            {
+                nums.push_back( std::stod( head.substr( tokStart, start - tokStart + 1 ) ) );
+            }
+            catch( ... )
+            {
+                break;
+            }
+
+            end = tokStart;
+        }
+
+        if( nums.size() == 6 )
+            origins.push_back( nums[1] ); // reversed order: e is second-from-last collected
+
+        pos += 5;
+    }
+
+    return origins;
+}
+
+
+// Issue #22606: PDF plotting of stroke-font text containing tab characters placed the following
+// text at the wrong tab stop.  The plotter hardcoded the outline font's tab rule (2.4 * size),
+// but the default schematic font is the stroke font, whose tab stops are column based and land
+// much further right.  The result was tabs that came out too short in the PDF versus on screen.
+//
+// This drives the plotter with the reporter's own text ("v07:\terstversion") and checks that the
+// text after the tab is placed exactly where the stroke font's own glyph model puts it.
+BOOST_AUTO_TEST_CASE( PlotStrokeTextTabStopMatchesFont )
 {
     wxString pdfPath = getTempPdfPath( "kicad_pdf_tabs" );
 
@@ -514,17 +564,20 @@ BOOST_AUTO_TEST_CASE( PlotTextWithTabs )
     plotter.SetViewport( VECTOR2I( 0, 0 ), 1.0, 1.0, false );
     BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ), wxT( "TabTest" ) ) );
 
-    TEXT_ATTRIBUTES attrs = BuildTextAttributes( 3000, 300, false, false );
-    auto strokeFont = LoadStrokeFontUnique();
+    const int       sizeIu = 1270000; // 1.27 mm, the reporter's text size
+    TEXT_ATTRIBUTES attrs = BuildTextAttributes( sizeIu, sizeIu / 10, false, false );
+    auto            strokeFont = LoadStrokeFontUnique();
     KIFONT::METRICS metrics;
 
-    wxString textWithTab = wxT( "Before\tAfter" );
-    wxString textWithoutTab = wxT( "BeforeAfter" );
+    // Two reference words establish the linear user->device X scale of the viewport.
+    plotter.PlotText( VECTOR2I( 40000000, 60000000 ), COLOR4D( 0, 0, 0, 1 ), wxT( "M" ), attrs,
+                      strokeFont.get(), metrics );
+    plotter.PlotText( VECTOR2I( 80000000, 60000000 ), COLOR4D( 0, 0, 0, 1 ), wxT( "M" ), attrs,
+                      strokeFont.get(), metrics );
 
-    plotter.PlotText( VECTOR2I( 50000, 60000 ), COLOR4D( 0, 0, 0, 1 ), textWithTab, attrs,
-                      strokeFont.get(), metrics );
-    plotter.PlotText( VECTOR2I( 50000, 50000 ), COLOR4D( 0, 0, 0, 1 ), textWithoutTab, attrs,
-                      strokeFont.get(), metrics );
+    // The reporter's tabbed line: "v07:" then a tab then the rest of the line.
+    plotter.PlotText( VECTOR2I( 40000000, 40000000 ), COLOR4D( 0, 0, 0, 1 ), wxT( "v07:\terstversion" ),
+                      attrs, strokeFont.get(), metrics );
 
     plotter.EndPlot();
 
@@ -532,10 +585,39 @@ BOOST_AUTO_TEST_CASE( PlotTextWithTabs )
     BOOST_REQUIRE( ReadPdfWithDecompressedStreams( pdfPath, buffer ) );
     BOOST_CHECK( buffer.rfind( "%PDF", 0 ) == 0 );
 
-    // The PDF should contain text content. Tabs should not produce visible tab glyphs but should
-    // create proper spacing. We verify the PDF is valid and contains our text characters.
-    BOOST_CHECK_MESSAGE( PdfContains( buffer, "0041" ) || PdfContains( buffer, "A" ),
-                         "PDF should contain 'A' from 'After'" );
+    std::vector<double> origins = ExtractStrokeTextOriginsX( buffer );
+
+    // Two reference "M" blocks plus the two segments ("v07:" and "erstversion") of the tabbed line.
+    BOOST_REQUIRE_EQUAL( origins.size(), 4u );
+
+    const double scale = ( origins[1] - origins[0] ) / ( 80000000.0 - 40000000.0 );
+    BOOST_REQUIRE( std::abs( scale ) > 0.0 );
+
+    // Distance in user units from the "v07:" origin to the post-tab "erstversion" origin.
+    const double measuredOffsetIu = ( origins[3] - origins[2] ) / scale;
+
+    const VECTOR2I size( sizeIu, sizeIu );
+
+    // The stroke font's own glyph placement is the ground truth for the on-screen position.
+    const double expectedOffsetIu =
+            strokeFont->GetTextAsGlyphs( nullptr, nullptr, wxT( "v07:\t" ), size, VECTOR2I(),
+                                         ANGLE_0, false, VECTOR2I(), 0 )
+                    .x;
+
+    // The old (buggy) hardcoded rule would have placed it here; kept only to document the gap.
+    const double widthV07 =
+            strokeFont->GetTextAsGlyphs( nullptr, nullptr, wxT( "v07:" ), size, VECTOR2I(), ANGLE_0,
+                                         false, VECTOR2I(), 0 )
+                    .x;
+    const int    oldTabWidth = KiROUND( sizeIu * 4 * 0.6 );
+    const double oldOffsetIu = widthV07 + ( oldTabWidth - KiROUND( widthV07 ) % oldTabWidth );
+
+    const double tolerance = sizeIu * 0.02;
+
+    BOOST_CHECK_MESSAGE( std::abs( measuredOffsetIu - expectedOffsetIu ) < tolerance,
+                         "Post-tab text at " << measuredOffsetIu << " IU, font model expects "
+                                             << expectedOffsetIu << " IU (old buggy rule: "
+                                             << oldOffsetIu << " IU)" );
 
     MaybeRemoveFile( pdfPath );
 }
