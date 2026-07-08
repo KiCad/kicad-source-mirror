@@ -38,6 +38,7 @@
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>
 #include <string_utils.h>
+#include <template_fieldnames.h>
 #include <project_sch.h>
 #include <refdes_utils.h>
 #include <dialog_sim_model.h>
@@ -839,7 +840,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
             if( i == event.GetRow() )
                 continue;
 
-            if( newName.CmpNoCase( m_grid->GetCellValue( i, FDC_NAME ) ) == 0 )
+            if( FieldNamesAreDuplicates( newName, m_grid->GetCellValue( i, FDC_NAME ) ) )
             {
                 DisplayError( this, wxString::Format( _( "The name '%s' is already in use." ), newName ) );
                 event.Veto();

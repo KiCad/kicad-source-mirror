@@ -79,6 +79,7 @@ set( QA_COMMON_SRCS
     test_grid_helper.cpp
     test_string_utils.cpp
     test_richio.cpp
+    test_template_fieldnames.cpp
     test_text_attributes.cpp
     test_tool_dispatcher.cpp
     git/test_libgit_backend.cpp

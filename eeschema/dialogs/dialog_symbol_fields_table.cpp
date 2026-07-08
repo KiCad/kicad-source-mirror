@@ -33,6 +33,7 @@
 #include <general.h>
 #include <grid_tricks.h>
 #include <string_utils.h>
+#include <template_fieldnames.h>
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
 #include <widgets/wx_infobar.h>
@@ -710,8 +711,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxS
     // e.g. ${QUANTITY} so make sure we don't add them twice
     for( int row = 0; row < m_viewControlsDataModel->GetNumberRows(); row++ )
     {
-        if( m_viewControlsDataModel->GetCanonicalFieldName( row ).CmpNoCase( aFieldName ) == 0 )
+        if( FieldNamesAreDuplicates( m_viewControlsDataModel->GetCanonicalFieldName( row ),
+                                     aFieldName ) )
+        {
             return;
+        }
     }
 
     m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser, m_parent->Schematic().GetCurrentVariant() );
@@ -751,13 +755,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     AddField( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE, _( "Qty" ), true, false );
     AddField( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE, _( "#" ), true, false );
 
-    // User fields next
-    auto caseInsensitiveLess = []( const wxString& a, const wxString& b )
-    {
-        return a.CmpNoCase( b ) < 0;
-    };
-
-    std::map<wxString, std::map<wxString, int>, decltype( caseInsensitiveLess )> userFieldGroups( caseInsensitiveLess );
+    // User field names are stored and matched case-sensitively (see issue #24021), so each
+    // distinct name gets its own column rather than collapsing case variants together.
+    std::set<wxString> userFieldNames;
 
     for( int ii = 0; ii < (int) m_symbolsList.GetCount(); ++ii )
     {
@@ -766,39 +766,17 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
         for( const SCH_FIELD& field : symbol->GetFields() )
         {
             if( !field.IsMandatory() && !field.IsPrivate() )
-                userFieldGroups[field.GetName()][field.GetName()]++;
+                userFieldNames.insert( field.GetName() );
         }
     }
 
-    for( const auto& [groupKey, exactCounts] : userFieldGroups )
-    {
-        wxString canonicalName;
-
-        if( const TEMPLATE_FIELDNAME* tfn = m_schSettings.m_TemplateFieldNames.GetFieldName( groupKey ) )
-        {
-            canonicalName = tfn->m_Name;
-        }
-        else
-        {
-            int bestCount = -1;
-
-            for( const auto& [name, count] : exactCounts )
-            {
-                if( count > bestCount )
-                {
-                    bestCount = count;
-                    canonicalName = name;
-                }
-            }
-        }
-
-        AddField( canonicalName, GetGeneratedFieldDisplayName( canonicalName ), true, false );
-    }
+    for( const wxString& fieldName : userFieldNames )
+        AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
 
     // Add any templateFieldNames which aren't already present.
     for( const TEMPLATE_FIELDNAME& tfn : m_schSettings.m_TemplateFieldNames.GetTemplateFieldNames() )
     {
-        if( userFieldGroups.count( tfn.m_Name ) == 0 )
+        if( userFieldNames.count( tfn.m_Name ) == 0 )
             AddField( tfn.m_Name, GetGeneratedFieldDisplayName( tfn.m_Name ), false, false );
     }
 }
@@ -821,7 +799,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnAddField( wxCommandEvent& event )
 
     for( int i = 0; i < m_dataModel->GetNumberCols(); ++i )
     {
-        if( fieldName.CmpNoCase( m_dataModel->GetColFieldName( i ) ) == 0 )
+        if( FieldNamesAreDuplicates( fieldName, m_dataModel->GetColFieldName( i ) ) )
         {
             DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ), fieldName ) );
             return;

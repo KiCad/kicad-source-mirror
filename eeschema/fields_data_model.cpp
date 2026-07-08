@@ -27,6 +27,7 @@
 #include <sch_reference_list.h>
 #include <sch_commit.h>
 #include <sch_screen.h>
+#include <template_fieldnames.h>
 #include "string_utils.h"
 
 #include "fields_data_model.h"
@@ -271,7 +272,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_REFERE
     {
         m_dataStore[key][aFieldName] = getAttributeValue( aSymbolRef, aFieldName, aVariantName );
     }
-    else if( const SCH_FIELD* field = symbol->FindFieldCaseInsensitive( aFieldName ) )
+    else if( const SCH_FIELD* field = symbol->GetField( aFieldName ) )
     {
         if( field->IsPrivate() )
         {
@@ -342,7 +343,7 @@ int FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( const wxString& aFieldName )
 {
     for( size_t i = 0; i < m_cols.size(); i++ )
     {
-        if( m_cols[i].m_fieldName.CmpNoCase( aFieldName ) == 0 )
+        if( FieldNamesAreDuplicates( m_cols[i].m_fieldName, aFieldName ) )
             return static_cast<int>( i );
     }
 
@@ -1349,13 +1350,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
             if( IsGeneratedField( srcName ) )
                 continue;
 
-            SCH_FIELD* destField = symbol->FindFieldCaseInsensitive( srcName );
-
-            if( destField && !destField->IsMandatory() && destField->GetName() != srcName )
-            {
-                destField->SetName( srcName );
-                symbolModified = true;
-            }
+            SCH_FIELD* destField = symbol->GetField( srcName );
 
             if( destField && destField->IsPrivate() )
             {
@@ -1411,7 +1406,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
             bool stillTracked = std::any_of( fieldStore.begin(), fieldStore.end(),
                                              [&]( const auto& kv )
                                              {
-                                                 return kv.first.IsSameAs( existingName, false );
+                                                 return kv.first == existingName;
                                              } );
 
             if( !stillTracked )
