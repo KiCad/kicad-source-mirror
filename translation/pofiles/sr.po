@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-07-07 21:23+0000\n"
+"PO-Revision-Date: 2026-07-08 16:57+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -13184,72 +13184,59 @@ msgid "Change symbols matching value:"
 msgstr "Промени симболе који одговарају вредности:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:62
-#, fuzzy
 msgid "Change symbols matching library identifier:"
-msgstr "Референца"
+msgstr "Промени симболе који одговарају идентификатору библиотеке:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:64
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:70
-#, fuzzy
 msgid "Update Fields"
-msgstr "Поља"
+msgstr "Ажурирај поља"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:65
-#, fuzzy
 msgid "Remove fields if not in new symbol"
-msgstr "Избриши поља која нису у библиотеци"
+msgstr "Уклони поља ако нису у новом симболу"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
-#, fuzzy
 msgid "Reset fields if empty in new symbol"
-msgstr "Додај поље"
+msgstr "Ресетуј поља ако су празна у новом симболу"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
-#, fuzzy
 msgid "Update field text"
-msgstr "Унесите текст филтера"
+msgstr "Ажурирај текст поља"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:68
-#, fuzzy
 msgid "Update field visibilities"
-msgstr "Додај поље"
+msgstr "Ажурирај видљивост поља"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:69
-#, fuzzy
 msgid "Update field sizes and styles"
-msgstr "Додај поље"
+msgstr "Ажурирајте величине и стилове поља"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:70
-#, fuzzy
 msgid "Update field positions"
-msgstr "Додај поље"
+msgstr "Ажурирај позиције поља"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:71
-#, fuzzy
 msgid "Update symbol attributes"
-msgstr "Поља"
+msgstr "Ажурирај атрибуте симбола"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:72
-#, fuzzy
 msgid "Update pin name/number visibilities"
-msgstr "Додај поље"
+msgstr "Ажурирај видљивост имена/бројева пинова"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:73
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:178
-#, fuzzy
 msgid "Reset alternate pin functions"
-msgstr "Врати %s на почетна подешавања"
+msgstr "Ресетуј алтернативне функције пинова"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:74
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Име симбола:"
+msgstr "Ресетујте прилагођене симболе снаге"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:77
-#, fuzzy
 msgid "Change selected symbol(s)"
-msgstr "Симбол"
+msgstr "Промени изабрани симбол (симболе)"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:127
@@ -13265,44 +13252,38 @@ msgstr "Промјени"
 #: kicad/pcm/dialogs/panel_package_base.cpp:75
 #: kicad/pcm/dialogs/panel_packages_view.cpp:709
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:127
-#, fuzzy
 msgid "Update"
-msgstr "Поља"
+msgstr "Ажурирај"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:459
-#, fuzzy
 msgid "Update Symbols"
-msgstr "&Нови симбол..."
+msgstr "Ажурирај симболе"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:565
-#, fuzzy
 msgid "*** No symbols matching criteria found ***"
-msgstr "Маркер није пронађен"
+msgstr "*** Нису пронађени симболи који одговарају критеријумима ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:598
-#, fuzzy
 msgid "*** symbol lib id not valid ***"
-msgstr "Маркер није пронађен"
+msgstr "*** ID библиотеке симбола није важећи ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:609
-#, fuzzy
 msgid "*** symbol not found ***"
-msgstr "Маркер није пронађен"
+msgstr "*** симбол није пронађен ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:620
-#, fuzzy
 msgid "*** new symbol has too few units ***"
-msgstr "Маркер није пронађен"
+msgstr "*** нови симбол има премало јединица ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:875
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "Попуњавање зона"
+msgstr "Ажурирај симбол %s са „%s” на „%s”"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:882
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "Попуњавање зона"
+msgstr "Ажурирај симболе %s са „%s” на „%s”"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:892
 #, c-format
@@ -13315,129 +13296,107 @@ msgid "Change symbols %s from '%s' to '%s'"
 msgstr "Промијенити симболе %s са '%s' у'%s'"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:28
-#, fuzzy
 msgid "Update all symbols in schematic"
-msgstr "Симбол"
+msgstr "Ажурирај све симболе на шеми"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:31
-#, fuzzy
 msgid "Update selected symbol(s)"
-msgstr "Симбол"
+msgstr "Ажурирај изабрани симбол (симболе)"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:34
-#, fuzzy
 msgid "Update symbols matching reference designator:"
-msgstr "Референца"
+msgstr "Ажурирај симболе који одговарају референтној ознаци:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:40
-#, fuzzy
 msgid "Update symbols matching value:"
-msgstr "Поља"
+msgstr "Ажурирај симболе који одговарају вредности:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:46
-#, fuzzy
 msgid "Update symbols matching library identifier:"
-msgstr "Референца"
+msgstr "Ажурирај симболе који одговарају идентификатору библиотеке:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:79
 msgid "New library identifier:"
 msgstr "Нови ID библиотеке:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
-#, fuzzy
 msgid "Update/Reset Fields"
-msgstr "Поља"
+msgstr "Ажурирај/Ресетуј поља"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:109
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:41
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:50
-#, fuzzy
 msgid "Select None"
-msgstr "Изабери"
+msgstr "Поништи избор"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:121
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:59
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:102
-#, fuzzy
 msgid "Update Options"
-msgstr "Опције:"
+msgstr "Опције ажурирања"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:126
-#, fuzzy
 msgid "Remove fields if not in library symbol"
-msgstr "Избриши поља која нису у библиотеци"
+msgstr "Уклоните поља ако се не налазе у библиотеци симбола"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:127
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
-#, fuzzy
 msgid "Removes fields that do not occur in the original library symbols"
-msgstr "Избриши поља која нису у библиотеци"
+msgstr "Уклања поља која се не појављују у оригиналним симболима библиотеке"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:131
-#, fuzzy
 msgid "Reset fields if empty in library symbol"
-msgstr "Избриши поља која нису у библиотеци"
+msgstr "Ресетуј поља ако су празна у симболу библиотеке"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
-#, fuzzy
 msgid "Update/reset field text"
-msgstr "Поље"
+msgstr "Ажурирај/ресетуј текст поља"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:140
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:76
-#, fuzzy
 msgid "Update/reset field visibilities"
-msgstr "Додај поље"
+msgstr "Ажурирај/ресетуј видљивост поља"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:143
-#, fuzzy
 msgid "Update/reset field text sizes and styles"
-msgstr "Додај поље"
+msgstr "Ажурирај/ресетуј величине и стилове текста"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:146
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:84
-#, fuzzy
 msgid "Update/reset field positions"
-msgstr "Додај поље"
+msgstr "Ажурирај/ресетуј позиције поља"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:127
-#, fuzzy
 msgid "Check All Update Options"
-msgstr "Опције:"
+msgstr "Провери све опције ажурирања"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:159
-#, fuzzy
 msgid "Update symbol shape and pins"
-msgstr "Поља"
+msgstr "Ажурирај облик симбола и пинове"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
-#, fuzzy
 msgid "Update keywords and footprint filters"
-msgstr "Попуњавање зона"
+msgstr "Ажурирајте кључне речи и филтере отиска"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
-#, fuzzy
 msgid "Update/reset pin name/number visibilities"
-msgstr "Додај поље"
+msgstr "Ажурирај/ресетуј видљивост имена/бројева пинова"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:184
-#, fuzzy
 msgid "Update/reset symbol attributes"
-msgstr "Поља"
+msgstr "Ажурирај/ресетуј атрибуте симбола"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:148
-#, fuzzy
 msgid "Uncheck All Update Options"
-msgstr "Опције:"
+msgstr "Поништи избор свих опција за ажурирање"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:107
-#, fuzzy
 msgid "Update Symbols from Library"
-msgstr "Креирање зона"
+msgstr "Ажурирај симболе из библиотеке"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 msgid "Connected to database successfully"
