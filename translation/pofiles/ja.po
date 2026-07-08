@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
 "PO-Revision-Date: 2026-07-08 16:57+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
 "Language: ja\n"
@@ -54711,14 +54711,14 @@ msgid "Changed group library link from '%s' to '%s'."
 msgstr "グループ ライブラリ リンクを '%s' から '%s' に変更しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1973
-#, fuzzy, c-format
+#, c-format
 msgid "Add group '%s' to group '%s'."
-msgstr "%s をグループ '%s' に追加します。"
+msgstr "'%s' をグループ '%s' に追加します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1978
-#, fuzzy, c-format
+#, c-format
 msgid "Added group '%s' to group '%s'."
-msgstr "%s をグループ '%s' に追加しました。"
+msgstr "'%s' をグループ '%s' に追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2018
 #, c-format
