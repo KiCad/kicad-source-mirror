@@ -31,6 +31,7 @@
 #include <vector>
 
 using PADS_SCH_BINARY::PADS_SCH_SDB;
+using PADS_SCH_BINARY::SCH_SDB_BLOCK_KIND;
 
 namespace
 {
@@ -67,6 +68,22 @@ static bool errorContains( const IO_ERROR& aError, const std::string& aNeedle1, 
     return message.find( aNeedle1 ) != std::string::npos && message.find( aNeedle2 ) != std::string::npos;
 }
 
+
+static void checkPhysicalPartition( const std::string& aPath )
+{
+    PADS_SCH_SDB sdb;
+    sdb.Load( loadBinary( aPath ) );
+
+    const auto& blocks = sdb.Blocks();
+    BOOST_REQUIRE_MESSAGE( !blocks.empty(), aPath );
+    BOOST_CHECK_EQUAL( blocks.front().offset, sdb.PayloadOffset() );
+
+    for( size_t i = 1; i < blocks.size(); ++i )
+        BOOST_CHECK_EQUAL( blocks[i - 1].End(), blocks[i].offset );
+
+    BOOST_CHECK_EQUAL( blocks.back().End(), sdb.FooterOffset() );
+}
+
 } // namespace
 
 
@@ -101,6 +118,45 @@ BOOST_AUTO_TEST_CASE( PublicV13Container )
     BOOST_CHECK_EQUAL( sdb.Pools()[9].count, 0 );
     BOOST_CHECK_EQUAL( sdb.Pools()[9].usedBytes, 0 );
     BOOST_CHECK_EQUAL( sdb.Pools()[9].handle, 179219184 );
+}
+
+
+BOOST_AUTO_TEST_CASE( PhysicalStreamPartitionsCorpus )
+{
+    const std::string publicRoot = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/";
+    std::ifstream     publicFile( publicRoot + "manifest.json" );
+    nlohmann::json    publicManifest;
+    publicFile >> publicManifest;
+
+    for( const nlohmann::json& fixture : publicManifest.at( "fixtures" ) )
+        checkPhysicalPartition( publicRoot + fixture.at( "binary" ).get<std::string>() );
+
+}
+
+
+BOOST_AUTO_TEST_CASE( MinimalV13PhysicalLedger )
+{
+    PADS_SCH_SDB sdb;
+    sdb.Load( loadPublicFixture() );
+    const auto& blocks = sdb.Blocks();
+
+    BOOST_REQUIRE_EQUAL( blocks.size(), 16 );
+    BOOST_CHECK( blocks[0].kind == SCH_SDB_BLOCK_KIND::FIXED_CONTROLLER );
+    BOOST_CHECK_EQUAL( blocks[0].controller, 0x24 );
+    BOOST_CHECK_EQUAL( blocks[0].offset, 0x250 );
+    BOOST_CHECK_EQUAL( blocks[0].bytes, 4 );
+    BOOST_CHECK( blocks[1].kind == SCH_SDB_BLOCK_KIND::STRING_HEAP );
+    BOOST_CHECK_EQUAL( blocks[1].controller, 1 );
+    BOOST_CHECK_EQUAL( blocks[1].offset, 0x254 );
+    BOOST_CHECK_EQUAL( blocks[1].bytes, 235 );
+    BOOST_CHECK_EQUAL( blocks[1].count, 235 );
+    BOOST_CHECK_EQUAL( blocks[1].stride, 1 );
+    BOOST_CHECK( blocks[14].kind == SCH_SDB_BLOCK_KIND::SHEET );
+    BOOST_CHECK_EQUAL( blocks[14].offset, 0x5439 );
+    BOOST_CHECK_EQUAL( blocks[14].End(), 0x9938 );
+    BOOST_CHECK( blocks[15].kind == SCH_SDB_BLOCK_KIND::FOOTER_AUX );
+    BOOST_CHECK_EQUAL( blocks[15].offset, 0x9938 );
+    BOOST_CHECK_EQUAL( blocks[15].bytes, 4 );
 }
 
 
@@ -233,6 +289,100 @@ BOOST_AUTO_TEST_CASE( RejectsUsedBytesForEmptyPool )
                            []( const IO_ERROR& e )
                            {
                                return errorContains( e, "v0x000D", "0x128" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsOuterControllerPastFooter )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    constexpr size_t     descriptor = 0x20 + 1 * 28;
+    putU32( bytes, descriptor + 4, UINT32_MAX );
+    putU32( bytes, descriptor + 12, UINT32_MAX );
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D", "0x48" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsSheetControllerPastFooter )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    constexpr size_t     descriptor = 0x5439 + 20;
+    putU32( bytes, descriptor + 8, UINT32_MAX );
+    putU32( bytes, descriptor + 16, UINT32_MAX );
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D", "0x545D" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsDerivedSheetCountPastFooter )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    constexpr size_t     countOffset = 0x20 + 3 * 28 + 8;
+    putU32( bytes, countOffset, UINT32_MAX );
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D", "0x7C" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsPreviewCountExtentOverflow )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    constexpr size_t     previewCountOffset = 0x9938;
+    putU32( bytes, previewCountOffset, UINT32_MAX );
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           []( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D", "0x9938" );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsFooterAuxBaseBeforePayload )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    size_t               pointerOffset = bytes.size() - 4;
+    putU32( bytes, pointerOffset, 0x24F );
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           [pointerOffset]( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D",
+                                                     wxString::Format( "0x%zX", pointerOffset ).ToStdString() );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsFooterAuxOverlapWithDerivedBlocks )
+{
+    std::vector<uint8_t> bytes = loadPublicFixture();
+    size_t               pointerOffset = bytes.size() - 4;
+    putU32( bytes, pointerOffset, 0x250 );
+
+    PADS_SCH_SDB sdb;
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,
+                           [pointerOffset]( const IO_ERROR& e )
+                           {
+                               return errorContains( e, "v0x000D",
+                                                     wxString::Format( "0x%zX", pointerOffset ).ToStdString() );
                            } );
 }
 

@@ -40,6 +40,17 @@ namespace
     constexpr size_t   FOOTER_SIZE = 42;
     constexpr char     FOOTER_GUID[] = "{F4997D70-AF8A-11D0-A373-000000000000}";
     constexpr size_t   FOOTER_GUID_SIZE = 38;
+    constexpr uint32_t DATABASE_CONTROLLER = 0x24;
+    constexpr size_t   SHEET_HEADER_SIZE = 20;
+    constexpr size_t   SHEET_POOL_COUNT = 24;
+    constexpr size_t   SHEET_POOL_SIZE = 28;
+    constexpr size_t   SHEET_SERIALIZED_POOL_COUNT = 23;
+    constexpr size_t   SHEET_POOL_COUNT_OFFSET = 12;
+    constexpr size_t   SHEET_POOL_USED_BYTES_OFFSET = 16;
+    constexpr size_t   SHEET_POOL_ALLOCATED_BYTES_OFFSET = 8;
+    constexpr size_t   FIRST_PREVIEW_FIXED_STATE_SIZE = 18;
+    constexpr size_t   BETWEEN_PREVIEW_TRAILER_SIZE = 0x66;
+    constexpr size_t   FINAL_PREVIEW_TRAILER_SIZE = 0x4E;
 
     constexpr size_t POOL_ALLOCATED_BYTES_OFFSET = 4;
     constexpr size_t POOL_COUNT_OFFSET = 8;
@@ -66,12 +77,14 @@ void PADS_SCH_SDB::Load( std::vector<uint8_t> aBytes )
     m_data = std::move( aBytes );
     m_version = m_data.size() >= 4 ? m_cursor.U16At( 2 ) : 0;
     m_pools = {};
+    m_blocks.clear();
     m_payloadOffset = 0;
     m_footerOffset = 0;
 
     parseHeader();
     parseDirectory();
     verifyFooter();
+    parseBlocks();
 }
 
 
@@ -149,6 +162,154 @@ void PADS_SCH_SDB::verifyFooter()
 
         throwAt( failingOffset, error.What() );
     }
+
+    size_t backPointerOffset = m_footerOffset + FOOTER_GUID_SIZE;
+
+    if( m_cursor.U32At( backPointerOffset ) < m_payloadOffset )
+        throwAt( backPointerOffset, "container-item back-pointer precedes schematic payload" );
+}
+
+
+void PADS_SCH_SDB::parseBlocks()
+{
+    auto checkedAdd = [this]( size_t aBase, size_t aBytes, size_t aSourceOffset, const wxString& aDetail )
+    {
+        if( aBase > m_footerOffset || aBytes > m_footerOffset - aBase )
+            throwAt( aSourceOffset, aDetail );
+
+        return aBase + aBytes;
+    };
+
+    size_t offset = m_payloadOffset;
+
+    if( m_cursor.U32At( offset ) != DATABASE_CONTROLLER )
+        throwAt( offset, "invalid first schematic controller ordinal" );
+
+    size_t outerEnd = checkedAdd( offset, 4, offset, "controller ordinal extends past footer" );
+    m_blocks.push_back(
+            { SCH_SDB_BLOCK_KIND::FIXED_CONTROLLER, static_cast<int>( DATABASE_CONTROLLER ), offset, 4, 1, 4 } );
+
+    for( size_t i = 1; i < m_pools.size(); ++i )
+    {
+        size_t source = POOL_OFFSET + i * POOL_SIZE + POOL_USED_BYTES_OFFSET;
+        size_t blockEnd =
+                checkedAdd( outerEnd, m_pools[i].usedBytes, source, "controller payload extends past footer" );
+
+        if( m_pools[i].usedBytes != 0 )
+        {
+            SCH_SDB_BLOCK_KIND kind = i <= 2 ? SCH_SDB_BLOCK_KIND::STRING_HEAP : SCH_SDB_BLOCK_KIND::FIXED_CONTROLLER;
+            uint32_t           stride = m_pools[i].count != 0 && m_pools[i].usedBytes % m_pools[i].count == 0
+                                                ? m_pools[i].usedBytes / m_pools[i].count
+                                                : 0;
+            m_blocks.push_back(
+                    { kind, static_cast<int>( i ), outerEnd, m_pools[i].usedBytes, m_pools[i].count, stride } );
+        }
+
+        outerEnd = blockEnd;
+    }
+
+    offset = outerEnd;
+
+    uint32_t         sheetCount = m_pools[3].count;
+    constexpr size_t minimumSheetBytes = SHEET_HEADER_SIZE + SHEET_POOL_COUNT * SHEET_POOL_SIZE;
+    size_t           sheetCountOffset = POOL_OFFSET + 3 * POOL_SIZE + POOL_COUNT_OFFSET;
+
+    if( sheetCount > ( m_footerOffset - offset ) / minimumSheetBytes )
+        throwAt( sheetCountOffset, "sheet count extent exceeds schematic payload" );
+
+    for( uint32_t sheet = 0; sheet < sheetCount; ++sheet )
+    {
+        size_t sheetStart = offset;
+        size_t descriptors =
+                checkedAdd( sheetStart, SHEET_HEADER_SIZE, sheetStart, "sheet header extends past footer" );
+
+        if( m_cursor.U32At( sheetStart ) != SHEET_HEADER_SIZE || m_cursor.U32At( sheetStart + 4 ) != 5
+            || m_cursor.U32At( sheetStart + 8 ) != SHEET_HEADER_SIZE )
+        {
+            throwAt( sheetStart, "invalid sheet database header" );
+        }
+
+        offset = checkedAdd( descriptors, SHEET_POOL_COUNT * SHEET_POOL_SIZE, descriptors,
+                             "sheet controller directory extends past footer" );
+
+        for( size_t i = 0; i < SHEET_SERIALIZED_POOL_COUNT; ++i )
+        {
+            size_t   descriptor = descriptors + i * SHEET_POOL_SIZE;
+            uint32_t allocatedBytes = m_cursor.U32At( descriptor + SHEET_POOL_ALLOCATED_BYTES_OFFSET );
+            uint32_t count = m_cursor.U32At( descriptor + SHEET_POOL_COUNT_OFFSET );
+            uint32_t usedBytes = m_cursor.U32At( descriptor + SHEET_POOL_USED_BYTES_OFFSET );
+
+            if( usedBytes > allocatedBytes )
+                throwAt( descriptor + SHEET_POOL_USED_BYTES_OFFSET, "sheet pool serialized bytes exceed allocation" );
+
+            if( count == 0 && usedBytes != 0 )
+                throwAt( descriptor + SHEET_POOL_USED_BYTES_OFFSET, "empty sheet pool has serialized bytes" );
+
+            offset = checkedAdd( offset, usedBytes, descriptor + SHEET_POOL_USED_BYTES_OFFSET,
+                                 "sheet controller payload extends past footer" );
+        }
+
+        m_blocks.push_back( { SCH_SDB_BLOCK_KIND::SHEET, static_cast<int>( sheet ), sheetStart, offset - sheetStart,
+                              SHEET_SERIALIZED_POOL_COUNT, 0 } );
+    }
+
+    size_t backPointerOffset = m_footerOffset + FOOTER_GUID_SIZE;
+
+    if( m_cursor.U32At( backPointerOffset ) != offset )
+        throwAt( backPointerOffset, "container-item back-pointer overlaps derived schematic blocks" );
+
+    uint32_t previewCount = m_cursor.U32At( offset );
+    size_t   previewCountOffset = offset;
+    offset = checkedAdd( offset, 4, previewCountOffset, "preview count extends past footer" );
+    m_blocks.push_back( { SCH_SDB_BLOCK_KIND::FOOTER_AUX, -1, previewCountOffset, 4, previewCount, 4 } );
+
+    if( previewCount == 0 )
+    {
+        if( offset != m_footerOffset )
+            throwAt( offset, "unowned bytes before schematic footer" );
+
+        return;
+    }
+
+    constexpr size_t firstPreviewFrameSize = 6 + FIRST_PREVIEW_FIXED_STATE_SIZE + 4;
+    constexpr size_t finalPreviewMinimum = firstPreviewFrameSize + FINAL_PREVIEW_TRAILER_SIZE;
+    size_t           remainingPreviewBytes = m_footerOffset - offset;
+
+    if( previewCount - 1 > ( SIZE_MAX - finalPreviewMinimum ) / BETWEEN_PREVIEW_TRAILER_SIZE
+        || finalPreviewMinimum + static_cast<size_t>( previewCount - 1 ) * BETWEEN_PREVIEW_TRAILER_SIZE
+                   > remainingPreviewBytes )
+    {
+        throwAt( previewCountOffset, "preview count extent exceeds schematic payload" );
+    }
+
+    size_t   previewStart = offset;
+    uint16_t classNameLength = m_cursor.U16At( previewStart + 4 );
+    size_t   lengthOffset = checkedAdd( previewStart, 6, previewStart, "preview class header extends past footer" );
+    lengthOffset =
+            checkedAdd( lengthOffset, classNameLength, previewStart + 4, "preview class name extends past footer" );
+    lengthOffset = checkedAdd( lengthOffset, FIRST_PREVIEW_FIXED_STATE_SIZE, lengthOffset,
+                               "preview item state extends past footer" );
+
+    for( uint32_t preview = 0; preview < previewCount; ++preview )
+    {
+        uint32_t cfbBytes = m_cursor.U32At( lengthOffset );
+        size_t   cfbOffset = checkedAdd( lengthOffset, 4, lengthOffset, "preview length extends past footer" );
+        size_t   cfbEnd = checkedAdd( cfbOffset, cfbBytes, lengthOffset, "preview CFB extends past footer" );
+        size_t   trailer = preview + 1 == previewCount ? FINAL_PREVIEW_TRAILER_SIZE : BETWEEN_PREVIEW_TRAILER_SIZE;
+        size_t   previewEnd = checkedAdd( cfbEnd, trailer, cfbEnd, "preview trailer extends past footer" );
+
+        m_blocks.push_back( { SCH_SDB_BLOCK_KIND::CFB_PREVIEW, static_cast<int>( preview ), previewStart,
+                              previewEnd - previewStart, 1, 0 } );
+        previewStart = previewEnd;
+
+        if( preview + 1 < previewCount )
+            lengthOffset = previewEnd - 4;
+
+        offset = previewEnd;
+    }
+
+    if( offset != m_footerOffset )
+        throwAt( offset, "preview data does not end at schematic footer" );
 }
 
 

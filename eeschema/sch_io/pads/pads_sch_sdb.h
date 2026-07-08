@@ -38,6 +38,29 @@ struct SCH_SDB_POOL
 };
 
 
+enum class SCH_SDB_BLOCK_KIND
+{
+    STRING_HEAP,
+    FIXED_CONTROLLER,
+    SHEET,
+    CFB_PREVIEW,
+    FOOTER_AUX
+};
+
+
+struct SCH_SDB_BLOCK
+{
+    SCH_SDB_BLOCK_KIND kind = SCH_SDB_BLOCK_KIND::FIXED_CONTROLLER;
+    int                controller = -1;
+    size_t             offset = 0;
+    size_t             bytes = 0;
+    uint32_t           count = 0;
+    uint32_t           stride = 0;
+
+    size_t End() const { return offset + bytes; }
+};
+
+
 class PADS_SCH_SDB
 {
 public:
@@ -55,6 +78,7 @@ public:
     const std::array<SCH_SDB_POOL, 20>& Pools() const { return m_pools; }
     const PADS_IO::BINARY_CURSOR&       Cursor() const { return m_cursor; }
     const std::vector<uint8_t>&         Bytes() const { return m_data; }
+    const std::vector<SCH_SDB_BLOCK>&   Blocks() const { return m_blocks; }
     size_t                              PayloadOffset() const { return m_payloadOffset; }
     size_t                              FooterOffset() const { return m_footerOffset; }
 
@@ -62,12 +86,14 @@ private:
     void              parseHeader();
     void              parseDirectory();
     void              verifyFooter();
+    void              parseBlocks();
     [[noreturn]] void throwAt( size_t aOffset, const wxString& aDetail ) const;
 
     std::vector<uint8_t>         m_data;
     PADS_IO::BINARY_CURSOR       m_cursor{ m_data };
     uint16_t                     m_version = 0;
     std::array<SCH_SDB_POOL, 20> m_pools{};
+    std::vector<SCH_SDB_BLOCK>   m_blocks;
     size_t                       m_payloadOffset = 0;
     size_t                       m_footerOffset = 0;
 };
