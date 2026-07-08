@@ -770,6 +770,10 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
+    // Always ensure that we are unregistered even in a close without graceful doCloseWindow()
+    if( GetBoard() )
+        Kiway().LocalHistory().UnregisterSaver( GetBoard() );
+
     ScriptingOnDestructPcbEditFrame( this );
 
     if( ADVANCED_CFG::GetCfg().m_ShowEventCounters )

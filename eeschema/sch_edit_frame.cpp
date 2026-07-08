@@ -590,6 +590,10 @@ void SCH_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
+    // Ensure that teardowns without doCloseWindow are fully unregistered
+    if( m_schematic )
+        Kiway().LocalHistory().UnregisterSaver( m_schematic );
+
     m_hierarchy->Unbind( wxEVT_SIZE, &SCH_EDIT_FRAME::OnResizeHierarchyNavigator, this );
 
     // Ensure m_canvasType is up to date, to save it in config
