@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-07-06 11:09+0000\n"
+"PO-Revision-Date: 2026-07-08 23:40+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
@@ -58339,7 +58339,7 @@ msgstr "Klonuje umístění a trasování přes více identických kanálů"
 
 #: pcbnew/tools/pcb_actions.cpp:2553
 msgid "Route Single Track"
-msgstr "Propojit jednotlivý spoj"
+msgstr "Táhnout spoj"
 
 #: pcbnew/tools/pcb_actions.cpp:2554
 msgid "Route tracks"
