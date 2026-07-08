@@ -60,84 +60,25 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
 
     PIN_ORIENTATION orient = m_pin.PinDrawOrient( DefaultTransform );
 
-    auto estimateQABox = [&]( const wxString& txt, int size, bool isVertical ) -> VECTOR2I
-    {
-        int h = size;
-        int w = (int) ( txt.Length() * size * 0.6 );
-
-        if( txt.Contains( '\n' ) )
-        {
-            wxArrayString lines;
-            wxStringSplit( txt, lines, '\n' );
-
-            if( isVertical )
-            {
-                int lineSpacing = KiROUND( size * 1.3 );
-                w = (int) lines.size() * lineSpacing;
-                size_t maxLen = 0;
-                for( const wxString& l : lines )
-                    maxLen = std::max( maxLen, l.Length() );
-                h = (int) ( maxLen * size * 0.6 );
-            }
-            else
-            {
-                int lineSpacing = KiROUND( size * 1.3 );
-                h = (int) lines.size() * lineSpacing;
-                size_t maxLen = 0;
-                for( const wxString& l : lines )
-                    maxLen = std::max( maxLen, l.Length() );
-                w = (int) ( maxLen * size * 0.6 );
-            }
-        }
-
-        return VECTOR2I( w, h );
-    };
-
-    // Pass 1: determine maximum perpendicular half span among all pin numbers to ensure
-    // a single distance from the pin center that avoids overlap for every pin.
     const SYMBOL* parentSym = m_pin.GetParentSymbol();
-    int           maxHalfHeight = 0; // vertical half span across all numbers (for horizontal pins)
-    int           maxHalfWidth = 0;  // horizontal half span across all numbers (for vertical pins when rotated)
-    int           maxFullHeight = 0; // full height (for dynamic clearance)
-
-    if( parentSym )
-    {
-        for( const SCH_PIN* p : parentSym->GetPins() )
-        {
-            wxString raw = p->GetShownNumber();
-
-            if( raw.IsEmpty() )
-                continue;
-
-            wxString fmt = FormatStackedPinForDisplay( raw, p->GetLength(), p->GetNumberTextSize(), font,
-                                                       p->GetFontMetrics() );
-            // For horizontal pins: compute vertical extent (height when text is horizontal)
-            VECTOR2I boxHoriz = estimateQABox( fmt, p->GetNumberTextSize(), false );
-            maxHalfHeight = std::max( maxHalfHeight, boxHoriz.y / 2 );
-            maxFullHeight = std::max( maxFullHeight, boxHoriz.y );
-
-            // For vertical pins: compute horizontal extent when text is rotated vertical
-            // When text is vertical, the perpendicular span is the original height
-            VECTOR2I boxVert = estimateQABox( fmt, p->GetNumberTextSize(), true );
-            maxHalfWidth = std::max( maxHalfWidth, boxVert.x / 2 );
-        }
-    }
 
     int       clearance = getPinTextOffset() + schIUScale.MilsToIU( PIN_TEXT_MARGIN );
     VECTOR2I  pinPos = m_pin.GetPosition();
     const int halfLength = m_pin.GetLength() / 2;
     bool      verticalOrient = ( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN );
 
-    // Calculate the current pin's text dimensions for positioning.
-    VECTOR2I currentBox = estimateQABox( formatted, info->m_TextSize, verticalOrient );
-    int currentHalfHeight = currentBox.y / 2;
-    int currentHalfWidth = currentBox.x / 2;
+    // Half the number height, which runs perpendicular to the pin in both orientations so the gap
+    // stays constant across rotations. A wrapped column spans several lines, use its full height.
+    int perpHeight = m_numExtentsCache.m_Extents.y;
 
-    // Detect if this is genuinely a stacked pin number using valid bracket notation (e.g. [1-5] or
-    // [1,2,3]).  A plain pin number that merely happens to contain a comma or bracket is not stacked
-    // and must use the single-line offset, otherwise its number is pushed out by 50 mil per comma.
-    bool stackedValid = false;
-    bool hasStackingNotation = CountStackedPinNotation( number, &stackedValid ) > 1 && stackedValid;
+    if( formatted.Contains( '\n' ) )
+    {
+        wxArrayString lines;
+        wxStringSplit( formatted, lines, '\n' );
+        perpHeight = (int) lines.size() * KiROUND( num_size * 1.3 );
+    }
+
+    const int perpendicularHalf = perpHeight / 2;
 
     if( verticalOrient )
     {
@@ -149,22 +90,7 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
                                      && parentSym->GetShowPinNames()
                                      && parentSym->GetPinNameOffset() == 0; // name is outside
 
-        // Calculate perpendicular offset based on text structure
-        int perpendicularOffset;
-
-        if( hasStackingNotation || formatted.Contains( '\n' ) )
-        {
-            // Stacked/multi-line text: use width-based offset for proper spacing
-            // of stacked pin numbers. Use currentHalfWidth to match original behavior.
-            perpendicularOffset = clearance + currentHalfWidth + m_numberThickness;
-        }
-        else
-        {
-            // True single-line text (no stacking): use text height for consistent
-            // spacing across rotations. This fixes issue 21980 where single-line pin
-            // names/numbers would have different perpendicular offsets at different rotations.
-            perpendicularOffset = clearance + info->m_TextSize / 2 + m_numberThickness;
-        }
+        int perpendicularOffset = clearance + perpendicularHalf + m_numberThickness;
 
         int centerX;
 
@@ -202,14 +128,12 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
         if( showBothNameAndNumber )
         {
             // When both are shown: name goes above, number goes below (top-aligned)
-            // Position the number below the pin with top edge at: pinPos.y + clearance
-            // Center at: pinPos.y + clearance + currentHalfHeight
-            centerY = pinPos.y + clearance + currentHalfHeight + m_numberThickness;
+            centerY = pinPos.y + clearance + perpendicularHalf + m_numberThickness;
         }
         else
         {
             // When only number is shown: place it above the pin
-            centerY = pinPos.y - ( currentHalfHeight + clearance + m_numberThickness );
+            centerY = pinPos.y - ( perpendicularHalf + clearance + m_numberThickness );
         }
 
         if( orient == PIN_ORIENTATION::PIN_LEFT )
