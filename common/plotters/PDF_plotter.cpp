@@ -2249,35 +2249,41 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
         return aPosition + rotatedSpaceBox;
     }
 
-    // If the word contains tab characters, we need to handle them specially.
-    // Split by tabs and render each segment, advancing to the next tab stop for each tab.
+    // Tabs are layout only.  Plot visible runs at font layout positions.
     if( aWord.Contains( wxT( '\t' ) ) )
     {
-        constexpr double TAB_WIDTH = 4 * 0.6;
+        auto positionedAdvance = [&]( const wxString& aText )
+        {
+            VECTOR2I advance( cursorAdvanceX( aText ), 0 );
 
-        VECTOR2I pos = aPosition;
+            if( aTextMirrored )
+                advance.x *= -1;
+
+            RotatePoint( advance, aOrient );
+            return advance;
+        };
+
+        wxString prefix;
         wxString segment;
+
+        auto flushSegment = [&]()
+        {
+            if( !segment.IsEmpty() )
+            {
+                renderWord( segment, aPosition + positionedAdvance( prefix ), aSize, aOrient,
+                            aTextMirrored, aWidth, aBold, aItalic, aFont, aFontMetrics,
+                            aV_justify, aTextStyle );
+                prefix += segment;
+                segment.clear();
+            }
+        };
 
         for( wxUniChar c : aWord )
         {
             if( c == '\t' )
             {
-                if( !segment.IsEmpty() )
-                {
-                    pos = renderWord( segment, pos, aSize, aOrient, aTextMirrored, aWidth, aBold, aItalic,
-                                      aFont, aFontMetrics, aV_justify, aTextStyle );
-                    segment.clear();
-                }
-
-                int tabWidth = KiROUND( aSize.x * TAB_WIDTH );
-                int currentIntrusion = ( pos.x - aPosition.x ) % tabWidth;
-                VECTOR2I tabAdvance( tabWidth - currentIntrusion, 0 );
-
-                if( aTextMirrored )
-                    tabAdvance.x *= -1;
-
-                RotatePoint( tabAdvance, aOrient );
-                pos += tabAdvance;
+                flushSegment();
+                prefix += c;
             }
             else
             {
@@ -2285,13 +2291,9 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             }
         }
 
-        if( !segment.IsEmpty() )
-        {
-            pos = renderWord( segment, pos, aSize, aOrient, aTextMirrored, aWidth, aBold, aItalic,
-                              aFont, aFontMetrics, aV_justify, aTextStyle );
-        }
+        flushSegment();
 
-        return pos;
+        return aPosition + positionedAdvance( aWord );
     }
 
     // Compute transformation parameters for this word
