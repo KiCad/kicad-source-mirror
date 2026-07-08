@@ -331,6 +331,10 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
     Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
     Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
 
+#ifdef __WXMSW__
+    Connect( wxEVT_IDLE, wxIdleEventHandler( WX_GRID::onIdleRefreshHighlight ), nullptr, this );
+#endif
+
     m_weOwnTable = aTakeOwnership;
 }
 
@@ -376,19 +380,28 @@ void WX_GRID::onGridCellSelect( wxGridEvent& aEvent )
         {
             SelectBlock( 0, col, GetNumberRows() - 1, col, false );
         }
-
-#ifdef __WXMSW__
-        // On Windows with wxWidgets 3.3+, the selection highlight can be drawn incorrectly
-        // on the first selection if the grid hasn't been fully laid out yet. Force a single
-        // deferred refresh after the first selection to ensure correct rendering.
-        if( !m_firstSelectionRefreshDone )
-        {
-            m_firstSelectionRefreshDone = true;
-            CallAfter( [this]() { ForceRefresh(); } );
-        }
-#endif
     }
 }
+
+
+#ifdef __WXMSW__
+void WX_GRID::onIdleRefreshHighlight( wxIdleEvent& aEvent )
+{
+    aEvent.Skip();
+
+    // On Windows with wxWidgets 3.3+, the selection highlight is drawn with stale geometry the
+    // first time the grid is displayed, because wxGrid derives the highlight rectangle from a
+    // layout that isn't finalized until the grid is actually on screen. Wait until the grid is
+    // genuinely visible before forcing the corrective redraw, so a grid living on an inactive
+    // notebook page (e.g. opening the dialog on the "3D Models" page) is still corrected when the
+    // user switches to it. The handler removes itself once the one-time refresh has run.
+    if( !IsShownOnScreen() )
+        return;
+
+    Disconnect( wxEVT_IDLE, wxIdleEventHandler( WX_GRID::onIdleRefreshHighlight ), nullptr, this );
+    ForceRefresh();
+}
+#endif
 
 
 void WX_GRID::onCellEditorShown( wxGridEvent& aEvent )
@@ -496,6 +509,10 @@ void WX_GRID::DestroyTable( wxGridTableBase* aTable )
 
     Disconnect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
     Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
+
+#ifdef __WXMSW__
+    Disconnect( wxEVT_IDLE, wxIdleEventHandler( WX_GRID::onIdleRefreshHighlight ), nullptr, this );
+#endif
 
     wxGrid::SetTable( nullptr );
     delete aTable;
