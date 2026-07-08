@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-07-08 03:35+0000\n"
+"PO-Revision-Date: 2026-07-08 16:57+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -3974,9 +3974,8 @@ msgid "Commit message cannot be empty"
 msgstr "コミット メッセージは空欄にできません"
 
 #: common/dialogs/git/dialog_git_commit.cpp:196
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "バック アノテートするには少なくとも一つのプロパティを選択"
+msgstr "コミットするファイルを一つ以上選択"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
@@ -21174,7 +21173,7 @@ msgstr "ポート '%s' には接続がありません。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4429
 #, c-format
 msgid "Embedded file %s not found in storage."
-msgstr "ストレージに埋め込まれたファイル '%s' が見つかりません。"
+msgstr "埋め込まれたファイル '%s' がストレージに見つかりません。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4446
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4465
