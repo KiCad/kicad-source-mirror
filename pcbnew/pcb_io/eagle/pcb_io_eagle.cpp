@@ -704,34 +704,36 @@ int EagleAlignmentFromKiCad( std::tuple<GR_TEXT_V_ALIGN_T, GR_TEXT_H_ALIGN_T> aA
 }
 
 
-void EaglePcbTextToKiCadAlignment( EDA_TEXT* aTxt, int aAlign, double aDegrees, bool aMirror, bool aSpin )
+void EaglePcbTextToKiCadAlignment( EDA_TEXT* aTxt, int aTxtAlign, double aTxtDegrees, bool aTxtMirror, bool aTxtSpin,
+                                   double aElementDegrees = 0.0, bool aElementMirror = false,
+                                   bool aElementSpin = false )
 {
     GR_TEXT_H_ALIGN_T halign{ GR_TEXT_H_ALIGN_INDETERMINATE };
     GR_TEXT_V_ALIGN_T valign{ GR_TEXT_V_ALIGN_INDETERMINATE };
-    double            degrees{ aDegrees };
-    int               align{ aAlign };
+    int               align{ aTxtAlign };
 
-    if( aSpin )
+    bool   spin = aTxtSpin != aElementSpin;
+    bool   mirror = aTxtMirror != aElementMirror;
+    double textDefDegrees = EDA_ANGLE( aTxtDegrees, DEGREES_T ).Normalize().AsDegrees();
+    double elementDegrees = EDA_ANGLE( aElementDegrees, DEGREES_T ).Normalize().AsDegrees();
+    double degrees = ( aTxtMirror ? -1.0 : 1.0 ) * textDefDegrees + elementDegrees;
+    degrees = EDA_ANGLE( degrees, DEGREES_T ).Normalize().AsDegrees();
+
+    if( !spin )
     {
-        if( aMirror )
-            degrees = EDA_ANGLE( 360 - degrees, DEGREES_T ).Normalize().AsDegrees();
-    }
-    else
-    {
-        if( degrees > 90 && degrees <= 270 )
+        if( ( !aTxtMirror && degrees > 90 && degrees <= 270 ) || ( aTxtMirror && degrees >= 90 && degrees < 270 ) )
         {
             align = -align;
-            degrees = EDA_ANGLE( degrees - 180, DEGREES_T ).Normalize().AsDegrees();
+            degrees = degrees - 180;
         }
-
-        if( aMirror )
-            degrees = EDA_ANGLE( 360 - degrees, DEGREES_T ).Normalize().AsDegrees();
     }
 
-    if( aMirror )
-        aTxt->SetMirrored( aMirror );
+    if( aElementMirror )
+        degrees = -degrees;
 
-    aTxt->SetTextAngle( EDA_ANGLE( degrees, DEGREES_T ) );
+    aTxt->SetTextAngle( EDA_ANGLE( degrees, DEGREES_T ).Normalize() );
+    aTxt->SetMirrored( mirror );
+    aTxt->SetKeepUpright( false ); // we just aligned the text exactly as EAGLE does
 
     std::tie( valign, halign ) = KiCadAlignmentFromEagle( align );
     aTxt->SetHorizJustify( halign );
@@ -1645,6 +1647,27 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
 void PCB_IO_EAGLE::orientFootprintAndText( FOOTPRINT* aFootprint, const EELEMENT& e,
                                            const EATTR* aNameAttr, const EATTR* aValueAttr )
 {
+    std::vector<std::tuple<PCB_FIELD*, double, bool, bool, const EATTR*>> textRotDefs{};
+
+    std::vector<PCB_FIELD*> fields{};
+    aFootprint->GetFields( fields, false );
+
+    for( PCB_FIELD* field : fields )
+    {
+        double       defDegrees = field->GetTextAngle().AsDegrees();
+        bool         defMirror = field->IsMirrored();
+        bool         defSpin = !field->IsKeepUpright();
+        const EATTR* attr = nullptr;
+
+        if( field == &aFootprint->Reference() )
+            attr = aNameAttr;
+        else if( field == &aFootprint->Value() )
+            attr = aValueAttr;
+
+        textRotDefs.push_back( std::tuple<PCB_FIELD*, double, bool, bool, const EATTR*>( field, defDegrees, defMirror,
+                                                                                         defSpin, attr ) );
+    }
+
     if( e.rot )
     {
         if( e.rot->mirror )
@@ -1658,13 +1681,21 @@ void PCB_IO_EAGLE::orientFootprintAndText( FOOTPRINT* aFootprint, const EELEMENT
         }
     }
 
-    orientFPText( aFootprint, e, &aFootprint->Reference(), aNameAttr );
-    orientFPText( aFootprint, e, &aFootprint->Value(), aValueAttr );
+    for( auto textRotDef : textRotDefs )
+    {
+        PCB_FIELD*   field{};
+        double       defDegrees{};
+        bool         defMirror{};
+        bool         defSpin{};
+        const EATTR* attr{};
+        std::tie( field, defDegrees, defMirror, defSpin, attr ) = textRotDef;
+        orientFPText( aFootprint, e, field, attr, defDegrees, defMirror, defSpin );
+    }
 }
 
 
-void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_TEXT* aFPText,
-                                 const EATTR* aAttr )
+void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_TEXT* aFPText, const EATTR* aAttr,
+                                 double aTextDefAngle, bool aTextDefMirror, bool aTextDefSpin )
 {
     // Smashed part ?
     if( aAttr )
@@ -1718,18 +1749,18 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
     {
         // Part is not smash so use Lib default for NAME/VALUE
         // the text is per the original package, sans <attribute>.
-        double degrees = aFPText->GetTextAngle().AsDegrees()
-                            + aFootprint->GetOrientation().AsDegrees();
+        int align = EagleAlignmentFromKiCad( std::tuple<GR_TEXT_V_ALIGN_T, GR_TEXT_H_ALIGN_T>(
+                aFPText->GetVertJustify(), aFPText->GetHorizJustify() ) );
 
-        // bottom-left is eagle default
-        aFPText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        aFPText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        double elementAngle = e.rot ? e.rot->degrees : 0.0;
+        bool   elementMirror = e.rot ? e.rot->mirror : false;
+        bool   elementSpin = e.rot ? e.rot->spin : false;
 
-        if( !aFPText->IsMirrored() && abs( degrees ) >= 180 )
-        {
-            aFPText->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            aFPText->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-        }
+        // To mimic EAGLE correctly, we need to know here in addition to the element rotation specification
+        // the rotation specification (i.e. angle, mirror flag and spin flag) of the original <text ...>
+        // definition within the package
+        EaglePcbTextToKiCadAlignment( aFPText, align, aTextDefAngle, aTextDefMirror, aTextDefSpin, elementAngle,
+                                      elementMirror, elementSpin );
     }
 }
 
@@ -2013,69 +2044,30 @@ void PCB_IO_EAGLE::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     textItem->SetTextThickness( textThickness );
     textItem->SetTextSize( kicad_fontsize( t.size, textThickness ) );
-    textItem->SetKeepUpright( false );
 
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 
     // An eagle package is never rotated, the DTD does not allow it.
     // angle -= aFootprint->GetOrienation();
 
-    if( t.rot )
-    {
-        int sign = t.rot->mirror ? -1 : 1;
-        textItem->SetMirrored( t.rot->mirror );
+    double degrees = t.rot ? t.rot->degrees : 0.0; // range used by EAGLE is [0° ; 360°[
+    bool   mirror = t.rot ? t.rot->mirror : false;
+    bool   spin = t.rot ? t.rot->spin : false;
 
-        double degrees = t.rot->degrees;
-        textItem->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
-    }
+    textItem->SetKeepUpright( !spin );
 
-    switch( align )
-    {
-    case ETEXT::CENTER:
-        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-        textItem->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-        break;
+    if( mirror )
+        textItem->SetMirrored( mirror );
 
-    case ETEXT::CENTER_LEFT:
-        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        textItem->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-        break;
+    GR_TEXT_H_ALIGN_T halign{ GR_TEXT_H_ALIGN_INDETERMINATE };
+    GR_TEXT_V_ALIGN_T valign{ GR_TEXT_V_ALIGN_INDETERMINATE };
+    std::tie( valign, halign ) = KiCadAlignmentFromEagle( align );
+    textItem->SetHorizJustify( halign );
+    textItem->SetVertJustify( valign );
 
-    case ETEXT::CENTER_RIGHT:
-        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-        textItem->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-        break;
-
-    case ETEXT::TOP_CENTER:
-        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-        textItem->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-        break;
-
-    case ETEXT::TOP_LEFT:
-        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        textItem->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-        break;
-
-    case ETEXT::TOP_RIGHT:
-        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-        textItem->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-        break;
-
-    case ETEXT::BOTTOM_CENTER:
-        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-        textItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-        break;
-
-    case ETEXT::BOTTOM_LEFT:
-        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-        textItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-        break;
-
-    case ETEXT::BOTTOM_RIGHT:
-        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-        textItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-        break;
-    }
+    textItem->SetTextAngle( EDA_ANGLE( degrees, DEGREES_T ) );
+    textItem->SetTextAngle( EDA_ANGLE( degrees, DEGREES_T ) );
+    // EaglePcbTextToKiCadAlignment (called from orientFPText) will tidy up the final orientation on the PCB
 }
 
 

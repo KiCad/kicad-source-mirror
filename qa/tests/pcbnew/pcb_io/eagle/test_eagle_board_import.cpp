@@ -173,9 +173,8 @@ BOOST_AUTO_TEST_CASE( TextJustification )
     // Find the I2C connector footprints and verify reference text justification.
     // I2C0 and I2C1 are smashed but have no NAME attribute, so their Reference text
     // goes through the non-smashed orientFPText() code path. With the footprint at R90
-    // and the package text at 0 degrees, the combined angle is 180, triggering the
-    // justification flip to RIGHT/TOP. Before the fix, the dead code branch
-    // (abs(degrees) <= -180) would never fire and justification stayed at LEFT/BOTTOM.
+    // and the package text at 0 degrees, the combined angle is 90 degrees,
+    // not triggering the justification flip to RIGHT/TOP.
     for( FOOTPRINT* fp : board->Footprints() )
     {
         wxString ref = fp->GetReference();
@@ -185,13 +184,13 @@ BOOST_AUTO_TEST_CASE( TextJustification )
             PCB_TEXT& refText = fp->Reference();
 
             BOOST_CHECK_MESSAGE(
-                    refText.GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT,
-                    ref + " reference horizontal justification should be RIGHT, got "
+                    refText.GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT,
+                    ref + " reference horizontal justification should be LEFT, got "
                             + std::to_string( refText.GetHorizJustify() ) );
 
             BOOST_CHECK_MESSAGE(
-                    refText.GetVertJustify() == GR_TEXT_V_ALIGN_TOP,
-                    ref + " reference vertical justification should be TOP, got "
+                    refText.GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM,
+                    ref + " reference vertical justification should be BOTTOM, got "
                             + std::to_string( refText.GetVertJustify() ) );
         }
     }
