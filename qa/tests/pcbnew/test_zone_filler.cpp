@@ -945,6 +945,83 @@ BOOST_FIXTURE_TEST_CASE( RegressionTHPadInnerLayerFlashing, ZONE_FILL_TEST_FIXTU
 
 
 /**
+ * Issue 24865: inner-layer annular rings vanish on some thermal reliefs.
+ *
+ * TH pads set to "Front, back and connected layers" sit inside same-net inner zones. The spokes
+ * connect and the fill reaches the pad, but the post-fill flash check only accepted fill within
+ * the hole radius of the pad center, which is exactly where the spoke ends. For some hole sizes
+ * (drill 1.1 and 1.4 mm) that rounded out and a connected pad lost its ring. Every pad inside
+ * its same-net inner zone must stay flashed after the fill.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionThermalReliefAnnularRing45, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue24865/issue24865", m_board );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    const PCB_LAYER_ID innerLayers[] = { m_board->GetLayerID( wxT( "In1.Cu" ) ),
+                                         m_board->GetLayerID( wxT( "In2.Cu" ) ) };
+
+    int padsWithMissingFlashing = 0;
+    int totalConditionalPads = 0;
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( !pad->GetRemoveUnconnected() || !pad->HasHole() )
+                continue;
+
+            for( PCB_LAYER_ID layer : innerLayers )
+            {
+                bool shouldFlash = false;
+
+                for( ZONE* zone : m_board->Zones() )
+                {
+                    if( zone->GetIsRuleArea() || zone->GetNetCode() != pad->GetNetCode() )
+                        continue;
+
+                    if( !zone->IsOnLayer( layer ) )
+                        continue;
+
+                    if( zone->Outline()->Contains( pad->GetPosition() ) )
+                    {
+                        shouldFlash = true;
+                        break;
+                    }
+                }
+
+                if( !shouldFlash )
+                    continue;
+
+                totalConditionalPads++;
+
+                if( !pad->FlashLayer( layer ) )
+                {
+                    BOOST_TEST_MESSAGE(
+                            wxString::Format( "Pad %s (drill %.2f mm, spoke angle %.0f deg) on net %s is inside the "
+                                              "zone but not flashing on %s",
+                                              pad->GetNumber(), pcbIUScale.IUTomm( pad->GetDrillSizeX() ),
+                                              pad->GetThermalSpokeAngle().AsDegrees(), pad->GetNetname(),
+                                              m_board->GetLayerName( layer ) ) );
+                    padsWithMissingFlashing++;
+                }
+            }
+        }
+    }
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Pads inside inner-layer zones: %d, missing flashing: %d",
+                                          totalConditionalPads, padsWithMissingFlashing ) );
+
+    BOOST_CHECK_MESSAGE( padsWithMissingFlashing == 0,
+                         wxString::Format( "Found %d TH pads inside a same-net inner-layer zone "
+                                           "that lost their annular ring after fill. This "
+                                           "indicates issue 24865 is not fixed.",
+                                           padsWithMissingFlashing ) );
+}
+
+
+/**
  * Test for issue 19405: Rounded teardrop geometry should not create concave shapes
  * when connecting to rounded rectangle pads at corners.
  *

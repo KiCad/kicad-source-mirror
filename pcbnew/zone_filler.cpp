@@ -1540,7 +1540,9 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             if( via->GetZoneLayerOverride( layer ) != ZLO_FORCE_FLASHED )
                 continue;
 
-            if( !zoneReachesPoint( netcode, layer, center, holeRadius ) )
+            int reach = std::max( holeRadius, via->GetWidth( layer ) / 2 );
+
+            if( !zoneReachesPoint( netcode, layer, center, reach ) )
                 via->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
         }
     }
@@ -1563,7 +1565,13 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 if( pad->GetZoneLayerOverride( layer ) != ZLO_FORCE_FLASHED )
                     continue;
 
-                if( !zoneReachesPoint( netcode, layer, center, holeRadius ) )
+                // A thermal spoke reaches the pad copper edge. Testing only the hole radius lands
+                // on the spoke endpoint and rounds out for some hole sizes, dropping a connected
+                // pad's flashing (issue 24865). Use the pad copper radius, still inside the gap.
+                VECTOR2I padSize = pad->GetSize( layer );
+                int      reach = std::max( holeRadius, std::min( padSize.x, padSize.y ) / 2 );
+
+                if( !zoneReachesPoint( netcode, layer, center, reach ) )
                     pad->SetZoneLayerOverride( layer, ZLO_FORCE_NO_ZONE_CONNECTION );
             }
         }
