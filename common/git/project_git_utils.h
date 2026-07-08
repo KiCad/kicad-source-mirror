@@ -86,6 +86,22 @@ public:
      */
     static wxString ComputeSymlinkPreservingWorkDir( const wxString& aUserProjectPath,
                                                      const wxString& aCanonicalWorkDir );
+
+    /**
+     * Test whether an absolute file path lives inside the current project directory.
+     *
+     * The git repository may span more than the KiCad project (the project is often a
+     * subdirectory of a larger repo).  Commit and amend checklists must only offer files
+     * under the project directory, otherwise unrelated repository files leak into the
+     * commit (issue #15910).  The project path is normalized to end in a separator before
+     * the prefix comparison so that a sibling such as "proj-extra/" is not treated as being
+     * inside "proj/".  An empty project path matches nothing.
+     *
+     * @param aAbsPath Absolute path of the file being tested.
+     * @param aProjectPath Absolute path of the project directory.
+     * @return True if aAbsPath is within the project directory.
+     */
+    static bool IsWithinProjectPath( const wxString& aAbsPath, const wxString& aProjectPath );
 };
 
 } // namespace KIGIT
