@@ -54,6 +54,7 @@ public:
     int TwoClickPlace( const TOOL_EVENT& aEvent );
     int ImportSheet( const TOOL_EVENT& aEvent );
     int DrawShape( const TOOL_EVENT& aEvent );
+    int DrawArc( const TOOL_EVENT& aEvent );
     int DrawRuleArea( const TOOL_EVENT& aEvent );
     int DrawTable( const TOOL_EVENT& aEvent );
     int DrawSheet( const TOOL_EVENT& aEvent );
@@ -116,6 +117,7 @@ private:
     wxString                   m_mruPath;
     bool                       m_lastAutoLabelRotateOnPlacement;
     bool                       m_drawingRuleArea;
+    bool                       m_drawingArc;
 
     bool                                    m_inDrawingTool; // Re-entrancy guard
     std::unique_ptr<STATUS_TEXT_POPUP>      m_statusPopup;

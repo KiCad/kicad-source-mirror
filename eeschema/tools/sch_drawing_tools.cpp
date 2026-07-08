@@ -31,6 +31,7 @@
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_selection_tool.h>
 #include <tools/ee_grid_helper.h>
+#include <tool/arc_draw_behavior.h>
 #include <tools/rule_area_create_helper.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_actions.h>
@@ -118,10 +119,18 @@ bool SCH_DRAWING_TOOLS::Init()
                 return m_drawingRuleArea;
             };
 
+    auto inDrawingArc =
+            [this]( const SELECTION& aSel )
+            {
+                return m_drawingArc;
+            };
+
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
     ctxMenu.AddItem( SCH_ACTIONS::leaveSheet,      belowRootSheetCondition, 150 );
     ctxMenu.AddItem( SCH_ACTIONS::closeOutline,    inDrawingRuleArea,       200 );
     ctxMenu.AddItem( SCH_ACTIONS::deleteLastPoint, inDrawingRuleArea,       200 );
+    ctxMenu.AddItem( ACTIONS::arcPosture,          inDrawingArc,            200 );
+    ctxMenu.AddItem( SCH_ACTIONS::deleteLastPoint, inDrawingArc,            200 );
 
     return true;
 }
@@ -2835,6 +2844,226 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_DRAWING_TOOLS::DrawArc( const TOOL_EVENT& aEvent )
+{
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD       guard( &m_inDrawingTool );
+    SCOPED_SET_RESET<bool> scopedDrawMode( m_drawingArc, true );
+
+    SCHEMATIC*            schematic = getModel<SCHEMATIC>();
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+    VECTOR2I              cursorPos;
+
+    // We might be running as the same shape in another co-routine.  Make sure that one
+    // gets whacked.
+    m_toolMgr->DeactivateTool();
+
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    m_frame->PushTool( aEvent );
+
+    auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    auto cleanup =
+            [&]()
+            {
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
+                m_view->ClearPreview();
+            };
+
+    Activate();
+
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+
+    // Set initial cursor
+    setCursor();
+
+    ARC_DRAW_BEHAVIOR arcBehavior( schIUScale, m_frame->GetUserUnits() );
+    m_view->Add( &arcBehavior.GetAssistant() );
+
+    // Create the shape up front, matching the PCB drawArc pattern.
+    std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, LAYER_NOTES, 0, m_lastFillStyle );
+    arc->SetStroke( m_lastStroke );
+    arc->SetFillColor( m_lastFillColor );
+    arc->SetParent( schematic );
+    arc->SetFlags( IS_NEW );
+
+    bool started = false;
+
+    m_toolMgr->PostAction( ACTIONS::refreshPreview );
+
+    if( aEvent.HasPosition() )
+    {
+        m_toolMgr->PrimeTool( aEvent.Position() );
+    }
+
+    // Main loop: keep receiving events
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        setCursor();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_GRAPHICS );
+        controls->ForceCursorPosition( true, cursorPos );
+
+        if( evt->IsCancelInteractive() || ( started && evt->IsAction( &ACTIONS::undo ) ) )
+        {
+            if( !started )
+            {
+                // Consume the event so it does not propagate to other tools.
+                evt->SetPassEvent( false );
+                m_frame->PopTool( aEvent );
+            }
+            else
+            {
+                cleanup();
+            }
+
+            break;
+        }
+        else if( evt->IsActivate() )
+        {
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                cleanup();
+                // leave ourselves on the stack so we come back after the move
+                break;
+            }
+            else
+            {
+                cleanup();
+                m_frame->PopTool( aEvent );
+                break;
+            }
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !started )
+            {
+                m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+                controls->SetAutoPan( true );
+                controls->CaptureCursor( true );
+
+                m_view->ClearPreview();
+                m_view->AddToPreview( arc->Clone() );
+                m_frame->SetMsgPanel( arc.get() );
+                started = true;
+            }
+
+            arcBehavior.AddPoint( cursorPos );
+        }
+        else if( evt->IsAction( &ACTIONS::arcPosture ) )
+        {
+            arcBehavior.ToggleClockwise();
+        }
+        else if( evt->IsAction( &SCH_ACTIONS::deleteLastPoint ) )
+        {
+            arcBehavior.RemoveLastPoint();
+            grid.FullReset();
+        }
+        else if( evt->IsMotion() )
+        {
+            arcBehavior.SetCursorPosition( cursorPos );
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            if( !started )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
+            m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else if( evt->IsAction( &ACTIONS::updateUnits ) )
+        {
+            arcBehavior.SetUnits( m_frame->GetUserUnits() );
+            m_view->Update( &arcBehavior.GetAssistant() );
+            evt->SetPassEvent();
+        }
+        else if( started && evt->IsAction( &ACTIONS::redo ) )
+        {
+            wxBell();
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+
+        if( arcBehavior.IsComplete() )
+        {
+            // Apply the final geometry before committing.
+            if( arcBehavior.HasGeometryChanged() )
+            {
+                arcBehavior.ApplyToShape( *arc );
+                m_view->ClearPreview();
+                m_view->AddToPreview( arc->Clone() );
+                m_view->Update( &arcBehavior.GetAssistant() );
+                arcBehavior.ClearGeometryChanged();
+            }
+
+            break;
+        }
+        else if( arcBehavior.HasGeometryChanged() )
+        {
+            arcBehavior.ApplyToShape( *arc );
+            m_view->ClearPreview();
+            m_view->AddToPreview( arc->Clone() );
+            m_view->Update( &arcBehavior.GetAssistant() );
+            arcBehavior.ClearGeometryChanged();
+
+            if( started )
+                m_frame->SetMsgPanel( arc.get() );
+            else
+                m_frame->SetMsgPanel( schematic );
+        }
+    }
+
+    m_view->Remove( &arcBehavior.GetAssistant() );
+
+    if( arcBehavior.IsComplete() )
+    {
+        m_lastStroke = arc->GetStroke();
+        m_lastFillStyle = arc->GetFillMode();
+        m_lastFillColor = arc->GetFillColor();
+
+        m_selectionTool->AddItemToSel( arc.get() );
+
+        SCH_COMMIT commit( m_toolMgr );
+        commit.Add( arc.release(), m_frame->GetScreen() );
+        commit.Push( _( "Draw Arc" ) );
+
+        m_view->ClearPreview();
+        m_toolMgr->PostAction( ACTIONS::activatePointEditor );
+    }
+    else
+    {
+        m_view->ClearPreview();
+    }
+
+    if( !started )
+        m_frame->SetMsgPanel( schematic );
+
+    controls->SetAutoPan( false );
+    controls->CaptureCursor( false );
+    controls->ForceCursorPosition( false );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
+    return 0;
+}
+
+
 int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
 {
     if( m_inDrawingTool )
@@ -3977,7 +4206,7 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawCircle.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawEllipse.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawEllipseArc.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawArc.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawArc,               SCH_ACTIONS::drawArc.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawBezier.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawTextBox.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawRuleArea,          SCH_ACTIONS::drawRuleArea.MakeEvent() );
