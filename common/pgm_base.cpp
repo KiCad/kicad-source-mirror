@@ -107,6 +107,7 @@ LANGUAGE_DESCR LanguagesList[] =
     { wxLANGUAGE_CROATIAN,   ID_LANGUAGE_CROATIAN,   wxT( "Hrvatski" ), true },
     { wxLANGUAGE_KOREAN,     ID_LANGUAGE_KOREAN,     wxT( "한국어"),       true },
     { wxLANGUAGE_ITALIAN,    ID_LANGUAGE_ITALIAN,    wxT( "Italiano" ), true },
+    { wxLANGUAGE_LAOTHIAN,   ID_LANGUAGE_LAOTHIAN,   wxT( "ພາສາລາວ" ), true  },
     { wxLANGUAGE_LATVIAN,    ID_LANGUAGE_LATVIAN,    wxT( "Latviešu" ), true },
     { wxLANGUAGE_LITHUANIAN, ID_LANGUAGE_LITHUANIAN, wxT( "Lietuvių" ), true },
     { wxLANGUAGE_HUNGARIAN,  ID_LANGUAGE_HUNGARIAN,  wxT( "Magyar" ),   true },
