@@ -237,6 +237,11 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
                     textWidth = maxLen * textHeight * 0.6;
                 }
             }
+            else if( numberInfo.m_Angle == ANGLE_VERTICAL )
+            {
+                // Single line vertical number, perpendicular extent is its height.
+                std::swap( textWidth, textHeight );
+            }
 
             // Create text bounding box around text position
             BOX2I textBbox;
@@ -388,17 +393,25 @@ BOOST_AUTO_TEST_CASE( PinTextConsistentSidePlacement )
     }
 }
 
-/**
- * Test that multiline and non-multiline pin numbers/names have the same bottom coordinate
- * (distance from pin along the axis connecting pin and text)
- */
+// Distance from a pin to the near edge of a box, measured perpendicular to the pin.
+static int nearEdgeClearance( const SCH_PIN* aPin, const TRANSFORM& aTransform, const BOX2I& aBox )
+{
+    VECTOR2I        pinPos = aPin->GetPosition();
+    PIN_ORIENTATION orient = aPin->PinDrawOrient( aTransform );
+
+    if( orient == PIN_ORIENTATION::PIN_LEFT || orient == PIN_ORIENTATION::PIN_RIGHT )
+        return std::min( std::abs( aBox.GetTop() - pinPos.y ), std::abs( aBox.GetBottom() - pinPos.y ) );
+
+    return std::min( std::abs( aBox.GetLeft() - pinPos.x ), std::abs( aBox.GetRight() - pinPos.x ) );
+}
+
+// Number and name keep the same clearance from the pin for every pin and every
+// rotation, whatever the text height. Measured from the real text bounding boxes.
 BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
 {
-    // Create test symbol with both types of pins
     std::unique_ptr<LIB_SYMBOL> symbol = createTestResistorSymbol();
     BOOST_REQUIRE( symbol );
 
-    // Get the pins - one will be multiline formatted, one will not
     std::vector<SCH_PIN*> pins;
 
     for( SCH_ITEM& item : symbol->GetDrawItems() )
@@ -409,166 +422,192 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
 
     BOOST_REQUIRE_EQUAL( pins.size(), 2 );
 
-    // Test rotations
-    std::vector<TRANSFORM> rotations = {
-        TRANSFORM( 1, 0, 0, 1 ),   // 0° (identity)
-        TRANSFORM( 0, -1, 1, 0 ),  // 90° CCW
-        TRANSFORM( -1, 0, 0, -1 ), // 180°
-        TRANSFORM( 0, 1, -1, 0 )   // 270° CCW (90° CW)
+    const std::vector<TRANSFORM> rotations = {
+        TRANSFORM( 1, 0, 0, 1 ),   // 0
+        TRANSFORM( 0, -1, 1, 0 ),  // 90
+        TRANSFORM( -1, 0, 0, -1 ), // 180
+        TRANSFORM( 0, 1, -1, 0 )   // 270
     };
 
-    std::vector<wxString> rotationNames = { wxT("0°"), wxT("90°"), wxT("180°"), wxT("270°") };
+    const std::vector<wxString> rotationNames = { wxT( "0" ), wxT( "90" ), wxT( "180" ), wxT( "270" ) };
+
+    const int tolerance = 100;
+    int       numberRef = -1;
+    int       nameRef = -1;
 
     for( size_t r = 0; r < rotations.size(); r++ )
     {
-        const TRANSFORM& transform = rotations[r];
-        const wxString& rotName = rotationNames[r];
-
-        // Set global transform for this test
         TRANSFORM oldTransform = DefaultTransform;
-        DefaultTransform = transform;
-
-        // For each rotation, collect pin and text position data
-        struct PinTextData {
-            VECTOR2I pinPos;
-            VECTOR2I numberPos;
-            VECTOR2I namePos;
-            wxString pinNumber;
-            bool isMultiline;
-            int numberBottomDistance;
-            int nameBottomDistance;
-        };
-
-        std::vector<PinTextData> pinData;
+        DefaultTransform = rotations[r];
 
         for( SCH_PIN* pin : pins )
         {
-            PinTextData data;
-            data.pinPos = pin->GetPosition();
-            data.pinNumber = pin->GetNumber();
-
-            // Create layout cache for this pin
             PIN_LAYOUT_CACHE cache( *pin );
 
-            // Get number position (shadow width 0 for testing)
-            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numberInfoOpt = cache.GetPinNumberInfo( 0 );
-            PIN_LAYOUT_CACHE::TEXT_INFO numberInfo; // store for later heuristics
+            OPT_BOX2I numberBox = cache.GetPinNumberBBox();
+            OPT_BOX2I nameBox = cache.GetPinNameBBox();
 
-            if( numberInfoOpt.has_value() )
-            {
-                numberInfo = numberInfoOpt.value();
-                data.numberPos = numberInfo.m_TextPosition;
-                data.isMultiline = numberInfo.m_Text.Contains( '\n' );
-            }
-            else
-            {
-                BOOST_FAIL( "Expected pin number text info" );
-            }
+            BOOST_REQUIRE_MESSAGE( numberBox.has_value() && nameBox.has_value(),
+                                   "Missing text box for pin " << pin->GetNumber() << " at rotation "
+                                                               << rotationNames[r] );
 
-            // Get name position
-            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> nameInfoOpt = cache.GetPinNameInfo( 0 );
-            PIN_LAYOUT_CACHE::TEXT_INFO nameInfo; // store for width/height heuristic
+            int numberClearance = nearEdgeClearance( pin, rotations[r], *numberBox );
+            int nameClearance = nearEdgeClearance( pin, rotations[r], *nameBox );
 
-            if( nameInfoOpt.has_value() )
-            {
-                nameInfo = nameInfoOpt.value();
-                data.namePos = nameInfo.m_TextPosition;
-            }
-            else
-            {
-                BOOST_FAIL( "Expected pin name text info" );
-            }
+            if( numberRef < 0 )
+                numberRef = numberClearance;
 
-            // Calculate bottom distance (closest distance to pin along pin-text axis)
-            PIN_ORIENTATION orient = pin->PinDrawOrient( DefaultTransform );
+            if( nameRef < 0 )
+                nameRef = nameClearance;
 
-            if( orient == PIN_ORIENTATION::PIN_UP || orient == PIN_ORIENTATION::PIN_DOWN )
-            {
-                // Vertical pins: numbers are to the right and should be LEFT-aligned.
-                // Calculate the left edge of the number text box.
-                int textWidth = data.isMultiline ? 0 : (int)( data.pinNumber.Length() * numberInfo.m_TextSize * 0.6 );
+            BOOST_CHECK_MESSAGE( std::abs( numberClearance - numberRef ) <= tolerance,
+                                 "Pin " << pin->GetNumber() << " number clearance " << numberClearance
+                                        << " at rotation " << rotationNames[r] << " differs from " << numberRef
+                                        << " (tolerance " << tolerance << ")" );
 
-                // (Multiline case: numberInfo.m_Text already contains \n; heuristic in earlier section)
-                if( data.isMultiline )
-                {
-                    wxArrayString lines; wxStringSplit( numberInfo.m_Text, lines, '\n' );
-                    int lineSpacing = numberInfo.m_TextSize * 1.3;
-                    textWidth = lines.size() * lineSpacing; // when vertical orientation text is rotated
-                }
-
-                // Left edge = center - halfWidth
-                int leftEdge = data.numberPos.x - textWidth / 2;
-                data.numberBottomDistance = leftEdge - data.pinPos.x; // distance from pin to left edge
-
-                // For names (to the left of the pin), measure right edge
-                int nameWidth = (int)( nameInfo.m_Text.Length() * nameInfo.m_TextSize * 0.6 );
-                int nameRightEdge = data.namePos.x + nameWidth / 2;
-                data.nameBottomDistance = data.pinPos.x - nameRightEdge; // distance from name right edge to pin
-            }
-            else
-            {
-                // Horizontal pins: numbers are below the pin and should be TOP-aligned.
-                // Calculate the top edge of the number text box.
-                int textHeight = data.isMultiline ? 0 : numberInfo.m_TextSize;
-
-                if( data.isMultiline )
-                {
-                    wxArrayString lines;
-                    wxStringSplit( numberInfo.m_Text, lines, '\n' );
-                    int lineSpacing = numberInfo.m_TextSize * 1.3;
-                    textHeight = lines.size() * lineSpacing;
-                }
-
-                // Top edge = center - halfHeight
-                int topEdge = data.numberPos.y - textHeight / 2;
-                data.numberBottomDistance = topEdge - data.pinPos.y; // distance from pin to top edge
-
-                // For names (above the pin), measure bottom edge
-                int nameHeight = nameInfo.m_TextSize;
-                int nameBottomEdge = data.namePos.y + nameHeight / 2;
-                data.nameBottomDistance = data.pinPos.y - nameBottomEdge; // distance from name bottom to pin
-            }
-
-            pinData.push_back( data );
-
-            wxLogTrace( "KICAD_PINS", "Rotation %s, Pin %s: pos=(%d,%d) numberPos=(%d,%d) namePos=(%d,%d) multiline=%s numberBottomDist=%d nameBottomDist=%d",
-                        rotName, data.pinNumber,
-                        data.pinPos.x, data.pinPos.y,
-                        data.numberPos.x, data.numberPos.y,
-                        data.namePos.x, data.namePos.y,
-                        data.isMultiline ? wxT("YES") : wxT("NO"),
-                        data.numberBottomDistance, data.nameBottomDistance );
+            BOOST_CHECK_MESSAGE( std::abs( nameClearance - nameRef ) <= tolerance,
+                                 "Pin " << pin->GetNumber() << " name clearance " << nameClearance << " at rotation "
+                                        << rotationNames[r] << " differs from " << nameRef << " (tolerance "
+                                        << tolerance << ")" );
         }
 
-        BOOST_REQUIRE_EQUAL( pinData.size(), 2 );
-
-        // Check that both pins have their numbers at the same bottom distance from pin
-        // Allow small tolerance for rounding differences
-        const int tolerance = 100; // 100 internal units tolerance
-
-        int bottomDist1 = pinData[0].numberBottomDistance;
-        int bottomDist2 = pinData[1].numberBottomDistance;
-        int distanceDiff = abs( bottomDist1 - bottomDist2 );
-
-        BOOST_CHECK_MESSAGE( distanceDiff <= tolerance,
-                           "At rotation " << rotName << ", pin numbers have different bottom distances from pin. "
-                           << "Pin " << pinData[0].pinNumber << " distance=" << bottomDist1
-                           << ", Pin " << pinData[1].pinNumber << " distance=" << bottomDist2
-                           << ", difference=" << distanceDiff << " (tolerance=" << tolerance << ")" );
-
-        // Check that both pins have their names at the same bottom distance from pin
-        int nameBottomDist1 = pinData[0].nameBottomDistance;
-        int nameBottomDist2 = pinData[1].nameBottomDistance;
-        int nameDistanceDiff = abs( nameBottomDist1 - nameBottomDist2 );
-
-        BOOST_CHECK_MESSAGE( nameDistanceDiff <= tolerance,
-                           "At rotation " << rotName << ", pin names have different bottom distances from pin. "
-                           << "Pin " << pinData[0].pinNumber << " name distance=" << nameBottomDist1
-                           << ", Pin " << pinData[1].pinNumber << " name distance=" << nameBottomDist2
-                           << ", difference=" << nameDistanceDiff << " (tolerance=" << tolerance << ")" );
-
-        // Restore original transform
         DefaultTransform = oldTransform;
+    }
+}
+
+// Symbol that shows only pin numbers (names hidden).
+static std::unique_ptr<LIB_SYMBOL> createNumberOnlySymbol()
+{
+    auto symbol = std::make_unique<LIB_SYMBOL>( wxT( "TestNumberOnly" ) );
+
+    symbol->SetShowPinNames( false );
+    symbol->SetShowPinNumbers( true );
+
+    // A plain number and a stacked number.
+    auto pin1 = std::make_unique<SCH_PIN>( symbol.get() );
+    pin1->SetPosition( VECTOR2I( 0, schIUScale.MilsToIU( 250 ) ) );
+    pin1->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
+    pin1->SetLength( schIUScale.MilsToIU( 100 ) );
+    pin1->SetNumber( wxT( "12" ) );
+    pin1->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    pin1->SetUnit( 1 );
+
+    auto pin2 = std::make_unique<SCH_PIN>( symbol.get() );
+    pin2->SetPosition( VECTOR2I( 0, schIUScale.MilsToIU( -250 ) ) );
+    pin2->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
+    pin2->SetLength( schIUScale.MilsToIU( 50 ) );
+    pin2->SetNumber( wxT( "[6,7,9-11]" ) );
+    pin2->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    pin2->SetUnit( 1 );
+
+    symbol->AddDrawItem( pin1.release() );
+    symbol->AddDrawItem( pin2.release() );
+
+    return symbol;
+}
+
+// Perpendicular distance from the pin to its number centre, at 0/90/180/270 deg.
+static std::vector<int> collectNumberGapsPerRotation( SCH_PIN* aPin )
+{
+    const std::vector<TRANSFORM> rotations = {
+        TRANSFORM( 1, 0, 0, 1 ),   // 0
+        TRANSFORM( 0, -1, 1, 0 ),  // 90
+        TRANSFORM( -1, 0, 0, -1 ), // 180
+        TRANSFORM( 0, 1, -1, 0 )   // 270
+    };
+
+    std::vector<int> gaps;
+
+    for( const TRANSFORM& transform : rotations )
+    {
+        TRANSFORM oldTransform = DefaultTransform;
+        DefaultTransform = transform;
+
+        PIN_LAYOUT_CACHE                           cache( *aPin );
+        std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numberInfo = cache.GetPinNumberInfo( 0 );
+
+        BOOST_REQUIRE_MESSAGE( numberInfo.has_value(), "Missing pin number info for pin " << aPin->GetNumber() );
+
+        VECTOR2I        pinPos = aPin->GetPosition();
+        PIN_ORIENTATION orient = aPin->PinDrawOrient( transform );
+        int             gap;
+
+        if( orient == PIN_ORIENTATION::PIN_LEFT || orient == PIN_ORIENTATION::PIN_RIGHT )
+            gap = std::abs( numberInfo->m_TextPosition.y - pinPos.y ); // horizontal pin
+        else
+            gap = std::abs( numberInfo->m_TextPosition.x - pinPos.x ); // vertical pin
+
+        gaps.push_back( gap );
+
+        DefaultTransform = oldTransform;
+    }
+
+    return gaps;
+}
+
+// Issue 21778: the number-to-pin gap must not change when the symbol is rotated.
+// Here names and numbers are both shown (name offset 0).
+BOOST_AUTO_TEST_CASE( PinNumberGapConstantAcrossRotations )
+{
+    std::unique_ptr<LIB_SYMBOL> symbol = createTestResistorSymbol();
+    BOOST_REQUIRE( symbol );
+
+    std::vector<SCH_PIN*> pins;
+
+    for( SCH_ITEM& item : symbol->GetDrawItems() )
+    {
+        if( item.Type() == SCH_PIN_T )
+            pins.push_back( static_cast<SCH_PIN*>( &item ) );
+    }
+
+    BOOST_REQUIRE_EQUAL( pins.size(), 2 );
+
+    // Gap is orientation independent, allow a couple of units for rounding.
+    const int tolerance = 2;
+
+    for( SCH_PIN* pin : pins )
+    {
+        std::vector<int> gaps = collectNumberGapsPerRotation( pin );
+
+        int minGap = *std::min_element( gaps.begin(), gaps.end() );
+        int maxGap = *std::max_element( gaps.begin(), gaps.end() );
+
+        BOOST_CHECK_MESSAGE( ( maxGap - minGap ) <= tolerance,
+                             "Pin " << pin->GetNumber() << " number gap changes with rotation. "
+                                    << "0=" << gaps[0] << " 90=" << gaps[1] << " 180=" << gaps[2] << " 270=" << gaps[3]
+                                    << " (tolerance " << tolerance << ")" );
+    }
+}
+
+// Issue 21778, number-only branch (pin names hidden): gap must stay constant too.
+BOOST_AUTO_TEST_CASE( PinNumberOnlyGapConstantAcrossRotations )
+{
+    std::unique_ptr<LIB_SYMBOL> symbol = createNumberOnlySymbol();
+    BOOST_REQUIRE( symbol );
+
+    std::vector<SCH_PIN*> pins;
+
+    for( SCH_ITEM& item : symbol->GetDrawItems() )
+    {
+        if( item.Type() == SCH_PIN_T )
+            pins.push_back( static_cast<SCH_PIN*>( &item ) );
+    }
+
+    BOOST_REQUIRE_EQUAL( pins.size(), 2 );
+
+    const int tolerance = 2;
+
+    for( SCH_PIN* pin : pins )
+    {
+        std::vector<int> gaps = collectNumberGapsPerRotation( pin );
+
+        int minGap = *std::min_element( gaps.begin(), gaps.end() );
+        int maxGap = *std::max_element( gaps.begin(), gaps.end() );
+
+        BOOST_CHECK_MESSAGE( ( maxGap - minGap ) <= tolerance,
+                             "Pin " << pin->GetNumber() << " number gap changes with rotation. "
+                                    << "0=" << gaps[0] << " 90=" << gaps[1] << " 180=" << gaps[2] << " 270=" << gaps[3]
+                                    << " (tolerance " << tolerance << ")" );
     }
 }
 
