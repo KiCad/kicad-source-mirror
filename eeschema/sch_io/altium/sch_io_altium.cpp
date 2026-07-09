@@ -22,7 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+#include <map>
 #include <memory>
+#include <set>
 
 #include "altium_parser_sch.h"
 #include <io/io_utils.h>
@@ -388,7 +391,7 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicProject( SCHEMATIC* aSchematic, const std
 {
     int x = 1;
     int y = 1;
-    int page = 2; // Start at page 2 since page 1 is the root sheet.
+    int page = 1;
 
     std::map<wxString, SCH_SHEET*> sheets;
     wxFileName project( aProperties->at( "project_file" ) );
@@ -627,6 +630,9 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
 
         m_rootSheet = &aSchematic->Root();
     }
+
+    if( !aAppendToMe )
+        NormalizeRepeatedSheetInstances();
 
     if( m_reporter )
     {
@@ -1138,6 +1144,136 @@ void SCH_IO_ALTIUM::EnsureSheetSymbolNames()
 }
 
 
+wxFileName SCH_IO_ALTIUM::ResolveSheetFileName( const wxString& aParentPath,
+                                                const wxString& aSheetFileName ) const
+{
+    wxFileName loadAltiumFileName( aParentPath, aSheetFileName );
+
+    if( loadAltiumFileName.IsFileReadable() )
+        return loadAltiumFileName;
+
+    if( !loadAltiumFileName.HasExt() )
+    {
+        wxFileName withExt( loadAltiumFileName );
+        withExt.SetExt( wxT( "SchDoc" ) );
+
+        if( withExt.IsFileReadable() )
+            return withExt;
+    }
+
+    wxFileName sheetFn( aSheetFileName );
+    bool       extensionless = !sheetFn.HasExt();
+
+    wxArrayString files;
+    wxDir::GetAllFiles( aParentPath, &files, wxEmptyString, wxDIR_FILES | wxDIR_HIDDEN );
+
+    for( const wxString& candidate : files )
+    {
+        wxFileName candidateFname( candidate );
+
+        if( candidateFname.GetFullName().IsSameAs( aSheetFileName, false )
+            || ( extensionless
+                 && !sheetFn.GetName().empty()
+                 && candidateFname.GetName().IsSameAs( sheetFn.GetName(), false )
+                 && candidateFname.GetExt().IsSameAs( wxT( "SchDoc" ), false ) ) )
+        {
+            return candidateFname;
+        }
+    }
+
+    return loadAltiumFileName;
+}
+
+
+void SCH_IO_ALTIUM::NormalizeRepeatedSheetInstances()
+{
+    wxCHECK( m_schematic, /* void */ );
+
+    m_schematic->RefreshHierarchy();
+
+    SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
+    std::map<wxString, std::vector<SCH_SHEET_PATH>> pathsByFile;
+
+    for( const SCH_SHEET_PATH& sheetPath : sheetList )
+    {
+        if( sheetPath.size() < 2 || !sheetPath.LastScreen() )
+            continue;
+
+        wxString sheetFileName = sheetPath.Last()->GetFileName().Lower();
+
+        if( sheetFileName.IsEmpty() )
+            continue;
+
+        SCH_SHEET_PATH parentPath = sheetPath;
+        parentPath.pop_back();
+
+        pathsByFile[parentPath.Path().AsString() + wxT( "|" ) + sheetFileName]
+                .push_back( sheetPath );
+    }
+
+    for( auto& [groupKey, sheetPaths] : pathsByFile )
+    {
+        if( sheetPaths.size() < 2 )
+            continue;
+
+        std::sort( sheetPaths.begin(), sheetPaths.end(),
+                   []( const SCH_SHEET_PATH& aFirst, const SCH_SHEET_PATH& aSecond )
+                   {
+                       const VECTOR2I& firstPos = aFirst.Last()->GetPosition();
+                       const VECTOR2I& secondPos = aSecond.Last()->GetPosition();
+
+                       if( firstPos.y != secondPos.y )
+                           return firstPos.y < secondPos.y;
+
+                       return firstPos.x < secondPos.x;
+                   } );
+
+        long basePage = 0;
+
+        for( const SCH_SHEET_PATH& sheetPath : sheetPaths )
+        {
+            long page = 0;
+
+            if( sheetPath.GetPageNumber().ToLong( &page ) && page > 0 )
+                basePage = basePage == 0 ? page : std::min( basePage, page );
+        }
+
+        if( basePage == 0 )
+        {
+            wxString nextPage = sheetList.GetNextPageNumber();
+            nextPage.ToLong( &basePage );
+        }
+
+        if( basePage == 0 )
+            basePage = 1;
+
+        for( size_t ii = 0; ii < sheetPaths.size(); ++ii )
+        {
+            SCH_SHEET_PATH& sheetPath = sheetPaths[ii];
+
+            sheetPath.SetPageNumber( wxString::Format( wxT( "%ld" ), basePage + (long) ii ) );
+
+            for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                wxString    baseRef = symbol->GetField( FIELD_T::REFERENCE )->GetText();
+
+                if( baseRef.StartsWith( wxT( "#" ) ) )
+                {
+                    symbol->AddSheetPathReferenceEntryIfMissing( sheetPath.Path() );
+                    continue;
+                }
+
+                if( !baseRef.IsEmpty() )
+                    symbol->SetRef( &sheetPath, baseRef + wxT( "_" ) + sheetPath.Last()->GetName() );
+            }
+        }
+    }
+
+    m_schematic->RefreshHierarchy();
+}
+
+
 void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
 {
     // Load path may be different from the project path.
@@ -1194,50 +1330,8 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
 
         wxCHECK2( sheet, continue );
 
-        // The assumption is that all of the Altium schematic files will be in the same
-        // path as the parent sheet path.
-        wxFileName loadAltiumFileName( parentFileName.GetPath(), sheet->GetFileName() );
-
-        if( !loadAltiumFileName.IsFileReadable() )
-        {
-            // Altium sheet symbols sometimes store filenames without the .SchDoc extension.
-            // Try appending it before falling through to the directory search.
-            if( !loadAltiumFileName.HasExt() )
-            {
-                wxFileName withExt( loadAltiumFileName );
-                withExt.SetExt( wxT( "SchDoc" ) );
-
-                if( withExt.IsFileReadable() )
-                    loadAltiumFileName = withExt;
-            }
-        }
-
-        if( !loadAltiumFileName.IsFileReadable() )
-        {
-            // Try case-insensitive search, matching by base name so that extensionless
-            // filenames from Altium sheet symbols can resolve to .SchDoc files on disk.
-            wxFileName sheetFn( sheet->GetFileName() );
-            bool       extensionless = !sheetFn.HasExt();
-
-            wxArrayString files;
-            wxDir::GetAllFiles( parentFileName.GetPath(), &files, wxEmptyString,
-                                wxDIR_FILES | wxDIR_HIDDEN );
-
-            for( const wxString& candidate : files )
-            {
-                wxFileName candidateFname( candidate );
-
-                if( candidateFname.GetFullName().IsSameAs( sheet->GetFileName(), false )
-                    || ( extensionless
-                         && !sheetFn.GetName().empty()
-                         && candidateFname.GetName().IsSameAs( sheetFn.GetName(), false )
-                         && candidateFname.GetExt().IsSameAs( wxT( "SchDoc" ), false ) ) )
-                {
-                    loadAltiumFileName = candidateFname;
-                    break;
-                }
-            }
-        }
+        wxFileName loadAltiumFileName = ResolveSheetFileName( parentFileName.GetPath(),
+                                                              sheet->GetFileName() );
 
         if( loadAltiumFileName.GetFullName().IsEmpty() || !loadAltiumFileName.IsFileReadable() )
         {
@@ -1261,36 +1355,6 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
             projectFileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
             sheet->SetFileName( projectFileName.GetFullName() );
 
-            // Set up symbol instance data for this new sheet path. When the same schematic
-            // is reused in multiple hierarchical instances, each instance needs its own
-            // symbol references with the sheet name as suffix to match Altium's behavior.
-            m_sheetPath.push_back( sheet );
-
-            for( SCH_ITEM* symItem : loadedScreen->Items().OfType( SCH_SYMBOL_T ) )
-            {
-                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( symItem );
-
-                // Get the base reference from existing instance data
-                wxString baseRef;
-
-                if( !symbol->GetInstances().empty() )
-                    baseRef = symbol->GetInstances().front().m_Reference;
-                else
-                    baseRef = symbol->GetField( FIELD_T::REFERENCE )->GetText();
-
-                // Skip power symbols and graphics
-                if( baseRef.StartsWith( wxT( "#" ) ) )
-                {
-                    symbol->AddSheetPathReferenceEntryIfMissing( m_sheetPath.Path() );
-                    continue;
-                }
-
-                // Create new reference with sheet name suffix (e.g., P1 -> P1_Connector2)
-                wxString newRef = baseRef + wxT( "_" ) + sheet->GetName();
-                symbol->SetRef( &m_sheetPath, newRef );
-            }
-
-            m_sheetPath.pop_back();
             // Do not need to load the sub-sheets - this has already been done.
         }
         else

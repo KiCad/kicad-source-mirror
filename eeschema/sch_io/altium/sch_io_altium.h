@@ -154,6 +154,8 @@ private:
     void CreateAliases();
     void PostProcessBusLabels();
     void EnsureSheetSymbolNames();
+    wxFileName ResolveSheetFileName( const wxString& aParentPath, const wxString& aSheetFileName ) const;
+    void NormalizeRepeatedSheetInstances();
     void AddTextBox( const ASCH_TEXT_FRAME* aElem );
     void AddLibTextBox( const ASCH_TEXT_FRAME* aElem, std::vector<LIB_SYMBOL*>& aSymbol = nullsym,
                         std::vector<int>& aFontSize = nullint );

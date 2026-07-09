@@ -28,6 +28,8 @@
 #include <sch_symbol.h>
 #include <settings/settings_manager.h>
 
+#include <map>
+#include <optional>
 #include <set>
 #include <vector>
 
@@ -50,6 +52,13 @@ struct ALTIUM_SCH_IMPORT_FIXTURE
     {
         return wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir()
                                    + "/plugins/altium/issue22943/" )
+               + aName;
+    }
+
+    wxString issue24861DataFile( const wxString& aName ) const
+    {
+        return wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir()
+                                   + "/plugins/altium/issue24861/" )
                + aName;
     }
 
@@ -103,6 +112,68 @@ BOOST_AUTO_TEST_CASE( Issue22943_SourceLibrarySymbolLibId )
                              "Library id '" << libId.Format().wx_str()
                                             << "' does not resolve in mounting_holes.SchLib" );
     }
+}
+
+
+// https://gitlab.com/kicad/code/kicad/-/issues/24861
+BOOST_AUTO_TEST_CASE( Issue24861_RepeatedSchematicChannels )
+{
+    SCH_IO_ALTIUM plugin;
+
+    std::map<std::string, UTF8> properties;
+    properties.emplace( "project_file", UTF8( issue24861DataFile( wxT( "Repeated_Schematic.PrjPcb" ) ) ) );
+    properties.emplace( "sch0", UTF8( issue24861DataFile( wxT( "Repeated_Schematic.SchDoc" ) ) ) );
+    properties.emplace( "sch1", UTF8( issue24861DataFile( wxT( "Channel.SchDoc" ) ) ) );
+
+    SCH_SHEET* rootSheet = plugin.LoadSchematicFile( wxEmptyString, &m_schematic, nullptr, &properties );
+    BOOST_REQUIRE( rootSheet );
+
+    const std::vector<SCH_SHEET*> topLevelSheets = m_schematic.GetTopLevelSheets();
+    BOOST_REQUIRE_EQUAL( topLevelSheets.size(), 1 );
+    BOOST_CHECK_EQUAL( topLevelSheets.front()->GetName(), wxT( "Repeated_Schematic" ) );
+
+    std::optional<SCH_SHEET_PATH> topLevelPath;
+    std::map<wxString, SCH_SHEET_PATH> channelPaths;
+
+    for( const SCH_SHEET_PATH& sheetPath : m_schematic.Hierarchy() )
+    {
+        SCH_SHEET* sheet = sheetPath.Last();
+
+        if( sheet && sheet->GetName() == wxT( "Repeated_Schematic" ) )
+            topLevelPath = sheetPath;
+        else if( sheet && sheet->GetName().StartsWith( wxT( "CH" ) ) )
+            channelPaths.emplace( sheet->GetName(), sheetPath );
+    }
+
+    BOOST_REQUIRE( topLevelPath );
+    BOOST_CHECK_EQUAL( topLevelPath->GetPageNumber(), wxT( "1" ) );
+
+    BOOST_REQUIRE_EQUAL( channelPaths.size(), 3 );
+    BOOST_CHECK_EQUAL( channelPaths.at( wxT( "CH1" ) ).GetPageNumber(), wxT( "2" ) );
+    BOOST_CHECK_EQUAL( channelPaths.at( wxT( "CH2" ) ).GetPageNumber(), wxT( "3" ) );
+    BOOST_CHECK_EQUAL( channelPaths.at( wxT( "CH3" ) ).GetPageNumber(), wxT( "4" ) );
+
+    std::set<wxString> ledReferences;
+    std::set<wxString> resistorReferences;
+
+    for( const auto& [channelName, sheetPath] : channelPaths )
+    {
+        for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            wxString    ref = symbol->GetRef( &sheetPath );
+
+            if( ref.StartsWith( wxT( "LED" ) ) )
+                ledReferences.insert( ref );
+            else if( ref.StartsWith( wxT( "R" ) ) )
+                resistorReferences.insert( ref );
+        }
+    }
+
+    BOOST_CHECK( ledReferences == std::set<wxString>( { wxT( "LED1_CH1" ), wxT( "LED1_CH2" ),
+                                                        wxT( "LED1_CH3" ) } ) );
+    BOOST_CHECK( resistorReferences == std::set<wxString>( { wxT( "R1_CH1" ), wxT( "R1_CH2" ),
+                                                             wxT( "R1_CH3" ) } ) );
 }
 
 

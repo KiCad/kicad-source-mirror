@@ -1657,6 +1657,33 @@ bool SCH_SHEET_LIST::AllSheetPageNumbersEmpty() const
 }
 
 
+wxString SCH_SHEET_LIST::GetNextPageNumber() const
+{
+    wxString pageNumber;
+
+    // Find the next available page number by checking all existing page numbers
+    std::set<int> usedPageNumbers;
+
+    for( const SCH_SHEET_PATH& path : *this )
+    {
+        wxString existingPageNum = path.GetPageNumber();
+        long     pageNum = 0;
+
+        if( existingPageNum.ToLong( &pageNum ) && pageNum > 0 )
+            usedPageNumbers.insert( static_cast<int>( pageNum ) );
+    }
+
+    // Find the first available number starting from 1
+    int nextAvailable = 1;
+
+    while( usedPageNumbers.count( nextAvailable ) > 0 )
+        nextAvailable++;
+
+    pageNumber.Printf( wxT( "%d" ), nextAvailable );
+    return pageNumber;
+}
+
+
 void SCH_SHEET_LIST::SetInitialPageNumbers()
 {
     // Don't accidentally renumber existing sheets.
