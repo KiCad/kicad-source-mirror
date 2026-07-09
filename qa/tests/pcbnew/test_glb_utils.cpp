@@ -28,7 +28,7 @@
 #include <fstream>
 #include <vector>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <wx/filename.h>
 
 #include <exporters/step/glb_utils.h>
