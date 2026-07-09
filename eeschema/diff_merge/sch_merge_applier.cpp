@@ -267,8 +267,8 @@ bool SCH_MERGE_APPLIER::Apply()
 
         if( ancestorItem && ancestorScreen )
         {
-            delete ancestorItem;
             freedAncestorItems.insert( ancestorItem );
+            delete ancestorItem;
             ancestorIndex.erase( aAncIt );
         }
 
@@ -625,8 +625,8 @@ bool SCH_MERGE_APPLIER::Apply()
             if( ancIt != ancestorIndex.end() )
             {
                 SCH_ITEM* victim = ancIt->second.item;
-                ancIt->second.sheetPath->LastScreen()->DeleteItem( victim );
                 freedAncestorItems.insert( victim );
+                ancIt->second.sheetPath->LastScreen()->DeleteItem( victim );
                 ancestorIndex.erase( ancIt );
                 ++m_report.itemsDeleted;
             }
@@ -710,8 +710,8 @@ bool SCH_MERGE_APPLIER::Apply()
             // is correct.
             if( ancestorItem && ancestorScreen )
             {
-                delete ancestorItem;
                 freedAncestorItems.insert( ancestorItem );
+                delete ancestorItem;
                 ancestorIndex.erase( ancIt );
             }
 
