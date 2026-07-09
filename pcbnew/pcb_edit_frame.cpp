@@ -2545,10 +2545,12 @@ static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
         *aUpdated |= aSrc.GetTextSize() != aDest.GetTextSize();
         *aUpdated |= aSrc.GetTextThickness() != aDest.GetTextThickness();
         *aUpdated |= aSrc.GetTextAngle() != aDest.GetTextAngle();
+        *aUpdated |= aSrc.IsKnockout() != aDest.IsKnockout();
     }
     else
     {
         aDest.SetAttributes( aSrc );
+        aDest.SetIsKnockout( aSrc.IsKnockout() );
     }
 
     if( aResetTextPositions )
