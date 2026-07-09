@@ -296,3 +296,64 @@ def test_sym_export_svg_from_symdir(
     # Same 6 unit-SVGs as the single-file export.
     svg_files = list(svg_output_path.glob("*.svg"))
     assert len(svg_files) == 4 + 1 + 1
+
+
+def test_sym_export_svg_single_derived_file_from_symdir(
+    kitest: KiTestFixture,
+) -> None:
+    """
+    Regression test for the second half of
+    https://gitlab.com/kicad/code/kicad/-/work_items/24720
+
+    In a directory-format library a derived symbol is stored in its own file,
+    while its parent root symbol lives in a sibling file. Pointing "sym export
+    svg" at the lone derived file used to fail with "Unable to load library"
+    because the parent could not be resolved.
+
+    The export must succeed by resolving the parent from the enclosing
+    directory, and must plot only the symbol(s) defined in the requested file.
+    """
+
+    # This library contains "C", which extends "CAP".
+    input_file = kitest.get_data_file_path(
+        "eeschema/spice_netlists/legacy_pspice/schematic_libspice.kicad_sym"
+    )
+    output_path = kitest.get_output_path("cli/sym_derived_test/")
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    # Build a real .kicad_symdir, which splits each symbol into its own file.
+    symdir_path = Path(output_path) / "schematic_libspice.export.kicad_symdir"
+    stdout, stderr, exitcode = utils.run_and_capture(
+        get_sym_upgrade_cmd(str(input_file), str(symdir_path) + "/")
+    )
+    assert exitcode == 0
+    assert symdir_path.is_dir()
+
+    # The derived symbol lives in its own file with the parent in a sibling file.
+    derived_file = symdir_path / "C.kicad_sym"
+    assert derived_file.is_file()
+    assert "(extends" in derived_file.read_text(encoding="utf-8")
+    assert not (symdir_path / "C.kicad_sym").samefile(symdir_path / "CAP.kicad_sym")
+
+    # Export SVG from the lone derived file. This is what the bug rejected.
+    svg_output_path = Path(output_path) / "svg_from_derived_file/"
+    svg_output_path.mkdir(parents=True, exist_ok=True)
+
+    export_cmd = [
+        utils.kicad_cli(),
+        "sym",
+        "export",
+        "svg",
+        str(derived_file),
+        "--output",
+        str(svg_output_path),
+    ]
+    stdout, stderr, exitcode = utils.run_and_capture(export_cmd)
+
+    assert exitcode == 0
+    assert stderr == ""
+    assert stdout is not None
+
+    # Only "C" is plotted, not the parent or any other sibling symbol.
+    svg_files = sorted(p.name for p in svg_output_path.glob("*.svg"))
+    assert svg_files == ["C_unit1.svg"]

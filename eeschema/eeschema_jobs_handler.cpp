@@ -1091,16 +1091,42 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     wxFileName fn( svgJob->m_libraryPath );
     fn.MakeAbsolute();
 
-    SCH_IO_KICAD_SEXPR_LIB_CACHE schLibrary( fn.GetFullPath() );
+    // When the input is a single symbol file we restrict plotting to the symbols defined in
+    // that file. Stays empty (no restriction) when the input is a whole library.
+    wxString singleFileFilter;
+
+    auto schLibrary = std::make_unique<SCH_IO_KICAD_SEXPR_LIB_CACHE>( fn.GetFullPath() );
 
     try
     {
-        schLibrary.Load();
+        schLibrary->Load();
     }
     catch( ... )
     {
-        m_reporter->Report( _( "Unable to load library\n" ), RPT_SEVERITY_ERROR );
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+        // A single file holding a derived symbol whose parent is in a sibling file cannot load
+        // alone. Retry against the enclosing directory, then plot only this file's symbols.
+        bool recovered = false;
+
+        if( !fn.IsDir() && wxDir::Exists( fn.GetPath() ) )
+        {
+            try
+            {
+                schLibrary = std::make_unique<SCH_IO_KICAD_SEXPR_LIB_CACHE>( fn.GetPath() );
+                schLibrary->Load();
+                singleFileFilter = fn.GetFullPath();
+                recovered = true;
+            }
+            catch( ... )
+            {
+                // Fall through to the generic load error below.
+            }
+        }
+
+        if( !recovered )
+        {
+            m_reporter->Report( _( "Unable to load library\n" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
     }
 
     if( m_progressReporter )
@@ -1111,7 +1137,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     if( !svgJob->m_symbol.IsEmpty() )
     {
         // See if the selected symbol exists
-        symbol = schLibrary.GetSymbol( svgJob->m_symbol );
+        symbol = schLibrary->GetSymbol( svgJob->m_symbol );
 
         if( !symbol )
         {
@@ -1148,10 +1174,21 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     else
     {
         // Just plot all the symbols we can
-        const LIB_SYMBOL_MAP& libSymMap = schLibrary.GetSymbolMap();
+        const LIB_SYMBOL_MAP&               libSymMap = schLibrary->GetSymbolMap();
+        const std::map<wxString, wxString>& sourceFiles = schLibrary->GetSymbolSourceFiles();
+        const wxFileName                    filterFile( singleFileFilter );
 
         for( const auto& [name, libSymbol] : libSymMap )
         {
+            // When a single file was requested, skip symbols that came from sibling files.
+            if( !singleFileFilter.IsEmpty() )
+            {
+                auto srcIt = sourceFiles.find( name );
+
+                if( srcIt == sourceFiles.end() || !wxFileName( srcIt->second ).SameAs( filterFile ) )
+                    continue;
+            }
+
             if( m_progressReporter )
             {
                 m_progressReporter->AdvancePhase( wxString::Format( _( "Exporting %s" ), name ) );
