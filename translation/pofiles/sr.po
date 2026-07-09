@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-08 23:40+0000\n"
+"PO-Revision-Date: 2026-07-09 03:28+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -14182,38 +14182,37 @@ msgstr ""
 #: eeschema/dialogs/dialog_create_net_chain.cpp:546
 #, c-format
 msgid "Showing %zu path(s) between %s and %s. Use Refresh to restore all."
-msgstr ""
+msgstr "Приказује се %zu путања између %s и %s. Освежите да бисте вратили све."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:767
 #: eeschema/dialogs/dialog_create_net_chain.cpp:784
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:80
 #: eeschema/dialogs/panel_setup_net_chains.cpp:646
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:87
-#, fuzzy
 msgid "Member Nets"
-msgstr "Име члана"
+msgstr "Мреже чланице"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:794
 #, c-format
 msgid "Member Nets — %s (%zu) [%s]"
-msgstr ""
+msgstr "Мреже чланице — %s (%zu) [%s]"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:799
 #: eeschema/dialogs/panel_setup_net_chains.cpp:654
 #, c-format
 msgid "Member Nets — %s (%zu)"
-msgstr ""
+msgstr "Мреже чланице — %s (%zu)"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1079
-#, fuzzy, c-format
+#, c-format
 msgid "net '%s'"
-msgstr "Текст '%s'"
+msgstr "мрежа „%s”"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1084
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid "component %s"
-msgstr "компонента"
+msgstr "компонента %s"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1108
 #, c-format
@@ -14221,16 +14220,19 @@ msgid ""
 "No uncommitted chains match the selected %s. Use Refresh to restore the full "
 "list."
 msgstr ""
+"Ниједан непотврђени ланац не одговара изабраном %s. Освежите приказ да бисте "
+"вратили комплетну листу."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:22
 msgid ""
 " Select a detected net chain path and assign a name to create a net chain."
 msgstr ""
+" Изаберите откривену путању мрежног ланца и доделите јој име како бисте "
+"креирали мрежни ланац."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:53
-#, fuzzy
 msgid "Suggested Name"
-msgstr "Име:"
+msgstr "Предложено име"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:54
 #: eeschema/net_navigator.cpp:391 pcbnew/board.cpp:2552
@@ -14242,115 +14244,102 @@ msgstr "Име:"
 #: pcbnew/widgets/appearance_controls_base.cpp:151
 #: pcbnew/widgets/search_handlers.cpp:450
 msgid "Nets"
-msgstr ""
+msgstr "Мреже"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:97
-#, fuzzy
 msgid "Manual endpoint selection"
-msgstr "Отвори"
+msgstr "Ручни избор крајње тачке"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:106
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:270
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:323
 msgid "From:"
-msgstr ""
+msgstr "Од:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:113
-#, fuzzy
 msgid "To:"
-msgstr ":"
+msgstr "До:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:121
-#, fuzzy
 msgid "Find net chain path between the two components"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Пронађите путању мрежног ланца између две компоненте"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:131
-#, fuzzy
 msgid "Chain Name:"
-msgstr "Име чиоде"
+msgstr "Назив ланца:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:145
-#, fuzzy
 msgid "Re-detect potential net chains from the schematic"
-msgstr "Грешка: "
+msgstr "Поново откријте потенцијалне ланце мрежа са шеме"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 msgid "Connected to database successfully"
-msgstr ""
+msgstr "Успешно повезивање са базом података"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "Попуњавање зона"
+msgstr "Повезивање са базом података није успело: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "Креирање зона"
+msgstr "Нема везе са базом података"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "Учитавање библиотека симбола"
+msgstr "Учитано %zu библиотека"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
-msgstr ""
+msgstr "ДСН:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
-msgstr "Нема конекције"
+msgstr "Ниска за повезивање:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
 msgstr "Тест"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
-#, fuzzy
 msgid "Reload Configuration"
-msgstr "Потврда"
+msgstr "Поново учитај конфигурацију"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
-#, fuzzy
 msgid "Reload the database library configuration file"
-msgstr "Учитавање  "
+msgstr "Поново учитај конфигурациону датотеку библиотеке базе података"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "Претражује се..."
+msgstr "Кеширање"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "Величина странице:"
+msgstr "Величина кеша:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
 msgid "How many database queries to cache"
-msgstr ""
+msgstr "Колико упита ка базама података кеширати"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "Симбол у кеш меморији:"
+msgstr "Истек времена кеша:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
-msgstr ""
+msgstr "Време у секундама које ће упити базе података бити кеширани"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "Учитавање  "
+msgstr "Подешавања библиотеке базе података"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library identifier %s is not valid."
-msgstr "Симбол"
+msgstr "Идентификатор библиотеке симбола %s није исправан."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:639
 #, c-format
@@ -14358,24 +14347,23 @@ msgid "Available Candidates for %s "
 msgstr "Доступни кандидати за %s "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:643
-#, fuzzy, c-format
+#, c-format
 msgid "Candidates count %d "
-msgstr "Доступни кандидати за %s "
+msgstr "Број кандидата: %d "
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:654
 #, c-format
 msgid "%u link(s) mapped, %u not found"
-msgstr ""
+msgstr "%u веза(а) мапирано, %u није пронађено"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:660
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr ""
+msgstr "Свих %u веза је разрешено"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:687
-#, fuzzy
 msgid "Invalid symbol library identifier"
-msgstr "Библиотека није дефинисана!"
+msgstr "Неважећи идентификатор библиотеке симбола"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:740
 #, c-format
@@ -14389,18 +14377,16 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
-#, fuzzy
 msgid "Current Library Reference"
-msgstr "библиотека"
+msgstr "Тренутна референца библиотеке"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
-#, fuzzy
 msgid "New Library Reference"
-msgstr "Нова библиотека"
+msgstr "Нова референца библиотеке"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
-msgstr ""
+msgstr "Мапирај неповезане"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:59
 msgid ""
@@ -14408,98 +14394,95 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
+"Ако су неки симболи неповезани (повезани симбол није пронађен ни у једној "
+"библиотеци),\n"
+"покушај да пронађеш одговарајући симбол истог назива у некој од учитаних "
+"библиотека симбола."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
-#, fuzzy
 msgid "Update symbol fields from new library"
-msgstr "Избриши поља која нису у библиотеци"
+msgstr "Ажурирај поља симбола из нове библиотеке"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:64
 msgid ""
 "Replace current symbols fields by fields from the new library.\n"
 "Warning: fields \"Value\" and \"Footprints\" will be therefore replaced."
 msgstr ""
+"Замени поља тренутних симбола пољима из нове библиотеке.\n"
+"Упозорење: поља „Вредност“ и „Отисци“ ће такође бити замењена."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:56
-#, fuzzy
 msgid "Symbol Library References"
-msgstr "Симбол"
+msgstr "Референце библиотеке симбола"
 
 #: eeschema/dialogs/dialog_erc.cpp:130
-#, fuzzy
 msgid "Run ERC"
-msgstr "Покрени DRC"
+msgstr "Покрени ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:191
-#, fuzzy
 msgid "Show Annotation dialog"
-msgstr "Нотација јединице симбола:"
+msgstr "Прикажи дијалог за означавање"
 
 #: eeschema/dialogs/dialog_erc.cpp:203
 msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
+"Шема није у потпуности означена. Резултати ERC провере неће бити потпуни."
 
 #: eeschema/dialogs/dialog_erc.cpp:239 pcbnew/dialogs/dialog_drc.cpp:381
-#, fuzzy
 msgid "Cross-probe Selected Items"
-msgstr "Изабери"
+msgstr "Унакрсно пронађи изабрано"
 
 #: eeschema/dialogs/dialog_erc.cpp:240
-#, fuzzy
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr "Избриши"
+msgstr "Истакни одговарајуће ставке на платну када су изабране на ERC листи"
 
 #: eeschema/dialogs/dialog_erc.cpp:244 pcbnew/dialogs/dialog_drc.cpp:386
-#, fuzzy
 msgid "Center on Cross-probe"
-msgstr "Центар"
+msgstr "Центрирај при унакрсном проналажењу"
 
 #: eeschema/dialogs/dialog_erc.cpp:245 pcbnew/dialogs/dialog_drc.cpp:387
 msgid "When cross-probing, scroll the canvas so that the item is visible"
 msgstr ""
+"Приликом унакрсног испитивања, померите приказ тако да елемент буде видљив"
 
 #: eeschema/dialogs/dialog_erc.cpp:249
-#, fuzzy
 msgid "Show all errors"
-msgstr "Прикажи"
+msgstr "Прикажи све грешке"
 
 #: eeschema/dialogs/dialog_erc.cpp:250
 msgid "Show duplicate ERC markers on all applicable pins"
-msgstr ""
+msgstr "Прикажи дупликате ERC ознака на свим одговарајућим пиновима"
 
 #: eeschema/dialogs/dialog_erc.cpp:424 pcbnew/dialogs/dialog_drc.cpp:1450
-#, fuzzy
 msgid "Delete exclusions too?"
-msgstr "Избриши"
+msgstr "Да ли обрисати и изузеће?"
 
 #: eeschema/dialogs/dialog_erc.cpp:424 eeschema/dialogs/dialog_erc_base.cpp:190
 #: pcbnew/dialogs/dialog_drc.cpp:1450 pcbnew/dialogs/dialog_drc_base.cpp:233
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:80
-#, fuzzy
 msgid "Delete All Markers"
-msgstr "Избриши"
+msgstr "Обриши све ознаке"
 
 #: eeschema/dialogs/dialog_erc.cpp:426 pcbnew/dialogs/dialog_drc.cpp:1452
-#, fuzzy
 msgid "Errors and Warnings Only"
-msgstr "фајл не постоји"
+msgstr "Само грешке и упозорења"
 
 #: eeschema/dialogs/dialog_erc.cpp:427 pcbnew/dialogs/dialog_drc.cpp:1453
 msgid "Errors, Warnings and Exclusions"
-msgstr ""
+msgstr "Грешке, упозорења и изузеци"
 
 #: eeschema/dialogs/dialog_erc.cpp:546
 #, c-format
 msgid "%d symbol(s) require annotation.<br><br>"
-msgstr ""
+msgstr "%d симбол(а) захтева(ју) анотацију.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:552
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr ""
+msgstr "-------- Корисник је отказао ERC.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:554 pcbnew/dialogs/dialog_drc.cpp:548
 msgid "Done.<br><br>"
-msgstr ""
+msgstr "Готово.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:720 pcbnew/dialogs/dialog_drc.cpp:860
 msgid "errors"
@@ -14511,12 +14494,11 @@ msgstr "упозорења"
 
 #: eeschema/dialogs/dialog_erc.cpp:722 pcbnew/dialogs/dialog_drc.cpp:862
 msgid "appropriate"
-msgstr ""
+msgstr "исправан"
 
 #: eeschema/dialogs/dialog_erc.cpp:746 pcbnew/dialogs/dialog_drc.cpp:884
-#, fuzzy
 msgid "Remove exclusion for this violation"
-msgstr "Избор филтера"
+msgstr "Уклони изузеће за ово кршење"
 
 #: eeschema/dialogs/dialog_erc.cpp:747 pcbnew/dialogs/dialog_drc.cpp:885
 #, c-format
@@ -14524,108 +14506,97 @@ msgid "It will be placed back in the %s list"
 msgstr "Биће стављено назад у %s листу"
 
 #: eeschema/dialogs/dialog_erc.cpp:750 pcbnew/dialogs/dialog_drc.cpp:888
-#, fuzzy
 msgid "Edit exclusion comment..."
-msgstr "Уреди Spice модел..."
+msgstr "Измени коментар изузећа..."
 
 #: eeschema/dialogs/dialog_erc.cpp:755 pcbnew/dialogs/dialog_drc.cpp:901
-#, fuzzy
 msgid "Exclude this violation"
-msgstr "Име симбола:"
+msgstr "Искључи ово кршење"
 
 #: eeschema/dialogs/dialog_erc.cpp:756 eeschema/dialogs/dialog_erc.cpp:760
 #: pcbnew/dialogs/dialog_drc.cpp:902 pcbnew/dialogs/dialog_drc.cpp:906
-#, fuzzy, c-format
+#, c-format
 msgid "It will be excluded from the %s list"
-msgstr "Биће стављено назад у %s листу"
+msgstr "Биће искључено са листе %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:759 pcbnew/dialogs/dialog_drc.cpp:905
-#, fuzzy
 msgid "Exclude with comment..."
-msgstr "Уреди Spice модел..."
+msgstr "Искључи уз коментар..."
 
 #: eeschema/dialogs/dialog_erc.cpp:787 pcbnew/dialogs/dialog_drc.cpp:936
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr ""
+msgstr "Промените озбиљност у „Грешка” за сва кршења типа „%s”"
 
 #: eeschema/dialogs/dialog_erc.cpp:789 eeschema/dialogs/dialog_erc.cpp:796
-#, fuzzy
 msgid "Violation severities can also be edited in Schematic Setup"
-msgstr "Отвори"
+msgstr "Степени озбиљности прекршаја се такође могу изменити у подешавању шеме"
 
 #: eeschema/dialogs/dialog_erc.cpp:794 pcbnew/dialogs/dialog_drc.cpp:943
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr ""
+msgstr "Промените озбиљност у „Упозорење” за сва кршења типа „%s”"
 
 #: eeschema/dialogs/dialog_erc.cpp:800 pcbnew/dialogs/dialog_drc.cpp:949
-#, fuzzy, c-format
+#, c-format
 msgid "Ignore all '%s' violations"
-msgstr "Измјени опције круга..."
+msgstr "Занемари сва кршења за „%s”"
 
 #: eeschema/dialogs/dialog_erc.cpp:801 pcbnew/dialogs/dialog_drc.cpp:950
 msgid "Violations will not be checked or reported"
-msgstr ""
+msgstr "Кршења се неће проверавати нити пријављивати"
 
 #: eeschema/dialogs/dialog_erc.cpp:809
 msgid "Edit pin-to-pin conflict map..."
-msgstr ""
+msgstr "Уреди мапу сукоба између пинова..."
 
 #: eeschema/dialogs/dialog_erc.cpp:810 eeschema/dialogs/dialog_erc.cpp:816
 #: eeschema/dialogs/dialog_erc.cpp:823
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
-msgstr "Отвори"
+msgstr "Отворите дијалог за подешавање шеме"
 
 #: eeschema/dialogs/dialog_erc.cpp:815 pcbnew/dialogs/dialog_drc.cpp:955
-#, fuzzy
 msgid "Edit violation severities..."
-msgstr "Попуњавање зона"
+msgstr "Уреди озбиљност прекршаја..."
 
 #: eeschema/dialogs/dialog_erc.cpp:822
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Попуњавање зона"
+msgstr "Измени размак мреже за повезивање..."
 
 #: eeschema/dialogs/dialog_erc.cpp:834 eeschema/dialogs/dialog_erc.cpp:875
 #: pcbnew/dialogs/dialog_drc.cpp:966 pcbnew/dialogs/dialog_drc.cpp:1018
-#, fuzzy
 msgid "Exclusion Comment"
-msgstr "Избриши"
+msgstr "Коментар о изузећу"
 
 #: eeschema/dialogs/dialog_erc.cpp:968
 #: eeschema/dialogs/dialog_schematic_setup.cpp:109
-#, fuzzy
 msgid "Pin Conflicts Map"
-msgstr "Дужина чиоде:"
+msgstr "Мапа сукоба пинова"
 
 #: eeschema/dialogs/dialog_erc.cpp:972 eeschema/dialogs/dialog_erc.cpp:1110
 #: eeschema/dialogs/dialog_schematic_setup.cpp:102
 #: pcbnew/dialogs/dialog_board_setup.cpp:245 pcbnew/dialogs/dialog_drc.cpp:1167
 #: pcbnew/dialogs/dialog_drc.cpp:1209
-#, fuzzy
 msgid "Violation Severity"
-msgstr "Поставке симулације"
+msgstr "Озбиљност прекршаја"
 
 #: eeschema/dialogs/dialog_erc.cpp:976
 #: eeschema/dialogs/dialog_label_properties_base.cpp:207
 #: eeschema/dialogs/dialog_schematic_setup.cpp:67
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:74
 #: pcbnew/dialogs/dialog_board_setup.cpp:146
-#, fuzzy
 msgid "Formatting"
-msgstr "Формат"
+msgstr "Форматирање"
 
 #: eeschema/dialogs/dialog_erc.cpp:1182 pcbnew/dialogs/dialog_gendrill.cpp:424
-#, fuzzy, c-format
+#, c-format
 msgid "Report file '%s' created."
-msgstr "Report фајлови"
+msgstr "Датотека извештаја „%s” је креирана."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:76
 #: pcbnew/dialogs/dialog_drc_base.cpp:90
 msgid "Tests Running..."
-msgstr ""
+msgstr "Тестови се извршавају..."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:84
 #: eeschema/dialogs/dialog_erc_base.cpp:132
@@ -14673,15 +14644,14 @@ msgstr "страница"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:106
 #: pcbnew/dialogs/dialog_drc_base.cpp:120
-#, fuzzy, c-format
+#, c-format
 msgid "Violations (%s)"
-msgstr "Ротација"
+msgstr "Кршења (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:114
 #: pcbnew/dialogs/dialog_drc_base.cpp:158
-#, fuzzy
 msgid "Edit ignored tests"
-msgstr "Измјени опције круга..."
+msgstr "Уреди занемарене тестове"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:124
 #: pcbnew/dialogs/dialog_drc_base.cpp:168
@@ -14692,9 +14662,8 @@ msgstr "Изигнорисани тестови (%s)"
 #: eeschema/dialogs/dialog_erc_base.cpp:164
 #: pcbnew/dialogs/dialog_drc_base.cpp:210
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:56
-#, fuzzy
 msgid "Exclusions"
-msgstr "Избриши"
+msgstr "Изузеци"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:187
 #: pcbnew/dialogs/dialog_drc_base.cpp:230
@@ -14703,61 +14672,51 @@ msgid "Delete Marker"
 msgstr "Избриши ознаку"
 
 #: eeschema/dialogs/dialog_erc_base.h:106 eeschema/tools/sch_actions.cpp:46
-#, fuzzy
 msgid "Electrical Rules Checker"
-msgstr "Електрични тип"
+msgstr "Алат за проверу електричних правила"
 
 #: eeschema/dialogs/dialog_erc_job_config.cpp:23
-#, fuzzy
 msgid "ERC Job Settings"
-msgstr "Уреди опције"
+msgstr "Подешавања ERC задатка"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:268
-#, fuzzy
 msgid "Export netlist in KiCad format"
-msgstr "Унеси текст који ће бити кориштен унутар шеме"
+msgstr "Извези нетлисту у KiCad формату"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:273
 msgid "Export netlist in OrcadPCB2 format"
-msgstr ""
+msgstr "Извези нет-листу у OrcadPCB2 формату"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:278
-#, fuzzy
 msgid "Export netlist in Allegro format"
-msgstr "Остало:"
+msgstr "Извези нет-листу у Allegro формату"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:283
-#, fuzzy
 msgid "Export netlist in CadStar format"
-msgstr "Унеси текст који ће бити кориштен унутар шеме"
+msgstr "Извези нет-листу у CadStar формату"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:288
-#, fuzzy
 msgid "Export netlist in PADS format"
-msgstr "Унеси"
+msgstr "Извези нет-листу у PADS формату"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:301
 #: eeschema/dialogs/dialog_export_netlist_base.h:66
-#, fuzzy
 msgid "Export Netlist"
-msgstr "Унеси"
+msgstr "Извоз нетлисте"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:345
-#, fuzzy
 msgid "Export netlist in SPICE format"
-msgstr "Унеси"
+msgstr "Извези нет-листу у SPICE формату"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 #: eeschema/dialogs/dialog_export_netlist.cpp:393
-#, fuzzy
 msgid "Use current sheet as root"
-msgstr "Струја"
+msgstr "Користи тренутни лист као корен"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 #: eeschema/dialogs/dialog_export_netlist.cpp:394
-#, fuzzy
 msgid "Export netlist only for the current sheet"
-msgstr "Остало:"
+msgstr "Извези нет-листу само за тренутни лист"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
 #: eeschema/dialogs/dialog_sim_command_base.cpp:647
@@ -14766,7 +14725,7 @@ msgstr "Сачувај све напоне"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:353
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Напишите директиву за чување свих напона (.save all)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:356
 #: eeschema/dialogs/dialog_sim_command_base.cpp:650
@@ -14775,34 +14734,36 @@ msgstr "Сачувај све струје"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:357
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Напишите директиву за чување свих струја (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:360
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "Стандардни тип"
+msgstr "Сачувајте све вредности расипања снаге"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:361
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
+"Напишите директиве за чување података о дисипацији снаге за све елементе "
+"(.probe p(<елемент>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:365
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
 msgid "Save all digital event data"
-msgstr ""
+msgstr "Сачувајте све дигиталне податке о догађајима"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:366
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
 msgstr ""
+"Ако није постављено, упиши директиву која спречава чување података о "
+"дигиталним догађајима (esave none)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:371
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Покрени"
+msgstr "Покрени команду спољног симулатора:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:372
 msgid ""
@@ -14810,10 +14771,13 @@ msgid ""
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
+"Унесите командну линију за покретање SPICE-а\n"
+"Обично је то '<путања до SPICE извршне датотеке> \"%I\"'\n"
+"%I ће бити замењено путањом до датотеке мрежне листе"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:390
 msgid "Export netlist as a SPICE .subckt model"
-msgstr ""
+msgstr "Извези нет-листу као SPICE .subckt модел"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:437
 #, fuzzy
