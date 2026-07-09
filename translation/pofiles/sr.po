@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-09 03:28+0000\n"
+"PO-Revision-Date: 2026-07-09 09:44+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -13078,9 +13078,8 @@ msgid "Schematic assignment"
 msgstr "Додјела шеме"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
-#, fuzzy
 msgid "Cmp file assignment"
-msgstr "Додјела шеме"
+msgstr "Додела из .cmp датотеке"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -14780,58 +14779,55 @@ msgid "Export netlist as a SPICE .subckt model"
 msgstr "Извези нет-листу као SPICE .subckt модел"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:437
-#, fuzzy
 msgid "Netlist command:"
-msgstr "Грешка: "
+msgstr "Наредба за нетлисту:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:462
-#, fuzzy
 msgid "Save Netlist File"
-msgstr "Сачувај као .csv фајл"
+msgstr "Сачувај датотеку мрежне листе"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:541
-#, fuzzy, c-format
+#, c-format
 msgid "%s Export"
-msgstr "Попуњавање зона"
+msgstr "%s извоз"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:581
 #: eeschema/netlist_exporters/netlist_generator.cpp:52
-#, fuzzy
 msgid "Exporting netlist requires a fully annotated schematic."
-msgstr "Унеси текст који ће бити кориштен унутар шеме"
+msgstr "Извоз нетлисте захтева потпуно означену шему."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:641
 #: eeschema/dialogs/dialog_export_netlist.cpp:680
-#, fuzzy
 msgid "external simulator not found"
-msgstr "Покрени"
+msgstr "Спољни симулатор није пронађен"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:642
 #: eeschema/dialogs/dialog_export_netlist.cpp:681
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
+"Напомена: командна линија обично гласи: <tt>&lt;путања до SPICE бинарног "
+"фајла&gt; \"%I\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:687
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "Спољни симулатор има погрешан формат или архитектуру"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:692
 msgid "permission denied"
 msgstr "онемогућен приступ"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:830
-#, fuzzy
 msgid "This plugin already exists."
-msgstr "Попуњавање зона"
+msgstr "Овај додатак већ постоји."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:844
 msgid "Maximum number of plugins already added to dialog."
-msgstr ""
+msgstr "Максималан број додатака је већ додат у дијалог."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:878
 msgid "You must provide a netlist generator title"
-msgstr ""
+msgstr "Морате навести назив генератора нетлисте."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:27
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:64
