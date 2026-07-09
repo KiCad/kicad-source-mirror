@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include <tools/sch_tool_base.h>
 #include <sch_base_frame.h>
 #include <sch_shape.h>
@@ -55,6 +57,16 @@ private:
 
     ///< Commit a completed item.
     void commitItem( SCH_COMMIT& aCommit, std::unique_ptr<SCH_ITEM> aItem, const wxString& aDescription );
+
+    ///< Return the default text size (in IU) for the active editor.
+    int getDefaultTextSize() const;
+
+    /**
+     * Run the interactive arc-drawing event loop.
+     *
+     * @return true if an arc was completed, false if the tool was cancelled.
+     */
+    bool drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aArc, std::optional<VECTOR2D> aStartingPoint );
 
     FILL_T        m_lastFillStyle;
     COLOR4D       m_lastFillColor;

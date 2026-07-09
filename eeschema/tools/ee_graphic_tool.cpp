@@ -427,17 +427,68 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     REENTRANCY_GUARD guard( &m_inDrawingTool );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
 
+    SCH_LAYER_ID            shapeLayer = getShapeLayer();
+    std::optional<VECTOR2D> startingPoint;
+
+    const auto makeNewArc =
+            [&]()
+            {
+                std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, shapeLayer, 0, m_lastFillStyle );
+                arc->SetStroke( m_lastStroke );
+                arc->SetFillColor( m_lastFillColor );
+                arc->SetParent( schematic );
+                arc->SetFlags( IS_NEW );
+
+                return arc;
+            };
+
+    std::unique_ptr<SCH_SHAPE> arc = makeNewArc();
+
+    arc->SetFlags( IS_NEW );
+
+    m_frame->PushTool( aEvent );
+    Activate();
+
+    if( aEvent.HasPosition() )
+        startingPoint = aEvent.Position();
+
+    while( drawArc( aEvent, arc, startingPoint ) )
+    {
+        if( arc )
+        {
+            m_lastStroke = arc->GetStroke();
+            m_lastFillStyle = arc->GetFillMode();
+            m_lastFillColor = arc->GetFillColor();
+
+            SCH_SHAPE* committedArc = arc.get();
+
+            SCH_COMMIT commit( m_toolMgr );
+            commitItem( commit, std::move( arc ), _( "Draw Arc" ) );
+
+            m_selectionTool->AddItemToSel( committedArc );
+            m_toolMgr->PostAction( ACTIONS::activatePointEditor );
+        }
+
+        arc = makeNewArc();
+        startingPoint = std::nullopt;
+    }
+
+    return 0;
+}
+
+
+bool EE_GRAPHIC_TOOL::drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aArc,
+                               std::optional<VECTOR2D> aStartingPoint )
+{
+    if( !aArc )
+        return false;
+
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     VECTOR2I              cursorPos;
 
-    // We might be running as the same shape in another co-routine.  Make sure that one
-    // gets whacked.
-    m_toolMgr->DeactivateTool();
-
-    m_toolMgr->RunAction( ACTIONS::selectionClear );
-
-    frame()->PushTool( aEvent );
+    ARC_DRAW_BEHAVIOR arcBehavior( schIUScale, frame()->GetUserUnits() );
+    m_view->Add( &arcBehavior.GetAssistant() );
 
     auto setCursor =
             [&]()
@@ -452,34 +503,17 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
             };
 
-    Activate();
-
-    // Must be done after Activate() so that it gets set into the correct context
-    getViewControls()->ShowCursor( true );
-
-    // Set initial cursor
+    controls->ShowCursor( true );
     setCursor();
 
-    ARC_DRAW_BEHAVIOR arcBehavior( schIUScale, frame()->GetUserUnits() );
-    m_view->Add( &arcBehavior.GetAssistant() );
-
-    SCH_LAYER_ID shapeLayer = getShapeLayer();
-
-    // Create the shape up front, matching the PCB drawArc pattern.
-    std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, shapeLayer, 0, m_lastFillStyle );
-    arc->SetStroke( m_lastStroke );
-    arc->SetFillColor( m_lastFillColor );
-    arc->SetParent( schematic );
-    arc->SetFlags( IS_NEW );
-
     bool started = false;
+    bool cancelled = false;
 
     m_toolMgr->PostAction( ACTIONS::refreshPreview );
 
-    if( aEvent.HasPosition() )
-        m_toolMgr->PrimeTool( aEvent.Position() );
+    if( aStartingPoint )
+        m_toolMgr->PrimeTool( *aStartingPoint );
 
-    // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
@@ -493,15 +527,15 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         {
             if( !started )
             {
-                // Consume the event so it does not propagate to other tools.
                 evt->SetPassEvent( false );
-                frame()->PopTool( aEvent );
+                m_frame->PopTool( aTool );
             }
             else
             {
                 cleanup();
             }
 
+            cancelled = true;
             break;
         }
         else if( evt->IsActivate() )
@@ -513,13 +547,14 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
             else if( evt->IsMoveTool() )
             {
                 cleanup();
-                // leave ourselves on the stack so we come back after the move
+                cancelled = true;
                 break;
             }
             else
             {
                 cleanup();
-                frame()->PopTool( aEvent );
+                m_frame->PopTool( aTool );
+                cancelled = true;
                 break;
             }
         }
@@ -533,8 +568,8 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
                 controls->CaptureCursor( true );
 
                 m_view->ClearPreview();
-                m_view->AddToPreview( arc->Clone() );
-                frame()->SetMsgPanel( arc.get() );
+                m_view->AddToPreview( aArc->Clone() );
+                frame()->SetMsgPanel( aArc.get() );
                 started = true;
             }
 
@@ -555,7 +590,7 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            if( !started )
+            if( !aArc )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
             m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
@@ -575,69 +610,37 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
         }
 
-        // --- Geometry update and completion check (at bottom of loop) ---
-
         if( arcBehavior.IsComplete() )
         {
-            // Apply the final geometry before committing.
-            if( arcBehavior.HasGeometryChanged() )
-            {
-                arcBehavior.ApplyToShape( *arc );
-                m_view->ClearPreview();
-                m_view->AddToPreview( arc->Clone() );
-                m_view->Update( &arcBehavior.GetAssistant() );
-                arcBehavior.ClearGeometryChanged();
-            }
-
             break;
         }
         else if( arcBehavior.HasGeometryChanged() )
         {
-            arcBehavior.ApplyToShape( *arc );
+            arcBehavior.ApplyToShape( *aArc );
             m_view->ClearPreview();
-            m_view->AddToPreview( arc->Clone() );
+            m_view->AddToPreview( aArc->Clone() );
             m_view->Update( &arcBehavior.GetAssistant() );
             arcBehavior.ClearGeometryChanged();
 
             if( started )
-                frame()->SetMsgPanel( arc.get() );
-            else
-                frame()->SetMsgPanel( schematic );
+                frame()->SetMsgPanel( aArc.get() );
         }
     }
 
     m_view->Remove( &arcBehavior.GetAssistant() );
-
-    if( arcBehavior.IsComplete() )
-    {
-        m_lastStroke = arc->GetStroke();
-        m_lastFillStyle = arc->GetFillMode();
-        m_lastFillColor = arc->GetFillColor();
-
-        SCH_SHAPE* committedArc = arc.get();
-
-        SCH_COMMIT commit( m_toolMgr );
-        commitItem( commit, std::move( arc ), _( "Draw Arc" ) );
-
-        m_selectionTool->AddItemToSel( committedArc );
-
-        m_view->ClearPreview();
-        m_toolMgr->PostAction( ACTIONS::activatePointEditor );
-    }
-    else
-    {
-        m_view->ClearPreview();
-    }
-
-    if( !started )
-        frame()->SetMsgPanel( schematic );
 
     controls->SetAutoPan( false );
     controls->CaptureCursor( false );
     controls->ForceCursorPosition( false );
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
-    return 0;
+    if( cancelled )
+    {
+        m_view->ClearPreview();
+        aArc.reset();
+    }
+
+    return !cancelled;
 }
 
 
@@ -651,5 +654,9 @@ void EE_GRAPHIC_TOOL::setTransitions()
     Go( &EE_GRAPHIC_TOOL::DrawArc,          SCH_ACTIONS::drawArc.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawBezier.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawTextBox.MakeEvent() );
+    Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolLines.MakeEvent() );
+    Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolPolygon.MakeEvent() );
+    Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolTextBox.MakeEvent() );
+
     // clang-format on
 }

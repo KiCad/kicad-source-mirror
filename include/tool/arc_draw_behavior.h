@@ -76,6 +76,9 @@ public:
     // Interactive operations called from a TOOL framework event loop
     //
 
+    /// Reset the behaviour to its initial state for chained object creation loops.
+    void Reset();
+
     /// Lock in a point and advance the construction state.
     void AddPoint( const VECTOR2I& aPosition );
 
@@ -118,6 +121,9 @@ public:
     void SetUnits( EDA_UNITS aUnits ) { m_assistant->SetUnits( aUnits ); }
 
 private:
+    const EDA_IU_SCALE& m_iuScale;
+    EDA_UNITS           m_units;
+
     std::unique_ptr<KIGFX::PREVIEW::ARC_GEOM_MANAGER> m_manager;
     std::unique_ptr<KIGFX::PREVIEW::ARC_ASSISTANT>    m_assistant;
 };

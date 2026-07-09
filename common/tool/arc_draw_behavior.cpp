@@ -24,10 +24,11 @@
 #include <preview_items/arc_geom_manager.h>
 
 
-ARC_DRAW_BEHAVIOR::ARC_DRAW_BEHAVIOR( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits )
+ARC_DRAW_BEHAVIOR::ARC_DRAW_BEHAVIOR( const EDA_IU_SCALE& aIuScale, EDA_UNITS aUnits ) :
+        m_iuScale( aIuScale ),
+        m_units( aUnits )
 {
-    m_manager = std::make_unique<KIGFX::PREVIEW::ARC_GEOM_MANAGER>();
-    m_assistant = std::make_unique<KIGFX::PREVIEW::ARC_ASSISTANT>( *m_manager, aIuScale, aUnits );
+    Reset();
 }
 
 
@@ -52,6 +53,13 @@ bool ARC_DRAW_BEHAVIOR::HasGeometryChanged() const
 void ARC_DRAW_BEHAVIOR::ClearGeometryChanged()
 {
     m_manager->ClearGeometryChanged();
+}
+
+
+void ARC_DRAW_BEHAVIOR::Reset()
+{
+    m_manager = std::make_unique<KIGFX::PREVIEW::ARC_GEOM_MANAGER>();
+    m_assistant = std::make_unique<KIGFX::PREVIEW::ARC_ASSISTANT>( *m_manager, m_iuScale, m_units );
 }
 
 
