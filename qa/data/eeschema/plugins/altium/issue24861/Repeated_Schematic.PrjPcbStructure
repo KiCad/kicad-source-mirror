@@ -1,0 +1,4 @@
+Record=TopLevelDocument|FileName=Repeated_Schematic.SchDoc|SheetNumber=1
+Record=SheetSymbol|SourceDocument=Repeated_Schematic.SchDoc|Designator=CH1|SchDesignator=CH1|FileName=Channel.SchDoc|SheetNumber=2|SymbolType=Normal|RawFileName=Channel.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Repeated_Schematic.SchDoc|Designator=CH2|SchDesignator=CH2|FileName=Channel.SchDoc|SheetNumber=2|SymbolType=Normal|RawFileName=Channel.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Repeated_Schematic.SchDoc|Designator=CH3|SchDesignator=CH3|FileName=Channel.SchDoc|SheetNumber=2|SymbolType=Normal|RawFileName=Channel.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
