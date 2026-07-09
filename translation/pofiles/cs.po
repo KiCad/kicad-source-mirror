@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-07-08 23:40+0000\n"
+"PO-Revision-Date: 2026-07-10 02:01+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
@@ -2130,9 +2130,8 @@ msgid "entrypoint '%s' could not be read"
 msgstr "Soubor '%s' nelze vytvořit."
 
 #: common/api/api_plugin_manager.cpp:407
-#, fuzzy
 msgid "process could not be created"
-msgstr "Proces nebylo možné vytvořit"
+msgstr "proces nebylo možné vytvořit"
 
 #: common/api/api_plugin_manager.cpp:452
 #, fuzzy, c-format
@@ -2694,18 +2693,16 @@ msgid "Add Netclass Assignment"
 msgstr "Přidat přiřazení třídy spojů"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(chybí soubor)"
+msgstr "(chybí)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
 msgid "File"
 msgstr "Soubor"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Zobrazit všechny verze"
+msgstr "Uložená verze"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
 #, fuzzy
@@ -2733,18 +2730,16 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "Proud"
+msgstr "Zachovat současnou"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Zakázaná zóna"
+msgstr "Zachovat obě"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
@@ -17313,9 +17308,9 @@ msgstr "Výchozí variantu nelze odstranit."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2998
 #: eeschema/sch_edit_frame.cpp:3091
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Description for '%s'"
-msgstr "Upravit popis úlohy"
+msgstr "Upravit Popis pro '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -20554,9 +20549,9 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "Nelze přistoupit k zásuvnému modulu symbolů KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "Uložení staženého symbolu selhalo."
+msgstr "Nelze uložit stažený symbol: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
 msgid "No symbol asset was available to place."
@@ -52068,9 +52063,9 @@ msgid "Loading unicode strings..."
 msgstr "Načítání řetězců Unicode..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4629
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "Vzory pro ladění délky"
+msgstr "Importováno %d vzorů pro ladění délky."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4640
 msgid "Loading text..."
