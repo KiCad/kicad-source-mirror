@@ -1332,7 +1332,7 @@ BOOST_AUTO_TEST_CASE( Issue23298_BaseFootprintHiddenInNonDefaultVariant )
                                           std::vector<KIID>{ KIID() } );
 
     COMPONENT_VARIANT variantA( "Variant A" );
-    variantA.m_fields[GetCanonicalFieldName( FIELD_T::FOOTPRINT )] = variantFpid.Format();
+    variantA.m_fields[GetCanonicalFieldName( FIELD_T::FOOTPRINT )] = variantFpid.Format().wx_str();
     variantA.m_dnp = false;
     variantA.m_hasDnp = true;
     component->AddVariant( variantA );
