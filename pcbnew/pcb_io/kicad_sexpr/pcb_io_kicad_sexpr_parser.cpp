@@ -4136,20 +4136,16 @@ PCB_REFERENCE_IMAGE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_REFERENCE_IMAGE( BOARD_
 
 PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEXT* aBaseText )
 {
+    std::unique_ptr<PCB_TEXT> text( aBaseText );
+
     wxCHECK_MSG( CurTok() == T_gr_text || CurTok() == T_fp_text, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_TEXT." ) );
 
-    FOOTPRINT*                parentFP = dynamic_cast<FOOTPRINT*>( aParent );
-    std::unique_ptr<PCB_TEXT> text;
+    FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aParent );
 
     T token = NextTok();
 
-    // If a base text is provided, we have a derived text already parsed and just need to update it
-    if( aBaseText )
-    {
-        text = std::unique_ptr<PCB_TEXT>( aBaseText );
-    }
-    else if( parentFP )
+    if( !text && parentFP )
     {
         switch( token )
         {
@@ -4172,7 +4168,7 @@ PCB_TEXT* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEX
 
         token = NextTok();
     }
-    else
+    else if( !text )
     {
         text = std::make_unique<PCB_TEXT>( aParent );
     }
@@ -4992,7 +4988,7 @@ PCB_DIMENSION_BASE* PCB_IO_KICAD_SEXPR_PARSER::parseDIMENSION( BOARD_ITEM* aPare
                 dim->SetKeepTextAligned( false );
             }
 
-            parsePCB_TEXT( m_board, dim.get() );
+            dim.reset( static_cast<PCB_DIMENSION_BASE*>( parsePCB_TEXT( m_board, dim.release() ) ) );
 
             if( isLegacyDimension )
             {

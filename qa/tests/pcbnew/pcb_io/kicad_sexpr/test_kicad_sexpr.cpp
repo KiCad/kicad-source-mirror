@@ -726,6 +726,24 @@ BOOST_AUTO_TEST_CASE( CopperThievingZone_RejectedInOldFileVersion )
 }
 
 
+BOOST_AUTO_TEST_CASE( MalformedDimensionTextThrowsCleanly )
+{
+    KI_TEST::TEMPORARY_DIRECTORY tempDir( "kicad_qa_malformed_dimension_text_", "" );
+    std::filesystem::path        tmpPath = tempDir.GetPath() / "malformed_dimension_text.kicad_pcb";
+    std::ofstream         out( tmpPath );
+    out << "(kicad_pcb (version 20240108) (generator \"test\")"
+        << " (general (thickness 1.6)) (paper \"A4\")"
+        << " (layers (0 \"F.Cu\" signal) (31 \"B.Cu\" signal) (36 \"B.SilkS\" user \"b.silkscreen\"))"
+        << " (dimension (type aligned) (layer \"B.SilkS\")"
+        << "   (gr_text \"1 mm\" (at broken))))";
+    out.close();
+
+    std::unique_ptr<BOARD> readBoard = std::make_unique<BOARD>();
+    PCB_IO_KICAD_SEXPR     reader;
+    BOOST_CHECK_THROW( reader.LoadBoard( tmpPath.string(), readBoard.get() ), IO_ERROR );
+}
+
+
 /**
  * The parser must reject non-positive size / gap / width values inline so a
  * hand-edited or corrupted file cannot leave the zone in a state that would
