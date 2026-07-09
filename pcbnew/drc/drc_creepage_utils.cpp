@@ -650,6 +650,34 @@ void CREEPAGE_GRAPH::RemoveDuplicatedShapes()
 
 void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
 {
+    // Flag overlapping cutouts so the arc void check below only runs when needed.
+    std::vector<BOX2I> cutouts;
+
+    for( BOARD_ITEM* be : m_boardEdge )
+    {
+        PCB_SHAPE* s = static_cast<PCB_SHAPE*>( be );
+
+        if( s
+            && ( s->GetShape() == SHAPE_T::RECTANGLE || s->GetShape() == SHAPE_T::CIRCLE
+                 || s->GetShape() == SHAPE_T::POLY ) )
+        {
+            cutouts.push_back( s->GetBoundingBox() );
+        }
+    }
+
+    for( size_t i = 0; i < cutouts.size() && !m_hasOverlappingCutouts; ++i )
+    {
+        for( size_t j = i + 1; j < cutouts.size(); ++j )
+        {
+            if( cutouts[i].Intersects( cutouts[j] ) && !cutouts[i].Contains( cutouts[j] )
+                && !cutouts[j].Contains( cutouts[i] ) )
+            {
+                m_hasOverlappingCutouts = true;
+                break;
+            }
+        }
+    }
+
     for( BOARD_ITEM* drawing : m_boardEdge )
     {
         PCB_SHAPE* d = dynamic_cast<PCB_SHAPE*>( drawing );
@@ -968,6 +996,23 @@ void BE_SHAPE_ARC::ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::shared
 {
     if( !a1 || !a2 )
         return;
+
+    // Drop an arc that bulges into an overlapping cutout, it is not a real edge to hug.
+    if( aG.m_hasOverlappingCutouts && aG.m_boardOutline )
+    {
+        VECTOR2D center( GetPos().x, GetPos().y );
+        VECTOR2D mid = ( VECTOR2D( a1->m_pos.x, a1->m_pos.y ) + VECTOR2D( a2->m_pos.x, a2->m_pos.y ) ) / 2.0 - center;
+
+        if( mid.EuclideanNorm() > 0 )
+        {
+            VECTOR2I arcMid( center + mid.Resize( m_radius ) );
+
+            if( !aG.m_boardOutline->Contains( arcMid, -1, 100 ) && !aG.m_boardOutline->PointOnEdge( arcMid, 100 ) )
+            {
+                return;
+            }
+        }
+    }
 
     EDA_ANGLE angle1 = AngleBetweenStartAndEnd( a1->m_pos );
     EDA_ANGLE angle2 = AngleBetweenStartAndEnd( a2->m_pos );

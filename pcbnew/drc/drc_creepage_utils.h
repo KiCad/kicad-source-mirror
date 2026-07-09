@@ -912,6 +912,7 @@ public:
     std::vector<BOARD_ITEM*>                       m_boardEdge;
     std::vector<std::unique_ptr<PCB_SHAPE>>        m_ownedBoardEdges;
     SHAPE_POLY_SET*                                m_boardOutline;
+    bool                                           m_hasOverlappingCutouts = false;
     std::vector<std::shared_ptr<GRAPH_NODE>>       m_nodes;
     std::vector<std::shared_ptr<GRAPH_CONNECTION>> m_connections;
     std::vector<CREEP_SHAPE*>                      m_shapeCollection;
