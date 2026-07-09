@@ -24,6 +24,8 @@
  */
 
 #include <atomic>
+#include <cmath>
+#include <functional>
 #include <future>
 #include <wx/filename.h>
 #include <hash.h>
@@ -99,7 +101,22 @@ public:
         VERTEX* tail = nullptr;
 
         for( int i = 0; i < aPolys.OutlineCount(); i++ )
-            tail = createList( aPolys.Outline( i ), tail, (void*)( intptr_t )( i ) );
+        {
+            const SHAPE_LINE_CHAIN& outline = aPolys.Outline( i );
+            std::vector<double>&    distances = m_outlineDistances.emplace_back();
+
+            distances.reserve( outline.PointCount() + 1 );
+            distances.push_back( 0.0 );
+
+            for( int j = 0; j < outline.PointCount(); j++ )
+            {
+                distances.push_back( distances.back()
+                                     + ( outline.CPoint( j + 1 ) - outline.CPoint( j ) )
+                                               .EuclideanNorm() );
+            }
+
+            tail = createList( outline, tail, (void*)( intptr_t )( i ) );
+        }
 
         if( tail )
             tail->updateList();
@@ -119,6 +136,20 @@ public:
 
         auto check_pt = [&]( VERTEX* p )
         {
+            // A nearby point along the same contour is already connected and would consume the
+            // visited-point suppression before a contour-distant point across a neck is considered.
+            if( p->GetUserData() == aPt->GetUserData() )
+            {
+                const std::vector<double>& distances =
+                        m_outlineDistances[(intptr_t) p->GetUserData()];
+                double directDistance = std::abs( distances[p->i] - distances[aPt->i] );
+                double contourDistance =
+                        std::min( directDistance, distances.back() - directDistance );
+
+                if( contourDistance < m_dist )
+                    return;
+            }
+
             VECTOR2D diff( p->x - aPt->x, p->y - aPt->y );
             SEG::ecoord dist2 = diff.SquaredEuclideanNorm();
 
@@ -201,8 +232,9 @@ public:
     }
 
 private:
-    std::set<RESULTS> m_results;
-    int m_dist;
+    std::set<RESULTS>                m_results;
+    std::vector<std::vector<double>> m_outlineDistances;
+    int                              m_dist;
 };
 
 
