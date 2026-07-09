@@ -52,6 +52,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
 #include <render_settings.h>
+#include <scoped_set_reset.h>
 #include <view/view.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
@@ -1142,8 +1143,14 @@ FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( const LIB_ID& aLibId, bool aAsPr
         if( m_pcb == m_tabContexts[reuseSlot]->GetBoard() )
             m_pcb = nullptr;
 
+        BOARD* displacedBoard = m_tabContexts[reuseSlot]->GetBoard();
+
         return placeReusedTabContext( m_tabContexts, reuseSlot, std::move( ctx ),
-                                      [&]() { m_tabsPanel->AddTab( key, name, aAsPreview ); } );
+                [&]()
+                {
+                    SCOPED_SET_RESET<BOARD*> protectedBoard( m_protectedBorrowedBoard, displacedBoard );
+                    m_tabsPanel->AddTab( key, name, aAsPreview );
+                } );
     }
 
     m_tabContexts.push_back( std::move( ctx ) );
