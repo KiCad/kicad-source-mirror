@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-08 23:40+0000\n"
+"PO-Revision-Date: 2026-07-09 09:44+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -2156,9 +2156,8 @@ msgid "entrypoint '%s' could not be read"
 msgstr "Soubor '%s' nelze vytvořit."
 
 #: common/api/api_plugin_manager.cpp:446
-#, fuzzy
 msgid "process could not be created"
-msgstr "Proces nebylo možné vytvořit"
+msgstr "proces nebylo možné vytvořit"
 
 #: common/api/api_plugin_manager.cpp:490
 #, fuzzy, c-format
@@ -2427,9 +2426,9 @@ msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr "Soubor desky '%s' nelze uložit jako blok návrhu na '%s'."
 
 #: common/design_block_io.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "Selhalo uložení souboru knihovny návrhového bloku '%s'."
+msgstr "Nelze uložit metadata návrhového bloku '%s': %s"
 
 #: common/design_block_io.cpp:501
 #, c-format
@@ -2733,18 +2732,16 @@ msgid "Add Netclass Assignment"
 msgstr "Přidat přiřazení třídy spojů"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:29
-#, fuzzy
 msgid "(missing)"
-msgstr "(chybí soubor)"
+msgstr "(chybí)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:41
 msgid "File"
 msgstr "Soubor"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:42
-#, fuzzy
 msgid "Saved version"
-msgstr "Zobrazit všechny verze"
+msgstr "Uložená verze"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:43
 #, fuzzy
@@ -2772,18 +2769,16 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "Proud"
+msgstr "Zachovat současnou"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Zakázaná zóna"
+msgstr "Zachovat obě"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
@@ -3202,9 +3197,9 @@ msgstr "Nelze vytvořit dočasný výstupní adresář."
 #: common/dialogs/dialog_git_mr_review.cpp:337
 #: common/dialogs/dialog_git_mr_review.cpp:357
 #: common/dialogs/dialog_git_mr_review.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Could not extract %s from %s."
-msgstr "Nelze načíst obrázek z '%s'."
+msgstr "Nelze extrahovat %s z %s."
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:25
 #, fuzzy
@@ -3217,9 +3212,8 @@ msgid "Head ref:"
 msgstr "Ohraničení záhlaví"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
-#, fuzzy
 msgid "Compare"
-msgstr "Společnost"
+msgstr "Porovnat"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:48
 #, fuzzy
@@ -3485,9 +3479,9 @@ msgstr "Nebyly zjištěny žádné relevantní rozdíly."
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "%zu change(s) detected."
-msgstr "Nejsou vybrány žádné spoje."
+msgstr "%zu změn detekováno."
 
 #: common/dialogs/dialog_kicad_diff.cpp:334
 #, fuzzy
@@ -3551,7 +3545,7 @@ msgstr "Žádná součástka k uložení."
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
 msgid "%zu conflict(s) require resolution."
-msgstr ""
+msgstr "%zu konfliktů vyžaduje řešení."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:217
 #, c-format
@@ -3573,9 +3567,9 @@ msgid "Select a conflict on the left to see details."
 msgstr "Vybrat všechny sítě v levém seznamu"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Conflict on %s"
-msgstr "Konflikty"
+msgstr "Konflikt s %s"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
@@ -6683,14 +6677,12 @@ msgid "Move Down"
 msgstr "Přesunout dolů"
 
 #: common/diff_merge/auto_resolution.cpp:251
-#, fuzzy
 msgid "Item id: "
-msgstr "Najít položku:"
+msgstr "Položka id: "
 
 #: common/diff_merge/auto_resolution.cpp:252
-#, fuzzy
 msgid "Current resolution: "
-msgstr "rozlišení X:"
+msgstr "Současné rozlišení: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
@@ -6739,7 +6731,7 @@ msgstr "Načtení dat obrázku se nezdařilo."
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
-msgstr ""
+msgstr "Kolize"
 
 #: common/diff_merge/diff_tree_grouping.cpp:41
 #, fuzzy
@@ -7524,7 +7516,7 @@ msgstr "Mnohoúhelník"
 #: common/eda_shape.cpp:469 common/eda_shape.cpp:1463 common/eda_shape.cpp:3394
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:213
 msgid "Ellipse"
-msgstr ""
+msgstr "Elipsa"
 
 #: common/eda_shape.cpp:470 common/eda_shape.cpp:1464 common/eda_shape.cpp:3395
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:229
@@ -8987,7 +8979,7 @@ msgstr "Nelze zapsat report do souboru '%s'."
 #: common/io/diptrace/diptrace_binary_reader.cpp:63
 #, c-format
 msgid "DipTrace file '%s' is too large (%ld bytes)."
-msgstr ""
+msgstr "Soubor DipTrace '%s' je příliš velký (%ld bajtů)."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:85
 #, c-format
@@ -9133,9 +9125,9 @@ msgid "'%s' is not a P-CAD ASCII file."
 msgstr "'%s' není platná hodnota SPICE."
 
 #: common/io/pcad/s_expr_loader.cpp:224 common/io/pcad/s_expr_loader.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Unbalanced parentheses in '%s'."
-msgstr "Nelze analyzovat '%s' na '%s'"
+msgstr "Nerovnováha závorek v '%s'."
 
 #: common/jobs/job.cpp:82
 msgid "Job Settings"
@@ -10257,9 +10249,9 @@ msgid "Restore Failed"
 msgstr "Obnovení selhalo"
 
 #: common/local_history.cpp:2281
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Obnovit na aktuální úhel od referenční polohy."
+msgstr "Obnovit projekt do verze z %s?"
 
 #: common/local_history.cpp:2283
 #, fuzzy
@@ -12363,18 +12355,16 @@ msgid "Close Tab"
 msgstr "Zavřít"
 
 #: common/widgets/editor_tabs_panel.cpp:640
-#, fuzzy
 msgid "Close Other Tabs"
-msgstr "Přepnout stav výběru"
+msgstr "Zavřít ostatní panely"
 
 #: common/widgets/editor_tabs_panel.cpp:641
 msgid "Close Tabs to the Right"
-msgstr ""
+msgstr "Zavřít panely napravo"
 
 #: common/widgets/editor_tabs_panel.cpp:642
-#, fuzzy
 msgid "Close All Tabs"
-msgstr "Vymazat všechny vrstvy"
+msgstr "Zavřít všechny panely"
 
 #: common/widgets/filter_combobox.cpp:68
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1157
@@ -18379,9 +18369,9 @@ msgstr "Výchozí variantu nelze odstranit."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2999
 #: eeschema/sch_edit_frame.cpp:3132
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Description for '%s'"
-msgstr "Upravit popis úlohy"
+msgstr "Upravit Popis pro '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -22064,9 +22054,9 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "Nelze přistoupit k zásuvnému modulu symbolů KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "Uložení staženého symbolu selhalo."
+msgstr "Nelze uložit stažený symbol: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
 msgid "No symbol asset was available to place."
@@ -29764,9 +29754,8 @@ msgid "Failed to load %s"
 msgstr "Nepodařilo se načíst '%s'."
 
 #: eeschema/tools/sch_inspection_tool.cpp:850
-#, fuzzy
 msgid "Save the schematic before comparing against local history."
-msgstr "Uložit změny do schématu před zavřením?"
+msgstr "Uložit schéma před porovnáním s místní historií."
 
 #: eeschema/tools/sch_inspection_tool.cpp:861
 #: pcbnew/tools/board_inspection_tool.cpp:2183
@@ -32901,9 +32890,9 @@ msgstr "(volitelné; výchozí 0)"
 
 #: kicad/cli/command_pcb_export_png.cpp:143
 #: kicad/cli/command_sch_export_plot.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "DPI must be between %d and %d\n"
-msgstr "Šířka textu musí být mezi %s a %s."
+msgstr "DPI musí být mezi %d a %d\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:75
@@ -38905,9 +38894,9 @@ msgid "Value must be between %s and %s."
 msgstr "Šířka textu musí být mezi %s a %s."
 
 #: pcbnew/board_design_settings.cpp:1473
-#, fuzzy, c-format
+#, c-format
 msgid "Value must be between %.3f and %.3f."
-msgstr "Šířka textu musí být mezi %s a %s."
+msgstr "Hodnota musí být mezi %.3f a %.3f."
 
 #: pcbnew/board_design_settings.cpp:1514
 #, fuzzy
@@ -42517,9 +42506,9 @@ msgid "Different"
 msgstr "Diferenciální"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "%zu items matched"
-msgstr " (načteno %d položek)"
+msgstr "%zu položek se shodou"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:929
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1108
@@ -42548,9 +42537,8 @@ msgid "Syntax OK"
 msgstr "Syntaxe je v pořádku"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1128
-#, fuzzy
 msgid "Syntax error: "
-msgstr "Interní chyba"
+msgstr "Chyba syntaxe: "
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:58
 #, fuzzy
@@ -53255,9 +53243,9 @@ msgid "Unexpected error with footprint wizard"
 msgstr "Výjimka v kódu průvodce pouzdry Python"
 
 #: pcbnew/footprint_wizard.cpp:150
-#, fuzzy, c-format
+#, c-format
 msgid "Could not launch footprint wizard '%s'"
-msgstr "Nemohu znovu načíst průvodce pouzdra"
+msgstr "Nelze spustit průvodce pouzder '%s'"
 
 #: pcbnew/footprint_wizard.cpp:160 pcbnew/footprint_wizard.cpp:169
 #, fuzzy
@@ -53265,9 +53253,9 @@ msgid "Unexpected response from footprint wizard"
 msgstr "Nemohu znovu načíst průvodce pouzdra"
 
 #: pcbnew/footprint_wizard.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint wizard error: %s"
-msgstr "Průvodce pouzdra"
+msgstr "Chyba průvodce pouzder: %s"
 
 #: pcbnew/footprint_wizard.cpp:196
 #, fuzzy
@@ -55539,9 +55527,9 @@ msgid "Loading unicode strings..."
 msgstr "Načítání řetězců Unicode..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4625
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "Vzory pro ladění délky"
+msgstr "Importováno %d vzorů pro ladění délky."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4636
 msgid "Loading text..."
