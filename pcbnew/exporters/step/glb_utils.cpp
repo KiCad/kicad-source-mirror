@@ -29,7 +29,7 @@
 #include <map>
 #include <vector>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <wx/filename.h>
 
