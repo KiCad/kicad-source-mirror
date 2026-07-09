@@ -75,6 +75,7 @@ BOOST_AUTO_TEST_CASE( ReusedPreviewTabBoardOutlivesInstall )
 
     auto oldBoard = std::make_unique<INSTRUMENTED_BOARD>( &dtorCount );
     oldBoard->SetBoardUse( BOARD_USE::FPHOLDER );
+    BOARD* oldBoardRaw = oldBoard.get();
 
     std::vector<std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>> contexts;
     contexts.push_back( std::make_unique<FOOTPRINT_EDITOR_TAB_CONTEXT>( wxS( "Lib" ), wxS( "A" ),
@@ -85,13 +86,19 @@ BOOST_AUTO_TEST_CASE( ReusedPreviewTabBoardOutlivesInstall )
     FOOTPRINT_EDITOR_TAB_CONTEXT* newRaw = newCtx.get();
 
     int dtorCountDuringInstall = -1;
+    BOARD* protectedBoardDuringInstall = nullptr;
 
     FOOTPRINT_EDITOR_TAB_CONTEXT* installed = FOOTPRINT_EDIT_FRAME::placeReusedTabContext(
             contexts, 0, std::move( newCtx ),
-            [&]() { dtorCountDuringInstall = dtorCount; } );
+            [&]( const FOOTPRINT_EDITOR_TAB_CONTEXT& aDisplaced )
+            {
+                dtorCountDuringInstall = dtorCount;
+                protectedBoardDuringInstall = aDisplaced.GetBoard();
+            } );
 
-    // The displaced board is still alive while the successor is installed, and freed only afterwards.
+    // The displaced board is still alive and identifiable while the successor is installed, and freed only afterwards.
     BOOST_CHECK_EQUAL( dtorCountDuringInstall, 0 );
+    BOOST_CHECK_EQUAL( protectedBoardDuringInstall, oldBoardRaw );
     BOOST_CHECK_EQUAL( dtorCount, 1 );
 
     // The slot holds the successor, stays index-aligned, and is returned raw.

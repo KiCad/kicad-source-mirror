@@ -62,8 +62,8 @@ public:
      * Replace the tab context at @p aSlot with @p aNew, running @p aInstallSuccessor before the
      * displaced context is destroyed.
      *
-     * @p aInstallSuccessor repoints the canvas VIEW at the incoming board; the displaced board must
-     * outlive it, otherwise VIEW::Clear() dereferences items from a freed board.
+     * @p aInstallSuccessor repoints the canvas VIEW at the incoming board; the displaced context is
+     * passed in so callers can keep the old board protected during install.
      *
      * Exposed for unit testing of the reuse ordering.
      *
@@ -72,7 +72,7 @@ public:
     static FOOTPRINT_EDITOR_TAB_CONTEXT* placeReusedTabContext(
             std::vector<std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>>& aContexts, int aSlot,
             std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT> aNew,
-            const std::function<void()>& aInstallSuccessor );
+            const std::function<void( const FOOTPRINT_EDITOR_TAB_CONTEXT& )>& aInstallSuccessor );
 
     ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
@@ -525,6 +525,9 @@ private:
     /// Set while a full clear tears the tab strip down so the panel's close-driven re-activation does
     /// not re-borrow a tab-owned board about to be freed.
     bool                        m_suppressTabActivation;
+
+    /// Board still owned by a displaced preview context while AddTab() synchronously installs its successor.
+    BOARD*                      m_protectedBorrowedBoard;
 
     /// While true, promptAndCloseFootprintTab() skips the unsaved-changes dialog.
     bool m_silentFootprintTabClose;

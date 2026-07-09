@@ -118,6 +118,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_tabsPanel( nullptr ),
         m_activeTab( nullptr ),
         m_suppressTabActivation( false ),
+        m_protectedBorrowedBoard( nullptr ),
         m_silentFootprintTabClose( false )
 {
     m_showBorderAndTitleBlock = false;   // true to show the frame references
@@ -911,6 +912,9 @@ void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 
 bool FOOTPRINT_EDIT_FRAME::activeBoardOwnedByTab() const
 {
+    if( m_protectedBorrowedBoard && m_protectedBorrowedBoard == m_pcb )
+        return true;
+
     return std::any_of( m_tabContexts.begin(), m_tabContexts.end(),
                         [this]( const std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>& aCtx )
                         {
@@ -1138,17 +1142,11 @@ FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( const LIB_ID& aLibId, bool aAsPr
             m_activeTab = nullptr;
         }
 
-        // Drop the frame's alias so borrowBoardNonDestructive cannot delete the displaced board while
-        // placeReusedTabContext still owns it.
-        if( m_pcb == m_tabContexts[reuseSlot]->GetBoard() )
-            m_pcb = nullptr;
-
-        BOARD* displacedBoard = m_tabContexts[reuseSlot]->GetBoard();
-
         return placeReusedTabContext( m_tabContexts, reuseSlot, std::move( ctx ),
-                [&]()
+                [&]( const FOOTPRINT_EDITOR_TAB_CONTEXT& aDisplaced )
                 {
-                    SCOPED_SET_RESET<BOARD*> protectedBoard( m_protectedBorrowedBoard, displacedBoard );
+                    SCOPED_SET_RESET<BOARD*> protectedBoard( m_protectedBorrowedBoard,
+                                                             aDisplaced.GetBoard() );
                     m_tabsPanel->AddTab( key, name, aAsPreview );
                 } );
     }
@@ -1164,7 +1162,7 @@ FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( const LIB_ID& aLibId, bool aAsPr
 FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::placeReusedTabContext(
         std::vector<std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>>& aContexts, int aSlot,
         std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT> aNew,
-        const std::function<void()>& aInstallSuccessor )
+        const std::function<void( const FOOTPRINT_EDITOR_TAB_CONTEXT& )>& aInstallSuccessor )
 {
     // Hold the displaced context, and its still-displayed board, alive across aInstallSuccessor, which
     // repoints the canvas VIEW at the incoming board. Freeing the old board first would leave
@@ -1174,7 +1172,7 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::placeReusedTabContext(
 
     FOOTPRINT_EDITOR_TAB_CONTEXT* raw = aContexts[aSlot].get();
 
-    aInstallSuccessor();
+    aInstallSuccessor( *displaced );
 
     return raw;
 }
