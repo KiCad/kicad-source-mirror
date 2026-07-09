@@ -3887,3 +3887,80 @@ BOOST_FIXTURE_TEST_CASE( RegressionZoneFillNarrowBridge, ZONE_FILL_TEST_FIXTURE 
                                            "expected 0 (issue 24312).",
                                            violations.size() ) );
 }
+
+
+BOOST_FIXTURE_TEST_CASE( RegressionIterativeRefillFullWidthBridge, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    bool          originalIterativeRefill = cfg.m_ZoneFillIterativeRefill;
+
+    struct ScopeGuard
+    {
+        bool& ref;
+        bool  orig;
+        ~ScopeGuard() { ref = orig; }
+    } guard{ cfg.m_ZoneFillIterativeRefill, originalIterativeRefill };
+
+    cfg.m_ZoneFillIterativeRefill = true;
+    KI_TEST::LoadBoard( m_settingsManager, "issue24835/issue24835-min", m_board );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    bds.m_MinConn = pcbIUScale.mmToIU( 0.1016 );
+    bds.m_DRCSeverities[ DRCE_CONNECTION_WIDTH ] = SEVERITY::RPT_SEVERITY_ERROR;
+    bds.m_DRCEngine->InitEngine( wxFileName() );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    const VECTOR2I bridgeCenter( pcbIUScale.mmToIU( 104.220616 ),
+                                 pcbIUScale.mmToIU( 103.646866 ) );
+
+    for( PCB_LAYER_ID layer : { In1_Cu, In4_Cu } )
+    {
+        double localCopperArea = 0.0;
+
+        for( ZONE* zone : m_board->Zones() )
+        {
+            if( !zone->IsOnLayer( layer ) )
+                continue;
+
+            std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
+            SHAPE_POLY_SET                 local;
+            int                            radius = pcbIUScale.mmToIU( 0.2 );
+
+            local.NewOutline();
+            local.Append( bridgeCenter + VECTOR2I( -radius, -radius ) );
+            local.Append( bridgeCenter + VECTOR2I( radius, -radius ) );
+            local.Append( bridgeCenter + VECTOR2I( radius, radius ) );
+            local.Append( bridgeCenter + VECTOR2I( -radius, radius ) );
+
+            if( fill )
+                local.BooleanIntersection( *fill );
+
+            localCopperArea = std::max( localCopperArea, std::abs( local.Area() ) );
+        }
+
+        double minimumLocalCopperArea = 0.05 * pcbIUScale.IU_PER_MM * pcbIUScale.IU_PER_MM;
+
+        BOOST_CHECK_MESSAGE( localCopperArea > minimumLocalCopperArea,
+                             wxString::Format( "Expected copper around the bridge on %s; the "
+                                               "bridge must be widened, not removed.",
+                                               LSET::Name( layer ) ) );
+    }
+
+    std::vector<DRC_ITEM> violations;
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I&, int,
+                 const std::function<void( PCB_MARKER* )>& )
+            {
+                if( aItem->GetErrorCode() == DRCE_CONNECTION_WIDTH )
+                    violations.push_back( *aItem );
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    BOOST_CHECK_MESSAGE( violations.empty(),
+                         wxString::Format( "Iterative refill produced %zu connection_width "
+                                           "violations; expected full-width bridges (issue 24835).",
+                                           violations.size() ) );
+}
