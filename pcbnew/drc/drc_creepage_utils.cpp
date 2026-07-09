@@ -997,25 +997,26 @@ void BE_SHAPE_ARC::ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::shared
     if( !a1 || !a2 )
         return;
 
-    // Drop an arc that bulges into an overlapping cutout, it is not a real edge to hug.
-    if( aG.m_hasOverlappingCutouts && aG.m_boardOutline )
-    {
-        VECTOR2D center( GetPos().x, GetPos().y );
-        VECTOR2D mid = ( VECTOR2D( a1->m_pos.x, a1->m_pos.y ) + VECTOR2D( a2->m_pos.x, a2->m_pos.y ) ) / 2.0 - center;
-
-        if( mid.EuclideanNorm() > 0 )
-        {
-            VECTOR2I arcMid( center + mid.Resize( m_radius ) );
-
-            if( !aG.m_boardOutline->Contains( arcMid, -1, 100 ) && !aG.m_boardOutline->PointOnEdge( arcMid, 100 ) )
-            {
-                return;
-            }
-        }
-    }
-
     EDA_ANGLE angle1 = AngleBetweenStartAndEnd( a1->m_pos );
     EDA_ANGLE angle2 = AngleBetweenStartAndEnd( a2->m_pos );
+
+    // Skip an arc that dips into an overlapping cutout, it is not a real edge to hug.
+    // Sample the whole sub-arc, the tolerance clears the outline arc-to-segment error.
+    if( aG.m_hasOverlappingCutouts && aG.m_boardOutline )
+    {
+        int    tol = aG.m_board.GetDesignSettings().m_MaxError + 1000;
+        double a1r = angle1.AsRadians();
+        double a2r = angle2.AsRadians();
+
+        for( int i = 0; i <= 8; ++i )
+        {
+            double   a = a1r + ( a2r - a1r ) * i / 8.0;
+            VECTOR2I p( m_pos.x + m_radius * cos( a ), m_pos.y + m_radius * sin( a ) );
+
+            if( !aG.m_boardOutline->Contains( p, -1, tol ) && !aG.m_boardOutline->PointOnEdge( p, tol ) )
+                return;
+        }
+    }
 
     double weight = abs( m_radius * ( angle2 - angle1 ).AsRadians() );
 

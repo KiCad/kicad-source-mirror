@@ -101,8 +101,7 @@ struct DRC_CREEPAGE_ISSUE24875_FIXTURE
 };
 
 
-// Overlapping caps. Was 1.93mm (shortcut across the void), correct ~3.93mm (wraps the merged
-// end via the arc tangents). Below 3.0 = shortcut, above 4.0 = forced onto arc endpoints.
+// Overlapping caps. Was a 1.93mm shortcut across the void, correct ~3.93mm around the end.
 BOOST_FIXTURE_TEST_CASE( CreepageOverlappingCapsIssue24875, DRC_CREEPAGE_ISSUE24875_FIXTURE )
 {
     std::vector<double> actuals = runCreepage( "issue24875/issue24875" );
@@ -118,8 +117,25 @@ BOOST_FIXTURE_TEST_CASE( CreepageOverlappingCapsIssue24875, DRC_CREEPAGE_ISSUE24
 }
 
 
-// A cap overlaps the other slot's straight section. Never a false path, so this guards
-// against the overlap detection over-triggering. The fix leaves it unchanged (~2.31mm).
+// Fully rounded (semicircle) cap overlapping. Was a 2.75mm phantom hug, correct ~3.90mm.
+// Needs the whole sub-arc sampled, an empty result would mean arcs were over-dropped.
+BOOST_FIXTURE_TEST_CASE( CreepageFullyRoundedCapIssue24875, DRC_CREEPAGE_ISSUE24875_FIXTURE )
+{
+    std::vector<double> actuals = runCreepage( "issue24875_fullround/issue24875_fullround" );
+
+    BOOST_REQUIRE_MESSAGE( !actuals.empty(), "Expected a creepage violation around the slots" );
+
+    for( double actual : actuals )
+    {
+        BOOST_TEST_MESSAGE( wxString::Format( "fullround: actual = %.4f mm", actual ) );
+        BOOST_CHECK_MESSAGE( actual > 3.0 && actual < 4.5,
+                             "Creepage should wrap the merged slot end (actual " << actual << " mm)" );
+    }
+}
+
+
+// Cap overlaps the other slot's straight section, never a false path (~2.31mm). Guards
+// against the overlap detection over-triggering.
 BOOST_FIXTURE_TEST_CASE( CreepageCapOverStraightIssue24875, DRC_CREEPAGE_ISSUE24875_FIXTURE )
 {
     std::vector<double> actuals = runCreepage( "issue24875_capstraight/issue24875_capstraight" );
