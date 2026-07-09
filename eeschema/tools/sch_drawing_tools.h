@@ -46,7 +46,6 @@ public:
     enum class MODE
     {
         NONE,
-        ARC,
         RULE_AREA,
     };
 
@@ -61,8 +60,6 @@ public:
     int SingleClickPlace( const TOOL_EVENT& aEvent );
     int TwoClickPlace( const TOOL_EVENT& aEvent );
     int ImportSheet( const TOOL_EVENT& aEvent );
-    int DrawShape( const TOOL_EVENT& aEvent );
-    int DrawArc( const TOOL_EVENT& aEvent );
     int DrawRuleArea( const TOOL_EVENT& aEvent );
     int DrawTable( const TOOL_EVENT& aEvent );
     int DrawSheet( const TOOL_EVENT& aEvent );
@@ -111,17 +108,8 @@ private:
     bool                       m_lastTextBold;
     bool                       m_lastTextItalic;
     EDA_ANGLE                  m_lastTextAngle;
-    EDA_ANGLE                  m_lastTextboxAngle;
     GR_TEXT_H_ALIGN_T          m_lastTextHJustify;
     GR_TEXT_V_ALIGN_T          m_lastTextVJustify;
-    GR_TEXT_H_ALIGN_T          m_lastTextboxHJustify;
-    GR_TEXT_V_ALIGN_T          m_lastTextboxVJustify;
-    FILL_T                     m_lastFillStyle;
-    FILL_T                     m_lastTextboxFillStyle;
-    COLOR4D                    m_lastFillColor;
-    COLOR4D                    m_lastTextboxFillColor;
-    STROKE_PARAMS              m_lastStroke;
-    STROKE_PARAMS              m_lastTextboxStroke;
     wxString                   m_mruPath;
     bool                       m_lastAutoLabelRotateOnPlacement;
     MODE                       m_mode;

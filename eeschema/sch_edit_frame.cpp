@@ -81,6 +81,7 @@
 #include <tools/sch_actions.h>
 #include <tools/sch_align_tool.h>
 #include <tools/ee_grid_helper.h>
+#include <tools/ee_graphic_tool.h>
 #include <tools/sch_inspection_tool.h>
 #include <tools/sch_point_editor.h>
 #include <tools/sch_design_block_control.h>
@@ -704,6 +705,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
     m_toolManager->RegisterTool( new PICKER_TOOL );
     m_toolManager->RegisterTool( new SCH_DRAWING_TOOLS );
+    m_toolManager->RegisterTool( new EE_GRAPHIC_TOOL );
     m_toolManager->RegisterTool( new SCH_LINE_WIRE_BUS_TOOL );
     m_toolManager->RegisterTool( new SCH_MOVE_TOOL );
     m_toolManager->RegisterTool( new SCH_ALIGN_TOOL );

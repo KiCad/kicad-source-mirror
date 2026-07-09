@@ -29,6 +29,7 @@
 #include <tool/actions.h>
 #include <tools/sch_selection_tool.h>
 #include <sch_edit_frame.h>
+#include <sch_base_frame.h>
 #include <sch_view.h>
 #include <symbol_edit_frame.h>
 #include <sch_shape.h>
@@ -317,6 +318,12 @@ public:
     }
 
 protected:
+    template <class F = SCH_BASE_FRAME>
+    F* frame() const
+    {
+        return getEditFrame<F>();
+    }
+
     /**
      * Similar to getView()->Update(), but also updates the SCH_SCREEN's RTree.
      */
