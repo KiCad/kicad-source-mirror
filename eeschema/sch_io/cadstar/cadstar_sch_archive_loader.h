@@ -167,8 +167,7 @@ private:
 
     std::unique_ptr<LIB_SYMBOL> loadLibPart( const CADSTAR_PART_ENTRY& aPart );
 
-    void copySymbolItems( std::unique_ptr<LIB_SYMBOL>& aSourceSym,
-                          std::unique_ptr<LIB_SYMBOL>& aDestSym, int aDestUnit,
+    void copySymbolItems( LIB_SYMBOL* aSourceSym, LIB_SYMBOL* aDestSym, int aDestUnit,
                           bool aOverrideFields = true );
 
     //Helper Functions for loading sheets
@@ -189,7 +188,7 @@ private:
     void loadSymbolGateAndPartFields( const SYMDEF_ID& aSymdefID, const PART& aCadstarPart,
                                       const GATE_ID& aGateID, LIB_SYMBOL* aSymbol );
 
-    void setFootprintOnSymbol( std::unique_ptr<LIB_SYMBOL>& aKiCadSymbol,
+    void setFootprintOnSymbol( LIB_SYMBOL*                  aKiCadSymbol,
                                const wxString&              aFootprintName,
                                const wxString&              aFootprintAlternate );
 
@@ -340,8 +339,8 @@ private:
     double getPolarRadius( const VECTOR2I& aPoint );
 
 
-    static SCH_FIELD* addNewFieldToSymbol( const wxString&              aFieldName,
-                                           std::unique_ptr<LIB_SYMBOL>& aKiCadSymbol );
+    static SCH_FIELD* addNewFieldToSymbol( const wxString& aFieldName,
+                                           LIB_SYMBOL*     aKiCadSymbol );
 
 }; // CADSTAR_SCH_ARCHIVE_LOADER
 
