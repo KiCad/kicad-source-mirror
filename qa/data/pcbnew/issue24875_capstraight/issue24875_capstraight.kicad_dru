@@ -1,0 +1,6 @@
+(version 1)
+
+(rule "Hlida povrchovou vzdalenost sitovych spoju mezi sebou"
+	(constraint creepage (min 5mm))
+	(condition "A.NetClass == 'Sitove'")
+)
