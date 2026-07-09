@@ -437,6 +437,32 @@ BOOST_AUTO_TEST_CASE( LoadIssue24812CopperPours )
 
 
 /**
+ * Regression test for the reopened half of issue 24812. The board's +5V pour is on a signal
+ * that carries no contactref, so the loader forced every pad-less signal's zones onto the
+ * unconnected net and dropped the pour's net; the reporter saw the +5V plane import as
+ * <no net>. Eagle assigns the pour to a real named net, so a correct import keeps at least
+ * one copper pour on the +5V net. Local-only, like the sibling test.
+ */
+BOOST_AUTO_TEST_CASE( LoadIssue24812PourNetName )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24812_vertice_error.brd" ) );
+
+    if( !board )
+        return;
+
+    bool foundPlusFiveVoltPour = false;
+
+    for( ZONE* zone : copperPours( board.get() ) )
+    {
+        if( zone->GetNetname() == wxS( "+5V" ) )
+            foundPlusFiveVoltPour = true;
+    }
+
+    BOOST_CHECK( foundPlusFiveVoltPour );
+}
+
+
+/**
  * Regression test for issue 24827. Eagle 4.x pad and SMD records carry the same
  * rotation word and offset-19 name as the 5.x layout, but their signature clears
  * the bits that distinguished the two layouts, so every pad bound the Eagle 3.x

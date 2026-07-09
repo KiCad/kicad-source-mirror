@@ -2644,7 +2644,6 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
-    ZONES zones;      // per net
     int   netCode = 1;
 
     // Eagle auto-named nets are stored without a name; we synthesize an N$<n>
@@ -2668,10 +2667,6 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
     while( net )
     {
         checkpoint();
-
-        bool    sawPad = false;
-
-        zones.clear();
 
         wxString                  netName = escapeName( net->GetAttribute( "name" ) );
 
@@ -2888,8 +2883,6 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
                 m_pads_to_nets[ key ] = ENET( netCode, netName );
 
                 m_xpath->pop();
-
-                sawPad = true;
             }
 
             else if( itemName == wxT( "polygon" ) )
@@ -2897,28 +2890,13 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
                 m_xpath->push( "polygon" );
                 auto* zone = loadPolygon( netItem );
 
-                if( zone )
-                {
-                    zones.push_back( zone );
-
-                    if( !zone->GetIsRuleArea() )
-                        zone->SetNetCode( netCode );
-                }
+                if( zone && !zone->GetIsRuleArea() )
+                    zone->SetNetCode( netCode );
 
                 m_xpath->pop();     // "polygon"
             }
 
             netItem = netItem->GetNext();
-        }
-
-        if( zones.size() && !sawPad )
-        {
-            // KiCad does not support an unconnected zone with its own non-zero netcode,
-            // but only when assigned netcode = 0 w/o a name...
-            for( ZONE* zone : zones )
-                zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
-
-            // therefore omit this signal/net.
         }
 
         //Next signal needs a new netCode
