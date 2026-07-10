@@ -90,10 +90,10 @@ public:
     */
     bool Send( int aService, const std::string& aMessage )
     {
+        std::lock_guard<std::mutex> lock( m_mutex );
+
         if( m_messageReady )
             return false;
-
-        std::lock_guard<std::mutex> lock( m_mutex );
 
         m_message      = std::make_pair( aService, aMessage );
         m_messageReady = true;
@@ -196,9 +196,8 @@ private:
             sock_client->Close();
             sock_client->Destroy();
 
-            m_messageReady = false;
-
             lock.lock();
+            m_messageReady = false;
         }
     }
 
