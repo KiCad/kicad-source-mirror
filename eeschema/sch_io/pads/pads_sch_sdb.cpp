@@ -51,6 +51,13 @@ namespace
     constexpr size_t   FIRST_PREVIEW_FIXED_STATE_SIZE = 18;
     constexpr size_t   BETWEEN_PREVIEW_TRAILER_SIZE = 0x66;
     constexpr size_t   FINAL_PREVIEW_TRAILER_SIZE = 0x4E;
+    constexpr size_t   CFB_HEADER_SIZE = 512;
+    constexpr uint8_t  MFC_CLASS_MARKER[] = { 0xFF, 0xFF, 0x01, 0x00 };
+    constexpr char     PREVIEW_CLASS_NAME[] = "CPowerPCBCntrItem";
+    constexpr uint8_t  CFB_MAGIC[] = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
+    constexpr uint8_t  CFB_ZERO_CLSID[16] = {};
+    constexpr uint8_t  CFB_BYTE_ORDER[] = { 0xFE, 0xFF };
+    constexpr uint8_t  CFB_ZERO_PADDING[6] = {};
 
     constexpr size_t POOL_ALLOCATED_BYTES_OFFSET = 4;
     constexpr size_t POOL_COUNT_OFFSET = 8;
@@ -180,14 +187,22 @@ void PADS_SCH_SDB::parseBlocks()
         return aBase + aBytes;
     };
 
+    auto requireBytes = [this]( size_t aOffset, const auto& aExpected, size_t aBytes, const wxString& aDetail )
+    {
+        for( size_t i = 0; i < aBytes; ++i )
+        {
+            if( m_data[aOffset + i] != static_cast<uint8_t>( aExpected[i] ) )
+                throwAt( aOffset + i, aDetail );
+        }
+    };
+
     size_t offset = m_payloadOffset;
 
     if( m_cursor.U32At( offset ) != DATABASE_CONTROLLER )
         throwAt( offset, "invalid first schematic controller ordinal" );
 
+    size_t outerStart = offset;
     size_t outerEnd = checkedAdd( offset, 4, offset, "controller ordinal extends past footer" );
-    m_blocks.push_back(
-            { SCH_SDB_BLOCK_KIND::FIXED_CONTROLLER, static_cast<int>( DATABASE_CONTROLLER ), offset, 4, 1, 4 } );
 
     for( size_t i = 1; i < m_pools.size(); ++i )
     {
@@ -195,18 +210,11 @@ void PADS_SCH_SDB::parseBlocks()
         size_t blockEnd =
                 checkedAdd( outerEnd, m_pools[i].usedBytes, source, "controller payload extends past footer" );
 
-        if( m_pools[i].usedBytes != 0 )
-        {
-            SCH_SDB_BLOCK_KIND kind = i <= 2 ? SCH_SDB_BLOCK_KIND::STRING_HEAP : SCH_SDB_BLOCK_KIND::FIXED_CONTROLLER;
-            uint32_t           stride = m_pools[i].count != 0 && m_pools[i].usedBytes % m_pools[i].count == 0
-                                                ? m_pools[i].usedBytes / m_pools[i].count
-                                                : 0;
-            m_blocks.push_back(
-                    { kind, static_cast<int>( i ), outerEnd, m_pools[i].usedBytes, m_pools[i].count, stride } );
-        }
-
         outerEnd = blockEnd;
     }
+
+    m_blocks.push_back( { SCH_SDB_BLOCK_KIND::FIXED_CONTROLLER, static_cast<int>( DATABASE_CONTROLLER ), outerStart,
+                          outerEnd - outerStart, 19, 0 } );
 
     offset = outerEnd;
 
@@ -283,25 +291,45 @@ void PADS_SCH_SDB::parseBlocks()
         throwAt( previewCountOffset, "preview count extent exceeds schematic payload" );
     }
 
-    size_t   previewStart = offset;
+    size_t previewStart = offset;
+    requireBytes( previewStart, MFC_CLASS_MARKER, std::size( MFC_CLASS_MARKER ),
+                  "invalid preview MFC class marker" );
     uint16_t classNameLength = m_cursor.U16At( previewStart + 4 );
-    size_t   lengthOffset = checkedAdd( previewStart, 6, previewStart, "preview class header extends past footer" );
+
+    if( classNameLength != std::size( PREVIEW_CLASS_NAME ) - 1 )
+        throwAt( previewStart + 4, "invalid preview MFC class name length" );
+
+    size_t lengthOffset = checkedAdd( previewStart, 6, previewStart, "preview class header extends past footer" );
     lengthOffset =
             checkedAdd( lengthOffset, classNameLength, previewStart + 4, "preview class name extends past footer" );
+    requireBytes( previewStart + 6, PREVIEW_CLASS_NAME, classNameLength, "invalid preview MFC class name" );
     lengthOffset = checkedAdd( lengthOffset, FIRST_PREVIEW_FIXED_STATE_SIZE, lengthOffset,
                                "preview item state extends past footer" );
+    size_t firstCfbOffset = checkedAdd( lengthOffset, 4, lengthOffset, "preview length extends past footer" );
+    m_blocks.push_back( { SCH_SDB_BLOCK_KIND::FOOTER_AUX, -1, previewStart, firstCfbOffset - previewStart, 1, 0 } );
 
     for( uint32_t preview = 0; preview < previewCount; ++preview )
     {
         uint32_t cfbBytes = m_cursor.U32At( lengthOffset );
-        size_t   cfbOffset = checkedAdd( lengthOffset, 4, lengthOffset, "preview length extends past footer" );
-        size_t   cfbEnd = checkedAdd( cfbOffset, cfbBytes, lengthOffset, "preview CFB extends past footer" );
-        size_t   trailer = preview + 1 == previewCount ? FINAL_PREVIEW_TRAILER_SIZE : BETWEEN_PREVIEW_TRAILER_SIZE;
-        size_t   previewEnd = checkedAdd( cfbEnd, trailer, cfbEnd, "preview trailer extends past footer" );
 
-        m_blocks.push_back( { SCH_SDB_BLOCK_KIND::CFB_PREVIEW, static_cast<int>( preview ), previewStart,
-                              previewEnd - previewStart, 1, 0 } );
-        previewStart = previewEnd;
+        if( cfbBytes < CFB_HEADER_SIZE )
+            throwAt( lengthOffset, "preview CFB is smaller than its structural header" );
+
+        size_t cfbOffset = checkedAdd( lengthOffset, 4, lengthOffset, "preview length extends past footer" );
+        size_t cfbEnd = checkedAdd( cfbOffset, cfbBytes, lengthOffset, "preview CFB extends past footer" );
+        requireBytes( cfbOffset, CFB_MAGIC, std::size( CFB_MAGIC ), "invalid preview CFB magic" );
+        requireBytes( cfbOffset + 8, CFB_ZERO_CLSID, std::size( CFB_ZERO_CLSID ),
+                      "invalid preview CFB reserved class ID" );
+        requireBytes( cfbOffset + 28, CFB_BYTE_ORDER, std::size( CFB_BYTE_ORDER ), "invalid preview CFB byte order" );
+        requireBytes( cfbOffset + 34, CFB_ZERO_PADDING, std::size( CFB_ZERO_PADDING ),
+                      "invalid preview CFB header padding" );
+        size_t trailer = preview + 1 == previewCount ? FINAL_PREVIEW_TRAILER_SIZE : BETWEEN_PREVIEW_TRAILER_SIZE;
+        size_t previewEnd = checkedAdd( cfbEnd, trailer, cfbEnd, "preview trailer extends past footer" );
+        requireBytes( cfbEnd, FOOTER_GUID, FOOTER_GUID_SIZE, "invalid preview trailer class ID" );
+
+        m_blocks.push_back(
+                { SCH_SDB_BLOCK_KIND::CFB_PREVIEW, static_cast<int>( preview ), cfbOffset, cfbBytes, 1, 0 } );
+        m_blocks.push_back( { SCH_SDB_BLOCK_KIND::FOOTER_AUX, -1, cfbEnd, trailer, 1, 0 } );
 
         if( preview + 1 < previewCount )
             lengthOffset = previewEnd - 4;

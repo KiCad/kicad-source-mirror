@@ -24,6 +24,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include <algorithm>
 #include <fstream>
 #include <iterator>
 #include <stdexcept>
@@ -140,23 +141,99 @@ BOOST_AUTO_TEST_CASE( MinimalV13PhysicalLedger )
     sdb.Load( loadPublicFixture() );
     const auto& blocks = sdb.Blocks();
 
-    BOOST_REQUIRE_EQUAL( blocks.size(), 16 );
+    BOOST_REQUIRE_EQUAL( blocks.size(), 3 );
     BOOST_CHECK( blocks[0].kind == SCH_SDB_BLOCK_KIND::FIXED_CONTROLLER );
     BOOST_CHECK_EQUAL( blocks[0].controller, 0x24 );
     BOOST_CHECK_EQUAL( blocks[0].offset, 0x250 );
-    BOOST_CHECK_EQUAL( blocks[0].bytes, 4 );
-    BOOST_CHECK( blocks[1].kind == SCH_SDB_BLOCK_KIND::STRING_HEAP );
-    BOOST_CHECK_EQUAL( blocks[1].controller, 1 );
-    BOOST_CHECK_EQUAL( blocks[1].offset, 0x254 );
-    BOOST_CHECK_EQUAL( blocks[1].bytes, 235 );
-    BOOST_CHECK_EQUAL( blocks[1].count, 235 );
-    BOOST_CHECK_EQUAL( blocks[1].stride, 1 );
-    BOOST_CHECK( blocks[14].kind == SCH_SDB_BLOCK_KIND::SHEET );
-    BOOST_CHECK_EQUAL( blocks[14].offset, 0x5439 );
-    BOOST_CHECK_EQUAL( blocks[14].End(), 0x9938 );
-    BOOST_CHECK( blocks[15].kind == SCH_SDB_BLOCK_KIND::FOOTER_AUX );
-    BOOST_CHECK_EQUAL( blocks[15].offset, 0x9938 );
-    BOOST_CHECK_EQUAL( blocks[15].bytes, 4 );
+    BOOST_CHECK_EQUAL( blocks[0].End(), 0x5439 );
+    BOOST_CHECK_EQUAL( blocks[0].count, 19 );
+    BOOST_CHECK_EQUAL( blocks[0].stride, 0 );
+    BOOST_CHECK( blocks[1].kind == SCH_SDB_BLOCK_KIND::SHEET );
+    BOOST_CHECK_EQUAL( blocks[1].offset, 0x5439 );
+    BOOST_CHECK_EQUAL( blocks[1].End(), 0x9938 );
+    BOOST_CHECK( blocks[2].kind == SCH_SDB_BLOCK_KIND::FOOTER_AUX );
+    BOOST_CHECK_EQUAL( blocks[2].offset, 0x9938 );
+    BOOST_CHECK_EQUAL( blocks[2].bytes, 4 );
+}
+
+
+BOOST_AUTO_TEST_CASE( RejectsEveryInvalidPreviewTrailerGuid )
+{
+    std::string path = findExternalSchematic( "SC350430B01.sch" );
+
+    if( path.empty() )
+    {
+        BOOST_TEST_MESSAGE( "external preview corpus unavailable" );
+        return;
+    }
+
+    PADS_SCH_SDB parsed;
+    parsed.Load( loadBinary( path ) );
+    const auto& blocks = parsed.Blocks();
+
+    for( const auto& block : blocks )
+    {
+        if( block.kind != SCH_SDB_BLOCK_KIND::CFB_PREVIEW )
+            continue;
+
+        size_t               trailerOffset = block.End();
+        std::vector<uint8_t> bytes = parsed.Bytes();
+        bytes[trailerOffset] ^= 1;
+        PADS_SCH_SDB sdb;
+        auto         hasOffset = [trailerOffset]( const IO_ERROR& e )
+        {
+            return errorContains( e, "v0x000D", wxString::Format( "0x%zX", trailerOffset ).ToStdString() );
+        };
+        BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR, hasOffset );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( ExternalPreviewChains )
+{
+    const std::pair<const char*, uint32_t> previews[] = { { "SC350420B02.sch", 6 },
+                                                          { "SC350430B01.sch", 3 },
+                                                          { "SC350460A01.sch", 6 } };
+
+    for( const auto& [filename, expectedCount] : previews )
+    {
+        std::string path = findExternalSchematic( filename );
+
+        if( path.empty() )
+        {
+            BOOST_TEST_MESSAGE( "external preview corpus unavailable" );
+            return;
+        }
+
+        PADS_SCH_SDB sdb;
+        sdb.Load( loadBinary( path ) );
+        const auto& blocks = sdb.Blocks();
+        auto        isPreview = []( const PADS_SCH_BINARY::SCH_SDB_BLOCK& aBlock )
+        {
+            return aBlock.kind == SCH_SDB_BLOCK_KIND::CFB_PREVIEW;
+        };
+        size_t count = std::count_if( blocks.begin(), blocks.end(), isPreview );
+        BOOST_CHECK_EQUAL( count, expectedCount );
+
+        for( size_t i = 1; i + 1 < blocks.size(); ++i )
+        {
+            if( !isPreview( blocks[i] ) )
+                continue;
+
+            BOOST_CHECK( blocks[i - 1].kind == SCH_SDB_BLOCK_KIND::FOOTER_AUX );
+            BOOST_CHECK( blocks[i + 1].kind == SCH_SDB_BLOCK_KIND::FOOTER_AUX );
+            BOOST_CHECK_EQUAL( sdb.Bytes()[blocks[i].offset], 0xD0 );
+            BOOST_CHECK_EQUAL( sdb.Bytes()[blocks[i].offset + 1], 0xCF );
+        }
+
+        auto footerAux = std::find_if( blocks.begin(), blocks.end(),
+                                       []( const auto& aBlock )
+                                       {
+                                           return aBlock.kind == SCH_SDB_BLOCK_KIND::FOOTER_AUX;
+                                       } );
+        BOOST_REQUIRE( footerAux != blocks.end() );
+        BOOST_CHECK_EQUAL( footerAux->count, expectedCount );
+    }
 }
 
 
