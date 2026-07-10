@@ -340,7 +340,7 @@ BOOST_AUTO_TEST_CASE( RejectsDerivedSheetCountPastFooter )
 }
 
 
-BOOST_AUTO_TEST_CASE( RejectsPreviewCountExtentOverflow )
+BOOST_AUTO_TEST_CASE( RejectsHugePreviewCountExtent )
 {
     std::vector<uint8_t> bytes = loadPublicFixture();
     constexpr size_t     previewCountOffset = 0x9938;

@@ -274,10 +274,11 @@ void PADS_SCH_SDB::parseBlocks()
     constexpr size_t firstPreviewFrameSize = 6 + FIRST_PREVIEW_FIXED_STATE_SIZE + 4;
     constexpr size_t finalPreviewMinimum = firstPreviewFrameSize + FINAL_PREVIEW_TRAILER_SIZE;
     size_t           remainingPreviewBytes = m_footerOffset - offset;
+    uint64_t minimumPreviewBytes =
+            finalPreviewMinimum + uint64_t( previewCount - 1 ) * BETWEEN_PREVIEW_TRAILER_SIZE;
 
-    if( previewCount - 1 > ( SIZE_MAX - finalPreviewMinimum ) / BETWEEN_PREVIEW_TRAILER_SIZE
-        || finalPreviewMinimum + static_cast<size_t>( previewCount - 1 ) * BETWEEN_PREVIEW_TRAILER_SIZE
-                   > remainingPreviewBytes )
+    // A u32 preview count times the 0x66-byte trailer is bounded well below uint64_t.
+    if( minimumPreviewBytes > remainingPreviewBytes )
     {
         throwAt( previewCountOffset, "preview count extent exceeds schematic payload" );
     }

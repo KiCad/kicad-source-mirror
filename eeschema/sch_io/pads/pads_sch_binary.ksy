@@ -227,20 +227,18 @@ types:
     seq:
       - id: preview_count
         type: u4
-      - id: first_preview
-        type: first_cfb_preview(preview_count == 1)
-        if: preview_count > 0
-      - id: remaining_previews
-        type: >-
-          cfb_preview(_index == 0 ? first_preview.next_len_cfb :
-          remaining_previews[_index - 1].next_len_cfb, _index == preview_count - 2)
-        repeat: expr
-        repeat-expr: 'preview_count > 0 ? preview_count - 1 : 0'
+      - id: previews
+        type:
+          switch-on: preview_count
+          cases:
+            0: no_cfb_previews
+            1: single_cfb_preview
+            _: multiple_cfb_previews(preview_count)
 
-  first_cfb_preview:
-    params:
-      - id: is_final
-        type: bool
+  no_cfb_previews:
+    seq: []
+
+  single_cfb_preview:
     seq:
       - id: mfc_class_marker
         contents: [0xff, 0xff, 0x01, 0x00]
@@ -256,31 +254,67 @@ types:
         type: microsoft_cfb
         size: len_cfb
       - id: trailer
-        type: cfb_preview_trailer(is_final)
-    instances:
-      next_len_cfb:
-        value: trailer.next_len_cfb
+        type: final_cfb_preview_trailer
 
-  cfb_preview:
+  multiple_cfb_previews:
+    params:
+      - id: preview_count
+        type: u4
+    seq:
+      - id: first_preview
+        type: first_nonfinal_cfb_preview
+      - id: middle_previews
+        type: >-
+          nonfinal_cfb_preview(_index == 0 ? first_preview.trailer.next_len_cfb :
+          middle_previews[_index - 1].trailer.next_len_cfb)
+        repeat: expr
+        repeat-expr: preview_count - 2
+      - id: final_preview
+        type: >-
+          final_cfb_preview(preview_count == 2 ? first_preview.trailer.next_len_cfb :
+          middle_previews[preview_count - 3].trailer.next_len_cfb)
+
+  first_nonfinal_cfb_preview:
+    seq:
+      - id: mfc_class_marker
+        contents: [0xff, 0xff, 0x01, 0x00]
+      - id: len_class_name
+        type: u2
+      - id: class_name
+        size: len_class_name
+      - id: item_state
+        size: 18
+      - id: len_cfb
+        type: u4
+      - id: cfb
+        type: microsoft_cfb
+        size: len_cfb
+      - id: trailer
+        type: nonfinal_cfb_preview_trailer
+
+  nonfinal_cfb_preview:
     params:
       - id: len_cfb
         type: u4
-      - id: is_final
-        type: bool
     seq:
       - id: cfb
         type: microsoft_cfb
         size: len_cfb
       - id: trailer
-        type: cfb_preview_trailer(is_final)
-    instances:
-      next_len_cfb:
-        value: trailer.next_len_cfb
+        type: nonfinal_cfb_preview_trailer
 
-  cfb_preview_trailer:
+  final_cfb_preview:
     params:
-      - id: is_final
-        type: bool
+      - id: len_cfb
+        type: u4
+    seq:
+      - id: cfb
+        type: microsoft_cfb
+        size: len_cfb
+      - id: trailer
+        type: final_cfb_preview_trailer
+
+  nonfinal_cfb_preview_trailer:
     seq:
       - id: class_id
         contents: [0x7b, 0x46, 0x34, 0x39, 0x39, 0x37, 0x44, 0x37,
@@ -293,10 +327,24 @@ types:
       - id: rectangle
         size: 16
       - id: item_state
-        size: 'is_final ? 8 : 28'
+        size: 28
       - id: next_len_cfb
         type: u4
-        if: not is_final
+
+  final_cfb_preview_trailer:
+    seq:
+      - id: class_id
+        contents: [0x7b, 0x46, 0x34, 0x39, 0x39, 0x37, 0x44, 0x37,
+                   0x30, 0x2d, 0x41, 0x46, 0x38, 0x41, 0x2d, 0x31,
+                   0x31, 0x44, 0x30, 0x2d, 0x41, 0x33, 0x37, 0x33,
+                   0x2d, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
+                   0x30, 0x30, 0x30, 0x30, 0x30, 0x7d]
+      - id: extent
+        size: 16
+      - id: rectangle
+        size: 16
+      - id: item_state
+        size: 8
 
   database_footer:
     seq:
