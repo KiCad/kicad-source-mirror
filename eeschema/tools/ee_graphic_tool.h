@@ -62,6 +62,12 @@ private:
     int getDefaultTextSize() const;
 
     /**
+     * When in the symbol editor, apply unit and body-style restrictions to @a aItem
+     * according to the current draw-specific flags on the frame.
+     */
+    void applySymbolEditorFlags( SCH_ITEM& aItem ) const;
+
+    /**
      * Run the interactive arc-drawing event loop.
      *
      * @return true if an arc was completed, false if the tool was cancelled.

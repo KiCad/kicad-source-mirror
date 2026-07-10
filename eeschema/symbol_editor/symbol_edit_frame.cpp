@@ -61,6 +61,7 @@
 #include <tools/sch_actions.h>
 #include <tools/sch_inspection_tool.h>
 #include <tools/sch_point_editor.h>
+#include <tools/ee_graphic_tool.h>
 #include <tools/ee_grid_helper.h>
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_find_replace_tool.h>
@@ -479,6 +480,7 @@ void SYMBOL_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_PIN_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_DRAWING_TOOLS );
+    m_toolManager->RegisterTool( new EE_GRAPHIC_TOOL );
     m_toolManager->RegisterTool( new SCH_POINT_EDITOR );
     m_toolManager->RegisterTool( new SCH_FIND_REPLACE_TOOL );
     m_toolManager->RegisterTool( new SYMBOL_EDITOR_MOVE_TOOL );
@@ -2167,8 +2169,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     // Optimize default edit options for this symbol
     // Usually if units are locked, graphic items are specific to each unit
     // and if units are interchangeable, graphic items are common to units
-    SYMBOL_EDITOR_DRAWING_TOOLS* tools = GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
-    tools->SetDrawSpecificUnit( symbol->UnitsLocked() );
+    SetDrawSpecificUnit( symbol->UnitsLocked() );
 
     // Hand the transient working symbol/screen to a session-only instance tab, whose activation
     // restores the frame's schematic-source state so the save path routes back to the schematic.

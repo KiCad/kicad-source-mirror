@@ -325,6 +325,20 @@ protected:
     }
 
     /**
+     * Return the parent container for new draw-items in the active editor.
+     *
+     * In the schematic editor this is the @ref SCHEMATIC, in the symbol editor it is
+     * the current @ref LIB_SYMBOL.
+     */
+    EDA_ITEM* getDrawParent() const
+    {
+        if( m_isSymbolEditor )
+            return static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
+
+        return &static_cast<SCH_EDIT_FRAME*>( m_frame )->Schematic();
+    }
+
+    /**
      * Similar to getView()->Update(), but also updates the SCH_SCREEN's RTree.
      */
     void updateItem( EDA_ITEM* aItem, bool aUpdateRTree ) const

@@ -48,11 +48,6 @@ SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
         m_lastTextItalic( false ),
         m_lastTextAngle( ANGLE_HORIZONTAL ),
         m_lastTextJust( GR_TEXT_H_ALIGN_LEFT ),
-        m_lastFillStyle( FILL_T::NO_FILL ),
-        m_lastFillColor( COLOR4D::UNSPECIFIED ),
-        m_lastStroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
-        m_drawSpecificBodyStyle( true ),
-        m_drawSpecificUnit( false ),
         m_inDrawShape( false ),
         m_inPlaceAnchor( false ),
         m_inTwoClickPlace( false )
@@ -225,10 +220,10 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                     text->SetParent( symbol );
 
-                    if( m_drawSpecificUnit )
+                    if( m_frame->GetDrawSpecificUnit() )
                         text->SetUnit( m_frame->GetUnit() );
 
-                    if( m_drawSpecificBodyStyle )
+                    if( m_frame->GetDrawSpecificBodyStyle() )
                         text->SetBodyStyle( m_frame->GetBodyStyle() );
 
                     if( cfg )
@@ -347,268 +342,6 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     controls->SetAutoPan( false );
     controls->CaptureCursor( false );
     controls->ForceCursorPosition( false );
-    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
-    return 0;
-}
-
-
-int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
-{
-    SHAPE_T requestedShape = aEvent.Parameter<SHAPE_T>();
-
-    return doDrawShape( aEvent, requestedShape );
-}
-
-
-int SYMBOL_EDITOR_DRAWING_TOOLS::DrawSymbolTextBox( const TOOL_EVENT& aEvent )
-{
-    return doDrawShape( aEvent, std::nullopt /* Draw text box */ );
-}
-
-
-int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::optional<SHAPE_T> aDrawingShape )
-{
-    bool    isTextBox = !aDrawingShape.has_value();
-    SHAPE_T toolType  = aDrawingShape.value_or( SHAPE_T::SEGMENT );
-
-    KIGFX::VIEW_CONTROLS*   controls = getViewControls();
-    SYMBOL_EDITOR_SETTINGS* cfg = GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" );
-    EE_GRID_HELPER          grid( m_toolMgr );
-    VECTOR2I                cursorPos;
-    SHAPE_T                 shapeType = toolType == SHAPE_T::SEGMENT ? SHAPE_T::POLY : toolType;
-    LIB_SYMBOL*             symbol = m_frame->GetCurSymbol();
-    SCH_SHAPE*              item = nullptr;
-    wxString                description;
-
-    if( m_inDrawShape )
-        return 0;
-
-    REENTRANCY_GUARD guard( &m_inDrawShape );
-
-    // We might be running as the same shape in another co-routine.  Make sure that one
-    // gets whacked.
-    m_toolMgr->DeactivateTool();
-
-    m_toolMgr->RunAction( ACTIONS::selectionClear );
-
-    m_frame->PushTool( aEvent );
-
-    auto setCursor =
-            [&]()
-            {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
-            };
-
-    auto cleanup =
-            [&] ()
-            {
-                m_toolMgr->RunAction( ACTIONS::selectionClear );
-                m_view->ClearPreview();
-                delete item;
-                item = nullptr;
-            };
-
-    Activate();
-    // Must be done after Activate() so that it gets set into the correct context
-    controls->ShowCursor( true );
-    // Set initial cursor
-    setCursor();
-
-    if( aEvent.HasPosition() )
-        m_toolMgr->PrimeTool( aEvent.Position() );
-
-    // Main loop: keep receiving events
-    while( TOOL_EVENT* evt = Wait() )
-    {
-        setCursor();
-        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-
-        cursorPos = grid.Align( controls->GetMousePosition(), grid.GetItemGrid( item ) );
-        controls->ForceCursorPosition( true, cursorPos );
-
-        // The tool hotkey is interpreted as a click when drawing
-        bool isSyntheticClick = item && evt->IsActivate() && evt->HasPosition()
-                                && evt->Matches( aEvent );
-
-        if( evt->IsCancelInteractive() )
-        {
-            if( item )
-            {
-                cleanup();
-            }
-            else
-            {
-                m_frame->PopTool( aEvent );
-                break;
-            }
-        }
-        else if( evt->IsActivate() && !isSyntheticClick )
-        {
-            if( item )
-                cleanup();
-
-            if( evt->IsPointEditor() )
-            {
-                // don't exit (the point editor runs in the background)
-            }
-            else if( evt->IsMoveTool() )
-            {
-                // leave ourselves on the stack so we come back after the move
-                break;
-            }
-            else
-            {
-                m_frame->PopTool( aEvent );
-                break;
-            }
-        }
-        else if( evt->IsClick( BUT_LEFT ) && !item )
-        {
-            // Update in case the symbol was changed while the tool was running
-            symbol = m_frame->GetCurSymbol();
-
-            if( !symbol )
-                continue;
-
-            m_toolMgr->RunAction( ACTIONS::selectionClear );
-
-            int lineWidth = schIUScale.MilsToIU( cfg ? cfg->m_Defaults.line_width : DEFAULT_LINE_WIDTH_MILS );
-
-            if( isTextBox )
-            {
-                SCH_TEXTBOX* textbox = new SCH_TEXTBOX( LAYER_DEVICE, lineWidth, m_lastFillStyle );
-
-                textbox->SetParent( symbol );
-
-                if( cfg )
-                {
-                    textbox->SetTextSize( VECTOR2I( schIUScale.MilsToIU( cfg->m_Defaults.text_size ),
-                                                    schIUScale.MilsToIU( cfg->m_Defaults.text_size ) ) );
-                }
-
-                // Must be after SetTextSize()
-                textbox->SetBold( m_lastTextBold );
-                textbox->SetItalic( m_lastTextItalic );
-
-                textbox->SetTextAngle( m_lastTextAngle );
-                textbox->SetHorizJustify( m_lastTextJust );
-
-                item = textbox;
-                description = _( "Add Text Box" );
-            }
-            else
-            {
-                item = new SCH_SHAPE( shapeType, LAYER_DEVICE, lineWidth, m_lastFillStyle );
-                item->SetParent( symbol );
-                description = wxString::Format( _( "Add %s" ), item->GetFriendlyName() );
-            }
-
-            item->SetStroke( m_lastStroke );
-            item->SetFillColor( m_lastFillColor );
-
-            item->SetFlags( IS_NEW );
-            item->BeginEdit( cursorPos );
-
-            if( m_drawSpecificUnit )
-                item->SetUnit( m_frame->GetUnit() );
-
-            if( m_drawSpecificBodyStyle )
-                item->SetBodyStyle( m_frame->GetBodyStyle() );
-
-            m_selectionTool->AddItemToSel( item );
-        }
-        else if( item && ( evt->IsClick( BUT_LEFT )
-                        || evt->IsDblClick( BUT_LEFT )
-                        || isSyntheticClick
-                        || evt->IsAction( &ACTIONS::finishInteractive ) ) )
-        {
-            if( symbol != m_frame->GetCurSymbol() )
-            {
-                symbol = m_frame->GetCurSymbol();
-                item->SetParent( symbol );
-            }
-
-            if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::finishInteractive )
-                || !item->ContinueEdit( VECTOR2I( cursorPos.x, cursorPos.y ) ) )
-            {
-                if( toolType == SHAPE_T::POLY )
-                {
-                    item->CalcEdit( item->GetPosition() );  // Close shape
-                    item->EndEdit( true );
-                }
-                else
-                {
-                    item->EndEdit();
-                }
-
-                item->ClearEditFlags();
-
-                if( isTextBox )
-                {
-                    SCH_TEXTBOX*           textbox = static_cast<SCH_TEXTBOX*>( item );
-                    DIALOG_TEXT_PROPERTIES dlg( m_frame, static_cast<SCH_TEXTBOX*>( item ) );
-
-                    // QuasiModal required for syntax help and Scintilla auto-complete
-                    if( dlg.ShowQuasiModal() != wxID_OK )
-                    {
-                        cleanup();
-                        continue;
-                    }
-
-                    m_lastTextBold = textbox->IsBold();
-                    m_lastTextItalic = textbox->IsItalic();
-                    m_lastTextAngle = textbox->GetTextAngle();
-                    m_lastTextJust = textbox->GetHorizJustify();
-                }
-
-                m_lastStroke = item->GetStroke();
-                m_lastFillStyle = item->GetFillMode();
-                m_lastFillColor = item->GetFillColor();
-
-                m_view->ClearPreview();
-
-                SCH_COMMIT commit( m_toolMgr );
-                commit.Modify( symbol, m_frame->GetScreen() );
-
-                symbol->AddDrawItem( item );
-                item = nullptr;
-
-                commit.Push( description );
-                m_frame->RebuildView();
-                m_toolMgr->PostAction( ACTIONS::activatePointEditor );
-            }
-        }
-        else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
-        {
-            item->CalcEdit( cursorPos );
-            m_view->ClearPreview();
-            m_view->AddToPreview( item->Clone() );
-        }
-        else if( evt->IsDblClick( BUT_LEFT ) && !item )
-        {
-            m_toolMgr->RunAction( SCH_ACTIONS::properties );
-        }
-        else if( evt->IsClick( BUT_RIGHT ) )
-        {
-            // Warp after context menu only if dragging...
-            if( !item )
-                m_toolMgr->VetoContextMenuMouseWarp();
-
-            m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
-        }
-        else
-        {
-            evt->SetPassEvent();
-        }
-
-        // Enable autopanning and cursor capture only when there is a shape being drawn
-        controls->SetAutoPan( item != nullptr );
-        controls->CaptureCursor( item != nullptr );
-    }
-
-    controls->SetAutoPan( false );
-    controls->CaptureCursor( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
@@ -888,15 +621,6 @@ void SYMBOL_EDITOR_DRAWING_TOOLS::setTransitions()
     // clang-format off
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     SCH_ACTIONS::placeSymbolPin.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     SCH_ACTIONS::placeSymbolText.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawRectangle.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawCircle.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawEllipse.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawEllipseArc.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawArc.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawBezier.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawSymbolLines.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawSymbolPolygon.MakeEvent() );
-    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawSymbolTextBox, SCH_ACTIONS::drawSymbolTextBox.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,       SCH_ACTIONS::placeSymbolAnchor.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics,    SCH_ACTIONS::importGraphics.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem,    SCH_ACTIONS::repeatDrawItem.MakeEvent() );

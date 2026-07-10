@@ -80,6 +80,7 @@
 #include <tool/zoom_tool.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_align_tool.h>
+#include <tools/ee_graphic_tool.h>
 #include <tools/ee_grid_helper.h>
 #include <tools/ee_graphic_tool.h>
 #include <tools/sch_inspection_tool.h>

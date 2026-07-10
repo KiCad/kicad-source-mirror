@@ -21,6 +21,7 @@
 
 #include <wx/msgdlg.h>
 
+#include <default_values.h>
 #include <scoped_set_reset.h>
 
 #include <dialogs/dialog_text_properties.h>
@@ -95,6 +96,34 @@ SCH_LAYER_ID EE_GRAPHIC_TOOL::getShapeLayer() const
 }
 
 
+int EE_GRAPHIC_TOOL::getDefaultTextSize() const
+{
+    if( IsSymbolEditor() )
+    {
+        const SYMBOL_EDITOR_SETTINGS* cfg = frame<SYMBOL_EDIT_FRAME>()->libeditconfig();
+
+        return schIUScale.MilsToIU( cfg ? cfg->m_Defaults.text_size : DEFAULT_TEXT_SIZE );
+    }
+
+    return getModel<SCHEMATIC>()->Settings().m_DefaultTextSize;
+}
+
+
+void EE_GRAPHIC_TOOL::applySymbolEditorFlags( SCH_ITEM& aItem ) const
+{
+    if( !IsSymbolEditor() )
+        return;
+
+    SYMBOL_EDIT_FRAME* symFrame = frame<SYMBOL_EDIT_FRAME>();
+
+    if( symFrame->GetDrawSpecificUnit() )
+        aItem.SetUnit( symFrame->GetUnit() );
+
+    if( symFrame->GetDrawSpecificBodyStyle() )
+        aItem.SetBodyStyle( symFrame->GetBodyStyle() );
+}
+
+
 void EE_GRAPHIC_TOOL::commitItem( SCH_COMMIT& aCommit, std::unique_ptr<SCH_ITEM> aItem, const wxString& aDescription )
 {
     if( IsSymbolEditor() )
@@ -117,11 +146,15 @@ void EE_GRAPHIC_TOOL::commitItem( SCH_COMMIT& aCommit, std::unique_ptr<SCH_ITEM>
 
 int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
 {
-    SCHEMATIC*          schematic = getModel<SCHEMATIC>();
-    SCHEMATIC_SETTINGS& sch_settings = schematic->Settings();
-    bool                isTextBox = aEvent.IsAction( &SCH_ACTIONS::drawTextBox );
-    SHAPE_T             type = aEvent.Parameter<SHAPE_T>();
-    wxString            description;
+    EDA_ITEM* parent = getDrawParent();
+
+    if( !parent )
+        return 0;
+
+    int        defaultTextSize = getDefaultTextSize();
+    bool       isTextBox = aEvent.IsAction( &SCH_ACTIONS::drawTextBox )
+                        || aEvent.IsAction( &SCH_ACTIONS::drawSymbolTextBox );
+    SHAPE_T    type = isTextBox ? SHAPE_T::RECTANGLE : aEvent.Parameter<SHAPE_T>();
 
     if( m_inDrawingTool )
         return 0;
@@ -230,7 +263,7 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
             {
                 auto textbox = std::make_unique<SCH_TEXTBOX>( shapeLayer, 0, m_lastTextboxFillStyle );
 
-                textbox->SetTextSize( VECTOR2I( sch_settings.m_DefaultTextSize, sch_settings.m_DefaultTextSize ) );
+                textbox->SetTextSize( VECTOR2I( defaultTextSize, defaultTextSize ) );
 
                 // Must come after SetTextSize()
                 textbox->SetBold( m_lastTextBold );
@@ -241,10 +274,9 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
                 textbox->SetVertJustify( m_lastTextboxVJustify );
                 textbox->SetStroke( m_lastTextboxStroke );
                 textbox->SetFillColor( m_lastTextboxFillColor );
-                textbox->SetParent( schematic );
+                textbox->SetParent( parent );
 
                 item = std::move( textbox );
-                description = _( "Add Text Box" );
             }
             else
             {
@@ -252,11 +284,13 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
 
                 item->SetStroke( m_lastStroke );
                 item->SetFillColor( m_lastFillColor );
-                item->SetParent( schematic );
-                description = wxString::Format( _( "Add %s" ), item->GetFriendlyName() );
+                item->SetParent( parent );
             }
 
             item->SetFlags( IS_NEW );
+
+            applySymbolEditorFlags( *item );
+
             item->BeginEdit( cursorPos );
 
             m_view->ClearPreview();
@@ -419,10 +453,10 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     if( m_inDrawingTool )
         return 0;
 
-    SCHEMATIC* schematic = nullptr;
+    EDA_ITEM* parent = getDrawParent();
 
-    if( !IsSymbolEditor() )
-        schematic = getModel<SCHEMATIC>();
+    if( !parent )
+        return 0;
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
@@ -436,8 +470,10 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
                 std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, shapeLayer, 0, m_lastFillStyle );
                 arc->SetStroke( m_lastStroke );
                 arc->SetFillColor( m_lastFillColor );
-                arc->SetParent( schematic );
+                arc->SetParent( parent );
                 arc->SetFlags( IS_NEW );
+
+                applySymbolEditorFlags( *arc );
 
                 return arc;
             };
@@ -486,6 +522,7 @@ bool EE_GRAPHIC_TOOL::drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAP
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     VECTOR2I              cursorPos;
+    EDA_ITEM*             parent = getDrawParent();
 
     ARC_DRAW_BEHAVIOR arcBehavior( schIUScale, frame()->GetUserUnits() );
     m_view->Add( &arcBehavior.GetAssistant() );
@@ -624,10 +661,15 @@ bool EE_GRAPHIC_TOOL::drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAP
 
             if( started )
                 frame()->SetMsgPanel( aArc.get() );
+            else
+                frame()->SetMsgPanel( parent );
         }
     }
 
     m_view->Remove( &arcBehavior.GetAssistant() );
+
+    if( !started )
+        frame()->SetMsgPanel( parent );
 
     controls->SetAutoPan( false );
     controls->CaptureCursor( false );
@@ -657,6 +699,5 @@ void EE_GRAPHIC_TOOL::setTransitions()
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolLines.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolPolygon.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolTextBox.MakeEvent() );
-
     // clang-format on
 }

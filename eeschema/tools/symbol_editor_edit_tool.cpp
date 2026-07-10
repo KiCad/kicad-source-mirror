@@ -953,9 +953,8 @@ void SYMBOL_EDITOR_EDIT_TOOL::editShapeProperties( SCH_SHAPE* aShape )
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
 
-    SYMBOL_EDITOR_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
-    drawingTools->SetDrawSpecificBodyStyle( !dlg.GetApplyToAllConversions() );
-    drawingTools->SetDrawSpecificUnit( !dlg.GetApplyToAllUnits() );
+    m_frame->SetDrawSpecificBodyStyle( !dlg.GetApplyToAllConversions() );
+    m_frame->SetDrawSpecificUnit( !dlg.GetApplyToAllUnits() );
 
     std::vector<MSG_PANEL_ITEM> items;
     aShape->GetMsgPanelInfo( m_frame, items );
@@ -1098,15 +1097,13 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
     // to the best value
     if( partLocked != symbol->UnitsLocked() )
     {
-        SYMBOL_EDITOR_DRAWING_TOOLS* tools = m_toolMgr->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
-
         // Enable synchronized pin edit mode for symbols with interchangeable units
         m_frame->m_SyncPinEdit = !symbol->UnitsLocked();
 
         // also set default edit options to the better value
         // Usually if units are locked, graphic items are specific to each unit
         // and if units are interchangeable, graphic items are common to units
-        tools->SetDrawSpecificUnit( symbol->UnitsLocked() );
+        m_frame->SetDrawSpecificUnit( symbol->UnitsLocked() );
     }
 }
 

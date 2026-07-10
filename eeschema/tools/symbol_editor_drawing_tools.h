@@ -45,8 +45,6 @@ public:
     bool Init() override;
 
     int TwoClickPlace( const TOOL_EVENT& aEvent );
-    int DrawShape( const TOOL_EVENT& aEvent );
-    int DrawSymbolTextBox( const TOOL_EVENT& aEvent );
     int PlaceAnchor( const TOOL_EVENT& aEvent );
     int ImportGraphics( const TOOL_EVENT& aEvent );
 
@@ -55,15 +53,7 @@ public:
     void SetLastTextAngle( const EDA_ANGLE& aAngle ) { m_lastTextAngle = aAngle; }
     EDA_ANGLE GetLastTextAngle() const { return m_lastTextAngle; }
 
-    void SetDrawSpecificBodyStyle( bool aSpecific ) { m_drawSpecificBodyStyle = aSpecific; }
-    bool GetDrawSpecificBodyStyle() const { return m_drawSpecificBodyStyle; }
-
-    void SetDrawSpecificUnit( bool aSpecific ) { m_drawSpecificUnit = aSpecific; }
-    bool GetDrawSpecificUnit() const { return m_drawSpecificUnit; }
-
 private:
-    int doDrawShape( const TOOL_EVENT& aEvent, std::optional<SHAPE_T> aDrawingShape );
-
     void setTransitions() override;
 
 private:
@@ -71,11 +61,6 @@ private:
     bool              m_lastTextItalic;
     EDA_ANGLE         m_lastTextAngle;
     GR_TEXT_H_ALIGN_T m_lastTextJust;
-    FILL_T            m_lastFillStyle;
-    COLOR4D           m_lastFillColor;
-    STROKE_PARAMS     m_lastStroke;
-    bool              m_drawSpecificBodyStyle;
-    bool              m_drawSpecificUnit;
 
     ///< Re-entrancy guards
     bool              m_inDrawShape;

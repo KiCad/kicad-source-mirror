@@ -295,6 +295,12 @@ public:
     int  GetBodyStyle() const { return m_bodyStyle; }
     void SetBodyStyle( int aBodyStyle );
 
+    void SetDrawSpecificUnit( bool aSpecific ) { m_drawSpecificUnit = aSpecific; }
+    bool GetDrawSpecificUnit() const { return m_drawSpecificUnit; }
+
+    void SetDrawSpecificBodyStyle( bool aSpecific ) { m_drawSpecificBodyStyle = aSpecific; }
+    bool GetDrawSpecificBodyStyle() const { return m_drawSpecificBodyStyle; }
+
     bool GetShowInvisibleFields();
     bool GetShowInvisiblePins();
 
@@ -740,6 +746,12 @@ private:
 
     // Show the normal shape (m_bodyStyle <= 1) or the DeMorgan converted shape (m_bodyStyle > 1)
     int         m_bodyStyle;
+
+    // When editing a symbol: only apply new graphic items to the current unit.
+    bool        m_drawSpecificUnit;
+
+    // When editing a symbol: only apply new graphic items to the current body style.
+    bool        m_drawSpecificBodyStyle;
 
     ///< Flag if the symbol being edited was loaded directly from a schematic.
     bool        m_isSymbolFromSchematic;

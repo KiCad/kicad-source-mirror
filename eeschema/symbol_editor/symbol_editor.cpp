@@ -24,8 +24,10 @@
 #include <confirm.h>
 #include <kidialog.h>
 #include <kiway.h>
+#include <tool/tool_manager.h>
+#include <tool/actions.h>
 #include <widgets/wx_infobar.h>
-#include <tools/symbol_editor_drawing_tools.h>
+#include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
@@ -1514,8 +1516,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbol( const wxString& aAlias, const wxString& aLib
     // Optimize default edit options for this symbol
     // Usually if units are locked, graphic items are specific to each unit
     // and if units are interchangeable, graphic items are common to units
-    SYMBOL_EDITOR_DRAWING_TOOLS* tools = GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
-    tools->SetDrawSpecificUnit( symbol->UnitsLocked() );
+    SetDrawSpecificUnit( symbol->UnitsLocked() );
 
     LoadOneLibrarySymbolAux( symbol, aLibrary, aUnit, 0 );
 }
