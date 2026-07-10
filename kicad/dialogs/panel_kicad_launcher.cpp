@@ -57,11 +57,15 @@ PANEL_KICAD_LAUNCHER::~PANEL_KICAD_LAUNCHER()
 
 void PANEL_KICAD_LAUNCHER::onLauncherButtonClick( wxCommandEvent& aEvent )
 {
-    BITMAP_BUTTON*     button = (BITMAP_BUTTON*) aEvent.GetEventObject();
-    const TOOL_ACTION* action = static_cast<const TOOL_ACTION*>( button->GetClientData() );
+    // BITMAP_BUTTON::OnLeftButtonUp() defers this click via CallAfter(), so CreateLaunchers()
+    // can destroy and rebuild the sender before this event is delivered.  aEvent.GetEventObject()
+    // may therefore be dangling; aEvent.GetId() is a plain copy made while the button was alive.
+    auto it = m_actionForId.find( aEvent.GetId() );
 
-    if( !action )
+    if( it == m_actionForId.end() )
         return;
+
+    const TOOL_ACTION* action = it->second;
 
     // Don't accept clicks processed during wxProgressReporter updating.  In particular, the wxSafeYield()
     // call below will puke.
@@ -86,6 +90,10 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
 {
     m_frame->SetPcmButton( nullptr );
 
+    // Old buttons are about to be destroyed; drop the id lookup with them so a stale
+    // asynchronous click event can never be mapped to an action again.
+    m_actionForId.clear();
+
     if( m_toolsSizer->GetEffectiveRowsCount() > 0 )
     {
         m_toolsSizer->Clear( true );
@@ -104,7 +112,11 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
     auto addLauncher =
             [&]( const TOOL_ACTION& aAction, BITMAPS aBitmaps, const wxString& aHelpText, bool enabled = true )
             {
-                BITMAP_BUTTON* btn = new BITMAP_BUTTON( m_scrolledWindow, wxID_ANY );
+                // Assign a monotonic id that is never reused across rebuilds.  A wxID_ANY id can be
+                // recycled after CreateLaunchers() destroys the old buttons, which would let a stale
+                // deferred click resolve to a different action; a fresh id makes it miss the map instead.
+                int            id = m_nextLauncherId++;
+                BITMAP_BUTTON* btn = new BITMAP_BUTTON( m_scrolledWindow, id );
                 btn->SetBitmap( KiBitmapBundle( aBitmaps ) );
                 btn->SetDisabledBitmap( KiDisabledBitmapBundle( aBitmaps ) );
                 btn->SetPadding( 4 );
@@ -118,7 +130,7 @@ void PANEL_KICAD_LAUNCHER::CreateLaunchers()
                 wxStaticText* help = new wxStaticText( m_scrolledWindow, wxID_ANY, aHelpText );
 
                 btn->Bind( wxEVT_BUTTON, &PANEL_KICAD_LAUNCHER::onLauncherButtonClick, this );
-                btn->SetClientData( (void*) &aAction );
+                m_actionForId[id] = &aAction;
 
                 // The bug fix below makes this handler active for the entire window width.  Without any visual
                 // feedback that's a bit odd.  Disabling for now.

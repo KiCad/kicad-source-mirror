@@ -22,7 +22,10 @@
 
 #include "panel_kicad_launcher_base.h"
 
+#include <unordered_map>
+
 class TOOL_MANAGER;
+class TOOL_ACTION;
 class KICAD_MANAGER_FRAME;
 
 class PANEL_KICAD_LAUNCHER : public PANEL_KICAD_LAUNCHER_BASE
@@ -39,6 +42,14 @@ private:
     void onLauncherButtonClick( wxCommandEvent& aEvent );
 
     KICAD_MANAGER_FRAME* m_frame;
+
+    // Action lookup keyed by button id rather than stashed as button client data, so the
+    // handler for the button's asynchronous click event never has to dereference the event
+    // object, which CreateLaunchers() may have already destroyed by the time the event arrives.
+    std::unordered_map<int, const TOOL_ACTION*> m_actionForId;
+
+    // Source of never-reused button ids so a stale click cannot alias a rebuilt button's id.
+    int                                         m_nextLauncherId = wxID_HIGHEST + 1;
 };
 
 
