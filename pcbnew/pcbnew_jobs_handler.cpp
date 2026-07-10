@@ -414,8 +414,7 @@ PCBNEW_JOBS_HANDLER::~PCBNEW_JOBS_HANDLER()
 
 void PCBNEW_JOBS_HANDLER::ClearCachedBoard()
 {
-    delete m_cliBoard;
-    m_cliBoard = nullptr;
+    m_cliBoard.reset();
     m_toolManager.reset();
 }
 
@@ -507,9 +506,9 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
         }
 
         if( !m_cliBoard )
-            m_cliBoard = loadBoardFromPath( pcbPath );
+            m_cliBoard.reset( loadBoardFromPath( pcbPath ) );
 
-        brd = m_cliBoard;
+        brd = m_cliBoard.get();
     }
     else if( Pgm().IsGUI() && Pgm().GetSettingsManager().IsProjectOpen() )
     {
@@ -520,7 +519,8 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
     }
     else
     {
-        brd = loadBoardFromPath( aPath );
+        m_cliBoard.reset( loadBoardFromPath( aPath ) );
+        brd = m_cliBoard.get();
     }
 
     if( !brd )

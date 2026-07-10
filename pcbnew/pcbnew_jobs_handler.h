@@ -105,7 +105,7 @@ private:
 
     TOOL_MANAGER* getToolManager( BOARD* aBrd );
 
-    BOARD* m_cliBoard;
+    std::unique_ptr<BOARD> m_cliBoard;
     std::unique_ptr<TOOL_MANAGER> m_toolManager;
 };
 
