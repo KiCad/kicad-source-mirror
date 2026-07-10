@@ -37,15 +37,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-05-29 23:52+0000\n"
-"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
+"PO-Revision-Date: 2026-07-11 08:01+0000\n"
+"Last-Translator: \"H. Selim Serdar\" <selimserdar2002@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v10/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:395
@@ -3204,11 +3204,11 @@ msgstr "Grup Özelliklerini Düzenle"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Bir grup, kendisini içeremez."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "Bu grup halihazırda mevcut grubu içerdiğinden eklenemez."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -3267,7 +3267,7 @@ msgstr "Proje Adı"
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1730
 msgid "PCB"
-msgstr "Baskı Devre"
+msgstr "Baskı Devre (PCB)"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35 common/eda_item.cpp:444
 #: eeschema/sch_edit_frame.cpp:1417 eeschema/sch_plotter.cpp:851
@@ -27995,7 +27995,7 @@ msgstr "Ögelerin bazıları dışarı taşınamadı."
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 msgid "Child items cannot be grouped separately from their parent item."
-msgstr ""
+msgstr "Alt öğeler, üst öğelerinden ayrı olarak gruplandırılamaz."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -39494,19 +39494,23 @@ msgstr "3B Model Çıkış Dosyası"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:422
 msgid "Please save the board before exporting STEP."
-msgstr ""
+msgstr "Lütfen STEP olarak dışa aktarmadan önce kartı kaydedin."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:429
 msgid ""
 "Board file not found on disk.\n"
 "Save the board before exporting STEP."
 msgstr ""
+"Kart dosyası diskte bulunamadı.\n"
+"STEP olarak dışa aktarmadan önce kartı kaydedin."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:441
 msgid ""
 "The board directory no longer exists.\n"
 "Save the board to a valid location before exporting STEP."
 msgstr ""
+"Kart dizini artık mevcut değil.\n"
+"STEP olarak dışa aktarma işleminden önce kartı geçerli bir konuma kaydedin."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:451
 #, fuzzy
@@ -41599,6 +41603,8 @@ msgid ""
 "If checked, layers will keep their standard KiCad names instead of being "
 "renamed to the imported layer names."
 msgstr ""
+"İşaretlenirse, katmanlar içe aktarılan katman adlarıyla yeniden "
+"adlandırılmak yerine standart KiCad adlarını korur."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:67
 msgid "Edit Mapping of Imported Layers"
@@ -44063,6 +44069,9 @@ msgid ""
 "For each new group created from a design block, apply the block's saved "
 "footprint placement and routing automatically."
 msgstr ""
+"Bir tasarım bloğundan oluşturulan her yeni grup için, bloğun kaydedilmiş "
+"ayak izi (footprint) yerleşimini ve yönlendirmesini (routing) otomatik "
+"olarak uygulayın."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
 msgid "Update Footprints"
@@ -53356,6 +53365,8 @@ msgid ""
 "Pad '%s' has custom shape with per-layer geometry; custom primitives not "
 "supported in padstack mode."
 msgstr ""
+"'%s' pedi, katman bazlı geometriye sahip özel bir şekle sahip; padstack "
+"modunda özel ilkel şekiller (primitives) desteklenmiyor."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2877
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2909
@@ -53746,6 +53757,8 @@ msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"Tanımlanmamış katmanlarda (%s) bir veya daha fazla öğe bulundu. Sorunu "
+"gidermek için kartı PCB Düzenleyicisi'nde açın."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1587
 #, c-format
@@ -56761,6 +56774,8 @@ msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 msgstr ""
+"Ayak izleri aynalanamaz. Onları kartın diğer tarafına taşımak için Çevir "
+"(Flip) özelliğini kullanın."
 
 #: pcbnew/tools/edit_tool.cpp:2661 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
@@ -57087,6 +57102,10 @@ msgid ""
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
+"Bu hedef Kural Alanı, referans alanıyla aynı bileşenleri seçer. Yinelemeli "
+"yerleşim (repeat layout) işlemi, bir Kural Alanını kendi üzerine "
+"kopyalayamaz. Her bir yerleşim Kural Alanına ayrı bir sayfa, bileşen sınıfı "
+"veya grup atayın."
 
 #: pcbnew/tools/multichannel_tool.cpp:1966
 #, fuzzy, c-format
@@ -59259,7 +59278,7 @@ msgstr "Tasarım bloğunun yerleştirilecek bir şematiği yok."
 
 #: pcbnew/tools/pcb_control.cpp:1688
 msgid "group is empty"
-msgstr ""
+msgstr "grup boş"
 
 #: pcbnew/tools/pcb_control.cpp:1740
 #, fuzzy
@@ -59269,7 +59288,7 @@ msgstr "'%s' dosyası kopyalanamıyor."
 #: pcbnew/tools/pcb_control.cpp:1758
 #, c-format
 msgid "Applying layout to group %zu of %zu..."
-msgstr ""
+msgstr "%zu / %zu numaralı gruba düzen uygulanıyor..."
 
 #: pcbnew/tools/pcb_control.cpp:1781
 #, fuzzy
@@ -59284,6 +59303,8 @@ msgstr "Bağlı tasarım bloğu yerleşimini seçili gruba uygula"
 #: pcbnew/tools/pcb_control.cpp:1790
 msgid "Copied copper has no net assigned. Assign nets to connect it."
 msgstr ""
+"Kopyalanan bakır alanın atanmış bir ağı yok. Bağlantı sağlamak için ağlar "
+"atayın."
 
 #: pcbnew/tools/pcb_control.cpp:1802
 #, fuzzy, c-format
@@ -59407,6 +59428,8 @@ msgstr "%d adet 3B model başarıyla kartın içine yerleştirildi."
 msgid ""
 "Footprint items cannot be grouped separately from their parent footprint."
 msgstr ""
+"Footprint öğeleri, ait oldukları üst footprint'ten ayrı olarak "
+"gruplandırılamaz."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2739
 msgid "Resize Table Cells"
@@ -60795,6 +60818,11 @@ msgid ""
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
 msgstr ""
+"Bölge doldurma işlemleri hatalı olabilir: yinelemeli yeniden doldurma işlemi "
+"%d geçişten sonra yakınsama sağlamadı.\n"
+"\n"
+"Bu durum, karmaşık ve üst üste binen bölgelerde meydana gelebilir.   "
+"Bölgelerinizi basitleştirmeyi düşünün."
 
 #: pcbnew/zone_filler.cpp:1534
 msgid "Prototype zone fill enabled. Disable setting and refill?"
