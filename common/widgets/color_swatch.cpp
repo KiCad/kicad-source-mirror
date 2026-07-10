@@ -20,6 +20,7 @@
 #include <kiplatform/ui.h>
 #include <widgets/color_swatch.h>
 #include <wx/dcmemory.h>
+#include <wx/weakref.h>
 
 #include <dpi_scaling_common.h>
 #include <dialogs/dialog_color_picker.h>
@@ -305,7 +306,14 @@ void COLOR_SWATCH::GetNewSwatchColor()
 
     DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, m_supportsOpacity, m_userColors, m_default );
 
-    if( dialog.ShowModal() == wxID_OK )
+    // ShowModal()'s event pump can let our owning panel rebuild or destroy us; guard `this`.
+    wxWeakRef<COLOR_SWATCH> self( this );
+    int                     result = dialog.ShowModal();
+
+    if( !self )
+        return;
+
+    if( result == wxID_OK )
     {
         COLOR4D newColor = dialog.GetColor();
 
