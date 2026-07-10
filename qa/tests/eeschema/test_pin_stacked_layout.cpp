@@ -576,4 +576,206 @@ BOOST_AUTO_TEST_CASE( PinTextSameBottomCoordinate )
     }
 }
 
+// Symbol for issue 24894: number-only display, one bottom-edge vertical pin with a
+// stacked number that wraps to a block, one horizontal pin with the same, and a
+// horizontal pin with a plain single-line number.
+static std::unique_ptr<LIB_SYMBOL> createMirrorTestSymbol()
+{
+    auto symbol = std::make_unique<LIB_SYMBOL>( wxT( "TestMirror" ) );
+
+    symbol->SetShowPinNames( false );
+    symbol->SetShowPinNumbers( true );
+
+    auto vertPin = std::make_unique<SCH_PIN>( symbol.get() );
+    vertPin->SetPosition( VECTOR2I( 0, schIUScale.MilsToIU( 250 ) ) );
+    vertPin->SetOrientation( PIN_ORIENTATION::PIN_UP );
+    vertPin->SetLength( schIUScale.MilsToIU( 50 ) );
+    vertPin->SetNumber( wxT( "[8,11,16,19]" ) );
+    vertPin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    vertPin->SetUnit( 1 );
+
+    auto horizPin = std::make_unique<SCH_PIN>( symbol.get() );
+    horizPin->SetPosition( VECTOR2I( schIUScale.MilsToIU( -250 ), 0 ) );
+    horizPin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
+    horizPin->SetLength( schIUScale.MilsToIU( 50 ) );
+    horizPin->SetNumber( wxT( "[1,2,3,4]" ) );
+    horizPin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    horizPin->SetUnit( 1 );
+
+    auto plainPin = std::make_unique<SCH_PIN>( symbol.get() );
+    plainPin->SetPosition( VECTOR2I( schIUScale.MilsToIU( 250 ), 0 ) );
+    plainPin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
+    plainPin->SetLength( schIUScale.MilsToIU( 100 ) );
+    plainPin->SetNumber( wxT( "12" ) );
+    plainPin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    plainPin->SetUnit( 1 );
+
+    symbol->AddDrawItem( vertPin.release() );
+    symbol->AddDrawItem( horizPin.release() );
+    symbol->AddDrawItem( plainPin.release() );
+
+    return symbol;
+}
+
+
+static PIN_LAYOUT_CACHE::TEXT_INFO numberInfoWithTransform( SCH_PIN* aPin, const TRANSFORM& aTransform )
+{
+    TRANSFORM oldTransform = DefaultTransform;
+    DefaultTransform = aTransform;
+
+    PIN_LAYOUT_CACHE                           cache( *aPin );
+    std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> info = cache.GetPinNumberInfo( 0 );
+
+    DefaultTransform = oldTransform;
+
+    BOOST_REQUIRE_MESSAGE( info.has_value(), "Missing pin number info for pin " << aPin->GetNumber() );
+    return *info;
+}
+
+
+// Truth table for the side-flip test used by the painter and the plotter.
+BOOST_AUTO_TEST_CASE( StackedTextSideFlippedTransforms )
+{
+    auto symbol = std::make_unique<LIB_SYMBOL>( wxT( "TestFlip" ) );
+
+    auto     pin = std::make_unique<SCH_PIN>( symbol.get() );
+    SCH_PIN* pinPtr = pin.get();
+    symbol->AddDrawItem( pin.release() );
+
+    const TRANSFORM identity( 1, 0, 0, 1 );
+    const TRANSFORM mirrorY( -1, 0, 0, 1 ); // left-right flip
+    const TRANSFORM mirrorX( 1, 0, 0, -1 ); // top-bottom flip
+    const TRANSFORM rot180( -1, 0, 0, -1 );
+
+    struct FLIP_CASE
+    {
+        PIN_ORIENTATION orient;
+        TRANSFORM       transform;
+        bool            expected;
+    };
+
+    const std::vector<FLIP_CASE> cases = {
+        { PIN_ORIENTATION::PIN_RIGHT, identity, false },
+        { PIN_ORIENTATION::PIN_LEFT, identity, false },
+        { PIN_ORIENTATION::PIN_UP, identity, false },
+        { PIN_ORIENTATION::PIN_DOWN, identity, false },
+
+        // Left-right flip moves the block side of vertical pins only
+        { PIN_ORIENTATION::PIN_RIGHT, mirrorY, false },
+        { PIN_ORIENTATION::PIN_LEFT, mirrorY, false },
+        { PIN_ORIENTATION::PIN_UP, mirrorY, true },
+        { PIN_ORIENTATION::PIN_DOWN, mirrorY, true },
+
+        // Top-bottom flip moves the block side of horizontal pins only
+        { PIN_ORIENTATION::PIN_RIGHT, mirrorX, true },
+        { PIN_ORIENTATION::PIN_LEFT, mirrorX, true },
+        { PIN_ORIENTATION::PIN_UP, mirrorX, false },
+        { PIN_ORIENTATION::PIN_DOWN, mirrorX, false },
+
+        { PIN_ORIENTATION::PIN_RIGHT, rot180, true },
+        { PIN_ORIENTATION::PIN_LEFT, rot180, true },
+        { PIN_ORIENTATION::PIN_UP, rot180, true },
+        { PIN_ORIENTATION::PIN_DOWN, rot180, true },
+    };
+
+    for( const FLIP_CASE& c : cases )
+    {
+        pinPtr->SetOrientation( c.orient );
+
+        BOOST_CHECK_MESSAGE( pinPtr->StackedTextSideFlipped( c.transform ) == c.expected,
+                             "Orientation " << (int) c.orient << " transform (" << c.transform.x1 << ","
+                                            << c.transform.y1 << "," << c.transform.x2 << "," << c.transform.y2
+                                            << ") expected " << c.expected );
+    }
+}
+
+
+// Issue 24894: a stacked multi-line number block must move to the other side of the pin
+// when the symbol is mirrored, so it stays clear of the neighbouring pins.  Single-line
+// numbers keep the classic fixed side.
+BOOST_AUTO_TEST_CASE( StackedBlockFollowsMirror )
+{
+    std::unique_ptr<LIB_SYMBOL> symbol = createMirrorTestSymbol();
+    BOOST_REQUIRE( symbol );
+
+    SCH_PIN* vertPin = nullptr;
+    SCH_PIN* horizPin = nullptr;
+    SCH_PIN* plainPin = nullptr;
+
+    for( SCH_ITEM& item : symbol->GetDrawItems() )
+    {
+        if( item.Type() != SCH_PIN_T )
+            continue;
+
+        SCH_PIN* pin = static_cast<SCH_PIN*>( &item );
+
+        if( pin->GetNumber() == wxT( "[8,11,16,19]" ) )
+            vertPin = pin;
+        else if( pin->GetNumber() == wxT( "[1,2,3,4]" ) )
+            horizPin = pin;
+        else if( pin->GetNumber() == wxT( "12" ) )
+            plainPin = pin;
+    }
+
+    BOOST_REQUIRE( vertPin && horizPin && plainPin );
+
+    const TRANSFORM identity( 1, 0, 0, 1 );
+    const TRANSFORM mirrorY( -1, 0, 0, 1 );
+    const TRANSFORM mirrorX( 1, 0, 0, -1 );
+
+    // Vertical pin: block left of the pin, right when mirrored left-right
+    {
+        PIN_LAYOUT_CACHE::TEXT_INFO base = numberInfoWithTransform( vertPin, identity );
+        PIN_LAYOUT_CACHE::TEXT_INFO mirrored = numberInfoWithTransform( vertPin, mirrorY );
+
+        BOOST_REQUIRE_MESSAGE( base.m_Text.Contains( '\n' ), "Stacked number did not wrap to a block" );
+
+        int baseOffset = base.m_TextPosition.x - vertPin->GetPosition().x;
+        int mirroredOffset = mirrored.m_TextPosition.x - vertPin->GetPosition().x;
+
+        BOOST_CHECK_MESSAGE( baseOffset < 0, "Unmirrored block not left of the vertical pin" );
+        BOOST_CHECK_MESSAGE( mirroredOffset > 0, "Mirrored block not right of the vertical pin" );
+        BOOST_CHECK_EQUAL( baseOffset, -mirroredOffset );
+    }
+
+    // Horizontal pin: block above the pin, below when mirrored top-bottom
+    {
+        PIN_LAYOUT_CACHE::TEXT_INFO base = numberInfoWithTransform( horizPin, identity );
+        PIN_LAYOUT_CACHE::TEXT_INFO mirrored = numberInfoWithTransform( horizPin, mirrorX );
+
+        BOOST_REQUIRE_MESSAGE( base.m_Text.Contains( '\n' ), "Stacked number did not wrap to a block" );
+
+        int baseOffset = base.m_TextPosition.y - horizPin->GetPosition().y;
+        int mirroredOffset = mirrored.m_TextPosition.y - horizPin->GetPosition().y;
+
+        BOOST_CHECK_MESSAGE( baseOffset < 0, "Unmirrored block not above the horizontal pin" );
+        BOOST_CHECK_MESSAGE( mirroredOffset > 0, "Mirrored block not below the horizontal pin" );
+        BOOST_CHECK_EQUAL( baseOffset, -mirroredOffset );
+    }
+
+    // Single-line number keeps the classic side under both mirrors
+    {
+        PIN_LAYOUT_CACHE::TEXT_INFO base = numberInfoWithTransform( plainPin, identity );
+        PIN_LAYOUT_CACHE::TEXT_INFO mirrored = numberInfoWithTransform( plainPin, mirrorX );
+
+        BOOST_REQUIRE_MESSAGE( !base.m_Text.Contains( '\n' ), "Plain number unexpectedly wrapped" );
+
+        BOOST_CHECK_EQUAL( base.m_TextPosition.y, mirrored.m_TextPosition.y );
+        BOOST_CHECK_MESSAGE( mirrored.m_TextPosition.y < plainPin->GetPosition().y,
+                             "Single-line number moved off the classic side" );
+    }
+
+    // Painter hint: a pre-transformed temp pin flips via the flag alone
+    {
+        PIN_LAYOUT_CACHE::TEXT_INFO base = numberInfoWithTransform( vertPin, identity );
+
+        vertPin->SetFlipStackedTextSide( true );
+        PIN_LAYOUT_CACHE::TEXT_INFO flagged = numberInfoWithTransform( vertPin, identity );
+        vertPin->SetFlipStackedTextSide( false );
+
+        BOOST_CHECK_EQUAL( base.m_TextPosition.x - vertPin->GetPosition().x,
+                           -( flagged.m_TextPosition.x - vertPin->GetPosition().x ) );
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()

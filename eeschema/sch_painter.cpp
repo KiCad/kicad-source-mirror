@@ -2766,6 +2766,8 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         SCH_PIN* symbolPin = aSymbol->GetPin( originalPins[ i ] );
         SCH_PIN* tempPin = tempPins[ i ];
 
+        tempPin->SetFlipStackedTextSide( originalPins[i]->StackedTextSideFlipped( aSymbol->GetTransform() ) );
+
         if( !symbolPin )
             continue;
 
