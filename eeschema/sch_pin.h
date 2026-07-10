@@ -240,6 +240,12 @@ public:
      */
     PIN_ORIENTATION PinDrawOrient( const TRANSFORM& aTransform ) const;
 
+    /**
+     * Return true when \a aTransform maps the side the stacked number block is drawn on
+     * (above horizontal pins, left of vertical pins) onto the opposite side.
+     */
+    bool StackedTextSideFlipped( const TRANSFORM& aTransform ) const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
@@ -393,6 +399,13 @@ public:
     const wxString& GetRemappedFromNumber() const { return m_remappedFromNumber; }
     void            SetRemappedFromNumber( const wxString& aNumber ) { m_remappedFromNumber = aNumber; }
 
+    /**
+     * Transient, render-only hint that the symbol transform mirrors the stacked number
+     * block side.  Set by the painter on its pre-transformed temp pins.  Never serialized.
+     */
+    bool GetFlipStackedTextSide() const { return m_flipStackedTextSide; }
+    void SetFlipStackedTextSide( bool aFlip ) { m_flipStackedTextSide = aFlip; }
+
     double Similarity( const SCH_ITEM& aOther ) const override;
 
     bool operator>( const SCH_ITEM& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
@@ -463,6 +476,9 @@ protected:
 
     /// Render-only original number for a pad-remapped pin; see GetRemappedFromNumber().  Not saved.
     wxString m_remappedFromNumber;
+
+    /// Render-only stacked block side hint, see GetFlipStackedTextSide().  Not saved.
+    bool m_flipStackedTextSide = false;
 
     bool                    m_isDangling;
 

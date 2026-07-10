@@ -80,6 +80,10 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
 
     const int perpendicularHalf = perpHeight / 2;
 
+    // Keep a multi-line stacked block on the authored side of a mirrored symbol (issue 24894)
+    const bool flipStacked = formatted.Contains( '\n' )
+                             && ( m_pin.GetFlipStackedTextSide() != m_pin.StackedTextSideFlipped( DefaultTransform ) );
+
     if( verticalOrient )
     {
         // Vertical pins: text is rotated vertical so that it reads bottom->top.
@@ -101,8 +105,8 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
         }
         else
         {
-            // When only number is shown: place it to the left of the pin
-            centerX = pinPos.x - perpendicularOffset;
+            // When only number is shown: place it to the left of the pin (right when mirrored)
+            centerX = flipStacked ? pinPos.x + perpendicularOffset : pinPos.x - perpendicularOffset;
         }
 
         info->m_TextPosition.x = centerX;
@@ -132,8 +136,9 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNumberInfo( i
         }
         else
         {
-            // When only number is shown: place it above the pin
-            centerY = pinPos.y - ( perpendicularHalf + clearance + m_numberThickness );
+            // When only number is shown: place it above the pin (below when mirrored)
+            centerY = flipStacked ? pinPos.y + ( perpendicularHalf + clearance + m_numberThickness )
+                                  : pinPos.y - ( perpendicularHalf + clearance + m_numberThickness );
         }
 
         if( orient == PIN_ORIENTATION::PIN_LEFT )
