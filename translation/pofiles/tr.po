@@ -32,13 +32,14 @@
 # Oğuz Ersen <oguz@ersen.moe>, 2026.
 # Deleted User <noreply+108163@weblate.org>, 2026.
 # temizinsan <temizinsan@protonmail.com>, 2026.
+# "H. Selim Serdar" <selimserdar2002@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-06-18 23:01+0000\n"
-"Last-Translator: Mert Gülsoy <mgulsoy@gmail.com>\n"
+"PO-Revision-Date: 2026-07-11 12:01+0000\n"
+"Last-Translator: \"H. Selim Serdar\" <selimserdar2002@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
 "source/tr/>\n"
 "Language: tr\n"
@@ -46,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:54
 #: common/dialogs/panel_embedded_files.cpp:391
@@ -3153,37 +3154,34 @@ msgid "Old Path"
 msgstr "Yol Bul"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
-#, fuzzy
 msgid "No git repository available."
-msgstr "Depo mevcut değil"
+msgstr "Git reposu mevcut değil"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 #: common/dialogs/dialog_git_mr_review.cpp:103
 #: common/dialogs/dialog_git_mr_review.cpp:119
 #: common/dialogs/dialog_git_mr_review_base.h:58
 #: kicad/kicad_manager_frame.cpp:1181
-#, fuzzy
 msgid "Compare Branches"
-msgstr "Açıklıklar"
+msgstr "Dallanmaları kıyasla"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
-msgstr ""
+msgstr "Karşılaştırılacak temel ve hedef referansları seçin."
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve ref '%s' to a commit or tree."
-msgstr "Birleştirilecek işlemler bulunamadı."
+msgstr "'%s' referansı bir commit veya ağaca (tree) çözümlenemedi."
 
 #: common/dialogs/dialog_git_mr_review.cpp:133
-#, fuzzy
 msgid "No changes between selected refs."
-msgstr "Seçilen çizgiler arasındaki köşeleri kes"
+msgstr "Seçili referanslar arasında değişiklik yok."
 
 #: common/dialogs/dialog_git_mr_review.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "No diff handler for '%s'."
-msgstr "'%s' için bir sayı gerekli"
+msgstr "'%s' için fark işleyicisi yok."
 
 #: common/dialogs/dialog_git_mr_review.cpp:252
 #: common/dialogs/dialog_git_mr_review.cpp:281
@@ -3192,9 +3190,8 @@ msgstr "'%s' için bir sayı gerekli"
 #: common/dialogs/dialog_git_mr_review.cpp:359
 #: common/dialogs/dialog_git_mr_review.cpp:373
 #: common/dialogs/dialog_git_mr_review.cpp:389
-#, fuzzy
 msgid "Compare File"
-msgstr "Uyumlu"
+msgstr "Dosyayı Karşılaştır"
 
 #: common/dialogs/dialog_git_mr_review.cpp:281
 #, fuzzy
@@ -3205,29 +3202,25 @@ msgstr "Geçici çıktı dizini oluşturulamıyor."
 #: common/dialogs/dialog_git_mr_review.cpp:337
 #: common/dialogs/dialog_git_mr_review.cpp:357
 #: common/dialogs/dialog_git_mr_review.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Could not extract %s from %s."
-msgstr "'%s' görüntüsü yüklenemedi."
+msgstr "%s, %s içinden çıkarılamadı."
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:25
-#, fuzzy
 msgid "Base ref:"
-msgstr "Temel Adı"
+msgstr "Temel referans:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:32
-#, fuzzy
 msgid "Head ref:"
-msgstr "Başlık kenarlığı"
+msgstr "Ana referans:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
-#, fuzzy
 msgid "Compare"
-msgstr "Uyumlu"
+msgstr "Kıyasla"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:48
-#, fuzzy
 msgid "Changed files (double-click to open):"
-msgstr "Komut (düzenlemek için çift tıklayın)"
+msgstr "Değiştirilen dosyalar (açmak için çift tıklayın):"
 
 #: common/dialogs/dialog_grid_settings.cpp:81
 msgid "Grid size X out of range."
@@ -3341,11 +3334,11 @@ msgstr "Grup Özelliklerini Düzenle"
 
 #: common/dialogs/dialog_group_properties.cpp:173
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Bir grup, kendisini içeremez."
 
 #: common/dialogs/dialog_group_properties.cpp:181
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "Bu grup halihazırda mevcut grubu içerdiğinden eklenemez."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -3406,7 +3399,7 @@ msgstr "Proje Adı"
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1810
 msgid "PCB"
-msgstr "Baskı Devre"
+msgstr "Baskı Devre (PCB)"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35 common/eda_item.cpp:440
 #: eeschema/sch_edit_frame.cpp:1420 eeschema/sch_plotter.cpp:1029
@@ -3435,16 +3428,15 @@ msgstr "Özellik"
 
 #: common/dialogs/dialog_kicad_diff.cpp:63
 msgid "Before"
-msgstr ""
+msgstr "Önceki"
 
 #: common/dialogs/dialog_kicad_diff.cpp:64
 msgid "After"
-msgstr ""
+msgstr "Sonraki"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
-#, fuzzy
 msgid "Filter changes…"
-msgstr "Ağları filtrele"
+msgstr "Değişiklikleri filtrele…"
 
 #: common/dialogs/dialog_kicad_diff.cpp:122
 #: common/diff_merge/diff_tree_grouping.cpp:37
@@ -3453,9 +3445,8 @@ msgstr "Eklendi"
 
 #: common/dialogs/dialog_kicad_diff.cpp:123
 #: common/diff_merge/diff_tree_grouping.cpp:38
-#, fuzzy
 msgid "Removed"
-msgstr "Kaldır"
+msgstr "Kaldırıldı"
 
 #: common/dialogs/dialog_kicad_diff.cpp:124
 #: common/dialogs/git/dialog_git_commit.cpp:103
@@ -3484,30 +3475,26 @@ msgstr "Özellikler"
 
 #: common/dialogs/dialog_kicad_diff.cpp:210
 #: common/dialogs/dialog_kicad_diff.cpp:514
-#, fuzzy
 msgid "No differences detected."
-msgstr "İlgili bir fark tespit edilmedi."
+msgstr "Herhangi bir fark tespit edilmedi."
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "%zu change(s) detected."
-msgstr "Hiçbir ağ seçilmedi."
+msgstr "%zu değişiklik(leri) algılandı."
 
 #: common/dialogs/dialog_kicad_diff.cpp:334
-#, fuzzy
 msgid "Show Change"
-msgstr "Değiştir"
+msgstr "Değişikliği Göster"
 
 #: common/dialogs/dialog_kicad_diff.cpp:336
-#, fuzzy
 msgid "Hide Change"
-msgstr "Değişiklikleri Oluştur"
+msgstr "Değişikliği Gizle"
 
 #: common/dialogs/dialog_kicad_diff.cpp:338
-#, fuzzy
 msgid "Show All Hidden"
-msgstr "Tüm Ağları Göster"
+msgstr "Gizli Olanların Tümünü Göster"
 
 #: common/dialogs/dialog_kicad_diff.cpp:414
 #: common/dialogs/dialog_page_settings_base.cpp:240
@@ -3515,21 +3502,17 @@ msgid "Revision:"
 msgstr "Revizyon:"
 
 #: common/dialogs/dialog_kicad_diff.cpp:425
-#, fuzzy
 msgid "Older"
-msgstr "Klasör"
+msgstr "Daha eski"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
-msgstr ""
+msgstr "Daha yeni"
 
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
-#, fuzzy
 msgid "Select a change in the tree to view details"
-msgstr ""
-"Varsayılan uzakyol adresini (URL) ve kimlik bilgilerini ayarlayın veya "
-"değiştirin"
+msgstr "Ayrıntıları görüntülemek için ağaçtaki bir değişikliği seçin"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:25
 #: pcbnew/dialogs/dialog_text_properties.cpp:126
@@ -3544,24 +3527,21 @@ msgid "(none)"
 msgstr "(hiçbiri)"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:33
-#, fuzzy
 msgid "Comparison:"
-msgstr "Şirket:"
+msgstr "Karşılaştırma:"
 
 #: common/dialogs/dialog_kicad_diff_base.h:61
-#, fuzzy
 msgid "Compare Files"
-msgstr "Resim Dosyaları"
+msgstr "Dosyaları Karşılaştır"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:129
-#, fuzzy
 msgid "No conflicts to resolve."
-msgstr "Bağlı bir ağ seçilmedi."
+msgstr "Çözülmesi gereken çakışma yok."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
 msgid "%zu conflict(s) require resolution."
-msgstr "%zu adet çelişkinin çözümlenmesi gerekli."
+msgstr "%zu çakışmanın çözülmesi gerekiyor."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:217
 #, c-format
@@ -3569,6 +3549,8 @@ msgid ""
 "%zu conflict(s) still need a resolution. Pick Ours, Theirs, or Ancestor for "
 "each one."
 msgstr ""
+"Hâlâ çözülmesi gereken %zu çakışma var. Her biri için \"Bizimki\" (Ours), "
+"\"Onlarınki\" (Theirs) veya \"Atasal\" (Ancestor) seçeneğini belirleyin."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:220
 #: common/dialogs/dialog_kicad_merge_3way_base.h:65
@@ -3578,14 +3560,13 @@ msgstr "İçe Aktarma Çakışmalarını Çöz"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:363
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:48
-#, fuzzy
 msgid "Select a conflict on the left to see details."
-msgstr "İmlecin altında bir bağlantı ögesi seçin"
+msgstr "Ayrıntıları görmek için soldan bir çatışma seçin."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Conflict on %s"
-msgstr "Çakışma"
+msgstr "%s üzerinde çakışma"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
@@ -3612,9 +3593,8 @@ msgid "Theirs"
 msgstr "Onlarınki"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
-#, fuzzy
 msgid "Ancestor"
-msgstr "Geri Yükle"
+msgstr "Atasal"
 
 #: common/dialogs/dialog_page_settings.cpp:85
 msgid "Preview Settings"
@@ -29999,7 +29979,7 @@ msgstr "Ögelerin bazıları dışarı taşınamadı."
 
 #: eeschema/tools/sch_group_tool.cpp:53 eeschema/tools/sch_group_tool.cpp:61
 msgid "Child items cannot be grouped separately from their parent item."
-msgstr ""
+msgstr "Alt öğeler, üst öğelerinden ayrı olarak gruplandırılamaz."
 
 #: eeschema/tools/sch_group_tool.cpp:90 pcbnew/tools/pcb_group_tool.cpp:82
 msgid "Click on new member..."
@@ -42439,19 +42419,23 @@ msgstr "3B Model Çıkış Dosyası"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:418
 msgid "Please save the board before exporting STEP."
-msgstr ""
+msgstr "Lütfen STEP olarak dışa aktarmadan önce kartı kaydedin."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:425
 msgid ""
 "Board file not found on disk.\n"
 "Save the board before exporting STEP."
 msgstr ""
+"Kart dosyası diskte bulunamadı.\n"
+"STEP olarak dışa aktarmadan önce kartı kaydedin."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:437
 msgid ""
 "The board directory no longer exists.\n"
 "Save the board to a valid location before exporting STEP."
 msgstr ""
+"Kart dizini artık mevcut değil.\n"
+"STEP olarak dışa aktarma işleminden önce kartı geçerli bir konuma kaydedin."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:447
 #, fuzzy
@@ -47143,6 +47127,9 @@ msgid ""
 "For each new group created from a design block, apply the block's saved "
 "footprint placement and routing automatically."
 msgstr ""
+"Bir tasarım bloğundan oluşturulan her yeni grup için, bloğun kaydedilmiş "
+"ayak izi (footprint) yerleşimini ve yönlendirmesini (routing) otomatik "
+"olarak uygulayın."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
 msgid "Update Footprints"
@@ -57051,6 +57038,8 @@ msgid ""
 "Pad '%s' has custom shape with per-layer geometry; custom primitives not "
 "supported in padstack mode."
 msgstr ""
+"'%s' pedi, katman bazlı geometriye sahip özel bir şekle sahip; padstack "
+"modunda özel ilkel şekiller (primitives) desteklenmiyor."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2890
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2922
@@ -57445,6 +57434,8 @@ msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"Tanımlanmamış katmanlarda (%s) bir veya daha fazla öğe bulundu. Sorunu "
+"gidermek için kartı PCB Düzenleyicisi'nde açın."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1629
 #, c-format
@@ -60645,6 +60636,8 @@ msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 msgstr ""
+"Ayak izleri aynalanamaz. Onları kartın diğer tarafına taşımak için Çevir "
+"(Flip) özelliğini kullanın."
 
 #: pcbnew/tools/edit_tool.cpp:2598
 msgid ""
@@ -60996,6 +60989,10 @@ msgid ""
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
+"Bu hedef Kural Alanı, referans alanıyla aynı bileşenleri seçer. Yinelemeli "
+"yerleşim (repeat layout) işlemi, bir Kural Alanını kendi üzerine "
+"kopyalayamaz. Her bir yerleşim Kural Alanına ayrı bir sayfa, bileşen sınıfı "
+"veya grup atayın."
 
 #: pcbnew/tools/multichannel_tool.cpp:1961
 #, fuzzy, c-format
@@ -63224,9 +63221,8 @@ msgid "design block contains no items to apply"
 msgstr "Tasarım bloğunun yerleştirilecek bir şematiği yok."
 
 #: pcbnew/tools/pcb_control.cpp:1686
-#, fuzzy
 msgid "group is empty"
-msgstr "İfade boş"
+msgstr "grup boş"
 
 #: pcbnew/tools/pcb_control.cpp:1738
 #, fuzzy
@@ -63236,7 +63232,7 @@ msgstr "'%s' dosyası kopyalanamıyor."
 #: pcbnew/tools/pcb_control.cpp:1756
 #, c-format
 msgid "Applying layout to group %zu of %zu..."
-msgstr ""
+msgstr "%zu / %zu numaralı gruba düzen uygulanıyor..."
 
 #: pcbnew/tools/pcb_control.cpp:1779
 #, fuzzy
@@ -63251,6 +63247,8 @@ msgstr "Bağlı tasarım bloğu yerleşimini seçili gruba uygula"
 #: pcbnew/tools/pcb_control.cpp:1788
 msgid "Copied copper has no net assigned. Assign nets to connect it."
 msgstr ""
+"Kopyalanan bakır alanın atanmış bir ağı yok. Bağlantı sağlamak için ağlar "
+"atayın."
 
 #: pcbnew/tools/pcb_control.cpp:1800
 #, fuzzy, c-format
@@ -63376,10 +63374,11 @@ msgid "%d 3D model(s) successfully embedded."
 msgstr "%d adet 3B model başarıyla kartın içine yerleştirildi."
 
 #: pcbnew/tools/pcb_group_tool.cpp:54
-#, fuzzy
 msgid ""
 "Footprint items cannot be grouped separately from their parent footprint."
-msgstr "Bu ayak izi için hiçbir ekstrüzyon ana hattı oluşturulamadı."
+msgstr ""
+"Footprint öğeleri, ait oldukları üst footprint'ten ayrı olarak "
+"gruplandırılamaz."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2740
 msgid "Resize Table Cells"
@@ -64830,11 +64829,11 @@ msgid ""
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
 msgstr ""
-"Bölge dolguları hatalı olabilir: %d geçişten sonra yinelemeli yeniden "
-"doldurma yakınsamadı.\n"
+"Bölge doldurma işlemleri hatalı olabilir: yinelemeli yeniden doldurma işlemi "
+"%d geçişten sonra yakınsama sağlamadı.\n"
 "\n"
-"Bu, karmaşık çakışan bölgelerle meydana gelebilir. Bölgelerinizi "
-"basitleştirmeyi düşünün."
+"Bu durum, karmaşık ve üst üste binen bölgelerde meydana gelebilir.   "
+"Bölgelerinizi basitleştirmeyi düşünün."
 
 #: pcbnew/zone_filler.cpp:1624
 msgid "Prototype zone fill enabled. Disable setting and refill?"
