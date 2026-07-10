@@ -85,13 +85,14 @@ BOARD_ITEM* PCB_MERGE_APPLIER::cloneInto( BOARD* aTarget, const BOARD_ITEM* aSou
     if( !boardClone )
         return nullptr;
 
-    cloned.release();
-
     // aTarget is the transient offline BOARD that Apply() builds and serializes to
     // disk; it is never the live editor document.  Adding directly rather than
     // through BOARD_COMMIT is deliberate: there is no editor frame, undo stack, or
     // VIEW to keep in sync, and routing through a commit would be wrong here.
     aTarget->Add( boardClone, ADD_MODE::APPEND );
+
+    // Ownership transfers to aTarget only once Add() has adopted the clone.
+    cloned.release();
     return boardClone;
 }
 
@@ -776,8 +777,10 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
 
             if( auto* childClone = dynamic_cast<BOARD_ITEM*>( cloned.get() ) )
             {
-                cloned.release();
                 parentFp->Add( childClone, ADD_MODE::APPEND );
+
+                // Ownership transfers to parentFp only once Add() has adopted the clone.
+                cloned.release();
             }
         };
 
