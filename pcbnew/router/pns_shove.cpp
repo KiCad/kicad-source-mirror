@@ -138,7 +138,7 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::replaceLine( LINE& aOld, LINE& aNew, bool aInclud
     {
         if( ! rootEntry )
         {
-            rootEntry = new ROOT_LINE_ENTRY( aOld.Clone() );
+            rootEntry = allocRootLine( std::unique_ptr<LINE>( aOld.Clone() ) );
         }
 
         for( LINKED_ITEM* link : aOld.Links() )
@@ -1939,6 +1939,15 @@ OPT_BOX2I SHOVE::totalAffectedArea() const
 }
 
 
+SHOVE::ROOT_LINE_ENTRY* SHOVE::allocRootLine( std::unique_ptr<LINE> aLine, int aPolicy )
+{
+    m_rootLineHistoryEntries.push_back(
+            std::make_unique<ROOT_LINE_ENTRY>( std::move( aLine ), aPolicy ) );
+
+    return m_rootLineHistoryEntries.back().get();
+}
+
+
 SHOVE::ROOT_LINE_ENTRY* SHOVE::findRootLine( const LINE& aLine ) const
 {
         for( const LINKED_ITEM* link : aLine.Links() )
@@ -1977,7 +1986,7 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::touchRootLine( const LINE& aLine )
         }
     }
 
-    auto rootEntry = new ROOT_LINE_ENTRY( aLine.Clone() );
+    auto rootEntry = allocRootLine( std::unique_ptr<LINE>( aLine.Clone() ) );
 
 
     for( const LINKED_ITEM* link : aLine.Links() )
@@ -2001,7 +2010,7 @@ SHOVE::ROOT_LINE_ENTRY* SHOVE::touchRootLine( const LINKED_ITEM* aItem )
         return it->second;
     }
 
-    auto rootEntry = new ROOT_LINE_ENTRY( nullptr );
+    auto rootEntry = allocRootLine( nullptr );
 
     PNS_DBG( Dbg(), Message, wxString::Format( wxT( "touch [create] uid=%llu"), aItem->Uid() ) );
     m_rootLineHistory[ aItem->Uid() ] = rootEntry;
@@ -2093,7 +2102,7 @@ void SHOVE::runOptimizer( NODE* aNode )
 
             if( rootEntry )
             {
-                rootLine = rootEntry->rootLine;
+                rootLine = rootEntry->rootLine.get();
 
                 if( rootEntry->policy & SHP_DONT_OPTIMIZE )
                     continue;
@@ -2309,8 +2318,8 @@ void SHOVE::reconstructHeads( bool aShoveFailed )
 
                 wxString msg = wxString::Format(
                         "head %d/%d [net %-20s]: root %p, lc-root %d, lc-new %d\n", i, (int) m_headLines.size(),
-                        iface->GetNetName( rootEntry->rootLine->Net() ).c_str().AsChar(), rootEntry->rootLine, rootEntry->rootLine->LinkCount(), headEntry.newHead->LinkCount() );
-                PNS_DBG( Dbg(), AddItem, rootEntry->rootLine, CYAN, 0, msg );
+                        iface->GetNetName( rootEntry->rootLine->Net() ).c_str().AsChar(), rootEntry->rootLine.get(), rootEntry->rootLine->LinkCount(), headEntry.newHead->LinkCount() );
+                PNS_DBG( Dbg(), AddItem, rootEntry->rootLine.get(), CYAN, 0, msg );
                 PNS_DBG( Dbg(), Message, msg );
 
             }
@@ -2502,7 +2511,7 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
 
             auto headRoot = touchRootLine( *headLineEntry.origHead );
             headRoot->isHead = true;
-            headRoot->rootLine = new PNS::LINE( *headLineEntry.origHead );
+            headRoot->rootLine = std::make_unique<PNS::LINE>( *headLineEntry.origHead );
             headRoot->policy = headLineEntry.policy;
             if( head.EndsWithVia() )
             {

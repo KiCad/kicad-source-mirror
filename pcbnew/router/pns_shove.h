@@ -22,6 +22,7 @@
 #ifndef __PNS_SHOVE_H
 #define __PNS_SHOVE_H
 
+#include <memory>
 #include <vector>
 #include <stack>
 
@@ -116,12 +117,12 @@ private:
 
     struct ROOT_LINE_ENTRY
     {
-        ROOT_LINE_ENTRY( LINE* aLine = nullptr, int aPolicy = SHP_DEFAULT ) :
-            rootLine( aLine ),
+        ROOT_LINE_ENTRY( std::unique_ptr<LINE> aLine = {}, int aPolicy = SHP_DEFAULT ) :
+            rootLine( std::move( aLine ) ),
             policy( aPolicy )
         {}
 
-        LINE *rootLine = nullptr;
+        std::unique_ptr<LINE> rootLine;
         VIA* oldVia = nullptr;
         VIA* newVia = nullptr;
         std::optional<LINE> newLine;
@@ -251,6 +252,8 @@ private:
                     bool aAllowRedundantSegments = true,
                       NODE *aNode = nullptr );
 
+    ROOT_LINE_ENTRY* allocRootLine( std::unique_ptr<LINE> aLine,
+                                    int aPolicy = SHP_DEFAULT );
     ROOT_LINE_ENTRY* findRootLine( const LINE& aLine ) const;
     ROOT_LINE_ENTRY* findRootLine( const LINKED_ITEM *aItem ) const;
     ROOT_LINE_ENTRY* touchRootLine( const LINE& aLine );
@@ -274,6 +277,8 @@ private:
     std::vector<LINE>           m_optimizerQueue;
     std::deque<HEAD_LINE_ENTRY> m_headLines;
 
+    // UID entries may alias the same history entry, so ownership lives outside the index.
+    std::vector<std::unique_ptr<ROOT_LINE_ENTRY>> m_rootLineHistoryEntries;
     std::unordered_map<LINKED_ITEM::UNIQ_ID, ROOT_LINE_ENTRY*> m_rootLineHistory;
 
     NODE*                       m_root;

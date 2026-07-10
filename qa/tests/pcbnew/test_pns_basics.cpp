@@ -39,6 +39,7 @@
 #include <router/pns_node.h>
 #include <router/pns_router.h>
 #include <router/pns_segment.h>
+#include <router/pns_shove.h>
 #include <router/pns_solid.h>
 #include <router/pns_via.h>
 
@@ -352,6 +353,12 @@ struct PNS_TEST_FIXTURE
         m_router->SetInterface( m_iface );
     }
 
+    ~PNS_TEST_FIXTURE()
+    {
+        delete m_router;
+        delete m_iface;
+    }
+
     SETTINGS_MANAGER      m_settingsManager;
     PNS::ROUTER*          m_router;
     MOCK_RULE_RESOLVER    m_ruleResolver;
@@ -363,6 +370,26 @@ struct PNS_TEST_FIXTURE
 PNS::RULE_RESOLVER* MOCK_PNS_KICAD_IFACE::GetRuleResolver()
 {
     return &m_testFixture->m_ruleResolver;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PNSShoveOwnsRootLineHistory, PNS_TEST_FIXTURE )
+{
+    PNS::NODE world;
+    world.SetRuleResolver( &m_ruleResolver );
+
+    PNS::SEGMENT segment( SEG( VECTOR2I( 0, 0 ), VECTOR2I( 1000000, 0 ) ),
+                          reinterpret_cast<PNS::NET_HANDLE>( 1 ) );
+    segment.SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+
+    PNS::LINE line;
+    line.Line().Append( VECTOR2I( 0, 0 ) );
+    line.Line().Append( VECTOR2I( 1000000, 0 ) );
+    line.SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+
+    PNS::SHOVE shove( &world, m_router );
+    shove.SetShovePolicy( &segment, PNS::SHOVE::SHP_SHOVE );
+    shove.SetShovePolicy( line, PNS::SHOVE::SHP_SHOVE );
 }
 
 static void dumpObstacles( const PNS::NODE::OBSTACLES &obstacles )
