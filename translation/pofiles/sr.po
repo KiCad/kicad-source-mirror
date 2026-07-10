@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-07-10 02:01+0000\n"
+"PO-Revision-Date: 2026-07-11 08:01+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -15324,20 +15324,17 @@ msgstr ""
 "употребљени"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:196
-#, fuzzy
 msgid "Pin Text Options"
-msgstr "Опције:"
+msgstr "Опције текста извода"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:198
-#, fuzzy
 msgid "Show pin number"
-msgstr "Прикажи"
+msgstr "Прикажи број извода"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:200
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:181
-#, fuzzy
 msgid "Show or hide pin numbers"
-msgstr "Прикажи"
+msgstr "Прикажи или сакриј бројеве извода"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:204
 msgid "Show pin name"
@@ -15345,14 +15342,12 @@ msgstr "Покажи име чиоде"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:206
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:187
-#, fuzzy
 msgid "Show or hide pin names"
-msgstr "Покажи име чиоде"
+msgstr "Прикажи или сакриј називе извода"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:213
-#, fuzzy
 msgid "Place pin names inside"
-msgstr "Име:"
+msgstr "Постави називе извода унутра"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:215
 msgid ""
@@ -15408,26 +15403,22 @@ msgstr "јединице"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:146
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:203
 #: eeschema/dialogs/dialog_text_properties_base.cpp:86
-#, fuzzy
 msgid "Exclude from simulation"
-msgstr "Име симбола:"
+msgstr "Изузми из симулације"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:265
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:203
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:165
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:831
-#, fuzzy
 msgid "Exclude from position files"
-msgstr "Име симбола:"
+msgstr "Изузми из датотека за позиционирање"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:287
-#, fuzzy
 msgid "Symbol Units"
-msgstr "Симбол"
+msgstr "Јединице симбола"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:292
-#, fuzzy
 msgid "Number of units:"
 msgstr "Број јединица:"
 
@@ -15441,41 +15432,38 @@ msgid ""
 "For instance, this should be checked for a quad NAND gate, while it should "
 "not be checked for a dual triode (where unit C is the filament)."
 msgstr ""
+"Означите ову опцију када све јединице симбола имају исту функцију.\n"
+"На пример, ово треба означити за четворострука NAND логичка кола, док не "
+"треба за двоструку триоду (код које је јединица C филамент)."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:315
-#, fuzzy
 msgid "Unit display names (optional):"
-msgstr "потребан је број за '%s'"
+msgstr "Приказни називи јединица (опционо):"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:351
 #: eeschema/lib_symbol.cpp:2633
-#, fuzzy
 msgid "Body Styles"
-msgstr "Стил"
+msgstr "Стилови симбола"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:353
-#, fuzzy
 msgid "Single body style"
-msgstr "Име симбола:"
+msgstr "Један стил симбола"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:359
 msgid "‘Standard’ and ‘Alternate’ De Morgan body styles"
-msgstr ""
+msgstr "Стандардни и алтернативни Де Морганови стилови"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:365
-#, fuzzy
 msgid "Custom body styles:"
-msgstr "Име симбола:"
+msgstr "Прилагођени стилови:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:436
-#, fuzzy
 msgid "Units && Body Styles"
-msgstr "Стил"
+msgstr "Јединице и стилови"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:444
-#, fuzzy
 msgid "Footprint filters:"
-msgstr "Додај поље"
+msgstr "Филтери отисака:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:446
 msgid ""
@@ -15488,29 +15476,24 @@ msgstr ""
 "сва имена подножја почињу на sm."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:457
-#, fuzzy
 msgid "Add footprint filter"
-msgstr "Додај поље"
+msgstr "Додај филтер за отисак"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:462
-#, fuzzy
 msgid "Edit footprint filter"
-msgstr "Додај поље"
+msgstr "Измени филтер отиска"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:470
-#, fuzzy
 msgid "Delete footprint filter"
-msgstr "Избриши поље"
+msgstr "Обриши филтер отиска"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:484
-#, fuzzy
 msgid "Footprint Filters"
-msgstr "Додај поље"
+msgstr "Филтери отиска"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:492
-#, fuzzy
 msgid "All pins with duplicate numbers are jumpers"
-msgstr "Поља"
+msgstr "Сви изводи са дуплираним бројевима су спојени"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:493
 msgid ""
@@ -15518,36 +15501,33 @@ msgid ""
 "Pins with the same number will be considered to be jumpered together "
 "internally."
 msgstr ""
+"Када је ова опција омогућена, овај симбол може имати више од једног извода "
+"са истим бројем. Изводи са истим бројем сматраће се међусобно интерно "
+"повезаним."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:500
-#, fuzzy
 msgid "Explicit jumper pin groups:"
-msgstr "Име симбола:"
+msgstr "Експлицитне групе премошћених извода:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:555
-#, fuzzy
 msgid "Pin Connections"
-msgstr "Нема конекције"
+msgstr "Везе извода"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:568
-#, fuzzy
 msgid "Edit Simulation Model..."
-msgstr "Уреди Spice модел..."
+msgstr "Уреди симулациони модел..."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:144
-#, fuzzy
 msgid "Library Symbol Properties"
-msgstr "Симбол"
+msgstr "Својства библиотечког симбола"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Line"
-msgstr "Уреди фајл"
+msgstr "Уреди линију"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Lines"
-msgstr "Додај линију"
+msgstr "Уреди линије"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:66
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:120
@@ -15555,72 +15535,70 @@ msgstr "Додај линију"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:252
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:232
 msgid "Combo!"
-msgstr ""
+msgstr "Комбо!"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
-#, fuzzy
 msgid "Set width to 0 to use schematic's default line width."
-msgstr "Додјела шеме"
+msgstr ""
+"Поставите ширину на 0 да бисте користили подразумевану ширину линије шеме."
 
 #: eeschema/dialogs/dialog_line_properties_base.h:66
-#, fuzzy
 msgid "Line Properties"
-msgstr "Својства круга"
+msgstr "Особине линије"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:111
-#, fuzzy
 msgid "Conflicting Labels"
-msgstr "Закључано: Да"
+msgstr "Сукобљене ознаке"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:112
-#, fuzzy
 msgid "New Label"
-msgstr "Нови"
+msgstr "Нова ознака"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:221
-#, fuzzy
 msgid "Updated"
-msgstr "Поља"
+msgstr "Ажурирано"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:19
 msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
+"Ова шема садржи једну или више сабирница са више од једне ознаке.\n"
+"Ово је било дозвољено у претходним верзијама KiCad-а, али више није "
+"дозвољено."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
+"Изаберите нови назив за сваку од наведених магистрала.\n"
+"Предложен је назив за вас на основу ознака придружених магистрали."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
-#, fuzzy
 msgid "Proposed new name:"
-msgstr "Име:"
+msgstr "Предложени нови назив:"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:45
 msgid "Accept Name"
 msgstr "Прихвати име"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
-#, fuzzy
 msgid "Migrate Buses"
-msgstr "Премјестити библиотеке..."
+msgstr "Миграција магистрала"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:55
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
-#, fuzzy
 msgid "Alternate Pin Name"
-msgstr "Додјела шеме"
+msgstr "Алтернативни назив извода"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:226
 #: eeschema/dialogs/dialog_symbol_properties.cpp:357
-#, fuzzy
 msgid ""
 "Alternate pin assignments are not available for symbols with multiple body "
 "styles."
-msgstr "Алтернативне доделе пинова нису доступне за Де Морганове симболе."
+msgstr ""
+"Алтернативна додела извода није доступна за симболе са више стилова симбола."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:304
 msgid "Exit sync pins mode"
@@ -15643,9 +15621,8 @@ msgid "This symbol only has one unit. This control has no effect."
 msgstr "Овај симбол има само једну јединицу. Овај параметар нема ефекта."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:352
-#, fuzzy
 msgid "Alternate pin definitions must have a name."
-msgstr "Поља морају имати име."
+msgstr "Алтернативне дефиниције извода морају имати назив."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:372
 #, c-format
@@ -15659,9 +15636,8 @@ msgstr ""
 "Желите ли да наставите?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:431
-#, fuzzy
 msgid "Synchronized Pins Mode."
-msgstr "Прикажи"
+msgstr "Режим синхронизованих извода."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:433
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
@@ -15674,48 +15650,40 @@ msgstr ""
 "бити ажурирани."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
-#, fuzzy
 msgid "Pin &name:"
-msgstr "Име:"
+msgstr "Назив &извода:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:51
-#, fuzzy
 msgid "Pin num&ber:"
-msgstr "Име:"
+msgstr "Број &извода:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:53
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
 msgstr "Број пина: 1 до 4 ASCII слова и/или цифара"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:60
-#, fuzzy
 msgid "&X position:"
-msgstr "X позиција:"
+msgstr "&X положај:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:69
-#, fuzzy
 msgid "&Y position:"
-msgstr "Y позиција:"
+msgstr "&Y положај:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:76
-#, fuzzy
 msgid "&Pin length:"
-msgstr "Дужина чиоде:"
+msgstr "Дужина &извода:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:83
-#, fuzzy
 msgid "N&ame text size:"
-msgstr "Величина текста:"
+msgstr "Величина текста &назива:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:90
-#, fuzzy
 msgid "Number text si&ze:"
-msgstr "Величина текста:"
+msgstr "Величина текста &броја:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:97
-#, fuzzy
 msgid "Electrical type:"
-msgstr "Тип:"
+msgstr "Електрични тип:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:99
 msgid "Used by the ERC."
@@ -15727,15 +15695,13 @@ msgstr "Начин графике:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:154
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:251
-#, fuzzy
 msgid "Common to all &units in symbol"
-msgstr "Заједничко свим јединицама"
+msgstr "Заједничко за све &јединице симбола"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:157
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:254
-#, fuzzy
 msgid "Common to all body &styles"
-msgstr "Име симбола:"
+msgstr "Заједничко свим стиловима &симбола"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:163
 msgid "&Visible"
@@ -15745,37 +15711,31 @@ msgstr "&Видљиво"
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:359
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:192
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:81
-#, fuzzy
 msgid "Preview:"
-msgstr "Преглед"
+msgstr "Преглед приказа:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
-#, fuzzy
 msgid "Alternate pin function definitions"
-msgstr "Изабери језик"
+msgstr "Дефиниције додатних функција извода"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:103
-#, fuzzy
 msgid "Pin Properties"
-msgstr "Својства круга"
+msgstr "Својства извода"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:73
-#, fuzzy
 msgid "Plot All Pages"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Исцртај све странице"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:74
-#, fuzzy
 msgid "Plot Current Page"
-msgstr "Струја"
+msgstr "Исцртај текућу страницу"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:205
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:228
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:595
 #: pcbnew/dialogs/dialog_gendrill.cpp:275 pcbnew/dialogs/dialog_plot.cpp:814
-#, fuzzy
 msgid "Select Output Directory"
-msgstr "Изабери библиотеку"
+msgstr "Изаберите излазни директоријум"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:221
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1478
@@ -15791,38 +15751,37 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic.cpp:383
 #, c-format
 msgid "Falling back to user path '%s'."
-msgstr ""
+msgstr "Враћање на корисничку путању „%s“."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:429
 #: eeschema/dialogs/dialog_plot_schematic.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot normalize path '%s'."
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Није могуће нормализовати путању „%s“."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:435
-#, fuzzy
 msgid "No project or path defined for the current schematic."
-msgstr "Остало:"
+msgstr "За тренутну шему није дефинисан ни пројекат ни путања."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:25
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:35
 #: pcbnew/dialogs/dialog_plot_base.cpp:62
-#, fuzzy
 msgid "Output directory:"
-msgstr "Изабери библиотеку"
+msgstr "Излазни директоријум:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:30
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
 msgstr ""
+"Одредишни директоријум за датотеке исцртавања. Може бити апсолутна или "
+"релативна путања у односу на локацију главне датотеке шеме."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:40
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26
 #: pcbnew/dialogs/dialog_plot_base.cpp:50
-#, fuzzy
 msgid "Design variant:"
-msgstr "Опис"
+msgstr "Пројектна варијанта:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:54
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:110
@@ -15854,9 +15813,8 @@ msgid "Page size:"
 msgstr "Величина странице:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:73
-#, fuzzy
 msgid "Schematic size"
-msgstr "Додјела шеме"
+msgstr "Величина шеме"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:73
 msgid "A4"
@@ -15876,74 +15834,70 @@ msgstr "A"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:79
 #: pcbnew/dialogs/dialog_plot_base.cpp:114
-#, fuzzy
 msgid "Plot drawing sheet"
-msgstr "Опције цртања"
+msgstr "Исцртај оквир цртежа"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:81
 msgid "Plot the drawing sheet border and title block"
-msgstr ""
+msgstr "Исцртај оквир и заглавље листа цртежа"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:90
 #: eeschema/printing/dialog_print_base.cpp:46
-#, fuzzy
 msgid "Black and White"
-msgstr "Бијела и смеђа"
+msgstr "Црно-бело"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:96
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:20
-#, fuzzy
 msgid "Color theme:"
-msgstr "Боја:"
+msgstr "Шема боја:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:103
 msgid "Select the color theme to use for plotting"
-msgstr ""
+msgstr "Изаберите шему боја за исцртавање"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:107
-#, fuzzy
 msgid "Plot background color"
-msgstr "Боја позадине"
+msgstr "Боја позадине исцртавања"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:108
 msgid "Plot the background color if the output format supports it"
-msgstr ""
+msgstr "Исцртај боју позадине ако је излазни формат подржава"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:112
-#, fuzzy
 msgid "Minimum line width:"
-msgstr "Дужина:"
+msgstr "Минимална ширина линије:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:117
 msgid ""
 "Selection of the default pen thickness used to draw items, when their "
 "thickness is set to 0."
 msgstr ""
+"Избор подразумеване дебљине оловке која се користи за исцртавање ставки када "
+"је њихова дебљина постављена на 0."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:137
 #: pcbnew/dialogs/dialog_plot_base.cpp:407
-#, fuzzy
 msgid "PDF Options"
-msgstr "DXF опције"
+msgstr "PDF опције"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:139
-#, fuzzy
 msgid "Generate property popups"
-msgstr "Генериши грешку"
+msgstr "Генериши искачуће прозоре са својствима"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:143
 msgid "Generate clickable links for hierarchical elements"
-msgstr ""
+msgstr "Генериши везе на које се може кликнути за хијерархијске елементе"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:147
 #: pcbnew/dialogs/dialog_plot_base.cpp:430
 msgid "Generate metadata from AUTHOR && SUBJECT variables"
-msgstr ""
+msgstr "Генериши метаподатке на основу променљивих AUTHOR и SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:149
 #: pcbnew/dialogs/dialog_plot_base.cpp:431
 msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
 msgstr ""
+"Генериши својства PDF документа из текстуалних променљивих AUTHOR и SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:156
 #: pcbnew/dialogs/dialog_plot_base.cpp:330
@@ -15952,9 +15906,8 @@ msgstr "DXF опције"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:161
 #: pcbnew/dialogs/dialog_plot_base.cpp:344
-#, fuzzy
 msgid "Export units:"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Јединице извоза:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:177
 #: pcbnew/dialogs/dialog_export_step_base.cpp:248
@@ -15962,154 +15915,137 @@ msgid "Other Options"
 msgstr "Остале опције"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:179
-#, fuzzy
 msgid "Open file after plot"
-msgstr "Унесите текст филтера"
+msgstr "Отвори датотеку након исцртавања"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:180
 msgid "Open output file with associated application after successful plot"
-msgstr ""
+msgstr "Отвори излазну датотеку придруженим програмом након успешног исцртавања"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:90
-#, fuzzy
 msgid "Plot Schematic"
-msgstr "Додјела шеме"
+msgstr "Исцртај шему"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:43
-#, fuzzy
 msgid "Remote Symbol Settings"
-msgstr "Унеси поставке"
+msgstr "Подешавања удаљених симбола"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:66
 msgid ""
 "Configure remote symbol providers and where downloaded libraries are stored."
 msgstr ""
+"Подесите удаљене добављаче симбола и место за чување преузетих библиотека."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:70
 msgid "Providers"
-msgstr ""
+msgstr "Добављачи"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:78
-#, fuzzy
 msgid "Add / Update"
-msgstr "Поља"
+msgstr "Додај / Ажурирај"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:80
-#, fuzzy
 msgid "Refresh Metadata"
-msgstr "претражи текст"
+msgstr "Ажурирај метаподатке"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:81
 msgid "Sign Out"
-msgstr ""
+msgstr "Одјави се"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:91
 msgid "Metadata URL:"
-msgstr ""
+msgstr "URL метаподатака:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
-#, fuzzy
 msgid "Display name:"
-msgstr "Име фајла:"
+msgstr "Приказано име:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:99
-#, fuzzy
 msgid "Last account:"
-msgstr "Дужина чиоде:"
+msgstr "Последњи налог:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:101
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:462
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:471
-#, fuzzy
 msgid "Not signed in"
-msgstr "Библиотека није изабрана."
+msgstr "Нисте пријављени"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:103
-#, fuzzy
 msgid "Auth status:"
-msgstr "Статус: "
+msgstr "Статус аутентификације:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:105
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:463
-#, fuzzy
 msgid "Not configured"
-msgstr "у огледалу"
+msgstr "Није подешено"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:114
-#, fuzzy
 msgid "Destination directory:"
-msgstr "Опис"
+msgstr "Одредишни директоријум:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:121
 msgid ""
 "Directory where downloaded symbol, footprint, and 3D model data will be "
 "written."
 msgstr ""
+"Директоријум у који ће бити уписани преузети подаци симбола, отисака и 3D "
+"модела."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:124
 msgid "Browse..."
 msgstr "Претражи..."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:128
-#, fuzzy
 msgid "Library prefix:"
-msgstr "Префикс надимка библиотеке:"
+msgstr "Префикс библиотеке:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:131
 msgid "Prefix that will be applied to the generated libraries."
-msgstr ""
+msgstr "Префикс који ће бити примењен на генерисане библиотеке."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:139
-#, fuzzy
 msgid "Add libraries to:"
-msgstr "Учитавање библиотека симбола"
+msgstr "Додај библиотеке у:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:143
-#, fuzzy
 msgid "Project library table"
-msgstr "Симбол"
+msgstr "Табела библиотека за пројекат"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:146
-#, fuzzy
 msgid "Adds the generated libraries to the project's library tables."
-msgstr "Додај у табелу библиотека"
+msgstr "Додаје генерисане библиотеке у табеле библиотека пројекта."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:149
-#, fuzzy
 msgid "Global library table"
-msgstr "Симбол"
+msgstr "Глобална табела библиотека"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:151
-#, fuzzy
 msgid "Adds the generated libraries to the global library tables."
-msgstr "Додај у табелу библиотека"
+msgstr "Додаје генерисане библиотеке у глобалне табеле библиотека."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:159
 msgid "Restore the default destination and prefix."
-msgstr ""
+msgstr "Врати подразумевано одредиште и префикс."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:208
-#, fuzzy
 msgid "Please choose a destination directory."
-msgstr "KiCad netlist фајлови"
+msgstr "Изаберите одредишни директоријум."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:216
-#, fuzzy
 msgid "Please enter a library prefix."
-msgstr "Учитавање  "
+msgstr "Унесите префикс библиотеке."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:252
-#, fuzzy
 msgid "Select Destination Directory"
-msgstr "Изабери"
+msgstr "Избор одредишног директоријума"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:313
 msgid "Enter a provider metadata URL first."
-msgstr ""
+msgstr "Прво унесите URL метаподатака добављача."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:384
 msgid "Provider metadata refreshed."
-msgstr ""
+msgstr "Метаподаци добављача су освежени."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:474
 #: eeschema/generate_alias_info.cpp:124 kicad/pcm/pcm.cpp:819
@@ -16121,11 +16057,13 @@ msgstr "Непознато"
 msgid ""
 "Library names will be created with suffixes such as _symbols, _fp, and _3d."
 msgstr ""
+"Називи библиотека ће бити креирани са суфиксима као што су _symbols, _fp и "
+"_3d."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:524
 #, c-format
 msgid "Will create libraries like %1$s_symbols, %1$s_fp, %1$s_3d, etc."
-msgstr ""
+msgstr "Креираће библиотеке као што су %1$s_symbols, %1$s_fp, %1$s_3d итд."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:97
 msgid ""
@@ -16136,31 +16074,34 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
+"Ова шема је направљена помоћу старијих библиотека симбола које могу нарушити "
+"исправност шеме. Неки симболи ће можда морати да се повежу са другим називом "
+"симбола. Неки симболи ће можда морати да буду „спашени“ (копирани и "
+"преименовани) у нову библиотеку.\n"
+"\n"
+"Следеће измене се препоручују ради ажурирања пројекта."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:104
 msgid "Accept"
 msgstr "Прихвати"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:121
-#, fuzzy
 msgid "Action Taken"
-msgstr "Акција"
+msgstr "Предузета радња"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:145
 #: eeschema/dialogs/dialog_rescue_each.cpp:288
-#, fuzzy
 msgid "Rescue Symbols"
-msgstr "&Нови симбол..."
+msgstr "Опоравак симбола"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:146
-#, fuzzy
 msgid "Skip Symbol Rescue"
-msgstr "Референца"
+msgstr "Прескочи спасавање симбола"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Instances of this symbol (%d items):"
-msgstr "Име симбола:"
+msgstr "Инстанце овог симбола (%d ставки):"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:284
 msgid ""
@@ -16170,16 +16111,19 @@ msgid ""
 "This setting can be changed from the \"Preferences\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
+"Престати са приказивањем овог алата?\n"
+"Никакве измене неће бити направљене.\n"
+"\n"
+"Ово подешавање се може променити у дијалогу „Подешавања“,\n"
+"а алат се може ручно покренути из менија „Алатке“."
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
-#, fuzzy
 msgid "Symbols to update:"
-msgstr "Поља"
+msgstr "Симболи за ажурирање:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:38
-#, fuzzy
 msgid "Instances of this symbol:"
-msgstr "Име симбола:"
+msgstr "Појављивања овог симбола:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:57
 msgid "Cached Symbol:"
@@ -16190,98 +16134,83 @@ msgid "Library Symbol:"
 msgstr "Симбол библиотеке:"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:102
-#, fuzzy
 msgid "Never Show Again"
-msgstr "Прикажи"
+msgstr "Не приказуј више"
 
 #: eeschema/dialogs/dialog_rescue_each_base.h:67
 #: eeschema/project_rescue.cpp:553 eeschema/project_rescue.cpp:568
-#, fuzzy
 msgid "Project Rescue Helper"
-msgstr "Пројект"
+msgstr "Алат за спасавање пројекта"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:31
-#, fuzzy
 msgid "&Search for:"
-msgstr "претражи текст"
+msgstr "&Претражи:"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
-#, fuzzy
 msgid "Text with optional wildcards"
-msgstr "претражи текст"
+msgstr "Текст са опционим џокерима"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:41
-#, fuzzy
 msgid "Replace &with:"
-msgstr "Пронађи и замјени"
+msgstr "З&амени са:"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:52
-#, fuzzy
 msgid "Direction:"
-msgstr "Опис:"
+msgstr "Правац:"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:61
 msgid "F&orward"
-msgstr ""
+msgstr "&Напред"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:66
-#, fuzzy
 msgid "&Backward"
-msgstr "2 слоја"
+msgstr "&Назад"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:83
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match &case"
-msgstr "Остали слојеви"
+msgstr "Разликуј &велика и мала слова"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:86
 #: pcbnew/dialogs/dialog_find_base.cpp:49
 msgid "Whole &words only"
-msgstr ""
+msgstr "Само &целе речи"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:90
 msgid "Regular Expression"
-msgstr ""
+msgstr "Регуларни изрази"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:93
-#, fuzzy
 msgid "Search pin &names and numbers"
-msgstr "Прикажи"
+msgstr "Претражи &називе и бројеве извода"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:96
 #: pcbnew/dialogs/dialog_find_base.cpp:92
-#, fuzzy
 msgid "Include &hidden fields"
-msgstr "Прикажи"
+msgstr "Укључи &скривена поља"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:99
-#, fuzzy
 msgid "Search the current &sheet only"
-msgstr "Струја"
+msgstr "Претражи само тренутни &лист"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:102
-#, fuzzy
 msgid "Search the current selection &only"
-msgstr "Струја"
+msgstr "Претражи само &изабране ставке"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:105
-#, fuzzy
 msgid "Replace matches in reference designators"
-msgstr "Референца"
+msgstr "Замени подударања у ознакама компоненти"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:110
 #: pcbnew/dialogs/dialog_find_base.cpp:88
-#, fuzzy
 msgid "Search &net names"
-msgstr "Име:"
+msgstr "Претражи &називе мрежа"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:152
 #: pcbnew/dialogs/dialog_find_base.cpp:145
-#, fuzzy
 msgid "Show search panel"
-msgstr "Својства текста"
+msgstr "Прикажи панел за претрагу"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:42
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:68
@@ -16308,6 +16237,8 @@ msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
 msgstr ""
+"Циљни директоријум за датотеке исцртавања. Може бити апсолутан или релативан "
+"у односу на локацију датотеке плоче."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:47
@@ -16315,82 +16246,67 @@ msgid "Import:"
 msgstr "Унеси:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
-#, fuzzy
 msgid "Formatting preferences"
-msgstr "Прикажи"
+msgstr "Поставке форматирања"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
-#, fuzzy
 msgid "Annotation preferences"
-msgstr "Прикажи"
+msgstr "Поставке означавања"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
-#, fuzzy
 msgid "Field name templates"
-msgstr "Поље"
+msgstr "Шаблони назива поља"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
-#, fuzzy
 msgid "BOM presets"
-msgstr "Избриши мрежу"
+msgstr "Унапред подешене вредности за спецификацију материјала"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
-#, fuzzy
 msgid "BOM format presets"
-msgstr "Формат"
+msgstr "Унапред подешени формати спецификације материјала"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:90
-#, fuzzy
 msgid "Violation severities"
-msgstr "Поставке симулације"
+msgstr "Нивои озбиљности прекршаја"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
-#, fuzzy
 msgid "Pin conflict map"
-msgstr "Дужина чиоде:"
+msgstr "Мапа сукоба извода"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:69
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
-#, fuzzy
 msgid "Net classes"
-msgstr "Нова библиотека"
+msgstr "Класе мрежа"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:72
-#, fuzzy
 msgid "Bus alias definitions"
-msgstr "Псеудоним"
+msgstr "Дефиниције алијаса магистрала"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:75
-#, fuzzy
 msgid "Text variables"
-msgstr "Текст фајлови"
+msgstr "Текстуалне променљиве"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:46
-#, fuzzy
 msgid "Schematic Setup"
-msgstr "Додјела шеме"
+msgstr "Подешавање шеме"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:47
-#, fuzzy
 msgid "Import Settings from Another Project..."
-msgstr "Унеси поставке из"
+msgstr "Увези подешавања из другог пројекта..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:440
-#, fuzzy
 msgid "Annotation"
-msgstr "Опције:"
+msgstr "Означавање"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:88
-#, fuzzy
 msgid "BOM Presets"
-msgstr "Избриши мрежу"
+msgstr "Унапред подешене конфигурације спецификације материјала"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:91
-#, fuzzy
 msgid "Electrical Rules"
-msgstr "Електрични тип"
+msgstr "Електрична правила"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:109
 #: pcbnew/board_statistics_report.cpp:540
@@ -16405,30 +16321,27 @@ msgstr "Пројект"
 #: pcbnew/widgets/appearance_controls_base.cpp:118
 #: pcbnew/widgets/search_handlers.cpp:531
 #: pcbnew/widgets/search_handlers.cpp:622
-#, fuzzy
 msgid "Net Classes"
-msgstr "Нова библиотека"
+msgstr "Класе мрежа"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:126
-#, fuzzy
 msgid "Bus Alias Definitions"
-msgstr "Псеудоним"
+msgstr "Дефиниције алијаса магистрала"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:133
 #: pcbnew/dialogs/dialog_board_setup.cpp:161
-#, fuzzy
 msgid "Text Variables"
-msgstr "Текст фајлови"
+msgstr "Текстуалне променљиве"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:136
-#, fuzzy
 msgid "Schematic Data"
-msgstr "Додјела шеме"
+msgstr "Подаци шеме"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:154
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:98
 msgid "Project is missing or read-only. Settings will not be editable."
 msgstr ""
+"Пројекат недостаје или је само за читање. Подешавања неће моћи да се мењају."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:191
 #, c-format
@@ -16436,6 +16349,8 @@ msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 msgstr ""
+"Грешка при увозу подешавања из пројекта:\n"
+"Датотека пројекта %s није могла да се учита."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:71
 #: eeschema/dialogs/dialog_sheet_properties.cpp:85
@@ -16444,12 +16359,13 @@ msgstr ""
 #: eeschema/dialogs/dialog_text_properties.cpp:73
 msgid "Note: individual item colors overridden in Preferences."
 msgstr ""
+"Напомена: Појединачне боје ставки су замењене подешавањима у „Подешавањима“."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:376
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s"
-msgstr "&Уреди"
+msgstr "Измени %s"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:50
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:153
@@ -16458,6 +16374,9 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
+"Ово је корисно за додавање симбола за отиске на плочи, као што су референтне "
+"ознаке и логотипи,\n"
+"које не желите да се појаве при извозу спецификације материјала"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:55
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:158
@@ -16467,6 +16386,10 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
+"Ово је корисно за додавање симбола који се извозе само у спецификацију "
+"материјала,\n"
+"али нису потребни за распоред плоче, као што су механички причвршћивачи и "
+"кућишта."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:59
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:162
@@ -16475,34 +16398,31 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:171
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:839
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:184
-#, fuzzy
 msgid "Do not populate"
-msgstr "Не попуњавати"
+msgstr "Не постављати"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:76
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:177
 #: eeschema/dialogs/dialog_text_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:164
 #: pcbnew/pcb_tablecell.cpp:292 pcbnew/pcb_textbox.cpp:879
-#, fuzzy
 msgid "Border"
-msgstr "Редослијед:"
+msgstr "Оквир"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:125
-#, fuzzy
 msgid "Set border width to 0 to use schematic's default line width."
-msgstr "Додјела шеме"
+msgstr ""
+"Поставите ширину оквира на 0 да бисте користили подразумевану ширину линије "
+"шеме."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:145
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:257
-#, fuzzy
 msgid "Fill:"
-msgstr "Попуњавање"
+msgstr "Попуна:"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:172
-#, fuzzy
 msgid "Clear colors to use Schematic Editor colors."
-msgstr "Додјела шеме"
+msgstr "Уклоните боје да бисте користили боје уређивача шема."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:189 pcbnew/zone.cpp:2072
 msgid "Fill Style"
@@ -16514,55 +16434,47 @@ msgstr "Не попуњавати"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:199
 msgid "Fill with body outline color"
-msgstr ""
+msgstr "Попуни бојом контуре тела"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:202
-#, fuzzy
 msgid "Fill with body background color"
-msgstr "Боја позадине"
+msgstr "Попуни бојом позадине тела"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:205
-#, fuzzy
 msgid "Fill with:"
-msgstr "Тип:"
+msgstr "Попуна:"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:239
-#, fuzzy
 msgid "Private to Symbol Editor"
-msgstr "Симбол"
+msgstr "Приватно за уређивач симбола"
 
 #: eeschema/dialogs/dialog_shape_properties_base.h:112
 #: pcbnew/dialogs/dialog_shape_properties_base.h:107
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Својства лука"
+msgstr "Својства %s"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:154
-#, fuzzy
 msgid "Edit Sheet Pin Properties"
-msgstr "Својства текста"
+msgstr "Измени својства извода листа"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
-#, fuzzy
 msgid "Sheet Pin Properties"
-msgstr "Својства текста"
+msgstr "Својства извода листа"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:279
 #: eeschema/dialogs/dialog_sheet_properties.cpp:290
 #: eeschema/widgets/sch_properties_panel.cpp:655
-#, fuzzy
 msgid "A sheet must have a valid file name."
-msgstr "Поља морају имати име."
+msgstr "Лист мора имати исправан назив датотеке."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:326
-#, fuzzy
 msgid "Use relative path for sheet file?"
-msgstr "Користити релативну путању?"
+msgstr "Користити релативну путању за датотеку листа?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:327
-#, fuzzy
 msgid "Sheet File Path"
-msgstr "фајл не постоји"
+msgstr "Путања до датотеке листа"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:330
 msgid ""
@@ -16570,25 +16482,25 @@ msgid ""
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
 msgstr ""
+"Коришћење релативних путања назива датотека хијерархијских листова побољшава "
+"преносивост шеме између различитих система и платформи. Коришћење апсолутних "
+"путања може довести до проблема са преносивошћу."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:333
-#, fuzzy
 msgid "Use Relative Path"
-msgstr "Користити релативну путању?"
+msgstr "Користи релативну путању"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:334
-#, fuzzy
 msgid "Use Absolute Path"
-msgstr "Апсолутна"
+msgstr "Користити апсолутну путању"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:375
-#, fuzzy
 msgid "Untitled Sheet"
-msgstr "Додај"
+msgstr "Неименовани лист"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:477
 msgid "Note: item colors are overridden in the current color theme."
-msgstr ""
+msgstr "Напомена: Боје ставки су надјачане у тренутној теми боја."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:479
 #, c-format
@@ -16596,11 +16508,12 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
+"Да бисте видели појединачне боје ставки, поништите избор опције „%s“\n"
+"у Подешавања > Уређивач шема > Боје."
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:133
-#, fuzzy
 msgid "Page number:"
-msgstr "Величина странице:"
+msgstr "Број странице:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:169
 #: eeschema/sch_field.cpp:983 eeschema/sch_label.cpp:1414
@@ -16610,92 +16523,83 @@ msgid "Style"
 msgstr "Стил"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:253
-#, fuzzy
 msgid "Hierarchical path:"
-msgstr "Попуњавање зона"
+msgstr "Хијерархијска путања:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:257
 #: kicad/dialogs/panel_jobset_base.cpp:191
 msgid "path"
-msgstr ""
+msgstr "путања"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.h:89
-#, fuzzy
 msgid "Sheet Properties"
-msgstr "Својства текста"
+msgstr "Својства листа"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:273
-#, fuzzy
 msgid "A DC source must be specified."
-msgstr "Поља морају имати име."
+msgstr "Мора бити наведeн извор једносмерног напајања."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:366
 msgid "Source 1 and Source 2 must be different."
-msgstr ""
+msgstr "Извор 1 и извор 2 морају бити различити."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:422
-#, fuzzy
 msgid "A frequency range must be specified."
-msgstr "Поља морају имати име."
+msgstr "Мора бити наведен опсег фреквенција."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:620
-#, fuzzy
 msgid "New Simulation Tab"
-msgstr "Покрени"
+msgstr "Нова картица симулације"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
-#, fuzzy
 msgid "Analysis type:"
-msgstr "Пасивни тип"
+msgstr "Тип анализе:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "AC"
-msgstr "A"
+msgstr "АЦ"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "DC"
-msgstr "ERC"
+msgstr "ДЦ"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "OP"
-msgstr ""
+msgstr "ОП"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "TRAN"
-msgstr ""
+msgstr "ТРАН"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "FFT"
-msgstr ""
+msgstr "ФФТ"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "NOISE"
-msgstr ""
+msgstr "ШУМ"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "SP"
-msgstr ""
+msgstr "СП"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 #: eeschema/dialogs/dialog_sim_command_base.cpp:402
 #: eeschema/dialogs/dialog_sim_command_base.cpp:472
 msgid "Decade"
-msgstr ""
+msgstr "Декада"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 #: eeschema/dialogs/dialog_sim_command_base.cpp:402
 #: eeschema/dialogs/dialog_sim_command_base.cpp:472
 msgid "Octave"
-msgstr ""
+msgstr "Октава"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:47
 #: eeschema/dialogs/dialog_sim_command_base.cpp:402
 #: eeschema/dialogs/dialog_sim_command_base.cpp:472
-#, fuzzy
 msgid "Linear"
-msgstr "Линија"
+msgstr "Линеарно"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:49
 #: eeschema/dialogs/dialog_sim_command_base.cpp:404
@@ -16706,9 +16610,8 @@ msgstr "Скала фреквенције"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:60
 #: eeschema/dialogs/dialog_sim_command_base.cpp:415
 #: eeschema/dialogs/dialog_sim_command_base.cpp:485
-#, fuzzy
 msgid "Number of points per decade:"
-msgstr "Број тачака"
+msgstr "Број тачака по декади:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:70
 #: eeschema/dialogs/dialog_sim_command_base.cpp:427
@@ -16733,9 +16636,8 @@ msgid "Stop frequency:"
 msgstr "Завршна фреквенција:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:111
-#, fuzzy
 msgid "Source 2"
-msgstr "Извор"
+msgstr "Извор 2"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:116
 #: eeschema/dialogs/dialog_sim_command_base.cpp:122
@@ -16754,66 +16656,57 @@ msgstr "Извор"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:266
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:246
 #: pcb_calculator/widgets/unit_selector.cpp:256
-#, fuzzy
 msgid "V"
-msgstr "m"
+msgstr "V"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:116
 #: eeschema/dialogs/dialog_sim_command_base.cpp:122
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "I"
-msgstr ""
+msgstr "I"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:116
 #: eeschema/dialogs/dialog_sim_command_base.cpp:122
 msgid "R"
-msgstr ""
+msgstr "R"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:116
 #: eeschema/dialogs/dialog_sim_command_base.cpp:122
 msgid "TEMP"
-msgstr ""
+msgstr "ТЕМП"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:128
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:24
-#, fuzzy
 msgid "Source:"
-msgstr "Извор"
+msgstr "Извор:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:132
-#, fuzzy
 msgid "Sweep type:"
-msgstr "Тип:"
+msgstr "Тип прелаза:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:136
-#, fuzzy
 msgid "Source 1"
-msgstr "Извор"
+msgstr "Извор 1"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:152
-#, fuzzy
 msgid "Starting value:"
-msgstr "Почетни напон:"
+msgstr "Почетна вредност:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:176
-#, fuzzy
 msgid "Final value:"
-msgstr "Почетна вриједност:"
+msgstr "Коначна вредност:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:196
-#, fuzzy
 msgid "Increment step:"
-msgstr "Вријеме:"
+msgstr "Корак увећања:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:222
-#, fuzzy
 msgid "Swap sources"
-msgstr "Извор"
+msgstr "Замени изворе"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:251
-#, fuzzy
 msgid "Time step:"
-msgstr "Вријеме:"
+msgstr "Временски корак:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:260
 #: eeschema/dialogs/dialog_sim_command_base.cpp:271
@@ -16831,175 +16724,156 @@ msgid "Initial time:"
 msgstr "Почетно вријеме:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:286
-#, fuzzy
 msgid "(optional; default 0)"
-msgstr "0"
+msgstr "(опционо; подразумевано 0)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:290
-#, fuzzy
 msgid "Max time step:"
-msgstr "Вријеме:"
+msgstr "Максимални временски корак:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:301
-#, fuzzy
 msgid "(optional; default min{tstep, (tstop-tstart)/50})"
-msgstr "0"
+msgstr "(опционо; подразумевано min{tstep, (tstop-tstart)/50})"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:305
-#, fuzzy
 msgid "Use initial conditions"
-msgstr "Користи империјалне јединице"
+msgstr "Користи почетне услове"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:323
-#, fuzzy
 msgid "Input signals:"
-msgstr "Унос"
+msgstr "Улазни сигнали:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
 msgid "Linearize inputs before performing FFT"
-msgstr ""
+msgstr "Линеаризуј улазе пре извршавања ФФТ-а"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
-#, fuzzy
 msgid "Measured node:"
-msgstr "Алат за мјерење"
+msgstr "Мерени чвор:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:371
-#, fuzzy
 msgid "Reference node:"
-msgstr "Референца"
+msgstr "Референтни чвор:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:380
-#, fuzzy
 msgid "(optional; default GND)"
-msgstr "0"
+msgstr "(опционо; подразумевано GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:384
-#, fuzzy
 msgid "Noise source:"
-msgstr "Извор шума"
+msgstr "Извор шума:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
 msgid "Save contributions from all noise generators"
-msgstr ""
+msgstr "Сачувај доприносе свих генератора шума"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:526
 msgid "Compute noise current correlation matrix"
-msgstr ""
+msgstr "Израчунај корелациону матрицу струја шума"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
-#, fuzzy
 msgid "SPICE directives:"
-msgstr "Тип:"
+msgstr "SPICE директиве:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:547
-#, fuzzy
 msgid "Load Directives from Schematic"
-msgstr "Додјела шеме"
+msgstr "Учитај директиве из шеме"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:567
-#, fuzzy
 msgid "Transfer function:"
-msgstr "Стави  "
+msgstr "Преносна функција:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input voltage)"
-msgstr ""
+msgstr "(излазни напон) / (улазни напон)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input current)"
-msgstr ""
+msgstr "(излазни напон) / (улазна струја)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:577
-#, fuzzy
 msgid "Input:"
-msgstr "Унос"
+msgstr "Улазни:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:586
 #: eeschema/dialogs/dialog_sim_command_base.cpp:604
 msgid "Ref:"
-msgstr ""
+msgstr "Реф.:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:595
-#, fuzzy
 msgid "Output:"
-msgstr "Излазне јединице:"
+msgstr "Излаз:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:619
-#, fuzzy
 msgid "Find:"
-msgstr "Пронађи"
+msgstr "Пронађи:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Poles and Zeros"
-msgstr ""
+msgstr "Полови и нуле"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Poles"
-msgstr "Облик рупе:"
+msgstr "Полови"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Zeros"
-msgstr ""
+msgstr "Нуле"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:643
 msgid "Add full path for .include library directives"
-msgstr ""
+msgstr "Додај пуну путању за .include библиотечке директиве"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:662
 msgid "Compatibility mode:"
-msgstr ""
+msgstr "Режим компатибилности:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
-#, fuzzy
 msgid "User configuration"
-msgstr "Потврда"
+msgstr "Корисничка конфигурација"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
-#, fuzzy
 msgid "Spice"
-msgstr "Тип:"
+msgstr "SPICE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "PSpice"
-msgstr ""
+msgstr "PSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "LTSpice"
-msgstr ""
+msgstr "LTSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "PSpice and LTSpice"
-msgstr ""
+msgstr "PSpice и LTSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "HSpice"
-msgstr ""
+msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:682
-#, fuzzy
 msgid "SPICE Command"
-msgstr "Покрени команду:"
+msgstr "SPICE наредба"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:689
 #: eeschema/dialogs/dialog_sim_command_base.cpp:728
 #: eeschema/dialogs/dialog_sim_command_base.cpp:765
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed %s scale"
-msgstr "Попуњавање зона"
+msgstr "Фиксна %s размера"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:700
 #: eeschema/dialogs/dialog_sim_command_base.cpp:739
 #: eeschema/dialogs/dialog_sim_command_base.cpp:776
 msgid "Min:"
-msgstr ""
+msgstr "Мин.:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:707
 #: eeschema/dialogs/dialog_sim_command_base.cpp:746
 #: eeschema/dialogs/dialog_sim_command_base.cpp:783
 msgid "Max:"
-msgstr ""
+msgstr "Макс.:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:805
 msgid "Show grid"
