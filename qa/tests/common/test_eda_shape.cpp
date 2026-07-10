@@ -250,6 +250,40 @@ BOOST_AUTO_TEST_CASE( PolygonBehaviorSurvivesAssignment )
 }
 
 
+BOOST_AUTO_TEST_CASE( GetPolyPointsPreservesOrderAcrossOutlines )
+{
+    // GetPolyPoints flattens every outline of the poly shape into a single
+    // ordered vector. Verify the count and order are preserved across multiple
+    // outlines so the single up-front reserve does not alter behavior.
+    EDA_SHAPE_MOCK shape( SHAPE_T::POLY );
+
+    SHAPE_POLY_SET& poly = shape.GetPolyShape();
+
+    poly.NewOutline();
+    poly.Append( { 0, 0 } );
+    poly.Append( { 1000, 0 } );
+    poly.Append( { 1000, 1000 } );
+
+    poly.NewOutline();
+    poly.Append( { 5000, 5000 } );
+    poly.Append( { 6000, 5000 } );
+
+    const std::vector<VECTOR2I> expected = {
+        { 0, 0 }, { 1000, 0 }, { 1000, 1000 }, { 5000, 5000 }, { 6000, 5000 }
+    };
+
+    const std::vector<VECTOR2I> points = shape.GetPolyPoints();
+
+    BOOST_REQUIRE_EQUAL( points.size(), expected.size() );
+
+    for( size_t ii = 0; ii < expected.size(); ++ii )
+    {
+        BOOST_CHECK_EQUAL( points[ii].x, expected[ii].x );
+        BOOST_CHECK_EQUAL( points[ii].y, expected[ii].y );
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( EllipseBasicAccessors )
 {
     // Construct a closed ellipse EDA_SHAPE and round-trip every accessor.

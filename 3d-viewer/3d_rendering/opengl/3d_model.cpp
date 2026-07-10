@@ -246,8 +246,6 @@ MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
             use_idx_count = ( use_idx_count / 3 ) * 3;
         }
 
-        mesh_group.m_indices.reserve( mesh_group.m_indices.size() + use_idx_count );
-
         for( unsigned int idx_i = 0; idx_i < use_idx_count; idx_i += 3 )
         {
             if( !IsTriangleInRange( mesh.m_FaceIdx, idx_i, mesh.m_VertexSize ) )

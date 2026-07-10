@@ -2389,20 +2389,19 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
 
 std::vector<VECTOR2I> EDA_SHAPE::GetPolyPoints() const
 {
+    const SHAPE_POLY_SET& poly = GetPolyShape();
     std::vector<VECTOR2I> points;
+    int                   totalCount = 0;
 
-    for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
+    for( int ii = 0; ii < poly.OutlineCount(); ++ii )
+        totalCount += poly.COutline( ii ).PointCount();
+
+    points.reserve( totalCount );
+
+    for( int ii = 0; ii < poly.OutlineCount(); ++ii )
     {
-        const SHAPE_LINE_CHAIN& outline = GetPolyShape().COutline( ii );
-        int                     pointCount = outline.PointCount();
-
-        if( pointCount )
-        {
-            points.reserve( points.size() + pointCount );
-
-            for( const VECTOR2I& pt : outline.CPoints() )
-                points.emplace_back( pt );
-        }
+        for( const VECTOR2I& pt : poly.COutline( ii ).CPoints() )
+            points.emplace_back( pt );
     }
 
     return points;
