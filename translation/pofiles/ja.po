@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-08 16:57+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2026-07-11 12:01+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
 "Language: ja\n"
@@ -2902,10 +2902,10 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"各々の環境変数へ名前とパスを入力して下さい。灰色の項目はシステムまたはユー"
-"ザーによって外部で定義された名前です。システムまたはユーザーによって定義され"
-"た環境変数は、このテーブルの定義に優先します。これは、このテーブルの定義が無"
-"視されることを意味します。"
+"各々の環境変数へ名前とパスを入力して下さい。 灰色の項目はシステムまたは"
+"ユーザーによって外部で定義された名前です。 システムまたはユーザーによって定義"
+"された環境変数は、 このテーブルで定義されている環境変数に優先します。 つまり"
+"このテーブルの定義が無視されることを意味します。"
 
 #: common/dialogs/dialog_configure_paths.cpp:436
 msgid ""
@@ -2913,8 +2913,8 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr ""
-"すべてのプラットフォームで有効な環境変数名とするため、名前フィールドは大文"
-"字、数字、アンダースコアだけを受け付けます。"
+"環境変数名がすべてのプラットフォームで有効であることを保証するため、 名前は大"
+"文字、 数字、 アンダースコアだけを受け付けます。"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
 msgid "Environment Variables"
@@ -7974,7 +7974,7 @@ msgid ""
 "content."
 msgstr ""
 "サードパーティのプラグイン、ライブラリとその他ダウンロード可能なコンテンツを"
-"含むディレクトリです。"
+"含むディレクトリ。"
 
 #: common/env_vars.cpp:144
 msgid ""
@@ -7985,10 +7985,10 @@ msgid ""
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
 "現在読み込まれているプロジェクト ファイルの絶対パスがKiCad によって内部定義さ"
-"れ (編集できません) 設定されます。この環境変数は、読み込まれているプロジェク"
-"トへの相対的なファイルやパスを定義するために使用できます。例え"
-"ば、${KIPRJMOD}/libs/footprints.pretty は footprints.pretty と名付けられたプ"
-"ロジェクト固有のフットプリント ライブラリを含むフォルダとして定義できます。"
+"れ (編集できません) 設定されます。 この環境変数は、読み込まれている"
+"プロジェクトへの相対的なファイルやパスを定義するために使用できます。 例えば"
+"、 ${KIPRJMOD}/libs/footprints.pretty は footprints.pretty と名付けられた"
+"プロジェクト固有のフットプリント ライブラリを含むフォルダとして定義できます。"
 
 #: common/env_vars.cpp:150
 msgid "A directory containing system-wide scripts installed with KiCad."
@@ -9089,7 +9089,7 @@ msgstr "ファイル '%s' を読み取れません。"
 #: common/io/pcad/s_expr_loader.cpp:205
 #, c-format
 msgid "'%s' is not a P-CAD ASCII file."
-msgstr "'%s' は PADS Logic アスキーファイルではありません。"
+msgstr "'%s' は P-CAD アスキーファイルではありません。"
 
 #: common/io/pcad/s_expr_loader.cpp:224 common/io/pcad/s_expr_loader.cpp:267
 #, c-format
@@ -12212,7 +12212,7 @@ msgstr "フィールドは %s 文字を含むことができません。"
 
 #: common/validators.cpp:382
 msgid "The reference designator cannot contain text variable references"
-msgstr "リファレンス指定子はテキスト値参照を含むことができません"
+msgstr "リファレンス指定子にはテキスト変数参照を含めることはできません"
 
 #: common/validators.cpp:386
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:483
@@ -14865,7 +14865,7 @@ msgstr "エクスポーターを実行するためのコマンドライン:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:131
 msgid "Browse Scripts..."
-msgstr "スクリプトを参照..."
+msgstr "スクリプトを閲覧..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:95
 msgid "Add Script-based Netlist Exporter"
@@ -15836,7 +15836,7 @@ msgstr "フットプリントを選択..."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:113
 #: eeschema/fields_grid_table.cpp:1196
 msgid "Browse for footprint"
-msgstr "フットプリントを参照"
+msgstr "フットプリントを閲覧"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:138
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:118
@@ -20091,13 +20091,13 @@ msgid "Rename Map..."
 msgstr "マップ名を変更..."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Reset '%s' to 1:1"
-msgstr "%s をデフォルトに戻す"
+msgstr "'%s' を一対一に戻す"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:95
 msgid "Copy From..."
-msgstr ""
+msgstr "列からのコピー..."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:479
 msgid "Map name:"
@@ -30695,19 +30695,17 @@ msgid "Named map"
 msgstr "名付けられたマップ"
 
 #: eeschema/widgets/sch_properties_panel.cpp:323
-#, fuzzy
 msgid "Identity"
-msgstr "数量"
+msgstr "アイデンティティ(ID)"
 
 #: eeschema/widgets/sch_properties_panel.cpp:496
-#, fuzzy
 msgid "Effective Pin Map"
-msgstr "実効 %s:"
+msgstr "有功なピン マップ"
 
 #: eeschema/widgets/sch_properties_panel.cpp:554
 #, c-format
 msgid "%s (identity)"
-msgstr ""
+msgstr "%s (アイデンティティ(ID))"
 
 #: eeschema/widgets/sch_properties_panel.cpp:584
 msgid "Edit Pin Map..."
@@ -37651,7 +37649,7 @@ msgstr "レギュレーターのパラメーターを保存しているデータ
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:98
 msgid "Browse"
-msgstr "参照"
+msgstr "閲覧"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:107
 msgid "Edit Regulator"
@@ -38599,7 +38597,6 @@ msgstr ""
 "\tR1 + (R2|R3)...\t\t上記の任意の組み合わせ\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
-#, fuzzy
 msgid ""
 "If you specify the maximum current, then the track widths will be calculated "
 "to suit.\n"
@@ -38638,22 +38635,36 @@ msgid ""
 msgstr ""
 "最大電流を指定すると配線幅が計算されます。\n"
 "\n"
-"いずれかの配線幅を指定するとその幅で扱える最大電流が計算されます。\n"
-"次に、この電流を扱える別の配線幅が計算されます。\n"
-"制御する値はボールド体で表示されます。\n"
+"いずれかの配線幅を指定するとその幅で扱える最大電流が計算されます。 次に、この"
+"電流を扱える別の配線幅が計算されます。\n"
 "\n"
-"計算は、電流 は35 A (外層配線) または 17.5 A (内層配線) 、温度上昇は 100℃ 、"
-"幅は 400mil (10mm)までの最大範囲で有効です。\n"
+"制御値は太字で表示されています。\n"
 "\n"
-"計算式 (IPC 2221 より)\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
-"H)<sup>0.725</sup>___</center>\n"
-"この場合:<br>\n"
+"計算には、IPC-2152データに適合したDouglas Brooks と Johannes Adam の閉形式解 "
+"(closed-formsolution) の式が使用されます。 2009年に旧IPC-2221 チャートに取っ"
+"て代わりました。\n"
+"\n"
+"計算式は次のとおりです\n"
+"<center>___&Delta;T = K &middot; I<sup>a</sup> &middot; W<sup>b</sup> "
+"&middot; Th<sup>c</sup>___</center>\n"
+"ここでは:<br>\n"
 "___I___ は最大電流 (A)<br>\n"
-"___&Delta;T___は周囲環境からの温度上昇 (℃)<br>\n"
-"___W___は 幅 (mils)<br>\n"
-"___H___ 厚さ(高さ) (mils)<br>\n"
-"___K___ は0.024 (外層配線) または 0.048 (内層配線)\n"
+"___&Delta;T___ は周囲温度上昇 (℃)<br>\n"
+"___W___ は幅 (mils)<br>\n"
+"___Th___ は厚さ/高さ (mils)<br>\n"
+"そして、係数 ___K___, ___a___, ___b___, ___c___ は<br>\n"
+"___K___ = 215.3, ___a___ = 2, ___b___ = -1.15, ___c___ = -1.0 外部配線の場合"
+"(全銅重量)<br>\n"
+"内部トラックの場合は下記のように銅重量に依存します:<br>\n"
+"0.5 オンス: ___K___ = 120, ___a___ = 2, ___b___ = -1.10, ___c___ = -1.52<br>"
+"\n"
+"1 オンス: ___K___ = 200, ___a___ = 1.9, ___b___ = -1.10, ___c___ = -1.52<br>"
+"\n"
+"2 オンス: ___K___ = 300, ___a___ = 2, ___b___ = -1.15, ___c___ = -1.52<br>\n"
+"3 オンス: ___K___ = 262.5, ___a___ = 1.9, ___b___ = -1.15, ___c___ = -1.52\n"
+"\n"
+"IPC-2221チャートとは異なり、 内部配線が外部配線とほぼ同等の冷却性能を示すこと"
+"が判明したため、 内部配線は固定係数で低減されることはありません。\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:65
 msgid "Dielectric Loss Factor"
