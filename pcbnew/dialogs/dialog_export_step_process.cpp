@@ -310,6 +310,10 @@ DIALOG_EXPORT_STEP_LOG::DIALOG_EXPORT_STEP_LOG( wxWindow* aParent, const wxStrin
     {
         m_startMessage.Append( "Unable to launch stdstream thread.\n" );
         delete m_stdioThread;
+
+        // Without this, onClose() and the dtor find a non-null but freed m_stdioThread and
+        // dereference it (KICAD 4020447211).
+        m_stdioThread = nullptr;
         return;
     }
 
