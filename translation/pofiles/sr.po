@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-07-11 08:01+0000\n"
+"PO-Revision-Date: 2026-07-11 12:11+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -16880,19 +16880,16 @@ msgid "Show grid"
 msgstr "Прикажи мрежу"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:809
-#, fuzzy
 msgid "Show legend"
-msgstr "Прикажи"
+msgstr "Прикажи легенду"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:812
-#, fuzzy
 msgid "Dotted current/phase"
-msgstr "Струја"
+msgstr "Тачкаста струја/фаза"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:822
-#, fuzzy
 msgid "Margins:"
-msgstr "Маргине странице:"
+msgstr "Маргине:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:832
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:546
@@ -16901,9 +16898,8 @@ msgstr "Лијево:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:836
 #: eeschema/dialogs/dialog_sim_command_base.cpp:877
-#, fuzzy
 msgid "70"
-msgstr "0"
+msgstr "70"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:849
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:574
@@ -16911,28 +16907,25 @@ msgstr "0"
 #: pcbnew/dialogs/dialog_render_job_base.cpp:265
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:530
 msgid "Top:"
-msgstr ""
+msgstr "Врх:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:853
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:204
-#, fuzzy
 msgid "30"
-msgstr "300"
+msgstr "30"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:858
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:588
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1155
 #: pcbnew/dialogs/dialog_render_job_base.cpp:273
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:577
-#, fuzzy
 msgid "Bottom:"
-msgstr "Десно"
+msgstr "Дно:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:862
-#, fuzzy
 msgid "45"
-msgstr "4"
+msgstr "45"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:873
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:560
@@ -16940,14 +16933,12 @@ msgid "Right:"
 msgstr "Десно:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:892
-#, fuzzy
 msgid "Plot Setup"
-msgstr "Подешавање странице..."
+msgstr "Подешавање исцртавања"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
-#, fuzzy
 msgid "Simulation Analysis"
-msgstr "Поставке симулације"
+msgstr "Анализа симулације"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:38
 #: eeschema/sim/sim_plot_tab.cpp:834
@@ -16969,36 +16960,32 @@ msgstr "Фреквенција"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:58
 #: eeschema/sim/sim_plot_tab.cpp:739
 msgid "Gain"
-msgstr ""
+msgstr "Појачање"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:63
 #: eeschema/sim/sim_plot_tab.cpp:740 eeschema/sim/sim_plot_tab.cpp:762
-#, fuzzy
 msgid "Phase"
-msgstr "AC фаза:"
+msgstr "Фаза"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:25
 msgid "Significant digits:"
-msgstr ""
+msgstr "Значајне цифре:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
-#, fuzzy
 msgid "Range:"
-msgstr "Промјени"
+msgstr "Опсег:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "f"
 msgstr "f"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "p"
-msgstr "px"
+msgstr "п"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "n"
-msgstr "не"
+msgstr "н"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
@@ -17014,52 +17001,46 @@ msgid "m"
 msgstr "m"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "K"
-msgstr "Уреду"
+msgstr "К"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "M"
-msgstr "MB"
+msgstr "М"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
-msgstr ""
+msgstr "Г"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr ":"
+msgstr "Т"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "P"
-msgstr ""
+msgstr "П"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "Формат"
+msgstr "Формат %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:239
-#, fuzzy
 msgid "<unknown>"
-msgstr "<Unknown>"
+msgstr "<непознато>"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:249
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in library."
-msgstr "Симбол '%s' већ постоји у библиотеци '%s'"
+msgstr "Нема модела под називом „%s“ у библиотеци."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:337
-#, fuzzy
 msgid "Failed to read simulation model from fields."
-msgstr "Учитавање  "
+msgstr "Није успело читање модела симулације из поља."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:561
-#, fuzzy
 msgid "Component:"
-msgstr "Компонента"
+msgstr "Компонента:"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:561
 #: eeschema/dialogs/dialog_sim_model_base.cpp:65
@@ -17069,17 +17050,16 @@ msgstr "Модел:"
 #: eeschema/dialogs/dialog_sim_model.cpp:624
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "Сачувај параметар „%s (%s)“ у пољу вредности"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:632
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "Сачувај примарни параметар у поље „Вредност“"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:649
 #: pcbnew/footprint_wizard_frame.cpp:338
-#, fuzzy
 msgid "Parameter"
-msgstr "Параметри:"
+msgstr "Параметар"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:652 eeschema/sch_label.cpp:1408
 #: eeschema/sch_marker.cpp:358 eeschema/sch_pin.cpp:1389
@@ -17099,19 +17079,17 @@ msgstr "Тип"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:779
 #: eeschema/dialogs/dialog_sim_model.cpp:816
-#, fuzzy
 msgid "Not Connected"
-msgstr "Нема конекције"
+msgstr "Није повезано"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:919
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "Симбол '%s' већ постоји у библиотеци '%s'"
+msgstr "Нема модела под називом „%s“ у „%s“."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1306
-#, fuzzy
 msgid "Browse Models"
-msgstr "Модел"
+msgstr "Преглед модела"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1456
 #, c-format
@@ -17121,10 +17099,14 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"Није успело рашчлањивање:\n"
+"\n"
+"%s\n"
+"Користи се генерички SPICE модел."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr ""
+msgstr "SPICE модел из датотеке (*.lib, .sub или .ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:88
 msgid "Pin:"
