@@ -1440,6 +1440,36 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
                     }
                 };
 
+        bool isBaseFootprint = fpidsEquivalent( footprint->GetFPID(), aBaseFpid );
+
+        // The footprint's own DNP flag before this pass forces the default-variant hiding below.
+        // The per-variant target for a footprint that IS the active choice must fall back to this
+        // original flag, not the forced one, so the active footprint stays populated.
+        const bool baseFootprintDnp = footprint->IsDNP();
+        bool       effectiveFootprintDnp = baseFootprintDnp;
+
+        // A footprint that is not the component's base footprint is DNP by default (it stands in
+        // only for the variants that select it).  This runs before the per-variant loop so the loop
+        // sees the correct effective DNP when deciding whether an explicit per-variant override is
+        // needed; otherwise a footprint kept populated for its own variant would not converge until
+        // a second netlist update.
+        if( !isBaseFootprint && !effectiveFootprintDnp )
+        {
+            msg.Printf( m_isDryRun ? _( "Add %s 'Do not place' fabrication attribute." )
+                                   : _( "Added %s 'Do not place' fabrication attribute." ),
+                        footprint->GetReference() );
+
+            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+
+            if( !m_isDryRun )
+                footprint->SetDNP( true );
+
+            // Track the forced DNP locally so the per-variant loop below sees the correct effective
+            // state even in dry run, where SetDNP() is intentionally not applied.
+            effectiveFootprintDnp = true;
+            changed = true;
+        }
+
         std::set<wxString> excessVariants;
 
         for( const auto& [variantName, _] : footprint->GetVariants() )
@@ -1455,15 +1485,38 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
             // Check if this footprint is the active one for this variant
             bool isAssociatedFootprint = fpidsEquivalent( footprint->GetFPID(), info.variantFPID );
 
-            // If this footprint is not active for this variant, it doesn't need variant info for it.
-            // Otherwise, apply explicit overrides from schematic, or reset to base footprint value.
-
+            // When multiple footprints share a RefDes (one per variant), a footprint that is not
+            // the active choice for this variant must be DNP for it so the 3D viewer and other
+            // consumers hide it.  The base footprint carries no global DNP flag, so it needs an
+            // explicit per-variant override; non-base footprints are already globally DNP above.
             if( !isAssociatedFootprint )
+            {
+                if( aFootprints.size() > 1 )
+                {
+                    excessVariants.erase( info.name );
+                    bool currentDnp = currentVariant ? currentVariant->GetDNP() : effectiveFootprintDnp;
+
+                    if( !currentDnp )
+                    {
+                        printAttributeMessage( true, _( "Do not place" ), info.name );
+
+                        if( !m_isDryRun )
+                        {
+                            if( FOOTPRINT_VARIANT* fpVariant = footprint->AddVariant( info.name ) )
+                                fpVariant->SetDNP( true );
+                        }
+
+                        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                        changed = true;
+                    }
+                }
+
                 continue;
+            }
 
             excessVariants.erase( info.name );
-            bool targetDnp = variant.m_hasDnp ? variant.m_dnp : footprint->IsDNP();
-            bool currentDnp = currentVariant ? currentVariant->GetDNP() : footprint->IsDNP();
+            bool targetDnp = variant.m_hasDnp ? variant.m_dnp : baseFootprintDnp;
+            bool currentDnp = currentVariant ? currentVariant->GetDNP() : effectiveFootprintDnp;
 
             if( currentDnp != targetDnp )
             {
@@ -1597,24 +1650,6 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
             }
 
             m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-            changed = true;
-        }
-
-        // For the default variant: if this footprint is not the base footprint
-        // it should be DNP by default
-        bool isBaseFootprint = fpidsEquivalent( footprint->GetFPID(), aBaseFpid );
-
-        if( !isBaseFootprint && !footprint->IsDNP() )
-        {
-            msg.Printf( m_isDryRun ? _( "Add %s 'Do not place' fabrication attribute." )
-                                   : _( "Added %s 'Do not place' fabrication attribute." ),
-                        footprint->GetReference() );
-
-            m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-
-            if( !m_isDryRun )
-                footprint->SetDNP( true );
-
             changed = true;
         }
 

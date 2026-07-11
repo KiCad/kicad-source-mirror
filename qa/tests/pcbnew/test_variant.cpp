@@ -32,12 +32,18 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <lib_id.h>
 #include <exporters/place_file_exporter.h>
+#include <netlist_reader/board_netlist_updater.h>
 #include <pcbnew/netlist_reader/kicad_netlist_parser.h>
 #include <pcbnew/netlist_reader/pcb_netlist.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcbnew_utils/board_file_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
 #include <richio.h>
+#include <settings/settings_manager.h>
+#include <template_fieldnames.h>
+#include <tool/tool_manager.h>
 
 
 BOOST_AUTO_TEST_SUITE( Variant )
@@ -1000,37 +1006,26 @@ BOOST_AUTO_TEST_CASE( VariantTestR2FootprintAttributeVerification )
         BOOST_TEST_MESSAGE( "R2 C_1210 has no Variant A data" );
     }
 
-    // Check C_3640 (base footprint) - this is NOT the active footprint for Variant A
-    // Since schematic R2:Variant A has NO explicit attribute overrides, the PCB variant
-    // should also have no attribute overrides (attributes reset to base footprint values).
-    // This matches the schematic inheritance model where unset attributes inherit from base.
+    // Check C_3640 (base footprint) - this is NOT the active footprint for Variant A.
+    // The netlist updater marks non-associated footprints as DNP for each variant where
+    // they are not the active choice, so C_3640 must have DNP=true for Variant A.
     const FOOTPRINT_VARIANT* c3640_variantA = r2_c3640->GetVariant( "Variant A" );
 
     BOOST_TEST_MESSAGE( "R2 C_3640 (base footprint) base attributes: DNP="
                         << r2_c3640->IsDNP() << " ExcludedFromBOM=" << r2_c3640->IsExcludedFromBOM()
                         << " ExcludedFromPosFiles=" << r2_c3640->IsExcludedFromPosFiles() );
 
-    if( c3640_variantA )
-    {
-        BOOST_TEST_MESSAGE( "R2 C_3640 Variant A attributes: DNP=" << c3640_variantA->GetDNP()
-                            << " ExcludedFromBOM=" << c3640_variantA->GetExcludedFromBOM()
-                            << " ExcludedFromPosFiles=" << c3640_variantA->GetExcludedFromPosFiles() );
+    BOOST_REQUIRE_MESSAGE( c3640_variantA,
+                           "C_3640 must have Variant A data to hide it when Variant A is active" );
 
-        // For the base footprint, since schematic has NO explicit attribute overrides,
-        // variant attributes should match base footprint values (all false).
-        // The PCB should mirror the schematic's inheritance model.
-        BOOST_CHECK_MESSAGE( !c3640_variantA->GetDNP(),
-                             "C_3640 Variant A DNP should be false (no schematic override)" );
-        BOOST_CHECK_MESSAGE( !c3640_variantA->GetExcludedFromBOM(),
-                             "C_3640 Variant A ExcludedFromBOM should be false (no override)" );
-        BOOST_CHECK_MESSAGE( !c3640_variantA->GetExcludedFromPosFiles(),
-                             "C_3640 Variant A ExcludedFromPosFiles should be false (no override)" );
-    }
-    else
-    {
-        // If there's no variant data stored, that's also acceptable - implies no overrides
-        BOOST_TEST_MESSAGE( "R2 C_3640 has no Variant A data (implies no overrides)" );
-    }
+    BOOST_TEST_MESSAGE( "R2 C_3640 Variant A attributes: DNP=" << c3640_variantA->GetDNP()
+                        << " ExcludedFromBOM=" << c3640_variantA->GetExcludedFromBOM()
+                        << " ExcludedFromPosFiles=" << c3640_variantA->GetExcludedFromPosFiles() );
+
+    // C_3640 is NOT the active footprint for Variant A (C_1210 is), so it must be
+    // marked DNP for Variant A so the 3D viewer and other consumers hide it correctly.
+    BOOST_CHECK_MESSAGE( c3640_variantA->GetDNP(),
+                         "C_3640 Variant A DNP should be true (it is not active for Variant A)" );
 }
 
 
@@ -1073,21 +1068,25 @@ BOOST_AUTO_TEST_CASE( VariantTestProjectLoad )
         }
         else if( ref == wxT( "R2" ) )
         {
-            // R2's C_3640 footprint (base) should have NO attribute overrides
-            // because schematic R2:Variant A has no explicit attribute overrides.
-            // PCB mirrors the schematic inheritance model.
             wxString fpName = fp->GetFPID().GetLibItemName();
 
             if( fpName.Contains( wxT( "C_3640" ) ) )
             {
+                // C_3640 is the base (default) footprint for R2. When Variant A is active,
+                // C_1210 is used instead, so C_3640 must be DNP for Variant A.
                 const FOOTPRINT_VARIANT* variantA = fp->GetVariant( "Variant A" );
-
-                if( variantA )
-                {
-                    BOOST_CHECK( !variantA->GetDNP() );
-                    BOOST_CHECK( !variantA->GetExcludedFromBOM() );
-                    BOOST_CHECK( !variantA->GetExcludedFromPosFiles() );
-                }
+                BOOST_REQUIRE( variantA );
+                BOOST_CHECK( variantA->GetDNP() );
+            }
+            else if( fpName.Contains( wxT( "C_1210" ) ) )
+            {
+                // C_1210 is the Variant A footprint for R2. It must be globally DNP
+                // (so it's hidden in the default variant) and its Variant A entry must
+                // be non-DNP (so it's visible when Variant A is active).
+                BOOST_CHECK( fp->IsDNP() );
+                const FOOTPRINT_VARIANT* variantA = fp->GetVariant( "Variant A" );
+                BOOST_REQUIRE( variantA );
+                BOOST_CHECK( !variantA->GetDNP() );
             }
         }
         else if( ref == wxT( "R3" ) )
@@ -1283,6 +1282,88 @@ BOOST_AUTO_TEST_CASE( ExcessVariantsSelectiveCleanup )
     BOOST_CHECK_MESSAGE( fp.GetVariant( "Debug" ) == nullptr,
                          "Debug variant should be removed (not in netlist)" );
     BOOST_CHECK_EQUAL( fp.GetVariants().size(), 1 );
+}
+
+
+/**
+ * Regression test for issue #23298: the 3D viewer shows the default-variant footprint even when a
+ * different variant is active and that variant has a different footprint assignment.
+ *
+ * When multiple footprints share a RefDes (one per variant), applyComponentVariants() must give the
+ * base footprint DNP=true in its per-variant data for every variant where it is not the active
+ * choice.  Without this, GetDNPForVariant() falls back to IsDNP() (the global flag), which is false
+ * for the base footprint, so it is incorrectly shown while a non-default variant is active.
+ *
+ * The test drives the full BOARD_NETLIST_UPDATER path in a single pass so it exercises the fix
+ * (rather than merely reading a pre-populated board file) and guards against the ordering bug where
+ * the correct footprint stays hidden until a second update.
+ */
+BOOST_AUTO_TEST_CASE( Issue23298_BaseFootprintHiddenInNonDefaultVariant )
+{
+    // The updater dereferences the board's project, so the board needs one.
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    board->SetProject( &settingsManager.Prj() );
+    board->AddVariant( "Variant A" );
+
+    LIB_ID baseFpid;
+    BOOST_REQUIRE_EQUAL( baseFpid.Parse( wxS( "TestLib:C_3640" ) ), -1 );
+
+    LIB_ID variantFpid;
+    BOOST_REQUIRE_EQUAL( variantFpid.Parse( wxS( "TestLib:C_1210" ) ), -1 );
+
+    // R2 has one footprint per variant sharing the RefDes: C_3640 for the default variant and
+    // C_1210 for Variant A.  Reproduce the board state the netlist updater starts from.
+    FOOTPRINT* baseFp = new FOOTPRINT( board.get() );
+    baseFp->SetReference( "R2" );
+    baseFp->SetFPID( baseFpid );
+    board->Add( baseFp );
+
+    FOOTPRINT* variantFp = new FOOTPRINT( board.get() );
+    variantFp->SetReference( "R2" );
+    variantFp->SetFPID( variantFpid );
+    board->Add( variantFp );
+
+    // Schematic side: R2 with base footprint C_3640 and a Variant A that reassigns C_1210 and keeps
+    // it populated (the non-base footprint is otherwise flagged globally DNP by the updater).  The
+    // netlist must also declare the variant, otherwise the updater reconciles it away.
+    NETLIST netlist;
+    netlist.AddVariant( "Variant A" );
+
+    COMPONENT* component = new COMPONENT( baseFpid, "R2", "10uF", KIID_PATH(),
+                                          std::vector<KIID>{ KIID() } );
+
+    COMPONENT_VARIANT variantA( "Variant A" );
+    variantA.m_fields[GetCanonicalFieldName( FIELD_T::FOOTPRINT )] = variantFpid.Format();
+    variantA.m_dnp = false;
+    variantA.m_hasDnp = true;
+    component->AddVariant( variantA );
+    netlist.AddComponent( component );
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( board.get(), nullptr, nullptr, nullptr, nullptr );
+    toolMgr.RegisterTool( new KI_TEST::DUMMY_TOOL() );
+
+    BOARD_NETLIST_UPDATER updater( &toolMgr, board.get() );
+    updater.SetReplaceFootprints( false );
+    updater.SetDeleteUnusedFootprints( false );
+
+    BOOST_REQUIRE( updater.UpdateNetlist( netlist ) );
+
+    // Default variant: base FP visible, variant FP hidden.
+    BOOST_CHECK_MESSAGE( !baseFp->GetDNPForVariant( wxEmptyString ),
+                         "Base FP must be visible in the default variant" );
+    BOOST_CHECK_MESSAGE( variantFp->GetDNPForVariant( wxEmptyString ),
+                         "Variant A FP must be hidden in the default variant (globally DNP)" );
+
+    // Variant A active: variant FP visible, base FP hidden.  The base-FP check is the #23298 fix;
+    // the variant-FP check guards the single-pass ordering.
+    BOOST_CHECK_MESSAGE( !variantFp->GetDNPForVariant( wxT( "Variant A" ) ),
+                         "Variant A FP must be visible when Variant A is active" );
+    BOOST_CHECK_MESSAGE( baseFp->GetDNPForVariant( wxT( "Variant A" ) ),
+                         "Base FP must be hidden when Variant A is active (issue #23298)" );
 }
 
 
