@@ -874,6 +874,11 @@ private:
     /// Allows other functions when called to know our state is cleanup.
     bool            m_isClosing;
 
+    /// Set while windowClosing() is deciding whether the frame may close.  The unsaved-changes
+    /// prompt pumps messages, so a second close event can be dispatched before m_isClosing is
+    /// set; running the teardown re-entrantly corrupts the frame.
+    bool            m_closeInProgress;
+
     /// Set by #NonUserClose() to indicate that the user did not request the current close.
     bool            m_isNonUserClose;
 

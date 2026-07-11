@@ -51,6 +51,7 @@
 #include <confirm.h>
 #include <panel_packages_and_updates.h>
 #include <pgm_base.h>
+#include <scoped_set_reset.h>
 #include <settings/app_settings.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
@@ -150,6 +151,7 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     m_autoSavePending   = false;
     m_undoRedoCountMax  = DEFAULT_MAX_UNDO_ITEMS;
     m_isClosing         = false;
+    m_closeInProgress   = false;
     m_isNonUserClose    = false;
     m_autoSaveTimer     = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_autoSaveRequired  = false;
@@ -270,6 +272,24 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
     if( m_isClosing )
         return;
 
+    // The unsaved-changes prompt in canCloseWindow() pumps messages, so a second close event
+    // (queued title-bar click, Alt+F4 repeat, session end) can arrive while the first close is
+    // still deciding.  m_isClosing is not set until canCloseWindow() succeeds, so without this
+    // guard the second event would run the entire prompt and teardown re-entrantly and the
+    // first close would then resume against a demolished frame.
+    //
+    // A non-vetoable session end that lands during the prompt is dropped here rather than run
+    // re-entrantly. That trades a rare failure to persist settings on forced logoff for not
+    // crashing; the durable fix keeps the close off the OS default-window-proc stack entirely and
+    // needs Windows verification.
+    if( m_closeInProgress )
+    {
+        if( event.CanVeto() )
+            event.Veto();
+
+        return;
+    }
+
     // Don't allow closing when a quasi-modal is open.
     wxWindow* quasiModal = findQuasiModalDialog();
 
@@ -293,6 +313,8 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
         // End session means the OS is going to terminate us
         m_isNonUserClose = true;
     }
+
+    SCOPED_SET_RESET<bool> closeGuard( m_closeInProgress, true );
 
     if( canCloseWindow( event ) )
     {
