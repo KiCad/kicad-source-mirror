@@ -2167,6 +2167,15 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
 int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    // A constraint selected by clicking its badge has no board selection, so Edit targets it here
+    // before the normal properties path (mirrors the Delete hook for a badge-selected constraint).
+    if( CONSTRAINT_EDIT_TOOL* constraintTool = m_toolMgr->GetTool<CONSTRAINT_EDIT_TOOL>();
+        constraintTool && constraintTool->TryEditSelectedConstraint() )
+    {
+        return 0;
+    }
+
     const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {

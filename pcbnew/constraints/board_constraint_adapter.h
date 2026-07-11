@@ -24,6 +24,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <set>
 #include <vector>
 
 #include <kiid.h>
@@ -113,8 +114,8 @@ public:
      * @return true if the system was built; unmappable constraints are skipped rather than fatal,
      *         and are listed by UnmappedConstraints() so the caller can flag them.
      */
-    bool Build( const std::vector<PCB_SHAPE*>& aShapes,
-                const std::vector<PCB_CONSTRAINT*>& aConstraints );
+    bool Build( const std::vector<PCB_SHAPE*>& aShapes, const std::vector<PCB_CONSTRAINT*>& aConstraints,
+                const std::set<KIID>* aFixedShapes = nullptr );
 
     /// Constraints from the last Build() that could not be mapped onto a solver primitive (wrong
     /// member count/kind for their type, e.g. a parallel whose shape was changed to a circle), so
@@ -130,10 +131,16 @@ public:
      * @param aDragged the anchor being dragged.
      * @param aCursor the cursor target, in IU.
      */
-    bool Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor );
+    /// @p aStabilize holds free segment lengths so an angle constraint rotates a segment instead of
+    /// collapsing it. Off for live dragging.
+    bool Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize = false );
 
-    /// Solve with no drag pin (validation / re-derivation after an external edit).
-    bool Solve();
+    /// Solve with no drag pin. @p aStabilize holds free segment lengths (see the dragged overload).
+    bool Solve( bool aStabilize = false );
+
+    /// Solve after a resize. Holds the resized radius, pins its centre (yielding), and holds the
+    /// other radii (yielding), so neighbours translate and the resized shape moves only if forced.
+    bool SolveAfterResize( const KIID& aResizedShape );
 
     /**
      * Write the solved coordinates back into the shapes, de-normalized to IU.
@@ -150,18 +157,28 @@ public:
     CONSTRAINT_DIAGNOSIS Diagnose();
 
 private:
-    enum class SHAPE_KIND { SEGMENT, CIRCLE, ARC };
+    enum class SHAPE_KIND
+    {
+        SEGMENT,
+        CIRCLE,
+        ARC,
+        ELLIPSE,
+        ELLIPSE_ARC
+    };
 
     /// Per-shape indices into m_params.  A segment stores start/end; a circle stores center
     /// (startX) + radius; an arc stores center (startX) + radius + endpoints + sweep angles, all
-    /// tied together by an ArcRules solver constraint.
+    /// tied together by an ArcRules solver constraint.  An ellipse stores center (startX) + first
+    /// focus + minor radius (the GCS parameterization); an elliptical arc adds endpoints + sweep
+    /// angles tied by ArcOfEllipseRules.
     struct SHAPE_VARS
     {
         PCB_SHAPE* shape = nullptr;
         SHAPE_KIND kind = SHAPE_KIND::SEGMENT;
-        int        startX = -1;        ///< start.x (segment) / center.x (circle, arc).
+        int        startX = -1;        ///< start.x (segment) / center.x (circle, arc, ellipse).
         int        endX = -1;          ///< end.x (segment only).
-        int        radius = -1;        ///< radius scalar (circle, arc).
+        int        radius = -1;        ///< radius scalar (circle, arc) / minor radius (ellipse).
+        int        focusX = -1;        ///< first focus.x (ellipse kinds only).
         int        arcStartX = -1;     ///< arc start-point.x.
         int        arcEndX = -1;       ///< arc end-point.x.
         int        startAngle = -1;    ///< arc start angle (radians).
@@ -170,6 +187,9 @@ private:
 
     /// Append a normalized coordinate to the backing store, returning its stable index.
     int pushParam( double aValue );
+
+    /// Add a yielding length hold on every free segment, cleared by tag after the solve.
+    void holdFreeSegmentLengths();
 
     /// Index into m_params of the x-coordinate an anchor maps to, or -1 if the shape has no such
     /// anchor (e.g. a circle has no endpoints).  The y-coordinate is always the next index.
@@ -221,11 +241,10 @@ private:
  *                  already is and do not stage it themselves.
  * @return the diagnosis; .solved is false if the cluster could not be built or did not converge.
  */
-CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged,
-                                   const VECTOR2I& aCursor,
-                                   std::vector<PCB_SHAPE*>* aModified = nullptr,
+CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor,
+                                   std::vector<PCB_SHAPE*>*                 aModified = nullptr,
                                    const std::function<void( PCB_SHAPE* )>& aBeforeModify = {},
-                                   bool aIncludeDragged = false );
+                                   bool aIncludeDragged = false, bool aStabilize = false );
 
 
 /**
@@ -240,6 +259,18 @@ CONSTRAINT_DIAGNOSIS ApplyConstraintImmediately(
         BOARD* aBoard, const PCB_CONSTRAINT* aConstraint,
         std::vector<PCB_SHAPE*>* aModified = nullptr,
         const std::function<void( PCB_SHAPE* )>& aBeforeModify = {} );
+
+
+/// Re-solve the clusters of shapes edited outside the solver, e.g. a whole-shape move. Pins one
+/// anchor of each edited shape at its new position. A failed solve leaves geometry untouched.
+void ReSolveShapeClusters( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aShapes,
+                           std::vector<PCB_SHAPE*>*                 aModified = nullptr,
+                           const std::function<void( PCB_SHAPE* )>& aBeforeModify = {} );
+
+
+/// Re-solve after a resize, e.g. a circle radius edit. Holds aShape fixed so its neighbors adjust.
+void ReSolveAfterShapeResize( BOARD* aBoard, PCB_SHAPE* aShape, std::vector<PCB_SHAPE*>* aModified = nullptr,
+                              const std::function<void( PCB_SHAPE* )>& aBeforeModify = {} );
 
 
 /**

@@ -843,7 +843,8 @@ private:
 
     std::vector<LIB_ID>    m_designBlockHistoryList;
     PCB_DESIGN_BLOCK_PANE* m_designBlocksPane;
-    PANEL_CONSTRAINTS*     m_constraintsPanel;   ///< Dockable geometric-constraint list (#2329).
+    // Tool Reset() reads this before the ctor creates the panel.
+    PANEL_CONSTRAINTS* m_constraintsPanel = nullptr; ///< Dockable geometric-constraint list (#2329).
 
     /// Secondary infobar that stacks above the main one; reserved for load-time
     /// notices (currently the WRL -> STEP migration prompt) that must not be

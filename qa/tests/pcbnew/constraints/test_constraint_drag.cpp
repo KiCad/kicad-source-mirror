@@ -217,4 +217,39 @@ BOOST_FIXTURE_TEST_CASE( DeleteShapeLeavesConstraintInErrorState, DRAG_FIXTURE )
 }
 
 
+// A whole-shape move breaks a point-on-line relation. ReSolveShapeClusters restores it with the
+// moved shape pinned where it was dropped.
+BOOST_FIXTURE_TEST_CASE( MoveReSolvesCluster, DRAG_FIXTURE )
+{
+    PCB_SHAPE* line = addSegment( { 0, 0 }, { 20 * MM, 0 } );
+    PCB_SHAPE* seg = addSegment( { 2 * MM, 5 * MM }, { 5 * MM, 0 } );
+
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::POINT_ON_LINE );
+    c->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::END );
+    c->AddMember( line->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    board.Add( c );
+
+    PCB_CONSTRAINT* f1 = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_POSITION );
+    f1->AddMember( line->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( f1 );
+
+    PCB_CONSTRAINT* f2 = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_POSITION );
+    f2->AddMember( line->m_Uuid, CONSTRAINT_ANCHOR::END );
+    board.Add( f2 );
+
+    seg->Move( { 0, 3 * MM } );
+    BOOST_CHECK_EQUAL( seg->GetEnd().y, 3 * MM );
+
+    std::vector<PCB_SHAPE*> modified;
+    ReSolveShapeClusters( &board, { seg }, &modified );
+
+    // The end is back on the line, the dropped start held, and the fixed line did not move.
+    BOOST_CHECK_LE( std::abs( seg->GetEnd().y ), 5000 );
+    BOOST_CHECK_LE( ( seg->GetStart() - VECTOR2I( 2 * MM, 8 * MM ) ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_EQUAL( line->GetStart(), VECTOR2I( 0, 0 ) );
+    BOOST_CHECK_EQUAL( line->GetEnd(), VECTOR2I( 20 * MM, 0 ) );
+    BOOST_CHECK( std::find( modified.begin(), modified.end(), seg ) != modified.end() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

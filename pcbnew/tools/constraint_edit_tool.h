@@ -76,6 +76,13 @@ public:
     /// Called by EDIT_TOOL::Remove so the Delete key targets a selected relation.
     bool TryDeleteSelectedConstraint();
 
+    /// Edit the currently badge-selected constraint's value; returns true if one was selected.
+    /// Called by EDIT_TOOL::Properties so the Edit key targets a selected relation.
+    bool TryEditSelectedConstraint();
+
+    /// Re-solve the clusters of @p aShapes after a whole-shape edit, folded into that edit's undo.
+    void SolveAfterMove( const std::vector<PCB_SHAPE*>& aShapes );
+
     /// Intent entry points for the constraints panel, so it never mutates the board or the selection
     /// itself -- the tool stays the single owner of constraint edit/remove/highlight + refresh.
     void RemoveConstraintById( const KIID& aId );

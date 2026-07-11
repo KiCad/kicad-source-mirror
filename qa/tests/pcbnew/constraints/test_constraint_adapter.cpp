@@ -301,6 +301,233 @@ BOOST_AUTO_TEST_CASE( PointOnLineLandsOnSegment )
 }
 
 
+// A point-on-line constraint with a circle target lands the point on the circumference.
+BOOST_AUTO_TEST_CASE( PointOnLineLandsOnCircle )
+{
+    BOARD board;
+
+    PCB_SHAPE* circle = addCircle( board, { 10 * MM, 10 * MM }, 5 * MM );
+    PCB_SHAPE* probe = addSegment( board, { 0, 0 }, { 2 * MM, 1 * MM } );
+
+    circle->SetLocked( true );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::POINT_ON_LINE,
+                   { { probe->m_Uuid, CONSTRAINT_ANCHOR::END }, { circle->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    std::vector<PCB_SHAPE*> shapes{ circle, probe };
+    solveAndApply( board, shapes );
+
+    double distToCenter = ( probe->GetEnd() - circle->GetCenter() ).EuclideanNorm();
+
+    BOOST_CHECK_LE( std::abs( distToCenter - 5.0 * MM ), 5000.0 );
+    BOOST_CHECK_EQUAL( circle->GetCenter(), VECTOR2I( 10 * MM, 10 * MM ) );
+    BOOST_CHECK_EQUAL( circle->GetRadius(), 5 * MM );
+}
+
+
+// A point-on-line constraint with an ellipse target lands the point on the outline.
+BOOST_AUTO_TEST_CASE( PointOnLineLandsOnEllipse )
+{
+    BOARD board;
+
+    PCB_SHAPE* ellipse = addEllipse( board, { 10 * MM, 10 * MM }, 8 * MM, 4 * MM, EDA_ANGLE( 30.0, DEGREES_T ) );
+    PCB_SHAPE* probe = addSegment( board, { 0, 0 }, { 2 * MM, 1 * MM } );
+
+    ellipse->SetLocked( true );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::POINT_ON_LINE,
+                   { { probe->m_Uuid, CONSTRAINT_ANCHOR::END }, { ellipse->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    std::vector<PCB_SHAPE*> shapes{ ellipse, probe };
+    solveAndApply( board, shapes );
+
+    BOOST_CHECK_LE( std::abs( ellipseEquationAt( ellipse, probe->GetEnd() ) - 1.0 ), 1e-3 );
+    BOOST_CHECK_EQUAL( ellipse->GetEllipseCenter(), VECTOR2I( 10 * MM, 10 * MM ) );
+    BOOST_CHECK_EQUAL( ellipse->GetEllipseMajorRadius(), 8 * MM );
+    BOOST_CHECK_EQUAL( ellipse->GetEllipseMinorRadius(), 4 * MM );
+}
+
+
+// The same with an elliptical arc target: the point lands on the arc's underlying ellipse.
+BOOST_AUTO_TEST_CASE( PointOnLineLandsOnEllipticalArc )
+{
+    BOARD board;
+
+    PCB_SHAPE* arc = addEllipseArc( board, { 10 * MM, 10 * MM }, 8 * MM, 4 * MM, EDA_ANGLE( 30.0, DEGREES_T ),
+                                    EDA_ANGLE( 0.0, DEGREES_T ), EDA_ANGLE( 120.0, DEGREES_T ) );
+    PCB_SHAPE* probe = addSegment( board, { 0, 0 }, { 2 * MM, 1 * MM } );
+
+    arc->SetLocked( true );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::POINT_ON_LINE,
+                   { { probe->m_Uuid, CONSTRAINT_ANCHOR::END }, { arc->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    std::vector<PCB_SHAPE*> shapes{ arc, probe };
+    solveAndApply( board, shapes );
+
+    BOOST_CHECK_LE( std::abs( ellipseEquationAt( arc, probe->GetEnd() ) - 1.0 ), 1e-3 );
+}
+
+
+// A free segment made tangent to a locked circle ends up with the center at exactly one radius
+// from its supporting line, on the side the circle started on.
+BOOST_AUTO_TEST_CASE( TangentLineToCircle )
+{
+    BOARD board;
+
+    PCB_SHAPE* circle = addCircle( board, { 10 * MM, 10 * MM }, 5 * MM );
+    PCB_SHAPE* line = addSegment( board, { 0, 0 }, { 20 * MM, 0 } );
+
+    circle->SetLocked( true );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::TANGENT,
+                   { { line->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { circle->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    std::vector<PCB_SHAPE*> shapes{ circle, line };
+    solveAndApply( board, shapes );
+
+    VECTOR2D d = VECTOR2D( line->GetEnd() - line->GetStart() );
+    VECTOR2D toCenter = VECTOR2D( circle->GetCenter() - line->GetStart() );
+    double   dist = std::abs( d.Cross( toCenter ) ) / d.EuclideanNorm();
+
+    BOOST_CHECK_LE( std::abs( dist - 5.0 * MM ), 5000.0 );
+    BOOST_CHECK_EQUAL( circle->GetCenter(), VECTOR2I( 10 * MM, 10 * MM ) );
+}
+
+
+// A free circle made tangent to a locked circle moves until the two touch externally.
+BOOST_AUTO_TEST_CASE( TangentCircleToCircle )
+{
+    BOARD board;
+
+    PCB_SHAPE* fixed = addCircle( board, { 0, 0 }, 5 * MM );
+    PCB_SHAPE* free = addCircle( board, { 20 * MM, 0 }, 3 * MM );
+
+    fixed->SetLocked( true );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::TANGENT,
+                   { { fixed->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { free->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    std::vector<PCB_SHAPE*> shapes{ fixed, free };
+    solveAndApply( board, shapes );
+
+    // The free circle's radius is also a solver variable, so assert the tangency itself.
+    double centerDist = ( free->GetCenter() - fixed->GetCenter() ).EuclideanNorm();
+    double radiusSum = 5.0 * MM + free->GetRadius();
+
+    BOOST_CHECK_LE( std::abs( centerDist - radiusSum ), 5000.0 );
+    BOOST_CHECK_GT( free->GetRadius(), 0 );
+    BOOST_CHECK_EQUAL( fixed->GetCenter(), VECTOR2I( 0, 0 ) );
+}
+
+
+// Resizing one of two tangent circles re-solves the other so they still touch. The neighbor moves,
+// the resized circle stays put. This is the radius-edit path that a plain re-solve would miss.
+BOOST_AUTO_TEST_CASE( ResizeTangentCircleMovesNeighbor )
+{
+    BOARD board;
+
+    PCB_SHAPE* resized = addCircle( board, { 0, 0 }, 5 * MM );
+    PCB_SHAPE* neighbor = addCircle( board, { 8 * MM, 0 }, 3 * MM ); // externally tangent: 5 + 3 = 8
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::TANGENT,
+                   { { resized->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { neighbor->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    // Grow the first circle, as the radius handle would.
+    resized->SetRadius( 7 * MM );
+
+    std::vector<PCB_SHAPE*> modified;
+    ReSolveAfterShapeResize( &board, resized, &modified );
+
+    // They still touch, the resized circle kept its new radius and center, and the neighbor moved.
+    double centerDist = ( neighbor->GetCenter() - resized->GetCenter() ).EuclideanNorm();
+
+    BOOST_CHECK_LE( std::abs( centerDist - ( 7.0 * MM + neighbor->GetRadius() ) ), 5000.0 );
+    BOOST_CHECK_EQUAL( resized->GetRadius(), 7 * MM );
+    BOOST_CHECK_EQUAL( resized->GetCenter(), VECTOR2I( 0, 0 ) );
+    BOOST_CHECK( std::find( modified.begin(), modified.end(), neighbor ) != modified.end() );
+
+    // The neighbor translates to stay tangent, keeping its own radius, not distorting it.
+    BOOST_CHECK_EQUAL( neighbor->GetRadius(), 3 * MM );
+    BOOST_CHECK_LE( std::abs( centerDist - 10 * MM ), 5000.0 );
+}
+
+
+// Resizing a circle tangent to a LOCKED circle: the locked one cannot move, so the resized circle
+// keeps its new radius and translates to stay tangent.
+BOOST_AUTO_TEST_CASE( ResizeTangentToLockedTranslates )
+{
+    BOARD board;
+
+    PCB_SHAPE* locked = addCircle( board, { 0, 0 }, 5 * MM );
+    PCB_SHAPE* resized = addCircle( board, { 8 * MM, 0 }, 3 * MM ); // tangent: 5 + 3 = 8
+
+    locked->SetLocked( true );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::TANGENT,
+                   { { resized->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { locked->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    resized->SetRadius( 4 * MM ); // grow it, breaking tangency
+
+    std::vector<PCB_SHAPE*> modified;
+    ReSolveAfterShapeResize( &board, resized, &modified );
+
+    double centerDist = ( resized->GetCenter() - locked->GetCenter() ).EuclideanNorm();
+
+    // Still tangent (5 + 4 = 9), the resized circle kept its new radius, and the locked one is put.
+    BOOST_CHECK_LE( std::abs( centerDist - 9 * MM ), 5000.0 );
+    BOOST_CHECK_EQUAL( resized->GetRadius(), 4 * MM );
+    BOOST_CHECK_EQUAL( locked->GetCenter(), VECTOR2I( 0, 0 ) );
+    BOOST_CHECK_EQUAL( locked->GetRadius(), 5 * MM );
+}
+
+
+// The radius hold yields to a real radius constraint: resizing one of two equal-radius circles still
+// resizes the other to match.
+BOOST_AUTO_TEST_CASE( ResizeEqualRadiusStillPropagates )
+{
+    BOARD board;
+
+    PCB_SHAPE* resized = addCircle( board, { 0, 0 }, 5 * MM );
+    PCB_SHAPE* neighbor = addCircle( board, { 20 * MM, 0 }, 5 * MM );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::EQUAL_RADIUS,
+                   { { resized->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { neighbor->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    resized->SetRadius( 8 * MM );
+
+    ReSolveAfterShapeResize( &board, resized, nullptr );
+
+    BOOST_CHECK_LE( std::abs( neighbor->GetRadius() - 8 * MM ), 5000 );
+}
+
+
+// A free ellipse made concentric with a locked circle moves its center without distorting: the
+// focus follows the center, so major/minor radius and rotation are preserved.
+BOOST_AUTO_TEST_CASE( ConcentricEllipseKeepsShape )
+{
+    BOARD board;
+
+    PCB_SHAPE* circle = addCircle( board, { 20 * MM, 15 * MM }, 3 * MM );
+    PCB_SHAPE* ellipse = addEllipse( board, { 0, 0 }, 8 * MM, 4 * MM, EDA_ANGLE( 30.0, DEGREES_T ) );
+
+    circle->SetLocked( true );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::CONCENTRIC,
+                   { { ellipse->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { circle->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    std::vector<PCB_SHAPE*> shapes{ circle, ellipse };
+    solveAndApply( board, shapes );
+
+    BOOST_CHECK_LE( ( ellipse->GetEllipseCenter() - VECTOR2I( 20 * MM, 15 * MM ) ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_LE( std::abs( ellipse->GetEllipseMajorRadius() - 8 * MM ), 5000 );
+    BOOST_CHECK_LE( std::abs( ellipse->GetEllipseMinorRadius() - 4 * MM ), 5000 );
+    BOOST_CHECK_LE(
+            std::abs( ( ellipse->GetEllipseRotation() - EDA_ANGLE( 30.0, DEGREES_T ) ).Normalize180().AsDegrees() ),
+            0.01 );
+}
+
+
 // A probe point made the midpoint of a fixed segment lands at its center.
 BOOST_AUTO_TEST_CASE( MidpointOfFixedSegment )
 {

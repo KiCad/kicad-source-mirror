@@ -2964,6 +2964,9 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
                 anchor = CONSTRAINT_ANCHOR::CENTER;
         }
 
+        bool isCurve = type == SHAPE_T::CIRCLE || type == SHAPE_T::ARC || type == SHAPE_T::ELLIPSE
+                       || type == SHAPE_T::ELLIPSE_ARC;
+
         if( anchor != CONSTRAINT_ANCHOR::WHOLE )
         {
             std::vector<PCB_SHAPE*> modified;
@@ -2972,6 +2975,20 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
             // half-moved or staged this frame.
             SolveCluster( board(), { shape->m_Uuid, anchor }, cursor, &modified,
                           [&]( PCB_SHAPE* aNeighbor ) { aCommit.Modify( aNeighbor ); } );
+
+            for( PCB_SHAPE* neighbor : modified )
+                updatedItems.push_back( neighbor );
+        }
+        else if( isCurve )
+        {
+            // A radius or axis handle, not a constrained point. Re-solve neighbors against the new size.
+            std::vector<PCB_SHAPE*> modified;
+
+            ReSolveAfterShapeResize( board(), shape, &modified,
+                                     [&]( PCB_SHAPE* aNeighbor )
+                                     {
+                                         aCommit.Modify( aNeighbor );
+                                     } );
 
             for( PCB_SHAPE* neighbor : modified )
                 updatedItems.push_back( neighbor );

@@ -168,4 +168,25 @@ BOOST_AUTO_TEST_CASE( ApplyIsOneUndoStep )
 }
 
 
+// The radial constraints accept arcs, and concentric also accepts ellipses, matching the solver.
+BOOST_AUTO_TEST_CASE( BuildRadialFromArcsAndEllipses )
+{
+    BOARD      board;
+    PCB_SHAPE* circle = addCircle( board, { 0, 0 }, 5 * MM );
+    PCB_SHAPE* arc = addArc( board, { 10 * MM, 0 }, { 12 * MM, 2 * MM }, { 14 * MM, 0 } );
+    PCB_SHAPE* ellipse = addEllipse( board, { 30 * MM, 0 }, 8 * MM, 4 * MM, EDA_ANGLE( 0.0, DEGREES_T ) );
+
+    // Fixed radius and equal radius work on arcs.
+    BOOST_CHECK( BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::FIXED_RADIUS, { arc } ) );
+    BOOST_CHECK( BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::EQUAL_RADIUS, { circle, arc } ) );
+
+    // Concentric additionally works on ellipses.
+    BOOST_CHECK( BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::CONCENTRIC, { circle, ellipse } ) );
+    BOOST_CHECK( BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::CONCENTRIC, { arc, ellipse } ) );
+
+    // Equal radius still rejects an ellipse (no single radius).
+    BOOST_CHECK( !BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::EQUAL_RADIUS, { circle, ellipse } ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

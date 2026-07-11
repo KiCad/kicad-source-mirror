@@ -639,6 +639,7 @@ public:
     static TOOL_ACTION addConstraintEqualLength;
     static TOOL_ACTION addConstraintCollinear;
     static TOOL_ACTION addConstraintAngular;
+    static TOOL_ACTION addConstraintTangent;
     static TOOL_ACTION addConstraintHorizontal;
     static TOOL_ACTION addConstraintVertical;
     static TOOL_ACTION addConstraintFixedLength;
@@ -652,6 +653,7 @@ public:
     static TOOL_ACTION addConstraintSymmetric;
     static TOOL_ACTION removeConstraints;
     static TOOL_ACTION showConstraints;     ///< Toggle the constraint diagnostics overlay.
+    static TOOL_ACTION hideConstraints;     ///< Same toggle, shown while the overlay is visible.
     static TOOL_ACTION manageConstraints;   ///< Open the constraint list dialog.
 
     /// Drag and drop

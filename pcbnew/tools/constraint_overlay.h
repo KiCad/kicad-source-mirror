@@ -123,12 +123,25 @@ public:
 
     const KIID& GetSelected() const { return m_selected; }
 
+    /// Show only this constraint, or niluuid to show all. Returns true if it changed.
+    bool SetIsolated( const KIID& aConstraint );
+
+    const KIID& GetIsolated() const { return m_isolated; }
+
     /// Badges placed by the last Update(), for canvas hit-testing.
     const std::vector<CONSTRAINT_BADGE>& Badges() const { return m_badges; }
 
     /// Click hit radius in screen pixels. The badges draw at a constant screen size, so the caller
     /// converts this to world units with the view scale.
     static double BadgeHitRadius();
+
+    /// Screen-pixel offset from a badge's anchor to where its glyph draws and hit-tests, keeping
+    /// the glyph clear of the geometry so clicks on the shape still select the shape.
+    static VECTOR2D BadgeScreenOffset();
+
+    /// World units per screen pixel for badge sizing, capped at far zoom-out. Shared by drawing
+    /// and hit-testing.
+    static double BadgeWorldPerPixel( double aWorldScale );
 
 private:
     /// Redraw the tint and badges from m_lastDiag (no re-solve).
@@ -138,5 +151,6 @@ private:
     BOARD_CONSTRAINT_DIAGNOSTICS  m_lastDiag;
     std::vector<CONSTRAINT_BADGE> m_badges;
     KIID                          m_selected;
+    KIID                          m_isolated;
     CONSTRAINT_BADGE_ITEM         m_badgeItem;
 };

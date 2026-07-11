@@ -42,6 +42,9 @@ static constexpr double IU_PER_NORM_UNIT = 1e6;
 // Bound the solver so an interactive drag can never stall the UI thread.
 static constexpr int MAX_SOLVE_ITERATIONS = 100;
 
+// A non-temporary tag for the hard radius hold during a resize solve.
+static constexpr int RESIZE_RADIUS_TAG = 1000;
+
 
 // Every constraint owned by the board or by any of its footprints.  In the footprint editor the
 // "board" is a footprint holder, so footprint-scoped constraints must be gathered too.
@@ -175,26 +178,26 @@ int BOARD_CONSTRAINT_ADAPTER::anchorParamIndex( const CONSTRAINT_MEMBER& aMember
     switch( aMember.m_anchor )
     {
     case CONSTRAINT_ANCHOR::START:
-        if( vars.kind == SHAPE_KIND::ARC )
+        if( vars.kind == SHAPE_KIND::ARC || vars.kind == SHAPE_KIND::ELLIPSE_ARC )
             return vars.arcStartX;
 
-        // A circle has no endpoints; its startX holds the centre, so never alias them.
-        return vars.kind == SHAPE_KIND::CIRCLE ? -1 : vars.startX;
+        // A circle or closed ellipse has no endpoints; startX holds the centre, so never alias them.
+        return vars.kind == SHAPE_KIND::SEGMENT ? vars.startX : -1;
     case CONSTRAINT_ANCHOR::END:
-        if( vars.kind == SHAPE_KIND::ARC )
+        if( vars.kind == SHAPE_KIND::ARC || vars.kind == SHAPE_KIND::ELLIPSE_ARC )
             return vars.arcEndX;
 
-        return vars.kind == SHAPE_KIND::CIRCLE ? -1 : vars.endX;
-    case CONSTRAINT_ANCHOR::CENTER:
-        return ( vars.kind == SHAPE_KIND::CIRCLE || vars.kind == SHAPE_KIND::ARC ) ? vars.startX : -1;
+        return vars.kind == SHAPE_KIND::SEGMENT ? vars.endX : -1;
+    case CONSTRAINT_ANCHOR::CENTER: return vars.kind == SHAPE_KIND::SEGMENT ? -1 : vars.startX;
     default:
         return -1;
     }
 }
 
 
-bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
-                                      const std::vector<PCB_CONSTRAINT*>& aConstraints )
+bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&      aShapes,
+                                      const std::vector<PCB_CONSTRAINT*>& aConstraints,
+                                      const std::set<KIID>*               aFixedShapes )
 {
     m_params.clear();
     m_shapeVars.clear();
@@ -216,6 +219,9 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
     // [first, last) parameter spans of locked shapes, folded into fixedParams below so the solver
     // treats a locked shape as an immovable reference.
     std::vector<std::pair<int, int>> lockedRanges;
+
+    // Fixed focus-offset params of ellipses, folded into fixedParams below.
+    std::vector<int> ellipseOffsetParams;
 
     for( PCB_SHAPE* shape : aShapes )
     {
@@ -272,14 +278,67 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
             arc.endAngle = &m_params[vars.endAngle];
             m_gcs->addConstraintArcRules( arc );
         }
+        else if( shape->GetShape() == SHAPE_T::ELLIPSE || shape->GetShape() == SHAPE_T::ELLIPSE_ARC )
+        {
+            vars.kind = shape->GetShape() == SHAPE_T::ELLIPSE ? SHAPE_KIND::ELLIPSE : SHAPE_KIND::ELLIPSE_ARC;
+
+            VECTOR2I center = shape->GetEllipseCenter();
+            double   major = shape->GetEllipseMajorRadius();
+            double   minor = shape->GetEllipseMinorRadius();
+            double   phi = shape->GetEllipseRotation().AsRadians();
+
+            // GCS parameterizes an ellipse as center + first focus + minor radius.
+            double focal = major > minor ? std::sqrt( major * major - minor * minor ) : 0.0;
+            double cx = normalizeX( center.x );
+            double cy = normalizeY( center.y );
+
+            vars.startX = pushParam( cx );
+            pushParam( cy );
+            vars.focusX = pushParam( cx + focal * m_invScale * std::cos( phi ) );
+            pushParam( cy + focal * m_invScale * std::sin( phi ) );
+            vars.radius = pushParam( std::min( major, minor ) * m_invScale );
+
+            // Tie the focus to the center, or a solve moving the center would leave the focus
+            // behind and distort the ellipse.
+            int offX = pushParam( focal * m_invScale * std::cos( phi ) );
+            int offY = pushParam( focal * m_invScale * std::sin( phi ) );
+            ellipseOffsetParams.push_back( offX );
+            ellipseOffsetParams.push_back( offY );
+
+            m_gcs->addConstraintDifference( &m_params[vars.startX], &m_params[vars.focusX], &m_params[offX] );
+            m_gcs->addConstraintDifference( &m_params[vars.startX + 1], &m_params[vars.focusX + 1], &m_params[offY] );
+
+            if( vars.kind == SHAPE_KIND::ELLIPSE_ARC )
+            {
+                VECTOR2I start = shape->GetStart();
+                VECTOR2I end = shape->GetEnd();
+
+                vars.arcStartX = pushParam( normalizeX( start.x ) );
+                pushParam( normalizeY( start.y ) );
+                vars.arcEndX = pushParam( normalizeX( end.x ) );
+                pushParam( normalizeY( end.y ) );
+                vars.startAngle = pushParam( shape->GetEllipseStartAngle().AsRadians() );
+                vars.endAngle = pushParam( shape->GetEllipseEndAngle().AsRadians() );
+
+                GCS::ArcOfEllipse arc;
+                arc.center = GCS::Point{ &m_params[vars.startX], &m_params[vars.startX + 1] };
+                arc.focus1 = GCS::Point{ &m_params[vars.focusX], &m_params[vars.focusX + 1] };
+                arc.radmin = &m_params[vars.radius];
+                arc.start = GCS::Point{ &m_params[vars.arcStartX], &m_params[vars.arcStartX + 1] };
+                arc.end = GCS::Point{ &m_params[vars.arcEndX], &m_params[vars.arcEndX + 1] };
+                arc.startAngle = &m_params[vars.startAngle];
+                arc.endAngle = &m_params[vars.endAngle];
+                m_gcs->addConstraintArcOfEllipseRules( arc );
+            }
+        }
         else
         {
             continue;   // other shapes are not mapped
         }
 
-        // A locked shape is an immovable reference: record its parameter span so the solver moves
-        // only the unlocked geometry sharing the cluster.
-        if( shape->IsLocked() )
+        // A locked shape, or one the caller pinned, is an immovable reference: record its parameter
+        // span so the solver moves only the rest of the cluster.
+        if( shape->IsLocked() || ( aFixedShapes && aFixedShapes->count( shape->m_Uuid ) ) )
             lockedRanges.emplace_back( firstParam, static_cast<int>( m_params.size() ) );
 
         m_shapeVars[shape->m_Uuid] = vars;
@@ -294,6 +353,9 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
         for( int i = first; i < last; ++i )
             fixedParams.insert( i );
     }
+
+    for( int i : ellipseOffsetParams )
+        fixedParams.insert( i );
 
     auto pointAt = [&]( int aXIndex ) -> GCS::Point
     {
@@ -329,6 +391,24 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
 
         aCircle.center = pointAt( it->second.startX );
         aCircle.rad = &m_params[it->second.radius];
+        return true;
+    };
+
+    // An ellipse for ellipse-target constraints; an elliptical arc is accepted too (its center,
+    // focus and minor radius are shared with the Ellipse base).
+    auto ellipseFor = [&]( const CONSTRAINT_MEMBER& aMember, GCS::Ellipse& aEllipse ) -> bool
+    {
+        auto it = m_shapeVars.find( aMember.m_item );
+
+        if( it == m_shapeVars.end()
+            || ( it->second.kind != SHAPE_KIND::ELLIPSE && it->second.kind != SHAPE_KIND::ELLIPSE_ARC ) )
+        {
+            return false;
+        }
+
+        aEllipse.center = pointAt( it->second.startX );
+        aEllipse.focus1 = pointAt( it->second.focusX );
+        aEllipse.radmin = &m_params[it->second.radius];
         return true;
     };
 
@@ -446,13 +526,28 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
 
         case PCB_CONSTRAINT_TYPE::POINT_ON_LINE:
         {
-            int       p = members.size() == 2 ? anchorParamIndex( members[0] ) : -1;
-            GCS::Line l;
+            int          p = members.size() == 2 ? anchorParamIndex( members[0] ) : -1;
+            GCS::Line    l;
+            GCS::Circle  circ;
+            GCS::Ellipse ell;
 
             if( p >= 0 && lineFor( members[1], l ) )
             {
                 GCS::Point point = pointAt( p );
                 m_gcs->addConstraintPointOnLine( point, l, tag );
+                mapped = true;
+            }
+            else if( p >= 0 && circleFor( members[1], circ ) )
+            {
+                // A circle or arc target keeps the point on its circumference.
+                GCS::Point point = pointAt( p );
+                m_gcs->addConstraintPointOnCircle( point, circ, tag );
+                mapped = true;
+            }
+            else if( p >= 0 && ellipseFor( members[1], ell ) )
+            {
+                GCS::Point point = pointAt( p );
+                m_gcs->addConstraintPointOnEllipse( point, ell, tag );
                 mapped = true;
             }
 
@@ -550,11 +645,32 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
 
         case PCB_CONSTRAINT_TYPE::CONCENTRIC:
         {
-            GCS::Circle c1, c2;
-
-            if( members.size() == 2 && circleFor( members[0], c1 ) && circleFor( members[1], c2 ) )
+            // Any center-bearing shape can be concentric, ellipses included.
+            auto centerOf = [&]( const CONSTRAINT_MEMBER& aMember, GCS::Point& aOut ) -> bool
             {
-                m_gcs->addConstraintP2PCoincident( c1.center, c2.center, tag );
+                GCS::Circle  c;
+                GCS::Ellipse e;
+
+                if( circleFor( aMember, c ) )
+                {
+                    aOut = c.center;
+                    return true;
+                }
+
+                if( ellipseFor( aMember, e ) )
+                {
+                    aOut = e.center;
+                    return true;
+                }
+
+                return false;
+            };
+
+            GCS::Point p1, p2;
+
+            if( members.size() == 2 && centerOf( members[0], p1 ) && centerOf( members[1], p2 ) )
+            {
+                m_gcs->addConstraintP2PCoincident( p1, p2, tag );
                 mapped = true;
             }
 
@@ -572,6 +688,47 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
                 int angle = pushParam( *constraint->GetValue() * M_PI / 180.0 );
                 fixedParams.insert( angle );
                 m_gcs->addConstraintL2LAngle( l1, l2, &m_params[angle], tag, constraint->IsDriving() );
+                mapped = true;
+            }
+
+            break;
+        }
+
+        case PCB_CONSTRAINT_TYPE::TANGENT:
+        {
+            if( members.size() != 2 )
+                break;
+
+            GCS::Line    l;
+            GCS::Circle  c1, c2;
+            GCS::Ellipse ell;
+
+            // The members may come in either order.
+            int lineIdx = lineFor( members[0], l ) ? 0 : ( lineFor( members[1], l ) ? 1 : -1 );
+
+            if( lineIdx >= 0 )
+            {
+                const CONSTRAINT_MEMBER& other = members[lineIdx == 0 ? 1 : 0];
+
+                if( circleFor( other, c1 ) )
+                {
+                    // Keep the circle on the side of the line it is on now.
+                    double dx = *l.p2.x - *l.p1.x;
+                    double dy = *l.p2.y - *l.p1.y;
+                    double cross = dx * ( *c1.center.y - *l.p1.y ) - dy * ( *c1.center.x - *l.p1.x );
+
+                    m_gcs->addConstraintTangent( l, c1, cross > 0.0, tag );
+                    mapped = true;
+                }
+                else if( ellipseFor( other, ell ) )
+                {
+                    m_gcs->addConstraintTangent( l, ell, tag );
+                    mapped = true;
+                }
+            }
+            else if( circleFor( members[0], c1 ) && circleFor( members[1], c2 ) )
+            {
+                m_gcs->addConstraintTangent( c1, c2, tag );
                 mapped = true;
             }
 
@@ -613,20 +770,69 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
 }
 
 
-bool BOARD_CONSTRAINT_ADAPTER::Solve()
+bool BOARD_CONSTRAINT_ADAPTER::Solve( bool aStabilize )
 {
     if( !m_built )
         return false;
+
+    if( aStabilize )
+        holdFreeSegmentLengths();
 
     m_gcs->initSolution();
     int ret = m_gcs->solve();
     m_gcs->applySolution();
 
+    if( aStabilize )
+        m_gcs->clearByTag( GCS::DefaultTemporaryConstraint );
+
     return ret == GCS::Success || ret == GCS::Converged;
 }
 
 
-bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor )
+bool BOARD_CONSTRAINT_ADAPTER::SolveAfterResize( const KIID& aResizedShape )
+{
+    if( !m_built )
+        return false;
+
+    for( auto& [kiid, vars] : m_shapeVars )
+    {
+        if( vars.radius < 0 )
+            continue;
+
+        int         target = pushParam( m_params[vars.radius] );
+        GCS::Circle c;
+        c.center = GCS::Point{ &m_params[vars.startX], &m_params[vars.startX + 1] };
+        c.rad = &m_params[vars.radius];
+
+        if( kiid == aResizedShape )
+        {
+            // The user set this radius, so hold it hard. Pin the centre yielding so the shape moves
+            // only if a locked neighbour leaves no other way to stay tangent.
+            m_gcs->addConstraintCircleRadius( c, &m_params[target], RESIZE_RADIUS_TAG, true );
+
+            int cx = pushParam( m_params[vars.startX] );
+            int cy = pushParam( m_params[vars.startX + 1] );
+            m_gcs->addConstraintCoordinateX( c.center, &m_params[cx], GCS::DefaultTemporaryConstraint );
+            m_gcs->addConstraintCoordinateY( c.center, &m_params[cy], GCS::DefaultTemporaryConstraint );
+        }
+        else
+        {
+            // Neighbours keep their size unless a real radius constraint says otherwise.
+            m_gcs->addConstraintCircleRadius( c, &m_params[target], GCS::DefaultTemporaryConstraint );
+        }
+    }
+
+    m_gcs->initSolution();
+    int ret = m_gcs->solve();
+    m_gcs->applySolution();
+
+    m_gcs->clearByTag( GCS::DefaultTemporaryConstraint );
+
+    return ret == GCS::Success || ret == GCS::Converged;
+}
+
+
+bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize )
 {
     if( !m_built )
         return false;
@@ -653,6 +859,9 @@ bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const V
     m_gcs->addConstraintCoordinateX( anchor, &m_params[m_dragTargetX], GCS::DefaultTemporaryConstraint );
     m_gcs->addConstraintCoordinateY( anchor, &m_params[m_dragTargetY], GCS::DefaultTemporaryConstraint );
 
+    if( aStabilize )
+        holdFreeSegmentLengths();
+
     m_gcs->initSolution();
     int ret = m_gcs->solve();
     m_gcs->applySolution();
@@ -660,6 +869,24 @@ bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const V
     m_gcs->clearByTag( GCS::DefaultTemporaryConstraint );
 
     return ret == GCS::Success || ret == GCS::Converged;
+}
+
+
+void BOARD_CONSTRAINT_ADAPTER::holdFreeSegmentLengths()
+{
+    // A yielding length hold keeps an angle constraint from collapsing a free segment to a point.
+    for( auto& [kiid, vars] : m_shapeVars )
+    {
+        if( vars.kind != SHAPE_KIND::SEGMENT || vars.shape->IsLocked() )
+            continue;
+
+        GCS::Point p1{ &m_params[vars.startX], &m_params[vars.startX + 1] };
+        GCS::Point p2{ &m_params[vars.endX], &m_params[vars.endX + 1] };
+        double     dx = m_params[vars.endX] - m_params[vars.startX];
+        double     dy = m_params[vars.endX + 1] - m_params[vars.startX + 1];
+        int        len = pushParam( std::hypot( dx, dy ) );
+        m_gcs->addConstraintP2PDistance( p1, p2, &m_params[len], GCS::DefaultTemporaryConstraint );
+    }
 }
 
 
@@ -734,12 +961,79 @@ std::vector<PCB_SHAPE*> BOARD_CONSTRAINT_ADAPTER::Apply( const std::function<voi
             continue;
         }
 
+        if( vars.kind == SHAPE_KIND::ELLIPSE || vars.kind == SHAPE_KIND::ELLIPSE_ARC )
+        {
+            VECTOR2I center( KiROUND( denormalizeX( m_params[vars.startX] ) ),
+                             KiROUND( denormalizeY( m_params[vars.startX + 1] ) ) );
+
+            // Recover major radius and rotation from the solved focus.
+            double fx = ( m_params[vars.focusX] - m_params[vars.startX] ) * m_scale;
+            double fy = ( m_params[vars.focusX + 1] - m_params[vars.startX + 1] ) * m_scale;
+            double focal = std::hypot( fx, fy );
+            double minor = m_params[vars.radius] * m_scale;
+            double major = std::sqrt( focal * focal + minor * minor );
+
+            // A focal distance below 1 IU means a circle-degenerate ellipse with no defined
+            // rotation, so keep the shape's current one.
+            EDA_ANGLE rotation =
+                    focal > 1.0 ? EDA_ANGLE( std::atan2( fy, fx ), RADIANS_T ) : vars.shape->GetEllipseRotation();
+
+            EDA_ANGLE startAngle = vars.shape->GetEllipseStartAngle();
+            EDA_ANGLE endAngle = vars.shape->GetEllipseEndAngle();
+
+            if( vars.kind == SHAPE_KIND::ELLIPSE_ARC )
+            {
+                startAngle = EDA_ANGLE( m_params[vars.startAngle], RADIANS_T );
+                endAngle = EDA_ANGLE( m_params[vars.endAngle], RADIANS_T );
+            }
+
+            auto sameAngle = []( const EDA_ANGLE& aA, const EDA_ANGLE& aB )
+            {
+                return std::abs( ( aA - aB ).Normalize180().AsDegrees() ) < 1e-6;
+            };
+
+            if( center == vars.shape->GetEllipseCenter() && KiROUND( major ) == vars.shape->GetEllipseMajorRadius()
+                && KiROUND( minor ) == vars.shape->GetEllipseMinorRadius()
+                && sameAngle( rotation, vars.shape->GetEllipseRotation() )
+                && sameAngle( startAngle, vars.shape->GetEllipseStartAngle() )
+                && sameAngle( endAngle, vars.shape->GetEllipseEndAngle() ) )
+            {
+                continue;
+            }
+
+            if( aBeforeWrite )
+                aBeforeWrite( vars.shape );
+
+            vars.shape->SetEllipseCenter( center );
+            vars.shape->SetEllipseRotation( rotation );
+            vars.shape->SetEllipseMajorRadius( KiROUND( major ) );
+            vars.shape->SetEllipseMinorRadius( KiROUND( minor ) );
+
+            if( vars.kind == SHAPE_KIND::ELLIPSE_ARC )
+            {
+                vars.shape->SetEllipseStartAngle( startAngle );
+                vars.shape->SetEllipseEndAngle( endAngle );
+            }
+
+            changed.push_back( vars.shape );
+            continue;
+        }
+
         VECTOR2I start( KiROUND( denormalizeX( m_params[vars.startX] ) ),
                         KiROUND( denormalizeY( m_params[vars.startX + 1] ) ) );
         VECTOR2I end( KiROUND( denormalizeX( m_params[vars.endX] ) ),
                       KiROUND( denormalizeY( m_params[vars.endX + 1] ) ) );
 
         if( start == vars.shape->GetStart() && end == vars.shape->GetEnd() )
+            continue;
+
+        // Never write a segment the solver shrank to a point. A 1 um result is a collapse, not
+        // intent, and a zero-length line vanishes from the canvas.
+        const double collapseFloor = 1000.0;
+        double       newLen = ( end - start ).EuclideanNorm();
+        double       curLen = ( vars.shape->GetEnd() - vars.shape->GetStart() ).EuclideanNorm();
+
+        if( newLen < collapseFloor && curLen >= collapseFloor )
             continue;
 
         if( aBeforeWrite )
@@ -783,15 +1077,30 @@ CONSTRAINT_DIAGNOSIS BOARD_CONSTRAINT_ADAPTER::Diagnose()
     tagsToKiids( conflictingTags, diag.conflicting );
     tagsToKiids( redundantTags, diag.redundant );
 
+    // Also flag any constraint the geometry does not satisfy. The rank analysis can miss it.
+    const double residualTol = 1e-3;
+
+    for( const auto& [tag, kiid] : m_tagToConstraint )
+    {
+        double err = m_gcs->calculateConstraintErrorByTag( tag );
+
+        // A nan is a degenerate system, not a conflict. A real contradiction leaves a finite error.
+        if( !std::isfinite( err ) || std::abs( err ) <= residualTol )
+            continue;
+
+        if( std::find( diag.conflicting.begin(), diag.conflicting.end(), kiid ) == diag.conflicting.end() )
+            diag.conflicting.push_back( kiid );
+    }
+
     // .solved reflects the last Solve(), which Diagnose() does not run; the caller sets it.
     return diag;
 }
 
 
-CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged,
-                                   const VECTOR2I& aCursor, std::vector<PCB_SHAPE*>* aModified,
-                                   const std::function<void( PCB_SHAPE* )>& aBeforeModify,
-                                   bool aIncludeDragged )
+CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor,
+                                   std::vector<PCB_SHAPE*>*                 aModified,
+                                   const std::function<void( PCB_SHAPE* )>& aBeforeModify, bool aIncludeDragged,
+                                   bool aStabilize )
 {
     CONSTRAINT_DIAGNOSIS diag;
 
@@ -816,7 +1125,7 @@ CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDrag
     if( !adapter.Build( shapes, clusterConstraints ) )
         return diag;
 
-    bool solved = adapter.Solve( aDragged, aCursor );
+    bool solved = adapter.Solve( aDragged, aCursor, aStabilize );
 
     if( !solved )
         return diag;   // leave geometry untouched on a failed/diverged solve
@@ -907,7 +1216,79 @@ CONSTRAINT_DIAGNOSIS ApplyConstraintImmediately( BOARD* aBoard, const PCB_CONSTR
 
     // The pinned shape itself can move (e.g. a fixed-length segment's far end), and the caller does
     // not stage it separately, so report it too.
-    return SolveCluster( aBoard, pin, *pos, aModified, aBeforeModify, /* aIncludeDragged */ true );
+    return SolveCluster( aBoard, pin, *pos, aModified, aBeforeModify, /* aIncludeDragged */ true,
+                         /* aStabilize */ true );
+}
+
+
+void ReSolveShapeClusters( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aShapes, std::vector<PCB_SHAPE*>* aModified,
+                           const std::function<void( PCB_SHAPE* )>& aBeforeModify )
+{
+    if( !aBoard )
+        return;
+
+    auto shapeToConstraints = buildShapeConstraintMap( aBoard, collectAllConstraints( aBoard ) );
+
+    // Solve each affected cluster once, no matter how many of its shapes were edited.
+    std::set<KIID> visited;
+
+    for( PCB_SHAPE* shape : aShapes )
+    {
+        if( !shape || visited.count( shape->m_Uuid ) || !shapeToConstraints.count( shape->m_Uuid ) )
+            continue;
+
+        std::unordered_set<KIID>     clusterShapes;
+        std::vector<PCB_CONSTRAINT*> clusterConstraints;
+        collectConstraintCluster( shapeToConstraints, shape->m_Uuid, clusterShapes, clusterConstraints, &visited );
+
+        std::vector<CONSTRAINT_ANCHOR_POINT> anchors = ConstraintShapeAnchors( shape );
+
+        if( anchors.empty() )
+            continue;
+
+        SolveCluster( aBoard, { shape->m_Uuid, anchors.front().anchor }, anchors.front().pos, aModified, aBeforeModify,
+                      true );
+    }
+}
+
+
+void ReSolveAfterShapeResize( BOARD* aBoard, PCB_SHAPE* aShape, std::vector<PCB_SHAPE*>* aModified,
+                              const std::function<void( PCB_SHAPE* )>& aBeforeModify )
+{
+    if( !aBoard || !aShape )
+        return;
+
+    auto shapeToConstraints = buildShapeConstraintMap( aBoard, collectAllConstraints( aBoard ) );
+
+    if( !shapeToConstraints.count( aShape->m_Uuid ) )
+        return;
+
+    std::unordered_set<KIID>     clusterShapes;
+    std::vector<PCB_CONSTRAINT*> clusterConstraints;
+    collectConstraintCluster( shapeToConstraints, aShape->m_Uuid, clusterShapes, clusterConstraints );
+
+    std::vector<PCB_SHAPE*> shapes = resolveClusterShapes( aBoard, clusterShapes );
+
+    if( shapes.empty() || clusterConstraints.empty() )
+        return;
+
+    BOARD_CONSTRAINT_ADAPTER adapter;
+
+    if( !adapter.Build( shapes, clusterConstraints ) || !adapter.SolveAfterResize( aShape->m_Uuid ) )
+        return;
+
+    std::vector<PCB_SHAPE*> changed = adapter.Apply(
+            [&]( PCB_SHAPE* aChanged )
+            {
+                if( aBeforeModify )
+                    aBeforeModify( aChanged );
+            } );
+
+    if( aModified )
+    {
+        for( PCB_SHAPE* shape : changed )
+            aModified->push_back( shape );
+    }
 }
 
 
@@ -946,6 +1327,10 @@ BOARD_CONSTRAINT_DIAGNOSTICS DiagnoseBoardConstraints( BOARD* aBoard )
         // not enforced; flag it so the user sees it is broken rather than silently ignored.
         result.errored.insert( result.errored.end(), adapter.UnmappedConstraints().begin(),
                                adapter.UnmappedConstraints().end() );
+
+        // Solve first so the residual check sees a real contradiction, not an unsolved constraint.
+        // The board is not touched.
+        adapter.Solve( true );
 
         CONSTRAINT_DIAGNOSIS diag = adapter.Diagnose();
 

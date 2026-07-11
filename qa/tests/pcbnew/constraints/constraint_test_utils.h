@@ -20,6 +20,7 @@
 #ifndef QA_PCBNEW_CONSTRAINT_TEST_UTILS_H
 #define QA_PCBNEW_CONSTRAINT_TEST_UTILS_H
 
+#include <cmath>
 #include <optional>
 #include <vector>
 
@@ -63,6 +64,48 @@ inline PCB_SHAPE* addArc( BOARD& aBoard, const VECTOR2I& aStart, const VECTOR2I&
     arc->SetArcGeometry( aStart, aMid, aEnd );
     aBoard.Add( arc );
     return arc;
+}
+
+
+inline PCB_SHAPE* addEllipse( BOARD& aBoard, const VECTOR2I& aCenter, int aMajor, int aMinor,
+                              const EDA_ANGLE& aRotation )
+{
+    PCB_SHAPE* ellipse = new PCB_SHAPE( &aBoard, SHAPE_T::ELLIPSE );
+    ellipse->SetEllipseCenter( aCenter );
+    ellipse->SetEllipseMajorRadius( aMajor );
+    ellipse->SetEllipseMinorRadius( aMinor );
+    ellipse->SetEllipseRotation( aRotation );
+    aBoard.Add( ellipse );
+    return ellipse;
+}
+
+
+inline PCB_SHAPE* addEllipseArc( BOARD& aBoard, const VECTOR2I& aCenter, int aMajor, int aMinor,
+                                 const EDA_ANGLE& aRotation, const EDA_ANGLE& aStart, const EDA_ANGLE& aEnd )
+{
+    PCB_SHAPE* arc = new PCB_SHAPE( &aBoard, SHAPE_T::ELLIPSE_ARC );
+    arc->SetEllipseCenter( aCenter );
+    arc->SetEllipseMajorRadius( aMajor );
+    arc->SetEllipseMinorRadius( aMinor );
+    arc->SetEllipseRotation( aRotation );
+    arc->SetEllipseStartAngle( aStart );
+    arc->SetEllipseEndAngle( aEnd );
+    aBoard.Add( arc );
+    return arc;
+}
+
+
+/// Squared-normalized ellipse equation value at aPos: 1.0 exactly on the outline.
+inline double ellipseEquationAt( const PCB_SHAPE* aEllipse, const VECTOR2I& aPos )
+{
+    double   a = aEllipse->GetEllipseMajorRadius();
+    double   b = aEllipse->GetEllipseMinorRadius();
+    double   phi = aEllipse->GetEllipseRotation().AsRadians();
+    VECTOR2D d = VECTOR2D( aPos - aEllipse->GetEllipseCenter() );
+    double   lx = d.x * std::cos( phi ) + d.y * std::sin( phi );
+    double   ly = -d.x * std::sin( phi ) + d.y * std::cos( phi );
+
+    return ( lx / a ) * ( lx / a ) + ( ly / b ) * ( ly / b );
 }
 
 

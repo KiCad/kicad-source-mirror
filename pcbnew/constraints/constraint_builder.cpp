@@ -43,6 +43,26 @@ bool isCircle( const BOARD_ITEM* aItem )
 }
 
 
+bool isCircleOrArc( const BOARD_ITEM* aItem )
+{
+    if( aItem->Type() != PCB_SHAPE_T )
+        return false;
+
+    SHAPE_T shape = static_cast<const PCB_SHAPE*>( aItem )->GetShape();
+    return shape == SHAPE_T::CIRCLE || shape == SHAPE_T::ARC;
+}
+
+
+bool isEllipseKind( const BOARD_ITEM* aItem )
+{
+    if( aItem->Type() != PCB_SHAPE_T )
+        return false;
+
+    SHAPE_T shape = static_cast<const PCB_SHAPE*>( aItem )->GetShape();
+    return shape == SHAPE_T::ELLIPSE || shape == SHAPE_T::ELLIPSE_ARC;
+}
+
+
 bool allSegments( const std::vector<BOARD_ITEM*>& aItems )
 {
     for( const BOARD_ITEM* item : aItems )
@@ -60,6 +80,32 @@ bool allCircles( const std::vector<BOARD_ITEM*>& aItems )
     for( const BOARD_ITEM* item : aItems )
     {
         if( !isCircle( item ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+// Circles and arcs have a radius the solver can equate or fix.
+bool allRadial( const std::vector<BOARD_ITEM*>& aItems )
+{
+    for( const BOARD_ITEM* item : aItems )
+    {
+        if( !isCircleOrArc( item ) )
+            return false;
+    }
+
+    return true;
+}
+
+
+// Circles, arcs and ellipses all have a centre the solver can make concentric.
+bool allCentered( const std::vector<BOARD_ITEM*>& aItems )
+{
+    for( const BOARD_ITEM* item : aItems )
+    {
+        if( !isCircleOrArc( item ) && !isEllipseKind( item ) )
             return false;
     }
 
@@ -120,9 +166,18 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
     }
 
     case PCB_CONSTRAINT_TYPE::CONCENTRIC:
+    {
+        if( aItems.size() != 2 || !allCentered( aItems ) )
+            return nullptr;
+
+        std::unique_ptr<PCB_CONSTRAINT> c = make();
+        addWhole( c.get() );
+        return c;
+    }
+
     case PCB_CONSTRAINT_TYPE::EQUAL_RADIUS:
     {
-        if( aItems.size() != 2 || !allCircles( aItems ) )
+        if( aItems.size() != 2 || !allRadial( aItems ) )
             return nullptr;
 
         std::unique_ptr<PCB_CONSTRAINT> c = make();
@@ -152,12 +207,32 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
 
     case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:
     {
-        if( aItems.size() != 1 || !isCircle( aItems[0] ) )
+        if( aItems.size() != 1 || !isCircleOrArc( aItems[0] ) )
             return nullptr;
 
         std::unique_ptr<PCB_CONSTRAINT> c = make();
         addWhole( c.get() );
         c->SetValue( static_cast<const PCB_SHAPE*>( aItems[0] )->GetRadius() );
+        return c;
+    }
+
+    case PCB_CONSTRAINT_TYPE::TANGENT:
+    {
+        if( aItems.size() != 2 )
+            return nullptr;
+
+        const BOARD_ITEM* a = aItems[0];
+        const BOARD_ITEM* b = aItems[1];
+
+        bool lineCurve = ( isSegment( a ) && ( isCircleOrArc( b ) || isEllipseKind( b ) ) )
+                         || ( isSegment( b ) && ( isCircleOrArc( a ) || isEllipseKind( a ) ) );
+        bool curveCurve = isCircleOrArc( a ) && isCircleOrArc( b );
+
+        if( !lineCurve && !curveCurve )
+            return nullptr;
+
+        std::unique_ptr<PCB_CONSTRAINT> c = make();
+        addWhole( c.get() );
         return c;
     }
 
@@ -190,6 +265,11 @@ std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintShapeAnchors( const PCB_SHAPE* aS
         break;
 
     case SHAPE_T::CIRCLE:
+    case SHAPE_T::ELLIPSE: anchors.push_back( { CONSTRAINT_ANCHOR::CENTER, aShape->GetCenter() } ); break;
+
+    case SHAPE_T::ELLIPSE_ARC:
+        anchors.push_back( { CONSTRAINT_ANCHOR::START, aShape->GetStart() } );
+        anchors.push_back( { CONSTRAINT_ANCHOR::END, aShape->GetEnd() } );
         anchors.push_back( { CONSTRAINT_ANCHOR::CENTER, aShape->GetCenter() } );
         break;
 

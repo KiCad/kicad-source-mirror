@@ -50,6 +50,7 @@ void PopulateConstraintList( wxListCtrl* aList, BOARD* aBoard, UNITS_PROVIDER* a
 
     std::set<KIID> errored( aDiag.errored.begin(), aDiag.errored.end() );
     std::set<KIID> conflicting( aDiag.conflicting.begin(), aDiag.conflicting.end() );
+    std::set<KIID> redundant( aDiag.redundant.begin(), aDiag.redundant.end() );
 
     auto memberLabel =
             [&]( const CONSTRAINT_MEMBER& aMember ) -> wxString
@@ -84,6 +85,8 @@ void PopulateConstraintList( wxListCtrl* aList, BOARD* aBoard, UNITS_PROVIDER* a
                         state = _( "Error (missing item)" );
                     else if( conflicting.count( constraint->m_Uuid ) )
                         state = _( "Over-constrained" );
+                    else if( redundant.count( constraint->m_Uuid ) )
+                        state = _( "Redundant" );
                     else
                         state = _( "OK" );
 

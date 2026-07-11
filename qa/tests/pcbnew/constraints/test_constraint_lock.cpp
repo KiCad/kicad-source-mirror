@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <set>
 #include <vector>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -125,6 +126,64 @@ BOOST_AUTO_TEST_CASE( LockedMemberNotMovedOnApply )
 
     // The free segment took the locked segment's length.
     BOOST_CHECK_LE( std::abs( segLength( free ) - 10.0 * MM ), 5000.0 );
+}
+
+
+// Authoring an angle constraint against a locked reference must rotate the free segment, not shrink
+// it to a point.  On the pre-fix solver the free segment collapsed to zero length and vanished, so
+// this fails without the stabilize pins and the collapse floor.
+BOOST_AUTO_TEST_CASE( PerpendicularDoesNotCollapseFreeSegment )
+{
+    BOARD board;
+
+    PCB_SHAPE* locked = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );        // horizontal reference
+    PCB_SHAPE* free = addSegment( board, { 0, 5 * MM }, { 4 * MM, 6 * MM } ); // angled, length ~4.1 mm
+
+    locked->SetLocked( true );
+
+    PCB_CONSTRAINT* c = addConstraint(
+            board, PCB_CONSTRAINT_TYPE::PERPENDICULAR,
+            { { locked->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { free->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    std::vector<PCB_SHAPE*> modified;
+    ApplyConstraintImmediately( &board, c, &modified,
+                                []( PCB_SHAPE* )
+                                {
+                                } );
+
+    // The free segment kept a real length instead of collapsing...
+    BOOST_CHECK_GT( segLength( free ), 1 * MM );
+
+    // ...and turned perpendicular to the horizontal reference (vertical: endpoints share X).
+    BOOST_CHECK_LE( std::abs( free->GetEnd().x - free->GetStart().x ), 1000 );
+}
+
+
+// Parallel and perpendicular on the same two lines contradict, so both are flagged and the geometry
+// is left alone.
+BOOST_AUTO_TEST_CASE( ContradictoryConstraintsAreFlagged )
+{
+    BOARD board;
+
+    PCB_SHAPE* a = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );          // horizontal
+    PCB_SHAPE* b = addSegment( board, { 0, 5 * MM }, { 4 * MM, 9 * MM } ); // 45 degrees
+
+    PCB_CONSTRAINT* par =
+            addConstraint( board, PCB_CONSTRAINT_TYPE::PARALLEL,
+                           { { a->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { b->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+    PCB_CONSTRAINT* perp =
+            addConstraint( board, PCB_CONSTRAINT_TYPE::PERPENDICULAR,
+                           { { a->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { b->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    BOARD_CONSTRAINT_DIAGNOSTICS d = DiagnoseBoardConstraints( &board );
+    std::set<KIID>               conflicting( d.conflicting.begin(), d.conflicting.end() );
+
+    BOOST_CHECK( conflicting.count( par->m_Uuid ) );
+    BOOST_CHECK( conflicting.count( perp->m_Uuid ) );
+
+    // Diagnosis does not move geometry.
+    BOOST_CHECK_EQUAL( b->GetStart(), VECTOR2I( 0, 5 * MM ) );
+    BOOST_CHECK_EQUAL( b->GetEnd(), VECTOR2I( 4 * MM, 9 * MM ) );
 }
 
 

@@ -103,6 +103,13 @@ TOOL_ACTION PCB_ACTIONS::addConstraintAngular( TOOL_ACTION_ARGS()
         .Tooltip( _( "Constrain the angle between the two selected segments" ) )
         .Parameter( PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION ) );
 
+TOOL_ACTION PCB_ACTIONS::addConstraintTangent( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ConstraintEditor.addTangent" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Tangent" ) )
+        .Tooltip( _( "Constrain the selected line and curve, or two curves, to touch tangentially" ) )
+        .Parameter( PCB_CONSTRAINT_TYPE::TANGENT ) );
+
 TOOL_ACTION PCB_ACTIONS::addConstraintHorizontal( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.addHorizontal" )
         .Scope( AS_GLOBAL )
@@ -128,21 +135,21 @@ TOOL_ACTION PCB_ACTIONS::addConstraintConcentric( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.addConcentric" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Concentric" ) )
-        .Tooltip( _( "Constrain the two selected circles to share a center" ) )
+        .Tooltip( _( "Constrain the two selected circles, arcs or ellipses to share a center" ) )
         .Parameter( PCB_CONSTRAINT_TYPE::CONCENTRIC ) );
 
 TOOL_ACTION PCB_ACTIONS::addConstraintEqualRadius( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.addEqualRadius" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Equal Radius" ) )
-        .Tooltip( _( "Constrain the two selected circles to be of equal radius" ) )
+        .Tooltip( _( "Constrain the two selected circles or arcs to be of equal radius" ) )
         .Parameter( PCB_CONSTRAINT_TYPE::EQUAL_RADIUS ) );
 
 TOOL_ACTION PCB_ACTIONS::addConstraintFixedRadius( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.addFixedRadius" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Fixed Radius" ) )
-        .Tooltip( _( "Lock the selected circle to its current radius" ) )
+        .Tooltip( _( "Lock the selected circle or arc to its current radius" ) )
         .Parameter( PCB_CONSTRAINT_TYPE::FIXED_RADIUS ) );
 
 TOOL_ACTION PCB_ACTIONS::addConstraintCoincident( TOOL_ACTION_ARGS()
@@ -156,7 +163,7 @@ TOOL_ACTION PCB_ACTIONS::addConstraintPointOnLine( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.addPointOnLine" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Point on Line..." ) )
-        .Tooltip( _( "Click an endpoint, then a segment, to put the point on the line" ) )
+        .Tooltip( _( "Click an endpoint, then a segment or circle, to put the point on it" ) )
         .Parameter( PCB_CONSTRAINT_TYPE::POINT_ON_LINE ) );
 
 TOOL_ACTION PCB_ACTIONS::addConstraintMidpoint( TOOL_ACTION_ARGS()
@@ -177,6 +184,14 @@ TOOL_ACTION PCB_ACTIONS::showConstraints( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.showConstraints" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Geometric Constraints" ) )
+        .Tooltip( _( "Toggle the geometric-constraint diagnostics overlay" ) )
+        .Flags( AF_NONE )
+        .Icon( BITMAPS::measurement ) );
+
+TOOL_ACTION PCB_ACTIONS::hideConstraints( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ConstraintEditor.hideConstraints" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Hide Geometric Constraints" ) )
         .Tooltip( _( "Toggle the geometric-constraint diagnostics overlay" ) )
         .Flags( AF_NONE )
         .Icon( BITMAPS::measurement ) );

@@ -43,7 +43,8 @@ using KIGFX::COLOR4D;
 CONSTRAINT_OVERLAY::CONSTRAINT_OVERLAY( BOARD* aBoard, KIGFX::VIEW* aView ) :
         VIEW_OVERLAY_HOLDER( aView ),
         m_board( aBoard ),
-        m_selected( niluuid )
+        m_selected( niluuid ),
+        m_isolated( niluuid )
 {
     m_view->Add( &m_badgeItem );
 }
@@ -76,12 +77,40 @@ double CONSTRAINT_OVERLAY::BadgeHitRadius()
 }
 
 
+VECTOR2D CONSTRAINT_OVERLAY::BadgeScreenOffset()
+{
+    // Up-right of the anchor, in screen pixels, so the glyph and its hit disc sit clear of the
+    // geometry and a click on the shape at the anchor still selects the shape.
+    return VECTOR2D( 16.0, -16.0 );
+}
+
+
+double CONSTRAINT_OVERLAY::BadgeWorldPerPixel( double aWorldScale )
+{
+    // Capped so a zoomed-out glyph shrinks instead of dominating the board. Shared by the drawing
+    // and the hit-test so the clickable disc always matches the visible glyph.
+    const double maxWorldPerPx = pcbIUScale.mmToIU( 3.0 ) / 16.0;
+
+    return aWorldScale > 0.0 ? std::min( 1.0 / aWorldScale, maxWorldPerPx ) : maxWorldPerPx;
+}
+
+
 bool CONSTRAINT_OVERLAY::SetSelected( const KIID& aConstraint )
 {
     if( m_selected == aConstraint )
         return false;
 
     m_selected = aConstraint;
+    return true;
+}
+
+
+bool CONSTRAINT_OVERLAY::SetIsolated( const KIID& aConstraint )
+{
+    if( m_isolated == aConstraint )
+        return false;
+
+    m_isolated = aConstraint;
     return true;
 }
 
@@ -146,8 +175,27 @@ void CONSTRAINT_OVERLAY::render()
 
     const BOARD_CONSTRAINT_DIAGNOSTICS& diag = m_lastDiag;
 
+    // Members of the isolated constraint. If it is gone, drop the isolate and show all again.
+    std::set<KIID> isolatedMembers;
+
+    if( m_isolated != niluuid )
+    {
+        if( PCB_CONSTRAINT* c = dynamic_cast<PCB_CONSTRAINT*>( m_board->ResolveItem( m_isolated, true ) ) )
+        {
+            for( const CONSTRAINT_MEMBER& member : c->GetMembers() )
+                isolatedMembers.insert( member.m_item );
+        }
+        else
+        {
+            m_isolated = niluuid;
+        }
+    }
+
     for( const auto& [shapeId, state] : diag.shapeStates )
     {
+        if( m_isolated != niluuid && !isolatedMembers.count( shapeId ) )
+            continue;
+
         if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( m_board->ResolveItem( shapeId, true ) ) )
             outlineShape( shape, colorForState( state ) );
     }
@@ -209,6 +257,9 @@ void CONSTRAINT_OVERLAY::render()
                 for( PCB_CONSTRAINT* constraint : aConstraints )
                 {
                     if( constraint->GetMembers().empty() )
+                        continue;
+
+                    if( m_isolated != niluuid && constraint->m_Uuid != m_isolated )
                         continue;
 
                     bool errored = erroredIds.count( constraint->m_Uuid );
@@ -287,32 +338,33 @@ void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     const double glyphPx = 16.0;
     const double bigGlyphPx = 24.0;
-    const double ringPx = 13.0;
+    const double ringPx = 20.0; // Clears the enlarged (24 px) selected glyph.
     const double linePx = 1.5;
 
-    // World units per screen pixel, giving a constant on-screen size. Cap it so a zoomed-out glyph
-    // shrinks instead of dominating the board. Do not floor it. A floor fixes the world size and
-    // makes the glyph grow without bound as you keep zooming in.
-    const double maxWorldPerPx = pcbIUScale.mmToIU( 3.0 ) / glyphPx;
-    const double worldPerPx = std::min( 1.0 / scale, maxWorldPerPx );
+    // Constant on-screen size at any zoom. No floor. A floor fixes the world size and makes the
+    // glyph grow without bound as you keep zooming in.
+    const double worldPerPx = CONSTRAINT_OVERLAY::BadgeWorldPerPixel( scale );
 
     gal->SetIsFill( false );
     gal->SetIsStroke( true );
 
+    const VECTOR2D offset = CONSTRAINT_OVERLAY::BadgeScreenOffset() * worldPerPx;
+
     for( const CONSTRAINT_BADGE& badge : m_badges )
     {
-        bool   selected = m_selected != niluuid && badge.constraint == m_selected;
-        double glyph = ( selected ? bigGlyphPx : glyphPx ) * worldPerPx;
+        bool     selected = m_selected != niluuid && badge.constraint == m_selected;
+        double   glyph = ( selected ? bigGlyphPx : glyphPx ) * worldPerPx;
+        VECTOR2I pos = badge.pos + VECTOR2I( KiROUND( offset.x ), KiROUND( offset.y ) );
 
         gal->SetStrokeColor( badge.color );
         gal->SetLineWidth( linePx * worldPerPx );
 
         if( selected )
-            gal->DrawCircle( badge.pos, ringPx * worldPerPx );
+            gal->DrawCircle( pos, ringPx * worldPerPx );
 
         // Keep at least 1 IU so an extreme zoom-in never rounds the glyph away to nothing.
         int glyphIU = std::max( 1, KiROUND( glyph ) );
         gal->SetGlyphSize( VECTOR2I( glyphIU, glyphIU ) );
-        gal->BitmapText( badge.glyph, badge.pos, ANGLE_0 );
+        gal->BitmapText( badge.glyph, pos, ANGLE_0 );
     }
 }

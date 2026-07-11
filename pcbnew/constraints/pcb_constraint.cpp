@@ -54,6 +54,7 @@ const char* ConstraintTypeToken( PCB_CONSTRAINT_TYPE aType )
     case PCB_CONSTRAINT_TYPE::CONCENTRIC:        return "concentric";
     case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:      return "fixed_radius";
     case PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION: return "angular_dimension";
+    case PCB_CONSTRAINT_TYPE::TANGENT: return "tangent";
     case PCB_CONSTRAINT_TYPE::UNDEFINED:         return "undefined";
     }
 
@@ -63,7 +64,7 @@ const char* ConstraintTypeToken( PCB_CONSTRAINT_TYPE aType )
 
 PCB_CONSTRAINT_TYPE ConstraintTypeFromToken( const wxString& aToken )
 {
-    for( int i = 0; i <= static_cast<int>( PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION ); ++i )
+    for( int i = 0; i <= static_cast<int>( PCB_CONSTRAINT_TYPE::TANGENT ); ++i )
     {
         PCB_CONSTRAINT_TYPE type = static_cast<PCB_CONSTRAINT_TYPE>( i );
 
@@ -140,6 +141,7 @@ wxString ConstraintTypeGlyph( PCB_CONSTRAINT_TYPE aType )
     case PCB_CONSTRAINT_TYPE::CONCENTRIC:        return wxT( "◎" );
     case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:      return wxT( "r" );
     case PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION: return wxT( "∠" );
+    case PCB_CONSTRAINT_TYPE::TANGENT: return wxT( "T" );
     case PCB_CONSTRAINT_TYPE::UNDEFINED:         return wxEmptyString;
     }
 
@@ -183,6 +185,7 @@ wxString ConstraintTypeLabel( PCB_CONSTRAINT_TYPE aType )
     case PCB_CONSTRAINT_TYPE::CONCENTRIC:        return _( "Concentric" );
     case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:      return _( "Fixed radius" );
     case PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION: return _( "Angular dimension" );
+    case PCB_CONSTRAINT_TYPE::TANGENT: return _( "Tangent" );
     case PCB_CONSTRAINT_TYPE::UNDEFINED:         return _( "Undefined" );
     }
 
@@ -243,7 +246,7 @@ bool PCB_CONSTRAINT::Deserialize( const google::protobuf::Any& aContainer )
     // a garbage type/anchor.
     int typeValue = constraint.type();
 
-    if( typeValue < 0 || typeValue > static_cast<int>( PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION ) )
+    if( typeValue < 0 || typeValue > static_cast<int>( PCB_CONSTRAINT_TYPE::TANGENT ) )
         m_type = PCB_CONSTRAINT_TYPE::UNDEFINED;
     else
         m_type = static_cast<PCB_CONSTRAINT_TYPE>( typeValue );

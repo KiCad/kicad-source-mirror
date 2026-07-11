@@ -37,22 +37,23 @@
 enum class PCB_CONSTRAINT_TYPE
 {
     UNDEFINED = 0,
-    COINCIDENT,         ///< Two points are made to coincide.
-    HORIZONTAL,         ///< A segment (or two points) is horizontal.
-    VERTICAL,           ///< A segment (or two points) is vertical.
-    PARALLEL,           ///< Two segments are parallel.
-    PERPENDICULAR,      ///< Two segments are perpendicular.
-    COLLINEAR,          ///< Two segments lie on the same line.
-    SYMMETRIC,          ///< Two points are mirror images about an axis.
-    EQUAL_LENGTH,       ///< Two segments have equal length.
-    EQUAL_RADIUS,       ///< Two arcs/circles have equal radius.
-    POINT_ON_LINE,      ///< A point lies on a segment's supporting line.
-    MIDPOINT,           ///< A point is the midpoint of a segment.
-    FIXED_POSITION,     ///< A point is locked at its current location.
-    FIXED_LENGTH,       ///< A segment has a driving length value.
-    CONCENTRIC,         ///< Two arcs/circles share a center.
-    FIXED_RADIUS,       ///< An arc/circle has a driving radius value.
-    ANGULAR_DIMENSION,  ///< An angle between members (driving or reference).
+    COINCIDENT,        ///< Two points are made to coincide.
+    HORIZONTAL,        ///< A segment (or two points) is horizontal.
+    VERTICAL,          ///< A segment (or two points) is vertical.
+    PARALLEL,          ///< Two segments are parallel.
+    PERPENDICULAR,     ///< Two segments are perpendicular.
+    COLLINEAR,         ///< Two segments lie on the same line.
+    SYMMETRIC,         ///< Two points are mirror images about an axis.
+    EQUAL_LENGTH,      ///< Two segments have equal length.
+    EQUAL_RADIUS,      ///< Two arcs/circles have equal radius.
+    POINT_ON_LINE,     ///< A point lies on a segment's supporting line.
+    MIDPOINT,          ///< A point is the midpoint of a segment.
+    FIXED_POSITION,    ///< A point is locked at its current location.
+    FIXED_LENGTH,      ///< A segment has a driving length value.
+    CONCENTRIC,        ///< Two arcs/circles share a center.
+    FIXED_RADIUS,      ///< An arc/circle has a driving radius value.
+    ANGULAR_DIMENSION, ///< An angle between members (driving or reference).
+    TANGENT,           ///< A line and a curve, or two curves, touch tangentially.
 };
 
 
