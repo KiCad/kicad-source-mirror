@@ -346,7 +346,13 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
     }
 
     double chord = ( start - end ).EuclideanNorm();
-    double r = ( chord / 2.0 ) / ( angle / 2.0 ).Sin();
+    double sinHalfAngle = ( angle / 2.0 ).Sin();
+
+    // A zero arc angle has no defined center, so fall back to the chord midpoint
+    if( sinHalfAngle == 0.0 )
+        return VECTOR2D( ( start + end ) / 2.0 );
+
+    double r = ( chord / 2.0 ) / sinHalfAngle;
     double d_squared = r * r - chord*  chord / 4.0;
     double d = 0.0;
 
