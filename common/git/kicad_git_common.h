@@ -217,7 +217,7 @@ private:
     int m_nextPublicKey;
     bool m_secretFetched;
 
-    std::atomic<bool> m_cancel;  // Set to true when the user cancels an operation
+    std::atomic<bool> m_cancel{ false };  // Set to true when the user cancels an operation
 
     // Create a dummy flag to tell if we have tested ssh agent credentials separately
     // from the ssh key credentials

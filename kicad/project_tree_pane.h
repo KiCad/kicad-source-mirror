@@ -254,6 +254,12 @@ private:
     void updateTreeCache();
 
     /**
+     * Releases the git repository handle, deferring the free to the orphan registry while a
+     * background git operation still holds the action mutex
+     */
+    void releaseGitRepo();
+
+    /**
      * Returns true if the current project has any uncommitted changes
     */
     bool hasChangedFiles();
