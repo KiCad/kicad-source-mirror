@@ -120,6 +120,9 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_LargeText )
 
 BOOST_AUTO_TEST_CASE( SaveClipboard_SpecialCharacters )
 {
+#ifdef _WIN32
+    BOOST_TEST_MESSAGE( "Skipping test - Windows normalizes clipboard text line endings" );
+#else
     SKIP_IF_HEADLESS();
 
     std::string specialText = "Line1\nLine2\tTabbed\r\nWindows newline";
@@ -130,6 +133,7 @@ BOOST_AUTO_TEST_CASE( SaveClipboard_SpecialCharacters )
         std::string retrieved = GetClipboardUTF8();
         BOOST_CHECK_EQUAL( retrieved, specialText );
     }
+#endif
 }
 
 BOOST_AUTO_TEST_CASE( GetClipboardUTF8_EmptyClipboard )
