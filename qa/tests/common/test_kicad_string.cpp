@@ -199,8 +199,8 @@ BOOST_AUTO_TEST_CASE( VariantNameSort )
     wxArrayString variantNames;
 
     // Verify default variant name is always sorted to the beginning of the list.
-    variantNames.emplace_back( wxS( "Variant1" ) );
-    variantNames.emplace_back( GetDefaultVariantName() );
+    variantNames.Add( wxS( "Variant1" ) );
+    variantNames.Add( GetDefaultVariantName() );
     variantNames.Sort( SortVariantNames );
 
     BOOST_CHECK_EQUAL( variantNames[0], GetDefaultVariantName() );
