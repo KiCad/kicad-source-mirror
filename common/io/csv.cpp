@@ -87,14 +87,16 @@ bool AutoDecodeCSV( const wxString& aInput, std::vector<std::vector<wxString>>& 
     // Read the data into aData
     aData.clear();
 
-    for( size_t i = 0; i < doc.GetRowCount(); ++i )
+    size_t rowCount = doc.GetRowCount();
+    size_t colCount = doc.GetColumnCount();
+
+    for( size_t i = 0; i < rowCount; ++i )
     {
-        std::vector<wxString>& row = aData.emplace_back();
-        for( size_t j = 0; j < doc.GetColumnCount(); ++j )
-        {
-            std::string cell = doc.GetCell<std::string>( j, i );
-            row.emplace_back( cell );
-        }
+        std::vector<std::string> docRow = doc.GetRow<std::string>( i );
+        std::vector<wxString>&   outRow = aData.emplace_back( colCount );
+
+        for( size_t j = 0; j < std::min( colCount, docRow.size() ); ++j )
+            outRow[j] = wxString::FromUTF8( docRow[j] );
     }
 
     // Anything in the first row?
