@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-11 12:01+0000\n"
+"PO-Revision-Date: 2026-07-11 12:09+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -18024,16 +18024,15 @@ msgstr "Модел:"
 #: eeschema/dialogs/dialog_sim_model.cpp:706
 #, c-format
 msgid "Save parameter '%s (%s)' in Value field"
-msgstr ""
+msgstr "Сачувај параметар „%s (%s)“ у пољу вредности"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:714
 msgid "Save primary parameter in Value field"
-msgstr ""
+msgstr "Сачувај примарни параметар у поље „Вредност“"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:731
-#, fuzzy
 msgid "Parameter"
-msgstr "Параметри:"
+msgstr "Параметар"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:734 eeschema/sch_label.cpp:1401
 #: eeschema/sch_marker.cpp:356 eeschema/sch_pin.cpp:1556
@@ -18054,19 +18053,17 @@ msgstr "Тип"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:863
 #: eeschema/dialogs/dialog_sim_model.cpp:900
-#, fuzzy
 msgid "Not Connected"
-msgstr "Нема конекције"
+msgstr "Није повезано"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1003
-#, fuzzy, c-format
+#, c-format
 msgid "No model named '%s' in '%s'."
-msgstr "Симбол '%s' већ постоји у библиотеци '%s'"
+msgstr "Нема модела под називом „%s“ у „%s“."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1390
-#, fuzzy
 msgid "Browse Models"
-msgstr "Модел"
+msgstr "Преглед модела"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:1540
 #, c-format
@@ -18076,10 +18073,14 @@ msgid ""
 "%s\n"
 "Using generic SPICE model."
 msgstr ""
+"Није успело рашчлањивање:\n"
+"\n"
+"%s\n"
+"Користи се генерички SPICE модел."
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
 msgid "SPICE model from file (*.lib, *.sub or *.ibs)"
-msgstr ""
+msgstr "SPICE модел из датотеке (*.lib, .sub или .ibs)"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:88
 msgid "Pin:"
