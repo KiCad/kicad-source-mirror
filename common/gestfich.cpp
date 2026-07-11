@@ -26,6 +26,7 @@
 
 #include <wx/mimetype.h>
 #include <wx/dir.h>
+#include <wx/stdpaths.h>
 
 #include <pgm_base.h>
 #include <confirm.h>
@@ -271,6 +272,13 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
 int ExecuteCommandThroughShell( const wxString& aCommand, wxProcess* aProcess )
 {
 #ifdef __WXMSW__
+    wxExecuteEnv env;
+    wxGetEnvMap( &env.env );
+
+    // Prepend the app bin path so that KiCad's python is used by default
+    wxString binPath = wxFileName( wxStandardPaths::Get().GetExecutablePath() ).GetPath();
+    env.env["PATH"] = binPath + wxS( ';' ) + env.env["PATH"];
+
     // The array form of wxExecute is unusable with cmd.exe. wx joins the argv elements back into a
     // single command line, wrapping any element containing spaces in double quotes and escaping
     // embedded quotes with backslashes. cmd.exe does not understand backslash-escaped quotes and
@@ -280,7 +288,7 @@ int ExecuteCommandThroughShell( const wxString& aCommand, wxProcess* aProcess )
     // AutoRun registry commands so job execution is not machine-dependent.
     wxString shellCmd = wxS( "cmd.exe /d /s /c \"" ) + aCommand + wxS( "\"" );
 
-    return static_cast<int>( wxExecute( shellCmd, wxEXEC_SYNC, aProcess ) );
+    return static_cast<int>( wxExecute( shellCmd, wxEXEC_SYNC, aProcess, &env ) );
 #else
     // Invoke /bin/sh -c so glob expansion, pipes, and other shell features work. The string form of
     // wxExecute would call execvp() directly, bypassing the shell. Hold the wchar buffers in named
