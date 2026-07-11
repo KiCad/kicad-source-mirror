@@ -1237,46 +1237,59 @@ BOOST_AUTO_TEST_CASE( VariantAttributeInitFromSymbol )
 
 
 /**
- * Regression test for issue #23518.
+ * Regression test for issues #23518 and #24828.
  *
- * Find-and-replace was matching power symbols derived from "+5V" (e.g. "+5VA") when
- * searching for "+5V" with whole-word matching, because SCH_SYMBOL::Matches() was
- * iterating the library template's fields instead of the instance's fields.  The lib
- * template for "+5VA" still contained "+5V" in its value field.
+ * Fields are searched as separate items, so the symbol itself must not match field
+ * text.  Otherwise a single hit in a custom field shows up three times in the find
+ * dialog (the field, the symbol, and the reference field).  It also must not match
+ * the lib template's field text ("+5V" whole-word matching a derived "+5VA").
+ * Metadata is the exception, it has no child item of its own, so the symbol matches
+ * it, but only when searchMetadata is set.
  */
-BOOST_AUTO_TEST_CASE( MatchesUsesInstanceFields )
+BOOST_AUTO_TEST_CASE( MatchesExcludesFieldText )
 {
-    // Build a minimal lib symbol simulating "+5V"
     LIB_SYMBOL* libSym = new LIB_SYMBOL( wxS( "+5V" ) );
-
-    // The lib symbol value field text stays as "+5V"
     libSym->GetValueField().SetText( wxS( "+5V" ) );
-    libSym->GetValueField().SetVisible( true );
+    libSym->SetDescription( wxS( "power rail" ) );
 
     SCH_SYMBOL symbol( *libSym, libSym->GetLibId(), nullptr, 0, 0, VECTOR2I() );
-
-    // Change the instance value to "+5VA" (simulating a user-derived power symbol)
     symbol.GetField( FIELD_T::VALUE )->SetText( wxS( "+5VA" ) );
 
+    SCH_FIELD customField( &symbol, FIELD_T::USER, wxS( "MyField" ) );
+    customField.SetText( wxS( "aayyxx" ) );
+    customField.SetVisible( true );
+    SCH_FIELD* custom = symbol.AddField( customField );
+
+    SCH_SHEET_PATH sheetPath;
+
     SCH_SEARCH_DATA data;
+    data.findString = wxS( "aayyxx" );
+    data.matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
+
+    // a custom field hit must be a single hit, not also the symbol and the reference
+    BOOST_CHECK( custom->Matches( data, &sheetPath ) );
+    BOOST_CHECK( !symbol.Matches( data, &sheetPath ) );
+    BOOST_CHECK( !symbol.GetField( FIELD_T::REFERENCE )->Matches( data, &sheetPath ) );
+
+    // whole-word "+5V" must not match a symbol whose value is "+5VA"
     data.findString = wxS( "+5V" );
     data.matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
-    data.searchAllFields = false;
+    BOOST_CHECK( !symbol.Matches( data, &sheetPath ) );
+    BOOST_CHECK( !symbol.GetField( FIELD_T::VALUE )->Matches( data, &sheetPath ) );
 
-    // "+5VA" must NOT match a whole-word search for "+5V"
-    BOOST_CHECK_MESSAGE( !symbol.Matches( data, nullptr ),
-                         "'+5VA' symbol must not match whole-word search for '+5V'" );
-
-    // "+5VA" must match a plain search for "+5V" (substring)
-    data.matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
-    BOOST_CHECK_MESSAGE( symbol.Matches( data, nullptr ),
-                         "'+5VA' symbol must match plain search for '+5V'" );
-
-    // "+5VA" must match a whole-word search for "+5VA"
     data.findString = wxS( "+5VA" );
-    data.matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
-    BOOST_CHECK_MESSAGE( symbol.Matches( data, nullptr ),
-                         "'+5VA' symbol must match whole-word search for '+5VA'" );
+    BOOST_CHECK( symbol.GetField( FIELD_T::VALUE )->Matches( data, &sheetPath ) );
+
+    // metadata search still surfaces the symbol, via the reference field in the
+    // search pane
+    data.findString = wxS( "power rail" );
+    data.matchMode = EDA_SEARCH_MATCH_MODE::PLAIN;
+    data.searchMetadata = true;
+    BOOST_CHECK( symbol.Matches( data, &sheetPath ) );
+    BOOST_CHECK( symbol.GetField( FIELD_T::REFERENCE )->Matches( data, &sheetPath ) );
+
+    data.searchMetadata = false;
+    BOOST_CHECK( !symbol.Matches( data, &sheetPath ) );
 
     delete libSym;
 }
