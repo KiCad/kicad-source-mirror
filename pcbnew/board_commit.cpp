@@ -47,6 +47,7 @@
 #include <pcb_board_outline.h>
 
 #include <functional>
+#include <unordered_set>
 #include <project/project_file.h>
 using namespace std::placeholders;
 
@@ -197,6 +198,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     PICKED_ITEMS_LIST   undoList;
     bool                itemsDeselected = false;
     bool                selectedModified = false;
+
+    std::unordered_set<EDA_ITEM*> removedItems;
 
     // Dirty flags and lists
     bool                     solderMaskDirty = false;
@@ -370,6 +373,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 itemsDeselected = true;
             }
 
+            removedItems.insert( boardItem );
+
             if( parentGroup && !( parentGroup->AsEdaItem()->GetFlags() & STRUCT_DELETED ) )
                 parentGroup->RemoveItem( boardItem );
 
@@ -499,6 +504,26 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 },
                 RECURSE_MODE::RECURSE );
     } // ... and regenerate them.
+
+    // Deselection above keys off the SELECTED flag on the removed item itself, but the selection
+    // may separately hold an owned descendant such as a pad, field or table cell.  Descendants
+    // are freed along with the removed parent, so prune them here or the selection keeps a
+    // dangling pointer that the next repaint dereferences.
+    if( selTool && !removedItems.empty() )
+    {
+        for( EDA_ITEM* selectedItem : selTool->GetSelection().GetItems() )
+        {
+            for( EDA_ITEM* ancestor = selectedItem; ancestor; ancestor = ancestor->GetParent() )
+            {
+                if( removedItems.count( ancestor ) )
+                {
+                    selTool->RemoveItemFromSel( selectedItem, true /* quiet mode */ );
+                    itemsDeselected = true;
+                    break;
+                }
+            }
+        }
+    }
 
     // Invalidate component classes
     board->GetComponentClassManager().InvalidateComponentClasses();

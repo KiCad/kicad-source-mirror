@@ -23,9 +23,12 @@
 #include <board.h>
 #include <board_commit.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_group.h>
+#include <pcb_view.h>
+#include <tools/pcb_selection_tool.h>
 
 BOOST_AUTO_TEST_SUITE( BoardCommit )
 
@@ -124,6 +127,39 @@ BOOST_AUTO_TEST_CASE( ReusedCommitModifyAfterAdd )
     // Modifying the already-added shape in the next commit must record a change.
     commit.Modify( shape );
     BOOST_CHECK_EQUAL( commit.GetStatus( shape ), CHT_MODIFY );
+}
+
+// Removing a footprint frees its pads, fields and other owned children with it.  A child that
+// sits in the selection on its own (the footprint itself unselected) must be pruned as well, or
+// PCB_SELECTION::updateDrawList() dereferences the freed child on the next repaint.
+BOOST_AUTO_TEST_CASE( RemoveFootprintPrunesSelectedChildren )
+{
+    BOARD           board;
+    KIGFX::PCB_VIEW view;
+    TOOL_MANAGER    mgr;
+    mgr.SetEnvironment( &board, &view, nullptr, nullptr, nullptr );
+
+    PCB_SELECTION_TOOL* selTool = new PCB_SELECTION_TOOL;
+    mgr.RegisterTool( selTool );
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    PAD*       pad = new PAD( fp );
+    fp->Add( pad );
+    board.Add( fp );
+
+    selTool->AddItemToSel( pad, true );
+
+    BOOST_REQUIRE( selTool->GetSelection().Contains( pad ) );
+    BOOST_REQUIRE( !fp->IsSelected() );
+
+    BOARD_COMMIT commit( &mgr, true, false );
+    commit.Remove( fp );
+    commit.Push( wxT( "Delete footprint" ), SKIP_UNDO | SKIP_TEARDROPS );
+
+    BOOST_CHECK( !selTool->GetSelection().Contains( pad ) );
+
+    // With SKIP_UNDO the removed footprint is ours to free
+    delete fp;
 }
 
 BOOST_AUTO_TEST_SUITE_END()
