@@ -1427,6 +1427,12 @@ public:
      */
     void SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_FILE_DATA>& aFileData );
 
+    /**
+     * Liveness token handed to LOCAL_HISTORY::RegisterSaver so a shared autosave timer skips this
+     * board's saver once the board is destroyed instead of serializing freed memory.
+     */
+    std::weak_ptr<void> GetHistoryLifetimeToken() const { return m_historyLifetime; }
+
     const std::unordered_map<KIID, BOARD_ITEM*>& GetItemByIdCache() const
     {
         return m_itemByIdCache;
@@ -1555,6 +1561,9 @@ private:
 
     std::map<wxString, wxString>        m_properties;
     std::shared_ptr<CONNECTIVITY_DATA>  m_connectivity;
+
+    // Sentinel whose expiry signals to LOCAL_HISTORY that this board has been destroyed.
+    std::shared_ptr<void>               m_historyLifetime = std::make_shared<char>();
 
     PAGE_INFO           m_paper;
     TITLE_BLOCK         m_titles;                   // text in lower right of screen and plots

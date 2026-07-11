@@ -29,6 +29,7 @@
  */
 #include <array>
 #include <map>
+#include <memory>
 #include <mutex>
 #include <vector>
 #include <kiid.h>
@@ -313,6 +314,12 @@ public:
      */
     void SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_FILE_DATA>& aFileData );
 
+    /**
+     * Liveness token handed to LOCAL_HISTORY::RegisterSaver so a shared autosave timer skips this
+     * project's saver once the project is destroyed instead of serializing freed memory.
+     */
+    std::weak_ptr<void> GetHistoryLifetimeToken() const { return m_historyLifetime; }
+
 private:
     friend class SETTINGS_MANAGER; // so that SM can set project path
     friend class TEST_NETLISTS_FIXTURE; // TODO(JE) make this not required
@@ -388,6 +395,9 @@ private:
 
     /// Synchronise access to DesignBlockLibs()
     std::mutex m_designBlockLibsMutex;
+
+    /// Sentinel whose expiry signals to LOCAL_HISTORY that this project has been destroyed.
+    std::shared_ptr<void> m_historyLifetime = std::make_shared<char>();
 };
 
 

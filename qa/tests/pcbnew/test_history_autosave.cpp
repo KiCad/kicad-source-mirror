@@ -29,6 +29,7 @@
 
 #include <git2.h>
 
+#include <memory>
 #include <vector>
 
 #include <wx/datetime.h>
@@ -609,6 +610,63 @@ BOOST_AUTO_TEST_CASE( FirstAutosaveSkipsCommitWhenStagedMatchesDisk )
     BOOST_CHECK_MESSAGE( !head.IsEmpty(), "in-memory edits diverging from disk must produce a commit" );
 
     history.UnregisterSaver( &history );
+}
+
+
+/**
+ * A saver tied to a document's lifetime token must be skipped, and dropped, once the document is
+ * destroyed.  The autosave timer is shared across editor frames, so a saver that outlives its
+ * BOARD/SCHEMATIC would serialize freed memory -- the autosave-saver use-after-free behind the
+ * crashes in EDA_BASE_FRAME::doAutoSave (Sentry KICAD-159V PCB, KICAD-17F5 SCH).
+ */
+BOOST_AUTO_TEST_CASE( SaverSkippedAfterOwningDocumentDestroyed )
+{
+    LIBGIT2_SCOPE libgit;
+
+    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    SCOPED_TEMP_DIR project( wxS( "kicad_qa_saver_lifetime" ) );
+    const wxString&  path = project.Path();
+    const wxString   sep = wxFileName::GetPathSeparator();
+
+    writeTextFile( path + sep + wxS( "p.kicad_pro" ), wxS( "{}\n" ) );
+    writeTextFile( path + sep + wxS( "p.kicad_pcb" ), wxS( "(kicad_pcb (version 20240108))\n" ) );
+
+    LOCAL_HISTORY history;
+
+    // The saver only touches this heap counter, so it stays safe to invoke after the board is gone;
+    // gating it on the board's token is the behaviour under test.
+    auto                   runCount = std::make_shared<int>( 0 );
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    history.RegisterSaver( board.get(),
+            [runCount]( const wxString&, std::vector<HISTORY_FILE_DATA>& aFileData )
+            {
+                ++( *runCount );
+
+                HISTORY_FILE_DATA entry;
+                entry.relativePath = wxS( "p.kicad_pcb" );
+                entry.content = "(kicad_pcb (version 20240108) (edited yes))\n";
+                aFileData.push_back( std::move( entry ) );
+            },
+            board->GetHistoryLifetimeToken() );
+
+    // Positive control: while the board is alive the saver runs.
+    history.RunRegisteredSaversAndCommit( path, wxS( "Autosave" ), wxEmptyString );
+    history.WaitForPendingSave();
+    BOOST_CHECK_EQUAL( *runCount, 1 );
+
+    // Destroy the document; its expired token must make both runners skip and drop the saver.
+    board.reset();
+
+    history.RunRegisteredSaversAndCommit( path, wxS( "Autosave" ), wxEmptyString );
+    history.WaitForPendingSave();
+    BOOST_CHECK_MESSAGE( *runCount == 1, "commit runner invoked a saver whose board was destroyed" );
+
+    history.RunRegisteredSaversAsAutosaveFiles( path );
+    BOOST_CHECK_MESSAGE( *runCount == 1, "autosave-file runner invoked a saver whose board was destroyed" );
 }
 
 
