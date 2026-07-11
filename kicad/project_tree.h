@@ -46,7 +46,7 @@ class PROJECT_TREE : public wxTreeCtrl
 private:
     PROJECT_TREE_PANE*            m_projectTreePane;
     wxImageList*                  m_statusImageList;
-    std::unique_ptr<KIGIT_COMMON> m_gitCommon;
+    std::shared_ptr<KIGIT_COMMON> m_gitCommon;
 
 public:
     PROJECT_TREE_PANE* GetProjectTreePane() const { return m_projectTreePane; }
@@ -63,10 +63,13 @@ public:
 
     KIGIT_COMMON* GitCommon() const             { return m_gitCommon.get(); }
 
-    std::unique_ptr<KIGIT_COMMON> TakeGitCommon()
+    /// Shared handle for background workers so the common outlives a concurrent TakeGitCommon().
+    std::shared_ptr<KIGIT_COMMON> GitCommonPtr() const { return m_gitCommon; }
+
+    std::shared_ptr<KIGIT_COMMON> TakeGitCommon()
     {
         auto old = std::move( m_gitCommon );
-        m_gitCommon = std::make_unique<KIGIT_COMMON>( nullptr );
+        m_gitCommon = std::make_shared<KIGIT_COMMON>( nullptr );
         return old;
     }
 
