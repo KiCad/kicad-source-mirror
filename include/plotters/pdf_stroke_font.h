@@ -26,6 +26,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include <wx/string.h>
@@ -62,7 +63,8 @@ public:
 
 public:
     PDF_STROKE_FONT_SUBSET( const KIFONT::STROKE_FONT* aFont, double aUnitsPerEm,
-                            unsigned aSubsetIndex, bool aBold, bool aItalic );
+                            unsigned aSubsetIndex, bool aBold, bool aItalic,
+                            double aStrokeWidthFactor );
 
     bool Contains( wxUniChar aCode ) const;
 
@@ -115,6 +117,8 @@ private:
 
     const GLYPH* glyphForCode( int aCode ) const;
 
+    std::string buildGlyphStream( const KIFONT::STROKE_GLYPH* aGlyph ) const;
+
 private:
     const KIFONT::STROKE_FONT*           m_font;
     double                               m_unitsPerEm;
@@ -134,6 +138,7 @@ private:
     int                                  m_toUnicodeHandle;
     bool                                 m_isBold;
     bool                                 m_isItalic;
+    double                               m_strokeWidthFactor;
 };
 
 class PDF_STROKE_FONT_MANAGER
@@ -144,29 +149,29 @@ public:
     void Reset();
 
     void EncodeString( const wxString& aText, std::vector<PDF_STROKE_FONT_RUN>* aRuns,
-                       bool aBold = false, bool aItalic = false );
+                       int aStrokeWidth, int aFontHeight, bool aBold = false, bool aItalic = false );
 
     // Collect all subsets including style-group (bold/italic) subsets. Returned pointers are
     // owned by the manager; vector is a temporary snapshot.
     std::vector<PDF_STROKE_FONT_SUBSET*> AllSubsets() const;
 
 private:
-    PDF_STROKE_FONT_SUBSET* ensureSubsetForGlyph( wxUniChar aCode, bool aBold, bool aItalic );
+    PDF_STROKE_FONT_SUBSET* ensureSubsetForGlyph( wxUniChar aCode, int aStrokeWidth, int aFontHeight,
+                                                  bool aBold, bool aItalic );
 
-    // style key packing: bit0 = bold, bit1 = italic
-    static unsigned styleKey( bool aBold, bool aItalic ) { return ( aBold ? 1u : 0u ) | ( aItalic ? 2u : 0u ); }
+    using STYLE_KEY = std::tuple<bool, bool, int, int>;
+
+    static STYLE_KEY styleKey( bool aBold, bool aItalic, int aStrokeWidth, int aFontHeight );
 
     struct STYLE_GROUP
     {
         std::vector<std::unique_ptr<PDF_STROKE_FONT_SUBSET>> subsets; // may overflow 256 glyph limit
     };
 
-    STYLE_GROUP& groupFor( bool aBold, bool aItalic );
-
 private:
     std::unique_ptr<KIFONT::STROKE_FONT>               m_font;
     double                                             m_unitsPerEm;
     unsigned                                           m_nextSubsetIndex; // global counter for unique resource names
-    std::map<unsigned, STYLE_GROUP>                      m_styleGroups; // all style groups including default
+    std::map<STYLE_KEY, STYLE_GROUP>                     m_styleGroups; // all style groups including default
 };
 

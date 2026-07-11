@@ -287,7 +287,8 @@ BOOST_AUTO_TEST_CASE( GlyphBBoxIncludesOffsetAndStrokeWidth )
     const ADVANCED_CFG& cfg = ADVANCED_CFG::GetCfg();
     double unitsPerEm = 1000.0;
     double expectedXOffset = cfg.m_PDFStrokeFontXOffset * unitsPerEm;
-    double expectedHalfStroke = unitsPerEm * cfg.m_PDFStrokeFontWidthFactor / 2.0;
+    double widthFactor = 300.0 / 3000.0;
+    double expectedHalfStroke = unitsPerEm * widthFactor / 2.0;
 
     // Find all d1 operators (skip .notdef which has all-zero bbox)
     std::string::size_type pos = 0;
@@ -318,8 +319,8 @@ BOOST_AUTO_TEST_CASE( GlyphBBoxIncludesOffsetAndStrokeWidth )
             }
 
             // The bbox minX should be shifted by the X offset minus half stroke width.
-            // With default offset 0.1 and stroke factor 0.12, minX should be around
-            // 0.1*1000 - 0.12*1000/2 = 100 - 60 = 40, not 0.
+            // With default offset 0.1 and stroke width 300 at size 3000, minX should be around
+            // 0.1*1000 - 0.1*1000/2 = 100 - 50 = 50, not 0.
             BOOST_CHECK_MESSAGE( minX < -expectedHalfStroke + 1.0 || minX > 0.1,
                                  "Glyph bbox minX (" << minX
                                  << ") suggests X offset or stroke padding is missing" );
