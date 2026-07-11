@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-05 17:01+0000\n"
+"PO-Revision-Date: 2026-07-12 03:38+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -4306,9 +4306,8 @@ msgid "Commit message cannot be empty"
 msgstr "Opis zmian nie może być pusty"
 
 #: common/dialogs/git/dialog_git_commit.cpp:192
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Wybierz przynajmniej jedną właściwość by dokonać numeracji wstecznej."
+msgstr "Wybierz przynajmniej jeden plik by wprowadzić"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:69
 msgid "Key passphrase:"
@@ -8946,9 +8945,9 @@ msgid "Error reading file."
 msgstr "Błąd podczas odczytywania pliku."
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "%s (whilst parsing '%s' in '%s')"
-msgstr "Brakująca gałąź '%s' w '%s'"
+msgstr "%s (podczas parsowania '%s' w '%s')"
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2485
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:315
@@ -9017,7 +9016,7 @@ msgstr "Nie można zapisać pliku raportu '%s'."
 #: common/io/diptrace/diptrace_binary_reader.cpp:63
 #, c-format
 msgid "DipTrace file '%s' is too large (%ld bytes)."
-msgstr ""
+msgstr "Plik DipTrace '%s' jest zbyt duży (%ld bajtów)."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:85
 #, c-format
@@ -9027,7 +9026,7 @@ msgstr "Błąd podczas odczytywania pliku '%s'."
 #: common/io/diptrace/diptrace_binary_reader.cpp:102
 #, c-format
 msgid "Seek past end of file (offset %zu, size %zu)."
-msgstr ""
+msgstr "Wyszukiwanie osiągnęło koniec pliku (ofset %zu, rozmiar %zu)."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:209
 #, c-format
@@ -9035,6 +9034,8 @@ msgid ""
 "Unexpected end of file at offset 0x%06zX: need 3 bytes for int3, have %zu "
 "remaining."
 msgstr ""
+"Niespodziewany koniec pliku na pozycji 0x%06zX: wymagane 3 bajty dla int3, "
+"tymczasem pozostało %zu."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:227
 #, c-format
@@ -9042,48 +9043,52 @@ msgid ""
 "Unexpected end of file at offset 0x%06zX: need 4 bytes for int4, have %zu "
 "remaining."
 msgstr ""
+"Niespodziewany koniec pliku na pozycji 0x%06zX: wymagane 4 bajty dla int4, "
+"tymczasem pozostało %zu."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:248
 #, c-format
 msgid "Unexpected end of file at offset 0x%06zX: need 1 byte."
-msgstr ""
+msgstr "Niespodziewany koniec pliku na pozycji 0x%06zX: wymagany 1 bajt."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:393
 #, c-format
 msgid "Unreasonable string length %d at offset 0x%06zX."
-msgstr ""
+msgstr "Nieprawidłowa długość ciągu %d na pozycji 0x%06zX."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:422
 #, c-format
 msgid "Unreasonable v37 string length %d at offset 0x%06zX."
-msgstr ""
+msgstr "Nieprawidłowa długość ciągu v37 %d przy przesunięciu 0x%06zX."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:556
 #, c-format
 msgid ""
 "Unexpected end of file at offset 0x%06zX: need %zu bytes, have %zu remaining."
 msgstr ""
+"Niespodziewany koniec pliku na pozycji 0x%06zX: potrzeba %zu bajtów, "
+"pozostało %zu."
 
 #: common/io/eagle/eagle_bin_parser.cpp:894
 msgid "Short read in Eagle binary file (field out of bounds)."
-msgstr ""
+msgstr "Krótki odczyt w pliku binarnym Eagle (pole poza zakresem)."
 
 #: common/io/eagle/eagle_bin_parser.cpp:1006
 msgid "Short read in Eagle binary file (truncated block)."
-msgstr ""
+msgstr "Krótki odczyt w pliku binarnym Eagle (obcięty blok)."
 
 #: common/io/eagle/eagle_bin_parser.cpp:1051
 #, c-format
 msgid "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
-msgstr ""
+msgstr "Nieznany identyfikator bloku binarnego Eagle 0x%02x%02x na pozycji %zu."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2370
 msgid "Eagle binary file has no drawing section."
-msgstr ""
+msgstr "Plik binarny Eagle nie posiada sekcji rysunków."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2388
 msgid "Eagle binary layout is missing a board/libraries node."
-msgstr ""
+msgstr "W trasowaniu binarnym Eagle brakuje węzła płytki/bibliotek."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2493
 msgid "File is too small to be an Eagle binary board."
@@ -9092,7 +9097,7 @@ msgstr ""
 
 #: common/io/eagle/eagle_bin_parser.cpp:2553
 msgid "Eagle binary schematic has no drawing section."
-msgstr ""
+msgstr "W schemacie binarnym Eagle brakuje sekcji rysunkowej."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2558
 #, fuzzy
@@ -9161,9 +9166,9 @@ msgid "'%s' is not a P-CAD ASCII file."
 msgstr "'%s' to nie jest plik PADS Logic ASCII."
 
 #: common/io/pcad/s_expr_loader.cpp:224 common/io/pcad/s_expr_loader.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Unbalanced parentheses in '%s'."
-msgstr "Nie można przetworzyć '%s' w '%s'"
+msgstr "Niedopasowane nawiasy w '%s'."
 
 #: common/jobs/job.cpp:82
 msgid "Job Settings"
@@ -9486,11 +9491,14 @@ msgid ""
 "Layer map file '%s' must be a JSON object mapping source layer names to "
 "KiCad layer names"
 msgstr ""
+"Plik mapy warstw '%s' musi być obiektem JSON mapującym nazwy warstw "
+"źródłowych na nazwy warstw KiCad"
 
 #: common/jobs/job_import_utils.cpp:97
 #, c-format
 msgid "Layer map entry for '%s' must be a KiCad layer name string"
 msgstr ""
+"Wpis w mapie warstw dla '%s' musi być ciągiem znaków z nazwą warstwy KiCad"
 
 #: common/jobs/job_import_utils.cpp:187
 #, c-format
@@ -10271,9 +10279,9 @@ msgid "Restore Failed"
 msgstr "Przywracanie nie powiodło się"
 
 #: common/local_history.cpp:2281
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Zresetuj do wersji zdalnej."
+msgstr "Zresetować projekt do wersji pochodzącej z %s?"
 
 #: common/local_history.cpp:2283
 #, fuzzy
@@ -10285,6 +10293,9 @@ msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
 msgstr ""
+"Najpierw tworzona jest kopia zapasowa bieżących plików, dzięki czemu można "
+"cofnąć przywracanie. Pliki, które nie są częścią tej wersji, pozostają "
+"nienaruszone."
 
 #: common/netclass.cpp:331 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1236 pcbnew/zone.cpp:1137
@@ -12384,23 +12395,20 @@ msgid "Overwrite existing design block?"
 msgstr "Nadpisać istniejący blok projektowy?"
 
 #: common/widgets/editor_tabs_panel.cpp:639
-#, fuzzy
 msgid "Close Tab"
-msgstr "Zamknij"
+msgstr "Zamknij zakładkę"
 
 #: common/widgets/editor_tabs_panel.cpp:640
-#, fuzzy
 msgid "Close Other Tabs"
-msgstr "Ignoruj przyciąganie do innych obiektów"
+msgstr "Zamknij inne zakładki"
 
 #: common/widgets/editor_tabs_panel.cpp:641
 msgid "Close Tabs to the Right"
-msgstr ""
+msgstr "Zamknij zakładki znajdujące się po prawej"
 
 #: common/widgets/editor_tabs_panel.cpp:642
-#, fuzzy
 msgid "Close All Tabs"
-msgstr "Wyczyść wszystkie warstwy"
+msgstr "Zamknij wszystkie zakładki"
 
 #: common/widgets/filter_combobox.cpp:68
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1157
@@ -13492,12 +13500,16 @@ msgid ""
 "Net chain rebuild failed: %s.  The schematic may have stale chain data; "
 "reload to recover."
 msgstr ""
+"Nie udało się odtworzyć łańcucha sieci: %s.   Schemat może zawierać "
+"nieaktualne dane łańcucha. Wczytaj ponownie, aby odzyskać dane."
 
 #: eeschema/connection_graph.cpp:3780
 msgid ""
 "Net chain rebuild failed with an unknown error.  The schematic may have "
 "stale chain data; reload to recover."
 msgstr ""
+"Odbudowa łańcucha sieci nie powiodła się z powodu nieznanego błędu.  Schemat "
+"może zawierać nieaktualne dane łańcucha; wczytaj ponownie, aby odzyskać dane."
 
 #: eeschema/connection_graph.cpp:5190
 #, c-format
@@ -14189,7 +14201,7 @@ msgstr "Utwórz"
 #: eeschema/dialogs/dialog_create_net_chain.cpp:129
 #, c-format
 msgid "Chain created (%d total). Select another or close."
-msgstr ""
+msgstr "Utworzono łańcuch (w sumie %d). Wybierz inny by zamknąć."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
 #, fuzzy
@@ -14219,7 +14231,7 @@ msgstr "Nazwy łańcuchów nie mogą zawierać spacji, cudzysłowa lub nawiasów
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:178
 msgid "Connection graph not available."
-msgstr ""
+msgstr "Graf połączeń niedostępny."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:184
 #, fuzzy, c-format
@@ -14268,10 +14280,16 @@ msgid ""
 "\n"
 "Would you like to force-create a manual chain link between these components?"
 msgstr ""
+"Nie znaleziono ścieżki łańcucha sieci między %s a %s przez komponenty "
+"przejściowe.\n"
+"\n"
+"Czy chcesz wymusić ręczne utworzenie łącza łańcucha między tymi komponentami?"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:438
 msgid "Selected components have no connected pins to anchor a manual chain."
 msgstr ""
+"Wybrane komponenty nie mają połączonych pinów umożliwiających ręczne "
+"zakotwiczenie łańcucha."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:470
 #, c-format
@@ -20278,9 +20296,8 @@ msgid "A pin map named '%s' already exists."
 msgstr "Element o nazwie skrótowej '%s' już istnieje."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:536
-#, fuzzy
 msgid "Invalid footprint identifier."
-msgstr "Określono niepoprawny footprint"
+msgstr "Niepoprawny identyfikator footprintu."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:545
 #, fuzzy
@@ -20297,9 +20314,9 @@ msgid "Remove Pin Map"
 msgstr "Usuń sygnał"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Remove pin map '%s' and its footprint association?"
-msgstr "Usuń wszystkie przydzielnia footprintów"
+msgstr "Czy usunąć mapę pinów '%s' i jej powiązanie z footprintem?"
 
 #: eeschema/dialogs/panel_symbol_pin_map_base.cpp:52
 #, fuzzy
@@ -20729,9 +20746,9 @@ msgid "Pin map '%s' references unknown symbol pin '%s'"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol pins '%s' and '%s' both map to pad '%s'"
-msgstr "Symbol '%s' mapuje pin '%s' zarówno do '%s' jak i '%s'."
+msgstr "Piny symbolu '%s' oraz '%s' równocześnie mapują do pola '%s'"
 
 #: eeschema/erc/erc.cpp:324
 #, c-format
@@ -20739,9 +20756,11 @@ msgid "Pin map '%s' references pad '%s' not present on footprint '%s'"
 msgstr ""
 
 #: eeschema/erc/erc.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid "Pin '%s' is connected but maps to no pad on footprint '%s'"
-msgstr "Pin %s jest połączony zarówno do %s jak i %s"
+msgstr ""
+"Pin '%s' jest połączony lecz mapa sugeruje powiązanie z brakującym polem "
+"footprintu '%s'"
 
 #: eeschema/erc/erc.cpp:413 eeschema/erc/erc.cpp:432
 #: pcbnew/drc/drc_test_provider_misc.cpp:446
@@ -21096,10 +21115,8 @@ msgid "Field name has leading or trailing whitespace"
 msgstr "Nazwa pola zawiera spacje końcowe lub spacje wiodące"
 
 #: eeschema/erc/erc_item.cpp:175
-#, fuzzy
 msgid "Pin map references a pad that does not exist on the footprint"
-msgstr ""
-"Pole lutownicze '%s' w grupie zworek %d nie istnieje w tym footprincie."
+msgstr "Mapa pinów odwołuje się do pola, które nie istnieje w footprincie"
 
 #: eeschema/erc/erc_item.cpp:179
 msgid "Connected pin is not mapped to any footprint pad"
@@ -21659,14 +21676,12 @@ msgid "Pin maps differ."
 msgstr "Pole lutownicze %s różni się."
 
 #: eeschema/lib_symbol.cpp:2291
-#, fuzzy
 msgid "Associated footprint count differs."
-msgstr "Przydziel footprinty na podstawie odnośnika"
+msgstr "Liczba powiązanych śladów jest różna."
 
 #: eeschema/lib_symbol.cpp:2299
-#, fuzzy
 msgid "Associated footprints differ."
-msgstr "Przypisz footprint"
+msgstr "Powiązane ślady są różne."
 
 #: eeschema/lib_symbol.cpp:2308
 msgid "Symbol keywords differ."
@@ -22787,10 +22802,12 @@ msgid "Embedded file '%s' not found in storage."
 msgstr "Osadzony plik %s nie został znaleziony w magazynie."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4771
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not write a temporary file while extracting the embedded image '%s'."
-msgstr "Nie można utworzyć folderu tymczasowego by połączyć.\n"
+msgstr ""
+"Nie można zapisać pliku tymczasowego podczas wyodrębniania osadzonego obrazu "
+"'%s'."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4793
 #, c-format
@@ -23911,9 +23928,9 @@ msgid "Empty P-CAD document"
 msgstr ""
 
 #: eeschema/sch_io/pcad/sch_io_pcad.cpp:1254
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol definition '%s' for '%s' not found."
-msgstr "Biblioteka symboli '%s' nie została znaleziona."
+msgstr "Nie znaleziono definicji symbolu '%s' dla '%s'."
 
 #: eeschema/sch_io/pcad/sch_io_pcad.h:56
 #, fuzzy
@@ -28867,9 +28884,8 @@ msgid "Symbol Properties..."
 msgstr "Właściwości symbolu..."
 
 #: eeschema/tools/sch_actions.cpp:1070
-#, fuzzy
 msgid "Symbol Pin Maps..."
-msgstr "Wyprowadzenie symbolu"
+msgstr "Mapy pinów symbolu..."
 
 #: eeschema/tools/sch_actions.cpp:1071
 msgid "Edit the symbol's pin-to-pad maps and associated footprints"
@@ -30945,9 +30961,8 @@ msgid "Identity"
 msgstr "Liczba"
 
 #: eeschema/widgets/sch_properties_panel.cpp:496
-#, fuzzy
 msgid "Effective Pin Map"
-msgstr "Skuteczne %s:"
+msgstr "Efektywna mapa pinów"
 
 #: eeschema/widgets/sch_properties_panel.cpp:554
 #, c-format
@@ -30955,9 +30970,8 @@ msgid "%s (identity)"
 msgstr ""
 
 #: eeschema/widgets/sch_properties_panel.cpp:584
-#, fuzzy
 msgid "Edit Pin Map..."
-msgstr "Edycja pinów"
+msgstr "Edycja mapy pinów..."
 
 #: eeschema/widgets/sch_properties_panel.cpp:1122
 #: pcbnew/widgets/pcb_properties_panel.cpp:967
@@ -34164,9 +34178,8 @@ msgid "Other Templates"
 msgstr "Szablony użytkownika"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
-#, fuzzy
 msgid "Browse for templates in another directory"
-msgstr "wewnątrz tego folderu szablonów."
+msgstr "Przeglądaj w poszukiwaniu szablonów w innym folderze"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
 msgid "Stop showing templates from the browsed directory"
@@ -40456,9 +40469,9 @@ msgid "Custom Rules"
 msgstr "Reguły użytkownika"
 
 #: pcbnew/cross-probing.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying footprint library '%s'."
-msgstr "Wystąpił błąd podczas ładowania footprintu %s z biblioteki '%s'."
+msgstr "Błąd podczas kopiowania biblioteki footprintów '%s'."
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:239
 msgid "Barcode Error"
@@ -53886,9 +53899,9 @@ msgstr ""
 "footprintami"
 
 #: pcbnew/footprint_libraries_utils.cpp:838
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' could not be saved to library '%s'."
-msgstr "Footprint '%s' nie został znaleziony w bibliotece '%s'"
+msgstr "Footprint '%s' nie może zostać zapisany w bibliotece '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:869
 #: pcbnew/footprint_viewer_frame.cpp:738
