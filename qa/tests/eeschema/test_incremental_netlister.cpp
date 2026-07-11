@@ -29,6 +29,9 @@
 #include <schematic.h>
 #include <sch_sheet.h>
 #include <sch_screen.h>
+#include <sch_symbol.h>
+#include <sch_pin.h>
+#include <lib_symbol.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
 
@@ -159,5 +162,109 @@ BOOST_FIXTURE_TEST_CASE( RemoveAddItems, CONNECTIVITY_TEST_FIXTURE )
 
             }
         }
+    }
+}
+
+
+// Reproducer for Sentry KICAD-4SJ / KICAD-10HY.  A pin on a shared (multi-instantiated) sheet is
+// registered in one subgraph per sheet path, but the connection graph's item-to-subgraph map only
+// remembers one of them.  When SCH_SYMBOL::UpdatePins() frees the pin after a library update that
+// dropped it, ~SCH_ITEM only cleans the mapped subgraph and the other instance keeps a dangling
+// driver, which a later recalculation hands to CONNECTION_SUBGRAPH::ResolveDrivers().
+BOOST_FIXTURE_TEST_CASE( SharedSheetUpdatePinsNoDanglingDriver, CONNECTIVITY_TEST_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    KI_TEST::LoadSchematic( m_settingsManager, wxS( "netlists/complex_hierarchy_shared/complex_hierarchy" ),
+                            m_schematic );
+
+    CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
+    SCH_SHEET_LIST    sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+
+    std::map<SCH_SCREEN*, int> instanceCount;
+
+    for( const SCH_SHEET_PATH& path : sheets )
+        instanceCount[path.LastScreen()]++;
+
+    // Count how many retained subgraphs still reference an item.  Pointer identity only; the
+    // pointer may be freed by the time this runs.
+    auto countRefs =
+            [&]( SCH_ITEM* aItem ) -> int
+            {
+                int refs = 0;
+
+                for( const auto& [key, subgraphs] : graph->GetNetMap() )
+                {
+                    for( CONNECTION_SUBGRAPH* sg : subgraphs )
+                    {
+                        if( sg->GetItems().count( aItem ) )
+                            refs++;
+                    }
+                }
+
+                return refs;
+            };
+
+    // Find a pin on a shared screen that the initial full rebuild registered once per sheet path
+    SCH_SYMBOL* symbol = nullptr;
+    SCH_PIN*    victim = nullptr;
+
+    for( auto& [screen, count] : instanceCount )
+    {
+        if( count < 2 )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* candidate = static_cast<SCH_SYMBOL*>( item );
+
+            if( !candidate->GetLibSymbolRef() || candidate->GetPins().size() < 2 )
+                continue;
+
+            for( SCH_PIN* pin : candidate->GetPins() )
+            {
+                if( countRefs( pin ) >= 2 )
+                {
+                    symbol = candidate;
+                    victim = pin;
+                    break;
+                }
+            }
+
+            if( symbol )
+                break;
+        }
+
+        if( symbol )
+            break;
+    }
+
+    BOOST_REQUIRE_MESSAGE( symbol && victim, "No shared-sheet pin registered on multiple paths" );
+
+    wxString              pinNumber = victim->GetNumber();
+    std::vector<SCH_PIN*> doomedPins = symbol->GetPinsByNumber( pinNumber );
+
+    BOOST_REQUIRE( !doomedPins.empty() );
+
+    std::vector<SCH_ITEM*> danglingCandidates( doomedPins.begin(), doomedPins.end() );
+
+    // Update the symbol from a library version that no longer has this pin.  This mirrors
+    // Update Symbol from Library; SetLibSymbol() -> UpdatePins() frees the surplus SCH_PINs.
+    std::unique_ptr<LIB_SYMBOL> updated = symbol->GetLibSymbolRef()->Flatten();
+
+    for( SCH_PIN* libPin : updated->GetPinsByNumber( pinNumber ) )
+        updated->RemoveDrawItem( libPin );
+
+    symbol->SetLibSymbol( updated.release() );
+
+    BOOST_REQUIRE( symbol->GetPinsByNumber( pinNumber ).empty() );
+
+    // The freed pins must be gone from every retained subgraph, or the next incremental
+    // recalculation will dereference them from a thread pool worker
+    for( SCH_ITEM* freedPin : danglingCandidates )
+    {
+        BOOST_CHECK_MESSAGE( countRefs( freedPin ) == 0,
+                             "Freed pin " << pinNumber.ToStdString()
+                                          << " still referenced by a retained subgraph" );
     }
 }

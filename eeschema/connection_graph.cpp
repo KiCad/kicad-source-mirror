@@ -656,8 +656,19 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
     for( auto& [key, value] : aGraph.m_net_code_to_subgraphs_map )
         m_net_code_to_subgraphs_map.insert_or_assign( key, value );
 
+    // Union rather than replace.  An incremental pass may only have rebuilt the item on some of
+    // its sheet paths, and dropping the surviving subgraphs here would orphan their references
+    // to the item so a later removal could no longer find them.
     for( auto& [key, value] : aGraph.m_item_to_subgraph_map )
-        m_item_to_subgraph_map.insert_or_assign( key, value );
+    {
+        std::vector<CONNECTION_SUBGRAPH*>& existing = m_item_to_subgraph_map[key];
+
+        for( CONNECTION_SUBGRAPH* sg : value )
+        {
+            if( !alg::contains( existing, sg ) )
+                existing.push_back( sg );
+        }
+    }
 
     for( auto& [key, value] : aGraph.m_local_label_cache )
         m_local_label_cache.insert_or_assign( key, value );
@@ -683,12 +694,13 @@ void CONNECTION_GRAPH::ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem )
         if( it == m_item_to_subgraph_map.end() )
             return;
 
-        CONNECTION_SUBGRAPH* sg = it->second;
+        std::vector<CONNECTION_SUBGRAPH*> sgs = std::move( it->second );
 
-        sg->ExchangeItem( aOld, aNew );
+        for( CONNECTION_SUBGRAPH* sg : sgs )
+            sg->ExchangeItem( aOld, aNew );
 
         m_item_to_subgraph_map.erase( it );
-        m_item_to_subgraph_map.emplace( aNew, sg );
+        m_item_to_subgraph_map.emplace( aNew, std::move( sgs ) );
 
         for( auto it2 = m_items.begin(); it2 != m_items.end(); ++it2 )
         {
@@ -1017,12 +1029,16 @@ void CONNECTION_GRAPH::RemoveItem( SCH_ITEM* aItem )
     if( it == m_item_to_subgraph_map.end() )
         return;
 
-    CONNECTION_SUBGRAPH* subgraph = it->second;
+    // The item sits in one subgraph per instantiating sheet path, and every one of them must
+    // drop it here or a subsequent recalculation resolves drivers against freed memory
+    for( CONNECTION_SUBGRAPH* subgraph : it->second )
+    {
+        while( subgraph->m_absorbed_by )
+            subgraph = subgraph->m_absorbed_by;
 
-    while(subgraph->m_absorbed_by )
-        subgraph = subgraph->m_absorbed_by;
+        subgraph->RemoveItem( aItem );
+    }
 
-    subgraph->RemoveItem( aItem );
     std::erase( m_items, aItem );
     m_item_to_subgraph_map.erase( it );
 }
@@ -1154,7 +1170,9 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
 
         for( auto it = m_item_to_subgraph_map.begin(); it != m_item_to_subgraph_map.end(); )
         {
-            if( it->second == sg )
+            std::erase( it->second, sg );
+
+            if( it->second.empty() )
                 it = m_item_to_subgraph_map.erase( it );
             else
                 ++it;
@@ -1557,7 +1575,7 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
                 subgraph->AddItem( item );
 
                 connection->SetSubgraphCode( subgraph->m_code );
-                m_item_to_subgraph_map[item] = subgraph;
+                m_item_to_subgraph_map[item].push_back( subgraph );
 
                 std::list<SCH_ITEM*> memberlist;
 
@@ -1589,7 +1607,7 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
                     if( connected_conn->SubgraphCode() == 0 )
                     {
                         connected_conn->SetSubgraphCode( subgraph->m_code );
-                        m_item_to_subgraph_map[connected_item] = subgraph;
+                        m_item_to_subgraph_map[connected_item].push_back( subgraph );
                         subgraph->AddItem( connected_item );
                         const SCH_ITEM_VEC& citemset = connected_item->ConnectedItems( sheet );
 
@@ -3529,8 +3547,13 @@ CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindFirstSubgraphByName( const wxString& 
 
 CONNECTION_SUBGRAPH* CONNECTION_GRAPH::GetSubgraphForItem( SCH_ITEM* aItem ) const
 {
-    auto                 it  = m_item_to_subgraph_map.find( aItem );
-    CONNECTION_SUBGRAPH* ret = it != m_item_to_subgraph_map.end() ? it->second : nullptr;
+    auto it = m_item_to_subgraph_map.find( aItem );
+
+    // Callers expect a single subgraph even for items registered on several sheet paths, so
+    // hand back the most recently registered one
+    CONNECTION_SUBGRAPH* ret = ( it != m_item_to_subgraph_map.end() && !it->second.empty() )
+                                       ? it->second.back()
+                                       : nullptr;
 
     while( ret && ret->m_absorbed )
         ret = ret->m_absorbed_by;

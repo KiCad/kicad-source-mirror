@@ -837,7 +837,9 @@ private:
 
     std::unordered_map<wxString, std::vector<CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
 
-    std::unordered_map<SCH_ITEM*, CONNECTION_SUBGRAPH*> m_item_to_subgraph_map;
+    /// Every subgraph referencing the item, one per instantiating sheet path for items on shared
+    /// screens.  Removal must purge all of them or a freed item leaves a dangling driver behind.
+    std::unordered_map<SCH_ITEM*, std::vector<CONNECTION_SUBGRAPH*>> m_item_to_subgraph_map;
 
     NET_MAP m_net_code_to_subgraphs_map;
 
