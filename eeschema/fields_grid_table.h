@@ -165,6 +165,11 @@ private:
     SCH_BASE_FRAME*              m_frame;
     DIALOG_SHIM*                 m_dialog;
     KICAD_T                      m_parentType;
+
+    // Owns a private copy of the schematic symbol's library part when the source is a unique_ptr
+    // that the still-live schematic could free while this quasi-modal dialog is open.  Null for
+    // the symbol-editor path, where m_part points at an externally-owned working symbol.
+    std::unique_ptr<LIB_SYMBOL>  m_ownedPart;
     LIB_SYMBOL*                  m_part;
     std::vector<EMBEDDED_FILES*> m_filesStack;
     wxString                     m_symbolNetlist;

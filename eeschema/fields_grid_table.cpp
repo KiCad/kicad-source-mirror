@@ -184,7 +184,7 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
-        m_part( aSymbol->GetLibSymbolRef().get() ),
+        m_part( nullptr ),
         m_symbolNetlist( netList( aSymbol, aFrame->GetCurrentSheet() ) ),
         m_fieldNameValidator( FIELD_T::USER ),
         m_referenceValidator( FIELD_T::REFERENCE ),
@@ -193,6 +193,16 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFra
         m_nonUrlValidator( FIELD_T::USER ),
         m_filepathValidator( FIELD_T::SHEET_FILENAME )
 {
+    // GetLibSymbolRef() hands back a raw pointer into a unique_ptr owned by the schematic symbol.
+    // This dialog is quasi-modal, so the still-live schematic can free that part through
+    // SetLibSymbol() (library update, ERC, undo) while the grid is open, after which GetAttr() would
+    // dereference freed memory.  Keep a private copy alive for the grid's lifetime instead.
+    if( LIB_SYMBOL* libSymbol = aSymbol->GetLibSymbolRef().get() )
+    {
+        m_ownedPart = std::make_unique<LIB_SYMBOL>( *libSymbol );
+        m_part = m_ownedPart.get();
+    }
+
     m_filesStack.push_back( aSymbol->Schematic() );
 
     if( m_part )
