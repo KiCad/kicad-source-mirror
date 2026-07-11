@@ -2198,21 +2198,23 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         else
         {
             newItems.Add( newItem );
-
-            SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
-            lwbTool->TrimOverLappingWires( &commit, &newItems );
-            lwbTool->AddJunctionsIfNeeded( &commit, &newItems );
-
-            m_frame->Schematic().CleanUp( &commit );
-            commit.Push( _( "Repeat Item" ) );
         }
     }
 
     if( !newItems.Empty() )
+    {
+        SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
+        lwbTool->TrimOverLappingWires( &commit, &newItems );
+        lwbTool->AddJunctionsIfNeeded( &commit, &newItems );
+
+        m_frame->Schematic().CleanUp( &commit );
+        commit.Push( _( "Repeat Item" ) );
+
         m_frame->SaveCopyForRepeatItem( static_cast<SCH_ITEM*>( newItems[0] ) );
 
-    for( size_t ii = 1; ii < newItems.GetSize(); ++ii )
-        m_frame->AddCopyForRepeatItem( static_cast<SCH_ITEM*>( newItems[ii] ) );
+        for( size_t ii = 1; ii < newItems.GetSize(); ++ii )
+            m_frame->AddCopyForRepeatItem( static_cast<SCH_ITEM*>( newItems[ii] ) );
+    }
 
     return 0;
 }
