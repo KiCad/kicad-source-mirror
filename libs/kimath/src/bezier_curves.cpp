@@ -460,6 +460,15 @@ void BEZIER_POLY::cubicParabolicApprox( std::vector<VECTOR2D>& aOutput, double a
 
         // Find the third control point deviation and the t values for subdivision
         double d = c->thirdControlPointDeviation();
+
+        // A vanishing deviation yields no valid split parameter, so subdivide recursively rather
+        // than dividing by zero
+        if( d == 0.0 )
+        {
+            c->recursiveSegmentation( aOutput, aMaxError );
+            break;
+        }
+
         double t = 2 * std::sqrt( aMaxError / ( 3.0 * d ) ); // Forumla 2 in Hain et al.
 
         wxLogTrace( BEZIER_DBG, "cubicParabolicApprox: split point t = %f", t );
