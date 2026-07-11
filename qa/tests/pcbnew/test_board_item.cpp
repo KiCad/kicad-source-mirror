@@ -150,6 +150,7 @@ public:
         case PCB_ITEM_LIST_T:
         case PCB_NETINFO_T:
         case PCB_GENERATOR_T:
+        case PCB_CONSTRAINT_T:   // geometry-free; geometric behavior covered by ConstraintSolverItem
         case PCB_BOARD_OUTLINE_T:
             return nullptr;
 

@@ -49,6 +49,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
+#include <tools/constraint_edit_tool.h>
 #include <tools/edit_tool.h>
 #include <tools/item_modification_routine.h>
 #include <tools/pcb_picker_tool.h>
@@ -2975,6 +2976,20 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
+    // A geometric constraint selected by clicking its on-canvas badge has no board selection, so a
+    // plain Delete targets it here before the normal item-removal path.  Cut is excluded: the
+    // constraint is not on the clipboard, so it must not be silently removed (#2329).
+    bool isCut = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::CUT;
+
+    if( !isCut )
+    {
+        if( CONSTRAINT_EDIT_TOOL* constraintTool = m_toolMgr->GetTool<CONSTRAINT_EDIT_TOOL>();
+            constraintTool && constraintTool->TryDeleteSelectedConstraint() )
+        {
+            return 0;
+        }
+    }
+
     editFrame->PushTool( aEvent );
 
     std::vector<BOARD_ITEM*> lockedItems;
@@ -2982,7 +2997,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
     // get a copy instead of reference (as we're going to clear the selection before removing items)
     PCB_SELECTION selectionCopy;
-    bool          isCut = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::CUT;
     bool          isAlt = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::ALT;
 
     // If we are in a "Cut" operation, then the copied selection exists already and we want to

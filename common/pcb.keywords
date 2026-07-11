@@ -80,6 +80,7 @@ component_classes
 connect
 connect_pads
 constant
+constraint
 copperpour
 copper_finish
 crossbar
@@ -113,6 +114,7 @@ djordjevic_sarkar
 dnp
 drawings
 drill
+driving
 duplicate_pad_numbers_are_jumpers
 ecc_level
 edge

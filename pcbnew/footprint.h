@@ -384,6 +384,9 @@ public:
     GROUPS& Groups()                       { return m_groups; }
     const GROUPS& Groups() const           { return m_groups; }
 
+    CONSTRAINTS& Constraints()             { return m_constraints; }
+    const CONSTRAINTS& Constraints() const { return m_constraints; }
+
     PCB_POINTS& Points()                   { return m_points; }
     const PCB_POINTS& Points() const       { return m_points; }
 
@@ -1405,6 +1408,7 @@ private:
     std::deque<PAD*>        m_pads;      // Pads, owned by pointer
     std::vector<ZONE*>      m_zones;     // Rule area zones, owned by pointer
     std::deque<PCB_GROUP*>  m_groups;    // Groups, owned by pointer
+    std::deque<PCB_CONSTRAINT*> m_constraints;  // Geometric constraints, owned by pointer
     std::deque<PCB_POINT*>  m_points;    // Points, owned by pointer
 
     TRANSFORM_TRS   m_transform;

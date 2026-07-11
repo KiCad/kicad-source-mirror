@@ -34,7 +34,7 @@ namespace KIGFX {
             unsigned int char_border;
             unsigned int spacing;
             // Height must match the atlas in bitmap_font_img.c
-            unsigned char pixels[1024 * 1071 * 3];
+            unsigned char pixels[1024 * 1107 * 3];
         };
 
         struct FONT_INFO_TYPE

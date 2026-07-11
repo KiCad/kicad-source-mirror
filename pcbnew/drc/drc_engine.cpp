@@ -2916,6 +2916,7 @@ std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingCondition( const wxString& 
         case PCB_NETINFO_T:
         case PCB_GENERATOR_T:
         case PCB_GROUP_T:
+        case PCB_CONSTRAINT_T:
             skippedItems++;
             continue;
 

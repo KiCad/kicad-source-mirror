@@ -1025,6 +1025,7 @@ FP_3DMODEL* PCB_IO_KICAD_SEXPR_PARSER::parse3DModel( bool aFileNameAlreadyParsed
 bool PCB_IO_KICAD_SEXPR_PARSER::IsValidBoardHeader()
 {
     m_groupInfos.clear();
+    m_constraintInfos.clear();
 
     // See Parse() - FOOTPRINTS can be prefixed with an initial block of single line comments,
     // eventually BOARD might be the same
@@ -1046,6 +1047,7 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR_PARSER::Parse()
     BOARD_ITEM*     item;
 
     m_groupInfos.clear();
+    m_constraintInfos.clear();
 
     // FOOTPRINTS can be prefixed with an initial block of single line comments and these are
     // kept for Format() so they round trip in s-expression form.  BOARDs might  eventually do
@@ -1094,6 +1096,7 @@ BOARD_ITEM* PCB_IO_KICAD_SEXPR_PARSER::Parse()
             RECURSE_MODE::RECURSE );
 
     resolveGroups( item );
+    resolveConstraints( item );
 
     return item;
 }
@@ -1299,6 +1302,10 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
         case T_group:
             parseGROUP( m_board );
+            break;
+
+        case T_constraint:
+            parseCONSTRAINT( m_board );
             break;
 
         case T_generated:
@@ -6241,6 +6248,10 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             parseGROUP( footprint.get() );
             break;
 
+        case T_constraint:
+            parseCONSTRAINT( footprint.get() );
+            break;
+
         case T_point:
         {
             PCB_POINT* point = parsePCB_POINT();
@@ -7727,6 +7738,170 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseGROUP( BOARD_ITEM* aParent )
         default:
             Expecting( "uuid, locked, lib_id, or members" );
         }
+    }
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::parseCONSTRAINT( BOARD_ITEM* aParent )
+{
+    wxCHECK_RET( CurTok() == T_constraint,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_CONSTRAINT." ) );
+
+    m_constraintInfos.push_back( CONSTRAINT_INFO() );
+    CONSTRAINT_INFO& info = m_constraintInfos.back();
+    info.parent = aParent;
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_type:
+            NextTok();
+            info.type = ConstraintTypeFromToken( FromUTF8() );
+            NeedRIGHT();
+            break;
+
+        case T_uuid:
+            NextTok();
+            info.uuid = CurStrToKIID();
+            NeedRIGHT();
+            break;
+
+        case T_members:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                if( NextTok() != T_member )
+                    Expecting( "member" );
+
+                NextTok();   // member uuid; resolved (and remapped on append) in resolveConstraints
+                KIID memberId( CurStr() );
+
+                NextTok();   // anchor token
+                CONSTRAINT_ANCHOR anchor = ConstraintAnchorFromToken( FromUTF8() );
+
+                info.members.emplace_back( memberId, anchor );
+                NeedRIGHT();
+            }
+
+            break;
+
+        case T_value:
+            NextTok();
+            info.value = parseDouble();
+            NeedRIGHT();
+            break;
+
+        case T_driving:
+            info.driving = parseBool();
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "type, uuid, members, value, or driving" );
+        }
+    }
+
+    // The value is written in mm for length/radius types; convert back to IU now that the type is
+    // known (independent of token order within the block).
+    if( info.value.has_value() && ConstraintValueIsLength( info.type ) )
+        info.value = *info.value * pcbIUScale.IU_PER_MM;
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::resolveConstraints( BOARD_ITEM* aParent )
+{
+    // Mirror resolveGroups: resolve every deferred constraint against the parsed items, adding
+    // each to its own recorded parent (a board parse also sees footprint-scoped constraints, so
+    // the resolution must not assume aParent owns them).
+    BOARD*     board = dynamic_cast<BOARD*>( aParent );
+    FOOTPRINT* footprint = board ? nullptr : dynamic_cast<FOOTPRINT*>( aParent );
+
+    std::unordered_map<KIID, BOARD_ITEM*> fpItemMap;
+
+    if( footprint )
+    {
+        footprint->RunOnChildren(
+                [&]( BOARD_ITEM* child )
+                {
+                    fpItemMap.insert( { child->m_Uuid, child } );
+                },
+                RECURSE_MODE::NO_RECURSE );
+    }
+
+    auto getItem =
+            [&]( const KIID& aId ) -> BOARD_ITEM*
+            {
+                if( board )
+                {
+                    const auto& cache = board->GetItemByIdCache();
+                    auto        it = cache.find( aId );
+
+                    return it != cache.end() ? it->second : nullptr;
+                }
+                else if( footprint )
+                {
+                    auto it = fpItemMap.find( aId );
+
+                    return it != fpItemMap.end() ? it->second : nullptr;
+                }
+
+                return nullptr;
+            };
+
+    for( const CONSTRAINT_INFO& info : m_constraintInfos )
+    {
+        std::unique_ptr<PCB_CONSTRAINT> constraint =
+                std::make_unique<PCB_CONSTRAINT>( info.parent, info.type );
+
+        constraint->SetUuidDirect( info.uuid );
+        constraint->SetValue( info.value );
+        constraint->SetDriving( info.driving );
+
+        for( const CONSTRAINT_MEMBER& member : info.members )
+        {
+            KIID resolvedId = member.m_item;
+
+            if( m_appendToExisting )
+            {
+                // Use the remapped uuid if this member's item was part of the appended content;
+                // otherwise keep the original (it will dangle as an error state).  find(), not
+                // operator[], so a miss does not pollute the remap with a nil entry.
+                auto remap = m_resetKIIDMap.find( member.m_item.AsString() );
+
+                if( remap != m_resetKIIDMap.end() )
+                    resolvedId = remap->second;
+            }
+
+            BOARD_ITEM* item = getItem( resolvedId );
+
+            // A member that resolves to an item in a different footprint scope is genuinely
+            // invalid and dropped.  A member that does not resolve at all (its item was deleted)
+            // is kept as a dangling reference: the constraint persists in an error state for the
+            // user to repair, rather than silently losing it (Zulip "Geometry Constraint Solver",
+            // 2026-06-18; supersedes the plan's drop-on-missing rule).
+            if( item )
+            {
+                if( item->GetParentFootprint() == constraint->GetParentFootprint() )
+                    constraint->AddMember( item->m_Uuid, member.m_anchor );
+            }
+            else
+            {
+                constraint->AddMember( resolvedId, member.m_anchor );
+            }
+        }
+
+        if( info.parent->Type() == PCB_FOOTPRINT_T )
+            static_cast<FOOTPRINT*>( info.parent )->Add( constraint.release(), ADD_MODE::INSERT, true );
+        else
+            static_cast<BOARD*>( info.parent )->Add( constraint.release(), ADD_MODE::INSERT, true );
     }
 }
 

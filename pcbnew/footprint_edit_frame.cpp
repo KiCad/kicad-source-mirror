@@ -22,6 +22,7 @@
 
 #include "tool/embed_tool.h"
 #include "tools/convert_tool.h"
+#include "tools/constraint_edit_tool.h"
 #include "tools/drawing_tool.h"
 #include "tools/edit_tool.h"
 #include "tools/pcb_edit_table_tool.h"
@@ -2122,6 +2123,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new ARRAY_TOOL );
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
     m_toolManager->RegisterTool( new PCB_GROUP_TOOL );
+    m_toolManager->RegisterTool( new CONSTRAINT_EDIT_TOOL );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
     m_toolManager->RegisterTool( new EMBED_TOOL );

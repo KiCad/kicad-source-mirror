@@ -27,6 +27,7 @@ class PCB_GROUP;
 class PCB_GENERATOR;
 class PCB_POINT;
 class PCB_MARKER;
+class PCB_CONSTRAINT;
 class ZONE;
 
 typedef std::vector<PCB_MARKER*> MARKERS;
@@ -36,6 +37,7 @@ typedef std::deque<FOOTPRINT*> FOOTPRINTS;
 typedef std::deque<PCB_GROUP*> GROUPS;
 typedef std::deque<PCB_GENERATOR*> GENERATORS;
 typedef std::deque<PCB_POINT*> PCB_POINTS;
+typedef std::deque<PCB_CONSTRAINT*> CONSTRAINTS;
 
 
 // Shared with board and footprint

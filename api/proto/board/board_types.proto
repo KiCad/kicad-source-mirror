@@ -988,6 +988,53 @@ message Group
   repeated kiapi.common.types.KIID items = 3;
 }
 
+// A geometric constraint between board items (issue #2329).
+enum ConstraintType
+{
+  CT_UNKNOWN = 0;
+  CT_COINCIDENT = 1;
+  CT_HORIZONTAL = 2;
+  CT_VERTICAL = 3;
+  CT_PARALLEL = 4;
+  CT_PERPENDICULAR = 5;
+  CT_COLLINEAR = 6;
+  CT_SYMMETRIC = 7;
+  CT_EQUAL_LENGTH = 8;
+  CT_EQUAL_RADIUS = 9;
+  CT_POINT_ON_LINE = 10;
+  CT_MIDPOINT = 11;
+  CT_FIXED_POSITION = 12;
+  CT_FIXED_LENGTH = 13;
+  CT_CONCENTRIC = 14;
+  CT_FIXED_RADIUS = 15;
+  CT_ANGULAR_DIMENSION = 16;
+}
+
+enum ConstraintAnchor
+{
+  CA_WHOLE = 0;
+  CA_START = 1;
+  CA_END = 2;
+  CA_MID = 3;
+  CA_CENTER = 4;
+  CA_RADIUS = 5;
+}
+
+message ConstraintMember
+{
+  kiapi.common.types.KIID item = 1;
+  ConstraintAnchor anchor = 2;
+}
+
+message Constraint
+{
+  kiapi.common.types.KIID id = 1;
+  ConstraintType type = 2;
+  repeated ConstraintMember members = 3;
+  optional double value = 4;
+  bool driving = 5;
+}
+
 message FieldId
 {
   int32 id = 1;

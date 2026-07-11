@@ -40,6 +40,7 @@ using namespace std::placeholders;
 #include <tool/selection_conditions.h>
 #include <preview_items/angle_item.h>
 #include <tools/pcb_actions.h>
+#include <tools/constraint_edit_tool.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_point_editor.h>
 #include <tools/pcb_grid_helper.h>
@@ -58,6 +59,8 @@ using namespace std::placeholders;
 #include <pad.h>
 #include <zone.h>
 #include <footprint.h>
+#include <board.h>
+#include <constraints/board_constraint_adapter.h>
 #include <footprint_editor_settings.h>
 #include <connectivity/connectivity_data.h>
 #include <progress_reporter.h>
@@ -2329,6 +2332,18 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             break;
         }
 
+        // A click on a geometric-constraint endpoint marker toggles it into the constraint
+        // point-set, mode-lessly, without disturbing the multi-selection or its edit points
+        // (#2329).  Only the constraint tool knows whether markers are shown.
+        if( !inDrag && evt->IsClick( BUT_LEFT ) && !evt->Modifier() )
+        {
+            if( CONSTRAINT_EDIT_TOOL* constraintTool = m_toolMgr->GetTool<CONSTRAINT_EDIT_TOOL>();
+                constraintTool && constraintTool->ToggleEndpointAt( evt->Position() ) )
+            {
+                continue;
+            }
+        }
+
         EDIT_POINT* prevHover = m_hoveredPoint;
 
         if( !inDrag )
@@ -2902,6 +2917,65 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
     {
         wxCHECK( m_editedPoint, /* void */ );
         m_editorBehavior->UpdateItem( *m_editedPoint, *m_editPoints, aCommit, updatedItems );
+    }
+
+    // Re-derive any geometry constrained to the dragged segment endpoint (issue #2329).  The
+    // behavior above has already moved the dragged point to the cursor, so its current endpoint
+    // position is the pin target for the solver.
+    auto anyConstraints =
+            [&]() -> bool
+            {
+                if( !board() )
+                    return false;
+
+                if( !board()->Constraints().empty() )
+                    return true;
+
+                // In the footprint editor the constraints live on the footprint, not the board.
+                for( FOOTPRINT* fp : board()->Footprints() )
+                {
+                    if( !fp->Constraints().empty() )
+                        return true;
+                }
+
+                return false;
+            };
+
+    if( item->Type() == PCB_SHAPE_T && m_editedPoint && anyConstraints() )
+    {
+        PCB_SHAPE*        shape = static_cast<PCB_SHAPE*>( item );
+        SHAPE_T           type = shape->GetShape();
+        VECTOR2I          cursor = m_editedPoint->GetPosition();
+        CONSTRAINT_ANCHOR anchor = CONSTRAINT_ANCHOR::WHOLE;
+
+        // Match the dragged point to a constraint anchor: segment/arc endpoints, arc/circle centre.
+        if( type == SHAPE_T::SEGMENT || type == SHAPE_T::ARC )
+        {
+            if( cursor == shape->GetStart() )
+                anchor = CONSTRAINT_ANCHOR::START;
+            else if( cursor == shape->GetEnd() )
+                anchor = CONSTRAINT_ANCHOR::END;
+            else if( type == SHAPE_T::ARC && cursor == shape->GetCenter() )
+                anchor = CONSTRAINT_ANCHOR::CENTER;
+        }
+        else if( type == SHAPE_T::CIRCLE )
+        {
+            if( cursor == shape->GetCenter() )
+                anchor = CONSTRAINT_ANCHOR::CENTER;
+        }
+
+        if( anchor != CONSTRAINT_ANCHOR::WHOLE )
+        {
+            std::vector<PCB_SHAPE*> modified;
+
+            // On a failed/diverged solve SolveCluster leaves neighbors untouched, so nothing is
+            // half-moved or staged this frame.
+            SolveCluster( board(), { shape->m_Uuid, anchor }, cursor, &modified,
+                          [&]( PCB_SHAPE* aNeighbor ) { aCommit.Modify( aNeighbor ); } );
+
+            for( PCB_SHAPE* neighbor : modified )
+                updatedItems.push_back( neighbor );
+        }
     }
 
     // Perform any post-edit actions that the item may require

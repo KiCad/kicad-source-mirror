@@ -631,6 +631,29 @@ public:
     static TOOL_ACTION convertToArc;
     static TOOL_ACTION convertToTracks;
 
+    // Geometric constraints (#2329).  addConstraint is parameterized by PCB_CONSTRAINT_TYPE (for
+    // programmatic use); the per-type actions below bake the parameter for menu items.
+    static TOOL_ACTION addConstraint;
+    static TOOL_ACTION addConstraintParallel;
+    static TOOL_ACTION addConstraintPerpendicular;
+    static TOOL_ACTION addConstraintEqualLength;
+    static TOOL_ACTION addConstraintCollinear;
+    static TOOL_ACTION addConstraintAngular;
+    static TOOL_ACTION addConstraintHorizontal;
+    static TOOL_ACTION addConstraintVertical;
+    static TOOL_ACTION addConstraintFixedLength;
+    static TOOL_ACTION addConstraintConcentric;
+    static TOOL_ACTION addConstraintEqualRadius;
+    static TOOL_ACTION addConstraintFixedRadius;
+    // Point-anchored families authored by clicking anchors (route to AddPointConstraint).
+    static TOOL_ACTION addConstraintCoincident;
+    static TOOL_ACTION addConstraintPointOnLine;
+    static TOOL_ACTION addConstraintMidpoint;
+    static TOOL_ACTION addConstraintSymmetric;
+    static TOOL_ACTION removeConstraints;
+    static TOOL_ACTION showConstraints;     ///< Toggle the constraint diagnostics overlay.
+    static TOOL_ACTION manageConstraints;   ///< Open the constraint list dialog.
+
     /// Drag and drop
     static TOOL_ACTION ddAppendBoard;
     static TOOL_ACTION ddImportFootprint;

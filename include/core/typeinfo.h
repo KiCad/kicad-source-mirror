@@ -235,6 +235,7 @@ enum KICAD_T
     // (IPC clients with stale protobuf-generated headers depend on stable values).
     PCB_SHAPE_LOCATE_ELLIPSE_T,
     PCB_SHAPE_LOCATE_ELLIPSE_ARC_T,
+    PCB_CONSTRAINT_T,      ///< class PCB_CONSTRAINT, a geometric constraint between board items
 
     // End value
     MAX_STRUCT_TYPE_ID
@@ -486,6 +487,7 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_SHAPE_LOCATE_ELLIPSE_T:
     case PCB_SHAPE_LOCATE_ELLIPSE_ARC_T:
     case PCB_BOARD_OUTLINE_T:
+    case PCB_CONSTRAINT_T:
         return true;
 
     default:

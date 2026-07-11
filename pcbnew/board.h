@@ -460,6 +460,10 @@ public:
      */
     const GROUPS& Groups() const { return m_groups; }
 
+    /// Geometric constraints (#2329) owned by this board.  Like groups, these carry no
+    /// geometry of their own and reference other board items by KIID.
+    const CONSTRAINTS& Constraints() const { return m_constraints; }
+
     const std::vector<BOARD_CONNECTED_ITEM*> AllConnectedItems();
 
     const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
@@ -1752,6 +1756,7 @@ private:
     FOOTPRINTS          m_footprints;
     TRACKS              m_tracks;
     GROUPS              m_groups;
+    CONSTRAINTS         m_constraints;
     ZONES               m_zones;
     GENERATORS          m_generators;
     PCB_BOARD_OUTLINE*  m_boardOutline;

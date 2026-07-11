@@ -30,6 +30,10 @@ include_directories(
     )
 
 set( PCBNEW_DIALOGS
+    dialogs/dialog_constraint_value.cpp
+    dialogs/dialog_constraint_value_base.cpp
+    dialogs/dialog_constraint_list.cpp
+    dialogs/dialog_constraint_list_base.cpp
     dialogs/dialog_filter_selection.cpp
     dialogs/dialog_filter_selection_base.cpp
     dialogs/dialog_barcode_properties.cpp
@@ -389,6 +393,12 @@ set( PCBNEW_CLASS_SRCS
 
     array_pad_number_provider.cpp
     board_loader.cpp
+    constraints/board_constraint_adapter.cpp
+    constraints/constraint_builder.cpp
+    tools/constraint_edit_tool.cpp
+    tools/constraint_overlay.cpp
+    tools/constraint_endpoint_overlay.cpp
+    tools/view_overlay_holder.cpp
     board_statistics.cpp
     board_statistics_report.cpp
     board_tables/board_characteristics_table.cpp
@@ -500,6 +510,9 @@ set( PCBNEW_CLASS_SRCS
     widgets/appearance_controls.cpp
     widgets/appearance_controls_base.cpp
     widgets/footprint_wizard_properties_panel.cpp
+    widgets/constraint_list_view.cpp
+    widgets/panel_constraints.cpp
+    widgets/panel_constraints_base.cpp
     widgets/panel_footprint_chooser.cpp
     widgets/panel_selection_filter.cpp
     widgets/panel_selection_filter_base.cpp
@@ -718,6 +731,7 @@ target_link_libraries( pcbnew_kiface_objects
         rectpack2d
         gzip-hpp
         nanoflann
+        planegcs
         Boost::boost
         ZLIB::ZLIB
         ${OCC_LIBRARIES}

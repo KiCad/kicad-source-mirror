@@ -51,6 +51,7 @@
 #include <pcb_group.h>
 #include <pcb_generator.h>
 #include <pcb_point.h>
+#include <constraints/pcb_constraint.h>
 #include <pcb_target.h>
 #include <pcb_shape.h>
 #include <pcb_barcode.h>
@@ -182,6 +183,7 @@ BOARD::~BOARD()
     m_tracks.clear();
     m_drawings.clear();
     m_groups.clear();
+    m_constraints.clear();
     m_points.clear();
 
     delete m_boardOutline;
@@ -717,6 +719,9 @@ void BOARD::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, 
 
         for( PCB_GROUP* group : m_groups )
             aFunction( group );
+
+        for( PCB_CONSTRAINT* constraint : m_constraints )
+            aFunction( constraint );
 
         for( PCB_POINT* point : m_points )
             aFunction( point );
@@ -1365,6 +1370,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     // this one uses a vector
     case PCB_GROUP_T: m_groups.push_back( (PCB_GROUP*) aBoardItem ); break;
 
+    case PCB_CONSTRAINT_T: m_constraints.push_back( (PCB_CONSTRAINT*) aBoardItem ); break;
+
     // this one uses a vector
     case PCB_GENERATOR_T: m_generators.push_back( (PCB_GENERATOR*) aBoardItem ); break;
 
@@ -1529,6 +1536,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 
     case PCB_GROUP_T: std::erase( m_groups, aBoardItem ); break;
 
+    case PCB_CONSTRAINT_T: std::erase( m_constraints, aBoardItem ); break;
+
     case PCB_ZONE_T: std::erase( m_zones, aBoardItem ); break;
 
     case PCB_POINT_T: std::erase( m_points, aBoardItem ); break;
@@ -1618,6 +1627,11 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         case PCB_GROUP_T:
             std::copy( m_groups.begin(), m_groups.end(), std::back_inserter( removed ) );
             m_groups.clear();
+            break;
+
+        case PCB_CONSTRAINT_T:
+            std::copy( m_constraints.begin(), m_constraints.end(), std::back_inserter( removed ) );
+            m_constraints.clear();
             break;
 
         case PCB_POINT_T:
@@ -1911,6 +1925,12 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
     {
         if( group->m_Uuid == aID )
             return CacheAndReturnItemById( aID, group );
+    }
+
+    for( PCB_CONSTRAINT* constraint : m_constraints )
+    {
+        if( constraint->m_Uuid == aID )
+            return CacheAndReturnItemById( aID, constraint );
     }
 
     for( PCB_GENERATOR* generator : m_generators )
@@ -2287,6 +2307,9 @@ void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
 
     for( PCB_GROUP* group : m_groups )
         aMap[group->m_Uuid] = group;
+
+    for( PCB_CONSTRAINT* constraint : m_constraints )
+        aMap[constraint->m_Uuid] = constraint;
 
     for( PCB_POINT* point : m_points )
         aMap[point->m_Uuid] = point;
@@ -2710,6 +2733,15 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vec
 
         case PCB_GROUP_T:
             if( IterateForward<PCB_GROUP*>( m_groups, inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
+            {
+                return INSPECT_RESULT::QUIT;
+            }
+
+            break;
+
+        case PCB_CONSTRAINT_T:
+            if( IterateForward<PCB_CONSTRAINT*>( m_constraints, inspector, testData, { scanType } )
+                == INSPECT_RESULT::QUIT )
             {
                 return INSPECT_RESULT::QUIT;
             }
@@ -3972,6 +4004,7 @@ const BOARD_ITEM_SET BOARD::GetItemSet()
     std::copy( m_drawings.begin(), m_drawings.end(), std::inserter( items, items.end() ) );
     std::copy( m_markers.begin(), m_markers.end(), std::inserter( items, items.end() ) );
     std::copy( m_groups.begin(), m_groups.end(), std::inserter( items, items.end() ) );
+    std::copy( m_constraints.begin(), m_constraints.end(), std::inserter( items, items.end() ) );
     std::copy( m_points.begin(), m_points.end(), std::inserter( items, items.end() ) );
 
     return items;

@@ -62,6 +62,7 @@ SOURCES = {
     0x2316: ("sym2", 0x2316), 0x25CE: ("sym2", 0x25CE), 0x25CF: ("sym2", 0x25CF),
     0x26A0: ("sym2", 0x26A0), 0x26A1: ("sym2", 0x26A1),
     0x2705: ("sym2", 0x2714), 0x274E: ("sym2", 0x2612), 0x27F7: ("math", 0x27F7),
+    0x29D3: ("math", 0x29D3),
 }
 
 EM_UNITS = 48.0   # atlas units per em (from the Ubuntu Mono cap-height metrics)

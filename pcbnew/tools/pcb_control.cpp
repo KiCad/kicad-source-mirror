@@ -1975,16 +1975,34 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
     std::vector<BOARD_ITEM*> itemsToSel;
     itemsToSel.reserve( aItems.size() );
 
+    // Re-UUIDing pasted items breaks any item that references another by KIID (e.g. a constraint's
+    // members); record old -> new so those references can be remapped once every item has its new id.
+    // A grouped shape appears both as a top-level item and as a group child, so reset each item only
+    // once -- a second reset would record a new->newer entry and corrupt the old->new mapping.
+    std::map<KIID, KIID>     idMap;
+    std::set<BOARD_ITEM*>    resetItems;
+
+    auto resetUuidOnce =
+            [&]( BOARD_ITEM* aItem )
+            {
+                if( !resetItems.insert( aItem ).second )
+                    return;
+
+                KIID oldUuid = aItem->m_Uuid;
+                aItem->ResetUuid();
+                idMap[oldUuid] = aItem->m_Uuid;
+            };
+
     for( BOARD_ITEM* item : aItems )
     {
         if( aIsNew )
         {
-            item->ResetUuid();
+            resetUuidOnce( item );
 
             item->RunOnChildren(
-                    []( BOARD_ITEM* aChild )
+                    [&]( BOARD_ITEM* aChild )
                     {
-                        aChild->ResetUuid();
+                        resetUuidOnce( aChild );
                     },
                     RECURSE_MODE::RECURSE );
 
@@ -2036,6 +2054,21 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
         // then the selection tool will select it for us.
         if( !item->GetParentGroup() || !alg::contains( aItems, item->GetParentGroup()->AsEdaItem() ) )
             itemsToSel.push_back( item );
+    }
+
+    // Now that every pasted item has its new UUID, remap KIID references (e.g. constraint members)
+    // from the old ids to the new ones so they still resolve to the pasted copies.
+    if( aIsNew && !idMap.empty() )
+    {
+        for( BOARD_ITEM* item : aItems )
+        {
+            item->RemapKIIDs( idMap );
+            item->RunOnChildren( [&]( BOARD_ITEM* aChild )
+                                 {
+                                     aChild->RemapKIIDs( idMap );
+                                 },
+                                 RECURSE_MODE::RECURSE );
+        }
     }
 
     // Select the items that should be selected

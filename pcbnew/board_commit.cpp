@@ -48,6 +48,15 @@
 using namespace std::placeholders;
 
 
+// A no-geometry board item (net metadata or a geometric constraint) is never pushed into the
+// VIEW or the connectivity graph.  VIEW::Add early-returns on an empty layer set but still
+// stamps the item's view private data, which a later VIEW::Remove would mis-index.
+static bool isNoGeometryItem( const BOARD_ITEM* aItem )
+{
+    return aItem->Type() == PCB_NETINFO_T || aItem->Type() == PCB_CONSTRAINT_T;
+}
+
+
 BOARD_COMMIT::BOARD_COMMIT( TOOL_BASE* aTool ) :
         COMMIT(),
         m_toolMgr( aTool->GetManager() ),
@@ -342,7 +351,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( boardItem->Type() != PCB_MARKER_T )
                 propagateDamage( boardItem, staleZones, staleRuleAreas );
 
-            if( view && boardItem->Type() != PCB_NETINFO_T )
+            if( view && !isNoGeometryItem( boardItem ) )
                 view->Add( boardItem );
 
             updateComponentClasses( boardItem );
@@ -445,6 +454,28 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
                 break;
 
+            // No-geometry items: never in the view, so skip view->Remove.
+            case PCB_CONSTRAINT_T:
+                if( !( changeFlags & CHT_DONE ) )
+                {
+                    if( m_isFootprintEditor )
+                    {
+                        if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
+                            parentFP->Remove( boardItem );
+                    }
+                    else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
+                    {
+                        parentFP->Remove( boardItem );
+                    }
+                    else
+                    {
+                        board->Remove( boardItem, REMOVE_MODE::BULK );
+                        bulkRemovedItems.push_back( boardItem );
+                    }
+                }
+
+                break;
+
             // Metadata items
             case PCB_NETINFO_T:
                 board->Remove( boardItem, REMOVE_MODE::BULK );
@@ -475,7 +506,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 undoList.PushItem( itemWrapper );
             }
 
-            if( !( aCommitFlags & SKIP_CONNECTIVITY ) )
+            if( !( aCommitFlags & SKIP_CONNECTIVITY ) && !isNoGeometryItem( boardItem ) )
             {
                 connectivity->MarkItemNetAsDirty( boardItemCopy );
                 connectivity->Update( boardItem );
@@ -489,7 +520,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             updateComponentClasses( boardItem );
 
-            if( view && boardItem->Type() != PCB_NETINFO_T )
+            if( view && !isNoGeometryItem( boardItem ) )
                 view->Update( boardItem );
 
             itemsChanged.push_back( boardItem );
@@ -621,7 +652,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 delete entry.m_copy;
             }
 
-            if( view && boardItem->Type() != PCB_NETINFO_T )
+            if( view && !isNoGeometryItem( boardItem ) )
             {
                 if( ( entry.m_type & CHT_TYPE ) == CHT_ADD )
                     view->Add( boardItem );
@@ -760,7 +791,7 @@ void BOARD_COMMIT::Revert()
         case CHT_ADD:
             if( changeFlags & CHT_DONE )
             {
-                if( view && boardItem->Type() != PCB_NETINFO_T )
+                if( view && !isNoGeometryItem( boardItem ) )
                     view->Remove( boardItem );
 
                 connectivity->Remove( boardItem );
@@ -792,7 +823,7 @@ void BOARD_COMMIT::Revert()
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
-            if( view && boardItem->Type() != PCB_NETINFO_T )
+            if( view && !isNoGeometryItem( boardItem ) )
                 view->Add( boardItem );
 
             if( m_isFootprintEditor )
@@ -816,7 +847,7 @@ void BOARD_COMMIT::Revert()
 
         case CHT_MODIFY:
         {
-            if( view && boardItem->Type() != PCB_NETINFO_T )
+            if( view && !isNoGeometryItem( boardItem ) )
                 view->Remove( boardItem );
 
             connectivity->Remove( boardItem );
@@ -825,7 +856,7 @@ void BOARD_COMMIT::Revert()
             BOARD_ITEM* boardItemCopy = static_cast<BOARD_ITEM*>( entry.m_copy );
             boardItem->SwapItemData( boardItemCopy );
 
-            if( view && boardItem->Type() != PCB_NETINFO_T )
+            if( view && !isNoGeometryItem( boardItem ) )
                 view->Add( boardItem );
 
             connectivity->Add( boardItem );

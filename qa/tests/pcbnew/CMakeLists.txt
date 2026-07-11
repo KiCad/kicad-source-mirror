@@ -262,6 +262,23 @@ set( QA_PCBNEW_SRCS
     pcb_io/odbpp/test_odbpp_netlist.cpp
 
     group_saveload.cpp
+
+    # Geometric constraint solver (planegcs adapter)
+    constraints/test_planegcs_smoke.cpp
+    constraints/test_pcb_constraint.cpp
+    constraints/test_constraint_ownership.cpp
+    constraints/test_constraint_commit.cpp
+    constraints/test_constraint_exclusions.cpp
+    constraints/test_constraint_adapter.cpp
+    constraints/test_constraint_serialization.cpp
+    constraints/test_constraint_drag.cpp
+    constraints/test_constraint_authoring.cpp
+    constraints/test_constraint_diagnostics.cpp
+    constraints/test_constraint_protobuf.cpp
+    constraints/test_constraint_clipboard.cpp
+    constraints/test_constraint_overlay.cpp
+    constraints/test_constraint_labels.cpp
+    constraints/test_constraint_apply.cpp
 )
 
 # DipTrace PCB benchmark tests that exercise proprietary reference designs kept outside the source
@@ -327,6 +344,7 @@ target_link_libraries( qa_pcbnew
     dxflib_qcad
     tinyspline_lib
     nanosvg
+    planegcs
     idf3
     markdown_lib
     ${PCBNEW_IO_LIBRARIES}
@@ -444,6 +462,9 @@ set( PCBNEW_DRC_REGRESSION_TESTS
 :DRCFalseNegativeRegressions\
 :DRCZoneFalsePositiveRegressions" )
 
+# Geometric constraint solver tests (planegcs adapter, issue #2329)
+set( PCBNEW_CONSTRAINTS_TESTS "PlanegcsSmokeSolve:ConstraintSolver*" )
+
 # Solder mask and copper sliver DRC tests (~6s)
 set( PCBNEW_DRC_SOLDER_MASK_TESTS
     "DRCCopperSliver\
@@ -462,6 +483,7 @@ add_pcbnew_test_group( tracks_cleaner "${PCBNEW_TRACKS_CLEANER_TESTS}" )
 add_pcbnew_test_group( multichannel "${PCBNEW_MULTICHANNEL_TESTS}" )
 add_pcbnew_test_group( drc_regression "${PCBNEW_DRC_REGRESSION_TESTS}" )
 add_pcbnew_test_group( drc_solder_mask "${PCBNEW_DRC_SOLDER_MASK_TESTS}" )
+add_pcbnew_test_group( constraints "${PCBNEW_CONSTRAINTS_TESTS}" )
 
 # Catch-all for everything not in a named group.  New tests automatically
 # land here so they are never silently skipped.
@@ -526,6 +548,8 @@ set( PCBNEW_EXCLUDED_FROM_OTHER
 :!DRCSolderMaskBridgeSingleErrorTest\
 :!DRCTrackToPadBridgeTest\
 :!FootprintLevelSolderMaskExpansion\
-:!SolderMaskExpansionPerformance" )
+:!SolderMaskExpansionPerformance\
+:!PlanegcsSmokeSolve\
+:!ConstraintSolver*" )
 
 add_pcbnew_test_group( other "${PCBNEW_EXCLUDED_FROM_OTHER}" )

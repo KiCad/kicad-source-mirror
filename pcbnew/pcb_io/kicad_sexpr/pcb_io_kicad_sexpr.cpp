@@ -43,6 +43,7 @@
 #include <pcb_dimension.h>
 #include <pcb_generator.h>
 #include <pcb_group.h>
+#include <constraints/pcb_constraint.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <pcb_point.h>
@@ -431,6 +432,10 @@ void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem ) const
 
     case PCB_GENERATOR_T:
         format( static_cast<const PCB_GENERATOR*>( aItem ) );
+        break;
+
+    case PCB_CONSTRAINT_T:
+        format( static_cast<const PCB_CONSTRAINT*>( aItem ) );
         break;
 
     case PCB_TRACE_T:
@@ -842,6 +847,8 @@ void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard ) const
                                                               aBoard->Groups().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp>  sorted_generators( aBoard->Generators().begin(),
                                                                    aBoard->Generators().end() );
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp>  sorted_constraints( aBoard->Constraints().begin(),
+                                                                    aBoard->Constraints().end() );
     formatHeader( aBoard );
 
     // Save the footprints.
@@ -873,6 +880,10 @@ void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard ) const
     // Save the generators
     for( BOARD_ITEM* gen : sorted_generators )
         Format( gen );
+
+    // Save the geometric constraints last, after every item they may reference.
+    for( BOARD_ITEM* constraint : sorted_constraints )
+        Format( constraint );
 
     // After writing all items, write the aggregated net chains section (if any)
     struct CHAIN_INFO
@@ -1558,6 +1569,8 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
                                                         aFootprint->Zones().end() );
     std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_groups( aFootprint->Groups().begin(),
                                                              aFootprint->Groups().end() );
+    std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_constraints( aFootprint->Constraints().begin(),
+                                                                  aFootprint->Constraints().end() );
 
     // Save drawing elements.
 
@@ -1578,6 +1591,10 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     // Save groups.
     for( BOARD_ITEM* group : sorted_groups )
         Format( group );
+
+    // Save geometric constraints, after the items they reference.
+    for( BOARD_ITEM* constraint : sorted_constraints )
+        Format( constraint );
 
     // Save variants.
     const bool baseDnp = aFootprint->IsDNP();
@@ -2708,6 +2725,49 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
 
     m_out->Print( ")" );        // Close `members` token.
     m_out->Print( ")" );        // Close `group` token.
+}
+
+
+void PCB_IO_KICAD_SEXPR::format( const PCB_CONSTRAINT* aConstraint ) const
+{
+    const std::vector<CONSTRAINT_MEMBER>& members = aConstraint->GetMembers();
+
+    if( members.empty() )
+        return;
+
+    // Members are KIID references (not pointers), so unlike format(PCB_GROUP*) there is no
+    // use-after-free risk: every member is written verbatim, including one whose item was deleted,
+    // so the constraint round-trips in its error state rather than silently losing the reference.
+    m_out->Print( "(constraint (type %s)", ConstraintTypeToken( aConstraint->GetConstraintType() ) );
+
+    KICAD_FORMAT::FormatUuid( m_out, aConstraint->m_Uuid );
+
+    m_out->Print( "(members" );
+
+    for( const CONSTRAINT_MEMBER& member : members )
+    {
+        m_out->Print( "(member %s %s)", m_out->Quotew( member.m_item.AsString() ).c_str(),
+                      ConstraintAnchorToken( member.m_anchor ) );
+    }
+
+    m_out->Print( ")" );        // Close `members` token.
+
+    if( aConstraint->HasValue() )
+    {
+        // Length/radius values are stored in IU but written in mm like every other dimension;
+        // angle values are written verbatim in degrees.
+        double value = *aConstraint->GetValue();
+
+        if( ConstraintValueIsLength( aConstraint->GetConstraintType() ) )
+            value /= pcbIUScale.IU_PER_MM;
+
+        m_out->Print( "(value %s)", FormatDouble2Str( value ).c_str() );
+    }
+
+    if( !aConstraint->IsDriving() )
+        KICAD_FORMAT::FormatBool( m_out, "driving", false );
+
+    m_out->Print( ")" );        // Close `constraint` token.
 }
 
 

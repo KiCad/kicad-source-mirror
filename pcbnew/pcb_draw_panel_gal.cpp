@@ -282,6 +282,11 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReport
 
     for( BOARD_ITEM* item : aBoard->GetItemSet() )
     {
+        // Geometry-free items (constraints) are never rendered; VIEW::Add would stamp their
+        // view data on an empty layer set and risk a later "already in a different view" assert.
+        if( item->Type() == PCB_CONSTRAINT_T )
+            continue;
+
         viewItems.push_back( item );
 
         if( item->Type() == PCB_FOOTPRINT_T )
@@ -289,7 +294,8 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard, PROGRESS_REPORTER* aReport
             static_cast<FOOTPRINT*>( item )->RunOnChildren(
                     [&viewItems]( BOARD_ITEM* child )
                     {
-                        viewItems.push_back( child );
+                        if( child->Type() != PCB_CONSTRAINT_T )
+                            viewItems.push_back( child );
                     },
                     RECURSE_MODE::NO_RECURSE );
         }

@@ -108,6 +108,7 @@
 #include <tools/drc_rule_editor_tool.h>
 #include <tools/global_edit_tool.h>
 #include <tools/convert_tool.h>
+#include <tools/constraint_edit_tool.h>
 #include <tools/drawing_tool.h>
 #include <tools/pcb_control.h>
 #include <tools/pcb_design_block_control.h>
@@ -132,6 +133,7 @@
 #include <widgets/appearance_controls.h>
 #include <widgets/pcb_design_block_pane.h>
 #include <widgets/pcb_search_pane.h>
+#include <widgets/panel_constraints.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/panel_selection_filter.h>
 #include <widgets/pcb_properties_panel.h>
@@ -297,6 +299,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_searchPane = new PCB_SEARCH_PANE( this );
     m_netInspectorPanel = new PCB_NET_INSPECTOR_PANEL( this, this );
     m_designBlocksPane = new PCB_DESIGN_BLOCK_PANE( this, nullptr, m_designBlockHistoryList );
+    m_constraintsPanel = new PANEL_CONSTRAINTS( this );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -403,6 +406,16 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .FloatingSize( FromDIP( wxSize( 480, 200 ) ) )
                       .DestroyOnClose( false )
                       .CloseButton( true ) );
+
+    m_auimgr.AddPane( m_constraintsPanel, EDA_PANE().Name( ConstraintsPaneName() )
+                      .Bottom().Layer( 1 )
+                      .Caption( _( "Geometric Constraints" ) ).PaneBorder( false )
+                      .MinSize( FromDIP( wxSize( 360, 120 ) ) )
+                      .BestSize( FromDIP( wxSize( 600, 200 ) ) )
+                      .FloatingSize( FromDIP( wxSize( 600, 240 ) ) )
+                      .DestroyOnClose( false )
+                      .CloseButton( true )
+                      .Hide() );
 
     RestoreAuiLayout();
 
@@ -803,6 +816,23 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 }
 
 
+void PCB_EDIT_FRAME::ToggleConstraintsPanel()
+{
+    wxAuiPaneInfo& pane = m_auimgr.GetPane( ConstraintsPaneName() );
+
+    if( !pane.IsOk() )
+        return;
+
+    bool show = !pane.IsShown();
+    pane.Show( show );
+
+    if( show && m_constraintsPanel )
+        m_constraintsPanel->RefreshList();
+
+    m_auimgr.Update();
+}
+
+
 void PCB_EDIT_FRAME::detachTextVarTracker()
 {
     if( GetCanvas() )
@@ -1032,6 +1062,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
     m_toolManager->RegisterTool( new PCB_GROUP_TOOL );
+    m_toolManager->RegisterTool( new CONSTRAINT_EDIT_TOOL );
     m_toolManager->RegisterTool( new GENERATOR_TOOL );
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
     m_toolManager->RegisterTool( new MULTICHANNEL_TOOL );

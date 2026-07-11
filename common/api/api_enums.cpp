@@ -66,6 +66,7 @@ KICAD_T FromProtoEnum( types::KiCadObjectType aValue )
     case types::KiCadObjectType::KOT_PCB_DIMENSION:         return PCB_DIMENSION_T;
     case types::KiCadObjectType::KOT_PCB_ZONE:              return PCB_ZONE_T;
     case types::KiCadObjectType::KOT_PCB_GROUP:             return PCB_GROUP_T;
+    case types::KiCadObjectType::KOT_PCB_CONSTRAINT:        return PCB_CONSTRAINT_T;
     case types::KiCadObjectType::KOT_SCH_GROUP:             return SCH_GROUP_T;
     case types::KiCadObjectType::KOT_SCH_MARKER:            return SCH_MARKER_T;
     case types::KiCadObjectType::KOT_SCH_JUNCTION:          return SCH_JUNCTION_T;
@@ -156,6 +157,7 @@ types::KiCadObjectType ToProtoEnum( KICAD_T aValue )
     case WSG_TEXT_T:             return types::KiCadObjectType::KOT_WSG_TEXT;
     case WSG_BITMAP_T:           return types::KiCadObjectType::KOT_WSG_BITMAP;
     case WSG_PAGE_T:             return types::KiCadObjectType::KOT_WSG_PAGE;
+    case PCB_CONSTRAINT_T:       return types::KiCadObjectType::KOT_PCB_CONSTRAINT;
     default:
         wxCHECK_MSG( false, types::KiCadObjectType::KOT_UNKNOWN,
                      "Unhandled case in ToProtoEnum<KICAD_T>");

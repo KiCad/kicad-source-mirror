@@ -29,7 +29,8 @@ enum class INFOBAR_MESSAGE_TYPE
     GENERIC,          ///< GENERIC Are messages that do not have special handling
     OUTDATED_SAVE,    ///< OUTDATED_SAVE Messages that should be cleared on save
     DRC_RULES_ERROR,
-    DRC_VIOLATION
+    DRC_VIOLATION,
+    CONSTRAINT_DIAGNOSTICS    ///< Geometric-constraint DOF / state readout (#2329).
 };
 
 #endif // WX_INFOBAR_MESSAGE_TYPE_H

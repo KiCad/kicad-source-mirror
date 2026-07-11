@@ -219,6 +219,11 @@ void PCB_DESIGN_BLOCK_PREVIEW_WIDGET::DisplayDesignBlock( DESIGN_BLOCK* aDesignB
 
             for( BOARD_ITEM* item : m_previewItem->GetItemSet() )
             {
+                // Geometry-free items (constraints) are never rendered; adding them stamps
+                // their view data on an empty layer set with no benefit.
+                if( item->Type() == PCB_CONSTRAINT_T )
+                    continue;
+
                 view->Add( item );
 
                 if( item->Type() == PCB_FIELD_T )
