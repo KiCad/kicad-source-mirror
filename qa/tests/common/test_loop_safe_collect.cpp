@@ -238,22 +238,28 @@ BOOST_AUTO_TEST_CASE( HiddenFlagControlsDotfiles )
     namespace fs = std::filesystem;
 
     const ScratchRoot scratch( "hidden" );
+    const fs::path    normalFile = scratch.path / "R_0603.step";
+    const fs::path    hiddenFile = scratch.path / ".hidden.step";
 
-    std::ofstream( scratch.path / "R_0603.step" ) << "ISO-10303-21;\n";
-    std::ofstream( scratch.path / ".hidden.step" ) << "ISO-10303-21;\n";
+    std::ofstream( normalFile ) << "ISO-10303-21;\n";
+    std::ofstream( hiddenFile ) << "ISO-10303-21;\n";
+
+#ifdef _WIN32
+    SetFileAttributesW( hiddenFile.c_str(), FILE_ATTRIBUTE_HIDDEN );
+#endif
 
     wxArrayString withHidden;
     CollectFilesLoopSafe( wxString::FromUTF8( scratch.path.string() ), withHidden );
 
-    BOOST_CHECK( contains( withHidden, scratch.path / "R_0603.step" ) );
-    BOOST_CHECK( contains( withHidden, scratch.path / ".hidden.step" ) );
+    BOOST_CHECK( contains( withHidden, normalFile ) );
+    BOOST_CHECK( contains( withHidden, hiddenFile ) );
 
     wxArrayString noHidden;
     CollectFilesLoopSafe( wxString::FromUTF8( scratch.path.string() ), noHidden, wxEmptyString,
                           wxDIR_FILES | wxDIR_DIRS );
 
-    BOOST_CHECK( contains( noHidden, scratch.path / "R_0603.step" ) );
-    BOOST_CHECK( !contains( noHidden, scratch.path / ".hidden.step" ) );
+    BOOST_CHECK( contains( noHidden, normalFile ) );
+    BOOST_CHECK( !contains( noHidden, hiddenFile ) );
 }
 
 
