@@ -213,10 +213,15 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
     m_scale = IU_PER_NORM_UNIT;
     m_invScale = 1.0 / m_scale;
 
+    // [first, last) parameter spans of locked shapes, folded into fixedParams below so the solver
+    // treats a locked shape as an immovable reference.
+    std::vector<std::pair<int, int>> lockedRanges;
+
     for( PCB_SHAPE* shape : aShapes )
     {
         SHAPE_VARS vars;
         vars.shape = shape;
+        int firstParam = static_cast<int>( m_params.size() );
 
         if( shape->GetShape() == SHAPE_T::SEGMENT )
         {
@@ -272,12 +277,23 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>& aShapes,
             continue;   // other shapes are not mapped
         }
 
+        // A locked shape is an immovable reference: record its parameter span so the solver moves
+        // only the unlocked geometry sharing the cluster.
+        if( shape->IsLocked() )
+            lockedRanges.emplace_back( firstParam, static_cast<int>( m_params.size() ) );
+
         m_shapeVars[shape->m_Uuid] = vars;
     }
 
-    // Param indices the solver may not change: grounded (fixed-position) points and driving
-    // constants (lengths, radii).  Everything else is an unknown.
+    // Param indices the solver may not change: grounded (fixed-position) points, driving constants
+    // (lengths, radii), and every parameter of a locked shape.  Everything else is an unknown.
     std::set<int> fixedParams;
+
+    for( const auto& [first, last] : lockedRanges )
+    {
+        for( int i = first; i < last; ++i )
+            fixedParams.insert( i );
+    }
 
     auto pointAt = [&]( int aXIndex ) -> GCS::Point
     {

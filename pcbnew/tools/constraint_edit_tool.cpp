@@ -19,6 +19,7 @@
 
 #include <tools/constraint_edit_tool.h>
 
+#include <algorithm>
 #include <set>
 
 #include <bitmaps.h>
@@ -38,6 +39,7 @@
 #include <tools/constraint_overlay.h>
 #include <tools/constraint_endpoint_overlay.h>
 #include <view/view.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <tool/actions.h>
 #include <tool/edit_points.h>
 #include <widgets/wx_infobar.h>
@@ -96,11 +98,16 @@ void CONSTRAINT_EDIT_TOOL::Reset( RESET_REASON aReason )
     m_overlay.reset();
     m_endpoints.reset();
 
-    // At shutdown the frame/info bar may already be tearing down, so don't touch UI then; on a
-    // model reload it is still valid and the stale readout should be cleared (overlay is gone, so
-    // the diagnosis is unused -- pass an empty one).
-    if( aReason != SHUTDOWN )
-        updateConstraintInfoBar( {} );
+    // At shutdown the frame/info bar may already be tearing down, so don't touch UI then.
+    if( aReason == SHUTDOWN )
+        return;
+
+    // Sticky visibility: re-create the overlay against the new view if the user left it shown.
+    if( frame() && board() && getView() && frame()->GetPcbNewSettings()->m_Display.m_ShowConstraints )
+        m_overlay = std::make_unique<CONSTRAINT_OVERLAY>( board(), getView() );
+
+    // refreshDiagnostics populates the overlay/info bar when shown, or just clears our readout.
+    refreshDiagnostics();
 }
 
 
@@ -156,7 +163,9 @@ PCB_CONSTRAINT* CONSTRAINT_EDIT_TOOL::hitTestBadge( const VECTOR2I& aPos ) const
     if( !m_overlay || !board() )
         return nullptr;
 
-    double          best = CONSTRAINT_OVERLAY::BadgeHitRadius();
+    // The badges draw screen-constant, so convert the pixel hit radius to world units at this zoom.
+    double scale = getView()->GetGAL()->GetWorldScale();
+    double best = scale > 0.0 ? CONSTRAINT_OVERLAY::BadgeHitRadius() / scale : CONSTRAINT_OVERLAY::BadgeHitRadius();
     PCB_CONSTRAINT* result = nullptr;
 
     for( const CONSTRAINT_BADGE& badge : m_overlay->Badges() )
@@ -338,6 +347,44 @@ void CONSTRAINT_EDIT_TOOL::HighlightConstraintMembers( const KIID& aId, int aMem
 }
 
 
+bool CONSTRAINT_EDIT_TOOL::allMembersLocked( const PCB_CONSTRAINT* aConstraint ) const
+{
+    if( !board() || !aConstraint || aConstraint->GetMembers().empty() )
+        return false;
+
+    for( const CONSTRAINT_MEMBER& member : aConstraint->GetMembers() )
+    {
+        BOARD_ITEM* item = board()->ResolveItem( member.m_item, true );
+
+        if( !item || !item->IsLocked() )
+            return false;
+    }
+
+    return true;
+}
+
+
+bool CONSTRAINT_EDIT_TOOL::isDuplicateConstraint( const PCB_CONSTRAINT* aConstraint ) const
+{
+    if( !aConstraint || !board() )
+        return false;
+
+    auto scan = [&]( const CONSTRAINTS& aList )
+    {
+        return std::any_of( aList.begin(), aList.end(),
+                            [&]( const PCB_CONSTRAINT* aExisting )
+                            {
+                                return aExisting != aConstraint && ConstraintsAreDuplicate( *aExisting, *aConstraint );
+                            } );
+    };
+
+    if( scan( board()->Constraints() ) )
+        return true;
+
+    return board()->GetFirstFootprint() && scan( board()->GetFirstFootprint()->Constraints() );
+}
+
+
 void CONSTRAINT_EDIT_TOOL::finishConstraintCommit( BOARD_COMMIT& aCommit,
                                                    const std::vector<PCB_CONSTRAINT*>& aAdded )
 {
@@ -348,6 +395,16 @@ void CONSTRAINT_EDIT_TOOL::finishConstraintCommit( BOARD_COMMIT& aCommit,
         solveAddedConstraint( aAdded.front() );
 
     refreshDiagnostics();
+
+    // A locked shape is a fixed reference the solver may not move.  If every referenced item is
+    // locked there is nothing it can adjust, so the relation is recorded but the geometry cannot
+    // snap; tell the user rather than appearing to silently do nothing.
+    if( !aAdded.empty() && allMembersLocked( aAdded.front() ) && frame() )
+    {
+        frame()->ShowInfoBarWarning( _( "All items referenced by this constraint are locked, so the constraint cannot "
+                                        "move any geometry." ),
+                                     true );
+    }
 }
 
 
@@ -374,11 +431,25 @@ void CONSTRAINT_EDIT_TOOL::bindCoincidentPointSet()
                                                             PCB_CONSTRAINT_TYPE::COINCIDENT );
         constraint->AddMember( pts[0].m_item, pts[0].m_anchor );
         constraint->AddMember( pts[i].m_item, pts[i].m_anchor );
+
+        // Skip a pair that is already coincident so a repeated bind does not stack duplicates.
+        if( isDuplicateConstraint( constraint.get() ) )
+            continue;
+
         added.push_back( constraint.get() );
         commit.Add( constraint.release() );
     }
 
     clearEndpointPointSet();
+
+    if( added.empty() )
+    {
+        if( frame() )
+            frame()->ShowInfoBarWarning( _( "An identical geometric constraint already exists." ) );
+
+        return;
+    }
+
     finishConstraintCommit( commit, added );
 }
 
@@ -446,6 +517,10 @@ int CONSTRAINT_EDIT_TOOL::ShowConstraints( const TOOL_EVENT& aEvent )
     {
         m_overlay = std::make_unique<CONSTRAINT_OVERLAY>( board(), getView() );
     }
+
+    // Remember the choice so the overlay stays shown across board reloads and sessions.
+    if( frame() )
+        frame()->GetPcbNewSettings()->m_Display.m_ShowConstraints = ( m_overlay != nullptr );
 
     refreshDiagnostics();
     return 0;
@@ -612,6 +687,14 @@ int CONSTRAINT_EDIT_TOOL::AddConstraint( const TOOL_EVENT& aEvent )
     if( !constraint )
         return 0;
 
+    if( isDuplicateConstraint( constraint.get() ) )
+    {
+        if( frame() )
+            frame()->ShowInfoBarWarning( _( "An identical geometric constraint already exists." ) );
+
+        return 0;
+    }
+
     // For a dimensional constraint, let the user confirm/override the measured value and choose
     // driving vs reference (issue #2329 step 7).
     if( constraint->HasValue() )
@@ -720,6 +803,15 @@ int CONSTRAINT_EDIT_TOOL::AddPointConstraint( const TOOL_EVENT& aEvent )
                 for( const CONSTRAINT_MEMBER& member : members )
                     constraint->AddMember( member.m_item, member.m_anchor );
 
+                if( isDuplicateConstraint( constraint.get() ) )
+                {
+                    if( frame() )
+                        frame()->ShowInfoBarWarning( _( "An identical geometric constraint already exists." ) );
+
+                    clearEndpointPointSet();
+                    return false; // done
+                }
+
                 PCB_CONSTRAINT* added = constraint.get();
 
                 BOARD_COMMIT commit( this );
@@ -812,8 +904,11 @@ void CONSTRAINT_EDIT_TOOL::setTransitions()
     Go( &CONSTRAINT_EDIT_TOOL::ShowConstraints,   PCB_ACTIONS::showConstraints.MakeEvent() );
     Go( &CONSTRAINT_EDIT_TOOL::ManageConstraints, PCB_ACTIONS::manageConstraints.MakeEvent() );
 
-    // Keep the diagnostics overlay current as the board changes underneath it.
+    // Keep the diagnostics overlay current as the board changes underneath it.  Undo/redo posts its
+    // own event (not TA_MODEL_CHANGE), so listen for it too or a restored/removed constraint's badge
+    // would not reappear/disappear.
     Go( &CONSTRAINT_EDIT_TOOL::refreshOverlay,    TOOL_EVENT( TC_MESSAGE, TA_MODEL_CHANGE ) );
+    Go( &CONSTRAINT_EDIT_TOOL::refreshOverlay, EVENTS::UndoRedoPostEvent );
 
     // Show/refresh the endpoint markers as the selection changes.
     Go( &CONSTRAINT_EDIT_TOOL::onSelectionChanged, EVENTS::SelectedEvent );

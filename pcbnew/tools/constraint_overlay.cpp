@@ -28,7 +28,9 @@
 #include <view/view.h>
 #include <view/view_overlay.h>
 #include <gal/color4d.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <base_units.h>
+#include <math/util.h>
 #include <geometry/eda_angle.h>
 
 #include <constraints/pcb_constraint.h>
@@ -43,6 +45,15 @@ CONSTRAINT_OVERLAY::CONSTRAINT_OVERLAY( BOARD* aBoard, KIGFX::VIEW* aView ) :
         m_board( aBoard ),
         m_selected( niluuid )
 {
+    m_view->Add( &m_badgeItem );
+}
+
+
+CONSTRAINT_OVERLAY::~CONSTRAINT_OVERLAY()
+{
+    // Remove the badge item before the base removes the tint overlay. Each is removed exactly once.
+    if( m_view )
+        m_view->Remove( &m_badgeItem );
 }
 
 
@@ -53,12 +64,15 @@ void CONSTRAINT_OVERLAY::Clear()
 
     m_overlay->Clear();
     m_view->Update( m_overlay.get() );
+
+    m_badgeItem.SetBadges( {}, niluuid );
+    m_view->Update( &m_badgeItem );
 }
 
 
 double CONSTRAINT_OVERLAY::BadgeHitRadius()
 {
-    return pcbIUScale.mmToIU( 1.2 );
+    return 14.0; // In screen pixels. The caller converts to world units with the view scale.
 }
 
 
@@ -141,11 +155,8 @@ void CONSTRAINT_OVERLAY::render()
     std::set<KIID> erroredIds( diag.errored.begin(), diag.errored.end() );
     std::set<KIID> conflictingIds( diag.conflicting.begin(), diag.conflicting.end() );
 
-    const int glyphIU = pcbIUScale.mmToIU( 0.8 );
-    const int bigGlyphIU = pcbIUScale.mmToIU( 1.2 );   // selected badge drawn 1.5x
-
-    // Fan badges out by two hit-radii so adjacent click targets never overlap.
-    const int fanStep = static_cast<int>( 2.0 * BadgeHitRadius() );
+    // Fan badges sharing an anchor apart by a fixed board distance so their glyphs do not stack.
+    const int fanStep = pcbIUScale.mmToIU( 1.5 );
 
     auto badgePosition =
             [&]( const CONSTRAINT_MEMBER& aFirst ) -> std::optional<VECTOR2I>
@@ -238,22 +249,11 @@ void CONSTRAINT_OVERLAY::render()
                     }
 
                     VECTOR2I placed = fanOut( *pos );
-                    m_badges.push_back( { placed, constraint->m_Uuid } );
 
-                    bool selected = constraint->m_Uuid == m_selected;
-
-                    m_overlay->SetIsFill( false );
-                    m_overlay->SetIsStroke( true );
-                    m_overlay->SetStrokeColor( color );
-                    m_overlay->SetLineWidth( pcbIUScale.mmToIU( 0.12 ) );
-
-                    if( selected )
-                        m_overlay->Circle( placed, BadgeHitRadius() );
-
-                    m_overlay->SetGlyphSize( selected ? VECTOR2I( bigGlyphIU, bigGlyphIU )
-                                                      : VECTOR2I( glyphIU, glyphIU ) );
-                    m_overlay->BitmapText( ConstraintTypeGlyph( constraint->GetConstraintType() ),
-                                           placed, ANGLE_0 );
+                    // The glyph itself is drawn screen-constant by m_badgeItem.  Only collect the
+                    // position, colour and glyph here.
+                    m_badges.push_back( { placed, constraint->m_Uuid,
+                                          ConstraintTypeGlyph( constraint->GetConstraintType() ), color } );
                 }
             };
 
@@ -271,5 +271,48 @@ void CONSTRAINT_OVERLAY::render()
         m_selected = niluuid;
     }
 
+    m_badgeItem.SetBadges( m_badges, m_selected );
+    m_view->Update( &m_badgeItem );
     m_view->Update( m_overlay.get() );
+}
+
+
+void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
+{
+    KIGFX::GAL*  gal = aView->GetGAL();
+    const double scale = gal->GetWorldScale();
+
+    if( scale <= 0.0 )
+        return;
+
+    const double glyphPx = 16.0;
+    const double bigGlyphPx = 24.0;
+    const double ringPx = 13.0;
+    const double linePx = 1.5;
+
+    // World units per screen pixel, giving a constant on-screen size. Cap it so a zoomed-out glyph
+    // shrinks instead of dominating the board. Do not floor it. A floor fixes the world size and
+    // makes the glyph grow without bound as you keep zooming in.
+    const double maxWorldPerPx = pcbIUScale.mmToIU( 3.0 ) / glyphPx;
+    const double worldPerPx = std::min( 1.0 / scale, maxWorldPerPx );
+
+    gal->SetIsFill( false );
+    gal->SetIsStroke( true );
+
+    for( const CONSTRAINT_BADGE& badge : m_badges )
+    {
+        bool   selected = m_selected != niluuid && badge.constraint == m_selected;
+        double glyph = ( selected ? bigGlyphPx : glyphPx ) * worldPerPx;
+
+        gal->SetStrokeColor( badge.color );
+        gal->SetLineWidth( linePx * worldPerPx );
+
+        if( selected )
+            gal->DrawCircle( badge.pos, ringPx * worldPerPx );
+
+        // Keep at least 1 IU so an extreme zoom-in never rounds the glyph away to nothing.
+        int glyphIU = std::max( 1, KiROUND( glyph ) );
+        gal->SetGlyphSize( VECTOR2I( glyphIU, glyphIU ) );
+        gal->BitmapText( badge.glyph, badge.pos, ANGLE_0 );
+    }
 }

@@ -21,8 +21,12 @@
 
 #include <vector>
 
+#include <eda_item.h>
 #include <kiid.h>
+#include <layer_ids.h>
+#include <math/box2.h>
 #include <math/vector2d.h>
+#include <gal/color4d.h>
 
 #include <tools/view_overlay_holder.h>
 #include <constraints/board_constraint_adapter.h>
@@ -35,11 +39,58 @@ class VIEW;
 }
 
 
-/// An on-canvas constraint badge: where its glyph was drawn and which constraint it represents.
+/// An on-canvas constraint badge. Holds where the glyph is drawn, the glyph and colour to draw, and
+/// which constraint it represents for hit-testing.
 struct CONSTRAINT_BADGE
 {
-    VECTOR2I pos;
-    KIID     constraint;
+    VECTOR2I       pos;
+    KIID           constraint;
+    wxString       glyph;
+    KIGFX::COLOR4D color;
+};
+
+
+/**
+ * Draws the constraint type-glyph badges at a constant on-screen size, like the edit handles. They
+ * read as annotations instead of scaling with zoom like board geometry. The size is taken from the
+ * view scale every frame, so this is a ViewDraw item rather than a cached overlay.
+ */
+class CONSTRAINT_BADGE_ITEM : public EDA_ITEM
+{
+public:
+    CONSTRAINT_BADGE_ITEM() :
+            EDA_ITEM( NOT_USED )
+    {
+    }
+
+    void SetBadges( const std::vector<CONSTRAINT_BADGE>& aBadges, const KIID& aSelected )
+    {
+        m_badges = aBadges;
+        m_selected = aSelected;
+    }
+
+    const BOX2I ViewBBox() const override
+    {
+        BOX2I bbox;
+        bbox.SetMaximum(); // Always drawn, so the per-frame screen-constant sizing stays current.
+        return bbox;
+    }
+
+    std::vector<int> ViewGetLayers() const override { return { LAYER_GP_OVERLAY }; }
+
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
+
+    bool HitTest( const VECTOR2I&, int = 0 ) const override { return false; }
+
+    wxString GetClass() const override { return wxT( "CONSTRAINT_BADGE_ITEM" ); }
+
+#if defined( DEBUG )
+    void Show( int, std::ostream& ) const override {}
+#endif
+
+private:
+    std::vector<CONSTRAINT_BADGE> m_badges;
+    KIID                          m_selected;
 };
 
 
@@ -55,6 +106,7 @@ class CONSTRAINT_OVERLAY : public VIEW_OVERLAY_HOLDER
 {
 public:
     CONSTRAINT_OVERLAY( BOARD* aBoard, KIGFX::VIEW* aView );
+    ~CONSTRAINT_OVERLAY() override;
 
     /// Redraw the tint and badges from @p aDiag (the caller owns the one board-wide solve).
     void Update( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag );
@@ -74,7 +126,8 @@ public:
     /// Badges placed by the last Update(), for canvas hit-testing.
     const std::vector<CONSTRAINT_BADGE>& Badges() const { return m_badges; }
 
-    /// World-space radius within which a click counts as hitting a badge.
+    /// Click hit radius in screen pixels. The badges draw at a constant screen size, so the caller
+    /// converts this to world units with the view scale.
     static double BadgeHitRadius();
 
 private:
@@ -85,4 +138,5 @@ private:
     BOARD_CONSTRAINT_DIAGNOSTICS  m_lastDiag;
     std::vector<CONSTRAINT_BADGE> m_badges;
     KIID                          m_selected;
+    CONSTRAINT_BADGE_ITEM         m_badgeItem;
 };

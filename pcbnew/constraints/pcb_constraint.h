@@ -241,4 +241,13 @@ wxString ConstraintDisplayLabel( const PCB_CONSTRAINT& aConstraint, EDA_UNITS aU
 wxString ConstraintMemberLabel( BOARD_ITEM* aItem, CONSTRAINT_ANCHOR aAnchor,
                                 UNITS_PROVIDER* aUnitsProvider );
 
+
+/**
+ * True if two constraints express the same relation: same type and the same members compared
+ * without regard to order (so A-B equals B-A).  Value and driving are ignored, so a second
+ * dimensional constraint on the same geometry -- which could only conflict -- also counts as a
+ * duplicate.  Used to reject authoring an identical constraint.
+ */
+bool ConstraintsAreDuplicate( const PCB_CONSTRAINT& aA, const PCB_CONSTRAINT& aB );
+
 #endif // PCB_CONSTRAINT_H_

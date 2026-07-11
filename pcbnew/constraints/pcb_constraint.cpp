@@ -19,6 +19,8 @@
 
 #include <constraints/pcb_constraint.h>
 
+#include <algorithm>
+
 #include <base_units.h>
 #include <bitmaps.h>
 #include <eda_units.h>
@@ -383,6 +385,34 @@ wxString ConstraintMemberLabel( BOARD_ITEM* aItem, CONSTRAINT_ANCHOR aAnchor,
         text += wxString::Format( wxT( " (%s)" ), anchor );
 
     return text;
+}
+
+
+bool ConstraintsAreDuplicate( const PCB_CONSTRAINT& aA, const PCB_CONSTRAINT& aB )
+{
+    if( aA.GetConstraintType() != aB.GetConstraintType() )
+        return false;
+
+    const std::vector<CONSTRAINT_MEMBER>& a = aA.GetMembers();
+    const std::vector<CONSTRAINT_MEMBER>& b = aB.GetMembers();
+
+    if( a.empty() || a.size() != b.size() )
+        return false;
+
+    // Match members as a multiset so member order does not matter (A-B is the same as B-A).
+    std::vector<CONSTRAINT_MEMBER> remaining( b.begin(), b.end() );
+
+    for( const CONSTRAINT_MEMBER& m : a )
+    {
+        auto it = std::find( remaining.begin(), remaining.end(), m );
+
+        if( it == remaining.end() )
+            return false;
+
+        remaining.erase( it );
+    }
+
+    return true;
 }
 
 

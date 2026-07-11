@@ -130,4 +130,46 @@ BOOST_AUTO_TEST_CASE( EqualityAndSimilarity )
 }
 
 
+BOOST_AUTO_TEST_CASE( DuplicateDetection )
+{
+    KIID a, b, c;
+
+    auto make = [&]( PCB_CONSTRAINT_TYPE aType, const KIID& aFirst, const KIID& aSecond )
+    {
+        PCB_CONSTRAINT constraint( nullptr, aType );
+        constraint.AddMember( aFirst, CONSTRAINT_ANCHOR::WHOLE );
+        constraint.AddMember( aSecond, CONSTRAINT_ANCHOR::WHOLE );
+        return constraint;
+    };
+
+    PCB_CONSTRAINT parallelAB = make( PCB_CONSTRAINT_TYPE::PARALLEL, a, b );
+
+    // Same type and members is a duplicate, and member order does not matter (A-B == B-A).
+    BOOST_CHECK( ConstraintsAreDuplicate( parallelAB, make( PCB_CONSTRAINT_TYPE::PARALLEL, a, b ) ) );
+    BOOST_CHECK( ConstraintsAreDuplicate( parallelAB, make( PCB_CONSTRAINT_TYPE::PARALLEL, b, a ) ) );
+
+    // A different type or a different member is not a duplicate.
+    BOOST_CHECK( !ConstraintsAreDuplicate( parallelAB, make( PCB_CONSTRAINT_TYPE::PERPENDICULAR, a, b ) ) );
+    BOOST_CHECK( !ConstraintsAreDuplicate( parallelAB, make( PCB_CONSTRAINT_TYPE::PARALLEL, a, c ) ) );
+
+    // Value and driving are ignored: a second fixed-length on the same segment is still a duplicate
+    // (it could only conflict).
+    PCB_CONSTRAINT len1( nullptr, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+    len1.AddMember( a, CONSTRAINT_ANCHOR::WHOLE );
+    len1.SetValue( 5.0 );
+
+    PCB_CONSTRAINT len2( nullptr, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+    len2.AddMember( a, CONSTRAINT_ANCHOR::WHOLE );
+    len2.SetValue( 9.0 );
+    len2.SetDriving( false );
+
+    BOOST_CHECK( ConstraintsAreDuplicate( len1, len2 ) );
+
+    // An empty-member constraint is never a duplicate (it is an error state, not a relation).
+    PCB_CONSTRAINT empty1( nullptr, PCB_CONSTRAINT_TYPE::PARALLEL );
+    PCB_CONSTRAINT empty2( nullptr, PCB_CONSTRAINT_TYPE::PARALLEL );
+    BOOST_CHECK( !ConstraintsAreDuplicate( empty1, empty2 ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

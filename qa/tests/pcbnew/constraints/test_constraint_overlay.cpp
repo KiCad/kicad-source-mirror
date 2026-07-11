@@ -61,12 +61,14 @@ BOOST_AUTO_TEST_CASE( OverlayRegistersOncePerLayerAndUnregistersFully )
         std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> withOverlay;
         view.Query( maxBox, withOverlay );
 
-        // Each item may appear once per layer it occupies; a duplicate (item, layer) pair means
+        // Each item may appear once per layer it occupies. A duplicate (item, layer) pair means
         // the same VIEW_ITEM was added to the view twice and can only be removed once.
         std::set<KIGFX::VIEW::LAYER_ITEM_PAIR> unique( withOverlay.begin(), withOverlay.end() );
         BOOST_CHECK_EQUAL( unique.size(), withOverlay.size() );
 
-        BOOST_CHECK_EQUAL( withOverlay.size(), baseline.size() + 1 );
+        // The overlay registers two items: the world-space tint overlay and the screen-constant
+        // badge item.
+        BOOST_CHECK_EQUAL( withOverlay.size(), baseline.size() + 2 );
     }
 
     // After destruction the view must hold no leftover (dangling) reference to the overlay. The

@@ -135,6 +135,14 @@ private:
     /// Open the value dialog for a constraint and, on accept, commit + re-solve + refresh.
     void editConstraint( PCB_CONSTRAINT* aConstraint );
 
+    /// True if every item @p aConstraint references resolves and is locked (nothing the solver may
+    /// move), so the relation was recorded but cannot adjust geometry.
+    bool allMembersLocked( const PCB_CONSTRAINT* aConstraint ) const;
+
+    /// True if the board already holds a constraint equal to @p aConstraint (same type and members),
+    /// so authoring it would only add a redundant copy.
+    bool isDuplicateConstraint( const PCB_CONSTRAINT* aConstraint ) const;
+
 private:
     PCB_SELECTION_TOOL*                          m_selectionTool;
     CONDITIONAL_MENU*                            m_menu;

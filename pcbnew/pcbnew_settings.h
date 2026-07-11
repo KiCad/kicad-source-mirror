@@ -215,6 +215,8 @@ public:
 
         bool                 m_ForceShowFieldsWhenFPSelected;
         bool                 m_Live3DRefresh;
+
+        bool m_ShowConstraints; ///< Keep the geometric-constraint overlay shown.
     };
 
     struct DIFF_PHASE_SKEW_SETTINGS

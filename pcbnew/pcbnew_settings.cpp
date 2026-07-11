@@ -246,6 +246,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "pcb_display.ratsnest_global",
             &m_Display.m_ShowGlobalRatsnest, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.show_constraints", &m_Display.m_ShowConstraints, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "pcb_display.ratsnest_footprint",
             &m_Display.m_ShowModuleRatsnest, true ) );
 
