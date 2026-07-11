@@ -348,6 +348,9 @@ void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal->SetIsFill( false );
     gal->SetIsStroke( true );
 
+    gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+    gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
+
     const VECTOR2D offset = CONSTRAINT_OVERLAY::BadgeScreenOffset() * worldPerPx;
 
     for( const CONSTRAINT_BADGE& badge : m_badges )
@@ -362,9 +365,11 @@ void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         if( selected )
             gal->DrawCircle( pos, ringPx * worldPerPx );
 
+        VECTOR2I glyphPos = pos + VECTOR2I( 0, KiROUND( 0.15 * glyph ) );
+
         // Keep at least 1 IU so an extreme zoom-in never rounds the glyph away to nothing.
         int glyphIU = std::max( 1, KiROUND( glyph ) );
         gal->SetGlyphSize( VECTOR2I( glyphIU, glyphIU ) );
-        gal->BitmapText( badge.glyph, pos, ANGLE_0 );
+        gal->BitmapText( badge.glyph, glyphPos, ANGLE_0 );
     }
 }

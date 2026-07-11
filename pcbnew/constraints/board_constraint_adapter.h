@@ -132,8 +132,9 @@ public:
      * @param aCursor the cursor target, in IU.
      */
     /// @p aStabilize holds free segment lengths so an angle constraint rotates a segment instead of
-    /// collapsing it. Off for live dragging.
-    bool Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize = false );
+    /// collapsing it. @p aHoldFarEnd pins the dragged segment's other end, for dragging one corner.
+    bool Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize = false,
+                bool aHoldFarEnd = false );
 
     /// Solve with no drag pin. @p aStabilize holds free segment lengths (see the dragged overload).
     bool Solve( bool aStabilize = false );
@@ -188,8 +189,8 @@ private:
     /// Append a normalized coordinate to the backing store, returning its stable index.
     int pushParam( double aValue );
 
-    /// Add a yielding length hold on every free segment, cleared by tag after the solve.
-    void holdFreeSegmentLengths();
+    /// Add a length hold on every free segment (tagged @p aTag), cleared by tag after the solve.
+    void holdFreeSegmentLengths( int aTag );
 
     /// Index into m_params of the x-coordinate an anchor maps to, or -1 if the shape has no such
     /// anchor (e.g. a circle has no endpoints).  The y-coordinate is always the next index.
@@ -244,7 +245,7 @@ private:
 CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor,
                                    std::vector<PCB_SHAPE*>*                 aModified = nullptr,
                                    const std::function<void( PCB_SHAPE* )>& aBeforeModify = {},
-                                   bool aIncludeDragged = false, bool aStabilize = false );
+                                   bool aIncludeDragged = false, bool aStabilize = false, bool aHoldFarEnd = false );
 
 
 /**

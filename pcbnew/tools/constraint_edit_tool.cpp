@@ -300,15 +300,22 @@ void CONSTRAINT_EDIT_TOOL::refreshDiagnostics()
         return;
     }
 
-    BOARD_CONSTRAINT_DIAGNOSTICS diag = DiagnoseBoardConstraints( board() );
+    applyDiagnostics( DiagnoseBoardConstraints( board() ) );
+}
 
+
+void CONSTRAINT_EDIT_TOOL::applyDiagnostics( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag )
+{
     if( m_overlay )
-        m_overlay->Update( diag );
+        m_overlay->Update( aDiag );
 
-    updateConstraintInfoBar( diag );
+    updateConstraintInfoBar( aDiag );
 
-    if( panelShown )
-        panel->RefreshList( diag );
+    if( PCB_EDIT_FRAME* pcbFrame = dynamic_cast<PCB_EDIT_FRAME*>( frame() ) )
+    {
+        if( PANEL_CONSTRAINTS* panel = pcbFrame->GetConstraintsPanel(); panel && panel->IsShownOnScreen() )
+            panel->RefreshList( aDiag );
+    }
 }
 
 
@@ -593,7 +600,24 @@ void CONSTRAINT_EDIT_TOOL::SolveAfterMove( const std::vector<PCB_SHAPE*>& aShape
     if( !modified.empty() )
         commit.Push( _( "Apply Geometric Constraint" ), APPEND_UNDO );
 
-    refreshDiagnostics();
+    // Diagnose once and use it for both the views and the warning below, so a transform does not
+    // pay for two board-wide solves.
+    BOARD_CONSTRAINT_DIAGNOSTICS diag = DiagnoseBoardConstraints( board() );
+    applyDiagnostics( diag );
+
+    // If the edit left a moved shape's constraint unsatisfiable, say so even when the overlay is off.
+    bool overConstrained = false;
+
+    for( PCB_SHAPE* shape : aShapes )
+    {
+        auto it = diag.shapeStates.find( shape->m_Uuid );
+
+        if( it != diag.shapeStates.end() && it->second == CONSTRAINT_STATE::OVER_CONSTRAINED )
+            overConstrained = true;
+    }
+
+    if( overConstrained && frame() )
+        frame()->ShowInfoBarWarning( _( "A geometric constraint could not be satisfied by this edit." ), true );
 }
 
 

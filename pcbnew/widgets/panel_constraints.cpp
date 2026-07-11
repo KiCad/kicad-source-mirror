@@ -143,6 +143,14 @@ void PANEL_CONSTRAINTS::onDelete( wxCommandEvent& aEvent )
 
     if( CONSTRAINT_EDIT_TOOL* tool = constraintTool() )
         tool->RemoveConstraintById( rowConstraint( row ) );
+
+    // Select the last row so pressing Delete again removes the next constraint.
+    if( long count = m_list->GetItemCount(); count > 0 )
+    {
+        m_list->SetItemState( count - 1, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED,
+                              wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED );
+        m_list->EnsureVisible( count - 1 );
+    }
 }
 
 

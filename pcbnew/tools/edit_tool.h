@@ -230,6 +230,9 @@ private:
     ///< Rebuilds the ratsnest for operations that require it outside the commit rebuild
     void rebuildConnectivity();
 
+    ///< Re-solve the geometric constraints of any shapes in @p aSelection after a transform.
+    void reSolveConstraintsAfterEdit( const PCB_SELECTION& aSelection );
+
 private:
     PCB_SELECTION_TOOL*   m_selectionTool;
     bool                  m_dragging;         // Indicates objects are currently being dragged

@@ -2972,9 +2972,14 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
             std::vector<PCB_SHAPE*> modified;
 
             // On a failed/diverged solve SolveCluster leaves neighbors untouched, so nothing is
-            // half-moved or staged this frame.
-            SolveCluster( board(), { shape->m_Uuid, anchor }, cursor, &modified,
-                          [&]( PCB_SHAPE* aNeighbor ) { aCommit.Modify( aNeighbor ); } );
+            // half-moved or staged this frame.  aHoldFarEnd pins the dragged segment's other corner.
+            SolveCluster(
+                    board(), { shape->m_Uuid, anchor }, cursor, &modified,
+                    [&]( PCB_SHAPE* aNeighbor )
+                    {
+                        aCommit.Modify( aNeighbor );
+                    },
+                    /* aIncludeDragged */ false, /* aStabilize */ false, /* aHoldFarEnd */ true );
 
             for( PCB_SHAPE* neighbor : modified )
                 updatedItems.push_back( neighbor );

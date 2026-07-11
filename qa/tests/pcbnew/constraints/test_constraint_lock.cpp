@@ -187,4 +187,68 @@ BOOST_AUTO_TEST_CASE( ContradictoryConstraintsAreFlagged )
 }
 
 
+// Two exactly-parallel lines with both parallel and perpendicular is still a contradiction. The
+// diagnostic solve must hold lengths hard, or it hides the conflict by collapsing a line to a point.
+BOOST_AUTO_TEST_CASE( ExactlyParallelPerpAndParallelFlagged )
+{
+    BOARD board;
+
+    // Two lines with identical direction (the failing case from a real board).
+    PCB_SHAPE* a = addSegment( board, { 190120000, 74420000 }, { 163850000, 100690000 } );
+    PCB_SHAPE* b = addSegment( board, { 202080000, 74420000 }, { 175810000, 100690000 } );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::PERPENDICULAR,
+                   { { a->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { b->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::PARALLEL,
+                   { { a->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { b->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    BOARD_CONSTRAINT_DIAGNOSTICS d = DiagnoseBoardConstraints( &board );
+
+    BOOST_CHECK( !d.conflicting.empty() );
+
+    // Diagnosis leaves both lines intact.
+    BOOST_CHECK_GT( segLength( a ), 1 * MM );
+    BOOST_CHECK_GT( segLength( b ), 1 * MM );
+}
+
+
+// Horizontal and vertical on one segment can only be met by a zero-length point, which the solver
+// reaches by collapsing the segment. The collapse itself must be flagged as over-constrained.
+BOOST_AUTO_TEST_CASE( HorizontalPlusVerticalIsFlagged )
+{
+    BOARD board;
+
+    PCB_SHAPE* s = addSegment( board, { 0, 0 }, { 10 * MM, 2 * MM } );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::HORIZONTAL, { { s->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::VERTICAL, { { s->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    BOOST_CHECK( !DiagnoseBoardConstraints( &board ).conflicting.empty() );
+    BOOST_CHECK_GT( segLength( s ), 1 * MM ); // diagnosis does not move the board geometry
+}
+
+
+// An authored length constraint (solved, so the geometry satisfies it) is not falsely flagged by
+// the diagnostic length hold.
+BOOST_AUTO_TEST_CASE( AuthoredLengthConstraintNotFlagged )
+{
+    BOARD board;
+
+    PCB_SHAPE* s1 = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* s2 = addSegment( board, { 0, 5 * MM }, { 4 * MM, 5 * MM } );
+
+    PCB_CONSTRAINT* c =
+            addConstraint( board, PCB_CONSTRAINT_TYPE::EQUAL_LENGTH,
+                           { { s1->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { s2->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    std::vector<PCB_SHAPE*> modified;
+    ApplyConstraintImmediately( &board, c, &modified,
+                                []( PCB_SHAPE* )
+                                {
+                                } );
+
+    BOOST_CHECK( DiagnoseBoardConstraints( &board ).conflicting.empty() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

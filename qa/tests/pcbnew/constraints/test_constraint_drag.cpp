@@ -252,4 +252,25 @@ BOOST_FIXTURE_TEST_CASE( MoveReSolvesCluster, DRAG_FIXTURE )
 }
 
 
+// Dragging one corner of a fixed-length segment pivots about the far corner, which stays put.
+BOOST_FIXTURE_TEST_CASE( DragCornerPivotsAboutFarEnd, DRAG_FIXTURE )
+{
+    PCB_SHAPE* seg = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+    c->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    c->SetValue( 10.0 * MM );
+    board.Add( c );
+
+    // Drag the START corner up toward (0, 5mm).
+    SolveCluster( &board, { seg->m_Uuid, CONSTRAINT_ANCHOR::START }, { 0, 5 * MM }, nullptr, {},
+                  /* aIncludeDragged */ true, /* aStabilize */ false, /* aHoldFarEnd */ true );
+
+    BOOST_CHECK_EQUAL( seg->GetEnd(), VECTOR2I( 10 * MM, 0 ) ); // far corner held
+    BOOST_CHECK_LE( std::abs( ( seg->GetEnd() - seg->GetStart() ).EuclideanNorm() - 10.0 * MM ),
+                    5000.0 );                    // length preserved
+    BOOST_CHECK_GT( seg->GetStart().y, 3 * MM ); // dragged corner followed the cursor
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

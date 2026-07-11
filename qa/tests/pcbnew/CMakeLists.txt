@@ -280,6 +280,7 @@ set( QA_PCBNEW_SRCS
     constraints/test_constraint_labels.cpp
     constraints/test_constraint_apply.cpp
     constraints/test_constraint_lock.cpp
+    constraints/test_constraint_combinations.cpp
 )
 
 # DipTrace PCB benchmark tests that exercise proprietary reference designs kept outside the source

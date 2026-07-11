@@ -45,6 +45,13 @@ static constexpr int MAX_SOLVE_ITERATIONS = 100;
 // A non-temporary tag for the hard radius hold during a resize solve.
 static constexpr int RESIZE_RADIUS_TAG = 1000;
 
+// A non-temporary tag for the hard length hold during a diagnostic solve, so a contradiction cannot
+// hide by collapsing a segment.
+static constexpr int LENGTH_HOLD_TAG = 1001;
+
+// Hard hold on a dragged segment's far corner.
+static constexpr int DRAG_HOLD_TAG = 1002;
+
 
 // Every constraint owned by the board or by any of its footprints.  In the footprint editor the
 // "board" is a footprint holder, so footprint-scoped constraints must be gathered too.
@@ -775,15 +782,16 @@ bool BOARD_CONSTRAINT_ADAPTER::Solve( bool aStabilize )
     if( !m_built )
         return false;
 
+    // A hard hold here (no drag pin) so a contradiction cannot hide by collapsing a segment.
     if( aStabilize )
-        holdFreeSegmentLengths();
+        holdFreeSegmentLengths( LENGTH_HOLD_TAG );
 
     m_gcs->initSolution();
     int ret = m_gcs->solve();
     m_gcs->applySolution();
 
     if( aStabilize )
-        m_gcs->clearByTag( GCS::DefaultTemporaryConstraint );
+        m_gcs->clearByTag( LENGTH_HOLD_TAG );
 
     return ret == GCS::Success || ret == GCS::Converged;
 }
@@ -832,7 +840,8 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveAfterResize( const KIID& aResizedShape )
 }
 
 
-bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize )
+bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize,
+                                      bool aHoldFarEnd )
 {
     if( !m_built )
         return false;
@@ -859,22 +868,41 @@ bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const V
     m_gcs->addConstraintCoordinateX( anchor, &m_params[m_dragTargetX], GCS::DefaultTemporaryConstraint );
     m_gcs->addConstraintCoordinateY( anchor, &m_params[m_dragTargetY], GCS::DefaultTemporaryConstraint );
 
+    // Pin the far corner. The drag pivots about it.
+    if( auto it = m_shapeVars.find( aDragged.m_item );
+        aHoldFarEnd && it != m_shapeVars.end() && it->second.kind == SHAPE_KIND::SEGMENT )
+    {
+        int otherX = anchorX == it->second.startX ? it->second.endX
+                     : anchorX == it->second.endX ? it->second.startX
+                                                  : -1;
+
+        if( otherX >= 0 )
+        {
+            GCS::Point other{ &m_params[otherX], &m_params[otherX + 1] };
+            int        tx = pushParam( m_params[otherX] );
+            int        ty = pushParam( m_params[otherX + 1] );
+            m_gcs->addConstraintCoordinateX( other, &m_params[tx], DRAG_HOLD_TAG );
+            m_gcs->addConstraintCoordinateY( other, &m_params[ty], DRAG_HOLD_TAG );
+        }
+    }
+
     if( aStabilize )
-        holdFreeSegmentLengths();
+        holdFreeSegmentLengths( GCS::DefaultTemporaryConstraint );
 
     m_gcs->initSolution();
     int ret = m_gcs->solve();
     m_gcs->applySolution();
 
     m_gcs->clearByTag( GCS::DefaultTemporaryConstraint );
+    m_gcs->clearByTag( DRAG_HOLD_TAG );
 
     return ret == GCS::Success || ret == GCS::Converged;
 }
 
 
-void BOARD_CONSTRAINT_ADAPTER::holdFreeSegmentLengths()
+void BOARD_CONSTRAINT_ADAPTER::holdFreeSegmentLengths( int aTag )
 {
-    // A yielding length hold keeps an angle constraint from collapsing a free segment to a point.
+    // Hold each free segment's length so an angle constraint cannot collapse it to a point.
     for( auto& [kiid, vars] : m_shapeVars )
     {
         if( vars.kind != SHAPE_KIND::SEGMENT || vars.shape->IsLocked() )
@@ -885,7 +913,7 @@ void BOARD_CONSTRAINT_ADAPTER::holdFreeSegmentLengths()
         double     dx = m_params[vars.endX] - m_params[vars.startX];
         double     dy = m_params[vars.endX + 1] - m_params[vars.startX + 1];
         int        len = pushParam( std::hypot( dx, dy ) );
-        m_gcs->addConstraintP2PDistance( p1, p2, &m_params[len], GCS::DefaultTemporaryConstraint );
+        m_gcs->addConstraintP2PDistance( p1, p2, &m_params[len], aTag );
     }
 }
 
@@ -1092,6 +1120,33 @@ CONSTRAINT_DIAGNOSIS BOARD_CONSTRAINT_ADAPTER::Diagnose()
             diag.conflicting.push_back( kiid );
     }
 
+    // The solve collapsing a segment to a point (e.g. horizontal and vertical at once) satisfies the
+    // constraints with zero residual, so flag the whole cluster when that happens.
+    const double normFloor = 1e-3;
+    bool         collapsed = false;
+
+    for( auto& [k, vars] : m_shapeVars )
+    {
+        if( vars.kind != SHAPE_KIND::SEGMENT )
+            continue;
+
+        double solvedLen = std::hypot( m_params[vars.endX] - m_params[vars.startX],
+                                       m_params[vars.endX + 1] - m_params[vars.startX + 1] );
+        double origLen = ( vars.shape->GetEnd() - vars.shape->GetStart() ).EuclideanNorm() * m_invScale;
+
+        if( origLen > normFloor && solvedLen < normFloor )
+            collapsed = true;
+    }
+
+    if( collapsed )
+    {
+        for( const auto& [tag, kiid] : m_tagToConstraint )
+        {
+            if( std::find( diag.conflicting.begin(), diag.conflicting.end(), kiid ) == diag.conflicting.end() )
+                diag.conflicting.push_back( kiid );
+        }
+    }
+
     // .solved reflects the last Solve(), which Diagnose() does not run; the caller sets it.
     return diag;
 }
@@ -1100,7 +1155,7 @@ CONSTRAINT_DIAGNOSIS BOARD_CONSTRAINT_ADAPTER::Diagnose()
 CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor,
                                    std::vector<PCB_SHAPE*>*                 aModified,
                                    const std::function<void( PCB_SHAPE* )>& aBeforeModify, bool aIncludeDragged,
-                                   bool aStabilize )
+                                   bool aStabilize, bool aHoldFarEnd )
 {
     CONSTRAINT_DIAGNOSIS diag;
 
@@ -1125,7 +1180,7 @@ CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDrag
     if( !adapter.Build( shapes, clusterConstraints ) )
         return diag;
 
-    bool solved = adapter.Solve( aDragged, aCursor, aStabilize );
+    bool solved = adapter.Solve( aDragged, aCursor, aStabilize, aHoldFarEnd );
 
     if( !solved )
         return diag;   // leave geometry untouched on a failed/diverged solve

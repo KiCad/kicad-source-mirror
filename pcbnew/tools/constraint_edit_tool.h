@@ -133,6 +133,10 @@ private:
     /// Solve the board diagnosis once and refresh every shown view (overlay, info bar, panel).
     void refreshDiagnostics();
 
+    /// Push an already-computed diagnosis into every shown view, so a caller that already solved
+    /// does not solve again.
+    void applyDiagnostics( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag );
+
     /// Remove a constraint in its own commit and refresh the diagnostics.
     void removeConstraint( PCB_CONSTRAINT* aConstraint );
 

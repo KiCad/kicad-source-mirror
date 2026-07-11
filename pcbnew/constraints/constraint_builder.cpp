@@ -36,13 +36,6 @@ bool isSegment( const BOARD_ITEM* aItem )
 }
 
 
-bool isCircle( const BOARD_ITEM* aItem )
-{
-    return aItem->Type() == PCB_SHAPE_T
-            && static_cast<const PCB_SHAPE*>( aItem )->GetShape() == SHAPE_T::CIRCLE;
-}
-
-
 bool isCircleOrArc( const BOARD_ITEM* aItem )
 {
     if( aItem->Type() != PCB_SHAPE_T )
@@ -68,18 +61,6 @@ bool allSegments( const std::vector<BOARD_ITEM*>& aItems )
     for( const BOARD_ITEM* item : aItems )
     {
         if( !isSegment( item ) )
-            return false;
-    }
-
-    return true;
-}
-
-
-bool allCircles( const std::vector<BOARD_ITEM*>& aItems )
-{
-    for( const BOARD_ITEM* item : aItems )
-    {
-        if( !isCircle( item ) )
             return false;
     }
 

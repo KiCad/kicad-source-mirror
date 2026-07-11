@@ -2291,6 +2291,25 @@ int EDIT_TOOL::EditVertices( const TOOL_EVENT& aEvent )
 }
 
 
+void EDIT_TOOL::reSolveConstraintsAfterEdit( const PCB_SELECTION& aSelection )
+{
+    CONSTRAINT_EDIT_TOOL* constraintTool = m_toolMgr->GetTool<CONSTRAINT_EDIT_TOOL>();
+
+    if( !constraintTool )
+        return;
+
+    std::vector<PCB_SHAPE*> shapes;
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        if( item->Type() == PCB_SHAPE_T )
+            shapes.push_back( static_cast<PCB_SHAPE*>( item ) );
+    }
+
+    constraintTool->SolveAfterMove( shapes );
+}
+
+
 int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
@@ -2432,7 +2451,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         // Don't push a separate undo entry when we're in the middle of a move operation.
         // The parent move will handle the commit.
         if( !localCommit.Empty() && !m_dragging )
+        {
             localCommit.Push( _( "Rotate" ) );
+            reSolveConstraintsAfterEdit( selection );
+        }
 
         if( is_hover && !m_dragging )
             m_toolMgr->RunAction( ACTIONS::selectionClear );
@@ -2597,7 +2619,10 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     // Don't push a separate undo entry when we're in the middle of a move operation.
     // The parent move will handle the commit.
     if( !localCommit.Empty() && !m_dragging )
+    {
         localCommit.Push( _( "Mirror" ) );
+        reSolveConstraintsAfterEdit( selection );
+    }
 
     if( skippedFootprints > 0 && !m_dragging )
     {
@@ -2779,7 +2804,10 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     // Don't push a separate undo entry when we're in the middle of a move operation.
     // The parent move will handle the commit.
     if( !localCommit.Empty() && !m_dragging )
+    {
         localCommit.Push( _( "Change Side / Flip" ) );
+        reSolveConstraintsAfterEdit( selection );
+    }
 
     if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( ACTIONS::selectionClear );
@@ -3151,6 +3179,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         }
 
         commit.Push( _( "Move Exactly" ) );
+        reSolveConstraintsAfterEdit( selection );
 
         if( selection.IsHover() )
             m_toolMgr->RunAction( ACTIONS::selectionClear );
