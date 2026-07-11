@@ -19,6 +19,7 @@
 
 #include <dialogs/dialog_constraint_value.h>
 
+#include <confirm.h>
 #include <pcb_base_frame.h>
 #include <board.h>
 #include <board_commit.h>
@@ -30,7 +31,8 @@
 DIALOG_CONSTRAINT_VALUE::DIALOG_CONSTRAINT_VALUE( PCB_BASE_FRAME* aParent, PCB_CONSTRAINT_TYPE aType,
                                                   double aValue, bool aDriving ) :
         DIALOG_CONSTRAINT_VALUE_BASE( aParent ),
-        m_isAngle( aType == PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION )
+        m_type( aType ),
+        m_isAngle( !ConstraintValueIsLength( aType ) )
 {
     if( m_isAngle )
         m_valueLabel->SetLabel( _( "Angle:" ) );
@@ -49,7 +51,20 @@ DIALOG_CONSTRAINT_VALUE::DIALOG_CONSTRAINT_VALUE( PCB_BASE_FRAME* aParent, PCB_C
         m_valueBinder->SetValue( static_cast<long long int>( aValue ) );
     }
 
+    m_drivingCtrl->Bind( wxEVT_CHECKBOX, [this]( wxCommandEvent& ) { updateValueEnabled(); } );
+    updateValueEnabled();
+
     finishDialogSettings();
+}
+
+
+void DIALOG_CONSTRAINT_VALUE::updateValueEnabled()
+{
+    // A reference dimension reports the measured geometry, so its value cannot be typed.
+    bool driving = m_drivingCtrl->GetValue();
+
+    m_valueCtrl->Enable( driving );
+    m_valueUnits->Enable( driving );
 }
 
 
@@ -74,6 +89,42 @@ bool DIALOG_CONSTRAINT_VALUE::GetDriving() const
 }
 
 
+bool DIALOG_CONSTRAINT_VALUE::TransferDataFromWindow()
+{
+    const bool driving = GetDriving();
+
+    if( m_isAngle && driving )
+    {
+        if( m_type == PCB_CONSTRAINT_TYPE::ARC_ANGLE )
+        {
+            // An arc's swept angle spans a full turn, but 0 and 360 are degenerate.
+            double degrees = m_valueBinder->GetAngleValue().AsDegrees();
+
+            if( degrees <= 0.0 || degrees >= 360.0 )
+            {
+                DisplayError( this, _( "Enter an arc angle between 0 and 360 degrees." ) );
+                return false;
+            }
+        }
+        // A corner angle is undirected, so only [0, 180] is meaningful.
+        else if( !m_valueBinder->Validate( 0.0, 180.0, EDA_UNITS::DEGREES ) )
+        {
+            return false;
+        }
+    }
+
+    // A zero or negative driving length or radius is degenerate geometry the solver can only
+    // fail on, so refuse it at entry like the angle ranges above.
+    if( !m_isAngle && driving && m_valueBinder->GetValue() <= 0 )
+    {
+        DisplayError( this, _( "Enter a value greater than zero." ) );
+        return false;
+    }
+
+    return DIALOG_CONSTRAINT_VALUE_BASE::TransferDataFromWindow();
+}
+
+
 bool EditConstraintValue( PCB_BASE_FRAME* aFrame, PCB_CONSTRAINT* aConstraint, BOARD_COMMIT& aCommit )
 {
     if( !aConstraint || !aConstraint->HasValue() )
@@ -91,9 +142,8 @@ bool EditConstraintValue( PCB_BASE_FRAME* aFrame, PCB_CONSTRAINT* aConstraint, B
 
     // Snap the geometry to the new value in the same commit, the way creation does -- otherwise a
     // driving length/radius/angle change is stored but the shapes keep their old size.
-    std::vector<PCB_SHAPE*> modified;
-    ApplyConstraintImmediately( aFrame->GetBoard(), aConstraint, &modified,
-                                [&]( PCB_SHAPE* aShape ) { aCommit.Modify( aShape ); } );
+    ApplyConstraintImmediately( aFrame->GetBoard(), aConstraint, nullptr,
+                                [&]( BOARD_ITEM* aItem ) { aCommit.Modify( aItem ); } );
 
     aCommit.Push( _( "Edit Geometric Constraint" ) );
     return true;

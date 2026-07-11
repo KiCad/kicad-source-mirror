@@ -66,7 +66,7 @@ void PopulateConstraintList( wxListCtrl* aList, BOARD* aBoard, UNITS_PROVIDER* a
                 {
                     const std::vector<CONSTRAINT_MEMBER>& members = constraint->GetMembers();
 
-                    wxString item1 = members.size() > 0 ? memberLabel( members[0] ) : wxString();
+                    wxString item1 = !members.empty() ? memberLabel( members[0] ) : wxString();
                     wxString item2 = members.size() > 1 ? memberLabel( members[1] ) : wxString();
 
                     // Constraints with more than two members (e.g. symmetric) still get two
@@ -81,11 +81,11 @@ void PopulateConstraintList( wxListCtrl* aList, BOARD* aBoard, UNITS_PROVIDER* a
 
                     wxString state;
 
-                    if( errored.count( constraint->m_Uuid ) )
+                    if( errored.contains( constraint->m_Uuid ) )
                         state = _( "Error (missing item)" );
-                    else if( conflicting.count( constraint->m_Uuid ) )
+                    else if( conflicting.contains( constraint->m_Uuid ) )
                         state = _( "Over-constrained" );
-                    else if( redundant.count( constraint->m_Uuid ) )
+                    else if( redundant.contains( constraint->m_Uuid ) )
                         state = _( "Redundant" );
                     else
                         state = _( "OK" );

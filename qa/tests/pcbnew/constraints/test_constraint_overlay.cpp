@@ -37,9 +37,9 @@
 
 #include <constraints/pcb_constraint.h>
 #include <constraints/board_constraint_adapter.h>
+#include <constraints/constraint_builder.h>
 
 #include <tools/constraint_overlay.h>
-#include <tools/constraint_endpoint_overlay.h>
 
 BOOST_AUTO_TEST_SUITE( ConstraintOverlay )
 
@@ -83,56 +83,6 @@ BOOST_AUTO_TEST_CASE( OverlayRegistersOncePerLayerAndUnregistersFully )
 BOOST_AUTO_TEST_SUITE_END()
 
 
-BOOST_AUTO_TEST_SUITE( ConstraintEndpointOverlay )
-
-
-BOOST_AUTO_TEST_CASE( PointSetTogglesAndPrunes )
-{
-    BOARD       board;
-    KIGFX::VIEW view;
-
-    // The overlay resolves shapes by KIID against the board, so the shapes must live on it.
-    PCB_SHAPE* a = new PCB_SHAPE( &board, SHAPE_T::SEGMENT );
-    a->SetStart( VECTOR2I( 0, 0 ) );
-    a->SetEnd( VECTOR2I( 1000000, 0 ) );
-    board.Add( a );
-
-    PCB_SHAPE* b = new PCB_SHAPE( &board, SHAPE_T::SEGMENT );
-    b->SetStart( VECTOR2I( 0, 1000000 ) );
-    b->SetEnd( VECTOR2I( 1000000, 1000000 ) );
-    board.Add( b );
-
-    const double tol = 100;
-
-    CONSTRAINT_ENDPOINT_OVERLAY overlay( &board, &view );
-    overlay.SetShapes( { a, b } );
-
-    // Clicking an anchor adds it; clicking again removes it.
-    BOOST_TEST( overlay.ToggleNearest( VECTOR2I( 0, 0 ), tol ) );
-    BOOST_CHECK_EQUAL( overlay.PointSet().size(), 1 );
-    BOOST_CHECK( overlay.PointSet()[0] == CONSTRAINT_MEMBER( a->m_Uuid, CONSTRAINT_ANCHOR::START ) );
-
-    BOOST_TEST( overlay.ToggleNearest( VECTOR2I( 0, 0 ), tol ) );
-    BOOST_TEST( overlay.PointSet().empty() );
-
-    // A click far from any anchor binds nothing.
-    BOOST_TEST( !overlay.ToggleNearest( VECTOR2I( 500000, 500000 ), tol ) );
-
-    // Two anchors across two shapes.
-    overlay.ToggleNearest( VECTOR2I( 0, 0 ), tol );                // a START
-    overlay.ToggleNearest( VECTOR2I( 1000000, 1000000 ), tol );    // b END
-    BOOST_CHECK_EQUAL( overlay.PointSet().size(), 2 );
-
-    // Dropping shape b from the offered set prunes its picked anchor.
-    overlay.SetShapes( { a } );
-    BOOST_REQUIRE_EQUAL( overlay.PointSet().size(), 1 );
-    BOOST_CHECK( overlay.PointSet()[0] == CONSTRAINT_MEMBER( a->m_Uuid, CONSTRAINT_ANCHOR::START ) );
-}
-
-
-BOOST_AUTO_TEST_SUITE_END()
-
-
 BOOST_AUTO_TEST_SUITE( ConstraintBadges )
 
 
@@ -162,16 +112,129 @@ BOOST_AUTO_TEST_CASE( BadgesFanOutAndSelectionToggles )
 
     BOOST_REQUIRE_EQUAL( overlay.Badges().size(), 2 );
 
-    // Both anchor on the segment's start, so fan-out must separate them by at least two hit-radii
-    // (one click can then never fall inside both badges' targets).
-    double dist = ( overlay.Badges()[0].pos - overlay.Badges()[1].pos ).EuclideanNorm();
-    BOOST_TEST( dist >= 2.0 * CONSTRAINT_OVERLAY::BadgeHitRadius() - 1.0 );
+    // The badges store their (shared) anchor; the fan-out lives in the screen-space layout.
+    BOOST_CHECK_EQUAL( overlay.Badges()[0].pos, overlay.Badges()[1].pos );
+
+    // LayoutBadges separates same-anchor badges by at least the fan step at any zoom, and the
+    // separation scales with world-per-pixel -- the regression against the old fixed 1.5 mm fan.
+    for( double worldPerPx : { 200.0, 8000.0 } )
+    {
+        std::vector<VECTOR2D> layout = CONSTRAINT_OVERLAY::LayoutBadges( overlay.Badges(), worldPerPx );
+
+        BOOST_REQUIRE_EQUAL( layout.size(), 2 );
+        double dist = ( layout[0] - layout[1] ).EuclideanNorm();
+        BOOST_TEST( dist >= 18.0 * worldPerPx - 1.0 );
+    }
 
     // Selection state changes only on a real change.
     BOOST_TEST( overlay.SetSelected( c1->m_Uuid ) );
     BOOST_TEST( !overlay.SetSelected( c1->m_Uuid ) );
     BOOST_CHECK( overlay.GetSelected() == c1->m_Uuid );
     BOOST_TEST( overlay.SetSelected( niluuid ) );
+}
+
+
+// Badges on DIFFERENT anchors that project within a glyph of each other at far zoom-out are still
+// pushed apart by the layout (the cross-anchor de-overlap the old world-space fan also did).
+BOOST_AUTO_TEST_CASE( LayoutDeOverlapsNearbyAnchors )
+{
+    constexpr int MM = 1000000;
+
+    BOARD       board;
+    KIGFX::VIEW view;
+
+    PCB_SHAPE* seg = new PCB_SHAPE( &board, SHAPE_T::SEGMENT );
+    seg->SetStart( VECTOR2I( 0, 0 ) );
+    seg->SetEnd( VECTOR2I( MM / 10, 0 ) );   // endpoints only 0.1 mm apart
+    board.Add( seg );
+
+    auto* c1 = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_POSITION );
+    c1->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( c1 );
+
+    auto* c2 = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_POSITION );
+    c2->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::END );
+    board.Add( c2 );
+
+    CONSTRAINT_OVERLAY overlay( &board, &view );
+    overlay.Update( DiagnoseBoardConstraints( &board ) );
+    BOOST_REQUIRE_EQUAL( overlay.Badges().size(), 2 );
+
+    const double          worldPerPx = 8000.0;
+    std::vector<VECTOR2D> layout = CONSTRAINT_OVERLAY::LayoutBadges( overlay.Badges(), worldPerPx );
+
+    BOOST_TEST( ( layout[0] - layout[1] ).EuclideanNorm() >= 18.0 * worldPerPx - 1.0 );
+}
+
+
+// The visibility mode and hover filter are orthogonal: ALWAYS shows every badge, HOVER with nothing
+// hovered shows none, HOVER with a shape shows only its constraints, and a panel isolation wins.
+BOOST_AUTO_TEST_CASE( VisibilityModeAndHoverFilter )
+{
+    constexpr int MM = 1000000;
+
+    BOARD       board;
+    KIGFX::VIEW view;
+
+    PCB_SHAPE* seg1 = new PCB_SHAPE( &board, SHAPE_T::SEGMENT );
+    seg1->SetStart( VECTOR2I( 0, 0 ) );
+    seg1->SetEnd( VECTOR2I( 10 * MM, 0 ) );
+    board.Add( seg1 );
+
+    PCB_SHAPE* seg2 = new PCB_SHAPE( &board, SHAPE_T::SEGMENT );
+    seg2->SetStart( VECTOR2I( 0, 10 * MM ) );
+    seg2->SetEnd( VECTOR2I( 10 * MM, 10 * MM ) );
+    board.Add( seg2 );
+
+    auto* c1 = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_POSITION );
+    c1->AddMember( seg1->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( c1 );
+
+    auto* c2 = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_POSITION );
+    c2->AddMember( seg2->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( c2 );
+
+    BOARD_CONSTRAINT_DIAGNOSTICS diag = DiagnoseBoardConstraints( &board );
+    CONSTRAINT_OVERLAY           overlay( &board, &view );
+
+    overlay.SetVisibilityMode( OVERLAY_MODE::ALWAYS );
+    overlay.Update( diag );
+    BOOST_CHECK_EQUAL( overlay.Badges().size(), 2 );
+
+    overlay.SetVisibilityMode( OVERLAY_MODE::HOVER );
+    overlay.Update( diag );
+    BOOST_CHECK_EQUAL( overlay.Badges().size(), 0 );   // nothing hovered -> hidden
+
+    overlay.SetHoverShape( seg1->m_Uuid );
+    overlay.Update( diag );
+    BOOST_REQUIRE_EQUAL( overlay.Badges().size(), 1 );
+    BOOST_CHECK( overlay.Badges()[0].constraint == c1->m_Uuid );
+
+    overlay.SetIsolated( c2->m_Uuid );   // panel focus wins over hover
+    overlay.Update( diag );
+    BOOST_REQUIRE_EQUAL( overlay.Badges().size(), 1 );
+    BOOST_CHECK( overlay.Badges()[0].constraint == c2->m_Uuid );
+}
+
+
+BOOST_AUTO_TEST_CASE( NearestConstrainedShapeUsesCandidatesOnly )
+{
+    constexpr int MM = 1000000;
+
+    BOARD      board;
+    PCB_SHAPE* seg = new PCB_SHAPE( &board, SHAPE_T::SEGMENT );
+    seg->SetStart( VECTOR2I( 0, 0 ) );
+    seg->SetEnd( VECTOR2I( 10 * MM, 0 ) );
+    board.Add( seg );
+
+    std::vector<PCB_SHAPE*> candidates = { seg };
+
+    std::optional<KIID> hit = NearestConstrainedShape( candidates, VECTOR2I( 5 * MM, 1000 ), 5000 );
+    BOOST_REQUIRE( hit.has_value() );
+    BOOST_CHECK( *hit == seg->m_Uuid );
+
+    BOOST_CHECK( !NearestConstrainedShape( candidates, VECTOR2I( 5 * MM, 5 * MM ), 5000 ).has_value() );
+    BOOST_CHECK( !NearestConstrainedShape( {}, VECTOR2I( 0, 0 ), 5000 ).has_value() );
 }
 
 

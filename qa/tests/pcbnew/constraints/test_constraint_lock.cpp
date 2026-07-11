@@ -25,6 +25,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <board.h>
+#include <footprint.h>
 #include <pcb_shape.h>
 #include <constraints/pcb_constraint.h>
 #include <constraints/board_constraint_adapter.h>
@@ -115,7 +116,7 @@ BOOST_AUTO_TEST_CASE( LockedMemberNotMovedOnApply )
 
     std::vector<PCB_SHAPE*> modified;
     ApplyConstraintImmediately( &board, c, &modified,
-                                []( PCB_SHAPE* )
+                                []( BOARD_ITEM* )
                                 {
                                 } );
 
@@ -147,7 +148,7 @@ BOOST_AUTO_TEST_CASE( PerpendicularDoesNotCollapseFreeSegment )
 
     std::vector<PCB_SHAPE*> modified;
     ApplyConstraintImmediately( &board, c, &modified,
-                                []( PCB_SHAPE* )
+                                []( BOARD_ITEM* )
                                 {
                                 } );
 
@@ -243,11 +244,66 @@ BOOST_AUTO_TEST_CASE( AuthoredLengthConstraintNotFlagged )
 
     std::vector<PCB_SHAPE*> modified;
     ApplyConstraintImmediately( &board, c, &modified,
-                                []( PCB_SHAPE* )
+                                []( BOARD_ITEM* )
                                 {
                                 } );
 
     BOOST_CHECK( DiagnoseBoardConstraints( &board ).conflicting.empty() );
+}
+
+
+// A graphic inside a locked footprint carries no lock bit of its own, but the footprint's lock must
+// still freeze it: the solver stretches only the free board segment.  BOARD_ITEM::IsLocked() never
+// consults the parent footprint, so this fails without ConstraintItemIsLocked.
+BOOST_AUTO_TEST_CASE( LockedFootprintChildIsNotMoved )
+{
+    BOARD board;
+
+    FOOTPRINT* footprint = new FOOTPRINT( &board );
+    board.Add( footprint );
+    footprint->SetLocked( true );
+
+    PCB_SHAPE* child = new PCB_SHAPE( footprint, SHAPE_T::SEGMENT );
+    child->SetStart( { 0, 0 } );
+    child->SetEnd( { 10 * MM, 0 } );
+    footprint->Add( child );
+
+    PCB_SHAPE* free = addSegment( board, { 0, 5 * MM }, { 4 * MM, 5 * MM } ); // length 4 mm
+
+    BOOST_CHECK( ConstraintItemIsLocked( child ) );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::EQUAL_LENGTH,
+                   { { child->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { free->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    std::vector<PCB_SHAPE*> shapes{ child, free };
+    solveAndApply( board, shapes );
+
+    BOOST_CHECK_EQUAL( child->GetStart(), VECTOR2I( 0, 0 ) );
+    BOOST_CHECK_EQUAL( child->GetEnd(), VECTOR2I( 10 * MM, 0 ) );
+
+    BOOST_CHECK_LE( std::abs( segLength( free ) - 10.0 * MM ), 5000.0 );
+}
+
+
+// In the footprint editor nothing is ever lock-frozen, even when the edited footprint carries a
+// stale lock bit, mirroring BOARD_ITEM::IsLocked()'s FPHOLDER exemption.
+BOOST_AUTO_TEST_CASE( FootprintEditorIgnoresLocks )
+{
+    BOARD board;
+    board.SetBoardUse( BOARD_USE::FPHOLDER );
+
+    FOOTPRINT* footprint = new FOOTPRINT( &board );
+    board.Add( footprint );
+    footprint->SetLocked( true );
+
+    PCB_SHAPE* child = new PCB_SHAPE( footprint, SHAPE_T::SEGMENT );
+    child->SetStart( { 0, 0 } );
+    child->SetEnd( { 10 * MM, 0 } );
+    footprint->Add( child );
+
+    // Only solver members (shapes, dimensions) are queried; the footprint itself is not, and its
+    // own IsLocked() reports the raw bit regardless of board use.
+    BOOST_CHECK( !ConstraintItemIsLocked( child ) );
 }
 
 

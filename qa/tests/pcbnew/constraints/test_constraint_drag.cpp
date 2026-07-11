@@ -67,6 +67,24 @@ struct DRAG_FIXTURE
         board.Add( circle );
         return circle;
     }
+
+    PCB_SHAPE* addArc( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+    {
+        PCB_SHAPE* arc = new PCB_SHAPE( &board, SHAPE_T::ARC );
+        arc->SetArcGeometry( aStart, aMid, aEnd );
+        board.Add( arc );
+        return arc;
+    }
+
+    PCB_CONSTRAINT* addCoincident( PCB_SHAPE* aA, CONSTRAINT_ANCHOR aAnchorA, PCB_SHAPE* aB,
+                                   CONSTRAINT_ANCHOR aAnchorB )
+    {
+        PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::COINCIDENT );
+        c->AddMember( aA->m_Uuid, aAnchorA );
+        c->AddMember( aB->m_Uuid, aAnchorB );
+        board.Add( c );
+        return c;
+    }
 };
 
 
@@ -86,7 +104,7 @@ void simulateDrag( BOARD_COMMIT& aCommit, BOARD* aBoard, PCB_SHAPE* aShape,
         aShape->SetCenter( aCursor );
 
     SolveCluster( aBoard, { aShape->m_Uuid, aAnchor }, aCursor, aModified,
-                  [&]( PCB_SHAPE* aNeighbor ) { aCommit.Modify( aNeighbor ); } );
+                  [&]( BOARD_ITEM* aNeighbor ) { aCommit.Modify( aNeighbor ); } );
 }
 }
 
@@ -252,24 +270,103 @@ BOOST_FIXTURE_TEST_CASE( MoveReSolvesCluster, DRAG_FIXTURE )
 }
 
 
-// Dragging one corner of a fixed-length segment pivots about the far corner, which stays put.
-BOOST_FIXTURE_TEST_CASE( DragCornerPivotsAboutFarEnd, DRAG_FIXTURE )
+// A fixed-length segment dragged by one endpoint rotates about the other end, which stays put.
+// Without pinning the far end the solver is free to translate the whole segment (Zulip "Constraint
+// solver", 2026-07-10: "we need to pin the other end of the line when moving, not only the length").
+BOOST_FIXTURE_TEST_CASE( FixedLengthDragPinsFarEnd, DRAG_FIXTURE )
 {
     PCB_SHAPE* seg = addSegment( { 0, 0 }, { 10 * MM, 0 } );
 
-    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
-    c->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
-    c->SetValue( 10.0 * MM );
-    board.Add( c );
+    PCB_CONSTRAINT* len = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+    len->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    len->SetValue( 10.0 * MM );
+    board.Add( len );
 
-    // Drag the START corner up toward (0, 5mm).
-    SolveCluster( &board, { seg->m_Uuid, CONSTRAINT_ANCHOR::START }, { 0, 5 * MM }, nullptr, {},
-                  /* aIncludeDragged */ true, /* aStabilize */ false, /* aHoldFarEnd */ true );
+    const VECTOR2I start0 = seg->GetStart();
 
-    BOOST_CHECK_EQUAL( seg->GetEnd(), VECTOR2I( 10 * MM, 0 ) ); // far corner held
-    BOOST_CHECK_LE( std::abs( ( seg->GetEnd() - seg->GetStart() ).EuclideanNorm() - 10.0 * MM ),
-                    5000.0 );                    // length preserved
-    BOOST_CHECK_GT( seg->GetStart().y, 3 * MM ); // dragged corner followed the cursor
+    std::vector<PCB_SHAPE*> modified;
+
+    BOARD_COMMIT commit( tool );
+
+    // Drag END to a 6-8-10 point, so the held 10 mm length lands it exactly on the cursor.
+    simulateDrag( commit, &board, seg, CONSTRAINT_ANCHOR::END, { 6 * MM, 8 * MM }, &modified );
+
+    // The far (start) end held where it was, and the length is unchanged.
+    BOOST_CHECK_LE( ( seg->GetStart() - start0 ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_LE( std::abs( ( seg->GetEnd() - seg->GetStart() ).EuclideanNorm() - 10.0 * MM ), 5000.0 );
+
+    // The dragged end reached the cursor, which sat on the length circle.
+    BOOST_CHECK_LE( ( seg->GetEnd() - VECTOR2I( 6 * MM, 8 * MM ) ).EuclideanNorm(), 20000.0 );
+
+    commit.Revert();
+}
+
+
+// Dragging one endpoint of a constrained arc holds the circle (centre + radius) and the far
+// endpoint, so only the dragged endpoint sweeps -- the arc does not drift or balloon.
+BOOST_FIXTURE_TEST_CASE( ArcEndpointDragHoldsCircleAndFarEnd, DRAG_FIXTURE )
+{
+    PCB_SHAPE* arc = addArc( { 10 * MM, 0 }, { 7071068, 7071068 }, { 0, 10 * MM } );   // 90 deg, r 10
+    PCB_SHAPE* seg = addSegment( { 0, 10 * MM }, { 5 * MM, 15 * MM } );
+    addCoincident( arc, CONSTRAINT_ANCHOR::END, seg, CONSTRAINT_ANCHOR::START );
+
+    const VECTOR2I center0 = arc->GetCenter();
+    const int      radius0 = arc->GetRadius();
+    const VECTOR2I end0 = arc->GetEnd();
+
+    // Even an off-circle target is projected onto the held circle inside the adapter, so the centre,
+    // radius and far end stay put and only the dragged endpoint sweeps.
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { arc->m_Uuid, CONSTRAINT_ANCHOR::START }, { 12 * MM, 3 * MM }, &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    BOOST_CHECK_LE( ( arc->GetCenter() - center0 ).EuclideanNorm(), 20000.0 );
+    BOOST_CHECK_LE( std::abs( arc->GetRadius() - radius0 ), 20000 );
+    BOOST_CHECK_LE( ( arc->GetEnd() - end0 ).EuclideanNorm(), 20000.0 );
+    BOOST_CHECK( ( arc->GetStart() - VECTOR2I( 10 * MM, 0 ) ).EuclideanNorm() > 20000.0 );
+}
+
+
+// A real FIXED_RADIUS on the arc overrides the temporary radius hold: dragging an endpoint keeps the
+// driven radius, so the far end must move off its old spot to stay on the (now larger) circle.
+BOOST_FIXTURE_TEST_CASE( ArcEndpointDragYieldsToFixedRadius, DRAG_FIXTURE )
+{
+    PCB_SHAPE* arc = addArc( { 10 * MM, 0 }, { 7071068, 7071068 }, { 0, 10 * MM } );   // r 10
+
+    PCB_CONSTRAINT* r = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_RADIUS );
+    r->AddMember( arc->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    r->SetValue( 12.0 * MM );   // drive the radius larger than the current 10 mm
+    board.Add( r );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { arc->m_Uuid, CONSTRAINT_ANCHOR::START }, { 12 * MM, 0 }, &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    // The driving radius wins over the temporary hold.
+    BOOST_CHECK_LE( std::abs( arc->GetRadius() - 12 * MM ), 20000 );
+}
+
+
+// Dragging an arc's centre holds both endpoints, so the centre moves and the radius adapts.
+BOOST_FIXTURE_TEST_CASE( ArcCentreDragHoldsEndpoints, DRAG_FIXTURE )
+{
+    PCB_SHAPE* arc = addArc( { 10 * MM, 0 }, { 7071068, 7071068 }, { 0, 10 * MM } );
+    PCB_SHAPE* seg = addSegment( { 0, 10 * MM }, { 5 * MM, 15 * MM } );
+    addCoincident( arc, CONSTRAINT_ANCHOR::END, seg, CONSTRAINT_ANCHOR::START );
+
+    const VECTOR2I start0 = arc->GetStart();
+    const VECTOR2I end0 = arc->GetEnd();
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { arc->m_Uuid, CONSTRAINT_ANCHOR::CENTER }, { 1 * MM, 1 * MM }, &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    BOOST_CHECK_LE( ( arc->GetStart() - start0 ).EuclideanNorm(), 20000.0 );
+    BOOST_CHECK_LE( ( arc->GetEnd() - end0 ).EuclideanNorm(), 20000.0 );
+    BOOST_CHECK( ( arc->GetCenter() - VECTOR2I( 0, 0 ) ).EuclideanNorm() > 100000.0 );
 }
 
 

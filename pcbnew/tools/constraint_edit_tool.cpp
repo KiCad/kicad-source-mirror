@@ -21,10 +21,12 @@
 
 #include <algorithm>
 #include <cmath>
+#include <ranges>
 #include <set>
 
 #include <bitmaps.h>
 #include <collectors.h>
+#include <core/kicad_algo.h>
 #include <tool/tool_manager.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
@@ -38,8 +40,8 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_selection_conditions.h>
 #include <tools/constraint_overlay.h>
-#include <tools/constraint_endpoint_overlay.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/actions.h>
 #include <tool/edit_points.h>
@@ -68,18 +70,18 @@ std::optional<KIID> nearestOutline( BOARD* aBoard, const VECTOR2I& aPos, double 
 
     for( PCB_SHAPE* shape : CollectConstraintShapes( aBoard ) )
     {
-        double dist;
+        const SHAPE_T shapeType = shape->GetShape();
+        double        dist = 0;
 
-        if( shape->GetShape() == SHAPE_T::SEGMENT )
+        if( shapeType == SHAPE_T::SEGMENT )
         {
             dist = SEG( shape->GetStart(), shape->GetEnd() ).Distance( aPos );
         }
-        else if( aAllowCircle && ( shape->GetShape() == SHAPE_T::CIRCLE || shape->GetShape() == SHAPE_T::ARC ) )
+        else if( aAllowCircle && ( shapeType == SHAPE_T::CIRCLE || shapeType == SHAPE_T::ARC ) )
         {
             dist = std::abs( ( aPos - shape->GetCenter() ).EuclideanNorm() - shape->GetRadius() );
         }
-        else if( aAllowCircle
-                 && ( shape->GetShape() == SHAPE_T::ELLIPSE || shape->GetShape() == SHAPE_T::ELLIPSE_ARC ) )
+        else if( aAllowCircle && ( shapeType == SHAPE_T::ELLIPSE || shapeType == SHAPE_T::ELLIPSE_ARC ) )
         {
             // Radial distance to the outline at the click's polar angle in the ellipse frame.
             // Not the exact outline distance, but exact on the outline, which is all a snap needs.
@@ -126,62 +128,30 @@ CONSTRAINT_EDIT_TOOL::CONSTRAINT_EDIT_TOOL() :
 
 void CONSTRAINT_EDIT_TOOL::Reset( RESET_REASON aReason )
 {
-    // The board (and its view) is being torn down or reloaded; drop the overlays so they do not
+    // The board (and its view) is being torn down or reloaded; drop the overlay so it does not
     // dangle on a stale view.
     m_overlay.reset();
-    m_endpoints.reset();
 
     // At shutdown the frame/info bar may already be tearing down, so don't touch UI then.
     if( aReason == SHUTDOWN )
         return;
 
-    // Sticky visibility: re-create the overlay against the new view if the user left it shown.
-    if( frame() && board() && getView() && frame()->GetPcbNewSettings()->m_Display.m_ShowConstraints )
+    // The overlay is long-lived so hover can reveal constraints at any time; the sticky setting only
+    // chooses whether it always shows everything (ALWAYS) or reveals on hover (HOVER).
+    if( frame() && board() && getView() )
+    {
         m_overlay = std::make_unique<CONSTRAINT_OVERLAY>( board(), getView() );
-
-    // refreshDiagnostics populates the overlay/info bar when shown, or just clears our readout.
-    refreshDiagnostics();
-}
-
-
-std::vector<PCB_SHAPE*> CONSTRAINT_EDIT_TOOL::selectedShapes() const
-{
-    std::vector<PCB_SHAPE*> shapes;
-
-    for( EDA_ITEM* item : m_selectionTool->GetSelection() )
-    {
-        if( item->Type() == PCB_SHAPE_T )
-            shapes.push_back( static_cast<PCB_SHAPE*>( item ) );
+        m_overlay->SetVisibilityMode( frame()->GetPcbNewSettings()->m_Display.m_ShowConstraints
+                                              ? OVERLAY_MODE::ALWAYS
+                                              : OVERLAY_MODE::HOVER );
     }
 
-    return shapes;
-}
-
-
-void CONSTRAINT_EDIT_TOOL::refreshEndpointMarkers()
-{
-    std::vector<PCB_SHAPE*> shapes = selectedShapes();
-
-    // Endpoint binding joins several items; a lone selection is served by the point editor's own
-    // handles, so markers only appear once two or more shapes are selected.
-    if( shapes.size() < 2 )
-    {
-        m_endpoints.reset();
-        return;
-    }
-
-    if( !m_endpoints )
-        m_endpoints = std::make_unique<CONSTRAINT_ENDPOINT_OVERLAY>( board(), getView() );
-
-    m_endpoints->SetShapes( shapes );
-    m_endpoints->Redraw();
+    refreshDiagnostics();   // marks the diagnosis dirty and re-renders
 }
 
 
 int CONSTRAINT_EDIT_TOOL::onSelectionChanged( const TOOL_EVENT& aEvent )
 {
-    refreshEndpointMarkers();
-
     // A real board selection supersedes a badge selection (and keeps Delete unambiguous).  This
     // does not fire for SelectConstraintAt's own ClearSelection, which leaves the board empty.
     if( m_selectionTool && !m_selectionTool->GetSelection().Empty() )
@@ -200,20 +170,23 @@ PCB_CONSTRAINT* CONSTRAINT_EDIT_TOOL::hitTestBadge( const VECTOR2I& aPos ) const
     if( !m_overlay || !board() )
         return nullptr;
 
-    // The badges draw screen-constant and offset from their anchor. Hit-test where they draw.
-    double          worldPerPx = CONSTRAINT_OVERLAY::BadgeWorldPerPixel( getView()->GetGAL()->GetWorldScale() );
-    double          best = CONSTRAINT_OVERLAY::BadgeHitRadius() * worldPerPx;
-    VECTOR2D        offset = CONSTRAINT_OVERLAY::BadgeScreenOffset() * worldPerPx;
-    PCB_CONSTRAINT* result = nullptr;
+    // Hit-test against the exact positions the badges draw at (same LayoutBadges call), so a click
+    // and a glyph can never drift apart at any zoom.
+    double worldPerPx = CONSTRAINT_OVERLAY::BadgeWorldPerPixel( getView()->GetGAL()->GetWorldScale() );
+    double best = CONSTRAINT_OVERLAY::BadgeHitRadius() * worldPerPx;
 
-    for( const CONSTRAINT_BADGE& badge : m_overlay->Badges() )
+    const std::vector<CONSTRAINT_BADGE>& badges = m_overlay->Badges();
+    std::vector<VECTOR2D>                layout = CONSTRAINT_OVERLAY::LayoutBadges( badges, worldPerPx );
+    PCB_CONSTRAINT*                      result = nullptr;
+
+    for( size_t i = 0; i < badges.size(); ++i )
     {
-        double dist = ( VECTOR2D( badge.pos ) + offset - VECTOR2D( aPos ) ).EuclideanNorm();
+        double dist = ( layout[i] - VECTOR2D( aPos ) ).EuclideanNorm();
 
         if( dist <= best )
         {
             best = dist;
-            result = dynamic_cast<PCB_CONSTRAINT*>( board()->ResolveItem( badge.constraint, true ) );
+            result = dynamic_cast<PCB_CONSTRAINT*>( board()->ResolveItem( badges[i].constraint, true ) );
         }
     }
 
@@ -284,6 +257,16 @@ BOARD_ITEM* CONSTRAINT_EDIT_TOOL::constraintParent() const
 
 void CONSTRAINT_EDIT_TOOL::refreshDiagnostics()
 {
+    // Called when the model changed, so the cached diagnosis is stale.  A bare re-render (hover) uses
+    // renderConstraintViews() directly and keeps the cache.
+    m_diagDirty = true;
+    m_hoverCandidates.reset();   // the constrained-shape set may have changed too
+    renderConstraintViews();
+}
+
+
+void CONSTRAINT_EDIT_TOOL::renderConstraintViews()
+{
     // The overlay tint/badges, the info bar, and the docked list all read the same board-wide
     // diagnosis; solve it once here and hand the result to each so a model change costs one solve,
     // not one per view.  Refresh the panel only while it is shown so a hidden pane costs nothing.
@@ -294,13 +277,122 @@ void CONSTRAINT_EDIT_TOOL::refreshDiagnostics()
 
     bool panelShown = panel && panel->IsShownOnScreen();
 
-    if( !m_overlay && !panelShown )
+    // With a long-lived overlay, only actually solve when something reads the result: ALWAYS mode, an
+    // active hover, or the docked panel.  A HOVER-idle canvas costs nothing.
+    bool overlayActive = m_overlay
+                         && ( m_overlay->GetVisibilityMode() == OVERLAY_MODE::ALWAYS
+                              || m_overlay->GetHoverShape() != niluuid );
+
+    if( !overlayActive && !panelShown )
     {
-        updateConstraintInfoBar( {} );   // nothing shown, so just dismiss our info-bar readout
+        if( m_overlay )
+        {
+            m_overlay->SetIsolated( niluuid );   // a panel isolation must not linger while hidden
+            m_overlay->Update( {} );             // draw nothing while hidden
+        }
+
+        updateConstraintInfoBar( {} );   // and dismiss our info-bar readout
         return;
     }
 
-    applyDiagnostics( DiagnoseBoardConstraints( board() ) );
+    applyDiagnostics( ensureDiagnosis() );
+}
+
+
+const BOARD_CONSTRAINT_DIAGNOSTICS& CONSTRAINT_EDIT_TOOL::ensureDiagnosis()
+{
+    if( m_diagDirty )
+    {
+        m_cachedDiag = DiagnoseBoardConstraints( board() );
+        m_diagDirty = false;
+    }
+
+    return m_cachedDiag;
+}
+
+
+const std::vector<PCB_SHAPE*>& CONSTRAINT_EDIT_TOOL::hoverCandidates()
+{
+    if( m_hoverCandidates )
+        return *m_hoverCandidates;
+
+    std::set<KIID>          ids;
+    std::vector<PCB_SHAPE*> shapes;
+
+    auto collect =
+            [&]( const CONSTRAINTS& aConstraints )
+            {
+                for( PCB_CONSTRAINT* c : aConstraints )
+                {
+                    for( const CONSTRAINT_MEMBER& m : c->GetMembers() )
+                    {
+                        if( ids.insert( m.m_item ).second )
+                        {
+                            if( PCB_SHAPE* shape =
+                                        dynamic_cast<PCB_SHAPE*>( board()->ResolveItem( m.m_item, true ) ) )
+                            {
+                                shapes.push_back( shape );
+                            }
+                        }
+                    }
+                }
+            };
+
+    if( board() )
+    {
+        collect( board()->Constraints() );
+
+        for( FOOTPRINT* footprint : board()->Footprints() )
+            collect( footprint->Constraints() );
+    }
+
+    m_hoverCandidates = std::move( shapes );
+    return *m_hoverCandidates;
+}
+
+
+int CONSTRAINT_EDIT_TOOL::onHoverMotion( const TOOL_EVENT& aEvent )
+{
+    // Cheapest guards first: only HOVER mode with constraints on the board does any work.  Waiting
+    // tools (selection, router, move) already saw this motion before the transition loop reached us,
+    // so there is nothing to forward.
+    if( !m_overlay || m_overlay->GetVisibilityMode() != OVERLAY_MODE::HOVER || !board()
+        || !BoardHasConstraints( board() ) )
+    {
+        return 0;
+    }
+
+    VECTOR2I cursor = getViewControls()->GetMousePosition();
+    double   tol = getView()->ToWorld( CONSTRAINT_OVERLAY::BadgeHitRadius() );
+
+    // Stay sticky while the cursor is still over the current shape or one of its badges, so a badge
+    // does not blink out as the pointer moves off the thin outline toward it.
+    if( m_overlay->GetHoverShape() != niluuid )
+    {
+        if( PCB_SHAPE* shape =
+                    dynamic_cast<PCB_SHAPE*>( board()->ResolveItem( m_overlay->GetHoverShape(), true ) ) )
+        {
+            double worldPerPx = CONSTRAINT_OVERLAY::BadgeWorldPerPixel( getView()->GetGAL()->GetWorldScale() );
+            std::vector<VECTOR2D> layout = CONSTRAINT_OVERLAY::LayoutBadges( m_overlay->Badges(), worldPerPx );
+            double                badgeTol = CONSTRAINT_OVERLAY::BadgeHitRadius() * worldPerPx;
+
+            bool overBadge = std::ranges::any_of( layout,
+                                          [&]( const VECTOR2D& aPos )
+                                          { return ( aPos - VECTOR2D( cursor ) ).EuclideanNorm() <= badgeTol; } );
+
+            if( overBadge || shape->HitTest( cursor, KiROUND( tol ) ) )
+                return 0;   // keep the current hover
+        }
+    }
+
+    std::optional<KIID> hit = NearestConstrainedShape( hoverCandidates(), cursor, KiROUND( tol ) );
+
+    // Only the hover filter changed, not the model, so redraw just the overlay from the cached
+    // diagnosis -- the panel (its row selection) and the info bar are left untouched.
+    if( m_overlay->SetHoverShape( hit.value_or( niluuid ) ) )
+        m_overlay->Update( ensureDiagnosis() );
+
+    return 0;
 }
 
 
@@ -370,7 +462,20 @@ void CONSTRAINT_EDIT_TOOL::editConstraint( PCB_CONSTRAINT* aConstraint )
 
 void CONSTRAINT_EDIT_TOOL::EditConstraintById( const KIID& aId )
 {
-    editConstraint( resolveConstraint( aId ) );
+    PCB_CONSTRAINT* constraint = resolveConstraint( aId );
+
+    if( !constraint )
+        return;
+
+    // A valueless relation has nothing to edit, so locate its members on the canvas instead of
+    // ignoring the gesture, matching the modal list's double-click behavior.
+    if( !constraint->HasValue() )
+    {
+        HighlightConstraintMembers( aId, -1 );
+        return;
+    }
+
+    editConstraint( constraint );
 }
 
 
@@ -388,18 +493,19 @@ void CONSTRAINT_EDIT_TOOL::HighlightConstraintMembers( const KIID& aId, int aMem
 
     const std::vector<CONSTRAINT_MEMBER>& members = constraint->GetMembers();
 
-    for( int i = 0; i < static_cast<int>( members.size() ); ++i )
-    {
-        // A click on a blank item cell (index past the members) falls back to highlighting all.
-        if( aMemberIndex >= 0 && aMemberIndex < static_cast<int>( members.size() )
-            && i != aMemberIndex )
-        {
-            continue;
-        }
+    // A click on a blank item cell (index past the members) falls back to highlighting all.
+    bool highlightOne = aMemberIndex >= 0 && aMemberIndex < static_cast<int>( members.size() );
 
-        if( BOARD_ITEM* item = board()->ResolveItem( members[i].m_item, true ) )
+    auto selectMember = [&]( const CONSTRAINT_MEMBER& aMember )
+    {
+        if( BOARD_ITEM* item = board()->ResolveItem( aMember.m_item, true ) )
             m_selectionTool->select( item );
-    }
+    };
+
+    if( highlightOne )
+        selectMember( members[aMemberIndex] );
+    else
+        std::ranges::for_each( members, selectMember );
 
     // Zoom to what we just selected so the affected items fill the view.
     if( !m_selectionTool->GetSelection().Empty() )
@@ -416,15 +522,12 @@ bool CONSTRAINT_EDIT_TOOL::allMembersLocked( const PCB_CONSTRAINT* aConstraint )
     if( !board() || !aConstraint || aConstraint->GetMembers().empty() )
         return false;
 
-    for( const CONSTRAINT_MEMBER& member : aConstraint->GetMembers() )
-    {
-        BOARD_ITEM* item = board()->ResolveItem( member.m_item, true );
-
-        if( !item || !item->IsLocked() )
-            return false;
-    }
-
-    return true;
+    return std::ranges::all_of( aConstraint->GetMembers(),
+                                [&]( const CONSTRAINT_MEMBER& aMember )
+                                {
+                                    BOARD_ITEM* item = board()->ResolveItem( aMember.m_item, true );
+                                    return item && ConstraintItemIsLocked( item );
+                                } );
 }
 
 
@@ -435,7 +538,7 @@ bool CONSTRAINT_EDIT_TOOL::isDuplicateConstraint( const PCB_CONSTRAINT* aConstra
 
     auto scan = [&]( const CONSTRAINTS& aList )
     {
-        return std::any_of( aList.begin(), aList.end(),
+        return std::ranges::any_of( aList,
                             [&]( const PCB_CONSTRAINT* aExisting )
                             {
                                 return aExisting != aConstraint && ConstraintsAreDuplicate( *aExisting, *aConstraint );
@@ -460,83 +563,49 @@ void CONSTRAINT_EDIT_TOOL::finishConstraintCommit( BOARD_COMMIT& aCommit,
 
     refreshDiagnostics();
 
+    if( aAdded.empty() || !frame() )
+        return;
+
     // A locked shape is a fixed reference the solver may not move.  If every referenced item is
     // locked there is nothing it can adjust, so the relation is recorded but the geometry cannot
     // snap; tell the user rather than appearing to silently do nothing.
-    if( !aAdded.empty() && allMembersLocked( aAdded.front() ) && frame() )
+    if( allMembersLocked( aAdded.front() ) )
     {
         frame()->ShowInfoBarWarning( _( "All items referenced by this constraint are locked, so the constraint cannot "
                                         "move any geometry." ),
                                      true );
-    }
-}
-
-
-void CONSTRAINT_EDIT_TOOL::clearEndpointPointSet()
-{
-    if( m_endpoints )
-    {
-        m_endpoints->ClearPointSet();
-        m_endpoints->Redraw();
-    }
-}
-
-
-void CONSTRAINT_EDIT_TOOL::bindCoincidentPointSet()
-{
-    std::vector<CONSTRAINT_MEMBER> pts = m_endpoints->PointSet();
-    std::vector<PCB_CONSTRAINT*>   added;
-    BOARD_COMMIT                   commit( this );
-
-    // Make every picked point coincident with the first, so they all coincide (a star pattern).
-    for( size_t i = 1; i < pts.size(); ++i )
-    {
-        auto constraint = std::make_unique<PCB_CONSTRAINT>( constraintParent(),
-                                                            PCB_CONSTRAINT_TYPE::COINCIDENT );
-        constraint->AddMember( pts[0].m_item, pts[0].m_anchor );
-        constraint->AddMember( pts[i].m_item, pts[i].m_anchor );
-
-        // Skip a pair that is already coincident so a repeated bind does not stack duplicates.
-        if( isDuplicateConstraint( constraint.get() ) )
-            continue;
-
-        added.push_back( constraint.get() );
-        commit.Add( constraint.release() );
-    }
-
-    clearEndpointPointSet();
-
-    if( added.empty() )
-    {
-        if( frame() )
-            frame()->ShowInfoBarWarning( _( "An identical geometric constraint already exists." ) );
-
         return;
     }
 
-    finishConstraintCommit( commit, added );
-}
+    // In the default configuration (hover overlay idle, panel hidden) nothing else surfaces the
+    // diagnosis, so an unsatisfiable new constraint must be called out here or the add appears to
+    // succeed silently.  Mirrors the SolveAfterMove() warning for the same condition.
+    const BOARD_CONSTRAINT_DIAGNOSTICS& diag = ensureDiagnosis();
 
-
-bool CONSTRAINT_EDIT_TOOL::ToggleEndpointAt( const VECTOR2I& aPos )
-{
-    if( !m_endpoints )
-        return false;
-
-    // Use the selected (enlarged) marker radius so the whole visible marker is clickable.
-    if( m_endpoints->ToggleNearest( aPos, getView()->ToWorld( EDIT_POINT::POINT_SIZE * 1.5 ) ) )
+    for( const PCB_CONSTRAINT* added : aAdded )
     {
-        m_endpoints->Redraw();
-        return true;
-    }
+        if( alg::contains( diag.conflicting, added->m_Uuid ) )
+        {
+            frame()->ShowInfoBarWarning( _( "The new geometric constraint conflicts with existing constraints and "
+                                            "could not be satisfied." ),
+                                         true );
+            return;
+        }
 
-    return false;
+        if( alg::contains( diag.errored, added->m_Uuid ) )
+        {
+            frame()->ShowInfoBarWarning( _( "The new geometric constraint could not be applied to the referenced "
+                                            "items." ),
+                                         true );
+            return;
+        }
+    }
 }
 
 
 bool CONSTRAINT_EDIT_TOOL::TryDeleteSelectedConstraint()
 {
-    // No badge-selected constraint: let the normal item-delete path run.
+    // With no badge selected, fall through to the normal item-delete path.
     if( !m_overlay || m_overlay->GetSelected() == niluuid )
         return false;
 
@@ -556,65 +625,74 @@ bool CONSTRAINT_EDIT_TOOL::TryDeleteSelectedConstraint()
 
 bool CONSTRAINT_EDIT_TOOL::TryEditSelectedConstraint()
 {
-    // No badge-selected constraint: let the normal properties path run.
+    // With no badge selected, fall through to the normal properties path.
     if( !m_overlay || m_overlay->GetSelected() == niluuid )
         return false;
 
+    PCB_CONSTRAINT* constraint = resolveConstraint( m_overlay->GetSelected() );
+
+    // The selected constraint vanished (undo / panel delete) but the badge selection lingered;
+    // clear it and fall through instead of consuming the key with no effect.
+    if( !constraint )
+    {
+        setSelectedConstraint( nullptr );
+        return false;
+    }
+
     // editConstraint only opens a dialog for a valued constraint; others just consume the key.
-    editConstraint( resolveConstraint( m_overlay->GetSelected() ) );
+    editConstraint( constraint );
     return true;
 }
 
 
 void CONSTRAINT_EDIT_TOOL::solveAddedConstraint( PCB_CONSTRAINT* aConstraint )
 {
-    // The solve is a separate commit on purpose, run after the add was pushed: SolveCluster gathers
-    // the cluster from board->Constraints(), and BOARD_COMMIT only adds the constraint to the board
-    // at Push time, so the constraint must already be live here.  APPEND_UNDO folds the snap into
-    // the add's undo step, so creating a constraint is a single undoable action.
+    // This solve runs after the add was pushed because SolveCluster gathers the cluster from
+    // board->Constraints(), and BOARD_COMMIT only makes the constraint live at Push time.
+    // APPEND_UNDO folds the snap into the add so creating a constraint is a single undoable action.
     BOARD_COMMIT            commit( this );
     std::vector<PCB_SHAPE*> modified;
 
     ApplyConstraintImmediately( board(), aConstraint, &modified,
-                                [&]( PCB_SHAPE* aShape ) { commit.Modify( aShape ); } );
+                                [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
 
-    if( !modified.empty() )
+    // Push if the snap moved a shape or re-measured a reference value in this cluster.
+    if( !commit.Empty() )
         commit.Push( _( "Apply Geometric Constraint" ), APPEND_UNDO );
 }
 
 
 void CONSTRAINT_EDIT_TOOL::SolveAfterMove( const std::vector<PCB_SHAPE*>& aShapes )
 {
-    if( aShapes.empty() || !board() )
+    if( aShapes.empty() || !board() || !BoardHasConstraints( board() ) )
         return;
 
     BOARD_COMMIT            commit( this );
     std::vector<PCB_SHAPE*> modified;
 
     ReSolveShapeClusters( board(), aShapes, &modified,
-                          [&]( PCB_SHAPE* aShape )
+                          [&]( BOARD_ITEM* aItem )
                           {
-                              commit.Modify( aShape );
+                              commit.Modify( aItem );
                           } );
 
-    if( !modified.empty() )
+    if( !commit.Empty() )
         commit.Push( _( "Apply Geometric Constraint" ), APPEND_UNDO );
 
     // Diagnose once and use it for both the views and the warning below, so a transform does not
-    // pay for two board-wide solves.
-    BOARD_CONSTRAINT_DIAGNOSTICS diag = DiagnoseBoardConstraints( board() );
+    // pay for two board-wide solves.  Cache it so a following hover reuses this fresh result.
+    m_cachedDiag = DiagnoseBoardConstraints( board() );
+    m_diagDirty = false;
+    const BOARD_CONSTRAINT_DIAGNOSTICS& diag = m_cachedDiag;
     applyDiagnostics( diag );
 
     // If the edit left a moved shape's constraint unsatisfiable, say so even when the overlay is off.
-    bool overConstrained = false;
-
-    for( PCB_SHAPE* shape : aShapes )
-    {
-        auto it = diag.shapeStates.find( shape->m_Uuid );
-
-        if( it != diag.shapeStates.end() && it->second == CONSTRAINT_STATE::OVER_CONSTRAINED )
-            overConstrained = true;
-    }
+    bool overConstrained = std::ranges::any_of( aShapes,
+            [&]( const PCB_SHAPE* aShape )
+            {
+                auto it = diag.shapeStates.find( aShape->m_Uuid );
+                return it != diag.shapeStates.end() && it->second == CONSTRAINT_STATE::OVER_CONSTRAINED;
+            } );
 
     if( overConstrained && frame() )
         frame()->ShowInfoBarWarning( _( "A geometric constraint could not be satisfied by this edit." ), true );
@@ -623,18 +701,23 @@ void CONSTRAINT_EDIT_TOOL::SolveAfterMove( const std::vector<PCB_SHAPE*>& aShape
 
 int CONSTRAINT_EDIT_TOOL::ShowConstraints( const TOOL_EVENT& aEvent )
 {
+    if( !m_overlay && board() && getView() )
+        m_overlay = std::make_unique<CONSTRAINT_OVERLAY>( board(), getView() );
+
     if( m_overlay )
     {
-        m_overlay.reset();
-    }
-    else
-    {
-        m_overlay = std::make_unique<CONSTRAINT_OVERLAY>( board(), getView() );
-    }
+        // The action, not a toggle, chooses the mode, so a freshly created overlay can never invert
+        // the clicked label.  The overlay object itself stays alive either way.
+        bool always = aEvent.IsAction( &PCB_ACTIONS::showConstraints );
+        m_overlay->SetVisibilityMode( always ? OVERLAY_MODE::ALWAYS : OVERLAY_MODE::HOVER );
 
-    // Remember the choice so the overlay stays shown across board reloads and sessions.
-    if( frame() )
-        frame()->GetPcbNewSettings()->m_Display.m_ShowConstraints = ( m_overlay != nullptr );
+        if( !always )
+            m_overlay->SetHoverShape( niluuid );   // hover mode starts hidden until a hover
+
+        // Remember the choice so it persists across board reloads and sessions.
+        if( frame() )
+            frame()->GetPcbNewSettings()->m_Display.m_ShowConstraints = always;
+    }
 
     refreshDiagnostics();
     return 0;
@@ -651,8 +734,9 @@ void CONSTRAINT_EDIT_TOOL::updateConstraintInfoBar( const BOARD_CONSTRAINT_DIAGN
     // The info bar is shared, so only ever touch it while it is showing our own readout.
     bool ours = infoBar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::CONSTRAINT_DIAGNOSTICS;
 
-    // No overlay -> no readout; clear ours but leave any other subsystem's message alone.
-    if( !m_overlay )
+    // The readout follows the always-show overlay; a transient hover reveal stays quiet.  Clear ours
+    // but leave any other subsystem's message alone.
+    if( !m_overlay || m_overlay->GetVisibilityMode() != OVERLAY_MODE::ALWAYS )
     {
         if( ours )
             infoBar->Dismiss();
@@ -679,7 +763,7 @@ void CONSTRAINT_EDIT_TOOL::updateConstraintInfoBar( const BOARD_CONSTRAINT_DIAGN
 }
 
 
-int CONSTRAINT_EDIT_TOOL::ManageConstraints( const TOOL_EVENT& aEvent )
+int CONSTRAINT_EDIT_TOOL::ManageConstraints( const TOOL_EVENT& )
 {
     // In the board editor the constraint list is a dockable pane; the footprint editor (which has
     // no such pane) falls back to the modal list dialog.
@@ -712,11 +796,8 @@ int CONSTRAINT_EDIT_TOOL::ManageConstraints( const TOOL_EVENT& aEvent )
 
 int CONSTRAINT_EDIT_TOOL::refreshOverlay( const TOOL_EVENT& aEvent )
 {
+    m_diagDirty = true;   // the model changed, so the cached diagnosis is stale
     refreshDiagnostics();
-
-    // A deleted shape may still sit in the marker set; rebuild it against the changed board.
-    if( m_endpoints )
-        refreshEndpointMarkers();
 
     aEvent.PassEvent();
     return 0;
@@ -751,15 +832,19 @@ bool CONSTRAINT_EDIT_TOOL::Init()
         return aShape == SHAPE_T::CIRCLE || aShape == SHAPE_T::ARC;
     };
 
-    auto isCentered = []( SHAPE_T aShape )
+    auto isCentered = [isRadial]( SHAPE_T aShape )
     {
-        return aShape == SHAPE_T::CIRCLE || aShape == SHAPE_T::ARC || aShape == SHAPE_T::ELLIPSE
-               || aShape == SHAPE_T::ELLIPSE_ARC;
+        return isRadial( aShape ) || aShape == SHAPE_T::ELLIPSE || aShape == SHAPE_T::ELLIPSE_ARC;
     };
 
     auto oneRadial = [kindOf, isRadial]( const SELECTION& aSel )
     {
         return aSel.Size() == 1 && isRadial( kindOf( aSel[0] ) );
+    };
+
+    auto oneArc = [kindOf]( const SELECTION& aSel )
+    {
+        return aSel.Size() == 1 && kindOf( aSel[0] ) == SHAPE_T::ARC;
     };
 
     auto twoRadial = [kindOf, isRadial]( const SELECTION& aSel )
@@ -798,16 +883,12 @@ bool CONSTRAINT_EDIT_TOOL::Init()
 
         auto anyMember = [&]( const CONSTRAINTS& aList )
         {
-            for( PCB_CONSTRAINT* c : aList )
-            {
-                for( const CONSTRAINT_MEMBER& m : c->GetMembers() )
-                {
-                    if( ids.count( m.m_item ) )
-                        return true;
-                }
-            }
-
-            return false;
+            return std::ranges::any_of( aList,
+                    [&]( const PCB_CONSTRAINT* c )
+                    {
+                        return std::ranges::any_of( c->GetMembers(),
+                                [&]( const CONSTRAINT_MEMBER& m ) { return ids.contains( m.m_item ); } );
+                    } );
         };
 
         if( anyMember( board()->Constraints() ) )
@@ -824,34 +905,57 @@ bool CONSTRAINT_EDIT_TOOL::Init()
     m_menu->SetIcon( BITMAPS::measurement );
     m_menu->SetUntranslatedTitle( _HKI( "Constraints" ) );
 
-    m_menu->AddItem( PCB_ACTIONS::addConstraintParallel,      twoSegments );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintPerpendicular, twoSegments );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintEqualLength,   twoSegments );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintCollinear,     twoSegments );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintAngular,       twoSegments );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintTangent, tangentPair );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintHorizontal,    oneSegment );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintVertical,      oneSegment );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintFixedLength,   oneSegment );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintConcentric, twoCentered );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintEqualRadius, twoRadial );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintFixedRadius, oneRadial );
+    // Gate each selection-based add-type by what it needs; the point-anchored families are authored
+    // by clicking and need no prior selection, so they are absent here and default to ShowAlways.
+    // The action list itself lives in PCB_ACTIONS::ConstraintAddActions() so the menubar's copy of
+    // this submenu cannot drift from it.
+    const std::map<const TOOL_ACTION*, SELECTION_CONDITION> gate = {
+        { &PCB_ACTIONS::addConstraintParallel,      twoSegments },
+        { &PCB_ACTIONS::addConstraintPerpendicular, twoSegments },
+        { &PCB_ACTIONS::addConstraintEqualLength,   twoSegments },
+        { &PCB_ACTIONS::addConstraintCollinear,     twoSegments },
+        { &PCB_ACTIONS::addConstraintAngular,       twoSegments },
+        { &PCB_ACTIONS::addConstraintTangent,       tangentPair },
+        { &PCB_ACTIONS::addConstraintHorizontal,    oneSegment },
+        { &PCB_ACTIONS::addConstraintVertical,      oneSegment },
+        { &PCB_ACTIONS::addConstraintFixedLength,   oneSegment },
+        { &PCB_ACTIONS::addConstraintConcentric,    twoCentered },
+        { &PCB_ACTIONS::addConstraintEqualRadius,   twoRadial },
+        { &PCB_ACTIONS::addConstraintFixedRadius,   oneRadial },
+        { &PCB_ACTIONS::addConstraintArcAngle,      oneArc },
+    };
 
-    // Point-anchored families are authored by clicking, so they need no prior selection.
-    m_menu->AddSeparator();
-    m_menu->AddItem( PCB_ACTIONS::addConstraintCoincident,    S_C::ShowAlways );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintPointOnLine,   S_C::ShowAlways );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintMidpoint,      S_C::ShowAlways );
-    m_menu->AddItem( PCB_ACTIONS::addConstraintSymmetric,     S_C::ShowAlways );
+    bool pointGroupSeparated = false;
+
+    for( const TOOL_ACTION* action : PCB_ACTIONS::ConstraintAddActions() )
+    {
+        if( auto it = gate.find( action ); it != gate.end() )
+        {
+            m_menu->AddItem( *action, it->second );
+        }
+        else
+        {
+            if( !pointGroupSeparated )
+            {
+                m_menu->AddSeparator();
+                pointGroupSeparated = true;
+            }
+
+            m_menu->AddItem( *action, S_C::ShowAlways );
+        }
+    }
 
     // Show while hidden, Hide while shown, so the label always names what the click will do.
+    // "Shown" is the always-on mode; the hover mode reads as hidden and offers the Show action.
+    // The ALWAYS/HOVER choice is a tool mode rather than an object visibility, which is why it
+    // lives here and not in the Appearance panel's Objects tab.
     auto overlayShown = [this]( const SELECTION& )
     {
-        return m_overlay != nullptr;
+        return m_overlay && m_overlay->GetVisibilityMode() == OVERLAY_MODE::ALWAYS;
     };
     auto overlayHidden = [this]( const SELECTION& )
     {
-        return m_overlay == nullptr;
+        return !m_overlay || m_overlay->GetVisibilityMode() == OVERLAY_MODE::HOVER;
     };
 
     m_menu->AddSeparator();
@@ -869,8 +973,8 @@ bool CONSTRAINT_EDIT_TOOL::Init()
 
 int CONSTRAINT_EDIT_TOOL::AddConstraint( const TOOL_EVENT& aEvent )
 {
-    PCB_CONSTRAINT_TYPE type = aEvent.Parameter<PCB_CONSTRAINT_TYPE>();
-    PCB_SELECTION&      selection = m_selectionTool->GetSelection();
+    PCB_CONSTRAINT_TYPE  type = aEvent.Parameter<PCB_CONSTRAINT_TYPE>();
+    const PCB_SELECTION& selection = m_selectionTool->GetSelection();
 
     std::vector<BOARD_ITEM*> items;
 
@@ -880,14 +984,22 @@ int CONSTRAINT_EDIT_TOOL::AddConstraint( const TOOL_EVENT& aEvent )
             items.push_back( static_cast<BOARD_ITEM*>( item ) );
     }
 
-    // This selection-based command supersedes any clicked endpoints.
-    clearEndpointPointSet();
-
     std::unique_ptr<PCB_CONSTRAINT> constraint =
             BuildConstraintFromItems( constraintParent(), type, items );
 
+    // The context menu gates each entry by selection, but the same actions are reachable from the
+    // command palette and user hotkeys, so an unbuildable selection needs an explanation here.
     if( !constraint )
+    {
+        if( frame() )
+        {
+            frame()->ShowInfoBarWarning(
+                    wxString::Format( _( "Cannot form constraint type %s from the current selection." ),
+                                      ConstraintTypeLabel( type ) ) );
+        }
+
         return 0;
+    }
 
     if( isDuplicateConstraint( constraint.get() ) )
     {
@@ -924,22 +1036,13 @@ int CONSTRAINT_EDIT_TOOL::AddPointConstraint( const TOOL_EVENT& aEvent )
 {
     PCB_CONSTRAINT_TYPE type = aEvent.Parameter<PCB_CONSTRAINT_TYPE>();
 
-    // If endpoints were already clicked into the point-set on the canvas, bind them directly
-    // instead of entering the click-to-pick flow (mode-less authoring, #2329).
-    if( type == PCB_CONSTRAINT_TYPE::COINCIDENT && m_endpoints
-        && m_endpoints->PointSet().size() >= 2 )
-    {
-        bindCoincidentPointSet();
-        return 0;
-    }
-
     // In the pick plan, true means click a point anchor and false means click a whole segment.
     std::vector<bool> plan;
 
     switch( type )
     {
     case PCB_CONSTRAINT_TYPE::COINCIDENT:    plan = { true, true }; break;
-    case PCB_CONSTRAINT_TYPE::POINT_ON_LINE: plan = { true, false }; break;
+    case PCB_CONSTRAINT_TYPE::POINT_ON_LINE:
     case PCB_CONSTRAINT_TYPE::MIDPOINT:      plan = { true, false }; break;
     case PCB_CONSTRAINT_TYPE::SYMMETRIC:     plan = { true, true, false }; break;
     default:                                 return 0;
@@ -949,10 +1052,6 @@ int CONSTRAINT_EDIT_TOOL::AddPointConstraint( const TOOL_EVENT& aEvent )
 
     if( !picker )
         return 0;
-
-    // Any endpoints clicked earlier belong to a coincident bind, not this picked family; start fresh
-    // so stale markers don't linger or mislead.
-    clearEndpointPointSet();
 
     std::vector<CONSTRAINT_MEMBER> members;
     const double                   snapTol = pcbIUScale.mmToIU( 1.0 );
@@ -976,15 +1075,6 @@ int CONSTRAINT_EDIT_TOOL::AddPointConstraint( const TOOL_EVENT& aEvent )
                         return true;   // nothing snapped; keep picking
 
                     members.push_back( *anchor );
-
-                    // Echo the pick on the endpoint markers (the picked anchor grows 50%).  Drive it
-                    // from the resolved member so the highlight matches exactly what was bound; it
-                    // simply shows nothing if that anchor's shape is not among the markers.
-                    if( m_endpoints )
-                    {
-                        m_endpoints->ToggleMember( *anchor );
-                        m_endpoints->Redraw();
-                    }
                 }
                 else // wants a whole shape
                 {
@@ -1011,7 +1101,6 @@ int CONSTRAINT_EDIT_TOOL::AddPointConstraint( const TOOL_EVENT& aEvent )
                     if( frame() )
                         frame()->ShowInfoBarWarning( _( "An identical geometric constraint already exists." ) );
 
-                    clearEndpointPointSet();
                     return false; // done
                 }
 
@@ -1019,7 +1108,6 @@ int CONSTRAINT_EDIT_TOOL::AddPointConstraint( const TOOL_EVENT& aEvent )
 
                 BOARD_COMMIT commit( this );
                 commit.Add( constraint.release() );
-                clearEndpointPointSet();
                 finishConstraintCommit( commit, { added } );
 
                 return false;   // done
@@ -1027,7 +1115,6 @@ int CONSTRAINT_EDIT_TOOL::AddPointConstraint( const TOOL_EVENT& aEvent )
 
     bool done = false;
 
-    picker->SetCancelHandler( [&]() { clearEndpointPointSet(); } );
     picker->SetFinalizeHandler(
             [&]( const int& aFinalState )
             {
@@ -1070,14 +1157,14 @@ int CONSTRAINT_EDIT_TOOL::RemoveConstraints( const TOOL_EVENT& aEvent )
             {
                 for( PCB_CONSTRAINT* constraint : aConstraints )
                 {
-                    for( const CONSTRAINT_MEMBER& member : constraint->GetMembers() )
+                    bool referenced = std::ranges::any_of( constraint->GetMembers(),
+                            [&]( const CONSTRAINT_MEMBER& aMember )
+                            { return selectedIds.contains( aMember.m_item ); } );
+
+                    if( referenced )
                     {
-                        if( selectedIds.count( member.m_item ) )
-                        {
-                            commit.Remove( constraint );
-                            any = true;
-                            break;
-                        }
+                        commit.Remove( constraint );
+                        any = true;
                     }
                 }
             };
@@ -1101,7 +1188,6 @@ int CONSTRAINT_EDIT_TOOL::RemoveConstraints( const TOOL_EVENT& aEvent )
 
 void CONSTRAINT_EDIT_TOOL::setTransitions()
 {
-    Go( &CONSTRAINT_EDIT_TOOL::AddConstraint, PCB_ACTIONS::addConstraint.MakeEvent() );
     Go( &CONSTRAINT_EDIT_TOOL::AddConstraint, PCB_ACTIONS::addConstraintParallel.MakeEvent() );
     Go( &CONSTRAINT_EDIT_TOOL::AddConstraint, PCB_ACTIONS::addConstraintPerpendicular.MakeEvent() );
     Go( &CONSTRAINT_EDIT_TOOL::AddConstraint, PCB_ACTIONS::addConstraintEqualLength.MakeEvent() );
@@ -1114,6 +1200,7 @@ void CONSTRAINT_EDIT_TOOL::setTransitions()
     Go( &CONSTRAINT_EDIT_TOOL::AddConstraint, PCB_ACTIONS::addConstraintConcentric.MakeEvent() );
     Go( &CONSTRAINT_EDIT_TOOL::AddConstraint, PCB_ACTIONS::addConstraintEqualRadius.MakeEvent() );
     Go( &CONSTRAINT_EDIT_TOOL::AddConstraint, PCB_ACTIONS::addConstraintFixedRadius.MakeEvent() );
+    Go( &CONSTRAINT_EDIT_TOOL::AddConstraint, PCB_ACTIONS::addConstraintArcAngle.MakeEvent() );
 
     Go( &CONSTRAINT_EDIT_TOOL::AddPointConstraint, PCB_ACTIONS::addConstraintCoincident.MakeEvent() );
     Go( &CONSTRAINT_EDIT_TOOL::AddPointConstraint, PCB_ACTIONS::addConstraintPointOnLine.MakeEvent() );
@@ -1136,4 +1223,7 @@ void CONSTRAINT_EDIT_TOOL::setTransitions()
     Go( &CONSTRAINT_EDIT_TOOL::onSelectionChanged, EVENTS::UnselectedEvent );
     Go( &CONSTRAINT_EDIT_TOOL::onSelectionChanged, EVENTS::ClearedEvent );
 
+    // No other pcbnew tool registers a plain-motion transition (only one transition runs per mouse
+    // event), and waiting tools receive motion before this loop, so claiming it here is safe.
+    Go( &CONSTRAINT_EDIT_TOOL::onHoverMotion, TOOL_EVENT( TC_MOUSE, TA_MOUSE_MOTION ) );
 }

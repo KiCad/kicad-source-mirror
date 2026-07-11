@@ -502,6 +502,35 @@ BOOST_AUTO_TEST_CASE( ResizeEqualRadiusStillPropagates )
 }
 
 
+// A resize solve holds the resized ellipse's minor radius; with the focus offset fixed at Build,
+// that pins the whole shape, so the user's new size survives the re-solve undistorted.
+BOOST_AUTO_TEST_CASE( ResizeEllipseKeepsShape )
+{
+    BOARD board;
+
+    PCB_SHAPE* resized = addEllipse( board, { 0, 0 }, 6 * MM, 3 * MM, EDA_ANGLE( 30.0, DEGREES_T ) );
+    PCB_SHAPE* neighbor = addCircle( board, { 20 * MM, 0 }, 2 * MM );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::CONCENTRIC,
+                   { { resized->m_Uuid, CONSTRAINT_ANCHOR::WHOLE }, { neighbor->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    // Shrink the minor radius, as the resize handle would.
+    resized->SetEllipseMinorRadius( 2 * MM );
+
+    ReSolveAfterShapeResize( &board, resized, nullptr );
+
+    BOOST_CHECK_LE( std::abs( resized->GetEllipseMajorRadius() - 6 * MM ), 5000 );
+    BOOST_CHECK_LE( std::abs( resized->GetEllipseMinorRadius() - 2 * MM ), 5000 );
+    BOOST_CHECK_LE(
+            std::abs( ( resized->GetEllipseRotation() - EDA_ANGLE( 30.0, DEGREES_T ) ).Normalize180().AsDegrees() ),
+            0.01 );
+
+    // The circle came to the ellipse's center; the resized shape stayed put.
+    BOOST_CHECK_LE( ( resized->GetEllipseCenter() - VECTOR2I( 0, 0 ) ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_LE( ( neighbor->GetCenter() - resized->GetEllipseCenter() ).EuclideanNorm(), 5000.0 );
+}
+
+
 // A free ellipse made concentric with a locked circle moves its center without distorting: the
 // focus follows the center, so major/minor radius and rotation are preserved.
 BOOST_AUTO_TEST_CASE( ConcentricEllipseKeepsShape )

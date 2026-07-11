@@ -40,7 +40,6 @@ using namespace std::placeholders;
 #include <tool/selection_conditions.h>
 #include <preview_items/angle_item.h>
 #include <tools/pcb_actions.h>
-#include <tools/constraint_edit_tool.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_point_editor.h>
 #include <tools/pcb_grid_helper.h>
@@ -2332,18 +2331,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             break;
         }
 
-        // A click on a geometric-constraint endpoint marker toggles it into the constraint
-        // point-set, mode-lessly, without disturbing the multi-selection or its edit points
-        // (#2329).  Only the constraint tool knows whether markers are shown.
-        if( !inDrag && evt->IsClick( BUT_LEFT ) && !evt->Modifier() )
-        {
-            if( CONSTRAINT_EDIT_TOOL* constraintTool = m_toolMgr->GetTool<CONSTRAINT_EDIT_TOOL>();
-                constraintTool && constraintTool->ToggleEndpointAt( evt->Position() ) )
-            {
-                continue;
-            }
-        }
-
         EDIT_POINT* prevHover = m_hoveredPoint;
 
         if( !inDrag )
@@ -2972,14 +2959,18 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
             std::vector<PCB_SHAPE*> modified;
 
             // On a failed/diverged solve SolveCluster leaves neighbors untouched, so nothing is
-            // half-moved or staged this frame.  aHoldFarEnd pins the dragged segment's other corner.
-            SolveCluster(
-                    board(), { shape->m_Uuid, anchor }, cursor, &modified,
-                    [&]( PCB_SHAPE* aNeighbor )
-                    {
-                        aCommit.Modify( aNeighbor );
-                    },
-                    /* aIncludeDragged */ false, /* aStabilize */ false, /* aHoldFarEnd */ true );
+            // half-moved or staged this frame.
+            // A moved shape is reported in `modified`; a moved dimension (a coincident member) is
+            // not, so refresh its view here or it would look frozen until the drag ends.
+            auto stageNeighbor = [&]( BOARD_ITEM* aItem )
+            {
+                aCommit.Modify( aItem );
+
+                if( aItem->Type() != PCB_SHAPE_T )
+                    updatedItems.push_back( aItem );
+            };
+
+            SolveCluster( board(), { shape->m_Uuid, anchor }, cursor, &modified, stageNeighbor );
 
             for( PCB_SHAPE* neighbor : modified )
                 updatedItems.push_back( neighbor );
@@ -2990,9 +2981,12 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
             std::vector<PCB_SHAPE*> modified;
 
             ReSolveAfterShapeResize( board(), shape, &modified,
-                                     [&]( PCB_SHAPE* aNeighbor )
+                                     [&]( BOARD_ITEM* aItem )
                                      {
-                                         aCommit.Modify( aNeighbor );
+                                         aCommit.Modify( aItem );
+
+                                         if( aItem->Type() != PCB_SHAPE_T )
+                                             updatedItems.push_back( aItem );
                                      } );
 
             for( PCB_SHAPE* neighbor : modified )

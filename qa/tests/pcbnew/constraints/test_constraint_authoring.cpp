@@ -85,11 +85,11 @@ BOOST_AUTO_TEST_CASE( BuildAngularMeasuresAngle )
 }
 
 
-BOOST_AUTO_TEST_CASE( BuildAngularPreservesSign )
+BOOST_AUTO_TEST_CASE( BuildAngularIsUndirectedCorner )
 {
     BOARD board;
-    PCB_SHAPE* a = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );        // along +x (0 deg)
-    PCB_SHAPE* b = addSegment( board, { 0, 0 }, { 0, -10 * MM } );       // clockwise from a
+    PCB_SHAPE* a = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );        // ray +x
+    PCB_SHAPE* b = addSegment( board, { 0, 0 }, { 0, -10 * MM } );       // ray -y
 
     std::unique_ptr<PCB_CONSTRAINT> c =
             BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION, { a, b } );
@@ -97,9 +97,84 @@ BOOST_AUTO_TEST_CASE( BuildAngularPreservesSign )
     BOOST_REQUIRE( c );
     BOOST_REQUIRE( c->HasValue() );
 
-    // The directed angle member[0] -> member[1] is negative; storing abs() would snap the lines to
-    // the mirror configuration when the constraint solves on creation.
-    BOOST_CHECK_CLOSE( *c->GetValue(), -90.0, 1e-6 );
+    // The corner is undirected: the same 90 degree opening regardless of segment orientation.
+    BOOST_CHECK_CLOSE( *c->GetValue(), 90.0, 1e-3 );
+}
+
+
+// A 120 degree corner authored in all four endpoint permutations and both member orders stores 120,
+// never folded to 60 (Seth: obtuse outline corners are preserved).
+BOOST_AUTO_TEST_CASE( BuildAngularObtuseCornerInvariant )
+{
+    const VECTOR2I vertex{ 0, 0 };
+    const VECTOR2I aFar{ 10 * MM, 0 };          // ray at 0 deg
+    const VECTOR2I bFar{ -5 * MM, 8660254 };    // ray at 120 deg (10 mm at 120)
+
+    for( bool swapA : { false, true } )
+    {
+        for( bool swapB : { false, true } )
+        {
+            for( bool swapOrder : { false, true } )
+            {
+                BOARD      board;
+                PCB_SHAPE* a = swapA ? addSegment( board, aFar, vertex )
+                                     : addSegment( board, vertex, aFar );
+                PCB_SHAPE* b = swapB ? addSegment( board, bFar, vertex )
+                                     : addSegment( board, vertex, bFar );
+
+                std::vector<BOARD_ITEM*> items = swapOrder ? std::vector<BOARD_ITEM*>{ b, a }
+                                                           : std::vector<BOARD_ITEM*>{ a, b };
+
+                std::unique_ptr<PCB_CONSTRAINT> c = BuildConstraintFromItems(
+                        &board, PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION, items );
+
+                BOOST_REQUIRE( c );
+                BOOST_REQUIRE( c->HasValue() );
+                BOOST_CHECK_CLOSE( *c->GetValue(), 120.0, 0.05 );
+            }
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( BuildAngularDomainEndpoints )
+{
+    {
+        // Both rays leave the vertex the same way: a 0 degree corner.
+        BOARD      board;
+        PCB_SHAPE* a = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+        PCB_SHAPE* b = addSegment( board, { 0, 0 }, { 20 * MM, 0 } );
+        auto c = BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION, { a, b } );
+        BOOST_REQUIRE( c && c->HasValue() );
+        BOOST_CHECK_SMALL( *c->GetValue(), 1e-3 );
+    }
+    {
+        // Rays leave the vertex in opposite directions: a straight 180 degree corner.
+        BOARD      board;
+        PCB_SHAPE* a = addSegment( board, { 0, 0 }, { -10 * MM, 0 } );
+        PCB_SHAPE* b = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+        auto c = BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION, { a, b } );
+        BOOST_REQUIRE( c && c->HasValue() );
+        BOOST_CHECK_CLOSE( *c->GetValue(), 180.0, 1e-3 );
+    }
+}
+
+
+// Two segments that do not touch still get a well-defined corner from nearest-endpoint pairing,
+// with no dependence on SEG::IntersectLines.
+BOOST_AUTO_TEST_CASE( BuildAngularDisconnectedLines )
+{
+    BOARD      board;
+    PCB_SHAPE* a = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );          // ray +x
+    PCB_SHAPE* b = addSegment( board, { 0, 2 * MM }, { 0, 12 * MM } );     // ray +y, 2 mm gap
+
+    std::unique_ptr<PCB_CONSTRAINT> c =
+            BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION, { a, b } );
+
+    BOOST_REQUIRE( c && c->HasValue() );
+
+    // SEG::Angle uses each segment's true direction, so the gap does not skew the measurement.
+    BOOST_CHECK_CLOSE( *c->GetValue(), 90.0, 1e-3 );
 }
 
 
@@ -116,6 +191,17 @@ BOOST_AUTO_TEST_CASE( WrongSelectionYieldsNoConstraint )
 
     // Coincident needs point anchors, not whole shapes.
     BOOST_CHECK( !BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::COINCIDENT, { a, a } ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( AngularRejectsZeroLengthSegment )
+{
+    BOARD      board;
+    PCB_SHAPE* a = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* zero = addSegment( board, { 5 * MM, 5 * MM }, { 5 * MM, 5 * MM } );   // no direction
+
+    BOOST_CHECK( !BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION,
+                                            { a, zero } ) );
 }
 
 

@@ -23,6 +23,8 @@
 #ifndef __PCB_ACTIONS_H
 #define __PCB_ACTIONS_H
 
+#include <vector>
+
 #include <layer_ids.h>
 #include <tool/tool_action.h>
 #include <tool/actions.h>
@@ -631,9 +633,8 @@ public:
     static TOOL_ACTION convertToArc;
     static TOOL_ACTION convertToTracks;
 
-    // Geometric constraints (#2329).  addConstraint is parameterized by PCB_CONSTRAINT_TYPE (for
-    // programmatic use); the per-type actions below bake the parameter for menu items.
-    static TOOL_ACTION addConstraint;
+    // Geometric constraints (#2329).  Each per-type action bakes its PCB_CONSTRAINT_TYPE parameter
+    // for menu items and hotkeys.
     static TOOL_ACTION addConstraintParallel;
     static TOOL_ACTION addConstraintPerpendicular;
     static TOOL_ACTION addConstraintEqualLength;
@@ -646,6 +647,7 @@ public:
     static TOOL_ACTION addConstraintConcentric;
     static TOOL_ACTION addConstraintEqualRadius;
     static TOOL_ACTION addConstraintFixedRadius;
+    static TOOL_ACTION addConstraintArcAngle;
     // Point-anchored families authored by clicking anchors (route to AddPointConstraint).
     static TOOL_ACTION addConstraintCoincident;
     static TOOL_ACTION addConstraintPointOnLine;
@@ -654,7 +656,12 @@ public:
     static TOOL_ACTION removeConstraints;
     static TOOL_ACTION showConstraints;     ///< Toggle the constraint diagnostics overlay.
     static TOOL_ACTION hideConstraints;     ///< Same toggle, shown while the overlay is visible.
-    static TOOL_ACTION manageConstraints;   ///< Open the constraint list dialog.
+    static TOOL_ACTION manageConstraints;      ///< Open the constraint list dialog.
+    static TOOL_ACTION showConstraintsPanel;   ///< Toggle the docked constraints pane (board editor).
+
+    /// Canonical ordered list of the geometric-constraint "add" actions, shared by the context
+    /// submenu (gated per selection) and the Place menu (ungated) so the two cannot drift.
+    static const std::vector<const TOOL_ACTION*>& ConstraintAddActions();
 
     /// Drag and drop
     static TOOL_ACTION ddAppendBoard;

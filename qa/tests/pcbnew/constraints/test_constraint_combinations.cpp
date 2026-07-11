@@ -30,7 +30,7 @@ void author( BOARD& aBoard, PCB_CONSTRAINT_TYPE aType, const std::vector<CONSTRA
     PCB_CONSTRAINT*         c = addConstraint( aBoard, aType, aMembers, aValue );
     std::vector<PCB_SHAPE*> mod;
     ApplyConstraintImmediately( &aBoard, c, &mod,
-                                []( PCB_SHAPE* )
+                                []( BOARD_ITEM* )
                                 {
                                 } );
 }
@@ -236,7 +236,7 @@ BOOST_AUTO_TEST_CASE( FlipRestoresTangent )
 
     std::vector<PCB_SHAPE*> shapes{ circ }, mod;
     ReSolveShapeClusters( &b, shapes, &mod,
-                          []( PCB_SHAPE* )
+                          []( BOARD_ITEM* )
                           {
                           } );
 
@@ -269,7 +269,7 @@ BOOST_AUTO_TEST_CASE( RotateRestoresParallel )
 
     std::vector<PCB_SHAPE*> shapes{ c }, mod;
     ReSolveShapeClusters( &b, shapes, &mod,
-                          []( PCB_SHAPE* )
+                          []( BOARD_ITEM* )
                           {
                           } );
 

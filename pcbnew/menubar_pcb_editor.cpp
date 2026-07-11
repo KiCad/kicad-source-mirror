@@ -230,6 +230,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     showHidePanels->Add( PCB_ACTIONS::showSearch,                 ACTION_MENU::CHECK );
     showHidePanels->Add( PCB_ACTIONS::showLayersManager,          ACTION_MENU::CHECK );
     showHidePanels->Add( PCB_ACTIONS::showNetInspector,           ACTION_MENU::CHECK );
+    showHidePanels->Add( PCB_ACTIONS::showConstraintsPanel,       ACTION_MENU::CHECK );
 
     if( ADVANCED_CFG::GetCfg().m_EnablePcbDesignBlocks )
         showHidePanels->Add( PCB_ACTIONS::showDesignBlockPanel, ACTION_MENU::CHECK, _( "Design Blocks" ) );
@@ -337,6 +338,21 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     dimensionSubmenu->Add( PCB_ACTIONS::drawRadialDimension );
     dimensionSubmenu->Add( PCB_ACTIONS::drawLeader );
     placeMenu->Add( dimensionSubmenu );
+
+    // Mirrors the selection tool's Constraints context submenu so the feature is reachable without
+    // right-clicking; an unsuitable selection is reported by the tool via the info bar.  The action
+    // list is shared (PCB_ACTIONS::ConstraintAddActions) so this menu cannot drift from the context
+    // one.  The pane itself is reached from View > Panels, so no toggle is repeated here.
+    ACTION_MENU* constraintsSubmenu = new ACTION_MENU( false, selTool );
+    constraintsSubmenu->SetTitle( _( "Geometric Constraints" ) );
+    constraintsSubmenu->SetIcon( BITMAPS::measurement );
+
+    for( const TOOL_ACTION* action : PCB_ACTIONS::ConstraintAddActions() )
+        constraintsSubmenu->Add( *action );
+
+    constraintsSubmenu->AppendSeparator();
+    constraintsSubmenu->Add( PCB_ACTIONS::removeConstraints );
+    placeMenu->Add( constraintsSubmenu );
 
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::placeCharacteristics );

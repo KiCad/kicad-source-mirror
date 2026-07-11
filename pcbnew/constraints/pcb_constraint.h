@@ -54,6 +54,7 @@ enum class PCB_CONSTRAINT_TYPE
     FIXED_RADIUS,      ///< An arc/circle has a driving radius value.
     ANGULAR_DIMENSION, ///< An angle between members (driving or reference).
     TANGENT,           ///< A line and a curve, or two curves, touch tangentially.
+    ARC_ANGLE,         ///< An arc has a driving or reference swept-angle value.
 };
 
 
@@ -180,7 +181,7 @@ public:
     bool   operator==( const PCB_CONSTRAINT& aOther ) const;
     bool   operator==( const BOARD_ITEM& aOther ) const override;
 
-    // No-geometry surface: a constraint occupies no space and is never on a layer.
+    // A constraint occupies no space and is never on a layer.
     VECTOR2I GetPosition() const override { return VECTOR2I(); }
     void     SetPosition( const VECTOR2I& ) override {}
 
@@ -244,10 +245,10 @@ wxString ConstraintMemberLabel( BOARD_ITEM* aItem, CONSTRAINT_ANCHOR aAnchor,
 
 
 /**
- * True if two constraints express the same relation: same type and the same members compared
- * without regard to order (so A-B equals B-A).  Value and driving are ignored, so a second
- * dimensional constraint on the same geometry -- which could only conflict -- also counts as a
- * duplicate.  Used to reject authoring an identical constraint.
+ * True if two constraints express the same relation, meaning the same type and the same members
+ * compared without regard to order (so A-B equals B-A).  Value and driving are ignored, so a second
+ * dimensional constraint on the same geometry counts as a duplicate since it could only conflict.
+ * Used to reject authoring an identical constraint.
  */
 bool ConstraintsAreDuplicate( const PCB_CONSTRAINT& aA, const PCB_CONSTRAINT& aB );
 

@@ -54,7 +54,8 @@ const char* ConstraintTypeToken( PCB_CONSTRAINT_TYPE aType )
     case PCB_CONSTRAINT_TYPE::CONCENTRIC:        return "concentric";
     case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:      return "fixed_radius";
     case PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION: return "angular_dimension";
-    case PCB_CONSTRAINT_TYPE::TANGENT: return "tangent";
+    case PCB_CONSTRAINT_TYPE::TANGENT:           return "tangent";
+    case PCB_CONSTRAINT_TYPE::ARC_ANGLE:         return "arc_angle";
     case PCB_CONSTRAINT_TYPE::UNDEFINED:         return "undefined";
     }
 
@@ -64,7 +65,7 @@ const char* ConstraintTypeToken( PCB_CONSTRAINT_TYPE aType )
 
 PCB_CONSTRAINT_TYPE ConstraintTypeFromToken( const wxString& aToken )
 {
-    for( int i = 0; i <= static_cast<int>( PCB_CONSTRAINT_TYPE::TANGENT ); ++i )
+    for( int i = 0; i <= static_cast<int>( PCB_CONSTRAINT_TYPE::ARC_ANGLE ); ++i )
     {
         PCB_CONSTRAINT_TYPE type = static_cast<PCB_CONSTRAINT_TYPE>( i );
 
@@ -84,7 +85,7 @@ bool ConstraintValueIsLength( PCB_CONSTRAINT_TYPE aType )
     case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:
         return true;
     default:
-        return false;   // ANGULAR_DIMENSION is an angle; everything else is valueless
+        return false;   // the angular types are angles; everything else is valueless
     }
 }
 
@@ -141,7 +142,8 @@ wxString ConstraintTypeGlyph( PCB_CONSTRAINT_TYPE aType )
     case PCB_CONSTRAINT_TYPE::CONCENTRIC:        return wxT( "◎" );
     case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:      return wxT( "r" );
     case PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION: return wxT( "∠" );
-    case PCB_CONSTRAINT_TYPE::TANGENT: return wxT( "T" );
+    case PCB_CONSTRAINT_TYPE::TANGENT:           return wxT( "T" );
+    case PCB_CONSTRAINT_TYPE::ARC_ANGLE:         return wxT( "α" );
     case PCB_CONSTRAINT_TYPE::UNDEFINED:         return wxEmptyString;
     }
 
@@ -185,7 +187,8 @@ wxString ConstraintTypeLabel( PCB_CONSTRAINT_TYPE aType )
     case PCB_CONSTRAINT_TYPE::CONCENTRIC:        return _( "Concentric" );
     case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:      return _( "Fixed radius" );
     case PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION: return _( "Angular dimension" );
-    case PCB_CONSTRAINT_TYPE::TANGENT: return _( "Tangent" );
+    case PCB_CONSTRAINT_TYPE::TANGENT:           return _( "Tangent" );
+    case PCB_CONSTRAINT_TYPE::ARC_ANGLE:         return _( "Arc angle" );
     case PCB_CONSTRAINT_TYPE::UNDEFINED:         return _( "Undefined" );
     }
 
@@ -205,6 +208,48 @@ PCB_CONSTRAINT::PCB_CONSTRAINT( BOARD_ITEM* aParent, PCB_CONSTRAINT_TYPE aType )
         m_driving( true )
 {
 }
+
+
+// Serialize() bridges the C++ and proto enums by static_cast, so any ordinal drift corrupts API
+// traffic silently; pin every value at compile time.
+#define CHECK_CONSTRAINT_TYPE( cppType, protoType )                                                \
+    static_assert( static_cast<int>( PCB_CONSTRAINT_TYPE::cppType )                               \
+                   == static_cast<int>( kiapi::board::types::protoType ) )
+
+CHECK_CONSTRAINT_TYPE( UNDEFINED, CT_UNKNOWN );
+CHECK_CONSTRAINT_TYPE( COINCIDENT, CT_COINCIDENT );
+CHECK_CONSTRAINT_TYPE( HORIZONTAL, CT_HORIZONTAL );
+CHECK_CONSTRAINT_TYPE( VERTICAL, CT_VERTICAL );
+CHECK_CONSTRAINT_TYPE( PARALLEL, CT_PARALLEL );
+CHECK_CONSTRAINT_TYPE( PERPENDICULAR, CT_PERPENDICULAR );
+CHECK_CONSTRAINT_TYPE( COLLINEAR, CT_COLLINEAR );
+CHECK_CONSTRAINT_TYPE( SYMMETRIC, CT_SYMMETRIC );
+CHECK_CONSTRAINT_TYPE( EQUAL_LENGTH, CT_EQUAL_LENGTH );
+CHECK_CONSTRAINT_TYPE( EQUAL_RADIUS, CT_EQUAL_RADIUS );
+CHECK_CONSTRAINT_TYPE( POINT_ON_LINE, CT_POINT_ON_LINE );
+CHECK_CONSTRAINT_TYPE( MIDPOINT, CT_MIDPOINT );
+CHECK_CONSTRAINT_TYPE( FIXED_POSITION, CT_FIXED_POSITION );
+CHECK_CONSTRAINT_TYPE( FIXED_LENGTH, CT_FIXED_LENGTH );
+CHECK_CONSTRAINT_TYPE( CONCENTRIC, CT_CONCENTRIC );
+CHECK_CONSTRAINT_TYPE( FIXED_RADIUS, CT_FIXED_RADIUS );
+CHECK_CONSTRAINT_TYPE( ANGULAR_DIMENSION, CT_ANGULAR_DIMENSION );
+CHECK_CONSTRAINT_TYPE( TANGENT, CT_TANGENT );
+CHECK_CONSTRAINT_TYPE( ARC_ANGLE, CT_ARC_ANGLE );
+
+#undef CHECK_CONSTRAINT_TYPE
+
+#define CHECK_CONSTRAINT_ANCHOR( cppAnchor, protoAnchor )                                          \
+    static_assert( static_cast<int>( CONSTRAINT_ANCHOR::cppAnchor )                               \
+                   == static_cast<int>( kiapi::board::types::protoAnchor ) )
+
+CHECK_CONSTRAINT_ANCHOR( WHOLE, CA_WHOLE );
+CHECK_CONSTRAINT_ANCHOR( START, CA_START );
+CHECK_CONSTRAINT_ANCHOR( END, CA_END );
+CHECK_CONSTRAINT_ANCHOR( MID, CA_MID );
+CHECK_CONSTRAINT_ANCHOR( CENTER, CA_CENTER );
+CHECK_CONSTRAINT_ANCHOR( RADIUS, CA_RADIUS );
+
+#undef CHECK_CONSTRAINT_ANCHOR
 
 
 void PCB_CONSTRAINT::Serialize( google::protobuf::Any& aContainer ) const
@@ -246,7 +291,7 @@ bool PCB_CONSTRAINT::Deserialize( const google::protobuf::Any& aContainer )
     // a garbage type/anchor.
     int typeValue = constraint.type();
 
-    if( typeValue < 0 || typeValue > static_cast<int>( PCB_CONSTRAINT_TYPE::TANGENT ) )
+    if( typeValue < 0 || typeValue > static_cast<int>( PCB_CONSTRAINT_TYPE::ARC_ANGLE ) )
         m_type = PCB_CONSTRAINT_TYPE::UNDEFINED;
     else
         m_type = static_cast<PCB_CONSTRAINT_TYPE>( typeValue );
@@ -295,9 +340,7 @@ void PCB_CONSTRAINT::RemapKIIDs( const std::map<KIID, KIID>& aIdMap )
 {
     for( CONSTRAINT_MEMBER& member : m_members )
     {
-        auto it = aIdMap.find( member.m_item );
-
-        if( it != aIdMap.end() )
+        if( auto it = aIdMap.find( member.m_item ); it != aIdMap.end() )
             member.m_item = it->second;
     }
 }
@@ -345,7 +388,7 @@ double PCB_CONSTRAINT::Similarity( const BOARD_ITEM& aOther ) const
 }
 
 
-wxString PCB_CONSTRAINT::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
+wxString PCB_CONSTRAINT::GetItemDescription( UNITS_PROVIDER*, bool ) const
 {
     return wxString::Format( _( "Constraint: %s (%zu members)" ),
                              ConstraintTypeLabel( m_type ), m_members.size() );
@@ -368,10 +411,7 @@ wxString ConstraintDisplayLabel( const PCB_CONSTRAINT& aConstraint, EDA_UNITS aU
         text = EDA_UNIT_UTILS::UI::MessageTextFromValue( EDA_ANGLE( value, DEGREES_T ) );
 
     // Reference (non-driving) dimensions only measure, so show them parenthesized like CAD does.
-    if( aConstraint.IsDriving() )
-        return wxString::Format( wxT( "%s: %s" ), label, text );
-    else
-        return wxString::Format( wxT( "%s: (%s)" ), label, text );
+    return wxString::Format( aConstraint.IsDriving() ? wxT( "%s: %s" ) : wxT( "%s: (%s)" ), label, text );
 }
 
 
@@ -403,19 +443,10 @@ bool ConstraintsAreDuplicate( const PCB_CONSTRAINT& aA, const PCB_CONSTRAINT& aB
         return false;
 
     // Match members as a multiset so member order does not matter (A-B is the same as B-A).
-    std::vector<CONSTRAINT_MEMBER> remaining( b.begin(), b.end() );
-
-    for( const CONSTRAINT_MEMBER& m : a )
-    {
-        auto it = std::find( remaining.begin(), remaining.end(), m );
-
-        if( it == remaining.end() )
-            return false;
-
-        remaining.erase( it );
-    }
-
-    return true;
+    // Roles survive this because a member's anchor encodes them; in SYMMETRIC and the point
+    // families the mirror/probe points carry endpoint anchors while the axis/line is WHOLE, so
+    // two constraints with the same multiset genuinely relate the same geometry the same way.
+    return std::is_permutation( a.begin(), a.end(), b.begin(), b.end() );
 }
 
 
@@ -425,7 +456,7 @@ BITMAPS PCB_CONSTRAINT::GetMenuImage() const
 }
 
 
-std::shared_ptr<SHAPE> PCB_CONSTRAINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_CONSTRAINT::GetEffectiveShape( PCB_LAYER_ID, FLASHING ) const
 {
     return std::make_shared<SHAPE_COMPOUND>();
 }

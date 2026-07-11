@@ -26,6 +26,7 @@
 #include <pcb_reference_image.h>
 #include <reference_image.h>
 #include <bitmap_base.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
@@ -246,11 +247,13 @@ BOOST_FIXTURE_TEST_CASE( ReferenceImagePpiScaleMigration, REFERENCE_IMAGE_LOAD_T
     BOOST_REQUIRE( reloaded );
     BOOST_CHECK_CLOSE( firstImageScale( *reloaded ), 2.0, 1e-6 );
 
-    // Simulate a pre-fix file by lowering the format version below the migration cutoff.
-    std::string legacy = current;
-    const size_t pos = legacy.find( "20260623" );
+    // Simulate a pre-fix file by lowering the format version below the migration cutoff.  Match
+    // the live version rather than a literal so a later format bump does not break this test.
+    std::string       legacy = current;
+    const std::string version = std::to_string( SEXPR_BOARD_FILE_VERSION );
+    const size_t      pos = legacy.find( version );
     BOOST_REQUIRE( pos != std::string::npos );
-    legacy.replace( pos, 8, "20260512" );
+    legacy.replace( pos, version.size(), "20260512" );
 
     std::unique_ptr<BOARD> migrated = parseBoardString( legacy );
     BOOST_REQUIRE( migrated );

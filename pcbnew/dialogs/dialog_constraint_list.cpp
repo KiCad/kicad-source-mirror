@@ -72,8 +72,7 @@ void DIALOG_CONSTRAINT_LIST::onRowActivated( wxListEvent& aEvent )
 {
     if( PCB_CONSTRAINT* constraint = selectedConstraint() )
     {
-        if( m_highlight )
-            m_highlight( constraint );
+        m_highlight( constraint );
 
         // Close so the highlighted members are visible on the canvas behind the dialog.
         EndModal( wxID_OK );
@@ -85,9 +84,7 @@ void DIALOG_CONSTRAINT_LIST::onDelete( wxCommandEvent& aEvent )
 {
     if( PCB_CONSTRAINT* constraint = selectedConstraint() )
     {
-        if( m_remove )
-            m_remove( constraint );
-
+        m_remove( constraint );
         Populate();   // the constraint set changed
     }
 }

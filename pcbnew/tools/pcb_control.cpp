@@ -49,6 +49,7 @@
 #include <geometry/shape_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <footprint.h>
+#include <constraints/pcb_constraint.h>
 #include <pad.h>
 #include <netinfo.h>
 #include <layer_pairs.h>
@@ -1002,6 +1003,16 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
     }
 
     aClipFootprint->Groups().clear();
+
+    // Constraints ride along like the other containers; the KIID remap in placeBoardItems points
+    // their members at the pasted copies.
+    for( PCB_CONSTRAINT* constraint : aClipFootprint->Constraints() )
+    {
+        constraint->SetParent( editorFootprint );
+        aPastedItems.push_back( constraint );
+    }
+
+    aClipFootprint->Constraints().clear();
 }
 
 

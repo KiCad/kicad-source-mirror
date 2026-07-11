@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE( TypeGlyphIsSingleCodepointAndDistinct )
     // fixed-size badge and read poorly at any zoom.
     std::set<wxString> seen;
 
-    for( int i = 1; i <= static_cast<int>( PCB_CONSTRAINT_TYPE::TANGENT ); ++i )
+    for( int i = 1; i <= static_cast<int>( PCB_CONSTRAINT_TYPE::ARC_ANGLE ); ++i )
     {
         wxString glyph = ConstraintTypeGlyph( static_cast<PCB_CONSTRAINT_TYPE>( i ) );
 

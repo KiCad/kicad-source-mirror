@@ -80,4 +80,31 @@ BOOST_AUTO_TEST_CASE( RoundTripNoValue )
 }
 
 
+// Every constraint type survives the proto round-trip, so a divergence between the C++ enum and
+// the proto ConstraintType (which Serialize bridges by static_cast) fails here in CI instead of
+// silently corrupting API traffic.
+BOOST_AUTO_TEST_CASE( RoundTripEveryType )
+{
+    for( int t = static_cast<int>( PCB_CONSTRAINT_TYPE::COINCIDENT );
+         t <= static_cast<int>( PCB_CONSTRAINT_TYPE::ARC_ANGLE ); ++t )
+    {
+        PCB_CONSTRAINT_TYPE type = static_cast<PCB_CONSTRAINT_TYPE>( t );
+
+        PCB_CONSTRAINT original( nullptr, type );
+        original.AddMember( KIID(), CONSTRAINT_ANCHOR::WHOLE );
+        original.AddMember( KIID(), CONSTRAINT_ANCHOR::WHOLE );
+
+        google::protobuf::Any container;
+        original.Serialize( container );
+
+        PCB_CONSTRAINT restored( nullptr );
+        BOOST_REQUIRE_MESSAGE( restored.Deserialize( container ),
+                               "type " << t << " failed to deserialize" );
+        BOOST_CHECK_MESSAGE( restored.GetConstraintType() == type,
+                             "type " << t << " came back as "
+                                     << static_cast<int>( restored.GetConstraintType() ) );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

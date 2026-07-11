@@ -25,12 +25,26 @@
 #include <vector>
 
 #include <math/vector2d.h>
+#include <geometry/eda_angle.h>
 
 #include <constraints/pcb_constraint.h>
 
 class BOARD;
 class BOARD_ITEM;
 class PCB_SHAPE;
+class SEG;
+
+
+/**
+ * The corner angle between two segments, in the closed range [0, 180] degrees.
+ *
+ * The vertex is the nearest pair of endpoints (one per segment); the angle is measured between the
+ * two rays running from that vertex toward each segment's other endpoint.  Defining both rays "away
+ * from the vertex" makes the value invariant to each segment's stored START/END order and to member
+ * order, and it reads the obtuse/acute corner the user sees (a 120 degree corner stays 120, not 60).
+ * Nearest-endpoint pairing avoids SEG::IntersectLines, so near-parallel segments stay stable.
+ */
+EDA_ANGLE MeasureCornerAngle( const SEG& aA, const SEG& aB );
 
 
 /// A selectable feature of a shape (a segment endpoint, arc centre, ...) and its location.
@@ -53,6 +67,10 @@ std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintShapeAnchors( const PCB_SHAPE* aS
 /// Every PCB_SHAPE on the board (drawings plus footprint graphics) -- the candidates constraints
 /// can reference.  Shared by the anchor and segment hit-tests so the board walk lives in one place.
 std::vector<PCB_SHAPE*> CollectConstraintShapes( BOARD* aBoard );
+
+
+/// Every constrainable item on the board -- shapes plus dimensions -- for board-wide anchor picking.
+std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard );
 
 
 /**
@@ -80,19 +98,44 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
 
 
 /**
- * Find the shape anchor (segment/arc endpoint, arc/circle centre) nearest @p aPos within
- * @p aMaxDist, for point-anchored constraint authoring (coincident, midpoint, ...).
+ * Find the constrainable-item anchor (a shape's segment/arc endpoint or centre, or a dimension's
+ * feature point) nearest @p aPos within @p aMaxDist, for point-anchored constraint authoring
+ * (coincident, midpoint, ...).
  *
- * @return the {shape, anchor} member, or std::nullopt if no anchor is close enough.
+ * @return the {item, anchor} member, or std::nullopt if no anchor is close enough.
  */
 std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( BOARD* aBoard, const VECTOR2I& aPos,
                                                           double aMaxDist );
 
 
 /**
- * Current location of a constraint member's anchor (its shape's START/END/CENTER), or
- * std::nullopt if the referenced item is gone or exposes no such anchor.
+ * The board item a constraint may reference: a PCB_SHAPE or a dimension, or nullptr for anything
+ * else (or a deleted item).  Constraints bind these two families; everything else is unconstrainable.
+ */
+BOARD_ITEM* ResolveConstrainableItem( BOARD* aBoard, const KIID& aId );
+
+
+/**
+ * The constraint anchors an item exposes.  Delegates to ConstraintShapeAnchors for a shape; for a
+ * dimension it returns the measured feature points (START/END for aligned/orthogonal/radial, START
+ * only for leader/center -- their other point is a control point, not a feature).
+ */
+std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintItemAnchors( const BOARD_ITEM* aItem );
+
+
+/**
+ * Current location of a constraint member's anchor (its shape's START/END/CENTER, or a dimension's
+ * feature point), or std::nullopt if the referenced item is gone or exposes no such anchor.
  */
 std::optional<VECTOR2I> ConstraintAnchorPosition( BOARD* aBoard, const CONSTRAINT_MEMBER& aMember );
+
+
+/**
+ * The candidate shape whose outline @p aPos hits within @p aMaxDist, or std::nullopt.  Pure over an
+ * explicit candidate set (the caller passes the constrained shapes), so hovering an unconstrained
+ * shape lying closer is ignored, and the helper stays unit-testable without the tool.
+ */
+std::optional<KIID> NearestConstrainedShape( const std::vector<PCB_SHAPE*>& aCandidates,
+                                             const VECTOR2I& aPos, int aMaxDist );
 
 #endif // CONSTRAINT_BUILDER_H_

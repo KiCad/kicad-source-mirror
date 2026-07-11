@@ -32,9 +32,9 @@ class VIEW_OVERLAY;
  * RAII owner of a single VIEW_OVERLAY.
  *
  * VIEW::MakeOverlay() already registers the overlay with the view, so it must be removed exactly
- * once and never Add()ed again.  Getting that wrong left a dangling R-tree entry that the next
- * repaint dereferenced (the constraint-overlay use-after-free).  Centralising the make/remove pair
- * here keeps the invariant in one place; derive from this to own a diagnostics or marker overlay.
+ * once and never Add()ed again.  Getting that wrong leaves a dangling R-tree entry that the next
+ * repaint dereferences.  Centralising the make/remove pair here keeps the invariant in one place.
+ * Derive from this to own a diagnostics or marker overlay.
  */
 class VIEW_OVERLAY_HOLDER
 {

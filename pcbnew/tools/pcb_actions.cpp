@@ -61,13 +61,6 @@ TOOL_ACTION PCB_ACTIONS::convertToZone( TOOL_ACTION_ARGS()
         .Tooltip( _( "Creates a copper zone from the selection" ) )
         .Icon( BITMAPS::add_zone ) );
 
-TOOL_ACTION PCB_ACTIONS::addConstraint( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.ConstraintEditor.addConstraint" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Add Geometric Constraint" ) )
-        .Tooltip( _( "Constrain the selected items' geometry" ) )
-        .Icon( BITMAPS::measurement ) );
-
 TOOL_ACTION PCB_ACTIONS::addConstraintParallel( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.addParallel" )
         .Scope( AS_GLOBAL )
@@ -152,6 +145,13 @@ TOOL_ACTION PCB_ACTIONS::addConstraintFixedRadius( TOOL_ACTION_ARGS()
         .Tooltip( _( "Lock the selected circle or arc to its current radius" ) )
         .Parameter( PCB_CONSTRAINT_TYPE::FIXED_RADIUS ) );
 
+TOOL_ACTION PCB_ACTIONS::addConstraintArcAngle( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ConstraintEditor.addArcAngle" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Arc Angle" ) )
+        .Tooltip( _( "Drive the selected arc's swept angle" ) )
+        .Parameter( PCB_CONSTRAINT_TYPE::ARC_ANGLE ) );
+
 TOOL_ACTION PCB_ACTIONS::addConstraintCoincident( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.addCoincident" )
         .Scope( AS_GLOBAL )
@@ -183,16 +183,16 @@ TOOL_ACTION PCB_ACTIONS::addConstraintSymmetric( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::showConstraints( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.showConstraints" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Show Geometric Constraints" ) )
-        .Tooltip( _( "Toggle the geometric-constraint diagnostics overlay" ) )
+        .FriendlyName( _( "Always Show Geometric Constraints" ) )
+        .Tooltip( _( "Always show the geometric-constraint diagnostics overlay" ) )
         .Flags( AF_NONE )
         .Icon( BITMAPS::measurement ) );
 
 TOOL_ACTION PCB_ACTIONS::hideConstraints( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.hideConstraints" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Hide Geometric Constraints" ) )
-        .Tooltip( _( "Toggle the geometric-constraint diagnostics overlay" ) )
+        .FriendlyName( _( "Show Geometric Constraints on Hover Only" ) )
+        .Tooltip( _( "Reveal a shape's geometric constraints only while hovering it" ) )
         .Flags( AF_NONE )
         .Icon( BITMAPS::measurement ) );
 
@@ -208,6 +208,13 @@ TOOL_ACTION PCB_ACTIONS::removeConstraints( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Remove Geometric Constraints" ) )
         .Tooltip( _( "Remove geometric constraints referencing the selected items" ) )
+        .Icon( BITMAPS::measurement ) );
+
+TOOL_ACTION PCB_ACTIONS::showConstraintsPanel( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.showConstraintsPanel" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Geometric Constraints" ) )
+        .Tooltip( _( "Show/hide the geometric constraints panel" ) )
         .Icon( BITMAPS::measurement ) );
 
 TOOL_ACTION PCB_ACTIONS::convertToKeepout( TOOL_ACTION_ARGS()
@@ -3104,4 +3111,19 @@ const TOOL_EVENT& PCB_EVENTS::LayerPairPresetChangedByKeyEvent()
                                           "pcbnew.Control.layerPairPresetChangedByKey" );
 
     return event;
+}
+
+
+const std::vector<const TOOL_ACTION*>& PCB_ACTIONS::ConstraintAddActions()
+{
+    static const std::vector<const TOOL_ACTION*> actions = {
+        &addConstraintParallel,      &addConstraintPerpendicular, &addConstraintEqualLength,
+        &addConstraintCollinear,     &addConstraintAngular,       &addConstraintTangent,
+        &addConstraintHorizontal,    &addConstraintVertical,      &addConstraintFixedLength,
+        &addConstraintConcentric,    &addConstraintEqualRadius,   &addConstraintFixedRadius,
+        &addConstraintArcAngle,      &addConstraintCoincident,    &addConstraintPointOnLine,
+        &addConstraintMidpoint,      &addConstraintSymmetric
+    };
+
+    return actions;
 }

@@ -19,6 +19,9 @@
 
 #include <widgets/panel_constraints.h>
 
+#include <algorithm>
+#include <ranges>
+
 #include <wx/listctrl.h>
 
 #include <board.h>
@@ -65,16 +68,15 @@ void PANEL_CONSTRAINTS::RefreshList( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag )
 
 void PANEL_CONSTRAINTS::SelectConstraint( const KIID& aConstraint )
 {
-    for( long row = 0; row < static_cast<long>( m_rows.size() ); ++row )
-    {
-        if( m_rows[row] != aConstraint )
-            continue;
+    auto it = std::ranges::find( m_rows, aConstraint );
 
-        m_list->SetItemState( row, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED,
-                              wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED );
-        m_list->EnsureVisible( row );
+    if( it == m_rows.end() )
         return;
-    }
+
+    long row = static_cast<long>( std::distance( m_rows.begin(), it ) );
+    m_list->SetItemState( row, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED,
+                          wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED );
+    m_list->EnsureVisible( row );
 }
 
 

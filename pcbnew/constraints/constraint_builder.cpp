@@ -19,11 +19,15 @@
 
 #include <constraints/constraint_builder.h>
 
+#include <algorithm>
 #include <cmath>
+#include <ranges>
 
 #include <board.h>
 #include <footprint.h>
 #include <geometry/eda_angle.h>
+#include <geometry/seg.h>
+#include <pcb_dimension.h>
 #include <pcb_shape.h>
 
 
@@ -46,6 +50,13 @@ bool isCircleOrArc( const BOARD_ITEM* aItem )
 }
 
 
+bool isArc( const BOARD_ITEM* aItem )
+{
+    return aItem->Type() == PCB_SHAPE_T
+            && static_cast<const PCB_SHAPE*>( aItem )->GetShape() == SHAPE_T::ARC;
+}
+
+
 bool isEllipseKind( const BOARD_ITEM* aItem )
 {
     if( aItem->Type() != PCB_SHAPE_T )
@@ -58,40 +69,57 @@ bool isEllipseKind( const BOARD_ITEM* aItem )
 
 bool allSegments( const std::vector<BOARD_ITEM*>& aItems )
 {
-    for( const BOARD_ITEM* item : aItems )
-    {
-        if( !isSegment( item ) )
-            return false;
-    }
-
-    return true;
+    return std::ranges::all_of( aItems, isSegment );
 }
 
 
 // Circles and arcs have a radius the solver can equate or fix.
 bool allRadial( const std::vector<BOARD_ITEM*>& aItems )
 {
-    for( const BOARD_ITEM* item : aItems )
-    {
-        if( !isCircleOrArc( item ) )
-            return false;
-    }
-
-    return true;
+    return std::ranges::all_of( aItems, isCircleOrArc );
 }
 
 
 // Circles, arcs and ellipses all have a centre the solver can make concentric.
 bool allCentered( const std::vector<BOARD_ITEM*>& aItems )
 {
-    for( const BOARD_ITEM* item : aItems )
+    return std::ranges::all_of( aItems,
+                                []( const BOARD_ITEM* aItem )
+                                {
+                                    return isCircleOrArc( aItem ) || isEllipseKind( aItem );
+                                } );
+}
+}
+
+
+EDA_ANGLE MeasureCornerAngle( const SEG& aA, const SEG& aB )
+{
+    const VECTOR2I aEnds[2] = { aA.A, aA.B };
+    const VECTOR2I bEnds[2] = { aB.A, aB.B };
+
+    // The vertex is the closest endpoint pair; the rays run from it toward each other endpoint.
+    int         vA = 0, vB = 0;
+    SEG::ecoord best = ( aEnds[0] - bEnds[0] ).SquaredEuclideanNorm();
+
+    for( int i = 0; i < 2; ++i )
     {
-        if( !isCircleOrArc( item ) && !isEllipseKind( item ) )
-            return false;
+        for( int j = 0; j < 2; ++j )
+        {
+            SEG::ecoord dist = ( aEnds[i] - bEnds[j] ).SquaredEuclideanNorm();
+
+            if( dist < best )
+            {
+                best = dist;
+                vA = i;
+                vB = j;
+            }
+        }
     }
 
-    return true;
-}
+    // Orient both segments from the shared vertex outward so SEG::Angle reads the corner the rays
+    // open.  It uses each segment's true direction (not a midpoint ray), so a small gap between the
+    // near endpoints does not skew the measurement, and it returns [0, 180] without folding past 90.
+    return SEG( aEnds[vA], aEnds[1 - vA] ).Angle( SEG( bEnds[vB], bEnds[1 - vB] ) );
 }
 
 
@@ -99,12 +127,15 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
                                                           PCB_CONSTRAINT_TYPE aType,
                                                           const std::vector<BOARD_ITEM*>& aItems )
 {
-    auto make = [&]() { return std::make_unique<PCB_CONSTRAINT>( aParent, aType ); };
-
-    auto addWhole = [&]( PCB_CONSTRAINT* aConstraint )
+    // Build a constraint of aType with every selected item bound by its WHOLE anchor.
+    auto makeWhole = [&]()
     {
+        std::unique_ptr<PCB_CONSTRAINT> c = std::make_unique<PCB_CONSTRAINT>( aParent, aType );
+
         for( BOARD_ITEM* item : aItems )
-            aConstraint->AddMember( item->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+            c->AddMember( item->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+
+        return c;
     };
 
     switch( aType )
@@ -117,9 +148,7 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
         if( aItems.size() != 2 || !allSegments( aItems ) )
             return nullptr;
 
-        std::unique_ptr<PCB_CONSTRAINT> c = make();
-        addWhole( c.get() );
-        return c;
+        return makeWhole();
     }
 
     case PCB_CONSTRAINT_TYPE::HORIZONTAL:
@@ -128,9 +157,7 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
         if( aItems.size() != 1 || !isSegment( aItems[0] ) )
             return nullptr;
 
-        std::unique_ptr<PCB_CONSTRAINT> c = make();
-        addWhole( c.get() );
-        return c;
+        return makeWhole();
     }
 
     case PCB_CONSTRAINT_TYPE::FIXED_LENGTH:
@@ -140,8 +167,7 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
 
         const PCB_SHAPE* seg = static_cast<const PCB_SHAPE*>( aItems[0] );
 
-        std::unique_ptr<PCB_CONSTRAINT> c = make();
-        addWhole( c.get() );
+        std::unique_ptr<PCB_CONSTRAINT> c = makeWhole();
         c->SetValue( ( seg->GetEnd() - seg->GetStart() ).EuclideanNorm() );
         return c;
     }
@@ -151,9 +177,7 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
         if( aItems.size() != 2 || !allCentered( aItems ) )
             return nullptr;
 
-        std::unique_ptr<PCB_CONSTRAINT> c = make();
-        addWhole( c.get() );
-        return c;
+        return makeWhole();
     }
 
     case PCB_CONSTRAINT_TYPE::EQUAL_RADIUS:
@@ -161,9 +185,7 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
         if( aItems.size() != 2 || !allRadial( aItems ) )
             return nullptr;
 
-        std::unique_ptr<PCB_CONSTRAINT> c = make();
-        addWhole( c.get() );
-        return c;
+        return makeWhole();
     }
 
     case PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION:
@@ -174,15 +196,14 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
         const PCB_SHAPE* a = static_cast<const PCB_SHAPE*>( aItems[0] );
         const PCB_SHAPE* b = static_cast<const PCB_SHAPE*>( aItems[1] );
 
-        EDA_ANGLE angleA( a->GetEnd() - a->GetStart() );
-        EDA_ANGLE angleB( b->GetEnd() - b->GetStart() );
+        // A zero-length segment has no direction, so the corner angle is undefined and the solver's
+        // angle equation is singular.
+        if( a->GetStart() == a->GetEnd() || b->GetStart() == b->GetEnd() )
+            return nullptr;
 
-        std::unique_ptr<PCB_CONSTRAINT> c = make();
-        addWhole( c.get() );
-
-        // Store the signed directed angle (member[0] -> member[1]); the solver constrains the same
-        // directed angle, so abs() here would snap the lines to the mirror configuration on solve.
-        c->SetValue( ( angleB - angleA ).Normalize180().AsDegrees() );
+        std::unique_ptr<PCB_CONSTRAINT> c = makeWhole();
+        c->SetValue( MeasureCornerAngle( SEG( a->GetStart(), a->GetEnd() ),
+                                         SEG( b->GetStart(), b->GetEnd() ) ).AsDegrees() );
         return c;
     }
 
@@ -191,9 +212,18 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
         if( aItems.size() != 1 || !isCircleOrArc( aItems[0] ) )
             return nullptr;
 
-        std::unique_ptr<PCB_CONSTRAINT> c = make();
-        addWhole( c.get() );
+        std::unique_ptr<PCB_CONSTRAINT> c = makeWhole();
         c->SetValue( static_cast<const PCB_SHAPE*>( aItems[0] )->GetRadius() );
+        return c;
+    }
+
+    case PCB_CONSTRAINT_TYPE::ARC_ANGLE:
+    {
+        if( aItems.size() != 1 || !isArc( aItems[0] ) )
+            return nullptr;
+
+        std::unique_ptr<PCB_CONSTRAINT> c = makeWhole();
+        c->SetValue( static_cast<const PCB_SHAPE*>( aItems[0] )->GetArcAngle().AsDegrees() );
         return c;
     }
 
@@ -205,16 +235,18 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
         const BOARD_ITEM* a = aItems[0];
         const BOARD_ITEM* b = aItems[1];
 
-        bool lineCurve = ( isSegment( a ) && ( isCircleOrArc( b ) || isEllipseKind( b ) ) )
-                         || ( isSegment( b ) && ( isCircleOrArc( a ) || isEllipseKind( a ) ) );
+        auto isCurve = []( const BOARD_ITEM* aItem )
+        {
+            return isCircleOrArc( aItem ) || isEllipseKind( aItem );
+        };
+
+        bool lineCurve = ( isSegment( a ) && isCurve( b ) ) || ( isSegment( b ) && isCurve( a ) );
         bool curveCurve = isCircleOrArc( a ) && isCircleOrArc( b );
 
         if( !lineCurve && !curveCurve )
             return nullptr;
 
-        std::unique_ptr<PCB_CONSTRAINT> c = make();
-        addWhole( c.get() );
-        return c;
+        return makeWhole();
     }
 
     default:
@@ -235,30 +267,22 @@ std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintShapeAnchors( const PCB_SHAPE* aS
     switch( aShape->GetShape() )
     {
     case SHAPE_T::SEGMENT:
-        anchors.push_back( { CONSTRAINT_ANCHOR::START, aShape->GetStart() } );
-        anchors.push_back( { CONSTRAINT_ANCHOR::END, aShape->GetEnd() } );
-        break;
+        return { { CONSTRAINT_ANCHOR::START, aShape->GetStart() },
+                 { CONSTRAINT_ANCHOR::END, aShape->GetEnd() } };
 
     case SHAPE_T::ARC:
-        anchors.push_back( { CONSTRAINT_ANCHOR::START, aShape->GetStart() } );
-        anchors.push_back( { CONSTRAINT_ANCHOR::END, aShape->GetEnd() } );
-        anchors.push_back( { CONSTRAINT_ANCHOR::CENTER, aShape->GetCenter() } );
-        break;
+    case SHAPE_T::ELLIPSE_ARC:
+        return { { CONSTRAINT_ANCHOR::START, aShape->GetStart() },
+                 { CONSTRAINT_ANCHOR::END, aShape->GetEnd() },
+                 { CONSTRAINT_ANCHOR::CENTER, aShape->GetCenter() } };
 
     case SHAPE_T::CIRCLE:
-    case SHAPE_T::ELLIPSE: anchors.push_back( { CONSTRAINT_ANCHOR::CENTER, aShape->GetCenter() } ); break;
-
-    case SHAPE_T::ELLIPSE_ARC:
-        anchors.push_back( { CONSTRAINT_ANCHOR::START, aShape->GetStart() } );
-        anchors.push_back( { CONSTRAINT_ANCHOR::END, aShape->GetEnd() } );
-        anchors.push_back( { CONSTRAINT_ANCHOR::CENTER, aShape->GetCenter() } );
-        break;
+    case SHAPE_T::ELLIPSE:
+        return { { CONSTRAINT_ANCHOR::CENTER, aShape->GetCenter() } };
 
     default:
-        break;
+        return anchors;
     }
-
-    return anchors;
 }
 
 
@@ -312,28 +336,123 @@ std::vector<PCB_SHAPE*> CollectConstraintShapes( BOARD* aBoard )
 }
 
 
+std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard )
+{
+    std::vector<BOARD_ITEM*> items;
+
+    if( !aBoard )
+        return items;
+
+    auto collect =
+            [&]( const auto& aContainer )
+            {
+                for( BOARD_ITEM* item : aContainer )
+                {
+                    if( item->Type() == PCB_SHAPE_T || dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
+                        items.push_back( item );
+                }
+            };
+
+    collect( aBoard->Drawings() );
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+        collect( footprint->GraphicalItems() );
+
+    return items;
+}
+
+
 std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( BOARD* aBoard, const VECTOR2I& aPos,
                                                           double aMaxDist )
 {
-    return NearestAnchorAmong( CollectConstraintShapes( aBoard ), aPos, aMaxDist );
+    double                           best = aMaxDist;
+    std::optional<CONSTRAINT_MEMBER> result;
+
+    for( BOARD_ITEM* item : CollectConstrainableItems( aBoard ) )
+    {
+        for( const CONSTRAINT_ANCHOR_POINT& a : ConstraintItemAnchors( item ) )
+        {
+            double dist = ( a.pos - aPos ).EuclideanNorm();
+
+            if( dist <= best )
+            {
+                best = dist;
+                result = CONSTRAINT_MEMBER( item->m_Uuid, a.anchor );
+            }
+        }
+    }
+
+    return result;
+}
+
+
+BOARD_ITEM* ResolveConstrainableItem( BOARD* aBoard, const KIID& aId )
+{
+    if( !aBoard )
+        return nullptr;
+
+    BOARD_ITEM* item = aBoard->ResolveItem( aId, true );
+
+    return item && ( item->Type() == PCB_SHAPE_T || dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
+                   ? item
+                   : nullptr;
+}
+
+
+std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintItemAnchors( const BOARD_ITEM* aItem )
+{
+    if( !aItem )
+        return {};
+
+    if( aItem->Type() == PCB_SHAPE_T )
+        return ConstraintShapeAnchors( static_cast<const PCB_SHAPE*>( aItem ) );
+
+    if( const PCB_DIMENSION_BASE* dim = dynamic_cast<const PCB_DIMENSION_BASE*>( aItem ) )
+    {
+        std::vector<CONSTRAINT_ANCHOR_POINT> anchors;
+        anchors.push_back( { CONSTRAINT_ANCHOR::START, dim->GetStart() } );
+
+        // Only aligned/orthogonal/radial dimensions have a second measured feature point; a leader
+        // or centre mark's second point is a control point.
+        switch( aItem->Type() )
+        {
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_DIM_RADIAL_T:
+            anchors.push_back( { CONSTRAINT_ANCHOR::END, dim->GetEnd() } );
+            break;
+
+        default:
+            break;
+        }
+
+        return anchors;
+    }
+
+    return {};
 }
 
 
 std::optional<VECTOR2I> ConstraintAnchorPosition( BOARD* aBoard, const CONSTRAINT_MEMBER& aMember )
 {
-    if( !aBoard )
-        return std::nullopt;
-
-    PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aBoard->ResolveItem( aMember.m_item, true ) );
-
-    if( !shape )
-        return std::nullopt;
-
-    for( const CONSTRAINT_ANCHOR_POINT& a : ConstraintShapeAnchors( shape ) )
+    for( const CONSTRAINT_ANCHOR_POINT& a : ConstraintItemAnchors( ResolveConstrainableItem( aBoard, aMember.m_item ) ) )
     {
         if( a.anchor == aMember.m_anchor )
             return a.pos;
     }
 
     return std::nullopt;
+}
+
+
+std::optional<KIID> NearestConstrainedShape( const std::vector<PCB_SHAPE*>& aCandidates,
+                                             const VECTOR2I& aPos, int aMaxDist )
+{
+    auto it = std::ranges::find_if( aCandidates,
+                                    [&]( const PCB_SHAPE* aShape )
+                                    {
+                                        return aShape && aShape->HitTest( aPos, aMaxDist );
+                                    } );
+
+    return it == aCandidates.end() ? std::nullopt : std::optional<KIID>( ( *it )->m_Uuid );
 }

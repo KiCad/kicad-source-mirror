@@ -56,9 +56,16 @@ public:
     /// True if the constraint should drive (lock) the geometry; false for a reference dimension.
     bool GetDriving() const;
 
+    /// Veto an angle outside the closed [0, 180] degree corner-angle range.
+    bool TransferDataFromWindow() override;
+
 private:
-    bool         m_isAngle;
-    UNIT_BINDER* m_valueBinder;
+    /// A reference (non-driving) constraint only measures, so its value is read-only.
+    void updateValueEnabled();
+
+    PCB_CONSTRAINT_TYPE m_type;
+    bool                m_isAngle;
+    UNIT_BINDER*        m_valueBinder;
 };
 
 #endif // DIALOG_CONSTRAINT_VALUE_H_

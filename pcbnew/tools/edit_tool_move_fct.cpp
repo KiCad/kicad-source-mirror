@@ -746,7 +746,9 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 
     if( BOARD_COMMIT* commit = dynamic_cast<BOARD_COMMIT*>( aEvent.Commit() ) )
     {
-        // Most moves will be synchronous unless they are coming from the API
+        // Most moves will be synchronous unless they are coming from the API.  Do not run the
+        // constraint solver here; this path contributes only the requested move to the
+        // caller-owned commit.
         if( aEvent.SynchronousState() )
             aEvent.SynchronousState()->store( STS_RUNNING );
 
@@ -769,18 +771,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
             localCommit.Push( _( "Move" ) );
 
             // A moved shape may have broken its geometric constraints. Re-solve those clusters.
-            if( CONSTRAINT_EDIT_TOOL* constraintTool = m_toolMgr->GetTool<CONSTRAINT_EDIT_TOOL>() )
-            {
-                std::vector<PCB_SHAPE*> shapes;
-
-                for( EDA_ITEM* item : m_selectionTool->GetSelection() )
-                {
-                    if( item->Type() == PCB_SHAPE_T )
-                        shapes.push_back( static_cast<PCB_SHAPE*>( item ) );
-                }
-
-                constraintTool->SolveAfterMove( shapes );
-            }
+            reSolveConstraintsAfterEdit( m_selectionTool->GetSelection() );
         }
         else
         {

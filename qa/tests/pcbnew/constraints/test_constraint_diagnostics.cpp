@@ -185,4 +185,95 @@ BOOST_AUTO_TEST_CASE( FootprintScopedConstraintsAreDiagnosed )
 }
 
 
+// A reference (non-driving) value that drifted from the geometry it measures is annotation, not a
+// contradiction, so the residual pass must not paint it as conflicting.
+BOOST_AUTO_TEST_CASE( DriftedReferenceValueIsNotConflicting )
+{
+    BOARD board;
+
+    PCB_SHAPE* seg = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* len = addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH,
+                                         { { seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } }, 5.0 * MM );
+    len->SetDriving( false );
+
+    BOARD_CONSTRAINT_DIAGNOSTICS diag = DiagnoseBoardConstraints( &board );
+
+    BOOST_CHECK( !alg::contains( diag.conflicting, len->m_Uuid ) );
+}
+
+
+// A contradiction on one segment of a multi-shape cluster still flags the constraints incident on
+// that segment, and the diagnosis never moves the geometry.
+BOOST_AUTO_TEST_CASE( ContradictionInMultiShapeClusterIsFlagged )
+{
+    BOARD board;
+
+    PCB_SHAPE* doomed = addSegment( board, { 0, 0 }, { 10 * MM, 2 * MM } );
+    PCB_SHAPE* bystander = addSegment( board, { 0, 20 * MM }, { 10 * MM, 20 * MM } );
+
+    PCB_CONSTRAINT* h = addConstraint( board, PCB_CONSTRAINT_TYPE::HORIZONTAL,
+                                       { { doomed->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+    PCB_CONSTRAINT* v = addConstraint( board, PCB_CONSTRAINT_TYPE::VERTICAL,
+                                       { { doomed->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::EQUAL_LENGTH,
+                   { { doomed->m_Uuid, CONSTRAINT_ANCHOR::WHOLE },
+                     { bystander->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    BOARD_CONSTRAINT_DIAGNOSTICS diag = DiagnoseBoardConstraints( &board );
+
+    BOOST_CHECK( alg::contains( diag.conflicting, h->m_Uuid )
+                 || alg::contains( diag.conflicting, v->m_Uuid ) );
+
+    BOOST_CHECK_EQUAL( doomed->GetStart(), VECTOR2I( 0, 0 ) );
+    BOOST_CHECK_EQUAL( doomed->GetEnd(), VECTOR2I( 10 * MM, 2 * MM ) );
+}
+
+
+// A plain (non-stabilize) solve satisfies horizontal+vertical by collapsing the segment with zero
+// residual, so only the collapse check can flag it.  The flags must land on the constraints
+// incident on the collapsed segment; a satisfied constraint on a connected bystander and a
+// reference measurement stay clean.
+BOOST_AUTO_TEST_CASE( ConvergentCollapseFlagsOnlyIncidentConstraints )
+{
+    BOARD board;
+
+    PCB_SHAPE* doomed = addSegment( board, { 0, 0 }, { 10 * MM, 2 * MM } );
+    PCB_SHAPE* bystander = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* h = addConstraint( board, PCB_CONSTRAINT_TYPE::HORIZONTAL,
+                                       { { doomed->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+    PCB_CONSTRAINT* v = addConstraint( board, PCB_CONSTRAINT_TYPE::VERTICAL,
+                                       { { doomed->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    // Joins the cluster at a shared endpoint without constraining the doomed segment's length.
+    addConstraint( board, PCB_CONSTRAINT_TYPE::COINCIDENT,
+                   { { doomed->m_Uuid, CONSTRAINT_ANCHOR::START },
+                     { bystander->m_Uuid, CONSTRAINT_ANCHOR::START } } );
+
+    PCB_CONSTRAINT* bystanderOnly = addConstraint( board, PCB_CONSTRAINT_TYPE::HORIZONTAL,
+                                                   { { bystander->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    PCB_CONSTRAINT* reference = addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH,
+                                               { { doomed->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } }, 5.0 * MM );
+    reference->SetDriving( false );
+
+    std::vector<PCB_CONSTRAINT*> constraints( board.Constraints().begin(), board.Constraints().end() );
+    std::vector<PCB_SHAPE*>      shapes{ doomed, bystander };
+
+    BOARD_CONSTRAINT_ADAPTER adapter;
+    BOOST_REQUIRE( adapter.Build( shapes, constraints ) );
+    BOOST_REQUIRE( adapter.Solve() );
+
+    CONSTRAINT_DIAGNOSIS diag = adapter.Diagnose();
+
+    BOOST_CHECK( alg::contains( diag.conflicting, h->m_Uuid )
+                 || alg::contains( diag.conflicting, v->m_Uuid ) );
+
+    BOOST_CHECK( !alg::contains( diag.conflicting, bystanderOnly->m_Uuid ) );
+    BOOST_CHECK( !alg::contains( diag.conflicting, reference->m_Uuid ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

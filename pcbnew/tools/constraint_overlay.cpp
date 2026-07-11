@@ -20,10 +20,12 @@
 #include <tools/constraint_overlay.h>
 
 #include <algorithm>
+#include <ranges>
 #include <set>
 
 #include <board.h>
 #include <footprint.h>
+#include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <view/view.h>
 #include <view/view_overlay.h>
@@ -53,8 +55,7 @@ CONSTRAINT_OVERLAY::CONSTRAINT_OVERLAY( BOARD* aBoard, KIGFX::VIEW* aView ) :
 CONSTRAINT_OVERLAY::~CONSTRAINT_OVERLAY()
 {
     // Remove the badge item before the base removes the tint overlay. Each is removed exactly once.
-    if( m_view )
-        m_view->Remove( &m_badgeItem );
+    m_view->Remove( &m_badgeItem );
 }
 
 
@@ -66,6 +67,9 @@ void CONSTRAINT_OVERLAY::Clear()
     m_overlay->Clear();
     m_view->Update( m_overlay.get() );
 
+    // Drop the badges from both the draw item and Badges(), so a hidden overlay is not still
+    // clickable through hitTestBadge.
+    m_badges.clear();
     m_badgeItem.SetBadges( {}, niluuid );
     m_view->Update( &m_badgeItem );
 }
@@ -95,6 +99,42 @@ double CONSTRAINT_OVERLAY::BadgeWorldPerPixel( double aWorldScale )
 }
 
 
+std::vector<VECTOR2D> CONSTRAINT_OVERLAY::LayoutBadges( const std::vector<CONSTRAINT_BADGE>& aBadges,
+                                                       double aWorldPerPx )
+{
+    // Screen-constant amounts scaled into world units, so the fan tracks the glyph size at any zoom
+    // instead of the old fixed 1.5 mm that collapsed zoomed-out and exploded zoomed-in.
+    const double   fanStep = 18.0 * aWorldPerPx;   // a little more than the 16 px glyph
+    const double   fanStepSq = fanStep * fanStep;
+    const VECTOR2D offset = BadgeScreenOffset() * aWorldPerPx;
+
+    // Cap the push-apart so a pathological board cannot hurt the pan/zoom framerate.
+    const size_t deOverlapLimit = 200;
+
+    std::vector<VECTOR2D> positions;
+    positions.reserve( aBadges.size() );
+
+    for( const CONSTRAINT_BADGE& badge : aBadges )
+    {
+        VECTOR2D pos = VECTOR2D( badge.pos ) + offset;
+
+        // Push clear of any already-placed badge so glyphs sharing (or near) an anchor fan out along
+        // a diagonal instead of stacking illegibly.  Capped so a pathological board cannot stall pan.
+        auto overlaps = [&]( const VECTOR2D& aPlaced )
+        {
+            return ( aPlaced - pos ).SquaredEuclideanNorm() < fanStepSq;
+        };
+
+        while( positions.size() < deOverlapLimit && std::ranges::any_of( positions, overlaps ) )
+            pos += VECTOR2D( fanStep, fanStep );
+
+        positions.push_back( pos );
+    }
+
+    return positions;
+}
+
+
 bool CONSTRAINT_OVERLAY::SetSelected( const KIID& aConstraint )
 {
     if( m_selected == aConstraint )
@@ -115,6 +155,26 @@ bool CONSTRAINT_OVERLAY::SetIsolated( const KIID& aConstraint )
 }
 
 
+bool CONSTRAINT_OVERLAY::SetVisibilityMode( OVERLAY_MODE aMode )
+{
+    if( m_mode == aMode )
+        return false;
+
+    m_mode = aMode;
+    return true;
+}
+
+
+bool CONSTRAINT_OVERLAY::SetHoverShape( const KIID& aShape )
+{
+    if( m_hoverShape == aShape )
+        return false;
+
+    m_hoverShape = aShape;
+    return true;
+}
+
+
 void CONSTRAINT_OVERLAY::Update( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag )
 {
     if( !m_overlay || !m_board )
@@ -128,9 +188,8 @@ void CONSTRAINT_OVERLAY::Update( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag )
 void CONSTRAINT_OVERLAY::RefreshSelection()
 {
     // Only the selected-badge highlight changed; redraw from the cached diagnosis without the
-    // expensive board-wide re-solve.
-    if( m_overlay && m_board )
-        render();
+    // expensive board-wide re-solve.  render() no-ops when the overlay is not ready.
+    render();
 }
 
 
@@ -154,57 +213,145 @@ void CONSTRAINT_OVERLAY::render()
                 {
                 case CONSTRAINT_STATE::WELL_CONSTRAINED:  return wellColor;
                 case CONSTRAINT_STATE::OVER_CONSTRAINED:  return overColor;
-                case CONSTRAINT_STATE::UNDER_CONSTRAINED: return underColor;
+                case CONSTRAINT_STATE::UNDER_CONSTRAINED:
                 default:                                  return underColor;
                 }
             };
 
-    auto outlineShape =
-            [&]( const PCB_SHAPE* aShape, const COLOR4D& aColor )
+    auto setStroke =
+            [&]( const COLOR4D& aColor )
             {
                 m_overlay->SetIsFill( false );
                 m_overlay->SetIsStroke( true );
                 m_overlay->SetStrokeColor( aColor );
                 m_overlay->SetLineWidth( lineWidth );
+            };
+
+    auto outlineShape =
+            [&]( const PCB_SHAPE* aShape, const COLOR4D& aColor )
+            {
+                setStroke( aColor );
 
                 if( aShape->GetShape() == SHAPE_T::CIRCLE )
+                {
                     m_overlay->Circle( aShape->GetCenter(), aShape->GetRadius() );
+                }
                 else if( aShape->GetShape() == SHAPE_T::SEGMENT )
+                {
                     m_overlay->Segment( aShape->GetStart(), aShape->GetEnd(), lineWidth );
+                }
+                else if( aShape->GetShape() == SHAPE_T::ARC )
+                {
+                    EDA_ANGLE startAngle( aShape->GetStart() - aShape->GetCenter() );
+                    m_overlay->Arc( aShape->GetCenter(), aShape->GetRadius(), startAngle,
+                                    startAngle + aShape->GetArcAngle() );
+                }
             };
 
     const BOARD_CONSTRAINT_DIAGNOSTICS& diag = m_lastDiag;
 
-    // Members of the isolated constraint. If it is gone, drop the isolate and show all again.
-    std::set<KIID> isolatedMembers;
+    // Decide what is shown.  A panel-row isolation wins; otherwise ALWAYS shows everything and HOVER
+    // shows only the hovered shape's constraints (or nothing when nothing is hovered).
+    bool           showAll = false;
+    std::set<KIID> shownShapes;
+    KIID           focusConstraint = niluuid;   // isolation: show only this constraint
+    KIID           focusShape = niluuid;         // hover: show only constraints referencing this shape
+
+    auto referencesShape = []( const PCB_CONSTRAINT* aConstraint, const KIID& aShape )
+    {
+        return std::ranges::any_of( aConstraint->GetMembers(),
+                                    [&]( const CONSTRAINT_MEMBER& m ) { return m.m_item == aShape; } );
+    };
 
     if( m_isolated != niluuid )
     {
         if( PCB_CONSTRAINT* c = dynamic_cast<PCB_CONSTRAINT*>( m_board->ResolveItem( m_isolated, true ) ) )
         {
+            focusConstraint = m_isolated;
+
             for( const CONSTRAINT_MEMBER& member : c->GetMembers() )
-                isolatedMembers.insert( member.m_item );
+                shownShapes.insert( member.m_item );
         }
         else
         {
-            m_isolated = niluuid;
+            m_isolated = niluuid;   // the isolated constraint is gone; fall through to the mode
         }
     }
 
+    if( m_isolated == niluuid )
+    {
+        if( m_mode == OVERLAY_MODE::ALWAYS )
+        {
+            showAll = true;
+        }
+        else if( m_hoverShape != niluuid )
+        {
+            focusShape = m_hoverShape;
+
+            // Every member of every constraint that references the hovered shape is shown, so the
+            // hover reveals the whole relation, not just the one shape.
+            auto collect =
+                    [&]( const CONSTRAINTS& aConstraints )
+                    {
+                        for( PCB_CONSTRAINT* c : aConstraints )
+                        {
+                            if( referencesShape( c, focusShape ) )
+                            {
+                                for( const CONSTRAINT_MEMBER& m : c->GetMembers() )
+                                    shownShapes.insert( m.m_item );
+                            }
+                        }
+                    };
+
+            collect( m_board->Constraints() );
+
+            for( FOOTPRINT* footprint : m_board->Footprints() )
+                collect( footprint->Constraints() );
+        }
+        // else HOVER with nothing hovered: showAll stays false and shownShapes stays empty -> nothing
+    }
+
+    auto shapeShown = [&]( const KIID& aId ) { return showAll || shownShapes.contains( aId ); };
+
+    auto constraintShown =
+            [&]( PCB_CONSTRAINT* aConstraint ) -> bool
+            {
+                if( focusConstraint != niluuid )
+                    return aConstraint->m_Uuid == focusConstraint;
+
+                if( showAll )
+                    return true;
+
+                if( focusShape == niluuid )
+                    return false;
+
+                return referencesShape( aConstraint, focusShape );
+            };
+
     for( const auto& [shapeId, state] : diag.shapeStates )
     {
-        if( m_isolated != niluuid && !isolatedMembers.count( shapeId ) )
+        if( !shapeShown( shapeId ) )
             continue;
 
-        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( m_board->ResolveItem( shapeId, true ) ) )
+        BOARD_ITEM* item = m_board->ResolveItem( shapeId, true );
+
+        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
+        {
             outlineShape( shape, colorForState( state ) );
+        }
+        else if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
+        {
+            // A solver-bound dimension has no outline to tint; mark its bindable feature points
+            // so it reads as part of the cluster rather than a free annotation.
+            setStroke( colorForState( state ) );
+
+            for( const CONSTRAINT_ANCHOR_POINT& anchor : ConstraintItemAnchors( dimension ) )
+                m_overlay->Circle( anchor.pos, 2 * lineWidth );
+        }
     }
 
     std::set<KIID> erroredIds( diag.errored.begin(), diag.errored.end() );
     std::set<KIID> conflictingIds( diag.conflicting.begin(), diag.conflicting.end() );
-
-    // Fan badges sharing an anchor apart by a fixed board distance so their glyphs do not stack.
-    const int fanStep = pcbIUScale.mmToIU( 1.5 );
 
     auto badgePosition =
             [&]( const CONSTRAINT_MEMBER& aFirst ) -> std::optional<VECTOR2I>
@@ -222,52 +369,24 @@ void CONSTRAINT_OVERLAY::render()
                 return std::nullopt;
             };
 
-    // Push a badge clear of any already-placed badge so glyphs sharing an anchor (coincident,
-    // point-on-line, ...) fan out along a diagonal instead of stacking illegibly.
-    auto fanOut =
-            [&]( VECTOR2I aPos ) -> VECTOR2I
-            {
-                bool moved = true;
-
-                while( moved )
-                {
-                    moved = false;
-
-                    for( const CONSTRAINT_BADGE& placed : m_badges )
-                    {
-                        if( ( placed.pos - aPos ).SquaredEuclideanNorm()
-                            < static_cast<int64_t>( fanStep ) * fanStep )
-                        {
-                            aPos += VECTOR2I( fanStep, fanStep );
-                            moved = true;
-                            break;
-                        }
-                    }
-                }
-
-                return aPos;
-            };
-
-    // Walk each constraint once, tinting an errored constraint's surviving members red (its cluster
-    // can't be diagnosed), then placing a type-glyph badge coloured by the constraint's state.  The
+    // An errored constraint's cluster can't be diagnosed, so tint its surviving members red.  The
     // selected constraint's badge is drawn enlarged and ringed.
     auto walkConstraints =
             [&]( const CONSTRAINTS& aConstraints )
             {
                 for( PCB_CONSTRAINT* constraint : aConstraints )
                 {
-                    if( constraint->GetMembers().empty() )
+                    const std::vector<CONSTRAINT_MEMBER>& members = constraint->GetMembers();
+
+                    if( members.empty() || !constraintShown( constraint ) )
                         continue;
 
-                    if( m_isolated != niluuid && constraint->m_Uuid != m_isolated )
-                        continue;
-
-                    bool errored = erroredIds.count( constraint->m_Uuid );
-                    bool conflicting = conflictingIds.count( constraint->m_Uuid );
+                    bool errored = erroredIds.contains( constraint->m_Uuid );
+                    bool conflicting = conflictingIds.contains( constraint->m_Uuid );
 
                     if( errored )
                     {
-                        for( const CONSTRAINT_MEMBER& member : constraint->GetMembers() )
+                        for( const CONSTRAINT_MEMBER& member : members )
                         {
                             if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>(
                                         m_board->ResolveItem( member.m_item, true ) ) )
@@ -277,7 +396,7 @@ void CONSTRAINT_OVERLAY::render()
                         }
                     }
 
-                    const CONSTRAINT_MEMBER& first = constraint->GetMembers().front();
+                    const CONSTRAINT_MEMBER& first = members.front();
                     std::optional<VECTOR2I>  pos = badgePosition( first );
 
                     if( !pos )
@@ -299,11 +418,9 @@ void CONSTRAINT_OVERLAY::render()
                         color = underColor;   // undiagnosed (e.g. an unsupported cluster); not "well"
                     }
 
-                    VECTOR2I placed = fanOut( *pos );
-
-                    // The glyph itself is drawn screen-constant by m_badgeItem.  Only collect the
-                    // position, colour and glyph here.
-                    m_badges.push_back( { placed, constraint->m_Uuid,
+                    // Store the anchor; LayoutBadges fans and offsets the badges in screen space at
+                    // draw time so they stay legible and clickable at any zoom.
+                    m_badges.push_back( { *pos, constraint->m_Uuid,
                                           ConstraintTypeGlyph( constraint->GetConstraintType() ), color } );
                 }
             };
@@ -341,8 +458,8 @@ void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     const double ringPx = 20.0; // Clears the enlarged (24 px) selected glyph.
     const double linePx = 1.5;
 
-    // Constant on-screen size at any zoom. No floor. A floor fixes the world size and makes the
-    // glyph grow without bound as you keep zooming in.
+    // Keep the glyph a constant on-screen size at any zoom.  A world-size floor would make it grow
+    // without bound as you keep zooming in, so there is none.
     const double worldPerPx = CONSTRAINT_OVERLAY::BadgeWorldPerPixel( scale );
 
     gal->SetIsFill( false );
@@ -351,16 +468,23 @@ void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
     gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
 
-    const VECTOR2D offset = CONSTRAINT_OVERLAY::BadgeScreenOffset() * worldPerPx;
-
-    for( const CONSTRAINT_BADGE& badge : m_badges )
+    // The same layout drives hit-testing (CONSTRAINT_EDIT_TOOL::hitTestBadge), so draw and click
+    // positions can never diverge.  Recompute only when the zoom or badge set changed.
+    if( m_layoutScale != worldPerPx )
     {
+        m_layout = CONSTRAINT_OVERLAY::LayoutBadges( m_badges, worldPerPx );
+        m_layoutScale = worldPerPx;
+    }
+
+    for( size_t i = 0; i < m_badges.size(); ++i )
+    {
+        const CONSTRAINT_BADGE& badge = m_badges[i];
         bool     selected = m_selected != niluuid && badge.constraint == m_selected;
         double   glyph = ( selected ? bigGlyphPx : glyphPx ) * worldPerPx;
-        VECTOR2I pos = badge.pos + VECTOR2I( KiROUND( offset.x ), KiROUND( offset.y ) );
+        VECTOR2I pos( KiROUND( m_layout[i].x ), KiROUND( m_layout[i].y ) );
 
         gal->SetStrokeColor( badge.color );
-        gal->SetLineWidth( linePx * worldPerPx );
+        gal->SetLineWidth( static_cast<float>( linePx * worldPerPx ) );
 
         if( selected )
             gal->DrawCircle( pos, ringPx * worldPerPx );

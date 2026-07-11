@@ -1009,6 +1009,7 @@ enum ConstraintType
   CT_FIXED_RADIUS = 15;
   CT_ANGULAR_DIMENSION = 16;
   CT_TANGENT = 17;
+  CT_ARC_ANGLE = 18;
 }
 
 enum ConstraintAnchor

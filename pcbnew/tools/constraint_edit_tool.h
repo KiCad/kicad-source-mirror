@@ -24,14 +24,13 @@
 #include <vector>
 
 #include <tools/pcb_tool_base.h>
+#include <constraints/board_constraint_adapter.h>
 
 class PCB_SHAPE;
 class PCB_CONSTRAINT;
 class PCB_SELECTION_TOOL;
 class CONDITIONAL_MENU;
 class CONSTRAINT_OVERLAY;
-class CONSTRAINT_ENDPOINT_OVERLAY;
-struct BOARD_CONSTRAINT_DIAGNOSTICS;
 
 
 /**
@@ -68,10 +67,6 @@ public:
     /// Clear any badge-selected constraint (e.g. on a click that misses every badge).
     void ClearConstraintSelection();
 
-    /// Toggle the endpoint marker at @p aPos in/out of the constraint point-set; returns true if a
-    /// marker was hit.  Called by the point editor so endpoints bind mode-lessly with a click.
-    bool ToggleEndpointAt( const VECTOR2I& aPos );
-
     /// Delete the currently badge-selected constraint; returns true if one was selected and removed.
     /// Called by EDIT_TOOL::Remove so the Delete key targets a selected relation.
     bool TryDeleteSelectedConstraint();
@@ -92,17 +87,14 @@ public:
     /// Refresh the diagnostics overlay if it is currently shown.
     int refreshOverlay( const TOOL_EVENT& aEvent );
 
-    /// Rebuild the endpoint markers when the selection changes.
+    /// Clear stale badge/isolation state when the board selection changes.
     int onSelectionChanged( const TOOL_EVENT& aEvent );
+
+    /// In HOVER mode, reveal the constraints of the shape under the cursor (nothing when none).
+    int onHoverMotion( const TOOL_EVENT& aEvent );
 
 private:
     void setTransitions() override;
-
-    /// Graphical shapes in the current selection, the ones whose endpoints can be bound.
-    std::vector<PCB_SHAPE*> selectedShapes() const;
-
-    /// Show/update endpoint markers for the current selection, creating the overlay on demand.
-    void refreshEndpointMarkers();
 
     /// The owner a new constraint should be parented to (the footprint in the footprint editor).
     BOARD_ITEM* constraintParent() const;
@@ -114,12 +106,6 @@ private:
     /// Solve a just-added constraint so the geometry snaps to satisfy it, in its own commit.
     void solveAddedConstraint( PCB_CONSTRAINT* aConstraint );
 
-    /// Discard any endpoint markers the user had clicked (the point-set is per-action).
-    void clearEndpointPointSet();
-
-    /// Make every endpoint in the marker point-set coincident with the first, then clear the set.
-    void bindCoincidentPointSet();
-
     /// The constraint whose badge is within the hit radius of @p aPos, or nullptr.
     PCB_CONSTRAINT* hitTestBadge( const VECTOR2I& aPos ) const;
 
@@ -130,8 +116,19 @@ private:
     /// shown; dismiss it when the overlay is off.
     void updateConstraintInfoBar( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag );
 
-    /// Solve the board diagnosis once and refresh every shown view (overlay, info bar, panel).
+    /// Mark the diagnosis and candidate caches stale (the model changed) and re-render the views.
     void refreshDiagnostics();
+
+    /// Re-render the shown views from the cached diagnosis without invalidating it -- for a bare
+    /// visibility change (a hover) that did not touch the model.
+    void renderConstraintViews();
+
+    /// The cached board diagnosis, solved only when the model changed since the last call, so a
+    /// hover acquisition reuses the last solve instead of re-solving on every mouse move.
+    const BOARD_CONSTRAINT_DIAGNOSTICS& ensureDiagnosis();
+
+    /// The shapes referenced by any constraint, the hover-hit candidate set (cached per model).
+    const std::vector<PCB_SHAPE*>& hoverCandidates();
 
     /// Push an already-computed diagnosis into every shown view, so a caller that already solved
     /// does not solve again.
@@ -158,8 +155,10 @@ private:
     PCB_SELECTION_TOOL*                          m_selectionTool;
     CONDITIONAL_MENU*                            m_menu;
     std::unique_ptr<CONSTRAINT_OVERLAY>          m_overlay;
-    std::unique_ptr<CONSTRAINT_ENDPOINT_OVERLAY> m_endpoints;
     wxString                                     m_infoBarSummary;   ///< Last shown, to avoid flicker.
+    BOARD_CONSTRAINT_DIAGNOSTICS                 m_cachedDiag;       ///< Reused until the model changes.
+    bool                                         m_diagDirty = true;
+    std::optional<std::vector<PCB_SHAPE*>>       m_hoverCandidates;  ///< Constrained shapes, per model.
 };
 
 #endif // CONSTRAINT_EDIT_TOOL_H_

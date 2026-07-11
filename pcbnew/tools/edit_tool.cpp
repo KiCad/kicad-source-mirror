@@ -2298,12 +2298,29 @@ void EDIT_TOOL::reSolveConstraintsAfterEdit( const PCB_SELECTION& aSelection )
     if( !constraintTool )
         return;
 
-    std::vector<PCB_SHAPE*> shapes;
+    // Recurse so constrained shapes carried inside a transformed footprint or group seed their
+    // clusters too; a top-level-only walk would leave those constraints silently violated.
+    // PCB_GROUP::RunOnChildren only descends into groups and generators, so recurse through every
+    // container ourselves; the visited set guards against overlapping ownership paths.
+    std::vector<PCB_SHAPE*>          shapes;
+    std::unordered_set<BOARD_ITEM*>  visited;
+
+    std::function<void( BOARD_ITEM* )> collect =
+            [&]( BOARD_ITEM* aItem )
+            {
+                if( !aItem || !visited.insert( aItem ).second )
+                    return;
+
+                if( aItem->Type() == PCB_SHAPE_T )
+                    shapes.push_back( static_cast<PCB_SHAPE*>( aItem ) );
+
+                aItem->RunOnChildren( collect, RECURSE_MODE::NO_RECURSE );
+            };
 
     for( EDA_ITEM* item : aSelection )
     {
-        if( item->Type() == PCB_SHAPE_T )
-            shapes.push_back( static_cast<PCB_SHAPE*>( item ) );
+        if( item->IsBOARD_ITEM() )
+            collect( static_cast<BOARD_ITEM*>( item ) );
     }
 
     constraintTool->SolveAfterMove( shapes );

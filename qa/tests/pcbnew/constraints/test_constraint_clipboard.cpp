@@ -22,6 +22,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <board.h>
+#include <footprint.h>
 #include <kicad_clipboard.h>
 #include <lset.h>
 #include <pcb_shape.h>
@@ -164,6 +165,72 @@ BOOST_AUTO_TEST_CASE( ConstraintNotCopiedWhenPartialSelection )
     std::unique_ptr<BOARD> pasted = roundTrip( board.get(), selection );
 
     BOOST_CHECK( pasted->Constraints().empty() );
+}
+
+
+// The footprint editor's loose-shape copy path carries footprint constraints whose members are all
+// selected, matching the board branch.
+BOOST_AUTO_TEST_CASE( FootprintEditorCopyCarriesConstraints )
+{
+    auto board = std::make_unique<BOARD>();
+    board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    FOOTPRINT* fp = new FOOTPRINT( board.get() );
+    board->Add( fp );
+
+    auto addFpSegment =
+            [&]( const VECTOR2I& aStart, const VECTOR2I& aEnd ) -> PCB_SHAPE*
+            {
+                PCB_SHAPE* seg = new PCB_SHAPE( fp, SHAPE_T::SEGMENT );
+                seg->SetStart( aStart );
+                seg->SetEnd( aEnd );
+                seg->SetLayer( F_SilkS );
+                seg->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
+                fp->Add( seg );
+                return seg;
+            };
+
+    PCB_SHAPE* a = addFpSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* b = addFpSegment( { 0, 5 * MM }, { 10 * MM, 6 * MM } );
+
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( fp, PCB_CONSTRAINT_TYPE::PARALLEL );
+    c->AddMember( a->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    c->AddMember( b->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    fp->Add( c );
+
+    // Each save gets a fresh CLIPBOARD_IO; its formatter accumulates across SaveSelection calls.
+    auto fpRoundTrip =
+            [&]( const PCB_SELECTION& aSelection ) -> std::unique_ptr<FOOTPRINT>
+            {
+                wxString     data;
+                CLIPBOARD_IO io;
+                io.SetBoard( board.get() );
+                io.SetWriter( [&]( const wxString& aData ) { data = aData; } );
+                io.SetReader( [&]() { return data; } );
+
+                io.SaveSelection( aSelection, true );
+
+                BOARD_ITEM* parsed = io.Parse();
+                BOOST_REQUIRE( parsed );
+                BOOST_REQUIRE( parsed->Type() == PCB_FOOTPRINT_T );
+
+                return std::unique_ptr<FOOTPRINT>( static_cast<FOOTPRINT*>( parsed ) );
+            };
+
+    PCB_SELECTION selection;
+    selection.Add( a );
+    selection.Add( b );
+
+    std::unique_ptr<FOOTPRINT> clip = fpRoundTrip( selection );
+
+    BOOST_REQUIRE_EQUAL( clip->Constraints().size(), 1 );
+    BOOST_CHECK( clip->Constraints().front()->GetConstraintType() == PCB_CONSTRAINT_TYPE::PARALLEL );
+
+    // A partial selection leaves the constraint behind, like the board branch.
+    PCB_SELECTION partial;
+    partial.Add( a );
+
+    BOOST_CHECK( fpRoundTrip( partial )->Constraints().empty() );
 }
 
 

@@ -1228,6 +1228,12 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 return m_auimgr.GetPane( SearchPaneName() ).IsShown();
             };
 
+    auto constraintsPaneCond =
+            [this] ( const SELECTION& )
+            {
+                return m_auimgr.GetPane( ConstraintsPaneName() ).IsShown();
+            };
+
     auto designBlockCond =
             [ this ] (const SELECTION& aSel )
             {
@@ -1289,6 +1295,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::showProperties,           CHECK( propertiesCond ) );
     mgr->SetConditions( PCB_ACTIONS::showNetInspector,     CHECK( netInspectorCond ) );
     mgr->SetConditions( PCB_ACTIONS::showSearch,           CHECK( searchPaneCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showConstraintsPanel, CHECK( constraintsPaneCond ) );
     mgr->SetConditions( PCB_ACTIONS::showDesignBlockPanel, CHECK( designBlockCond ) );
 
     mgr->SetConditions( PCB_ACTIONS::saveBoardAsDesignBlock,     ENABLE( hasElements ) );

@@ -39,8 +39,9 @@ class VIEW;
 }
 
 
-/// An on-canvas constraint badge. Holds where the glyph is drawn, the glyph and colour to draw, and
-/// which constraint it represents for hit-testing.
+/// An on-canvas constraint badge. Holds its anchor (the world point it labels), the glyph and colour
+/// to draw, and which constraint it represents for hit-testing. The on-screen draw position (anchor
+/// offset plus screen-space fan-out) is computed at draw time by CONSTRAINT_OVERLAY::LayoutBadges.
 struct CONSTRAINT_BADGE
 {
     VECTOR2I       pos;
@@ -67,6 +68,7 @@ public:
     {
         m_badges = aBadges;
         m_selected = aSelected;
+        m_layoutScale = -1.0;   // invalidate the cached layout; the badge set changed
     }
 
     const BOX2I ViewBBox() const override
@@ -91,6 +93,10 @@ public:
 private:
     std::vector<CONSTRAINT_BADGE> m_badges;
     KIID                          m_selected;
+
+    // Screen-space layout cached per view scale, recomputed only when the zoom or badge set changes.
+    mutable std::vector<VECTOR2D> m_layout;
+    mutable double                m_layoutScale = -1.0;
 };
 
 
@@ -102,6 +108,15 @@ private:
  * The constraint objects themselves carry no geometry, so this overlay is the only way to see
  * them on the canvas.  Call Update() whenever the board changes; Clear() hides it.
  */
+/// How much of the constraint overlay is shown.  ALWAYS draws every constraint (the classic
+/// toggle); HOVER draws only the constraints of the hovered shape, or nothing when none is hovered.
+enum class OVERLAY_MODE
+{
+    HOVER,
+    ALWAYS
+};
+
+
 class CONSTRAINT_OVERLAY : public VIEW_OVERLAY_HOLDER
 {
 public:
@@ -128,6 +143,17 @@ public:
 
     const KIID& GetIsolated() const { return m_isolated; }
 
+    /// Set the visibility mode (HOVER vs ALWAYS). Returns true if it changed.
+    bool SetVisibilityMode( OVERLAY_MODE aMode );
+
+    OVERLAY_MODE GetVisibilityMode() const { return m_mode; }
+
+    /// In HOVER mode, show only this shape's constraints; niluuid draws nothing. Independent of the
+    /// panel-row isolation. Returns true if it changed.
+    bool SetHoverShape( const KIID& aShape );
+
+    const KIID& GetHoverShape() const { return m_hoverShape; }
+
     /// Badges placed by the last Update(), for canvas hit-testing.
     const std::vector<CONSTRAINT_BADGE>& Badges() const { return m_badges; }
 
@@ -143,6 +169,13 @@ public:
     /// and hit-testing.
     static double BadgeWorldPerPixel( double aWorldScale );
 
+    /// The on-screen draw position (world units) of each badge at the given scale: the anchor offset
+    /// by BadgeScreenOffset() plus a screen-constant fan-out that de-overlaps badges sharing (or near)
+    /// an anchor.  Because it is a pure function of the badge set and @p aWorldPerPx, drawing and
+    /// hit-testing call it identically so they can never diverge.
+    static std::vector<VECTOR2D> LayoutBadges( const std::vector<CONSTRAINT_BADGE>& aBadges,
+                                               double aWorldPerPx );
+
 private:
     /// Redraw the tint and badges from m_lastDiag (no re-solve).
     void render();
@@ -152,5 +185,7 @@ private:
     std::vector<CONSTRAINT_BADGE> m_badges;
     KIID                          m_selected;
     KIID                          m_isolated;
+    OVERLAY_MODE                  m_mode = OVERLAY_MODE::ALWAYS;
+    KIID                          m_hoverShape = niluuid;
     CONSTRAINT_BADGE_ITEM         m_badgeItem;
 };

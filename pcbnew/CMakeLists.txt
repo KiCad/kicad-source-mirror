@@ -397,7 +397,6 @@ set( PCBNEW_CLASS_SRCS
     constraints/constraint_builder.cpp
     tools/constraint_edit_tool.cpp
     tools/constraint_overlay.cpp
-    tools/constraint_endpoint_overlay.cpp
     tools/view_overlay_holder.cpp
     board_statistics.cpp
     board_statistics_report.cpp
