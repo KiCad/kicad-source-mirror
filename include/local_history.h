@@ -24,6 +24,7 @@
 
 #include <atomic>
 #include <future>
+#include <memory>
 #include <vector>
 #include <set>
 #include <map>
@@ -89,10 +90,16 @@ public:
      *  The callback receives the project path and should populate aFileData with
      *  serialized content or source paths for inclusion.
      *  @param aSaverObject Unique object pointer identifier for this saver (to prevent duplicate registration)
-     *  @param aSaver The saver callback function */
+     *  @param aSaver The saver callback function
+     *  @param aLifetime Optional liveness token owned by the serialized document.  When supplied,
+     *         an expired token makes the saver-runner skip and drop the saver instead of invoking a
+     *         callback that would dereference a freed document.  The autosave timer is shared across
+     *         editor frames, so a saver can outlive the document it captures unless its lifetime is
+     *         tracked here. */
     void RegisterSaver(
             const void* aSaverObject,
-            const std::function<void( const wxString&, std::vector<HISTORY_FILE_DATA>& )>& aSaver );
+            const std::function<void( const wxString&, std::vector<HISTORY_FILE_DATA>& )>& aSaver,
+            const std::weak_ptr<void>& aLifetime = {} );
 
     /** Unregister a previously registered saver callback.
      *  @param aSaverObject The object pointer that was used to register the saver */
@@ -217,9 +224,21 @@ private:
     bool commitInBackground( const wxString& aProjectPath, const wxString& aTitle,
                              const std::vector<HISTORY_FILE_DATA>& aFileData, bool aIsManualSave );
 
-    std::set<wxString> m_pendingFiles;
-    std::map<const void*,
-             std::function<void( const wxString&, std::vector<HISTORY_FILE_DATA>& )>> m_savers;
+    /** Drop tracked savers whose owning document has been freed, before any saver runs. */
+    void pruneExpiredSavers();
+
+    // A registered saver plus the optional liveness token of the document it serializes.  Tracking
+    // is opt-in because a live token at registration is what distinguishes a tracked saver from an
+    // untracked one (a default-constructed weak_ptr is indistinguishable from an expired one).
+    struct SAVER_ENTRY
+    {
+        std::function<void( const wxString&, std::vector<HISTORY_FILE_DATA>& )> saver;
+        std::weak_ptr<void>                                                     lifetime;
+        bool                                                                    tracked = false;
+    };
+
+    std::set<wxString>                 m_pendingFiles;
+    std::map<const void*, SAVER_ENTRY> m_savers;
 
     std::atomic<bool> m_saveInProgress{ false };
     std::future<bool> m_pendingFuture;

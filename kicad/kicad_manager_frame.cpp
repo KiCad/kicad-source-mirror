@@ -1378,7 +1378,8 @@ void KICAD_MANAGER_FRAME::ProjectChanged()
             [this]( const wxString& aProjectPath, std::vector<HISTORY_FILE_DATA>& aFileData )
             {
                 Prj().SaveToHistory( aProjectPath, aFileData );
-            } );
+            },
+            Prj().GetHistoryLifetimeToken() );
 }
 
 

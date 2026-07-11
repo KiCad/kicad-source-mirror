@@ -548,6 +548,12 @@ public:
      */
     void SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_FILE_DATA>& aFileData );
 
+    /**
+     * Liveness token handed to LOCAL_HISTORY::RegisterSaver so a shared autosave timer skips this
+     * schematic's saver once the schematic is destroyed instead of serializing freed memory.
+     */
+    std::weak_ptr<void> GetHistoryLifetimeToken() const { return m_historyLifetime; }
+
 private:
     friend class SCH_EDIT_FRAME;
 
@@ -564,6 +570,9 @@ private:
     void rebuildHierarchyState( bool aResetConnectionGraph );
 
     PROJECT* m_project;
+
+    /// Sentinel whose expiry signals to LOCAL_HISTORY that this schematic has been destroyed.
+    std::shared_ptr<void> m_historyLifetime = std::make_shared<char>();
 
     /// The virtual root sheet (has no screen, contains all top-level sheets)
     SCH_SHEET* m_rootSheet;

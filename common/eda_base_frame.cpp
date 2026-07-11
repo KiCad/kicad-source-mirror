@@ -432,6 +432,11 @@ void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
         return;
     }
 
+    // A one-shot tick can already be queued when the frame starts closing; running the saver batch
+    // then would serialize documents whose editors are mid-teardown, so bail once closing begins.
+    if( m_isClosing )
+        return;
+
     // When the save is deferred (an interactive operation is in progress) keep the timer armed so
     // a later tick retries.  Maintaining m_autoSavePending here preserves the "pending == timer
     // running" invariant that ProcessEvent() relies on to avoid re-arming the timer on every event.

@@ -2679,7 +2679,8 @@ void PCB_EDIT_FRAME::ProjectChanged()
                         return;
 
                     GetBoard()->SaveToHistory( aProjectPath, aFileData );
-                } );
+                },
+                GetBoard()->GetHistoryLifetimeToken() );
     }
 }
 

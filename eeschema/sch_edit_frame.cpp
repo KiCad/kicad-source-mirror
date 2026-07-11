@@ -1513,7 +1513,8 @@ void SCH_EDIT_FRAME::ProjectChanged()
             [this]( const wxString& aProjectPath, std::vector<HISTORY_FILE_DATA>& aFileData )
             {
                 m_schematic->SaveToHistory( aProjectPath, aFileData );
-            } );
+            },
+            m_schematic->GetHistoryLifetimeToken() );
 
     m_designBlocksPane->ProjectChanged();
 }

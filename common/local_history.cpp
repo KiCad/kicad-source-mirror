@@ -249,7 +249,8 @@ void LOCAL_HISTORY::NoteFileChange( const wxString& aFile )
 
 void LOCAL_HISTORY::RegisterSaver(
         const void* aSaverObject,
-        const std::function<void( const wxString&, std::vector<HISTORY_FILE_DATA>& )>& aSaver )
+        const std::function<void( const wxString&, std::vector<HISTORY_FILE_DATA>& )>& aSaver,
+        const std::weak_ptr<void>& aLifetime )
 {
     if( m_savers.find( aSaverObject ) != m_savers.end() )
     {
@@ -257,8 +258,33 @@ void LOCAL_HISTORY::RegisterSaver(
         return;
     }
 
-    m_savers[aSaverObject] = aSaver;
+    SAVER_ENTRY entry;
+    entry.saver = aSaver;
+    entry.lifetime = aLifetime;
+
+    // The token is alive here, so lock() succeeding marks this saver for liveness tracking.  When
+    // the owning document is later freed the token expires and the saver-runner drops the saver.
+    entry.tracked = aLifetime.lock() != nullptr;
+
+    m_savers[aSaverObject] = std::move( entry );
     wxLogTrace( traceAutoSave, wxS( "[history] Registered saver %p (total=%zu)" ), aSaverObject, m_savers.size() );
+}
+
+
+void LOCAL_HISTORY::pruneExpiredSavers()
+{
+    std::vector<const void*> expired;
+
+    // A tracked saver whose owning document has been freed must be dropped before any saver runs;
+    // probing the freed object is itself the autosave-saver use-after-free we are guarding against.
+    for( const auto& [saverObject, entry] : m_savers )
+    {
+        if( entry.tracked && entry.lifetime.expired() )
+            expired.push_back( saverObject );
+    }
+
+    for( const void* obj : expired )
+        m_savers.erase( obj );
 }
 
 
@@ -320,13 +346,15 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
         return false;
     }
 
+    pruneExpiredSavers();
+
     // Phase 1 (UI thread): call savers to collect serialized data
     std::vector<HISTORY_FILE_DATA> fileData;
 
-    for( const auto& [saverObject, saver] : m_savers )
+    for( const auto& [saverObject, entry] : m_savers )
     {
         size_t before = fileData.size();
-        saver( aProjectPath, fileData );
+        entry.saver( aProjectPath, fileData );
         wxLogTrace( traceAutoSave, wxS( "[history] saver %p produced %zu entries (total=%zu)" ),
                     saverObject, fileData.size() - before, fileData.size() );
     }
@@ -398,10 +426,12 @@ bool LOCAL_HISTORY::RunRegisteredSaversAsAutosaveFiles( const wxString& aProject
         return false;
     }
 
+    pruneExpiredSavers();
+
     std::vector<HISTORY_FILE_DATA> fileData;
 
-    for( const auto& [saverObject, saver] : m_savers )
-        saver( aProjectPath, fileData );
+    for( const auto& [saverObject, entry] : m_savers )
+        entry.saver( aProjectPath, fileData );
 
     bool anyWritten = false;
 
