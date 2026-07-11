@@ -1511,10 +1511,15 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
         break;
 
     case SHAPE_T::POLY:
-        msg.Printf( wxS( "%d" ), GetPolyShape().Outline(0).PointCount() );
+    {
+        int pointCount = 0;
+        if( GetPolyShape().OutlineCount() > 0 )
+            pointCount = GetPolyShape().Outline( 0 ).PointCount();
+
+        msg.Printf( wxS( "%d" ), pointCount );
         aList.emplace_back( _( "Points" ), msg );
         break;
-
+    }
     case SHAPE_T::RECTANGLE:
         aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( std::abs( GetEnd().x - GetStart().x ) ) );
         aList.emplace_back( _( "Height" ), aFrame->MessageTextFromValue( std::abs( GetEnd().y - GetStart().y ) ) );
