@@ -45,6 +45,14 @@ public:
         m_libraries[aNickname].status.load_status = LOAD_STATUS::LOAD_ERROR;
     }
 
+    /// Seed a LOAD_ERROR sentinel carrying a real error message, as the async loader
+    /// leaves it when a library plugin fails to enumerate.
+    void SeedLoadError( const wxString& aNickname, const wxString& aMessage )
+    {
+        m_libraries[aNickname].status.load_status = LOAD_STATUS::LOAD_ERROR;
+        m_libraries[aNickname].status.error = LIBRARY_ERROR( aMessage );
+    }
+
     /// Mark a table row as successfully loaded so GetLibraryNames() reports it.
     void SeedLoaded( const wxString& aNickname )
     {
@@ -151,6 +159,48 @@ BOOST_AUTO_TEST_CASE( GetLibraryNamesSortedRegardlessOfTableOrder )
                                              wxS( "Device" ), wxS( "Zebra" ) };
 
     BOOST_CHECK_EQUAL_COLLECTIONS( names.begin(), names.end(), expected.begin(), expected.end() );
+}
+
+
+/**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/22764.
+ *
+ * With "remember open files" enabled the schematic auto-opens and loads symbols on demand
+ * while the background preload is still enumerating the library table. At any instant some
+ * enabled table rows have no loaded entry yet. GetLibraryLoadErrors() collects the status of
+ * every enabled row, and a row present in the table but not yet loaded must not be reported
+ * as a load error, otherwise a spurious error indicator appears and its count varies with the
+ * load timing from one launch to the next. Genuine failures still carry a real error message
+ * and must still be reported.
+ */
+BOOST_AUTO_TEST_CASE( PartiallyLoadedTableReportsNoSpuriousErrors )
+{
+    const std::vector<wxString> tableOrder = { wxS( "Device" ), wxS( "Connector" ), wxS( "Amplifier" ),
+                                               wxS( "Regulator" ), wxS( "BadLib" ) };
+
+    SCOPED_SYM_LIB_TABLE tableFile( tableOrder );
+
+    LIBRARY_MANAGER manager;
+    manager.LoadProjectTables( tableFile.Path(), { LIBRARY_TABLE_TYPE::SYMBOL } );
+
+    TEST_SYMBOL_LIBRARY_ADAPTER adapter( manager );
+
+    // Simulate a preload caught mid-flight: two libraries resolved, one genuinely failed,
+    // and the remaining table rows have no entry yet because loading has not reached them.
+    adapter.SeedLoaded( wxS( "Device" ) );
+    adapter.SeedLoaded( wxS( "Connector" ) );
+    adapter.SeedLoadError( wxS( "BadLib" ), wxS( "File is corrupt" ) );
+
+    const wxString errors = adapter.GetLibraryLoadErrors();
+
+    // The unloaded-but-present rows must not masquerade as missing-from-table errors.
+    BOOST_CHECK( !errors.Contains( wxS( "not found in library table" ) ) );
+    BOOST_CHECK( !errors.Contains( wxS( "Amplifier" ) ) );
+    BOOST_CHECK( !errors.Contains( wxS( "Regulator" ) ) );
+
+    // The genuine failure must still be reported.
+    BOOST_CHECK( errors.Contains( wxS( "BadLib" ) ) );
+    BOOST_CHECK( errors.Contains( wxS( "File is corrupt" ) ) );
 }
 
 
