@@ -1500,12 +1500,14 @@ std::vector<std::pair<wxString, LIB_STATUS>> LIBRARY_MANAGER_ADAPTER::GetLibrary
         }
         else
         {
-            // This should probably never happen, but until that can be proved...
+            // The row came from the library table, so the missing entry means the async
+            // preload has not reached it yet (or was pre-empted by a project change), not
+            // that the library is absent. Reporting a load error here surfaces a spurious
+            // error indicator while background loading races schematic auto-open. Genuine
+            // failures carry their own LOAD_ERROR entry, and the library still loads on
+            // demand, so report it as not-yet-loaded instead.
             ret.emplace_back( std::make_pair( row->Nickname(),
-                                              LIB_STATUS( {
-                                                  .load_status = LOAD_STATUS::LOAD_ERROR,
-                                                  .error = LIBRARY_ERROR( _( "Library not found in library table" ) )
-                                              } ) ) );
+                                              LIB_STATUS( { .load_status = LOAD_STATUS::INVALID } ) ) );
         }
     }
 
