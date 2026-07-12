@@ -68,6 +68,10 @@ void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString
     PCB_IO* plugin = pcbplugin( aLib );
     wxString nickname = aLib->row->Nickname();
 
+    // Hold across the enumerate-then-borrow sequence: GetEnumeratedFootprint returns borrowed
+    // FP_CACHE pointers, so no other thread may rebuild the cache until we finish cloning.
+    std::lock_guard pluginGuard( pluginMutex( nickname ) );
+
     // FootprintEnumerate populates the plugin's internal FP_CACHE with parsed footprints
     plugin->FootprintEnumerate( namesAS, aUri, false, &options );
 
@@ -130,6 +134,8 @@ std::optional<LIB_STATUS> FOOTPRINT_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
 
     try
     {
+        std::lock_guard pluginGuard( pluginMutex( aLib->row->Nickname() ) );
+
         wxArrayString dummyList;
         pcbplugin( aLib )->FootprintEnumerate( dummyList, getUri( aLib->row ), false, &options );
         aLib->status.load_status = LOAD_STATUS::LOADED;
@@ -192,6 +198,8 @@ std::vector<wxString> FOOTPRINT_LIBRARY_ADAPTER::GetFootprintNames( const wxStri
 
         try
         {
+            std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
             pcbplugin( lib )->FootprintEnumerate( namesAS, getUri( lib->row ), true, &options );
         }
         catch( IO_ERROR& e )
@@ -275,6 +283,9 @@ bool FOOTPRINT_LIBRARY_ADAPTER::FootprintExists( const wxString& aNickname, cons
     {
         const LIB_DATA* lib = *maybeLib;
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+
+        std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
         return pcbplugin( lib )->FootprintExists( getUri( lib->row ), aName, &options );
     }
 
@@ -316,6 +327,8 @@ FOOTPRINT* FOOTPRINT_LIBRARY_ADAPTER::LoadFootprint( const wxString& aNickname, 
     {
         try
         {
+            std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
             if( FOOTPRINT* footprint = pcbplugin( *lib )->FootprintLoad( getUri( ( *lib )->row ), aName, aKeepUUID ) )
             {
                 LIB_ID id = footprint->GetFPID();
@@ -367,6 +380,9 @@ FOOTPRINT_LIBRARY_ADAPTER::SAVE_T FOOTPRINT_LIBRARY_ADAPTER::SaveFootprint( cons
 
     if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aNickname ) )
     {
+        // Serialize the load-check / save / cache-update sequence against a concurrent rebuild.
+        std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
         if( !aOverwrite )
         {
             wxString fpname = aFootprint->GetFPID().GetLibItemName();
@@ -446,6 +462,8 @@ void FOOTPRINT_LIBRARY_ADAPTER::DeleteFootprint( const wxString& aNickname, cons
 {
     if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aNickname ) )
     {
+        std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
         try
         {
             pcbplugin( *lib )->FootprintDelete( getUri( ( *lib )->row ), aFootprintName );
@@ -485,7 +503,11 @@ bool FOOTPRINT_LIBRARY_ADAPTER::IsFootprintLibWritable( const wxString& aLib )
     // Route through fetchIfLoaded() so LOAD_ERROR sentinel entries, which carry a null
     // plugin, are filtered out instead of dereferenced.
     if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aLib ) )
+    {
+        std::lock_guard pluginGuard( pluginMutex( aLib ) );
+
         return ( *lib )->plugin->IsLibraryWritable( getUri( ( *lib )->row ) );
+    }
 
     return false;
 }

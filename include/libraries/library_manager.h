@@ -23,6 +23,7 @@
 
 #include <future>
 #include <memory>
+#include <mutex>
 #include <shared_mutex>
 
 #include <kicommon.h>
@@ -242,6 +243,13 @@ protected:
     virtual LIBRARY_RESULT<IO_BASE*> createPlugin( const LIBRARY_TABLE_ROW* row ) = 0;
 
     virtual IO_BASE* plugin( const LIB_DATA* aRow ) = 0;
+
+    /// Serializes access to a library's shared plugin instance so its single mutable cache is not
+    /// raced by concurrent enumerate/load/save/delete calls from the loader pool, preview panels
+    /// and tree refreshes. Keyed by nickname, a safe over-approximation of the real resource (the
+    /// plugin instance): sharing one mutex across two distinct resources can only over-serialize,
+    /// never under-protect. Static because global-library plugins are shared process-wide.
+    static std::mutex& pluginMutex( const wxString& aNickname );
 
     LIBRARY_MANAGER& m_manager;
 
