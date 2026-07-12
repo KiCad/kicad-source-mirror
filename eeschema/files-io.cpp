@@ -1560,6 +1560,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     case SCH_IO_MGR::SCH_GEDA:
     case SCH_IO_MGR::SCH_DIPTRACE:
     case SCH_IO_MGR::SCH_PCAD:
+    case SCH_IO_MGR::SCH_ORCAD:
     {
         // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
         // Unless we are passing the files in aproperties, in which case aFileName can be empty.

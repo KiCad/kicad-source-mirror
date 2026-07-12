@@ -139,6 +139,11 @@ public:
     void OnImportDipTraceFiles( wxCommandEvent& event );
 
     /**
+     *  Open dialog to import an OrCAD schematic file.
+     */
+    void OnImportOrcadFiles( wxCommandEvent& event );
+
+    /**
      * Prints the current working directory name and the project name on the text panel.
      */
     void PrintPrjInfo();

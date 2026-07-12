@@ -107,6 +107,16 @@ set( EESCHEMA_SCH_IO
     # P-CAD 2006 ASCII IO plugin
     sch_io/pcad/sch_io_pcad.cpp
     sch_io/pcad/pcad_sch_parser.cpp
+
+    # OrCAD IO plugin
+    sch_io/orcad/orcad_cache.cpp
+    sch_io/orcad/orcad_converter_sheet.cpp
+    sch_io/orcad/orcad_converter_symbols.cpp
+    sch_io/orcad/orcad_library.cpp
+    sch_io/orcad/orcad_page.cpp
+    sch_io/orcad/orcad_stream.cpp
+    sch_io/orcad/orcad_structures.cpp
+    sch_io/orcad/sch_io_orcad.cpp
     )
 
 set( EESCHEMA_DLGS

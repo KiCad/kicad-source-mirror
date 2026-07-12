@@ -72,6 +72,7 @@ public:
         SCH_PADS,             ///< PADS Logic schematic format
         SCH_DIPTRACE,         ///< DipTrace schematic format
         SCH_PCAD,             ///< P-CAD 2006 ASCII schematic format
+        SCH_ORCAD,            ///< OrCAD Capture schematic format
 
         // Add your schematic type here.
         SCH_FILE_UNKNOWN,

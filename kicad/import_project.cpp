@@ -240,3 +240,13 @@ void KICAD_MANAGER_FRAME::OnImportDipTraceFiles( wxCommandEvent& event )
                            FILEEXT::DipTraceFilesWildcard(), { "dch" }, { "dip" },
                            SCH_IO_MGR::SCH_DIPTRACE, PCB_IO_MGR::DIPTRACE );
 }
+
+
+void KICAD_MANAGER_FRAME::OnImportOrcadFiles( wxCommandEvent& event )
+{
+    // Schematic-only: with an empty PCB extension list the PCB leg of the import
+    // finds no candidate file and is skipped, so only Eeschema is launched.
+    ImportNonKiCadProject( _( "Import OrCAD Project Files" ),
+                           FILEEXT::OrCadSchematicFilesWildcard(), { "dsn" }, {},
+                           SCH_IO_MGR::SCH_ORCAD, PCB_IO_MGR::FILE_TYPE_NONE );
+}

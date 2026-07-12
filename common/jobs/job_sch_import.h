@@ -49,7 +49,8 @@ public:
         LTSPICE,
         PADS,
         DIPTRACE,
-        PCAD
+        PCAD,
+        ORCAD
     };
 
     wxString             m_inputFile;
