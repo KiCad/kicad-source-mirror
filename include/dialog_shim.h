@@ -257,17 +257,17 @@ protected:
      */
     virtual void TearDownQuasiModal() {}
 
-    /**                                                                                                               
+    /**
      * Reset undo/redo tracking after dynamically replacing child panels.
-     *                                                                                                                
+     *
      * Clears the undo/redo stacks and current value baselines, then registers
      * undo/redo event handlers on the new children.
      *
      * @param aChildren The child window list of the newly created panel.
      */
-    void resetUndoRedoForNewContent( wxWindowList& aChildren ); 
+    void resetUndoRedoForNewContent( wxWindowList& aChildren );
 
-    /**                                                                                                                   
+    /**
      * Remove UNIT_BINDER registrations for a window and all its descendants.
      *
      * Call before destroying a panel whose children have registered unit binders.
