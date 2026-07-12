@@ -36,6 +36,7 @@
 #include <common.h>               // ResolveUriByEnvVars
 #include <eda_text.h>             // for IsGotoPageHref
 #include <font/font.h>
+#include <gr_text.h>
 #include <core/ignore.h>
 #include <macros.h>
 #include <trace_helpers.h>
@@ -2117,11 +2118,17 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     SetColor( aColor );
     SetCurrentLineWidth( aWidth, aData );
 
-    if( !aFont )
-        aFont = KIFONT::FONT::GetFont( m_renderSettings->GetDefaultFont() );
-
     VECTOR2I t_size( std::abs( aSize.x ), std::abs( aSize.y ) );
     bool     textMirrored = aSize.x < 0;
+
+    if( aWidth == 0 && aBold )
+        aWidth = GetPenSizeForBold( std::min( t_size.x, t_size.y ) );
+
+    if( aWidth < 0 )
+        aWidth = -aWidth;
+
+    if( !aFont )
+        aFont = KIFONT::FONT::GetFont( m_renderSettings->GetDefaultFont() );
 
     // Parse the text for markup
     // IMPORTANT: Use explicit UTF-8 encoding. wxString::ToStdString() is locale-dependent
@@ -2504,7 +2511,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
                     TO_UTF8( aWord ), (int) ( aItalic || ( aTextStyle & TEXT_STYLE::ITALIC ) ), (int) aItalic, (int) aBold );
 
         std::vector<PDF_STROKE_FONT_RUN> runs;
-        m_strokeFontManager->EncodeString( aWord, &runs, aBold, aItalic );
+        m_strokeFontManager->EncodeString( aWord, &runs, aWidth, aSize.y, aBold, aItalic );
 
         if( !runs.empty() )
         {
