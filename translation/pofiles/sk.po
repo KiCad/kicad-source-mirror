@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:13+0300\n"
-"PO-Revision-Date: 2026-07-02 19:01+0000\n"
+"PO-Revision-Date: 2026-07-13 13:44+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -3982,9 +3982,8 @@ msgid "Commit message cannot be empty"
 msgstr "Správa commit-u nemôže byť prázdna"
 
 #: common/dialogs/git/dialog_git_commit.cpp:196
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Vybrať je potrebné aspoň jednu vlastnosť pre spätné číslovanie."
+msgstr "Vybrať aspoň jeden súbor pre commit"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
