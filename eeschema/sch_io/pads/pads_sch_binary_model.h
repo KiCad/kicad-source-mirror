@@ -61,6 +61,8 @@ struct SOURCE_STRING
     wxString               text;
     STRING_ENCODING_STATUS encoding = STRING_ENCODING_STATUS::UTF8;
     SOURCE_PROVENANCE      source;
+    uint32_t               codePage = 65001;
+    wxString               codePageName = wxS( "UTF-8" );
 
     bool operator==( const SOURCE_STRING& ) const = default;
 };
