@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 14:12+0300\n"
-"PO-Revision-Date: 2026-07-02 00:01+0000\n"
+"PO-Revision-Date: 2026-07-13 13:44+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -3494,11 +3494,8 @@ msgstr "Novší"
 
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
-#, fuzzy
 msgid "Select a change in the tree to view details"
-msgstr ""
-"Nastavenie alebo zmena predvolenej vzdialenej adresy URL a prihlasovacích "
-"údajov"
+msgstr "Vybrať zmenu v stromovom prehľade pre zobrazenie podrobností"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:25
 #: pcbnew/dialogs/dialog_text_properties.cpp:126
@@ -3513,19 +3510,16 @@ msgid "(none)"
 msgstr "(žiadne)"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:33
-#, fuzzy
 msgid "Comparison:"
-msgstr "Spoločnosť:"
+msgstr "Porovnanie:"
 
 #: common/dialogs/dialog_kicad_diff_base.h:61
-#, fuzzy
 msgid "Compare Files"
-msgstr "Súbory Obrázkov"
+msgstr "Porovnať súbory"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:129
-#, fuzzy
 msgid "No conflicts to resolve."
-msgstr "Žiadna súčiastka na uložeenie."
+msgstr "Žiadne konflikty na vyriešenie."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
@@ -3543,20 +3537,18 @@ msgstr ""
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:220
 #: common/dialogs/dialog_kicad_merge_3way_base.h:65
-#, fuzzy
 msgid "Resolve Merge Conflicts"
-msgstr "Vyriešiť konflikty pri importe"
+msgstr "Vyriešiť konflikty pri zlúčení"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:363
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:48
-#, fuzzy
 msgid "Select a conflict on the left to see details."
-msgstr "Vybrať položku pripojenia pod kurzorom"
+msgstr "Vybrať konflikt vľavo pre zobrazenie podrobností."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Conflict on %s"
-msgstr "Konflikty"
+msgstr "Konflikt pri %s"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
@@ -3570,9 +3562,8 @@ msgid "Conflicts"
 msgstr "Konflikty"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:58
-#, fuzzy
 msgid "Pick a side"
-msgstr "Názov vývodu vnútri"
+msgstr "Vybrať stranu"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
@@ -3583,9 +3574,8 @@ msgid "Theirs"
 msgstr "Ich"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
-#, fuzzy
 msgid "Ancestor"
-msgstr "Obnoviť"
+msgstr "Predchodca"
 
 #: common/dialogs/dialog_page_settings.cpp:85
 msgid "Preview Settings"
@@ -4281,9 +4271,8 @@ msgid "Commit message cannot be empty"
 msgstr "Správa commit-u nemôže byť prázdna"
 
 #: common/dialogs/git/dialog_git_commit.cpp:192
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Vybrať je potrebné aspoň jednu vlastnosť pre spätné číslovanie."
+msgstr "Vybrať aspoň jeden súbor pre commit"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:69
 msgid "Key passphrase:"
@@ -6669,28 +6658,24 @@ msgid "Move Down"
 msgstr "Posunúť nižšie"
 
 #: common/diff_merge/auto_resolution.cpp:251
-#, fuzzy
 msgid "Item id: "
-msgstr "Položky:"
+msgstr "Položka id: "
 
 #: common/diff_merge/auto_resolution.cpp:252
-#, fuzzy
 msgid "Current resolution: "
-msgstr "X rozlíšenie:"
+msgstr "Aktuálne rozlíšenie: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
 msgstr "Prevziať si naše"
 
 #: common/diff_merge/auto_resolution.cpp:257
-#, fuzzy
 msgid "Take theirs"
-msgstr "Umiestni spoj"
+msgstr "Prevziať ich"
 
 #: common/diff_merge/auto_resolution.cpp:258
-#, fuzzy
 msgid "Take ancestor"
-msgstr "Umiestniť kotvu"
+msgstr "Prevziať predchodcu"
 
 #: common/diff_merge/auto_resolution.cpp:259
 msgid "Property-level merge"
@@ -6709,9 +6694,8 @@ msgid "Delete"
 msgstr "Odstrániť"
 
 #: common/diff_merge/auto_resolution.cpp:261
-#, fuzzy
 msgid "Keep (default)"
-msgstr "(Predvolené)"
+msgstr "Zachovať (predvolené)"
 
 #: common/diff_merge/auto_resolution.cpp:265
 #, c-format
@@ -6719,18 +6703,16 @@ msgid "%zu property edit(s) in this resolution.\n"
 msgstr "%zu úprav vlastností v tomto riešení.\n"
 
 #: common/diff_merge/diff_job_output.cpp:88
-#, fuzzy
 msgid "Failed to render diff image\n"
-msgstr "Nepodarilo sa načítať dáta obrázku."
+msgstr "Nepodarilo sa vytvoriť rozdielový obrázok\n"
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
 msgstr "Kolízia"
 
 #: common/diff_merge/diff_tree_grouping.cpp:41
-#, fuzzy
 msgid "Duplicate ID"
-msgstr "Duplikovať"
+msgstr "Duplikát ID"
 
 #: common/draw_panel_gal.cpp:228 common/draw_panel_gal.cpp:664
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -8896,9 +8878,9 @@ msgid "Error reading file."
 msgstr "Pri načítavaní súboru nastala chyba."
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "%s (whilst parsing '%s' in '%s')"
-msgstr "Chýbajúci uzol '%s' v '%s'"
+msgstr "%s (pri spracovávaní '%s' v '%s')"
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2485
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:315
@@ -8959,9 +8941,9 @@ msgid "Unable to parse '%s' in '%s'"
 msgstr "Nepodarilo sa spracovať '%s' v '%s'"
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot determine length of file '%s'."
-msgstr "Nie je možné zapísať protokol do súboru '%s'."
+msgstr "Nie je možné určiť dĺžku súboru '%s'."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:63
 #, c-format
@@ -8969,9 +8951,9 @@ msgid "DipTrace file '%s' is too large (%ld bytes)."
 msgstr "Súbor DipTrace '%s' je príliš veľký (%ld bajtov)."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading file '%s'."
-msgstr "Pri načítavaní súboru nastala chyba."
+msgstr "Chyba pri čítaní súboru '%s'."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:102
 #, c-format
@@ -9041,18 +9023,16 @@ msgid "Eagle binary layout is missing a board/libraries node."
 msgstr "Binárnemu návrhu Eagle chýba uzol doska/knižnica."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2493
-#, fuzzy
 msgid "File is too small to be an Eagle binary board."
-msgstr "Súbor '%s' je príliš malý na to, aby to bol Sprint Layout súbor"
+msgstr "Súbor je príliš malý na to, aby to bola binárna doska Eagle."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2553
 msgid "Eagle binary schematic has no drawing section."
 msgstr "Binárna schéma Eagle neobsahuje sekciu výkresu."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2558
-#, fuzzy
 msgid "Eagle binary file has no schematic section."
-msgstr "Návrhový blok nemá žiadnu schému na umiestnenie."
+msgstr "Binárny súbor Eagle nemá schematickú časť."
 
 #: common/io/eagle/eagle_parser.cpp:284
 #, c-format
@@ -9106,19 +9086,19 @@ msgid "Loading file canceled by user."
 msgstr "Načítavanie súboru bolo zrušené používateľom."
 
 #: common/io/pcad/s_expr_loader.cpp:194 common/io/pcad/s_expr_loader.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read file '%s'."
-msgstr "Nie je možné otvoriť súbor '%s'."
+msgstr "Nie je možné prečítať súbor '%s'."
 
 #: common/io/pcad/s_expr_loader.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a P-CAD ASCII file."
-msgstr "'%s' nie je PADS Logic ASCII súbor."
+msgstr "'%s' nie je súbor P-CAD ASCII."
 
 #: common/io/pcad/s_expr_loader.cpp:224 common/io/pcad/s_expr_loader.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Unbalanced parentheses in '%s'."
-msgstr "Nepodarilo sa spracovať '%s' v '%s'"
+msgstr "Nezodpovedajúci počet počiatočných a koncových zátvoriek v '%s'."
 
 #: common/jobs/job.cpp:82
 msgid "Job Settings"
@@ -9375,14 +9355,12 @@ msgid "Schematic PythonBOM export"
 msgstr "Export PythonBOM schémy"
 
 #: common/jobs/job_fp_diff.cpp:37
-#, fuzzy
 msgid "Diff two .pretty footprint libraries"
-msgstr "Prehliadať knižnice puzdier"
+msgstr "Rozdiely medzi dvoma knižnicami puzdier .pretty"
 
 #: common/jobs/job_fp_diff.cpp:41
-#, fuzzy
 msgid "Footprint Library: Diff"
-msgstr "Knižnice puzdier"
+msgstr "Knižnica puzdier: Rozdiely"
 
 #: common/jobs/job_gerber_diff.cpp:46
 msgid "Gerber Diff"
@@ -9421,19 +9399,19 @@ msgid "Gerber: Info"
 msgstr "Gerber: Informácie"
 
 #: common/jobs/job_import_utils.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open layer map file '%s'"
-msgstr "Nepodarilo sa nájsť súbor knižnice '%s'"
+msgstr "Nebolo možné otvoriť súbor mapovania vrstiev '%s'"
 
 #: common/jobs/job_import_utils.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read layer map file '%s'"
-msgstr "Nepodarilo sa načítať súbor: %s"
+msgstr "Nebolo možné prečítať súbor mapovania vrstiev '%s'"
 
 #: common/jobs/job_import_utils.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Layer map file '%s' is not valid JSON: %s"
-msgstr "Typ stránky \"%s\" nie je platný."
+msgstr "Súbor mapovania vrstiev '%s' nie je platný JSON: %s"
 
 #: common/jobs/job_import_utils.cpp:86
 #, c-format
@@ -9451,19 +9429,17 @@ msgstr ""
 "Záznam mapovania vrstvy pre '%s' musí byť reťazec s názvom vrstvy KiCad"
 
 #: common/jobs/job_import_utils.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write import report to '%s'\n"
-msgstr "Nepodarilo sa zapísať súbory vykreslenia do priečinka '%s'."
+msgstr "Nepodarilo sa zapísať protokol o importe do '%s'\n"
 
 #: common/jobs/job_pcb_diff.cpp:37
-#, fuzzy
 msgid "Diff two PCB files"
-msgstr "Solidworks PCB súbory"
+msgstr "Rozdiely dvoch DPS súborov"
 
 #: common/jobs/job_pcb_diff.cpp:41
-#, fuzzy
 msgid "PCB: Diff"
-msgstr "Rozdiel"
+msgstr "DPS: Rozdiely"
 
 #: common/jobs/job_pcb_drc.cpp:42
 msgid "Perform DRC"
@@ -9499,14 +9475,12 @@ msgid "PCB: Render"
 msgstr "DPS: Vytvoriť obrázok"
 
 #: common/jobs/job_sch_diff.cpp:37
-#, fuzzy
 msgid "Diff two schematic files"
-msgstr "PADS Logic súbory schém"
+msgstr "Rozdiely dvoch súborov schém"
 
 #: common/jobs/job_sch_diff.cpp:41
-#, fuzzy
 msgid "Schematic: Diff"
-msgstr "Veľkosť schémy"
+msgstr "Schéma: Rozdiely"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform ERC"
@@ -9521,9 +9495,8 @@ msgid "Schematic: Perform ERC"
 msgstr "Schéma: Vykonať ERC"
 
 #: common/jobs/job_sch_import.cpp:51
-#, fuzzy
 msgid "Import schematic"
-msgstr "Import schémy"
+msgstr "Importovať schému"
 
 #: common/jobs/job_sch_import.cpp:57
 #, fuzzy
@@ -10243,6 +10216,8 @@ msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
 msgstr ""
+"Najskôr sa zálohujú Vaše aktuálne súbory, aby ste mohli obnovenie vrátiť "
+"späť. Súbory, ktoré nie sú súčasťou tejto verzie, zostanú nedotknuté."
 
 #: common/netclass.cpp:331 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1236 pcbnew/zone.cpp:1137
@@ -20202,7 +20177,7 @@ msgstr "Obnoviť predvolené pre %s"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:95
 msgid "Copy From..."
-msgstr ""
+msgstr "Kopírovať z..."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:479
 #, fuzzy
@@ -20232,7 +20207,7 @@ msgstr "Táto pozícia je už obsadená iným vývodom v jednotke %d."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:703
 msgid "Click a pin map column to choose which map to remove."
-msgstr ""
+msgstr "Kliknite na stĺpec mapy vývodov, ktorý chcete odstrániť."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:703
 #, fuzzy
@@ -20676,7 +20651,7 @@ msgstr "Bez pripojenia"
 #: eeschema/erc/erc.cpp:262
 #, c-format
 msgid "Pin map '%s' references unknown symbol pin '%s'"
-msgstr ""
+msgstr "Mapa vývodov '%s' odkazuje na neznámy symbol vývodu '%s'"
 
 #: eeschema/erc/erc.cpp:290
 #, fuzzy, c-format
@@ -21042,15 +21017,15 @@ msgstr ""
 
 #: eeschema/erc/erc_item.cpp:179
 msgid "Connected pin is not mapped to any footprint pad"
-msgstr ""
+msgstr "Pripojený pin nie je namapovaný na žiadnu plôšku puzdra"
 
 #: eeschema/erc/erc_item.cpp:183
 msgid "Two symbol pins are mapped to the same footprint pad"
-msgstr ""
+msgstr "Dva vývody symbolu sú namapované na rovnakú plôšku puzdra"
 
 #: eeschema/erc/erc_item.cpp:187
 msgid "Pin map references a pin number that no longer exists on the symbol"
-msgstr ""
+msgstr "Mapa vývodov odkazuje na číslo vývodu, ktoré už v symbole neexistuje"
 
 #: eeschema/erc/erc_item.cpp:191 pcbnew/drc/drc_item.cpp:216
 #: pcbnew/drc/drc_rule_parser.cpp:89
@@ -22718,6 +22693,8 @@ msgid ""
 "Failed to read embedded image '%s'. The image data may be corrupt or in an "
 "unsupported format."
 msgstr ""
+"Nepodarilo sa načítať vložený obrázok '%s'. Údaje obrázka môžu byť poškodené "
+"alebo v nepodporovanom formáte."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4810
 #, c-format
@@ -22725,6 +22702,8 @@ msgid ""
 "Could not find image file '%s'. The file path may be specific to a different "
 "operating system."
 msgstr ""
+"Nebolo možné nájsť súbor s obrázkom '%s'. Cesta k súboru môže byť špecifická "
+"pre iný operačný systém."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4828
 #, c-format
@@ -22732,6 +22711,8 @@ msgid ""
 "Failed to read image file '%s'. The image may be corrupt or in an "
 "unsupported format."
 msgstr ""
+"Nepodarilo sa načítať súbor s obrázkom '%s'. Obrázok môže byť poškodený "
+"alebo v nepodporovanom formáte."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5624
 #, c-format
@@ -23834,7 +23815,7 @@ msgstr "PADS Logic súbory knižnice"
 
 #: eeschema/sch_io/pcad/pcad_sch_parser.cpp:256
 msgid "Empty P-CAD document"
-msgstr ""
+msgstr "Prázdny P-CAD dokument"
 
 #: eeschema/sch_io/pcad/sch_io_pcad.cpp:1254
 #, fuzzy, c-format
@@ -28763,7 +28744,7 @@ msgstr "Vývod symbolu"
 
 #: eeschema/tools/sch_actions.cpp:1071
 msgid "Edit the symbol's pin-to-pad maps and associated footprints"
-msgstr ""
+msgstr "Upraviť mapy vývod-na-plôšku symbolu a súvisiace puzdrá"
 
 #: eeschema/tools/sch_actions.cpp:1077
 msgid "Pin Table..."
@@ -30828,7 +30809,7 @@ msgstr "Efektívny %s:"
 #: eeschema/widgets/sch_properties_panel.cpp:554
 #, c-format
 msgid "%s (identity)"
-msgstr ""
+msgstr "%s (identita)"
 
 #: eeschema/widgets/sch_properties_panel.cpp:584
 #, fuzzy
@@ -34060,7 +34041,7 @@ msgstr "v adresári tejto šablóny."
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
 msgid "Stop showing templates from the browsed directory"
-msgstr ""
+msgstr "Zastaviť zobrazovanie šablón z prehliadaného adresára"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:125
 msgid "Go Back"
@@ -57695,7 +57676,7 @@ msgstr "Spúšťanie importu PADS binárneho DPS"
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:91
 #, c-format
 msgid "Undefined P-CAD layer %u substituted with the drawings layer."
-msgstr ""
+msgstr "Nedefinovaná vrstva P-CAD %u bola nahradená vrstvami s kresbami."
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:887
 msgid "KiCad only supports 32 signal layers."
@@ -60689,6 +60670,8 @@ msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
 msgstr ""
+"Skupiny obsahujúce puzdrá alebo iné položky, ktoré nie je možné zrkadliť, "
+"boli preskočené."
 
 #: pcbnew/tools/edit_tool.cpp:2771 pcbnew/tools/pcb_actions.cpp:717
 msgid "Change Side / Flip"
