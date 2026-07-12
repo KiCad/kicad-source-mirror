@@ -34,10 +34,15 @@ namespace PADS_SCH_BINARY
 struct SOURCE_PROVENANCE
 {
     wxString file;
-    size_t   offset = 0;
-    size_t   length = 0;
+    uint16_t version = 0;
+    wxString objectClass;
     int      controller = -1;
+    size_t   recordIndex = 0;
+    size_t   absoluteOffset = 0;
+    size_t   length = 0;
     int      sheet = -1;
+
+    bool operator==( const SOURCE_PROVENANCE& ) const = default;
 };
 
 
@@ -56,6 +61,8 @@ struct SOURCE_STRING
     wxString               text;
     STRING_ENCODING_STATUS encoding = STRING_ENCODING_STATUS::UTF8;
     SOURCE_PROVENANCE      source;
+
+    bool operator==( const SOURCE_STRING& ) const = default;
 };
 
 
@@ -73,6 +80,21 @@ struct PARSER_DIAGNOSTIC
     SEVERITY          severity = RPT_SEVERITY_UNDEFINED;
     SOURCE_PROVENANCE source;
     wxString          message;
+
+    bool operator==( const PARSER_DIAGNOSTIC& ) const = default;
+};
+
+wxString FormatParserError( const SOURCE_PROVENANCE& aSource, const wxString& aMessage );
+
+
+struct SOURCE_PROPERTY
+{
+    SOURCE_STRING        name;
+    SOURCE_STRING        value;
+    PROPERTY_DISPOSITION disposition = PROPERTY_DISPOSITION::EXACT;
+    SOURCE_PROVENANCE    source;
+
+    bool operator==( const SOURCE_PROPERTY& ) const = default;
 };
 
 
@@ -115,6 +137,23 @@ using PLACEMENT_ID = CONTROLLER_ID<PLACEMENT_ID_TAG>;
 using NET_ID = CONTROLLER_ID<NET_ID_TAG>;
 using BUS_ID = CONTROLLER_ID<BUS_ID_TAG>;
 
+template <typename Id>
+struct CONTROLLER_REFERENCE
+{
+    Id                id;
+    SOURCE_PROVENANCE source;
+
+    bool operator==( const CONTROLLER_REFERENCE& ) const = default;
+};
+
+using SHEET_REFERENCE = CONTROLLER_REFERENCE<SHEET_ID>;
+using DEFINITION_REFERENCE = CONTROLLER_REFERENCE<DEFINITION_ID>;
+using PIN_REFERENCE = CONTROLLER_REFERENCE<PIN_ID>;
+using PART_TYPE_REFERENCE = CONTROLLER_REFERENCE<PART_TYPE_ID>;
+using GATE_REFERENCE = CONTROLLER_REFERENCE<GATE_ID>;
+using PLACEMENT_REFERENCE = CONTROLLER_REFERENCE<PLACEMENT_ID>;
+using NET_REFERENCE = CONTROLLER_REFERENCE<NET_ID>;
+
 // PADS source coordinates remain signed integer half-mils.  Angles are tenths of a degree,
 // normalized to [0, 3600).  Conversion to KiCad units belongs to the schematic builder.
 constexpr int64_t NormalizeCoordinate( int64_t aCoordinate )
@@ -131,28 +170,84 @@ constexpr int NormalizeAngle( int aAngle )
 
 struct SOURCE_POINT
 {
-    int64_t x = 0;
-    int64_t y = 0;
+    int64_t           x = 0;
+    int64_t           y = 0;
+    SOURCE_PROVENANCE source;
+
+    bool operator==( const SOURCE_POINT& ) const = default;
+};
+
+
+enum class MODEL_LINE_STYLE
+{
+    DEFAULT,
+    SOLID,
+    DASH,
+    DOT,
+    DASH_DOT
+};
+
+
+enum class MODEL_FILL_STYLE
+{
+    NONE,
+    FILLED,
+    HATCHED
+};
+
+
+enum class MODEL_JUSTIFICATION
+{
+    LEFT,
+    CENTER,
+    RIGHT
+};
+
+
+struct MODEL_TEXT_PRESENTATION
+{
+    SOURCE_PROVENANCE            source;
+    int64_t                      height = 0;
+    int64_t                      width = 0;
+    SOURCE_STRING                font;
+    MODEL_JUSTIFICATION          horizontalJustification = MODEL_JUSTIFICATION::LEFT;
+    MODEL_JUSTIFICATION          verticalJustification = MODEL_JUSTIFICATION::CENTER;
+    bool                         bold = false;
+    bool                         italic = false;
+    bool                         underline = false;
+    bool                         visible = true;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_TEXT_PRESENTATION& ) const = default;
 };
 
 
 struct DESIGN_SETTINGS
 {
-    SOURCE_PROVENANCE source;
-    int64_t           coordinateUnitsPerMil = 2;
-    SOURCE_POINT      pageSize;
+    SOURCE_PROVENANCE            source;
+    int64_t                      coordinateUnitsPerMil = 2;
+    SOURCE_POINT                 pageSize;
+    int64_t                      defaultLineWidth = 0;
+    int64_t                      defaultBusWidth = 0;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const DESIGN_SETTINGS& ) const = default;
 };
 
 
 struct MODEL_FIELD
 {
-    SOURCE_PROVENANCE    source;
-    SOURCE_STRING        name;
-    SOURCE_STRING        value;
-    SOURCE_POINT         position;
-    int                  angle = 0;
-    bool                 visible = true;
-    PROPERTY_DISPOSITION disposition = PROPERTY_DISPOSITION::EXACT;
+    SOURCE_PROVENANCE            source;
+    SOURCE_STRING                name;
+    SOURCE_STRING                value;
+    SOURCE_POINT                 position;
+    int                          angle = 0;
+    bool                         visible = true;
+    PROPERTY_DISPOSITION         disposition = PROPERTY_DISPOSITION::EXACT;
+    MODEL_TEXT_PRESENTATION      presentation;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_FIELD& ) const = default;
 };
 
 
@@ -169,24 +264,35 @@ enum class MODEL_GRAPHIC_KIND
 
 struct MODEL_GRAPHIC
 {
-    SOURCE_PROVENANCE         source;
-    MODEL_GRAPHIC_KIND        kind = MODEL_GRAPHIC_KIND::LINE;
-    std::vector<SOURCE_POINT> points;
-    SOURCE_STRING             text;
-    int64_t                   width = 0;
+    SOURCE_PROVENANCE            source;
+    MODEL_GRAPHIC_KIND           kind = MODEL_GRAPHIC_KIND::LINE;
+    std::vector<SOURCE_POINT>    points;
+    SOURCE_STRING                text;
+    MODEL_LINE_STYLE             lineStyle = MODEL_LINE_STYLE::DEFAULT;
+    int64_t                      strokeWidth = 0;
+    MODEL_FILL_STYLE             fill = MODEL_FILL_STYLE::NONE;
+    MODEL_TEXT_PRESENTATION      presentation;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_GRAPHIC& ) const = default;
 };
 
 
 struct MODEL_PIN_DEFINITION
 {
-    PIN_ID            id;
-    SOURCE_PROVENANCE source;
-    SOURCE_STRING     number;
-    SOURCE_STRING     name;
-    SOURCE_POINT      position;
-    int               angle = 0;
-    uint32_t          electricalType = 0;
-    uint32_t          graphicStyle = 0;
+    PIN_ID                       id;
+    SOURCE_PROVENANCE            source;
+    SOURCE_STRING                number;
+    SOURCE_STRING                name;
+    SOURCE_POINT                 position;
+    int                          angle = 0;
+    uint32_t                     electricalType = 0;
+    uint32_t                     graphicStyle = 0;
+    int64_t                      length = 0;
+    MODEL_TEXT_PRESENTATION      presentation;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_PIN_DEFINITION& ) const = default;
 };
 
 
@@ -198,59 +304,94 @@ struct MODEL_SYMBOL_DEFINITION
     std::vector<MODEL_GRAPHIC>        graphics;
     std::vector<MODEL_PIN_DEFINITION> pins;
     std::vector<MODEL_FIELD>          fields;
+    std::vector<SOURCE_PROPERTY>      properties;
+
+    bool operator==( const MODEL_SYMBOL_DEFINITION& ) const = default;
 };
 
 
 struct MODEL_GATE
 {
-    GATE_ID             id;
-    SOURCE_PROVENANCE   source;
-    DEFINITION_ID       definition;
-    uint32_t            unit = 1;
-    std::vector<PIN_ID> pins;
+    GATE_ID                      id;
+    SOURCE_PROVENANCE            source;
+    DEFINITION_REFERENCE         definition;
+    uint32_t                     unit = 1;
+    std::vector<PIN_REFERENCE>   pins;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_GATE& ) const = default;
 };
 
 
 struct MODEL_PART_TYPE
 {
-    PART_TYPE_ID             id;
-    SOURCE_PROVENANCE        source;
-    SOURCE_STRING            name;
-    std::vector<MODEL_GATE>  gates;
-    std::vector<MODEL_FIELD> fields;
+    PART_TYPE_ID                 id;
+    SOURCE_PROVENANCE            source;
+    SOURCE_STRING                name;
+    std::vector<MODEL_GATE>      gates;
+    std::vector<MODEL_FIELD>     fields;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_PART_TYPE& ) const = default;
 };
 
 
 struct MODEL_SHEET
 {
-    SHEET_ID                id;
-    size_t                  index = 0;
-    SOURCE_PROVENANCE       source;
-    SOURCE_STRING           name;
-    std::optional<SHEET_ID> parent;
+    SHEET_ID                       id;
+    size_t                         index = 0;
+    SOURCE_PROVENANCE              source;
+    SOURCE_STRING                  name;
+    std::optional<SHEET_REFERENCE> parent;
+    SOURCE_POINT                   pageSize;
+    int64_t                        defaultLineWidth = 0;
+    int64_t                        defaultBusWidth = 0;
+    SOURCE_STRING                  title;
+    std::vector<MODEL_GRAPHIC>     border;
+    std::vector<MODEL_FIELD>       titleBlockFields;
+    std::vector<SOURCE_PROPERTY>   properties;
+
+    bool operator==( const MODEL_SHEET& ) const = default;
 };
 
 
 struct MODEL_PLACEMENT
 {
-    PLACEMENT_ID             id;
-    SOURCE_PROVENANCE        source;
-    SHEET_ID                 sheet;
-    PART_TYPE_ID             partType;
-    std::optional<GATE_ID>   gate;
-    SOURCE_STRING            reference;
-    SOURCE_POINT             position;
-    int                      angle = 0;
-    bool                     mirrored = false;
-    std::vector<MODEL_FIELD> fields;
+    PLACEMENT_ID                  id;
+    SOURCE_PROVENANCE             source;
+    SHEET_REFERENCE               sheet;
+    PART_TYPE_REFERENCE           partType;
+    std::optional<GATE_REFERENCE> gate;
+    uint32_t                      unit = 1;
+    SOURCE_STRING                 reference;
+    SOURCE_POINT                  position;
+    int                           angle = 0;
+    bool                          mirrored = false;
+    std::vector<MODEL_FIELD>      fields;
+    std::vector<SOURCE_PROPERTY>  properties;
+
+    bool operator==( const MODEL_PLACEMENT& ) const = default;
+};
+
+
+enum class MODEL_ENDPOINT_KIND
+{
+    INVALID,
+    POINT,
+    PIN
 };
 
 
 struct MODEL_CONNECTION_ENDPOINT
 {
-    std::optional<PLACEMENT_ID> placement;
-    std::optional<PIN_ID>       pin;
-    SOURCE_POINT                point;
+    MODEL_ENDPOINT_KIND                kind = MODEL_ENDPOINT_KIND::INVALID;
+    SOURCE_PROVENANCE                  source;
+    std::optional<PLACEMENT_REFERENCE> placement;
+    std::optional<PIN_REFERENCE>       pin;
+    SOURCE_POINT                       point;
+    std::vector<SOURCE_PROPERTY>       properties;
+
+    bool operator==( const MODEL_CONNECTION_ENDPOINT& ) const = default;
 };
 
 
@@ -259,6 +400,9 @@ struct MODEL_CONNECTION
     SOURCE_PROVENANCE                      source;
     std::vector<MODEL_CONNECTION_ENDPOINT> endpoints;
     std::vector<SOURCE_POINT>              vertices;
+    std::vector<SOURCE_PROPERTY>           properties;
+
+    bool operator==( const MODEL_CONNECTION& ) const = default;
 };
 
 
@@ -266,19 +410,39 @@ struct MODEL_NET
 {
     NET_ID                        id;
     SOURCE_PROVENANCE             source;
-    SHEET_ID                      sheet;
+    SHEET_REFERENCE               sheet;
     SOURCE_STRING                 name;
     std::vector<MODEL_CONNECTION> connections;
+    std::vector<SOURCE_PROPERTY>  properties;
+
+    bool operator==( const MODEL_NET& ) const = default;
+};
+
+
+struct MODEL_BUS_ENTRY
+{
+    SOURCE_PROVENANCE            source;
+    SOURCE_POINT                 position;
+    NET_REFERENCE                memberNet;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_BUS_ENTRY& ) const = default;
 };
 
 
 struct MODEL_BUS
 {
-    BUS_ID                    id;
-    SOURCE_PROVENANCE         source;
-    SHEET_ID                  sheet;
-    SOURCE_STRING             name;
-    std::vector<SOURCE_POINT> vertices;
+    BUS_ID                       id;
+    SOURCE_PROVENANCE            source;
+    SHEET_REFERENCE              sheet;
+    SOURCE_STRING                name;
+    std::vector<SOURCE_POINT>    vertices;
+    std::vector<MODEL_BUS_ENTRY> entries;
+    std::vector<SOURCE_STRING>   aliases;
+    std::vector<NET_REFERENCE>   memberNets;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_BUS& ) const = default;
 };
 
 
@@ -294,30 +458,41 @@ enum class MODEL_LABEL_KIND
 
 struct MODEL_LABEL
 {
-    SOURCE_PROVENANCE source;
-    SHEET_ID          sheet;
-    MODEL_LABEL_KIND  kind = MODEL_LABEL_KIND::LOCAL;
-    SOURCE_STRING     text;
-    SOURCE_POINT      position;
-    int               angle = 0;
+    SOURCE_PROVENANCE            source;
+    SHEET_REFERENCE              sheet;
+    MODEL_LABEL_KIND             kind = MODEL_LABEL_KIND::LOCAL;
+    SOURCE_STRING                text;
+    SOURCE_POINT                 position;
+    int                          angle = 0;
+    MODEL_TEXT_PRESENTATION      presentation;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_LABEL& ) const = default;
 };
 
 
 struct MODEL_JUNCTION
 {
-    SOURCE_PROVENANCE source;
-    SHEET_ID          sheet;
-    SOURCE_POINT      position;
+    SOURCE_PROVENANCE            source;
+    SHEET_REFERENCE              sheet;
+    SOURCE_POINT                 position;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_JUNCTION& ) const = default;
 };
 
 
 struct MODEL_TEXT
 {
-    SOURCE_PROVENANCE source;
-    SHEET_ID          sheet;
-    SOURCE_STRING     text;
-    SOURCE_POINT      position;
-    int               angle = 0;
+    SOURCE_PROVENANCE            source;
+    SHEET_REFERENCE              sheet;
+    SOURCE_STRING                text;
+    SOURCE_POINT                 position;
+    int                          angle = 0;
+    MODEL_TEXT_PRESENTATION      presentation;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_TEXT& ) const = default;
 };
 
 
@@ -341,6 +516,8 @@ struct PADS_SCH_MODEL
     bool HasUniqueTypedIds() const;
     bool AllReferencesResolved() const;
     void ValidateOrThrow() const;
+
+    bool operator==( const PADS_SCH_MODEL& ) const = default;
 };
 
 } // namespace PADS_SCH_BINARY

@@ -30,6 +30,12 @@ class PADS_SCH_BINARY_PARSER
 {
 public:
     PADS_SCH_MODEL Parse( const std::vector<uint8_t>& aBytes, const wxString& aSourceName = {} ) const;
+
+    static SOURCE_STRING DecodeString( const std::vector<uint8_t>& aBytes, uint32_t aCodePage,
+                                       const SOURCE_PROVENANCE& aSource, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics );
+
+    static void RecordUnknownEnum( const wxString& aEnumName, uint32_t aValue, const SOURCE_PROVENANCE& aSource,
+                                   std::vector<PARSER_DIAGNOSTIC>& aDiagnostics );
 };
 
 } // namespace PADS_SCH_BINARY
