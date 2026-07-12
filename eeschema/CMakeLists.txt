@@ -100,6 +100,7 @@ set( EESCHEMA_SCH_IO
     sch_io/pads/pads_sch_symbol_builder.cpp
     sch_io/pads/pads_sch_schematic_builder.cpp
     sch_io/pads/pads_sch_binary_reader.cpp
+    sch_io/pads/pads_sch_binary_parser.cpp
     sch_io/pads/pads_sch_sdb.cpp
 
     # DipTrace IO plugin
