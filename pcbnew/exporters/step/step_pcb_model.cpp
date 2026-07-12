@@ -45,7 +45,6 @@
 
 #include <decompress.hpp>
 
-#include <thread_pool.h>
 #include <trace_helpers.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -2480,8 +2479,6 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
         return true;
     }
 
-    thread_pool& tp = GetKiCadThreadPool();
-
     Handle( XCAFDoc_VisMaterialTool ) visMatTool = XCAFDoc_DocumentTool::VisMaterialTool( m_doc->Main() );
 
     m_hasPCB = true; // whether or not operations fail we note that CreatePCB has been invoked
@@ -2575,17 +2572,19 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
             };
 
     auto subtractShapesMap =
-            [&tp, this]( const wxString& aWhat, std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
-                         std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles,
-                         const std::vector<Bnd_Box>& aHoleBoxes )
+            [this]( const wxString& aWhat, std::map<wxString, std::vector<TopoDS_Shape>>& aShapesMap,
+                    std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles,
+                    const std::vector<Bnd_Box>& aHoleBoxes )
             {
                 m_reporter->Report( wxString::Format( _( "Subtracting holes for %s" ), aWhat ),
                                     RPT_SEVERITY_DEBUG );
 
                 for( auto& [netname, vec] : aShapesMap )
                 {
-                    std::mutex mutex;
-
+                    // Cuts must run sequentially.  Parallel cuts share the same hole TShapes as
+                    // tools, and OCC boolean ops mutate their inputs (tolerance updates on common
+                    // vertices and edges), corrupting the heap.  Each cut still parallelizes
+                    // internally through SetRunParallel, which is the threading mode OCC supports.
                     auto subtractLoopFn = [&]( const int shapeId )
                     {
                         TopoDS_Shape& shape = vec[shapeId];
@@ -2595,25 +2594,21 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
 
                         NCollection_List<TopoDS_Shape> holelist;
 
+                        const NCollection_List<int>& indices = aBSBHoles.Compare( shapeBbox );
+
+                        for( const int& index : indices )
+                            holelist.Append( aHolesList[index] );
+
+                        // Workaround for OCCT bug (https://github.com/Open-Cascade-SAS/OCCT/issues/506)
+                        // Bnd_BoundSortBox::Compare can fail to detect intersections in certain edge
+                        // cases (e.g., single item). Fall back to direct bounding box intersection
+                        // checks when Compare returns empty but intersections may exist.
+                        if( holelist.IsEmpty() )
                         {
-                            std::unique_lock lock( mutex );
-
-                            const NCollection_List<int>& indices = aBSBHoles.Compare( shapeBbox );
-
-                            for( const int& index : indices )
-                                holelist.Append( aHolesList[index] );
-
-                            // Workaround for OCCT bug (https://github.com/Open-Cascade-SAS/OCCT/issues/506)
-                            // Bnd_BoundSortBox::Compare can fail to detect intersections in certain edge
-                            // cases (e.g., single item). Fall back to direct bounding box intersection
-                            // checks when Compare returns empty but intersections may exist.
-                            if( holelist.IsEmpty() )
+                            for( size_t i = 0; i < aHoleBoxes.size(); i++ )
                             {
-                                for( size_t i = 0; i < aHoleBoxes.size(); i++ )
-                                {
-                                    if( !shapeBbox.IsOut( aHoleBoxes[i] ) )
-                                        holelist.Append( aHolesList[i] );
-                                }
+                                if( !shapeBbox.IsOut( aHoleBoxes[i] ) )
+                                    holelist.Append( aHolesList[i] );
                             }
                         }
 
@@ -2665,7 +2660,8 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
                         shape = cut.Shape();
                     };
 
-                    tp.submit_loop( 0, vec.size(), subtractLoopFn ).wait();
+                    for( int shapeId = 0; shapeId < (int) vec.size(); shapeId++ )
+                        subtractLoopFn( shapeId );
                 }
             };
 
@@ -2722,32 +2718,22 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
 
         m_reporter->Report( wxT( "Fusing shapes" ), RPT_SEVERITY_DEBUG );
 
-        // Do fusing in parallel
-        std::mutex mutex;
-
-        auto fuseLoopFn = [&]( const wxString& aNetname )
+        // Fuse nets sequentially.  Running BRepAlgoAPI ops on multiple threads is unsafe because
+        // they all nest into OCC's single global thread pool through SetRunParallel, which is the
+        // only threading mode OCC supports.
+        for( const auto& [netname, toFuse] : shapesToFuseMap )
         {
-            auto&        toFuse = shapesToFuseMap[aNetname];
             TopoDS_Shape fusedShape = fuseShapesOrCompound( toFuse, m_reporter );
 
             if( !fusedShape.IsNull() )
             {
-                std::unique_lock lock( mutex );
+                m_board_copper_fused[netname].emplace_back( fusedShape );
 
-                m_board_copper_fused[aNetname].emplace_back( fusedShape );
-
-                m_board_copper[aNetname].clear();
-                m_board_copper_pads[aNetname].clear();
-                m_board_copper_vias[aNetname].clear();
+                m_board_copper[netname].clear();
+                m_board_copper_pads[netname].clear();
+                m_board_copper_vias[netname].clear();
             }
-        };
-
-        BS::multi_future<void> mf;
-
-        for( const auto& [netname, _] : shapesToFuseMap )
-            mf.push_back( tp.submit_task( [&, netname]() { fuseLoopFn( netname ); } ) );
-
-        mf.wait();
+        }
     }
 
     // push the board to the data structure
