@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include <filesystem>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -69,6 +70,48 @@ public:
     {};
 
     void Reset( RESET_REASON aReason ) override {}
+};
+
+
+/**
+ * Footprint round-trip tests must save into a directory of their own.  Saving a footprint causes
+ * the whole containing directory to be validated as a library, so writing directly into the shared
+ * system temp directory makes the test fail whenever any unrelated .kicad_mod file happens to live
+ * there.
+ */
+class TEMPORARY_DIRECTORY
+{
+public:
+    /**
+     * Create a temporary directory with a given prefix and suffix. The directory will be
+     * created in the system temporary directory, and will not be pre-existing.
+     */
+    TEMPORARY_DIRECTORY( const std::string& aNamePrefix, const std::string aSuffix )
+    {
+        int i = 0;
+
+        // Find a unique directory name
+        while( true )
+        {
+            m_path = std::filesystem::temp_directory_path()
+                     / ( aNamePrefix + std::to_string( i ) + aSuffix );
+
+            if( !std::filesystem::exists( m_path ) )
+                break;
+
+            i++;
+        }
+
+        wxASSERT( !std::filesystem::exists( m_path ) );
+        std::filesystem::create_directories( m_path );
+    }
+
+    ~TEMPORARY_DIRECTORY() { std::filesystem::remove_all( m_path ); }
+
+    const std::filesystem::path& GetPath() const { return m_path; }
+
+private:
+    std::filesystem::path m_path;
 };
 
 

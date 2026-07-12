@@ -49,6 +49,24 @@ struct LIBRARY_MANAGER_INTERNALS
 };
 
 
+std::mutex& LIBRARY_MANAGER_ADAPTER::pluginMutex( const wxString& aNickname )
+{
+    // Leaked and never erased: must outlive every caller including static teardown, and stable node
+    // addresses keep the returned reference valid.
+    static std::mutex&                                      registryLock = *new std::mutex;
+    static std::map<wxString, std::unique_ptr<std::mutex>>& registry =
+            *new std::map<wxString, std::unique_ptr<std::mutex>>;
+
+    std::lock_guard              guard( registryLock );
+    std::unique_ptr<std::mutex>& slot = registry[aNickname];
+
+    if( !slot )
+        slot = std::make_unique<std::mutex>();
+
+    return *slot;
+}
+
+
 LIBRARY_MANAGER::LIBRARY_MANAGER()
 {
 }
@@ -1304,6 +1322,10 @@ bool LIBRARY_MANAGER_ADAPTER::DeleteLibrary( const wxString& aNickname )
         LIB_DATA* data = *result;
         std::map<std::string, UTF8> options = data->row->GetOptionsMap();
 
+        // Serialize cache teardown against readers. loadIfNeeded() already dropped the manager lock
+        // (manager > pluginMutex).
+        std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
         try
         {
             return data->plugin->DeleteLibrary( getUri( data->row ), &options );
@@ -1502,6 +1524,10 @@ std::optional<LIB_STATUS> LIBRARY_MANAGER_ADAPTER::LoadLibraryEntry( const wxStr
 
 void LIBRARY_MANAGER_ADAPTER::ReloadLibraryEntry( const wxString& aNickname, LIBRARY_TABLE_SCOPE aScope )
 {
+    // Drain the async load before erasing, else a worker mid-enumerate writes status through the
+    // freed LIB_DATA (every other invalidator already does this).
+    abortLoad();
+
     auto reloadScope =
             [&]( LIBRARY_TABLE_SCOPE aScopeToReload, std::map<wxString, LIB_DATA>& aTarget,
                  std::shared_mutex& aMutex )
@@ -1556,6 +1582,11 @@ bool LIBRARY_MANAGER_ADAPTER::IsWritable( const wxString& aNickname ) const
     if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
     {
         const LIB_DATA* rowData = *result;
+
+        // IsLibraryWritable() may rebuild the cache via validateCache(); serialize against readers.
+        // fetchIfLoaded() already dropped the manager lock.
+        std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
         return rowData->plugin->IsLibraryWritable( getUri( rowData->row ) );
     }
 
@@ -1569,6 +1600,9 @@ bool LIBRARY_MANAGER_ADAPTER::CreateLibrary( const wxString& aNickname )
     {
         LIB_DATA* data = *result;
         std::map<std::string, UTF8> options = data->row->GetOptionsMap();
+
+        // Serialize cache replacement against readers; loadIfNeeded() already dropped the manager lock.
+        std::lock_guard pluginGuard( pluginMutex( aNickname ) );
 
         try
         {
