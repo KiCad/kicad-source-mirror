@@ -2220,7 +2220,9 @@ SELECTION& SCH_EDIT_FRAME::GetCurrentSelection()
 
 void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 {
-    if( IsShown() )
+    // doCloseWindow() destroys the tool manager and then updates the AUI layout, which can
+    // dispatch a deferred size event back to this still-bound handler.
+    if( IsShown() && GetToolManager() )
     {
         // We only need this until the frame is done resizing and the final client size is
         // established.
