@@ -24,6 +24,7 @@
 
 // Code under test
 #include <board.h>
+#include <board_design_settings.h>
 #include <board_item.h>
 #include <footprint.h>
 #include <pad.h>
@@ -403,6 +404,25 @@ BOOST_AUTO_TEST_CASE( Issue24696_SwapItemDataKeepsGroupMembership )
     BOOST_CHECK( image.GetParentGroup() == &group );
 
     image.SetParentGroup( nullptr );
+}
+
+
+// Partial hardening for the BOARD::RecordDRCExclusions crash family (Sentry KICAD-YT2,
+// KICAD-YTA).  A PCB_MARKER may legitimately carry a null RC_ITEM (its ctor and dtor both guard
+// the member), but SerializeToString() dereferences it unconditionally, so recording exclusions
+// during a project save or window close faulted on such a marker.
+BOOST_AUTO_TEST_CASE( RecordDRCExclusionsSkipsMarkerWithoutRCItem )
+{
+    BOARD board;
+
+    PCB_MARKER* marker = new PCB_MARKER( nullptr, VECTOR2I( 0, 0 ) );
+    marker->SetExcluded( true );
+    board.Add( marker );
+
+    BOOST_CHECK_NO_THROW( board.RecordDRCExclusions() );
+
+    // The item-less marker has no violation to serialize, so nothing is persisted.
+    BOOST_CHECK( board.GetDesignSettings().m_DrcExclusions.empty() );
 }
 
 
