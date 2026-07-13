@@ -4764,6 +4764,22 @@ bool PCB_SELECTION_TOOL::ReportFilteredLockedItems()
 }
 
 
+bool PCB_SELECTION_TOOL::HasLockedDescendant( const BOARD_ITEM* aItem )
+{
+    bool lockedDescendant = false;
+
+    aItem->RunOnChildren(
+            [&]( BOARD_ITEM* curr_item )
+            {
+                if( !curr_item->GetParentFootprint() && curr_item->IsLocked() )
+                    lockedDescendant = true;
+            },
+            RECURSE_MODE::RECURSE );
+
+    return lockedDescendant;
+}
+
+
 void PCB_SELECTION_TOOL::FilterCollectorForLockedItems( GENERAL_COLLECTOR& aCollector )
 {
     m_lockedItemsFiltered = false;
@@ -4774,17 +4790,8 @@ void PCB_SELECTION_TOOL::FilterCollectorForLockedItems( GENERAL_COLLECTOR& aColl
         for( int i = (int) aCollector.GetCount() - 1; i >= 0; --i )
         {
             BOARD_ITEM* item = aCollector[i];
-            bool        lockedDescendant = false;
 
-            item->RunOnChildren(
-                    [&]( BOARD_ITEM* curr_item )
-                    {
-                        if( curr_item->IsLocked() )
-                            lockedDescendant = true;
-                    },
-                    RECURSE_MODE::RECURSE );
-
-            if( item->IsLocked() || lockedDescendant )
+            if( item->IsLocked() || HasLockedDescendant( item ) )
             {
                 aCollector.Remove( item );
                 m_lockedItemsFiltered = true;

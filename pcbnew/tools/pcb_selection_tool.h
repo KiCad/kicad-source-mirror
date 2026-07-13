@@ -222,6 +222,13 @@ public:
     void FilterCollectorForLockedItems( GENERAL_COLLECTOR& aCollector );
 
     /**
+     * @return true if a locked descendant should pin aItem in place.  Locked items inside a
+     * footprint move rigidly with it, so only descendants outside a parent footprint count
+     * (group members, see issue 6841).
+     */
+    static bool HasLockedDescendant( const BOARD_ITEM* aItem );
+
+    /**
      * If the most recent FilterCollectorForLockedItems call filtered a locked item, show an
      * InfoBar warning prompting the user to enable Override locks and return true.  The caller
      * should stop the action in that case.  Return false otherwise.

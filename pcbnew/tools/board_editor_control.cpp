@@ -1578,6 +1578,16 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
             board_item->SetLocked( true );
         else
             board_item->SetLocked( false );
+
+        if( aMode == OFF && board_item->Type() == PCB_FOOTPRINT_T )
+        {
+            board_item->RunOnChildren(
+                    []( BOARD_ITEM* child )
+                    {
+                        child->SetLocked( false );
+                    },
+                    RECURSE_MODE::RECURSE );
+        }
     }
 
     if( !commit.Empty() )
