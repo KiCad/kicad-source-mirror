@@ -145,6 +145,13 @@ public:
                                    bool aBold, bool aItalic, const METRICS& aFontMetrics ) const;
 
     /**
+     * Return the draw position for the first line of text, using the same alignment rules as
+     * GAL rendering (FONT::getLinePositions).
+     */
+    VECTOR2I GetAlignedDrawPosition( const wxString& aText, const VECTOR2I& aAnchor, const TEXT_ATTRIBUTES& aAttributes,
+                                     const METRICS& aFontMetrics ) const;
+
+    /**
      * Insert \n characters into text to ensure that no lines are wider than \a aColumnWidth.
      *
      * This is a highly simplified line-breaker.  KiCad is an EDA tool, not a word processor.

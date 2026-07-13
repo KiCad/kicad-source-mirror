@@ -474,6 +474,22 @@ VECTOR2I FONT::StringBoundaryLimits( const wxString& aText, const VECTOR2I& aSiz
 }
 
 
+VECTOR2I FONT::GetAlignedDrawPosition( const wxString& aText, const VECTOR2I& aAnchor,
+                                       const TEXT_ATTRIBUTES& aAttributes, const METRICS& aFontMetrics ) const
+{
+    wxArrayString         strings_list;
+    std::vector<VECTOR2I> positions;
+    std::vector<VECTOR2I> extents;
+
+    getLinePositions( aText, aAnchor, strings_list, positions, extents, aAttributes, aFontMetrics );
+
+    if( positions.empty() )
+        return aAnchor;
+
+    return positions.front();
+}
+
+
 VECTOR2I FONT::boundingBoxSingleLine( BOX2I* aBBox, const wxString& aText,
                                       const VECTOR2I& aPosition, const VECTOR2I& aSize,
                                       bool aItalic, const METRICS& aFontMetrics ) const

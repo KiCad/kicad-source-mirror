@@ -212,12 +212,11 @@ int PDF_STROKE_FONT_SUBSET::EnsureGlyph( wxUniChar aCode )
 
     // Expand bbox by half the stroke width so the d1 clipping rect covers the full painted
     // area, not just the stroke center lines.
-    double halfStrokeY = m_unitsPerEm * m_strokeWidthFactor / 2.0;
-    double halfStrokeX = halfStrokeY * m_aspectRatio;
-    data.m_minX -= halfStrokeX;
-    data.m_minY -= halfStrokeY;
-    data.m_maxX += halfStrokeX;
-    data.m_maxY += halfStrokeY;
+    double halfStroke = m_unitsPerEm * m_strokeWidthFactor / 2.0;
+    data.m_minX -= halfStroke;
+    data.m_minY -= halfStroke;
+    data.m_maxX += halfStroke;
+    data.m_maxY += halfStroke;
 
     // Build charproc stream: first specify width and bbox (d1 operator) then stroke path.
     double kerningFactor = ADVANCED_CFG::GetCfg().m_PDFStrokeFontKerningFactor;
