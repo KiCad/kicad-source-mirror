@@ -146,11 +146,12 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PC
         m_MultiLineSizer->Show( false );
 
         // Do not allow locking items in the footprint editor
-        m_cbLocked->Show( false );
+        if( m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+            m_cbLocked->Show( false );
 
-        m_tabOrder = { m_SingleLineText, m_LayerSelectionCtrl, m_SizeXCtrl,     m_SizeYCtrl,     m_ThicknessCtrl,
-                       m_Visible,        m_cbKnockout,         m_KeepUpright,   m_PositionXCtrl, m_PositionYCtrl,
-                       m_OrientCtrl,     m_sdbSizerOK,         m_sdbSizerCancel };
+        m_tabOrder = { m_SingleLineText, m_cbLocked,   m_LayerSelectionCtrl, m_SizeXCtrl,     m_SizeYCtrl,
+                       m_ThicknessCtrl,  m_Visible,    m_cbKnockout,         m_KeepUpright,   m_PositionXCtrl,
+                       m_PositionYCtrl,  m_OrientCtrl, m_sdbSizerOK,         m_sdbSizerCancel };
     }
     else
     {
