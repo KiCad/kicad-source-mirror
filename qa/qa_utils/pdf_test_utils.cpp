@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+
 #include <qa_utils/pdf_test_utils.h>
 #include <gal/color4d.h>
 
@@ -94,6 +96,14 @@ static void append_decompressed_streams( std::string& aBuffer )
 
         if( dataLen > 0 )
         {
+            // Trailing newline after the zlib payload is common in PDF writers; strip it so
+            // inflate does not see leftover input.
+            while( dataLen > 0
+                   && ( aBuffer[dataStart + dataLen - 1] == '\n' || aBuffer[dataStart + dataLen - 1] == '\r' ) )
+            {
+                --dataLen;
+            }
+
             const unsigned char* data = reinterpret_cast<const unsigned char*>( aBuffer.data() + dataStart );
             z_stream             zs{};
             zs.next_in = const_cast<Bytef*>( data );
@@ -101,11 +111,22 @@ static void append_decompressed_streams( std::string& aBuffer )
 
             if( inflateInit( &zs ) == Z_OK )
             {
+                // Grow until inflate finishes.
                 std::string out;
-                out.resize( dataLen * 4 + 64 );
-                zs.next_out = reinterpret_cast<Bytef*>( out.data() );
-                zs.avail_out = static_cast<uInt>( out.size() );
-                int ret = inflate( &zs, Z_FINISH );
+                out.resize( std::max( dataLen * 8 + 256, size_t( 4096 ) ) );
+                int ret = Z_OK;
+
+                for( ;; )
+                {
+                    zs.next_out = reinterpret_cast<Bytef*>( out.data() ) + zs.total_out;
+                    zs.avail_out = static_cast<uInt>( out.size() - zs.total_out );
+                    ret = inflate( &zs, Z_FINISH );
+
+                    if( ret == Z_STREAM_END || ret != Z_BUF_ERROR )
+                        break;
+
+                    out.resize( out.size() * 2 );
+                }
 
                 if( ret == Z_STREAM_END )
                 {
