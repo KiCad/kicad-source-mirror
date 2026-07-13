@@ -53,6 +53,21 @@ set( KIAPI_PROTO_SRCS
     schematic/schematic_jobs.proto
     schematic/schematic_rules.proto
     schematic/schematic_tasks.proto
+
+    workspace/workspace_types.proto
+
+    mdw/mdw_envelope.proto
+    mdw/backend_base.proto
+    mdw/backend_locking.proto
+    mdw/backend_revisions.proto
+    mdw/backend_lifecycle.proto
+    mdw/backend_search.proto
+    mdw/backend_shared_libs.proto
+    mdw/backend_bom.proto
+    mdw/backend_eco.proto
+    mdw/backend_review.proto
+    mdw/backend_parts.proto
+    mdw/backend_permissions.proto
     )
 
 # Generated C++ code must be in the build dir; it is dependent on the version of protoc installed

@@ -1,0 +1,604 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Shared Managed Design Workspace (MDW) vocabulary. These messages are the
+ * public contract between KiCad and any backend, carried by the backend
+ * channel messages in kiapi.mdw.
+ *
+ * This file is an API commitment from KiCad 11. Fields are additive-only
+ * within a protocol major version; renumbering or removing a field requires a
+ * major bump.
+ *
+ * Ids are opaque and minted by the backend. Clients never parse one, and every
+ * id a user may see travels with display text (path_hint, label, display_id).
+ * A reply may name an item by a different item_id than its request did; the
+ * reply's id is canonical and replaces the one the caller stored.
+ */
+
+syntax = "proto3";
+
+package kiapi.workspace;
+
+/**
+ * Semantic version triple used for backend and protocol versions.
+ */
+message Version
+{
+  uint32 major = 1;
+  uint32 minor = 2;
+  uint32 patch = 3;
+  string full = 4; // Optional free-form identifier (build metadata, git hash)
+}
+
+/**
+ * How a backend's items reach the user's disk.
+ */
+enum CheckinModel
+{
+  CM_UNKNOWN      = 0;
+  CM_UPLOAD       = 1; // Checkout downloads a copy and Checkin uploads it
+  CM_WORKING_COPY = 2; // Items are files in a working copy at local_root, edited in place and committed by Checkin
+}
+
+/**
+ * Identifying metadata a backend advertises during the handshake.
+ */
+message BackendInfo
+{
+  string       backend_id    = 1; // Globally unique identifier, e.g. "org.kicad.mdw.git"
+  string       display_name  = 2; // Human-readable name for UI
+  string       description   = 3;
+  string       vendor        = 4;
+  Version      version       = 5;
+  CheckinModel checkin_model = 6;
+}
+
+/**
+ * Optional capability groups a backend may advertise. Mandatory checkout is
+ * not a group; every backend implements it. The framework consults this set
+ * before exposing any UI or dispatching any sub-interface call. A request for
+ * an unadvertised group returns WE_NOT_SUPPORTED.
+ */
+enum CapabilityGroup
+{
+  CG_UNKNOWN          = 0;
+  CG_LOCKING          = 1;
+  CG_REVISIONS        = 2;
+  CG_LIFECYCLE        = 3;
+  CG_EVENTS           = 4;
+  CG_SEARCH           = 5;
+  CG_SHARED_LIBRARIES = 6;
+  CG_BOM              = 7;
+  CG_ECO              = 8;
+  CG_REVIEW           = 9;
+  CG_PARTS            = 10;
+  CG_PERMISSIONS      = 11;
+}
+
+/**
+ * Four universal lifecycle categories every backend maps its native states
+ * onto. PENDING_REVIEW and RESTRICTED block writes; EDITABLE allows writes
+ * without warning; RELEASED allows writes but warns on save. RESTRICTED names
+ * a policy-imposed read-only state and is independent of per-user locks
+ * (see LockInfo). A client reads LC_UNKNOWN as LC_RESTRICTED.
+ */
+enum LifecycleCategory
+{
+  LC_UNKNOWN        = 0;
+  LC_EDITABLE       = 1;
+  LC_PENDING_REVIEW = 2;
+  LC_RESTRICTED     = 3;
+  LC_RELEASED       = 4;
+}
+
+/**
+ * The lifecycle state of one revision. state_id names a CustomState and may be
+ * empty when the backend has only categories. not_for_new_designs repeats the
+ * CustomState's flag.
+ */
+message LifecycleState
+{
+  LifecycleCategory category            = 1;
+  string            state_id            = 2;
+  bool              not_for_new_designs = 3;
+}
+
+/**
+ * A backend-supplied display state layered on top of a category. The standard
+ * UI shows display_name; the framework consults only category and
+ * not_for_new_designs, which marks a released state that designs already
+ * using it may keep but new placements are warned against.
+ */
+message CustomState
+{
+  string            state_id            = 1;
+  string            display_name        = 2;
+  string            description         = 3;
+  LifecycleCategory category            = 4;
+  int32             sort_order          = 5;
+  bool              not_for_new_designs = 6;
+}
+
+/**
+ * The states an item can be in. Definitions can differ between items of one
+ * backend.
+ */
+message LifecycleDefinition
+{
+  string               definition_id = 1;
+  string               display_name  = 2;
+  repeated CustomState states        = 3;
+}
+
+/**
+ * The capability advertisement. HelloReply may carry a subset that the
+ * backend refines once the user is authenticated; the client re-reads it after
+ * every successful Authenticate and on ET_CAPABILITIES_CHANGED. custom_states
+ * is the union of every state an item of this backend can be in.
+ */
+message Capabilities
+{
+  repeated CapabilityGroup groups             = 1;
+  repeated CustomState     custom_states      = 2;
+  bool                     adopts_whole_files = 3; // CheckInSharedLibraryRequest.whole_files is honoured
+}
+
+/**
+ * The kind of design file an item holds. It decides which editor opens an item
+ * and whether two versions of it can be compared or merged.
+ */
+enum DocumentKind
+{
+  DK_UNKNOWN        = 0;
+  DK_PROJECT        = 1;
+  DK_SCHEMATIC      = 2;
+  DK_BOARD          = 3;
+  DK_SYMBOL_LIBRARY = 4;
+  DK_FOOTPRINT      = 5;
+  DK_OTHER          = 6; // A file with no editor or differ
+}
+
+/**
+ * Value types a search field declares.
+ */
+enum AttrType
+{
+  AT_UNKNOWN = 0;
+  AT_STRING  = 1;
+  AT_ENUM    = 2;
+}
+
+/**
+ * One attribute definition. The framework treats the schema as opaque.
+ */
+message AttributeSchema
+{
+  string attr_id       = 1;
+  string display_name  = 2;
+  int32  display_order = 3;
+}
+
+/**
+ * A backend-declared attribute schema, as the ECO schema request answers it.
+ */
+message Schema
+{
+  repeated AttributeSchema attributes = 1;
+}
+
+/**
+ * One attribute value. The value is carried as text and typed by the schema.
+ */
+message AttributeValue
+{
+  string attr_id = 1;
+  string value   = 2;
+}
+
+message AttributeSet
+{
+  repeated AttributeValue values = 1;
+}
+
+/**
+ * A field a backend lets search filter on.
+ */
+message SearchField
+{
+  string          field_id     = 1;
+  string          display_name = 2;
+  AttrType        type         = 3;
+  repeated string enum_values  = 4;
+}
+
+// Equality on one field. Filters are AND-ed
+message SearchFilter
+{
+  string field_id = 1;
+  string value    = 2;
+}
+
+/**
+ * An opaque item id with the text a user sees for it. Ids are unique within
+ * their source only. source is the credential-free locator of the source that
+ * owns the item, and empty means the backend that sent it. It is matched
+ * exactly against the configured sources, never searched in order.
+ */
+message ItemRef
+{
+  string item_id   = 1;
+  string path_hint = 2;
+  string source    = 3;
+}
+
+/**
+ * Per-user exclusive lock state, independent of LifecycleCategory. An item can
+ * be EDITABLE and locked by a teammate, or RESTRICTED and unlocked.
+ */
+message LockInfo
+{
+  bool   is_locked           = 1;
+  string owner_id            = 2;
+  string owner_display_name  = 3;
+  int64  lock_timestamp_unix = 4;
+  bool   locked_by_me        = 5;
+  bool   advisory            = 6; // The backend accepts another user's check-in or push while this lock is held
+}
+
+/**
+ * A managed file or folder. The revision and state fields describe the item's
+ * latest revision, and the lock its last-known lock, so a listing needs no
+ * follow-up calls to render.
+ */
+message ItemInfo
+{
+  string         item_id        = 1;
+  string         display_name   = 2;
+  string         path_hint      = 3; // Display only, e.g. "boards/rx/amp.kicad_sch" or "Passives/R_10k_0603"
+  string         folder_id      = 4;
+  bool           is_folder      = 5;
+  DocumentKind   kind           = 6;
+  int64          modified_unix  = 7; // Seconds since epoch, UTC
+  string         revision_id    = 8; // The revision this metadata describes; empty for folders
+  string         revision_label = 9;
+  LifecycleState state          = 10; // The state of revision_id
+  LockInfo       lock           = 11;
+  string         relative_path  = 12; // Where a checkout lands under the project, '/'-separated; empty for none
+  RevisionKind   revision_kind  = 13; // What revision_id is, which says how revision_label reads
+}
+
+/**
+ * A navigable folder in the workspace tree.
+ */
+message Folder
+{
+  string folder_id        = 1;
+  string display_name     = 2;
+  string parent_folder_id = 3;
+  bool   has_children     = 4;
+}
+
+/**
+ * What kind of point in an item's history a revision is.
+ */
+enum RevisionKind
+{
+  RK_UNKNOWN  = 0;
+  RK_CHECKIN  = 1; // A saved version, such as a commit or a file edition
+  RK_RELEASE  = 2; // An approved release, made by ReleaseRevision
+  RK_BASELINE = 3; // Made by CreateBaseline
+  RK_WORKING  = 4; // Planned or in progress, holding no released data yet
+  RK_RELEASE_PENDING  = 5; // A release attempt awaiting approval; becomes RK_RELEASE or RK_RELEASE_REJECTED
+  RK_RELEASE_REJECTED = 6; // A release attempt that was refused or withdrawn; it never released data
+}
+
+/**
+ * A point-in-time snapshot of an item. parent_revision_ids is empty at a root
+ * and carries more than one entry for a merge. ordinal increases strictly
+ * across an item's revisions of one kind, so it sorts labels such as "A.1"
+ * that do not sort as text. RK_RELEASE ordinals count approved releases only,
+ * and an attempt takes its RK_RELEASE kind and ordinal when it is approved.
+ */
+message Revision
+{
+  string          revision_id         = 1;
+  string          label               = 2; // "3", "A.1", "B"; may repeat revision_id for a commit
+  uint64          ordinal             = 3;
+  RevisionKind    kind                = 4;
+  repeated string parent_revision_ids = 5;
+  string          author              = 6;
+  int64           timestamp_unix      = 7;
+  string          comment             = 8;
+  string          content_digest      = 9; // "v1:<sha256>" stored with a release; empty otherwise
+  LifecycleState  state               = 10;
+  string          member_digest       = 11; // The whole member's digest where content_digest covers less
+}
+
+/**
+ * Which part of a part a library member provides.
+ */
+enum MemberKind
+{
+  MK_UNKNOWN   = 0;
+  MK_SYMBOL    = 1;
+  MK_FOOTPRINT = 2;
+}
+
+/**
+ * A library member that makes up a part. The member may live in another
+ * source, which member.source names; member.path_hint is "nickname:item". A
+ * member the source's libraries do not hold has an empty item_id, and the
+ * client shows its path_hint without resolving it.
+ */
+message PartMember
+{
+  MemberKind kind        = 1;
+  ItemRef    member      = 2;
+  string     revision_id = 3; // The member revision this part revision uses; empty means its latest release
+}
+
+message ManufacturerPart
+{
+  string manufacturer = 1;
+  string mpn          = 2;
+}
+
+/**
+ * A managed part record (CG_PARTS).
+ */
+message Part
+{
+  string                    part_id            = 1;
+  string                    part_number        = 2;
+  string                    name               = 3;
+  string                    description        = 4;
+  string                    revision_id        = 5;
+  string                    revision_label     = 6;
+  LifecycleState            state              = 7;
+  repeated PartMember       members            = 8;
+  repeated ManufacturerPart manufacturer_parts = 9;
+  string                    url                = 10; // Opens the part in the backend's own UI
+}
+
+enum PermissionState
+{
+  PS_UNKNOWN = 0; // The backend cannot tell in advance; the action is offered and its call decides
+  PS_ALLOWED = 1;
+  PS_DENIED  = 2;
+}
+
+/**
+ * One named permission. The names in use are checkout, checkin, lock,
+ * force_unlock, transition, release, revise, baseline and manage. A backend may add names; a
+ * name it does not report is PS_UNKNOWN.
+ */
+message Permission
+{
+  string          name   = 1;
+  PermissionState state  = 2;
+  string          reason = 3; // Why it is denied, in the user's language
+}
+
+/**
+ * A lifecycle transition offered on one revision.
+ */
+message LifecycleTransition
+{
+  string            target_state_id   = 1;
+  string            display_name      = 2;
+  string            description       = 3;
+  LifecycleCategory target_category   = 4;
+  bool              requires_comment  = 5;
+  bool              requires_approval = 6; // The transition will answer CO_PENDING
+  Permission        permission        = 7; // PS_DENIED shows the transition disabled with its reason
+}
+
+/**
+ * Whether a mutation took effect now or was accepted for a later decision.
+ */
+enum ChangeOutcome
+{
+  CO_UNKNOWN = 0;
+  CO_APPLIED = 1;
+  CO_PENDING = 2; // ET_PENDING_RESOLVED follows when it is decided
+}
+
+/**
+ * A change accepted but decided later, by an approval or a change order.
+ * change_id is always set and stays answerable by GetPendingChange after a
+ * reconnect; eco_id is set only when a change order carries the change.
+ */
+message PendingChange
+{
+  string change_id  = 1;
+  string eco_id     = 2;
+  string display_id = 3;
+  string reason     = 4;
+  string url        = 5;
+}
+
+/**
+ * The fate of a PendingChange.
+ */
+enum PendingChangeStatus
+{
+  PCS_UNKNOWN   = 0;
+  PCS_PENDING   = 1;
+  PCS_APPLIED   = 2;
+  PCS_REJECTED  = 3;
+  PCS_WITHDRAWN = 4;
+}
+
+/**
+ * A change order cited outside its own source.
+ */
+message EcoRef
+{
+  string source = 1;
+  string eco_id = 2;
+}
+
+/**
+ * The error vocabulary. Backend workflow families (ECO routing, BOM
+ * transforms, CI) are not errors here; those workflows live in the backend.
+ */
+enum WorkspaceErrorCode
+{
+  WE_UNKNOWN                  = 0;
+  WE_OK                       = 1;
+  WE_NOT_SUPPORTED            = 2;  // Capability group not advertised, or not for this item
+  WE_NOT_AUTHENTICATED        = 3;
+  WE_AUTH_FAILED              = 4;
+  WE_PERMISSION_DENIED        = 5;
+  WE_NETWORK                  = 6;
+  WE_TIMEOUT                  = 7;
+  WE_LOCK_CONFLICT            = 8;
+  WE_NOT_LOCK_OWNER           = 9;
+  WE_ITEM_NOT_FOUND           = 10;
+  WE_REVISION_NOT_FOUND       = 11;
+  WE_VERSION_CONFLICT         = 12;
+  WE_INVALID_STATE_TRANSITION = 13;
+  WE_NO_CHANGES               = 14;
+  WE_CANCELLED                = 15;
+  WE_INVALID_PARAMETER        = 16;
+  WE_BACKEND_LOST             = 17; // Backend process died mid-request
+  WE_PROTOCOL                 = 18; // Malformed envelope or version mismatch
+  WE_INTERNAL                 = 19;
+  WE_RATE_LIMITED             = 20; // A quota or rate limit was hit
+  WE_BUSY                     = 21; // Another process holds a lock the backend needs
+  WE_UNTRUSTED_HOST           = 22; // The server's host key needs the user's confirmation
+  WE_COPY_BEHIND              = 23; // The shared store moved on without touching the item; update the copy, retry
+}
+
+/**
+ * One field of a credential form.
+ */
+message AuthField
+{
+  string field_id     = 1; // The key in Credentials.fields
+  string display_name = 2;
+  bool   secret       = 3;
+  bool   required     = 4;
+}
+
+/**
+ * The credential form to ask the user to fill in.
+ */
+message AuthChallenge
+{
+  string             realm         = 1; // The server's URL; saved credentials are keyed by its scheme://host[:port]
+  repeated AuthField fields        = 2;
+  string             username_hint = 3;
+}
+
+/**
+ * Who the backend acts as on its server.
+ */
+message Account
+{
+  string user_id      = 1;
+  string display_name = 2;
+  string email        = 3;
+}
+
+/**
+ * A server key the backend does not trust yet.
+ */
+message HostKey
+{
+  string host               = 1;
+  uint32 port               = 2;
+  string key_type           = 3;
+  string sha256_fingerprint = 4;
+}
+
+/**
+ * A typed error carried on every response. code == WE_OK means success. The
+ * detail fields are set only with the codes that name them.
+ */
+message WorkspaceError
+{
+  WorkspaceErrorCode code           = 1;
+  string             message        = 2;
+  uint32             retry_after_ms = 3; // WE_RATE_LIMITED, WE_BUSY; 0 when unknown
+  AuthChallenge      auth_challenge = 4; // WE_NOT_AUTHENTICATED, WE_AUTH_FAILED
+  HostKey            host_key       = 5; // WE_UNTRUSTED_HOST
+  // The transport's own text, for a details view and never the headline. It is shown as sent, so a backend must
+  // strip any credential from it
+  string             detail         = 6;
+}
+
+/**
+ * Types of workspace state transitions. BACKEND_EVENT carries a
+ * backend-defined type string; the framework treats its payload as opaque.
+ */
+enum EventType
+{
+  ET_UNKNOWN                    = 0;
+  ET_WORKSPACE_BOUND            = 1;
+  ET_WORKSPACE_UNBOUND          = 2;
+  ET_WORKSPACE_RECONNECTED      = 3;
+  ET_ITEM_LOCKED                = 4;
+  ET_ITEM_UNLOCKED              = 5;
+  ET_REVISION_CHECKED_IN        = 6;
+  ET_REVISION_CHECKED_OUT       = 7;
+  ET_LIFECYCLE_CATEGORY_CHANGED = 8;
+  ET_BACKEND_EVENT              = 9;
+  ET_REVISION_RELEASED          = 10; // A release or baseline was applied; item_id names the item
+  ET_PENDING_RESOLVED           = 11; // A CO_PENDING change was applied, rejected or withdrawn; re-read item_id
+  ET_CAPABILITIES_CHANGED       = 12; // Re-read GetCapabilities
+  ET_LIBRARY_CHANGED            = 13; // A shared library has upstream changes; item_id is its library_id, or empty
+  ET_PROGRESS                   = 14; // How far a running request has got; see ProgressNotice. Never numbered
+  ET_LOCKS_CHANGED              = 15; // Raised by the client after it reads every lock again; a backend never sends it
+}
+
+/*
+ * How far the request named by the envelope's operation_id has got, in units of phase. total is 0 while unknown.
+ * phase is "receive" for objects arriving from the remote, "checkout" for files written to disk, "index" for the work
+ * after, or any other short text a backend wants shown as it is. A notice is advisory and unnumbered, so a lost one
+ * costs nothing.
+ */
+message ProgressNotice
+{
+  uint64 done  = 1;
+  uint64 total = 2;
+  string phase = 3;
+}
+
+/**
+ * The envelope carried on the event channel. seq is monotonic per workspace so
+ * clients detect gaps and resync via getters. client_identity names the issuer
+ * of the originating mutation.
+ */
+message EventEnvelope
+{
+  EventType      type               = 1;
+  string         workspace_id       = 2;
+  string         item_id            = 3;
+  string         client_identity    = 4;
+  string         payload            = 5; // JSON, opaque to the framework
+  uint64         seq                = 6;
+  int64          timestamp_unix     = 7;
+  string         backend_event_type = 8; // Set only for ET_BACKEND_EVENT
+  string         operation_id       = 9; // Idempotency id of the request that caused the event
+  string         change_id          = 10; // Set only for ET_PENDING_RESOLVED
+  string         path_hint          = 11; // Display text for item_id; never parsed as an id
+  ProgressNotice progress           = 12; // Set only for ET_PROGRESS
+}
