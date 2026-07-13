@@ -575,10 +575,25 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
     std::shared_ptr<RC_ITEM> rc_item = node->m_RcItem;
 
-    if( rc_item->GetErrorCode() == DRCE_UNRESOLVED_VARIABLE
-            && rc_item->GetParent()->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
+    // The tree keeps its RC_ITEMs alive independently of the board, so rc_item->GetParent()
+    // can dangle once the owning marker is deleted (board edited, DRC re-run, undo) while this
+    // modeless dialog stays open.  Recover the still-live marker by matching the shared RC_ITEM
+    // against the board's current markers instead of trusting the raw back-pointer.
+    PCB_MARKER* parentMarker = nullptr;
+
+    for( PCB_MARKER* marker : board->Markers() )
     {
-        m_frame->FocusOnLocation( node->m_RcItem->GetParent()->GetPos(), m_scroll_on_crossprobe );
+        if( marker->GetRCItem() == rc_item )
+        {
+            parentMarker = marker;
+            break;
+        }
+    }
+
+    if( rc_item->GetErrorCode() == DRCE_UNRESOLVED_VARIABLE && parentMarker
+            && parentMarker->GetMarkerType() == MARKER_BASE::MARKER_DRAWING_SHEET )
+    {
+        m_frame->FocusOnLocation( parentMarker->GetPos(), m_scroll_on_crossprobe );
 
         aEvent.Skip();
         return;
