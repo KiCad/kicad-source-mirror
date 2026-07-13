@@ -2515,7 +2515,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
                     TO_UTF8( aWord ), (int) ( aItalic || ( aTextStyle & TEXT_STYLE::ITALIC ) ), (int) aItalic, (int) aBold );
 
         std::vector<PDF_STROKE_FONT_RUN> runs;
-        m_strokeFontManager->EncodeString( aWord, &runs, aWidth, aSize.y, aBold, aItalic );
+        m_strokeFontManager->EncodeString( aWord, &runs, aWidth, aSize.x, aSize.y, aBold, aItalic );
 
         if( !runs.empty() )
         {
@@ -2574,10 +2574,13 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
             const double adj_ctm_e = ctm_e - deltaDev * adj_c;
             const double adj_ctm_f = ctm_f - deltaDev * adj_d;
 
+            // Aspect ratio is baked into the Type3 glyph charprocs; Tz only mirrors when needed.
+            const double tzFactor = wideningFactor < 0 ? -100.0 : 100.0;
+
             fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} Tr {} Tz ",
                         ctm_a, ctm_b, adj_c, adj_d, adj_ctm_e, adj_ctm_f,
                         0, // render_mode
-                        encodeDoubleForPlotter( wideningFactor * 100 ) );
+                        encodeDoubleForPlotter( tzFactor ) );
 
             for( const PDF_STROKE_FONT_RUN& run : runs )
             {
