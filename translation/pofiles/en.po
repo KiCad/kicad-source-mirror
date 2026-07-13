@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 14:13+0300\n"
+"POT-Creation-Date: 2026-07-13 16:46+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1618,8 +1618,8 @@ msgstr ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 
-msgid "Restore auto-saved"
-msgstr "Restore auto-saved"
+msgid "Restore Auto-saved"
+msgstr "Restore Auto-saved"
 
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
@@ -1628,14 +1628,14 @@ msgstr ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 
-msgid "Keep current"
-msgstr "Keep current"
+msgid "Keep Current"
+msgstr "Keep Current"
 
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr "Keeps your saved file as-is and discards the auto-saved changes."
 
-msgid "Keep both"
-msgstr "Keep both"
+msgid "Keep Both"
+msgstr "Keep Both"
 
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
@@ -1644,8 +1644,8 @@ msgstr ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 
-msgid "Cancel open"
-msgstr "Cancel open"
+msgid "Cancel Open"
+msgstr "Cancel Open"
 
 msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
@@ -4074,12 +4074,12 @@ msgstr "Override locks"
 msgid "Edit Grids..."
 msgstr "Edit Grids..."
 
-msgid "Zoom Auto"
-msgstr "Zoom Auto"
-
 #, c-format
 msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
+
+msgid "Zoom Auto"
+msgstr "Zoom Auto"
 
 #, c-format
 msgid "grid %s"
@@ -18868,6 +18868,9 @@ msgstr "Modify sheet pin"
 msgid "Modify schematic item"
 msgstr "Modify schematic item"
 
+msgid "Auto-place Sheet Pins"
+msgstr "Auto-place Sheet Pins"
+
 msgid "No sub schematic found in the current project"
 msgstr "No sub schematic found in the current project"
 
@@ -19539,6 +19542,9 @@ msgstr "Excl. BOM"
 
 msgid "Excl. Board"
 msgstr "Excl. Board"
+
+msgid "Excl. Pos Files"
+msgstr "Excl. Pos Files"
 
 msgid "Hierarchical"
 msgstr "Hierarchical"
@@ -33138,6 +33144,9 @@ msgstr "<no net> will result in an isolated copper island."
 msgid "Zone name:"
 msgstr "Zone name:"
 
+msgid "A unique name for this zone, used to identify it in DRC rules"
+msgstr "A unique name for this zone, used to identify it in DRC rules"
+
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
 "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -35156,6 +35165,13 @@ msgstr "Cannot identify actual file type for '%s'."
 #, c-format
 msgid "Could not transfer model data from file '%s'."
 msgstr "Could not transfer model data from file '%s'."
+
+msgid ""
+"Could not post-process GLB line primitives; the exported model may not "
+"import in strict glTF viewers."
+msgstr ""
+"Could not post-process GLB line primitives; the exported model may not "
+"import in strict glTF viewers."
 
 #, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
@@ -40582,6 +40598,13 @@ msgstr ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 
+msgid ""
+"Groups containing footprints or other items that cannot be mirrored were "
+"skipped."
+msgstr ""
+"Groups containing footprints or other items that cannot be mirrored were "
+"skipped."
+
 msgid "Change Side / Flip"
 msgstr "Change Side / Flip"
 
@@ -43586,8 +43609,8 @@ msgstr "Building zone fills..."
 msgid "Removing isolated copper islands..."
 msgstr "Removing isolated copper islands..."
 
-msgid "Refilling zones after island removal..."
-msgstr "Refilling zones after island removal..."
+msgid "Refilling overlapping zones..."
+msgstr "Refilling overlapping zones..."
 
 #, c-format
 msgid ""
@@ -43788,6 +43811,21 @@ msgstr "Process could not be created"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Could not create user scripting path %s."
+
+#~ msgid "Restore auto-saved"
+#~ msgstr "Restore auto-saved"
+
+#~ msgid "Keep current"
+#~ msgstr "Keep current"
+
+#~ msgid "Keep both"
+#~ msgstr "Keep both"
+
+#~ msgid "Cancel open"
+#~ msgstr "Cancel open"
+
+#~ msgid "Refilling zones after island removal..."
+#~ msgstr "Refilling zones after island removal..."
 
 #~ msgid "Symbol must have at least 1 body style"
 #~ msgstr "Symbol must have at least 1 body style"
