@@ -2134,6 +2134,59 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
     if( !aFont )
         aFont = KIFONT::FONT::GetFont( m_renderSettings->GetDefaultFont() );
 
+    auto computeAlignedStartPos = [&]()
+    {
+        VECTOR2I startPos( aPos );
+
+        if( aFont->IsStroke() )
+        {
+            TEXT_ATTRIBUTES alignAttrs;
+            alignAttrs.m_Size = t_size;
+            alignAttrs.m_StrokeWidth = aWidth;
+            alignAttrs.m_Halign = aH_justify;
+            alignAttrs.m_Valign = aV_justify;
+            alignAttrs.m_Bold = aBold;
+            alignAttrs.m_Italic = aItalic;
+
+            // getLinePositions returns anchor + offset; use (0,0) to get the offset alone.
+            VECTOR2I drawOffset = aFont->GetAlignedDrawPosition( text, VECTOR2I( 0, 0 ), alignAttrs, aFontMetrics );
+
+            // GAL mirrors about the text anchor (GetDrawPos), after placing the unmirrored
+            // cursor.  Negating the X offset before rotation makes the Type3 Tz=-100 origin
+            // land on the mirrored start so ink sits on the correct side of the anchor.
+            if( textMirrored )
+                drawOffset.x = -drawOffset.x;
+
+            RotatePoint( drawOffset, aOrient );
+            startPos = aPos + drawOffset;
+        }
+        else
+        {
+            VECTOR2I full_box( aFont->StringBoundaryLimits( text, t_size, aWidth, aBold, aItalic, aFontMetrics ) );
+
+            if( textMirrored )
+                full_box.x *= -1;
+
+            VECTOR2I box_x( full_box.x, 0 );
+            VECTOR2I box_y( 0, full_box.y );
+
+            RotatePoint( box_x, aOrient );
+            RotatePoint( box_y, aOrient );
+
+            if( aH_justify == GR_TEXT_H_ALIGN_CENTER )
+                startPos -= box_x / 2;
+            else if( aH_justify == GR_TEXT_H_ALIGN_RIGHT )
+                startPos -= box_x;
+
+            if( aV_justify == GR_TEXT_V_ALIGN_CENTER )
+                startPos += box_y / 2;
+            else if( aV_justify == GR_TEXT_V_ALIGN_TOP )
+                startPos += box_y;
+        }
+
+        return startPos;
+    };
+
     // Parse the text for markup
     // IMPORTANT: Use explicit UTF-8 encoding. wxString::ToStdString() is locale-dependent
     // and under C/POSIX locale can drop or mangle non-ASCII, leading to missing CMaps.
@@ -2147,7 +2200,7 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
         wxLogTrace( tracePdfPlotter, "PDF_PLOTTER::Text: Markup parsing failed, falling back to plain text." );
         // Fallback to simple text rendering if parsing fails
         wxStringTokenizer str_tok( text, " ", wxTOKEN_RET_DELIMS );
-        VECTOR2I pos = aPos;
+        VECTOR2I pos = computeAlignedStartPos();
 
         while( str_tok.HasMoreTokens() )
         {
@@ -2158,28 +2211,7 @@ void PDF_PLOTTER::Text( const VECTOR2I&        aPos,
         return;
     }
 
-    // Calculate the full text bounding box for alignment
-    VECTOR2I full_box( aFont->StringBoundaryLimits( text, t_size, aWidth, aBold, aItalic, aFontMetrics ) );
-
-    if( textMirrored )
-        full_box.x *= -1;
-
-    VECTOR2I box_x( full_box.x, 0 );
-    VECTOR2I box_y( 0, full_box.y );
-
-    RotatePoint( box_x, aOrient );
-    RotatePoint( box_y, aOrient );
-
-    VECTOR2I pos( aPos );
-    if( aH_justify == GR_TEXT_H_ALIGN_CENTER )
-        pos -= box_x / 2;
-    else if( aH_justify == GR_TEXT_H_ALIGN_RIGHT )
-        pos -= box_x;
-
-    if( aV_justify == GR_TEXT_V_ALIGN_CENTER )
-        pos += box_y / 2;
-    else if( aV_justify == GR_TEXT_V_ALIGN_TOP )
-        pos += box_y;
+    VECTOR2I pos = computeAlignedStartPos();
 
     // Render markup tree
     std::vector<OVERBAR_INFO> overbars;
@@ -2536,43 +2568,18 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
                 adj_d -= ctm_b * tilt;
             }
 
-            // Realign the Type3 stroke text with where GAL would have drawn the same glyphs.
-            // PDF_PLOTTER::Text() derives its anchor from StringBoundaryLimits, which inflates
-            // the stroke-font bounding box by 3*thickness and does not account for the
-            // m_PDFStrokeFontYOffset baked into every Type3 glyph.  Both issues together shift
-            // the text off its anchor by an amount that depends on the caller's pen width.
-            // The corrections below are the difference between the anchor-relative position
-            // FONT::getLinePositions computes (+yOffsetEm to cancel the glyph yOffset) and
-            // what PDF_PLOTTER::Text already applied.
+            // Cancel m_PDFStrokeFontXOffset / m_PDFStrokeFontYOffset baked into Type3 charprocs.
+            // Horizontal/vertical anchors are already GAL-aligned in PDF_PLOTTER::Text().
+            // X offset is stored in aspect-scaled glyph X units, so cancel with device width.
+            // When Tz mirrors (wideningFactor < 0), glyph X is flipped, so cancel the other way.
+            const double xOffsetEm = ADVANCED_CFG::GetCfg().m_PDFStrokeFontXOffset;
             const double yOffsetEm = ADVANCED_CFG::GetCfg().m_PDFStrokeFontYOffset;
-            const double thicknessDev = userToDeviceSize( (double) aWidth );
-            double deltaDev = 0.0;
+            const double xCancelDev = xOffsetEm * dev_size.x;
+            const double yCancelDev = yOffsetEm * dev_size.y;
+            const double xSign = ( wideningFactor < 0 ) ? -1.0 : 1.0;
 
-            switch( aV_justify )
-            {
-            case GR_TEXT_V_ALIGN_TOP:
-                deltaDev = yOffsetEm * fontSize - 3.0 * thicknessDev;
-                break;
-
-            case GR_TEXT_V_ALIGN_CENTER:
-                deltaDev = ( yOffsetEm - 0.085 ) * fontSize - 1.5 * thicknessDev;
-                break;
-
-            case GR_TEXT_V_ALIGN_BOTTOM:
-                deltaDev = ( yOffsetEm - 0.17 ) * fontSize;
-                break;
-
-            case GR_TEXT_V_ALIGN_INDETERMINATE:
-                break;
-            }
-
-            // Shift the text-matrix origin along the text's local Y axis, which is the
-            // (adj_c, adj_d) column of the text matrix.  Using adj_c/adj_d rather than a raw
-            // sin/cos of aOrient keeps the correction aligned with the rendered glyph Y axis
-            // after italic shear has been applied.  Positive deltaDev moves pos downward in
-            // IU (+Y down) -> upward in glyph-local Y -> subtract from the origin.
-            const double adj_ctm_e = ctm_e - deltaDev * adj_c;
-            const double adj_ctm_f = ctm_f - deltaDev * adj_d;
+            const double adj_ctm_e = ctm_e - yCancelDev * adj_c - xSign * xCancelDev * ctm_a;
+            const double adj_ctm_f = ctm_f - yCancelDev * adj_d - xSign * xCancelDev * ctm_b;
 
             // Aspect ratio is baked into the Type3 glyph charprocs; Tz only mirrors when needed.
             const double tzFactor = wideningFactor < 0 ? -100.0 : 100.0;
