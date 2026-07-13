@@ -102,7 +102,7 @@ enum class CANONICAL_KIND
     TEXT
 };
 
-using CANONICAL_VALUE = std::variant<int64_t, bool, std::string>;
+using CANONICAL_VALUE = std::variant<int64_t, bool, std::string, std::vector<std::string>>;
 
 struct CANONICAL_PROPERTY
 {
@@ -168,6 +168,221 @@ static void addSourceProperties( CANONICAL_SEMANTIC_RECORD& aRecord, const std::
                                                                  property.disposition };
 }
 
+static CANONICAL_PROPERTY unknownEnum( int64_t aValue )
+{
+    return { "unknown:" + std::to_string( aValue ), PROPERTY_DISPOSITION::UNSUPPORTED };
+}
+
+static CANONICAL_PROPERTY canonicalGraphicType( MODEL_GRAPHIC_KIND aKind )
+{
+    switch( aKind )
+    {
+    case MODEL_GRAPHIC_KIND::LINE: return { "line" };
+    case MODEL_GRAPHIC_KIND::POLYLINE: return { "polyline" };
+    case MODEL_GRAPHIC_KIND::RECTANGLE: return { "rectangle" };
+    case MODEL_GRAPHIC_KIND::CIRCLE: return { "circle" };
+    case MODEL_GRAPHIC_KIND::ARC: return { "arc" };
+    case MODEL_GRAPHIC_KIND::TEXT: return { "text" };
+    }
+
+    return unknownEnum( static_cast<int64_t>( aKind ) );
+}
+
+static CANONICAL_PROPERTY canonicalGraphicType( PADS_SCH::GRAPHIC_TYPE aKind )
+{
+    switch( aKind )
+    {
+    case PADS_SCH::GRAPHIC_TYPE::LINE: return { "line" };
+    case PADS_SCH::GRAPHIC_TYPE::POLYLINE: return { "polyline" };
+    case PADS_SCH::GRAPHIC_TYPE::RECTANGLE: return { "rectangle" };
+    case PADS_SCH::GRAPHIC_TYPE::CIRCLE: return { "circle" };
+    case PADS_SCH::GRAPHIC_TYPE::ARC: return { "arc" };
+    }
+
+    return unknownEnum( static_cast<int64_t>( aKind ) );
+}
+
+static CANONICAL_PROPERTY canonicalLineStyle( MODEL_LINE_STYLE aStyle )
+{
+    switch( aStyle )
+    {
+    case MODEL_LINE_STYLE::DEFAULT:
+    case MODEL_LINE_STYLE::SOLID: return { "solid" };
+    case MODEL_LINE_STYLE::DASH: return { "dash" };
+    case MODEL_LINE_STYLE::DOT: return { "dot" };
+    case MODEL_LINE_STYLE::DASH_DOT: return { "dash_dot" };
+    }
+
+    return unknownEnum( static_cast<int64_t>( aStyle ) );
+}
+
+static CANONICAL_PROPERTY canonicalLineStyle( int aStyle )
+{
+    switch( static_cast<int8_t>( aStyle & 0xFF ) )
+    {
+    case 1:
+    case -1: return { "solid" };
+    case 0:
+    case -2: return { "dash" };
+    case -3: return { "dot" };
+    case -4: return { "dash_dot" };
+    case -5: return { "dash_dot_dot" };
+    default: return unknownEnum( aStyle );
+    }
+}
+
+static CANONICAL_PROPERTY canonicalFill( MODEL_FILL_STYLE aFill )
+{
+    switch( aFill )
+    {
+    case MODEL_FILL_STYLE::NONE: return { "none" };
+    case MODEL_FILL_STYLE::FILLED: return { "filled" };
+    case MODEL_FILL_STYLE::HATCHED: return { "hatched" };
+    }
+
+    return unknownEnum( static_cast<int64_t>( aFill ) );
+}
+
+static CANONICAL_PROPERTY canonicalFill( bool aFilled )
+{
+    return { aFilled ? "filled" : "none" };
+}
+
+static CANONICAL_PROPERTY canonicalPinType( uint32_t aType )
+{
+    switch( aType )
+    {
+    case 0: return { "passive" };
+    case 1: return { "input" };
+    case 2: return { "output" };
+    case 3: return { "bidirectional" };
+    case 4: return { "tristate" };
+    case 5: return { "open_collector" };
+    case 6: return { "open_emitter" };
+    case 7: return { "power" };
+    case 8: return { "unspecified" };
+    default: return unknownEnum( aType );
+    }
+}
+
+static CANONICAL_PROPERTY canonicalPinType( PADS_SCH::PIN_TYPE aType )
+{
+    switch( aType )
+    {
+    case PADS_SCH::PIN_TYPE::PASSIVE: return { "passive" };
+    case PADS_SCH::PIN_TYPE::INPUT: return { "input" };
+    case PADS_SCH::PIN_TYPE::OUTPUT: return { "output" };
+    case PADS_SCH::PIN_TYPE::BIDIRECTIONAL: return { "bidirectional" };
+    case PADS_SCH::PIN_TYPE::TRISTATE: return { "tristate" };
+    case PADS_SCH::PIN_TYPE::OPEN_COLLECTOR: return { "open_collector" };
+    case PADS_SCH::PIN_TYPE::OPEN_EMITTER: return { "open_emitter" };
+    case PADS_SCH::PIN_TYPE::POWER: return { "power" };
+    case PADS_SCH::PIN_TYPE::UNSPECIFIED: return { "unspecified" };
+    }
+
+    return unknownEnum( static_cast<int64_t>( aType ) );
+}
+
+static CANONICAL_PROPERTY canonicalPinStyle( uint32_t aStyle )
+{
+    switch( aStyle )
+    {
+    case 0: return { "normal" };
+    case 1: return { "inverted" };
+    case 2: return { "clock" };
+    case 3: return { "inverted_clock" };
+    default: return unknownEnum( aStyle );
+    }
+}
+
+static CANONICAL_PROPERTY canonicalPinStyle( bool aInverted, bool aClock )
+{
+    return canonicalPinStyle( ( aInverted ? 1U : 0U ) | ( aClock ? 2U : 0U ) );
+}
+
+static CANONICAL_PROPERTY canonicalJustification( MODEL_JUSTIFICATION aJustification )
+{
+    switch( aJustification )
+    {
+    case MODEL_JUSTIFICATION::LEFT: return { "left" };
+    case MODEL_JUSTIFICATION::CENTER: return { "center" };
+    case MODEL_JUSTIFICATION::RIGHT: return { "right" };
+    }
+
+    return unknownEnum( static_cast<int64_t>( aJustification ) );
+}
+
+static CANONICAL_PROPERTY canonicalVerticalJustification( MODEL_JUSTIFICATION aJustification )
+{
+    switch( aJustification )
+    {
+    case MODEL_JUSTIFICATION::LEFT: return { "top" };
+    case MODEL_JUSTIFICATION::CENTER: return { "center" };
+    case MODEL_JUSTIFICATION::RIGHT: return { "bottom" };
+    }
+
+    return unknownEnum( static_cast<int64_t>( aJustification ) );
+}
+
+static CANONICAL_PROPERTY canonicalHorizontalJustification( int aJustification )
+{
+    int horizontal =
+            aJustification >= 8 ? aJustification - 8 : ( aJustification >= 2 ? aJustification - 2 : aJustification );
+
+    switch( horizontal )
+    {
+    case 0: return { "left" };
+    case 1: return { "right" };
+    case 4: return { "center" };
+    default: return unknownEnum( aJustification );
+    }
+}
+
+static CANONICAL_PROPERTY canonicalVerticalJustification( int aJustification )
+{
+    if( aJustification >= 8 )
+        return { "center" };
+
+    if( aJustification >= 2 )
+        return { "top" };
+
+    if( aJustification >= 0 )
+        return { "bottom" };
+
+    return unknownEnum( aJustification );
+}
+
+static CANONICAL_PROPERTY canonicalLabelKind( MODEL_LABEL_KIND aKind )
+{
+    switch( aKind )
+    {
+    case MODEL_LABEL_KIND::LOCAL: return { "local" };
+    case MODEL_LABEL_KIND::GLOBAL: return { "global" };
+    case MODEL_LABEL_KIND::HIERARCHICAL: return { "hierarchical" };
+    case MODEL_LABEL_KIND::POWER: return { "power" };
+    case MODEL_LABEL_KIND::BUS: return { "bus" };
+    }
+
+    return unknownEnum( static_cast<int64_t>( aKind ) );
+}
+
+static CANONICAL_PROPERTY canonicalEndpointKind( MODEL_ENDPOINT_KIND aKind )
+{
+    switch( aKind )
+    {
+    case MODEL_ENDPOINT_KIND::INVALID: return { "invalid", PROPERTY_DISPOSITION::UNSUPPORTED };
+    case MODEL_ENDPOINT_KIND::POINT: return { "point" };
+    case MODEL_ENDPOINT_KIND::PIN: return { "pin" };
+    }
+
+    return unknownEnum( static_cast<int64_t>( aKind ) );
+}
+
+static int64_t canonicalAngle( int64_t aAngleTenths )
+{
+    return NormalizeAngle( static_cast<int>( aAngleTenths ) );
+}
+
 static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_SCH_MODEL& aModel )
 {
     std::vector<CANONICAL_SEMANTIC_RECORD> out;
@@ -179,10 +394,10 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
     auto graphic = [&]( const MODEL_GRAPHIC& aGraphic, int aSheet )
     {
         auto& r = add( CANONICAL_KIND::GRAPHIC, aSheet );
-        r.properties["type"] = { static_cast<int64_t>( aGraphic.kind ) };
-        r.properties["line_style"] = { static_cast<int64_t>( aGraphic.lineStyle ) };
+        r.properties["type"] = canonicalGraphicType( aGraphic.kind );
+        r.properties["line_style"] = canonicalLineStyle( aGraphic.lineStyle );
         r.properties["stroke_half_mils"] = { aGraphic.strokeWidth };
-        r.properties["fill"] = { aGraphic.fill != MODEL_FILL_STYLE::NONE };
+        r.properties["fill"] = canonicalFill( aGraphic.fill );
         r.properties["text"] = { aGraphic.text.text.ToStdString() };
         r.properties["font"] = { aGraphic.presentation.font.text.ToStdString() };
         r.properties["visible"] = { aGraphic.presentation.visible };
@@ -197,7 +412,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
         r.properties["visible"] = { aField.visible };
         r.properties["font"] = { aField.presentation.font.text.ToStdString() };
         r.geometry.points.push_back( point( aField.position ) );
-        r.geometry.angleTenths = aField.angle;
+        r.geometry.angleTenths = canonicalAngle( aField.angle );
         addSourceProperties( r, aField.properties );
     };
     auto& settings = add( CANONICAL_KIND::SETTINGS, -1 );
@@ -229,13 +444,13 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
         {
             auto& r = add( CANONICAL_KIND::PIN, d.source.sheet, p.number.text.ToStdString() );
             r.properties["name"] = { p.name.text.ToStdString() };
-            r.properties["type"] = { int64_t( p.electricalType ) };
-            r.properties["style"] = { int64_t( p.graphicStyle ) };
+            r.properties["type"] = canonicalPinType( p.electricalType );
+            r.properties["style"] = canonicalPinStyle( p.graphicStyle );
             r.properties["length_half_mils"] = { p.length };
             r.properties["font"] = { p.presentation.font.text.ToStdString() };
             r.properties["visible"] = { p.presentation.visible };
             r.geometry.points.push_back( point( p.position ) );
-            r.geometry.angleTenths = p.angle;
+            r.geometry.angleTenths = canonicalAngle( p.angle );
             addSourceProperties( r, p.properties );
         }
         for( const auto& f : d.fields )
@@ -248,13 +463,43 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
         for( const auto& g : p.gates )
         {
             auto& r = add( CANONICAL_KIND::GATE, g.source.sheet, std::to_string( g.unit ) );
-            r.properties["definition_id"] = { int64_t( g.definition.id.Value() ) };
+            auto  definition = std::ranges::find_if( aModel.definitions,
+                                                     [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                                     {
+                                                        return aDefinition.id == g.definition.id;
+                                                    } );
+            r.properties["definition"] = definition == aModel.definitions.end()
+                                                 ? unknownEnum( g.definition.id.Value() )
+                                                 : CANONICAL_PROPERTY{ definition->name.text.ToStdString() };
             addSourceProperties( r, g.properties );
             for( size_t i = 0; i < g.pins.size(); ++i )
             {
-                auto& m = add( CANONICAL_KIND::GATE_PIN_MAPPING, g.source.sheet,
-                               std::to_string( g.unit ) + ":" + std::to_string( i ) );
-                m.properties["pin_id"] = { int64_t( g.pins[i].id.Value() ) };
+                auto&                       m = add( CANONICAL_KIND::GATE_PIN_MAPPING, g.source.sheet,
+                                                     std::to_string( g.unit ) + ":" + std::to_string( i ) );
+                const MODEL_PIN_DEFINITION* pin = nullptr;
+
+                if( definition != aModel.definitions.end() )
+                {
+                    auto resolved = std::ranges::find_if( definition->pins,
+                                                          [&]( const MODEL_PIN_DEFINITION& aPin )
+                                                          {
+                                                              return aPin.id == g.pins[i].id;
+                                                          } );
+
+                    if( resolved != definition->pins.end() )
+                        pin = &*resolved;
+                }
+
+                if( pin )
+                {
+                    m.properties["pin_number"] = { pin->number.text.ToStdString() };
+                    m.properties["pin_name"] = { pin->name.text.ToStdString() };
+                }
+                else
+                {
+                    m.properties["pin_number"] = unknownEnum( g.pins[i].id.Value() );
+                    m.properties["pin_name"] = unknownEnum( g.pins[i].id.Value() );
+                }
             }
         }
         for( const auto& f : p.fields )
@@ -266,7 +511,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
         r.properties["unit"] = { int64_t( p.unit ) };
         r.properties["mirrored"] = { p.mirrored };
         r.geometry.points.push_back( point( p.position ) );
-        r.geometry.angleTenths = p.angle;
+        r.geometry.angleTenths = canonicalAngle( p.angle );
         addSourceProperties( r, p.properties );
         for( const auto& f : p.fields )
             field( f, p.source.sheet );
@@ -282,13 +527,44 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
             for( size_t i = 0; i < c.endpoints.size(); ++i )
             {
                 const auto prefix = "endpoint_" + std::to_string( i ) + "_";
-                r.properties[prefix + "kind"] = { int64_t( c.endpoints[i].kind ) };
+                r.properties[prefix + "kind"] = canonicalEndpointKind( c.endpoints[i].kind );
 
                 if( c.endpoints[i].placement )
-                    r.properties[prefix + "placement_id"] = { int64_t( c.endpoints[i].placement->id.Value() ) };
+                {
+                    auto placement = std::ranges::find_if( aModel.placements,
+                                                           [&]( const MODEL_PLACEMENT& aPlacement )
+                                                           {
+                                                               return aPlacement.id == c.endpoints[i].placement->id;
+                                                           } );
+                    r.properties[prefix + "placement"] =
+                            placement == aModel.placements.end()
+                                    ? unknownEnum( c.endpoints[i].placement->id.Value() )
+                                    : CANONICAL_PROPERTY{ placement->reference.text.ToStdString() };
+                }
 
                 if( c.endpoints[i].pin )
-                    r.properties[prefix + "pin_id"] = { int64_t( c.endpoints[i].pin->id.Value() ) };
+                {
+                    auto definition = std::ranges::find_if( aModel.definitions,
+                                                            [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                                            {
+                                                                return std::ranges::any_of(
+                                                                        aDefinition.pins,
+                                                                        [&]( const MODEL_PIN_DEFINITION& aPin )
+                                                                        {
+                                                                            return aPin.id == c.endpoints[i].pin->id;
+                                                                        } );
+                                                            } );
+                    r.properties[prefix + "pin_number"] =
+                            definition == aModel.definitions.end()
+                                    ? unknownEnum( c.endpoints[i].pin->id.Value() )
+                                    : CANONICAL_PROPERTY{ std::ranges::find_if( definition->pins,
+                                                                                [&]( const MODEL_PIN_DEFINITION& aPin )
+                                                                                {
+                                                                                    return aPin.id
+                                                                                           == c.endpoints[i].pin->id;
+                                                                                } )
+                                                                  ->number.text.ToStdString() };
+                }
             }
             for( const auto& p : c.vertices )
                 r.geometry.points.push_back( point( p ) );
@@ -297,7 +573,31 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
     }
     for( const auto& b : aModel.buses )
     {
-        auto& r = add( CANONICAL_KIND::BUS, b.source.sheet, b.name.text.ToStdString() );
+        auto netName = [&]( NET_ID aId ) -> CANONICAL_PROPERTY
+        {
+            auto net = std::ranges::find_if( aModel.nets,
+                                             [&]( const MODEL_NET& aNet )
+                                             {
+                                                 return aNet.id == aId;
+                                             } );
+
+            if( net == aModel.nets.end() )
+                return unknownEnum( aId.Value() );
+
+            return { net->name.text.ToStdString() };
+        };
+        auto&                    r = add( CANONICAL_KIND::BUS, b.source.sheet, b.name.text.ToStdString() );
+        std::vector<std::string> aliases;
+        std::vector<std::string> members;
+
+        for( const SOURCE_STRING& alias : b.aliases )
+            aliases.push_back( alias.text.ToStdString() );
+
+        for( const NET_REFERENCE& member : b.memberNets )
+            members.push_back( std::get<std::string>( netName( member.id ).value ) );
+
+        r.properties["aliases"] = { aliases };
+        r.properties["member_nets"] = { members };
         for( const auto& p : b.vertices )
             r.geometry.points.push_back( point( p ) );
         addSourceProperties( r, b.properties );
@@ -305,27 +605,31 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
         {
             auto& e = add( CANONICAL_KIND::BUS_ENTRY, b.entries[i].source.sheet, std::to_string( i ) );
             e.properties["member_index"] = { int64_t( i ) };
+            e.properties["member_net"] = netName( b.entries[i].memberNet.id );
             e.geometry.points.push_back( point( b.entries[i].position ) );
             addSourceProperties( e, b.entries[i].properties );
         }
         for( const auto& a : b.aliases )
             add( CANONICAL_KIND::BUS_ALIAS, a.source.sheet, a.text.ToStdString() );
         for( size_t i = 0; i < b.memberNets.size(); ++i )
-            add( CANONICAL_KIND::BUS_MEMBER, b.memberNets[i].source.sheet, std::to_string( i ) );
+        {
+            auto& member = add( CANONICAL_KIND::BUS_MEMBER, b.memberNets[i].source.sheet, std::to_string( i ) );
+            member.properties["member_net"] = netName( b.memberNets[i].id );
+        }
     }
     for( const auto& l : aModel.labels )
     {
         auto& r = add( CANONICAL_KIND::LABEL, l.source.sheet, l.text.text.ToStdString() );
-        r.properties["kind"] = { int64_t( l.kind ) };
+        r.properties["kind"] = canonicalLabelKind( l.kind );
         r.properties["visible"] = { l.presentation.visible };
         r.properties["font"] = { l.presentation.font.text.ToStdString() };
         r.properties["bold"] = { l.presentation.bold };
         r.properties["italic"] = { l.presentation.italic };
         r.properties["underline"] = { l.presentation.underline };
-        r.properties["horizontal_justification"] = { int64_t( l.presentation.horizontalJustification ) };
-        r.properties["vertical_justification"] = { int64_t( l.presentation.verticalJustification ) };
+        r.properties["horizontal_justification"] = canonicalJustification( l.presentation.horizontalJustification );
+        r.properties["vertical_justification"] = canonicalVerticalJustification( l.presentation.verticalJustification );
         r.geometry.points.push_back( point( l.position ) );
-        r.geometry.angleTenths = l.angle;
+        r.geometry.angleTenths = canonicalAngle( l.angle );
         addSourceProperties( r, l.properties );
     }
     for( const auto& j : aModel.junctions )
@@ -342,10 +646,10 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
         r.properties["bold"] = { t.presentation.bold };
         r.properties["italic"] = { t.presentation.italic };
         r.properties["underline"] = { t.presentation.underline };
-        r.properties["horizontal_justification"] = { int64_t( t.presentation.horizontalJustification ) };
-        r.properties["vertical_justification"] = { int64_t( t.presentation.verticalJustification ) };
+        r.properties["horizontal_justification"] = canonicalJustification( t.presentation.horizontalJustification );
+        r.properties["vertical_justification"] = canonicalVerticalJustification( t.presentation.verticalJustification );
         r.geometry.points.push_back( point( t.position ) );
-        r.geometry.angleTenths = t.angle;
+        r.geometry.angleTenths = canonicalAngle( t.angle );
         addSourceProperties( r, t.properties );
     }
     for( const auto& g : aModel.graphics )
@@ -370,10 +674,10 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
     auto addGraphic = [&]( const PADS_SCH::SYMBOL_GRAPHIC& aGraphic, int aSheet )
     {
         auto& r = add( CANONICAL_KIND::GRAPHIC, aSheet );
-        r.properties["type"] = { int64_t( aGraphic.type ) };
-        r.properties["line_style"] = { int64_t( aGraphic.line_style ) };
+        r.properties["type"] = canonicalGraphicType( aGraphic.type );
+        r.properties["line_style"] = canonicalLineStyle( aGraphic.line_style );
         r.properties["stroke_half_mils"] = { int64_t( std::llround( aGraphic.line_width * 2 ) ) };
-        r.properties["fill"] = { aGraphic.filled };
+        r.properties["fill"] = canonicalFill( aGraphic.filled );
         r.properties["text"] = { std::string() };
         r.properties["font"] = { std::string() };
         r.properties["visible"] = { true };
@@ -398,11 +702,11 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         {
             auto& r = add( CANONICAL_KIND::PIN, -1, pin.number );
             r.properties["name"] = { pin.name };
-            r.properties["type"] = { int64_t( pin.type ) };
-            r.properties["style"] = { int64_t( ( pin.inverted ? 1 : 0 ) | ( pin.clock ? 2 : 0 ) ) };
+            r.properties["type"] = canonicalPinType( pin.type );
+            r.properties["style"] = canonicalPinStyle( pin.inverted, pin.clock );
             r.properties["length_half_mils"] = { int64_t( std::llround( pin.length * 2 ) ) };
             r.geometry.points.push_back( point( pin.position ) );
-            r.geometry.angleTenths = int64_t( std::llround( pin.rotation * 10 ) );
+            r.geometry.angleTenths = canonicalAngle( std::llround( pin.rotation * 10 ) );
         }
         for( const auto& t : d.texts )
         {
@@ -411,7 +715,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             r.properties["visible"] = { t.visible };
             r.properties["font"] = { t.font_name };
             r.geometry.points.push_back( point( t.position ) );
-            r.geometry.angleTenths = int64_t( std::llround( t.rotation * 10 ) );
+            r.geometry.angleTenths = canonicalAngle( std::llround( t.rotation * 10 ) );
         }
     }
     for( const auto& [name, part] : aParser.GetPartTypes() )
@@ -419,12 +723,15 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         add( CANONICAL_KIND::PART_TYPE, -1, name );
         for( size_t i = 0; i < part.gates.size(); ++i )
         {
-            add( CANONICAL_KIND::GATE, -1, std::to_string( i + 1 ) );
+            auto& gate = add( CANONICAL_KIND::GATE, -1, std::to_string( i + 1 ) );
+            gate.properties["definition"] = { part.gates[i].decal_names.empty() ? std::string()
+                                                                                : part.gates[i].decal_names.front() };
             for( size_t j = 0; j < part.gates[i].pins.size(); ++j )
             {
                 auto& r = add( CANONICAL_KIND::GATE_PIN_MAPPING, -1,
                                std::to_string( i + 1 ) + ":" + std::to_string( j ) );
                 r.properties["pin_number"] = { part.gates[i].pins[j].pin_id };
+                r.properties["pin_name"] = { part.gates[i].pins[j].pin_name };
             }
         }
     }
@@ -434,7 +741,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         r.properties["unit"] = { int64_t( x.gate_number ) };
         r.properties["mirrored"] = { x.mirror_flags != 0 };
         r.geometry.points.push_back( point( x.position ) );
-        r.geometry.angleTenths = int64_t( std::llround( x.rotation * 10 ) );
+        r.geometry.angleTenths = canonicalAngle( std::llround( x.rotation * 10 ) );
         for( const auto& f : x.attributes )
         {
             auto& q = add( CANONICAL_KIND::FIELD, x.sheet_number - 1, f.name );
@@ -442,7 +749,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             q.properties["visible"] = { f.visible };
             q.properties["font"] = { f.font_name };
             q.geometry.points.push_back( point( f.position ) );
-            q.geometry.angleTenths = int64_t( std::llround( f.rotation * 10 ) );
+            q.geometry.angleTenths = canonicalAngle( std::llround( f.rotation * 10 ) );
         }
     }
     for( const auto& n : aParser.GetSignals() )
@@ -459,28 +766,43 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
     for( const auto& b : aParser.GetBuses() )
     {
         auto& r = add( CANONICAL_KIND::BUS, b.sheet_number - 1, b.name );
+        r.properties["aliases"] = { b.aliases };
+        r.properties["member_nets"] = { b.member_nets };
         for( const auto& q : b.path )
             r.geometry.points.push_back( point( q ) );
         for( size_t i = 0; i < b.entries.size(); ++i )
         {
             auto& e = add( CANONICAL_KIND::BUS_ENTRY, b.sheet_number - 1, std::to_string( i ) );
             e.properties["member_index"] = { int64_t( i ) };
+            e.properties["member_net"] = { b.entries[i].member_net };
             e.geometry.points.push_back( point( b.entries[i].position ) );
         }
         for( const auto& a : b.aliases )
             add( CANONICAL_KIND::BUS_ALIAS, b.sheet_number - 1, a );
         for( size_t i = 0; i < b.member_nets.size(); ++i )
-            add( CANONICAL_KIND::BUS_MEMBER, b.sheet_number - 1, std::to_string( i ) );
+        {
+            auto& member = add( CANONICAL_KIND::BUS_MEMBER, b.sheet_number - 1, std::to_string( i ) );
+            member.properties["member_net"] = { b.member_nets[i] };
+
+            if( std::ranges::none_of( aParser.GetSignals(),
+                                      [&]( const PADS_SCH::SCH_SIGNAL& aSignal )
+                                      {
+                                          return aSignal.name == b.member_nets[i];
+                                      } ) )
+            {
+                add( CANONICAL_KIND::NET, b.sheet_number - 1, b.member_nets[i] );
+            }
+        }
     }
     for( const auto& l : aParser.GetOffPageConnectors() )
     {
         if( l.symbol_lib.starts_with( "@@@B" ) )
             continue;
         auto& r = add( CANONICAL_KIND::LABEL, l.source_sheet - 1, l.signal_name );
-        r.properties["kind"] = { int64_t( 0 ) };
+        r.properties["kind"] = { "local" };
         r.properties["visible"] = { true };
         r.geometry.points.push_back( point( l.position ) );
-        r.geometry.angleTenths = int64_t( l.rotation * 10 );
+        r.geometry.angleTenths = canonicalAngle( l.rotation * 10 );
     }
     for( const auto& j : aParser.GetTiedDots() )
         add( CANONICAL_KIND::JUNCTION, j.sheet_number - 1 ).geometry.points.push_back( point( j.position ) );
@@ -489,7 +811,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         auto& r = add( CANONICAL_KIND::TEXT, t.sheet_number - 1, t.content );
         r.properties["visible"] = { true };
         r.geometry.points.push_back( point( t.position ) );
-        r.geometry.angleTenths = int64_t( t.rotation * 10 );
+        r.geometry.angleTenths = canonicalAngle( t.rotation * 10 );
     }
     for( const auto& lines : aParser.GetLinesItems() )
     {
@@ -501,20 +823,22 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             auto& r = add( CANONICAL_KIND::TEXT, lines.sheet_number - 1, t.content );
             r.properties["visible"] = { true };
             r.properties["font"] = { t.font_name };
-            r.properties["horizontal_justification"] = { int64_t( t.justification ) };
+            r.properties["horizontal_justification"] = canonicalHorizontalJustification( t.justification );
+            r.properties["vertical_justification"] = canonicalVerticalJustification( t.justification );
             r.geometry.points.push_back( point( t.position ) );
-            r.geometry.angleTenths = int64_t( t.rotation * 10 );
+            r.geometry.angleTenths = canonicalAngle( t.rotation * 10 );
         }
     }
     for( const auto& label : aParser.GetNetNameLabels() )
     {
         auto& r = add( CANONICAL_KIND::LABEL, -1, label.net_name );
-        r.properties["kind"] = { int64_t( 0 ) };
+        r.properties["kind"] = { "local" };
         r.properties["visible"] = { true };
         r.properties["font"] = { label.font_name };
-        r.properties["horizontal_justification"] = { int64_t( label.justification ) };
+        r.properties["horizontal_justification"] = canonicalHorizontalJustification( label.justification );
+        r.properties["vertical_justification"] = canonicalVerticalJustification( label.justification );
         r.geometry.points.push_back( point( PADS_SCH::POINT{ double( label.x_offset ), double( label.y_offset ) } ) );
-        r.geometry.angleTenths = int64_t( label.rotation * 10 );
+        r.geometry.angleTenths = canonicalAngle( label.rotation * 10 );
     }
     return out;
 }
@@ -935,6 +1259,15 @@ BOOST_AUTO_TEST_CASE( BinaryAndAsciiBusSnapshotsMatch )
     sheet.defaultBusWidth = 50;
     binary.sheets.push_back( sheet );
 
+    for( int i = 0; i < 3; ++i )
+    {
+        MODEL_NET net;
+        net.id = NET_ID( i + 1 );
+        net.source = source;
+        net.name = string( wxString::Format( wxS( "DATA%d" ), i ) );
+        binary.nets.push_back( net );
+    }
+
     MODEL_BUS bus;
     bus.id = BUS_ID( 2 );
     bus.source = source;
@@ -944,12 +1277,133 @@ BOOST_AUTO_TEST_CASE( BinaryAndAsciiBusSnapshotsMatch )
 
     for( int i = 0; i < 3; ++i )
     {
-        bus.entries.push_back( { source, { 8000 + i * 2000, 14000, source } } );
+        bus.entries.push_back( { source, { 8000 + i * 2000, 14000, source }, { NET_ID( i + 1 ), source } } );
         bus.memberNets.push_back( { NET_ID( i + 1 ), source } );
     }
 
     binary.buses.push_back( bus );
     BOOST_CHECK( snapshotsMatch( normalizeBinaryModel( binary ), normalizeAsciiModel( asciiParser ) ) );
+
+    std::vector<CANONICAL_SEMANTIC_RECORD> records = normalizeBinaryModel( binary );
+    auto                                   entry = std::ranges::find_if( records,
+                                                                         []( const CANONICAL_SEMANTIC_RECORD& aRecord )
+                                                                         {
+                                           return aRecord.kind == CANONICAL_KIND::BUS_ENTRY;
+                                       } );
+    BOOST_REQUIRE( entry != records.end() );
+    BOOST_CHECK( entry->properties.at( "member_net" ).value == CANONICAL_VALUE( std::string( "DATA0" ) ) );
+    auto busRecord = std::ranges::find_if( records,
+                                           []( const CANONICAL_SEMANTIC_RECORD& aRecord )
+                                           {
+                                               return aRecord.kind == CANONICAL_KIND::BUS;
+                                           } );
+    BOOST_REQUIRE( busRecord != records.end() );
+    BOOST_CHECK( busRecord->properties.at( "member_nets" ).value
+                 == CANONICAL_VALUE( std::vector<std::string>{ "DATA0", "DATA1", "DATA2" } ) );
+
+    PADS_SCH_MODEL wrongMapping = binary;
+    wrongMapping.buses[0].entries[0].memberNet.id = NET_ID( 2 );
+    BOOST_CHECK( !snapshotsMatch( normalizeBinaryModel( wrongMapping ), normalizeAsciiModel( asciiParser ) ) );
+
+    PADS_SCH_MODEL missingMember = binary;
+    missingMember.buses[0].memberNets.pop_back();
+    BOOST_CHECK( !snapshotsMatch( normalizeBinaryModel( missingMember ), normalizeAsciiModel( asciiParser ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( CanonicalEnumMappings )
+{
+    BOOST_CHECK( canonicalGraphicType( MODEL_GRAPHIC_KIND::RECTANGLE ).value
+                 == CANONICAL_VALUE( std::string( "rectangle" ) ) );
+    BOOST_CHECK( canonicalGraphicType( MODEL_GRAPHIC_KIND::CIRCLE ).value
+                 == CANONICAL_VALUE( std::string( "circle" ) ) );
+    BOOST_CHECK( canonicalGraphicType( MODEL_GRAPHIC_KIND::ARC ).value == CANONICAL_VALUE( std::string( "arc" ) ) );
+    BOOST_CHECK( canonicalGraphicType( MODEL_GRAPHIC_KIND::POLYLINE ).value
+                 == CANONICAL_VALUE( std::string( "polyline" ) ) );
+    BOOST_CHECK( canonicalGraphicType( PADS_SCH::GRAPHIC_TYPE::RECTANGLE ).value
+                 == CANONICAL_VALUE( std::string( "rectangle" ) ) );
+    BOOST_CHECK( canonicalGraphicType( PADS_SCH::GRAPHIC_TYPE::CIRCLE ).value
+                 == CANONICAL_VALUE( std::string( "circle" ) ) );
+    BOOST_CHECK( canonicalGraphicType( PADS_SCH::GRAPHIC_TYPE::ARC ).value == CANONICAL_VALUE( std::string( "arc" ) ) );
+    BOOST_CHECK( canonicalGraphicType( PADS_SCH::GRAPHIC_TYPE::POLYLINE ).value
+                 == CANONICAL_VALUE( std::string( "polyline" ) ) );
+    BOOST_CHECK( canonicalLineStyle( MODEL_LINE_STYLE::DEFAULT ).value == CANONICAL_VALUE( std::string( "solid" ) ) );
+    BOOST_CHECK( canonicalLineStyle( 255 ).value == CANONICAL_VALUE( std::string( "solid" ) ) );
+    BOOST_CHECK( canonicalLineStyle( 0 ).value == CANONICAL_VALUE( std::string( "dash" ) ) );
+    BOOST_CHECK( canonicalLineStyle( 42 ).disposition == PROPERTY_DISPOSITION::UNSUPPORTED );
+    BOOST_CHECK( canonicalFill( MODEL_FILL_STYLE::HATCHED ).value == CANONICAL_VALUE( std::string( "hatched" ) ) );
+    BOOST_CHECK( canonicalFill( true ).value == CANONICAL_VALUE( std::string( "filled" ) ) );
+    BOOST_CHECK( canonicalPinType( uint32_t( 3 ) ).value == CANONICAL_VALUE( std::string( "bidirectional" ) ) );
+    BOOST_CHECK( canonicalPinType( PADS_SCH::PIN_TYPE::BIDIRECTIONAL ).value
+                 == CANONICAL_VALUE( std::string( "bidirectional" ) ) );
+    BOOST_CHECK( canonicalPinStyle( 3 ).value == CANONICAL_VALUE( std::string( "inverted_clock" ) ) );
+    BOOST_CHECK( canonicalPinStyle( true, true ).value == CANONICAL_VALUE( std::string( "inverted_clock" ) ) );
+    BOOST_CHECK( canonicalJustification( MODEL_JUSTIFICATION::CENTER ).value
+                 == CANONICAL_VALUE( std::string( "center" ) ) );
+    BOOST_CHECK( canonicalHorizontalJustification( 12 ).value == CANONICAL_VALUE( std::string( "center" ) ) );
+    BOOST_CHECK( canonicalVerticalJustification( 12 ).value == CANONICAL_VALUE( std::string( "center" ) ) );
+    BOOST_CHECK( canonicalLabelKind( MODEL_LABEL_KIND::HIERARCHICAL ).value
+                 == CANONICAL_VALUE( std::string( "hierarchical" ) ) );
+    BOOST_CHECK( canonicalEndpointKind( MODEL_ENDPOINT_KIND::PIN ).value == CANONICAL_VALUE( std::string( "pin" ) ) );
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+    BOOST_REQUIRE( parser.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/multigate.txt" ) );
+    const PADS_SCH::SYMBOL_GRAPHIC* serializedGraphic = nullptr;
+
+    for( const PADS_SCH::SYMBOL_DEF& definition : parser.GetSymbolDefs() )
+    {
+        auto graphic = std::ranges::find_if( definition.graphics,
+                                             []( const PADS_SCH::SYMBOL_GRAPHIC& aGraphic )
+                                             {
+                                                 return aGraphic.line_style == 255;
+                                             } );
+
+        if( graphic != definition.graphics.end() )
+        {
+            serializedGraphic = &*graphic;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( serializedGraphic );
+    BOOST_CHECK( canonicalLineStyle( serializedGraphic->line_style )
+                 == canonicalLineStyle( MODEL_LINE_STYLE::DEFAULT ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( GatePinMappingsUseSemanticPinIdentity )
+{
+    SOURCE_PROVENANCE source{ wxS( "mapping.sch" ), 0x000D, wxS( "synthetic" ), 1, 0, 0, 0, 0 };
+    auto              string = [&]( const wxString& aText )
+    {
+        SOURCE_STRING result;
+        result.text = aText;
+        result.source = source;
+        return result;
+    };
+
+    PADS_SCH_MODEL          model;
+    MODEL_SYMBOL_DEFINITION definition;
+    definition.id = DEFINITION_ID( 1 );
+    definition.source = source;
+    definition.pins.push_back( { PIN_ID( 91 ), source, string( wxS( "A1" ) ), string( wxS( "CLK" ) ) } );
+    model.definitions.push_back( definition );
+
+    MODEL_PART_TYPE part;
+    part.source = source;
+    part.gates.push_back( { GATE_ID( 2 ), source, { definition.id, source }, 1, { { PIN_ID( 91 ), source } } } );
+    model.partTypes.push_back( part );
+
+    const auto records = normalizeBinaryModel( model );
+    auto       mapping = std::ranges::find_if( records,
+                                               []( const CANONICAL_SEMANTIC_RECORD& aRecord )
+                                               {
+                                             return aRecord.kind == CANONICAL_KIND::GATE_PIN_MAPPING;
+                                         } );
+    BOOST_REQUIRE( mapping != records.end() );
+    BOOST_CHECK( mapping->properties.at( "pin_number" ).value == CANONICAL_VALUE( std::string( "A1" ) ) );
+    BOOST_CHECK( mapping->properties.at( "pin_name" ).value == CANONICAL_VALUE( std::string( "CLK" ) ) );
+    BOOST_CHECK( !mapping->properties.contains( "pin_id" ) );
 }
 
 
