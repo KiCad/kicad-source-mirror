@@ -35,6 +35,7 @@
 #include <math/vector3.h>
 #include <geometry/shape_poly_set.h>
 #include <board_stackup_manager/board_stackup.h>
+#include <reporter.h>
 
 /**
  * Default distance between points to treat them as separate ones (mm)
@@ -419,6 +420,11 @@ private:
 
     /// The current output format for created file
     OUTPUT_FORMAT m_outFmt;
+
+    /// Thread-safe wrapper around the caller's reporter.  CreatePCB fuses and cuts on worker
+    /// threads that report through m_reporter, so it points at this wrapper rather than the raw
+    /// reporter to serialize those calls.
+    SYNC_REPORTER m_syncReporter;
     REPORTER*     m_reporter;
 };
 

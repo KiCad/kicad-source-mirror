@@ -26,6 +26,7 @@
 #include <wx/log.h>
 #include <vector>
 #include <sstream>
+#include <thread>
 
 // Mock TEST_REPORTER to test base REPORTER functionality
 class TEST_REPORTER : public REPORTER
@@ -483,6 +484,60 @@ BOOST_AUTO_TEST_CASE( CliProgressReporter_VerboseToggle )
 
     // Restore original state
     reporter.SetVerbose( originalState );
+}
+
+BOOST_AUTO_TEST_CASE( SyncReporter_ForwardsEveryEntryPoint )
+{
+    TEST_REPORTER sink;
+    SYNC_REPORTER sync( sink );
+
+    sync.Report( wxT( "body" ), RPT_SEVERITY_INFO );
+    sync.ReportHead( wxT( "head" ), RPT_SEVERITY_WARNING );
+    sync.ReportTail( wxT( "tail" ), RPT_SEVERITY_ERROR );
+
+    // Everything must land on the wrapped reporter, and the queries must reflect its state rather
+    // than the wrapper's unused base mask.
+    BOOST_CHECK_EQUAL( sink.GetMessageCount(), 3 );
+    BOOST_CHECK( sync.HasMessage() );
+    BOOST_CHECK( sync.HasMessageOfSeverity( RPT_SEVERITY_INFO ) );
+    BOOST_CHECK( sync.HasMessageOfSeverity( RPT_SEVERITY_WARNING ) );
+    BOOST_CHECK( sync.HasMessageOfSeverity( RPT_SEVERITY_ERROR ) );
+
+    sync.Clear();
+
+    BOOST_CHECK( !sink.HasMessage() );
+    BOOST_CHECK( !sync.HasMessage() );
+    BOOST_CHECK_EQUAL( sink.GetMessageCount(), 0 );
+}
+
+BOOST_AUTO_TEST_CASE( SyncReporter_SerializesConcurrentReports )
+{
+    // The wrapped reporter is not thread-safe (plain std::vector + counter).  SYNC_REPORTER must
+    // serialize access so concurrent workers neither lose updates nor corrupt it.  Without the
+    // wrapper's lock this races and the final count is wrong (or it crashes under a sanitizer).
+    TEST_REPORTER sink;
+    SYNC_REPORTER sync( sink );
+
+    constexpr int threadCount = 8;
+    constexpr int perThread = 2000;
+
+    std::vector<std::thread> workers;
+    workers.reserve( threadCount );
+
+    for( int t = 0; t < threadCount; ++t )
+    {
+        workers.emplace_back(
+                [&sync]()
+                {
+                    for( int i = 0; i < perThread; ++i )
+                        sync.Report( wxT( "concurrent" ), RPT_SEVERITY_INFO );
+                } );
+    }
+
+    for( std::thread& worker : workers )
+        worker.join();
+
+    BOOST_CHECK_EQUAL( sink.GetMessageCount(), threadCount * perThread );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
