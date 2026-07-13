@@ -109,6 +109,8 @@ public:
         return *this;
     }
 
+    ~BOARD_ITEM() override;
+
     virtual void CopyFrom( const BOARD_ITEM* aOther );
 
     bool IsGroupableType() const;

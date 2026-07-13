@@ -91,6 +91,18 @@ BOARD* BOARD_ITEM::GetBoard()
 }
 
 
+BOARD_ITEM::~BOARD_ITEM()
+{
+    // Catch-all safety net for the board identity cache.  We remove individually in ::Remove() but
+    // some paths miss this, so if we are dtor-ing a board item make sure that it is fully uncached
+    if( Type() != PCB_T )
+    {
+        if( BOARD* board = GetBoard(); board && board->IsItemIndexedById( this ) )
+            board->UncacheItemByPtr( this );
+    }
+}
+
+
 FOOTPRINT* BOARD_ITEM::GetParentFootprint() const
 {
     return static_cast<FOOTPRINT*>( findParent( PCB_FOOTPRINT_T ) );
