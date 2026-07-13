@@ -629,15 +629,13 @@ BOOST_AUTO_TEST_CASE( PlotStrokeTextTabStopMatchesFont )
 
 // Regression test for GitLab issue 23740: stroke-font Type3 glyphs in the PDF output were
 // plotted above and to the left of where they should have been.  The old code derived the
-// vertical anchor from StringBoundaryLimits (which inflates by 3*thickness) and forgot to
-// cancel the m_PDFStrokeFontYOffset baked into every Type3 glyph, so character placement
-// varied with the caller's pen width and with the stroke-font Y offset.
+// vertical anchor from StringBoundaryLimits (which inflates by 3*thickness) and used
+// thickness-dependent CTM hacks.  Alignment now goes through FONT::GetAlignedDrawPosition
+// (GAL getLinePositions), with a constant cancel of the baked Type3 glyph Y offset.
 //
 // The test plots the same character with V_TOP, V_CENTER and V_BOTTOM alignments at the same
 // anchor, parses the text-matrix ctm_f value out of the content stream, then verifies that
-// ctm_f corresponds to the positions that FONT::getLinePositions would produce for GAL,
-// translated to PDF device coordinates (with the stroke-font yOffset applied so glyph ink
-// lands where screen rendering would).
+// ctm_f deltas match FONT::getLinePositions (the constant YOffset cancel drops out of deltas).
 BOOST_AUTO_TEST_CASE( StrokeFontVerticalAlignmentMatchesScreen )
 {
     wxString pdfPath = getTempPdfPath( "kicad_pdf_valign" );
@@ -700,13 +698,13 @@ BOOST_AUTO_TEST_CASE( StrokeFontVerticalAlignmentMatchesScreen )
     const double fontSize  = (double) sizeIU;
     const double thickness = (double) strokeW;
 
-    // GAL cursor offsets from FONT::getLinePositions (single line, height = 1.17 * size):
-    //     V_TOP    = size                (+ size.y below anchor)
-    //     V_CENTER = 0.415 * size        (size - height/2)
-    //     V_BOTTOM = -0.17  * size       (size - height)
-    // The PDF stroke path applies a constant yOffset on top of these, which drops out of the
-    // deltas between alignments, so we check those deltas directly.  PDF device Y decreases
-    // as IU Y increases, so ctm_f_TOP < ctm_f_CENTER < ctm_f_BOTTOM.
+    // GAL cursor Y offsets from FONT::getLinePositions (single line, height = 1.17 * size),
+    // ignoring the strokeWidth*0.052 fudge which is the same for every V-align and cancels
+    // in the deltas:
+    //     V_TOP    = 1.000 * size
+    //     V_CENTER = 0.415 * size
+    //     V_BOTTOM = -0.17 * size
+    // PDF device Y decreases as IU Y increases, so ctm_f_TOP < ctm_f_CENTER < ctm_f_BOTTOM.
     const double expected_delta_top_center = ( 1.000 - 0.415 ) * fontSize;
     const double expected_delta_center_bot = ( 0.415 - ( -0.17 ) ) * fontSize;
 
@@ -717,44 +715,34 @@ BOOST_AUTO_TEST_CASE( StrokeFontVerticalAlignmentMatchesScreen )
     BOOST_CHECK_CLOSE( observed_delta_center_bot, expected_delta_center_bot, 1.0 );
 
     BOOST_CHECK_MESSAGE( matrices[0].f < matrices[1].f && matrices[1].f < matrices[2].f,
-                         "Expected ctm_f to decrease from V_BOTTOM to V_CENTER to V_TOP, got "
+                         "Expected ctm_f_TOP < ctm_f_CENTER < ctm_f_BOTTOM, got "
                              << matrices[0].f << ", " << matrices[1].f << ", " << matrices[2].f );
 
-    // The uncorrected formula (pre-fix) would give 0.5 * (size + 3*thickness) for the V_TOP
-    // to V_CENTER delta.  Ensure the observed delta does not match that, which would mean
-    // the alignment fix is inactive.
+    // The uncorrected StringBoundaryLimits formula (pre-fix) would give
+    // 0.5 * (size + 3*thickness) for the V_TOP to V_CENTER delta.
     const double uncorrectedDelta = 0.5 * ( fontSize + 3.0 * thickness );
     BOOST_CHECK_MESSAGE( std::abs( observed_delta_top_center - uncorrectedDelta ) > 1.0,
                          "ctm_f delta for V_TOP vs V_CENTER matches the uncorrected formula; "
                          "the stroke-font alignment fix does not appear to be in effect." );
 
-    // For italic text the Y axis of the text matrix is sheared (adj_c != 0 for horizontal
-    // italic), so the baseline correction has to project onto (adj_c, adj_d) rather than
-    // sin/cos of aOrient.  With the buggy sin/cos formula, italic_delta_e between V_TOP and
-    // V_CENTER at angle 0 would be zero (same as the non-italic case); with the fix the
-    // shear transfers part of the correction into the X direction.
-    const double italic_delta_e = matrices[4].e - matrices[3].e;
-    const double nonitalic_delta_e = matrices[1].e - matrices[0].e;
-
+    // Italic shear must still be present on the text matrix.
     BOOST_CHECK_MESSAGE( std::abs( matrices[3].c ) > 0.01,
                          "Italic text matrix does not show the expected shear (adj_c == "
                              << matrices[3].c << ")" );
 
-    // Non-italic, horizontal text has adj_c == 0, so delta_e between V-alignments is 0.
-    BOOST_CHECK_SMALL( nonitalic_delta_e, 1.0 );
+    // Glyph YOffset cancel is constant across V-alignments.  With GAL-based start positions,
+    // only IU Y differs between V_TOP and V_CENTER for horizontal text, so ctm_e must not
+    // change (old per-V-align deltaDev hacks incorrectly introduced a shear * Y correction
+    // into e).  Same for italic and non-italic.
+    const double italic_delta_e = matrices[4].e - matrices[3].e;
+    const double nonitalic_delta_e = matrices[1].e - matrices[0].e;
 
-    // Italic text must show a non-zero delta_e from the shear projection.  The direction
-    // is determined by the sign of the shear: with tilt = -ITALIC_TILT and downward IU Y
-    // correction, italic_delta_e has the opposite sign of adj_c (i.e., negative when the
-    // italic shear leans right).
-    BOOST_CHECK_MESSAGE( std::abs( italic_delta_e ) > 1.0,
-                         "Italic baseline correction did not shear along the text-matrix Y "
-                         "axis; italic_delta_e = "
-                             << italic_delta_e
-                             << " (should be non-zero when adj_c is non-zero)" );
-    BOOST_CHECK_MESSAGE( italic_delta_e * matrices[3].c < 0,
-                         "italic_delta_e should have the opposite sign of adj_c; got "
-                             << italic_delta_e << " vs adj_c=" << matrices[3].c );
+    BOOST_CHECK_SMALL( nonitalic_delta_e, 1.0 );
+    BOOST_CHECK_SMALL( italic_delta_e, 1.0 );
+
+    // V-alignment deltas on f remain the same under italic shear (Y cancel is constant).
+    const double italic_delta_top_center = matrices[4].f - matrices[3].f;
+    BOOST_CHECK_CLOSE( italic_delta_top_center, expected_delta_top_center, 1.0 );
 
     MaybeRemoveFile( pdfPath );
 }
