@@ -102,6 +102,65 @@ REPORTER& WX_STRING_REPORTER::Report( const wxString& aText, SEVERITY aSeverity 
 }
 
 
+REPORTER& SYNC_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    std::lock_guard lock( m_mutex );
+
+    m_reporter.Report( aText, aSeverity );
+    return *this;
+}
+
+
+REPORTER& SYNC_REPORTER::ReportTail( const wxString& aText, SEVERITY aSeverity )
+{
+    std::lock_guard lock( m_mutex );
+
+    m_reporter.ReportTail( aText, aSeverity );
+    return *this;
+}
+
+
+REPORTER& SYNC_REPORTER::ReportHead( const wxString& aText, SEVERITY aSeverity )
+{
+    std::lock_guard lock( m_mutex );
+
+    m_reporter.ReportHead( aText, aSeverity );
+    return *this;
+}
+
+
+void SYNC_REPORTER::Clear()
+{
+    std::lock_guard lock( m_mutex );
+
+    m_reporter.Clear();
+}
+
+
+bool SYNC_REPORTER::HasMessage() const
+{
+    std::lock_guard lock( m_mutex );
+
+    return m_reporter.HasMessage();
+}
+
+
+bool SYNC_REPORTER::HasMessageOfSeverity( int aSeverityMask ) const
+{
+    std::lock_guard lock( m_mutex );
+
+    return m_reporter.HasMessageOfSeverity( aSeverityMask );
+}
+
+
+EDA_UNITS SYNC_REPORTER::GetUnits() const
+{
+    std::lock_guard lock( m_mutex );
+
+    return m_reporter.GetUnits();
+}
+
+
 const wxString& WX_STRING_REPORTER::GetMessages() const
 {
     return m_string;
