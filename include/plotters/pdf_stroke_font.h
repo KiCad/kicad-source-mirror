@@ -60,7 +60,7 @@ public:
 public:
     PDF_STROKE_FONT_SUBSET( const KIFONT::STROKE_FONT* aFont, double aUnitsPerEm,
                             unsigned aSubsetIndex, bool aBold, bool aItalic,
-                            double aStrokeWidthFactor );
+                            double aStrokeWidthFactor, double aAspectRatio );
 
     bool Contains( wxUniChar aCode ) const;
 
@@ -135,6 +135,7 @@ private:
     bool                                 m_isBold;
     bool                                 m_isItalic;
     double                               m_strokeWidthFactor;
+    double                               m_aspectRatio;
 };
 
 class PDF_STROKE_FONT_MANAGER
@@ -144,20 +145,20 @@ public:
 
     void Reset();
 
-    void EncodeString( const wxString& aText, std::vector<PDF_STROKE_FONT_RUN>* aRuns,
-                       int aStrokeWidth, int aFontHeight, bool aBold = false, bool aItalic = false );
+    void EncodeString( const wxString& aText, std::vector<PDF_STROKE_FONT_RUN>* aRuns, int aStrokeWidth, int aFontWidth,
+                       int aFontHeight, bool aBold = false, bool aItalic = false );
 
     // Collect all subsets including style-group (bold/italic) subsets. Returned pointers are
     // owned by the manager; vector is a temporary snapshot.
     std::vector<PDF_STROKE_FONT_SUBSET*> AllSubsets() const;
 
 private:
-    PDF_STROKE_FONT_SUBSET* ensureSubsetForGlyph( wxUniChar aCode, int aStrokeWidth, int aFontHeight,
+    PDF_STROKE_FONT_SUBSET* ensureSubsetForGlyph( wxUniChar aCode, int aStrokeWidth, int aFontWidth, int aFontHeight,
                                                   bool aBold, bool aItalic );
 
-    using STYLE_KEY = std::tuple<bool, bool, int, int>;
+    using STYLE_KEY = std::tuple<bool, bool, int, int, int>;
 
-    static STYLE_KEY styleKey( bool aBold, bool aItalic, int aStrokeWidth, int aFontHeight );
+    static STYLE_KEY styleKey( bool aBold, bool aItalic, int aStrokeWidth, int aFontWidth, int aFontHeight );
 
     struct STYLE_GROUP
     {

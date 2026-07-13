@@ -53,7 +53,7 @@ static std::string formatUnicodeHex( uint32_t aCodepoint )
 
 PDF_STROKE_FONT_SUBSET::PDF_STROKE_FONT_SUBSET( const KIFONT::STROKE_FONT* aFont, double aUnitsPerEm,
                                                 unsigned aSubsetIndex, bool aBold, bool aItalic,
-                                                double aStrokeWidthFactor ) :
+                                                double aStrokeWidthFactor, double aAspectRatio ) :
         m_font( aFont ),
         m_unitsPerEm( aUnitsPerEm ),
         m_resourceName( fmt::format( "/KiCadStroke{}", aSubsetIndex ) ),
@@ -70,7 +70,8 @@ PDF_STROKE_FONT_SUBSET::PDF_STROKE_FONT_SUBSET( const KIFONT::STROKE_FONT* aFont
         m_toUnicodeHandle( -1 ),
         m_isBold( aBold ),
         m_isItalic( aItalic ),
-        m_strokeWidthFactor( aStrokeWidthFactor )
+        m_strokeWidthFactor( aStrokeWidthFactor ),
+        m_aspectRatio( aAspectRatio )
 {
     GLYPH notdef;
     notdef.m_unicode = 0;
@@ -103,6 +104,9 @@ std::string PDF_STROKE_FONT_SUBSET::buildGlyphStream( const KIFONT::STROKE_GLYPH
 
     fmt::memory_buffer buffer;
 
+    const double xEm = m_unitsPerEm * m_aspectRatio;
+    const double yEm = m_unitsPerEm;
+
     double lw = m_unitsPerEm * m_strokeWidthFactor;
     fmt::format_to( std::back_inserter( buffer ), "{:.3f} w 1 J 1 j ", lw );
     auto& cfg = ADVANCED_CFG::GetCfg();
@@ -113,11 +117,11 @@ std::string PDF_STROKE_FONT_SUBSET::buildGlyphStream( const KIFONT::STROKE_GLYPH
 
         for( const VECTOR2D& point : stroke )
         {
-            double x = ( point.x + cfg.m_PDFStrokeFontXOffset ) * m_unitsPerEm;
-            double y = point.y * m_unitsPerEm;
+            double x = ( point.x + cfg.m_PDFStrokeFontXOffset ) * xEm;
+            double y = point.y * yEm;
 
             y = -y; // Mirror vertically about baseline (y=0)
-            y += cfg.m_PDFStrokeFontYOffset * m_unitsPerEm;
+            y += cfg.m_PDFStrokeFontYOffset * yEm;
 
             if( firstPoint )
             {
@@ -178,11 +182,14 @@ int PDF_STROKE_FONT_SUBSET::EnsureGlyph( wxUniChar aCode )
     VECTOR2D origin = bbox.GetOrigin();
     VECTOR2D size = bbox.GetSize();
 
-    data.m_width = size.x * m_unitsPerEm;
-    data.m_minX = origin.x * m_unitsPerEm;
-    data.m_minY = origin.y * m_unitsPerEm;
-    data.m_maxX = ( origin.x + size.x ) * m_unitsPerEm;
-    data.m_maxY = ( origin.y + size.y ) * m_unitsPerEm;
+    const double xEm = m_unitsPerEm * m_aspectRatio;
+    const double yEm = m_unitsPerEm;
+
+    data.m_width = size.x * xEm;
+    data.m_minX = origin.x * xEm;
+    data.m_minY = origin.y * yEm;
+    data.m_maxX = ( origin.x + size.x ) * xEm;
+    data.m_maxY = ( origin.y + size.y ) * yEm;
 
     // Invert Y so glyphs render upright in PDF coordinate space.
     {
@@ -193,23 +200,24 @@ int PDF_STROKE_FONT_SUBSET::EnsureGlyph( wxUniChar aCode )
         data.m_maxY = newMaxY;
 
         // Apply Y offset to bounding box to match the offset applied to stroke coordinates
-        double yOffset = ADVANCED_CFG::GetCfg().m_PDFStrokeFontYOffset * m_unitsPerEm;
+        double yOffset = ADVANCED_CFG::GetCfg().m_PDFStrokeFontYOffset * yEm;
         data.m_minY += yOffset;
         data.m_maxY += yOffset;
     }
 
     // Apply X offset to bounding box to match the offset applied to stroke coordinates
-    double xOffset = ADVANCED_CFG::GetCfg().m_PDFStrokeFontXOffset * m_unitsPerEm;
+    double xOffset = ADVANCED_CFG::GetCfg().m_PDFStrokeFontXOffset * xEm;
     data.m_minX += xOffset;
     data.m_maxX += xOffset;
 
     // Expand bbox by half the stroke width so the d1 clipping rect covers the full painted
     // area, not just the stroke center lines.
-    double halfStroke = m_unitsPerEm * m_strokeWidthFactor / 2.0;
-    data.m_minX -= halfStroke;
-    data.m_minY -= halfStroke;
-    data.m_maxX += halfStroke;
-    data.m_maxY += halfStroke;
+    double halfStrokeY = m_unitsPerEm * m_strokeWidthFactor / 2.0;
+    double halfStrokeX = halfStrokeY * m_aspectRatio;
+    data.m_minX -= halfStrokeX;
+    data.m_minY -= halfStrokeY;
+    data.m_maxX += halfStrokeX;
+    data.m_maxY += halfStrokeY;
 
     // Build charproc stream: first specify width and bbox (d1 operator) then stroke path.
     double kerningFactor = ADVANCED_CFG::GetCfg().m_PDFStrokeFontKerningFactor;
@@ -218,7 +226,7 @@ int PDF_STROKE_FONT_SUBSET::EnsureGlyph( wxUniChar aCode )
         kerningFactor = 1.0;
 
     std::string strokes = buildGlyphStream( glyph );
-    data.m_width = size.x * m_unitsPerEm * kerningFactor;
+    data.m_width = size.x * xEm * kerningFactor;
     data.m_stream = fmt::format( "{:.3f} 0 {:.3f} {:.3f} {:.3f} {:.3f} d1 {}",
                                  data.m_width,
                                  data.m_minX, data.m_minY, data.m_maxX, data.m_maxY,
@@ -411,17 +419,20 @@ void PDF_STROKE_FONT_MANAGER::Reset()
 }
 
 
-PDF_STROKE_FONT_MANAGER::STYLE_KEY PDF_STROKE_FONT_MANAGER::styleKey( bool aBold, bool aItalic, int aStrokeWidth,
+PDF_STROKE_FONT_MANAGER::STYLE_KEY PDF_STROKE_FONT_MANAGER::styleKey( bool aBold, bool aItalic,
+                                                                      int aStrokeWidth, int aFontWidth,
                                                                       int aFontHeight )
 {
     int strokeWidth = std::abs( aStrokeWidth );
+    int fontWidth = std::abs( aFontWidth );
     int fontHeight = strokeWidth > 0 ? std::abs( aFontHeight ) : 0;
-    return { aBold, aItalic, strokeWidth, fontHeight };
+    return { aBold, aItalic, strokeWidth, fontWidth, fontHeight };
 }
 
 
 void PDF_STROKE_FONT_MANAGER::EncodeString( const wxString& aText, std::vector<PDF_STROKE_FONT_RUN>* aRuns,
-                                            int aStrokeWidth, int aFontHeight, bool aBold, bool aItalic )
+                                            int aStrokeWidth, int aFontWidth, int aFontHeight, bool aBold,
+                                            bool aItalic )
 {
     if( !aRuns )
         return;
@@ -436,7 +447,8 @@ void PDF_STROKE_FONT_MANAGER::EncodeString( const wxString& aText, std::vector<P
 
     for( wxUniChar ch : aText )
     {
-        PDF_STROKE_FONT_SUBSET* subset = ensureSubsetForGlyph( ch, aStrokeWidth, aFontHeight, aBold, aItalic );
+        PDF_STROKE_FONT_SUBSET* subset = ensureSubsetForGlyph( ch, aStrokeWidth, aFontWidth, aFontHeight,
+                                                               aBold, aItalic );
 
         if( !subset )
             continue;
@@ -463,9 +475,11 @@ void PDF_STROKE_FONT_MANAGER::EncodeString( const wxString& aText, std::vector<P
 }
 
 PDF_STROKE_FONT_SUBSET* PDF_STROKE_FONT_MANAGER::ensureSubsetForGlyph( wxUniChar aCode, int aStrokeWidth,
-                                                                       int aFontHeight, bool aBold, bool aItalic )
+                                                                       int aFontWidth, int aFontHeight,
+                                                                       bool aBold, bool aItalic )
 {
     int strokeWidth = std::abs( aStrokeWidth );
+    int fontWidth = std::abs( aFontWidth );
     int fontHeight = std::abs( aFontHeight );
 
     double widthFactor;
@@ -492,7 +506,12 @@ PDF_STROKE_FONT_SUBSET* PDF_STROKE_FONT_MANAGER::ensureSubsetForGlyph( wxUniChar
         }
     }
 
-    STYLE_KEY    key = styleKey( aBold, aItalic, aStrokeWidth, aFontHeight );
+    double aspectRatio = 1.0;
+
+    if( fontHeight > 0 && fontWidth > 0 )
+        aspectRatio = static_cast<double>( fontWidth ) / static_cast<double>( fontHeight );
+
+    STYLE_KEY    key = styleKey( aBold, aItalic, aStrokeWidth, aFontWidth, aFontHeight );
     STYLE_GROUP& group = m_styleGroups[key];
 
     for( const std::unique_ptr<PDF_STROKE_FONT_SUBSET>& subset : group.subsets )
@@ -512,7 +531,7 @@ PDF_STROKE_FONT_SUBSET* PDF_STROKE_FONT_MANAGER::ensureSubsetForGlyph( wxUniChar
 
     unsigned subsetIndex = m_nextSubsetIndex++;
     auto newSubset = std::make_unique<PDF_STROKE_FONT_SUBSET>( m_font.get(), m_unitsPerEm, subsetIndex, aBold, aItalic,
-                                                               widthFactor );
+                                                               widthFactor, aspectRatio );
     PDF_STROKE_FONT_SUBSET* subsetPtr = newSubset.get();
     subsetPtr->EnsureGlyph( aCode );
     group.subsets.emplace_back( std::move( newSubset ) );
