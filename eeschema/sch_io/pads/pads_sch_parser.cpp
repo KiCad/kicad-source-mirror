@@ -61,9 +61,9 @@ VECTOR2I padsSchArcMidpoint( const VECTOR2I& aStart, const VECTOR2I& aEnd, const
 
 
 PADS_SCH_PARSER::PADS_SCH_PARSER() :
-    m_reporter( nullptr ),
-    m_lineNumber( 0 ),
-    m_currentSheet( 0 )
+        m_reporter( nullptr ),
+        m_lineNumber( 0 ),
+        m_currentSheet( 0 )
 {
 }
 
@@ -125,7 +125,7 @@ bool PADS_SCH_PARSER::Parse( const std::string& aFileName )
     }
 
     std::vector<std::string> lines;
-    std::string line;
+    std::string              line;
 
     while( std::getline( file, line ) )
     {
@@ -213,7 +213,7 @@ bool PADS_SCH_PARSER::Parse( const std::string& aFileName )
         }
         else if( sectionName == "BUSSES" )
         {
-            continue;
+            i = parseSectionBUSSES( lines, i );
         }
         else if( sectionName == "OFFPAGE REFS" )
         {
@@ -303,7 +303,7 @@ bool PADS_SCH_PARSER::parseHeader( const std::string& aLine )
     std::string headerTag = aLine.substr( 1, endPos - 1 );
 
     // The optional trailing suffix is an ANSI code page for non-ASCII strings.
-    std::regex headerRegex( R"(PADS-(POWER)?LOGIC-V(\d+\.\d+)(?:-([A-Za-z0-9]+))?)" );
+    std::regex  headerRegex( R"(PADS-(POWER)?LOGIC-V(\d+\.\d+)(?:-([A-Za-z0-9]+))?)" );
     std::smatch match;
 
     if( !std::regex_match( headerTag, match, headerRegex ) )
@@ -322,7 +322,7 @@ bool PADS_SCH_PARSER::parseHeader( const std::string& aLine )
     if( endPos + 1 < aLine.size() )
     {
         std::string desc = aLine.substr( endPos + 1 );
-        size_t start = desc.find_first_not_of( ' ' );
+        size_t      start = desc.find_first_not_of( ' ' );
 
         if( start != std::string::npos )
             m_header.description = desc.substr( start );
@@ -350,7 +350,7 @@ size_t PADS_SCH_PARSER::parseSectionSCH( const std::vector<std::string>& aLines,
         }
 
         std::istringstream iss( line );
-        std::string keyword;
+        std::string        keyword;
         iss >> keyword;
 
         if( keyword == "UNITS" )
@@ -535,15 +535,12 @@ size_t PADS_SCH_PARSER::parseSectionSCH( const std::vector<std::string>& aLines,
             }
         }
         // Color and other numeric keywords we ignore
-        else if( keyword == "NTXCOL" || keyword == "HIRCOL" || keyword == "LINCOL" ||
-                 keyword == "TXTCOL" || keyword == "CONCOL" || keyword == "BUSCOL" ||
-                 keyword == "PTXCOL" || keyword == "COMCOL" || keyword == "NMCOL" ||
-                 keyword == "PNMCOL" || keyword == "PINCOL" || keyword == "NETCOL" ||
-                 keyword == "FBGCOL" || keyword == "FIELDCOL" ||
-                 keyword == "NNVISPWRGND" || keyword == "PCBFLAGS" ||
-                 keyword == "JOBTIME" || keyword == "BACKUPTIME" ||
-                 keyword == "OFFREFVIEW" || keyword == "OFFREFNUM" ||
-                 keyword == "SHEETNUMSEP" )
+        else if( keyword == "NTXCOL" || keyword == "HIRCOL" || keyword == "LINCOL" || keyword == "TXTCOL"
+                 || keyword == "CONCOL" || keyword == "BUSCOL" || keyword == "PTXCOL" || keyword == "COMCOL"
+                 || keyword == "NMCOL" || keyword == "PNMCOL" || keyword == "PINCOL" || keyword == "NETCOL"
+                 || keyword == "FBGCOL" || keyword == "FIELDCOL" || keyword == "NNVISPWRGND" || keyword == "PCBFLAGS"
+                 || keyword == "JOBTIME" || keyword == "BACKUPTIME" || keyword == "OFFREFVIEW" || keyword == "OFFREFNUM"
+                 || keyword == "SHEETNUMSEP" )
         {
         }
 
@@ -604,10 +601,10 @@ size_t PADS_SCH_PARSER::parseSectionSHT( const std::vector<std::string>& aLines,
 {
     // Fields: sheet_num sheet_name parent_num parent_name
     const std::string& line = aLines[aStartLine];
-    std::string afterMarker = line.substr( line.find( '*', 1 ) + 1 );
+    std::string        afterMarker = line.substr( line.find( '*', 1 ) + 1 );
 
     std::istringstream iss( afterMarker );
-    SHEET_HEADER header;
+    SHEET_HEADER       header;
 
     iss >> header.sheet_num >> header.sheet_name >> header.parent_num >> header.parent_name;
 
@@ -660,8 +657,7 @@ size_t PADS_SCH_PARSER::parseSectionTEXT( const std::vector<std::string>& aLines
         std::istringstream iss( line );
 
         int x = 0, y = 0;
-        iss >> x >> y >> item.rotation >> item.justification >> item.height >> item.width_factor
-            >> item.attr_flag;
+        iss >> x >> y >> item.rotation >> item.justification >> item.height >> item.width_factor >> item.attr_flag;
 
         item.position.x = x;
         item.position.y = y;
@@ -711,10 +707,10 @@ size_t PADS_SCH_PARSER::parseSectionLINES( const std::vector<std::string>& aLine
         // LINES item header: name LINES x y param1 param2
         if( line.find( "LINES" ) != std::string::npos )
         {
-            LINES_ITEM item;
+            LINES_ITEM         item;
             std::istringstream iss( line );
-            std::string name, keyword;
-            int x = 0, y = 0;
+            std::string        name, keyword;
+            int                x = 0, y = 0;
 
             iss >> name >> keyword >> x >> y >> item.param1 >> item.param2;
 
@@ -744,7 +740,7 @@ size_t PADS_SCH_PARSER::parseSectionLINES( const std::vector<std::string>& aLine
                     if( pline.find( "LINES" ) != std::string::npos )
                     {
                         std::istringstream tiss( pline );
-                        std::string tname, tkw;
+                        std::string        tname, tkw;
                         tiss >> tname >> tkw;
 
                         if( tkw == "LINES" )
@@ -752,11 +748,11 @@ size_t PADS_SCH_PARSER::parseSectionLINES( const std::vector<std::string>& aLine
                     }
 
                     std::istringstream piss( pline );
-                    std::string firstToken;
+                    std::string        firstToken;
                     piss >> firstToken;
 
-                    if( firstToken == "OPEN" || firstToken == "CLOSED" ||
-                        firstToken == "CIRCLE" || firstToken == "COPCLS" )
+                    if( firstToken == "OPEN" || firstToken == "CLOSED" || firstToken == "CIRCLE"
+                        || firstToken == "COPCLS" )
                     {
                         SYMBOL_GRAPHIC graphic;
                         i = parseGraphicPrimitive( aLines, i, graphic );
@@ -766,20 +762,18 @@ size_t PADS_SCH_PARSER::parseSectionLINES( const std::vector<std::string>& aLine
                     }
 
                     // A leading number marks a text item (coordinate attribute line)
-                    bool isNumber = !firstToken.empty()
-                                    && ( std::isdigit( firstToken[0] )
-                                         || firstToken[0] == '-'
-                                         || firstToken[0] == '+' );
+                    bool isNumber =
+                            !firstToken.empty()
+                            && ( std::isdigit( firstToken[0] ) || firstToken[0] == '-' || firstToken[0] == '+' );
 
                     if( isNumber && pline.find( '"' ) != std::string::npos )
                     {
                         TEXT_ITEM text;
                         text.sheet_number = m_currentSheet;
                         std::istringstream tiss( pline );
-                        int tx = 0, ty = 0;
+                        int                tx = 0, ty = 0;
 
-                        tiss >> tx >> ty >> text.rotation >> text.justification >> text.height
-                             >> text.width_factor;
+                        tiss >> tx >> ty >> text.rotation >> text.justification >> text.height >> text.width_factor;
 
                         text.position.x = tx;
                         text.position.y = ty;
@@ -819,8 +813,7 @@ size_t PADS_SCH_PARSER::parseSectionLINES( const std::vector<std::string>& aLine
 }
 
 
-size_t PADS_SCH_PARSER::parseSectionCAEDECAL( const std::vector<std::string>& aLines,
-                                               size_t aStartLine )
+size_t PADS_SCH_PARSER::parseSectionCAEDECAL( const std::vector<std::string>& aLines, size_t aStartLine )
 {
     size_t i = aStartLine + 1;
 
@@ -865,8 +858,8 @@ size_t PADS_SCH_PARSER::parseSectionCAEDECAL( const std::vector<std::string>& aL
 
             const auto& first = graphic.points.front().coord;
             const auto& last = graphic.points.back().coord;
-            double dx = last.x - first.x;
-            double dy = last.y - first.y;
+            double      dx = last.x - first.x;
+            double      dy = last.y - first.y;
             pinDecalLengths[sym.name] = std::sqrt( dx * dx + dy * dy );
             break;
         }
@@ -893,8 +886,7 @@ size_t PADS_SCH_PARSER::parseSectionCAEDECAL( const std::vector<std::string>& aL
 }
 
 
-size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, size_t aStartLine,
-                                         SYMBOL_DEF& aSymbol )
+size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, size_t aStartLine, SYMBOL_DEF& aSymbol )
 {
     if( aStartLine >= aLines.size() )
         return aStartLine;
@@ -904,7 +896,7 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
     // Header fields: name f1 f2 height width h2 w2 num_attrs num_pieces has_polarity num_pins
     //                pin_origin_code is_pin_decal
     std::istringstream iss( headerLine );
-    std::string name;
+    std::string        name;
     iss >> name;
 
     if( name.empty() )
@@ -913,7 +905,7 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
     aSymbol.name = name;
 
     std::vector<std::string> tokens;
-    std::string token;
+    std::string              token;
 
     while( iss >> token )
         tokens.push_back( token );
@@ -956,9 +948,9 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
             if( gline.empty() || isSectionMarker( gline ) )
                 break;
 
-            SYMBOL_GRAPHIC graphic;
+            SYMBOL_GRAPHIC     graphic;
             std::istringstream giss( gline );
-            std::string typeStr;
+            std::string        typeStr;
             giss >> typeStr;
 
             if( typeStr == "OPEN" || typeStr == "LINE" )
@@ -997,9 +989,9 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
             if( pline.empty() || isSectionMarker( pline ) )
                 break;
 
-            SYMBOL_PIN pin;
+            SYMBOL_PIN         pin;
             std::istringstream piss( pline );
-            double orientation = 0;
+            double             orientation = 0;
 
             piss >> pin.position.x >> pin.position.y >> orientation >> pin.length;
             piss >> pin.number >> pin.name;
@@ -1023,7 +1015,7 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
     if( idx < aLines.size() && aLines[idx].find( "TIMESTAMP" ) == 0 )
     {
         std::istringstream tiss( aLines[idx] );
-        std::string kw;
+        std::string        kw;
         tiss >> kw >> aSymbol.timestamp;
         idx++;
     }
@@ -1052,9 +1044,9 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
     // Attribute label pairs, each a position line then a name line
     for( int a = 0; a < aSymbol.num_attrs && idx + 1 < aLines.size(); a++ )
     {
-        CAEDECAL_ATTR attr;
+        CAEDECAL_ATTR      attr;
         std::istringstream aiss( aLines[idx] );
-        int x = 0, y = 0;
+        int                x = 0, y = 0;
 
         aiss >> x >> y >> attr.angle >> attr.justification >> attr.height >> attr.width;
         attr.position.x = x;
@@ -1109,15 +1101,15 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
             break;
 
         // A pin T-line starts with T followed by a digit or minus sign
-        if( tline.size() > 1 && tline[0] == 'T' &&
-            ( std::isdigit( static_cast<unsigned char>( tline[1] ) ) || tline[1] == '-' ) )
+        if( tline.size() > 1 && tline[0] == 'T'
+            && ( std::isdigit( static_cast<unsigned char>( tline[1] ) ) || tline[1] == '-' ) )
         {
             break;
         }
 
-        SYMBOL_TEXT text;
+        SYMBOL_TEXT        text;
         std::istringstream tiss( tline );
-        int tx = 0, ty = 0;
+        int                tx = 0, ty = 0;
 
         tiss >> tx >> ty >> text.rotation >> text.justification;
 
@@ -1161,28 +1153,26 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
         //         pin_decal_name
         if( tLine.size() > 1 && tLine[0] == 'T' )
         {
-            std::string tContent = tLine.substr( 1 );
+            std::string        tContent = tLine.substr( 1 );
             std::istringstream tiss( tContent );
-            int tx = 0, ty = 0, angle = 0;
+            int                tx = 0, ty = 0, angle = 0;
 
-            tiss >> tx >> ty >> angle >> pin.side >> pin.pn_h >> pin.pn_w >> pin.pn_angle
-                 >> pin.pn_just >> pin.pl_h >> pin.pl_w >> pin.pl_angle >> pin.pl_just
-                 >> pin.pin_decal_name;
+            tiss >> tx >> ty >> angle >> pin.side >> pin.pn_h >> pin.pn_w >> pin.pn_angle >> pin.pn_just >> pin.pl_h
+                    >> pin.pl_w >> pin.pl_angle >> pin.pl_just >> pin.pin_decal_name;
 
             pin.position.x = tx;
             pin.position.y = ty;
             pin.rotation = angle;
 
             // The pin decal name encodes inverted/clock styles
-            if( pin.pin_decal_name == "PINB" || pin.pin_decal_name == "PINORB" ||
-                pin.pin_decal_name == "PCLKB" || pin.pin_decal_name == "PINIEB" ||
-                pin.pin_decal_name == "PINCLKB" )
+            if( pin.pin_decal_name == "PINB" || pin.pin_decal_name == "PINORB" || pin.pin_decal_name == "PCLKB"
+                || pin.pin_decal_name == "PINIEB" || pin.pin_decal_name == "PINCLKB" )
             {
                 pin.inverted = true;
             }
 
-            if( pin.pin_decal_name == "PCLK" || pin.pin_decal_name == "PCLKB" ||
-                pin.pin_decal_name == "PINCLK" || pin.pin_decal_name == "PINCLKB" )
+            if( pin.pin_decal_name == "PCLK" || pin.pin_decal_name == "PCLKB" || pin.pin_decal_name == "PINCLK"
+                || pin.pin_decal_name == "PINCLKB" )
             {
                 pin.clock = true;
             }
@@ -1206,12 +1196,12 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
 
             if( pLine.size() > 1 && pLine[0] == 'P' )
             {
-                std::string pContent = pLine.substr( 1 );
+                std::string        pContent = pLine.substr( 1 );
                 std::istringstream piss( pContent );
-                int px1 = 0, py1 = 0, px2 = 0, py2 = 0;
+                int                px1 = 0, py1 = 0, px2 = 0, py2 = 0;
 
-                piss >> px1 >> py1 >> pin.pn_off_angle >> pin.pn_off_just
-                     >> px2 >> py2 >> pin.pl_off_angle >> pin.pl_off_just >> pin.p_flags;
+                piss >> px1 >> py1 >> pin.pn_off_angle >> pin.pn_off_just >> px2 >> py2 >> pin.pl_off_angle
+                        >> pin.pl_off_just >> pin.p_flags;
 
                 pin.pn_offset.x = px1;
                 pin.pn_offset.y = py1;
@@ -1236,16 +1226,16 @@ size_t PADS_SCH_PARSER::parseSymbolDef( const std::vector<std::string>& aLines, 
 }
 
 
-size_t PADS_SCH_PARSER::parseGraphicPrimitive( const std::vector<std::string>& aLines,
-                                                size_t aStartLine, SYMBOL_GRAPHIC& aGraphic )
+size_t PADS_SCH_PARSER::parseGraphicPrimitive( const std::vector<std::string>& aLines, size_t aStartLine,
+                                               SYMBOL_GRAPHIC& aGraphic )
 {
     if( aStartLine >= aLines.size() )
         return aStartLine;
 
     const std::string& headerLine = aLines[aStartLine];
     std::istringstream iss( headerLine );
-    std::string typeStr;
-    int pointCount = 0, lineWidth = 0, lineStyle = 255;
+    std::string        typeStr;
+    int                pointCount = 0, lineWidth = 0, lineStyle = 255;
 
     iss >> typeStr >> pointCount >> lineWidth >> lineStyle;
 
@@ -1283,11 +1273,11 @@ size_t PADS_SCH_PARSER::parseGraphicPrimitive( const std::vector<std::string>& a
             break;
 
         std::istringstream piss( ptLine );
-        GRAPHIC_POINT gpt;
+        GRAPHIC_POINT      gpt;
         piss >> gpt.coord.x >> gpt.coord.y;
 
         std::vector<std::string> extraTokens;
-        std::string tok;
+        std::string              tok;
 
         while( piss >> tok )
             extraTokens.push_back( tok );
@@ -1354,8 +1344,7 @@ size_t PADS_SCH_PARSER::parseGraphicPrimitive( const std::vector<std::string>& a
 }
 
 
-size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aLines,
-                                               size_t aStartLine )
+size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aLines, size_t aStartLine )
 {
     size_t i = aStartLine + 1;
 
@@ -1373,10 +1362,9 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
             return i - 1;
 
         // Header fields: name category num_physical num_sigpins unused num_swap_groups
-        PARTTYPE_DEF pt;
+        PARTTYPE_DEF       pt;
         std::istringstream iss( line );
-        iss >> pt.name >> pt.category >> pt.num_physical >> pt.num_sigpins
-            >> pt.unused >> pt.num_swap_groups;
+        iss >> pt.name >> pt.category >> pt.num_physical >> pt.num_sigpins >> pt.unused >> pt.num_swap_groups;
 
         if( pt.name.empty() )
         {
@@ -1395,19 +1383,17 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
         if( i < aLines.size() && aLines[i].find( "TIMESTAMP" ) == 0 )
         {
             std::istringstream tiss( aLines[i] );
-            std::string kw;
+            std::string        kw;
             tiss >> kw >> pt.timestamp;
             i++;
         }
 
-        bool isSpecial = ( pt.name == "$GND_SYMS" || pt.name == "$PWR_SYMS" ||
-                           pt.name == "$OSR_SYMS" );
+        bool isSpecial = ( pt.name == "$GND_SYMS" || pt.name == "$PWR_SYMS" || pt.name == "$OSR_SYMS" );
 
         // Older files use "G:decal swap num_pins" gate lines; newer ones use
         // "GATE num_variants num_pins swap" followed by decal lines. A leading "G:" marks the
         // older form.
-        bool isV52Gates = ( i < aLines.size() && aLines[i].size() >= 3
-                            && aLines[i][0] == 'G' && aLines[i][1] == ':' );
+        bool isV52Gates = ( i < aLines.size() && aLines[i].size() >= 3 && aLines[i][0] == 'G' && aLines[i][1] == ':' );
 
         if( isSpecial && !isV52Gates )
         {
@@ -1415,14 +1401,14 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
             if( i < aLines.size() )
             {
                 std::istringstream siss( aLines[i] );
-                int numVariants = 0;
+                int                numVariants = 0;
                 siss >> pt.special_keyword >> numVariants;
                 i++;
 
                 for( int v = 0; v < numVariants && i < aLines.size(); v++ )
                 {
                     PARTTYPE_DEF::SPECIAL_VARIANT sv;
-                    std::istringstream viss( aLines[i] );
+                    std::istringstream            viss( aLines[i] );
                     viss >> sv.decal_name >> sv.pin_type;
 
                     std::string rest;
@@ -1461,7 +1447,7 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                     break;
 
                 std::istringstream giss( gline );
-                std::string keyword;
+                std::string        keyword;
                 giss >> keyword;
 
                 if( keyword == "GATE" )
@@ -1484,9 +1470,9 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                         if( aLines[i].empty() || isSectionMarker( aLines[i] ) )
                             break;
 
-                        PARTTYPE_PIN pin;
+                        PARTTYPE_PIN       pin;
                         std::istringstream piss( aLines[i] );
-                        std::string pinType;
+                        std::string        pinType;
 
                         piss >> pin.pin_id >> pin.swap_group >> pinType;
 
@@ -1514,9 +1500,9 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
 
                     GATE_DEF gate;
 
-                    std::string decalStr = keyword.substr( 2 );
+                    std::string        decalStr = keyword.substr( 2 );
                     std::istringstream diss( decalStr );
-                    std::string decalName;
+                    std::string        decalName;
 
                     while( std::getline( diss, decalName, ':' ) )
                     {
@@ -1537,21 +1523,20 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                         if( pline.empty() || isSectionMarker( pline ) )
                             break;
 
-                        if( ( pline[0] == 'G' && pline.size() >= 2 && pline[1] == ':' )
-                            || pline.find( "SIGPIN" ) == 0 )
+                        if( ( pline[0] == 'G' && pline.size() >= 2 && pline[1] == ':' ) || pline.find( "SIGPIN" ) == 0 )
                         {
                             break;
                         }
 
                         std::istringstream piss( pline );
-                        std::string pinToken;
+                        std::string        pinToken;
 
                         while( piss >> pinToken && pinsRead < gate.num_pins )
                         {
-                            PARTTYPE_PIN pin;
+                            PARTTYPE_PIN             pin;
                             std::vector<std::string> fields;
-                            std::istringstream fiss( pinToken );
-                            std::string field;
+                            std::istringstream       fiss( pinToken );
+                            std::string              field;
 
                             while( std::getline( fiss, field, '.' ) )
                                 fields.push_back( field );
@@ -1561,8 +1546,7 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
 
                             if( fields.size() >= 2 )
                             {
-                                pin.swap_group =
-                                        PADS_COMMON::ParseInt( fields[1], 0, "V5.2 pin" );
+                                pin.swap_group = PADS_COMMON::ParseInt( fields[1], 0, "V5.2 pin" );
                             }
 
                             if( fields.size() >= 3 && !fields[2].empty() )
@@ -1581,8 +1565,7 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                     if( isSpecial )
                     {
                         PARTTYPE_DEF::SPECIAL_VARIANT sv;
-                        sv.decal_name =
-                                gate.decal_names.empty() ? "" : gate.decal_names[0];
+                        sv.decal_name = gate.decal_names.empty() ? "" : gate.decal_names[0];
 
                         if( !gate.pins.empty() )
                             sv.pin_type = std::string( 1, gate.pins[0].pin_type );
@@ -1597,7 +1580,7 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                 {
                     pt.is_connector = true;
                     GATE_DEF gate;
-                    int numPins = 0;
+                    int      numPins = 0;
                     giss >> gate.num_decal_variants >> numPins;
                     gate.num_pins = numPins;
                     i++;
@@ -1608,7 +1591,7 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                             break;
 
                         std::istringstream diss( aLines[i] );
-                        std::string decalName, pinType;
+                        std::string        decalName, pinType;
                         diss >> decalName >> pinType;
                         gate.decal_names.push_back( decalName );
                         i++;
@@ -1619,9 +1602,9 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                         if( aLines[i].empty() || isSectionMarker( aLines[i] ) )
                             break;
 
-                        PARTTYPE_PIN pin;
+                        PARTTYPE_PIN       pin;
                         std::istringstream piss( aLines[i] );
-                        std::string pinType;
+                        std::string        pinType;
 
                         piss >> pin.pin_id >> pin.swap_group >> pinType;
 
@@ -1638,7 +1621,7 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                 else if( keyword == "SIGPIN" )
                 {
                     PARTTYPE_DEF::SIGPIN sp;
-                    std::string token;
+                    std::string          token;
                     giss >> token;
 
                     // Older files pack the fields dot-separated (e.g. "1.50.DGND"); newer ones
@@ -1646,8 +1629,8 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
                     if( token.find( '.' ) != std::string::npos )
                     {
                         std::vector<std::string> fields;
-                        std::istringstream fiss( token );
-                        std::string field;
+                        std::istringstream       fiss( token );
+                        std::string              field;
 
                         while( std::getline( fiss, field, '.' ) )
                             fields.push_back( field );
@@ -1685,8 +1668,7 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
 }
 
 
-size_t PADS_SCH_PARSER::parseSectionPART( const std::vector<std::string>& aLines,
-                                           size_t aStartLine )
+size_t PADS_SCH_PARSER::parseSectionPART( const std::vector<std::string>& aLines, size_t aStartLine )
 {
     size_t i = aStartLine + 1;
 
@@ -1729,8 +1711,8 @@ size_t PADS_SCH_PARSER::parseSectionPART( const std::vector<std::string>& aLines
 }
 
 
-size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLines,
-                                             size_t aStartLine, PART_PLACEMENT& aPart )
+size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLines, size_t aStartLine,
+                                            PART_PLACEMENT& aPart )
 {
     if( aStartLine >= aLines.size() )
         return aStartLine;
@@ -1742,7 +1724,7 @@ size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLin
     //   Normal: ref part_type x y angle mirror h1 w1 h2 w2 attrs disp pins u1 gate u2
     //   Power:  ref net_name $part_type x y angle mirror variant_index
     std::string refdes, partType;
-    int x = 0, y = 0, angleCode = 0, mirrorFlag = 0;
+    int         x = 0, y = 0, angleCode = 0, mirrorFlag = 0;
 
     iss >> refdes >> partType;
 
@@ -1791,8 +1773,8 @@ size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLin
         int numAttrs = 0, numDisplayedValues = 0, numPins = 0, unused1 = 0, gateIdx = 0;
         int unused2 = 0;
 
-        if( iss >> aPart.h1 >> aPart.w1 >> aPart.h2 >> aPart.w2 >> numAttrs >> numDisplayedValues
-                >> numPins >> unused1 >> gateIdx >> unused2 )
+        if( iss >> aPart.h1 >> aPart.w1 >> aPart.h2 >> aPart.w2 >> numAttrs >> numDisplayedValues >> numPins >> unused1
+            >> gateIdx >> unused2 )
         {
             aPart.num_attrs = numAttrs;
             aPart.num_displayed_values = numDisplayedValues;
@@ -1804,7 +1786,7 @@ size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLin
         {
             // Simplified format: ref part_type x y angle mirror sheet gate
             std::istringstream iss2( headerLine );
-            std::string dummy;
+            std::string        dummy;
             iss2 >> dummy >> dummy >> x >> y;
 
             double rotDeg = 0;
@@ -1881,9 +1863,9 @@ size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLin
 
         for( int a = 0; a < aPart.num_attrs && i + 1 < aLines.size(); a++ )
         {
-            PART_ATTRIBUTE attr;
+            PART_ATTRIBUTE     attr;
             std::istringstream aiss( aLines[i] );
-            int ax = 0, ay = 0, angle = 0, disp = 0, h = 0, w = 0, vis = 0;
+            int                ax = 0, ay = 0, angle = 0, disp = 0, h = 0, w = 0, vis = 0;
 
             aiss >> ax >> ay >> angle >> disp >> h >> w >> vis;
 
@@ -1925,8 +1907,7 @@ size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLin
         // Each displayed-value override is a position line then a "name" value line
         for( int d = 0; d < aPart.num_displayed_values && i < aLines.size(); d++ )
         {
-            if( !aLines[i].empty()
-                && std::isdigit( static_cast<unsigned char>( aLines[i][0] ) ) )
+            if( !aLines[i].empty() && std::isdigit( static_cast<unsigned char>( aLines[i][0] ) ) )
             {
                 i++;
             }
@@ -1991,8 +1972,8 @@ size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLin
             if( std::isdigit( static_cast<unsigned char>( pline[0] ) ) )
             {
                 PART_PLACEMENT::PIN_OVERRIDE po;
-                std::istringstream poiss( pline );
-                int pinIdx = 0;
+                std::istringstream           poiss( pline );
+                int                          pinIdx = 0;
                 poiss >> pinIdx >> po.height >> po.width >> po.angle >> po.justification;
                 aPart.pin_overrides.push_back( po );
             }
@@ -2015,7 +1996,7 @@ size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLin
 
             if( attrLine[0] == '@' )
             {
-                PART_ATTRIBUTE attr;
+                PART_ATTRIBUTE     attr;
                 std::istringstream aiss( attrLine.substr( 1 ) );
                 aiss >> attr.name;
 
@@ -2071,8 +2052,62 @@ size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLin
 }
 
 
-size_t PADS_SCH_PARSER::parseSectionOFFPAGEREFS( const std::vector<std::string>& aLines,
-                                                   size_t aStartLine )
+size_t PADS_SCH_PARSER::parseSectionBUSSES( const std::vector<std::string>& aLines, size_t aStartLine )
+{
+    size_t i = aStartLine + 1;
+
+    while( i < aLines.size() )
+    {
+        const std::string& line = aLines[i];
+
+        if( isSectionMarker( line ) )
+            return i - 1;
+
+        if( line.empty() || line.find( "@@@B" ) != 0 )
+        {
+            ++i;
+            continue;
+        }
+
+        BUS_DEF            bus;
+        size_t             pointCount = 0;
+        std::istringstream header( line );
+        header >> bus.handle >> bus.name >> pointCount;
+        bus.sheet_number = m_currentSheet;
+
+        if( !bus.name.empty() )
+            bus.aliases.push_back( bus.name );
+
+        ++i;
+
+        while( i < aLines.size() && bus.path.size() < pointCount )
+        {
+            if( isSectionMarker( aLines[i] ) )
+                break;
+
+            if( aLines[i].empty() )
+            {
+                ++i;
+                continue;
+            }
+
+            POINT              point;
+            std::istringstream coordinates( aLines[i] );
+
+            if( coordinates >> point.x >> point.y )
+                bus.path.push_back( point );
+
+            ++i;
+        }
+
+        m_buses.push_back( std::move( bus ) );
+    }
+
+    return aLines.size() - 1;
+}
+
+
+size_t PADS_SCH_PARSER::parseSectionOFFPAGEREFS( const std::vector<std::string>& aLines, size_t aStartLine )
 {
     size_t i = aStartLine + 1;
 
@@ -2094,21 +2129,37 @@ size_t PADS_SCH_PARSER::parseSectionOFFPAGEREFS( const std::vector<std::string>&
         {
             OFF_PAGE_CONNECTOR opc;
             std::istringstream iss( line );
-            std::string idToken;
+            std::string        idToken;
             iss >> idToken;
 
             if( idToken.size() > 4 )
                 opc.id = PADS_COMMON::ParseInt( idToken.substr( 4 ), 0, "OPC id" );
 
             int x = 0, y = 0;
-            iss >> opc.signal_name >> opc.symbol_lib >> x >> y >> opc.rotation
-                >> opc.flags1 >> opc.flags2;
+            iss >> opc.signal_name >> opc.symbol_lib >> x >> y >> opc.rotation >> opc.flags1 >> opc.flags2;
 
             opc.position.x = x;
             opc.position.y = y;
             opc.source_sheet = m_currentSheet;
 
             m_offPageConnectors.push_back( opc );
+
+            auto bus = std::find_if( m_buses.begin(), m_buses.end(),
+                                     [&]( const BUS_DEF& aBus )
+                                     {
+                                         return aBus.handle == opc.symbol_lib && aBus.sheet_number == m_currentSheet;
+                                     } );
+
+            if( bus != m_buses.end() )
+            {
+                bus->entries.push_back( { opc.signal_name, opc.position, opc.rotation } );
+
+                if( std::find( bus->member_nets.begin(), bus->member_nets.end(), opc.signal_name )
+                    == bus->member_nets.end() )
+                {
+                    bus->member_nets.push_back( opc.signal_name );
+                }
+            }
         }
 
         i++;
@@ -2118,8 +2169,7 @@ size_t PADS_SCH_PARSER::parseSectionOFFPAGEREFS( const std::vector<std::string>&
 }
 
 
-size_t PADS_SCH_PARSER::parseSectionTIEDOTS( const std::vector<std::string>& aLines,
-                                              size_t aStartLine )
+size_t PADS_SCH_PARSER::parseSectionTIEDOTS( const std::vector<std::string>& aLines, size_t aStartLine )
 {
     size_t i = aStartLine + 1;
 
@@ -2139,9 +2189,9 @@ size_t PADS_SCH_PARSER::parseSectionTIEDOTS( const std::vector<std::string>& aLi
         // Fields: @@@D<id> x y
         if( line.find( "@@@D" ) == 0 )
         {
-            TIED_DOT dot;
+            TIED_DOT           dot;
             std::istringstream iss( line );
-            std::string idToken;
+            std::string        idToken;
             iss >> idToken;
 
             if( idToken.size() > 4 )
@@ -2163,8 +2213,7 @@ size_t PADS_SCH_PARSER::parseSectionTIEDOTS( const std::vector<std::string>& aLi
 }
 
 
-size_t PADS_SCH_PARSER::parseSectionCONNECTION( const std::vector<std::string>& aLines,
-                                                  size_t aStartLine )
+size_t PADS_SCH_PARSER::parseSectionCONNECTION( const std::vector<std::string>& aLines, size_t aStartLine )
 {
     // SIGNAL blocks follow inside the CONNECTION section
     size_t i = aStartLine + 1;
@@ -2199,10 +2248,9 @@ size_t PADS_SCH_PARSER::parseSectionCONNECTION( const std::vector<std::string>& 
                     {
                         for( const auto& ep : { wire.endpoint_a, wire.endpoint_b } )
                         {
-                            if( ep.find( '.' ) != std::string::npos &&
-                                ep.find( "@@@" ) == std::string::npos )
+                            if( ep.find( '.' ) != std::string::npos && ep.find( "@@@" ) == std::string::npos )
                             {
-                                size_t dotPos = ep.find( '.' );
+                                size_t         dotPos = ep.find( '.' );
                                 PIN_CONNECTION conn;
                                 conn.reference = ep.substr( 0, dotPos );
                                 conn.pin_number = ep.substr( dotPos + 1 );
@@ -2212,8 +2260,7 @@ size_t PADS_SCH_PARSER::parseSectionCONNECTION( const std::vector<std::string>& 
 
                                 for( const auto& existing : signal.connections )
                                 {
-                                    if( existing.reference == conn.reference &&
-                                        existing.pin_number == conn.pin_number )
+                                    if( existing.reference == conn.reference && existing.pin_number == conn.pin_number )
                                     {
                                         found = true;
                                         break;
@@ -2245,15 +2292,14 @@ size_t PADS_SCH_PARSER::parseSectionCONNECTION( const std::vector<std::string>& 
 }
 
 
-size_t PADS_SCH_PARSER::parseSignalDef( const std::vector<std::string>& aLines, size_t aStartLine,
-                                          SCH_SIGNAL& aSignal )
+size_t PADS_SCH_PARSER::parseSignalDef( const std::vector<std::string>& aLines, size_t aStartLine, SCH_SIGNAL& aSignal )
 {
     if( aStartLine >= aLines.size() )
         return aStartLine;
 
     // Header fields after the marker: net_name flags1 flags2
     const std::string& headerLine = aLines[aStartLine];
-    std::string secName = extractSectionName( headerLine );
+    std::string        secName = extractSectionName( headerLine );
 
     if( secName != "SIGNAL" )
         return aStartLine;
@@ -2263,7 +2309,7 @@ size_t PADS_SCH_PARSER::parseSignalDef( const std::vector<std::string>& aLines, 
     if( afterMarker == std::string::npos )
         return aStartLine;
 
-    std::string rest = headerLine.substr( afterMarker + 1 );
+    std::string        rest = headerLine.substr( afterMarker + 1 );
     std::istringstream iss( rest );
 
     iss >> aSignal.name >> aSignal.flags1 >> aSignal.flags2;
@@ -2274,8 +2320,7 @@ size_t PADS_SCH_PARSER::parseSignalDef( const std::vector<std::string>& aLines, 
     {
         const std::string& funcLine = aLines[i];
 
-        if( funcLine.find( "\"FUNCTION\"" ) != std::string::npos ||
-            funcLine.find( "FUNCTION" ) == 0 )
+        if( funcLine.find( "\"FUNCTION\"" ) != std::string::npos || funcLine.find( "FUNCTION" ) == 0 )
         {
             size_t qStart = funcLine.find( '"' );
 
@@ -2311,7 +2356,7 @@ size_t PADS_SCH_PARSER::parseSignalDef( const std::vector<std::string>& aLines, 
         if( isSectionMarker( line ) )
             return i - 1;
 
-        WIRE_SEGMENT wire;
+        WIRE_SEGMENT       wire;
         std::istringstream wiss( line );
         wiss >> wire.endpoint_a >> wire.endpoint_b >> wire.vertex_count >> wire.flags;
 
@@ -2330,7 +2375,7 @@ size_t PADS_SCH_PARSER::parseSignalDef( const std::vector<std::string>& aLines, 
             if( ptLine.empty() || isSectionMarker( ptLine ) )
                 break;
 
-            POINT pt;
+            POINT              pt;
             std::istringstream piss( ptLine );
             piss >> pt.x >> pt.y;
             wire.vertices.push_back( pt );
@@ -2350,8 +2395,7 @@ size_t PADS_SCH_PARSER::parseSignalDef( const std::vector<std::string>& aLines, 
 }
 
 
-size_t PADS_SCH_PARSER::parseSectionNETNAMES( const std::vector<std::string>& aLines,
-                                               size_t aStartLine )
+size_t PADS_SCH_PARSER::parseSectionNETNAMES( const std::vector<std::string>& aLines, size_t aStartLine )
 {
     size_t i = aStartLine + 1;
 
@@ -2370,12 +2414,12 @@ size_t PADS_SCH_PARSER::parseSectionNETNAMES( const std::vector<std::string>& aL
 
         // Fields: net_name anchor_ref x_offset y_offset rotation justification f3 f4 f5 f6 f7
         //         height width_pct "font_name"
-        NETNAME_LABEL label;
+        NETNAME_LABEL      label;
         std::istringstream iss( line );
 
-        iss >> label.net_name >> label.anchor_ref >> label.x_offset >> label.y_offset
-            >> label.rotation >> label.justification >> label.f3 >> label.f4 >> label.f5
-            >> label.f6 >> label.f7 >> label.height >> label.width_pct;
+        iss >> label.net_name >> label.anchor_ref >> label.x_offset >> label.y_offset >> label.rotation
+                >> label.justification >> label.f3 >> label.f4 >> label.f5 >> label.f6 >> label.f7 >> label.height
+                >> label.width_pct;
 
         std::string rest;
         std::getline( iss, rest );
@@ -2397,12 +2441,11 @@ size_t PADS_SCH_PARSER::parseSectionNETNAMES( const std::vector<std::string>& aL
 }
 
 
-size_t PADS_SCH_PARSER::skipBraceDelimitedSection( const std::vector<std::string>& aLines,
-                                                     size_t aStartLine )
+size_t PADS_SCH_PARSER::skipBraceDelimitedSection( const std::vector<std::string>& aLines, size_t aStartLine )
 {
     size_t i = aStartLine + 1;
-    int braceDepth = 0;
-    bool foundFirstBrace = false;
+    int    braceDepth = 0;
+    bool   foundFirstBrace = false;
 
     while( i < aLines.size() )
     {
@@ -2594,7 +2637,7 @@ PIN_TYPE PADS_SCH_PARSER::ParsePinTypeChar( char aTypeChar )
     case 'P': return PIN_TYPE::POWER;
     case 'G': return PIN_TYPE::POWER;
     case 'U': return PIN_TYPE::UNSPECIFIED;
-    default:  return PIN_TYPE::UNSPECIFIED;
+    default: return PIN_TYPE::UNSPECIFIED;
     }
 }
 

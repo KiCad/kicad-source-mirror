@@ -361,6 +361,26 @@ struct OFF_PAGE_CONNECTOR
 };
 
 
+struct BUS_ENTRY
+{
+    std::string member_net;
+    POINT       position;
+    int         rotation = 0;
+};
+
+
+struct BUS_DEF
+{
+    std::string              handle;
+    std::string              name;
+    int                      sheet_number = 1;
+    std::vector<POINT>       path;
+    std::vector<BUS_ENTRY>   entries;
+    std::vector<std::string> aliases;
+    std::vector<std::string> member_nets;
+};
+
+
 struct SHEET_DEF
 {
     int         sheet_number = 1;
@@ -463,7 +483,6 @@ struct PARTTYPE_DEF
     std::vector<GATE_DEF> gates;
 
     std::string special_keyword;
-
     struct SPECIAL_VARIANT
     {
         std::string decal_name;
@@ -480,7 +499,6 @@ struct PARTTYPE_DEF
         std::string pin_number;
         std::string net_name;
     };
-
     std::vector<SIGPIN> sigpins;
 
     std::vector<std::string> swap_lines;
@@ -523,6 +541,7 @@ public:
     std::set<int> GetSheetNumbers() const;
 
     const std::vector<OFF_PAGE_CONNECTOR>& GetOffPageConnectors() const { return m_offPageConnectors; }
+    const std::vector<BUS_DEF>&            GetBuses() const { return m_buses; }
 
     std::vector<SCH_SIGNAL>     GetSignalsOnSheet( int aSheetNumber ) const;
     std::vector<PART_PLACEMENT> GetPartsOnSheet( int aSheetNumber ) const;
@@ -546,6 +565,7 @@ private:
     size_t parseSectionCAEDECAL( const std::vector<std::string>& aLines, size_t aStartLine );
     size_t parseSectionPARTTYPE( const std::vector<std::string>& aLines, size_t aStartLine );
     size_t parseSectionPART( const std::vector<std::string>& aLines, size_t aStartLine );
+    size_t parseSectionBUSSES( const std::vector<std::string>& aLines, size_t aStartLine );
     size_t parseSectionOFFPAGEREFS( const std::vector<std::string>& aLines, size_t aStartLine );
     size_t parseSectionTIEDOTS( const std::vector<std::string>& aLines, size_t aStartLine );
     size_t parseSectionCONNECTION( const std::vector<std::string>& aLines, size_t aStartLine );
@@ -572,6 +592,7 @@ private:
     std::vector<PART_PLACEMENT>         m_partPlacements;
     std::vector<SCH_SIGNAL>             m_signals;
     std::vector<OFF_PAGE_CONNECTOR>     m_offPageConnectors;
+    std::vector<BUS_DEF>                m_buses;
     int                                 m_lineNumber;
     int                                 m_currentSheet;
     std::map<std::string, PARTTYPE_DEF> m_partTypes;

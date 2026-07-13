@@ -53,6 +53,28 @@ BOOST_AUTO_TEST_CASE( CheckFileHeader_ValidPowerLogicFile )
 }
 
 
+BOOST_AUTO_TEST_CASE( ParseBusses )
+{
+    std::string               testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/buses.txt";
+    PADS_SCH::PADS_SCH_PARSER parser;
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    const auto& buses = parser.GetBuses();
+    BOOST_REQUIRE_EQUAL( buses.size(), 1 );
+    BOOST_CHECK_EQUAL( buses[0].handle, "@@@B0" );
+    BOOST_CHECK_EQUAL( buses[0].name, "DATA[0..2]" );
+    BOOST_CHECK_EQUAL( buses[0].sheet_number, 1 );
+    BOOST_REQUIRE_EQUAL( buses[0].path.size(), 3 );
+    BOOST_CHECK_EQUAL( buses[0].path[0].x, 3000 );
+    BOOST_CHECK_EQUAL( buses[0].path[2].y, 5000 );
+    BOOST_REQUIRE_EQUAL( buses[0].entries.size(), 3 );
+    BOOST_CHECK_EQUAL( buses[0].entries[1].member_net, "DATA1" );
+    BOOST_CHECK_EQUAL( buses[0].entries[1].position.x, 5000 );
+    BOOST_CHECK_EQUAL( buses[0].aliases, std::vector<std::string>{ "DATA[0..2]" } );
+    BOOST_CHECK_EQUAL( buses[0].member_nets, ( std::vector<std::string>{ "DATA0", "DATA1", "DATA2" } ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( CheckFileHeader_InvalidFile )
 {
     std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/nonexistent.txt";
@@ -83,8 +105,7 @@ BOOST_AUTO_TEST_CASE( CheckFileHeader_LogicWithCodePageSuffix )
     // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23420
     // PADS exporters may include the ANSI code page as a suffix in the header
     // (e.g. *PADS-LOGIC-V9.0-CP1250*). Detection must still succeed.
-    std::string testFile =
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23420_codepage_schematic.txt";
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23420_codepage_schematic.txt";
 
     BOOST_CHECK( PADS_SCH::PADS_SCH_PARSER::CheckFileHeader( testFile ) );
 }
@@ -93,8 +114,7 @@ BOOST_AUTO_TEST_CASE( CheckFileHeader_LogicWithCodePageSuffix )
 BOOST_AUTO_TEST_CASE( ParseHeader_LogicWithCodePageSuffix )
 {
     // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23420
-    std::string testFile =
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23420_codepage_schematic.txt";
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23420_codepage_schematic.txt";
 
     PADS_SCH::PADS_SCH_PARSER parser;
 
@@ -1156,7 +1176,7 @@ BOOST_AUTO_TEST_CASE( SheetNumbers_FromParts )
     BOOST_REQUIRE( parser.Parse( testFile ) );
 
     std::set<int> sheets = parser.GetSheetNumbers();
-    BOOST_CHECK( sheets.count( 1 ) > 0 );  // At least sheet 1 should exist
+    BOOST_CHECK( sheets.count( 1 ) > 0 ); // At least sheet 1 should exist
 }
 
 
@@ -1459,10 +1479,9 @@ BOOST_AUTO_TEST_CASE( SymbolBuilder_MultiUnitConnectorSymbol )
     symDef.pins.push_back( symPin );
 
     std::vector<std::string> pinNumbers = { "1", "2", "3", "4" };
-    std::string cacheKey = "TEST_MULTICONN:conn:J1";
+    std::string              cacheKey = "TEST_MULTICONN:conn:J1";
 
-    LIB_SYMBOL* multiSym =
-            builder.GetOrCreateMultiUnitConnectorSymbol( connPt, symDef, pinNumbers, cacheKey );
+    LIB_SYMBOL* multiSym = builder.GetOrCreateMultiUnitConnectorSymbol( connPt, symDef, pinNumbers, cacheKey );
     BOOST_REQUIRE( multiSym != nullptr );
 
     BOOST_CHECK_EQUAL( multiSym->GetUnitCount(), 4 );
@@ -1482,13 +1501,11 @@ BOOST_AUTO_TEST_CASE( SymbolBuilder_MultiUnitConnectorSymbol )
     }
 
     // Same cache key should return the same symbol
-    LIB_SYMBOL* cached =
-            builder.GetOrCreateMultiUnitConnectorSymbol( connPt, symDef, pinNumbers, cacheKey );
+    LIB_SYMBOL* cached = builder.GetOrCreateMultiUnitConnectorSymbol( connPt, symDef, pinNumbers, cacheKey );
     BOOST_CHECK_EQUAL( multiSym, cached );
 
     // Different cache key should produce a new symbol
-    LIB_SYMBOL* other =
-            builder.GetOrCreateMultiUnitConnectorSymbol( connPt, symDef, pinNumbers, "other_key" );
+    LIB_SYMBOL* other = builder.GetOrCreateMultiUnitConnectorSymbol( connPt, symDef, pinNumbers, "other_key" );
     BOOST_CHECK_NE( multiSym, other );
 }
 
@@ -1575,7 +1592,7 @@ BOOST_AUTO_TEST_CASE( CreateNetLabel_FromSignal )
     wire.end.y = 2000.0;
     signal.wires.push_back( wire );
 
-    VECTOR2I pos( 1000, 2000 );
+    VECTOR2I         pos( 1000, 2000 );
     SCH_GLOBALLABEL* label = builder.CreateNetLabel( signal, pos );
     BOOST_REQUIRE( label != nullptr );
 
@@ -1597,7 +1614,7 @@ BOOST_AUTO_TEST_CASE( CreateNetLabel_PreservesSpecialChars )
     PADS_SCH::SCH_SIGNAL signal;
     signal.name = "NET 1";
 
-    VECTOR2I pos( 1000, 2000 );
+    VECTOR2I         pos( 1000, 2000 );
     SCH_GLOBALLABEL* label = builder.CreateNetLabel( signal, pos );
     BOOST_REQUIRE( label != nullptr );
 
@@ -1683,7 +1700,7 @@ BOOST_AUTO_TEST_CASE( ApplyPartAttributes_Reference )
 
     // Create a minimal symbol for testing
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "TEST" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "TEST" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "TEST" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -1725,7 +1742,7 @@ BOOST_AUTO_TEST_CASE( ApplyPartAttributes_Footprint )
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( parser.GetParameters(), &schematic );
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "CAP" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "CAP" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "CAP" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -1770,7 +1787,7 @@ BOOST_AUTO_TEST_CASE( ApplyFieldSettings_Visibility )
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( parser.GetParameters(), &schematic );
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "74HC00" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "74HC00" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "74HC00" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -1800,7 +1817,7 @@ BOOST_AUTO_TEST_CASE( ApplyPartAttributes_NullSymbol )
     // Should not crash when called with nullptr
     builder.ApplyPartAttributes( nullptr, placement );
 
-    BOOST_CHECK( true );  // If we get here, we passed
+    BOOST_CHECK( true ); // If we get here, we passed
 }
 
 
@@ -1835,7 +1852,7 @@ BOOST_AUTO_TEST_CASE( CreateCustomFields_ManufacturerAndMPN )
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( parser.GetParameters(), &schematic );
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "74HC00" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "74HC00" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "74HC00" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -1872,12 +1889,12 @@ BOOST_AUTO_TEST_CASE( CreateCustomFields_SkipsStandardFields )
 
     // Add standard field attributes (should be skipped by CreateCustomFields)
     PADS_SCH::PART_ATTRIBUTE refAttr;
-    refAttr.name = "Ref.Des.";  // Standard field
+    refAttr.name = "Ref.Des."; // Standard field
     refAttr.value = "R1";
     placement.attributes.push_back( refAttr );
 
     PADS_SCH::PART_ATTRIBUTE valAttr;
-    valAttr.name = "Part Type";  // Standard field
+    valAttr.name = "Part Type"; // Standard field
     valAttr.value = "10K";
     placement.attributes.push_back( valAttr );
 
@@ -1894,7 +1911,7 @@ BOOST_AUTO_TEST_CASE( CreateCustomFields_SkipsStandardFields )
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( parser.GetParameters(), &schematic );
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "RES" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "RES" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "RES" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -1942,7 +1959,7 @@ BOOST_AUTO_TEST_CASE( CreateCustomFields_SkipsEmptyValues )
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( parser.GetParameters(), &schematic );
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "IC" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "IC" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "IC" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -2041,7 +2058,7 @@ BOOST_AUTO_TEST_CASE( CreateTitleBlock_NullScreen )
     // Should not crash with nullptr
     builder.CreateTitleBlock( nullptr );
 
-    BOOST_CHECK( true );  // If we get here, we passed
+    BOOST_CHECK( true ); // If we get here, we passed
 }
 
 
@@ -2128,7 +2145,7 @@ BOOST_AUTO_TEST_CASE( CreateHierarchicalSheet_ReturnsValidSheet )
     schematic.Reset();
 
     // Create root sheet
-    SCH_SHEET* rootSheet = new SCH_SHEET( &schematic );
+    SCH_SHEET*  rootSheet = new SCH_SHEET( &schematic );
     SCH_SCREEN* rootScreen = new SCH_SCREEN( &schematic );
     rootSheet->SetScreen( rootScreen );
 
@@ -2161,7 +2178,7 @@ BOOST_AUTO_TEST_CASE( CreateHierarchicalSheet_SetsFilename )
     SCHEMATIC schematic( nullptr );
     schematic.Reset();
 
-    SCH_SHEET* rootSheet = new SCH_SHEET( &schematic );
+    SCH_SHEET*  rootSheet = new SCH_SHEET( &schematic );
     SCH_SCREEN* rootScreen = new SCH_SCREEN( &schematic );
     rootSheet->SetScreen( rootScreen );
 
@@ -2188,7 +2205,7 @@ BOOST_AUTO_TEST_CASE( CreateHierarchicalSheet_SetsSheetName )
     SCHEMATIC schematic( nullptr );
     schematic.Reset();
 
-    SCH_SHEET* rootSheet = new SCH_SHEET( &schematic );
+    SCH_SHEET*  rootSheet = new SCH_SHEET( &schematic );
     SCH_SCREEN* rootScreen = new SCH_SCREEN( &schematic );
     rootSheet->SetScreen( rootScreen );
 
@@ -2294,7 +2311,7 @@ BOOST_AUTO_TEST_CASE( CreateHierLabel_ValidLabel )
 
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( params, &schematic );
 
-    VECTOR2I pos( 1000, 2000 );
+    VECTOR2I       pos( 1000, 2000 );
     SCH_HIERLABEL* label = builder.CreateHierLabel( "DATA_OUT", pos, &screen );
     BOOST_REQUIRE( label != nullptr );
 
@@ -2344,8 +2361,7 @@ BOOST_AUTO_TEST_CASE( IsGlobalSignal_NotGlobal )
 // bits select what is shown, so it must remain visible. Only the hidden bit (8) hides.
 BOOST_AUTO_TEST_CASE( Issue23855_ValueVisibleWithDisplayFlag )
 {
-    std::string testFile =
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
 
     PADS_SCH::PADS_SCH_PARSER parser;
     BOOST_REQUIRE( parser.Parse( testFile ) );
@@ -2374,8 +2390,7 @@ BOOST_AUTO_TEST_CASE( Issue23855_ValueVisibleWithDisplayFlag )
 // numbers are shown, even when the gate is written in the V9 "GATE" format.
 BOOST_AUTO_TEST_CASE( Issue23855_ConnectorCategoryFlagged )
 {
-    std::string testFile =
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
 
     PADS_SCH::PADS_SCH_PARSER parser;
     BOOST_REQUIRE( parser.Parse( testFile ) );
@@ -2395,8 +2410,7 @@ BOOST_AUTO_TEST_CASE( Issue23855_ConnectorCategoryFlagged )
 // carry no pin names.
 BOOST_AUTO_TEST_CASE( Issue23855_ConnectorShowsPinNumbers )
 {
-    std::string testFile =
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
 
     PADS_SCH::PADS_SCH_PARSER parser;
     BOOST_REQUIRE( parser.Parse( testFile ) );
@@ -2408,7 +2422,7 @@ BOOST_AUTO_TEST_CASE( Issue23855_ConnectorShowsPinNumbers )
     BOOST_REQUIRE( symDef != nullptr );
 
     PADS_SCH::PADS_SCH_SYMBOL_BUILDER builder( parser.GetParameters() );
-    LIB_SYMBOL* connSym = builder.GetOrCreatePartTypeSymbol( ptIt->second, *symDef );
+    LIB_SYMBOL*                       connSym = builder.GetOrCreatePartTypeSymbol( ptIt->second, *symDef );
     BOOST_REQUIRE( connSym != nullptr );
     BOOST_CHECK( connSym->GetShowPinNumbers() );
 
@@ -2459,8 +2473,7 @@ BOOST_AUTO_TEST_CASE( Issue23855_DecodeJustification )
 // placed-frame attribute offsets of a 90 degree rotated part.
 BOOST_AUTO_TEST_CASE( Issue23855_NetNamesAndRotatedAttributes )
 {
-    std::string testFile =
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
+    std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
 
     PADS_SCH::PADS_SCH_PARSER parser;
     BOOST_REQUIRE( parser.Parse( testFile ) );
