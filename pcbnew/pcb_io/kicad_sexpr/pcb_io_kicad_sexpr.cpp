@@ -3405,6 +3405,54 @@ BOARD* PCB_IO_KICAD_SEXPR::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe,
 
     parser.SetLayerMappingHandler( m_layer_mapping_handler );
 
+    std::set<BOARD_ITEM*>   itemsBefore;
+    std::set<NETINFO_ITEM*> netsBefore;
+
+    if( aAppendToMe )
+    {
+        for( BOARD_ITEM* item : aAppendToMe->GetItemSet() )
+            itemsBefore.insert( item );
+
+        for( NETINFO_ITEM* net : aAppendToMe->GetNetInfo() )
+            netsBefore.insert( net );
+    }
+
+    auto revertPartialAppend = [&]()
+    {
+        if( !aAppendToMe )
+            return;
+
+        std::vector<BOARD_ITEM*> addedItems;
+
+        for( BOARD_ITEM* item : aAppendToMe->GetItemSet() )
+        {
+            if( !itemsBefore.contains( item ) )
+                addedItems.push_back( item );
+        }
+
+        // Remove everything before deleting anything, group member back pointers
+        // must be unlinked while their groups are still alive
+        for( BOARD_ITEM* item : addedItems )
+            aAppendToMe->Remove( item );
+
+        for( BOARD_ITEM* item : addedItems )
+            delete item;
+
+        std::vector<NETINFO_ITEM*> addedNets;
+
+        for( NETINFO_ITEM* net : aAppendToMe->GetNetInfo() )
+        {
+            if( !netsBefore.contains( net ) )
+                addedNets.push_back( net );
+        }
+
+        for( NETINFO_ITEM* net : addedNets )
+        {
+            aAppendToMe->Remove( net );
+            delete net;
+        }
+    };
+
     BOARD* board;
 
     try
@@ -3413,15 +3461,24 @@ BOARD* PCB_IO_KICAD_SEXPR::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe,
     }
     catch( const FUTURE_FORMAT_ERROR& )
     {
+        revertPartialAppend();
+
         // Don't wrap a FUTURE_FORMAT_ERROR in another
         throw;
     }
     catch( const PARSE_ERROR& parse_error )
     {
+        revertPartialAppend();
+
         if( parser.IsTooRecent() )
             throw FUTURE_FORMAT_ERROR( parse_error, parser.GetRequiredVersion() );
         else
             throw;
+    }
+    catch( ... )
+    {
+        revertPartialAppend();
+        throw;
     }
 
     if( !board )

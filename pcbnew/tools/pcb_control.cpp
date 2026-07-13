@@ -2170,7 +2170,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
         DisplayErrorMessage( editFrame, _( "Error loading board." ), ioe.What() );
         clearSkipStructOnExistingItems();
 
-        return 0;
+        return 1;
     }
 
     newProperties = brd->GetProperties();

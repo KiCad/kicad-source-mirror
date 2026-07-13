@@ -17,17 +17,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <memory>
 #include <sstream>
 #include <string>
+#include <thread>
 
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <io/kicad/kicad_io_utils.h>
+#include <progress_reporter.h>
 #include <richio.h>
 
 #include <board.h>
@@ -783,6 +788,117 @@ BOOST_AUTO_TEST_CASE( CopperThievingZone_RejectsMalformedGeometry )
     BOOST_CHECK_GT( loaded.line_width, 0 );
 
     std::filesystem::remove( tmpPath );
+}
+
+
+/**
+ * Cancelling a load that appends into an existing board must not leave any partially
+ * parsed items or nets behind (issue 24911)
+ */
+BOOST_AUTO_TEST_CASE( Issue24911_CancelledAppendLeavesBoardUntouched )
+{
+    // Requests cancellation once the parse reaches the given line, then stalls long
+    // enough to open the parser 250ms cancel checkpoint window
+    class CANCEL_AT_LINE_READER : public STRING_LINE_READER
+    {
+    public:
+        CANCEL_AT_LINE_READER( const std::string& aText, unsigned aCancelLine, bool* aCancelFlag ) :
+                STRING_LINE_READER( aText, wxT( "cancel-test" ) ),
+                m_cancelLine( aCancelLine ),
+                m_cancelFlag( aCancelFlag )
+        {
+        }
+
+        char* ReadLine() override
+        {
+            if( !*m_cancelFlag && LineNumber() >= m_cancelLine )
+            {
+                *m_cancelFlag = true;
+                std::this_thread::sleep_for( std::chrono::milliseconds( 300 ) );
+            }
+
+            return STRING_LINE_READER::ReadLine();
+        }
+
+    private:
+        unsigned m_cancelLine;
+        bool*    m_cancelFlag;
+    };
+
+    class CANCELLING_REPORTER : public PROGRESS_REPORTER
+    {
+    public:
+        CANCELLING_REPORTER( bool* aCancelFlag ) :
+                m_cancelFlag( aCancelFlag )
+        {
+        }
+
+        void SetNumPhases( int ) override {}
+        void AddPhases( int ) override {}
+        void BeginPhase( int ) override {}
+        void AdvancePhase() override {}
+        void AdvancePhase( const wxString& ) override {}
+        void Report( const wxString& ) override {}
+        void SetCurrentProgress( double ) override {}
+        void SetMaxProgress( int ) override {}
+        void AdvanceProgress() override {}
+        void SetTitle( const wxString& ) override {}
+        bool IsCancelled() const override { return *m_cancelFlag; }
+        bool KeepRefreshing( bool ) override { return !*m_cancelFlag; }
+
+    private:
+        bool* m_cancelFlag;
+    };
+
+    // Source board with one net and enough tracks that the cancel lands mid-parse
+    std::unique_ptr<BOARD> source = std::make_unique<BOARD>();
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( source.get(), wxT( "GHOST_NET" ), 1 );
+    source->Add( net );
+
+    for( int i = 0; i < 400; i++ )
+    {
+        PCB_TRACK* track = new PCB_TRACK( source.get() );
+        track->SetStart( VECTOR2I( i * 10000, 0 ) );
+        track->SetEnd( VECTOR2I( i * 10000, 10000 ) );
+        track->SetWidth( 200000 );
+        track->SetLayer( F_Cu );
+        track->SetNet( net );
+        source->Add( track );
+    }
+
+    STRING_FORMATTER fmt;
+    kicadPlugin.FormatBoardToFormatter( &fmt, source.get() );
+
+    // The formatter emits a single line, the parser can only be interrupted between lines
+    std::string text = fmt.GetString();
+    KICAD_FORMAT::Prettify( text );
+
+    unsigned lineCount = std::count( text.begin(), text.end(), '\n' );
+
+    // Destination board with one pre-existing track
+    std::unique_ptr<BOARD> dest = std::make_unique<BOARD>();
+
+    PCB_TRACK* existing = new PCB_TRACK( dest.get() );
+    existing->SetStart( VECTOR2I( 0, 0 ) );
+    existing->SetEnd( VECTOR2I( 5000, 0 ) );
+    existing->SetWidth( 200000 );
+    existing->SetLayer( F_Cu );
+    dest->Add( existing );
+
+    size_t   tracksBefore = dest->Tracks().size();
+    unsigned netsBefore = dest->GetNetInfo().GetNetCount();
+
+    bool cancelRequested = false;
+
+    CANCEL_AT_LINE_READER reader( text, lineCount / 2, &cancelRequested );
+    CANCELLING_REPORTER   reporter( &cancelRequested );
+
+    BOOST_CHECK_THROW( kicadPlugin.DoLoad( reader, dest.get(), nullptr, &reporter, lineCount ), IO_ERROR );
+    BOOST_CHECK( cancelRequested );
+
+    BOOST_CHECK_EQUAL( dest->Tracks().size(), tracksBefore );
+    BOOST_CHECK_EQUAL( dest->GetNetInfo().GetNetCount(), netsBefore );
 }
 
 
