@@ -18,7 +18,12 @@
 # The runtime links kiapi and nng only, never kicommon or wxWidgets, so wxString stays out of the protocol
 
 set( MDW_RUNTIME_SRCS
+    src/mdw_backend_server.cpp
+    src/mdw_event_publisher.cpp
     src/mdw_file_io.cpp
+    src/mdw_idempotency.cpp
+    src/mdw_paging.cpp
+    src/mdw_run_backend.cpp
     )
 
 add_library( mdw_runtime STATIC

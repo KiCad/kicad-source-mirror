@@ -22,6 +22,7 @@ add_subdirectory( diff_merge )
 add_subdirectory( gerbview )
 add_subdirectory( eeschema )
 add_subdirectory( libs )
+add_subdirectory( mdw/runtime )
 add_subdirectory( pcbnew )
 
 if( KICAD_SPICE_QA )
