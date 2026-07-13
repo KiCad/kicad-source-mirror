@@ -128,8 +128,9 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( SCH_ACTIONS::syncAllSheetsPins );
 
         config.AppendSeparator()
-              .AppendAction( SCH_ACTIONS::placeSchematicText )
-              .AppendAction( SCH_ACTIONS::drawTextBox )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Text objects" ) )
+                            .AddAction( SCH_ACTIONS::placeSchematicText )
+                            .AddAction( SCH_ACTIONS::drawTextBox ) )
               .AppendAction( SCH_ACTIONS::drawTable )
               .AppendAction( SCH_ACTIONS::drawRectangle )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Circle" ) )

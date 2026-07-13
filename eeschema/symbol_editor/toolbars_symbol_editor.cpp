@@ -93,8 +93,9 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
 
         config.AppendSeparator()
               .AppendAction( SCH_ACTIONS::placeSymbolPin )
-              .AppendAction( SCH_ACTIONS::placeSymbolText )
-              .AppendAction( SCH_ACTIONS::drawSymbolTextBox )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Text objects" ) )
+                            .AddAction( SCH_ACTIONS::placeSymbolText )
+                            .AddAction( SCH_ACTIONS::drawSymbolTextBox ) )
               .AppendAction( SCH_ACTIONS::drawRectangle )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Circle" ) )
                             .AddAction( SCH_ACTIONS::drawCircle )
