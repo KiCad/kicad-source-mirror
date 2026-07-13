@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 14:12+0300\n"
+"POT-Creation-Date: 2026-07-13 16:46+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1634,8 +1634,8 @@ msgstr ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 
-msgid "Restore auto-saved"
-msgstr "Restore auto-saved"
+msgid "Restore Auto-saved"
+msgstr "Restore Auto-saved"
 
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
@@ -1644,14 +1644,14 @@ msgstr ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 
-msgid "Keep current"
-msgstr "Keep current"
+msgid "Keep Current"
+msgstr "Keep Current"
 
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr "Keeps your saved file as-is and discards the auto-saved changes."
 
-msgid "Keep both"
-msgstr "Keep both"
+msgid "Keep Both"
+msgstr "Keep Both"
 
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
@@ -1660,8 +1660,8 @@ msgstr ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 
-msgid "Cancel open"
-msgstr "Cancel open"
+msgid "Cancel Open"
+msgstr "Cancel Open"
 
 msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
@@ -2113,6 +2113,10 @@ msgid ""
 msgstr ""
 "Error loading drawing sheet '%s'.\n"
 "%s"
+
+#, c-format
+msgid "Remove the previously embedded drawing sheet file '%s'?"
+msgstr "Remove the previously embedded drawing sheet file '%s'?"
 
 msgid "dummy text"
 msgstr "dummy text"
@@ -4276,12 +4280,12 @@ msgstr "Override locks"
 msgid "Edit Grids..."
 msgstr "Edit Grids..."
 
-msgid "Zoom Auto"
-msgstr "Zoom Auto"
-
 #, c-format
 msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
+
+msgid "Zoom Auto"
+msgstr "Zoom Auto"
 
 #, c-format
 msgid "grid %s"
@@ -14622,6 +14626,26 @@ msgstr "Select variant name to remove:"
 msgid "Remove Design Variant"
 msgstr "Remove Design Variant"
 
+msgid "No variants to rename."
+msgstr "No variants to rename."
+
+msgid "Select variant to rename:"
+msgstr "Select variant to rename:"
+
+#, c-format
+msgid "Rename variant '%s' to '%s'"
+msgstr "Rename variant '%s' to '%s'"
+
+msgid "No variants to copy."
+msgstr "No variants to copy."
+
+msgid "Select variant to copy:"
+msgstr "Select variant to copy:"
+
+#, c-format
+msgid "Copy variant '%s' to '%s'"
+msgstr "Copy variant '%s' to '%s'"
+
 #, c-format
 msgid "Field %s (empty)"
 msgstr "Field %s (empty)"
@@ -20095,6 +20119,18 @@ msgstr "Edit Variant Description..."
 msgid "Edit the description of an existing design variant."
 msgstr "Edit the description of an existing design variant."
 
+msgid "Rename Design Variant..."
+msgstr "Rename Design Variant..."
+
+msgid "Rename an existing design variant."
+msgstr "Rename an existing design variant."
+
+msgid "Copy Design Variant..."
+msgstr "Copy Design Variant..."
+
+msgid "Create a copy of an existing design variant."
+msgstr "Create a copy of an existing design variant."
+
 msgid "Align"
 msgstr "Align"
 
@@ -20212,6 +20248,9 @@ msgstr "Modify sheet pin"
 
 msgid "Modify schematic item"
 msgstr "Modify schematic item"
+
+msgid "Auto-place Sheet Pins"
+msgstr "Auto-place Sheet Pins"
 
 msgid "No sub schematic found in the current project"
 msgstr "No sub schematic found in the current project"
@@ -35921,8 +35960,8 @@ msgid "Netclass clearances apply only between copper items."
 msgstr "Netclass clearances apply only between copper items."
 
 #, c-format
-msgid "%s contains no copper.  Rule ignored."
-msgstr "%s contains no copper.  Rule ignored."
+msgid "%s contains no copper.  Constraint ignored."
+msgstr "%s contains no copper.  Constraint ignored."
 
 msgid "Keepout constraint not met."
 msgstr "Keepout constraint not met."
@@ -37669,6 +37708,13 @@ msgstr "Cannot identify actual file type for '%s'."
 #, c-format
 msgid "Could not transfer model data from file '%s'."
 msgstr "Could not transfer model data from file '%s'."
+
+msgid ""
+"Could not post-process GLB line primitives; the exported model may not "
+"import in strict glTF viewers."
+msgstr ""
+"Could not post-process GLB line primitives; the exported model may not "
+"import in strict glTF viewers."
 
 #, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
@@ -46742,6 +46788,22 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Restore auto-saved"
+#~ msgstr "Restore auto-saved"
+
+#~ msgid "Keep current"
+#~ msgstr "Keep current"
+
+#~ msgid "Keep both"
+#~ msgstr "Keep both"
+
+#~ msgid "Cancel open"
+#~ msgstr "Cancel open"
+
+#, c-format
+#~ msgid "%s contains no copper.  Rule ignored."
+#~ msgstr "%s contains no copper.  Rule ignored."
 
 #~ msgid ""
 #~ "The following files will be deleted when restoring this commit:\n"
