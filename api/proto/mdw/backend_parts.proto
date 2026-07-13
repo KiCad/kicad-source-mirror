@@ -1,0 +1,70 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Capability group CG_PARTS.
+ *
+ * Managed parts, with lookup, search and the batch map from library members to
+ * the parts that use them.
+ */
+
+syntax = "proto3";
+
+package kiapi.mdw;
+
+import "mdw/backend_base.proto";
+import "workspace/workspace_types.proto";
+
+// An empty revision_id reads the latest revision
+message GetPartRequest
+{
+  string part_id     = 1;
+  string revision_id = 2;
+}
+message GetPartReply { kiapi.workspace.Part part = 1; }
+
+message SearchPartsRequest
+{
+  string      text = 1;
+  PageRequest page = 2;
+}
+
+message SearchPartsReply
+{
+  repeated kiapi.workspace.Part parts           = 1;
+  string                        next_page_token = 2;
+  optional uint64               total_count     = 3; // Unset when the backend cannot count cheaply
+}
+
+/*
+ * Every part of this source that uses each member, for a symbol placed
+ * without a part identity. Members may belong to another source. A generic
+ * symbol serves many parts, so the caller shows the candidates and never picks
+ * one. At most 1000 members per request.
+ */
+message ResolvePartsRequest { repeated kiapi.workspace.ItemRef members = 1; }
+
+message ResolvedPart
+{
+  kiapi.workspace.ItemRef       member     = 1;
+  repeated kiapi.workspace.Part candidates = 2;
+}
+
+// One entry per requested member, in request order
+message ResolvePartsReply { repeated ResolvedPart parts = 1; }

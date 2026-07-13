@@ -1,0 +1,180 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Capability group CG_REVISIONS.
+ *
+ * Revision history, revision download, and design baselines. The framework
+ * downloads two revisions into its cache to drive the visual diff.
+ *
+ * A baseline is a release of a design, the project item at one revision, with
+ * the library parts placed in it pinned by their content digests. Each source
+ * reports facts about the members it owns; the project's source applies its
+ * policy to all of them and decides which block a release.
+ */
+
+syntax = "proto3";
+
+package kiapi.mdw;
+
+import "mdw/backend_base.proto";
+import "workspace/workspace_types.proto";
+
+// Newest first
+message GetRevisionHistoryRequest
+{
+  string      item_id = 1;
+  PageRequest page    = 2;
+}
+
+message GetRevisionHistoryReply
+{
+  repeated kiapi.workspace.Revision revisions       = 1;
+  string                            next_page_token = 2;
+}
+
+message DownloadRevisionRequest
+{
+  string item_id     = 1;
+  string revision_id = 2;
+  string local_path  = 3;
+}
+
+// The revision written, which for an empty revision_id is the latest
+message DownloadRevisionReply { kiapi.workspace.Revision revision = 1; }
+
+enum PlacedPartStatus
+{
+  PPS_UNKNOWN             = 0; // Also when the owning source does not track releases
+  PPS_RELEASED            = 1; // Matches the latest release, in a state usable in designs
+  PPS_NEVER_RELEASED      = 2; // The item has no release
+  PPS_DIFFERS             = 3; // Matches no release
+  PPS_OUTDATED            = 4; // Matches a release, and a newer one exists
+  PPS_NOT_USABLE          = 5; // Matches a release whose state may not be used in designs
+  PPS_UNPUBLISHED         = 6; // Matches a release the shared store does not hold yet
+  PPS_UNVERIFIED          = 7; // The owning source is not set up here, not connected, or could not answer
+  PPS_NOT_FOR_NEW_DESIGNS = 8; // Matches a release whose state is usable but not for new designs
+}
+
+/*
+ * What the source owning a placed member knows about it. statuses holds
+ * UNKNOWN, UNVERIFIED, NEVER_RELEASED or DIFFERS alone; for a matched release it holds every
+ * OUTDATED, NOT_USABLE, UNPUBLISHED and NOT_FOR_NEW_DESIGNS that applies, or RELEASED when none does.
+ * The project's policy weighs all of them with matched_state.
+ */
+message PartFacts
+{
+  repeated PlacedPartStatus      statuses               = 1;
+  string                         matched_revision_id    = 2;
+  string                         matched_revision_label = 3;
+  string                         latest_revision_label  = 4;
+  string                         message                = 5;
+  kiapi.workspace.LifecycleState matched_state          = 6;
+}
+
+/*
+ * A library member placed in a design. content_digest is the library digest of it
+ * as placed. part and part_revision_id come from the symbol's MDW_Part field,
+ * which holds identity only; both are empty when the symbol has none, and the
+ * backend resolves such a member itself (ResolveParts). A revision's label is
+ * not sent; the owning backend knows it. The client sets owner_facts when
+ * item.source names another source, from that source's CheckPlacedParts.
+ */
+message PlacedPart
+{
+  kiapi.workspace.ItemRef item                = 1;
+  string                  content_digest      = 2;
+  repeated string         references          = 3; // Designators
+  kiapi.workspace.ItemRef part                = 4;
+  string                  part_revision_id    = 5;
+  PartFacts               owner_facts         = 6;
+  string                  lib_id              = 7; // As placed, for display
+}
+
+// Asked of the source that owns the members. One answer per part, in request order
+message CheckPlacedPartsRequest { repeated PlacedPart parts = 1; }
+message CheckPlacedPartsReply { repeated PartFacts facts = 1; }
+
+enum Severity
+{
+  SEV_UNKNOWN = 0;
+  SEV_NONE    = 1;
+  SEV_WARNING = 2;
+  SEV_ERROR   = 3; // CreateBaseline refuses the part unless an exception names it
+}
+
+// The project source's verdict on parts[part_index]
+message PlacedPartCheck
+{
+  uint32    part_index = 1;
+  PartFacts facts      = 2;
+  Severity  severity   = 3;
+}
+
+message CheckBaselineRequest
+{
+  string              item_id     = 1; // The project item, empty for a design not added to the source yet
+  string              revision_id = 2; // The project revision to release
+  repeated PlacedPart parts       = 3;
+}
+
+// Why CreateBaseline would refuse the project revision now, whatever its parts
+enum BaselineHold
+{
+  HOLD_UNKNOWN     = 0;
+  HOLD_NONE        = 1;
+  HOLD_UNCOMMITTED = 2; // The project has changes no revision holds
+  HOLD_DETACHED    = 3; // The project is on no branch
+  HOLD_NO_REMOTE   = 4; // The project has nowhere to share a release
+  HOLD_LOCKED      = 5; // Another user has the project checked out
+}
+
+// One check per request part, in request order
+message CheckBaselineReply
+{
+  repeated PlacedPartCheck parts  = 1;
+  BaselineHold             hold   = 2; // The first hold, in the order the user must clear them
+  string                   holder = 3; // Display name of the user holding a HOLD_LOCKED project
+}
+
+// Why parts[part_index] may be released as placed despite its check
+message BaselineException
+{
+  uint32                 part_index = 1;
+  string                 note       = 2;
+  kiapi.workspace.EcoRef eco        = 3;
+}
+
+message CreateBaselineRequest
+{
+  string                     item_id         = 1; // The project item
+  string                     revision_id     = 2; // The project revision to release
+  repeated PlacedPart        parts           = 3;
+  repeated BaselineException exceptions      = 4;
+  string                     comment         = 5;
+  string                     requested_label = 6; // Empty takes the backend's next label
+  string                     idempotency_id  = 7;
+}
+
+message CreateBaselineReply
+{
+  kiapi.workspace.ChangeOutcome outcome  = 1;
+  kiapi.workspace.Revision      baseline = 2; // Set when applied
+  kiapi.workspace.PendingChange pending  = 3; // Set when pending
+}

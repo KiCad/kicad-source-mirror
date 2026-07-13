@@ -1,0 +1,94 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Capability group CG_LIFECYCLE.
+ *
+ * Lifecycle states, transitions between them, and releases. A transition
+ * moves a revision between states; a release publishes new content as the
+ * item's next released revision. They are separate because every backend that
+ * keeps revisions keeps them separate.
+ *
+ * Every request takes an optional revision_id; empty means the item's latest.
+ * Revising a released item is Checkout with lock, and the lock is the claim.
+ */
+
+syntax = "proto3";
+
+package kiapi.mdw;
+
+import "mdw/backend_shared_libs.proto";
+import "workspace/workspace_types.proto";
+
+message GetLifecycleDefinitionRequest { string item_id = 1; }
+message GetLifecycleDefinitionReply { kiapi.workspace.LifecycleDefinition definition = 1; }
+
+message GetAvailableTransitionsRequest
+{
+  string item_id     = 1;
+  string revision_id = 2;
+}
+
+message GetAvailableTransitionsReply { repeated kiapi.workspace.LifecycleTransition transitions = 1; }
+
+message TransitionLifecycleRequest
+{
+  string item_id         = 1;
+  string revision_id     = 2;
+  string target_state_id = 3;
+  string comment         = 4;
+  string idempotency_id  = 5;
+}
+
+message TransitionLifecycleReply
+{
+  kiapi.workspace.ChangeOutcome  outcome = 1;
+  kiapi.workspace.LifecycleState state   = 2; // Set when applied
+  kiapi.workspace.PendingChange  pending = 3; // Set when pending
+}
+
+/*
+ * Publish the content at local_path as the item's next released revision.
+ * base_revision_id is the release the edit started from, empty for a first
+ * release; a newer release answers WE_VERSION_CONFLICT. local_path is the file
+ * holding the item inside the source's local copy, and content_digest is
+ * the library digest of the item as the client computed it. member_digest, when set,
+ * covers the whole member where content_digest covers what a placement is compared on;
+ * a backend tells releases apart by it. Releasing gives up the caller's claim on the item.
+ */
+message ReleaseRevisionRequest
+{
+  string item_id          = 1;
+  string base_revision_id = 2;
+  string local_path       = 3;
+  string content_digest   = 4;
+  string comment          = 5;
+  string requested_label  = 6; // Empty takes the backend's next label
+  string idempotency_id   = 7;
+  string member_digest    = 8;
+}
+
+message ReleaseRevisionReply
+{
+  kiapi.workspace.ChangeOutcome outcome       = 1;
+  kiapi.workspace.Revision      revision      = 2; // Set when applied
+  kiapi.workspace.PendingChange pending       = 3; // Set when pending
+  Snapshot                      snapshot      = 4; // The copy as this release left it; unset unless named exactly
+  string                        base_snapshot = 5; // Token of the library copy this release built on; set with snapshot
+}

@@ -1,0 +1,88 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Capability group CG_REVIEW.
+ *
+ * Design reviews of a revision. The client shows review state in Release
+ * Design and can hold a release until a review is approved when the backend
+ * says one is required.
+ */
+
+syntax = "proto3";
+
+package kiapi.mdw;
+
+import "mdw/backend_base.proto";
+import "workspace/workspace_types.proto";
+
+enum ReviewState
+{
+  RS_UNKNOWN           = 0;
+  RS_OPEN              = 1;
+  RS_APPROVED          = 2;
+  RS_CHANGES_REQUESTED = 3;
+  RS_REJECTED          = 4;
+  RS_CANCELLED         = 5;
+}
+
+message Reviewer
+{
+  string      user_id      = 1;
+  string      display_name = 2;
+  ReviewState verdict      = 3;
+  bool        required     = 4;
+}
+
+message Review
+{
+  string                  review_id      = 1;
+  string                  display_id     = 2; // "DR-12"
+  string                  title          = 3;
+  string                  state          = 4; // Backend display string
+  ReviewState             state_category = 5;
+  string                  author         = 6;
+  repeated Reviewer       reviewers      = 7;
+  string                  revision_id    = 8; // The revision under review
+  string                  url            = 9;
+  kiapi.workspace.ItemRef item           = 10; // The reviewed item; an empty source is the answering one
+}
+
+message GetReviewRequest { string review_id = 1; }
+message GetReviewReply { Review review = 1; }
+
+/*
+ * Answer only reviews of item_id, each naming that item in Review.item. While
+ * approval_required is set, CreateBaseline of a revision with no approved
+ * review fails with WE_PERMISSION_DENIED naming the missing approval, or
+ * answers pending until it is approved. It never succeeds silently.
+ */
+message ListReviewsRequest
+{
+  string      item_id     = 1;
+  string      revision_id = 2; // Empty for every revision, otherwise only reviews naming it or WE_NOT_SUPPORTED
+  PageRequest page        = 3;
+}
+
+message ListReviewsReply
+{
+  repeated Review reviews           = 1;
+  bool            approval_required = 2; // The backend holds a release of this item until a review is approved
+  string          next_page_token   = 3;
+}

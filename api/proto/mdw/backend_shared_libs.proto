@@ -1,0 +1,266 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Capability group CG_SHARED_LIBRARIES.
+ *
+ * Workspace-owned shared component libraries. The client chooses where a
+ * source's libraries live on disk (local_root) and registers each library in
+ * its library tables; the backend writes and updates the files there and keeps
+ * whatever it needs to know about that copy inside it.
+ *
+ * A library member is an item. member_id is an item_id, so lifecycle, locks,
+ * history and permissions address members directly. DownloadRevision of a
+ * member writes a library file holding only that member, under its name. For
+ * a symbol that is a .kicad_sym with one self-contained symbol, its inherited
+ * content flattened from that revision's snapshot and never an extends stub.
+ * For a footprint it is the .kicad_mod.
+ *
+ * A member's file is the file under local_root that holds it, the .kicad_sym
+ * for a symbol or the .kicad_mod inside the .pretty for a footprint. That is
+ * finer than SharedLibrary.relative_path, which names the library.
+ *
+ * Pins are Snapshot tokens the backend mints, such as a commit, a manifest of
+ * member revisions or a point in time. The client stores and shows them and never
+ * parses one.
+ */
+
+syntax = "proto3";
+
+package kiapi.mdw;
+
+import "mdw/backend_base.proto";
+import "workspace/workspace_types.proto";
+
+enum SharedLibType
+{
+  SLT_UNKNOWN   = 0;
+  SLT_SYMBOL    = 1;
+  SLT_FOOTPRINT = 2;
+  SLT_MODEL_3D  = 3;
+}
+
+message Snapshot
+{
+  string          token    = 1; // Opaque and backend-specific; returned verbatim, never parsed
+  string          label    = 2; // What the user sees, such as a branch, a tag or a date
+  repeated string warnings = 3; // Set when membership at the snapshot can only be rebuilt approximately
+}
+
+message SharedLibrary
+{
+  string        library_id    = 1;
+  string        display_name  = 2; // The library table nickname
+  SharedLibType type          = 3;
+  string        relative_path = 4; // Under local_root, as "Passives.kicad_sym" or "footprints/Conn.pretty"
+}
+
+message ListSharedLibrariesRequest {}
+
+message ListSharedLibrariesReply
+{
+  repeated SharedLibrary libraries = 1;
+  Snapshot               latest    = 2;
+}
+
+// Write every library at a snapshot into local_root. pin is a Snapshot token; empty means the latest
+message MaterializeSharedLibrariesRequest
+{
+  string local_root     = 1;
+  string pin            = 2; // A Snapshot token
+  string idempotency_id = 3;
+}
+
+message MaterializeSharedLibrariesReply
+{
+  Snapshot               snapshot  = 1; // What was written
+  repeated SharedLibrary libraries = 2;
+  repeated LibraryMember members   = 3; // Every member at snapshot, as ListMembers rows them
+}
+
+message MemberChange
+{
+  kiapi.workspace.ItemRef member             = 1;
+  ChangeType              change             = 2;
+  string                  old_revision_label = 3;
+  string                  new_revision_label = 4;
+}
+
+/*
+ * A member changed both locally and upstream that the backend could not merge.
+ * Ours is the member called name inside relative_path, absent when the file or
+ * the member is missing (deleted locally). The client downloads base and theirs
+ * with DownloadRevision, merges them with an extract of ours and sends the
+ * result back as a ConflictResolution. An empty base_revision_id means both
+ * sides added the member; an empty theirs_revision_id means upstream removed
+ * it. Never both.
+ */
+message UpdateConflict
+{
+  kiapi.workspace.ItemRef      item               = 1;
+  kiapi.workspace.DocumentKind kind               = 2;
+  string                       base_revision_id   = 3;
+  string                       theirs_revision_id = 4;
+  string                       relative_path      = 5; // The member's file under local_root
+  string                       name               = 6; // The member's name inside that file
+  string                       ours_token         = 7; // Opaque; names ours as the backend read it
+}
+
+/*
+ * The user's answer to a conflict against theirs_revision_id. With merged
+ * unset the member stays as the local file holds it. Otherwise the member
+ * becomes merged, a library file holding only that member as DownloadRevision
+ * writes it, under a header of its file's format version, and every other
+ * member of its file is left untouched. With whole_file_of set, merged is
+ * instead the member's whole symbol file, holding every other symbol the file
+ * holds here, and replaces that file as it is; whole_file_of is the git blob id
+ * of the file's bytes the answer was made from, and a file that no longer holds
+ * them counts as a moved ours. A merged that is empty, or a
+ * symbol file without the member, removes it. ours_token echoes the
+ * conflict's, and is empty in a keep answer no conflict asked for, which is
+ * never refused; a merged answer whose ours or theirs has moved since is never
+ * written, and is either asked for again or fails the update with
+ * WE_VERSION_CONFLICT.
+ */
+message ConflictResolution
+{
+  string          item_id            = 1;
+  string          theirs_revision_id = 2;
+  optional bytes  merged             = 3;
+  string          ours_token         = 4;
+  string          whole_file_of      = 5;
+}
+
+/*
+ * Bring an unpinned copy to the latest snapshot. A local_root that does not
+ * exist or is empty is materialized at the latest snapshot. A non-empty
+ * directory without the backend's manifest fails with WE_INVALID_PARAMETER
+ * naming it, and is never overwritten. Any conflict leaves the copy
+ * unchanged; the caller resolves every conflict and sends the update again with
+ * the resolutions.
+ */
+message UpdateSharedLibrariesRequest
+{
+  string                      local_root     = 1;
+  repeated ConflictResolution resolutions    = 2;
+  string                      idempotency_id = 3;
+}
+
+message UpdateSharedLibrariesReply
+{
+  Snapshot                snapshot  = 1;
+  repeated MemberChange   changes   = 2;
+  repeated UpdateConflict conflicts = 3;
+  repeated SharedLibrary  libraries = 4; // What local_root holds at snapshot, set when there are no conflicts
+  repeated LibraryMember  members   = 5; // Every member at snapshot, set when there are no conflicts
+}
+
+message LibraryMember
+{
+  string                         member_id      = 1;
+  string                         library_id     = 2;
+  string                         name           = 3; // The item name inside the library, as in a LIB_ID
+  kiapi.workspace.MemberKind     kind           = 4;
+  string                         path_hint      = 5;
+  string                         revision_id    = 6; // Latest release at the snapshot; empty when never released
+  string                         revision_label = 7;
+  kiapi.workspace.LifecycleState state          = 8;
+  string                         version        = 9;  // The member's content at the snapshot, compared, never shown
+  string                         release_digest = 10; // The content_digest revision_id was released with
+  repeated MemberRelease         releases       = 11; // Every release at the snapshot, oldest first
+}
+
+// One release of a member, as the placed-part check weighs it
+message MemberRelease
+{
+  string                         revision_id    = 1;
+  string                         label          = 2;
+  string                         content_digest = 3; // Empty when no placed part may match it
+  kiapi.workspace.LifecycleState state          = 4;
+  bool                           published      = 5; // The shared store holds it
+}
+
+// Membership and revisions at snapshot, a Snapshot token; empty means the latest
+message ListMembersRequest
+{
+  string      library_id = 1;
+  PageRequest page       = 2;
+  string      snapshot   = 3;
+}
+
+message ListMembersReply
+{
+  repeated LibraryMember members         = 1;
+  string                 next_page_token = 2;
+}
+
+/*
+ * One member's outcome. library_id and name identify the member even when no
+ * item could be created for it. outcome is unset when error is set.
+ */
+message MemberResult
+{
+  string                         library_id = 1;
+  string                         name       = 2;
+  string                         item_id    = 3;
+  kiapi.workspace.ChangeOutcome  outcome    = 4;
+  kiapi.workspace.Revision       revision   = 5; // CO_APPLIED
+  kiapi.workspace.PendingChange  pending    = 6; // CO_PENDING
+  kiapi.workspace.WorkspaceError error      = 7;
+}
+
+/*
+ * Check in the local changes under local_root, which is the binding's
+ * local_root or a copy Materialize or Update wrote. Any other directory fails
+ * with WE_INVALID_PARAMETER and checks in nothing. Empty item_ids means every
+ * changed member, unless whole_files names files, which are then all it asks for.
+ * item_ids may hold provisional ids from ListLocalChanges; an
+ * expired one fails in its own MemberResult with WE_ITEM_NOT_FOUND, after any
+ * idempotent replay. A new member gets its item here. Each member answers on
+ * its own, so a WE_OK envelope means the batch was processed, not that every
+ * member applied.
+ */
+message CheckInSharedLibraryRequest
+{
+  string              local_root     = 1;
+  repeated string     item_ids       = 2;
+  string              comment        = 3;
+  string              idempotency_id = 4;
+  // Files committed as they are on disk, relative to local_root, to the digest of their bytes. Each was only
+  // reformatted, or its real edits are all members in item_ids, whose splice stands if the file is not adopted
+  map<string, string> whole_files    = 5;
+  // whole_files only reformat members that stay where they are, as a file format upgrade does, so the commit
+  // revises no member and may reformat released ones. The caller vouches for each member, and item_ids is empty
+  bool                format_upgrade = 6;
+}
+
+// A whole file the check-in left out, and a sentence saying why
+message WholeFileSkip
+{
+  string path   = 1;
+  string reason = 2;
+}
+
+message CheckInSharedLibraryReply
+{
+  repeated MemberResult   results       = 1;
+  Snapshot                snapshot      = 2; // The libraries as this check-in left them; unset if nothing committed
+  Snapshot                copy_snapshot = 3; // local_root as this check-in left it; unset unless named exactly
+  repeated WholeFileSkip  skipped_files = 4;
+}

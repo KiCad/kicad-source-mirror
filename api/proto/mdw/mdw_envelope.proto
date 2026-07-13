@@ -1,0 +1,75 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * The backend channel envelope. The client spawns a backend executable and
+ * speaks this protocol over nng REQ/REP (control) and a reversed REQ/REP
+ * (events). Dispatch is method-per-message through this envelope's
+ * google.protobuf.Any payload, as in the API_HANDLER model, so there are no
+ * proto service blocks.
+ */
+
+syntax = "proto3";
+
+package kiapi.mdw;
+
+import "google/protobuf/any.proto";
+import "workspace/workspace_types.proto";
+
+/*
+ * A request from the client to the backend on the control channel. channel_token is
+ * the per-spawn secret echoed in every envelope both directions. request_id
+ * ties CancelRequest to an in-flight call.
+ */
+message MdwRequest
+{
+  string              channel_token = 1;
+  string              request_id    = 2;
+
+  google.protobuf.Any payload       = 3;
+}
+
+message MdwResponse
+{
+  string                         channel_token = 1;
+  string                         request_id    = 2;
+
+  // The single error channel for the backend call, WE_OK on success. Reply
+  // payloads carry no error field of their own and may be empty on error.
+  kiapi.workspace.WorkspaceError error         = 3;
+
+  google.protobuf.Any            payload       = 4;
+}
+
+/*
+ * Event-channel message (backend to client), pushed as a REQ and ACKed per
+ * message. Delivery is authoritative for lock and lifecycle tracking, so the
+ * channel is reliable REQ/REP rather than lossy pub/sub.
+ */
+message PublishEvent
+{
+  string                         channel_token = 1;
+  kiapi.workspace.EventEnvelope  event         = 2;
+}
+
+message PublishEventAck
+{
+  string channel_token = 1;
+  uint64 seq           = 2;
+}

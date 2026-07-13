@@ -1,0 +1,76 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Capability group CG_LOCKING.
+ *
+ * Per-user exclusive locks. Independent of lifecycle category.
+ */
+
+syntax = "proto3";
+
+package kiapi.mdw;
+
+import "mdw/backend_base.proto";
+import "workspace/workspace_types.proto";
+
+message LockRequest
+{
+  string item_id        = 1;
+  string idempotency_id = 2;
+}
+
+message LockReply { kiapi.workspace.LockInfo lock = 1; }
+
+message UnlockRequest
+{
+  string item_id        = 1;
+  bool   force          = 2; // Administrator override of another user's lock
+  string idempotency_id = 3;
+  string reason         = 4; // Why a forced release was made, shown to the holder; ignored without force
+
+  // The claim the user confirmed releasing, as a lock read showed it: its owner_id and lock_timestamp_unix.
+  // With force, a backend whose item is now held under another claim answers WE_BUSY and releases nothing.
+  // Unset, a forced release removes whoever holds the item. Ignored without force
+  kiapi.workspace.LockInfo expected = 5;
+}
+
+message UnlockReply { kiapi.workspace.LockInfo lock = 1; }
+
+message GetLockInfoRequest { string item_id = 1; }
+message GetLockInfoReply { kiapi.workspace.LockInfo lock = 1; }
+
+// The locked items under a folder, so a file list can show ownership without a query per row
+message ListLocksRequest
+{
+  string      folder_id = 1; // Empty for every lock in the workspace
+  PageRequest page      = 2;
+}
+
+message ItemLock
+{
+  string                   item_id = 1;
+  kiapi.workspace.LockInfo lock    = 2;
+}
+
+message ListLocksReply
+{
+  repeated ItemLock locks           = 1;
+  string            next_page_token = 2;
+}

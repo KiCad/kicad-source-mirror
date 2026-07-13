@@ -1,0 +1,388 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * The mandatory backend surface, answered regardless of the capability groups
+ * a backend advertises. It covers handshake, identity, capability declaration,
+ * authentication, folder navigation, checkout/checkin and liveness.
+ *
+ * Every request FooRequest answers FooReply; Hello answers HelloReply.
+ */
+
+syntax = "proto3";
+
+package kiapi.mdw;
+
+import "workspace/workspace_types.proto";
+
+/*
+ * Which workspace a backend process serves. Each workspace gets its own
+ * process, so this is the only place a backend learns its server, repository
+ * or database. locator is opaque to the client and free of credentials.
+ * local_root is the directory the client chose for the workspace's files.
+ */
+message WorkspaceBinding
+{
+  string workspace_id = 1;
+  string locator      = 2;
+  string local_root   = 3;
+}
+
+/*
+ * Handshake. Major protocol_version must match; minors are additive-only. The
+ * reply carries identity and capabilities so the framework can gate UI before
+ * any further call. author is the name and email the user chose in KiCad for
+ * what the backend records on their behalf; absent, the backend uses its own
+ * identity. A backend with no use for it ignores it.
+ */
+message Hello
+{
+  kiapi.workspace.Version protocol_version = 1;
+  WorkspaceBinding        workspace        = 2;
+  kiapi.workspace.Account author           = 3;
+}
+
+// auth is the credential form the bound workspace needs. Absent, it needs none and never gets Authenticate
+message HelloReply
+{
+  kiapi.workspace.Version       protocol_version = 1;
+  kiapi.workspace.BackendInfo   backend_info     = 2;
+  kiapi.workspace.Capabilities  capabilities     = 3;
+  kiapi.workspace.AuthChallenge auth             = 4;
+}
+
+message GetCapabilitiesRequest {}
+message GetCapabilitiesReply { kiapi.workspace.Capabilities capabilities = 1; }
+
+/*
+ * Credentials cross the local socket only inside Authenticate. Backends never
+ * touch the platform keychain; the client brokers it. fields is keyed by
+ * AuthField.field_id. The backend keeps them and verifies them as
+ * CheckConnection does, answering WE_NETWORK or WE_TIMEOUT when it cannot.
+ */
+message Credentials
+{
+  map<string, string> fields = 1;
+}
+
+message AuthenticateRequest { Credentials credentials = 1; }
+
+message AuthenticateReply
+{
+  bool                    authenticated = 1;
+  kiapi.workspace.Account account       = 2;
+}
+
+/*
+ * Contact the server, or find the locator of a local workspace, with the kept
+ * credentials. Mandatory with no default; a backend without it fails Hello.
+ * WE_OK means reachable and accepted, WE_NETWORK or WE_TIMEOUT unreachable,
+ * WE_NOT_AUTHENTICATED or WE_AUTH_FAILED a sign-in is needed, and
+ * WE_UNTRUSTED_HOST the host key needs confirming.
+ */
+message CheckConnectionRequest {}
+message CheckConnectionReply { kiapi.workspace.Account account = 1; }
+
+// Accept a key a WE_UNTRUSTED_HOST error named. The backend records it where its transport reads trusted keys
+message TrustHostKeyRequest { kiapi.workspace.HostKey host_key = 1; }
+message TrustHostKeyReply {}
+
+/*
+ * One page of a list. page_size 0 asks for the backend's default. An empty
+ * page_token starts at the first page; a reply's empty next_page_token ends
+ * the list. A continuation token binds the whole query and a stable listing
+ * snapshot, so a traversal returns each row of that snapshot exactly once.
+ * Only page_token changes between pages; any other change answers
+ * WE_INVALID_PARAMETER. A backend that can no longer serve the snapshot
+ * answers WE_VERSION_CONFLICT and the caller starts again.
+ */
+message PageRequest
+{
+  uint32 page_size  = 1;
+  string page_token = 2;
+}
+
+message GetRootFoldersRequest { PageRequest page = 1; }
+
+message GetRootFoldersReply
+{
+  repeated kiapi.workspace.Folder folders         = 1;
+  string                          next_page_token = 2;
+}
+
+message GetChildFoldersRequest
+{
+  string      folder_id = 1;
+  PageRequest page      = 2;
+}
+
+message GetChildFoldersReply
+{
+  repeated kiapi.workspace.Folder folders         = 1;
+  string                          next_page_token = 2;
+}
+
+// An empty folder_id lists the workspace root. For a binding that names one design, that root is the design's files,
+// which Open Project from Workspace checks out
+message ListItemsRequest
+{
+  string      folder_id = 1;
+  string      filter    = 2; // Backend-defined text filter; empty lists every item
+  PageRequest page      = 3;
+}
+
+message ListItemsReply
+{
+  repeated kiapi.workspace.ItemInfo items           = 1;
+  string                            next_page_token = 2;
+}
+
+// An empty revision_id describes the latest revision
+message GetItemInfoRequest
+{
+  string item_id     = 1;
+  string revision_id = 2;
+}
+
+message GetItemInfoReply { kiapi.workspace.ItemInfo item = 1; }
+
+/*
+ * The items at files under the binding's local_root (Hello.workspace), one ref
+ * per path in request order, duplicates included. An empty item_id means the
+ * file is not an item; a file deleted locally still answers its item when the
+ * backend knows it. Paths are '/' separated, relative and normalized. A
+ * leading run of '..' components may climb above local_root; the backend
+ * bounds it lexically against its own working tree, never by resolving
+ * links, and a path that lands outside answers an empty item. A
+ * rooted path, a drive letter, a backslash or any other '..' component fails
+ * the request with WE_INVALID_PARAMETER. Mandatory for
+ * CM_WORKING_COPY. A CM_UPLOAD backend may answer WE_NOT_SUPPORTED, and its
+ * client then knows only the files it checked out; one that answers lets a
+ * design made elsewhere resolve with no checkout. Not paged; the caller
+ * batches.
+ *
+ * The base is the revision the working copy holds for the item, the one a
+ * release of the local design names. An upload backend may name one only when
+ * the file under local_root holds exactly that revision's bytes, and for a
+ * project file only while every schematic and board of the design also holds
+ * its latest revision's bytes, since a release names the whole design. It is
+ * empty when unknown, as on an upload backend that cannot tell, for a file that
+ * is not an item, or for one added since. An empty revision_id elsewhere
+ * still means the item's latest revision, for every check-in model.
+ */
+message LocateItemsRequest { repeated string relative_paths = 1; }
+
+message LocatedItem
+{
+  kiapi.workspace.ItemRef item                = 1;
+  string                  base_revision_id    = 2;
+  string                  base_revision_label = 3;
+}
+
+message LocateItemsReply { repeated LocatedItem items = 1; }
+
+/*
+ * Lists what a project can be bound to, for a backend whose locator names one thing among many, as an Odoo locator
+ * names a product. text narrows the list by name or code and is empty for every target, and limit caps the answer
+ * (0 leaves the cap to the backend). A backend with nothing to choose answers WE_NOT_SUPPORTED, as one that
+ * predates this request does.
+ */
+message FindBindingTargetsRequest
+{
+  string text  = 1;
+  uint32 limit = 2;
+}
+
+message BindingTarget
+{
+  string display_name = 1;
+  string code         = 2;
+
+  // The query item of the locator that names this target, as "key=value" with the value already encoded. The
+  // client sets it in the locator it holds and never reads the key or the value
+  string locator = 3;
+}
+
+message FindBindingTargetsReply { repeated BindingTarget targets = 1; }
+
+enum ChangeType
+{
+  CT_UNKNOWN  = 0;
+  CT_ADDED    = 1;
+  CT_REMOVED  = 2;
+  CT_MODIFIED = 3;
+}
+
+/*
+ * One item that differs under local_root from what the backend last wrote
+ * there. In a library copy a row is one member; under the binding's local_root
+ * it is one file, with library_id and name empty. item_id is set on every row.
+ * An item that does not exist yet has a provisional id, stable while the copy
+ * is unchanged, never reused for another item, and expired by any change to
+ * the copy (Materialize, Update, a check-in). It is valid only in
+ * CheckInSharedLibrary.item_ids for the same library copy; elsewhere it only
+ * keys the row. A client never persists one and lists again after each change.
+ *
+ * A moved item is REMOVED plus ADDED. base_revision_id is the revision the copy
+ * holds for the item, possibly unreleased, and stays downloadable for MODIFIED
+ * and REMOVED; it is empty only for ADDED. For REMOVED the location is where
+ * the item was.
+ */
+message LocalChange
+{
+  kiapi.workspace.ItemRef      member             = 1;
+  string                       library_id         = 2;
+  string                       name               = 3;  // The member's name inside the library, as in a LIB_ID
+  ChangeType                   change             = 4;
+  kiapi.workspace.DocumentKind kind               = 5;
+  string                       relative_path      = 6;  // The file under local_root, for Show Diff
+  bool                         provisional        = 7;  // member.item_id is provisional; no item requests
+  string                       base_revision_id   = 8;
+
+  // Where the source holds the member, which differs from relative_path when
+  // it moved. Empty when the source cannot tell, and for CT_ADDED
+  string                       base_relative_path = 9;
+
+  // Whether this change may be checked in. PS_DENIED disables the row with its reason; PS_UNKNOWN leaves it to the
+  // check-in call
+  kiapi.workspace.Permission   checkin            = 10;
+
+  // The format version the source holds the member's file in at the copy's snapshot, as that file's header names
+  // it, read at base_relative_path or for CT_ADDED at relative_path. Empty when it holds no such file or cannot tell
+  string                       base_format        = 11;
+}
+
+/*
+ * The local changes under local_root, either the binding's local_root
+ * (Hello.workspace) or a library copy Materialize or Update wrote. Any other
+ * directory fails with WE_INVALID_PARAMETER. Paged as PageRequest describes,
+ * over the copy as of the first page; a copy changed mid-walk answers
+ * WE_VERSION_CONFLICT. Mandatory for CM_WORKING_COPY; a CM_UPLOAD backend may
+ * answer WE_NOT_SUPPORTED. This answers what changed, where LocateItems answers
+ * which item a path is.
+ */
+message ListLocalChangesRequest
+{
+  string      local_root = 1;
+  PageRequest page       = 2;
+}
+
+message ListLocalChangesReply
+{
+  repeated LocalChange changes         = 1;
+  string               next_page_token = 2;
+}
+
+/*
+ * The fate of a change that answered CO_PENDING. A backend that never pends
+ * answers WE_ITEM_NOT_FOUND.
+ */
+message GetPendingChangeRequest { string change_id = 1; }
+
+message GetPendingChangeReply
+{
+  kiapi.workspace.PendingChangeStatus status   = 1;
+  kiapi.workspace.PendingChange       change   = 2;
+  kiapi.workspace.ItemRef             item     = 3;
+  kiapi.workspace.Revision            revision = 4; // What the change made, for PCS_APPLIED
+  string                              reason   = 5; // Why it was rejected or withdrawn
+}
+
+/*
+ * Checkout downloads an item's working copy to local_path and optionally takes
+ * the lock. Mutating requests carry a client-generated idempotency_id so a
+ * retry after a mid-call crash does not double-apply. Checkout with lock on a
+ * released item is how a part is revised; the lock is the claim.
+ */
+message CheckoutRequest
+{
+  string item_id        = 1;
+  string local_path     = 2;
+  bool   lock           = 3;
+  string idempotency_id = 4;
+}
+
+message CheckoutReply
+{
+  kiapi.workspace.ItemInfo item       = 1;
+  string                   local_path = 2;
+}
+
+/*
+ * Upload local_path as the item's next revision. base_revision_id is the
+ * revision the file was edited from, empty when the client does not know it.
+ * An upload backend answers WE_VERSION_CONFLICT when a revision since then
+ * changed the item, naming the latest revision and its author, and changes
+ * nothing. An empty base checks in over whatever is latest.
+ */
+message CheckinRequest
+{
+  string item_id          = 1;
+  string local_path       = 2;
+  string comment          = 3;
+  string idempotency_id   = 4;
+  string base_revision_id = 5;
+}
+
+message CheckinReply { kiapi.workspace.Revision revision = 1; }
+
+/*
+ * Make the file at local_path a new item, which a checkout places at
+ * relative_path under the binding's local_root, and its content the item's
+ * first revision. For CM_UPLOAD, whose items exist only once added; a working
+ * copy adds a file by checking it in. A backend that cannot add answers
+ * WE_NOT_SUPPORTED, and one that needs more of the binding first, such as the
+ * product an Odoo design lives on, answers WE_INVALID_PARAMETER saying what.
+ * relative_path follows LocateItemsRequest's rules without the '..' run.
+ */
+message AddItemRequest
+{
+  string relative_path  = 1;
+  string local_path     = 2;
+  string comment        = 3;
+  string idempotency_id = 4;
+}
+
+message AddItemReply
+{
+  kiapi.workspace.ItemInfo item     = 1;
+  kiapi.workspace.Revision revision = 2;
+}
+
+message CancelCheckoutRequest
+{
+  string item_id        = 1;
+  string local_path     = 2;
+  string idempotency_id = 3; // Echoed as the operation_id of the resulting ITEM_UNLOCKED event
+}
+
+message CancelCheckoutReply {}
+
+/*
+ * Liveness and lifecycle. Ping is the idle health probe. Bye asks for a clean
+ * shutdown. CancelRequest is a best-effort abort of an in-flight request_id.
+ */
+message PingRequest {}
+message PingReply {}
+
+message ByeRequest {}
+message ByeReply {}
+
+message CancelRequestRequest { string request_id = 1; }
+message CancelRequestReply {}

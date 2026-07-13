@@ -1,0 +1,80 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2026 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Capability group CG_ECO.
+ *
+ * Engineering change orders affecting parts and designs. The client lists
+ * and shows change orders and lets a release exception cite one; routing and
+ * approval stay in the backend.
+ */
+
+syntax = "proto3";
+
+package kiapi.mdw;
+
+import "mdw/backend_base.proto";
+import "workspace/workspace_types.proto";
+
+// APPLIED, REJECTED and CANCELLED are closed; the others are open
+enum EcoState
+{
+  ECO_UNKNOWN   = 0;
+  ECO_DRAFT     = 1;
+  ECO_OPEN      = 2;
+  ECO_APPROVED  = 3;
+  ECO_APPLIED   = 4;
+  ECO_REJECTED  = 5;
+  ECO_CANCELLED = 6;
+}
+
+message Eco
+{
+  string                           eco_id         = 1;
+  string                           display_id     = 2; // "ECO-0042"
+  string                           title          = 3;
+  string                           eco_type       = 4; // Backend display string
+  string                           state          = 5; // Backend display string
+  EcoState                         state_category = 6;
+  string                           author         = 7;
+  repeated kiapi.workspace.ItemRef affected_items = 8;
+  string                           url            = 9;
+  kiapi.workspace.AttributeSet     attributes     = 10;
+}
+
+message GetEcoSchemaRequest {}
+message GetEcoSchemaReply { kiapi.workspace.Schema schema = 1; }
+
+message GetEcoRequest { string eco_id = 1; }
+message GetEcoReply { Eco eco = 1; }
+
+// The change orders affecting any of the items, which may belong to other sources. An item matches by item_id and
+// source together; empty items lists every change order, and closed ones need include_closed
+message ListEcosRequest
+{
+  repeated kiapi.workspace.ItemRef items          = 1;
+  bool                             include_closed = 2;
+  PageRequest                      page           = 3;
+}
+
+message ListEcosReply
+{
+  repeated Eco ecos            = 1;
+  string       next_page_token = 2;
+}
