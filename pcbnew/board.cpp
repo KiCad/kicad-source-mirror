@@ -337,6 +337,11 @@ void BOARD::RecordDRCExclusions()
 
     for( PCB_MARKER* marker : m_markers )
     {
+        // SerializeToString() dereferences the RC_ITEM, so a marker carrying none would fault
+        // while persisting exclusions during a save or window close.
+        if( !marker->GetRCItem() )
+            continue;
+
         if( marker->IsExcluded() )
         {
             wxString serialized = marker->SerializeToString();
