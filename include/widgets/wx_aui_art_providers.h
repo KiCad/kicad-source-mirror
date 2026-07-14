@@ -21,6 +21,7 @@
 
 #include <wx/aui/auibar.h>
 #include <wx/aui/dockart.h>
+#include <wx/aui/tabart.h>
 
 
 class WX_AUI_TOOLBAR_ART : public wxAuiDefaultToolBarArt
@@ -61,13 +62,30 @@ public:
     WX_AUI_DOCK_ART();
 };
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+class WX_AUI_TAB_ART : public wxAuiDefaultTabArt
+{
+public:
+    WX_AUI_TAB_ART() :
+            wxAuiDefaultTabArt()
+    {
+    }
 
+    wxAuiTabArt* Clone() override
+    {
+        return new WX_AUI_TAB_ART();
+    }
+
+    void SetSizingInfo( const wxSize& tabCtrlSize, size_t tabCount, wxWindow* wnd = nullptr ) override;
+};
+#else
 class WX_AUI_TAB_ART : public wxAuiGenericTabArt
 {
 public:
     WX_AUI_TAB_ART() :
             wxAuiGenericTabArt()
-    {}
+    {
+    }
 
     wxAuiTabArt* Clone() override
     {
@@ -77,4 +95,4 @@ public:
     void DrawTab( wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& page, const wxRect& in_rect,
                   int close_button_state, wxRect* out_tab_rect, wxRect* out_button_rect, int* x_extent ) override;
 };
-
+#endif
