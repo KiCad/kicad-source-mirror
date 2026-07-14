@@ -197,6 +197,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_creepage_issue24524.cpp
     drc/test_drc_creepage_issue24597.cpp
     drc/test_drc_creepage_issue24875.cpp
+    drc/test_drc_creepage_issue24885.cpp
     drc/test_creepage_engine_parity.cpp
     drc/test_creepage_engine_incremental.cpp
     drc/test_drc_invalid_outline_issue24078.cpp

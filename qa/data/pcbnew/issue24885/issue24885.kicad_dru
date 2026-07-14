@@ -1,0 +1,6 @@
+(version 1)
+
+(rule "Check creepage distance between mains nets"
+	(constraint creepage (min 5mm))
+	(condition "A.NetClass == 'Mains'")
+)

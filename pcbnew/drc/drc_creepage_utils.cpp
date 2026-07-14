@@ -966,6 +966,30 @@ void BE_SHAPE_CIRCLE::ConnectChildren( std::shared_ptr<GRAPH_NODE>& a1, std::sha
     if( m_radius == 0 )
         return;
 
+    // When cutouts overlap, part of this wall runs inside the merged void and is not
+    // a real edge to hug. Check the shorter arc, the one the solver measures and draws.
+    if( aG.m_hasOverlappingCutouts && aG.m_boardOutline )
+    {
+        int    tol = aG.m_board.GetDesignSettings().m_MaxError + 1000;
+        double a1r = EDA_ANGLE( a1->m_pos - m_pos ).AsRadians();
+        double a2r = EDA_ANGLE( a2->m_pos - m_pos ).AsRadians();
+        double delta = a2r - a1r;
+
+        while( delta > M_PI )
+            delta -= 2 * M_PI;
+        while( delta < -M_PI )
+            delta += 2 * M_PI;
+
+        for( int i = 0; i <= 8; ++i )
+        {
+            double   a = a1r + delta * i / 8.0;
+            VECTOR2I p( m_pos.x + m_radius * cos( a ), m_pos.y + m_radius * sin( a ) );
+
+            if( !aG.m_boardOutline->Contains( p, -1, tol ) && !aG.m_boardOutline->PointOnEdge( p, tol ) )
+                return;
+        }
+    }
+
     VECTOR2D distI( a1->m_pos - a2->m_pos );
     VECTOR2D distD( double( distI.x ), double( distI.y ) );
 
