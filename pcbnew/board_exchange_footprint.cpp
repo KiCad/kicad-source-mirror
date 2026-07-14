@@ -66,11 +66,19 @@ static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest, const VECTOR
         *aUpdated |= aSrc.GetTextSize() != aDest.GetTextSize();
         *aUpdated |= aSrc.GetTextThickness() != aDest.GetTextThickness();
         *aUpdated |= aSrc.IsKnockout() != aDest.IsKnockout();
+        aDest.KeepUpright();
     }
     else
     {
         EDA_ANGLE origAngle = aDest.GetTextAngle();
+        origAngle.Normalize();
         aDest.SetAttributes( aSrc );
+        if( origAngle >= ANGLE_180 && aDest.IsKeepUpright() )
+        {
+            // Text is already rotated by 180 because of 'keep upright'.
+            origAngle -= ANGLE_180;
+        }
+
         aDest.SetTextAngle( origAngle ); // apply rotation as part of position shift
         aDest.SetIsKnockout( aSrc.IsKnockout() );
     }

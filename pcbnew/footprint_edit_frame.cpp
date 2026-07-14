@@ -1258,6 +1258,13 @@ FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootpri
         clone->Flip( clone->GetPosition(), GetPcbNewSettings()->m_FlipDirection );
 
     clone->SetOrientation( ANGLE_0 );
+    clone->RunOnChildren(
+            [&]( BOARD_ITEM* aItem )
+            {
+                if( aItem->Type() == PCB_TEXT_T )
+                    static_cast<PCB_TEXT*>( aItem )->KeepUpright();
+            },
+            RECURSE_MODE::RECURSE );
 
     m_tabContexts.push_back( std::move( ctx ) );
 
