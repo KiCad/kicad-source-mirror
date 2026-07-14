@@ -25,7 +25,6 @@
 #include <sch_io/pads/pads_sch_parser.h>
 
 #include <ki_exception.h>
-
 #include <algorithm>
 #include <cmath>
 #include <filesystem>
@@ -1045,6 +1044,78 @@ BOOST_AUTO_TEST_CASE( GlobalsAndSheets )
     BOOST_CHECK_LT( multisheet.sheets[0].source.absoluteOffset, multisheet.sheets[1].source.absoluteOffset );
     BOOST_CHECK( !multisheet.sheets[0].parent );
     BOOST_CHECK( !multisheet.sheets[1].parent );
+}
+
+
+BOOST_AUTO_TEST_CASE( VariableTitleFields )
+{
+    std::vector<uint8_t> bytes = loadBinaryFixture( "minimal_v13.sch" );
+    const size_t         poolOffset = outerControllerOffset( bytes, 1 );
+    const size_t         poolBytes = readU32( bytes, 0x20 + 1 * 28 + 12 );
+    const std::array<std::pair<std::string, std::string>, 5> expected = {
+        std::pair{ "Drawn By", "Alice" }, std::pair{ "Checked By", "Bob" },
+        std::pair{ "Title", "Variable Title" }, std::pair{ "Revision", "C" }, std::pair{ "Scale", "2:1" }
+    };
+    std::vector<uint8_t> pool;
+    std::array<size_t, expected.size()> offsets;
+    std::array<size_t, expected.size()> lengths;
+
+    for( size_t i = 0; i < expected.size(); ++i )
+    {
+        offsets[i] = poolOffset + pool.size();
+        const std::string slot = "Field\n" + expected[i].first + '\x01' + expected[i].second + '\0';
+        lengths[i] = slot.size();
+        pool.insert( pool.end(), slot.begin(), slot.end() );
+    }
+
+    const size_t firstNonFieldOffset = poolOffset + pool.size();
+    const std::string firstNonField( "BUS0\0", 5 );
+    pool.insert( pool.end(), firstNonField.begin(), firstNonField.end() );
+    BOOST_REQUIRE_LE( pool.size(), poolBytes );
+    pool.resize( poolBytes, 0 );
+    std::copy( pool.begin(), pool.end(), bytes.begin() + poolOffset );
+
+    PADS_SCH_BINARY_PARSER parser;
+    PADS_SCH_MODEL         model = parser.Parse( bytes, wxS( "variable-title.sch" ) );
+    BOOST_REQUIRE_EQUAL( model.sheets.size(), 1 );
+    BOOST_REQUIRE_EQUAL( model.sheets[0].titleBlockFields.size(), expected.size() );
+
+    for( size_t i = 0; i < expected.size(); ++i )
+    {
+        const MODEL_FIELD& field = model.sheets[0].titleBlockFields[i];
+        BOOST_CHECK_EQUAL( field.name.text, wxString::FromUTF8( expected[i].first ) );
+        BOOST_CHECK_EQUAL( field.value.text, wxString::FromUTF8( expected[i].second ) );
+        BOOST_CHECK_EQUAL_COLLECTIONS( field.name.raw.begin(), field.name.raw.end(), expected[i].first.begin(),
+                                       expected[i].first.end() );
+        BOOST_CHECK_EQUAL_COLLECTIONS( field.value.raw.begin(), field.value.raw.end(), expected[i].second.begin(),
+                                       expected[i].second.end() );
+        BOOST_CHECK_EQUAL( field.source.absoluteOffset, offsets[i] );
+        BOOST_CHECK_EQUAL( field.source.length, lengths[i] );
+        BOOST_CHECK_EQUAL( field.source.recordIndex, i );
+        BOOST_CHECK_EQUAL( field.source.controller, 1 );
+        BOOST_CHECK_EQUAL( field.source.version, 0x000D );
+        BOOST_CHECK_EQUAL( field.source.sheet, 0 );
+        BOOST_CHECK_EQUAL( field.source.objectClass, wxS( "title field" ) );
+        BOOST_CHECK_EQUAL( field.name.source.absoluteOffset, offsets[i] + 6 );
+        BOOST_CHECK_EQUAL( field.name.source.length, expected[i].first.size() );
+        BOOST_CHECK_EQUAL( field.name.source.controller, 1 );
+        BOOST_CHECK_EQUAL( field.name.source.version, 0x000D );
+        BOOST_CHECK_EQUAL( field.name.source.sheet, 0 );
+        BOOST_CHECK_EQUAL( field.value.source.absoluteOffset,
+                           offsets[i] + 6 + expected[i].first.size() + 1 );
+        BOOST_CHECK_EQUAL( field.value.source.length, expected[i].second.size() );
+        BOOST_CHECK_EQUAL( field.value.source.controller, 1 );
+        BOOST_CHECK_EQUAL( field.value.source.version, 0x000D );
+        BOOST_CHECK_EQUAL( field.value.source.sheet, 0 );
+    }
+
+    BOOST_CHECK_EQUAL( model.sheets[0].title.text, wxS( "Variable Title" ) );
+    BOOST_CHECK_EQUAL_COLLECTIONS( bytes.begin() + firstNonFieldOffset,
+                                   bytes.begin() + firstNonFieldOffset + firstNonField.size(), firstNonField.begin(),
+                                   firstNonField.end() );
+    BOOST_CHECK_EQUAL( model.sheets[0].titleBlockFields.back().source.absoluteOffset
+                               + model.sheets[0].titleBlockFields.back().source.length,
+                       firstNonFieldOffset );
 }
 
 
