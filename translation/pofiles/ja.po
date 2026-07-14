@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-07-11 12:01+0000\n"
+"PO-Revision-Date: 2026-07-15 01:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2743,9 +2743,8 @@ msgstr ""
 "存されていない作業がある状態で KiCad が予期せず終了したことを意味します。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
-msgstr "自動保存で復元"
+msgstr "自動保存から復元"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
@@ -2756,7 +2755,6 @@ msgstr ""
 "棄されます。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep Current"
 msgstr "現状を保持"
 
@@ -2765,7 +2763,6 @@ msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr "保存済みのファイルはそのまま保持し、自動保存された変更は破棄します。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
 msgstr "両方とも保持"
 
@@ -2778,7 +2775,6 @@ msgstr ""
 "ンプ付きの別ファイルとしてその横に書き込みます。後でレビューできます。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
 msgstr "開くをキャンセル"
 
@@ -3635,7 +3631,7 @@ msgstr ""
 #: common/dialogs/dialog_page_settings.cpp:809
 #, c-format
 msgid "Remove the previously embedded drawing sheet file '%s'?"
-msgstr ""
+msgstr "以前埋め込まれた図面用紙ファイル '%s' を削除しますか？"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -22432,34 +22428,30 @@ msgid "Remove Design Variant"
 msgstr "デザイン バリアントを削除"
 
 #: eeschema/sch_edit_frame.cpp:3257
-#, fuzzy
 msgid "No variants to rename."
-msgstr "編集可能なデザイン バリアントはありません。"
+msgstr "名前を変更するデザイン バリアントはありません。"
 
 #: eeschema/sch_edit_frame.cpp:3262
-#, fuzzy
 msgid "Select variant to rename:"
-msgstr "削除するバリアント名を選択:"
+msgstr "名前を変更するバリアント名を選択:"
 
 #: eeschema/sch_edit_frame.cpp:3297
-#, fuzzy, c-format
+#, c-format
 msgid "Rename variant '%s' to '%s'"
-msgstr "ファイル名 %s を %s へ変更"
+msgstr "バリアント名の変更 '%s' から '%s'"
 
 #: eeschema/sch_edit_frame.cpp:3321
-#, fuzzy
 msgid "No variants to copy."
-msgstr "編集可能なデザイン バリアントはありません。"
+msgstr "コピーするバリアントはありません。"
 
 #: eeschema/sch_edit_frame.cpp:3326
-#, fuzzy
 msgid "Select variant to copy:"
-msgstr "削除するバリアント名を選択:"
+msgstr "コピーするバリアントを選択:"
 
 #: eeschema/sch_edit_frame.cpp:3355
-#, fuzzy, c-format
+#, c-format
 msgid "Copy variant '%s' to '%s'"
-msgstr "フットプリント '%s' を '%s' に追加しました"
+msgstr "コピーするバリアント '%s' から '%s'"
 
 #: eeschema/sch_field.cpp:1013
 #, c-format
@@ -29506,24 +29498,20 @@ msgid "Edit the description of an existing design variant."
 msgstr "既存のデザイン バリアントの説明を編集します。"
 
 #: eeschema/tools/sch_actions.cpp:1917
-#, fuzzy
 msgid "Rename Design Variant..."
-msgstr "デザイン バリアント名の変更"
+msgstr "デザイン バリアント名の変更..."
 
 #: eeschema/tools/sch_actions.cpp:1918
-#, fuzzy
 msgid "Rename an existing design variant."
-msgstr "回路図から既存のデザイン バリアントを削除。"
+msgstr "既存のデザイン バリアント名の変更。"
 
 #: eeschema/tools/sch_actions.cpp:1923
-#, fuzzy
 msgid "Copy Design Variant..."
-msgstr "デザイン バリアントのコピー"
+msgstr "デザイン バリアントのコピー..."
 
 #: eeschema/tools/sch_actions.cpp:1924
-#, fuzzy
 msgid "Create a copy of an existing design variant."
-msgstr "既存のデザイン バリアントの説明を編集します。"
+msgstr "既存のデザイン バリアントのコピーを作成します。"
 
 #: eeschema/tools/sch_align_tool.cpp:60
 msgid "Align"
@@ -29702,9 +29690,8 @@ msgid "Modify schematic item"
 msgstr "回路図アイテムを変更"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3879
-#, fuzzy
 msgid "Auto-place Sheet Pins"
-msgstr "すべてのシートピンを自動配置"
+msgstr "シートピンを自動配置"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3926
 msgid "No sub schematic found in the current project"
@@ -50857,9 +50844,9 @@ msgid "Netclass clearances apply only between copper items."
 msgstr "ネットクラスのクリアランスは導体のアイテム間でのみ適用されます。"
 
 #: pcbnew/drc/drc_engine.cpp:1639 pcbnew/drc/drc_engine.cpp:1645
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Constraint ignored."
-msgstr "%s は導体を含みません。 ルールは無視されます。"
+msgstr "%s は導体を含みません。   ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:1703
 msgid "Keepout constraint not met."
@@ -53218,6 +53205,8 @@ msgid ""
 "Could not post-process GLB line primitives; the exported model may not "
 "import in strict glTF viewers."
 msgstr ""
+"GLBライン基本データ型の後処理ができませんでした。 エクスポートされたモデルは"
+"、 厳格なglTFビューアではインポートできない可能性があります。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4190
 #: pcbnew/exporters/step/step_pcb_model.cpp:4237
@@ -60584,7 +60573,8 @@ msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
 msgstr ""
-"フットプリントやその他ミラーできないアイテムを含むグループは無視されました。"
+"フットプリントやその他ミラーできないアイテムを含むグループはスキップされまし"
+"た。"
 
 #: pcbnew/tools/edit_tool.cpp:2772 pcbnew/tools/pcb_actions.cpp:717
 msgid "Change Side / Flip"
@@ -64705,7 +64695,7 @@ msgstr "孤立した導体部分を削除中..."
 
 #: pcbnew/zone_filler.cpp:1225
 msgid "Refilling overlapping zones..."
-msgstr "重複するゾーンを充填しています..."
+msgstr "重複するゾーンを塗り直し..."
 
 #: pcbnew/zone_filler.cpp:1392
 #, c-format
