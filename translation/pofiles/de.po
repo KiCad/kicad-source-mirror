@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-07-13 21:11+0000\n"
+"PO-Revision-Date: 2026-07-15 01:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -3551,9 +3551,8 @@ msgid "Revision:"
 msgstr "Revision:"
 
 #: common/dialogs/dialog_kicad_diff.cpp:425
-#, fuzzy
 msgid "Older"
-msgstr "Verzeichnis"
+msgstr "Älter"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
@@ -3577,14 +3576,12 @@ msgid "(none)"
 msgstr "(keine/-r/-s)"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:33
-#, fuzzy
 msgid "Comparison:"
-msgstr "Firma:"
+msgstr "Vergleich:"
 
 #: common/dialogs/dialog_kicad_diff_base.h:61
-#, fuzzy
 msgid "Compare Files"
-msgstr "Bilddateien"
+msgstr "Dateien vergleichen"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:129
 #, fuzzy
@@ -16903,7 +16900,7 @@ msgstr "Ausweichen auf Benutzerpfad \"%s\"."
 #: eeschema/dialogs/dialog_plot_schematic.cpp:471
 #, c-format
 msgid "Cannot normalize path '%s'."
-msgstr "Der Pfad ‚%s‘ kann nicht normalisiert werden."
+msgstr "Der Pfad \"%s\" kann nicht normalisiert werden."
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:454
 msgid "No project or path defined for the current schematic."
@@ -21011,7 +21008,8 @@ msgstr "\"%s\" ist keine gültige Footprint-ID"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1120
 #, c-format
 msgid "The current configuration does not include the footprint library '%s'"
-msgstr "Die aktuelle Konfiguration enthält die Footprint-Bibliothek '%s' nicht"
+msgstr ""
+"Die aktuelle Konfiguration enthält die Footprint-Bibliothek \"%s\" nicht"
 
 #: eeschema/erc/erc.cpp:2273
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1134
@@ -22004,12 +22002,12 @@ msgstr "&Einstellungen"
 #: eeschema/net_navigator.cpp:65
 #, c-format
 msgid "Wire from (%s, %s) to (%s, %s)"
-msgstr "Verbindung von (%s,%s) nach (%s,%s)"
+msgstr "Verbindung von (%s, %s) nach (%s, %s)"
 
 #: eeschema/net_navigator.cpp:73
 #, c-format
 msgid "Bus from (%s, %s) to (%s, %s)"
-msgstr "Bus von (%s,%s) nach (%s,%s)"
+msgstr "Bus von (%s, %s) nach (%s, %s)"
 
 #: eeschema/net_navigator.cpp:81
 msgid "Graphic line not connectable"
@@ -22965,9 +22963,9 @@ msgid "Port %s has no connections."
 msgstr "Port %s ist nicht verbunden."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4812
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file '%s' not found in storage."
-msgstr "Eingebettete Datei %s nicht im Speicher gefunden."
+msgstr "Eingebettete Datei \"%s\" nicht im Speicher gefunden."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4835
 #, c-format
@@ -26393,7 +26391,7 @@ msgstr "Unbekannte Polarität "
 #: eeschema/sim/kibis/ibis_parser.cpp:2560
 msgid "Continued reading a model that did not begin. ( internal error )"
 msgstr ""
-"Lesen eines Modells fortgeführt, das nicht begonnen hat (interner Fehler)"
+"Lesen eines Modells fortgeführt, das nicht begonnen hat. (interner Fehler)"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2589
 msgid " is not a recognised submodel type."
