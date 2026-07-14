@@ -62,12 +62,12 @@ public:
         return {
             { 0 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_XO, 135 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // opt_width
-            { 80 + DRC_RE_OVERLAY_XO, 120 + DRC_RE_OVERLAY_XO, 135 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // width_tolerance (±)
+            { 100 + DRC_RE_OVERLAY_XO, 140 + DRC_RE_OVERLAY_XO, 135 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
+              LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
             { 185 + DRC_RE_OVERLAY_XO, 225 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // opt_gap
-            { 265 + DRC_RE_OVERLAY_XO, 305 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // gap_tolerance (±)
+            { 285 + DRC_RE_OVERLAY_XO, 325 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ),
+              LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // gap_tolerance (±)
             { 95 + DRC_RE_OVERLAY_XO, 135 + DRC_RE_OVERLAY_XO, 10 + DRC_RE_OVERLAY_YO, 5, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // max_uncoupled
         };

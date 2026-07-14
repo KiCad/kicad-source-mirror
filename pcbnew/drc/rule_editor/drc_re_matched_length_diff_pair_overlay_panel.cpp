@@ -72,21 +72,6 @@ DRC_RE_MATCHED_LENGTH_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_MATCHED_LENGTH_DIFF_PAIR_O
     toleranceField->SetUnitBinder( m_toleranceBinder.get() );
     toleranceField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
-    // Add +/- decoration between opt and tolerance fields
-    {
-        const DRC_RE_FIELD_POSITION& optPos = positions[0];
-        const DRC_RE_FIELD_POSITION& tolPos = positions[1];
-        int                          fieldHeight = optLengthField->GetControl()->GetBestSize().GetHeight();
-
-        auto*         plusMinus = new wxStaticText( this, wxID_ANY, wxS( "\u00B1" ) );
-        wxSize        pmSize = plusMinus->GetBestSize();
-        wxStaticText* optMmLabel = optLengthField->GetLabel();
-        int           afterOptLabel = optMmLabel->GetPosition().x + optMmLabel->GetBestSize().GetWidth();
-        int           gapMid = ( afterOptLabel + tolPos.xStart ) / 2;
-        plusMinus->SetPosition(
-                wxPoint( gapMid - pmSize.GetWidth() / 2, optPos.yTop + ( fieldHeight - pmSize.GetHeight() ) / 2 ) );
-    }
-
     // Create max skew field
     auto* maxSkewField = AddField<wxTextCtrl>( wxS( "max_skew" ), positions[2], wxTE_CENTRE | wxTE_PROCESS_ENTER );
     m_maxSkewBinder = std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxSkewField->GetControl(),

@@ -157,10 +157,17 @@ private:
      */
     void PositionLabel( DRC_RE_OVERLAY_FIELD* aField );
 
+    /**
+     * Position a prefix label to the left of its field control.
+     *
+     * @param aField The overlay field containing the prefix label to position.
+     */
+    void PositionPrefixLabel( DRC_RE_OVERLAY_FIELD* aField );
+
 protected:
     wxBitmap                                        m_bitmap;       ///< Current background bitmap
     BITMAPS                                         m_bitmapId;     ///< BITMAPS enum value
-    wxSize                                          m_baseBitmapSize; ///< Bitmap size at 1x scale
+    wxSize                                          m_logicalBitmapSize; ///< Bitmap size in logical pixels
     std::vector<std::unique_ptr<DRC_RE_OVERLAY_FIELD>> m_fields;    ///< All overlay fields
     std::map<wxString, DRC_RE_OVERLAY_FIELD*>       m_fieldIdMap;   ///< Field ID to field lookup
 };
@@ -188,11 +195,14 @@ DRC_RE_OVERLAY_FIELD* DRC_RE_BITMAP_OVERLAY_PANEL::AddField( const wxString& aId
     control->SetPosition( pos );
     control->SetSize( size );
 
-    // Create label if specified
-    fieldPtr->CreateLabel();
+    // Create labels if specified
+    fieldPtr->CreateLabels();
 
     if( fieldPtr->HasLabel() )
         PositionLabel( fieldPtr );
+
+    if( fieldPtr->HasPrefixLabel() )
+        PositionPrefixLabel( fieldPtr );
 
     // Store in collections
     m_fieldIdMap[aId] = fieldPtr;

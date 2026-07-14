@@ -73,6 +73,7 @@ struct DRC_RE_FIELD_POSITION
 
     wxString       labelText;      ///< Optional label text (empty for no label)
     LABEL_POSITION labelPosition;  ///< Position of label relative to field
+    wxString       prefixText;     ///< Optional text placed on the left
 
     DRC_RE_FIELD_POSITION() :
             xStart( 0 ),
@@ -80,19 +81,22 @@ struct DRC_RE_FIELD_POSITION
             yTop( 0 ),
             tabOrder( 0 ),
             labelText(),
-            labelPosition( LABEL_POSITION::NONE )
+            labelPosition( LABEL_POSITION::NONE ),
+            prefixText()
     {
     }
 
     DRC_RE_FIELD_POSITION( int aXStart, int aXEnd, int aYTop, int aTabOrder,
                            const wxString& aLabelText = wxEmptyString,
-                           LABEL_POSITION aLabelPos = LABEL_POSITION::NONE ) :
+                           LABEL_POSITION  aLabelPos = LABEL_POSITION::NONE,
+                           const wxString& aPrefixText = wxEmptyString ) :
             xStart( aXStart ),
             xEnd( aXEnd ),
             yTop( aYTop ),
             tabOrder( aTabOrder ),
             labelText( aLabelText ),
-            labelPosition( aLabelPos )
+            labelPosition( aLabelPos ),
+            prefixText( aPrefixText )
     {
     }
 };

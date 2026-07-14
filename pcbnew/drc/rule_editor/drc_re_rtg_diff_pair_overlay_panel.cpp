@@ -87,34 +87,6 @@ DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_ROUTING_DIFF_PAIR_OVERLAY_PANEL(
                                            maxUncoupledField->GetLabel(), false, false );
     maxUncoupledField->SetUnitBinder( m_maxUncoupledLengthBinder.get() );
 
-    {
-        const DRC_RE_FIELD_POSITION& optPos = positions[0];
-        const DRC_RE_FIELD_POSITION& tolPos = positions[1];
-        int                          fieldHeight = optWidthField->GetControl()->GetBestSize().GetHeight();
-
-        auto*         plusMinus = new wxStaticText( this, wxID_ANY, wxS( "\u00B1" ) );
-        wxSize        pmSize = plusMinus->GetBestSize();
-        wxStaticText* optMmLabel = optWidthField->GetLabel();
-        int           afterOptLabel = optMmLabel->GetPosition().x + optMmLabel->GetBestSize().GetWidth();
-        int           gapMid = ( afterOptLabel + tolPos.xStart ) / 2;
-        plusMinus->SetPosition(
-                wxPoint( gapMid - pmSize.GetWidth() / 2, optPos.yTop + ( fieldHeight - pmSize.GetHeight() ) / 2 ) );
-    }
-
-    {
-        const DRC_RE_FIELD_POSITION& optPos = positions[2];
-        const DRC_RE_FIELD_POSITION& tolPos = positions[3];
-        int                          fieldHeight = optGapField->GetControl()->GetBestSize().GetHeight();
-
-        auto*         plusMinus = new wxStaticText( this, wxID_ANY, wxS( "\u00B1" ) );
-        wxSize        pmSize = plusMinus->GetBestSize();
-        wxStaticText* optMmLabel = optGapField->GetLabel();
-        int           afterOptLabel = optMmLabel->GetPosition().x + optMmLabel->GetBestSize().GetWidth();
-        int           gapMid = ( afterOptLabel + tolPos.xStart ) / 2;
-        plusMinus->SetPosition(
-                wxPoint( gapMid - pmSize.GetWidth() / 2, optPos.yTop + ( fieldHeight - pmSize.GetHeight() ) / 2 ) );
-    }
-
     auto notifyModified = [this]( wxCommandEvent& )
     {
         RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );

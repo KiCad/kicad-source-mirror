@@ -44,7 +44,8 @@ DRC_RE_OVERLAY_FIELD::DRC_RE_OVERLAY_FIELD( wxWindow* aParent, const wxString& a
         m_unitBinder( nullptr ),
         m_errorIcon( nullptr ),
         m_showingError( false ),
-        m_label( nullptr )
+        m_label( nullptr ),
+        m_prefixLabel( nullptr )
 {
 }
 
@@ -142,13 +143,15 @@ bool DRC_RE_OVERLAY_FIELD::TransferFromWindow()
 }
 
 
-void DRC_RE_OVERLAY_FIELD::CreateLabel()
+void DRC_RE_OVERLAY_FIELD::CreateLabels()
 {
-    if( m_label )
-        return;
+    if( !m_label && !m_position.labelText.IsEmpty() && m_position.labelPosition != LABEL_POSITION::NONE )
+    {
+        m_label = new wxStaticText( m_parent, wxID_ANY, m_position.labelText );
+    }
 
-    if( m_position.labelText.IsEmpty() || m_position.labelPosition == LABEL_POSITION::NONE )
-        return;
-
-    m_label = new wxStaticText( m_parent, wxID_ANY, m_position.labelText );
+    if( !m_prefixLabel && !m_position.prefixText.IsEmpty() )
+    {
+        m_prefixLabel = new wxStaticText( m_parent, wxID_ANY, m_position.prefixText );
+    }
 }
