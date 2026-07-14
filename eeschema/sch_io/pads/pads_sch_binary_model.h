@@ -280,6 +280,16 @@ struct MODEL_GRAPHIC
 };
 
 
+struct MODEL_PAGE_GRAPHIC
+{
+    SOURCE_PROVENANCE source;
+    SHEET_REFERENCE   sheet;
+    MODEL_GRAPHIC     graphic;
+
+    bool operator==( const MODEL_PAGE_GRAPHIC& ) const = default;
+};
+
+
 struct MODEL_PIN_DEFINITION
 {
     PIN_ID                       id;
@@ -512,7 +522,7 @@ struct PADS_SCH_MODEL
     std::vector<MODEL_LABEL>             labels;
     std::vector<MODEL_JUNCTION>          junctions;
     std::vector<MODEL_TEXT>              texts;
-    std::vector<MODEL_GRAPHIC>           graphics;
+    std::vector<MODEL_PAGE_GRAPHIC>      graphics;
     std::vector<PARSER_DIAGNOSTIC>       diagnostics;
 
     bool HasUniqueTypedIds() const;

@@ -24,6 +24,8 @@
 #include <algorithm>
 #include <map>
 #include <set>
+#include <unordered_map>
+#include <unordered_set>
 
 #include <ki_exception.h>
 #include <wx/strconv.h>
@@ -145,11 +147,11 @@ namespace
     template <typename Item>
     bool idsAreUnique( const std::vector<Item>& aItems )
     {
-        std::set<decltype( aItems.front().id )> ids;
+        std::unordered_set<uint32_t> ids;
 
         for( const Item& item : aItems )
         {
-            if( !item.id.IsValid() || !ids.insert( item.id ).second )
+            if( !item.id.IsValid() || !ids.insert( item.id.Value() ).second )
                 return false;
         }
 
@@ -190,24 +192,61 @@ namespace
     }
 
 
-    template <typename Item, typename Id>
-    bool containsId( const std::vector<Item>& aItems, Id aId )
-    {
-        return std::ranges::any_of( aItems,
-                                    [&]( const Item& aItem )
-                                    {
-                                        return aItem.id == aId;
-                                    } );
-    }
-
-
     [[noreturn]] void throwValidationError( const SOURCE_PROVENANCE& aSource, const wxString& aMessage )
     {
         THROW_IO_ERROR( FormatParserError( aSource, aMessage ) );
     }
 
 
-    bool endpointIsValid( const PADS_SCH_MODEL& aModel, const MODEL_CONNECTION_ENDPOINT& aEndpoint )
+    struct MODEL_INDEX
+    {
+        std::unordered_map<uint32_t, const MODEL_SHEET*>             sheets;
+        std::unordered_map<uint32_t, const MODEL_SYMBOL_DEFINITION*> definitions;
+        std::unordered_map<uint32_t, const MODEL_PART_TYPE*>         partTypes;
+        std::unordered_map<uint32_t, const MODEL_GATE*>              gates;
+        std::unordered_map<uint32_t, const MODEL_PART_TYPE*>         gateOwners;
+        std::unordered_map<uint32_t, const MODEL_PIN_DEFINITION*>    pins;
+        std::unordered_map<uint32_t, const MODEL_SYMBOL_DEFINITION*> pinOwners;
+        std::unordered_map<uint32_t, const MODEL_PLACEMENT*>         placements;
+        std::unordered_map<uint32_t, const MODEL_NET*>               nets;
+
+        explicit MODEL_INDEX( const PADS_SCH_MODEL& aModel )
+        {
+            for( const MODEL_SHEET& sheet : aModel.sheets )
+                sheets.emplace( sheet.id.Value(), &sheet );
+
+            for( const MODEL_SYMBOL_DEFINITION& definition : aModel.definitions )
+            {
+                definitions.emplace( definition.id.Value(), &definition );
+
+                for( const MODEL_PIN_DEFINITION& pin : definition.pins )
+                {
+                    pins.emplace( pin.id.Value(), &pin );
+                    pinOwners.emplace( pin.id.Value(), &definition );
+                }
+            }
+
+            for( const MODEL_PART_TYPE& partType : aModel.partTypes )
+            {
+                partTypes.emplace( partType.id.Value(), &partType );
+
+                for( const MODEL_GATE& gate : partType.gates )
+                {
+                    gates.emplace( gate.id.Value(), &gate );
+                    gateOwners.emplace( gate.id.Value(), &partType );
+                }
+            }
+
+            for( const MODEL_PLACEMENT& placement : aModel.placements )
+                placements.emplace( placement.id.Value(), &placement );
+
+            for( const MODEL_NET& net : aModel.nets )
+                nets.emplace( net.id.Value(), &net );
+        }
+    };
+
+
+    bool endpointIsValid( const MODEL_INDEX& aIndex, const MODEL_CONNECTION_ENDPOINT& aEndpoint )
     {
         if( aEndpoint.kind == MODEL_ENDPOINT_KIND::POINT )
             return !aEndpoint.placement && !aEndpoint.pin;
@@ -215,32 +254,22 @@ namespace
         if( aEndpoint.kind != MODEL_ENDPOINT_KIND::PIN || !aEndpoint.placement || !aEndpoint.pin )
             return false;
 
-        auto placement = std::ranges::find_if( aModel.placements,
-                                               [&]( const MODEL_PLACEMENT& aPlacement )
-                                               {
-                                                   return aPlacement.id == aEndpoint.placement->id;
-                                               } );
+        auto placement = aIndex.placements.find( aEndpoint.placement->id.Value() );
 
-        if( placement == aModel.placements.end() || !placement->gate )
+        if( placement == aIndex.placements.end() || !placement->second->gate )
             return false;
 
-        auto partType = std::ranges::find_if( aModel.partTypes,
-                                              [&]( const MODEL_PART_TYPE& aPartType )
-                                              {
-                                                  return aPartType.id == placement->partType.id;
-                                              } );
+        auto partType = aIndex.partTypes.find( placement->second->partType.id.Value() );
 
-        if( partType == aModel.partTypes.end() )
+        if( partType == aIndex.partTypes.end() )
             return false;
 
-        auto gate = std::ranges::find_if( partType->gates,
-                                          [&]( const MODEL_GATE& aGate )
-                                          {
-                                              return aGate.id == placement->gate->id;
-                                          } );
+        auto gate = aIndex.gates.find( placement->second->gate->id.Value() );
+        auto gateOwner = aIndex.gateOwners.find( placement->second->gate->id.Value() );
 
-        if( gate == partType->gates.end() || gate->unit != placement->unit
-            || std::ranges::none_of( gate->pins,
+        if( gate == aIndex.gates.end() || gateOwner == aIndex.gateOwners.end() || gateOwner->second != partType->second
+            || gate->second->unit != placement->second->unit
+            || std::ranges::none_of( gate->second->pins,
                                      [&]( const PIN_REFERENCE& aPin )
                                      {
                                          return aPin.id == aEndpoint.pin->id;
@@ -249,13 +278,12 @@ namespace
             return false;
         }
 
-        auto definition = std::ranges::find_if( aModel.definitions,
-                                                [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
-                                                {
-                                                    return aDefinition.id == gate->definition.id;
-                                                } );
+        auto definition = aIndex.definitions.find( gate->second->definition.id.Value() );
+        auto pin = aIndex.pins.find( aEndpoint.pin->id.Value() );
+        auto pinOwner = aIndex.pinOwners.find( aEndpoint.pin->id.Value() );
 
-        return definition != aModel.definitions.end() && containsId( definition->pins, aEndpoint.pin->id );
+        return definition != aIndex.definitions.end() && pin != aIndex.pins.end() && pinOwner != aIndex.pinOwners.end()
+               && pinOwner->second == definition->second;
     }
 
 } // namespace
@@ -279,24 +307,38 @@ bool PADS_SCH_MODEL::HasUniqueTypedIds() const
         return false;
     }
 
-    std::vector<MODEL_GATE>           gates;
-    std::vector<MODEL_PIN_DEFINITION> pins;
+    std::unordered_set<uint32_t> gateIds;
+    std::unordered_set<uint32_t> pinIds;
 
     for( const MODEL_PART_TYPE& partType : partTypes )
-        gates.insert( gates.end(), partType.gates.begin(), partType.gates.end() );
+    {
+        for( const MODEL_GATE& gate : partType.gates )
+        {
+            if( !gate.id.IsValid() || !gateIds.insert( gate.id.Value() ).second )
+                return false;
+        }
+    }
 
     for( const MODEL_SYMBOL_DEFINITION& definition : definitions )
-        pins.insert( pins.end(), definition.pins.begin(), definition.pins.end() );
+    {
+        for( const MODEL_PIN_DEFINITION& pin : definition.pins )
+        {
+            if( !pin.id.IsValid() || !pinIds.insert( pin.id.Value() ).second )
+                return false;
+        }
+    }
 
-    return idsAreUnique( gates ) && idsAreUnique( pins );
+    return true;
 }
 
 
 bool PADS_SCH_MODEL::AllReferencesResolved() const
 {
+    const MODEL_INDEX index( *this );
+
     for( const MODEL_SHEET& sheet : sheets )
     {
-        if( sheet.parent && !containsId( sheets, sheet.parent->id ) )
+        if( sheet.parent && !index.sheets.contains( sheet.parent->id.Value() ) )
             return false;
     }
 
@@ -304,18 +346,16 @@ bool PADS_SCH_MODEL::AllReferencesResolved() const
     {
         for( const MODEL_GATE& gate : partType.gates )
         {
-            auto definition = std::ranges::find_if( definitions,
-                                                    [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
-                                                    {
-                                                        return aDefinition.id == gate.definition.id;
-                                                    } );
+            auto definition = index.definitions.find( gate.definition.id.Value() );
 
-            if( definition == definitions.end() )
+            if( definition == index.definitions.end() )
                 return false;
 
             for( const PIN_REFERENCE& pin : gate.pins )
             {
-                if( !containsId( definition->pins, pin.id ) )
+                auto pinOwner = index.pinOwners.find( pin.id.Value() );
+
+                if( pinOwner == index.pinOwners.end() || pinOwner->second != definition->second )
                     return false;
             }
         }
@@ -323,34 +363,29 @@ bool PADS_SCH_MODEL::AllReferencesResolved() const
 
     for( const MODEL_PLACEMENT& placement : placements )
     {
-        if( !containsId( sheets, placement.sheet.id ) || !containsId( partTypes, placement.partType.id ) )
+        if( !index.sheets.contains( placement.sheet.id.Value() )
+            || !index.partTypes.contains( placement.partType.id.Value() ) )
             return false;
 
         if( placement.gate )
         {
-            auto partType = std::ranges::find_if( partTypes,
-                                                  [&]( const MODEL_PART_TYPE& aPartType )
-                                                  {
-                                                      return aPartType.id == placement.partType.id;
-                                                  } );
+            auto partType = index.partTypes.find( placement.partType.id.Value() );
 
-            if( partType == partTypes.end() )
+            if( partType == index.partTypes.end() )
                 return false;
 
-            auto gate = std::ranges::find_if( partType->gates,
-                                              [&]( const MODEL_GATE& aGate )
-                                              {
-                                                  return aGate.id == placement.gate->id;
-                                              } );
+            auto gate = index.gates.find( placement.gate->id.Value() );
+            auto gateOwner = index.gateOwners.find( placement.gate->id.Value() );
 
-            if( gate == partType->gates.end() || gate->unit != placement.unit )
+            if( gate == index.gates.end() || gateOwner == index.gateOwners.end()
+                || gateOwner->second != partType->second || gate->second->unit != placement.unit )
                 return false;
         }
     }
 
     for( const MODEL_NET& net : nets )
     {
-        if( !containsId( sheets, net.sheet.id ) )
+        if( !index.sheets.contains( net.sheet.id.Value() ) )
             return false;
 
         for( const MODEL_CONNECTION& connection : net.connections )
@@ -360,45 +395,70 @@ bool PADS_SCH_MODEL::AllReferencesResolved() const
 
             for( const MODEL_CONNECTION_ENDPOINT& endpoint : connection.endpoints )
             {
-                if( !endpointIsValid( *this, endpoint ) )
+                if( !endpointIsValid( index, endpoint ) )
                     return false;
+
+                if( endpoint.placement )
+                {
+                    auto placement = index.placements.find( endpoint.placement->id.Value() );
+
+                    if( placement == index.placements.end() || placement->second->sheet.id != net.sheet.id )
+                        return false;
+                }
             }
         }
     }
 
     for( const MODEL_BUS& bus : buses )
     {
-        if( !containsId( sheets, bus.sheet.id ) )
+        if( !index.sheets.contains( bus.sheet.id.Value() ) )
             return false;
 
         for( const NET_REFERENCE& member : bus.memberNets )
         {
-            if( !containsId( nets, member.id ) )
+            auto net = index.nets.find( member.id.Value() );
+
+            if( net == index.nets.end() || net->second->sheet.id != bus.sheet.id )
                 return false;
         }
 
         for( const MODEL_BUS_ENTRY& entry : bus.entries )
         {
-            if( !containsId( nets, entry.memberNet.id ) )
+            auto net = index.nets.find( entry.memberNet.id.Value() );
+
+            if( net == index.nets.end() || net->second->sheet.id != bus.sheet.id
+                || std::ranges::none_of( bus.memberNets,
+                                         [&]( const NET_REFERENCE& aMember )
+                                         {
+                                             return aMember.id == entry.memberNet.id;
+                                         } ) )
+            {
                 return false;
+            }
         }
     }
 
     for( const MODEL_LABEL& label : labels )
     {
-        if( !containsId( sheets, label.sheet.id ) )
+        if( !index.sheets.contains( label.sheet.id.Value() ) )
             return false;
     }
 
     for( const MODEL_JUNCTION& junction : junctions )
     {
-        if( !containsId( sheets, junction.sheet.id ) )
+        if( !index.sheets.contains( junction.sheet.id.Value() ) )
             return false;
     }
 
     for( const MODEL_TEXT& text : texts )
     {
-        if( !containsId( sheets, text.sheet.id ) )
+        if( !index.sheets.contains( text.sheet.id.Value() ) )
+            return false;
+    }
+
+    for( const MODEL_PAGE_GRAPHIC& graphic : graphics )
+    {
+        if( !index.sheets.contains( graphic.sheet.id.Value() ) )
             return false;
     }
 
@@ -423,21 +483,46 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
     validateUniqueIds( nets, wxS( "net" ), id, provenance );
     validateUniqueIds( buses, wxS( "bus" ), id, provenance );
 
-    std::vector<MODEL_GATE>           gates;
-    std::vector<MODEL_PIN_DEFINITION> pins;
+    std::unordered_map<uint32_t, SOURCE_PROVENANCE> gateDeclarations;
+    std::unordered_map<uint32_t, SOURCE_PROVENANCE> pinDeclarations;
+
+    auto validateNestedId = [&]( const auto& aItem, const wxString& aObjectClass, auto& aDeclarations )
+    {
+        if( !aItem.id.IsValid() )
+            throwValidationError( aItem.source, wxString::Format( wxS( "invalid %s ID" ), aObjectClass ) );
+
+        auto [first, inserted] = aDeclarations.emplace( aItem.id.Value(), aItem.source );
+
+        if( !inserted )
+        {
+            throwValidationError(
+                    aItem.source,
+                    wxString::Format( wxS( "duplicate %s ID %u; first at v0x%04X %s controller %d record %llu "
+                                           "sheet %d offset 0x%llX" ),
+                                      aObjectClass, aItem.id.Value(), first->second.version, first->second.objectClass,
+                                      first->second.controller,
+                                      static_cast<unsigned long long>( first->second.recordIndex ), first->second.sheet,
+                                      static_cast<unsigned long long>( first->second.absoluteOffset ) ) );
+        }
+    };
 
     for( const MODEL_PART_TYPE& partType : partTypes )
-        gates.insert( gates.end(), partType.gates.begin(), partType.gates.end() );
+    {
+        for( const MODEL_GATE& gate : partType.gates )
+            validateNestedId( gate, wxS( "gate" ), gateDeclarations );
+    }
 
     for( const MODEL_SYMBOL_DEFINITION& definition : definitions )
-        pins.insert( pins.end(), definition.pins.begin(), definition.pins.end() );
+    {
+        for( const MODEL_PIN_DEFINITION& pin : definition.pins )
+            validateNestedId( pin, wxS( "pin" ), pinDeclarations );
+    }
 
-    validateUniqueIds( gates, wxS( "gate" ), id, provenance );
-    validateUniqueIds( pins, wxS( "pin" ), id, provenance );
+    const MODEL_INDEX index( *this );
 
     for( const MODEL_SHEET& sheet : sheets )
     {
-        if( sheet.parent && !containsId( sheets, sheet.parent->id ) )
+        if( sheet.parent && !index.sheets.contains( sheet.parent->id.Value() ) )
             throwValidationError( sheet.parent->source, wxS( "unresolved sheet reference" ) );
     }
 
@@ -445,18 +530,16 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
     {
         for( const MODEL_GATE& gate : partType.gates )
         {
-            auto definition = std::ranges::find_if( definitions,
-                                                    [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
-                                                    {
-                                                        return aDefinition.id == gate.definition.id;
-                                                    } );
+            auto definition = index.definitions.find( gate.definition.id.Value() );
 
-            if( definition == definitions.end() )
+            if( definition == index.definitions.end() )
                 throwValidationError( gate.definition.source, wxS( "unresolved symbol definition reference" ) );
 
             for( const PIN_REFERENCE& pin : gate.pins )
             {
-                if( !containsId( definition->pins, pin.id ) )
+                auto pinOwner = index.pinOwners.find( pin.id.Value() );
+
+                if( pinOwner == index.pinOwners.end() || pinOwner->second != definition->second )
                     throwValidationError( pin.source, wxS( "pin does not belong to gate definition" ) );
             }
         }
@@ -464,34 +547,28 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
 
     for( const MODEL_PLACEMENT& placement : placements )
     {
-        if( !containsId( sheets, placement.sheet.id ) )
+        if( !index.sheets.contains( placement.sheet.id.Value() ) )
             throwValidationError( placement.sheet.source, wxS( "unresolved placement sheet reference" ) );
 
-        auto partType = std::ranges::find_if( partTypes,
-                                              [&]( const MODEL_PART_TYPE& aPartType )
-                                              {
-                                                  return aPartType.id == placement.partType.id;
-                                              } );
+        auto partType = index.partTypes.find( placement.partType.id.Value() );
 
-        if( partType == partTypes.end() )
+        if( partType == index.partTypes.end() )
             throwValidationError( placement.partType.source, wxS( "unresolved placement part-type reference" ) );
 
         if( placement.gate )
         {
-            auto gate = std::ranges::find_if( partType->gates,
-                                              [&]( const MODEL_GATE& aGate )
-                                              {
-                                                  return aGate.id == placement.gate->id;
-                                              } );
+            auto gate = index.gates.find( placement.gate->id.Value() );
+            auto gateOwner = index.gateOwners.find( placement.gate->id.Value() );
 
-            if( gate == partType->gates.end() || gate->unit != placement.unit )
+            if( gate == index.gates.end() || gateOwner == index.gateOwners.end()
+                || gateOwner->second != partType->second || gate->second->unit != placement.unit )
                 throwValidationError( placement.gate->source, wxS( "placement gate or unit mismatch" ) );
         }
     }
 
     for( const MODEL_NET& net : nets )
     {
-        if( !containsId( sheets, net.sheet.id ) )
+        if( !index.sheets.contains( net.sheet.id.Value() ) )
             throwValidationError( net.sheet.source, wxS( "unresolved net sheet reference" ) );
 
         for( const MODEL_CONNECTION& connection : net.connections )
@@ -501,9 +578,20 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
 
             for( const MODEL_CONNECTION_ENDPOINT& endpoint : connection.endpoints )
             {
-                if( !endpointIsValid( *this, endpoint ) )
+                if( !endpointIsValid( index, endpoint ) )
                 {
                     throwValidationError( endpoint.source, wxS( "empty, mixed, or unresolved connection endpoint" ) );
+                }
+
+                if( endpoint.placement )
+                {
+                    auto placement = index.placements.find( endpoint.placement->id.Value() );
+
+                    if( placement != index.placements.end() && placement->second->sheet.id != net.sheet.id )
+                    {
+                        throwValidationError( endpoint.source,
+                                              wxS( "connection endpoint placement sheet does not match net sheet" ) );
+                    }
                 }
             }
         }
@@ -511,42 +599,64 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
 
     for( const MODEL_BUS& bus : buses )
     {
-        if( !containsId( sheets, bus.sheet.id ) )
+        if( !index.sheets.contains( bus.sheet.id.Value() ) )
             throwValidationError( bus.sheet.source, wxS( "unresolved bus sheet reference" ) );
 
         for( const NET_REFERENCE& member : bus.memberNets )
         {
-            if( !containsId( nets, member.id ) )
+            auto net = index.nets.find( member.id.Value() );
+
+            if( net == index.nets.end() )
                 throwValidationError( member.source, wxS( "unresolved bus member-net reference" ) );
+
+            if( net->second->sheet.id != bus.sheet.id )
+                throwValidationError( member.source, wxS( "bus member-net sheet does not match bus sheet" ) );
         }
 
         for( const MODEL_BUS_ENTRY& entry : bus.entries )
         {
-            if( !containsId( nets, entry.memberNet.id ) )
+            auto net = index.nets.find( entry.memberNet.id.Value() );
+
+            if( net == index.nets.end() )
                 throwValidationError( entry.memberNet.source, wxS( "unresolved bus-entry net reference" ) );
+
+            if( net->second->sheet.id != bus.sheet.id )
+                throwValidationError( entry.memberNet.source, wxS( "bus-entry net sheet does not match bus sheet" ) );
+
+            if( std::ranges::none_of( bus.memberNets,
+                                      [&]( const NET_REFERENCE& aMember )
+                                      {
+                                          return aMember.id == entry.memberNet.id;
+                                      } ) )
+            {
+                throwValidationError( entry.source, wxS( "bus-entry net is absent from bus member nets" ) );
+            }
         }
     }
 
     for( const MODEL_LABEL& label : labels )
     {
-        if( !containsId( sheets, label.sheet.id ) )
+        if( !index.sheets.contains( label.sheet.id.Value() ) )
             throwValidationError( label.sheet.source, wxS( "unresolved label sheet reference" ) );
     }
 
     for( const MODEL_JUNCTION& junction : junctions )
     {
-        if( !containsId( sheets, junction.sheet.id ) )
+        if( !index.sheets.contains( junction.sheet.id.Value() ) )
             throwValidationError( junction.sheet.source, wxS( "unresolved junction sheet reference" ) );
     }
 
     for( const MODEL_TEXT& text : texts )
     {
-        if( !containsId( sheets, text.sheet.id ) )
+        if( !index.sheets.contains( text.sheet.id.Value() ) )
             throwValidationError( text.sheet.source, wxS( "unresolved text sheet reference" ) );
     }
 
-    if( !AllReferencesResolved() )
-        throwValidationError( source, wxS( "unresolved or wrong-class controller reference" ) );
+    for( const MODEL_PAGE_GRAPHIC& graphic : graphics )
+    {
+        if( !index.sheets.contains( graphic.sheet.id.Value() ) )
+            throwValidationError( graphic.sheet.source, wxS( "unresolved page-graphic sheet reference" ) );
+    }
 
     for( const MODEL_SHEET& sheet : sheets )
     {
@@ -558,16 +668,12 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
             if( !ancestors.insert( current->id ).second )
                 throwValidationError( current->source, wxS( "cyclic sheet hierarchy" ) );
 
-            auto parent = std::ranges::find_if( sheets,
-                                                [&]( const MODEL_SHEET& aSheet )
-                                                {
-                                                    return aSheet.id == current->parent->id;
-                                                } );
+            auto parent = index.sheets.find( current->parent->id.Value() );
 
-            if( parent == sheets.end() )
+            if( parent == index.sheets.end() )
                 break;
 
-            current = &*parent;
+            current = parent->second;
         }
     }
 }
@@ -621,6 +727,14 @@ SOURCE_STRING PADS_SCH_BINARY_PARSER::DecodeString( const std::vector<uint8_t>& 
     else if( aCodePage != 65001 )
         result.encoding = STRING_ENCODING_STATUS::UNKNOWN_CODE_PAGE;
 
+    if( aCodePage != 65001 && aCodePage != 1252 )
+    {
+        aDiagnostics.push_back( { RPT_SEVERITY_WARNING, aSource,
+                                  wxString::Format( wxS( "unknown code page %u; bytes preserved and "
+                                                         "non-ASCII bytes decoded as U+FFFD" ),
+                                                    aCodePage ) } );
+    }
+
     if( aBytes.empty() )
         return result;
 
@@ -633,10 +747,6 @@ SOURCE_STRING PADS_SCH_BINARY_PARSER::DecodeString( const std::vector<uint8_t>& 
     if( aCodePage != 65001 )
     {
         result.text = decodeUnknownCodePage( aBytes );
-        aDiagnostics.push_back( { RPT_SEVERITY_WARNING, aSource,
-                                  wxString::Format( wxS( "unknown code page %u; bytes preserved and "
-                                                         "non-ASCII bytes decoded as U+FFFD" ),
-                                                    aCodePage ) } );
         return result;
     }
 

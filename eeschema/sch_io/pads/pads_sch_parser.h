@@ -122,8 +122,8 @@ struct ARC_DATA
 
 struct GRAPHIC_POINT
 {
-    POINT                   coord;
-    std::optional<ARC_DATA> arc;
+    POINT                     coord;
+    std::optional<ARC_DATA>   arc;
 };
 
 
@@ -163,13 +163,13 @@ struct SYMBOL_PIN
     int         pl_just = 0;
     std::string pin_decal_name;
 
-    POINT pn_offset;
-    int   pn_off_angle = 0;
-    int   pn_off_just = 0;
-    POINT pl_offset;
-    int   pl_off_angle = 0;
-    int   pl_off_just = 0;
-    int   p_flags = 0;
+    POINT       pn_offset;
+    int         pn_off_angle = 0;
+    int         pn_off_just = 0;
+    POINT       pl_offset;
+    int         pl_off_angle = 0;
+    int         pl_off_just = 0;
+    int         p_flags = 0;
 };
 
 
@@ -185,15 +185,15 @@ enum class GRAPHIC_TYPE
 
 struct SYMBOL_GRAPHIC
 {
-    GRAPHIC_TYPE               type = GRAPHIC_TYPE::LINE;
-    double                     line_width = 0.0;
-    bool                       filled = false;
-    int                        line_style = 255;
+    GRAPHIC_TYPE        type = GRAPHIC_TYPE::LINE;
+    double              line_width = 0.0;
+    bool                filled = false;
+    int                 line_style = 255;
     std::vector<GRAPHIC_POINT> points;
-    POINT                      center;
-    double                     radius = 0.0;
-    double                     start_angle = 0.0;
-    double                     end_angle = 0.0;
+    POINT               center;
+    double              radius = 0.0;
+    double              start_angle = 0.0;
+    double              end_angle = 0.0;
 };
 
 
@@ -234,21 +234,21 @@ struct SYMBOL_DEF
     std::vector<SYMBOL_GRAPHIC> graphics;
     std::vector<SYMBOL_TEXT>    texts;
 
-    int f1 = 0;
-    int f2 = 0;
-    int height = 0;
-    int width = 0;
-    int h2 = 0;
-    int w2 = 0;
-    int num_attrs = 0;
-    int num_pieces = 0;
-    int has_polarity = 0;
-    int num_pins = 0;
-    int pin_origin_code = 0;
-    int is_pin_decal = 0;
+    int         f1 = 0;
+    int         f2 = 0;
+    int         height = 0;
+    int         width = 0;
+    int         h2 = 0;
+    int         w2 = 0;
+    int         num_attrs = 0;
+    int         num_pieces = 0;
+    int         has_polarity = 0;
+    int         num_pins = 0;
+    int         pin_origin_code = 0;
+    int         is_pin_decal = 0;
 
-    std::string                font1;
-    std::string                font2;
+    std::string font1;
+    std::string font2;
     std::vector<CAEDECAL_ATTR> attrs;
 };
 
@@ -272,15 +272,15 @@ struct PART_ATTRIBUTE
 
 struct PART_PLACEMENT
 {
-    std::string                 reference;
-    std::string                 symbol_name;
-    std::string                 part_type;
-    POINT                       position;
-    double                      rotation = 0.0;
-    int                         mirror_flags = 0;
-    std::string                 power_net_name;
-    int                         sheet_number = 1;
-    int                         gate_number = 1;
+    std::string reference;
+    std::string symbol_name;
+    std::string part_type;
+    POINT       position;
+    double      rotation = 0.0;
+    int         mirror_flags = 0;
+    std::string power_net_name;
+    int         sheet_number = 1;
+    int         gate_number = 1;
     std::vector<PART_ATTRIBUTE> attributes;
 
     int         h1 = 0;
@@ -318,11 +318,11 @@ struct WIRE_SEGMENT
     POINT end;
     int   sheet_number = 1;
 
-    std::string        endpoint_a;
-    std::string        endpoint_b;
-    int                vertex_count = 0;
-    int                flags = 0;
-    std::vector<POINT> vertices;
+    std::string             endpoint_a;
+    std::string             endpoint_b;
+    int                     vertex_count = 0;
+    int                     flags = 0;
+    std::vector<POINT>      vertices;
 };
 
 
@@ -462,27 +462,27 @@ struct PARTTYPE_PIN
 
 struct GATE_DEF
 {
-    int                       num_decal_variants = 0;
-    int                       num_pins = 0;
-    int                       swap_flag = 0;
-    std::vector<std::string>  decal_names;
-    std::vector<PARTTYPE_PIN> pins;
+    int                         num_decal_variants = 0;
+    int                         num_pins = 0;
+    int                         swap_flag = 0;
+    std::vector<std::string>    decal_names;
+    std::vector<PARTTYPE_PIN>   pins;
 };
 
 
 struct PARTTYPE_DEF
 {
-    std::string name;
-    std::string category;
-    int         num_physical = 0;
-    int         num_sigpins = 0;
-    int         unused = 0;
-    int         num_swap_groups = 0;
-    std::string timestamp;
+    std::string                 name;
+    std::string                 category;
+    int                         num_physical = 0;
+    int                         num_sigpins = 0;
+    int                         unused = 0;
+    int                         num_swap_groups = 0;
+    std::string                 timestamp;
 
-    std::vector<GATE_DEF> gates;
+    std::vector<GATE_DEF>       gates;
 
-    std::string special_keyword;
+    std::string                 special_keyword;
     struct SPECIAL_VARIANT
     {
         std::string decal_name;
@@ -492,16 +492,16 @@ struct PARTTYPE_DEF
 
     std::vector<SPECIAL_VARIANT> special_variants;
 
-    bool is_connector = false;
+    bool                        is_connector = false;
 
     struct SIGPIN
     {
         std::string pin_number;
         std::string net_name;
     };
-    std::vector<SIGPIN> sigpins;
+    std::vector<SIGPIN>         sigpins;
 
-    std::vector<std::string> swap_lines;
+    std::vector<std::string>    swap_lines;
 };
 
 
@@ -523,35 +523,35 @@ public:
     static PIN_TYPE ParsePinTypeChar( char aTypeChar );
 
     const FILE_HEADER& GetHeader() const { return m_header; }
-    const PARAMETERS&  GetParameters() const { return m_parameters; }
+    const PARAMETERS& GetParameters() const { return m_parameters; }
 
     const std::vector<SYMBOL_DEF>& GetSymbolDefs() const { return m_symbolDefs; }
-    const SYMBOL_DEF*              GetSymbolDef( const std::string& aName ) const;
+    const SYMBOL_DEF* GetSymbolDef( const std::string& aName ) const;
 
     const std::vector<PART_PLACEMENT>& GetPartPlacements() const { return m_partPlacements; }
-    const PART_PLACEMENT*              GetPartPlacement( const std::string& aReference ) const;
+    const PART_PLACEMENT* GetPartPlacement( const std::string& aReference ) const;
 
     const std::vector<SCH_SIGNAL>& GetSignals() const { return m_signals; }
-    const SCH_SIGNAL*              GetSignal( const std::string& aName ) const;
+    const SCH_SIGNAL* GetSignal( const std::string& aName ) const;
 
     std::string GetVersion() const { return m_header.version; }
-    bool        IsValid() const { return m_header.valid; }
+    bool IsValid() const { return m_header.valid; }
 
-    int           GetSheetCount() const;
+    int GetSheetCount() const;
     std::set<int> GetSheetNumbers() const;
 
     const std::vector<OFF_PAGE_CONNECTOR>& GetOffPageConnectors() const { return m_offPageConnectors; }
     const std::vector<BUS_DEF>&            GetBuses() const { return m_buses; }
 
-    std::vector<SCH_SIGNAL>     GetSignalsOnSheet( int aSheetNumber ) const;
+    std::vector<SCH_SIGNAL> GetSignalsOnSheet( int aSheetNumber ) const;
     std::vector<PART_PLACEMENT> GetPartsOnSheet( int aSheetNumber ) const;
 
     const std::map<std::string, PARTTYPE_DEF>& GetPartTypes() const { return m_partTypes; }
-    const std::vector<TIED_DOT>&               GetTiedDots() const { return m_tiedDots; }
-    const std::vector<SHEET_HEADER>&           GetSheetHeaders() const { return m_sheetHeaders; }
-    const std::vector<TEXT_ITEM>&              GetTextItems() const { return m_textItems; }
-    const std::vector<LINES_ITEM>&             GetLinesItems() const { return m_linesItems; }
-    const std::vector<NETNAME_LABEL>&          GetNetNameLabels() const { return m_netNameLabels; }
+    const std::vector<TIED_DOT>& GetTiedDots() const { return m_tiedDots; }
+    const std::vector<SHEET_HEADER>& GetSheetHeaders() const { return m_sheetHeaders; }
+    const std::vector<TEXT_ITEM>& GetTextItems() const { return m_textItems; }
+    const std::vector<LINES_ITEM>& GetLinesItems() const { return m_linesItems; }
+    const std::vector<NETNAME_LABEL>& GetNetNameLabels() const { return m_netNameLabels; }
 
 private:
     bool parseHeader( const std::string& aLine );
@@ -582,25 +582,25 @@ private:
 
     PIN_TYPE parsePinType( const std::string& aTypeStr );
 
-    bool        isSectionMarker( const std::string& aLine ) const;
+    bool isSectionMarker( const std::string& aLine ) const;
     std::string extractSectionName( const std::string& aLine ) const;
 
-    REPORTER*                           m_reporter;
-    FILE_HEADER                         m_header;
-    PARAMETERS                          m_parameters;
-    std::vector<SYMBOL_DEF>             m_symbolDefs;
-    std::vector<PART_PLACEMENT>         m_partPlacements;
-    std::vector<SCH_SIGNAL>             m_signals;
-    std::vector<OFF_PAGE_CONNECTOR>     m_offPageConnectors;
+    REPORTER*                               m_reporter;
+    FILE_HEADER                             m_header;
+    PARAMETERS                              m_parameters;
+    std::vector<SYMBOL_DEF>                 m_symbolDefs;
+    std::vector<PART_PLACEMENT>             m_partPlacements;
+    std::vector<SCH_SIGNAL>                 m_signals;
+    std::vector<OFF_PAGE_CONNECTOR>         m_offPageConnectors;
     std::vector<BUS_DEF>                m_buses;
-    int                                 m_lineNumber;
-    int                                 m_currentSheet;
-    std::map<std::string, PARTTYPE_DEF> m_partTypes;
-    std::vector<TIED_DOT>               m_tiedDots;
-    std::vector<SHEET_HEADER>           m_sheetHeaders;
-    std::vector<TEXT_ITEM>              m_textItems;
-    std::vector<LINES_ITEM>             m_linesItems;
-    std::vector<NETNAME_LABEL>          m_netNameLabels;
+    int                                     m_lineNumber;
+    int                                     m_currentSheet;
+    std::map<std::string, PARTTYPE_DEF>     m_partTypes;
+    std::vector<TIED_DOT>                   m_tiedDots;
+    std::vector<SHEET_HEADER>               m_sheetHeaders;
+    std::vector<TEXT_ITEM>                   m_textItems;
+    std::vector<LINES_ITEM>                 m_linesItems;
+    std::vector<NETNAME_LABEL>              m_netNameLabels;
 };
 
 } // namespace PADS_SCH
