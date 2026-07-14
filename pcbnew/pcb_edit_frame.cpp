@@ -2496,6 +2496,7 @@ static void processTextItem( const PCB_TEXT& aSrc, PCB_TEXT& aDest,
         *aUpdated |= aSrc.GetTextThickness() != aDest.GetTextThickness();
         *aUpdated |= aSrc.GetTextAngle() != aDest.GetTextAngle();
         *aUpdated |= aSrc.IsKnockout() != aDest.IsKnockout();
+        aDest.KeepUpright();
     }
     else
     {
