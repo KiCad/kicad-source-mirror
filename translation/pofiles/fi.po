@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-06-18 17:01+0000\n"
+"PO-Revision-Date: 2026-07-15 01:01+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -4007,9 +4007,8 @@ msgid "Commit message cannot be empty"
 msgstr "Commit viesti ei voi olla tyhjä"
 
 #: common/dialogs/git/dialog_git_commit.cpp:196
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Valitse vähintään yksi ominaisuus merkinnän takaamiseksi."
+msgstr "Valitse vähintään yksi tiedosto kommitoitavaksi"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
@@ -4047,9 +4046,8 @@ msgid "SSH key:"
 msgstr "SSH-avaimen:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Valitse yksityinen SSH-avaintiedosto"
+msgstr "Valitse yksityinen SSH-avain"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -10482,7 +10480,7 @@ msgstr "Sulje nykyinen editori"
 #: eeschema/tools/sch_group_tool.cpp:210 pcbnew/pcb_design_block_utils.cpp:472
 #: pcbnew/pcb_design_block_utils.cpp:610 pcbnew/tools/pcb_group_tool.cpp:224
 msgid "Group Items"
-msgstr "Ryhmän jäsenet"
+msgstr "Ryhmittele jäsenet"
 
 #: common/tool/actions.cpp:203
 msgid "Group the selected items so that they are treated as a single item"
@@ -18638,7 +18636,7 @@ msgid "(source)"
 msgstr "(lähde)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s'"
 msgstr "Ryhmän '%s' jäsenet"
 
@@ -55422,9 +55420,9 @@ msgid "Unable to determine file format for '%s'\n"
 msgstr "Tiedostoa '%s' ei voi kirjoittaa."
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2847
-#, fuzzy, c-format
+#, c-format
 msgid "Input file not found: '%s'\n"
-msgstr "Tiedostoa ei löydy: '%s'."
+msgstr "Syötetiedostoa ei löydy: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2873
 #, fuzzy, c-format
@@ -55446,9 +55444,9 @@ msgid "Successfully saved imported board to '%s'\n"
 msgstr "VRML vietiin onnistuneesti kohteeseen %s"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3017
-#, fuzzy, c-format
+#, c-format
 msgid "Error during import: %s\n"
-msgstr "Virhe ladattaessa jalanjälkeä"
+msgstr "Virhe tuodessa: %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:110
 msgid "Multiple Layers"
@@ -57267,9 +57265,8 @@ msgid "Some of the items could not be outset."
 msgstr "Joitakin kohteita ei voitu aloittaa."
 
 #: pcbnew/tools/multichannel_tool.cpp:89
-#, fuzzy
 msgid "(none)"
-msgstr "ei mitään"
+msgstr "(ei mitään)"
 
 #: pcbnew/tools/multichannel_tool.cpp:139
 #: pcbnew/tools/multichannel_tool.cpp:2098
