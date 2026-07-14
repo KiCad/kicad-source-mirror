@@ -324,7 +324,33 @@ WX_AUI_DOCK_ART::WX_AUI_DOCK_ART() :
     m_gradientType = wxAUI_GRADIENT_NONE;
 }
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+void WX_AUI_TAB_ART::SetSizingInfo( const wxSize& tabCtrlSize, size_t tabCount, wxWindow* wnd )
+{
+    // SetSizingInfo is called after adding pages.
+    // Remove the close button from tabs of unclosable panels.
+    PANEL_NOTEBOOK_BASE* panel = dynamic_cast<PANEL_NOTEBOOK_BASE*>( wnd );
 
+    if( panel && !panel->GetClosable() )
+    {
+        if( wxAuiNotebook* notebook = dynamic_cast<wxAuiNotebook*>( panel->GetParent() ) )
+        {
+            for( wxAuiTabCtrl* ctrl : notebook->GetAllTabCtrls() )
+            {
+                for( size_t i = 0; i < ctrl->GetPageCount(); i++ )
+                {
+                    wxAuiNotebookPage& page = ctrl->GetPage( i );
+
+                    if( page.window == wnd )
+                        page.buttons.clear();
+                }
+            }
+        }
+    }
+
+    wxAuiDefaultTabArt::SetSizingInfo( tabCtrlSize, tabCount, wnd );
+}
+#else
 void WX_AUI_TAB_ART::DrawTab( wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& page, const wxRect& in_rect,
                               int close_button_state, wxRect* out_tab_rect, wxRect* out_button_rect,
                               int* x_extent )
@@ -337,3 +363,4 @@ void WX_AUI_TAB_ART::DrawTab( wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& 
     return wxAuiGenericTabArt::DrawTab( dc, wnd, page, in_rect, close_button_state, out_tab_rect,
                                         out_button_rect, x_extent );
 }
+#endif
