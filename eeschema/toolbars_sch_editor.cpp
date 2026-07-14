@@ -373,10 +373,13 @@ void SCH_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
 }
 
 
-bool SCH_EDIT_FRAME::ShowAddVariantDialog()
+bool SCH_EDIT_FRAME::ShowAddVariantDialog( wxWindow* aParent )
 {
+    if( !aParent )
+        aParent = this;
+
     // Create a dialog with both name and description fields
-    wxDialog dlg( this, wxID_ANY, _( "New Design Variant" ), wxDefaultPosition, wxDefaultSize,
+    wxDialog dlg( aParent, wxID_ANY, _( "New Design Variant" ), wxDefaultPosition, wxDefaultSize,
                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
 
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );

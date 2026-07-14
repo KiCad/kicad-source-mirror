@@ -277,7 +277,7 @@ public:
      *
      * @return true if a variant was created, false if cancelled or invalid input
      */
-    bool ShowAddVariantDialog();
+    bool ShowAddVariantDialog( wxWindow* aParent = nullptr );
 
     void onVariantSelected( wxCommandEvent& aEvent );
 
