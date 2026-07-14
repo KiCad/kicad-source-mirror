@@ -1597,6 +1597,8 @@ public:
 
     BOARD_ITEM* CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) const;
 
+    void ClearItemByIdCache();
+
     // --------- Item order comparators ---------
 
     struct cmp_items
