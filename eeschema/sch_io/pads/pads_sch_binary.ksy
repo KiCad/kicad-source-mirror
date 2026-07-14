@@ -37,6 +37,17 @@ instances:
     valid:
       any-of: [0x000c, 0x000d]
 
+enums:
+  page_size_prefix:
+    0x53: size
+    0x57: wditbsize
+  page_size_designator:
+    0x41: a
+    0x42: b
+    0x43: c
+    0x44: d
+    0x45: e
+
 types:
   header_v12:
     seq:
@@ -101,7 +112,7 @@ types:
         type: u4
         valid: 0x24
       - id: global_string_pool
-        type: nul_terminated_string_pool
+        type: global_string_controller
         size: _root.pool_directory[1].used_bytes
       - id: controller_payload_2
         size: _root.pool_directory[2].used_bytes
@@ -142,12 +153,44 @@ types:
       - id: controller_payload_19
         size: _root.pool_directory[19].used_bytes
 
-  nul_terminated_string_pool:
+  global_string_controller:
     seq:
-      - id: strings
+      - id: records
+        type: global_string_record
+        repeat: eos
+
+  global_string_record:
+    seq:
+      - id: prefix
+        type: u1
+      - id: body
+        type:
+          switch-on: prefix
+          cases:
+            0x46: title_field_slot
+            _: generic_global_string_tail
+
+  title_field_slot:
+    seq:
+      - id: field_marker_tail
+        contents: [0x69, 0x65, 0x6c, 0x64, 0x0a]
+      - id: name
+        type: str
+        encoding: windows-1252
+        terminator: 1
+        consume: false
+        eos-error: true
+      - id: separator
+        contents: [1]
+      - id: value
         type: strz
         encoding: windows-1252
-        repeat: eos
+
+  generic_global_string_tail:
+    seq:
+      - id: tail
+        type: strz
+        encoding: windows-1252
 
   sheet_index_controller:
     params:
@@ -205,8 +248,8 @@ types:
       - id: preserved_design_settings_2c
         size: 220
       - id: page_size_storage
+        type: page_size_slot
         size: 11
-        doc: Fixed slot containing either SIZE<X> NUL or WDITBSIZE<X> NUL.
       - id: preserved_design_settings_113
         size: 125
 
@@ -246,10 +289,45 @@ types:
         type: u2
       - id: successor_ordinal
         type: u2
-      - id: presentation_flags
+      - id: relationship_word_28
         type: u2
+        doc: Preserved relationship/ordinal-like word; paired ASCII proves this is not a presentation flag.
       - id: line_width_mils
         type: u2
+
+  page_size_slot:
+    seq:
+      - id: prefix
+        type: u1
+        enum: page_size_prefix
+      - id: value
+        type:
+          switch-on: prefix
+          cases:
+            'page_size_prefix::size': page_size_short
+            'page_size_prefix::wditbsize': page_size_legacy
+
+  page_size_short:
+    seq:
+      - id: prefix_tail
+        contents: [0x49, 0x5a, 0x45]
+      - id: designator
+        type: u1
+        enum: page_size_designator
+      - id: terminator
+        contents: [0]
+      - id: padding
+        contents: [0, 0, 0, 0, 0]
+
+  page_size_legacy:
+    seq:
+      - id: prefix_tail
+        contents: [0x44, 0x49, 0x54, 0x42, 0x53, 0x49, 0x5a, 0x45]
+      - id: designator
+        type: u1
+        enum: page_size_designator
+      - id: terminator
+        contents: [0]
 
   sheet_pool_descriptor:
     seq:

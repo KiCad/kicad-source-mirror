@@ -509,6 +509,16 @@ struct MODEL_TEXT
 };
 
 
+struct PRESERVED_CONTROLLER_PAYLOAD
+{
+    SOURCE_PROVENANCE    source;
+    PROPERTY_DISPOSITION disposition = PROPERTY_DISPOSITION::PRESERVED;
+    std::vector<uint8_t> bytes;
+
+    bool operator==( const PRESERVED_CONTROLLER_PAYLOAD& ) const = default;
+};
+
+
 struct PADS_SCH_MODEL
 {
     uint16_t                             version = 0;
@@ -525,6 +535,7 @@ struct PADS_SCH_MODEL
     std::vector<MODEL_JUNCTION>          junctions;
     std::vector<MODEL_TEXT>              texts;
     std::vector<MODEL_PAGE_GRAPHIC>      graphics;
+    std::vector<PRESERVED_CONTROLLER_PAYLOAD> preservedControllerPayloads;
     std::vector<PARSER_DIAGNOSTIC>       diagnostics;
 
     bool HasUniqueTypedIds() const;

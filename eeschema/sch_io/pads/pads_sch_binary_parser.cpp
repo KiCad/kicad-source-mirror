@@ -775,7 +775,6 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
     model.version = sdb.Version();
     model.subversion = cursor.U16At( 6 );
     model.source = { aSourceName, model.version, wxS( "model" ), -1, 0, 0, aBytes.size(), -1 };
-    model.settings.source = model.source;
     model.settings.codePage = DEFAULT_CODE_PAGE;
 
     const SCH_SDB_POOL& sheetPool = sdb.Pools()[3];
@@ -801,6 +800,7 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
     size_t            settingsOffset = outerControllerOffset( sdb, 5 );
     SOURCE_PROVENANCE settingsSource = sourceAt( aSourceName, model.version, wxS( "design settings" ), 5, 0,
                                                  settingsOffset, settingsPool.usedBytes, -1 );
+    model.settings.source = settingsSource;
 
     uint8_t pageDesignator = 0;
 
@@ -835,7 +835,8 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
     size_t                   titleEnd = titleOffset + titleFieldPool.usedBytes;
     size_t                   titleRecord = 0;
 
-    while( titleOffset < titleEnd && titleFields.size() < 14 )
+    while( titleOffset + 6 <= titleEnd
+           && std::equal( aBytes.begin() + titleOffset, aBytes.begin() + titleOffset + 6, "Field\n" ) )
     {
         size_t terminator = titleOffset;
 
@@ -874,11 +875,11 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
         ++titleRecord;
     }
 
-    if( titleFields.size() != 14 )
+    if( titleFields.empty() )
     {
         SOURCE_PROVENANCE source = sourceAt( aSourceName, model.version, wxS( "title field" ), 1, titleFields.size(),
                                              outerControllerOffset( sdb, 1 ), titleFieldPool.usedBytes, -1 );
-        throwDecodeError( source, wxS( "title-field controller does not contain 14 records" ) );
+        throwDecodeError( source, wxS( "title-field controller is empty" ) );
     }
 
     size_t sheetIndexOffset = outerControllerOffset( sdb, 3 );
@@ -956,74 +957,104 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
         model.sheets.push_back( std::move( sheet ) );
     }
 
-    if( model.version == 0x000D )
-    {
-        size_t sheetIndex = 0;
+    size_t sheetIndex = 0;
 
-        for( const SCH_SDB_BLOCK& block : sdb.Blocks() )
+    for( const SCH_SDB_BLOCK& block : sdb.Blocks() )
+    {
+        if( block.kind != SCH_SDB_BLOCK_KIND::SHEET )
+            continue;
+
+        size_t   descriptors = block.offset + SHEET_HEADER_BYTES;
+        size_t   payload = descriptors + SHEET_DESCRIPTOR_COUNT * SHEET_DESCRIPTOR_BYTES;
+        uint32_t textCount = cursor.U32At( descriptors + SHEET_COUNT_OFFSET );
+        uint32_t textBytes = cursor.U32At( descriptors + SHEET_USED_BYTES_OFFSET );
+        uint32_t heapBytes = cursor.U32At( descriptors + SHEET_DESCRIPTOR_BYTES + SHEET_USED_BYTES_OFFSET );
+
+        SOURCE_PROVENANCE controllerSource = sourceAt( aSourceName, model.version, wxS( "text controller" ), 1, 0,
+                                                       payload, textBytes, static_cast<int>( sheetIndex ) );
+
+        if( textBytes != textCount * TEXT_RECORD_BYTES )
+            throwDecodeError( controllerSource, wxS( "text-controller byte count does not match 32-byte records" ) );
+
+        size_t heapOffset = payload + textBytes;
+
+        if( model.version == 0x000C )
         {
-            if( block.kind != SCH_SDB_BLOCK_KIND::SHEET )
+            SOURCE_PROVENANCE heapSource = sourceAt( aSourceName, model.version, wxS( "text string controller" ), 2, 0,
+                                                     heapOffset, heapBytes, static_cast<int>( sheetIndex ) );
+            model.preservedControllerPayloads.push_back(
+                    { controllerSource,
+                      PROPERTY_DISPOSITION::PRESERVED,
+                      { aBytes.begin() + payload, aBytes.begin() + payload + textBytes } } );
+            model.preservedControllerPayloads.push_back(
+                    { heapSource,
+                      PROPERTY_DISPOSITION::PRESERVED,
+                      { aBytes.begin() + heapOffset, aBytes.begin() + heapOffset + heapBytes } } );
+            ++sheetIndex;
+            continue;
+        }
+
+        for( size_t record = 0; record < textCount; ++record )
+        {
+            size_t recordOffset = payload + record * TEXT_RECORD_BYTES;
+
+            if( cursor.U16At( recordOffset + 24 ) != cursor.U16At( recordOffset + 26 ) )
                 continue;
 
-            size_t   descriptors = block.offset + SHEET_HEADER_BYTES;
-            size_t   payload = descriptors + SHEET_DESCRIPTOR_COUNT * SHEET_DESCRIPTOR_BYTES;
-            uint32_t textCount = cursor.U32At( descriptors + SHEET_COUNT_OFFSET );
-            uint32_t textBytes = cursor.U32At( descriptors + SHEET_USED_BYTES_OFFSET );
-            uint32_t heapBytes = cursor.U32At( descriptors + SHEET_DESCRIPTOR_BYTES + SHEET_USED_BYTES_OFFSET );
+            SOURCE_PROVENANCE textSource = sourceAt( aSourceName, model.version, wxS( "free text" ), 1, record,
+                                                     recordOffset, TEXT_RECORD_BYTES, static_cast<int>( sheetIndex ) );
+            uint32_t          stringOffset = cursor.U32At( recordOffset + 8 );
+            uint16_t          stringBytes = cursor.U16At( recordOffset + 20 );
 
-            SOURCE_PROVENANCE controllerSource = sourceAt( aSourceName, model.version, wxS( "text controller" ), 1, 0,
-                                                           payload, textBytes, static_cast<int>( sheetIndex ) );
-
-            if( textBytes != textCount * TEXT_RECORD_BYTES )
-                throwDecodeError( controllerSource,
-                                  wxS( "text-controller byte count does not match 32-byte records" ) );
-
-            size_t heapOffset = payload + textBytes;
-
-            for( size_t record = 0; record < textCount; ++record )
+            if( stringBytes == 0 || stringOffset > heapBytes || stringBytes > heapBytes - stringOffset
+                || aBytes[heapOffset + stringOffset + stringBytes - 1] != 0 )
             {
-                size_t recordOffset = payload + record * TEXT_RECORD_BYTES;
-
-                if( cursor.U16At( recordOffset + 24 ) != cursor.U16At( recordOffset + 26 ) )
-                    continue;
-
-                SOURCE_PROVENANCE textSource =
-                        sourceAt( aSourceName, model.version, wxS( "free text" ), 1, record, recordOffset,
-                                  TEXT_RECORD_BYTES, static_cast<int>( sheetIndex ) );
-                uint32_t stringOffset = cursor.U32At( recordOffset + 8 );
-                uint16_t stringBytes = cursor.U16At( recordOffset + 20 );
-
-                if( stringBytes == 0 || stringOffset > heapBytes || stringBytes > heapBytes - stringOffset
-                    || aBytes[heapOffset + stringOffset + stringBytes - 1] != 0 )
-                {
-                    throwDecodeError( textSource, wxS( "free-text string reference leaves controller 2" ) );
-                }
-
-                SOURCE_PROVENANCE stringSource =
-                        sourceAt( aSourceName, model.version, wxS( "free text string" ), 2, record,
-                                  heapOffset + stringOffset, stringBytes - 1, static_cast<int>( sheetIndex ) );
-                std::vector<uint8_t> string( aBytes.begin() + stringSource.absoluteOffset,
-                                             aBytes.begin() + stringSource.absoluteOffset + stringSource.length );
-                uint16_t             justification = cursor.U16At( recordOffset + 18 );
-
-                MODEL_TEXT text;
-                text.source = textSource;
-                text.sheet = { model.sheets[sheetIndex].id, textSource };
-                text.text = DecodeString( string, DEFAULT_CODE_PAGE, stringSource, model.diagnostics );
-                text.position = { decodeCoordinate( cursor.U16At( recordOffset + 12 ) ),
-                                  decodeCoordinate( cursor.U16At( recordOffset + 14 ) ), textSource };
-                text.angle = NormalizeAngle( cursor.U16At( recordOffset + 16 ) );
-                text.presentation.source = textSource;
-                text.presentation.height = static_cast<int64_t>( cursor.U16At( recordOffset + 22 ) ) * 2;
-                text.presentation.width = static_cast<int64_t>( cursor.U16At( recordOffset + 30 ) ) * 2;
-                text.presentation.horizontalJustification =
-                        horizontalJustification( justification, textSource, model.diagnostics );
-                text.presentation.verticalJustification = verticalJustification( justification );
-                model.texts.push_back( std::move( text ) );
+                throwDecodeError( textSource, wxS( "free-text string reference leaves controller 2" ) );
             }
 
-            ++sheetIndex;
+            SOURCE_PROVENANCE stringSource =
+                    sourceAt( aSourceName, model.version, wxS( "free text string" ), 2, record,
+                              heapOffset + stringOffset, stringBytes - 1, static_cast<int>( sheetIndex ) );
+            std::vector<uint8_t> string( aBytes.begin() + stringSource.absoluteOffset,
+                                         aBytes.begin() + stringSource.absoluteOffset + stringSource.length );
+            uint16_t             justification = cursor.U16At( recordOffset + 18 );
+
+            MODEL_TEXT text;
+            text.source = textSource;
+            text.sheet = { model.sheets[sheetIndex].id, textSource };
+            text.text = DecodeString( string, DEFAULT_CODE_PAGE, stringSource, model.diagnostics );
+            text.position = { decodeCoordinate( cursor.U16At( recordOffset + 12 ) ),
+                              decodeCoordinate( cursor.U16At( recordOffset + 14 ) ), textSource };
+            text.angle = NormalizeAngle( cursor.U16At( recordOffset + 16 ) );
+            text.presentation.source = textSource;
+            text.presentation.height = static_cast<int64_t>( cursor.U16At( recordOffset + 22 ) ) * 2;
+            text.presentation.width = static_cast<int64_t>( cursor.U16At( recordOffset + 30 ) ) * 2;
+            text.presentation.horizontalJustification =
+                    horizontalJustification( justification, textSource, model.diagnostics );
+            text.presentation.verticalJustification = verticalJustification( justification );
+
+            SOURCE_PROVENANCE relationshipSource = textSource;
+            relationshipSource.objectClass = wxS( "free text relationship" );
+            relationshipSource.absoluteOffset += 28;
+            relationshipSource.length = 2;
+            uint16_t        relationship = cursor.U16At( relationshipSource.absoluteOffset );
+            SOURCE_PROPERTY relationshipProperty;
+            relationshipProperty.name.text = wxS( "controller_1_relationship_word_28" );
+            relationshipProperty.name.source = relationshipSource;
+            relationshipProperty.value.raw = { static_cast<uint8_t>( relationship ),
+                                               static_cast<uint8_t>( relationship >> 8 ) };
+            relationshipProperty.value.text = wxString::Format( wxS( "%u" ), relationship );
+            relationshipProperty.value.encoding = STRING_ENCODING_STATUS::CODE_PAGE;
+            relationshipProperty.value.source = relationshipSource;
+            relationshipProperty.value.codePage = DEFAULT_CODE_PAGE;
+            relationshipProperty.value.codePageName = wxS( "windows-1252" );
+            relationshipProperty.disposition = PROPERTY_DISPOSITION::PRESERVED;
+            relationshipProperty.source = relationshipSource;
+            text.properties.push_back( std::move( relationshipProperty ) );
+            model.texts.push_back( std::move( text ) );
         }
+
+        ++sheetIndex;
     }
 
     model.ValidateOrThrow();

@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <filesystem>
 #include <fstream>
 #include <iterator>
 #include <map>
@@ -890,6 +891,9 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
     {
         auto& r = addOwned( CANONICAL_KIND::TEXT, t.sheet_number - 1, t.content );
         r.properties["visible"] = { true };
+        r.properties["bold"] = { false };
+        r.properties["italic"] = { false };
+        r.properties["underline"] = { false };
         r.geometry.points.push_back( point( t.position ) );
         r.geometry.angleTenths = canonicalAngle( t.rotation * 10 );
     }
@@ -908,6 +912,9 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         {
             auto& r = addOwned( CANONICAL_KIND::TEXT, lines.sheet_number - 1, t.content );
             r.properties["visible"] = { true };
+            r.properties["bold"] = { false };
+            r.properties["italic"] = { false };
+            r.properties["underline"] = { false };
             r.properties["font"] = { t.font_name };
             r.properties["horizontal_justification"] = canonicalHorizontalJustification( t.justification );
             r.properties["vertical_justification"] = canonicalVerticalJustification( t.justification );
@@ -967,6 +974,11 @@ BOOST_AUTO_TEST_CASE( GlobalsAndSheets )
     BOOST_CHECK_EQUAL( minimal.settings.pageSize.y, 22000 );
     BOOST_CHECK_EQUAL( minimal.settings.defaultLineWidth, 20 );
     BOOST_CHECK_EQUAL( minimal.settings.defaultBusWidth, 50 );
+    BOOST_CHECK_EQUAL( minimal.settings.source.objectClass, wxS( "design settings" ) );
+    BOOST_CHECK_EQUAL( minimal.settings.source.controller, 5 );
+    BOOST_CHECK_EQUAL( minimal.settings.source.absoluteOffset, 0x439 );
+    BOOST_CHECK_EQUAL( minimal.settings.source.length, 400 );
+    BOOST_CHECK_EQUAL( minimal.settings.source.version, 0x000D );
     BOOST_REQUIRE_EQUAL( minimal.sheets.size(), 1 );
     BOOST_CHECK_EQUAL( minimal.sheets[0].id.Value(), 1 );
     BOOST_CHECK_EQUAL( minimal.sheets[0].index, 0 );
@@ -977,6 +989,51 @@ BOOST_AUTO_TEST_CASE( GlobalsAndSheets )
     BOOST_REQUIRE_EQUAL( minimal.sheets[0].titleBlockFields.size(), 14 );
     BOOST_CHECK_EQUAL( minimal.sheets[0].titleBlockFields.front().name.text, wxS( "Drawn By" ) );
     BOOST_CHECK_EQUAL( minimal.sheets[0].titleBlockFields.back().name.text, wxS( "Scale" ) );
+
+    const std::array<wxString, 14> titleNames = { wxS( "Drawn By" ),    wxS( "Checked By" ),   wxS( "QC By" ),
+                                                  wxS( "Released By" ), wxS( "Drawn Date" ),   wxS( "Checked Date" ),
+                                                  wxS( "QC Date" ),     wxS( "Release Date" ), wxS( "Company Name" ),
+                                                  wxS( "Title" ),       wxS( "Code" ),         wxS( "Drawing Number" ),
+                                                  wxS( "Revision" ),    wxS( "Scale" ) };
+    const std::array<size_t, 14>   titleOffsets = { 0x254, 0x264, 0x276, 0x283, 0x296, 0x2A8, 0x2BC,
+                                                    0x2CB, 0x2DF, 0x2F3, 0x300, 0x30C, 0x322, 0x332 };
+    const std::array<size_t, 14>   titleLengths = { 16, 18, 13, 19, 18, 20, 15, 20, 20, 13, 12, 22, 16, 13 };
+
+    for( size_t i = 0; i < titleNames.size(); ++i )
+    {
+        const MODEL_FIELD& field = minimal.sheets[0].titleBlockFields[i];
+        const std::string  expectedName = titleNames[i].ToStdString();
+        BOOST_CHECK_EQUAL( field.name.text, titleNames[i] );
+        BOOST_CHECK_EQUAL( field.value.text, wxString() );
+        BOOST_CHECK_EQUAL_COLLECTIONS( field.name.raw.begin(), field.name.raw.end(), expectedName.begin(),
+                                       expectedName.end() );
+        BOOST_CHECK( field.value.raw.empty() );
+        BOOST_CHECK_EQUAL( field.source.absoluteOffset, titleOffsets[i] );
+        BOOST_CHECK_EQUAL( field.source.length, titleLengths[i] );
+        BOOST_CHECK_EQUAL( field.source.controller, 1 );
+        BOOST_CHECK_EQUAL( field.source.version, 0x000D );
+        BOOST_CHECK_EQUAL( field.name.source.absoluteOffset, titleOffsets[i] + 6 );
+        BOOST_CHECK_EQUAL( field.name.source.length, expectedName.size() );
+        BOOST_CHECK_EQUAL( field.name.source.controller, 1 );
+        BOOST_CHECK_EQUAL( field.name.source.version, 0x000D );
+        BOOST_CHECK_EQUAL( field.value.source.absoluteOffset, titleOffsets[i] + titleLengths[i] - 1 );
+        BOOST_CHECK_EQUAL( field.value.source.length, 0 );
+        BOOST_CHECK_EQUAL( field.value.source.controller, 1 );
+        BOOST_CHECK_EQUAL( field.value.source.version, 0x000D );
+    }
+
+    BOOST_CHECK_EQUAL( minimal.sheets[0].title.text, wxString() );
+    PADS_SCH::PADS_SCH_PARSER minimalAscii;
+    BOOST_REQUIRE(
+            minimalAscii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/minimal_v13.txt" ) );
+    BOOST_REQUIRE_EQUAL( minimalAscii.GetParameters().fields.size(), titleNames.size() );
+
+    for( const MODEL_FIELD& field : minimal.sheets[0].titleBlockFields )
+    {
+        auto asciiField = minimalAscii.GetParameters().fields.find( field.name.text.ToStdString() );
+        BOOST_REQUIRE( asciiField != minimalAscii.GetParameters().fields.end() );
+        BOOST_CHECK_EQUAL( asciiField->second, field.value.text.ToStdString() );
+    }
 
     PADS_SCH_MODEL multisheet =
             parser.Parse( loadBinaryFixture( "multisheet_connectivity.sch" ), wxS( "multisheet_connectivity.sch" ) );
@@ -1010,6 +1067,17 @@ BOOST_AUTO_TEST_CASE( FreeText )
     BOOST_CHECK_EQUAL( text.presentation.width, 20 );
     BOOST_CHECK( text.presentation.horizontalJustification == MODEL_JUSTIFICATION::LEFT );
     BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::RIGHT );
+    BOOST_CHECK( !text.presentation.bold );
+    BOOST_CHECK( !text.presentation.italic );
+    BOOST_CHECK( !text.presentation.underline );
+    BOOST_CHECK( text.presentation.visible );
+    BOOST_REQUIRE_EQUAL( text.properties.size(), 1 );
+    BOOST_CHECK_EQUAL( text.properties[0].name.text, wxS( "controller_1_relationship_word_28" ) );
+    BOOST_CHECK_EQUAL( text.properties[0].value.text, wxS( "16" ) );
+    BOOST_CHECK_EQUAL( text.properties[0].value.raw.size(), 2 );
+    BOOST_CHECK_EQUAL( text.properties[0].source.absoluteOffset, text.source.absoluteOffset + 28 );
+    BOOST_CHECK_EQUAL( text.properties[0].source.length, 2 );
+    BOOST_CHECK( text.properties[0].disposition == PROPERTY_DISPOSITION::PRESERVED );
     BOOST_CHECK_EQUAL( text.source.objectClass, wxS( "free text" ) );
     BOOST_CHECK_EQUAL( text.source.controller, 1 );
     BOOST_CHECK_EQUAL( text.text.source.controller, 2 );
@@ -1037,13 +1105,27 @@ BOOST_AUTO_TEST_CASE( FreeText )
             std::erase_if( record.properties,
                            []( const auto& aProperty )
                            {
-                               return aProperty.first != "owner_sheet" && aProperty.first != "visible";
+                               return aProperty.first != "owner_sheet" && aProperty.first != "visible"
+                                      && aProperty.first != "bold" && aProperty.first != "italic"
+                                      && aProperty.first != "underline";
                            } );
         }
     };
     retainTask7Properties( expected );
     retainTask7Properties( actual );
     BOOST_CHECK( snapshotsMatch( expected, actual ) );
+
+    std::vector<uint8_t> changedRelationship = loadBinaryFixture( "text_encoding.sch" );
+    writeU16( changedRelationship, text.source.absoluteOffset + 28, 0xBEEF );
+    PADS_SCH_MODEL changed = parser.Parse( changedRelationship, wxS( "text_encoding.sch" ) );
+    BOOST_REQUIRE_EQUAL( changed.texts.size(), 1 );
+    BOOST_CHECK_EQUAL( changed.texts[0].properties[0].value.text, wxS( "48879" ) );
+    BOOST_CHECK( changed.texts[0].properties[0].disposition == PROPERTY_DISPOSITION::PRESERVED );
+    BOOST_CHECK_EQUAL( changed.texts[0].presentation.bold, text.presentation.bold );
+    BOOST_CHECK_EQUAL( changed.texts[0].presentation.italic, text.presentation.italic );
+    BOOST_CHECK_EQUAL( changed.texts[0].presentation.underline, text.presentation.underline );
+    BOOST_CHECK_EQUAL( changed.texts[0].presentation.visible, text.presentation.visible );
+    BOOST_CHECK_EQUAL( changed.diagnostics.size(), model.diagnostics.size() );
 }
 
 
