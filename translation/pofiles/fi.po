@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-06-17 21:34+0000\n"
+"PO-Revision-Date: 2026-07-15 01:01+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -3157,42 +3157,38 @@ msgid "Status"
 msgstr "Tilanne"
 
 #: common/dialogs/dialog_git_mr_review.cpp:49
-#, fuzzy
 msgid "Old Path"
-msgstr "Etsi Seuraava"
+msgstr "Vanha polku"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
-#, fuzzy
 msgid "No git repository available."
-msgstr "Ei saatavilla olevaa arkistoa"
+msgstr "Ei saatavilla olevaa git-arkistoa."
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 #: common/dialogs/dialog_git_mr_review.cpp:103
 #: common/dialogs/dialog_git_mr_review.cpp:119
 #: common/dialogs/dialog_git_mr_review_base.h:58
 #: kicad/kicad_manager_frame.cpp:1184
-#, fuzzy
 msgid "Compare Branches"
-msgstr "Eristysvälit"
+msgstr "Vertaile haaroja"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
-msgstr ""
+msgstr "Valitse vertailtavat perus- ja kohdeviitteet."
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve ref '%s' to a commit or tree."
-msgstr "Yhdistettäviä kohdeversiota ei voitu hakea."
+msgstr "Viitettä '%s' ei voitu selvittää commitiksi tai puuksi."
 
 #: common/dialogs/dialog_git_mr_review.cpp:133
-#, fuzzy
 msgid "No changes between selected refs."
-msgstr "Leikkaa kulmat pois valittujen viivojen välistä"
+msgstr "Valittujen viitteiden välillä ei ole muutoksia."
 
 #: common/dialogs/dialog_git_mr_review.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "No diff handler for '%s'."
-msgstr "tarvitset numeron \"%s\""
+msgstr "Tiedostotyypille '%s' ei ole vertailutyökalua."
 
 #: common/dialogs/dialog_git_mr_review.cpp:252
 #: common/dialogs/dialog_git_mr_review.cpp:281
@@ -3201,42 +3197,36 @@ msgstr "tarvitset numeron \"%s\""
 #: common/dialogs/dialog_git_mr_review.cpp:359
 #: common/dialogs/dialog_git_mr_review.cpp:373
 #: common/dialogs/dialog_git_mr_review.cpp:389
-#, fuzzy
 msgid "Compare File"
-msgstr "Yhteensopiva"
+msgstr "Vertaile tiedostoa"
 
 #: common/dialogs/dialog_git_mr_review.cpp:281
-#, fuzzy
 msgid "Could not create a temporary directory."
-msgstr "Väliaikaista kohdehakemistoa ei voi luoda."
+msgstr "Väliaikaistahakemistoa ei voitu luoda."
 
 #: common/dialogs/dialog_git_mr_review.cpp:322
 #: common/dialogs/dialog_git_mr_review.cpp:337
 #: common/dialogs/dialog_git_mr_review.cpp:357
 #: common/dialogs/dialog_git_mr_review.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Could not extract %s from %s."
-msgstr "Ei voitu ladata kuvaa kohteesta '%s'."
+msgstr "Ei voitu purkaa tiedostoa %s kohteesta %s."
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:25
-#, fuzzy
 msgid "Base ref:"
-msgstr "Perusnimi"
+msgstr "Perusviite:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:32
-#, fuzzy
 msgid "Head ref:"
-msgstr "Otsikon reuna"
+msgstr "Kohdeviite:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
-#, fuzzy
 msgid "Compare"
-msgstr "Yhtiö:"
+msgstr "Vertaa"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:48
-#, fuzzy
 msgid "Changed files (double-click to open):"
-msgstr "(muokkaa kaksoisnapsauttamalla)"
+msgstr "Muuttuneet tiedostot (muokkaa kaksoisnapsauttamalla):"
 
 #: common/dialogs/dialog_grid_settings.cpp:81
 msgid "Grid size X out of range."
@@ -3445,16 +3435,15 @@ msgstr "Ominaisuudet"
 
 #: common/dialogs/dialog_kicad_diff.cpp:63
 msgid "Before"
-msgstr ""
+msgstr "Ennen"
 
 #: common/dialogs/dialog_kicad_diff.cpp:64
 msgid "After"
-msgstr ""
+msgstr "Jälkeen"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
-#, fuzzy
 msgid "Filter changes…"
-msgstr "Suodatinverkot"
+msgstr "Suodata muutoksia…"
 
 #: common/dialogs/dialog_kicad_diff.cpp:122
 #: common/diff_merge/diff_tree_grouping.cpp:37
@@ -3463,9 +3452,8 @@ msgstr "Lisätty"
 
 #: common/dialogs/dialog_kicad_diff.cpp:123
 #: common/diff_merge/diff_tree_grouping.cpp:38
-#, fuzzy
 msgid "Removed"
-msgstr "Poista"
+msgstr "Poistettu"
 
 #: common/dialogs/dialog_kicad_diff.cpp:124
 #: common/dialogs/git/dialog_git_commit.cpp:103
@@ -3474,9 +3462,8 @@ msgid "Modified"
 msgstr "Muokattu"
 
 #: common/dialogs/dialog_kicad_diff.cpp:125
-#, fuzzy
 msgid "Conflict"
-msgstr "Ristiriidat"
+msgstr "Ristiriita"
 
 #: common/dialogs/dialog_kicad_diff.cpp:143
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:24
@@ -3494,30 +3481,26 @@ msgstr "Ominaisuudet"
 
 #: common/dialogs/dialog_kicad_diff.cpp:210
 #: common/dialogs/dialog_kicad_diff.cpp:514
-#, fuzzy
 msgid "No differences detected."
-msgstr "Olennaisia eroja ei havaittu."
+msgstr "Muutoksia ei havaittu."
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "%zu change(s) detected."
-msgstr "Kytkentäverkko valitsematta."
+msgstr "%zu muutosta havaittu."
 
 #: common/dialogs/dialog_kicad_diff.cpp:334
-#, fuzzy
 msgid "Show Change"
-msgstr "Vaihda"
+msgstr "Näytä muutos"
 
 #: common/dialogs/dialog_kicad_diff.cpp:336
-#, fuzzy
 msgid "Hide Change"
-msgstr "Rakenna Muutokset"
+msgstr "Piilota muutos"
 
 #: common/dialogs/dialog_kicad_diff.cpp:338
-#, fuzzy
 msgid "Show All Hidden"
-msgstr "Näytä kaikki verkot"
+msgstr "Näytä kaikki piilotetut"
 
 #: common/dialogs/dialog_kicad_diff.cpp:414
 #: common/dialogs/dialog_page_settings_base.cpp:240
@@ -3525,19 +3508,17 @@ msgid "Revision:"
 msgstr "Versio:"
 
 #: common/dialogs/dialog_kicad_diff.cpp:425
-#, fuzzy
 msgid "Older"
-msgstr "Kansio"
+msgstr "Vanhempi"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
-msgstr ""
+msgstr "Uudempi"
 
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
-#, fuzzy
 msgid "Select a change in the tree to view details"
-msgstr "Valitse kaikki kytkentäverkot vasemmanpuoleisessa luettelossa"
+msgstr "Valitse ristiriita nähdäksesi lisätiedot"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:25
 #: pcbnew/dialogs/dialog_text_properties.cpp:126
@@ -3548,29 +3529,25 @@ msgstr "Viite:"
 #: common/dialogs/dialog_kicad_diff_base.cpp:29
 #: common/dialogs/dialog_kicad_diff_base.cpp:37
 #: pcbnew/tools/multichannel_tool.cpp:84
-#, fuzzy
 msgid "(none)"
-msgstr "ei mitään"
+msgstr "(ei mitään)"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:33
-#, fuzzy
 msgid "Comparison:"
-msgstr "Yhtiö:"
+msgstr "Vertailu:"
 
 #: common/dialogs/dialog_kicad_diff_base.h:61
-#, fuzzy
 msgid "Compare Files"
-msgstr "Kuvatiedostot"
+msgstr "Vertaile tiedostoja"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:129
-#, fuzzy
 msgid "No conflicts to resolve."
-msgstr "Ei tallennettavaa komponenttia."
+msgstr "Ei ratkaistavia ristiriitoja."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
 msgid "%zu conflict(s) require resolution."
-msgstr ""
+msgstr "%zu ristiriitaa vaatii ratkaisemista."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:217
 #, c-format
@@ -3578,27 +3555,29 @@ msgid ""
 "%zu conflict(s) still need a resolution. Pick Ours, Theirs, or Ancestor for "
 "each one."
 msgstr ""
+"%zu ristiriitaa odottaa yhä ratkaisua. Valitse jokaiselle joko \"Meidän\", "
+"\"Heidän\" tai \"Alkuperäinen\"."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:220
 #: common/dialogs/dialog_kicad_merge_3way_base.h:65
-#, fuzzy
 msgid "Resolve Merge Conflicts"
-msgstr "Varjo Konflikteille"
+msgstr "Ratkaise yhdistämisristiriidat"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:363
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:48
-#, fuzzy
 msgid "Select a conflict on the left to see details."
-msgstr "Valitse kaikki kytkentäverkot vasemmanpuoleisessa luettelossa"
+msgstr "Valitse ristiriita vasemmalta nähdäksesi lisätiedot."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Conflict on %s"
-msgstr "Ristiriidat"
+msgstr "Ristiriita kohdassa %s"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
 msgstr ""
+"Ratkaise kukin ristiriita valitsemalla säilytettävä puoli ja napsauta "
+"lopuksi Käytä."
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:31
 #: eeschema/erc/erc_item.cpp:38
@@ -3606,22 +3585,20 @@ msgid "Conflicts"
 msgstr "Ristiriidat"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:58
-#, fuzzy
 msgid "Pick a side"
-msgstr "Nastan nimi sisällä"
+msgstr "Valitse puoli"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
-msgstr ""
+msgstr "Meidän"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:64
 msgid "Theirs"
-msgstr ""
+msgstr "Heidän"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:67
-#, fuzzy
 msgid "Ancestor"
-msgstr "Vastus"
+msgstr "Alkuperäinen"
 
 #: common/dialogs/dialog_page_settings.cpp:85
 msgid "Preview Settings"
@@ -4325,9 +4302,8 @@ msgid "Commit message cannot be empty"
 msgstr "Commit viesti ei voi olla tyhjä"
 
 #: common/dialogs/git/dialog_git_commit.cpp:192
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Valitse vähintään yksi ominaisuus merkinnän takaamiseksi."
+msgstr "Valitse vähintään yksi tiedosto kommitoitavaksi"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:69
 msgid "Key passphrase:"
@@ -4365,9 +4341,8 @@ msgid "SSH key:"
 msgstr "SSH-avaimen:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Valitse yksityinen SSH-avaintiedosto"
+msgstr "Valitse yksityinen SSH-avain"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -6730,14 +6705,12 @@ msgid "Move Down"
 msgstr "Siirrä alas"
 
 #: common/diff_merge/auto_resolution.cpp:251
-#, fuzzy
 msgid "Item id: "
-msgstr "Haettava elementti:"
+msgstr "Esineen id: "
 
 #: common/diff_merge/auto_resolution.cpp:252
-#, fuzzy
 msgid "Current resolution: "
-msgstr "X resoluutio:"
+msgstr "Nykyinen resoluutio: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
@@ -6780,9 +6753,8 @@ msgid "%zu property edit(s) in this resolution.\n"
 msgstr ""
 
 #: common/diff_merge/diff_job_output.cpp:88
-#, fuzzy
 msgid "Failed to render diff image\n"
-msgstr "Kuvatietojen lukeminen epäonnistui."
+msgstr "Vertailukuvan renderöinti epäonnistui\n"
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
@@ -8967,9 +8939,9 @@ msgid "Error reading file."
 msgstr "Virhe luettaessa tiedostoa."
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "%s (whilst parsing '%s' in '%s')"
-msgstr "Puuttuva solmu \"%s\" kohdassa %s"
+msgstr "%s (luettaessa kohdetta ”%s” tiedostossa ”%s”)"
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2498
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:315
@@ -9116,11 +9088,8 @@ msgid "Eagle binary layout is missing a board/libraries node."
 msgstr ""
 
 #: common/io/eagle/eagle_bin_parser.cpp:2549
-#, fuzzy
 msgid "File is too small to be an Eagle binary board."
-msgstr ""
-"Tiedostoa \"<%s>\"\n"
-"ei tunnistettu KiCad-projektitiedostoksi."
+msgstr "Tiedosto on liian pieni ollakseen Eagle-binääripiirilevy."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2614
 msgid "Eagle binary schematic has no drawing section."
@@ -9193,9 +9162,9 @@ msgid "'%s' is not a P-CAD ASCII file."
 msgstr "'%s' ei ole kelvollinen SPICE-arvo."
 
 #: common/io/pcad/s_expr_loader.cpp:224 common/io/pcad/s_expr_loader.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Unbalanced parentheses in '%s'."
-msgstr "Kohteen %s jäsentäminen ryhmässä %s ei onnistu"
+msgstr "Kohteen '%s' sulut epäsymmetriset."
 
 #: common/jobs/job.cpp:82
 msgid "Job Settings"
@@ -9522,9 +9491,9 @@ msgid "Could not read layer map file '%s'"
 msgstr "Tiedostoa %s ei voitu lukea"
 
 #: common/jobs/job_import_utils.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Layer map file '%s' is not valid JSON: %s"
-msgstr "Sivutyyppi '%s' ei kelpaa."
+msgstr "Tasokarttatiedosto '%s' ei ole validia JSONia: %s"
 
 #: common/jobs/job_import_utils.cpp:86
 #, c-format
@@ -9539,9 +9508,9 @@ msgid "Layer map entry for '%s' must be a KiCad layer name string"
 msgstr ""
 
 #: common/jobs/job_import_utils.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write import report to '%s'\n"
-msgstr "Piirustustiedostoja ei voitu kirjoittaa kansioon '%s'."
+msgstr "Tuontiraportin kirjoittaminen epäonnistui sijaintiin '%s'\n"
 
 #: common/jobs/job_pcb_diff.cpp:37
 #, fuzzy
@@ -9589,9 +9558,8 @@ msgid "PCB: Render"
 msgstr "PCB:Renderöi"
 
 #: common/jobs/job_sch_diff.cpp:37
-#, fuzzy
 msgid "Diff two schematic files"
-msgstr "LTspice kytkentäkaaviotiedostot"
+msgstr "Vertaile kahta kytkentäkaaviotiedostoa"
 
 #: common/jobs/job_sch_diff.cpp:41
 #, fuzzy
@@ -9616,9 +9584,8 @@ msgid "Import schematic"
 msgstr "Tuo kaavio"
 
 #: common/jobs/job_sch_import.cpp:57
-#, fuzzy
 msgid "Schematic Import Job Settings"
-msgstr "Kytkentäkaavio ERC työasetukset"
+msgstr "Kytkentäkaavion tuonnin asetukset"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 #, fuzzy
@@ -10331,9 +10298,9 @@ msgid "Restore Failed"
 msgstr "Yhdistäminen epäonnistui"
 
 #: common/local_history.cpp:2298
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Palauta nykyiseen kulmaan vertailupaikasta."
+msgstr "Palauta projekti sijainnin %s versioon?"
 
 #: common/local_history.cpp:2300
 #, fuzzy
@@ -11166,7 +11133,7 @@ msgstr "Sulje nykyinen editori"
 #: eeschema/tools/sch_group_tool.cpp:206 pcbnew/pcb_design_block_utils.cpp:472
 #: pcbnew/pcb_design_block_utils.cpp:610 pcbnew/tools/pcb_group_tool.cpp:220
 msgid "Group Items"
-msgstr "Ryhmän jäsenet"
+msgstr "Ryhmittele jäsenet"
 
 #: common/tool/actions.cpp:199
 msgid "Group the selected items so that they are treated as a single item"
@@ -18379,9 +18346,8 @@ msgid "Repeat per unit"
 msgstr "Toista Laskenta"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:257
-#, fuzzy
 msgid "Shared model pins:"
-msgstr "Komponenttitietojen lisääminen epäonnistui"
+msgstr "Jaetun mallin nastat:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:281
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:146
@@ -19729,7 +19695,7 @@ msgid "(source)"
 msgstr "(lähde)"
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:94
-#, fuzzy, c-format
+#, c-format
 msgid "Members of '%s'"
 msgstr "Ryhmän '%s' jäsenet"
 
@@ -20368,9 +20334,8 @@ msgid "A pin map named '%s' already exists."
 msgstr "Kirjasto lempinimellä '%s' on jo olemassa."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:536
-#, fuzzy
 msgid "Invalid footprint identifier."
-msgstr "Määritetty virheellinen jalanjälki"
+msgstr "Virheellinen jalanjäljen tunniste."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:545
 #, fuzzy
@@ -20387,9 +20352,9 @@ msgid "Remove Pin Map"
 msgstr "Poista Signaali"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Remove pin map '%s' and its footprint association?"
-msgstr "Poista kaikki jalanjälkiasennukset"
+msgstr "Poistetaanko nastakartta '%s' ja siihen liittyvä jalanjälki?"
 
 #: eeschema/dialogs/panel_symbol_pin_map_base.cpp:52
 #, fuzzy
@@ -20616,14 +20581,14 @@ msgstr ""
 "Kytkentäkaaviotiedosto tallennettu onnistuneesti uusimmalla formaatilla\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1477 pcbnew/pcbnew_jobs_handler.cpp:2930
-#, fuzzy, c-format
+#, c-format
 msgid "Input file not found: '%s'\n"
-msgstr "Tiedostoa ei löydy: '%s'."
+msgstr "Syötetiedostoa ei löydy: '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1504
-#, fuzzy, c-format
+#, c-format
 msgid "No schematic importer recognizes the file format of '%s'\n"
-msgstr "Kaaviokuva muunnetaan uuteen tiedostomuotoon tallennuksen yhteydessä."
+msgstr "Yksikään kytkentäkaavion ei tunnista tiedoston '%s' tyyppiä\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1545
 msgid "Could not establish a project for the import\n"
@@ -20640,20 +20605,20 @@ msgid "Importing '%s' using %s format...\n"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:1600 pcbnew/pcbnew_jobs_handler.cpp:3181
-#, fuzzy, c-format
+#, c-format
 msgid "Error during import: %s\n"
-msgstr "Virhe ladattaessa jalanjälkeä"
+msgstr "Virhe tuodessa: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1677
 #: eeschema/eeschema_jobs_handler.cpp:1684
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving imported schematic: %s\n"
-msgstr "Virhe ladattaessa kytkentäkaaviota '%s'."
+msgstr "Virhe tallentaessa tuotua kytkentäkaaviota: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1690
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully saved imported schematic to '%s'\n"
-msgstr "VRML vietiin onnistuneesti kohteeseen %s"
+msgstr "Tuotu kytkentäkaavio tallennettiin onnistuneesti sijaintiin '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1813
 #: eeschema/eeschema_jobs_handler.cpp:1819
@@ -20661,9 +20626,9 @@ msgstr "VRML vietiin onnistuneesti kohteeseen %s"
 #: eeschema/eeschema_jobs_handler.cpp:1994 pcbnew/pcbnew_jobs_handler.cpp:3260
 #: pcbnew/pcbnew_jobs_handler.cpp:3266 pcbnew/pcbnew_jobs_handler.cpp:3744
 #: pcbnew/pcbnew_jobs_handler.cpp:3750
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s\n"
-msgstr "'%s' lataaminen epäonnistui."
+msgstr "'%s':n lataaminen epäonnistui\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1876
 #: eeschema/eeschema_jobs_handler.cpp:1882
@@ -20672,9 +20637,9 @@ msgstr "'%s' lataaminen epäonnistui."
 #: pcbnew/pcbnew_jobs_handler.cpp:3605 pcbnew/pcbnew_jobs_handler.cpp:3818
 #: pcbnew/pcbnew_jobs_handler.cpp:3829 pcbnew/pcbnew_jobs_handler.cpp:3943
 #: pcbnew/pcbnew_jobs_handler.cpp:3949
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s: %s\n"
-msgstr "'%s' lataaminen epäonnistui."
+msgstr "'%s':n lataaminen epäonnistui: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2093 pcbnew/pcbnew_jobs_handler.cpp:3860
 msgid "Unsupported document kind for this dispatcher.\n"
@@ -20716,14 +20681,14 @@ msgid "Cannot flatten sub-sheets with duplicate basename '%s'\n"
 msgstr "Ei voi purkaa aliarkkeja, joilla on sama perusnimi '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2322
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged schematic: %s\n"
-msgstr "Kytkentäkaavion '%s' tallentaminen epäonnistui"
+msgstr "Yhdistetyn kytkentäkaavion tallennus epäonnistui: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2369 pcbnew/pcbnew_jobs_handler.cpp:3482
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged project file: %s\n"
-msgstr "Hakemistopuun kirjoittaminen epäonnistui: %s"
+msgstr "Yhdistetyn projektitiedoston tallennus epäonnistui: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2387 pcbnew/pcbnew_jobs_handler.cpp:3562
 #, c-format
@@ -20737,9 +20702,9 @@ msgid "--output is required\n"
 msgstr "Saaren vähimmäiskoko:"
 
 #: eeschema/eeschema_jobs_handler.cpp:2500
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged symbol library: %s\n"
-msgstr "Symbolikirjastotiedoston %s tallentaminen epäonnistui"
+msgstr "Yhdistetyn symbolikirjaston '%s' tallentaminen epäonnistui\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2515
 #, c-format
