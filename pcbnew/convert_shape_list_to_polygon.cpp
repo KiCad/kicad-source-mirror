@@ -42,6 +42,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <collectors.h>
+#include <set>
 
 #include <nanoflann.hpp>
 
@@ -399,17 +400,21 @@ static std::map<int, std::vector<int>> buildContourHierarchy( const std::vector<
     return contourToParentIndexesMap;
 }
 
-static bool addOutlinesToPolygon( const std::vector<SHAPE_LINE_CHAIN>& aContours,
+static bool addOutlinesToPolygon( const std::vector<SHAPE_LINE_CHAIN>&   aContours,
                                   const std::map<int, std::vector<int>>& aContourHierarchy,
-                                  SHAPE_POLY_SET& aPolygons, bool aAllowDisjoint,
-                                  OUTLINE_ERROR_HANDLER* aErrorHandler,
-                                  const std::function<PCB_SHAPE*(const SEG&)>& aFetchOwner,
-                                  std::map<int, int>& aContourToOutlineIdxMap )
+                                  const std::set<int>& aCrossingContours, SHAPE_POLY_SET& aPolygons,
+                                  bool aAllowDisjoint, OUTLINE_ERROR_HANDLER* aErrorHandler,
+                                  const std::function<PCB_SHAPE*( const SEG& )>& aFetchOwner,
+                                  std::map<int, int>&                            aContourToOutlineIdxMap )
 {
     for( const auto& [ contourIndex, parentIndexes ] : aContourHierarchy )
     {
         if( parentIndexes.size() % 2 == 0 )
         {
+            // A nested contour crossing another is a cutout wall, parent parity lies for it
+            if( !parentIndexes.empty() && aCrossingContours.count( contourIndex ) )
+                continue;
+
             // Even number of parents; top-level outline
             if( !aAllowDisjoint && !aPolygons.IsEmpty() )
             {
@@ -437,15 +442,15 @@ static bool addOutlinesToPolygon( const std::vector<SHAPE_LINE_CHAIN>& aContours
 static void addHolesToPolygon( const std::vector<SHAPE_LINE_CHAIN>&   aContours,
                                const std::map<int, std::vector<int>>& aContourHierarchy,
                                const std::map<int, int>& aContourToOutlineIdxMap, SHAPE_POLY_SET& aPolygons,
-                               bool aAllowUseArcsInPolygons, bool aHasMalformedOverlap )
+                               bool aAllowUseArcsInPolygons, const std::set<int>& aCrossingContours )
 {
-    if( aAllowUseArcsInPolygons || !aHasMalformedOverlap )
+    if( aAllowUseArcsInPolygons || aCrossingContours.empty() )
     {
         for( const auto& [contourIndex, parentIndexes] : aContourHierarchy )
         {
             if( parentIndexes.size() % 2 == 1 )
             {
-                // Odd number of parents; we're a hole in the parent which has one fewer parents
+                // Odd nesting depth means a hole, attach it to its direct parent
                 const SHAPE_LINE_CHAIN& hole = aContours[contourIndex];
 
                 for( int parentContourIdx : parentIndexes )
@@ -472,7 +477,7 @@ static void addHolesToPolygon( const std::vector<SHAPE_LINE_CHAIN>&   aContours,
         if( parentIndexes.empty() )
             continue;
 
-        if( parentIndexes.size() % 2 == 1 )
+        if( parentIndexes.size() % 2 == 1 || aCrossingContours.count( contourIndex ) )
             cutoutCandidates.AddOutline( aContours[contourIndex] );
         else
             islandCandidates.AddOutline( aContours[contourIndex] );
@@ -606,8 +611,10 @@ static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const VECTOR2I& aPoint, const KDT
 }
 
 
-static bool hasOverlappingClosedContours( const std::vector<SHAPE_LINE_CHAIN>& aContours )
+static std::set<int> findCrossingContours( const std::vector<SHAPE_LINE_CHAIN>& aContours )
 {
+    std::set<int> crossing;
+
     for( size_t ii = 0; ii < aContours.size(); ++ii )
     {
         for( size_t jj = ii + 1; jj < aContours.size(); ++jj )
@@ -615,11 +622,14 @@ static bool hasOverlappingClosedContours( const std::vector<SHAPE_LINE_CHAIN>& a
             SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
 
             if( aContours[ii].Intersect( aContours[jj], intersections, true ) != 0 )
-                return true;
+            {
+                crossing.insert( ii );
+                crossing.insert( jj );
+            }
         }
     }
 
-    return false;
+    return crossing;
 }
 
 
@@ -996,19 +1006,22 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
     // Build contour hierarchy
     auto contourHierarchy = buildContourHierarchy( contours );
 
-    bool hasMalformedOverlap = !aAllowUseArcsInPolygons && hasOverlappingClosedContours( contours );
+    std::set<int> crossingContours;
+
+    if( !aAllowUseArcsInPolygons )
+        crossingContours = findCrossingContours( contours );
 
     // Add outlines to polygon set
     std::map<int, int> contourToOutlineIdxMap;
-    if( !addOutlinesToPolygon( contours, contourHierarchy, aPolygons, aAllowDisjoint, aErrorHandler, fetchOwner,
-                               contourToOutlineIdxMap ) )
+    if( !addOutlinesToPolygon( contours, contourHierarchy, crossingContours, aPolygons, aAllowDisjoint, aErrorHandler,
+                               fetchOwner, contourToOutlineIdxMap ) )
     {
         return false;
     }
 
     // Add holes to polygon set
     addHolesToPolygon( contours, contourHierarchy, contourToOutlineIdxMap, aPolygons, aAllowUseArcsInPolygons,
-                       hasMalformedOverlap );
+                       crossingContours );
 
     // Check for self-intersections
     return checkSelfIntersections( aPolygons, aErrorHandler, fetchOwner );
