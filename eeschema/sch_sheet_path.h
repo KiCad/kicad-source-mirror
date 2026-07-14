@@ -94,6 +94,10 @@ public:
 
     void InitializeAttributes( const SCH_SYMBOL& aSymbol );
 
+    /// Return true if the variant carries any differential against the base symbol values,
+    /// a variant without differentials resolves identically to no variant at all.
+    bool HasDifferentials( const SCH_SYMBOL& aSymbol ) const;
+
     virtual ~SCH_SYMBOL_VARIANT() = default;
 };
 
@@ -148,6 +152,9 @@ public:
     virtual ~SCH_SHEET_VARIANT() = default;
 
     void InitializeAttributes( const SCH_SHEET& aSheet );
+
+    /// Return true if the variant carries any differential against the base sheet values.
+    bool HasDifferentials( const SCH_SHEET& aSheet ) const;
 };
 
 

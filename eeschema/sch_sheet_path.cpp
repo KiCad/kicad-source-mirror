@@ -108,6 +108,14 @@ void SCH_SYMBOL_VARIANT::InitializeAttributes( const SCH_SYMBOL& aSymbol )
 }
 
 
+bool SCH_SYMBOL_VARIANT::HasDifferentials( const SCH_SYMBOL& aSymbol ) const
+{
+    return m_DNP != aSymbol.GetDNP() || m_ExcludedFromBOM != aSymbol.GetExcludedFromBOM()
+           || m_ExcludedFromSim != aSymbol.GetExcludedFromSim() || m_ExcludedFromBoard != aSymbol.GetExcludedFromBoard()
+           || m_ExcludedFromPosFiles != aSymbol.GetExcludedFromPosFiles() || !m_Fields.empty();
+}
+
+
 void SCH_SHEET_VARIANT::InitializeAttributes( const SCH_SHEET& aSheet )
 {
     m_DNP = aSheet.GetDNP();
@@ -115,6 +123,13 @@ void SCH_SHEET_VARIANT::InitializeAttributes( const SCH_SHEET& aSheet )
     m_ExcludedFromSim = aSheet.GetExcludedFromSim();
     m_ExcludedFromBoard = aSheet.GetExcludedFromBoard();
     m_ExcludedFromPosFiles = false;  // Sheets don't have position files exclusion
+}
+
+
+bool SCH_SHEET_VARIANT::HasDifferentials( const SCH_SHEET& aSheet ) const
+{
+    return m_DNP != aSheet.GetDNP() || m_ExcludedFromBOM != aSheet.GetExcludedFromBOM()
+           || m_ExcludedFromSim != aSheet.GetExcludedFromSim() || !m_Fields.empty();
 }
 
 

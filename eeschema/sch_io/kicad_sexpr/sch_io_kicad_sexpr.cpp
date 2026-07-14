@@ -959,6 +959,11 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
                 {
                     for( const auto&[name, variant] : instance.m_Variants )
                     {
+                        // A variant without differentials resolves identically to no variant,
+                        // writing it only keeps deleted variants alive across sessions.
+                        if( !variant.HasDifferentials( *aSymbol ) )
+                            continue;
+
                         m_out->Print( "(variant (name %s)", m_out->Quotew( name ).c_str() );
 
                         if( variant.m_DNP != aSymbol->GetDNP() )
@@ -1211,6 +1216,11 @@ void SCH_IO_KICAD_SEXPR::saveSheet( SCH_SHEET* aSheet, const SCH_SHEET_LIST& aSh
             {
                 for( const auto&[name, variant] : sheetInstances[i].m_Variants )
                 {
+                    // A variant without differentials resolves identically to no variant,
+                    // writing it only keeps deleted variants alive across sessions.
+                    if( !variant.HasDifferentials( *aSheet ) )
+                        continue;
+
                     m_out->Print( "(variant (name %s)", m_out->Quotew( name ).c_str() );
 
                     if( variant.m_DNP != aSheet->GetDNP() )
