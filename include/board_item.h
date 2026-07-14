@@ -357,6 +357,8 @@ public:
     bool IsLocked() const override;
     void SetLocked( bool aLocked ) override { m_isLocked = aLocked; }
 
+    bool IsIndexedInBoard() const { return m_indexedInBoard; }
+
     int GetMaxError() const;
 
     virtual void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide ) { }
@@ -510,6 +512,10 @@ protected:
     PCB_LAYER_ID    m_layer;
     bool            m_isKnockout;
     bool            m_isLocked;
+
+    // Mirrors BOARD identity-cache membership so ~BOARD_ITEM can evict without walking a parent
+    // chain that may already be freed.  Maintained by BOARD; clones start detached.
+    mutable bool    m_indexedInBoard = false;
 
     friend class BOARD;
 };

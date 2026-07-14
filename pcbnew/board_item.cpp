@@ -93,9 +93,9 @@ BOARD* BOARD_ITEM::GetBoard()
 
 BOARD_ITEM::~BOARD_ITEM()
 {
-    // Catch-all safety net for the board identity cache.  We remove individually in ::Remove() but
-    // some paths miss this, so if we are dtor-ing a board item make sure that it is fully uncached
-    if( Type() != PCB_T )
+    // Safety net for paths that free an item without ::Remove().  Gate on the flag so a never-indexed
+    // transient does not walk GetBoard()'s parent chain into an already-freed board.
+    if( m_indexedInBoard && Type() != PCB_T )
     {
         if( BOARD* board = GetBoard(); board && board->IsItemIndexedById( this ) )
             board->UncacheItemByPtr( this );

@@ -168,8 +168,7 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
-    m_itemByIdCache.clear();
-    m_cachedIdByItem.clear();
+    ClearItemByIdCache();
 
     // Clean up the owned elements
     DeleteMARKERs();
@@ -1356,8 +1355,6 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         return;
     }
 
-    CacheItemById( aBoardItem );
-
     switch( aBoardItem->Type() )
     {
     case PCB_NETINFO_T: m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem ); break;
@@ -1410,7 +1407,6 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         else
             m_footprints.push_front( footprint );
 
-        CacheChildrenById( footprint );
         break;
     }
 
@@ -1433,11 +1429,6 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         else
             m_drawings.push_front( aBoardItem );
 
-        if( aBoardItem->Type() == PCB_TABLE_T )
-        {
-            CacheChildrenById( aBoardItem );
-        }
-
         break;
     }
 
@@ -1457,6 +1448,13 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
 
     aBoardItem->SetParent( this );
     aBoardItem->ClearEditFlags();
+
+    // Index only after the item is accepted and parented, so a rejected item never lingers as a
+    // dangling cache entry and an indexed item can always reach its board through its parent.
+    CacheItemById( aBoardItem );
+
+    if( aBoardItem->Type() == PCB_FOOTPRINT_T || aBoardItem->Type() == PCB_TABLE_T )
+        CacheChildrenById( aBoardItem );
 
     if( !aSkipConnectivity )
         m_connectivity->Add( aBoardItem );
@@ -1672,8 +1670,7 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         }
     }
 
-    m_itemByIdCache.clear();
-    m_cachedIdByItem.clear();
+    ClearItemByIdCache();
 
     IncrementTimeStamp();
 
@@ -2059,12 +2056,14 @@ void BOARD::CacheItemById( BOARD_ITEM* aItem ) const
         if( auto prev = m_cachedIdByItem.find( existing->second );
             prev != m_cachedIdByItem.end() && prev->second == aItem->m_Uuid )
         {
+            existing->second->m_indexedInBoard = false;
             m_cachedIdByItem.erase( prev );
         }
     }
 
     m_itemByIdCache.insert_or_assign( aItem->m_Uuid, aItem );
     m_cachedIdByItem.insert_or_assign( aItem, aItem->m_Uuid );
+    aItem->m_indexedInBoard = true;
 }
 
 
@@ -2082,6 +2081,7 @@ void BOARD::UncacheItemById( const KIID& aId ) const
     if( auto cached = m_cachedIdByItem.find( item );
         cached != m_cachedIdByItem.end() && cached->second == aId )
     {
+        item->m_indexedInBoard = false;
         m_cachedIdByItem.erase( cached );
     }
 }
@@ -2107,12 +2107,14 @@ BOARD_ITEM* BOARD::CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) 
         if( auto prev = m_cachedIdByItem.find( existing->second );
             prev != m_cachedIdByItem.end() && prev->second == aId )
         {
+            existing->second->m_indexedInBoard = false;
             m_cachedIdByItem.erase( prev );
         }
     }
 
     m_itemByIdCache.insert_or_assign( aId, aItem );
     m_cachedIdByItem.insert_or_assign( aItem, aId );
+    aItem->m_indexedInBoard = true;
 
     return aItem;
 }
@@ -2120,6 +2122,8 @@ BOARD_ITEM* BOARD::CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) 
 
 void BOARD::UncacheItemByPtr( const BOARD_ITEM* aItem )
 {
+    aItem->m_indexedInBoard = false;
+
     if( auto cached = m_cachedIdByItem.find( aItem ); cached != m_cachedIdByItem.end() )
     {
         auto it = m_itemByIdCache.find( cached->second );
@@ -2138,6 +2142,16 @@ void BOARD::UncacheItemByPtr( const BOARD_ITEM* aItem )
         else
             ++it;
     }
+}
+
+
+void BOARD::ClearItemByIdCache()
+{
+    for( const auto& [item, id] : m_cachedIdByItem )
+        item->m_indexedInBoard = false;
+
+    m_itemByIdCache.clear();
+    m_cachedIdByItem.clear();
 }
 
 

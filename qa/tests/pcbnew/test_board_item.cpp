@@ -454,4 +454,77 @@ BOOST_AUTO_TEST_CASE( ResolveItemIdentityCachePurgedOnDestruction )
 }
 
 
+// The per-item flag must track the board's identity cache across every mutation path.
+BOOST_AUTO_TEST_CASE( IndexMembershipFlagTracksCache )
+{
+    BOARD board;
+
+    FOOTPRINT* footprint = new FOOTPRINT( &board );
+    board.Add( footprint );
+
+    PAD* pad = new PAD( footprint );
+    footprint->Pads().push_back( pad );
+
+    BOOST_CHECK( !pad->IsIndexedInBoard() );
+
+    board.CacheItemById( pad );
+    BOOST_CHECK( pad->IsIndexedInBoard() );
+    BOOST_CHECK( board.IsItemIndexedById( pad ) );
+
+    // A clone is a distinct object, not itself indexed.
+    {
+        PAD copy( *pad );
+        BOOST_CHECK( !copy.IsIndexedInBoard() );
+    }
+
+    board.UncacheItemById( pad->m_Uuid );
+    BOOST_CHECK( !pad->IsIndexedInBoard() );
+    BOOST_CHECK( !board.IsItemIndexedById( pad ) );
+
+    board.CacheAndReturnItemById( pad->m_Uuid, pad );
+    BOOST_CHECK( pad->IsIndexedInBoard() );
+
+    board.UncacheItemByPtr( pad );
+    BOOST_CHECK( !pad->IsIndexedInBoard() );
+    BOOST_CHECK( !board.IsItemIndexedById( pad ) );
+
+    board.CacheItemById( pad );
+    BOOST_REQUIRE( pad->IsIndexedInBoard() );
+    board.ClearItemByIdCache();
+    BOOST_CHECK( !pad->IsIndexedInBoard() );
+}
+
+
+// A rejected Add() (here a track on a non-copper layer) must leave the item out of the cache.
+BOOST_AUTO_TEST_CASE( RejectedAddLeavesItemUnindexed )
+{
+    BOARD board;
+
+    PCB_TRACK* track = new PCB_TRACK( &board );
+    track->SetLayer( Edge_Cuts );
+
+    CHECK_WX_ASSERT( board.Add( track ) );
+
+    BOOST_CHECK( !track->IsIndexedInBoard() );
+    BOOST_CHECK( !board.IsItemIndexedById( track ) );
+
+    BOOST_CHECK_NO_THROW( delete track );
+}
+
+
+// A never-indexed item parented to a freed board must not touch that board on destruction, the
+// crash from the "KiCad master crashes" report (follow-up to ac12a1c820).
+BOOST_AUTO_TEST_CASE( UncachedItemSurvivesBoardDestruction )
+{
+    BOARD*   board = new BOARD();
+    PCB_VIA* dummy = new PCB_VIA( board );
+
+    BOOST_REQUIRE( !dummy->IsIndexedInBoard() );
+
+    delete board;
+
+    BOOST_CHECK_NO_THROW( delete dummy );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
