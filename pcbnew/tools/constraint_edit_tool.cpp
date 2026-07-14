@@ -46,6 +46,7 @@
 #include <tool/actions.h>
 #include <tool/edit_points.h>
 #include <widgets/wx_infobar.h>
+#include <widgets/msgpanel.h>
 #include <pcb_base_frame.h>
 #include <dialogs/dialog_constraint_value.h>
 #include <dialogs/dialog_constraint_list.h>
@@ -210,6 +211,55 @@ void CONSTRAINT_EDIT_TOOL::setSelectedConstraint( PCB_CONSTRAINT* aConstraint )
                 panel->SelectConstraint( aConstraint->m_Uuid );
         }
     }
+
+    updateConstraintMsgPanel( aConstraint );
+}
+
+
+void CONSTRAINT_EDIT_TOOL::updateConstraintMsgPanel( PCB_CONSTRAINT* aConstraint )
+{
+    if( !frame() )
+        return;
+
+    if( !aConstraint || !board() )
+    {
+        // Restore the default board readout (Pads/Vias/Tracks), unless a board selection owns the
+        // panel now.
+        if( board() && m_selectionTool && m_selectionTool->GetSelection().Empty() )
+            frame()->SetMsgPanel( board() );
+
+        return;
+    }
+
+    std::vector<MSG_PANEL_ITEM> items;
+
+    items.emplace_back( _( "Constraint" ), ConstraintDisplayLabel( *aConstraint, frame()->GetUserUnits() ) );
+
+    wxString members;
+
+    for( const CONSTRAINT_MEMBER& member : aConstraint->GetMembers() )
+    {
+        if( !members.IsEmpty() )
+            members += wxT( ", " );
+
+        members += ConstraintMemberLabel( board()->ResolveItem( member.m_item, true ), member.m_anchor, frame() );
+    }
+
+    items.emplace_back( _( "Items" ), members );
+
+    const BOARD_CONSTRAINT_DIAGNOSTICS& diag = ensureDiagnosis();
+    wxString                            state = _( "OK" );
+
+    if( alg::contains( diag.errored, aConstraint->m_Uuid ) )
+        state = _( "Error (missing item)" );
+    else if( alg::contains( diag.conflicting, aConstraint->m_Uuid ) )
+        state = _( "Over-constrained" );
+    else if( alg::contains( diag.redundant, aConstraint->m_Uuid ) )
+        state = _( "Redundant" );
+
+    items.emplace_back( _( "State" ), state );
+
+    frame()->SetMsgPanel( items );
 }
 
 

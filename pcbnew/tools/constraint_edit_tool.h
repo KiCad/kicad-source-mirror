@@ -116,6 +116,10 @@ private:
     /// shown; dismiss it when the overlay is off.
     void updateConstraintInfoBar( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag );
 
+    /// Show the selected constraint's type, items and state in the bottom message panel. Restore the
+    /// default board readout when nothing is selected.
+    void updateConstraintMsgPanel( PCB_CONSTRAINT* aConstraint );
+
     /// Mark the diagnosis and candidate caches stale (the model changed) and re-render the views.
     void refreshDiagnostics();
 
