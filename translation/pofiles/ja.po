@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-07-11 08:01+0000\n"
+"PO-Revision-Date: 2026-07-15 01:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2707,9 +2707,8 @@ msgstr ""
 "存されていない作業がある状態で KiCad が予期せず終了したことを意味します。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
-msgstr "自動保存で復元"
+msgstr "自動保存から復元"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
@@ -2720,7 +2719,6 @@ msgstr ""
 "棄されます。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep Current"
 msgstr "現状を保持"
 
@@ -2729,7 +2727,6 @@ msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr "保存済みのファイルはそのまま保持し、自動保存された変更は破棄します。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
 msgstr "両方とも保持"
 
@@ -2742,7 +2739,6 @@ msgstr ""
 "ンプ付きの別ファイルとしてその横に書き込みます。後でレビューできます。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
 msgstr "開くをキャンセル"
 
@@ -27691,9 +27687,8 @@ msgid "Modify schematic item"
 msgstr "回路図アイテムを変更"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3844
-#, fuzzy
 msgid "Auto-place Sheet Pins"
-msgstr "すべてのシートピンを自動配置"
+msgstr "シートピンを自動配置"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3891
 msgid "No sub schematic found in the current project"
@@ -28640,7 +28635,6 @@ msgid "Excl. Board"
 msgstr "基板から除外"
 
 #: eeschema/widgets/search_handlers.cpp:169
-#, fuzzy
 msgid "Excl. Pos Files"
 msgstr "部品位置情報ファイル から除外"
 
@@ -47001,9 +46995,8 @@ msgstr "ゾーン名:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:39
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:44
-#, fuzzy
 msgid "A unique name for this zone, used to identify it in DRC rules"
-msgstr "このゾーンに対する DRC で識別するための固有名"
+msgstr "このゾーンに対する DRC で識別・使用するためのゾーン固有の名前"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:76
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -49722,6 +49715,8 @@ msgid ""
 "Could not post-process GLB line primitives; the exported model may not "
 "import in strict glTF viewers."
 msgstr ""
+"GLBライン基本データ型の後処理ができませんでした。 エクスポートされたモデルは"
+"、 厳格なglTFビューアではインポートできない可能性があります。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4041
 #: pcbnew/exporters/step/step_pcb_model.cpp:4088
@@ -56661,6 +56656,8 @@ msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
 msgstr ""
+"フットプリントやその他ミラーできないアイテムを含むグループはスキップされまし"
+"た。"
 
 #: pcbnew/tools/edit_tool.cpp:2714 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
@@ -60645,9 +60642,8 @@ msgid "Removing isolated copper islands..."
 msgstr "孤立した導体部分を削除中..."
 
 #: pcbnew/zone_filler.cpp:1169
-#, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "すべてのゾーンを塗り直し..."
+msgstr "重複するゾーンを塗り直し..."
 
 #: pcbnew/zone_filler.cpp:1330
 #, c-format
