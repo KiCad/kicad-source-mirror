@@ -53,8 +53,8 @@ public:
         return {
             { 80 + DRC_RE_OVERLAY_XO, 120 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // opt_length
-            { 160 + DRC_RE_OVERLAY_XO, 200 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // tolerance
+            { 180 + DRC_RE_OVERLAY_XO, 220 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
+              LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // tolerance (±)
         };
     }
 
@@ -142,8 +142,8 @@ public:
         return {
             { 80 + DRC_RE_OVERLAY_XO, 120 + DRC_RE_OVERLAY_XO, 130 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // opt_length
-            { 160 + DRC_RE_OVERLAY_XO, 200 + DRC_RE_OVERLAY_XO, 130 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // tolerance
+            { 180 + DRC_RE_OVERLAY_XO, 220 + DRC_RE_OVERLAY_XO, 130 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
+              LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // tolerance (±)
             { 25 + DRC_RE_OVERLAY_XO, 65 + DRC_RE_OVERLAY_XO, 0 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // max_skew
         };

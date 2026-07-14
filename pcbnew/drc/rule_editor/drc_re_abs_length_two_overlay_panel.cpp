@@ -67,21 +67,6 @@ DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL::DRC_RE_ABS_LENGTH_TWO_OVERLAY_PANEL(
     toleranceField->SetUnitBinder( m_toleranceBinder.get() );
     toleranceField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
-    // Add +/- decoration between the two fields (same pattern as via style)
-    {
-        const DRC_RE_FIELD_POSITION& optPos = positions[0];
-        const DRC_RE_FIELD_POSITION& tolPos = positions[1];
-        int                          fieldHeight = optLengthField->GetControl()->GetBestSize().GetHeight();
-
-        auto*         plusMinus = new wxStaticText( this, wxID_ANY, wxS( "\u00B1" ) );
-        wxSize        pmSize = plusMinus->GetBestSize();
-        wxStaticText* optMmLabel = optLengthField->GetLabel();
-        int           afterOptLabel = optMmLabel->GetPosition().x + optMmLabel->GetBestSize().GetWidth();
-        int           gapMid = ( afterOptLabel + tolPos.xStart ) / 2;
-        plusMinus->SetPosition(
-                wxPoint( gapMid - pmSize.GetWidth() / 2, optPos.yTop + ( fieldHeight - pmSize.GetHeight() ) / 2 ) );
-    }
-
     auto notifyModified = [this]( wxCommandEvent& )
     {
         RULE_EDITOR_DIALOG_BASE* dlg = RULE_EDITOR_DIALOG_BASE::GetDialog( this );
