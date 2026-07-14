@@ -104,6 +104,8 @@ void STD_BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 
     SetMinSize( minSize );
 #endif
+
+    Refresh();
 }
 
 
