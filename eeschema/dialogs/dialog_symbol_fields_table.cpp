@@ -2793,7 +2793,7 @@ SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSheetSymbolReferences( SCH_SHE
 
 void DIALOG_SYMBOL_FIELDS_TABLE::onAddVariant( wxCommandEvent& aEvent )
 {
-    if( !m_parent->ShowAddVariantDialog() )
+    if( !m_parent->ShowAddVariantDialog( this ) )
         return;
 
     wxArrayString ctrlContents;
