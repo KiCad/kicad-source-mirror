@@ -677,6 +677,8 @@ public:
      */
     void SetWorldUnitLength( double aWorldUnitLength ) { m_worldUnitLength = aWorldUnitLength; }
 
+    double GetWorldUnitLength() const { return m_worldUnitLength; }
+
     void SetScreenSize( const VECTOR2I& aSize ) { m_screenSize = aSize; }
 
     /**

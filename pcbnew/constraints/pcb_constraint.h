@@ -127,6 +127,11 @@ wxString ConstraintTypeLabel( PCB_CONSTRAINT_TYPE aType );
 /// Compact glyph for a constraint type (e.g. "//", "=") for on-canvas badges.
 wxString ConstraintTypeGlyph( PCB_CONSTRAINT_TYPE aType );
 
+enum class BITMAPS : unsigned int;
+
+/// Badge icon for a constraint type; INVALID_BITMAP for UNDEFINED.
+BITMAPS ConstraintTypeBitmap( PCB_CONSTRAINT_TYPE aType );
+
 enum class EDA_UNITS : int;
 
 

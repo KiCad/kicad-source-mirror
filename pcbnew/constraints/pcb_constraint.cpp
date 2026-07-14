@@ -151,6 +151,35 @@ wxString ConstraintTypeGlyph( PCB_CONSTRAINT_TYPE aType )
 }
 
 
+BITMAPS ConstraintTypeBitmap( PCB_CONSTRAINT_TYPE aType )
+{
+    switch( aType )
+    {
+    case PCB_CONSTRAINT_TYPE::COINCIDENT: return BITMAPS::constraint_coincident;
+    case PCB_CONSTRAINT_TYPE::HORIZONTAL: return BITMAPS::constraint_horizontal;
+    case PCB_CONSTRAINT_TYPE::VERTICAL: return BITMAPS::constraint_vertical;
+    case PCB_CONSTRAINT_TYPE::PARALLEL: return BITMAPS::constraint_parallel;
+    case PCB_CONSTRAINT_TYPE::PERPENDICULAR: return BITMAPS::constraint_perpendicular;
+    case PCB_CONSTRAINT_TYPE::COLLINEAR: return BITMAPS::constraint_collinear;
+    case PCB_CONSTRAINT_TYPE::SYMMETRIC: return BITMAPS::constraint_symmetric;
+    case PCB_CONSTRAINT_TYPE::EQUAL_LENGTH: return BITMAPS::constraint_equal_length;
+    case PCB_CONSTRAINT_TYPE::EQUAL_RADIUS: return BITMAPS::constraint_equal_radius;
+    case PCB_CONSTRAINT_TYPE::POINT_ON_LINE: return BITMAPS::constraint_point_on_line;
+    case PCB_CONSTRAINT_TYPE::MIDPOINT: return BITMAPS::constraint_midpoint;
+    case PCB_CONSTRAINT_TYPE::FIXED_POSITION: return BITMAPS::constraint_fixed_position;
+    case PCB_CONSTRAINT_TYPE::FIXED_LENGTH: return BITMAPS::constraint_fixed_length;
+    case PCB_CONSTRAINT_TYPE::CONCENTRIC: return BITMAPS::constraint_concentric;
+    case PCB_CONSTRAINT_TYPE::FIXED_RADIUS: return BITMAPS::constraint_fixed_radius;
+    case PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION: return BITMAPS::constraint_angular_dimension;
+    case PCB_CONSTRAINT_TYPE::TANGENT: return BITMAPS::constraint_tangent;
+    case PCB_CONSTRAINT_TYPE::ARC_ANGLE: return BITMAPS::constraint_arc_angle;
+    case PCB_CONSTRAINT_TYPE::UNDEFINED: return BITMAPS::INVALID_BITMAP;
+    }
+
+    return BITMAPS::INVALID_BITMAP;
+}
+
+
 wxString ConstraintAnchorLabel( CONSTRAINT_ANCHOR aAnchor )
 {
     switch( aAnchor )

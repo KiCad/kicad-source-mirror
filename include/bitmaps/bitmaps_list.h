@@ -727,7 +727,26 @@ enum class BITMAPS : unsigned int
     constraint_absolute_length_2,
     constraint_permitted_layers,
     constraint_allowed_orientation,
-    constraint_vias_under_smd
+    constraint_vias_under_smd,
+
+    constraint_coincident,
+    constraint_horizontal,
+    constraint_vertical,
+    constraint_parallel,
+    constraint_perpendicular,
+    constraint_collinear,
+    constraint_symmetric,
+    constraint_equal_length,
+    constraint_equal_radius,
+    constraint_point_on_line,
+    constraint_midpoint,
+    constraint_fixed_position,
+    constraint_fixed_length,
+    constraint_concentric,
+    constraint_fixed_radius,
+    constraint_angular_dimension,
+    constraint_tangent,
+    constraint_arc_angle
 };
 
 

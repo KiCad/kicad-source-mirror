@@ -64,8 +64,8 @@ public:
     /// Open the value dialog for the constraint badged at @p aPos; returns true if one was hit.
     bool EditConstraintAt( const VECTOR2I& aPos );
 
-    /// Clear any badge-selected constraint (e.g. on a click that misses every badge).
-    void ClearConstraintSelection();
+    /// Clear any badge-selected constraint.  Returns true if a constraint was selected and is now cleared.
+    bool ClearConstraintSelection();
 
     /// Delete the currently badge-selected constraint; returns true if one was selected and removed.
     /// Called by EDIT_TOOL::Remove so the Delete key targets a selected relation.

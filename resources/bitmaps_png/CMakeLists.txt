@@ -755,6 +755,24 @@ set( BMAPS_CONSTRAINTS
     solderpaste-expansion
     via-style
     vias-under-smd
+    coincident
+    horizontal
+    vertical
+    parallel
+    perpendicular
+    collinear
+    symmetric
+    equal-length
+    equal-radius
+    point-on-line
+    midpoint
+    fixed-position
+    fixed-length
+    concentric
+    fixed-radius
+    angular-dimension
+    tangent
+    arc-angle
     )
 
 # Images in this section are generated at whatever resolution is set in the source SVG file

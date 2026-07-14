@@ -240,9 +240,11 @@ bool CONSTRAINT_EDIT_TOOL::EditConstraintAt( const VECTOR2I& aPos )
 }
 
 
-void CONSTRAINT_EDIT_TOOL::ClearConstraintSelection()
+bool CONSTRAINT_EDIT_TOOL::ClearConstraintSelection()
 {
+    bool wasSelected = m_overlay && m_overlay->GetSelected() != niluuid;
     setSelectedConstraint( nullptr );
+    return wasSelected;
 }
 
 

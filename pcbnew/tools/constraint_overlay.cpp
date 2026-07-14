@@ -20,8 +20,12 @@
 #include <tools/constraint_overlay.h>
 
 #include <algorithm>
+#include <cmath>
+#include <limits>
 #include <ranges>
 #include <set>
+
+#include <wx/image.h>
 
 #include <board.h>
 #include <footprint.h>
@@ -32,6 +36,8 @@
 #include <gal/color4d.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <base_units.h>
+#include <bitmap_base.h>
+#include <bitmaps.h>
 #include <math/util.h>
 #include <geometry/eda_angle.h>
 
@@ -72,6 +78,7 @@ void CONSTRAINT_OVERLAY::Clear()
     m_badges.clear();
     m_badgeItem.SetBadges( {}, niluuid );
     m_view->Update( &m_badgeItem );
+    m_view->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 }
 
 
@@ -102,33 +109,73 @@ double CONSTRAINT_OVERLAY::BadgeWorldPerPixel( double aWorldScale )
 std::vector<VECTOR2D> CONSTRAINT_OVERLAY::LayoutBadges( const std::vector<CONSTRAINT_BADGE>& aBadges,
                                                        double aWorldPerPx )
 {
-    // Screen-constant amounts scaled into world units, so the fan tracks the glyph size at any zoom
-    // instead of the old fixed 1.5 mm that collapsed zoomed-out and exploded zoomed-in.
-    const double   fanStep = 18.0 * aWorldPerPx;   // a little more than the 16 px glyph
-    const double   fanStepSq = fanStep * fanStep;
-    const VECTOR2D offset = BadgeScreenOffset() * aWorldPerPx;
+    // Screen pixels scaled to world, so placement holds its look at any zoom.
+    const double   discPx = 11.0;  // chip radius
+    const double   marginPx = 3.0; // gap the chip keeps from geometry and other badges
+    const VECTOR2D preferred = BadgeScreenOffset();
+    const double   baseMag = preferred.EuclideanNorm();
+    const double   baseAngle = atan2( preferred.y, preferred.x );
 
-    // Cap the push-apart so a pathological board cannot hurt the pan/zoom framerate.
-    const size_t deOverlapLimit = 200;
+    const double shapeClear = ( discPx + marginPx ) * aWorldPerPx;
+    const double badgeClear = ( 2.0 * discPx + marginPx ) * aWorldPerPx;
+
+    // Fan the direction out from the default, then push farther if every direction is blocked.
+    static const double dirSpread[] = { 0, 30, -30, 60, -60, 90, -90, 120, -120, 150, -150, 180 };
+    static const double magSteps[] = { 1.0, 1.6, 2.3 };
 
     std::vector<VECTOR2D> positions;
     positions.reserve( aBadges.size() );
 
     for( const CONSTRAINT_BADGE& badge : aBadges )
     {
-        VECTOR2D pos = VECTOR2D( badge.pos ) + offset;
+        VECTOR2D anchor( badge.pos );
 
-        // Push clear of any already-placed badge so glyphs sharing (or near) an anchor fan out along
-        // a diagonal instead of stacking illegibly.  Capped so a pathological board cannot stall pan.
-        auto overlaps = [&]( const VECTOR2D& aPlaced )
+        // Clearance to the nearest obstacle.
+        auto clearance = [&]( const VECTOR2D& aPos ) -> double
         {
-            return ( aPlaced - pos ).SquaredEuclideanNorm() < fanStepSq;
+            double   d = std::numeric_limits<double>::max();
+            VECTOR2I p( KiROUND( aPos.x ), KiROUND( aPos.y ) );
+
+            for( const SEG& seg : badge.avoid )
+                d = std::min( d, seg.Distance( p ) - shapeClear );
+
+            for( const VECTOR2D& placed : positions )
+                d = std::min( d, ( placed - aPos ).EuclideanNorm() - badgeClear );
+
+            return d;
         };
 
-        while( positions.size() < deOverlapLimit && std::ranges::any_of( positions, overlaps ) )
-            pos += VECTOR2D( fanStep, fanStep );
+        VECTOR2D best = anchor + preferred * aWorldPerPx;
+        double   bestScore = -std::numeric_limits<double>::max();
+        bool     placed = false;
 
-        positions.push_back( pos );
+        for( double mag : magSteps )
+        {
+            for( double spread : dirSpread )
+            {
+                double   a = baseAngle + spread * M_PI / 180.0;
+                VECTOR2D cand = anchor + VECTOR2D( cos( a ), sin( a ) ) * ( baseMag * mag * aWorldPerPx );
+                double   score = clearance( cand );
+
+                if( score >= 0.0 )
+                {
+                    best = cand;
+                    placed = true;
+                    break;
+                }
+
+                if( score > bestScore )
+                {
+                    bestScore = score;
+                    best = cand;
+                }
+            }
+
+            if( placed )
+                break;
+        }
+
+        positions.push_back( best );
     }
 
     return positions;
@@ -369,6 +416,41 @@ void CONSTRAINT_OVERLAY::render()
                 return std::nullopt;
             };
 
+    // A constrained shape as world segments, for the badge placement search.
+    auto appendShapeSegs = [&]( const PCB_SHAPE* aShape, std::vector<SEG>& aOut )
+    {
+        switch( aShape->GetShape() )
+        {
+        case SHAPE_T::SEGMENT: aOut.emplace_back( aShape->GetStart(), aShape->GetEnd() ); break;
+
+        case SHAPE_T::CIRCLE:
+        case SHAPE_T::ARC:
+        {
+            VECTOR2I  center = aShape->GetCenter();
+            double    radius = aShape->GetRadius();
+            EDA_ANGLE start = aShape->GetShape() == SHAPE_T::ARC ? EDA_ANGLE( aShape->GetStart() - center ) : ANGLE_0;
+            EDA_ANGLE sweep = aShape->GetShape() == SHAPE_T::ARC ? aShape->GetArcAngle() : ANGLE_360;
+            int       steps = std::max( 2, KiROUND( std::abs( sweep.AsDegrees() ) / 30.0 ) );
+            VECTOR2I  prev;
+
+            for( int i = 0; i <= steps; ++i )
+            {
+                EDA_ANGLE a = start + sweep * ( double( i ) / steps );
+                VECTOR2I  p( center.x + KiROUND( radius * a.Cos() ), center.y + KiROUND( radius * a.Sin() ) );
+
+                if( i > 0 )
+                    aOut.emplace_back( prev, p );
+
+                prev = p;
+            }
+
+            break;
+        }
+
+        default: break;
+        }
+    };
+
     // An errored constraint's cluster can't be diagnosed, so tint its surviving members red.  The
     // selected constraint's badge is drawn enlarged and ringed.
     auto walkConstraints =
@@ -418,10 +500,18 @@ void CONSTRAINT_OVERLAY::render()
                         color = underColor;   // undiagnosed (e.g. an unsupported cluster); not "well"
                     }
 
-                    // Store the anchor; LayoutBadges fans and offsets the badges in screen space at
-                    // draw time so they stay legible and clickable at any zoom.
-                    m_badges.push_back( { *pos, constraint->m_Uuid,
-                                          ConstraintTypeGlyph( constraint->GetConstraintType() ), color } );
+                    std::vector<SEG> avoid;
+
+                    for( const CONSTRAINT_MEMBER& member : members )
+                    {
+                        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( m_board->ResolveItem( member.m_item, true ) ) )
+                        {
+                            appendShapeSegs( shape, avoid );
+                        }
+                    }
+
+                    m_badges.push_back(
+                            { *pos, constraint->m_Uuid, constraint->GetConstraintType(), color, std::move( avoid ) } );
                 }
             };
 
@@ -442,6 +532,74 @@ void CONSTRAINT_OVERLAY::render()
     m_badgeItem.SetBadges( m_badges, m_selected );
     m_view->Update( &m_badgeItem );
     m_view->Update( m_overlay.get() );
+    m_view->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+}
+
+
+CONSTRAINT_BADGE_ITEM::CONSTRAINT_BADGE_ITEM() :
+        EDA_ITEM( NOT_USED )
+{
+}
+
+
+CONSTRAINT_BADGE_ITEM::~CONSTRAINT_BADGE_ITEM() = default;
+
+
+BITMAP_BASE* CONSTRAINT_BADGE_ITEM::icon( PCB_CONSTRAINT_TYPE aType ) const
+{
+    if( auto it = m_icons.find( aType ); it != m_icons.end() )
+        return it->second.get();
+
+    std::unique_ptr<BITMAP_BASE> base;
+
+    if( BITMAPS id = ConstraintTypeBitmap( aType ); id != BITMAPS::INVALID_BITMAP )
+    {
+        if( wxBitmap bmp = KiBitmap( id ); bmp.IsOk() )
+        {
+            base = std::make_unique<BITMAP_BASE>();
+            base->SetImage( bmp.ConvertToImage() );
+        }
+    }
+
+    return ( m_icons[aType] = std::move( base ) ).get();
+}
+
+
+BITMAP_BASE* CONSTRAINT_BADGE_ITEM::disc( const KIGFX::COLOR4D& aColor ) const
+{
+    uint8_t r = uint8_t( aColor.r * 255.0 );
+    uint8_t g = uint8_t( aColor.g * 255.0 );
+    uint8_t b = uint8_t( aColor.b * 255.0 );
+    uint8_t a = uint8_t( aColor.a * 255.0 );
+
+    uint32_t key = ( uint32_t( r ) << 24 ) | ( uint32_t( g ) << 16 ) | ( uint32_t( b ) << 8 ) | a;
+
+    if( auto it = m_discs.find( key ); it != m_discs.end() )
+        return it->second.get();
+
+    const int S = 96;
+    wxImage   img( S, S );
+    img.InitAlpha();
+
+    const double center = S / 2.0;
+    const double radius = center - 1.0;
+
+    for( int y = 0; y < S; ++y )
+    {
+        for( int x = 0; x < S; ++x )
+        {
+            double d = std::hypot( x + 0.5 - center, y + 0.5 - center );
+            double coverage = std::clamp( radius - d + 0.5, 0.0, 1.0 );
+
+            img.SetRGB( x, y, r, g, b );
+            img.SetAlpha( x, y, uint8_t( a * coverage ) );
+        }
+    }
+
+    auto base = std::make_unique<BITMAP_BASE>();
+    base->SetImage( img );
+
+    return ( m_discs[key] = std::move( base ) ).get();
 }
 
 
@@ -453,20 +611,14 @@ void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     if( scale <= 0.0 )
         return;
 
-    const double glyphPx = 16.0;
-    const double bigGlyphPx = 24.0;
-    const double ringPx = 20.0; // Clears the enlarged (24 px) selected glyph.
+    const double iconPx = 18.0;
+    const double bigIconPx = 26.0;
     const double linePx = 1.5;
 
-    // Keep the glyph a constant on-screen size at any zoom.  A world-size floor would make it grow
+    // Keep the badge a constant on-screen size at any zoom.  A world-size floor would make it grow
     // without bound as you keep zooming in, so there is none.
     const double worldPerPx = CONSTRAINT_OVERLAY::BadgeWorldPerPixel( scale );
-
-    gal->SetIsFill( false );
-    gal->SetIsStroke( true );
-
-    gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
-    gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
+    const double worldUnitLength = gal->GetWorldUnitLength();
 
     // The same layout drives hit-testing (CONSTRAINT_EDIT_TOOL::hitTestBadge), so draw and click
     // positions can never diverge.  Recompute only when the zoom or badge set changed.
@@ -476,24 +628,46 @@ void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         m_layoutScale = worldPerPx;
     }
 
+    // Draw a bitmap centred on aPos, scaled so its width spans aWidth world units.
+    auto blit = [&]( BITMAP_BASE* aBmp, const VECTOR2I& aPos, double aWidth )
+    {
+        double natural = aBmp->GetSizePixels().x / ( aBmp->GetPPI() * worldUnitLength );
+
+        if( natural <= 0.0 )
+            return;
+
+        gal->Save();
+        gal->Translate( aPos );
+        gal->Scale( VECTOR2D( aWidth / natural, aWidth / natural ) );
+        gal->DrawBitmap( *aBmp, 1.0 );
+        gal->Restore();
+    };
+
     for( size_t i = 0; i < m_badges.size(); ++i )
     {
         const CONSTRAINT_BADGE& badge = m_badges[i];
+        BITMAP_BASE*            bitmap = icon( badge.type );
+
+        if( !bitmap )
+            continue;
+
         bool     selected = m_selected != niluuid && badge.constraint == m_selected;
-        double   glyph = ( selected ? bigGlyphPx : glyphPx ) * worldPerPx;
+        double   iconSize = ( selected ? bigIconPx : iconPx ) * worldPerPx;
+        double   chipR = 0.62 * iconSize;
         VECTOR2I pos( KiROUND( m_layout[i].x ), KiROUND( m_layout[i].y ) );
 
-        gal->SetStrokeColor( badge.color );
-        gal->SetLineWidth( static_cast<float>( linePx * worldPerPx ) );
+        // Chip and icon are both bitmaps, so the icon always lands on top of the chip.
+        blit( disc( badge.color ), pos, 2.0 * chipR );
 
         if( selected )
-            gal->DrawCircle( pos, ringPx * worldPerPx );
+        {
+            gal->SetIsFill( false );
+            gal->SetIsStroke( true );
+            gal->SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 0.9 ) );
+            gal->SetLineWidth( static_cast<float>( linePx * worldPerPx ) );
+            gal->DrawCircle( pos, chipR + 2.0 * linePx * worldPerPx );
+        }
 
-        VECTOR2I glyphPos = pos + VECTOR2I( 0, KiROUND( 0.15 * glyph ) );
-
-        // Keep at least 1 IU so an extreme zoom-in never rounds the glyph away to nothing.
-        int glyphIU = std::max( 1, KiROUND( glyph ) );
-        gal->SetGlyphSize( VECTOR2I( glyphIU, glyphIU ) );
-        gal->BitmapText( badge.glyph, glyphPos, ANGLE_0 );
+        blit( bitmap, pos, iconSize );
     }
 }

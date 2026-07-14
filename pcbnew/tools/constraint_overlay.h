@@ -19,6 +19,9 @@
 
 #pragma once
 
+#include <cstdint>
+#include <map>
+#include <memory>
 #include <vector>
 
 #include <eda_item.h>
@@ -26,12 +29,14 @@
 #include <layer_ids.h>
 #include <math/box2.h>
 #include <math/vector2d.h>
+#include <geometry/seg.h>
 #include <gal/color4d.h>
 
 #include <tools/view_overlay_holder.h>
 #include <constraints/board_constraint_adapter.h>
 
 class BOARD;
+class BITMAP_BASE;
 
 namespace KIGFX
 {
@@ -39,15 +44,16 @@ class VIEW;
 }
 
 
-/// An on-canvas constraint badge. Holds its anchor (the world point it labels), the glyph and colour
-/// to draw, and which constraint it represents for hit-testing. The on-screen draw position (anchor
-/// offset plus screen-space fan-out) is computed at draw time by CONSTRAINT_OVERLAY::LayoutBadges.
+/// An on-canvas constraint badge. Holds its anchor (the world point it labels), the constraint type
+/// (which picks the icon) and colour to draw, and which constraint it represents for hit-testing. The
+/// on-screen draw position is computed at draw time by CONSTRAINT_OVERLAY::LayoutBadges.
 struct CONSTRAINT_BADGE
 {
-    VECTOR2I       pos;
-    KIID           constraint;
-    wxString       glyph;
-    KIGFX::COLOR4D color;
+    VECTOR2I            pos;
+    KIID                constraint;
+    PCB_CONSTRAINT_TYPE type;
+    KIGFX::COLOR4D      color;
+    std::vector<SEG>    avoid; // constrained geometry the badge stays clear of
 };
 
 
@@ -59,10 +65,9 @@ struct CONSTRAINT_BADGE
 class CONSTRAINT_BADGE_ITEM : public EDA_ITEM
 {
 public:
-    CONSTRAINT_BADGE_ITEM() :
-            EDA_ITEM( NOT_USED )
-    {
-    }
+    CONSTRAINT_BADGE_ITEM();
+
+    ~CONSTRAINT_BADGE_ITEM() override;
 
     void SetBadges( const std::vector<CONSTRAINT_BADGE>& aBadges, const KIID& aSelected )
     {
@@ -91,8 +96,18 @@ public:
 #endif
 
 private:
+    /// The badge icon for a constraint type, loaded and cached on first use (nullptr for UNDEFINED).
+    BITMAP_BASE* icon( PCB_CONSTRAINT_TYPE aType ) const;
+
+    /// A filled disc of the given colour, built and cached on first use. Drawn as a bitmap (not a
+    /// GAL circle) so it and the icon share the immediate-mode path and always layer in draw order.
+    BITMAP_BASE* disc( const KIGFX::COLOR4D& aColor ) const;
+
     std::vector<CONSTRAINT_BADGE> m_badges;
     KIID                          m_selected;
+
+    mutable std::map<PCB_CONSTRAINT_TYPE, std::unique_ptr<BITMAP_BASE>> m_icons;
+    mutable std::map<uint32_t, std::unique_ptr<BITMAP_BASE>>            m_discs;
 
     // Screen-space layout cached per view scale, recomputed only when the zoom or badge set changes.
     mutable std::vector<VECTOR2D> m_layout;

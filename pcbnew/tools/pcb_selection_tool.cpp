@@ -696,6 +696,12 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_disambiguateTimer.Stop();
             m_frame->ClearFocus();
 
+            if( CONSTRAINT_EDIT_TOOL* constraintTool = m_toolMgr->GetTool<CONSTRAINT_EDIT_TOOL>();
+                constraintTool && constraintTool->ClearConstraintSelection() )
+            {
+                continue;
+            }
+
             if( !GetSelection().Empty() )
             {
                 ClearSelection();
