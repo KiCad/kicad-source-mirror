@@ -1014,12 +1014,13 @@ enum ConstraintType
 
 enum ConstraintAnchor
 {
-  CA_WHOLE = 0;
-  CA_START = 1;
-  CA_END = 2;
-  CA_MID = 3;
-  CA_CENTER = 4;
-  CA_RADIUS = 5;
+  CA_UNKNOWN = 0;
+  CA_WHOLE = 1;
+  CA_START = 2;
+  CA_END = 3;
+  CA_MID = 4;
+  CA_CENTER = 5;
+  CA_RADIUS = 6;
 }
 
 message ConstraintMember

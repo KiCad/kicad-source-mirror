@@ -30,6 +30,7 @@
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
+#include <api/api_enums.h>
 #include <api/board/board_types.pb.h>
 #include <google/protobuf/any.pb.h>
 
@@ -239,48 +240,6 @@ PCB_CONSTRAINT::PCB_CONSTRAINT( BOARD_ITEM* aParent, PCB_CONSTRAINT_TYPE aType )
 }
 
 
-// Serialize() bridges the C++ and proto enums by static_cast, so any ordinal drift corrupts API
-// traffic silently; pin every value at compile time.
-#define CHECK_CONSTRAINT_TYPE( cppType, protoType )                                                \
-    static_assert( static_cast<int>( PCB_CONSTRAINT_TYPE::cppType )                               \
-                   == static_cast<int>( kiapi::board::types::protoType ) )
-
-CHECK_CONSTRAINT_TYPE( UNDEFINED, CT_UNKNOWN );
-CHECK_CONSTRAINT_TYPE( COINCIDENT, CT_COINCIDENT );
-CHECK_CONSTRAINT_TYPE( HORIZONTAL, CT_HORIZONTAL );
-CHECK_CONSTRAINT_TYPE( VERTICAL, CT_VERTICAL );
-CHECK_CONSTRAINT_TYPE( PARALLEL, CT_PARALLEL );
-CHECK_CONSTRAINT_TYPE( PERPENDICULAR, CT_PERPENDICULAR );
-CHECK_CONSTRAINT_TYPE( COLLINEAR, CT_COLLINEAR );
-CHECK_CONSTRAINT_TYPE( SYMMETRIC, CT_SYMMETRIC );
-CHECK_CONSTRAINT_TYPE( EQUAL_LENGTH, CT_EQUAL_LENGTH );
-CHECK_CONSTRAINT_TYPE( EQUAL_RADIUS, CT_EQUAL_RADIUS );
-CHECK_CONSTRAINT_TYPE( POINT_ON_LINE, CT_POINT_ON_LINE );
-CHECK_CONSTRAINT_TYPE( MIDPOINT, CT_MIDPOINT );
-CHECK_CONSTRAINT_TYPE( FIXED_POSITION, CT_FIXED_POSITION );
-CHECK_CONSTRAINT_TYPE( FIXED_LENGTH, CT_FIXED_LENGTH );
-CHECK_CONSTRAINT_TYPE( CONCENTRIC, CT_CONCENTRIC );
-CHECK_CONSTRAINT_TYPE( FIXED_RADIUS, CT_FIXED_RADIUS );
-CHECK_CONSTRAINT_TYPE( ANGULAR_DIMENSION, CT_ANGULAR_DIMENSION );
-CHECK_CONSTRAINT_TYPE( TANGENT, CT_TANGENT );
-CHECK_CONSTRAINT_TYPE( ARC_ANGLE, CT_ARC_ANGLE );
-
-#undef CHECK_CONSTRAINT_TYPE
-
-#define CHECK_CONSTRAINT_ANCHOR( cppAnchor, protoAnchor )                                          \
-    static_assert( static_cast<int>( CONSTRAINT_ANCHOR::cppAnchor )                               \
-                   == static_cast<int>( kiapi::board::types::protoAnchor ) )
-
-CHECK_CONSTRAINT_ANCHOR( WHOLE, CA_WHOLE );
-CHECK_CONSTRAINT_ANCHOR( START, CA_START );
-CHECK_CONSTRAINT_ANCHOR( END, CA_END );
-CHECK_CONSTRAINT_ANCHOR( MID, CA_MID );
-CHECK_CONSTRAINT_ANCHOR( CENTER, CA_CENTER );
-CHECK_CONSTRAINT_ANCHOR( RADIUS, CA_RADIUS );
-
-#undef CHECK_CONSTRAINT_ANCHOR
-
-
 void PCB_CONSTRAINT::Serialize( google::protobuf::Any& aContainer ) const
 {
     using namespace kiapi::board::types;
@@ -288,9 +247,7 @@ void PCB_CONSTRAINT::Serialize( google::protobuf::Any& aContainer ) const
 
     constraint.mutable_id()->set_value( m_Uuid.AsStdString() );
 
-    // The proto ConstraintType/ConstraintAnchor enums mirror PCB_CONSTRAINT_TYPE/CONSTRAINT_ANCHOR
-    // ordinal-for-ordinal; keep them in sync.
-    constraint.set_type( static_cast<ConstraintType>( m_type ) );
+    constraint.set_type( ToProtoEnum<PCB_CONSTRAINT_TYPE, ConstraintType>( m_type ) );
     constraint.set_driving( m_driving );
 
     if( m_value.has_value() )
@@ -300,7 +257,7 @@ void PCB_CONSTRAINT::Serialize( google::protobuf::Any& aContainer ) const
     {
         ConstraintMember* m = constraint.add_members();
         m->mutable_item()->set_value( member.m_item.AsStdString() );
-        m->set_anchor( static_cast<ConstraintAnchor>( member.m_anchor ) );
+        m->set_anchor( ToProtoEnum<CONSTRAINT_ANCHOR, ConstraintAnchor>( member.m_anchor ) );
     }
 
     aContainer.PackFrom( constraint );
@@ -309,22 +266,15 @@ void PCB_CONSTRAINT::Serialize( google::protobuf::Any& aContainer ) const
 
 bool PCB_CONSTRAINT::Deserialize( const google::protobuf::Any& aContainer )
 {
-    kiapi::board::types::Constraint constraint;
+    using namespace kiapi::board::types;
+    Constraint constraint;
 
     if( !aContainer.UnpackTo( &constraint ) )
         return false;
 
     SetUuidDirect( KIID( constraint.id().value() ) );
 
-    // Validate the enum against the known range so a malformed or newer-API message can't cast to
-    // a garbage type/anchor.
-    int typeValue = constraint.type();
-
-    if( typeValue < 0 || typeValue > static_cast<int>( PCB_CONSTRAINT_TYPE::ARC_ANGLE ) )
-        m_type = PCB_CONSTRAINT_TYPE::UNDEFINED;
-    else
-        m_type = static_cast<PCB_CONSTRAINT_TYPE>( typeValue );
-
+    m_type = FromProtoEnum<PCB_CONSTRAINT_TYPE, ConstraintType>( constraint.type() );
     m_driving = constraint.driving();
 
     if( constraint.has_value() )
@@ -337,11 +287,7 @@ bool PCB_CONSTRAINT::Deserialize( const google::protobuf::Any& aContainer )
     // Members reference items by KIID, so they need no board to resolve (resolved on use).
     for( const auto& m : constraint.members() )
     {
-        int anchorValue = m.anchor();
-        CONSTRAINT_ANCHOR anchor = CONSTRAINT_ANCHOR::WHOLE;
-
-        if( anchorValue >= 0 && anchorValue <= static_cast<int>( CONSTRAINT_ANCHOR::RADIUS ) )
-            anchor = static_cast<CONSTRAINT_ANCHOR>( anchorValue );
+        CONSTRAINT_ANCHOR anchor = FromProtoEnum<CONSTRAINT_ANCHOR, ConstraintAnchor>( m.anchor() );
 
         m_members.emplace_back( KIID( m.item().value() ), anchor );
     }

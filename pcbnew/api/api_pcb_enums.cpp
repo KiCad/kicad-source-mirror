@@ -29,6 +29,7 @@
 #include <widgets/report_severity.h>
 
 #include <board_stackup_manager/board_stackup.h>
+#include <constraints/pcb_constraint.h>
 #include <drc/drc_item.h>
 #include <padstack.h>
 #include <pcb_dimension.h>
@@ -2130,6 +2131,109 @@ PCB_DRC_CODE FromProtoEnum( DrcErrorType aValue )
     case DrcErrorType::DRCET_UNKNOWN:
     default:
         return static_cast<PCB_DRC_CODE>( 0 );
+    }
+}
+
+
+template<>
+types::ConstraintType ToProtoEnum( PCB_CONSTRAINT_TYPE aValue )
+{
+    switch( aValue )
+    {
+    case PCB_CONSTRAINT_TYPE::COINCIDENT:        return types::ConstraintType::CT_COINCIDENT;
+    case PCB_CONSTRAINT_TYPE::HORIZONTAL:        return types::ConstraintType::CT_HORIZONTAL;
+    case PCB_CONSTRAINT_TYPE::VERTICAL:          return types::ConstraintType::CT_VERTICAL;
+    case PCB_CONSTRAINT_TYPE::PARALLEL:          return types::ConstraintType::CT_PARALLEL;
+    case PCB_CONSTRAINT_TYPE::PERPENDICULAR:     return types::ConstraintType::CT_PERPENDICULAR;
+    case PCB_CONSTRAINT_TYPE::COLLINEAR:         return types::ConstraintType::CT_COLLINEAR;
+    case PCB_CONSTRAINT_TYPE::SYMMETRIC:         return types::ConstraintType::CT_SYMMETRIC;
+    case PCB_CONSTRAINT_TYPE::EQUAL_LENGTH:      return types::ConstraintType::CT_EQUAL_LENGTH;
+    case PCB_CONSTRAINT_TYPE::EQUAL_RADIUS:      return types::ConstraintType::CT_EQUAL_RADIUS;
+    case PCB_CONSTRAINT_TYPE::POINT_ON_LINE:     return types::ConstraintType::CT_POINT_ON_LINE;
+    case PCB_CONSTRAINT_TYPE::MIDPOINT:          return types::ConstraintType::CT_MIDPOINT;
+    case PCB_CONSTRAINT_TYPE::FIXED_POSITION:    return types::ConstraintType::CT_FIXED_POSITION;
+    case PCB_CONSTRAINT_TYPE::FIXED_LENGTH:      return types::ConstraintType::CT_FIXED_LENGTH;
+    case PCB_CONSTRAINT_TYPE::CONCENTRIC:        return types::ConstraintType::CT_CONCENTRIC;
+    case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:      return types::ConstraintType::CT_FIXED_RADIUS;
+    case PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION: return types::ConstraintType::CT_ANGULAR_DIMENSION;
+    case PCB_CONSTRAINT_TYPE::TANGENT:           return types::ConstraintType::CT_TANGENT;
+    case PCB_CONSTRAINT_TYPE::ARC_ANGLE:         return types::ConstraintType::CT_ARC_ANGLE;
+
+    case PCB_CONSTRAINT_TYPE::UNDEFINED:
+    default:
+        wxCHECK_MSG( false, types::ConstraintType::CT_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PCB_CONSTRAINT_TYPE>" );
+    }
+}
+
+
+template<>
+PCB_CONSTRAINT_TYPE FromProtoEnum( types::ConstraintType aValue )
+{
+    switch( aValue )
+    {
+    case types::ConstraintType::CT_UNKNOWN:           return PCB_CONSTRAINT_TYPE::UNDEFINED;
+    case types::ConstraintType::CT_COINCIDENT:        return PCB_CONSTRAINT_TYPE::COINCIDENT;
+    case types::ConstraintType::CT_HORIZONTAL:        return PCB_CONSTRAINT_TYPE::HORIZONTAL;
+    case types::ConstraintType::CT_VERTICAL:          return PCB_CONSTRAINT_TYPE::VERTICAL;
+    case types::ConstraintType::CT_PARALLEL:          return PCB_CONSTRAINT_TYPE::PARALLEL;
+    case types::ConstraintType::CT_PERPENDICULAR:     return PCB_CONSTRAINT_TYPE::PERPENDICULAR;
+    case types::ConstraintType::CT_COLLINEAR:         return PCB_CONSTRAINT_TYPE::COLLINEAR;
+    case types::ConstraintType::CT_SYMMETRIC:         return PCB_CONSTRAINT_TYPE::SYMMETRIC;
+    case types::ConstraintType::CT_EQUAL_LENGTH:      return PCB_CONSTRAINT_TYPE::EQUAL_LENGTH;
+    case types::ConstraintType::CT_EQUAL_RADIUS:      return PCB_CONSTRAINT_TYPE::EQUAL_RADIUS;
+    case types::ConstraintType::CT_POINT_ON_LINE:     return PCB_CONSTRAINT_TYPE::POINT_ON_LINE;
+    case types::ConstraintType::CT_MIDPOINT:          return PCB_CONSTRAINT_TYPE::MIDPOINT;
+    case types::ConstraintType::CT_FIXED_POSITION:    return PCB_CONSTRAINT_TYPE::FIXED_POSITION;
+    case types::ConstraintType::CT_FIXED_LENGTH:      return PCB_CONSTRAINT_TYPE::FIXED_LENGTH;
+    case types::ConstraintType::CT_CONCENTRIC:        return PCB_CONSTRAINT_TYPE::CONCENTRIC;
+    case types::ConstraintType::CT_FIXED_RADIUS:      return PCB_CONSTRAINT_TYPE::FIXED_RADIUS;
+    case types::ConstraintType::CT_ANGULAR_DIMENSION: return PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION;
+    case types::ConstraintType::CT_TANGENT:           return PCB_CONSTRAINT_TYPE::TANGENT;
+    case types::ConstraintType::CT_ARC_ANGLE:         return PCB_CONSTRAINT_TYPE::ARC_ANGLE;
+
+    default:
+        wxCHECK_MSG( false, PCB_CONSTRAINT_TYPE::UNDEFINED,
+                     "Unhandled case in FromProtoEnum<types::ConstraintType>" );
+    }
+}
+
+
+template<>
+types::ConstraintAnchor ToProtoEnum( CONSTRAINT_ANCHOR aValue )
+{
+    switch( aValue )
+    {
+    case CONSTRAINT_ANCHOR::WHOLE:  return types::ConstraintAnchor::CA_WHOLE;
+    case CONSTRAINT_ANCHOR::START:  return types::ConstraintAnchor::CA_START;
+    case CONSTRAINT_ANCHOR::END:    return types::ConstraintAnchor::CA_END;
+    case CONSTRAINT_ANCHOR::MID:    return types::ConstraintAnchor::CA_MID;
+    case CONSTRAINT_ANCHOR::CENTER: return types::ConstraintAnchor::CA_CENTER;
+    case CONSTRAINT_ANCHOR::RADIUS: return types::ConstraintAnchor::CA_RADIUS;
+
+    default:
+        wxCHECK_MSG( false, types::ConstraintAnchor::CA_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<CONSTRAINT_ANCHOR>" );
+    }
+}
+
+
+template<>
+CONSTRAINT_ANCHOR FromProtoEnum( types::ConstraintAnchor aValue )
+{
+    switch( aValue )
+    {
+    case types::ConstraintAnchor::CA_UNKNOWN:
+    case types::ConstraintAnchor::CA_WHOLE:  return CONSTRAINT_ANCHOR::WHOLE;
+    case types::ConstraintAnchor::CA_START:  return CONSTRAINT_ANCHOR::START;
+    case types::ConstraintAnchor::CA_END:    return CONSTRAINT_ANCHOR::END;
+    case types::ConstraintAnchor::CA_MID:    return CONSTRAINT_ANCHOR::MID;
+    case types::ConstraintAnchor::CA_CENTER: return CONSTRAINT_ANCHOR::CENTER;
+    case types::ConstraintAnchor::CA_RADIUS: return CONSTRAINT_ANCHOR::RADIUS;
+
+    default:
+        wxCHECK_MSG( false, CONSTRAINT_ANCHOR::WHOLE,
+                     "Unhandled case in FromProtoEnum<types::ConstraintAnchor>" );
     }
 }
 

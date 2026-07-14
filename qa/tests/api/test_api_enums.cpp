@@ -41,6 +41,7 @@
 #include <api/board/board_jobs.pb.h>
 #include <api/schematic/schematic_jobs.pb.h>
 #include <board_stackup_manager/board_stackup.h>
+#include <constraints/pcb_constraint.h>
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
 #include <jobs/job_export_pcb_3d.h>
@@ -227,6 +228,17 @@ BOOST_AUTO_TEST_CASE( DrcSeverity )
 BOOST_AUTO_TEST_CASE( RuleSeverity )
 {
     testEnums<SEVERITY, kiapi::common::types::RuleSeverity>();
+}
+
+BOOST_AUTO_TEST_CASE( ConstraintType )
+{
+    // UNDEFINED is an internal sentinel that is not exposed to the API.
+    testEnums<PCB_CONSTRAINT_TYPE, kiapi::board::types::ConstraintType>( true );
+}
+
+BOOST_AUTO_TEST_CASE( ConstraintAnchor )
+{
+    testEnums<CONSTRAINT_ANCHOR, kiapi::board::types::ConstraintAnchor>();
 }
 
 BOOST_AUTO_TEST_CASE( DesignRuleType )
