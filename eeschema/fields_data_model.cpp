@@ -1046,27 +1046,37 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_REFERENCE&  aRef,
     if( aAttributeName == wxS( "${DNP}" ) )
     {
         attrChanged = aRef.GetSymbolDNP( aVariantName ) != newValue;
-        aRef.SetSymbolDNP( newValue, aVariantName );
+
+        if( attrChanged )
+            aRef.SetSymbolDNP( newValue, aVariantName );
     }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
     {
         attrChanged = aRef.GetSymbolExcludedFromBoard() != newValue;
-        aRef.SetSymbolExcludedFromBoard( newValue );
+
+        if( attrChanged )
+            aRef.SetSymbolExcludedFromBoard( newValue );
     }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
     {
         attrChanged = aRef.GetSymbolExcludedFromBOM( aVariantName ) != newValue;
-        aRef.SetSymbolExcludedFromBOM( newValue, aVariantName );
+
+        if( attrChanged )
+            aRef.SetSymbolExcludedFromBOM( newValue, aVariantName );
     }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
     {
         attrChanged = aRef.GetSymbolExcludedFromSim( aVariantName ) != newValue;
-        aRef.SetSymbolExcludedFromSim( newValue, aVariantName );
+
+        if( attrChanged )
+            aRef.SetSymbolExcludedFromSim( newValue, aVariantName );
     }
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_POS_FILES}" ) )
     {
         attrChanged = aRef.GetSymbolExcludedFromPosFiles( aVariantName ) != newValue;
-        aRef.SetSymbolExcludedFromPosFiles( newValue, aVariantName );
+
+        if( attrChanged )
+            aRef.SetSymbolExcludedFromPosFiles( newValue, aVariantName );
     }
 
     return attrChanged;

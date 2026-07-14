@@ -1253,11 +1253,11 @@ void SCH_SYMBOL::SetDNP( bool aEnable, const SCH_SHEET_PATH* aInstance, const wx
     }
     else
     {
-        if( instance->m_Variants.contains( aVariantName ) && ( aEnable != instance->m_Variants[aVariantName].m_DNP ) )
+        if( instance->m_Variants.contains( aVariantName ) )
         {
             instance->m_Variants[aVariantName].m_DNP = aEnable;
         }
-        else
+        else if( aEnable != m_DNP )
         {
             SCH_SYMBOL_VARIANT variant( aVariantName );
 
@@ -1305,7 +1305,7 @@ void SCH_SYMBOL::SetPinMapOverride( const PIN_MAP_INSTANCE_OVERRIDE& aOverride, 
     {
         instance->m_Variants[aVariantName].m_PinMapOverride = aOverride;
     }
-    else
+    else if( !aOverride.IsDefault() )
     {
         SCH_SYMBOL_VARIANT variant( aVariantName );
 
@@ -1391,12 +1391,11 @@ void SCH_SYMBOL::SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstan
     }
     else
     {
-        if( instance->m_Variants.contains( aVariantName )
-          && ( aEnable != instance->m_Variants[aVariantName].m_ExcludedFromBOM ) )
+        if( instance->m_Variants.contains( aVariantName ) )
         {
             instance->m_Variants[aVariantName].m_ExcludedFromBOM = aEnable;
         }
-        else
+        else if( aEnable != m_excludedFromBOM )
         {
             SCH_SYMBOL_VARIANT variant( aVariantName );
 
@@ -1446,12 +1445,11 @@ void SCH_SYMBOL::SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH* aInstan
     }
     else
     {
-        if( instance->m_Variants.contains( aVariantName )
-          && ( aEnable != instance->m_Variants[aVariantName].m_ExcludedFromSim ) )
+        if( instance->m_Variants.contains( aVariantName ) )
         {
             instance->m_Variants[aVariantName].m_ExcludedFromSim = aEnable;
         }
-        else
+        else if( aEnable != m_excludedFromSim )
         {
             SCH_SYMBOL_VARIANT variant( aVariantName );
 
@@ -1502,12 +1500,11 @@ void SCH_SYMBOL::SetExcludedFromBoard( bool aEnable, const SCH_SHEET_PATH* aInst
     }
     else
     {
-        if( instance->m_Variants.contains( aVariantName )
-          && ( aEnable != instance->m_Variants[aVariantName].m_ExcludedFromBoard ) )
+        if( instance->m_Variants.contains( aVariantName ) )
         {
             instance->m_Variants[aVariantName].m_ExcludedFromBoard = aEnable;
         }
-        else
+        else if( aEnable != m_excludedFromBoard )
         {
             SCH_SYMBOL_VARIANT variant( aVariantName );
 
@@ -1559,12 +1556,11 @@ void SCH_SYMBOL::SetExcludedFromPosFiles( bool aEnable, const SCH_SHEET_PATH* aI
     }
     else
     {
-        if( instance->m_Variants.contains( aVariantName )
-          && ( aEnable != instance->m_Variants[aVariantName].m_ExcludedFromPosFiles ) )
+        if( instance->m_Variants.contains( aVariantName ) )
         {
             instance->m_Variants[aVariantName].m_ExcludedFromPosFiles = aEnable;
         }
-        else
+        else if( aEnable != m_excludedFromPosFiles )
         {
             SCH_SYMBOL_VARIANT variant( aVariantName );
 
