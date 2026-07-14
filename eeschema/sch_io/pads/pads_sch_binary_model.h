@@ -227,6 +227,7 @@ struct MODEL_TEXT_PRESENTATION
 struct DESIGN_SETTINGS
 {
     SOURCE_PROVENANCE            source;
+    uint32_t                     codePage = 1252;
     int64_t                      coordinateUnitsPerMil = 2;
     SOURCE_POINT                 pageSize;
     int64_t                      defaultLineWidth = 0;
@@ -511,6 +512,7 @@ struct MODEL_TEXT
 struct PADS_SCH_MODEL
 {
     uint16_t                             version = 0;
+    uint16_t                             subversion = 0;
     SOURCE_PROVENANCE                    source;
     DESIGN_SETTINGS                      settings;
     std::vector<MODEL_SHEET>             sheets;

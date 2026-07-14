@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <map>
+#include <ranges>
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
@@ -35,6 +36,91 @@ namespace PADS_SCH_BINARY
 
 namespace
 {
+
+    constexpr size_t   OUTER_DIRECTORY_OFFSET = 0x20;
+    constexpr size_t   OUTER_DESCRIPTOR_BYTES = 28;
+    constexpr size_t   OUTER_USED_BYTES_OFFSET = 12;
+    constexpr size_t   SHEET_HEADER_BYTES = 20;
+    constexpr size_t   SHEET_DESCRIPTOR_COUNT = 24;
+    constexpr size_t   SHEET_DESCRIPTOR_BYTES = 28;
+    constexpr size_t   SHEET_COUNT_OFFSET = 12;
+    constexpr size_t   SHEET_USED_BYTES_OFFSET = 16;
+    constexpr size_t   SHEET_RECORD_BYTES = 48;
+    constexpr size_t   TEXT_RECORD_BYTES = 32;
+    constexpr uint32_t DEFAULT_CODE_PAGE = 1252;
+
+
+    size_t outerControllerOffset( const PADS_SCH_SDB& aSdb, size_t aController )
+    {
+        size_t offset = aSdb.PayloadOffset() + 4;
+
+        for( size_t controller = 1; controller < aController; ++controller )
+            offset += aSdb.Pools()[controller].usedBytes;
+
+        return offset;
+    }
+
+
+    SOURCE_PROVENANCE sourceAt( const wxString& aFile, uint16_t aVersion, const wxString& aObjectClass, int aController,
+                                size_t aRecord, size_t aOffset, size_t aLength, int aSheet )
+    {
+        return { aFile, aVersion, aObjectClass, aController, aRecord, aOffset, aLength, aSheet };
+    }
+
+
+    [[noreturn]] void throwDecodeError( const SOURCE_PROVENANCE& aSource, const wxString& aMessage )
+    {
+        THROW_IO_ERROR( FormatParserError( aSource, aMessage ) );
+    }
+
+
+    int64_t decodeCoordinate( uint16_t aRaw )
+    {
+        return static_cast<int64_t>( aRaw ) * 4 - 198144;
+    }
+
+
+    SOURCE_POINT pageExtent( uint8_t aPage, const SOURCE_PROVENANCE& aSource )
+    {
+        switch( aPage )
+        {
+        case 'A': return { 22000, 17000, aSource };
+        case 'B': return { 34000, 22000, aSource };
+        case 'C': return { 44000, 34000, aSource };
+        case 'D': return { 68000, 44000, aSource };
+        case 'E': return { 88000, 68000, aSource };
+        default: throwDecodeError( aSource, wxS( "invalid design page-size token" ) );
+        }
+    }
+
+
+    MODEL_JUSTIFICATION horizontalJustification( uint16_t aValue, const SOURCE_PROVENANCE& aSource,
+                                                 std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    {
+        uint16_t horizontal = aValue >= 8 ? aValue - 8 : ( aValue >= 2 ? aValue - 2 : aValue );
+
+        switch( horizontal )
+        {
+        case 0: return MODEL_JUSTIFICATION::LEFT;
+        case 1: return MODEL_JUSTIFICATION::RIGHT;
+        case 4: return MODEL_JUSTIFICATION::CENTER;
+        default:
+            PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "text justification" ), aValue, aSource, aDiagnostics );
+            return MODEL_JUSTIFICATION::LEFT;
+        }
+    }
+
+
+    MODEL_JUSTIFICATION verticalJustification( uint16_t aValue )
+    {
+        if( aValue >= 8 )
+            return MODEL_JUSTIFICATION::CENTER;
+
+        if( aValue >= 2 )
+            return MODEL_JUSTIFICATION::LEFT;
+
+        return MODEL_JUSTIFICATION::RIGHT;
+    }
 
     constexpr uint32_t CP1252_HIGH[] = { 0x20AC, 0xFFFD, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021,
                                          0x02C6, 0x2030, 0x0160, 0x2039, 0x0152, 0xFFFD, 0x017D, 0xFFFD,
@@ -684,25 +770,260 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
     PADS_SCH_SDB sdb;
     sdb.Load( aBytes );
 
-    PADS_SCH_MODEL model;
+    const PADS_IO::BINARY_CURSOR& cursor = sdb.Cursor();
+    PADS_SCH_MODEL                model;
     model.version = sdb.Version();
+    model.subversion = cursor.U16At( 6 );
     model.source = { aSourceName, model.version, wxS( "model" ), -1, 0, 0, aBytes.size(), -1 };
     model.settings.source = model.source;
+    model.settings.codePage = DEFAULT_CODE_PAGE;
 
-    for( const SCH_SDB_BLOCK& block : sdb.Blocks() )
+    const SCH_SDB_POOL& sheetPool = sdb.Pools()[3];
+
+    if( sheetPool.usedBytes != sheetPool.count * SHEET_RECORD_BYTES )
     {
-        if( block.kind != SCH_SDB_BLOCK_KIND::SHEET )
-            continue;
+        SOURCE_PROVENANCE source =
+                sourceAt( aSourceName, model.version, wxS( "sheet index" ), 3, 0,
+                          OUTER_DIRECTORY_OFFSET + 3 * OUTER_DESCRIPTOR_BYTES + OUTER_USED_BYTES_OFFSET, 4, -1 );
+        throwDecodeError( source, wxS( "sheet-index byte count does not match 48-byte record count" ) );
+    }
 
-        const size_t      index = model.sheets.size();
-        SOURCE_PROVENANCE provenance{ aSourceName, model.version, wxS( "sheet" ), block.controller,
-                                      index,       block.offset,  block.bytes,    static_cast<int>( index ) };
-        MODEL_SHEET       sheet;
-        sheet.id = SHEET_ID( static_cast<uint32_t>( index ) );
+    const SCH_SDB_POOL& settingsPool = sdb.Pools()[5];
+
+    if( settingsPool.count != 100 || settingsPool.usedBytes != 400 )
+    {
+        SOURCE_PROVENANCE source =
+                sourceAt( aSourceName, model.version, wxS( "design settings" ), 5, 0,
+                          OUTER_DIRECTORY_OFFSET + 5 * OUTER_DESCRIPTOR_BYTES + OUTER_USED_BYTES_OFFSET, 4, -1 );
+        throwDecodeError( source, wxS( "design-settings controller is not the required 400-byte record" ) );
+    }
+
+    size_t            settingsOffset = outerControllerOffset( sdb, 5 );
+    SOURCE_PROVENANCE settingsSource = sourceAt( aSourceName, model.version, wxS( "design settings" ), 5, 0,
+                                                 settingsOffset, settingsPool.usedBytes, -1 );
+
+    uint8_t pageDesignator = 0;
+
+    if( std::equal( aBytes.begin() + settingsOffset + 264, aBytes.begin() + settingsOffset + 268, "SIZE" )
+        && aBytes[settingsOffset + 269] == 0 )
+    {
+        pageDesignator = aBytes[settingsOffset + 268];
+    }
+    else if( std::equal( aBytes.begin() + settingsOffset + 264, aBytes.begin() + settingsOffset + 273, "WDITBSIZE" )
+             && aBytes[settingsOffset + 274] == 0 )
+    {
+        pageDesignator = aBytes[settingsOffset + 273];
+    }
+    else
+    {
+        SOURCE_PROVENANCE source = settingsSource;
+        source.absoluteOffset += 264;
+        source.length = 11;
+        throwDecodeError( source, wxS( "invalid design page-size field" ) );
+    }
+
+    SOURCE_PROVENANCE pageSource = settingsSource;
+    pageSource.absoluteOffset += 264;
+    pageSource.length = 11;
+    model.settings.pageSize = pageExtent( pageDesignator, pageSource );
+    model.settings.defaultLineWidth = static_cast<int64_t>( cursor.U32At( settingsOffset + 12 ) ) * 2;
+    model.settings.defaultBusWidth = static_cast<int64_t>( cursor.U32At( settingsOffset + 16 ) ) * 2;
+
+    std::vector<MODEL_FIELD> titleFields;
+    const SCH_SDB_POOL&      titleFieldPool = sdb.Pools()[1];
+    size_t                   titleOffset = outerControllerOffset( sdb, 1 );
+    size_t                   titleEnd = titleOffset + titleFieldPool.usedBytes;
+    size_t                   titleRecord = 0;
+
+    while( titleOffset < titleEnd && titleFields.size() < 14 )
+    {
+        size_t terminator = titleOffset;
+
+        while( terminator < titleEnd && aBytes[terminator] != 0 )
+            ++terminator;
+
+        SOURCE_PROVENANCE source = sourceAt( aSourceName, model.version, wxS( "title field" ), 1, titleRecord,
+                                             titleOffset, terminator - titleOffset + 1, -1 );
+
+        size_t separator = titleOffset + 6;
+
+        while( separator < terminator && aBytes[separator] != 1 )
+            ++separator;
+
+        if( terminator == titleEnd || terminator - titleOffset < 7 || separator == terminator
+            || !std::equal( aBytes.begin() + titleOffset, aBytes.begin() + titleOffset + 6, "Field\n" ) )
+        {
+            throwDecodeError( source, wxS( "invalid title-field name record" ) );
+        }
+
+        std::vector<uint8_t> nameBytes( aBytes.begin() + titleOffset + 6, aBytes.begin() + separator );
+        std::vector<uint8_t> valueBytes( aBytes.begin() + separator + 1, aBytes.begin() + terminator );
+        SOURCE_PROVENANCE    nameSource = source;
+        nameSource.absoluteOffset += 6;
+        nameSource.length = nameBytes.size();
+        SOURCE_PROVENANCE valueSource = source;
+        valueSource.absoluteOffset = separator + 1;
+        valueSource.length = valueBytes.size();
+        MODEL_FIELD field;
+        field.source = source;
+        field.name = DecodeString( nameBytes, DEFAULT_CODE_PAGE, nameSource, model.diagnostics );
+        field.value = DecodeString( valueBytes, DEFAULT_CODE_PAGE, valueSource, model.diagnostics );
+        field.presentation.source = source;
+        titleFields.push_back( std::move( field ) );
+        titleOffset = terminator + 1;
+        ++titleRecord;
+    }
+
+    if( titleFields.size() != 14 )
+    {
+        SOURCE_PROVENANCE source = sourceAt( aSourceName, model.version, wxS( "title field" ), 1, titleFields.size(),
+                                             outerControllerOffset( sdb, 1 ), titleFieldPool.usedBytes, -1 );
+        throwDecodeError( source, wxS( "title-field controller does not contain 14 records" ) );
+    }
+
+    size_t sheetIndexOffset = outerControllerOffset( sdb, 3 );
+    auto   sheetBlocks = sdb.Blocks()
+                       | std::views::filter(
+                               []( const SCH_SDB_BLOCK& aBlock )
+                               {
+                                   return aBlock.kind == SCH_SDB_BLOCK_KIND::SHEET;
+                               } );
+    auto sheetBlock = sheetBlocks.begin();
+
+    for( size_t index = 0; index < sheetPool.count; ++index, ++sheetBlock )
+    {
+        size_t            recordOffset = sheetIndexOffset + index * SHEET_RECORD_BYTES;
+        SOURCE_PROVENANCE provenance = sourceAt( aSourceName, model.version, wxS( "sheet" ), 3, index, recordOffset,
+                                                 SHEET_RECORD_BYTES, static_cast<int>( index ) );
+
+        if( sheetBlock == sheetBlocks.end() || cursor.U32At( recordOffset ) != sheetBlock->offset
+            || cursor.U32At( recordOffset + 4 ) != sheetBlock->bytes )
+        {
+            throwDecodeError( provenance, wxS( "sheet-index record references the wrong SDB object class" ) );
+        }
+
+        constexpr size_t nameOffset = 14;
+
+        if( cursor.U16At( recordOffset + 10 ) != 0xFFFF || cursor.U16At( recordOffset + 12 ) != 0xFFFF )
+        {
+            throwDecodeError( provenance, wxS( "invalid sheet-index class marker" ) );
+        }
+
+        size_t nameEnd = recordOffset + nameOffset;
+
+        while( nameEnd < recordOffset + SHEET_RECORD_BYTES && aBytes[nameEnd] != 0 )
+            ++nameEnd;
+
+        if( nameEnd == recordOffset + SHEET_RECORD_BYTES )
+            throwDecodeError( provenance, wxS( "unterminated sheet name" ) );
+
+        std::vector<uint8_t> nameBytes( aBytes.begin() + recordOffset + nameOffset, aBytes.begin() + nameEnd );
+        SOURCE_PROVENANCE    nameSource = provenance;
+        nameSource.absoluteOffset += nameOffset;
+        nameSource.length = nameBytes.size();
+
+        MODEL_SHEET sheet;
+        sheet.id = SHEET_ID( cursor.U16At( recordOffset + 8 ) );
         sheet.index = index;
         sheet.source = provenance;
-        sheet.name.source = provenance;
+        sheet.name = DecodeString( nameBytes, DEFAULT_CODE_PAGE, nameSource, model.diagnostics );
+
+        if( sheet.name.text.empty() )
+            sheet.name.text = wxS( "$$$NONE" );
+
+        sheet.pageSize = model.settings.pageSize;
+        sheet.defaultLineWidth = model.settings.defaultLineWidth;
+        sheet.defaultBusWidth = model.settings.defaultBusWidth;
+        sheet.titleBlockFields = titleFields;
+
+        auto title = std::ranges::find_if( sheet.titleBlockFields,
+                                           []( const MODEL_FIELD& aField )
+                                           {
+                                               return aField.name.text == wxS( "Title" );
+                                           } );
+
+        if( title != sheet.titleBlockFields.end() )
+            sheet.title = title->value;
+
+        for( MODEL_FIELD& field : sheet.titleBlockFields )
+        {
+            field.source.sheet = static_cast<int>( index );
+            field.name.source.sheet = static_cast<int>( index );
+            field.value.source.sheet = static_cast<int>( index );
+            field.presentation.source.sheet = static_cast<int>( index );
+        }
+
         model.sheets.push_back( std::move( sheet ) );
+    }
+
+    if( model.version == 0x000D )
+    {
+        size_t sheetIndex = 0;
+
+        for( const SCH_SDB_BLOCK& block : sdb.Blocks() )
+        {
+            if( block.kind != SCH_SDB_BLOCK_KIND::SHEET )
+                continue;
+
+            size_t   descriptors = block.offset + SHEET_HEADER_BYTES;
+            size_t   payload = descriptors + SHEET_DESCRIPTOR_COUNT * SHEET_DESCRIPTOR_BYTES;
+            uint32_t textCount = cursor.U32At( descriptors + SHEET_COUNT_OFFSET );
+            uint32_t textBytes = cursor.U32At( descriptors + SHEET_USED_BYTES_OFFSET );
+            uint32_t heapBytes = cursor.U32At( descriptors + SHEET_DESCRIPTOR_BYTES + SHEET_USED_BYTES_OFFSET );
+
+            SOURCE_PROVENANCE controllerSource = sourceAt( aSourceName, model.version, wxS( "text controller" ), 1, 0,
+                                                           payload, textBytes, static_cast<int>( sheetIndex ) );
+
+            if( textBytes != textCount * TEXT_RECORD_BYTES )
+                throwDecodeError( controllerSource,
+                                  wxS( "text-controller byte count does not match 32-byte records" ) );
+
+            size_t heapOffset = payload + textBytes;
+
+            for( size_t record = 0; record < textCount; ++record )
+            {
+                size_t recordOffset = payload + record * TEXT_RECORD_BYTES;
+
+                if( cursor.U16At( recordOffset + 24 ) != cursor.U16At( recordOffset + 26 ) )
+                    continue;
+
+                SOURCE_PROVENANCE textSource =
+                        sourceAt( aSourceName, model.version, wxS( "free text" ), 1, record, recordOffset,
+                                  TEXT_RECORD_BYTES, static_cast<int>( sheetIndex ) );
+                uint32_t stringOffset = cursor.U32At( recordOffset + 8 );
+                uint16_t stringBytes = cursor.U16At( recordOffset + 20 );
+
+                if( stringBytes == 0 || stringOffset > heapBytes || stringBytes > heapBytes - stringOffset
+                    || aBytes[heapOffset + stringOffset + stringBytes - 1] != 0 )
+                {
+                    throwDecodeError( textSource, wxS( "free-text string reference leaves controller 2" ) );
+                }
+
+                SOURCE_PROVENANCE stringSource =
+                        sourceAt( aSourceName, model.version, wxS( "free text string" ), 2, record,
+                                  heapOffset + stringOffset, stringBytes - 1, static_cast<int>( sheetIndex ) );
+                std::vector<uint8_t> string( aBytes.begin() + stringSource.absoluteOffset,
+                                             aBytes.begin() + stringSource.absoluteOffset + stringSource.length );
+                uint16_t             justification = cursor.U16At( recordOffset + 18 );
+
+                MODEL_TEXT text;
+                text.source = textSource;
+                text.sheet = { model.sheets[sheetIndex].id, textSource };
+                text.text = DecodeString( string, DEFAULT_CODE_PAGE, stringSource, model.diagnostics );
+                text.position = { decodeCoordinate( cursor.U16At( recordOffset + 12 ) ),
+                                  decodeCoordinate( cursor.U16At( recordOffset + 14 ) ), textSource };
+                text.angle = NormalizeAngle( cursor.U16At( recordOffset + 16 ) );
+                text.presentation.source = textSource;
+                text.presentation.height = static_cast<int64_t>( cursor.U16At( recordOffset + 22 ) ) * 2;
+                text.presentation.width = static_cast<int64_t>( cursor.U16At( recordOffset + 30 ) ) * 2;
+                text.presentation.horizontalJustification =
+                        horizontalJustification( justification, textSource, model.diagnostics );
+                text.presentation.verticalJustification = verticalJustification( justification );
+                model.texts.push_back( std::move( text ) );
+            }
+
+            ++sheetIndex;
+        }
     }
 
     model.ValidateOrThrow();

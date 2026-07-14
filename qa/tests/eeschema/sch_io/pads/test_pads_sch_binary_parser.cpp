@@ -52,6 +52,47 @@ static std::vector<uint8_t> loadMinimalV13()
 }
 
 
+static std::vector<uint8_t> loadBinaryFixture( const std::string& aName )
+{
+    std::ifstream file( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/" + aName, std::ios::binary );
+    BOOST_REQUIRE( file );
+    return { std::istreambuf_iterator<char>( file ), std::istreambuf_iterator<char>() };
+}
+
+
+static uint32_t readU32( const std::vector<uint8_t>& aBytes, size_t aOffset )
+{
+    return static_cast<uint32_t>( aBytes[aOffset] ) | ( static_cast<uint32_t>( aBytes[aOffset + 1] ) << 8 )
+           | ( static_cast<uint32_t>( aBytes[aOffset + 2] ) << 16 )
+           | ( static_cast<uint32_t>( aBytes[aOffset + 3] ) << 24 );
+}
+
+
+static void writeU16( std::vector<uint8_t>& aBytes, size_t aOffset, uint16_t aValue )
+{
+    aBytes[aOffset] = static_cast<uint8_t>( aValue );
+    aBytes[aOffset + 1] = static_cast<uint8_t>( aValue >> 8 );
+}
+
+
+static void writeU32( std::vector<uint8_t>& aBytes, size_t aOffset, uint32_t aValue )
+{
+    writeU16( aBytes, aOffset, static_cast<uint16_t>( aValue ) );
+    writeU16( aBytes, aOffset + 2, static_cast<uint16_t>( aValue >> 16 ) );
+}
+
+
+static size_t outerControllerOffset( const std::vector<uint8_t>& aBytes, size_t aController )
+{
+    size_t offset = 0x254;
+
+    for( size_t controller = 1; controller < aController; ++controller )
+        offset += readU32( aBytes, 0x20 + controller * 28 + 12 );
+
+    return offset;
+}
+
+
 static std::string canonicalModel( const PADS_SCH_MODEL& aModel )
 {
     std::ostringstream out;
@@ -913,6 +954,159 @@ static bool snapshotsMatch( std::vector<CANONICAL_SEMANTIC_RECORD> aExpected,
 BOOST_AUTO_TEST_SUITE( PadsSchBinaryParser )
 
 
+BOOST_AUTO_TEST_CASE( GlobalsAndSheets )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    PADS_SCH_MODEL         minimal = parser.Parse( loadBinaryFixture( "minimal_v13.sch" ), wxS( "minimal_v13.sch" ) );
+
+    BOOST_CHECK_EQUAL( minimal.version, 0x000D );
+    BOOST_CHECK_EQUAL( minimal.subversion, 0 );
+    BOOST_CHECK_EQUAL( minimal.settings.codePage, 1252 );
+    BOOST_CHECK_EQUAL( minimal.settings.coordinateUnitsPerMil, 2 );
+    BOOST_CHECK_EQUAL( minimal.settings.pageSize.x, 34000 );
+    BOOST_CHECK_EQUAL( minimal.settings.pageSize.y, 22000 );
+    BOOST_CHECK_EQUAL( minimal.settings.defaultLineWidth, 20 );
+    BOOST_CHECK_EQUAL( minimal.settings.defaultBusWidth, 50 );
+    BOOST_REQUIRE_EQUAL( minimal.sheets.size(), 1 );
+    BOOST_CHECK_EQUAL( minimal.sheets[0].id.Value(), 1 );
+    BOOST_CHECK_EQUAL( minimal.sheets[0].index, 0 );
+    BOOST_CHECK_EQUAL( minimal.sheets[0].name.text, wxS( "$$$NONE" ) );
+    BOOST_CHECK( !minimal.sheets[0].parent );
+    BOOST_CHECK_EQUAL( minimal.sheets[0].pageSize.x, 34000 );
+    BOOST_CHECK_EQUAL( minimal.sheets[0].defaultLineWidth, 20 );
+    BOOST_REQUIRE_EQUAL( minimal.sheets[0].titleBlockFields.size(), 14 );
+    BOOST_CHECK_EQUAL( minimal.sheets[0].titleBlockFields.front().name.text, wxS( "Drawn By" ) );
+    BOOST_CHECK_EQUAL( minimal.sheets[0].titleBlockFields.back().name.text, wxS( "Scale" ) );
+
+    PADS_SCH_MODEL multisheet =
+            parser.Parse( loadBinaryFixture( "multisheet_connectivity.sch" ), wxS( "multisheet_connectivity.sch" ) );
+    BOOST_REQUIRE_EQUAL( multisheet.sheets.size(), 2 );
+    BOOST_CHECK_EQUAL( multisheet.sheets[0].id.Value(), 1 );
+    BOOST_CHECK_EQUAL( multisheet.sheets[1].id.Value(), 2 );
+    BOOST_CHECK_EQUAL( multisheet.sheets[0].name.text, wxS( "[1]DUP/SAFE:*" ) );
+    BOOST_CHECK_EQUAL( multisheet.sheets[1].name.text, wxS( "[2]DUP/SAFE:*" ) );
+    BOOST_CHECK_LT( multisheet.sheets[0].source.absoluteOffset, multisheet.sheets[1].source.absoluteOffset );
+    BOOST_CHECK( !multisheet.sheets[0].parent );
+    BOOST_CHECK( !multisheet.sheets[1].parent );
+}
+
+
+BOOST_AUTO_TEST_CASE( FreeText )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    PADS_SCH_MODEL         model = parser.Parse( loadBinaryFixture( "text_encoding.sch" ), wxS( "text_encoding.sch" ) );
+
+    BOOST_REQUIRE_EQUAL( model.texts.size(), 1 );
+    const MODEL_TEXT& text = model.texts.front();
+    BOOST_CHECK_EQUAL( text.sheet.id.Value(), 1 );
+    BOOST_CHECK_EQUAL( text.text.text, wxS( "ascii-text cafe=" ) );
+    BOOST_CHECK_EQUAL( text.text.raw.size(), 16 );
+    BOOST_CHECK( text.text.encoding == STRING_ENCODING_STATUS::CODE_PAGE );
+    BOOST_CHECK_EQUAL( text.text.codePage, 1252 );
+    BOOST_CHECK_EQUAL( text.position.x, 20200 );
+    BOOST_CHECK_EQUAL( text.position.y, 14000 );
+    BOOST_CHECK_EQUAL( text.angle, 0 );
+    BOOST_CHECK_EQUAL( text.presentation.height, 194 );
+    BOOST_CHECK_EQUAL( text.presentation.width, 20 );
+    BOOST_CHECK( text.presentation.horizontalJustification == MODEL_JUSTIFICATION::LEFT );
+    BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::RIGHT );
+    BOOST_CHECK_EQUAL( text.source.objectClass, wxS( "free text" ) );
+    BOOST_CHECK_EQUAL( text.source.controller, 1 );
+    BOOST_CHECK_EQUAL( text.text.source.controller, 2 );
+    BOOST_CHECK_EQUAL( text.source.sheet, 0 );
+
+    PADS_SCH::PADS_SCH_PARSER ascii;
+    BOOST_REQUIRE( ascii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/text_encoding.txt" ) );
+    std::vector<CANONICAL_SEMANTIC_RECORD> expected = normalizeAsciiModel( ascii );
+    std::vector<CANONICAL_SEMANTIC_RECORD> actual = normalizeBinaryModel( model );
+    auto retainTask7Properties = []( std::vector<CANONICAL_SEMANTIC_RECORD>& aRecords )
+    {
+        std::erase_if( aRecords,
+                       []( const CANONICAL_SEMANTIC_RECORD& aRecord )
+                       {
+                           return aRecord.kind != CANONICAL_KIND::SETTINGS && aRecord.kind != CANONICAL_KIND::SHEET
+                                  && ( aRecord.kind != CANONICAL_KIND::TEXT
+                                       || aRecord.stableKey != "ascii-text cafe=" );
+                       } );
+
+        for( CANONICAL_SEMANTIC_RECORD& record : aRecords )
+        {
+            if( record.kind != CANONICAL_KIND::TEXT )
+                continue;
+
+            std::erase_if( record.properties,
+                           []( const auto& aProperty )
+                           {
+                               return aProperty.first != "owner_sheet" && aProperty.first != "visible";
+                           } );
+        }
+    };
+    retainTask7Properties( expected );
+    retainTask7Properties( actual );
+    BOOST_CHECK( snapshotsMatch( expected, actual ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( TextEncodingWarnings )
+{
+    SOURCE_PROVENANCE              source{ wxS( "text_encoding.sch" ), 0x000D, wxS( "free text" ), 2, 0, 0x6250, 2, 0 };
+    std::vector<PARSER_DIAGNOSTIC> diagnostics;
+    SOURCE_STRING unknown = PADS_SCH_BINARY_PARSER::DecodeString( { 0x41, 0xE9 }, 932, source, diagnostics );
+    SOURCE_STRING invalid = PADS_SCH_BINARY_PARSER::DecodeString( { 0xC3, 0x28 }, 65001, source, diagnostics );
+
+    BOOST_CHECK( unknown.encoding == STRING_ENCODING_STATUS::UNKNOWN_CODE_PAGE );
+    BOOST_CHECK_EQUAL( unknown.raw[1], 0xE9 );
+    BOOST_CHECK_EQUAL( unknown.text[1].GetValue(), 0xFFFD );
+    BOOST_CHECK( invalid.encoding == STRING_ENCODING_STATUS::INVALID_BYTES );
+    BOOST_REQUIRE_EQUAL( diagnostics.size(), 2 );
+    BOOST_CHECK_EQUAL( diagnostics[0].source.absoluteOffset, 0x6250 );
+    BOOST_CHECK( diagnostics[0].message.Contains( wxS( "code page 932" ) ) );
+    BOOST_CHECK( diagnostics[1].message.Contains( wxS( "invalid UTF-8" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( GlobalRecordCorruption )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    std::vector<uint8_t>   duplicate = loadBinaryFixture( "multisheet_connectivity.sch" );
+    size_t                 sheetIndex = outerControllerOffset( duplicate, 3 );
+    writeU16( duplicate, sheetIndex + 48 + 8, 1 );
+    BOOST_CHECK_EXCEPTION( parser.Parse( duplicate, wxS( "duplicate.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "duplicate sheet ID 1" ) )
+                                      && aError.What().Contains( wxS( "controller 3" ) );
+                           } );
+
+    std::vector<uint8_t> wrongClassBytes = loadMinimalV13();
+    sheetIndex = outerControllerOffset( wrongClassBytes, 3 );
+    writeU32( wrongClassBytes, sheetIndex, static_cast<uint32_t>( outerControllerOffset( wrongClassBytes, 5 ) ) );
+    BOOST_CHECK_EXCEPTION( parser.Parse( wrongClassBytes, wxS( "wrong-class.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "references the wrong SDB object class" ) )
+                                      && aError.What().Contains( wxS( "controller 3" ) );
+                           } );
+
+    PADS_SCH_MODEL    wrongClass = parser.Parse( loadMinimalV13(), wxS( "wrong-class.sch" ) );
+    SOURCE_PROVENANCE refSource{ wxS( "wrong-class.sch" ), 0x000D, wxS( "free text" ), 1, 0, 0x100, 32, 0 };
+    wrongClass.texts.push_back( { refSource, { SHEET_ID( 99 ), refSource } } );
+    BOOST_CHECK_EXCEPTION( wrongClass.ValidateOrThrow(), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "unresolved text sheet reference" ) );
+                           } );
+
+    PADS_SCH_MODEL cycle = parser.Parse( loadMinimalV13(), wxS( "cycle.sch" ) );
+    cycle.sheets[0].parent = SHEET_REFERENCE{ cycle.sheets[0].id, cycle.sheets[0].source };
+    BOOST_CHECK_EXCEPTION( cycle.ValidateOrThrow(), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "cyclic sheet hierarchy" ) );
+                           } );
+}
+
+
 BOOST_AUTO_TEST_CASE( ModelContract )
 {
     static_assert( !std::is_same_v<SHEET_ID, PLACEMENT_ID> );
@@ -928,7 +1122,7 @@ BOOST_AUTO_TEST_CASE( ModelContract )
     BOOST_CHECK( first.AllReferencesResolved() );
     BOOST_CHECK( first.HasUniqueTypedIds() );
     BOOST_CHECK_EQUAL( first.sheets[0].index, 0 );
-    BOOST_CHECK_EQUAL( first.sheets[0].id.Value(), 0 );
+    BOOST_CHECK_EQUAL( first.sheets[0].id.Value(), 1 );
     BOOST_CHECK_EQUAL( first.sheets[0].source.file, wxS( "minimal_v13.sch" ) );
     BOOST_CHECK_GT( first.sheets[0].source.length, 0 );
     BOOST_CHECK_EQUAL( first.sheets[0].source.version, 0x000D );

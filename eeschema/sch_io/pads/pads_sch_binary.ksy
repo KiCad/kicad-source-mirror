@@ -100,15 +100,18 @@ types:
       - id: ordinal
         type: u4
         valid: 0x24
-      - id: controller_payload_1
+      - id: global_string_pool
+        type: nul_terminated_string_pool
         size: _root.pool_directory[1].used_bytes
       - id: controller_payload_2
         size: _root.pool_directory[2].used_bytes
-      - id: controller_payload_3
+      - id: sheet_index
+        type: sheet_index_controller(_root.pool_directory[3].used_count)
         size: _root.pool_directory[3].used_bytes
       - id: controller_payload_4
         size: _root.pool_directory[4].used_bytes
-      - id: controller_payload_5
+      - id: design_settings
+        type: design_settings_record
         size: _root.pool_directory[5].used_bytes
       - id: controller_payload_6
         size: _root.pool_directory[6].used_bytes
@@ -138,6 +141,115 @@ types:
         size: _root.pool_directory[18].used_bytes
       - id: controller_payload_19
         size: _root.pool_directory[19].used_bytes
+
+  nul_terminated_string_pool:
+    seq:
+      - id: strings
+        type: strz
+        encoding: windows-1252
+        repeat: eos
+
+  sheet_index_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: sheet_index_record
+        repeat: expr
+        repeat-expr: num_records
+
+  sheet_index_record:
+    seq:
+      - id: sheet_database_offset
+        type: u4
+      - id: sheet_database_bytes
+        type: u4
+      - id: sheet_id
+        type: u2
+        valid:
+          min: 1
+      - id: class_marker_1
+        contents: [0xff, 0xff]
+      - id: class_marker_2
+        contents: [0xff, 0xff]
+      - id: sheet_name_storage
+        type: strz
+        encoding: windows-1252
+        size: 34
+
+  design_settings_record:
+    seq:
+      - id: active_sheet
+        type: u4
+      - id: user_grid_mils
+        type: u4
+      - id: text_grid_mils
+        type: u4
+      - id: default_line_width_mils
+        type: u4
+      - id: default_bus_width_mils
+        type: u4
+      - id: bus_angle
+        type: u4
+      - id: preserved_design_settings_18
+        size: 12
+      - id: pin_name_height_mils
+        type: u2
+      - id: pin_name_width_mils
+        type: u2
+      - id: text_height_mils
+        type: u2
+      - id: text_width_mils
+        type: u2
+      - id: preserved_design_settings_2c
+        size: 220
+      - id: page_size_storage
+        size: 11
+        doc: Fixed slot containing either SIZE<X> NUL or WDITBSIZE<X> NUL.
+      - id: preserved_design_settings_113
+        size: 125
+
+  sheet_text_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: sheet_text_record
+        repeat: expr
+        repeat-expr: num_records
+
+  sheet_text_record:
+    seq:
+      - id: link_state
+        type: u2
+      - id: object_state
+        type: u2
+      - id: owner_state
+        type: u4
+      - id: string_heap_offset
+        type: u4
+      - id: x_biased_half_mil
+        type: u2
+      - id: y_biased_half_mil
+        type: u2
+      - id: angle_tenths_degree
+        type: u2
+      - id: justification
+        type: u2
+      - id: string_bytes_including_nul
+        type: u2
+      - id: height_mils
+        type: u2
+      - id: predecessor_ordinal
+        type: u2
+      - id: successor_ordinal
+        type: u2
+      - id: presentation_flags
+        type: u2
+      - id: line_width_mils
+        type: u2
 
   sheet_pool_descriptor:
     seq:
@@ -176,9 +288,10 @@ types:
         type: sheet_pool_descriptor
         repeat: expr
         repeat-expr: 24
-      - id: controller_payload_1
+      - id: text_and_presentation_records
+        type: sheet_text_controller(pool_directory[0].used_count)
         size: pool_directory[0].used_bytes
-      - id: controller_payload_2
+      - id: indexed_string_heap
         size: pool_directory[1].used_bytes
       - id: controller_payload_3
         size: pool_directory[2].used_bytes
