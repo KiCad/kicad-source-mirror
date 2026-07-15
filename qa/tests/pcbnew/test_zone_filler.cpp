@@ -3644,6 +3644,69 @@ BOOST_FIXTURE_TEST_CASE( RegressionSameNetMergeAroundHigherPriorityZone, ZONE_FI
 }
 
 
+// Issue 24935: a lower-priority same-net zone must not pour through the hatch windows of a
+// higher-priority hatched zone during the iterative refill.
+BOOST_FIXTURE_TEST_CASE( RegressionHatchedZonePriorityRefill, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    struct ScopeGuard
+    {
+        bool& ref;
+        bool  orig;
+        ~ScopeGuard() { ref = orig; }
+    } guard{ cfg.m_ZoneFillIterativeRefill, cfg.m_ZoneFillIterativeRefill };
+
+    for( bool iterative : { true, false } )
+    {
+        cfg.m_ZoneFillIterativeRefill = iterative;
+
+        KI_TEST::LoadBoard( m_settingsManager, "issue24935/issue24935", m_board );
+        KI_TEST::FillZones( m_board.get() );
+
+        const PCB_LAYER_ID layer = F_Cu;
+        ZONE*              hatched = nullptr;
+        ZONE*              solid = nullptr;
+
+        for( ZONE* zone : m_board->Zones() )
+        {
+            if( zone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
+                hatched = zone;
+            else
+                solid = zone;
+        }
+
+        BOOST_REQUIRE( hatched && solid );
+        BOOST_REQUIRE( hatched->GetAssignedPriority() > solid->GetAssignedPriority() );
+        BOOST_REQUIRE( hatched->SameNet( solid ) );
+        BOOST_REQUIRE( hatched->HasFilledPolysForLayer( layer ) );
+        BOOST_REQUIRE( solid->HasFilledPolysForLayer( layer ) );
+
+        const double mm2 = pcbIUScale.IU_PER_MM * (double) pcbIUScale.IU_PER_MM;
+
+        // Guard against a degenerate fixture: the hatch must leave most of its outline open,
+        // otherwise the containment check below proves nothing.
+        SHAPE_POLY_SET hatchedFill = hatched->GetFilledPolysList( layer )->CloneDropTriangulation();
+        SHAPE_POLY_SET hatchedOutline = hatched->Outline()->CloneDropTriangulation();
+        BOOST_REQUIRE( hatchedFill.Area() < 0.8 * hatchedOutline.Area() );
+
+        // The lower-priority zone owns nothing inside the hatched zone's outline.
+        SHAPE_POLY_SET window = hatchedOutline;
+        window.Deflate( pcbIUScale.mmToIU( 0.05 ), CORNER_STRATEGY::CHAMFER_ALL_CORNERS, ARC_HIGH_DEF );
+
+        SHAPE_POLY_SET leaked = solid->GetFilledPolysList( layer )->CloneDropTriangulation();
+        leaked.BooleanIntersection( window );
+
+        double leakedArea = leaked.Area() / mm2;
+
+        BOOST_CHECK_MESSAGE( leakedArea < 0.01,
+                             wxString::Format( "%s: lower-priority zone poured %.3f mm^2 inside the "
+                                               "higher-priority hatched zone (issue 24935).",
+                                               iterative ? wxS( "iterative refill" ) : wxS( "single pass" ),
+                                               leakedArea ) );
+    }
+}
+
+
 // Issue 24758: this board is densely tiled with same-net zones, so the zone-fill dependency-DAG
 // scheduler builds a large successor graph.  The scheduler returned once its logical work counter
 // reached zero while detached worker tasks -- which captured the successor/in-degree vectors by
