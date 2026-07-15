@@ -804,12 +804,12 @@ void CONSTRAINT_EDIT_TOOL::updateConstraintInfoBar( const BOARD_CONSTRAINT_DIAGN
     bool     overConstrained = false;
     wxString summary = ConstraintStateSummary( aDiag, &overConstrained );
 
-    // Re-show when the text changes, or when we need to (re)claim the bar; gating on the text keeps
-    // editing from re-animating the bar each frame.
-    if( summary != m_infoBarSummary || !ours )
+    // Re-show when the text changes, when we need to (re)claim the bar, or once it has auto-hidden.
+    // Gating on the text keeps editing from re-animating the bar each frame.
+    if( summary != m_infoBarSummary || !ours || !infoBar->IsShown() )
     {
-        infoBar->ShowMessage( summary, overConstrained ? wxICON_WARNING : wxICON_INFORMATION,
-                              WX_INFOBAR::MESSAGE_TYPE::CONSTRAINT_DIAGNOSTICS );
+        infoBar->ShowMessageFor( summary, 8000, overConstrained ? wxICON_WARNING : wxICON_INFORMATION,
+                                 WX_INFOBAR::MESSAGE_TYPE::CONSTRAINT_DIAGNOSTICS );
         m_infoBarSummary = summary;
     }
 }
