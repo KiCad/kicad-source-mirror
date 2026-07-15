@@ -1074,11 +1074,11 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
             break;
 
         case wxAUI_DOCK_LEFT:
-            // Left toolbars need to shift the palette window up by the toolbar padding
+            // Left toolbars open the palette to the right, with a small extra nudge so it does not
+            // paint over the toolbar icon that opened it.
             dir = false;                               // Buttons are horizontal in the palette
             pos = ClientToScreen( toolRect.GetTopRight() );
-            pos += wxPoint( m_rightPadding,            // Shift right to move away from the toolbar
-                            -( PALETTE_BORDER ) );     // Shift up to align the button tops
+            pos += wxPoint( m_rightPadding + PALETTE_BORDER, 0 );
             break;
 
         case wxAUI_DOCK_RIGHT:
@@ -1087,9 +1087,9 @@ void ACTION_TOOLBAR::popupPalette( wxAuiToolBarItem* aItem )
             dir = false;                                // Buttons are horizontal in the palette
             pos = ClientToScreen( toolRect.GetTopLeft() );
 
-            // Shift left by the entire length of the palette.
-            pos += wxPoint( -( paletteLongDim + m_leftPadding ),
-                            -( PALETTE_BORDER  ) );                // Shift up to align the button
+            // Shift left by the palette length, with a small extra nudge so it does not paint over
+            // the toolbar icon that opened it.
+            pos += wxPoint( -( paletteLongDim + m_leftPadding + PALETTE_BORDER ), 0 );
             break;
     }
 

@@ -1039,46 +1039,151 @@ int CONSTRAINT_EDIT_TOOL::AddConstraint( const TOOL_EVENT& aEvent )
     std::unique_ptr<PCB_CONSTRAINT> constraint =
             BuildConstraintFromItems( constraintParent(), type, items );
 
-    // The context menu gates each entry by selection, but the same actions are reachable from the
-    // command palette and user hotkeys, so an unbuildable selection needs an explanation here.
+    // A valid selection builds right away (the context-menu path).  Otherwise drop into click-to-pick
+    // so the toolbar and hotkeys can author a constraint by clicking the items on the canvas.
     if( !constraint )
-    {
-        if( frame() )
-        {
-            frame()->ShowInfoBarWarning(
-                    wxString::Format( _( "Cannot form constraint type %s from the current selection." ),
-                                      ConstraintTypeLabel( type ) ) );
-        }
+        return pickShapeConstraint( type, aEvent );
 
-        return 0;
-    }
+    commitConstraint( std::move( constraint ) );
+    return 0;
+}
 
-    if( isDuplicateConstraint( constraint.get() ) )
+
+bool CONSTRAINT_EDIT_TOOL::commitConstraint( std::unique_ptr<PCB_CONSTRAINT> aConstraint )
+{
+    if( !aConstraint )
+        return false;
+
+    if( isDuplicateConstraint( aConstraint.get() ) )
     {
         if( frame() )
             frame()->ShowInfoBarWarning( _( "An identical geometric constraint already exists." ) );
 
-        return 0;
+        return false;
     }
 
     // For a dimensional constraint, let the user confirm/override the measured value and choose
     // driving vs reference (issue #2329 step 7).
-    if( constraint->HasValue() )
+    if( aConstraint->HasValue() )
     {
-        DIALOG_CONSTRAINT_VALUE dlg( frame(), type, *constraint->GetValue(), constraint->IsDriving() );
+        DIALOG_CONSTRAINT_VALUE dlg( frame(), aConstraint->GetConstraintType(), *aConstraint->GetValue(),
+                                     aConstraint->IsDriving() );
 
         if( dlg.ShowModal() != wxID_OK )
-            return 0;
+            return false;
 
-        constraint->SetValue( dlg.GetConstraintValue() );
-        constraint->SetDriving( dlg.GetDriving() );
+        aConstraint->SetValue( dlg.GetConstraintValue() );
+        aConstraint->SetDriving( dlg.GetDriving() );
     }
 
-    PCB_CONSTRAINT* added = constraint.get();
+    PCB_CONSTRAINT* added = aConstraint.get();
 
     BOARD_COMMIT commit( this );
-    commit.Add( constraint.release() );
+    commit.Add( aConstraint.release() );
     finishConstraintCommit( commit, { added } );
+
+    return true;
+}
+
+
+int CONSTRAINT_EDIT_TOOL::pickShapeConstraint( PCB_CONSTRAINT_TYPE aType, const TOOL_EVENT& aEvent )
+{
+    int  count = 2;
+    bool allowCircle = false;
+
+    switch( aType )
+    {
+    case PCB_CONSTRAINT_TYPE::HORIZONTAL:
+    case PCB_CONSTRAINT_TYPE::VERTICAL:
+    case PCB_CONSTRAINT_TYPE::FIXED_LENGTH:
+        count = 1;
+        allowCircle = false;
+        break;
+    case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:
+    case PCB_CONSTRAINT_TYPE::ARC_ANGLE:
+        count = 1;
+        allowCircle = true;
+        break;
+    case PCB_CONSTRAINT_TYPE::TANGENT:
+    case PCB_CONSTRAINT_TYPE::CONCENTRIC:
+    case PCB_CONSTRAINT_TYPE::EQUAL_RADIUS:
+        count = 2;
+        allowCircle = true;
+        break;
+    default:
+        count = 2;
+        allowCircle = false;
+        break;
+    }
+
+    PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
+
+    if( !picker )
+        return 0;
+
+    std::vector<KIID> picked;
+    const double      snapTol = pcbIUScale.mmToIU( 1.0 );
+
+    Activate();
+    picker->SetCursor( KICURSOR::BULLSEYE );
+    picker->SetSnapping( true );
+    picker->ClearHandlers();
+
+    picker->SetClickHandler(
+            [&]( const VECTOR2D& aPoint ) -> bool
+            {
+                VECTOR2I            pos( KiROUND( aPoint.x ), KiROUND( aPoint.y ) );
+                std::optional<KIID> target = nearestOutline( board(), pos, snapTol, allowCircle );
+
+                if( !target || alg::contains( picked, *target ) )
+                    return true; // nothing new snapped, keep picking
+
+                picked.push_back( *target );
+
+                if( static_cast<int>( picked.size() ) < count )
+                    return true; // need more
+
+                std::vector<BOARD_ITEM*> items;
+
+                for( const KIID& id : picked )
+                {
+                    if( BOARD_ITEM* item = board()->ResolveItem( id, true ) )
+                        items.push_back( item );
+                }
+
+                std::unique_ptr<PCB_CONSTRAINT> constraint =
+                        BuildConstraintFromItems( constraintParent(), aType, items );
+
+                if( !constraint && frame() )
+                {
+                    frame()->ShowInfoBarWarning( wxString::Format( _( "Cannot form a %s constraint from those items." ),
+                                                                   ConstraintTypeLabel( aType ) ) );
+                }
+
+                commitConstraint( std::move( constraint ) );
+                picked.clear();
+                return true; // stay active so more can be placed, like the draw tools
+            } );
+
+    bool done = false;
+
+    picker->SetFinalizeHandler(
+            [&]( const int& )
+            {
+                done = true;
+            } );
+
+    m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
+
+    while( !done )
+    {
+        if( TOOL_EVENT* evt = Wait() )
+            evt->SetPassEvent();
+        else
+            break;
+    }
+
+    picker->ClearHandlers();
 
     return 0;
 }

@@ -103,6 +103,12 @@ private:
     void finishConstraintCommit( BOARD_COMMIT& aCommit,
                                  const std::vector<PCB_CONSTRAINT*>& aAdded );
 
+    /// Confirm any value, reject a duplicate, and commit @p aConstraint. Returns true if it was added.
+    bool commitConstraint( std::unique_ptr<PCB_CONSTRAINT> aConstraint );
+
+    /// Author a whole-shape constraint by clicking its items on the canvas (the no-selection path).
+    int pickShapeConstraint( PCB_CONSTRAINT_TYPE aType, const TOOL_EVENT& aEvent );
+
     /// Solve a just-added constraint so the geometry snaps to satisfy it, in its own commit.
     void solveAddedConstraint( PCB_CONSTRAINT* aConstraint );
 
