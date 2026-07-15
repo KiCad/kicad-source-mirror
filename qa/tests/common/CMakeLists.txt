@@ -45,6 +45,7 @@ set( QA_COMMON_SRCS
     test_commit.cpp
     test_coroutine.cpp
     test_design_block_io.cpp
+    test_dialog_shim.cpp
     test_eda_shape.cpp
     test_eda_text.cpp
     test_wx_dataviewctrl.cpp
