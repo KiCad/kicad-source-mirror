@@ -248,7 +248,7 @@ void CONSTRAINT_OVERLAY::render()
     m_overlay->Clear();
     m_badges.clear();
 
-    const COLOR4D underColor( 0.95, 0.62, 0.10, 0.9 );   // amber, free DOF remain
+    const COLOR4D underColor( 0.80, 0.42, 0.02, 0.9 );   // amber, free DOF remain
     const COLOR4D wellColor( 0.18, 0.72, 0.30, 0.9 );    // green, fully constrained
     const COLOR4D overColor( 0.92, 0.18, 0.18, 0.9 );    // red, conflicting / errored
     const double  lineWidth = pcbIUScale.mmToIU( 0.15 );
