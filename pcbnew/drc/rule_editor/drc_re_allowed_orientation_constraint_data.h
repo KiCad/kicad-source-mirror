@@ -57,15 +57,15 @@ public:
         // Format: { xStart, xEnd, yCenter, tabOrder }
         // Checkboxes stacked vertically on the right side
         return {
-            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 52 + DRC_RE_OVERLAY_YO, 1, _( "Allow 0°" ),
+            { 400, 615, 52, 1, _( "Allow 0°" ),
               LABEL_POSITION::RIGHT }, // 0 degrees checkbox
-            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 92 + DRC_RE_OVERLAY_YO, 2, _( "Allow 90°" ),
+            { 400, 615, 92, 2, _( "Allow 90°" ),
               LABEL_POSITION::RIGHT }, // 90 degrees checkbox
-            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 132 + DRC_RE_OVERLAY_YO, 3, _( "Allow 180°" ),
+            { 400, 615, 132, 3, _( "Allow 180°" ),
               LABEL_POSITION::RIGHT }, // 180 degrees checkbox
-            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 172 + DRC_RE_OVERLAY_YO, 4, _( "Allow 270°" ),
+            { 400, 615, 172, 4, _( "Allow 270°" ),
               LABEL_POSITION::RIGHT }, // 270 degrees checkbox
-            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 212 + DRC_RE_OVERLAY_YO, 5, _( "Allow All" ),
+            { 400, 615, 212, 5, _( "Allow All" ),
               LABEL_POSITION::RIGHT }, // all degrees checkbox
         };
     }

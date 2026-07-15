@@ -141,7 +141,7 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionFields()
             continue;
 
         int heightLogical = ctrl->GetBestSize().GetHeight();
-        int widthLogical = FromDIP( pos.xEnd - pos.xStart + DRC_RE_OVERLAY_WE );
+        int widthLogical = FromDIP( pos.xEnd - pos.xStart );
         int xLogical = FromDIP( pos.xStart );
         int yLogical = FromDIP( pos.yCenter ) - heightLogical / 2;
 
