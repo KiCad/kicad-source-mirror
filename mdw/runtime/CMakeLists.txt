@@ -22,6 +22,7 @@ set( MDW_RUNTIME_SRCS
     src/mdw_event_publisher.cpp
     src/mdw_file_io.cpp
     src/mdw_idempotency.cpp
+    src/mdw_lifecycle.cpp
     src/mdw_paging.cpp
     src/mdw_run_backend.cpp
     )
