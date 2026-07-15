@@ -262,30 +262,18 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::ShowFieldError( const wxString& aFieldId )
 }
 
 
-DRC_RE_OVERLAY_FIELD* DRC_RE_BITMAP_OVERLAY_PANEL::AddCheckbox( const wxString& aId,
-                                                                 const DRC_RE_FIELD_POSITION& aPosition )
+DRC_RE_OVERLAY_FIELD* DRC_RE_BITMAP_OVERLAY_PANEL::AddCheckbox( const wxString&              aId,
+                                                                const DRC_RE_FIELD_POSITION& aPosition )
 {
-    wxCheckBox* checkbox = new wxCheckBox( this, wxID_ANY, wxEmptyString );
+    long style = wxALIGN_CENTER_VERTICAL;
 
-    auto field = std::make_unique<DRC_RE_OVERLAY_FIELD>( this, aId, checkbox, aPosition );
-    DRC_RE_OVERLAY_FIELD* fieldPtr = field.get();
+    if( aPosition.labelPosition == LABEL_POSITION::LEFT )
+        style |= wxALIGN_RIGHT;
+    else
+        style |= wxALIGN_LEFT;
 
-    SetupFieldStyling( checkbox );
+    wxCheckBox* checkbox =
+            new wxCheckBox( this, wxID_ANY, aPosition.labelText, wxDefaultPosition, wxDefaultSize, style );
 
-    wxPoint pos( aPosition.xStart, aPosition.yTop );
-    checkbox->SetPosition( pos );
-
-    // Create labels if specified
-    fieldPtr->CreateLabels();
-
-    if( fieldPtr->HasLabel() )
-        PositionLabel( fieldPtr );
-
-    if( fieldPtr->HasPrefixLabel() )
-        PositionPrefixLabel( fieldPtr );
-
-    m_fieldIdMap[aId] = fieldPtr;
-    m_fields.push_back( std::move( field ) );
-
-    return fieldPtr;
+    return AddControl( aId, aPosition, checkbox );
 }
