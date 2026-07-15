@@ -19,6 +19,8 @@ include_directories(
 set( KICAD_SRCS
     dialogs/dialog_destination.cpp
     dialogs/dialog_destination_base.cpp
+    dialogs/dialog_archive_job_settings.cpp
+    dialogs/dialog_archive_job_settings_base.cpp
     dialogs/dialog_copyfiles_job_settings.cpp
     dialogs/dialog_copyfiles_job_settings_base.cpp
     dialogs/dialog_executecommand_job_settings.cpp

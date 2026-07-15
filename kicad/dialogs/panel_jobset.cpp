@@ -20,6 +20,7 @@
 
 #include "panel_jobset.h"
 #include "dialog_destination.h"
+#include "dialog_archive_job_settings.h"
 #include "dialog_copyfiles_job_settings.h"
 #include <wx/aui/auibook.h>
 #include <jobs/jobset.h>
@@ -46,6 +47,7 @@
 
 #include <jobs/job_special_execute.h>
 #include <jobs/job_special_copyfiles.h>
+#include <jobs/job_special_archive.h>
 #include <dialogs/dialog_executecommand_job_settings.h>
 #include <common.h>
 
@@ -685,6 +687,14 @@ bool PANEL_JOBSET::OpenJobOptionsForListItem( size_t aItemIndex )
         {
             JOB_SPECIAL_COPYFILES* specialJob = static_cast<JOB_SPECIAL_COPYFILES*>( job.m_job.get() );
             DIALOG_COPYFILES_JOB_SETTINGS dialog( m_frame, specialJob );
+
+            if( dialog.ShowModal() == wxID_OK )
+                success = true;
+        }
+        else if( job.m_job->GetType() == "special_archive" )
+        {
+            JOB_SPECIAL_ARCHIVE*        specialJob = static_cast<JOB_SPECIAL_ARCHIVE*>( job.m_job.get() );
+            DIALOG_ARCHIVE_JOB_SETTINGS dialog( m_frame, specialJob );
 
             if( dialog.ShowModal() == wxID_OK )
                 success = true;
