@@ -156,24 +156,31 @@ types:
   global_string_controller:
     seq:
       - id: records
-        type: global_string_record
+        type: global_string_record(_io.pos)
         repeat: eos
 
   global_string_record:
+    params:
+      - id: slot_start
+        type: u8
     seq:
-      - id: prefix
-        type: u1
-      - id: body
-        type:
-          switch-on: prefix
-          cases:
-            0x46: title_field_slot
-            _: generic_global_string_tail
+      - id: raw_slot
+        terminator: 0
+        include: true
+    instances:
+      title_field:
+        pos: slot_start
+        type: title_field_slot
+        size: raw_slot.size
+        if: >
+          raw_slot.size >= 6 and raw_slot[0] == 0x46 and raw_slot[1] == 0x69 and
+          raw_slot[2] == 0x65 and raw_slot[3] == 0x6c and raw_slot[4] == 0x64 and
+          raw_slot[5] == 0x0a
 
   title_field_slot:
     seq:
-      - id: field_marker_tail
-        contents: [0x69, 0x65, 0x6c, 0x64, 0x0a]
+      - id: field_marker
+        contents: [0x46, 0x69, 0x65, 0x6c, 0x64, 0x0a]
       - id: name
         type: str
         encoding: windows-1252
@@ -183,12 +190,6 @@ types:
       - id: separator
         contents: [1]
       - id: value
-        type: strz
-        encoding: windows-1252
-
-  generic_global_string_tail:
-    seq:
-      - id: tail
         type: strz
         encoding: windows-1252
 

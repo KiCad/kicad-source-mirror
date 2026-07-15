@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <map>
 #include <ranges>
-#include <set>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -744,15 +743,28 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
             throwValidationError( graphic.sheet.source, wxS( "unresolved page-graphic sheet reference" ) );
     }
 
+    enum class VISIT_STATE : uint8_t
+    {
+        VISITING,
+        COMPLETE
+    };
+    std::unordered_map<uint32_t, VISIT_STATE> visitStates;
+
     for( const MODEL_SHEET& sheet : sheets )
     {
-        std::set<SHEET_ID> ancestors;
-        const MODEL_SHEET* current = &sheet;
+        const MODEL_SHEET*              current = &sheet;
+        std::vector<const MODEL_SHEET*> path;
 
-        while( current->parent )
+        while( current && !visitStates.contains( current->id.Value() ) )
         {
-            if( !ancestors.insert( current->id ).second )
-                throwValidationError( current->source, wxS( "cyclic sheet hierarchy" ) );
+            visitStates.emplace( current->id.Value(), VISIT_STATE::VISITING );
+            path.push_back( current );
+
+            if( !current->parent )
+            {
+                current = nullptr;
+                break;
+            }
 
             auto parent = index.sheets.find( current->parent->id.Value() );
 
@@ -761,6 +773,14 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
 
             current = parent->second;
         }
+
+        if( current && visitStates.at( current->id.Value() ) == VISIT_STATE::VISITING )
+        {
+            throwValidationError( current->source, wxS( "cyclic sheet hierarchy" ) );
+        }
+
+        for( const MODEL_SHEET* visited : path )
+            visitStates[visited->id.Value()] = VISIT_STATE::COMPLETE;
     }
 }
 
@@ -946,14 +966,6 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
         if( title != sheet.titleBlockFields.end() )
             sheet.title = title->value;
 
-        for( MODEL_FIELD& field : sheet.titleBlockFields )
-        {
-            field.source.sheet = static_cast<int>( index );
-            field.name.source.sheet = static_cast<int>( index );
-            field.value.source.sheet = static_cast<int>( index );
-            field.presentation.source.sheet = static_cast<int>( index );
-        }
-
         model.sheets.push_back( std::move( sheet ) );
     }
 
@@ -1006,10 +1018,28 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
             uint32_t          stringOffset = cursor.U32At( recordOffset + 8 );
             uint16_t          stringBytes = cursor.U16At( recordOffset + 20 );
 
-            if( stringBytes == 0 || stringOffset > heapBytes || stringBytes > heapBytes - stringOffset
-                || aBytes[heapOffset + stringOffset + stringBytes - 1] != 0 )
+            if( stringOffset > heapBytes )
             {
-                throwDecodeError( textSource, wxS( "free-text string reference leaves controller 2" ) );
+                SOURCE_PROVENANCE offsetSource = textSource;
+                offsetSource.absoluteOffset += 8;
+                offsetSource.length = 4;
+                throwDecodeError( offsetSource, wxS( "free-text string offset leaves controller 2" ) );
+            }
+
+            if( stringBytes == 0 || stringBytes > heapBytes - stringOffset )
+            {
+                SOURCE_PROVENANCE lengthSource = textSource;
+                lengthSource.absoluteOffset += 20;
+                lengthSource.length = 2;
+                throwDecodeError( lengthSource, wxS( "free-text string length leaves controller 2" ) );
+            }
+
+            if( aBytes[heapOffset + stringOffset + stringBytes - 1] != 0 )
+            {
+                SOURCE_PROVENANCE terminatorSource = sourceAt(
+                        aSourceName, model.version, wxS( "free text string terminator" ), 2, record,
+                        heapOffset + stringOffset + stringBytes - 1, 1, static_cast<int>( sheetIndex ) );
+                throwDecodeError( terminatorSource, wxS( "free-text string is not NUL terminated" ) );
             }
 
             SOURCE_PROVENANCE stringSource =

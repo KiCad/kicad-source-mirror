@@ -30,6 +30,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iterator>
+#include <limits>
 #include <map>
 #include <optional>
 #include <set>
@@ -1044,6 +1045,28 @@ BOOST_AUTO_TEST_CASE( GlobalsAndSheets )
     BOOST_CHECK_LT( multisheet.sheets[0].source.absoluteOffset, multisheet.sheets[1].source.absoluteOffset );
     BOOST_CHECK( !multisheet.sheets[0].parent );
     BOOST_CHECK( !multisheet.sheets[1].parent );
+
+    for( const MODEL_SHEET& sheet : multisheet.sheets )
+    {
+        BOOST_REQUIRE_EQUAL( sheet.titleBlockFields.size(), 14 );
+
+        for( const MODEL_FIELD& field : sheet.titleBlockFields )
+        {
+            BOOST_CHECK_EQUAL( field.source.sheet, -1 );
+            BOOST_CHECK_EQUAL( field.name.source.sheet, -1 );
+            BOOST_CHECK_EQUAL( field.value.source.sheet, -1 );
+            BOOST_CHECK_EQUAL( field.presentation.source.sheet, -1 );
+        }
+
+        BOOST_CHECK_EQUAL( sheet.title.source.sheet, -1 );
+        auto title = std::ranges::find_if( sheet.titleBlockFields,
+                                           []( const MODEL_FIELD& aField )
+                                           {
+                                               return aField.name.text == wxS( "Title" );
+                                           } );
+        BOOST_REQUIRE( title != sheet.titleBlockFields.end() );
+        BOOST_CHECK( sheet.title == title->value );
+    }
 }
 
 
@@ -1069,7 +1092,7 @@ BOOST_AUTO_TEST_CASE( VariableTitleFields )
     }
 
     const size_t firstNonFieldOffset = poolOffset + pool.size();
-    const std::string firstNonField( "BUS0\0", 5 );
+    const std::string firstNonField( "Font Default\0", 13 );
     pool.insert( pool.end(), firstNonField.begin(), firstNonField.end() );
     BOOST_REQUIRE_LE( pool.size(), poolBytes );
     pool.resize( poolBytes, 0 );
@@ -1094,19 +1117,19 @@ BOOST_AUTO_TEST_CASE( VariableTitleFields )
         BOOST_CHECK_EQUAL( field.source.recordIndex, i );
         BOOST_CHECK_EQUAL( field.source.controller, 1 );
         BOOST_CHECK_EQUAL( field.source.version, 0x000D );
-        BOOST_CHECK_EQUAL( field.source.sheet, 0 );
+        BOOST_CHECK_EQUAL( field.source.sheet, -1 );
         BOOST_CHECK_EQUAL( field.source.objectClass, wxS( "title field" ) );
         BOOST_CHECK_EQUAL( field.name.source.absoluteOffset, offsets[i] + 6 );
         BOOST_CHECK_EQUAL( field.name.source.length, expected[i].first.size() );
         BOOST_CHECK_EQUAL( field.name.source.controller, 1 );
         BOOST_CHECK_EQUAL( field.name.source.version, 0x000D );
-        BOOST_CHECK_EQUAL( field.name.source.sheet, 0 );
+        BOOST_CHECK_EQUAL( field.name.source.sheet, -1 );
         BOOST_CHECK_EQUAL( field.value.source.absoluteOffset,
                            offsets[i] + 6 + expected[i].first.size() + 1 );
         BOOST_CHECK_EQUAL( field.value.source.length, expected[i].second.size() );
         BOOST_CHECK_EQUAL( field.value.source.controller, 1 );
         BOOST_CHECK_EQUAL( field.value.source.version, 0x000D );
-        BOOST_CHECK_EQUAL( field.value.source.sheet, 0 );
+        BOOST_CHECK_EQUAL( field.value.source.sheet, -1 );
     }
 
     BOOST_CHECK_EQUAL( model.sheets[0].title.text, wxS( "Variable Title" ) );
@@ -1153,6 +1176,53 @@ BOOST_AUTO_TEST_CASE( FreeText )
     BOOST_CHECK_EQUAL( text.source.controller, 1 );
     BOOST_CHECK_EQUAL( text.text.source.controller, 2 );
     BOOST_CHECK_EQUAL( text.source.sheet, 0 );
+
+    std::vector<uint8_t> cp1252Bytes = loadBinaryFixture( "text_encoding.sch" );
+    cp1252Bytes[text.text.source.absoluteOffset + text.text.source.length - 1] = 0xE9;
+    PADS_SCH_MODEL cp1252 = parser.Parse( cp1252Bytes, wxS( "text_encoding.sch" ) );
+    BOOST_REQUIRE_EQUAL( cp1252.texts.size(), 1 );
+    BOOST_CHECK_EQUAL( cp1252.texts[0].text.raw.back(), 0xE9 );
+    BOOST_CHECK_EQUAL( cp1252.texts[0].text.text.Last().GetValue(), 0x00E9 );
+    BOOST_CHECK( cp1252.texts[0].text.encoding == STRING_ENCODING_STATUS::CODE_PAGE );
+    BOOST_CHECK_EQUAL( cp1252.texts[0].text.codePage, 1252 );
+    BOOST_CHECK_EQUAL( cp1252.texts[0].text.source.absoluteOffset, text.text.source.absoluteOffset );
+    BOOST_CHECK_EQUAL( cp1252.texts[0].text.source.length, text.text.source.length );
+    BOOST_CHECK_EQUAL( cp1252.texts[0].text.source.controller, 2 );
+    BOOST_CHECK_EQUAL( cp1252.texts[0].text.source.version, 0x000D );
+
+    std::vector<uint8_t> invalidOffset = loadBinaryFixture( "text_encoding.sch" );
+    writeU32( invalidOffset, text.source.absoluteOffset + 8, std::numeric_limits<uint32_t>::max() );
+    BOOST_CHECK_EXCEPTION( parser.Parse( invalidOffset, wxS( "invalid-offset.sch" ) ), IO_ERROR,
+                           [&]( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains(
+                                              wxString::Format( wxS( "offset 0x%zX" ),
+                                                                text.source.absoluteOffset + 8 ) )
+                                      && aError.What().Contains( wxS( "string offset leaves controller 2" ) );
+                           } );
+
+    std::vector<uint8_t> invalidLength = loadBinaryFixture( "text_encoding.sch" );
+    writeU16( invalidLength, text.source.absoluteOffset + 20, std::numeric_limits<uint16_t>::max() );
+    BOOST_CHECK_EXCEPTION( parser.Parse( invalidLength, wxS( "invalid-length.sch" ) ), IO_ERROR,
+                           [&]( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains(
+                                              wxString::Format( wxS( "offset 0x%zX" ),
+                                                                text.source.absoluteOffset + 20 ) )
+                                      && aError.What().Contains( wxS( "string length leaves controller 2" ) );
+                           } );
+
+    std::vector<uint8_t> missingNul = loadBinaryFixture( "text_encoding.sch" );
+    const size_t terminatorOffset = text.text.source.absoluteOffset + text.text.source.length;
+    missingNul[terminatorOffset] = 'X';
+    BOOST_CHECK_EXCEPTION( parser.Parse( missingNul, wxS( "missing-nul.sch" ) ), IO_ERROR,
+                           [&]( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains(
+                                              wxString::Format( wxS( "offset 0x%zX" ), terminatorOffset ) )
+                                      && aError.What().Contains( wxS( "not NUL terminated" ) )
+                                      && aError.What().Contains( wxS( "controller 2" ) );
+                           } );
 
     PADS_SCH::PADS_SCH_PARSER ascii;
     BOOST_REQUIRE( ascii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/text_encoding.txt" ) );
@@ -1256,6 +1326,36 @@ BOOST_AUTO_TEST_CASE( GlobalRecordCorruption )
                            []( const IO_ERROR& aError )
                            {
                                return aError.What().Contains( wxS( "cyclic sheet hierarchy" ) );
+                           } );
+
+    PADS_SCH_MODEL longHierarchy;
+    longHierarchy.version = 0x000D;
+    constexpr size_t hierarchySize = 4096;
+    longHierarchy.sheets.reserve( hierarchySize );
+
+    for( size_t i = 0; i < hierarchySize; ++i )
+    {
+        SOURCE_PROVENANCE source{ wxS( "long-hierarchy.sch" ), 0x000D, wxS( "sheet" ), 3, i,
+                                  0x100 + i * 48, 48, static_cast<int>( i ) };
+        MODEL_SHEET sheet;
+        sheet.id = SHEET_ID( i + 1 );
+        sheet.index = i;
+        sheet.source = source;
+
+        if( i > 0 )
+            sheet.parent = SHEET_REFERENCE{ SHEET_ID( i ), source };
+
+        longHierarchy.sheets.push_back( std::move( sheet ) );
+    }
+
+    BOOST_CHECK_NO_THROW( longHierarchy.ValidateOrThrow() );
+    longHierarchy.sheets[0].parent =
+            SHEET_REFERENCE{ longHierarchy.sheets.back().id, longHierarchy.sheets[0].source };
+    BOOST_CHECK_EXCEPTION( longHierarchy.ValidateOrThrow(), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "cyclic sheet hierarchy" ) )
+                                      && aError.What().Contains( wxS( "controller 3" ) );
                            } );
 }
 
