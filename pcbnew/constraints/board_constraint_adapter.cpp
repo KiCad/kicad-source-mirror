@@ -856,6 +856,13 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
                 int len = pushConstant( *constraint->GetValue() );
                 m_gcs->addConstraintP2PDistance( l.p1, l.p2, &m_params[len], tag, constraint->IsDriving() );
                 recordReferenceValue( constraint );
+
+                if( constraint->IsDriving() )
+                {
+                    if( auto it = m_shapeVars.find( members[0].m_item ); it != m_shapeVars.end() )
+                        it->second.fixedLengthParam = len;
+                }
+
                 mapped = true;
             }
 
@@ -1202,6 +1209,25 @@ bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const V
             double radius = m_params[vars.radius];
             targetX = m_params[vars.startX] + dx * radius / len;
             targetY = m_params[vars.startX + 1] + dy * radius / len;
+        }
+    }
+
+    if( auto it = m_shapeVars.find( aDragged.m_item );
+        !aStabilize && it != m_shapeVars.end() && it->second.kind == SHAPE_KIND::SEGMENT
+        && it->second.fixedLengthParam >= 0
+        && ( aDragged.m_anchor == CONSTRAINT_ANCHOR::START || aDragged.m_anchor == CONSTRAINT_ANCHOR::END ) )
+    {
+        const SHAPE_VARS& vars = it->second;
+        int               farX = aDragged.m_anchor == CONSTRAINT_ANCHOR::START ? vars.endX : vars.startX;
+        double            segLen = m_params[vars.fixedLengthParam];
+        double            dx = targetX - m_params[farX];
+        double            dy = targetY - m_params[farX + 1];
+        double            len = std::hypot( dx, dy );
+
+        if( len > 1e-9 && segLen > 1e-9 )
+        {
+            targetX = m_params[farX] + dx * segLen / len;
+            targetY = m_params[farX + 1] + dy * segLen / len;
         }
     }
 

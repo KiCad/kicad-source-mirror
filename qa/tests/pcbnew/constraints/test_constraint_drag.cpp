@@ -302,6 +302,33 @@ BOOST_FIXTURE_TEST_CASE( FixedLengthDragPinsFarEnd, DRAG_FIXTURE )
 }
 
 
+// A fixed-length segment dragged by one end holds the far end even when the cursor is off the length
+// circle.  The far end used to drift to split the pin error between the two ends.
+BOOST_FIXTURE_TEST_CASE( FixedLengthDragOffCircleHoldsFarEnd, DRAG_FIXTURE )
+{
+    PCB_SHAPE* seg = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* len = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+    len->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    len->SetValue( 10.0 * MM );
+    board.Add( len );
+
+    const VECTOR2I start0 = seg->GetStart();
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+
+    // Cursor 20 mm out on +x, off the 10 mm circle.  Far end holds, dragged end lands at {10 mm, 0}.
+    simulateDrag( commit, &board, seg, CONSTRAINT_ANCHOR::END, { 20 * MM, 0 }, &modified );
+
+    BOOST_CHECK_LE( ( seg->GetStart() - start0 ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_LE( std::abs( ( seg->GetEnd() - seg->GetStart() ).EuclideanNorm() - 10.0 * MM ), 5000.0 );
+    BOOST_CHECK_LE( ( seg->GetEnd() - VECTOR2I( 10 * MM, 0 ) ).EuclideanNorm(), 20000.0 );
+
+    commit.Revert();
+}
+
+
 // Dragging one endpoint of a constrained arc holds the circle (centre + radius) and the far
 // endpoint, so only the dragged endpoint sweeps -- the arc does not drift or balloon.
 BOOST_FIXTURE_TEST_CASE( ArcEndpointDragHoldsCircleAndFarEnd, DRAG_FIXTURE )

@@ -204,6 +204,7 @@ private:
         int        arcEndX = -1;       ///< arc end-point.x.
         int        startAngle = -1;    ///< arc start angle (radians).
         int        endAngle = -1;      ///< arc end angle (radians).
+        int                 fixedLengthParam = -1; ///< param index of a driving fixed-length target, or -1.
     };
 
     /// Append a normalized coordinate to the backing store, returning its stable index.
