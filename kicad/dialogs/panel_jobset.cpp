@@ -675,7 +675,7 @@ bool PANEL_JOBSET::OpenJobOptionsForListItem( size_t aItemIndex )
         {
             JOB_SPECIAL_EXECUTE* specialJob = static_cast<JOB_SPECIAL_EXECUTE*>( job.m_job.get() );
 
-            DIALOG_EXECUTECOMMAND_JOB_SETTINGS dialog( m_frame, specialJob );
+            DIALOG_EXECUTECOMMAND_JOB_SETTINGS dialog( m_frame, specialJob, &m_frame->Prj() );
 
             // QuasiModal for Scintilla autocomplete
             if( dialog.ShowQuasiModal() == wxID_OK )
