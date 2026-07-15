@@ -1782,9 +1782,13 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
             }
         }
 
-        cx /= static_cast<double>( ptsCount );
-        cy /= static_cast<double>( ptsCount );
-        ptsCenter = sprintToKicadPos( static_cast<float>( cx ), static_cast<float>( cy ) );
+        // Skip centering when the group contributed no points
+        if( ptsCount > 0 )
+        {
+            cx /= static_cast<double>( ptsCount );
+            cy /= static_cast<double>( ptsCount );
+            ptsCenter = sprintToKicadPos( static_cast<float>( cx ), static_cast<float>( cy ) );
+        }
     }
 
     text->SetLayer( layer );
