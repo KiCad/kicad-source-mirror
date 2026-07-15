@@ -21,6 +21,7 @@
 
 #include <kicommon.h>
 #include <io/kicad/kicad_io_utils.h>
+#include <settings/common_settings.h>
 
 #include <atomic>
 #include <future>
@@ -140,6 +141,22 @@ public:
      */
     std::vector<std::pair<wxString, wxString>> FindStaleAutosaveFiles( const wxString&              aProjectPath,
                                                                        const std::vector<wxString>& aExtensions ) const;
+
+    /**
+     * Enumerate every (autosave, source) pair found under @p aAutosaveRoot for the project
+     * at @p aProjectPath, honoring @p aLocation for name resolution.  The walk terminates on
+     * symlink cycles and refuses to follow links out of @p aAutosaveRoot, so a project
+     * directory that contains a root-escape symlink (e.g. a Wine prefix's dosdevices/z: -> /)
+     * cannot send it walking the whole filesystem.  Exposed as a static entry point so the
+     * traversal can be exercised without the settings singleton.
+     *
+     * Each entry has:
+     *   first  - autosave file path
+     *   second - corresponding source path under the project directory
+     */
+    static std::vector<std::pair<wxString, wxString>>
+    CollectAutosaveFilePairs( const wxString& aAutosaveRoot, const wxString& aProjectPath,
+                              BACKUP_LOCATION aLocation );
 
     /**
      * Remove every autosave file under the project at @p aProjectPath regardless of
