@@ -86,18 +86,48 @@ std::vector<std::string> OrcadParsePageOrder( const std::vector<char>& aData );
 
 /**
  * Parse a 'Views/<folder>/Hierarchy/Hierarchy' stream into block-instance links:
- * block db id -> child folder name.  Used only to name skipped child folders in
+ * block db id -> child folder name.  Used to name skipped child folders in
  * hierarchy warnings (hierarchical designs are converted flat).
  *
  * The stream header is version-fragile, so the reader scans for preambles and
  * backtracks prefix chains (OrcadFindStructureStart), keeping only type-66
  * structures.  Type-66 body: u32, u32 instance db id, u8 inner-frame marker that
- * must equal 0x42, u32, u32, lzt child folder name.  Bad candidates are skipped
- * silently; the scan never throws.
+ * must equal 0x42, u32, u32, lzt child folder name, lzt occurrence reference.
+ * Bad candidates are skipped silently; the scan never throws.
+ *
+ * When aOccurrenceRefs is non-null it receives instance db id -> reference
+ * designator from the second lzt, which occurrence-annotated designs use to
+ * store the real refdes that the placed instance itself leaves as "C?".
  */
 std::map<uint32_t, std::string> OrcadReadHierarchyLinks( const std::vector<char>& aData,
                                                          const std::vector<std::string>& aStrings,
-                                                         const ORCAD_WARN_FN& aWarn );
+                                                         const ORCAD_WARN_FN& aWarn,
+                                                         std::map<uint32_t, std::string>*
+                                                                 aOccurrenceRefs = nullptr );
+
+/**
+ * Parse the root folder 'Hierarchy/Hierarchy' stream into the full occurrence tree:
+ * per-scope part reference designators (keyed by placed-instance db id) and the
+ * hierarchical block occurrences that descend into child schematics, each with its
+ * own nested scope so a schematic reused N times yields N per-occurrence ref sets.
+ *
+ * Returns an empty scope for legacy pre-preamble streams (which are instance-
+ * annotated) and on any parse error (the caller then falls back to the scan-based
+ * OrcadReadHierarchyLinks for the flat root-scope refs).
+ */
+ORCAD_OCC_SCOPE OrcadReadOccurrenceTree( const std::vector<char>& aData,
+                                         const ORCAD_WARN_FN& aWarn );
+
+/**
+ * Parse one v2.0 (pre-2003) 'Views/<folder>/Pages/<page>' stream.  v2.0 uses
+ * short-prefix-only framing (no long prefixes, no FF E4 5C 39 preambles) with u16
+ * string-table indices and a collapsed primitive envelope, but the same record
+ * vocabulary as the modern format.  Throws IO_ERROR on any framing error (the
+ * format has no per-record skip offsets, so recovery is per-page).
+ */
+ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData,
+                                 const std::vector<std::string>& aStrings,
+                                 const ORCAD_WARN_FN& aWarn );
 
 /// True when the page contains hierarchical block instances (DrawnInstance, type 12).
 inline bool OrcadPageHasHierarchyBlocks( const ORCAD_RAW_PAGE& aPage )

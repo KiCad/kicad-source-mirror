@@ -47,6 +47,7 @@
 #include <kiid.h>
 #include <progress_reporter.h>
 
+#include <lib_symbol.h>
 #include <schematic.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
@@ -65,10 +66,18 @@ namespace
 std::vector<char> readStream( const ALTIUM_COMPOUND_FILE& aFile,
                               const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
-    std::vector<char> data( static_cast<size_t>( aEntry->size ) );
+    const CFB::CompoundFileReader& reader = aFile.GetCompoundFileReader();
+
+    // Stream cannot exceed file; corrupt entry claiming more must not drive huge allocation
+    uint64_t size = reader.GetStreamSize( aEntry );
+
+    if( size > reader.GetBufferLen() )
+        THROW_IO_ERROR( wxS( "OrCAD stream size exceeds the compound file" ) );
+
+    std::vector<char> data( static_cast<size_t>( size ) );
 
     if( !data.empty() )
-        aFile.GetCompoundFileReader().ReadFile( aEntry, 0, data.data(), data.size() );
+        reader.ReadFile( aEntry, 0, data.data(), data.size() );
 
     return data;
 }
@@ -218,19 +227,17 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
         design.library = OrcadParseLibrary( readStream( cfbFile, libraryEntry ) );
 
-        // Designs saved before OrCAD 10.x (2003) use a different stream framing.
-        if( design.library.versionMajor < 3 )
+        // Pre-2003 designs use pre-preamble framing; pages via v2 reader, symbol bodies
+        // (v2 cache framing undecoded) synthesized as placeholders
+        bool isV2 = design.library.versionMajor < 3;
+
+        // 'Cache' stream: symbol defs and package pin maps
+        if( isV2 )
         {
-            THROW_IO_ERROR( wxString::Format( _( "This file uses the pre-2003 OrCAD Capture "
-                                                 "format (version %d.%d), which is not "
-                                                 "supported yet." ),
-                                              design.library.versionMajor,
-                                              design.library.versionMinor ) );
+            warnFn( _( "This is a pre-2003 OrCAD design; symbol graphics are synthesized as "
+                       "placeholders (the legacy symbol cache format is not decoded)." ) );
         }
-
-        // -- 'Cache' stream: symbol definitions and package pin maps ------------------
-
-        if( const CFB::COMPOUND_FILE_ENTRY* cacheEntry =
+        else if( const CFB::COMPOUND_FILE_ENTRY* cacheEntry =
                     cfbFile.FindStreamSingleLevel( root, "Cache", true ) )
         {
             OrcadParseCache( readStream( cfbFile, cacheEntry ), design.library.strings, warnFn,
@@ -244,7 +251,7 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
         // 'Packages/<name>' streams: locally modified parts, same framing
         if( const CFB::COMPOUND_FILE_ENTRY* packagesStorage =
-                    cfbFile.FindStreamSingleLevel( root, "Packages", false ) )
+                    !isV2 ? cfbFile.FindStreamSingleLevel( root, "Packages", false ) : nullptr )
         {
             for( const auto& [streamName, entry] : enumChildren( cfbFile, packagesStorage, true ) )
             {
@@ -313,116 +320,161 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         if( rootFolder.empty() )
             rootFolder = folders.front();
 
-        for( const std::string& folder : folders )
-        {
-            if( folder != rootFolder )
-                design.skippedFolders.push_back( folder );
-        }
-
         design.name = design.library.schematicName.empty() ? rootFolder
                                                            : design.library.schematicName;
 
-        // -- page streams under 'Views/<root>/Pages' -----------------------------------
+        // Hierarchical designs split pages across sibling folders linked by block instances;
+        // import all as flat pages (root first) so nothing dropped. Hierarchy streams yield
+        // occurrence designators and block->child-folder links, merged design-wide
+        std::map<uint32_t, std::string> hierarchyLinks;
 
-        const CFB::COMPOUND_FILE_ENTRY* folderEntry = folderEntries[rootFolder];
-        const CFB::COMPOUND_FILE_ENTRY* pagesStorage =
-                cfbFile.FindStreamSingleLevel( folderEntry, "Pages", false );
-
-        std::vector<std::string>                                available;
-        std::map<std::string, const CFB::COMPOUND_FILE_ENTRY*> pageEntries;
-
-        if( pagesStorage )
+        auto parseFolderPages = [&]( const std::string&              aFolderName,
+                                     const CFB::COMPOUND_FILE_ENTRY* aFolderEntry,
+                                     std::vector<ORCAD_RAW_PAGE>&    aOutPages )
         {
-            for( const auto& [pageName, entry] : enumChildren( cfbFile, pagesStorage, true ) )
-            {
-                if( pageEntries.emplace( pageName, entry ).second )
-                    available.push_back( pageName );
-            }
-        }
+            const CFB::COMPOUND_FILE_ENTRY* pagesStorage =
+                    cfbFile.FindStreamSingleLevel( aFolderEntry, "Pages", false );
 
-        // Display order comes from the folder's 'Schematic' stream; fall back to
-        // name order when it is missing or unreadable.
-        std::vector<std::string> ordered;
-        bool                     orderKnown = false;
+            std::vector<std::string>                                available;
+            std::map<std::string, const CFB::COMPOUND_FILE_ENTRY*> pageEntries;
 
-        if( const CFB::COMPOUND_FILE_ENTRY* orderEntry =
-                    cfbFile.FindStreamSingleLevel( folderEntry, "Schematic", true ) )
-        {
-            try
+            if( pagesStorage )
             {
-                for( const std::string& pageName :
-                     OrcadParsePageOrder( readStream( cfbFile, orderEntry ) ) )
+                for( const auto& [pageName, entry] : enumChildren( cfbFile, pagesStorage, true ) )
                 {
-                    if( pageEntries.count( pageName )
-                        && std::find( ordered.begin(), ordered.end(), pageName )
-                                   == ordered.end() )
-                    {
-                        ordered.push_back( pageName );
-                    }
+                    if( pageEntries.emplace( pageName, entry ).second )
+                        available.push_back( pageName );
                 }
+            }
 
-                orderKnown = true;
-            }
-            catch( const IO_ERROR& e )
-            {
-                warnFn( wxString::Format( _( "The page display order could not be read (%s); "
-                                             "pages are imported in name order." ),
-                                          e.What() ) );
-                ordered.clear();
-            }
-        }
-        else
-        {
-            warnFn( _( "The schematic folder has no page-order stream; pages are imported in "
-                       "name order." ) );
-        }
+            // Display order from folder's 'Schematic' stream; fall back to name order if absent
+            std::vector<std::string> ordered;
+            bool                     orderKnown = false;
 
-        if( orderKnown )
-        {
-            for( const std::string& pageName : available )
+            if( const CFB::COMPOUND_FILE_ENTRY* orderEntry =
+                        cfbFile.FindStreamSingleLevel( aFolderEntry, "Schematic", true ) )
             {
-                if( std::find( ordered.begin(), ordered.end(), pageName ) == ordered.end() )
-                    ordered.push_back( pageName );
-            }
-        }
-        else
-        {
-            ordered = available;
-            std::sort( ordered.begin(), ordered.end() );
-        }
+                try
+                {
+                    for( const std::string& pageName :
+                         OrcadParsePageOrder( readStream( cfbFile, orderEntry ) ) )
+                    {
+                        if( pageEntries.count( pageName )
+                            && std::find( ordered.begin(), ordered.end(), pageName )
+                                       == ordered.end() )
+                        {
+                            ordered.push_back( pageName );
+                        }
+                    }
 
-        for( const std::string& pageName : ordered )
+                    orderKnown = true;
+                }
+                catch( const IO_ERROR& e )
+                {
+                    warnFn( wxString::Format(
+                            _( "The page display order for schematic folder '%s' could not be "
+                               "read (%s); pages are imported in name order." ),
+                            wxString::FromUTF8( aFolderName ), e.What() ) );
+                    ordered.clear();
+                }
+            }
+
+            if( orderKnown )
+            {
+                for( const std::string& pageName : available )
+                {
+                    if( std::find( ordered.begin(), ordered.end(), pageName ) == ordered.end() )
+                        ordered.push_back( pageName );
+                }
+            }
+            else
+            {
+                ordered = available;
+                std::sort( ordered.begin(), ordered.end() );
+            }
+
+            for( const std::string& pageName : ordered )
+            {
+                try
+                {
+                    std::vector<char> pageData = readStream( cfbFile, pageEntries[pageName] );
+
+                    aOutPages.push_back( isV2 ? OrcadParsePageV2( pageData, design.library.strings,
+                                                                  warnFn )
+                                              : OrcadParsePage( pageData, design.library.strings,
+                                                                warnFn ) );
+                }
+                catch( const IO_ERROR& e )
+                {
+                    warnFn( wxString::Format( _( "Page '%s' could not be parsed and was "
+                                                 "skipped: %s" ),
+                                              wxString::FromUTF8( pageName ), e.What() ) );
+                }
+            }
+        };
+
+        parseFolderPages( rootFolder, folderEntries[rootFolder], design.pages );
+
+        // Root folder's Hierarchy stream holds whole occurrence tree (part refdes + nested blocks)
+        if( const CFB::COMPOUND_FILE_ENTRY* hierarchyEntry =
+                    cfbFile.FindStream( folderEntries[rootFolder], { "Hierarchy", "Hierarchy" } ) )
         {
-            try
+            std::vector<char> hierarchyData = readStream( cfbFile, hierarchyEntry );
+
+            design.occurrenceRoot = OrcadReadOccurrenceTree( hierarchyData, warnFn );
+
+            if( design.occurrenceRoot.blocks.empty() && design.occurrenceRoot.partRefs.empty() )
             {
-                design.pages.push_back( OrcadParsePage( readStream( cfbFile,
-                                                                    pageEntries[pageName] ),
-                                                        design.library.strings, warnFn ) );
+                // Legacy/unreadable tree: scan-recover flat root-scope refs and block links,
+                // rebuild flat block occurrences so converter still schedules each child once
+                hierarchyLinks = OrcadReadHierarchyLinks( hierarchyData, design.library.strings,
+                                                          warnFn, &design.occurrenceRoot.partRefs );
+
+                for( const auto& [dbId, childName] : hierarchyLinks )
+                {
+                    ORCAD_OCC_BLOCK block;
+                    block.targetDbId = dbId;
+                    block.childFolder = childName;
+                    design.occurrenceRoot.blocks.push_back( std::move( block ) );
+                }
             }
-            catch( const IO_ERROR& e )
+
+            // Block instance dbId -> child folder name, from occurrence tree
+            std::function<void( const ORCAD_OCC_SCOPE& )> collectLinks =
+                    [&]( const ORCAD_OCC_SCOPE& aScope )
             {
-                // CFB entry names are UTF-16 in the container, UTF-8 here.
-                warnFn( wxString::Format( _( "Page '%s' could not be parsed and was "
-                                             "skipped: %s" ),
-                                          wxString::FromUTF8( pageName ), e.What() ) );
-            }
+                for( const ORCAD_OCC_BLOCK& block : aScope.blocks )
+                {
+                    hierarchyLinks[block.targetDbId] = block.childFolder;
+                    collectLinks( block.scope );
+                }
+            };
+
+            collectLinks( design.occurrenceRoot );
         }
 
         if( design.pages.empty() )
             THROW_IO_ERROR( _( "No schematic pages could be read from the design." ) );
 
-        // -- hierarchy detection --------------------------------------------------------
-        //
-        // The link table maps block instances to child folders; it is used only to
-        // name the skipped children in the conversion warnings.
+        // Parse pages of every block-reachable folder once; instantiated per block occurrence
+        // during conversion. Unreferenced alternate/backup folders left out
+        std::map<std::string, std::string> folderByLowerName;
 
-        std::map<uint32_t, std::string> hierarchyLinks;
+        for( const std::string& folder : folders )
+            folderByLowerName.emplace( lowerCopy( folder ), folder );
 
-        if( const CFB::COMPOUND_FILE_ENTRY* hierarchyEntry =
-                    cfbFile.FindStream( folderEntry, { "Hierarchy", "Hierarchy" } ) )
+        for( const auto& [dbId, childName] : hierarchyLinks )
         {
-            hierarchyLinks = OrcadReadHierarchyLinks( readStream( cfbFile, hierarchyEntry ),
-                                                      design.library.strings, warnFn );
+            std::string key = lowerCopy( childName );
+
+            if( key == lowerCopy( rootFolder ) || design.childFolderPages.count( key ) )
+                continue;
+
+            auto childIt = folderByLowerName.find( key );
+
+            if( childIt != folderByLowerName.end() )
+                parseFolderPages( childIt->second, folderEntries[childIt->second],
+                                  design.childFolderPages[key] );
         }
 
         for( ORCAD_RAW_PAGE& page : design.pages )

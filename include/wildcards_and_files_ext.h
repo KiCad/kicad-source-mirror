@@ -255,6 +255,7 @@ public:
     static wxString EasyEdaProFileWildcard();
     static wxString DipTraceFilesWildcard();
     static wxString OrCadSchematicFilesWildcard();
+    static wxString AllegroPcbFilesWildcard();
     static wxString PdfFileWildcard();
     static wxString PSFileWildcard();
     static wxString MacrosFileWildcard();

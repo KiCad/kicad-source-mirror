@@ -47,6 +47,7 @@
 #include <math/util.h>
 #include <pin_type.h>
 #include <sch_field.h>
+#include <sch_no_connect.h>
 #include <sch_pin.h>
 #include <sch_screen.h>
 #include <sch_shape.h>
@@ -125,14 +126,27 @@ bool isBookkeepingProp( const std::string& aName )
 
 void ORCAD_CONVERTER::prepareSymbols()
 {
-    // Symbols placed on pages but absent from the design cache get a synthesized
-    // placeholder so their T0x10 connection points stay electrically intact.
+    // Page symbols absent from design cache get synthesized placeholder so T0x10
+    // connection points stay electrically intact.
     std::vector<std::string>                                          missingOrder;
     std::map<std::string, std::vector<const ORCAD_PLACED_INSTANCE*>>  missing;
 
+    // Scan root and child-folder pages; child-folder parts live in childFolderPages,
+    // not root page list.
+    std::vector<const ORCAD_RAW_PAGE*> allPages;
+
     for( const ORCAD_RAW_PAGE& page : m_design.pages )
+        allPages.push_back( &page );
+
+    for( const auto& [folder, pages] : m_design.childFolderPages )
     {
-        for( const ORCAD_PLACED_INSTANCE& inst : page.instances )
+        for( const ORCAD_RAW_PAGE& page : pages )
+            allPages.push_back( &page );
+    }
+
+    for( const ORCAD_RAW_PAGE* page : allPages )
+    {
+        for( const ORCAD_PLACED_INSTANCE& inst : page->instances )
         {
             if( inst.pkgName.empty() || m_design.symbols.count( inst.pkgName ) )
                 continue;
@@ -157,9 +171,9 @@ void ORCAD_CONVERTER::prepareSymbols()
         m_design.symbols[name] = synthesizeSymbol( name, insts );
     }
 
-    for( const ORCAD_RAW_PAGE& page : m_design.pages )
+    for( const ORCAD_RAW_PAGE* page : allPages )
     {
-        for( const ORCAD_PLACED_INSTANCE& inst : page.instances )
+        for( const ORCAD_PLACED_INSTANCE& inst : page->instances )
             libForInstance( inst );
     }
 
@@ -632,13 +646,26 @@ LIB_SYMBOL* ORCAD_CONVERTER::kicadSymbolFor( const std::string& aLibName )
     if( entry.kicadSymbol )
         return entry.kicadSymbol.get();
 
-    // OrCAD cache names can contain characters that are illegal in a LIB_ID
-    // item name (e.g. backslashes from library path prefixes).
+    // OrCAD cache names can contain LIB_ID-illegal chars (e.g. backslashes from
+    // library path prefixes).
     wxString name = LIB_ID::FixIllegalChars( FromOrcadString( entry.name ), false ).wx_str();
 
     std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( name );
     symbol->SetLibId( LIB_ID( wxString::FromUTF8( LIB_NICK ), name ) );
     symbol->SetPinNameOffset( schMm( 0.254 ) );
+
+    // Pin number/name visibility from LibraryPart flags; bit0=numbers visible,
+    // bit2=names hidden.
+    for( const UNIT_INFO& unit : entry.units )
+    {
+        if( unit.symbol && unit.symbol->generalFlags >= 0 )
+        {
+            int flags = unit.symbol->generalFlags;
+            symbol->SetShowPinNumbers( ( flags & 0x01 ) != 0 );
+            symbol->SetShowPinNames( ( flags & 0x04 ) == 0 );
+            break;
+        }
+    }
 
     if( entry.isPower )
         symbol->SetGlobalPower();
@@ -1060,15 +1087,46 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
 
     placeSymbolFields( symbol, aInst, def, ori, value, footprint );
 
-    wxString reference = FromOrcadString( aInst.reference );
-
-    if( reference.IsEmpty() )
-        reference = wxS( "?" );
+    wxString reference = resolveReference( aInst );
 
     symbol->SetRef( &aSheetPath, reference );
     symbol->SetUnitSelection( &aSheetPath, unit );
 
     aScreen->Append( symbol );
+
+    // Placed pin w/ zero net word is unconnected; OrCAD draws no-connect marker,
+    // reproduce it.
+    for( const ORCAD_PIN_INST& pin : aInst.pins )
+    {
+        if( pin.wordA == 0 )
+            aScreen->Append( new SCH_NO_CONNECT( OrcadDbuToIu( pin.x, pin.y ) ) );
+    }
+}
+
+
+wxString ORCAD_CONVERTER::resolveReference( const ORCAD_PLACED_INSTANCE& aInst ) const
+{
+    wxString reference = FromOrcadString( aInst.reference );
+
+    // Hierarchy stream carries authoritative per-occurrence designator; overrides
+    // stale placed "C?" template since OrCAD re-annotates without rewriting record.
+    if( m_currentOccRefs )
+    {
+        auto it = m_currentOccRefs->find( aInst.dbId );
+
+        if( it != m_currentOccRefs->end() )
+        {
+            wxString occurrence = FromOrcadString( it->second );
+
+            if( !occurrence.IsEmpty() && !occurrence.EndsWith( wxS( "?" ) ) )
+                reference = occurrence;
+        }
+    }
+
+    if( reference.IsEmpty() )
+        reference = wxS( "?" );
+
+    return reference;
 }
 
 
@@ -1113,14 +1171,10 @@ void ORCAD_CONVERTER::placePowerSymbol( ORCAD_RAW_PAGE&, const ORCAD_GRAPHIC_INS
     refField->SetTextAngle( ANGLE_HORIZONTAL );
     refField->SetVisible( false );
 
-    // Net name centered on the body: above it, or below it for ground-style
-    // symbols, whose pin connects in the top quarter of the placed box.
-    int bxmin = std::min( aInst.bbox.x1, aInst.bbox.x2 );
-    int bxmax = std::max( aInst.bbox.x1, aInst.bbox.x2 );
+    // Net name against body; below ground-style symbol (pin in top quarter of box),
+    // above supply one.
     int bymin = std::min( aInst.bbox.y1, aInst.bbox.y2 );
     int bymax = std::max( aInst.bbox.y1, aInst.bbox.y2 );
-
-    int cxm = ( bxmin + bxmax ) * ORCAD_IU_PER_DBU / 2;
 
     VECTOR2I pinPos = graphicPinPos( aInst );
 
@@ -1128,12 +1182,25 @@ void ORCAD_CONVERTER::placePowerSymbol( ORCAD_RAW_PAGE&, const ORCAD_GRAPHIC_INS
 
     SCH_FIELD* valField = symbol->GetField( FIELD_T::VALUE );
 
-    if( pinPos.y <= bymin + ( bymax - bymin ) / 4.0 )
-        valField->SetPosition( VECTOR2I( cxm, bymax * ORCAD_IU_PER_DBU + schMm( 1.6 ) ) );
-    else
-        valField->SetPosition( VECTOR2I( cxm, bymin * ORCAD_IU_PER_DBU - schMm( 1.0 ) ) );
+    // Net name snug against symbol body; OrCAD placed bbox padded w/ text, so anchor
+    // near text edge for edge-to-edge gap.
+    BOX2I body = symbol->GetBodyBoundingBox();
 
-    valField->SetTextAngle( ANGLE_HORIZONTAL );
+    if( pinPos.y <= bymin + ( bymax - bymin ) / 4.0 )
+    {
+        valField->SetPosition( VECTOR2I( body.Centre().x, body.GetBottom() + schMm( 0.3 ) ) );
+        valField->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+    }
+    else
+    {
+        valField->SetPosition( VECTOR2I( body.Centre().x, body.GetTop() - schMm( 0.3 ) ) );
+        valField->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+    }
+
+    // Net name reads horizontally; compensate for KiCad re-rotating field w/ flipped
+    // (90/270) power symbol.
+    valField->SetTextAngle( symbol->GetTransform().y1 ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
+    valField->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
     valField->SetVisible( true );
 
     SCH_FIELD* fpField = symbol->GetField( FIELD_T::FOOTPRINT );
@@ -1173,25 +1240,24 @@ void ORCAD_CONVERTER::placeSymbolFields( SCH_SYMBOL* aSymbol, const ORCAD_PLACED
     int cxm = ( bxmin + bxmax ) * ORCAD_IU_PER_DBU / 2;
     int cym = ( bymin + bymax ) * ORCAD_IU_PER_DBU / 2;
 
-    // Fields always read horizontally: KiCad rotates field text together with
-    // the symbol, so a 90/270-degree placement gets a compensating 90-degree
-    // field angle.
+    // Fields always read horizontally; KiCad rotates field text w/ symbol, so
+    // 90/270 placement gets compensating field angle.
     int       angle = ORCAD_ORIENT_TABLE[aOrient & 7].angle;
     bool      vertical = angle == 90 || angle == 270;
     EDA_ANGLE fieldAngle = vertical ? ANGLE_VERTICAL : ANGLE_HORIZONTAL;
 
-    // Visibility follows the source: a field is shown only when the instance
-    // carries a display prop for it (decoupling caps usually show just the
-    // reference, not the value).
+    // Visibility follows source display mode; bit 0x100 is field visible flag.
     bool showRef = false;
     bool showVal = false;
 
     for( const ORCAD_DISPLAY_PROP& dp : aInst.displayProps )
     {
+        bool visible = ( dp.dispMode & 0x100 ) != 0;
+
         if( dp.name == "Part Reference" )
-            showRef = true;
+            showRef = visible;
         else if( dp.name == "Value" )
-            showVal = true;
+            showVal = visible;
     }
 
     aSymbol->SetValueFieldText( FromOrcadString( aValue ) );
@@ -1243,14 +1309,46 @@ void ORCAD_CONVERTER::placeSymbolFields( SCH_SYMBOL* aSymbol, const ORCAD_PLACED
     dsField->SetPosition( aSymbol->GetPosition() );
     dsField->SetVisible( false );
 
-    // Display-prop positions are symbol-space; transform them to the canvas.
+    // Display-prop positions are canvas-space offsets from instance anchor; field
+    // text does not rotate w/ symbol, so not run through body orientation transform.
     std::map<std::string, std::pair<VECTOR2I, const ORCAD_DISPLAY_PROP*>> shown;
 
     for( const ORCAD_DISPLAY_PROP& dp : aInst.displayProps )
+        shown[dp.name] = { OrcadDbuToIu( aInst.x + dp.x, aInst.y + dp.y ), &dp };
+
+    // KiCad re-rotates field text when parent transform flips X/Y (GetDrawRotation),
+    // so store angle that renders property's own text angle after flip.
+    bool symbolFlips = aSymbol->GetTransform().y1 != 0;
+
+    auto storedFieldAngle = [&]( const ORCAD_DISPLAY_PROP* aDp ) -> EDA_ANGLE
     {
-        VECTOR2I p = OrcadTransformPoint( aOrient, w, h, aInst.x, aInst.y, dp.x, dp.y );
-        shown[dp.name] = { OrcadDbuToIu( p.x, p.y ), &dp };
-    }
+        bool textVertical = ( aDp->rotation & 1 ) != 0;
+        return ( textVertical != symbolFlips ) ? ANGLE_VERTICAL : ANGLE_HORIZONTAL;
+    };
+
+    // OrCAD carries explicit reference/value field positions; honor them so fields
+    // land where source placed them, not computed fallback.
+    auto applyDisplayPos = [&]( SCH_FIELD* aField, const char* aName )
+    {
+        auto it = shown.find( aName );
+
+        if( it == shown.end() )
+            return;
+
+        const ORCAD_DISPLAY_PROP* dp = it->second.second;
+        int                       size = textSizeIU( dp->fontIdx );
+
+        // OrCAD stores text top-left corner; text grows right and down, so reference
+        // stacks above value clear of body.
+        aField->SetPosition( it->second.first );
+        aField->SetTextSize( VECTOR2I( size, size ) );
+        aField->SetTextAngle( storedFieldAngle( dp ) );
+        aField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        aField->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+    };
+
+    applyDisplayPos( refField, "Part Reference" );
+    applyDisplayPos( valField, "Value" );
 
     for( const auto& [propName, propValue] : aInst.props )
     {
@@ -1264,12 +1362,15 @@ void ORCAD_CONVERTER::placeSymbolFields( SCH_SYMBOL* aSymbol, const ORCAD_PLACED
 
         if( sIt != shown.end() )
         {
-            int size = textSizeIU( sIt->second.second->fontIdx );
+            const ORCAD_DISPLAY_PROP* dp = sIt->second.second;
+            int                       size = textSizeIU( dp->fontIdx );
 
             field.SetPosition( sIt->second.first );
-            field.SetTextAngle( fieldAngle );
+            field.SetTextAngle( storedFieldAngle( dp ) );
             field.SetTextSize( VECTOR2I( size, size ) );
-            field.SetVisible( true );
+            field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+            field.SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+            field.SetVisible( ( dp->dispMode & 0x100 ) != 0 );
         }
         else
         {

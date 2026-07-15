@@ -367,6 +367,12 @@ wxString FILEEXT::OrCadSchematicFilesWildcard()
 }
 
 
+wxString FILEEXT::AllegroPcbFilesWildcard()
+{
+    return _( "Allegro PCB files" ) + AddFileExtListToFilter( { "brd" } );
+}
+
+
 wxString FILEEXT::PcbFileWildcard()
 {
     return _( "KiCad printed circuit board files" )

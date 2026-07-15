@@ -394,6 +394,13 @@ private:
                         SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aSheetPath );
 
     /**
+     * Resolve a placed instance's reference designator, falling back to the
+     * Hierarchy-stream occurrence designator when the instance carries only the
+     * unannotated "C?" template; returns "?" when neither is annotated.
+     */
+    wxString resolveReference( const ORCAD_PLACED_INSTANCE& aInst ) const;
+
+    /**
      * Place one power symbol: transform base = placed bbox min corner (fall back
      * to the anchor when the bbox is all zero), reference "#PWR%04d" from a
      * design-wide counter (hidden), value = net name centered on the body —
@@ -469,15 +476,6 @@ private:
      */
     void convertPage( ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen,
                       const SCH_SHEET_PATH& aSheetPath );
-
-    /**
-     * Multi-page designs: create the SCH_SHEET + SCH_SCREEN for one page, append
-     * the sheet to the root screen and wire it up: SHEET_NAME field = page name,
-     * SHEET_FILENAME field = relative child filename, screen filename = absolute
-     * path in the project directory, sheet position/size on the root grid (see
-     * Convert()), page number via SCH_SHEET_PATH::SetPageNumber.
-     */
-    SCH_SHEET* addPageSheet( ORCAD_RAW_PAGE& aPage, int aPageIndex );
 
     /**
      * "P%02d_<pagename>.kicad_sch" (1-based index), sanitized: control characters
@@ -646,6 +644,14 @@ private:
     std::map<PKG_KEY, std::pair<std::string, int>> m_pkgToLib;
     int                                            m_powerCount;      ///< "#PWR%04d" counter
     int                                            m_fontBaselineDbu; ///< dominant text height; 0 = none
+
+    /// Occurrence reference designators of the scope currently being converted; set
+    /// per page so a child schematic reused by several block occurrences takes each
+    /// occurrence's own designators.  Null when the design has no occurrence tree.
+    const std::map<uint32_t, std::string>*         m_currentOccRefs = nullptr;
+
+    /// Lower-cased sheet names already emitted, to keep sibling sheet names unique.
+    std::set<wxString>                             m_usedSheetNames;
 
     /// Per-page wire lookup: endpoint -> wires ending there.  Rebuilt by buildNetLookup().
     std::map<std::pair<int, int>, std::vector<const ORCAD_WIRE*>> m_wireEndpoints;

@@ -27,8 +27,13 @@
 #include <sch_io/sch_io_mgr.h>
 #include <reporter.h>
 
+#include <map>
+#include <memory>
+#include <vector>
+
 
 class SCH_SHEET;
+class LIB_SYMBOL;
 class SCH_SCREEN;
 class SCHEMATIC;
 
@@ -43,10 +48,13 @@ class SCHEMATIC;
  * design to ORCAD_CONVERTER.
  *
  * Supported: the modern stream framing (Library version 3 and later, i.e.
- * OrCAD 10.x/2003 onward), flat and multi-page designs.  Designs with the
- * pre-2003 framing raise a clean IO_ERROR; hierarchical block designs are
- * converted flat (root schematic folder only) with one warning per skipped
- * block and folder; OLE-embedded pictures are skipped with a warning.
+ * OrCAD 10.x/2003 onward) and the pre-2003 v2.0 framing (parsed with the v2 page
+ * reader; its legacy symbol cache is not decoded, so v2 symbol graphics are
+ * synthesized placeholders).  Hierarchical block designs are converted flat: the
+ * root schematic folder and every child folder reachable through block links are
+ * imported as sibling pages, and each reused child is materialized once per block
+ * occurrence with that occurrence's reference designators.  OLE-embedded pictures
+ * are skipped with a warning.
  */
 class SCH_IO_ORCAD : public SCH_IO
 {

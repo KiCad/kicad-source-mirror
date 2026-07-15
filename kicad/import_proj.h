@@ -93,6 +93,11 @@ private:
     void AltiumProjectHandler();
 
     void GedaProjectHandler();
+
+    /**
+     * @brief Imports the OrCAD schematic, then offers to import an associated Allegro board.
+     */
+    void OrcadProjectHandler();
 };
 
 #endif

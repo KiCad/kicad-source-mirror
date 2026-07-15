@@ -118,63 +118,95 @@ ORCAD_LIBRARY_INFO OrcadParseLibrary( const std::vector<char>& aData )
     }
     else
     {
-        // v1.x: fixed 42 bytes (17 x u16 + 2 x u32, no count field)
+        // v1.x fixed 42 bytes (17 x u16 + 2 x u32, no count field)
         stream.Skip( 42 );
     }
 
-    // The 8 named part fields ("Part Reference", "Value", ...).
+    // 8 named part fields (Part Reference, Value, ...)
     for( int i = 0; i < 8; i++ )
         lib.partFields.push_back( stream.ReadLzt() );
 
     ORCAD_PAGE_SETTINGS settings = OrcadParsePageSettings( stream );
     lib.pinToPin = settings.pinToPin;
 
-    // String table length field: modern files use u32, legacy pre-16.x files use
-    // u16.  Try u32 first and reject implausible counts, then rewind and re-read
-    // with a u16 count.
     size_t tablePos = stream.GetOffset();
 
-    try
+    // Count = u32 (modern) or u16 (legacy). Wrong width yields implausible count, so
+    // sanity-check each vs remaining bytes; failed read keeps parsed strings, never aborts file
+    auto readStringTable = [&]( bool aU16Count ) -> bool
     {
-        uint32_t count = stream.ReadU32();
+        stream.Seek( tablePos );
+        lib.strings.clear();
+
+        uint32_t count = aU16Count ? stream.ReadU16() : stream.ReadU32();
 
         if( count > 2000000
             || static_cast<uint64_t>( count ) * 3
                        > static_cast<uint64_t>( stream.Remaining() ) + 16 )
         {
-            THROW_IO_ERROR( wxS( "implausible string count" ) );
+            return false;
         }
 
         for( uint32_t i = 0; i < count; i++ )
             lib.strings.push_back( stream.ReadLzt() );
+
+        return true;
+    };
+
+    // Legacy v2.x always u16; u32-first can pass sanity w/ bogus large count -> huge alloc
+    bool u16First = lib.versionMajor < 3;
+
+    try
+    {
+        if( !readStringTable( u16First ) && !readStringTable( !u16First ) )
+        {
+            stream.Seek( tablePos );
+            lib.strings.clear();
+        }
     }
     catch( const IO_ERROR& )
     {
-        stream.Seek( tablePos );
-        lib.strings.clear();
-
-        uint16_t count = stream.ReadU16();
-
-        for( uint16_t i = 0; i < count; i++ )
-            lib.strings.push_back( stream.ReadLzt() );
+        try
+        {
+            if( !readStringTable( !u16First ) )
+            {
+                stream.Seek( tablePos );
+                lib.strings.clear();
+            }
+        }
+        catch( const IO_ERROR& )
+        {
+            stream.Seek( tablePos );
+            lib.strings.clear();
+        }
     }
 
-    // Part alias pairs: alias name, aliased part name.
-    uint16_t aliasCount = stream.ReadU16();
-
-    for( uint16_t i = 0; i < aliasCount; i++ )
+    // Alias pairs and root schematic folder follow; both optional, so read failure
+    // must not sink whole library
+    try
     {
-        std::string alias = stream.ReadLzt();
-        std::string part = stream.ReadLzt();
+        uint16_t aliasCount = stream.ReadU16();
 
-        lib.partAliases.emplace_back( std::move( alias ), std::move( part ) );
+        if( static_cast<uint64_t>( aliasCount ) * 2 <= stream.Remaining() + 4 )
+        {
+            for( uint16_t i = 0; i < aliasCount; i++ )
+            {
+                std::string alias = stream.ReadLzt();
+                std::string part = stream.ReadLzt();
+
+                lib.partAliases.emplace_back( std::move( alias ), std::move( part ) );
+            }
+        }
+
+        // Design files (not standalone libs) carry root schematic folder
+        if( lib.introduction.rfind( "OrCAD Windows Design", 0 ) == 0 )
+        {
+            stream.Skip( 8 );
+            lib.schematicName = stream.ReadLzt();
+        }
     }
-
-    // Design files (not standalone libraries) carry the root schematic folder name.
-    if( lib.introduction.rfind( "OrCAD Windows Design", 0 ) == 0 )
+    catch( const IO_ERROR& )
     {
-        stream.Skip( 8 );
-        lib.schematicName = stream.ReadLzt();
     }
 
     return lib;

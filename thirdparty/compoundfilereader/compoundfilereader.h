@@ -326,13 +326,32 @@ public:
         return m_hdr;
     }
 
+    /// Total byte length of the compound file buffer.  A stream cannot be larger,
+    /// so callers use it to reject a corrupt directory entry before allocating.
+    size_t GetBufferLen() const
+    {
+        return m_bufferLen;
+    }
+
+    /// Effective stream size.
+    /// MS-CFB 2.6.1 requires the high 32 bits of the size field to be zero in
+    /// version-3 (512-byte sector) files, but some writers (OrCAD) leave garbage
+    /// there.  Masking keeps a small stream from being read as a multi-gigabyte one
+    /// and routed through the main FAT instead of the mini FAT.
+    uint64_t GetStreamSize(const COMPOUND_FILE_ENTRY* entry) const
+    {
+        return m_hdr->majorVersion == 3 ? (entry->size & 0xFFFFFFFFu) : entry->size;
+    }
+
     /// Get file(stream) data start with "offset".
     /// The buffer must have enough space to store "len" bytes. Typically "len" is derived by the steam length.
     void ReadFile(const COMPOUND_FILE_ENTRY* entry, size_t offset, char* buffer, size_t len) const
     {
-        if (entry->size < offset || entry->size - offset < len) throw std::invalid_argument("");
+        uint64_t size = GetStreamSize(entry);
 
-        if (entry->size < m_hdr->miniStreamCutoffSize)
+        if (size < offset || size - offset < len) throw std::invalid_argument("");
+
+        if (size < m_hdr->miniStreamCutoffSize)
         {
             ReadMiniStream(entry->startSectorLocation, offset, buffer, len);
         }

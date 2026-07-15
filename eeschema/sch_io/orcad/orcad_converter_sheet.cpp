@@ -29,7 +29,10 @@
 #include <sch_io/orcad/orcad_converter.h>
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
+#include <functional>
+#include <limits>
 #include <map>
 #include <memory>
 #include <set>
@@ -78,14 +81,6 @@ namespace
 /// OrCAD DBU (10 mil) -> millimetres.
 constexpr double DBU_TO_MM = 0.254;
 
-/// Root sheet-symbol grid for multi-page designs.
-constexpr int    SHEET_GRID_COLS = 4;
-constexpr double SHEET_GRID_X0_MM = 25.4;
-constexpr double SHEET_GRID_Y0_MM = 25.4;
-constexpr double SHEET_GRID_DX_MM = 70.0;
-constexpr double SHEET_GRID_DY_MM = 35.0;
-constexpr double SHEET_W_MM = 55.0;
-constexpr double SHEET_H_MM = 20.0;
 
 
 std::string trimmed( const std::string& aText )
@@ -165,6 +160,33 @@ void ORCAD_CONVERTER::note( const wxString& aMsg )
 }
 
 
+/// Leading "N - " prefix carries page order, not title; return order (or -1), strip prefix
+static int takePageOrderPrefix( wxString& aName )
+{
+    size_t i = 0;
+
+    while( i < aName.length() && wxIsdigit( aName[i] ) )
+        i++;
+
+    long order = 0;
+
+    if( i == 0 || !aName.Left( i ).ToLong( &order ) )
+        return -1;
+
+    wxString rest = aName.Mid( i );
+    rest.Trim( false );
+
+    if( !rest.StartsWith( wxS( "-" ) ) )
+        return -1;
+
+    rest = rest.Mid( 1 );
+    rest.Trim( false );
+    aName = rest;
+
+    return static_cast<int>( order );
+}
+
+
 SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
 {
     m_rootSheet = aRootSheet;
@@ -177,75 +199,133 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
     rootPath.push_back( aRootSheet );
     rootPath.SetPageNumber( wxS( "1" ) );
 
-    if( m_design.pages.size() == 1 )
+    // Page list = root pages + each block occurrence's child pages, tagged w/ scope refs.
+    // Child schematic reused N times yields N jobs, each w/ own designators.
+    struct PAGE_JOB
     {
-        ORCAD_RAW_PAGE& page = m_design.pages[0];
+        ORCAD_RAW_PAGE*                        page;
+        const std::map<uint32_t, std::string>* refs;
+    };
 
-        pollProgress( m_progressReporter, page.name );
-        applyPageSettings( page, rootScreen );
-        convertPage( page, rootScreen, rootPath );
+    std::vector<PAGE_JOB> jobs;
+
+    for( ORCAD_RAW_PAGE& page : m_design.pages )
+        jobs.push_back( { &page, &m_design.occurrenceRoot.partRefs } );
+
+    std::function<void( const ORCAD_OCC_SCOPE& )> expand =
+            [&]( const ORCAD_OCC_SCOPE& aScope )
+    {
+        for( const ORCAD_OCC_BLOCK& block : aScope.blocks )
+        {
+            std::string key = block.childFolder;
+            std::transform( key.begin(), key.end(), key.begin(),
+                            []( unsigned char c ) { return static_cast<char>( std::tolower( c ) ); } );
+
+            auto it = m_design.childFolderPages.find( key );
+
+            if( it != m_design.childFolderPages.end() )
+            {
+                for( ORCAD_RAW_PAGE& childPage : it->second )
+                    jobs.push_back( { &childPage, &block.scope.partRefs } );
+            }
+
+            expand( block.scope );
+        }
+    };
+
+    expand( m_design.occurrenceRoot );
+
+    if( jobs.size() == 1 )
+    {
+        PAGE_JOB& job = jobs[0];
+
+        pollProgress( m_progressReporter, job.page->name );
+        m_currentOccRefs = job.refs;
+        applyPageSettings( *job.page, rootScreen );
+        convertPage( *job.page, rootScreen, rootPath );
+        m_currentOccRefs = nullptr;
     }
     else
     {
-        // The root sheet only stitches the pages together.
-        rootScreen->SetPageSettings( PAGE_INFO( PAGE_SIZE_TYPE::A3 ) );
-
-        TITLE_BLOCK titleBlock;
-        titleBlock.SetTitle( FromOrcadString( m_design.name ) );
-        titleBlock.SetComment( 0, wxString::Format(
-                _( "Converted from %s" ),
-                wxFileName( rootScreen->GetFileName() ).GetFullName() ) );
-        rootScreen->SetTitleBlock( titleBlock );
-
-        for( size_t i = 0; i < m_design.pages.size(); ++i )
+        // Each page = flat top-level sheet (no stitching root); order root pages by
+        // leading "N - " prefix, also stripped for title.
+        struct SHEET_JOB
         {
-            ORCAD_RAW_PAGE& page = m_design.pages[i];
+            PAGE_JOB job;
+            wxString name;
+            int      order;
+        };
 
-            pollProgress( m_progressReporter, page.name );
+        std::vector<SHEET_JOB> sheetJobs;
 
-            SCH_SHEET* sheet = addPageSheet( page, static_cast<int>( i ) );
+        for( size_t i = 0; i < jobs.size(); ++i )
+        {
+            wxString name = FromOrcadString( jobs[i].page->name );
+            int      order = i < m_design.pages.size() ? takePageOrderPrefix( name ) : -1;
 
-            SCH_SHEET_PATH pagePath;
-            pagePath.push_back( aRootSheet );
-            pagePath.push_back( sheet );
+            if( name.IsEmpty() )
+                name = wxString::Format( wxS( "PAGE%zu" ), i + 1 );
 
-            applyPageSettings( page, sheet->GetScreen() );
-            convertPage( page, sheet->GetScreen(), pagePath );
+            sheetJobs.push_back( { jobs[i], name, order } );
         }
-    }
 
-    // Hierarchical block instances are not descended into: the design is converted flat.
-    for( const ORCAD_RAW_PAGE& page : m_design.pages )
-    {
-        for( const ORCAD_DRAWN_INSTANCE& block : page.blocks )
+        std::stable_sort( sheetJobs.begin(), sheetJobs.end(),
+                          []( const SHEET_JOB& a, const SHEET_JOB& b )
+                          {
+                              int ka = a.order >= 0 ? a.order : std::numeric_limits<int>::max();
+                              int kb = b.order >= 0 ? b.order : std::numeric_limits<int>::max();
+                              return ka < kb;
+                          } );
+
+        std::vector<SCH_SHEET*> topSheets;
+
+        for( size_t i = 0; i < sheetJobs.size(); ++i )
         {
-            wxString reference = FromOrcadString( block.reference );
+            SHEET_JOB& sj = sheetJobs[i];
 
-            if( reference.IsEmpty() )
-                reference = wxString::Format( wxS( "#%u" ), block.dbId );
+            pollProgress( m_progressReporter, sj.job.page->name );
 
-            if( block.childName.empty() )
+            SCH_SHEET*  sheet;
+            SCH_SCREEN* screen;
+
+            if( i == 0 )
             {
-                warn( wxString::Format( _( "Hierarchical block '%s' on page '%s' was not "
-                                           "converted; hierarchical designs are imported flat." ),
-                                        reference, FromOrcadString( page.name ) ) );
+                // Reuse sheet the loader created for first page
+                sheet = aRootSheet;
+                screen = rootScreen;
             }
             else
             {
-                warn( wxString::Format( _( "Hierarchical block '%s' on page '%s' (child "
-                                           "schematic '%s') was not converted; hierarchical "
-                                           "designs are imported flat." ),
-                                        reference, FromOrcadString( page.name ),
-                                        FromOrcadString( block.childName ) ) );
+                screen = new SCH_SCREEN( m_schematic );
+                sheet = new SCH_SHEET( m_schematic );
+                sheet->SetScreen( screen );
+                const_cast<KIID&>( sheet->m_Uuid ) = screen->GetUuid();
             }
-        }
-    }
 
-    for( const std::string& folder : m_design.skippedFolders )
-    {
-        warn( wxString::Format( _( "Schematic folder '%s' is not the root schematic; its pages "
-                                   "were skipped." ),
-                                FromOrcadString( folder ) ) );
+            wxString base = sj.name;
+
+            for( int suffix = 2; !m_usedSheetNames.insert( sj.name.Lower() ).second; ++suffix )
+                sj.name = wxString::Format( wxS( "%s (%d)" ), base, suffix );
+
+            wxString fileName = MakePageFileName( static_cast<int>( i + 1 ), sj.job.page->name );
+
+            sheet->GetField( FIELD_T::SHEET_NAME )->SetText( sj.name );
+            sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
+            screen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
+
+            SCH_SHEET_PATH pagePath;
+            pagePath.push_back( sheet );
+            pagePath.SetPageNumber( wxString::Format( wxS( "%zu" ), i + 1 ) );
+
+            m_currentOccRefs = sj.job.refs;
+            applyPageSettings( *sj.job.page, screen );
+            convertPage( *sj.job.page, screen, pagePath );
+            m_currentOccRefs = nullptr;
+
+            topSheets.push_back( sheet );
+        }
+
+        m_schematic->SetTopLevelSheets( topSheets );
     }
 
     return aRootSheet;
@@ -271,43 +351,6 @@ void ORCAD_CONVERTER::convertPage( ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen,
 
     for( const ORCAD_GRAPHIC_INST& global : aPage.globals )
         placePowerSymbol( aPage, global, powerNet( aPage, global ), aScreen, aSheetPath );
-}
-
-
-SCH_SHEET* ORCAD_CONVERTER::addPageSheet( ORCAD_RAW_PAGE& aPage, int aPageIndex )
-{
-    int col = aPageIndex % SHEET_GRID_COLS;
-    int row = aPageIndex / SHEET_GRID_COLS;
-
-    VECTOR2I pos( schIUScale.mmToIU( SHEET_GRID_X0_MM + col * SHEET_GRID_DX_MM ),
-                  schIUScale.mmToIU( SHEET_GRID_Y0_MM + row * SHEET_GRID_DY_MM ) );
-    VECTOR2I size( schIUScale.mmToIU( SHEET_W_MM ), schIUScale.mmToIU( SHEET_H_MM ) );
-
-    SCH_SHEET* sheet = new SCH_SHEET( m_rootSheet, pos, size );
-
-    wxString fileName = MakePageFileName( aPageIndex + 1, aPage.name );
-    wxString pageName = FromOrcadString( aPage.name );
-
-    if( pageName.IsEmpty() )
-        pageName = wxString::Format( wxS( "PAGE%d" ), aPageIndex + 1 );
-
-    sheet->GetField( FIELD_T::SHEET_NAME )->SetText( pageName );
-
-    // The sheet keeps the relative file name; the screen gets the absolute path.
-    sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
-
-    SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
-    screen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
-    sheet->SetScreen( screen );
-
-    m_rootSheet->GetScreen()->Append( sheet );
-
-    SCH_SHEET_PATH path;
-    path.push_back( m_rootSheet );
-    path.push_back( sheet );
-    path.SetPageNumber( wxString::Format( wxS( "%d" ), aPageIndex + 2 ) );
-
-    return sheet;
 }
 
 
@@ -723,11 +766,19 @@ ORCAD_CONVERTER::offpageNets( const ORCAD_RAW_PAGE& aPage ) const
 
     for( size_t i = 0; i < aPage.offpage.size(); ++i )
     {
-        VECTOR2I pin = graphicPinPos( aPage.offpage[i] );
+        const ORCAD_GRAPHIC_INST& conn = aPage.offpage[i];
+        VECTOR2I                  pin = graphicPinPos( conn );
 
         OFFPAGE_NET entry;
         entry.index = static_cast<int>( i );
-        entry.net = trimmed( netAt( aPage, pin.x, pin.y ) );
+
+        // Connector name = cross-page net identity; prefer over local wire net which
+        // OrCAD may name differently (CAM0_IO1 on net GPIO19). Global label still binds wire.
+        entry.net = trimmed( conn.logicalName );
+
+        if( entry.net.empty() )
+            entry.net = trimmed( netAt( aPage, pin.x, pin.y ) );
+
         entry.x = pin.x;
         entry.y = pin.y;
 
@@ -873,16 +924,20 @@ void ORCAD_CONVERTER::placeOffpageConnectors( const ORCAD_RAW_PAGE& aPage, SCH_S
                                                       FromOrcadString( offpage.net ) );
         label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
 
-        // Point the label away from the attached wire.
+        // Point label away from attached wire; vertical wire gives up/down, horizontal left/right.
         SPIN_STYLE spin = SPIN_STYLE::RIGHT;
         auto       endIt = m_wireEndpoints.find( { offpage.x, offpage.y } );
 
         if( endIt != m_wireEndpoints.end() && !endIt->second.empty() )
         {
             const ORCAD_WIRE* wire = endIt->second.front();
+            int64_t           dx = (int64_t) wire->x1 + wire->x2 - 2LL * offpage.x;
+            int64_t           dy = (int64_t) wire->y1 + wire->y2 - 2LL * offpage.y;
 
-            if( wire->x1 + wire->x2 - 2 * offpage.x > 0 )
-                spin = SPIN_STYLE::LEFT;
+            if( std::abs( dx ) >= std::abs( dy ) )
+                spin = dx > 0 ? SPIN_STYLE::LEFT : SPIN_STYLE::RIGHT;
+            else
+                spin = dy > 0 ? SPIN_STYLE::UP : SPIN_STYLE::BOTTOM;
         }
 
         label->SetSpinStyle( spin );

@@ -528,8 +528,8 @@ ORCAD_PIN_INST OrcadReadPinInst( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFI
     ds.ReadU16();
     pin.x = ds.ReadI16();
     pin.y = ds.ReadI16();
-    ds.ReadU32();
-    ds.ReadU32();
+    pin.wordA = ds.ReadU32();
+    pin.wordB = ds.ReadU32();
 
     pin.displayProps = OrcadReadDisplayPropList( aReader );
 

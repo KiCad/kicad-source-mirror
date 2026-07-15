@@ -496,6 +496,16 @@ ORCAD_SYMBOL_DEF OrcadReadSymbolDef( ORCAD_STRUCT_READER& aReader, const ORCAD_P
 
         for( uint16_t i = 0; i < propCount; i++ )
             aReader.ReadStructure();
+
+        // LibraryPart GeneralProperties tail ends w/ u16 flags for pin number/name visibility; last before stop
+        if( sym.typeId == ORCAD_ST_LIBRARY_PART && aPrefixes.end >= 2
+            && aPrefixes.end - 2 >= stream.GetOffset() )
+        {
+            size_t save = stream.GetOffset();
+            stream.Seek( aPrefixes.end - 2 );
+            sym.generalFlags = stream.ReadU16();
+            stream.Seek( save );
+        }
     }
 
     if( aPrefixes.end != 0 && aPrefixes.end > stream.GetOffset() )

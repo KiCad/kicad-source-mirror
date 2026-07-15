@@ -183,7 +183,9 @@ std::vector<std::string> OrcadParsePageOrder( const std::vector<char>& aData )
 
 std::map<uint32_t, std::string> OrcadReadHierarchyLinks( const std::vector<char>& aData,
                                                          const std::vector<std::string>& aStrings,
-                                                         const ORCAD_WARN_FN& aWarn )
+                                                         const ORCAD_WARN_FN& aWarn,
+                                                         std::map<uint32_t, std::string>*
+                                                                 aOccurrenceRefs )
 {
     std::map<uint32_t, std::string> links;
 
@@ -222,10 +224,16 @@ std::map<uint32_t, std::string> OrcadReadHierarchyLinks( const std::vector<char>
             stream.ReadU32();
             stream.ReadU32();
 
+            // First lzt = child folder (hier block link), second lzt = occurrence refdes; either
+            // may be empty.
             std::string child = stream.ReadLzt();
+            std::string occurrenceRef = stream.ReadLzt();
 
             if( !child.empty() )
                 links[instDbId] = child;
+
+            if( aOccurrenceRefs && !occurrenceRef.empty() )
+                ( *aOccurrenceRefs )[instDbId] = occurrenceRef;
 
             pos = std::max( stream.GetOffset(), preamblePos + 4 );
 
@@ -239,4 +247,712 @@ std::map<uint32_t, std::string> OrcadReadHierarchyLinks( const std::vector<char>
     }
 
     return links;
+}
+
+
+// Framed occ header = long prefix (u8 type, u32 bodyLen, u32 0) + short prefix (u8 type, i16
+// propCount, propCount x u32 pairs) + FF E4 5C 39 preamble; throw on mismatch to scan fallback.
+static uint8_t readOccHeader( ORCAD_STREAM& aStream, int aExpectType )
+{
+    uint8_t type = aStream.ReadU8();
+    aStream.ReadU32();                          // bodyLen, unused
+
+    if( aStream.ReadU32() != 0 )
+        THROW_IO_ERROR( wxS( "occurrence record: long-prefix pad not zero" ) );
+
+    if( aStream.ReadU8() != type )
+        THROW_IO_ERROR( wxS( "occurrence record: short-prefix type mismatch" ) );
+
+    int16_t propCount = aStream.ReadI16();
+
+    for( int i = 0; i < std::max<int>( propCount, 0 ); i++ )
+    {
+        aStream.ReadU32();
+        aStream.ReadU32();
+    }
+
+    aStream.ExpectPreamble( wxS( "occurrence record preamble" ) );
+    aStream.Skip( aStream.ReadU32() );          // trailer
+
+    if( aExpectType >= 0 && type != aExpectType )
+        THROW_IO_ERROR( wxString::Format( wxS( "occurrence record type %d != expected %d" ),
+                                          (int) type, aExpectType ) );
+
+    return type;
+}
+
+
+static ORCAD_OCC_SCOPE readOccScope( ORCAD_STREAM& aStream );
+
+
+static void readOccurrence( ORCAD_STREAM& aStream, ORCAD_OCC_SCOPE& aScope )
+{
+    readOccHeader( aStream, 0x42 );
+
+    aStream.ReadU32();                          // occurrence's own db id
+    uint32_t targetDbId = aStream.ReadU32();    // placed-instance (t13) / block (t12) db id
+
+    aStream.ExpectByte( 0x42, wxS( "occurrence inner marker" ) );
+
+    aStream.ReadU32();                          // C (symbol-complexity correlated)
+    aStream.ReadU32();                          // D (zero observed)
+
+    std::string child = aStream.ReadLzt();      // child folder name; empty for parts
+    std::string ref = aStream.ReadLzt();        // occurrence refdes; empty when none
+
+    aStream.ReadU32();                          // F (zero except rare multi-unit)
+
+    uint16_t pinCount = aStream.ReadU16();
+
+    for( uint16_t i = 0; i < pinCount; i++ )
+    {
+        readOccHeader( aStream, -1 );           // 0x44 scalar / 0x45 bus pin occurrence
+        aStream.ReadU32();                      // pin occurrence db id
+        aStream.ReadU16();                      // pin index
+    }
+
+    ORCAD_OCC_SCOPE nested = readOccScope( aStream );
+
+    if( !child.empty() )
+    {
+        ORCAD_OCC_BLOCK block;
+        block.targetDbId = targetDbId;
+        block.childFolder = child;
+        block.scope = std::move( nested );
+        aScope.blocks.push_back( std::move( block ) );
+    }
+    else if( !ref.empty() )
+    {
+        aScope.partRefs[targetDbId] = ref;
+    }
+}
+
+
+// Scope = net occ (0x43), title-block occ (0x52), global/off-page occ (0x5b, u32-counted),
+// optional separator preamble, then part/block occ; only part/block kept, rest read to stay aligned.
+static ORCAD_OCC_SCOPE readOccScope( ORCAD_STREAM& aStream )
+{
+    ORCAD_OCC_SCOPE scope;
+
+    uint16_t netCount = aStream.ReadU16();
+
+    for( uint16_t i = 0; i < netCount; i++ )
+    {
+        readOccHeader( aStream, 0x43 );
+        aStream.ReadU32();
+        aStream.ReadLzt();
+    }
+
+    uint16_t titleBlockCount = aStream.ReadU16();
+
+    for( uint16_t i = 0; i < titleBlockCount; i++ )
+    {
+        readOccHeader( aStream, 0x52 );
+        aStream.ReadU32();
+        aStream.ReadU32();
+    }
+
+    uint32_t globalCount = aStream.ReadU32();
+
+    for( uint32_t i = 0; i < globalCount; i++ )
+    {
+        readOccHeader( aStream, 0x5b );
+        aStream.ReadU32();
+        aStream.ReadU32();
+    }
+
+    if( aStream.AtPreamble() )
+    {
+        aStream.Skip( 4 );
+        aStream.Skip( aStream.ReadU32() );
+    }
+
+    uint16_t occCount = aStream.ReadU16();
+
+    for( uint16_t i = 0; i < occCount; i++ )
+        readOccurrence( aStream, scope );
+
+    return scope;
+}
+
+
+// v2.0 (pre-2003) page parsing. Short-prefix-only framing: every structure is u8 typeId, i16
+// propCount, propCount x (u16 nameIdx, u16 valueIdx), no long prefixes, no FF E4 5C 39 preambles.
+// String-table indices u16 (modern u32); primitive bodies drop doubled type/byteLength envelope.
+// Record vocabulary/field order otherwise modern. Modern path (version >= 3) untouched.
+
+static std::string v2Resolve( const std::vector<std::string>& aStrings, uint16_t aIdx )
+{
+    return ( aIdx != 0xFFFF && aIdx < aStrings.size() ) ? aStrings[aIdx] : std::string();
+}
+
+
+// Some ancient v2 OLB streams use 10-byte display-prop body (u8 dispMode, no u16, no terminator);
+// selected per stream by retry. thread_local so parallel library loads do not race on flag.
+static thread_local bool g_v2ShortDisplayProp = false;
+
+
+// Reject repeat count that cannot fit remaining bytes or exceeds ceiling, so mis-parsed count
+// throws (stream skipped) not runaway allocation.
+static void v2CheckCount( ORCAD_STREAM& aStream, uint32_t aCount )
+{
+    if( aCount > 30000 || aCount > aStream.Remaining() )
+    {
+        THROW_IO_ERROR( wxString::Format( wxS( "v2 repeat count %u exceeds the sane bound "
+                                               "(%zu bytes remain)" ),
+                                          aCount, aStream.Remaining() ) );
+    }
+}
+
+
+// v2 short prefix; fills aProps w/ resolved name/value pairs (empty value when index 0xFFFF).
+static uint8_t v2Prefix( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings,
+                  std::map<std::string, std::string>* aProps = nullptr )
+{
+    uint8_t type = aStream.ReadU8();
+    int16_t count = aStream.ReadI16();
+
+    if( count > 1000 )
+        THROW_IO_ERROR( wxString::Format( wxS( "v2 prefix: absurd property count %d" ), count ) );
+
+    for( int i = 0; i < count; i++ )
+    {
+        uint16_t nameIdx = aStream.ReadU16();
+        uint16_t valueIdx = aStream.ReadU16();
+
+        if( aProps )
+            ( *aProps )[v2Resolve( aStrings, nameIdx )] = v2Resolve( aStrings, valueIdx );
+    }
+
+    return type;
+}
+
+
+static ORCAD_DISPLAY_PROP v2DisplayProp( ORCAD_STREAM& aStream,
+                                         const std::vector<std::string>& aStrings )
+{
+    v2Prefix( aStream, aStrings );
+
+    ORCAD_DISPLAY_PROP prop;
+    prop.nameIdx = aStream.ReadU16();
+    prop.name = v2Resolve( aStrings, static_cast<uint16_t>( prop.nameIdx ) );
+    prop.x = aStream.ReadI16();
+    prop.y = aStream.ReadI16();
+
+    uint16_t rotFont = aStream.ReadU16();
+    prop.fontIdx = rotFont & 0x3FFF;
+    prop.rotation = ( rotFont >> 14 ) & 0x3;
+    prop.color = aStream.ReadU8();
+
+    if( g_v2ShortDisplayProp )
+    {
+        prop.dispMode = aStream.ReadU8();
+    }
+    else
+    {
+        prop.dispMode = aStream.ReadU16();
+        aStream.ExpectByte( 0x00, wxS( "v2 display prop terminator" ) );
+    }
+
+    return prop;
+}
+
+
+static std::vector<ORCAD_DISPLAY_PROP> v2DisplayPropList( ORCAD_STREAM& aStream,
+                                                   const std::vector<std::string>& aStrings )
+{
+    std::vector<ORCAD_DISPLAY_PROP> props;
+    uint16_t                        count = aStream.ReadU16();
+
+    for( uint16_t i = 0; i < count; i++ )
+        props.push_back( v2DisplayProp( aStream, aStrings ) );
+
+    return props;
+}
+
+
+static ORCAD_ALIAS v2Alias( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings )
+{
+    v2Prefix( aStream, aStrings );
+
+    ORCAD_ALIAS alias;
+    alias.x = aStream.ReadI32();
+    alias.y = aStream.ReadI32();
+    alias.color = aStream.ReadU32();
+    alias.rotation = aStream.ReadU32() & 0x3;
+    alias.fontIdx = aStream.ReadU32();
+    alias.name = aStream.ReadLzt();
+
+    return alias;
+}
+
+
+static void v2Structure( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings );
+
+
+static ORCAD_WIRE v2Wire( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings )
+{
+    uint8_t type = v2Prefix( aStream, aStrings );
+
+    ORCAD_WIRE wire;
+    aStream.ReadU32();                          // wire db id
+    wire.id = aStream.ReadU32();                // net db id, keys page net table
+    aStream.ReadU32();                          // color
+    wire.x1 = aStream.ReadI32();
+    wire.y1 = aStream.ReadI32();
+    wire.x2 = aStream.ReadI32();
+    wire.y2 = aStream.ReadI32();
+    wire.isBus = type == ORCAD_ST_WIRE_BUS;
+    aStream.Skip( 1 );
+
+    uint16_t aliasCount = aStream.ReadU16();
+
+    for( uint16_t i = 0; i < aliasCount; i++ )
+        wire.aliases.push_back( v2Alias( aStream, aStrings ) );
+
+    uint16_t propCount = aStream.ReadU16();
+
+    for( uint16_t i = 0; i < propCount; i++ )
+        v2Structure( aStream, aStrings );       // framed wire properties, consumed in full
+
+    return wire;
+}
+
+
+static ORCAD_PIN_INST v2PinInst( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings )
+{
+    v2Prefix( aStream, aStrings );
+
+    ORCAD_PIN_INST pin;
+    aStream.ReadU16();
+    pin.x = aStream.ReadI16();
+    pin.y = aStream.ReadI16();
+    pin.wordA = aStream.ReadU32();
+    pin.wordB = aStream.ReadU32();
+    pin.displayProps = v2DisplayPropList( aStream, aStrings );
+
+    return pin;
+}
+
+
+static ORCAD_PLACED_INSTANCE v2PlacedInstance( ORCAD_STREAM& aStream,
+                                               const std::vector<std::string>& aStrings )
+{
+    ORCAD_PLACED_INSTANCE inst;
+    v2Prefix( aStream, aStrings, &inst.props );
+
+    aStream.Skip( 8 );                          // uninitialized header bytes
+    inst.pkgName = aStream.ReadLzt();
+    inst.dbId = aStream.ReadU32();
+
+    int by1 = aStream.ReadI16();
+    int bx1 = aStream.ReadI16();
+    int by2 = aStream.ReadI16();
+    int bx2 = aStream.ReadI16();
+    inst.bbox.x1 = bx1;
+    inst.bbox.y1 = by1;
+    inst.bbox.x2 = bx2;
+    inst.bbox.y2 = by2;
+
+    inst.x = aStream.ReadI16();
+    inst.y = aStream.ReadI16();
+    inst.color = aStream.ReadU8();
+
+    uint8_t orientation = aStream.ReadU8();
+    inst.rotation = orientation & 0x3;
+    inst.mirror = ( orientation & 0x4 ) != 0;
+    aStream.Skip( 2 );
+
+    inst.displayProps = v2DisplayPropList( aStream, aStrings );
+    aStream.Skip( 1 );
+    inst.reference = aStream.ReadLzt();
+    inst.value = v2Resolve( aStrings, aStream.ReadU16() );  // v2 u16 value index
+    aStream.Skip( 6 );                                      // v2 6 bytes (modern 10)
+
+    uint16_t pinCount = aStream.ReadU16();
+
+    for( uint16_t i = 0; i < pinCount; i++ )
+        inst.pins.push_back( v2PinInst( aStream, aStrings ) );
+
+    inst.sourcePackage = aStream.ReadLzt();
+    aStream.Skip( 2 );
+
+    return inst;
+}
+
+
+static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDepth = 0 );
+
+
+static ORCAD_PRIMITIVE v2Primitive( ORCAD_STREAM& aStream )
+{
+    return v2PrimBody( aStream, aStream.ReadU8() );
+}
+
+
+static ORCAD_SYMBOL_DEF v2SymbolDef( ORCAD_STREAM& aStream,
+                                     const std::vector<std::string>& aStrings )
+{
+    v2Prefix( aStream, aStrings );
+
+    ORCAD_SYMBOL_DEF def;
+    def.typeId = ORCAD_ST_STH_IN_PAGES0;
+    def.name = aStream.ReadLzt();
+    def.sourceLib = aStream.ReadLzt();
+    aStream.ReadU32();                          // color
+
+    uint16_t primCount = aStream.ReadU16();
+
+    for( uint16_t i = 0; i < primCount; i++ )
+        def.primitives.push_back( v2Primitive( aStream ) );
+
+    ORCAD_BBOX bbox;
+    bbox.x1 = aStream.ReadI16();
+    bbox.y1 = aStream.ReadI16();
+    bbox.x2 = aStream.ReadI16();
+    bbox.y2 = aStream.ReadI16();
+    def.bbox = bbox;
+
+    return def;
+}
+
+
+static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDepth )
+{
+    // Symbol vectors nest recursively; bound depth so crafted chain cannot exhaust stack.
+    if( aDepth > 32 )
+        THROW_IO_ERROR( wxS( "v2 primitive nesting too deep" ) );
+
+    uint8_t         type = aType;
+    ORCAD_PRIMITIVE prim;
+
+    switch( type )
+    {
+    case ORCAD_PRIM_RECT:
+    case ORCAD_PRIM_ELLIPSE:
+        prim.kind = type == ORCAD_PRIM_RECT ? ORCAD_PRIM_KIND::RECT : ORCAD_PRIM_KIND::ELLIPSE;
+        prim.x1 = aStream.ReadI32();
+        prim.y1 = aStream.ReadI32();
+        prim.x2 = aStream.ReadI32();
+        prim.y2 = aStream.ReadI32();
+        aStream.ReadU32();                      // lineStyle
+        prim.lineWidth = aStream.ReadU32();
+        prim.fill = aStream.ReadU32() != 0;
+        aStream.ReadU32();                      // hatchStyle
+        break;
+
+    case ORCAD_PRIM_LINE:
+        prim.kind = ORCAD_PRIM_KIND::LINE;
+        prim.x1 = aStream.ReadI32();
+        prim.y1 = aStream.ReadI32();
+        prim.x2 = aStream.ReadI32();
+        prim.y2 = aStream.ReadI32();
+        aStream.ReadU32();                      // lineStyle
+        prim.lineWidth = aStream.ReadU32();
+        break;
+
+    case ORCAD_PRIM_ARC:
+        prim.kind = ORCAD_PRIM_KIND::ARC;
+        prim.x1 = aStream.ReadI32();
+        prim.y1 = aStream.ReadI32();
+        prim.x2 = aStream.ReadI32();
+        prim.y2 = aStream.ReadI32();
+        prim.start = ORCAD_POINT{ aStream.ReadI32(), aStream.ReadI32() };
+        prim.end = ORCAD_POINT{ aStream.ReadI32(), aStream.ReadI32() };
+        aStream.ReadU32();                      // lineStyle
+        prim.lineWidth = aStream.ReadU32();
+        break;
+
+    case ORCAD_PRIM_POLYGON:
+    case ORCAD_PRIM_POLYLINE:
+    case ORCAD_PRIM_BEZIER:
+    {
+        prim.kind = type == ORCAD_PRIM_POLYGON ? ORCAD_PRIM_KIND::POLYGON
+                    : type == ORCAD_PRIM_BEZIER ? ORCAD_PRIM_KIND::BEZIER
+                                                : ORCAD_PRIM_KIND::POLYLINE;
+        aStream.ReadU32();                      // lineStyle
+        prim.lineWidth = aStream.ReadU32();
+
+        if( type == ORCAD_PRIM_POLYGON )
+        {
+            aStream.ReadU32();                  // fillStyle
+            aStream.ReadU32();                  // hatchStyle
+        }
+
+        uint16_t count = aStream.ReadU16();
+        v2CheckCount( aStream, count );
+
+        for( uint16_t i = 0; i < count; i++ )
+        {
+            int y = aStream.ReadI16();          // points are stored y-first
+            int x = aStream.ReadI16();
+            prim.points.push_back( ORCAD_POINT{ x, y } );
+        }
+
+        break;
+    }
+
+    case ORCAD_PRIM_SYMBOL_VECTOR:
+    {
+        // Nested graphic doubled type byte, prefix, i16 location, nested prims each padded (u8
+        // type, u8 0x00); flatten not meaningful, so read to stay aligned and drop.
+        aStream.ExpectByte( ORCAD_PRIM_SYMBOL_VECTOR, wxS( "v2 symbol vector pair" ) );
+
+        int16_t nProp = aStream.ReadI16();
+
+        for( int i = 0; i < std::max<int>( nProp, 0 ); i++ )
+        {
+            aStream.ReadU16();
+            aStream.ReadU16();
+        }
+
+        aStream.ReadI16();                      // location x
+        aStream.ReadI16();                      // location y
+
+        uint16_t nested = aStream.ReadU16();
+        v2CheckCount( aStream, nested );
+
+        for( uint16_t i = 0; i < nested; i++ )
+        {
+            uint8_t nestedType = aStream.ReadU8();
+            aStream.ExpectByte( 0x00, wxS( "v2 vector prim pad" ) );
+            v2PrimBody( aStream, nestedType, aDepth + 1 );
+        }
+
+        aStream.ReadLzt();                      // vector name
+        prim.kind = ORCAD_PRIM_KIND::LINE;      // placeholder; vector body not drawn
+        break;
+    }
+
+    case ORCAD_PRIM_COMMENT_TEXT:
+        prim.kind = ORCAD_PRIM_KIND::TEXT;
+        prim.x1 = aStream.ReadI32();
+        prim.y1 = aStream.ReadI32();
+        aStream.ReadI32();                      // x2
+        aStream.ReadI32();                      // y2
+        aStream.ReadI32();                      // x1 (duplicate corner)
+        aStream.ReadI32();                      // y1
+        prim.fontIdx = aStream.ReadU16();
+        aStream.Skip( 2 );
+        prim.text = aStream.ReadLzt();
+        break;
+
+    default:
+        THROW_IO_ERROR( wxString::Format( wxS( "v2 primitive: unhandled type %d" ), (int) type ) );
+    }
+
+    return prim;
+}
+
+
+static ORCAD_GRAPHIC_INST v2GraphicInst( ORCAD_STREAM& aStream,
+                                         const std::vector<std::string>& aStrings )
+{
+    ORCAD_GRAPHIC_INST inst;
+    inst.typeId = v2Prefix( aStream, aStrings, &inst.props );
+
+    uint16_t nameIdx = aStream.ReadU16();
+    aStream.ReadU16();                          // source library string index
+    aStream.Skip( 4 );                          // uninitialized junk
+    inst.logicalName = v2Resolve( aStrings, nameIdx );
+    inst.name = aStream.ReadLzt();
+    inst.dbId = aStream.ReadU32();
+
+    inst.y = aStream.ReadI16();
+    inst.x = aStream.ReadI16();
+    int y2 = aStream.ReadI16();
+    int x2 = aStream.ReadI16();
+    int x1 = aStream.ReadI16();
+    int y1 = aStream.ReadI16();
+    inst.bbox.x1 = x1;
+    inst.bbox.y1 = y1;
+    inst.bbox.x2 = x2;
+    inst.bbox.y2 = y2;
+
+    inst.color = aStream.ReadU8();
+    uint8_t orientation = aStream.ReadU8();
+    inst.rotation = orientation & 0x3;
+    inst.mirror = ( orientation & 0x4 ) != 0;
+    aStream.Skip( 2 );
+
+    inst.displayProps = v2DisplayPropList( aStream, aStrings );
+
+    uint8_t flag = aStream.ReadU8();
+
+    if( flag == 0x02 )
+        inst.nested = std::make_unique<ORCAD_SYMBOL_DEF>( v2SymbolDef( aStream, aStrings ) );
+
+    return inst;
+}
+
+
+static void v2Structure( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings )
+{
+    switch( aStream.PeekU8() )
+    {
+    case ORCAD_ST_STH_IN_PAGES0:       v2SymbolDef( aStream, aStrings ); break;
+    case ORCAD_ST_SYMBOL_DISPLAY_PROP: v2DisplayProp( aStream, aStrings ); break;
+    case ORCAD_ST_ALIAS:               v2Alias( aStream, aStrings ); break;
+    case ORCAD_ST_T0X10:               v2PinInst( aStream, aStrings ); break;
+    case ORCAD_ST_PLACED_INSTANCE:     v2PlacedInstance( aStream, aStrings ); break;
+    case ORCAD_ST_WIRE_SCALAR:
+    case ORCAD_ST_WIRE_BUS:            v2Wire( aStream, aStrings ); break;
+    default:
+        THROW_IO_ERROR( wxString::Format( wxS( "v2 nested structure: unhandled type %d" ),
+                                          aStream.PeekU8() ) );
+    }
+}
+
+
+// -- v2.0 .OLB symbol-library streams -----------------------------------------------
+
+// Used by the .OLB symbol readers added in the following commit.
+[[maybe_unused]] static ORCAD_PORT_TYPE v2PortType( uint32_t aRaw )
+{
+    return aRaw <= 7 ? static_cast<ORCAD_PORT_TYPE>( aRaw ) : ORCAD_PORT_TYPE::PASSIVE;
+}
+
+
+ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData,
+                                 const std::vector<std::string>& aStrings,
+                                 const ORCAD_WARN_FN& /* aWarn */ )
+{
+    ORCAD_STREAM   stream( aData );
+    ORCAD_RAW_PAGE page;
+
+    uint8_t type = v2Prefix( stream, aStrings );
+
+    if( type != ORCAD_ST_PAGE )
+        THROW_IO_ERROR( wxString::Format( wxS( "v2 page: unexpected root type %d" ), (int) type ) );
+
+    page.name = stream.ReadLzt();
+    page.pageSize = stream.ReadLzt();
+
+    ORCAD_PAGE_SETTINGS settings = OrcadParsePageSettings( stream );
+    page.width = settings.width;
+    page.height = settings.height;
+    page.isMetric = settings.isMetric;
+
+    uint16_t titleBlockCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < titleBlockCount; i++ )
+    {
+        page.titleBlocks.push_back( v2GraphicInst( stream, aStrings ) );
+        stream.Skip( 12 );                      // title-block trailer
+    }
+
+    uint16_t allNetCount = stream.ReadU16();    // every net on page (name empty)
+
+    for( uint16_t i = 0; i < allNetCount; i++ )
+    {
+        stream.ReadU32();
+        stream.ReadLzt();
+    }
+
+    stream.ReadU16();                           // net table B, always zero in corpus
+
+    uint16_t netmapCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < netmapCount; i++ )
+    {
+        std::string netName = stream.ReadLzt();
+        page.netmap[stream.ReadU32()] = netName;
+    }
+
+    uint16_t wireCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < wireCount; i++ )
+        page.wires.push_back( v2Wire( stream, aStrings ) );
+
+    uint16_t instanceCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < instanceCount; i++ )
+        page.instances.push_back( v2PlacedInstance( stream, aStrings ) );
+
+    uint16_t portCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < portCount; i++ )
+    {
+        page.ports.push_back( v2GraphicInst( stream, aStrings ) );
+        stream.Skip( 9 );
+    }
+
+    uint16_t globalCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < globalCount; i++ )
+    {
+        page.globals.push_back( v2GraphicInst( stream, aStrings ) );
+        stream.Skip( 5 );
+    }
+
+    uint16_t offPageCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < offPageCount; i++ )
+    {
+        page.offpage.push_back( v2GraphicInst( stream, aStrings ) );
+        stream.Skip( 5 );
+    }
+
+    uint16_t ercCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < ercCount; i++ )
+    {
+        page.ercObjects.push_back( v2GraphicInst( stream, aStrings ) );
+        stream.ReadLzt();
+        stream.ReadLzt();
+        stream.ReadLzt();
+    }
+
+    uint16_t busEntryCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < busEntryCount; i++ )
+    {
+        v2Prefix( stream, aStrings );
+        ORCAD_BUS_ENTRY entry;
+        entry.color = stream.ReadU32();
+        stream.Skip( 8 );
+        entry.x1 = stream.ReadI32();
+        entry.y1 = stream.ReadI32();
+        entry.x2 = stream.ReadI32();
+        entry.y2 = stream.ReadI32();
+        page.busEntries.push_back( entry );
+    }
+
+    uint16_t graphicCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < graphicCount; i++ )
+        page.graphics.push_back( v2GraphicInst( stream, aStrings ) );
+
+    return page;
+}
+
+ORCAD_OCC_SCOPE OrcadReadOccurrenceTree( const std::vector<char>& aData,
+                                         const ORCAD_WARN_FN& aWarn )
+{
+    // Modern streams open w/ type-0x42 long prefix (u8 0x42, u32 bodyLen, u32 0); legacy pre-preamble
+    // streams start at view-name lzt with only instance-annotated refs, so empty tree is correct.
+    if( aData.size() < 9 || (uint8_t) aData[0] != 0x42 || aData[5] || aData[6] || aData[7]
+        || aData[8] )
+    {
+        return {};
+    }
+
+    ORCAD_STREAM stream( aData );
+
+    try
+    {
+        stream.ReadU8();                        // 0x42
+        stream.ReadU32();                       // bodyLen
+        stream.ReadU32();                       // 0
+        stream.ReadLzt();                       // view name
+        stream.Skip( 9 );                       // zeros
+        return readOccScope( stream );
+    }
+    catch( const IO_ERROR& e )
+    {
+        aWarn( wxString::Format( wxS( "The design occurrence tree could not be fully read (%s); "
+                                      "reference designators fall back to the placed instances." ),
+                                 e.What() ) );
+        return {};
+    }
 }

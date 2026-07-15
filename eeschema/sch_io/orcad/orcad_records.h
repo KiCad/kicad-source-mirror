@@ -249,6 +249,8 @@ struct ORCAD_PIN_INST
 {
     int                             x = 0;
     int                             y = 0;
+    uint32_t                        wordA = 0;   ///< two flag/id words after (x, y)
+    uint32_t                        wordB = 0;
     std::vector<ORCAD_DISPLAY_PROP> displayProps;
 };
 
@@ -422,6 +424,10 @@ struct ORCAD_SYMBOL_DEF
      */
     std::vector<ORCAD_SYMBOL_DEF>      variants;
 
+    /// LibraryPart GeneralProperties flags (-1 = absent); bit0 = pin numbers visible,
+    /// bit2 = pin names hidden.
+    int                                generalFlags = -1;
+
     bool                               synthesized = false;  ///< placeholder built from T0x10 data
 };
 
@@ -592,10 +598,41 @@ struct ORCAD_RAW_PAGE
 };
 
 
+struct ORCAD_OCC_BLOCK;   // defined below (a scope owns child block occurrences)
+
+
 /**
- * Everything parsed from one .DSN, as handed to ORCAD_CONVERTER.  Pages are the
- * root schematic folder's pages in schematic order; other folders are recorded
- * only for the skipped-content warnings.
+ * One node of the design occurrence tree parsed from the root Hierarchy stream.
+ * A scope is the set of occurrences visible at one point in the instantiation
+ * path: the reference designator of every placed part (keyed by its type-13 db
+ * id) and the hierarchical block occurrences that descend into child schematics.
+ */
+struct ORCAD_OCC_SCOPE
+{
+    std::map<uint32_t, std::string>   partRefs;   ///< type-13 dbId -> occurrence refdes
+    std::vector<ORCAD_OCC_BLOCK>      blocks;     ///< hierarchical block occurrences
+};
+
+
+/**
+ * A hierarchical block occurrence: one placement of a child schematic folder on a
+ * parent page.  The same child folder appears once per instantiation path, each
+ * with its own nested scope (so a schematic reused N times yields N sets of
+ * per-occurrence reference designators).
+ */
+struct ORCAD_OCC_BLOCK
+{
+    uint32_t        targetDbId = 0;   ///< type-12 drawn-instance dbId on the parent page
+    std::string     childFolder;      ///< child schematic folder name
+    ORCAD_OCC_SCOPE scope;            ///< the child's occurrences under this path
+};
+
+
+/**
+ * Everything parsed from one .DSN, as handed to ORCAD_CONVERTER.  design.pages are
+ * the root schematic folder's pages in schematic order; child folder pages are held
+ * in childFolderPages and instantiated once per block occurrence via the occurrence
+ * tree, so a schematic reused N times imports N times with per-occurrence refs.
  */
 struct ORCAD_DESIGN
 {
@@ -603,10 +640,19 @@ struct ORCAD_DESIGN
     ORCAD_LIBRARY_INFO                      library;
     std::map<std::string, ORCAD_SYMBOL_DEF> symbols;   ///< cache, keyed by cache name
     std::map<std::string, ORCAD_PACKAGE>    packages;  ///< keyed by package name
-    std::vector<ORCAD_RAW_PAGE>             pages;
+    std::vector<ORCAD_RAW_PAGE>             pages;      ///< root schematic folder pages
+
+    /// Child schematic folder pages, keyed by lower-cased folder name; instantiated
+    /// once per hierarchical block occurrence during conversion.
+    std::map<std::string, std::vector<ORCAD_RAW_PAGE>> childFolderPages;
+
+    /// Occurrence tree from the root folder Hierarchy stream.  occurrenceRoot.partRefs
+    /// carries the root folder's occurrence designators (occurrence-annotated designs
+    /// leave the placed instance's own field as the "C?" template; this fills it in);
+    /// occurrenceRoot.blocks descend into the child schematics with per-path refs.
+    ORCAD_OCC_SCOPE                         occurrenceRoot;
 
     bool                                    hasHierarchyBlocks = false;
-    std::vector<std::string>                skippedFolders;  ///< non-root schematic folders
 };
 
 #endif // ORCAD_RECORDS_H_
