@@ -54,18 +54,18 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         // Positions measured from constraint_allowed_orientation.png (~280x180)
-        // Format: { xStart, xEnd, yTop, tabOrder }
+        // Format: { xStart, xEnd, yCenter, tabOrder }
         // Checkboxes stacked vertically on the right side
         return {
-            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_YO, 1, _( "Allow 0°" ),
+            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 52 + DRC_RE_OVERLAY_YO, 1, _( "Allow 0°" ),
               LABEL_POSITION::RIGHT }, // 0 degrees checkbox
-            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 80 + DRC_RE_OVERLAY_YO, 2, _( "Allow 90°" ),
+            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 92 + DRC_RE_OVERLAY_YO, 2, _( "Allow 90°" ),
               LABEL_POSITION::RIGHT }, // 90 degrees checkbox
-            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 120 + DRC_RE_OVERLAY_YO, 3, _( "Allow 180°" ),
+            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 132 + DRC_RE_OVERLAY_YO, 3, _( "Allow 180°" ),
               LABEL_POSITION::RIGHT }, // 180 degrees checkbox
-            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 160 + DRC_RE_OVERLAY_YO, 4, _( "Allow 270°" ),
+            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 172 + DRC_RE_OVERLAY_YO, 4, _( "Allow 270°" ),
               LABEL_POSITION::RIGHT }, // 270 degrees checkbox
-            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 200 + DRC_RE_OVERLAY_YO, 5, _( "Allow All" ),
+            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 212 + DRC_RE_OVERLAY_YO, 5, _( "Allow All" ),
               LABEL_POSITION::RIGHT }, // all degrees checkbox
         };
     }

@@ -140,12 +140,13 @@ void DRC_RE_BITMAP_OVERLAY_PANEL::PositionFields()
         if( !ctrl )
             continue;
 
-        wxPoint posLogical = FromDIP( wxPoint( pos.xStart, pos.yTop ) );
-        int     widthLogical = FromDIP( pos.xEnd - pos.xStart + DRC_RE_OVERLAY_WE );
-        wxSize  sizeLogical( widthLogical, ctrl->GetBestSize().GetHeight() );
+        int heightLogical = ctrl->GetBestSize().GetHeight();
+        int widthLogical = FromDIP( pos.xEnd - pos.xStart + DRC_RE_OVERLAY_WE );
+        int xLogical = FromDIP( pos.xStart );
+        int yLogical = FromDIP( pos.yCenter ) - heightLogical / 2;
 
-        ctrl->SetPosition( posLogical );
-        ctrl->SetSize( sizeLogical );
+        ctrl->SetPosition( wxPoint( xLogical, yLogical ) );
+        ctrl->SetSize( wxSize( widthLogical, heightLogical ) );
 
         // Position labels if present
         if( field->HasLabel() )
