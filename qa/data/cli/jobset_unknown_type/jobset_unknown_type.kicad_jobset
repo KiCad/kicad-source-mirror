@@ -1,0 +1,25 @@
+{
+  "jobs": [
+    {
+      "description": "",
+      "id": "5261b358-63a1-4bc8-a8b2-6ec2ba79eafc",
+      "settings": {
+        "some_future_option": true
+      },
+      "type": "special_from_the_future"
+    }
+  ],
+  "meta": {
+    "version": 1
+  },
+  "outputs": [
+    {
+      "description": "Out folder",
+      "id": "d9bbe1ae-e64d-4b3c-9bcd-e5b57a5a3b31",
+      "settings": {
+        "output_path": "out/"
+      },
+      "type": "folder"
+    }
+  ]
+}

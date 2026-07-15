@@ -174,6 +174,7 @@ set( KICOMMON_SRCS
     jobs/job_special_archive.cpp
     jobs/job_special_copyfiles.cpp
     jobs/job_special_execute.cpp
+    jobs/job_unknown.cpp
     jobs/jobset.cpp
     jobs/job_fp_export_svg.cpp
     jobs/job_fp_upgrade.cpp

@@ -699,6 +699,12 @@ bool PANEL_JOBSET::OpenJobOptionsForListItem( size_t aItemIndex )
             if( dialog.ShowModal() == wxID_OK )
                 success = true;
         }
+        else
+        {
+            DisplayErrorMessage( m_frame, wxString::Format( _( "This version of KiCad does not "
+                                                               "support the '%s' job type." ),
+                                                            job.m_type ) );
+        }
     }
 
     if( success )

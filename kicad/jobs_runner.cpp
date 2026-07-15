@@ -298,6 +298,12 @@ bool JOBS_RUNNER::RunJobsForDestination( JOBSET_DESTINATION* aDestination, bool 
             {
                 result = runSpecialArchive( &job, &isolatedReporter, m_project );
             }
+            else
+            {
+                msg = wxString::Format( wxT( "Unsupported job type '%s'" ), job.m_type );
+                isolatedReporter.Report( msg, RPT_SEVERITY_ERROR );
+                result = CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
         }
 
         aDestination->m_lastRunSuccessMap[job.m_id] = ( result == CLI::EXIT_CODES::SUCCESS );
