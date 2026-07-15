@@ -5684,6 +5684,20 @@
 				(path "/2e45d1d2-c73f-46e5-98d6-3a9dc360bff5"
 					(reference "R1")
 					(unit 1)
+					(variant
+						(name "Variant 1")
+						(field
+							(name "Value")
+							(value "10K_V1")
+						)
+					)
+					(variant
+						(name "Variant2")
+						(field
+							(name "Value")
+							(value "10K_V2")
+						)
+					)
 				)
 			)
 		)

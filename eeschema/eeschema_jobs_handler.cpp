@@ -888,6 +888,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         std::vector<wxString> singleVariant = { variantName };
         dataModel.SetVariantNames( singleVariant );
         dataModel.SetCurrentVariant( variantName );
+        dataModel.UpdateReferences( dataModel.GetReferenceList(), variantName );
         dataModel.ApplyBomPreset( preset, variantName );
 
         wxString outPath;
