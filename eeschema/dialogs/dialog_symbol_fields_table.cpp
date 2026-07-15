@@ -345,6 +345,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
                    m_splitter_left->SetSashPosition( cfg.variant_sash_pos );
                } );
 
+    OptOut( m_outputFileName );
+
     if( m_job )
         m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
     else
