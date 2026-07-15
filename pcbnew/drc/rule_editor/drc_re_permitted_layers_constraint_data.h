@@ -50,8 +50,10 @@ public:
         // Positions measured from constraint_permitted_layers.png (~300x170)
         // Format: { xStart, xEnd, yTop, tabOrder }
         return {
-            { 150 + DRC_RE_OVERLAY_XO, 164 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_YO, 1, _( "Allow top Layer" ), LABEL_POSITION::RIGHT },      // top layer checkbox (upper left)
-            { 150 + DRC_RE_OVERLAY_XO, 164 + DRC_RE_OVERLAY_XO, 200 + DRC_RE_OVERLAY_YO, 2, _( "Allow bottom Layer" ), LABEL_POSITION::RIGHT },  // bottom layer checkbox (lower left)
+            { 150 + DRC_RE_OVERLAY_XO, 350 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_YO, 1, _( "Allow top Layer" ),
+              LABEL_POSITION::RIGHT }, // top layer checkbox (upper left)
+            { 150 + DRC_RE_OVERLAY_XO, 350 + DRC_RE_OVERLAY_XO, 200 + DRC_RE_OVERLAY_YO, 2, _( "Allow bottom Layer" ),
+              LABEL_POSITION::RIGHT }, // bottom layer checkbox (lower left)
         };
     }
 

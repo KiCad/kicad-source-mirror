@@ -75,17 +75,8 @@ DRC_RE_MATCHED_LENGTH_DIFF_PAIR_OVERLAY_PANEL::DRC_RE_MATCHED_LENGTH_DIFF_PAIR_O
     maxSkewField->SetUnitBinder( m_maxSkewBinder.get() );
     maxSkewField->GetControl()->SetValidator( VALIDATOR_NUMERIC_CTRL( false, false ) );
 
-    {
-        const DRC_RE_FIELD_POSITION& skewPos = positions[2];
-        wxStaticText*                skewMmLabel = maxSkewField->GetLabel();
-        int afterSkewLabel = skewMmLabel->GetPosition().x + skewMmLabel->GetBestSize().GetWidth();
-        int fieldHeight = maxSkewField->GetControl()->GetBestSize().GetHeight();
-
-        m_withinDiffPairsCheckbox = new wxCheckBox( this, wxID_ANY, _( "Within diff pairs" ) );
-        wxSize cbSize = m_withinDiffPairsCheckbox->GetBestSize();
-        m_withinDiffPairsCheckbox->SetPosition(
-                wxPoint( afterSkewLabel + 8, skewPos.yTop + ( fieldHeight - cbSize.GetHeight() ) / 2 ) );
-    }
+    auto* withinDiffPairs = AddCheckbox( wxS( "within_diff_pairs" ), positions[3] );
+    m_withinDiffPairsCheckbox = static_cast<wxCheckBox*>( withinDiffPairs->GetControl() );
 
     auto notifyModified = [this]( wxCommandEvent& )
     {

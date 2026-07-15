@@ -53,10 +53,10 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return {
-            { 400 + DRC_RE_OVERLAY_XO, 414 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_YO, 1, wxS( "Disallow Through Via" ), LABEL_POSITION::RIGHT },
-            { 400 + DRC_RE_OVERLAY_XO, 414 + DRC_RE_OVERLAY_XO, 80 + DRC_RE_OVERLAY_YO, 2, wxS( "Disallow Micro Via" ), LABEL_POSITION::RIGHT },
-            { 400 + DRC_RE_OVERLAY_XO, 414 + DRC_RE_OVERLAY_XO, 120 + DRC_RE_OVERLAY_YO, 3, wxS( "Disallow Blind Via" ), LABEL_POSITION::RIGHT },
-            { 400 + DRC_RE_OVERLAY_XO, 414 + DRC_RE_OVERLAY_XO, 160 + DRC_RE_OVERLAY_YO, 4, wxS( "Disallow Buried Via" ), LABEL_POSITION::RIGHT },
+            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_YO, 1, wxS( "Disallow Through Via" ), LABEL_POSITION::RIGHT },
+            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 80 + DRC_RE_OVERLAY_YO, 2, wxS( "Disallow Micro Via" ), LABEL_POSITION::RIGHT },
+            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 120 + DRC_RE_OVERLAY_YO, 3, wxS( "Disallow Blind Via" ), LABEL_POSITION::RIGHT },
+            { 400 + DRC_RE_OVERLAY_XO, 600 + DRC_RE_OVERLAY_XO, 160 + DRC_RE_OVERLAY_YO, 4, wxS( "Disallow Buried Via" ), LABEL_POSITION::RIGHT },
         };
     }
 

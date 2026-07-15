@@ -141,7 +141,8 @@ bool DRC_RE_OVERLAY_FIELD::TransferFromWindow()
 
 void DRC_RE_OVERLAY_FIELD::CreateLabels()
 {
-    if( !m_label && !m_position.labelText.IsEmpty() && m_position.labelPosition != LABEL_POSITION::NONE )
+    if( !m_label && !m_position.labelText.IsEmpty() && m_position.labelPosition != LABEL_POSITION::NONE
+        && GetControl()->GetLabel() != m_position.labelText )
     {
         m_label = new wxStaticText( m_parent, wxID_ANY, m_position.labelText );
     }

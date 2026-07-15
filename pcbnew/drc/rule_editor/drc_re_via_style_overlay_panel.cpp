@@ -52,8 +52,6 @@ DRC_RE_VIA_STYLE_OVERLAY_PANEL::DRC_RE_VIA_STYLE_OVERLAY_PANEL(
     }
 
     // Via type dropdown
-    const DRC_RE_FIELD_POSITION& viaTypePos = positions[4];
-
     wxArrayString choices;
     choices.Add( _( "Any" ) );
     choices.Add( _( "Through" ) );
@@ -61,16 +59,10 @@ DRC_RE_VIA_STYLE_OVERLAY_PANEL::DRC_RE_VIA_STYLE_OVERLAY_PANEL(
     choices.Add( _( "Blind" ) );
     choices.Add( _( "Buried" ) );
 
-    m_viaTypeChoice = new wxChoice( this, wxID_ANY, wxPoint( viaTypePos.xStart, viaTypePos.yTop ),
-                                    wxSize( viaTypePos.xEnd - viaTypePos.xStart, -1 ), choices );
-
+    m_viaTypeChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices );
     m_viaTypeChoice->SetSelection( static_cast<int>( m_data->GetViaType() ) );
 
-    m_viaTypeLabel = new wxStaticText( this, wxID_ANY, viaTypePos.labelText );
-    wxSize labelSize = m_viaTypeLabel->GetBestSize();
-    m_viaTypeLabel->SetPosition(
-            wxPoint( viaTypePos.xStart - labelSize.GetWidth() - 4,
-                     viaTypePos.yTop + ( m_viaTypeChoice->GetBestSize().GetHeight() - labelSize.GetHeight() ) / 2 ) );
+    AddControl( wxS( "via_type" ), positions[4], m_viaTypeChoice );
 
     // Create via diameter fields (min/max)
     auto* minViaDiameterField =
@@ -101,59 +93,6 @@ DRC_RE_VIA_STYLE_OVERLAY_PANEL::DRC_RE_VIA_STYLE_OVERLAY_PANEL(
             std::make_unique<UNIT_BINDER>( &m_unitsProvider, eventSource, nullptr, maxViaHoleField->GetControl(),
                                            maxViaHoleField->GetLabel(), false, false );
     maxViaHoleField->SetUnitBinder( m_maxViaHoleSizeBinder.get() );
-
-    // Diameter row decorations
-    {
-        const DRC_RE_FIELD_POSITION& minPos = positions[0];
-        const DRC_RE_FIELD_POSITION& maxPos = positions[1];
-        int                          fieldHeight = minViaDiameterField->GetControl()->GetBestSize().GetHeight();
-
-        auto*  openDia = new wxStaticText( this, wxID_ANY, wxS( "(" ) );
-        wxSize openSize = openDia->GetBestSize();
-        openDia->SetPosition( wxPoint( minPos.xStart - openSize.GetWidth() - 2,
-                                       minPos.yTop + ( fieldHeight - openSize.GetHeight() ) / 2 ) );
-
-        auto*         dashDia = new wxStaticText( this, wxID_ANY, wxS( "-" ) );
-        wxSize        dashSize = dashDia->GetBestSize();
-        wxStaticText* minMmLabel = minViaDiameterField->GetLabel();
-        int           afterMinLabel = minMmLabel->GetPosition().x + minMmLabel->GetBestSize().GetWidth();
-        int           gapMid = ( afterMinLabel + maxPos.xStart ) / 2;
-        dashDia->SetPosition(
-                wxPoint( gapMid - dashSize.GetWidth() / 2, minPos.yTop + ( fieldHeight - dashSize.GetHeight() ) / 2 ) );
-
-        auto*         closeDia = new wxStaticText( this, wxID_ANY, wxS( ")" ) );
-        wxSize        closeSize = closeDia->GetBestSize();
-        wxStaticText* mmLabel = maxViaDiameterField->GetLabel();
-        int           afterLabel = mmLabel->GetPosition().x + mmLabel->GetBestSize().GetWidth();
-        closeDia->SetPosition( wxPoint( afterLabel + 2, minPos.yTop + ( fieldHeight - closeSize.GetHeight() ) / 2 ) );
-    }
-
-    // Hole row decorations
-    {
-        const DRC_RE_FIELD_POSITION& minPos = positions[2];
-        const DRC_RE_FIELD_POSITION& maxPos = positions[3];
-        int                          fieldHeight = minViaHoleField->GetControl()->GetBestSize().GetHeight();
-
-        auto*  openHole = new wxStaticText( this, wxID_ANY, wxS( "(" ) );
-        wxSize openSize = openHole->GetBestSize();
-        openHole->SetPosition( wxPoint( minPos.xStart - openSize.GetWidth() - 2,
-                                        minPos.yTop + ( fieldHeight - openSize.GetHeight() ) / 2 ) );
-
-
-        auto*         dashHole = new wxStaticText( this, wxID_ANY, wxS( "-" ) );
-        wxSize        dashSize = dashHole->GetBestSize();
-        wxStaticText* minMmLabel = minViaHoleField->GetLabel();
-        int           afterMinLabel = minMmLabel->GetPosition().x + minMmLabel->GetBestSize().GetWidth();
-        int           gapMid = ( afterMinLabel + maxPos.xStart ) / 2;
-        dashHole->SetPosition(
-                wxPoint( gapMid - dashSize.GetWidth() / 2, minPos.yTop + ( fieldHeight - dashSize.GetHeight() ) / 2 ) );
-
-        auto*         closeHole = new wxStaticText( this, wxID_ANY, wxS( ")" ) );
-        wxSize        closeSize = closeHole->GetBestSize();
-        wxStaticText* mmLabel = maxViaHoleField->GetLabel();
-        int           afterLabel = mmLabel->GetPosition().x + mmLabel->GetBestSize().GetWidth();
-        closeHole->SetPosition( wxPoint( afterLabel + 2, minPos.yTop + ( fieldHeight - closeSize.GetHeight() ) / 2 ) );
-    }
 
     auto notifyModified = [this]( wxCommandEvent& )
     {
