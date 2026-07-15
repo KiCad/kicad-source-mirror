@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-07-15 01:02+0000\n"
+"PO-Revision-Date: 2026-07-16 07:13+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -23729,7 +23729,7 @@ msgstr ""
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:386
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:398
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:210
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read file '%s'"
 msgstr "Није могуће прочитати датотеку '%s'"
 
