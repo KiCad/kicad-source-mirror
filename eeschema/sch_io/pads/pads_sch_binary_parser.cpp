@@ -22,6 +22,8 @@
 #include "pads_sch_sdb.h"
 
 #include <algorithm>
+#include <array>
+#include <iterator>
 #include <map>
 #include <ranges>
 #include <unordered_map>
@@ -46,6 +48,16 @@ namespace
     constexpr size_t   SHEET_USED_BYTES_OFFSET = 16;
     constexpr size_t   SHEET_RECORD_BYTES = 48;
     constexpr size_t   TEXT_RECORD_BYTES = 32;
+    constexpr size_t   SYMBOL_RECORD_BYTES = 80;
+    constexpr size_t   SYMBOL_PIECE_BYTES = 6;
+    constexpr size_t   SYMBOL_VERTEX_BYTES = 6;
+    constexpr size_t   SYMBOL_ARC_BYTES = 14;
+    constexpr size_t   USED_DECAL_BYTES = 108;
+    constexpr size_t   TERMINAL_BYTES = 26;
+    constexpr size_t   PART_TYPE_BYTES = 76;
+    constexpr size_t   GATE_BYTES = 12;
+    constexpr size_t   PIN_BYTES = 24;
+    constexpr size_t   SIGNAL_PIN_BYTES = 64;
     constexpr uint32_t DEFAULT_CODE_PAGE = 1252;
 
 
@@ -76,6 +88,63 @@ namespace
     int64_t decodeCoordinate( uint16_t aRaw )
     {
         return static_cast<int64_t>( aRaw ) * 4 - 198144;
+    }
+
+
+    int64_t decodeLocalCoordinate( uint16_t aRaw )
+    {
+        return static_cast<int64_t>( static_cast<int16_t>( aRaw ) ) * 2;
+    }
+
+
+    SOURCE_STRING decodeFixedString( const std::vector<uint8_t>& aBytes, size_t aOffset, size_t aBytesAvailable,
+                                     const SOURCE_PROVENANCE& aSource, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    {
+        size_t end = aOffset;
+
+        while( end < aOffset + aBytesAvailable && aBytes[end] != 0 )
+            ++end;
+
+        if( end == aOffset + aBytesAvailable )
+            throwDecodeError( aSource, wxS( "unterminated fixed string" ) );
+
+        return PADS_SCH_BINARY_PARSER::DecodeString( { aBytes.begin() + aOffset, aBytes.begin() + end },
+                                                     DEFAULT_CODE_PAGE, aSource, aDiagnostics );
+    }
+
+
+    SOURCE_PROPERTY sourceProperty( const wxString& aName, const wxString& aValue, const SOURCE_PROVENANCE& aSource )
+    {
+        SOURCE_PROPERTY property;
+        property.name.text = aName;
+        property.name.source = aSource;
+        property.value.text = aValue;
+        property.value.source = aSource;
+        property.disposition = PROPERTY_DISPOSITION::EXACT;
+        property.source = aSource;
+        return property;
+    }
+
+
+    uint32_t pinElectricalType( uint8_t aType, const SOURCE_PROVENANCE& aSource,
+                                std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    {
+        switch( aType )
+        {
+        case 'U': return 0;
+        case 'L': return 1;
+        case 'S': return 2;
+        case 'B': return 3;
+        case 'T': return 4;
+        case 'C': return 5;
+        case 'E': return 6;
+        case 'P':
+        case 'G': return 7;
+        case 'Z': return 8;
+        default:
+            PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "pin electrical type" ), aType, aSource, aDiagnostics );
+            return 8;
+        }
     }
 
 
@@ -369,6 +438,584 @@ namespace
 
         return definition != aIndex.definitions.end() && pin != aIndex.pins.end() && pinOwner != aIndex.pinOwners.end()
                && pinOwner->second == definition->second;
+    }
+
+
+    struct SHEET_CONTROLLERS
+    {
+        std::array<SCH_SDB_POOL, 23> pools;
+        std::array<size_t, 23>       offsets;
+    };
+
+
+    SHEET_CONTROLLERS sheetControllers( const PADS_IO::BINARY_CURSOR& aCursor, const SCH_SDB_BLOCK& aBlock )
+    {
+        SHEET_CONTROLLERS result;
+        size_t            descriptor = aBlock.offset + SHEET_HEADER_BYTES;
+        size_t            payload = descriptor + 24 * SHEET_DESCRIPTOR_BYTES;
+
+        for( size_t i = 0; i < result.pools.size(); ++i )
+        {
+            result.pools[i].count = aCursor.U32At( descriptor + i * SHEET_DESCRIPTOR_BYTES + 12 );
+            result.pools[i].usedBytes = aCursor.U32At( descriptor + i * SHEET_DESCRIPTOR_BYTES + 16 );
+            result.offsets[i] = payload;
+            payload += result.pools[i].usedBytes;
+        }
+
+        return result;
+    }
+
+
+    void requireFixedController( const SHEET_CONTROLLERS& aControllers, size_t aController, size_t aStride,
+                                 const wxString& aFile, uint16_t aVersion, int aSheet )
+    {
+        const SCH_SDB_POOL& pool = aControllers.pools[aController - 1];
+
+        if( pool.usedBytes != pool.count * aStride )
+        {
+            SOURCE_PROVENANCE source =
+                    sourceAt( aFile, aVersion, wxS( "controller directory" ), static_cast<int>( aController ), 0,
+                              aControllers.offsets[aController - 1], pool.usedBytes, aSheet );
+            throwDecodeError( source, wxString::Format( wxS( "controller byte count does not match %llu-byte records" ),
+                                                        static_cast<unsigned long long>( aStride ) ) );
+        }
+    }
+
+
+    void decodeDefinitionsAndParts( const std::vector<uint8_t>& aBytes, const PADS_IO::BINARY_CURSOR& aCursor,
+                                    const SCH_SDB_BLOCK& aBlock, size_t aSheetIndex, const wxString& aSourceName,
+                                    PADS_SCH_MODEL& aModel )
+    {
+        if( aModel.version == 0x000C )
+        {
+            const SHEET_CONTROLLERS controllers = sheetControllers( aCursor, aBlock );
+
+            for( size_t controller = 3; controller <= 14; ++controller )
+            {
+                const SCH_SDB_POOL& pool = controllers.pools[controller - 1];
+
+                if( pool.usedBytes == 0 )
+                    continue;
+
+                SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "definition controller" ),
+                                                     controller, 0, controllers.offsets[controller - 1], pool.usedBytes,
+                                                     static_cast<int>( aSheetIndex ) );
+                aModel.preservedControllerPayloads.push_back(
+                        { source,
+                          PROPERTY_DISPOSITION::PRESERVED,
+                          { aBytes.begin() + source.absoluteOffset,
+                            aBytes.begin() + source.absoluteOffset + source.length } } );
+            }
+
+            return;
+        }
+
+        const SHEET_CONTROLLERS controllers = sheetControllers( aCursor, aBlock );
+        requireFixedController( controllers, 3, SYMBOL_RECORD_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 4, SYMBOL_PIECE_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 5, SYMBOL_VERTEX_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 6, SYMBOL_ARC_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 7, USED_DECAL_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 8, TERMINAL_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 9, PART_TYPE_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 10, GATE_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 11, PIN_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 12, SIGNAL_PIN_BYTES, aSourceName, aModel.version, aSheetIndex );
+
+        const size_t   symbolBase = controllers.offsets[2];
+        const size_t   pieceBase = controllers.offsets[3];
+        const size_t   vertexBase = controllers.offsets[4];
+        const size_t   arcBase = controllers.offsets[5];
+        const size_t   usedDecalBase = controllers.offsets[6];
+        const size_t   terminalBase = controllers.offsets[7];
+        const size_t   partBase = controllers.offsets[8];
+        const size_t   gateBase = controllers.offsets[9];
+        const size_t   pinBase = controllers.offsets[10];
+        const size_t   signalPinBase = controllers.offsets[11];
+        const size_t   textBase = controllers.offsets[0];
+        const size_t   textHeapBase = controllers.offsets[1];
+        const size_t   pinNameBase = controllers.offsets[13];
+        const uint32_t textCount = controllers.pools[0].count;
+        const uint32_t textHeapBytes = controllers.pools[1].usedBytes;
+        const uint32_t pinNameBytes = controllers.pools[13].usedBytes;
+        const uint32_t definitionIdBase = static_cast<uint32_t>( aSheetIndex * 0x100000 + 1 );
+        const uint32_t pinIdBase = static_cast<uint32_t>( aSheetIndex * 0x100000 + 0x10000 );
+        const uint32_t partIdBase = static_cast<uint32_t>( aSheetIndex * 0x100000 + 0x20000 );
+        const uint32_t gateIdBase = static_cast<uint32_t>( aSheetIndex * 0x100000 + 0x30000 );
+
+        std::vector<uint32_t> pieceVertexStart;
+        uint32_t              vertexCursor = 0;
+
+        for( size_t piece = 0; piece < controllers.pools[3].count; ++piece )
+        {
+            pieceVertexStart.push_back( vertexCursor );
+            vertexCursor += aCursor.U8At( pieceBase + piece * SYMBOL_PIECE_BYTES + 2 );
+        }
+
+        if( vertexCursor > controllers.pools[4].count )
+        {
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "symbol piece" ), 4, 0, pieceBase,
+                                                 controllers.pools[3].usedBytes, static_cast<int>( aSheetIndex ) );
+            throwDecodeError( source, wxS( "symbol piece vertex counts leave controller 5" ) );
+        }
+
+        std::vector<std::optional<size_t>> pieceArcRecord( controllers.pools[3].count );
+        size_t                             discoveredArcCount = 0;
+
+        for( size_t piece = 0; piece < controllers.pools[3].count; ++piece )
+        {
+            const size_t pieceOffset = pieceBase + piece * SYMBOL_PIECE_BYTES;
+            const size_t vertexOffset = vertexBase + pieceVertexStart[piece] * SYMBOL_VERTEX_BYTES;
+
+            if( aCursor.U8At( pieceOffset ) == 0 && static_cast<int16_t>( aCursor.U16At( vertexOffset + 4 ) ) >= 0
+                && discoveredArcCount < controllers.pools[5].count )
+            {
+                pieceArcRecord[piece] = discoveredArcCount++;
+            }
+        }
+
+        std::vector<MODEL_SYMBOL_DEFINITION*> definitionsByRecord( controllers.pools[2].count );
+        aModel.definitions.reserve( aModel.definitions.size() + controllers.pools[2].count );
+
+        for( size_t record = 0; record < controllers.pools[2].count; ++record )
+        {
+            const size_t      offset = symbolBase + record * SYMBOL_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "symbol definition" ), 3, record,
+                                                 offset, SYMBOL_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            SOURCE_PROVENANCE nameSource = source;
+            nameSource.length = 38;
+            SOURCE_STRING  name = decodeFixedString( aBytes, offset, 38, nameSource, aModel.diagnostics );
+            const uint8_t  objectClass = aCursor.U8At( offset + 0x29 );
+            const uint32_t vertexStart = aCursor.U32At( offset + 0x34 );
+            const uint32_t vertexEnd = record + 1 < controllers.pools[2].count
+                                               ? aCursor.U32At( offset + SYMBOL_RECORD_BYTES + 0x34 )
+                                               : controllers.pools[4].count;
+
+            if( vertexStart > vertexEnd || vertexEnd > controllers.pools[4].count )
+                throwDecodeError( source, wxS( "symbol definition vertex slice leaves controller 5" ) );
+
+            if( objectClass != 0x06 )
+                continue;
+
+            MODEL_SYMBOL_DEFINITION definition;
+            definition.id = DEFINITION_ID( definitionIdBase + record );
+            definition.source = source;
+            definition.name = std::move( name );
+
+            for( size_t piece = 0; piece < pieceVertexStart.size(); ++piece )
+            {
+                if( pieceVertexStart[piece] < vertexStart || pieceVertexStart[piece] >= vertexEnd )
+                    continue;
+
+                const size_t      pieceOffset = pieceBase + piece * SYMBOL_PIECE_BYTES;
+                const uint8_t     pieceKind = aCursor.U8At( pieceOffset );
+                const uint8_t     pointCount = aCursor.U8At( pieceOffset + 2 );
+                const uint32_t    firstVertex = pieceVertexStart[piece];
+                SOURCE_PROVENANCE graphicSource =
+                        sourceAt( aSourceName, aModel.version, wxS( "symbol graphic" ), 4, piece, pieceOffset,
+                                  SYMBOL_PIECE_BYTES, static_cast<int>( aSheetIndex ) );
+                MODEL_GRAPHIC graphic;
+                graphic.source = graphicSource;
+                graphic.strokeWidth = static_cast<int64_t>( aCursor.U8At( pieceOffset + 4 ) ) * 2;
+
+                switch( pieceKind )
+                {
+                case 0: graphic.kind = pointCount == 2 ? MODEL_GRAPHIC_KIND::LINE : MODEL_GRAPHIC_KIND::POLYLINE; break;
+                case 1: graphic.kind = MODEL_GRAPHIC_KIND::POLYLINE; break;
+                case 2: graphic.kind = MODEL_GRAPHIC_KIND::CIRCLE; break;
+                case 4:
+                    graphic.kind = MODEL_GRAPHIC_KIND::POLYLINE;
+                    graphic.fill = MODEL_FILL_STYLE::FILLED;
+                    break;
+                default:
+                    PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "symbol graphic kind" ), pieceKind, graphicSource,
+                                                               aModel.diagnostics );
+                    graphic.kind = MODEL_GRAPHIC_KIND::POLYLINE;
+                    break;
+                }
+
+                for( size_t point = 0; point < pointCount; ++point )
+                {
+                    const size_t      pointOffset = vertexBase + ( firstVertex + point ) * SYMBOL_VERTEX_BYTES;
+                    SOURCE_PROVENANCE pointSource =
+                            sourceAt( aSourceName, aModel.version, wxS( "symbol vertex" ), 5, firstVertex + point,
+                                      pointOffset, SYMBOL_VERTEX_BYTES, static_cast<int>( aSheetIndex ) );
+                    graphic.points.push_back( { decodeLocalCoordinate( aCursor.U16At( pointOffset ) ),
+                                                decodeLocalCoordinate( aCursor.U16At( pointOffset + 2 ) ),
+                                                pointSource } );
+                }
+
+                const int16_t arcMarker =
+                        static_cast<int16_t>( aCursor.U16At( vertexBase + firstVertex * SYMBOL_VERTEX_BYTES + 4 ) );
+
+                if( pieceKind == 0 && arcMarker >= 0 )
+                {
+                    if( !pieceArcRecord[piece] )
+                        throwDecodeError( graphicSource, wxS( "symbol arc has no controller-6 record" ) );
+
+                    const size_t arcRecord = *pieceArcRecord[piece];
+                    const size_t arcOffset = arcBase + arcRecord * SYMBOL_ARC_BYTES;
+                    graphic.kind = MODEL_GRAPHIC_KIND::ARC;
+                    graphic.properties.push_back( sourceProperty(
+                            wxS( "sweep_angle_tenths" ), wxString::Format( wxS( "%u" ), aCursor.U16At( arcOffset ) ),
+                            sourceAt( aSourceName, aModel.version, wxS( "symbol arc" ), 6, arcRecord, arcOffset,
+                                      SYMBOL_ARC_BYTES, static_cast<int>( aSheetIndex ) ) ) );
+                }
+
+                definition.graphics.push_back( std::move( graphic ) );
+            }
+
+            aModel.definitions.push_back( std::move( definition ) );
+            definitionsByRecord[record] = &aModel.definitions.back();
+        }
+
+        struct USED_DECAL
+        {
+            size_t                   record = 0;
+            uint32_t                 definitionRecord = 0;
+            uint16_t                 terminalStart = 0;
+            uint8_t                  terminalCount = 0;
+            uint32_t                 fieldStart = 0;
+            MODEL_SYMBOL_DEFINITION* definition = nullptr;
+        };
+
+        std::vector<USED_DECAL>  usedDecals( controllers.pools[6].count );
+        std::vector<USED_DECAL*> semanticDecals;
+
+        for( size_t record = 0; record < usedDecals.size(); ++record )
+        {
+            const size_t      offset = usedDecalBase + record * USED_DECAL_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "used decal" ), 7, record, offset,
+                                                 USED_DECAL_BYTES, static_cast<int>( aSheetIndex ) );
+            SOURCE_PROVENANCE nameSource = source;
+            nameSource.length = 40;
+            SOURCE_STRING name = decodeFixedString( aBytes, offset, 40, nameSource, aModel.diagnostics );
+            USED_DECAL&   decal = usedDecals[record];
+            decal.record = record;
+            decal.terminalCount = aCursor.U8At( offset + 42 );
+            decal.terminalStart = aCursor.U16At( offset + 44 );
+            decal.definitionRecord = aCursor.U32At( offset + 48 );
+            decal.fieldStart = aCursor.U32At( offset + 52 );
+
+            if( name.text.empty() || decal.definitionRecord == 0xFFFFFFFF )
+                continue;
+
+            if( decal.definitionRecord >= definitionsByRecord.size() )
+                throwDecodeError( source, wxS( "unresolved symbol definition reference" ) );
+
+            const size_t      definitionOffset = symbolBase + decal.definitionRecord * SYMBOL_RECORD_BYTES;
+            SOURCE_PROVENANCE targetNameSource =
+                    sourceAt( aSourceName, aModel.version, wxS( "symbol definition" ), 3, decal.definitionRecord,
+                              definitionOffset, 38, static_cast<int>( aSheetIndex ) );
+            SOURCE_STRING targetName =
+                    decodeFixedString( aBytes, definitionOffset, 38, targetNameSource, aModel.diagnostics );
+
+            if( targetName.text != name.text )
+            {
+                const uint8_t targetClass = aCursor.U8At( definitionOffset + 0x29 );
+                throwDecodeError( source, targetClass == 0x06 ? wxS( "used-decal handle name mismatch" )
+                                                              : wxS( "used-decal handle targets wrong object class" ) );
+            }
+
+            decal.definition = definitionsByRecord[decal.definitionRecord];
+
+            if( !decal.definition )
+                continue;
+
+            if( static_cast<uint32_t>( decal.terminalStart ) + decal.terminalCount > controllers.pools[7].count )
+                throwDecodeError( source, wxS( "used-decal terminal slice leaves controller 8" ) );
+
+            semanticDecals.push_back( &decal );
+
+            for( size_t pin = 0; pin < decal.terminalCount; ++pin )
+            {
+                const size_t      terminalRecord = decal.terminalStart + pin;
+                const size_t      terminalOffset = terminalBase + terminalRecord * TERMINAL_BYTES;
+                SOURCE_PROVENANCE pinSource =
+                        sourceAt( aSourceName, aModel.version, wxS( "symbol pin" ), 8, terminalRecord, terminalOffset,
+                                  TERMINAL_BYTES, static_cast<int>( aSheetIndex ) );
+                const uint16_t       pinDecalHandle = aCursor.U16At( terminalOffset );
+                MODEL_PIN_DEFINITION definitionPin;
+                definitionPin.id = PIN_ID( pinIdBase + terminalRecord );
+                definitionPin.source = pinSource;
+                definitionPin.position = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 2 ) ),
+                                           decodeLocalCoordinate( aCursor.U16At( terminalOffset + 4 ) ), pinSource };
+                definitionPin.presentation.source = pinSource;
+                definitionPin.presentation.height = static_cast<int64_t>( aCursor.U16At( terminalOffset + 6 ) ) * 2;
+                definitionPin.presentation.width = static_cast<int64_t>( aCursor.U16At( terminalOffset + 8 ) ) * 2;
+                definitionPin.presentation.visible = ( aCursor.U16At( terminalOffset + 24 ) & 0x8000 ) == 0;
+                definitionPin.length = 400;
+
+                if( pinDecalHandle < definitionsByRecord.size() )
+                {
+                    const MODEL_SYMBOL_DEFINITION* pinDecal = definitionsByRecord[pinDecalHandle];
+                    const wxString                 pinDecalName = pinDecal ? pinDecal->name.text : wxString();
+
+                    if( pinDecalName.Contains( wxS( "SHORT" ) ) )
+                        definitionPin.length = 200;
+                    else if( pinDecalName.Contains( wxS( "LONG" ) ) )
+                        definitionPin.length = 600;
+
+                    const bool inverted = pinDecalName == wxS( "PINB" ) || pinDecalName == wxS( "PINORB" )
+                                          || pinDecalName == wxS( "PCLKB" ) || pinDecalName == wxS( "PINIEB" );
+                    const bool clock = pinDecalName == wxS( "PCLK" ) || pinDecalName == wxS( "PCLKB" );
+                    definitionPin.graphicStyle = ( inverted ? 1U : 0U ) | ( clock ? 2U : 0U );
+                }
+
+                definitionPin.properties.push_back( sourceProperty(
+                        wxS( "pin_name_height_half_mils" ),
+                        wxString::Format( wxS( "%lld" ), definitionPin.presentation.height ), pinSource ) );
+                definitionPin.properties.push_back( sourceProperty(
+                        wxS( "pin_number_height_half_mils" ),
+                        wxString::Format( wxS( "%u" ), aCursor.U16At( terminalOffset + 10 ) * 2 ), pinSource ) );
+                decal.definition->pins.push_back( std::move( definitionPin ) );
+            }
+        }
+
+        std::vector<USED_DECAL*> fieldDecals;
+
+        std::ranges::copy_if( semanticDecals, std::back_inserter( fieldDecals ),
+                              [&]( const USED_DECAL* aDecal )
+                              {
+                                  return aDecal->fieldStart < textCount;
+                              } );
+        std::ranges::sort( fieldDecals,
+                           []( const USED_DECAL* aLeft, const USED_DECAL* aRight )
+                           {
+                               return aLeft->fieldStart < aRight->fieldStart;
+                           } );
+
+        auto decodeTextRecord = [&]( size_t aRecord, bool aEmbedded, MODEL_SYMBOL_DEFINITION& aDefinition )
+        {
+            if( aRecord >= textCount )
+                throwDecodeError( aDefinition.source, wxS( "definition field handle leaves controller 1" ) );
+
+            const size_t      offset = textBase + aRecord * TEXT_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt(
+                    aSourceName, aModel.version, aEmbedded ? wxS( "embedded symbol text" ) : wxS( "definition field" ),
+                    1, aRecord, offset, TEXT_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            const uint32_t stringOffset = aCursor.U32At( offset + 8 );
+            const uint16_t stringBytes = aCursor.U16At( offset + 20 );
+
+            if( stringBytes == 0 || stringOffset > textHeapBytes || stringBytes > textHeapBytes - stringOffset
+                || aBytes[textHeapBase + stringOffset + stringBytes - 1] != 0 )
+            {
+                throwDecodeError( source, wxS( "definition field string leaves controller 2" ) );
+            }
+
+            SOURCE_PROVENANCE stringSource =
+                    sourceAt( aSourceName, aModel.version, source.objectClass + wxS( " string" ), 2, aRecord,
+                              textHeapBase + stringOffset, stringBytes - 1, static_cast<int>( aSheetIndex ) );
+            SOURCE_STRING string = PADS_SCH_BINARY_PARSER::DecodeString(
+                    { aBytes.begin() + stringSource.absoluteOffset,
+                      aBytes.begin() + stringSource.absoluteOffset + stringSource.length },
+                    DEFAULT_CODE_PAGE, stringSource, aModel.diagnostics );
+            MODEL_FIELD field;
+            field.source = source;
+
+            if( aEmbedded )
+                field.value = std::move( string );
+            else
+                field.name = std::move( string );
+
+            field.position = { decodeLocalCoordinate( aCursor.U16At( offset + 12 ) ),
+                               decodeLocalCoordinate( aCursor.U16At( offset + 14 ) ), source };
+            field.angle = NormalizeAngle( aCursor.U16At( offset + 16 ) );
+            field.presentation.source = source;
+            field.presentation.height = static_cast<int64_t>( aCursor.U16At( offset + 22 ) ) * 2;
+            field.presentation.width = static_cast<int64_t>( aCursor.U16At( offset + 30 ) ) * 2;
+            field.presentation.horizontalJustification =
+                    horizontalJustification( aCursor.U16At( offset + 18 ), source, aModel.diagnostics );
+            field.presentation.verticalJustification = verticalJustification( aCursor.U16At( offset + 18 ) );
+            aDefinition.fields.push_back( std::move( field ) );
+        };
+
+        for( size_t i = 0; i < fieldDecals.size(); ++i )
+        {
+            USED_DECAL&    decal = *fieldDecals[i];
+            const size_t   definitionOffset = symbolBase + decal.definitionRecord * SYMBOL_RECORD_BYTES;
+            const uint16_t embeddedCount = aCursor.U16At( definitionOffset + 0x40 );
+            const uint32_t fieldEnd = i + 1 < fieldDecals.size() ? fieldDecals[i + 1]->fieldStart : textCount;
+
+            if( decal.fieldStart > fieldEnd || embeddedCount > decal.fieldStart )
+                throwDecodeError( decal.definition->source, wxS( "definition field slice is not monotone" ) );
+
+            for( size_t record = decal.fieldStart - embeddedCount; record < decal.fieldStart; ++record )
+                decodeTextRecord( record, true, *decal.definition );
+
+            for( size_t record = decal.fieldStart; record < fieldEnd; ++record )
+                decodeTextRecord( record, false, *decal.definition );
+        }
+
+        size_t signalPinCursor = 0;
+
+        for( size_t record = 0; record < controllers.pools[8].count; ++record )
+        {
+            const size_t      offset = partBase + record * PART_TYPE_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "part type" ), 9, record, offset,
+                                                 PART_TYPE_BYTES, static_cast<int>( aSheetIndex ) );
+            SOURCE_PROVENANCE nameSource = source;
+            nameSource.length = 44;
+            MODEL_PART_TYPE part;
+            part.id = PART_TYPE_ID( partIdBase + record );
+            part.source = source;
+            part.name = decodeFixedString( aBytes, offset, 44, nameSource, aModel.diagnostics );
+            const uint32_t gateStart = aCursor.U32At( offset + 44 );
+            const uint32_t pinStart = aCursor.U32At( offset + 48 );
+            const uint32_t gateEnd = record + 1 < controllers.pools[8].count
+                                             ? aCursor.U32At( offset + PART_TYPE_BYTES + 44 )
+                                             : controllers.pools[9].count;
+            const uint32_t pinEnd = record + 1 < controllers.pools[8].count
+                                            ? aCursor.U32At( offset + PART_TYPE_BYTES + 48 )
+                                            : controllers.pools[10].count;
+
+            if( gateStart > gateEnd || gateEnd > controllers.pools[9].count || pinStart > pinEnd
+                || pinEnd > controllers.pools[10].count )
+            {
+                throwDecodeError( source, wxS( "part-type gate or pin slice leaves its controller" ) );
+            }
+
+            size_t partPinCursor = pinStart;
+
+            for( size_t gateRecord = gateStart; gateRecord < gateEnd; ++gateRecord )
+            {
+                const size_t      gateOffset = gateBase + gateRecord * GATE_BYTES;
+                SOURCE_PROVENANCE gateSource = sourceAt( aSourceName, aModel.version, wxS( "gate" ), 10, gateRecord,
+                                                         gateOffset, GATE_BYTES, static_cast<int>( aSheetIndex ) );
+                MODEL_GATE        gate;
+                gate.id = GATE_ID( gateIdBase + gateRecord );
+                gate.source = gateSource;
+                gate.unit = static_cast<uint32_t>( gateRecord - gateStart + 1 );
+                const uint16_t pinCount = aCursor.U16At( gateOffset + 8 );
+                const uint16_t swapGroup = aCursor.U16At( gateOffset + 10 );
+                const uint16_t primaryHandle = aCursor.U16At( gateOffset );
+
+                if( pinCount == 0 )
+                    continue;
+
+                if( primaryHandle == 0xFFFF || primaryHandle >= usedDecals.size()
+                    || !usedDecals[primaryHandle].definition )
+                {
+                    bool pinDecalGroup = primaryHandle == 0xFFFF && gateRecord + 1 < gateEnd;
+
+                    for( size_t member = gateRecord + 1; pinDecalGroup && member < gateEnd; ++member )
+                    {
+                        const size_t   memberOffset = gateBase + member * GATE_BYTES;
+                        const uint16_t memberHandle = aCursor.U16At( memberOffset );
+                        pinDecalGroup = aCursor.U16At( memberOffset + 8 ) == 0 && memberHandle < usedDecals.size()
+                                        && usedDecals[memberHandle].definition;
+                    }
+
+                    if( !pinDecalGroup || partPinCursor + pinCount > pinEnd )
+                        throwDecodeError( gateSource, wxS( "unresolved symbol definition reference" ) );
+
+                    part.properties.push_back( sourceProperty(
+                            wxString::Format( wxS( "pin_decal_group_%llu" ),
+                                              static_cast<unsigned long long>( gateRecord - gateStart + 1 ) ),
+                            wxString::Format( wxS( "%u" ), pinCount ), gateSource ) );
+                    partPinCursor += pinCount;
+                    continue;
+                }
+
+                MODEL_SYMBOL_DEFINITION* definition = usedDecals[primaryHandle].definition;
+                gate.definition = { definition->id, gateSource };
+                gate.properties.push_back(
+                        sourceProperty( wxS( "swap_group" ), wxString::Format( wxS( "%u" ), swapGroup ), gateSource ) );
+
+                for( size_t alternate = 1; alternate < 4; ++alternate )
+                {
+                    const uint16_t handle = aCursor.U16At( gateOffset + alternate * 2 );
+
+                    if( handle == 0xFFFF )
+                        continue;
+
+                    if( handle >= usedDecals.size() || !usedDecals[handle].definition )
+                        throwDecodeError( gateSource, wxS( "unresolved alternate symbol definition reference" ) );
+
+                    gate.properties.push_back(
+                            sourceProperty( wxString::Format( wxS( "alternate_definition_%llu" ),
+                                                              static_cast<unsigned long long>( alternate ) ),
+                                            usedDecals[handle].definition->name.text, gateSource ) );
+                }
+
+                if( partPinCursor + pinCount > pinEnd || pinCount > definition->pins.size() )
+                    throwDecodeError( gateSource, wxS( "gate pin slice leaves part type or symbol definition" ) );
+
+                for( size_t pin = 0; pin < pinCount; ++pin, ++partPinCursor )
+                {
+                    const size_t      pinOffset = pinBase + partPinCursor * PIN_BYTES;
+                    SOURCE_PROVENANCE pinSource =
+                            sourceAt( aSourceName, aModel.version, wxS( "part pin" ), 11, partPinCursor, pinOffset,
+                                      PIN_BYTES, static_cast<int>( aSheetIndex ) );
+                    MODEL_PIN_DEFINITION& definitionPin = definition->pins[pin];
+                    SOURCE_PROVENANCE     numberSource = pinSource;
+                    numberSource.absoluteOffset += 4;
+                    numberSource.length = 16;
+                    definitionPin.number =
+                            decodeFixedString( aBytes, pinOffset + 4, 16, numberSource, aModel.diagnostics );
+                    const uint32_t nameOffset = aCursor.U32At( pinOffset );
+
+                    if( nameOffset != 0xFFFFFFFF )
+                    {
+                        if( nameOffset >= pinNameBytes )
+                            throwDecodeError( pinSource, wxS( "pin-name offset leaves controller 14" ) );
+
+                        SOURCE_PROVENANCE pinNameSource = sourceAt(
+                                aSourceName, aModel.version, wxS( "pin name" ), 14, partPinCursor,
+                                pinNameBase + nameOffset, pinNameBytes - nameOffset, static_cast<int>( aSheetIndex ) );
+                        definitionPin.name =
+                                decodeFixedString( aBytes, pinNameBase + nameOffset, pinNameBytes - nameOffset,
+                                                   pinNameSource, aModel.diagnostics );
+                    }
+
+                    definitionPin.electricalType =
+                            pinElectricalType( aCursor.U8At( pinOffset + 21 ), pinSource, aModel.diagnostics );
+                    definitionPin.properties.push_back( sourceProperty(
+                            wxS( "swap_group" ), wxString::Format( wxS( "%u" ), aCursor.U8At( pinOffset + 20 ) ),
+                            pinSource ) );
+                    gate.pins.push_back( { definitionPin.id, pinSource } );
+                }
+
+                part.gates.push_back( std::move( gate ) );
+            }
+
+            if( partPinCursor != pinEnd )
+                throwDecodeError( source, wxS( "part-type gates do not consume its pin slice" ) );
+
+            const uint16_t signalPinCount = aCursor.U16At( offset + 70 );
+
+            if( signalPinCursor + signalPinCount > controllers.pools[11].count )
+                throwDecodeError( source, wxS( "part-type signal-pin slice leaves controller 12" ) );
+
+            for( size_t signal = 0; signal < signalPinCount; ++signal, ++signalPinCursor )
+            {
+                const size_t      signalOffset = signalPinBase + signalPinCursor * SIGNAL_PIN_BYTES;
+                SOURCE_PROVENANCE signalSource =
+                        sourceAt( aSourceName, aModel.version, wxS( "signal pin" ), 12, signalPinCursor, signalOffset,
+                                  SIGNAL_PIN_BYTES, static_cast<int>( aSheetIndex ) );
+                SOURCE_PROVENANCE numberSource = signalSource;
+                numberSource.length = 16;
+                SOURCE_PROVENANCE nameSource2 = signalSource;
+                nameSource2.absoluteOffset += 16;
+                nameSource2.length = 48;
+                SOURCE_STRING number = decodeFixedString( aBytes, signalOffset, 16, numberSource, aModel.diagnostics );
+                SOURCE_STRING signalName =
+                        decodeFixedString( aBytes, signalOffset + 16, 48, nameSource2, aModel.diagnostics );
+                part.signalPins.push_back( { signalSource, number, signalName } );
+                part.properties.push_back(
+                        sourceProperty( wxS( "signal_pin_" ) + number.text, signalName.text, signalSource ) );
+            }
+
+            aModel.partTypes.push_back( std::move( part ) );
+        }
+
+        if( signalPinCursor != controllers.pools[11].count )
+        {
+            SOURCE_PROVENANCE source =
+                    sourceAt( aSourceName, aModel.version, wxS( "signal pin" ), 12, signalPinCursor, signalPinBase,
+                              controllers.pools[11].usedBytes, static_cast<int>( aSheetIndex ) );
+            throwDecodeError( source, wxS( "unowned signal-pin record" ) );
+        }
     }
 
 } // namespace
@@ -1002,6 +1649,7 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
                     { heapSource,
                       PROPERTY_DISPOSITION::PRESERVED,
                       { aBytes.begin() + heapOffset, aBytes.begin() + heapOffset + heapBytes } } );
+            decodeDefinitionsAndParts( aBytes, cursor, block, sheetIndex, aSourceName, model );
             ++sheetIndex;
             continue;
         }
@@ -1036,9 +1684,9 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
 
             if( aBytes[heapOffset + stringOffset + stringBytes - 1] != 0 )
             {
-                SOURCE_PROVENANCE terminatorSource = sourceAt(
-                        aSourceName, model.version, wxS( "free text string terminator" ), 2, record,
-                        heapOffset + stringOffset + stringBytes - 1, 1, static_cast<int>( sheetIndex ) );
+                SOURCE_PROVENANCE terminatorSource =
+                        sourceAt( aSourceName, model.version, wxS( "free text string terminator" ), 2, record,
+                                  heapOffset + stringOffset + stringBytes - 1, 1, static_cast<int>( sheetIndex ) );
                 throwDecodeError( terminatorSource, wxS( "free-text string is not NUL terminated" ) );
             }
 
@@ -1084,6 +1732,7 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
             model.texts.push_back( std::move( text ) );
         }
 
+        decodeDefinitionsAndParts( aBytes, cursor, block, sheetIndex, aSourceName, model );
         ++sheetIndex;
     }
 

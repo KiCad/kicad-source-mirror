@@ -336,6 +336,16 @@ struct MODEL_GATE
 };
 
 
+struct MODEL_SIGNAL_PIN
+{
+    SOURCE_PROVENANCE source;
+    SOURCE_STRING     number;
+    SOURCE_STRING     name;
+
+    bool operator==( const MODEL_SIGNAL_PIN& ) const = default;
+};
+
+
 struct MODEL_PART_TYPE
 {
     PART_TYPE_ID                 id;
@@ -344,6 +354,7 @@ struct MODEL_PART_TYPE
     std::vector<MODEL_GATE>      gates;
     std::vector<MODEL_FIELD>     fields;
     std::vector<SOURCE_PROPERTY> properties;
+    std::vector<MODEL_SIGNAL_PIN> signalPins;
 
     bool operator==( const MODEL_PART_TYPE& ) const = default;
 };

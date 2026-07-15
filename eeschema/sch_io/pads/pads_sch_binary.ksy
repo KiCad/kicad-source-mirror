@@ -38,6 +38,11 @@ instances:
       any-of: [0x000c, 0x000d]
 
 enums:
+  symbol_graphic_kind:
+    0: open
+    1: closed
+    2: circle
+    4: filled_closed
   page_size_prefix:
     0x53: size
     0x57: wditbsize
@@ -373,28 +378,39 @@ types:
       - id: indexed_string_heap
         size: pool_directory[1].used_bytes
       - id: controller_payload_3
+        type: symbol_definition_controller(pool_directory[2].used_count)
         size: pool_directory[2].used_bytes
       - id: controller_payload_4
+        type: symbol_piece_controller(pool_directory[3].used_count)
         size: pool_directory[3].used_bytes
       - id: controller_payload_5
+        type: symbol_vertex_controller(pool_directory[4].used_count)
         size: pool_directory[4].used_bytes
       - id: controller_payload_6
+        type: symbol_arc_controller(pool_directory[5].used_count)
         size: pool_directory[5].used_bytes
       - id: controller_payload_7
+        type: used_decal_controller(pool_directory[6].used_count)
         size: pool_directory[6].used_bytes
       - id: controller_payload_8
+        type: symbol_terminal_controller(pool_directory[7].used_count)
         size: pool_directory[7].used_bytes
       - id: controller_payload_9
+        type: part_type_controller(pool_directory[8].used_count)
         size: pool_directory[8].used_bytes
       - id: controller_payload_10
+        type: gate_controller(pool_directory[9].used_count)
         size: pool_directory[9].used_bytes
       - id: controller_payload_11
+        type: part_pin_controller(pool_directory[10].used_count)
         size: pool_directory[10].used_bytes
       - id: controller_payload_12
+        type: signal_pin_controller(pool_directory[11].used_count)
         size: pool_directory[11].used_bytes
       - id: controller_payload_13
         size: pool_directory[12].used_bytes
       - id: controller_payload_14
+        type: pin_name_heap
         size: pool_directory[13].used_bytes
       - id: controller_payload_15
         size: pool_directory[14].used_bytes
@@ -414,6 +430,294 @@ types:
         size: pool_directory[21].used_bytes
       - id: controller_payload_23
         size: pool_directory[22].used_bytes
+
+  symbol_definition_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: symbol_definition_record
+        repeat: expr
+        repeat-expr: num_records
+
+  symbol_definition_record:
+    seq:
+      - id: name
+        type: strz
+        size: 38
+        encoding: windows-1252
+      - id: name_class_payload
+        size: 3
+      - id: object_class
+        type: u1
+      - id: graphic_piece_count
+        type: u1
+      - id: definition_flags
+        type: u1
+      - id: preserved_definition_word_2c
+        type: u4
+      - id: terminal_prefix_index
+        type: u4
+      - id: vertex_prefix_index
+        type: u4
+      - id: preserved_definition_word_38
+        type: u4
+      - id: timestamp
+        type: u4
+      - id: embedded_text_count
+        type: u2
+      - id: definition_style_payload
+        size: 14
+
+  symbol_piece_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: symbol_piece_record
+        repeat: expr
+        repeat-expr: num_records
+
+  symbol_piece_record:
+    seq:
+      - id: kind
+        type: u1
+        enum: symbol_graphic_kind
+      - id: continuation_marker
+        type: u1
+      - id: vertex_count
+        type: u2
+      - id: stroke_width_mils
+        type: u2
+
+  symbol_vertex_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: symbol_vertex_record
+        repeat: expr
+        repeat-expr: num_records
+
+  symbol_vertex_record:
+    seq:
+      - id: x_half_mil_divided_by_2
+        type: s2
+      - id: y_half_mil_divided_by_2
+        type: s2
+      - id: arc_marker
+        type: s2
+
+  symbol_arc_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: symbol_arc_record
+        repeat: expr
+        repeat-expr: num_records
+
+  symbol_arc_record:
+    seq:
+      - id: sweep_angle_tenths_degree
+        type: u2
+      - id: direction_marker
+        type: s2
+      - id: center_x_half_mil_divided_by_2
+        type: s2
+      - id: bounding_x1_half_mil_divided_by_2
+        type: s2
+      - id: bounding_y1_half_mil_divided_by_2
+        type: s2
+      - id: bounding_x2_half_mil_divided_by_2
+        type: s2
+      - id: bounding_y2_half_mil_divided_by_2
+        type: s2
+
+  used_decal_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: used_decal_record
+        repeat: expr
+        repeat-expr: num_records
+
+  used_decal_record:
+    seq:
+      - id: name
+        type: strz
+        size: 40
+        encoding: windows-1252
+      - id: decal_flags
+        size: 2
+      - id: terminal_count
+        type: u1
+      - id: pin_origin_code
+        type: u1
+      - id: terminal_prefix_index
+        type: u2
+      - id: preserved_used_decal_word_2e
+        type: u2
+      - id: definition_index
+        type: u4
+      - id: definition_field_index
+        type: u4
+      - id: timestamp
+        type: u4
+      - id: decal_geometry_and_style
+        size: 48
+
+  symbol_terminal_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: symbol_terminal_record
+        repeat: expr
+        repeat-expr: num_records
+
+  symbol_terminal_record:
+    seq:
+      - id: pin_decal_handle
+        type: u2
+      - id: x_half_mil_divided_by_2
+        type: s2
+      - id: y_half_mil_divided_by_2
+        type: s2
+      - id: pin_name_height_half_mil_divided_by_2
+        type: u2
+      - id: pin_name_width_half_mil_divided_by_2
+        type: u2
+      - id: pin_number_height_half_mil_divided_by_2
+        type: u2
+      - id: pin_number_width_half_mil_divided_by_2
+        type: u2
+      - id: name_offset_x_half_mil_divided_by_2
+        type: s2
+      - id: name_offset_y_half_mil_divided_by_2
+        type: s2
+      - id: number_offset_x_half_mil_divided_by_2
+        type: s2
+      - id: number_offset_y_half_mil_divided_by_2
+        type: s2
+      - id: side
+        type: u2
+      - id: visibility_flags
+        type: u2
+
+  part_type_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: part_type_record
+        repeat: expr
+        repeat-expr: num_records
+
+  part_type_record:
+    seq:
+      - id: name
+        type: strz
+        size: 44
+        encoding: windows-1252
+      - id: gate_prefix_index
+        type: u4
+      - id: pin_prefix_index
+        type: u4
+      - id: part_type_payload_34
+        size: 12
+      - id: timestamp
+        type: u4
+      - id: gate_count
+        type: u2
+      - id: signal_pin_count
+        type: u2
+      - id: category
+        type: strz
+        size: 4
+        encoding: windows-1252
+
+  gate_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: gate_record
+        repeat: expr
+        repeat-expr: num_records
+
+  gate_record:
+    seq:
+      - id: definition_handles
+        type: u2
+        repeat: expr
+        repeat-expr: 4
+      - id: pin_count
+        type: u2
+      - id: swap_group
+        type: u2
+
+  part_pin_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: part_pin_record
+        repeat: expr
+        repeat-expr: num_records
+
+  part_pin_record:
+    seq:
+      - id: name_heap_offset
+        type: u4
+      - id: number
+        type: strz
+        size: 16
+        encoding: windows-1252
+      - id: swap_group
+        type: u1
+      - id: electrical_type
+        type: u1
+      - id: pin_flags
+        type: u2
+
+  signal_pin_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: signal_pin_record
+        repeat: expr
+        repeat-expr: num_records
+
+  signal_pin_record:
+    seq:
+      - id: number
+        type: strz
+        size: 16
+        encoding: windows-1252
+      - id: signal_name
+        type: strz
+        size: 48
+        encoding: windows-1252
+
+  pin_name_heap:
+    seq:
+      - id: names
+        type: strz
+        encoding: windows-1252
+        repeat: eos
 
   footer_aux:
     seq:
