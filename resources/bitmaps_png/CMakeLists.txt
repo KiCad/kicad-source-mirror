@@ -1028,8 +1028,8 @@ endfunction()
 
 # Function bitmap_dir_untheme
 # Like bitmap_dir_constraints but for one themeless icon per name, kept in
-# sources/geometric_constraints/.  Emits constraint_<name>.png and a single light-theme entry that
-# the bitmap store also serves in dark mode via its fallback.
+# sources/geometric_constraints/.  Emits constraint_<name>.png and registers it for both themes, so
+# it resolves directly in either without the bitmap store's missing-theme fallback.
 function( bitmap_dir_untheme pngWidth pngHeight bmapList )
 
     set( pngDir "${CMAKE_CURRENT_SOURCE_DIR}/png" )
@@ -1061,7 +1061,7 @@ function( bitmap_dir_untheme pngWidth pngHeight bmapList )
         png2png( ${tmpFile} ${pngPath} )
 
         set( bitmapInfo
-        "    aBitmapInfoCache[BITMAPS::constraint_${bmnNormalized}].emplace_back( BITMAPS::constraint_${bmnNormalized}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"light\" ) );\n"
+        "    aBitmapInfoCache[BITMAPS::constraint_${bmnNormalized}].emplace_back( BITMAPS::constraint_${bmnNormalized}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"light\" ) );\n    aBitmapInfoCache[BITMAPS::constraint_${bmnNormalized}].emplace_back( BITMAPS::constraint_${bmnNormalized}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"dark\" ) );\n"
         )
 
         set( BITMAP_INFO_LIST "${BITMAP_INFO_LIST}${bitmapInfo}" )

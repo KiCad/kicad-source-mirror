@@ -5118,42 +5118,42 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_solderpaste_expansion].emplace_back( BITMAPS::constraint_solderpaste_expansion, wxT( "constraint_solderpaste_expansion.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_via_style].emplace_back( BITMAPS::constraint_via_style, wxT( "constraint_via_style.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_vias_under_smd].emplace_back( BITMAPS::constraint_vias_under_smd, wxT( "constraint_vias_under_smd.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back(
-            BITMAPS::constraint_coincident, wxT( "constraint_coincident.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back(
-            BITMAPS::constraint_horizontal, wxT( "constraint_horizontal.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical,
-                                                                 wxT( "constraint_vertical.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_parallel].emplace_back( BITMAPS::constraint_parallel,
-                                                                 wxT( "constraint_parallel.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_perpendicular].emplace_back(
-            BITMAPS::constraint_perpendicular, wxT( "constraint_perpendicular.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_collinear].emplace_back(
-            BITMAPS::constraint_collinear, wxT( "constraint_collinear.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_symmetric].emplace_back(
-            BITMAPS::constraint_symmetric, wxT( "constraint_symmetric.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_equal_length].emplace_back(
-            BITMAPS::constraint_equal_length, wxT( "constraint_equal_length.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_equal_radius].emplace_back(
-            BITMAPS::constraint_equal_radius, wxT( "constraint_equal_radius.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_point_on_line].emplace_back(
-            BITMAPS::constraint_point_on_line, wxT( "constraint_point_on_line.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_midpoint].emplace_back( BITMAPS::constraint_midpoint,
-                                                                 wxT( "constraint_midpoint.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_fixed_position].emplace_back(
-            BITMAPS::constraint_fixed_position, wxT( "constraint_fixed_position.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_fixed_length].emplace_back(
-            BITMAPS::constraint_fixed_length, wxT( "constraint_fixed_length.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_concentric].emplace_back(
-            BITMAPS::constraint_concentric, wxT( "constraint_concentric.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_fixed_radius].emplace_back(
-            BITMAPS::constraint_fixed_radius, wxT( "constraint_fixed_radius.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back(
-            BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent,
-                                                                wxT( "constraint_tangent.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back(
-            BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_parallel].emplace_back( BITMAPS::constraint_parallel, wxT( "constraint_parallel.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_parallel].emplace_back( BITMAPS::constraint_parallel, wxT( "constraint_parallel.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_perpendicular].emplace_back( BITMAPS::constraint_perpendicular, wxT( "constraint_perpendicular.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_perpendicular].emplace_back( BITMAPS::constraint_perpendicular, wxT( "constraint_perpendicular.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_collinear].emplace_back( BITMAPS::constraint_collinear, wxT( "constraint_collinear.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_collinear].emplace_back( BITMAPS::constraint_collinear, wxT( "constraint_collinear.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_symmetric].emplace_back( BITMAPS::constraint_symmetric, wxT( "constraint_symmetric.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_symmetric].emplace_back( BITMAPS::constraint_symmetric, wxT( "constraint_symmetric.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_equal_length].emplace_back( BITMAPS::constraint_equal_length, wxT( "constraint_equal_length.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_equal_length].emplace_back( BITMAPS::constraint_equal_length, wxT( "constraint_equal_length.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_equal_radius].emplace_back( BITMAPS::constraint_equal_radius, wxT( "constraint_equal_radius.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_equal_radius].emplace_back( BITMAPS::constraint_equal_radius, wxT( "constraint_equal_radius.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_point_on_line].emplace_back( BITMAPS::constraint_point_on_line, wxT( "constraint_point_on_line.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_point_on_line].emplace_back( BITMAPS::constraint_point_on_line, wxT( "constraint_point_on_line.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_midpoint].emplace_back( BITMAPS::constraint_midpoint, wxT( "constraint_midpoint.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_midpoint].emplace_back( BITMAPS::constraint_midpoint, wxT( "constraint_midpoint.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_fixed_position].emplace_back( BITMAPS::constraint_fixed_position, wxT( "constraint_fixed_position.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_fixed_position].emplace_back( BITMAPS::constraint_fixed_position, wxT( "constraint_fixed_position.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_fixed_length].emplace_back( BITMAPS::constraint_fixed_length, wxT( "constraint_fixed_length.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_fixed_length].emplace_back( BITMAPS::constraint_fixed_length, wxT( "constraint_fixed_length.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_concentric].emplace_back( BITMAPS::constraint_concentric, wxT( "constraint_concentric.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_concentric].emplace_back( BITMAPS::constraint_concentric, wxT( "constraint_concentric.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_fixed_radius].emplace_back( BITMAPS::constraint_fixed_radius, wxT( "constraint_fixed_radius.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_fixed_radius].emplace_back( BITMAPS::constraint_fixed_radius, wxT( "constraint_fixed_radius.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_absolute_length_2].emplace_back( BITMAPS::constraint_absolute_length_2, wxT( "constraint_absolute_length_2_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_allowed_orientation].emplace_back( BITMAPS::constraint_allowed_orientation, wxT( "constraint_allowed_orientation_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_basic_clearance].emplace_back( BITMAPS::constraint_basic_clearance, wxT( "constraint_basic_clearance_dark.png" ), -1, wxT( "dark" ) );
@@ -5190,6 +5190,5 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_soldermask_expansion].emplace_back( BITMAPS::constraint_soldermask_expansion, wxT( "constraint_soldermask_expansion_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_solderpaste_expansion].emplace_back( BITMAPS::constraint_solderpaste_expansion, wxT( "constraint_solderpaste_expansion_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_via_style].emplace_back( BITMAPS::constraint_via_style, wxT( "constraint_via_style_dark.png" ), -1, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::constraint_vias_under_smd].emplace_back(
-            BITMAPS::constraint_vias_under_smd, wxT( "constraint_vias_under_smd_dark.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_vias_under_smd].emplace_back( BITMAPS::constraint_vias_under_smd, wxT( "constraint_vias_under_smd_dark.png" ), -1, wxT( "dark" ) );
 };
