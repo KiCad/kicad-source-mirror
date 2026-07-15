@@ -736,7 +736,14 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             if( solder_mask )
                 solder_mask->ApplyScalePosition( pLayerDispList );
 
+            // Offset non-copper layers slightly closer to the screen than soldermask to avoid Z-fighting.
+            glEnable( GL_POLYGON_OFFSET_FILL );
+            glPolygonOffset( 0.0f, -4.0f );
+
             pLayerDispList->DrawCulled( showThickness, solder_mask, throughHolesOuter, anti_board );
+
+            glDisable( GL_POLYGON_OFFSET_FILL );
+            glPolygonOffset( 0.0f, 0.0f );
         }
 
         glPopMatrix();
@@ -751,14 +758,24 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
     // Display board body
     if( layerFlags.test( LAYER_3D_BOARD ) )
+    {
+        // Make the board body appear further from the screen
+        // to avoid Z-fighting with copper items.
+        glEnable( GL_POLYGON_OFFSET_FILL );
+        glPolygonOffset( 0.0f, 2.0f );
+
         renderBoardBody( skipRenderHoles );
+
+        glDisable( GL_POLYGON_OFFSET_FILL );
+        glPolygonOffset( 0.0f, 0.0f );
+    }
 
     // Display transparent mask layers
     if( layerFlags.test( LAYER_3D_SOLDERMASK_TOP )
       || layerFlags.test( LAYER_3D_SOLDERMASK_BOTTOM ) )
     {
-        // add a depth buffer offset, it will help to hide some artifacts
-        // on silkscreen where the SolderMask is removed
+        // Make the soldermask appear closer to the screen
+        // to avoid Z-fighting with copper items
         glEnable( GL_POLYGON_OFFSET_FILL );
         glPolygonOffset( 0.0f, -2.0f );
 
