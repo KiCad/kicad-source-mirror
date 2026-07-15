@@ -720,6 +720,10 @@ PANEL_SETUP_TUNING_PROFILE_INFO::DIELECTRIC_INFO PANEL_SETUP_TUNING_PROFILE_INFO
         }
     }
 
+    // No matching dielectric layers or zero total thickness leaves nothing to average
+    if( totalHeight <= 0.0 )
+        return { 0.0, 0.0, 0.0 };
+
     e_r = e_r / totalHeight;
     lossTangent = lossTangent / totalHeight;
     totalHeight /= 1000.0; // Convert from mm to m
