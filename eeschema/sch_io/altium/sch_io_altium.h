@@ -131,6 +131,11 @@ public:
     wxFileName getLibFileName();
 
     void ParseAltiumSch( const wxString& aFileName );
+
+    /// Remove sheet symbols referencing a parse-stack file (an unrepresentable cycle), converting
+    /// their pins to hierarchical labels and clearing their sheet-instance records.
+    void pruneCyclicSheets( const std::vector<SCH_SHEET*>& aCyclicSheets, SCH_SCREEN* aScreen );
+
     void ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
     void ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
     void ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
@@ -264,6 +269,12 @@ private:
 
     // Cache the error messages to avoid duplicate messages
     std::unordered_map<wxString, SEVERITY > m_errorMessages;
+
+    // Canonical parse-stack paths, ref-counted so a multi-page block holds all sibling members at
+    // once. Breaks cyclic OrCad sheet references. See PARSE_FILE_GUARD.
+    std::map<wxString, int> m_parsingFiles;
+
+    friend struct PARSE_FILE_GUARD;
 };
 
 #endif // _SCH_IO_ALTIUM_H_

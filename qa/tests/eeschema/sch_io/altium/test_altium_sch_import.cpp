@@ -23,8 +23,11 @@
 #include <lib_id.h>
 #include <schematic.h>
 #include <sch_io/altium/sch_io_altium.h>
+#include <sch_label.h>
+#include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <settings/settings_manager.h>
 
@@ -59,6 +62,13 @@ struct ALTIUM_SCH_IMPORT_FIXTURE
     {
         return wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir()
                                    + "/plugins/altium/issue24861/" )
+               + aName;
+    }
+
+    wxString ticket1303DataFile( const wxString& aName ) const
+    {
+        return wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir()
+                                   + "/plugins/altium/ticket1303/" )
                + aName;
     }
 
@@ -174,6 +184,90 @@ BOOST_AUTO_TEST_CASE( Issue24861_RepeatedSchematicChannels )
                                                         wxT( "LED1_CH3" ) } ) );
     BOOST_CHECK( resistorReferences == std::set<wxString>( { wxT( "R1_CH1" ), wxT( "R1_CH2" ),
                                                              wxT( "R1_CH3" ) } ) );
+}
+
+
+// Support ticket #1303: an OrCad-derived Altium sheet symbol references several source files
+// through a single semicolon-separated filename ("pagea.SchDoc;pageb.SchDoc"), the two pages of one
+// multi-page block. The pages cross-reference each other (and one references itself). Every page
+// must be merged into the one sub-sheet screen, and the cyclic cross-references must not create a
+// recursive hierarchy that trips SCH_SHEET_LIST::BuildSheetList.
+BOOST_AUTO_TEST_CASE( Ticket1303_MultiPageBlock )
+{
+    SCH_IO_ALTIUM plugin;
+
+    SCH_SHEET* rootSheet = plugin.LoadSchematicFile( ticket1303DataFile( wxT( "overview.SchDoc" ) ),
+                                                     &m_schematic, nullptr, nullptr );
+    BOOST_REQUIRE( rootSheet );
+    BOOST_REQUIRE( rootSheet->GetScreen() );
+
+    // Walking the hierarchy must not trip the recursion guard in SCH_SHEET_LIST::BuildSheetList.
+    // Before the fix this raised a wxASSERT (the pages resolved to sub-sheets whose remapped
+    // filenames collided in the ancestry).
+    SCH_SHEET_LIST hierarchy = m_schematic.Hierarchy();
+
+    // Both pages of the block land in a single merged sub-sheet screen; a regression drops one (or
+    // both), leaving the sheet empty. The screen also holds no residual sub-sheet symbols, since the
+    // cross-page references were pruned rather than descended into.
+    bool foundMergedScreen = false;
+
+    for( const SCH_SHEET_PATH& sheetPath : hierarchy )
+    {
+        SCH_SCREEN* screen = sheetPath.LastScreen();
+
+        if( !screen || screen == rootSheet->GetScreen() )
+            continue;
+
+        std::optional<VECTOR2I> posA;
+        std::optional<VECTOR2I> posB;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_LABEL_T ) )
+        {
+            SCH_LABEL* label = static_cast<SCH_LABEL*>( item );
+
+            if( label->GetText() == wxT( "ONLY_A" ) )
+                posA = label->GetPosition();
+            else if( label->GetText() == wxT( "ONLY_B" ) )
+                posB = label->GetPosition();
+        }
+
+        if( !posA || !posB )
+            continue;
+
+        foundMergedScreen = true;
+
+        // The cross-page references were pruned, not descended into: the merged screen holds no
+        // residual sub-sheet symbols.
+        int subSheetCount = 0;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SHEET_T ) )
+        {
+            (void) item;
+            subSheetCount++;
+        }
+
+        BOOST_CHECK_EQUAL( subSheetCount, 0 );
+
+        // Page B is tiled below page A rather than superimposed, even though both labels sit at the
+        // same coordinates in their source files.
+        BOOST_CHECK_MESSAGE( *posA != *posB, "Merged pages must be tiled, not overlapping" );
+
+        // The pruned cross-reference sheet's pin was converted to a hierarchical label so the wire
+        // that terminated on it still connects by name.
+        bool foundSigLabel = false;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
+        {
+            if( static_cast<SCH_HIERLABEL*>( item )->GetText() == wxT( "SIG" ) )
+                foundSigLabel = true;
+        }
+
+        BOOST_CHECK_MESSAGE( foundSigLabel,
+                             "Pruned sheet pin must survive as a hierarchical label" );
+    }
+
+    BOOST_CHECK_MESSAGE( foundMergedScreen,
+                         "Both pages of the multi-file sheet symbol must load into one screen" );
 }
 
 

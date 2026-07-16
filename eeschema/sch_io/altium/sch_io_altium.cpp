@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 
 #include "altium_parser_sch.h"
@@ -87,6 +88,51 @@
 // AltiumDeriveSheetName below.
 wxString AltiumWrapBusLabel( const wxString& aText );
 wxString AltiumDeriveSheetName( const wxString& aFilename, const std::set<wxString>& aExistingNames );
+
+
+// Normalized parse-stack key so a cycle through a dotted relative or differently-cased path
+// still matches
+static wxString AltiumParseKey( const wxFileName& aFileName )
+{
+    wxFileName fn = aFileName;
+    fn.Normalize( wxPATH_NORM_ABSOLUTE | wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_CASE );
+    return fn.GetFullPath();
+}
+
+
+// Ref-counted RAII entry in m_parsingFiles so a block holds every sibling member open and a
+// member cross-referencing a sibling or itself reads as recursion
+struct PARSE_FILE_GUARD
+{
+    PARSE_FILE_GUARD( SCH_IO_ALTIUM* aOwner, const wxString& aKey ) :
+            PARSE_FILE_GUARD( aOwner, std::vector<wxString>{ aKey } )
+    {
+    }
+
+    PARSE_FILE_GUARD( SCH_IO_ALTIUM* aOwner, std::vector<wxString> aKeys ) :
+            m_owner( aOwner ), m_keys( std::move( aKeys ) )
+    {
+        for( const wxString& key : m_keys )
+            m_owner->m_parsingFiles[key]++;
+    }
+
+    ~PARSE_FILE_GUARD()
+    {
+        for( const wxString& key : m_keys )
+        {
+            auto it = m_owner->m_parsingFiles.find( key );
+
+            if( it != m_owner->m_parsingFiles.end() && --it->second <= 0 )
+                m_owner->m_parsingFiles.erase( it );
+        }
+    }
+
+    PARSE_FILE_GUARD( const PARSE_FILE_GUARD& ) = delete;
+    PARSE_FILE_GUARD& operator=( const PARSE_FILE_GUARD& ) = delete;
+
+    SCH_IO_ALTIUM*        m_owner;
+    std::vector<wxString> m_keys;
+};
 
 
 static const VECTOR2I GetRelativePosition( const VECTOR2I& aPosition, const SCH_SYMBOL* aSymbol )
@@ -511,6 +557,12 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     wxFileName fileName( aFileName );
     fileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
     m_schematic = aSchematic;
+
+    // Importer may be reused so reset per-import state or freed pointers leak into the new hierarchy
+    m_parsingFiles.clear();
+    m_sheets.clear();
+    m_sheetPath = SCH_SHEET_PATH();
+    m_rootFilepath.clear();
 
     // Collect the font substitution warnings (RAII - automatically reset on scope exit)
     FONTCONFIG_REPORTER_SCOPE fontconfigScope( &LOAD_INFO_REPORTER::GetInstance() );
@@ -1275,6 +1327,13 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
     // Load path may be different from the project path.
     wxFileName parentFileName( aFileName );
 
+    // Mark on the parse stack so a sheet referencing an ancestor or itself reads as recursion
+    PARSE_FILE_GUARD selfGuard( this, AltiumParseKey( parentFileName ) );
+
+    // Fresh per-file owner-index map so a stale entry from a pruned sheet is not dereferenced
+    // map insert keeps a dangling entry rather than replacing it
+    m_sheets.clear();
+
     if( m_rootFilepath.IsEmpty() )
         m_rootFilepath = parentFileName.GetPath();
 
@@ -1318,86 +1377,197 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
     SCH_SCREEN* currentScreen = getCurrentScreen();
     wxCHECK( currentScreen, /* void */ );
 
-    // Descend the sheet hierarchy.
+    // Descend the hierarchy. One symbol may list several semicolon-separated files (pages of a
+    // multi-page block) merged into one screen; refs to a parse-stack file are cycles pruned later
+    std::vector<SCH_SHEET*> cyclicSheets;
+
     for( SCH_ITEM* item : currentScreen->Items().OfType( SCH_SHEET_T ) )
     {
-        SCH_SCREEN* loadedScreen = nullptr;
         SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( item );
 
         wxCHECK2( sheet, continue );
 
-        wxFileName loadAltiumFileName = ResolveSheetFileName( parentFileName.GetPath(),
-                                                              sheet->GetFileName() );
+        // Already given a screen by an earlier member pass
+        if( sheet->GetScreen() )
+            continue;
 
-        if( loadAltiumFileName.GetFullName().IsEmpty() || !loadAltiumFileName.IsFileReadable() )
+        wxArrayString           tokens = wxSplit( sheet->GetFileName(), ';' );
+        std::vector<wxFileName> members;
+        std::set<wxString>      memberKeySet;
+        bool                    skippedForRecursion = false;
+
+        for( wxString token : tokens )
         {
-            m_errorMessages.emplace( wxString::Format( _( "The file name for sheet %s is undefined, "
-                                                          "this is probably an Altium signal harness "
-                                                          "that got converted to a sheet." ),
-                                                       sheet->GetName() ),
-                                     SEVERITY::RPT_SEVERITY_INFO );
-            sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
+            token.Trim( true ).Trim( false );
+
+            if( token.IsEmpty() )
+                continue;
+
+            wxFileName resolved = ResolveSheetFileName( parentFileName.GetPath(), token );
+
+            if( resolved.GetFullName().IsEmpty() || !resolved.IsFileReadable() )
+                continue;
+
+            wxString key = AltiumParseKey( resolved );
+
+            if( m_parsingFiles.count( key ) )
+            {
+                skippedForRecursion = true;
+                continue;
+            }
+
+            // Dedup so a page listed twice is not parsed and tiled twice
+            if( memberKeySet.insert( key ).second )
+                members.push_back( resolved );
+        }
+
+        if( members.empty() )
+        {
+            // Only parse-stack files means a cross-page or self reference to prune
+            // otherwise an unresolved Altium signal harness
+            if( skippedForRecursion )
+            {
+                cyclicSheets.push_back( sheet );
+            }
+            else
+            {
+                m_errorMessages.emplace( wxString::Format( _( "The file name for sheet %s is undefined, "
+                                                              "this is probably an Altium signal harness "
+                                                              "that got converted to a sheet." ),
+                                                           sheet->GetName() ),
+                                         SEVERITY::RPT_SEVERITY_INFO );
+                sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
+            }
+
             continue;
         }
 
-        m_rootSheet->SearchHierarchy( loadAltiumFileName.GetFullPath(), &loadedScreen );
+        // Single-file case may reuse a screen already loaded. Keyed on raw token count not member
+        // count so a multi-file symbol with dropped members still parses fresh into one screen
+        SCH_SCREEN* loadedScreen = nullptr;
+
+        if( tokens.size() == 1 )
+            m_rootSheet->SearchHierarchy( members[0].GetFullPath(), &loadedScreen );
+
+        wxFileName projectFileName = members[0];
+        projectFileName.SetPath( m_schematic->Project().GetProjectPath() );
+        projectFileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
         if( loadedScreen )
         {
             sheet->SetScreen( loadedScreen );
-
-            wxFileName projectFileName = loadAltiumFileName;
-            projectFileName.SetPath( m_schematic->Project().GetProjectPath() );
-            projectFileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
             sheet->SetFileName( projectFileName.GetFullName() );
 
-            // Do not need to load the sub-sheets - this has already been done.
+            // Sub-sheets already loaded
+            continue;
         }
-        else
+
+        sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
+        SCH_SCREEN* screen = sheet->GetScreen();
+
+        wxCHECK2( screen, continue );
+
+        if( sheet->GetName().Trim().empty() )
         {
-            sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
-            SCH_SCREEN* screen = sheet->GetScreen();
+            std::set<wxString> sheetNames;
 
-            if( sheet->GetName().Trim().empty() )
+            for( EDA_ITEM* otherItem : currentScreen->Items().OfType( SCH_SHEET_T ) )
+                sheetNames.insert( static_cast<SCH_SHEET*>( otherItem )->GetName() );
+
+            sheet->SetName( AltiumDeriveSheetName( members[0].GetFullName(), sheetNames ) );
+        }
+
+        // Hold every block member on the parse stack so a page cross-referencing a sibling or
+        // itself reads as recursion below
+        PARSE_FILE_GUARD blockGuard( this,
+                                     std::vector<wxString>( memberKeySet.begin(),
+                                                            memberKeySet.end() ) );
+
+        m_sheetPath.push_back( sheet );
+
+        std::optional<int> nextPageTop;
+
+        for( const wxFileName& member : members )
+        {
+            std::set<const SCH_ITEM*> before;
+
+            for( SCH_ITEM* screenItem : screen->Items() )
+                before.insert( screenItem );
+
+            ParseAltiumSch( member.GetFullPath() );
+
+            std::vector<SCH_ITEM*> added;
+            BOX2I                  addedBox;
+
+            for( SCH_ITEM* screenItem : screen->Items() )
             {
-                wxString baseName = loadAltiumFileName.GetName();
-                baseName.Replace( wxT( "/" ), wxT( "_" ) );
-
-                wxString           sheetName = baseName;
-                std::set<wxString> sheetNames;
-
-                for( EDA_ITEM* otherItem : currentScreen->Items().OfType( SCH_SHEET_T ) )
+                if( !before.count( screenItem ) )
                 {
-                    SCH_SHEET* otherSheet = static_cast<SCH_SHEET*>( otherItem );
-                    sheetNames.insert( otherSheet->GetName() );
+                    added.push_back( screenItem );
+                    addedBox.Merge( screenItem->GetBoundingBox() );
                 }
-
-                for( int ii = 1; ; ++ii )
-                {
-                    if( sheetNames.find( sheetName ) == sheetNames.end() )
-                        break;
-
-                    sheetName = baseName + wxString::Format( wxT( "_%d" ), ii );
-                }
-
-                sheet->SetName( sheetName );
             }
 
-            wxCHECK2( screen, continue );
+            if( added.empty() )
+                continue;
 
-            m_sheetPath.push_back( sheet );
-            m_sheets.clear();
-            ParseAltiumSch( loadAltiumFileName.GetFullPath() );
+            // Tile each later page below the merged ones so shared source coordinates do not overlap
+            if( nextPageTop )
+            {
+                VECTOR2I shift( 0, *nextPageTop - addedBox.GetTop() );
 
-            // Map the loaded Altium file to the project file.
-            wxFileName projectFileName = loadAltiumFileName;
-            projectFileName.SetPath( m_schematic->Project().GetProjectPath() );
-            projectFileName.SetExt( FILEEXT::KiCadSchematicFileExtension );
-            sheet->SetFileName( projectFileName.GetFullName() );
-            screen->SetFileName( projectFileName.GetFullPath() );
+                for( SCH_ITEM* addedItem : added )
+                {
+                    addedItem->Move( shift );
+                    screen->Update( addedItem );
+                }
 
-            m_sheetPath.pop_back();
+                addedBox.Offset( shift );
+            }
+
+            nextPageTop = addedBox.GetBottom() + schIUScale.MilsToIU( 500 );
         }
+
+        m_sheetPath.pop_back();
+
+        sheet->SetFileName( projectFileName.GetFullName() );
+        screen->SetFileName( projectFileName.GetFullPath() );
+    }
+
+    pruneCyclicSheets( cyclicSheets, currentScreen );
+}
+
+
+void SCH_IO_ALTIUM::pruneCyclicSheets( const std::vector<SCH_SHEET*>& aCyclicSheets,
+                                       SCH_SCREEN* aScreen )
+{
+    SCH_SCREEN* rootScreen = m_rootSheet->GetScreen();
+
+    for( SCH_SHEET* sheet : aCyclicSheets )
+    {
+        // Deleting the sheet drops its pins leaving wires dangling. Replace each pin with a hier
+        // label at its location so the wire connects by name to the merged page port
+        for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+        {
+            SCH_HIERLABEL* label = new SCH_HIERLABEL( pin->GetPosition(), pin->GetText() );
+
+            label->SetShape( pin->GetShape() );
+            label->SetSpinStyle( pin->GetSpinStyle() );
+            aScreen->Append( label );
+        }
+
+        // Drop the sheet-instance record on the root screen
+        if( rootScreen )
+        {
+            std::erase_if( rootScreen->m_sheetInstances,
+                           [&]( const SCH_SHEET_INSTANCE& aInstance )
+                           {
+                               return !aInstance.m_Path.empty()
+                                      && aInstance.m_Path.back() == sheet->m_Uuid;
+                           } );
+        }
+
+        aScreen->DeleteItem( sheet );
     }
 }
 
