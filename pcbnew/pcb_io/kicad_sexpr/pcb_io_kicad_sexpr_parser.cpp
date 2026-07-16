@@ -2022,8 +2022,18 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseBoardStackup()
         NeedSYMBOL();
         name = FromUTF8();
 
-        // init the layer id. For dielectric, layer id = UNDEFINED_LAYER
-        PCB_LAYER_ID layerId = m_board->GetLayerID( name );
+        // Match the canonical names that we write, not GetLayerID() because the user-name matching
+        // could end up being the same as a canonical name and corrupt the stack.
+        PCB_LAYER_ID layerId = UNDEFINED_LAYER;
+
+        for( PCB_LAYER_ID candidate : m_board->GetEnabledLayers().Seq() )
+        {
+            if( LSET::Name( candidate ) == name )
+            {
+                layerId = candidate;
+                break;
+            }
+        }
 
         // Init the type
         BOARD_STACKUP_ITEM_TYPE type = BS_ITEM_TYPE_UNDEFINED;
