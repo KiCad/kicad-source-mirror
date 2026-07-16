@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
 "PO-Revision-Date: 2026-07-17 10:01+0000\n"
-"Last-Translator: William Lin <unrealin01@gmail.com>\n"
+"Last-Translator: Che-Hsien Su <jonassu1101@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -422,7 +422,7 @@ msgstr "將目前視圖匯出為圖片檔"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:87
 msgid "Set Pivot"
-msgstr "設定 Pivot"
+msgstr "設定軸心"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:88
 msgid "Place point around which the board will be rotated (middle mouse click)"
@@ -1561,9 +1561,8 @@ msgid "Disable uVia holes"
 msgstr "停用微過孔"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
-#, fuzzy
 msgid "Disable all plated holes"
-msgstr "停用通孔繪製"
+msgstr "停用電鍍過孔"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:30
 msgid "Procedural textures (slow)"
@@ -1883,9 +1882,8 @@ msgid "Replace Loaded File?"
 msgstr "要取代目前載入的檔案嗎？"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:586
-#, fuzzy
 msgid "There is already a file loaded. Do you want to replace it?"
-msgstr "項目已鎖定，你要繼續嗎？"
+msgstr "已有文件載入,要取代當前載入文件嗎?"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
@@ -2079,17 +2077,16 @@ msgstr "通過 API 修改"
 #: common/api/api_plugin.cpp:58
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "無效的外掛設定在 '%s': %s"
 
 #: common/api/api_plugin.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "無效的接腳名稱"
+msgstr "無效的外掛執行：%s"
 
 #: common/api/api_plugin.cpp:105
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "無法存取儲存庫設定"
+msgstr "無法存取外掛程式設定檔"
 
 #: common/api/api_plugin.cpp:125
 #, c-format
@@ -2107,9 +2104,9 @@ msgid "identifier '%s' is invalid"
 msgstr "識別碼 %s 無效。"
 
 #: common/api/api_plugin.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "資料庫連接失敗: %s"
+msgstr "動作區塊無效: %s"
 
 #: common/api/api_plugin_manager.cpp:98
 #, c-format
@@ -2136,9 +2133,9 @@ msgid "missing plugin environment"
 msgstr "缺少插件環境"
 
 #: common/api/api_plugin_manager.cpp:378
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' could not be read"
-msgstr "無法建立檔案 '%s'。"
+msgstr "無法讀取程式進入點 '%s'。"
 
 #: common/api/api_plugin_manager.cpp:446
 #, fuzzy
@@ -2146,9 +2143,9 @@ msgid "process could not be created"
 msgstr "無法建立檔案 '%s'。"
 
 #: common/api/api_plugin_manager.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' is not executable"
-msgstr "目錄 '%s' 不可寫入。"
+msgstr "程式進入點 '%s'無法被執行"
 
 #: common/api/api_plugin_manager.cpp:571
 msgid "could not launch plugin"
@@ -2167,9 +2164,8 @@ msgid "could not create plugin environment: %s"
 msgstr "無法建立插件環境：%s"
 
 #: common/api/api_plugin_manager.cpp:872
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "無法建立檔案 '%s'。"
+msgstr "無法讀取requirements.txt"
 
 #: common/api/python_manager.cpp:138
 #, fuzzy
@@ -2778,10 +2774,12 @@ msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"不做任何變動並且關閉這個對話.自動保存的文檔仍會在硬盤上並在下次打開項目時被提"
+"供."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "自動存檔恢復"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -3317,11 +3315,11 @@ msgstr "編輯群組屬性"
 
 #: common/dialogs/dialog_group_properties.cpp:173
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "一個群組不能包含自己."
 
 #: common/dialogs/dialog_group_properties.cpp:181
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "不能添加這個群組因為這已經包含了當前群組."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -4312,7 +4310,7 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "SSH金鑰"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
