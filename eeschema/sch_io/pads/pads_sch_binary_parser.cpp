@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <array>
+#include <functional>
 #include <iterator>
 #include <map>
 #include <ranges>
@@ -126,6 +127,23 @@ namespace
     }
 
 
+    SOURCE_STRING decodedDefinitionFont( int16_t aHandle, const SOURCE_PROVENANCE& aSource )
+    {
+        SOURCE_STRING font;
+        font.source = aSource;
+
+        if( aHandle == -1 || aHandle == -4 )
+        {
+            font.text = wxS( "Default Font" );
+            font.encoding = STRING_ENCODING_STATUS::CODE_PAGE;
+            font.codePage = DEFAULT_CODE_PAGE;
+            font.codePageName = wxS( "windows-1252" );
+        }
+
+        return font;
+    }
+
+
     uint32_t pinElectricalType( uint8_t aType, const SOURCE_PROVENANCE& aSource,
                                 std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
@@ -165,7 +183,7 @@ namespace
     MODEL_JUSTIFICATION horizontalJustification( uint16_t aValue, const SOURCE_PROVENANCE& aSource,
                                                  std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
-        uint16_t horizontal = aValue >= 8 ? aValue - 8 : ( aValue >= 2 ? aValue - 2 : aValue );
+        const uint16_t horizontal = aValue & ~uint16_t{ 0x0A };
 
         switch( horizontal )
         {
@@ -549,13 +567,15 @@ namespace
         std::vector<uint32_t> pieceVertexStart;
         uint64_t              vertexCursor = 0;
         uint64_t              pieceCursor = 0;
+        std::vector<uint32_t> definitionPieceStart;
 
         for( size_t definition = 0; definition < controllers.pools[2].count; ++definition )
         {
-            pieceCursor += aCursor.U8At( symbolBase + definition * SYMBOL_RECORD_BYTES + 0x2A );
+            definitionPieceStart.push_back( static_cast<uint32_t>( pieceCursor ) );
+            pieceCursor += aCursor.U16At( symbolBase + definition * SYMBOL_RECORD_BYTES + 0x2A );
         }
 
-        if( pieceCursor > controllers.pools[3].count )
+        if( pieceCursor != controllers.pools[3].count )
         {
             SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "symbol definition" ), 3, 0,
                                                  symbolBase, controllers.pools[2].usedBytes,
@@ -569,11 +589,38 @@ namespace
             vertexCursor += aCursor.U16At( pieceBase + piece * SYMBOL_PIECE_BYTES + 2 );
         }
 
-        if( vertexCursor > controllers.pools[4].count )
+        if( vertexCursor != controllers.pools[4].count )
         {
             SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "symbol piece" ), 4, 0, pieceBase,
                                                  controllers.pools[3].usedBytes, static_cast<int>( aSheetIndex ) );
-            throwDecodeError( source, wxS( "symbol piece vertex counts leave controller 5" ) );
+            throwDecodeError( source, wxS( "symbol piece vertex counts do not consume controller 5" ) );
+        }
+
+        for( size_t definition = 0; definition < controllers.pools[2].count; ++definition )
+        {
+            const size_t definitionOffset = symbolBase + definition * SYMBOL_RECORD_BYTES;
+            const uint32_t firstPiece = definitionPieceStart[definition];
+            const uint32_t pieceEnd = definition + 1 < definitionPieceStart.size()
+                                              ? definitionPieceStart[definition + 1]
+                                              : controllers.pools[3].count;
+            const uint32_t firstVertex = aCursor.U32At( definitionOffset + 0x34 );
+            const uint32_t vertexEnd = definition + 1 < controllers.pools[2].count
+                                               ? aCursor.U32At( definitionOffset + SYMBOL_RECORD_BYTES + 0x34 )
+                                               : controllers.pools[4].count;
+            const bool emptyMatches = firstPiece == pieceEnd && firstVertex == vertexEnd;
+            const bool ownedMatches = firstPiece < pieceEnd && pieceVertexStart[firstPiece] == firstVertex
+                                      && pieceVertexStart[pieceEnd - 1]
+                                                         + aCursor.U16At( pieceBase + ( pieceEnd - 1 ) * SYMBOL_PIECE_BYTES
+                                                                          + 2 )
+                                                 == vertexEnd;
+
+            if( !emptyMatches && !ownedMatches )
+            {
+                SOURCE_PROVENANCE source = sourceAt(
+                        aSourceName, aModel.version, wxS( "symbol definition" ), 3, definition, definitionOffset,
+                        SYMBOL_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+                throwDecodeError( source, wxS( "symbol piece/vertex ownership mismatch" ) );
+            }
         }
 
         std::vector<std::vector<size_t>> pieceArcRecords( controllers.pools[3].count );
@@ -629,16 +676,17 @@ namespace
             definition.id = DEFINITION_ID( definitionIdBase + record );
             definition.source = source;
             definition.name = std::move( name );
+            const uint32_t firstPiece = definitionPieceStart[record];
+            const uint32_t pieceEnd = record + 1 < definitionPieceStart.size()
+                                              ? definitionPieceStart[record + 1]
+                                              : controllers.pools[3].count;
 
-            for( size_t piece = 0; piece < pieceVertexStart.size(); ++piece )
+            for( size_t piece = firstPiece; piece < pieceEnd; ++piece )
             {
                 const size_t      pieceOffset = pieceBase + piece * SYMBOL_PIECE_BYTES;
                 const uint8_t     pieceKind = aCursor.U8At( pieceOffset );
                 const uint16_t    pointCount = aCursor.U16At( pieceOffset + 2 );
                 const uint32_t    firstVertex = pieceVertexStart[piece];
-
-                if( firstVertex < vertexStart || firstVertex >= vertexEnd )
-                    continue;
 
                 if( firstVertex + pointCount > vertexEnd )
                     throwDecodeError( source, wxS( "symbol piece crosses its definition vertex slice" ) );
@@ -967,7 +1015,13 @@ namespace
                 graphic.presentation.horizontalJustification =
                         horizontalJustification( aCursor.U16At( offset + 18 ), source, aModel.diagnostics );
                 graphic.presentation.verticalJustification = verticalJustification( aCursor.U16At( offset + 18 ) );
-                graphic.presentation.font = { {}, wxS( "Default Font" ), STRING_ENCODING_STATUS::CODE_PAGE, source };
+                SOURCE_PROVENANCE fontSource = source;
+                fontSource.absoluteOffset += 28;
+                fontSource.length = 2;
+                const int16_t fontHandle = static_cast<int16_t>( aCursor.U16At( offset + 28 ) );
+                graphic.presentation.font = decodedDefinitionFont( fontHandle, fontSource );
+                graphic.presentation.properties.push_back( sourceProperty(
+                        wxS( "font_handle" ), wxString::Format( wxS( "%d" ), fontHandle ), fontSource ) );
                 graphic.angle = NormalizeAngle( aCursor.U16At( offset + 16 ) );
                 aDefinition.graphics.push_back( std::move( graphic ) );
             }
@@ -985,7 +1039,13 @@ namespace
                 field.presentation.horizontalJustification =
                         horizontalJustification( aCursor.U16At( offset + 18 ), source, aModel.diagnostics );
                 field.presentation.verticalJustification = verticalJustification( aCursor.U16At( offset + 18 ) );
-                field.presentation.font = { {}, wxS( "Default Font" ), STRING_ENCODING_STATUS::CODE_PAGE, source };
+                SOURCE_PROVENANCE fontSource = source;
+                fontSource.absoluteOffset += 28;
+                fontSource.length = 2;
+                const int16_t fontHandle = static_cast<int16_t>( aCursor.U16At( offset + 28 ) );
+                field.presentation.font = decodedDefinitionFont( fontHandle, fontSource );
+                field.presentation.properties.push_back( sourceProperty(
+                        wxS( "font_handle" ), wxString::Format( wxS( "%d" ), fontHandle ), fontSource ) );
                 aDefinition.fields.push_back( std::move( field ) );
             }
         };
@@ -1019,10 +1079,18 @@ namespace
                     field.presentation.source = fieldSource;
                     field.presentation.height = static_cast<int64_t>( aCursor.U16At( usedOffset + 88 + standard * 2 ) ) * 2;
                     field.presentation.width = static_cast<int64_t>( aCursor.U8At( usedOffset + 96 + standard ) ) * 2;
-                    field.presentation.font = { {}, wxS( "Default Font" ), STRING_ENCODING_STATUS::CODE_PAGE,
-                                                fieldSource };
-                    field.presentation.horizontalJustification = horizontalJustification(
-                            aCursor.U16At( usedOffset + 66 + standard * 8 ), fieldSource, aModel.diagnostics );
+                    SOURCE_PROVENANCE fontSource = fieldSource;
+                    fontSource.absoluteOffset = usedOffset + 100 + standard * 2;
+                    fontSource.length = 2;
+                    const int16_t fontHandle =
+                            static_cast<int16_t>( aCursor.U16At( fontSource.absoluteOffset ) );
+                    field.presentation.font = decodedDefinitionFont( fontHandle, fontSource );
+                    field.presentation.properties.push_back( sourceProperty(
+                            wxS( "font_handle" ), wxString::Format( wxS( "%d" ), fontHandle ), fontSource ) );
+                    const uint16_t justification = aCursor.U16At( usedOffset + 66 + standard * 8 );
+                    field.presentation.horizontalJustification =
+                            horizontalJustification( justification, fieldSource, aModel.diagnostics );
+                    field.presentation.verticalJustification = verticalJustification( justification );
                     decal.definition->fields.push_back( std::move( field ) );
                 }
             }
@@ -1190,6 +1258,21 @@ namespace
 
             if( partPinCursor != pinEnd )
                 throwDecodeError( source, wxS( "part-type gates do not consume its pin slice" ) );
+
+            if( !part.gates.empty() && part.gates.front().definition.id.IsValid() )
+            {
+                auto defaultDefinition = std::ranges::find_if(
+                        aModel.definitions,
+                        [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                        {
+                            return aDefinition.id == part.gates.front().definition.id;
+                        } );
+
+                if( defaultDefinition == aModel.definitions.end() )
+                    throwDecodeError( source, wxS( "unresolved part-type default definition" ) );
+
+                part.fields = defaultDefinition->fields;
+            }
 
             const uint16_t signalPinCount = aCursor.U16At( offset + 70 );
 
@@ -1514,6 +1597,49 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
                     throwValidationError( pin.source, wxS( "pin does not belong to gate definition" ) );
             }
         }
+    }
+
+    struct DEFINITION_EDGE
+    {
+        uint32_t          target;
+        SOURCE_PROVENANCE source;
+    };
+
+    std::unordered_map<uint32_t, std::vector<DEFINITION_EDGE>> definitionEdges;
+
+    for( const MODEL_PART_TYPE& partType : partTypes )
+    {
+        for( const MODEL_GATE& gate : partType.gates )
+        {
+            if( !gate.definition.id.IsValid() )
+                continue;
+
+            for( const DEFINITION_REFERENCE& alternate : gate.alternateDefinitions )
+                definitionEdges[gate.definition.id.Value()].push_back( { alternate.id.Value(), alternate.source } );
+        }
+    }
+
+    std::unordered_map<uint32_t, uint8_t> definitionColors;
+    std::function<void( uint32_t )> visitDefinition = [&]( uint32_t aDefinition )
+    {
+        definitionColors[aDefinition] = 1;
+
+        for( const DEFINITION_EDGE& edge : definitionEdges[aDefinition] )
+        {
+            if( definitionColors[edge.target] == 1 )
+                throwValidationError( edge.source, wxS( "cyclic symbol definition reference" ) );
+
+            if( definitionColors[edge.target] == 0 )
+                visitDefinition( edge.target );
+        }
+
+        definitionColors[aDefinition] = 2;
+    };
+
+    for( const auto& [definition, edges] : definitionEdges )
+    {
+        if( definitionColors[definition] == 0 )
+            visitDefinition( definition );
     }
 
     for( const MODEL_PLACEMENT& placement : placements )

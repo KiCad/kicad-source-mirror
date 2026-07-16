@@ -281,6 +281,23 @@ static CANONICAL_PROPERTY canonicalGraphicType( PADS_SCH::GRAPHIC_TYPE aKind )
     return unknownEnum( static_cast<int64_t>( aKind ) );
 }
 
+static CANONICAL_PROPERTY canonicalGraphicType( const PADS_SCH::SYMBOL_GRAPHIC& aGraphic )
+{
+    if( std::ranges::any_of( aGraphic.points,
+                            []( const PADS_SCH::GRAPHIC_POINT& aPoint )
+                            {
+                                return aPoint.arc.has_value();
+                            } ) )
+    {
+        return { "arc" };
+    }
+
+    if( aGraphic.type == PADS_SCH::GRAPHIC_TYPE::POLYLINE && aGraphic.points.size() == 2 )
+        return { "line" };
+
+    return canonicalGraphicType( aGraphic.type );
+}
+
 static CANONICAL_PROPERTY canonicalLineStyle( MODEL_LINE_STYLE aStyle )
 {
     switch( aStyle )
@@ -422,8 +439,7 @@ static CANONICAL_PROPERTY canonicalVerticalJustification( MODEL_JUSTIFICATION aJ
 
 static CANONICAL_PROPERTY canonicalHorizontalJustification( int aJustification )
 {
-    int horizontal =
-            aJustification >= 8 ? aJustification - 8 : ( aJustification >= 2 ? aJustification - 2 : aJustification );
+    const int horizontal = aJustification & ~0x0A;
 
     switch( horizontal )
     {
@@ -2195,6 +2211,28 @@ BOOST_AUTO_TEST_CASE( DefinitionFields )
     BOOST_CHECK_EQUAL( definition.fields[1].position.x, 310 );
     BOOST_CHECK_EQUAL( definition.fields[1].position.y, 200 );
     BOOST_CHECK( definition.fields[0].value.text.empty() );
+    BOOST_CHECK_EQUAL( propertyValue( definition.fields[0].presentation.properties, wxS( "font_handle" ) ),
+                       wxS( "-1" ) );
+    BOOST_CHECK_EQUAL( propertyValue( definition.fields[1].presentation.properties, wxS( "font_handle" ) ),
+                       wxS( "-1" ) );
+    BOOST_CHECK_EQUAL( propertyValue( definition.fields[2].presentation.properties, wxS( "font_handle" ) ),
+                       wxS( "-4" ) );
+    BOOST_CHECK_EQUAL( propertyValue( definition.fields[3].presentation.properties, wxS( "font_handle" ) ),
+                       wxS( "-4" ) );
+    BOOST_CHECK( definition.fields[0].presentation.horizontalJustification == MODEL_JUSTIFICATION::CENTER );
+    BOOST_CHECK( definition.fields[0].presentation.verticalJustification == MODEL_JUSTIFICATION::LEFT );
+    BOOST_CHECK( definition.fields[2].presentation.horizontalJustification == MODEL_JUSTIFICATION::CENTER );
+    BOOST_CHECK( definition.fields[2].presentation.verticalJustification == MODEL_JUSTIFICATION::LEFT );
+
+    const MODEL_PART_TYPE& partType = itemNamed( model.partTypes, wxS( "RES-RESN1" ) );
+    BOOST_REQUIRE_EQUAL( partType.fields.size(), 4 );
+
+    for( size_t i = 0; i < partType.fields.size(); ++i )
+    {
+        BOOST_CHECK_EQUAL( partType.fields[i].name.text, definition.fields[i].name.text );
+        BOOST_CHECK_EQUAL( partType.fields[i].value.text, definition.fields[i].value.text );
+        BOOST_CHECK( partType.fields[i].presentation == definition.fields[i].presentation );
+    }
 }
 
 
@@ -2262,6 +2300,27 @@ BOOST_AUTO_TEST_CASE( SymbolHandleErrors )
                                       && aError.What().Contains( wxS( "controller 10" ) );
                            } );
 
+    std::vector<uint8_t> pieceCount = loadBinaryFixture( "symbol_primitives.sch" );
+    size_t               definitions = sheetControllerOffset( pieceCount, 3 );
+    pieceCount[definitions + 14 * 80 + 43] = 1;
+    BOOST_CHECK_EXCEPTION( parser.Parse( pieceCount, wxS( "piece-count.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "graphic-piece counts" ) )
+                                      && aError.What().Contains( wxS( "controller 3" ) );
+                           } );
+
+    std::vector<uint8_t> ownership = loadBinaryFixture( "symbol_primitives.sch" );
+    size_t               ownershipDefinitions = sheetControllerOffset( ownership, 3 );
+    const size_t         vertexPrefix = ownershipDefinitions + 14 * 80 + 0x34;
+    writeU32( ownership, vertexPrefix, readU32( ownership, vertexPrefix ) + 1 );
+    BOOST_CHECK_EXCEPTION( parser.Parse( ownership, wxS( "piece-ownership.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "ownership mismatch" ) )
+                                      && aError.What().Contains( wxS( "controller 3" ) );
+                           } );
+
     auto duplicateModel = [&]()
     {
         return parser.Parse( loadBinaryFixture( "multigate.sch" ), wxS( "duplicate-id.sch" ) );
@@ -2298,11 +2357,15 @@ BOOST_AUTO_TEST_CASE( SymbolHandleErrors )
                            } );
 
     PADS_SCH_MODEL cycle = duplicateModel();
-    cycle.sheets[0].parent = { cycle.sheets[0].id, cycle.sheets[0].source };
+    MODEL_GATE&    firstGate = cycle.partTypes[1].gates[0];
+    MODEL_GATE&    secondGate = cycle.partTypes[1].gates[1];
+    firstGate.alternateDefinitions.push_back( { secondGate.definition.id, firstGate.source } );
+    secondGate.alternateDefinitions.push_back( { firstGate.definition.id, secondGate.source } );
     BOOST_CHECK_EXCEPTION( cycle.ValidateOrThrow(), IO_ERROR,
                            []( const IO_ERROR& aError )
                            {
-                               return aError.What().Contains( wxS( "cyclic sheet hierarchy" ) );
+                               return aError.What().Contains( wxS( "cyclic symbol definition reference" ) )
+                                      && aError.What().Contains( wxS( "controller 10" ) );
                            } );
 }
 
@@ -2354,6 +2417,184 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
         BOOST_CHECK( canonicalPinStyle( binaryDefinition.pins[i].graphicStyle )
                      == canonicalPinStyle( asciiDefinition->pins[i].inverted, asciiDefinition->pins[i].clock ) );
         BOOST_CHECK_EQUAL( binaryDefinition.pins[i].length, std::llround( asciiDefinition->pins[i].length * 2 ) );
+    }
+
+    PADS_SCH_MODEL primitiveBinary =
+            binaryParser.Parse( loadBinaryFixture( "symbol_primitives.sch" ), wxS( "symbol_primitives.sch" ) );
+    PADS_SCH::PADS_SCH_PARSER primitiveAscii;
+    BOOST_REQUIRE(
+            primitiveAscii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/symbol_primitives.txt" ) );
+    const MODEL_SYMBOL_DEFINITION& primitiveDefinition =
+            itemNamed( primitiveBinary.definitions, wxS( "BATCHB_PRIMITIVES" ) );
+    const PADS_SCH::SYMBOL_DEF* asciiPrimitive = primitiveAscii.GetSymbolDef( "BATCHB_PRIMITIVES" );
+    BOOST_REQUIRE( asciiPrimitive );
+    BOOST_REQUIRE_EQUAL( primitiveDefinition.graphics.size(), asciiPrimitive->graphics.size() + asciiPrimitive->texts.size() );
+
+    for( size_t graphic = 0; graphic < asciiPrimitive->graphics.size(); ++graphic )
+    {
+        BOOST_CHECK( canonicalGraphicType( primitiveDefinition.graphics[graphic].kind )
+                     == canonicalGraphicType( asciiPrimitive->graphics[graphic] ) );
+        BOOST_CHECK_EQUAL( primitiveDefinition.graphics[graphic].strokeWidth,
+                           std::llround( asciiPrimitive->graphics[graphic].line_width * 2 ) );
+        BOOST_CHECK( primitiveDefinition.graphics[graphic].lineStyle == MODEL_LINE_STYLE::SOLID );
+        BOOST_CHECK( canonicalFill( primitiveDefinition.graphics[graphic].fill )
+                     == canonicalFill( asciiPrimitive->graphics[graphic].filled ) );
+        BOOST_REQUIRE_EQUAL( primitiveDefinition.graphics[graphic].points.size(),
+                             asciiPrimitive->graphics[graphic].points.size() );
+
+        for( size_t pointIndex = 0; pointIndex < asciiPrimitive->graphics[graphic].points.size(); ++pointIndex )
+        {
+            BOOST_CHECK_EQUAL( primitiveDefinition.graphics[graphic].points[pointIndex].x,
+                               std::llround( asciiPrimitive->graphics[graphic].points[pointIndex].coord.x ) );
+            BOOST_CHECK_EQUAL( primitiveDefinition.graphics[graphic].points[pointIndex].y,
+                               std::llround( asciiPrimitive->graphics[graphic].points[pointIndex].coord.y ) );
+        }
+    }
+
+    const MODEL_GRAPHIC& binaryText = primitiveDefinition.graphics.back();
+    BOOST_REQUIRE_EQUAL( asciiPrimitive->texts.size(), 1 );
+    BOOST_CHECK_EQUAL( binaryText.text.text, wxString::FromUTF8( asciiPrimitive->texts[0].content ) );
+    BOOST_CHECK_EQUAL( binaryText.points[0].x, std::llround( asciiPrimitive->texts[0].position.x ) );
+    BOOST_CHECK_EQUAL( binaryText.points[0].y, std::llround( asciiPrimitive->texts[0].position.y ) );
+    BOOST_CHECK_EQUAL( binaryText.presentation.height, std::llround( asciiPrimitive->texts[0].size * 2 ) );
+    BOOST_CHECK_EQUAL( binaryText.presentation.width, asciiPrimitive->texts[0].width_factor * 2 );
+    BOOST_CHECK_EQUAL( binaryText.presentation.font.text, wxString::FromUTF8( asciiPrimitive->font1 ) );
+    BOOST_CHECK_EQUAL( binaryText.angle, std::llround( asciiPrimitive->texts[0].rotation * 10 ) );
+    BOOST_CHECK_EQUAL( binaryText.presentation.visible, asciiPrimitive->texts[0].visible );
+    BOOST_CHECK( canonicalJustification( binaryText.presentation.horizontalJustification ).value
+                 == canonicalHorizontalJustification( asciiPrimitive->texts[0].justification ).value );
+    BOOST_CHECK( canonicalVerticalJustification( binaryText.presentation.verticalJustification ).value
+                 == canonicalVerticalJustification( asciiPrimitive->texts[0].justification ).value );
+
+    PADS_SCH_MODEL fieldsBinary = binaryParser.Parse( loadBinaryFixture( "fields.sch" ), wxS( "fields.sch" ) );
+    PADS_SCH::PADS_SCH_PARSER fieldsAscii;
+    BOOST_REQUIRE( fieldsAscii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/fields.txt" ) );
+    const MODEL_SYMBOL_DEFINITION& fieldsDefinition = itemNamed( fieldsBinary.definitions, wxS( "RESZ-H" ) );
+    const PADS_SCH::SYMBOL_DEF* asciiFields = fieldsAscii.GetSymbolDef( "RESZ-H" );
+    BOOST_REQUIRE( asciiFields );
+    BOOST_REQUIRE_EQUAL( fieldsDefinition.fields.size(), asciiFields->attrs.size() );
+
+    for( size_t field = 0; field < asciiFields->attrs.size(); ++field )
+    {
+        BOOST_TEST_CONTEXT( "field " << field )
+        {
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].name.text,
+                               wxString::FromUTF8( asciiFields->attrs[field].attr_name ) );
+            BOOST_CHECK( fieldsDefinition.fields[field].value.text.empty() );
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].position.x,
+                               std::llround( asciiFields->attrs[field].position.x ) );
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].position.y,
+                               std::llround( asciiFields->attrs[field].position.y ) );
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].angle, asciiFields->attrs[field].angle * 10 );
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.height,
+                               asciiFields->attrs[field].height * 2 );
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.width,
+                               asciiFields->attrs[field].width * 2 );
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.font.text,
+                               wxString::FromUTF8( asciiFields->attrs[field].font_name ) );
+            BOOST_CHECK( canonicalJustification(
+                                 fieldsDefinition.fields[field].presentation.horizontalJustification ).value
+                         == canonicalHorizontalJustification( asciiFields->attrs[field].justification ).value );
+            BOOST_CHECK( canonicalVerticalJustification(
+                                 fieldsDefinition.fields[field].presentation.verticalJustification ).value
+                         == canonicalVerticalJustification( asciiFields->attrs[field].justification ).value );
+        }
+    }
+
+    const MODEL_PART_TYPE& fieldsPart = itemNamed( fieldsBinary.partTypes, wxS( "RES-RESN1" ) );
+    BOOST_CHECK( fieldsPart.fields == fieldsDefinition.fields );
+
+    PADS_SCH_MODEL multiBinary = binaryParser.Parse( loadBinaryFixture( "multigate.sch" ), wxS( "multigate.sch" ) );
+    PADS_SCH::PADS_SCH_PARSER multiAscii;
+    BOOST_REQUIRE( multiAscii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/multigate.txt" ) );
+    const MODEL_PART_TYPE& multiPart = itemNamed( multiBinary.partTypes, wxS( "BATCHD-MULTIGATE" ) );
+    const PADS_SCH::PARTTYPE_DEF& asciiMulti = multiAscii.GetPartTypes().at( "BATCHD-MULTIGATE" );
+    BOOST_REQUIRE_EQUAL( multiPart.gates.size(), asciiMulti.gates.size() );
+    BOOST_REQUIRE_EQUAL( multiPart.signalPins.size(), asciiMulti.sigpins.size() );
+
+    auto definitionName = [&]( const PADS_SCH_MODEL& aModel, const DEFINITION_REFERENCE& aReference )
+    {
+        auto definition = std::ranges::find_if( aModel.definitions,
+                                                [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                                {
+                                                    return aDefinition.id == aReference.id;
+                                                } );
+        BOOST_REQUIRE( definition != aModel.definitions.end() );
+        return definition->name.text;
+    };
+
+    auto pinDefinition = []( const PADS_SCH_MODEL& aModel,
+                             const PIN_REFERENCE& aReference ) -> const MODEL_PIN_DEFINITION&
+    {
+        for( const MODEL_SYMBOL_DEFINITION& definition : aModel.definitions )
+        {
+            auto pin = std::ranges::find_if( definition.pins,
+                                             [&]( const MODEL_PIN_DEFINITION& aPin )
+                                             {
+                                                 return aPin.id == aReference.id;
+                                             } );
+
+            if( pin != definition.pins.end() )
+                return *pin;
+        }
+
+        BOOST_FAIL( "unresolved pin reference" );
+        throw std::logic_error( "unreachable" );
+    };
+
+    for( size_t gate = 0; gate < multiPart.gates.size(); ++gate )
+    {
+        BOOST_CHECK_EQUAL( definitionName( multiBinary, multiPart.gates[gate].definition ),
+                           wxString::FromUTF8( asciiMulti.gates[gate].decal_names.front() ) );
+        BOOST_CHECK_EQUAL( propertyValue( multiPart.gates[gate].properties, wxS( "swap_group" ) ),
+                           wxString::Format( wxS( "%d" ), asciiMulti.gates[gate].swap_flag ) );
+        BOOST_CHECK_EQUAL( multiPart.gates[gate].pins.size(), asciiMulti.gates[gate].pins.size() );
+
+        for( size_t pin = 0; pin < multiPart.gates[gate].pins.size(); ++pin )
+        {
+            const MODEL_PIN_DEFINITION& binaryPin = pinDefinition( multiBinary, multiPart.gates[gate].pins[pin] );
+            BOOST_CHECK_EQUAL( binaryPin.number.text,
+                               wxString::FromUTF8( asciiMulti.gates[gate].pins[pin].pin_id ) );
+            BOOST_CHECK_EQUAL( binaryPin.name.text,
+                               wxString::FromUTF8( asciiMulti.gates[gate].pins[pin].pin_name ) );
+            BOOST_CHECK_EQUAL( propertyValue( binaryPin.properties, wxS( "swap_group" ) ),
+                               wxString::Format( wxS( "%d" ), asciiMulti.gates[gate].pins[pin].swap_group ) );
+        }
+    }
+
+    const MODEL_PART_TYPE& alternatePart = itemNamed( multiBinary.partTypes, wxS( "RES-RESN1" ) );
+    const PADS_SCH::GATE_DEF& asciiAlternates = multiAscii.GetPartTypes().at( "RES-RESN1" ).gates[0];
+    BOOST_REQUIRE_EQUAL( alternatePart.gates[0].alternateDefinitions.size() + 1,
+                         asciiAlternates.decal_names.size() );
+    BOOST_CHECK_EQUAL( definitionName( multiBinary, alternatePart.gates[0].definition ),
+                       wxString::FromUTF8( asciiAlternates.decal_names[0] ) );
+
+    for( size_t alternate = 0; alternate < alternatePart.gates[0].alternateDefinitions.size(); ++alternate )
+    {
+        BOOST_CHECK_EQUAL( definitionName( multiBinary, alternatePart.gates[0].alternateDefinitions[alternate] ),
+                           wxString::FromUTF8( asciiAlternates.decal_names[alternate + 1] ) );
+    }
+
+    for( size_t signal = 0; signal < multiPart.signalPins.size(); ++signal )
+    {
+        BOOST_CHECK_EQUAL( multiPart.signalPins[signal].number.text,
+                           wxString::FromUTF8( asciiMulti.sigpins[signal].pin_number ) );
+        BOOST_CHECK_EQUAL( multiPart.signalPins[signal].name.text,
+                           wxString::FromUTF8( asciiMulti.sigpins[signal].net_name ) );
+    }
+
+    PADS_SCH_MODEL connectorsBinary =
+            binaryParser.Parse( loadBinaryFixture( "connectors.sch" ), wxS( "connectors.sch" ) );
+    PADS_SCH::PADS_SCH_PARSER connectorsAscii;
+    BOOST_REQUIRE( connectorsAscii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/connectors.txt" ) );
+    const MODEL_PART_TYPE& connectorPart = itemNamed( connectorsBinary.partTypes, wxS( "CON-26P-ED" ) );
+    const PADS_SCH::GATE_DEF& asciiConnector = connectorsAscii.GetPartTypes().at( "CON-26P-ED" ).gates[0];
+    BOOST_REQUIRE_EQUAL( connectorPart.gates[0].decalGroupMembers.size(), asciiConnector.decal_names.size() );
+
+    for( size_t member = 0; member < asciiConnector.decal_names.size(); ++member )
+    {
+        BOOST_CHECK_EQUAL( definitionName( connectorsBinary, connectorPart.gates[0].decalGroupMembers[member] ),
+                           wxString::FromUTF8( asciiConnector.decal_names[member] ) );
     }
 }
 

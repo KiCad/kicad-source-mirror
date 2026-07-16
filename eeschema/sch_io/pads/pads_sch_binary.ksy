@@ -513,9 +513,7 @@ types:
       - id: object_class
         type: u1
       - id: graphic_piece_count
-        type: u1
-      - id: definition_flags
-        type: u1
+        type: u2
       - id: preserved_definition_word_2c
         type: u4
       - id: terminal_prefix_index
@@ -627,8 +625,9 @@ types:
         type: strz
         size: 40
         encoding: windows-1252
-      - id: decal_flags
-        size: 2
+      - id: preserved_decal_flags
+        type: u2
+        doc: Exact preserved value; controlled fixtures do not prove individual bit semantics.
       - id: terminal_count
         type: u1
       - id: pin_origin_code
