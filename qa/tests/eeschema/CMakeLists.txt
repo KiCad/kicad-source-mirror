@@ -118,6 +118,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24409_cli_hierarchical_instances.cpp
     test_issue24760_plot_page_numbers.cpp
     test_issue24961_group_promotion.cpp
+    test_issue24943_variant_unit_sync.cpp
     test_issue24663_sheet_dnp_fields.cpp
     test_issue24360_root_sheetname.cpp
     test_issue24217_cli_variant_export.cpp

@@ -587,8 +587,7 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
                 {
                     changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
                     field->SetText( newValue.GetString(), &symbol->Schematic()->CurrentSheet(), variantName );
-                    symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, property,
-                                            variantName );
+                    symbol->SyncOtherUnits( symbol->Schematic()->CurrentSheet(), changes, nullptr, variantName );
                     continue;
                 }
             }
