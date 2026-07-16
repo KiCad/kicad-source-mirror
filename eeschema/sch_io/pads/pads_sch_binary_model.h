@@ -275,6 +275,12 @@ struct MODEL_GRAPHIC
     int64_t                      strokeWidth = 0;
     MODEL_FILL_STYLE             fill = MODEL_FILL_STYLE::NONE;
     MODEL_TEXT_PRESENTATION      presentation;
+    int                          angle = 0;
+    SOURCE_POINT                 arcCenter;
+    SOURCE_POINT                 arcBoundsStart;
+    SOURCE_POINT                 arcBoundsEnd;
+    int                          arcSweepAngle = 0;
+    bool                         arcClockwise = false;
     std::vector<SOURCE_PROPERTY> properties;
 
     bool operator==( const MODEL_GRAPHIC& ) const = default;
@@ -303,6 +309,10 @@ struct MODEL_PIN_DEFINITION
     uint32_t                     graphicStyle = 0;
     int64_t                      length = 0;
     MODEL_TEXT_PRESENTATION      presentation;
+    MODEL_TEXT_PRESENTATION      namePresentation;
+    MODEL_TEXT_PRESENTATION      numberPresentation;
+    SOURCE_POINT                 nameOffset;
+    SOURCE_POINT                 numberOffset;
     std::vector<SOURCE_PROPERTY> properties;
 
     bool operator==( const MODEL_PIN_DEFINITION& ) const = default;
@@ -330,6 +340,8 @@ struct MODEL_GATE
     DEFINITION_REFERENCE         definition;
     uint32_t                     unit = 1;
     std::vector<PIN_REFERENCE>   pins;
+    std::vector<DEFINITION_REFERENCE> alternateDefinitions;
+    std::vector<DEFINITION_REFERENCE> decalGroupMembers;
     std::vector<SOURCE_PROPERTY> properties;
 
     bool operator==( const MODEL_GATE& ) const = default;

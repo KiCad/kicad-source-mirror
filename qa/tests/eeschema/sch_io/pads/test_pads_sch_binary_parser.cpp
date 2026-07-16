@@ -119,6 +119,18 @@ static const Item& itemNamed( const std::vector<Item>& aItems, const wxString& a
 }
 
 
+static wxString propertyValue( const std::vector<SOURCE_PROPERTY>& aProperties, const wxString& aName )
+{
+    auto property = std::ranges::find_if( aProperties,
+                                          [&]( const SOURCE_PROPERTY& aProperty )
+                                          {
+                                              return aProperty.name.text == aName;
+                                          } );
+    BOOST_REQUIRE( property != aProperties.end() );
+    return property->value.text;
+}
+
+
 static std::string canonicalModel( const PADS_SCH_MODEL& aModel )
 {
     std::ostringstream out;
@@ -350,6 +362,23 @@ static CANONICAL_PROPERTY canonicalPinType( PADS_SCH::PIN_TYPE aType )
     return unknownEnum( static_cast<int64_t>( aType ) );
 }
 
+static CANONICAL_PROPERTY canonicalPinType( char aType )
+{
+    switch( aType )
+    {
+    case 'U': return { "passive" };
+    case 'L': return { "input" };
+    case 'S': return { "output" };
+    case 'B': return { "bidirectional" };
+    case 'T': return { "tristate" };
+    case 'C': return { "open_collector" };
+    case 'E': return { "open_emitter" };
+    case 'P':
+    case 'G': return { "power" };
+    default: return { "unspecified" };
+    }
+}
+
 static CANONICAL_PROPERTY canonicalPinStyle( uint32_t aStyle )
 {
     switch( aStyle )
@@ -483,8 +512,11 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
         r.properties["text"] = { aGraphic.text.text.ToStdString() };
         r.properties["font"] = { aGraphic.presentation.font.text.ToStdString() };
         r.properties["visible"] = { aGraphic.presentation.visible };
+        r.properties["height_half_mils"] = { aGraphic.presentation.height };
+        r.properties["width_half_mils"] = { aGraphic.presentation.width };
         for( const SOURCE_POINT& p : aGraphic.points )
             r.geometry.points.push_back( point( p ) );
+        r.geometry.angleTenths = canonicalAngle( aGraphic.angle );
         addSourceProperties( r, aGraphic.properties );
     };
     auto field = [&]( const MODEL_FIELD& aField, int aSheet )
@@ -785,6 +817,8 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         r.properties["text"] = { std::string() };
         r.properties["font"] = { std::string() };
         r.properties["visible"] = { true };
+        r.properties["height_half_mils"] = { int64_t( 0 ) };
+        r.properties["width_half_mils"] = { int64_t( 0 ) };
 
         for( const auto& q : aGraphic.points )
             r.geometry.points.push_back( point( q.coord ) );
@@ -802,7 +836,39 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         add( CANONICAL_KIND::DEFINITION, -1, d.name );
         for( const auto& g : d.graphics )
             addGraphic( g, -1 );
-        for( const auto& pin : d.pins )
+        std::vector<PADS_SCH::SYMBOL_PIN> pins = d.pins;
+
+        for( const auto& [partName, part] : aParser.GetPartTypes() )
+        {
+            for( const PADS_SCH::GATE_DEF& gate : part.gates )
+            {
+                if( gate.decal_names.empty() || gate.decal_names.front() != d.name || gate.pins.size() != pins.size() )
+                    continue;
+
+                for( size_t i = 0; i < pins.size(); ++i )
+                {
+                    pins[i].number = gate.pins[i].pin_id;
+                    pins[i].name = gate.pins[i].pin_name;
+                    switch( gate.pins[i].pin_type )
+                    {
+                    case 'L': pins[i].type = PADS_SCH::PIN_TYPE::INPUT; break;
+                    case 'S': pins[i].type = PADS_SCH::PIN_TYPE::OUTPUT; break;
+                    case 'B': pins[i].type = PADS_SCH::PIN_TYPE::BIDIRECTIONAL; break;
+                    case 'T': pins[i].type = PADS_SCH::PIN_TYPE::TRISTATE; break;
+                    case 'C': pins[i].type = PADS_SCH::PIN_TYPE::OPEN_COLLECTOR; break;
+                    case 'E': pins[i].type = PADS_SCH::PIN_TYPE::OPEN_EMITTER; break;
+                    case 'P':
+                    case 'G': pins[i].type = PADS_SCH::PIN_TYPE::POWER; break;
+                    case 'U': pins[i].type = PADS_SCH::PIN_TYPE::PASSIVE; break;
+                    default: pins[i].type = PADS_SCH::PIN_TYPE::UNSPECIFIED; break;
+                    }
+                }
+
+                break;
+            }
+        }
+
+        for( const auto& pin : pins )
         {
             auto& r = add( CANONICAL_KIND::PIN, -1, pin.number );
             r.properties["name"] = { pin.name };
@@ -814,10 +880,16 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         }
         for( const auto& t : d.texts )
         {
-            auto& r = add( CANONICAL_KIND::FIELD, -1 );
-            r.properties["value"] = { t.content };
+            auto& r = add( CANONICAL_KIND::GRAPHIC, -1 );
+            r.properties["type"] = { "text" };
+            r.properties["line_style"] = { "solid" };
+            r.properties["stroke_half_mils"] = { int64_t( 0 ) };
+            r.properties["fill"] = { "none" };
+            r.properties["text"] = { t.content };
             r.properties["visible"] = { t.visible };
             r.properties["font"] = { t.font_name };
+            r.properties["height_half_mils"] = { int64_t( std::llround( t.size * 2 ) ) };
+            r.properties["width_half_mils"] = { int64_t( t.width_factor * 2 ) };
             r.geometry.points.push_back( point( t.position ) );
             r.geometry.angleTenths = canonicalAngle( std::llround( t.rotation * 10 ) );
         }
@@ -1425,7 +1497,7 @@ BOOST_AUTO_TEST_CASE( ModelContract )
 
     first.diagnostics.push_back(
             { RPT_SEVERITY_WARNING, first.sheets[0].source, wxS( "unknown but structurally valid enum" ) } );
-    BOOST_CHECK_EQUAL( first.diagnostics[0].source.absoluteOffset, first.sheets[0].source.absoluteOffset );
+    BOOST_CHECK_EQUAL( first.diagnostics.back().source.absoluteOffset, first.sheets[0].source.absoluteOffset );
 
     PADS_SCH_MODEL unresolved = second;
     unresolved.sheets[0].parent = SHEET_REFERENCE{ SHEET_ID( 99 ), unresolved.sheets[0].source };
@@ -2004,7 +2076,7 @@ BOOST_AUTO_TEST_CASE( SymbolPrimitives )
     PADS_SCH_MODEL model = parser.Parse( loadBinaryFixture( "symbol_primitives.sch" ), wxS( "symbol_primitives.sch" ) );
     const MODEL_SYMBOL_DEFINITION& definition = itemNamed( model.definitions, wxS( "BATCHB_PRIMITIVES" ) );
 
-    BOOST_REQUIRE_EQUAL( definition.graphics.size(), 5 );
+    BOOST_REQUIRE_EQUAL( definition.graphics.size(), 6 );
     BOOST_CHECK( definition.graphics[0].kind == MODEL_GRAPHIC_KIND::LINE );
     BOOST_REQUIRE_EQUAL( definition.graphics[0].points.size(), 2 );
     BOOST_CHECK_EQUAL( definition.graphics[0].points[0].x, 100 );
@@ -2014,7 +2086,26 @@ BOOST_AUTO_TEST_CASE( SymbolPrimitives )
     BOOST_CHECK( definition.graphics[1].kind == MODEL_GRAPHIC_KIND::POLYLINE );
     BOOST_CHECK( definition.graphics[2].kind == MODEL_GRAPHIC_KIND::CIRCLE );
     BOOST_CHECK( definition.graphics[3].kind == MODEL_GRAPHIC_KIND::ARC );
+    BOOST_CHECK_EQUAL( definition.graphics[3].strokeWidth, 20 );
+    BOOST_CHECK( definition.graphics[3].lineStyle == MODEL_LINE_STYLE::SOLID );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcSweepAngle, 1800 );
+    BOOST_CHECK( definition.graphics[3].arcClockwise );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcCenter.x, 650 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcCenter.y, 550 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsStart.x, 500 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsStart.y, 400 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsEnd.x, 800 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsEnd.y, 700 );
     BOOST_CHECK( definition.graphics[4].fill == MODEL_FILL_STYLE::FILLED );
+    BOOST_CHECK( definition.graphics[5].kind == MODEL_GRAPHIC_KIND::TEXT );
+    BOOST_CHECK_EQUAL( definition.graphics[5].text.text, wxS( "EMBEDDED_TEXT" ) );
+    BOOST_CHECK_EQUAL( definition.graphics[5].presentation.font.text, wxS( "Default Font" ) );
+    BOOST_REQUIRE_EQUAL( definition.graphics[5].points.size(), 1 );
+    BOOST_CHECK_EQUAL( definition.graphics[5].points[0].x, 500 );
+    BOOST_CHECK_EQUAL( definition.graphics[5].points[0].y, 800 );
+    BOOST_CHECK_EQUAL( definition.graphics[5].presentation.height, 200 );
+    BOOST_CHECK_EQUAL( definition.graphics[5].presentation.width, 20 );
+    BOOST_CHECK_EQUAL( definition.graphics[5].angle, 0 );
     BOOST_REQUIRE_EQUAL( definition.pins.size(), 2 );
     BOOST_CHECK_EQUAL( definition.pins[0].position.x, 0 );
     BOOST_CHECK_EQUAL( definition.pins[0].position.y, 300 );
@@ -2040,6 +2131,21 @@ BOOST_AUTO_TEST_CASE( PartPinsAndGates )
     BOOST_CHECK_EQUAL( pinDefinition.pins[4].graphicStyle, 1 );
     BOOST_CHECK_EQUAL( pinDefinition.pins[5].graphicStyle, 2 );
     BOOST_CHECK( !pinDefinition.pins[6].presentation.visible );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[4].angle, 1800 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[4].length, 280 );
+    BOOST_CHECK_EQUAL( propertyValue( pinDefinition.pins[0].properties, wxS( "pin_name_height_half_mils" ) ),
+                       wxS( "100" ) );
+    BOOST_CHECK_EQUAL( propertyValue( pinDefinition.pins[0].properties, wxS( "pin_number_height_half_mils" ) ),
+                       wxS( "100" ) );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].namePresentation.width, 10 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberPresentation.width, 10 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.x, -100 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.y, -50 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.x, 250 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.y, -50 );
+    BOOST_CHECK( !pinDefinition.pins[2].namePresentation.visible );
+    BOOST_CHECK( !pinDefinition.pins[6].namePresentation.visible );
+    BOOST_CHECK( pinDefinition.pins[6].numberPresentation.visible );
     BOOST_REQUIRE_EQUAL( pinPart.signalPins.size(), 1 );
     BOOST_CHECK_EQUAL( pinPart.signalPins[0].number.text, wxS( "8" ) );
     BOOST_CHECK_EQUAL( pinPart.signalPins[0].name.text, wxS( "VCC_HIDDEN" ) );
@@ -2052,23 +2158,43 @@ BOOST_AUTO_TEST_CASE( PartPinsAndGates )
     BOOST_CHECK_EQUAL( multiPart.gates[1].unit, 2 );
     BOOST_CHECK_EQUAL( multiPart.gates[1].pins.size(), 2 );
     BOOST_CHECK_EQUAL( multiPart.gates[0].properties.front().name.text, wxS( "swap_group" ) );
+    const MODEL_PART_TYPE& alternatePart = itemNamed( multi.partTypes, wxS( "RES-RESN1" ) );
+    BOOST_REQUIRE_EQUAL( alternatePart.gates[0].alternateDefinitions.size(), 3 );
     BOOST_REQUIRE_EQUAL( multiPart.signalPins.size(), 1 );
     BOOST_CHECK_EQUAL( multiPart.signalPins[0].number.text, wxS( "15" ) );
+
+    PADS_SCH_MODEL connectorModel =
+            parser.Parse( loadBinaryFixture( "connectors.sch" ), wxS( "connectors.sch" ) );
+    const MODEL_PART_TYPE& connector = itemNamed( connectorModel.partTypes, wxS( "CON-26P-ED" ) );
+    BOOST_REQUIRE_EQUAL( connector.gates.size(), 1 );
+    BOOST_REQUIRE_EQUAL( connector.gates[0].decalGroupMembers.size(), 5 );
+
+    for( const DEFINITION_REFERENCE& member : connector.gates[0].decalGroupMembers )
+    {
+        BOOST_CHECK( member.id.IsValid() );
+        BOOST_CHECK_EQUAL( member.source.controller, 10 );
+    }
 }
 
 
 BOOST_AUTO_TEST_CASE( DefinitionFields )
 {
     PADS_SCH_BINARY_PARSER parser;
-    PADS_SCH_MODEL model = parser.Parse( loadBinaryFixture( "symbol_primitives.sch" ), wxS( "symbol_primitives.sch" ) );
-    const MODEL_SYMBOL_DEFINITION& definition = itemNamed( model.definitions, wxS( "BATCHB_PRIMITIVES" ) );
-    BOOST_REQUIRE_EQUAL( definition.fields.size(), 3 );
-    BOOST_CHECK_EQUAL( definition.fields[0].value.text, wxS( "EMBEDDED_TEXT" ) );
-    BOOST_CHECK_EQUAL( definition.fields[0].position.x, 500 );
-    BOOST_CHECK_EQUAL( definition.fields[0].position.y, 800 );
-    BOOST_CHECK_EQUAL( definition.fields[1].name.text, wxS( "VALUE1" ) );
-    BOOST_CHECK( definition.fields[1].value.text.empty() );
-    BOOST_CHECK_EQUAL( definition.fields[2].name.text, wxS( "*" ) );
+    PADS_SCH_MODEL model = parser.Parse( loadBinaryFixture( "fields.sch" ), wxS( "fields.sch" ) );
+    const MODEL_SYMBOL_DEFINITION& definition = itemNamed( model.definitions, wxS( "RESZ-H" ) );
+    BOOST_REQUIRE_EQUAL( definition.fields.size(), 4 );
+    BOOST_CHECK_EQUAL( definition.fields[0].name.text, wxS( "REF-DES" ) );
+    BOOST_CHECK_EQUAL( definition.fields[1].name.text, wxS( "PART-TYPE" ) );
+    BOOST_CHECK_EQUAL( definition.fields[2].name.text, wxS( "VALUE" ) );
+    BOOST_CHECK_EQUAL( definition.fields[3].name.text, wxS( "*" ) );
+    BOOST_CHECK_EQUAL( definition.fields[0].presentation.font.text, wxS( "Default Font" ) );
+    BOOST_CHECK_EQUAL( definition.fields[0].presentation.height, 200 );
+    BOOST_CHECK_EQUAL( definition.fields[0].presentation.width, 20 );
+    BOOST_CHECK_EQUAL( definition.fields[0].position.x, 300 );
+    BOOST_CHECK_EQUAL( definition.fields[0].position.y, 100 );
+    BOOST_CHECK_EQUAL( definition.fields[1].position.x, 310 );
+    BOOST_CHECK_EQUAL( definition.fields[1].position.y, 200 );
+    BOOST_CHECK( definition.fields[0].value.text.empty() );
 }
 
 
@@ -2095,6 +2221,89 @@ BOOST_AUTO_TEST_CASE( SymbolHandleErrors )
                            {
                                return aError.What().Contains( wxS( "unresolved symbol definition reference" ) );
                            } );
+
+    std::vector<uint8_t> badPinHandle = loadBinaryFixture( "symbol_primitives.sch" );
+    size_t               terminals = sheetControllerOffset( badPinHandle, 8 );
+    writeU16( badPinHandle, terminals + 8 * 26, 0xFFFE );
+    BOOST_CHECK_EXCEPTION( parser.Parse( badPinHandle, wxS( "bad-pin-handle.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "pin-decal handle" ) )
+                                      && aError.What().Contains( wxS( "controller 8" ) );
+                           } );
+
+    std::vector<uint8_t> gateCount = loadBinaryFixture( "multigate.sch" );
+    size_t               partTypes = sheetControllerOffset( gateCount, 9 );
+    writeU16( gateCount, partTypes + 76 + 68, 3 );
+    BOOST_CHECK_EXCEPTION( parser.Parse( gateCount, wxS( "gate-count.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "gate count" ) )
+                                      && aError.What().Contains( wxS( "controller 9" ) );
+                           } );
+
+    std::vector<uint8_t> fieldHandle = loadBinaryFixture( "symbol_primitives.sch" );
+    size_t               fieldDecals = sheetControllerOffset( fieldHandle, 7 );
+    writeU32( fieldHandle, fieldDecals + 104 * 108 + 52, 132 );
+    BOOST_CHECK_EXCEPTION( parser.Parse( fieldHandle, wxS( "field-handle.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "field" ) )
+                                      && aError.What().Contains( wxS( "controller 7" ) );
+                           } );
+
+    std::vector<uint8_t> alternateHandle = loadBinaryFixture( "multigate.sch" );
+    size_t               alternateGates = sheetControllerOffset( alternateHandle, 10 );
+    writeU16( alternateHandle, alternateGates + 2, 0xFFFE );
+    BOOST_CHECK_EXCEPTION( parser.Parse( alternateHandle, wxS( "alternate-handle.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "alternate symbol definition" ) )
+                                      && aError.What().Contains( wxS( "controller 10" ) );
+                           } );
+
+    auto duplicateModel = [&]()
+    {
+        return parser.Parse( loadBinaryFixture( "multigate.sch" ), wxS( "duplicate-id.sch" ) );
+    };
+    PADS_SCH_MODEL duplicateDefinition = duplicateModel();
+    duplicateDefinition.definitions[1].id = duplicateDefinition.definitions[0].id;
+    BOOST_CHECK_EXCEPTION( duplicateDefinition.ValidateOrThrow(), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "duplicate definition ID" ) );
+                           } );
+    PADS_SCH_MODEL duplicatePart = duplicateModel();
+    duplicatePart.partTypes[1].id = duplicatePart.partTypes[0].id;
+    BOOST_CHECK_EXCEPTION( duplicatePart.ValidateOrThrow(), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "duplicate part type ID" ) );
+                           } );
+    PADS_SCH_MODEL duplicateGate = duplicateModel();
+    duplicateGate.partTypes[1].gates[1].id = duplicateGate.partTypes[1].gates[0].id;
+    BOOST_CHECK_EXCEPTION( duplicateGate.ValidateOrThrow(), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "duplicate gate ID" ) );
+                           } );
+    PADS_SCH_MODEL duplicatePin = duplicateModel();
+    const MODEL_SYMBOL_DEFINITION& pinOwner = itemNamed( duplicatePin.definitions, wxS( "BATCHB_PIN_STYLES" ) );
+    size_t pinOwnerIndex = &pinOwner - duplicatePin.definitions.data();
+    duplicatePin.definitions[pinOwnerIndex].pins[1].id = duplicatePin.definitions[pinOwnerIndex].pins[0].id;
+    BOOST_CHECK_EXCEPTION( duplicatePin.ValidateOrThrow(), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "duplicate pin ID" ) );
+                           } );
+
+    PADS_SCH_MODEL cycle = duplicateModel();
+    cycle.sheets[0].parent = { cycle.sheets[0].id, cycle.sheets[0].source };
+    BOOST_CHECK_EXCEPTION( cycle.ValidateOrThrow(), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "cyclic sheet hierarchy" ) );
+                           } );
 }
 
 
@@ -2118,6 +2327,34 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
                        static_cast<int64_t>( std::llround( asciiDefinition->pins[0].position.x * 2 ) ) );
     BOOST_CHECK_EQUAL( binaryDefinition.pins[4].graphicStyle,
                        ( asciiDefinition->pins[4].inverted ? 1U : 0U ) | ( asciiDefinition->pins[4].clock ? 2U : 0U ) );
+
+    BOOST_REQUIRE_EQUAL( binaryDefinition.graphics.size(), asciiDefinition->graphics.size() );
+
+    for( size_t i = 0; i < binaryDefinition.graphics.size(); ++i )
+    {
+        BOOST_CHECK( canonicalGraphicType( binaryDefinition.graphics[i].kind )
+                     == canonicalGraphicType( asciiDefinition->graphics[i].type ) );
+        BOOST_CHECK_EQUAL( binaryDefinition.graphics[i].strokeWidth,
+                           std::llround( asciiDefinition->graphics[i].line_width * 2 ) );
+        BOOST_CHECK( canonicalFill( binaryDefinition.graphics[i].fill )
+                     == canonicalFill( asciiDefinition->graphics[i].filled ) );
+        BOOST_CHECK_EQUAL( binaryDefinition.graphics[i].points.size(), asciiDefinition->graphics[i].points.size() );
+    }
+
+    BOOST_REQUIRE_EQUAL( binaryDefinition.pins.size(), asciiDefinition->pins.size() );
+    const PADS_SCH::GATE_DEF& asciiGate = asciiParser.GetPartTypes().at( "BATCHB-PIN-STYLES" ).gates[0];
+    BOOST_REQUIRE_EQUAL( asciiGate.pins.size(), binaryDefinition.pins.size() );
+
+    for( size_t i = 0; i < binaryDefinition.pins.size(); ++i )
+    {
+        BOOST_CHECK_EQUAL( binaryDefinition.pins[i].number.text, wxString::FromUTF8( asciiGate.pins[i].pin_id ) );
+        BOOST_CHECK_EQUAL( binaryDefinition.pins[i].name.text, wxString::FromUTF8( asciiGate.pins[i].pin_name ) );
+        BOOST_CHECK( canonicalPinType( binaryDefinition.pins[i].electricalType )
+                     == canonicalPinType( asciiGate.pins[i].pin_type ) );
+        BOOST_CHECK( canonicalPinStyle( binaryDefinition.pins[i].graphicStyle )
+                     == canonicalPinStyle( asciiDefinition->pins[i].inverted, asciiDefinition->pins[i].clock ) );
+        BOOST_CHECK_EQUAL( binaryDefinition.pins[i].length, std::llround( asciiDefinition->pins[i].length * 2 ) );
+    }
 }
 
 

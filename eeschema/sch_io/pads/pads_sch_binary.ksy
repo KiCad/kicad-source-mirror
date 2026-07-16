@@ -378,39 +378,84 @@ types:
       - id: indexed_string_heap
         size: pool_directory[1].used_bytes
       - id: controller_payload_3
-        type: symbol_definition_controller(pool_directory[2].used_count)
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: symbol_definition_controller(pool_directory[2].used_count)
         size: pool_directory[2].used_bytes
       - id: controller_payload_4
-        type: symbol_piece_controller(pool_directory[3].used_count)
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: symbol_piece_controller(pool_directory[3].used_count)
         size: pool_directory[3].used_bytes
       - id: controller_payload_5
-        type: symbol_vertex_controller(pool_directory[4].used_count)
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: symbol_vertex_controller(pool_directory[4].used_count)
         size: pool_directory[4].used_bytes
       - id: controller_payload_6
-        type: symbol_arc_controller(pool_directory[5].used_count)
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: symbol_arc_controller(pool_directory[5].used_count)
         size: pool_directory[5].used_bytes
       - id: controller_payload_7
-        type: used_decal_controller(pool_directory[6].used_count)
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: used_decal_controller(pool_directory[6].used_count)
         size: pool_directory[6].used_bytes
       - id: controller_payload_8
-        type: symbol_terminal_controller(pool_directory[7].used_count)
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: symbol_terminal_controller(pool_directory[7].used_count)
         size: pool_directory[7].used_bytes
       - id: controller_payload_9
-        type: part_type_controller(pool_directory[8].used_count)
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: part_type_controller(pool_directory[8].used_count)
         size: pool_directory[8].used_bytes
       - id: controller_payload_10
-        type: gate_controller(pool_directory[9].used_count)
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: gate_controller(pool_directory[9].used_count)
         size: pool_directory[9].used_bytes
       - id: controller_payload_11
-        type: part_pin_controller(pool_directory[10].used_count)
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: part_pin_controller(pool_directory[10].used_count)
         size: pool_directory[10].used_bytes
       - id: controller_payload_12
-        type: signal_pin_controller(pool_directory[11].used_count)
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: signal_pin_controller(pool_directory[11].used_count)
         size: pool_directory[11].used_bytes
       - id: controller_payload_13
+        type: preserved_definition_controller
         size: pool_directory[12].used_bytes
       - id: controller_payload_14
-        type: pin_name_heap
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_definition_controller
+            0x000d: pin_name_heap
         size: pool_directory[13].used_bytes
       - id: controller_payload_15
         size: pool_directory[14].used_bytes
@@ -431,6 +476,18 @@ types:
       - id: controller_payload_23
         size: pool_directory[22].used_bytes
 
+  preserved_v12_definition_controller:
+    doc: Exact bounded v0x000C definition payload; semantics unsupported without paired ASCII evidence.
+    seq:
+      - id: preserved_payload
+        size-eos: true
+
+  preserved_definition_controller:
+    doc: Exact bounded controller payload whose semantics are not yet proven.
+    seq:
+      - id: preserved_payload
+        size-eos: true
+
   symbol_definition_controller:
     params:
       - id: num_records
@@ -447,8 +504,12 @@ types:
         type: strz
         size: 38
         encoding: windows-1252
-      - id: name_class_payload
-        size: 3
+      - id: preserved_name_class_byte_26
+        type: u1
+      - id: preserved_name_class_byte_27
+        type: u1
+      - id: preserved_name_class_byte_28
+        type: u1
       - id: object_class
         type: u1
       - id: graphic_piece_count
@@ -467,8 +528,20 @@ types:
         type: u4
       - id: embedded_text_count
         type: u2
-      - id: definition_style_payload
-        size: 14
+      - id: preserved_definition_style_word_42
+        type: s2
+      - id: preserved_definition_style_word_44
+        type: s2
+      - id: preserved_definition_style_word_46
+        type: s2
+      - id: preserved_definition_style_word_48
+        type: s2
+      - id: preserved_definition_style_word_4a
+        type: s2
+      - id: preserved_definition_style_word_4c
+        type: s2
+      - id: preserved_definition_style_word_4e
+        type: s2
 
   symbol_piece_controller:
     params:
@@ -527,7 +600,7 @@ types:
         type: u2
       - id: direction_marker
         type: s2
-      - id: center_x_half_mil_divided_by_2
+      - id: preserved_arc_word_04
         type: s2
       - id: bounding_x1_half_mil_divided_by_2
         type: s2
@@ -570,8 +643,54 @@ types:
         type: u4
       - id: timestamp
         type: u4
-      - id: decal_geometry_and_style
-        size: 48
+      - id: reference_x_half_mil_divided_by_2
+        type: s2
+      - id: reference_y_half_mil_divided_by_2
+        type: s2
+      - id: reference_angle_tenths_degree
+        type: u2
+      - id: reference_justification
+        type: u2
+      - id: part_type_x_half_mil_divided_by_2
+        type: s2
+      - id: part_type_y_half_mil_divided_by_2
+        type: s2
+      - id: part_type_angle_tenths_degree
+        type: u2
+      - id: part_type_justification
+        type: u2
+      - id: bounding_x1_half_mil_divided_by_2
+        type: s2
+      - id: bounding_y1_half_mil_divided_by_2
+        type: s2
+      - id: bounding_x2_half_mil_divided_by_2
+        type: s2
+      - id: bounding_y2_half_mil_divided_by_2
+        type: s2
+      - id: preserved_decal_word_54
+        type: u2
+      - id: preserved_decal_word_56
+        type: u2
+      - id: reference_height_half_mil_divided_by_2
+        type: u2
+      - id: part_type_height_half_mil_divided_by_2
+        type: u2
+      - id: value_height_half_mil_divided_by_2
+        type: u2
+      - id: wildcard_height_half_mil_divided_by_2
+        type: u2
+      - id: reference_width_half_mil_divided_by_2
+        type: u1
+      - id: part_type_width_half_mil_divided_by_2
+        type: u1
+      - id: value_width_half_mil_divided_by_2
+        type: u1
+      - id: wildcard_width_half_mil_divided_by_2
+        type: u1
+      - id: definition_font_handles
+        type: s2
+        repeat: expr
+        repeat-expr: 4
 
   symbol_terminal_controller:
     params:
@@ -632,8 +751,12 @@ types:
         type: u4
       - id: pin_prefix_index
         type: u4
-      - id: part_type_payload_34
-        size: 12
+      - id: preserved_part_type_word_34
+        type: u4
+      - id: preserved_part_type_word_38
+        type: u4
+      - id: preserved_part_type_word_3c
+        type: u4
       - id: timestamp
         type: u4
       - id: gate_count
