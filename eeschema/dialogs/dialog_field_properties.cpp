@@ -747,7 +747,7 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
                 for( SCH_SYMBOL* otherUnit : otherUnits )
                 {
                     aCommit->Modify( otherUnit, screen );
-                    otherUnit->GetField( m_fieldId )->SetText( m_text );
+                    otherUnit->GetField( m_fieldId )->SetText( m_text, &sheet, variantName );
                     editFrame->UpdateItem( otherUnit, false, true );
                 }
             }

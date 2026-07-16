@@ -1884,7 +1884,11 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                 aCommit.Modify( otherUnit, screen );
 
                 if( updateValue )
-                    otherUnit->SetValueFieldText( GetField( FIELD_T::VALUE )->GetText() );
+                {
+                    otherUnit->SetFieldText( GetField( FIELD_T::VALUE )->GetName(),
+                                             GetValue( false, &aSourceSheet, false, aVariantName ), &sheet,
+                                             aVariantName );
+                }
 
                 if( updateOtherFields )
                 {
@@ -1905,7 +1909,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
 
                         if( otherField )
                         {
-                            otherField->SetText( field.GetText() );
+                            otherField->SetText( field.GetText( &aSourceSheet, aVariantName ), &sheet, aVariantName );
                         }
                         else
                         {
@@ -1916,7 +1920,13 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                             newField.Offset( otherUnit->GetPosition() );
 
                             newField.SetParent( otherUnit );
-                            otherUnit->AddField( newField );
+                            SCH_FIELD* addedField = otherUnit->AddField( newField );
+
+                            if( !aVariantName.IsEmpty() )
+                            {
+                                addedField->SetText( field.GetText( &aSourceSheet, aVariantName ), &sheet,
+                                                     aVariantName );
+                            }
                         }
                     }
 
@@ -1930,13 +1940,22 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
                 }
 
                 if( updateExclFromBOM )
-                    otherUnit->SetExcludedFromBOM( m_excludedFromBOM );
+                {
+                    otherUnit->SetExcludedFromBOM( GetExcludedFromBOM( &aSourceSheet, aVariantName ), &sheet,
+                                                   aVariantName );
+                }
 
                 if( updateExclFromBoard )
-                    otherUnit->SetExcludedFromBoard( m_excludedFromBoard );
+                {
+                    otherUnit->SetExcludedFromBoard( GetExcludedFromBoard( &aSourceSheet, aVariantName ), &sheet,
+                                                     aVariantName );
+                }
 
                 if( updateExclFromPosFiles )
-                    otherUnit->SetExcludedFromPosFiles( m_excludedFromPosFiles );
+                {
+                    otherUnit->SetExcludedFromPosFiles( GetExcludedFromPosFiles( &aSourceSheet, aVariantName ), &sheet,
+                                                        aVariantName );
+                }
 
                 if( updateDNP )
                     otherUnit->SetDNP( GetDNP( &aSourceSheet, aVariantName ), &sheet, aVariantName );
