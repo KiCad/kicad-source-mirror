@@ -166,7 +166,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_minimum_soldermask_sliver; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 200, 255, 302, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
+        return { { 195, 250, 302, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
     }
 };
 
@@ -214,7 +214,7 @@ public:
     BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_silk_to_silk_clearance; }
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 170, 225, 37, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
+        return { { 165, 220, 37, 1, wxS( "mm" ), LABEL_POSITION::RIGHT } };
     }
 };
 

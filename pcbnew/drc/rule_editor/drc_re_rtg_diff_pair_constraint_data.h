@@ -60,16 +60,11 @@ public:
         // Format: { xStart, xEnd, yCenter, tabOrder }
         // TODO: measure actual positions from PNG
         return {
-            { 0, 55, 147, 1, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // opt_width
-            { 100, 155, 147, 2, wxS( "mm" ),
-              LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
-            { 185, 240, 127, 3, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // opt_gap
-            { 285, 340, 127, 4, wxS( "mm" ),
-              LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // gap_tolerance (±)
-            { 95, 150, 22, 5, wxS( "mm" ),
-              LABEL_POSITION::RIGHT }, // max_uncoupled
+            { 0, 55, 147, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },                     // opt_width
+            { 100, 155, 147, 2, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
+            { 185, 240, 127, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },                  // opt_gap
+            { 285, 340, 127, 4, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // gap_tolerance (±)
+            { 90, 145, 22, 5, wxS( "mm" ), LABEL_POSITION::RIGHT },                    // max_uncoupled
         };
     }
 

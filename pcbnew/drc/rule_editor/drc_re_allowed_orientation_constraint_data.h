@@ -61,16 +61,11 @@ public:
         // Format: { xStart, xEnd, yCenter, tabOrder }
         // Checkboxes stacked vertically on the right side
         return {
-            { 400, 615, 52, 1, _( "Allow 0°" ),
-              LABEL_POSITION::RIGHT }, // 0 degrees checkbox
-            { 400, 615, 92, 2, _( "Allow 90°" ),
-              LABEL_POSITION::RIGHT }, // 90 degrees checkbox
-            { 400, 615, 132, 3, _( "Allow 180°" ),
-              LABEL_POSITION::RIGHT }, // 180 degrees checkbox
-            { 400, 615, 172, 4, _( "Allow 270°" ),
-              LABEL_POSITION::RIGHT }, // 270 degrees checkbox
-            { 400, 615, 212, 5, _( "Allow All" ),
-              LABEL_POSITION::RIGHT }, // all degrees checkbox
+            { 400, 615, 52, 1, _( "Allow 0°" ), LABEL_POSITION::RIGHT },    // 0 degrees checkbox
+            { 400, 615, 92, 2, _( "Allow 90°" ), LABEL_POSITION::RIGHT },   // 90 degrees checkbox
+            { 400, 615, 132, 3, _( "Allow 180°" ), LABEL_POSITION::RIGHT }, // 180 degrees checkbox
+            { 400, 615, 172, 4, _( "Allow 270°" ), LABEL_POSITION::RIGHT }, // 270 degrees checkbox
+            { 400, 615, 212, 5, _( "Allow All" ), LABEL_POSITION::RIGHT },  // all degrees checkbox
         };
     }
 
