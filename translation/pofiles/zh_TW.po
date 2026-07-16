@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-06-20 21:01+0000\n"
+"PO-Revision-Date: 2026-07-16 11:01+0000\n"
 "Last-Translator: William Lin <unrealin01@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hant/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -1542,9 +1542,8 @@ msgid "Disable thickness"
 msgstr "停用厚度繪製"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
-#, fuzzy
 msgid "Disable uVia holes"
-msgstr "停用通孔繪製"
+msgstr "停用微過孔"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
 #, fuzzy
@@ -2075,19 +2074,19 @@ msgid "could not read plugin configuration file"
 msgstr "無法存取儲存庫設定"
 
 #: common/api/api_plugin.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "配置錯誤"
+msgstr "插件設定檔錯誤：%s"
 
 #: common/api/api_plugin.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "溫度範圍無效。"
+msgstr "缺少或無效的鍵值：%s"
 
 #: common/api/api_plugin.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "符號庫識別碼 %s 無效。"
+msgstr "識別碼 %s 無效。"
 
 #: common/api/api_plugin.cpp:201
 #, fuzzy, c-format
@@ -2095,14 +2094,14 @@ msgid "actions section is invalid: %s"
 msgstr "資料庫連接失敗: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "插件選項"
+msgstr "插件動作 '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s': %s"
-msgstr "插件 (%d)"
+msgstr "插件 '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
 #, fuzzy, c-format
