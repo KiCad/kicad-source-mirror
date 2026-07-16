@@ -19,6 +19,7 @@
  */
 
 #include "import_proj.h"
+#include <import_proj_properties.h>
 #include <wildcards_and_files_ext.h>
 #include <macros.h>
 #include <string_utils.h>
@@ -207,6 +208,34 @@ void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler()
 }
 
 
+void IMPORT_PROJ_HELPER::setImportCacheNickname()
+{
+    // fresh empty target dir, so a stem-derived name is collision-free; reconciler still guards on-disk
+    wxString stem = m_TargetProj.GetName();
+
+    if( stem.IsEmpty() )
+        stem = m_InputFile.GetName();
+
+    m_properties[IMPORT_PROJ_PROPS::FP_CACHE_NICKNAME] = IMPORT_PROJ_PROPS::MakeCacheNickname( stem );
+}
+
+
+wxString IMPORT_PROJ_HELPER::joinSourceLibNicknames( const std::set<wxString>& aPaths ) const
+{
+    wxArrayString nicks;
+
+    for( const wxString& path : aPaths )
+    {
+        wxString nick = wxFileName( path ).GetName();
+
+        if( !nick.IsEmpty() )
+            nicks.Add( nick );
+    }
+
+    return IMPORT_PROJ_PROPS::JoinList( nicks );
+}
+
+
 void IMPORT_PROJ_HELPER::addLocalLibraries( const std::set<wxString>& aNames, FRAME_T aFrameType )
 {
     KIWAY_PLAYER* frame = m_frame->Kiway().Player( aFrameType, true );
@@ -303,6 +332,9 @@ void IMPORT_PROJ_HELPER::AltiumProjectHandler()
 
     addLocalLibraries( sch_libs, FRAME_SCH );
     addLocalLibraries( pcb_libs, FRAME_PCB_EDITOR );
+
+    // pass source fp libs to both imports so found footprints relink to source, not the cache
+    m_properties[IMPORT_PROJ_PROPS::SOURCE_FP_LIBS] = joinSourceLibNicknames( pcb_libs );
 
     m_properties["project_file"] = m_InputFile.GetFullPath();
 
@@ -607,6 +639,9 @@ void IMPORT_PROJ_HELPER::GedaProjectHandler()
 void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcbFileType )
 {
     m_properties.clear();
+
+    // both imports must agree on the cache nickname up front
+    setImportCacheNickname();
 
     if( aImportedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO
         || aImportedPcbFileType == PCB_IO_MGR::EASYEDAPRO )
