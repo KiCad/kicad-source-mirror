@@ -124,6 +124,43 @@ BOOST_AUTO_TEST_CASE( CachedLibraryFootprintsAreOwnedCopies )
 
 
 /**
+ * Altium emits metadata for all 16 legacy internal-plane slots even when most are absent from the
+ * physical stackup.  Only active planes should be offered to the layer mapper; otherwise every
+ * unused slot produces a misleading warning during command-line imports.
+ */
+BOOST_AUTO_TEST_CASE( UnusedInternalPlanesNotMapped )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/eDP_adapter_dvt1_source/eDP_adapter_dvt1.PcbDoc";
+
+    std::set<wxString> mappedLayerNames;
+
+    m_altiumPlugin.RegisterCallback(
+            [&]( const std::vector<INPUT_LAYER_DESC>& aLayers )
+            {
+                for( const INPUT_LAYER_DESC& layer : aLayers )
+                    mappedLayerNames.insert( layer.Name );
+
+                return PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback( aLayers );
+            } );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+    BOOST_CHECK( mappedLayerNames.count( wxS( "Internal Plane 1" ) ) );
+    BOOST_CHECK( mappedLayerNames.count( wxS( "Internal Plane 2" ) ) );
+
+    for( int plane = 3; plane <= 16; ++plane )
+    {
+        wxString name = wxString::Format( wxS( "Internal Plane %d" ), plane );
+        BOOST_CHECK_MESSAGE( !mappedLayerNames.count( name ),
+                             wxString::Format( "Unused layer '%s' reached the mapper", name ) );
+    }
+}
+
+
+/**
  * Test that netclass pattern assignments result in direct netclass assignments on nets.
  * This is a regression test for https://gitlab.com/kicad/code/kicad/-/issues/15584
  *

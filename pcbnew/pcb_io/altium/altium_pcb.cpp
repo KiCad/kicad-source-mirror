@@ -1229,7 +1229,8 @@ void ALTIUM_PCB::remapUnsureLayers( std::vector<ABOARD6_LAYER_STACKUP>& aStackup
         // Skip unused copper layers not present in the board's stackup. Used copper layers
         // were added to m_layermap during stackup parsing; any copper layer not in the map
         // is unused and should not appear in the dialog.
-        if( layer_num >= ALTIUM_LAYER::TOP_LAYER && layer_num <= ALTIUM_LAYER::BOTTOM_LAYER
+        if( ( ( layer_num >= ALTIUM_LAYER::TOP_LAYER && layer_num <= ALTIUM_LAYER::BOTTOM_LAYER )
+              || IsAltiumLayerAPlane( layer_num ) )
             && existingMapping == m_layermap.end() )
         {
             continue;
