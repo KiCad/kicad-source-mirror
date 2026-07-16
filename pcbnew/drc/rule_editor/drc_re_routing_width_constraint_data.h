@@ -52,7 +52,7 @@ public:
         // Format: { xStart, xEnd, yCenter, tabOrder }
         return {
             { 30, 85, 27, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },                    // opt_width
-            { 130, 185, 27, 2, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
+            { 135, 190, 27, 2, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
         };
     }
 
