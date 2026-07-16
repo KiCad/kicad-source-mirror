@@ -23,6 +23,7 @@
 
 #include <rc_item.h>
 #include <marker_base.h>
+#include <lset.h>
 
 class PCB_BASE_FRAME;
 class DRC_RULE;
@@ -138,6 +139,13 @@ public:
      * @return the created item
      */
     static std::shared_ptr<DRC_ITEM> Create( const wxString& aErrorKey );
+
+    /**
+     * Work out which layer to focus on and which layers a violation involves.
+     * The marker layer wins, except for error types tied to a fixed layer.
+     */
+    static void GetViolationLayers( BOARD* aBoard, const std::shared_ptr<RC_ITEM>& aItem, PCB_MARKER* aMarker,
+                                    PCB_LAYER_ID& aPrincipalLayer, LSET& aViolationLayers );
 
     static std::vector<std::reference_wrapper<RC_ITEM>> GetItemsWithSeverities()
     {

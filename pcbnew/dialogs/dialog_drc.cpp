@@ -604,28 +604,6 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     BOARD*        board = m_frame->GetBoard();
     RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
 
-    auto getActiveLayers =
-            []( BOARD_ITEM* aItem ) -> LSET
-            {
-                if( aItem->Type() == PCB_PAD_T )
-                {
-                    PAD* pad = static_cast<PAD*>( aItem );
-                    LSET layers;
-
-                    for( int layer : aItem->GetLayerSet() )
-                    {
-                        if( pad->FlashLayer( layer ) )
-                            layers.set( layer );
-                    }
-
-                    return layers;
-                }
-                else
-                {
-                    return aItem->GetLayerSet();
-                }
-            };
-
     if( !node )
     {
         // list is being freed; don't do anything with null ptrs
@@ -673,8 +651,6 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     LSET         violationLayers;
     BOARD_ITEM*  a = board->ResolveItem( rc_item->GetMainItemID(), true );
     BOARD_ITEM*  b = board->ResolveItem( rc_item->GetAuxItemID(), true );
-    BOARD_ITEM*  c = board->ResolveItem( rc_item->GetAuxItem2ID(), true );
-    BOARD_ITEM*  d = board->ResolveItem( rc_item->GetAuxItem3ID(), true );
 
     auto focus = [&]( BOARD_ITEM* aItem )
     {
@@ -686,60 +662,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
         m_frame->FocusOnItems( items, principalLayer, m_scroll_on_crossprobe );
     };
 
-    if( rc_item->GetErrorCode() == DRCE_MALFORMED_COURTYARD )
-    {
-        if( a && ( a->GetFlags() & MALFORMED_B_COURTYARD ) > 0
-              && ( a->GetFlags() & MALFORMED_F_COURTYARD ) == 0 )
-        {
-            principalLayer = B_CrtYd;
-        }
-        else
-        {
-            principalLayer = F_CrtYd;
-        }
-    }
-    else if( rc_item->GetErrorCode() == DRCE_INVALID_OUTLINE )
-    {
-        principalLayer = Edge_Cuts;
-    }
-    else
-    {
-        principalLayer = UNDEFINED_LAYER;
-
-        // The marker's layer is set by the test provider
-        if( parentMarker )
-        {
-            PCB_LAYER_ID markerLayer = parentMarker->GetLayer();
-
-            if( markerLayer > UNDEFINED_LAYER )
-                principalLayer = markerLayer;
-        }
-
-        // Fall back to intersecting the contributing items layer sets.
-        if( principalLayer <= UNDEFINED_LAYER )
-        {
-            if( a || b || c || d )
-                violationLayers = LSET::AllLayersMask();
-
-            for( BOARD_ITEM* it: { a, b, c, d } )
-            {
-                if( !it )
-                    continue;
-
-                LSET layersList = getActiveLayers( it );
-                violationLayers &= layersList;
-
-                if( principalLayer <= UNDEFINED_LAYER && layersList.count() )
-                    principalLayer = layersList.Seq().front();
-
-            }
-        }
-    }
-
-    if( violationLayers.count() )
-        principalLayer = violationLayers.Seq().front();
-    else if( principalLayer >= 0 )
-        violationLayers.set( principalLayer );
+    DRC_ITEM::GetViolationLayers( board, rc_item, parentMarker, principalLayer, violationLayers );
 
     WINDOW_THAWER thawer( m_frame );
 
