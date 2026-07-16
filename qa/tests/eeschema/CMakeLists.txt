@@ -126,6 +126,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24943_variant_unit_sync.cpp
     test_issue24663_sheet_dnp_fields.cpp
     test_issue24360_root_sheetname.cpp
+    test_unique_sheet_name.cpp
     test_issue1441_bom_default_filename.cpp
     test_issue16915_bus_netclass.cpp
     test_issue24220_hierarchical_bus_netclass.cpp

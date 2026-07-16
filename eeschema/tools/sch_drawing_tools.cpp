@@ -3476,7 +3476,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             {
                 wxFileName fn( filename );
 
-                sheet->GetField( FIELD_T::SHEET_NAME )->SetText( designBlock->GetLibId().GetLibItemName() );
+                sheet->GetField( FIELD_T::SHEET_NAME )
+                        ->SetText( UniqueSheetName( m_frame->GetScreen(), designBlock->GetLibId().GetLibItemName() ) );
                 sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fn.GetName() + ext );
 
                 std::vector<SCH_FIELD>& sheetFields = sheet->GetFields();
