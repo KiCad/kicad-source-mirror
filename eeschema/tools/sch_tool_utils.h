@@ -112,13 +112,13 @@ bool SymbolHasSheetInstances( const SCH_SYMBOL& aSymbol, const wxString& aCurren
 std::set<wxString> GetSheetNamesFromPaths( const std::set<wxString>& aSheetPaths, const SCHEMATIC& aSchematic );
 
 /**
- * Make a sheet name unique on the given screen.
- *
- * Comparison is case insensitive to match the ERC duplicate sheet name check.
- *
- * @param aScreen the screen the sheet is being placed on.
- * @param aBaseName the desired sheet name.
- *
- * @return aBaseName if free, otherwise aBaseName with the lowest free numeric suffix appended.
+ * Return aBaseName, or aBaseName + smallest free integer if a sheet with that name already
+ * exists on aScreen. Case insensitive, like the ERC duplicate sheet name check.
  */
 wxString UniqueSheetName( SCH_SCREEN* aScreen, const wxString& aBaseName );
+
+/**
+ * Return aBaseName, or aBaseName + smallest free integer if a group with that name already
+ * exists on aScreen.
+ */
+wxString UniqueGroupName( SCH_SCREEN* aScreen, const wxString& aBaseName );

@@ -74,35 +74,6 @@
 #include <wx/msgdlg.h>
 
 
-namespace
-{
-// Returns aBaseName, or aBaseName + smallest free integer if already used on aScreen.
-wxString uniqueGroupName( SCH_SCREEN* aScreen, const wxString& aBaseName )
-{
-    if( !aScreen )
-        return aBaseName;
-
-    std::unordered_set<wxString> existing;
-
-    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_GROUP_T ) )
-        existing.insert( static_cast<SCH_GROUP*>( item )->GetName() );
-
-    if( !existing.count( aBaseName ) )
-        return aBaseName;
-
-    for( int n = 1; n < std::numeric_limits<int>::max(); ++n )
-    {
-        wxString candidate = aBaseName + wxString::Format( wxT( "%d" ), n );
-
-        if( !existing.count( candidate ) )
-            return candidate;
-    }
-
-    return aBaseName;
-}
-} // namespace
-
-
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
         m_lastSheetPinType( LABEL_FLAG_SHAPE::L_INPUT ),
@@ -890,7 +861,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                         baseName = wxFileName( sheetFileName ).GetName();
                     }
 
-                    group->SetName( uniqueGroupName( screen, baseName ) );
+                    group->SetName( UniqueGroupName( screen, baseName ) );
                 }
 
                 bool autoAnnotate = !keepAnnotations && cfg->m_AnnotatePanel.automatic;
@@ -3582,7 +3553,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                     SCH_SCREEN* screen = m_frame->GetScreen();
 
                     sheetGroup = new SCH_GROUP( screen );
-                    sheetGroup->SetName( uniqueGroupName( screen, designBlock->GetLibId().GetLibItemName() ) );
+                    sheetGroup->SetName( UniqueGroupName( screen, designBlock->GetLibId().GetLibItemName() ) );
                     sheetGroup->SetDesignBlockLibId( designBlock->GetLibId() );
                     c.Add( sheetGroup, screen );
                     c.Modify( sheet, screen, RECURSE_MODE::NO_RECURSE );

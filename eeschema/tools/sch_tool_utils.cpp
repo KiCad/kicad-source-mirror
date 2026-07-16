@@ -31,6 +31,7 @@
 #include <sch_sheet_path.h>
 #include <sch_sheet.h>
 #include <sch_screen.h>
+#include <sch_group.h>
 #include <kiid.h>
 
 #include <limits>
@@ -453,6 +454,31 @@ wxString UniqueSheetName( SCH_SCREEN* aScreen, const wxString& aBaseName )
         wxString candidate = aBaseName + wxString::Format( wxT( "%d" ), n );
 
         if( !existing.count( candidate.Lower() ) )
+            return candidate;
+    }
+
+    return aBaseName;
+}
+
+
+wxString UniqueGroupName( SCH_SCREEN* aScreen, const wxString& aBaseName )
+{
+    if( !aScreen )
+        return aBaseName;
+
+    std::set<wxString> existing;
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_GROUP_T ) )
+        existing.insert( static_cast<SCH_GROUP*>( item )->GetName() );
+
+    if( !existing.count( aBaseName ) )
+        return aBaseName;
+
+    for( int n = 1; n < std::numeric_limits<int>::max(); ++n )
+    {
+        wxString candidate = aBaseName + wxString::Format( wxT( "%d" ), n );
+
+        if( !existing.count( candidate ) )
             return candidate;
     }
 

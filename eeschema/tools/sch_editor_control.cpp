@@ -2926,6 +2926,15 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 destItem->SetConnectivityDirty( true );
                 destItem->SetLastResolvedState( srcItem );
             }
+
+            // Pasted named groups need a unique name, the multichannel tool matches groups by name.
+            if( item->Type() == SCH_GROUP_T )
+            {
+                SCH_GROUP* group = static_cast<SCH_GROUP*>( item );
+
+                if( !group->GetName().IsEmpty() )
+                    group->SetName( UniqueGroupName( m_frame->GetScreen(), group->GetName() ) );
+            }
         }
 
         // Lines need both ends selected for a move after paste so the whole line moves.
