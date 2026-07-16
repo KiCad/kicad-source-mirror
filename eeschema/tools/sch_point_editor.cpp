@@ -1199,6 +1199,11 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         {
             if( !inDrag )
             {
+                // Ctrl overrides grid snapping during the drag, but it is also the selection
+                // disambiguation modifier.  Cancel the pending disambiguation menu so it does
+                // not pop up mid-drag.
+                m_selectionTool->CancelDisambiguation();
+
                 commit.Modify( m_editPoints->GetParent(), m_frame->GetScreen() );
 
                 if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )

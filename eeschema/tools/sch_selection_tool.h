@@ -168,6 +168,12 @@ public:
     int SelectRows( const TOOL_EVENT& aEvent );
     int SelectTable( const TOOL_EVENT& aEvent );
 
+    /**
+     * Stop the pending disambiguation timer so its menu cannot fire.  Used by other tools (e.g.
+     * the point editor) that take over the drag once Ctrl is held for grid-snap override.
+     */
+    void CancelDisambiguation() { m_disambiguateTimer.Stop(); }
+
     ///< Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
 
