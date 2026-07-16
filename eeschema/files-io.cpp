@@ -46,9 +46,11 @@
 #include <project_rescue.h>
 #include <project_sch.h>
 #include <dialog_HTML_reporter_base.h>
+#include <import_proj_properties.h>
 #include <io/common/plugin_common_choose_project.h>
 #include <reporter.h>
 #include <richio.h>
+#include <sch_footprint_field_reconciler.h>
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
@@ -1599,6 +1601,17 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                 // that back to the returned sheet.
                 if( !loadedIsTopLevel && !loadedIsVirtualRoot )
                     Schematic().SetTopLevelSheets( { loadedSheet } );
+
+                // re-link footprint fields to the project lib so update-from-schematic works
+                {
+                    wxString              cacheNick;
+                    std::vector<wxString> sourceFpLibs;
+                    IMPORT_PROJ_PROPS::ReadFootprintProps( aProperties, cacheNick, sourceFpLibs );
+
+                    SCH_FOOTPRINT_FIELD_RECONCILER fpReconciler( cacheNick, sourceFpLibs,
+                                                                 &loadReporter );
+                    fpReconciler.Reconcile( Schematic() );
+                }
 
                 if( errorReporter.m_Reporter->HasMessage() )
                 {

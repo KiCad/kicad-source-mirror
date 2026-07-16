@@ -143,6 +143,7 @@ set( QA_EESCHEMA_SRCS
     test_nc_pin_connectivity.cpp
     test_crossing_label.cpp
     test_eagle_plugin.cpp
+    test_sch_footprint_field_reconciler.cpp
     test_junction_helpers.cpp
     test_junction_place.cpp
     test_issue18346_junction_fixup.cpp

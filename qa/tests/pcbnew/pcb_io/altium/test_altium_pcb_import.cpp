@@ -31,6 +31,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <footprint.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <common.h>
 #include <core/utf8.h>
@@ -82,6 +83,40 @@ BOOST_AUTO_TEST_CASE( BoardLoadNoAssertions )
     // Basic sanity checks
     BOOST_CHECK( board->GetNetCount() > 0 );
     BOOST_CHECK( board->Footprints().size() > 0 );
+}
+
+
+// GetImportedCachedLibraryFootprints() is caller-owns, so Altium must clone rather than alias
+// aliasing would let the reconciler (takes ownership) double-free the board
+BOOST_AUTO_TEST_CASE( CachedLibraryFootprintsAreOwnedCopies )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/HiFive/HiFive1.B01.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE_GT( board->Footprints().size(), 0 );
+
+    std::vector<FOOTPRINT*> cached = m_altiumPlugin.GetImportedCachedLibraryFootprints();
+
+    // adopt ownership so the clones free with the test
+    std::vector<std::unique_ptr<FOOTPRINT>> owned;
+
+    for( FOOTPRINT* fp : cached )
+        owned.emplace_back( fp );
+
+    BOOST_CHECK_EQUAL( cached.size(), board->Footprints().size() );
+
+    std::set<FOOTPRINT*> boardFootprints( board->Footprints().begin(), board->Footprints().end() );
+
+    // no returned footprint may alias a board-owned one
+    for( FOOTPRINT* fp : cached )
+    {
+        BOOST_CHECK_MESSAGE( boardFootprints.count( fp ) == 0,
+                             "GetImportedCachedLibraryFootprints returned a board-owned footprint" );
+    }
 }
 
 

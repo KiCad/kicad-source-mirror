@@ -474,8 +474,9 @@ std::vector<FOOTPRINT*> PCB_IO_ALTIUM_DESIGNER::GetImportedCachedLibraryFootprin
 {
     std::vector<FOOTPRINT*> footprints;
 
+    // caller owns result, clone not alias
     for( FOOTPRINT* fp : m_board->Footprints() )
-        footprints.push_back( fp );
+        footprints.push_back( static_cast<FOOTPRINT*>( fp->Clone() ) );
 
     return footprints;
 }

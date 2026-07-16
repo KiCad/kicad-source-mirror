@@ -48,6 +48,10 @@ public:
         // optional callback to configure the plugin, e.g. to set GUI callbacks
         std::function<void( PCB_IO& )> plugin_configurator;
 
+        // optional callback invoked with the plugin after a successful load, e.g. to extract the
+        // importer's cached library footprints before the plugin is destroyed
+        std::function<void( PCB_IO& )> post_load_hook;
+
         // if present, will be called with (sheet path, error message) on failure to load sheet
         std::function<void( const wxString&, const wxString& )> drawing_sheet_error_callback;
 
