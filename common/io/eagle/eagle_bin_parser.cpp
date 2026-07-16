@@ -109,6 +109,7 @@ enum ATTR_TYPE
     T_BMB, // bit-mask-bool: apply mask in len to byte at offs, result is a boolean
     T_UBF, // unsigned bitfield, len is a BITFIELD() descriptor
     T_INT, // signed little-endian integer
+    T_UINT, // unsigned little-endian integer
     T_DBL, // 8-byte IEEE double
     T_STR  // fixed-length NUL-padded string
 };
@@ -687,7 +688,8 @@ const SCRIPT_ROW g_script[] = {
       { { 2, 2, SS_RECURSIVE, nullptr }, TERM_S },
       { { "lib", T_INT, 4, 2 },
         { "device", T_INT, 6, 2 },
-        { "variant", T_INT, 8, 1 },
+        // devicesets can exceed 127 variants, read unsigned or high index sign-extends negative
+        { "variant", T_UINT, 8, 1 },
         { "technology", T_INT, 9, 2 },
         { "name", T_STR, 11, 5 },
         { "value", T_STR, 16, 8 },
@@ -1090,6 +1092,7 @@ int EAGLE_BIN_PARSER::readBlock( long& aNumBlocks, EGB_NODE* aParent )
         case T_BMB: val = loadBmb( blockStart + at->offs, at->len ) ? wxS( "yes" ) : wxS( "no" ); break;
         case T_UBF: val = wxString::Format( wxS( "%u" ), loadUbf( blockStart + at->offs, at->len ) ); break;
         case T_INT: val = wxString::Format( wxS( "%d" ), loadS32( blockStart + at->offs, at->len ) ); break;
+        case T_UINT: val = wxString::Format( wxS( "%u" ), loadU32( blockStart + at->offs, at->len ) ); break;
         case T_DBL: val = wxString::FromCDouble( loadDouble( blockStart + at->offs ) ); break;
         case T_STR:
         {
@@ -2751,6 +2754,8 @@ void EAGLE_BIN_PARSER::renameSchSections( EGB_NODE* aSchematic )
                 case EGKW_SECT_SCHEMASHEET:    aNode->name = wxS( "sheet" );      break;
                 case EGKW_SECT_SCHEMANET:      aNode->name = wxS( "net" );        break;
                 case EGKW_SECT_PACKAGEVARIANT: aNode->name = wxS( "device" );     break;
+                // segment reader wants <label> not <netbuslabel> or it gets dropped
+                case EGKW_SECT_NETBUSLABEL:    aNode->name = wxS( "label" );      break;
                 default:
                     if( aNode->name == wxS( "variants" ) )
                         aNode->name = wxS( "devices" );

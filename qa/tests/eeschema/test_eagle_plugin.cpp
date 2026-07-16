@@ -448,3 +448,53 @@ BOOST_AUTO_TEST_CASE( DetachedLabelProjectsOntoWire )
                          "Label projected to " << offsetMM
                                                << " mm from the wire's left end, expected 10 mm" );
 }
+
+
+// issue 24829 dropped net labels under the raw netbuslabel element name
+// and lost symbols whose variant ordinal above 127 sign-extended negative
+BOOST_AUTO_TEST_CASE( BinaryNetLabelAndHighVariantImported )
+{
+    const wxFileName eagleFn = getEagleTestSchematic( "issue24829_brenner.sch" );
+    BOOST_REQUIRE( wxFileExists( eagleFn.GetFullPath() ) );
+
+    std::unique_ptr<SCHEMATIC> schematic;
+    loadEagleSchematic( eagleFn, wxS( "eagle_brenner_24829" ), schematic );
+
+    int symbolCount = 0;
+    SCH_SYMBOL* c4 = nullptr;
+    SCH_LABEL_BASE* netLabel = nullptr;
+
+    for( const SCH_SHEET_PATH& sheetPath : schematic->BuildSheetListSortedByPageNumbers() )
+    {
+        SCH_SCREEN* screen = sheetPath.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items() )
+        {
+            if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T
+                || item->Type() == SCH_HIER_LABEL_T )
+            {
+                netLabel = static_cast<SCH_LABEL_BASE*>( item );
+            }
+            else if( item->Type() == SCH_SYMBOL_T )
+            {
+                ++symbolCount;
+                SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
+
+                if( sym->GetField( FIELD_T::REFERENCE )->GetText() == wxS( "C4" ) )
+                    c4 = sym;
+            }
+        }
+    }
+
+    // single placed net label on VSS, previously dropped entirely
+    BOOST_REQUIRE_MESSAGE( netLabel, "placed net label was not imported" );
+    BOOST_CHECK_EQUAL( netLabel->GetText(), wxS( "VSS" ) );
+
+    // 36 placed instances, C4 is CPOL-EU with variant ordinal 131
+    BOOST_CHECK_EQUAL( symbolCount, 36 );
+    BOOST_REQUIRE_MESSAGE( c4, "CPOL-EU symbol C4 (variant ordinal 131) was not imported" );
+    BOOST_CHECK( c4->GetLibSymbolRef() != nullptr );
+}
