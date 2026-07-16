@@ -63,12 +63,14 @@ enum class LABEL_POSITION
  *
  * All coordinates are in 1x bitmap pixels. When the system selects a higher-resolution
  * bitmap (1.5x or 2x), these values are automatically scaled at runtime.
+ *
+ * yCenter is the vertical center of the field.
  */
 struct DRC_RE_FIELD_POSITION
 {
     int xStart;     ///< Left edge X coordinate where the field starts
     int xEnd;       ///< Right edge X coordinate where the field ends
-    int yTop;       ///< Top edge Y coordinate of the field
+    int yCenter;    ///< Vertical center Y coordinate of the field
     int tabOrder;   ///< Tab navigation order (1-based, lower numbers receive focus first)
 
     wxString       labelText;      ///< Optional label text (empty for no label)
@@ -78,7 +80,7 @@ struct DRC_RE_FIELD_POSITION
     DRC_RE_FIELD_POSITION() :
             xStart( 0 ),
             xEnd( 0 ),
-            yTop( 0 ),
+            yCenter( 0 ),
             tabOrder( 0 ),
             labelText(),
             labelPosition( LABEL_POSITION::NONE ),
@@ -86,13 +88,13 @@ struct DRC_RE_FIELD_POSITION
     {
     }
 
-    DRC_RE_FIELD_POSITION( int aXStart, int aXEnd, int aYTop, int aTabOrder,
+    DRC_RE_FIELD_POSITION( int aXStart, int aXEnd, int aYCenter, int aTabOrder,
                            const wxString& aLabelText = wxEmptyString,
                            LABEL_POSITION  aLabelPos = LABEL_POSITION::NONE,
                            const wxString& aPrefixText = wxEmptyString ) :
             xStart( aXStart ),
             xEnd( aXEnd ),
-            yTop( aYTop ),
+            yCenter( aYCenter ),
             tabOrder( aTabOrder ),
             labelText( aLabelText ),
             labelPosition( aLabelPos ),

@@ -57,18 +57,18 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         // Positions measured from constraint_routing_diff_pair.png bitmap (~423x133)
-        // Format: { xStart, xEnd, yTop, tabOrder }
+        // Format: { xStart, xEnd, yCenter, tabOrder }
         // TODO: measure actual positions from PNG
         return {
-            { 0 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_XO, 135 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
+            { 0 + DRC_RE_OVERLAY_XO, 40 + DRC_RE_OVERLAY_XO, 147 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // opt_width
-            { 100 + DRC_RE_OVERLAY_XO, 140 + DRC_RE_OVERLAY_XO, 135 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
+            { 100 + DRC_RE_OVERLAY_XO, 140 + DRC_RE_OVERLAY_XO, 147 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
               LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
-            { 185 + DRC_RE_OVERLAY_XO, 225 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ),
+            { 185 + DRC_RE_OVERLAY_XO, 225 + DRC_RE_OVERLAY_XO, 127 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // opt_gap
-            { 285 + DRC_RE_OVERLAY_XO, 325 + DRC_RE_OVERLAY_XO, 115 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ),
+            { 285 + DRC_RE_OVERLAY_XO, 325 + DRC_RE_OVERLAY_XO, 127 + DRC_RE_OVERLAY_YO, 4, wxS( "mm" ),
               LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // gap_tolerance (±)
-            { 95 + DRC_RE_OVERLAY_XO, 135 + DRC_RE_OVERLAY_XO, 10 + DRC_RE_OVERLAY_YO, 5, wxS( "mm" ),
+            { 95 + DRC_RE_OVERLAY_XO, 135 + DRC_RE_OVERLAY_XO, 22 + DRC_RE_OVERLAY_YO, 5, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // max_uncoupled
         };
     }
