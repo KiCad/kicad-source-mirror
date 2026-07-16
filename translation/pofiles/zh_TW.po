@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-07-16 11:01+0000\n"
+"PO-Revision-Date: 2026-07-17 16:01+0000\n"
 "Last-Translator: Che-Hsien Su <jonassu1101@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hant/>\n"
@@ -2738,6 +2738,8 @@ msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"不做任何變動並且關閉這個對話.自動保存的文檔仍會在硬盤上並在下次打開項目時被提"
+"供."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
@@ -3176,11 +3178,11 @@ msgstr "編輯群組屬性"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "一個群組不能包含自己."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "不能添加這個群組因為這已經包含了當前群組."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
