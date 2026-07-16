@@ -70,15 +70,15 @@ public:
         // Positions measured from constraint_via_style.png bitmap
         // Format: { xStart, xEnd, yCenter, tabOrder }
         return {
-            { 155 + DRC_RE_OVERLAY_XO, 195 + DRC_RE_OVERLAY_XO, 22 + DRC_RE_OVERLAY_YO, 0, wxS( "mm" ),
+            { 155, 210, 22, 0, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // [0] min_via_diameter
-            { 265 + DRC_RE_OVERLAY_XO, 305 + DRC_RE_OVERLAY_XO, 22 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ),
+            { 265, 320, 22, 1, wxS( "mm" ),
               LABEL_POSITION::RIGHT, wxS( "–  " ) }, // [1] max_via_diameter
-            { 195 + DRC_RE_OVERLAY_XO, 235 + DRC_RE_OVERLAY_XO, 202 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ),
+            { 195, 250, 202, 2, wxS( "mm" ),
               LABEL_POSITION::RIGHT }, // [2] min_via_hole
-            { 305 + DRC_RE_OVERLAY_XO, 345 + DRC_RE_OVERLAY_XO, 202 + DRC_RE_OVERLAY_YO, 3, wxS( "mm" ),
+            { 305, 360, 202, 3, wxS( "mm" ),
               LABEL_POSITION::RIGHT, wxS( "–  " ) }, // [3] max_via_hole
-            { 420 + DRC_RE_OVERLAY_XO, 510 + DRC_RE_OVERLAY_XO, 122 + DRC_RE_OVERLAY_YO, 4, _( "Via type:" ),
+            { 420, 525, 122, 4, _( "Via type:" ),
               LABEL_POSITION::LEFT }, // [4] via_type dropdown
         };
     }

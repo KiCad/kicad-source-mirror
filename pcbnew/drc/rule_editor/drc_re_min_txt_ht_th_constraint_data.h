@@ -57,8 +57,8 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return {
-            { 208 + DRC_RE_OVERLAY_XO, 248 + DRC_RE_OVERLAY_XO, 94 + DRC_RE_OVERLAY_YO, 1, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_text_height
-            { 109 + DRC_RE_OVERLAY_XO, 149 + DRC_RE_OVERLAY_XO, 209 + DRC_RE_OVERLAY_YO, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_text_thickness
+            { 208, 263, 94, 1, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_text_height
+            { 109, 164, 209, 2, wxS( "mm" ), LABEL_POSITION::RIGHT }, // min_text_thickness
         };
     }
 
