@@ -25,6 +25,7 @@ set( MDW_RUNTIME_SRCS
     src/mdw_lifecycle.cpp
     src/mdw_paging.cpp
     src/mdw_run_backend.cpp
+    src/mdw_staged_folder.cpp
     )
 
 add_library( mdw_runtime STATIC
