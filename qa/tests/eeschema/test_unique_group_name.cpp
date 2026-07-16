@@ -18,75 +18,64 @@
  */
 
 /**
- * @file test_unique_sheet_name.cpp
+ * @file test_unique_group_name.cpp
  *
- * Tests for UniqueSheetName, used when placing design blocks as sheets.
+ * Tests for UniqueGroupName, used when placing and pasting named groups.
  */
 
 #include <boost/test/unit_test.hpp>
 
 #include <sch_screen.h>
-#include <sch_sheet.h>
+#include <sch_group.h>
 #include <tools/sch_tool_utils.h>
 
 
 namespace
 {
-SCH_SHEET* addSheet( SCH_SCREEN& aScreen, const wxString& aName )
+SCH_GROUP* addGroup( SCH_SCREEN& aScreen, const wxString& aName )
 {
-    SCH_SHEET* sheet = new SCH_SHEET();
-    sheet->SetName( aName );
-    aScreen.Append( sheet );
-    return sheet;
+    SCH_GROUP* group = new SCH_GROUP( &aScreen );
+    group->SetName( aName );
+    aScreen.Append( group );
+    return group;
 }
 } // namespace
 
 
-BOOST_AUTO_TEST_SUITE( UniqueSheetNames )
+BOOST_AUTO_TEST_SUITE( UniqueGroupNames )
 
 
 BOOST_AUTO_TEST_CASE( NullScreenReturnsBase )
 {
-    BOOST_CHECK_EQUAL( UniqueSheetName( nullptr, wxT( "Amp" ) ), wxString( wxT( "Amp" ) ) );
+    BOOST_CHECK_EQUAL( UniqueGroupName( nullptr, wxT( "Amp" ) ), wxString( wxT( "Amp" ) ) );
 }
 
 
 BOOST_AUTO_TEST_CASE( FreeNameIsKept )
 {
     SCH_SCREEN screen;
-    addSheet( screen, wxT( "Other Sheet" ) );
+    addGroup( screen, wxT( "Other Group" ) );
 
-    BOOST_CHECK_EQUAL( UniqueSheetName( &screen, wxT( "Amp" ) ), wxString( wxT( "Amp" ) ) );
+    BOOST_CHECK_EQUAL( UniqueGroupName( &screen, wxT( "Amp" ) ), wxString( wxT( "Amp" ) ) );
 }
 
 
 BOOST_AUTO_TEST_CASE( CollisionGetsSuffix )
 {
     SCH_SCREEN screen;
-    addSheet( screen, wxT( "Amp" ) );
+    addGroup( screen, wxT( "Amp" ) );
 
-    BOOST_CHECK_EQUAL( UniqueSheetName( &screen, wxT( "Amp" ) ), wxString( wxT( "Amp1" ) ) );
+    BOOST_CHECK_EQUAL( UniqueGroupName( &screen, wxT( "Amp" ) ), wxString( wxT( "Amp1" ) ) );
 }
 
 
 BOOST_AUTO_TEST_CASE( SuffixSkipsTakenNumbers )
 {
     SCH_SCREEN screen;
-    addSheet( screen, wxT( "Amp" ) );
-    addSheet( screen, wxT( "Amp1" ) );
-    addSheet( screen, wxT( "Amp2" ) );
+    addGroup( screen, wxT( "Amp" ) );
+    addGroup( screen, wxT( "Amp1" ) );
 
-    BOOST_CHECK_EQUAL( UniqueSheetName( &screen, wxT( "Amp" ) ), wxString( wxT( "Amp3" ) ) );
-}
-
-
-BOOST_AUTO_TEST_CASE( ComparisonIsCaseInsensitive )
-{
-    SCH_SCREEN screen;
-    addSheet( screen, wxT( "AMP" ) );
-    addSheet( screen, wxT( "amp1" ) );
-
-    BOOST_CHECK_EQUAL( UniqueSheetName( &screen, wxT( "Amp" ) ), wxString( wxT( "Amp2" ) ) );
+    BOOST_CHECK_EQUAL( UniqueGroupName( &screen, wxT( "Amp" ) ), wxString( wxT( "Amp2" ) ) );
 }
 
 

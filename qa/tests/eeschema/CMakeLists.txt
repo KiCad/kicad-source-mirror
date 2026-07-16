@@ -122,6 +122,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24360_root_sheetname.cpp
     test_issue24217_cli_variant_export.cpp
     test_unique_sheet_name.cpp
+    test_unique_group_name.cpp
     test_issue16915_bus_netclass.cpp
     test_issue24220_hierarchical_bus_netclass.cpp
     test_issue24477_http_network_loss.cpp
