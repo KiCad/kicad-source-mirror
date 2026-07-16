@@ -441,15 +441,24 @@ std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
             value.Replace( wxT( "ÿ" ), wxT( " " ) );
         }
 
-        if( canonicalKey == wxT( "DESIGNATOR" )
-                || canonicalKey == wxT( "NAME" )
-                || canonicalKey == wxT( "TEXT" ) )
-        {
-            if( kv[ wxT( "RECORD" ) ] != wxT( "4" ) )
-                value = AltiumPropertyToKiCadString( value.Trim() );
-        }
-
         kv.insert( { canonicalKey, value.Trim() } );
+    }
+
+    // DESIGNATOR/NAME/TEXT carry Altium overbar markup that must be converted for every record
+    // type except RECORD=4 (LABEL). Older schematics emit those keys ahead of RECORD, so the type
+    // is only reliably known once the whole record has been read; deciding mid-stream both misses
+    // the exemption and, via operator[], leaves an empty RECORD that shadows the real value.
+    auto recordIt = kv.find( wxT( "RECORD" ) );
+
+    if( recordIt == kv.end() || recordIt->second != wxT( "4" ) )
+    {
+        for( const wxString& key : { wxT( "DESIGNATOR" ), wxT( "NAME" ), wxT( "TEXT" ) } )
+        {
+            auto valueIt = kv.find( key );
+
+            if( valueIt != kv.end() )
+                valueIt->second = AltiumPropertyToKiCadString( valueIt->second );
+        }
     }
 
     return kv;

@@ -254,6 +254,12 @@ static const std::vector<std::tuple<std::string, std::map<wxString, wxString>>> 
     // Correct reading errors
     { "|A|B=C\0", { { "B", "C" } } },
     { "|A=B|C\0", { { "A", "B" } } },
+    // DESIGNATOR/NAME/TEXT overbar conversion is exempt for RECORD=4 (LABEL) and applied for
+    // any other record type, independent of whether RECORD precedes or trails the text key.
+    { "|RECORD=4|TEXT=\\A\\B\0", { { "RECORD", "4" }, { "TEXT", "\\A\\B" } } },
+    { "|TEXT=\\A\\B|RECORD=4\0", { { "RECORD", "4" }, { "TEXT", "\\A\\B" } } },
+    { "|RECORD=25|TEXT=\\A\\B\0", { { "RECORD", "25" }, { "TEXT", "~{A}B" } } },
+    { "|TEXT=\\A\\B|RECORD=25\0", { { "RECORD", "25" }, { "TEXT", "~{A}B" } } },
 };
 
 /**

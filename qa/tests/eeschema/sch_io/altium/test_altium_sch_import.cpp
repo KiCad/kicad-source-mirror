@@ -72,6 +72,13 @@ struct ALTIUM_SCH_IMPORT_FIXTURE
                + aName;
     }
 
+    wxString eDPAdapterDataFile( const wxString& aName ) const
+    {
+        return wxString::FromUTF8( KI_TEST::GetTestDataRootDir()
+                                   + "pcbnew/plugins/altium/eDP_adapter_dvt1_source/" )
+               + aName;
+    }
+
     SETTINGS_MANAGER m_settingsManager;
     SCHEMATIC        m_schematic;
 };
@@ -268,6 +275,54 @@ BOOST_AUTO_TEST_CASE( Ticket1303_MultiPageBlock )
 
     BOOST_CHECK_MESSAGE( foundMergedScreen,
                          "Both pages of the multi-file sheet symbol must load into one screen" );
+}
+
+
+// https://gitlab.com/kicad/code/kicad/-/issues/24843
+// Altium encodes symbol rotation as quarter turns that map one-for-one onto KiCad's
+// SYM_ORIENT_* angles. The importer must store the same angle Altium shows so a later
+// "Update Symbols from Library" against a canonical upright symbol does not rotate the
+// placement. The reference symbols below are non-mirrored so the stored angle reads back
+// directly, without GetOrientation()'s mirror normalization.
+BOOST_AUTO_TEST_CASE( Issue24843_SymbolOrientationMatchesAltium )
+{
+    SCH_IO_ALTIUM plugin;
+
+    SCH_SHEET* rootSheet = plugin.LoadSchematicFile( eDPAdapterDataFile( "power.SchDoc" ),
+                                                     &m_schematic );
+    BOOST_REQUIRE( rootSheet );
+
+    m_schematic.RefreshHierarchy();
+
+    // Reference designator -> Altium orientation angle read straight from the source records.
+    const std::map<wxString, SYMBOL_ORIENTATION_PROP> expected = {
+        { wxT( "L10P" ), SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_0 },   // Altium ORIENTATION 0
+        { wxT( "C10P" ), SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_90 },  // Altium ORIENTATION 1
+        { wxT( "R10P" ), SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_180 }, // Altium ORIENTATION 2
+        { wxT( "C13P" ), SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_270 }, // Altium ORIENTATION 3
+    };
+
+    std::map<wxString, SYMBOL_ORIENTATION_PROP> actual;
+
+    for( const SCH_SHEET_PATH& sheetPath : m_schematic.Hierarchy() )
+    {
+        for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            wxString    ref = symbol->GetRef( &sheetPath );
+
+            if( expected.count( ref ) )
+                actual[ref] = symbol->GetOrientationProp();
+        }
+    }
+
+    for( const auto& [ref, angle] : expected )
+    {
+        BOOST_REQUIRE_MESSAGE( actual.count( ref ), "Symbol '" << ref << "' not found on import" );
+        BOOST_CHECK_MESSAGE( actual.at( ref ) == angle,
+                             "Symbol '" << ref << "' imported with orientation " << actual.at( ref )
+                                        << ", expected " << angle );
+    }
 }
 
 

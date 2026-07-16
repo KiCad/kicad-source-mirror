@@ -2183,12 +2183,15 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
 
     int orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_0;
 
+    // Altium encodes symbol rotation as quarter turns CCW, matching KiCad's SYM_ORIENT_* angles
+    // one for one. The stored value must equal the Altium angle so a later "Update Symbols from
+    // Library" against a canonical upright symbol does not rotate the placement.
     switch( elem.orientation )
     {
-    case 0: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_90;  break;
-    case 1: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_180; break;
-    case 2: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_270; break;
-    case 3: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_0;   break;
+    case 0: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_0;   break;
+    case 1: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_90;  break;
+    case 2: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_180; break;
+    case 3: orientation = SYMBOL_ORIENTATION_T::SYM_ORIENT_270; break;
     default: break;
     }
 
@@ -2538,10 +2541,13 @@ void AdjustFieldForSymbolOrientation( SCH_FIELD* aField, const ASCH_SYMBOL& aSym
 {
     bool isHorizontal = aField->GetTextAngle().IsHorizontal();
 
-    // Altium orientation 0 (RIGHTWARDS) maps to KiCad SYM_ORIENT_90 (CCW). To compensate,
+    // Altium orientation 0 (RIGHTWARDS) maps to KiCad SYM_ORIENT_0 (identity). No rotation
+    // compensation needed.
+
+    // Altium orientation 1 (UPWARDS) maps to KiCad SYM_ORIENT_90 (CCW). To compensate,
     // apply CW 90-degree rotation to text properties. Per SCH_FIELD::Rotate(), CW rotation
     // of horizontal text flips justification; CW rotation of vertical text does not.
-    if( aSymbol.orientation == 0 )
+    if( aSymbol.orientation == 1 )
     {
         if( isHorizontal )
         {
@@ -2551,18 +2557,18 @@ void AdjustFieldForSymbolOrientation( SCH_FIELD* aField, const ASCH_SYMBOL& aSym
 
         aField->SetTextAngle( isHorizontal ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
     }
-    // Altium orientation 1 (UPWARDS) maps to KiCad SYM_ORIENT_180 (two CCW rotations). The
+    // Altium orientation 2 (LEFTWARDS) maps to KiCad SYM_ORIENT_180 (two CCW rotations). The
     // transform [-1,0,0,-1] negates both X and Y, flipping horizontal justification. Apply
     // one correction for the full 180 degrees regardless of text angle.
-    else if( aSymbol.orientation == 1 )
+    else if( aSymbol.orientation == 2 )
     {
         aField->SetHorizJustify(
                 static_cast<GR_TEXT_H_ALIGN_T>( -aField->GetHorizJustify() ) );
     }
-    // Altium orientation 2 (LEFTWARDS) maps to KiCad SYM_ORIENT_270 (CW). To compensate,
+    // Altium orientation 3 (DOWNWARDS) maps to KiCad SYM_ORIENT_270 (CW). To compensate,
     // apply CCW 90-degree rotation to text properties. Per SCH_FIELD::Rotate(), CCW rotation
     // of vertical text flips justification; CCW rotation of horizontal text does not.
-    else if( aSymbol.orientation == 2 )
+    else if( aSymbol.orientation == 3 )
     {
         if( !isHorizontal )
         {
@@ -2572,8 +2578,6 @@ void AdjustFieldForSymbolOrientation( SCH_FIELD* aField, const ASCH_SYMBOL& aSym
 
         aField->SetTextAngle( isHorizontal ? ANGLE_VERTICAL : ANGLE_HORIZONTAL );
     }
-    // Altium orientation 3 (DOWNWARDS) maps to KiCad SYM_ORIENT_0 (identity). No rotation
-    // compensation needed.
 
     // Mirror-Y in KiCad negates the X component of the bounding box, which effectively
     // flips horizontal justification. Compensate so the rendered text matches Altium.
@@ -2592,7 +2596,7 @@ void AdjustFieldForSymbolOrientation( SCH_FIELD* aField, const ASCH_SYMBOL& aSym
 // since GetRelativePosition already handles the positional component.
 void AdjustTextForSymbolOrientation( SCH_TEXT* aText, const ASCH_SYMBOL& aSymbol )
 {
-    int nRenderRotations = ( aSymbol.orientation + 1 ) % 4;
+    int nRenderRotations = aSymbol.orientation % 4;
 
     // Undo mirror first (reverse of render-time application order).
     // MirrorHorizontally on LAYER_DEVICE text flips H-justify when horizontal

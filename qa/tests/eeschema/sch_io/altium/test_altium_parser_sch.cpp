@@ -271,7 +271,7 @@ static ASCH_SYMBOL MakeTestSymbol( int aOrientation, bool aMirrored )
 // does at render time. Position is not relevant for this test.
 static void SimulateRenderTransform( SCH_TEXT* aText, int aAltiumOrientation, bool aMirrored )
 {
-    int nRotations = ( aAltiumOrientation + 1 ) % 4;
+    int nRotations = aAltiumOrientation % 4;
 
     for( int i = 0; i < nRotations; i++ )
         aText->Rotate90( false );
