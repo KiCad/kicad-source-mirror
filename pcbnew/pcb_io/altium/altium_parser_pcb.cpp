@@ -853,6 +853,7 @@ ARULE6::ARULE6( ALTIUM_BINARY_PARSER& aReader )
 
     name     = ALTIUM_PROPS_UTILS::ReadString( props, wxT( "NAME" ), wxT( "" ) );
     priority = ALTIUM_PROPS_UTILS::ReadInt( props, wxT( "PRIORITY" ), 1 );
+    enabled  = ALTIUM_PROPS_UTILS::ReadBool( props, wxT( "ENABLED" ), true );
 
     scope1expr = ALTIUM_PROPS_UTILS::ReadString( props, wxT( "SCOPE1EXPRESSION" ), wxT( "" ) );
     scope2expr = ALTIUM_PROPS_UTILS::ReadString( props, wxT( "SCOPE2EXPRESSION" ), wxT( "" ) );
@@ -902,8 +903,11 @@ ARULE6::ARULE6( ALTIUM_BINARY_PARSER& aReader )
         kind = ALTIUM_RULE_KIND::WIDTH;
         minLimit       = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "MINLIMIT" ), wxT( "6mil" ) );
         maxLimit       = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "MAXLIMIT" ), wxT( "40mil" ) );
-        preferredWidth = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "PREFERREDWIDTH" ), wxT( "6mil" ) );
-}
+        // Altium writes PREFEREDWIDTH; fall back to the correct spelling in case that ever changes
+        preferredWidth = ALTIUM_PROPS_UTILS::ReadKicadUnit(
+                props, wxT( "PREFEREDWIDTH" ),
+                ALTIUM_PROPS_UTILS::ReadString( props, wxT( "PREFERREDWIDTH" ), wxT( "6mil" ) ) );
+    }
     else if( rulekind == wxT( "PasteMaskExpansion" ) )
     {
         kind = ALTIUM_RULE_KIND::PASTE_MASK_EXPANSION;

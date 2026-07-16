@@ -23,6 +23,7 @@
 
 #include <functional>
 #include <layer_ids.h>
+#include <map>
 #include <vector>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 
@@ -90,6 +91,7 @@ class FOOTPRINT;
 class ZONE;
 class PCB_DIM_RADIAL;
 class PROGRESS_REPORTER;
+class NET_SETTINGS;
 
 namespace CFB
 {
@@ -120,6 +122,18 @@ struct ALTIUM_EMBEDDED_MODEL_DATA
  * candidate that is already taken on @p aBoard.
  */
 wxString AltiumUnnamedNetName( const BOARD& aBoard, int& aCounter );
+
+
+/**
+ * Copy the values of Altium rules scoped to a single netclass onto that netclass.
+ *
+ * Only rules of the form InNetClass('<name>') against All are considered, and only for the
+ * clearance, width and routing-via kinds.  Each vector in @p aRulesByKind must be sorted by
+ * ARULE6::priority ascending; the first enabled match for a netclass wins, because Altium
+ * priority 1 is the most specific.  Disabled rules are skipped.
+ */
+void ApplyAltiumNetclassRules( const std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>>& aRulesByKind,
+                               NET_SETTINGS& aNetSettings );
 
 
 // type declaration required for a helper method
@@ -215,6 +229,10 @@ private:
     void ParseUnionNamesData( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPcbFile, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void HelperCreateTuningPatterns();
     void HelperSetFootprintMountingStyles();
+
+    /// Rebuild the composite netclasses and point every net at its effective netclass.
+    void HelperAssignNetclassesToNets();
+
     void ParseTexts6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ConvertTexts6ToBoardItem( const ATEXT6& aElem );

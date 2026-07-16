@@ -577,6 +577,87 @@ BOOST_AUTO_TEST_CASE( UnnamedNetPlaceholderAvoidsCollisions )
 
 
 /**
+ * Altium keeps its preferred track width, via size and clearance in design rules rather than in
+ * the design settings.  Fastino_Ground_Isolator.PcbDoc carries an All/All Width rule of 11.811mil
+ * and RoutingVias of 23.622mil/11.811mil, plus a Width rule of 13.7795mil scoped to the '50R'
+ * netclass.
+ */
+BOOST_AUTO_TEST_CASE( RulesPopulateNetclasses )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    std::shared_ptr<NET_SETTINGS> netSettings = board->GetDesignSettings().m_NetSettings;
+    std::shared_ptr<NETCLASS>     defaultNetclass = netSettings->GetDefaultNetclass();
+
+    BOOST_CHECK_EQUAL( defaultNetclass->GetTrackWidth(), pcbIUScale.mmToIU( 0.3 ) );
+    BOOST_CHECK_EQUAL( defaultNetclass->GetViaDiameter(), pcbIUScale.mmToIU( 0.6 ) );
+    BOOST_CHECK_EQUAL( defaultNetclass->GetViaDrill(), pcbIUScale.mmToIU( 0.3 ) );
+
+    auto it = netSettings->GetNetclasses().find( wxT( "50R" ) );
+
+    BOOST_REQUIRE( it != netSettings->GetNetclasses().end() );
+    BOOST_CHECK_EQUAL( it->second->GetTrackWidth(), pcbIUScale.mmToIU( 0.35 ) );
+
+    BOOST_CHECK( board->m_LegacyDesignSettingsLoaded );
+}
+
+
+/**
+ * Altium allows several rules of one kind to target the same netclass and resolves them by
+ * priority, where 1 is the most specific.  Disabled rules never apply, and a rule is only about
+ * one netclass when its second scope is unrestricted.
+ */
+BOOST_AUTO_TEST_CASE( NetclassRulePriority )
+{
+    auto makeWidthRule = []( int aPriority, bool aEnabled, const wxString& aScope2, int aWidth )
+    {
+        ARULE6 rule;
+        rule.kind = ALTIUM_RULE_KIND::WIDTH;
+        rule.priority = aPriority;
+        rule.enabled = aEnabled;
+        rule.scope1expr = wxT( "InNetClass('SIG')" );
+        rule.scope2expr = aScope2;
+        rule.preferredWidth = aWidth;
+        return rule;
+    };
+
+    BOARD                     board;
+    NET_SETTINGS&             netSettings = *board.GetDesignSettings().m_NetSettings;
+    std::shared_ptr<NETCLASS> sig = std::make_shared<NETCLASS>( wxT( "SIG" ), false );
+
+    netSettings.SetNetclass( wxT( "SIG" ), sig );
+
+    // Sorted by priority ascending, matching the order produced by ParseRules6Data
+    std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>> rules;
+    rules[ALTIUM_RULE_KIND::WIDTH] = {
+        makeWidthRule( 1, true, wxT( "All" ), 100 ),
+        makeWidthRule( 2, true, wxT( "All" ), 200 ),
+    };
+
+    ApplyAltiumNetclassRules( rules, netSettings );
+    BOOST_CHECK_EQUAL( sig->GetTrackWidth(), 100 );
+
+    // A disabled priority 1 rule leaves the next one in charge
+    sig->SetTrackWidth( std::optional<int>() );
+    rules[ALTIUM_RULE_KIND::WIDTH][0].enabled = false;
+
+    ApplyAltiumNetclassRules( rules, netSettings );
+    BOOST_CHECK_EQUAL( sig->GetTrackWidth(), 200 );
+
+    // A restricted second scope means the rule is not simply "this netclass"
+    sig->SetTrackWidth( std::optional<int>() );
+    rules[ALTIUM_RULE_KIND::WIDTH][1].scope2expr = wxT( "IsRegion" );
+
+    ApplyAltiumNetclassRules( rules, netSettings );
+    BOOST_CHECK( !sig->HasTrackWidth() );
+}
+
+
+/**
  * Verify that copper zones in imported Altium boards have non-zero local clearance values
  * derived from rules whose scope expressions match polygons.
  * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/18408

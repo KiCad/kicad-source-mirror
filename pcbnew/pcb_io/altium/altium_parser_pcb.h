@@ -630,6 +630,7 @@ struct ARULE6
 {
     wxString name;
     int      priority = 0;
+    bool     enabled = true;
 
     ALTIUM_RULE_KIND kind = ALTIUM_RULE_KIND::UNKNOWN;
 

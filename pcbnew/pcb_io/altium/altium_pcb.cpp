@@ -50,6 +50,7 @@
 #include <board_stackup_manager/stackup_predefined_prms.h>
 
 #include <cmath>
+#include <set>
 
 #include <advanced_config.h>
 #include <compoundfilereader.h>
@@ -95,6 +96,68 @@ wxString AltiumUnnamedNetName( const BOARD& aBoard, int& aCounter )
     } while( aBoard.FindNet( name ) );
 
     return name;
+}
+
+
+static bool GetAltiumNetclassScopeName( const ARULE6& aRule, wxString* aNetclassName )
+{
+    static const wxString prefix = wxT( "InNetClass('" );
+
+    if( aRule.scope2expr != wxT( "All" ) || !aRule.scope1expr.StartsWith( prefix )
+        || !aRule.scope1expr.EndsWith( wxT( "')" ) ) )
+    {
+        return false;
+    }
+
+    *aNetclassName = aRule.scope1expr.Mid( prefix.Length(),
+                                           aRule.scope1expr.Length() - prefix.Length() - 2 );
+
+    return !aNetclassName->IsEmpty();
+}
+
+
+void ApplyAltiumNetclassRules( const std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>>& aRulesByKind,
+                               NET_SETTINGS& aNetSettings )
+{
+    const std::map<wxString, std::shared_ptr<NETCLASS>>& netclasses = aNetSettings.GetNetclasses();
+
+    for( const auto& [kind, rules] : aRulesByKind )
+    {
+        std::set<wxString> applied;
+
+        for( const ARULE6& rule : rules )
+        {
+            wxString netclassName;
+
+            if( !rule.enabled || !GetAltiumNetclassScopeName( rule, &netclassName ) )
+                continue;
+
+            auto it = netclasses.find( netclassName );
+
+            if( it == netclasses.end() )
+                continue;
+
+            // rules are sorted by ascending Altium priority, so the first match is the winner
+            if( !applied.insert( netclassName ).second )
+                continue;
+
+            const std::shared_ptr<NETCLASS>& netclass = it->second;
+
+            switch( kind )
+            {
+            case ALTIUM_RULE_KIND::CLEARANCE: netclass->SetClearance( rule.clearanceGap ); break;
+
+            case ALTIUM_RULE_KIND::WIDTH: netclass->SetTrackWidth( rule.preferredWidth ); break;
+
+            case ALTIUM_RULE_KIND::ROUTING_VIAS:
+                netclass->SetViaDiameter( rule.width );
+                netclass->SetViaDrill( rule.holeWidth );
+                break;
+
+            default: break;
+            }
+        }
+    }
 }
 
 
@@ -706,6 +769,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&                  altiumP
     bds.SetAuxOrigin( bds.GetAuxOrigin() + movementVector );
     bds.SetGridOrigin( bds.GetGridOrigin() + movementVector );
 
+    m_board->m_LegacyDesignSettingsLoaded = true;
     m_board->SetModified();
 }
 
@@ -937,7 +1001,7 @@ const ARULE6* ALTIUM_PCB::GetRule( ALTIUM_RULE_KIND aKind, const wxString& aName
 
     for( const ARULE6& rule : rules->second )
     {
-        if( rule.name == aName )
+        if( rule.enabled && rule.name == aName )
             return &rule;
     }
 
@@ -953,7 +1017,7 @@ const ARULE6* ALTIUM_PCB::GetRuleDefault( ALTIUM_RULE_KIND aKind ) const
 
     for( const ARULE6& rule : rules->second )
     {
-        if( rule.scope1expr == wxT( "All" ) && rule.scope2expr == wxT( "All" ) )
+        if( rule.enabled && rule.scope1expr == wxT( "All" ) && rule.scope2expr == wxT( "All" ) )
             return &rule;
     }
 
@@ -1483,7 +1547,7 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumP
 
         if( elem.kind == ALTIUM_CLASS_KIND::NET_CLASS )
         {
-            std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( elem.name );
+            std::shared_ptr<NETCLASS> nc = std::make_shared<NETCLASS>( elem.name, false );
 
             for( const wxString& name : elem.names )
             {
@@ -1515,20 +1579,26 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumP
 
     // Now that all netclasses and pattern assignments are set up, resolve the pattern
     // assignments to direct netclass assignments on each net.
+    HelperAssignNetclassesToNets();
+
+    m_board->m_LegacyNetclassesLoaded = true;
+}
+
+
+void ALTIUM_PCB::HelperAssignNetclassesToNets()
+{
     std::shared_ptr<NET_SETTINGS> netSettings = m_board->GetDesignSettings().m_NetSettings;
+
+    netSettings->RecomputeEffectiveNetclasses();
 
     for( NETINFO_ITEM* net : m_board->GetNetInfo() )
     {
-        if( net->GetNetCode() > 0 )
-        {
-            std::shared_ptr<NETCLASS> netclass = netSettings->GetEffectiveNetClass( net->GetNetname() );
+        if( net->GetNetCode() <= 0 )
+            continue;
 
-            if( netclass )
-                net->SetNetClass( netclass );
-        }
+        if( std::shared_ptr<NETCLASS> netclass = netSettings->GetEffectiveNetClass( net->GetNetname() ) )
+            net->SetNetClass( netclass );
     }
-
-    m_board->m_LegacyNetclassesLoaded = true;
 }
 
 
@@ -2639,6 +2709,26 @@ void ALTIUM_PCB::ParseRules6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
 
     if( pastemaskRule )
         m_board->GetDesignSettings().m_SolderPasteMargin = pastemaskRule->pastemaskExpansion;
+
+    std::shared_ptr<NET_SETTINGS> netSettings = m_board->GetDesignSettings().m_NetSettings;
+    std::shared_ptr<NETCLASS>     defaultNetclass = netSettings->GetDefaultNetclass();
+
+    if( clearanceRule )
+        defaultNetclass->SetClearance( clearanceRule->clearanceGap );
+
+    if( trackWidthRule )
+        defaultNetclass->SetTrackWidth( trackWidthRule->preferredWidth );
+
+    if( routingViasRule )
+    {
+        defaultNetclass->SetViaDiameter( routingViasRule->width );
+        defaultNetclass->SetViaDrill( routingViasRule->holeWidth );
+    }
+
+    ApplyAltiumNetclassRules( m_rules, *netSettings );
+
+    // Composite netclasses cached the values we just changed
+    HelperAssignNetclassesToNets();
 
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( wxT( "Rules6 stream is not fully parsed" ) );
