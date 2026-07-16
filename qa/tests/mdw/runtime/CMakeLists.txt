@@ -20,6 +20,7 @@ add_executable( qa_mdw_runtime
     test_mdw_backend_server.cpp
     test_mdw_event_publisher.cpp
     test_mdw_file_io.cpp
+    test_mdw_poller.cpp
     )
 
 target_link_libraries( qa_mdw_runtime
