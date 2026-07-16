@@ -47,6 +47,13 @@ public:
     void ShowExportTab();
     void ShowHideColumn( int aCol, bool aShow );
 
+    /**
+     * Derive the default BOM output file name from the schematic file name by swapping the
+     * extension to CSV. Returns an empty string when the schematic has no name (unsaved), so
+     * callers can distinguish "use the default" from "no destination is available".
+     */
+    static wxString GetDefaultBomFileName( const wxString& aSchematicFileName );
+
 private:
     void SetupColumnProperties( int aCol );
     void SetupAllColumnProperties();

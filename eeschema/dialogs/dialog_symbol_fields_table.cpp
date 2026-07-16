@@ -1511,6 +1511,18 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSidebarToggle( wxCommandEvent& event )
 }
 
 
+wxString DIALOG_SYMBOL_FIELDS_TABLE::GetDefaultBomFileName( const wxString& aSchematicFileName )
+{
+    if( aSchematicFileName.IsEmpty() )
+        return wxEmptyString;
+
+    wxFileName fn( aSchematicFileName );
+    fn.SetExt( FILEEXT::CsvFileExtension );
+
+    return fn.GetFullPath();
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 {
     if( m_dataModel->IsEdited() )
@@ -1540,8 +1552,17 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
 
     if( path.IsEmpty() )
     {
-        DisplayError( this, _( "No output file specified in Export tab." ) );
-        return;
+        // Match the behaviour of other exporters and default to <schematic>.csv in the project
+        // directory when the user leaves the field blank.
+        path = GetDefaultBomFileName( m_parent->Schematic().GetFileName() );
+
+        if( path.IsEmpty() )
+        {
+            DisplayError( this, _( "No output file specified in Export tab." ) );
+            return;
+        }
+
+        m_outputFileName->SetValue( path );
     }
 
     path = ExpandTextVars( NormalizeFilePathForTextVars( path ), &textResolver );
