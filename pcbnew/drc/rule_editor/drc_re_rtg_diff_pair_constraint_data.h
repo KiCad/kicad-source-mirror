@@ -61,10 +61,10 @@ public:
         // TODO: measure actual positions from PNG
         return {
             { 0, 55, 147, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },                     // opt_width
-            { 100, 155, 147, 2, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
-            { 185, 240, 127, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },                  // opt_gap
-            { 285, 340, 127, 4, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // gap_tolerance (±)
-            { 90, 145, 22, 5, wxS( "mm" ), LABEL_POSITION::RIGHT },                    // max_uncoupled
+            { 105, 160, 147, 2, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
+            { 185, 240, 123, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },                  // opt_gap
+            { 290, 345, 123, 4, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // gap_tolerance (±)
+            { 85, 140, 20, 5, wxS( "mm" ), LABEL_POSITION::RIGHT },                    // max_uncoupled
         };
     }
 
