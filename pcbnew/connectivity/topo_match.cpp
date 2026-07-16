@@ -1120,10 +1120,23 @@ bool COMPONENT::prefixesShareCommonBase( const wxString& aPrefixA, const wxStrin
 }
 
 
+bool COMPONENT::isUnannotatedRef( const wxString& aRef )
+{
+    // REF** placeholder prefix ends in wildcard glyph so shares no base with annotated dest
+    // clean-prefix placeholders like SW? already match via prefixesShareCommonBase
+    wxString prefix = UTIL::GetRefDesPrefix( aRef );
+
+    return !prefix.IsEmpty() && ( prefix.Last() == '*' || prefix.Last() == '?' );
+}
+
+
 bool COMPONENT::IsSameKind( const COMPONENT& b ) const
 {
-    if( !prefixesShareCommonBase( m_prefix, b.m_prefix ) )
+    if( !isUnannotatedRef( m_reference ) && !isUnannotatedRef( b.m_reference )
+        && !prefixesShareCommonBase( m_prefix, b.m_prefix ) )
+    {
         return false;
+    }
 
     return ( m_parentFootprint->GetFPID() == b.m_parentFootprint->GetFPID() )
            || ( m_parentFootprint->GetFPID().empty() && b.m_parentFootprint->GetFPID().empty() );
@@ -1154,7 +1167,8 @@ bool COMPONENT::MatchesWith( COMPONENT* b, TOPOLOGY_MISMATCH_REASON& aReason )
         aReason.m_reference = GetParent()->GetReferenceAsString();
         aReason.m_candidate = b->GetParent()->GetReferenceAsString();
 
-        if( !prefixesShareCommonBase( m_prefix, b->m_prefix ) )
+        if( !isUnannotatedRef( m_reference ) && !isUnannotatedRef( b->m_reference )
+            && !prefixesShareCommonBase( m_prefix, b->m_prefix ) )
         {
             aReason.m_reason = wxString::Format(
                     _( "Reference prefix mismatch: %s uses prefix '%s' but candidate %s uses '%s'." ),

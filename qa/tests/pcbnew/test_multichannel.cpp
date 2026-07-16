@@ -637,6 +637,131 @@ BOOST_FIXTURE_TEST_CASE( TopologyMatchDottedRefDes, MULTICHANNEL_TEST_FIXTURE )
 
 
 /**
+ * A design block created from an un-annotated footprint stores the placeholder reference
+ * REF**. Applying its layout to an annotated destination footprint must still match on
+ * footprint ID and topology; the placeholder reference must act as a wildcard rather than
+ * being compared literally against the destination prefix (issue 24585).
+ */
+BOOST_FIXTURE_TEST_CASE( TopologyMatchUnannotatedReference, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+    using TMATCH::COMPONENT;
+
+    auto cgRef = std::make_unique<CONNECTION_GRAPH>();
+    auto cgTarget = std::make_unique<CONNECTION_GRAPH>();
+
+    LIB_ID fpid( wxT( "_BugFpLib" ), wxT( "SW_Hotswap" ) );
+
+    // Reference footprint as stored in the design block: never annotated, so it keeps the
+    // default REF** placeholder.
+    FOOTPRINT fpRef( nullptr );
+    fpRef.SetFPID( fpid );
+    fpRef.SetReference( wxT( "REF**" ) );
+
+    // Destination footprint placed and annotated on the board.
+    FOOTPRINT fpTarget( nullptr );
+    fpTarget.SetFPID( fpid );
+    fpTarget.SetReference( wxT( "SW1" ) );
+
+    PAD padRef1( &fpRef );
+    padRef1.SetNumber( wxT( "1" ) );
+    padRef1.SetNetCode( 1 );
+    fpRef.Add( &padRef1 );
+
+    PAD padRef2( &fpRef );
+    padRef2.SetNumber( wxT( "2" ) );
+    padRef2.SetNetCode( 2 );
+    fpRef.Add( &padRef2 );
+
+    PAD padTarget1( &fpTarget );
+    padTarget1.SetNumber( wxT( "1" ) );
+    padTarget1.SetNetCode( 3 );
+    fpTarget.Add( &padTarget1 );
+
+    PAD padTarget2( &fpTarget );
+    padTarget2.SetNumber( wxT( "2" ) );
+    padTarget2.SetNetCode( 4 );
+    fpTarget.Add( &padTarget2 );
+
+    cgRef->AddFootprint( &fpRef, VECTOR2I( 0, 0 ) );
+    cgTarget->AddFootprint( &fpTarget, VECTOR2I( 0, 0 ) );
+
+    cgRef->BuildConnectivity();
+    cgTarget->BuildConnectivity();
+
+    BOOST_CHECK_EQUAL( cgRef->Components().size(), 1 );
+    BOOST_CHECK_EQUAL( cgTarget->Components().size(), 1 );
+
+    COMPONENT* cmpRef = cgRef->Components()[0];
+    COMPONENT* cmpTarget = cgTarget->Components()[0];
+
+    BOOST_CHECK_MESSAGE( cmpRef->IsSameKind( *cmpTarget ),
+                         "REF** placeholder must be the same kind as an annotated footprint "
+                         "with matching FPID (issue 24585)" );
+
+    TMATCH::COMPONENT_MATCHES result;
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+    bool status = cgRef->FindIsomorphism( cgTarget.get(), result, details );
+
+    if( !status )
+    {
+        for( const auto& reason : details )
+        {
+            BOOST_TEST_MESSAGE( wxString::Format( "Mismatch: %s <-> %s: %s",
+                                                  reason.m_reference, reason.m_candidate, reason.m_reason ) );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( status,
+                         "Design block layout with an un-annotated REF** footprint must match "
+                         "an annotated destination (issue 24585)" );
+    BOOST_CHECK( details.empty() );
+
+    fpRef.Pads().clear();
+    fpTarget.Pads().clear();
+}
+
+
+/**
+ * The placeholder wildcard introduced for issue 24585 must stay narrow. Annotated footprints
+ * with unrelated prefixes must keep the prefix check, and the placeholder wildcard must not
+ * bypass the footprint-ID requirement.
+ */
+BOOST_FIXTURE_TEST_CASE( TopologyMatchAnnotatedReferencesKeepPrefixCheck, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::COMPONENT;
+
+    LIB_ID fpid( wxT( "_BugFpLib" ), wxT( "SW_Hotswap" ) );
+    LIB_ID otherFpid( wxT( "_BugFpLib" ), wxT( "R_0402" ) );
+
+    FOOTPRINT fpTarget( nullptr );
+    fpTarget.SetFPID( fpid );
+    fpTarget.SetReference( wxT( "SW1" ) );
+    COMPONENT cmpTarget( fpTarget.GetReference(), &fpTarget );
+
+    // Unrelated annotated prefixes with the same FPID must not match.
+    FOOTPRINT fpUnrelated( nullptr );
+    fpUnrelated.SetFPID( fpid );
+    fpUnrelated.SetReference( wxT( "U1A" ) );
+    COMPONENT cmpUnrelated( fpUnrelated.GetReference(), &fpUnrelated );
+
+    BOOST_CHECK_MESSAGE( !cmpUnrelated.IsSameKind( cmpTarget ),
+                         "Two annotated footprints with unrelated prefixes must not match even "
+                         "with the same FPID (issue 24585)" );
+
+    // The placeholder wildcard must not bypass the footprint-ID requirement.
+    FOOTPRINT fpPlaceholder( nullptr );
+    fpPlaceholder.SetFPID( otherFpid );
+    fpPlaceholder.SetReference( wxT( "REF**" ) );
+    COMPONENT cmpPlaceholder( fpPlaceholder.GetReference(), &fpPlaceholder );
+
+    BOOST_CHECK_MESSAGE( !cmpPlaceholder.IsSameKind( cmpTarget ),
+                         "A REF** placeholder must not match a target with a different FPID "
+                         "(issue 24585)" );
+}
+
+
+/**
  * Test that GeneratePotentialRuleAreas includes components from child sheets
  * when generating rule areas for a parent sheet (issue 20016).
  *

@@ -94,6 +94,12 @@ private:
      */
     static bool prefixesShareCommonBase( const wxString& aPrefixA, const wxString& aPrefixB );
 
+    /**
+     * True for un-annotated placeholder refs like REF** that match any counterpart on FPID and
+     * topology alone
+     */
+    static bool isUnannotatedRef( const wxString& aRef );
+
     std::optional<VECTOR2I> m_raOffset;
     wxString          m_reference;
     wxString          m_prefix;
