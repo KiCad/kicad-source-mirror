@@ -121,12 +121,6 @@ BOOST_FIXTURE_TEST_CASE( DRCIssue23469_ReferenceReducesEdgeClearance, DRC_ISSUE2
                 return count;
             };
 
-    // Positive control: the reproduction board has an NPTH mounting hole on SW1 whose
-    // drilled opening crosses the board edge.  SW1 is not covered by any custom rule, so
-    // these violations must still be reported.  A regression that silenced edge-clearance
-    // DRC entirely would otherwise hide the fix.
-    BOOST_REQUIRE_GT( countViolationsForRef( edgeViolations, wxString( "SW1" ), false ), 0 );
-
     // Primary assertion: the custom rule "(condition "A.Reference == 'J1'")" must reduce
     // the default edge clearance so that J1 pads no longer violate.
     BOOST_CHECK_EQUAL( countViolationsForRef( edgeViolations, wxString( "J1" ), false ), 0 );
@@ -147,4 +141,15 @@ BOOST_FIXTURE_TEST_CASE( DRCIssue23469_ReferenceReducesEdgeClearance, DRC_ISSUE2
         for( const DRC_ITEM& item : holeViolations )
             BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
     }
+
+    // Without the custom rules J1 violates the board defaults, so the clean
+    // results above came from the rules matching and not from DRC being silent.
+    edgeViolations.clear();
+    holeViolations.clear();
+
+    bds.m_DRCEngine->InitEngine( wxFileName() );
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    BOOST_REQUIRE_GT( countViolationsForRef( edgeViolations, wxString( "J1" ), false ), 0 );
+    BOOST_REQUIRE_GT( countViolationsForRef( holeViolations, wxString( "J1" ), true ), 0 );
 }

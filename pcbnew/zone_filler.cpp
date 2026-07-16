@@ -2209,15 +2209,6 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
                     gap = std::max( gap, evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, aZone, aPad, aLayer ) );
 
-                    // Oblong NPTH holes are milled rather than drilled, so they need
-                    // edge clearance in addition to hole clearance
-                    if( aPad->GetAttribute() == PAD_ATTRIB::NPTH
-                        && aPad->GetDrillSize().x != aPad->GetDrillSize().y )
-                    {
-                        gap = std::max( gap, evalRulesForItems( EDGE_CLEARANCE_CONSTRAINT, aZone,
-                                                                aPad, aLayer ) );
-                    }
-
                     if( gap >= 0 )
                         addHoleKnockout( aPad, gap + extra_margin, aHoles );
                 }

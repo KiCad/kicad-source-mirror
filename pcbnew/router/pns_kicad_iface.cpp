@@ -934,8 +934,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                 }
             }
 
-            // No 'else'; non-plated milled holes get both HOLE_CLEARANCE and EDGE_CLEARANCE
-            if( isEdge( aA ) || IsNonPlatedSlot( aA ) || isEdge( aB ) || IsNonPlatedSlot( aB ) )
+            if( isEdge( aA ) || isEdge( aB ) )
             {
                 if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
                 {

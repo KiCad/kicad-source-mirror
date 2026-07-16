@@ -194,12 +194,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE*
                                                         BOARD_ITEM* edge, DRC_CONSTRAINT_T aConstraintType,
                                                         PCB_DRC_CODE aErrorCode )
 {
-    std::shared_ptr<SHAPE> shape;
-
-    if( edge->Type() == PCB_PAD_T )
-        shape = edge->GetEffectiveHoleShape();
-    else
-        shape = edge->GetEffectiveShape( Edge_Cuts );
+    std::shared_ptr<SHAPE> shape = edge->GetEffectiveShape( Edge_Cuts );
 
     auto     constraint = m_drcEngine->EvalRules( aConstraintType, edge, item, UNDEFINED_LAYER );
     int      minClearance = constraint.GetValue().Min();
@@ -296,7 +291,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         m_largestEdgeClearance = worstClearanceConstraint.GetValue().Min();
 
     /*
-     * Build an RTree of the various edges (including NPTH holes) and margins found on the board.
+     * Build an RTree of the various edges and margins found on the board.
      */
     std::vector<std::unique_ptr<PCB_SHAPE>> edges;
 
@@ -397,14 +392,6 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->HasHole() )
-            {
-                // edge-clearances are for milling tolerances (drilling tolerances are handled
-                // by hole-clearances)
-                if( pad->GetDrillSizeX() != pad->GetDrillSizeY() )
-                    m_edgesTree.Insert( pad, Edge_Cuts, m_largestEdgeClearance );
-            }
-
             if( pad->GetProperty() == PAD_PROP::CASTELLATED )
                 m_castellatedPads.push_back( pad );
         }
