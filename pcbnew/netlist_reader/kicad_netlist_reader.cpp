@@ -867,15 +867,18 @@ void KICAD_NETLIST_PARSER::parseGroup()
 {
     /* Parses a section like
      * (groups
-     *      (group (name "") (lib_id "DesignBlock:Block") (uuid "7b1488be-4c43-4004-94fc-e4a26dda8f5b")
+     *      (group (name "") (lib_id "DesignBlock:Block") (uuid "/f1b49c40-.../7b1488be-...")
      *      (members
-     *          (member (uuid "dfef752d-e203-4feb-91de-483b44bc4062"))
+     *          (member (uuid "/f1b49c40-.../dfef752d-..."))
+     *
+     * Group and member uuids are full instance paths (sheet path + item uuid), so a group on
+     * a shared sheet resolves to one group per sheet instance. Bare uuids are also accepted.
      */
 
     wxString   name;
     KIID       uuid;
-    wxString          libId; // Design block library link
-    std::vector<KIID> members;
+    wxString               libId; // Design block library link
+    std::vector<KIID_PATH> members;
 
     // The token net was read, so the next data is (code <number>)
     while( (token = NextTok() ) != T_EOF )
@@ -894,10 +897,20 @@ void KICAD_NETLIST_PARSER::parseGroup()
             break;
 
         case T_uuid:
+        {
             NeedSYMBOLorNUMBER();
-            uuid = From_UTF8( CurText() );
+            wxString uuidStr = From_UTF8( CurText() );
+
+            // An instance path collapses to a deterministic uuid so re-reading the same
+            // netlist finds the same board group.
+            if( uuidStr.StartsWith( wxT( "/" ) ) )
+                uuid = KIID::FromName( std::string( KIID_PATH( uuidStr ).AsString().ToUTF8() ) );
+            else
+                uuid = uuidStr;
+
             NeedRIGHT();
             break;
+        }
 
         case T_lib_id:
             NeedSYMBOLorNUMBER();

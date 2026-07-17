@@ -710,6 +710,10 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
 
     SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
     SCH_SHEET_LIST sheetList = m_schematic->Hierarchy();
+    std::map<SCH_SCREEN*, int> screenVisits;
+
+    for( const SCH_SHEET_PATH& sheet : sheetList )
+        screenVisits[sheet.LastScreen()]++;
 
     for( const SCH_SHEET_PATH& sheet : sheetList )
     {
@@ -717,15 +721,21 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
         // resolution of text variables in sheet fields.
         m_schematic->SetCurrentSheet( sheet );
 
+        wxString instancePrefix = sheet.PathAsString();
+
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_GROUP_T ) )
         {
             SCH_GROUP* group = static_cast<SCH_GROUP*>( item );
+            wxString   groupName = group->GetName();
+
+            if( screenVisits[sheet.LastScreen()] > 1 )
+                groupName = wxString::Format( wxT( "%s (%s)" ), groupName, sheet.PathHumanReadable() );
 
             XNODE* xgroup;  // current symbol being constructed
             xcomps->AddChild( xgroup = node( wxT( "group" ) ) );
 
-            xgroup->AddAttribute( wxT( "name" ), group->GetName() );
-            xgroup->AddAttribute( wxT( "uuid" ), group->m_Uuid.AsString() );
+            xgroup->AddAttribute( wxT( "name" ), groupName );
+            xgroup->AddAttribute( wxT( "uuid" ), instancePrefix + group->m_Uuid.AsString() );
             xgroup->AddAttribute( wxT( "lib_id" ), group->GetDesignBlockLibId().Format() );
 
             XNODE* xmembers;
@@ -737,14 +747,14 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
                 {
                     XNODE* xmember;
                     xmembers->AddChild( xmember = node( wxT( "member" ) ) );
-                    xmember->AddAttribute( wxT( "uuid" ), member->m_Uuid.AsString() );
+                    xmember->AddAttribute( wxT( "uuid" ), instancePrefix + member->m_Uuid.AsString() );
                 }
                 else if( member->Type() == SCH_GROUP_T )
                 {
                     // Emit nested groups so the board side can rebuild the nesting.
                     XNODE* xmember;
                     xmembers->AddChild( xmember = node( wxT( "member" ) ) );
-                    xmember->AddAttribute( wxT( "uuid" ), member->m_Uuid.AsString() );
+                    xmember->AddAttribute( wxT( "uuid" ), instancePrefix + member->m_Uuid.AsString() );
                 }
                 else if( member->Type() == SCH_SHEET_T )
                 {
@@ -760,7 +770,8 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
                         {
                             XNODE* xmember;
                             xmembers->AddChild( xmember = node( wxT( "member" ) ) );
-                            xmember->AddAttribute( wxT( "uuid" ), descendantItem->m_Uuid.AsString() );
+                            xmember->AddAttribute( wxT( "uuid" ),
+                                                   descendantSheet.PathAsString() + descendantItem->m_Uuid.AsString() );
                         }
                     }
                 }

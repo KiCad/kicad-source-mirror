@@ -68,6 +68,14 @@ PCB_GROUP* findGroup( BOARD* aBoard, const KIID& aUuid )
     return nullptr;
 }
 
+
+KIID_PATH pathOf( const KIID& aUuid )
+{
+    KIID_PATH path;
+    path.push_back( aUuid );
+    return path;
+}
+
 } // namespace
 
 
@@ -103,11 +111,13 @@ BOOST_AUTO_TEST_CASE( NestedSchematicGroupNestsOnBoard )
     KIID childUuid;
     KIID parentUuid;
 
-    netlist.AddGroup( new NETLIST_GROUP{ wxS( "RPI" ), childUuid, LIB_ID(), std::vector<KIID>{ r1, r2 } } );
+    netlist.AddGroup( new NETLIST_GROUP{ wxS( "RPI" ), childUuid, LIB_ID(),
+                                         std::vector<KIID_PATH>{ pathOf( r1 ), pathOf( r2 ) } } );
 
     // RPI1 nests RPI: its members include the child group's uuid.
-    netlist.AddGroup(
-            new NETLIST_GROUP{ wxS( "RPI1" ), parentUuid, LIB_ID(), std::vector<KIID>{ x3, x4, x5, childUuid } } );
+    netlist.AddGroup( new NETLIST_GROUP{
+            wxS( "RPI1" ), parentUuid, LIB_ID(),
+            std::vector<KIID_PATH>{ pathOf( x3 ), pathOf( x4 ), pathOf( x5 ), pathOf( childUuid ) } } );
 
     netlist.ApplyGroupMembership();
 

@@ -23,6 +23,7 @@
 
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/name_generator_sha1.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
 #if BOOST_VERSION >= 106700
@@ -230,6 +231,19 @@ timestamp_t KIID::AsLegacyTimestamp() const
 size_t KIID::Hash() const
 {
     return boost::uuids::hash_value( m_uuid );
+}
+
+
+KIID KIID::FromName( const std::string& aName )
+{
+    // Arbitrary but fixed namespace, the same name must map to the same KIID forever
+    static const boost::uuids::uuid nsUuid = stringGenerator( "8b8b58e2-3d21-4a24-9dcf-42e0f14001a2" );
+
+    boost::uuids::name_generator_sha1 nameGenerator( nsUuid );
+
+    KIID id( 0 );
+    id.m_uuid = nameGenerator( aName );
+    return id;
 }
 
 
