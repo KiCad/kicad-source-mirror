@@ -18,7 +18,7 @@ PANEL_DRC_GROUP_HEADER_BASE::PANEL_DRC_GROUP_HEADER_BASE( wxWindow* parent, wxWi
 
 	// Grid
 	m_dataGrid->CreateGrid( 0, 3 );
-	m_dataGrid->EnableEditing( true );
+	m_dataGrid->EnableEditing( false );
 	m_dataGrid->EnableGridLines( true );
 	m_dataGrid->EnableDragGridSize( false );
 	m_dataGrid->SetMargins( 0, 0 );
@@ -27,10 +27,14 @@ PANEL_DRC_GROUP_HEADER_BASE::PANEL_DRC_GROUP_HEADER_BASE( wxWindow* parent, wxWi
 	m_dataGrid->AutoSizeColumns();
 	m_dataGrid->EnableDragColMove( false );
 	m_dataGrid->EnableDragColSize( true );
-	m_dataGrid->SetColLabelSize( 20 );
+	m_dataGrid->SetColLabelValue( 0, _("Rule Type") );
+	m_dataGrid->SetColLabelValue( 1, _("Rule Name") );
+	m_dataGrid->SetColLabelValue( 2, _("Comment") );
+	m_dataGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_dataGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
+	m_dataGrid->AutoSizeRows();
 	m_dataGrid->EnableDragRowSize( true );
 	m_dataGrid->SetRowLabelSize( 0 );
 	m_dataGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
