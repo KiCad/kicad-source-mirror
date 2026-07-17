@@ -2093,8 +2093,11 @@ std::unique_ptr<PCB_TEXT> BOARD_BUILDER::buildPcbText( const BLK_0x30_STR_WRAPPE
     RotatePoint( textFontOffset, textAngle );
     text->SetPosition( textPos + textFontOffset );
 
-    if( props->m_Reversal == BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::REVERSED )
+    if( props->m_Reversal == BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::REVERSED
+        || props->m_Reversal == BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::REVERSED_3 )
+    {
         text->SetMirrored( true );
+    }
 
     switch( props->m_Alignment )
     {
@@ -2670,13 +2673,13 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildPadItems( const BLK
             // Custom shape defined by a 0x28 polygon. Walk the shape's segments and build
             // a polygon primitive for this pad.
             const BLK_0x28_SHAPE* shapeData =
-                    expectBlockByKey<BLK_0x28_SHAPE>( padComp.m_StrPtr, 0x28 );
+                    expectBlockByKey<BLK_0x28_SHAPE>( padComp.m_ShapePtr, 0x28 );
 
             if( !shapeData )
             {
                 wxLogTrace( traceAllegroBuilder,
                             "Padstack %s: SHAPE_SYMBOL on layer %zu has no 0x28 shape at %#010x",
-                            padStackName, i, padComp.m_StrPtr );
+                            padStackName, i, padComp.m_ShapePtr );
                 break;
             }
 
@@ -3070,36 +3073,77 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
 
     wxLogTrace( traceAllegroBuilder, "  Footprint reference: '%s'", refDesStr );
 
-    const VECTOR2I  fpPos = scale( VECTOR2I{ aFpInstance.m_CoordX, aFpInstance.m_CoordY } );
+    const VECTOR2I fpPos = scale( VECTOR2I{ aFpInstance.m_CoordX, aFpInstance.m_CoordY } );
+    fp->SetPosition( fpPos );
+
+    // Find the pads.
+    // 0x0D coordinates and rotation are in the footprint's local (unrotated, unflipped) space.
+    // Add pads here, before the footprint is flipped/rotated below, so that Flip()/Rotate()
+    // carry them into board space along with the footprint.
+    LL_WALKER padWalker{ aFpInstance.m_FirstPadPtr, aFpInstance.m_Key, m_brdDb };
+    padWalker.SetNextFunc( PadGetNextInFootprint );
+    for( const BLOCK_BASE* padBlock : padWalker )
+    {
+        const auto& placedPadInfo = static_cast<const BLOCK<BLK_0x32_PLACED_PAD>&>( *padBlock ).GetData();
+
+        const BLK_0x04_NET_ASSIGNMENT* netAssignment =
+                expectBlockByKey<BLK_0x04_NET_ASSIGNMENT>( placedPadInfo.m_NetPtr, 0x04 );
+        const BLK_0x0D_PAD* padInfo = expectBlockByKey<BLK_0x0D_PAD>( placedPadInfo.m_PadPtr, 0x0D );
+
+        if( !padInfo )
+            continue;
+
+        const BLK_0x1C_PADSTACK* padStack = expectBlockByKey<BLK_0x1C_PADSTACK>( padInfo->m_PadStack, 0x1C );
+
+        if( !padStack )
+            continue;
+
+        int netCode = NETINFO_LIST::UNCONNECTED;
+
+        if( netAssignment )
+        {
+            auto netIt = m_netCache.find( netAssignment->m_Net );
+            if( netIt != m_netCache.end() )
+                netCode = netIt->second->GetNetCode();
+        }
+
+        const wxString padName = m_brdDb.GetString( padInfo->m_NameStrId );
+
+        // 0x0D coordinates and rotation are in the footprint's local (unrotated, unflipped) space.
+        // Use SetFPRelativePosition/Orientation to let KiCad handle the transform to
+        // board-absolute coordinates (rotating by FP orientation and adding FP position).
+        VECTOR2I  padLocalPos = scale( VECTOR2I{ padInfo->m_CoordsX, padInfo->m_CoordsY } );
+        EDA_ANGLE padLocalRot = fromMillidegrees( padInfo->m_Rotation );
+
+        std::vector<std::unique_ptr<BOARD_ITEM>> padItems = buildPadItems( *padStack, *fp, padName, netCode );
+
+        for( std::unique_ptr<BOARD_ITEM>& item : padItems )
+        {
+            if( item->Type() == PCB_PAD_T )
+            {
+                PAD* pad = static_cast<PAD*>( item.get() );
+                pad->SetFPRelativeOrientation( padLocalRot );
+            }
+
+            item->SetFPRelativePosition( padLocalPos );
+
+            fp->Add( item.release() );
+        }
+    }
 
     {
         EDA_ANGLE rotation = fromMillidegrees( aFpInstance.m_Rotation );
 
         if( backSide )
-            rotation = ANGLE_180 - rotation;
+            fp->Flip( fpPos, FLIP_DIRECTION::LEFT_RIGHT );
 
-        fp->SetPosition( fpPos );
-        fp->SetOrientation( rotation );
+        fp->Rotate( fpPos, rotation );
     }
 
-    // Allegro stores placed instance data in board-absolute form: bottom-side
-    // components already have shapes on bottom layers with bottom-side positions.
-    // Allegro stores placed footprints in board-absolute form with final layers.
-    // KiCad stores footprints in canonical front-side form and uses Flip() to
-    // mirror both positions and layers to the back side.
-    //
-    // Move back-layer items to their front-side counterpart so that fp->Flip()
-    // consistently mirrors positions AND layers for all children. Without this,
-    // bottom-side footprints would have their back-layer graphics double-flipped
-    // to the front.
-    //
-    // Even if there isn't a layer flip, the postions still need to be flipped.
-    const auto canonicalizeLayer = [backSide, fpPos]( BOARD_ITEM* aItem )
-    {
-        if( backSide )
-            aItem->Flip( fpPos, FLIP_DIRECTION::LEFT_RIGHT );
-    };
-
+    // Graphics, text, and areas are stored in Allegro as board-absolute geometry
+    // on their final layers. Pads were already placed in local footprint space and
+    // the footprint Flip/Rotate above put them into board space, so these items
+    // can be added as-is.
     const LL_WALKER graphicsWalker{ aFpInstance.m_GraphicPtr, aFpInstance.m_Key, m_brdDb };
 
     for( const BLOCK_BASE* graphicsBlock : graphicsWalker )
@@ -3113,10 +3157,7 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
             std::vector<std::unique_ptr<PCB_SHAPE>> shapes = buildShapes( graphics, *fp );
 
             for( std::unique_ptr<PCB_SHAPE>& shape : shapes )
-            {
-                canonicalizeLayer( shape.get() );
                 fp->Add( shape.release() );
-            }
         }
         else
         {
@@ -3143,8 +3184,6 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         if( !text )
             continue;
 
-        canonicalizeLayer( text.get() );
-
         const uint8_t textClass = strWrapper.m_Layer.m_Class;
         const uint8_t textSubclass = strWrapper.m_Layer.m_Subclass;
 
@@ -3163,6 +3202,7 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
                 text->SetText( wxString( "UNK" ) + text->GetText() );
 
             *refDes = PCB_FIELD( *text, FIELD_T::REFERENCE );
+            refDes->SetTextAngle( text->GetTextAngle() ); // Set to absolute orientation
         }
         else if( textClass == LAYER_INFO::CLASS::REF_DES && isAssembly )
         {
@@ -3179,6 +3219,7 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
                 // First COMPONENT_VALUE on assembly updates the built-in VALUE field
                 PCB_FIELD* valField = fp->GetField( FIELD_T::VALUE );
                 *valField = PCB_FIELD( *text, FIELD_T::VALUE );
+                valField->SetTextAngle( text->GetTextAngle() ); // Set to absolute orientation
                 valField->SetVisible( false );
                 valueFieldSet = true;
             }
@@ -3227,10 +3268,7 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         std::vector<std::unique_ptr<BOARD_ITEM>> shapes = buildGraphicItems( *assemblyBlock, *fp );
 
         for( std::unique_ptr<BOARD_ITEM>& item : shapes )
-        {
-            canonicalizeLayer( item.get() );
             fp->Add( item.release() );
-        }
     }
 
     // Areas (courtyards, etc)
@@ -3247,11 +3285,9 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         {
             // Zone within a footprint - we can handle keepouts at least
             std::unique_ptr<ZONE> zone = buildZone( *areaBlock, {}, zoneFillHandler );
+
             if( zone )
-            {
-                canonicalizeLayer( zone.get() );
                 fp->Add( zone.release() );
-            }
         }
         else
         {
@@ -3259,8 +3295,6 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
 
             for( std::unique_ptr<BOARD_ITEM>& item : shapes )
             {
-                canonicalizeLayer( item.get() );
-
                 // If we find shapes in the areas list, they are (presumably) filled.
                 // Maybe there's a flag to look at rather than just assuming this?
                 if( item->Type() == PCB_SHAPE_T )
@@ -3277,75 +3311,6 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
                 fp->Add( item.release() );
             }
         }
-    }
-
-    // Find the pads
-    LL_WALKER padWalker{ aFpInstance.m_FirstPadPtr, aFpInstance.m_Key, m_brdDb };
-    padWalker.SetNextFunc( PadGetNextInFootprint );
-    for( const BLOCK_BASE* padBlock : padWalker )
-    {
-        const auto& placedPadInfo = static_cast<const BLOCK<BLK_0x32_PLACED_PAD>&>( *padBlock ).GetData();
-
-        const BLK_0x04_NET_ASSIGNMENT* netAssignment =
-                expectBlockByKey<BLK_0x04_NET_ASSIGNMENT>( placedPadInfo.m_NetPtr, 0x04 );
-        const BLK_0x0D_PAD* padInfo = expectBlockByKey<BLK_0x0D_PAD>( placedPadInfo.m_PadPtr, 0x0D );
-
-        if( !padInfo )
-            continue;
-
-        const BLK_0x1C_PADSTACK* padStack = expectBlockByKey<BLK_0x1C_PADSTACK>( padInfo->m_PadStack, 0x1C );
-
-        if( !padStack )
-            continue;
-
-        int netCode = NETINFO_LIST::UNCONNECTED;
-
-        if( netAssignment )
-        {
-            auto netIt = m_netCache.find( netAssignment->m_Net );
-            if( netIt != m_netCache.end() )
-                netCode = netIt->second->GetNetCode();
-        }
-
-        const wxString padName = m_brdDb.GetString( padInfo->m_NameStrId );
-
-        // 0x0D coordinates and rotation are in the footprint's local (unrotatesinced) space.
-        // Use SetFPRelativePosition/Orientation to let KiCad handle the transform to
-        // board-absolute coordinates (rotating by FP orientation and adding FP position).
-        VECTOR2I  padLocalPos = scale( VECTOR2I{ padInfo->m_CoordsX, padInfo->m_CoordsY } );
-        EDA_ANGLE padLocalRot = fromMillidegrees( padInfo->m_Rotation );
-
-        // Unlike other items, pads in "canonical front side form" - a normal pad is on F.Cu already,
-        // but the positions, like all the other items, are in board-absolute form, so we need to pre-transform
-        // so that the final footprint flip puts them in the right place.
-        if ( backSide )
-        {
-            RotatePoint( padLocalPos, ANGLE_180 );
-            padLocalRot += ANGLE_180;
-        }
-
-        std::vector<std::unique_ptr<BOARD_ITEM>> padItems = buildPadItems( *padStack, *fp, padName, netCode );
-
-        for( std::unique_ptr<BOARD_ITEM>& item : padItems )
-        {
-            if( item->Type() == PCB_PAD_T )
-            {
-                PAD* pad = static_cast<PAD*>( item.get() );
-                pad->SetFPRelativeOrientation( padLocalRot );
-            }
-
-            item->SetFPRelativePosition( padLocalPos );
-            fp->Add( item.release() );
-        }
-    }
-
-    // Flip AFTER adding all children so that graphics, text, and pads all get
-    // their layers and positions mirrored correctly for bottom-layer footprints.
-    // We have carefully constructed a front-side canonical form by applying
-    // pre-transforms to compensate for the coming Flip().
-    if( backSide )
-    {
-        fp->Flip( fpPos, FLIP_DIRECTION::LEFT_RIGHT );
     }
 
     return fp;
