@@ -460,15 +460,6 @@ static PCB_LAYER_ID nthCopperLayerId( int aIndex, int aTotal )
 }
 
 
-/// Pack an x/y coordinate pair into a unique key. The unsigned halves keep it defined for
-/// negative coordinates.
-static int64_t packPoint( int32_t aX, int32_t aY )
-{
-    return ( static_cast<int64_t>( static_cast<uint32_t>( aX ) ) << 32 )
-           | static_cast<uint32_t>( aY );
-}
-
-
 /**
  * Class to handle the mapping for Allegro CLASS/SUBCLASS idiom to KiCad layers.
  */
@@ -3216,172 +3207,6 @@ std::vector<std::unique_ptr<BOARD_ITEM>> BOARD_BUILDER::buildTrack( const BLK_0x
 }
 
 
-/**
- * Parse a 1-based "<begin>-<end>" copper layer span from an Allegro padstack name (e.g.
- * "BBUVIA_1-2"), the only reliable record of a blind/buried via's start layer. Returns false when
- * no candidate matches @p aSpanLen.
- */
-static bool parseViaSpanFromName( const wxString& aName, int aSpanLen, int aTotalCu, int& aBegin,
-                                  int& aEnd )
-{
-    // Bounded digit runs keep std::stoi in range; the non-digit boundaries stop a span from
-    // matching inside a longer number such as a date or dimension.
-    static const std::regex spanRe( R"((?:^|\D)(\d{1,2})-(\d{1,2})(?:\D|$))" );
-
-    const std::string name = aName.ToStdString();
-
-    for( std::sregex_iterator it( name.begin(), name.end(), spanRe ), last; it != last; ++it )
-    {
-        const int begin = std::stoi( ( *it )[1].str() );
-        const int end = std::stoi( ( *it )[2].str() );
-
-        if( begin >= 1 && begin < end && end <= aTotalCu && ( end - begin + 1 ) == aSpanLen )
-        {
-            aBegin = begin;
-            aEnd = end;
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
-std::optional<std::pair<int, int>> BOARD_BUILDER::resolveViaSpan( const BLK_0x1C_PADSTACK& aPadstack,
-                                                                  const VECTOR2I& aViaCenterRaw,
-                                                                  int aTotalCu, bool& aResolved )
-{
-    // Only a span read from the padstack or a fully connected via is "resolved" and cacheable; an
-    // undetermined via stays unresolved so a better-connected sibling can still settle the padstack.
-    aResolved = true;
-
-    // The padstack stores only how many layers the via crosses, not where it starts. A span
-    // reaching the whole stack is a through via.
-    const int spanLen = static_cast<int>( aPadstack.GetLayerCount() );
-
-    if( spanLen <= 1 || spanLen >= aTotalCu )
-        return std::nullopt;
-
-    // The name is the only signal that separates stacked microvias, whose shared location makes
-    // their connected copper ambiguous, so prefer it.
-    const wxString name = m_brdDb.GetString( aPadstack.m_PadStr );
-    int            begin = 0;
-    int            end = 0;
-
-    if( parseViaSpanFromName( name, spanLen, aTotalCu, begin, end ) )
-        return std::make_pair( begin - 1, end - 1 );
-
-    // Otherwise the tracks meeting at the via centre bound its span. Collect them on first need so
-    // boards with no name-less blind/buried vias never pay for the extra walk.
-    if( !m_trackEndpointsCollected )
-    {
-        collectTrackEndpointCopper();
-        m_trackEndpointsCollected = true;
-    }
-
-    auto it = m_trackEndpointCopper.find( packPoint( aViaCenterRaw.x, aViaCenterRaw.y ) );
-
-    if( it != m_trackEndpointCopper.end() )
-    {
-        const auto& [minCu, maxCu] = it->second;
-
-        // Accept only when the connected layer range matches the padstack's layer count.
-        if( maxCu > minCu && ( maxCu - minCu + 1 ) == spanLen )
-            return std::make_pair( minCu, maxCu );
-    }
-
-    // Neither source determined the span; leave it a through via rather than guess.
-    aResolved = false;
-
-    m_reporter.Report(
-            wxString::Format( "Via padstack '%s' crosses %d of %d copper layers but its span could "
-                              "not be determined; importing as a through via.",
-                              name, spanLen, aTotalCu ),
-            RPT_SEVERITY_WARNING );
-
-    return std::nullopt;
-}
-
-
-void BOARD_BUILDER::collectTrackEndpointCopper()
-{
-    const int totalCu = m_board.GetCopperLayerCount();
-
-    auto record = [this]( int32_t aX, int32_t aY, int aCopper )
-    {
-        auto [it, inserted] = m_trackEndpointCopper.try_emplace( packPoint( aX, aY ), aCopper, aCopper );
-
-        if( !inserted )
-        {
-            it->second.first = std::min( it->second.first, aCopper );
-            it->second.second = std::max( it->second.second, aCopper );
-        }
-    };
-
-    TYPED_LL_WALKER<BLK_0x1B_NET> netWalker{ m_brdDb.m_Header->m_LL_0x1B_Nets, m_brdDb,
-                                             MISMATCH_POLICY::SKIP };
-
-    for( const BLK_0x1B_NET& net : netWalker )
-    {
-        TYPED_LL_WALKER<BLK_0x04_NET_ASSIGNMENT> assignmentWalker{ net.m_Assignment, net.m_Key,
-                                                                   m_brdDb, MISMATCH_POLICY::SKIP };
-
-        for( const BLK_0x04_NET_ASSIGNMENT& assign : assignmentWalker )
-        {
-            LL_WALKER connWalker{ assign.m_ConnItem, assign.m_Key, m_brdDb };
-
-            for( const BLOCK_BASE* connItemBlock : connWalker )
-            {
-                if( connItemBlock->GetBlockType() != 0x05 )
-                    continue;
-
-                const BLK_0x05_TRACK& track = BlockDataAs<BLK_0x05_TRACK>( *connItemBlock );
-
-                // Only etch tracks carry a copper-layer index in their subclass.
-                if( track.m_Layer.m_Class != LAYER_INFO::CLASS::ETCH )
-                    continue;
-
-                const int copper = track.m_Layer.m_Subclass;
-
-                if( copper < 0 || copper >= totalCu )
-                    continue;
-
-                LL_WALKER segWalker{ track.m_FirstSegPtr, track.m_Key, m_brdDb };
-
-                for( const BLOCK_BASE* segBlock : segWalker )
-                {
-                    switch( segBlock->GetBlockType() )
-                    {
-                    case 0x15:
-                    case 0x16:
-                    case 0x17:
-                    {
-                        const auto& seg = BlockDataAs<BLK_0x15_16_17_SEGMENT>( *segBlock );
-                        record( seg.m_StartX, seg.m_StartY, copper );
-                        record( seg.m_EndX, seg.m_EndY, copper );
-                        break;
-                    }
-                    case 0x01:
-                    {
-                        // Arc tracks join vias at their endpoints just as line segments do.
-                        const auto& arc = BlockDataAs<BLK_0x01_ARC>( *segBlock );
-                        record( arc.m_StartX, arc.m_StartY, copper );
-                        record( arc.m_EndX, arc.m_EndY, copper );
-                        break;
-                    }
-                    default:
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    wxLogTrace( traceAllegroBuilder, "Collected %zu track endpoints for via span resolution",
-                m_trackEndpointCopper.size() );
-}
-
-
 std::unique_ptr<BOARD_ITEM> BOARD_BUILDER::buildVia( const BLK_0x33_VIA& aViaData, int aNetCode )
 {
     VECTOR2I viaPos{ aViaData.m_CoordsX, aViaData.m_CoordsY };
@@ -3408,35 +3233,21 @@ std::unique_ptr<BOARD_ITEM> BOARD_BUILDER::buildVia( const BLK_0x33_VIA& aViaDat
             viaWidth = scale( padComp.m_W );
     }
 
-    // The span is a padstack property, so resolve it once per padstack key and cache it.
     const int totalCu = m_board.GetCopperLayerCount();
 
-    std::optional<std::pair<int, int>> span;
+    int startLayer = viaPadstack->m_StartLayer;
+    int layerCount = viaPadstack->GetLayerCount();
+    int endLayer = startLayer + layerCount - 1;
 
-    if( auto cacheIt = m_viaSpanCache.find( viaPadstack->m_Key ); cacheIt != m_viaSpanCache.end() )
-    {
-        span = cacheIt->second;
-    }
-    else
-    {
-        bool resolved = false;
-        span = resolveViaSpan( *viaPadstack, viaPos, totalCu, resolved );
-
-        // Cache only a resolved span, so a better-connected instance can still settle one this
-        // instance could not.
-        if( resolved )
-            m_viaSpanCache.emplace( viaPadstack->m_Key, span );
-    }
-
-    if( span )
+    if( layerCount > 1 && layerCount < totalCu )
     {
         // Set the type before the layer pair: SanitizeLayers() snaps a THROUGH via back to
         // F_Cu/B_Cu and would discard the span. Reaching an outer layer makes it BLIND, else BURIED.
-        const bool touchesOuter = ( span->first == 0 ) || ( span->second == totalCu - 1 );
+        const bool touchesOuter = ( startLayer == 0 ) || ( endLayer == totalCu - 1 );
 
         via->SetViaType( touchesOuter ? VIATYPE::BLIND : VIATYPE::BURIED );
-        via->SetLayerPair( nthCopperLayerId( span->first, totalCu ),
-                           nthCopperLayerId( span->second, totalCu ) );
+        via->SetLayerPair( nthCopperLayerId( startLayer, totalCu ),
+                           nthCopperLayerId( endLayer, totalCu ) );
     }
     else
     {
@@ -3567,8 +3378,6 @@ void BOARD_BUILDER::createTracks()
     }
 
     m_board.FinalizeBulkAdd( newItems );
-
-    m_trackEndpointCopper.clear();
 
     wxLogTrace( traceAllegroBuilder, "Finished creating %zu track/via items", newItems.size() );
 }

@@ -206,10 +206,36 @@ Padstacks had a major overhaul in V17.2:
 
 The first few fields in the header are the same in all versions:
 
-* Block type (and some other numbers which drive a list size)
+* Block type
+* `m_UnknownByte1`
+* `m_N`: drives the size of a trailing uint32 array (`m_N * 8` pre-V172,
+  `m_N * 10` V172+)
+* `m_StartLayer`: 0-based index of the first copper layer in the
+  padstack span
 * Key
 * Next block key
 * The padstack name string key
+
+The version-specific header variant (`HEADER_v16x` / `HEADER_v17x`)
+follows and contains `m_LayerCount`, the number of copper layers
+spanned by the padstack.
+
+#### Via Layer Span
+
+Blind and buried vias (0x33) inherit their span from the referenced
+0x1C padstack:
+
+- `start = m_StartLayer` (0-based copper index)
+- `count = m_LayerCount` from the padstack header
+- `end = start + count - 1`
+
+Importer rules:
+
+- `count > 1` and `count < totalCu`: set a blind/buried via between
+  `start` and `end` (BLIND when either endpoint is an outer copper
+  layer, else BURIED)
+- `count == 1` or `count >= totalCu`: import as a through via
+  (F_Cu to B_Cu)
 
 #### Drill Diameter
 

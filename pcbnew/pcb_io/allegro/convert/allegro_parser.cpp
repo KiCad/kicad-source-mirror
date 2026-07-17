@@ -1058,7 +1058,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
 
     data.m_UnknownByte1 = aStream.ReadU8();
     data.m_N = aStream.ReadU8();
-    data.m_UnknownByte2 = aStream.ReadU8();
+    data.m_StartLayer = aStream.ReadU8();
 
     data.m_Key = aStream.ReadU32();
     block->SetKey( data.m_Key );

@@ -170,17 +170,6 @@ private:
     std::vector<std::unique_ptr<BOARD_ITEM>> buildTrack( const BLK_0x05_TRACK& aBlock, int aNetcode );
     std::unique_ptr<BOARD_ITEM>              buildVia( const BLK_0x33_VIA& aBlock, int aNetcode );
 
-    /// Resolve a via padstack's copper span (0-based first/last copper index), or nullopt for a
-    /// through via, from the padstack name or the tracks meeting at the via centre. @p aResolved is
-    /// false when the span could not be determined, so the result is not cached.
-    std::optional<std::pair<int, int>> resolveViaSpan( const BLK_0x1C_PADSTACK& aPadstack,
-                                                       const VECTOR2I& aViaCenterRaw, int aTotalCu,
-                                                       bool& aResolved );
-
-    /// Populate m_trackEndpointCopper, mapping each copper track segment endpoint to the copper
-    /// layers terminating there. Built lazily the first time a name-less blind/buried via needs it.
-    void collectTrackEndpointCopper();
-
     class ZONE_FILL_HANDLER;
 
     /**
@@ -296,15 +285,6 @@ private:
 
     // Cache of segment chains keyed by start key, avoiding redundant hole geometry rebuilds
     mutable std::unordered_map<uint32_t, SHAPE_LINE_CHAIN> m_segChainCache;
-
-    // Resolved copper span (0-based) per via padstack key, or nullopt for a through via.
-    std::unordered_map<uint32_t, std::optional<std::pair<int, int>>> m_viaSpanCache;
-
-    // Packed track segment endpoint -> [min,max] copper layer index of tracks ending there.
-    std::unordered_map<int64_t, std::pair<int, int>> m_trackEndpointCopper;
-
-    // True once m_trackEndpointCopper has been populated.
-    bool m_trackEndpointsCollected = false;
 
     // Conversion factor from internal units to nanometers.
     double m_scale;

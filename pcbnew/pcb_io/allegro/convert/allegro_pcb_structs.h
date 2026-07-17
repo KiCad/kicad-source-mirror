@@ -1353,7 +1353,7 @@ struct BLK_0x1C_PADSTACK
      * The number of something. Drives the size of an array (with a multiplier).
      */
     uint8_t  m_N;
-    uint8_t  m_UnknownByte2;
+    uint8_t  m_StartLayer;
     uint32_t m_Key;
     uint32_t m_Next;
 
