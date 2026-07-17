@@ -17,67 +17,56 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Re-caching every remove-unconnected pad on each active-layer change stalled the start of a track
-// drag on dense boards. activeLayerUpdateFlags() narrows that, but only with high contrast off.
+// high contrast + colour/alpha display changes used to recache the whole board
+// displayOptionsRequireRecache limits recache to real geometry changes
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <board.h>
-#include <footprint.h>
-#include <pad.h>
-#include <pcb_shape.h>
 #include <pcb_edit_frame.h>
-#include <netinfo.h>
-#include <view/view_item.h>
+#include <pcb_display_options.h>
 #include <project/board_project_settings.h>
 
 
-BOOST_AUTO_TEST_SUITE( ActiveLayerUpdate )
+BOOST_AUTO_TEST_SUITE( DisplayOptionsRecache )
 
 
-BOOST_AUTO_TEST_CASE( OnlyFlashChangedPadsUpdateWithoutHighContrast )
+BOOST_AUTO_TEST_CASE( ColorAndAlphaChangesSkipRecache )
 {
-    BOARD board;
-    board.SetBoardUse( BOARD_USE::FPHOLDER );
+    PCB_DISPLAY_OPTIONS base;
 
-    auto footprint = std::make_unique<FOOTPRINT>( &board );
-    auto net = new NETINFO_ITEM( &board, "P1", 1 );
-    board.Add( net );
+    // same options no recache
+    BOOST_CHECK( !PCB_BASE_FRAME::displayOptionsRequireRecache( base, base ) );
 
-    // PTH pad that flashes on the outer layers but not on an unconnected inner layer.
-    PAD* pad = new PAD( footprint.get() );
-    pad->SetAttribute( PAD_ATTRIB::PTH );
-    pad->SetLayerSet( LSET::AllCuMask() );
-    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
-    pad->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 0.5 ), pcbIUScale.mmToIU( 0.5 ) ) );
-    pad->SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
-    pad->SetNet( net );
-    footprint->Add( pad );
-    board.Add( footprint.release() );
-    board.BuildConnectivity();
+    // high contrast is a colour-lookup flag geometry unchanged
+    PCB_DISPLAY_OPTIONS contrast = base;
+    contrast.m_ContrastModeDisplay = HIGH_CONTRAST_MODE::HIDDEN;
+    BOOST_CHECK( !PCB_BASE_FRAME::displayOptionsRequireRecache( base, contrast ) );
 
-    BOOST_REQUIRE( pad->FlashLayer( F_Cu ) );
-    BOOST_REQUIRE( pad->FlashLayer( B_Cu ) );
-    BOOST_REQUIRE( !pad->FlashLayer( In1_Cu ) );
+    // opacity is a group colour so recolour suffices
+    PCB_DISPLAY_OPTIONS opacity = base;
+    opacity.m_TrackOpacity = 0.5;
+    BOOST_CHECK( !PCB_BASE_FRAME::displayOptionsRequireRecache( base, opacity ) );
 
-    // Same flashing on both layers: nothing to re-cache.
-    BOOST_CHECK_EQUAL(
-            PCB_EDIT_FRAME::activeLayerUpdateFlags( pad, F_Cu, B_Cu, HIGH_CONTRAST_MODE::NORMAL ),
-            KIGFX::NONE );
+    // net colouring re-tints existing groups
+    PCB_DISPLAY_OPTIONS netColor = base;
+    netColor.m_NetColorMode = NET_COLOR_MODE::ALL;
+    BOOST_CHECK( !PCB_BASE_FRAME::displayOptionsRequireRecache( base, netColor ) );
+}
 
-    BOOST_CHECK_EQUAL(
-            PCB_EDIT_FRAME::activeLayerUpdateFlags( pad, F_Cu, In1_Cu, HIGH_CONTRAST_MODE::NORMAL ),
-            KIGFX::ALL );
 
-    // High contrast also dims by active layer, so the redraw is kept even when flashing is unchanged.
-    BOOST_CHECK_EQUAL(
-            PCB_EDIT_FRAME::activeLayerUpdateFlags( pad, F_Cu, B_Cu, HIGH_CONTRAST_MODE::DIMMED ),
-            KIGFX::ALL );
+BOOST_AUTO_TEST_CASE( GeometryChangesRequireRecache )
+{
+    PCB_DISPLAY_OPTIONS base;
 
-    PCB_SHAPE shape( &board, SHAPE_T::RECTANGLE );
-    BOOST_CHECK_EQUAL(
-            PCB_EDIT_FRAME::activeLayerUpdateFlags( &shape, F_Cu, In1_Cu, HIGH_CONTRAST_MODE::NORMAL ),
-            KIGFX::NONE );
+    // filled vs outline zones differ in geometry
+    PCB_DISPLAY_OPTIONS zoneMode = base;
+    zoneMode.m_ZoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE;
+    BOOST_CHECK( PCB_BASE_FRAME::displayOptionsRequireRecache( base, zoneMode ) );
+
+    // board flip regenerates mirrored geometry
+    PCB_DISPLAY_OPTIONS flip = base;
+    flip.m_FlipBoardView = true;
+    BOOST_CHECK( PCB_BASE_FRAME::displayOptionsRequireRecache( base, flip ) );
 }
 
 

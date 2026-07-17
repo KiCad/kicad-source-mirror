@@ -1094,8 +1094,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     COLOR4D      color = m_pcbSettings.GetColor( aVia, aLayer );
     VECTOR2D     center( aVia->GetStart() );
 
-    if( color == COLOR4D::CLEAR )
-        return;
+    // draw hidden vias transparent not skipped so a recolour restores them without re-tessellating
 
     const int copperLayer = IsViaCopperLayer( aLayer ) ? aLayer - LAYER_VIA_COPPER_START : aLayer;
 

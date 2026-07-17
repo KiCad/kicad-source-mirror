@@ -1863,70 +1863,14 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer, bool aForceRedraw )
     if( std::optional<int> newClearanceLayer = getClearanceLayerForActive( aLayer ) )
         GetCanvas()->GetView()->SetLayerVisible( *newClearanceLayer, true );
 
-    const HIGH_CONTRAST_MODE contrastMode = GetDisplayOptions().m_ContrastModeDisplay;
+    // per-layer view groups already hold each layer geometry so an active-layer change needs no
+    // re-tessellation just clearance visibility above and the recolour in SetHighContrastLayer
 
-    GetCanvas()->GetView()->UpdateAllItemsConditionally(
-            [&]( KIGFX::VIEW_ITEM* aItem ) -> int
-            {
-                if( !aItem->IsBOARD_ITEM() )
-                    return 0;
-
-                return activeLayerUpdateFlags( static_cast<const BOARD_ITEM*>( aItem ), oldLayer,
-                                               aLayer, contrastMode );
-            } );
-
-    GetCanvas()->Refresh();
-}
-
-
-int PCB_EDIT_FRAME::activeLayerUpdateFlags( const BOARD_ITEM* aItem, PCB_LAYER_ID aOldLayer,
-                                            PCB_LAYER_ID aNewLayer, HIGH_CONTRAST_MODE aContrastMode )
-{
-    // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as they
-    // won't be found in the view layer's itemset for re-painting.
-    if( aContrastMode == HIGH_CONTRAST_MODE::HIDDEN )
-    {
-        if( aItem->IsOnLayer( aOldLayer ) || aItem->IsOnLayer( aNewLayer ) )
-            return KIGFX::ALL;
-    }
-
-    // High contrast dims by active layer so all flagged items repaint; without it only the flashed
-    // copper geometry depends on the active layer, so re-cache just the items whose flashing changes.
-    const bool highContrast = aContrastMode != HIGH_CONTRAST_MODE::NORMAL;
-
-    if( aItem->Type() == PCB_VIA_T )
-    {
-        const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
-
-        if( via->GetViaType() == VIATYPE::BLIND
-                || via->GetViaType() == VIATYPE::BURIED
-                || via->GetViaType() == VIATYPE::MICROVIA )
-        {
-            if( highContrast
-                    || via->GetLayerSet().test( aOldLayer ) != via->GetLayerSet().test( aNewLayer ) )
-            {
-                return KIGFX::REPAINT;
-            }
-        }
-
-        if( via->GetRemoveUnconnected()
-                && ( highContrast || via->FlashLayer( aOldLayer ) != via->FlashLayer( aNewLayer ) ) )
-        {
-            return KIGFX::ALL;
-        }
-    }
-    else if( aItem->Type() == PCB_PAD_T )
-    {
-        const PAD* pad = static_cast<const PAD*>( aItem );
-
-        if( pad->GetRemoveUnconnected()
-                && ( highContrast || pad->FlashLayer( aOldLayer ) != pad->FlashLayer( aNewLayer ) ) )
-        {
-            return KIGFX::ALL;
-        }
-    }
-
-    return 0;
+    // idle refresh coalesces mashed hotkeys into one repaint forced redraws stay immediate
+    if( aForceRedraw )
+        GetCanvas()->Refresh();
+    else
+        GetCanvas()->RequestRefresh();
 }
 
 
