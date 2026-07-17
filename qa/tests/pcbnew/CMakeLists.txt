@@ -104,6 +104,7 @@ set( QA_PCBNEW_SRCS
     test_gencad_export.cpp
     test_idf_export.cpp
     test_d356_export.cpp
+    test_specctra_export.cpp
     test_step_model_color_transfer.cpp
     test_board_netlist_updater_fpid_change.cpp
     test_board_netlist_updater_nested_groups.cpp

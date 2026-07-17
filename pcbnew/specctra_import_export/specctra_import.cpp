@@ -45,6 +45,7 @@
 #include <math/util.h>      // for KiROUND
 #include <pcbnew_settings.h>
 #include <string_utils.h>
+#include <wx/log.h>
 
 using namespace DSN;
 
@@ -398,6 +399,11 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
     for( PCB_TRACK* track : locked )
         aBoard->Add( track );
 
+    // A single unresolvable place, wire, or via (e.g. a uniquified fiducial id or an unknown layer
+    // from a foreign router) must not sink the whole session, so skipped items are counted and
+    // reported once at the end.
+    int skipped = 0;
+
     if( m_session->placement )
     {
         // Walk the PLACEMENT object's COMPONENTs list, and for each PLACE within
@@ -413,7 +419,10 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                 FOOTPRINT* footprint = aBoard->FindFootprintByReference( reference );
 
                 if( !footprint )
-                    THROW_IO_ERROR( wxString::Format( _( "Reference '%s' not found." ), reference ) );
+                {
+                    ++skipped;
+                    continue;
+                }
 
                 if( !place.m_hasVertex )
                     continue;
@@ -463,6 +472,20 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
     // Walk the NET_OUTs and create tracks and vias anew.
     boost::ptr_vector<NET_OUT>& net_outs = m_session->route->net_outs;
 
+    // Item-local failures (unknown layer id, missing padstack) throw from the make* helpers; run
+    // each item through this guard so one bad wire or via is dropped instead of aborting.
+    auto skipOnError = [&skipped]( auto&& aBuild )
+    {
+        try
+        {
+            aBuild();
+        }
+        catch( const IO_ERROR& )
+        {
+            ++skipped;
+        }
+    };
+
     for( NET_OUT& net_out : net_outs )
     {
         int netoutCode = 0;
@@ -479,83 +502,92 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
         for( WIRE& wire : net_out.wires )
         {
-            DSN_T   shape = wire.m_shape->Type();
-
-            if( shape == T_path )
+            skipOnError( [&]()
             {
-                PATH* path = static_cast<PATH*>( wire.m_shape );
+                DSN_T shape = wire.m_shape->Type();
 
-                for( unsigned pt = 0; pt < path->points.size() - 1; ++pt )
+                if( shape == T_path )
                 {
-                    PCB_TRACK* track;
-                    track = makeTRACK( &wire, path, pt, netoutCode );
-                    aBoard->Add( track );
+                    PATH* path = static_cast<PATH*>( wire.m_shape );
+
+                    for( unsigned pt = 0; pt < path->points.size() - 1; ++pt )
+                        aBoard->Add( makeTRACK( &wire, path, pt, netoutCode ) );
                 }
-            }
-            else if ( shape == T_qarc )
-            {
-                QARC* qarc = static_cast<QARC*>( wire.m_shape );
+                else if( shape == T_qarc )
+                {
+                    QARC* qarc = static_cast<QARC*>( wire.m_shape );
 
-                PCB_ARC* arc = makeARC( &wire, qarc, netoutCode );
-                aBoard->Add( arc );
-            }
-            else
-            {
-                /*
-                 * shape == T_polygon is expected from freerouter if you have a zone on a non-
-                 * "power" type layer, i.e. a T_signal layer and the design does a round-trip
-                 * back in as session here.  We kept our own zones in the BOARD, so ignore this
-                 * so called 'wire'.
+                    aBoard->Add( makeARC( &wire, qarc, netoutCode ) );
+                }
+                else
+                {
+                    /*
+                     * shape == T_polygon is expected from freerouter if you have a zone on a non-
+                     * "power" type layer, i.e. a T_signal layer and the design does a round-trip
+                     * back in as session here.  We kept our own zones in the BOARD, so ignore this
+                     * so called 'wire'.
 
-                wxString netId = From_UTF8( wire->net_id.c_str() );
-                THROW_IO_ERROR( wxString::Format( _( "Unsupported wire shape: '%s' for net: '%s'" ),
-                                                    DLEX::GetTokenString(shape).GetData(),
-                                                    netId.GetData() ) );
-                */
-            }
+                    wxString netId = From_UTF8( wire->net_id.c_str() );
+                    THROW_IO_ERROR( wxString::Format( _( "Unsupported wire shape: '%s' for net: '%s'" ),
+                                                        DLEX::GetTokenString(shape).GetData(),
+                                                        netId.GetData() ) );
+                    */
+                }
+            } );
         }
 
         for( WIRE_VIA& wire_via : net_out.wire_vias )
         {
-            int netCode = 0;
-
-            // page 144 of spec says wire_via's net_id is optional
-            if( net_out.net_id.size() )
+            skipOnError( [&]()
             {
-                wxString netName = From_UTF8( net_out.net_id.c_str() );
-                NETINFO_ITEM* netvia = aBoard->FindNet( netName );
+                int netCode = 0;
 
-                if( netvia )
-                    netCode = netvia->GetNetCode();
-            }
+                // page 144 of spec says wire_via's net_id is optional
+                if( net_out.net_id.size() )
+                {
+                    wxString netName = From_UTF8( net_out.net_id.c_str() );
+                    NETINFO_ITEM* netvia = aBoard->FindNet( netName );
 
-            // example: (via Via_15:8_mil 149000 -71000 )
+                    if( netvia )
+                        netCode = netvia->GetNetCode();
+                }
 
-            PADSTACK* padstack = m_session->route->library->FindPADSTACK( wire_via.GetPadstackId() );
+                // example: (via Via_15:8_mil 149000 -71000 )
 
-            if( !padstack )
-            {
-                // Dick  Feb 29, 2008:
-                // Freerouter has a bug where it will not round trip all vias.  Vias which have
-                // a (use_via) element will be round tripped.  Vias which do not, don't come back
-                // in in the session library, even though they may be actually used in the
-                // pre-routed, protected wire_vias. So until that is fixed, create the padstack
-                // from its name as a work around.
-                wxString psid( From_UTF8( wire_via.GetPadstackId().c_str() ) );
+                PADSTACK* padstack =
+                        m_session->route->library->FindPADSTACK( wire_via.GetPadstackId() );
 
-                THROW_IO_ERROR( wxString::Format( _( "A wire_via refers to missing padstack '%s'." ), psid ) );
-            }
+                if( !padstack )
+                {
+                    // Dick  Feb 29, 2008:
+                    // Freerouter has a bug where it will not round trip all vias.  Vias which have
+                    // a (use_via) element will be round tripped.  Vias which do not, don't come back
+                    // in in the session library, even though they may be actually used in the
+                    // pre-routed, protected wire_vias. So until that is fixed, create the padstack
+                    // from its name as a work around.
+                    wxString psid( From_UTF8( wire_via.GetPadstackId().c_str() ) );
 
-            std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
+                    THROW_IO_ERROR( wxString::Format( _( "A wire_via refers to missing padstack '%s'." ),
+                                                      psid ) );
+                }
 
-            int via_drill_default = netSettings->GetDefaultNetclass()->GetViaDrill();
+                std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
 
-            for( unsigned v = 0; v < wire_via.m_vertexes.size(); ++v )
-            {
-                PCB_VIA* via = makeVIA( &wire_via, padstack, wire_via.m_vertexes[v], netCode, via_drill_default );
-                aBoard->Add( via );
-            }
+                int via_drill_default = netSettings->GetDefaultNetclass()->GetViaDrill();
+
+                for( unsigned v = 0; v < wire_via.m_vertexes.size(); ++v )
+                {
+                    aBoard->Add( makeVIA( &wire_via, padstack, wire_via.m_vertexes[v], netCode,
+                                          via_drill_default ) );
+                }
+            } );
         }
+    }
+
+    if( skipped > 0 )
+    {
+        wxLogWarning( wxString::Format( _( "%d session item(s) were skipped due to unresolved "
+                                           "reference, layer, or padstack." ), skipped ) );
     }
 }
 
