@@ -23,6 +23,7 @@
 #include <board_design_settings.h>
 #include <pad.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
 #include <pcb_text.h>
@@ -68,6 +69,39 @@ RULE_AREA* findRuleAreaByPartialName( MULTICHANNEL_TOOL* aTool, const wxString& 
     return nullptr;
 }
 
+RULE_AREA* findSheetRuleAreaByPath( MULTICHANNEL_TOOL* aTool, wxString aPath )
+{
+    if( aPath.EndsWith( wxT( "/" ) ) )
+        aPath.RemoveLast();
+
+    for( RULE_AREA& ra : aTool->GetData()->m_areas )
+    {
+        if( ra.m_sourceType != PLACEMENT_SOURCE_T::SHEETNAME )
+            continue;
+
+        wxString path = ra.m_sheetPath;
+
+        if( path.EndsWith( wxT( "/" ) ) )
+            path.RemoveLast();
+
+        if( path == aPath )
+            return &ra;
+    }
+
+    return nullptr;
+}
+
+RULE_AREA* findGroupRuleAreaByName( MULTICHANNEL_TOOL* aTool, const wxString& aGroupName )
+{
+    for( RULE_AREA& ra : aTool->GetData()->m_areas )
+    {
+        if( ra.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && ra.m_groupName == aGroupName )
+            return &ra;
+    }
+
+    return nullptr;
+}
+
 RULE_AREA* findRuleAreaByPlacementGroup( MULTICHANNEL_TOOL* aTool, const wxString& aGroupName )
 {
     for( RULE_AREA& ra : aTool->GetData()->m_areas )
@@ -78,6 +112,41 @@ RULE_AREA* findRuleAreaByPlacementGroup( MULTICHANNEL_TOOL* aTool, const wxStrin
 
     return nullptr;
 }
+
+int countTuningGensInArea( BOARD* aBoard, ZONE* aZone )
+{
+    int                     n = 0;
+    const SHAPE_LINE_CHAIN& outline = aZone->Outline()->COutline( 0 );
+
+    for( PCB_GENERATOR* gen : aBoard->Generators() )
+    {
+        if( gen->GetGeneratorType() != wxT( "tuning_pattern" ) )
+            continue;
+
+        if( gen->HitTest( outline, false ) )
+            n++;
+    }
+
+    return n;
+}
+
+
+int countCopperZonesInArea( BOARD* aBoard, ZONE* aRAZone )
+{
+    int n = 0;
+
+    for( ZONE* zone : aBoard->Zones() )
+    {
+        if( zone == aRAZone || zone->GetIsRuleArea() )
+            continue;
+
+        if( aRAZone->Outline()->Contains( zone->Outline()->COutline( 0 ).Centre() ) )
+            n++;
+    }
+
+    return n;
+}
+
 
 int countZonesByNameInRuleArea( BOARD* aBoard, const wxString& aZoneName, const RULE_AREA& aRuleArea )
 {
@@ -149,7 +218,8 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
         BOOST_TEST_MESSAGE( wxString::Format( "RA multichannel sheets = %d",
                                               static_cast<int>( ruleData->m_areas.size() ) ) );
 
-        BOOST_CHECK_EQUAL( ruleData->m_areas.size(), 72 );
+        // 73 counts the /fpga/ container sheet, now offered as a channel.
+        BOOST_CHECK_EQUAL( ruleData->m_areas.size(), 73 );
 
         int cnt = 0;
 
@@ -2976,6 +3046,311 @@ BOOST_FIXTURE_TEST_CASE( CheckRACompatOverlappingAreaKeepsLocalNet, MULTICHANNEL
     BOOST_CHECK_MESSAGE( !it->second.m_isOk,
                          "Channel 1 and channel 2 differ on a local net and must not match; an "
                          "overlapping rule area must not hide that net by marking it global" );
+}
+
+
+// A sheet that holds only sub-sheets must still be offered as a channel and gather every
+// footprint below it, not just the deepest sheet of each footprint.
+BOOST_FIXTURE_TEST_CASE( MultichannelNestedSheetChannels, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "multichannel_nested", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    RULE_AREA* first = findSheetRuleAreaByPath( mtTool, wxT( "/FirstChannel/" ) );
+    RULE_AREA* second = findSheetRuleAreaByPath( mtTool, wxT( "/SecondChannel/" ) );
+
+    BOOST_REQUIRE( first );
+    BOOST_REQUIRE( second );
+
+    BOOST_CHECK_EQUAL( first->m_components.size(), 32 );
+    BOOST_CHECK_EQUAL( second->m_components.size(), 32 );
+
+    // Leaf sheets still work.
+    RULE_AREA* leaf = findSheetRuleAreaByPath( mtTool, wxT( "/FirstChannel/Common emitter amplifier/" ) );
+    BOOST_REQUIRE( leaf );
+    BOOST_CHECK_EQUAL( leaf->m_components.size(), 8 );
+
+    // The root is not a channel.
+    BOOST_CHECK( findSheetRuleAreaByPath( mtTool, wxT( "/" ) ) == nullptr );
+    BOOST_CHECK( findSheetRuleAreaByPath( mtTool, wxEmptyString ) == nullptr );
+}
+
+
+// A group that wraps several sub-groups must be offered as a channel and gather every
+// footprint below it, same as the sheet case.
+BOOST_FIXTURE_TEST_CASE( MultichannelNestedGroupChannels, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "multichannel_nested", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    RULE_AREA* first = findGroupRuleAreaByName( mtTool, wxT( "FirstChannel" ) );
+    RULE_AREA* second = findGroupRuleAreaByName( mtTool, wxT( "SecondChannel" ) );
+
+    BOOST_REQUIRE( first );
+    BOOST_REQUIRE( second );
+
+    BOOST_CHECK_EQUAL( first->m_components.size(), 32 );
+    BOOST_CHECK_EQUAL( second->m_components.size(), 32 );
+
+    // The inner sub-groups still work.
+    RULE_AREA* sub = findGroupRuleAreaByName( mtTool, wxT( "Common emitter amplifier1 (/FirstChannel/)" ) );
+    BOOST_REQUIRE( sub );
+    BOOST_CHECK_EQUAL( sub->m_components.size(), 8 );
+}
+
+
+// Sheet-level Repeat Layout with "group items" enabled must still reproduce tuning meanders
+// as generators in the target, not flatten them to loose tracks.
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutSheetCopiesMeandersWhole, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "multichannel_nested", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+    ruleData->m_replaceExisting = true;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME
+            && ( ra.m_sheetPath == wxT( "/FirstChannel/" ) || ra.m_sheetPath == wxT( "/SecondChannel/" ) ) )
+            ra.m_generateEnabled = true;
+    }
+
+    TOOL_EVENT dummy;
+    mtTool->AutogenerateRuleAreas( dummy );
+    mtTool->FindExistingRuleAreas();
+
+    RULE_AREA* source = findRuleAreaByPlacementGroup( mtTool, wxT( "/FirstChannel/" ) );
+    RULE_AREA* target = findRuleAreaByPlacementGroup( mtTool, wxT( "/SecondChannel/" ) );
+
+    BOOST_REQUIRE( source && source->m_zone );
+    BOOST_REQUIRE( target && target->m_zone );
+
+    // Keep only the source channel's meanders so the copy delta is unambiguous.
+    std::vector<PCB_GENERATOR*> strip;
+
+    for( PCB_GENERATOR* gen : m_board->Generators() )
+    {
+        if( gen->GetGeneratorType() != wxT( "tuning_pattern" ) )
+            continue;
+
+        if( !gen->HitTest( source->m_zone->Outline()->COutline( 0 ), false ) )
+            strip.push_back( gen );
+    }
+
+    for( PCB_GENERATOR* gen : strip )
+    {
+        for( EDA_ITEM* member : gen->GetItems() )
+        {
+            if( member->IsBOARD_ITEM() )
+                static_cast<BOARD_ITEM*>( member )->SetParentGroup( nullptr );
+        }
+
+        m_board->Remove( gen );
+    }
+
+    int sourceMeanders = countTuningGensInArea( m_board.get(), source->m_zone );
+    BOOST_REQUIRE( sourceMeanders > 0 );
+    BOOST_REQUIRE_EQUAL( countTuningGensInArea( m_board.get(), target->m_zone ), 0 );
+
+    ruleData->m_options.m_groupItems = true;
+
+    mtTool->CheckRACompatibility( source->m_zone );
+    ruleData->m_compatMap[target].m_doCopy = true;
+
+    int result = mtTool->RepeatLayout( TOOL_EVENT(), source->m_zone );
+    BOOST_REQUIRE( result >= 0 );
+
+    BOOST_CHECK_EQUAL( countTuningGensInArea( m_board.get(), target->m_zone ), sourceMeanders );
+}
+
+
+// A sheet placement area outline must cover the channel's grouped content (meanders), not just
+// its footprints, otherwise routing that extends past the parts is left behind on repeat.
+BOOST_FIXTURE_TEST_CASE( SheetRuleAreaOutlineCoversMeanders, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "multichannel_nested", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+    ruleData->m_replaceExisting = true;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME
+            && ( ra.m_sheetPath == wxT( "/FirstChannel/" ) || ra.m_sheetPath == wxT( "/SecondChannel/" ) ) )
+            ra.m_generateEnabled = true;
+    }
+
+    TOOL_EVENT dummy;
+    mtTool->AutogenerateRuleAreas( dummy );
+    mtTool->FindExistingRuleAreas();
+
+    RULE_AREA* source = findRuleAreaByPlacementGroup( mtTool, wxT( "/FirstChannel/" ) );
+    BOOST_REQUIRE( source && source->m_zone );
+
+    std::set<EDA_GROUP*> groups;
+
+    for( FOOTPRINT* fp : source->m_components )
+    {
+        for( EDA_GROUP* g = fp->GetParentGroup(); g; g = g->AsEdaItem()->GetParentGroup() )
+            groups.insert( g );
+    }
+
+    int checked = 0;
+
+    for( EDA_GROUP* g : groups )
+    {
+        for( EDA_ITEM* member : g->GetItems() )
+        {
+            if( member->Type() != PCB_GENERATOR_T )
+                continue;
+
+            BOX2I bb = static_cast<PCB_GENERATOR*>( member )->GetBoundingBox();
+
+            BOOST_CHECK( source->m_zone->Outline()->Contains( bb.GetOrigin() ) );
+            BOOST_CHECK( source->m_zone->Outline()->Contains( bb.GetEnd() ) );
+            checked++;
+        }
+    }
+
+    BOOST_REQUIRE( checked > 0 );
+}
+
+
+// Sheet-level Repeat Layout must reproduce the design-block GND zones in the target channel.
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutSheetCopiesBlockZones, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "multichannel_nested", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+    ruleData->m_replaceExisting = true;
+
+    for( RULE_AREA& ra : ruleData->m_areas )
+    {
+        if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME
+            && ( ra.m_sheetPath == wxT( "/FirstChannel/" ) || ra.m_sheetPath == wxT( "/SecondChannel/" ) ) )
+            ra.m_generateEnabled = true;
+    }
+
+    TOOL_EVENT dummy;
+    mtTool->AutogenerateRuleAreas( dummy );
+    mtTool->FindExistingRuleAreas();
+
+    RULE_AREA* source = findRuleAreaByPlacementGroup( mtTool, wxT( "/FirstChannel/" ) );
+    RULE_AREA* target = findRuleAreaByPlacementGroup( mtTool, wxT( "/SecondChannel/" ) );
+
+    BOOST_REQUIRE( source && source->m_zone );
+    BOOST_REQUIRE( target && target->m_zone );
+
+    // After the repeat the target should mirror the source's block zones.
+    int expected = countCopperZonesInArea( m_board.get(), source->m_zone );
+    BOOST_REQUIRE( expected > 0 );
+
+    // Clear the target channel's zones so the copy delta is unambiguous.
+    std::vector<ZONE*> stripZones;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetIsRuleArea() )
+            continue;
+
+        if( target->m_zone->Outline()->Contains( zone->Outline()->COutline( 0 ).Centre() ) )
+            stripZones.push_back( zone );
+    }
+
+    for( ZONE* zone : stripZones )
+    {
+        if( EDA_GROUP* group = zone->GetParentGroup() )
+            group->RemoveItem( zone );
+
+        m_board->Remove( zone );
+    }
+
+    BOOST_REQUIRE_EQUAL( countCopperZonesInArea( m_board.get(), target->m_zone ), 0 );
+
+    mtTool->CheckRACompatibility( source->m_zone );
+    ruleData->m_compatMap[target].m_doCopy = true;
+
+    int result = mtTool->RepeatLayout( TOOL_EVENT(), source->m_zone );
+    BOOST_REQUIRE( result >= 0 );
+
+    BOOST_CHECK_EQUAL( countCopperZonesInArea( m_board.get(), target->m_zone ), expected );
+}
+
+
+// The two channels must match by topology so one can be repeated onto the other.
+BOOST_FIXTURE_TEST_CASE( MultichannelNestedChannelTopologyMatches, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+
+    KI_TEST::LoadBoard( m_settingsManager, "multichannel_nested", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    RULE_AREA* first = findSheetRuleAreaByPath( mtTool, wxT( "/FirstChannel/" ) );
+    RULE_AREA* second = findSheetRuleAreaByPath( mtTool, wxT( "/SecondChannel/" ) );
+
+    BOOST_REQUIRE( first );
+    BOOST_REQUIRE( second );
+
+    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( first->m_components, second->m_components );
+    auto cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( second->m_components, first->m_components );
+
+    TMATCH::COMPONENT_MATCHES                     result;
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+    bool                                          status = cgRef->FindIsomorphism( cgTarget.get(), result, details );
+
+    BOOST_CHECK( status );
+    BOOST_CHECK( details.empty() );
 }
 
 
