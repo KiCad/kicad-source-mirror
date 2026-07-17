@@ -2833,6 +2833,9 @@ void SCH_EDIT_TOOL::EditProperties( EDA_ITEM* aItem )
             }
             else
             {
+                // The sheet file change invalidated the undo/redo list.
+                m_frame->ClearUndoRedoList();
+
                 std::vector<SCH_ITEM*> items;
 
                 items.emplace_back( sheet );
@@ -2842,12 +2845,6 @@ void SCH_EDIT_TOOL::EditProperties( EDA_ITEM* aItem )
                 m_frame->Schematic().RefreshHierarchy();
                 m_frame->UpdateHierarchyNavigator();
             }
-        }
-        else
-        {
-            // If we are renaming files, the undo/redo list becomes invalid and must be cleared.
-            m_frame->ClearUndoRedoList();
-            m_frame->OnModify();
         }
 
         // If the sheet file is changed and new sheet contents are loaded then we have to
