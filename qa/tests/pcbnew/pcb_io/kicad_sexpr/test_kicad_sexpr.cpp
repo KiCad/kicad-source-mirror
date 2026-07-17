@@ -792,6 +792,75 @@ BOOST_AUTO_TEST_CASE( CopperThievingZone_RejectsMalformedGeometry )
 
 
 /**
+ * Zone tokens at their format defaults are omitted from the file.  When appending into a
+ * live board (design block placement, paste) the parsed zone must get the format defaults,
+ * not the destination board's default zone settings.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24955
+ */
+BOOST_AUTO_TEST_CASE( Issue24955_AppendDoesNotInheritSessionZoneDefaults )
+{
+    KI_TEST::TEMPORARY_DIRECTORY tempDir( "kicad_qa_zone_defaults_append_", "" );
+    std::filesystem::path        tmpPath = tempDir.GetPath() / "thermal_zone_block.kicad_pcb";
+    std::ofstream                out( tmpPath );
+
+    // Two zones, first with every omitted-when-default token left out (thermal, polygon
+    // fill, no smoothing, unlocked), second with the explicit tokens
+    out << "(kicad_pcb (version 20260513) (generator \"test\") (generator_version \"test\")"
+        << " (general (thickness 1.6)) (paper \"A4\")"
+        << " (layers (0 \"F.Cu\" signal) (31 \"B.Cu\" signal))"
+        << " (zone (net 0) (net_name \"\") (layer \"F.Cu\") (uuid \"00000000-0000-0000-0000-000000000001\")"
+        << "       (hatch edge 0.5)"
+        << "       (connect_pads (clearance 0.5))"
+        << "       (min_thickness 0.25) (filled_areas_thickness no)"
+        << "       (fill yes (thermal_gap 0.5) (thermal_bridge_width 0.5) (island_removal_mode 0))"
+        << "       (polygon (pts (xy 0 0) (xy 5 0) (xy 5 5) (xy 0 5))))"
+        << " (zone (net 0) (net_name \"\") (layer \"F.Cu\") (uuid \"00000000-0000-0000-0000-000000000002\")"
+        << "       (locked yes)"
+        << "       (hatch edge 0.5)"
+        << "       (connect_pads yes (clearance 0.5))"
+        << "       (min_thickness 0.25) (filled_areas_thickness no)"
+        << "       (fill yes (thermal_gap 0.5) (thermal_bridge_width 0.5) (island_removal_mode 0)"
+        << "             (smoothing fillet) (radius 1))"
+        << "       (polygon (pts (xy 10 0) (xy 15 0) (xy 15 5) (xy 10 5))))"
+        << ")";
+    out.close();
+
+    // A destination board whose session zone defaults differ from the format defaults
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    ZONE_SETTINGS settings = board->GetDesignSettings().GetDefaultZoneSettings();
+    settings.SetPadConnection( ZONE_CONNECTION::FULL );
+    settings.m_FillMode = ZONE_FILL_MODE::HATCH_PATTERN;
+    settings.SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_FILLET );
+    settings.SetCornerRadius( pcbIUScale.mmToIU( 1 ) );
+    settings.m_HatchSmoothingLevel = 2;
+    settings.m_Locked = true;
+    board->GetDesignSettings().SetDefaultZoneSettings( settings );
+
+    kicadPlugin.LoadBoard( tmpPath.string(), board.get() );
+
+    BOOST_REQUIRE_EQUAL( board->Zones().size(), 2u );
+
+    // The all-defaults zone must not pick up the board's session defaults
+    ZONE* omitted = board->Zones()[0];
+    BOOST_CHECK( omitted->GetPadConnection() == ZONE_CONNECTION::THERMAL );
+    BOOST_CHECK( omitted->GetFillMode() == ZONE_FILL_MODE::POLYGONS );
+    BOOST_CHECK_EQUAL( omitted->GetCornerSmoothingType(), ZONE_SETTINGS::SMOOTHING_NONE );
+    BOOST_CHECK_EQUAL( omitted->GetCornerRadius(), 0 );
+    BOOST_CHECK_EQUAL( omitted->GetHatchSmoothingLevel(), 0 );
+    BOOST_CHECK( !omitted->IsLocked() );
+
+    // Explicit tokens still win
+    ZONE* explicitZone = board->Zones()[1];
+    BOOST_CHECK( explicitZone->GetPadConnection() == ZONE_CONNECTION::FULL );
+    BOOST_CHECK_EQUAL( explicitZone->GetCornerSmoothingType(), ZONE_SETTINGS::SMOOTHING_FILLET );
+    BOOST_CHECK_EQUAL( explicitZone->GetCornerRadius(), pcbIUScale.mmToIU( 1 ) );
+    BOOST_CHECK( explicitZone->IsLocked() );
+}
+
+
+/**
  * Cancelling a load that appends into an existing board must not leave any partially
  * parsed items or nets behind (issue 24911)
  */

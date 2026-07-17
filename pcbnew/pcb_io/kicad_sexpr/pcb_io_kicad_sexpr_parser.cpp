@@ -8561,6 +8561,16 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
     // This is the default for board files:
     zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::ALWAYS );
 
+    // The ZONE ctor copies the board's default zone settings, but these tokens are
+    // omitted from the file when at their defaults. Reset them so appending into a
+    // live board (design block, paste) doesn't pick up its session defaults.
+    zone->SetPadConnection( ZONE_CONNECTION::THERMAL );
+    zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
+    zone->SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_NONE );
+    zone->SetCornerRadius( 0 );
+    zone->SetHatchSmoothingLevel( 0 );
+    zone->SetLocked( false );
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         // legacy locked
