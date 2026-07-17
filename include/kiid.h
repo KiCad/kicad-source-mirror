@@ -59,6 +59,11 @@ public:
 
     size_t Hash() const;
 
+    /**
+     * Return a KIID derived from a name, the same name always gives the same KIID.
+     */
+    static KIID FromName( const std::string& aName );
+
     bool        IsLegacyTimestamp() const;
     timestamp_t AsLegacyTimestamp() const;
 

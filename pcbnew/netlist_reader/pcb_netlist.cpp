@@ -460,9 +460,21 @@ void NETLIST::ApplyGroupMembership()
 {
     for( NETLIST_GROUP& group : m_groups )
     {
-        for( KIID& member : group.members )
+        for( const KIID_PATH& member : group.members )
         {
-            COMPONENT* component = GetComponentByUuid( member );
+            COMPONENT* component = nullptr;
+
+            if( member.size() > 1 )
+            {
+                // Instance path, match the exact instance. The same symbol uuid exists once
+                // per instance of a shared sheet, only the path tells them apart.
+                component = GetComponentByPath( member );
+            }
+            else if( member.size() == 1 )
+            {
+                // Bare symbol uuid
+                component = GetComponentByUuid( member.front() );
+            }
 
             if( component )
                 component->SetGroup( &group );

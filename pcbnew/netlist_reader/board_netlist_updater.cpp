@@ -1948,13 +1948,19 @@ bool BOARD_NETLIST_UPDATER::updateGroups( NETLIST& aNetlist )
 
         // A group member may be another group's uuid (a nested group).  Restore that
         // parent/child relationship on the board.
-        for( const KIID& member : netlistGroup->members )
+        for( const KIID_PATH& member : netlistGroup->members )
         {
+            if( member.empty() )
+                continue;
+
+            KIID memberGroupUuid =
+                    member.size() == 1 ? member.front() : KIID::FromName( std::string( member.AsString().ToUTF8() ) );
+
             PCB_GROUP* childGroup = nullptr;
 
             for( PCB_GROUP* candidate : m_board->Groups() )
             {
-                if( candidate->m_Uuid == member )
+                if( candidate->m_Uuid == memberGroupUuid )
                 {
                     childGroup = candidate;
                     break;
