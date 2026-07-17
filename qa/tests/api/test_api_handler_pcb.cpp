@@ -30,6 +30,7 @@
 #include <api/api_handler_pcb.h>
 #include <api/headless_pcb_context.h>
 #include <api/board/board_commands.pb.h>
+#include <api/common/commands/editor_commands.pb.h>
 #include <api/common/envelope.pb.h>
 #include <api/common/types/base_types.pb.h>
 
@@ -105,6 +106,33 @@ struct API_HANDLER_PCB_FIXTURE
         }
     }
 };
+
+
+kiapi::common::ApiRequest makeBeginCommitRequest()
+{
+    // No header, so the pre-11.0 path assumes the PCB editor
+    kiapi::common::commands::BeginCommit command;
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    request.mutable_message()->PackFrom( command );
+
+    return request;
+}
+
+
+kiapi::common::ApiRequest makeRevertRequest( BOARD* aBoard )
+{
+    kiapi::common::commands::RevertDocument command;
+    command.mutable_document()->set_type( kiapi::common::types::DocumentType::DOCTYPE_PCB );
+    command.mutable_document()->set_board_filename( wxFileName( aBoard->GetFileName() ).GetFullName().ToStdString() );
+
+    kiapi::common::ApiRequest request;
+    request.mutable_header()->set_client_name( "kicad.qa" );
+    request.mutable_message()->PackFrom( command );
+
+    return request;
+}
 
 } // namespace
 
@@ -214,6 +242,43 @@ BOOST_AUTO_TEST_CASE( RefillZonesUnknownIdRejected )
 
     BOOST_REQUIRE( !result.has_value() );
     BOOST_CHECK_EQUAL( result.error().status(), kiapi::common::ApiStatusCode::AS_BAD_REQUEST );
+}
+
+
+// RevertDocument reloads the board, freeing every item an in-flight client commit points at.
+// The handler must refuse with AS_BUSY while a commit is open, or the pointers dangle
+// (use-after-free). Latent UAF found via #24803.
+BOOST_AUTO_TEST_CASE( RevertDocumentRejectedWithOpenCommit )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    API_HANDLER_PCB handler( m_context );
+
+    // Open a client transaction, as a client staging edits would
+    kiapi::common::ApiRequest beginRequest = makeBeginCommitRequest();
+    BOOST_REQUIRE( handler.Handle( beginRequest ).has_value() );
+
+    kiapi::common::ApiRequest request = makeRevertRequest( board );
+    API_RESULT                result = handler.Handle( request );
+
+    BOOST_REQUIRE( !result.has_value() );
+    BOOST_CHECK_EQUAL( result.error().status(), kiapi::common::ApiStatusCode::AS_BUSY );
+    BOOST_CHECK( result.error().error_message().find( "commit" ) != std::string::npos );
+}
+
+
+// With no open commit the guard passes; the reload then needs a running editor, so a headless
+// handler reports AS_UNIMPLEMENTED. This confirms the guard does not reject the normal path.
+BOOST_AUTO_TEST_CASE( RevertDocumentWithoutCommitPassesGuard )
+{
+    BOARD* board = loadBoard( wxS( "issue5830" ) );
+
+    API_HANDLER_PCB           handler( m_context );
+    kiapi::common::ApiRequest request = makeRevertRequest( board );
+    API_RESULT                result = handler.Handle( request );
+
+    BOOST_REQUIRE( !result.has_value() );
+    BOOST_CHECK_EQUAL( result.error().status(), kiapi::common::ApiStatusCode::AS_UNIMPLEMENTED );
 }
 
 

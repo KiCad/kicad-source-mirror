@@ -278,16 +278,27 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveCopyOfDocument(
 HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRevertDocument(
         const HANDLER_CONTEXT<RevertDocument>& aCtx )
 {
+    // Validate first so a request meant for another editor's document is not captured here
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    // Reloading frees every item, so refuse while any client transaction is open; the staged
+    // commit would otherwise dangle
+    if( !m_commits.empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BUSY );
+        e.set_error_message( "cannot revert while a commit is open" );
+        return tl::unexpected( e );
+    }
+
     if( std::optional<ApiResponseStatus> headless = checkForHeadless( "RevertDocument" ) )
         return tl::unexpected( *headless );
 
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
-
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
-
-    if( !documentValidation )
-        return tl::unexpected( documentValidation.error() );
 
     wxFileName fn = project().AbsolutePath( board()->GetFileName() );
 
