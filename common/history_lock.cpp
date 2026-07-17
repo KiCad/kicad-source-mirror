@@ -126,6 +126,8 @@ bool HISTORY_LOCK_MANAGER::acquireFileLock()
     // Ensure history directory exists
     if( !wxDirExists( m_historyPath ) )
     {
+        wxLogNull suppressSysErrorPopups;
+
         if( !wxFileName::Mkdir( m_historyPath, 0777, wxPATH_MKDIR_FULL ) )
         {
             m_lockError = wxString::Format(

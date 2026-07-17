@@ -959,6 +959,8 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
 
     if( !wxDirExists( hist ) )
     {
+        wxLogNull suppressSysErrorPopups;
+
         // EnsurePathExists creates intermediate directories as needed, which is required
         // for USER_DIR mode where the parent (e.g., ~/.config/kicad/<ver>/local_history/)
         // may not yet exist.  In PROJECT_DIR mode it falls back to a single mkdir.
