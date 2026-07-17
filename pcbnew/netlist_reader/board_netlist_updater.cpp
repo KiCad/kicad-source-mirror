@@ -2294,6 +2294,21 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             }
         }
 
+        if( !baseFootprint && !m_replaceFootprints )
+        {
+            for( FOOTPRINT* footprint : matchingFootprints )
+            {
+                if( usedFootprints.count( footprint ) )
+                    continue;
+
+                if( isExpectedFpid( footprint->GetFPID() ) )
+                    continue;
+
+                baseFootprint = footprint;
+                break;
+            }
+        }
+
         if( !baseFootprint && ( hasBaseFpid || expectedFpids.empty() ) )
             baseFootprint = addNewFootprint( component, baseFpid );
 
