@@ -166,6 +166,8 @@ private:
 
     wxString getSelectedVariant() const;
 
+    wxString resolveVariant() const;
+
 private:
     std::map<wxString, BOM_PRESET>     m_bomPresets;
     BOM_PRESET*                        m_currentBomPreset;

@@ -168,8 +168,7 @@ public:
     static const wxString QUANTITY_VARIABLE;
     static const wxString ITEM_NUMBER_VARIABLE;
 
-    void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser,
-                    const wxString& aVariantName );
+    void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser );
     void RemoveColumn( int aCol );
     void RenameColumn( int aCol, const wxString& newName );
 
@@ -336,14 +335,14 @@ public:
         return m_cols[aCol].m_show;
     }
 
-    void     ApplyBomPreset( const BOM_PRESET& preset, const wxString& aVariantName );
+    void       ApplyBomPreset( const BOM_PRESET& preset );
     BOM_PRESET GetBomSettings();
     wxString Export( const BOM_FMT_PRESET& settings );
 
     void AddReferences( const SCH_REFERENCE_LIST& aRefs );
     void RemoveReferences( const SCH_REFERENCE_LIST& aRefs );
     void RemoveSymbol( const SCH_SYMBOL& aSymbol );
-    void UpdateReferences( const SCH_REFERENCE_LIST& aRefs, const wxString& aVariantName );
+    void UpdateReferences( const SCH_REFERENCE_LIST& aRefs );
 
     // Identity-based undo serialization (keyed by symbol, not row position) for the dialog's
     // Ctrl+Z, so it stays correct as rows are grouped/sorted/reordered.
@@ -419,8 +418,7 @@ private:
 
     void Sort();
 
-    void updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef, const wxString& aFieldName,
-                                     const wxString& aVariantName );
+    void updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef, const wxString& aFieldName );
 
 protected:
     /**

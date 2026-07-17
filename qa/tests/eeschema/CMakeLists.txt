@@ -123,6 +123,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24409_cli_hierarchical_instances.cpp
     test_issue24760_plot_page_numbers.cpp
     test_issue24858_variant_persistence.cpp
+    test_issue24915_job_variant_fields.cpp
     test_issue24943_variant_unit_sync.cpp
     test_issue24663_sheet_dnp_fields.cpp
     test_issue24360_root_sheetname.cpp

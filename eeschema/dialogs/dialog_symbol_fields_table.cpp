@@ -315,10 +315,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_hash_key = TO_UTF8( GetTitle() );
 
     // Set the current variant for highlighting variant-specific field values
-    if( m_job )
-        m_dataModel->SetCurrentVariant( getSelectedVariant() );
-    else
-        m_dataModel->SetCurrentVariant( m_parent->Schematic().GetCurrentVariant() );
+    m_dataModel->SetCurrentVariant( resolveVariant() );
 
     SetInitialFocus( m_grid );
     m_grid->ClearSelection();
@@ -731,7 +728,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxS
         }
     }
 
-    m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser, m_parent->Schematic().GetCurrentVariant() );
+    m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser );
 
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_APPENDED, 1 );
     m_grid->ProcessTableMessage( msg );
@@ -2081,7 +2078,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
 
     // Basically, we apply the BOM preset to the data model and then
     // update our UI to reflect resulting the data model state, not the preset.
-    m_dataModel->ApplyBomPreset( aPreset, m_parent->Schematic().GetCurrentVariant() );
+    m_dataModel->SetCurrentVariant( resolveVariant() );
+    m_dataModel->ApplyBomPreset( aPreset );
 
     // BOM Presets can add, but not remove, columns, so make sure the view controls
     // grid has all of them before starting
@@ -2630,8 +2628,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
             for( SCH_FIELD& field : symbol->GetFields() )
                 AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
 
-            m_dataModel->UpdateReferences( getSymbolReferences( symbol, allRefs ),
-                                           m_parent->Schematic().GetCurrentVariant() );
+            m_dataModel->UpdateReferences( getSymbolReferences( symbol, allRefs ) );
         }
         else if( item->Type() == SCH_SHEET_T )
         {
@@ -2648,7 +2645,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
                     AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
             }
 
-            m_dataModel->UpdateReferences( refs, m_parent->Schematic().GetCurrentVariant() );
+            m_dataModel->UpdateReferences( refs );
         }
     }
 
@@ -2873,7 +2870,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onDeleteVariant( wxCommandEvent& aEvent )
     if( m_grid->CommitPendingChanges( true ) )
     {
         m_dataModel->SetCurrentVariant( selectedVariant );
-        m_dataModel->UpdateReferences( m_dataModel->GetReferenceList(), selectedVariant );
+        m_dataModel->UpdateReferences( m_dataModel->GetReferenceList() );
         m_dataModel->RebuildRows();
 
         if( m_nbPages->GetSelection() == 1 )
@@ -3072,6 +3069,26 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEven
 
     updateVariantButtonStates();
 
+    if( m_job )
+    {
+        m_grid->CommitPendingChanges( true );
+
+        if( m_parent )
+            m_parent->SetCurrentVariant( selectedVariant );
+
+        m_dataModel->SetCurrentVariant( selectedVariant );
+        m_dataModel->UpdateReferences( m_dataModel->GetReferenceList() );
+        m_dataModel->RebuildRows();
+
+        if( m_nbPages->GetSelection() == 1 )
+            PreviewRefresh();
+        else
+            m_grid->ForceRefresh();
+
+        syncBomFmtPresetSelection();
+        return;
+    }
+
     if( m_parent )
     {
         currentVariant = m_parent->Schematic().GetCurrentVariant();
@@ -3096,7 +3113,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEven
 
         // Update the data model's current variant for field highlighting
         m_dataModel->SetCurrentVariant( selectedVariant );
-        m_dataModel->UpdateReferences( m_dataModel->GetReferenceList(), selectedVariant );
+        m_dataModel->UpdateReferences( m_dataModel->GetReferenceList() );
         m_dataModel->RebuildRows();
 
         if( m_nbPages->GetSelection() == 1 )
@@ -3133,4 +3150,14 @@ wxString DIALOG_SYMBOL_FIELDS_TABLE::getSelectedVariant() const
         return retv;
 
     return m_variantListBox->GetString( selection );
+}
+
+
+wxString DIALOG_SYMBOL_FIELDS_TABLE::resolveVariant() const
+{
+    // A job keeps its own variant, otherwise follow the schematic.
+    if( m_job )
+        return getSelectedVariant();
+
+    return m_parent->Schematic().GetCurrentVariant();
 }
