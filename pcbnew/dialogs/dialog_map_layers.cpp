@@ -194,16 +194,15 @@ void DIALOG_MAP_LAYERS::DeleteListItems( const wxArrayInt& aRowsToDelete, wxList
 }
 
 
-void DIALOG_MAP_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
+void DIALOG_MAP_LAYERS::AutoMatchLayers()
 {
-    // Iterate through each selected layer in the unmatched layers list
     int        itemIndex = -1;
     wxArrayInt rowsToDelete;
 
     while( ( itemIndex = m_unmatched_layers_list->GetNextItem( itemIndex, wxLIST_NEXT_ALL,
                                                                wxLIST_STATE_DONTCARE ) ) != wxNOT_FOUND )
     {
-        wxString     layerName      = m_unmatched_layers_list->GetItemText( itemIndex );
+        wxString     layerName = m_unmatched_layers_list->GetItemText( itemIndex );
         PCB_LAYER_ID autoMatchLayer = GetAutoMatchLayerID( layerName );
 
         if( autoMatchLayer == PCB_LAYER_ID::UNDEFINED_LAYER )
@@ -231,6 +230,12 @@ void DIALOG_MAP_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
     }
 
     DeleteListItems( rowsToDelete, m_unmatched_layers_list );
+}
+
+
+void DIALOG_MAP_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
+{
+    AutoMatchLayers();
 }
 
 
@@ -314,6 +319,8 @@ DIALOG_MAP_LAYERS::DIALOG_MAP_LAYERS( wxWindow* aParent, const std::vector<INPUT
         m_cbKeepKiCadLayerNames->SetValue( frame->GetPcbNewSettings()->m_ImportKeepKiCadLayerNames );
 
     SetupStandardButtons();
+    m_sdbSizerOK->SetDefault();
+    m_sdbSizerOK->SetFocus();
 
     Fit();
     finishDialogSettings();
@@ -346,6 +353,10 @@ DIALOG_MAP_LAYERS::RunModal( wxWindow* aParent, const std::vector<INPUT_LAYER_DE
     while( !dataOk )
     {
         dlg.ShowModal();
+
+        // If the user accepted with no mappings, apply suggested AutoMapLayer values.
+        if( dlg.m_matched_layers_map.empty() )
+            dlg.AutoMatchLayers();
 
         if( dlg.GetUnmappedRequiredLayers().size() > 0 )
         {

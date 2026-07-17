@@ -55,6 +55,8 @@ private:
     void RemoveMappings( int aStatus );
     void DeleteListItems( const wxArrayInt& aRowsToDelete, wxListCtrl* aListCtrl );
 
+    void AutoMatchLayers();
+
     const INPUT_LAYER_DESC* GetLayerDescription( const wxString& aLayerName ) const;
 
     /// KiCad layer name to display, using the destination board's names when available.
