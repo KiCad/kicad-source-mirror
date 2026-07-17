@@ -117,6 +117,53 @@ BOOST_FIXTURE_TEST_CASE( DRCKeepoutDisallowViasAndTracks, DRC_KEEPOUT_TEST_FIXTU
 }
 
 
+// Regression test for GitLab #24924: a footprint keepout that disallows footprints
+// must never flag its own footprint.  The board is a real ESP32-C3-WROOM-02 (whose
+// keepout excludes footprints) plus a second rule area that duplicates the keepout's
+// UUID and wins the board's item-by-id cache.  Duplicate zone UUIDs occur in the wild
+// (boards from older versions, importers, undo clones); the keepout self-exclusion must
+// resolve ownership from the rule's own zone rather than by re-resolving the UUID.
+BOOST_FIXTURE_TEST_CASE( DRCKeepoutFootprintExcludesItself, DRC_KEEPOUT_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue24924/keepout_self_exclude", m_board );
+
+    std::map<KIID, EDA_ITEM*> itemMap;
+    m_board->FillItemMap( itemMap );
+
+    int                    footprintViolations = 0;
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    bds.m_DRCSeverities[DRCE_INVALID_OUTLINE] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_UNCONNECTED_ITEMS] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_LIB_FOOTPRINT_ISSUES] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_LIB_FOOTPRINT_MISMATCH] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_DRILL_OUT_OF_RANGE] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_PADSTACK] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_COPPER_SLIVER] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_STARVED_THERMAL] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_ALLOWED_ITEMS] = SEVERITY::RPT_SEVERITY_ERROR;
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
+            {
+                if( aItem->GetErrorCode() != DRCE_ALLOWED_ITEMS )
+                    return;
+
+                auto it = itemMap.find( aItem->GetMainItemID() );
+
+                if( it != itemMap.end() && it->second->Type() == PCB_FOOTPRINT_T )
+                    footprintViolations++;
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    BOOST_CHECK_MESSAGE( footprintViolations == 0,
+                         "Footprint flagged by its own keepout, got "
+                                 << footprintViolations << " footprint keepout violations" );
+}
+
+
 // Regression test: a track outside a no-tracks keepout must not be flagged
 // when board->m_DRCMaxClearance is large.  The antiTrackKeepouts Collide()
 // call previously used m_DRCMaxClearance as the collision distance, silently

@@ -735,13 +735,11 @@ void DRC_ENGINE::compileRules()
             engineConstraint->parentRule = rule;
 
             if( rule->IsImplicit() && constraint.m_Type == DISALLOW_CONSTRAINT
-                && m_board && rule->m_ImplicitItemId != niluuid )
+                && rule->m_ImplicitItem && rule->m_ImplicitItem->Type() == PCB_ZONE_T )
             {
-                const auto& cache = m_board->GetItemByIdCache();
-                auto        it = cache.find( rule->m_ImplicitItemId );
-
-                if( it != cache.end() && it->second->Type() == PCB_ZONE_T )
-                    engineConstraint->implicitKeepoutZone = static_cast<ZONE*>( it->second );
+                // Duplicate zone UUIDs make an item-by-id lookup return the wrong same-UUID
+                // zone and defeat self-exclusion, so use the rule's own zone pointer
+                engineConstraint->implicitKeepoutZone = static_cast<ZONE*>( rule->m_ImplicitItem );
             }
 
             ruleVec->push_back( engineConstraint );
@@ -1649,6 +1647,14 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 }
                 else if( c->constraint.m_Type == DISALLOW_CONSTRAINT )
                 {
+                    // A footprint's own keepout never applies to that footprint; decide
+                    // ownership from the rule's zone so a hijacked UUID cache can't defeat it
+                    if( c->implicitKeepoutZone && a == c->implicitKeepoutZone->GetParentFootprint() )
+                    {
+                        REPORT( _( "Keepout belongs to the footprint under test; constraint ignored." ) )
+                        return;
+                    }
+
                     int mask;
 
                     if( a->GetFlags() & HOLE_PROXY )
