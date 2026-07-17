@@ -1845,7 +1845,7 @@ void SCH_SELECTION_TOOL::narrowSelection( SCH_COLLECTOR& collector, const VECTOR
         }
     }
 
-    filterCollectorForHierarchy( collector, false );
+    FilterCollectorForHierarchy( collector, false );
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
@@ -1902,7 +1902,7 @@ bool SCH_SELECTION_TOOL::selectPoint( SCH_COLLECTOR& aCollector, const VECTOR2I&
             ExitGroup();
     }
 
-    filterCollectorForHierarchy( aCollector, true );
+    FilterCollectorForHierarchy( aCollector, true );
 
     int  addedCount = 0;
     bool anySubtracted = false;
@@ -2037,7 +2037,7 @@ int SCH_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
                 return true;
             } );
 
-    filterCollectorForHierarchy( collection, true );
+    FilterCollectorForHierarchy( collection, true );
 
     // Sheet pins aren't in the view; add them by hand
     for( EDA_ITEM* item : collection )
@@ -2894,13 +2894,13 @@ void SCH_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, 
     }
 
     filterCollectedItems( collector, true );
-    filterCollectorForHierarchy( collector, true );
+    FilterCollectorForHierarchy( collector, true );
 
     if( collector.GetCount() == 0 )
     {
         collector = pinsCollector;
         filterCollectedItems( collector, true );
-        filterCollectorForHierarchy( collector, true );
+        FilterCollectorForHierarchy( collector, true );
     }
 
     std::sort( collector.begin(), collector.end(),
@@ -3034,8 +3034,7 @@ void SCH_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, 
 }
 
 
-void SCH_SELECTION_TOOL::filterCollectorForHierarchy( SCH_COLLECTOR& aCollector,
-                                                      bool aMultiselect ) const
+void SCH_SELECTION_TOOL::FilterCollectorForHierarchy( SCH_COLLECTOR& aCollector, bool aMultiselect ) const
 {
     std::unordered_set<EDA_ITEM*> toAdd;
 
@@ -3056,6 +3055,11 @@ void SCH_SELECTION_TOOL::filterCollectorForHierarchy( SCH_COLLECTOR& aCollector,
             aCollector[j]->SetFlags( SELECTION_CANDIDATE );
     }
 
+    // Skip group promotion when the caller asked for specific types that exclude groups
+    const std::vector<KICAD_T>& scanTypes = aCollector.GetScanTypes();
+    bool                        promoteToGroups = scanTypes.empty() || alg::contains( scanTypes, SCH_LOCATE_ANY_T )
+                           || alg::contains( scanTypes, SCH_GROUP_T );
+
     for( int j = 0; j < aCollector.GetCount(); )
     {
         SCH_ITEM* item = aCollector[j];
@@ -3074,7 +3078,8 @@ void SCH_SELECTION_TOOL::filterCollectorForHierarchy( SCH_COLLECTOR& aCollector,
 
         // If any element is a member of a group, replace those elements with the top containing
         // group.
-        if( EDA_GROUP* top = SCH_GROUP::TopLevelGroup( start, m_enteredGroup, m_isSymbolEditor ) )
+        if( EDA_GROUP* top =
+                    promoteToGroups ? SCH_GROUP::TopLevelGroup( start, m_enteredGroup, m_isSymbolEditor ) : nullptr )
         {
             if( top->AsEdaItem() != item )
             {
