@@ -1124,8 +1124,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     COLOR4D      color = m_pcbSettings.GetColor( aVia, aLayer );
     VECTOR2D     center( aVia->GetStart() );
 
-    if( color == COLOR4D::CLEAR )
-        return;
+    // draw hidden vias transparent not skipped so a recolour restores them without re-tessellating
 
     // Chain highlight colour override for copper/hole layers.
     if( board && !m_pcbSettings.m_highlightedNetChain.IsEmpty()

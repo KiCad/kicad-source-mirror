@@ -184,6 +184,14 @@ public:
     void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aRefresh = true );
 
     /**
+     * Return true when moving from @p aOld to @p aNew changes drawn item geometry and therefore
+     * requires the GAL cache to be rebuilt.  Colour, opacity and high-contrast changes are handled
+     * by a cheaper recolour and return false.
+     */
+    static bool displayOptionsRequireRecache( const PCB_DISPLAY_OPTIONS& aOld,
+                                              const PCB_DISPLAY_OPTIONS& aNew );
+
+    /**
      * Return the #PCB_PLOT_PARAMS for the BOARD owned by this frame.
      */
     virtual const PCB_PLOT_PARAMS& GetPlotSettings() const;

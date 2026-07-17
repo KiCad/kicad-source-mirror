@@ -1066,11 +1066,19 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
 }
 
 
+bool PCB_BASE_FRAME::displayOptionsRequireRecache( const PCB_DISPLAY_OPTIONS& aOld,
+                                                   const PCB_DISPLAY_OPTIONS& aNew )
+{
+    // only zone mode and board flip change geometry
+    // colour opacity contrast are recolour only
+    return aOld.m_ZoneDisplayMode != aNew.m_ZoneDisplayMode
+           || aOld.m_FlipBoardView != aNew.m_FlipBoardView;
+}
+
+
 void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aRefresh )
 {
-    bool hcChanged    = m_displayOptions.m_ContrastModeDisplay != aOptions.m_ContrastModeDisplay;
-    bool hcVisChanged = m_displayOptions.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN
-                        || aOptions.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN;
+    bool needsRecache = displayOptionsRequireRecache( m_displayOptions, aOptions );
     m_displayOptions  = aOptions;
 
     EDA_DRAW_PANEL_GAL* canvas = GetCanvas();
@@ -1078,45 +1086,13 @@ void PCB_BASE_FRAME::SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, boo
 
     view->UpdateDisplayOptions( aOptions );
     view->SetMirror( aOptions.m_FlipBoardView, view->IsMirroredY() );
-    view->RecacheAllItems();
+
+    // skip recache for colour/alpha-only changes handled by the recolour below
+    if( needsRecache )
+        view->RecacheAllItems();
 
     canvas->SetHighContrastLayer( GetActiveLayer() );
     OnDisplayOptionsChanged();
-
-    // Vias on a restricted layer set must be redrawn when high contrast mode is changed
-    if( hcChanged )
-    {
-        bool showNetNames = false;
-
-        if( PCBNEW_SETTINGS* config = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
-            showNetNames = config->m_Display.m_NetNames > 0;
-
-        // Note: KIGFX::REPAINT isn't enough for things that go from invisible to visible as
-        // they won't be found in the view layer's itemset for re-painting.
-        GetCanvas()->GetView()->UpdateAllItemsConditionally(
-                [&]( KIGFX::VIEW_ITEM* aItem ) -> int
-                {
-                    if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem ) )
-                    {
-                        if( via->GetViaType() != VIATYPE::THROUGH
-                                || via->GetRemoveUnconnected()
-                                || showNetNames )
-                        {
-                            return hcVisChanged ? KIGFX::ALL : KIGFX::REPAINT;
-                        }
-                    }
-                    else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
-                    {
-                        if( pad->GetRemoveUnconnected()
-                                || showNetNames )
-                        {
-                            return hcVisChanged ? KIGFX::ALL : KIGFX::REPAINT;
-                        }
-                    }
-
-                    return 0;
-                } );
-    }
 
     if( aRefresh )
         canvas->Refresh();
