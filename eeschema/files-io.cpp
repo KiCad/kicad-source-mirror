@@ -114,9 +114,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     wxString   fullFileName( aFileSet[0] );
     wxFileName wx_filename( fullFileName );
 
-    if( !Prj().IsNullProject() )
-        Kiway().LocalHistory().Init( Prj().GetProjectPath() );
-
     // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
     wxASSERT_MSG( wx_filename.IsAbsolute(), wxS( "Path is not absolute!" ) );
 

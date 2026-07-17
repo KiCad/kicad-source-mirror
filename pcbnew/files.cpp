@@ -482,7 +482,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     wxString   fullFileName( aFileSet[0] );
     wxFileName wx_filename( fullFileName );
-    Kiway().LocalHistory().Init( wx_filename.GetPath() );
     wxString   msg;
 
     if( Kiface().IsSingle() )
