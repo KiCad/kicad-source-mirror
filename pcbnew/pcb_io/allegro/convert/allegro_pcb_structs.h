@@ -1214,7 +1214,7 @@ struct PADSTACK_COMPONENT
      * * 0x0F objects when the type is 0x06
      * * 0x28 objects when the type is 0x16
      */
-    uint32_t m_StrPtr;
+    uint32_t m_ShapePtr;
 
     // In versions < 17.2, seems to be not present in the last entry.
     std::optional<uint32_t> m_Z2;
@@ -2031,9 +2031,10 @@ struct BLK_0x30_STR_WRAPPER
 
     enum class TEXT_REVERSAL
     {
-        STRAIGHT,
-        REVERSED,
-        UNKNOWN,
+        STRAIGHT = 0,
+        REVERSED = 1,
+        REVERSED_3 = 3, // Seen on some boards
+        UNKNOWN
     };
 
     enum class TEXT_ALIGNMENT

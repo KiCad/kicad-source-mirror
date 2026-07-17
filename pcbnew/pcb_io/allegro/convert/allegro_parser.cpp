@@ -1187,12 +1187,17 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x1C_PADSTACK( FILE_STREAM& aStrea
         comp.m_X3 = aStream.ReadS32();
         comp.m_X4 = aStream.ReadS32();
 
-        comp.m_StrPtr = aStream.ReadU32();
-
-        // The last component has a different size only in < 17.2
-        if( aVer >= FMT_VER::V_172 || i < nComps - 1 )
+        if( aVer >= FMT_VER::V_172 )
         {
             comp.m_Z2 = aStream.ReadU32();
+            comp.m_ShapePtr = aStream.ReadU32();
+        }
+        else
+        {
+            comp.m_ShapePtr = aStream.ReadU32();
+
+            if(i < nComps - 1)
+                comp.m_Z2 = aStream.ReadU32();
         }
     }
 
@@ -1790,6 +1795,7 @@ static BLK_0x30_STR_WRAPPER::TEXT_PROPERTIES ParseTextProps( FILE_STREAM& aStrea
     {
     case 0x00: props.m_Reversal = BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::STRAIGHT; break;
     case 0x01: props.m_Reversal = BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::REVERSED; break;
+    case 0x03: props.m_Reversal = BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::REVERSED_3; break;
     case 0x0c:
     default:
         props.m_Reversal = BLK_0x30_STR_WRAPPER::TEXT_REVERSAL::UNKNOWN;
