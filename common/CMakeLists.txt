@@ -493,6 +493,7 @@ set_target_properties(kicommon PROPERTIES CXX_VISIBILITY_PRESET hidden)
 target_link_libraries( kicommon
     core
     kiapi
+    mdw_runtime
     kimath
     kinng
     kiplatform
@@ -589,6 +590,7 @@ target_include_directories( kicommon
     PUBLIC
         .
         ${CMAKE_BINARY_DIR}
+        ${CMAKE_SOURCE_DIR}/mdw/runtime/include
         $<TARGET_PROPERTY:dynamic_bitset,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:magic_enum,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:pegtl,INTERFACE_INCLUDE_DIRECTORIES>

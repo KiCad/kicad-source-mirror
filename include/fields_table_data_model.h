@@ -540,6 +540,16 @@ public:
     }
 
 
+    /// Every member of the row's group, including those a collapsed real parent row hides
+    const std::vector<ITEM_TYPE>& GetRowGroupItems( int aRow ) const
+    {
+        static const std::vector<ITEM_TYPE> empty;
+
+        wxCHECK( aRow >= 0 && aRow < (int) m_rows.size(), empty );
+        return m_rows[aRow].m_items;
+    }
+
+
     /**
      * Go through and revert all the fields in the row to their live values from the item (symbol/footprint/etc).
      *

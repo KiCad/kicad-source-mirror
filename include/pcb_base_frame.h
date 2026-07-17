@@ -210,6 +210,12 @@ public:
                          "override!" ) );
     }
 
+    /// True while the edited content must stay as it is, such as a released part nobody is revising
+    virtual bool IsContentReadOnly() const { return false; }
+
+    /// Tell the user why an edit to read-only content was just undone
+    virtual void ShowReadOnlyRefusal() {}
+
     /**
      * Set the #m_pcb member in such as way as to ensure deleting any previous #BOARD.
      */

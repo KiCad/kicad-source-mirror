@@ -26,6 +26,7 @@
 #include <wx/settings.h>
 #include <wx/stattext.h>
 #include <wx/string.h>
+#include <wx/intl.h>
 
 #include <paths.h>
 
@@ -345,6 +346,32 @@ void NOTIFICATIONS_MANAGER::Remove( const wxString& aKey )
     }
 
     m_notifications.erase( it );
+
+    Save();
+
+    for( KISTATUSBAR* statusBar : m_statusBars )
+        statusBar->SetNotificationCount( m_notifications.size() );
+}
+
+
+void NOTIFICATIONS_MANAGER::RemoveWithPrefix( const wxString& aKeyPrefix )
+{
+    auto matches = [&]( const NOTIFICATION& noti )
+    {
+        return noti.key.StartsWith( aKeyPrefix );
+    };
+
+    for( NOTIFICATION& noti : m_notifications )
+    {
+        if( !matches( noti ) )
+            continue;
+
+        for( NOTIFICATIONS_LIST* list : m_shownDialogs )
+            list->Remove( &noti );
+    }
+
+    if( std::erase_if( m_notifications, matches ) == 0 )
+        return;
 
     Save();
 

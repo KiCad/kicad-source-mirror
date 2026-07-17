@@ -63,6 +63,11 @@ public:
     static wxString GetUserPluginsPath();
 
     /**
+     * Gets the user path holding the local copies of team library sources
+     */
+    static wxString GetUserTeamLibrariesPath();
+
+    /**
      * Gets the default path we point users to create projects
      */
     static wxString GetDefaultUserProjectsPath();

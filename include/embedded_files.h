@@ -112,6 +112,12 @@ public:
     EMBEDDED_FILE* AddFile( const wxFileName& aName, bool aOverwrite );
 
     /**
+     * Embed the font file \a aName unless a font with the same data is embedded already.  A font loaded from
+     * its embedded copy names the cache file it was extracted to, so the data identifies it, not the name.
+     */
+    EMBEDDED_FILE* AddFont( const wxFileName& aName );
+
+    /**
      * Append a file to the collection.  Ownership of @p aFile is transferred to the collection.
      *
      * @return as for the shared_ptr overload; note that @p aFile itself is destroyed when a

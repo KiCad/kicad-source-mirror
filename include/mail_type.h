@@ -68,6 +68,7 @@ enum MAIL_T
     MAIL_SCH_GET_REF_SUFFIXES,  // Fetch the composed reference suffix of each sheet path in page order
     MAIL_LIB_SAVE_ALL,          // Save every modified library in a library editor; replies "success" or "failed"
     MAIL_LIB_HAS_UNSAVED,       // Whether a library editor holds unsaved edits in any tab; replies "yes" or "no"
+    MAIL_REVIEW_LIBRARY_UPDATES, // Offer to update placed symbols or footprints from their libraries
 };
 
 /**

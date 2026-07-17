@@ -42,6 +42,7 @@ static const std::vector<wxString> predefinedEnvVars = {
     ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) ),
     ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) ),
     wxS( "KICAD_USER_TEMPLATE_DIR" ),
+    wxS( "KICAD_TEAM_LIBRARIES" ),
     wxS( "KICAD_PTEMPLATES" ),
     wxS( "KICAD_LTSPICE_LIB" ),
     ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ),
@@ -141,6 +142,10 @@ static void initialiseEnvVarHelp( std::map<wxString, wxString>& aMap )
     aMap[wxS( "KICAD_LTSPICE_LIB" )] =
         _( "Optional. The LTspice library folder, which holds the sub and sym folders, used when importing "
            "LTspice schematics." );
+
+    aMap[wxS( "KICAD_TEAM_LIBRARIES" )] =
+            _( "The folder holding the local copies of team libraries, so a project's library tables can name "
+               "them the same way on every computer." );
 
     aMap[ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) )] =
         _( "A directory containing 3rd party plugins, libraries and other downloadable content." );

@@ -57,6 +57,17 @@ wxString PATHS::GetUserPluginsPath()
 }
 
 
+wxString PATHS::GetUserTeamLibrariesPath()
+{
+    wxFileName tmp;
+    getUserDocumentPath( tmp );
+
+    tmp.AppendDir( wxT( "team-libraries" ) );
+
+    return tmp.GetPath();
+}
+
+
 wxString PATHS::GetUserScriptingPath()
 {
     wxFileName tmp;

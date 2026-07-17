@@ -64,6 +64,7 @@ const wxChar* const traceLibWatch = wxT( "KICAD_LIB_WATCH" );
 const wxChar* const traceKiCad2Step = wxT( "KICAD2STEP" );
 const wxChar* const traceUiProfile = wxT( "KICAD_UI_PROFILE" );
 const wxChar* const traceGit = wxT( "KICAD_GIT" );
+const wxChar* const traceMdw = wxT( "KICAD_MDW" );
 const wxChar* const traceModelPreview = wxT( "KICAD_MODEL_PREVIEW" );
 const wxChar* const traceDiffMerge = wxT( "KICAD_DIFF_MERGE" );
 const wxChar* const traceEagleIo = wxT( "KICAD_EAGLE_IO" );

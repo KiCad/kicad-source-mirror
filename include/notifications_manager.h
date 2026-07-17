@@ -74,6 +74,11 @@ public:
     void Remove( const wxString& aKey );
 
     /**
+     * Remove every notification whose key starts with aKeyPrefix.
+     */
+    void RemoveWithPrefix( const wxString& aKeyPrefix );
+
+    /**
      * Load notifications stored from disk.
      */
     void Load();

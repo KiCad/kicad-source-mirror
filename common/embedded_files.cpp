@@ -138,6 +138,28 @@ EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( const wxFileName& aName,
 }
 
 
+EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFont( const wxFileName& aName )
+{
+    std::string hash;
+
+    if( !HasFile( aName.GetFullName() ) && ComputeFileHash( aName, hash ) == RETURN_CODE::OK )
+    {
+        for( const auto& [name, file] : m_files )
+        {
+            if( file->type == EMBEDDED_FILE::FILE_TYPE::FONT && file->data_hash == hash )
+                return file.get();
+        }
+    }
+
+    EMBEDDED_FILE* file = AddFile( aName, false );
+
+    if( file )
+        file->type = EMBEDDED_FILE::FILE_TYPE::FONT;
+
+    return file;
+}
+
+
 EMBEDDED_FILES::EMBEDDED_FILE* EMBEDDED_FILES::AddFile( EMBEDDED_FILE* aFile )
 {
     return AddFile( std::shared_ptr<EMBEDDED_FILE>( aFile ) );

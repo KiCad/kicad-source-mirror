@@ -20,9 +20,11 @@
 #ifndef KIFACE_SERVICES_H
 #define KIFACE_SERVICES_H
 
+#include <optional>
 #include <set>
 #include <string>
 #include <type_traits>
+#include <vector>
 
 #include <wx/string.h>
 
@@ -30,6 +32,7 @@
 #include <kiway.h>
 
 class FOOTPRINT_LIBRARY_ADAPTER;
+class PROGRESS_REPORTER;
 class PROJECT;
 class REPORTER;
 class WIDGET_DIFF_CANVAS;
@@ -97,6 +100,24 @@ using KIFACE_TEST_FOOTPRINT_LINK_SERVICE =
 using KIFACE_FOOTPRINT_PAD_NUMBERS_SERVICE =
         KIFACE_SERVICE<KIFACE_FOOTPRINT_PAD_NUMBERS,
                        void (*)( const wxString&, PROJECT*, std::set<wxString>& )>;
+
+using KIFACE_DIFF_SYMBOL_LIBRARY_TEXT_SERVICE =
+        KIFACE_SERVICE<KIFACE_DIFF_SYMBOL_LIBRARY_TEXT,
+                       bool (*)( const std::string&, const std::string&, KICAD_DIFF::DOCUMENT_DIFF* )>;
+
+using KIFACE_COLLECT_PLACED_PARTS_SERVICE =
+        KIFACE_SERVICE<KIFACE_COLLECT_PLACED_PARTS,
+                       std::optional<std::string> (*)( const wxString&, PROJECT&, PROGRESS_REPORTER* )>;
+
+using KIFACE_CURRENT_SYMBOL_FORMAT_SERVICE =
+        KIFACE_SERVICE<KIFACE_CURRENT_SYMBOL_FORMAT,
+                       std::optional<std::string> (*)( const std::string&, const std::vector<std::string>&,
+                                                       const std::string&, const wxString& )>;
+
+using KIFACE_DIFF_SYMBOL_LIBRARY_FILES_SERVICE =
+        KIFACE_SERVICE<KIFACE_DIFF_SYMBOL_LIBRARY_FILES,
+                       bool (*)( const std::vector<std::string>&, const std::vector<std::string>&,
+                                 KICAD_DIFF::DOCUMENT_DIFF* )>;
 
 /**
  * Return a service address for IfaceOrAddress().

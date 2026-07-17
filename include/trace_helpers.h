@@ -305,6 +305,13 @@ extern KICOMMON_API const wxChar* const traceUiProfile;
 extern KICOMMON_API const wxChar* const traceGit;
 
 /**
+ * Flag to enable workspace (MDW) framework debugging output.
+ *
+ * Use "KICAD_MDW" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceMdw;
+
+/**
  * Flag to enable diff/merge engine and renderer debugging output.
  *
  * Use "KICAD_DIFF_MERGE" to enable.
