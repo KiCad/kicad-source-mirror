@@ -49,6 +49,7 @@
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
 #include <board.h>
+#include <footprint.h>
 #include <collectors.h>
 #include <component_classes/component_class_manager.h>
 #include <kiplatform/app.h>
