@@ -365,17 +365,17 @@ std::vector<KIID_PATH> DIALOG_KICAD_DIFF::changeRowIds( const KICAD_DIFF::ITEM_C
 
     std::function<void( const std::vector<KICAD_DIFF::ITEM_CHANGE>& )> walk =
             [&]( const std::vector<KICAD_DIFF::ITEM_CHANGE>& aChanges )
-    {
-        for( const KICAD_DIFF::ITEM_CHANGE& c : aChanges )
-        {
-            if( KICAD_DIFF::IsRoutingNetChange( c ) && c.kind == aChange.kind && c.refdes == aChange.refdes )
             {
-                ids.push_back( c.id );
-            }
+                for( const KICAD_DIFF::ITEM_CHANGE& c : aChanges )
+                {
+                    if( KICAD_DIFF::IsRoutingNetChange( c ) && c.kind == aChange.kind && c.refdes == aChange.refdes )
+                    {
+                        ids.push_back( c.id );
+                    }
 
-            walk( c.children );
-        }
-    };
+                    walk( c.children );
+                }
+            };
 
     walk( m_diff.changes );
     return ids;
@@ -606,23 +606,23 @@ void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
     // is not empty for the parent.
     std::function<void( const wxString&, const KICAD_DIFF::ITEM_CHANGE& )> walkChildren =
             [&]( const wxString& aPrefix, const KICAD_DIFF::ITEM_CHANGE& aC )
-    {
-        for( const KICAD_DIFF::ITEM_CHANGE& child : aC.children )
-        {
-            wxString prefix = child.typeName;
+            {
+                for( const KICAD_DIFF::ITEM_CHANGE& child : aC.children )
+                {
+                    wxString prefix = child.typeName;
 
-            if( child.refdes && !child.refdes->IsEmpty() )
-                prefix += wxS( " " ) + *child.refdes;
+                    if( child.refdes && !child.refdes->IsEmpty() )
+                        prefix += wxS( " " ) + *child.refdes;
 
-            if( !aPrefix.IsEmpty() )
-                prefix = aPrefix + wxS( " / " ) + prefix;
+                    if( !aPrefix.IsEmpty() )
+                        prefix = aPrefix + wxS( " / " ) + prefix;
 
-            for( const KICAD_DIFF::PROPERTY_DELTA& d : child.properties )
-                emitDelta( prefix, d );
+                    for( const KICAD_DIFF::PROPERTY_DELTA& d : child.properties )
+                        emitDelta( prefix, d );
 
-            walkChildren( prefix, child );
-        }
-    };
+                    walkChildren( prefix, child );
+                }
+            };
 
     walkChildren( wxEmptyString, *aChange );
 }

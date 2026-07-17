@@ -41,26 +41,27 @@
 struct ExpandTextVarsFixture
 {
     // Simple resolver that maps VAR->value, X->5, Y->2
-    std::function<bool( wxString* )> resolver = []( wxString* token ) -> bool
-    {
-        if( *token == wxT( "VAR" ) )
-        {
-            *token = wxT( "value" );
-            return true;
-        }
-        else if( *token == wxT( "X" ) )
-        {
-            *token = wxT( "5" );
-            return true;
-        }
-        else if( *token == wxT( "Y" ) )
-        {
-            *token = wxT( "2" );
-            return true;
-        }
+    std::function<bool( wxString* )> resolver =
+            []( wxString* token ) -> bool
+            {
+                if( *token == wxT( "VAR" ) )
+                {
+                    *token = wxT( "value" );
+                    return true;
+                }
+                else if( *token == wxT( "X" ) )
+                {
+                    *token = wxT( "5" );
+                    return true;
+                }
+                else if( *token == wxT( "Y" ) )
+                {
+                    *token = wxT( "2" );
+                    return true;
+                }
 
-        return false;
-    };
+                return false;
+            };
 };
 
 BOOST_FIXTURE_TEST_SUITE( ExpandTextVarsTests, ExpandTextVarsFixture )
@@ -442,22 +443,23 @@ BOOST_AUTO_TEST_SUITE( TextVarExpressionEvaluatorConcurrency )
 
 BOOST_AUTO_TEST_CASE( ParallelResolveTextVarsWithMathExpressions )
 {
-    std::function<bool( wxString* )> resolver = []( wxString* token ) -> bool
-    {
-        if( *token == wxT( "#" ) )
-        {
-            *token = wxT( "3" );
-            return true;
-        }
+    std::function<bool( wxString* )> resolver =
+            []( wxString* token ) -> bool
+            {
+                if( *token == wxT( "#" ) )
+                {
+                    *token = wxT( "3" );
+                    return true;
+                }
 
-        if( *token == wxT( "ROW" ) )
-        {
-            *token = wxT( "4" );
-            return true;
-        }
+                if( *token == wxT( "ROW" ) )
+                {
+                    *token = wxT( "4" );
+                    return true;
+                }
 
-        return false;
-    };
+                return false;
+            };
 
     const std::vector<wxString> inputs = {
         wxT( "Out@{(${#}-2)*8+0}" ),

@@ -970,10 +970,11 @@ wxString SCH_LABEL_BASE::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowE
     // Use local depth counter so each text element starts fresh
     int depth = 0;
 
-    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
-    {
-        return ResolveTextVar( aPath, token, depth + 1 );
-    };
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return ResolveTextVar( aPath, token, depth + 1 );
+            };
 
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, depth );
 

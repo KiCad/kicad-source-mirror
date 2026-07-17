@@ -217,10 +217,11 @@ void PANEL_SETUP_RULES::OnShowMatching()
 
     try
     {
-        std::function<bool( wxString* )> resolver = [&]( wxString* token ) -> bool
-        {
-            return m_frame->GetBoard()->ResolveTextVar( token, 0 );
-        };
+        std::function<bool( wxString* )> resolver =
+                [&]( wxString* token ) -> bool
+                {
+                    return m_frame->GetBoard()->ResolveTextVar( token, 0 );
+                };
 
         wxString rulesText = m_frame->GetBoard()->ConvertCrossReferencesToKIIDs( text );
         rulesText = ExpandTextVars( rulesText, &resolver );

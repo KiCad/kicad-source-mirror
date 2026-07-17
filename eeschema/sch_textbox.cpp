@@ -413,16 +413,17 @@ wxString SCH_TEXTBOX::GetShownText( const RENDER_SETTINGS* aSettings, const SCH_
     if( aPath )
         sheet = aPath->Last();
 
-    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
-    {
-        if( sheet )
-        {
-            if( sheet->ResolveTextVar( aPath, token, depth + 1 ) )
-                return true;
-        }
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                if( sheet )
+                {
+                    if( sheet->ResolveTextVar( aPath, token, depth + 1 ) )
+                        return true;
+                }
 
-        return false;
-    };
+                return false;
+            };
 
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, depth );
 

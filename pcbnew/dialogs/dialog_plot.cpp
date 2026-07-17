@@ -1359,10 +1359,11 @@ void DIALOG_PLOT::onRunDRC( wxCommandEvent& event )
 
 void DIALOG_PLOT::onOpenOutputDirectory( wxCommandEvent& event )
 {
-    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
-    {
-        return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
-    };
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
+            };
 
     wxString path = m_outputDirectoryName->GetValue();
     path = ExpandTextVars( path, &textResolver );

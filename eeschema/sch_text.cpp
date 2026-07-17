@@ -371,27 +371,28 @@ wxString SCH_TEXT::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraTe
     else if( SCHEMATIC* schematic = Schematic() )
         sheet = schematic->CurrentSheet().Last();
 
-    std::function<bool( wxString* )> textResolver = [&]( wxString* token ) -> bool
-    {
-        if( SCH_SYMBOL* sch_symbol = dynamic_cast<SCH_SYMBOL*>( m_parent ) )
-        {
-            if( sch_symbol->ResolveTextVar( aPath, token, depth + 1 ) )
-                return true;
-        }
-        else if( LIB_SYMBOL* lib_symbol = dynamic_cast<LIB_SYMBOL*>( m_parent ) )
-        {
-            if( lib_symbol->ResolveTextVar( token, depth + 1 ) )
-                return true;
-        }
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                if( SCH_SYMBOL* sch_symbol = dynamic_cast<SCH_SYMBOL*>( m_parent ) )
+                {
+                    if( sch_symbol->ResolveTextVar( aPath, token, depth + 1 ) )
+                        return true;
+                }
+                else if( LIB_SYMBOL* lib_symbol = dynamic_cast<LIB_SYMBOL*>( m_parent ) )
+                {
+                    if( lib_symbol->ResolveTextVar( token, depth + 1 ) )
+                        return true;
+                }
 
-        if( sheet )
-        {
-            if( sheet->ResolveTextVar( aPath, token, depth + 1 ) )
-                return true;
-        }
+                if( sheet )
+                {
+                    if( sheet->ResolveTextVar( aPath, token, depth + 1 ) )
+                        return true;
+                }
 
-        return false;
-    };
+                return false;
+            };
 
     wxString text = EDA_TEXT::GetShownText( aAllowExtraText, depth );
 
