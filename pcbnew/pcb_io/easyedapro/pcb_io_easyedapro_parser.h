@@ -85,6 +85,9 @@ public:
     SHAPE_LINE_CHAIN ParseContour( nlohmann::json polyData, bool aInFill,
                                    int aMaxError = SHAPE_ARC::DefaultAccuracyForPCB() ) const;
 
+    void FillFootprintModelInfo( FOOTPRINT* footprint, const wxString& modelUuid, const wxString& modelTitle,
+                                 const wxString& modelTransform ) const;
+
 private:
     BOARD*   m_board;
     VECTOR2D m_relOrigin;
@@ -92,9 +95,6 @@ private:
     NETINFO_ITEM* getNet( BOARD* aBoard, const wxString& aNetName );
 
     std::unique_ptr<PAD> createPAD( FOOTPRINT* aFootprint, const nlohmann::json& line );
-
-    void fillFootprintModelInfo( FOOTPRINT* footprint, const wxString& modelUuid,
-                                 const wxString& modelTitle, const wxString& modelTransform ) const;
 };
 
 

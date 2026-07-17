@@ -487,7 +487,8 @@ static V3_LIBRARY_CONTENTS ScanV3LibraryArchive( const wxString& aFileName, cons
         wxString entryName = entry->GetName();
         wxString baseName = entryName.AfterLast( '\\' ).AfterLast( '/' ).Lower();
 
-        if( baseName == wxS( "symbol2.json" ) || baseName == wxS( "footprint2.json" ) )
+        if( baseName == wxS( "symbol2.json" ) || baseName == wxS( "footprint2.json" )
+            || baseName == wxS( "device2.json" ) )
         {
             contents.hasIndex = true;
         }
@@ -569,7 +570,8 @@ static std::vector<V3_DOC_RAW> ParseV3DocsFromLibraryArchive( const wxString& aF
         wxString baseName = entryName.AfterLast( '\\' ).AfterLast( '/' );
         wxString lowerBaseName = baseName.Lower();
 
-        if( lowerBaseName == wxS( "symbol2.json" ) || lowerBaseName == wxS( "footprint2.json" ) )
+        if( lowerBaseName == wxS( "symbol2.json" ) || lowerBaseName == wxS( "footprint2.json" )
+            || lowerBaseName == wxS( "device2.json" ) )
         {
             nlohmann::json index = ReadJsonEntry( zip, entryName );
 
@@ -590,7 +592,8 @@ static std::vector<V3_DOC_RAW> ParseV3DocsFromLibraryArchive( const wxString& aF
     if( !HasValidV3LibraryContents( contents, wxEmptyString ) )
     {
         THROW_IO_ERROR( wxString::Format( _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 library. "
-                                             "Cannot find symbol2.json or footprint2.json and .elibu documents." ),
+                                             "Cannot find symbol2.json, footprint2.json or device2.json and .elibu "
+                                             "documents." ),
                                           aFileName ) );
     }
 

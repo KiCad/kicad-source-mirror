@@ -40,8 +40,7 @@ public:
     explicit PCB_IO_EASYEDAPRO_V3_PARSER( BOARD*             aBoard,
                                           PROGRESS_REPORTER* aProgressReporter );
 
-    FOOTPRINT* ParseFootprint( const nlohmann::json& aProject, const wxString& aFpUuid,
-                               const std::map<wxString, EASYEDAPRO::BLOB>& aBlobMap,
+    FOOTPRINT* ParseFootprint( const std::map<wxString, EASYEDAPRO::BLOB>& aBlobMap,
                                const EASYEDAPRO::V3_DOC_RAW&               aDoc );
 
     void ParseBoard( BOARD* aBoard, const nlohmann::json& aProject,

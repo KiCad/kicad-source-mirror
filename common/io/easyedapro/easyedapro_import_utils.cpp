@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
@@ -25,8 +25,10 @@
 #include <io/common/plugin_common_choose_project.h>
 
 #include <algorithm>
+#include <core/map_helpers.h>
 #include <ki_exception.h>
 #include <string_utils.h>
+#include <vector>
 #include <json_common.h>
 #include <core/json_serializers.h>
 
@@ -40,6 +42,21 @@
 
 namespace
 {
+
+// clang-format off
+static const std::vector<wxString> c_deviceAttributesWhitelist = { wxS( "Value" ),
+                                                                   wxS( "Datasheet" ),
+                                                                   wxS( "Manufacturer Part" ),
+                                                                   wxS( "Manufacturer" ),
+                                                                   wxS( "BOM_Manufacturer Part" ),
+                                                                   wxS( "BOM_Manufacturer" ),
+                                                                   wxS( "Supplier Part" ),
+                                                                   wxS( "Supplier" ),
+                                                                   wxS( "BOM_Supplier Part" ),
+                                                                   wxS( "BOM_Supplier" ),
+                                                                   wxS( "LCSC Part Name" ) };
+// clang-format on
+
 
 static std::string ToStdString( const wxString& aStr )
 {
@@ -566,8 +583,7 @@ nlohmann::json EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& 
         sym["display_title"] = sym["title"];
         sym["version"] = "3";
         sym["type"] = MetaGetInt( symDoc, "docType", static_cast<int>( SYMBOL_TYPE::NORMAL ) );
-        sym["tags"] = nlohmann::json::object();
-        sym["custom_tags"] = nlohmann::json::object();
+        sym["tags"] = MetaGetValue( symDoc, "tags", nlohmann::json::object() );
 
         project["symbols"][ToStdString( uuid )] = std::move( sym );
     }
@@ -581,8 +597,7 @@ nlohmann::json EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& 
         fp["display_title"] = fp["title"];
         fp["version"] = "3";
         fp["type"] = static_cast<int>( FOOTPRINT_TYPE::NORMAL );
-        fp["tags"] = nlohmann::json::object();
-        fp["custom_tags"] = nlohmann::json::object();
+        fp["tags"] = MetaGetValue( fpDoc, "tags", nlohmann::json::object() );
 
         project["footprints"][ToStdString( uuid )] = std::move( fp );
     }
@@ -594,8 +609,7 @@ nlohmann::json EASYEDAPRO::BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& 
         dev["description"] = ToStdString( MetaGetString( deviceDoc, "description" ) );
         dev["title"] = ToStdString( MetaGetString( deviceDoc, "title", uuid ) );
         dev["version"] = "3";
-        dev["tags"] = nlohmann::json::object();
-        dev["custom_tags"] = nlohmann::json::object();
+        dev["tags"] = MetaGetValue( deviceDoc, "tags", nlohmann::json::object() );
         dev["attributes"] = MetaGetValue( deviceDoc, "attributes", nlohmann::json::object() );
 
         project["devices"][ToStdString( uuid )] = std::move( dev );
@@ -649,27 +663,284 @@ wxString EASYEDAPRO::GetV3LibraryItemTitle( const nlohmann::json& aMetadata, con
 }
 
 
-static void InsertV3LibraryItem( std::map<wxString, wxString>& aNameToUuid, const wxString& aName,
-                                 const wxString& aUuid )
+wxString EASYEDAPRO::KeywordsFromV3Tags( const nlohmann::json& aTags )
 {
-    wxString uniqueBase = aName;
+    if( !aTags.is_object() )
+        return {};
 
-    if( uniqueBase.empty() )
-        uniqueBase = aUuid;
+    wxString keywords;
 
-    wxString uniqueName = uniqueBase;
-
-    if( aNameToUuid.contains( uniqueName ) )
+    auto appendTagName = [&]( const char* aKey )
     {
-        uniqueBase += wxS( "_" ) + aUuid.Left( 8 );
-        uniqueName = uniqueBase;
-    }
+        if( !aTags.contains( aKey ) || !aTags.at( aKey ).is_object() )
+            return;
 
-    int suffix = 2;
-    while( aNameToUuid.contains( uniqueName ) )
+        wxString name = V3GetString( aTags.at( aKey ), "name" );
+
+        if( name.empty() )
+            return;
+
+        if( !keywords.empty() )
+            keywords += wxS( " " );
+
+        keywords += name;
+    };
+
+    appendTagName( "parent_tag" );
+    appendTagName( "child_tag" );
+
+    return keywords;
+}
+
+
+wxString EASYEDAPRO::ResolveDeviceFieldVariables( const wxString&                      aInput,
+                                                  const std::map<wxString, wxString>& aDeviceAttributes )
+{
+    wxString inputText = aInput;
+    wxString resolvedText;
+    int      variableCount = 0;
+
+    // Resolve variables: ={Variable1}text{Variable2}
+    do
+    {
+        if( !inputText.StartsWith( wxS( "={" ) ) )
+            return inputText;
+
+        resolvedText.Clear();
+        variableCount = 0;
+
+        for( size_t i = 1; i < inputText.size(); )
+        {
+            wxUniChar c = inputText[i++];
+
+            if( c == '{' )
+            {
+                wxString varName;
+                bool     endFound = false;
+
+                while( i < inputText.size() )
+                {
+                    c = inputText[i++];
+
+                    if( c == '}' )
+                    {
+                        endFound = true;
+                        break;
+                    }
+
+                    varName << c;
+                }
+
+                if( !endFound )
+                    return inputText;
+
+                wxString varValue =
+                        get_def( aDeviceAttributes, varName, wxString::Format( wxS( "{%s!}" ), varName ) );
+
+                resolvedText << varValue;
+                variableCount++;
+            }
+            else
+            {
+                resolvedText << c;
+            }
+        }
+
+        inputText = resolvedText;
+    } while( variableCount > 0 );
+
+    return resolvedText;
+}
+
+
+wxString EASYEDAPRO::NormalizeEasyEDAText( wxString aText )
+{
+    // ℃ -> °C
+    aText.Replace( wxS( "\u2103" ), wxS( "\u00B0C" ), true );
+    return aText;
+}
+
+
+wxString EASYEDAPRO::MakeUniqueLibName( std::set<wxString>& aUsedNames, const wxString& aName,
+                                        const wxString& aFallback )
+{
+    wxString uniqueBase = aName.empty() ? aFallback : aName;
+    wxString uniqueName = uniqueBase;
+    int      suffix = 2;
+
+    while( aUsedNames.contains( uniqueName ) )
         uniqueName = uniqueBase + wxString::Format( wxS( "_%d" ), suffix++ );
 
-    aNameToUuid[uniqueName] = aUuid;
+    aUsedNames.insert( uniqueName );
+    return uniqueName;
+}
+
+
+std::map<wxString, wxString> EASYEDAPRO::BuildV3DeviceLibNames( nlohmann::json& aProject,
+                                                               const std::map<wxString, PRJ_DEVICE>& aDevices,
+                                                               std::set<wxString>* aUsedNames )
+{
+    std::map<wxString, wxString> deviceLibNames;
+    std::set<wxString>           localUsedNames;
+    std::set<wxString>&          usedLibNames = aUsedNames ? *aUsedNames : localUsedNames;
+    nlohmann::json               deviceLibNamesJson = nlohmann::json::object();
+
+    for( const auto& [devUuid, device] : aDevices )
+    {
+        wxString libNameForDevice = MakeUniqueLibName( usedLibNames, device.title, devUuid );
+        deviceLibNames[devUuid] = libNameForDevice;
+        deviceLibNamesJson[std::string( devUuid.ToUTF8() )] = std::string( libNameForDevice.ToUTF8() );
+    }
+
+    aProject["device_lib_names"] = std::move( deviceLibNamesJson );
+    return deviceLibNames;
+}
+
+
+wxString EASYEDAPRO::LookupV3DeviceLibName( const nlohmann::json& aProject, const wxString& aDeviceUuid )
+{
+    if( aDeviceUuid.empty() || !aProject.contains( "device_lib_names" )
+        || !aProject.at( "device_lib_names" ).is_object() )
+    {
+        return {};
+    }
+
+    std::string deviceIdUtf8 = std::string( aDeviceUuid.ToUTF8() );
+    const auto& names = aProject.at( "device_lib_names" );
+
+    if( names.contains( deviceIdUtf8 ) && names.at( deviceIdUtf8 ).is_string() )
+        return names.at( deviceIdUtf8 ).get<wxString>();
+
+    return {};
+}
+
+
+EASYEDAPRO::V3_DEVICE_DATA EASYEDAPRO::GetV3DeviceData( const nlohmann::json& aProject,
+                                                        const wxString&       aDeviceUuid )
+{
+    V3_DEVICE_DATA data;
+
+    if( aDeviceUuid.empty() || !aProject.contains( "devices" ) || !aProject.at( "devices" ).is_object() )
+        return data;
+
+    std::string deviceIdUtf8 = std::string( aDeviceUuid.ToUTF8() );
+
+    if( !aProject.at( "devices" ).contains( deviceIdUtf8 ) )
+        return data;
+
+    const nlohmann::json& dev = aProject.at( "devices" ).at( deviceIdUtf8 );
+
+    data.found = true;
+    data.description = V3GetString( dev, "description" );
+
+    if( dev.contains( "attributes" ) && dev.at( "attributes" ).is_object() )
+    {
+        for( const auto& [key, value] : dev.at( "attributes" ).items() )
+            data.attributes[wxString::FromUTF8( key )] = V3JsonToString( value );
+    }
+
+    return data;
+}
+
+
+wxString EASYEDAPRO::ResolveV3DeviceValueText( const std::map<wxString, wxString>& aDeviceAttributes )
+{
+    wxString valueText = get_def( aDeviceAttributes, wxS( "Value" ), wxEmptyString );
+
+    if( valueText.empty() )
+        valueText = get_def( aDeviceAttributes, wxS( "Name" ), wxEmptyString );
+
+    return NormalizeEasyEDAText( ResolveDeviceFieldVariables( valueText, aDeviceAttributes ) );
+}
+
+
+void EASYEDAPRO::ForEachImportedDeviceField(
+        const std::map<wxString, wxString>& aDeviceAttributes, bool aIncludeValue,
+        const std::function<void( const wxString& aKey, const wxString& aValue )>& aCallback )
+{
+    for( const wxString& attrKey : c_deviceAttributesWhitelist )
+    {
+        if( !aIncludeValue && attrKey == wxS( "Value" ) )
+            continue;
+
+        auto valOpt = get_opt( aDeviceAttributes, attrKey );
+
+        if( !valOpt || valOpt->empty() )
+            continue;
+
+        aCallback( attrKey,
+                   NormalizeEasyEDAText( ResolveDeviceFieldVariables( *valOpt, aDeviceAttributes ) ) );
+    }
+}
+
+
+template <typename Map>
+static wxString MakeUniqueV3LibraryName( const Map& aItems, const wxString& aName, const wxString& aFallback )
+{
+    wxString uniqueBase = aName.empty() ? aFallback : aName;
+    wxString uniqueName = uniqueBase;
+
+    int suffix = 2;
+    while( aItems.contains( uniqueName ) )
+        uniqueName = uniqueBase + wxString::Format( wxS( "_%d" ), suffix++ );
+
+    return uniqueName;
+}
+
+
+std::map<wxString, EASYEDAPRO::V3_SYMBOL_LIB_ITEM> EASYEDAPRO::BuildV3SymbolLibraryMap( const V3_DOC_PARSER& aParser )
+{
+    std::map<wxString, V3_SYMBOL_LIB_ITEM> items;
+    const nlohmann::json&                  index = aParser.GetLibraryIndex();
+
+    const bool hasDevices = index.is_object() && index.contains( "devices" ) && index.at( "devices" ).is_object()
+                            && !index.at( "devices" ).empty();
+
+    if( hasDevices )
+    {
+        try
+        {
+            for( const auto& [devUuidKey, deviceJson] : index.at( "devices" ).items() )
+            {
+                if( !deviceJson.is_object() )
+                    continue;
+
+                PRJ_DEVICE device = deviceJson;
+                auto       symbolIt = device.attributes.find( wxS( "Symbol" ) );
+
+                if( symbolIt == device.attributes.end() || symbolIt->second.empty() )
+                    continue;
+
+                if( !aParser.FindRawDoc( wxS( "SYMBOL" ), symbolIt->second ) )
+                    continue;
+
+                wxString deviceUuid = V3GetString( deviceJson, "uuid", ToWxString( devUuidKey ) );
+                wxString name = device.title.empty() ? GetV3LibraryItemTitle( deviceJson, deviceUuid ) : device.title;
+                V3_SYMBOL_LIB_ITEM item;
+                item.symbolUuid = symbolIt->second;
+                item.device = std::move( device );
+                item.hasDevice = true;
+
+                items.emplace( MakeUniqueV3LibraryName( items, name, deviceUuid ), std::move( item ) );
+            }
+        }
+        catch( nlohmann::json::exception& e )
+        {
+            wxLogWarning( wxString::Format( _( "Failed to parse EasyEDA Pro v3 device metadata: %s" ), e.what() ) );
+            return {};
+        }
+
+        return items;
+    }
+
+    for( const auto& [name, symbolUuid] : BuildV3LibraryItemMap( aParser, "symbols", wxS( "SYMBOL" ) ) )
+    {
+        V3_SYMBOL_LIB_ITEM item;
+        item.symbolUuid = symbolUuid;
+        items.emplace( name, std::move( item ) );
+    }
+
+    return items;
 }
 
 
@@ -699,7 +970,7 @@ std::map<wxString, wxString> EASYEDAPRO::BuildV3LibraryItemMap( const V3_DOC_PAR
         if( auto it = titlesByUuid.find( uuid ); it != titlesByUuid.end() )
             name = it->second;
 
-        InsertV3LibraryItem( nameToUuid, name, uuid );
+        nameToUuid[MakeUniqueV3LibraryName( nameToUuid, name, uuid )] = uuid;
     }
 
     return nameToUuid;

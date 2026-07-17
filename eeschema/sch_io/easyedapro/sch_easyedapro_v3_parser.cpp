@@ -50,21 +50,6 @@
 using namespace EASYEDAPRO;
 
 
-// clang-format off
-static const std::vector<wxString> c_attributesWhitelist = { "Value",
-                                                             "Datasheet",
-                                                             "Manufacturer Part",
-                                                             "Manufacturer",
-                                                             "BOM_Manufacturer Part",
-                                                             "BOM_Manufacturer",
-                                                             "Supplier Part",
-                                                             "Supplier",
-                                                             "BOM_Supplier Part",
-                                                             "BOM_Supplier",
-                                                             "LCSC Part Name" };
-// clang-format on
-
-
 static LINE_STYLE ConvertStrokeStyle( const nlohmann::json& aStyle )
 {
     int dash = 0;
@@ -157,8 +142,7 @@ static void ApplyV3TextSizeIfDefined( T& aText, const nlohmann::json& aInner )
 }
 
 
-static wxString ResolveV3FootprintText( const wxString& aFootprintValue,
-                                        const nlohmann::json& aProject,
+static wxString ResolveV3FootprintText( const wxString& aFootprintValue, const nlohmann::json& aProject,
                                         const wxString& aLibName )
 {
     if( aFootprintValue.empty() )
@@ -188,16 +172,14 @@ static wxString ResolveV3FootprintText( const wxString& aFootprintValue,
 }
 
 
-SCH_EASYEDAPRO_V3_PARSER::SCH_EASYEDAPRO_V3_PARSER( SCHEMATIC*         aSchematic,
-                                                      PROGRESS_REPORTER* aProgressReporter )
+SCH_EASYEDAPRO_V3_PARSER::SCH_EASYEDAPRO_V3_PARSER( SCHEMATIC* aSchematic, PROGRESS_REPORTER* aProgressReporter )
 {
     m_schematic = aSchematic;
 }
 
 
 template <typename T>
-void SCH_EASYEDAPRO_V3_PARSER::ApplyV3FontStyle( T& text, const nlohmann::json& aInner,
-                                                  const char* aAlignField )
+void SCH_EASYEDAPRO_V3_PARSER::ApplyV3FontStyle( T& text, const nlohmann::json& aInner, const char* aAlignField )
 {
     wxString color = V3GetString( aInner, "color", wxEmptyString );
     wxString fontFamily = V3GetString( aInner, "fontFamily", wxS( "default" ) );
@@ -712,28 +694,21 @@ SCH_EASYEDAPRO_V3_PARSER::ParseSymbol( const EASYEDAPRO::V3_DOC_RAW&       aDoc,
             ksymbol->GetReferenceField().SetText( symbolPrefix );
         }
 
-        for( const wxString& attrName : c_attributesWhitelist )
-        {
-            if( auto valOpt = get_opt( aDeviceAttributes, attrName ) )
-            {
-                if( valOpt->empty() )
-                    continue;
-
-                SCH_FIELD* fd = ksymbol->FindFieldCaseInsensitive( attrName );
-
-                if( !fd )
+        ForEachImportedDeviceField(
+                aDeviceAttributes, true,
+                [&]( const wxString& attrName, const wxString& value )
                 {
-                    fd = new SCH_FIELD( ksymbol, FIELD_T::USER, attrName );
-                    ksymbol->AddField( fd );
-                }
+                    SCH_FIELD* fd = ksymbol->FindFieldCaseInsensitive( attrName );
 
-                wxString value = *valOpt;
-                value.Replace( wxS( "\u2103" ), wxS( "\u00B0C" ), true );
+                    if( !fd )
+                    {
+                        fd = new SCH_FIELD( ksymbol, FIELD_T::USER, attrName );
+                        ksymbol->AddField( fd );
+                    }
 
-                fd->SetText( value );
-                fd->SetVisible( false );
-            }
-        }
+                    fd->SetText( value );
+                    fd->SetVisible( false );
+                } );
     }
 
     // Process pins
@@ -861,66 +836,6 @@ SCH_EASYEDAPRO_V3_PARSER::ParseSymbol( const EASYEDAPRO::V3_DOC_RAW&       aDoc,
 }
 
 
-static wxString ResolveFieldVariables( const wxString                      aInput,
-                                       const std::map<wxString, wxString>& aDeviceAttributes )
-{
-    wxString inputText = aInput;
-    wxString resolvedText;
-    int      variableCount = 0;
-
-    do
-    {
-        if( !inputText.StartsWith( wxS( "={" ) ) )
-            return inputText;
-
-        resolvedText.Clear();
-        variableCount = 0;
-
-        for( size_t i = 1; i < inputText.size(); )
-        {
-            wxUniChar c = inputText[i++];
-
-            if( c == '{' )
-            {
-                wxString varName;
-                bool     endFound = false;
-
-                while( i < inputText.size() )
-                {
-                    c = inputText[i++];
-
-                    if( c == '}' )
-                    {
-                        endFound = true;
-                        break;
-                    }
-
-                    varName << c;
-                }
-
-                if( !endFound )
-                    return inputText;
-
-                wxString varValue =
-                        get_def( aDeviceAttributes, varName,
-                                 wxString::Format( "{%s!}", varName ) );
-
-                resolvedText << varValue;
-                variableCount++;
-            }
-            else
-            {
-                resolvedText << c;
-            }
-        }
-        inputText = resolvedText;
-
-    } while( variableCount > 0 );
-
-    return resolvedText;
-}
-
-
 static EASYEDAPRO::SCH_ATTR V3RowToSchAttr( const V3_ROW& aRow )
 {
     EASYEDAPRO::SCH_ATTR attr;
@@ -949,7 +864,7 @@ static void ApplyV3AttrToField( SCH_FIELD* aField, const EASYEDAPRO::SCH_ATTR& a
 {
     EDA_TEXT* text = static_cast<EDA_TEXT*>( aField );
 
-    text->SetText( ResolveFieldVariables( aAttr.value, aDeviceAttributes ) );
+    text->SetText( ResolveDeviceFieldVariables( aAttr.value, aDeviceAttributes ) );
     text->SetVisible( aAttr.keyVisible || aAttr.valVisible );
 
     aField->SetNameShown( aAttr.keyVisible );
@@ -1483,41 +1398,12 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
 
         std::map<wxString, wxString> compAttrs;
 
-        try
+        if( deviceAttrIt != attributes.end() && !deviceAttrIt->second.first.value.IsEmpty() )
         {
-            wxString deviceId;
+            V3_DEVICE_DATA deviceData = GetV3DeviceData( aProject, deviceAttrIt->second.first.value );
 
-            if( deviceAttrIt != attributes.end() )
-                deviceId = deviceAttrIt->second.first.value;
-
-            std::string deviceIdUtf8 = std::string( deviceId.ToUTF8() );
-
-            if( !deviceId.empty()
-                && aProject.contains( "devices" )
-                && aProject.at( "devices" ).is_object()
-                && aProject.at( "devices" ).contains( deviceIdUtf8 ) )
-            {
-                const nlohmann::json& dev = aProject.at( "devices" ).at( deviceIdUtf8 );
-
-                if( dev.contains( "attributes" ) && dev.at( "attributes" ).is_object() )
-                {
-                    for( const auto& [key, value] : dev.at( "attributes" ).items() )
-                    {
-                        compAttrs[wxString::FromUTF8( key )] = EASYEDAPRO::V3JsonToString( value );
-                    }
-                }
-            }
-        }
-        catch( const std::exception& e )
-        {
-            wxString deviceId;
-
-            if( deviceAttrIt != attributes.end() )
-                deviceId = deviceAttrIt->second.first.value;
-
-            wxLogWarning( wxString::Format(
-                    _( "EasyEDA Pro v3 component '%s': failed to read device attributes for '%s': %s" ),
-                    parentId, deviceId, e.what() ) );
+            if( deviceData.found )
+                compAttrs = std::move( deviceData.attributes );
         }
 
         wxString symbolId;
@@ -1561,8 +1447,18 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
             }
         }
 
-        LIB_ID libId = EASYEDAPRO::ToKiCadLibID( aLibName,
-                                                 newLibSymbol.GetLibId().GetLibItemName() );
+        // Prefer the Device-backed project-lib name when the component links a Device.
+        wxString libItemName = newLibSymbol.GetLibId().GetLibItemName();
+
+        if( deviceAttrIt != attributes.end() && !deviceAttrIt->second.first.value.IsEmpty() )
+        {
+            wxString deviceLibName = LookupV3DeviceLibName( aProject, deviceAttrIt->second.first.value );
+
+            if( !deviceLibName.empty() )
+                libItemName = deviceLibName;
+        }
+
+        LIB_ID libId = EASYEDAPRO::ToKiCadLibID( aLibName, libItemName );
 
         auto schSym = std::make_unique<SCH_SYMBOL>( newLibSymbol, libId,
                                                      &aSchematic->CurrentSheet(),
@@ -1611,7 +1507,7 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
             if( netName.IsEmpty() )
                 netName = newLibSymbol.GetValueField().GetText();
 
-            netName = ResolveFieldVariables( netName, compAttrs );
+            netName = ResolveDeviceFieldVariables( netName, compAttrs );
 
             std::vector<SCH_PIN*> pins = schSym->GetPins( &aSchematic->CurrentSheet() );
             SCH_PIN*              pin = pins.empty() ? nullptr : pins.front();
@@ -1741,7 +1637,7 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
                 globalNetName = newLibSymbol.GetValueField().GetText();
             }
 
-            globalNetName = ResolveFieldVariables( globalNetName, compAttrs );
+            globalNetName = ResolveDeviceFieldVariables( globalNetName, compAttrs );
 
             if( valueSource && valueSource->second )
             {
@@ -1775,7 +1671,7 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
 
                 if( valueFromNameAttr && !hasExplicitStyleOrPosition )
                 {
-                    valueField->SetText( ResolveFieldVariables( globalNetName, compAttrs ) );
+                    valueField->SetText( ResolveDeviceFieldVariables( globalNetName, compAttrs ) );
 
                     if( !globalNetName.IsEmpty() )
                         valueField->SetVisible( true );
@@ -1793,7 +1689,7 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
             }
             else
             {
-                valueField->SetText( ResolveFieldVariables( globalNetName, compAttrs ) );
+                valueField->SetText( ResolveDeviceFieldVariables( globalNetName, compAttrs ) );
                 valueField->SetVisible( !globalNetName.IsEmpty() );
             }
 
@@ -1827,6 +1723,29 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
 
             if( !hasReferenceValue )
                 refField->SetVisible( false );
+
+            // Device BOM / identity fields live on the Device, not as schematic ATTR rows.
+            // Apply them per-instance so shared symbol geometry stays device-agnostic.
+            ForEachImportedDeviceField(
+                    compAttrs, true,
+                    [&]( const wxString& attrKey, const wxString& value )
+                    {
+                        SCH_FIELD* field = schSym->FindFieldCaseInsensitive( attrKey );
+
+                        if( !field )
+                            field = schSym->AddField( SCH_FIELD( schSym.get(), FIELD_T::USER, attrKey ) );
+
+                        field->SetText( value );
+                        field->SetVisible( false );
+                    } );
+
+            wxString description = get_def( compAttrs, wxS( "Description" ), wxEmptyString );
+
+            if( !description.empty() )
+            {
+                schSym->GetField( FIELD_T::DESCRIPTION )
+                        ->SetText( NormalizeEasyEDAText( ResolveDeviceFieldVariables( description, compAttrs ) ) );
+            }
 
             auto valueAttrIt = attributes.find( "Value" );
             auto nameAttrIt = attributes.find( "Name" );
@@ -1870,7 +1789,7 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
                 }
                 else
                 {
-                    valueField->SetText( ResolveFieldVariables( valueText, compAttrs ) );
+                    valueField->SetText( ResolveDeviceFieldVariables( valueText, compAttrs ) );
                 }
             }
             else

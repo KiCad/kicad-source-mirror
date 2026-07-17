@@ -21,8 +21,10 @@
 #ifndef EASYEDAPRO_IMPORT_UTILS_H_
 #define EASYEDAPRO_IMPORT_UTILS_H_
 
+#include <functional>
 #include <map>
 #include <set>
+#include <vector>
 #include <wx/stream.h>
 #include <wx/string.h>
 #include <io/easyedapro/easyedapro_parser.h>
@@ -75,6 +77,72 @@ nlohmann::json BuildV3ProjectIndexFromRawDocs( const V3_DOC_PARSER& aParser, boo
 std::map<wxString, BLOB> BuildV3BlobMap( const V3_DOC_PARSER& aParser );
 
 wxString GetV3LibraryItemTitle( const nlohmann::json& aMetadata, const wxString& aUuid );
+
+/**
+ * Build KiCad keywords from a v3 tags object (parent_tag / child_tag name fields).
+ */
+wxString KeywordsFromV3Tags( const nlohmann::json& aTags );
+
+/**
+ * Resolve EasyEDA `={Var}` / `={A}text{B}` field expressions against device attributes.
+ */
+wxString ResolveDeviceFieldVariables( const wxString& aInput, const std::map<wxString, wxString>& aDeviceAttributes );
+
+/** Replace EasyEDA temperature glyph (℃) with °C. */
+wxString NormalizeEasyEDAText( wxString aText );
+
+/**
+ * Allocate a unique library item name, recording it in @a aUsedNames.
+ */
+wxString MakeUniqueLibName( std::set<wxString>& aUsedNames, const wxString& aName, const wxString& aFallback );
+
+/**
+ * Stable project-lib item names keyed by Device UUID (one entry per Device).
+ * Also writes project["device_lib_names"] for place-time symbol LIB_ID lookup.
+ * When @a aUsedNames is non-null, it receives the allocated names (for orphan uniqueness).
+ */
+std::map<wxString, wxString> BuildV3DeviceLibNames( nlohmann::json&                       aProject,
+                                                    const std::map<wxString, PRJ_DEVICE>& aDevices,
+                                                    std::set<wxString>*                   aUsedNames = nullptr );
+
+wxString LookupV3DeviceLibName( const nlohmann::json& aProject, const wxString& aDeviceUuid );
+
+struct V3_DEVICE_DATA
+{
+    bool                         found = false;
+    wxString                     description;
+    std::map<wxString, wxString> attributes;
+};
+
+V3_DEVICE_DATA GetV3DeviceData( const nlohmann::json& aProject, const wxString& aDeviceUuid );
+
+/**
+ * Preferred Value text: Value attribute, else Name, with variables resolved.
+ */
+wxString ResolveV3DeviceValueText( const std::map<wxString, wxString>& aDeviceAttributes );
+
+/**
+ * Invoke @a aCallback for each non-empty whitelisted Device field (resolved + normalized).
+ * When @a aIncludeValue is false, skips the Value key (callers often handle it separately).
+ */
+void ForEachImportedDeviceField( const std::map<wxString, wxString>& aDeviceAttributes, bool aIncludeValue,
+                                 const std::function<void( const wxString& aKey, const wxString& aValue )>& aCallback );
+
+/**
+ * Build the schematic-library name map for a v3 .elibz2.
+ *
+ * Prefers devices from the library index when present (device2.json); otherwise falls
+ * back to symbols.  Each entry's @a symbolUuid is the geometry document to parse;
+ * @a device is populated only for device-backed entries.
+ */
+struct V3_SYMBOL_LIB_ITEM
+{
+    wxString   symbolUuid;
+    PRJ_DEVICE device;
+    bool       hasDevice = false;
+};
+
+std::map<wxString, V3_SYMBOL_LIB_ITEM> BuildV3SymbolLibraryMap( const V3_DOC_PARSER& aParser );
 
 std::map<wxString, wxString> BuildV3LibraryItemMap( const V3_DOC_PARSER& aParser, const char* aIndexKey,
                                                     const wxString& aDocType );

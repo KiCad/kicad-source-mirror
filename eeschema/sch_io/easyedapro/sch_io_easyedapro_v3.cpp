@@ -48,6 +48,8 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 
+#include <set>
+
 
 static long long getFileTimestamp( const wxString& aFileName )
 {
@@ -57,6 +59,62 @@ static long long getFileTimestamp( const wxString& aFileName )
         return fileName.GetModificationTime().GetValue().GetValue();
 
     return 0;
+}
+
+
+static LIB_SYMBOL* LoadV3LibrarySymbolItem( const EASYEDAPRO::V3_DOC_PARSER&      aParser,
+                                            const EASYEDAPRO::V3_SYMBOL_LIB_ITEM& aItem, const wxString& aLibName,
+                                            const wxString&                             aSymbolName,
+                                            const std::map<wxString, EASYEDAPRO::BLOB>& aBlobs,
+                                            SCH_EASYEDAPRO_V3_PARSER&                   aSymbolParser )
+{
+    const EASYEDAPRO::V3_DOC_RAW* rawDoc = aParser.FindRawDoc( wxS( "SYMBOL" ), aItem.symbolUuid );
+
+    if( !rawDoc )
+        return nullptr;
+
+    static const std::map<wxString, wxString> emptyAttributes;
+    const EASYEDAPRO::PRJ_DEVICE*             device = aItem.hasDevice ? &aItem.device : nullptr;
+    const std::map<wxString, wxString>&       attributes = aItem.hasDevice ? aItem.device.attributes : emptyAttributes;
+
+    EASYEDAPRO::SYM_INFO symInfo = aSymbolParser.ParseSymbol( *rawDoc, attributes, aBlobs );
+
+    if( !symInfo.libSymbol )
+        return nullptr;
+
+    LIB_SYMBOL& symbol = *symInfo.libSymbol;
+
+    symbol.SetLibId( EASYEDAPRO::ToKiCadLibID( aLibName, aSymbolName ) );
+    symbol.SetName( aSymbolName );
+
+    if( device )
+    {
+        if( auto fpUuid = get_opt( device->attributes, "Footprint" ) )
+        {
+            wxString              fpTitle = *fpUuid;
+            const nlohmann::json& index = aParser.GetLibraryIndex();
+
+            if( index.contains( "footprints" ) && index.at( "footprints" ).is_object() )
+            {
+                const nlohmann::json& footprints = index.at( "footprints" );
+                const std::string     key( fpUuid->ToUTF8() );
+
+                if( footprints.contains( key ) )
+                    fpTitle = EASYEDAPRO::GetV3LibraryItemTitle( footprints.at( key ), *fpUuid );
+            }
+
+            symbol.GetFootprintField().SetText( aLibName + wxS( ":" ) + fpTitle );
+        }
+
+        symbol.SetDescription( EASYEDAPRO::NormalizeEasyEDAText( device->description ) );
+
+        wxString keywords = EASYEDAPRO::KeywordsFromV3Tags( device->tags );
+
+        if( !keywords.empty() )
+            symbol.SetKeyWords( keywords );
+    }
+
+    return symInfo.libSymbol.release();
 }
 
 
@@ -108,10 +166,10 @@ void SCH_IO_EASYEDAPRO_V3::EnumerateSymbolLib( wxArrayString& aSymbolNameList, c
 
     const EASYEDAPRO::V3_DOC_PARSER& v3 = getCachedLibraryParser( aLibraryPath );
 
-    std::map<wxString, wxString> symbolMap = EASYEDAPRO::BuildV3LibraryItemMap( v3, "symbols", wxS( "SYMBOL" ) );
-
-    for( const auto& [name, uuid] : symbolMap )
+    for( const auto& [name, item] : EASYEDAPRO::BuildV3SymbolLibraryMap( v3 ) )
+    {
         aSymbolNameList.Add( name );
+    }
 }
 
 
@@ -120,34 +178,20 @@ void SCH_IO_EASYEDAPRO_V3::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbol
 {
     FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
 
-    const EASYEDAPRO::V3_DOC_PARSER& v3 = getCachedLibraryParser( aLibraryPath );
+    const EASYEDAPRO::V3_DOC_PARSER&           v3 = getCachedLibraryParser( aLibraryPath );
+    std::map<wxString, EASYEDAPRO::V3_SYMBOL_LIB_ITEM> items = EASYEDAPRO::BuildV3SymbolLibraryMap( v3 );
+    std::map<wxString, EASYEDAPRO::BLOB>      blobs = EASYEDAPRO::BuildV3BlobMap( v3 );
 
-    std::map<wxString, wxString> symbolMap = EASYEDAPRO::BuildV3LibraryItemMap( v3, "symbols", wxS( "SYMBOL" ) );
-
-    std::map<wxString, EASYEDAPRO::BLOB> blobs = EASYEDAPRO::BuildV3BlobMap( v3 );
-
-    wxFileName libFileName( aLibraryPath );
-    wxString   libName = EASYEDAPRO::ShortenLibName( libFileName.GetName() );
+    wxString libName = LIB_ID::FixIllegalChars( wxFileName( aLibraryPath ).GetName(), true );
 
     SCH_EASYEDAPRO_V3_PARSER parser( nullptr, nullptr );
 
-    for( const auto& [symbolName, uuid] : symbolMap )
+    for( const auto& [symbolName, item] : items )
     {
-        const EASYEDAPRO::V3_DOC_RAW* rawDoc = v3.FindRawDoc( wxS( "SYMBOL" ), uuid );
-
-        if( !rawDoc )
-            continue;
-
         try
         {
-            EASYEDAPRO::SYM_INFO symInfo = parser.ParseSymbol( *rawDoc, {}, blobs );
-
-            if( !symInfo.libSymbol )
-                continue;
-
-            symInfo.libSymbol->SetLibId( EASYEDAPRO::ToKiCadLibID( libName, symbolName ) );
-            symInfo.libSymbol->SetName( symbolName );
-            aSymbolList.push_back( symInfo.libSymbol.release() );
+            if( LIB_SYMBOL* symbol = LoadV3LibrarySymbolItem( v3, item, libName, symbolName, blobs, parser ) )
+                aSymbolList.push_back( symbol );
         }
         catch( nlohmann::json::exception& e )
         {
@@ -164,48 +208,33 @@ LIB_SYMBOL* SCH_IO_EASYEDAPRO_V3::LoadSymbol( const wxString& aLibraryPath, cons
 {
     FONTCONFIG_REPORTER_SCOPE fontconfigScope( nullptr );
 
-    const EASYEDAPRO::V3_DOC_PARSER& v3 = getCachedLibraryParser( aLibraryPath );
+    const EASYEDAPRO::V3_DOC_PARSER&                   v3 = getCachedLibraryParser( aLibraryPath );
+    std::map<wxString, EASYEDAPRO::V3_SYMBOL_LIB_ITEM> items = EASYEDAPRO::BuildV3SymbolLibraryMap( v3 );
 
-    std::map<wxString, wxString> symbolMap = EASYEDAPRO::BuildV3LibraryItemMap( v3, "symbols", wxS( "SYMBOL" ) );
+    auto itemIt = items.find( aAliasName );
 
-    auto symIt = symbolMap.find( aAliasName );
-
-    if( symIt == symbolMap.end() )
+    if( itemIt == items.end() )
         return nullptr;
 
-    const EASYEDAPRO::V3_DOC_RAW* rawDoc = v3.FindRawDoc( wxS( "SYMBOL" ), symIt->second );
-
-    if( !rawDoc )
-        return nullptr;
+    wxString libName = LIB_ID::FixIllegalChars( wxFileName( aLibraryPath ).GetName(), true );
 
     SCH_EASYEDAPRO_V3_PARSER parser( nullptr, nullptr );
-    EASYEDAPRO::SYM_INFO     symInfo;
 
     try
     {
-        symInfo = parser.ParseSymbol( *rawDoc, {}, EASYEDAPRO::BuildV3BlobMap( v3 ) );
+        return LoadV3LibrarySymbolItem( v3, itemIt->second, libName, aAliasName,
+                                        EASYEDAPRO::BuildV3BlobMap( v3 ), parser );
     }
     catch( nlohmann::json::exception& e )
     {
         THROW_IO_ERROR(
                 wxString::Format( _( "Cannot load symbol '%s' from '%s': %s" ), aAliasName, aLibraryPath, e.what() ) );
     }
-
-    if( !symInfo.libSymbol )
-        return nullptr;
-
-    wxFileName libFileName( aLibraryPath );
-    wxString   libName = EASYEDAPRO::ShortenLibName( libFileName.GetName() );
-
-    symInfo.libSymbol->SetLibId( EASYEDAPRO::ToKiCadLibID( libName, aAliasName ) );
-    symInfo.libSymbol->SetName( aAliasName );
-
-    return symInfo.libSymbol.release();
 }
 
 
 SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                                    SCH_SHEET* aAppendToMe,
+                                                    SCH_SHEET*                         aAppendToMe,
                                                     const std::map<std::string, UTF8>* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
@@ -315,6 +344,12 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
                 wxString::Format( _( "Failed to parse EasyEDA Pro v3 symbol/device metadata: %s" ), e.what() ) );
     }
 
+    // Schematic components reference Symbol (geometry) and Device (BOM attrs) separately.
+    // Build geometry by symbol UUID; assign stable project-lib names from each Device.
+    std::set<wxString>           usedLibNames;
+    std::map<wxString, wxString> deviceLibNames =
+            EASYEDAPRO::BuildV3DeviceLibNames( project, prjDevices, &usedLibNames );
+
     std::map<wxString, EASYEDAPRO::SYM_INFO> symbols;
     std::map<wxString, EASYEDAPRO::BLOB>     blobs = EASYEDAPRO::BuildV3BlobMap( v3 );
 
@@ -325,44 +360,17 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
         if( symMetaIt == prjSymbols.end() )
             continue;
 
-        wxString                     description;
-        wxString                     customTags;
-        std::map<wxString, wxString> deviceAttributes;
-        wxString                     fpTitle;
-
-        for( auto& [devUuid, device] : prjDevices )
-        {
-            auto val = get_opt( device.attributes, "Symbol" );
-
-            if( !val || *val != symbolUuid )
-                continue;
-
-            description = device.description;
-            deviceAttributes = device.attributes;
-
-            if( device.custom_tags.is_string() )
-                customTags = device.custom_tags.get<wxString>();
-
-            if( auto fpUuid = get_opt( device.attributes, "Footprint" ) )
-            {
-                if( auto prjFp = get_opt( prjFootprints, *fpUuid ) )
-                {
-                    fpTitle = prjFp->title;
-                    break;
-                }
-            }
-        }
-
         EASYEDAPRO::SYM_INFO symInfo;
 
         try
         {
-            symInfo = parser.ParseSymbol( rawDoc, deviceAttributes, blobs );
+            // Geometry only.  Device BOM fields come from the component Device ATTR.
+            symInfo = parser.ParseSymbol( rawDoc, {}, blobs );
         }
         catch( nlohmann::json::exception& e )
         {
             wxLogWarning( wxString::Format( _( "EasyEDA Pro v3 symbol '%s' was skipped due to parse error: %s" ),
-                    symbolUuid, e.what() ) );
+                                            symbolUuid, e.what() ) );
             continue;
         }
 
@@ -372,14 +380,13 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
         LIB_ID libID = EASYEDAPRO::ToKiCadLibID( libName, symMetaIt->second.title );
         symInfo.libSymbol->SetLibId( libID );
         symInfo.libSymbol->SetName( symMetaIt->second.title );
-        symInfo.libSymbol->GetFootprintField().SetText( libName + wxS( ":" ) + fpTitle );
 
-        wxString keywords = customTags;
-        keywords.Replace( wxS( ":" ), wxS( " " ), true );
-        symInfo.libSymbol->SetKeyWords( keywords );
+        symInfo.libSymbol->SetDescription( EASYEDAPRO::NormalizeEasyEDAText( symMetaIt->second.desc ) );
 
-        description.Replace( wxS( "\u2103" ), wxS( "\u00B0C" ), true );
-        symInfo.libSymbol->SetDescription( description );
+        wxString keywords = EASYEDAPRO::KeywordsFromV3Tags( symMetaIt->second.tags );
+
+        if( !keywords.empty() )
+            symInfo.libSymbol->SetKeyWords( keywords );
 
         symbols.emplace( symbolUuid, std::move( symInfo ) );
     }
@@ -419,7 +426,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
             {
                 wxLogWarning(
                         wxString::Format( _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
-                        prjSheet.uuid, e.what() ) );
+                                          prjSheet.uuid, e.what() ) );
                 continue;
             }
 
@@ -467,7 +474,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
         {
             wxLogWarning(
                     wxString::Format( _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
-                    prjSheet.uuid, e.what() ) );
+                                      prjSheet.uuid, e.what() ) );
             continue;
         }
 
@@ -498,12 +505,83 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
     std::map<std::string, UTF8> properties;
     properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
 
+    std::set<wxString> symbolsSavedViaDevices;
+
+    // Project library entries are devices: geometry from Symbol + BOM fields from Device.
+    for( const auto& [devUuid, device] : prjDevices )
+    {
+        auto symbolAttr = get_opt( device.attributes, "Symbol" );
+
+        if( !symbolAttr )
+            continue;
+
+        const EASYEDAPRO::V3_DOC_RAW* symbolDoc = v3.FindRawDoc( wxS( "SYMBOL" ), *symbolAttr );
+
+        if( !symbolDoc )
+            continue;
+
+        EASYEDAPRO::SYM_INFO deviceSymInfo;
+
+        try
+        {
+            deviceSymInfo = parser.ParseSymbol( *symbolDoc, device.attributes, blobs );
+        }
+        catch( nlohmann::json::exception& e )
+        {
+            wxLogWarning( wxString::Format( _( "EasyEDA Pro v3 device '%s' was skipped due to parse error: %s" ),
+                                            device.title, e.what() ) );
+            continue;
+        }
+
+        if( !deviceSymInfo.libSymbol )
+            continue;
+
+        auto nameIt = deviceLibNames.find( devUuid );
+        wxString itemName = ( nameIt != deviceLibNames.end() ) ? nameIt->second : device.title;
+
+        LIB_ID libID = EASYEDAPRO::ToKiCadLibID( libName, itemName );
+        deviceSymInfo.libSymbol->SetLibId( libID );
+        deviceSymInfo.libSymbol->SetName( itemName );
+
+        if( auto fpUuid = get_opt( device.attributes, "Footprint" ) )
+        {
+            if( auto prjFp = get_opt( prjFootprints, *fpUuid ) )
+                deviceSymInfo.libSymbol->GetFootprintField().SetText( libName + wxS( ":" ) + prjFp->title );
+        }
+
+        wxString description = device.description;
+
+        if( description.empty() )
+            description = get_def( device.attributes, wxS( "Description" ), wxEmptyString );
+
+        if( !description.empty() )
+        {
+            deviceSymInfo.libSymbol->SetDescription( EASYEDAPRO::NormalizeEasyEDAText(
+                    EASYEDAPRO::ResolveDeviceFieldVariables( description, device.attributes ) ) );
+        }
+
+        wxString keywords = EASYEDAPRO::KeywordsFromV3Tags( device.tags );
+
+        if( !keywords.empty() )
+            deviceSymInfo.libSymbol->SetKeyWords( keywords );
+
+        schPlugin->SaveSymbol( libFileName.GetFullPath(), deviceSymInfo.libSymbol.release(), &properties );
+        symbolsSavedViaDevices.insert( *symbolAttr );
+    }
+
+    // Keep geometry-only entries for symbols not referenced by any device (e.g. some helpers).
     for( auto& [symbolUuid, symInfo] : symbols )
     {
-        if( symInfo.libSymbol )
-        {
-            schPlugin->SaveSymbol( libFileName.GetFullPath(), symInfo.libSymbol.release(), &properties );
-        }
+        if( !symInfo.libSymbol || symbolsSavedViaDevices.contains( symbolUuid ) )
+            continue;
+
+        wxString itemName = EASYEDAPRO::MakeUniqueLibName( usedLibNames, symInfo.libSymbol->GetName(),
+                                                           symbolUuid );
+        LIB_ID   libID = EASYEDAPRO::ToKiCadLibID( libName, itemName );
+        symInfo.libSymbol->SetLibId( libID );
+        symInfo.libSymbol->SetName( itemName );
+
+        schPlugin->SaveSymbol( libFileName.GetFullPath(), symInfo.libSymbol.release(), &properties );
     }
 
     schPlugin->SaveLibrary( libFileName.GetFullPath() );

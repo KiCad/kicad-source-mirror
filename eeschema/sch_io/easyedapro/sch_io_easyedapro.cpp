@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
@@ -223,9 +223,7 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
 
             symInfo.libSymbol->SetKeyWords( keywords );
 
-            description.Replace( wxS( "\u2103" ), wxS( "\u00B0C" ), true ); // ℃ -> °C
-
-            symInfo.libSymbol->SetDescription( description );
+            symInfo.libSymbol->SetDescription( EASYEDAPRO::NormalizeEasyEDAText( description ) );
 
             symbol = symInfo.libSymbol.release();
 
@@ -383,9 +381,7 @@ void SCH_IO_EASYEDAPRO::LoadAllDataFromProject( const wxString& aProjectPath )
 
             symInfo.libSymbol->SetKeyWords( keywords );
 
-            description.Replace( wxS( "\u2103" ), wxS( "\u00B0C" ), true ); // ℃ -> °C
-
-            symInfo.libSymbol->SetDescription( description );
+            symInfo.libSymbol->SetDescription( EASYEDAPRO::NormalizeEasyEDAText( description ) );
 
             m_projectData->m_Symbols.emplace( baseName, std::move( symInfo ) );
         }

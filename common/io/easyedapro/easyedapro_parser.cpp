@@ -197,7 +197,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_BOARD& d )
 
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_SYMBOL& d )
 {
-    if( j.at( "source" ).is_string() )
+    if( j.contains( "source" ) && j.at( "source" ).is_string() )
         d.source = j.at( "source" ).get<wxString>();
 
     if( j.contains( "desc" ) )
@@ -210,10 +210,10 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_SYMBOL& d )
     else if( j.contains( "title" ) )
         d.title = j.at( "title" ).get<wxString>();
 
-    if( j.at( "version" ).is_string() )
+    if( j.contains( "version" ) && j.at( "version" ).is_string() )
         d.version = j.at( "version" ).get<wxString>();
 
-    if( j.at( "type" ).is_number() )
+    if( j.contains( "type" ) && j.at( "type" ).is_number() )
         d.type = j.at( "type" );
 
     if( j.find( "tags" ) != j.end() && j.at( "tags" ).is_object() )
@@ -226,7 +226,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_SYMBOL& d )
 
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_FOOTPRINT& d )
 {
-    if( j.at( "source" ).is_string() )
+    if( j.contains( "source" ) && j.at( "source" ).is_string() )
         d.source = j.at( "source" ).get<wxString>();
 
     if( j.contains( "desc" ) )
@@ -239,10 +239,10 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_FOOTPRINT& 
     else if( j.contains( "title" ) )
         d.title = j.at( "title" ).get<wxString>();
 
-    if( j.at( "version" ).is_string() )
+    if( j.contains( "version" ) && j.at( "version" ).is_string() )
         d.version = j.at( "version" ).get<wxString>();
 
-    if( j.at( "type" ).is_number() )
+    if( j.contains( "type" ) && j.at( "type" ).is_number() )
         d.type = j.at( "type" );
 
     if( j.find( "tags" ) != j.end() && j.at( "tags" ).is_object() )
@@ -255,7 +255,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_FOOTPRINT& 
 
 void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_DEVICE& d )
 {
-    if( j.at( "source" ).is_string() )
+    if( j.contains( "source" ) && j.at( "source" ).is_string() )
         d.source = j.at( "source" ).get<wxString>();
 
     if( j.contains( "desc" ) )
@@ -268,7 +268,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_DEVICE& d )
     else if( j.contains( "title" ) )
         d.title = j.at( "title" ).get<wxString>();
 
-    if( j.at( "version" ).is_string() )
+    if( j.contains( "version" ) && j.at( "version" ).is_string() )
         d.version = j.at( "version" ).get<wxString>();
 
     if( j.find( "tags" ) != j.end() && j.at( "tags" ).is_object() )
@@ -277,7 +277,7 @@ void EASYEDAPRO::from_json( const nlohmann::json& j, EASYEDAPRO::PRJ_DEVICE& d )
     if( j.find( "custom_tags" ) != j.end() && j.at( "custom_tags" ).is_object() )
         d.custom_tags = j.at( "custom_tags" );
 
-    if( j.at( "attributes" ).is_object() )
+    if( j.contains( "attributes" ) && j.at( "attributes" ).is_object() )
         d.attributes = AnyMapToStringMap( j.at( "attributes" ) );
 }
 

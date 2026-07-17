@@ -105,9 +105,10 @@ public:
     /**
      * Return true if @a aFileName looks like an EasyEDA Pro v3 library archive.
      *
-     * Detection requires a .elibz2 extension with a ZIP containing symbol2.json or
-     * footprint2.json and at least one .elibu document file.  When @a aRequiredDocType is
-     * set, the .elibu document file must also contain that document type.
+     * Detection requires a .elibz2 extension with a ZIP containing symbol2.json,
+     * footprint2.json or device2.json and at least one .elibu document file.
+     * When @a aRequiredDocType is set, the .elibu document file must also contain
+     * that document type.
      */
     static bool IsV3Library( const wxString& aFileName, const wxString& aRequiredDocType = wxEmptyString );
 

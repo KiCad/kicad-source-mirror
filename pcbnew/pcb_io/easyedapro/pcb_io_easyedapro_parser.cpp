@@ -197,7 +197,7 @@ static void AlignText( EDA_TEXT* text, int align )
 }
 
 
-void PCB_IO_EASYEDAPRO_PARSER::fillFootprintModelInfo( FOOTPRINT* footprint,
+void PCB_IO_EASYEDAPRO_PARSER::FillFootprintModelInfo( FOOTPRINT* footprint,
                                                        const wxString& modelUuid,
                                                        const wxString& modelTitle,
                                                        const wxString& modelTransform ) const
@@ -943,7 +943,7 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
         modelTitle = get_def( compAttrs, "3D Model Title", modelUuid );
         modelTransform = get_def( compAttrs, "3D Model Transform", "" );
 
-        fillFootprintModelInfo( footprint, modelUuid, modelTitle, modelTransform );
+        FillFootprintModelInfo( footprint, modelUuid, modelTitle, modelTransform );
     }
 
     // Heal board outlines
@@ -1731,7 +1731,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
         else
             modelTransform = compAttrs.value<wxString>( "3D Model Transform", "" );
 
-        fillFootprintModelInfo( footprint.get(), modelUuid, modelTitle, modelTransform );
+        FillFootprintModelInfo( footprint.get(), modelUuid, modelTitle, modelTransform );
 
         footprint->SetParent( aBoard );
 

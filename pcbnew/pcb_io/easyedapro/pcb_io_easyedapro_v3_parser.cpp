@@ -268,8 +268,7 @@ PCB_TEXT* PCB_IO_EASYEDAPRO_V3_PARSER::createV3Text( BOARD_ITEM_CONTAINER*     a
 }
 
 
-FOOTPRINT* PCB_IO_EASYEDAPRO_V3_PARSER::ParseFootprint( const nlohmann::json& aProject, const wxString& aFpUuid,
-                                                        const std::map<wxString, EASYEDAPRO::BLOB>& aBlobMap,
+FOOTPRINT* PCB_IO_EASYEDAPRO_V3_PARSER::ParseFootprint( const std::map<wxString, EASYEDAPRO::BLOB>& aBlobMap,
                                                         const V3_DOC_RAW&                           aDoc )
 {
     std::unique_ptr<FOOTPRINT> footprintPtr = std::make_unique<FOOTPRINT>( m_board );
@@ -611,20 +610,9 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_V3_PARSER::ParseFootprint( const nlohmann::json& aP
         }
     }
 
-    // Extract 3D model info from project
-    if( aProject.is_object() && aProject.contains( "devices" ) )
-    {
-        std::map<wxString, EASYEDAPRO::PRJ_DEVICE> devicesMap = aProject.at( "devices" );
-
-        for( auto& [devUuid, devData] : devicesMap )
-        {
-            if( auto fp = get_opt( devData.attributes, "Footprint" ) )
-            {
-                if( *fp == aFpUuid )
-                    break;
-            }
-        }
-    }
+    // 3D models are applied by the caller from the component's Device ATTR (board import)
+    // or a matching library device (FootprintLoad).  Do not pick an arbitrary device here:
+    // footprints are often shared by devices with different models.
 
     // Heal board outlines
     std::vector<PCB_SHAPE*> edgeShapes;
@@ -1447,30 +1435,14 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
                 fpDesignator = attr.value;
         }
 
-        wxString fpId;
+        // BOM / identity / 3D fields come from the component's Device ATTR.
+        EASYEDAPRO::V3_DEVICE_DATA deviceData = GetV3DeviceData( aProject, deviceId );
+        const std::map<wxString, wxString>& deviceAttrs = deviceData.attributes;
 
-        if( !fpIdOverride.IsEmpty() )
-        {
-            fpId = fpIdOverride;
-        }
-        else
-        {
-            std::string deviceIdUtf8 = std::string( deviceId.ToUTF8() );
+        wxString fpId = fpIdOverride;
 
-            if( !deviceId.empty()
-                && aProject.contains( "devices" )
-                && aProject.at( "devices" ).is_object()
-                && aProject.at( "devices" ).contains( deviceIdUtf8 ) )
-            {
-                const nlohmann::json& dev = aProject.at( "devices" ).at( deviceIdUtf8 );
-
-                if( dev.contains( "attributes" ) && dev.at( "attributes" ).is_object()
-                    && dev.at( "attributes" ).contains( "Footprint" ) )
-                {
-                    fpId = V3JsonToString( dev.at( "attributes" ).at( "Footprint" ) );
-                }
-            }
-        }
+        if( fpId.empty() )
+            fpId = get_def( deviceAttrs, wxS( "Footprint" ), wxEmptyString );
 
         if( fpId.empty() )
         {
@@ -1493,6 +1465,58 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
                 static_cast<FOOTPRINT*>( footprintOrig->Clone() ) );
 
         footprint->SetParent( aBoard );
+
+        // Footprint LIB_ID uses package geometry name (e.g. C0402), matching schematic
+        // Footprint fields. Device/BOM identity stays in fields, not the FPID.
+        wxString libItemName = footprint->GetFPID().GetLibItemName();
+
+        if( libItemName.empty() )
+            libItemName = fpId;
+
+        footprint->SetFPID( ToKiCadLibID( aFpLibName, libItemName ) );
+
+        wxString modelUuid = get_def( deviceAttrs, wxS( "3D Model" ), wxEmptyString );
+        wxString modelTitle = get_def( deviceAttrs, wxS( "3D Model Title" ), modelUuid ).Trim();
+        wxString modelTransform = get_def( deviceAttrs, wxS( "3D Model Transform" ), wxEmptyString );
+
+        m_v2Parser.FillFootprintModelInfo( footprint.get(), modelUuid, modelTitle, modelTransform );
+
+        wxString valueText = ResolveV3DeviceValueText( deviceAttrs );
+
+        if( !valueText.empty() )
+            footprint->SetValue( valueText );
+
+        wxString description = deviceData.description;
+
+        if( description.empty() )
+            description = get_def( deviceAttrs, wxS( "Description" ), wxEmptyString );
+
+        if( !description.empty() )
+        {
+            footprint->GetField( FIELD_T::DESCRIPTION )
+                    ->SetText( NormalizeEasyEDAText( ResolveDeviceFieldVariables( description, deviceAttrs ) ) );
+        }
+
+        ForEachImportedDeviceField(
+                deviceAttrs, false,
+                [&]( const wxString& attrKey, const wxString& value )
+                {
+                    PCB_FIELD* field = nullptr;
+
+                    if( attrKey == wxS( "Datasheet" ) )
+                        field = footprint->GetField( FIELD_T::DATASHEET );
+                    else
+                        field = footprint->GetField( attrKey );
+
+                    if( !field )
+                    {
+                        field = new PCB_FIELD( footprint.get(), FIELD_T::USER, attrKey );
+                        footprint->Add( field, ADD_MODE::APPEND );
+                    }
+
+                    field->SetText( value );
+                    field->SetVisible( false );
+                } );
 
         // Apply position, rotation, flip
         PCB_LAYER_ID klayer = m_v2Parser.LayerToKi( comp.layer );
