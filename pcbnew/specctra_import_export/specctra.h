@@ -3351,6 +3351,7 @@ public:
     {
         rules = nullptr;
         net_number = -1;
+        m_unassigned = false;
     }
 
     ~NET_OUT()
@@ -3364,6 +3365,9 @@ public:
 
         // cannot use Type() here, it is T_net_out and we need "(net "
         out->Print( nestLevel, "(net %s%s%s\n", quote, net_id.c_str(), quote );
+
+        if( m_unassigned )
+            out->Print( nestLevel + 1, "(unassigned)\n" );
 
         if( net_number>= 0 )
             out->Print( nestLevel+1, "(net_number %d)\n", net_number );
@@ -3388,6 +3392,7 @@ private:
 
     std::string                   net_id;
     int                           net_number;
+    bool                          m_unassigned;
     RULE*                         rules;
     boost::ptr_vector<WIRE>       wires;
     boost::ptr_vector<WIRE_VIA>   wire_vias;

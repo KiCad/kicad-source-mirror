@@ -3612,6 +3612,7 @@ void SPECCTRA_DB::doNET_OUT( NET_OUT* growth )
 
     /*  <net_out_descriptor >::=
         (net <net_id >
+          [(unassigned)]
           [(net_number <integer >)]
           [<rule_descriptor> ]
           {[<wire_shape_descriptor> | <wire_guide_descriptor> |
@@ -3632,6 +3633,11 @@ void SPECCTRA_DB::doNET_OUT( NET_OUT* growth )
 
         switch( tok )
         {
+        case T_unassigned:
+            growth->m_unassigned = true;
+            NeedRIGHT();
+            break;
+
         case T_net_number:
             tok = NextTok();
 
