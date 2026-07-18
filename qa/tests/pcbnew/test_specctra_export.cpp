@@ -27,12 +27,15 @@
 #include <system_error>
 
 #include <board.h>
+#include <board_commit.h>
 #include <footprint.h>
 #include <layer_ids.h>
 #include <locale_io.h>
 #include <pcb_track.h>
 #include <pcbnew_utils/board_file_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
 #include <specctra_import_export/specctra.h>
+#include <tool/tool_manager.h>
 
 #include <wx/filename.h>
 #include <wx/string.h>
@@ -100,6 +103,18 @@ int countTraces( BOARD* aBoard )
 
     return n;
 }
+
+
+void importSession( BOARD* aBoard, const wxString& aSesPath )
+{
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( aBoard, nullptr, nullptr, nullptr, nullptr );
+    toolMgr.RegisterTool( new KI_TEST::DUMMY_TOOL() );
+
+    BOARD_COMMIT commit( &toolMgr, true, false );
+    ImportSpecctraSession( aBoard, aSesPath, commit );
+    commit.Push( wxT( "Import Specctra Session" ), SKIP_UNDO );
+}
 } // namespace
 
 
@@ -159,6 +174,42 @@ BOOST_AUTO_TEST_CASE( SpecctraExportDuplicateEmptyRefs )
 }
 
 
+// Allegro Specctra writes zone fills as (wire (poly ...)) — an abbreviation of (polygon).
+// Parsing must accept that token and skip the pour geometry (zones stay on the board).
+BOOST_AUTO_TEST_CASE( SpecctraImportAllegroPolyWire )
+{
+    LOCALE_IO              toggle;
+    std::unique_ptr<BOARD> board = loadTestBoard();
+
+    TEMP_FILE ses( wxT( "kicad_specctra_allegro_poly_" ) );
+
+    const std::string validLayer = std::string( board->GetLayerName( F_Cu ).ToUTF8() );
+
+    std::ofstream out( ses.Path() );
+    out << "(session test.ses\n"
+        << "  (base_design test.dsn)\n"
+        << "  (routes\n"
+        << "    (resolution um 10)\n"
+        << "    (library_out )\n"
+        << "    (network_out\n"
+        << "      (net \"/ALLPST\"\n"
+        << "        (wire (path \"" << validLayer << "\" 1600  0 0  1000 0)\n"
+        << "          (type route))\n"
+        << "        (wire (poly \"" << validLayer << "\" 0  0 0  1000 0  1000 1000  0 1000  0 0)\n"
+        << "          (type normal))\n"
+        << "      )\n"
+        << "    )\n"
+        << "  )\n"
+        << ")\n";
+    out.close();
+
+    BOOST_REQUIRE_NO_THROW( importSession( board.get(), ses.Str() ) );
+
+    // Path wire imported; poly wire ignored (zone fill), so exactly one trace.
+    BOOST_CHECK_EQUAL( countTraces( board.get() ), 1 );
+}
+
+
 // #24948: single unresolved session items (an unknown wire layer or a placement referencing a
 // uniquified id the board never had) must be skipped rather than sinking the whole import.
 BOOST_AUTO_TEST_CASE( SpecctraImportSkipsInvalidWireLayer )
@@ -194,7 +245,7 @@ BOOST_AUTO_TEST_CASE( SpecctraImportSkipsInvalidWireLayer )
         << ")\n";
     out.close();
 
-    BOOST_REQUIRE_NO_THROW( ImportSpecctraSession( board.get(), ses.Str() ) );
+    BOOST_REQUIRE_NO_THROW( importSession( board.get(), ses.Str() ) );
 
     // The session replaces all unlocked traces; only the valid wire survives, the bogus wire and
     // the unresolved placement are dropped rather than throwing.

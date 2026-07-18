@@ -36,37 +36,36 @@
 #include <locale_io.h>
 #include <macros.h>
 #include <board.h>
+#include <board_commit.h>
 #include <board_design_settings.h>
+#include <commit.h>
 #include <footprint.h>
-#include <pcb_group.h>
 #include <pcb_track.h>
-#include <connectivity/connectivity_data.h>
-#include <view/view.h>
 #include <math/util.h>      // for KiROUND
 #include <pcbnew_settings.h>
 #include <string_utils.h>
+#include <tool/actions.h>
+#include <tool/tool_manager.h>
 #include <wx/log.h>
 
 using namespace DSN;
 
 bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
 {
-    // To avoid issues with undo/redo lists (dangling pointers) clear the lists
-    // todo: use undo/redo feature
-    ClearUndoRedoList();
+    BOARD_COMMIT commit( this );
 
-    if( GetCanvas() )    // clear view:
-    {
-        for( PCB_TRACK* track : GetBoard()->Tracks() )
-            GetCanvas()->GetView()->Remove( track );
-    }
+    // Avoid dangling selection pointers when tracks/vias are removed by the import.
+    if( TOOL_MANAGER* tools = GetToolManager() )
+        tools->RunAction( ACTIONS::selectionClear );
 
     try
     {
-        DSN::ImportSpecctraSession( GetBoard(), fullFileName );
+        DSN::ImportSpecctraSession( GetBoard(), fullFileName, commit );
     }
     catch( const IO_ERROR& ioe )
     {
+        commit.Revert();
+
         wxString msg = _( "Board may be corrupted, do not save it.\n Fix problem and try again" );
 
         wxString extra = ioe.What();
@@ -75,20 +74,9 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
         return false;
     }
 
-    OnModify();
-
-    if( GetCanvas() )    // Update view:
-    {
-        // Update footprint positions
-
-        // add imported tracks (previous tracks are removed, therefore all are new)
-        for( PCB_TRACK* track : GetBoard()->Tracks() )
-            GetCanvas()->GetView()->Add( track );
-    }
+    commit.Push( _( "Import Specctra Session" ) );
 
     SetStatusText( wxString( _( "Session file imported and merged OK." ) ) );
-
-    Refresh();
 
     return true;
 }
@@ -357,7 +345,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
 // no UI code in this function, throw exception to report problems to the
 // UI handler: void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
-void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
+void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
 {
     m_sessionBoard = aBoard;      // not owned here
 
@@ -370,34 +358,17 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
     if( !m_session->route->library )
         THROW_IO_ERROR( _("Session file is missing the \"library_out\" section") );
 
-    // delete the old tracks and vias but save locked tracks/vias; they will be re-added later
-    std::vector<PCB_TRACK*> locked;
-    TRACKS tracks = aBoard->Tracks();
-    aBoard->RemoveAll( { PCB_TRACE_T } );
-
-    for( PCB_TRACK* track : tracks )
+    // Remove unlocked tracks/vias (locked ones stay; they are exported as fixed and omitted
+    // from the .ses).
+    for( PCB_TRACK* track : aBoard->Tracks() )
     {
-        if( track->IsLocked() )
-        {
-            locked.push_back( track );
-        }
-        else
-        {
-            if( EDA_GROUP* group = track->GetParentGroup() )
-                group->RemoveItem( track );
-
-            delete track;
-        }
+        if( !track->IsLocked() )
+            aCommit.Remove( track );
     }
 
     aBoard->DeleteMARKERs();
 
     buildLayerMaps( aBoard );
-
-    // Add locked tracks: because they are exported as Fix tracks, they are not
-    // in .ses file.
-    for( PCB_TRACK* track : locked )
-        aBoard->Add( track );
 
     // A single unresolvable place, wire, or via (e.g. a uniquified fiducial id or an unknown layer
     // from a foreign router) must not sink the whole session, so skipped items are counted and
@@ -429,6 +400,8 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
                 UNIT_RES* resolution = place.GetUnits();
                 wxASSERT( resolution );
+
+                aCommit.Modify( footprint );
 
                 VECTOR2I newPos = mapPt( place.m_vertex, resolution );
                 footprint->SetPosition( newPos );
@@ -511,13 +484,13 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                     PATH* path = static_cast<PATH*>( wire.m_shape );
 
                     for( unsigned pt = 0; pt < path->points.size() - 1; ++pt )
-                        aBoard->Add( makeTRACK( &wire, path, pt, netoutCode ) );
+                        aCommit.Add( makeTRACK( &wire, path, pt, netoutCode ) );
                 }
                 else if( shape == T_qarc )
                 {
                     QARC* qarc = static_cast<QARC*>( wire.m_shape );
 
-                    aBoard->Add( makeARC( &wire, qarc, netoutCode ) );
+                    aCommit.Add( makeARC( &wire, qarc, netoutCode ) );
                 }
                 else if( shape == T_polygon )
                 {
@@ -576,7 +549,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
                 for( unsigned v = 0; v < wire_via.m_vertexes.size(); ++v )
                 {
-                    aBoard->Add( makeVIA( &wire_via, padstack, wire_via.m_vertexes[v], netCode,
+                    aCommit.Add( makeVIA( &wire_via, padstack, wire_via.m_vertexes[v], netCode,
                                           via_drill_default ) );
                 }
             } );
@@ -591,16 +564,13 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 }
 
 
-bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName )
+bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName, COMMIT& aCommit )
 {
     SPECCTRA_DB db;
     LOCALE_IO   toggle;
 
     db.LoadSESSION( fullFileName );
-    db.FromSESSION( aBoard );
-
-    aBoard->GetConnectivity()->ClearRatsnest();
-    aBoard->BuildConnectivity();
+    db.FromSESSION( aBoard, aCommit );
 
     return true;
 }

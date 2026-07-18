@@ -39,6 +39,7 @@
 
 // all outside the DSN namespace:
 class BOARD;
+class COMMIT;
 class PAD;
 class PCB_TRACK;
 class PCB_ARC;
@@ -3697,8 +3698,10 @@ public:
      * its components are subject to being moved.
      *
      * @param aBoard The #BOARD to merge the #SESSION information into.
+     * @param aCommit Commit used to stage removals, footprint moves, and new tracks for
+     *                undo/redo and view updates. The caller is responsible for Push().
      */
-    void FromSESSION( BOARD* aBoard );
+    void FromSESSION( BOARD* aBoard, COMMIT& aCommit );
 
     /**
      * Write the internal #SESSION instance out as a #SPECTRA DSN format file.
@@ -3957,11 +3960,14 @@ private:
 /**
  * @brief Helper method to import SES file to a board
  *
+ * Stages board changes into \a aCommit. The caller must Push() the commit.
+ *
  * @param aBoard board object
- * @param aFullFilename specctra file name
+ * @param fullFileName specctra session file name
+ * @param aCommit commit for undo/redo and view updates
  */
 
-bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName );
+bool ImportSpecctraSession( BOARD* aBoard, const wxString& fullFileName, COMMIT& aCommit );
 
 }           // namespace DSN
 

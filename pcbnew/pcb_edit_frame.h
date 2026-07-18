@@ -494,8 +494,11 @@ public:
     bool ExportSpecctraFile( const wxString& aFullFilename );
 
     /**
-     * Import a specctra *.ses file and use it to relocate MODULEs and to replace all vias and
+     * Import a specctra *.ses file and use it to relocate footprints and to replace all vias and
      * tracks in an existing and loaded #BOARD.
+     *
+     * Changes are committed through #BOARD_COMMIT so they participate in undo/redo and refresh
+     * the canvas view (including moved footprints).
      *
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the specification.
      */
