@@ -56,6 +56,16 @@ public:
     static TOOL_ACTION saveCopy;
     static TOOL_ACTION saveAll;
     static TOOL_ACTION revert;
+    static TOOL_ACTION checkInTeamLibrary;
+    static TOOL_ACTION updateTeamLibrary;
+
+    // Lifecycle of a team part, run from a library tree or the editor infobar
+    static TOOL_ACTION teamPartCheckIn;
+    static TOOL_ACTION teamPartRevise;
+    static TOOL_ACTION teamPartCancelRevision;
+    static TOOL_ACTION teamPartRelease;
+    static TOOL_ACTION teamPartTransition; ///< Parameter is the state id; empty offers the part's states
+    static TOOL_ACTION teamPartHistory;
     static TOOL_ACTION pageSettings;
     static TOOL_ACTION exportForOlderVersion;
     static TOOL_ACTION print;

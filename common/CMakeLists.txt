@@ -387,6 +387,14 @@ set( KICOMMON_SRCS
     api/cross_probe_client.cpp
     api/python_manager.cpp
     api/serializable.cpp
+    mdw/client/mdw_compare_doc.cpp
+    mdw/client/mdw_overwritten_parts.cpp
+    mdw/client/mdw_file_lock.cpp
+    mdw/client/mdw_lifecycle.cpp
+    mdw/client/mdw_op.cpp
+    mdw/client/mdw_item.cpp
+    mdw/mdw_serial_worker.cpp
+    mdw/mdw_types.cpp
 
     startwizard/startwizard.cpp
     startwizard/startwizard_provider_libraries.cpp
