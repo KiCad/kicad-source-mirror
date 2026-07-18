@@ -43,6 +43,8 @@
 #include <router/pns_node.h>
 #include <router/pns_router.h>
 #include <router/pns_segment.h>
+#include <router/pns_shove.h>
+#include <router/pns_sizes_settings.h>
 #include <router/pns_solid.h>
 #include <router/pns_via.h>
 
@@ -1244,4 +1246,42 @@ BOOST_FIXTURE_TEST_CASE( PNSBothPhysicalConstraintsMaxWins, PNS_TEST_FIXTURE )
     for( const PNS::OBSTACLE& obs : obstacles )
         maxClearance = std::max( maxClearance, obs.m_clearance );
     BOOST_CHECK_EQUAL( maxClearance, 2000000 );
+}
+
+
+// Diff pair vias must respect copper-to-hole clearance, not just copper-to-copper and
+// hole-to-hole. EffectiveDiffPairViaGap() is the copper-edge-to-copper-edge distance the
+// placer fits vias to; it converts each clearance rule to that reference by subtracting the
+// annular ring(s) of via copper that sit between a hole edge and the copper edge.
+//
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/21623 where the placer
+// ignored copper-to-hole clearance and produced DRC violations on diff pair vias.
+BOOST_AUTO_TEST_CASE( PNSDiffPairViaGapCopperToHoleClearance )
+{
+    PNS::SIZES_SETTINGS sizes;
+
+    // 600um copper diameter over a 300um drill leaves a 150um annular ring.
+    sizes.SetViaDiameter( 600000 );
+    sizes.SetViaDrill( 300000 );
+    sizes.SetDiffPairViaGapSameAsTraceGap( false );
+
+    BOOST_CHECK_EQUAL( sizes.GetDiffPairCopperToHole(), 0 );
+
+    // Copper-to-hole binds because 400um from a hole edge to the neighbour's copper edge is
+    // 400000 - 150000 = 250000 copper-to-copper, exceeding both other rules.
+    sizes.SetDiffPairViaGap( 200000 );
+    sizes.SetDiffPairHoleToHole( 500000 ); // 500000 - 300000 = 200000 copper-to-copper
+    sizes.SetDiffPairCopperToHole( 400000 );
+
+    BOOST_CHECK_EQUAL( sizes.GetDiffPairCopperToHole(), 400000 );
+    BOOST_CHECK_EQUAL( sizes.EffectiveDiffPairViaGap(), 250000 );
+
+    // Hole-to-hole binds when it is the largest converted rule.
+    sizes.SetDiffPairHoleToHole( 900000 ); // 900000 - 300000 = 600000 copper-to-copper
+    BOOST_CHECK_EQUAL( sizes.EffectiveDiffPairViaGap(), 600000 );
+
+    // Plain copper-to-copper gap binds when the hole-based rules are slack.
+    sizes.SetDiffPairHoleToHole( 0 );
+    sizes.SetDiffPairCopperToHole( 0 );
+    BOOST_CHECK_EQUAL( sizes.EffectiveDiffPairViaGap(), 200000 );
 }

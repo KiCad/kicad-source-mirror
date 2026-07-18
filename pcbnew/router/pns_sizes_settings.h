@@ -22,6 +22,7 @@
 #ifndef __PNS_SIZES_SETTINGS_H
 #define __PNS_SIZES_SETTINGS_H
 
+#include <algorithm>
 #include <map>
 #include <optional>
 
@@ -53,7 +54,8 @@ public:
             m_diffPairViaGap( 180000 ),
             m_diffPairViaGapSameAsTraceGap( true ),
             m_holeToHole( 0 ),
-            m_diffPairHoleToHole( 0 )
+            m_diffPairHoleToHole( 0 ),
+            m_diffPairCopperToHole( 0 )
     {};
 
     ~SIZES_SETTINGS() {};
@@ -136,6 +138,20 @@ public:
     void SetDiffPairHoleToHole( int aHoleToHole ) { m_diffPairHoleToHole = aHoleToHole; }
     int GetDiffPairHoleToHole() const { return m_diffPairHoleToHole; }
 
+    void SetDiffPairCopperToHole( int aCopperToHole ) { m_diffPairCopperToHole = aCopperToHole; }
+    int GetDiffPairCopperToHole() const { return m_diffPairCopperToHole; }
+
+    // Copper-edge-to-copper-edge gap between diff pair vias, accounting for hole-to-hole and
+    // copper-to-hole clearance in addition to the plain copper-to-copper gap.
+    int EffectiveDiffPairViaGap() const
+    {
+        int annularRing = ( ViaDiameter() - ViaDrill() ) / 2;
+
+        return std::max( { DiffPairViaGap(),
+                           GetDiffPairHoleToHole() - 2 * annularRing,
+                           GetDiffPairCopperToHole() - annularRing } );
+    }
+
 private:
     int     m_clearance;
     int     m_minClearance;
@@ -154,6 +170,7 @@ private:
 
     int     m_holeToHole;
     int     m_diffPairHoleToHole;
+    int     m_diffPairCopperToHole;
 
     std::map<int, int> m_layerPairs;
 
