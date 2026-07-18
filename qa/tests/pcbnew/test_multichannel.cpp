@@ -1372,6 +1372,127 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutCopiesSilkscreen, MULTICHANNEL_TE
 
 
 /**
+ * Apply Design Block Layout must rotate each footprint field exactly once. The footprint already
+ * carries the block rotation into its fields, so a second explicit rotate double-rotated the text.
+ * Block placed at 45 deg, source fields at 10 deg, so the copies must land at 55 deg not 90 deg.
+ */
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutRotatesFieldsOnce, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxT( "NET1" ), 1 );
+    m_board->Add( net );
+
+    auto makeFootprint = [&]( const wxString& aRef, const VECTOR2I& aPos ) -> FOOTPRINT*
+    {
+        FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+        fp->SetFPID( LIB_ID( wxT( "TestLib" ), wxT( "R" ) ) );
+        fp->SetReference( aRef );
+        fp->SetPosition( aPos );
+
+        PAD* pad = new PAD( fp );
+        pad->SetNumber( wxT( "1" ) );
+        pad->SetNet( net );
+        pad->SetPosition( aPos );
+        pad->SetSize( F_Cu, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+        pad->SetLayerSet( LSET( { F_Cu } ) );
+        fp->Add( pad );
+
+        m_board->Add( fp );
+        return fp;
+    };
+
+    const EDA_ANGLE sourceFieldAngle( 10.0, DEGREES_T );
+    const EDA_ANGLE blockRotation( 45.0, DEGREES_T );
+
+    // Source design block: two matched footprints at orientation 0 with their Value field tilted.
+    FOOTPRINT* refFp1 = makeFootprint( wxT( "R1" ), VECTOR2I( pcbIUScale.mmToIU( 0 ), 0 ) );
+    FOOTPRINT* refFp2 = makeFootprint( wxT( "R2" ), VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ) );
+
+    for( FOOTPRINT* fp : { refFp1, refFp2 } )
+        fp->GetField( FIELD_T::VALUE )->SetTextAngle( sourceFieldAngle );
+
+    // Destination: matched pair placed at 45 deg so the block is applied with a 45 deg rotation.
+    FOOTPRINT* destFp1 = makeFootprint( wxT( "R3" ), VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ) );
+    FOOTPRINT* destFp2 = makeFootprint( wxT( "R4" ), VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 50 ) ) );
+
+    for( FOOTPRINT* fp : { destFp1, destFp2 } )
+        fp->SetOrientation( blockRotation );
+
+    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+    destGroup->SetName( wxT( "design-block-dest" ) );
+    destGroup->AddItem( destFp1 );
+    destGroup->AddItem( destFp2 );
+    m_board->Add( destGroup );
+
+    RULE_AREA dbRA;
+    dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+    dbRA.m_components.insert( refFp1 );
+    dbRA.m_components.insert( refFp2 );
+    dbRA.m_designBlockItems.insert( refFp1 );
+    dbRA.m_designBlockItems.insert( refFp2 );
+
+    dbRA.m_zone = new ZONE( m_board.get() );
+    dbRA.m_zone->SetIsRuleArea( true );
+    dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    dbRA.m_zone->AddPolygon(
+            KIGEOM::BoxToLineChain( BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
+                                                      VECTOR2I( pcbIUScale.mmToIU( 15 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
+
+    RULE_AREA destRA;
+    destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+    destRA.m_components.insert( destFp1 );
+    destRA.m_components.insert( destFp2 );
+
+    destRA.m_zone = new ZONE( m_board.get() );
+    destRA.m_zone->SetIsRuleArea( true );
+    destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+            BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 45 ), pcbIUScale.mmToIU( 45 ) ),
+                              VECTOR2I( pcbIUScale.mmToIU( 65 ), pcbIUScale.mmToIU( 55 ) ) ) ) );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                   .m_connectedRoutingOnly = false,
+                                   .m_copyPlacement = true,
+                                   .m_copyOtherItems = true,
+                                   .m_groupItems = false,
+                                   .m_includeLockedItems = true,
+                                   .m_anchorFp = nullptr };
+
+    int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
+    BOOST_REQUIRE_MESSAGE( result >= 0, "RepeatLayout failed" );
+
+    delete dbRA.m_zone;
+    delete destRA.m_zone;
+
+    // Each placed field must be rotated by the block rotation exactly once: 10 deg + 45 deg = 55 deg.
+    // The double-rotation regression produced 90 deg.
+    const double expected = ( sourceFieldAngle + blockRotation ).AsDegrees();
+
+    for( FOOTPRINT* fp : { destFp1, destFp2 } )
+    {
+        PCB_FIELD* valueField = fp->GetField( FIELD_T::VALUE );
+        BOOST_REQUIRE( valueField != nullptr );
+
+        double actual = valueField->GetTextAngle().Normalize().AsDegrees();
+
+        BOOST_CHECK_MESSAGE( std::abs( actual - expected ) < 1e-3,
+                             wxString::Format( "Field on %s rotated to %.3f deg, expected %.3f deg "
+                                               "(field double-rotation regression)",
+                                               fp->GetReference(), actual, expected ) );
+    }
+}
+
+
+/**
  * Apply Design Block Layout maps block footprints to their placed instances by symbol instance
  * UUID when the board's net topology no longer matches the block (issue: a board wire makes the
  * two non isomorphic, which used to abort with "No compatible component found in the target area").

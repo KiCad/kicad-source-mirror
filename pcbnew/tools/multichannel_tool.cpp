@@ -1714,6 +1714,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 targetField->SetVisible( refField->IsVisible() );
                 targetField->SetAttributes( refField->GetAttributes() );
                 targetField->SetPosition( refField->GetPosition() );
+                targetField->SetTextAngle( refField->GetTextAngle() );
                 targetField->Rotate( VECTOR2( 0, 0 ), rot );
                 targetField->Move( disp );
                 targetField->SetIsKnockout( refField->IsKnockout() );
@@ -1759,6 +1760,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 targetText->SetVisible( refText->IsVisible() );
                 targetText->SetAttributes( refText->GetAttributes() );
                 targetText->SetPosition( refText->GetPosition() );
+                targetText->SetTextAngle( refText->GetTextAngle() );
                 targetText->Rotate( VECTOR2( 0, 0 ), rot );
                 targetText->Move( disp );
                 targetText->SetIsKnockout( refText->IsKnockout() );
