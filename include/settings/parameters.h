@@ -60,9 +60,11 @@ public:
     virtual void SetDefault() = 0;
 
     /**
-     * Checks whether the parameter in memory matches the one in a given JSON file
+     * Checks whether persisting the parameter would leave the file unchanged.  When the settings
+     * reset absent params on load, a parameter the file omits but which still holds its default
+     * counts as a match, so unchanged projects are not rewritten with redundant default keys.
      * @param aSettings is a JSON_SETTINGS to check the JSON file contents of
-     * @return true if the parameter in memory matches its value in the file
+     * @return true if the parameter in memory matches its value in the file, or is absent and default
      */
     virtual bool MatchesFile( const JSON_SETTINGS& aSettings ) const = 0;
 
@@ -156,7 +158,7 @@ public:
         if( std::optional<ValueType> optval = aSettings.Get<ValueType>( m_path ) )
             return *optval == *m_ptr;
 
-        return false;
+        return aSettings.ResetsParamsIfMissing() && *m_ptr == m_default;
     }
 
 private:
@@ -200,7 +202,7 @@ public:
         if( std::optional<wxString> optval = aSettings.Get<wxString>( m_path ) )
             return fromFileFormat( *optval ) == *m_ptr;
 
-        return false;
+        return aSettings.ResetsParamsIfMissing() && *m_ptr == fromFileFormat( m_default );
     }
 
 private:
@@ -278,7 +280,7 @@ public:
         if( std::optional<int> val = aSettings.Get<int>( m_path ) )
             return *val == static_cast<int>( *m_ptr );
 
-        return false;
+        return aSettings.ResetsParamsIfMissing() && *m_ptr == m_default;
     }
 
 private:
@@ -361,7 +363,21 @@ public:
                 return *optval == m_getter();
         }
 
-        // Not in file
+        // Absent from the file counts as a match when the value is still default and missing keys
+        // reset on load.  Many json defaults are null while the getter emits an empty array or
+        // object for the same empty state, so treat an empty getter result against an empty default
+        // as a match too.
+        if( !aSettings.ResetsParamsIfMissing() )
+            return false;
+
+        ValueType current = m_getter();
+
+        if( current == m_default )
+            return true;
+
+        if constexpr( std::is_same_v<ValueType, nlohmann::json> )
+            return current.empty() && ( m_default.is_null() || m_default.empty() );
+
         return false;
     }
 
@@ -460,7 +476,7 @@ public:
         if( std::optional<double> optval = aSettings.Get<double>( m_path ) )
             return *optval == ( *m_ptr / m_invScale );
 
-        return false;
+        return aSettings.ResetsParamsIfMissing() && *m_ptr == m_default;
     }
 
 private:
@@ -558,7 +574,7 @@ public:
             }
         }
 
-        return false;
+        return aSettings.ResetsParamsIfMissing() && *m_ptr == m_default;
     }
 
 protected:
@@ -655,7 +671,7 @@ public:
             }
         }
 
-        return false;
+        return aSettings.ResetsParamsIfMissing() && *m_ptr == m_default;
     }
 
 protected:
@@ -797,7 +813,7 @@ public:
             }
         }
 
-        return false;
+        return aSettings.ResetsParamsIfMissing() && *m_ptr == m_default;
     }
 
 private:

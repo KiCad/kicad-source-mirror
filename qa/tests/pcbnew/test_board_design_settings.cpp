@@ -27,8 +27,12 @@
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_rule.h>
+#include <settings/json_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/settings_manager.h>
 #include <pcbnew_utils/board_test_utils.h>
+
+#include <nlohmann/json.hpp>
 
 
 namespace
@@ -41,6 +45,17 @@ struct BDS_TEST_FIXTURE
 
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
+};
+
+
+// A caller-owned parent so a BOARD_DESIGN_SETTINGS can nest under it without a full project.
+class BDS_TEST_PARENT : public JSON_SETTINGS
+{
+public:
+    BDS_TEST_PARENT() :
+            JSON_SETTINGS( "bds_test_parent", SETTINGS_LOC::NONE, 0, false, false, false )
+    {
+    }
 };
 } // namespace
 

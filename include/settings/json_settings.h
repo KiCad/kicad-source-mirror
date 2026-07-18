@@ -106,6 +106,14 @@ public:
     void SetReadOnly( bool aReadOnly ) { m_writeFile = !aReadOnly; }
 
     /**
+     * @return true if a param absent from the file is reset to its default on load, meaning an
+     *         absent key whose value equals the default is a faithful round-trip of the file.
+     *         When false (e.g. board design settings), an absent key preserves the loaded value,
+     *         so absent-and-default must still be treated as a change.
+     */
+    bool ResetsParamsIfMissing() const { return m_resetParamsIfMissing; }
+
+    /**
      * Wrappers for the underlying JSON API so that most consumers don't need json.hpp
      * All of these functions take a string that is passed to PointerFromString internally.
      */
