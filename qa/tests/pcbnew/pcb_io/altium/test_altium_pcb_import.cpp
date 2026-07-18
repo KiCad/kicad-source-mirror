@@ -700,4 +700,51 @@ BOOST_AUTO_TEST_CASE( LengthTuningPatterns )
 }
 
 
+// https://gitlab.com/kicad/code/kicad/-/issues/24847
+// Keepout regions defined inside an Altium footprint must be imported at the footprint's board
+// location. The importer keeps the Altium absolute coordinates instead of re-basing them to the
+// footprint origin, so the keepout zone lands far from the footprint that owns it.
+BOOST_AUTO_TEST_CASE( Issue24847_FootprintKeepoutPlacement )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/altium/issue24847/PCB1.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE_GT( board->Footprints().size(), 0 );
+
+    int keepoutZoneCount = 0;
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        const VECTOR2I fpPos = footprint->GetPosition();
+
+        for( ZONE* zone : footprint->Zones() )
+        {
+            keepoutZoneCount++;
+
+            const VECTOR2I zoneCenter = zone->GetBoundingBox().GetCenter();
+            const double   distMm = ( zoneCenter - fpPos ).EuclideanNorm() / 1e6;
+
+            BOOST_TEST_MESSAGE( "footprint " << footprint->GetReference().ToStdString()
+                                             << " at (" << fpPos.x << "," << fpPos.y
+                                             << ") keepout center (" << zoneCenter.x << ","
+                                             << zoneCenter.y << ") dist " << distMm << " mm" );
+
+            // A footprint-local keepout sits on its footprint anchor; the pre-fix regression put
+            // it over 100mm away, so anything past a couple of mm is a placement failure.
+            BOOST_CHECK_MESSAGE( distMm < 2.0,
+                                 "Keepout in footprint " << footprint->GetReference().ToStdString()
+                                     << " is " << distMm << " mm from its footprint origin" );
+        }
+    }
+
+    // PCB1.PcbDoc carries exactly three footprint-local keepouts (Z1, Z2, R1); dropping any is a
+    // regression the placement check alone would not catch.
+    BOOST_CHECK_EQUAL( keepoutZoneCount, 3 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
