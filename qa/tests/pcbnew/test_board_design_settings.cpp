@@ -23,8 +23,12 @@
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_rule.h>
+#include <settings/json_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/settings_manager.h>
 #include <pcbnew_utils/board_test_utils.h>
+
+#include <nlohmann/json.hpp>
 
 
 namespace
@@ -37,6 +41,17 @@ struct BDS_TEST_FIXTURE
 
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
+};
+
+
+// A caller-owned parent so a BOARD_DESIGN_SETTINGS can nest under it without a full project.
+class BDS_TEST_PARENT : public JSON_SETTINGS
+{
+public:
+    BDS_TEST_PARENT() :
+            JSON_SETTINGS( "bds_test_parent", SETTINGS_LOC::NONE, 0, false, false, false )
+    {
+    }
 };
 } // namespace
 
@@ -260,6 +275,38 @@ BOOST_AUTO_TEST_CASE( TrackWidthSwitchAdvancesFromConnectedWidth )
     decIndex();
     BOOST_CHECK_EQUAL( bds.GetTrackWidthIndex(), 3 );
     BOOST_CHECK_EQUAL( bds.GetCurrentTrackWidth(), size3 );
+}
+
+
+/**
+ * Highest-risk path of the #24402 fix. BOARD_DESIGN_SETTINGS sets m_resetParamsIfMissing = false
+ * because its params are seeded from the .kicad_pcb parser before the project JSON loads. A
+ * non-default value absent from the project JSON must not be reset on load and must survive a
+ * save/reload round-trip through the parent -- the "absent-but-default counts as a match" logic
+ * must never drop a genuine board value.
+ */
+BOOST_AUTO_TEST_CASE( SeededBoardValueSurvivesRoundTrip )
+{
+    BDS_TEST_PARENT parent;
+
+    ( *parent.Internals() )["/board/design_settings"_json_pointer] =
+            nlohmann::json{ { "meta", { { "version", 2 } } } };
+
+    const int negativeValue = pcbIUScale.mmToIU( -0.1 );
+
+    {
+        BOARD_DESIGN_SETTINGS bds( &parent, "board.design_settings" );
+
+        bds.m_SilkClearance = negativeValue;
+        bds.LoadFromFile();
+        BOOST_CHECK_EQUAL( bds.m_SilkClearance, negativeValue );
+
+        bds.SaveToFile();
+    }
+
+    BOARD_DESIGN_SETTINGS reloaded( &parent, "board.design_settings" );
+    reloaded.LoadFromFile();
+    BOOST_CHECK_EQUAL( reloaded.m_SilkClearance, negativeValue );
 }
 
 

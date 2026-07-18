@@ -51,7 +51,7 @@ bool PARAM_PATH_LIST::MatchesFile( const JSON_SETTINGS& aSettings ) const
         }
     }
 
-    return false;
+    return aSettings.ResetsParamsIfMissing() && *m_ptr == m_default;
 }
 
 
@@ -112,7 +112,7 @@ bool PARAM_WXSTRING_MAP::MatchesFile( const JSON_SETTINGS& aSettings ) const
         }
     }
 
-    return false;
+    return aSettings.ResetsParamsIfMissing() && *m_ptr == m_default;
 }
 
 #if !defined( __MINGW32__ )

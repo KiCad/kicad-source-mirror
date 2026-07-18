@@ -28,6 +28,8 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
 
+#include <nlohmann/json.hpp>
+
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -370,6 +372,75 @@ BOOST_AUTO_TEST_CASE( UnloadProjectSavesToOwnDirectory )
     std::string savedA = readFile( proAPath );
     BOOST_CHECK_MESSAGE( savedA.find( "OWNER" ) == std::string::npos,
                          "active project's file must not receive the unloaded project's data" );
+}
+
+
+/**
+ * Opening a project and saving it without any user change must not rewrite the .kicad_pro.
+ *
+ * A file written by an older build omits parameters added since, so on load those parameters
+ * hold their defaults while being absent from the file. Store() once counted every such absent
+ * parameter as modified, which resurrected the missing keys and rewrote an otherwise-unchanged
+ * project (and its .kicad_prl), spuriously touching version control and file timestamps.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24402
+ */
+BOOST_AUTO_TEST_CASE( NoRewriteWhenUnchanged )
+{
+    fs::path projectDir = m_tempDir / "unchanged_project";
+    fs::create_directories( projectDir );
+
+    fs::path proPath = projectDir / "unchanged_project.kicad_pro";
+
+    // Produce a canonical, fully-populated current-version file with KiCad's own writer so the
+    // reload round-trip is otherwise clean.
+    {
+        std::ofstream seed( proPath );
+        seed << R"({"meta":{"version":3}})";
+        seed.close();
+
+        SETTINGS_MANAGER mgr;
+        BOOST_REQUIRE( mgr.LoadProject( wxString( proPath.string() ), true ) );
+        BOOST_REQUIRE( mgr.SaveProject() );
+        mgr.UnloadProject( &mgr.Prj(), false );
+    }
+
+    auto readFile = []( const fs::path& aPath )
+    {
+        std::ifstream in( aPath );
+        std::stringstream buffer;
+        buffer << in.rdbuf();
+        return buffer.str();
+    };
+
+    // Drop keys the file would omit if saved before those parameters existed. The scalar
+    // board.ipc2581 block covers the plain PARAM path; schematic.bus_aliases (default null in
+    // memory but serialized as {}) covers the PARAM_LAMBDA path. Both hold their defaults, so a
+    // no-op load must not resurrect them.
+    {
+        nlohmann::json js = nlohmann::json::parse( readFile( proPath ) );
+        js["board"].erase( "ipc2581" );
+        js["schematic"].erase( "bus_aliases" );
+
+        std::ofstream out( proPath );
+        out << std::setw( 2 ) << js << std::endl;
+        out.close();
+    }
+
+    std::string before = readFile( proPath );
+    BOOST_REQUIRE( before.find( "ipc2581" ) == std::string::npos );
+    BOOST_REQUIRE( before.find( "bus_aliases" ) == std::string::npos );
+
+    SETTINGS_MANAGER mgr;
+    BOOST_REQUIRE( mgr.LoadProject( wxString( proPath.string() ), true ) );
+
+    PROJECT_FILE& projectFile = mgr.Prj().GetProjectFile();
+
+    // The auto-save path must decline to write when nothing changed.
+    BOOST_CHECK( !projectFile.SaveToFile( wxString( projectDir.string() ) ) );
+
+    // And the on-disk file must be byte-for-byte unchanged.
+    BOOST_CHECK_EQUAL( before, readFile( proPath ) );
 }
 
 

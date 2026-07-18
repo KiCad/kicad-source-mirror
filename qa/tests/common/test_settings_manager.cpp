@@ -24,12 +24,17 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <settings/color_settings.h>
 #include <settings/common_settings.h>
 #include <settings/json_settings.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 
+#include <nlohmann/json.hpp>
+
 #include <filesystem>
+#include <fstream>
+#include <sstream>
 #include <system_error>
 
 namespace fs = std::filesystem;
@@ -130,6 +135,50 @@ BOOST_AUTO_TEST_CASE( LoadDoesNotFlushNeverSyncedSettings )
     FLUSH_TEST_SETTINGS fresh( Path( "cold" ) );
     fresh.LoadFromFile();
     BOOST_CHECK_EQUAL( fresh.m_value, 7 );
+}
+
+
+// An incomplete color theme (missing keys added by a newer build) must not be rewritten merely
+// to inject default colors when the user made no change, mirroring the .kicad_pro guarantee.
+//
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24402
+BOOST_AUTO_TEST_CASE( ColorThemeNotRewrittenWhenUnchanged )
+{
+    // Canonical theme written with KiCad's own writer so the reload round-trip is clean.
+    {
+        COLOR_SETTINGS seed( Path( "theme" ), true );
+        seed.SaveToFile( wxEmptyString, true );
+    }
+
+    fs::path themePath = m_tempDir / "theme.json";
+
+    auto readFile = []( const fs::path& aPath )
+    {
+        std::ifstream in( aPath );
+        std::stringstream buffer;
+        buffer << in.rdbuf();
+        return buffer.str();
+    };
+
+    // Drop a whole colored section so the file mimics a theme saved before those colors existed.
+    // Their in-memory values load as defaults, so a no-op load must not resurrect them.
+    {
+        nlohmann::json js = nlohmann::json::parse( readFile( themePath ) );
+        BOOST_REQUIRE( js.contains( "gerbview" ) );
+        js.erase( "gerbview" );
+
+        std::ofstream out( themePath );
+        out << std::setw( 2 ) << js << std::endl;
+        out.close();
+    }
+
+    std::string before = readFile( themePath );
+
+    COLOR_SETTINGS cfg( Path( "theme" ), true );
+    cfg.LoadFromFile();
+
+    BOOST_CHECK( !cfg.SaveToFile( wxEmptyString ) );
+    BOOST_CHECK_EQUAL( before, readFile( themePath ) );
 }
 
 
