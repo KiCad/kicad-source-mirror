@@ -180,6 +180,13 @@ void IMPORT_PROJ_HELPER::EasyEDAProProjectHandler( int aImportedSchFileType, int
     const bool isV3 =
             aImportedSchFileType == SCH_IO_MGR::SCH_EASYEDAPRO_V3 || aImportedPcbFileType == PCB_IO_MGR::EASYEDAPRO_V3;
 
+    // Sch/PCB importers both assign FPIDs under ShortenLibName( archive ); advertise that
+    // nickname as the source footprint lib so post-import reconciler keeps it (instead of
+    // rewriting schematic Footprint fields onto the generated *-import-fps cache).
+    wxArrayString sourceFpLibs;
+    sourceFpLibs.Add( EASYEDAPRO::ShortenLibName( m_InputFile.GetName() ) );
+    m_properties[IMPORT_PROJ_PROPS::SOURCE_FP_LIBS] = IMPORT_PROJ_PROPS::JoinList( sourceFpLibs );
+
     nlohmann::json project;
 
     if( isV3 )
