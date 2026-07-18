@@ -519,19 +519,18 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
                     aBoard->Add( makeARC( &wire, qarc, netoutCode ) );
                 }
+                else if( shape == T_polygon )
+                {
+                    // Wire polygons are zone fills from FreeRouter / Specctra
+                    // ((polygon ...) or Specctra's (poly ...)).  The board already has its
+                    // zones; keep those and ignore the session pour geometry.
+                }
                 else
                 {
-                    /*
-                     * shape == T_polygon is expected from freerouter if you have a zone on a non-
-                     * "power" type layer, i.e. a T_signal layer and the design does a round-trip
-                     * back in as session here.  We kept our own zones in the BOARD, so ignore this
-                     * so called 'wire'.
-
-                    wxString netId = From_UTF8( wire->net_id.c_str() );
-                    THROW_IO_ERROR( wxString::Format( _( "Unsupported wire shape: '%s' for net: '%s'" ),
-                                                        DLEX::GetTokenString(shape).GetData(),
-                                                        netId.GetData() ) );
-                    */
+                    wxString netId = From_UTF8( wire.m_net_id.c_str() );
+                    THROW_IO_ERROR(
+                            wxString::Format( _( "Unsupported wire shape: '%s' for net: '%s'" ),
+                                              GetTokenText( shape ), netId ) );
                 }
             } );
         }
