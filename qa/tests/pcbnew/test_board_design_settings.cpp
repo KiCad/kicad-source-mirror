@@ -28,7 +28,7 @@
 #include <settings/settings_manager.h>
 #include <pcbnew_utils/board_test_utils.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 
 namespace

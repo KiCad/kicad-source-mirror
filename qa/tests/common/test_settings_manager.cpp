@@ -30,7 +30,7 @@
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <filesystem>
 #include <fstream>
