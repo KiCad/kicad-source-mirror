@@ -58,6 +58,10 @@
 #include <wx/splitter.h>
 #include <wx/radiobox.h>
 #include <wx/radiobut.h>
+#include <wx/datectrl.h>
+#if wxUSE_TIMEPICKCTRL
+#include <wx/timectrl.h>
+#endif
 #include <wx/variant.h>
 
 #include <algorithm>
@@ -92,6 +96,31 @@ static std::string getDialogKeyFromTitle( const wxString& aTitle )
     }
 
     return title;
+}
+
+
+/**
+ * Return true when the given window is a compound date/time picker whose internal
+ * children should be opaque to the dialog-wide state save/load and undo/redo helpers.
+ *
+ * On wxGTK these controls are implemented as a wxComboCtrl + wxTextCtrl + popup
+ * wxCalendarCtrl. The inner text control reports as a wxTextEntry, so enumerating
+ * children causes the persisted state to clobber the picker's value on the next
+ * open and turns user edits into spurious undo entries.
+ */
+static bool isCompoundDateTimePicker( const wxWindow* aWin )
+{
+#if wxUSE_DATEPICKCTRL
+    if( dynamic_cast<const wxDatePickerCtrl*>( aWin ) != nullptr )
+        return true;
+#endif
+
+#if wxUSE_TIMEPICKCTRL
+    if( dynamic_cast<const wxTimePickerCtrl*>( aWin ) != nullptr )
+        return true;
+#endif
+
+    return false;
 }
 
 
@@ -187,6 +216,9 @@ DIALOG_SHIM::~DIALOG_SHIM()
             {
                 for( wxWindow* child : children )
                 {
+                    if( isCompoundDateTimePicker( child ) )
+                        continue;
+
                     if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
                     {
                         textCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( DIALOG_SHIM::onChildSetFocus ),
@@ -211,6 +243,9 @@ DIALOG_SHIM::~DIALOG_SHIM()
             {
                 for( wxWindow* child : children )
                 {
+                    if( isCompoundDateTimePicker( child ) )
+                        continue;
+
                     if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
                     {
                         textCtrl->Unbind( wxEVT_TEXT, &DIALOG_SHIM::onCommandEvent, this );
@@ -679,6 +714,9 @@ void DIALOG_SHIM::SaveControlState()
                         return;
                 }
 
+                if( isCompoundDateTimePicker( win ) )
+                    return;
+
                 std::string key = generateKey( win );
 
                 if( !key.empty() )
@@ -785,6 +823,9 @@ void DIALOG_SHIM::LoadControlState()
                     if( !props->GetPropertyOr( "persist", false ) )
                         return;
                 }
+
+                if( isCompoundDateTimePicker( win ) )
+                    return;
 
                 std::string key = generateKey( win );
 
@@ -967,6 +1008,9 @@ void DIALOG_SHIM::SelectAllInTextCtrls( wxWindowList& children )
 {
     for( wxWindow* child : children )
     {
+        if( isCompoundDateTimePicker( child ) )
+            continue;
+
         if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
         {
             m_beforeEditValues[ textCtrl ] = textCtrl->GetValue();
@@ -1039,6 +1083,9 @@ void DIALOG_SHIM::registerUndoRedoHandlers( wxWindowList& children )
     for( wxWindow* child : children )
     {
         if( m_noControlUndoRedo.count( child ) )
+            continue;
+
+        if( isCompoundDateTimePicker( child ) )
             continue;
 
         if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
