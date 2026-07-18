@@ -1615,7 +1615,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 if( track->IsLocked() )
                     wire->m_wire_type = T_fix;    // tracks with fix property are not returned in .ses files
                 else
-                    wire->m_wire_type = T_route;  // could be T_protect
+                    wire->m_wire_type = T_protect;
 
                 PCB_LAYER_ID kiLayer = track->GetLayer();
                 int          pcbLayer = m_kicadLayer2pcb[kiLayer];
@@ -1669,7 +1669,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             if( via->IsLocked() )
                 dsnVia->m_via_type = T_fix;    // vias with fix property are not returned in .ses files
             else
-                dsnVia->m_via_type = T_route;  // could be T_protect
+                dsnVia->m_via_type = T_protect;
         }
     }
 
