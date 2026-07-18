@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_CASE( LibraryIndexMergeKeepsSymbolAndFootprintNames )
 }
 
 
-BOOST_AUTO_TEST_CASE( LibraryItemDuplicateNamesKeepUuidDisambiguator )
+BOOST_AUTO_TEST_CASE( LibraryItemDuplicateNamesGetNumericSuffix )
 {
     wxString archivePath = makeTempElibz2Path( wxS( "easyedapro_v3_dupes" ) );
 
@@ -179,9 +179,8 @@ BOOST_AUTO_TEST_CASE( LibraryItemDuplicateNamesKeepUuidDisambiguator )
 
     BOOST_REQUIRE_EQUAL( symbols.size(), 3 );
     BOOST_CHECK( symbols.contains( wxS( "DUP" ) ) );
-    BOOST_CHECK( symbols.contains( wxS( "DUP_aaaaaaaa" ) ) );
-    BOOST_CHECK( symbols.contains( wxS( "DUP_aaaaaaaa_2" ) ) );
-    BOOST_CHECK( !symbols.contains( wxS( "DUP_2" ) ) );
+    BOOST_CHECK( symbols.contains( wxS( "DUP_2" ) ) );
+    BOOST_CHECK( symbols.contains( wxS( "DUP_3" ) ) );
 
     BOOST_CHECK( wxRemoveFile( archivePath ) );
 }
