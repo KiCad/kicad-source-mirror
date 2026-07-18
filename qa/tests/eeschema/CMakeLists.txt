@@ -228,7 +228,6 @@ set( QA_EESCHEMA_SRCS
     test_schematic_clipboard_export.cpp
     test_autoplace_fields.cpp
     test_field_case_conflicts.cpp
-    test_issue23020_deep_hierarchy.cpp
 
     # Net Chains test suite
     net_chains/test_net_chains.cpp

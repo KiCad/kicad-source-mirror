@@ -662,6 +662,14 @@ void PGM_KICAD::OnPgmExit()
     {
         SaveCommonSettings();
         m_settings_manager->Save();
+
+        // Unload projects while the kiface DRC/ERC severity tables their PROJECT_FILE serializes
+        // against are still alive; deferring to static teardown crashes
+        for( const wxString& projectPath : m_settings_manager->GetOpenProjects() )
+        {
+            if( PROJECT* project = m_settings_manager->GetProject( projectPath ) )
+                m_settings_manager->UnloadProject( project, false );
+        }
     }
 
     if( GetGitBackend() )

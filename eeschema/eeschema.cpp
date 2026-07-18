@@ -704,6 +704,11 @@ void IFACE::ProjectChanged()
 
 void IFACE::OnKifaceEnd()
 {
+    // Release the CLI-cached schematic while the static ERC_ITEM tables it serializes against are
+    // still alive; deferring to static teardown crashes reading dangling severity keys
+    if( m_jobHandler )
+        m_jobHandler->ClearCachedSchematic();
+
     end_common();
 }
 

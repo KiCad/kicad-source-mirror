@@ -255,15 +255,15 @@ void BOARD::ClearProject()
 
     PROJECT_FILE& project = m_project->GetProjectFile();
 
-    // Owned by the BOARD
-    if( project.m_BoardSettings )
-    {
-        project.ReleaseNestedSettings( project.m_BoardSettings );
+    // Release this board's own design settings, not project.m_BoardSettings; a second board
+    // sharing the project (e.g. diffing a file against itself) overwrites m_BoardSettings, so
+    // trusting it would orphan our settings as a dangling entry in the project's nested list
+    project.ReleaseNestedSettings( &GetDesignSettings() );
+
+    if( project.m_BoardSettings == &GetDesignSettings() )
         project.m_BoardSettings = nullptr;
-    }
 
     GetDesignSettings().m_NetSettings = nullptr;
-    GetDesignSettings().SetParent( nullptr );
     m_project = nullptr;
 }
 

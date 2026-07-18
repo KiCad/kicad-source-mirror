@@ -705,6 +705,11 @@ void IFACE::Reset()
 
 void IFACE::OnKifaceEnd()
 {
+    // Release the CLI-cached board while the static DRC_ITEM tables it serializes against are
+    // still alive; deferring to static teardown crashes reading dangling severity keys
+    if( m_jobHandler )
+        m_jobHandler->ClearCachedBoard();
+
     end_common();
 }
 

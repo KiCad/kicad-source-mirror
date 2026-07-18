@@ -102,7 +102,11 @@ JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
 
 JSON_SETTINGS::~JSON_SETTINGS()
 {
-    for( NESTED_SETTINGS* nested : m_nested_settings )
+    // ReleaseNestedSettings erases from m_nested_settings, so snapshot first to avoid
+    // iterating an invalidated container
+    std::vector<NESTED_SETTINGS*> nestedToRelease( m_nested_settings );
+
+    for( NESTED_SETTINGS* nested : nestedToRelease )
         ReleaseNestedSettings( nested );
 
     for( PARAM_BASE* param: m_params )
