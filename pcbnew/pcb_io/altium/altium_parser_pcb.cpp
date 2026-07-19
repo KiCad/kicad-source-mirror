@@ -863,6 +863,11 @@ ARULE6::ARULE6( ALTIUM_BINARY_PARSER& aReader )
         kind         = ALTIUM_RULE_KIND::CLEARANCE;
         clearanceGap = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "GAP" ), wxT( "10mil" ) );
     }
+    else if( rulekind == wxT( "BoardOutlineClearance" ) )
+    {
+        kind = ALTIUM_RULE_KIND::BOARD_OUTLINE_CLEARANCE;
+        clearanceGap = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "GAP" ), wxT( "10mil" ) );
+    }
     else if( rulekind == wxT( "DiffPairsRouting" ) )
     {
         kind = ALTIUM_RULE_KIND::DIFF_PAIR_ROUTINGS;

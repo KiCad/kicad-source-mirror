@@ -104,17 +104,18 @@ enum class ALTIUM_RULE_KIND
 {
     UNKNOWN = 0,
 
-    CLEARANCE              = 1,
-    DIFF_PAIR_ROUTINGS     = 2,
-    HEIGHT                 = 3,
-    HOLE_SIZE              = 4,
-    HOLE_TO_HOLE_CLEARANCE = 5,
-    WIDTH                  = 6,
-    PASTE_MASK_EXPANSION   = 7,
-    SOLDER_MASK_EXPANSION  = 8,
-    PLANE_CLEARANCE        = 9,
-    POLYGON_CONNECT        = 10,
-    ROUTING_VIAS           = 11
+    CLEARANCE               = 1,
+    DIFF_PAIR_ROUTINGS      = 2,
+    HEIGHT                  = 3,
+    HOLE_SIZE               = 4,
+    HOLE_TO_HOLE_CLEARANCE  = 5,
+    WIDTH                   = 6,
+    PASTE_MASK_EXPANSION    = 7,
+    SOLDER_MASK_EXPANSION   = 8,
+    PLANE_CLEARANCE         = 9,
+    POLYGON_CONNECT         = 10,
+    ROUTING_VIAS            = 11,
+    BOARD_OUTLINE_CLEARANCE = 12
 };
 
 enum class ALTIUM_CONNECT_STYLE

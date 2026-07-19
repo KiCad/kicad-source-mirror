@@ -2559,6 +2559,7 @@ void ALTIUM_PCB::ParseRules6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
     const ARULE6* routingViasRule = GetRuleDefault( ALTIUM_RULE_KIND::ROUTING_VIAS );
     const ARULE6* holeSizeRule = GetRuleDefault( ALTIUM_RULE_KIND::HOLE_SIZE );
     const ARULE6* holeToHoleRule = GetRuleDefault( ALTIUM_RULE_KIND::HOLE_TO_HOLE_CLEARANCE );
+    const ARULE6* boardOutlineRule = GetRuleDefault( ALTIUM_RULE_KIND::BOARD_OUTLINE_CLEARANCE );
 
     if( clearanceRule )
         m_board->GetDesignSettings().m_MinClearance = clearanceRule->clearanceGap;
@@ -2582,6 +2583,9 @@ void ALTIUM_PCB::ParseRules6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
 
     if( holeToHoleRule )
         m_board->GetDesignSettings().m_HoleToHoleMin = holeToHoleRule->clearanceGap;
+
+    if( boardOutlineRule )
+        m_board->GetDesignSettings().m_CopperEdgeClearance = boardOutlineRule->clearanceGap;
 
     const ARULE6* soldermaskRule = GetRuleDefault( ALTIUM_RULE_KIND::SOLDER_MASK_EXPANSION );
     const ARULE6* pastemaskRule = GetRuleDefault( ALTIUM_RULE_KIND::PASTE_MASK_EXPANSION );
