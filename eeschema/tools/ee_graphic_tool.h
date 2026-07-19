@@ -48,6 +48,7 @@ public:
 
     int DrawShape( const TOOL_EVENT& aEvent );
     int DrawArc( const TOOL_EVENT& aEvent );
+    int ImportGraphics( const TOOL_EVENT& aEvent );
 
 private:
     void setTransitions() override;

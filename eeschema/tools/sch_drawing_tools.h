@@ -64,7 +64,6 @@ public:
     int DrawTable( const TOOL_EVENT& aEvent );
     int DrawSheet( const TOOL_EVENT& aEvent );
     int PlaceImage( const TOOL_EVENT& aEvent );
-    int ImportGraphics( const TOOL_EVENT& aEvent );
     int SyncSheetsPins( const TOOL_EVENT& aEvent );
     int SyncAllSheetsPins( const TOOL_EVENT& aEvent );
     int AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent );

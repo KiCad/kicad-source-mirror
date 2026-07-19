@@ -26,6 +26,7 @@
 
 #include <dialogs/dialog_text_properties.h>
 #include <eeschema_settings.h>
+#include <import_gfx/dialog_import_gfx_sch.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_actions.h>
 #include <sch_commit.h>
@@ -126,6 +127,8 @@ void EE_GRAPHIC_TOOL::applySymbolEditorFlags( SCH_ITEM& aItem ) const
 
 void EE_GRAPHIC_TOOL::commitItem( SCH_COMMIT& aCommit, std::unique_ptr<SCH_ITEM> aItem, const wxString& aDescription )
 {
+    aItem->ClearEditFlags();
+
     if( IsSymbolEditor() )
     {
         SYMBOL_EDIT_FRAME* symFrame = frame<SYMBOL_EDIT_FRAME>();
@@ -317,7 +320,6 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
             if( finished )
             {
                 item->EndEdit();
-                item->ClearEditFlags();
                 item->SetFlags( IS_NEW );
 
                 if( isTextBox )
@@ -686,6 +688,179 @@ bool EE_GRAPHIC_TOOL::drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAP
 }
 
 
+int EE_GRAPHIC_TOOL::ImportGraphics( const TOOL_EVENT& aEvent )
+{
+    if( m_inDrawingTool )
+        return 0;
+
+    EDA_ITEM* parent = getDrawParent();
+
+    if( !parent )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
+    DIALOG_IMPORT_GFX_SCH dlg( frame() );
+
+    // Set filename on drag-and-drop
+    if( aEvent.HasParameter() )
+        dlg.SetFilenameOverride( *aEvent.Parameter<wxString*>() );
+
+    int dlgResult = dlg.ShowModal();
+
+    std::list<std::unique_ptr<EDA_ITEM>>& list = dlg.GetImportedItems();
+
+    if( dlgResult != wxID_OK )
+        return 0;
+
+    // Ensure the list is not empty:
+    if( list.empty() )
+    {
+        wxMessageBox( _( "No graphic items found in file." ) );
+        return 0;
+    }
+
+    m_toolMgr->RunAction( ACTIONS::cancelInteractive );
+
+    KIGFX::VIEW_CONTROLS*  controls = getViewControls();
+    std::vector<SCH_ITEM*> newItems;
+    std::vector<SCH_ITEM*> selectedItems;
+    SCH_SELECTION          preview;
+    SCH_COMMIT             commit( m_toolMgr );
+
+    auto commitImport =
+            [&]( const std::vector<SCH_ITEM*>& aItems )
+            {
+                if( IsSymbolEditor() )
+                {
+                    LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( parent );
+                    commit.Modify( symbol, frame()->GetScreen() );
+
+                    for( SCH_ITEM* item : aItems )
+                    {
+                        symbol->AddDrawItem( item );
+                        item->ClearEditFlags();
+                    }
+                }
+                else
+                {
+                    for( SCH_ITEM* item : aItems )
+                        commit.Add( item, frame()->GetScreen() );
+                }
+
+                commit.Push( _( "Import Graphic" ) );
+
+                if( IsSymbolEditor() )
+                    frame<SYMBOL_EDIT_FRAME>()->RebuildView();
+            };
+
+    for( std::unique_ptr<EDA_ITEM>& ptr : list )
+    {
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( ptr.get() );
+        wxCHECK2_MSG( item, continue, wxString::Format( "Bad item type: ", ptr->Type() ) );
+
+        newItems.push_back( item );
+        selectedItems.push_back( item );
+        preview.Add( item );
+
+        ptr.release();
+    }
+
+    if( !dlg.IsPlacementInteractive() )
+    {
+        commitImport( newItems );
+        return 0;
+    }
+
+    m_view->Add( &preview );
+
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    EDA_ITEMS selItems( selectedItems.begin(), selectedItems.end() );
+    m_toolMgr->RunAction<EDA_ITEMS*>( ACTIONS::selectItems, &selItems );
+
+    frame()->PushTool( aEvent );
+
+    auto setCursor =
+            [&]()
+            {
+                frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+            };
+
+    Activate();
+    controls->ShowCursor( true );
+    controls->ForceCursorPosition( false );
+    setCursor();
+
+    EE_GRID_HELPER grid( m_toolMgr );
+
+    VECTOR2I cursorPos = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
+    VECTOR2I delta = cursorPos;
+    VECTOR2I currentOffset;
+
+    for( SCH_ITEM* item : selectedItems )
+        item->Move( delta );
+
+    currentOffset += delta;
+    m_view->Update( &preview );
+
+    // Main loop: keep receiving events
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        setCursor();
+
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_GRAPHICS );
+        controls->ForceCursorPosition( true, cursorPos );
+
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+            for( SCH_ITEM* item : newItems )
+                delete item;
+
+            break;
+        }
+        else if( evt->IsMotion() )
+        {
+            delta = cursorPos - currentOffset;
+
+            for( SCH_ITEM* item : selectedItems )
+                item->Move( delta );
+
+            currentOffset += delta;
+            m_view->Update( &preview );
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
+        {
+            commitImport( newItems );
+            break;
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+    }
+
+    preview.Clear();
+    m_view->Remove( &preview );
+
+    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    controls->ForceCursorPosition( false );
+    frame()->PopTool( aEvent );
+
+    return 0;
+}
+
+
 void EE_GRAPHIC_TOOL::setTransitions()
 {
     // clang-format off
@@ -699,5 +874,7 @@ void EE_GRAPHIC_TOOL::setTransitions()
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolLines.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolPolygon.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolTextBox.MakeEvent() );
+    Go( &EE_GRAPHIC_TOOL::ImportGraphics,   SCH_ACTIONS::importGraphics.MakeEvent() );
+    Go( &EE_GRAPHIC_TOOL::ImportGraphics,   SCH_ACTIONS::ddImportGraphics.MakeEvent() );
     // clang-format on
 }

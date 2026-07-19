@@ -307,6 +307,8 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
     m_acceptedExts.emplace( FILEEXT::KiCadSymbolLibFileExtension, &ACTIONS::ddAddLibrary );
+    m_acceptedExts.emplace( wxS( "dxf" ), &SCH_ACTIONS::ddImportGraphics );
+    m_acceptedExts.emplace( FILEEXT::SVGFileExtension, &SCH_ACTIONS::ddImportGraphics );
     DragAcceptFiles( true );
 
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Library changes are unsaved" ) );
