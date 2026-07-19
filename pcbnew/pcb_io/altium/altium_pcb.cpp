@@ -49,6 +49,8 @@
 
 #include <board_stackup_manager/stackup_predefined_prms.h>
 
+#include <cmath>
+
 #include <advanced_config.h>
 #include <compoundfilereader.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -3373,26 +3375,16 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
 {
     if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
     {
-        EDA_ANGLE includedAngle( aElem.endangle - aElem.startangle, DEGREES_T );
+        double    sweepDegrees = aElem.endangle - aElem.startangle;
+        EDA_ANGLE includedAngle( sweepDegrees, DEGREES_T );
         EDA_ANGLE startAngle( aElem.endangle, DEGREES_T );
-
-        includedAngle.Normalize();
 
         VECTOR2I startOffset = VECTOR2I( KiROUND( startAngle.Cos() * aElem.radius ),
                                          -KiROUND( startAngle.Sin() * aElem.radius ) );
 
-        if( includedAngle.AsDegrees() >= 0.1 )
+        auto addArc = [&]( const VECTOR2I& aStart, const EDA_ANGLE& aAngle )
         {
-            // TODO: This is not the actual board item. We use it for now to calculate the arc points. This could be improved!
-            PCB_SHAPE shape( nullptr, SHAPE_T::ARC );
-
-            shape.SetCenter( aElem.center );
-            shape.SetStart( aElem.center + startOffset );
-            shape.SetArcAngleAndEnd( includedAngle, true );
-
-            // Create actual arc
-            SHAPE_ARC shapeArc( shape.GetCenter(), shape.GetStart(), shape.GetArcAngle(),
-                                aElem.width );
+            SHAPE_ARC                shapeArc( aElem.center, aStart, aAngle, aElem.width );
             std::unique_ptr<PCB_ARC> arc = std::make_unique<PCB_ARC>( m_board, &shapeArc );
 
             arc->SetWidth( aElem.width );
@@ -3404,7 +3396,22 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
 
             if( aElem.unionindex != 0 )
                 m_unionToBoardItems[static_cast<int>( aElem.unionindex )].push_back( added );
+        };
+
+        // PCB_ARC cannot represent a closed sweep, so emit the ring as two halves
+        if( std::abs( sweepDegrees ) >= 359.999 )
+        {
+            EDA_ANGLE halfSweep( sweepDegrees < 0. ? -180. : 180., DEGREES_T );
+
+            addArc( aElem.center + startOffset, halfSweep );
+            addArc( aElem.center - startOffset, halfSweep );
+            return;
         }
+
+        includedAngle.Normalize();
+
+        if( includedAngle.AsDegrees() >= 0.1 )
+            addArc( aElem.center + startOffset, includedAngle );
     }
     else
     {

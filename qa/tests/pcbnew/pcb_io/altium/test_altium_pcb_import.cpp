@@ -54,6 +54,8 @@
 #include <settings/settings_manager.h>
 #include <zone.h>
 
+#include <algorithm>
+#include <cmath>
 #include <cstring>
 #include <map>
 #include <set>
@@ -75,6 +77,12 @@ struct ALTIUM_PCB_IMPORT_FIXTURE
                                                                         int aPrimitiveIndex, ALTIUM_LAYER aLayer )
     {
         return aImporter.HelperGetSolderAndPasteMaskExpansions( aType, aPrimitiveIndex, aLayer );
+    }
+
+    static void convertConnectedArc( ALTIUM_PCB& aImporter, const AARC6& aArc, PCB_LAYER_ID aLayer )
+    {
+        aImporter.m_altiumToKicadNetcodes = { NETINFO_LIST::UNCONNECTED };
+        aImporter.ConvertArcs6ToBoardItemOnLayer( aArc, aLayer );
     }
 
     PCB_IO_ALTIUM_DESIGNER m_altiumPlugin;
@@ -138,6 +146,74 @@ BOOST_AUTO_TEST_CASE( ArcMaskExpansionUsesArcMetadata )
     BOOST_REQUIRE_EQUAL( back.size(), 1 );
     BOOST_CHECK_EQUAL( back[0].first, B_Paste );
     BOOST_CHECK_EQUAL( back[0].second, pcbIUScale.mmToIU( -1.0 ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ConnectedFullCircleArcPreservesRingGeometry )
+{
+    constexpr uint32_t      subrecordSize = 57;
+    constexpr size_t        recordSize = 1 + sizeof( subrecordSize ) + subrecordSize;
+    std::unique_ptr<char[]> content = std::make_unique<char[]>( recordSize );
+    size_t                  offset = 0;
+
+    auto append = [&]( auto aValue )
+    {
+        std::memcpy( content.get() + offset, &aValue, sizeof( aValue ) );
+        offset += sizeof( aValue );
+    };
+
+    append( static_cast<uint8_t>( ALTIUM_RECORD::ARC ) );
+    append( subrecordSize );
+    append( static_cast<uint8_t>( ALTIUM_LAYER::TOP_LAYER ) );
+    append( uint8_t{ 0 } );
+    append( uint8_t{ 0 } );
+    append( uint16_t{ 0 } );
+    append( static_cast<uint16_t>( ALTIUM_POLYGON_NONE ) );
+    append( static_cast<uint16_t>( ALTIUM_COMPONENT_NONE ) );
+    append( uint32_t{ 0 } );
+    append( int32_t{ 0 } );
+    append( int32_t{ 0 } );
+    append( uint32_t{ 100000 } );
+    append( double{ 0.0 } );
+    append( double{ 360.0 } );
+    append( uint32_t{ 10000 } );
+    append( uint16_t{ 0 } );
+    append( uint8_t{ 0 } );
+    append( uint32_t{ 0 } );
+    append( static_cast<uint32_t>( ALTIUM_LAYER::UNKNOWN ) );
+    append( uint8_t{ 0 } );
+
+    BOOST_REQUIRE_EQUAL( offset, recordSize );
+
+    ALTIUM_BINARY_PARSER  reader( content, recordSize );
+    AARC6                 sourceArc( reader );
+    BOARD                 board;
+    LAYER_MAPPING_HANDLER layerMappingHandler;
+    ALTIUM_PCB            importer( &board, nullptr, layerMappingHandler );
+
+    convertConnectedArc( importer, sourceArc, F_Cu );
+
+    BOOST_REQUIRE_EQUAL( board.Tracks().size(), 2 );
+
+    std::vector<const PCB_ARC*> arcs;
+
+    for( const PCB_TRACK* track : board.Tracks() )
+    {
+        BOOST_REQUIRE_EQUAL( track->Type(), PCB_ARC_T );
+        arcs.push_back( static_cast<const PCB_ARC*>( track ) );
+    }
+
+    for( const PCB_ARC* arc : arcs )
+    {
+        BOOST_CHECK_CLOSE( std::abs( arc->GetAngle().AsDegrees() ), 180.0, 1e-6 );
+        BOOST_CHECK_CLOSE( arc->GetRadius(), pcbIUScale.mmToIU( 0.254 ), 1e-6 );
+        BOOST_CHECK_EQUAL( arc->GetWidth(), pcbIUScale.mmToIU( 0.0254 ) );
+        BOOST_CHECK_EQUAL( arc->GetLayer(), F_Cu );
+    }
+
+    BOOST_CHECK( arcs[0]->GetStart() == arcs[1]->GetEnd() );
+    BOOST_CHECK( arcs[0]->GetEnd() == arcs[1]->GetStart() );
+    BOOST_CHECK( board.Drawings().empty() );
 }
 
 
