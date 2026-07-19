@@ -25,7 +25,10 @@
 #include <boost/test/results_collector.hpp> // To check if the current test failed (to be moved?).
 #include <eeschema_test_utils.h>
 #include <test_netlist_exporter_spice.h>
+#include <sim/spice_circuit_model.h>
+#include <richio.h>
 #include <wx/ffile.h>
+#include <wx/tokenzr.h>
 #include <mock_pgm_base.h>
 #include <locale_io.h>
 
@@ -167,3 +170,34 @@ BOOST_FIXTURE_TEST_CASE( IBISSim, TEST_SIM_REGRESSIONS_FIXTURE )
     TestTranPoint( 1e-6, { { "V(PRBS_OUTPUT)", -0.1144 } } );
 }
 
+
+BOOST_FIXTURE_TEST_CASE( FFTCommandNotBareInNetlist, TEST_SIM_REGRESSIONS_FIXTURE )
+{
+    LOCALE_IO dummy;
+
+    LoadSchematic( SchematicQAPath( wxS( "issue13591" ) ) );
+
+    SPICE_CIRCUIT_MODEL model( m_schematic.get() );
+    STRING_FORMATTER    formatter;
+
+    const wxString fftCommand = wxS( "linearize v(/out)\nfft v(/out)" );
+
+    BOOST_REQUIRE( model.GetNetlist( fftCommand, GetNetlistOptions(), &formatter, *m_reporter ) );
+
+    wxString          netlist( formatter.GetString().c_str(), wxConvUTF8 );
+    wxStringTokenizer lines( netlist, wxS( "\n" ), wxTOKEN_RET_EMPTY_ALL );
+    bool              inControl = false;
+
+    while( lines.HasMoreTokens() )
+    {
+        wxString line = lines.GetNextToken().Trim( false ).Trim( true ).Lower();
+
+        if( line.IsSameAs( wxS( ".control" ) ) )
+            inControl = true;
+        else if( line.IsSameAs( wxS( ".endc" ) ) )
+            inControl = false;
+        else if( !inControl )
+            BOOST_CHECK_MESSAGE( !line.StartsWith( wxS( "linearize" ) ) && !line.StartsWith( wxS( "fft" ) ),
+                                 "Bare control command leaked into netlist: " << line );
+    }
+}
