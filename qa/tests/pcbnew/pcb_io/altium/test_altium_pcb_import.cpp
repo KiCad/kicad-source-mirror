@@ -861,6 +861,8 @@ BOOST_AUTO_TEST_CASE( LengthTuningPatterns )
     int singleCount = 0;
     int diffPairCount = 0;
 
+    std::set<wxString> patternNames;
+
     for( PCB_GENERATOR* generator : board->Generators() )
     {
         PCB_TUNING_PATTERN* pattern = dynamic_cast<PCB_TUNING_PATTERN*>( generator );
@@ -869,6 +871,7 @@ BOOST_AUTO_TEST_CASE( LengthTuningPatterns )
             continue;
 
         tuningCount++;
+        patternNames.insert( pattern->GetName() );
 
         // Each pattern must wrap the real imported copper and carry Altium's meander parameters.
         BOOST_CHECK_MESSAGE( !pattern->GetBoardItems().empty(),
@@ -906,6 +909,20 @@ BOOST_AUTO_TEST_CASE( LengthTuningPatterns )
     BOOST_CHECK_EQUAL( tuningCount, 8 );
     BOOST_CHECK_EQUAL( singleCount, 4 );
     BOOST_CHECK_EQUAL( diffPairCount, 4 );
+
+    // Each meander keeps the interactive union name Altium assigned it (from the UnionNames stream).
+    const std::set<wxString> expectedNames = {
+        wxT( "Interactive Length Tunings" ),
+        wxT( "Interactive Length Tunings 1" ),
+        wxT( "Interactive Length Tunings 2" ),
+        wxT( "Interactive Length Tunings 3" ),
+        wxT( "Interactive Diffpair Length Tunings" ),
+        wxT( "Interactive Diffpair Length Tunings 1" ),
+        wxT( "Interactive Diffpair Length Tunings 2" ),
+        wxT( "Interactive Diffpair Length Tunings 3" ),
+    };
+
+    BOOST_CHECK( patternNames == expectedNames );
 }
 
 

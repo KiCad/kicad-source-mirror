@@ -202,6 +202,7 @@ private:
                                                PCB_LAYER_ID aLayer );
     void ParseSmartUnions6Data( const ALTIUM_PCB_COMPOUND_FILE&  aAltiumPcbFile,
                                 const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void ParseUnionNamesData( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPcbFile, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void HelperCreateTuningPatterns();
     void ParseTexts6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
@@ -291,6 +292,7 @@ private:
             m_extendedPrimitiveInformationMaps;
 
     std::vector<ASMARTUNION6>                  m_tuningUnions;
+    std::map<uint32_t, wxString>               m_unionNames;
     std::map<int, std::vector<BOARD_ITEM*>>    m_unionToBoardItems;
 
     std::map<ALTIUM_LAYER, ZONE*>        m_outer_plane;

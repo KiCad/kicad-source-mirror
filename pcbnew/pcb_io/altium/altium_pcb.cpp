@@ -425,6 +425,11 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&                  altiumP
           {
               this->ParseSmartUnions6Data( aFile, fileHeader );
           } },
+        { false, ALTIUM_PCB_DIR::UNIONNAMES,
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseUnionNamesData( aFile, fileHeader );
+          } },
         { false, ALTIUM_PCB_DIR::WIDESTRINGS6,
           [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
@@ -4553,6 +4558,20 @@ void ALTIUM_PCB::ParseSmartUnions6Data( const ALTIUM_PCB_COMPOUND_FILE&  aAltium
 }
 
 
+void ALTIUM_PCB::ParseUnionNamesData( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPcbFile,
+                                      const CFB::COMPOUND_FILE_ENTRY* aEntry )
+{
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
+
+    // Discard the leading record count, otherwise the wide-string table desyncs by four bytes
+    reader.Read<uint32_t>();
+    m_unionNames = reader.ReadWideStringTable();
+
+    if( reader.GetRemainingBytes() != 0 )
+        THROW_IO_ERROR( wxT( "UnionNames stream is not fully parsed" ) );
+}
+
+
 void ALTIUM_PCB::HelperCreateTuningPatterns()
 {
     int created = 0;
@@ -4592,6 +4611,13 @@ void ALTIUM_PCB::HelperCreateTuningPatterns()
         pattern->SetParent( m_board );
         pattern->SetLayer( layer );
         pattern->SetTuningMode( mode );
+
+        // Preserve Altium's interactive union name so the meander keeps its designer-visible label.
+        if( auto nameIt = m_unionNames.find( tuning.unionindex );
+            nameIt != m_unionNames.end() && !nameIt->second.IsEmpty() )
+        {
+            pattern->SetName( nameIt->second );
+        }
 
         pattern->SetMaxAmplitude( tuning.amplitude );
         pattern->SetMinAmplitude( tuning.minamplitude );
