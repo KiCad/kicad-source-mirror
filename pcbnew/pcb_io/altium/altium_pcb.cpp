@@ -1122,6 +1122,7 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
 
     HelperCreateBoardOutline( elem.board_vertices );
     m_board->GetDesignSettings().SetBoardThickness( stackup.BuildBoardThicknessFromStackup() );
+    designSettings.m_HasStackup = true;
 }
 
 

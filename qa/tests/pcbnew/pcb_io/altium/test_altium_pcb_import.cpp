@@ -456,7 +456,11 @@ BOOST_AUTO_TEST_CASE( StackupDielectricLossTangent )
 
     BOOST_REQUIRE( board );
 
-    const BOARD_STACKUP& stackup = board->GetDesignSettings().GetStackupDescriptor();
+    const BOARD_DESIGN_SETTINGS& designSettings = board->GetDesignSettings();
+    const BOARD_STACKUP&         stackup = designSettings.GetStackupDescriptor();
+
+    BOOST_REQUIRE( designSettings.m_HasStackup );
+    BOOST_CHECK( board->GetStackupOrDefault() == stackup );
 
     int dielectricCount = 0;
     int dielectricWithTangent = 0;
