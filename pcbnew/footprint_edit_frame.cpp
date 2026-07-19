@@ -784,6 +784,10 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
 
 void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 {
+    // Cancel a mid-draw tool before the footprint it points into is freed (#24975).
+    if( GetToolManager() )
+        GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
     GetBoard()->DeleteAllFootprints();
 
     m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
@@ -1003,9 +1007,12 @@ void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEX
 
     detachActiveFootprintTab();
 
-    // Drop the live selection while the outgoing board is still valid.
+    // Drop selection and unwind a mid-draw tool while the outgoing board is still valid (#24975).
     if( m_toolManager )
+    {
         m_toolManager->RunAction( ACTIONS::selectionClear );
+        m_toolManager->DeactivateTool();
+    }
 
     m_activeTab = aCtx;
 
