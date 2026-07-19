@@ -97,6 +97,7 @@ struct COMPOUND_FILE_ENTRY;
 } // namespace CFB
 
 class ALTIUM_PCB_COMPOUND_FILE;
+struct ALTIUM_PCB_IMPORT_FIXTURE;
 
 // Structure for storing embedded model data
 struct ALTIUM_EMBEDDED_MODEL_DATA
@@ -118,6 +119,8 @@ typedef std::function<void( const ALTIUM_PCB_COMPOUND_FILE&, const CFB::COMPOUND
 
 class ALTIUM_PCB
 {
+    friend struct ALTIUM_PCB_IMPORT_FIXTURE;
+
 public:
     explicit ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter,
                          LAYER_MAPPING_HANDLER& aLayerMappingHandler,

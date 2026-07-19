@@ -27,9 +27,13 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/pcb_io/altium/pcb_io_altium_designer.h>
+#include <pcbnew/pcb_io/altium/altium_pcb.h>
+#include <pcbnew/pcb_io/altium/altium_pcb_compound_file.h>
 #include <pcbnew/pcb_io/altium/altium_parser_pcb.h>
 
 #include <base_units.h>
+#include <compoundfilereader.h>
+
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -60,11 +64,54 @@ struct ALTIUM_PCB_IMPORT_FIXTURE
 {
     ALTIUM_PCB_IMPORT_FIXTURE() = default;
 
+    static void parseExtendedPrimitiveInformation( ALTIUM_PCB& aImporter, const ALTIUM_PCB_COMPOUND_FILE& aFile,
+                                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
+    {
+        aImporter.ParseExtendedPrimitiveInformationData( aFile, aEntry );
+    }
+
+    static std::vector<std::pair<PCB_LAYER_ID, int>> getMaskExpansions( ALTIUM_PCB& aImporter, ALTIUM_RECORD aType,
+                                                                        int aPrimitiveIndex, ALTIUM_LAYER aLayer )
+    {
+        return aImporter.HelperGetSolderAndPasteMaskExpansions( aType, aPrimitiveIndex, aLayer );
+    }
+
     PCB_IO_ALTIUM_DESIGNER m_altiumPlugin;
 };
 
 
 BOOST_FIXTURE_TEST_SUITE( AltiumPcbImport, ALTIUM_PCB_IMPORT_FIXTURE )
+
+
+BOOST_AUTO_TEST_CASE( ArcMaskExpansionUsesArcMetadata )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc";
+
+    ALTIUM_PCB_COMPOUND_FILE        file( wxString::FromUTF8( dataPath.c_str() ) );
+    const CFB::COMPOUND_FILE_ENTRY* data = file.FindStream( { "ExtendedPrimitiveInformation", "Data" } );
+
+    BOOST_REQUIRE( data );
+
+    BOARD                 board;
+    LAYER_MAPPING_HANDLER layerMappingHandler;
+    ALTIUM_PCB            importer( &board, nullptr, layerMappingHandler );
+
+    parseExtendedPrimitiveInformation( importer, file, data );
+
+    std::vector<std::pair<PCB_LAYER_ID, int>> front =
+            getMaskExpansions( importer, ALTIUM_RECORD::ARC, 6, ALTIUM_LAYER::TOP_LAYER );
+
+    BOOST_REQUIRE_EQUAL( front.size(), 1 );
+    BOOST_CHECK_EQUAL( front[0].first, F_Paste );
+    BOOST_CHECK_EQUAL( front[0].second, pcbIUScale.mmToIU( -1.0 ) );
+
+    std::vector<std::pair<PCB_LAYER_ID, int>> back =
+            getMaskExpansions( importer, ALTIUM_RECORD::ARC, 70, ALTIUM_LAYER::BOTTOM_LAYER );
+
+    BOOST_REQUIRE_EQUAL( back.size(), 1 );
+    BOOST_CHECK_EQUAL( back[0].first, B_Paste );
+    BOOST_CHECK_EQUAL( back[0].second, pcbIUScale.mmToIU( -1.0 ) );
+}
 
 
 /**
