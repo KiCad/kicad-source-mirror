@@ -710,13 +710,13 @@ types:
       - id: y_half_mil_divided_by_2
         type: s2
       - id: pin_name_height_half_mil_divided_by_2
-        type: u2
+        type: s2
       - id: pin_name_width_half_mil_divided_by_2
-        type: u2
+        type: s2
       - id: pin_number_height_half_mil_divided_by_2
-        type: u2
+        type: s2
       - id: pin_number_width_half_mil_divided_by_2
-        type: u2
+        type: s2
       - id: name_offset_x_half_mil_divided_by_2
         type: s2
       - id: name_offset_y_half_mil_divided_by_2
@@ -725,9 +725,9 @@ types:
         type: s2
       - id: number_offset_y_half_mil_divided_by_2
         type: s2
-      - id: side
+      - id: side_and_name_presentation_flags
         type: u2
-      - id: visibility_flags
+      - id: visibility_and_number_presentation_flags
         type: u2
 
   part_type_controller:

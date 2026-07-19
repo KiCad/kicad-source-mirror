@@ -577,9 +577,9 @@ namespace
 
         if( pieceCursor != controllers.pools[3].count )
         {
-            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "symbol definition" ), 3, 0,
-                                                 symbolBase, controllers.pools[2].usedBytes,
-                                                 static_cast<int>( aSheetIndex ) );
+            SOURCE_PROVENANCE source =
+                    sourceAt( aSourceName, aModel.version, wxS( "symbol definition" ), 3, 0, symbolBase,
+                              controllers.pools[2].usedBytes, static_cast<int>( aSheetIndex ) );
             throwDecodeError( source, wxS( "symbol graphic-piece counts leave controller 4" ) );
         }
 
@@ -598,7 +598,7 @@ namespace
 
         for( size_t definition = 0; definition < controllers.pools[2].count; ++definition )
         {
-            const size_t definitionOffset = symbolBase + definition * SYMBOL_RECORD_BYTES;
+            const size_t   definitionOffset = symbolBase + definition * SYMBOL_RECORD_BYTES;
             const uint32_t firstPiece = definitionPieceStart[definition];
             const uint32_t pieceEnd = definition + 1 < definitionPieceStart.size()
                                               ? definitionPieceStart[definition + 1]
@@ -607,18 +607,18 @@ namespace
             const uint32_t vertexEnd = definition + 1 < controllers.pools[2].count
                                                ? aCursor.U32At( definitionOffset + SYMBOL_RECORD_BYTES + 0x34 )
                                                : controllers.pools[4].count;
-            const bool emptyMatches = firstPiece == pieceEnd && firstVertex == vertexEnd;
-            const bool ownedMatches = firstPiece < pieceEnd && pieceVertexStart[firstPiece] == firstVertex
-                                      && pieceVertexStart[pieceEnd - 1]
-                                                         + aCursor.U16At( pieceBase + ( pieceEnd - 1 ) * SYMBOL_PIECE_BYTES
-                                                                          + 2 )
-                                                 == vertexEnd;
+            const bool     emptyMatches = firstPiece == pieceEnd && firstVertex == vertexEnd;
+            const bool     ownedMatches =
+                    firstPiece < pieceEnd && pieceVertexStart[firstPiece] == firstVertex
+                    && pieceVertexStart[pieceEnd - 1]
+                                       + aCursor.U16At( pieceBase + ( pieceEnd - 1 ) * SYMBOL_PIECE_BYTES + 2 )
+                               == vertexEnd;
 
             if( !emptyMatches && !ownedMatches )
             {
-                SOURCE_PROVENANCE source = sourceAt(
-                        aSourceName, aModel.version, wxS( "symbol definition" ), 3, definition, definitionOffset,
-                        SYMBOL_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+                SOURCE_PROVENANCE source =
+                        sourceAt( aSourceName, aModel.version, wxS( "symbol definition" ), 3, definition,
+                                  definitionOffset, SYMBOL_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
                 throwDecodeError( source, wxS( "symbol piece/vertex ownership mismatch" ) );
             }
         }
@@ -628,13 +628,12 @@ namespace
 
         for( size_t piece = 0; piece < controllers.pools[3].count; ++piece )
         {
-            const size_t pieceOffset = pieceBase + piece * SYMBOL_PIECE_BYTES;
+            const size_t   pieceOffset = pieceBase + piece * SYMBOL_PIECE_BYTES;
             const uint16_t pointCount = aCursor.U16At( pieceOffset + 2 );
 
             for( size_t point = 0; point < pointCount; ++point )
             {
-                const size_t vertexOffset =
-                        vertexBase + ( pieceVertexStart[piece] + point ) * SYMBOL_VERTEX_BYTES;
+                const size_t vertexOffset = vertexBase + ( pieceVertexStart[piece] + point ) * SYMBOL_VERTEX_BYTES;
 
                 if( static_cast<int16_t>( aCursor.U16At( vertexOffset + 4 ) ) >= 0 )
                     pieceArcRecords[piece].push_back( discoveredArcCount++ );
@@ -643,9 +642,9 @@ namespace
 
         if( discoveredArcCount != controllers.pools[5].count )
         {
-            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "symbol arc" ), 6,
-                                                 discoveredArcCount, arcBase, controllers.pools[5].usedBytes,
-                                                 static_cast<int>( aSheetIndex ) );
+            SOURCE_PROVENANCE source =
+                    sourceAt( aSourceName, aModel.version, wxS( "symbol arc" ), 6, discoveredArcCount, arcBase,
+                              controllers.pools[5].usedBytes, static_cast<int>( aSheetIndex ) );
             throwDecodeError( source, wxS( "arc markers do not consume controller 6" ) );
         }
 
@@ -677,16 +676,15 @@ namespace
             definition.source = source;
             definition.name = std::move( name );
             const uint32_t firstPiece = definitionPieceStart[record];
-            const uint32_t pieceEnd = record + 1 < definitionPieceStart.size()
-                                              ? definitionPieceStart[record + 1]
-                                              : controllers.pools[3].count;
+            const uint32_t pieceEnd = record + 1 < definitionPieceStart.size() ? definitionPieceStart[record + 1]
+                                                                               : controllers.pools[3].count;
 
             for( size_t piece = firstPiece; piece < pieceEnd; ++piece )
             {
-                const size_t      pieceOffset = pieceBase + piece * SYMBOL_PIECE_BYTES;
-                const uint8_t     pieceKind = aCursor.U8At( pieceOffset );
-                const uint16_t    pointCount = aCursor.U16At( pieceOffset + 2 );
-                const uint32_t    firstVertex = pieceVertexStart[piece];
+                const size_t   pieceOffset = pieceBase + piece * SYMBOL_PIECE_BYTES;
+                const uint8_t  pieceKind = aCursor.U8At( pieceOffset );
+                const uint16_t pointCount = aCursor.U16At( pieceOffset + 2 );
+                const uint32_t firstVertex = pieceVertexStart[piece];
 
                 if( firstVertex + pointCount > vertexEnd )
                     throwDecodeError( source, wxS( "symbol piece crosses its definition vertex slice" ) );
@@ -726,25 +724,23 @@ namespace
                                                 pointSource } );
                 }
 
-                if( pieceKind == 1 && graphic.points.size() == 5
-                    && graphic.points.front().x == graphic.points.back().x
+                if( pieceKind == 1 && graphic.points.size() == 5 && graphic.points.front().x == graphic.points.back().x
                     && graphic.points.front().y == graphic.points.back().y )
                 {
                     const auto [minX, maxX] = std::ranges::minmax( graphic.points, {}, &SOURCE_POINT::x );
                     const auto [minY, maxY] = std::ranges::minmax( graphic.points, {}, &SOURCE_POINT::y );
-                    const bool cornersOnly = std::ranges::all_of(
-                            graphic.points,
-                            [&]( const SOURCE_POINT& aPoint )
-                            {
-                                return ( aPoint.x == minX.x || aPoint.x == maxX.x )
-                                       && ( aPoint.y == minY.y || aPoint.y == maxY.y );
-                            } );
+                    const bool cornersOnly =
+                            std::ranges::all_of( graphic.points,
+                                                 [&]( const SOURCE_POINT& aPoint )
+                                                 {
+                                                     return ( aPoint.x == minX.x || aPoint.x == maxX.x )
+                                                            && ( aPoint.y == minY.y || aPoint.y == maxY.y );
+                                                 } );
 
                     if( cornersOnly )
                     {
                         graphic.kind = MODEL_GRAPHIC_KIND::RECTANGLE;
-                        graphic.points = { { minX.x, minY.y, graphicSource },
-                                           { maxX.x, maxY.y, graphicSource } };
+                        graphic.points = { { minX.x, minY.y, graphicSource }, { maxX.x, maxY.y, graphicSource } };
                     }
                 }
 
@@ -771,12 +767,11 @@ namespace
                     graphic.arcCenter = { ( graphic.arcBoundsStart.x + graphic.arcBoundsEnd.x ) / 2,
                                           ( graphic.arcBoundsStart.y + graphic.arcBoundsEnd.y ) / 2, arcSource };
                     graphic.properties.push_back( sourceProperty(
-                            wxS( "arc_direction" ), graphic.arcClockwise ? wxS( "clockwise" ) : wxS( "counterclockwise" ),
-                            arcSource ) );
+                            wxS( "arc_direction" ),
+                            graphic.arcClockwise ? wxS( "clockwise" ) : wxS( "counterclockwise" ), arcSource ) );
                     graphic.properties.push_back( sourceProperty(
                             wxS( "arc_marker" ),
-                            wxString::Format( wxS( "%d" ),
-                                              static_cast<int16_t>( aCursor.U16At( arcOffset + 4 ) ) ),
+                            wxString::Format( wxS( "%d" ), static_cast<int16_t>( aCursor.U16At( arcOffset + 4 ) ) ),
                             arcSource ) );
                 }
 
@@ -865,15 +860,17 @@ namespace
                 definitionPin.position = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 2 ) ),
                                            decodeLocalCoordinate( aCursor.U16At( terminalOffset + 4 ) ), pinSource };
                 definitionPin.presentation.source = pinSource;
-                definitionPin.presentation.height = static_cast<int64_t>( aCursor.U16At( terminalOffset + 6 ) ) * 2;
-                definitionPin.presentation.width = static_cast<int64_t>( aCursor.U16At( terminalOffset + 8 ) ) * 2;
+                definitionPin.presentation.height =
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 6 ) ) ) * 2;
+                definitionPin.presentation.width =
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 8 ) ) ) * 2;
                 definitionPin.presentation.visible = ( aCursor.U16At( terminalOffset + 24 ) & 0x8000 ) == 0;
                 definitionPin.namePresentation = definitionPin.presentation;
                 definitionPin.numberPresentation.source = pinSource;
                 definitionPin.numberPresentation.height =
-                        static_cast<int64_t>( aCursor.U16At( terminalOffset + 10 ) ) * 2;
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 10 ) ) ) * 2;
                 definitionPin.numberPresentation.width =
-                        static_cast<int64_t>( aCursor.U16At( terminalOffset + 12 ) ) * 2;
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 12 ) ) ) * 2;
                 definitionPin.namePresentation.visible = definitionPin.namePresentation.height != 0
                                                          && ( aCursor.U16At( terminalOffset + 24 ) & 0x8000 ) == 0;
                 definitionPin.numberPresentation.visible = definitionPin.numberPresentation.height != 0;
@@ -881,18 +878,41 @@ namespace
                 definitionPin.nameOffset = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 14 ) ),
                                              decodeLocalCoordinate( aCursor.U16At( terminalOffset + 16 ) ), pinSource };
                 definitionPin.numberOffset = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 18 ) ),
-                                               decodeLocalCoordinate( aCursor.U16At( terminalOffset + 20 ) ), pinSource };
-                const uint16_t side = aCursor.U16At( terminalOffset + 22 );
+                                               decodeLocalCoordinate( aCursor.U16At( terminalOffset + 20 ) ),
+                                               pinSource };
+                const uint16_t presentationFlags = aCursor.U16At( terminalOffset + 22 );
+                const uint16_t visibilityFlags = aCursor.U16At( terminalOffset + 24 );
+                const uint16_t side = presentationFlags & 0x0006;
+                definitionPin.side = side / 2;
 
-                switch( side )
+                if( ( presentationFlags & ~0x2107 ) != 0 )
+                    PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal side" ), presentationFlags, pinSource,
+                                                               aModel.diagnostics );
+
+                definitionPin.angle = ( presentationFlags & 0x2000 ) != 0 ? 900 : 0;
+                definitionPin.nameAngle = ( presentationFlags & 0x2000 ) != 0 ? 900 : 0;
+                definitionPin.numberAngle = 0;
+                definitionPin.nameJustification = ( presentationFlags & 0x0100 ) != 0 ? 2 : 0;
+
+                switch( visibilityFlags & 0x00E0 )
                 {
-                case 0: definitionPin.angle = 0; break;
-                case 2: definitionPin.angle = 1800; break;
-                case 4: definitionPin.angle = 900; break;
-                case 6: definitionPin.angle = 2700; break;
-                default: break;
+                case 0x0000: definitionPin.numberJustification = 0; break;
+                case 0x0040: definitionPin.numberJustification = 8; break;
+                case 0x0060: definitionPin.numberJustification = 9; break;
+                case 0x0080: definitionPin.numberJustification = 2; break;
+                default:
+                    PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal number justification" ),
+                                                               visibilityFlags & 0x00E0, pinSource,
+                                                               aModel.diagnostics );
+                    break;
                 }
-                definitionPin.length = 400;
+                definitionPin.nameOffsetAngle = definitionPin.nameAngle;
+                definitionPin.numberOffsetAngle = 0;
+                definitionPin.nameOffsetJustification = ( presentationFlags & 0x0100 ) != 0 ? 2
+                                                        : ( visibilityFlags & 0x0400 ) != 0 ? 1
+                                                                                            : 0;
+                definitionPin.numberOffsetJustification = 0;
+                definitionPin.visibilityFlags = ( visibilityFlags & 0x8000 ) != 0 ? 128 : 0;
 
                 if( pinDecalHandle == 0xFFFF )
                 {
@@ -907,7 +927,7 @@ namespace
 
                     if( !pinDecal )
                     {
-                        const size_t handleOffset = usedDecalBase + pinDecalHandle * USED_DECAL_BYTES;
+                        const size_t   handleOffset = usedDecalBase + pinDecalHandle * USED_DECAL_BYTES;
                         const uint32_t definitionRecord = aCursor.U32At( handleOffset + 48 );
 
                         if( definitionRecord >= definitionsByRecord.size() || !definitionsByRecord[definitionRecord] )
@@ -916,28 +936,35 @@ namespace
                         pinDecal = definitionsByRecord[definitionRecord];
                     }
 
-                    const wxString                 pinDecalName = pinDecal->name.text;
+                    const wxString pinDecalName = pinDecal->name.text;
 
                     int64_t provenLength = 0;
 
                     for( const MODEL_GRAPHIC& pinGraphic : pinDecal->graphics )
                     {
-                        const bool containsOrigin = std::ranges::any_of(
-                                pinGraphic.points,
-                                []( const SOURCE_POINT& aPoint )
-                                {
-                                    return aPoint.x == 0 && aPoint.y == 0;
-                                } );
+                        const bool containsOrigin = std::ranges::any_of( pinGraphic.points,
+                                                                         []( const SOURCE_POINT& aPoint )
+                                                                         {
+                                                                             return aPoint.x == 0 && aPoint.y == 0;
+                                                                         } );
 
                         if( !containsOrigin )
                             continue;
 
                         for( const SOURCE_POINT& point : pinGraphic.points )
-                            provenLength = std::max( provenLength, std::max( std::abs( point.x ), std::abs( point.y ) ) );
+                            provenLength =
+                                    std::max( provenLength, std::max( std::abs( point.x ), std::abs( point.y ) ) );
                     }
 
                     if( provenLength != 0 )
                         definitionPin.length = provenLength * 2;
+                    else
+                    {
+                        SOURCE_PROPERTY lengthProperty =
+                                sourceProperty( wxS( "pin_length" ), wxS( "unknown" ), pinSource );
+                        lengthProperty.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                        definitionPin.properties.push_back( std::move( lengthProperty ) );
+                    }
 
                     const bool inverted = pinDecalName == wxS( "PINB" ) || pinDecalName == wxS( "PINORB" )
                                           || pinDecalName == wxS( "PCLKB" ) || pinDecalName == wxS( "PINIEB" );
@@ -975,6 +1002,28 @@ namespace
                            {
                                return aLeft->fieldStart < aRight->fieldStart;
                            } );
+
+        for( size_t i = 1; i < fieldDecals.size(); ++i )
+        {
+            if( fieldDecals[i - 1]->fieldStart != fieldDecals[i]->fieldStart )
+                continue;
+
+            SOURCE_PROVENANCE first =
+                    sourceAt( aSourceName, aModel.version, wxS( "used decal" ), 7, fieldDecals[i - 1]->record,
+                              usedDecalBase + fieldDecals[i - 1]->record * USED_DECAL_BYTES, USED_DECAL_BYTES,
+                              static_cast<int>( aSheetIndex ) );
+            SOURCE_PROVENANCE duplicate =
+                    sourceAt( aSourceName, aModel.version, wxS( "used decal" ), 7, fieldDecals[i]->record,
+                              usedDecalBase + fieldDecals[i]->record * USED_DECAL_BYTES, USED_DECAL_BYTES,
+                              static_cast<int>( aSheetIndex ) );
+            throwDecodeError(
+                    duplicate,
+                    wxString::Format( wxS( "duplicate field ID; first at v0x%04X %s controller %d record %llu "
+                                           "sheet %d offset 0x%llX" ),
+                                      first.version, first.objectClass, first.controller,
+                                      static_cast<unsigned long long>( first.recordIndex ), first.sheet,
+                                      static_cast<unsigned long long>( first.absoluteOffset ) ) );
+        }
 
         auto decodeTextRecord = [&]( size_t aRecord, bool aEmbedded, MODEL_SYMBOL_DEFINITION& aDefinition )
         {
@@ -1065,25 +1114,27 @@ namespace
                 for( size_t standard = 0; standard < 2; ++standard )
                 {
                     const size_t      usedOffset = usedDecalBase + decal.record * USED_DECAL_BYTES;
-                    SOURCE_PROVENANCE fieldSource = sourceAt(
-                            aSourceName, aModel.version, wxS( "standard definition field" ), 7, decal.record,
-                            usedOffset + 60 + standard * 8, 8, static_cast<int>( aSheetIndex ) );
+                    SOURCE_PROVENANCE fieldSource =
+                            sourceAt( aSourceName, aModel.version, wxS( "standard definition field" ), 7, decal.record,
+                                      usedOffset + 60 + standard * 8, 8, static_cast<int>( aSheetIndex ) );
                     MODEL_FIELD field;
                     field.source = fieldSource;
-                    field.name = { {}, standard == 0 ? wxS( "REF-DES" ) : wxS( "PART-TYPE" ),
-                                   STRING_ENCODING_STATUS::CODE_PAGE, fieldSource };
+                    field.name = { {},
+                                   standard == 0 ? wxS( "REF-DES" ) : wxS( "PART-TYPE" ),
+                                   STRING_ENCODING_STATUS::CODE_PAGE,
+                                   fieldSource };
                     field.position = { decodeLocalCoordinate( aCursor.U16At( usedOffset + 60 + standard * 8 ) ),
                                        decodeLocalCoordinate( aCursor.U16At( usedOffset + 62 + standard * 8 ) ),
                                        fieldSource };
                     field.angle = NormalizeAngle( aCursor.U16At( usedOffset + 64 + standard * 8 ) );
                     field.presentation.source = fieldSource;
-                    field.presentation.height = static_cast<int64_t>( aCursor.U16At( usedOffset + 88 + standard * 2 ) ) * 2;
+                    field.presentation.height =
+                            static_cast<int64_t>( aCursor.U16At( usedOffset + 88 + standard * 2 ) ) * 2;
                     field.presentation.width = static_cast<int64_t>( aCursor.U8At( usedOffset + 96 + standard ) ) * 2;
                     SOURCE_PROVENANCE fontSource = fieldSource;
                     fontSource.absoluteOffset = usedOffset + 100 + standard * 2;
                     fontSource.length = 2;
-                    const int16_t fontHandle =
-                            static_cast<int16_t>( aCursor.U16At( fontSource.absoluteOffset ) );
+                    const int16_t fontHandle = static_cast<int16_t>( aCursor.U16At( fontSource.absoluteOffset ) );
                     field.presentation.font = decodedDefinitionFont( fontHandle, fontSource );
                     field.presentation.properties.push_back( sourceProperty(
                             wxS( "font_handle" ), wxString::Format( wxS( "%d" ), fontHandle ), fontSource ) );
@@ -1133,8 +1184,43 @@ namespace
             if( aCursor.U16At( offset + 68 ) != gateEnd - gateStart )
                 throwDecodeError( source, wxS( "stored gate count does not match controller-10 slice" ) );
 
-            size_t partPinCursor = pinStart;
+            size_t   partPinCursor = pinStart;
             uint32_t unitCursor = 0;
+
+            auto decodePartPin = [&]( MODEL_PIN_DEFINITION& aDefinitionPin, size_t aPinRecord, MODEL_GATE& aGate )
+            {
+                const size_t pinOffset = pinBase + aPinRecord * PIN_BYTES;
+                SOURCE_PROVENANCE pinSource = sourceAt( aSourceName, aModel.version, wxS( "part pin" ), 11,
+                                                         aPinRecord, pinOffset, PIN_BYTES,
+                                                         static_cast<int>( aSheetIndex ) );
+                SOURCE_PROVENANCE numberSource = pinSource;
+                numberSource.absoluteOffset += 4;
+                numberSource.length = 16;
+                aDefinitionPin.number =
+                        decodeFixedString( aBytes, pinOffset + 4, 16, numberSource, aModel.diagnostics );
+                const uint32_t nameOffset = aCursor.U32At( pinOffset );
+
+                if( nameOffset != 0xFFFFFFFF )
+                {
+                    if( nameOffset >= pinNameBytes )
+                        throwDecodeError( pinSource, wxS( "pin-name offset leaves controller 14" ) );
+
+                    SOURCE_PROVENANCE pinNameSource =
+                            sourceAt( aSourceName, aModel.version, wxS( "pin name" ), 14, aPinRecord,
+                                      pinNameBase + nameOffset, pinNameBytes - nameOffset,
+                                      static_cast<int>( aSheetIndex ) );
+                    aDefinitionPin.name = decodeFixedString( aBytes, pinNameBase + nameOffset,
+                                                             pinNameBytes - nameOffset, pinNameSource,
+                                                             aModel.diagnostics );
+                }
+
+                aDefinitionPin.electricalType =
+                        pinElectricalType( aCursor.U8At( pinOffset + 21 ), pinSource, aModel.diagnostics );
+                aDefinitionPin.properties.push_back( sourceProperty(
+                        wxS( "swap_group" ), wxString::Format( wxS( "%u" ), aCursor.U8At( pinOffset + 20 ) ),
+                        pinSource ) );
+                aGate.pins.push_back( { aDefinitionPin.id, pinSource } );
+            };
 
             for( size_t gateRecord = gateStart; gateRecord < gateEnd; ++gateRecord )
             {
@@ -1182,9 +1268,9 @@ namespace
                         if( aCursor.U16At( memberOffset + 8 ) != 0 )
                             break;
 
-                        SOURCE_PROVENANCE memberSource = sourceAt(
-                                aSourceName, aModel.version, wxS( "pin-decal group member" ), 10, member,
-                                memberOffset, GATE_BYTES, static_cast<int>( aSheetIndex ) );
+                        SOURCE_PROVENANCE memberSource =
+                                sourceAt( aSourceName, aModel.version, wxS( "pin-decal group member" ), 10, member,
+                                          memberOffset, GATE_BYTES, static_cast<int>( aSheetIndex ) );
 
                         if( memberHandle >= usedDecals.size() || !usedDecals[memberHandle].definition )
                             throwDecodeError( memberSource, wxS( "unresolved pin-decal group member" ) );
@@ -1220,37 +1306,8 @@ namespace
 
                 for( size_t pin = 0; pin < pinCount; ++pin, ++partPinCursor )
                 {
-                    const size_t      pinOffset = pinBase + partPinCursor * PIN_BYTES;
-                    SOURCE_PROVENANCE pinSource =
-                            sourceAt( aSourceName, aModel.version, wxS( "part pin" ), 11, partPinCursor, pinOffset,
-                                      PIN_BYTES, static_cast<int>( aSheetIndex ) );
                     MODEL_PIN_DEFINITION& definitionPin = definition->pins[pin];
-                    SOURCE_PROVENANCE     numberSource = pinSource;
-                    numberSource.absoluteOffset += 4;
-                    numberSource.length = 16;
-                    definitionPin.number =
-                            decodeFixedString( aBytes, pinOffset + 4, 16, numberSource, aModel.diagnostics );
-                    const uint32_t nameOffset = aCursor.U32At( pinOffset );
-
-                    if( nameOffset != 0xFFFFFFFF )
-                    {
-                        if( nameOffset >= pinNameBytes )
-                            throwDecodeError( pinSource, wxS( "pin-name offset leaves controller 14" ) );
-
-                        SOURCE_PROVENANCE pinNameSource = sourceAt(
-                                aSourceName, aModel.version, wxS( "pin name" ), 14, partPinCursor,
-                                pinNameBase + nameOffset, pinNameBytes - nameOffset, static_cast<int>( aSheetIndex ) );
-                        definitionPin.name =
-                                decodeFixedString( aBytes, pinNameBase + nameOffset, pinNameBytes - nameOffset,
-                                                   pinNameSource, aModel.diagnostics );
-                    }
-
-                    definitionPin.electricalType =
-                            pinElectricalType( aCursor.U8At( pinOffset + 21 ), pinSource, aModel.diagnostics );
-                    definitionPin.properties.push_back( sourceProperty(
-                            wxS( "swap_group" ), wxString::Format( wxS( "%u" ), aCursor.U8At( pinOffset + 20 ) ),
-                            pinSource ) );
-                    gate.pins.push_back( { definitionPin.id, pinSource } );
+                    decodePartPin( definitionPin, partPinCursor, gate );
                 }
 
                 part.gates.push_back( std::move( gate ) );
@@ -1261,12 +1318,12 @@ namespace
 
             if( !part.gates.empty() && part.gates.front().definition.id.IsValid() )
             {
-                auto defaultDefinition = std::ranges::find_if(
-                        aModel.definitions,
-                        [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
-                        {
-                            return aDefinition.id == part.gates.front().definition.id;
-                        } );
+                auto defaultDefinition =
+                        std::ranges::find_if( aModel.definitions,
+                                              [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                              {
+                                                  return aDefinition.id == part.gates.front().definition.id;
+                                              } );
 
                 if( defaultDefinition == aModel.definitions.end() )
                     throwDecodeError( source, wxS( "unresolved part-type default definition" ) );
@@ -1310,6 +1367,68 @@ namespace
         }
     }
 
+
+    void assignFieldIds( PADS_SCH_MODEL& aModel )
+    {
+        auto stableId = []( uint32_t aDomain, uint32_t aOwner, size_t aOrdinal,
+                            const SOURCE_PROVENANCE& aSource )
+        {
+            uint32_t value = 2166136261U;
+            auto mix = [&]( uint64_t aValue )
+            {
+                for( size_t byte = 0; byte < sizeof( aValue ); ++byte )
+                {
+                    value ^= static_cast<uint8_t>( aValue >> ( byte * 8 ) );
+                    value *= 16777619U;
+                }
+            };
+            mix( aDomain );
+            mix( aOwner );
+            mix( aOrdinal );
+            mix( static_cast<uint32_t>( aSource.sheet ) );
+            mix( static_cast<uint32_t>( aSource.controller ) );
+            mix( aSource.recordIndex );
+            mix( aSource.absoluteOffset );
+            return FIELD_ID( value == 0 ? 1 : value );
+        };
+
+        for( MODEL_SHEET& sheet : aModel.sheets )
+        {
+            for( size_t ordinal = 0; ordinal < sheet.titleBlockFields.size(); ++ordinal )
+            {
+                MODEL_FIELD& field = sheet.titleBlockFields[ordinal];
+                field.id = stableId( 1, sheet.id.Value(), ordinal, field.source );
+            }
+        }
+
+        for( MODEL_SYMBOL_DEFINITION& definition : aModel.definitions )
+        {
+            for( size_t ordinal = 0; ordinal < definition.fields.size(); ++ordinal )
+            {
+                MODEL_FIELD& field = definition.fields[ordinal];
+                field.id = stableId( 2, definition.id.Value(), ordinal, field.source );
+            }
+        }
+
+        for( MODEL_PART_TYPE& partType : aModel.partTypes )
+        {
+            for( size_t ordinal = 0; ordinal < partType.fields.size(); ++ordinal )
+            {
+                MODEL_FIELD& field = partType.fields[ordinal];
+                field.id = stableId( 3, partType.id.Value(), ordinal, field.source );
+            }
+        }
+
+        for( MODEL_PLACEMENT& placement : aModel.placements )
+        {
+            for( size_t ordinal = 0; ordinal < placement.fields.size(); ++ordinal )
+            {
+                MODEL_FIELD& field = placement.fields[ordinal];
+                field.id = stableId( 4, placement.id.Value(), ordinal, field.source );
+            }
+        }
+    }
+
 } // namespace
 
 
@@ -1333,6 +1452,7 @@ bool PADS_SCH_MODEL::HasUniqueTypedIds() const
 
     std::unordered_set<uint32_t> gateIds;
     std::unordered_set<uint32_t> pinIds;
+    std::unordered_set<uint32_t> fieldIds;
 
     for( const MODEL_PART_TYPE& partType : partTypes )
     {
@@ -1350,6 +1470,39 @@ bool PADS_SCH_MODEL::HasUniqueTypedIds() const
             if( !pin.id.IsValid() || !pinIds.insert( pin.id.Value() ).second )
                 return false;
         }
+
+        for( const MODEL_FIELD& field : definition.fields )
+        {
+            if( !field.id.IsValid() || !fieldIds.insert( field.id.Value() ).second )
+                return false;
+        }
+    }
+
+    auto fieldsAreUnique = [&]( const std::vector<MODEL_FIELD>& aFields )
+    {
+        return std::ranges::all_of( aFields,
+                                    [&]( const MODEL_FIELD& aField )
+                                    {
+                                        return aField.id.IsValid() && fieldIds.insert( aField.id.Value() ).second;
+                                    } );
+    };
+
+    for( const MODEL_SHEET& sheet : sheets )
+    {
+        if( !fieldsAreUnique( sheet.titleBlockFields ) )
+            return false;
+    }
+
+    for( const MODEL_PART_TYPE& partType : partTypes )
+    {
+        if( !fieldsAreUnique( partType.fields ) )
+            return false;
+    }
+
+    for( const MODEL_PLACEMENT& placement : placements )
+    {
+        if( !fieldsAreUnique( placement.fields ) )
+            return false;
     }
 
     return true;
@@ -1524,6 +1677,7 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
 
     std::unordered_map<uint32_t, SOURCE_PROVENANCE> gateDeclarations;
     std::unordered_map<uint32_t, SOURCE_PROVENANCE> pinDeclarations;
+    std::unordered_map<uint32_t, SOURCE_PROVENANCE> fieldDeclarations;
 
     auto validateNestedId = [&]( const auto& aItem, const wxString& aObjectClass, auto& aDeclarations )
     {
@@ -1555,6 +1709,27 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
     {
         for( const MODEL_PIN_DEFINITION& pin : definition.pins )
             validateNestedId( pin, wxS( "pin" ), pinDeclarations );
+
+        for( const MODEL_FIELD& field : definition.fields )
+            validateNestedId( field, wxS( "field" ), fieldDeclarations );
+    }
+
+    for( const MODEL_SHEET& sheet : sheets )
+    {
+        for( const MODEL_FIELD& field : sheet.titleBlockFields )
+            validateNestedId( field, wxS( "field" ), fieldDeclarations );
+    }
+
+    for( const MODEL_PART_TYPE& partType : partTypes )
+    {
+        for( const MODEL_FIELD& field : partType.fields )
+            validateNestedId( field, wxS( "field" ), fieldDeclarations );
+    }
+
+    for( const MODEL_PLACEMENT& placement : placements )
+    {
+        for( const MODEL_FIELD& field : placement.fields )
+            validateNestedId( field, wxS( "field" ), fieldDeclarations );
     }
 
     const MODEL_INDEX index( *this );
@@ -1620,7 +1795,7 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
     }
 
     std::unordered_map<uint32_t, uint8_t> definitionColors;
-    std::function<void( uint32_t )> visitDefinition = [&]( uint32_t aDefinition )
+    std::function<void( uint32_t )>       visitDefinition = [&]( uint32_t aDefinition )
     {
         definitionColors[aDefinition] = 1;
 
@@ -2101,6 +2276,7 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
         ++sheetIndex;
     }
 
+    assignFieldIds( model );
     model.ValidateOrThrow();
     return model;
 }

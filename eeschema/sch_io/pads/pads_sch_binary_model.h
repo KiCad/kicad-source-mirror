@@ -124,6 +124,7 @@ private:
 struct SHEET_ID_TAG;
 struct DEFINITION_ID_TAG;
 struct PIN_ID_TAG;
+struct FIELD_ID_TAG;
 struct PART_TYPE_ID_TAG;
 struct GATE_ID_TAG;
 struct PLACEMENT_ID_TAG;
@@ -133,6 +134,7 @@ struct BUS_ID_TAG;
 using SHEET_ID = CONTROLLER_ID<SHEET_ID_TAG>;
 using DEFINITION_ID = CONTROLLER_ID<DEFINITION_ID_TAG>;
 using PIN_ID = CONTROLLER_ID<PIN_ID_TAG>;
+using FIELD_ID = CONTROLLER_ID<FIELD_ID_TAG>;
 using PART_TYPE_ID = CONTROLLER_ID<PART_TYPE_ID_TAG>;
 using GATE_ID = CONTROLLER_ID<GATE_ID_TAG>;
 using PLACEMENT_ID = CONTROLLER_ID<PLACEMENT_ID_TAG>;
@@ -240,6 +242,7 @@ struct DESIGN_SETTINGS
 
 struct MODEL_FIELD
 {
+    FIELD_ID                     id;
     SOURCE_PROVENANCE            source;
     SOURCE_STRING                name;
     SOURCE_STRING                value;
@@ -304,6 +307,7 @@ struct MODEL_PIN_DEFINITION
     SOURCE_STRING                number;
     SOURCE_STRING                name;
     SOURCE_POINT                 position;
+    uint32_t                     side = 0;
     int                          angle = 0;
     uint32_t                     electricalType = 0;
     uint32_t                     graphicStyle = 0;
@@ -313,6 +317,15 @@ struct MODEL_PIN_DEFINITION
     MODEL_TEXT_PRESENTATION      numberPresentation;
     SOURCE_POINT                 nameOffset;
     SOURCE_POINT                 numberOffset;
+    int                          nameAngle = 0;
+    int                          numberAngle = 0;
+    uint16_t                     nameJustification = 0;
+    uint16_t                     numberJustification = 0;
+    int                          nameOffsetAngle = 0;
+    int                          numberOffsetAngle = 0;
+    uint16_t                     nameOffsetJustification = 0;
+    uint16_t                     numberOffsetJustification = 0;
+    uint16_t                     visibilityFlags = 0;
     std::vector<SOURCE_PROPERTY> properties;
 
     bool operator==( const MODEL_PIN_DEFINITION& ) const = default;
@@ -335,14 +348,14 @@ struct MODEL_SYMBOL_DEFINITION
 
 struct MODEL_GATE
 {
-    GATE_ID                      id;
-    SOURCE_PROVENANCE            source;
-    DEFINITION_REFERENCE         definition;
-    uint32_t                     unit = 1;
-    std::vector<PIN_REFERENCE>   pins;
+    GATE_ID                           id;
+    SOURCE_PROVENANCE                 source;
+    DEFINITION_REFERENCE              definition;
+    uint32_t                          unit = 1;
+    std::vector<PIN_REFERENCE>        pins;
     std::vector<DEFINITION_REFERENCE> alternateDefinitions;
     std::vector<DEFINITION_REFERENCE> decalGroupMembers;
-    std::vector<SOURCE_PROPERTY> properties;
+    std::vector<SOURCE_PROPERTY>      properties;
 
     bool operator==( const MODEL_GATE& ) const = default;
 };
@@ -360,12 +373,12 @@ struct MODEL_SIGNAL_PIN
 
 struct MODEL_PART_TYPE
 {
-    PART_TYPE_ID                 id;
-    SOURCE_PROVENANCE            source;
-    SOURCE_STRING                name;
-    std::vector<MODEL_GATE>      gates;
-    std::vector<MODEL_FIELD>     fields;
-    std::vector<SOURCE_PROPERTY> properties;
+    PART_TYPE_ID                  id;
+    SOURCE_PROVENANCE             source;
+    SOURCE_STRING                 name;
+    std::vector<MODEL_GATE>       gates;
+    std::vector<MODEL_FIELD>      fields;
+    std::vector<SOURCE_PROPERTY>  properties;
     std::vector<MODEL_SIGNAL_PIN> signalPins;
 
     bool operator==( const MODEL_PART_TYPE& ) const = default;
@@ -544,22 +557,22 @@ struct PRESERVED_CONTROLLER_PAYLOAD
 
 struct PADS_SCH_MODEL
 {
-    uint16_t                             version = 0;
-    uint16_t                             subversion = 0;
-    SOURCE_PROVENANCE                    source;
-    DESIGN_SETTINGS                      settings;
-    std::vector<MODEL_SHEET>             sheets;
-    std::vector<MODEL_SYMBOL_DEFINITION> definitions;
-    std::vector<MODEL_PART_TYPE>         partTypes;
-    std::vector<MODEL_PLACEMENT>         placements;
-    std::vector<MODEL_NET>               nets;
-    std::vector<MODEL_BUS>               buses;
-    std::vector<MODEL_LABEL>             labels;
-    std::vector<MODEL_JUNCTION>          junctions;
-    std::vector<MODEL_TEXT>              texts;
-    std::vector<MODEL_PAGE_GRAPHIC>      graphics;
+    uint16_t                                  version = 0;
+    uint16_t                                  subversion = 0;
+    SOURCE_PROVENANCE                         source;
+    DESIGN_SETTINGS                           settings;
+    std::vector<MODEL_SHEET>                  sheets;
+    std::vector<MODEL_SYMBOL_DEFINITION>      definitions;
+    std::vector<MODEL_PART_TYPE>              partTypes;
+    std::vector<MODEL_PLACEMENT>              placements;
+    std::vector<MODEL_NET>                    nets;
+    std::vector<MODEL_BUS>                    buses;
+    std::vector<MODEL_LABEL>                  labels;
+    std::vector<MODEL_JUNCTION>               junctions;
+    std::vector<MODEL_TEXT>                   texts;
+    std::vector<MODEL_PAGE_GRAPHIC>           graphics;
     std::vector<PRESERVED_CONTROLLER_PAYLOAD> preservedControllerPayloads;
-    std::vector<PARSER_DIAGNOSTIC>       diagnostics;
+    std::vector<PARSER_DIAGNOSTIC>            diagnostics;
 
     bool HasUniqueTypedIds() const;
     bool AllReferencesResolved() const;
