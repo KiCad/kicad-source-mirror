@@ -622,6 +622,10 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
 
 void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 {
+    // Cancel a mid-draw tool before the footprint it points into is freed (#24975).
+    if( GetToolManager() )
+        GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
     GetBoard()->DeleteAllFootprints();
 
     m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
