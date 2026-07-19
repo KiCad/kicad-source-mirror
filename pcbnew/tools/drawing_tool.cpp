@@ -49,6 +49,7 @@
 #include <pcb_barcode.h>
 #include <tools/tool_event_utils.h>
 #include <tool/arc_draw_behavior.h>
+#include <tool/ellipse_draw_behavior.h>
 #include <tools/zone_create_helper.h>
 #include <tools/zone_filler_tool.h>
 #include <view/view.h>
@@ -485,15 +486,6 @@ int DRAWING_TOOL::DrawEllipse( const TOOL_EVENT& aEvent )
                                } );
 }
 
-int DRAWING_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
-{
-    return runSimpleShapeDraw( aEvent, SHAPE_T::ELLIPSE_ARC, MODE::ELLIPSE_ARC, _( "Draw Elliptical Arc" ),
-                               [this]( const TOOL_EVENT& e, PCB_SHAPE** s, std::optional<VECTOR2D> sp )
-                               {
-                                   return drawShape( e, s, sp, nullptr );
-                               } );
-}
-
 
 int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 {
@@ -506,7 +498,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
     BOARD_ITEM*             parent = m_frame->GetModel();
-    PCB_SHAPE*              arc = new PCB_SHAPE( parent );
+    std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( parent );
     BOARD_COMMIT            commit( m_frame );
     SCOPED_DRAW_MODE        scopedDrawMode( m_mode, MODE::ARC );
     std::optional<VECTOR2D> startingPoint;
@@ -520,18 +512,69 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = aEvent.Position();
 
-    while( drawArc( aEvent, &arc, startingPoint ) )
+    ARC_DRAW_BEHAVIOR arcBehavior( pcbIUScale, m_frame->GetUserUnits() );
+
+    while( drawManagedShape( aEvent, arc, arcBehavior, startingPoint ) )
     {
         if( arc )
         {
-            commit.Add( arc );
+            PCB_SHAPE* committedArc = arc.get();
+            commit.Add( arc.release() );
             commit.Push( _( "Draw Arc" ) );
 
-            m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, arc );
+            m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, committedArc );
         }
 
-        arc = new PCB_SHAPE( parent );
+        arc = std::make_unique<PCB_SHAPE>( parent );
         arc->SetShape( SHAPE_T::ARC );
+        arc->SetFlags( IS_NEW );
+
+        startingPoint = std::nullopt;
+    }
+
+    return 0;
+}
+
+
+int DRAWING_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
+{
+    if( m_isFootprintEditor && !m_frame->GetModel() )
+        return 0;
+
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
+    BOARD_ITEM*             parent = m_frame->GetModel();
+    std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( parent );
+    BOARD_COMMIT            commit( m_frame );
+    std::optional<VECTOR2D> startingPoint;
+
+    arc->SetShape( SHAPE_T::ELLIPSE_ARC );
+    arc->SetFlags( IS_NEW );
+
+    m_frame->PushTool( aEvent );
+    Activate();
+
+    if( aEvent.HasPosition() )
+        startingPoint = aEvent.Position();
+
+    ELLIPSE_ARC_DRAW_BEHAVIOR ellipseBehavior( pcbIUScale, m_frame->GetUserUnits() );
+
+    while( drawManagedShape( aEvent, arc, ellipseBehavior, startingPoint ) )
+    {
+        if( arc )
+        {
+            PCB_SHAPE* committedArc = arc.get();
+            commit.Add( arc.release() );
+            commit.Push( _( "Draw Elliptical Arc" ) );
+
+            m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, committedArc );
+        }
+
+        arc = std::make_unique<PCB_SHAPE>( parent );
+        arc->SetShape( SHAPE_T::ELLIPSE_ARC );
         arc->SetFlags( IS_NEW );
 
         startingPoint = std::nullopt;
@@ -2869,17 +2912,15 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 }
 
 
-/**
- * Update an arc PCB_SHAPE from the current state of an Arc Geometry Manager.
- */
-bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
-                            std::optional<VECTOR2D> aStartingPoint )
+bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
+                                     SHAPE_DRAW_BEHAVIOR& aBehavior, std::optional<VECTOR2D> aStartingPoint )
 {
-    wxCHECK( aGraphic, false );
+    if( !aGraphic )
+        return false;
 
-    PCB_SHAPE*&  graphic = *aGraphic;
+    PCB_SHAPE* graphic = aGraphic.get();
 
-    wxCHECK( graphic, false );
+    aBehavior.Reset();
 
     if( m_layer != m_frame->GetActiveLayer() )
     {
@@ -2889,12 +2930,10 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         m_stroke.SetColor( COLOR4D::UNSPECIFIED );
     }
 
-    ARC_DRAW_BEHAVIOR arcBehavior( pcbIUScale, m_frame->GetUserUnits() );
-
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCB_SELECTION preview;
     m_view->Add( &preview );
-    m_view->Add( &arcBehavior.GetAssistant() );
+    m_view->Add( &aBehavior.GetAssistant() );
     PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     auto setCursor =
@@ -2907,8 +2946,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             [&] ()
             {
                 preview.Clear();
-                delete *aGraphic;
-                *aGraphic = nullptr;
+                aGraphic.reset();
             };
 
     m_controls->ShowCursor( true );
@@ -2992,7 +3030,6 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
                 // Init the new item attributes
                 // (non-geometric, those are handled by the manager)
-                graphic->SetShape( SHAPE_T::ARC );
                 graphic->SetStroke( m_stroke );
 
                 if( !m_view->IsLayerVisible( m_layer ) )
@@ -3006,22 +3043,22 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 started = true;
             }
 
-            arcBehavior.AddPoint( cursorPos );
+            aBehavior.AddPoint( cursorPos );
         }
         else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
         {
             // Snap guides persist in the grid helper until the tool exits, so a mid-draw backup
             // must clear them or they linger on screen.
             grid.FullReset();
-            arcBehavior.RemoveLastPoint();
+            aBehavior.RemoveLastPoint();
         }
         else if( evt->IsMotion() )
         {
             // set angle snap
-            arcBehavior.SetAngleSnap( angleSnap != LEADER_MODE::DIRECT );
+            aBehavior.SetAngleSnap( angleSnap != LEADER_MODE::DIRECT );
 
             // update, but don't step the manager state
-            arcBehavior.SetCursorPosition( cursorPos );
+            aBehavior.SetCursorPosition( cursorPos );
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
@@ -3053,19 +3090,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsAction( &PCB_ACTIONS::properties ) )
         {
-            const KIGFX::PREVIEW::ARC_GEOM_MANAGER& geomMgr = arcBehavior.GetManager();
-
-            if( geomMgr.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_START )
-            {
-                graphic->SetArcAngleAndEnd( ANGLE_90 );
-                frame()->OnEditItemRequest( graphic );
-                m_view->Update( &preview );
-                frame()->SetMsgPanel( graphic );
-                break;
-            }
-            // Don't show the edit panel if we can't represent the arc with it
-            else if( ( geomMgr.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_ANGLE )
-                     && ( geomMgr.GetStartRadiusEnd() != geomMgr.GetEndRadiusEnd() ) )
+            if( aBehavior.OnProperties( *graphic ) )
             {
                 frame()->OnEditItemRequest( graphic );
                 m_view->Update( &preview );
@@ -3111,12 +3136,12 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsAction( &ACTIONS::arcPosture ) )
         {
-            arcBehavior.ToggleClockwise();
+            aBehavior.ToggleClockwise();
         }
         else if( evt->IsAction( &ACTIONS::updateUnits ) )
         {
-            arcBehavior.SetUnits( frame()->GetUserUnits() );
-            m_view->Update( &arcBehavior.GetAssistant() );
+            aBehavior.SetUnits( frame()->GetUserUnits() );
+            m_view->Update( &aBehavior.GetAssistant() );
             evt->SetPassEvent();
         }
         else if( started && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
@@ -3129,16 +3154,16 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             evt->SetPassEvent();
         }
 
-        if( arcBehavior.IsComplete() )
+        if( aBehavior.IsComplete() )
         {
             break;
         }
-        else if( arcBehavior.HasGeometryChanged() )
+        else if( aBehavior.HasGeometryChanged() )
         {
-            arcBehavior.ApplyToShape( *graphic );
+            aBehavior.ApplyToShape( *graphic );
             m_view->Update( &preview );
-            m_view->Update( &arcBehavior.GetAssistant() );
-            arcBehavior.ClearGeometryChanged();
+            m_view->Update( &aBehavior.GetAssistant() );
+            aBehavior.ClearGeometryChanged();
 
             if( started )
                 frame()->SetMsgPanel( graphic );
@@ -3148,7 +3173,7 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     }
 
     preview.Remove( graphic );
-    m_view->Remove( &arcBehavior.GetAssistant() );
+    m_view->Remove( &aBehavior.GetAssistant() );
     m_view->Remove( &preview );
 
     if( selection().Empty() )
@@ -3158,6 +3183,9 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
     m_controls->ForceCursorPosition( false );
+
+    if( cancelled )
+        aGraphic.reset();
 
     return !cancelled;
 }

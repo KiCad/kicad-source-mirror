@@ -27,6 +27,7 @@
 
 class SCH_EDIT_FRAME;
 class SYMBOL_EDIT_FRAME;
+class SHAPE_DRAW_BEHAVIOR;
 
 
 /**
@@ -40,6 +41,7 @@ public:
     {
         NONE,
         ARC,
+        ELLIPSE_ARC,
     };
 
     EE_GRAPHIC_TOOL();
@@ -48,6 +50,7 @@ public:
 
     int DrawShape( const TOOL_EVENT& aEvent );
     int DrawArc( const TOOL_EVENT& aEvent );
+    int DrawEllipseArc( const TOOL_EVENT& aEvent );
     int ImportGraphics( const TOOL_EVENT& aEvent );
 
 private:
@@ -69,11 +72,13 @@ private:
     void applySymbolEditorFlags( SCH_ITEM& aItem ) const;
 
     /**
-     * Run the interactive arc-drawing event loop.
+     * Run the interactive drawing event loop for any shape driven by a
+     * SHAPE_DRAW_BEHAVIOR (arcs, ellipse arcs, etc.).
      *
-     * @return true if an arc was completed, false if the tool was cancelled.
+     * @return true if the shape was completed, false if cancelled.
      */
-    bool drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aArc, std::optional<VECTOR2D> aStartingPoint );
+    bool drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aShape, SHAPE_DRAW_BEHAVIOR& aBehavior,
+                           std::optional<VECTOR2D> aStartingPoint );
 
     FILL_T        m_lastFillStyle;
     COLOR4D       m_lastFillColor;

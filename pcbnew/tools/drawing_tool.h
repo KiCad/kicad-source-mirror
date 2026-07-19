@@ -42,6 +42,7 @@ class PCB_BASE_EDIT_FRAME;
 class PCB_SHAPE;
 class POLYGON_GEOM_MANAGER;
 class PCB_TUNING_PATTERN;
+class SHAPE_DRAW_BEHAVIOR;
 class STATUS_MIN_MAX_POPUP;
 
 
@@ -280,16 +281,16 @@ private:
                             std::function<bool( const TOOL_EVENT&, PCB_SHAPE**, std::optional<VECTOR2D> )> aDrawer );
 
     /**
-     * Start drawing an arc.
+     * Run the interactive drawing event loop for a shape, driven by a
+     * SHAPE_DRAW_BEHAVIOR.
      *
-     * @param aGraphic is an object that is going to be used by the tool for drawing. Must be
-     *                 already created. The tool deletes the object if it is not added to a BOARD.
-     * @return False if the tool was canceled before the origin was set or origin and end are
-     *         the same point.
+     * @param aGraphic  the shape being drawn; must already be created.  On
+     *                  cancel the unique_ptr is reset; on completion the
+     *                  caller can take ownership (e.g. to release into a COMMIT).
+     * @return true if the shape was completed, false if cancelled.
      */
-    bool drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
-                  std::optional<VECTOR2D> aStartingPoint );
-
+    bool drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
+                           SHAPE_DRAW_BEHAVIOR& aBehavior, std::optional<VECTOR2D> aStartingPoint );
 
     /**
      * Draw a bezier curve.

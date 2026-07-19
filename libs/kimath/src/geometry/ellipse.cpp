@@ -19,6 +19,8 @@
 
 #include <geometry/ellipse.h>
 
+#include <type_traits>
+
 
 template <typename NumericType>
 ELLIPSE<NumericType>::ELLIPSE( const VECTOR2<NumericType>& aCenter, NumericType aMajorRadius,
@@ -73,6 +75,51 @@ void ELLIPSE<NumericType>::Mirror( const VECTOR2<NumericType>& aRef, FLIP_DIRECT
         StartAngle = -oldEnd;
         EndAngle = -oldStart;
     }
+}
+
+
+template <typename NumericType>
+EDA_ANGLE ELLIPSE<NumericType>::GetSubtendedAngle() const
+{
+    EDA_ANGLE subtended = EndAngle - StartAngle;
+    return subtended.Normalize();
+}
+
+
+template <typename NumericType>
+VECTOR2<NumericType> ELLIPSE<NumericType>::GetPointAtAngle( EDA_ANGLE angle ) const
+{
+    double t = angle.AsRadians();
+    double ex = MajorRadius * std::cos( t );
+    double ey = MinorRadius * std::sin( t );
+
+    double cosR = Rotation.Cos();
+    double sinR = Rotation.Sin();
+    double rx = ex * cosR - ey * sinR;
+    double ry = ex * sinR + ey * cosR;
+
+    if constexpr( std::is_integral_v<NumericType> )
+        return Center + VECTOR2I( KiROUND( rx ), KiROUND( ry ) );
+    else
+        return Center + VECTOR2<NumericType>( rx, ry );
+}
+
+
+template <typename NumericType>
+EDA_ANGLE ELLIPSE<NumericType>::GetAngleAtPoint( const VECTOR2<NumericType>& aPt ) const
+{
+    const double a = std::max( 1.0, static_cast<double>( MajorRadius ) );
+    const double b = std::max( 1.0, static_cast<double>( MinorRadius ) );
+
+    const double dx = static_cast<double>( aPt.x ) - static_cast<double>( Center.x );
+    const double dy = static_cast<double>( aPt.y ) - static_cast<double>( Center.y );
+
+    const double cosRot = Rotation.Cos();
+    const double sinRot = Rotation.Sin();
+    const double lx = dx * cosRot + dy * sinRot;
+    const double ly = -dx * sinRot + dy * cosRot;
+
+    return EDA_ANGLE( std::atan2( ly / b, lx / a ), RADIANS_T );
 }
 
 

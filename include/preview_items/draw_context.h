@@ -21,6 +21,7 @@
 #define PREVIEW_PREVIEW_DRAW_CONTEXT__H_
 
 #include <gal/painter.h>
+#include <geometry/ellipse.h>
 #include <math/vector2d.h>
 
 namespace KIGFX
@@ -43,6 +44,14 @@ public:
     DRAW_CONTEXT( KIGFX::VIEW& aView );
 
     /**
+     * Draw a rectangle on the current layer.
+     *
+     * @param aC1     rectangle corner 1.
+     * @param aC2     rectangle corner 2.
+     */
+    void DrawRectangle( const VECTOR2I& aC1, const VECTOR2I& aC2, bool aDeEmphasised );
+
+    /**
      * Draw a preview circle on the current layer.
      *
      * @param aOrigin circle origin.
@@ -62,6 +71,13 @@ public:
      */
     void DrawCircleDashed( const VECTOR2I& aOrigin, double aRad, double aStepAngle,
                            double aFillAngle, bool aDeEmphasised );
+
+
+    /**
+     * Draw a preview ellipse on the current layer.
+     */
+    void DrawEllipse( const VECTOR2I& aOrigin, double aA, double aB, EDA_ANGLE aRot, bool aDeEmphasised );
+    void DrawEllipse( const ELLIPSE<int>& aEllipse, bool aDeEmphasised );
 
     /**
      * Draw a simple line on the current layer.

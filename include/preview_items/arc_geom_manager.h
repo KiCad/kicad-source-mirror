@@ -62,8 +62,6 @@ public:
         return static_cast<ARC_STEPS>( getStep() );
     }
 
-    bool acceptPoint( const VECTOR2I& aPt ) override;
-
     ///< The arc to be clockwise from start
     void SetClockwise( bool aCw );
 
@@ -98,8 +96,10 @@ public:
     ///< Get the angle of the vector leading to the end point (valid if step >= SET_ANGLE)
     EDA_ANGLE GetSubtended() const;
 
-private:
+protected:
+    bool acceptPoint( const VECTOR2I& aPt ) override;
 
+private:
     /*
      * Point acceptor functions
      */

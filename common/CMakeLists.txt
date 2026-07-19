@@ -694,6 +694,8 @@ set( COMMON_PREVIEW_ITEMS_SRCS
     preview_items/angle_item.cpp
     preview_items/arc_assistant.cpp
     preview_items/arc_geom_manager.cpp
+    preview_items/ellipse_assistant.cpp
+    preview_items/ellipse_geom_manager.cpp
     preview_items/bezier_assistant.cpp
     preview_items/bezier_geom_manager.cpp
     preview_items/centreline_rect_item.cpp
@@ -875,7 +877,6 @@ set( COMMON_SRCS
     tool/library_editor_control.cpp
     tool/picker_tool.cpp
     tool/point_editor_behavior.cpp
-    tool/arc_draw_behavior.cpp
     tool/properties_tool.cpp
     tool/selection.cpp
     tool/selection_tool.cpp

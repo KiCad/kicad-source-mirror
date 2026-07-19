@@ -37,6 +37,7 @@
 #include <symbol_edit_frame.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <tool/arc_draw_behavior.h>
+#include <tool/ellipse_draw_behavior.h>
 #include <tools/ee_grid_helper.h>
 #include <tools/sch_selection_tool.h>
 #include <view/view_controls.h>
@@ -77,7 +78,7 @@ bool EE_GRAPHIC_TOOL::Init()
 
     const auto canUndoPoint = [this]( const SELECTION& aSel )
             {
-                return m_mode == MODE::ARC;
+                return m_mode == MODE::ARC || m_mode == MODE::ELLIPSE_ARC;
             };
 
     CONDITIONAL_MENU& ctxMenu = m_menu->GetMenu();
@@ -385,36 +386,6 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
 
-            if( type == SHAPE_T::ELLIPSE_ARC && item->GetEllipseMajorRadius() > 100
-                && item->GetEllipseMinorRadius() > 100 )
-            {
-                const VECTOR2I  center = item->GetEllipseCenter();
-                const double    a = item->GetEllipseMajorRadius();
-                const double    b = item->GetEllipseMinorRadius();
-                const EDA_ANGLE rot = item->GetEllipseRotation();
-                const double    cosRot = rot.Cos();
-                const double    sinRot = rot.Sin();
-
-                const double dx = cursorPos.x - center.x;
-                const double dy = cursorPos.y - center.y;
-                const double lx = dx * cosRot + dy * sinRot;
-                const double ly = -dx * sinRot + dy * cosRot;
-
-                const EDA_ANGLE t( std::atan2( ly / b, lx / a ), RADIANS_T );
-                const double    px = a * t.Cos();
-                const double    py = b * t.Sin();
-
-                VECTOR2I markerPos =
-                        center + VECTOR2I( KiROUND( px * cosRot - py * sinRot ), KiROUND( px * sinRot + py * cosRot ) );
-
-                SCH_SHAPE* dot = new SCH_SHAPE( SHAPE_T::CIRCLE, shapeLayer );
-                int        radius = schIUScale.MilsToIU( 20 );
-                dot->SetStart( markerPos );
-                dot->SetEnd( markerPos + VECTOR2I( radius, 0 ) );
-                dot->SetFillMode( FILL_T::FILLED_SHAPE );
-                m_view->AddToPreview( dot );
-            }
-
             frame()->SetMsgPanel( item.get() );
         }
         else if( evt->IsDblClick( BUT_LEFT ) && !item )
@@ -490,7 +461,9 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = aEvent.Position();
 
-    while( drawArc( aEvent, arc, startingPoint ) )
+    ARC_DRAW_BEHAVIOR arcBehavior( schIUScale, frame()->GetUserUnits() );
+
+    while( drawManagedShape( aEvent, arc, arcBehavior, startingPoint ) )
     {
         if( arc )
         {
@@ -498,12 +471,11 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
             m_lastFillStyle = arc->GetFillMode();
             m_lastFillColor = arc->GetFillColor();
 
-            SCH_SHAPE* committedArc = arc.get();
+            m_selectionTool->AddItemToSel( arc.get() );
 
             SCH_COMMIT commit( m_toolMgr );
             commitItem( commit, std::move( arc ), _( "Draw Arc" ) );
 
-            m_selectionTool->AddItemToSel( committedArc );
             m_toolMgr->PostAction( ACTIONS::activatePointEditor );
         }
 
@@ -515,19 +487,87 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 }
 
 
-bool EE_GRAPHIC_TOOL::drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aArc,
-                               std::optional<VECTOR2D> aStartingPoint )
+int EE_GRAPHIC_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
 {
-    if( !aArc )
+    if( m_inDrawingTool )
+        return 0;
+
+    EDA_ITEM* parent = getDrawParent();
+
+    if( !parent )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ELLIPSE_ARC );
+
+    SCH_LAYER_ID            shapeLayer = getShapeLayer();
+    std::optional<VECTOR2D> startingPoint;
+
+    const auto makeNewEllipseArc =
+            [&]()
+            {
+                std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>(
+                    SHAPE_T::ELLIPSE_ARC, shapeLayer, 0, m_lastFillStyle );
+                arc->SetStroke( m_lastStroke );
+                arc->SetFillColor( m_lastFillColor );
+                arc->SetParent( parent );
+                arc->SetFlags( IS_NEW );
+
+                applySymbolEditorFlags( *arc );
+
+                return arc;
+            };
+
+    std::unique_ptr<SCH_SHAPE> arc = makeNewEllipseArc();
+
+    m_frame->PushTool( aEvent );
+    Activate();
+
+    if( aEvent.HasPosition() )
+        startingPoint = aEvent.Position();
+
+    ELLIPSE_ARC_DRAW_BEHAVIOR ellipseBehavior( schIUScale, frame()->GetUserUnits() );
+
+    while( drawManagedShape( aEvent, arc, ellipseBehavior, startingPoint ) )
+    {
+        if( arc )
+        {
+            m_lastStroke = arc->GetStroke();
+            m_lastFillStyle = arc->GetFillMode();
+            m_lastFillColor = arc->GetFillColor();
+
+            m_selectionTool->AddItemToSel( arc.get() );
+
+            SCH_COMMIT commit( m_toolMgr );
+            commitItem( commit, std::move( arc ), _( "Draw Elliptical Arc" ) );
+
+            m_toolMgr->PostAction( ACTIONS::activatePointEditor );
+        }
+
+        arc = makeNewEllipseArc();
+        startingPoint = std::nullopt;
+    }
+
+    return 0;
+}
+
+
+bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aShape,
+                                        SHAPE_DRAW_BEHAVIOR& aBehavior, std::optional<VECTOR2D> aStartingPoint )
+{
+    if( !aShape )
         return false;
 
+    aBehavior.Reset();
+
+    SELECTION             preview;
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
     VECTOR2I              cursorPos;
     EDA_ITEM*             parent = getDrawParent();
 
-    ARC_DRAW_BEHAVIOR arcBehavior( schIUScale, frame()->GetUserUnits() );
-    m_view->Add( &arcBehavior.GetAssistant() );
+    m_view->Add( &preview );
+    m_view->Add( &aBehavior.GetAssistant() );
 
     auto setCursor =
             [&]()
@@ -539,7 +579,7 @@ bool EE_GRAPHIC_TOOL::drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAP
             [&]()
             {
                 m_toolMgr->RunAction( ACTIONS::selectionClear );
-                m_view->ClearPreview();
+                preview.Clear();
             };
 
     controls->ShowCursor( true );
@@ -606,38 +646,37 @@ bool EE_GRAPHIC_TOOL::drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAP
                 controls->SetAutoPan( true );
                 controls->CaptureCursor( true );
 
-                m_view->ClearPreview();
-                m_view->AddToPreview( aArc->Clone() );
-                frame()->SetMsgPanel( aArc.get() );
+                preview.Add( aShape.get() );
+                frame()->SetMsgPanel( aShape.get() );
                 started = true;
             }
 
-            arcBehavior.AddPoint( cursorPos );
+            aBehavior.AddPoint( cursorPos );
         }
         else if( evt->IsAction( &ACTIONS::arcPosture ) )
         {
-            arcBehavior.ToggleClockwise();
+            aBehavior.ToggleClockwise();
         }
         else if( evt->IsAction( &SCH_ACTIONS::deleteLastPoint ) )
         {
-            arcBehavior.RemoveLastPoint();
+            aBehavior.RemoveLastPoint();
             grid.FullReset();
         }
         else if( evt->IsMotion() )
         {
-            arcBehavior.SetCursorPosition( cursorPos );
+            aBehavior.SetCursorPosition( cursorPos );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            if( !aArc )
+            if( !aShape )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
             m_menu->ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->IsAction( &ACTIONS::updateUnits ) )
         {
-            arcBehavior.SetUnits( frame()->GetUserUnits() );
-            m_view->Update( &arcBehavior.GetAssistant() );
+            aBehavior.SetUnits( frame()->GetUserUnits() );
+            m_view->Update( &aBehavior.GetAssistant() );
             evt->SetPassEvent();
         }
         else if( started && evt->IsAction( &ACTIONS::redo ) )
@@ -649,26 +688,27 @@ bool EE_GRAPHIC_TOOL::drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAP
             evt->SetPassEvent();
         }
 
-        if( arcBehavior.IsComplete() )
+        if( aBehavior.IsComplete() )
         {
             break;
         }
-        else if( arcBehavior.HasGeometryChanged() )
+        else if( aBehavior.HasGeometryChanged() )
         {
-            arcBehavior.ApplyToShape( *aArc );
-            m_view->ClearPreview();
-            m_view->AddToPreview( aArc->Clone() );
-            m_view->Update( &arcBehavior.GetAssistant() );
-            arcBehavior.ClearGeometryChanged();
+            aBehavior.ApplyToShape( *aShape );
+            m_view->Update( &preview );
+            m_view->Update( &aBehavior.GetAssistant() );
+            aBehavior.ClearGeometryChanged();
 
             if( started )
-                frame()->SetMsgPanel( aArc.get() );
+                frame()->SetMsgPanel( aShape.get() );
             else
                 frame()->SetMsgPanel( parent );
         }
     }
 
-    m_view->Remove( &arcBehavior.GetAssistant() );
+    preview.Remove( aShape.get() );
+    m_view->Remove( &aBehavior.GetAssistant() );
+    m_view->Remove( &preview );
 
     if( !started )
         frame()->SetMsgPanel( parent );
@@ -680,8 +720,7 @@ bool EE_GRAPHIC_TOOL::drawArc( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAP
 
     if( cancelled )
     {
-        m_view->ClearPreview();
-        aArc.reset();
+        aShape.reset();
     }
 
     return !cancelled;
@@ -867,7 +906,7 @@ void EE_GRAPHIC_TOOL::setTransitions()
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawRectangle.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawCircle.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawEllipse.MakeEvent() );
-    Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawEllipseArc.MakeEvent() );
+    Go( &EE_GRAPHIC_TOOL::DrawEllipseArc,   SCH_ACTIONS::drawEllipseArc.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawArc,          SCH_ACTIONS::drawArc.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawBezier.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawTextBox.MakeEvent() );

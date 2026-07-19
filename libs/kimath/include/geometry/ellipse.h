@@ -71,6 +71,33 @@ public:
      */
     void Mirror( const VECTOR2<NumericType>& aRef, FLIP_DIRECTION aFlipDirection );
 
+    /**
+     * Get the subtended angle of the ellipse or elliptical arc at the center.
+     */
+    EDA_ANGLE GetSubtendedAngle() const;
+
+    /**
+     * Get the point on the ellipse at a given angle.  The angle is measured in the ellipse's
+     * local coordinate system, where the x-axis is the major axis and the y-axis is the minor axis.
+     */
+    VECTOR2<NumericType> GetPointAtAngle( EDA_ANGLE angle ) const;
+
+    /**
+     * Get the point on the ellipse at the start angle of the arc.
+     */
+    VECTOR2<NumericType> GetArcStartPoint() const { return GetPointAtAngle( StartAngle ); }
+
+    /**
+     * Get the point on the ellipse at the end angle of the arc.
+     */
+    VECTOR2<NumericType> GetArcEndPoint() const { return GetPointAtAngle( EndAngle ); }
+
+    /**
+     * Get the parametric angle of a point on the ellipse.  The angle is measured in the ellipse's
+     * local coordinate system, where the x-axis is the major axis and the y-axis is the minor axis.
+     */
+    EDA_ANGLE GetAngleAtPoint( const VECTOR2<NumericType>& aPt ) const;
+
     VECTOR2<NumericType> Center;
     NumericType MajorRadius;
     NumericType MinorRadius;
