@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-07-15 01:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-07-20 06:34+0000\n"
+"Last-Translator: Luc <some_physics@live.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2791,7 +2791,6 @@ msgstr ""
 "Änderungen."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
 msgstr "Beide behalten"
 
@@ -2805,7 +2804,6 @@ msgstr ""
 "Überprüfung."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
 msgstr "Öffnen abbrechen"
 
@@ -8289,7 +8287,7 @@ msgstr "Konnte den Remote-Zweig nicht lesen."
 #: common/git/libgit_backend.cpp:1653
 #, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Konnte nicht zu Remote-Zweig zurücksetzen: %s"
+msgstr "Konnte nicht zu Remote-Branch zurücksetzen: %s"
 
 #: common/git/libgit_backend.cpp:1679
 msgid ""
@@ -55640,9 +55638,8 @@ msgid "Loading Footprint Libraries"
 msgstr "Lade Footprint-Bibliotheken"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:455
-#, fuzzy
 msgid "Failed to load board"
-msgstr "Fehler beim Laden der Platine.\n"
+msgstr "Fehler beim Laden der Platine"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:527
 #, c-format
@@ -55954,10 +55951,9 @@ msgstr ""
 "gehören, mit _N/_P oder +/- enden."
 
 #: pcbnew/router/pns_dragger.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drag arc tracks of %.1f degrees or greater."
-msgstr ""
-"Größe der Leiterbahnbögen von %s oder größer kann nicht geändert werden."
+msgstr "Leiterbahnbögen von %.1f Grad oder größer können nicht geändert werden."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1109
 #: pcbnew/router/pns_kicad_iface.cpp:1225 pcbnew/router/router_tool.cpp:919
