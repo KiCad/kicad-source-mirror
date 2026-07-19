@@ -1187,120 +1187,93 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         rules.push_back( rule );
     }
 
-    //-----<zones (not keepout areas) become planes>--------------------------------
-    // Note: only zones are output here, keepout areas are created later.
+    //-----<zones (not keepout areas) become wiring polygons>-----------------------
+    // Specctra treats (plane ...) as pins; export copper zones as (wire (polygon ...))
+    // instead. Top-level polygon = fractured zone outline; windows = outline − fill.
     {
-        int netlessZones = 0;
+        int     netlessZones = 0;
+        WIRING* wiring = m_pcb->m_wiring;
+
+        auto appendClosedChain = [&]( PATH* aPath, const SHAPE_LINE_CHAIN& aChain )
+        {
+            if( aChain.PointCount() < 3 )
+                return;
+
+            for( int v = 0; v < aChain.PointCount(); v++ )
+                aPath->AppendPoint( mapPt( aChain.CPoint( v ) ) );
+
+            aPath->AppendPoint( mapPt( aChain.CPoint( 0 ) ) );
+        };
 
         for( ZONE* zone : aBoard->Zones() )
         {
-            if( zone->GetIsRuleArea() )
+            if( zone->GetIsRuleArea() || !zone->IsOnCopperLayer() )
                 continue;
 
-            // Currently, we export only copper layers
-            if( ! zone->IsOnCopperLayer() )
+            const SHAPE_POLY_SET* zoneOutline = zone->Outline();
+            wxCHECK2( zoneOutline && zoneOutline->OutlineCount() > 0, continue );
+
+            // Fracture the zone outline with potential cutouts to fit as top-level wire polygon.
+            SHAPE_POLY_SET zoneOutlineFractured( *zoneOutline );
+            zoneOutlineFractured.Fracture();
+            wxCHECK2( zoneOutlineFractured.OutlineCount() == 1, continue );
+
+            if( zoneOutlineFractured.FullPointCount() < 3 )
                 continue;
 
-            // Now, build zone polygon on each copper layer where the zone
-            // is living (zones can live on many copper layers)
+            std::string netId = zone->GetNetname().utf8_string();
+
+            if( netId.empty() )
+            {
+                NET* no_net = new NET( m_pcb->m_network );
+                no_net->m_net_id = "@:no_net_" + std::to_string( netlessZones++ );
+                m_pcb->m_network->m_nets.push_back( no_net );
+                netId = no_net->m_net_id;
+            }
+
             LSET layerset = zone->GetLayerSet() & LSET::AllCuMask( aBoard->GetCopperLayerCount() );
 
             for( PCB_LAYER_ID layer : layerset )
             {
-                COPPER_PLANE*   plane = new COPPER_PLANE( m_pcb->m_structure );
+                const std::string& layerId = m_layerIds[m_kicadLayer2pcb[layer]];
 
-                m_pcb->m_structure->m_planes.push_back( plane );
+                WIRE* wire = new WIRE( wiring );
+                wiring->wires.push_back( wire );
+                wire->m_net_id = netId;
+                wire->m_wire_type = T_protect;
 
-                PATH* mainPolygon = new PATH( plane, T_polygon );
+                PATH* mainPolygon = new PATH( wire, T_polygon );
+                wire->SetShape( mainPolygon );
+                mainPolygon->layer_id = layerId;
+                appendClosedChain( mainPolygon, zoneOutlineFractured.COutline( 0 ) );
 
-                plane->SetShape( mainPolygon );
-                plane->m_name = TO_UTF8( zone->GetNetname() );
+                SHAPE_POLY_SET* zoneFill = zone->GetFill( layer );
 
-                if( plane->m_name.size() == 0 )
+                if( !zoneFill || zoneFill->IsEmpty() )
+                    continue;
+
+                SHAPE_POLY_SET fill( *zoneFill );
+                fill.Unfracture();
+
+                SHAPE_POLY_SET cutouts( *zoneOutline );
+                cutouts.BooleanSubtract( fill );
+
+                for( int c = 0; c < cutouts.OutlineCount(); c++ )
                 {
-                    // This is one of those no connection zones, netcode=0, and it has no name.
-                    // Create a unique, bogus netname.
-                    NET* no_net = new NET( m_pcb->m_network );
+                    const SHAPE_LINE_CHAIN& hole = cutouts.COutline( c );
 
+                    if( hole.PointCount() < 3 )
+                        continue;
 
-                    no_net->m_net_id = "@:no_net_" + std::to_string( netlessZones++ );
+                    WINDOW* window = new WINDOW( wire );
+                    wire->AddWindow( window );
 
-                    // add the bogus net name to network->nets.
-                    m_pcb->m_network->m_nets.push_back( no_net );
-
-                    // use the bogus net name in the netless zone.
-                    plane->m_name = no_net->m_net_id;
+                    PATH* cutout = new PATH( window, T_polygon );
+                    window->SetShape( cutout );
+                    cutout->layer_id = layerId;
+                    appendClosedChain( cutout, hole );
                 }
-
-                mainPolygon->layer_id = m_layerIds[ m_kicadLayer2pcb[ layer ] ];
-
-                // Handle the main outlines
-                SHAPE_POLY_SET::ITERATOR iterator;
-                VECTOR2I                 startpoint;
-                bool is_first_point = true;
-
-                for( iterator = zone->IterateWithHoles(); iterator; iterator++ )
-                {
-                    VECTOR2I point( iterator->x, iterator->y );
-
-                    if( is_first_point )
-                    {
-                        startpoint = point;
-                        is_first_point = false;
-                    }
-
-                    mainPolygon->AppendPoint( mapPt( point ) );
-
-                    // this was the end of the main polygon
-                    if( iterator.IsEndContour() )
-                    {
-                        // Close polygon
-                        mainPolygon->AppendPoint( mapPt( startpoint ) );
-                        break;
-                    }
-                }
-
-                WINDOW* window  = nullptr;
-                PATH*   cutout  = nullptr;
-
-                bool isStartContour = true;
-
-                // handle the cutouts
-                for( iterator++; iterator; iterator++ )
-                {
-                    if( isStartContour )
-                    {
-                        is_first_point = true;
-                        window = new WINDOW( plane );
-                        plane->AddWindow( window );
-
-                        cutout = new PATH( window, T_polygon );
-                        window->SetShape( cutout );
-                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ layer ] ];
-                    }
-
-                    // If the point in this iteration is the last of the contour, the next iteration
-                    // will start with a new contour.
-                    isStartContour = iterator.IsEndContour();
-
-                    wxASSERT( window );
-                    wxASSERT( cutout );
-
-                    VECTOR2I point( iterator->x, iterator->y );
-
-                    if( is_first_point )
-                    {
-                        startpoint = point;
-                        is_first_point = false;
-                    }
-
-                    cutout->AppendPoint( mapPt( point ) );
-
-                    // Close the polygon
-                    if( iterator.IsEndContour() )
-                        cutout->AppendPoint( mapPt( startpoint ) );
-                }
-            }   // end build zones by layer
+            }
         }
     }
 

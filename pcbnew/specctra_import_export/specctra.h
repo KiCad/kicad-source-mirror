@@ -2867,6 +2867,12 @@ public:
         }
     }
 
+    void AddWindow( WINDOW* aWindow )
+    {
+        aWindow->SetParent( this );
+        m_windows.push_back( aWindow );
+    }
+
     void Format( OUTPUTFORMATTER* out, int nestLevel ) override
     {
         out->Print( nestLevel, "(%s ", Name() );
@@ -2901,6 +2907,8 @@ public:
 
             for( WINDOW& window : m_windows )
                 window.Format( out, nestLevel + 1 );
+
+            out->Print( nestLevel, "" );
         }
 
         if( m_connect )
