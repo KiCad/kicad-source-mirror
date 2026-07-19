@@ -521,8 +521,13 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
     aItem.model = &libModel.model;
 
     std::string modelName = aItem.model->SpiceGenerator().ModelName( aItem );
-    // Resolve model name collisions.
-    aItem.modelName = m_modelNameGenerator.Generate( modelName );
+
+    // Only uniquify names KiCad defines itself with a .model line. Subcircuit names must
+    // match their library definition and stay shared between instances.
+    if( aItem.model->requiresSpiceModelLine( aItem ) )
+        aItem.modelName = m_modelNameGenerator.Generate( modelName );
+    else
+        aItem.modelName = modelName;
 
     // FIXME: Don't have special cases for raw Spice models and KIBIS.
     if( auto rawSpiceModel = dynamic_cast<const SIM_MODEL_RAW_SPICE*>( aItem.model ) )
