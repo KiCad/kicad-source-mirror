@@ -1545,14 +1545,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<create the wires from tracks>-----------------------------------
     {
-        // export all of them for now, later we'll decide what controls we need on this.
-        std::string netname;
-        WIRING*     wiring = m_pcb->m_wiring;
-        PATH*       path = nullptr;
-
-        int old_netcode = -1;
-        int old_width = -1;
-        int old_layer = UNDEFINED_LAYER;
+        // One Specctra wire per KiCad track/arc segment, always exactly two path points.
+        // FreeRouting may have issues normalizing multi-point (polyline) wires
+        // that share endpoints
+        WIRING* wiring = m_pcb->m_wiring;
 
         for( PCB_TRACK* track : aBoard->Tracks() )
         {
@@ -1564,44 +1560,28 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             if( netcode == 0 )
                 continue;
 
-            if( old_netcode != netcode
-                    || old_width != track->GetWidth()
-                    || old_layer != track->GetLayer()
-                    || ( path && path->points.back() != mapPt( track->GetStart() ) ) )
-            {
-                old_width   = track->GetWidth();
-                old_layer   = track->GetLayer();
+            NETINFO_ITEM* net = aBoard->FindNet( netcode );
+            wxASSERT( net );
 
-                if( old_netcode != netcode )
-                {
-                    old_netcode = netcode;
-                    NETINFO_ITEM* net = aBoard->FindNet( netcode );
-                    wxASSERT( net );
-                    netname = TO_UTF8( net->GetNetname() );
-                }
+            WIRE* wire = new WIRE( wiring );
 
-                WIRE* wire = new WIRE( wiring );
+            wiring->wires.push_back( wire );
+            wire->m_net_id = TO_UTF8( net->GetNetname() );
 
-                wiring->wires.push_back( wire );
-                wire->m_net_id = netname;
+            if( track->IsLocked() )
+                wire->m_wire_type = T_fix; // tracks with fix property are not returned in .ses files
+            else
+                wire->m_wire_type = T_protect;
 
-                if( track->IsLocked() )
-                    wire->m_wire_type = T_fix;    // tracks with fix property are not returned in .ses files
-                else
-                    wire->m_wire_type = T_protect;
+            PCB_LAYER_ID kiLayer = track->GetLayer();
+            int          pcbLayer = m_kicadLayer2pcb[kiLayer];
 
-                PCB_LAYER_ID kiLayer = track->GetLayer();
-                int          pcbLayer = m_kicadLayer2pcb[kiLayer];
-
-                path = new PATH( wire );
-                wire->SetShape( path );
-                path->layer_id = m_layerIds[pcbLayer];
-                path->aperture_width = scale( old_width );
-                path->AppendPoint( mapPt( track->GetStart() ) );
-            }
-
-            if( path )  // Should not occur
-                path->AppendPoint( mapPt( track->GetEnd() ) );
+            PATH* path = new PATH( wire );
+            wire->SetShape( path );
+            path->layer_id = m_layerIds[pcbLayer];
+            path->aperture_width = scale( track->GetWidth() );
+            path->AppendPoint( mapPt( track->GetStart() ) );
+            path->AppendPoint( mapPt( track->GetEnd() ) );
         }
     }
 
