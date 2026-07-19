@@ -37,6 +37,7 @@
 #include <symbol_preview_widget.h>
 #include <libraries/symbol_library_adapter.h>
 #include <widgets/wx_panel.h>
+#include <kiplatform/ui.h>
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
@@ -75,6 +76,13 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
                                               std::function<void( int, int, const wxString& )> aProgressCallback )
 {
     THROTTLE progressThrottle( std::chrono::milliseconds( 120 ) );
+
+    // Cancels a queued scroll; a frame-clock tick would else walk rows freed below
+    KIPLATFORM::UI::CancelPendingScroll( m_widget );
+
+    // Detaches the model for the rebuild; a frame-clock tick during the progress dialog
+    // yield would else validate freed rows
+    ResetTreeView resetGuard( *this );
 
     m_lastSyncHash = m_libMgr->GetHash();
     int i = 0, max = GetLibrariesCount();

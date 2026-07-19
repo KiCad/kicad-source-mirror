@@ -327,6 +327,35 @@ public:
     void Thaw() { m_freeze--; }
     bool IsFrozen() const { return m_freeze; }
 
+    /**
+     * RAII guard that detaches the tree view from the model during a rebuild, guarding against
+     * a deferred frame-clock tick validating rows the rebuild frees.
+     *
+     * Construct before freeing any node.
+     */
+    class ResetTreeView
+    {
+    public:
+        explicit ResetTreeView( LIB_TREE_MODEL_ADAPTER& aAdapter ) :
+                m_adapter( aAdapter )
+        {
+            m_adapter.Freeze();
+            m_adapter.BeforeReset();
+        }
+
+        ~ResetTreeView()
+        {
+            m_adapter.AfterReset();
+            m_adapter.Thaw();
+        }
+
+        ResetTreeView( const ResetTreeView& ) = delete;
+        ResetTreeView& operator=( const ResetTreeView& ) = delete;
+
+    private:
+        LIB_TREE_MODEL_ADAPTER& m_adapter;
+    };
+
     void RefreshTree();
 
     // Allows subclasses to nominate a context menu handler.

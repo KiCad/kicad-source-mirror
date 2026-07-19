@@ -36,6 +36,7 @@
 #include <footprint.h>
 #include <tool/tool_manager.h>
 #include <tools/footprint_editor_control.h>
+#include <kiplatform/ui.h>
 
 #include <map>
 
@@ -74,6 +75,13 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) c
 void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FOOTPRINT_LIBRARY_ADAPTER* aLibs )
 {
     m_libs = aLibs;
+
+    // Cancels a queued scroll; a frame-clock tick would else walk rows freed below
+    KIPLATFORM::UI::CancelPendingScroll( m_widget );
+
+    // Detaches the model for the rebuild; a frame-clock tick during an event loop yield
+    // would else validate freed rows
+    ResetTreeView resetGuard( *this );
 
     // Process already stored libraries
     for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end(); )
