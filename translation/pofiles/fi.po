@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-07-15 01:01+0000\n"
+"PO-Revision-Date: 2026-07-20 06:34+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
@@ -13640,22 +13640,20 @@ msgid "Highlight corresponding items on canvas when selected in the ERC list"
 msgstr "Korosta vastaavat kohteet kankaalla, kun ne on valittu ERC-luettelossa"
 
 #: eeschema/dialogs/dialog_erc.cpp:248 pcbnew/dialogs/dialog_drc.cpp:325
-#, fuzzy
 msgid "Center on Cross-probe"
-msgstr "Keskitä kohdistin"
+msgstr "Keskitä kohdistin ristivertailussa"
 
 #: eeschema/dialogs/dialog_erc.cpp:249 pcbnew/dialogs/dialog_drc.cpp:326
 msgid "When cross-probing, scroll the canvas so that the item is visible"
-msgstr ""
+msgstr "Vieritä piirtoaluetta siten, että esine näkyy ristivertaillessa"
 
 #: eeschema/dialogs/dialog_erc.cpp:253
-#, fuzzy
 msgid "Show all errors"
-msgstr "Näytä kaikki versiot"
+msgstr "Näytä kaikki virheet"
 
 #: eeschema/dialogs/dialog_erc.cpp:254
 msgid "Show duplicate ERC markers on all applicable pins"
-msgstr ""
+msgstr "Näytä monistetut ERC markkerit kaikilla soveltuvilla nastoilla"
 
 #: eeschema/dialogs/dialog_erc.cpp:428 pcbnew/dialogs/dialog_drc.cpp:1374
 msgid "Delete exclusions too?"
@@ -13681,7 +13679,6 @@ msgid "%d symbol(s) require annotation.<br><br>"
 msgstr "%d symboli(t) vaativat viitemerkinnän. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:556
-#, fuzzy
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr "-------- Käyttäjä keskeytti ERC:n.<br><br>"
 
@@ -13760,9 +13757,8 @@ msgstr "Muokkaa nastojen konfliktitaulukkoa..."
 
 #: eeschema/dialogs/dialog_erc.cpp:814 eeschema/dialogs/dialog_erc.cpp:820
 #: eeschema/dialogs/dialog_erc.cpp:827
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
-msgstr "Avaa Kytkentäkaavion Asetukset ... valintaikkuna"
+msgstr "Avaa kytkentäkaavion asetusten valintaikkuna"
 
 #: eeschema/dialogs/dialog_erc.cpp:819 pcbnew/dialogs/dialog_drc.cpp:879
 msgid "Edit violation severities..."
@@ -14090,7 +14086,6 @@ msgid "Show field name"
 msgstr "Näytä kentän nimi"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:115
-#, fuzzy
 msgid "Show the field name in addition to its value"
 msgstr "Näytä kentän nimi sen arvon lisäksi"
 
@@ -14295,19 +14290,16 @@ msgstr "Kentän nimellä:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:98
-#, fuzzy
 msgid "By parent reference designator:"
-msgstr "Aloitusviitteen tunniste:"
+msgstr "Ylätasonviitetunnisteen mukaan:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
-#, fuzzy
 msgid "By parent symbol library id:"
-msgstr "Suodata kohteet ylätason kirjastotunnuksen mukaan:"
+msgstr "Ylätason symbolikirjaston idn mukaan:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
-#, fuzzy
 msgid "By parent symbol type:"
-msgstr "Suodata kohteet ylätason symbolityypin mukaan:"
+msgstr "Ylätason symbolityypin mukaan:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
@@ -14444,19 +14436,19 @@ msgid "Unable to find a plugin to read this library."
 msgstr "Tämän kirjaston lukemiseen soveltuvaa laajennusta ei löytynyt."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:156
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read symbol library '%s'."
-msgstr "Symbolikirjastoa '%s' ei voi tuoda."
+msgstr "Symbolikirjastoa '%s' ei voi lukea."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is empty."
-msgstr "Symbolikirjastotiedosto '%s' on tyhjä."
+msgstr "Symbolikirjasto '%s' on tyhjä."
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:341
 #, c-format
 msgid "%d symbols selected, %d parents auto-included"
-msgstr ""
+msgstr "%d symbolia valittu, %d ylätason kohdetta sisällytetty automaattisesti"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:346
 #, c-format
@@ -14464,20 +14456,20 @@ msgid "%d symbols selected"
 msgstr "%d symbolia valittu"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:545
-#, fuzzy
 msgid "Resolve Import Conflicts"
-msgstr "Varjo Konflikteille"
+msgstr "Ratkaise tuontikonfliktit"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:552
 msgid ""
 "The following symbols already exist in the destination library. Choose how "
 "to handle each conflict:"
 msgstr ""
+"Seuraavat symbolit ovat jo olemassa kohdekirjastossa. Valitse miten jokainen "
+"konflikti ratkaistaan:"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:574
-#, fuzzy
 msgid "Skip All"
-msgstr "Ohita"
+msgstr "Ohita kaikki"
 
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:575
 #: eeschema/symbol_editor/symbol_editor.cpp:988
@@ -14485,9 +14477,8 @@ msgid "Overwrite All"
 msgstr "Korvaa kaikki"
 
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:85
-#, fuzzy
 msgid "0 symbols selected"
-msgstr "Symbolia ei ole valittu"
+msgstr "0 symbolia valittu"
 
 #: eeschema/dialogs/dialog_increment_annotations_base.cpp:28
 msgid "Start reference designator:"
@@ -15537,7 +15528,7 @@ msgstr "Sulje pois simulaatiosta"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:165
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:831
 msgid "Exclude from position files"
-msgstr "Sulje pois sijaintitiedostoista"
+msgstr "Jätä pois ladontatiedostoista"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:287
 #, fuzzy
@@ -20223,9 +20214,8 @@ msgid "Missing field in schematic symbol: %s."
 msgstr "Puuttuva kenttä piirikaavion symbolissa: %s."
 
 #: eeschema/lib_symbol.cpp:2335
-#, fuzzy
 msgid "Footprint filter count differs."
-msgstr "Jalanjälkisuodattimet eriävät."
+msgstr "Jalanjälkisuodattimien määrä ei täsmää."
 
 #: eeschema/lib_symbol.cpp:2347
 msgid "Footprint filters differ."
@@ -20260,28 +20250,24 @@ msgid "Exclude from board settings differ."
 msgstr "Sulje pois levyltä asetukset eroavat."
 
 #: eeschema/lib_symbol.cpp:2423
-#, fuzzy
 msgid "Exclude from position files settings differ."
-msgstr "Sulje pois simulaatiosta eroavat asetukset."
+msgstr "Jätä pois ladontatiedostoista asetukset poikkeavat."
 
 #: eeschema/lib_symbol.cpp:2658 eeschema/symbol_editor/symbol_editor.cpp:1769
 msgid "Datasheet"
 msgstr "Datalehti"
 
 #: eeschema/lib_symbol.cpp:2665
-#, fuzzy
 msgid "Symbol Definition"
-msgstr "Symboliyksikkö"
+msgstr "Symbolimääritelmä"
 
 #: eeschema/lib_symbol.cpp:2667
-#, fuzzy
 msgid "Define as Power Symbol"
 msgstr "Määritä tehosymboliksi"
 
 #: eeschema/lib_symbol.cpp:2671
-#, fuzzy
 msgid "Define as Local Power Symbol"
-msgstr "Määritä tehosymboliksi"
+msgstr "Määritä lokaaliksi tehosymboliksi"
 
 #: eeschema/lib_symbol.cpp:2676
 #, fuzzy
@@ -20322,19 +20308,16 @@ msgstr "Jätä pois materiaaliluettelosta"
 
 #: eeschema/lib_symbol.cpp:2706 eeschema/tools/sch_actions.cpp:1097
 #: pcbnew/tools/pcb_actions.cpp:578
-#, fuzzy
 msgid "Exclude from Position Files"
-msgstr "Sulje pois sijaintitiedostoista"
+msgstr "Jätä pois ladontatiedostoista"
 
 #: eeschema/lib_symbol.cpp:2711
-#, fuzzy
 msgid "Units and Body Styles"
-msgstr "Rungon tyyli"
+msgstr "Yksiköt ja rungon tyylit"
 
 #: eeschema/lib_symbol.cpp:2713
-#, fuzzy
 msgid "Number of Symbol Units"
-msgstr "Bittien määrä"
+msgstr "Symboliyksiköiden määrä"
 
 #: eeschema/lib_symbol.cpp:2716
 #, fuzzy
@@ -20374,9 +20357,8 @@ msgid "Netlist..."
 msgstr "Netlist ..."
 
 #: eeschema/menubar.cpp:117
-#, fuzzy
 msgid "Symbols..."
-msgstr "Symboli..."
+msgstr "Symbolit..."
 
 #: eeschema/menubar.cpp:178
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:124 kicad/menubar.cpp:194
@@ -20390,9 +20372,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/menubar.cpp:327
-#, fuzzy
 msgid "Variants"
-msgstr "Kirjastonhoitajat"
+msgstr "Varioaatiot"
 
 #: eeschema/menubar.cpp:356
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:187
@@ -20421,9 +20402,9 @@ msgid "P&references"
 msgstr "A&setukset"
 
 #: eeschema/net_navigator.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from (%s, %s) to (%s, %s)"
-msgstr "Johto %s,%s kohteeseen %s,%s"
+msgstr "Johto kohteesta (%s,%s) kohteeseen (%s,%s)"
 
 #: eeschema/net_navigator.cpp:73
 #, fuzzy, c-format
@@ -20432,7 +20413,7 @@ msgstr "Väylä %s,%s kohteeseen %s,%s"
 
 #: eeschema/net_navigator.cpp:81
 msgid "Graphic line not connectable"
-msgstr "Grafiikkaviivaa ei voi yhdistää"
+msgstr "Grafiikkaviivaan ei voi yhdistää"
 
 #: eeschema/net_navigator.cpp:92
 #, c-format
@@ -20460,24 +20441,24 @@ msgid "Hierarchical label '%s' at (%s, %s)"
 msgstr "Hierarkkinen verkkotunniste '%s' kohteessa (%s, %s)"
 
 #: eeschema/net_navigator.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at (%s, %s)"
-msgstr "Risteys kohdassa %s, %s"
+msgstr "Risteys kohdassa (%s, %s)"
 
 #: eeschema/net_navigator.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at (%s, %s)"
-msgstr "Ei yhteyttä %s, %s"
+msgstr "Ei yhteyttä merkki kohdassa (%s, %s)"
 
 #: eeschema/net_navigator.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from (%s, %s) to (%s, %s)"
-msgstr "Väylä johtoon kohdasta %s, %s kohteeseen %s, %s"
+msgstr "Väylä johtoon kohdasta (%s, %s) kohteeseen (%s, %s)"
 
 #: eeschema/net_navigator.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from (%s, %s) to (%s, %s)"
-msgstr "Väylä väyläliitäntään kohteesta %s, %s kohteeseen %s, %s"
+msgstr "Väylä väyläliitäntään kohteesta (%s, %s) kohteeseen (%s, %s)"
 
 #: eeschema/net_navigator.cpp:191
 #, c-format
@@ -20502,7 +20483,7 @@ msgstr "Verkkoja"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:52
 msgid "Failed to create directory 'devices' ."
-msgstr "Hakemiston \"laitteet\" luominen epäonnistui."
+msgstr "Hakemiston 'laitteet' luominen epäonnistui."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:408
 #: pcbnew/pcbnew_jobs_handler.cpp:1514 pcbnew/pcbnew_jobs_handler.cpp:1583
@@ -20588,9 +20569,8 @@ msgid "&Duplicate '%s'"
 msgstr "&Monista '%s'"
 
 #: eeschema/picksymbol.cpp:179
-#, fuzzy
 msgid "Swap Units"
-msgstr "Yksiköt"
+msgstr "Vaihda yksiköt"
 
 #: eeschema/picksymbol.cpp:181
 msgid "Change Unit"
@@ -20837,9 +20817,9 @@ msgid "Payload was empty."
 msgstr ""
 
 #: eeschema/remote_symbol_import_utils.cpp:88
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create '%s'."
-msgstr "Ei voitu luoda %s"
+msgstr "Ei voitu luoda kohdetta '%s'."
 
 #: eeschema/remote_symbol_import_utils.cpp:96
 #, fuzzy, c-format
@@ -20852,9 +20832,8 @@ msgid "Failed to write '%s'."
 msgstr "Tiedoston '%s' kirjoittaminen epäonnistui."
 
 #: eeschema/remote_symbol_import_utils.cpp:131
-#, fuzzy
 msgid "Destination directory is not configured."
-msgstr "3D-kokoonpanohakemisto on tuntematon"
+msgstr "Kohdehakemistoa ei ole konfiguroitu."
 
 #: eeschema/remote_symbol_import_utils.cpp:140
 #, fuzzy, c-format
@@ -20882,9 +20861,8 @@ msgid "Failed to save the library table."
 msgstr "Symbolikirjaston tallentaminen tiedostoon \"%s\" epäonnistui."
 
 #: eeschema/remote_symbol_import_utils.cpp:213
-#, fuzzy
 msgid "No schematic editor is available for placement."
-msgstr "Käytä kytkentäkaavioeditorin väriteemaa"
+msgstr "Piirikaavioeditoria ei ole käytettävissä sijoittelua varten."
 
 #: eeschema/remote_symbol_import_utils.cpp:225
 #, fuzzy
@@ -20903,9 +20881,8 @@ msgstr "Symbolikirjastotiedosto '%s' on tyhjä."
 
 #: eeschema/remote_symbol_import_utils.cpp:265
 #: eeschema/remote_symbol_import_utils.cpp:274
-#, fuzzy
 msgid "Unable to create a temporary file for the symbol payload."
-msgstr "<b>Väliaikaisen tiedoston '%s' luominen epäonnistui. </b>"
+msgstr "Symbolitiedon väliaikaistiedostoa ei voitu luoda."
 
 #: eeschema/remote_symbol_import_utils.cpp:281
 #, fuzzy
@@ -22763,7 +22740,7 @@ msgstr "Hierarkisen arkin nasta '%s'"
 #: pcbnew/widgets/pcb_properties_panel.cpp:619
 #: pcbnew/widgets/pcb_properties_panel.cpp:720
 msgid "Exclude From Position Files"
-msgstr "Sulje pois sijaintitiedostoista"
+msgstr "Jätä pois ladontatiedostoista"
 
 #: eeschema/sch_symbol.cpp:2711
 msgid "Power symbol"
@@ -26558,10 +26535,9 @@ msgstr ""
 "Muuta %s \"Poissulje materiaaliluettelosta\" kohteesta \"%s\" > \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr ""
-"Muuta %s \"Poissulje materiaaliluettelosta\" kohteesta \"%s\" > \"%s\"."
+msgstr "Muuta %s 'Jätä pois ladontatiedostoista' kohteesta '%s' muotoon '%s'."
 
 #: eeschema/tools/backannotate.cpp:925
 #, c-format
@@ -27500,9 +27476,8 @@ msgid "Set the exclude from board attribute"
 msgstr "Aseta poissulkeminen piirilevyltä -määrite"
 
 #: eeschema/tools/sch_actions.cpp:1098
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "Aseta poissulkeminen simulaatiosta -määrite"
+msgstr "Aseta jätä pois ladontatiedostoista -määrite"
 
 #: eeschema/tools/sch_actions.cpp:1104
 msgid "Set the do not populate attribute"
@@ -51525,22 +51500,22 @@ msgstr "Poistettu %s 'Älä sijoita' valmistusmäärite."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:817
 #, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "Lisää %s 'poista pois sijaintitiedostoista' -valmistusattribuutti."
+msgstr "Lisää %s 'jätä pois ladontatiedostoista' -tuotantomäärite."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:822
 #, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "Poista %s 'poista pois sijaintitiedostoista' valmistusattribuutti."
+msgstr "Poista %s 'jätä pois ladontatiedostoista' -tuotantomäärite."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:833
 #, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "Lisätty %s 'poista pois sijaintitiedostoista' -valmistusattribuutti."
+msgstr "Lisätty %s 'jätä pois ladontatiedostoista' -tuotantomäärite."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:839
 #, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "Poistettu %s 'poista pois sijaintitiedostoista' -valmistusattribuutti."
+msgstr "Poistettu %s 'jätä pois ladontatiedostoista' -tuotantomäärite."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:862
 #, c-format
@@ -51699,9 +51674,8 @@ msgid "Do not place"
 msgstr "Ei asenneta"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1561
-#, fuzzy
 msgid "exclude from position files"
-msgstr "Sulje pois sijaintitiedostoista"
+msgstr "jätä pois ladontatiedostoista"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1587
 #, fuzzy, c-format
@@ -57702,9 +57676,8 @@ msgid "Toggle the exclude from bill of materials attribute"
 msgstr "Ota pois materiaaliluettelosta -määrite (päälle/pois)"
 
 #: pcbnew/tools/pcb_actions.cpp:579
-#, fuzzy
 msgid "Toggle the exclude from position files attribute"
-msgstr "Ota pois simulaatiosta -määrite (päälle/pois)"
+msgstr "Vaihda jätä pois ladontatiedostoista -määritteen tilaa"
 
 #: pcbnew/tools/pcb_actions.cpp:587
 msgid ""
