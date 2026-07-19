@@ -197,6 +197,8 @@ public:
         ConstrainOnEdge( aPosition, true );
     }
 
+    void CalcEdit( const VECTOR2I& aPosition ) override { ConstrainOnEdge( aPosition, true ); }
+
     bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override
     {
         return m_isDangling && GetPosition() == aPos;
