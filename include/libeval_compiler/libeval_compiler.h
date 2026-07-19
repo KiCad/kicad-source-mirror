@@ -206,30 +206,30 @@ class KICOMMON_API VALUE
 public:
     VALUE() :
             m_type( VT_UNDEFINED ),
+            m_units( EDA_UNITS::UNSCALED ),
             m_valueDbl( 0 ),
             m_stringIsWildcard( false ),
             m_isDeferredDbl( false ),
-            m_isDeferredStr( false ),
-            m_units( EDA_UNITS::UNSCALED )
+            m_isDeferredStr( false )
     {}
 
     VALUE( const wxString& aStr, bool aIsWildcard = false ) :
             m_type( VT_STRING ),
+            m_units( EDA_UNITS::UNSCALED ),
             m_valueDbl( 0 ),
             m_valueStr( aStr ),
             m_stringIsWildcard( aIsWildcard ),
             m_isDeferredDbl( false ),
-            m_isDeferredStr( false ),
-            m_units( EDA_UNITS::UNSCALED )
+            m_isDeferredStr( false )
     {}
 
     VALUE( const double aVal ) :
             m_type( VT_NUMERIC ),
+            m_units( EDA_UNITS::UNSCALED ),
             m_valueDbl( aVal ),
             m_stringIsWildcard( false ),
             m_isDeferredDbl( false ),
-            m_isDeferredStr( false ),
-            m_units( EDA_UNITS::UNSCALED )
+            m_isDeferredStr( false )
     {}
 
     static VALUE* MakeNullValue()
@@ -315,17 +315,16 @@ public:
 
 private:
     VAR_TYPE_T                m_type;
+    EDA_UNITS                 m_units;
     mutable double            m_valueDbl;               // mutable to support deferred evaluation
     mutable wxString          m_valueStr;               // mutable to support deferred evaluation
-    bool                      m_stringIsWildcard;
 
-    mutable bool                 m_isDeferredDbl;
     INPLACE_FUNCTION<double()>   m_lambdaDbl;
-
-    mutable bool                 m_isDeferredStr;
     INPLACE_FUNCTION<wxString()> m_lambdaStr;
+    bool                         m_stringIsWildcard;
+    mutable bool                 m_isDeferredDbl;
+    mutable bool                 m_isDeferredStr;
 
-    EDA_UNITS                 m_units;
 };
 
 class KICOMMON_API VAR_REF
