@@ -20,6 +20,7 @@ class WX_GRID;
 #include <wx/settings.h>
 #include <wx/statline.h>
 #include <wx/grid.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 
@@ -36,6 +37,7 @@ class PANEL_SETUP_ZONE_HATCH_OFFSETS_BASE : public wxPanel
 		wxStaticText* m_staticTextLabel;
 		wxStaticLine* m_staticline1;
 		WX_GRID* m_layerOffsetsGrid;
+		wxCheckBox* m_prototypeZoneFills;
 
 	public:
 
@@ -44,4 +46,3 @@ class PANEL_SETUP_ZONE_HATCH_OFFSETS_BASE : public wxPanel
 		~PANEL_SETUP_ZONE_HATCH_OFFSETS_BASE();
 
 };
-

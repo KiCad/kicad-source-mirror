@@ -45,6 +45,8 @@ public:
     void ImportSettingsFrom( BOARD* aBoard );
 
 private:
+    void loadHatchOffsets();
+
     PCB_BASE_FRAME*              m_frame;
     LAYER_PROPERTIES_GRID_TABLE* m_layerPropsTable;
     BOARD_DESIGN_SETTINGS*       m_brdSettings;

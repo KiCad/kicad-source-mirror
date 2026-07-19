@@ -18,6 +18,7 @@
  */
 
 #include "panel_setup_zone_hatch_offsets.h"
+#include <project/project_local_settings.h>
 #include <zone_layer_properties_grid.h>
 #include <grid_layer_box_helpers.h>
 #include <pcb_edit_frame.h>
@@ -58,6 +59,20 @@ PANEL_SETUP_ZONE_HATCH_OFFSETS::~PANEL_SETUP_ZONE_HATCH_OFFSETS()
 
 bool PANEL_SETUP_ZONE_HATCH_OFFSETS::TransferDataToWindow()
 {
+    m_prototypeZoneFills->SetValue( m_frame->Prj().GetLocalSettings().m_PrototypeZoneFill );
+    loadHatchOffsets();
+
+    return true;
+}
+
+
+void PANEL_SETUP_ZONE_HATCH_OFFSETS::loadHatchOffsets()
+{
+    int rowCount = m_layerPropsTable->GetNumberRows();
+
+    if( rowCount > 0 )
+        m_layerPropsTable->DeleteRows( 0, rowCount );
+
     for( PCB_LAYER_ID layer : LSET::AllCuMask().UIOrder() )
     {
         if( m_brdSettings->IsLayerEnabled( layer ) )
@@ -70,8 +85,6 @@ bool PANEL_SETUP_ZONE_HATCH_OFFSETS::TransferDataToWindow()
     }
 
     Layout();
-
-    return true;
 }
 
 
@@ -108,6 +121,8 @@ bool PANEL_SETUP_ZONE_HATCH_OFFSETS::TransferDataFromWindow()
     if( !m_layerOffsetsGrid->CommitPendingChanges() )
         return false;
 
+    m_frame->Prj().GetLocalSettings().m_PrototypeZoneFill = m_prototypeZoneFills->GetValue();
+
     for( const auto& [layer, props] : m_layerPropsTable->GetItems() )
         m_brdSettings->m_ZoneLayerProperties[layer] = props;
 
@@ -120,7 +135,7 @@ void PANEL_SETUP_ZONE_HATCH_OFFSETS::ImportSettingsFrom( BOARD* aBoard )
     BOARD_DESIGN_SETTINGS* savedSettings = m_brdSettings;
 
     m_brdSettings = &aBoard->GetDesignSettings();
-    TransferDataToWindow();
+    loadHatchOffsets();
 
     m_brdSettings = savedSettings;
 }

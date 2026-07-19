@@ -58,6 +58,11 @@ PANEL_SETUP_ZONE_HATCH_OFFSETS_BASE::PANEL_SETUP_ZONE_HATCH_OFFSETS_BASE( wxWind
 	m_layerOffsetsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	mainSizer->Add( m_layerOffsetsGrid, 0, wxALL, 5 );
 
+	m_prototypeZoneFills = new wxCheckBox( this, wxID_ANY, _("Use solid fills for hatched zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_prototypeZoneFills->SetToolTip( _("Prototype zone fill mode fills hatched zones as solid to improve performance on large boards. This local setting takes effect the next time zones are filled.") );
+
+	mainSizer->Add( m_prototypeZoneFills, 0, wxALL, 5 );
+
 
 	this->SetSizer( mainSizer );
 	this->Layout();
