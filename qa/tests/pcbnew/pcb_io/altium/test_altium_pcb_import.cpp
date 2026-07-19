@@ -588,6 +588,21 @@ BOOST_AUTO_TEST_CASE( Via_HoleReferencedMaskTenting )
 }
 
 
+BOOST_AUTO_TEST_CASE( SlotDrillDimensionsSurviveUnsupportedRotation )
+{
+    bool rotationSupported;
+
+    BOOST_CHECK_EQUAL( altiumSlotDrillSize( 550000, 850000, 0.0, rotationSupported ), VECTOR2I( 850000, 550000 ) );
+    BOOST_CHECK( rotationSupported );
+
+    BOOST_CHECK_EQUAL( altiumSlotDrillSize( 550000, 850000, 90.0, rotationSupported ), VECTOR2I( 550000, 850000 ) );
+    BOOST_CHECK( rotationSupported );
+
+    BOOST_CHECK_EQUAL( altiumSlotDrillSize( 550000, 850000, 45.0, rotationSupported ), VECTOR2I( 850000, 550000 ) );
+    BOOST_CHECK( !rotationSupported );
+}
+
+
 /**
  * Verify that the dielectric loss tangent is imported from the modern Altium physical stackup
  * (LAYER_V8_/V9_STACK_LAYER keys). The legacy LAYER<n> records used to build the stackup do not

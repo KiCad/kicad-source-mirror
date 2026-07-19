@@ -3682,20 +3682,15 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
             case ALTIUM_PAD_HOLE_SHAPE::SLOT:
             {
                 pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
-                EDA_ANGLE slotRotation( aElem.sizeAndShape->slotrotation, DEGREES_T );
+                bool slotRotationSupported;
+                pad->SetDrillSize( altiumSlotDrillSize( aElem.holesize, aElem.sizeAndShape->slotsize,
+                                                        aElem.sizeAndShape->slotrotation, slotRotationSupported ) );
 
-                slotRotation.Normalize();
+                if( !slotRotationSupported )
+                {
+                    EDA_ANGLE slotRotation( aElem.sizeAndShape->slotrotation, DEGREES_T );
+                    slotRotation.Normalize();
 
-                if( slotRotation.IsHorizontal() )
-                {
-                    pad->SetDrillSize( VECTOR2I( aElem.sizeAndShape->slotsize, aElem.holesize ) );
-                }
-                else if( slotRotation.IsVertical() )
-                {
-                    pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.sizeAndShape->slotsize ) );
-                }
-                else
-                {
                     if( !m_footprintName.IsEmpty() )
                     {
                         if( m_reporter )

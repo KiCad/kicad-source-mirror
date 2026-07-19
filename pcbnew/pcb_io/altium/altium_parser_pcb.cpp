@@ -97,6 +97,26 @@ bool altiumViaSideIsTented( bool aTentFlag, bool aManual, bool aFromHole, uint32
 }
 
 
+VECTOR2I altiumSlotDrillSize( uint32_t aHoleSize, uint32_t aSlotSize, double aSlotRotation, bool& aRotationSupported )
+{
+    double slotRotation = std::fmod( aSlotRotation, 360.0 );
+
+    if( slotRotation < 0.0 )
+        slotRotation += 360.0;
+
+    aRotationSupported = true;
+
+    if( std::abs( slotRotation ) < 1e-9 || std::abs( slotRotation - 180.0 ) < 1e-9 )
+        return { static_cast<int>( aSlotSize ), static_cast<int>( aHoleSize ) };
+
+    if( std::abs( slotRotation - 90.0 ) < 1e-9 || std::abs( slotRotation - 270.0 ) < 1e-9 )
+        return { static_cast<int>( aHoleSize ), static_cast<int>( aSlotSize ) };
+
+    aRotationSupported = false;
+    return { static_cast<int>( aSlotSize ), static_cast<int>( aHoleSize ) };
+}
+
+
 /*
  * Returns V7 layer ids for Mechanical 17 and above. Otherwise, V6 layer ids.
  */

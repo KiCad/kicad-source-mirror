@@ -1022,4 +1022,13 @@ bool altiumViaSideIsTented( bool aTentFlag, bool aManual, bool aFromHole, uint32
                             int32_t aMaskExpansion, int aLandDiameter );
 
 
+/**
+ * Convert an Altium slot's independent rotation and dimensions to KiCad's cardinal drill shape.
+ *
+ * KiCad cannot rotate a drill independently of its pad.  Non-cardinal slots therefore retain
+ * their source dimensions in a horizontal approximation and set @p aRotationSupported false.
+ */
+VECTOR2I altiumSlotDrillSize( uint32_t aHoleSize, uint32_t aSlotSize, double aSlotRotation, bool& aRotationSupported );
+
+
 #endif //ALTIUM_PARSER_PCB_H
