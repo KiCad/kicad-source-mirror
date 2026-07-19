@@ -37,8 +37,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-07-16 07:13+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-07-20 03:50+0000\n"
+"Last-Translator: Luc <some_physics@live.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -2829,7 +2829,6 @@ msgstr ""
 "Änderungen."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
 msgstr "Beide behalten"
 
@@ -2843,7 +2842,6 @@ msgstr ""
 "Überprüfung."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
 msgstr "Öffnen abbrechen"
 
@@ -3584,9 +3582,8 @@ msgid "Compare Files"
 msgstr "Dateien vergleichen"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:129
-#, fuzzy
 msgid "No conflicts to resolve."
-msgstr "Keine verbundenen Netze ausgewählt."
+msgstr "Keine Konflikte zu lösen."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:134
 #, c-format
@@ -6819,9 +6816,8 @@ msgid "Collision"
 msgstr "Kollision"
 
 #: common/diff_merge/diff_tree_grouping.cpp:41
-#, fuzzy
 msgid "Duplicate ID"
-msgstr "Duplizieren"
+msgstr "ID duplizieren"
 
 #: common/draw_panel_gal.cpp:228 common/draw_panel_gal.cpp:664
 msgid "Could not use OpenGL, falling back to software rendering"
@@ -8706,7 +8702,7 @@ msgstr "Konnte den Remote-Zweig nicht lesen."
 #: common/git/libgit_backend.cpp:1659
 #, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Konnte nicht zu Remote-Zweig zurücksetzen: %s"
+msgstr "Konnte nicht zu Remote-Branch zurücksetzen: %s"
 
 #: common/git/libgit_backend.cpp:1685
 msgid ""
@@ -9068,7 +9064,7 @@ msgid "Unable to parse '%s' in '%s'"
 msgstr "Kann \"%s\" in \"%s\" nicht parsen"
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:53
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot determine length of file '%s'."
 msgstr "Kann Länge der Datei \"%s\" nicht bestimmen."
 
@@ -9078,17 +9074,17 @@ msgid "DipTrace file '%s' is too large (%ld bytes)."
 msgstr ""
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading file '%s'."
 msgstr "Fehler beim Lesen der Datei \"%s\"."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:102
-#, fuzzy, c-format
+#, c-format
 msgid "Seek past end of file (offset %zu, size %zu)."
-msgstr "Über das Dateiende hinaus suchen (Offset %zu, Größe %zu)."
+msgstr "Über das Dateiende hinaus gesucht (Offset %zu, Größe %zu)."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:209
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unexpected end of file at offset 0x%06zX: need 3 bytes for int3, have %zu "
 "remaining."
@@ -9097,7 +9093,7 @@ msgstr ""
 "%zu sind noch übrig."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:227
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unexpected end of file at offset 0x%06zX: need 4 bytes for int4, have %zu "
 "remaining."
@@ -9121,7 +9117,7 @@ msgid "Unreasonable v37 string length %d at offset 0x%06zX."
 msgstr "Unpassende v37-Zeichenkettenlänge %d bei Offset 0x%06zX."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:556
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unexpected end of file at offset 0x%06zX: need %zu bytes, have %zu remaining."
 msgstr ""
@@ -9139,7 +9135,7 @@ msgid "Short read in Eagle binary file (truncated block)."
 msgstr "Zu kurzer Abschnitt in Eagle-Binärdatei (abgeschnittener Block)."
 
 #: common/io/eagle/eagle_bin_parser.cpp:1073
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
 msgstr "Unbekannte Eagle Binärblock-ID 0x%02x%02x bei Offset %zu."
 
@@ -9149,24 +9145,20 @@ msgid "Eagle binary file has no drawing section."
 msgstr "Eagle Binärdatei hat keinen Zeichnungsabschnitt."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2443
-#, fuzzy
 msgid "Eagle binary layout is missing a board/libraries node."
 msgstr "Eagle Binär-Layout fehlt ein Platinen-/Bibliotheksknoten."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2549
-#, fuzzy
 msgid "File is too small to be an Eagle binary board."
 msgstr "Die Datei ist zu klein, um eine Eagle Binär-Platine zu sein."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2614
-#, fuzzy
 msgid "Eagle binary schematic has no drawing section."
-msgstr "Eagle Binärdatei hat keinen Zeichnungsabschnitt."
+msgstr "Eagle Binär-Schaltplan hat keinen Zeichnungsabschnitt."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2619
-#, fuzzy
 msgid "Eagle binary file has no schematic section."
-msgstr "Eagle Binärdatei hat keinen Zeichnungsabschnitt."
+msgstr "Eagle Binärdatei hat keinen Schaltplanabschnitt."
 
 #: common/io/eagle/eagle_parser.cpp:284
 #, c-format
@@ -9220,14 +9212,14 @@ msgid "Loading file canceled by user."
 msgstr "Laden der Datei durch Benutzer abgebrochen."
 
 #: common/io/pcad/s_expr_loader.cpp:194 common/io/pcad/s_expr_loader.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read file '%s'."
-msgstr "Kann Datei \"%s\" nicht öffnen."
+msgstr "Kann Datei \"%s\" nicht lesen."
 
 #: common/io/pcad/s_expr_loader.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a P-CAD ASCII file."
-msgstr "\"%s\" ist keine gültige PADS Logic-ASCII-Datei."
+msgstr "\"%s\" ist keine gültige P-CAD ASCII-Datei."
 
 #: common/io/pcad/s_expr_loader.cpp:224 common/io/pcad/s_expr_loader.cpp:267
 #, c-format
@@ -9494,9 +9486,8 @@ msgid "Diff two .pretty footprint libraries"
 msgstr "Footprintbibliotheken durchsuchen"
 
 #: common/jobs/job_fp_diff.cpp:41
-#, fuzzy
 msgid "Footprint Library: Diff"
-msgstr "Footprintbibliotheken"
+msgstr "Footprintbibliothek: Vergleichen"
 
 #: common/jobs/job_gerber_diff.cpp:46
 msgid "Gerber Diff"
@@ -9567,14 +9558,12 @@ msgid "Failed to write import report to '%s'\n"
 msgstr "Konnte Importbericht nicht in \"%s\" schreiben\n"
 
 #: common/jobs/job_pcb_diff.cpp:37
-#, fuzzy
 msgid "Diff two PCB files"
-msgstr "Solidworks PCB-Datei"
+msgstr "Zwei Leiterplattendateien vergleichen"
 
 #: common/jobs/job_pcb_diff.cpp:41
-#, fuzzy
 msgid "PCB: Diff"
-msgstr "Diff"
+msgstr "Leiterplatte: Vergleichen"
 
 #: common/jobs/job_pcb_drc.cpp:42
 msgid "Perform DRC"
@@ -9614,9 +9603,8 @@ msgid "Diff two schematic files"
 msgstr "Zwei Schaltplandateien vergleichen"
 
 #: common/jobs/job_sch_diff.cpp:41
-#, fuzzy
 msgid "Schematic: Diff"
-msgstr "Schaltplangröße"
+msgstr "Schaltplan: Vergleichen"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform ERC"
@@ -9631,9 +9619,8 @@ msgid "Schematic: Perform ERC"
 msgstr "Schaltplan: ERC ausführen"
 
 #: common/jobs/job_sch_import.cpp:51
-#, fuzzy
 msgid "Import schematic"
-msgstr "Schaltplanimport"
+msgstr "Schaltplan importieren"
 
 #: common/jobs/job_sch_import.cpp:57
 msgid "Schematic Import Job Settings"
@@ -9648,14 +9635,12 @@ msgid "Special: Execute Command"
 msgstr "Spezial: Kommando ausführen"
 
 #: common/jobs/job_sym_diff.cpp:37
-#, fuzzy
 msgid "Diff two .kicad_sym libraries"
-msgstr "Ordner mit .kicad_sym-Dateien"
+msgstr "Zwei .kicad_sym-Bibliotheken vergleichen"
 
 #: common/jobs/job_sym_diff.cpp:41
-#, fuzzy
 msgid "Symbol Library: Diff"
-msgstr "Symbolbibliotheken"
+msgstr "Symbolbibliothek: Vergleichen"
 
 #: common/jobs/jobs_output_archive.cpp:127 common/jobs/jobset.cpp:46
 msgid "Archive"
@@ -12472,23 +12457,20 @@ msgid "Overwrite existing design block?"
 msgstr "Bestehenden Designblock überschreiben?"
 
 #: common/widgets/editor_tabs_panel.cpp:639
-#, fuzzy
 msgid "Close Tab"
-msgstr "Schließen"
+msgstr "Tab schließen"
 
 #: common/widgets/editor_tabs_panel.cpp:640
-#, fuzzy
 msgid "Close Other Tabs"
-msgstr "Andere Fänge ignorieren"
+msgstr "Andere Tabs schließen"
 
 #: common/widgets/editor_tabs_panel.cpp:641
 msgid "Close Tabs to the Right"
 msgstr ""
 
 #: common/widgets/editor_tabs_panel.cpp:642
-#, fuzzy
 msgid "Close All Tabs"
-msgstr "Alle Lagen leeren"
+msgstr "Alle Tabs schliessen"
 
 #: common/widgets/filter_combobox.cpp:68
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1158
@@ -12904,9 +12886,8 @@ msgid "Eagle XML files"
 msgstr "Eagle XML-Dateien"
 
 #: common/wildcards_and_files_ext.cpp:304
-#, fuzzy
 msgid "P-CAD ASCII files"
-msgstr "PADS-ASCII-Dateien"
+msgstr "P-CAD-ASCII-Dateien"
 
 #: common/wildcards_and_files_ext.cpp:310
 msgid "PADS ASCII files"
@@ -14343,9 +14324,8 @@ msgid "Failed to create the manual net chain."
 msgstr "Manuelle Netzkette konnte nicht erstellt werden."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
-#, fuzzy
 msgid "Please select both a From and To component."
-msgstr "Bitte wählen Sie beides, ein Von- und ein Zu-Bauteil."
+msgstr "Bitte wählen Sie ein Von- und ein Zu-Bauteil."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
@@ -14353,12 +14333,10 @@ msgstr "Bitte wählen Sie beides, ein Von- und ein Zu-Bauteil."
 #: eeschema/dialogs/dialog_create_net_chain.cpp:406
 #: eeschema/dialogs/dialog_create_net_chain.cpp:439
 #: eeschema/dialogs/dialog_create_net_chain.cpp:513
-#, fuzzy
 msgid "Find Path"
 msgstr "Pfad finden"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
-#, fuzzy
 msgid "From and To must be different components."
 msgstr "Von und Zu müssen unterschiedliche Bauteile sein."
 
@@ -14430,7 +14408,7 @@ msgid "Member Nets — %s (%zu)"
 msgstr "Mitgliedsnetze — %s (%zu)"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1079
-#, fuzzy, c-format
+#, c-format
 msgid "net '%s'"
 msgstr "Netz \"%s\""
 
@@ -14458,7 +14436,6 @@ msgstr ""
 "Erstellung einer Netzkette einen Namen zu."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:53
-#, fuzzy
 msgid "Suggested Name"
 msgstr "Vorgeschlagener Name"
 
@@ -14486,7 +14463,6 @@ msgid "From:"
 msgstr "Von:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:113
-#, fuzzy
 msgid "To:"
 msgstr "Zu:"
 
@@ -18855,7 +18831,6 @@ msgid "Block"
 msgstr "Taktanschluss"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:235
-#, fuzzy
 msgid "Force"
 msgstr "Erzwingen"
 
@@ -20156,7 +20131,6 @@ msgid "Net Chain Class"
 msgstr "Netzkettenklasse"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:62
-#, fuzzy
 msgid "Colour"
 msgstr "Farbe"
 
@@ -20407,9 +20381,9 @@ msgid "Rename Map..."
 msgstr "Datei umbenennen ..."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Reset '%s' to 1:1"
-msgstr "%s auf Standardwerte zurücksetzen"
+msgstr "%s auf 1:1 zurücksetzen"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:95
 msgid "Copy From..."
@@ -20714,9 +20688,9 @@ msgid "Error saving imported schematic: %s\n"
 msgstr "Fehler beim Speichern des importierten Schaltplans: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1690
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully saved imported schematic to '%s'\n"
-msgstr "Importierte Platine erfolgreich als \"%s\" gespeichert\n"
+msgstr "Importierter Schaltplan erfolgreich als \"%s\" gespeichert\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1813
 #: eeschema/eeschema_jobs_handler.cpp:1819
@@ -29955,9 +29929,8 @@ msgid "Edit the description of an existing design variant."
 msgstr "Die Beschreibung einer vorhandenen Designvariante bearbeiten."
 
 #: eeschema/tools/sch_actions.cpp:1917
-#, fuzzy
 msgid "Rename Design Variant..."
-msgstr "Designvariante umbenennen"
+msgstr "Designvariante umbenennen..."
 
 #: eeschema/tools/sch_actions.cpp:1918
 #, fuzzy
@@ -29965,9 +29938,8 @@ msgid "Rename an existing design variant."
 msgstr "Eine bestehende Designvariante aus dem Schaltplan entfernen."
 
 #: eeschema/tools/sch_actions.cpp:1923
-#, fuzzy
 msgid "Copy Design Variant..."
-msgstr "Designvariante kopieren"
+msgstr "Designvariante kopieren..."
 
 #: eeschema/tools/sch_actions.cpp:1924
 #, fuzzy
@@ -59701,7 +59673,7 @@ msgstr "Lade Footprint-Bibliotheken"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:528
 msgid "Failed to load board"
-msgstr "Konnte Platine nicht laden"
+msgstr "Fehler beim Laden der Platine"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:599
 #, c-format
@@ -60010,9 +59982,7 @@ msgstr ""
 #: pcbnew/router/pns_dragger.cpp:165
 #, c-format
 msgid "Unable to drag arc tracks of %.1f degrees or greater."
-msgstr ""
-"Kann Leiterbahnbögen mit einem Winkel von %.1f Grad oder mehr nicht "
-"verschieben."
+msgstr "Leiterbahnbögen von %.1f Grad oder größer können nicht geändert werden."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1111
 #: pcbnew/router/pns_kicad_iface.cpp:1227 pcbnew/router/router_tool.cpp:1002
