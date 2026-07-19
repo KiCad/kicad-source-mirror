@@ -54,6 +54,7 @@
 #include <settings/settings_manager.h>
 #include <zone.h>
 
+#include <cstring>
 #include <map>
 #include <set>
 #include <string>
@@ -81,6 +82,32 @@ struct ALTIUM_PCB_IMPORT_FIXTURE
 
 
 BOOST_FIXTURE_TEST_SUITE( AltiumPcbImport, ALTIUM_PCB_IMPORT_FIXTURE )
+
+
+BOOST_AUTO_TEST_CASE( DimensionBoldPropertyParsing )
+{
+    std::string properties = "|BOLD=TRUE|TEXTLINEWIDTH=6mil";
+    properties.push_back( '\0' );
+
+    const uint16_t recordHeader = 1;
+    const uint32_t propertySize = static_cast<uint32_t>( properties.size() );
+    const size_t   recordSize = sizeof( recordHeader ) + sizeof( propertySize ) + properties.size();
+
+    std::unique_ptr<char[]> content = std::make_unique<char[]>( recordSize );
+
+    std::memcpy( content.get(), &recordHeader, sizeof( recordHeader ) );
+    std::memcpy( content.get() + sizeof( recordHeader ), &propertySize, sizeof( propertySize ) );
+    std::memcpy( content.get() + sizeof( recordHeader ) + sizeof( propertySize ), properties.data(),
+                 properties.size() );
+
+    ALTIUM_BINARY_PARSER reader( content, recordSize );
+    ADIMENSION6          dimension( reader );
+
+    BOOST_CHECK( dimension.textbold );
+    BOOST_CHECK_EQUAL( dimension.textlinewidth, pcbIUScale.mmToIU( 0.1524 ) );
+    BOOST_CHECK( !reader.HasParsingError() );
+    BOOST_CHECK_EQUAL( reader.GetRemainingBytes(), 0 );
+}
 
 
 BOOST_AUTO_TEST_CASE( ArcMaskExpansionUsesArcMetadata )

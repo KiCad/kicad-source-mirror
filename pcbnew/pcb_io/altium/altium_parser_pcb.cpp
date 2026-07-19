@@ -700,7 +700,7 @@ ADIMENSION6::ADIMENSION6( ALTIUM_BINARY_PARSER& aReader )
     textheight     = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "TEXTHEIGHT" ), wxT( "10mil" ) );
     textlinewidth  = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "TEXTLINEWIDTH" ), wxT( "6mil" ) );
     textprecision  = ALTIUM_PROPS_UTILS::ReadInt( props, wxT( "TEXTPRECISION" ), 2 );
-    textbold       = ALTIUM_PROPS_UTILS::ReadBool( props, wxT( "TEXTLINEWIDTH" ), false );
+    textbold = ALTIUM_PROPS_UTILS::ReadBool( props, wxT( "BOLD" ), false );
     textitalic     = ALTIUM_PROPS_UTILS::ReadBool( props, wxT( "ITALIC" ), false );
     textgap        = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "TEXTGAP" ), wxT( "10mil" ) );
 
