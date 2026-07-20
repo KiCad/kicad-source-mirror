@@ -134,55 +134,25 @@ void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint
 
 VECTOR2I EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::evaluateAt( const EDA_ANGLE& aTheta ) const
 {
-    const VECTOR2I  center = m_ellipse.GetEllipseCenter();
-    const double    a = m_ellipse.GetEllipseMajorRadius();
-    const double    b = m_ellipse.GetEllipseMinorRadius();
-    const EDA_ANGLE rotation = m_ellipse.GetEllipseRotation();
-
-    const double cosTheta = aTheta.Cos();
-    const double sinTheta = aTheta.Sin();
-    const double cosRot = rotation.Cos();
-    const double sinRot = rotation.Sin();
-
-    const double lx = a * cosTheta;
-    const double ly = b * sinTheta;
-
-    return center + VECTOR2I( KiROUND( lx * cosRot - ly * sinRot ), KiROUND( lx * sinRot + ly * cosRot ) );
+    const ELLIPSE<int>& ellipse = m_ellipse.GetEllipse();
+    return ellipse.GetPointAtAngle( aTheta );
 }
 
 
 EDA_ANGLE EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::parametricAngleOf( const VECTOR2I& aWorldPt ) const
 {
-    const VECTOR2I  center = m_ellipse.GetEllipseCenter();
-    const double    a = std::max( 1, m_ellipse.GetEllipseMajorRadius() );
-    const double    b = std::max( 1, m_ellipse.GetEllipseMinorRadius() );
-    const EDA_ANGLE rotation = m_ellipse.GetEllipseRotation();
-
-    const double dx = aWorldPt.x - center.x;
-    const double dy = aWorldPt.y - center.y;
-
-    const double cosRot = rotation.Cos();
-    const double sinRot = rotation.Sin();
-    const double lx = dx * cosRot + dy * sinRot;
-    const double ly = -dx * sinRot + dy * cosRot;
-
-    return EDA_ANGLE( atan2( ly / b, lx / a ), RADIANS_T );
+    const ELLIPSE<int>& ellipse = m_ellipse.GetEllipse();
+    return ellipse.GetAngleAtPoint( aWorldPt );
 }
 
 
 void EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
 {
-    const VECTOR2I  center = m_ellipse.GetEllipseCenter();
-    const int       a = m_ellipse.GetEllipseMajorRadius();
-    const int       b = m_ellipse.GetEllipseMinorRadius();
-    const EDA_ANGLE rotation = m_ellipse.GetEllipseRotation();
+    const ELLIPSE<int>& ellipse = m_ellipse.GetEllipse();
 
-    const double cosRot = rotation.Cos();
-    const double sinRot = rotation.Sin();
-
-    aPoints.AddPoint( center );
-    aPoints.AddPoint( center + VECTOR2I( KiROUND( a * cosRot ), KiROUND( a * sinRot ) ) );
-    aPoints.AddPoint( center + VECTOR2I( KiROUND( -b * sinRot ), KiROUND( b * cosRot ) ) );
+    aPoints.AddPoint( ellipse.Center );
+    aPoints.AddPoint( ellipse.GetPointAtAngle( ANGLE_0 ) );
+    aPoints.AddPoint( ellipse.GetPointAtAngle( ANGLE_90 ) );
 
     if( m_ellipse.GetShape() == SHAPE_T::ELLIPSE_ARC )
     {
@@ -199,18 +169,11 @@ bool EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
 
     wxCHECK( aPoints.PointsSize() == expected, false );
 
-    const VECTOR2I  center = m_ellipse.GetEllipseCenter();
-    const int       a = m_ellipse.GetEllipseMajorRadius();
-    const int       b = m_ellipse.GetEllipseMinorRadius();
-    const EDA_ANGLE rotation = m_ellipse.GetEllipseRotation();
+    const ELLIPSE<int>& ellipse = m_ellipse.GetEllipse();
 
-    const double cosRot = rotation.Cos();
-    const double sinRot = rotation.Sin();
-
-    aPoints.Point( ELLIPSE_CENTER ).SetPosition( center );
-    aPoints.Point( ELLIPSE_MAJOR_END ).SetPosition( center + VECTOR2I( KiROUND( a * cosRot ), KiROUND( a * sinRot ) ) );
-    aPoints.Point( ELLIPSE_MINOR_END )
-            .SetPosition( center + VECTOR2I( KiROUND( -b * sinRot ), KiROUND( b * cosRot ) ) );
+    aPoints.Point( ELLIPSE_CENTER ).SetPosition( ellipse.Center );
+    aPoints.Point( ELLIPSE_MAJOR_END ).SetPosition( ellipse.GetPointAtAngle( ANGLE_0 ) );
+    aPoints.Point( ELLIPSE_MINOR_END ).SetPosition( ellipse.GetPointAtAngle( ANGLE_90 ) );
 
     if( isArc )
     {
