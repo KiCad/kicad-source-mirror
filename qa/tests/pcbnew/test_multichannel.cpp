@@ -22,6 +22,8 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <pad.h>
+#include <netinfo.h>
+#include <base_units.h>
 #include <pcb_group.h>
 #include <pcb_generator.h>
 #include <pcb_shape.h>
@@ -3472,6 +3474,92 @@ BOOST_FIXTURE_TEST_CASE( MultichannelNestedChannelTopologyMatches, MULTICHANNEL_
 
     BOOST_CHECK( status );
     BOOST_CHECK( details.empty() );
+}
+
+
+/**
+ * A channel placed as a sheet must include the tracks connecting its design blocks in the
+ * generated rule area outline. Those tracks are loose at the sheet level, not in any group,
+ * so before the fix the outline hugged the footprints and a track bulging past them fell
+ * outside the area and was not repeated to other channels (issue 24983).
+ */
+BOOST_FIXTURE_TEST_CASE( GenerateSheetRAIncludesLooseInterBlockRouting, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    BOARD* board = m_board.get();
+
+    board->Add( new NETINFO_ITEM( board, wxT( "N1" ), 1 ) );
+
+    auto addFootprint = [&]( const wxString& aRef, const VECTOR2I& aPos )
+    {
+        FOOTPRINT* fp = new FOOTPRINT( board );
+        fp->SetReference( aRef );
+        fp->SetFPID( LIB_ID( wxT( "lib" ), wxT( "R_0402" ) ) );
+        fp->SetSheetname( wxT( "/ChannelA/" ) );
+        fp->SetSheetfile( wxT( "channelA.kicad_sch" ) );
+
+        PAD* pad = new PAD( fp );
+        pad->SetNumber( wxT( "1" ) );
+        pad->SetAttribute( PAD_ATTRIB::SMD );
+        pad->SetLayerSet( LSET( { F_Cu } ) );
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+        fp->Add( pad );
+
+        fp->SetPosition( aPos );
+        board->Add( fp );
+
+        pad->SetNetCode( 1 );
+    };
+
+    addFootprint( wxT( "R1" ), VECTOR2I( 0, 0 ) );
+    addFootprint( wxT( "R2" ), VECTOR2I( pcbIUScale.mmToIU( 10.0 ), 0 ) );
+
+    // Track on the channel-local net, detouring far south of the footprints.
+    PCB_TRACK* track = new PCB_TRACK( board );
+    track->SetLayer( F_Cu );
+    track->SetWidth( pcbIUScale.mmToIU( 0.25 ) );
+    track->SetStart( VECTOR2I( 0, 0 ) );
+    track->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 5.0 ), pcbIUScale.mmToIU( 30.0 ) ) );
+    board->Add( track );
+    track->SetNetCode( 1 );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( board, nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+    ruleData->m_replaceExisting = true;
+
+    RULE_AREA* channelRA = findSheetRuleAreaByPath( mtTool, wxT( "/ChannelA/" ) );
+    BOOST_REQUIRE( channelRA != nullptr );
+    channelRA->m_generateEnabled = true;
+
+    TOOL_EVENT dummyEvent;
+    mtTool->AutogenerateRuleAreas( dummyEvent );
+
+    ZONE* raZone = nullptr;
+
+    for( ZONE* zone : board->Zones() )
+    {
+        if( zone->GetIsRuleArea() && zone->GetZoneName() == wxT( "auto-placement-area-/ChannelA/" ) )
+        {
+            raZone = zone;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( raZone != nullptr );
+
+    // A point on the bulging track, well past the footprint band.
+    VECTOR2I onTrack( pcbIUScale.mmToIU( 2.5 ), pcbIUScale.mmToIU( 15.0 ) );
+
+    BOOST_CHECK_MESSAGE( raZone->Outline()->Contains( onTrack ),
+                         "Sheet rule area outline must enclose loose inter-block routing (issue 24983)" );
 }
 
 

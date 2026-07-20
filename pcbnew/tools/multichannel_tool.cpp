@@ -2357,10 +2357,14 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             // footprints land inside the outline. Group membership keeps it bounded to this channel.
             std::set<BOARD_ITEM*> outlineItems;
             std::set<EDA_GROUP*>  groups;
+            std::set<int>         channelNets;
 
             for( FOOTPRINT* fp : ra.m_components )
             {
                 outlineItems.insert( fp );
+
+                for( PAD* pad : fp->Pads() )
+                    channelNets.insert( pad->GetNetCode() );
 
                 for( EDA_GROUP* g = fp->GetParentGroup(); g; g = g->AsEdaItem()->GetParentGroup() )
                     groups.insert( g );
@@ -2368,6 +2372,27 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 
             for( EDA_GROUP* g : groups )
                 collectGroupBoardItems( g, outlineItems );
+
+            // Also include tracks and vias on nets local to this channel (all pads on the net
+            // belong to the channel), so loose connections between blocks land in the outline.
+            std::set<int> foreignNets;
+
+            for( FOOTPRINT* fp : board()->Footprints() )
+            {
+                if( ra.m_components.count( fp ) )
+                    continue;
+
+                for( PAD* pad : fp->Pads() )
+                    foreignNets.insert( pad->GetNetCode() );
+            }
+
+            for( PCB_TRACK* track : board()->Tracks() )
+            {
+                int net = track->GetNetCode();
+
+                if( net > 0 && channelNets.count( net ) && !foreignNets.count( net ) )
+                    outlineItems.insert( track );
+            }
 
             raOutline = buildRAOutline( outlineItems, 100000 );
         }
