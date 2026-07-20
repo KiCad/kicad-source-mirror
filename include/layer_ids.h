@@ -316,6 +316,9 @@ enum GAL_LAYER_ID: int
     /// PCB reference/manual snap points visibility
     LAYER_POINTS             = GAL_LAYER_ID_START + 45,
 
+    /// Shadow layer for items bound to a constraint
+    LAYER_CONSTRAINT_SHADOW  = GAL_LAYER_ID_START + 46,
+
     // Add layers below this point that do not have visibility controls, so don't need explicit
     // enum values
 
@@ -326,6 +329,11 @@ enum GAL_LAYER_ID: int
                                    ///< PCBNEW_SETTINGS::m_ShowPageLimits)
 
     LAYER_DRC_HIGHLIGHTED,          ///< Color for highlighted DRC markers.
+
+    // Constraint tints themed and drawn by overlay with no visibility control of their own
+    LAYER_CONSTRAINT_UNDER,         ///< Under-constrained (free DOF remain).
+    LAYER_CONSTRAINT_WELL,          ///< Fully constrained.
+    LAYER_CONSTRAINT_OVER,          ///< Over-constrained / conflicting.
 
     /// Virtual layers for stacking zones and tracks on a given copper layer.
     LAYER_ZONE_START,

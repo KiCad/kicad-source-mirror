@@ -30,6 +30,8 @@
 class LINE_READER;
 class MSG_PANEL_ITEM;
 
+enum class DIM_VALUE_MODE : int;   // defined in constraints/constraint_builder.h
+
 
 /// How to display the units in a dimension's text
 enum class DIM_UNITS_FORMAT
@@ -153,6 +155,27 @@ public:
         SetOverrideText( aValue );
         Update();
     }
+
+    /// Value mode from board state via DimensionValueMode
+    DIM_VALUE_MODE GetValueMode() const;
+
+    /**
+     * Property panel setter for value mode override text flag lives on dimension
+     * length constraint is board state staged via panel commit for shared undo step
+     */
+    void ChangeValueMode( DIM_VALUE_MODE aMode );
+
+    /**
+     * Mode aware value for panel driving shows constraint length arbitrary shows override text
+     * otherwise shows measured value
+     */
+    wxString GetValueFieldText() const;
+
+    /**
+     * Property panel setter for value arbitrary text owned by dimension
+     * driving edits board level constraint via panel driven mirrors geometry and is never written
+     */
+    void ChangeValueFieldText( const wxString& aText );
 
     int GetMeasuredValue() const { return m_measuredValue; }
 
@@ -311,6 +334,10 @@ public:
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
     const BOX2I ViewBBox() const override;
+
+    std::vector<int> ViewGetLayers() const override;
+
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     void ClearRenderCache() override;
 

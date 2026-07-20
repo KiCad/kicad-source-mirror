@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <vector>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -273,6 +274,172 @@ BOOST_AUTO_TEST_CASE( ConvergentCollapseFlagsOnlyIncidentConstraints )
 
     BOOST_CHECK( !alg::contains( diag.conflicting, bystanderOnly->m_Uuid ) );
     BOOST_CHECK( !alg::contains( diag.conflicting, reference->m_Uuid ) );
+}
+
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+BOOST_AUTO_TEST_SUITE( ConstraintDiagnoserIncremental )
+
+
+// Two independent clusters move a shape in one only that cluster re solves SolveCount up by one
+// other served from cache both verdicts stay correct
+BOOST_AUTO_TEST_CASE( MovingOneShapeReSolvesOnlyItsCluster )
+{
+    BOARD board;
+
+    // Cluster A only a direction constraint under constrained
+    PCB_SHAPE* segA = addSegment( board, { 0, 0 }, { 10 * MM, 2 * MM } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::HORIZONTAL,
+                   { { segA->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    // Cluster B both endpoints pinned well constrained disjoint from A
+    PCB_SHAPE* segB = addSegment( board, { 0, 40 * MM }, { 10 * MM, 40 * MM } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_POSITION,
+                   { { segB->m_Uuid, CONSTRAINT_ANCHOR::START } } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_POSITION,
+                   { { segB->m_Uuid, CONSTRAINT_ANCHOR::END } } );
+
+    BOARD_CONSTRAINT_DIAGNOSER diagnoser;
+
+    BOARD_CONSTRAINT_DIAGNOSTICS first = diagnoser.Diagnose( &board );
+    BOOST_CHECK_EQUAL( diagnoser.SolveCount(), 2 );
+    BOOST_CHECK( first.shapeStates[segA->m_Uuid] == CONSTRAINT_STATE::UNDER_CONSTRAINED );
+    BOOST_CHECK( first.shapeStates[segB->m_Uuid] == CONSTRAINT_STATE::WELL_CONSTRAINED );
+
+    // Edit cluster A only constraint set unchanged key survives only hash moves
+    segA->SetEnd( { 12 * MM, 5 * MM } );
+
+    BOARD_CONSTRAINT_DIAGNOSTICS second = diagnoser.Diagnose( &board );
+
+    // Exactly one more cluster was solved -- cluster B came from cache.
+    BOOST_CHECK_EQUAL( diagnoser.SolveCount(), 3 );
+    BOOST_CHECK( second.shapeStates[segA->m_Uuid] == CONSTRAINT_STATE::UNDER_CONSTRAINED );
+    BOOST_CHECK( second.shapeStates[segB->m_Uuid] == CONSTRAINT_STATE::WELL_CONSTRAINED );
+
+    // Nothing changed re solves nothing
+    diagnoser.Diagnose( &board );
+    BOOST_CHECK_EQUAL( diagnoser.SolveCount(), 3 );
+}
+
+
+// Adding a constraint to one cluster changes only that cluster's key/hash, so only it re-solves.
+BOOST_AUTO_TEST_CASE( AddingConstraintReSolvesOnlyItsCluster )
+{
+    BOARD board;
+
+    // Already horizontal pinning both endpoints later stays consistent
+    PCB_SHAPE* segA = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::HORIZONTAL,
+                   { { segA->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    PCB_SHAPE* segB = addSegment( board, { 0, 40 * MM }, { 10 * MM, 40 * MM } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_POSITION,
+                   { { segB->m_Uuid, CONSTRAINT_ANCHOR::START } } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_POSITION,
+                   { { segB->m_Uuid, CONSTRAINT_ANCHOR::END } } );
+
+    BOARD_CONSTRAINT_DIAGNOSER diagnoser;
+
+    diagnoser.Diagnose( &board );
+    BOOST_CHECK_EQUAL( diagnoser.SolveCount(), 2 );
+
+    // Pin A endpoints too well constrained now only A key changes
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_POSITION,
+                   { { segA->m_Uuid, CONSTRAINT_ANCHOR::START } } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_POSITION,
+                   { { segA->m_Uuid, CONSTRAINT_ANCHOR::END } } );
+
+    BOARD_CONSTRAINT_DIAGNOSTICS after = diagnoser.Diagnose( &board );
+
+    // Cluster A re-solved once (its key changed); cluster B stayed cached.
+    BOOST_CHECK_EQUAL( diagnoser.SolveCount(), 3 );
+    BOOST_CHECK( after.shapeStates[segA->m_Uuid] == CONSTRAINT_STATE::WELL_CONSTRAINED );
+    BOOST_CHECK( after.shapeStates[segB->m_Uuid] == CONSTRAINT_STATE::WELL_CONSTRAINED );
+}
+
+
+// Editing a driving value changes only its cluster's hash, so only that cluster re-solves.
+BOOST_AUTO_TEST_CASE( ChangingDrivingValueReSolvesOnlyItsCluster )
+{
+    BOARD board;
+
+    PCB_SHAPE*      segA = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+    PCB_CONSTRAINT* lenA = addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH,
+                                          { { segA->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } }, 10.0 * MM );
+    lenA->SetDriving( true );
+
+    PCB_SHAPE* segB = addSegment( board, { 0, 40 * MM }, { 10 * MM, 40 * MM } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_POSITION,
+                   { { segB->m_Uuid, CONSTRAINT_ANCHOR::START } } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_POSITION,
+                   { { segB->m_Uuid, CONSTRAINT_ANCHOR::END } } );
+
+    BOARD_CONSTRAINT_DIAGNOSER diagnoser;
+
+    diagnoser.Diagnose( &board );
+    BOOST_CHECK_EQUAL( diagnoser.SolveCount(), 2 );
+
+    lenA->SetValue( 8.0 * MM );
+
+    diagnoser.Diagnose( &board );
+    BOOST_CHECK_EQUAL( diagnoser.SolveCount(), 3 );
+}
+
+
+// Incremental diagnoser matches free function board wide despite cluster caching
+BOOST_AUTO_TEST_CASE( DiagnoserMatchesFreeFunction )
+{
+    BOARD board;
+
+    // A well-constrained cluster.
+    PCB_SHAPE* pinned = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_POSITION,
+                   { { pinned->m_Uuid, CONSTRAINT_ANCHOR::START } } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_POSITION,
+                   { { pinned->m_Uuid, CONSTRAINT_ANCHOR::END } } );
+
+    // An under-constrained cluster.
+    PCB_SHAPE* loose = addSegment( board, { 0, 20 * MM }, { 10 * MM, 22 * MM } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::HORIZONTAL,
+                   { { loose->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    // An over-constrained cluster.
+    PCB_SHAPE* clash = addSegment( board, { 0, 40 * MM }, { 10 * MM, 40 * MM } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH,
+                   { { clash->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } }, 10.0 * MM );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH,
+                   { { clash->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } }, 8.0 * MM );
+
+    // Dangling member constraint for map scan errored path
+    PCB_CONSTRAINT* dangling = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::COINCIDENT );
+    dangling->AddMember( pinned->m_Uuid, CONSTRAINT_ANCHOR::START );
+    dangling->AddMember( KIID(), CONSTRAINT_ANCHOR::START );
+    board.Add( dangling );
+
+    BOARD_CONSTRAINT_DIAGNOSTICS reference = DiagnoseBoardConstraints( &board );
+
+    BOARD_CONSTRAINT_DIAGNOSER   diagnoser;
+    BOARD_CONSTRAINT_DIAGNOSTICS incremental = diagnoser.Diagnose( &board );
+
+    auto sorted = []( std::vector<KIID> aVec )
+    {
+        std::sort( aVec.begin(), aVec.end() );
+        return aVec;
+    };
+
+    BOOST_CHECK_EQUAL( incremental.totalFreeDof, reference.totalFreeDof );
+    BOOST_CHECK( incremental.shapeStates == reference.shapeStates );
+    BOOST_CHECK( sorted( incremental.conflicting ) == sorted( reference.conflicting ) );
+    BOOST_CHECK( sorted( incremental.redundant ) == sorted( reference.redundant ) );
+    BOOST_CHECK( sorted( incremental.errored ) == sorted( reference.errored ) );
+
+    // A re-diagnose with no change re-solves nothing, and still matches.
+    std::size_t before = diagnoser.SolveCount();
+    BOARD_CONSTRAINT_DIAGNOSTICS again = diagnoser.Diagnose( &board );
+    BOOST_CHECK_EQUAL( diagnoser.SolveCount(), before );
+    BOOST_CHECK( again.shapeStates == reference.shapeStates );
 }
 
 

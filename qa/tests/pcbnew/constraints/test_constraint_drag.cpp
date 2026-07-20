@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include <cmath>
 #include <vector>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -26,8 +28,10 @@
 #include <board.h>
 #include <board_commit.h>
 #include <pcb_shape.h>
+#include <geometry/shape_arc.h>
 #include <constraints/pcb_constraint.h>
 #include <constraints/board_constraint_adapter.h>
+#include <constraints/constraint_builder.h>
 
 
 BOOST_AUTO_TEST_SUITE( ConstraintSolverDrag )
@@ -76,6 +80,23 @@ struct DRAG_FIXTURE
         return arc;
     }
 
+    PCB_SHAPE* addRect( const VECTOR2I& aStart, const VECTOR2I& aEnd )
+    {
+        PCB_SHAPE* rect = new PCB_SHAPE( &board, SHAPE_T::RECTANGLE );
+        rect->SetStart( aStart );
+        rect->SetEnd( aEnd );
+        board.Add( rect );
+        return rect;
+    }
+
+    PCB_SHAPE* addPoly( const std::vector<VECTOR2I>& aPoints )
+    {
+        PCB_SHAPE* poly = new PCB_SHAPE( &board, SHAPE_T::POLY );
+        poly->SetPolyPoints( aPoints );
+        board.Add( poly );
+        return poly;
+    }
+
     PCB_CONSTRAINT* addCoincident( PCB_SHAPE* aA, CONSTRAINT_ANCHOR aAnchorA, PCB_SHAPE* aB,
                                    CONSTRAINT_ANCHOR aAnchorB )
     {
@@ -88,8 +109,8 @@ struct DRAG_FIXTURE
 };
 
 
-// Mirror PCB_POINT_EDITOR::updateItem: stage the dragged shape, move it, then re-derive the
-// constrained cluster, staging each neighbor before it changes.
+// Mirrors PCB_POINT_EDITOR updateItem staging dragged shape moving it then rederiving constrained cluster
+// staging each neighbor before it changes
 void simulateDrag( BOARD_COMMIT& aCommit, BOARD* aBoard, PCB_SHAPE* aShape,
                    CONSTRAINT_ANCHOR aAnchor, const VECTOR2I& aCursor,
                    std::vector<PCB_SHAPE*>* aModified )
@@ -270,6 +291,68 @@ BOOST_FIXTURE_TEST_CASE( MoveReSolvesCluster, DRAG_FIXTURE )
 }
 
 
+// The live move drag stages every neighbor it pulls along into the drag commit, so cancelling the
+// move (localCommit.Revert) must restore both the moved shape and its solved neighbor.
+BOOST_FIXTURE_TEST_CASE( MoveReSolveStagesNeighborsRevertRestores, DRAG_FIXTURE )
+{
+    PCB_SHAPE* a = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* b = addSegment( { 10 * MM, 0 }, { 10 * MM, 10 * MM } );
+
+    addCoincident( a, CONSTRAINT_ANCHOR::END, b, CONSTRAINT_ANCHOR::START );
+
+    const VECTOR2I aStart0 = a->GetStart();
+    const VECTOR2I aEnd0 = a->GetEnd();
+    const VECTOR2I bStart0 = b->GetStart();
+
+    // Mirrors drag loop staging moved shape translating it then resolving cluster into same commit
+    // staging each neighbor the solver touches
+    BOARD_COMMIT            commit( tool );
+    std::vector<PCB_SHAPE*> modified;
+
+    commit.Modify( a );
+    a->Move( { 0, 4 * MM } );
+
+    ReSolveShapeClusters( &board, { a }, &modified,
+                          [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    // The neighbor followed the moved corner.
+    BOOST_CHECK_LE( ( a->GetEnd() - b->GetStart() ).EuclideanNorm(), 100 );
+    BOOST_CHECK( b->GetStart() != bStart0 );
+
+    // Cancelling the move restores every shape the drag commit staged.
+    commit.Revert();
+    BOOST_CHECK_EQUAL( a->GetStart(), aStart0 );
+    BOOST_CHECK_EQUAL( a->GetEnd(), aEnd0 );
+    BOOST_CHECK_EQUAL( b->GetStart(), bStart0 );
+}
+
+
+// The caller-owned, Pack and Duplicate move paths pass no constraint shapes, so the drag collects
+// none and the settle-solve runs over an empty set.  That must stage nothing and touch no neighbor,
+// mirroring the guard that keeps those commits free of constraint side effects.
+BOOST_FIXTURE_TEST_CASE( MoveEmptyShapesStagesNoNeighbor, DRAG_FIXTURE )
+{
+    PCB_SHAPE* a = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* b = addSegment( { 10 * MM, 0 }, { 10 * MM, 10 * MM } );
+
+    addCoincident( a, CONSTRAINT_ANCHOR::END, b, CONSTRAINT_ANCHOR::START );
+
+    const VECTOR2I bStart0 = b->GetStart();
+
+    BOARD_COMMIT            commit( tool );
+    std::vector<PCB_SHAPE*> modified;
+    int                     staged = 0;
+
+    ReSolveShapeClusters( &board, {}, &modified,
+                          [&]( BOARD_ITEM* ) { staged++; } );
+
+    BOOST_CHECK_EQUAL( staged, 0 );
+    BOOST_CHECK( modified.empty() );
+    BOOST_CHECK_EQUAL( b->GetStart(), bStart0 );
+    BOOST_CHECK( commit.Empty() );
+}
+
+
 // A fixed-length segment dragged by one endpoint rotates about the other end, which stays put.
 // Without pinning the far end the solver is free to translate the whole segment (Zulip "Constraint
 // solver", 2026-07-10: "we need to pin the other end of the line when moving, not only the length").
@@ -355,8 +438,8 @@ BOOST_FIXTURE_TEST_CASE( ArcEndpointDragHoldsCircleAndFarEnd, DRAG_FIXTURE )
 }
 
 
-// A real FIXED_RADIUS on the arc overrides the temporary radius hold: dragging an endpoint keeps the
-// driven radius, so the far end must move off its old spot to stay on the (now larger) circle.
+// Real FIXED_RADIUS on arc overrides temporary radius hold
+// Dragging endpoint keeps driven radius so far end moves off old spot to stay on the now larger circle
 BOOST_FIXTURE_TEST_CASE( ArcEndpointDragYieldsToFixedRadius, DRAG_FIXTURE )
 {
     PCB_SHAPE* arc = addArc( { 10 * MM, 0 }, { 7071068, 7071068 }, { 0, 10 * MM } );   // r 10
@@ -373,6 +456,447 @@ BOOST_FIXTURE_TEST_CASE( ArcEndpointDragYieldsToFixedRadius, DRAG_FIXTURE )
 
     // The driving radius wins over the temporary hold.
     BOOST_CHECK_LE( std::abs( arc->GetRadius() - 12 * MM ), 20000 );
+}
+
+
+// Dragging a rectangle corner resizes about the diagonally opposite corner, which
+// pinDraggedShapeRest holds.  The rect stores its corners swapped (start is the bottom-right), so a
+// broken canonical corner-role mapping would drive or hold the wrong corner and fail both checks.
+BOOST_FIXTURE_TEST_CASE( RectCornerDragHoldsOppositeCorner, DRAG_FIXTURE )
+{
+    PCB_SHAPE* rect = addRect( { 10 * MM, 10 * MM }, { 0, 0 } );   // swapped storage
+    PCB_SHAPE* seg = addSegment( { 10 * MM, 0 }, { 15 * MM, -5 * MM } );
+
+    // Tie the dragged corner (canonical index 1, the corner at (10mm, 0)) to a segment end so the
+    // cluster contains a mappable constraint and the solve runs.
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::COINCIDENT );
+    c->AddMember( rect->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 );
+    c->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( c );
+
+    const VECTOR2I cursor( 12 * MM, -2 * MM );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { rect->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 }, cursor, &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    VECTOR2I tl( std::min( rect->GetStart().x, rect->GetEnd().x ),
+                 std::min( rect->GetStart().y, rect->GetEnd().y ) );
+    VECTOR2I br( std::max( rect->GetStart().x, rect->GetEnd().x ),
+                 std::max( rect->GetStart().y, rect->GetEnd().y ) );
+
+    // The dragged top-right corner landed on the cursor and pulled the coincident segment along.
+    BOOST_CHECK_LE( ( VECTOR2I( br.x, tl.y ) - cursor ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_LE( ( seg->GetStart() - cursor ).EuclideanNorm(), 5000.0 );
+
+    // The opposite (bottom-left) corner held its position.
+    BOOST_CHECK_LE( ( VECTOR2I( tl.x, br.y ) - VECTOR2I( 0, 10 * MM ) ).EuclideanNorm(), 5000.0 );
+}
+
+
+// Dragging one polygon vertex moves only that vertex; pinDraggedShapeRest holds every other vertex
+// so the rest of the outline does not drift.
+BOOST_FIXTURE_TEST_CASE( PolyVertexDragHoldsOtherVertices, DRAG_FIXTURE )
+{
+    const std::vector<VECTOR2I> points{ { 0, 0 },
+                                        { 10 * MM, 0 },
+                                        { 13 * MM, 8 * MM },
+                                        { 5 * MM, 14 * MM },
+                                        { -3 * MM, 8 * MM } };
+
+    PCB_SHAPE* poly = addPoly( points );
+    PCB_SHAPE* seg = addSegment( { 0, 0 }, { -5 * MM, -5 * MM } );
+
+    // Tie one vertex to a segment start so the cluster contains a mappable constraint.
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::COINCIDENT );
+    c->AddMember( poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 0 );
+    c->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( c );
+
+    const VECTOR2I cursor( 16 * MM, 9 * MM );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 2 }, cursor, &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    const SHAPE_LINE_CHAIN& outline = poly->GetPolyShape().COutline( 0 );
+
+    BOOST_REQUIRE_EQUAL( outline.PointCount(), 5 );
+    BOOST_CHECK_LE( ( outline.CPoint( 2 ) - cursor ).EuclideanNorm(), 5000.0 );
+
+    for( int i : { 0, 1, 3, 4 } )
+        BOOST_CHECK_LE( ( outline.CPoint( i ) - points[i] ).EuclideanNorm(), 5000.0 );
+}
+
+
+// The point-editor bridge maps a dragged rectangle corner handle to its canonical min/max corner,
+// independent of which diagonal the shape stores; ordinals past the corners map to nothing, so the
+// centre and radius handles fall through to the authoritative-shape re-solve instead.
+BOOST_FIXTURE_TEST_CASE( VertexForRectCornerMapsCanonicalIndex, DRAG_FIXTURE )
+{
+    PCB_SHAPE* rect = addRect( { 0, 0 }, { 10 * MM, 10 * MM } );
+    PCB_SHAPE* swapped = addRect( { 10 * MM, 10 * MM }, { 0, 0 } );   // swapped storage
+
+    for( PCB_SHAPE* shape : { rect, swapped } )
+    {
+        const std::vector<VECTOR2I> corners{ { 0, 0 },
+                                             { 10 * MM, 0 },
+                                             { 10 * MM, 10 * MM },
+                                             { 0, 10 * MM } };
+
+        for( size_t i = 0; i < corners.size(); ++i )
+        {
+            std::optional<CONSTRAINT_ANCHOR_POINT> vertex = ConstraintShapeVertex( shape, (int) i );
+
+            BOOST_REQUIRE( vertex.has_value() );
+            BOOST_CHECK( vertex->anchor == CONSTRAINT_ANCHOR::VERTEX );
+            BOOST_CHECK_EQUAL( vertex->index, (int) i );
+            BOOST_CHECK( vertex->pos == corners[i] );
+        }
+    }
+
+    BOOST_CHECK( !ConstraintShapeVertex( rect, 4 ) );
+    BOOST_CHECK( !ConstraintShapeVertex( rect, -1 ) );
+
+    // A segment exposes endpoint anchors, not vertices, so an ordinal on it maps to nothing.
+    PCB_SHAPE* seg = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    BOOST_CHECK( !ConstraintShapeVertex( seg, 0 ) );
+}
+
+
+// The point-editor bridge maps a dragged polygon vertex handle to its outline ordinal; an ordinal
+// past the outline, or any ordinal on an arc-bearing polygon, maps to nothing.
+BOOST_FIXTURE_TEST_CASE( VertexForPolyMapsOrdinal, DRAG_FIXTURE )
+{
+    const std::vector<VECTOR2I> points{ { 0, 0 },
+                                        { 10 * MM, 0 },
+                                        { 13 * MM, 8 * MM },
+                                        { 5 * MM, 14 * MM },
+                                        { -3 * MM, 8 * MM } };
+
+    PCB_SHAPE* poly = addPoly( points );
+
+    for( size_t i = 0; i < points.size(); ++i )
+    {
+        std::optional<CONSTRAINT_ANCHOR_POINT> vertex = ConstraintShapeVertex( poly, (int) i );
+
+        BOOST_REQUIRE( vertex.has_value() );
+        BOOST_CHECK( vertex->anchor == CONSTRAINT_ANCHOR::VERTEX );
+        BOOST_CHECK_EQUAL( vertex->index, (int) i );
+        BOOST_CHECK( vertex->pos == points[i] );
+    }
+
+    BOOST_CHECK( !ConstraintShapeVertex( poly, (int) points.size() ) );
+
+    PCB_SHAPE* arcPoly = new PCB_SHAPE( &board, SHAPE_T::POLY );
+
+    SHAPE_LINE_CHAIN chain;
+    chain.Append( VECTOR2I( 10 * MM, 10 * MM ) );
+    chain.Append( VECTOR2I( 50 * MM, 10 * MM ) );
+    chain.Append( SHAPE_ARC( { 50 * MM, 10 * MM }, { 55 * MM, 25 * MM }, { 50 * MM, 40 * MM }, 0 ) );
+    chain.Append( VECTOR2I( 10 * MM, 40 * MM ) );
+    chain.SetClosed( true );
+
+    arcPoly->GetPolyShape().AddOutline( chain );
+    board.Add( arcPoly );
+
+    BOOST_REQUIRE_GT( arcPoly->GetPolyShape().COutline( 0 ).ArcCount(), 0 );
+
+    // The solver never ingests an arc-bearing outline, so its vertices must not map to members.
+    BOOST_CHECK( !ConstraintShapeVertex( arcPoly, 0 ) );
+}
+
+
+// Mimics point editor end to end for rectangle corner
+// Behavior moves corner first bridge maps dragged handle ordinal to canonical corner and solve pulls coincident segment along
+BOOST_FIXTURE_TEST_CASE( RectCornerDragMapsThenSolves, DRAG_FIXTURE )
+{
+    PCB_SHAPE* rect = addRect( { 0, 0 }, { 10 * MM, 10 * MM } );
+    PCB_SHAPE* seg = addSegment( { 10 * MM, 0 }, { 15 * MM, -5 * MM } );
+
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::COINCIDENT );
+    c->AddMember( rect->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 );
+    c->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( c );
+
+    // Drag the top-right corner as RECTANGLE_POINT_EDIT_BEHAVIOR::UpdateItem would.
+    const VECTOR2I cursor( 12 * MM, -2 * MM );
+    rect->SetTop( cursor.y );
+    rect->SetRight( cursor.x );
+
+    std::optional<CONSTRAINT_ANCHOR_POINT> vertex = ConstraintShapeVertex( rect, 1 );
+
+    BOOST_REQUIRE( vertex.has_value() );
+    BOOST_CHECK( vertex->pos == cursor );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { rect->m_Uuid, vertex->anchor, vertex->index }, vertex->pos, &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    BOOST_CHECK_LE( ( seg->GetStart() - cursor ).EuclideanNorm(), 5000.0 );
+}
+
+
+// PinEditedCorner clamps a corner drag at minimum size so shape holds clamped corner while edit point keeps raw cursor
+// Mapping by handle ordinal and solving toward post clamp corner keeps neighbor riding its real position
+BOOST_FIXTURE_TEST_CASE( ClampedRectCornerDragSolvesToClampedCorner, DRAG_FIXTURE )
+{
+    PCB_SHAPE* rect = addRect( { 0, 0 }, { 10 * MM, 10 * MM } );
+    PCB_SHAPE* seg = addSegment( { 10 * MM, 0 }, { 15 * MM, -5 * MM } );
+
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::COINCIDENT );
+    c->AddMember( rect->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 );
+    c->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( c );
+
+    // Drag the top-right corner far past the left edge; the behavior clamps x to the minimum
+    // width while y follows the cursor, so the shape corner and the raw cursor diverge.
+    const VECTOR2I rawCursor( -5 * MM, -2 * MM );
+    const int      minWidth = 25400;   // 1 mil floor applied by PinEditedCorner
+    const VECTOR2I clamped( minWidth, rawCursor.y );
+
+    rect->SetTop( clamped.y );
+    rect->SetRight( clamped.x );
+
+    std::optional<CONSTRAINT_ANCHOR_POINT> vertex = ConstraintShapeVertex( rect, 1 );
+
+    BOOST_REQUIRE( vertex.has_value() );
+    BOOST_CHECK( vertex->pos == clamped );
+    BOOST_CHECK( vertex->pos != rawCursor );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { rect->m_Uuid, vertex->anchor, vertex->index }, vertex->pos, &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    BOOST_CHECK_LE( ( seg->GetStart() - clamped ).EuclideanNorm(), 5000.0 );
+}
+
+
+namespace
+{
+VECTOR2I dragRectTopLeft( const PCB_SHAPE* aRect )
+{
+    return VECTOR2I( std::min( aRect->GetStart().x, aRect->GetEnd().x ),
+                     std::min( aRect->GetStart().y, aRect->GetEnd().y ) );
+}
+
+
+VECTOR2I dragRectBotRight( const PCB_SHAPE* aRect )
+{
+    return VECTOR2I( std::max( aRect->GetStart().x, aRect->GetEnd().x ),
+                     std::max( aRect->GetStart().y, aRect->GetEnd().y ) );
+}
+
+
+PCB_CONSTRAINT* addDrivingVertexLength( BOARD& aBoard, PCB_SHAPE* aShape, int aIndexA, int aIndexB,
+                                        double aLengthIU )
+{
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &aBoard, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+    c->AddMember( aShape->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, aIndexA );
+    c->AddMember( aShape->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, aIndexB );
+    c->SetValue( aLengthIU );
+    c->SetDriving( true );
+    aBoard.Add( c );
+    return c;
+}
+}
+
+
+// Driving width on top side must survive adjacent side drag where side handles used to bypass solver and violate length
+// Pinning side canonical corner routes it through same drag solve as corner drag so hard length wins and rectangle translates
+BOOST_FIXTURE_TEST_CASE( RectSideDragEnforcesDrivingWidth, DRAG_FIXTURE )
+{
+    PCB_SHAPE* rect = addRect( { 0, 0 }, { 10 * MM, 10 * MM } );
+
+    addDrivingVertexLength( board, rect, 0, 1, 10.0 * MM );   // TL-TR width
+
+    // Drag the right side 5 mm out, as RECTANGLE_POINT_EDIT_BEHAVIOR::UpdateItem would.
+    rect->SetRight( 15 * MM );
+
+    // Side RECT_RIGHT (1) maps to canonical corner 1 (TR), read back post-move.
+    std::optional<CONSTRAINT_ANCHOR_POINT> corner = ConstraintShapeVertex( rect, 1 );
+
+    BOOST_REQUIRE( corner.has_value() );
+    BOOST_CHECK( corner->pos == VECTOR2I( 15 * MM, 0 ) );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { rect->m_Uuid, corner->anchor, corner->index }, corner->pos, &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    const VECTOR2I tl = dragRectTopLeft( rect );
+    const VECTOR2I br = dragRectBotRight( rect );
+
+    // The driving width held against the drag and the height stayed untouched.
+    BOOST_CHECK_LE( std::abs( ( br.x - tl.x ) - 10 * MM ), 20000 );
+    BOOST_CHECK_LE( std::abs( ( br.y - tl.y ) - 10 * MM ), 20000 );
+
+    // Drag was not simply refused rect moved toward cursor strictly between original and requested span
+    BOOST_CHECK_GT( tl.x, 1 * MM );
+    BOOST_CHECK_LT( br.x, 14 * MM );
+
+    BOOST_TEST_MESSAGE( "side drag under driving width settled TL at " << tl.x << "," << tl.y );
+
+    // The four enumerated corners agree with the solved extremes, so the rect stayed axis-aligned.
+    std::vector<CONSTRAINT_ANCHOR_POINT> corners = ConstraintShapeAnchors( rect );
+
+    BOOST_REQUIRE_EQUAL( corners.size(), 4 );
+    BOOST_CHECK_EQUAL( corners[0].pos, tl );
+    BOOST_CHECK_EQUAL( corners[2].pos, br );
+}
+
+
+// Dragging bottom side leaves top side width constraint satisfiable so resize applies exactly
+// Height follows handle while held top left corner and driven width stay intact
+BOOST_FIXTURE_TEST_CASE( RectSideDragOffConstrainedAxisResizes, DRAG_FIXTURE )
+{
+    PCB_SHAPE* rect = addRect( { 0, 0 }, { 10 * MM, 10 * MM } );
+
+    addDrivingVertexLength( board, rect, 0, 1, 10.0 * MM );   // TL-TR width
+
+    // Drag the bottom side 5 mm down; side RECT_BOT (2) maps to canonical corner 2 (BR).
+    rect->SetBottom( 15 * MM );
+
+    std::optional<CONSTRAINT_ANCHOR_POINT> corner = ConstraintShapeVertex( rect, 2 );
+
+    BOOST_REQUIRE( corner.has_value() );
+    BOOST_CHECK( corner->pos == VECTOR2I( 10 * MM, 15 * MM ) );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { rect->m_Uuid, corner->anchor, corner->index }, corner->pos, &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    const VECTOR2I tl = dragRectTopLeft( rect );
+    const VECTOR2I br = dragRectBotRight( rect );
+
+    BOOST_CHECK_LE( tl.EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_LE( std::abs( ( br.x - tl.x ) - 10 * MM ), 5000 );
+    BOOST_CHECK_LE( std::abs( ( br.y - tl.y ) - 15 * MM ), 5000 );
+}
+
+
+// A side drag on a rectangle whose own dimensions are unconstrained resizes exactly as the handle
+// placed it; the coincident neighbor on an unmoved corner stays put.
+BOOST_FIXTURE_TEST_CASE( UnconstrainedRectSideDragResizesExactly, DRAG_FIXTURE )
+{
+    PCB_SHAPE* rect = addRect( { 0, 0 }, { 10 * MM, 10 * MM } );
+    PCB_SHAPE* seg = addSegment( { 0, 0 }, { -5 * MM, -5 * MM } );
+
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::COINCIDENT );
+    c->AddMember( rect->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 0 );
+    c->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( c );
+
+    rect->SetRight( 15 * MM );
+
+    std::optional<CONSTRAINT_ANCHOR_POINT> corner = ConstraintShapeVertex( rect, 1 );
+
+    BOOST_REQUIRE( corner.has_value() );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { rect->m_Uuid, corner->anchor, corner->index }, corner->pos, &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+
+    BOOST_CHECK_LE( dragRectTopLeft( rect ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_LE( ( dragRectBotRight( rect ) - VECTOR2I( 15 * MM, 10 * MM ) ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_LE( seg->GetStart().EuclideanNorm(), 5000.0 );
+}
+
+
+// Driving length on polygon edge must survive a drag of that same edge
+// Both endpoints ride co dragged pins that yield to hard length so edge lands at driven length and unbound vertices hold
+BOOST_FIXTURE_TEST_CASE( PolyEdgeDragEnforcesDrivingLength, DRAG_FIXTURE )
+{
+    const std::vector<VECTOR2I> points{ { 0, 0 },
+                                        { 10 * MM, 0 },
+                                        { 13 * MM, 8 * MM },
+                                        { 5 * MM, 14 * MM },
+                                        { -3 * MM, 8 * MM } };
+
+    PCB_SHAPE*   poly = addPoly( points );
+    const double edgeLen = std::hypot( 3.0, 8.0 ) * MM;   // the 1-2 edge's current length
+
+    addDrivingVertexLength( board, poly, 1, 2, edgeLen );
+
+    // Drag the 1-2 edge so both vertices move and its length would stretch.
+    std::vector<VECTOR2I> dragged = points;
+    dragged[1] = { 8 * MM, -2 * MM };
+    dragged[2] = { 16 * MM, 9 * MM };
+    poly->SetPolyPoints( dragged );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 }, dragged[1], &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); },
+                  /* aIncludeDragged */ false, /* aStabilize */ false, {},
+                  std::pair{ CONSTRAINT_MEMBER( poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 2 ), dragged[2] } );
+
+    const SHAPE_LINE_CHAIN& outline = poly->GetPolyShape().COutline( 0 );
+
+    double solvedLen = ( outline.CPoint( 2 ) - outline.CPoint( 1 ) ).EuclideanNorm();
+
+    BOOST_CHECK_LE( std::abs( solvedLen - edgeLen ), 20000.0 );
+
+    // Drag was not simply refused edge midpoint moved out of solver noise toward requested midpoint
+    // Length constrains only vertex separation so midpoint is free to follow landing closer than start
+    const VECTOR2I midBefore = ( points[1] + points[2] ) / 2;
+    const VECTOR2I midTarget = ( dragged[1] + dragged[2] ) / 2;
+    const VECTOR2I midSolved = ( outline.CPoint( 1 ) + outline.CPoint( 2 ) ) / 2;
+
+    BOOST_CHECK_LT( ( midSolved - midTarget ).EuclideanNorm(), ( midBefore - midTarget ).EuclideanNorm() );
+    BOOST_CHECK_GT( ( midSolved - midBefore ).EuclideanNorm(), 250000.0 );
+
+    for( int i : { 0, 3, 4 } )
+        BOOST_CHECK_LE( ( outline.CPoint( i ) - points[i] ).EuclideanNorm(), 5000.0 );
+}
+
+
+// An unconstrained polygon edge drag lands both vertices exactly where the handle placed them; the
+// vertex-bound segment follows and the unbound vertices hold.
+BOOST_FIXTURE_TEST_CASE( UnconstrainedPolyEdgeDragMovesBothVertices, DRAG_FIXTURE )
+{
+    const std::vector<VECTOR2I> points{ { 0, 0 },
+                                        { 10 * MM, 0 },
+                                        { 13 * MM, 8 * MM },
+                                        { 5 * MM, 14 * MM },
+                                        { -3 * MM, 8 * MM } };
+
+    PCB_SHAPE* poly = addPoly( points );
+    PCB_SHAPE* seg = addSegment( points[1], { 25 * MM, -5 * MM } );
+
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::COINCIDENT );
+    c->AddMember( poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 );
+    c->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( c );
+
+    // Translate the 1-2 edge 3 mm right, as the edge handle would.
+    std::vector<VECTOR2I> dragged = points;
+    dragged[1] += VECTOR2I( 3 * MM, 0 );
+    dragged[2] += VECTOR2I( 3 * MM, 0 );
+    poly->SetPolyPoints( dragged );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOARD_COMMIT            commit( tool );
+    SolveCluster( &board, { poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 }, dragged[1], &modified,
+                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); },
+                  /* aIncludeDragged */ false, /* aStabilize */ false, {},
+                  std::pair{ CONSTRAINT_MEMBER( poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 2 ), dragged[2] } );
+
+    const SHAPE_LINE_CHAIN& outline = poly->GetPolyShape().COutline( 0 );
+
+    BOOST_CHECK_LE( ( outline.CPoint( 1 ) - dragged[1] ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_LE( ( outline.CPoint( 2 ) - dragged[2] ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK_LE( ( seg->GetStart() - dragged[1] ).EuclideanNorm(), 5000.0 );
+    BOOST_CHECK( std::find( modified.begin(), modified.end(), seg ) != modified.end() );
+
+    for( int i : { 0, 3, 4 } )
+        BOOST_CHECK_LE( ( outline.CPoint( i ) - points[i] ).EuclideanNorm(), 5000.0 );
 }
 
 

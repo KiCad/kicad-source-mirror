@@ -20,6 +20,9 @@
 #ifndef PCB_ITEM_CONTAINERS_H_
 #define PCB_ITEM_CONTAINERS_H_
 
+#include <deque>
+#include <vector>
+
 // Board-level items
 class FOOTPRINT;
 class PCB_TRACK;

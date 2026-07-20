@@ -1026,6 +1026,8 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_dimension.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_shape.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_group.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/constraints/constraint_builder.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/constraints/constraint_copy.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/constraints/pcb_constraint.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_marker.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/footprint.cpp

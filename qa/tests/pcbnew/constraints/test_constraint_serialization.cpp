@@ -18,7 +18,10 @@
  */
 
 #include <filesystem>
+#include <fstream>
 #include <memory>
+#include <regex>
+#include <sstream>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
@@ -103,6 +106,118 @@ BOOST_AUTO_TEST_CASE( RoundTrip )
     BOOST_CHECK( !dim2->IsDriving() );
     BOOST_REQUIRE( dim2->HasValue() );
     BOOST_CHECK_CLOSE( *dim2->GetValue(), 10.0 * MM, 1e-6 );   // length survives the mm round-trip
+}
+
+
+// VERTEX members carry an ordinal that survives the round trip non VERTEX members keep the
+// shorter index less form and reload with member index negative one
+BOOST_AUTO_TEST_CASE( VertexIndexRoundTrip )
+{
+    auto board1 = std::make_unique<BOARD>();
+
+    PCB_SHAPE* a = addSegment( *board1, { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* b = addSegment( *board1, { 0, 5 * MM }, { 8 * MM, 6 * MM } );
+
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( board1.get(), PCB_CONSTRAINT_TYPE::COINCIDENT );
+    c->AddMember( a->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 );
+    c->AddMember( b->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 7 );
+    board1->Add( c );
+
+    PCB_CONSTRAINT* d = new PCB_CONSTRAINT( board1.get(), PCB_CONSTRAINT_TYPE::HORIZONTAL );
+    d->AddMember( a->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board1->Add( d );
+
+    KIID aId = a->m_Uuid;
+    KIID bId = b->m_Uuid;
+
+    auto path = std::filesystem::temp_directory_path() / "constraint_vertex_tst.kicad_pcb";
+    ::KI_TEST::DumpBoardToFile( *board1, path.string() );
+
+    // Written text carries the index only for VERTEX members a START member keeps the two token
+    // form so the common format stays unchanged
+    std::ifstream     in( path );
+    std::stringstream buf;
+    buf << in.rdbuf();
+    std::string text = buf.str();
+
+    std::regex vertexRe( "\\(member\\s+\"" + std::string( aId.AsString().ToUTF8() )
+                         + "\"\\s+vertex\\s+1\\s*\\)" );
+    std::regex startWithIndexRe( "\\(member\\s+\"[^\"]+\"\\s+start\\s+[-0-9]" );
+
+    BOOST_CHECK( std::regex_search( text, vertexRe ) );
+    BOOST_CHECK( !std::regex_search( text, startWithIndexRe ) );
+
+    std::unique_ptr<BOARD> board2 = ::KI_TEST::ReadBoardFromFileOrStream( path.string() );
+
+    BOOST_REQUIRE_EQUAL( board2->Constraints().size(), 2 );
+
+    PCB_CONSTRAINT* c2 = findConstraint( *board2, PCB_CONSTRAINT_TYPE::COINCIDENT );
+    BOOST_REQUIRE( c2 );
+    BOOST_REQUIRE_EQUAL( c2->GetMembers().size(), 2 );
+    BOOST_CHECK( c2->GetMembers()[0].m_item == aId );
+    BOOST_CHECK( c2->GetMembers()[0].m_anchor == CONSTRAINT_ANCHOR::VERTEX );
+    BOOST_CHECK_EQUAL( c2->GetMembers()[0].m_index, 1 );
+    BOOST_CHECK( c2->GetMembers()[1].m_item == bId );
+    BOOST_CHECK( c2->GetMembers()[1].m_anchor == CONSTRAINT_ANCHOR::VERTEX );
+    BOOST_CHECK_EQUAL( c2->GetMembers()[1].m_index, 7 );
+
+    PCB_CONSTRAINT* d2 = findConstraint( *board2, PCB_CONSTRAINT_TYPE::HORIZONTAL );
+    BOOST_REQUIRE( d2 );
+    BOOST_REQUIRE_EQUAL( d2->GetMembers().size(), 1 );
+    BOOST_CHECK( d2->GetMembers()[0].m_anchor == CONSTRAINT_ANCHOR::START );
+    BOOST_CHECK_EQUAL( d2->GetMembers()[0].m_index, -1 );   // absent index token maps back to -1
+}
+
+
+// Index token is legal only on a VERTEX anchor and must be numeric a bad index breaks equality
+// silently on the next save so both are rejected at parse time
+BOOST_AUTO_TEST_CASE( VertexIndexValidation )
+{
+    auto board1 = std::make_unique<BOARD>();
+
+    PCB_SHAPE* a = addSegment( *board1, { 0, 0 }, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* c = new PCB_CONSTRAINT( board1.get(), PCB_CONSTRAINT_TYPE::HORIZONTAL );
+    c->AddMember( a->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 );
+    board1->Add( c );
+
+    auto path = std::filesystem::temp_directory_path() / "constraint_vertex_validation_tst.kicad_pcb";
+    ::KI_TEST::DumpBoardToFile( *board1, path.string() );
+
+    std::ifstream     in( path );
+    std::stringstream buf;
+    buf << in.rdbuf();
+    std::string text = buf.str();
+
+    // Rewrite the known-good "vertex 1" member into each variant under test and parse the result.
+    auto parseVariant =
+            [&]( const std::string& aReplacement ) -> std::unique_ptr<BOARD>
+            {
+                std::string variant = std::regex_replace( text, std::regex( "vertex\\s+1" ), aReplacement );
+
+                BOOST_REQUIRE( variant != text );   // guard against the pattern silently not matching
+
+                auto board = std::make_unique<BOARD>();
+
+                STRING_LINE_READER reader( variant, wxT( "constraint_vertex_validation" ) );
+                PCB_IO_KICAD_SEXPR_PARSER parser( &reader, board.get(),
+                                                  []( wxString, int, wxString, wxString ) { return true; } );
+                parser.Parse();
+                return board;
+            };
+
+    // A bare vertex anchor still loads, mapping the absent index back to -1.
+    std::unique_ptr<BOARD> board2 = parseVariant( "vertex" );
+    BOOST_REQUIRE_EQUAL( board2->Constraints().size(), 1 );
+    BOOST_REQUIRE_EQUAL( board2->Constraints().front()->GetMembers().size(), 1 );
+    BOOST_CHECK( board2->Constraints().front()->GetMembers()[0].m_anchor == CONSTRAINT_ANCHOR::VERTEX );
+    BOOST_CHECK_EQUAL( board2->Constraints().front()->GetMembers()[0].m_index, -1 );
+
+    // An index on a non-VERTEX anchor is rejected rather than loaded asymmetrically.
+    BOOST_CHECK_THROW( parseVariant( "start 4" ), IO_ERROR );
+
+    // A non-numeric index is rejected rather than silently becoming 0.
+    BOOST_CHECK_THROW( parseVariant( "vertex garbage" ), IO_ERROR );
 }
 
 

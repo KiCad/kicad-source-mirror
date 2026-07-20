@@ -124,6 +124,10 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "board.anchor",                   LAYER_ANCHOR             );
     CLR( "board.locked_shadow",            LAYER_LOCKED_ITEM_SHADOW );
     CLR( "board.conflicts_shadow",         LAYER_CONFLICTS_SHADOW   );
+    CLR( "board.constraint_shadow",        LAYER_CONSTRAINT_SHADOW  );
+    CLR( "board.constraint_under",         LAYER_CONSTRAINT_UNDER   );
+    CLR( "board.constraint_well",          LAYER_CONSTRAINT_WELL    );
+    CLR( "board.constraint_over",          LAYER_CONSTRAINT_OVER    );
     CLR( "board.aux_items",                LAYER_AUX_ITEMS          );
     CLR( "board.background",               LAYER_PCB_BACKGROUND     );
     CLR( "board.cursor",                   LAYER_CURSOR             );

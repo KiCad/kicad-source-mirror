@@ -20,7 +20,9 @@
 #ifndef CONSTRAINT_EDIT_TOOL_H_
 #define CONSTRAINT_EDIT_TOOL_H_
 
+#include <map>
 #include <memory>
+#include <unordered_set>
 #include <vector>
 
 #include <tools/pcb_tool_base.h>
@@ -31,6 +33,11 @@ class PCB_CONSTRAINT;
 class PCB_SELECTION_TOOL;
 class CONDITIONAL_MENU;
 class CONSTRAINT_OVERLAY;
+
+namespace KIGFX
+{
+class PCB_RENDER_SETTINGS;
+}
 
 
 /**
@@ -78,6 +85,14 @@ public:
     /// Re-solve the clusters of @p aShapes after a whole-shape edit, folded into that edit's undo.
     void SolveAfterMove( const std::vector<PCB_SHAPE*>& aShapes );
 
+    /// Re-solve after a panel or dialog edit holding @p aShapes fixed so typed values survive
+    /// Only their constrained neighbors move folded into the same undo
+    void SolveAfterEdit( const std::vector<PCB_SHAPE*>& aShapes );
+
+    /// Re-diagnose and refresh the overlay and info bar after the caller re-solves @p aShapes
+    /// into its own commit for example a live move drag solving each tick
+    void DiagnoseAfterMove( const std::vector<PCB_SHAPE*>& aShapes );
+
     /// Intent entry points for the constraints panel, so it never mutates the board or the selection
     /// itself -- the tool stays the single owner of constraint edit/remove/highlight + refresh.
     void RemoveConstraintById( const KIID& aId );
@@ -109,6 +124,10 @@ private:
     /// Author a whole-shape constraint by clicking its items on the canvas (the no-selection path).
     int pickShapeConstraint( PCB_CONSTRAINT_TYPE aType, const TOOL_EVENT& aEvent );
 
+    /// Author a horizontal or vertical constraint from a whole segment or two point anchors
+    /// Clicking a point first starts the two point path so a corner can be levelled
+    int pickLinearConstraint( PCB_CONSTRAINT_TYPE aType, const TOOL_EVENT& aEvent );
+
     /// Solve a just-added constraint so the geometry snaps to satisfy it, in its own commit.
     void solveAddedConstraint( PCB_CONSTRAINT* aConstraint );
 
@@ -118,9 +137,20 @@ private:
     /// Mark @p aConstraint selected on the overlay and in the panel (nullptr clears).
     void setSelectedConstraint( PCB_CONSTRAINT* aConstraint );
 
-    /// Reflect @p aDiag (DOF / over-constrained) in the info bar while the diagnostics overlay is
-    /// shown; dismiss it when the overlay is off.
-    void updateConstraintInfoBar( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag );
+    /// The active PCB render settings, or nullptr when no painter is attached (headless).
+    KIGFX::PCB_RENDER_SETTINGS* pcbRenderSettings() const;
+
+    /// Stash the constrained-item set (the shadow-layer gate) into the render settings and repaint
+    /// the overlay target.  Pass an empty diagnosis to clear it.
+    void updateConstrainedItems( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag );
+
+    /// Stash the selected constraint's members (the highlighted-shadow set) into the render settings
+    /// and repaint the overlay target.  Pass nullptr to clear it.
+    void updateHighlightedConstraintMembers( PCB_CONSTRAINT* aConstraint );
+
+    /// Re-cache the items whose shadow-set membership changed between @p aOld and @p aNew, so the
+    /// cached constraint-shadow layer reflects the new set (a plain target-dirty would not rebuild it).
+    void repaintShadowItems( const std::unordered_set<KIID>& aOld, const std::unordered_set<KIID>& aNew );
 
     /// Show the selected constraint's type, items and state in the bottom message panel. Restore the
     /// default board readout when nothing is selected.
@@ -165,10 +195,18 @@ private:
     PCB_SELECTION_TOOL*                          m_selectionTool;
     CONDITIONAL_MENU*                            m_menu;
     std::unique_ptr<CONSTRAINT_OVERLAY>          m_overlay;
-    wxString                                     m_infoBarSummary;   ///< Last shown, to avoid flicker.
     BOARD_CONSTRAINT_DIAGNOSTICS                 m_cachedDiag;       ///< Reused until the model changes.
+
+    /// Incremental board diagnoser for the hot edit path, so editing one shape re-solves only its
+    /// own cluster instead of every cluster on the board.
+    BOARD_CONSTRAINT_DIAGNOSER                   m_diagnoser;
     bool                                         m_diagDirty = true;
     std::optional<std::vector<PCB_SHAPE*>>       m_hoverCandidates;  ///< Constrained shapes, per model.
+
+    /// Last value and driving choice per constraint type this session so same type runs keep one size
+    /// Keyed by type so length and angle values never mix cleared on tool Reset
+    std::map<PCB_CONSTRAINT_TYPE, double>        m_lastConstraintValue;
+    std::map<PCB_CONSTRAINT_TYPE, bool>          m_lastConstraintDriving;
 };
 
 #endif // CONSTRAINT_EDIT_TOOL_H_

@@ -1471,6 +1471,20 @@ double PCB_SHAPE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
         }
     }
 
+    if( aLayer == LAYER_CONSTRAINT_SHADOW )
+    {
+        // Shadow always appended gate draw here on live constrained-item set not in
+        // ViewGetLayers which caches
+        if( !renderSettings.GetConstrainedItems().count( m_Uuid ) )
+            return LOD_HIDE;
+
+        if( !aView->IsLayerVisibleCached( m_layer ) )
+            return LOD_HIDE;
+
+        if( renderSettings.GetHighContrast() && m_layer != renderSettings.GetPrimaryHighContrastLayer() )
+            return LOD_HIDE;
+    }
+
     if( FOOTPRINT* parent = GetParentFootprint() )
     {
         PCB_LAYER_ID checkLayer = m_layer;
@@ -1492,7 +1506,7 @@ double PCB_SHAPE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 std::vector<int> PCB_SHAPE::ViewGetLayers() const
 {
     std::vector<int> layers;
-    layers.reserve( 4 );
+    layers.reserve( 5 );
 
     layers.push_back( GetLayer() );
 
@@ -1511,6 +1525,9 @@ std::vector<int> PCB_SHAPE::ViewGetLayers() const
 
     if( IsLocked() || ( GetParentFootprint() && GetParentFootprint()->IsLocked() ) )
         layers.push_back( LAYER_LOCKED_ITEM_SHADOW );
+
+    // Always advertise constraint-shadow layer ViewGetLOD gates draw by constrained state
+    layers.push_back( LAYER_CONSTRAINT_SHADOW );
 
     return layers;
 }

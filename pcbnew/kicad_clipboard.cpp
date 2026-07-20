@@ -28,6 +28,7 @@
 #include <font/fontconfig.h>
 #include <pad.h>
 #include <pcb_group.h>
+#include <constraints/constraint_copy.h>
 #include <constraints/pcb_constraint.h>
 #include <pcb_generator.h>
 #include <pcb_text.h>
@@ -110,40 +111,6 @@ wxString CLIPBOARD_IO::clipboardReader()
     }
 
     return wxEmptyString;
-}
-
-
-// The KIIDs of every selected item and all of their descendants, for deciding which constraints
-// travel with a copy.
-static std::set<KIID> collectSelectedIds( const PCB_SELECTION& aSelected )
-{
-    std::set<KIID> ids;
-
-    for( EDA_ITEM* item : aSelected )
-    {
-        if( !item->IsBOARD_ITEM() )
-            continue;
-
-        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-        ids.insert( boardItem->m_Uuid );
-        boardItem->RunOnChildren( [&]( BOARD_ITEM* aChild ) { ids.insert( aChild->m_Uuid ); },
-                                  RECURSE_MODE::RECURSE );
-    }
-
-    return ids;
-}
-
-
-static bool constraintFullySelected( const PCB_CONSTRAINT* aConstraint, const std::set<KIID>& aSelectedIds )
-{
-    const std::vector<CONSTRAINT_MEMBER>& members = aConstraint->GetMembers();
-
-    return !members.empty()
-           && std::all_of( members.begin(), members.end(),
-                           [&]( const CONSTRAINT_MEMBER& aMember )
-                           {
-                               return aSelectedIds.count( aMember.m_item ) > 0;
-                           } );
 }
 
 
@@ -346,11 +313,11 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
         // Carry footprint constraints whose members were all copied, like the board branch below;
         // the paste path remaps the member KIIDs to the pasted copies.
-        std::set<KIID> selectedIds = collectSelectedIds( aSelected );
+        std::set<KIID> selectedIds = CollectConstraintScopeIds( aSelected );
 
         for( PCB_CONSTRAINT* constraint : editedFootprint->Constraints() )
         {
-            if( constraintFullySelected( constraint, selectedIds ) )
+            if( ConstraintFullySelected( constraint, selectedIds ) )
                 partialFootprint.Add( static_cast<PCB_CONSTRAINT*>( constraint->Clone() ) );
         }
 
@@ -490,11 +457,11 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
         // Copy a constraint along with its objects when every participant is in the selection
         // (Zulip "Geometry Constraint Solver", 2026-06-18).  Member KIIDs are preserved; the
         // paste/append parser remaps them to the pasted copies.
-        std::set<KIID> selectedIds = collectSelectedIds( aSelected );
+        std::set<KIID> selectedIds = CollectConstraintScopeIds( aSelected );
 
         for( PCB_CONSTRAINT* constraint : m_board->Constraints() )
         {
-            if( constraintFullySelected( constraint, selectedIds ) )
+            if( ConstraintFullySelected( constraint, selectedIds ) )
             {
                 std::unique_ptr<PCB_CONSTRAINT> copy(
                         static_cast<PCB_CONSTRAINT*>( constraint->Clone() ) );

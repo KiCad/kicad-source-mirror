@@ -7787,8 +7787,29 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseCONSTRAINT( BOARD_ITEM* aParent )
                 NextTok();   // anchor token
                 CONSTRAINT_ANCHOR anchor = ConstraintAnchorFromToken( FromUTF8() );
 
-                info.members.emplace_back( memberId, anchor );
-                NeedRIGHT();
+                // Only VERTEX may carry an ordinal and even then optional
+                // writer never emits one elsewhere so accepting one there breaks round-trip
+                int index = -1;
+
+                if( anchor == CONSTRAINT_ANCHOR::VERTEX )
+                {
+                    token = NextTok();
+
+                    if( token != T_RIGHT )
+                    {
+                        if( token != T_NUMBER )
+                            Expecting( "vertex index" );
+
+                        index = parseInt();
+                        NeedRIGHT();
+                    }
+                }
+                else
+                {
+                    NeedRIGHT();
+                }
+
+                info.members.emplace_back( memberId, anchor, index );
             }
 
             break;
@@ -7890,11 +7911,11 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveConstraints( BOARD_ITEM* aParent )
             if( item )
             {
                 if( item->GetParentFootprint() == constraint->GetParentFootprint() )
-                    constraint->AddMember( item->m_Uuid, member.m_anchor );
+                    constraint->AddMember( item->m_Uuid, member.m_anchor, member.m_index );
             }
             else
             {
-                constraint->AddMember( resolvedId, member.m_anchor );
+                constraint->AddMember( resolvedId, member.m_anchor, member.m_index );
             }
         }
 

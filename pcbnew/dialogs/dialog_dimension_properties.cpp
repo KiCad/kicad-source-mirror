@@ -20,16 +20,25 @@
 
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
+#include <base_units.h>
+#include <eda_units.h>
+#include <math/util.h>
 #include <board.h>
 #include <board_commit.h>
+#include <footprint.h>
 #include <pcb_dimension.h>
 #include <pcb_base_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <widgets/unit_binder.h>
 #include <wx/msgdlg.h>
 
+#include <constraints/pcb_constraint.h>
+#include <constraints/board_constraint_adapter.h>
+#include <constraints/constraint_builder.h>
+
 #include "dialog_dimension_properties.h"
 
+#include <algorithm>
 
 
 DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
@@ -38,6 +47,7 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_frame( aParent ),
         m_cbLayerActual( m_cbLayer ),
         m_txtValueActual( m_txtValue ),
+        m_valueFieldUnits( EDA_UNITS::MM ),
         m_textWidth( aParent, m_lblTextWidth, m_txtTextWidth, m_lblTextWidthUnits ),
         m_textHeight( aParent, m_lblTextHeight, m_txtTextHeight, m_lblTextHeightUnits ),
         m_textThickness( aParent, m_lblTextThickness, m_txtTextThickness, m_lblTextThicknessUnits ),
@@ -91,6 +101,13 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         break;
     }
 
+    // Value mode choice offered only for aligned orthogonal and radial
+    // centre and leader have no measured value
+    if( hasValueModeChoice() )
+        buildValueModeChoice();
+    else
+        m_choiceValueMode->Show( false );
+
     m_separator0->SetIsSeparator();
 
     m_bold->SetIsCheckButton();
@@ -140,19 +157,34 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
     for( size_t ii = 0; ii < m_cbTextOrientation->GetCount() && ii < 4; ++ii )
         m_cbTextOrientation->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
-    m_cbOverrideValue->Bind( wxEVT_CHECKBOX,
+    m_choiceValueMode->Bind( wxEVT_CHOICE,
             [&]( wxCommandEvent& evt )
             {
-                m_txtValue->Enable( m_cbOverrideValue->GetValue() );
+                // Driven mirrors geometry other modes hold user value
+                DIM_VALUE_MODE mode = selectedValueMode();
 
-                if( !m_cbOverrideValue->GetValue() )
+                m_txtValue->Enable( mode != DIM_VALUE_MODE::DRIVEN );
+
+                if( mode == DIM_VALUE_MODE::DRIVEN )
+                {
                     m_txtValue->SetValue( m_dimension->GetValueText() );
+                }
+                else if( mode == DIM_VALUE_MODE::DRIVING )
+                {
+                    // Default to measured value if stale expression is not positive
+                    int lengthIU = 0;
+
+                    if( !parseDrivingLength( lengthIU ) )
+                        m_txtValue->SetValue( m_dimension->GetValueText() );
+                }
+
+                updatePreviewText();
             } );
 
     auto updateEventHandler =
             [&]( wxCommandEvent& evt )
             {
-                if( !m_cbOverrideValue->GetValue() )
+                if( valueFieldTracksMeasurement() )
                     m_txtValue->ChangeValue( m_dimension->GetValueText() );
 
                 updatePreviewText();
@@ -200,8 +232,14 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 {
     BOARD*  board = m_frame->GetBoard();
 
-    m_txtValue->Enable( m_dimension->GetOverrideTextEnabled() );
-    m_cbOverrideValue->SetValue( m_dimension->GetOverrideTextEnabled() );
+    // Capture dimension units so Driving length round trips correctly
+    m_valueFieldUnits = m_dimension->GetUnits();
+
+    if( hasValueModeChoice() )
+    {
+        setValueModeSelection( DimensionValueMode( board, m_dimension ) );
+        m_txtValue->Enable( selectedValueMode() != DIM_VALUE_MODE::DRIVEN );
+    }
 
     switch( m_dimension->GetUnitsMode() )
     {
@@ -276,7 +314,19 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
         m_extensionOvershoot.Show( false );
 
     // Do this last; it depends on the other settings
-    if( m_dimension->GetOverrideTextEnabled() )
+    if( hasValueModeChoice() && selectedValueMode() == DIM_VALUE_MODE::DRIVING )
+    {
+        // Shows constraint length not geometry to prevent silent restage on OK
+        PCB_CONSTRAINT*       lengthConstraint = FindDimensionLengthConstraint( board, m_dimension );
+        std::optional<double> value = lengthConstraint ? lengthConstraint->GetValue() : std::nullopt;
+
+        if( value )
+            m_txtValueActual->SetValue( EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale,
+                                                                            m_valueFieldUnits, *value ) );
+        else
+            m_txtValueActual->SetValue( m_dimension->GetValueText() );
+    }
+    else if( m_dimension->GetOverrideTextEnabled() )
     {
         wxString txt = board->ConvertKIIDsToCrossReferences( m_dimension->GetOverrideText() );
         m_txtValueActual->SetValue( txt );
@@ -298,6 +348,19 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataFromWindow()
     if( !DIALOG_DIMENSION_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
 
+    // Non positive length keeps dialog open avoids collapsing constraint to zero
+    if( hasValueModeChoice() && selectedValueMode() == DIM_VALUE_MODE::DRIVING )
+    {
+        int lengthIU = 0;
+
+        if( !parseDrivingLength( lengthIU ) )
+        {
+            wxMessageBox( _( "Enter a positive length for a driving dimension." ),
+                          _( "Invalid Value" ), wxOK | wxICON_ERROR, this );
+            return false;
+        }
+    }
+
     BOARD_COMMIT commit( m_frame );
     commit.Modify( m_dimension );
 
@@ -314,10 +377,155 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataFromWindow()
 
     updateDimensionFromDialog( m_dimension );
 
+    // Value dimensions always own their commit so the constraint stages and pushes here
+    wxASSERT_MSG( pushCommit || !hasValueModeChoice(),
+                  wxT( "value dimension edited without owning its commit; value mode would be lost" ) );
+
+    PCB_CONSTRAINT* drivingConstraint = pushCommit ? stageValueModeConstraint( commit ) : nullptr;
+
     if( pushCommit )
         commit.Push( _( "Edit Dimension Properties" ) );
 
+    if( drivingConstraint )
+        resolveDrivingConstraint( drivingConstraint );
+
     return true;
+}
+
+
+bool DIALOG_DIMENSION_PROPERTIES::hasValueModeChoice() const
+{
+    switch( m_dimension->Type() )
+    {
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_DIM_RADIAL_T:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+
+void DIALOG_DIMENSION_PROPERTIES::buildValueModeChoice()
+{
+    m_valueModeHasDriving = DimensionCanDrive( m_frame->GetBoard(), m_dimension );
+
+    m_choiceValueMode->Clear();
+    m_choiceValueMode->Append( _( "Driven" ) );
+
+    if( m_valueModeHasDriving )
+        m_choiceValueMode->Append( _( "Driving" ) );
+
+    m_choiceValueMode->Append( _( "Arbitrary" ) );
+    m_choiceValueMode->SetSelection( 0 );
+    m_choiceValueMode->Show( true );
+}
+
+
+DIM_VALUE_MODE DIALOG_DIMENSION_PROPERTIES::selectedValueMode() const
+{
+    int selection = m_choiceValueMode->GetSelection();
+
+    if( selection <= 0 )
+        return DIM_VALUE_MODE::DRIVEN;
+
+    if( m_valueModeHasDriving )
+        return selection == 1 ? DIM_VALUE_MODE::DRIVING : DIM_VALUE_MODE::ARBITRARY;
+
+    return DIM_VALUE_MODE::ARBITRARY;
+}
+
+
+void DIALOG_DIMENSION_PROPERTIES::setValueModeSelection( DIM_VALUE_MODE aMode )
+{
+    int selection = 0;
+
+    switch( aMode )
+    {
+    case DIM_VALUE_MODE::DRIVEN:
+        selection = 0;
+        break;
+
+    case DIM_VALUE_MODE::DRIVING:
+        // Driving may not be offered (endpoints not both bound); fall back to Driven.
+        selection = m_valueModeHasDriving ? 1 : 0;
+        break;
+
+    case DIM_VALUE_MODE::ARBITRARY:
+        selection = m_valueModeHasDriving ? 2 : 1;
+        break;
+    }
+
+    m_choiceValueMode->SetSelection( selection );
+}
+
+
+bool DIALOG_DIMENSION_PROPERTIES::valueFieldTracksMeasurement() const
+{
+    if( hasValueModeChoice() )
+        return selectedValueMode() == DIM_VALUE_MODE::DRIVEN;
+
+    return false;
+}
+
+
+PCB_CONSTRAINT* DIALOG_DIMENSION_PROPERTIES::stageValueModeConstraint( BOARD_COMMIT& aCommit )
+{
+    if( !hasValueModeChoice() )
+        return nullptr;
+
+    DIM_VALUE_MODE     mode = selectedValueMode();
+    std::optional<int> length;
+
+    if( mode == DIM_VALUE_MODE::DRIVING )
+    {
+        int lengthIU = 0;
+
+        // Already validated so failure here stages nothing not a zero length
+        if( parseDrivingLength( lengthIU ) )
+            length = lengthIU;
+    }
+
+    // Override text already written by updateDimensionFromDialog skip here
+    return SetDimensionValueMode( m_frame->GetBoard(), m_dimension, mode, length, std::nullopt,
+                                  [&]( BOARD_ITEM* aItem ) { aCommit.Modify( aItem ); },
+                                  [&]( BOARD_ITEM* aItem ) { aCommit.Add( aItem ); },
+                                  [&]( BOARD_ITEM* aItem ) { aCommit.Remove( aItem ); } );
+}
+
+
+bool DIALOG_DIMENSION_PROPERTIES::parseDrivingLength( int& aLengthIU ) const
+{
+    // Parse using the field displayed units stale text parses to zero caught by positive check
+    double iu = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_valueFieldUnits,
+                                                           m_txtValue->GetValue() );
+
+    if( !( iu > 0.0 ) )
+        return false;
+
+    aLengthIU = KiROUND( iu );
+    return true;
+}
+
+
+void DIALOG_DIMENSION_PROPERTIES::resolveDrivingConstraint( PCB_CONSTRAINT* aConstraint )
+{
+    BOARD_COMMIT            commit( m_frame );
+    std::vector<PCB_SHAPE*> modified;
+
+    // Driving length moves far endpoint and coincident geometry
+    // Stage each item just before it changes for clean undo
+    ApplyConstraintImmediately( m_frame->GetBoard(), aConstraint, &modified,
+                                [&]( BOARD_ITEM* aItem )
+                                {
+                                    commit.Modify( aItem );
+                                } );
+
+    // APPEND_UNDO folds solve into prior edit one undo reverts both
+    if( !commit.Empty() )
+        commit.Push( _( "Apply Dimension Length" ), APPEND_UNDO );
 }
 
 
@@ -377,12 +585,29 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
 {
     BOARD* board = m_frame->GetBoard();
 
-    aTarget->SetOverrideTextEnabled( m_cbOverrideValue->GetValue() );
-
-    if( m_cbOverrideValue->GetValue() )
+    if( hasValueModeChoice() )
     {
-        wxString txt = board->ConvertCrossReferencesToKIIDs( m_txtValueActual->GetValue() );
-        aTarget->SetOverrideText( txt );
+        // Only Arbitrary shows custom text Driven and Driving measure geometry natively
+        if( selectedValueMode() == DIM_VALUE_MODE::ARBITRARY )
+        {
+            aTarget->SetOverrideTextEnabled( true );
+            aTarget->SetOverrideText( board->ConvertCrossReferencesToKIIDs( m_txtValueActual->GetValue() ) );
+        }
+        else
+        {
+            aTarget->SetOverrideTextEnabled( false );
+        }
+    }
+    else
+    {
+        // Centre and leader lack value mode choice preserve existing override state
+        aTarget->SetOverrideTextEnabled( m_dimension->GetOverrideTextEnabled() );
+
+        if( m_dimension->GetOverrideTextEnabled() )
+        {
+            wxString txt = board->ConvertCrossReferencesToKIIDs( m_txtValueActual->GetValue() );
+            aTarget->SetOverrideText( txt );
+        }
     }
 
     aTarget->SetPrefix( board->ConvertCrossReferencesToKIIDs( m_txtPrefix->GetValue() ) );

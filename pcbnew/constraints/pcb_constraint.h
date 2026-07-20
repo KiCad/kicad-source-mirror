@@ -74,6 +74,7 @@ enum class CONSTRAINT_ANCHOR
     MID,        ///< Midpoint of a segment or arc.
     CENTER,     ///< Center of an arc or circle.
     RADIUS,     ///< The radius (scalar feature) of an arc or circle.
+    VERTEX,     ///< An indexed rectangle corner or polygon outline vertex; pairs with CONSTRAINT_MEMBER::m_index.
 };
 
 
@@ -83,8 +84,9 @@ enum class CONSTRAINT_ANCHOR
  */
 struct CONSTRAINT_MEMBER
 {
-    KIID              m_item;    ///< Referenced board item, usually a PCB_SHAPE.
-    CONSTRAINT_ANCHOR m_anchor;  ///< Which feature of that item participates.
+    KIID              m_item;        ///< Referenced board item, usually a PCB_SHAPE.
+    CONSTRAINT_ANCHOR m_anchor;      ///< Which feature of that item participates.
+    int               m_index = -1;  ///< Vertex ordinal; only meaningful for the VERTEX anchor.
 
     CONSTRAINT_MEMBER() :
             m_item( niluuid ),
@@ -92,9 +94,10 @@ struct CONSTRAINT_MEMBER
     {
     }
 
-    CONSTRAINT_MEMBER( const KIID& aItem, CONSTRAINT_ANCHOR aAnchor ) :
+    CONSTRAINT_MEMBER( const KIID& aItem, CONSTRAINT_ANCHOR aAnchor, int aIndex = -1 ) :
             m_item( aItem ),
-            m_anchor( aAnchor )
+            m_anchor( aAnchor ),
+            m_index( aIndex )
     {
     }
 
@@ -164,9 +167,10 @@ public:
     const std::vector<CONSTRAINT_MEMBER>& GetMembers() const { return m_members; }
     std::vector<CONSTRAINT_MEMBER>&       Members() { return m_members; }
 
-    void AddMember( const KIID& aItem, CONSTRAINT_ANCHOR aAnchor = CONSTRAINT_ANCHOR::WHOLE )
+    void AddMember( const KIID& aItem, CONSTRAINT_ANCHOR aAnchor = CONSTRAINT_ANCHOR::WHOLE,
+                    int aIndex = -1 )
     {
-        m_members.emplace_back( aItem, aAnchor );
+        m_members.emplace_back( aItem, aAnchor, aIndex );
     }
 
     bool                  HasValue() const { return m_value.has_value(); }
@@ -242,10 +246,12 @@ wxString ConstraintDisplayLabel( const PCB_CONSTRAINT& aConstraint, EDA_UNITS aU
 
 
 /**
- * Label for one constrained item in a list: the item's description with its anchored feature
- * appended, e.g. "Line ... (start)".  Shared by the board panel and the footprint-editor dialog.
+ * Label for one constrained item in a list combining the item description with its anchored
+ * feature such as Line start An indexed VERTEX member names the feature by 1 based ordinal
+ * corner N on a rectangle or vertex N on a polygon Shared by the board panel and the footprint
+ * editor dialog
  */
-wxString ConstraintMemberLabel( BOARD_ITEM* aItem, CONSTRAINT_ANCHOR aAnchor,
+wxString ConstraintMemberLabel( BOARD_ITEM* aItem, const CONSTRAINT_MEMBER& aMember,
                                 UNITS_PROVIDER* aUnitsProvider );
 
 

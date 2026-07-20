@@ -81,4 +81,33 @@ BOOST_AUTO_TEST_CASE( PlainRectangle )
     CheckPolygonFitsRect( 20000000, 10000000, 0 );
 }
 
+// Zero radius corners always come out TL TR BR BL regardless of orientation
+// pcbnew VERTEX constraints rely on this order reorder means silent rebind
+BOOST_AUTO_TEST_CASE( PlainRectangleCornerOrder )
+{
+    const VECTOR2I pos( 1000, 2000 );
+    const int      w = 20000000;
+    const int      h = 10000000;
+
+    // Normalized rect plus negative extent variant hits normalization recursion
+    for( const SHAPE_RECT& rect : { SHAPE_RECT( pos, w, h ),
+                                    SHAPE_RECT( pos + VECTOR2I( w, h ), -w, -h ) } )
+    {
+        ROUNDRECT rr( rect, 0 );
+
+        SHAPE_POLY_SET poly;
+        rr.TransformToPolygon( poly, 100 );
+
+        BOOST_REQUIRE_EQUAL( poly.OutlineCount(), 1 );
+
+        const SHAPE_LINE_CHAIN& outline = poly.COutline( 0 );
+
+        BOOST_REQUIRE_EQUAL( outline.PointCount(), 4 );
+        BOOST_CHECK_EQUAL( outline.CPoint( 0 ), pos );
+        BOOST_CHECK_EQUAL( outline.CPoint( 1 ), pos + VECTOR2I( w, 0 ) );
+        BOOST_CHECK_EQUAL( outline.CPoint( 2 ), pos + VECTOR2I( w, h ) );
+        BOOST_CHECK_EQUAL( outline.CPoint( 3 ), pos + VECTOR2I( 0, h ) );
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -2746,8 +2746,17 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_CONSTRAINT* aConstraint ) const
 
     for( const CONSTRAINT_MEMBER& member : members )
     {
-        m_out->Print( "(member %s %s)", m_out->Quotew( member.m_item.AsString() ).c_str(),
-                      ConstraintAnchorToken( member.m_anchor ) );
+        // Only VERTEX carries an ordinal others stay two-token
+        if( member.m_anchor == CONSTRAINT_ANCHOR::VERTEX )
+        {
+            m_out->Print( "(member %s %s %d)", m_out->Quotew( member.m_item.AsString() ).c_str(),
+                          ConstraintAnchorToken( member.m_anchor ), member.m_index );
+        }
+        else
+        {
+            m_out->Print( "(member %s %s)", m_out->Quotew( member.m_item.AsString() ).c_str(),
+                          ConstraintAnchorToken( member.m_anchor ) );
+        }
     }
 
     m_out->Print( ")" );        // Close `members` token.

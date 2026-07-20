@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -222,6 +223,36 @@ BOOST_AUTO_TEST_CASE( NearestAnchorSnapsToEndpoint )
 }
 
 
+// Excluding a handle skips only that shape and anchor coincident endpoint elsewhere stays reachable
+BOOST_AUTO_TEST_CASE( NearestAnchorExcludesPickedHandleNotCoincident )
+{
+    BOARD      board;
+    PCB_SHAPE* a = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* b = addSegment( board, { 10 * MM, 0 }, { 20 * MM, 0 } );
+
+    const VECTOR2I shared{ 10 * MM, 0 };   // a's END and b's START coincide here
+
+    std::optional<CONSTRAINT_MEMBER> first = NearestConstraintAnchor( &board, shared, 1 * MM );
+    BOOST_REQUIRE( first.has_value() );
+
+    // Exclude first handle still finds coincident endpoint as distinct member on b
+    std::optional<CONSTRAINT_MEMBER> second =
+            NearestConstraintAnchor( &board, shared, 1 * MM, { *first } );
+    BOOST_REQUIRE( second.has_value() );
+    BOOST_CHECK( *second != *first );
+    BOOST_CHECK( second->m_item != first->m_item );
+    BOOST_CHECK( ConstraintAnchorPosition( &board, *first )
+                 == ConstraintAnchorPosition( &board, *second ) );
+
+    // Two handles are shape a and shape b own endpoints at the shared point
+    BOOST_CHECK( ( first->m_item == a->m_Uuid && second->m_item == b->m_Uuid )
+                 || ( first->m_item == b->m_Uuid && second->m_item == a->m_Uuid ) );
+
+    // Both handles excluded nothing else within tolerance
+    BOOST_CHECK( !NearestConstraintAnchor( &board, shared, 1 * MM, { *first, *second } ).has_value() );
+}
+
+
 // Applying an authored constraint through a commit is a single undoable step.
 BOOST_AUTO_TEST_CASE( ApplyIsOneUndoStep )
 {
@@ -272,6 +303,49 @@ BOOST_AUTO_TEST_CASE( BuildRadialFromArcsAndEllipses )
 
     // Equal radius still rejects an ellipse (no single radius).
     BOOST_CHECK( !BuildConstraintFromItems( &board, PCB_CONSTRAINT_TYPE::EQUAL_RADIUS, { circle, ellipse } ) );
+}
+
+
+// Nothing remembered dialog opens on measured geometry
+BOOST_AUTO_TEST_CASE( InitialValueDefaultsToMeasured )
+{
+    std::map<PCB_CONSTRAINT_TYPE, double> remembered;
+
+    BOOST_CHECK_CLOSE( InitialConstraintValue( PCB_CONSTRAINT_TYPE::FIXED_LENGTH, 7.0 * MM, remembered ),
+                       7.0 * MM, 1e-6 );
+    BOOST_CHECK_CLOSE( InitialConstraintValue( PCB_CONSTRAINT_TYPE::ARC_ANGLE, 90.0, remembered ), 90.0,
+                       1e-6 );
+}
+
+
+// Once set remembered value overrides measurement
+BOOST_AUTO_TEST_CASE( InitialValueRemembersLastUsed )
+{
+    std::map<PCB_CONSTRAINT_TYPE, double> remembered;
+    remembered[PCB_CONSTRAINT_TYPE::FIXED_LENGTH] = 5.0 * MM;
+
+    BOOST_CHECK_CLOSE( InitialConstraintValue( PCB_CONSTRAINT_TYPE::FIXED_LENGTH, 7.0 * MM, remembered ),
+                       5.0 * MM, 1e-6 );
+}
+
+
+// Keyed by type length value never bleeds into angle default
+BOOST_AUTO_TEST_CASE( InitialValueDoesNotMixTypes )
+{
+    std::map<PCB_CONSTRAINT_TYPE, double> remembered;
+    remembered[PCB_CONSTRAINT_TYPE::FIXED_LENGTH] = 5.0 * MM;
+
+    // ARC_ANGLE unremembered opens on measured 90 degrees
+    BOOST_CHECK_CLOSE( InitialConstraintValue( PCB_CONSTRAINT_TYPE::ARC_ANGLE, 90.0, remembered ), 90.0,
+                       1e-6 );
+
+    // Recording an angle leaves the earlier length value untouched.
+    remembered[PCB_CONSTRAINT_TYPE::ARC_ANGLE] = 60.0;
+
+    BOOST_CHECK_CLOSE( InitialConstraintValue( PCB_CONSTRAINT_TYPE::FIXED_LENGTH, 7.0 * MM, remembered ),
+                       5.0 * MM, 1e-6 );
+    BOOST_CHECK_CLOSE( InitialConstraintValue( PCB_CONSTRAINT_TYPE::ARC_ANGLE, 90.0, remembered ), 60.0,
+                       1e-6 );
 }
 
 

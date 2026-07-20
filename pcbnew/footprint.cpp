@@ -3363,11 +3363,21 @@ BOARD_ITEM* FOOTPRINT::Duplicate( bool addToParentGroup, BOARD_COMMIT* aCommit )
 {
     FOOTPRINT* dupe = static_cast<FOOTPRINT*>( BOARD_ITEM::Duplicate( addToParentGroup, aCommit ) );
 
-    dupe->RunOnChildren( [&]( BOARD_ITEM* child )
-                            {
-                                child->ResetUuidDirect();
-                            },
-                            RECURSE_MODE::RECURSE );
+    // Clones keep child UUIDs so cloned constraints still resolve to them
+    // Map old ids to new before reset else constraints below strand
+    std::map<KIID, KIID> idMap;
+
+    dupe->RunOnChildren(
+            [&]( BOARD_ITEM* child )
+            {
+                KIID oldId = child->m_Uuid;
+                child->ResetUuidDirect();
+                idMap[oldId] = child->m_Uuid;
+            },
+            RECURSE_MODE::RECURSE );
+
+    for( PCB_CONSTRAINT* constraint : dupe->Constraints() )
+        constraint->RemapKIIDs( idMap );
 
     return dupe;
 }

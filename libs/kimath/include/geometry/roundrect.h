@@ -78,6 +78,8 @@ public:
 
     /**
      * Get the polygonal representation of the roundrect.
+     *
+     * Zero radius emits corners in order TL TR BR BL and constraint VERTEX bindings rely on that order
      */
     void TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError ) const;
 

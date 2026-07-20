@@ -26,10 +26,12 @@
 
 #include <frame_type.h>
 #include <gal/painter.h>
+#include <kiid.h>
 #include <padstack.h>   // PAD_DRILL_SHAPE
 #include <pcb_display_options.h>
 #include <math/vector2d.h>
 #include <memory>
+#include <unordered_set>
 #include <geometry/shape_segment.h>
 
 
@@ -142,6 +144,22 @@ public:
     const wxString& GetHighlightedNetChain() const { return m_highlightedNetChain; }
     void SetHighlightedNetChain( const wxString& aNetChain ) { m_highlightedNetChain = aNetChain; }
 
+    // Items referenced by geometric constraint shadow layer draws only for these
+    // refreshed each board-wide diagnosis
+    const std::unordered_set<KIID>& GetConstrainedItems() const { return m_constrainedItems; }
+    void SetConstrainedItems( std::unordered_set<KIID> aItems ) { m_constrainedItems = std::move( aItems ); }
+
+    // Members of badge-selected constraint shadows drawn brighter and thicker
+    const std::unordered_set<KIID>& GetHighlightedConstraintMembers() const
+    {
+        return m_highlightedConstraintMembers;
+    }
+
+    void SetHighlightedConstraintMembers( std::unordered_set<KIID> aItems )
+    {
+        m_highlightedConstraintMembers = std::move( aItems );
+    }
+
 public:
     bool               m_ForcePadSketchModeOn;
     bool               m_ForceShowFieldsWhenFPSelected;
@@ -176,6 +194,12 @@ protected:
     double m_filledShapeOpacity;     ///< Opacity override for graphic shapes
 
     wxString m_highlightedNetChain;    ///< Active highlighted chain name (if any)
+
+    ///< Gates the constraint-shadow draw
+    std::unordered_set<KIID> m_constrainedItems;
+
+    ///< Selected constraint members shadow highlighted
+    std::unordered_set<KIID> m_highlightedConstraintMembers;
 };
 
 

@@ -276,6 +276,7 @@ set( QA_PCBNEW_SRCS
     constraints/test_constraint_diagnostics.cpp
     constraints/test_constraint_protobuf.cpp
     constraints/test_constraint_clipboard.cpp
+    constraints/test_constraint_duplicate.cpp
     constraints/test_constraint_overlay.cpp
     constraints/test_constraint_labels.cpp
     constraints/test_constraint_apply.cpp

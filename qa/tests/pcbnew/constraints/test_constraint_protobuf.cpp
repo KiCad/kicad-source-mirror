@@ -21,6 +21,7 @@
 
 #include <google/protobuf/any.pb.h>
 
+#include <api/board/board_types.pb.h>
 #include <constraints/pcb_constraint.h>
 
 
@@ -104,6 +105,94 @@ BOOST_AUTO_TEST_CASE( RoundTripEveryType )
                              "type " << t << " came back as "
                                      << static_cast<int>( restored.GetConstraintType() ) );
     }
+}
+
+
+// VERTEX members keep their index across the round trip non vertex members come back with the
+// negative one sentinel not proto3 scalar default of zero
+BOOST_AUTO_TEST_CASE( RoundTripVertexIndex )
+{
+    PCB_CONSTRAINT original( nullptr, PCB_CONSTRAINT_TYPE::COINCIDENT );
+
+    KIID a, b;
+    original.AddMember( a, CONSTRAINT_ANCHOR::VERTEX, 2 );
+    original.AddMember( b, CONSTRAINT_ANCHOR::START );
+
+    google::protobuf::Any container;
+    original.Serialize( container );
+
+    // Index is presence tracked on the wire so only the vertex member carries it
+    kiapi::board::types::Constraint wire;
+    BOOST_REQUIRE( container.UnpackTo( &wire ) );
+    BOOST_REQUIRE_EQUAL( wire.members_size(), 2 );
+    BOOST_CHECK( wire.members( 0 ).has_index() );
+    BOOST_CHECK( !wire.members( 1 ).has_index() );
+
+    PCB_CONSTRAINT restored( nullptr );
+    BOOST_REQUIRE( restored.Deserialize( container ) );
+
+    BOOST_REQUIRE_EQUAL( restored.GetMembers().size(), 2 );
+    BOOST_CHECK( restored.GetMembers()[0].m_anchor == CONSTRAINT_ANCHOR::VERTEX );
+    BOOST_CHECK_EQUAL( restored.GetMembers()[0].m_index, 2 );
+    BOOST_CHECK( restored.GetMembers()[1].m_anchor == CONSTRAINT_ANCHOR::START );
+    BOOST_CHECK_EQUAL( restored.GetMembers()[1].m_index, -1 );
+
+    BOOST_CHECK( restored == original );
+}
+
+
+// A hand built message with an index on a non vertex anchor must not leak it into the
+// deserialized member only VERTEX anchors may carry one
+BOOST_AUTO_TEST_CASE( DeserializeIgnoresIndexOnNonVertexAnchor )
+{
+    using namespace kiapi::board::types;
+
+    Constraint constraint;
+    constraint.mutable_id()->set_value( KIID().AsStdString() );
+    constraint.set_type( ConstraintType::CT_COINCIDENT );
+    constraint.set_driving( true );
+
+    ConstraintMember* m = constraint.add_members();
+    m->mutable_item()->set_value( KIID().AsStdString() );
+    m->set_anchor( ConstraintAnchor::CA_START );
+    m->set_index( 5 );
+
+    google::protobuf::Any container;
+    container.PackFrom( constraint );
+
+    PCB_CONSTRAINT restored( nullptr );
+    BOOST_REQUIRE( restored.Deserialize( container ) );
+
+    BOOST_REQUIRE_EQUAL( restored.GetMembers().size(), 1 );
+    BOOST_CHECK( restored.GetMembers()[0].m_anchor == CONSTRAINT_ANCHOR::START );
+    BOOST_CHECK_EQUAL( restored.GetMembers()[0].m_index, -1 );
+}
+
+
+// A VERTEX anchor with no index gets the negative one sentinel not a silent vertex zero
+// presence tracking distinguishes this from an explicit index of zero
+BOOST_AUTO_TEST_CASE( DeserializeVertexWithoutIndexGetsSentinel )
+{
+    using namespace kiapi::board::types;
+
+    Constraint constraint;
+    constraint.mutable_id()->set_value( KIID().AsStdString() );
+    constraint.set_type( ConstraintType::CT_COINCIDENT );
+    constraint.set_driving( true );
+
+    ConstraintMember* m = constraint.add_members();
+    m->mutable_item()->set_value( KIID().AsStdString() );
+    m->set_anchor( ConstraintAnchor::CA_VERTEX );
+
+    google::protobuf::Any container;
+    container.PackFrom( constraint );
+
+    PCB_CONSTRAINT restored( nullptr );
+    BOOST_REQUIRE( restored.Deserialize( container ) );
+
+    BOOST_REQUIRE_EQUAL( restored.GetMembers().size(), 1 );
+    BOOST_CHECK( restored.GetMembers()[0].m_anchor == CONSTRAINT_ANCHOR::VERTEX );
+    BOOST_CHECK_EQUAL( restored.GetMembers()[0].m_index, -1 );
 }
 
 

@@ -29,6 +29,14 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
+#include <tools/edit_tool.h>
+#include <tools/constraint_edit_tool.h>
+#include <constraints/board_constraint_adapter.h>
+#include <constraints/constraint_builder.h>
+#include <constraints/pcb_constraint.h>
+#include <math/util.h>
+#include <base_units.h>
+#include <pcb_shape.h>
 #include <eda_units.h>
 #include <properties/property_mgr.h>
 #include <properties/pg_editors.h>
@@ -38,6 +46,7 @@
 #include <board.h>
 #include <properties/pg_properties.h>
 #include <properties/property.h>
+#include <pcb_dimension.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
@@ -865,6 +874,9 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     const bool     useSelectionCenter = fpInSelection > 1;
     const VECTOR2I selectionCenter = useSelectionCenter ? selectionBBox.GetCenter() : VECTOR2I( 0, 0 );
 
+    // Driving length constraints touched by this edit solved again after commit lands
+    std::vector<PCB_CONSTRAINT*> drivingConstraints;
+
     for( EDA_ITEM* edaItem : selection )
     {
         if( !edaItem->IsBOARD_ITEM() )
@@ -961,10 +973,101 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
             continue;
         }
 
+        // Value mode and Driving value live partly in a board level constraint not item scoped
+        // so route them through this commit for a shared undo step
+        if( BaseType( item->Type() ) == PCB_DIMENSION_T )
+        {
+            PCB_DIMENSION_BASE* dim = static_cast<PCB_DIMENSION_BASE*>( item );
+            BOARD*              board = m_frame->GetBoard();
+
+            if( propName == _HKI( "Value Mode" ) )
+            {
+                DIM_VALUE_MODE mode = static_cast<DIM_VALUE_MODE>( newValue.GetLong() );
+
+                // Seed from current display value so a mode switch alone does not move geometry
+                std::optional<int> length;
+
+                if( mode == DIM_VALUE_MODE::DRIVING )
+                {
+                    PCB_CONSTRAINT* existing = FindDimensionLengthConstraint( board, dim );
+
+                    if( existing && existing->GetValue() )
+                        length = KiROUND( *existing->GetValue() );
+                    else
+                        length = dim->GetMeasuredValue();
+                }
+
+                // Arbitrary keeps measured text until edited
+                std::optional<wxString> overrideText;
+
+                if( mode == DIM_VALUE_MODE::ARBITRARY && !dim->GetOverrideTextEnabled() )
+                    overrideText = dim->GetValueText();
+
+                PCB_CONSTRAINT* driving = SetDimensionValueMode(
+                        board, dim, mode, length, overrideText,
+                        [&]( BOARD_ITEM* aItem ) { changes.Modify( aItem ); },
+                        [&]( BOARD_ITEM* aItem ) { changes.Add( aItem ); },
+                        [&]( BOARD_ITEM* aItem ) { changes.Remove( aItem ); } );
+
+                if( driving )
+                    drivingConstraints.push_back( driving );
+
+                continue;
+            }
+
+            if( propName == _HKI( "Value" ) && dim->GetValueMode() == DIM_VALUE_MODE::DRIVING )
+            {
+                // Parsed in dimension own units to match display validator already blocked
+                // non positive entries other selected dims failing parse left unchanged
+                double iu = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, dim->GetUnits(),
+                                                                       newValue.GetString() );
+
+                if( iu > 0.0 )
+                {
+                    if( PCB_CONSTRAINT* driving = FindDimensionLengthConstraint( board, dim ) )
+                    {
+                        changes.Modify( driving );
+                        driving->SetValue( KiROUND( iu ) );
+                        drivingConstraints.push_back( driving );
+                    }
+                }
+
+                continue;
+            }
+        }
+
         item->Set( property, newValue );
     }
 
     changes.Push( _( "Edit Properties" ) );
+
+    // Edit is authoritative so hold shapes fixed while solving neighbors and fold into this
+    // undo with a no op if nothing was touched
+    if( CONSTRAINT_EDIT_TOOL* constraintTool = m_frame->GetToolManager()->GetTool<CONSTRAINT_EDIT_TOOL>() )
+    {
+        std::vector<PCB_SHAPE*> shapes;
+        EDIT_TOOL::collectConstraintShapes( selection, shapes );
+        constraintTool->SolveAfterEdit( shapes );
+    }
+
+    // Driving length now on board so solve bound geometry to it and APPEND_UNDO folds follow
+    // up moves into one undo
+    if( !drivingConstraints.empty() )
+    {
+        BOARD_COMMIT solveCommit( m_frame );
+
+        for( PCB_CONSTRAINT* constraint : drivingConstraints )
+        {
+            ApplyConstraintImmediately( m_frame->GetBoard(), constraint, nullptr,
+                                        [&]( BOARD_ITEM* aItem )
+                                        {
+                                            solveCommit.Modify( aItem );
+                                        } );
+        }
+
+        if( !solveCommit.Empty() )
+            solveCommit.Push( _( "Apply Dimension Length" ), APPEND_UNDO );
+    }
 
     m_frame->Refresh();
 

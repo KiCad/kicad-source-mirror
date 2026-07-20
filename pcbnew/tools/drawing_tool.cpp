@@ -80,6 +80,8 @@
 #include <pcb_tablecell.h>
 #include <pcb_track.h>
 #include <pcb_dimension.h>
+#include <constraints/constraint_builder.h>
+#include <constraints/pcb_constraint.h>
 #include <pcbnew_id.h>
 #include <scoped_set_reset.h>
 #include <string_utils.h>
@@ -90,6 +92,95 @@
 const unsigned int DRAWING_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
+
+
+// True if board already carries same constraint so a redrawn dimension does not stack a conflicting duplicate
+static bool dimensionBindingIsDuplicate( BOARD* aBoard, const PCB_CONSTRAINT* aConstraint )
+{
+    auto scan = [&]( const CONSTRAINTS& aList )
+    {
+        return std::ranges::any_of( aList,
+                                    [&]( const PCB_CONSTRAINT* aExisting )
+                                    { return ConstraintsAreDuplicate( *aExisting, *aConstraint ); } );
+    };
+
+    if( scan( aBoard->Constraints() ) )
+        return true;
+
+    // Dimension coincidences parent to their own footprint not necessarily the first
+    // so every footprint constraints must be scanned to find where bindings are stored
+    return std::ranges::any_of( aBoard->Footprints(),
+                                [&]( FOOTPRINT* aFootprint )
+                                { return scan( aFootprint->Constraints() ); } );
+}
+
+
+// Bind dimension feature points coincident to measured geometry so it follows that geometry
+// Bindings ride @p aCommit with dimension for single undo interactive draw only paste and duplicate remap constraints
+static void bindDimensionEndpoints( BOARD* aBoard, PCB_DIMENSION_BASE* aDimension, BOARD_ITEM* aParent,
+                                    BOARD_COMMIT& aCommit )
+{
+    if( !aBoard || !aDimension )
+        return;
+
+    const double tol = pcbIUScale.mmToIU( 0.01 );
+
+    // Radial dimension binds only when centre and rim share one circle or arc
+    // uses coincident centre plus point on circumference rim not generic both ends coincidence
+    if( aDimension->Type() == PCB_DIM_RADIAL_T )
+    {
+        std::optional<KIID> arc = SelectRadialDimensionTarget( aBoard, aDimension->m_Uuid,
+                                                               aDimension->GetStart(),
+                                                               aDimension->GetEnd(), tol );
+
+        if( !arc )
+            return;
+
+        auto addBinding = [&]( PCB_CONSTRAINT_TYPE aType, CONSTRAINT_ANCHOR aDimAnchor,
+                               CONSTRAINT_ANCHOR aTargetAnchor )
+        {
+            auto constraint = std::make_unique<PCB_CONSTRAINT>( aParent, aType );
+            constraint->AddMember( aDimension->m_Uuid, aDimAnchor );
+            constraint->AddMember( *arc, aTargetAnchor );
+
+            if( !dimensionBindingIsDuplicate( aBoard, constraint.get() ) )
+                aCommit.Add( constraint.release() );
+        };
+
+        addBinding( PCB_CONSTRAINT_TYPE::COINCIDENT, CONSTRAINT_ANCHOR::START, CONSTRAINT_ANCHOR::CENTER );
+        addBinding( PCB_CONSTRAINT_TYPE::POINT_ON_LINE, CONSTRAINT_ANCHOR::END, CONSTRAINT_ANCHOR::WHOLE );
+        return;
+    }
+
+    // Only aligned/orthogonal dimensions measure a second feature point; the rest bind START.
+    std::optional<VECTOR2I> end;
+
+    switch( aDimension->Type() )
+    {
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_ORTHOGONAL_T:
+        end = aDimension->GetEnd();
+        break;
+
+    default:
+        break;
+    }
+
+    std::vector<DIMENSION_ENDPOINT_BINDING> bindings =
+            SelectDimensionEndpointBindings( aBoard, aDimension->m_Uuid, aDimension->GetStart(), end, tol );
+
+    for( const DIMENSION_ENDPOINT_BINDING& binding : bindings )
+    {
+        auto constraint = std::make_unique<PCB_CONSTRAINT>( aParent, PCB_CONSTRAINT_TYPE::COINCIDENT );
+        constraint->AddMember( aDimension->m_Uuid, binding.dimAnchor );
+        constraint->AddMember( binding.target.m_item, binding.target.m_anchor, binding.target.m_index );
+
+        if( dimensionBindingIsDuplicate( aBoard, constraint.get() ) )
+            continue;
+
+        aCommit.Add( constraint.release() );
+    }
+}
 
 
 class VIA_SIZE_MENU : public ACTION_MENU
@@ -1859,6 +1950,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 preview.Remove( dimension );
 
                 commit.Add( dimension );
+
+                // Bind feature points to measured geometry so it tracks that geometry interactive draw only
+                bindDimensionEndpoints( m_board, dimension, m_frame->GetModel(), commit );
+
                 commit.Push( _( "Draw Dimension" ) );
 
                 // Run the edit immediately to set the leader text

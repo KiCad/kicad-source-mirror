@@ -2210,6 +2210,7 @@ types::ConstraintAnchor ToProtoEnum( CONSTRAINT_ANCHOR aValue )
     case CONSTRAINT_ANCHOR::MID:    return types::ConstraintAnchor::CA_MID;
     case CONSTRAINT_ANCHOR::CENTER: return types::ConstraintAnchor::CA_CENTER;
     case CONSTRAINT_ANCHOR::RADIUS: return types::ConstraintAnchor::CA_RADIUS;
+    case CONSTRAINT_ANCHOR::VERTEX: return types::ConstraintAnchor::CA_VERTEX;
 
     default:
         wxCHECK_MSG( false, types::ConstraintAnchor::CA_UNKNOWN,
@@ -2230,6 +2231,7 @@ CONSTRAINT_ANCHOR FromProtoEnum( types::ConstraintAnchor aValue )
     case types::ConstraintAnchor::CA_MID:    return CONSTRAINT_ANCHOR::MID;
     case types::ConstraintAnchor::CA_CENTER: return CONSTRAINT_ANCHOR::CENTER;
     case types::ConstraintAnchor::CA_RADIUS: return CONSTRAINT_ANCHOR::RADIUS;
+    case types::ConstraintAnchor::CA_VERTEX: return CONSTRAINT_ANCHOR::VERTEX;
 
     default:
         wxCHECK_MSG( false, CONSTRAINT_ANCHOR::WHOLE,

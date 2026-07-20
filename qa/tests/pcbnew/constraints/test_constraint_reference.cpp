@@ -79,6 +79,31 @@ BOOST_AUTO_TEST_CASE( ReferenceLengthTracksGeometry )
 }
 
 
+// The two point form has no owning segment so its value is re measured from the two member
+// anchors after a drag it must follow the new distance
+BOOST_AUTO_TEST_CASE( ReferenceTwoPointLengthTracksGeometry )
+{
+    BOARD      board;
+    PCB_SHAPE* seg = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* len = addConstraint( board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH,
+                                         { { seg->m_Uuid, CONSTRAINT_ANCHOR::START },
+                                           { seg->m_Uuid, CONSTRAINT_ANCHOR::END } },
+                                         10.0 * MM );
+    len->SetDriving( false );
+
+    std::vector<BOARD_ITEM*> staged;
+
+    // Drag END straight up to (0, 6 mm); the pinned start keeps the anchor distance at 6 mm.
+    SolveCluster( &board, { seg->m_Uuid, CONSTRAINT_ANCHOR::END }, { 0, 6 * MM }, nullptr,
+                  [&]( BOARD_ITEM* i ) { staged.push_back( i ); } );
+
+    BOOST_REQUIRE( len->GetValue().has_value() );
+    BOOST_CHECK_LE( std::abs( *len->GetValue() - 6.0 * MM ), 5000.0 );
+    BOOST_CHECK( std::find( staged.begin(), staged.end(), len ) != staged.end() );
+}
+
+
 // A driving length forces the geometry, so the same drag leaves the segment 10 mm long and never
 // rewrites the stored value.
 BOOST_AUTO_TEST_CASE( DrivingLengthValueNotOverwritten )

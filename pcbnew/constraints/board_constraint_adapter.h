@@ -24,6 +24,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <vector>
 
@@ -35,6 +36,7 @@
 class BOARD;
 class BOARD_ITEM;
 class PCB_DIMENSION_BASE;
+class PCB_DIM_ORTHOGONAL;
 class PCB_SHAPE;
 
 // planegcs is an Eigen-heavy implementation detail; keep its header out of this one (PIMPL).
@@ -137,10 +139,15 @@ public:
      *
      * @param aDragged the anchor being dragged.
      * @param aCursor the cursor target, in IU.
+     * @param aEdited other shapes edited alongside the dragged one excluded from stay-put pins
+     * @param aCoDragged second anchor moved by the same handle with its own target pinned at the
+     *                same weight since a polygon edge drag needs two independent points
      */
     /// @p aStabilize holds free segment lengths so an angle constraint rotates a segment instead of
     /// collapsing it. Off for live dragging.
-    bool Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize = false );
+    bool Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize = false,
+                const std::set<KIID>& aEdited = {},
+                const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged = std::nullopt );
 
     /// Solve with no drag pin. @p aStabilize holds free segment lengths (see the dragged overload).
     bool Solve( bool aStabilize = false );
@@ -179,11 +186,16 @@ private:
     enum class SHAPE_KIND
     {
         SEGMENT,
+        BEZIER,      ///< A cubic bezier only its start and end endpoints are exposed as free points
         CIRCLE,
         ARC,
         ELLIPSE,
         ELLIPSE_ARC,
-        POINT_PAIR   ///< A dimension's two feature points (start + end); no line/curve geometry.
+        POINT_PAIR,  ///< A dimension's two feature points (start + end); no line/curve geometry.
+        RECT,        ///< An axis-aligned rectangle whose four corners alias the two stored corners
+                     ///< params so rectness holds by construction with no extra DOF
+        POLYGON      ///< A single hole-free outline with one free param pair per vertex since
+                     ///< write-back rebuilds one outline only
     };
 
     /// Per-shape indices into m_params.  A segment stores start/end; a circle stores center
@@ -205,6 +217,24 @@ private:
         int        startAngle = -1;    ///< arc start angle (radians).
         int        endAngle = -1;      ///< arc end angle (radians).
         int                 fixedLengthParam = -1; ///< param index of a driving fixed-length target, or -1.
+
+        /// Outline-0 vertex count of a POLYGON vertex i x param is startX plus 2 times i
+        int vertexCount = 0;
+
+        /// Rect corner roles frozen at Build so VERTEX 0 to 3 as TL TR BR BL bind the same physical
+        /// corners whatever the stored start end order
+        bool startIsLeft = true;
+        bool startIsTop = true;
+    };
+
+    /// Param indices of an anchor coordinates a rect corner aliases mixed start end params
+    /// so y is not always x plus 1
+    struct ANCHOR_PARAMS
+    {
+        int x = -1;
+        int y = -1;
+
+        bool IsValid() const { return x >= 0 && y >= 0; }
     };
 
     /// Append a normalized coordinate to the backing store, returning its stable index.
@@ -214,26 +244,48 @@ private:
     /// A driving constraint is ignored here -- its value is an input, never overwritten.
     void recordReferenceValue( PCB_CONSTRAINT* aConstraint );
 
-    /// Add a length hold on every free segment (tagged @p aTag), cleared by tag after the solve.
-    void holdFreeSegmentLengths( int aTag );
+    /// Length hold on the free segments in @p aShapes tagged @p aTag so only those shapes are
+    /// protected while a merely dragged-along neighbour keeps its own stay-put pins instead
+    void holdFreeSegmentLengths( int aTag, const std::set<KIID>& aShapes );
 
-    /// Add a radius hold on every free arc (tagged @p aTag) so an angle change rotates an endpoint
-    /// about a stable radius instead of collapsing the arc.  A real FIXED_RADIUS still wins.
-    void holdFreeArcRadii( int aTag );
+    /// Radius hold on the free arcs in @p aShapes tagged @p aTag so an angle change rotates an
+    /// endpoint instead of collapsing the arc a real FIXED_RADIUS still wins
+    void holdFreeArcRadii( int aTag, const std::set<KIID>& aShapes );
 
     /// Hold @p aVars's arc at its current radius (tagged @p aTag).
     void holdArcRadius( const SHAPE_VARS& aVars, int aTag );
 
-    /// Hold the parts of the dragged shape the edit means to keep (tagged @p aTag), so grabbing one
-    /// handle moves only that handle instead of letting the solver drift the rest.  A segment holds
-    /// its far endpoint; an arc endpoint drag holds the centre, radius and far endpoint (only the
-    /// dragged endpoint sweeps); an arc centre drag holds both endpoints.  The holds are temporary,
-    /// so a real constraint still wins.
-    void pinDraggedShapeRest( const CONSTRAINT_MEMBER& aDragged, int aTag );
+    /// Pin the point at @p aPoint where it sits tagged @p aTag with @p aWeight rescaling the tier
+    /// or the default weight overriding the stay-put tier when unset an invalid point is ignored
+    void softPinPoint( const ANCHOR_PARAMS& aPoint, int aTag, std::optional<double> aWeight = std::nullopt );
 
-    /// Index into m_params of the x-coordinate an anchor maps to, or -1 if the shape has no such
-    /// anchor (e.g. a circle has no endpoints).  The y-coordinate is always the next index.
-    int anchorParamIndex( const CONSTRAINT_MEMBER& aMember ) const;
+    /// As above for the point whose x param is @p aPointX and whose y param follows it
+    void softPinPoint( int aPointX, int aTag, std::optional<double> aWeight = std::nullopt );
+
+    /// Soft-pin every vertex of each POLYGON in @p aShapes tagged @p aTag for edited shapes
+    /// pinUneditedShapes excludes so unbound vertices keep their null-space minimal-movement pins
+    void holdPolygonVertices( const std::set<KIID>& aShapes, int aTag );
+
+    /// Hold the parts of the dragged shape meant to stay put tagged @p aTag a segment holds its far
+    /// endpoint an arc holds centre radius and far endpoint or both endpoints on a centre drag
+    void pinDraggedShapeRest( const CONSTRAINT_MEMBER& aDragged, int aTag,
+                              const CONSTRAINT_MEMBER* aCoDragged = nullptr );
+
+    /// Soft-pin every cluster shape not in @p aEdited at its current geometry tagged @p aTag for a
+    /// minimal-movement solve @p aEdited must list every edited shape or a neighbour gets held back
+    void pinUneditedShapes( const std::set<KIID>& aEdited, int aTag );
+
+    /// Decide whether a solve reached a usable result a raw Success or Converged always qualifies
+    /// while a Failed code is accepted only when every driving hard constraint is still satisfied
+    bool solveSucceeded( int aSolveResult );
+
+    /// Indices into m_params of the coordinates an anchor maps to invalid if the shape has no
+    /// such anchor for example a circle has no endpoints
+    ANCHOR_PARAMS anchorParams( const CONSTRAINT_MEMBER& aMember ) const;
+
+    /// The orthogonal dimension a two-point length constraint drives or nullptr requires both
+    /// members to be the same dimension START and END in either order
+    PCB_DIM_ORTHOGONAL* orthogonalDimensionForMembers( const std::vector<CONSTRAINT_MEMBER>& aMembers ) const;
 
     /// IU <-> normalized (millimetre, cluster-centred) frame, per axis.
     double normalizeX( int aIU ) const { return ( aIU - m_originX ) * m_invScale; }
@@ -253,6 +305,10 @@ private:
     std::vector<PCB_CONSTRAINT*>  m_referenceConstraints;   ///< Non-driving valued, read back after a solve.
     std::vector<KIID>             m_unmapped;   ///< Constraints Build() could not map (not enforced).
 
+    /// Shapes a direction or angle constraint could collapse to a point only these get a
+    /// stabilize length or radius hold
+    std::set<KIID>                m_angleConstrainedShapes;
+
     double m_originX = 0.0;    ///< IU offset subtracted from x before scaling (cluster anchor).
     double m_originY = 0.0;    ///< IU offset subtracted from y before scaling.
     double m_scale = 1.0;      ///< IU per normalized unit.
@@ -260,6 +316,8 @@ private:
 
     int m_dragTargetX = -1;    ///< Stable backing slot for the drag pin's x target (-1 = unset).
     int m_dragTargetY = -1;    ///< Stable backing slot for the drag pin's y target.
+    int m_coDragTargetX = -1;  ///< Backing slot for the co-dragged pin x target
+    int m_coDragTargetY = -1;  ///< Backing slot for the co-dragged pin y target
 
     // Hold tags reserved by Build() just past the mapped constraints' tags, so a hold can never
     // collide with (and clear) a real constraint on a large cluster.
@@ -288,12 +346,19 @@ private:
  * @param aIncludeDragged if true, the dragged shape is also reported in @p aModified and passed to
  *                  @p aBeforeModify -- for callers (e.g. solve-on-create) that pin where the shape
  *                  already is and do not stage it themselves.
+ * @param aEdited other shapes in this cluster edited alongside the dragged one left free instead
+ *                  of stay-pinned back
+ * @param aCoDragged second anchor moved by the same handle with its own target for a polygon edge
+ *                  drag pinned at the same weight as the primary
  * @return the diagnosis; .solved is false if the cluster could not be built or did not converge.
  */
 CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor,
                                    std::vector<PCB_SHAPE*>*                  aModified = nullptr,
                                    const std::function<void( BOARD_ITEM* )>& aBeforeModify = {},
-                                   bool aIncludeDragged = false, bool aStabilize = false );
+                                   bool aIncludeDragged = false, bool aStabilize = false,
+                                   const std::set<KIID>& aEdited = {},
+                                   const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged =
+                                           std::nullopt );
 
 
 /**
@@ -330,6 +395,13 @@ void ReSolveShapeClusters( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aShapes
                            const std::function<void( BOARD_ITEM* )>& aBeforeModify = {} );
 
 
+/// Re-solve clusters whose new geometry is authoritative holding every edited shape fully fixed
+/// so only constrained neighbors move a failed solve leaves that cluster untouched
+void ReSolveShapeClustersHoldingEdited( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aEditedShapes,
+                                        std::vector<PCB_SHAPE*>*                  aModified = nullptr,
+                                        const std::function<void( BOARD_ITEM* )>& aBeforeModify = {} );
+
+
 /// Re-solve after a resize, e.g. a circle radius edit. Holds aShape fixed so its neighbors adjust.
 void ReSolveAfterShapeResize( BOARD* aBoard, PCB_SHAPE* aShape, std::vector<PCB_SHAPE*>* aModified = nullptr,
                               const std::function<void( BOARD_ITEM* )>& aBeforeModify = {} );
@@ -344,10 +416,50 @@ BOARD_CONSTRAINT_DIAGNOSTICS DiagnoseBoardConstraints( BOARD* aBoard );
 
 
 /**
- * One-line summary of the board's overall constraint state for the info bar, e.g. "Fully
- * constrained" or "Under-constrained (3 degrees of freedom)".  @p aOverConstrained is set true for
- * an error/conflict state so the caller can pick a warning icon.
+ * One cluster's diagnosis, the unit DiagnoseBoardConstraints assembles the board-wide result from
+ * and #BOARD_CONSTRAINT_DIAGNOSER caches state applies to every shape and dimension in the cluster
  */
-wxString ConstraintStateSummary( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag, bool* aOverConstrained = nullptr );
+struct CLUSTER_DIAGNOSIS
+{
+    CONSTRAINT_STATE  state = CONSTRAINT_STATE::WELL_CONSTRAINED;
+    std::vector<KIID> shapeIds;          ///< Cluster shapes in the order the state is written
+    std::vector<KIID> dimensionIds;      ///< Cluster dimensions
+    int               freeDof = 0;       ///< Remaining free DOF folded into the board total
+    std::vector<KIID> conflicting;
+    std::vector<KIID> redundant;
+    std::vector<KIID> erroredUnmapped;   ///< Constraints Build could not map and so not enforced
+};
+
+
+/**
+ * An incremental #DiagnoseBoardConstraints for the interactive edit path
+ *
+ * Caches each cluster diagnosis keyed by constraint-id set with a hash of every solve input so a
+ * model change re-solves only the affected clusters matching DiagnoseBoardConstraints exactly
+ */
+class BOARD_CONSTRAINT_DIAGNOSER
+{
+public:
+    /// Diagnose every cluster reusing cached per-cluster results whose solve inputs are unchanged
+    BOARD_CONSTRAINT_DIAGNOSTICS Diagnose( BOARD* aBoard );
+
+    /// Drop the cache call when the board or view reloads and item-identity assumptions break
+    void Clear();
+
+    /// Clusters actually re-solved across this diagnoser lifetime for testing cache isolation
+    std::size_t SolveCount() const { return m_solveCount; }
+
+private:
+    struct CACHE_ENTRY
+    {
+        std::size_t       hash = 0;
+        CLUSTER_DIAGNOSIS result;
+    };
+
+    // Keyed by the cluster sorted constraint-id set which is stable across a geometry or value
+    // edit and changes only when a constraint is added to or removed from the cluster
+    std::map<std::vector<KIID>, CACHE_ENTRY> m_cache;
+    std::size_t                              m_solveCount = 0;
+};
 
 #endif // BOARD_CONSTRAINT_ADAPTER_H_

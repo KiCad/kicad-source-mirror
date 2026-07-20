@@ -107,7 +107,8 @@ const int GAL_LAYER_ORDER[] = {
 
     LAYER_FP_TEXT, LAYER_FP_REFERENCES, LAYER_FP_VALUES,
 
-    LAYER_RATSNEST, LAYER_ANCHOR, LAYER_POINTS, LAYER_LOCKED_ITEM_SHADOW, LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS,
+    LAYER_RATSNEST, LAYER_ANCHOR, LAYER_POINTS, LAYER_LOCKED_ITEM_SHADOW, LAYER_CONSTRAINT_SHADOW,
+    LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS,
     LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES, LAYER_VIA_THROUGH, LAYER_VIA_BLIND,
     LAYER_VIA_BURIED, LAYER_VIA_MICROVIA,
 
@@ -377,7 +378,8 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
                 LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
                 LAYER_RATSNEST, LAYER_CURSOR,
                 LAYER_ANCHOR,
-                LAYER_LOCKED_ITEM_SHADOW
+                LAYER_LOCKED_ITEM_SHADOW,
+                LAYER_CONSTRAINT_SHADOW
         };
 
         for( int i : layers )
@@ -413,7 +415,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
         LAYER_VIA_HOLEWALLS,   LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES, LAYER_PAD_NETNAMES,
         LAYER_VIA_NETNAMES,    LAYER_SELECT_OVERLAY,  LAYER_GP_OVERLAY,    LAYER_RATSNEST,        LAYER_ANCHOR,
         LAYER_DRC_HIGHLIGHTED, LAYER_DRC_ERROR,       LAYER_DRC_WARNING,   LAYER_DRC_EXCLUSION,   LAYER_MARKER_SHADOWS,
-        LAYER_DRC_SHAPES,      LAYER_CONFLICTS_SHADOW
+        LAYER_DRC_SHAPES,      LAYER_CONFLICTS_SHADOW, LAYER_CONSTRAINT_SHADOW
     };
 
     for( auto layer : layers )
@@ -723,8 +725,11 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     // that may change while the view stays the same.
     m_view->SetLayerTarget( LAYER_CONFLICTS_SHADOW, KIGFX::TARGET_OVERLAY );
 
+    // Constraint shadow drawn under item like locked-item shadow
+    // kept on cached target not overlay and re-cached on set change
     m_view->SetLayerDisplayOnly( LAYER_LOCKED_ITEM_SHADOW );
     m_view->SetLayerDisplayOnly( LAYER_CONFLICTS_SHADOW );
+    m_view->SetLayerDisplayOnly( LAYER_CONSTRAINT_SHADOW );
     m_view->SetLayerDisplayOnly( LAYER_BOARD_OUTLINE_AREA );
 
     // Some more required layers settings

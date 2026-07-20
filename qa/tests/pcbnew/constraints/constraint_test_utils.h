@@ -47,6 +47,39 @@ inline PCB_SHAPE* addSegment( BOARD& aBoard, const VECTOR2I& aStart, const VECTO
 }
 
 
+inline PCB_SHAPE* addBezier( BOARD& aBoard, const VECTOR2I& aStart, const VECTOR2I& aCtrl1,
+                             const VECTOR2I& aCtrl2, const VECTOR2I& aEnd )
+{
+    PCB_SHAPE* bezier = new PCB_SHAPE( &aBoard, SHAPE_T::BEZIER );
+    bezier->SetStart( aStart );
+    bezier->SetBezierC1( aCtrl1 );
+    bezier->SetBezierC2( aCtrl2 );
+    bezier->SetEnd( aEnd );
+    bezier->RebuildBezierToSegmentsPointsList();
+    aBoard.Add( bezier );
+    return bezier;
+}
+
+
+inline PCB_SHAPE* addRect( BOARD& aBoard, const VECTOR2I& aStart, const VECTOR2I& aEnd )
+{
+    PCB_SHAPE* rect = new PCB_SHAPE( &aBoard, SHAPE_T::RECTANGLE );
+    rect->SetStart( aStart );
+    rect->SetEnd( aEnd );
+    aBoard.Add( rect );
+    return rect;
+}
+
+
+inline PCB_SHAPE* addPoly( BOARD& aBoard, const std::vector<VECTOR2I>& aPoints )
+{
+    PCB_SHAPE* poly = new PCB_SHAPE( &aBoard, SHAPE_T::POLY );
+    poly->SetPolyPoints( aPoints );
+    aBoard.Add( poly );
+    return poly;
+}
+
+
 inline PCB_SHAPE* addCircle( BOARD& aBoard, const VECTOR2I& aCenter, int aRadius )
 {
     PCB_SHAPE* circle = new PCB_SHAPE( &aBoard, SHAPE_T::CIRCLE );
@@ -116,7 +149,7 @@ inline PCB_CONSTRAINT* addConstraint( BOARD& aBoard, PCB_CONSTRAINT_TYPE aType,
     PCB_CONSTRAINT* c = new PCB_CONSTRAINT( &aBoard, aType );
 
     for( const CONSTRAINT_MEMBER& m : aMembers )
-        c->AddMember( m.m_item, m.m_anchor );
+        c->AddMember( m.m_item, m.m_anchor, m.m_index );
 
     c->SetValue( aValue );
     aBoard.Add( c );

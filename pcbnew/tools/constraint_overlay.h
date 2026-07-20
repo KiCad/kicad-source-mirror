@@ -22,6 +22,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include <eda_item.h>
@@ -76,6 +77,9 @@ public:
         m_layoutScale = -1.0;   // invalidate the cached layout; the badge set changed
     }
 
+    /// Pick preview anchor drawn at constant on screen size like edit handles nullopt draws none
+    void SetPreviewAnchor( const std::optional<VECTOR2I>& aAnchor ) { m_previewAnchor = aAnchor; }
+
     const BOX2I ViewBBox() const override
     {
         BOX2I bbox;
@@ -105,6 +109,7 @@ private:
 
     std::vector<CONSTRAINT_BADGE> m_badges;
     KIID                          m_selected;
+    std::optional<VECTOR2I>       m_previewAnchor;
 
     mutable std::map<PCB_CONSTRAINT_TYPE, std::unique_ptr<BITMAP_BASE>> m_icons;
     mutable std::map<uint32_t, std::unique_ptr<BITMAP_BASE>>            m_discs;
@@ -169,6 +174,14 @@ public:
 
     const KIID& GetHoverShape() const { return m_hoverShape; }
 
+    /// Preview next constraint pick target while authoring a point based constraint
+    /// @p aElement is shape or dimension outlined @p aAnchor marks point unless @p aWholeElement niluuid clears
+    bool SetPickPreview( const KIID& aElement, bool aWholeElement,
+                         const std::optional<VECTOR2I>& aAnchor );
+
+    /// Drop any pick preview.
+    void ClearPickPreview();
+
     /// Badges placed by the last Update(), for canvas hit-testing.
     const std::vector<CONSTRAINT_BADGE>& Badges() const { return m_badges; }
 
@@ -203,4 +216,10 @@ private:
     OVERLAY_MODE                  m_mode = OVERLAY_MODE::ALWAYS;
     KIID                          m_hoverShape = niluuid;
     CONSTRAINT_BADGE_ITEM         m_badgeItem;
+
+    // Pick preview channel drawn on top of diagnostics tint while authoring a point based constraint
+    // m_previewElement is outlined shape a point pick also marks m_previewAnchor
+    KIID                          m_previewElement = niluuid;
+    bool                          m_previewWhole = true;
+    std::optional<VECTOR2I>       m_previewAnchor;
 };

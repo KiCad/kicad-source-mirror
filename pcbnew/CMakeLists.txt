@@ -394,7 +394,6 @@ set( PCBNEW_CLASS_SRCS
     array_pad_number_provider.cpp
     board_loader.cpp
     constraints/board_constraint_adapter.cpp
-    constraints/constraint_builder.cpp
     tools/constraint_edit_tool.cpp
     tools/constraint_overlay.cpp
     tools/view_overlay_holder.cpp

@@ -56,7 +56,7 @@ void PopulateConstraintList( wxListCtrl* aList, BOARD* aBoard, UNITS_PROVIDER* a
             [&]( const CONSTRAINT_MEMBER& aMember ) -> wxString
             {
                 return ConstraintMemberLabel( aBoard->ResolveItem( aMember.m_item, true ),
-                                              aMember.m_anchor, aUnits );
+                                              aMember, aUnits );
             };
 
     auto addRows =

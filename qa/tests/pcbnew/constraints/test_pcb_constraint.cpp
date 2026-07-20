@@ -172,4 +172,39 @@ BOOST_AUTO_TEST_CASE( DuplicateDetection )
 }
 
 
+BOOST_AUTO_TEST_CASE( VertexMemberIdentity )
+{
+    KIID id;
+    CONSTRAINT_MEMBER a( id, CONSTRAINT_ANCHOR::VERTEX, 2 );
+    CONSTRAINT_MEMBER b( id, CONSTRAINT_ANCHOR::VERTEX, 2 );
+    CONSTRAINT_MEMBER c( id, CONSTRAINT_ANCHOR::VERTEX, 3 );
+
+    BOOST_CHECK( a == b );
+    BOOST_CHECK( !( a == c ) );
+    BOOST_CHECK( ConstraintAnchorFromToken( wxS( "vertex" ) ) == CONSTRAINT_ANCHOR::VERTEX );
+}
+
+
+BOOST_AUTO_TEST_CASE( VertexIndexInDuplicateDetection )
+{
+    KIID item, other;
+
+    auto make = [&]( int aFirstIndex, int aSecondIndex )
+    {
+        PCB_CONSTRAINT constraint( nullptr, PCB_CONSTRAINT_TYPE::COINCIDENT );
+        constraint.AddMember( item, CONSTRAINT_ANCHOR::VERTEX, aFirstIndex );
+        constraint.AddMember( other, CONSTRAINT_ANCHOR::VERTEX, aSecondIndex );
+        return constraint;
+    };
+
+    PCB_CONSTRAINT vertex02 = make( 0, 2 );
+
+    // Index is part of a member identity so the same anchor on a different vertex of the same
+    // item is a different relation even with order insensitive comparison
+    BOOST_CHECK( ConstraintsAreDuplicate( vertex02, make( 0, 2 ) ) );
+    BOOST_CHECK( !ConstraintsAreDuplicate( vertex02, make( 2, 2 ) ) );
+    BOOST_CHECK( !ConstraintsAreDuplicate( vertex02, make( 0, 3 ) ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

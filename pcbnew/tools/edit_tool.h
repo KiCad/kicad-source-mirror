@@ -29,11 +29,13 @@
 #include <tools/pcb_selection_tool.h>
 #include <status_popup.h>
 #include <unordered_set>
+#include <vector>
 
 
 class BOARD_COMMIT;
 class BOARD_ITEM;
 class CONNECTIVITY_DATA;
+class PCB_SHAPE;
 class STATUS_TEXT_POPUP;
 
 namespace KIGFX::PREVIEW
@@ -225,13 +227,21 @@ private:
     bool pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                              const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );
 
-    bool doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit, bool aAutoStart );
+    /// Runs interactive move drag when @p aConstraintShapes is non null previews constraint solve live
+    /// each tick and returns moved shapes for a final settle solve other callers pass null and skip it
+    bool doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit, bool aAutoStart,
+                          std::vector<PCB_SHAPE*>* aConstraintShapes = nullptr );
 
     ///< Rebuilds the ratsnest for operations that require it outside the commit rebuild
     void rebuildConnectivity();
 
     ///< Re-solve the geometric constraints of any shapes in @p aSelection after a transform.
     void reSolveConstraintsAfterEdit( const PCB_SELECTION& aSelection );
+
+public:
+    ///< Collect constrainable PCB_SHAPEs in @p aSelection recursing groups and footprints so
+    ///< contained shapes seed clusters too shared with properties panel for drag like settle on edit
+    static void collectConstraintShapes( const SELECTION& aSelection, std::vector<PCB_SHAPE*>& aShapes );
 
 private:
     PCB_SELECTION_TOOL*   m_selectionTool;

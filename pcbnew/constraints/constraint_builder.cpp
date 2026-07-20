@@ -24,9 +24,12 @@
 #include <ranges>
 
 #include <board.h>
+#include <core/kicad_algo.h>
 #include <footprint.h>
 #include <geometry/eda_angle.h>
 #include <geometry/seg.h>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
 #include <pcb_dimension.h>
 #include <pcb_shape.h>
 
@@ -267,6 +270,7 @@ std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintShapeAnchors( const PCB_SHAPE* aS
     switch( aShape->GetShape() )
     {
     case SHAPE_T::SEGMENT:
+    case SHAPE_T::BEZIER:
         return { { CONSTRAINT_ANCHOR::START, aShape->GetStart() },
                  { CONSTRAINT_ANCHOR::END, aShape->GetEnd() } };
 
@@ -280,9 +284,70 @@ std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintShapeAnchors( const PCB_SHAPE* aS
     case SHAPE_T::ELLIPSE:
         return { { CONSTRAINT_ANCHOR::CENTER, aShape->GetCenter() } };
 
+    case SHAPE_T::RECTANGLE:
+    {
+        // TL TR BR BL order must match frozen corner roles of adapter
+        VECTOR2I s = aShape->GetStart();
+        VECTOR2I e = aShape->GetEnd();
+        VECTOR2I tl( std::min( s.x, e.x ), std::min( s.y, e.y ) );
+        VECTOR2I br( std::max( s.x, e.x ), std::max( s.y, e.y ) );
+
+        return { { CONSTRAINT_ANCHOR::VERTEX, tl, 0 },
+                 { CONSTRAINT_ANCHOR::VERTEX, VECTOR2I( br.x, tl.y ), 1 },
+                 { CONSTRAINT_ANCHOR::VERTEX, br, 2 },
+                 { CONSTRAINT_ANCHOR::VERTEX, VECTOR2I( tl.x, br.y ), 3 } };
+    }
+
+    case SHAPE_T::POLY:
+    {
+        // Same eligibility gate as adapter ingestion so picker never offers unmappable anchor
+        if( !ConstraintPolygonIsModelable( aShape ) )
+            return anchors;
+
+        const SHAPE_LINE_CHAIN& outline = aShape->GetPolyShape().COutline( 0 );
+
+        for( int i = 0; i < outline.PointCount(); ++i )
+            anchors.push_back( { CONSTRAINT_ANCHOR::VERTEX, outline.CPoint( i ), i } );
+
+        return anchors;
+    }
+
     default:
         return anchors;
     }
+}
+
+
+bool ConstraintPolygonIsModelable( const PCB_SHAPE* aShape )
+{
+    if( !aShape || aShape->GetShape() != SHAPE_T::POLY )
+        return false;
+
+    const SHAPE_POLY_SET& polySet = aShape->GetPolyShape();
+
+    if( polySet.OutlineCount() != 1 || polySet.HoleCount( 0 ) > 0 )
+        return false;
+
+    const SHAPE_LINE_CHAIN& outline = polySet.COutline( 0 );
+
+    return outline.PointCount() > 0 && outline.ArcCount() == 0;
+}
+
+
+std::optional<CONSTRAINT_ANCHOR_POINT> ConstraintShapeVertex( const PCB_SHAPE* aShape, int aIndex )
+{
+    if( !aShape || aIndex < 0 )
+        return std::nullopt;
+
+    if( aShape->GetShape() != SHAPE_T::RECTANGLE && aShape->GetShape() != SHAPE_T::POLY )
+        return std::nullopt;
+
+    std::vector<CONSTRAINT_ANCHOR_POINT> anchors = ConstraintShapeAnchors( aShape );
+
+    if( aIndex >= (int) anchors.size() )
+        return std::nullopt;
+
+    return anchors[aIndex];
 }
 
 
@@ -301,7 +366,7 @@ std::optional<CONSTRAINT_MEMBER> NearestAnchorAmong( const std::vector<PCB_SHAPE
             if( dist <= best )
             {
                 best = dist;
-                result = CONSTRAINT_MEMBER( shape->m_Uuid, a.anchor );
+                result = CONSTRAINT_MEMBER( shape->m_Uuid, a.anchor, a.index );
             }
         }
     }
@@ -363,7 +428,8 @@ std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard )
 
 
 std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( BOARD* aBoard, const VECTOR2I& aPos,
-                                                          double aMaxDist )
+                                                          double aMaxDist,
+                                                          const std::vector<CONSTRAINT_MEMBER>& aExclude )
 {
     double                           best = aMaxDist;
     std::optional<CONSTRAINT_MEMBER> result;
@@ -372,17 +438,151 @@ std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( BOARD* aBoard, const V
     {
         for( const CONSTRAINT_ANCHOR_POINT& a : ConstraintItemAnchors( item ) )
         {
+            CONSTRAINT_MEMBER candidate( item->m_Uuid, a.anchor, a.index );
+
+            // Skip already picked handle so distinct coincident endpoint stays reachable
+            if( alg::contains( aExclude, candidate ) )
+                continue;
+
             double dist = ( a.pos - aPos ).EuclideanNorm();
 
             if( dist <= best )
             {
                 best = dist;
-                result = CONSTRAINT_MEMBER( item->m_Uuid, a.anchor );
+                result = candidate;
             }
         }
     }
 
     return result;
+}
+
+
+std::vector<DIMENSION_ENDPOINT_BINDING>
+SelectDimensionEndpointBindings( BOARD* aBoard, const KIID& aDimension, const VECTOR2I& aStart,
+                                 const std::optional<VECTOR2I>& aEnd, double aMaxDist )
+{
+    std::vector<DIMENSION_ENDPOINT_BINDING> bindings;
+
+    if( !aBoard )
+        return bindings;
+
+    // Best pair of distinct anchors on one item within aMaxDist minimizing summed distance
+    // Distinct anchors required or endpoints merge and pairs judged jointly not per end nearest
+    using ANCHOR_PAIR = std::pair<CONSTRAINT_MEMBER, CONSTRAINT_MEMBER>;
+
+    auto bestPairOn = [&]( BOARD_ITEM* aItem ) -> std::optional<std::pair<ANCHOR_PAIR, double>>
+    {
+        std::vector<CONSTRAINT_ANCHOR_POINT> anchors = ConstraintItemAnchors( aItem );
+
+        // Sum decomposes per endpoint best and runner up END anchors computed once serve every
+        // START candidate keeps a dense polygon linear in vertex count instead of quadratic
+        const size_t        none = anchors.size();
+        size_t              bestEnd = none;
+        size_t              secondEnd = none;
+        std::vector<double> dEnd( anchors.size(), 0.0 );
+
+        for( size_t j = 0; j < anchors.size(); ++j )
+        {
+            dEnd[j] = ( anchors[j].pos - *aEnd ).EuclideanNorm();
+
+            if( dEnd[j] > aMaxDist )
+                continue;
+
+            if( bestEnd == none || dEnd[j] < dEnd[bestEnd] )
+            {
+                secondEnd = bestEnd;
+                bestEnd = j;
+            }
+            else if( secondEnd == none || dEnd[j] < dEnd[secondEnd] )
+            {
+                secondEnd = j;
+            }
+        }
+
+        if( bestEnd == none )
+            return std::nullopt;
+
+        std::optional<std::pair<ANCHOR_PAIR, double>> best;
+
+        for( size_t i = 0; i < anchors.size(); ++i )
+        {
+            double dStart = ( anchors[i].pos - aStart ).EuclideanNorm();
+
+            if( dStart > aMaxDist )
+                continue;
+
+            size_t j = ( i == bestEnd ) ? secondEnd : bestEnd;
+
+            if( j == none )
+                continue;
+
+            double sum = dStart + dEnd[j];
+
+            if( !best || sum < best->second )
+            {
+                best = std::make_pair(
+                        ANCHOR_PAIR{ CONSTRAINT_MEMBER( aItem->m_Uuid, anchors[i].anchor,
+                                                        anchors[i].index ),
+                                     CONSTRAINT_MEMBER( aItem->m_Uuid, anchors[j].anchor,
+                                                        anchors[j].index ) },
+                        sum );
+            }
+        }
+
+        return best;
+    };
+
+    // Prefer single object reaching both endpoints so a single feature dimension stays bound at
+    // both ends
+    if( aEnd )
+    {
+        std::optional<ANCHOR_PAIR> bestPair;
+        double                     bestSum = 0.0;
+
+        for( BOARD_ITEM* item : CollectConstrainableItems( aBoard ) )
+        {
+            if( item->m_Uuid == aDimension )
+                continue;
+
+            auto pair = bestPairOn( item );
+
+            if( !pair )
+                continue;
+
+            if( !bestPair || pair->second < bestSum )
+            {
+                bestSum = pair->second;
+                bestPair = pair->first;
+            }
+        }
+
+        if( bestPair )
+        {
+            bindings.push_back( { CONSTRAINT_ANCHOR::START, bestPair->first } );
+            bindings.push_back( { CONSTRAINT_ANCHOR::END, bestPair->second } );
+            return bindings;
+        }
+    }
+
+    // Else bind each endpoint to its own nearest anchor the two may land on different objects
+    // and either may find nothing
+    std::vector<CONSTRAINT_MEMBER> exclude{ { aDimension, CONSTRAINT_ANCHOR::START },
+                                            { aDimension, CONSTRAINT_ANCHOR::END } };
+
+    if( auto startTarget = NearestConstraintAnchor( aBoard, aStart, aMaxDist, exclude ) )
+    {
+        bindings.push_back( { CONSTRAINT_ANCHOR::START, *startTarget } );
+        exclude.push_back( *startTarget );
+    }
+
+    if( aEnd )
+    {
+        if( auto endTarget = NearestConstraintAnchor( aBoard, *aEnd, aMaxDist, exclude ) )
+            bindings.push_back( { CONSTRAINT_ANCHOR::END, *endTarget } );
+    }
+
+    return bindings;
 }
 
 
@@ -437,11 +637,24 @@ std::optional<VECTOR2I> ConstraintAnchorPosition( BOARD* aBoard, const CONSTRAIN
 {
     for( const CONSTRAINT_ANCHOR_POINT& a : ConstraintItemAnchors( ResolveConstrainableItem( aBoard, aMember.m_item ) ) )
     {
-        if( a.anchor == aMember.m_anchor )
+        // VERTEX anchor needs its ordinal too else every vertex member resolves to vertex 0
+        if( a.anchor == aMember.m_anchor
+            && ( a.anchor != CONSTRAINT_ANCHOR::VERTEX || a.index == aMember.m_index ) )
+        {
             return a.pos;
+        }
     }
 
     return std::nullopt;
+}
+
+
+double InitialConstraintValue( PCB_CONSTRAINT_TYPE aType, double aMeasured,
+                               const std::map<PCB_CONSTRAINT_TYPE, double>& aRemembered )
+{
+    auto it = aRemembered.find( aType );
+
+    return it != aRemembered.end() ? it->second : aMeasured;
 }
 
 
@@ -455,4 +668,363 @@ std::optional<KIID> NearestConstrainedShape( const std::vector<PCB_SHAPE*>& aCan
                                     } );
 
     return it == aCandidates.end() ? std::nullopt : std::optional<KIID>( ( *it )->m_Uuid );
+}
+
+
+std::optional<KIID> SelectRadialDimensionTarget( BOARD* aBoard, const KIID& aDimension,
+                                                 const VECTOR2I& aCenter, const VECTOR2I& aRim,
+                                                 double aMaxDist )
+{
+    if( !aBoard )
+        return std::nullopt;
+
+    std::optional<KIID> best;
+    double              bestErr = 0.0;
+
+    for( PCB_SHAPE* shape : CollectConstraintShapes( aBoard ) )
+    {
+        if( shape->m_Uuid == aDimension || !isCircleOrArc( shape ) )
+            continue;
+
+        // Centre and rim must land on the same circle or arc centre and circumference or else a
+        // radial dimension over unrelated geometry would bind spuriously
+        std::optional<VECTOR2I> centerPos;
+
+        for( const CONSTRAINT_ANCHOR_POINT& a : ConstraintShapeAnchors( shape ) )
+        {
+            if( a.anchor == CONSTRAINT_ANCHOR::CENTER )
+                centerPos = a.pos;
+        }
+
+        if( !centerPos )
+            continue;
+
+        double centerErr = ( *centerPos - aCenter ).EuclideanNorm();
+
+        if( centerErr > aMaxDist )
+            continue;
+
+        double rimErr = std::abs( ( aRim - *centerPos ).EuclideanNorm() - shape->GetRadius() );
+
+        if( rimErr > aMaxDist )
+            continue;
+
+        // Arc outline is swept portion only not the whole circle so a rim point off the arc must
+        // not bind
+        if( shape->GetShape() == SHAPE_T::ARC && !shape->HitTest( aRim, KiROUND( aMaxDist ) ) )
+            continue;
+
+        double err = centerErr + rimErr;
+
+        if( !best || err < bestErr )
+        {
+            bestErr = err;
+            best = shape->m_Uuid;
+        }
+    }
+
+    return best;
+}
+
+
+bool DimensionEndpointsBound( BOARD* aBoard, const PCB_DIMENSION_BASE* aDimension )
+{
+    if( !aBoard || !aDimension )
+        return false;
+
+    const CONSTRAINT_MEMBER startMember( aDimension->m_Uuid, CONSTRAINT_ANCHOR::START );
+    const CONSTRAINT_MEMBER endMember( aDimension->m_Uuid, CONSTRAINT_ANCHOR::END );
+
+    auto anyConstraint = [&]( const auto& aMatch )
+    {
+        if( std::ranges::any_of( aBoard->Constraints(), aMatch ) )
+            return true;
+
+        // Bindings are parented to the owning dimension footprint not necessarily the first so
+        // every footprint must be scanned to match the write path
+        return std::ranges::any_of( aBoard->Footprints(),
+                                    [&]( const FOOTPRINT* aFootprint )
+                                    { return std::ranges::any_of( aFootprint->Constraints(), aMatch ); } );
+    };
+
+    // Radial dimension binds centre coincident plus rim on outline of one circle or arc
+    // Legs on different objects or an object that cannot play the radius role never offer Driving
+    if( aDimension->Type() == PCB_DIM_RADIAL_T )
+    {
+        auto rimOnItem = [&]( const KIID& aItem )
+        {
+            return anyConstraint(
+                    [&]( const PCB_CONSTRAINT* aConstraint )
+                    {
+                        if( aConstraint->GetConstraintType() != PCB_CONSTRAINT_TYPE::POINT_ON_LINE )
+                            return false;
+
+                        // Point on line binding is asymmetric the dimension rim point is member 0
+                        // and the object outline WHOLE anchor is member 1
+                        const std::vector<CONSTRAINT_MEMBER>& members = aConstraint->GetMembers();
+
+                        return members.size() == 2 && members[0] == endMember
+                               && members[1] == CONSTRAINT_MEMBER( aItem, CONSTRAINT_ANCHOR::WHOLE );
+                    } );
+        };
+
+        return anyConstraint(
+                [&]( const PCB_CONSTRAINT* aConstraint )
+                {
+                    if( aConstraint->GetConstraintType() != PCB_CONSTRAINT_TYPE::COINCIDENT )
+                        return false;
+
+                    const std::vector<CONSTRAINT_MEMBER>& members = aConstraint->GetMembers();
+
+                    if( members.size() != 2 )
+                        return false;
+
+                    // Authored dimension first but coincident is symmetric so accept either order
+                    const CONSTRAINT_MEMBER* target = nullptr;
+
+                    if( members[0] == startMember )
+                        target = &members[1];
+                    else if( members[1] == startMember )
+                        target = &members[0];
+
+                    if( !target || target->m_anchor != CONSTRAINT_ANCHOR::CENTER )
+                        return false;
+
+                    BOARD_ITEM* item = ResolveConstrainableItem( aBoard, target->m_item );
+
+                    return item && isCircleOrArc( item ) && rimOnItem( target->m_item );
+                } );
+    }
+
+    // Aligned or orthogonal needs a coincident per endpoint whose target still resolves a target
+    // pointing at a deleted item or a stale vertex index does not count
+    auto hasCoincident = [&]( const CONSTRAINT_MEMBER& aMember )
+    {
+        return anyConstraint(
+                [&]( const PCB_CONSTRAINT* aConstraint )
+                {
+                    if( aConstraint->GetConstraintType() != PCB_CONSTRAINT_TYPE::COINCIDENT )
+                        return false;
+
+                    const std::vector<CONSTRAINT_MEMBER>& members = aConstraint->GetMembers();
+
+                    // Must pair with a distinct target not itself
+                    if( members.size() != 2 || members[0].m_item == members[1].m_item )
+                        return false;
+
+                    if( members[0] == aMember )
+                        return ConstraintAnchorPosition( aBoard, members[1] ).has_value();
+
+                    return members[1] == aMember
+                           && ConstraintAnchorPosition( aBoard, members[0] ).has_value();
+                } );
+    };
+
+    return hasCoincident( startMember ) && hasCoincident( endMember );
+}
+
+
+bool DimensionHasValueMode( const PCB_DIMENSION_BASE* aDimension )
+{
+    if( !aDimension )
+        return false;
+
+    switch( aDimension->Type() )
+    {
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    case PCB_DIM_RADIAL_T:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+
+PCB_CONSTRAINT* FindDimensionLengthConstraint( BOARD* aBoard, const PCB_DIMENSION_BASE* aDimension )
+{
+    if( !aBoard || !aDimension )
+        return nullptr;
+
+    const CONSTRAINT_MEMBER startMember( aDimension->m_Uuid, CONSTRAINT_ANCHOR::START );
+    const CONSTRAINT_MEMBER endMember( aDimension->m_Uuid, CONSTRAINT_ANCHOR::END );
+
+    auto matches = [&]( const PCB_CONSTRAINT* aConstraint )
+    {
+        if( aConstraint->GetConstraintType() != PCB_CONSTRAINT_TYPE::FIXED_LENGTH )
+            return false;
+
+        const std::vector<CONSTRAINT_MEMBER>& members = aConstraint->GetMembers();
+
+        return members.size() == 2
+               && ( ( members[0] == startMember && members[1] == endMember )
+                    || ( members[0] == endMember && members[1] == startMember ) );
+    };
+
+    auto scan = [&]( const CONSTRAINTS& aList ) -> PCB_CONSTRAINT*
+    {
+        auto it = std::ranges::find_if( aList, matches );
+        return it != aList.end() ? *it : nullptr;
+    };
+
+    if( PCB_CONSTRAINT* c = scan( aBoard->Constraints() ) )
+        return c;
+
+    // Driving length is parented to the owning dimension footprint not necessarily the first so
+    // scan every footprint to match the write
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+    {
+        if( PCB_CONSTRAINT* c = scan( footprint->Constraints() ) )
+            return c;
+    }
+
+    return nullptr;
+}
+
+
+bool DimensionCanDrive( BOARD* aBoard, const PCB_DIMENSION_BASE* aDimension )
+{
+    if( !DimensionHasValueMode( aDimension ) )
+        return false;
+
+    if( DimensionEndpointsBound( aBoard, aDimension ) )
+        return true;
+
+    PCB_CONSTRAINT* existing = FindDimensionLengthConstraint( aBoard, aDimension );
+
+    return existing && existing->IsDriving();
+}
+
+
+DIM_VALUE_MODE DimensionValueMode( BOARD* aBoard, const PCB_DIMENSION_BASE* aDimension )
+{
+    PCB_CONSTRAINT* lengthConstraint = FindDimensionLengthConstraint( aBoard, aDimension );
+
+    if( lengthConstraint && lengthConstraint->IsDriving() )
+        return DIM_VALUE_MODE::DRIVING;
+
+    if( aDimension && aDimension->GetOverrideTextEnabled() )
+        return DIM_VALUE_MODE::ARBITRARY;
+
+    return DIM_VALUE_MODE::DRIVEN;
+}
+
+
+PCB_CONSTRAINT* SetDimensionValueMode( BOARD* aBoard, PCB_DIMENSION_BASE* aDimension, DIM_VALUE_MODE aMode,
+                                       std::optional<int>                        aDrivingLengthIU,
+                                       const std::optional<wxString>&            aOverrideText,
+                                       const std::function<void( BOARD_ITEM* )>& aBeforeModify,
+                                       const std::function<void( BOARD_ITEM* )>& aStageAdd,
+                                       const std::function<void( BOARD_ITEM* )>& aBeforeRemove )
+{
+    if( !aBoard || !DimensionHasValueMode( aDimension ) )
+        return nullptr;
+
+    PCB_CONSTRAINT* existing = FindDimensionLengthConstraint( aBoard, aDimension );
+
+    if( aMode == DIM_VALUE_MODE::DRIVING )
+    {
+        // Unbound dimension has no geometry to drive and a non positive length would collapse the
+        // constraint so the transition rejects with the board untouched
+        if( !aDrivingLengthIU || *aDrivingLengthIU <= 0 || !DimensionCanDrive( aBoard, aDimension ) )
+            return nullptr;
+
+        aBeforeModify( aDimension );
+        aDimension->SetOverrideTextEnabled( false );
+        aDimension->Update();
+
+        if( existing )
+        {
+            aBeforeModify( existing );
+            existing->SetValue( *aDrivingLengthIU );
+            existing->SetDriving( true );
+            return existing;
+        }
+
+        BOARD_ITEM* parent = aDimension->GetParentFootprint()
+                                     ? static_cast<BOARD_ITEM*>( aDimension->GetParentFootprint() )
+                                     : static_cast<BOARD_ITEM*>( aBoard );
+
+        auto constraint = std::make_unique<PCB_CONSTRAINT>( parent, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+        constraint->AddMember( aDimension->m_Uuid, CONSTRAINT_ANCHOR::START );
+        constraint->AddMember( aDimension->m_Uuid, CONSTRAINT_ANCHOR::END );
+        constraint->SetValue( *aDrivingLengthIU );
+        constraint->SetDriving( true );
+
+        PCB_CONSTRAINT* added = constraint.get();
+        aStageAdd( constraint.release() );
+        return added;
+    }
+
+    aBeforeModify( aDimension );
+    aDimension->SetOverrideTextEnabled( aMode == DIM_VALUE_MODE::ARBITRARY );
+
+    if( aMode == DIM_VALUE_MODE::ARBITRARY && aOverrideText )
+        aDimension->SetOverrideText( *aOverrideText );
+
+    aDimension->Update();
+
+    // Driven and Arbitrary both measure geometry natively so any driving length is dropped
+    if( existing )
+        aBeforeRemove( existing );
+
+    return nullptr;
+}
+
+
+void RemapPolygonVertexMembers( BOARD* aBoard, const KIID& aPoly, int aChangedIndex, int aDelta,
+                                const std::function<void( BOARD_ITEM* )>& aBeforeModify,
+                                const std::function<void( BOARD_ITEM* )>& aBeforeRemove )
+{
+    if( !aBoard || aDelta == 0 )
+        return;
+
+    auto remapIn = [&]( const CONSTRAINTS& aConstraints )
+    {
+        for( PCB_CONSTRAINT* constraint : aConstraints )
+        {
+            bool shifts = false;
+            bool doomed = false;
+
+            for( const CONSTRAINT_MEMBER& member : constraint->GetMembers() )
+            {
+                if( member.m_item != aPoly || member.m_anchor != CONSTRAINT_ANCHOR::VERTEX )
+                    continue;
+
+                if( aDelta < 0 && member.m_index == aChangedIndex )
+                    doomed = true;
+                else if( member.m_index >= aChangedIndex )
+                    shifts = true;
+            }
+
+            // Deleted vertex drags its bound member down and no fixed arity solver form survives
+            // losing one so the whole constraint retires left unedited the staged removal image
+            // keeps the authored members for undo
+            if( doomed )
+            {
+                aBeforeRemove( constraint );
+                continue;
+            }
+
+            if( !shifts )
+                continue;
+
+            aBeforeModify( constraint );
+
+            for( CONSTRAINT_MEMBER& member : constraint->Members() )
+            {
+                if( member.m_item == aPoly && member.m_anchor == CONSTRAINT_ANCHOR::VERTEX
+                        && member.m_index >= aChangedIndex )
+                {
+                    member.m_index += aDelta;
+                }
+            }
+        }
+    };
+
+    remapIn( aBoard->Constraints() );
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+        remapIn( footprint->Constraints() );
 }

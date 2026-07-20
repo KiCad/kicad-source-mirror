@@ -29,7 +29,9 @@
 #include <board_commit.h>
 #include <board_item.h>
 #include <eda_group.h>
+#include <kiid.h>
 #include <lset.h>
+#include <map>
 #include <unordered_set>
 
 namespace KIGFX
@@ -126,8 +128,12 @@ public:
      *
      * @param addToParentGroup if the original is part of a group then the new member will also
      *                         be added to said group
+     * @param aKIIDMap if non-null orig-to-dupe KIID map for group and descendants captured at
+     *                 clone time members iterate unordered so this is the only reliable pairing
+     *                 eg for re-pointing constraints
      */
-    PCB_GROUP* DeepDuplicate( bool addToParentGroup, BOARD_COMMIT* aCommit = nullptr ) const;
+    PCB_GROUP* DeepDuplicate( bool addToParentGroup, BOARD_COMMIT* aCommit = nullptr,
+                              std::map<KIID, KIID>* aKIIDMap = nullptr ) const;
 
     /// @copydoc BOARD_ITEM::IsOnLayer
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;

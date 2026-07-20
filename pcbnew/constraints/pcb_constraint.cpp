@@ -27,6 +27,7 @@
 #include <geometry/eda_angle.h>
 #include <geometry/shape_compound.h>
 #include <i18n_utility.h>
+#include <pcb_shape.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
@@ -101,6 +102,7 @@ const char* ConstraintAnchorToken( CONSTRAINT_ANCHOR aAnchor )
     case CONSTRAINT_ANCHOR::MID:    return "mid";
     case CONSTRAINT_ANCHOR::CENTER: return "center";
     case CONSTRAINT_ANCHOR::RADIUS: return "radius";
+    case CONSTRAINT_ANCHOR::VERTEX: return "vertex";
     }
 
     return "whole";
@@ -109,7 +111,7 @@ const char* ConstraintAnchorToken( CONSTRAINT_ANCHOR aAnchor )
 
 CONSTRAINT_ANCHOR ConstraintAnchorFromToken( const wxString& aToken )
 {
-    for( int i = 0; i <= static_cast<int>( CONSTRAINT_ANCHOR::RADIUS ); ++i )
+    for( int i = 0; i <= static_cast<int>( CONSTRAINT_ANCHOR::VERTEX ); ++i )
     {
         CONSTRAINT_ANCHOR anchor = static_cast<CONSTRAINT_ANCHOR>( i );
 
@@ -191,6 +193,7 @@ wxString ConstraintAnchorLabel( CONSTRAINT_ANCHOR aAnchor )
     case CONSTRAINT_ANCHOR::MID:    return _( "mid" );
     case CONSTRAINT_ANCHOR::CENTER: return _( "center" );
     case CONSTRAINT_ANCHOR::RADIUS: return _( "radius" );
+    case CONSTRAINT_ANCHOR::VERTEX: return _( "vertex" );
     }
 
     return wxEmptyString;
@@ -258,6 +261,11 @@ void PCB_CONSTRAINT::Serialize( google::protobuf::Any& aContainer ) const
         ConstraintMember* m = constraint.add_members();
         m->mutable_item()->set_value( member.m_item.AsStdString() );
         m->set_anchor( ToProtoEnum<CONSTRAINT_ANCHOR, ConstraintAnchor>( member.m_anchor ) );
+
+        // Only vertex anchors carry an index leaving it absent elsewhere keeps the negative one
+        // sentinel out of the wire format
+        if( member.m_anchor == CONSTRAINT_ANCHOR::VERTEX )
+            m->set_index( member.m_index );
     }
 
     aContainer.PackFrom( constraint );
@@ -289,7 +297,11 @@ bool PCB_CONSTRAINT::Deserialize( const google::protobuf::Any& aContainer )
     {
         CONSTRAINT_ANCHOR anchor = FromProtoEnum<CONSTRAINT_ANCHOR, ConstraintAnchor>( m.anchor() );
 
-        m_members.emplace_back( KIID( m.item().value() ), anchor );
+        // A vertex member without an explicit index gets the negative one sentinel rather than a
+        // silent vertex zero no other anchor may carry an index at all
+        int index = anchor == CONSTRAINT_ANCHOR::VERTEX && m.has_index() ? m.index() : -1;
+
+        m_members.emplace_back( KIID( m.item().value() ), anchor, index );
     }
 
     return true;
@@ -390,14 +402,30 @@ wxString ConstraintDisplayLabel( const PCB_CONSTRAINT& aConstraint, EDA_UNITS aU
 }
 
 
-wxString ConstraintMemberLabel( BOARD_ITEM* aItem, CONSTRAINT_ANCHOR aAnchor,
+wxString ConstraintMemberLabel( BOARD_ITEM* aItem, const CONSTRAINT_MEMBER& aMember,
                                 UNITS_PROVIDER* aUnitsProvider )
 {
     if( !aItem )
         return _( "(missing)" );
 
     wxString text = aItem->GetItemDescription( aUnitsProvider, false );
-    wxString anchor = ConstraintAnchorLabel( aAnchor );
+    wxString anchor;
+
+    if( aMember.m_anchor == CONSTRAINT_ANCHOR::VERTEX && aMember.m_index >= 0 )
+    {
+        const PCB_SHAPE* shape = dynamic_cast<const PCB_SHAPE*>( aItem );
+
+        // Ordinals read 1 based matching the vertex editor pane grid row numbering Widened so a
+        // hostile INT_MAX index from a file cannot overflow
+        if( shape && shape->GetShape() == SHAPE_T::RECTANGLE )
+            anchor = wxString::Format( _( "corner %lld" ), static_cast<long long>( aMember.m_index ) + 1 );
+        else
+            anchor = wxString::Format( _( "vertex %lld" ), static_cast<long long>( aMember.m_index ) + 1 );
+    }
+    else
+    {
+        anchor = ConstraintAnchorLabel( aMember.m_anchor );
+    }
 
     if( !anchor.IsEmpty() )
         text += wxString::Format( wxT( " (%s)" ), anchor );

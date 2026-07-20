@@ -35,11 +35,16 @@
 #include <view/view_overlay.h>
 #include <gal/color4d.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <gal/painter.h>
+#include <render_settings.h>
 #include <base_units.h>
 #include <bitmap_base.h>
 #include <bitmaps.h>
 #include <math/util.h>
 #include <geometry/eda_angle.h>
+#include <geometry/shape_ellipse.h>
+#include <geometry/shape_line_chain.h>
+#include <tool/edit_points.h>
 
 #include <constraints/pcb_constraint.h>
 #include <constraints/constraint_builder.h>
@@ -69,6 +74,9 @@ void CONSTRAINT_OVERLAY::Clear()
 {
     if( !m_overlay )
         return;
+
+    m_previewElement = niluuid;
+    m_previewAnchor.reset();
 
     m_overlay->Clear();
     m_view->Update( m_overlay.get() );
@@ -222,6 +230,27 @@ bool CONSTRAINT_OVERLAY::SetHoverShape( const KIID& aShape )
 }
 
 
+bool CONSTRAINT_OVERLAY::SetPickPreview( const KIID& aElement, bool aWholeElement,
+                                         const std::optional<VECTOR2I>& aAnchor )
+{
+    if( m_previewElement == aElement && m_previewWhole == aWholeElement && m_previewAnchor == aAnchor )
+        return false;
+
+    m_previewElement = aElement;
+    m_previewWhole = aWholeElement;
+    m_previewAnchor = aAnchor;
+
+    render();
+    return true;
+}
+
+
+void CONSTRAINT_OVERLAY::ClearPickPreview()
+{
+    SetPickPreview( niluuid, true, std::nullopt );
+}
+
+
 void CONSTRAINT_OVERLAY::Update( const BOARD_CONSTRAINT_DIAGNOSTICS& aDiag )
 {
     if( !m_overlay || !m_board )
@@ -248,9 +277,22 @@ void CONSTRAINT_OVERLAY::render()
     m_overlay->Clear();
     m_badges.clear();
 
-    const COLOR4D underColor( 0.80, 0.42, 0.02, 0.9 );   // amber, free DOF remain
-    const COLOR4D wellColor( 0.18, 0.72, 0.30, 0.9 );    // green, fully constrained
-    const COLOR4D overColor( 0.92, 0.18, 0.18, 0.9 );    // red, conflicting / errored
+    // State tints are theme colors read from active color settings so they can be rethemed
+    // Literals are shipped defaults used as fallback when no painter attached such as headless tests
+    COLOR4D underColor( 0.80, 0.42, 0.02, 0.9 );   // amber, free DOF remain
+    COLOR4D wellColor( 0.18, 0.72, 0.30, 0.9 );    // green, fully constrained
+    COLOR4D overColor( 0.92, 0.18, 0.18, 0.9 );    // red, conflicting / errored
+
+    if( KIGFX::PAINTER* painter = m_view->GetPainter() )
+    {
+        if( KIGFX::RENDER_SETTINGS* settings = painter->GetSettings() )
+        {
+            underColor = settings->GetLayerColor( LAYER_CONSTRAINT_UNDER );
+            wellColor = settings->GetLayerColor( LAYER_CONSTRAINT_WELL );
+            overColor = settings->GetLayerColor( LAYER_CONSTRAINT_OVER );
+        }
+    }
+
     const double  lineWidth = pcbIUScale.mmToIU( 0.15 );
 
     auto colorForState =
@@ -293,16 +335,38 @@ void CONSTRAINT_OVERLAY::render()
                     m_overlay->Arc( aShape->GetCenter(), aShape->GetRadius(), startAngle,
                                     startAngle + aShape->GetArcAngle() );
                 }
+                else if( aShape->GetShape() == SHAPE_T::ELLIPSE )
+                {
+                    SHAPE_ELLIPSE ellipse( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
+                                           aShape->GetEllipseMinorRadius(), aShape->GetEllipseRotation() );
+                    m_overlay->Polyline( ellipse.ConvertToPolyline( aShape->GetMaxError() ) );
+                }
+                else if( aShape->GetShape() == SHAPE_T::ELLIPSE_ARC )
+                {
+                    SHAPE_ELLIPSE ellipse( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
+                                           aShape->GetEllipseMinorRadius(), aShape->GetEllipseRotation(),
+                                           aShape->GetEllipseStartAngle(), aShape->GetEllipseEndAngle() );
+                    m_overlay->Polyline( ellipse.ConvertToPolyline( aShape->GetMaxError() ) );
+                }
+                else if( aShape->GetShape() == SHAPE_T::BEZIER )
+                {
+                    // Stroke flattened curve fall back to chord if untessellated
+                    const std::vector<VECTOR2I>& pts = aShape->GetBezierPoints();
+
+                    if( pts.size() >= 2 )
+                        m_overlay->Polyline( SHAPE_LINE_CHAIN( pts ) );
+                    else
+                        m_overlay->Segment( aShape->GetStart(), aShape->GetEnd(), lineWidth );
+                }
             };
 
     const BOARD_CONSTRAINT_DIAGNOSTICS& diag = m_lastDiag;
 
     // Decide what is shown.  A panel-row isolation wins; otherwise ALWAYS shows everything and HOVER
     // shows only the hovered shape's constraints (or nothing when nothing is hovered).
-    bool           showAll = false;
-    std::set<KIID> shownShapes;
-    KIID           focusConstraint = niluuid;   // isolation: show only this constraint
-    KIID           focusShape = niluuid;         // hover: show only constraints referencing this shape
+    bool showAll = false;
+    KIID focusConstraint = niluuid;   // isolation: show only this constraint
+    KIID focusShape = niluuid;         // hover: show only constraints referencing this shape
 
     auto referencesShape = []( const PCB_CONSTRAINT* aConstraint, const KIID& aShape )
     {
@@ -312,53 +376,20 @@ void CONSTRAINT_OVERLAY::render()
 
     if( m_isolated != niluuid )
     {
-        if( PCB_CONSTRAINT* c = dynamic_cast<PCB_CONSTRAINT*>( m_board->ResolveItem( m_isolated, true ) ) )
-        {
+        if( dynamic_cast<PCB_CONSTRAINT*>( m_board->ResolveItem( m_isolated, true ) ) )
             focusConstraint = m_isolated;
-
-            for( const CONSTRAINT_MEMBER& member : c->GetMembers() )
-                shownShapes.insert( member.m_item );
-        }
         else
-        {
             m_isolated = niluuid;   // the isolated constraint is gone; fall through to the mode
-        }
     }
 
     if( m_isolated == niluuid )
     {
         if( m_mode == OVERLAY_MODE::ALWAYS )
-        {
             showAll = true;
-        }
         else if( m_hoverShape != niluuid )
-        {
             focusShape = m_hoverShape;
-
-            // Every member of every constraint that references the hovered shape is shown, so the
-            // hover reveals the whole relation, not just the one shape.
-            auto collect =
-                    [&]( const CONSTRAINTS& aConstraints )
-                    {
-                        for( PCB_CONSTRAINT* c : aConstraints )
-                        {
-                            if( referencesShape( c, focusShape ) )
-                            {
-                                for( const CONSTRAINT_MEMBER& m : c->GetMembers() )
-                                    shownShapes.insert( m.m_item );
-                            }
-                        }
-                    };
-
-            collect( m_board->Constraints() );
-
-            for( FOOTPRINT* footprint : m_board->Footprints() )
-                collect( footprint->Constraints() );
-        }
-        // else HOVER with nothing hovered: showAll stays false and shownShapes stays empty -> nothing
+        // else HOVER with nothing hovered leaves showAll false so only always on badges show none focused
     }
-
-    auto shapeShown = [&]( const KIID& aId ) { return showAll || shownShapes.contains( aId ); };
 
     auto constraintShown =
             [&]( PCB_CONSTRAINT* aConstraint ) -> bool
@@ -375,28 +406,8 @@ void CONSTRAINT_OVERLAY::render()
                 return referencesShape( aConstraint, focusShape );
             };
 
-    for( const auto& [shapeId, state] : diag.shapeStates )
-    {
-        if( !shapeShown( shapeId ) )
-            continue;
-
-        BOARD_ITEM* item = m_board->ResolveItem( shapeId, true );
-
-        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
-        {
-            outlineShape( shape, colorForState( state ) );
-        }
-        else if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
-        {
-            // A solver-bound dimension has no outline to tint; mark its bindable feature points
-            // so it reads as part of the cluster rather than a free annotation.
-            setStroke( colorForState( state ) );
-
-            for( const CONSTRAINT_ANCHOR_POINT& anchor : ConstraintItemAnchors( dimension ) )
-                m_overlay->Circle( anchor.pos, 2 * lineWidth );
-        }
-    }
-
+    // Constrained shapes are marked by cached under shadow layer not an on top tint
+    // Overlay only draws badges and while authoring the pick preview
     std::set<KIID> erroredIds( diag.errored.begin(), diag.errored.end() );
     std::set<KIID> conflictingIds( diag.conflicting.begin(), diag.conflicting.end() );
 
@@ -447,12 +458,22 @@ void CONSTRAINT_OVERLAY::render()
             break;
         }
 
+        case SHAPE_T::BEZIER:
+        {
+            const std::vector<VECTOR2I>& pts = aShape->GetBezierPoints();
+
+            for( size_t i = 1; i < pts.size(); ++i )
+                aOut.emplace_back( pts[i - 1], pts[i] );
+
+            break;
+        }
+
         default: break;
         }
     };
 
-    // An errored constraint's cluster can't be diagnosed, so tint its surviving members red.  The
-    // selected constraint's badge is drawn enlarged and ringed.
+    // Selected badge draws enlarged and ringed
+    // Badge colour reflects constraint solve state no on top tint
     auto walkConstraints =
             [&]( const CONSTRAINTS& aConstraints )
             {
@@ -465,18 +486,6 @@ void CONSTRAINT_OVERLAY::render()
 
                     bool errored = erroredIds.contains( constraint->m_Uuid );
                     bool conflicting = conflictingIds.contains( constraint->m_Uuid );
-
-                    if( errored )
-                    {
-                        for( const CONSTRAINT_MEMBER& member : members )
-                        {
-                            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>(
-                                        m_board->ResolveItem( member.m_item, true ) ) )
-                            {
-                                outlineShape( shape, overColor );
-                            }
-                        }
-                    }
 
                     const CONSTRAINT_MEMBER& first = members.front();
                     std::optional<VECTOR2I>  pos = badgePosition( first );
@@ -520,6 +529,29 @@ void CONSTRAINT_OVERLAY::render()
     for( FOOTPRINT* footprint : m_board->Footprints() )
         walkConstraints( footprint->Constraints() );
 
+    // Pick preview outline draws last on top of diagnostics tint in a hue distinct from state colours
+    // Anchor point drawn by badge item at constant screen size like an edit handle not scaled with zoom
+    if( m_previewElement != niluuid )
+    {
+        const COLOR4D previewColor( 0.10, 0.85, 0.95, 0.9 );   // cyan, distinct from the state tints
+
+        BOARD_ITEM* previewItem = m_board->ResolveItem( m_previewElement, true );
+
+        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( previewItem ) )
+        {
+            outlineShape( shape, previewColor );
+        }
+        else if( PCB_DIMENSION_BASE* dimension = dynamic_cast<PCB_DIMENSION_BASE*>( previewItem ) )
+        {
+            // Dimension has no outline to stroke so mark bindable feature points like diagnostics render
+            // keeps whole element visible while picking
+            setStroke( previewColor );
+
+            for( const CONSTRAINT_ANCHOR_POINT& anchor : ConstraintItemAnchors( dimension ) )
+                m_overlay->Circle( anchor.pos, 2 * lineWidth );
+        }
+    }
+
     // Drop a selection whose constraint no longer has a badge (deleted, or its members vanished).
     if( m_selected != niluuid
         && std::none_of( m_badges.begin(), m_badges.end(),
@@ -530,6 +562,10 @@ void CONSTRAINT_OVERLAY::render()
     }
 
     m_badgeItem.SetBadges( m_badges, m_selected );
+
+    // Only a point pick shows the anchor marker badge item draws it at constant screen size
+    m_badgeItem.SetPreviewAnchor( m_previewWhole ? std::optional<VECTOR2I>{} : m_previewAnchor );
+
     m_view->Update( &m_badgeItem );
     m_view->Update( m_overlay.get() );
     m_view->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
@@ -669,5 +705,20 @@ void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         }
 
         blit( bitmap, pos, iconSize );
+    }
+
+    // Anchor draws here not in cached overlay so it holds constant on screen size like edit handle
+    // sized larger so candidate point stands out
+    if( m_previewAnchor )
+    {
+        const double pxToWorld = 1.0 / scale;
+        const double radius = 1.25 * EDIT_POINT::POINT_SIZE * pxToWorld;
+
+        gal->SetIsFill( true );
+        gal->SetIsStroke( true );
+        gal->SetFillColor( COLOR4D( 0.95, 0.15, 0.85, 0.95 ) );      // magenta, contrasts the outline
+        gal->SetStrokeColor( COLOR4D( 1.0, 1.0, 1.0, 0.9 ) );
+        gal->SetLineWidth( static_cast<float>( linePx * pxToWorld ) );
+        gal->DrawCircle( *m_previewAnchor, radius );
     }
 }

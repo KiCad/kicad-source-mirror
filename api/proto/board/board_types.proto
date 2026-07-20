@@ -1021,12 +1021,16 @@ enum ConstraintAnchor
   CA_MID = 4;
   CA_CENTER = 5;
   CA_RADIUS = 6;
+  CA_VERTEX = 7;
 }
 
 message ConstraintMember
 {
   kiapi.common.types.KIID item = 1;
   ConstraintAnchor anchor = 2;
+
+  // Vertex ordinal; only present when anchor == CA_VERTEX
+  optional int32 index = 3;
 }
 
 message Constraint

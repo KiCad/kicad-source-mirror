@@ -26,6 +26,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <climits>
 #include <set>
 
 #include <base_units.h>
@@ -92,6 +93,75 @@ BOOST_AUTO_TEST_CASE( AngularValueShownInDegrees )
 }
 
 
+BOOST_AUTO_TEST_CASE( VertexMemberOnRectangleReadsCorner )
+{
+    PCB_SHAPE rect( nullptr, SHAPE_T::RECTANGLE );
+    rect.SetLayer( Edge_Cuts );
+    rect.SetStart( VECTOR2I( 0, 0 ) );
+    rect.SetEnd( VECTOR2I( 1000, 1000 ) );
+
+    // Ordinals are 1 based matching the vertex editor pane rows so index 1 labels as corner 2
+    wxString label = ConstraintMemberLabel(
+            &rect, CONSTRAINT_MEMBER( rect.m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 ), nullptr );
+
+    BOOST_TEST( label.Contains( "(corner 2)" ), "unexpected label: " << label.ToStdString() );
+}
+
+
+BOOST_AUTO_TEST_CASE( VertexMemberOnPolygonReadsVertex )
+{
+    PCB_SHAPE poly( nullptr, SHAPE_T::POLY );
+    poly.SetLayer( Edge_Cuts );
+    poly.SetPolyPoints( { { 0, 0 }, { 1000, 0 }, { 1500, 800 }, { 500, 1400 }, { -300, 800 } } );
+
+    wxString label = ConstraintMemberLabel(
+            &poly, CONSTRAINT_MEMBER( poly.m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 2 ), nullptr );
+
+    BOOST_TEST( label.Contains( "(vertex 3)" ), "unexpected label: " << label.ToStdString() );
+}
+
+
+BOOST_AUTO_TEST_CASE( VertexMemberIndexAtIntMaxDoesNotOverflow )
+{
+    // Ordinal is computed in long long so a hostile INT_MAX index from a file renders as 2147483648
+    // instead of overflowing
+    PCB_SHAPE rect( nullptr, SHAPE_T::RECTANGLE );
+    rect.SetLayer( Edge_Cuts );
+    rect.SetStart( VECTOR2I( 0, 0 ) );
+    rect.SetEnd( VECTOR2I( 1000, 1000 ) );
+
+    wxString label = ConstraintMemberLabel(
+            &rect, CONSTRAINT_MEMBER( rect.m_Uuid, CONSTRAINT_ANCHOR::VERTEX, INT_MAX ), nullptr );
+
+    BOOST_TEST( label.Contains( "(corner 2147483648)" ), "unexpected label: " << label.ToStdString() );
+
+    PCB_SHAPE poly( nullptr, SHAPE_T::POLY );
+    poly.SetLayer( Edge_Cuts );
+    poly.SetPolyPoints( { { 0, 0 }, { 1000, 0 }, { 500, 1000 } } );
+
+    label = ConstraintMemberLabel(
+            &poly, CONSTRAINT_MEMBER( poly.m_Uuid, CONSTRAINT_ANCHOR::VERTEX, INT_MAX ), nullptr );
+
+    BOOST_TEST( label.Contains( "(vertex 2147483648)" ), "unexpected label: " << label.ToStdString() );
+}
+
+
+BOOST_AUTO_TEST_CASE( NonVertexMemberLabelUnchanged )
+{
+    PCB_SHAPE seg( nullptr, SHAPE_T::SEGMENT );
+    seg.SetLayer( Edge_Cuts );
+    seg.SetStart( VECTOR2I( 0, 0 ) );
+    seg.SetEnd( VECTOR2I( 1000, 0 ) );
+
+    wxString label = ConstraintMemberLabel(
+            &seg, CONSTRAINT_MEMBER( seg.m_Uuid, CONSTRAINT_ANCHOR::START ), nullptr );
+
+    BOOST_TEST( label.Contains( "(start)" ), "unexpected label: " << label.ToStdString() );
+    BOOST_TEST( !label.Contains( "vertex" ) );
+    BOOST_TEST( !label.Contains( "corner" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
 
@@ -146,13 +216,25 @@ BOOST_AUTO_TEST_CASE( CircleExposesOnlyCenter )
 }
 
 
-BOOST_AUTO_TEST_CASE( NonAnchoredShapeYieldsNothing )
+BOOST_AUTO_TEST_CASE( RectangleExposesIndexedCorners )
 {
     PCB_SHAPE rect( nullptr, SHAPE_T::RECTANGLE );
     rect.SetStart( VECTOR2I( 0, 0 ) );
     rect.SetEnd( VECTOR2I( 1000, 1000 ) );
 
-    BOOST_CHECK( ConstraintShapeAnchors( &rect ).empty() );
+    std::vector<CONSTRAINT_ANCHOR_POINT> anchors = ConstraintShapeAnchors( &rect );
+
+    BOOST_REQUIRE_EQUAL( anchors.size(), 4 );
+
+    // Canonical TL, TR, BR, BL order with matching vertex ordinals.
+    const VECTOR2I expected[4] = { { 0, 0 }, { 1000, 0 }, { 1000, 1000 }, { 0, 1000 } };
+
+    for( int i = 0; i < 4; ++i )
+    {
+        BOOST_CHECK( anchors[i].anchor == CONSTRAINT_ANCHOR::VERTEX );
+        BOOST_CHECK_EQUAL( anchors[i].index, i );
+        BOOST_CHECK_EQUAL( anchors[i].pos, expected[i] );
+    }
 }
 
 

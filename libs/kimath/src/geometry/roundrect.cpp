@@ -110,7 +110,7 @@ void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError ) con
 
     if( m_radius == 0 )
     {
-        // It's just a rectangle
+        // Just a rectangle with order TL TR BR BL load bearing for constraint VERTEX bindings
         outline.Append( m_p0 );
         outline.Append( m_p0 + VECTOR2I( w, 0 ) );
         outline.Append( m_p0 + VECTOR2I( w, h ) );

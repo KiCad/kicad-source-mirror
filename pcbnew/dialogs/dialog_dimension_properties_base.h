@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -60,7 +60,7 @@ class DIALOG_DIMENSION_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_sizerFormat;
 		wxStaticText* m_lblValue;
 		wxTextCtrl* m_txtValue;
-		wxCheckBox* m_cbOverrideValue;
+		wxChoice* m_choiceValueMode;
 		wxStaticText* m_lblUnits;
 		wxChoice* m_cbUnits;
 		wxStaticText* m_lblPrefix;

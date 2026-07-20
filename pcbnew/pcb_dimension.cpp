@@ -29,7 +29,9 @@
 #include <board.h>
 #include <footprint.h>
 #include <pcb_dimension.h>
+#include <pcb_painter.h>
 #include <pcb_text.h>
+#include <view/view.h>
 #include <board_design_settings.h>
 #include <geometry/shape_compound.h>
 #include <geometry/shape_circle.h>
@@ -44,6 +46,10 @@
 #include <api/board/board_types.pb.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+#include <properties/property_validators.h>
+
+#include <constraints/constraint_builder.h>
+#include <constraints/pcb_constraint.h>
 
 
 static const int INWARD_ARROW_LENGTH_TO_HEAD_RATIO = 2;
@@ -515,6 +521,60 @@ wxString PCB_DIMENSION_BASE::GetValueText() const
 }
 
 
+DIM_VALUE_MODE PCB_DIMENSION_BASE::GetValueMode() const
+{
+    // Read only here but shared lookup helpers require a mutable board pointer
+    BOARD* board = const_cast<BOARD*>( GetBoard() );
+
+    return DimensionValueMode( board, this );
+}
+
+
+void PCB_DIMENSION_BASE::ChangeValueMode( DIM_VALUE_MODE aMode )
+{
+    SetOverrideTextEnabled( aMode == DIM_VALUE_MODE::ARBITRARY );
+    Update();
+}
+
+
+wxString PCB_DIMENSION_BASE::GetValueFieldText() const
+{
+    switch( GetValueMode() )
+    {
+    case DIM_VALUE_MODE::DRIVING:
+    {
+        PCB_CONSTRAINT* lengthConstraint =
+                FindDimensionLengthConstraint( const_cast<BOARD*>( GetBoard() ), this );
+
+        if( lengthConstraint && lengthConstraint->GetValue() )
+        {
+            return EDA_UNIT_UTILS::UI::StringFromValue( pcbIUScale, GetUnits(),
+                                                        *lengthConstraint->GetValue() );
+        }
+
+        return GetValueText();
+    }
+
+    case DIM_VALUE_MODE::ARBITRARY:
+        return GetOverrideText();
+
+    case DIM_VALUE_MODE::DRIVEN:
+    default:
+        return GetValueText();
+    }
+}
+
+
+void PCB_DIMENSION_BASE::ChangeValueFieldText( const wxString& aText )
+{
+    if( GetValueMode() == DIM_VALUE_MODE::ARBITRARY )
+    {
+        SetOverrideText( aText );
+        Update();
+    }
+}
+
+
 void PCB_DIMENSION_BASE::SetPrefix( const wxString& aPrefix )
 {
     m_prefix = aPrefix;
@@ -916,6 +976,40 @@ const BOX2I PCB_DIMENSION_BASE::ViewBBox() const
     dimBBox.Merge( PCB_TEXT::ViewBBox() );
 
     return dimBBox;
+}
+
+
+std::vector<int> PCB_DIMENSION_BASE::ViewGetLayers() const
+{
+    std::vector<int> layers = PCB_TEXT::ViewGetLayers();
+
+    // Always advertised while ViewGetLOD gates the draw on actual constraint reference
+    layers.push_back( LAYER_CONSTRAINT_SHADOW );
+
+    return layers;
+}
+
+
+double PCB_DIMENSION_BASE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
+{
+    if( aLayer == LAYER_CONSTRAINT_SHADOW && aView )
+    {
+        KIGFX::PCB_RENDER_SETTINGS& renderSettings =
+                *static_cast<KIGFX::PCB_PAINTER&>( *aView->GetPainter() ).GetSettings();
+
+        if( !renderSettings.GetConstrainedItems().count( m_Uuid ) )
+            return LOD_HIDE;
+
+        if( !aView->IsLayerVisibleCached( GetLayer() ) )
+            return LOD_HIDE;
+
+        if( renderSettings.GetHighContrast() && GetLayer() != renderSettings.GetPrimaryHighContrastLayer() )
+            return LOD_HIDE;
+
+        return LOD_SHOW;
+    }
+
+    return PCB_TEXT::ViewGetLOD( aLayer, aView );
 }
 
 
@@ -2000,6 +2094,11 @@ static struct DIMENSION_DESC
                     .Map( DIM_ARROW_DIRECTION::INWARD,  _HKI( "Inward" ) )
                     .Map( DIM_ARROW_DIRECTION::OUTWARD, _HKI( "Outward" ) );
 
+        ENUM_MAP<DIM_VALUE_MODE>::Instance()
+                    .Map( DIM_VALUE_MODE::DRIVEN,    _HKI( "Driven" ) )
+                    .Map( DIM_VALUE_MODE::DRIVING,   _HKI( "Driving" ) )
+                    .Map( DIM_VALUE_MODE::ARBITRARY, _HKI( "Arbitrary" ) );
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PCB_DIMENSION_BASE );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_DIMENSION_BASE, PCB_TEXT> );
@@ -2039,10 +2138,97 @@ static struct DIMENSION_DESC
                 &PCB_DIMENSION_BASE::ChangeSuffix, &PCB_DIMENSION_BASE::GetSuffix ),
                 groupDimension )
                 .SetAvailableFunc( isNotLeader );
+        auto hasValueMode =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    return DimensionHasValueMode( dynamic_cast<PCB_DIMENSION_BASE*>( aItem ) );
+                };
+
+        // Value bearing dims use Value row instead while leaders keep Text below
+        // Override Text left for centre mark only
+        auto usesOverrideText =
+                [isLeader, hasValueMode]( INSPECTABLE* aItem ) -> bool
+                {
+                    return aItem && !isLeader( aItem ) && !hasValueMode( aItem );
+                };
+
+        // Driving needs both endpoints bound to movable geometry
+        // Dropdown always offers it so gate the transition here
+        auto valueModeValidator =
+                []( const wxAny&& aValue, EDA_ITEM* aItem ) -> VALIDATOR_RESULT
+                {
+                    PCB_DIMENSION_BASE* dim = dynamic_cast<PCB_DIMENSION_BASE*>( aItem );
+
+                    if( !dim )
+                        return std::nullopt;
+
+                    int mode = 0;
+
+                    if( aValue.CheckType<DIM_VALUE_MODE>() )
+                        mode = static_cast<int>( aValue.As<DIM_VALUE_MODE>() );
+                    else if( !aValue.GetAs( &mode ) )
+                        return std::nullopt;
+
+                    if( mode == static_cast<int>( DIM_VALUE_MODE::DRIVING )
+                            && !DimensionCanDrive( dim->GetBoard(), dim ) )
+                    {
+                        return std::make_unique<VALIDATION_ERROR_MSG>(
+                                _( "Driving requires both dimension endpoints bound to objects" ) );
+                    }
+
+                    return std::nullopt;
+                };
+
+        // Driving edits length constraint which must stay positive
+        // Catches zero and negative and stale exprs parsing to zero
+        auto drivingValueValidator =
+                []( const wxAny&& aValue, EDA_ITEM* aItem ) -> VALIDATOR_RESULT
+                {
+                    PCB_DIMENSION_BASE* dim = dynamic_cast<PCB_DIMENSION_BASE*>( aItem );
+
+                    if( !dim || dim->GetValueMode() != DIM_VALUE_MODE::DRIVING )
+                        return std::nullopt;
+
+                    wxString text;
+
+                    if( !aValue.GetAs( &text ) )
+                        return std::nullopt;
+
+                    double iu = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, dim->GetUnits(),
+                                                                           text );
+
+                    if( !( iu > 0.0 ) )
+                    {
+                        return std::make_unique<VALIDATION_ERROR_MSG>(
+                                _( "Enter a positive length for a driving dimension" ) );
+                    }
+
+                    return std::nullopt;
+                };
+
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Override Text" ),
                 &PCB_DIMENSION_BASE::ChangeOverrideText, &PCB_DIMENSION_BASE::GetOverrideText ),
                 groupDimension )
-                .SetAvailableFunc( isNotLeader );
+                .SetAvailableFunc( usesOverrideText );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PCB_DIMENSION_BASE, DIM_VALUE_MODE>( _HKI( "Value Mode" ),
+                &PCB_DIMENSION_BASE::ChangeValueMode, &PCB_DIMENSION_BASE::GetValueMode ),
+                groupDimension )
+                .SetAvailableFunc( hasValueMode )
+                .SetValidator( std::move( valueModeValidator ) );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Value" ),
+                &PCB_DIMENSION_BASE::ChangeValueFieldText, &PCB_DIMENSION_BASE::GetValueFieldText ),
+                groupDimension )
+                .SetAvailableFunc( hasValueMode )
+                .SetWriteableFunc(
+                        []( INSPECTABLE* aItem ) -> bool
+                        {
+                            // Driven mirrors measured geometry so grey it out since edit would not stick
+                            PCB_DIMENSION_BASE* dim = dynamic_cast<PCB_DIMENSION_BASE*>( aItem );
+                            return dim && dim->GetValueMode() != DIM_VALUE_MODE::DRIVEN;
+                        } )
+                .SetValidator( std::move( drivingValueValidator ) );
 
         propMgr.AddProperty( new PROPERTY<PCB_DIMENSION_BASE, wxString>( _HKI( "Text" ),
                 &PCB_DIMENSION_BASE::ChangeOverrideText, &PCB_DIMENSION_BASE::GetOverrideText ),
@@ -2097,6 +2283,7 @@ ENUM_TO_WXANY( DIM_PRECISION )
 ENUM_TO_WXANY( DIM_UNITS_FORMAT )
 ENUM_TO_WXANY( DIM_UNITS_MODE )
 ENUM_TO_WXANY( DIM_ARROW_DIRECTION )
+ENUM_TO_WXANY( DIM_VALUE_MODE )
 
 
 static struct ALIGNED_DIMENSION_DESC
