@@ -33,6 +33,8 @@
 #include <wx/txtstrm.h>
 #include <wx/sstream.h>
 #include <wx/wfstream.h>
+#include <wx/mstream.h>
+#include <wx/tokenzr.h>
 #include <gestfich.h>
 
 JOBS_RUNNER::JOBS_RUNNER( KIWAY* aKiway, JOBSET* aJobsFile, PROJECT* aProject,
@@ -73,16 +75,41 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
     wxInputStream* inputStream = process.GetInputStream();
     wxInputStream* errorStream = process.GetErrorStream();
 
+    // Reads wxInputStream into a wxMemoryBuffer
+    auto streamToBuf = []( wxInputStream& aIs )
+    {
+        wxMemoryOutputStream memOut;
+        aIs >> memOut;
+
+        wxMemoryBuffer buf;
+        buf.AppendData( memOut.GetOutputStreamBuffer()->GetBufferStart(),
+                        memOut.GetOutputStreamBuffer()->GetIntPosition() );
+
+        return buf;
+    };
+
     if( inputStream && errorStream )
     {
-        wxTextInputStream inputTextStream( *inputStream );
-        wxTextInputStream errorTextStream( *errorStream );
+        wxMemoryBuffer memInBuf = streamToBuf( *inputStream );
+        wxMemoryBuffer memErrBuf = streamToBuf( *errorStream );
 
-        while( !inputStream->Eof() )
-            aReporter->Report( inputTextStream.ReadLine(), RPT_SEVERITY_INFO );
+        if( !memInBuf.IsEmpty() )
+        {
+            wxString          str = wxString::FromUTF8( memInBuf, memInBuf.GetDataLen() );
+            wxStringTokenizer tokenizer( str, "\r\n" );
 
-        while( !errorStream->Eof() )
-            aReporter->Report( errorTextStream.ReadLine(), RPT_SEVERITY_ERROR );
+            while( tokenizer.HasMoreTokens() )
+                aReporter->Report( tokenizer.GetNextToken(), RPT_SEVERITY_INFO );
+        }
+
+        if( !memErrBuf.IsEmpty() )
+        {
+            wxString          str = wxString::FromUTF8( memErrBuf, memErrBuf.GetDataLen() );
+            wxStringTokenizer tokenizer( str, "\r\n" );
+
+            while( tokenizer.HasMoreTokens() )
+                aReporter->Report( tokenizer.GetNextToken(), RPT_SEVERITY_ERROR );
+        }
 
         if( specialJob->m_recordOutput )
         {
@@ -98,8 +125,7 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
             if( !procOutput.IsOk() )
                 return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
 
-            inputStream->Reset();
-            *inputStream >> procOutput;
+            procOutput.WriteAll( memInBuf, memInBuf.GetDataLen() );
         }
     }
 
