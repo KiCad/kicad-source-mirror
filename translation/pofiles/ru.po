@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-13 16:46+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"PO-Revision-Date: 2026-07-20 06:34+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ru/>\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2776,7 +2776,6 @@ msgstr ""
 "изменения."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
 msgstr "Восстановить авто-сохранённые"
 
@@ -2789,7 +2788,6 @@ msgstr ""
 "содержимое будет удалено."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep Current"
 msgstr "Оставить текущее"
 
@@ -2800,7 +2798,6 @@ msgstr ""
 "изменения."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
 msgstr "Оставить оба"
 
@@ -2813,7 +2810,6 @@ msgstr ""
 "отдельного файла с временной меткой, который вы можете проверить позже."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
 msgstr "Отменить открытие"
 
@@ -4345,9 +4341,8 @@ msgid "Commit message cannot be empty"
 msgstr "Сообщение коммита не может быть пустым"
 
 #: common/dialogs/git/dialog_git_commit.cpp:192
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Укажите хотя бы один параметр для обратной аннотации."
+msgstr "Выберите хотя бы один файл для коммита"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:69
 msgid "Key passphrase:"
@@ -16250,9 +16245,8 @@ msgid "Delete extra units from symbol?"
 msgstr "Удалить остальные части из символа?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:588
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "Символ должен иметь хотя бы 1 стиль корпуса."
+msgstr "Пользовательские стили корпуса должны содержать хотя бы 2 элемента"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
 msgid "Delete extra body styles from symbol?"
@@ -26927,13 +26921,13 @@ msgid "Add Symbol Library"
 msgstr "Добавить библиотеку символов"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Не удалось создать файл библиотеки '%s'.\n"
-"Проверьте права доступа."
+"Не удалось перезаписать файл библиотеки '%s'.\n"
+"Проверьте права доступа и попытайтесь снова."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1314
 #, c-format
@@ -28597,9 +28591,8 @@ msgid "Set the exclude from board attribute"
 msgstr "Установить атрибут \"Исключить из платы\""
 
 #: eeschema/tools/sch_actions.cpp:1216
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "Установить атрибут \"Исключить из симуляции\""
+msgstr "Установить атрибут \"Исключить из файлов размещения\""
 
 #: eeschema/tools/sch_actions.cpp:1222
 msgid "Set the do not populate attribute"
@@ -29456,9 +29449,8 @@ msgid "Modify schematic item"
 msgstr "Изменить элемент схемы"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3879
-#, fuzzy
 msgid "Auto-place Sheet Pins"
-msgstr "Авторазмещение всех выводов листа"
+msgstr "Авторазмещение выводов листа"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3926
 msgid "No sub schematic found in the current project"
@@ -30577,9 +30569,8 @@ msgid "Excl. Board"
 msgstr "Искл. из платы"
 
 #: eeschema/widgets/search_handlers.cpp:169
-#, fuzzy
 msgid "Excl. Pos Files"
-msgstr "Исключить из файлов размещения"
+msgstr "Искл. из файлов размещ."
 
 #: eeschema/widgets/search_handlers.cpp:481
 msgid "Hierarchical"
@@ -33233,9 +33224,8 @@ msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr "Пресет внешнего вида. Опции: %s, %s, или имя пользовательского пресета"
 
 #: kicad/cli/command_pcb_render.cpp:266
-#, fuzzy
 msgid "Use colors defined in the board stackup instead of those in the preset"
-msgstr "Цвета, определенные в стеке платы, заменяют цвета из пресета"
+msgstr "Исп. цвета из стека платы вместо цветов из пресета"
 
 #: kicad/cli/command_pcb_render.cpp:271
 msgid ""
@@ -40025,9 +40015,9 @@ msgid "Custom Rules"
 msgstr "Особые правила"
 
 #: pcbnew/cross-probing.cpp:712
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying footprint library '%s'."
-msgstr "Ошибка загрузки посад. места %s из библиотеки '%s'."
+msgstr "Ошибка копирования библиотеки посад. мест '%s'."
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:239
 msgid "Barcode Error"
@@ -50145,9 +50135,8 @@ msgstr "Имя зоны:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:39
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:44
-#, fuzzy
 msgid "A unique name for this zone, used to identify it in DRC rules"
-msgstr "Уникальное имя зоны для её определения при проверке правил DRC"
+msgstr "Уникальное имя зоны для её идентификации в правилах DRC"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:76
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -50712,9 +50701,8 @@ msgid "Items not allowed"
 msgstr "Элементы запрещены"
 
 #: pcbnew/drc/drc_item.cpp:60
-#, fuzzy
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "Текст (или размеры) на слое Edge.Cuts"
+msgstr "Текст или графика на слое Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:64
 msgid "Clearance violation"
@@ -52918,6 +52906,8 @@ msgid ""
 "Could not post-process GLB line primitives; the exported model may not "
 "import in strict glTF viewers."
 msgstr ""
+"Не удалось выполнить постобработку линий GLB; экспортированная модель может "
+"не открываться в строгих просмотрщиках glTF."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4190
 #: pcbnew/exporters/step/step_pcb_model.cpp:4237
@@ -54515,14 +54505,14 @@ msgid "Changed group library link from '%s' to '%s'."
 msgstr "Изменена ссылка на библиотеку группы с '%s' на '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2008
-#, fuzzy, c-format
+#, c-format
 msgid "Add group '%s' to group '%s'."
-msgstr "Добавить %s в группу '%s'."
+msgstr "Добавить группу '%s' в группу '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2013
-#, fuzzy, c-format
+#, c-format
 msgid "Added group '%s' to group '%s'."
-msgstr "Добавлен %s в группу '%s'."
+msgstr "Добавлена группа '%s' в группу '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2053
 #, c-format
@@ -55763,9 +55753,9 @@ msgid "Loading unicode strings..."
 msgstr "Загрузка строк Unicode..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4625
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "Паттерны настройки длины"
+msgstr "Импортировано %d паттернов настройки длины."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4636
 msgid "Loading text..."
@@ -56687,6 +56677,8 @@ msgid ""
 "Pad '%s' has custom shape with per-layer geometry; custom primitives not "
 "supported in padstack mode."
 msgstr ""
+"Конт. пл. '%s' имеет нестандартную форму с геометрией для каждого слоя; "
+"нестандартные примитивы не поддерживаются в режиме padstack."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2890
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2922
@@ -57086,6 +57078,8 @@ msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"Один или несколько элементов находятся на неопределенных слоях (%s). "
+"Откройте плату в редакторе печатных плат, для устранения проблемы."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1629
 #, c-format
@@ -58209,9 +58203,8 @@ msgid "Loading Footprint Libraries"
 msgstr "Загрузка библиотек посад. мест"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:528
-#, fuzzy
 msgid "Failed to load board"
-msgstr "Не удалось загрузить плату\n"
+msgstr "Не удалось загрузить плату"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:599
 #, c-format
@@ -58514,9 +58507,10 @@ msgstr ""
 "что имена цепей диф.пары заканчиваются на _N/_P или +/-."
 
 #: pcbnew/router/pns_dragger.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drag arc tracks of %.1f degrees or greater."
-msgstr "Невозможно задать размеры дуговых дорожек %s или больше."
+msgstr ""
+"Невозможно перетаскивать дуговые дорожки с углом %.1f градуса или более."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1111
 #: pcbnew/router/pns_kicad_iface.cpp:1227 pcbnew/router/router_tool.cpp:1002
@@ -60011,6 +60005,8 @@ msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
 msgstr ""
+"Группы, содержащие посад. места или другие элементы, которые невозможно "
+"отразить, были пропущены."
 
 #: pcbnew/tools/edit_tool.cpp:2772 pcbnew/tools/pcb_actions.cpp:717
 msgid "Change Side / Flip"
@@ -60350,9 +60346,8 @@ msgid "Copied to %d Rule Areas."
 msgstr "Скопировано в %d областей правил."
 
 #: pcbnew/tools/multichannel_tool.cpp:1955
-#, fuzzy
 msgid "Target Rule Area shares components with the reference area"
-msgstr "Редактирование компонента с поз.обозначением "
+msgstr "Целевая зона правил имеет общие компоненты с эталонной зоной"
 
 #: pcbnew/tools/multichannel_tool.cpp:1958
 msgid ""
@@ -60360,14 +60355,18 @@ msgid ""
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
+"Эта целевая область правил использует те же компоненты, что и эталонная "
+"область. При повторении разводки невозможно скопировать область правил на "
+"саму себя. Для каждой области правил размещения следует использовать "
+"отдельный лист, класс компонентов или группу."
 
 #: pcbnew/tools/multichannel_tool.cpp:1961
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Shared components:\n"
 "%s"
 msgstr ""
-"Компоненты целевой области:\n"
+"Общие компоненты:\n"
 "%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2099
@@ -60743,9 +60742,8 @@ msgid "Toggle the exclude from bill of materials attribute"
 msgstr "Переключить атрибут \"Исключить из перечня элементов\""
 
 #: pcbnew/tools/pcb_actions.cpp:603
-#, fuzzy
 msgid "Toggle the exclude from position files attribute"
-msgstr "Переключить атрибут \"Исключить из симуляции\""
+msgstr "Переключить атрибут \"Исключить из файлов размещения\""
 
 #: pcbnew/tools/pcb_actions.cpp:608
 #, fuzzy
@@ -62592,13 +62590,12 @@ msgid "could not load the design block's layout"
 msgstr "Не удалось загрузить компоновку дизайн-блока."
 
 #: pcbnew/tools/pcb_control.cpp:1636
-#, fuzzy
 msgid "design block contains no items to apply"
-msgstr "У дизайн-блока нет схемы для размещения."
+msgstr "дизайн-блок не содержит элементов для применения"
 
 #: pcbnew/tools/pcb_control.cpp:1686
 msgid "group is empty"
-msgstr ""
+msgstr "группа пуста"
 
 #: pcbnew/tools/pcb_control.cpp:1738
 msgid "layout copy failed"
@@ -62621,6 +62618,8 @@ msgstr "Применение компоновки дизайн-блока к %d 
 #: pcbnew/tools/pcb_control.cpp:1788
 msgid "Copied copper has no net assigned. Assign nets to connect it."
 msgstr ""
+"У скопированной меди нет назначенной цепи. Чтобы подключить её, назначьте "
+"цепи."
 
 #: pcbnew/tools/pcb_control.cpp:1800
 #, c-format
@@ -64197,19 +64196,23 @@ msgid "Removing isolated copper islands..."
 msgstr "Удаление изолированных участков меди..."
 
 #: pcbnew/zone_filler.cpp:1225
-#, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "Перезаливка всех зон..."
+msgstr "Перезаливка пересекающихся зон..."
 
 #: pcbnew/zone_filler.cpp:1392
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Zone fills may be incorrect: iterative refill did not converge after %d "
 "passes.\n"
 "\n"
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
-msgstr "test"
+msgstr ""
+"Заливка зон может быть некорректна: итеративная заливка не сошлась после %d "
+"проходов.\n"
+"\n"
+"Это может происходить при наличии сложных пересекающихся зон.  Попробуйте "
+"упростить свои зоны."
 
 #: pcbnew/zone_filler.cpp:1664
 msgid "Prototype zone fill enabled. Disable setting and refill?"
