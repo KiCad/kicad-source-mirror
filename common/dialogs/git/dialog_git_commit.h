@@ -37,6 +37,7 @@ public:
                        const wxString&              defaultAuthorName,
                        const wxString&              defaultAuthorEmail,
                        const std::map<wxString, int>& filesToCommit );
+    ~DIALOG_GIT_COMMIT() override;
 
     wxString GetCommitMessage() const;
 
@@ -59,6 +60,8 @@ public:
 private:
     /// Enable the OK button only when there is both a message and at least one selected file.
     void updateOkButton();
+    void loadFileListColumnWidths();
+    void saveFileListColumnWidths();
 
     wxTextCtrl* m_commitMessageTextCtrl;
     wxTextCtrl* m_authorTextCtrl;

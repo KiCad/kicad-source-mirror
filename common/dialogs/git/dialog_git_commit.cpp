@@ -22,6 +22,11 @@
 #include <bitmaps/bitmaps_list.h>
 #include <bitmaps/bitmap_types.h>
 #include <git/kicad_git_common.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
+#include <settings/common_settings_internals.h>
+
+#include <algorithm>
 
 #include <wx/button.h>
 #include <wx/checkbox.h>
@@ -29,6 +34,13 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+
+
+static constexpr const char* DIALOG_GIT_COMMIT_SETTINGS_KEY = "DIALOG_GIT_COMMIT";
+static constexpr const char* LIST_COLUMN_WIDTHS_KEY = "listctrl_column_widths";
+static constexpr const char* FILENAME_COLUMN_WIDTH_KEY = "filename_col_width";
+static constexpr const char* STATUS_COLUMN_WIDTH_KEY = "status_col_width";
+
 
 DIALOG_GIT_COMMIT::DIALOG_GIT_COMMIT( wxWindow* parent, git_repository* repo,
                                       const wxString&                defaultAuthorName,
@@ -48,8 +60,24 @@ DIALOG_GIT_COMMIT::DIALOG_GIT_COMMIT( wxWindow* parent, git_repository* repo,
     m_listCtrl->AppendColumn( _( "Status" ) );
 
     // Set column widths
-    m_listCtrl->SetColumnWidth( 0, 200 );
-    m_listCtrl->SetColumnWidth( 1, 200 );
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+    int              filesColWidth = 200;
+    int              statusWidthWidth = 200;
+    auto             dlgIt = settings->CsInternals().m_dialogControlValues.find( DIALOG_GIT_COMMIT_SETTINGS_KEY );
+
+    if( dlgIt != settings->CsInternals().m_dialogControlValues.end() )
+    {
+        auto widths = dlgIt->second.find( LIST_COLUMN_WIDTHS_KEY );
+        if( widths != dlgIt->second.end() && widths->second.is_object() )
+        {
+            filesColWidth = widths->second.value( FILENAME_COLUMN_WIDTH_KEY, 200 );
+            statusWidthWidth = widths->second.value( STATUS_COLUMN_WIDTH_KEY, 200 );
+        }
+    }
+
+    m_listCtrl->SetColumnWidth( 0, FromDIP( filesColWidth ) );
+    m_listCtrl->SetColumnWidth( 1, FromDIP( statusWidthWidth ) );
+
 
     // Set up image list for icons
 #ifdef __WXMAC__
@@ -171,6 +199,19 @@ DIALOG_GIT_COMMIT::DIALOG_GIT_COMMIT( wxWindow* parent, git_repository* repo,
     updateOkButton();
 }
 
+
+DIALOG_GIT_COMMIT::~DIALOG_GIT_COMMIT()
+{
+    COMMON_SETTINGS*                       settings = Pgm().GetCommonSettings();
+    std::map<std::string, nlohmann::json>& dlgMap =
+            settings->CsInternals().m_dialogControlValues[DIALOG_GIT_COMMIT_SETTINGS_KEY];
+
+    nlohmann::json widths;
+    widths[FILENAME_COLUMN_WIDTH_KEY] = ToDIP( m_listCtrl->GetColumnWidth( 0 ) );
+    widths[STATUS_COLUMN_WIDTH_KEY] = ToDIP( m_listCtrl->GetColumnWidth( 1 ) );
+
+    dlgMap[LIST_COLUMN_WIDTHS_KEY] = widths;
+}
 
 void DIALOG_GIT_COMMIT::SetFileSelectionRequired( bool aRequired )
 {
