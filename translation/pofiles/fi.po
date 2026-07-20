@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-20 09:36+0300\n"
-"PO-Revision-Date: 2026-07-20 06:34+0000\n"
+"PO-Revision-Date: 2026-07-21 06:37+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
@@ -22073,9 +22073,9 @@ msgid "Invalid hyperlink url '%s'"
 msgstr "Virheellinen hyperlinkin URL-osoite '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:907
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse '%s' as a header."
-msgstr "Ei voi jäsentää %s symbolina"
+msgstr "Ei voi jäsentää '%s' otsikkona."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:944
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1099
@@ -22127,9 +22127,8 @@ msgid "Empty sheet pin name"
 msgstr "Tyhjä arkin nastan nimi"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2941
-#, fuzzy
 msgid "Schematic polyline has too few points"
-msgstr "Muoto ei sisällä yhtään pistettä."
+msgstr "Kytkentäkaavion murtoviivassa ei ole tarpeeksi pisteitä"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3030
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3043
@@ -22154,9 +22153,8 @@ msgid "Missing sheet file property"
 msgstr "Puuttuva arkin nimen argumentti"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5079
-#, fuzzy
 msgid "Invalid table: no cells defined"
-msgstr "Virheellinen karttamuoto määritetty\n"
+msgstr "Virheellinen taulukko: ei määriteltyjä soluja"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5204
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7032
@@ -22361,9 +22359,9 @@ msgid "Label '%s'"
 msgstr "Tunniste \"%s\""
 
 #: eeschema/sch_label.cpp:1959
-#, fuzzy, c-format
+#, c-format
 msgid "Directive Label [%s (empty)]"
-msgstr "Direktiivin Nimike [%s %s]"
+msgstr "Direktiivin verkkotunniste [%s (tyhjä)]"
 
 #: eeschema/sch_label.cpp:1963
 #, c-format
@@ -24283,12 +24281,8 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1311
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2138
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2207
-#, fuzzy
 msgid "Error saving library table."
-msgstr ""
-"Virhe tallennettaessa kirjastotaulukkoa:\n"
-"\n"
-"%s"
+msgstr "Virhe tallennettaessa kirjastotaulukkoa."
 
 #: eeschema/sheet.cpp:937 eeschema/tools/sch_editor_control.cpp:3100
 msgid "Cannot create the schematic image"
@@ -24476,9 +24470,8 @@ msgid "Missing or invalid C_comp_pulldown value."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:583
-#, fuzzy
 msgid "No C_comp values are available."
-msgstr "Pakettipäivitykset ovat saatavilla"
+msgstr "C_comp arvoja ei ole saatavilla."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:592
 #, fuzzy
@@ -24486,9 +24479,8 @@ msgid "Missing or invalid Temperature Range value."
 msgstr "Lämpötila-alue on virheellinen."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:601
-#, fuzzy
 msgid "Missing or invalid Voltage Range value."
-msgstr "IV-taulukossa on virheellinen jännite"
+msgstr "Puuttuva tai virheellinen jännitealueen arvo."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:610
 msgid "Missing or invalid Pullup Reference value."
@@ -24552,9 +24544,8 @@ msgstr "Virhellinen GND kiinnitin."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:698
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Invalid Ramp specification."
-msgstr "Virheellinen rivimääritys"
+msgstr "Virheellinen rampin määrittely."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:711
 #, fuzzy
@@ -24582,9 +24573,8 @@ msgid "Missing or invalid V_trigger_f value."
 msgstr "Virheellinen V_ref arvo."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:748
-#, fuzzy
 msgid "Missing or invalid Off_delay value."
-msgstr "Virheellinen viivearvo"
+msgstr "Puuttuva tai virheellinen Off_delay-arvo."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:773
 #, fuzzy
@@ -27641,9 +27631,8 @@ msgstr ""
 "generaattoria"
 
 #: eeschema/tools/sch_actions.cpp:1261
-#, fuzzy
 msgid "Export Symbols..."
-msgstr "Vie symbolin piirrokset"
+msgstr "Vie symbolit..."
 
 #: eeschema/tools/sch_actions.cpp:1262
 #, fuzzy
@@ -28091,9 +28080,8 @@ msgid "Show SPICE Netlist"
 msgstr "Näytä SPICE Verkkolista"
 
 #: eeschema/tools/sch_actions.cpp:1781
-#, fuzzy
 msgid "Add Design Variant..."
-msgstr "Lisää viiva"
+msgstr "Lisää suunnitteluvariaatio..."
 
 #: eeschema/tools/sch_actions.cpp:1782
 #, fuzzy
@@ -28101,9 +28089,8 @@ msgid "Add new design variant to the schematic."
 msgstr "Lisää nykyinen symboli kytkentäkaavioon"
 
 #: eeschema/tools/sch_actions.cpp:1787
-#, fuzzy
 msgid "Remove Design Variant..."
-msgstr "Selaa &liitännäisiä"
+msgstr "Poista suunnitteluvariaatio..."
 
 #: eeschema/tools/sch_actions.cpp:1788
 #, fuzzy
@@ -28111,14 +28098,12 @@ msgid "Remove an existing design variant from the schematic."
 msgstr "Virhe yritettäessä tulostaa kytkentäkaaviota."
 
 #: eeschema/tools/sch_actions.cpp:1793
-#, fuzzy
 msgid "Edit Variant Description..."
-msgstr "Muokkaa työkuvausta"
+msgstr "Muokkaa variaation kuvausta..."
 
 #: eeschema/tools/sch_actions.cpp:1794
-#, fuzzy
 msgid "Edit the description of an existing design variant."
-msgstr "Muokkaa komentotiedostoa tekstieditorissa"
+msgstr "Muokkaa olemassa olevan suunnitteluvariaation kuvausta."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -28155,9 +28140,8 @@ msgid "All units of this symbol are already placed."
 msgstr "Kaikki tämän symbolin yksiköt on jo sijoitettu."
 
 #: eeschema/tools/sch_drawing_tools.cpp:729
-#, fuzzy
 msgid "Requested unit already placed."
-msgstr "Yksikkö on jo sijoitettu"
+msgstr "Pyydetty yksikkö on jo sijoitettu."
 
 #: eeschema/tools/sch_drawing_tools.cpp:803
 #: eeschema/tools/sch_editor_control.cpp:3412
@@ -28312,17 +28296,18 @@ msgstr "Kaikki tiedostot (*)|*"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:145
 #: pcbnew/tools/pcb_edit_table_tool.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to open file:\n"
 "%s"
-msgstr "Tiedoston '%s' avaaminen epäonnistui."
+msgstr ""
+"Tiedoston avaaminen epäonnistui:\n"
+"%s"
 
 #: eeschema/tools/sch_edit_table_tool.cpp:146
 #: pcbnew/tools/pcb_edit_table_tool.cpp:187
-#, fuzzy
 msgid "Export Error"
-msgstr "Vie STEP"
+msgstr "Vientivirhe"
 
 #: eeschema/tools/sch_edit_tool.cpp:87
 msgid "Symbol Unit"
@@ -28333,9 +28318,9 @@ msgid " (already placed)"
 msgstr " (On jo sijoitettu)"
 
 #: eeschema/tools/sch_edit_tool.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid "Place unit %s"
-msgstr "Aseta kaikki yksiköt"
+msgstr "Sijoita yksikkö %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:194
 msgid "Pin Function"
@@ -28467,9 +28452,8 @@ msgid "Toggle Attribute"
 msgstr "Kytke Määrite (päälle/pois)"
 
 #: eeschema/tools/sch_edit_tool.cpp:3627
-#, fuzzy
 msgid "Edit Symbol Properties..."
-msgstr "Muokkaa Symbolin Ominaisuuksia"
+msgstr "Muokkaa symbolin ominaisuuksia..."
 
 #: eeschema/tools/sch_edit_tool.cpp:3644
 #, fuzzy
@@ -28488,14 +28472,12 @@ msgid "Export Symbols"
 msgstr "Vie symboli"
 
 #: eeschema/tools/sch_editor_control.cpp:661
-#, fuzzy
 msgid "Export symbols to library:"
-msgstr "Vie symbolit kirjastoon..."
+msgstr "Vie symbolit kirjastoon:"
 
 #: eeschema/tools/sch_editor_control.cpp:662
-#, fuzzy
 msgid "Include power symbols in export"
-msgstr "Sisällytetäänkö tehosymbolit kytkentäkaaviosta kirjastoon?"
+msgstr "Sisällytä tehosymbolit viennissä"
 
 #: eeschema/tools/sch_editor_control.cpp:663
 msgid "Update schematic symbols to link to exported symbols"
@@ -28521,12 +28503,10 @@ msgid "No connected net selected."
 msgstr "Kytkentäverkko valitsematta."
 
 #: eeschema/tools/sch_editor_control.cpp:2124 pcbnew/tools/pcb_control.cpp:1190
-#, fuzzy
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
 msgstr ""
-"Tiedostotunnisteen muuttaminen muuttaa tiedostotyyppiä.\n"
-"Haluatko jatkaa ?"
+"Pitkän merkkijonon liittäminen voi olla hyvin hidasta.  Haluatko jatkaa?"
 
 #: eeschema/tools/sch_editor_control.cpp:2179 pcbnew/tools/pcb_control.cpp:1155
 #, fuzzy
@@ -28534,9 +28514,8 @@ msgid "Paste Cells"
 msgstr "Liitä Erityinen"
 
 #: eeschema/tools/sch_editor_control.cpp:2184 pcbnew/tools/pcb_control.cpp:1160
-#, fuzzy
 msgid "Failed to paste cells"
-msgstr "%s:n tallentaminen epäonnistui."
+msgstr "Solujen liittäminen epäonnistui"
 
 #: eeschema/tools/sch_editor_control.cpp:2300
 #, c-format
@@ -28558,9 +28537,9 @@ msgid "Increment Annotations"
 msgstr "Lisää huomautuksia"
 
 #: eeschema/tools/sch_editor_control.cpp:3420
-#, fuzzy, c-format
+#, c-format
 msgid "Design block %s does not have a schematic file."
-msgstr "Suunnittelulohkolla ei ole kelvollista kirjastotunnusta."
+msgstr "Suunnittelulohkolla %s ei ole kelvollista kytkentäkaaviotiedostoa."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:385
 #, fuzzy
@@ -28576,15 +28555,13 @@ msgid "Reached end of sheet."
 msgstr "Saavutettu arkin pääty."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:398
-#, fuzzy
 msgid "No matches found."
-msgstr "Ei löytynyt"
+msgstr "Yhtään kohdetta ei löytynyt."
 
 #: eeschema/tools/sch_group_tool.cpp:46 eeschema/tools/sch_group_tool.cpp:72
 #: pcbnew/tools/pcb_group_tool.cpp:49 pcbnew/tools/pcb_group_tool.cpp:64
-#, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "Lisää valitut kohteet uuteen ryhmään"
+msgstr "Osaa valituista kohteista ei voi ryhmittellä."
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 msgid "Child items cannot be grouped separately from their parent item."
@@ -28761,9 +28738,9 @@ msgstr "Symbolikirjastoa ei ole valittu."
 #: eeschema/tools/symbol_editor_control.cpp:331
 #: eeschema/tools/symbol_editor_control.cpp:492
 #: eeschema/tools/symbol_editor_control.cpp:536
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' not found."
-msgstr "Symbolikirjastoa ei löydy."
+msgstr "Symbolikirjastoa '%s' ei löydy."
 
 #: eeschema/tools/symbol_editor_control.cpp:421
 #: pcbnew/tools/footprint_editor_control.cpp:648
@@ -28812,14 +28789,12 @@ msgid "No symbol to flatten"
 msgstr "Ei vietävää symbolia"
 
 #: eeschema/tools/symbol_editor_control.cpp:875
-#, fuzzy
 msgid "Failed to flatten symbol"
-msgstr "%s:n tallentaminen epäonnistui."
+msgstr "Symbolin tasoitus epäonnistui"
 
 #: eeschema/tools/symbol_editor_control.cpp:879
-#, fuzzy
 msgid "Failed to update library with flattened symbol"
-msgstr "Symbolikirjastotiedoston '%s' luominen epäonnistui."
+msgstr "Kirjaston päivitys tasoitetulla symbolilla epäonnistui"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:302
 msgid "Place Pin"
