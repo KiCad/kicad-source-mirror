@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-20 09:36+0300\n"
-"PO-Revision-Date: 2026-07-15 01:01+0000\n"
+"PO-Revision-Date: 2026-07-21 06:37+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -9101,12 +9101,9 @@ msgid "Failed to parse EasyEDA Pro v3 device metadata: %s"
 msgstr "遠隔提供者付帯情報の解釈に失敗しました: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:310
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid DOCHEAD in '%s' at line %d"
-msgstr ""
-"不正なフットプリント ID\n"
-"ファイル: '%s'\n"
-"行: %d"
+msgstr "不正なDOCHEAD エントリ '%s'の %d 行"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:321
 #, c-format
@@ -9115,9 +9112,9 @@ msgstr ""
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:351
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error in '%s' at line %d: %s"
-msgstr "JSON '%s' の読み込み中のエラー: %s"
+msgstr "JSON 解析エラー '%s'の %d 行: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:544
 #, fuzzy, c-format
@@ -22572,9 +22569,11 @@ msgid "Show Field Name"
 msgstr "フィールド名を表示"
 
 #: eeschema/sch_footprint_field_reconciler.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
-msgstr "%s のフットプリントを '%s' から '%s' へ変更します。"
+msgstr ""
+"%d 個のインポートされたフットプリント割り当てをライブラリ '%s' に再リンクしま"
+"した。"
 
 #: eeschema/sch_group.cpp:399 pcbnew/pcb_group.cpp:412
 #, c-format
@@ -23304,14 +23303,14 @@ msgid "EasyEDA Pro v3 symbol '%s' in '%s' was skipped due to parse error: %s"
 msgstr ""
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load symbol '%s' from '%s': %s"
-msgstr "シンボル '%s' を ライブラリ '%s' から読み込みできません。"
+msgstr "シンボル '%s' を ライブラリ '%s' から読み込みできません: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic document '%s' not found in '%s'"
-msgstr "回路図ファイル '%s' が見つかりません。"
+msgstr "回路図ドキュメント '%s' が '%s' 内で見つかりません"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:344
 #, fuzzy, c-format
@@ -23341,9 +23340,11 @@ msgstr ""
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:594
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "EasyEDA (JLCEDA) Pro v3 import skipped %d unsupported object(s)."
-msgstr "EasyEDA (JLCEDA) Pro プロジェクト"
+msgstr ""
+"EasyEDA (JLCEDA) Pro v3 インポートで %d 個のサポートされていないオブジェクト"
+"がスキップされました。"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.h:50
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.h:55
@@ -34216,9 +34217,9 @@ msgid "Select all jobs"
 msgstr "すべてのジョブを選択"
 
 #: kicad/dialogs/panel_jobset.cpp:704
-#, fuzzy, c-format
+#, c-format
 msgid "This version of KiCad does not support the '%s' job type."
-msgstr "この KiCad のインストールでは API サポートが有効になっていません."
+msgstr "この KiCad 版数ではジョブの種類 '%s' をサポートをしていません。"
 
 #: kicad/dialogs/panel_jobset.cpp:751
 msgid "Job Types"
@@ -34230,7 +34231,7 @@ msgstr "新規ジョブを追加"
 
 #: kicad/dialogs/panel_jobset.cpp:766
 msgid "Select job type:"
-msgstr "ジョブのタイプを選択:"
+msgstr "ジョブの種類を選択:"
 
 #: kicad/dialogs/panel_jobset.cpp:830
 msgid "Destination Types"
@@ -53746,9 +53747,9 @@ msgstr ""
 "す)。"
 
 #: pcbnew/footprint_import_reconciler.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported footprint cache '%s': %s"
-msgstr "ドリル レポート ファイル '%s' の作成に失敗"
+msgstr "インポートされたフットプリント キャッシュの書き込みエラー '%s': %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:335
 #, c-format
