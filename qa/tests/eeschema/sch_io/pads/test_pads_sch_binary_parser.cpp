@@ -2193,11 +2193,27 @@ BOOST_AUTO_TEST_CASE( PartPinsAndGates )
     const MODEL_PART_TYPE& connector = itemNamed( connectorModel.partTypes, wxS( "CON-26P-ED" ) );
     BOOST_REQUIRE_EQUAL( connector.gates.size(), 1 );
     BOOST_REQUIRE_EQUAL( connector.gates[0].decalGroupMembers.size(), 5 );
+    BOOST_REQUIRE_EQUAL( connector.gates[0].connectorPins.size(), 26 );
 
     for( const DEFINITION_REFERENCE& member : connector.gates[0].decalGroupMembers )
     {
         BOOST_CHECK( member.id.IsValid() );
         BOOST_CHECK_EQUAL( member.source.controller, 10 );
+    }
+
+    for( size_t pin = 0; pin < connector.gates[0].connectorPins.size(); ++pin )
+    {
+        const MODEL_CONNECTOR_PIN& connectorPin = connector.gates[0].connectorPins[pin];
+        BOOST_CHECK_EQUAL( connectorPin.number.text, wxString::Format( wxS( "%llu" ), pin + 1 ) );
+        BOOST_CHECK_EQUAL( connectorPin.name.text, wxString() );
+        BOOST_CHECK_EQUAL( connectorPin.electricalType, 0 );
+        BOOST_CHECK_EQUAL( connectorPin.swapGroup, 0 );
+        BOOST_CHECK_EQUAL( connectorPin.flags, 0 );
+        BOOST_CHECK_EQUAL( connectorPin.source.controller, 11 );
+        BOOST_CHECK_EQUAL( connectorPin.source.length, 24 );
+        BOOST_CHECK_EQUAL( connectorPin.number.source.controller, 11 );
+        BOOST_CHECK_EQUAL( connectorPin.number.source.absoluteOffset, connectorPin.source.absoluteOffset + 4 );
+        BOOST_CHECK_EQUAL( connectorPin.number.source.length, 16 );
     }
 }
 
@@ -2467,6 +2483,18 @@ BOOST_AUTO_TEST_CASE( SymbolHandleErrors )
                                return aError.What().Contains( wxS( "duplicate field ID" ) )
                                       && aError.What().Contains( wxS( "controller 7" ) )
                                       && aError.What().Contains( wxS( "first at" ) );
+                           } );
+
+    std::vector<uint8_t> connectorPinName = loadBinaryFixture( "connectors.sch" );
+    const size_t         connectorParts = sheetControllerOffset( connectorPinName, 9 );
+    const size_t         connectorPins = sheetControllerOffset( connectorPinName, 11 );
+    const uint32_t       connectorPinStart = readU32( connectorPinName, connectorParts + 76 + 48 );
+    writeU32( connectorPinName, connectorPins + connectorPinStart * 24, 0xFFFFFFFE );
+    BOOST_CHECK_EXCEPTION( parser.Parse( connectorPinName, wxS( "connector-pin-name.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "pin-name offset leaves controller 14" ) )
+                                      && aError.What().Contains( wxS( "controller 11" ) );
                            } );
 }
 
@@ -2786,8 +2814,26 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
                 const MODEL_GATE& binaryGate = binaryPart.gates[gate];
                 const PADS_SCH::GATE_DEF& asciiGateForPart = asciiPart->second.gates[gate];
 
-                if( binaryGate.pins.empty() && !binaryGate.decalGroupMembers.empty() )
+                if( !binaryGate.decalGroupMembers.empty() )
+                {
+                    BOOST_REQUIRE_EQUAL( binaryGate.connectorPins.size(), asciiGateForPart.pins.size() );
+
+                    for( size_t pin = 0; pin < binaryGate.connectorPins.size(); ++pin )
+                    {
+                        const MODEL_CONNECTOR_PIN& binaryPin = binaryGate.connectorPins[pin];
+                        BOOST_TEST_CONTEXT( fixture << ": " << binaryPart.name.text << " connector pin " << pin )
+                        {
+                            BOOST_CHECK_EQUAL( binaryPin.number.text,
+                                               wxString::FromUTF8( asciiGateForPart.pins[pin].pin_id ) );
+                            BOOST_CHECK_EQUAL( binaryPin.name.text,
+                                               wxString::FromUTF8( asciiGateForPart.pins[pin].pin_name ) );
+                            BOOST_CHECK( canonicalPinType( binaryPin.electricalType )
+                                         == canonicalPinType( asciiGateForPart.pins[pin].pin_type ) );
+                        }
+                    }
+
                     continue;
+                }
 
                 BOOST_REQUIRE_EQUAL( binaryGate.pins.size(), asciiGateForPart.pins.size() );
 

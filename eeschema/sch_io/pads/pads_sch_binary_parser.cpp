@@ -1222,6 +1222,40 @@ namespace
                 aGate.pins.push_back( { aDefinitionPin.id, pinSource } );
             };
 
+            auto decodeConnectorPin = [&]( size_t aPinRecord )
+            {
+                const size_t pinOffset = pinBase + aPinRecord * PIN_BYTES;
+                SOURCE_PROVENANCE pinSource =
+                        sourceAt( aSourceName, aModel.version, wxS( "connector logical pin" ), 11, aPinRecord,
+                                  pinOffset, PIN_BYTES, static_cast<int>( aSheetIndex ) );
+                SOURCE_PROVENANCE numberSource = pinSource;
+                numberSource.absoluteOffset += 4;
+                numberSource.length = 16;
+                MODEL_CONNECTOR_PIN pin;
+                pin.source = pinSource;
+                pin.number = decodeFixedString( aBytes, pinOffset + 4, 16, numberSource, aModel.diagnostics );
+                const uint32_t nameOffset = aCursor.U32At( pinOffset );
+
+                if( nameOffset != 0xFFFFFFFF )
+                {
+                    if( nameOffset >= pinNameBytes )
+                        throwDecodeError( pinSource, wxS( "pin-name offset leaves controller 14" ) );
+
+                    SOURCE_PROVENANCE pinNameSource =
+                            sourceAt( aSourceName, aModel.version, wxS( "connector pin name" ), 14, aPinRecord,
+                                      pinNameBase + nameOffset, pinNameBytes - nameOffset,
+                                      static_cast<int>( aSheetIndex ) );
+                    pin.name = decodeFixedString( aBytes, pinNameBase + nameOffset, pinNameBytes - nameOffset,
+                                                  pinNameSource, aModel.diagnostics );
+                }
+
+                pin.swapGroup = aCursor.U8At( pinOffset + 20 );
+                pin.electricalType =
+                        pinElectricalType( aCursor.U8At( pinOffset + 21 ), pinSource, aModel.diagnostics );
+                pin.flags = aCursor.U16At( pinOffset + 22 );
+                return pin;
+            };
+
             for( size_t gateRecord = gateStart; gateRecord < gateEnd; ++gateRecord )
             {
                 const size_t      gateOffset = gateBase + gateRecord * GATE_BYTES;
@@ -1278,7 +1312,9 @@ namespace
                         gate.decalGroupMembers.push_back( { usedDecals[memberHandle].definition->id, memberSource } );
                     }
 
-                    partPinCursor += pinCount;
+                    for( size_t pin = 0; pin < pinCount; ++pin, ++partPinCursor )
+                        gate.connectorPins.push_back( decodeConnectorPin( partPinCursor ) );
+
                     part.gates.push_back( std::move( gate ) );
                     continue;
                 }
