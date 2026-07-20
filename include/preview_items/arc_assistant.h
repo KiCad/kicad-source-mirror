@@ -71,6 +71,10 @@ private:
     const ARC_GEOM_MANAGER& m_constructMan;
     const EDA_IU_SCALE&     m_iuScale;
     EDA_UNITS               m_units;
+
+    /// Draw the arc segment (or just the radius lines). May be false if the assistant
+    /// is secondary to an in-progress drawing of a real arc object.
+    bool m_drawArc;
 };
 
 } // namespace PREVIEW
