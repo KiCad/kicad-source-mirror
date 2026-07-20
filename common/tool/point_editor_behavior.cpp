@@ -158,6 +158,9 @@ void EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
     {
         aPoints.AddPoint( evaluateAt( m_ellipse.GetEllipseStartAngle() ) );
         aPoints.AddPoint( evaluateAt( m_ellipse.GetEllipseEndAngle() ) );
+
+        aPoints.AddIndicatorLine( aPoints.Point( ELLIPSE_CENTER ), aPoints.Point( ELLIPSE_ARC_START ) );
+        aPoints.AddIndicatorLine( aPoints.Point( ELLIPSE_CENTER ), aPoints.Point( ELLIPSE_ARC_END ) );
     }
 }
 
