@@ -707,8 +707,8 @@ void EDA_DRAW_FRAME::DisplayGridMsg()
 
     wxString msg;
 
-    GRID_SETTINGS& gridSettings = m_toolManager->GetSettings()->m_Window.grid;
-    int            currentIdx = m_toolManager->GetSettings()->m_Window.grid.last_size_idx;
+    GRID_SETTINGS& gridSettings = GetWindowSettings( config() )->grid;
+    int            currentIdx = gridSettings.last_size_idx;
 
     msg.Printf( _( "grid %s" ), gridSettings.grids[currentIdx].UserUnitsMessageText( this, false ) );
 
