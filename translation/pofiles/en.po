@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-13 16:46+0300\n"
+"POT-Creation-Date: 2026-07-20 09:36+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5454,6 +5454,42 @@ msgstr "Cannot read ZIP archive '%s'"
 msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "Cannot parse JSON line %d in '%s': %s"
 
+#, c-format
+msgid "EasyEDA Pro v3 blob in '%s' was skipped due to parse error: %s"
+msgstr "EasyEDA Pro v3 blob in '%s' was skipped due to parse error: %s"
+
+#, c-format
+msgid "Failed to parse EasyEDA Pro v3 device metadata: %s"
+msgstr "Failed to parse EasyEDA Pro v3 device metadata: %s"
+
+#, c-format
+msgid "Invalid DOCHEAD in '%s' at line %d"
+msgstr "Invalid DOCHEAD in '%s' at line %d"
+
+#, c-format
+msgid "Expected DOCHEAD in '%s' at line %d"
+msgstr "Expected DOCHEAD in '%s' at line %d"
+
+#, c-format
+msgid "JSON error in '%s' at line %d: %s"
+msgstr "JSON error in '%s' at line %d: %s"
+
+#, c-format
+msgid ""
+"'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 project. Cannot "
+"find project2.json and .epru documents."
+msgstr ""
+"'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 project. Cannot "
+"find project2.json and .epru documents."
+
+#, c-format
+msgid ""
+"'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 library. Cannot "
+"find symbol2.json, footprint2.json or device2.json and .elibu documents."
+msgstr ""
+"'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 library. Cannot "
+"find symbol2.json, footprint2.json or device2.json and .elibu documents."
+
 msgid "Loading file canceled by user."
 msgstr "Loading file canceled by user."
 
@@ -5762,6 +5798,9 @@ msgstr "Import schematic"
 
 msgid "Schematic Import Job Settings"
 msgstr "Schematic Import Job Settings"
+
+msgid "Special: Archive Project"
+msgstr "Special: Archive Project"
 
 msgid "Special: Copy Files"
 msgstr "Special: Copy Files"
@@ -14680,6 +14719,10 @@ msgid "Show Field Name"
 msgstr "Show Field Name"
 
 #, c-format
+msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
+msgstr "Re-linked %d imported footprint assignment(s) to library '%s'."
+
+#, c-format
 msgid "Unnamed Group, %zu members"
 msgstr "Unnamed Group, %zu members"
 
@@ -15237,6 +15280,57 @@ msgstr "EasyEDA (JLCEDA) Std files"
 #, c-format
 msgid "Failed to parse value: '%s'"
 msgstr "Failed to parse value: '%s'"
+
+#, c-format
+msgid "EasyEDA Pro v3 component '%s': missing Symbol attribute, skipping."
+msgstr "EasyEDA Pro v3 component '%s': missing Symbol attribute, skipping."
+
+#, c-format
+msgid ""
+"EasyEDA Pro v3 component '%s': partId '%s' not found in symbol '%s', using "
+"unit 1."
+msgstr ""
+"EasyEDA Pro v3 component '%s': partId '%s' not found in symbol '%s', using "
+"unit 1."
+
+#, c-format
+msgid "EasyEDA Pro v3 symbol '%s' in '%s' was skipped due to parse error: %s"
+msgstr "EasyEDA Pro v3 symbol '%s' in '%s' was skipped due to parse error: %s"
+
+#, c-format
+msgid "Cannot load symbol '%s' from '%s': %s"
+msgstr "Cannot load symbol '%s' from '%s': %s"
+
+#, c-format
+msgid "Schematic document '%s' not found in '%s'"
+msgstr "Schematic document '%s' not found in '%s'"
+
+#, c-format
+msgid "Failed to parse EasyEDA Pro v3 symbol/device metadata: %s"
+msgstr "Failed to parse EasyEDA Pro v3 symbol/device metadata: %s"
+
+#, c-format
+msgid "EasyEDA Pro v3 symbol '%s' was skipped due to parse error: %s"
+msgstr "EasyEDA Pro v3 symbol '%s' was skipped due to parse error: %s"
+
+#, c-format
+msgid "EasyEDA Pro v3 schematic page '%s' was not found and was skipped."
+msgstr "EasyEDA Pro v3 schematic page '%s' was not found and was skipped."
+
+#, c-format
+msgid "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s"
+msgstr "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s"
+
+#, c-format
+msgid "EasyEDA Pro v3 device '%s' was skipped due to parse error: %s"
+msgstr "EasyEDA Pro v3 device '%s' was skipped due to parse error: %s"
+
+#, c-format
+msgid "EasyEDA (JLCEDA) Pro v3 import skipped %d unsupported object(s)."
+msgstr "EasyEDA (JLCEDA) Pro v3 import skipped %d unsupported object(s)."
+
+msgid "EasyEDA (JLCEDA) Pro v3 files"
+msgstr "EasyEDA (JLCEDA) Pro v3 files"
 
 #, c-format
 msgid "Symbol '%s' not found in gEDA libraries."
@@ -18643,6 +18737,9 @@ msgstr "Cannot import symbol '%s': %s"
 #, c-format
 msgid "Imported %d symbol(s), skipped %d."
 msgstr "Imported %d symbol(s), skipped %d."
+
+msgid "Text objects"
+msgstr "Text objects"
 
 #, c-format
 msgid "Error deleting symbol %s from library '%s'."
@@ -23149,6 +23246,22 @@ msgid "Invalid output format '%s' (expected 'json', 'text', 'png', or 'svg')\n"
 msgstr ""
 "Invalid output format '%s' (expected 'json', 'text', 'png', or 'svg')\n"
 
+msgid "Archive file:"
+msgstr "Archive file:"
+
+msgid ""
+"Text variables such as ${PROJECTNAME} are expanded. A relative path is "
+"resolved against the working directory."
+msgstr ""
+"Text variables such as ${PROJECTNAME} are expanded. A relative path is "
+"resolved against the working directory."
+
+msgid "Include extra files (legacy and output files)"
+msgstr "Include extra files (legacy and output files)"
+
+msgid "Archive Project Job Settings"
+msgstr "Archive Project Job Settings"
+
 msgid "Destination:"
 msgstr "Destination:"
 
@@ -23384,6 +23497,10 @@ msgstr "Delete selected jobs"
 
 msgid "Select all jobs"
 msgstr "Select all jobs"
+
+#, c-format
+msgid "This version of KiCad does not support the '%s' job type."
+msgstr "This version of KiCad does not support the '%s' job type."
 
 msgid "Job Types"
 msgstr "Job Types"
@@ -35963,6 +36080,9 @@ msgstr "Netclass clearances apply only between copper items."
 msgid "%s contains no copper.  Constraint ignored."
 msgstr "%s contains no copper.  Constraint ignored."
 
+msgid "Keepout belongs to the footprint under test; constraint ignored."
+msgstr "Keepout belongs to the footprint under test; constraint ignored."
+
 msgid "Keepout constraint not met."
 msgstr "Keepout constraint not met."
 
@@ -37105,6 +37225,9 @@ msgstr "Tolerance must be greater than or equal to 0"
 msgid "Tolerance is too large: resulting minimum length is not positive"
 msgstr "Tolerance is too large: resulting minimum length is not positive"
 
+msgid "Within diff pairs"
+msgstr "Within diff pairs"
+
 msgid "At least one constraint must be defined"
 msgstr "At least one constraint must be defined"
 
@@ -37189,9 +37312,6 @@ msgstr "ERROR at line %d, column %d: %s"
 
 msgid "Syntax check passed with warnings:\n"
 msgstr "Syntax check passed with warnings:\n"
-
-msgid "Within diff pairs"
-msgstr "Within diff pairs"
 
 msgid "Minimum Text Height must be greater than 0"
 msgstr "Minimum Text Height must be greater than 0"
@@ -37281,11 +37401,11 @@ msgstr "%s value cannot be greater than %s value."
 msgid "Please select at least one option from %s list."
 msgstr "Please select at least one option from %s list."
 
-msgid "Rule type"
-msgstr "Rule type"
+msgid "Rule Type"
+msgstr "Rule Type"
 
-msgid "Rule name"
-msgstr "Rule name"
+msgid "Rule Name"
+msgstr "Rule Name"
 
 msgid "Rule name must be unique."
 msgstr "Rule name must be unique."
@@ -37781,16 +37901,6 @@ msgstr "Memory exhausted loading PCB '%s'"
 msgid "Finalizing board"
 msgstr "Finalizing board"
 
-msgid "New Footprint Library"
-msgstr "New Footprint Library"
-
-#, c-format
-msgid "Error saving footprint %s to project specific library."
-msgstr "Error saving footprint %s to project specific library."
-
-msgid "Error saving project specific footprint library table."
-msgstr "Error saving project specific footprint library table."
-
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Error saving custom rules file '%s'."
@@ -37802,6 +37912,10 @@ msgid ""
 msgstr ""
 "Error saving board file '%s'.\n"
 "%s"
+
+#, c-format
+msgid "Could not reconcile imported footprint libraries: %s"
+msgstr "Could not reconcile imported footprint libraries: %s"
 
 msgid "Generate ODB++ Files"
 msgstr "Generate ODB++ Files"
@@ -37992,6 +38106,37 @@ msgstr ""
 msgid "Footprint library not enabled."
 msgstr "Footprint library not enabled."
 
+#, c-format
+msgid ""
+"Imported footprint '%s' has conflicting placed definitions; keeping the "
+"first."
+msgstr ""
+"Imported footprint '%s' has conflicting placed definitions; keeping the "
+"first."
+
+msgid "Cannot reconcile imported footprints: no KiCad footprint writer."
+msgstr "Cannot reconcile imported footprints: no KiCad footprint writer."
+
+#, c-format
+msgid "Error writing imported footprint cache '%s': %s"
+msgstr "Error writing imported footprint cache '%s': %s"
+
+#, c-format
+msgid ""
+"A library already exists at '%s'; leaving imported footprints unresolved."
+msgstr ""
+"A library already exists at '%s'; leaving imported footprints unresolved."
+
+#, c-format
+msgid "Could not publish imported footprint cache to '%s'."
+msgstr "Could not publish imported footprint cache to '%s'."
+
+msgid "Cannot register imported footprint cache: no project library table."
+msgstr "Cannot register imported footprint cache: no project library table."
+
+msgid "Error saving project footprint library table."
+msgstr "Error saving project footprint library table."
+
 msgid "Loading footprints..."
 msgstr "Loading footprints..."
 
@@ -38037,6 +38182,9 @@ msgstr "Export Footprint"
 #, c-format
 msgid "Footprint exported to file '%s'."
 msgstr "Footprint exported to file '%s'."
+
+msgid "New Footprint Library"
+msgstr "New Footprint Library"
 
 #, c-format
 msgid "Delete footprint '%s' from library '%s'?"
@@ -40520,6 +40668,21 @@ msgid "EasyEDA (JLCEDA) Pro project"
 msgstr "EasyEDA (JLCEDA) Pro project"
 
 #, c-format
+msgid "Cannot load footprint '%s' from '%s': %s"
+msgstr "Cannot load footprint '%s' from '%s': %s"
+
+#, c-format
+msgid "PCB document '%s' not found in '%s'"
+msgstr "PCB document '%s' not found in '%s'"
+
+msgid "EasyEDA (JLCEDA) Pro v3 project"
+msgstr "EasyEDA (JLCEDA) Pro v3 project"
+
+#, c-format
+msgid "EasyEDA Pro v3 component '%s' (%s): no footprint mapping, skipping."
+msgstr "EasyEDA Pro v3 component '%s' (%s): no footprint mapping, skipping."
+
+#, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
 msgstr "Unknown FABMASTER section %s:%s at row %zu."
 
@@ -42706,20 +42869,15 @@ msgstr "BOARD exported OK."
 msgid "Unable to export, please fix and try again"
 msgstr "Unable to export, please fix and try again"
 
-#, c-format
-msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr "Footprint with value of '%s' has an empty reference designator."
-
-#, c-format
-msgid "Multiple footprints have the reference designator '%s'."
-msgstr "Multiple footprints have the reference designator '%s'."
-
 msgid ""
 "Board may be corrupted, do not save it.\n"
 " Fix problem and try again"
 msgstr ""
 "Board may be corrupted, do not save it.\n"
 " Fix problem and try again"
+
+msgid "Import Specctra Session"
+msgstr "Import Specctra Session"
 
 msgid "Session file imported and merged OK."
 msgstr "Session file imported and merged OK."
@@ -42753,12 +42911,20 @@ msgid "Session file is missing the \"library_out\" section"
 msgstr "Session file is missing the “library_out” section"
 
 #, c-format
-msgid "Reference '%s' not found."
-msgstr "Reference '%s' not found."
+msgid "Unsupported wire shape: '%s' for net: '%s'"
+msgstr "Unsupported wire shape: '%s' for net: '%s'"
 
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
 msgstr "A wire_via refers to missing padstack '%s'."
+
+#, c-format
+msgid ""
+"%d session item(s) were skipped due to unresolved reference, layer, or "
+"padstack."
+msgstr ""
+"%d session item(s) were skipped due to unresolved reference, layer, or "
+"padstack."
 
 msgid "Dimension objects"
 msgstr "Dimension objects"
@@ -46788,6 +46954,31 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Rule type"
+#~ msgstr "Rule type"
+
+#~ msgid "Rule name"
+#~ msgstr "Rule name"
+
+#, c-format
+#~ msgid "Error saving footprint %s to project specific library."
+#~ msgstr "Error saving footprint %s to project specific library."
+
+#~ msgid "Error saving project specific footprint library table."
+#~ msgstr "Error saving project specific footprint library table."
+
+#, c-format
+#~ msgid "Footprint with value of '%s' has an empty reference designator."
+#~ msgstr "Footprint with value of '%s' has an empty reference designator."
+
+#, c-format
+#~ msgid "Multiple footprints have the reference designator '%s'."
+#~ msgstr "Multiple footprints have the reference designator '%s'."
+
+#, c-format
+#~ msgid "Reference '%s' not found."
+#~ msgstr "Reference '%s' not found."
 
 #~ msgid "Restore auto-saved"
 #~ msgstr "Restore auto-saved"
