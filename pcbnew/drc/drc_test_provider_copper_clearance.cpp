@@ -278,10 +278,11 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
 
         if( itemShape->Collide( otherShape, sub_e( clearance ), &actual, &pos ) )
         {
-            if( itemNet && m_drcEngine->IsNetTieExclusion( itemNet->GetNetCode(), layer, pos, other ) )
+            if( ( itemNet && m_drcEngine->IsNetTieExclusion( itemNet->GetNetCode(), layer, pos, other ) )
+                || ( otherNet && m_drcEngine->IsNetTieExclusion( otherNet->GetNetCode(), layer, pos, item ) ) )
             {
-                // Collision occurred as track was entering a pad marked as a net-tie.  We
-                // allow these.
+                // Collision occurred as a copper item entered a pad marked as a net-tie.  We allow
+                // these regardless of which side DRC happened to test first.
             }
             else if( actual == 0 && otherNet && testShorting )
             {

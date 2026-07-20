@@ -65,7 +65,8 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
         "issue18839",            // False positive board edge clearance between concentric arcs
         "unconnected-netnames/unconnected-netnames", // Raised false schematic partity error
         "net_tie_drc",                               // Net tie bridging soldermask DRC test
-        "diff_pair_uncoupled_tuning_drc"             // Tuning pattern length wrongly counted as uncoupled
+        "issue24974",                    // Net-tie graphic copper on last pad, UUID-order-independent exemption
+        "diff_pair_uncoupled_tuning_drc" // Tuning pattern length wrongly counted as uncoupled
     };
 
     for( const wxString& relPath : tests )
