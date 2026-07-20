@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-20 09:36+0300\n"
-"PO-Revision-Date: 2026-07-15 01:01+0000\n"
+"PO-Revision-Date: 2026-07-21 06:37+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -9554,20 +9554,21 @@ msgid "Restore Failed"
 msgstr "復元に失敗しました"
 
 #: common/local_history.cpp:2260
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "リモート バージョンにリセットします。"
+msgstr "プロジェクトを版数 %s に復元しますか？"
 
 #: common/local_history.cpp:2262
-#, fuzzy
 msgid "Restore Version"
-msgstr "セッションの復元"
+msgstr "版数復元"
 
 #: common/local_history.cpp:2265
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
 msgstr ""
+"復元を元に戻せるよう、 まず現在のファイルをバックアップします。 この版数に含"
+"まれていないファイルは変更されません。"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1228 pcbnew/zone.cpp:989
@@ -31445,7 +31446,7 @@ msgstr "新規ジョブを追加"
 
 #: kicad/dialogs/panel_jobset.cpp:750
 msgid "Select job type:"
-msgstr "ジョブのタイプを選択:"
+msgstr "ジョブの種類を選択:"
 
 #: kicad/dialogs/panel_jobset.cpp:814
 msgid "Destination Types"
