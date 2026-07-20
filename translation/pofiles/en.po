@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-13 16:46+0300\n"
+"POT-Creation-Date: 2026-07-20 09:36+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5811,53 +5811,25 @@ msgstr "Trimming local history..."
 msgid "Compacting trimmed history..."
 msgstr "Compacting trimmed history..."
 
-msgid ""
-"The following files will be deleted when restoring this commit:\n"
-"\n"
-msgstr ""
-"The following files will be deleted when restoring this commit:\n"
-"\n"
-
-#, c-format
-msgid ""
-"\n"
-"... and %zu more files\n"
-msgstr ""
-"\n"
-"... and %zu more files\n"
-
-msgid "Delete Files during Restore"
-msgstr "Delete Files during Restore"
-
-msgid "Proceed"
-msgstr "Proceed"
-
-msgid "Keep All Files"
-msgstr "Keep All Files"
-
-msgid "Abort"
-msgstr "Abort"
-
-msgid ""
-"Choosing 'Keep All Files' will restore the selected commit but retain any "
-"existing files in the project directory. Choosing 'Proceed' will delete "
-"files that are not present in the restored commit."
-msgstr ""
-"Choosing 'Keep All Files' will restore the selected commit but retain any "
-"existing files in the project directory. Choosing 'Proceed' will delete "
-"files that are not present in the restored commit."
-
-#, c-format
-msgid ""
-"Files removed by 'Proceed' are archived to %s and can be recovered manually."
-msgstr ""
-"Files removed by 'Proceed' are archived to %s and can be recovered manually."
-
 msgid "Cannot restore - the following files are open by another user:"
 msgstr "Cannot restore - the following files are open by another user:"
 
 msgid "Restore Failed"
 msgstr "Restore Failed"
+
+#, c-format
+msgid "Restore the project to the version from %s?"
+msgstr "Restore the project to the version from %s?"
+
+msgid "Restore Version"
+msgstr "Restore Version"
+
+msgid ""
+"Your current files are backed up first so you can undo the restore. Files "
+"that are not part of this version are left untouched."
+msgstr ""
+"Your current files are backed up first so you can undo the restore. Files "
+"that are not part of this version are left untouched."
 
 #, c-format
 msgid "%s and %s"
@@ -12811,6 +12783,9 @@ msgstr ""
 
 msgid "Load Without Cache File"
 msgstr "Load Without Cache File"
+
+msgid "Abort"
+msgstr "Abort"
 
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
@@ -34575,6 +34550,9 @@ msgstr "Tolerance must be greater than or equal to 0"
 msgid "Tolerance is too large: resulting minimum length is not positive"
 msgstr "Tolerance is too large: resulting minimum length is not positive"
 
+msgid "Within diff pairs"
+msgstr "Within diff pairs"
+
 msgid "At least one constraint must be defined"
 msgstr "At least one constraint must be defined"
 
@@ -34665,9 +34643,6 @@ msgstr "Syntax check passed with warnings:\n"
 
 msgid "Syntax OK"
 msgstr "Syntax OK"
-
-msgid "Within diff pairs"
-msgstr "Within diff pairs"
 
 msgid "Minimum Text Height must be greater than 0"
 msgstr "Minimum Text Height must be greater than 0"
@@ -43811,6 +43786,47 @@ msgstr "Process could not be created"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Could not create user scripting path %s."
+
+#~ msgid ""
+#~ "The following files will be deleted when restoring this commit:\n"
+#~ "\n"
+#~ msgstr ""
+#~ "The following files will be deleted when restoring this commit:\n"
+#~ "\n"
+
+#, c-format
+#~ msgid ""
+#~ "\n"
+#~ "... and %zu more files\n"
+#~ msgstr ""
+#~ "\n"
+#~ "... and %zu more files\n"
+
+#~ msgid "Delete Files during Restore"
+#~ msgstr "Delete Files during Restore"
+
+#~ msgid "Proceed"
+#~ msgstr "Proceed"
+
+#~ msgid "Keep All Files"
+#~ msgstr "Keep All Files"
+
+#~ msgid ""
+#~ "Choosing 'Keep All Files' will restore the selected commit but retain any "
+#~ "existing files in the project directory. Choosing 'Proceed' will delete "
+#~ "files that are not present in the restored commit."
+#~ msgstr ""
+#~ "Choosing 'Keep All Files' will restore the selected commit but retain any "
+#~ "existing files in the project directory. Choosing 'Proceed' will delete "
+#~ "files that are not present in the restored commit."
+
+#, c-format
+#~ msgid ""
+#~ "Files removed by 'Proceed' are archived to %s and can be recovered "
+#~ "manually."
+#~ msgstr ""
+#~ "Files removed by 'Proceed' are archived to %s and can be recovered "
+#~ "manually."
 
 #~ msgid "Restore auto-saved"
 #~ msgstr "Restore auto-saved"
