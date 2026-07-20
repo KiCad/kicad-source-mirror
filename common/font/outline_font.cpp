@@ -179,15 +179,9 @@ void OUTLINE_FONT::SelectCharmap( FT_Face aFace )
 
 double OUTLINE_FONT::GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const
 {
-    double glyphToFontHeight = 1.0;
-
-    // Both FreeType metrics are integers, so the ratio must be computed in floating point.
-    // Truncated integer division collapsed the spacing to zero for fonts with height < units_per_EM.
-    if( GetFace() && GetFace()->units_per_EM > 0 && GetFace()->height > 0 )
-        glyphToFontHeight = static_cast<double>( GetFace()->height )
-                            / static_cast<double>( GetFace()->units_per_EM );
-
-    return aFontMetrics.GetInterline( aGlyphHeight * glyphToFontHeight );
+    // The em-relative interline pitch already sets the line spacing; scaling it again by the face
+    // height / units_per_EM ratio double-counts and inflates spacing for non-default fonts
+    return aFontMetrics.GetInterline( aGlyphHeight );
 }
 
 
