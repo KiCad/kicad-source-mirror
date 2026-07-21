@@ -1042,7 +1042,7 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
     if( !coupledNet || !startItem )
         return false;
 
-    LINE lp = m_world->AssembleLine( startItem );
+    LINE lp = m_world->AssembleLine( startItem, nullptr, false, false, false );
 
     std::vector<ITEM*> pItems;
     std::vector<ITEM*> nItems;
@@ -1155,7 +1155,7 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
     if( !coupledItem )
         return false;
 
-    LINE ln = m_world->AssembleLine( coupledItem );
+    LINE ln = m_world->AssembleLine( coupledItem, nullptr, false, false, false );
 
     if( m_world->GetRuleResolver()->DpNetPolarity( refNet ) < 0 )
         std::swap( lp, ln );

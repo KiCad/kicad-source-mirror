@@ -107,6 +107,7 @@ set( QA_PCBNEW_SRCS
     test_tuning_pattern_layer.cpp
     test_multichannel.cpp
     test_pns_tuning_path_through_pad.cpp
+    test_pns_diff_pair_tuning_width.cpp
     test_variant.cpp
     test_zone.cpp
     test_zone_filler.cpp
