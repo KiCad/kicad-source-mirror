@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-07-21 18:07+0000\n"
+"PO-Revision-Date: 2026-07-22 19:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -16125,7 +16125,7 @@ msgstr "検索 (&S):"
 #: eeschema/dialogs/dialog_sch_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
 msgid "Text with optional wildcards"
-msgstr "検索文字列"
+msgstr "オプション ワイルドカードを含むテキスト"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:41
 msgid "Replace &with:"
@@ -21064,8 +21064,7 @@ msgstr ""
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1435
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr ""
-"ストレージのファイルは完全に読み込まれていません(%d バイト残っています)."
+msgstr "ストレージのファイルは完全に解釈されていません(%d バイト残っています)."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1518
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1619
@@ -30297,7 +30296,7 @@ msgstr "ハンダマスクレイヤーを平面のセットとしてエクスポ
 
 #: kicad/cli/command_pcb_export_3d.cpp:163
 msgid "Fuse overlapping geometry together"
-msgstr "重なり合うジオメトリを融合する"
+msgstr "重なり合う形状を融合する"
 
 #: kicad/cli/command_pcb_export_3d.cpp:167
 #: pcbnew/dialogs/dialog_export_step_base.cpp:154
@@ -52101,12 +52100,12 @@ msgstr "Pads6ストリームのsubrecord6の長さが予期しないものです
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:493
 #, c-format
 msgid "'%s' was not parsed correctly."
-msgstr "'%s' 正しくパースされませんでした。"
+msgstr "'%s' 正しく解釈されませんでした。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:507
 #, c-format
 msgid "'%s' was not fully parsed."
-msgstr "'%s' は完全にパースされていません。"
+msgstr "'%s' は完全に解釈されていません。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:528
 msgid ""
