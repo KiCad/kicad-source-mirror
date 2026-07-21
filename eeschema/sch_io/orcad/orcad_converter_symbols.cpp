@@ -181,6 +181,98 @@ void ORCAD_CONVERTER::prepareSymbols()
 }
 
 
+std::vector<LIB_SYMBOL*> ORCAD_CONVERTER::BuildSymbolLibrary()
+{
+    // .OLB has same Library/Cache/Packages streams but no pages, so lib entries built
+    // directly from cache defs (grouped by base name, Normal view) w/ package data.
+    auto stripView = []( const std::string& aName ) -> std::string
+    {
+        size_t dot = aName.rfind( '.' );
+
+        if( dot != std::string::npos )
+        {
+            std::string view = aName.substr( dot + 1 );
+
+            if( view == "Normal" || view == "Convert" )
+                return aName.substr( 0, dot );
+        }
+
+        return aName;
+    };
+
+    for( auto& [cacheName, def] : m_design.symbols )
+    {
+        // Only drawable library parts and power symbols become library items
+        if( def.typeId != ORCAD_ST_LIBRARY_PART && def.typeId != ORCAD_ST_GLOBAL_SYMBOL )
+            continue;
+
+        bool        convertView = cacheName.size() > 8
+                                  && cacheName.compare( cacheName.size() - 8, 8, ".Convert" ) == 0;
+        std::string base = stripView( cacheName );
+        std::string libname = SymbolId( base );
+
+        LIB_ENTRY& ls = m_libSymbols[libname];
+
+        // First (Normal) view wins; .Convert is DeMorgan alternate sharing pin map,
+        // not separate item.
+        if( !ls.name.empty() )
+            continue;
+
+        if( convertView && m_design.symbols.count( base + ".Normal" ) )
+            continue;
+
+        ls.name = libname;
+
+        std::string          bare = base.substr( 0, base.find( '.' ) );
+        const ORCAD_PACKAGE* pkg = nullptr;
+
+        for( const std::string& key : { base, bare } )
+        {
+            auto pkgIt = m_design.packages.find( key );
+
+            if( pkgIt != m_design.packages.end() )
+            {
+                pkg = &pkgIt->second;
+                break;
+            }
+        }
+
+        ls.isPower = def.typeId == ORCAD_ST_GLOBAL_SYMBOL;
+        ls.refPrefix = ( pkg && !pkg->refDes.empty() ) ? pkg->refDes : ( ls.isPower ? "#PWR" : "U" );
+        ls.footprint = pkg ? pkg->pcbFootprint : "";
+
+        if( ls.isPower )
+            ls.powerNet = base;                 // power value = net name (symbol base)
+
+        std::vector<std::string> pinNumbers;
+
+        if( pkg && !pkg->devices.empty() )
+            pinNumbers = pkg->devices.front().pinNumbers;
+
+        ls.units.push_back( { "A", &def, pinNumbers } );
+    }
+
+    computeFontBaseline();
+
+    std::vector<LIB_SYMBOL*> out;
+
+    for( auto& [libname, entry] : m_libSymbols )
+    {
+        // Single malformed cache symbol must not sink whole library.
+        try
+        {
+            if( LIB_SYMBOL* symbol = kicadSymbolFor( libname ) )
+                out.push_back( static_cast<LIB_SYMBOL*>( symbol->Duplicate() ) );
+        }
+        catch( const std::exception& )
+        {
+        }
+    }
+
+    return out;
+}
+
+
 ORCAD_SYMBOL_DEF
 ORCAD_CONVERTER::synthesizeSymbol( const std::string& aPkgName,
                                    const std::vector<const ORCAD_PLACED_INSTANCE*>& aInstances ) const

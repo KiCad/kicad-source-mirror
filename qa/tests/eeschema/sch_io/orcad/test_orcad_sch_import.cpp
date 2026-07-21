@@ -637,6 +637,94 @@ BOOST_AUTO_TEST_CASE( CorpusValidation )
 }
 
 
+// ============================================================================
+// OLB symbol-library import (opt-in via KICAD_ORCAD_CORPUS)
+//
+// Each .OLB must enumerate symbols carrying pins or graphics; empty symbol means
+// cache decode silently produced nothing.
+// ============================================================================
+
+BOOST_AUTO_TEST_CASE( OlbLibraryImport )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+    {
+        BOOST_TEST_MESSAGE( "KICAD_ORCAD_CORPUS not set; skipping OrCAD OLB library import." );
+        return;
+    }
+
+    namespace fs = std::filesystem;
+    std::vector<fs::path> libs;
+
+    for( auto it = fs::recursive_directory_iterator( fs::path( corpusEnv ),
+                                                     fs::directory_options::skip_permission_denied );
+         it != fs::recursive_directory_iterator(); ++it )
+    {
+        if( !it->is_regular_file() )
+            continue;
+
+        std::string ext = it->path().extension().string();
+        std::transform( ext.begin(), ext.end(), ext.begin(),
+                        []( unsigned char c ) { return std::tolower( c ); } );
+
+        if( ext == ".olb" )
+            libs.push_back( it->path() );
+    }
+
+    std::sort( libs.begin(), libs.end() );
+    BOOST_TEST_MESSAGE( "OrCAD OLB libraries: " << libs.size() );
+
+    int totalSymbols = 0, emptySymbols = 0, checkedLibs = 0, crashedLibs = 0;
+
+    for( const fs::path& lib : libs )
+    {
+        SCH_IO_ORCAD             plugin;
+        std::vector<LIB_SYMBOL*> symbols;
+
+        try
+        {
+            // Vector overload materializes all symbols O(n); per-name LoadSymbol rescans O(n^2).
+            plugin.EnumerateSymbolLib( symbols, lib.string() );
+        }
+        catch( const std::exception& e )
+        {
+            ++crashedLibs;
+            BOOST_TEST_MESSAGE( "  THROW  " << lib.filename().string() << " : " << e.what() );
+            continue;
+        }
+
+        ++checkedLibs;
+        int withGeometry = 0;
+
+        for( LIB_SYMBOL* symbol : symbols )
+        {
+            BOOST_REQUIRE( symbol );
+            ++totalSymbols;
+
+            if( symbol->GetPinCount() > 0 || !symbol->GetDrawItems().empty() )
+                ++withGeometry;
+            else
+                ++emptySymbols;
+        }
+
+        BOOST_TEST_MESSAGE( "  " << lib.filename().string() << " : " << symbols.size()
+                                 << " symbols, " << withGeometry << " with pins/graphics" );
+    }
+
+    BOOST_TEST_MESSAGE( "OLB summary: " << checkedLibs << " libs, " << crashedLibs
+                                        << " crashed, " << totalSymbols << " symbols, "
+                                        << emptySymbols << " empty" );
+
+    // Bad streams must degrade gracefully, not throw; wholesale empty result means decode broke.
+    BOOST_CHECK_EQUAL( crashedLibs, 0 );
+    BOOST_CHECK_GT( totalSymbols, 0 );
+
+    if( totalSymbols )
+        BOOST_CHECK_LT( emptySymbols, totalSymbols / 2 );
+}
+
+
 // CutiePi (3 pages) imports as three sibling top-level sheets; off-page connectors keep own
 // names; reference/value fields honor source display positions.
 BOOST_AUTO_TEST_CASE( MultiPageFlatImport )

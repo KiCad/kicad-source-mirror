@@ -508,3 +508,154 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
     return rootSheet;
 }
+
+
+const std::vector<std::unique_ptr<LIB_SYMBOL>>&
+SCH_IO_ORCAD::loadOlbSymbols( const wxString& aLibraryPath )
+{
+    if( auto it = m_libCache.find( aLibraryPath ); it != m_libCache.end() )
+        return it->second;
+
+    ORCAD_WARN_FN warnFn = [this]( const wxString& aMsg )
+    {
+        if( m_reporter )
+            m_reporter->Report( aMsg, RPT_SEVERITY_WARNING );
+    };
+
+    ORCAD_DESIGN design;
+
+    try
+    {
+        ALTIUM_COMPOUND_FILE cfbFile( aLibraryPath );
+
+        const CFB::CompoundFileReader&  reader = cfbFile.GetCompoundFileReader();
+        const CFB::COMPOUND_FILE_ENTRY* root = reader.GetRootEntry();
+
+        const CFB::COMPOUND_FILE_ENTRY* libraryEntry =
+                cfbFile.FindStreamSingleLevel( root, "Library", true );
+
+        if( !libraryEntry )
+            THROW_IO_ERROR( _( "The file is not an OrCAD Capture library (no 'Library' stream)." ) );
+
+        design.library = OrcadParseLibrary( readStream( cfbFile, libraryEntry ) );
+
+        bool isV2 = design.library.versionMajor < 3;
+
+        // Parse one stream, tolerating a single bad/oversized stream without aborting the
+        // library. Modern streams use preamble-framed cache reader; v2.0 uses short-prefix readers
+        auto parseStream = [&]( const CFB::COMPOUND_FILE_ENTRY* aEntry, bool aIsPackage )
+        {
+            std::map<std::string, ORCAD_SYMBOL_DEF> extraSymbols;
+            std::map<std::string, ORCAD_PACKAGE>    extraPackages;
+
+            try
+            {
+                std::vector<char> data = readStream( cfbFile, aEntry );
+
+                if( isV2 && aIsPackage )
+                    OrcadParseOlbPackageStreamV2( data, design.library.strings, extraSymbols,
+                                                  extraPackages );
+                else if( isV2 )
+                    OrcadParseOlbSymbolStreamV2( data, design.library.strings, extraSymbols );
+                else
+                    OrcadParseCache( data, design.library.strings, warnFn, extraSymbols,
+                                     extraPackages );
+            }
+            catch( const std::exception& )
+            {
+                // Single bad stream must not abort whole library
+                return;
+            }
+
+            OrcadMergeCacheStreams( design.symbols, design.packages, std::move( extraSymbols ),
+                                    std::move( extraPackages ) );
+        };
+
+        // Design 'Cache' usually empty in a library; read anyway for rare cached symbol
+        if( !isV2 )
+        {
+            if( const CFB::COMPOUND_FILE_ENTRY* cacheEntry =
+                        cfbFile.FindStreamSingleLevel( root, "Cache", true ) )
+            {
+                parseStream( cacheEntry, false );
+            }
+        }
+
+        // Symbols and parts live one per stream under 'Symbols' and 'Packages' storages
+        for( const char* storageName : { "Symbols", "Packages" } )
+        {
+            bool isPackage = std::string( storageName ) == "Packages";
+
+            const CFB::COMPOUND_FILE_ENTRY* storage =
+                    cfbFile.FindStreamSingleLevel( root, storageName, false );
+
+            if( storage )
+            {
+                for( const auto& [streamName, entry] : enumChildren( cfbFile, storage, true ) )
+                {
+                    // '$Types$' and similar helper streams are not symbol defs
+                    if( !streamName.empty() && streamName.front() == '$' )
+                        continue;
+
+                    parseStream( entry, isPackage );
+                }
+            }
+        }
+    }
+    catch( const CFB::CFBException& e )
+    {
+        THROW_IO_ERROR( e.what() );
+    }
+    catch( const IO_ERROR& )
+    {
+        // Reportable errors (e.g. pre-2003 version gate) propagate
+        throw;
+    }
+    catch( const std::exception& e )
+    {
+        // Malformed Library stream can drive over-sized allocation; degrade to recovered symbols
+        warnFn( wxString::Format( _( "The OrCAD library could not be fully parsed (%s); some "
+                                     "symbols may be missing." ),
+                                  wxString::FromUTF8( e.what() ) ) );
+    }
+
+    ORCAD_CONVERTER converter( design, nullptr, m_reporter, m_progressReporter );
+
+    // Build fully before caching so mid-parse failure does not cache an empty library
+    std::vector<std::unique_ptr<LIB_SYMBOL>> built;
+
+    for( LIB_SYMBOL* symbol : converter.BuildSymbolLibrary() )
+        built.emplace_back( symbol );
+
+    return m_libCache[aLibraryPath] = std::move( built );
+}
+
+
+void SCH_IO_ORCAD::EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
+                                       const std::map<std::string, UTF8>* )
+{
+    for( const std::unique_ptr<LIB_SYMBOL>& symbol : loadOlbSymbols( aLibraryPath ) )
+        aSymbolNameList.Add( symbol->GetName() );
+}
+
+
+void SCH_IO_ORCAD::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
+                                       const wxString& aLibraryPath,
+                                       const std::map<std::string, UTF8>* )
+{
+    for( const std::unique_ptr<LIB_SYMBOL>& symbol : loadOlbSymbols( aLibraryPath ) )
+        aSymbolList.push_back( symbol.get() );
+}
+
+
+LIB_SYMBOL* SCH_IO_ORCAD::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                                      const std::map<std::string, UTF8>* )
+{
+    for( const std::unique_ptr<LIB_SYMBOL>& symbol : loadOlbSymbols( aLibraryPath ) )
+    {
+        if( symbol->GetName() == aAliasName )
+            return symbol.get();
+    }
+
+    return nullptr;
+}

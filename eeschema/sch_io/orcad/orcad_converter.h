@@ -227,6 +227,14 @@ public:
      */
     SCH_SHEET* Convert( SCH_SHEET* aRootSheet );
 
+    /**
+     * Build KiCad library symbols from the design cache and packages alone (no
+     * schematic pages), for importing an OrCAD .OLB library.  One entry per package
+     * (multi-unit from its devices), plus any cache symbol not owned by a package.
+     * The returned symbols are owned by the caller.  [orcad_converter_symbols.cpp]
+     */
+    std::vector<LIB_SYMBOL*> BuildSymbolLibrary();
+
     /// Symbol library nickname used in every emitted LIB_ID.
     static constexpr const char* LIB_NICK = "orcad_import";
 

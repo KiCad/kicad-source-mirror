@@ -806,10 +806,183 @@ static void v2Structure( ORCAD_STREAM& aStream, const std::vector<std::string>& 
 
 // -- v2.0 .OLB symbol-library streams -----------------------------------------------
 
-// Used by the .OLB symbol readers added in the following commit.
-[[maybe_unused]] static ORCAD_PORT_TYPE v2PortType( uint32_t aRaw )
+static ORCAD_PORT_TYPE v2PortType( uint32_t aRaw )
 {
     return aRaw <= 7 ? static_cast<ORCAD_PORT_TYPE>( aRaw ) : ORCAD_PORT_TYPE::PASSIVE;
+}
+
+
+// One symbol pin (type 26 scalar / 27 bus); lone 0x00 = skipped slot
+static bool v2SymbolPin( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings,
+                         ORCAD_SYMBOL_PIN& aOut )
+{
+    if( aStream.PeekU8() == 0x00 )
+    {
+        aStream.Skip( 1 );
+        return false;
+    }
+
+    uint8_t type = v2Prefix( aStream, aStrings );
+
+    aOut.name = aStream.ReadLzt();
+    aOut.startX = aStream.ReadI32();
+    aOut.startY = aStream.ReadI32();
+    aOut.hotptX = aStream.ReadI32();
+    aOut.hotptY = aStream.ReadI32();
+    aOut.shapeBits = aStream.ReadU16();
+    aStream.Skip( 2 );
+    aOut.portType = v2PortType( aStream.ReadU32() );
+    aStream.ExpectByte( type, wxS( "v2 pin type echo" ) );
+    aStream.Skip( 3 );
+
+    uint16_t dispCount = aStream.ReadU16();
+    v2CheckCount( aStream, dispCount );
+
+    for( uint16_t i = 0; i < dispCount; i++ )
+        v2DisplayProp( aStream, aStrings );
+
+    return true;
+}
+
+
+// Symbol-def body shared by Symbols streams and inline LibraryParts (read after prefix).
+static ORCAD_SYMBOL_DEF v2LibSymbolDef( ORCAD_STREAM& aStream,
+                                        const std::vector<std::string>& aStrings, int aTypeId )
+{
+    ORCAD_SYMBOL_DEF def;
+    def.typeId = aTypeId;
+    def.name = aStream.ReadLzt();
+    def.sourceLib = aStream.ReadLzt();
+    aStream.ReadU32();                          // color
+
+    uint16_t primCount = aStream.ReadU16();
+    v2CheckCount( aStream, primCount );
+
+    for( uint16_t i = 0; i < primCount; i++ )
+        def.primitives.push_back( v2Primitive( aStream ) );
+
+    ORCAD_BBOX bbox;
+    bbox.x1 = aStream.ReadI16();
+    bbox.y1 = aStream.ReadI16();
+    bbox.x2 = aStream.ReadI16();
+    bbox.y2 = aStream.ReadI16();
+    def.bbox = bbox;
+
+    uint16_t pinCount = aStream.ReadU16();
+    v2CheckCount( aStream, pinCount );
+
+    for( uint16_t i = 0; i < pinCount; i++ )
+    {
+        ORCAD_SYMBOL_PIN pin;
+
+        if( v2SymbolPin( aStream, aStrings, pin ) )
+            def.pins.push_back( std::move( pin ) );
+    }
+
+    uint16_t dispCount = aStream.ReadU16();
+    v2CheckCount( aStream, dispCount );
+
+    for( uint16_t i = 0; i < dispCount; i++ )
+        v2DisplayProp( aStream, aStrings );
+
+    return def;
+}
+
+
+// One part cell (type 6); views + one inline LibraryPart per view w/ GeneralProperties tail.
+struct V2_PART_CELL
+{
+    std::string                   name;
+    std::vector<ORCAD_SYMBOL_DEF> symbols;   ///< one per view, keyed positionally
+    std::vector<std::string>      viewNames;
+    std::string                   refDesPrefix;
+};
+
+
+static V2_PART_CELL v2PartCell( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings )
+{
+    v2Prefix( aStream, aStrings );              // type 6
+
+    V2_PART_CELL cell;
+    cell.name = aStream.ReadLzt();
+    aStream.ReadLzt();                          // source library
+
+    uint16_t viewCount = aStream.ReadU16();
+    v2CheckCount( aStream, viewCount );
+
+    for( uint16_t i = 0; i < viewCount; i++ )
+        cell.viewNames.push_back( aStream.ReadLzt() );
+
+    uint16_t symbolCount = aStream.ReadU16();
+    v2CheckCount( aStream, symbolCount );
+
+    for( uint16_t i = 0; i < symbolCount; i++ )
+    {
+        v2Prefix( aStream, aStrings );          // type 24 LibraryPart
+        ORCAD_SYMBOL_DEF def = v2LibSymbolDef( aStream, aStrings, ORCAD_ST_LIBRARY_PART );
+
+        aStream.ReadLzt();                      // implementation path
+        aStream.ReadLzt();                      // implementation (PSpice model)
+        cell.refDesPrefix = aStream.ReadLzt();
+        aStream.ReadLzt();                      // part value
+        def.generalFlags = aStream.ReadU16();   // pin number/name visibility bits
+
+        cell.symbols.push_back( std::move( def ) );
+    }
+
+    return cell;
+}
+
+
+static ORCAD_DEVICE v2Device( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings )
+{
+    v2Prefix( aStream, aStrings );              // type 32
+
+    ORCAD_DEVICE dev;
+    dev.unitRef = aStream.ReadLzt();
+    dev.refDes = aStream.ReadLzt();             // part name selecting part cell
+
+    uint16_t pinCount = aStream.ReadU16();
+    v2CheckCount( aStream, pinCount );
+
+    static const uint8_t emptySlot[2] = { 0xFF, 0xFF };
+
+    for( uint16_t i = 0; i < pinCount; i++ )
+    {
+        if( aStream.PeekMatches( emptySlot, 2 ) )
+        {
+            aStream.Skip( 2 );
+            dev.pinNumbers.push_back( std::string() );
+            dev.pinIgnore.push_back( true );
+            continue;
+        }
+
+        dev.pinNumbers.push_back( aStream.ReadLzt() );
+        dev.pinIgnore.push_back( ( aStream.ReadU8() & 0x80 ) != 0 );
+    }
+
+    return dev;
+}
+
+
+static ORCAD_PACKAGE v2Package( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings )
+{
+    v2Prefix( aStream, aStrings );              // type 31
+
+    ORCAD_PACKAGE pkg;
+    pkg.name = aStream.ReadLzt();
+    pkg.sourceLib = aStream.ReadLzt();
+    pkg.refDes = aStream.ReadLzt();
+    aStream.ReadLzt();                          // unknown
+    pkg.pcbFootprint = aStream.ReadLzt();
+
+    uint16_t deviceCount = aStream.ReadU16();
+    v2CheckCount( aStream, deviceCount );
+
+    for( uint16_t i = 0; i < deviceCount; i++ )
+        pkg.devices.push_back( v2Device( aStream, aStrings ) );
+
+    return pkg;
 }
 
 
@@ -925,6 +1098,100 @@ ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData,
 
     return page;
 }
+
+
+void OrcadParseOlbSymbolStreamV2( const std::vector<char>& aData,
+                                  const std::vector<std::string>& aStrings,
+                                  std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols )
+{
+    // Some ancient streams use 10-byte display-prop body; retry whole stream with short form when
+    // normal parse does not consume it exactly.
+    for( bool shortDisp : { false, true } )
+    {
+        g_v2ShortDisplayProp = shortDisp;
+        ORCAD_STREAM stream( aData );
+
+        try
+        {
+            uint8_t type = v2Prefix( stream, aStrings );
+            ORCAD_SYMBOL_DEF def = v2LibSymbolDef( stream, aStrings, type );
+
+            if( stream.Remaining() != 0 )
+                THROW_IO_ERROR( wxS( "v2 symbol stream: trailing bytes" ) );
+
+            if( !def.name.empty() )
+                aSymbols.emplace( def.name, std::move( def ) );
+
+            g_v2ShortDisplayProp = false;
+            return;
+        }
+        catch( const IO_ERROR& )
+        {
+            if( shortDisp )
+            {
+                g_v2ShortDisplayProp = false;
+                throw;
+            }
+        }
+    }
+}
+
+
+void OrcadParseOlbPackageStreamV2( const std::vector<char>& aData,
+                                   const std::vector<std::string>& aStrings,
+                                   std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
+                                   std::map<std::string, ORCAD_PACKAGE>& aPackages )
+{
+    for( bool shortDisp : { false, true } )
+    {
+        g_v2ShortDisplayProp = shortDisp;
+        ORCAD_STREAM stream( aData );
+
+        try
+        {
+            uint16_t                  partCount = stream.ReadU16();
+            v2CheckCount( stream, partCount );
+            std::vector<V2_PART_CELL> cells;
+
+            for( uint16_t i = 0; i < partCount; i++ )
+                cells.push_back( v2PartCell( stream, aStrings ) );
+
+            ORCAD_PACKAGE pkg = v2Package( stream, aStrings );
+
+            if( stream.Remaining() != 0 )
+                THROW_IO_ERROR( wxS( "v2 package stream: trailing bytes" ) );
+
+            // Inline symbol keyed by view name ("7400.Normal"); view suffix later stripped to
+            // part base.
+            for( const V2_PART_CELL& cell : cells )
+            {
+                for( const ORCAD_SYMBOL_DEF& def : cell.symbols )
+                {
+                    if( !def.name.empty() )
+                        aSymbols.emplace( def.name, def );
+                }
+
+                if( pkg.refDes.empty() && !cell.refDesPrefix.empty() )
+                    pkg.refDes = cell.refDesPrefix;
+            }
+
+            if( !pkg.name.empty() )
+                aPackages.emplace( pkg.name, std::move( pkg ) );
+
+            g_v2ShortDisplayProp = false;
+            return;
+        }
+        catch( const IO_ERROR& )
+        {
+            if( shortDisp )
+            {
+                g_v2ShortDisplayProp = false;
+                throw;
+            }
+        }
+    }
+}
+
 
 ORCAD_OCC_SCOPE OrcadReadOccurrenceTree( const std::vector<char>& aData,
                                          const ORCAD_WARN_FN& aWarn )

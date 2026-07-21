@@ -129,6 +129,25 @@ ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData,
                                  const std::vector<std::string>& aStrings,
                                  const ORCAD_WARN_FN& aWarn );
 
+/**
+ * Parse one v2.0 .OLB 'Symbols/<name>' stream (a single special symbol: power,
+ * port, off-page, title block or ERC) into aSymbols, keyed by symbol name.
+ * Throws IO_ERROR on a framing error.
+ */
+void OrcadParseOlbSymbolStreamV2( const std::vector<char>& aData,
+                                  const std::vector<std::string>& aStrings,
+                                  std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols );
+
+/**
+ * Parse one v2.0 .OLB 'Packages/<name>' stream (a part's inline symbol definitions
+ * plus its package/device pin maps) into aSymbols (keyed by view name, e.g.
+ * "7400.Normal") and aPackages (keyed by package name).  Throws on a framing error.
+ */
+void OrcadParseOlbPackageStreamV2( const std::vector<char>& aData,
+                                   const std::vector<std::string>& aStrings,
+                                   std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
+                                   std::map<std::string, ORCAD_PACKAGE>& aPackages );
+
 /// True when the page contains hierarchical block instances (DrawnInstance, type 12).
 inline bool OrcadPageHasHierarchyBlocks( const ORCAD_RAW_PAGE& aPage )
 {

@@ -73,7 +73,7 @@ public:
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
+        return IO_BASE::IO_FILE_DESC( _HKI( "OrCAD Capture symbol library files" ), { "olb" } );
     }
 
     /**
@@ -99,7 +99,28 @@ public:
                                   SCH_SHEET*             aAppendToMe = nullptr,
                                   const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
+    /**
+     * Enumerate the symbols of an OrCAD .OLB library (an OLE2/CFB compound document
+     * with the same Library/Cache/Packages streams as a design, but no schematic
+     * pages).  The cache symbol definitions are converted to KiCad library symbols.
+     */
+    void EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
+    void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList, const wxString& aLibraryPath,
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
+    LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                            const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
     bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
+
+private:
+    /// Parse an .OLB and build its KiCad library symbols, cached by library path.
+    /// The returned symbols are owned by m_libCache.
+    const std::vector<std::unique_ptr<LIB_SYMBOL>>& loadOlbSymbols( const wxString& aLibraryPath );
+
+    std::map<wxString, std::vector<std::unique_ptr<LIB_SYMBOL>>> m_libCache;
 };
 
 #endif // SCH_IO_ORCAD_H_
