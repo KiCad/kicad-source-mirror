@@ -2220,15 +2220,26 @@ BOOST_AUTO_TEST_CASE( PartPinsAndGates )
 
 BOOST_AUTO_TEST_CASE( DefinitionFields )
 {
+    const FIELD_ID controller7Record11214 =
+            MakeFieldId( FIELD_ID_DOMAIN::DEFINITION, 11214, 0 );
+    const FIELD_ID controller7Record12125 =
+            MakeFieldId( FIELD_ID_DOMAIN::DEFINITION, 12125, 0 );
+    BOOST_CHECK( controller7Record11214.IsValid() );
+    BOOST_CHECK( controller7Record12125.IsValid() );
+    BOOST_CHECK_NE( controller7Record11214.Value(), controller7Record12125.Value() );
+
     PADS_SCH_BINARY_PARSER         parser;
     PADS_SCH_MODEL                 model = parser.Parse( loadBinaryFixture( "fields.sch" ), wxS( "fields.sch" ) );
     const MODEL_SYMBOL_DEFINITION& definition = itemNamed( model.definitions, wxS( "RESZ-H" ) );
     BOOST_REQUIRE_EQUAL( definition.fields.size(), 4 );
-    std::set<uint32_t> fieldIds;
+    std::set<uint64_t> fieldIds;
 
-    for( const MODEL_FIELD& field : definition.fields )
+    for( size_t ordinal = 0; ordinal < definition.fields.size(); ++ordinal )
     {
+        const MODEL_FIELD& field = definition.fields[ordinal];
         BOOST_CHECK( field.id.IsValid() );
+        BOOST_CHECK_EQUAL( field.id.Value(),
+                           MakeFieldId( FIELD_ID_DOMAIN::DEFINITION, definition.id.Value(), ordinal ).Value() );
         BOOST_CHECK( fieldIds.insert( field.id.Value() ).second );
     }
     BOOST_CHECK_EQUAL( definition.fields[0].name.text, wxS( "REF-DES" ) );
@@ -2265,6 +2276,8 @@ BOOST_AUTO_TEST_CASE( DefinitionFields )
         BOOST_CHECK_EQUAL( partType.fields[i].value.text, definition.fields[i].value.text );
         BOOST_CHECK( partType.fields[i].presentation == definition.fields[i].presentation );
         BOOST_CHECK( partType.fields[i].id.IsValid() );
+        BOOST_CHECK_EQUAL( partType.fields[i].id.Value(),
+                           MakeFieldId( FIELD_ID_DOMAIN::PART_TYPE, partType.id.Value(), i ).Value() );
         BOOST_CHECK( fieldIds.insert( partType.fields[i].id.Value() ).second );
     }
 

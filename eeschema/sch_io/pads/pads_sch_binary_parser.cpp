@@ -1406,26 +1406,12 @@ namespace
 
     void assignFieldIds( PADS_SCH_MODEL& aModel )
     {
-        auto stableId = []( uint32_t aDomain, uint32_t aOwner, size_t aOrdinal,
-                            const SOURCE_PROVENANCE& aSource )
+        auto assign = []( MODEL_FIELD& aField, FIELD_ID_DOMAIN aDomain, uint32_t aOwner, size_t aOrdinal )
         {
-            uint32_t value = 2166136261U;
-            auto mix = [&]( uint64_t aValue )
-            {
-                for( size_t byte = 0; byte < sizeof( aValue ); ++byte )
-                {
-                    value ^= static_cast<uint8_t>( aValue >> ( byte * 8 ) );
-                    value *= 16777619U;
-                }
-            };
-            mix( aDomain );
-            mix( aOwner );
-            mix( aOrdinal );
-            mix( static_cast<uint32_t>( aSource.sheet ) );
-            mix( static_cast<uint32_t>( aSource.controller ) );
-            mix( aSource.recordIndex );
-            mix( aSource.absoluteOffset );
-            return FIELD_ID( value == 0 ? 1 : value );
+            if( aOrdinal > FIELD_ID_MAX_ORDINAL )
+                throwDecodeError( aField.source, wxS( "field ordinal exceeds identity capacity" ) );
+
+            aField.id = MakeFieldId( aDomain, aOwner, static_cast<uint32_t>( aOrdinal ) );
         };
 
         for( MODEL_SHEET& sheet : aModel.sheets )
@@ -1433,7 +1419,7 @@ namespace
             for( size_t ordinal = 0; ordinal < sheet.titleBlockFields.size(); ++ordinal )
             {
                 MODEL_FIELD& field = sheet.titleBlockFields[ordinal];
-                field.id = stableId( 1, sheet.id.Value(), ordinal, field.source );
+                assign( field, FIELD_ID_DOMAIN::SHEET, sheet.id.Value(), ordinal );
             }
         }
 
@@ -1442,7 +1428,7 @@ namespace
             for( size_t ordinal = 0; ordinal < definition.fields.size(); ++ordinal )
             {
                 MODEL_FIELD& field = definition.fields[ordinal];
-                field.id = stableId( 2, definition.id.Value(), ordinal, field.source );
+                assign( field, FIELD_ID_DOMAIN::DEFINITION, definition.id.Value(), ordinal );
             }
         }
 
@@ -1451,7 +1437,7 @@ namespace
             for( size_t ordinal = 0; ordinal < partType.fields.size(); ++ordinal )
             {
                 MODEL_FIELD& field = partType.fields[ordinal];
-                field.id = stableId( 3, partType.id.Value(), ordinal, field.source );
+                assign( field, FIELD_ID_DOMAIN::PART_TYPE, partType.id.Value(), ordinal );
             }
         }
 
@@ -1460,7 +1446,7 @@ namespace
             for( size_t ordinal = 0; ordinal < placement.fields.size(); ++ordinal )
             {
                 MODEL_FIELD& field = placement.fields[ordinal];
-                field.id = stableId( 4, placement.id.Value(), ordinal, field.source );
+                assign( field, FIELD_ID_DOMAIN::PLACEMENT, placement.id.Value(), ordinal );
             }
         }
     }
@@ -1488,7 +1474,7 @@ bool PADS_SCH_MODEL::HasUniqueTypedIds() const
 
     std::unordered_set<uint32_t> gateIds;
     std::unordered_set<uint32_t> pinIds;
-    std::unordered_set<uint32_t> fieldIds;
+    std::unordered_set<uint64_t> fieldIds;
 
     for( const MODEL_PART_TYPE& partType : partTypes )
     {
@@ -1713,7 +1699,7 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
 
     std::unordered_map<uint32_t, SOURCE_PROVENANCE> gateDeclarations;
     std::unordered_map<uint32_t, SOURCE_PROVENANCE> pinDeclarations;
-    std::unordered_map<uint32_t, SOURCE_PROVENANCE> fieldDeclarations;
+    std::unordered_map<uint64_t, SOURCE_PROVENANCE> fieldDeclarations;
 
     auto validateNestedId = [&]( const auto& aItem, const wxString& aObjectClass, auto& aDeclarations )
     {
@@ -1726,9 +1712,10 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
         {
             throwValidationError(
                     aItem.source,
-                    wxString::Format( wxS( "duplicate %s ID %u; first at v0x%04X %s controller %d record %llu "
+                    wxString::Format( wxS( "duplicate %s ID %llu; first at v0x%04X %s controller %d record %llu "
                                            "sheet %d offset 0x%llX" ),
-                                      aObjectClass, aItem.id.Value(), first->second.version, first->second.objectClass,
+                                      aObjectClass, static_cast<unsigned long long>( aItem.id.Value() ),
+                                      first->second.version, first->second.objectClass,
                                       first->second.controller,
                                       static_cast<unsigned long long>( first->second.recordIndex ), first->second.sheet,
                                       static_cast<unsigned long long>( first->second.absoluteOffset ) ) );

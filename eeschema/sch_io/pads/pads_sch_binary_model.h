@@ -100,24 +100,24 @@ struct SOURCE_PROPERTY
 };
 
 
-template <typename Tag>
+template <typename Tag, typename ValueType = uint32_t>
 class CONTROLLER_ID
 {
 public:
     constexpr CONTROLLER_ID() = default;
-    explicit constexpr CONTROLLER_ID( uint32_t aValue ) :
+    explicit constexpr CONTROLLER_ID( ValueType aValue ) :
             m_value( aValue )
     {
     }
 
-    constexpr uint32_t Value() const { return m_value; }
-    constexpr bool     IsValid() const { return m_value != INVALID; }
+    constexpr ValueType Value() const { return m_value; }
+    constexpr bool      IsValid() const { return m_value != INVALID; }
 
     auto operator<=>( const CONTROLLER_ID& ) const = default;
 
 private:
-    static constexpr uint32_t INVALID = std::numeric_limits<uint32_t>::max();
-    uint32_t                  m_value = INVALID;
+    static constexpr ValueType INVALID = std::numeric_limits<ValueType>::max();
+    ValueType                  m_value = INVALID;
 };
 
 
@@ -134,12 +134,31 @@ struct BUS_ID_TAG;
 using SHEET_ID = CONTROLLER_ID<SHEET_ID_TAG>;
 using DEFINITION_ID = CONTROLLER_ID<DEFINITION_ID_TAG>;
 using PIN_ID = CONTROLLER_ID<PIN_ID_TAG>;
-using FIELD_ID = CONTROLLER_ID<FIELD_ID_TAG>;
+using FIELD_ID = CONTROLLER_ID<FIELD_ID_TAG, uint64_t>;
 using PART_TYPE_ID = CONTROLLER_ID<PART_TYPE_ID_TAG>;
 using GATE_ID = CONTROLLER_ID<GATE_ID_TAG>;
 using PLACEMENT_ID = CONTROLLER_ID<PLACEMENT_ID_TAG>;
 using NET_ID = CONTROLLER_ID<NET_ID_TAG>;
 using BUS_ID = CONTROLLER_ID<BUS_ID_TAG>;
+
+enum class FIELD_ID_DOMAIN : uint8_t
+{
+    SHEET = 1,
+    DEFINITION = 2,
+    PART_TYPE = 3,
+    PLACEMENT = 4
+};
+
+constexpr uint32_t FIELD_ID_MAX_ORDINAL = ( 1U << 29 ) - 1;
+
+constexpr FIELD_ID MakeFieldId( FIELD_ID_DOMAIN aDomain, uint32_t aOwner, uint32_t aOrdinal )
+{
+    if( aOrdinal > FIELD_ID_MAX_ORDINAL )
+        return FIELD_ID();
+
+    return FIELD_ID( ( static_cast<uint64_t>( aDomain ) << 61 ) | ( static_cast<uint64_t>( aOwner ) << 29 )
+                     | aOrdinal );
+}
 
 template <typename Id>
 struct CONTROLLER_REFERENCE
