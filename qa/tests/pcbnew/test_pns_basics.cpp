@@ -42,6 +42,7 @@
 #include <router/pns_shove.h>
 #include <router/pns_sizes_settings.h>
 #include <router/pns_solid.h>
+#include <router/pns_topology.h>
 #include <router/pns_via.h>
 
 static bool isCopper( const PNS::ITEM* aItem )
@@ -1027,6 +1028,102 @@ BOOST_FIXTURE_TEST_CASE( PNSDragArcRejectsNear180, PNS_TEST_FIXTURE )
 
         world->KillChildren();
     }
+}
+
+
+// Base mock's NetCode() returns -1 for everything, which reads as unnetted; use a real net here
+namespace
+{
+struct NETCODE_RULE_RESOLVER : public MOCK_RULE_RESOLVER
+{
+    int NetCode( PNS::NET_HANDLE aNet ) override { return aNet ? 1 : -1; }
+};
+
+PNS::ITEM* queryFinishAnchor( PNS::NODE& aWorld, const PNS::LINE& aTrack )
+{
+    PNS::TOPOLOGY   topo( &aWorld );
+    VECTOR2I        anchorPoint;
+    PNS_LAYER_RANGE anchorLayers;
+    PNS::ITEM*      anchorItem = nullptr;
+
+    BOOST_REQUIRE( topo.NearestUnconnectedAnchorPoint( &aTrack, anchorPoint, anchorLayers,
+                                                       anchorItem ) );
+    return anchorItem;
+}
+} // namespace
+
+
+// F-key finish adds the track to a temporary branch node; a joint linking only to that
+// track must still yield a persistent-world anchor, not a dangling branch pointer
+//
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24985
+BOOST_FIXTURE_TEST_CASE( PNSFinishAnchorNoDanglingBranchItem, PNS_TEST_FIXTURE )
+{
+    NETCODE_RULE_RESOLVER resolver;
+
+    PNS::NODE world;
+    world.SetMaxClearance( 10000000 );
+    world.SetRuleResolver( &resolver );
+
+    PNS::NET_HANDLE net = (PNS::NET_HANDLE) 1;
+
+    // Persistent unconnected target on the same net, away from the track
+    PNS::SEGMENT* target = new PNS::SEGMENT( SEG( VECTOR2I( 10000000, 10000000 ),
+                                                 VECTOR2I( 12000000, 10000000 ) ), net );
+    target->SetWidth( 250000 );
+    target->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    world.AddRaw( target );
+
+    // Closed loop; end joint's two links are both owned by the temporary branch node
+    PNS::LINE track;
+    track.SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    track.SetNet( net );
+    track.SetWidth( 250000 );
+    track.Line().Append( VECTOR2I( 0, 0 ) );
+    track.Line().Append( VECTOR2I( 2000000, 0 ) );
+    track.Line().Append( VECTOR2I( 2000000, 2000000 ) );
+    track.Line().Append( VECTOR2I( 0, 2000000 ) );
+    track.Line().Append( VECTOR2I( 0, 0 ) );
+
+    // Anchor must be the persistent target, never a link owned by the destroyed temp branch
+    BOOST_CHECK_EQUAL( queryFinishAnchor( world, track ), target );
+}
+
+
+// ConnectedJoints must cross arcs when subtracting the track; stopping at an arc left
+// temporary primitives beyond it selectable as the anchor, reviving the dangling pointer
+//
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24985
+BOOST_FIXTURE_TEST_CASE( PNSFinishAnchorCrossesArcInConnectivity, PNS_TEST_FIXTURE )
+{
+    NETCODE_RULE_RESOLVER resolver;
+
+    PNS::NODE world;
+    world.SetMaxClearance( 10000000 );
+    world.SetRuleResolver( &resolver );
+
+    PNS::NET_HANDLE net = (PNS::NET_HANDLE) 1;
+
+    // Farther from the track end than its own far segment, wins only once that's subtracted
+    PNS::SEGMENT* target = new PNS::SEGMENT( SEG( VECTOR2I( 7000000, 0 ),
+                                                 VECTOR2I( 8000000, 0 ) ), net );
+    target->SetWidth( 250000 );
+    target->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    world.AddRaw( target );
+
+    // Segment-arc-segment track; far segment lies across the arc, so connectivity must cross it
+    PNS::LINE track;
+    track.SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    track.SetNet( net );
+    track.SetWidth( 250000 );
+    track.Line().Append( VECTOR2I( 0, 0 ) );
+    track.Line().Append( VECTOR2I( 1000000, 0 ) );
+    track.Line().Append( SHAPE_ARC( VECTOR2I( 1000000, 0 ), VECTOR2I( 1500000, 500000 ),
+                                    VECTOR2I( 2000000, 0 ), 0 ) );
+    track.Line().Append( VECTOR2I( 3000000, 0 ) );
+
+    // Anchor must be the persistent target, not a branch-owned primitive across the arc
+    BOOST_CHECK_EQUAL( queryFinishAnchor( world, track ), target );
 }
 
 
