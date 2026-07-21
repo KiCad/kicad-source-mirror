@@ -120,6 +120,7 @@ types:
         type: global_string_controller
         size: _root.pool_directory[1].used_bytes
       - id: controller_payload_2
+        type: indexed_placement_attribute_heap
         size: _root.pool_directory[2].used_bytes
       - id: sheet_index
         type: sheet_index_controller(_root.pool_directory[3].used_count)
@@ -130,8 +131,10 @@ types:
         type: design_settings_record
         size: _root.pool_directory[5].used_bytes
       - id: controller_payload_6
+        type: placement_group_controller(_root.pool_directory[6].used_count)
         size: _root.pool_directory[6].used_bytes
       - id: controller_payload_7
+        type: placement_attribute_offset_controller(_root.pool_directory[7].used_count)
         size: _root.pool_directory[7].used_bytes
       - id: controller_payload_8
         size: _root.pool_directory[8].used_bytes
@@ -156,6 +159,7 @@ types:
       - id: controller_payload_18
         size: _root.pool_directory[18].used_bytes
       - id: controller_payload_19
+        type: placement_font_controller(_root.pool_directory[19].used_count)
         size: _root.pool_directory[19].used_bytes
 
   global_string_controller:
@@ -458,10 +462,25 @@ types:
             0x000d: pin_name_heap
         size: pool_directory[13].used_bytes
       - id: controller_payload_15
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_placement_controller
+            0x000d: placement_controller(pool_directory[14].used_count)
         size: pool_directory[14].used_bytes
       - id: controller_payload_16
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_placement_controller
+            0x000d: placed_pin_controller(pool_directory[15].used_count)
         size: pool_directory[15].used_bytes
       - id: controller_payload_17
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_placement_controller
+            0x000d: placement_field_controller(pool_directory[16].used_count)
         size: pool_directory[16].used_bytes
       - id: controller_payload_18
         size: pool_directory[17].used_bytes
@@ -481,6 +500,211 @@ types:
     seq:
       - id: preserved_payload
         size-eos: true
+
+  preserved_v12_placement_controller:
+    doc: Exact bounded v0x000C placement payload; semantics unsupported without paired ASCII evidence.
+    seq:
+      - id: preserved_payload
+        size-eos: true
+
+  indexed_placement_attribute_heap:
+    doc: NUL-terminated component attribute slots indexed by outer controller 7; byte 1 separates custom-field names and values.
+    seq:
+      - id: indexed_attribute_bytes
+        size-eos: true
+
+  placement_group_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: placement_group_record
+        repeat: expr
+        repeat-expr: num_records
+
+  placement_group_record:
+    seq:
+      - id: first_attribute_index
+        type: u4
+      - id: preserved_group_properties
+        size: 16
+      - id: attribute_count
+        type: u2
+      - id: preserved_group_tail
+        size: 2
+
+  placement_attribute_offset_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: heap_offsets
+        type: u4
+        repeat: expr
+        repeat-expr: num_records
+
+  placement_font_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: placement_font_record
+        repeat: expr
+        repeat-expr: num_records
+
+  placement_font_record:
+    seq:
+      - id: style_flags
+        type: u4
+      - id: family
+        type: strz
+        size: 32
+        encoding: windows-1252
+
+  placement_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: placement_record
+        repeat: expr
+        repeat-expr: num_records
+
+  placement_record:
+    seq:
+      - id: reference_font_handle
+        type: s2
+      - id: part_type_font_handle
+        type: s2
+      - id: value_font_handle
+        type: s2
+      - id: wildcard_font_handle
+        type: s2
+      - id: preserved_field_link_properties
+        size: 12
+      - id: placed_pin_start
+        type: u4
+      - id: component_identity
+        type: u4
+      - id: component_group_handle
+        type: u4
+      - id: x_biased_quarter_mil
+        type: u2
+      - id: y_biased_quarter_mil
+        type: u2
+      - id: rotation_tenths_degree
+        type: u2
+      - id: mirror_flags
+        type: u2
+        valid:
+          max: 3
+      - id: reference_x_half_mil
+        type: s2
+      - id: reference_y_half_mil
+        type: s2
+      - id: reference_rotation_tenths_degree
+        type: u2
+      - id: reference_justification
+        type: u2
+      - id: part_type_x_half_mil
+        type: s2
+      - id: part_type_y_half_mil
+        type: s2
+      - id: part_type_rotation_tenths_degree
+        type: u2
+      - id: part_type_justification
+        type: u2
+      - id: preserved_instance_properties_38
+        size: 10
+      - id: part_type_handle
+        type: u2
+      - id: used_decal_handle
+        type: u2
+      - id: preserved_decal_link_properties
+        size: 4
+      - id: gate_index
+        type: u2
+      - id: placed_pin_count
+        type: u2
+      - id: custom_field_count
+        type: u2
+      - id: reference_height_half_mil
+        type: u2
+      - id: part_type_height_half_mil
+        type: u2
+      - id: preserved_text_size_properties
+        size: 4
+      - id: reference_width_half_mil
+        type: u1
+      - id: part_type_width_half_mil
+        type: u1
+      - id: preserved_text_presentation
+        size: 4
+      - id: reference_designator
+        type: strz
+        size: 40
+        encoding: windows-1252
+      - id: preserved_instance_tail
+        size: 2
+
+  placed_pin_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: placed_pin_record
+        repeat: expr
+        repeat-expr: num_records
+
+  placed_pin_record:
+    seq:
+      - id: preserved_pin_link_prefix
+        size: 4
+      - id: definition_pin_ordinal
+        type: u2
+      - id: preserved_pin_link_tail
+        size: 6
+
+  placement_field_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: placement_field_record
+        repeat: expr
+        repeat-expr: num_records
+
+  placement_field_record:
+    seq:
+      - id: font_handle
+        type: s2
+      - id: preserved_field_link
+        size: 6
+      - id: x_half_mil
+        type: s2
+      - id: y_half_mil
+        type: s2
+      - id: rotation_tenths_degree
+        type: u2
+      - id: justification
+        type: u1
+      - id: presentation_class
+        type: u1
+      - id: line_width_half_mil
+        type: u2
+      - id: height_half_mil
+        type: u2
+      - id: width_half_mil
+        type: u1
+      - id: display_flags
+        type: u1
+      - id: preserved_field_tail
+        type: u2
 
   preserved_definition_controller:
     doc: Exact bounded controller payload whose semantics are not yet proven.

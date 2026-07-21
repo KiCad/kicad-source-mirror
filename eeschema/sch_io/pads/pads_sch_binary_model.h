@@ -444,11 +444,14 @@ struct MODEL_PLACEMENT
     SHEET_REFERENCE               sheet;
     PART_TYPE_REFERENCE           partType;
     std::optional<GATE_REFERENCE> gate;
+    DEFINITION_REFERENCE          definition;
+    std::vector<PIN_REFERENCE>    pins;
     uint32_t                      unit = 1;
     SOURCE_STRING                 reference;
     SOURCE_POINT                  position;
     int                           angle = 0;
     bool                          mirrored = false;
+    uint16_t                      mirrorFlags = 0;
     std::vector<MODEL_FIELD>      fields;
     std::vector<SOURCE_PROPERTY>  properties;
 
