@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-21 18:07+0000\n"
+"PO-Revision-Date: 2026-07-22 19:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -12845,9 +12845,8 @@ msgstr "DipTrace ファイル"
 
 #: common/wildcards_and_files_ext.cpp:366
 #: eeschema/sch_io/orcad/sch_io_orcad.h:71
-#, fuzzy
 msgid "OrCAD Capture schematic files"
-msgstr "P-CAD 回路図ファイル"
+msgstr "OrCAD Capture 回路図ファイル"
 
 #: common/wildcards_and_files_ext.cpp:372
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:35
@@ -17208,7 +17207,7 @@ msgstr "検索 (&S):"
 #: eeschema/dialogs/dialog_sch_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
 msgid "Text with optional wildcards"
-msgstr "検索文字列"
+msgstr "オプション ワイルドカードを含むテキスト"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:41
 msgid "Replace &with:"
@@ -22632,8 +22631,7 @@ msgstr ""
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1601
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr ""
-"ストレージのファイルは完全に読み込まれていません(%d バイト残っています)."
+msgstr "ストレージのファイルは完全に解釈されていません(%d バイト残っています)."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1684
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1785
@@ -23905,9 +23903,9 @@ msgid "LTspice schematic files"
 msgstr "LTspice 回路図ファイル"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Converting page '%s'..."
-msgstr "パッケージ '%s' をインストール."
+msgstr "'%s' ページを変換中..."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:917
 #, c-format
@@ -23966,9 +23964,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Package stream '%s' could not be parsed: %s"
-msgstr "図面シート '%s' が開けません。"
+msgstr "パッケージ ストリーム '%s' を解釈できませんでした: %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:285
 msgid ""
@@ -23977,9 +23975,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:301
-#, fuzzy
 msgid "The design contains no schematic folders."
-msgstr "デザイン ブロック には配置する回路図がありません。"
+msgstr "デザインには回路図フォルダ含まれていません。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:375
 #, c-format
@@ -23989,14 +23986,13 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' could not be parsed and was skipped: %s"
-msgstr "レイヤー '%s' をマップできなかったため、スキップした。"
+msgstr "ページ '%s' を解釈できませんでした、そしてスキップされました: %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:457
-#, fuzzy
 msgid "No schematic pages could be read from the design."
-msgstr "ライブラリからシンボルが読み込まれていません。"
+msgstr "デザインから回路図のページを読み込むことができませんでした。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:538
 msgid "The file is not an OrCAD Capture library (no 'Library' stream)."
@@ -24010,9 +24006,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.h:76
-#, fuzzy
 msgid "OrCAD Capture symbol library files"
-msgstr "すべての KiCad シンボル ライブラリ ファイル"
+msgstr "OrCAD Capture シンボル ライブラリ ファイル"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1460
 #, c-format
@@ -33097,7 +33092,7 @@ msgstr "ハンダマスクレイヤーを平面のセットとしてエクスポ
 
 #: kicad/cli/command_pcb_export_3d.cpp:163
 msgid "Fuse overlapping geometry together"
-msgstr "重なり合うジオメトリを融合する"
+msgstr "重なり合う形状を融合する"
 
 #: kicad/cli/command_pcb_export_3d.cpp:167
 #: pcbnew/dialogs/dialog_export_step_base.cpp:154
@@ -33932,13 +33927,12 @@ msgid "Import a non-KiCad schematic file to KiCad format"
 msgstr "KiCad以外の回路図ファイルをKiCad形式にインポートする"
 
 #: kicad/cli/command_sch_import.cpp:44
-#, fuzzy
 msgid ""
 "Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
 "ltspice, pads, diptrace, pcad, orcad (default: auto)"
 msgstr ""
 "入力フォーマットのヒント: auto, Altium, EAGLE, Cadstar, EasyEda, EasyEdaPro, "
-"LTSpice, Pads, DipTrace, pcad(デフォルト: auto)"
+"LTSpice, Pads, DipTrace, pcad,OrCAD(デフォルト: auto)"
 
 #: kicad/cli/command_sch_upgrade.cpp:31
 msgid "Upgrade the schematic file's format to the latest one"
@@ -34627,18 +34621,16 @@ msgid "Import the associated Allegro board '%s'?"
 msgstr ""
 
 #: kicad/import_proj.cpp:710
-#, fuzzy
 msgid "Import an associated Allegro board file?"
-msgstr "KiCad以外の基板ファイルをインポート"
+msgstr "関連する Allegro 基板ファイルをインポートしますか？"
 
 #: kicad/import_proj.cpp:712
 msgid "Import Allegro Board"
-msgstr ""
+msgstr "Allegro基板をインポート"
 
 #: kicad/import_proj.cpp:720
-#, fuzzy
 msgid "Locate Allegro Board"
-msgstr "基板を回転"
+msgstr "Allegro 基板の場所"
 
 #: kicad/import_project.cpp:69
 msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
@@ -34707,9 +34699,8 @@ msgid "Import DipTrace Project Files"
 msgstr "DipTrace プロジェクト ファイルをインポート"
 
 #: kicad/import_project.cpp:249
-#, fuzzy
 msgid "Import OrCAD Project Files"
-msgstr "P-CADプロジェクトファイルをインポート"
+msgstr "OrCAD プロジェクト ファイルをインポート"
 
 #: kicad/jobs_runner.cpp:274
 #, c-format
@@ -34969,9 +34960,8 @@ msgid "Import DipTrace schematic and PCB (*.dch, *.dip)"
 msgstr "DipTrace 回路図とプリント基板(*.dch, *.dip)をインポートします"
 
 #: kicad/menubar.cpp:163
-#, fuzzy
 msgid "OrCAD Project..."
-msgstr "P-CADプロジェクト..."
+msgstr "OrCAD プロジェクト..."
 
 #: kicad/menubar.cpp:164
 msgid "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)"
@@ -56042,12 +56032,12 @@ msgstr "Pads6ストリームのsubrecord6の長さが予期しないものです
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:489
 #, c-format
 msgid "'%s' was not parsed correctly."
-msgstr "'%s' 正しくパースされませんでした。"
+msgstr "'%s' 正しく解釈されませんでした。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:503
 #, c-format
 msgid "'%s' was not fully parsed."
-msgstr "'%s' は完全にパースされていません。"
+msgstr "'%s' は完全に解釈されていません。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:524
 msgid ""
