@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-20 09:36+0300\n"
-"PO-Revision-Date: 2026-07-21 06:37+0000\n"
+"PO-Revision-Date: 2026-07-21 18:07+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
@@ -28084,9 +28084,8 @@ msgid "Add Design Variant..."
 msgstr "Lisää suunnitteluvariaatio..."
 
 #: eeschema/tools/sch_actions.cpp:1782
-#, fuzzy
 msgid "Add new design variant to the schematic."
-msgstr "Lisää nykyinen symboli kytkentäkaavioon"
+msgstr "Lisää uusi suunnitteluvariaatio kytkentäkaavioon."
 
 #: eeschema/tools/sch_actions.cpp:1787
 msgid "Remove Design Variant..."
@@ -28827,18 +28826,17 @@ msgid "All pins must be at the same location"
 msgstr "Kaikkien nastojen on oltava samassa paikassa"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1395
-#, fuzzy, c-format
+#, c-format
 msgid "Convert %zu Stacked Pins to '%s'"
-msgstr "Liitä %s nasta %s liittimeen %s."
+msgstr "Muunna %zu päällekkäistä nastaa muotoon '%s'"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1417
 msgid "Select a single pin with stacked notation to explode"
 msgstr "Valitse yksi pinottu merkintätapa räjäyttääksesi sen"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1429
-#, fuzzy
 msgid "Selected pin does not have valid stacked notation"
-msgstr "Valittu polku ei sisällä kelvollisia KiCad-asetuksia!"
+msgstr "Valitulla nastalla ei ole kelvollista päällekkäismerkintää"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1498
 msgid "Symbol is not derived from another symbol."
@@ -29029,9 +29027,9 @@ msgstr ""
 "Paikallisesti tallennetun repository.json-tiedoston jäsentäminen epäonnistui."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:758
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported RPC version %d."
-msgstr "Ei tuettu läpiviennin muoto: %s."
+msgstr "Ei tuettu RPC-versio %d."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:767
 #, fuzzy
@@ -29050,7 +29048,7 @@ msgstr "Zoomaa valittuna oleviin kohteisiin"
 #: eeschema/widgets/panel_remote_symbol.cpp:983
 #, fuzzy
 msgid "Unable to process provider payload."
-msgstr "Ei voitu lukea "
+msgstr "Ei voitu prosessoida tarjoajan kuormaa."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:989
 #, fuzzy, c-format
@@ -29068,9 +29066,8 @@ msgid "Unsupported symbol payload type."
 msgstr "[ei ladattua symbolia]"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1015
-#, fuzzy
 msgid "No schematic editor is available to store symbols."
-msgstr "Ei käytettävissä olevaa tietovarastoa etäkäytön määrittämiseen"
+msgstr "Kytkentäkaavioeditoria ei ole saatavilla symbolien säilytykseen."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1060
 #, fuzzy
@@ -29078,9 +29075,9 @@ msgid "Unable to access the symbol library manager."
 msgstr "Symbolikirjastotiedoston '%s' luominen epäonnistui."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse component list: %s"
-msgstr "Komponenttitietojen lisääminen epäonnistui"
+msgstr "Komponenttilistan '%s' jäsentely epäonnistui"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1122
 #, fuzzy
@@ -29297,12 +29294,15 @@ msgid "Tune %s"
 msgstr "Viritys %s"
 
 #: eeschema/widgets/tuner_slider.cpp:91
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s has simulation model of type '%s %s'.\n"
 "\n"
 "Only passive R, L, C models and voltage and current sources may be tuned."
-msgstr "%s on simulaatiomalli tyyppiä '%s %s'; vain RLC-passiiviset säädetään"
+msgstr ""
+"%s on simulaatiomalli tyyppiä '%s %s';\n"
+"\n"
+"vain RLC-passiivien malleja, sekä jännite- ja virtalähteitä voidaan säätää."
 
 #: eeschema/widgets/tuner_slider.cpp:140
 #: eeschema/widgets/tuner_slider_base.cpp:39
@@ -29317,9 +29317,8 @@ msgstr ""
 
 #: eeschema/widgets/tuner_slider.cpp:152
 #: eeschema/widgets/tuner_slider_base.cpp:45
-#, fuzzy
 msgid "Steps"
-msgstr "Vaihe X:"
+msgstr "Askeleita"
 
 #: eeschema/widgets/tuner_slider_base.cpp:62
 msgid "Limit to E24 series values."
@@ -29391,9 +29390,9 @@ msgid "Layers Settings"
 msgstr "Kerrosten Asetukset"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:144
-#, fuzzy, c-format
+#, c-format
 msgid "Layer %d:"
-msgstr "Kerros %d"
+msgstr "Kerros %d:"
 
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:170
 #: gerbview/dialogs/dialog_map_gerber_layers_to_pcb.cpp:233
@@ -29693,14 +29692,12 @@ msgid "These parameters are usually specified in files, but not always."
 msgstr "Nämä parametrit määritellään yleensä tiedostoissa, mutta ei aina."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:37
-#, fuzzy
 msgid "File units:"
-msgstr "Tiedostoyksiköt"
+msgstr "Tiedostoyksiköt:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:47
-#, fuzzy
 msgid "Zero format:"
-msgstr "Nollamuoto"
+msgstr "Nollamuoto:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "No leading zeros (TZ format)"
@@ -29723,9 +29720,8 @@ msgid "(The decimal format does not use these settings)"
 msgstr "(Desimaalimuoto ei käytä näitä asetuksia)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:89
-#, fuzzy
 msgid "Format for mm:"
-msgstr "Muoto millimetreissä"
+msgstr "Muoto millimetreille:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:96
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:106
@@ -29785,9 +29781,8 @@ msgid ":"
 msgstr ":"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:115
-#, fuzzy
 msgid "Format for inches:"
-msgstr "Muotoiluasetukset tuumissa"
+msgstr "Muoto tuumille:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:144
 msgid "Usually: 3:3 in mm and 2:4 in inches"
@@ -29842,12 +29837,12 @@ msgstr "Gerbview: <b>ei enää vapaita tasoja</b> tiedostojen lataamiseen"
 #: gerbview/files.cpp:46
 #, c-format
 msgid "<b>Not loaded:</b> <i>%s</i>"
-msgstr "<b> Ei ladattu: </b> <i> %s </i>"
+msgstr "<b>Ei ladattu:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:47
 #, c-format
 msgid "<b>Memory was exhausted reading:</b> <i>%s</i>"
-msgstr "<b> Muisti nääntyi lukemisesta: </b> <i> %s </i>"
+msgstr "<b>Muisti loppui lukiessa:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:52 gerbview/files.cpp:223
 msgid "Gerber files"
@@ -29928,8 +29923,7 @@ msgstr "Tiedostoa ei löytynyt:"
 #: gerbview/files.cpp:305
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr ""
-"<b> Gerber-työtiedostoa ei voi ladata juontotiedostona </b> <i> %s </i>"
+msgstr "<b>Gerber-työtiedostoa ei voi ladata plottaustiedostona </b> <i>%s</i>"
 
 #: gerbview/files.cpp:318
 #, fuzzy
@@ -29964,7 +29958,7 @@ msgstr "Ohitettu tiedosto '%s' (tuntematon tyyppi)."
 #: gerbview/files.cpp:610
 #, c-format
 msgid "<b>unzipped file %s read error</b>"
-msgstr "<b> purettu zip.tiedosto %s lukuvirhe </b>"
+msgstr "<b>purettu tiedosto %s lukuvirhe</b>"
 
 #: gerbview/files.cpp:661
 msgid "Open Zip File"
@@ -30020,17 +30014,17 @@ msgstr "Kytkentäverkko:"
 #: gerbview/gerber_draw_item.cpp:753
 #, c-format
 msgid "Cmp: %s  Pad: %s"
-msgstr "CMP: %s Pad: %s"
+msgstr "Cmp: %s  Pad: %s"
 
 #: gerbview/gerber_draw_item.cpp:759
 #, c-format
 msgid "Cmp: %s  Pad: %s  Fct %s"
-msgstr "CCMP: %s Pad: %s Fct %s"
+msgstr "Cmp: %s  Pad: %s  Fct %s"
 
 #: gerbview/gerber_draw_item.cpp:768 gerbview/toolbars_gerber.cpp:185
 #: gerbview/toolbars_gerber.cpp:188
 msgid "Cmp:"
-msgstr "CMP:"
+msgstr "Cmp:"
 
 #: gerbview/gerber_draw_item.cpp:1029
 #, c-format
@@ -30620,23 +30614,20 @@ msgid "Delete Column"
 msgstr "Poista sarake"
 
 #: include/tool/edit_table_tool_base.h:643
-#, fuzzy
 msgid "No cells selected"
-msgstr "Kytkentäverkko valitsematta."
+msgstr "Soluja ei ole valittu"
 
 #: include/tool/edit_table_tool_base.h:656
-#, fuzzy
 msgid "Selection contains non-cell items"
-msgstr "Valinta sisältää %lu lukittua kohdetta."
+msgstr "Valinta sisältää muita kuin soluja"
 
 #: include/tool/edit_table_tool_base.h:666
 msgid "Selected cells are from different tables"
 msgstr ""
 
 #: include/tool/edit_table_tool_base.h:673
-#, fuzzy
 msgid "Cannot paste into merged cells"
-msgstr "Kohdehakemistoa '%s'. ei voi luoda."
+msgstr "Ei voida liittää yhdistettyihin soluihin"
 
 #: include/tool/edit_table_tool_base.h:683
 msgid "Selected cells must form a contiguous block"
@@ -30648,9 +30639,8 @@ msgid "Embed file"
 msgstr "Upotettu tiedosto"
 
 #: include/widgets/filedlg_hook_new_library.h:42
-#, fuzzy
 msgid "Add new library to global library table"
-msgstr "Lisätäänkö kirjasto yleiseen kirjastotaulukkoon?"
+msgstr "Lisää uusi kirjasto globaaliin kirjastotaulukkoon"
 
 #: include/widgets/filedlg_hook_new_library.h:43
 #, fuzzy
@@ -32011,9 +32001,8 @@ msgid "Template name cannot be empty."
 msgstr "Verkon nimi ei voi olla tyhjä."
 
 #: kicad/dialogs/dialog_template_selector.cpp:389
-#, fuzzy
 msgid "Could not find user templates directory."
-msgstr "Hakemistoa '%s' ei voitu luoda"
+msgstr "Käyttäjän mallipohjahakemistoa ei löytynyt."
 
 #: kicad/dialogs/dialog_template_selector.cpp:399
 #, fuzzy, c-format
@@ -32021,14 +32010,13 @@ msgid "Directory '%s' already exists."
 msgstr "Kohdekansio '%s' on jo olemassa."
 
 #: kicad/dialogs/dialog_template_selector.cpp:405
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'."
-msgstr "Hakemistoa '%s' ei voitu luoda"
+msgstr "Hakemistoa '%s' ei voitu luoda."
 
 #: kicad/dialogs/dialog_template_selector.cpp:413
-#, fuzzy
 msgid "Could not open source template directory."
-msgstr "Lähdehakemistoa ei voitu avata: %s"
+msgstr "Lähdemallipohjan hakemistoa ei voitu avata."
 
 #: kicad/dialogs/dialog_template_selector.cpp:474
 #, c-format
@@ -32293,9 +32281,10 @@ msgid "Pre-configured Libraries"
 msgstr "Muunna kirjastot uuteen muotoon"
 
 #: kicad/dialogs/template_default_html.h:244
-#, fuzzy
 msgid "Common symbols and footprints already linked and ready to use."
-msgstr "Uusi kirjastotunnus:"
+msgstr ""
+"Yleiset symbolit ja jalanjäljet ovat jo linkitetty ja valmiinta "
+"käytettäväksi."
 
 #: kicad/dialogs/template_default_html.h:250
 #: pcbnew/dialogs/dialog_board_setup.cpp:163
@@ -32345,9 +32334,9 @@ msgid "Create the project"
 msgstr "Luo uusi projekti"
 
 #: kicad/dialogs/template_default_html.h:411
-#, fuzzy
 msgid "Click OK to create a new project folder with this template's contents."
-msgstr "Luo uusi projekti tälle kytkentäkaaviolle"
+msgstr ""
+"Paina OK luodaksesi uuden projektikansion tämän mallipohjan sisällöillä."
 
 #: kicad/dialogs/template_default_html.h:417
 #, fuzzy
@@ -32355,9 +32344,9 @@ msgid "Open schematic and PCB"
 msgstr "Avaa kytkentäkaavio"
 
 #: kicad/dialogs/template_default_html.h:418
-#, fuzzy
 msgid "Use the Project Manager to launch the Schematic and PCB editors."
-msgstr "Näytä edellinen lehti kytkentäkaavioeditorissa"
+msgstr ""
+"Käytä projektimanageria avataksesi kytkentäkaavio- ja piirilevyeditorit."
 
 #: kicad/dialogs/template_default_html.h:424
 #, fuzzy
@@ -32373,9 +32362,8 @@ msgid "Add a description by creating"
 msgstr ""
 
 #: kicad/dialogs/template_default_html.h:433
-#, fuzzy
 msgid "inside this template's directory."
-msgstr "KiCad-mallihakemisto"
+msgstr "tämän mallipohjan hakemiston sisällä."
 
 #: kicad/dialogs/template_default_html.h:541
 #, fuzzy
@@ -32393,14 +32381,12 @@ msgid "Suggestions"
 msgstr "Kysymys"
 
 #: kicad/dialogs/template_default_html.h:548
-#, fuzzy
 msgid "Browse to a different directory using the folder icon"
-msgstr "Käytä eri väriteemaa tulostamiseen:"
+msgstr "Siirry toiseen hakemistoon kansiokuvakkeella"
 
 #: kicad/dialogs/template_default_html.h:549
-#, fuzzy
 msgid "Use the refresh icon to reload the current directory"
-msgstr "Poista kaikki versionhallintatiedostot projektihakemistosta."
+msgstr "Päivitä nykyinen hakemisto päivitä-kuvakkeesta"
 
 #: kicad/dialogs/template_default_html.h:550
 #, fuzzy
