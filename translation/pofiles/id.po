@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 09:36+0300\n"
+"POT-Creation-Date: 2026-07-21 21:09+0300\n"
 "PO-Revision-Date: 2026-07-05 04:01+0000\n"
 "Last-Translator: \"Triyan W. Nugroho\" <triyan.wn@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/v10/id/"
@@ -31773,16 +31773,16 @@ msgstr "Impor Berkas Proyek PADS"
 msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "Impor Berkas Proyek gEDA / Lepton EDA"
 
-#: kicad/jobs_runner.cpp:227
+#: kicad/jobs_runner.cpp:253
 #, c-format
 msgid "Running job %d: %s"
 msgstr "Menjalankan job %d: %s"
 
-#: kicad/jobs_runner.cpp:283
+#: kicad/jobs_runner.cpp:309
 msgid "Job successful"
 msgstr "Job berhasil"
 
-#: kicad/jobs_runner.cpp:290
+#: kicad/jobs_runner.cpp:316
 msgid "Job failed"
 msgstr "Job gagal"
 

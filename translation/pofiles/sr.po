@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 09:36+0300\n"
+"POT-Creation-Date: 2026-07-21 21:09+0300\n"
 "PO-Revision-Date: 2026-07-16 11:01+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
@@ -32351,17 +32351,17 @@ msgstr "Пројект"
 msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "Пројект"
 
-#: kicad/jobs_runner.cpp:227
+#: kicad/jobs_runner.cpp:253
 #, fuzzy, c-format
 msgid "Running job %d: %s"
 msgstr "Дефинисане боје"
 
-#: kicad/jobs_runner.cpp:283
+#: kicad/jobs_runner.cpp:309
 #, fuzzy
 msgid "Job successful"
 msgstr "Нема конекције"
 
-#: kicad/jobs_runner.cpp:290
+#: kicad/jobs_runner.cpp:316
 #, fuzzy
 msgid "Job failed"
 msgstr "Job фајлови"

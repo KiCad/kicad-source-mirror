@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 09:36+0300\n"
+"POT-Creation-Date: 2026-07-21 21:09+0300\n"
 "PO-Revision-Date: 2026-06-19 15:02+0000\n"
 "Last-Translator: 서범기 <joonhoflow@naver.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v10/ko/>\n"
@@ -31585,16 +31585,16 @@ msgstr "PADS 프로젝트 파일 가져오기"
 msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "gEDA / Lepton EDA 프로젝트 파일 가져오기"
 
-#: kicad/jobs_runner.cpp:227
+#: kicad/jobs_runner.cpp:253
 #, c-format
 msgid "Running job %d: %s"
 msgstr "작업 실행중 %d: %s"
 
-#: kicad/jobs_runner.cpp:283
+#: kicad/jobs_runner.cpp:309
 msgid "Job successful"
 msgstr "작업 성공"
 
-#: kicad/jobs_runner.cpp:290
+#: kicad/jobs_runner.cpp:316
 msgid "Job failed"
 msgstr "작업 실패"
 

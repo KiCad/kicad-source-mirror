@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 09:36+0300\n"
+"POT-Creation-Date: 2026-07-21 21:09+0300\n"
 "PO-Revision-Date: 2026-04-24 15:43+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v10/ta/>\n"
@@ -31692,16 +31692,16 @@ msgstr "நிரப்பிடங்கள் திட்ட கோப்ப�
 msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "gEDA / மெதுனி EDA திட்டக் கோப்புகளை இறக்குமதி செய்யவும்"
 
-#: kicad/jobs_runner.cpp:227
+#: kicad/jobs_runner.cpp:253
 #, c-format
 msgid "Running job %d: %s"
 msgstr "இயங்கும் வேலை %d: %s"
 
-#: kicad/jobs_runner.cpp:283
+#: kicad/jobs_runner.cpp:309
 msgid "Job successful"
 msgstr "வேலை வெற்றிகரமாக"
 
-#: kicad/jobs_runner.cpp:290
+#: kicad/jobs_runner.cpp:316
 msgid "Job failed"
 msgstr "வேலை தோல்வியடைந்தது"
 

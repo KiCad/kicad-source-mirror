@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 09:36+0300\n"
+"POT-Creation-Date: 2026-07-21 21:09+0300\n"
 "PO-Revision-Date: 2026-07-21 18:07+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
@@ -32195,16 +32195,16 @@ msgstr "PADS-Projektdateien importieren"
 msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "gEDA / Lepton EDA-Projektdateien importieren"
 
-#: kicad/jobs_runner.cpp:227
+#: kicad/jobs_runner.cpp:253
 #, c-format
 msgid "Running job %d: %s"
 msgstr "Führe Auftrag %d aus: %s"
 
-#: kicad/jobs_runner.cpp:283
+#: kicad/jobs_runner.cpp:309
 msgid "Job successful"
 msgstr "Auftrag erfolgreich"
 
-#: kicad/jobs_runner.cpp:290
+#: kicad/jobs_runner.cpp:316
 msgid "Job failed"
 msgstr "Auftrag fehlgeschlagen"
 

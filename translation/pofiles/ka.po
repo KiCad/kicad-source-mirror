@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 09:36+0300\n"
+"POT-Creation-Date: 2026-07-21 21:09+0300\n"
 "PO-Revision-Date: 2026-04-26 04:39+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v10/ka/>\n"
@@ -31847,16 +31847,16 @@ msgstr "საკონტაქტო ბალიშები პროექ�
 msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "gEDA / Lepton EDA პროექტის ფაილების შემოტანა"
 
-#: kicad/jobs_runner.cpp:227
+#: kicad/jobs_runner.cpp:253
 #, c-format
 msgid "Running job %d: %s"
 msgstr "გაშვებულია დავალება %d: %s"
 
-#: kicad/jobs_runner.cpp:283
+#: kicad/jobs_runner.cpp:309
 msgid "Job successful"
 msgstr "დავალება წარმატებულია"
 
-#: kicad/jobs_runner.cpp:290
+#: kicad/jobs_runner.cpp:316
 msgid "Job failed"
 msgstr "სამუშაო ვერ შესრულდა"
 

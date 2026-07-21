@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 09:36+0300\n"
+"POT-Creation-Date: 2026-07-21 21:09+0300\n"
 "PO-Revision-Date: 2026-04-30 19:09+0000\n"
 "Last-Translator: Troy <radiohotline@disroot.org>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/kicad/v10/ar/>\n"
@@ -31442,16 +31442,16 @@ msgstr "استيراد ملفات مشروع PADS"
 msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "استيراد ملفات مشروع gEDA / Lepton EDA"
 
-#: kicad/jobs_runner.cpp:227
+#: kicad/jobs_runner.cpp:253
 #, c-format
 msgid "Running job %d: %s"
 msgstr "تشغيل المهمة %d: %s"
 
-#: kicad/jobs_runner.cpp:283
+#: kicad/jobs_runner.cpp:309
 msgid "Job successful"
 msgstr "نجحت المهمة"
 
-#: kicad/jobs_runner.cpp:290
+#: kicad/jobs_runner.cpp:316
 msgid "Job failed"
 msgstr "فشلت المهمة"
 
