@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-20 09:36+0300\n"
-"PO-Revision-Date: 2026-07-20 06:34+0000\n"
-"Last-Translator: Luc <some_physics@live.com>\n"
+"PO-Revision-Date: 2026-07-21 18:07+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2763,8 +2763,8 @@ msgid ""
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
 "KiCad hat automatisch gespeicherte Änderungen einer vorherigen Sitzung "
-"gefunden. Das heißt normalerweise, dass KiCad unerwartet geschlossen wurde "
-"ohne alle Änderungen zu speichern."
+"gefunden. Das heißt normalerweise, dass KiCad unerwartet geschlossen wurde, "
+"während Sie noch ungespeicherte Änderungen hatten."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
 #, fuzzy
@@ -9672,15 +9672,17 @@ msgid "Restore the project to the version from %s?"
 msgstr "Auf die Remote-Version zurücksetzen."
 
 #: common/local_history.cpp:2262
-#, fuzzy
 msgid "Restore Version"
-msgstr "Sitzung wiederherstellen"
+msgstr "Version wiederherstellen"
 
 #: common/local_history.cpp:2265
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
 msgstr ""
+"Ihre aktuellen Dateien werden zuerst gesichert, damit Sie die "
+"Wiederherstellung rückgängig machen können. Dateien, die nicht Teil dieser "
+"Version sind, bleiben davon unberührt."
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1228 pcbnew/zone.cpp:989
@@ -15368,7 +15370,7 @@ msgstr "Zusätzliche Einheiten des Symbols ebenfalls entfernen?"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:551
 #, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "Symbol muss mindestens eine Symbolform haben"
+msgstr "Benutzerdefinierte Symbolstile müssen mindestens 2 Einträge haben"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:557
 msgid "Delete extra body styles from symbol?"
@@ -16017,7 +16019,7 @@ msgstr "Farbthema:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:103
 msgid "Select the color theme to use for plotting"
-msgstr "Auswahl des Farbthemas welches beim Plotten benutzt werden soll"
+msgstr "Auswahl des Farbthemas, welches beim Plotten benutzt werden soll"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:107
 msgid "Plot background color"
