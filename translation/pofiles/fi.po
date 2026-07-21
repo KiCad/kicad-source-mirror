@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-21 18:07+0000\n"
+"PO-Revision-Date: 2026-07-22 19:01+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -9175,9 +9175,9 @@ msgstr ""
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:351
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error in '%s' at line %d: %s"
-msgstr "JSON-virhe luettaessa '%s': %s"
+msgstr "JSON-virhe kohdassa '%s' rivillä %d: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:544
 #, fuzzy, c-format
@@ -9640,7 +9640,7 @@ msgstr "Kytkentäkaavion tuonnin asetukset"
 #: common/jobs/job_special_archive.cpp:38
 #, fuzzy
 msgid "Special: Archive Project"
-msgstr "&Pakkaa Projekti ..."
+msgstr "Spesiaali: Arkistoi projekti"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 #, fuzzy
@@ -24190,9 +24190,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' could not be parsed and was skipped: %s"
-msgstr "Tiedostoa '%s' ei voitu luoda."
+msgstr "Sivua '%s' ei voitu jäsennellä, joten se ohitettiin: %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:457
 #, fuzzy
@@ -32415,7 +32415,7 @@ msgstr "Tiedostoa ei löytynyt:"
 #: gerbview/files.cpp:301
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr "<b>Gerber-työtiedostoa ei voi ladata plottaustiedostona </b> <i>%s</i>"
+msgstr "<b>Gerber-työtiedostoa ei voi ladata plottaustiedostona</b> <i>%s</i>"
 
 #: gerbview/files.cpp:314
 #, fuzzy
@@ -33374,9 +33374,9 @@ msgstr ""
 
 #: kicad/cli/command_gerber_convert_png.cpp:147
 #: kicad/cli/command_gerber_info.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid units: %s\n"
-msgstr "Virheelliset yksiköt määritetty\n"
+msgstr "Virheelliset yksiköt: %s\n"
 
 #: kicad/cli/command_gerber_convert_png.cpp:158
 msgid ""
@@ -33426,9 +33426,9 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_gerber_diff.cpp:124 kicad/cli/command_gerber_info.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid output format: %s\n"
-msgstr "Virheellinen raportin muoto\n"
+msgstr "Virheellinen lähdön muoto: %s\n"
 
 #: kicad/cli/command_gerber_info.cpp:40
 msgid "Display information about a Gerber or Excellon file"
@@ -33502,9 +33502,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_import.cpp:77
-#, fuzzy
 msgid "At least one input file is required\n"
-msgstr "Vähintään yksi ruudukon koko vaaditaan."
+msgstr "Ainakin yksi syötetiedosto vaaditaan\n"
 
 #: kicad/cli/command_import.cpp:119
 #, fuzzy, c-format
@@ -35500,9 +35499,9 @@ msgid "Import OrCAD Project Files"
 msgstr "Tuo Eagle Projektitiedostot"
 
 #: kicad/jobs_runner.cpp:274
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Käynnissä olevat työt"
+msgstr "Työ käynnissä %d: %s"
 
 #: kicad/jobs_runner.cpp:340
 msgid "Job successful"
@@ -35555,9 +35554,8 @@ msgid "Export STEPZ"
 msgstr "Vie STEP"
 
 #: kicad/kicad_cli.cpp:172
-#, fuzzy
 msgid "Export U3D"
-msgstr "Vie DXF"
+msgstr "Vie U3D"
 
 #: kicad/kicad_cli.cpp:203
 msgid "Export PS"
@@ -35577,9 +35575,8 @@ msgstr "Projektitiedostot"
 
 #: kicad/kicad_manager_frame.cpp:247 kicad/kicad_manager_frame.cpp:847
 #: kicad/tools/kicad_manager_actions.cpp:241
-#, fuzzy
 msgid "Local History"
-msgstr "Historialuettelo:"
+msgstr "Paikallinen historia"
 
 #: kicad/kicad_manager_frame.cpp:407 kicad/project_tree_pane.cpp:1529
 msgid "Local path: monitoring folder changes"
@@ -35658,9 +35655,9 @@ msgid "Moments ago"
 msgstr "Kommentit"
 
 #: kicad/local_history_pane.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "%d minutes ago"
-msgstr "minuutit"
+msgstr "%d minuuttia sitten"
 
 #: kicad/local_history_pane.cpp:120
 #, c-format
@@ -35681,9 +35678,8 @@ msgid "Import Non-KiCad Project..."
 msgstr "Tuo Ei-KiCad Projekti..."
 
 #: kicad/menubar.cpp:122
-#, fuzzy
 msgid "Altium Project..."
-msgstr "EAGLE Projekti..."
+msgstr "Altium Projekti..."
 
 #: kicad/menubar.cpp:123
 #, fuzzy
