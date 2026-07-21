@@ -1073,11 +1073,13 @@ void NODE::Remove( LINE& aLine )
 
 void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, int aLimit,
                        VECTOR2I* aCorners, LINKED_ITEM** aSegments, bool* aArcReversed,
-                       bool& aGuardHit, bool aStopAtLockedJoints, bool aFollowLockedSegments )
+                       bool& aGuardHit, bool aStopAtLockedJoints, bool aFollowLockedSegments,
+                       bool aAllowSegmentSizeMismatch )
 {
     bool prevReversed = false;
 
     const VECTOR2I guard = aCurrent->Anchor( aScanDirection );
+    const int      startWidth = aCurrent->Width();
 
     for( int count = 0 ; ; ++count )
     {
@@ -1116,11 +1118,12 @@ void NODE::followLine( LINKED_ITEM* aCurrent, bool aScanDirection, int& aPos, in
         if( locked || aPos < 0 || aPos == aLimit )
             break;
 
-        aCurrent = jt->NextSegment( aCurrent, aFollowLockedSegments );
+        LINKED_ITEM* next = jt->NextSegment( aCurrent, aFollowLockedSegments );
 
-        if( !aCurrent )
+        if( !next || ( !aAllowSegmentSizeMismatch && next->Width() != startWidth ) )
             break;
 
+        aCurrent = next;
         prevReversed = ( aCurrent && jt->Pos() == aCurrent->Anchor( aScanDirection ) );
     }
 }
@@ -1149,12 +1152,12 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool
     pl.SetOwner( this );
 
     followLine( aSeg, false, i_start, MaxVerts, corners.data(), segs.data(), arcReversed.data(),
-                guardHit, aStopAtLockedJoints, aFollowLockedSegments );
+                guardHit, aStopAtLockedJoints, aFollowLockedSegments, aAllowSegmentSizeMismatch );
 
     if( !guardHit )
     {
         followLine( aSeg, true, i_end, MaxVerts, corners.data(), segs.data(), arcReversed.data(),
-                    guardHit, aStopAtLockedJoints, aFollowLockedSegments );
+                    guardHit, aStopAtLockedJoints, aFollowLockedSegments, aAllowSegmentSizeMismatch );
     }
 
     int n = 0;
@@ -1168,9 +1171,6 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool
     {
         const VECTOR2I& p  = corners[i];
         LINKED_ITEM*    li = segs[i];
-
-        if( !aAllowSegmentSizeMismatch && ( li && li->Width() != aSeg->Width() ) )
-            continue;
 
         if( !li || li->Kind() != ITEM::ARC_T )
             line.Append( p );
