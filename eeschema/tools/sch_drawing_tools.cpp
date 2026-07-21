@@ -125,7 +125,7 @@ bool SCH_DRAWING_TOOLS::Init()
     // clang-format off
     ctxMenu.AddItem( SCH_ACTIONS::leaveSheet,      belowRootSheetCondition, 150 );
     ctxMenu.AddItem( SCH_ACTIONS::closeOutline,    inDrawingRuleArea,       200 );
-    ctxMenu.AddItem( SCH_ACTIONS::deleteLastPoint, canUndoPoint,            200 );
+    ctxMenu.AddItem( ACTIONS::deleteLastPoint,     canUndoPoint,            200 );
     // clang-format on
 
     return true;
@@ -2522,7 +2522,7 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( started && (   evt->IsAction( &SCH_ACTIONS::deleteLastPoint )
+        else if( started && (   evt->IsAction( &ACTIONS::deleteLastPoint )
                              || evt->IsAction( &ACTIONS::doDelete )
                              || evt->IsAction( &ACTIONS::undo ) ) )
         {

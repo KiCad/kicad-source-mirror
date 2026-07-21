@@ -787,13 +787,6 @@ TOOL_ACTION SCH_ACTIONS::drawRuleArea( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( SHAPE_T::RECTANGLE ) );
 
-TOOL_ACTION SCH_ACTIONS::deleteLastPoint( TOOL_ACTION_ARGS()
-        .Name( "eeschema.InteractiveDrawing.deleteLastPoint" )
-        .Scope( AS_CONTEXT )
-        .FriendlyName( _( "Delete Last Point" ) )
-        .Tooltip( _( "Delete the last point added to the current item" ) )
-        .Icon( BITMAPS::undo ) );
-
 TOOL_ACTION SCH_ACTIONS::closeOutline( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.closeOutline" )
         .Scope( AS_CONTEXT )

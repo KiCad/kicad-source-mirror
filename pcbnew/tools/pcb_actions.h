@@ -228,7 +228,6 @@ public:
     static TOOL_ACTION placeFootprint;
     static TOOL_ACTION placeImportedGraphics;
     static TOOL_ACTION setAnchor;
-    static TOOL_ACTION deleteLastPoint;
 
     // Line mode grouping and events
     static TOOL_ACTION lineModeFree;         ///< Unconstrained angle mode (icon lines_any)

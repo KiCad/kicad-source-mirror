@@ -86,7 +86,7 @@ bool EE_GRAPHIC_TOOL::Init()
 
     // clang-format off
     ctxMenu.AddItem( ACTIONS::arcPosture,          inDrawingArc,    200 );
-    ctxMenu.AddItem( SCH_ACTIONS::deleteLastPoint, canUndoPoint,    200 );
+    ctxMenu.AddItem( ACTIONS::deleteLastPoint,     canUndoPoint,    200 );
     // clang-format on
 
     return true;
@@ -760,7 +760,7 @@ bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr
         {
             aBehavior.ToggleClockwise();
         }
-        else if( evt->IsAction( &SCH_ACTIONS::deleteLastPoint ) )
+        else if( evt->IsAction( &ACTIONS::deleteLastPoint ) )
         {
             aBehavior.RemoveLastPoint();
             grid.FullReset();

@@ -1557,7 +1557,7 @@ int PCB_SELECTION_TOOL::SelectPolyArea( const TOOL_EVENT& aEvent )
             evt->SetPassEvent( false );
             break;
         }
-        else if(   evt->IsAction( &PCB_ACTIONS::deleteLastPoint )
+        else if(   evt->IsAction( &ACTIONS::deleteLastPoint )
                 || evt->IsAction( &ACTIONS::doDelete )
                 || evt->IsAction( &ACTIONS::undo ) )
         {

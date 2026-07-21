@@ -99,7 +99,6 @@ public:
     static TOOL_ACTION undoLastSegment;
     static TOOL_ACTION switchSegmentPosture;
     static TOOL_ACTION drawRuleArea;
-    static TOOL_ACTION deleteLastPoint;
     static TOOL_ACTION closeOutline;
 
     // Symbol Tools

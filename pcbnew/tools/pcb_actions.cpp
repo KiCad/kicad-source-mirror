@@ -666,14 +666,6 @@ TOOL_ACTION PCB_ACTIONS::magneticSnapToggle( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Toggle Snapping Between Active and All Layers" ) )
         .Tooltip( _( "Toggles between snapping on all visible layers and only the active area" ) ) );
 
-TOOL_ACTION PCB_ACTIONS::deleteLastPoint( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.InteractiveDrawing.deleteLastPoint" )
-        .Scope( AS_CONTEXT )
-        .DefaultHotkey( WXK_BACK )
-        .FriendlyName( _( "Delete Last Point" ) )
-        .Tooltip( _( "Delete the last point added to the current item" ) )
-        .Icon( BITMAPS::undo ) );
-
 TOOL_ACTION PCB_ACTIONS::closeOutline( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.closeOutline" )
         .Scope( AS_CONTEXT )

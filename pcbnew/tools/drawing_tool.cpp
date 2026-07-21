@@ -361,7 +361,7 @@ bool DRAWING_TOOL::Init()
 
     // tool-specific actions
     ctxMenu.AddItem( PCB_ACTIONS::closeOutline,          canCloseOutline, 200 );
-    ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint,       canUndoPoint, 200 );
+    ctxMenu.AddItem( ACTIONS::deleteLastPoint,           canUndoPoint, 200 );
     ctxMenu.AddItem( ACTIONS::arcPosture,                arcToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::spacingIncrease,       tuningToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::spacingDecrease,       tuningToolActive, 200 );
@@ -2914,7 +2914,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             }
         }
         else if( started && (   evt->IsAction( &PCB_ACTIONS::doDelete )
-                             || evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) ) )
+                             || evt->IsAction( &ACTIONS::deleteLastPoint ) ) )
         {
             if( aCommittedGraphics && !aCommittedGraphics->empty() )
             {
@@ -3180,7 +3180,7 @@ bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PC
 
             aBehavior.AddPoint( cursorPos );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
+        else if( evt->IsAction( &ACTIONS::deleteLastPoint ) )
         {
             // Snap guides persist in the grid helper until the tool exits, so a mid-draw backup
             // must clear them or they linger on screen.
@@ -3559,7 +3559,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( started && (   evt->IsAction( &PCB_ACTIONS::deleteLastPoint )
+        else if( started && (   evt->IsAction( &ACTIONS::deleteLastPoint )
                              || evt->IsAction( &ACTIONS::doDelete )
                              || evt->IsAction( &ACTIONS::undo ) ) )
         {
