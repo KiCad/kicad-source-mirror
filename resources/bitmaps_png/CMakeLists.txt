@@ -1026,54 +1026,6 @@ function( bitmap_dir_constraints pngWidth pngHeight bmapList )
 endfunction()
 
 
-# Function bitmap_dir_untheme
-# Like bitmap_dir_constraints but for one themeless icon per name, kept in
-# sources/geometric_constraints/.  Emits constraint_<name>.png and registers it for both themes, so
-# it resolves directly in either without the bitmap store's missing-theme fallback.
-function( bitmap_dir_untheme pngWidth pngHeight bmapList )
-
-    set( pngDir "${CMAKE_CURRENT_SOURCE_DIR}/png" )
-
-    file( MAKE_DIRECTORY ${pngDir} )
-    file( MAKE_DIRECTORY ${TMP_DIR} )
-
-    if( ${pngHeight} EQUAL -1 )
-        set( heightTag "" )
-    else()
-        set( heightTag "_${pngHeight}" )
-    endif()
-
-    foreach( bmn ${bmapList} )
-
-        string( REPLACE "-" "_" bmnNormalized "${bmn}" )
-
-        set( svgFile "${CMAKE_CURRENT_SOURCE_DIR}/sources/geometric_constraints/${bmn}.svg" )
-        set( pngFile "constraint_${bmnNormalized}${heightTag}.png" )
-        set( pngPath "${pngDir}/${pngFile}" )
-        set( tmpFile "${TMP_DIR}/${pngFile}" )
-
-        if( NOT EXISTS ${svgFile} )
-            message( "Warning: Source SVG ${svgFile} does not exist!" )
-            continue()
-        endif()
-
-        svg2png( ${svgFile} ${tmpFile} ${pngWidth} ${pngHeight} )
-        png2png( ${tmpFile} ${pngPath} )
-
-        set( bitmapInfo
-        "    aBitmapInfoCache[BITMAPS::constraint_${bmnNormalized}].emplace_back( BITMAPS::constraint_${bmnNormalized}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"light\" ) );\n    aBitmapInfoCache[BITMAPS::constraint_${bmnNormalized}].emplace_back( BITMAPS::constraint_${bmnNormalized}, wxT( \"${pngFile}\" ), ${pngHeight}, wxT( \"dark\" ) );\n"
-        )
-
-        set( BITMAP_INFO_LIST "${BITMAP_INFO_LIST}${bitmapInfo}" )
-        list( APPEND ALL_PNGS ${pngPath} )
-    endforeach()
-
-    set( ALL_PNGS ${ALL_PNGS} PARENT_SCOPE )
-    set( BITMAP_INFO_LIST ${BITMAP_INFO_LIST} PARENT_SCOPE )
-
-endfunction()
-
-
 include( FindUnixCommands )
 
 if( TAR STREQUAL "TAR-NOTFOUND" )
@@ -1208,8 +1160,13 @@ if( MAINTAIN_PNGS )
     # Constraint bitmaps with light/dark theme variants (DRC rule editor panels)
     bitmap_dir_constraints( -1 -1 "${BMAPS_CONSTRAINTS}" )
 
-    # Geometric-constraint badge icons (one themeless icon each)
-    bitmap_dir_untheme( -1 -1 "${BMAPS_CONSTRAINTS_GEOM}" )
+    # Geometric-constraint badge icons shown in toolbars and context menus, so they need the
+    # standard theme-aware menu/toolbar sizes rather than the native SVG size.
+    bitmap_dir_constraints( 24 24 "${BMAPS_CONSTRAINTS_GEOM}" )  # "primary" size first
+    bitmap_dir_constraints( 16 16 "${BMAPS_CONSTRAINTS_GEOM}" )  # Small toolbar mode
+    bitmap_dir_constraints( 32 32 "${BMAPS_CONSTRAINTS_GEOM}" )  # Large toolbar mode
+    bitmap_dir_constraints( 48 48 "${BMAPS_CONSTRAINTS_GEOM}" )  # HiDPI normal size
+    bitmap_dir_constraints( 64 64 "${BMAPS_CONSTRAINTS_GEOM}" )  # HiDPI large size
 
     configure_file( ${BITMAP_INFO_TEMPLATE} ${BITMAP_INFO_FILE}  NEWLINE_STYLE UNIX )
 
