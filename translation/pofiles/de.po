@@ -37,8 +37,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-20 09:36+0300\n"
-"PO-Revision-Date: 2026-07-20 03:50+0000\n"
-"Last-Translator: Luc <some_physics@live.com>\n"
+"PO-Revision-Date: 2026-07-21 18:07+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -2802,8 +2802,8 @@ msgid ""
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
 "KiCad hat automatisch gespeicherte Änderungen einer vorherigen Sitzung "
-"gefunden. Das heißt normalerweise, dass KiCad unerwartet geschlossen wurde "
-"ohne alle Änderungen zu speichern."
+"gefunden. Das heißt normalerweise, dass KiCad unerwartet geschlossen wurde, "
+"während Sie noch ungespeicherte Änderungen hatten."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
 #, fuzzy
@@ -9214,9 +9214,11 @@ msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "Kann JSON-Zeile %d in \"%s\" nicht lesen: %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:642
-#, c-format
+#, c-format, fuzzy
 msgid "EasyEDA Pro v3 blob in '%s' was skipped due to parse error: %s"
 msgstr ""
+"\"EasyEDA Pro v3\"-Blob in \"%s\" wurde aufgrund eines Parsingfehlers "
+"übersprungen: %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:929
 #, fuzzy, c-format
@@ -9224,23 +9226,20 @@ msgid "Failed to parse EasyEDA Pro v3 device metadata: %s"
 msgstr "Remote-Anbieter-Metadaten konnten nicht geparst werden: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:310
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid DOCHEAD in '%s' at line %d"
-msgstr ""
-"Ungültige Footprint-ID in\n"
-"Datei: \"%s\"\n"
-"Zeile: %d"
+msgstr "Ungültiger DOCHEAD in \"%s\" in Zeile %d"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:321
 #, c-format
 msgid "Expected DOCHEAD in '%s' at line %d"
-msgstr ""
+msgstr "Erwarteter DOCHEAD in \"%s\" in Zeile %d"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:351
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error in '%s' at line %d: %s"
-msgstr "JSON-Fehler beim Lesen von \"%s\": %s"
+msgstr "JSON-Fehler in \"%s\" in Zeile %d: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:544
 #, fuzzy, c-format
@@ -9680,9 +9679,8 @@ msgid "Schematic Import Job Settings"
 msgstr "Schaltplanimport-Auftragseinstellungen"
 
 #: common/jobs/job_special_archive.cpp:38
-#, fuzzy
 msgid "Special: Archive Project"
-msgstr "Projekt archivieren ..."
+msgstr "Spezial: Projekt archivieren"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
@@ -10390,15 +10388,17 @@ msgid "Restore the project to the version from %s?"
 msgstr "Das Projekt auf Version von %s zurücksetzen?"
 
 #: common/local_history.cpp:2325
-#, fuzzy
 msgid "Restore Version"
-msgstr "Sitzung wiederherstellen"
+msgstr "Version wiederherstellen"
 
 #: common/local_history.cpp:2328
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
 msgstr ""
+"Ihre aktuellen Dateien werden zuerst gesichert, damit Sie die "
+"Wiederherstellung rückgängig machen können. Dateien, die nicht Teil dieser "
+"Version sind, bleiben davon unberührt."
 
 #: common/netclass.cpp:331 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1236 pcbnew/zone.cpp:1137
@@ -10930,8 +10930,8 @@ msgstr "Kann \"%s\" nicht auf Festplnatte geschrieben werden: %s"
 msgid ""
 "Failed to commit save of '%s': %s. The file on disk has not been modified."
 msgstr ""
-"Das Commiten von \"%s\" ist fehlgeschlagen: %s. Die gespeicherte Datei wurde "
-"nicht geändert."
+"Das Committen von \"%s\" ist fehlgeschlagen: %s. Die gespeicherte Datei "
+"wurde nicht geändert."
 
 #: common/richio.cpp:717
 #, c-format
@@ -12790,8 +12790,8 @@ msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Both bindings are kept, "
 "but only one runs per key press. Continue?"
 msgstr ""
-"\"%s\" ist bereits zu \"%s\" in Sektion \"%s\" zugewiesen. Sind Sie sicher, "
-"dass Sie diese Zuweisung ändern wollen?"
+"\"%s\" ist bereits zu \"%s\" in Sektion \"%s\" zugewiesen. Beide Zuweisungen "
+"bleiben erhalten, aber nur eine wird pro Tastendruck ausgeführt. Fortfahren?"
 
 #: common/widgets/widget_hotkey_list.cpp:512
 #, fuzzy
@@ -16375,7 +16375,7 @@ msgstr "Zusätzliche Einheiten des Symbols ebenfalls entfernen?"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:588
 #, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "Symbol muss mindestens eine Symbolform haben"
+msgstr "Benutzerdefinierte Symbolstile müssen mindestens 2 Einträge haben"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
 msgid "Delete extra body styles from symbol?"
@@ -17035,7 +17035,7 @@ msgstr "Farbthema:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:103
 msgid "Select the color theme to use for plotting"
-msgstr "Auswahl des Farbthemas welches beim Plotten benutzt werden soll"
+msgstr "Auswahl des Farbthemas, welches beim Plotten benutzt werden soll"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:107
 msgid "Plot background color"
@@ -21067,9 +21067,8 @@ msgid "Checking sheet names..."
 msgstr "Prüfe Blattnamen ..."
 
 #: eeschema/erc/erc.cpp:2528
-#, fuzzy
 msgid "Checking pin maps..."
-msgstr "Prüfe Pins ..."
+msgstr "Prüfe Pinzuordnungen ..."
 
 #: eeschema/erc/erc.cpp:2535
 msgid "Checking conflicts..."
@@ -39227,7 +39226,7 @@ msgstr ""
 "von Betriebsmitteln, die an das Niederspannungsnetz angeschlossen werden, zu "
 "geben.\n"
 "\n"
-"\"Einige Fälle werden von diesem Rechner jedoch nicht abgedeckt:\n"
+"Einige Fälle werden von diesem Rechner jedoch nicht abgedeckt:\n"
 "\n"
 "- Bei Frequenzen über 30 kHz verschlechtern sich dielektrische "
 "Eigenschaften. IEC60664-4 deckt diese Fälle ab.\n"
@@ -39236,7 +39235,7 @@ msgstr ""
 "– die Luft- und Kriechstrecken reduziert werden. Lötstoplack wird nicht als "
 "hinreichende Beschichtung betrachtet.\n"
 "- Isolation durch Flüssigkeiten, Druckluft oder andere Gase als Luft fallen "
-"nicht in den Anwendungsbereich der IEC60664.\"\n"
+"nicht in den Anwendungsbereich der IEC60664.\n"
 "- Die Abmessungen für Kriechstrecken können nicht für Bereiche spezifiziert "
 "werden, in denen permanent leitfähige Verschmutzung vorhanden ist "
 "(Verschmutzungsgrad 4)\n"
