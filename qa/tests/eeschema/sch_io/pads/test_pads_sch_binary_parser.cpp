@@ -2304,6 +2304,19 @@ BOOST_AUTO_TEST_CASE( PlacementTransforms )
     const std::array<int, 5> angles = { 0, 900, 0, 900, 900 };
     const std::array<bool, 5> mirrored = { false, false, true, true, true };
     const std::array<uint16_t, 5> mirrorFlags = { 0, 0, 3, 3, 2 };
+    const std::array<std::pair<uint16_t, int>, 4> orthogonalAngles = {
+        std::pair<uint16_t, int>{ 0, 0 }, { 900, 900 }, { 1800, 1800 }, { 2700, 2700 }
+    };
+
+    for( const auto& [raw, normalized] : orthogonalAngles )
+    {
+        std::vector<uint8_t> transform = loadBinaryFixture( "placement_transform.sch" );
+        writeU16( transform, sheetControllerOffset( transform, 15 ) + 0x24, raw );
+        PADS_SCH_MODEL transformed = parser.Parse( transform, wxS( "placement_transform.sch" ) );
+        BOOST_CHECK_EQUAL( transformed.placements[0].angle, normalized );
+        BOOST_CHECK_EQUAL( propertyValue( transformed.placements[0].properties, wxS( "raw_angle" ) ),
+                           wxString::Format( wxS( "%u" ), raw ) );
+    }
 
     for( size_t i = 0; i < model.placements.size(); ++i )
     {
@@ -2314,6 +2327,22 @@ BOOST_AUTO_TEST_CASE( PlacementTransforms )
         BOOST_CHECK_EQUAL( placement.angle, angles[i] );
         BOOST_CHECK_EQUAL( placement.mirrored, mirrored[i] );
         BOOST_CHECK_EQUAL( placement.mirrorFlags, mirrorFlags[i] );
+        BOOST_CHECK_EQUAL( propertyValue( placement.properties, wxS( "raw_angle" ) ),
+                           wxString::Format( wxS( "%d" ), angles[i] ) );
+        BOOST_CHECK_EQUAL( propertyValue( placement.properties, wxS( "raw_mirror" ) ),
+                           wxString::Format( wxS( "%u" ), mirrorFlags[i] ) );
+        auto rawAngle = std::ranges::find_if( placement.properties,
+                                              []( const SOURCE_PROPERTY& aProperty )
+                                              { return aProperty.name.text == wxS( "raw_angle" ); } );
+        auto rawMirror = std::ranges::find_if( placement.properties,
+                                               []( const SOURCE_PROPERTY& aProperty )
+                                               { return aProperty.name.text == wxS( "raw_mirror" ); } );
+        BOOST_REQUIRE( rawAngle != placement.properties.end() );
+        BOOST_REQUIRE( rawMirror != placement.properties.end() );
+        BOOST_CHECK_EQUAL( rawAngle->source.absoluteOffset, placement.source.absoluteOffset + 0x24 );
+        BOOST_CHECK_EQUAL( rawMirror->source.absoluteOffset, placement.source.absoluteOffset + 0x26 );
+        BOOST_CHECK_EQUAL( rawAngle->source.length, 2 );
+        BOOST_CHECK_EQUAL( rawMirror->source.length, 2 );
         BOOST_CHECK_EQUAL( placement.sheet.id.Value(), model.sheets[0].id.Value() );
         BOOST_REQUIRE( placement.gate.has_value() );
         BOOST_CHECK( placement.partType.id.IsValid() );
@@ -2407,11 +2436,11 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
                            } );
 
     std::vector<uint8_t> unresolvedPart = loadBinaryFixture( "placement_transform.sch" );
-    writeU16( unresolvedPart, sheetControllerOffset( unresolvedPart, 15 ) + 0x42, 0xFFFE );
+    writeU16( unresolvedPart, sheetControllerOffset( unresolvedPart, 15 ) + 0x42, 20 );
     BOOST_CHECK_EXCEPTION( parser.Parse( unresolvedPart, wxS( "placement-part.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
                            {
-                               return aError.What().Contains( wxS( "unresolved placement part-type reference" ) )
+                               return aError.What().Contains( wxS( "targets definition object class" ) )
                                       && aError.What().Contains( wxS( "controller 15" ) );
                            } );
 
@@ -2422,16 +2451,16 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
                            { return aError.What().Contains( wxS( "component-group handle" ) ); } );
 
     std::vector<uint8_t> wrongDecal = loadBinaryFixture( "placement_transform.sch" );
-    writeU16( wrongDecal, sheetControllerOffset( wrongDecal, 15 ) + 0x44, 0xFFFF );
+    writeU16( wrongDecal, sheetControllerOffset( wrongDecal, 15 ) + 0x44, 0 );
     BOOST_CHECK_EXCEPTION( parser.Parse( wrongDecal, wxS( "placement-decal.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
-                           { return aError.What().Contains( wxS( "unresolved placement decal reference" ) ); } );
+                           { return aError.What().Contains( wxS( "different object classes" ) ); } );
 
     std::vector<uint8_t> wrongGate = loadBinaryFixture( "multigate.sch" );
-    writeU16( wrongGate, sheetControllerOffset( wrongGate, 15 ) + 136 + 0x4A, 0xFFFF );
+    writeU16( wrongGate, sheetControllerOffset( wrongGate, 15 ) + 136 + 0x4A, 7 );
     BOOST_CHECK_EXCEPTION( parser.Parse( wrongGate, wxS( "placement-gate.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
-                           { return aError.What().Contains( wxS( "unresolved placement gate reference" ) ); } );
+                           { return aError.What().Contains( wxS( "gate handle targets definition object class" ) ); } );
 
     std::vector<uint8_t> wrongPin = loadBinaryFixture( "placement_transform.sch" );
     writeU16( wrongPin, sheetControllerOffset( wrongPin, 16 ) + 4, 0xFFFF );
@@ -2440,10 +2469,35 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
                            { return aError.What().Contains( wxS( "placed-pin handle" ) ); } );
 
     std::vector<uint8_t> wrongField = loadBinaryFixture( "fields.sch" );
-    writeU16( wrongField, sheetControllerOffset( wrongField, 17 ), 0x7FFF );
+    writeU16( wrongField, sheetControllerOffset( wrongField, 17 ), 10 );
     BOOST_CHECK_EXCEPTION( parser.Parse( wrongField, wxS( "placement-field.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
                            { return aError.What().Contains( wxS( "placement font handle" ) ); } );
+
+    PADS_SCH_MODEL wrongSheet =
+            parser.Parse( loadBinaryFixture( "placement_transform.sch" ), wxS( "placement-sheet.sch" ) );
+    const uint32_t wrongClassSheet = wrongSheet.definitions.back().id.Value();
+    BOOST_REQUIRE( std::ranges::none_of( wrongSheet.sheets,
+                                        [&]( const MODEL_SHEET& aSheet )
+                                        { return aSheet.id.Value() == wrongClassSheet; } ) );
+    wrongSheet.placements[0].sheet = { SHEET_ID( wrongClassSheet ), wrongSheet.placements[0].source };
+    BOOST_CHECK_EXCEPTION( wrongSheet.ValidateOrThrow(), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           { return aError.What().Contains( wxS( "unresolved placement sheet reference" ) ); } );
+
+    std::vector<uint8_t> unknownTransform = loadBinaryFixture( "placement_transform.sch" );
+    writeU16( unknownTransform, sheetControllerOffset( unknownTransform, 15 ) + 0x24, 123 );
+    writeU16( unknownTransform, sheetControllerOffset( unknownTransform, 15 ) + 0x26, 9 );
+    PADS_SCH_MODEL unknown = parser.Parse( unknownTransform, wxS( "placement-transform-enum.sch" ) );
+    BOOST_CHECK_EQUAL( propertyValue( unknown.placements[0].properties, wxS( "raw_angle" ) ), wxS( "123" ) );
+    BOOST_CHECK_EQUAL( propertyValue( unknown.placements[0].properties, wxS( "raw_mirror" ) ), wxS( "9" ) );
+    BOOST_CHECK_EQUAL( std::ranges::count_if( unknown.diagnostics,
+                                              []( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                              {
+                                                  return aDiagnostic.message.Contains(
+                                                          wxS( "unknown placement transform" ) );
+                                              } ),
+                       2 );
 }
 
 
@@ -2470,6 +2524,22 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
             BOOST_CHECK_EQUAL( binaryPlacement.position.y, asciiPlacement.position.y * 2 );
             BOOST_CHECK_EQUAL( binaryPlacement.angle, std::lround( asciiPlacement.rotation * 10 ) );
             BOOST_CHECK_EQUAL( binaryPlacement.mirrorFlags, asciiPlacement.mirror_flags );
+            BOOST_CHECK_EQUAL( binaryPlacement.sheet.id.Value(), binary.sheets[0].id.Value() );
+            auto part = std::ranges::find_if( binary.partTypes,
+                                              [&]( const MODEL_PART_TYPE& aPart )
+                                              { return aPart.id == binaryPlacement.partType.id; } );
+            BOOST_REQUIRE( part != binary.partTypes.end() );
+            BOOST_CHECK_EQUAL( part->name.text, wxString::FromUTF8( asciiPlacement.part_type ) );
+            BOOST_REQUIRE( binaryPlacement.gate.has_value() );
+            auto gate = std::ranges::find_if( part->gates,
+                                              [&]( const MODEL_GATE& aGate )
+                                              { return aGate.id == binaryPlacement.gate->id; } );
+            BOOST_REQUIRE( gate != part->gates.end() );
+            BOOST_CHECK_EQUAL( binaryPlacement.unit, static_cast<uint32_t>( asciiPlacement.gate_index + 1 ) );
+            BOOST_CHECK( std::ranges::any_of( binary.definitions,
+                                              [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                              { return aDefinition.id == binaryPlacement.definition.id; } ) );
+            BOOST_CHECK( !propertyValue( binaryPlacement.properties, wxS( "decal_handle" ) ).empty() );
             BOOST_REQUIRE_EQUAL( binaryPlacement.fields.size(), asciiPlacement.attributes.size() );
 
             for( size_t fieldIndex = 0; fieldIndex < binaryPlacement.fields.size(); ++fieldIndex )
@@ -2489,6 +2559,28 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                 BOOST_CHECK_EQUAL( binaryField.presentation.visible, asciiField.visible );
                 BOOST_CHECK_EQUAL( binaryField.presentation.font.text,
                                    wxString::FromUTF8( asciiField.font_name ) );
+                BOOST_CHECK_EQUAL( binaryField.presentation.bold,
+                                   wxString::FromUTF8( asciiField.font_name ).StartsWith( wxS( "Bold " ) ) );
+                BOOST_CHECK_EQUAL( binaryField.presentation.italic,
+                                   wxString::FromUTF8( asciiField.font_name ).StartsWith( wxS( "Italic " ) ) );
+
+                const uint16_t horizontal = asciiField.justification & ~uint16_t{ 0x0A };
+                const MODEL_JUSTIFICATION expectedHorizontal =
+                        horizontal == 1 ? MODEL_JUSTIFICATION::RIGHT
+                        : horizontal == 4 ? MODEL_JUSTIFICATION::CENTER
+                                          : MODEL_JUSTIFICATION::LEFT;
+                const MODEL_JUSTIFICATION expectedVertical =
+                        asciiField.justification >= 8 ? MODEL_JUSTIFICATION::CENTER
+                        : asciiField.justification >= 2 ? MODEL_JUSTIFICATION::LEFT
+                                                       : MODEL_JUSTIFICATION::RIGHT;
+                BOOST_CHECK( binaryField.presentation.horizontalJustification == expectedHorizontal );
+                BOOST_CHECK( binaryField.presentation.verticalJustification == expectedVertical );
+
+                if( fieldIndex >= 2 )
+                {
+                    BOOST_CHECK_EQUAL( propertyValue( binaryField.properties, wxS( "display_flags" ) ),
+                                       wxString::Format( wxS( "%d" ), asciiField.visibility ) );
+                }
             }
         }
     }

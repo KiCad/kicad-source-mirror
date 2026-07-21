@@ -536,13 +536,13 @@ types:
 
   placement_attribute_offset_controller:
     params:
-      - id: num_records
+      - id: num_heap_offsets
         type: u4
     seq:
       - id: heap_offsets
         type: u4
         repeat: expr
-        repeat-expr: num_records
+        repeat-expr: num_heap_offsets
 
   placement_font_controller:
     params:

@@ -59,13 +59,111 @@ namespace
     constexpr size_t   GATE_BYTES = 12;
     constexpr size_t   PIN_BYTES = 24;
     constexpr size_t   SIGNAL_PIN_BYTES = 64;
-    constexpr size_t   PLACEMENT_BYTES = 136;
-    constexpr size_t   PLACED_PIN_BYTES = 12;
-    constexpr size_t   PLACEMENT_FIELD_BYTES = 24;
     constexpr size_t   PLACEMENT_GROUP_BYTES = 24;
     constexpr size_t   ATTRIBUTE_OFFSET_BYTES = 4;
     constexpr size_t   FONT_RECORD_BYTES = 36;
     constexpr uint32_t DEFAULT_CODE_PAGE = 1252;
+
+    struct PLACEMENT_LAYOUT
+    {
+        uint16_t version;
+        bool     decoded;
+        size_t   placementBytes;
+        size_t   placedPinBytes;
+        size_t   fieldBytes;
+        size_t   pinStart;
+        size_t   componentIdentity;
+        size_t   componentGroup;
+        size_t   x;
+        size_t   y;
+        size_t   angle;
+        size_t   mirror;
+        size_t   partType;
+        size_t   decal;
+        size_t   gate;
+        size_t   pinCount;
+        size_t   fieldCount;
+        size_t   reference;
+        size_t   referenceFont;
+        size_t   partTypeFont;
+        size_t   referenceField;
+        size_t   referenceFieldAngle;
+        size_t   partTypeField;
+        size_t   partTypeFieldAngle;
+        size_t   referenceHeight;
+        size_t   partTypeHeight;
+        size_t   referenceWidth;
+        size_t   partTypeWidth;
+        size_t   placedPinOrdinal;
+        size_t   customFont;
+        size_t   customX;
+        size_t   customAngle;
+        size_t   customJustification;
+        size_t   customLineWidth;
+        size_t   customHeight;
+        size_t   customWidth;
+        size_t   customDisplayFlags;
+        size_t   customTail;
+    };
+
+    constexpr PLACEMENT_LAYOUT PLACEMENT_LAYOUTS[] = {
+        []
+        {
+            PLACEMENT_LAYOUT layout{};
+            layout.version = 0x000C;
+            return layout;
+        }(),
+        { .version = 0x000D,
+          .decoded = true,
+          .placementBytes = 136,
+          .placedPinBytes = 12,
+          .fieldBytes = 24,
+          .pinStart = 0x14,
+          .componentIdentity = 0x18,
+          .componentGroup = 0x1C,
+          .x = 0x20,
+          .y = 0x22,
+          .angle = 0x24,
+          .mirror = 0x26,
+          .partType = 0x42,
+          .decal = 0x44,
+          .gate = 0x4A,
+          .pinCount = 0x4C,
+          .fieldCount = 0x4E,
+          .reference = 0x5E,
+          .referenceFont = 0,
+          .partTypeFont = 2,
+          .referenceField = 0x28,
+          .referenceFieldAngle = 0x2C,
+          .partTypeField = 0x30,
+          .partTypeFieldAngle = 0x34,
+          .referenceHeight = 0x50,
+          .partTypeHeight = 0x52,
+          .referenceWidth = 0x58,
+          .partTypeWidth = 0x59,
+          .placedPinOrdinal = 4,
+          .customFont = 0,
+          .customX = 8,
+          .customAngle = 12,
+          .customJustification = 14,
+          .customLineWidth = 16,
+          .customHeight = 18,
+          .customWidth = 20,
+          .customDisplayFlags = 21,
+          .customTail = 22 }
+    };
+
+    const PLACEMENT_LAYOUT& placementLayout( uint16_t aVersion )
+    {
+        auto layout = std::ranges::find_if( PLACEMENT_LAYOUTS,
+                                            [&]( const PLACEMENT_LAYOUT& aLayout )
+                                            { return aLayout.version == aVersion; } );
+
+        if( layout == std::end( PLACEMENT_LAYOUTS ) )
+            THROW_IO_ERROR( wxString::Format( wxS( "unsupported PADS placement layout v0x%04X" ), aVersion ) );
+
+        return *layout;
+    }
 
 
     size_t outerControllerOffset( const PADS_SCH_SDB& aSdb, size_t aController )
@@ -1462,10 +1560,15 @@ namespace
                            const SCH_SDB_BLOCK& aBlock, size_t aSheetIndex, const wxString& aSourceName,
                            const PLACEMENT_GLOBALS& aGlobals, PADS_SCH_MODEL& aModel )
     {
+        const PLACEMENT_LAYOUT& layout = placementLayout( aModel.version );
+
+        if( !layout.decoded )
+            throwDecodeError( aModel.source, wxS( "placement decoder selected for raw-preserved version" ) );
+
         const SHEET_CONTROLLERS controllers = sheetControllers( aCursor, aBlock );
-        requireFixedController( controllers, 15, PLACEMENT_BYTES, aSourceName, aModel.version, aSheetIndex );
-        requireFixedController( controllers, 16, PLACED_PIN_BYTES, aSourceName, aModel.version, aSheetIndex );
-        requireFixedController( controllers, 17, PLACEMENT_FIELD_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 15, layout.placementBytes, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 16, layout.placedPinBytes, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 17, layout.fieldBytes, aSourceName, aModel.version, aSheetIndex );
 
         const size_t placementBase = controllers.offsets[14];
         const size_t placedPinBase = controllers.offsets[15];
@@ -1587,12 +1690,12 @@ namespace
 
         for( size_t record = 0; record < controllers.pools[14].count; ++record )
         {
-            const size_t offset = placementBase + record * PLACEMENT_BYTES;
+            const size_t offset = placementBase + record * layout.placementBytes;
             SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "placement" ), 15, record, offset,
-                                                 PLACEMENT_BYTES, static_cast<int>( aSheetIndex ) );
-            const uint32_t componentIdentity = aCursor.U32At( offset + 24 );
+                                                 layout.placementBytes, static_cast<int>( aSheetIndex ) );
+            const uint32_t componentIdentity = aCursor.U32At( offset + layout.componentIdentity );
 
-            const uint16_t partHandle = aCursor.U16At( offset + 0x42 );
+            const uint16_t partHandle = aCursor.U16At( offset + layout.partType );
             auto part = std::ranges::find_if( aModel.partTypes,
                                               [&]( const MODEL_PART_TYPE& aPart )
                                               {
@@ -1601,9 +1704,20 @@ namespace
                                               } );
 
             if( part == aModel.partTypes.end() )
-                throwDecodeError( source, wxS( "unresolved placement part-type reference" ) );
+            {
+                const bool definitionClass = std::ranges::any_of(
+                        aModel.definitions,
+                        [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                        {
+                            return aDefinition.source.sheet == static_cast<int>( aSheetIndex )
+                                   && aDefinition.source.recordIndex == partHandle;
+                        } );
+                throwDecodeError( source, definitionClass
+                                                  ? wxS( "placement part-type handle targets definition object class" )
+                                                  : wxS( "unresolved placement part-type reference" ) );
+            }
 
-            const uint32_t groupHandle = aCursor.U32At( offset + 0x1C );
+            const uint32_t groupHandle = aCursor.U32At( offset + layout.componentGroup );
 
             if( groupHandle >= aGlobals.groupCount )
                 throwDecodeError( source, wxS( "placement component-group handle leaves outer controller 6" ) );
@@ -1623,7 +1737,7 @@ namespace
             if( groupPartName.text != part->name.text )
                 throwDecodeError( source, wxS( "placement component-group targets wrong part-type object class" ) );
 
-            const uint16_t decalHandle = aCursor.U16At( offset + 0x44 );
+            const uint16_t decalHandle = aCursor.U16At( offset + layout.decal );
 
             if( decalHandle >= controllers.pools[6].count )
                 throwDecodeError( source, wxS( "unresolved placement decal reference" ) );
@@ -1641,7 +1755,7 @@ namespace
             if( definition == aModel.definitions.end() )
                 throwDecodeError( source, wxS( "placement decal targets wrong definition object class" ) );
 
-            const uint16_t unitIndex = aCursor.U16At( offset + 0x4A );
+            const uint16_t unitIndex = aCursor.U16At( offset + layout.gate );
 
             const MODEL_GATE* gate = nullptr;
 
@@ -1652,7 +1766,18 @@ namespace
             else if( part->gates.empty() && unitIndex == 0 && definition->pins.empty() )
                 gate = nullptr;
             else
-                throwDecodeError( source, wxS( "unresolved placement gate reference" ) );
+            {
+                const bool definitionClass = std::ranges::any_of(
+                        aModel.definitions,
+                        [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                        {
+                            return aDefinition.source.sheet == static_cast<int>( aSheetIndex )
+                                   && aDefinition.source.recordIndex == unitIndex;
+                        } );
+                throwDecodeError( source, definitionClass
+                                                  ? wxS( "placement gate handle targets definition object class" )
+                                                  : wxS( "unresolved placement gate reference" ) );
+            }
 
             auto gateHasDefinition = [&]( const DEFINITION_REFERENCE& aReference )
             {
@@ -1666,8 +1791,8 @@ namespace
                 throwDecodeError( source, wxS( "placement decal and gate reference target different object classes" ) );
             }
 
-            const uint32_t pinStart = aCursor.U32At( offset + 0x14 );
-            const uint16_t pinCount = aCursor.U16At( offset + 0x4C );
+            const uint32_t pinStart = aCursor.U32At( offset + layout.pinStart );
+            const uint16_t pinCount = aCursor.U16At( offset + layout.pinCount );
 
             if( pinStart != expectedPinStart || pinStart > controllers.pools[15].count
                 || pinCount > controllers.pools[15].count - pinStart || pinCount != definition->pins.size() )
@@ -1688,32 +1813,41 @@ namespace
                 placement.gate = GATE_REFERENCE{ gate->id, source };
             placement.definition = { definition->id, source };
             placement.unit = unitIndex + 1;
-            placement.position = { decodeCoordinate( aCursor.U16At( offset + 0x20 ) ),
-                                   decodeCoordinate( aCursor.U16At( offset + 0x22 ) ), source };
-            placement.angle = NormalizeAngle( aCursor.U16At( offset + 0x24 ) );
+            placement.position = { decodeCoordinate( aCursor.U16At( offset + layout.x ) ),
+                                   decodeCoordinate( aCursor.U16At( offset + layout.y ) ), source };
+            const uint16_t rawAngle = aCursor.U16At( offset + layout.angle );
+            placement.angle = NormalizeAngle( rawAngle );
+            placement.mirrorFlags = aCursor.U16At( offset + layout.mirror );
+
+            auto recordTransformEnum = [&]( size_t aFieldOffset )
+            {
+                SOURCE_PROVENANCE enumSource = source;
+                enumSource.absoluteOffset += aFieldOffset;
+                enumSource.length = 2;
+                aModel.diagnostics.push_back(
+                        { RPT_SEVERITY_WARNING, enumSource, wxS( "unknown placement transform enum preserved" ) } );
+            };
 
             if( placement.angle % 900 != 0 )
-                throwDecodeError( source, wxS( "unsupported placement rotation" ) );
-
-            placement.mirrorFlags = aCursor.U16At( offset + 0x26 );
+                recordTransformEnum( layout.angle );
 
             if( placement.mirrorFlags > 3 )
-                throwDecodeError( source, wxS( "unsupported placement mirror flags" ) );
+                recordTransformEnum( layout.mirror );
 
             placement.mirrored = placement.mirrorFlags != 0;
             SOURCE_PROVENANCE referenceSource = source;
-            referenceSource.absoluteOffset += 0x5E;
+            referenceSource.absoluteOffset += layout.reference;
             referenceSource.length = 40;
-            placement.reference = decodeFixedString( aBytes, offset + 0x5E, 40, referenceSource,
+            placement.reference = decodeFixedString( aBytes, offset + layout.reference, 40, referenceSource,
                                                       aModel.diagnostics );
 
             for( size_t pin = 0; pin < pinCount; ++pin )
             {
-                const size_t pinOffset = placedPinBase + ( pinStart + pin ) * PLACED_PIN_BYTES;
+                const size_t pinOffset = placedPinBase + ( pinStart + pin ) * layout.placedPinBytes;
                 SOURCE_PROVENANCE pinSource = sourceAt( aSourceName, aModel.version, wxS( "placed pin" ), 16,
-                                                        pinStart + pin, pinOffset, PLACED_PIN_BYTES,
+                                                        pinStart + pin, pinOffset, layout.placedPinBytes,
                                                         static_cast<int>( aSheetIndex ) );
-                const uint16_t pinOrdinal = aCursor.U16At( pinOffset + 4 );
+                const uint16_t pinOrdinal = aCursor.U16At( pinOffset + layout.placedPinOrdinal );
 
                 if( pinOrdinal >= definition->pins.size() || pinOrdinal != pin )
                     throwDecodeError( pinSource, wxS( "placed-pin handle leaves placement definition" ) );
@@ -1755,10 +1889,14 @@ namespace
             };
 
             SOURCE_STRING referenceValue = placement.reference;
-            addInlineField( wxS( "REF-DES" ), referenceValue, 0x28, 0x2C, 0, 0x50, 0x58 );
-            addInlineField( wxS( "PART-TYPE" ), part->name, 0x30, 0x34, 2, 0x52, 0x59 );
+            addInlineField( wxS( "REF-DES" ), referenceValue, layout.referenceField,
+                            layout.referenceFieldAngle, layout.referenceFont, layout.referenceHeight,
+                            layout.referenceWidth );
+            addInlineField( wxS( "PART-TYPE" ), part->name, layout.partTypeField,
+                            layout.partTypeFieldAngle, layout.partTypeFont, layout.partTypeHeight,
+                            layout.partTypeWidth );
 
-            const uint16_t customFieldCount = aCursor.U16At( offset + 0x4E );
+            const uint16_t customFieldCount = aCursor.U16At( offset + layout.fieldCount );
 
             if( fieldCursor > controllers.pools[16].count
                 || customFieldCount > controllers.pools[16].count - fieldCursor )
@@ -1770,9 +1908,9 @@ namespace
 
             for( size_t fieldOrdinal = 0; fieldOrdinal < customFieldCount; ++fieldOrdinal )
             {
-                const size_t candidateOffset = fieldBase + ( fieldCursor + fieldOrdinal ) * PLACEMENT_FIELD_BYTES;
+                const size_t candidateOffset = fieldBase + ( fieldCursor + fieldOrdinal ) * layout.fieldBytes;
 
-                if( ( aCursor.U8At( candidateOffset + 21 ) & 7 ) != 0 )
+                if( ( aCursor.U8At( candidateOffset + layout.customDisplayFlags ) & 7 ) != 0 )
                     ++namedFieldCount;
             }
 
@@ -1784,14 +1922,14 @@ namespace
 
             for( size_t fieldOrdinal = 0; fieldOrdinal < customFieldCount; ++fieldOrdinal )
             {
-                const size_t fieldOffset = fieldBase + fieldCursor * PLACEMENT_FIELD_BYTES;
+                const size_t fieldOffset = fieldBase + fieldCursor * layout.fieldBytes;
                 SOURCE_PROVENANCE fieldSource = sourceAt( aSourceName, aModel.version, wxS( "placement field" ), 17,
-                                                          fieldCursor, fieldOffset, PLACEMENT_FIELD_BYTES,
+                                                          fieldCursor, fieldOffset, layout.fieldBytes,
                                                           static_cast<int>( aSheetIndex ) );
                 SOURCE_STRING name;
                 SOURCE_STRING value;
 
-                const uint8_t displayFlags = aCursor.U8At( fieldOffset + 21 );
+                const uint8_t displayFlags = aCursor.U8At( fieldOffset + layout.customDisplayFlags );
 
                 if( ( displayFlags & 7 ) == 0 )
                 {
@@ -1809,45 +1947,59 @@ namespace
                 field.source = fieldSource;
                 field.name = std::move( name );
                 field.value = std::move( value );
-                field.position = { decodeLocalCoordinate( aCursor.U16At( fieldOffset + 8 ) ),
-                                   decodeLocalCoordinate( aCursor.U16At( fieldOffset + 10 ) ), fieldSource };
-                field.angle = NormalizeAngle( aCursor.U16At( fieldOffset + 12 ) );
+                field.position = { decodeLocalCoordinate( aCursor.U16At( fieldOffset + layout.customX ) ),
+                                   decodeLocalCoordinate( aCursor.U16At( fieldOffset + layout.customX + 2 ) ),
+                                   fieldSource };
+                field.angle = NormalizeAngle( aCursor.U16At( fieldOffset + layout.customAngle ) );
 
                 if( field.angle % 900 != 0 )
                     throwDecodeError( fieldSource, wxS( "unsupported placement-field rotation" ) );
 
-                const uint8_t justification = aCursor.U8At( fieldOffset + 14 );
+                const uint8_t justification = aCursor.U8At( fieldOffset + layout.customJustification );
                 field.presentation.source = fieldSource;
                 field.presentation.horizontalJustification =
                         horizontalJustification( justification, fieldSource, aModel.diagnostics );
                 field.presentation.verticalJustification = verticalJustification( justification );
-                field.presentation.height = static_cast<int64_t>( aCursor.U16At( fieldOffset + 18 ) ) * 2;
-                field.presentation.width = static_cast<int64_t>( aCursor.U8At( fieldOffset + 20 ) ) * 2;
+                field.presentation.height =
+                        static_cast<int64_t>( aCursor.U16At( fieldOffset + layout.customHeight ) ) * 2;
+                field.presentation.width =
+                        static_cast<int64_t>( aCursor.U8At( fieldOffset + layout.customWidth ) ) * 2;
                 field.presentation.visible = ( displayFlags & 8 ) == 0;
                 field.visible = field.presentation.visible;
 
                 SOURCE_PROVENANCE fontSource = fieldSource;
                 fontSource.length = 2;
-                font( static_cast<int16_t>( aCursor.U16At( fieldOffset ) ), fontSource, field.presentation, true );
+                font( static_cast<int16_t>( aCursor.U16At( fieldOffset + layout.customFont ) ), fontSource,
+                      field.presentation, true );
                 field.properties.push_back( sourceProperty(
                         wxS( "display_flags" ), wxString::Format( wxS( "%u" ), displayFlags ), fieldSource ) );
                 SOURCE_PROPERTY preservedTail = sourceProperty(
                         wxS( "preserved_field_tail" ),
-                        wxString::Format( wxS( "%u" ), aCursor.U16At( fieldOffset + 22 ) ), fieldSource );
+                        wxString::Format( wxS( "%u" ), aCursor.U16At( fieldOffset + layout.customTail ) ),
+                        fieldSource );
                 preservedTail.disposition = PROPERTY_DISPOSITION::PRESERVED;
                 field.properties.push_back( std::move( preservedTail ) );
                 placement.fields.push_back( std::move( field ) );
                 ++fieldCursor;
             }
 
+            SOURCE_PROVENANCE rawAngleSource = source;
+            rawAngleSource.absoluteOffset += layout.angle;
+            rawAngleSource.length = 2;
+            placement.properties.push_back( sourceProperty(
+                    wxS( "raw_angle" ), wxString::Format( wxS( "%u" ), rawAngle ), rawAngleSource ) );
             placement.properties.push_back( sourceProperty(
                     wxS( "component_identity" ), wxString::Format( wxS( "%u" ), componentIdentity ), source ) );
             placement.properties.push_back( sourceProperty(
                     wxS( "component_group_handle" ), wxString::Format( wxS( "%u" ), groupHandle ), source ) );
             placement.properties.push_back( sourceProperty(
                     wxS( "decal_handle" ), wxString::Format( wxS( "%u" ), decalHandle ), source ) );
+            SOURCE_PROVENANCE rawMirrorSource = source;
+            rawMirrorSource.absoluteOffset += layout.mirror;
+            rawMirrorSource.length = 2;
             placement.properties.push_back( sourceProperty(
-                    wxS( "mirror_flags" ), wxString::Format( wxS( "%u" ), placement.mirrorFlags ), source ) );
+                    wxS( "raw_mirror" ), wxString::Format( wxS( "%u" ), placement.mirrorFlags ),
+                    rawMirrorSource ) );
             aModel.placements.push_back( std::move( placement ) );
         }
 
@@ -2730,8 +2882,9 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
 
     size_t sheetIndex = 0;
     std::optional<PLACEMENT_GLOBALS> placementData;
+    const PLACEMENT_LAYOUT& placementSchema = placementLayout( model.version );
 
-    if( model.version == 0x000D )
+    if( placementSchema.decoded )
         placementData = placementGlobals( sdb, aSourceName );
 
     for( const SCH_SDB_BLOCK& block : sdb.Blocks() )
@@ -2753,7 +2906,7 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
 
         size_t heapOffset = payload + textBytes;
 
-        if( model.version == 0x000C )
+        if( !placementSchema.decoded )
         {
             SOURCE_PROVENANCE heapSource = sourceAt( aSourceName, model.version, wxS( "text string controller" ), 2, 0,
                                                      heapOffset, heapBytes, static_cast<int>( sheetIndex ) );
