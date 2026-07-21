@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <optional>
+#include <vector>
 
 #include <tools/sch_tool_base.h>
 #include <sch_base_frame.h>
@@ -41,6 +41,7 @@ public:
     {
         NONE,
         ARC,
+        BEZIER,
         ELLIPSE_ARC,
     };
 
@@ -50,6 +51,7 @@ public:
 
     int DrawShape( const TOOL_EVENT& aEvent );
     int DrawArc( const TOOL_EVENT& aEvent );
+    int DrawBezier( const TOOL_EVENT& aEvent );
     int DrawEllipseArc( const TOOL_EVENT& aEvent );
     int ImportGraphics( const TOOL_EVENT& aEvent );
 
@@ -73,12 +75,12 @@ private:
 
     /**
      * Run the interactive drawing event loop for any shape driven by a
-     * SHAPE_DRAW_BEHAVIOR (arcs, ellipse arcs, etc.).
+     * @ref SHAPE_DRAW_BEHAVIOR (arcs, ellipse arcs, etc.).
      *
      * @return true if the shape was completed, false if cancelled.
      */
     bool drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aShape, SHAPE_DRAW_BEHAVIOR& aBehavior,
-                           std::optional<VECTOR2D> aStartingPoint );
+                           const std::vector<VECTOR2D>& aInitialPts );
 
     FILL_T        m_lastFillStyle;
     COLOR4D       m_lastFillColor;

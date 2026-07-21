@@ -247,21 +247,6 @@ public:
     void UpdateStatusBar() const;
 
 private:
-    enum class DRAW_ONE_RESULT
-    {
-        // The drawing was accepted "normally"
-        // E.g. for a poly-line, you might then begin a chained next segment
-        ACCEPTED,
-        // The drawing was cancelled with no shape accepted.
-        CANCELLED,
-        // The drawing was reset - no shape was accepted this time,
-        // but the tool remains active.
-        RESET,
-        // A shape was accepted, but the tool should reset for the
-        // next one (e.g. no chaining)
-        ACCEPTED_AND_RESET,
-    };
-
     /**
      * Start drawing a selected shape (i.e. PCB_SHAPE).
      *
@@ -287,29 +272,14 @@ private:
      * @param aGraphic  the shape being drawn; must already be created.  On
      *                  cancel the unique_ptr is reset; on completion the
      *                  caller can take ownership (e.g. to release into a COMMIT).
+     * @param aInitialPts  points to pre-load into the behaviour before the first
+     *                     user click, e.g. start point and mirrored control point
+     *                     for tangent-continuous bezier chaining.
      * @return true if the shape was completed, false if cancelled.
      */
     bool drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
-                           SHAPE_DRAW_BEHAVIOR& aBehavior, std::optional<VECTOR2D> aStartingPoint );
-
-    /**
-     * Draw a bezier curve.
-     *
-     * @param aTool is the event that triggered the drawing.
-     * @param aStartingPoint is the starting point of the curve (e.g. the end point of the
-     *                      previous curve).
-     * @param aStartingControl1Point is the previous control point of the curve (which can
-     *                               be used to create a smooth transition between two curves).
-     * @param aCancelled is set to true if the tool was canceled before the curve was finished.
-     *
-     * @return A new PCB_SHAPE object representing the bezier curve, or nullptr if
-     *         the tool was cancelled or reset.
-     */
-    std::unique_ptr<PCB_SHAPE> drawOneBezier( const TOOL_EVENT&   aTool,
-                                              const OPT_VECTOR2I& aStartingPoint,
-                                              const OPT_VECTOR2I& aStartingControl1Point,
-                                              DRAW_ONE_RESULT&    aResult );
-
+                           SHAPE_DRAW_BEHAVIOR& aBehavior,
+                           const std::vector<VECTOR2D>& aInitialPts );
 
     /**
      * Draw a polygon, that is added as a zone or a keepout area.
