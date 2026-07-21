@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-20 09:36+0300\n"
-"PO-Revision-Date: 2026-07-21 06:37+0000\n"
+"PO-Revision-Date: 2026-07-21 18:07+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -57878,7 +57878,7 @@ msgstr "Specctra セッションをインポート..."
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Import routed Specctra session (*.ses) file"
-msgstr "配線済みの Specctra session ファイル (*.ses) をインポート"
+msgstr "配線済みの Specctra セッション ファイル (*.ses) をインポート"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid "Export Specctra DSN..."
