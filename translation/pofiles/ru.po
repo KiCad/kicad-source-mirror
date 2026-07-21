@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-20 09:36+0300\n"
-"PO-Revision-Date: 2026-07-20 06:34+0000\n"
+"PO-Revision-Date: 2026-07-21 18:07+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v10/ru/>\n"
 "Language: ru\n"
@@ -9612,20 +9612,22 @@ msgid "Restore Failed"
 msgstr "Не удалось восстановить"
 
 #: common/local_history.cpp:2260
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Сбросить до версии из удалённого репозитория."
+msgstr "Восстановить проект до версии из %s?"
 
 #: common/local_history.cpp:2262
-#, fuzzy
 msgid "Restore Version"
-msgstr "Восстановление сессии"
+msgstr "Восстановить версию"
 
 #: common/local_history.cpp:2265
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
 msgstr ""
+"В первую очередь создается резервная копия текущих файлов, чтобы вы могли "
+"отменить восстановление. Файлы, не принадлежащие к этой версии, остаются без "
+"изменений."
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1228 pcbnew/zone.cpp:989
