@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-07-21 18:07+0000\n"
+"PO-Revision-Date: 2026-07-22 19:01+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
@@ -29923,7 +29923,7 @@ msgstr "Tiedostoa ei löytynyt:"
 #: gerbview/files.cpp:305
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr "<b>Gerber-työtiedostoa ei voi ladata plottaustiedostona </b> <i>%s</i>"
+msgstr "<b>Gerber-työtiedostoa ei voi ladata plottaustiedostona</b> <i>%s</i>"
 
 #: gerbview/files.cpp:318
 #, fuzzy
@@ -32503,9 +32503,9 @@ msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "Tuo Eagle Projektitiedostot"
 
 #: kicad/jobs_runner.cpp:253
-#, fuzzy, c-format
+#, c-format
 msgid "Running job %d: %s"
-msgstr "Käynnissä olevat työt"
+msgstr "Työ käynnissä %d: %s"
 
 #: kicad/jobs_runner.cpp:309
 msgid "Job successful"
@@ -32558,9 +32558,8 @@ msgid "Export STEPZ"
 msgstr "Vie STEP"
 
 #: kicad/kicad_cli.cpp:141
-#, fuzzy
 msgid "Export U3D"
-msgstr "Vie DXF"
+msgstr "Vie U3D"
 
 #: kicad/kicad_cli.cpp:166
 msgid "Export PS"
@@ -32580,9 +32579,8 @@ msgstr "Projektitiedostot"
 
 #: kicad/kicad_manager_frame.cpp:244 kicad/kicad_manager_frame.cpp:844
 #: kicad/tools/kicad_manager_actions.cpp:245
-#, fuzzy
 msgid "Local History"
-msgstr "Historialuettelo:"
+msgstr "Paikallinen historia"
 
 #: kicad/kicad_manager_frame.cpp:404 kicad/project_tree_pane.cpp:1532
 msgid "Local path: monitoring folder changes"
@@ -32657,9 +32655,9 @@ msgid "Moments ago"
 msgstr "Kommentit"
 
 #: kicad/local_history_pane.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "%d minutes ago"
-msgstr "minuutit"
+msgstr "%d minuuttia sitten"
 
 #: kicad/local_history_pane.cpp:124
 #, c-format
@@ -32680,9 +32678,8 @@ msgid "Import Non-KiCad Project..."
 msgstr "Tuo Ei-KiCad Projekti..."
 
 #: kicad/menubar.cpp:126
-#, fuzzy
 msgid "Altium Project..."
-msgstr "EAGLE Projekti..."
+msgstr "Altium Projekti..."
 
 #: kicad/menubar.cpp:127
 #, fuzzy
