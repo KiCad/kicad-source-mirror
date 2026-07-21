@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 09:36+0300\n"
+"POT-Creation-Date: 2026-07-21 21:08+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -7133,6 +7133,12 @@ msgstr "Keep Arc Radius and Center, adjust angle"
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
 msgstr "Switch arc editing mode to maintaining radius when endpoint are moved"
 
+msgid "Switch Arc Posture"
+msgstr "Switch Arc Posture"
+
+msgid "Switch arc posture between clockwise and counter-clockwise"
+msgstr "Switch arc posture between clockwise and counter-clockwise"
+
 msgid "Cycle Arc Editing Mode"
 msgstr "Cycle Arc Editing Mode"
 
@@ -8078,6 +8084,12 @@ msgstr "EasyEDA (JLCEDA) Pro files"
 
 msgid "DipTrace files"
 msgstr "DipTrace files"
+
+msgid "OrCAD Capture schematic files"
+msgstr "OrCAD Capture schematic files"
+
+msgid "Allegro PCB files"
+msgstr "Allegro PCB files"
 
 msgid "KiCad printed circuit board files"
 msgstr "KiCad printed circuit board files"
@@ -15722,6 +15734,113 @@ msgid "LTspice schematic files"
 msgstr "LTspice schematic files"
 
 #, c-format
+msgid "Converting page '%s'..."
+msgstr "Converting page '%s'..."
+
+#, c-format
+msgid ""
+"Page '%s': the off-page connector at (%d, %d) is unconnected in the source "
+"design; skipped."
+msgstr ""
+"Page '%s': the off-page connector at (%d, %d) is unconnected in the source "
+"design; skipped."
+
+msgid ""
+"An embedded picture could not be decoded and was skipped; only plain bitmap "
+"images are supported."
+msgstr ""
+"An embedded picture could not be decoded and was skipped; only plain bitmap "
+"images are supported."
+
+#, c-format
+msgid ""
+"Symbol '%s' is absent from the design cache; synthesized placeholder from %d "
+"instance(s)."
+msgstr ""
+"Symbol '%s' is absent from the design cache; synthesized placeholder from %d "
+"instance(s)."
+
+#, c-format
+msgid "No cached symbol for '%s' (%s); placeholder emitted."
+msgstr "No cached symbol for '%s' (%s); placeholder emitted."
+
+#, c-format
+msgid ""
+"Page %s: %s uses a synthesized placeholder at a different orientation; pin "
+"layout approximate."
+msgstr ""
+"Page %s: %s uses a synthesized placeholder at a different orientation; pin "
+"layout approximate."
+
+#, c-format
+msgid ""
+"Page %s: %s pin positions mismatch (orientation %d); geometry may be off."
+msgstr ""
+"Page %s: %s pin positions mismatch (orientation %d); geometry may be off."
+
+msgid ""
+"The file does not contain the 'Library' stream of an OrCAD Capture design."
+msgstr ""
+"The file does not contain the 'Library' stream of an OrCAD Capture design."
+
+msgid ""
+"This is a pre-2003 OrCAD design; symbol graphics are synthesized as "
+"placeholders (the legacy symbol cache format is not decoded)."
+msgstr ""
+"This is a pre-2003 OrCAD design; symbol graphics are synthesized as "
+"placeholders (the legacy symbol cache format is not decoded)."
+
+msgid ""
+"The design has no 'Cache' stream; placeholder symbols will be synthesized "
+"for all parts."
+msgstr ""
+"The design has no 'Cache' stream; placeholder symbols will be synthesized "
+"for all parts."
+
+#, c-format
+msgid "Package stream '%s' could not be parsed: %s"
+msgstr "Package stream '%s' could not be parsed: %s"
+
+msgid ""
+"The file does not contain a 'Views' storage; it is not a supported OrCAD "
+"Capture design."
+msgstr ""
+"The file does not contain a 'Views' storage; it is not a supported OrCAD "
+"Capture design."
+
+msgid "The design contains no schematic folders."
+msgstr "The design contains no schematic folders."
+
+#, c-format
+msgid ""
+"The page display order for schematic folder '%s' could not be read (%s); "
+"pages are imported in name order."
+msgstr ""
+"The page display order for schematic folder '%s' could not be read (%s); "
+"pages are imported in name order."
+
+#, c-format
+msgid "Page '%s' could not be parsed and was skipped: %s"
+msgstr "Page '%s' could not be parsed and was skipped: %s"
+
+msgid "No schematic pages could be read from the design."
+msgstr "No schematic pages could be read from the design."
+
+msgid "The file is not an OrCAD Capture library (no 'Library' stream)."
+msgstr "The file is not an OrCAD Capture library (no 'Library' stream)."
+
+#, c-format
+msgid ""
+"The OrCAD library could not be fully parsed (%s); some symbols may be "
+"missing."
+msgstr ""
+"The OrCAD library could not be fully parsed (%s); some symbols may be "
+"missing."
+
+msgid "OrCAD Capture symbol library files"
+msgstr "OrCAD Capture symbol library files"
+
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
 msgstr "'%s' is not a PADS Logic ASCII file."
 
@@ -19012,6 +19131,22 @@ msgstr "Net %s cannot be changed to %s because it is driven by a power pin."
 msgid "Add label '%s' to %s pin %s net."
 msgstr "Add label '%s' to %s pin %s net."
 
+#, c-format
+msgid "Draw %s"
+msgstr "Draw %s"
+
+msgid "Draw Arc"
+msgstr "Draw Arc"
+
+msgid "Draw Elliptical Arc"
+msgstr "Draw Elliptical Arc"
+
+msgid "No graphic items found in file."
+msgstr "No graphic items found in file."
+
+msgid "Import Graphic"
+msgstr "Import Graphic"
+
 msgid "Draw Rule Area"
 msgstr "Draw Rule Area"
 
@@ -20281,12 +20416,6 @@ msgstr "Could not load image from '%s'."
 msgid "Place Image"
 msgstr "Place Image"
 
-msgid "No graphic items found in file."
-msgstr "No graphic items found in file."
-
-msgid "Import Graphic"
-msgstr "Import Graphic"
-
 msgid "Add No Connect Flag"
 msgstr "Add No Connect Flag"
 
@@ -20322,17 +20451,6 @@ msgstr "No new hierarchical labels found."
 
 msgid "Add Sheet Pin"
 msgstr "Add Sheet Pin"
-
-msgid "Add Text Box"
-msgstr "Add Text Box"
-
-#, c-format
-msgid "Add %s"
-msgstr "Add %s"
-
-#, c-format
-msgid "Draw %s"
-msgstr "Draw %s"
 
 msgid "Draw Table"
 msgstr "Draw Table"
@@ -23185,10 +23303,10 @@ msgstr "Import a non-KiCad schematic file to KiCad format"
 
 msgid ""
 "Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
-"ltspice, pads, diptrace, pcad (default: auto)"
+"ltspice, pads, diptrace, pcad, orcad (default: auto)"
 msgstr ""
 "Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
-"ltspice, pads, diptrace, pcad (default: auto)"
+"ltspice, pads, diptrace, pcad, orcad (default: auto)"
 
 msgid "Upgrade the schematic file's format to the latest one"
 msgstr "Upgrade the schematic file's format to the latest one"
@@ -23698,6 +23816,19 @@ msgstr "gEDA / Lepton EDA PCB files"
 msgid "Locate gEDA / Lepton EDA PCB"
 msgstr "Locate gEDA / Lepton EDA PCB"
 
+#, c-format
+msgid "Import the associated Allegro board '%s'?"
+msgstr "Import the associated Allegro board '%s'?"
+
+msgid "Import an associated Allegro board file?"
+msgstr "Import an associated Allegro board file?"
+
+msgid "Import Allegro Board"
+msgstr "Import Allegro Board"
+
+msgid "Locate Allegro Board"
+msgstr "Locate Allegro Board"
+
 msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
 msgstr "The selected file does not appear to be a PADS ASCII schematic or PCB."
 
@@ -23748,6 +23879,9 @@ msgstr "Import gEDA / Lepton EDA Project Files"
 
 msgid "Import DipTrace Project Files"
 msgstr "Import DipTrace Project Files"
+
+msgid "Import OrCAD Project Files"
+msgstr "Import OrCAD Project Files"
 
 #, c-format
 msgid "Running job %d: %s"
@@ -23943,6 +24077,12 @@ msgstr "DipTrace Project..."
 
 msgid "Import DipTrace schematic and PCB (*.dch, *.dip)"
 msgstr "Import DipTrace schematic and PCB (*.dch, *.dip)"
+
+msgid "OrCAD Project..."
+msgstr "OrCAD Project..."
+
+msgid "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)"
+msgstr "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)"
 
 msgid "Edit Advanced Config..."
 msgstr "Edit Advanced Config..."
@@ -39698,9 +39838,6 @@ msgstr ""
 msgid "Failed to build board from Allegro data"
 msgstr "Failed to build board from Allegro data"
 
-msgid "Allegro PCB files"
-msgstr "Allegro PCB files"
-
 #, c-format
 msgid "Unknown mapping of the Altium layer '%s'."
 msgstr "Unknown mapping of the Altium layer '%s'."
@@ -43517,12 +43654,6 @@ msgstr "Draw Circle"
 msgid "Draw Ellipse"
 msgstr "Draw Ellipse"
 
-msgid "Draw Elliptical Arc"
-msgstr "Draw Elliptical Arc"
-
-msgid "Draw Arc"
-msgstr "Draw Arc"
-
 msgid "Draw Bezier"
 msgstr "Draw Bezier"
 
@@ -44137,9 +44268,6 @@ msgstr "Increase Line Width"
 
 msgid "Decrease Line Width"
 msgstr "Decrease Line Width"
-
-msgid "Switch Arc Posture"
-msgstr "Switch Arc Posture"
 
 msgid "Snap to Objects on the Active Layer Only"
 msgstr "Snap to Objects on the Active Layer Only"
@@ -46954,6 +47082,20 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Add Text Box"
+#~ msgstr "Add Text Box"
+
+#, c-format
+#~ msgid "Add %s"
+#~ msgstr "Add %s"
+
+#~ msgid ""
+#~ "Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
+#~ "ltspice, pads, diptrace, pcad (default: auto)"
+#~ msgstr ""
+#~ "Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
+#~ "ltspice, pads, diptrace, pcad (default: auto)"
 
 #~ msgid "Rule type"
 #~ msgstr "Rule type"
