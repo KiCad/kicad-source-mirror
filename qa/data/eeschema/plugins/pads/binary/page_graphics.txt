@@ -22,7 +22,7 @@ NETNAMESIZE  100    10      Height and LineWidth used by net names
 REAL WIDTH   20             Widths greater then this are displayed real size
 SHEET SIZE   B             
 UNITS        0              Rules units type
-JOBNAME      page_graphics_source.txt
+JOBNAME      task10-page-graphics.sch
 NTXCOL 11 9
 HIRCOL 14
 LINCOL 14
@@ -644,7 +644,7 @@ MATCH_LENGTH_TOLERANCE	200
 *SHT*   1 $$$NONE -1 $$$NONE
 *CAE*        GENERAL PARAMETERS FOR THE SHEET"
 
-SCALE        3.765          Scale of window expansion
+SCALE        3.766          Scale of window expansion
 WINDOWCENTER 4250   4311    Point defining the center of the window
 BITCS0       0              system status bits
 BITCS1       0              system status bits

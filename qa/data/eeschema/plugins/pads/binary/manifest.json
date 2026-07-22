@@ -89,8 +89,8 @@
     {
       "binary": "page_graphics.sch",
       "ascii": "page_graphics.txt",
-      "binary_sha256": "e119fdcdb564d393c02c18730094fe40546f794173ba5f943943108fd8aa8278",
-      "ascii_sha256": "db2ea0858fcd5df3da99baa4276472b6c1b5bb0f8cda6da2e81029ea5d03768a",
+      "binary_sha256": "9eea8360a3abfb89d23f582cc8ffac2029db50a24c7dc23f73eb247b709443b8",
+      "ascii_sha256": "4580582127f4e5455efbf0966f7bb587d2fa46188f4ee4a94cb82bb72629e8d8",
       "pads_binary_version": "0x000D",
       "features": [
         "page_line",
@@ -102,7 +102,7 @@
         "title_block_fields",
         "page_size_b"
       ],
-      "provenance": "Created from fixture-owned PADS Logic 9.0 ASCII in PADS Logic VX.2.4; the BATCHB_PAGE_GRAPHICS group contains OPEN, CLOSED, CIRCLE, arc-encoded OPEN, COPCLS, and embedded text records, and the sheet retains the built-in SIZEB title block and page size. PADS reported NO ERRORS FOUND on the final import, then saved native binary and exported all ASCII sections; no third-party design content"
+      "provenance": "Created from fixture-owned PADS Logic 9.0 ASCII in PADS Logic VX.2.4; the BATCHB_PAGE_GRAPHICS group contains OPEN, CLOSED, CIRCLE, arc-encoded OPEN, COPCLS, and embedded text records, and the sheet retains the built-in SIZEB title block and page size. PADS reported NO ERRORS FOUND on import, saved the native binary, reopened it with the custom graphics still visible, saved it to the shared host folder, and exported all ASCII sections; no third-party design content"
     },
     {
       "binary": "connectivity_topology.sch",
