@@ -18,13 +18,14 @@
 # szumsky <beish97@gmail.com>, 2026.
 # Annonmus <cabbagesAreTheBest@proton.me>, 2026.
 # Zbigniew Gibek <zbeegin@op.pl>, 2026.
+# Sebastian Mroz <smroz@antmicro.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-20 03:50+0000\n"
-"Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2026-07-22 19:02+0000\n"
+"Last-Translator: Sebastian Mroz <smroz@antmicro.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
 "Language: pl\n"
@@ -3201,9 +3202,8 @@ msgstr "Brak handlera różnic dla '%s'."
 #: common/dialogs/dialog_git_mr_review.cpp:359
 #: common/dialogs/dialog_git_mr_review.cpp:373
 #: common/dialogs/dialog_git_mr_review.cpp:389
-#, fuzzy
 msgid "Compare File"
-msgstr "Kompatybilność"
+msgstr "Porównaj plik"
 
 #: common/dialogs/dialog_git_mr_review.cpp:281
 #, fuzzy
@@ -3459,7 +3459,7 @@ msgstr "Dodano"
 #: common/diff_merge/diff_tree_grouping.cpp:38
 #, fuzzy
 msgid "Removed"
-msgstr "Usuń"
+msgstr "Usunięto"
 
 #: common/dialogs/dialog_kicad_diff.cpp:124
 #: common/dialogs/git/dialog_git_commit.cpp:103
@@ -3470,7 +3470,7 @@ msgstr "Zmodyfikowano"
 #: common/dialogs/dialog_kicad_diff.cpp:125
 #, fuzzy
 msgid "Conflict"
-msgstr "Konflikty"
+msgstr "Konflikt"
 
 #: common/dialogs/dialog_kicad_diff.cpp:143
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:24
@@ -3488,9 +3488,8 @@ msgstr "Właściwości"
 
 #: common/dialogs/dialog_kicad_diff.cpp:210
 #: common/dialogs/dialog_kicad_diff.cpp:514
-#, fuzzy
 msgid "No differences detected."
-msgstr "Nie wykryto istotnych różnic."
+msgstr "Nie wykryto różnic."
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:516
@@ -3499,19 +3498,16 @@ msgid "%zu change(s) detected."
 msgstr "Wykryto %zu zmian."
 
 #: common/dialogs/dialog_kicad_diff.cpp:334
-#, fuzzy
 msgid "Show Change"
-msgstr "Zmień (jeśli trzeba)"
+msgstr "Pokaż zmianę"
 
 #: common/dialogs/dialog_kicad_diff.cpp:336
-#, fuzzy
 msgid "Hide Change"
-msgstr "Przetwórz Zmiany"
+msgstr "Ukryj zmianę"
 
 #: common/dialogs/dialog_kicad_diff.cpp:338
-#, fuzzy
 msgid "Show All Hidden"
-msgstr "Pokaż wszystkie sieci"
+msgstr "Pokaż wszystkie ukryte"
 
 #: common/dialogs/dialog_kicad_diff.cpp:414
 #: common/dialogs/dialog_page_settings_base.cpp:240
@@ -3519,9 +3515,8 @@ msgid "Revision:"
 msgstr "Rewizja:"
 
 #: common/dialogs/dialog_kicad_diff.cpp:425
-#, fuzzy
 msgid "Older"
-msgstr "Folder"
+msgstr "Starszy"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
@@ -3530,7 +3525,7 @@ msgstr "Nowszy"
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
 msgid "Select a change in the tree to view details"
-msgstr "Wybierz zmianę w widoku drzewa by wyświetlić szczegóły"
+msgstr "Wybierz zmianę w drzewie by wyświetlić szczegóły"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:25
 #: pcbnew/dialogs/dialog_text_properties.cpp:126
