@@ -207,6 +207,15 @@ public:
      */
     int RunRuleAreaERC();
 
+    /**
+     * Test all variant symbol overrides for resolution and pin compatibility.
+     *
+     * Creates ERCE_VARIANT_SYMBOL_INVALID markers when a variant's symbol override
+     * LIB_ID cannot be resolved, and ERCE_VARIANT_SYMBOL_INCOMPATIBLE markers when the
+     * alternate symbol fails pin compatibility validation against the base symbol.
+     */
+    int TestVariantSymbols();
+
     void RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
                    KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter );
 

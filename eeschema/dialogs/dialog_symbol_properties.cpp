@@ -41,6 +41,7 @@
 #include <sch_reference_list.h>
 #include <schematic.h>
 #include <sch_commit.h>
+#include <sch_sheet_path.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 
@@ -408,8 +409,26 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     QueueEvent( evt );
 
     // Remind user that they are editing the current variant.
-    if( !aParent->Schematic().GetCurrentVariant().IsEmpty() )
-        SetTitle( GetTitle() + wxS( " - " ) + aParent->Schematic().GetCurrentVariant() + _( " Design Variant" ) );
+    wxString variantName = aParent->Schematic().GetCurrentVariant();
+
+    if( !variantName.IsEmpty() )
+    {
+        SetTitle( GetTitle() + wxS( " - " ) + variantName + _( " Design Variant" ) );
+
+        m_changeSymbolBtn->SetLabel( _( "Set Variant Symbol..." ) );
+
+        SCH_SHEET_PATH&            currentSheet = aParent->GetCurrentSheet();
+        std::optional<SCH_SYMBOL_VARIANT> existingVariant =
+                aSymbol->GetVariant( currentSheet, variantName );
+
+        bool hasVariantSymbol = existingVariant.has_value() && existingVariant->m_SymbolOverride.has_value();
+
+        m_clearVariantSymbolBtn->Show( hasVariantSymbol );
+    }
+    else
+    {
+        m_clearVariantSymbolBtn->Hide();
+    }
 
     Layout();
     m_fieldsGrid->Layout();
@@ -1073,10 +1092,22 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateSymbol( wxCommandEvent&  )
 }
 
 
-void DIALOG_SYMBOL_PROPERTIES::OnExchangeSymbol( wxCommandEvent&  )
+void DIALOG_SYMBOL_PROPERTIES::OnExchangeSymbol( wxCommandEvent& )
+{
+    if( !TransferDataFromWindow() )
+        return;
+
+    if( !GetParent()->Schematic().GetCurrentVariant().IsEmpty() )
+        EndQuasiModal( SYMBOL_PROPS_WANT_SET_VARIANT_SYMBOL );
+    else
+        EndQuasiModal( SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL );
+}
+
+
+void DIALOG_SYMBOL_PROPERTIES::OnClearVariantSymbol( wxCommandEvent& )
 {
     if( TransferDataFromWindow() )
-        EndQuasiModal( SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL );
+        EndQuasiModal( SYMBOL_PROPS_WANT_CLEAR_VARIANT_SYMBOL );
 }
 
 

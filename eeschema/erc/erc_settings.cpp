@@ -127,6 +127,8 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     m_ERCSeverities[ERCE_EMPTY_LABEL_NAME] = RPT_SEVERITY_ERROR;
     m_ERCSeverities[ERCE_PIN_MAP_UNMAPPED_PIN] = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_PIN_MAP_STALE_PIN] = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_VARIANT_SYMBOL_INVALID]  = RPT_SEVERITY_ERROR;
+    m_ERCSeverities[ERCE_VARIANT_SYMBOL_INCOMPATIBLE] = RPT_SEVERITY_WARNING;
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "rule_severities",
             [&]() -> nlohmann::json

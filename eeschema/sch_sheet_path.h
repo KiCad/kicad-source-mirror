@@ -32,6 +32,7 @@
 #include <optional>
 
 #include <kiid.h>
+#include <lib_id.h>
 #include <pin_map.h>
 #include <wx/string.h>
 
@@ -99,6 +100,9 @@ public:
 
     /// Per-instance pin-to-pad map override for this variant (issue #2282).
     PIN_MAP_INSTANCE_OVERRIDE m_PinMapOverride;
+
+    /// Alternate library symbol to substitute for the base symbol in this variant, if any.
+    std::optional<LIB_ID> m_SymbolOverride;
 };
 
 

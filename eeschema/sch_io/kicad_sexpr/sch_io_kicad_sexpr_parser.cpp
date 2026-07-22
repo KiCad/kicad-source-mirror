@@ -1281,6 +1281,39 @@ PIN_MAP_INSTANCE_OVERRIDE SCH_IO_KICAD_SEXPR_PARSER::parsePinMapOverride()
 }
 
 
+LIB_ID SCH_IO_KICAD_SEXPR_PARSER::parseSymbolOverride()
+{
+    wxCHECK_MSG( CurTok() == T_symbol_override, LIB_ID(),
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as a symbol_override token." );
+
+    T token = NextTok();
+
+    if( !IsSymbol( token ) )
+        Expecting( "symbol LIB_ID" );
+
+    wxString name = FromUTF8();
+    LIB_ID   libId;
+    int      bad_pos = libId.Parse( name );
+
+    if( bad_pos >= 0 )
+    {
+        if( static_cast<int>( name.size() ) > bad_pos )
+        {
+            wxString msg = wxString::Format( _( "Variant symbol override contains invalid character '%c'" ),
+                                             name[bad_pos] );
+
+            THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+        }
+
+        THROW_PARSE_ERROR( _( "Invalid variant symbol override LIB_ID" ), CurSource(), CurLine(),
+                           CurLineNumber(), CurOffset() );
+    }
+
+    NeedRIGHT();
+    return libId;
+}
+
+
 SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol )
 {
     wxCHECK_MSG( CurTok() == T_property, nullptr,
@@ -3811,9 +3844,11 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
 
                                 case T_pin_map_override: variant.m_PinMapOverride = parsePinMapOverride(); break;
 
+                                case T_symbol_override: variant.m_SymbolOverride = parseSymbolOverride(); break;
+
                                 default:
                                     Expecting( "dnp, exclude_from_sim, field, in_bom, in_pos_files, name, "
-                                               "on_board, or pin_map_override" );
+                                               "on_board, pin_map_override, or symbol_override" );
                                 }
 
                                 instance.m_Variants[variant.m_Name] = variant;

@@ -163,6 +163,8 @@ public:
     static TOOL_ACTION updateSymbols;
     static TOOL_ACTION changeSymbol;
     static TOOL_ACTION updateSymbol;
+    static TOOL_ACTION setVariantSymbol;
+    static TOOL_ACTION clearVariantSymbol;
     static TOOL_ACTION assignFootprints;
     static TOOL_ACTION assignNetclass;
     static TOOL_ACTION findNetInInspector;

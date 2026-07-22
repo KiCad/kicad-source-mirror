@@ -144,4 +144,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260512  // Net chains
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260622  // Escaped special chars in stacked pin notation
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260623  // Migrate reference image scale for PNG pixel-density fix
-#define SEXPR_SCHEMATIC_FILE_VERSION 20260629 // Pin-to-pad maps (issue #2282)
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20260629  // Pin-to-pad maps (issue #2282)
+#define SEXPR_SCHEMATIC_FILE_VERSION 20260722 // Dedicated variant symbol_override token

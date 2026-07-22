@@ -21,6 +21,7 @@
 
 #include "symbol_tree_model_adapter.h"
 
+#include <wx/colour.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 #include <wx/window.h>
@@ -80,6 +81,8 @@ void SYMBOL_TREE_MODEL_ADAPTER::loadColumnConfig()
 
 void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( SCH_BASE_FRAME* aFrame )
 {
+    m_compatCache.clear();
+
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     PROJECT_FILE&    project = aFrame->Prj().GetProjectFile();
 
@@ -234,6 +237,37 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname, bool p
         comp_list.assign( symbols.begin(), symbols.end() );
         DoAddLibrary( aLibNickname, ( *row )->Description(), comp_list, pinned, false );
     }
+}
+
+
+bool SYMBOL_TREE_MODEL_ADAPTER::GetAttr( const wxDataViewItem& aItem, unsigned int aCol,
+                                         wxDataViewItemAttr& aAttr ) const
+{
+    bool base = LIB_TREE_MODEL_ADAPTER::GetAttr( aItem, aCol, aAttr );
+
+    if( m_compatCallback && aCol == NAME_COL )
+    {
+        LIB_TREE_NODE* node = ToNode( aItem );
+
+        if( node && node->m_Type == LIB_TREE_NODE::TYPE::ITEM )
+        {
+            auto it = m_compatCache.find( node->m_LibId );
+
+            if( it == m_compatCache.end() )
+            {
+                std::vector<VARIANT_COMPAT_RESULT> issues = m_compatCallback( node->m_LibId );
+                it = m_compatCache.emplace( node->m_LibId, !issues.empty() ).first;
+            }
+
+            if( it->second )
+            {
+                aAttr.SetColour( wxColour( 200, 120, 0 ) );
+                return true;
+            }
+        }
+    }
+
+    return base;
 }
 
 

@@ -21,6 +21,7 @@
 #define PANEL_SYMBOL_CHOOSER_H
 
 #include <template_fieldnames.h>
+#include <variant_symbol_utils.h>
 #include <widgets/lib_tree.h>
 #include <symbol_tree_model_adapter.h>
 #include <footprint_info.h>
@@ -100,6 +101,8 @@ public:
 
     void ShutdownCanvases();
 
+    void SetCompatibilityCallback( SYMBOL_COMPAT_FUNC aFunc );
+
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> Adapter() const { return m_adapter; }
 
     void Regenerate();
@@ -177,6 +180,8 @@ protected:
     wxString                  m_fp_override;
 
     std::vector<std::pair<FIELD_T, wxString>>  m_field_edits;
+
+    SYMBOL_COMPAT_FUNC  m_compatCallback;
 };
 
 #endif /* PANEL_SYMBOL_CHOOSER_H */

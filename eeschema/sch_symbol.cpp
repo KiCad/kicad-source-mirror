@@ -43,6 +43,9 @@
 #include <sch_rule_area.h>
 #include <api/api_sch_utils.h>
 #include <api/schematic/schematic_types.pb.h>
+#include <project_sch.h>
+#include <libraries/symbol_library_adapter.h>
+#include <variant_symbol_utils.h>
 
 #include <utility>
 #include <validators.h>
@@ -553,6 +556,9 @@ void SCH_SYMBOL::SetLibSymbol( LIB_SYMBOL* aLibSymbol )
 
     m_part.reset( aLibSymbol );
 
+    // Library content changed, so cached flattened alternates may be stale.
+    m_variantSymbolCache.clear();
+
     // We've just reset the library symbol, so the lib_pins, which were just
     // pointers to the old symbol, need to be cleared.
     for( auto& pin : m_pins )
@@ -1058,6 +1064,16 @@ void SCH_SYMBOL::SetFieldText( const wxString& aFieldName, const wxString& aFiel
 
             wxCHECK( instance, /* void */ );
 
+            // Diff against the value the variant resolves to without an explicit override so
+            // alternate symbol fields read back through the UI are not re-stored as overrides.
+            if( LIB_SYMBOL* altSymbol = GetVariantLibSymbol( aVariantName, *aPath ) )
+            {
+                const SCH_FIELD* altField = altSymbol->GetField( aFieldName );
+
+                if( altField && !altField->GetText().IsEmpty() )
+                    defaultText = altField->GetText();
+            }
+
             if( instance->m_Variants.contains( aVariantName ) )
             {
                 if( aFieldText != defaultText )
@@ -1107,6 +1123,16 @@ wxString SCH_SYMBOL::GetFieldText( const wxString& aFieldName, const SCH_SHEET_P
             {
                 return instance->m_Variants.at( aVariantName ).m_Fields.at( aFieldName );
             }
+
+            LIB_SYMBOL* altSymbol = GetVariantLibSymbol( aVariantName, *aPath );
+
+            if( altSymbol )
+            {
+                const SCH_FIELD* altField = altSymbol->GetField( FIELD_T::FOOTPRINT );
+
+                if( altField && !altField->GetText().IsEmpty() )
+                    return altField->GetText();
+            }
         }
 
         return GetFootprintFieldText( false, nullptr, false );
@@ -1116,13 +1142,27 @@ wxString SCH_SYMBOL::GetFieldText( const wxString& aFieldName, const SCH_SHEET_P
         {
             return field->GetText();
         }
-        else
+        else if( aPath )
         {
             const SCH_SYMBOL_INSTANCE* instance = getInstance( *aPath );
 
-            if( instance->m_Variants.contains( aVariantName )
-              && instance->m_Variants.at( aVariantName ).m_Fields.contains( aFieldName ) )
-                return instance->m_Variants.at( aVariantName ).m_Fields.at( aFieldName );
+            if( instance && instance->m_Variants.contains( aVariantName ) )
+            {
+                const SCH_SYMBOL_VARIANT& variant = instance->m_Variants.at( aVariantName );
+
+                if( variant.m_Fields.contains( aFieldName ) )
+                    return variant.m_Fields.at( aFieldName );
+
+                LIB_SYMBOL* altSymbol = GetVariantLibSymbol( aVariantName, *aPath );
+
+                if( altSymbol )
+                {
+                    const SCH_FIELD* altField = altSymbol->GetField( aFieldName );
+
+                    if( altField && !altField->GetText().IsEmpty() )
+                        return altField->GetText();
+                }
+            }
         }
 
         break;
@@ -1601,7 +1641,7 @@ void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aInstance,
                                      bool aAllowExtraText, const wxString& aVariantName ) const
 {
-    if( aVariantName.IsEmpty() )
+    if( aVariantName.IsEmpty() || !aInstance )
     {
         if( aResolve )
             return GetField( FIELD_T::VALUE )->GetShownText( aInstance, aAllowExtraText );
@@ -1611,8 +1651,23 @@ const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aInsta
 
     std::optional variant = GetVariant( *aInstance, aVariantName );
 
-    if( variant && variant->m_Fields.contains( GetField( FIELD_T::VALUE )->GetName() ) )
-        return variant->m_Fields[GetField( FIELD_T::VALUE )->GetName()];
+    if( variant )
+    {
+        const wxString& fieldName = GetField( FIELD_T::VALUE )->GetName();
+
+        if( variant->m_Fields.contains( fieldName ) )
+            return variant->m_Fields[fieldName];
+
+        LIB_SYMBOL* altSymbol = GetVariantLibSymbol( aVariantName, *aInstance );
+
+        if( altSymbol )
+        {
+            const SCH_FIELD* altField = altSymbol->GetField( FIELD_T::VALUE );
+
+            if( altField && !altField->GetText().IsEmpty() )
+                return altField->GetText();
+        }
+    }
 
     // Fall back to default value when variant doesn't have an override
     if( aResolve )
@@ -1988,6 +2043,13 @@ void SCH_SYMBOL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunctio
 }
 
 
+void SCH_SYMBOL::ClearCaches()
+{
+    SCH_ITEM::ClearCaches();
+    m_variantSymbolCache.clear();
+}
+
+
 SCH_PIN* SCH_SYMBOL::GetPin( const wxString& aNumber ) const
 {
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
@@ -2190,6 +2252,9 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
     std::swap( m_instances, symbol->m_instances );
     std::swap( m_instancePathIndex, symbol->m_instancePathIndex );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
+
+    m_variantSymbolCache.clear();
+    symbol->m_variantSymbolCache.clear();
 }
 
 
@@ -3034,9 +3099,11 @@ void SCH_SYMBOL::Show( int nestLevel, std::ostream& os ) const
 BOX2I SCH_SYMBOL::doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) const
 {
     BOX2I bBox;
+    const SCH_SHEET_PATH* sheetPath = Schematic() ? &Schematic()->CurrentSheet() : nullptr;
+    const LIB_SYMBOL* effSym = GetEffectiveLibSymbol( sheetPath );
 
-    if( m_part )
-        bBox = m_part->GetBodyBoundingBox( m_unit, m_bodyStyle, aIncludePins, false );
+    if( effSym )
+        bBox = effSym->GetBodyBoundingBox( m_unit, m_bodyStyle, aIncludePins, false );
     else
         bBox = LIB_SYMBOL::GetDummy()->GetBodyBoundingBox( m_unit, m_bodyStyle, aIncludePins, false );
 
@@ -3618,6 +3685,7 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_SYMBOL& aSymbol )
             field.SetParent( this );
 
         UpdatePins();
+        m_variantSymbolCache.clear();
     }
 
     return *this;
@@ -3698,18 +3766,24 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
     if( aBackground )
         return;
 
-    if( m_part )
+    SCH_SHEET_PATH*   sheet = Schematic() ? &Schematic()->CurrentSheet() : nullptr;
+    const LIB_SYMBOL* effectiveSym = GetEffectiveLibSymbol( sheet );
+
+    if( effectiveSym )
     {
-        std::vector<SCH_PIN*> libPins = m_part->GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        bool usingAlternate = ( effectiveSym != m_part.get() );
+
+        std::vector<const SCH_PIN*> libPins = effectiveSym->GetGraphicalPins( GetUnit(), GetBodyStyle() );
 
         // Copy the source so we can re-orient and translate it.
-        LIB_SYMBOL            tempSymbol( *m_part );
+        LIB_SYMBOL            tempSymbol( *effectiveSym );
         std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<SCH_PIN*> symbolPins = MapLibPins( libPins, usingAlternate );
 
-        // Copy the pin info from the symbol to the temp pins
+        // Copy the pin info from the symbol to the temp pins.
         for( unsigned i = 0; i < tempPins.size(); ++i )
         {
-            SCH_PIN* symbolPin = GetPin( libPins[i] );
+            SCH_PIN* symbolPin = symbolPins[i];
             SCH_PIN* tempPin = tempPins[i];
 
             if( !symbolPin )
@@ -3739,8 +3813,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
         renderSettings->m_Transform = GetTransform();
         aPlotter->StartBlock( nullptr );
 
-        wxString        variant = Schematic()->GetCurrentVariant();
-        SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
+        wxString variant = Schematic() ? Schematic()->GetCurrentVariant() : wxString();
         bool            dnp = GetDNP( sheet, variant );
 
         for( bool local_background : { true, false } )
@@ -3778,10 +3851,11 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
                 properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), field.GetName(), text_field ) );
             }
 
-            if( !m_part->GetKeyWords().IsEmpty() )
+            if( !effectiveSym->GetKeyWords().IsEmpty() )
             {
                 properties.emplace_back(
-                        wxString::Format( wxT( "!%s = %s" ), _( "Keywords" ), m_part->GetKeyWords() ) );
+                        wxString::Format( wxT( "!%s = %s" ), _( "Keywords" ),
+                                          effectiveSym->GetKeyWords() ) );
             }
 
             aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
@@ -3790,7 +3864,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
         aPlotter->EndBlock( nullptr );
         renderSettings->m_Transform = savedTransform;
 
-        if( !m_part->IsPower() )
+        if( !effectiveSym->IsPower() )
             aPlotter->Bookmark( GetBoundingBox(), GetRef( sheet ), _( "Symbols" ) );
     }
 }
@@ -3884,23 +3958,29 @@ void SCH_SYMBOL::PlotLocalPowerIconShape( PLOTTER* aPlotter ) const
 
 void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter, bool aDnp ) const
 {
-    if( m_part )
+    SCH_SHEET_PATH*   sheet = Schematic() ? &Schematic()->CurrentSheet() : nullptr;
+    const LIB_SYMBOL* effectiveSym = GetEffectiveLibSymbol( sheet );
+
+    if( effectiveSym )
     {
+        bool usingAlternate = ( effectiveSym != m_part.get() );
+
         SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
         TRANSFORM            savedTransform = renderSettings->m_Transform;
         renderSettings->m_Transform = GetTransform();
 
-        std::vector<SCH_PIN*> libPins = m_part->GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<const SCH_PIN*> libPins = effectiveSym->GetGraphicalPins( GetUnit(), GetBodyStyle() );
 
         // Copy the source to stay const
-        LIB_SYMBOL            tempSymbol( *m_part );
+        LIB_SYMBOL            tempSymbol( *effectiveSym );
         std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<SCH_PIN*> symbolPins = MapLibPins( libPins, usingAlternate );
         SCH_PLOT_OPTS         plotOpts;
 
-        // Copy the pin info from the symbol to the temp pins
+        // Copy the pin info from the symbol to the temp pins.
         for( unsigned i = 0; i < tempPins.size(); ++i )
         {
-            SCH_PIN* symbolPin = GetPin( libPins[i] );
+            SCH_PIN* symbolPin = symbolPins[i];
             SCH_PIN* tempPin = tempPins[i];
 
             if( !symbolPin )
@@ -4112,6 +4192,135 @@ void SCH_SYMBOL::AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SYMBOL_V
 }
 
 
+LIB_SYMBOL* SCH_SYMBOL::GetVariantLibSymbol( const wxString&      aVariantName,
+                                              const SCH_SHEET_PATH& aPath ) const
+{
+    if( aVariantName.IsEmpty() )
+        return nullptr;
+
+    const SCH_SYMBOL_INSTANCE* instance = getInstance( aPath );
+
+    if( !instance || !instance->m_Variants.contains( aVariantName ) )
+        return nullptr;
+
+    const SCH_SYMBOL_VARIANT& variant = instance->m_Variants.at( aVariantName );
+
+    if( !variant.m_SymbolOverride )
+        return nullptr;
+
+    const LIB_ID& libId = *variant.m_SymbolOverride;
+    wxString      libIdStr = libId.Format();
+
+    // Cache by LIB_ID string so hierarchical instances sharing the same alternate symbol
+    // reuse a single flattened copy regardless of sheet path or variant name.  Failed
+    // resolutions are cached as nullptr to keep unresolvable overrides from hitting the
+    // library adapter on every paint.
+    auto cacheIt = m_variantSymbolCache.find( libIdStr );
+
+    if( cacheIt != m_variantSymbolCache.end() )
+        return cacheIt->second.get();
+
+    if( libId == m_lib_id )
+    {
+        m_variantSymbolCache[libIdStr] = nullptr;
+        return nullptr;
+    }
+
+    SCHEMATIC* schematic = Schematic();
+
+    if( !schematic )
+        return nullptr;
+
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &schematic->Project() );
+
+    if( !adapter )
+        return nullptr;
+
+    try
+    {
+        if( LIB_SYMBOL* libSymbol = adapter->LoadSymbol( libId ) )
+        {
+            std::unique_ptr<LIB_SYMBOL>& cached = m_variantSymbolCache[libIdStr];
+
+            cached = libSymbol->Flatten();
+
+            if( m_part && !ValidateVariantSymbolCompatibility( *m_part, *cached ).empty() )
+            {
+                cached.reset();
+                return nullptr;
+            }
+
+            return cached.get();
+        }
+    }
+    catch( const IO_ERROR& )
+    {
+    }
+
+    m_variantSymbolCache[libIdStr] = nullptr;
+    return nullptr;
+}
+
+
+const LIB_SYMBOL* SCH_SYMBOL::GetEffectiveLibSymbol( const SCH_SHEET_PATH* aPath ) const
+{
+    if( aPath && Schematic() )
+    {
+        const wxString& variantName = Schematic()->GetCurrentVariant();
+
+        if( !variantName.IsEmpty() )
+        {
+            LIB_SYMBOL* altSymbol = GetVariantLibSymbol( variantName, *aPath );
+
+            if( altSymbol )
+                return altSymbol;
+        }
+    }
+
+    return m_part.get();
+}
+
+
+std::vector<SCH_PIN*> SCH_SYMBOL::MapLibPins( const std::vector<const SCH_PIN*>& aLibPins,
+                                              bool aByNumber ) const
+{
+    std::vector<SCH_PIN*> mapped;
+
+    mapped.reserve( aLibPins.size() );
+
+    if( aByNumber )
+    {
+        const LIB_SYMBOL*           baseSymbol = m_part.get();
+        std::vector<const SCH_PIN*> basePins = baseSymbol->GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<bool>           matched( basePins.size(), false );
+
+        for( const SCH_PIN* alternatePin : aLibPins )
+        {
+            SCH_PIN* instancePin = nullptr;
+
+            for( size_t i = 0; i < basePins.size(); ++i )
+            {
+                if( matched[i] || !VariantSymbolPinsMatch( *basePins[i], *alternatePin ) )
+                    continue;
+
+                matched[i] = true;
+                instancePin = GetPin( const_cast<SCH_PIN*>( basePins[i] ) );
+                break;
+            }
+
+            mapped.push_back( instancePin );
+        }
+    }
+    else
+    {
+        for( const SCH_PIN* libPin : aLibPins )
+            mapped.push_back( GetPin( const_cast<SCH_PIN*>( libPin ) ) );
+    }
+
+    return mapped;
+}
+
+
 void SCH_SYMBOL::DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantName )
 {
     SCH_SYMBOL_INSTANCE* instance = getInstance( aPath );
@@ -4154,6 +4363,46 @@ void SCH_SYMBOL::CopyVariant( const KIID_PATH& aPath, const wxString& aSourceVar
     SCH_SYMBOL_VARIANT variant = instance->m_Variants[aSourceVariant];
     variant.m_Name = aNewVariant;
     instance->m_Variants.insert( std::make_pair( aNewVariant, variant ) );
+}
+
+
+void SCH_SYMBOL::SetVariantSymbolOverride( const SCH_SHEET_PATH& aPath,
+                                           const wxString& aVariantName,
+                                           const LIB_ID& aLibId )
+{
+    SCH_SYMBOL_INSTANCE* instance = getInstance( aPath );
+
+    if( !instance )
+        return;
+
+    if( !instance->m_Variants.contains( aVariantName ) )
+    {
+        SCH_SYMBOL_VARIANT newVariant( aVariantName );
+        newVariant.InitializeAttributes( *this );
+        instance->m_Variants.insert( std::make_pair( aVariantName, newVariant ) );
+    }
+
+    instance->m_Variants[aVariantName].m_SymbolOverride = aLibId;
+    m_variantSymbolCache.clear();
+}
+
+
+bool SCH_SYMBOL::ClearVariantSymbolOverride( const SCH_SHEET_PATH& aPath,
+                                             const wxString& aVariantName )
+{
+    SCH_SYMBOL_INSTANCE* instance = getInstance( aPath );
+
+    if( !instance || !instance->m_Variants.contains( aVariantName ) )
+        return false;
+
+    SCH_SYMBOL_VARIANT& variant = instance->m_Variants[aVariantName];
+
+    if( !variant.m_SymbolOverride )
+        return false;
+
+    variant.m_SymbolOverride.reset();
+    m_variantSymbolCache.clear();
+    return true;
 }
 
 

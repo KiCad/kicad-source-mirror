@@ -41,12 +41,13 @@
 #include <project_sch.h>
 
 #include <dialog_symbol_chooser.h>
+#include <widgets/panel_symbol_chooser.h>
 
 PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER* aFilter,
                                                      std::vector<PICKED_SYMBOL>&  aHistoryList,
                                                      std::vector<PICKED_SYMBOL>&  aAlreadyPlaced,
                                                      bool aShowFootprints, const LIB_ID* aHighlight,
-                                                     bool aAllowFields )
+                                                     bool aAllowFields, SYMBOL_COMPAT_FUNC aCompatFunc )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_SYMBOL_CHOOSER::g_Mutex, std::defer_lock );
 
@@ -58,6 +59,9 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER
 
     DIALOG_SYMBOL_CHOOSER dlg( this, aHighlight, aFilter, aHistoryList, aAlreadyPlaced,
                                aAllowFields, aShowFootprints, aCancelled );
+
+    if( aCompatFunc )
+        dlg.GetChooserPanel()->SetCompatibilityCallback( std::move( aCompatFunc ) );
 
     if( aCancelled || dlg.ShowModal() == wxID_CANCEL )
         return PICKED_SYMBOL();

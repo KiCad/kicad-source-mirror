@@ -55,6 +55,9 @@
 #include <eda_list_dialog.h>
 #include <project_sch.h>
 #include <jobs/job_export_sch_bom.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
+#include <sch_sheet_path.h>
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
@@ -70,7 +73,9 @@ using SCOPE = FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
 enum
 {
     MYID_SELECT_FOOTPRINT = GRIDTRICKS_FIRST_CLIENT_ID,
-    MYID_SHOW_DATASHEET
+    MYID_SHOW_DATASHEET,
+    MYID_SET_VARIANT_SYMBOL,
+    MYID_CLEAR_VARIANT_SYMBOL
 };
 
 class VIEW_CONTROLS_GRID_TRICKS : public GRID_TRICKS
@@ -120,6 +125,27 @@ protected:
             menu.AppendSeparator();
         }
 
+        SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_dlg->GetParent() );
+
+        if( frame && !frame->Schematic().GetCurrentVariant().IsEmpty() )
+        {
+            int row = m_grid->GetGridCursorRow();
+            std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( row );
+
+            if( refs.size() == 1 && refs[0].GetSymbol() )
+            {
+                menu.AppendSeparator();
+                menu.Append( MYID_SET_VARIANT_SYMBOL, _( "Set Variant Symbol..." ) );
+
+                const SCH_SYMBOL* sym = refs[0].GetSymbol();
+                wxString variantName = frame->Schematic().GetCurrentVariant();
+                auto variant = sym->GetVariant( refs[0].GetSheetPath(), variantName );
+
+                if( variant && variant->m_SymbolOverride )
+                    menu.Append( MYID_CLEAR_VARIANT_SYMBOL, _( "Clear Variant Symbol" ) );
+            }
+        }
+
         GRID_TRICKS::showPopupMenu( menu, aEvent );
     }
 
@@ -146,6 +172,29 @@ protected:
             wxString datasheet_uri = m_grid->GetCellValue( row, col );
             GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj(), PROJECT_SCH::SchSearchS( &m_dlg->Prj() ),
                                    { m_files } );
+        }
+        else if( event.GetId() == MYID_SET_VARIANT_SYMBOL
+                 || event.GetId() == MYID_CLEAR_VARIANT_SYMBOL )
+        {
+            SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_dlg->GetParent() );
+
+            if( !frame )
+                return;
+
+            std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( row );
+
+            if( refs.size() != 1 || !refs[0].GetSymbol() )
+                return;
+
+            SCH_SELECTION_TOOL* selTool =
+                    frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+            std::vector<SCH_ITEM*> items = { refs[0].GetSymbol() };
+            selTool->SyncSelection( refs[0].GetSheetPath(), nullptr, items );
+
+            if( event.GetId() == MYID_SET_VARIANT_SYMBOL )
+                frame->GetToolManager()->RunAction( SCH_ACTIONS::setVariantSymbol );
+            else
+                frame->GetToolManager()->RunAction( SCH_ACTIONS::clearVariantSymbol );
         }
         else if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
         {

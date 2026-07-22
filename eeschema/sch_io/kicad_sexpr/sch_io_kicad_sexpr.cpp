@@ -1130,6 +1130,12 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
                                           m_out->Quotew( fname ).c_str(), m_out->Quotew( fvalue ).c_str() );
                         }
 
+                        if( variant.m_SymbolOverride )
+                        {
+                            m_out->Print( "(symbol_override %s)",
+                                          m_out->Quotew( variant.m_SymbolOverride->Format().wx_str() ).c_str() );
+                        }
+
                         formatPinMapOverride( m_out, variant.m_PinMapOverride );
 
                         m_out->Print( ")" );  // Closes `variant` token.

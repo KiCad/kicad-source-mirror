@@ -38,6 +38,8 @@ enum SYMBOL_PROPS_RETVALUE
 {
     SYMBOL_PROPS_WANT_UPDATE_SYMBOL,
     SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL,
+    SYMBOL_PROPS_WANT_SET_VARIANT_SYMBOL,
+    SYMBOL_PROPS_WANT_CLEAR_VARIANT_SYMBOL,
     SYMBOL_PROPS_EDIT_OK,
     SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL,
     SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL
@@ -92,6 +94,7 @@ private:
     void OnEditLibrarySymbol( wxCommandEvent&  ) override;
     void OnUpdateSymbol( wxCommandEvent&  ) override;
     void OnExchangeSymbol( wxCommandEvent&  ) override;
+    void OnClearVariantSymbol( wxCommandEvent& ) override;
 
     void AdjustPinsGridColumns();
     void HandleDelayedFocus( wxCommandEvent& event );

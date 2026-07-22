@@ -2834,10 +2834,19 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     int unit = m_schematic ? aSymbol->GetUnitSelection( &m_schematic->CurrentSheet() ) : 1;
     int bodyStyle = aSymbol->GetBodyStyle();
 
-    // Use dummy symbol if the actual couldn't be found (or couldn't be locked).
-    LIB_SYMBOL*           originalSymbol = aSymbol->GetLibSymbolRef() ? aSymbol->GetLibSymbolRef().get()
-                                                                      : LIB_SYMBOL::GetDummy();
-    std::vector<SCH_PIN*> originalPins = originalSymbol->GetGraphicalPins( unit, bodyStyle );
+    // Use the effective symbol (variant alternate or base), falling back to dummy.
+    const LIB_SYMBOL* originalSymbol = aSymbol->GetEffectiveLibSymbol( sheetPath );
+
+    if( !originalSymbol )
+        originalSymbol = LIB_SYMBOL::GetDummy();
+
+    bool usingAlternateSymbol = ( originalSymbol != aSymbol->GetLibSymbolRef().get()
+                                  && originalSymbol != LIB_SYMBOL::GetDummy() );
+
+    std::vector<const SCH_PIN*> originalPins = originalSymbol->GetGraphicalPins( unit, bodyStyle );
+
+    if( usingAlternateSymbol && originalPins.empty() && bodyStyle > 1 )
+        originalPins = originalSymbol->GetGraphicalPins( unit, 1 );
 
     // Copy the source so we can re-orient and translate it.
     auto       tCopy1 = std::chrono::high_resolution_clock::now();
@@ -2851,6 +2860,9 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     }
 
     std::vector<SCH_PIN*> tempPins = tempSymbol.GetGraphicalPins( unit, bodyStyle );
+
+    if( usingAlternateSymbol && tempPins.empty() && bodyStyle > 1 )
+        tempPins = tempSymbol.GetGraphicalPins( unit, 1 );
 
     tempSymbol.SetFlags( aSymbol->GetFlags() );
 
@@ -2877,10 +2889,13 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         }
     }
 
-    // Copy the pin info from the symbol to the temp pins
+    // Copy the pin info from the symbol to the temp pins.
+    std::vector<SCH_PIN*> symbolPins = aSymbol->MapLibPins( originalPins, usingAlternateSymbol );
+
     for( unsigned i = 0; i < tempPins.size(); ++ i )
     {
-        SCH_PIN* symbolPin = aSymbol->GetPin( originalPins[ i ] );
+        SCH_PIN* symbolPin = symbolPins[ i ];
+
         SCH_PIN* tempPin = tempPins[ i ];
 
         tempPin->SetFlipStackedTextSide( originalPins[i]->StackedTextSideFlipped( aSymbol->GetTransform() ) );
@@ -2932,7 +2947,8 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 
     for( unsigned i = 0; i < tempPins.size(); ++i )
     {
-        SCH_PIN* symbolPin = aSymbol->GetPin( originalPins[ i ] );
+        SCH_PIN* symbolPin = symbolPins[ i ];
+
         SCH_PIN* tempPin = tempPins[ i ];
 
         if( !symbolPin )

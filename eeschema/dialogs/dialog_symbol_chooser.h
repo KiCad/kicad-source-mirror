@@ -76,6 +76,8 @@ public:
     bool GetKeepSymbol() { return m_keepSymbol->GetValue(); }
     bool GetPlaceAllUnits() { return m_useUnits->GetValue(); }
 
+    PANEL_SYMBOL_CHOOSER* GetChooserPanel() const { return m_chooserPanel; }
+
 public:
     static std::mutex         g_Mutex;
 

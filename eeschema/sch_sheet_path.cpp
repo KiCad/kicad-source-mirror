@@ -113,7 +113,7 @@ bool SCH_SYMBOL_VARIANT::HasDifferentials( const SCH_SYMBOL& aSymbol ) const
     return m_DNP != aSymbol.GetDNP() || m_ExcludedFromBOM != aSymbol.GetExcludedFromBOM()
            || m_ExcludedFromSim != aSymbol.GetExcludedFromSim() || m_ExcludedFromBoard != aSymbol.GetExcludedFromBoard()
            || m_ExcludedFromPosFiles != aSymbol.GetExcludedFromPosFiles() || !m_Fields.empty()
-           || !m_PinMapOverride.IsDefault();
+           || !m_PinMapOverride.IsDefault() || m_SymbolOverride.has_value();
 }
 
 

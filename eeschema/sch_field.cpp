@@ -1758,9 +1758,19 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
                     // If the variant is not found, fall back to default variant above.
                     if( std::optional<SCH_SYMBOL_VARIANT> variant = symbol->GetVariant( *aPath, aVariantName ) )
                     {
-                        // If the field name does not exist in the variant, fall back to the default variant above.
+                        // An explicit override wins; otherwise resolve through the alternate
+                        // library symbol so the canvas matches the fields table and netlist.
                         if( variant->m_Fields.contains( GetName() ) )
+                        {
                             retv = variant->m_Fields[GetName()];
+                        }
+                        else if( LIB_SYMBOL* altSymbol = symbol->GetVariantLibSymbol( aVariantName, *aPath ) )
+                        {
+                            const SCH_FIELD* altField = altSymbol->GetField( GetName() );
+
+                            if( altField && !altField->GetText().IsEmpty() )
+                                retv = altField->GetText();
+                        }
                     }
                 }
             }

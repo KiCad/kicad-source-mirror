@@ -482,6 +482,7 @@ set( EESCHEMA_SRCS
     symbol.cpp
     symbol_checker.cpp
     symbol_chooser_frame.cpp
+    variant_symbol_utils.cpp
     symbol_import_manager.cpp
 
     symbol_library_manager.cpp

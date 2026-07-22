@@ -184,6 +184,7 @@ start_angle
 stroke
 symbol
 symbol_instances
+symbol_override
 table
 table_cell
 text

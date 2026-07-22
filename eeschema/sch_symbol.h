@@ -588,6 +588,7 @@ public:
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction, RECURSE_MODE aMode ) override;
 
+    void ClearCaches() override;
 
     //-----</Fields>----------------------------------------------------------
 
@@ -1011,6 +1012,60 @@ public:
     std::optional<SCH_SYMBOL_VARIANT> GetVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName ) const;
     void AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SYMBOL_VARIANT& aVariant );
 
+    /**
+     * Set the alternate-symbol override for a given variant and sheet instance.
+     *
+     * Creates the variant if it does not already exist.
+     */
+    void SetVariantSymbolOverride( const SCH_SHEET_PATH& aPath, const wxString& aVariantName,
+                                   const LIB_ID& aLibId );
+
+    /**
+     * Remove the alternate-symbol override for a given variant and sheet instance.
+     *
+     * Returns false if the variant had no override.
+     */
+    bool ClearVariantSymbolOverride( const SCH_SHEET_PATH& aPath, const wxString& aVariantName );
+
+    /**
+     * Resolve the alternate library symbol for a given variant.
+     *
+     * Looks up the variant's symbol override and resolves the LIB_ID through
+     * the project's symbol library adapter. Returns nullptr if the variant has no
+     * override or if the LIB_ID cannot be resolved.
+     *
+     * @param aVariantName the variant to resolve.
+     * @param aPath the sheet path for this instance.
+     * @return the resolved flattened library symbol, or nullptr.
+     */
+    LIB_SYMBOL* GetVariantLibSymbol( const wxString& aVariantName,
+                                     const SCH_SHEET_PATH& aPath ) const;
+
+    /**
+     * Return the library symbol to use for rendering and bounding box calculations.
+     *
+     * If the current variant has a symbol override and it resolves successfully,
+     * returns the alternate symbol. Otherwise returns the base m_part.
+     *
+     * @param aPath optional sheet path for variant context.
+     * @return the effective library symbol, or nullptr.
+     */
+    const LIB_SYMBOL* GetEffectiveLibSymbol( const SCH_SHEET_PATH* aPath = nullptr ) const;
+
+    /**
+     * Map pins of an effective library symbol to this symbol's instance pins.
+     *
+     * Base symbol pins are matched through the pin map. Pins from a variant alternate
+     * symbol are not in the pin map, so each occurrence is matched by number, unit,
+     * body style, and position.
+     *
+     * @param aLibPins pins of the effective library symbol, in drawing order.
+     * @param aByNumber true when aLibPins belong to a variant alternate symbol.
+     * @return instance pins aligned with aLibPins; entries are nullptr when unmatched.
+     */
+    std::vector<SCH_PIN*> MapLibPins( const std::vector<const SCH_PIN*>& aLibPins,
+                                      bool aByNumber ) const;
+
     void DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName )
     {
         DeleteVariant( aInstance.Path(), aVariantName );
@@ -1098,6 +1153,8 @@ private:
     std::unordered_map<KIID_PATH, size_t>  m_instancePathIndex;
 
     void rebuildInstancePathIndex();
+
+    mutable std::map<wxString, std::unique_ptr<LIB_SYMBOL>> m_variantSymbolCache;
 
     /// @see SCH_SYMBOL::GetOrientation
     static std::unordered_map<TRANSFORM, int> s_transformToOrientationCache;

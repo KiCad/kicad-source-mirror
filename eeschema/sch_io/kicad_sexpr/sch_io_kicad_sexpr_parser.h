@@ -28,6 +28,7 @@
 #define SCH_IO_KICAD_SEXPR_PARSER_H_
 
 #include <symbol_library_common.h>
+#include <lib_id.h>
 #include <progress_reporter.h>
 #include <schematic_lexer.h>
 #include <sch_file_versions.h>
@@ -249,6 +250,7 @@ private:
     PIN_MAP parseOnePinMap();
 
     PIN_MAP_INSTANCE_OVERRIDE parsePinMapOverride();
+    LIB_ID                     parseSymbolOverride();
 
     SCH_FIELD* parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 

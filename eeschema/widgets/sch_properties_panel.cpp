@@ -45,6 +45,7 @@
 #include <settings/color_settings.h>
 #include <string_utils.h>
 #include <tool/tool_manager.h>
+#include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
@@ -946,10 +947,20 @@ void SCH_PROPERTIES_PANEL::onEditPinMap( wxCommandEvent& aEvent )
 
     // The dialog can subsequently invoke a KIWAY_PLAYER as a quasimodal frame, so it must run
     // quasimodally to keep that support working.
-    if( dlg.ShowQuasiModal() == SYMBOL_PROPS_EDIT_OK )
+    int retval = dlg.ShowQuasiModal();
+
+    if( retval == SYMBOL_PROPS_EDIT_OK )
     {
         editFrame->OnModify();
         AfterCommit();
+    }
+    else if( retval == SYMBOL_PROPS_WANT_SET_VARIANT_SYMBOL )
+    {
+        editFrame->GetToolManager()->RunAction( SCH_ACTIONS::setVariantSymbol );
+    }
+    else if( retval == SYMBOL_PROPS_WANT_CLEAR_VARIANT_SYMBOL )
+    {
+        editFrame->GetToolManager()->RunAction( SCH_ACTIONS::clearVariantSymbol );
     }
 }
 

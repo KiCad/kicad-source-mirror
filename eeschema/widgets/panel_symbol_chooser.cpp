@@ -34,6 +34,7 @@
 #include <project/project_file.h>
 #include <eeschema_settings.h>
 #include <symbol_editor_settings.h>
+#include <string_utils.h>
 #include <symbol_library_common.h>         // For SYMBOL_LIBRARY_FILTER
 #include <algorithm>
 #include <wx/button.h>
@@ -479,6 +480,18 @@ void PANEL_SYMBOL_CHOOSER::OnDetailsCharHook( wxKeyEvent& e )
 }
 
 
+void PANEL_SYMBOL_CHOOSER::SetCompatibilityCallback( SYMBOL_COMPAT_FUNC aFunc )
+{
+    m_compatCallback = std::move( aFunc );
+
+    if( SYMBOL_TREE_MODEL_ADAPTER* symAdapter =
+            dynamic_cast<SYMBOL_TREE_MODEL_ADAPTER*>( m_adapter.get() ) )
+    {
+        symAdapter->SetCompatibilityCallback( m_compatCallback );
+    }
+}
+
+
 void PANEL_SYMBOL_CHOOSER::SetPreselect( const LIB_ID& aPreselect )
 {
     m_adapter->SetPreselectNode( aPreselect, 0 );
@@ -668,6 +681,22 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
             showFootprintFor( node->m_LibId );
 
         populateFootprintSelector( node->m_LibId );
+
+        if( m_compatCallback && m_details )
+        {
+            std::vector<VARIANT_COMPAT_RESULT> issues = m_compatCallback( node->m_LibId );
+
+            if( !issues.empty() )
+            {
+                wxString html = wxS( "<br><b>" ) + _( "Compatibility Warnings:" ) + wxS( "</b><ul>" );
+
+                for( const VARIANT_COMPAT_RESULT& issue : issues )
+                    html += wxS( "<li>" ) + EscapeHTML( issue.detail ) + wxS( "</li>" );
+
+                html += wxS( "</ul>" );
+                m_details->AppendToPage( html );
+            }
+        }
     }
     else
     {

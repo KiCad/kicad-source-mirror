@@ -44,6 +44,7 @@
 #include <map>
 #include <set>
 #include <libraries/symbol_library_adapter.h>
+#include <sch_sheet_path.h>
 
 static bool sortPinsByNumber( SCH_PIN* aPin1, SCH_PIN* aPin2 );
 
@@ -488,7 +489,15 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                     if( symbol->GetInstance( instance, sheet.Path() ) && instance.m_Variants.contains( variantName ) )
                         variant = &instance.m_Variants.at( variantName );
 
-                    if( variant && !variant->m_Fields.empty() )
+                    if( variant && variant->m_SymbolOverride )
+                    {
+                        XNODE* xprop = node( wxT( "property" ) );
+                        xprop->AddAttribute( wxT( "name" ), wxT( "symbol_override" ) );
+                        xprop->AddAttribute( wxT( "value" ), variant->m_SymbolOverride->Format() );
+                        addToVariant( xprop );
+                    }
+
+                    if( variant && ( !variant->m_Fields.empty() || variant->m_SymbolOverride ) )
                     {
                         XNODE* xfields = nullptr;
 
@@ -511,6 +520,75 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                             XNODE* xfield = node( wxT( "field" ), UnescapeString( resolvedValue ) );
                             xfield->AddAttribute( wxT( "name" ), UnescapeString( fieldName ) );
                             xfields->AddChild( xfield );
+                        }
+
+                        // Emit fields resolved from the alternate library symbol where the
+                        // value differs from the base symbol. Explicit overrides in
+                        // variant->m_Fields were already handled above.
+                        if( variant->m_SymbolOverride )
+                        {
+                            for( const SCH_FIELD& baseField : symbol->GetFields() )
+                            {
+                                const wxString& fieldName = baseField.GetName();
+
+                                if( variant->m_Fields.contains( fieldName ) )
+                                    continue;
+
+                                const wxString baseValue =
+                                        symbol->GetFieldText( fieldName, &sheet, wxEmptyString );
+                                const wxString variantValue =
+                                        symbol->GetFieldText( fieldName, &sheet, variantName );
+
+                                if( variantValue == baseValue )
+                                    continue;
+
+                                if( !xfields )
+                                    xfields = node( wxT( "fields" ) );
+
+                                wxString resolvedValue = variantValue;
+
+                                if( m_resolveTextVars )
+                                    resolvedValue = symbol->ResolveText( variantValue, &sheet );
+
+                                XNODE* xfield =
+                                        node( wxT( "field" ), UnescapeString( resolvedValue ) );
+                                xfield->AddAttribute( wxT( "name" ),
+                                                      UnescapeString( baseField.GetCanonicalName() ) );
+                                xfields->AddChild( xfield );
+                            }
+
+                            // Emit fields that exist only on the alternate library symbol so the
+                            // netlist reflects the full atomic part, not just the base field set.
+                            if( LIB_SYMBOL* altSymbol = symbol->GetVariantLibSymbol( variantName, sheet ) )
+                            {
+                                std::vector<SCH_FIELD*> altFields;
+                                altSymbol->GetFields( altFields );
+
+                                for( const SCH_FIELD* altField : altFields )
+                                {
+                                    const wxString& fieldName = altField->GetName();
+
+                                    if( symbol->GetField( fieldName )
+                                        || variant->m_Fields.contains( fieldName )
+                                        || altField->GetText().IsEmpty() )
+                                    {
+                                        continue;
+                                    }
+
+                                    if( !xfields )
+                                        xfields = node( wxT( "fields" ) );
+
+                                    wxString resolvedValue = altField->GetText();
+
+                                    if( m_resolveTextVars )
+                                        resolvedValue = symbol->ResolveText( resolvedValue, &sheet );
+
+                                    XNODE* xfield =
+                                            node( wxT( "field" ), UnescapeString( resolvedValue ) );
+                                    xfield->AddAttribute( wxT( "name" ), UnescapeString( fieldName ) );
+                                    xfields->AddChild( xfield );
+                                }
+                            }
                         }
 
                         addToVariant( xfields );

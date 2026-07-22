@@ -3446,6 +3446,14 @@ int SCH_EDITOR_CONTROL::EditSymbolFields( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::EditSymbolLibraryLinks( const TOOL_EVENT& aEvent )
 {
+    if( !m_frame->Schematic().GetCurrentVariant().IsEmpty() )
+    {
+        DisplayInfoMessage( m_frame,
+                _( "Bulk Edit Symbol Library Links is not available when a design variant is "
+                   "active. Switch to the default variant first." ) );
+        return 0;
+    }
+
     if( InvokeDialogEditSymbolsLibId( m_frame ) )
         m_frame->HardRedraw();
 

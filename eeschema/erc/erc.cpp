@@ -20,6 +20,7 @@
  */
 
 #include <algorithm>
+#include <map>
 #include <numeric>
 #include <set>
 
@@ -59,6 +60,7 @@
 #include <pgm_base.h>
 #include <libraries/symbol_library_adapter.h>
 #include <trace_helpers.h>
+#include <variant_symbol_utils.h>
 
 
 /* ERC tests :
@@ -2544,6 +2546,124 @@ int ERC_TESTER::TestSimModelIssues()
 }
 
 
+int ERC_TESTER::TestVariantSymbols()
+{
+    wxCHECK( m_schematic, 0 );
+
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_schematic->Project() );
+
+    if( !adapter )
+        return 0;
+
+    int err_count = 0;
+
+    // Flatten each alternate once per ERC run rather than once per referencing symbol.
+    std::map<wxString, std::unique_ptr<LIB_SYMBOL>> flatAltCache;
+
+    for( SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        if( !screen )
+            continue;
+
+        std::vector<SCH_MARKER*> markers;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            SCH_SYMBOL_INSTANCE instance;
+
+            if( !symbol->GetInstance( instance, sheet.Path() ) )
+                continue;
+
+            auto addMarker =
+                    [&]( int aErrorCode, const wxString& aMessage )
+                    {
+                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( aErrorCode );
+
+                        ercItem->SetItems( symbol );
+                        ercItem->SetSheetSpecificPath( sheet );
+                        ercItem->SetErrorMessage( aMessage );
+
+                        markers.emplace_back(
+                                new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
+                        err_count++;
+                    };
+
+            for( const auto& [variantName, variant] : instance.m_Variants )
+            {
+                if( !variant.m_SymbolOverride )
+                    continue;
+
+                const LIB_ID& libId = *variant.m_SymbolOverride;
+                wxString      libIdStr = libId.Format();
+
+                // A self-referencing override is ignored by resolution, so skip it here too.
+                if( libId == symbol->GetLibId() )
+                    continue;
+
+                auto cacheIt = flatAltCache.find( libIdStr );
+
+                if( cacheIt == flatAltCache.end() )
+                {
+                    std::unique_ptr<LIB_SYMBOL> flatAlt;
+
+                    try
+                    {
+                        if( LIB_SYMBOL* altSymbol = adapter->LoadSymbol( libId ) )
+                            flatAlt = altSymbol->Flatten();
+                    }
+                    catch( const IO_ERROR& )
+                    {
+                    }
+
+                    cacheIt = flatAltCache.emplace( libIdStr, std::move( flatAlt ) ).first;
+                }
+
+                const LIB_SYMBOL* flatAlt = cacheIt->second.get();
+
+                if( !flatAlt )
+                {
+                    if( m_settings.IsTestEnabled( ERCE_VARIANT_SYMBOL_INVALID ) )
+                    {
+                        addMarker( ERCE_VARIANT_SYMBOL_INVALID,
+                                   wxString::Format( _( "Variant '%s': symbol '%s' not found in libraries" ),
+                                                     variantName, libIdStr ) );
+                    }
+
+                    continue;
+                }
+
+                if( !m_settings.IsTestEnabled( ERCE_VARIANT_SYMBOL_INCOMPATIBLE ) )
+                    continue;
+
+                // The schematic's library symbol is stored flattened, so compare it directly.
+                LIB_SYMBOL* baseSymbol = symbol->GetLibSymbolRef().get();
+
+                if( !baseSymbol )
+                    continue;
+
+                std::vector<VARIANT_COMPAT_RESULT> issues =
+                        ValidateVariantSymbolCompatibility( *baseSymbol, *flatAlt );
+
+                for( const VARIANT_COMPAT_RESULT& issue : issues )
+                {
+                    addMarker( ERCE_VARIANT_SYMBOL_INCOMPATIBLE,
+                               wxString::Format( _( "Variant '%s', alternate '%s': %s" ),
+                                                 variantName, libIdStr, issue.detail ) );
+                }
+            }
+        }
+
+        for( SCH_MARKER* marker : markers )
+            screen->Append( marker );
+    }
+
+    return err_count;
+}
+
+
 void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
                            KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
 {
@@ -2744,6 +2864,15 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking for undefined netclasses..." ) );
 
         TestMissingNetclasses();
+    }
+
+    if( m_settings.IsTestEnabled( ERCE_VARIANT_SYMBOL_INVALID )
+        || m_settings.IsTestEnabled( ERCE_VARIANT_SYMBOL_INCOMPATIBLE ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking variant symbols..." ) );
+
+        TestVariantSymbols();
     }
 
     m_schematic->ResolveERCExclusionsPostUpdate();

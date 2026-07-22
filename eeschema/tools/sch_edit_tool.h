@@ -49,6 +49,8 @@ public:
     int EditField( const TOOL_EVENT& aEvent );
     int AutoplaceFields( const TOOL_EVENT& aEvent );
     int ChangeSymbols( const TOOL_EVENT& aEvent );
+    int SetVariantSymbol( const TOOL_EVENT& aEvent );
+    int ClearVariantSymbol( const TOOL_EVENT& aEvent );
     int CycleBodyStyle( const TOOL_EVENT& aEvent );
     int EditPageNumber( const TOOL_EVENT& aEvent );
 

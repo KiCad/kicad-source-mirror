@@ -43,6 +43,7 @@
 #include <sch_marker.h>
 #include <sch_rule_area.h>
 #include <sch_pin.h>
+#include <sch_sheet_path.h>
 #include <sch_sheet_pin.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
@@ -70,6 +71,10 @@
 #include <wx/textdlg.h>
 #include <wx/msgdlg.h>
 #include <project/net_settings.h>
+#include <project_sch.h>
+#include <libraries/symbol_library_adapter.h>
+#include <symbol_library_common.h>
+#include <variant_symbol_utils.h>
 #include <tools/sch_tool_utils.h>
 
 
@@ -723,6 +728,37 @@ bool SCH_EDIT_TOOL::Init()
 
     auto singleSheetCondition = S_C::Count( 1 ) && S_C::OnlyTypes( sheetTypes );
 
+    auto variantActiveCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return !m_frame->Schematic().GetCurrentVariant().IsEmpty();
+            };
+
+    auto noVariantActiveCondition =
+            [this]( const SELECTION& aSel )
+            {
+                return m_frame->Schematic().GetCurrentVariant().IsEmpty();
+            };
+
+    auto symbolHasVariantSymbol =
+            [this]( const SELECTION& aSel )
+            {
+                if( m_frame->Schematic().GetCurrentVariant().IsEmpty() || aSel.GetSize() != 1 )
+                    return false;
+
+                SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( aSel.Front() );
+
+                if( !sym )
+                    return false;
+
+                SCH_SHEET_PATH& sheet = m_frame->GetCurrentSheet();
+
+                std::optional<SCH_SYMBOL_VARIANT> variant =
+                        sym->GetVariant( sheet, m_frame->Schematic().GetCurrentVariant() );
+
+                return variant.has_value() && variant->m_SymbolOverride.has_value();
+            };
+
     auto makeSymbolUnitMenu =
             [&]( TOOL_INTERACTIVE* tool )
             {
@@ -907,11 +943,18 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields, autoplaceCondition, 200 );
 
     selToolMenu.AddItem( SCH_ACTIONS::editWithLibEdit, S_C::SingleSymbolOrPower && S_C::Idle, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::changeSymbol,    S_C::SingleSymbolOrPower, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::updateSymbol,    S_C::SingleSymbolOrPower, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::changeSymbols,   S_C::MultipleSymbolsOrPower, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::updateSymbols,   S_C::MultipleSymbolsOrPower, 200 );
-    selToolMenu.AddMenu( makeConvertToMenu(),          toChangeCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::changeSymbol,
+                         S_C::SingleSymbolOrPower && noVariantActiveCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::updateSymbol, S_C::SingleSymbolOrPower, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::changeSymbols,
+                         S_C::MultipleSymbolsOrPower && noVariantActiveCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::updateSymbols, S_C::MultipleSymbolsOrPower, 200 );
+
+    selToolMenu.AddItem( SCH_ACTIONS::setVariantSymbol,
+                         S_C::SingleSymbolOrPower && variantActiveCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::clearVariantSymbol,
+                         symbolHasVariantSymbol, 200 );
+    selToolMenu.AddMenu( makeConvertToMenu(), toChangeCondition, 200 );
 
     selToolMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, sheetHasUndefinedPins, 250 );
     selToolMenu.AddMenu( makeLockMenu( m_selectionTool ), S_C::NotEmpty, 250 );
@@ -2554,12 +2597,189 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
     DIALOG_CHANGE_SYMBOLS::MODE mode = DIALOG_CHANGE_SYMBOLS::MODE::UPDATE;
 
     if( aEvent.IsAction( &SCH_ACTIONS::changeSymbol ) || aEvent.IsAction( &SCH_ACTIONS::changeSymbols ) )
+    {
+        // Exchanging the base symbol under an active variant would rewrite all variants
+        // while the canvas shows variant-resolved values, so require the default variant.
+        if( !m_frame->Schematic().GetCurrentVariant().IsEmpty() )
+        {
+            DisplayInfoMessage( m_frame,
+                    _( "Change Symbol is not available when a design variant is active. "
+                       "Use Set Variant Symbol or switch to the default variant first." ) );
+            return 0;
+        }
+
         mode = DIALOG_CHANGE_SYMBOLS::MODE::CHANGE;
+    }
 
     DIALOG_CHANGE_SYMBOLS dlg( m_frame, selectedSymbol, mode );
 
     // QuasiModal required to invoke symbol browser
     dlg.ShowQuasiModal();
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    return 0;
+}
+
+
+int SCH_EDIT_TOOL::SetVariantSymbol( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+
+    if( selection.Empty() )
+        return 0;
+
+    SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
+
+    if( !symbol )
+        return 0;
+
+    wxString variantName = m_frame->Schematic().GetCurrentVariant();
+
+    if( variantName.IsEmpty() )
+        return 0;
+
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
+
+    if( !adapter )
+        return 0;
+
+    const LIB_SYMBOL*           baseSymbol = symbol->GetLibSymbolRef().get();
+    std::shared_ptr<LIB_SYMBOL> baseFlat;
+    SYMBOL_COMPAT_FUNC          compatFunc;
+
+    if( baseSymbol )
+    {
+        // The flattened copy is shared with the callback so its lifetime cannot be cut
+        // short by schematic changes while the chooser is open.
+        baseFlat = baseSymbol->Flatten();
+
+        compatFunc =
+                [baseFlat, adapter]( const LIB_ID& aCandidate )
+                        -> std::vector<VARIANT_COMPAT_RESULT>
+                {
+                    try
+                    {
+                        if( LIB_SYMBOL* raw = adapter->LoadSymbol( aCandidate ) )
+                        {
+                            std::unique_ptr<LIB_SYMBOL> flat = raw->Flatten();
+                            return ValidateVariantSymbolCompatibility( *baseFlat, *flat );
+                        }
+                    }
+                    catch( const IO_ERROR& )
+                    {
+                    }
+
+                    return {};
+                };
+    }
+
+    SYMBOL_LIBRARY_FILTER         filter;
+    std::vector<PICKED_SYMBOL>    historyList;
+    std::vector<PICKED_SYMBOL>    alreadyPlaced;
+
+    PICKED_SYMBOL picked = m_frame->PickSymbolFromLibrary( &filter, historyList, alreadyPlaced, true,
+                                                           &symbol->GetLibId(), false, compatFunc );
+
+    if( !picked.LibId.IsValid() )
+        return 0;
+
+    LIB_SYMBOL* candidateRaw = nullptr;
+
+    try
+    {
+        candidateRaw = adapter->LoadSymbol( picked.LibId );
+    }
+    catch( const IO_ERROR& )
+    {
+        wxString symLabel = picked.LibId.Format().empty()
+                                    ? wxString( picked.LibId.GetLibItemName() )
+                                    : wxString( picked.LibId.Format() );
+
+        DisplayErrorMessage( m_frame, wxString::Format(
+                _( "Could not load symbol '%s' from library." ), symLabel ) );
+        return 0;
+    }
+
+    if( !candidateRaw )
+        return 0;
+
+    std::unique_ptr<LIB_SYMBOL> candidateFlat = candidateRaw->Flatten();
+
+    if( baseFlat )
+    {
+        std::vector<VARIANT_COMPAT_RESULT> issues =
+                ValidateVariantSymbolCompatibility( *baseFlat, *candidateFlat );
+
+        if( !issues.empty() )
+        {
+            wxString msg = wxString::Format(
+                    _( "The selected symbol '%s' is not pin-compatible with the base symbol "
+                       "'%s'.\n\n" ),
+                    wxString( picked.LibId.Format() ),
+                    wxString( symbol->GetLibId().Format() ) );
+
+            for( const VARIANT_COMPAT_RESULT& issue : issues )
+                msg += wxS( "\u2022 " ) + issue.detail + wxS( "\n" );
+
+            msg += wxS( "\n" ) + _( "Choose a symbol with equivalent pins and pin positions." );
+            wxMessageBox( msg, _( "Variant Symbol Compatibility" ), wxOK | wxICON_ERROR, m_frame );
+            return 0;
+        }
+    }
+
+    SCH_COMMIT      commit( m_toolMgr );
+    SCH_SHEET_PATH& currentSheet = m_frame->GetCurrentSheet();
+
+    commit.Modify( symbol, m_frame->GetScreen() );
+
+    symbol->SetVariantSymbolOverride( currentSheet, variantName, picked.LibId );
+    symbol->ClearCaches();
+
+    commit.Push( _( "Set Variant Symbol" ) );
+    m_frame->GetCanvas()->Refresh();
+
+    if( selection.IsHover() )
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    return 0;
+}
+
+
+int SCH_EDIT_TOOL::ClearVariantSymbol( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
+
+    if( selection.Empty() )
+        return 0;
+
+    SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( selection.Front() );
+
+    if( !symbol )
+        return 0;
+
+    wxString variantName = m_frame->Schematic().GetCurrentVariant();
+
+    if( variantName.IsEmpty() )
+        return 0;
+
+    SCH_SHEET_PATH& currentSheet = m_frame->GetCurrentSheet();
+
+    std::optional<SCH_SYMBOL_VARIANT> existingVariant =
+            symbol->GetVariant( currentSheet, variantName );
+
+    if( !existingVariant || !existingVariant->m_SymbolOverride.has_value() )
+        return 0;
+
+    SCH_COMMIT commit( m_toolMgr );
+    commit.Modify( symbol, m_frame->GetScreen() );
+
+    symbol->ClearVariantSymbolOverride( currentSheet, variantName );
+    symbol->ClearCaches();
+
+    commit.Push( _( "Clear Variant Symbol" ) );
+    m_frame->GetCanvas()->Refresh();
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( ACTIONS::selectionClear );
@@ -2801,6 +3021,14 @@ void SCH_EDIT_TOOL::EditProperties( EDA_ITEM* aItem )
         {
             DIALOG_CHANGE_SYMBOLS dlg( m_frame, symbol, DIALOG_CHANGE_SYMBOLS::MODE::CHANGE );
             dlg.ShowQuasiModal();
+        }
+        else if( retval == SYMBOL_PROPS_WANT_SET_VARIANT_SYMBOL )
+        {
+            m_toolMgr->RunAction( SCH_ACTIONS::setVariantSymbol );
+        }
+        else if( retval == SYMBOL_PROPS_WANT_CLEAR_VARIANT_SYMBOL )
+        {
+            m_toolMgr->RunAction( SCH_ACTIONS::clearVariantSymbol );
         }
 
         break;
@@ -3843,6 +4071,8 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      SCH_ACTIONS::updateSymbols.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      SCH_ACTIONS::changeSymbol.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      SCH_ACTIONS::updateSymbol.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SetVariantSymbol,   SCH_ACTIONS::setVariantSymbol.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ClearVariantSymbol, SCH_ACTIONS::clearVariantSymbol.MakeEvent() );
     Go( &SCH_EDIT_TOOL::CycleBodyStyle,     SCH_ACTIONS::cycleBodyStyle.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toHLabel.MakeEvent() );

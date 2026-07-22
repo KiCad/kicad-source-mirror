@@ -23,6 +23,7 @@
 #define SYMBOL_TREE_MODEL_ADAPTER_H
 
 #include <lib_tree_model_adapter.h>
+#include <variant_symbol_utils.h>
 
 class SYMBOL_LIBRARY_ADAPTER;
 class SCH_BASE_FRAME;
@@ -56,6 +57,15 @@ public:
 
     void AddLibrary( wxString const& aLibNickname, bool pinned );
 
+    void SetCompatibilityCallback( SYMBOL_COMPAT_FUNC aFunc )
+    {
+        m_compatCallback = std::move( aFunc );
+        m_compatCache.clear();
+    }
+
+    bool GetAttr( const wxDataViewItem& aItem, unsigned int aCol,
+                  wxDataViewItemAttr& aAttr ) const override;
+
     wxString GenerateInfo( LIB_ID const& aLibId, int aUnit ) override;
 
 protected:
@@ -73,6 +83,9 @@ private:
 
     std::set<wxString> m_pending_load_libraries;
     std::unique_ptr<wxTimer> m_check_pending_libraries_timer;
+
+    SYMBOL_COMPAT_FUNC                    m_compatCallback;
+    mutable std::map<LIB_ID, bool>        m_compatCache;
 };
 
 #endif // SYMBOL_TREE_MODEL_ADAPTER_H

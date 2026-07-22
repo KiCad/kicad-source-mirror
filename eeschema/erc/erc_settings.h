@@ -98,8 +98,10 @@ enum ERCE_T
     ERCE_PIN_MAP_DUPLICATE_PAD,             ///< Two symbol pins map to one pad (not stacked/jumper).
     ERCE_PIN_MAP_STALE_PIN,                 ///< Pin map references a pin number not on the symbol.
     ERCE_EMPTY_LABEL_NAME,                  ///< Label has an empty or whitespace-only name.
+    ERCE_VARIANT_SYMBOL_INVALID,            ///< Variant symbol override LIB_ID cannot be resolved.
+    ERCE_VARIANT_SYMBOL_INCOMPATIBLE,       ///< Variant symbol override fails pin compatibility.
 
-    ERCE_LAST = ERCE_EMPTY_LABEL_NAME,
+    ERCE_LAST = ERCE_VARIANT_SYMBOL_INCOMPATIBLE,
 
     ERCE_DUPLICATE_PIN_ERROR,
     ERCE_PIN_TO_PIN_WARNING, // pin connected to an other pin: warning level

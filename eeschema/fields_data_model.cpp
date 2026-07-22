@@ -28,6 +28,7 @@
 #include <sch_commit.h>
 #include <sch_screen.h>
 #include <template_fieldnames.h>
+#include <sch_sheet_path.h>
 #include "string_utils.h"
 
 #include "fields_data_model.h"
@@ -469,14 +470,34 @@ wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGr
                 {
                     needsVariantHighlight = true;
 
-                    // Use a subtle highlight color that works in both light and dark themes
+                    bool isPriority2 = false;
+
+                    if( const SCH_SYMBOL* sym = ref.GetSymbol() )
+                    {
+                        auto variantData = sym->GetVariant( ref.GetSheetPath(),
+                                                            m_currentVariant );
+
+                        if( variantData
+                            && variantData->m_SymbolOverride
+                            && !variantData->m_Fields.count( fieldName ) )
+                        {
+                            isPriority2 = true;
+                        }
+                    }
+
                     wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
                     bool     isDark = ( bg.Red() + bg.Green() + bg.Blue() ) < 384;
 
-                    if( isDark )
-                        highlightColor = wxColour( 80, 80, 40 );   // Dark gold/brown
+                    if( isPriority2 )
+                    {
+                        highlightColor = isDark ? wxColour( 40, 60, 80 )
+                                                : wxColour( 220, 235, 255 );
+                    }
                     else
-                        highlightColor = wxColour( 255, 255, 200 ); // Light yellow
+                    {
+                        highlightColor = isDark ? wxColour( 80, 80, 40 )
+                                                : wxColour( 255, 255, 200 );
+                    }
 
                     break;
                 }

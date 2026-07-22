@@ -231,6 +231,8 @@ set( QA_EESCHEMA_SRCS
     test_schematic_clipboard_export.cpp
     test_autoplace_fields.cpp
     test_field_case_conflicts.cpp
+    test_variant_symbol_compatibility.cpp
+    test_variant_field_resolution.cpp
 
     # Net Chains test suite
     net_chains/test_net_chains.cpp

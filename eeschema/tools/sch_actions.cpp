@@ -962,6 +962,20 @@ TOOL_ACTION SCH_ACTIONS::updateSymbol( TOOL_ACTION_ARGS()
         .Tooltip( _( "Update symbol to include any changes from the library" ) )
         .Icon( BITMAPS::refresh ) );
 
+TOOL_ACTION SCH_ACTIONS::setVariantSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.setVariantSymbol" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Set Variant Symbol..." ) )
+        .Tooltip( _( "Assign an alternate library symbol for this design variant" ) )
+        .Icon( BITMAPS::exchange ) );
+
+TOOL_ACTION SCH_ACTIONS::clearVariantSymbol( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.clearVariantSymbol" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Clear Variant Symbol" ) )
+        .Tooltip( _( "Remove the variant symbol override and revert to the base symbol" ) )
+        .Icon( BITMAPS::cancel ) );
+
 TOOL_ACTION SCH_ACTIONS::assignNetclass( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveEdit.assignNetclass" )
         .Scope( AS_GLOBAL )
