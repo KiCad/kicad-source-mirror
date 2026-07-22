@@ -548,12 +548,11 @@ ORCAD_BUS_ENTRY OrcadReadBusEntry( ORCAD_STRUCT_READER& aReader,
     ORCAD_BUS_ENTRY entry;
 
     entry.color = static_cast<int>( ds.ReadU32() );
-    ds.Skip( 4 );               // unknown
-    ds.Skip( 4 );               // unknown
     entry.x1 = ds.ReadI32();
     entry.y1 = ds.ReadI32();
     entry.x2 = ds.ReadI32();
     entry.y2 = ds.ReadI32();
+    ds.Skip( 8 ); // unknown
 
     return entry;
 }

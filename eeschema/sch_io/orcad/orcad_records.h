@@ -498,7 +498,7 @@ struct ORCAD_DRAWN_INSTANCE
 
 /**
  * Bus entry (structure type 29).
- * Body layout: u32 color, 8 unknown bytes, i32 x1, y1, x2, y2.
+ * Body layout: u32 color, i32 x1, y1, x2, y2, 8 unknown bytes
  */
 struct ORCAD_BUS_ENTRY
 {
