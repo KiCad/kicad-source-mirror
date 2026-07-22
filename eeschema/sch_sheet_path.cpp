@@ -1111,10 +1111,8 @@ void SCH_SHEET_LIST::SortByHierarchicalPageNumbers( bool aUpdateVirtualPageNums 
 
             // If one path is a prefix of the other, the shorter one comes first
             // This ensures parents come before children
-            if( common_len == a.size() )
-                return true;  // a is a prefix of b - a is the parent
-            if( common_len == b.size() )
-                return false; // b is a prefix of a - b is the parent
+            if( common_len == min_len )
+                return a.size() < b.size();
 
             // Paths diverge at common_len
             // If they share the same parent, sort by page number

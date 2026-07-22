@@ -306,18 +306,19 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*,
                                   SCH_SHEET_PATH>>( groupCount, first_ele ) );
 
-        for( auto it = m_orderedSymbolsSheetpath.begin(); it != m_orderedSymbolsSheetpath.end();
-             ++it )
+        for( auto it = m_orderedSymbolsSheetpath.begin(); it != m_orderedSymbolsSheetpath.end(); )
         {
             if( it->first->GetValue( false, &it->second, false )
                 != first_ele.first->GetValue( false, &first_ele.second, false ) )
             {
+                ++it;
                 continue;
             }
 
             if( it->first->GetFootprintFieldText( false, &it->second, false )
                 != first_ele.first->GetFootprintFieldText( false, &first_ele.second, false ) )
             {
+                ++it;
                 continue;
             }
 
@@ -329,11 +330,10 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
                 m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*,
                                           SCH_SHEET_PATH>>( groupCount, ( *it ) ) );
                 it = m_orderedSymbolsSheetpath.erase( it );
-
-                if( m_orderedSymbolsSheetpath.size() == 0 )
-                    break;
-                else
-                    it--;   // we want to test the new it element, so compensate the next ++it
+            }
+            else
+            {
+                ++it;
             }
         }
         groupCount++;
