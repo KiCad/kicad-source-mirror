@@ -1441,7 +1441,7 @@ void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
     wxString filename = GetFileFromHistory( event.GetId(), _( "Schematic" ) );
 
     if( !filename.IsEmpty() )
-        OpenProjectFiles( std::vector<wxString>( 1, filename ) );
+        OpenProjectFiles( std::vector<wxString>( 1, filename ), KICTL_KICAD_ONLY );
 }
 
 
@@ -1504,7 +1504,7 @@ void SCH_EDIT_FRAME::LoadProject()
 
     if( dlg.ShowModal() != wxID_CANCEL )
     {
-        OpenProjectFiles( std::vector<wxString>( 1, dlg.GetPath() ) );
+        OpenProjectFiles( std::vector<wxString>( 1, dlg.GetPath() ), KICTL_KICAD_ONLY );
         m_mruPath = Prj().GetProjectPath();
     }
 
