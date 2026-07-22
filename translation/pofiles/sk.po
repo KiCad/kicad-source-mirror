@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-13 13:44+0000\n"
+"PO-Revision-Date: 2026-07-22 19:02+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -14073,12 +14073,12 @@ msgstr "Aktualizovať symboly %s z '%s' na '%s'"
 #: eeschema/dialogs/dialog_change_symbols.cpp:917
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "Zameniť symbol %s z '%s' na '%s'"
+msgstr "Zámena symbolu %s z '%s' na '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:924
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "Zameniť symboly %s z '%s' na '%s'"
+msgstr "Zámena symbolu %s z '%s' na '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:28
 msgid "Update all symbols in schematic"
@@ -14337,9 +14337,9 @@ msgid "Member Nets — %s (%zu)"
 msgstr "Člen spojov — %s (%zu)"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1079
-#, fuzzy, c-format
+#, c-format
 msgid "net '%s'"
-msgstr "Text '%s'"
+msgstr "spoj '%s'"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1084
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1089
@@ -27859,9 +27859,8 @@ msgstr "Importovaných symbolov: %d, preskočených: %d."
 #: eeschema/symbol_editor/toolbars_symbol_editor.cpp:96
 #: eeschema/toolbars_sch_editor.cpp:131
 #: pcbnew/toolbars_footprint_editor.cpp:126 pcbnew/toolbars_pcb_editor.cpp:279
-#, fuzzy
 msgid "Text objects"
-msgstr "Vlastnosti textu"
+msgstr "Textové objekty"
 
 #: eeschema/symbol_library_manager.cpp:198
 #, c-format
@@ -29176,9 +29175,8 @@ msgstr "Nahradiť všetky existujúce vývody"
 
 #: eeschema/tools/sch_actions.cpp:1164
 #: eeschema/tools/sch_editor_control.cpp:1849
-#, fuzzy
 msgid "Name Net Chain"
-msgstr "Názov Veľkosť textu"
+msgstr "Názov reťazeného spoja"
 
 #: eeschema/tools/sch_actions.cpp:1165
 #, fuzzy
@@ -32649,9 +32647,8 @@ msgid "Failed to start API server\n"
 msgstr "Nepodarilo sa spustiť API server\n"
 
 #: kicad/cli/command_diff_base.h:71
-#, fuzzy
 msgid "Output format: json, text, png, or svg (default: json)"
-msgstr "Formát výstupu: png, text, alebo json (predvolené: png)"
+msgstr "Formát výstupu: json, text, png, or svg (predvolené: json)"
 
 #: kicad/cli/command_diff_base.h:76
 msgid ""
@@ -40301,7 +40298,7 @@ msgstr "Oblasť"
 #: pcbnew/widgets/panel_selection_filter.cpp:229
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
 msgid "Dimensions"
-msgstr "Rozmery"
+msgstr "Kóty"
 
 #: pcbnew/board_statistics_report.cpp:560
 msgid "Front copper area"
@@ -52110,13 +52107,13 @@ msgstr "Kontrolujú sa otvory mikro prekovov..."
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:235
 #, c-format
 msgid "(%s min hole %s; actual %s)"
-msgstr "(%s min. otvor %s; aktuálny %s)"
+msgstr "(%s min. otvor %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:171
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:242
 #, c-format
 msgid "(%s max hole %s; actual %s)"
-msgstr "(%s max. otvor %s; aktuálny %s)"
+msgstr "(%s max. otvor %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:105
 msgid "Checking hole to hole clearances..."
@@ -52536,8 +52533,8 @@ msgstr "(%s max. dĺžka %s; aktuálna %s)"
 #, c-format
 msgid "(%s min skew %s; actual %s; target net length %s (from %s); actual %s)"
 msgstr ""
-"(%s min. rozdiel dĺžok %s; aktuálny %s; cieľová dĺžka spoja %s (z %s); "
-"aktuálna %s)"
+"(%s min. rozdiel dĺžok %s; aktuálne %s; cieľová dĺžka spoja %s (z %s); "
+"aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:243
 #, c-format
@@ -52549,7 +52546,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:313
 #, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s max. počet %d; aktuálny %d)"
+msgstr "(%s max. počet %d; aktuálne %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:318
 msgid "Too many vias on a connection"
@@ -52558,7 +52555,7 @@ msgstr "Príliš veľa prekovov na spojení"
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:323
 #, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s min. počet %d; aktuálny %d)"
+msgstr "(%s min. počet %d; aktuálne %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:328
 msgid "Too few vias on a connection"
@@ -52648,7 +52645,7 @@ msgstr "Kontrolujú sa fyzické min. vzdialenosti..."
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:512
 #, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "Porušenie interného odstupu (%s odstup %s; aktuálny %s)"
+msgstr "Porušenie interného odstupu (%s odstup %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:104
 #, c-format
@@ -52786,7 +52783,7 @@ msgstr "Kontrolujú sa uhly spojov..."
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:168
 #, c-format
 msgid "(%s min angle %s; actual %s)"
-msgstr "(%s min. uhol %s; aktuálny %s)"
+msgstr "(%s min. uhol %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_track_angle.cpp:175
 #, c-format
@@ -52818,12 +52815,12 @@ msgstr "Kontrolujú sa priemery prekovov..."
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:110
 #, c-format
 msgid "(%s min diameter %s; actual %s)"
-msgstr "(%s minimálny priemer %s; aktuálny %s)"
+msgstr "(%s minimálny priemer %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:117
 #, c-format
 msgid "(%s max diameter %s; actual %s)"
-msgstr "(%s maximálny priemer %s; aktuálny %s)"
+msgstr "(%s maximálny priemer %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:195
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:290
@@ -52839,7 +52836,7 @@ msgstr "(vrstva %s; %s vlastný počet ramien %d; skutočný %d)"
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:297
 #, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
-msgstr "(vrstva %s; %s min. počet ramien %d; aktuálny %d)"
+msgstr "(vrstva %s; %s min. počet ramien %d; aktuálne %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:321
 msgid "Checking thermal reliefs..."
@@ -59098,7 +59095,7 @@ msgstr "Spoj (oblúk) %s na %s, dĺžka %s"
 #: pcbnew/pcb_track.cpp:2630
 #, c-format
 msgid "Track %s on %s, length %s"
-msgstr "Trať %s dňa %s, dĺžka %s"
+msgstr "Spoj %s na %s, dĺžka %s"
 
 #: pcbnew/pcb_track.cpp:2892 pcbnew/pcb_track.cpp:2898
 #: pcbnew/pcb_track.cpp:2904 pcbnew/pcb_track.cpp:2910
@@ -60167,12 +60164,12 @@ msgstr ""
 
 #: pcbnew/toolbars_pcb_editor.cpp:633
 msgid "Track: use netclass width"
-msgstr "Trať: použite šírku netclass"
+msgstr "Spoj: použiť šírku z triedy spojov"
 
 #: pcbnew/toolbars_pcb_editor.cpp:639
 #, c-format
 msgid "Track: %s (%s)"
-msgstr "Trať: %s (%s)"
+msgstr "Spoj: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:648 pcbnew/toolbars_pcb_editor.cpp:709
 msgid "Edit Pre-defined Sizes..."
