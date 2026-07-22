@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-22 19:01+0000\n"
+"PO-Revision-Date: 2026-07-22 23:26+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -11480,7 +11480,7 @@ msgstr "円弧の形状を変更"
 
 #: common/tool/actions.cpp:612
 msgid "Switch arc posture between clockwise and counter-clockwise"
-msgstr ""
+msgstr "円弧の姿勢を時計回り反時計回りと切り替える"
 
 #: common/tool/actions.cpp:618
 msgid "Cycle Arc Editing Mode"
@@ -23913,6 +23913,8 @@ msgid ""
 "Page '%s': the off-page connector at (%d, %d) is unconnected in the source "
 "design; skipped."
 msgstr ""
+"ページ '%s': ページ外 (%d, %d) に在るコネクターは、 元のデザインでは接続され"
+"ていません; スキップされました。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:1118
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:1139
@@ -23920,6 +23922,8 @@ msgid ""
 "An embedded picture could not be decoded and was skipped; only plain bitmap "
 "images are supported."
 msgstr ""
+"埋め込み画像はデコードできなかったためスキップされました。 純粋なビットマップ"
+"画像のみがサポートされています。"
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:167
 #, c-format
@@ -23927,11 +23931,13 @@ msgid ""
 "Symbol '%s' is absent from the design cache; synthesized placeholder from %d "
 "instance(s)."
 msgstr ""
+"シンボル '%s' はデザイン キャッシュに存在しません; %d 個のインスタンスから合"
+"成された大枠を使用します。"
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:565
 #, c-format
 msgid "No cached symbol for '%s' (%s); placeholder emitted."
-msgstr ""
+msgstr "'%s' (%s) のキャッシュされたシンボルが在りません; 大枠が出力されました。"
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1132
 #, c-format
@@ -23939,29 +23945,39 @@ msgid ""
 "Page %s: %s uses a synthesized placeholder at a different orientation; pin "
 "layout approximate."
 msgstr ""
+"ページ %s: %s は異なる向きで合成された大枠を使用しています; ピンの配置は近似"
+"です。"
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1139
 #, c-format
 msgid ""
 "Page %s: %s pin positions mismatch (orientation %d); geometry may be off."
 msgstr ""
+"ページ %s: %s のピン位置が一致しません (向き %d); 形状がずれている可能性があ"
+"ります。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:224
 msgid ""
 "The file does not contain the 'Library' stream of an OrCAD Capture design."
 msgstr ""
+"このファイルに OrCAD Capture デザイン 'ライブラリ' ストリームが含まれていませ"
+"ん。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:237
 msgid ""
 "This is a pre-2003 OrCAD design; symbol graphics are synthesized as "
 "placeholders (the legacy symbol cache format is not decoded)."
 msgstr ""
+"これは2003年以前の OrCAD デザインです; シンボル 図形は領域として合成されます "
+"(従前のシンボル キャッシュ形式でのデコードはされません) 。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:248
 msgid ""
 "The design has no 'Cache' stream; placeholder symbols will be synthesized "
 "for all parts."
 msgstr ""
+"このデザインに 'キャッシュ' ストリームが在りません。 すべての部品は大枠 "
+"シンボルで合成されます。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:269
 #, c-format
@@ -23973,6 +23989,8 @@ msgid ""
 "The file does not contain a 'Views' storage; it is not a supported OrCAD "
 "Capture design."
 msgstr ""
+"このファイルに 'ビュー' ストレージが含まれていません; サポートされている "
+"OrCAD Capture デザインではありません。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:301
 msgid "The design contains no schematic folders."
@@ -23984,6 +24002,8 @@ msgid ""
 "The page display order for schematic folder '%s' could not be read (%s); "
 "pages are imported in name order."
 msgstr ""
+"この回路図フォルダ '%s' のページ表示順位を読み取ることができませんでした (%s)"
+"; ページは名前順にインポートされます。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:409
 #, c-format
@@ -23997,6 +24017,8 @@ msgstr "デザインから回路図のページを読み込むことができま
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:538
 msgid "The file is not an OrCAD Capture library (no 'Library' stream)."
 msgstr ""
+"このファイルは OrCAD Capture ライブラリ('ライブラリ' ストリーム)がありません"
+"。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:617
 #, c-format
@@ -24004,6 +24026,8 @@ msgid ""
 "The OrCAD library could not be fully parsed (%s); some symbols may be "
 "missing."
 msgstr ""
+"この OrCAD ライブラリは完全に解釈できませんでした (%s); いくつかのシンボルが"
+"欠落してしまった可能性があります。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.h:76
 msgid "OrCAD Capture symbol library files"
@@ -34618,7 +34642,7 @@ msgstr "gEDA / Lepton EDAプリント基板図の場所"
 #: kicad/import_proj.cpp:708
 #, c-format
 msgid "Import the associated Allegro board '%s'?"
-msgstr ""
+msgstr "関連する Allegro 基板 '%s' をインポートしますか?"
 
 #: kicad/import_proj.cpp:710
 msgid "Import an associated Allegro board file?"
@@ -34965,7 +34989,7 @@ msgstr "OrCAD プロジェクト..."
 
 #: kicad/menubar.cpp:164
 msgid "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)"
-msgstr ""
+msgstr "OrCAD回路図 (*.dsn) と オプションの Allegro 基板 (*.brd) をインポート"
 
 #: kicad/menubar.cpp:193
 msgid "Edit Advanced Config..."
