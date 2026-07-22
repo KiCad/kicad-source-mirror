@@ -1828,10 +1828,15 @@ namespace
                         { RPT_SEVERITY_WARNING, enumSource, wxS( "unknown placement transform enum preserved" ) } );
             };
 
-            if( placement.angle % 900 != 0 )
+            const bool knownAngle = rawAngle == 0 || rawAngle == 900 || rawAngle == 1800 || rawAngle == 2700;
+
+            if( !knownAngle )
                 recordTransformEnum( layout.angle );
 
-            if( placement.mirrorFlags > 3 )
+            const bool knownMirror = placement.mirrorFlags == 0 || placement.mirrorFlags == 2
+                                     || placement.mirrorFlags == 3;
+
+            if( !knownMirror )
                 recordTransformEnum( layout.mirror );
 
             placement.mirrored = placement.mirrorFlags != 0;
@@ -1973,6 +1978,14 @@ namespace
                       field.presentation, true );
                 field.properties.push_back( sourceProperty(
                         wxS( "display_flags" ), wxString::Format( wxS( "%u" ), displayFlags ), fieldSource ) );
+                SOURCE_PROVENANCE lineWidthSource = fieldSource;
+                lineWidthSource.absoluteOffset += layout.customLineWidth;
+                lineWidthSource.length = 2;
+                field.properties.push_back( sourceProperty(
+                        wxS( "line_width_half_mil" ),
+                        wxString::Format( wxS( "%u" ),
+                                          aCursor.U16At( fieldOffset + layout.customLineWidth ) ),
+                        lineWidthSource ) );
                 SOURCE_PROPERTY preservedTail = sourceProperty(
                         wxS( "preserved_field_tail" ),
                         wxString::Format( wxS( "%u" ), aCursor.U16At( fieldOffset + layout.customTail ) ),

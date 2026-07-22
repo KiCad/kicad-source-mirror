@@ -1828,6 +1828,23 @@ size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLin
         }
     }
 
+    auto partTypeDefinition = m_partTypes.find( aPart.part_type );
+
+    if( partTypeDefinition != m_partTypes.end() )
+    {
+        const PARTTYPE_DEF& definition = partTypeDefinition->second;
+
+        if( aPart.gate_index >= 0 && static_cast<size_t>( aPart.gate_index ) < definition.gates.size()
+            && !definition.gates[aPart.gate_index].decal_names.empty() )
+        {
+            aPart.symbol_name = definition.gates[aPart.gate_index].decal_names.front();
+        }
+        else if( definition.is_connector && !definition.special_variants.empty() )
+        {
+            aPart.symbol_name = definition.special_variants.front().decal_name;
+        }
+    }
+
     size_t i = aStartLine + 1;
 
     // Full format carries font lines, attribute labels, overrides and pin overrides

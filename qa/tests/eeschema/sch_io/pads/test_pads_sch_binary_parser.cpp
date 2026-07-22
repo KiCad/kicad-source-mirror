@@ -2412,6 +2412,15 @@ BOOST_AUTO_TEST_CASE( PlacementInstanceFields )
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.visible, false );
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.font.text, wxS( "Bold Verdana" ) );
     BOOST_CHECK_EQUAL( placement.fields[2].source.controller, 17 );
+    BOOST_CHECK_EQUAL( propertyValue( placement.fields[2].properties, wxS( "line_width_half_mil" ) ),
+                       wxS( "10" ) );
+    auto lineWidth = std::ranges::find_if( placement.fields[2].properties,
+                                          []( const SOURCE_PROPERTY& aProperty )
+                                          { return aProperty.name.text == wxS( "line_width_half_mil" ); } );
+    BOOST_REQUIRE( lineWidth != placement.fields[2].properties.end() );
+    BOOST_CHECK_EQUAL( lineWidth->source.controller, 17 );
+    BOOST_CHECK_EQUAL( lineWidth->source.absoluteOffset, placement.fields[2].source.absoluteOffset + 16 );
+    BOOST_CHECK_EQUAL( lineWidth->source.length, 2 );
 
     for( size_t i = 0; i < placement.fields.size(); ++i )
     {
@@ -2469,6 +2478,8 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
                            { return aError.What().Contains( wxS( "placed-pin handle" ) ); } );
 
     std::vector<uint8_t> wrongField = loadBinaryFixture( "fields.sch" );
+    BOOST_REQUIRE_GT( readU32( wrongField, 0x20 + 7 * 28 + 8 ), 10 );
+    BOOST_REQUIRE_LE( readU32( wrongField, 0x20 + 19 * 28 + 8 ), 10 );
     writeU16( wrongField, sheetControllerOffset( wrongField, 17 ), 10 );
     BOOST_CHECK_EXCEPTION( parser.Parse( wrongField, wxS( "placement-field.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
@@ -2492,6 +2503,22 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
     BOOST_CHECK_EQUAL( propertyValue( unknown.placements[0].properties, wxS( "raw_angle" ) ), wxS( "123" ) );
     BOOST_CHECK_EQUAL( propertyValue( unknown.placements[0].properties, wxS( "raw_mirror" ) ), wxS( "9" ) );
     BOOST_CHECK_EQUAL( std::ranges::count_if( unknown.diagnostics,
+                                              []( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                              {
+                                                  return aDiagnostic.message.Contains(
+                                                          wxS( "unknown placement transform" ) );
+                                              } ),
+                       2 );
+
+    std::vector<uint8_t> boundaryTransform = loadBinaryFixture( "placement_transform.sch" );
+    writeU16( boundaryTransform, sheetControllerOffset( boundaryTransform, 15 ) + 0x24, 3600 );
+    writeU16( boundaryTransform, sheetControllerOffset( boundaryTransform, 15 ) + 0x26, 1 );
+    PADS_SCH_MODEL boundary = parser.Parse( boundaryTransform, wxS( "placement-transform-boundary.sch" ) );
+    BOOST_CHECK_EQUAL( boundary.placements[0].angle, 0 );
+    BOOST_CHECK_EQUAL( boundary.placements[0].mirrored, true );
+    BOOST_CHECK_EQUAL( propertyValue( boundary.placements[0].properties, wxS( "raw_angle" ) ), wxS( "3600" ) );
+    BOOST_CHECK_EQUAL( propertyValue( boundary.placements[0].properties, wxS( "raw_mirror" ) ), wxS( "1" ) );
+    BOOST_CHECK_EQUAL( std::ranges::count_if( boundary.diagnostics,
                                               []( const PARSER_DIAGNOSTIC& aDiagnostic )
                                               {
                                                   return aDiagnostic.message.Contains(
@@ -2536,9 +2563,11 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                                               { return aGate.id == binaryPlacement.gate->id; } );
             BOOST_REQUIRE( gate != part->gates.end() );
             BOOST_CHECK_EQUAL( binaryPlacement.unit, static_cast<uint32_t>( asciiPlacement.gate_index + 1 ) );
-            BOOST_CHECK( std::ranges::any_of( binary.definitions,
-                                              [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
-                                              { return aDefinition.id == binaryPlacement.definition.id; } ) );
+            auto definition = std::ranges::find_if( binary.definitions,
+                                                    [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                                    { return aDefinition.id == binaryPlacement.definition.id; } );
+            BOOST_REQUIRE( definition != binary.definitions.end() );
+            BOOST_CHECK_EQUAL( definition->name.text, wxString::FromUTF8( asciiPlacement.symbol_name ) );
             BOOST_CHECK( !propertyValue( binaryPlacement.properties, wxS( "decal_handle" ) ).empty() );
             BOOST_REQUIRE_EQUAL( binaryPlacement.fields.size(), asciiPlacement.attributes.size() );
 
@@ -2580,6 +2609,8 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                 {
                     BOOST_CHECK_EQUAL( propertyValue( binaryField.properties, wxS( "display_flags" ) ),
                                        wxString::Format( wxS( "%d" ), asciiField.visibility ) );
+                    BOOST_CHECK_EQUAL( propertyValue( binaryField.properties, wxS( "line_width_half_mil" ) ),
+                                       fixture == "fields" ? wxS( "10" ) : wxS( "65535" ) );
                 }
             }
         }

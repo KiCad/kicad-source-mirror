@@ -597,10 +597,10 @@ types:
         type: u2
       - id: rotation_tenths_degree
         type: u2
+        doc: Observed semantic values are 0, 900, 1800, and 2700; other values are preserved and warned by the importer.
       - id: mirror_flags
         type: u2
-        valid:
-          max: 3
+        doc: Observed semantic values are 0, 2, and 3; other values are preserved and warned by the importer.
       - id: reference_x_half_mil
         type: s2
       - id: reference_y_half_mil
