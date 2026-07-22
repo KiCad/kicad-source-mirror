@@ -393,6 +393,8 @@ set( KICOMMON_SRCS
     mdw/client/mdw_lifecycle.cpp
     mdw/client/mdw_op.cpp
     mdw/client/mdw_item.cpp
+    mdw/mdw_backend_registry.cpp
+    mdw/mdw_credentials.cpp
     mdw/mdw_serial_worker.cpp
     mdw/mdw_types.cpp
 
