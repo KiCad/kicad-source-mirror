@@ -3801,8 +3801,11 @@ void FOOTPRINT::BuildNetTieCache()
         if( it == map.end() || it->second < 0 )
             continue;
 
-        for( size_t jj = ii + 1; jj < m_pads.size(); ++jj )
+        for( size_t jj = 0; jj < m_pads.size(); ++jj )
         {
+            if( jj == ii )
+                continue;
+
             PAD* other = m_pads[ jj ];
 
             auto it2 = map.find( other->GetNumber() );
