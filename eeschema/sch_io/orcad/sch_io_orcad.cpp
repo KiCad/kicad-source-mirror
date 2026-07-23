@@ -60,6 +60,14 @@
 #include <sch_io/orcad/orcad_records.h>
 
 
+std::string OrcadNormalizeCfbName( const std::string& aName )
+{
+    std::string name = aName;
+    std::replace( name.begin(), name.end(), '\x03', ':' );
+    return name;
+}
+
+
 namespace
 {
 
@@ -96,7 +104,7 @@ enumChildren( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY*
             [&]( const CFB::COMPOUND_FILE_ENTRY* aEntry, const CFB::utf16string&, int ) -> int
             {
                 if( reader.IsStream( aEntry ) == aStreams )
-                    out.emplace_back( UTF16ToUTF8( aEntry->name ), aEntry );
+                    out.emplace_back( OrcadNormalizeCfbName( UTF16ToUTF8( aEntry->name ) ), aEntry );
 
                 return 0;
             } );

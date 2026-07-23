@@ -30,6 +30,7 @@
 #include <connection_graph.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_label.h>
@@ -242,6 +243,56 @@ BOOST_AUTO_TEST_CASE( CaptureColorPalette )
     BOOST_CHECK( OrcadColor( 47 ) == KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     BOOST_CHECK( OrcadColor( 48 ) == KIGFX::COLOR4D::UNSPECIFIED );
     BOOST_CHECK( OrcadColor( 0 ) == KIGFX::COLOR4D::UNSPECIFIED );
+}
+
+
+BOOST_AUTO_TEST_CASE( CaptureCompoundFileName )
+{
+    BOOST_CHECK_EQUAL( OrcadNormalizeCfbName( std::string( "Sch 2" ) + '\x03' + " PCI Connector" ),
+                       "Sch 2: PCI Connector" );
+}
+
+
+BOOST_AUTO_TEST_CASE( CaptureStrokeAndFillSemantics )
+{
+    BOOST_CHECK_EQUAL( OrcadLineWidthIu( 0 ), schIUScale.MilsToIU( 5 ) );
+    BOOST_CHECK_EQUAL( OrcadLineWidthIu( 1 ), schIUScale.MilsToIU( 10 ) );
+    BOOST_CHECK_EQUAL( OrcadLineWidthIu( 2 ), schIUScale.MilsToIU( 15 ) );
+    BOOST_CHECK_EQUAL( OrcadLineWidthIu( 3 ), 0 );
+
+    BOOST_CHECK( OrcadLineStyle( 0 ) == LINE_STYLE::SOLID );
+    BOOST_CHECK( OrcadLineStyle( 4 ) == LINE_STYLE::DASHDOTDOT );
+    BOOST_CHECK( OrcadLineStyle( 5 ) == LINE_STYLE::DEFAULT );
+
+    BOOST_CHECK( OrcadFillType( 0, 0 ) == FILL_T::FILLED_WITH_BG_BODYCOLOR );
+    BOOST_CHECK( OrcadFillType( 1, 0 ) == FILL_T::NO_FILL );
+    BOOST_CHECK( OrcadFillType( 2, 0 ) == FILL_T::HATCH );
+    BOOST_CHECK( OrcadFillType( 2, 4 ) == FILL_T::REVERSE_HATCH );
+    BOOST_CHECK( OrcadFillType( 2, 5 ) == FILL_T::CROSS_HATCH );
+}
+
+
+BOOST_AUTO_TEST_CASE( CapturePageOrder )
+{
+    wxString dashed = wxS( "03 - CAN" );
+    wxString dotted = wxS( "02.uC" );
+    wxString colon = wxS( "13:IMU" );
+    wxString folder = wxS( "Sch 7: CAN Drivers" );
+    wxString pager = wxS( "PAGER 8" );
+    wxString plain = wxS( "Overview" );
+
+    BOOST_CHECK_EQUAL( OrcadPageOrder( dashed ), 3 );
+    BOOST_CHECK_EQUAL( dashed, wxS( "CAN" ) );
+    BOOST_CHECK_EQUAL( OrcadPageOrder( dotted ), 2 );
+    BOOST_CHECK_EQUAL( dotted, wxS( "02.uC" ) );
+    BOOST_CHECK_EQUAL( OrcadPageOrder( colon ), 13 );
+    BOOST_CHECK_EQUAL( colon, wxS( "13:IMU" ) );
+    BOOST_CHECK_EQUAL( OrcadPageOrder( folder ), 7 );
+    BOOST_CHECK_EQUAL( folder, wxS( "Sch 7: CAN Drivers" ) );
+    BOOST_CHECK_EQUAL( OrcadPageOrder( pager ), -1 );
+    BOOST_CHECK_EQUAL( pager, wxS( "PAGER 8" ) );
+    BOOST_CHECK_EQUAL( OrcadPageOrder( plain ), -1 );
+    BOOST_CHECK_EQUAL( plain, wxS( "Overview" ) );
 }
 
 
@@ -1129,6 +1180,184 @@ BOOST_AUTO_TEST_CASE( CorpusValidation )
         BOOST_CHECK_GE( 100.0 * netCheckable / netTotal, 80.0 );
         BOOST_CHECK_EQUAL( netConsistent, netCheckable );
     }
+}
+
+
+static std::filesystem::path findCorpusDesign( const std::filesystem::path& aRoot,
+                                               const std::string& aFileName )
+{
+    for( const std::filesystem::directory_entry& entry :
+         std::filesystem::recursive_directory_iterator( aRoot ) )
+    {
+        if( entry.is_regular_file() && entry.path().filename() == aFileName )
+            return entry.path();
+    }
+
+    return {};
+}
+
+
+BOOST_AUTO_TEST_CASE( Issue25005Hierarchy )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+    {
+        BOOST_TEST_MESSAGE( "KICAD_ORCAD_CORPUS not set; skipping issue 25005." );
+        return;
+    }
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "CFW-002.DSN" );
+
+    if( dsn.empty() )
+    {
+        BOOST_TEST_MESSAGE( "CFW-002.DSN not present in corpus; skipping issue 25005." );
+        return;
+    }
+
+    std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC( nullptr ) );
+    SETTINGS_MANAGER           manager;
+    manager.LoadProject( "" );
+    schematic->SetProject( &manager.Prj() );
+    schematic->CurrentSheet().clear();
+    schematic->CurrentSheet().push_back( &schematic->Root() );
+
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), schematic.get() );
+
+    std::vector<SCH_SHEET*> topSheets = schematic->GetTopLevelSheets();
+    BOOST_REQUIRE_EQUAL( topSheets.size(), 1u );
+
+    SCH_SCREEN* rootScreen = topSheets.front()->GetScreen();
+    size_t      sheets = 0;
+    size_t      sheetPins = 0;
+
+    for( SCH_ITEM* item : rootScreen->Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+        ++sheets;
+        sheetPins += sheet->GetPins().size();
+    }
+
+    const std::vector<wxString> expectedNames = { wxS( "PAG_2" ), wxS( "PAG_3" ), wxS( "PAG_4" ),
+                                                  wxS( "PAG_5" ), wxS( "PAG_6" ), wxS( "PAG_7" ),
+                                                  wxS( "PAG_8" ), wxS( "PAG_9" ) };
+    const std::vector<size_t> expectedPinCounts = { 31, 24, 39, 47, 40, 33, 26, 10 };
+    SCH_SHEET_LIST            hierarchy = schematic->BuildSheetListSortedByPageNumbers();
+    std::vector<wxString>     sheetNames;
+    std::vector<size_t>       pinCounts;
+
+    for( auto it = std::next( hierarchy.begin() ); it != hierarchy.end(); ++it )
+    {
+        SCH_SHEET*         sheet = it->Last();
+        std::set<wxString> sheetPinNames;
+        std::set<wxString> hierarchicalLabelNames;
+
+        sheetNames.push_back( sheet->GetField( FIELD_T::SHEET_NAME )->GetText() );
+        pinCounts.push_back( sheet->GetPins().size() );
+
+        for( const SCH_SHEET_PIN* pin : sheet->GetPins() )
+            sheetPinNames.insert( pin->GetText() );
+
+        for( SCH_ITEM* item : sheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
+            hierarchicalLabelNames.insert( static_cast<SCH_HIERLABEL*>( item )->GetText() );
+
+        BOOST_CHECK_EQUAL_COLLECTIONS( sheetPinNames.begin(), sheetPinNames.end(),
+                                       hierarchicalLabelNames.begin(), hierarchicalLabelNames.end() );
+    }
+
+    schematic->ConnectionGraph()->Recalculate( hierarchy, true );
+
+    BOOST_CHECK_EQUAL( hierarchy.size(), 9u );
+    BOOST_CHECK_EQUAL( sheets, 8u );
+    BOOST_CHECK_EQUAL( sheetPins, 250u );
+    BOOST_CHECK_EQUAL_COLLECTIONS( sheetNames.begin(), sheetNames.end(), expectedNames.begin(),
+                                   expectedNames.end() );
+    BOOST_CHECK_EQUAL_COLLECTIONS( pinCounts.begin(), pinCounts.end(), expectedPinCounts.begin(),
+                                   expectedPinCounts.end() );
+}
+
+
+BOOST_AUTO_TEST_CASE( Issue25009PageOrderAndGraphics )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+    {
+        BOOST_TEST_MESSAGE( "KICAD_ORCAD_CORPUS not set; skipping issue 25009." );
+        return;
+    }
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "SE_NGFOC-L_01.DSN" );
+
+    if( dsn.empty() )
+    {
+        BOOST_TEST_MESSAGE( "SE_NGFOC-L_01.DSN not present in corpus; skipping issue 25009." );
+        return;
+    }
+
+    std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC( nullptr ) );
+    SETTINGS_MANAGER           manager;
+    manager.LoadProject( "" );
+    schematic->SetProject( &manager.Prj() );
+    schematic->CurrentSheet().clear();
+    schematic->CurrentSheet().push_back( &schematic->Root() );
+
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), schematic.get() );
+
+    const std::vector<wxString> expectedNames = {
+        wxS( "01.REV.HISTORY" ), wxS( "02.uC" ),          wxS( "03.CAN" ),
+        wxS( "04. Ethercat" ),   wxS( "05.EtherSynch" ),  wxS( "06.RS-485" ),
+        wxS( "11.GPIO" ),        wxS( "12.Analog" ),      wxS( "13:IMU" ),
+        wxS( "14.Bridge" ),      wxS( "15.Encoder" ),     wxS( "29.uCPower" ),
+        wxS( "30.PowerSupply" ), wxS( "31.Expansion" )
+    };
+
+    std::vector<SCH_SHEET*> sheets = schematic->GetTopLevelSheets();
+    BOOST_REQUIRE_EQUAL( sheets.size(), expectedNames.size() );
+
+    size_t wires = 0;
+    size_t shapes = 0;
+    size_t texts = 0;
+    size_t tables = 0;
+
+    for( size_t i = 0; i < sheets.size(); ++i )
+    {
+        BOOST_CHECK_EQUAL( sheets[i]->GetField( FIELD_T::SHEET_NAME )->GetText(), expectedNames[i] );
+
+        for( SCH_ITEM* item : sheets[i]->GetScreen()->Items() )
+        {
+            if( item->Type() == SCH_LINE_T )
+            {
+                SCH_LINE* line = static_cast<SCH_LINE*>( item );
+                BOOST_CHECK_EQUAL( line->GetLineWidth(), 0 );
+                ++wires;
+            }
+            else if( item->Type() == SCH_SHAPE_T )
+            {
+                SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
+
+                if( i == 0 )
+                    BOOST_CHECK( shape->GetFillMode() == FILL_T::NO_FILL );
+
+                ++shapes;
+            }
+            else if( item->Type() == SCH_TEXT_T )
+            {
+                ++texts;
+            }
+            else if( item->Type() == SCH_TABLE_T )
+            {
+                ++tables;
+            }
+        }
+    }
+
+    BOOST_CHECK_EQUAL( wires, 1921u );
+    BOOST_CHECK_EQUAL( shapes, 168u );
+    BOOST_CHECK_EQUAL( texts, 206u );
+    BOOST_CHECK_EQUAL( tables, 0u );
 }
 
 

@@ -793,7 +793,8 @@ static void v2Structure( ORCAD_STREAM& aStream, const std::vector<std::string>& 
     case ORCAD_ST_STH_IN_PAGES0:       v2SymbolDef( aStream, aStrings ); break;
     case ORCAD_ST_SYMBOL_DISPLAY_PROP: v2DisplayProp( aStream, aStrings ); break;
     case ORCAD_ST_ALIAS:               v2Alias( aStream, aStrings ); break;
-    case ORCAD_ST_T0X10:               v2PinInst( aStream, aStrings ); break;
+    case ORCAD_ST_T0X10:
+    case ORCAD_ST_T0X11:               v2PinInst( aStream, aStrings ); break;
     case ORCAD_ST_PLACED_INSTANCE:     v2PlacedInstance( aStream, aStrings ); break;
     case ORCAD_ST_WIRE_SCALAR:
     case ORCAD_ST_WIRE_BUS:            v2Wire( aStream, aStrings ); break;

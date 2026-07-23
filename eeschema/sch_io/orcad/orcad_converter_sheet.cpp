@@ -68,6 +68,7 @@
 #include <sch_shape.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
+#include <sch_sheet_pin.h>
 #include <sch_text.h>
 #include <string_utils.h>
 #include <stroke_params.h>
@@ -119,33 +120,15 @@ SCH_SHAPE* makeSheetPoly( const std::vector<VECTOR2I>& aPoints, const ORCAD_PRIM
     for( const VECTOR2I& pt : aPoints )
         poly->AddPoint( pt );
 
-    LINE_STYLE style = LINE_STYLE::SOLID;
+    poly->SetStroke( STROKE_PARAMS( OrcadLineWidthIu( aPrimitive.lineWidth ),
+                                    OrcadLineStyle( aPrimitive.lineStyle ), aColor ) );
 
-    if( aPrimitive.lineStyle == 1 )
-        style = LINE_STYLE::DASH;
-    else if( aPrimitive.lineStyle == 2 )
-        style = LINE_STYLE::DOT;
-    else if( aPrimitive.lineStyle == 3 )
-        style = LINE_STYLE::DASHDOT;
-
-    int width = aPrimitive.lineWidth > 0 ? schIUScale.MilsToIU( 5 * aPrimitive.lineWidth ) : 0;
-    poly->SetStroke( STROKE_PARAMS( width, style, aColor ) );
-
-    if( aCanFill && aPrimitive.fillStyle == 1 )
+    // Page graphics have no symbol body color, so solid fill uses the foreground color.
+    if( aCanFill && aPrimitive.fillStyle == 0 )
         poly->SetFillMode( FILL_T::FILLED_SHAPE );
-    else if( aCanFill && aPrimitive.fillStyle == 2 )
-    {
-        if( aPrimitive.hatchStyle == 4 )
-            poly->SetFillMode( FILL_T::REVERSE_HATCH );
-        else if( aPrimitive.hatchStyle == 5 )
-            poly->SetFillMode( FILL_T::CROSS_HATCH );
-        else
-            poly->SetFillMode( FILL_T::HATCH );
-    }
     else
-    {
-        poly->SetFillMode( FILL_T::NO_FILL );
-    }
+        poly->SetFillMode( aCanFill ? OrcadFillType( aPrimitive.fillStyle, aPrimitive.hatchStyle )
+                                    : FILL_T::NO_FILL );
 
     return poly;
 }
@@ -210,28 +193,58 @@ void ORCAD_CONVERTER::note( const wxString& aMsg )
 }
 
 
-/// Leading "N - " prefix carries page order, not title; return order (or -1), strip prefix
-static int takePageOrderPrefix( wxString& aName )
+/// Return a numeric page prefix (or -1); strip only the "N - title" convention.
+int OrcadPageOrder( wxString& aName )
 {
-    size_t i = 0;
+    size_t   digitStart = 0;
+    wxString upper = aName.Upper();
 
-    while( i < aName.length() && wxIsdigit( aName[i] ) )
-        i++;
+    for( const wxString& prefix : { wxS( "PAGE" ), wxS( "SCH" ), wxS( "PAG" ) } )
+    {
+        if( upper.StartsWith( prefix )
+            && ( aName.length() == prefix.length() || wxIsdigit( aName[prefix.length()] )
+                 || wxIsspace( aName[prefix.length()] ) || aName[prefix.length()] == '_' ) )
+        {
+            digitStart = prefix.length();
+
+            while( digitStart < aName.length()
+                   && ( wxIsspace( aName[digitStart] ) || aName[digitStart] == '_' ) )
+            {
+                digitStart++;
+            }
+
+            break;
+        }
+    }
+
+    size_t digitEnd = digitStart;
+
+    while( digitEnd < aName.length() && wxIsdigit( aName[digitEnd] ) )
+        digitEnd++;
 
     long order = 0;
 
-    if( i == 0 || !aName.Left( i ).ToLong( &order ) )
+    if( digitEnd == digitStart
+        || !aName.Mid( digitStart, digitEnd - digitStart ).ToLong( &order ) )
+    {
+        return -1;
+    }
+
+    size_t separator = digitEnd;
+
+    while( separator < aName.length() && wxIsspace( aName[separator] ) )
+        separator++;
+
+    if( separator == aName.length()
+        || ( aName[separator] != '-' && aName[separator] != '.' && aName[separator] != ':' ) )
         return -1;
 
-    wxString rest = aName.Mid( i );
-    rest.Trim( false );
-
-    if( !rest.StartsWith( wxS( "-" ) ) )
-        return -1;
-
-    rest = rest.Mid( 1 );
-    rest.Trim( false );
-    aName = rest;
+    if( aName[separator] == '-' )
+    {
+        wxString rest = aName.Mid( separator + 1 );
+        rest.Trim( false );
+        aName = rest;
+    }
 
     return static_cast<int>( order );
 }
@@ -248,6 +261,158 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
     SCH_SHEET_PATH rootPath;
     rootPath.push_back( aRootSheet );
     rootPath.SetPageNumber( wxS( "1" ) );
+
+    std::function<bool( const ORCAD_RAW_PAGE&, const ORCAD_OCC_SCOPE& )> canBuildHierarchy =
+            [&]( const ORCAD_RAW_PAGE& aPage, const ORCAD_OCC_SCOPE& aScope )
+    {
+        if( aPage.blocks.size() != aScope.blocks.size() )
+            return false;
+
+        std::set<uint32_t> matchedBlocks;
+
+        for( const ORCAD_OCC_BLOCK& occurrence : aScope.blocks )
+        {
+            auto drawn = std::find_if( aPage.blocks.begin(), aPage.blocks.end(),
+                    [&]( const ORCAD_DRAWN_INSTANCE& aBlock )
+                    {
+                        return aBlock.dbId == occurrence.targetDbId;
+                    } );
+
+            std::string key = occurrence.childFolder;
+            std::transform( key.begin(), key.end(), key.begin(),
+                            []( unsigned char c ) { return static_cast<char>( std::tolower( c ) ); } );
+
+            auto pages = m_design.childFolderPages.find( key );
+
+            if( !matchedBlocks.insert( occurrence.targetDbId ).second
+                || drawn == aPage.blocks.end() || pages == m_design.childFolderPages.end()
+                || pages->second.size() != 1 || !canBuildHierarchy( pages->second.front(), occurrence.scope ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    bool nativeHierarchy = m_design.pages.size() == 1 && !m_design.occurrenceRoot.blocks.empty()
+                           && canBuildHierarchy( m_design.pages.front(), m_design.occurrenceRoot );
+
+    if( nativeHierarchy )
+    {
+        ORCAD_RAW_PAGE& rootPage = m_design.pages.front();
+
+        pollProgress( m_progressReporter, rootPage.name );
+        m_currentOccRefs = &m_design.occurrenceRoot.partRefs;
+        applyPageSettings( rootPage, rootScreen );
+        convertPage( rootPage, rootScreen, rootPath );
+
+        int pageIndex = 1;
+
+        std::function<void( ORCAD_RAW_PAGE&, const ORCAD_OCC_SCOPE&, SCH_SHEET*,
+                            const SCH_SHEET_PATH& )> placeChildren =
+                [&]( ORCAD_RAW_PAGE& aParentPage, const ORCAD_OCC_SCOPE& aScope,
+                     SCH_SHEET* aParentSheet, const SCH_SHEET_PATH& aParentPath )
+        {
+            std::vector<const ORCAD_OCC_BLOCK*> occurrences;
+
+            for( const ORCAD_OCC_BLOCK& occurrence : aScope.blocks )
+                occurrences.push_back( &occurrence );
+
+            std::stable_sort( occurrences.begin(), occurrences.end(),
+                    []( const ORCAD_OCC_BLOCK* a, const ORCAD_OCC_BLOCK* b )
+                    {
+                        wxString aName = FromOrcadString( a->childFolder );
+                        wxString bName = FromOrcadString( b->childFolder );
+                        int      aOrder = OrcadPageOrder( aName );
+                        int      bOrder = OrcadPageOrder( bName );
+                        int      aKey = aOrder >= 0 ? aOrder : std::numeric_limits<int>::max();
+                        int      bKey = bOrder >= 0 ? bOrder : std::numeric_limits<int>::max();
+                        return aKey < bKey;
+                    } );
+
+            for( const ORCAD_OCC_BLOCK* occurrencePtr : occurrences )
+            {
+                const ORCAD_OCC_BLOCK& occurrence = *occurrencePtr;
+                auto drawn = std::find_if( aParentPage.blocks.begin(), aParentPage.blocks.end(),
+                        [&]( const ORCAD_DRAWN_INSTANCE& aBlock )
+                        {
+                            return aBlock.dbId == occurrence.targetDbId;
+                        } );
+
+                std::string key = occurrence.childFolder;
+                std::transform( key.begin(), key.end(), key.begin(),
+                                []( unsigned char c ) { return static_cast<char>( std::tolower( c ) ); } );
+
+                ORCAD_RAW_PAGE& childPage = m_design.childFolderPages.at( key ).front();
+                SCH_SCREEN*     childScreen = new SCH_SCREEN( m_schematic );
+                SCH_SHEET*      childSheet = new SCH_SHEET( aParentSheet,
+                                                            OrcadDbuToIu( drawn->x1, drawn->y1 ),
+                                                            OrcadDbuToIu( drawn->w, drawn->h ) );
+                wxString        sheetName = FromOrcadString( drawn->reference );
+
+                if( sheetName.IsEmpty() )
+                    sheetName = FromOrcadString( childPage.name );
+
+                wxString base = sheetName;
+
+                for( int suffix = 2; !m_usedSheetNames.insert( sheetName.Lower() ).second; ++suffix )
+                    sheetName = wxString::Format( wxS( "%s (%d)" ), base, suffix );
+
+                wxString fileName = MakePageFileName( ++pageIndex, childPage.name );
+                childSheet->GetField( FIELD_T::SHEET_NAME )->SetText( sheetName );
+                childSheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
+                childSheet->SetScreen( childScreen );
+                childScreen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
+
+                for( const ORCAD_BLOCK_PIN& sourcePin : drawn->pins )
+                {
+                    VECTOR2I       position = OrcadDbuToIu( sourcePin.x, sourcePin.y );
+                    SCH_SHEET_PIN* pin = new SCH_SHEET_PIN( childSheet, position,
+                                                           FromOrcadString( sourcePin.name ) );
+                    std::array<std::pair<int, SHEET_SIDE>, 4> sides = {
+                        std::pair{ std::abs( sourcePin.x - drawn->x1 ), SHEET_SIDE::LEFT },
+                        std::pair{ std::abs( sourcePin.x - drawn->x1 - drawn->w ), SHEET_SIDE::RIGHT },
+                        std::pair{ std::abs( sourcePin.y - drawn->y1 ), SHEET_SIDE::TOP },
+                        std::pair{ std::abs( sourcePin.y - drawn->y1 - drawn->h ), SHEET_SIDE::BOTTOM }
+                    };
+
+                    pin->SetSide( std::min_element( sides.begin(), sides.end(),
+                                          []( const auto& a, const auto& b )
+                                          {
+                                              return a.first < b.first;
+                                          } )->second );
+
+                    switch( sourcePin.portType )
+                    {
+                    case ORCAD_PORT_TYPE::INPUT:         pin->SetShape( LABEL_FLAG_SHAPE::L_INPUT ); break;
+                    case ORCAD_PORT_TYPE::OUTPUT:        pin->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT ); break;
+                    case ORCAD_PORT_TYPE::BIDIRECTIONAL: pin->SetShape( LABEL_FLAG_SHAPE::L_BIDI ); break;
+                    case ORCAD_PORT_TYPE::TRI_STATE:     pin->SetShape( LABEL_FLAG_SHAPE::L_TRISTATE ); break;
+                    default:                            pin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED ); break;
+                    }
+
+                    childSheet->AddPin( pin );
+                }
+
+                aParentSheet->GetScreen()->Append( childSheet );
+
+                SCH_SHEET_PATH childPath = aParentPath;
+                childPath.push_back( childSheet );
+                childPath.SetPageNumber( wxString::Format( wxS( "%d" ), pageIndex ) );
+
+                pollProgress( m_progressReporter, childPage.name );
+                m_currentOccRefs = &occurrence.scope.partRefs;
+                applyPageSettings( childPage, childScreen );
+                convertPage( childPage, childScreen, childPath );
+                placeChildren( childPage, occurrence.scope, childSheet, childPath );
+            }
+        };
+
+        placeChildren( rootPage, m_design.occurrenceRoot, aRootSheet, rootPath );
+        m_currentOccRefs = nullptr;
+        return aRootSheet;
+    }
 
     // Page list = root pages + each block occurrence's child pages, tagged w/ scope refs.
     // Child schematic reused N times yields N jobs, each w/ own designators.
@@ -311,7 +476,7 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
         for( size_t i = 0; i < jobs.size(); ++i )
         {
             wxString name = FromOrcadString( jobs[i].page->name );
-            int      order = i < m_design.pages.size() ? takePageOrderPrefix( name ) : -1;
+            int      order = i < m_design.pages.size() ? OrcadPageOrder( name ) : -1;
 
             if( name.IsEmpty() )
                 name = wxString::Format( wxS( "PAGE%zu" ), i + 1 );
@@ -393,7 +558,7 @@ void ORCAD_CONVERTER::convertPage( ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen,
     placeBusEntries( aPage, aScreen );
     placeWires( aPage, aScreen );
     placeOffpageConnectors( aPage, aScreen );
-    placePorts( aPage, aScreen );
+    placePorts( aPage, aScreen, aSheetPath.size() > 1 );
     placeGraphics( aPage, aScreen );
 
     for( const ORCAD_PLACED_INSTANCE& instance : aPage.instances )
@@ -1061,15 +1226,8 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                                        wire.isBus ? LAYER_BUS : LAYER_WIRE );
         line->SetEndPoint( OrcadDbuToIu( wire.x2, wire.y2 ) );
 
-        if( wire.lineWidth > 0 )
-            line->SetLineWidth( schIUScale.MilsToIU( 5 * wire.lineWidth ) );
-
-        if( wire.lineStyle == 1 )
-            line->SetLineStyle( LINE_STYLE::DASH );
-        else if( wire.lineStyle == 2 )
-            line->SetLineStyle( LINE_STYLE::DOT );
-        else if( wire.lineStyle == 3 )
-            line->SetLineStyle( LINE_STYLE::DASHDOT );
+        line->SetLineWidth( OrcadLineWidthIu( wire.lineWidth ) );
+        line->SetLineStyle( OrcadLineStyle( wire.lineStyle ) );
 
         line->SetLineColor( OrcadColor( wire.color ) );
 
@@ -1169,7 +1327,8 @@ void ORCAD_CONVERTER::placeOffpageConnectors( const ORCAD_RAW_PAGE& aPage, SCH_S
 }
 
 
-void ORCAD_CONVERTER::placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen )
+void ORCAD_CONVERTER::placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen,
+                                 bool aHierarchical )
 {
     for( const ORCAD_GRAPHIC_INST& port : aPage.ports )
     {
@@ -1189,14 +1348,22 @@ void ORCAD_CONVERTER::placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
         else if( symbolName.Contains( wxS( "RIGHT" ) ) )
             shape = LABEL_FLAG_SHAPE::L_OUTPUT;
 
-        SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( OrcadDbuToIu( pos.x, pos.y ),
-                                                      FromOrcadString( net ) );
+        SCH_LABEL_BASE* label;
+
+        if( aHierarchical )
+            label = new SCH_HIERLABEL( OrcadDbuToIu( pos.x, pos.y ), FromOrcadString( net ) );
+        else
+            label = new SCH_GLOBALLABEL( OrcadDbuToIu( pos.x, pos.y ), FromOrcadString( net ) );
+
         label->SetShape( shape );
         label->SetSpinStyle( SPIN_STYLE::RIGHT );
         label->SetTextColor( OrcadColor( port.color ) );
 
-        if( SCH_FIELD* refs = label->GetField( FIELD_T::INTERSHEET_REFS ) )
-            refs->SetVisible( false );
+        if( SCH_GLOBALLABEL* global = dynamic_cast<SCH_GLOBALLABEL*>( label ) )
+        {
+            if( SCH_FIELD* refs = global->GetField( FIELD_T::INTERSHEET_REFS ) )
+                refs->SetVisible( false );
+        }
 
         aScreen->Append( label );
     }
@@ -1334,17 +1501,8 @@ void ORCAD_CONVERTER::placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aS
                     shape->SetBezierC2( OrcadDbuToIu( prim.points[i + 2].x, prim.points[i + 2].y ) );
                     shape->SetEnd( OrcadDbuToIu( prim.points[i + 3].x, prim.points[i + 3].y ) );
 
-                    LINE_STYLE style = LINE_STYLE::SOLID;
-
-                    if( prim.lineStyle == 1 )
-                        style = LINE_STYLE::DASH;
-                    else if( prim.lineStyle == 2 )
-                        style = LINE_STYLE::DOT;
-                    else if( prim.lineStyle == 3 )
-                        style = LINE_STYLE::DASHDOT;
-
-                    int width = prim.lineWidth > 0 ? schIUScale.MilsToIU( 5 * prim.lineWidth ) : 0;
-                    shape->SetStroke( STROKE_PARAMS( width, style, graphicColor ) );
+                    shape->SetStroke( STROKE_PARAMS( OrcadLineWidthIu( prim.lineWidth ),
+                                                    OrcadLineStyle( prim.lineStyle ), graphicColor ) );
                     shape->SetFillMode( FILL_T::NO_FILL );
                     aScreen->Append( shape );
                 }

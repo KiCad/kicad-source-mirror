@@ -258,6 +258,7 @@ ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
             break;
 
         case ORCAD_ST_T0X10:
+        case ORCAD_ST_T0X11:
             result.record = OrcadReadPinInst( *this, pfx );
             break;
 

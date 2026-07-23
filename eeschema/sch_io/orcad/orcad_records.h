@@ -67,7 +67,8 @@ enum ORCAD_ST : int
     ORCAD_ST_PART_INSTANCE            = 11,
     ORCAD_ST_DRAWN_INSTANCE           = 12,  ///< hierarchical block instance
     ORCAD_ST_PLACED_INSTANCE          = 13,
-    ORCAD_ST_T0X10                    = 16,  ///< pin of a placed instance (absolute pos)
+    ORCAD_ST_T0X10                    = 16,  ///< scalar pin instance (absolute pos)
+    ORCAD_ST_T0X11                    = 17,  ///< bus pin instance (absolute pos)
     ORCAD_ST_WIRE_SCALAR              = 20,
     ORCAD_ST_WIRE_BUS                 = 21,
     ORCAD_ST_PORT                     = 23,
@@ -236,8 +237,8 @@ struct ORCAD_WIRE
     int                      y2 = 0;
     bool                     isBus = false; ///< true for structure type 21
     int                      color = 0;
-    int                      lineWidth = 0;
-    int                      lineStyle = 0;
+    int                      lineWidth = 3;
+    int                      lineStyle = 5;
     std::vector<ORCAD_ALIAS> aliases;
 };
 
@@ -368,9 +369,9 @@ struct ORCAD_PRIMITIVE
     std::vector<ORCAD_POINT>     points; ///< polygon/polyline/bezier vertices
     std::string                  text;   ///< kind == TEXT
     int                          fontIdx = 0;
-    int                          lineStyle = 0; ///< 0 solid/default, 1 dashed, 2 dotted
-    int                          lineWidth = 0; ///< Capture width enum: 0 default, 1 thin, 2 medium, 3 thick
-    int                          fillStyle = 0; ///< 0 hollow, 1 solid, 2 hatched
+    int                          lineStyle = 5; ///< 0 solid, 1 dash, 2 dot, 3 dash-dot, 4 dash-dot-dot, 5 default
+    int                          lineWidth = 3; ///< Capture width enum: 0 thin, 1 medium, 2 wide, 3 default
+    int                          fillStyle = 1; ///< 0 solid, 1 none, 2 hatch pattern
     int                          hatchStyle = 0;
     std::vector<uint8_t>         data;     ///< kind == IMAGE: raw embedded payload
     std::vector<ORCAD_PRIMITIVE> children; ///< kind == GROUP, translated by (x1, y1)

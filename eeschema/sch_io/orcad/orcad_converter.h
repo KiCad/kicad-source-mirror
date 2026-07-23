@@ -60,6 +60,7 @@
 #include <math/box2.h>
 #include <math/vector2d.h>
 #include <gal/color4d.h>
+#include <eda_shape.h>
 
 #include <sch_io/orcad/orcad_records.h>
 
@@ -79,6 +80,10 @@ class wxMemoryBuffer;
 inline constexpr int ORCAD_IU_PER_DBU = 2540;
 
 KIGFX::COLOR4D OrcadColor( int aColorIndex );
+int            OrcadLineWidthIu( int aWidth );
+LINE_STYLE     OrcadLineStyle( int aStyle );
+FILL_T         OrcadFillType( int aFillStyle, int aHatchStyle );
+int            OrcadPageOrder( wxString& aName );
 
 inline VECTOR2I OrcadDbuToIu( int aX, int aY )
 {
@@ -216,16 +221,11 @@ public:
      *
      * Steps:
      *  1. prepareSymbols() — placeholders, lib-entry registration, font baseline.
-     *  2. Single page: the page content goes directly onto the root screen, page
-     *     number "1".  Multiple pages: the root screen holds one SCH_SHEET per
-     *     page on a tidy grid (4 columns; position mm (25.4 + col*70,
-     *     25.4 + row*35); size mm 55 x 20), child filename
-     *     "P%02d_<pagename>.kicad_sch", page numbers "2", "3", ... in page order,
-     *     root numbered "1".
+     *  2. An unambiguous Capture hierarchy becomes KiCad sheets at the source
+     *     block positions, with source sheet pins and hierarchical labels.
+     *     Otherwise, pages become separate top-level sheets in source page order.
      *  3. Per page: applyPageSettings(), then convertPage() with the page's
      *     SCH_SHEET_PATH (references are set against that path).
-     *  4. Hierarchy warnings: one warning per skipped block (design converted
-     *     flat) and per skipped non-root folder.
      *
      * Polls the PROGRESS_REPORTER (when present) once per page; a cancel throws
      * IO_ERROR.
@@ -602,12 +602,12 @@ private:
     void placeOffpageConnectors( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen );
 
     /**
-     * SCH_GLOBALLABEL per hierarchical port (flat conversion), at the port's
-     * connection point.  Net = logical name, else the symbol name; empty nets
-     * are skipped.  Shape: "LEFT" in the symbol name -> input, "RIGHT" ->
-     * output, else bidirectional.
+     * SCH_HIERLABEL per port on a hierarchical child page, otherwise
+     * SCH_GLOBALLABEL.  Net = logical name, else the symbol name; empty nets are
+     * skipped.  Shape: "LEFT" in the symbol name -> input, "RIGHT" -> output,
+     * else bidirectional.
      */
-    void placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen );
+    void placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen, bool aHierarchical );
 
     /**
      * Free page graphics from the nested primitives of each Graphic*Inst (the

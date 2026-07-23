@@ -157,7 +157,7 @@ public:
      *   65              OrcadReadTitleBlock
      *   77              OrcadReadErcObject
      *   29              OrcadReadBusEntry
-     *   16              OrcadReadPinInst
+     *   16, 17          OrcadReadPinInst
      *   55..62, 88, 89  OrcadReadGraphicInst
      *   2               OrcadReadSthInPages0    (declared in orcad_cache.h)
      *   12              OrcadReadDrawnInstance  (declared in orcad_cache.h)

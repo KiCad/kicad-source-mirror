@@ -64,42 +64,33 @@
 #include <sch_io/orcad/orcad_stream.h>
 
 
-namespace
-{
-
-int schMm( double aMm )
-{
-    return schIUScale.mmToIU( aMm );
-}
-
-
-int dbuIu( double aDbu )
-{
-    return KiROUND( aDbu * ORCAD_IU_PER_DBU );
-}
-
-
-LINE_STYLE lineStyleFor( int aStyle )
+LINE_STYLE OrcadLineStyle( int aStyle )
 {
     switch( aStyle )
     {
+    case 0: return LINE_STYLE::SOLID;
     case 1: return LINE_STYLE::DASH;
     case 2: return LINE_STYLE::DOT;
     case 3: return LINE_STYLE::DASHDOT;
-    default: return LINE_STYLE::SOLID;
+    case 4: return LINE_STYLE::DASHDOTDOT;
+    case 5: return LINE_STYLE::DEFAULT;
+    default: return LINE_STYLE::DEFAULT;
     }
 }
 
 
-int lineWidthFor( int aWidth )
+int OrcadLineWidthIu( int aWidth )
 {
-    return aWidth > 0 ? schIUScale.MilsToIU( 5 * aWidth ) : 0;
+    if( aWidth == 3 )
+        return 0;
+
+    return aWidth >= 0 && aWidth <= 2 ? schIUScale.MilsToIU( 5 * ( aWidth + 1 ) ) : 0;
 }
 
 
-FILL_T fillFor( int aFillStyle, int aHatchStyle )
+FILL_T OrcadFillType( int aFillStyle, int aHatchStyle )
 {
-    if( aFillStyle == 1 )
+    if( aFillStyle == 0 )
         return FILL_T::FILLED_WITH_BG_BODYCOLOR;
 
     if( aFillStyle == 2 )
@@ -116,9 +107,24 @@ FILL_T fillFor( int aFillStyle, int aHatchStyle )
 }
 
 
+namespace
+{
+
+int schMm( double aMm )
+{
+    return schIUScale.mmToIU( aMm );
+}
+
+
+int dbuIu( double aDbu )
+{
+    return KiROUND( aDbu * ORCAD_IU_PER_DBU );
+}
+
+
 STROKE_PARAMS strokeFor( const ORCAD_PRIMITIVE& aPrimitive, int aColor )
 {
-    return STROKE_PARAMS( lineWidthFor( aPrimitive.lineWidth ), lineStyleFor( aPrimitive.lineStyle ),
+    return STROKE_PARAMS( OrcadLineWidthIu( aPrimitive.lineWidth ), OrcadLineStyle( aPrimitive.lineStyle ),
                           OrcadColor( aColor ) );
 }
 
@@ -908,7 +914,7 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
         shape->SetPosition( VECTOR2I( toX( aPrim.x1 ), toY( aPrim.y1 ) ) );
         shape->SetEnd( VECTOR2I( toX( aPrim.x2 ), toY( aPrim.y2 ) ) );
         shape->SetStroke( strokeFor( aPrim, aColor ) );
-        shape->SetFillMode( fillFor( aPrim.fillStyle, aPrim.hatchStyle ) );
+        shape->SetFillMode( OrcadFillType( aPrim.fillStyle, aPrim.hatchStyle ) );
         shape->SetUnit( aUnit );
         aSymbol->AddDrawItem( shape, false );
         break;
@@ -944,7 +950,7 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
                                        toY( aPrim.points.front().y ) ) );
 
         shape->SetStroke( strokeFor( aPrim, aColor ) );
-        shape->SetFillMode( isPolygon ? fillFor( aPrim.fillStyle, aPrim.hatchStyle ) : FILL_T::NO_FILL );
+        shape->SetFillMode( isPolygon ? OrcadFillType( aPrim.fillStyle, aPrim.hatchStyle ) : FILL_T::NO_FILL );
         shape->SetUnit( aUnit );
         aSymbol->AddDrawItem( shape, false );
         break;
@@ -1000,7 +1006,7 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
             shape->SetPosition( center );
             shape->SetEnd( center + VECTOR2I( dbuIu( rx ), 0 ) );
             shape->SetStroke( strokeFor( aPrim, aColor ) );
-            shape->SetFillMode( fillFor( aPrim.fillStyle, aPrim.hatchStyle ) );
+            shape->SetFillMode( OrcadFillType( aPrim.fillStyle, aPrim.hatchStyle ) );
             shape->SetUnit( aUnit );
             aSymbol->AddDrawItem( shape, false );
         }
@@ -1017,7 +1023,7 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
             }
 
             shape->SetStroke( strokeFor( aPrim, aColor ) );
-            shape->SetFillMode( fillFor( aPrim.fillStyle, aPrim.hatchStyle ) );
+            shape->SetFillMode( OrcadFillType( aPrim.fillStyle, aPrim.hatchStyle ) );
             shape->SetUnit( aUnit );
             aSymbol->AddDrawItem( shape, false );
         }
