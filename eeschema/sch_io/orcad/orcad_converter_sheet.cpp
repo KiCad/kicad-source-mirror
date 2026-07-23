@@ -1096,7 +1096,12 @@ std::string ORCAD_CONVERTER::powerNet( const ORCAD_RAW_PAGE& aPage,
     std::string net = netAt( aPage, pin.x, pin.y );
 
     if( net.empty() )
-        net = aInst.name;
+    {
+        // No wire touches the pin (direct pin-to-pin placement): the record's resolved
+        // logical name is the net; the symbol shape name (e.g. a "VCC_BAR" graphic
+        // shared by differently-named rails) is only a last resort.
+        net = aInst.logicalName.empty() ? aInst.name : aInst.logicalName;
+    }
 
     return trimmed( net );
 }
