@@ -309,7 +309,7 @@ void DRC_ENGINE::loadImplicitRules()
                 if( nc->HasDiffPairWidth() )
                 {
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
-                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' diff pair" ),
                                                              nc->GetDiffPairWidthParent()->GetHumanReadableName() );
                     netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
@@ -326,7 +326,7 @@ void DRC_ENGINE::loadImplicitRules()
                 if( nc->HasDiffPairGap() )
                 {
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
-                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s'" ),
                                                              nc->GetDiffPairGapParent()->GetHumanReadableName() );
                     netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
@@ -343,7 +343,7 @@ void DRC_ENGINE::loadImplicitRules()
                     if( nc->GetDiffPairGap() < nc->GetClearance() )
                     {
                         netclassRule = std::make_shared<DRC_RULE>();
-                        netclassRule->m_Name = wxString::Format( _( "netclass '%s' (diff pair)" ),
+                        netclassRule->m_Name = wxString::Format( _( "netclass '%s' diff pair" ),
                                                                  nc->GetDiffPairGapParent()->GetHumanReadableName() );
                         netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
@@ -396,7 +396,7 @@ void DRC_ENGINE::loadImplicitRules()
                 if( nc->HasuViaDiameter() )
                 {
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
-                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (uvia)" ),
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' uvia" ),
                                                              nc->GetuViaDiameterParent()->GetHumanReadableName() );
                     netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
@@ -413,7 +413,7 @@ void DRC_ENGINE::loadImplicitRules()
                 if( nc->HasuViaDrill() )
                 {
                     std::shared_ptr<DRC_RULE> netclassRule = std::make_shared<DRC_RULE>();
-                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' (uvia)" ),
+                    netclassRule->m_Name = wxString::Format( _( "netclass '%s' uvia" ),
                                                              nc->GetuViaDrillParent()->GetHumanReadableName() );
                     netclassRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::NET_CLASS );
 
@@ -1923,6 +1923,21 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
             for( DRC_ENGINE_CONSTRAINT* rule : *it->second )
                 processConstraint( rule );
         }
+
+        // DIFF_PAIR_GAP_CONSTRAINT must also respect CLEARANCE_CONSTRAINTs.
+        if( aConstraintType == DIFF_PAIR_GAP_CONSTRAINT )
+        {
+            DRC_CONSTRAINT clearanceConstraint = EvalRules( CLEARANCE_CONSTRAINT, a, b, aLayer, nullptr );
+
+            REPORT( "" )
+            REPORT( wxString::Format( _( "Resolved minimum clearance: %s." ),
+                                      MessageTextFromValue( clearanceConstraint.m_Value.Min() ) ) )
+
+            if( constraint.m_Value.Min() < clearanceConstraint.m_Value.Min() )
+                constraint.m_Value.SetMin( clearanceConstraint.m_Value.Min() );
+
+            return constraint;
+        }
     }
 
     if( constraint.GetParentRule() && !constraint.GetParentRule()->IsImplicit() )
@@ -2060,21 +2075,6 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 constraint.SetName( _( "board minimum" ) );
                 constraint.m_Value.SetMin( m_designSettings->m_MinClearance );
             }
-        }
-
-        return constraint;
-    }
-    else if( aConstraintType == DIFF_PAIR_GAP_CONSTRAINT )
-    {
-        REPORT( "" )
-        REPORT( wxString::Format( _( "Board minimum clearance: %s." ),
-                                  MessageTextFromValue( m_designSettings->m_MinClearance ) ) )
-
-        if( constraint.m_Value.Min() < m_designSettings->m_MinClearance )
-        {
-            constraint.SetParentRule( nullptr );
-            constraint.SetName( _( "board minimum" ) );
-            constraint.m_Value.SetMin( m_designSettings->m_MinClearance );
         }
 
         return constraint;
