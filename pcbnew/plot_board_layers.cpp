@@ -380,7 +380,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                 continue;
 
             /// pads not connected to copper are optionally not drawn
-            if( ( onCopperLayer || onSolderMaskLayer || onSolderPasteLayer ) && !pad->FlashLayer( aLayerMask ) )
+            if( onCopperLayer && !pad->FlashLayer( aLayerMask ) )
                 continue;
 
             // TODO(JE) padstacks - different behavior for single layer or multilayer

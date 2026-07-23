@@ -496,7 +496,7 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 
         if( const BOARD* board = GetBoard() )
         {
-            if( GetZoneLayerOverride( static_cast<PCB_LAYER_ID>( aLayer ) ) == ZLO_FORCE_FLASHED )
+            if( GetZoneLayerOverride( layer ) == ZLO_FORCE_FLASHED )
             {
                 return true;
             }
