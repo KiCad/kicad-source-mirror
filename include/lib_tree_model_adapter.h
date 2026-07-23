@@ -380,13 +380,6 @@ protected:
      */
     wxDataViewItem GetParent( const wxDataViewItem& aItem ) const override;
 
-    unsigned int GetColumnCount() const override { return m_columns.size(); }
-
-    /**
-     * Return the type of data stored in the column as indicated by wxVariant::GetType()
-     */
-    wxString GetColumnType( unsigned int aCol ) const override { return "string"; }
-
     /**
      * Get the value of an item.
      *
