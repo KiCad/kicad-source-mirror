@@ -33,6 +33,7 @@ JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
     m_refRangeDelimiter(),
     m_keepTabs( false ),
     m_keepLineBreaks( false ),
+    m_includeByteOrderMark( false ),
 
     m_fieldsOrdered(),
     m_fieldsLabels(),
@@ -60,6 +61,9 @@ JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
     m_params.emplace_back( new JOB_PARAM<bool>( "keep_line_breaks",
                                                 &m_keepLineBreaks,
                                                 m_keepLineBreaks ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "include_byte_order_mark",
+                                                &m_includeByteOrderMark,
+                                                m_includeByteOrderMark ) );
     m_params.emplace_back( new JOB_PARAM_LIST<wxString>( "fields_ordered",
                                                                  &m_fieldsOrdered,
                                                                  m_fieldsOrdered ) );

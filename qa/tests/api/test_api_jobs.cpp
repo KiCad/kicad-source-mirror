@@ -301,6 +301,41 @@ BOOST_FIXTURE_TEST_CASE( ExportSchematicBom, API_SERVER_E2E_FIXTURE )
     wxString goldenPath = testDataDir + wxS( "variants_default.bom.csv" );
     BOOST_CHECK_MESSAGE( textFilesMatch( goldenPath, generatedPath, 0 ), "BOM output does not match golden file" );
 
+    request.mutable_format()->clear_preset_name();
+    request.mutable_format()->set_field_delimiter( "," );
+    request.mutable_format()->set_string_delimiter( "\"" );
+    request.mutable_format()->set_ref_delimiter( "," );
+    request.mutable_format()->set_ref_range_delimiter( "" );
+    request.mutable_format()->set_include_byte_order_mark( true );
+    response.Clear();
+
+    BOOST_REQUIRE_MESSAGE( Client().RunJob( request, &response ),
+                           "BOM job with byte order mark failed: " + Client().LastError() );
+
+    BOOST_REQUIRE_MESSAGE( response.status() == kiapi::common::types::JS_SUCCESS,
+                           "BOM job with byte order mark failed: " + wxString::FromUTF8( response.message() ) );
+    BOOST_REQUIRE_MESSAGE( response.output_path_size() > 0, "BOM job with byte order mark returned no output paths" );
+
+    generatedPath = wxString::FromUTF8( response.output_path( 0 ) );
+    std::ifstream generatedStream( generatedPath.ToStdString(), std::ios::binary );
+    std::ifstream goldenStream( goldenPath.ToStdString(), std::ios::binary );
+    BOOST_REQUIRE( generatedStream.is_open() );
+    BOOST_REQUIRE( goldenStream.is_open() );
+
+    std::ostringstream generatedContents;
+    std::ostringstream goldenContents;
+    generatedContents << generatedStream.rdbuf();
+    goldenContents << goldenStream.rdbuf();
+
+    const std::string utf8ByteOrderMark( "\xEF\xBB\xBF", 3 );
+    const std::string bom = generatedContents.str();
+    BOOST_REQUIRE_GE( bom.size(), utf8ByteOrderMark.size() );
+    BOOST_CHECK_EQUAL( bom.substr( 0, utf8ByteOrderMark.size() ), utf8ByteOrderMark );
+    BOOST_CHECK_EQUAL( bom.substr( utf8ByteOrderMark.size() ), goldenContents.str() );
+
+    generatedStream.close();
+    goldenStream.close();
+
     if( wxFileName::FileExists( generatedPath ) )
         wxRemoveFile( generatedPath );
 

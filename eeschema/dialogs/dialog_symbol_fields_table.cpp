@@ -598,6 +598,7 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
         fmtPreset.fieldDelimiter = m_job->m_fieldDelimiter;
         fmtPreset.keepLineBreaks = m_job->m_keepLineBreaks;
         fmtPreset.keepTabs = m_job->m_keepTabs;
+        fmtPreset.includeByteOrderMark = m_job->m_includeByteOrderMark;
         fmtPreset.refDelimiter = m_job->m_refDelimiter;
         fmtPreset.refRangeDelimiter = m_job->m_refRangeDelimiter;
         fmtPreset.stringDelimiter = m_job->m_stringDelimiter;
@@ -1434,6 +1435,7 @@ BOM_FMT_PRESET DIALOG_SYMBOL_FIELDS_TABLE::GetCurrentBomFmtSettings()
     current.refRangeDelimiter = m_textRefRangeDelimiter->GetValue();
     current.keepTabs = m_checkKeepTabs->GetValue();
     current.keepLineBreaks = m_checkKeepLineBreaks->GetValue();
+    current.includeByteOrderMark = m_checkIncludeByteOrderMark->GetValue();
 
     return current;
 }
@@ -1648,6 +1650,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnOk( wxCommandEvent& aEvent )
         m_job->m_refRangeDelimiter = fmtSettings.refRangeDelimiter;
         m_job->m_keepTabs = fmtSettings.keepTabs;
         m_job->m_keepLineBreaks = fmtSettings.keepLineBreaks;
+        m_job->m_includeByteOrderMark = fmtSettings.includeByteOrderMark;
 
         BOM_PRESET presetFields = m_dataModel->GetBomSettings();
         m_job->m_sortAsc = presetFields.sortAsc;
@@ -2272,7 +2275,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomFmtPresetSelection()
                                          && aPair.second.refDelimiter == current.refDelimiter
                                          && aPair.second.refRangeDelimiter == current.refRangeDelimiter
                                          && aPair.second.keepTabs == current.keepTabs
-                                         && aPair.second.keepLineBreaks == current.keepLineBreaks );
+                                         && aPair.second.keepLineBreaks == current.keepLineBreaks
+                                         && aPair.second.includeByteOrderMark == current.includeByteOrderMark );
                             } );
 
     if( it != m_bomFmtPresets.end() )
@@ -2481,6 +2485,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomFmtPreset( const BOM_FMT_PRESET& aPre
     m_textRefRangeDelimiter->ChangeValue( aPreset.refRangeDelimiter );
     m_checkKeepTabs->SetValue( aPreset.keepTabs );
     m_checkKeepLineBreaks->SetValue( aPreset.keepLineBreaks );
+    m_checkIncludeByteOrderMark->SetValue( aPreset.includeByteOrderMark );
 
     // Refresh the preview if that's the current page
     if( m_nbPages->GetSelection() == 1 )

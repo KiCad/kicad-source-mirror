@@ -20,15 +20,41 @@
 #include <boost/test/unit_test.hpp>
 #include <jobs/job_export_sch_bom.h>
 #include <nlohmann/json.hpp>
+#include <settings/bom_settings.h>
 
 
 BOOST_AUTO_TEST_SUITE( JobExportSchBom )
+
+
+BOOST_AUTO_TEST_CASE( ByteOrderMarkFormatPresetRoundTripAndLegacyDefault )
+{
+    BOM_FMT_PRESET preset = BOM_FMT_PRESET::CSV();
+    preset.includeByteOrderMark = true;
+
+    BOM_FMT_PRESET withoutByteOrderMark = preset;
+    withoutByteOrderMark.includeByteOrderMark = false;
+    BOOST_CHECK( preset != withoutByteOrderMark );
+
+    nlohmann::json j = preset;
+
+    BOOST_REQUIRE( j.contains( "include_byte_order_mark" ) );
+    BOOST_CHECK( j.at( "include_byte_order_mark" ).get<bool>() );
+
+    BOM_FMT_PRESET loaded = j.get<BOM_FMT_PRESET>();
+    BOOST_CHECK( loaded.includeByteOrderMark );
+
+    j.erase( "include_byte_order_mark" );
+    loaded.includeByteOrderMark = true;
+    from_json( j, loaded );
+    BOOST_CHECK( !loaded.includeByteOrderMark );
+}
 
 
 BOOST_AUTO_TEST_CASE( VariantRoundTrip )
 {
     JOB_EXPORT_SCH_BOM job;
     job.SetSelectedVariant( wxS( "VAR A" ) );
+    job.m_includeByteOrderMark = true;
 
     nlohmann::json j;
     job.ToJson( j );
@@ -37,6 +63,7 @@ BOOST_AUTO_TEST_CASE( VariantRoundTrip )
     loaded.FromJson( j );
 
     BOOST_CHECK( loaded.GetSelectedVariant() == wxS( "VAR A" ) );
+    BOOST_CHECK( loaded.m_includeByteOrderMark );
 }
 
 
@@ -86,9 +113,11 @@ BOOST_AUTO_TEST_CASE( VariantFromList )
     nlohmann::json j = { { "variant_names", { "VAR A", "VAR B" } } };
 
     JOB_EXPORT_SCH_BOM loaded;
+    loaded.m_includeByteOrderMark = true;
     loaded.FromJson( j );
 
     BOOST_CHECK( loaded.GetSelectedVariant() == wxS( "VAR A" ) );
+    BOOST_CHECK( !loaded.m_includeByteOrderMark );
 }
 
 

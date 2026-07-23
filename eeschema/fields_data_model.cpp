@@ -1564,6 +1564,9 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
     if( last_col == -1 )
         return out;
 
+    if( settings.includeByteOrderMark )
+        out.Append( wxString::FromUTF8( "\xEF\xBB\xBF" ) );
+
     auto formatField =
             [&]( wxString field, bool last ) -> wxString
             {

@@ -86,6 +86,7 @@ struct KICOMMON_API BOM_FMT_PRESET
     wxString refRangeDelimiter;
     bool     keepTabs = false;
     bool     keepLineBreaks = false;
+    bool     includeByteOrderMark = false;
 
     bool operator==( const BOM_FMT_PRESET& rhs ) const;
 

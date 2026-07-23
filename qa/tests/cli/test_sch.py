@@ -187,20 +187,25 @@ def test_sch_export_pdf( kitest,
     kitest.add_attachment( output_filepath )
 
 
-@pytest.mark.parametrize("test_file,output_fn,compare_fn,line_skip_count,cli_args",
+@pytest.mark.parametrize("test_file,output_fn,compare_fn,line_skip_count,cli_args,expect_byte_order_mark",
                             [("cli/variants/variants.kicad_sch", "variants_default.bom.csv", "cli/variants/variants_default.bom.csv", 0,
-                              ["--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"]),
+                              ["--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"], False),
                              ("cli/variants/variants.kicad_sch", "variants_v1.bom.csv", "cli/variants/variants_v1.bom.csv", 0,
-                              ["--variant", "Variant 1", "--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"]),
+                              ["--variant", "Variant 1", "--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"], False),
                              ("cli/variants/variants.kicad_sch", "variants_v2.bom.csv", "cli/variants/variants_v2.bom.csv", 0,
-                              ["--variant", "Variant2", "--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"]),
+                              ["--variant", "Variant2", "--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"], False),
+                             ("cli/variants/variants.kicad_sch", "variants_default_bom_flag.bom.csv", "cli/variants/variants_default.bom.csv", 0,
+                              ["--include-byte-order-mark", "--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"], True),
+                             ("cli/variants/variants.kicad_sch", "variants_default_bom_preset.bom.csv", "cli/variants/variants_default.bom.csv", 0,
+                              ["--format-preset", "UTF-8 BOM", "--exclude-dnp", "--fields", "Reference,Value", "--labels", "Refs,Value"], True),
                              ])
 def test_sch_export_bom_variants( kitest: KiTestFixture,
                          test_file: str,
                          output_fn: str,
                          compare_fn: str,
                          line_skip_count: int,
-                         cli_args: List[str] ):
+                         cli_args: List[str],
+                         expect_byte_order_mark: bool ):
     """Test BOM export with variant support and DNP exclusion"""
     input_file = kitest.get_data_file_path( test_file )
     compare_filepath = kitest.get_data_file_path( compare_fn )
@@ -218,7 +223,11 @@ def test_sch_export_bom_variants( kitest: KiTestFixture,
     assert exitcode == 0
     assert stderr == ''
 
-    assert utils.textdiff_files( compare_filepath, output_filepath, line_skip_count )
+    if expect_byte_order_mark:
+        expected = b"\xef\xbb\xbf" + compare_filepath.read_bytes()
+        assert output_filepath.read_bytes() == expected
+    else:
+        assert utils.textdiff_files( compare_filepath, output_filepath, line_skip_count )
 
     kitest.add_attachment( output_filepath )
 

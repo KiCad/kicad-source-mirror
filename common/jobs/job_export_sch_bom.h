@@ -52,6 +52,7 @@ public:
     wxString m_refRangeDelimiter;
     bool     m_keepTabs;
     bool     m_keepLineBreaks;
+    bool     m_includeByteOrderMark;
 
     // Fields options
     std::vector<wxString> m_fieldsOrdered;

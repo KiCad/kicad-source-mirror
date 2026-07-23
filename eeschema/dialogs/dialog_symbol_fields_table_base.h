@@ -93,6 +93,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textRefRangeDelimiter;
 		wxCheckBox* m_checkKeepTabs;
 		wxCheckBox* m_checkKeepLineBreaks;
+		wxCheckBox* m_checkIncludeByteOrderMark;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_labelBomExportPresets;
 		wxChoice* m_cbBomFmtPresets;

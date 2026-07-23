@@ -853,6 +853,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         fmt.refRangeDelimiter = aBomJob->m_refRangeDelimiter;
         fmt.keepTabs = aBomJob->m_keepTabs;
         fmt.keepLineBreaks = aBomJob->m_keepLineBreaks;
+        fmt.includeByteOrderMark = aBomJob->m_includeByteOrderMark;
     }
 
     if( aBomJob->GetConfiguredOutputPath().IsEmpty() )

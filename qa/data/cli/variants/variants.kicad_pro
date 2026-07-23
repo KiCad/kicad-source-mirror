@@ -574,7 +574,18 @@
       "sort_order": 0
     },
     "bom_export_filename": "${PROJECTNAME}.csv",
-    "bom_fmt_presets": [],
+    "bom_fmt_presets": [
+      {
+        "field_delimiter": ",",
+        "include_byte_order_mark": true,
+        "keep_line_breaks": false,
+        "keep_tabs": false,
+        "name": "UTF-8 BOM",
+        "ref_delimiter": ",",
+        "ref_range_delimiter": "",
+        "string_delimiter": "\""
+      }
+    ],
     "bom_fmt_settings": {
       "field_delimiter": ",",
       "keep_line_breaks": false,

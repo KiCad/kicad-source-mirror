@@ -136,6 +136,9 @@ message BOMFormatSettings
 
 	// Whether line breaks in field values will be preserved when exporting or stripped (default)
 	bool keep_line_breaks = 7;
+
+	// Whether to include a UTF-8 byte order mark at the start of the exported file
+	bool include_byte_order_mark = 8;
 }
 
 message BOMField

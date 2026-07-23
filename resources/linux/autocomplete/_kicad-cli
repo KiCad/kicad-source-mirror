@@ -1248,6 +1248,7 @@ _kicad_cli_sch_export_bom() {
         '--format-preset[Use a named BOM format preset setting from the schematic, e.g. CSV. \[nargs=0..1\] \[default: ""\]]' \
         '--group-by[Fields to group references by when field values match. \[nargs=0..1\] \[default: ""\]]' \
         '(--help -h)'{--help,-h}'[Shows help message and exits]' \
+        '--include-byte-order-mark[Include a UTF-8 byte order mark at the start of the exported file.]' \
         '--include-excluded-from-bom[Deprecated.  Has no effect.]' \
         '--keep-line-breaks[Keep line break characters from input fields. Stripped by default.]' \
         '--keep-tabs[Keep tab characters from input fields. Stripped by default.]' \

@@ -1194,6 +1194,7 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     bomJob.m_refRangeDelimiter = wxString::FromUTF8( aCtx.Request.format().ref_range_delimiter() );
     bomJob.m_keepTabs = aCtx.Request.format().keep_tabs();
     bomJob.m_keepLineBreaks = aCtx.Request.format().keep_line_breaks();
+    bomJob.m_includeByteOrderMark = aCtx.Request.format().include_byte_order_mark();
 
     bomJob.m_bomPresetName = wxString::FromUTF8( aCtx.Request.fields().preset_name() );
     bomJob.m_sortField = wxString::FromUTF8( aCtx.Request.fields().sort_field() );

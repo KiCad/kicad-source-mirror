@@ -199,7 +199,7 @@ _kicad_cli()
             return 0
             ;;
         "sch export bom")
-            COMPREPLY=( $(compgen -W "--exclude-dnp --field-delimiter --fields --filter --format-preset --group-by --help --include-excluded-from-bom --keep-line-breaks --keep-tabs --labels --output --preset --ref-delimiter --ref-range-delimiter --sort-asc --sort-field --string-delimiter --variant -h -o" -- "$cur") )
+            COMPREPLY=( $(compgen -W "--exclude-dnp --field-delimiter --fields --filter --format-preset --group-by --help --include-byte-order-mark --include-excluded-from-bom --keep-line-breaks --keep-tabs --labels --output --preset --ref-delimiter --ref-range-delimiter --sort-asc --sort-field --string-delimiter --variant -h -o" -- "$cur") )
             return 0
             ;;
         "sch export dxf")

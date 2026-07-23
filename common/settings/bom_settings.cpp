@@ -218,7 +218,8 @@ bool BOM_FMT_PRESET::operator==( const BOM_FMT_PRESET& rhs ) const
            && this->fieldDelimiter == rhs.fieldDelimiter
            && this->stringDelimiter == rhs.stringDelimiter && this->refDelimiter == rhs.refDelimiter
            && this->refRangeDelimiter == rhs.refRangeDelimiter && this->keepTabs == rhs.keepTabs
-           && this->keepLineBreaks == rhs.keepLineBreaks;
+           && this->keepLineBreaks == rhs.keepLineBreaks
+           && this->includeByteOrderMark == rhs.includeByteOrderMark;
 }
 
 
@@ -242,7 +243,8 @@ void to_json( nlohmann::json& j, const BOM_FMT_PRESET& p )
                         { "ref_delimiter", p.refDelimiter },
                         { "ref_range_delimiter", p.refRangeDelimiter },
                         { "keep_tabs", p.keepTabs },
-                        { "keep_line_breaks", p.keepLineBreaks } };
+                        { "keep_line_breaks", p.keepLineBreaks },
+                        { "include_byte_order_mark", p.includeByteOrderMark } };
 }
 
 
@@ -255,25 +257,27 @@ void from_json( const nlohmann::json& j, BOM_FMT_PRESET& f )
     j.at( "ref_range_delimiter" ).get_to( f.refRangeDelimiter );
     j.at( "keep_tabs" ).get_to( f.keepTabs );
     j.at( "keep_line_breaks" ).get_to( f.keepLineBreaks );
+    // Added after the other options, so may not be present in old settings
+    f.includeByteOrderMark = j.value( "include_byte_order_mark", false );
 }
 
 
 BOM_FMT_PRESET BOM_FMT_PRESET::CSV()
 {
-    return { _HKI( "CSV" ), true, wxS( "," ), wxT( "\"" ), wxT( "," ), wxT( "" ), false, false };
+    return { _HKI( "CSV" ), true, wxS( "," ), wxT( "\"" ), wxT( "," ), wxT( "" ), false, false, false };
 }
 
 
 BOM_FMT_PRESET BOM_FMT_PRESET::TSV()
 {
-    return { _HKI( "TSV" ), true, wxS( "\t" ), wxT( "" ), wxT( "," ), wxT( "" ), false, false };
+    return { _HKI( "TSV" ), true, wxS( "\t" ), wxT( "" ), wxT( "," ), wxT( "" ), false, false, false };
 }
 
 
 BOM_FMT_PRESET BOM_FMT_PRESET::Semicolons()
 {
     return {
-        _HKI( "Semicolons" ), true, wxS( ";" ), wxT( "'" ), wxT( "," ), wxT( "" ), false, false
+        _HKI( "Semicolons" ), true, wxS( ";" ), wxT( "'" ), wxT( "," ), wxT( "" ), false, false, false
     };
 }
 
