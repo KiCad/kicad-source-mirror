@@ -124,7 +124,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 
 	gbSizer1->Add( 0, 0, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
-	m_modelSolderMask = new wxCheckBox( this, wxID_ANY, _("Model Solder Mask"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_modelSolderMask = new wxCheckBox( this, wxID_ANY, _("Model solder mask"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_modelSolderMask->SetValue(true);
 	gbSizer1->Add( m_modelSolderMask, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
@@ -144,8 +144,45 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 	wxBoxSizer* bSizerTrackPropagation;
 	bSizerTrackPropagation = new wxBoxSizer( wxVERTICAL );
 
+	wxGridBagSizer* gbSizer2;
+	gbSizer2 = new wxGridBagSizer( 0, 0 );
+	gbSizer2->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+
+	m_netChainBridgeLabel = new wxStaticText( m_panelTrackPropagation, wxID_ANY, _("Net Chain Bridge Propagation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_netChainBridgeLabel->Wrap( -1 );
+	m_netChainBridgeLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	gbSizer2->Add( m_netChainBridgeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 4 ), wxALL, 5 );
+
+	m_netChainBridgePropagationSpeedLabel = new wxStaticText( m_panelTrackPropagation, wxID_ANY, _("Global unit delay:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_netChainBridgePropagationSpeedLabel->Wrap( -1 );
+	m_netChainBridgePropagationSpeedLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+
+	gbSizer2->Add( m_netChainBridgePropagationSpeedLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_netChainBridgePropagationSpeed = new wxTextCtrl( m_panelTrackPropagation, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_netChainBridgePropagationSpeed, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_netChainBridgePropSpeedUnits = new wxStaticText( m_panelTrackPropagation, wxID_ANY, _("ps/cm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_netChainBridgePropSpeedUnits->Wrap( -1 );
+	gbSizer2->Add( m_netChainBridgePropSpeedUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	gbSizer2->Add( 50, 0, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+
+
+	gbSizer2->AddGrowableCol( 3 );
+
+	bSizerTrackPropagation->Add( gbSizer2, 0, wxEXPAND, 5 );
+
+	m_staticline7 = new wxStaticLine( m_panelTrackPropagation, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerTrackPropagation->Add( m_staticline7, 0, wxEXPAND | wxALL, 5 );
+
 	m_trackPropagationLabel = new wxStaticText( m_panelTrackPropagation, wxID_ANY, _("Track Propagation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_trackPropagationLabel->Wrap( -1 );
+	m_trackPropagationLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
 	bSizerTrackPropagation->Add( m_trackPropagationLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_trackPropagationGrid = new WX_GRID( m_panelTrackPropagation, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
@@ -203,32 +240,31 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 	wxBoxSizer* bSizerViaPropagation;
 	bSizerViaPropagation = new wxBoxSizer( wxVERTICAL );
 
+	m_viaPropagationLabel1 = new wxStaticText( m_panelViaPropagation, wxID_ANY, _("Via Propagation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaPropagationLabel1->Wrap( -1 );
+	m_viaPropagationLabel1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	bSizerViaPropagation->Add( m_viaPropagationLabel1, 0, wxALL, 5 );
+
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_viaPropagationLabel = new wxStaticText( m_panelViaPropagation, wxID_ANY, _("Via Propagation"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_viaPropagationLabel->Wrap( -1 );
-	bSizer8->Add( m_viaPropagationLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
-
-	bSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	m_viaPropagationSpeedLabel = new wxStaticText( m_panelViaPropagation, wxID_ANY, _("Global unit delay:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaPropagationSpeedLabel->Wrap( -1 );
-	bSizer8->Add( m_viaPropagationSpeedLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizer8->Add( m_viaPropagationSpeedLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 5 );
 
 	m_viaPropagationSpeed = new wxTextCtrl( m_panelViaPropagation, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer8->Add( m_viaPropagationSpeed, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer8->Add( m_viaPropagationSpeed, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_viaPropSpeedUnits = new wxStaticText( m_panelViaPropagation, wxID_ANY, _("ps/cm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaPropSpeedUnits->Wrap( -1 );
-	bSizer8->Add( m_viaPropSpeedUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizer8->Add( m_viaPropSpeedUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 5 );
 
 
 	bSizer8->Add( 50, 0, 1, wxEXPAND, 5 );
 
 
-	bSizerViaPropagation->Add( bSizer8, 0, wxEXPAND, 5 );
+	bSizerViaPropagation->Add( bSizer8, 0, wxBOTTOM|wxEXPAND, 5 );
 
 	m_viaDelayOverridesLabel = new wxStaticText( m_panelViaPropagation, wxID_ANY, _("Via delay overrides:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaDelayOverridesLabel->Wrap( -1 );

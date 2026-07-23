@@ -159,6 +159,7 @@ struct TUNING_PROFILE
     std::vector<DELAY_PROFILE_TRACK_PROPAGATION_ENTRY> m_TrackPropagationEntries;
     int                                                m_ViaPropagationDelay;
     std::vector<DELAY_PROFILE_VIA_OVERRIDE_ENTRY>      m_ViaOverrides;
+    int                                                m_NetChainBridgePropagationDelay;
 
     // This is not persisted - but is used for quick lookup for track statistics calculations
     std::map<PCB_LAYER_ID, DELAY_PROFILE_TRACK_PROPAGATION_ENTRY> m_TrackPropagationEntriesMap;
@@ -192,6 +193,9 @@ struct TUNING_PROFILE
         if( m_ViaOverrides != aOther.m_ViaOverrides )
             return false;
 
+        if( m_NetChainBridgePropagationDelay != aOther.m_NetChainBridgePropagationDelay )
+            return false;
+
         return true;
     }
 };
@@ -220,7 +224,8 @@ public:
     TUNING_PROFILE& GetTuningProfile( wxString aProfileName );
 
 private:
-    bool migrateSchema0to1();
+    bool migrateSchema0to1() const;
+    bool migrateSchema1to2() const;
 
     std::vector<TUNING_PROFILE> m_tuningProfiles;
 

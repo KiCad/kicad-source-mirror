@@ -29,7 +29,7 @@
 #include <settings/parameters.h>
 
 
-constexpr int tuningParametersSchemaVersion = 1;
+constexpr int tuningParametersSchemaVersion = 2;
 
 TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPath ) :
         NESTED_SETTINGS( "tuning_profiles", tuningParametersSchemaVersion, aParent, aPath, false )
@@ -104,7 +104,8 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
                                            { "enable_time_domain_tuning", item.m_EnableTimeDomainTuning },
                                            { "layer_entries", layer_entries },
                                            { "via_prop_delay", item.m_ViaPropagationDelay },
-                                           { "via_overrides", via_overrides } };
+                                           { "via_overrides", via_overrides },
+                                           { "net_chain_bridge_prop_delay", item.m_NetChainBridgePropagationDelay } };
 
         json_array.push_back( item_json );
     };
@@ -118,6 +119,7 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
         const bool                         modelSolderMask = entry["model_solder_mask"];
         const bool                         enableTimeDomainTuning = entry["enable_time_domain_tuning"];
         const int                          viaPropDelay = entry["via_prop_delay"];
+        const int                          netChainBridgePropDelay = entry["net_chain_bridge_prop_delay"];
         std::vector<DELAY_PROFILE_TRACK_PROPAGATION_ENTRY>            trackEntries;
         std::map<PCB_LAYER_ID, DELAY_PROFILE_TRACK_PROPAGATION_ENTRY> trackEntriesMap;
 
@@ -165,6 +167,7 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
                              std::move( trackEntries ),
                              viaPropDelay,
                              std::move( viaOverrides ),
+                             netChainBridgePropDelay,
                              std::move( trackEntriesMap ) };
 
         return item;
@@ -199,10 +202,11 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
             {} ) );
 
     registerMigration( 0, 1, std::bind( &TUNING_PROFILES::migrateSchema0to1, this ) );
+    registerMigration( 1, 2, std::bind( &TUNING_PROFILES::migrateSchema1to2, this ) );
 }
 
 
-bool TUNING_PROFILES::migrateSchema0to1()
+bool TUNING_PROFILES::migrateSchema0to1() const
 {
     // Add frequency and model solder mask fields to tuning profiles
     if( m_internals->contains( "tuning_profiles_impedance_geometric" )
@@ -212,6 +216,21 @@ bool TUNING_PROFILES::migrateSchema0to1()
         {
             profile.value()["frequency"] = 1e9;
             profile.value()["model_solder_mask"] = false;
+        }
+    }
+
+    return true;
+}
+
+bool TUNING_PROFILES::migrateSchema1to2() const
+{
+    // Add net chain bridge propagation delay entries
+    if( m_internals->contains( "tuning_profiles_impedance_geometric" )
+        && m_internals->At( "tuning_profiles_impedance_geometric" ).is_array() )
+    {
+        for( auto& profile : m_internals->At( "tuning_profiles_impedance_geometric" ).items() )
+        {
+            profile.value()["net_chain_bridge_prop_delay"] = 0;
         }
     }
 

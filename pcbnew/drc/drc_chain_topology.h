@@ -73,8 +73,8 @@ public:
         CYCLE_DETECTED
     };
 
-    CHAIN_TOPOLOGY( BOARD* aBoard, const wxString& aChainName,
-                    const std::set<BOARD_CONNECTED_ITEM*>& aChainItems );
+    CHAIN_TOPOLOGY( BOARD* aBoard, const wxString& aChainName, const std::set<BOARD_CONNECTED_ITEM*>& aChainItems,
+                    double aDefaultUnitDelay = 0.0 );
 
     STATUS GetStatus() const { return m_status; }
     bool   IsValid() const { return m_status == STATUS::OK; }

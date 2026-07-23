@@ -147,6 +147,8 @@ set( QA_PCBNEW_SRCS
     net_chains/test_net_chain_partition.cpp
     net_chains/test_net_chain_trunk_delay.cpp
     net_chains/test_tuning_bridging_clamp.cpp
+    # Tuning profile integration
+    net_chains/test_net_chain_bridging_delay_tuning_profiles.cpp
 
     drc/test_custom_rule_severities.cpp
     drc/test_drc_backdrill_postmachining.cpp

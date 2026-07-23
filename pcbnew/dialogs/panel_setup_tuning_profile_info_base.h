@@ -59,12 +59,17 @@ class PANEL_SETUP_TUNING_PROFILE_INFO_BASE : public wxPanel
 		wxStaticLine* m_staticline1;
 		wxSplitterWindow* m_splitter1;
 		wxPanel* m_panelTrackPropagation;
+		wxStaticText* m_netChainBridgeLabel;
+		wxStaticText* m_netChainBridgePropagationSpeedLabel;
+		wxTextCtrl* m_netChainBridgePropagationSpeed;
+		wxStaticText* m_netChainBridgePropSpeedUnits;
+		wxStaticLine* m_staticline7;
 		wxStaticText* m_trackPropagationLabel;
 		WX_GRID* m_trackPropagationGrid;
 		STD_BITMAP_BUTTON* m_addTrackPropogationLayer;
 		STD_BITMAP_BUTTON* m_deleteTrackPropogationLayer;
 		wxPanel* m_panelViaPropagation;
-		wxStaticText* m_viaPropagationLabel;
+		wxStaticText* m_viaPropagationLabel1;
 		wxStaticText* m_viaPropagationSpeedLabel;
 		wxTextCtrl* m_viaPropagationSpeed;
 		wxStaticText* m_viaPropSpeedUnits;

@@ -29,6 +29,9 @@
 #include <padstack.h>
 
 
+constexpr double DEFAULT_PROPAGATION_DELAY_PS_PER_MM = 5.9 * pcbIUScale.IU_PER_PS;
+
+
 namespace
 {
 
@@ -73,7 +76,7 @@ BOOST_AUTO_TEST_CASE( EmptyInputsReturnZero )
 {
     BOARD board;
 
-    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ) );
+    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ), DEFAULT_PROPAGATION_DELAY_PS_PER_MM );
 
     BOOST_CHECK_EQUAL( len, 0.0 );
     BOOST_CHECK_EQUAL( delay, 0.0 );
@@ -101,13 +104,13 @@ BOOST_AUTO_TEST_CASE( BridgingLengthAndDelayMatchFallback )
     addPad( fp, netA, VECTOR2I( -1'000'000, 0 ) );
     addPad( fp, netB, VECTOR2I(  1'000'000, 0 ) );
 
-    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ) );
+    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ), DEFAULT_PROPAGATION_DELAY_PS_PER_MM );
 
     // 2 mm bridging span.
     BOOST_CHECK_CLOSE( len, 2'000'000.0, 0.001 );
 
     // 2 mm at fallback ps/mm, expressed in delay IU (attoseconds).
-    double expectedDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS * 2.0;
+    double expectedDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * 2.0;
     BOOST_CHECK_CLOSE( delay, expectedDelayIU, 0.001 );
     BOOST_CHECK_GT( delay, 0.0 );
 }
@@ -123,7 +126,7 @@ BOOST_AUTO_TEST_CASE( SingleNetFootprintContributesNothing )
     addPad( fp, netA, VECTOR2I( -1'000'000, 0 ) );
     addPad( fp, netA, VECTOR2I(  1'000'000, 0 ) );
 
-    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ) );
+    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ), DEFAULT_PROPAGATION_DELAY_PS_PER_MM );
 
     BOOST_CHECK_EQUAL( len, 0.0 );
     BOOST_CHECK_EQUAL( delay, 0.0 );
@@ -146,11 +149,11 @@ BOOST_AUTO_TEST_CASE( MultipleFootprintsSum )
     addPad( fp2, netB, VECTOR2I( 10'000'000, 0 ) );
     addPad( fp2, netC, VECTOR2I( 13'000'000, 0 ) );
 
-    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ) );
+    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ), DEFAULT_PROPAGATION_DELAY_PS_PER_MM );
 
     BOOST_CHECK_CLOSE( len, 6'000'000.0, 0.001 );
 
-    double expectedDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS * 6.0;
+    double expectedDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * 6.0;
     BOOST_CHECK_CLOSE( delay, expectedDelayIU, 0.001 );
 }
 
@@ -172,14 +175,14 @@ BOOST_AUTO_TEST_CASE( ChainsArePartitionedByName )
     addPad( fp2, netC, VECTOR2I( 10'000'000, 0 ) );
     addPad( fp2, netD, VECTOR2I( 14'000'000, 0 ) );
 
-    auto [xLen, xDelay] = BoardChainBridging( &board, wxS( "SIG_X" ) );
-    auto [yLen, yDelay] = BoardChainBridging( &board, wxS( "SIG_Y" ) );
+    auto [xLen, xDelay] = BoardChainBridging( &board, wxS( "SIG_X" ), DEFAULT_PROPAGATION_DELAY_PS_PER_MM );
+    auto [yLen, yDelay] = BoardChainBridging( &board, wxS( "SIG_Y" ), DEFAULT_PROPAGATION_DELAY_PS_PER_MM );
 
     BOOST_CHECK_CLOSE( xLen, 2'000'000.0, 0.001 );
     BOOST_CHECK_CLOSE( yLen, 4'000'000.0, 0.001 );
 
-    double expectedXDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS * 2.0;
-    double expectedYDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS * 4.0;
+    double expectedXDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * 2.0;
+    double expectedYDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * 4.0;
     BOOST_CHECK_CLOSE( xDelay, expectedXDelayIU, 0.001 );
     BOOST_CHECK_CLOSE( yDelay, expectedYDelayIU, 0.001 );
     BOOST_CHECK_GT( yDelay, xDelay );
@@ -200,11 +203,11 @@ BOOST_AUTO_TEST_CASE( LargeBridgingLengthDoesNotOverflowIntCast )
     addPad( fp, netA, VECTOR2I( -1'500'000'000, 0 ) );
     addPad( fp, netB, VECTOR2I(  1'500'000'000, 0 ) );
 
-    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ) );
+    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ), DEFAULT_PROPAGATION_DELAY_PS_PER_MM );
 
     BOOST_CHECK_CLOSE( len, 3'000'000'000.0, 0.001 );
 
-    double expectedDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS * 3000.0;
+    double expectedDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * 3000.0;
     BOOST_CHECK_CLOSE( delay, expectedDelayIU, 0.001 );
     BOOST_CHECK_GT( delay, 0.0 );
 }

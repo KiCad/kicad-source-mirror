@@ -19,6 +19,9 @@
 
 #include <net_chain_bridging.h>
 
+#include "project/project_file.h"
+#include "project/tuning_profiles.h"
+
 #include <queue>
 #include <unordered_map>
 
@@ -91,12 +94,10 @@ double BoardChainBridgingLength( const BOARD* aBoard, const wxString& aNetChain 
 }
 
 
-double ChainBridgingDelayPerMm( const BOARD* aBoard, const wxString& aNetChain )
+double ChainBridgingDelayPerMm( const BOARD* aBoard, const wxString& aNetChain, const double aDefaultBridgeUnitDelay )
 {
-    double delayIUPerMm = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS;
-
     if( !aBoard || aNetChain.IsEmpty() )
-        return delayIUPerMm;
+        return aDefaultBridgeUnitDelay;
 
     for( const PCB_TRACK* track : aBoard->Tracks() )
     {
@@ -105,24 +106,23 @@ double ChainBridgingDelayPerMm( const BOARD* aBoard, const wxString& aNetChain )
         if( !ninfo || ninfo->GetNetChain() != aNetChain )
             continue;
 
-        double tLen = 0.0;
-        double tDelay = 0.0;
+        if( !ninfo->GetNetClass()->HasTuningProfile() )
+            continue;
 
-        std::tie( std::ignore, tLen, std::ignore, tDelay, std::ignore ) =
-                aBoard->GetTrackLength( *track );
+        const wxString                         tuningProfileName = ninfo->GetNetClass()->GetTuningProfile();
+        const std::shared_ptr<TUNING_PROFILES> tuningParams =
+                aBoard->GetProject()->GetProjectFile().TuningProfileParameters();
+        const TUNING_PROFILE& tuningProfile = tuningParams->GetTuningProfile( tuningProfileName );
 
-        if( tLen > 0.0 && tDelay > 0.0 )
-        {
-            delayIUPerMm = tDelay / ( tLen / pcbIUScale.IU_PER_MM );
-            break;
-        }
+        return tuningProfile.m_NetChainBridgePropagationDelay;
     }
 
-    return delayIUPerMm;
+    return aDefaultBridgeUnitDelay;
 }
 
 
-std::tuple<double, double> BoardChainBridging( const BOARD* aBoard, const wxString& aNetChain )
+std::tuple<double, double> BoardChainBridging( const BOARD* aBoard, const wxString& aNetChain,
+                                               const double aDefaultBridgeUnitDelay )
 {
     if( !aBoard || aNetChain.IsEmpty() )
         return { 0.0, 0.0 };
@@ -132,21 +132,22 @@ std::tuple<double, double> BoardChainBridging( const BOARD* aBoard, const wxStri
     if( lengthIU <= 0.0 )
         return { 0.0, 0.0 };
 
-    double delayIU = ChainBridgingDelayPerMm( aBoard, aNetChain ) * lengthIU
-                     / pcbIUScale.IU_PER_MM;
+    double delayIU =
+            ChainBridgingDelayPerMm( aBoard, aNetChain, aDefaultBridgeUnitDelay ) * lengthIU / pcbIUScale.IU_PER_MM;
 
     return { lengthIU, delayIU };
 }
 
 
-std::vector<CHAIN_BRIDGE> EnumerateChainBridges( const BOARD* aBoard, const wxString& aNetChain )
+std::vector<CHAIN_BRIDGE> EnumerateChainBridges( const BOARD* aBoard, const wxString& aNetChain,
+                                                 const double aDefaultBridgeUnitDelay )
 {
     std::vector<CHAIN_BRIDGE> bridges;
 
     if( !aBoard || aNetChain.IsEmpty() )
         return bridges;
 
-    const double delayIUPerMm = ChainBridgingDelayPerMm( aBoard, aNetChain );
+    const double delayIUPerMm = ChainBridgingDelayPerMm( aBoard, aNetChain, aDefaultBridgeUnitDelay );
 
     for( FOOTPRINT* fp : aBoard->Footprints() )
     {

@@ -226,6 +226,9 @@ private:
     /// Units for global via propagation unit delay
     UNIT_BINDER m_viaPropagationUnits;
 
+    /// Units for global net chain bridge propagation unit delay
+    UNIT_BINDER m_netchainBridgePropagationUnits;
+
     /// Calculator for single microstrip parameters
     MICROSTRIP m_microstripCalc;
 

@@ -484,8 +484,8 @@ bool dfsSpanningTree( const Graph& aGraph, int aRoot,
 
 
 CHAIN_TOPOLOGY::CHAIN_TOPOLOGY( BOARD* aBoard, const wxString& aChainName,
-                                const std::set<BOARD_CONNECTED_ITEM*>& aChainItems ) :
-    m_chainName( aChainName )
+                                const std::set<BOARD_CONNECTED_ITEM*>& aChainItems, const double aDefaultUnitDelay ) :
+        m_chainName( aChainName )
 {
     if( !aBoard || aChainName.IsEmpty() || aChainItems.empty() )
     {
@@ -526,7 +526,7 @@ CHAIN_TOPOLOGY::CHAIN_TOPOLOGY( BOARD* aBoard, const wxString& aChainName,
     Graph                                          graph;
     std::unordered_map<NodeKey, int, NodeKeyHash> index;
     LENGTH_DELAY_CALCULATION*                      calc = aBoard->GetLengthCalculation();
-    double fallbackDelayPerMm = ChainBridgingDelayPerMm( aBoard, m_chainName );
+    double fallbackDelayPerMm = ChainBridgingDelayPerMm( aBoard, m_chainName, aDefaultUnitDelay );
 
     // Collect pads belonging to chain-member nets — including ones not in
     // aChainItems (terminal pads sit on the chain but might not be in the
@@ -596,7 +596,7 @@ CHAIN_TOPOLOGY::CHAIN_TOPOLOGY( BOARD* aBoard, const wxString& aChainName,
     }
 
     // Bridge edges through series passives.
-    std::vector<CHAIN_BRIDGE> bridges = EnumerateChainBridges( aBoard, m_chainName );
+    std::vector<CHAIN_BRIDGE> bridges = EnumerateChainBridges( aBoard, m_chainName, aDefaultUnitDelay );
 
     for( const CHAIN_BRIDGE& br : bridges )
     {
