@@ -1063,9 +1063,6 @@ bool SCH_FIELD::HasHypertext() const
     if( m_id == FIELD_T::INTERSHEET_REFS )
         return true;
 
-    if( m_name == SIM_LIBRARY::LIBRARY_FIELD )
-        return true;
-
     return IsURL( GetShownText( false ) );
 }
 
