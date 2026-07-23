@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-22 23:26+0000\n"
+"PO-Revision-Date: 2026-07-24 06:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -23994,7 +23994,7 @@ msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:301
 msgid "The design contains no schematic folders."
-msgstr "デザインには回路図フォルダ含まれていません。"
+msgstr "このデザインには回路図フォルダ含まれていません。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:375
 #, c-format
@@ -50954,21 +50954,21 @@ msgstr "調整プロファイル '%s'"
 #: pcbnew/drc/drc_engine.cpp:593
 #, c-format
 msgid "keepout area of %s"
-msgstr "キープアウト(禁止)領域 %s"
+msgstr "禁止領域 %s"
 
 #: pcbnew/drc/drc_engine.cpp:598
 msgid "keepout area"
-msgstr "キープアウト(禁止)領域"
+msgstr "禁止領域"
 
 #: pcbnew/drc/drc_engine.cpp:606
 #, c-format
 msgid "keepout area '%s' of %s"
-msgstr "キープアウト(禁止)領域 '%s' の %s"
+msgstr "禁止領域 '%s' の %s"
 
 #: pcbnew/drc/drc_engine.cpp:612
 #, c-format
 msgid "keepout area '%s'"
-msgstr "キープアウト(禁止)領域 %s"
+msgstr "禁止領域 %s"
 
 #: pcbnew/drc/drc_engine.cpp:975
 #, c-format
@@ -51194,11 +51194,11 @@ msgstr "%s は導体を含みません。   ルールは無視されます。"
 
 #: pcbnew/drc/drc_engine.cpp:1654
 msgid "Keepout belongs to the footprint under test; constraint ignored."
-msgstr "キープアウトはテスト中のフットプリントに属している; 制約は無視された。"
+msgstr "禁止領域は評価中のフットプリントに属している; 制約は無視された。"
 
 #: pcbnew/drc/drc_engine.cpp:1709
 msgid "Keepout constraint not met."
-msgstr "キープアウトの制約が満たされていません。"
+msgstr "禁止領域の制約が満たされていません。"
 
 #: pcbnew/drc/drc_engine.cpp:1711
 msgid "Disallow constraint not met."
@@ -51206,7 +51206,7 @@ msgstr "不許可の制約が満たされていません。"
 
 #: pcbnew/drc/drc_engine.cpp:1733
 msgid "Keepout layer(s) not matched."
-msgstr "キープアウト レイヤーが一致しません。"
+msgstr "禁止領域 レイヤーが一致しません。"
 
 #: pcbnew/drc/drc_engine.cpp:1737 pcbnew/drc/drc_engine.cpp:1758
 #: pcbnew/drc/drc_engine.cpp:2232
@@ -53939,11 +53939,11 @@ msgstr ""
 "です。"
 
 #: pcbnew/footprint_import_reconciler.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported footprint cache to '%s'."
 msgstr ""
-"インポートされたフットプリントのキャッシュを '%s' に publish できませんでし"
-"た。"
+"インポートされたフットプリントのキャッシュを '%s' に 書き出すことができません"
+"でした。"
 
 #: pcbnew/footprint_import_reconciler.cpp:369
 msgid "Cannot register imported footprint cache: no project library table."
@@ -56616,9 +56616,9 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"CADSTAR の 領域 '%s' (ライブラリ コンポーネント '%s'の中の) は、KiCadに同等の"
-"ものがありません。この領域は、ビアでも配線のキープアウト 領域でもありません。"
-"その領域はインポートされませんでした。"
+"CADSTAR の 領域 '%s' (ライブラリ コンポーネント '%s' 中) は、 KiCadに同等のも"
+"のがありません。 この領域は、ビアでも配線の禁止領域でもありません。 その領域"
+"はインポートされませんでした。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1075
 #, c-format
@@ -57976,11 +57976,11 @@ msgstr "マッピングされていないレイヤー %d への注入をスキ�
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2288
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
-msgstr "マッピングされていないレイヤー %d へのキープアウトをスキップ"
+msgstr "マッピングされていないレイヤー %d への禁止領域をスキップ"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2312
 msgid "Skipping keepout with no valid layers"
-msgstr "有効なレイヤーがないキープアウトをスキップ"
+msgstr "有効なレイヤーがない禁止領域をスキップ"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2510
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:648
@@ -60629,7 +60629,7 @@ msgstr "解決済みの幅の制約: 最小 %s; 最適 %s; 最大 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1867
 msgid "Keepout resolution for:"
-msgstr "キープアウトの解決:"
+msgstr "禁止領域の解決:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1877
 #: pcbnew/tools/board_inspection_tool.cpp:1901
@@ -64981,7 +64981,7 @@ msgstr "正方形"
 
 #: pcbnew/zone.cpp:2312
 msgid "Keepout"
-msgstr "キープアウト(禁止)"
+msgstr "禁止領域"
 
 #: pcbnew/zone.cpp:2314
 msgid "Keep Out Tracks"
