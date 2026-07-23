@@ -1330,6 +1330,25 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
         findRoutingInRuleArea( aTargetArea, targetRouting, connectivity, targetPoly, aOpts );
         findRoutingInRuleArea( aRefArea, refRouting, connectivity, refPoly, aOpts );
 
+        // Nets used by the target group's own items, footprint pads included.
+        std::set<int> targetGroupNets;
+
+        if( aTargetArea->m_group )
+        {
+            for( EDA_ITEM* member : aTargetArea->m_group->GetItems() )
+            {
+                if( member->Type() == PCB_FOOTPRINT_T )
+                {
+                    for( PAD* pad : static_cast<FOOTPRINT*>( member )->Pads() )
+                        targetGroupNets.insert( pad->GetNetCode() );
+                }
+                else if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( member ) )
+                {
+                    targetGroupNets.insert( bci->GetNetCode() );
+                }
+            }
+        }
+
         for( BOARD_CONNECTED_ITEM* item : targetRouting )
         {
             // Never remove pads as part of routing copy.
@@ -1339,11 +1358,19 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( aRefArea->m_designBlockItems.count( item ) )
                 continue;
 
-            // Design block apply (target has a group): don't remove routing owned by another
-            // group, or applying to stacked instances wipes the previous instance's traces.
-            if( aTargetArea->m_group && item->GetParentGroup() && item->GetParentGroup() != aTargetArea->m_group )
+            // Design block apply: replace only the group's own routing and loose routing on the
+            // group's nets. Other groups' routing belongs to stacked instances (issue 24767).
+            // Everything else is unrelated and just sits inside the block's area (issue 24944).
+            if( aTargetArea->m_group && item->GetParentGroup() != aTargetArea->m_group )
             {
-                continue;
+                if( item->GetParentGroup() )
+                    continue;
+
+                if( item->IsLocked() )
+                    continue;
+
+                if( item->GetNetCode() <= 0 || !targetGroupNets.contains( item->GetNetCode() ) )
+                    continue;
             }
 
             if( item->IsLocked() && !aOpts.m_includeLockedItems )

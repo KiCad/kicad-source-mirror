@@ -1780,8 +1780,8 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutFootprintFreeReapplyReplaces, MUL
  * Applying a design block layout must not delete routing owned by another group. When several
  * instances of the same block overlap (e.g. stacked right after Update PCB) the target area
  * encloses a sibling instance's traces. Removing them made each apply wipe the previously applied
- * instance's routing, so only the last instance kept its layout (issue 24767). Loose, ungrouped
- * routing in the target area must still be replaced.
+ * instance's routing, so only the last instance kept its layout (issue 24767). Loose routing
+ * without a net is unrelated to the block and survives too (issue 24944).
  */
 BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutKeepsOtherGroupRouting, MULTICHANNEL_TEST_FIXTURE )
 {
@@ -1826,7 +1826,7 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutKeepsOtherGroupRouting, MULTICHAN
     siblingGroup->AddItem( siblingTrack );
     m_board->Add( siblingGroup );
 
-    // Loose, ungrouped routing inside the destination area, which still gets replaced.
+    // Loose, ungrouped routing without a net inside the destination area, unrelated to the block.
     PCB_TRACK* looseTrack = new PCB_TRACK( m_board.get() );
     looseTrack->SetLayer( F_Cu );
     looseTrack->SetWidth( pcbIUScale.mmToIU( 0.25 ) );
@@ -1898,9 +1898,157 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutKeepsOtherGroupRouting, MULTICHAN
     BOOST_CHECK_MESSAGE( siblingTracks == 1,
                          wxString::Format( "Sibling group routing was deleted (issue 24767): found %d, expected 1",
                                            siblingTracks ) );
-    BOOST_CHECK_MESSAGE( looseTracks == 0,
-                         wxString::Format( "Loose routing in the target area should be replaced: found %d, expected 0",
+    BOOST_CHECK_MESSAGE( looseTracks == 1,
+                         wxString::Format( "Loose no-net routing in the target area was deleted (issue 24944): "
+                                           "found %d, expected 1",
                                            looseTracks ) );
+}
+
+
+/**
+ * Applying a design block layout must not rip up unrelated circuitry that merely sits inside the
+ * group's bounding area (issue 24944). Only routing owned by the target group or loose routing on
+ * the group's own nets is replaced. Locked bystander tracks are never removed.
+ */
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutKeepsUnrelatedRouting, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    NETINFO_ITEM* net1 = new NETINFO_ITEM( m_board.get(), wxT( "NET1" ), 1 );
+    NETINFO_ITEM* net2 = new NETINFO_ITEM( m_board.get(), wxT( "NET2" ), 2 );
+    m_board->Add( net1 );
+    m_board->Add( net2 );
+
+    auto addTrack = [&]( double aStartX, double aStartY, double aEndX, double aEndY, NETINFO_ITEM* aNet )
+    {
+        PCB_TRACK* track = new PCB_TRACK( m_board.get() );
+        track->SetLayer( F_Cu );
+        track->SetWidth( pcbIUScale.mmToIU( 0.25 ) );
+        track->SetStart( VECTOR2I( pcbIUScale.mmToIU( aStartX ), pcbIUScale.mmToIU( aStartY ) ) );
+        track->SetEnd( VECTOR2I( pcbIUScale.mmToIU( aEndX ), pcbIUScale.mmToIU( aEndY ) ) );
+        track->SetNet( aNet );
+        m_board->Add( track );
+        return track;
+    };
+
+    // Source block: one track centered on origin.
+    PCB_TRACK* srcTrack = addTrack( -2, 0, 2, 0, net1 );
+
+    // Destination group with a placeholder and its own routing from a previous apply.
+    PCB_SHAPE* destPlaceholder = new PCB_SHAPE( m_board.get(), SHAPE_T::SEGMENT );
+    destPlaceholder->SetStart( VECTOR2I( pcbIUScale.mmToIU( 49 ), pcbIUScale.mmToIU( 49 ) ) );
+    destPlaceholder->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 51 ), pcbIUScale.mmToIU( 49 ) ) );
+    destPlaceholder->SetLayer( F_SilkS );
+    destPlaceholder->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
+    m_board->Add( destPlaceholder );
+
+    PCB_TRACK* prevTrack = addTrack( 46, 49, 48, 49, net1 );
+
+    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+    destGroup->SetName( wxT( "design-block-dest" ) );
+    destGroup->AddItem( destPlaceholder );
+    destGroup->AddItem( prevTrack );
+    m_board->Add( destGroup );
+
+    // Bystanders inside the destination area: a track on an unrelated net and a locked track.
+    // Both must survive the apply (issue 24944).
+    addTrack( 46, 47, 48, 47, net2 );
+
+    PCB_TRACK* lockedTrack = addTrack( 46, 51.5, 48, 51.5, net1 );
+    lockedTrack->SetLocked( true );
+
+    // Loose routing on the group's own net, a stale user tweak, which still gets replaced.
+    addTrack( 46, 53, 48, 53, net1 );
+
+    RULE_AREA dbRA;
+    dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+    dbRA.m_designBlockItems.insert( srcTrack );
+
+    dbRA.m_zone = new ZONE( m_board.get() );
+    dbRA.m_zone->SetIsRuleArea( true );
+    dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    dbRA.m_zone->AddPolygon(
+            KIGEOM::BoxToLineChain( BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
+                                                      VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
+    dbRA.m_center = dbRA.m_zone->Outline()->COutline( 0 ).Centre();
+
+    RULE_AREA destRA;
+    destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+    destRA.m_group = destGroup;
+
+    destRA.m_zone = new ZONE( m_board.get() );
+    destRA.m_zone->SetIsRuleArea( true );
+    destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+            BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 45 ), pcbIUScale.mmToIU( 45 ) ),
+                              VECTOR2I( pcbIUScale.mmToIU( 55 ), pcbIUScale.mmToIU( 55 ) ) ) ) );
+    destRA.m_center = destRA.m_zone->Outline()->COutline( 0 ).Centre();
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                   .m_connectedRoutingOnly = false,
+                                   .m_copyPlacement = true,
+                                   .m_copyOtherItems = true,
+                                   .m_groupItems = false,
+                                   .m_includeLockedItems = true,
+                                   .m_anchorFp = nullptr };
+
+    wxString err;
+    int      result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts, nullptr, &err );
+
+    delete dbRA.m_zone;
+    delete destRA.m_zone;
+
+    BOOST_REQUIRE_MESSAGE( result >= 0, wxString::Format( "RepeatLayout failed: %s", err ) );
+
+    // Pointers to removed tracks are deleted, so count survivors by location instead.
+    int unrelatedTracks = 0;
+    int prevTracks = 0;
+    int copiedTracks = 0;
+    int lockedTracks = 0;
+    int staleTweakTracks = 0;
+
+    for( PCB_TRACK* track : m_board->Tracks() )
+    {
+        int y = track->GetStart().y;
+
+        if( y > pcbIUScale.mmToIU( 46.5 ) && y < pcbIUScale.mmToIU( 47.5 ) )
+            unrelatedTracks++;
+        else if( y > pcbIUScale.mmToIU( 48.5 ) && y < pcbIUScale.mmToIU( 49.5 ) )
+            prevTracks++;
+        else if( y > pcbIUScale.mmToIU( 49.5 ) && y < pcbIUScale.mmToIU( 50.5 ) )
+            copiedTracks++;
+        else if( y > pcbIUScale.mmToIU( 51 ) && y < pcbIUScale.mmToIU( 52 ) )
+            lockedTracks++;
+        else if( y > pcbIUScale.mmToIU( 52.5 ) && y < pcbIUScale.mmToIU( 53.5 ) )
+            staleTweakTracks++;
+    }
+
+    BOOST_CHECK_MESSAGE( unrelatedTracks == 1,
+                         wxString::Format( "Unrelated net routing in the target area was deleted (issue 24944): "
+                                           "found %d, expected 1",
+                                           unrelatedTracks ) );
+    BOOST_CHECK_MESSAGE( lockedTracks == 1,
+                         wxString::Format( "Locked bystander routing in the target area was deleted (issue 24944): "
+                                           "found %d, expected 1",
+                                           lockedTracks ) );
+    BOOST_CHECK_MESSAGE(
+            prevTracks == 0,
+            wxString::Format( "The group's own routing should be replaced: found %d, expected 0", prevTracks ) );
+    BOOST_CHECK_MESSAGE( staleTweakTracks == 0,
+                         wxString::Format( "Loose routing on the group's nets should be replaced: found %d, "
+                                           "expected 0",
+                                           staleTweakTracks ) );
+    BOOST_CHECK_MESSAGE( copiedTracks == 1,
+                         wxString::Format( "Block routing was not copied into the target area: found %d, expected 1",
+                                           copiedTracks ) );
 }
 
 
