@@ -43,6 +43,20 @@ enums:
     1: closed
     2: circle
     4: filled_closed
+  graphic_line_style:
+    0: dashed
+    1: dotted
+    2: dash_dot
+    0xff: solid
+  offpage_kind:
+    0: ground_or_power
+    1: power
+    2: preserved_kind_2
+    3: global_label
+    4: preserved_kind_4
+    5: preserved_kind_5
+    0xfe: local
+    0xff: bus_entry
   page_size_prefix:
     0x53: size
     0x57: wditbsize
@@ -126,6 +140,11 @@ types:
         type: sheet_index_controller(_root.pool_directory[3].used_count)
         size: _root.pool_directory[3].used_bytes
       - id: controller_payload_4
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_connectivity_controller
+            0x000d: shared_sheet_membership_controller(_root.pool_directory[4].used_count)
         size: _root.pool_directory[4].used_bytes
       - id: design_settings
         type: design_settings_record
@@ -137,6 +156,11 @@ types:
         type: placement_attribute_offset_controller(_root.pool_directory[7].used_count)
         size: _root.pool_directory[7].used_bytes
       - id: controller_payload_8
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_connectivity_controller
+            0x000d: global_net_controller(_root.pool_directory[8].used_count)
         size: _root.pool_directory[8].used_bytes
       - id: controller_payload_9
         size: _root.pool_directory[9].used_bytes
@@ -167,6 +191,53 @@ types:
       - id: records
         type: global_string_record(_io.pos)
         repeat: eos
+
+  shared_sheet_membership_controller:
+    params:
+      - id: num_sheet_indices
+        type: u4
+    seq:
+      - id: sheet_indices
+        type: u2
+        repeat: expr
+        repeat-expr: num_sheet_indices
+
+  global_net_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: global_net_record
+        repeat: expr
+        repeat-expr: num_records
+
+  global_net_record:
+    seq:
+      - id: preserved_net_identity
+        type: u4
+      - id: sheet_membership_start
+        type: u4
+      - id: alias_string_offset
+        type: u4
+      - id: alias_member_ordinal
+        type: u4
+      - id: sheet_membership_count
+        type: u2
+      - id: alias_member_count
+        type: u2
+      - id: reserved_zero_14
+        contents: [0, 0]
+      - id: net_kind_flags
+        type: u2
+      - id: name
+        type: strz
+        size: 56
+        encoding: windows-1252
+      - id: unset_link_50
+        contents: [0xff, 0xff, 0xff, 0xff]
+      - id: preserved_net_relationship_54
+        type: u4
 
   global_string_record:
     params:
@@ -302,8 +373,10 @@ types:
       - id: relationship_word_28
         type: u2
         doc: Preserved relationship/ordinal-like word; paired ASCII proves this is not a presentation flag.
-      - id: line_width_mils
-        type: u2
+      - id: width_factor
+        type: u1
+      - id: display_flags
+        type: u1
 
   page_size_slot:
     seq:
@@ -483,16 +556,42 @@ types:
             0x000d: placement_field_controller(pool_directory[16].used_count)
         size: pool_directory[16].used_bytes
       - id: controller_payload_18
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_connectivity_controller
+            0x000d: bus_controller(pool_directory[17].used_count)
         size: pool_directory[17].used_bytes
       - id: controller_payload_19
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_connectivity_controller
+            0x000d: junction_controller(pool_directory[18].used_count)
         size: pool_directory[18].used_bytes
       - id: controller_payload_20
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_connectivity_controller
+            0x000d: offpage_controller(pool_directory[19].used_count)
         size: pool_directory[19].used_bytes
       - id: controller_payload_21
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_connectivity_controller
+            0x000d: connection_controller(pool_directory[20].used_count)
         size: pool_directory[20].used_bytes
       - id: controller_payload_22
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_connectivity_controller
+            0x000d: connection_vertex_controller(pool_directory[21].used_count)
         size: pool_directory[21].used_bytes
       - id: controller_payload_23
+        type: preserved_connectivity_tail_controller
         size: pool_directory[22].used_bytes
 
   preserved_v12_definition_controller:
@@ -506,6 +605,186 @@ types:
     seq:
       - id: preserved_payload
         size-eos: true
+
+  preserved_v12_connectivity_controller:
+    doc: Exact bounded v0x000C connectivity payload; semantics unsupported without paired ASCII evidence.
+    seq:
+      - id: preserved_payload
+        size-eos: true
+
+  preserved_connectivity_tail_controller:
+    doc: Exact bounded controller 23 payload; empty in every public v0x000D fixture and preserved if encountered.
+    seq:
+      - id: preserved_payload
+        size-eos: true
+
+  bus_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: bus_record
+        repeat: expr
+        repeat-expr: num_records
+
+  bus_record:
+    seq:
+      - id: reserved_zero_00
+        contents: [0, 0, 0, 0]
+      - id: vertex_prefix_index
+        type: u4
+      - id: global_net_record
+        type: u4
+      - id: preserved_relationship_0c
+        size: 12
+      - id: tail_bus_entry_handle
+        type: u2
+      - id: preserved_relationship_1a
+        type: u2
+      - id: bounds_x1_biased_quarter_mil
+        type: u2
+      - id: bounds_y1_biased_quarter_mil
+        type: u2
+      - id: bounds_x2_biased_quarter_mil
+        type: u2
+      - id: bounds_y2_biased_quarter_mil
+        type: u2
+      - id: preserved_relationship_24
+        type: u2
+      - id: class_and_status
+        type: u2
+      - id: reserved_zero_28
+        contents: [0, 0, 0, 0]
+
+  junction_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: junction_record
+        repeat: expr
+        repeat-expr: num_records
+
+  junction_record:
+    seq:
+      - id: reserved_zero_00
+        contents: [0, 0, 0, 0]
+      - id: x_biased_quarter_mil
+        type: u2
+      - id: y_biased_quarter_mil
+        type: u2
+      - id: connection_handle
+        type: u2
+      - id: status
+        type: u2
+
+  offpage_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: offpage_record
+        repeat: expr
+        repeat-expr: num_records
+
+  offpage_record:
+    seq:
+      - id: reserved_zero_00
+        contents: [0, 0, 0, 0]
+      - id: decal_or_entry_predecessor_handle
+        type: u2
+      - id: preserved_relationship_06
+        type: u2
+      - id: connection_record
+        type: u2
+      - id: preserved_relationship_0a
+        type: u2
+      - id: bounds_x1_biased_quarter_mil
+        type: u2
+      - id: bounds_y1_biased_quarter_mil
+        type: u2
+      - id: bounds_x2_biased_quarter_mil
+        type: u2
+      - id: bounds_y2_biased_quarter_mil
+        type: u2
+      - id: preserved_relationship_14
+        type: u2
+      - id: x_biased_quarter_mil
+        type: u2
+      - id: y_biased_quarter_mil
+        type: u2
+      - id: rotation_tenths_degree
+        type: u2
+      - id: preserved_relationship_1c
+        type: u2
+      - id: kind
+        type: u1
+        enum: offpage_kind
+      - id: reserved_zero_1f
+        contents: [0]
+
+  connection_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: connection_record
+        repeat: expr
+        repeat-expr: num_records
+
+  connection_record:
+    seq:
+      - id: reserved_zero_00
+        contents: [0, 0, 0, 0]
+      - id: vertex_prefix_index
+        type: u4
+      - id: global_net_record
+        type: u4
+      - id: endpoint_a_handle
+        type: u2
+      - id: endpoint_b_handle
+        type: u2
+      - id: preserved_relationship_10
+        type: u4
+      - id: preserved_relationship_14
+        size: 4
+      - id: bounds_x1_biased_quarter_mil
+        type: u2
+      - id: bounds_y1_biased_quarter_mil
+        type: u2
+      - id: bounds_x2_biased_quarter_mil
+        type: u2
+      - id: bounds_y2_biased_quarter_mil
+        type: u2
+      - id: preserved_relationship_20
+        type: u2
+      - id: class_and_status
+        type: u2
+      - id: preserved_connection_tail_24
+        type: u4
+
+  connection_vertex_controller:
+    params:
+      - id: num_records
+        type: u4
+    seq:
+      - id: records
+        type: connection_vertex_record
+        repeat: expr
+        repeat-expr: num_records
+
+  connection_vertex_record:
+    seq:
+      - id: reserved_zero_00
+        contents: [0, 0, 0, 0]
+      - id: x_biased_quarter_mil
+        type: u2
+      - id: y_biased_quarter_mil
+        type: u2
 
   indexed_placement_attribute_heap:
     doc: NUL-terminated component attribute slots indexed by outer controller 7; byte 1 separates custom-field names and values.
@@ -748,10 +1027,10 @@ types:
         type: u4
       - id: timestamp
         type: u4
-      - id: embedded_text_count
+      - id: embedded_text_count_or_preserved_relationship
         type: u2
-      - id: preserved_definition_style_word_42
-        type: s2
+      - id: embedded_text_last_record_or_preserved_relationship
+        type: u2
       - id: preserved_definition_style_word_44
         type: s2
       - id: preserved_definition_style_word_46
@@ -780,8 +1059,9 @@ types:
       - id: kind
         type: u1
         enum: symbol_graphic_kind
-      - id: continuation_marker
+      - id: line_style
         type: u1
+        enum: graphic_line_style
       - id: vertex_count
         type: u2
       - id: stroke_width_mils

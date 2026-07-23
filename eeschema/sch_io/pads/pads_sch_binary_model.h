@@ -537,7 +537,8 @@ enum class MODEL_LABEL_KIND
     GLOBAL,
     HIERARCHICAL,
     POWER,
-    BUS
+    BUS,
+    UNSUPPORTED
 };
 
 
@@ -550,6 +551,7 @@ struct MODEL_LABEL
     SOURCE_POINT                 position;
     int                          angle = 0;
     MODEL_TEXT_PRESENTATION      presentation;
+    std::vector<SHEET_REFERENCE> linkedSheets;
     std::vector<SOURCE_PROPERTY> properties;
 
     bool operator==( const MODEL_LABEL& ) const = default;

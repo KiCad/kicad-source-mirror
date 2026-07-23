@@ -487,6 +487,7 @@ static CANONICAL_PROPERTY canonicalLabelKind( MODEL_LABEL_KIND aKind )
     case MODEL_LABEL_KIND::HIERARCHICAL: return { "hierarchical" };
     case MODEL_LABEL_KIND::POWER: return { "power" };
     case MODEL_LABEL_KIND::BUS: return { "bus" };
+    case MODEL_LABEL_KIND::UNSUPPORTED: return unknownEnum( static_cast<int64_t>( aKind ) );
     }
 
     return unknownEnum( static_cast<int64_t>( aKind ) );
@@ -961,12 +962,36 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
     }
     for( const auto& n : aParser.GetSignals() )
     {
+        if( n.flags1 == 5 && n.flags2 == 3 )
+            continue;
+
         int netSheet = n.wires.empty() ? -1 : n.wires.front().sheet_number - 1;
         addOwned( CANONICAL_KIND::NET, netSheet, n.name );
         for( const auto& c : n.wires )
         {
             auto& r = addOwned( CANONICAL_KIND::CONNECTION, c.sheet_number - 1 );
             r.properties["endpoint_count"] = { int64_t( 2 ) };
+
+            const std::array<std::string, 2> endpoints = { c.endpoint_a, c.endpoint_b };
+
+            for( size_t endpoint = 0; endpoint < endpoints.size(); ++endpoint )
+            {
+                const std::string  prefix = "endpoint_" + std::to_string( endpoint ) + "_";
+                const std::string& token = endpoints[endpoint];
+
+                if( token.starts_with( "@@@" ) )
+                {
+                    r.properties[prefix + "kind"] = canonicalEndpointKind( MODEL_ENDPOINT_KIND::POINT );
+                }
+                else
+                {
+                    const size_t separator = token.rfind( '.' );
+                    r.properties[prefix + "kind"] = canonicalEndpointKind( MODEL_ENDPOINT_KIND::PIN );
+                    r.properties[prefix + "placement"] = { token.substr( 0, separator ) };
+                    r.properties[prefix + "pin_number"] = { token.substr( separator + 1 ) };
+                }
+            }
+
             for( const auto& q : c.vertices )
                 r.geometry.points.push_back( point( q ) );
         }
@@ -1007,8 +1032,16 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         if( l.symbol_lib.starts_with( "@@@B" ) )
             continue;
         auto& r = addOwned( CANONICAL_KIND::LABEL, l.source_sheet - 1, l.signal_name );
-        r.properties["kind"] = { "local" };
+        r.properties["kind"] = { l.symbol_lib == "@TERM"              ? "local"
+                                 : l.symbol_lib.starts_with( "$OSR" ) ? "global"
+                                                                      : "power" };
         r.properties["visible"] = { true };
+        r.properties["font"] = { std::string() };
+        r.properties["bold"] = { false };
+        r.properties["italic"] = { false };
+        r.properties["underline"] = { false };
+        r.properties["horizontal_justification"] = canonicalJustification( MODEL_JUSTIFICATION::LEFT );
+        r.properties["vertical_justification"] = canonicalVerticalJustification( MODEL_JUSTIFICATION::CENTER );
         r.geometry.points.push_back( point( l.position ) );
         r.geometry.angleTenths = canonicalAngle( l.rotation * 10 );
     }
@@ -1033,19 +1066,50 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             out.pop_back();
             addGraphic( g, lines.sheet_number - 1 );
             out.back().properties["owner_sheet"] = property;
+            out.back().properties["page_graphic_group"] = { lines.name };
+            out.back().properties["type"] = canonicalGraphicType( g );
+
+            if( g.type == PADS_SCH::GRAPHIC_TYPE::RECTANGLE )
+            {
+                out.back().properties["type"] = canonicalGraphicType( MODEL_GRAPHIC_KIND::POLYLINE );
+
+                if( out.back().geometry.points.size() == 2 )
+                {
+                    const CANONICAL_POINT first = out.back().geometry.points.front();
+                    const CANONICAL_POINT last = out.back().geometry.points.back();
+                    out.back().geometry.points = { { last.xHalfMils, last.yHalfMils },
+                                                   { first.xHalfMils, last.yHalfMils },
+                                                   { first.xHalfMils, first.yHalfMils },
+                                                   { last.xHalfMils, first.yHalfMils },
+                                                   { last.xHalfMils, last.yHalfMils } };
+                }
+            }
+
+            for( CANONICAL_POINT& point : out.back().geometry.points )
+            {
+                point.xHalfMils /= 2;
+                point.yHalfMils /= 2;
+            }
+
+            out.back().geometry.angleTenths = 0;
         }
 
         for( const auto& t : lines.texts )
         {
-            auto& r = addOwned( CANONICAL_KIND::TEXT, lines.sheet_number - 1, t.content );
+            auto& r = addOwned( CANONICAL_KIND::GRAPHIC, lines.sheet_number - 1 );
+            r.properties["type"] = canonicalGraphicType( MODEL_GRAPHIC_KIND::TEXT );
+            r.properties["line_style"] = canonicalLineStyle( MODEL_LINE_STYLE::DEFAULT );
+            r.properties["stroke_half_mils"] = { int64_t( 0 ) };
+            r.properties["fill"] = canonicalFill( MODEL_FILL_STYLE::NONE );
+            r.properties["text"] = { t.content };
+            r.properties["page_graphic_group"] = { lines.name };
             r.properties["visible"] = { true };
-            r.properties["bold"] = { false };
-            r.properties["italic"] = { false };
-            r.properties["underline"] = { false };
+            r.properties["height_half_mils"] = { int64_t( t.height * 2 ) };
+            r.properties["width_half_mils"] = { int64_t( t.width_factor * 2 ) };
             r.properties["font"] = { t.font_name };
-            r.properties["horizontal_justification"] = canonicalHorizontalJustification( t.justification );
-            r.properties["vertical_justification"] = canonicalVerticalJustification( t.justification );
             r.geometry.points.push_back( point( t.position ) );
+            r.geometry.points.back().xHalfMils /= 2;
+            r.geometry.points.back().yHalfMils /= 2;
             r.geometry.angleTenths = canonicalAngle( t.rotation * 10 );
         }
     }
@@ -2222,10 +2286,8 @@ BOOST_AUTO_TEST_CASE( PartPinsAndGates )
 
 BOOST_AUTO_TEST_CASE( DefinitionFields )
 {
-    const FIELD_ID controller7Record11214 =
-            MakeFieldId( FIELD_ID_DOMAIN::DEFINITION, 11214, 0 );
-    const FIELD_ID controller7Record12125 =
-            MakeFieldId( FIELD_ID_DOMAIN::DEFINITION, 12125, 0 );
+    const FIELD_ID controller7Record11214 = MakeFieldId( FIELD_ID_DOMAIN::DEFINITION, 11214, 0 );
+    const FIELD_ID controller7Record12125 = MakeFieldId( FIELD_ID_DOMAIN::DEFINITION, 12125, 0 );
     BOOST_CHECK( controller7Record11214.IsValid() );
     BOOST_CHECK( controller7Record12125.IsValid() );
     BOOST_CHECK_NE( controller7Record11214.Value(), controller7Record12125.Value() );
@@ -2292,18 +2354,17 @@ BOOST_AUTO_TEST_CASE( DefinitionFields )
 BOOST_AUTO_TEST_CASE( PlacementTransforms )
 {
     PADS_SCH_BINARY_PARSER parser;
-    PADS_SCH_MODEL model =
+    PADS_SCH_MODEL         model =
             parser.Parse( loadBinaryFixture( "placement_transform.sch" ), wxS( "placement_transform.sch" ) );
     BOOST_REQUIRE_EQUAL( model.placements.size(), 5 );
 
-    const std::array<wxString, 5> references = { wxS( "R1" ), wxS( "R2" ), wxS( "R3" ), wxS( "R4" ),
-                                                 wxS( "R5" ) };
+    const std::array<wxString, 5>     references = { wxS( "R1" ), wxS( "R2" ), wxS( "R3" ), wxS( "R4" ), wxS( "R5" ) };
     const std::array<SOURCE_POINT, 5> positions = { SOURCE_POINT{ -4800, 18200 }, SOURCE_POINT{ -200, 14800 },
                                                     SOURCE_POINT{ 2200, 14000 }, SOURCE_POINT{ 3400, 13000 },
                                                     SOURCE_POINT{ 6000, 10800 } };
-    const std::array<int, 5> angles = { 0, 900, 0, 900, 900 };
-    const std::array<bool, 5> mirrored = { false, false, true, true, true };
-    const std::array<uint16_t, 5> mirrorFlags = { 0, 0, 3, 3, 2 };
+    const std::array<int, 5>          angles = { 0, 900, 0, 900, 900 };
+    const std::array<bool, 5>         mirrored = { false, false, true, true, true };
+    const std::array<uint16_t, 5>     mirrorFlags = { 0, 0, 3, 3, 2 };
     const std::array<std::pair<uint16_t, int>, 4> orthogonalAngles = {
         std::pair<uint16_t, int>{ 0, 0 }, { 900, 900 }, { 1800, 1800 }, { 2700, 2700 }
     };
@@ -2333,10 +2394,14 @@ BOOST_AUTO_TEST_CASE( PlacementTransforms )
                            wxString::Format( wxS( "%u" ), mirrorFlags[i] ) );
         auto rawAngle = std::ranges::find_if( placement.properties,
                                               []( const SOURCE_PROPERTY& aProperty )
-                                              { return aProperty.name.text == wxS( "raw_angle" ); } );
+                                              {
+                                                  return aProperty.name.text == wxS( "raw_angle" );
+                                              } );
         auto rawMirror = std::ranges::find_if( placement.properties,
                                                []( const SOURCE_PROPERTY& aProperty )
-                                               { return aProperty.name.text == wxS( "raw_mirror" ); } );
+                                               {
+                                                   return aProperty.name.text == wxS( "raw_mirror" );
+                                               } );
         BOOST_REQUIRE( rawAngle != placement.properties.end() );
         BOOST_REQUIRE( rawMirror != placement.properties.end() );
         BOOST_CHECK_EQUAL( rawAngle->source.absoluteOffset, placement.source.absoluteOffset + 0x24 );
@@ -2357,12 +2422,14 @@ BOOST_AUTO_TEST_CASE( PlacementTransforms )
     {
         auto placement = std::ranges::find_if( aModel.placements,
                                                [&]( const MODEL_PLACEMENT& aPlacement )
-                                               { return aPlacement.reference.text == aReference; } );
+                                               {
+                                                   return aPlacement.reference.text == aReference;
+                                               } );
         BOOST_REQUIRE( placement != aModel.placements.end() );
         return *placement;
     };
 
-    PADS_SCH_MODEL multi = parser.Parse( loadBinaryFixture( "multigate.sch" ), wxS( "multigate.sch" ) );
+    PADS_SCH_MODEL         multi = parser.Parse( loadBinaryFixture( "multigate.sch" ), wxS( "multigate.sch" ) );
     const MODEL_PLACEMENT& gateA = placementNamed( multi, wxS( "U3-A" ) );
     const MODEL_PLACEMENT& gateB = placementNamed( multi, wxS( "U3-B" ) );
     BOOST_CHECK_EQUAL( gateA.unit, 1 );
@@ -2371,7 +2438,7 @@ BOOST_AUTO_TEST_CASE( PlacementTransforms )
     BOOST_CHECK_EQUAL( gateA.pins.size(), 7 );
     BOOST_CHECK_EQUAL( gateB.pins.size(), 2 );
 
-    PADS_SCH_MODEL connectors = parser.Parse( loadBinaryFixture( "connectors.sch" ), wxS( "connectors.sch" ) );
+    PADS_SCH_MODEL         connectors = parser.Parse( loadBinaryFixture( "connectors.sch" ), wxS( "connectors.sch" ) );
     const MODEL_PLACEMENT& connector = placementNamed( connectors, wxS( "P1-1" ) );
     BOOST_CHECK_EQUAL( connector.unit, 1 );
     BOOST_CHECK_EQUAL( connector.fields.size(), 4 );
@@ -2385,7 +2452,7 @@ BOOST_AUTO_TEST_CASE( PlacementTransforms )
 BOOST_AUTO_TEST_CASE( PlacementInstanceFields )
 {
     PADS_SCH_BINARY_PARSER parser;
-    PADS_SCH_MODEL model = parser.Parse( loadBinaryFixture( "fields.sch" ), wxS( "fields.sch" ) );
+    PADS_SCH_MODEL         model = parser.Parse( loadBinaryFixture( "fields.sch" ), wxS( "fields.sch" ) );
     BOOST_REQUIRE_EQUAL( model.placements.size(), 1 );
     const MODEL_PLACEMENT& placement = model.placements[0];
     BOOST_REQUIRE_EQUAL( placement.fields.size(), 3 );
@@ -2412,11 +2479,12 @@ BOOST_AUTO_TEST_CASE( PlacementInstanceFields )
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.visible, false );
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.font.text, wxS( "Bold Verdana" ) );
     BOOST_CHECK_EQUAL( placement.fields[2].source.controller, 17 );
-    BOOST_CHECK_EQUAL( propertyValue( placement.fields[2].properties, wxS( "line_width_half_mil" ) ),
-                       wxS( "10" ) );
+    BOOST_CHECK_EQUAL( propertyValue( placement.fields[2].properties, wxS( "line_width_half_mil" ) ), wxS( "10" ) );
     auto lineWidth = std::ranges::find_if( placement.fields[2].properties,
-                                          []( const SOURCE_PROPERTY& aProperty )
-                                          { return aProperty.name.text == wxS( "line_width_half_mil" ); } );
+                                           []( const SOURCE_PROPERTY& aProperty )
+                                           {
+                                               return aProperty.name.text == wxS( "line_width_half_mil" );
+                                           } );
     BOOST_REQUIRE( lineWidth != placement.fields[2].properties.end() );
     BOOST_CHECK_EQUAL( lineWidth->source.controller, 17 );
     BOOST_CHECK_EQUAL( lineWidth->source.absoluteOffset, placement.fields[2].source.absoluteOffset + 16 );
@@ -2433,7 +2501,7 @@ BOOST_AUTO_TEST_CASE( PlacementInstanceFields )
 BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
 {
     PADS_SCH_BINARY_PARSER parser;
-    PADS_SCH_MODEL duplicate =
+    PADS_SCH_MODEL         duplicate =
             parser.Parse( loadBinaryFixture( "placement_transform.sch" ), wxS( "duplicate-placement.sch" ) );
     duplicate.placements[1].id = duplicate.placements[0].id;
     BOOST_CHECK_EXCEPTION( duplicate.ValidateOrThrow(), IO_ERROR,
@@ -2457,25 +2525,33 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
     writeU32( wrongGroup, sheetControllerOffset( wrongGroup, 15 ) + 0x1C, 0xFFFFFFFF );
     BOOST_CHECK_EXCEPTION( parser.Parse( wrongGroup, wxS( "placement-group.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
-                           { return aError.What().Contains( wxS( "component-group handle" ) ); } );
+                           {
+                               return aError.What().Contains( wxS( "component-group handle" ) );
+                           } );
 
     std::vector<uint8_t> wrongDecal = loadBinaryFixture( "placement_transform.sch" );
     writeU16( wrongDecal, sheetControllerOffset( wrongDecal, 15 ) + 0x44, 0 );
     BOOST_CHECK_EXCEPTION( parser.Parse( wrongDecal, wxS( "placement-decal.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
-                           { return aError.What().Contains( wxS( "different object classes" ) ); } );
+                           {
+                               return aError.What().Contains( wxS( "different object classes" ) );
+                           } );
 
     std::vector<uint8_t> wrongGate = loadBinaryFixture( "multigate.sch" );
     writeU16( wrongGate, sheetControllerOffset( wrongGate, 15 ) + 136 + 0x4A, 7 );
     BOOST_CHECK_EXCEPTION( parser.Parse( wrongGate, wxS( "placement-gate.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
-                           { return aError.What().Contains( wxS( "gate handle targets definition object class" ) ); } );
+                           {
+                               return aError.What().Contains( wxS( "gate handle targets definition object class" ) );
+                           } );
 
     std::vector<uint8_t> wrongPin = loadBinaryFixture( "placement_transform.sch" );
     writeU16( wrongPin, sheetControllerOffset( wrongPin, 16 ) + 4, 0xFFFF );
     BOOST_CHECK_EXCEPTION( parser.Parse( wrongPin, wxS( "placement-pin.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
-                           { return aError.What().Contains( wxS( "placed-pin handle" ) ); } );
+                           {
+                               return aError.What().Contains( wxS( "placed-pin handle" ) );
+                           } );
 
     std::vector<uint8_t> wrongField = loadBinaryFixture( "fields.sch" );
     BOOST_REQUIRE_GT( readU32( wrongField, 0x20 + 7 * 28 + 8 ), 10 );
@@ -2483,18 +2559,24 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
     writeU16( wrongField, sheetControllerOffset( wrongField, 17 ), 10 );
     BOOST_CHECK_EXCEPTION( parser.Parse( wrongField, wxS( "placement-field.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
-                           { return aError.What().Contains( wxS( "placement font handle" ) ); } );
+                           {
+                               return aError.What().Contains( wxS( "placement font handle" ) );
+                           } );
 
     PADS_SCH_MODEL wrongSheet =
             parser.Parse( loadBinaryFixture( "placement_transform.sch" ), wxS( "placement-sheet.sch" ) );
     const uint32_t wrongClassSheet = wrongSheet.definitions.back().id.Value();
     BOOST_REQUIRE( std::ranges::none_of( wrongSheet.sheets,
-                                        [&]( const MODEL_SHEET& aSheet )
-                                        { return aSheet.id.Value() == wrongClassSheet; } ) );
+                                         [&]( const MODEL_SHEET& aSheet )
+                                         {
+                                             return aSheet.id.Value() == wrongClassSheet;
+                                         } ) );
     wrongSheet.placements[0].sheet = { SHEET_ID( wrongClassSheet ), wrongSheet.placements[0].source };
     BOOST_CHECK_EXCEPTION( wrongSheet.ValidateOrThrow(), IO_ERROR,
                            []( const IO_ERROR& aError )
-                           { return aError.What().Contains( wxS( "unresolved placement sheet reference" ) ); } );
+                           {
+                               return aError.What().Contains( wxS( "unresolved placement sheet reference" ) );
+                           } );
 
     std::vector<uint8_t> unknownTransform = loadBinaryFixture( "placement_transform.sch" );
     writeU16( unknownTransform, sheetControllerOffset( unknownTransform, 15 ) + 0x24, 123 );
@@ -2530,21 +2612,20 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
 
 BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
 {
-    PADS_SCH_BINARY_PARSER binaryParser;
+    PADS_SCH_BINARY_PARSER           binaryParser;
     const std::array<std::string, 4> fixtures = { "placement_transform", "fields", "connectors", "multigate" };
 
     for( const std::string& fixture : fixtures )
     {
-        PADS_SCH_MODEL binary = binaryParser.Parse( loadBinaryFixture( fixture + ".sch" ),
-                                                    wxString::FromUTF8( fixture + ".sch" ) );
+        PADS_SCH_MODEL binary =
+                binaryParser.Parse( loadBinaryFixture( fixture + ".sch" ), wxString::FromUTF8( fixture + ".sch" ) );
         PADS_SCH::PADS_SCH_PARSER ascii;
-        BOOST_REQUIRE( ascii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/" + fixture
-                                    + ".txt" ) );
+        BOOST_REQUIRE( ascii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/" + fixture + ".txt" ) );
         BOOST_REQUIRE_EQUAL( binary.placements.size(), ascii.GetPartPlacements().size() );
 
         for( size_t placementIndex = 0; placementIndex < binary.placements.size(); ++placementIndex )
         {
-            const MODEL_PLACEMENT& binaryPlacement = binary.placements[placementIndex];
+            const MODEL_PLACEMENT&          binaryPlacement = binary.placements[placementIndex];
             const PADS_SCH::PART_PLACEMENT& asciiPlacement = ascii.GetPartPlacements()[placementIndex];
             BOOST_CHECK_EQUAL( binaryPlacement.reference.text, wxString::FromUTF8( asciiPlacement.reference ) );
             BOOST_CHECK_EQUAL( binaryPlacement.position.x, asciiPlacement.position.x * 2 );
@@ -2554,18 +2635,24 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
             BOOST_CHECK_EQUAL( binaryPlacement.sheet.id.Value(), binary.sheets[0].id.Value() );
             auto part = std::ranges::find_if( binary.partTypes,
                                               [&]( const MODEL_PART_TYPE& aPart )
-                                              { return aPart.id == binaryPlacement.partType.id; } );
+                                              {
+                                                  return aPart.id == binaryPlacement.partType.id;
+                                              } );
             BOOST_REQUIRE( part != binary.partTypes.end() );
             BOOST_CHECK_EQUAL( part->name.text, wxString::FromUTF8( asciiPlacement.part_type ) );
             BOOST_REQUIRE( binaryPlacement.gate.has_value() );
             auto gate = std::ranges::find_if( part->gates,
                                               [&]( const MODEL_GATE& aGate )
-                                              { return aGate.id == binaryPlacement.gate->id; } );
+                                              {
+                                                  return aGate.id == binaryPlacement.gate->id;
+                                              } );
             BOOST_REQUIRE( gate != part->gates.end() );
             BOOST_CHECK_EQUAL( binaryPlacement.unit, static_cast<uint32_t>( asciiPlacement.gate_index + 1 ) );
             auto definition = std::ranges::find_if( binary.definitions,
                                                     [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
-                                                    { return aDefinition.id == binaryPlacement.definition.id; } );
+                                                    {
+                                                        return aDefinition.id == binaryPlacement.definition.id;
+                                                    } );
             BOOST_REQUIRE( definition != binary.definitions.end() );
             BOOST_CHECK_EQUAL( definition->name.text, wxString::FromUTF8( asciiPlacement.symbol_name ) );
             BOOST_CHECK( !propertyValue( binaryPlacement.properties, wxS( "decal_handle" ) ).empty() );
@@ -2573,10 +2660,10 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
 
             for( size_t fieldIndex = 0; fieldIndex < binaryPlacement.fields.size(); ++fieldIndex )
             {
-                const MODEL_FIELD& binaryField = binaryPlacement.fields[fieldIndex];
+                const MODEL_FIELD&              binaryField = binaryPlacement.fields[fieldIndex];
                 const PADS_SCH::PART_ATTRIBUTE& asciiField = asciiPlacement.attributes[fieldIndex];
                 BOOST_CHECK_EQUAL( binaryField.name.text, wxString::FromUTF8( asciiField.name ) );
-                const wxString asciiValue = fieldIndex == 0 ? wxString::FromUTF8( asciiPlacement.reference )
+                const wxString asciiValue = fieldIndex == 0   ? wxString::FromUTF8( asciiPlacement.reference )
                                             : fieldIndex == 1 ? wxString::FromUTF8( asciiPlacement.part_type )
                                                               : wxString::FromUTF8( asciiField.value );
                 BOOST_CHECK_EQUAL( binaryField.value.text, asciiValue );
@@ -2586,22 +2673,20 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                 BOOST_CHECK_EQUAL( binaryField.presentation.height, asciiField.height * 2 );
                 BOOST_CHECK_EQUAL( binaryField.presentation.width, asciiField.width * 2 );
                 BOOST_CHECK_EQUAL( binaryField.presentation.visible, asciiField.visible );
-                BOOST_CHECK_EQUAL( binaryField.presentation.font.text,
-                                   wxString::FromUTF8( asciiField.font_name ) );
+                BOOST_CHECK_EQUAL( binaryField.presentation.font.text, wxString::FromUTF8( asciiField.font_name ) );
                 BOOST_CHECK_EQUAL( binaryField.presentation.bold,
                                    wxString::FromUTF8( asciiField.font_name ).StartsWith( wxS( "Bold " ) ) );
                 BOOST_CHECK_EQUAL( binaryField.presentation.italic,
                                    wxString::FromUTF8( asciiField.font_name ).StartsWith( wxS( "Italic " ) ) );
 
-                const uint16_t horizontal = asciiField.justification & ~uint16_t{ 0x0A };
-                const MODEL_JUSTIFICATION expectedHorizontal =
-                        horizontal == 1 ? MODEL_JUSTIFICATION::RIGHT
-                        : horizontal == 4 ? MODEL_JUSTIFICATION::CENTER
-                                          : MODEL_JUSTIFICATION::LEFT;
-                const MODEL_JUSTIFICATION expectedVertical =
-                        asciiField.justification >= 8 ? MODEL_JUSTIFICATION::CENTER
-                        : asciiField.justification >= 2 ? MODEL_JUSTIFICATION::LEFT
-                                                       : MODEL_JUSTIFICATION::RIGHT;
+                const uint16_t            horizontal = asciiField.justification & ~uint16_t{ 0x0A };
+                const MODEL_JUSTIFICATION expectedHorizontal = horizontal == 1   ? MODEL_JUSTIFICATION::RIGHT
+                                                               : horizontal == 4 ? MODEL_JUSTIFICATION::CENTER
+                                                                                 : MODEL_JUSTIFICATION::LEFT;
+                const MODEL_JUSTIFICATION expectedVertical = asciiField.justification >= 8 ? MODEL_JUSTIFICATION::CENTER
+                                                             : asciiField.justification >= 2
+                                                                     ? MODEL_JUSTIFICATION::LEFT
+                                                                     : MODEL_JUSTIFICATION::RIGHT;
                 BOOST_CHECK( binaryField.presentation.horizontalJustification == expectedHorizontal );
                 BOOST_CHECK( binaryField.presentation.verticalJustification == expectedVertical );
 
@@ -2613,6 +2698,340 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                                        fixture == "fields" ? wxS( "10" ) : wxS( "65535" ) );
                 }
             }
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( Connectivity )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    PADS_SCH_MODEL         model =
+            parser.Parse( loadBinaryFixture( "connectivity_topology.sch" ), wxS( "connectivity_topology.sch" ) );
+
+    BOOST_REQUIRE_EQUAL( model.nets.size(), 9 );
+    BOOST_CHECK_EQUAL( itemNamed( model.nets, wxS( "CROSS_H" ) ).connections.size(), 1 );
+    BOOST_CHECK_EQUAL( itemNamed( model.nets, wxS( "CROSS_V" ) ).connections.size(), 1 );
+    BOOST_REQUIRE_EQUAL( itemNamed( model.nets, wxS( "T_NET" ) ).connections.size(), 3 );
+
+    const MODEL_CONNECTION& horizontal = itemNamed( model.nets, wxS( "CROSS_H" ) ).connections.front();
+    BOOST_REQUIRE_EQUAL( horizontal.vertices.size(), 2 );
+    BOOST_REQUIRE_EQUAL( horizontal.endpoints.size(), 2 );
+    BOOST_CHECK_EQUAL( horizontal.vertices[0].x, 6000 );
+    BOOST_CHECK_EQUAL( horizontal.vertices[0].y, 6000 );
+    BOOST_CHECK_EQUAL( horizontal.vertices[1].x, 14000 );
+    BOOST_CHECK_EQUAL( horizontal.vertices[1].y, 6000 );
+    BOOST_CHECK( horizontal.endpoints[0].kind == MODEL_ENDPOINT_KIND::POINT );
+    BOOST_CHECK( horizontal.endpoints[1].kind == MODEL_ENDPOINT_KIND::POINT );
+
+    PADS_SCH_MODEL minimal = parser.Parse( loadMinimalV13(), wxS( "minimal_v13.sch" ) );
+    BOOST_REQUIRE_EQUAL( minimal.nets.size(), 1 );
+    BOOST_REQUIRE_EQUAL( minimal.nets[0].connections.size(), 1 );
+    BOOST_CHECK( minimal.nets[0].connections[0].endpoints[0].kind == MODEL_ENDPOINT_KIND::PIN );
+    BOOST_REQUIRE( minimal.nets[0].connections[0].endpoints[0].placement );
+    BOOST_REQUIRE( minimal.nets[0].connections[0].endpoints[0].pin );
+    BOOST_CHECK_EQUAL( minimal.nets[0].connections[0].endpoints[0].placement->id.Value(),
+                       minimal.placements[0].id.Value() );
+    BOOST_CHECK_EQUAL( minimal.nets[0].connections[0].endpoints[0].pin->id.Value(),
+                       minimal.placements[0].pins[0].id.Value() );
+}
+
+
+BOOST_AUTO_TEST_CASE( LabelsAndPower )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    PADS_SCH_MODEL         model =
+            parser.Parse( loadBinaryFixture( "connectivity_topology.sch" ), wxS( "connectivity_topology.sch" ) );
+
+    BOOST_REQUIRE_EQUAL( model.labels.size(), 16 );
+    BOOST_CHECK_EQUAL( std::ranges::count( model.labels, MODEL_LABEL_KIND::LOCAL, &MODEL_LABEL::kind ), 13 );
+    BOOST_CHECK_EQUAL( std::ranges::count( model.labels, MODEL_LABEL_KIND::POWER, &MODEL_LABEL::kind ), 2 );
+    BOOST_CHECK_EQUAL( std::ranges::count( model.labels, MODEL_LABEL_KIND::GLOBAL, &MODEL_LABEL::kind ), 1 );
+
+    auto global = std::ranges::find_if( model.labels,
+                                        []( const MODEL_LABEL& aLabel )
+                                        {
+                                            return aLabel.kind == MODEL_LABEL_KIND::GLOBAL;
+                                        } );
+    BOOST_REQUIRE( global != model.labels.end() );
+    BOOST_CHECK_EQUAL( global->text.text, wxS( "GLOBAL_LINK" ) );
+    BOOST_CHECK_EQUAL( global->position.x, 16000 );
+    BOOST_CHECK_EQUAL( global->position.y, 12000 );
+    BOOST_CHECK_EQUAL( global->angle, 0 );
+
+    PADS_SCH_MODEL multisheet =
+            parser.Parse( loadBinaryFixture( "multisheet_connectivity.sch" ), wxS( "multisheet_connectivity.sch" ) );
+    BOOST_CHECK_EQUAL( std::ranges::count_if( multisheet.labels,
+                                              []( const MODEL_LABEL& aLabel )
+                                              {
+                                                  return aLabel.kind == MODEL_LABEL_KIND::GLOBAL
+                                                         && aLabel.text.text == wxS( "CROSS_SHEET" );
+                                              } ),
+                       2 );
+}
+
+
+BOOST_AUTO_TEST_CASE( Buses )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    PADS_SCH_MODEL         model =
+            parser.Parse( loadBinaryFixture( "connectivity_topology.sch" ), wxS( "connectivity_topology.sch" ) );
+
+    BOOST_REQUIRE_EQUAL( model.buses.size(), 1 );
+    const MODEL_BUS& bus = model.buses.front();
+    BOOST_CHECK_EQUAL( bus.name.text, wxS( "BATCHC_BUS_ALIAS" ) );
+    BOOST_REQUIRE_EQUAL( bus.vertices.size(), 3 );
+    BOOST_CHECK_EQUAL( bus.vertices[0].x, 6000 );
+    BOOST_CHECK_EQUAL( bus.vertices[0].y, 14000 );
+    BOOST_CHECK_EQUAL( bus.vertices[2].x, 14000 );
+    BOOST_CHECK_EQUAL( bus.vertices[2].y, 10000 );
+    BOOST_REQUIRE_EQUAL( bus.entries.size(), 3 );
+    BOOST_REQUIRE_EQUAL( bus.aliases.size(), 1 );
+    BOOST_REQUIRE_EQUAL( bus.memberNets.size(), 3 );
+    BOOST_CHECK_EQUAL( bus.aliases[0].text, wxS( "BATCHC_BUS_ALIAS" ) );
+    BOOST_CHECK_EQUAL( bus.entries[0].position.x, 8000 );
+    BOOST_CHECK_EQUAL( bus.entries[1].position.x, 10000 );
+    BOOST_CHECK_EQUAL( bus.entries[2].position.x, 12000 );
+    BOOST_CHECK_EQUAL( itemNamed( model.nets, wxS( "BUS0" ) ).id.Value(), bus.memberNets[0].id.Value() );
+    BOOST_CHECK_EQUAL( itemNamed( model.nets, wxS( "BUS1" ) ).id.Value(), bus.memberNets[1].id.Value() );
+    BOOST_CHECK_EQUAL( itemNamed( model.nets, wxS( "BUS2" ) ).id.Value(), bus.memberNets[2].id.Value() );
+}
+
+
+BOOST_AUTO_TEST_CASE( PageGraphics )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    PADS_SCH_MODEL         model = parser.Parse( loadBinaryFixture( "page_graphics.sch" ), wxS( "page_graphics.sch" ) );
+
+    BOOST_REQUIRE_EQUAL( model.sheets.size(), 1 );
+    BOOST_REQUIRE_EQUAL( model.graphics.size(), 178 );
+    BOOST_CHECK_EQUAL( std::ranges::count_if( model.graphics,
+                                              []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                                              {
+                                                  return aGraphic.graphic.kind == MODEL_GRAPHIC_KIND::LINE;
+                                              } ),
+                       63 );
+    BOOST_CHECK_GE( std::ranges::count_if( model.graphics,
+                                           []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                                           {
+                                               return aGraphic.graphic.kind == MODEL_GRAPHIC_KIND::POLYLINE;
+                                           } ),
+                    1 );
+    BOOST_CHECK_EQUAL( std::ranges::count_if( model.graphics,
+                                              []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                                              {
+                                                  return aGraphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT;
+                                              } ),
+                       105 );
+    auto titleText = std::ranges::find_if( model.graphics,
+                                           []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                                           {
+                                               return aGraphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT
+                                                      && aGraphic.graphic.text.text == wxS( "TITLE:" );
+                                           } );
+    BOOST_REQUIRE( titleText != model.graphics.end() );
+    BOOST_CHECK_EQUAL( titleText->graphic.presentation.height, 200 );
+    BOOST_CHECK_EQUAL( titleText->graphic.presentation.width, 20 );
+
+    std::vector<const MODEL_PAGE_GRAPHIC*> custom;
+
+    for( const MODEL_PAGE_GRAPHIC& graphic : model.graphics )
+    {
+        if( propertyValue( graphic.graphic.properties, wxS( "page_graphic_group" ) ) == wxS( "BATCHB_PAGE_GRAPHICS" ) )
+        {
+            custom.push_back( &graphic );
+        }
+    }
+
+    BOOST_REQUIRE_EQUAL( custom.size(), 6 );
+    auto customKind = [&]( MODEL_GRAPHIC_KIND aKind )
+    {
+        return std::ranges::find_if( custom,
+                                     [&]( const MODEL_PAGE_GRAPHIC* aGraphic )
+                                     {
+                                         return aGraphic->graphic.kind == aKind;
+                                     } );
+    };
+    auto line = customKind( MODEL_GRAPHIC_KIND::LINE );
+    BOOST_REQUIRE( line != custom.end() );
+    BOOST_REQUIRE_EQUAL( ( *line )->graphic.points.size(), 2 );
+    BOOST_CHECK_EQUAL( ( *line )->graphic.points[0].x, 0 );
+    BOOST_CHECK_EQUAL( ( *line )->graphic.points[1].x, 800 );
+    BOOST_CHECK_EQUAL( ( *line )->graphic.strokeWidth, 20 );
+    BOOST_CHECK( ( *line )->graphic.lineStyle == MODEL_LINE_STYLE::SOLID );
+    auto circle = customKind( MODEL_GRAPHIC_KIND::CIRCLE );
+    BOOST_REQUIRE( circle != custom.end() );
+    BOOST_CHECK_EQUAL( ( *circle )->graphic.points[0].x, 1600 );
+    BOOST_CHECK_EQUAL( ( *circle )->graphic.points[1].y, 400 );
+    auto arc = customKind( MODEL_GRAPHIC_KIND::ARC );
+    BOOST_REQUIRE( arc != custom.end() );
+    BOOST_CHECK_EQUAL( ( *arc )->graphic.arcSweepAngle, 1800 );
+    BOOST_CHECK( ( *arc )->graphic.arcClockwise );
+    BOOST_CHECK_EQUAL( ( *arc )->graphic.arcCenter.x, 2400 );
+    BOOST_CHECK_EQUAL( ( *arc )->graphic.arcCenter.y, 200 );
+    auto text = customKind( MODEL_GRAPHIC_KIND::TEXT );
+    BOOST_REQUIRE( text != custom.end() );
+    BOOST_CHECK_EQUAL( ( *text )->graphic.text.text, wxS( "EMBEDDED PAGE TEXT" ) );
+    BOOST_CHECK_EQUAL( ( *text )->graphic.points[0].y, 600 );
+    BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.font.text, wxS( "Default Font" ) );
+    BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.height, 300 );
+    BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.width, 20 );
+
+    PADS_SCH::PADS_SCH_PARSER ascii;
+    BOOST_REQUIRE( ascii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/page_graphics.txt" ) );
+    auto pageRecords = []( std::vector<CANONICAL_SEMANTIC_RECORD> aRecords )
+    {
+        std::erase_if( aRecords,
+                       []( const CANONICAL_SEMANTIC_RECORD& aRecord )
+                       {
+                           auto group = aRecord.properties.find( "page_graphic_group" );
+                           return aRecord.kind != CANONICAL_KIND::GRAPHIC || group == aRecord.properties.end()
+                                  || group->second.value != CANONICAL_VALUE( std::string( "BATCHB_PAGE_GRAPHICS" ) );
+                       } );
+        return aRecords;
+    };
+    auto expectedPage = pageRecords( normalizeAsciiModel( ascii ) );
+    auto actualPage = pageRecords( normalizeBinaryModel( model ) );
+    BOOST_CHECK( snapshotsMatch( expectedPage, actualPage ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ConnectivityHandleErrors )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    std::vector<uint8_t>   wrongEndpoint = loadBinaryFixture( "connectivity_topology.sch" );
+    const size_t           connection = sheetControllerOffset( wrongEndpoint, 21 );
+    writeU16( wrongEndpoint, connection + 12, 0x1000 );
+    BOOST_CHECK_EXCEPTION( parser.Parse( wrongEndpoint, wxS( "wrong-endpoint.sch" ) ), IO_ERROR,
+                           [&]( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 21" ) )
+                                      && aError.What().Contains( wxS( "wrong endpoint object class" ) );
+                           } );
+
+    std::vector<uint8_t> unresolvedEndpoint = loadBinaryFixture( "connectivity_topology.sch" );
+    writeU16( unresolvedEndpoint, connection + 12, 0x2FFF );
+    BOOST_CHECK_EXCEPTION( parser.Parse( unresolvedEndpoint, wxS( "unresolved-endpoint.sch" ) ), IO_ERROR,
+                           [&]( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 21" ) )
+                                      && aError.What().Contains( wxS( "unresolved off-page endpoint" ) );
+                           } );
+
+    std::vector<uint8_t> duplicateMembership = loadBinaryFixture( "connectivity_topology.sch" );
+    const size_t         globalNets = outerControllerOffset( duplicateMembership, 8 );
+    writeU32( duplicateMembership, globalNets + 2 * 88 + 4, 1 );
+    BOOST_CHECK_EXCEPTION( parser.Parse( duplicateMembership, wxS( "duplicate-membership.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 8" ) )
+                                      && aError.What().Contains( wxS( "duplicate net sheet-membership" ) );
+                           } );
+
+    std::vector<uint8_t> wrongNetClass = loadBinaryFixture( "connectivity_topology.sch" );
+    const size_t         wrongNetConnection = sheetControllerOffset( wrongNetClass, 21 );
+    writeU32( wrongNetClass, wrongNetConnection + 8, 0 );
+    BOOST_CHECK_EXCEPTION( parser.Parse( wrongNetClass, wxS( "wrong-net-class.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 21" ) )
+                                      && aError.What().Contains( wxS( "wrong or unresolved object class" ) );
+                           } );
+
+    std::vector<uint8_t> wrongBusClass = loadBinaryFixture( "connectivity_topology.sch" );
+    const size_t         wrongBus = sheetControllerOffset( wrongBusClass, 18 );
+    writeU32( wrongBusClass, wrongBus + 8, 1 );
+    BOOST_CHECK_EXCEPTION( parser.Parse( wrongBusClass, wxS( "wrong-bus-class.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 18" ) )
+                                      && aError.What().Contains( wxS( "wrong or unresolved object class" ) );
+                           } );
+
+    std::vector<uint8_t> wrongSheet = loadBinaryFixture( "multisheet_connectivity.sch" );
+    const size_t         sheetMembership = outerControllerOffset( wrongSheet, 4 );
+    writeU16( wrongSheet, sheetMembership + 2, 2 );
+    BOOST_CHECK_EXCEPTION( parser.Parse( wrongSheet, wxS( "wrong-net-sheet.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 8" ) )
+                                      && aError.What().Contains( wxS( "wrong sheet object class" ) );
+                           } );
+
+    std::vector<uint8_t> busCycle = loadBinaryFixture( "connectivity_topology.sch" );
+    const size_t         bus = sheetControllerOffset( busCycle, 18 );
+    const size_t         offpage = sheetControllerOffset( busCycle, 20 );
+    const uint16_t       tailHandle = readU16( busCycle, bus + 24 );
+    BOOST_REQUIRE_EQUAL( tailHandle >> 12, 2 );
+    const uint16_t tailRecord = tailHandle & 0x0FFF;
+    writeU16( busCycle, offpage + tailRecord * 32 + 4, tailHandle );
+    BOOST_CHECK_EXCEPTION( parser.Parse( busCycle, wxS( "bus-entry-cycle.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 18" ) )
+                                      && aError.What().Contains( wxS( "cyclic bus-entry" ) );
+                           } );
+
+    std::vector<uint8_t> unresolvedLabelConnection = loadBinaryFixture( "connectivity_topology.sch" );
+    const size_t         label = sheetControllerOffset( unresolvedLabelConnection, 20 );
+    writeU16( unresolvedLabelConnection, label + 8, 0xFFFF );
+    BOOST_CHECK_EXCEPTION( parser.Parse( unresolvedLabelConnection, wxS( "unresolved-label-connection.sch" ) ),
+                           IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 20" ) )
+                                      && aError.What().Contains( wxS( "off-page net handle leaves controller 21" ) );
+                           } );
+}
+
+
+BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
+{
+    PADS_SCH_BINARY_PARSER binaryParser;
+
+    for( const std::string& fixture :
+         { "minimal_v13", "connectivity_topology", "multisheet_connectivity", "page_graphics" } )
+    {
+        PADS_SCH_MODEL binary =
+                binaryParser.Parse( loadBinaryFixture( fixture + ".sch" ), wxString::FromUTF8( fixture + ".sch" ) );
+        PADS_SCH::PADS_SCH_PARSER ascii;
+        BOOST_REQUIRE( ascii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/" + fixture + ".txt" ) );
+
+        auto task10 = []( std::vector<CANONICAL_SEMANTIC_RECORD> aRecords )
+        {
+            std::erase_if( aRecords,
+                           []( const CANONICAL_SEMANTIC_RECORD& aRecord )
+                           {
+                               return aRecord.kind != CANONICAL_KIND::NET && aRecord.kind != CANONICAL_KIND::CONNECTION
+                                      && aRecord.kind != CANONICAL_KIND::BUS
+                                      && aRecord.kind != CANONICAL_KIND::BUS_ENTRY
+                                      && aRecord.kind != CANONICAL_KIND::BUS_ALIAS
+                                      && aRecord.kind != CANONICAL_KIND::BUS_MEMBER
+                                      && aRecord.kind != CANONICAL_KIND::LABEL
+                                      && aRecord.kind != CANONICAL_KIND::JUNCTION
+                                      && ( aRecord.kind != CANONICAL_KIND::GRAPHIC
+                                           || !aRecord.properties.contains( "page_graphic_group" ) );
+                           } );
+
+            for( CANONICAL_SEMANTIC_RECORD& record : aRecords )
+            {
+                record.properties.erase( "global_net_record" );
+                record.properties.erase( "preserved_net_identity" );
+                record.properties.erase( "preserved_net_relationship" );
+                record.properties.erase( "raw_endpoint_handle" );
+                record.properties.erase( "raw_connection_marker" );
+                record.properties.erase( "raw_label_kind" );
+                record.properties.erase( "connection_record" );
+            }
+
+            return aRecords;
+        };
+
+        BOOST_TEST_CONTEXT( fixture )
+        {
+            auto expected = task10( normalizeAsciiModel( ascii ) );
+            auto actual = task10( normalizeBinaryModel( binary ) );
+            BOOST_CHECK( snapshotsMatch( expected, actual ) );
         }
     }
 }
@@ -3155,7 +3574,7 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
 
             for( size_t gate = 0; gate < binaryPart.gates.size(); ++gate )
             {
-                const MODEL_GATE& binaryGate = binaryPart.gates[gate];
+                const MODEL_GATE&         binaryGate = binaryPart.gates[gate];
                 const PADS_SCH::GATE_DEF& asciiGateForPart = asciiPart->second.gates[gate];
 
                 if( !binaryGate.decalGroupMembers.empty() )
@@ -3183,13 +3602,12 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
 
                 for( size_t pin = 0; pin < binaryGate.pins.size(); ++pin )
                 {
-                    const PIN_REFERENCE& pinReference = binaryGate.pins[pin];
+                    const PIN_REFERENCE&        pinReference = binaryGate.pins[pin];
                     const MODEL_PIN_DEFINITION* binaryPin = nullptr;
 
                     for( const MODEL_SYMBOL_DEFINITION& definition : fixtureBinary.definitions )
                     {
-                        auto found = std::ranges::find( definition.pins, pinReference.id,
-                                                       &MODEL_PIN_DEFINITION::id );
+                        auto found = std::ranges::find( definition.pins, pinReference.id, &MODEL_PIN_DEFINITION::id );
 
                         if( found != definition.pins.end() )
                         {
@@ -3199,8 +3617,7 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
                     }
 
                     BOOST_REQUIRE( binaryPin );
-                    BOOST_TEST_CONTEXT( fixture << ": " << binaryPart.name.text << " gate " << gate << " pin "
-                                                << pin )
+                    BOOST_TEST_CONTEXT( fixture << ": " << binaryPart.name.text << " gate " << gate << " pin " << pin )
                     {
                         BOOST_CHECK_EQUAL( binaryPin->number.text,
                                            wxString::FromUTF8( asciiGateForPart.pins[pin].pin_id ) );

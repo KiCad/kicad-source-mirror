@@ -59,10 +59,41 @@ namespace
     constexpr size_t   GATE_BYTES = 12;
     constexpr size_t   PIN_BYTES = 24;
     constexpr size_t   SIGNAL_PIN_BYTES = 64;
+    constexpr size_t   NET_MEMBERSHIP_BYTES = 2;
+    constexpr size_t   NET_RECORD_BYTES = 88;
+    constexpr size_t   BUS_RECORD_BYTES = 44;
+    constexpr size_t   JUNCTION_RECORD_BYTES = 12;
+    constexpr size_t   OFFPAGE_RECORD_BYTES = 32;
+    constexpr size_t   CONNECTION_RECORD_BYTES = 40;
+    constexpr size_t   CONNECTION_VERTEX_BYTES = 8;
     constexpr size_t   PLACEMENT_GROUP_BYTES = 24;
     constexpr size_t   ATTRIBUTE_OFFSET_BYTES = 4;
     constexpr size_t   FONT_RECORD_BYTES = 36;
     constexpr uint32_t DEFAULT_CODE_PAGE = 1252;
+
+    struct GLOBAL_NET_RECORD
+    {
+        SOURCE_PROVENANCE          source;
+        SOURCE_STRING              name;
+        uint32_t                   preservedIdentity = 0;
+        uint32_t                   preservedRelationship = 0xFFFFFFFF;
+        uint32_t                   membershipStart = 0;
+        uint16_t                   membershipCount = 0;
+        uint32_t                   aliasStringOffset = 0xFFFFFFFF;
+        uint16_t                   aliasCount = 0;
+        uint16_t                   kindFlags = 0;
+        bool                       tombstone = false;
+        std::vector<SOURCE_STRING> aliasMembers;
+    };
+
+
+    struct CONNECTIVITY_GLOBALS
+    {
+        size_t                         membershipBase = 0;
+        uint32_t                       membershipCount = 0;
+        std::vector<uint16_t>          membershipSheets;
+        std::vector<GLOBAL_NET_RECORD> nets;
+    };
 
     struct PLACEMENT_LAYOUT
     {
@@ -106,58 +137,58 @@ namespace
         size_t   customTail;
     };
 
-    constexpr PLACEMENT_LAYOUT PLACEMENT_LAYOUTS[] = {
-        []
-        {
-            PLACEMENT_LAYOUT layout{};
-            layout.version = 0x000C;
-            return layout;
-        }(),
-        { .version = 0x000D,
-          .decoded = true,
-          .placementBytes = 136,
-          .placedPinBytes = 12,
-          .fieldBytes = 24,
-          .pinStart = 0x14,
-          .componentIdentity = 0x18,
-          .componentGroup = 0x1C,
-          .x = 0x20,
-          .y = 0x22,
-          .angle = 0x24,
-          .mirror = 0x26,
-          .partType = 0x42,
-          .decal = 0x44,
-          .gate = 0x4A,
-          .pinCount = 0x4C,
-          .fieldCount = 0x4E,
-          .reference = 0x5E,
-          .referenceFont = 0,
-          .partTypeFont = 2,
-          .referenceField = 0x28,
-          .referenceFieldAngle = 0x2C,
-          .partTypeField = 0x30,
-          .partTypeFieldAngle = 0x34,
-          .referenceHeight = 0x50,
-          .partTypeHeight = 0x52,
-          .referenceWidth = 0x58,
-          .partTypeWidth = 0x59,
-          .placedPinOrdinal = 4,
-          .customFont = 0,
-          .customX = 8,
-          .customAngle = 12,
-          .customJustification = 14,
-          .customLineWidth = 16,
-          .customHeight = 18,
-          .customWidth = 20,
-          .customDisplayFlags = 21,
-          .customTail = 22 }
-    };
+    constexpr PLACEMENT_LAYOUT PLACEMENT_LAYOUTS[] = { []
+                                                       {
+                                                           PLACEMENT_LAYOUT layout{};
+                                                           layout.version = 0x000C;
+                                                           return layout;
+                                                       }(),
+                                                       { .version = 0x000D,
+                                                         .decoded = true,
+                                                         .placementBytes = 136,
+                                                         .placedPinBytes = 12,
+                                                         .fieldBytes = 24,
+                                                         .pinStart = 0x14,
+                                                         .componentIdentity = 0x18,
+                                                         .componentGroup = 0x1C,
+                                                         .x = 0x20,
+                                                         .y = 0x22,
+                                                         .angle = 0x24,
+                                                         .mirror = 0x26,
+                                                         .partType = 0x42,
+                                                         .decal = 0x44,
+                                                         .gate = 0x4A,
+                                                         .pinCount = 0x4C,
+                                                         .fieldCount = 0x4E,
+                                                         .reference = 0x5E,
+                                                         .referenceFont = 0,
+                                                         .partTypeFont = 2,
+                                                         .referenceField = 0x28,
+                                                         .referenceFieldAngle = 0x2C,
+                                                         .partTypeField = 0x30,
+                                                         .partTypeFieldAngle = 0x34,
+                                                         .referenceHeight = 0x50,
+                                                         .partTypeHeight = 0x52,
+                                                         .referenceWidth = 0x58,
+                                                         .partTypeWidth = 0x59,
+                                                         .placedPinOrdinal = 4,
+                                                         .customFont = 0,
+                                                         .customX = 8,
+                                                         .customAngle = 12,
+                                                         .customJustification = 14,
+                                                         .customLineWidth = 16,
+                                                         .customHeight = 18,
+                                                         .customWidth = 20,
+                                                         .customDisplayFlags = 21,
+                                                         .customTail = 22 } };
 
     const PLACEMENT_LAYOUT& placementLayout( uint16_t aVersion )
     {
         auto layout = std::ranges::find_if( PLACEMENT_LAYOUTS,
                                             [&]( const PLACEMENT_LAYOUT& aLayout )
-                                            { return aLayout.version == aVersion; } );
+                                            {
+                                                return aLayout.version == aVersion;
+                                            } );
 
         if( layout == std::end( PLACEMENT_LAYOUTS ) )
             THROW_IO_ERROR( wxString::Format( wxS( "unsupported PADS placement layout v0x%04X" ), aVersion ) );
@@ -532,34 +563,15 @@ namespace
 
         auto placement = aIndex.placements.find( aEndpoint.placement->id.Value() );
 
-        if( placement == aIndex.placements.end() || !placement->second->gate )
+        if( placement == aIndex.placements.end() )
             return false;
 
-        auto partType = aIndex.partTypes.find( placement->second->partType.id.Value() );
-
-        if( partType == aIndex.partTypes.end() )
-            return false;
-
-        auto gate = aIndex.gates.find( placement->second->gate->id.Value() );
-        auto gateOwner = aIndex.gateOwners.find( placement->second->gate->id.Value() );
-
-        if( gate == aIndex.gates.end() || gateOwner == aIndex.gateOwners.end() || gateOwner->second != partType->second
-            || gate->second->unit != placement->second->unit
-            || std::ranges::none_of( gate->second->pins,
-                                     [&]( const PIN_REFERENCE& aPin )
-                                     {
-                                         return aPin.id == aEndpoint.pin->id;
-                                     } ) )
-        {
-            return false;
-        }
-
-        auto definition = aIndex.definitions.find( gate->second->definition.id.Value() );
-        auto pin = aIndex.pins.find( aEndpoint.pin->id.Value() );
-        auto pinOwner = aIndex.pinOwners.find( aEndpoint.pin->id.Value() );
-
-        return definition != aIndex.definitions.end() && pin != aIndex.pins.end() && pinOwner != aIndex.pinOwners.end()
-               && pinOwner->second == definition->second;
+        return aIndex.pins.contains( aEndpoint.pin->id.Value() )
+               && std::ranges::any_of( placement->second->pins,
+                                       [&]( const PIN_REFERENCE& aPin )
+                                       {
+                                           return aPin.id == aEndpoint.pin->id;
+                                       } );
     }
 
 
@@ -597,9 +609,9 @@ namespace
                         aSourceName, aSdb.Version(), wxS( "outer controller directory" ), aController, 0,
                         OUTER_DIRECTORY_OFFSET + aController * OUTER_DESCRIPTOR_BYTES + OUTER_USED_BYTES_OFFSET, 4,
                         -1 );
-                throwDecodeError(
-                        source, wxString::Format( wxS( "controller byte count does not match %llu-byte records" ),
-                                                 static_cast<unsigned long long>( aStride ) ) );
+                throwDecodeError( source,
+                                  wxString::Format( wxS( "controller byte count does not match %llu-byte records" ),
+                                                    static_cast<unsigned long long>( aStride ) ) );
             }
         };
 
@@ -614,6 +626,120 @@ namespace
         result.attributeOffsetCount = aSdb.Pools()[7].count;
         result.fontBase = outerControllerOffset( aSdb, 19 );
         result.fontCount = aSdb.Pools()[19].count;
+        return result;
+    }
+
+
+    CONNECTIVITY_GLOBALS connectivityGlobals( const std::vector<uint8_t>& aBytes, const PADS_IO::BINARY_CURSOR& aCursor,
+                                              const PADS_SCH_SDB& aSdb, const wxString& aSourceName,
+                                              PADS_SCH_MODEL& aModel )
+    {
+        CONNECTIVITY_GLOBALS result;
+        const SCH_SDB_POOL&  membershipPool = aSdb.Pools()[4];
+        const SCH_SDB_POOL&  netPool = aSdb.Pools()[8];
+
+        if( membershipPool.usedBytes != membershipPool.count * NET_MEMBERSHIP_BYTES )
+        {
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "net membership directory" ), 4, 0,
+                                                 outerControllerOffset( aSdb, 4 ), membershipPool.usedBytes, -1 );
+            throwDecodeError( source, wxS( "controller byte count does not match 2-byte records" ) );
+        }
+
+        if( netPool.usedBytes != netPool.count * NET_RECORD_BYTES )
+        {
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "net directory" ), 8, 0,
+                                                 outerControllerOffset( aSdb, 8 ), netPool.usedBytes, -1 );
+            throwDecodeError( source, wxS( "controller byte count does not match 88-byte records" ) );
+        }
+
+        result.membershipBase = outerControllerOffset( aSdb, 4 );
+        result.membershipCount = membershipPool.count;
+        result.membershipSheets.reserve( membershipPool.count );
+
+        for( size_t record = 0; record < membershipPool.count; ++record )
+            result.membershipSheets.push_back( aCursor.U16At( result.membershipBase + record * 2 ) );
+
+        const size_t      netBase = outerControllerOffset( aSdb, 8 );
+        const size_t      aliasHeapBase = outerControllerOffset( aSdb, 1 );
+        const uint32_t    aliasHeapBytes = aSdb.Pools()[1].usedBytes;
+        std::vector<bool> claimedMemberships( membershipPool.count, false );
+
+        result.nets.reserve( netPool.count );
+
+        for( size_t record = 0; record < netPool.count; ++record )
+        {
+            const size_t      offset = netBase + record * NET_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "global net" ), 8, record, offset,
+                                                 NET_RECORD_BYTES, -1 );
+            GLOBAL_NET_RECORD net;
+            net.source = source;
+            net.preservedIdentity = aCursor.U32At( offset );
+            net.preservedRelationship = aCursor.U32At( offset + 84 );
+            net.membershipStart = aCursor.U32At( offset + 4 );
+            net.aliasStringOffset = aCursor.U32At( offset + 8 );
+            net.membershipCount = aCursor.U16At( offset + 16 );
+            net.aliasCount = aCursor.U16At( offset + 18 );
+            net.kindFlags = aCursor.U16At( offset + 22 );
+            net.tombstone = net.membershipCount == 0xFFFF;
+            SOURCE_PROVENANCE nameSource = source;
+            nameSource.absoluteOffset += 24;
+            nameSource.length = 56;
+            net.name = decodeFixedString( aBytes, offset + 24, 56, nameSource, aModel.diagnostics );
+
+            if( aCursor.U16At( offset + 20 ) != 0 || aCursor.U32At( offset + 80 ) != 0xFFFFFFFF )
+            {
+                throwDecodeError( source, wxS( "global net record has nonzero padding or a live reserved link" ) );
+            }
+
+            if( !net.tombstone
+                && ( net.membershipStart > membershipPool.count
+                     || net.membershipCount > membershipPool.count - net.membershipStart ) )
+            {
+                throwDecodeError( source, wxS( "net sheet-membership slice leaves outer controller 4" ) );
+            }
+
+            for( uint32_t membership = net.membershipStart;
+                 !net.tombstone && membership < net.membershipStart + net.membershipCount; ++membership )
+            {
+                if( claimedMemberships[membership] )
+                    throwDecodeError( source, wxS( "duplicate net sheet-membership ownership" ) );
+
+                if( result.membershipSheets[membership] >= aModel.sheets.size() )
+                    throwDecodeError( source, wxS( "net membership references the wrong sheet object class" ) );
+
+                claimedMemberships[membership] = true;
+            }
+
+            if( net.aliasCount == 0 )
+            {
+                if( net.aliasStringOffset != 0xFFFFFFFF )
+                    throwDecodeError( source, wxS( "non-alias net has an alias-string handle" ) );
+            }
+            else
+            {
+                if( net.aliasStringOffset >= aliasHeapBytes )
+                    throwDecodeError( source, wxS( "bus-alias string handle leaves outer controller 1" ) );
+
+                size_t stringOffset = net.aliasStringOffset;
+
+                for( size_t alias = 0; alias < net.aliasCount; ++alias )
+                {
+                    SOURCE_PROVENANCE aliasSource =
+                            sourceAt( aSourceName, aModel.version, wxS( "bus alias member" ), 1, alias,
+                                      aliasHeapBase + stringOffset, aliasHeapBytes - stringOffset, -1 );
+                    SOURCE_STRING member =
+                            decodeFixedString( aBytes, aliasHeapBase + stringOffset, aliasHeapBytes - stringOffset,
+                                               aliasSource, aModel.diagnostics );
+                    aliasSource.length = member.raw.size();
+                    member.source.length = member.raw.size();
+                    stringOffset += member.raw.size() + 1;
+                    net.aliasMembers.push_back( std::move( member ) );
+                }
+            }
+
+            result.nets.push_back( std::move( net ) );
+        }
+
         return result;
     }
 
@@ -801,6 +927,7 @@ namespace
         }
 
         std::vector<MODEL_SYMBOL_DEFINITION*> definitionsByRecord( controllers.pools[2].count );
+        std::vector<size_t>                   pageGraphicRecords;
         aModel.definitions.reserve( aModel.definitions.size() + controllers.pools[2].count );
 
         for( size_t record = 0; record < controllers.pools[2].count; ++record )
@@ -819,6 +946,133 @@ namespace
 
             if( vertexStart > vertexEnd || vertexEnd > controllers.pools[4].count )
                 throwDecodeError( source, wxS( "symbol definition vertex slice leaves controller 5" ) );
+
+            if( objectClass == 0 )
+            {
+                const uint32_t firstPiece = definitionPieceStart[record];
+                const uint32_t pieceEnd = record + 1 < definitionPieceStart.size() ? definitionPieceStart[record + 1]
+                                                                                   : controllers.pools[3].count;
+                const uint16_t groupTextCount = aCursor.U16At( offset + 64 );
+                const uint16_t groupLastText = aCursor.U16At( offset + 66 );
+                const bool     hasContiguousTextOwnership =
+                        groupTextCount == 0
+                        || ( groupLastText < textCount && groupTextCount <= static_cast<size_t>( groupLastText ) + 1 );
+
+                if( !hasContiguousTextOwnership )
+                {
+                    aModel.diagnostics.push_back(
+                            { RPT_SEVERITY_WARNING, source,
+                              wxS( "unsupported class-zero drawing text relationship preserved" ) } );
+                }
+
+                if( aCursor.U16At( offset + 42 ) != pieceEnd - firstPiece )
+                    throwDecodeError( source, wxS( "page-graphic piece count does not match controller 4 slice" ) );
+
+                for( size_t piece = firstPiece; piece < pieceEnd; ++piece )
+                {
+                    const size_t      pieceOffset = pieceBase + piece * SYMBOL_PIECE_BYTES;
+                    const uint8_t     pieceKind = aCursor.U8At( pieceOffset );
+                    const uint8_t     lineStyle = aCursor.U8At( pieceOffset + 1 );
+                    const uint16_t    pointCount = aCursor.U16At( pieceOffset + 2 );
+                    const uint32_t    firstVertex = pieceVertexStart[piece];
+                    SOURCE_PROVENANCE graphicSource =
+                            sourceAt( aSourceName, aModel.version, wxS( "page graphic" ), 4, piece, pieceOffset,
+                                      SYMBOL_PIECE_BYTES, static_cast<int>( aSheetIndex ) );
+
+                    if( firstVertex + pointCount > vertexEnd )
+                        throwDecodeError( graphicSource, wxS( "page graphic crosses its controller-5 slice" ) );
+
+                    MODEL_GRAPHIC graphic;
+                    graphic.source = graphicSource;
+                    graphic.strokeWidth = static_cast<int64_t>( aCursor.U16At( pieceOffset + 4 ) ) * 2;
+
+                    switch( lineStyle )
+                    {
+                    case 0xFF: graphic.lineStyle = MODEL_LINE_STYLE::SOLID; break;
+                    case 0: graphic.lineStyle = MODEL_LINE_STYLE::DASH; break;
+                    case 1: graphic.lineStyle = MODEL_LINE_STYLE::DOT; break;
+                    case 2: graphic.lineStyle = MODEL_LINE_STYLE::DASH_DOT; break;
+                    default:
+                        PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "page graphic line style" ), lineStyle,
+                                                                   graphicSource, aModel.diagnostics );
+                        graphic.lineStyle = MODEL_LINE_STYLE::DEFAULT;
+                        break;
+                    }
+
+                    switch( pieceKind )
+                    {
+                    case 0:
+                        graphic.kind = pointCount == 2 ? MODEL_GRAPHIC_KIND::LINE : MODEL_GRAPHIC_KIND::POLYLINE;
+                        break;
+                    case 1: graphic.kind = MODEL_GRAPHIC_KIND::POLYLINE; break;
+                    case 2: graphic.kind = MODEL_GRAPHIC_KIND::CIRCLE; break;
+                    case 4:
+                        graphic.kind = MODEL_GRAPHIC_KIND::POLYLINE;
+                        graphic.fill = MODEL_FILL_STYLE::FILLED;
+                        break;
+                    default:
+                        PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "page graphic kind" ), pieceKind, graphicSource,
+                                                                   aModel.diagnostics );
+                        graphic.kind = MODEL_GRAPHIC_KIND::POLYLINE;
+                        break;
+                    }
+
+                    for( size_t point = 0; point < pointCount; ++point )
+                    {
+                        const size_t      pointOffset = vertexBase + ( firstVertex + point ) * SYMBOL_VERTEX_BYTES;
+                        SOURCE_PROVENANCE pointSource = sourceAt(
+                                aSourceName, aModel.version, wxS( "page graphic vertex" ), 5, firstVertex + point,
+                                pointOffset, SYMBOL_VERTEX_BYTES, static_cast<int>( aSheetIndex ) );
+                        graphic.points.push_back( { decodeLocalCoordinate( aCursor.U16At( pointOffset ) ),
+                                                    decodeLocalCoordinate( aCursor.U16At( pointOffset + 2 ) ),
+                                                    pointSource } );
+                    }
+
+                    const int16_t arcMarker =
+                            static_cast<int16_t>( aCursor.U16At( vertexBase + firstVertex * SYMBOL_VERTEX_BYTES + 4 ) );
+
+                    if( pieceKind == 0 && arcMarker >= 0 )
+                    {
+                        if( pieceArcRecords[piece].empty() )
+                            throwDecodeError( graphicSource, wxS( "page arc has no controller-6 record" ) );
+
+                        const size_t      arcRecord = pieceArcRecords[piece].front();
+                        const size_t      arcOffset = arcBase + arcRecord * SYMBOL_ARC_BYTES;
+                        SOURCE_PROVENANCE arcSource =
+                                sourceAt( aSourceName, aModel.version, wxS( "page arc" ), 6, arcRecord, arcOffset,
+                                          SYMBOL_ARC_BYTES, static_cast<int>( aSheetIndex ) );
+                        graphic.kind = MODEL_GRAPHIC_KIND::ARC;
+                        graphic.arcSweepAngle = aCursor.U16At( arcOffset );
+                        graphic.arcClockwise = static_cast<int16_t>( aCursor.U16At( arcOffset + 2 ) ) < 0;
+                        graphic.arcBoundsStart = { decodeLocalCoordinate( aCursor.U16At( arcOffset + 6 ) ),
+                                                   decodeLocalCoordinate( aCursor.U16At( arcOffset + 8 ) ), arcSource };
+                        graphic.arcBoundsEnd = { decodeLocalCoordinate( aCursor.U16At( arcOffset + 10 ) ),
+                                                 decodeLocalCoordinate( aCursor.U16At( arcOffset + 12 ) ), arcSource };
+                        graphic.arcCenter = { ( graphic.arcBoundsStart.x + graphic.arcBoundsEnd.x ) / 2,
+                                              ( graphic.arcBoundsStart.y + graphic.arcBoundsEnd.y ) / 2, arcSource };
+                    }
+
+                    graphic.properties.push_back( sourceProperty( wxS( "page_graphic_group" ), name.text, source ) );
+
+                    if( !hasContiguousTextOwnership )
+                    {
+                        SOURCE_PROVENANCE relationshipSource = source;
+                        relationshipSource.absoluteOffset += 64;
+                        relationshipSource.length = 4;
+                        SOURCE_PROPERTY relationship = sourceProperty(
+                                wxS( "preserved_drawing_text_relationship" ),
+                                wxString::Format( wxS( "%u,%u" ), groupTextCount, groupLastText ), relationshipSource );
+                        relationship.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                        graphic.properties.push_back( std::move( relationship ) );
+                    }
+                    aModel.graphics.push_back(
+                            { graphicSource, { aModel.sheets[aSheetIndex].id, graphicSource }, std::move( graphic ) } );
+                }
+
+                if( hasContiguousTextOwnership )
+                    pageGraphicRecords.push_back( record );
+                continue;
+            }
 
             if( objectClass != 0x06 )
                 continue;
@@ -1177,7 +1431,8 @@ namespace
                                       static_cast<unsigned long long>( first.absoluteOffset ) ) );
         }
 
-        auto decodeTextRecord = [&]( size_t aRecord, bool aEmbedded, MODEL_SYMBOL_DEFINITION& aDefinition )
+        auto decodeTextRecord =
+                [&]( size_t aRecord, bool aEmbedded, bool aPageText, MODEL_SYMBOL_DEFINITION& aDefinition )
         {
             if( aRecord >= textCount )
                 throwDecodeError( aDefinition.source, wxS( "definition field handle leaves controller 1" ) );
@@ -1212,17 +1467,21 @@ namespace
                                             decodeLocalCoordinate( aCursor.U16At( offset + 14 ) ), source } );
                 graphic.presentation.source = source;
                 graphic.presentation.height = static_cast<int64_t>( aCursor.U16At( offset + 22 ) ) * 2;
-                graphic.presentation.width = static_cast<int64_t>( aCursor.U16At( offset + 30 ) ) * 2;
+                graphic.presentation.width = static_cast<int64_t>( aCursor.U8At( offset + 30 ) ) * 2;
+                graphic.presentation.properties.push_back(
+                        sourceProperty( wxS( "display_flags" ),
+                                        wxString::Format( wxS( "%u" ), aCursor.U8At( offset + 31 ) ), source ) );
                 graphic.presentation.horizontalJustification =
                         horizontalJustification( aCursor.U16At( offset + 18 ), source, aModel.diagnostics );
                 graphic.presentation.verticalJustification = verticalJustification( aCursor.U16At( offset + 18 ) );
                 SOURCE_PROVENANCE fontSource = source;
                 fontSource.absoluteOffset += 28;
                 fontSource.length = 2;
-                const int16_t fontHandle = static_cast<int16_t>( aCursor.U16At( offset + 28 ) );
-                graphic.presentation.font = decodedDefinitionFont( fontHandle, fontSource );
-                graphic.presentation.properties.push_back( sourceProperty(
-                        wxS( "font_handle" ), wxString::Format( wxS( "%d" ), fontHandle ), fontSource ) );
+                const int16_t relationship = static_cast<int16_t>( aCursor.U16At( offset + 28 ) );
+                graphic.presentation.font = decodedDefinitionFont( aPageText ? -1 : relationship, fontSource );
+                graphic.presentation.properties.push_back(
+                        sourceProperty( aPageText ? wxS( "successor_ordinal" ) : wxS( "font_handle" ),
+                                        wxString::Format( wxS( "%d" ), relationship ), fontSource ) );
                 graphic.angle = NormalizeAngle( aCursor.U16At( offset + 16 ) );
                 aDefinition.graphics.push_back( std::move( graphic ) );
             }
@@ -1236,7 +1495,10 @@ namespace
                 field.angle = NormalizeAngle( aCursor.U16At( offset + 16 ) );
                 field.presentation.source = source;
                 field.presentation.height = static_cast<int64_t>( aCursor.U16At( offset + 22 ) ) * 2;
-                field.presentation.width = static_cast<int64_t>( aCursor.U16At( offset + 30 ) ) * 2;
+                field.presentation.width = static_cast<int64_t>( aCursor.U8At( offset + 30 ) ) * 2;
+                field.presentation.properties.push_back(
+                        sourceProperty( wxS( "display_flags" ),
+                                        wxString::Format( wxS( "%u" ), aCursor.U8At( offset + 31 ) ), source ) );
                 field.presentation.horizontalJustification =
                         horizontalJustification( aCursor.U16At( offset + 18 ), source, aModel.diagnostics );
                 field.presentation.verticalJustification = verticalJustification( aCursor.U16At( offset + 18 ) );
@@ -1250,6 +1512,45 @@ namespace
                 aDefinition.fields.push_back( std::move( field ) );
             }
         };
+
+        for( size_t record : pageGraphicRecords )
+        {
+            const size_t      offset = symbolBase + record * SYMBOL_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "page graphic group" ), 3, record,
+                                                 offset, SYMBOL_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            SOURCE_PROVENANCE nameSource = source;
+            nameSource.length = 38;
+            SOURCE_STRING  groupName = decodeFixedString( aBytes, offset, 38, nameSource, aModel.diagnostics );
+            const uint16_t textCountForGroup = aCursor.U16At( offset + 64 );
+            const uint16_t lastTextRecord = aCursor.U16At( offset + 66 );
+
+            if( textCountForGroup != 0
+                && ( lastTextRecord >= textCount || textCountForGroup > static_cast<size_t>( lastTextRecord ) + 1 ) )
+                throwDecodeError( source, wxS( "page-text ownership leaves controller 1" ) );
+
+            MODEL_SYMBOL_DEFINITION textOwner;
+            textOwner.source = source;
+
+            if( textCountForGroup != 0 )
+            {
+                for( size_t textRecord = static_cast<size_t>( lastTextRecord ) + 1 - textCountForGroup;
+                     textRecord <= lastTextRecord; ++textRecord )
+                {
+                    decodeTextRecord( textRecord, true, true, textOwner );
+                }
+            }
+
+            if( textOwner.graphics.size() != textCountForGroup )
+                throwDecodeError( source, wxS( "page-text records do not exactly match declared count" ) );
+
+            for( MODEL_GRAPHIC& graphic : textOwner.graphics )
+            {
+                graphic.source.objectClass = wxS( "page text" );
+                graphic.properties.push_back( sourceProperty( wxS( "page_graphic_group" ), groupName.text, source ) );
+                aModel.graphics.push_back(
+                        { graphic.source, { aModel.sheets[aSheetIndex].id, graphic.source }, std::move( graphic ) } );
+            }
+        }
 
         for( size_t i = 0; i < fieldDecals.size(); ++i )
         {
@@ -1299,10 +1600,10 @@ namespace
             }
 
             for( size_t record = decal.fieldStart - embeddedCount; record < decal.fieldStart; ++record )
-                decodeTextRecord( record, true, *decal.definition );
+                decodeTextRecord( record, true, false, *decal.definition );
 
             for( size_t record = decal.fieldStart; record < fieldEnd; ++record )
-                decodeTextRecord( record, false, *decal.definition );
+                decodeTextRecord( record, false, false, *decal.definition );
         }
 
         size_t signalPinCursor = 0;
@@ -1341,10 +1642,9 @@ namespace
 
             auto decodePartPin = [&]( MODEL_PIN_DEFINITION& aDefinitionPin, size_t aPinRecord, MODEL_GATE& aGate )
             {
-                const size_t pinOffset = pinBase + aPinRecord * PIN_BYTES;
-                SOURCE_PROVENANCE pinSource = sourceAt( aSourceName, aModel.version, wxS( "part pin" ), 11,
-                                                         aPinRecord, pinOffset, PIN_BYTES,
-                                                         static_cast<int>( aSheetIndex ) );
+                const size_t      pinOffset = pinBase + aPinRecord * PIN_BYTES;
+                SOURCE_PROVENANCE pinSource = sourceAt( aSourceName, aModel.version, wxS( "part pin" ), 11, aPinRecord,
+                                                        pinOffset, PIN_BYTES, static_cast<int>( aSheetIndex ) );
                 SOURCE_PROVENANCE numberSource = pinSource;
                 numberSource.absoluteOffset += 4;
                 numberSource.length = 16;
@@ -1357,26 +1657,25 @@ namespace
                     if( nameOffset >= pinNameBytes )
                         throwDecodeError( pinSource, wxS( "pin-name offset leaves controller 14" ) );
 
-                    SOURCE_PROVENANCE pinNameSource =
-                            sourceAt( aSourceName, aModel.version, wxS( "pin name" ), 14, aPinRecord,
-                                      pinNameBase + nameOffset, pinNameBytes - nameOffset,
-                                      static_cast<int>( aSheetIndex ) );
-                    aDefinitionPin.name = decodeFixedString( aBytes, pinNameBase + nameOffset,
-                                                             pinNameBytes - nameOffset, pinNameSource,
-                                                             aModel.diagnostics );
+                    SOURCE_PROVENANCE pinNameSource = sourceAt(
+                            aSourceName, aModel.version, wxS( "pin name" ), 14, aPinRecord, pinNameBase + nameOffset,
+                            pinNameBytes - nameOffset, static_cast<int>( aSheetIndex ) );
+                    aDefinitionPin.name =
+                            decodeFixedString( aBytes, pinNameBase + nameOffset, pinNameBytes - nameOffset,
+                                               pinNameSource, aModel.diagnostics );
                 }
 
                 aDefinitionPin.electricalType =
                         pinElectricalType( aCursor.U8At( pinOffset + 21 ), pinSource, aModel.diagnostics );
-                aDefinitionPin.properties.push_back( sourceProperty(
-                        wxS( "swap_group" ), wxString::Format( wxS( "%u" ), aCursor.U8At( pinOffset + 20 ) ),
-                        pinSource ) );
+                aDefinitionPin.properties.push_back(
+                        sourceProperty( wxS( "swap_group" ),
+                                        wxString::Format( wxS( "%u" ), aCursor.U8At( pinOffset + 20 ) ), pinSource ) );
                 aGate.pins.push_back( { aDefinitionPin.id, pinSource } );
             };
 
             auto decodeConnectorPin = [&]( size_t aPinRecord )
             {
-                const size_t pinOffset = pinBase + aPinRecord * PIN_BYTES;
+                const size_t      pinOffset = pinBase + aPinRecord * PIN_BYTES;
                 SOURCE_PROVENANCE pinSource =
                         sourceAt( aSourceName, aModel.version, wxS( "connector logical pin" ), 11, aPinRecord,
                                   pinOffset, PIN_BYTES, static_cast<int>( aSheetIndex ) );
@@ -1393,17 +1692,15 @@ namespace
                     if( nameOffset >= pinNameBytes )
                         throwDecodeError( pinSource, wxS( "pin-name offset leaves controller 14" ) );
 
-                    SOURCE_PROVENANCE pinNameSource =
-                            sourceAt( aSourceName, aModel.version, wxS( "connector pin name" ), 14, aPinRecord,
-                                      pinNameBase + nameOffset, pinNameBytes - nameOffset,
-                                      static_cast<int>( aSheetIndex ) );
+                    SOURCE_PROVENANCE pinNameSource = sourceAt(
+                            aSourceName, aModel.version, wxS( "connector pin name" ), 14, aPinRecord,
+                            pinNameBase + nameOffset, pinNameBytes - nameOffset, static_cast<int>( aSheetIndex ) );
                     pin.name = decodeFixedString( aBytes, pinNameBase + nameOffset, pinNameBytes - nameOffset,
                                                   pinNameSource, aModel.diagnostics );
                 }
 
                 pin.swapGroup = aCursor.U8At( pinOffset + 20 );
-                pin.electricalType =
-                        pinElectricalType( aCursor.U8At( pinOffset + 21 ), pinSource, aModel.diagnostics );
+                pin.electricalType = pinElectricalType( aCursor.U8At( pinOffset + 21 ), pinSource, aModel.diagnostics );
                 pin.flags = aCursor.U16At( pinOffset + 22 );
                 return pin;
             };
@@ -1590,9 +1887,9 @@ namespace
                 if( aStrictHandle )
                     throwDecodeError( aHandleSource, wxS( "placement font handle leaves outer controller 19" ) );
 
-                SOURCE_PROPERTY property = sourceProperty(
-                        wxS( "inline_font_payload" ), wxString::Format( wxS( "%u" ), uint16_t( aHandle ) ),
-                        aHandleSource );
+                SOURCE_PROPERTY property =
+                        sourceProperty( wxS( "inline_font_payload" ),
+                                        wxString::Format( wxS( "%u" ), uint16_t( aHandle ) ), aHandleSource );
                 property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
                 aPresentation.properties.push_back( std::move( property ) );
                 aModel.diagnostics.push_back( { RPT_SEVERITY_WARNING, aHandleSource,
@@ -1600,10 +1897,10 @@ namespace
                 return;
             }
 
-            const size_t fontOffset = aGlobals.fontBase + static_cast<size_t>( aHandle ) * FONT_RECORD_BYTES;
-            SOURCE_PROVENANCE fontSource = sourceAt( aSourceName, aModel.version, wxS( "placement font" ), 19,
-                                                     aHandle, fontOffset, FONT_RECORD_BYTES, -1 );
-            const uint32_t style = aCursor.U32At( fontOffset );
+            const size_t      fontOffset = aGlobals.fontBase + static_cast<size_t>( aHandle ) * FONT_RECORD_BYTES;
+            SOURCE_PROVENANCE fontSource = sourceAt( aSourceName, aModel.version, wxS( "placement font" ), 19, aHandle,
+                                                     fontOffset, FONT_RECORD_BYTES, -1 );
+            const uint32_t    style = aCursor.U32At( fontOffset );
 
             SOURCE_PROVENANCE nameSource = fontSource;
             nameSource.absoluteOffset += 4;
@@ -1624,13 +1921,12 @@ namespace
 
             if( ( style & ~uint32_t{ 3 } ) != 0 )
             {
-                SOURCE_PROPERTY property = sourceProperty(
-                        wxS( "unsupported_font_style_flags" ), wxString::Format( wxS( "%u" ), style & ~3U ),
-                        fontSource );
+                SOURCE_PROPERTY property = sourceProperty( wxS( "unsupported_font_style_flags" ),
+                                                           wxString::Format( wxS( "%u" ), style & ~3U ), fontSource );
                 property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
                 aPresentation.properties.push_back( std::move( property ) );
-                aModel.diagnostics.push_back(
-                        { RPT_SEVERITY_WARNING, fontSource, wxS( "unsupported placement font style flags preserved" ) } );
+                aModel.diagnostics.push_back( { RPT_SEVERITY_WARNING, fontSource,
+                                                wxS( "unsupported placement font style flags preserved" ) } );
             }
         };
 
@@ -1638,21 +1934,21 @@ namespace
         {
             if( aOffsetIndex >= aGlobals.attributeOffsetCount )
             {
-                SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "attribute offset" ), 7,
-                                                     aOffsetIndex, aGlobals.attributeOffsetBase,
-                                                     ATTRIBUTE_OFFSET_BYTES, -1 );
+                SOURCE_PROVENANCE source =
+                        sourceAt( aSourceName, aModel.version, wxS( "attribute offset" ), 7, aOffsetIndex,
+                                  aGlobals.attributeOffsetBase, ATTRIBUTE_OFFSET_BYTES, -1 );
                 throwDecodeError( source, wxS( "attribute offset index leaves outer controller 7" ) );
             }
 
-            const size_t offsetRecord = aGlobals.attributeOffsetBase + aOffsetIndex * ATTRIBUTE_OFFSET_BYTES;
-            const uint32_t heapOffset = aCursor.U32At( offsetRecord );
+            const size_t      offsetRecord = aGlobals.attributeOffsetBase + aOffsetIndex * ATTRIBUTE_OFFSET_BYTES;
+            const uint32_t    heapOffset = aCursor.U32At( offsetRecord );
             SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "placement attribute" ), 2,
                                                  aOffsetIndex, aGlobals.attributeHeapBase + heapOffset, 0, -1 );
 
             if( heapOffset >= aGlobals.attributeHeapBytes )
                 throwDecodeError( source, wxS( "attribute string offset leaves outer controller 2" ) );
 
-            size_t end = source.absoluteOffset;
+            size_t       end = source.absoluteOffset;
             const size_t heapEnd = aGlobals.attributeHeapBase + aGlobals.attributeHeapBytes;
 
             while( end < heapEnd && aBytes[end] != 0 )
@@ -1671,8 +1967,8 @@ namespace
                 throwDecodeError( source, wxS( "placement attribute lacks key/value separator" ) );
 
             SOURCE_STRING name = PADS_SCH_BINARY_PARSER::DecodeString(
-                    { aBytes.begin() + source.absoluteOffset, aBytes.begin() + separator }, DEFAULT_CODE_PAGE,
-                    source, aModel.diagnostics );
+                    { aBytes.begin() + source.absoluteOffset, aBytes.begin() + separator }, DEFAULT_CODE_PAGE, source,
+                    aModel.diagnostics );
             SOURCE_STRING value;
 
             if( separator != end )
@@ -1690,28 +1986,28 @@ namespace
 
         for( size_t record = 0; record < controllers.pools[14].count; ++record )
         {
-            const size_t offset = placementBase + record * layout.placementBytes;
+            const size_t      offset = placementBase + record * layout.placementBytes;
             SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "placement" ), 15, record, offset,
                                                  layout.placementBytes, static_cast<int>( aSheetIndex ) );
-            const uint32_t componentIdentity = aCursor.U32At( offset + layout.componentIdentity );
+            const uint32_t    componentIdentity = aCursor.U32At( offset + layout.componentIdentity );
 
             const uint16_t partHandle = aCursor.U16At( offset + layout.partType );
-            auto part = std::ranges::find_if( aModel.partTypes,
-                                              [&]( const MODEL_PART_TYPE& aPart )
-                                              {
+            auto           part = std::ranges::find_if( aModel.partTypes,
+                                                        [&]( const MODEL_PART_TYPE& aPart )
+                                                        {
                                                   return aPart.source.sheet == static_cast<int>( aSheetIndex )
                                                          && aPart.source.recordIndex == partHandle;
                                               } );
 
             if( part == aModel.partTypes.end() )
             {
-                const bool definitionClass = std::ranges::any_of(
-                        aModel.definitions,
-                        [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
-                        {
-                            return aDefinition.source.sheet == static_cast<int>( aSheetIndex )
-                                   && aDefinition.source.recordIndex == partHandle;
-                        } );
+                const bool definitionClass =
+                        std::ranges::any_of( aModel.definitions,
+                                             [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                             {
+                                                 return aDefinition.source.sheet == static_cast<int>( aSheetIndex )
+                                                        && aDefinition.source.recordIndex == partHandle;
+                                             } );
                 throwDecodeError( source, definitionClass
                                                   ? wxS( "placement part-type handle targets definition object class" )
                                                   : wxS( "unresolved placement part-type reference" ) );
@@ -1722,7 +2018,7 @@ namespace
             if( groupHandle >= aGlobals.groupCount )
                 throwDecodeError( source, wxS( "placement component-group handle leaves outer controller 6" ) );
 
-            const size_t groupOffset = aGlobals.groupBase + groupHandle * PLACEMENT_GROUP_BYTES;
+            const size_t   groupOffset = aGlobals.groupBase + groupHandle * PLACEMENT_GROUP_BYTES;
             const uint32_t attributeStart = aCursor.U32At( groupOffset );
             const uint16_t attributeCount = aCursor.U16At( groupOffset + 20 );
 
@@ -1742,15 +2038,15 @@ namespace
             if( decalHandle >= controllers.pools[6].count )
                 throwDecodeError( source, wxS( "unresolved placement decal reference" ) );
 
-            const size_t decalOffset = controllers.offsets[6] + decalHandle * USED_DECAL_BYTES;
+            const size_t   decalOffset = controllers.offsets[6] + decalHandle * USED_DECAL_BYTES;
             const uint32_t definitionHandle = aCursor.U32At( decalOffset + 48 );
-            auto definition = std::ranges::find_if( aModel.definitions,
-                                                    [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
-                                                    {
-                                                        return aDefinition.source.sheet
-                                                                       == static_cast<int>( aSheetIndex )
-                                                               && aDefinition.source.recordIndex == definitionHandle;
-                                                    } );
+            auto           definition =
+                    std::ranges::find_if( aModel.definitions,
+                                          [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                          {
+                                              return aDefinition.source.sheet == static_cast<int>( aSheetIndex )
+                                                     && aDefinition.source.recordIndex == definitionHandle;
+                                          } );
 
             if( definition == aModel.definitions.end() )
                 throwDecodeError( source, wxS( "placement decal targets wrong definition object class" ) );
@@ -1767,13 +2063,13 @@ namespace
                 gate = nullptr;
             else
             {
-                const bool definitionClass = std::ranges::any_of(
-                        aModel.definitions,
-                        [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
-                        {
-                            return aDefinition.source.sheet == static_cast<int>( aSheetIndex )
-                                   && aDefinition.source.recordIndex == unitIndex;
-                        } );
+                const bool definitionClass =
+                        std::ranges::any_of( aModel.definitions,
+                                             [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                             {
+                                                 return aDefinition.source.sheet == static_cast<int>( aSheetIndex )
+                                                        && aDefinition.source.recordIndex == unitIndex;
+                                             } );
                 throwDecodeError( source, definitionClass
                                                   ? wxS( "placement gate handle targets definition object class" )
                                                   : wxS( "unresolved placement gate reference" ) );
@@ -1833,8 +2129,8 @@ namespace
             if( !knownAngle )
                 recordTransformEnum( layout.angle );
 
-            const bool knownMirror = placement.mirrorFlags == 0 || placement.mirrorFlags == 2
-                                     || placement.mirrorFlags == 3;
+            const bool knownMirror =
+                    placement.mirrorFlags == 0 || placement.mirrorFlags == 2 || placement.mirrorFlags == 3;
 
             if( !knownMirror )
                 recordTransformEnum( layout.mirror );
@@ -1843,15 +2139,15 @@ namespace
             SOURCE_PROVENANCE referenceSource = source;
             referenceSource.absoluteOffset += layout.reference;
             referenceSource.length = 40;
-            placement.reference = decodeFixedString( aBytes, offset + layout.reference, 40, referenceSource,
-                                                      aModel.diagnostics );
+            placement.reference =
+                    decodeFixedString( aBytes, offset + layout.reference, 40, referenceSource, aModel.diagnostics );
 
             for( size_t pin = 0; pin < pinCount; ++pin )
             {
-                const size_t pinOffset = placedPinBase + ( pinStart + pin ) * layout.placedPinBytes;
-                SOURCE_PROVENANCE pinSource = sourceAt( aSourceName, aModel.version, wxS( "placed pin" ), 16,
-                                                        pinStart + pin, pinOffset, layout.placedPinBytes,
-                                                        static_cast<int>( aSheetIndex ) );
+                const size_t      pinOffset = placedPinBase + ( pinStart + pin ) * layout.placedPinBytes;
+                SOURCE_PROVENANCE pinSource =
+                        sourceAt( aSourceName, aModel.version, wxS( "placed pin" ), 16, pinStart + pin, pinOffset,
+                                  layout.placedPinBytes, static_cast<int>( aSheetIndex ) );
                 const uint16_t pinOrdinal = aCursor.U16At( pinOffset + layout.placedPinOrdinal );
 
                 if( pinOrdinal >= definition->pins.size() || pinOrdinal != pin )
@@ -1888,18 +2184,16 @@ namespace
                 SOURCE_PROVENANCE fontSource = fieldSource;
                 fontSource.absoluteOffset = offset + aFontOffset;
                 fontSource.length = 2;
-                font( static_cast<int16_t>( aCursor.U16At( offset + aFontOffset ) ), fontSource,
-                      field.presentation, false );
+                font( static_cast<int16_t>( aCursor.U16At( offset + aFontOffset ) ), fontSource, field.presentation,
+                      false );
                 placement.fields.push_back( std::move( field ) );
             };
 
             SOURCE_STRING referenceValue = placement.reference;
-            addInlineField( wxS( "REF-DES" ), referenceValue, layout.referenceField,
-                            layout.referenceFieldAngle, layout.referenceFont, layout.referenceHeight,
-                            layout.referenceWidth );
-            addInlineField( wxS( "PART-TYPE" ), part->name, layout.partTypeField,
-                            layout.partTypeFieldAngle, layout.partTypeFont, layout.partTypeHeight,
-                            layout.partTypeWidth );
+            addInlineField( wxS( "REF-DES" ), referenceValue, layout.referenceField, layout.referenceFieldAngle,
+                            layout.referenceFont, layout.referenceHeight, layout.referenceWidth );
+            addInlineField( wxS( "PART-TYPE" ), part->name, layout.partTypeField, layout.partTypeFieldAngle,
+                            layout.partTypeFont, layout.partTypeHeight, layout.partTypeWidth );
 
             const uint16_t customFieldCount = aCursor.U16At( offset + layout.fieldCount );
 
@@ -1927,10 +2221,10 @@ namespace
 
             for( size_t fieldOrdinal = 0; fieldOrdinal < customFieldCount; ++fieldOrdinal )
             {
-                const size_t fieldOffset = fieldBase + fieldCursor * layout.fieldBytes;
-                SOURCE_PROVENANCE fieldSource = sourceAt( aSourceName, aModel.version, wxS( "placement field" ), 17,
-                                                          fieldCursor, fieldOffset, layout.fieldBytes,
-                                                          static_cast<int>( aSheetIndex ) );
+                const size_t      fieldOffset = fieldBase + fieldCursor * layout.fieldBytes;
+                SOURCE_PROVENANCE fieldSource =
+                        sourceAt( aSourceName, aModel.version, wxS( "placement field" ), 17, fieldCursor, fieldOffset,
+                                  layout.fieldBytes, static_cast<int>( aSheetIndex ) );
                 SOURCE_STRING name;
                 SOURCE_STRING value;
 
@@ -1944,8 +2238,7 @@ namespace
                 }
                 else
                 {
-                    std::tie( name, value ) =
-                            attributeString( customAttributeStart + namedFieldOrdinal, true );
+                    std::tie( name, value ) = attributeString( customAttributeStart + namedFieldOrdinal, true );
                     ++namedFieldOrdinal;
                 }
                 MODEL_FIELD field;
@@ -1967,8 +2260,7 @@ namespace
                 field.presentation.verticalJustification = verticalJustification( justification );
                 field.presentation.height =
                         static_cast<int64_t>( aCursor.U16At( fieldOffset + layout.customHeight ) ) * 2;
-                field.presentation.width =
-                        static_cast<int64_t>( aCursor.U8At( fieldOffset + layout.customWidth ) ) * 2;
+                field.presentation.width = static_cast<int64_t>( aCursor.U8At( fieldOffset + layout.customWidth ) ) * 2;
                 field.presentation.visible = ( displayFlags & 8 ) == 0;
                 field.visible = field.presentation.visible;
 
@@ -1983,8 +2275,7 @@ namespace
                 lineWidthSource.length = 2;
                 field.properties.push_back( sourceProperty(
                         wxS( "line_width_half_mil" ),
-                        wxString::Format( wxS( "%u" ),
-                                          aCursor.U16At( fieldOffset + layout.customLineWidth ) ),
+                        wxString::Format( wxS( "%u" ), aCursor.U16At( fieldOffset + layout.customLineWidth ) ),
                         lineWidthSource ) );
                 SOURCE_PROPERTY preservedTail = sourceProperty(
                         wxS( "preserved_field_tail" ),
@@ -1999,38 +2290,594 @@ namespace
             SOURCE_PROVENANCE rawAngleSource = source;
             rawAngleSource.absoluteOffset += layout.angle;
             rawAngleSource.length = 2;
-            placement.properties.push_back( sourceProperty(
-                    wxS( "raw_angle" ), wxString::Format( wxS( "%u" ), rawAngle ), rawAngleSource ) );
+            placement.properties.push_back(
+                    sourceProperty( wxS( "raw_angle" ), wxString::Format( wxS( "%u" ), rawAngle ), rawAngleSource ) );
             placement.properties.push_back( sourceProperty(
                     wxS( "component_identity" ), wxString::Format( wxS( "%u" ), componentIdentity ), source ) );
-            placement.properties.push_back( sourceProperty(
-                    wxS( "component_group_handle" ), wxString::Format( wxS( "%u" ), groupHandle ), source ) );
-            placement.properties.push_back( sourceProperty(
-                    wxS( "decal_handle" ), wxString::Format( wxS( "%u" ), decalHandle ), source ) );
+            placement.properties.push_back( sourceProperty( wxS( "component_group_handle" ),
+                                                            wxString::Format( wxS( "%u" ), groupHandle ), source ) );
+            placement.properties.push_back(
+                    sourceProperty( wxS( "decal_handle" ), wxString::Format( wxS( "%u" ), decalHandle ), source ) );
             SOURCE_PROVENANCE rawMirrorSource = source;
             rawMirrorSource.absoluteOffset += layout.mirror;
             rawMirrorSource.length = 2;
             placement.properties.push_back( sourceProperty(
-                    wxS( "raw_mirror" ), wxString::Format( wxS( "%u" ), placement.mirrorFlags ),
-                    rawMirrorSource ) );
+                    wxS( "raw_mirror" ), wxString::Format( wxS( "%u" ), placement.mirrorFlags ), rawMirrorSource ) );
             aModel.placements.push_back( std::move( placement ) );
         }
 
         if( expectedPinStart != controllers.pools[15].count )
         {
-            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "placed pin" ), 16,
-                                                 expectedPinStart, placedPinBase,
-                                                 controllers.pools[15].usedBytes,
-                                                 static_cast<int>( aSheetIndex ) );
+            SOURCE_PROVENANCE source =
+                    sourceAt( aSourceName, aModel.version, wxS( "placed pin" ), 16, expectedPinStart, placedPinBase,
+                              controllers.pools[15].usedBytes, static_cast<int>( aSheetIndex ) );
             throwDecodeError( source, wxS( "unowned placed-pin record" ) );
         }
 
         if( fieldCursor != controllers.pools[16].count )
         {
-            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "placement field" ), 17,
-                                                 fieldCursor, fieldBase, controllers.pools[16].usedBytes,
-                                                 static_cast<int>( aSheetIndex ) );
+            SOURCE_PROVENANCE source =
+                    sourceAt( aSourceName, aModel.version, wxS( "placement field" ), 17, fieldCursor, fieldBase,
+                              controllers.pools[16].usedBytes, static_cast<int>( aSheetIndex ) );
             throwDecodeError( source, wxS( "unowned placement-field record" ) );
+        }
+    }
+
+
+    void decodeConnectivity( const std::vector<uint8_t>& aBytes, const PADS_IO::BINARY_CURSOR& aCursor,
+                             const SCH_SDB_BLOCK& aBlock, size_t aSheetIndex, const wxString& aSourceName,
+                             const CONNECTIVITY_GLOBALS& aGlobals, PADS_SCH_MODEL& aModel )
+    {
+        if( aModel.version != 0x000D )
+            throwDecodeError( aModel.source, wxS( "connectivity decoder selected for raw-preserved version" ) );
+
+        const SHEET_CONTROLLERS controllers = sheetControllers( aCursor, aBlock );
+        requireFixedController( controllers, 18, BUS_RECORD_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 19, JUNCTION_RECORD_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 20, OFFPAGE_RECORD_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 21, CONNECTION_RECORD_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 22, CONNECTION_VERTEX_BYTES, aSourceName, aModel.version, aSheetIndex );
+
+        const size_t                 busBase = controllers.offsets[17];
+        const size_t                 junctionBase = controllers.offsets[18];
+        const size_t                 offpageBase = controllers.offsets[19];
+        const size_t                 connectionBase = controllers.offsets[20];
+        const size_t                 vertexBase = controllers.offsets[21];
+        std::unordered_set<uint32_t> busGlobalRecords;
+
+        for( size_t record = 0; record < controllers.pools[17].count; ++record )
+        {
+            const uint32_t globalRecord = aCursor.U32At( busBase + record * BUS_RECORD_BYTES + 8 );
+            const uint8_t  netKind =
+                    globalRecord < aGlobals.nets.size() ? aGlobals.nets[globalRecord].kindFlags & 0xFF : 0;
+
+            if( globalRecord >= aGlobals.nets.size() || aGlobals.nets[globalRecord].tombstone
+                || ( netKind != 1 && netKind != 5 ) )
+            {
+                SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "bus" ), 18, record,
+                                                     busBase + record * BUS_RECORD_BYTES, BUS_RECORD_BYTES,
+                                                     static_cast<int>( aSheetIndex ) );
+                throwDecodeError( source, wxS( "bus global-net handle targets wrong or unresolved object class" ) );
+            }
+
+            busGlobalRecords.insert( globalRecord );
+        }
+
+        std::vector<MODEL_NET*> sheetNets( aGlobals.nets.size(), nullptr );
+        aModel.nets.reserve( aModel.nets.size() + aGlobals.nets.size() );
+
+        for( size_t globalRecord = 0; globalRecord < aGlobals.nets.size(); ++globalRecord )
+        {
+            const GLOBAL_NET_RECORD& global = aGlobals.nets[globalRecord];
+
+            if( global.tombstone )
+                continue;
+
+            for( uint32_t membership = global.membershipStart;
+                 membership < global.membershipStart + global.membershipCount; ++membership )
+            {
+                if( aGlobals.membershipSheets[membership] != aSheetIndex )
+                    continue;
+
+                if( global.aliasCount != 0 || busGlobalRecords.contains( globalRecord ) )
+                    continue;
+
+                MODEL_NET net;
+                net.id = NET_ID( membership );
+                net.source = global.source;
+                net.source.sheet = static_cast<int>( aSheetIndex );
+                SOURCE_PROVENANCE membershipSource =
+                        sourceAt( aSourceName, aModel.version, wxS( "net sheet membership" ), 4, membership,
+                                  aGlobals.membershipBase + membership * NET_MEMBERSHIP_BYTES, NET_MEMBERSHIP_BYTES,
+                                  static_cast<int>( aSheetIndex ) );
+                net.sheet = { aModel.sheets[aSheetIndex].id, membershipSource };
+                net.name = global.name;
+                net.properties.push_back( sourceProperty(
+                        wxS( "global_net_record" ), wxString::Format( wxS( "%llu" ), globalRecord ), global.source ) );
+                SOURCE_PROPERTY identity =
+                        sourceProperty( wxS( "preserved_net_identity" ),
+                                        wxString::Format( wxS( "%u" ), global.preservedIdentity ), global.source );
+                identity.disposition = PROPERTY_DISPOSITION::PRESERVED;
+                net.properties.push_back( std::move( identity ) );
+                SOURCE_PROVENANCE relationshipSource = global.source;
+                relationshipSource.absoluteOffset += 84;
+                relationshipSource.length = 4;
+                SOURCE_PROPERTY relationship = sourceProperty(
+                        wxS( "preserved_net_relationship" ),
+                        wxString::Format( wxS( "%u" ), global.preservedRelationship ), relationshipSource );
+                relationship.disposition = PROPERTY_DISPOSITION::PRESERVED;
+                net.properties.push_back( std::move( relationship ) );
+                aModel.nets.push_back( std::move( net ) );
+                sheetNets[globalRecord] = &aModel.nets.back();
+            }
+        }
+
+        struct PLACED_PIN_JOIN
+        {
+            MODEL_PLACEMENT* placement = nullptr;
+            PIN_ID           pin;
+        };
+
+        std::vector<PLACED_PIN_JOIN> placedPins( controllers.pools[15].count );
+        const PLACEMENT_LAYOUT&      placementSchema = placementLayout( aModel.version );
+
+        for( MODEL_PLACEMENT& placement : aModel.placements )
+        {
+            if( placement.source.sheet != static_cast<int>( aSheetIndex ) )
+                continue;
+
+            const size_t placementOffset =
+                    controllers.offsets[14] + placement.source.recordIndex * placementSchema.placementBytes;
+            const uint32_t pinStart = aCursor.U32At( placementOffset + placementSchema.pinStart );
+            const uint16_t pinCount = aCursor.U16At( placementOffset + placementSchema.pinCount );
+
+            if( pinStart > placedPins.size() || pinCount > placedPins.size() - pinStart
+                || pinCount != placement.pins.size() )
+            {
+                throwDecodeError( placement.source, wxS( "placement pin join leaves controller 16" ) );
+            }
+
+            for( size_t pin = 0; pin < pinCount; ++pin )
+                placedPins[pinStart + pin] = { &placement, placement.pins[pin].id };
+        }
+
+        auto offpagePosition = [&]( size_t aRecord )
+        {
+            const size_t      offset = offpageBase + aRecord * OFFPAGE_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "off-page reference" ), 20, aRecord,
+                                                 offset, OFFPAGE_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            return SOURCE_POINT{ decodeCoordinate( aCursor.U16At( offset + 22 ) ),
+                                 decodeCoordinate( aCursor.U16At( offset + 24 ) ), source };
+        };
+
+        auto junctionPosition = [&]( size_t aRecord )
+        {
+            const size_t      offset = junctionBase + aRecord * JUNCTION_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "junction" ), 19, aRecord, offset,
+                                                 JUNCTION_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            return SOURCE_POINT{ decodeCoordinate( aCursor.U16At( offset + 4 ) ),
+                                 decodeCoordinate( aCursor.U16At( offset + 6 ) ), source };
+        };
+
+        for( size_t record = 0; record < controllers.pools[18].count; ++record )
+        {
+            const size_t      offset = junctionBase + record * JUNCTION_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "junction" ), 19, record, offset,
+                                                 JUNCTION_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+
+            const uint16_t status = aCursor.U16At( offset + 10 );
+
+            if( status != 0 && status != 0x00FC && status != 0x00FD )
+                throwDecodeError( source, wxS( "invalid junction object-class marker" ) );
+
+            MODEL_JUNCTION junction;
+            junction.source = source;
+            junction.sheet = { aModel.sheets[aSheetIndex].id, source };
+            junction.position = junctionPosition( record );
+            junction.properties.push_back( sourceProperty( wxS( "connection_record" ),
+                                                           wxString::Format( wxS( "%u" ), aCursor.U16At( offset + 8 ) ),
+                                                           source ) );
+            aModel.junctions.push_back( std::move( junction ) );
+        }
+
+        std::vector<uint32_t> objectVertexStarts;
+        objectVertexStarts.reserve( controllers.pools[17].count + controllers.pools[20].count );
+
+        for( size_t record = 0; record < controllers.pools[17].count; ++record )
+            objectVertexStarts.push_back( aCursor.U32At( busBase + record * BUS_RECORD_BYTES + 4 ) );
+
+        for( size_t record = 0; record < controllers.pools[20].count; ++record )
+            objectVertexStarts.push_back( aCursor.U32At( connectionBase + record * CONNECTION_RECORD_BYTES + 4 ) );
+
+        std::vector<size_t> objectOrder( objectVertexStarts.size() );
+
+        for( size_t object = 0; object < objectOrder.size(); ++object )
+            objectOrder[object] = object;
+
+        std::ranges::sort( objectOrder,
+                           [&]( size_t aLeft, size_t aRight )
+                           {
+                               return objectVertexStarts[aLeft] < objectVertexStarts[aRight];
+                           } );
+        std::vector<uint32_t> objectVertexEnds( objectVertexStarts.size() );
+
+        for( size_t ordinal = 0; ordinal < objectOrder.size(); ++ordinal )
+        {
+            const size_t   object = objectOrder[ordinal];
+            const uint32_t end = ordinal + 1 < objectOrder.size() ? objectVertexStarts[objectOrder[ordinal + 1]]
+                                                                  : controllers.pools[21].count;
+
+            if( ( ordinal == 0 && objectVertexStarts[object] != 0 ) || objectVertexStarts[object] >= end
+                || end > controllers.pools[21].count )
+            {
+                SOURCE_PROVENANCE source =
+                        sourceAt( aSourceName, aModel.version, wxS( "connectivity vertex ownership" ),
+                                  object < controllers.pools[17].count ? 18 : 21, object, vertexBase,
+                                  controllers.pools[21].usedBytes, static_cast<int>( aSheetIndex ) );
+                throwDecodeError( source, wxS( "connectivity vertex slices do not exactly tile controller 22" ) );
+            }
+
+            objectVertexEnds[object] = end;
+        }
+
+        if( objectVertexStarts.empty() && controllers.pools[21].count != 0 )
+        {
+            SOURCE_PROVENANCE source =
+                    sourceAt( aSourceName, aModel.version, wxS( "connection vertex" ), 22, 0, vertexBase,
+                              controllers.pools[21].usedBytes, static_cast<int>( aSheetIndex ) );
+            throwDecodeError( source, wxS( "unclaimed connection vertices" ) );
+        }
+
+        auto appendVertices = [&]( std::vector<SOURCE_POINT>& aVertices, size_t aObject )
+        {
+            const uint32_t start = objectVertexStarts[aObject];
+            const uint32_t end = objectVertexEnds[aObject];
+
+            for( uint32_t vertex = start; vertex < end; ++vertex )
+            {
+                const size_t      offset = vertexBase + vertex * CONNECTION_VERTEX_BYTES;
+                SOURCE_PROVENANCE source =
+                        sourceAt( aSourceName, aModel.version, wxS( "connection vertex" ), 22, vertex, offset,
+                                  CONNECTION_VERTEX_BYTES, static_cast<int>( aSheetIndex ) );
+
+                if( aCursor.U32At( offset ) != 0 )
+                    throwDecodeError( source, wxS( "nonzero connection-vertex padding" ) );
+
+                aVertices.push_back( { decodeCoordinate( aCursor.U16At( offset + 4 ) ),
+                                       decodeCoordinate( aCursor.U16At( offset + 6 ) ), source } );
+            }
+        };
+
+        std::vector<MODEL_CONNECTION*> connections( controllers.pools[20].count, nullptr );
+        std::vector<MODEL_NET*>        connectionNets( controllers.pools[20].count, nullptr );
+        std::vector<size_t>            connectionCounts( sheetNets.size(), 0 );
+
+        for( size_t record = 0; record < controllers.pools[20].count; ++record )
+        {
+            const uint32_t netHandle = aCursor.U32At( connectionBase + record * CONNECTION_RECORD_BYTES + 8 );
+
+            if( netHandle < connectionCounts.size() )
+                ++connectionCounts[netHandle];
+        }
+
+        for( size_t net = 0; net < sheetNets.size(); ++net )
+        {
+            if( sheetNets[net] )
+                sheetNets[net]->connections.reserve( connectionCounts[net] );
+        }
+
+        for( size_t record = 0; record < controllers.pools[20].count; ++record )
+        {
+            const size_t      offset = connectionBase + record * CONNECTION_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "connection" ), 21, record, offset,
+                                                 CONNECTION_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            const uint32_t    netHandle = aCursor.U32At( offset + 8 );
+
+            if( netHandle >= sheetNets.size() || !sheetNets[netHandle] )
+                throwDecodeError( source, wxS( "connection net handle targets wrong or unresolved object class" ) );
+
+            const uint16_t marker = aCursor.U16At( offset + 34 );
+
+            const uint8_t markerStatus = marker & 0xFF;
+
+            if( marker >> 8 < 2 || marker >> 8 > 6
+                || ( markerStatus != 0 && markerStatus != 0xFC && markerStatus != 0xFD ) )
+                throwDecodeError( source, wxS( "invalid connection object-class marker" ) );
+
+            MODEL_CONNECTION connection;
+            connection.source = source;
+
+            auto endpoint = [&]( size_t aFieldOffset )
+            {
+                SOURCE_PROVENANCE endpointSource = source;
+                endpointSource.objectClass = wxS( "connection endpoint" );
+                endpointSource.absoluteOffset += aFieldOffset;
+                endpointSource.length = 2;
+                const uint16_t            raw = aCursor.U16At( endpointSource.absoluteOffset );
+                const uint16_t            objectClass = raw >> 12;
+                const uint16_t            objectRecord = raw & 0x0FFF;
+                MODEL_CONNECTION_ENDPOINT result;
+                result.source = endpointSource;
+
+                switch( objectClass )
+                {
+                case 0:
+                    if( objectRecord >= placedPins.size() || !placedPins[objectRecord].placement
+                        || !placedPins[objectRecord].pin.IsValid() )
+                    {
+                        throwDecodeError( endpointSource, wxS( "unresolved placed-pin endpoint" ) );
+                    }
+
+                    result.kind = MODEL_ENDPOINT_KIND::PIN;
+                    result.placement = PLACEMENT_REFERENCE{ placedPins[objectRecord].placement->id, endpointSource };
+                    result.pin = PIN_REFERENCE{ placedPins[objectRecord].pin, endpointSource };
+                    result.point = { placedPins[objectRecord].placement->position.x,
+                                     placedPins[objectRecord].placement->position.y, endpointSource };
+                    break;
+
+                case 2:
+                    if( objectRecord >= controllers.pools[19].count )
+                        throwDecodeError( endpointSource, wxS( "unresolved off-page endpoint" ) );
+
+                    result.kind = MODEL_ENDPOINT_KIND::POINT;
+                    result.point = offpagePosition( objectRecord );
+                    break;
+
+                case 3:
+                    if( objectRecord >= controllers.pools[18].count )
+                        throwDecodeError( endpointSource, wxS( "unresolved junction endpoint" ) );
+
+                    result.kind = MODEL_ENDPOINT_KIND::POINT;
+                    result.point = junctionPosition( objectRecord );
+                    break;
+
+                default: throwDecodeError( endpointSource, wxS( "wrong endpoint object class" ) );
+                }
+
+                result.properties.push_back( sourceProperty( wxS( "raw_endpoint_handle" ),
+                                                             wxString::Format( wxS( "%u" ), raw ), endpointSource ) );
+                return result;
+            };
+
+            connection.endpoints.push_back( endpoint( 12 ) );
+            connection.endpoints.push_back( endpoint( 14 ) );
+            appendVertices( connection.vertices, controllers.pools[17].count + record );
+            connection.properties.push_back(
+                    sourceProperty( wxS( "raw_connection_marker" ), wxString::Format( wxS( "%u" ), marker ), source ) );
+            sheetNets[netHandle]->connections.push_back( std::move( connection ) );
+            connections[record] = &sheetNets[netHandle]->connections.back();
+            connectionNets[record] = sheetNets[netHandle];
+        }
+
+        std::vector<bool> claimedBusEntries( controllers.pools[19].count, false );
+
+        for( size_t record = 0; record < controllers.pools[17].count; ++record )
+        {
+            const size_t      offset = busBase + record * BUS_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "bus" ), 18, record, offset,
+                                                 BUS_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            const uint16_t    marker = aCursor.U16At( offset + 38 );
+
+            const uint8_t markerStatus = marker & 0xFF;
+
+            if( marker >> 8 < 2 || marker >> 8 > 4 || ( markerStatus != 0 && markerStatus != 0xFD ) )
+                throwDecodeError( source, wxS( "invalid bus object-class marker" ) );
+
+            const size_t globalRecord = aCursor.U32At( offset + 8 );
+
+            if( globalRecord >= aGlobals.nets.size() || aGlobals.nets[globalRecord].tombstone
+                || !busGlobalRecords.contains( globalRecord ) )
+            {
+                throwDecodeError( source, wxS( "bus global-net handle targets wrong or unresolved object class" ) );
+            }
+
+            const GLOBAL_NET_RECORD& global = aGlobals.nets[globalRecord];
+            uint32_t                 membership = global.membershipStart;
+
+            while( membership < global.membershipStart + global.membershipCount
+                   && aGlobals.membershipSheets[membership] != aSheetIndex )
+            {
+                ++membership;
+            }
+
+            if( membership == global.membershipStart + global.membershipCount )
+                throwDecodeError( source, wxS( "bus global-net handle does not belong to this sheet" ) );
+
+            MODEL_BUS bus;
+            bus.id = BUS_ID( static_cast<uint32_t>( aSheetIndex * 0x100000 + record + 1 ) );
+            bus.source = source;
+            bus.sheet = { aModel.sheets[aSheetIndex].id, source };
+            bus.name = global.name;
+            bus.aliases.push_back( global.name );
+            SOURCE_PROPERTY identity =
+                    sourceProperty( wxS( "preserved_net_identity" ),
+                                    wxString::Format( wxS( "%u" ), global.preservedIdentity ), global.source );
+            identity.disposition = PROPERTY_DISPOSITION::PRESERVED;
+            bus.properties.push_back( std::move( identity ) );
+            SOURCE_PROVENANCE relationshipSource = global.source;
+            relationshipSource.absoluteOffset += 84;
+            relationshipSource.length = 4;
+            SOURCE_PROPERTY relationship =
+                    sourceProperty( wxS( "preserved_net_relationship" ),
+                                    wxString::Format( wxS( "%u" ), global.preservedRelationship ), relationshipSource );
+            relationship.disposition = PROPERTY_DISPOSITION::PRESERVED;
+            bus.properties.push_back( std::move( relationship ) );
+            appendVertices( bus.vertices, record );
+
+            std::vector<size_t>        entryRecords;
+            uint16_t                   entryHandle = aCursor.U16At( offset + 24 );
+            std::unordered_set<size_t> chain;
+
+            while( ( entryHandle >> 12 ) == 2 )
+            {
+                const size_t entryRecord = entryHandle & 0x0FFF;
+
+                if( entryRecord >= controllers.pools[19].count )
+                    throwDecodeError( source, wxS( "unresolved bus-entry handle" ) );
+
+                if( !chain.insert( entryRecord ).second )
+                    throwDecodeError( source, wxS( "cyclic bus-entry handle chain" ) );
+
+                entryRecords.push_back( entryRecord );
+                entryHandle = aCursor.U16At( offpageBase + entryRecord * OFFPAGE_RECORD_BYTES + 4 );
+            }
+
+            if( record > 0x0FFF || entryHandle != 0xBFFF - record )
+                throwDecodeError( source, wxS( "bus-entry chain terminates in wrong object class" ) );
+
+            std::ranges::reverse( entryRecords );
+
+            const bool exactAliasMapping = entryRecords.size() == global.aliasMembers.size();
+
+            if( !exactAliasMapping )
+            {
+                wxString preservedMembers;
+
+                for( const SOURCE_STRING& member : global.aliasMembers )
+                {
+                    if( !preservedMembers.empty() )
+                        preservedMembers += wxS( "\n" );
+
+                    preservedMembers += member.text;
+                }
+
+                SOURCE_PROPERTY members =
+                        sourceProperty( wxS( "preserved_bus_alias_members" ), preservedMembers, global.source );
+                members.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                bus.properties.push_back( std::move( members ) );
+                aModel.diagnostics.push_back( { RPT_SEVERITY_WARNING, source,
+                                                wxS( "unsupported expanded bus-alias membership preserved" ) } );
+            }
+
+            for( size_t entry = 0; entry < entryRecords.size(); ++entry )
+            {
+                const size_t      entryRecord = entryRecords[entry];
+                const size_t      entryOffset = offpageBase + entryRecord * OFFPAGE_RECORD_BYTES;
+                SOURCE_PROVENANCE entrySource =
+                        sourceAt( aSourceName, aModel.version, wxS( "bus entry" ), 20, entryRecord, entryOffset,
+                                  OFFPAGE_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+
+                if( aCursor.U8At( entryOffset + 30 ) != 0xFF )
+                    throwDecodeError( entrySource, wxS( "bus-entry handle targets wrong off-page object class" ) );
+
+                if( claimedBusEntries[entryRecord] )
+                    throwDecodeError( entrySource, wxS( "duplicate bus-entry membership" ) );
+
+                const uint16_t connectionHandle = aCursor.U16At( entryOffset + 8 );
+
+                if( connectionHandle >= connections.size() || !connections[connectionHandle] )
+                    throwDecodeError( entrySource, wxS( "unresolved bus-entry connection reference" ) );
+
+                MODEL_CONNECTION* entryConnection = connections[connectionHandle];
+                MODEL_NET*        memberNet = connectionNets[connectionHandle];
+
+                if( !memberNet )
+                    throwDecodeError( entrySource, wxS( "bus-entry connection targets wrong member-net class" ) );
+
+                if( exactAliasMapping && memberNet->name.text != global.aliasMembers[entry].text )
+                    throwDecodeError( entrySource, wxS( "bus alias member does not match connected net" ) );
+
+                const bool ownsConnection = std::ranges::any_of( memberNet->connections,
+                                                                 [&]( const MODEL_CONNECTION& aConnection )
+                                                                 {
+                                                                     return &aConnection == entryConnection;
+                                                                 } );
+
+                if( !ownsConnection )
+                    throwDecodeError( entrySource, wxS( "bus-entry connection targets wrong member-net class" ) );
+
+                claimedBusEntries[entryRecord] = true;
+                MODEL_BUS_ENTRY busEntry;
+                busEntry.source = entrySource;
+                busEntry.position = offpagePosition( entryRecord );
+                busEntry.memberNet = { memberNet->id, entrySource };
+                bus.entries.push_back( std::move( busEntry ) );
+                bus.memberNets.push_back( { memberNet->id, entrySource } );
+            }
+
+            aModel.buses.push_back( std::move( bus ) );
+        }
+
+        for( size_t record = 0; record < controllers.pools[19].count; ++record )
+        {
+            const size_t      offset = offpageBase + record * OFFPAGE_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "off-page reference" ), 20, record,
+                                                 offset, OFFPAGE_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            const uint8_t     rawKind = aCursor.U8At( offset + 30 );
+
+            if( rawKind == 0xFF )
+            {
+                if( !claimedBusEntries[record] )
+                    throwDecodeError( source, wxS( "unclaimed bus-entry record" ) );
+
+                continue;
+            }
+
+            const uint16_t connectionHandle = aCursor.U16At( offset + 8 );
+
+            if( connectionHandle >= connections.size() || !connections[connectionHandle] )
+                throwDecodeError( source, wxS( "off-page net handle leaves controller 21" ) );
+
+            MODEL_NET* ownerNet = connectionNets[connectionHandle];
+
+            if( !ownerNet )
+                throwDecodeError( source, wxS( "off-page record targets wrong net object class" ) );
+
+            MODEL_LABEL label;
+            label.source = source;
+            label.sheet = { aModel.sheets[aSheetIndex].id, source };
+            label.text = ownerNet->name;
+            label.position = offpagePosition( record );
+            label.angle = NormalizeAngle( aCursor.U16At( offset + 26 ) );
+            label.presentation.source = source;
+
+            switch( rawKind )
+            {
+            case 0xFE: label.kind = MODEL_LABEL_KIND::LOCAL; break;
+            case 0:
+            case 1:
+            {
+                label.kind = MODEL_LABEL_KIND::POWER;
+                const uint16_t decalHandle = aCursor.U16At( offset + 4 );
+
+                if( decalHandle >= controllers.pools[6].count )
+                    throwDecodeError( source, wxS( "power-label decal handle leaves controller 7" ) );
+                break;
+            }
+            case 3:
+                label.kind = MODEL_LABEL_KIND::GLOBAL;
+
+                for( uint32_t membership =
+                             aGlobals.nets[aCursor.U32At( connectionBase + connectionHandle * CONNECTION_RECORD_BYTES
+                                                          + 8 )]
+                                     .membershipStart;
+                     membership
+                     < aGlobals.nets[aCursor.U32At( connectionBase + connectionHandle * CONNECTION_RECORD_BYTES + 8 )]
+                                       .membershipStart
+                               + aGlobals.nets[aCursor.U32At( connectionBase
+                                                              + connectionHandle * CONNECTION_RECORD_BYTES + 8 )]
+                                         .membershipCount;
+                     ++membership )
+                {
+                    const uint16_t peerSheet = aGlobals.membershipSheets[membership];
+
+                    if( peerSheet != aSheetIndex )
+                        label.linkedSheets.push_back( { aModel.sheets[peerSheet].id, source } );
+                }
+                break;
+            case 2:
+            case 4:
+            case 5:
+                label.kind = MODEL_LABEL_KIND::UNSUPPORTED;
+                aModel.diagnostics.push_back(
+                        { RPT_SEVERITY_WARNING, source, wxS( "unsupported off-page label kind preserved" ) } );
+                break;
+            default: throwDecodeError( source, wxS( "unknown off-page label kind" ) );
+            }
+
+            label.properties.push_back(
+                    sourceProperty( wxS( "raw_label_kind" ), wxString::Format( wxS( "%u" ), rawKind ), source ) );
+            aModel.labels.push_back( std::move( label ) );
         }
     }
 
@@ -2241,15 +3088,17 @@ bool PADS_SCH_MODEL::AllReferencesResolved() const
                 return false;
 
             const MODEL_GATE& selectedGate = *gate->second;
-            const bool definitionMatches = selectedGate.definition.id == placement.definition.id
-                                           || std::ranges::any_of(
-                                                   selectedGate.alternateDefinitions,
-                                                   [&]( const DEFINITION_REFERENCE& aDefinition )
-                                                   { return aDefinition.id == placement.definition.id; } )
-                                           || std::ranges::any_of(
-                                                   selectedGate.decalGroupMembers,
-                                                   [&]( const DEFINITION_REFERENCE& aDefinition )
-                                                   { return aDefinition.id == placement.definition.id; } );
+            const bool        definitionMatches = selectedGate.definition.id == placement.definition.id
+                                           || std::ranges::any_of( selectedGate.alternateDefinitions,
+                                                                   [&]( const DEFINITION_REFERENCE& aDefinition )
+                                                                   {
+                                                                       return aDefinition.id == placement.definition.id;
+                                                                   } )
+                                           || std::ranges::any_of( selectedGate.decalGroupMembers,
+                                                                   [&]( const DEFINITION_REFERENCE& aDefinition )
+                                                                   {
+                                                                       return aDefinition.id == placement.definition.id;
+                                                                   } );
 
             if( !definitionMatches )
                 return false;
@@ -2328,6 +3177,13 @@ bool PADS_SCH_MODEL::AllReferencesResolved() const
     {
         if( !index.sheets.contains( label.sheet.id.Value() ) )
             return false;
+
+        if( std::ranges::any_of( label.linkedSheets,
+                                 [&]( const SHEET_REFERENCE& aSheet )
+                                 {
+                                     return !index.sheets.contains( aSheet.id.Value() );
+                                 } ) )
+            return false;
     }
 
     for( const MODEL_JUNCTION& junction : junctions )
@@ -2387,8 +3243,7 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
                     wxString::Format( wxS( "duplicate %s ID %llu; first at v0x%04X %s controller %d record %llu "
                                            "sheet %d offset 0x%llX" ),
                                       aObjectClass, static_cast<unsigned long long>( aItem.id.Value() ),
-                                      first->second.version, first->second.objectClass,
-                                      first->second.controller,
+                                      first->second.version, first->second.objectClass, first->second.controller,
                                       static_cast<unsigned long long>( first->second.recordIndex ), first->second.sheet,
                                       static_cast<unsigned long long>( first->second.absoluteOffset ) ) );
         }
@@ -2546,15 +3401,17 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
                 throwValidationError( placement.gate->source, wxS( "placement gate or unit mismatch" ) );
 
             const MODEL_GATE& selectedGate = *gate->second;
-            const bool definitionMatches = selectedGate.definition.id == placement.definition.id
-                                           || std::ranges::any_of(
-                                                   selectedGate.alternateDefinitions,
-                                                   [&]( const DEFINITION_REFERENCE& aDefinition )
-                                                   { return aDefinition.id == placement.definition.id; } )
-                                           || std::ranges::any_of(
-                                                   selectedGate.decalGroupMembers,
-                                                   [&]( const DEFINITION_REFERENCE& aDefinition )
-                                                   { return aDefinition.id == placement.definition.id; } );
+            const bool        definitionMatches = selectedGate.definition.id == placement.definition.id
+                                           || std::ranges::any_of( selectedGate.alternateDefinitions,
+                                                                   [&]( const DEFINITION_REFERENCE& aDefinition )
+                                                                   {
+                                                                       return aDefinition.id == placement.definition.id;
+                                                                   } )
+                                           || std::ranges::any_of( selectedGate.decalGroupMembers,
+                                                                   [&]( const DEFINITION_REFERENCE& aDefinition )
+                                                                   {
+                                                                       return aDefinition.id == placement.definition.id;
+                                                                   } );
 
             if( !definitionMatches )
                 throwValidationError( placement.definition.source,
@@ -2647,6 +3504,12 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
     {
         if( !index.sheets.contains( label.sheet.id.Value() ) )
             throwValidationError( label.sheet.source, wxS( "unresolved label sheet reference" ) );
+
+        for( const SHEET_REFERENCE& linkedSheet : label.linkedSheets )
+        {
+            if( !index.sheets.contains( linkedSheet.id.Value() ) )
+                throwValidationError( linkedSheet.source, wxS( "unresolved cross-sheet label reference" ) );
+        }
     }
 
     for( const MODEL_JUNCTION& junction : junctions )
@@ -2893,12 +3756,16 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
         model.sheets.push_back( std::move( sheet ) );
     }
 
-    size_t sheetIndex = 0;
-    std::optional<PLACEMENT_GLOBALS> placementData;
-    const PLACEMENT_LAYOUT& placementSchema = placementLayout( model.version );
+    size_t                              sheetIndex = 0;
+    std::optional<PLACEMENT_GLOBALS>    placementData;
+    std::optional<CONNECTIVITY_GLOBALS> connectivityData;
+    const PLACEMENT_LAYOUT&             placementSchema = placementLayout( model.version );
 
     if( placementSchema.decoded )
+    {
         placementData = placementGlobals( sdb, aSourceName );
+        connectivityData = connectivityGlobals( aBytes, cursor, sdb, aSourceName, model );
+    }
 
     for( const SCH_SDB_BLOCK& block : sdb.Blocks() )
     {
@@ -3016,6 +3883,7 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
 
         decodeDefinitionsAndParts( aBytes, cursor, block, sheetIndex, aSourceName, model );
         decodePlacements( aBytes, cursor, block, sheetIndex, aSourceName, *placementData, model );
+        decodeConnectivity( aBytes, cursor, block, sheetIndex, aSourceName, *connectivityData, model );
         ++sheetIndex;
     }
 
