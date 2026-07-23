@@ -131,6 +131,17 @@ public:
     void RemoveFile( const wxString& name, bool aErase = true );
 
     /**
+     * Replace this collection's files with references to @p aSource's files, skipping any whose
+     * name appears in @p aExcludedNames.  Payloads are shared, not copied.
+     *
+     * This leaves @p aSource untouched, so the operation is idempotent.  Editor dialogs commit
+     * their working copy on both page change and OK; a destructive commit would wipe the target
+     * on the second pass.
+     */
+    void AssignSharedFrom( const EMBEDDED_FILES& aSource,
+                           const std::set<wxString>& aExcludedNames = {} );
+
+    /**
      * Output formatter for the embedded files.
      *
      * @param aOut is the output formatter.

@@ -368,4 +368,45 @@ BOOST_AUTO_TEST_CASE( DeepCopyAllocatesIndependentPayloads )
 }
 
 
+// A paged setup dialog commits its working copy on both page change and OK, so the commit must
+// leave the source intact.  A destructive commit wiped the board/schematic on the second pass and
+// silently dropped the embedded drawing sheet (issue 24998).
+BOOST_AUTO_TEST_CASE( AssignSharedFromIsIdempotent )
+{
+    EMBEDDED_FILES working;
+
+    auto* file = new EMBEDDED_FILES::EMBEDDED_FILE();
+    file->name = wxS( "ARTIDIS-KiCAD_HEADER.kicad_wks" );
+    file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::WORKSHEET;
+    file->decompressedData.assign( { '1', '2', '3' } );
+
+    MMH3_HASH hash( EMBEDDED_FILES::Seed() );
+    hash.add( file->decompressedData );
+    file->data_hash = hash.digest().ToString();
+
+    BOOST_REQUIRE_EQUAL( EMBEDDED_FILES::CompressAndEncode( *file ),
+                         EMBEDDED_FILES::RETURN_CODE::OK );
+
+    working.AddFile( file );
+
+    EMBEDDED_FILES target;
+
+    target.AssignSharedFrom( working );
+    target.AssignSharedFrom( working );
+
+    // IsEmpty() gates whether the embedded_files block is written on save.
+    BOOST_CHECK( !target.IsEmpty() );
+    BOOST_CHECK( target.HasFile( wxS( "ARTIDIS-KiCAD_HEADER.kicad_wks" ) ) );
+    BOOST_CHECK( working.HasFile( wxS( "ARTIDIS-KiCAD_HEADER.kicad_wks" ) ) );
+
+    // Self-assignment must not empty the collection.
+    working.AssignSharedFrom( working );
+    BOOST_CHECK( working.HasFile( wxS( "ARTIDIS-KiCAD_HEADER.kicad_wks" ) ) );
+
+    std::set<wxString> exclude{ wxS( "ARTIDIS-KiCAD_HEADER.kicad_wks" ) };
+    working.AssignSharedFrom( working, exclude );
+    BOOST_CHECK( !working.HasFile( wxS( "ARTIDIS-KiCAD_HEADER.kicad_wks" ) ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

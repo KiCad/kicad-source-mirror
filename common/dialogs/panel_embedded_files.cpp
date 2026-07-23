@@ -234,22 +234,10 @@ bool PANEL_EMBEDDED_FILES::TransferDataFromWindow()
             break;
     }
 
-    m_files->ClearEmbeddedFiles();
-
-    std::vector<std::shared_ptr<EMBEDDED_FILES::EMBEDDED_FILE>> files;
-
-    for( const auto& [name, file] : m_localFiles->EmbeddedFileMap() )
-        files.push_back( file );
-
-    for( std::shared_ptr<EMBEDDED_FILES::EMBEDDED_FILE>& file : files )
-    {
-        if( m_inheritedFileNames.count( file->name ) )
-            continue;
-
-        wxString name = file->name;
-        m_files->AddFile( std::move( file ) );
-        m_localFiles->RemoveFile( name, false );
-    }
+    // Share the payloads instead of moving them out of m_localFiles.  PAGED_DIALOG commits on
+    // both page change and OK, so a destructive commit would wipe every embedded file on the
+    // second pass.
+    m_files->AssignSharedFrom( *m_localFiles, m_inheritedFileNames );
 
     m_files->SetAreFontsEmbedded( m_cbEmbedFonts->IsChecked() );
 
