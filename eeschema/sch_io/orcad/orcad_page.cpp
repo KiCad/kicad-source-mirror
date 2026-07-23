@@ -495,9 +495,9 @@ static ORCAD_WIRE v2Wire( ORCAD_STREAM& aStream, const std::vector<std::string>&
     uint8_t type = v2Prefix( aStream, aStrings );
 
     ORCAD_WIRE wire;
-    aStream.ReadU32();                          // wire db id
-    wire.id = aStream.ReadU32();                // net db id, keys page net table
-    aStream.ReadU32();                          // color
+    aStream.ReadU32();           // wire db id
+    wire.id = aStream.ReadU32(); // net db id, keys page net table
+    wire.color = static_cast<int>( aStream.ReadU32() );
     wire.x1 = aStream.ReadI32();
     wire.y1 = aStream.ReadI32();
     wire.x2 = aStream.ReadI32();
@@ -599,7 +599,7 @@ static ORCAD_SYMBOL_DEF v2SymbolDef( ORCAD_STREAM& aStream,
     def.typeId = ORCAD_ST_STH_IN_PAGES0;
     def.name = aStream.ReadLzt();
     def.sourceLib = aStream.ReadLzt();
-    aStream.ReadU32();                          // color
+    def.color = static_cast<int>( aStream.ReadU32() );
 
     uint16_t primCount = aStream.ReadU16();
 
@@ -635,10 +635,10 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDe
         prim.y1 = aStream.ReadI32();
         prim.x2 = aStream.ReadI32();
         prim.y2 = aStream.ReadI32();
-        aStream.ReadU32();                      // lineStyle
+        prim.lineStyle = aStream.ReadU32();
         prim.lineWidth = aStream.ReadU32();
-        prim.fill = aStream.ReadU32() != 0;
-        aStream.ReadU32();                      // hatchStyle
+        prim.fillStyle = aStream.ReadU32();
+        prim.hatchStyle = aStream.ReadU32();
         break;
 
     case ORCAD_PRIM_LINE:
@@ -647,7 +647,7 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDe
         prim.y1 = aStream.ReadI32();
         prim.x2 = aStream.ReadI32();
         prim.y2 = aStream.ReadI32();
-        aStream.ReadU32();                      // lineStyle
+        prim.lineStyle = aStream.ReadU32();
         prim.lineWidth = aStream.ReadU32();
         break;
 
@@ -659,7 +659,7 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDe
         prim.y2 = aStream.ReadI32();
         prim.start = ORCAD_POINT{ aStream.ReadI32(), aStream.ReadI32() };
         prim.end = ORCAD_POINT{ aStream.ReadI32(), aStream.ReadI32() };
-        aStream.ReadU32();                      // lineStyle
+        prim.lineStyle = aStream.ReadU32();
         prim.lineWidth = aStream.ReadU32();
         break;
 
@@ -670,13 +670,13 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDe
         prim.kind = type == ORCAD_PRIM_POLYGON ? ORCAD_PRIM_KIND::POLYGON
                     : type == ORCAD_PRIM_BEZIER ? ORCAD_PRIM_KIND::BEZIER
                                                 : ORCAD_PRIM_KIND::POLYLINE;
-        aStream.ReadU32();                      // lineStyle
+        prim.lineStyle = aStream.ReadU32();
         prim.lineWidth = aStream.ReadU32();
 
         if( type == ORCAD_PRIM_POLYGON )
         {
-            aStream.ReadU32();                  // fillStyle
-            aStream.ReadU32();                  // hatchStyle
+            prim.fillStyle = aStream.ReadU32();
+            prim.hatchStyle = aStream.ReadU32();
         }
 
         uint16_t count = aStream.ReadU16();
@@ -706,8 +706,9 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDe
             aStream.ReadU16();
         }
 
-        aStream.ReadI16();                      // location x
-        aStream.ReadI16();                      // location y
+        prim.kind = ORCAD_PRIM_KIND::GROUP;
+        prim.x1 = aStream.ReadI16();
+        prim.y1 = aStream.ReadI16();
 
         uint16_t nested = aStream.ReadU16();
         v2CheckCount( aStream, nested );
@@ -716,11 +717,10 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDe
         {
             uint8_t nestedType = aStream.ReadU8();
             aStream.ExpectByte( 0x00, wxS( "v2 vector prim pad" ) );
-            v2PrimBody( aStream, nestedType, aDepth + 1 );
+            prim.children.push_back( v2PrimBody( aStream, nestedType, aDepth + 1 ) );
         }
 
-        aStream.ReadLzt();                      // vector name
-        prim.kind = ORCAD_PRIM_KIND::LINE;      // placeholder; vector body not drawn
+        aStream.ReadLzt(); // vector name
         break;
     }
 
@@ -853,7 +853,7 @@ static ORCAD_SYMBOL_DEF v2LibSymbolDef( ORCAD_STREAM& aStream,
     def.typeId = aTypeId;
     def.name = aStream.ReadLzt();
     def.sourceLib = aStream.ReadLzt();
-    aStream.ReadU32();                          // color
+    def.color = static_cast<int>( aStream.ReadU32() );
 
     uint16_t primCount = aStream.ReadU16();
     v2CheckCount( aStream, primCount );
@@ -1022,7 +1022,22 @@ ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData,
         stream.ReadLzt();
     }
 
-    stream.ReadU16();                           // net table B, always zero in corpus
+    uint16_t netGroupCount = stream.ReadU16();
+
+    for( uint16_t i = 0; i < netGroupCount; i++ )
+    {
+        ORCAD_NET_GROUP group;
+        group.id = stream.ReadU32();
+        group.name = stream.ReadLzt();
+
+        uint16_t memberCount = stream.ReadU16();
+        v2CheckCount( stream, memberCount );
+
+        for( uint16_t j = 0; j < memberCount; j++ )
+            group.members.push_back( stream.ReadU32() );
+
+        page.netGroups.push_back( std::move( group ) );
+    }
 
     uint16_t netmapCount = stream.ReadU16();
 

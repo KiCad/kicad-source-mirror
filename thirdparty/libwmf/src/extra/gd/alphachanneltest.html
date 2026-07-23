@@ -1,0 +1,45 @@
+<head>
+<title>gd Alpha Channel Test</title>
+<head>
+<body bgcolor="#c0c0FF">
+<h1>gd Alpha Channel Test</h1>
+If your browser fully supports PNG alpha channels, the
+"blended" and "alpha channel" images should appear identical
+to the naked eye. Miniscule mathematical differences may
+exist due to the 7-bit alpha channel resolution of gd. 
+<p>
+Palette and truecolor images will look slightly different,
+as the palette versions are limited to 256 palette entries,
+which are used as well as possible to approach the effect
+of the original truecolor version.
+<table>
+<tr>
+<th colspan=2>Truecolor Images</th>
+<tr>
+<th>Blending against light blue, Half Size<td><img src="blending-halfsize-truecolor.png">
+<tr>
+<th>Alpha channel, Half Size<td><img src="noblending-halfsize-truecolor.png">
+<tr>
+<th>Blending against light blue, Full Size<td><img src="blending-fullsize-truecolor.png">
+<tr>
+<th>Alpha channel, Full Size<td><img src="noblending-fullsize-truecolor.png">
+<tr>
+<th>Blending against light blue, Double Size<td><img src="blending-doublesize-truecolor.png">
+<tr>
+<th>Alpha channel, Double Size<td><img src="noblending-doublesize-truecolor.png">
+<tr>
+<th colspan=2>Palette Images</th>
+<tr>
+<th>Blending against light blue, Half Size<td><img src="blending-halfsize-palette.png">
+<tr>
+<th>Alpha channel, Half Size<td><img src="noblending-halfsize-palette.png">
+<tr>
+<th>Blending against light blue, Full Size<td><img src="blending-fullsize-palette.png">
+<tr>
+<th>Alpha channel, Full Size<td><img src="noblending-fullsize-palette.png">
+<tr>
+<th>Blending against light blue, Double Size<td><img src="blending-doublesize-palette.png">
+<tr>
+<th>Alpha channel, Double Size<td><img src="noblending-doublesize-palette.png"></table>
+</body>
+

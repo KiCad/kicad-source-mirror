@@ -344,7 +344,7 @@ ORCAD_WIRE OrcadReadWire( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aP
 
     ds.Skip( 4 );               // unknown
     wire.id = ds.ReadU32();
-    ds.ReadU32();               // color
+    wire.color = static_cast<int>( ds.ReadU32() );
     wire.x1 = ds.ReadI32();
     wire.y1 = ds.ReadI32();
     wire.x2 = ds.ReadI32();
@@ -366,8 +366,8 @@ ORCAD_WIRE OrcadReadWire( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aP
     for( int i = 0; i < propCount; i++ )
         aReader.ReadStructure();
 
-    ds.ReadU32();               // line width
-    ds.ReadU32();               // line style
+    wire.lineWidth = static_cast<int>( ds.ReadU32() );
+    wire.lineStyle = static_cast<int>( ds.ReadU32() );
 
     wire.isBus = ( aPrefixes.typeId == ORCAD_ST_WIRE_BUS );
 

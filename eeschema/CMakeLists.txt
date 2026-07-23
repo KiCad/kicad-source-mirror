@@ -113,6 +113,7 @@ set( EESCHEMA_SCH_IO
     sch_io/orcad/orcad_converter_sheet.cpp
     sch_io/orcad/orcad_converter_symbols.cpp
     sch_io/orcad/orcad_library.cpp
+    sch_io/orcad/orcad_ole.cpp
     sch_io/orcad/orcad_page.cpp
     sch_io/orcad/orcad_stream.cpp
     sch_io/orcad/orcad_structures.cpp
@@ -666,6 +667,7 @@ target_include_directories( eeschema_kiface_objects
 target_link_libraries( eeschema_kiface_objects
     PUBLIC
         common
+        libwmf_orcad
         pads_common
         pcm )
 

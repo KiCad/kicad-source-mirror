@@ -1,0 +1,1 @@
+gcc -I. -I/usr/include/freetype2 -I/usr/include/X11 -I/usr/X11R6/include/X11 -I/usr/local/include  -O -DHAVE_LIBXPM -DHAVE_LIBPNG -DHAVE_LIBJPEG -DHAVE_LIBFREETYPE   -c gd_gd2.c -o gd_gd2.o

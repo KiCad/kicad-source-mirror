@@ -27,8 +27,10 @@
  */
 
 #include <sch_io/orcad/orcad_converter.h>
+#include <sch_io/orcad/orcad_ole.h>
 
 #include <algorithm>
+#include <array>
 #include <cctype>
 #include <cmath>
 #include <functional>
@@ -109,14 +111,41 @@ void pollProgress( PROGRESS_REPORTER* aReporter, const std::string& aPageName )
 }
 
 
-SCH_SHAPE* makeSheetPoly( const std::vector<VECTOR2I>& aPoints )
+SCH_SHAPE* makeSheetPoly( const std::vector<VECTOR2I>& aPoints, const ORCAD_PRIMITIVE& aPrimitive,
+                          const KIGFX::COLOR4D& aColor, bool aCanFill = false )
 {
     SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY, LAYER_NOTES );
 
     for( const VECTOR2I& pt : aPoints )
         poly->AddPoint( pt );
 
-    poly->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT ) );
+    LINE_STYLE style = LINE_STYLE::SOLID;
+
+    if( aPrimitive.lineStyle == 1 )
+        style = LINE_STYLE::DASH;
+    else if( aPrimitive.lineStyle == 2 )
+        style = LINE_STYLE::DOT;
+    else if( aPrimitive.lineStyle == 3 )
+        style = LINE_STYLE::DASHDOT;
+
+    int width = aPrimitive.lineWidth > 0 ? schIUScale.MilsToIU( 5 * aPrimitive.lineWidth ) : 0;
+    poly->SetStroke( STROKE_PARAMS( width, style, aColor ) );
+
+    if( aCanFill && aPrimitive.fillStyle == 1 )
+        poly->SetFillMode( FILL_T::FILLED_SHAPE );
+    else if( aCanFill && aPrimitive.fillStyle == 2 )
+    {
+        if( aPrimitive.hatchStyle == 4 )
+            poly->SetFillMode( FILL_T::REVERSE_HATCH );
+        else if( aPrimitive.hatchStyle == 5 )
+            poly->SetFillMode( FILL_T::CROSS_HATCH );
+        else
+            poly->SetFillMode( FILL_T::HATCH );
+    }
+    else
+    {
+        poly->SetFillMode( FILL_T::NO_FILL );
+    }
 
     return poly;
 }
@@ -130,8 +159,29 @@ VECTOR2I dbuPointToIu( double aX, double aY )
 } // namespace
 
 
-ORCAD_CONVERTER::ORCAD_CONVERTER( ORCAD_DESIGN& aDesign, SCHEMATIC* aSchematic,
-                                  REPORTER* aReporter, PROGRESS_REPORTER* aProgressReporter ) :
+KIGFX::COLOR4D OrcadColor( int aColorIndex )
+{
+    static constexpr uint8_t palette[][3] = {
+        { 0, 0, 0 },       { 255, 255, 128 }, { 128, 255, 128 }, { 0, 255, 128 },   { 128, 255, 255 }, { 0, 128, 255 },
+        { 255, 128, 192 }, { 255, 128, 255 }, { 255, 0, 0 },     { 255, 255, 0 },   { 128, 255, 0 },   { 0, 255, 64 },
+        { 0, 255, 255 },   { 0, 128, 192 },   { 128, 128, 192 }, { 255, 0, 255 },   { 128, 64, 64 },   { 255, 128, 64 },
+        { 0, 255, 0 },     { 0, 128, 128 },   { 0, 64, 128 },    { 128, 128, 255 }, { 128, 0, 64 },    { 255, 0, 128 },
+        { 128, 0, 0 },     { 255, 128, 0 },   { 0, 128, 0 },     { 0, 128, 64 },    { 0, 0, 255 },     { 0, 0, 160 },
+        { 128, 0, 128 },   { 128, 0, 255 },   { 64, 0, 0 },      { 128, 64, 0 },    { 0, 64, 0 },      { 0, 64, 64 },
+        { 0, 0, 128 },     { 0, 0, 64 },      { 64, 0, 64 },     { 64, 0, 128 },    { 0, 0, 0 },       { 128, 128, 0 },
+        { 128, 128, 64 },  { 128, 128, 128 }, { 64, 128, 128 },  { 192, 192, 192 }, { 64, 0, 64 },     { 255, 255, 255 }
+    };
+
+    if( aColorIndex < 1 || aColorIndex >= static_cast<int>( std::size( palette ) ) )
+        return KIGFX::COLOR4D::UNSPECIFIED;
+
+    return KIGFX::COLOR4D( palette[aColorIndex][0] / 255.0, palette[aColorIndex][1] / 255.0,
+                           palette[aColorIndex][2] / 255.0, 1.0 );
+}
+
+
+ORCAD_CONVERTER::ORCAD_CONVERTER( ORCAD_DESIGN& aDesign, SCHEMATIC* aSchematic, REPORTER* aReporter,
+                                  PROGRESS_REPORTER* aProgressReporter ) :
         m_design( aDesign ),
         m_schematic( aSchematic ),
         m_reporter( aReporter ),
@@ -632,6 +682,16 @@ void ORCAD_CONVERTER::applyTitleBlock( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* 
 {
     for( const ORCAD_GRAPHIC_INST& tbInst : aPage.titleBlocks )
     {
+        auto symbolIt = m_design.symbols.find( tbInst.name );
+
+        if( symbolIt != m_design.symbols.end() )
+        {
+            placeDefinitionVectors( symbolIt->second, tbInst.bbox.x1, tbInst.bbox.y1,
+                                    OrcadOrientOf( tbInst.rotation, tbInst.mirror ), aScreen );
+            placeDefinitionImages( symbolIt->second, tbInst.bbox.x1, tbInst.bbox.y1,
+                                   OrcadOrientOf( tbInst.rotation, tbInst.mirror ), aScreen );
+        }
+
         if( tbInst.props.empty() )
             continue;
 
@@ -661,6 +721,142 @@ void ORCAD_CONVERTER::applyTitleBlock( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* 
         aScreen->SetTitleBlock( titleBlock );
         return;
     }
+}
+
+
+void ORCAD_CONVERTER::placeDefinitionVectors( const ORCAD_SYMBOL_DEF& aDefinition, int aBaseX, int aBaseY, int aOrient,
+                                              SCH_SCREEN* aScreen )
+{
+    ORCAD_BBOX bbox = aDefinition.bbox.value_or( ORCAD_BBOX() );
+    int        width = bbox.x2 - bbox.x1;
+    int        height = bbox.y2 - bbox.y1;
+
+    auto transform = [&]( int aX, int aY )
+    {
+        return OrcadTransformPoint( aOrient, width, height, aBaseX, aBaseY, aX, aY );
+    };
+
+    ORCAD_GRAPHIC_INST graphic;
+    graphic.rotation = aOrient & 3;
+    graphic.color = aDefinition.color;
+    graphic.nested = std::make_unique<ORCAD_SYMBOL_DEF>();
+
+    std::function<void( const std::vector<ORCAD_PRIMITIVE>&, int, int )> appendVectors =
+            [&]( const std::vector<ORCAD_PRIMITIVE>& aPrimitives, int aOffsetX, int aOffsetY )
+    {
+        for( const ORCAD_PRIMITIVE& source : aPrimitives )
+        {
+            if( source.kind == ORCAD_PRIM_KIND::GROUP )
+            {
+                appendVectors( source.children, aOffsetX + source.x1, aOffsetY + source.y1 );
+                continue;
+            }
+
+            if( source.kind == ORCAD_PRIM_KIND::IMAGE )
+                continue;
+
+            ORCAD_PRIMITIVE primitive = source;
+
+            auto transformBox = [&]
+            {
+                std::array<VECTOR2I, 4> corners = { transform( aOffsetX + source.x1, aOffsetY + source.y1 ),
+                                                    transform( aOffsetX + source.x2, aOffsetY + source.y1 ),
+                                                    transform( aOffsetX + source.x2, aOffsetY + source.y2 ),
+                                                    transform( aOffsetX + source.x1, aOffsetY + source.y2 ) };
+
+                primitive.x1 = primitive.x2 = corners[0].x;
+                primitive.y1 = primitive.y2 = corners[0].y;
+
+                for( const VECTOR2I& corner : corners )
+                {
+                    primitive.x1 = std::min( primitive.x1, corner.x );
+                    primitive.y1 = std::min( primitive.y1, corner.y );
+                    primitive.x2 = std::max( primitive.x2, corner.x );
+                    primitive.y2 = std::max( primitive.y2, corner.y );
+                }
+            };
+
+            if( source.kind == ORCAD_PRIM_KIND::LINE )
+            {
+                VECTOR2I p1 = transform( aOffsetX + source.x1, aOffsetY + source.y1 );
+                VECTOR2I p2 = transform( aOffsetX + source.x2, aOffsetY + source.y2 );
+                primitive.x1 = p1.x;
+                primitive.y1 = p1.y;
+                primitive.x2 = p2.x;
+                primitive.y2 = p2.y;
+            }
+            else
+            {
+                transformBox();
+            }
+
+            for( ORCAD_POINT& point : primitive.points )
+            {
+                VECTOR2I transformed = transform( aOffsetX + point.x, aOffsetY + point.y );
+                point.x = transformed.x;
+                point.y = transformed.y;
+            }
+
+            if( primitive.start )
+            {
+                VECTOR2I transformed = transform( aOffsetX + primitive.start->x, aOffsetY + primitive.start->y );
+                primitive.start = ORCAD_POINT{ transformed.x, transformed.y };
+            }
+
+            if( primitive.end )
+            {
+                VECTOR2I transformed = transform( aOffsetX + primitive.end->x, aOffsetY + primitive.end->y );
+                primitive.end = ORCAD_POINT{ transformed.x, transformed.y };
+            }
+
+            graphic.nested->primitives.push_back( std::move( primitive ) );
+        }
+    };
+
+    appendVectors( aDefinition.primitives, 0, 0 );
+
+    ORCAD_RAW_PAGE page;
+    page.graphics.push_back( std::move( graphic ) );
+    placeGraphics( page, aScreen );
+}
+
+
+void ORCAD_CONVERTER::placeDefinitionImages( const ORCAD_SYMBOL_DEF& aDefinition, int aBaseX, int aBaseY, int aOrient,
+                                             SCH_SCREEN* aScreen )
+{
+    ORCAD_BBOX bbox = aDefinition.bbox.value_or( ORCAD_BBOX() );
+    int        width = bbox.x2 - bbox.x1;
+    int        height = bbox.y2 - bbox.y1;
+
+    std::function<void( const std::vector<ORCAD_PRIMITIVE>&, int, int )> placeImages =
+            [&]( const std::vector<ORCAD_PRIMITIVE>& aPrimitives, int aOffsetX, int aOffsetY )
+    {
+        for( const ORCAD_PRIMITIVE& primitive : aPrimitives )
+        {
+            if( primitive.kind == ORCAD_PRIM_KIND::GROUP )
+            {
+                placeImages( primitive.children, aOffsetX + primitive.x1, aOffsetY + primitive.y1 );
+                continue;
+            }
+
+            if( primitive.kind != ORCAD_PRIM_KIND::IMAGE )
+                continue;
+
+            VECTOR2I        center = OrcadTransformPoint( aOrient, width, height, aBaseX, aBaseY,
+                                                          aOffsetX + ( primitive.x1 + primitive.x2 ) / 2,
+                                                          aOffsetY + ( primitive.y1 + primitive.y2 ) / 2 );
+            int             imageWidth = std::abs( primitive.x2 - primitive.x1 );
+            int             imageHeight = std::abs( primitive.y2 - primitive.y1 );
+            ORCAD_PRIMITIVE image = primitive;
+            image.x1 = center.x - imageWidth / 2;
+            image.y1 = center.y - imageHeight / 2;
+            image.x2 = image.x1 + imageWidth;
+            image.y2 = image.y1 + imageHeight;
+            placeBitmap( image, aScreen, aOrient );
+        }
+    };
+
+    placeImages( aDefinition.primitives, 0, 0 );
 }
 
 
@@ -722,9 +918,16 @@ std::string ORCAD_CONVERTER::netAt( const ORCAD_RAW_PAGE& aPage, int aX, int aY 
 std::string ORCAD_CONVERTER::powerNet( const ORCAD_RAW_PAGE& aPage,
                                        const ORCAD_GRAPHIC_INST& aInst ) const
 {
-    // Touched wire's net is authoritative; power ports can be renamed (VCC_BAR naming +3V3).
-    VECTOR2I pin = graphicPinPos( aInst );
+    // Capture's Name property is the effective net name, including renamed stock power symbols.
+    auto nameIt = aInst.props.find( "Name" );
 
+    if( nameIt != aInst.props.end() && !trimmed( nameIt->second ).empty() )
+        return trimmed( nameIt->second );
+
+    if( !trimmed( aInst.logicalName ).empty() )
+        return trimmed( aInst.logicalName );
+
+    VECTOR2I    pin = graphicPinPos( aInst );
     std::string net = netAt( aPage, pin.x, pin.y );
 
     if( net.empty() )
@@ -743,7 +946,6 @@ VECTOR2I ORCAD_CONVERTER::graphicPinPos( const ORCAD_GRAPHIC_INST& aInst ) const
 
     const ORCAD_SYMBOL_DEF& sym = symIt->second;
 
-    // Transform base = placed bbox corner, NOT anchor.
     int baseX = std::min( aInst.bbox.x1, aInst.bbox.x2 );
     int baseY = std::min( aInst.bbox.y1, aInst.bbox.y2 );
 
@@ -858,6 +1060,19 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
         SCH_LINE* line = new SCH_LINE( OrcadDbuToIu( wire.x1, wire.y1 ),
                                        wire.isBus ? LAYER_BUS : LAYER_WIRE );
         line->SetEndPoint( OrcadDbuToIu( wire.x2, wire.y2 ) );
+
+        if( wire.lineWidth > 0 )
+            line->SetLineWidth( schIUScale.MilsToIU( 5 * wire.lineWidth ) );
+
+        if( wire.lineStyle == 1 )
+            line->SetLineStyle( LINE_STYLE::DASH );
+        else if( wire.lineStyle == 2 )
+            line->SetLineStyle( LINE_STYLE::DOT );
+        else if( wire.lineStyle == 3 )
+            line->SetLineStyle( LINE_STYLE::DASHDOT );
+
+        line->SetLineColor( OrcadColor( wire.color ) );
+
         aScreen->Append( line );
 
         for( const ORCAD_ALIAS& alias : wire.aliases )
@@ -881,6 +1096,8 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
 
             int size = textSizeIU( alias.fontIdx );
             label->SetTextSize( VECTOR2I( size, size ) );
+            applyFont( label, alias.fontIdx );
+            label->SetTextColor( OrcadColor( alias.color ) );
 
             aScreen->Append( label );
         }
@@ -896,6 +1113,7 @@ void ORCAD_CONVERTER::placeBusEntries( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* 
                                                                           busEntry.y1 ) );
         entry->SetSize( VECTOR2I( ( busEntry.x2 - busEntry.x1 ) * ORCAD_IU_PER_DBU,
                                   ( busEntry.y2 - busEntry.y1 ) * ORCAD_IU_PER_DBU ) );
+        entry->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT, OrcadColor( busEntry.color ) ) );
         aScreen->Append( entry );
     }
 }
@@ -923,6 +1141,7 @@ void ORCAD_CONVERTER::placeOffpageConnectors( const ORCAD_RAW_PAGE& aPage, SCH_S
         SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( OrcadDbuToIu( offpage.x, offpage.y ),
                                                       FromOrcadString( offpage.net ) );
         label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+        label->SetTextColor( OrcadColor( aPage.offpage[offpage.index].color ) );
 
         // Point label away from attached wire; vertical wire gives up/down, horizontal left/right.
         SPIN_STYLE spin = SPIN_STYLE::RIGHT;
@@ -974,6 +1193,7 @@ void ORCAD_CONVERTER::placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                                                       FromOrcadString( net ) );
         label->SetShape( shape );
         label->SetSpinStyle( SPIN_STYLE::RIGHT );
+        label->SetTextColor( OrcadColor( port.color ) );
 
         if( SCH_FIELD* refs = label->GetField( FIELD_T::INTERSHEET_REFS ) )
             refs->SetVisible( false );
@@ -990,13 +1210,47 @@ void ORCAD_CONVERTER::placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aS
         if( !gfx.nested )
             continue;
 
-        for( const ORCAD_PRIMITIVE& prim : gfx.nested->primitives )
+        KIGFX::COLOR4D                                          graphicColor = OrcadColor( gfx.color );
+        std::function<void( const ORCAD_PRIMITIVE&, int, int )> placePrimitive =
+                [&]( const ORCAD_PRIMITIVE& aSource, int aOffsetX, int aOffsetY )
         {
+            if( aSource.kind == ORCAD_PRIM_KIND::GROUP )
+            {
+                for( const ORCAD_PRIMITIVE& child : aSource.children )
+                    placePrimitive( child, aOffsetX + aSource.x1, aOffsetY + aSource.y1 );
+
+                return;
+            }
+
+            ORCAD_PRIMITIVE prim = aSource;
+            prim.x1 += aOffsetX;
+            prim.y1 += aOffsetY;
+            prim.x2 += aOffsetX;
+            prim.y2 += aOffsetY;
+
+            for( ORCAD_POINT& point : prim.points )
+            {
+                point.x += aOffsetX;
+                point.y += aOffsetY;
+            }
+
+            if( prim.start )
+            {
+                prim.start->x += aOffsetX;
+                prim.start->y += aOffsetY;
+            }
+
+            if( prim.end )
+            {
+                prim.end->x += aOffsetX;
+                prim.end->y += aOffsetY;
+            }
+
             switch( prim.kind )
             {
-            case ORCAD_PRIM_KIND::IMAGE:
-                placeBitmap( prim, aScreen );
-                break;
+            case ORCAD_PRIM_KIND::GROUP: break;
+
+            case ORCAD_PRIM_KIND::IMAGE: placeBitmap( prim, aScreen ); break;
 
             case ORCAD_PRIM_KIND::TEXT:
             {
@@ -1014,6 +1268,8 @@ void ORCAD_CONVERTER::placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aS
 
                 int size = textSizeIU( prim.fontIdx );
                 text->SetTextSize( VECTOR2I( size, size ) );
+                applyFont( text, prim.fontIdx );
+                text->SetTextColor( graphicColor );
 
                 // Quadrants 2/3 fold to horizontal so text reads upright.
                 if( ( gfx.rotation & 3 ) == 1 )
@@ -1024,21 +1280,19 @@ void ORCAD_CONVERTER::placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aS
             }
 
             case ORCAD_PRIM_KIND::LINE:
-                aScreen->Append( makeSheetPoly( { OrcadDbuToIu( prim.x1, prim.y1 ),
-                                                  OrcadDbuToIu( prim.x2, prim.y2 ) } ) );
+                aScreen->Append( makeSheetPoly( { OrcadDbuToIu( prim.x1, prim.y1 ), OrcadDbuToIu( prim.x2, prim.y2 ) },
+                                                prim, graphicColor ) );
                 break;
 
             case ORCAD_PRIM_KIND::RECT:
-                aScreen->Append( makeSheetPoly( { OrcadDbuToIu( prim.x1, prim.y1 ),
-                                                  OrcadDbuToIu( prim.x2, prim.y1 ),
-                                                  OrcadDbuToIu( prim.x2, prim.y2 ),
-                                                  OrcadDbuToIu( prim.x1, prim.y2 ),
-                                                  OrcadDbuToIu( prim.x1, prim.y1 ) } ) );
+                aScreen->Append( makeSheetPoly( { OrcadDbuToIu( prim.x1, prim.y1 ), OrcadDbuToIu( prim.x2, prim.y1 ),
+                                                  OrcadDbuToIu( prim.x2, prim.y2 ), OrcadDbuToIu( prim.x1, prim.y2 ),
+                                                  OrcadDbuToIu( prim.x1, prim.y1 ) },
+                                                prim, graphicColor, true ) );
                 break;
 
             case ORCAD_PRIM_KIND::POLYLINE:
             case ORCAD_PRIM_KIND::POLYGON:
-            case ORCAD_PRIM_KIND::BEZIER:
             {
                 if( prim.points.size() < 2 )
                     break;
@@ -1051,7 +1305,50 @@ void ORCAD_CONVERTER::placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aS
                 if( prim.kind == ORCAD_PRIM_KIND::POLYGON )
                     pts.push_back( pts.front() );
 
-                aScreen->Append( makeSheetPoly( pts ) );
+                aScreen->Append( makeSheetPoly( pts, prim, graphicColor, prim.kind == ORCAD_PRIM_KIND::POLYGON ) );
+                break;
+            }
+
+            case ORCAD_PRIM_KIND::BEZIER:
+            {
+                if( prim.points.size() < 4 || ( prim.points.size() - 1 ) % 3 != 0 )
+                {
+                    if( prim.points.size() >= 2 )
+                    {
+                        std::vector<VECTOR2I> pts;
+
+                        for( const ORCAD_POINT& pt : prim.points )
+                            pts.push_back( OrcadDbuToIu( pt.x, pt.y ) );
+
+                        aScreen->Append( makeSheetPoly( pts, prim, graphicColor ) );
+                    }
+
+                    break;
+                }
+
+                for( size_t i = 0; i + 3 < prim.points.size(); i += 3 )
+                {
+                    SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::BEZIER, LAYER_NOTES );
+                    shape->SetPosition( OrcadDbuToIu( prim.points[i].x, prim.points[i].y ) );
+                    shape->SetBezierC1( OrcadDbuToIu( prim.points[i + 1].x, prim.points[i + 1].y ) );
+                    shape->SetBezierC2( OrcadDbuToIu( prim.points[i + 2].x, prim.points[i + 2].y ) );
+                    shape->SetEnd( OrcadDbuToIu( prim.points[i + 3].x, prim.points[i + 3].y ) );
+
+                    LINE_STYLE style = LINE_STYLE::SOLID;
+
+                    if( prim.lineStyle == 1 )
+                        style = LINE_STYLE::DASH;
+                    else if( prim.lineStyle == 2 )
+                        style = LINE_STYLE::DOT;
+                    else if( prim.lineStyle == 3 )
+                        style = LINE_STYLE::DASHDOT;
+
+                    int width = prim.lineWidth > 0 ? schIUScale.MilsToIU( 5 * prim.lineWidth ) : 0;
+                    shape->SetStroke( STROKE_PARAMS( width, style, graphicColor ) );
+                    shape->SetFillMode( FILL_T::NO_FILL );
+                    aScreen->Append( shape );
+                }
+
                 break;
             }
 
@@ -1094,16 +1391,19 @@ void ORCAD_CONVERTER::placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aS
                                                  cy + ry * std::sin( a ) ) );
                 }
 
-                aScreen->Append( makeSheetPoly( pts ) );
+                aScreen->Append( makeSheetPoly( pts, prim, graphicColor, prim.kind == ORCAD_PRIM_KIND::ELLIPSE ) );
                 break;
             }
             }
-        }
+        };
+
+        for( const ORCAD_PRIMITIVE& sourcePrimitive : gfx.nested->primitives )
+            placePrimitive( sourcePrimitive, 0, 0 );
     }
 }
 
 
-void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aScreen )
+void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aScreen, int aOrient )
 {
     int widthDbu = std::abs( aPrim.x2 - aPrim.x1 );
     int heightDbu = std::abs( aPrim.y2 - aPrim.y1 );
@@ -1113,31 +1413,47 @@ void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aSc
 
     wxMemoryBuffer bmpData;
 
-    if( !MakeBmpFromDib( aPrim.data, bmpData ) )
-    {
-        warn( _( "An embedded picture could not be decoded and was skipped; only plain "
-                 "bitmap images are supported." ) );
-        return;
-    }
-
-    VECTOR2I center = dbuPointToIu( ( aPrim.x1 + aPrim.x2 ) / 2.0,
-                                    ( aPrim.y1 + aPrim.y2 ) / 2.0 );
+    VECTOR2I center = dbuPointToIu( ( aPrim.x1 + aPrim.x2 ) / 2.0, ( aPrim.y1 + aPrim.y2 ) / 2.0 );
 
     std::unique_ptr<SCH_BITMAP> bitmap = std::make_unique<SCH_BITMAP>( center );
     REFERENCE_IMAGE&            refImage = bitmap->GetReferenceImage();
 
-    bool readOk;
+    bool readOk = false;
 
+    if( MakeBmpFromDib( aPrim.data, bmpData ) )
     {
-        // Suppress wxImage log spam on failed read; own message reported below.
         wxLogNull noLog;
         readOk = refImage.ReadImageFile( bmpData );
+    }
+    else
+    {
+        ORCAD_OLE_PREVIEW preview = OrcadExtractOlePreview( aPrim.data );
+
+        if( preview.type == ORCAD_OLE_PREVIEW_TYPE::BMP )
+        {
+            bmpData.AppendData( preview.data.data(), preview.data.size() );
+            wxLogNull noLog;
+            readOk = refImage.ReadImageFile( bmpData );
+        }
+        else if( preview.type == ORCAD_OLE_PREVIEW_TYPE::DIB && MakeBmpFromDib( preview.data, bmpData ) )
+        {
+            wxLogNull noLog;
+            readOk = refImage.ReadImageFile( bmpData );
+        }
+        else if( preview.type == ORCAD_OLE_PREVIEW_TYPE::WMF )
+        {
+            wxImage image;
+            int     maxWidth = std::clamp( widthDbu * 2, 1, 4096 );
+            int     maxHeight = std::clamp( heightDbu * 2, 1, 4096 );
+
+            if( OrcadRenderWmf( preview.data, maxWidth, maxHeight, image ) )
+                readOk = refImage.SetImage( image );
+        }
     }
 
     if( !readOk )
     {
-        warn( _( "An embedded picture could not be decoded and was skipped; only plain "
-                 "bitmap images are supported." ) );
+        warn( _( "An embedded picture could not be decoded and was skipped." ) );
         return;
     }
 
@@ -1150,6 +1466,16 @@ void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aSc
 
         refImage.SetImageScale( std::min( scaleX, scaleY ) );
     }
+
+    const ORCAD_ORIENT_ENTRY& orientation = ORCAD_ORIENT_TABLE[aOrient & 7];
+
+    if( orientation.mirror == 'x' )
+        bitmap->MirrorVertically( center.y );
+    else if( orientation.mirror == 'y' )
+        bitmap->MirrorHorizontally( center.x );
+
+    for( int angle = 0; angle < orientation.angle; angle += 90 )
+        bitmap->Rotate( center, true );
 
     aScreen->Append( bitmap.release() );
 }

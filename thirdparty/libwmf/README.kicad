@@ -1,0 +1,14 @@
+libwmf 0.2.15
+
+Upstream: https://github.com/caolanm/libwmf
+Revision: 94b932de7a4aa6bceb0ff630c65b4aa9cc1dfd1e
+License: LGPL-2.0-or-later; bundled Nimbus fonts carry their own license.
+
+KiCad builds only the WMF parser and GD raster backend needed by the OrCAD
+importer. Upstream converters, command-line tools, and unused output backends
+are not built.
+
+Local changes:
+- Disable libwmf's Windows DLL entry point, relocation helpers, and import/export
+  annotations for the static KiCad target.  KiCad supplies the installed font
+  directory explicitly.

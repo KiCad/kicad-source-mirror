@@ -1,0 +1,205 @@
+#!/usr/bin/perl -w
+
+#
+# Simple convertor from bdf to gd font format.
+#
+# Author: Jan Pazdziora, adelton@fi.muni.cz, http://www.fi.muni.cz/~adelton/
+# at Faculty of Informatics, Masaryk University in Brno, Czech Republic.
+#
+# Example of use:
+# fstobdf -s fontserverhost:7100 -fn 8x16 | ./bdftogd FontLarge gdfontl
+#
+
+use strict;
+
+my $VERSION = '0.60';
+my $now = localtime;
+
+if (@ARGV != 2)
+	{ die "usage: bdftogd fontname filename, eg. bdftogd FontLarge gdfontl\n"; }
+
+my $gdname = shift;
+$gdname = 'gd' . $gdname unless $gdname =~ /^gd/i;
+
+my $filename = shift;
+$filename = 'gd' . $filename unless $filename =~ /^gd/i;
+
+if (-f "$filename.c") { die "File $filename.c already exists, won't overwrite\n"; }
+if (-f "$filename.h") { die "File $filename.h already exists, won't overwrite\n"; }
+
+my ($width, $height);
+my (@data, @left, @bottom);
+my ($globalleft, $globaltop);
+
+my ($minchar, $maxchar);
+
+my ($copyright, $fontdef);
+
+my $currentchar;
+my $gobitmap = 0;
+
+
+while (<>)
+	{
+	chomp;
+	s/\r$//;
+	my ($tag, $value) = split / /, $_, 2;
+	die "Font is not fixed width\n"
+			if $tag eq 'SPACING' and not $value =~ /[CM]/i;
+	
+	$currentchar = $value if $tag eq 'ENCODING';
+	$minchar = $currentchar if not defined $minchar
+		or $currentchar < $minchar;
+	$maxchar = $currentchar if not defined $maxchar
+		or $currentchar > $maxchar;
+	
+	if ($tag eq 'ENDCHAR')
+		{
+		$gobitmap = 0;
+		my $bottom = $globaltop - $bottom[$currentchar];
+		
+
+		if ($bottom > 0)
+			{ $data[$currentchar] = substr $data[$currentchar], 0, length($data[$currentchar]) - $bottom * $width; }
+		else
+			{ $data[$currentchar] .= '0' x (-$bottom * $width); }
+		}
+
+	if ($tag eq 'FONTBOUNDINGBOX')
+		{
+		my ($tag, $wid, $hei, $left, $top) = split / /;
+		if (defined $top)
+			{
+			$globalleft = $left;
+			$globaltop = $top;
+			$height = $hei;
+			$width = $wid;
+			}
+		}
+	if ($tag eq 'FONT' and not defined $fontdef)
+		{ $fontdef = $value; }
+	if ($tag eq 'COPYRIGHT' and not defined $copyright)
+		{ $copyright = $value; }
+	
+	if ($tag eq 'BBX')
+		{
+		my ($tag, $wid, $hei, $left, $bottom) = split / /;
+		if (defined $bottom)
+			{
+			$left[$currentchar] = $left;
+			$bottom[$currentchar] = $bottom;
+			}
+		}
+
+	if ($gobitmap)
+		{
+		my $value = pack 'H*', $_;
+		my $bits = unpack 'B*', $value;
+		$bits = ('0' x $left[$currentchar]) . $bits;
+		$bits .= '0' x ($width - length $bits);
+		$bits = substr $bits, 0, $width;
+		$data[$currentchar] .= $bits;
+		}
+	
+	if ($tag eq 'BITMAP')
+		{
+		$gobitmap = 1;
+		$data[$currentchar] = '';
+		}
+	}
+
+my $info = <<"EOF";
+/*
+	This is a header file for gd font, generated using
+	bdftogd version $VERSION by Jan Pazdziora, adelton\@fi.muni.cz
+	from bdf font
+	$fontdef
+	at $now.
+EOF
+
+if (defined $copyright)
+	{
+	$info .= <<"EOF";
+	The original bdf was holding following copyright:
+	$copyright
+ */
+EOF
+	}
+else
+	{
+	$info .= <<"EOF";
+	No copyright info was found in the original bdf.
+ */
+EOF
+	}
+
+open FILEC, "> $filename.c" or die "Error writing $filename.c: $!\n";
+open FILEH, "> $filename.h" or die "Error writing $filename.h: $!\n";
+print FILEC <<"EOF";
+
+$info
+
+#include "$filename.h"
+
+char ${gdname}Data[] = {
+EOF
+
+$minchar = 0 unless defined $minchar;
+$maxchar = 255 unless defined $maxchar;
+for (my $i = $minchar; $i <= $maxchar; $i++)
+	{
+	$data[$i] = '' unless defined $data[$i];
+	$data[$i] = '0' x ($width * $height - length $data[$i]) . $data[$i];
+	
+	print FILEC "/* Char $i */\n";
+	for my $line (0 .. $height - 1)
+		{ print FILEC join ',', split(//, substr($data[$i], $line * $width, $width)), "\n"; }
+
+	print FILEC "\n";
+
+	next;
+	
+	for my $line (0 .. $height - 1)
+		{ print substr($data[$i], $line * $width, $width), "\n"; }
+	}
+
+my $capdef = "\U_${filename}_H_";
+
+print FILEC <<"EOF";
+
+};
+
+gdFont ${gdname}Rep = {
+	@{[ $maxchar - $minchar + 1]},
+	$minchar,
+	$width,
+	$height,
+	${gdname}Data
+};
+
+gdFontPtr ${gdname} = &${gdname}Rep;
+
+/* This file has not been truncated. */
+
+EOF
+
+
+close FILEC;
+
+print FILEH <<"EOF";
+
+#ifndef $capdef
+#define $capdef 1
+
+$info
+
+#include "gd.h"
+
+extern gdFontPtr $gdname;
+
+#endif
+
+EOF
+
+1;
+

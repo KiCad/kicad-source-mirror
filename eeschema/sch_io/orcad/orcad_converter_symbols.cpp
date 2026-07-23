@@ -41,6 +41,8 @@
 #include <wx/translation.h>
 
 #include <base_units.h>
+#include <eda_text.h>
+#include <font/font.h>
 #include <layer_ids.h>
 #include <lib_id.h>
 #include <lib_symbol.h>
@@ -74,6 +76,50 @@ int schMm( double aMm )
 int dbuIu( double aDbu )
 {
     return KiROUND( aDbu * ORCAD_IU_PER_DBU );
+}
+
+
+LINE_STYLE lineStyleFor( int aStyle )
+{
+    switch( aStyle )
+    {
+    case 1: return LINE_STYLE::DASH;
+    case 2: return LINE_STYLE::DOT;
+    case 3: return LINE_STYLE::DASHDOT;
+    default: return LINE_STYLE::SOLID;
+    }
+}
+
+
+int lineWidthFor( int aWidth )
+{
+    return aWidth > 0 ? schIUScale.MilsToIU( 5 * aWidth ) : 0;
+}
+
+
+FILL_T fillFor( int aFillStyle, int aHatchStyle )
+{
+    if( aFillStyle == 1 )
+        return FILL_T::FILLED_WITH_BG_BODYCOLOR;
+
+    if( aFillStyle == 2 )
+    {
+        switch( aHatchStyle )
+        {
+        case 4: return FILL_T::REVERSE_HATCH;
+        case 5: return FILL_T::CROSS_HATCH;
+        default: return FILL_T::HATCH;
+        }
+    }
+
+    return FILL_T::NO_FILL;
+}
+
+
+STROKE_PARAMS strokeFor( const ORCAD_PRIMITIVE& aPrimitive, int aColor )
+{
+    return STROKE_PARAMS( lineWidthFor( aPrimitive.lineWidth ), lineStyleFor( aPrimitive.lineStyle ),
+                          OrcadColor( aColor ) );
 }
 
 
@@ -809,15 +855,22 @@ LIB_SYMBOL* ORCAD_CONVERTER::kicadSymbolFor( const std::string& aLibName )
             continue;
 
         for( const ORCAD_PRIMITIVE& prim : unit.symbol->primitives )
-            addSymbolPrimitive( symbol.get(), prim, unitNo );
+            addSymbolPrimitive( symbol.get(), prim, unitNo, unit.symbol->color );
 
         for( size_t pi = 0; pi < unit.symbol->pins.size(); ++pi )
         {
-            wxString number = pi < unit.pinNumbers.size()
-                                      ? FromOrcadString( unit.pinNumbers[pi] )
+            const ORCAD_SYMBOL_PIN& sourcePin = unit.symbol->pins[pi];
+            int                     position =
+                    unit.symbol->pins[pi].position >= 0 ? unit.symbol->pins[pi].position : static_cast<int>( pi );
+            wxString number = position < static_cast<int>( unit.pinNumbers.size() )
+                                      ? FromOrcadString( unit.pinNumbers[position] )
                                       : wxString::Format( wxS( "%d" ), (int) pi + 1 );
 
-            addSymbolPin( symbol.get(), unit.symbol->pins[pi], number, unitNo, entry.isPower,
+            if( !sourcePin.name.empty()
+                && std::count( unit.pinNumbers.begin(), unit.pinNumbers.end(), sourcePin.name ) == 1 )
+                number = FromOrcadString( sourcePin.name );
+
+            addSymbolPin( symbol.get(), sourcePin, number, unitNo, entry.isPower,
                           entry.isPower ? entry.powerNet : std::string() );
         }
     }
@@ -827,29 +880,35 @@ LIB_SYMBOL* ORCAD_CONVERTER::kicadSymbolFor( const std::string& aLibName )
 }
 
 
-void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMITIVE& aPrim,
-                                          int aUnit )
+void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMITIVE& aPrim, int aUnit, int aColor,
+                                          int aOffsetX, int aOffsetY )
 {
     // Cache defs and in-memory symbol space both Y-down; .kicad_sch writer flips to
     // file Y-up itself.
-    auto toX = []( int aV )
+    auto toX = [aOffsetX]( int aV )
     {
-        return aV * ORCAD_IU_PER_DBU;
+        return ( aV + aOffsetX ) * ORCAD_IU_PER_DBU;
     };
-    auto toY = []( int aV )
+    auto toY = [aOffsetY]( int aV )
     {
-        return aV * ORCAD_IU_PER_DBU;
+        return ( aV + aOffsetY ) * ORCAD_IU_PER_DBU;
     };
 
     switch( aPrim.kind )
     {
+    case ORCAD_PRIM_KIND::GROUP:
+        for( const ORCAD_PRIMITIVE& child : aPrim.children )
+            addSymbolPrimitive( aSymbol, child, aUnit, aColor, aOffsetX + aPrim.x1, aOffsetY + aPrim.y1 );
+
+        break;
+
     case ORCAD_PRIM_KIND::RECT:
     {
         SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
         shape->SetPosition( VECTOR2I( toX( aPrim.x1 ), toY( aPrim.y1 ) ) );
         shape->SetEnd( VECTOR2I( toX( aPrim.x2 ), toY( aPrim.y2 ) ) );
-        shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT ) );
-        shape->SetFillMode( aPrim.fill ? FILL_T::FILLED_WITH_BG_BODYCOLOR : FILL_T::NO_FILL );
+        shape->SetStroke( strokeFor( aPrim, aColor ) );
+        shape->SetFillMode( fillFor( aPrim.fillStyle, aPrim.hatchStyle ) );
         shape->SetUnit( aUnit );
         aSymbol->AddDrawItem( shape, false );
         break;
@@ -860,7 +919,7 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
         SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         shape->AddPoint( VECTOR2I( toX( aPrim.x1 ), toY( aPrim.y1 ) ) );
         shape->AddPoint( VECTOR2I( toX( aPrim.x2 ), toY( aPrim.y2 ) ) );
-        shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT ) );
+        shape->SetStroke( strokeFor( aPrim, aColor ) );
         shape->SetFillMode( FILL_T::NO_FILL );
         shape->SetUnit( aUnit );
         aSymbol->AddDrawItem( shape, false );
@@ -869,7 +928,6 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
 
     case ORCAD_PRIM_KIND::POLYLINE:
     case ORCAD_PRIM_KIND::POLYGON:
-    case ORCAD_PRIM_KIND::BEZIER:
     {
         if( aPrim.points.size() < 2 )
             return;
@@ -885,11 +943,46 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
             shape->AddPoint( VECTOR2I( toX( aPrim.points.front().x ),
                                        toY( aPrim.points.front().y ) ) );
 
-        shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT ) );
-        shape->SetFillMode( isPolygon && aPrim.fill ? FILL_T::FILLED_WITH_BG_BODYCOLOR
-                                                    : FILL_T::NO_FILL );
+        shape->SetStroke( strokeFor( aPrim, aColor ) );
+        shape->SetFillMode( isPolygon ? fillFor( aPrim.fillStyle, aPrim.hatchStyle ) : FILL_T::NO_FILL );
         shape->SetUnit( aUnit );
         aSymbol->AddDrawItem( shape, false );
+        break;
+    }
+
+    case ORCAD_PRIM_KIND::BEZIER:
+    {
+        if( aPrim.points.size() < 4 || ( aPrim.points.size() - 1 ) % 3 != 0 )
+        {
+            if( aPrim.points.size() >= 2 )
+            {
+                SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
+
+                for( const ORCAD_POINT& pt : aPrim.points )
+                    shape->AddPoint( VECTOR2I( toX( pt.x ), toY( pt.y ) ) );
+
+                shape->SetStroke( strokeFor( aPrim, aColor ) );
+                shape->SetFillMode( FILL_T::NO_FILL );
+                shape->SetUnit( aUnit );
+                aSymbol->AddDrawItem( shape, false );
+            }
+
+            return;
+        }
+
+        for( size_t i = 0; i + 3 < aPrim.points.size(); i += 3 )
+        {
+            SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::BEZIER, LAYER_DEVICE );
+            shape->SetPosition( VECTOR2I( toX( aPrim.points[i].x ), toY( aPrim.points[i].y ) ) );
+            shape->SetBezierC1( VECTOR2I( toX( aPrim.points[i + 1].x ), toY( aPrim.points[i + 1].y ) ) );
+            shape->SetBezierC2( VECTOR2I( toX( aPrim.points[i + 2].x ), toY( aPrim.points[i + 2].y ) ) );
+            shape->SetEnd( VECTOR2I( toX( aPrim.points[i + 3].x ), toY( aPrim.points[i + 3].y ) ) );
+            shape->SetStroke( strokeFor( aPrim, aColor ) );
+            shape->SetFillMode( FILL_T::NO_FILL );
+            shape->SetUnit( aUnit );
+            aSymbol->AddDrawItem( shape, false );
+        }
+
         break;
     }
 
@@ -906,9 +999,8 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
             VECTOR2I   center( dbuIu( cx ), dbuIu( cy ) );
             shape->SetPosition( center );
             shape->SetEnd( center + VECTOR2I( dbuIu( rx ), 0 ) );
-            shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT ) );
-            shape->SetFillMode( aPrim.fill ? FILL_T::FILLED_WITH_BG_BODYCOLOR
-                                           : FILL_T::NO_FILL );
+            shape->SetStroke( strokeFor( aPrim, aColor ) );
+            shape->SetFillMode( fillFor( aPrim.fillStyle, aPrim.hatchStyle ) );
             shape->SetUnit( aUnit );
             aSymbol->AddDrawItem( shape, false );
         }
@@ -924,9 +1016,8 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
                                            dbuIu( cy + ry * std::sin( a ) ) ) );
             }
 
-            shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT ) );
-            shape->SetFillMode( aPrim.fill ? FILL_T::FILLED_WITH_BG_BODYCOLOR
-                                           : FILL_T::NO_FILL );
+            shape->SetStroke( strokeFor( aPrim, aColor ) );
+            shape->SetFillMode( fillFor( aPrim.fillStyle, aPrim.hatchStyle ) );
             shape->SetUnit( aUnit );
             aSymbol->AddDrawItem( shape, false );
         }
@@ -934,9 +1025,7 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
         break;
     }
 
-    case ORCAD_PRIM_KIND::ARC:
-        addSymbolArc( aSymbol, aPrim, aUnit );
-        break;
+    case ORCAD_PRIM_KIND::ARC: addSymbolArc( aSymbol, aPrim, aUnit, aColor, aOffsetX, aOffsetY ); break;
 
     case ORCAD_PRIM_KIND::TEXT:
     {
@@ -944,6 +1033,8 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
                                        FromOrcadString( aPrim.text ), LAYER_DEVICE );
         int       size = textSizeIU( aPrim.fontIdx );
         text->SetTextSize( VECTOR2I( size, size ) );
+        applyFont( text, aPrim.fontIdx );
+        text->SetTextColor( OrcadColor( aColor ) );
 
         // OrCAD anchors comment text at top-left of bounding box.
         text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
@@ -960,7 +1051,8 @@ void ORCAD_CONVERTER::addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMI
 }
 
 
-void ORCAD_CONVERTER::addSymbolArc( LIB_SYMBOL* aSymbol, const ORCAD_PRIMITIVE& aPrim, int aUnit )
+void ORCAD_CONVERTER::addSymbolArc( LIB_SYMBOL* aSymbol, const ORCAD_PRIMITIVE& aPrim, int aUnit, int aColor,
+                                    int aOffsetX, int aOffsetY )
 {
     if( !aPrim.start || !aPrim.end )
         return;
@@ -992,11 +1084,11 @@ void ORCAD_CONVERTER::addSymbolArc( LIB_SYMBOL* aSymbol, const ORCAD_PRIMITIVE& 
     for( int k = 0; k <= steps; ++k )
     {
         double a = a0 + ( a1 - a0 ) * k / steps;
-        shape->AddPoint( VECTOR2I( dbuIu( cx + rx * std::cos( a ) ),
-                                   dbuIu( cy + ry * std::sin( a ) ) ) );
+        shape->AddPoint(
+                VECTOR2I( dbuIu( cx + rx * std::cos( a ) + aOffsetX ), dbuIu( cy + ry * std::sin( a ) + aOffsetY ) ) );
     }
 
-    shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::DEFAULT ) );
+    shape->SetStroke( strokeFor( aPrim, aColor ) );
     shape->SetFillMode( FILL_T::NO_FILL );
     shape->SetUnit( aUnit );
     aSymbol->AddDrawItem( shape, false );
@@ -1185,6 +1277,7 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
     symbol->SetUnitSelection( &aSheetPath, unit );
 
     aScreen->Append( symbol );
+    placeDefinitionImages( def, aInst.x, aInst.y, ori, aScreen );
 
     // Placed pin w/ zero net word is unconnected; OrCAD draws no-connect marker,
     // reproduce it.
@@ -1237,7 +1330,6 @@ void ORCAD_CONVERTER::placePowerSymbol( ORCAD_RAW_PAGE&, const ORCAD_GRAPHIC_INS
     int        ori = OrcadOrientOf( aInst.rotation, aInst.mirror );
     VECTOR2I   offset = OrcadOrientOffset( ori, w, h );
 
-    // Orientation transform base = placed bbox min corner, NOT anchor point.
     bool hasBbox = aInst.bbox.x1 || aInst.bbox.y1 || aInst.bbox.x2 || aInst.bbox.y2;
     int  bx = hasBbox ? std::min( aInst.bbox.x1, aInst.bbox.x2 ) : aInst.x;
     int  by = hasBbox ? std::min( aInst.bbox.y1, aInst.bbox.y2 ) : aInst.y;
@@ -1434,6 +1526,8 @@ void ORCAD_CONVERTER::placeSymbolFields( SCH_SYMBOL* aSymbol, const ORCAD_PLACED
         // stacks above value clear of body.
         aField->SetPosition( it->second.first );
         aField->SetTextSize( VECTOR2I( size, size ) );
+        applyFont( aField, dp->fontIdx );
+        aField->SetTextColor( OrcadColor( dp->color ) );
         aField->SetTextAngle( storedFieldAngle( dp ) );
         aField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         aField->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
@@ -1460,6 +1554,8 @@ void ORCAD_CONVERTER::placeSymbolFields( SCH_SYMBOL* aSymbol, const ORCAD_PLACED
             field.SetPosition( sIt->second.first );
             field.SetTextAngle( storedFieldAngle( dp ) );
             field.SetTextSize( VECTOR2I( size, size ) );
+            applyFont( &field, dp->fontIdx );
+            field.SetTextColor( OrcadColor( dp->color ) );
             field.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
             field.SetVertJustify( GR_TEXT_V_ALIGN_TOP );
             field.SetVisible( ( dp->dispMode & 0x100 ) != 0 );
@@ -1560,6 +1656,22 @@ int ORCAD_CONVERTER::textSizeIU( int aFontIdx ) const
     }
 
     return schMm( mm );
+}
+
+
+void ORCAD_CONVERTER::applyFont( EDA_TEXT* aText, int aFontIdx ) const
+{
+    if( !aText || aFontIdx <= 0 || aFontIdx > static_cast<int>( m_design.library.fonts.size() ) )
+        return;
+
+    const ORCAD_FONT& font = m_design.library.fonts[aFontIdx - 1];
+    aText->SetBold( font.bold );
+    aText->SetItalic( font.italic );
+
+    if( !font.face.empty() )
+    {
+        aText->SetFont( KIFONT::FONT::GetFont( FromOrcadString( font.face ), font.bold, font.italic ) );
+    }
 }
 
 

@@ -1,0 +1,36 @@
+(1) Export to PNG and JPEG uses Thomas Boutell's GD library.
+    http://www.boutell.com/gd/
+
+(2) Font support in GD and in libwmf is provided by the FreeType library.
+    http://freetype.sourceforge.net/
+
+(3) Also deserving of credit are:
+  (a) allegro
+      http://www.talula.demon.co.uk/allegro/
+  (b) Gdtclft
+      http://www.tcltk.com/
+  (c) wine
+      http://www.winehq.com/
+  (d) Bjorn Reese and Daniel Stenberg for trio.
+
+(4) Caolan McNamara was original author of libwmf, and although I (Francis
+    James Franklin) have reworked much of it the core of the interpreter
+    (i.e., the most important part) owes everything to Caolan.
+    http://www.csn.ul.ie/~caolan
+    http://www.alinameridon.com/
+
+(5) Export to FIG format (readable/editable by xfig) was added by David Airlie,
+    Frédéric Vivien and Martin Vermeer.
+    http://www.csn.ul.ie/~airlied
+    http://www.netby.net/Oest/Europa-Alle/vermeer
+
+(6) Bob Friesenhahn linked libwmf into ImageMagick, so now you are able to
+    convert WMF files to anything ImageMagick supports using the handy
+    ImageMagick command syntax.
+
+(7) Other contributors include Raj Manandhar, Steven Michael Robbins, Bob Bell
+    Albert Chin and Matej Vila. Also, Benjamin Geer, Peter Ohlerich, Steve Oney
+    and Michael Cree have helped with debugging.
+
+(8) Finally, special thanks to Dom Lachowicz for all sorts of reasons.
+    http://www.seas.upenn.edu/~dominicl/

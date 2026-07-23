@@ -38,6 +38,9 @@ common/gal/opengl/bitmap_font_img.c     generated
 # Vendored Eigen headers are upstream sources and must not be reformatted
 thirdparty/eigen/**    -format.clang-format-kicad -whitespace
 
+# Vendored libwmf sources are upstream sources and must not be reformatted
+thirdparty/libwmf/**    -format.clang-format-kicad -whitespace
+
 # Scripts
 *.sh    text eol=lf
 *.bat   text eol=crlf

@@ -1,0 +1,89 @@
+void 
+gdImageEllipse (gdImagePtr im, int cx, int cy, int w, int h, int color)
+{
+  long d, b_sq, b_sq_4, b_sq_6;
+  long a_sq, a_sq_4, a_sq_6;
+  int x, y, switchem;
+  long lsqrt (long);
+  int pix, half, pstart;
+  int thick = im->thick;
+
+  half = thick / 2;
+  w /= 2;			/* ImageArc uses diameter, not radius */
+  h /= 2;
+
+  d = 2 * (long) h *h + (long) w *w - 2 * (long) w *w * h;
+  b_sq = (long) h *h;
+  b_sq_4 = 4 * (long) h *h;
+  b_sq_6 = 6 * (long) h *h;
+  a_sq = (long) w *w;
+  a_sq_4 = 4 * (long) w *w;
+  a_sq_6 = 6 * (long) w *w;
+
+  x = 0;
+  y = -h;
+  switchem = a_sq / lsqrt (a_sq + b_sq);
+
+  while (x <= switchem)
+    {
+      pstart = y - half;
+      for (pix = pstart; pix < pstart + thick; pix++)
+	{
+	  gdImageSetPixel (im, cx + x, cy + pix, color);
+	  gdImageSetPixel (im, cx - x, cy + pix, color);
+	  gdImageSetPixel (im, cx + x, cy - pix, color);
+	  gdImageSetPixel (im, cx - x, cy - pix, color);
+	}
+      if (d < 0)
+	d += b_sq_4 * x++ + b_sq_6;
+      else
+	d += b_sq_4 * x++ + b_sq_6 + a_sq_4 * (++y);
+    }
+
+  /* Middlesplat!
+     ** Go a little further if the thickness is not nominal...
+   */
+  if (thick > 1)
+    {
+      int xp = x;
+      int yp = y;
+      int dp = d;
+      int thick2 = thick + 2;
+      int half2 = half + 1;
+
+      while (xp <= switchem + half)
+	{
+	  pstart = yp - half2;
+	  for (pix = pstart; pix < pstart + thick2; pix++)
+	    {
+	      gdImageSetPixel (im, cx + xp, cy + pix, color);
+	      gdImageSetPixel (im, cx - xp, cy + pix, color);
+	      gdImageSetPixel (im, cx + xp, cy - pix, color);
+	      gdImageSetPixel (im, cx - xp, cy - pix, color);
+	    }
+	  if (dp < 0)
+	    dp += b_sq_4 * xp++ + b_sq_6;
+	  else
+	    dp += b_sq_4 * xp++ + b_sq_6 + a_sq_4 * (++yp);
+	}
+    }
+
+  d += -2 * (long) b_sq + 2 * (long) a_sq - 2 * (long) b_sq *(x - 1) + 2 * (long) a_sq *(y - 1);
+
+  while (y <= 0)
+    {
+      pstart = x - half;
+      for (pix = pstart; pix < pstart + thick; pix++)
+	{
+	  gdImageSetPixel (im, cx + pix, cy + y, color);
+	  gdImageSetPixel (im, cx - pix, cy + y, color);
+	  gdImageSetPixel (im, cx + pix, cy - y, color);
+	  gdImageSetPixel (im, cx - pix, cy - y, color);
+	}
+
+      if (d < 0)
+	d += a_sq_4 * y++ + a_sq_6 + b_sq_4 * (++x);
+      else
+	d += a_sq_4 * y++ + a_sq_6;
+    }
+}

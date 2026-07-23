@@ -1,0 +1,120 @@
+#NMAKE makefile for Windows 95/98/NT developers.
+#Produces a static library (libgd.lib). Thanks to Joe Gregorio.
+#THIS IS OUT OF DATE.
+
+COMPILER=cl
+
+#If the ar command fails on your system, consult the ar manpage
+#for your system. 
+AR=LIB
+
+#If the install command is not in your path, provide
+#an explicit path for it here, or install manually.
+INSTALL=install
+
+#If you don't have FreeType and/or Xpm installed, including the
+#header files, uncomment this (default).
+CFLAGS=-Ox -GX 
+
+#If you do have FreeType and/or Xpm fully installed, uncomment a
+#variation of this and comment out the line above. See also LIBS below.
+#CFLAGS=-O -DHAVE_LIBXPM -DHAVE_LIBJPEG -DHAVE_LIBPNG -DHAVE_LIBTTF
+
+# -DHAVE_LIBFREETYPE can be used instead of -DHAVE_TTF to use the
+# newer FreeType2 libraries
+
+#Libraries required for applications 
+LIBS=gd.lib libpng.lib zlib.lib 
+#LIBS=gd.lib libpng.lib zlib.lib libjpeg.lib libttf.lib
+
+#Libraries required for gd.lib itself
+GDLIBS=libpng.lib zlib.lib
+#GDLIBS=libpng.lib zlib.lib libjpeg.lib libttf.lib
+
+#Typical install locations for freetype, zlib, jpeg, xpm and 
+#libpng header files. If yours are somewhere else, change this. 
+INCLUDEDIRS=-I d:\zlib -I d:\libpng -I d:\libjpeg -I d:\libttf
+
+#Typical install locations for freetype, zlib, xpm, libjpeg and 
+#libpng libraries.
+#
+#If yours are somewhere else, other than a standard location
+#such as /lib or /usr/lib, then change this. Be sure to keep
+#-L. as this allows the gd library itself to be found.
+#Put -L. first so that old versions of the gd library elsewhere
+#on your system can't cause conflicts while building a new one.
+LIB=d:\devstudio\vc\lib;d:\zlib;d:\libpng;d:\libjpeg;d:\libttf
+
+#Location where gd.lib should be installed by "make install".
+INSTALL_LIB=/usr/local/lib
+
+#Location where .h files should be installed by "make install".
+INSTALL_INCLUDE=/usr/local/include
+
+#Location where useful non-test programs should be installed by "make install".
+INSTALL_BIN=/usr/local/bin
+
+#
+#
+# Changes should not be required below here.
+#
+#
+
+VERSION=1.8.1
+
+CC=$(COMPILER) $(INCLUDEDIRS)
+LINK=$(CC) $(LIBS)
+
+PROGRAMS=$(BIN_PROGRAMS) $(TEST_PROGRAMS)
+
+BIN_PROGRAMS=pngtogd.exe pngtogd2.exe gdtopng.exe gd2topng.exe gd2copypal.exe gdparttopng.exe webpng.exe
+TEST_PROGRAMS=gdtest.exe gddemo.exe gd2time.exe gdtestttf.exe gdtestft.exe
+
+all: gd.lib $(PROGRAMS)
+
+gddemo.exe: gddemo.c gd.lib
+	$(CC) gddemo.c $(LIBDIRS) $(LIBS)
+
+pngtogd.exe: pngtogd.c gd.lib
+	$(CC) pngtogd.c $(LIBDIRS) $(LIBS) 
+
+webpng.exe: webpng.c gd.lib
+	$(CC) webpng.c 	$(LIBDIRS) $(LIBS)
+
+pngtogd2.exe: pngtogd2.c gd.lib
+	$(CC) pngtogd2.c	$(LIBDIRS) $(LIBS)
+
+gdtopng.exe: gdtopng.c gd.lib
+	$(CC) gdtopng.c 	$(LIBDIRS) $(LIBS)
+
+gd2topng.exe: gd2topng.c gd.lib
+	$(CC) gd2topng.c	$(LIBDIRS) $(LIBS)
+
+gd2copypal.exe: gd2copypal.c gd.lib
+	$(CC) gd2copypal.c	$(LIBDIRS) $(LIBS)
+
+gdparttopng.exe: gdparttopng.c gd.lib
+	$(CC) gdparttopng.c	$(LIBDIRS) $(LIBS)
+
+gdtest.exe: gdtest.c gd.lib
+	$(CC) gdtest.c 	$(LIBDIRS) $(LIBS)
+
+gd2time.exe: gd2time.c gd.lib
+	$(CC) gd2time.c	$(LIBDIRS) $(LIBS)
+
+gdtestttf.exe: gdtestttf.c gd.lib
+	$(CC) gdtestttf.c 	$(LIBDIRS) $(LIBS)
+
+gdtestft.exe: gdtestft.c gd.lib
+	$(CC) gdtestft.c 	$(LIBDIRS) $(LIBS)
+
+OBJS=gd.obj gd_gd.obj gd_gd2.obj gd_io.obj gd_io_dp.obj gd_io_file.obj gd_ss.obj \
+	gd_io_ss.obj gd_png.obj gdxpm.obj gdfontt.obj gdfonts.obj gdfontmb.obj gdfontl.obj \
+	gdfontg.obj gdtables.obj gdttf.obj gdft.c gdcache.obj gdkanji.obj gd_jpeg.obj
+
+gd.lib:  $(OBJS) gd.h gdfontt.h gdfonts.h gdfontmb.h gdfontl.h gdfontg.h	
+	$(AR) $(OBJS) $(GDLIBS) 
+
+clean:
+	del *.obj *.lib $(PROGRAMS)
+

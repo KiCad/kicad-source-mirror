@@ -21,6 +21,10 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <sch_io/orcad/sch_io_orcad.h>
+#include <sch_io/orcad/orcad_cache.h>
+#include <sch_io/orcad/orcad_converter.h>
+#include <sch_io/orcad/orcad_ole.h>
+#include <sch_io/orcad/orcad_page.h>
 
 #include <schematic.h>
 #include <connection_graph.h>
@@ -29,6 +33,9 @@
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_label.h>
+#include <sch_line.h>
+#include <sch_bitmap.h>
+#include <sch_shape.h>
 #include <sch_pin.h>
 #include <lib_symbol.h>
 #include <reporter.h>
@@ -50,6 +57,105 @@
 
 namespace
 {
+
+static void appendLe32( std::vector<uint8_t>& aBytes, uint32_t aValue )
+{
+    for( int shift = 0; shift < 32; shift += 8 )
+        aBytes.push_back( static_cast<uint8_t>( aValue >> shift ) );
+}
+
+
+static void appendLe16( std::vector<uint8_t>& aBytes, uint16_t aValue )
+{
+    aBytes.push_back( static_cast<uint8_t>( aValue ) );
+    aBytes.push_back( static_cast<uint8_t>( aValue >> 8 ) );
+}
+
+
+static void appendLzt( std::vector<uint8_t>& aBytes, const std::string& aValue )
+{
+    appendLe16( aBytes, static_cast<uint16_t>( aValue.size() ) );
+    aBytes.insert( aBytes.end(), aValue.begin(), aValue.end() );
+    aBytes.push_back( 0 );
+}
+
+
+static void writeLe16( std::vector<uint8_t>& aBytes, size_t aOffset, uint16_t aValue )
+{
+    aBytes[aOffset] = static_cast<uint8_t>( aValue );
+    aBytes[aOffset + 1] = static_cast<uint8_t>( aValue >> 8 );
+}
+
+
+static void writeLe32( std::vector<uint8_t>& aBytes, size_t aOffset, uint32_t aValue )
+{
+    for( int shift = 0; shift < 32; shift += 8 )
+        aBytes[aOffset++] = static_cast<uint8_t>( aValue >> shift );
+}
+
+
+static std::vector<uint8_t> makeOlePreviewCfb( const std::vector<uint16_t>& aName, const std::vector<uint8_t>& aStream )
+{
+    constexpr uint32_t FREE_SECTOR = 0xFFFFFFFF;
+    constexpr uint32_t END_OF_CHAIN = 0xFFFFFFFE;
+    constexpr uint32_t FAT_SECTOR = 0xFFFFFFFD;
+    constexpr size_t   SECTOR_SIZE = 512;
+    constexpr size_t   STREAM_SECTORS = 8;
+
+    std::vector<uint8_t> cfb( SECTOR_SIZE * ( 3 + STREAM_SECTORS ), 0 );
+    const uint8_t        magic[] = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
+    std::copy( std::begin( magic ), std::end( magic ), cfb.begin() );
+    writeLe16( cfb, 24, 0x003E );
+    writeLe16( cfb, 26, 3 );
+    writeLe16( cfb, 28, 0xFFFE );
+    writeLe16( cfb, 30, 9 );
+    writeLe16( cfb, 32, 6 );
+    writeLe32( cfb, 44, 1 );
+    writeLe32( cfb, 48, 1 );
+    writeLe32( cfb, 56, 4096 );
+    writeLe32( cfb, 60, END_OF_CHAIN );
+    writeLe32( cfb, 68, END_OF_CHAIN );
+
+    for( size_t i = 0; i < 109; ++i )
+        writeLe32( cfb, 76 + 4 * i, i == 0 ? 0 : FREE_SECTOR );
+
+    size_t fat = SECTOR_SIZE;
+    writeLe32( cfb, fat, FAT_SECTOR );
+    writeLe32( cfb, fat + 4, END_OF_CHAIN );
+
+    for( size_t i = 0; i < STREAM_SECTORS; ++i )
+        writeLe32( cfb, fat + 4 * ( 2 + i ), i + 1 == STREAM_SECTORS ? END_OF_CHAIN : 3 + i );
+
+    for( size_t i = 2 + STREAM_SECTORS; i < SECTOR_SIZE / 4; ++i )
+        writeLe32( cfb, fat + 4 * i, FREE_SECTOR );
+
+    size_t root = 2 * SECTOR_SIZE;
+    writeLe16( cfb, root, 'R' );
+    writeLe16( cfb, root + 2, 0 );
+    writeLe16( cfb, root + 64, 4 );
+    cfb[root + 66] = 5;
+    writeLe32( cfb, root + 68, FREE_SECTOR );
+    writeLe32( cfb, root + 72, FREE_SECTOR );
+    writeLe32( cfb, root + 76, 1 );
+    writeLe32( cfb, root + 116, END_OF_CHAIN );
+
+    size_t entry = root + 128;
+
+    for( size_t i = 0; i < aName.size(); ++i )
+        writeLe16( cfb, entry + 2 * i, aName[i] );
+
+    writeLe16( cfb, entry + 64, static_cast<uint16_t>( 2 * aName.size() ) );
+    cfb[entry + 66] = 2;
+    writeLe32( cfb, entry + 68, FREE_SECTOR );
+    writeLe32( cfb, entry + 72, FREE_SECTOR );
+    writeLe32( cfb, entry + 76, FREE_SECTOR );
+    writeLe32( cfb, entry + 116, 2 );
+    writeLe32( cfb, entry + 120, STREAM_SECTORS * SECTOR_SIZE );
+
+    std::copy_n( aStream.begin(), std::min( aStream.size(), STREAM_SECTORS * SECTOR_SIZE ),
+                 cfb.begin() + 3 * SECTOR_SIZE );
+    return cfb;
+}
 
 /// Throw-away temp file; impostor fixtures synthesized at runtime since user designs not redistributable.
 struct TEMP_TEST_FILE
@@ -104,6 +210,203 @@ struct ORCAD_SCH_IMPORT_FIXTURE
 
 
 BOOST_FIXTURE_TEST_SUITE( OrcadSchImport, ORCAD_SCH_IMPORT_FIXTURE )
+
+
+BOOST_AUTO_TEST_CASE( PrimitiveLineWidth )
+{
+    std::vector<uint8_t> bytes = { ORCAD_PRIM_LINE, ORCAD_PRIM_LINE };
+    appendLe32( bytes, 32 );
+    appendLe32( bytes, 0 );
+    appendLe32( bytes, 10 );
+    appendLe32( bytes, 20 );
+    appendLe32( bytes, 30 );
+    appendLe32( bytes, 40 );
+    appendLe32( bytes, 1 );
+    appendLe32( bytes, 2 );
+
+    ORCAD_STREAM                   stream( bytes.data(), bytes.size() );
+    std::optional<ORCAD_PRIMITIVE> primitive = OrcadReadPrimitive( stream );
+
+    BOOST_REQUIRE( primitive );
+    BOOST_CHECK( primitive->kind == ORCAD_PRIM_KIND::LINE );
+    BOOST_CHECK_EQUAL( primitive->lineWidth, 2 );
+}
+
+
+BOOST_AUTO_TEST_CASE( CaptureColorPalette )
+{
+    BOOST_CHECK( OrcadColor( 8 ) == KIGFX::COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+    BOOST_CHECK( OrcadColor( 18 ) == KIGFX::COLOR4D( 0.0, 1.0, 0.0, 1.0 ) );
+    BOOST_CHECK( OrcadColor( 28 ) == KIGFX::COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );
+    BOOST_CHECK( OrcadColor( 40 ) == KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
+    BOOST_CHECK( OrcadColor( 47 ) == KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
+    BOOST_CHECK( OrcadColor( 48 ) == KIGFX::COLOR4D::UNSPECIFIED );
+    BOOST_CHECK( OrcadColor( 0 ) == KIGFX::COLOR4D::UNSPECIFIED );
+}
+
+
+BOOST_AUTO_TEST_CASE( PrimitiveStrokeAndFillStyles )
+{
+    std::vector<uint8_t> bytes = { ORCAD_PRIM_RECT, ORCAD_PRIM_RECT };
+    appendLe32( bytes, 40 );
+    appendLe32( bytes, 0 );
+    appendLe32( bytes, 10 );
+    appendLe32( bytes, 20 );
+    appendLe32( bytes, 30 );
+    appendLe32( bytes, 40 );
+    appendLe32( bytes, 2 );
+    appendLe32( bytes, 3 );
+    appendLe32( bytes, 2 );
+    appendLe32( bytes, 5 );
+
+    ORCAD_STREAM                   stream( bytes.data(), bytes.size() );
+    std::optional<ORCAD_PRIMITIVE> primitive = OrcadReadPrimitive( stream );
+
+    BOOST_REQUIRE( primitive );
+    BOOST_CHECK_EQUAL( primitive->lineStyle, 2 );
+    BOOST_CHECK_EQUAL( primitive->lineWidth, 3 );
+    BOOST_CHECK_EQUAL( primitive->fillStyle, 2 );
+    BOOST_CHECK_EQUAL( primitive->hatchStyle, 5 );
+}
+
+
+BOOST_AUTO_TEST_CASE( PrimitivePolygonStylesBeforePoints )
+{
+    std::vector<uint8_t> bytes = { ORCAD_PRIM_POLYGON, ORCAD_PRIM_POLYGON };
+    appendLe32( bytes, 34 );
+    appendLe32( bytes, 0 );
+    appendLe32( bytes, 1 );
+    appendLe32( bytes, 2 );
+    appendLe32( bytes, 2 );
+    appendLe32( bytes, 4 );
+    appendLe16( bytes, 2 );
+    appendLe16( bytes, 20 );
+    appendLe16( bytes, 10 );
+    appendLe16( bytes, 40 );
+    appendLe16( bytes, 30 );
+
+    ORCAD_STREAM                   stream( bytes.data(), bytes.size() );
+    std::optional<ORCAD_PRIMITIVE> primitive = OrcadReadPrimitive( stream );
+
+    BOOST_REQUIRE( primitive );
+    BOOST_CHECK_EQUAL( primitive->lineStyle, 1 );
+    BOOST_CHECK_EQUAL( primitive->lineWidth, 2 );
+    BOOST_CHECK_EQUAL( primitive->fillStyle, 2 );
+    BOOST_CHECK_EQUAL( primitive->hatchStyle, 4 );
+    BOOST_REQUIRE_EQUAL( primitive->points.size(), 2u );
+    BOOST_CHECK( ( primitive->points[0] == ORCAD_POINT{ 10, 20 } ) );
+    BOOST_CHECK( ( primitive->points[1] == ORCAD_POINT{ 30, 40 } ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( PrimitiveSymbolVectorContents )
+{
+    std::vector<uint8_t> bytes = { ORCAD_PRIM_SYMBOL_VECTOR, ORCAD_PRIM_SYMBOL_VECTOR };
+    appendLe32( bytes, 63 );
+    appendLe32( bytes, 0 );
+    bytes.push_back( ORCAD_PRIM_SYMBOL_VECTOR );
+    appendLe16( bytes, 0 );
+    bytes.insert( bytes.end(), std::begin( ORCAD_STREAM::PREAMBLE ), std::end( ORCAD_STREAM::PREAMBLE ) );
+    appendLe32( bytes, 0 );
+    appendLe16( bytes, 12 );
+    appendLe16( bytes, 26 );
+    appendLe16( bytes, 1 );
+    bytes.insert( bytes.end(), { ORCAD_PRIM_POLYLINE, 0, ORCAD_PRIM_POLYLINE } );
+    appendLe32( bytes, 30 );
+    appendLe32( bytes, 0 );
+    appendLe32( bytes, 0 );
+    appendLe32( bytes, 0 );
+    appendLe16( bytes, 3 );
+    appendLe16( bytes, 8 );
+    appendLe16( bytes, 4 );
+    appendLe16( bytes, 0 );
+    appendLe16( bytes, 4 );
+    appendLe16( bytes, 0 );
+    appendLe16( bytes, 16 );
+    appendLe16( bytes, 10 );
+    bytes.insert( bytes.end(), { 'H', 'y', 's', 't', 'e', 'r', 'e', 's', 'i', 's', 0 } );
+
+    ORCAD_STREAM                   stream( bytes.data(), bytes.size() );
+    std::optional<ORCAD_PRIMITIVE> primitive = OrcadReadPrimitive( stream );
+
+    BOOST_REQUIRE( primitive );
+    BOOST_CHECK( primitive->kind == ORCAD_PRIM_KIND::GROUP );
+    BOOST_CHECK_EQUAL( primitive->x1, 12 );
+    BOOST_CHECK_EQUAL( primitive->y1, 26 );
+    BOOST_REQUIRE_EQUAL( primitive->children.size(), 1u );
+    BOOST_CHECK( primitive->children[0].kind == ORCAD_PRIM_KIND::POLYLINE );
+    BOOST_REQUIRE_EQUAL( primitive->children[0].points.size(), 3u );
+    BOOST_CHECK( ( primitive->children[0].points[2] == ORCAD_POINT{ 16, 0 } ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( OleMetafilePreviewExtraction )
+{
+    std::vector<uint8_t> presentation( 4096, 0 );
+    writeLe32( presentation, 4, 14 );
+    presentation[40] = 1;
+    presentation[41] = 0;
+    presentation[42] = 9;
+    presentation[43] = 0;
+
+    std::vector<uint16_t> name = { 2, 'O', 'l', 'e', 'P', 'r', 'e', 's', '0', '0', '0', 0 };
+    ORCAD_OLE_PREVIEW     preview = OrcadExtractOlePreview( makeOlePreviewCfb( name, presentation ) );
+
+    BOOST_CHECK( preview.type == ORCAD_OLE_PREVIEW_TYPE::WMF );
+    BOOST_REQUIRE_EQUAL( preview.data.size(), presentation.size() - 40 );
+    BOOST_CHECK_EQUAL( preview.data[0], 1 );
+    BOOST_CHECK_EQUAL( preview.data[2], 9 );
+}
+
+
+BOOST_AUTO_TEST_CASE( OleNativeBitmapExtraction )
+{
+    std::vector<uint8_t> native( 4096, 0 );
+    writeLe32( native, 0, 58 );
+    native[4] = 'B';
+    native[5] = 'M';
+    writeLe32( native, 6, 58 );
+
+    std::vector<uint16_t> name = { 1, 'O', 'l', 'e', '1', '0', 'N', 'a', 't', 'i', 'v', 'e', 0 };
+    ORCAD_OLE_PREVIEW     preview = OrcadExtractOlePreview( makeOlePreviewCfb( name, native ) );
+
+    BOOST_CHECK( preview.type == ORCAD_OLE_PREVIEW_TYPE::BMP );
+    BOOST_REQUIRE_EQUAL( preview.data.size(), native.size() - 4 );
+    BOOST_CHECK_EQUAL( preview.data[0], 'B' );
+    BOOST_CHECK_EQUAL( preview.data[1], 'M' );
+}
+
+
+BOOST_AUTO_TEST_CASE( LegacyPageNetGroups )
+{
+    std::vector<uint8_t> bytes = { ORCAD_ST_PAGE, 0, 0 };
+    appendLzt( bytes, "PAGE" );
+    appendLzt( bytes, "C" );
+    bytes.resize( bytes.size() + 156 );
+    appendLe16( bytes, 0 );
+    appendLe16( bytes, 0 );
+    appendLe16( bytes, 1 );
+    appendLe32( bytes, 0x12345678 );
+    appendLzt( bytes, "BUS[1:0]" );
+    appendLe16( bytes, 2 );
+    appendLe32( bytes, 0x11111111 );
+    appendLe32( bytes, 0x22222222 );
+
+    for( int i = 0; i < 10; ++i )
+        appendLe16( bytes, 0 );
+
+    std::vector<char> data( bytes.begin(), bytes.end() );
+    ORCAD_RAW_PAGE    page = OrcadParsePageV2( data, {},
+                                               []( const wxString& )
+                                               {
+                                            } );
+
+    BOOST_REQUIRE_EQUAL( page.netGroups.size(), 1u );
+    BOOST_CHECK_EQUAL( page.netGroups[0].id, 0x12345678u );
+    BOOST_CHECK_EQUAL( page.netGroups[0].name, "BUS[1:0]" );
+    BOOST_REQUIRE_EQUAL( page.netGroups[0].members.size(), 2u );
+    BOOST_CHECK_EQUAL( page.netGroups[0].members[1], 0x22222222u );
+}
 
 
 // ============================================================================
@@ -366,8 +669,8 @@ static std::vector<std::set<std::string>> parseNetTerminals( const std::string& 
 
 /// Count ground-truth nets whose resolvable terminals all land on one KiCad net after
 /// connectivity rebuild. Returns {consistent, checkable}.
-static std::pair<int, int> checkConnectivity( SCHEMATIC& aSchematic,
-                                       const std::vector<std::set<std::string>>& aNets )
+static std::pair<int, int> checkConnectivity( SCHEMATIC& aSchematic, const std::vector<std::set<std::string>>& aNets,
+                                              std::vector<std::set<std::string>>* aInconsistent = nullptr )
 {
     SCH_SHEET_LIST sheets = aSchematic.BuildSheetListSortedByPageNumbers();
     aSchematic.ConnectionGraph()->Recalculate( sheets, true );
@@ -403,7 +706,14 @@ static std::pair<int, int> checkConnectivity( SCHEMATIC& aSchematic,
         ++netId;
     }
 
-    int consistent = 0, checkable = 0;
+    struct CHECKED_NET
+    {
+        const std::set<std::string>* terminals;
+        std::set<int>                ids;
+    };
+
+    std::vector<CHECKED_NET> checkedNets;
+    std::map<int, int>       sourceNetsPerImportedNet;
 
     for( const std::set<std::string>& net : aNets )
     {
@@ -423,14 +733,26 @@ static std::pair<int, int> checkConnectivity( SCHEMATIC& aSchematic,
 
         if( resolved >= 2 )
         {
-            ++checkable;
-
             if( ids.size() == 1 )
-                ++consistent;
+                sourceNetsPerImportedNet[*ids.begin()]++;
+
+            checkedNets.push_back( { &net, std::move( ids ) } );
         }
     }
 
-    return { consistent, checkable };
+    int consistent = 0;
+
+    for( const CHECKED_NET& net : checkedNets )
+    {
+        bool exact = net.ids.size() == 1 && sourceNetsPerImportedNet[*net.ids.begin()] == 1;
+
+        if( exact )
+            ++consistent;
+        else if( aInconsistent )
+            aInconsistent->push_back( *net.terminals );
+    }
+
+    return { consistent, static_cast<int>( checkedNets.size() ) };
 }
 
 
@@ -497,14 +819,29 @@ BOOST_AUTO_TEST_CASE( CorpusValidation )
     int          imported = 0, crashed = 0, unsupported = 0, rejected = 0, checked = 0;
     unsigned int totalExpected = 0, totalMatched = 0, totalMissing = 0, totalExtra = 0;
     int          netConsistent = 0, netCheckable = 0, netTotal = 0;
+    uint64_t     importedPages = 0, importedComponents = 0, importedPowerSymbols = 0;
+    uint64_t     importedPins = 0, importedWires = 0, importedBuses = 0;
+    uint64_t     importedLabels = 0, importedShapes = 0, importedTexts = 0, importedBitmaps = 0;
 
     const char* debugEnv = std::getenv( "KICAD_ORCAD_DEBUG" );
     std::string debugFilter = debugEnv ? debugEnv : "";
+    const char* filterEnv = std::getenv( "KICAD_ORCAD_FILTER" );
+    std::string designFilter = filterEnv ? filterEnv : "";
 
     for( const fs::path& dsn : designs )
     {
         std::string rel = fs::relative( dsn, root ).string();
+
+        if( !designFilter.empty() && rel.find( designFilter ) == std::string::npos )
+            continue;
+
         SCH_IO_ORCAD plugin;
+        uint64_t     perDesignPages = 0, perDesignComponents = 0, perDesignPowerSymbols = 0;
+        uint64_t     perDesignPins = 0, perDesignWires = 0, perDesignBuses = 0;
+        uint64_t     perDesignLabels = 0, perDesignShapes = 0, perDesignTexts = 0;
+        uint64_t     perDesignBitmaps = 0;
+        uint64_t     perDesignRedWires = 0;
+        uint64_t     perDesignVddmPowerSymbols = 0;
 
         bool debug = !debugFilter.empty() && rel.find( debugFilter ) != std::string::npos;
 
@@ -543,6 +880,120 @@ BOOST_AUTO_TEST_CASE( CorpusValidation )
 
         ++imported;
 
+        for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
+        {
+            SCH_SCREEN* screen = path.LastScreen();
+
+            if( !screen )
+                continue;
+
+            ++importedPages;
+            ++perDesignPages;
+
+            for( SCH_ITEM* item : screen->Items() )
+            {
+                switch( item->Type() )
+                {
+                case SCH_SYMBOL_T:
+                {
+                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                    wxString    ref = symbol->GetRef( &path, false );
+
+                    if( ref.StartsWith( wxS( "#" ) ) )
+                    {
+                        ++importedPowerSymbols;
+                        ++perDesignPowerSymbols;
+
+                        if( symbol->GetValue( false, &path, false ) == wxS( "VDDM" ) )
+                            ++perDesignVddmPowerSymbols;
+                    }
+                    else
+                    {
+                        ++importedComponents;
+                        ++perDesignComponents;
+                    }
+
+                    size_t pinCount = symbol->GetPins( &path ).size();
+                    importedPins += pinCount;
+                    perDesignPins += pinCount;
+                    break;
+                }
+
+                case SCH_LINE_T:
+                {
+                    SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+                    if( line->GetLayer() == LAYER_BUS )
+                    {
+                        ++importedBuses;
+                        ++perDesignBuses;
+                    }
+                    else if( line->GetLayer() == LAYER_WIRE )
+                    {
+                        ++importedWires;
+                        ++perDesignWires;
+
+                        if( line->GetLineColor() == OrcadColor( 8 ) )
+                            ++perDesignRedWires;
+                    }
+
+                    break;
+                }
+
+                case SCH_LABEL_T:
+                case SCH_GLOBAL_LABEL_T:
+                case SCH_HIER_LABEL_T:
+                    ++importedLabels;
+                    ++perDesignLabels;
+                    break;
+
+                case SCH_SHAPE_T:
+                    ++importedShapes;
+                    ++perDesignShapes;
+                    break;
+
+                case SCH_TEXT_T:
+                    ++importedTexts;
+                    ++perDesignTexts;
+                    break;
+
+                case SCH_BITMAP_T:
+                    ++importedBitmaps;
+                    ++perDesignBitmaps;
+                    break;
+
+                default: break;
+                }
+            }
+        }
+
+        BOOST_TEST_MESSAGE( "  AUDIT   " << rel << "|pages=" << perDesignPages << "|components=" << perDesignComponents
+                                         << "|power=" << perDesignPowerSymbols << "|pins=" << perDesignPins
+                                         << "|wires=" << perDesignWires << "|buses=" << perDesignBuses
+                                         << "|labels=" << perDesignLabels << "|shapes=" << perDesignShapes
+                                         << "|texts=" << perDesignTexts << "|bitmaps=" << perDesignBitmaps );
+
+        if( rel == "allegro/beagleboard-xm/SCH/BeagleBoard-xM_ORCAD.DSN" )
+        {
+            BOOST_CHECK_EQUAL( perDesignBitmaps, 10u );
+            BOOST_CHECK_EQUAL( perDesignShapes, 108u );
+            BOOST_CHECK_EQUAL( perDesignTexts, 175u );
+        }
+
+        if( rel
+            == "allegro/OpenCellular-LED/Rev-C/schematic/"
+               "OpenCellular_Connect-1_LED_Life-3_Schematic.DSN" )
+        {
+            BOOST_CHECK_EQUAL( perDesignVddmPowerSymbols, 31u );
+        }
+
+        if( rel
+            == "orcad/OpenCellular-GBC-Elgon_ARM/Rev-A/schematics/"
+               "CN81XX_GBCV2_sch_0530.DSN" )
+        {
+            BOOST_CHECK_EQUAL( perDesignRedWires, 35u );
+        }
+
         if( debug )
             BOOST_TEST_MESSAGE( "  DEBUG   " << rel << " warnings:\n"
                                              << std::string( reporter.GetMessages().ToUTF8() ) );
@@ -571,9 +1022,18 @@ BOOST_AUTO_TEST_CASE( CorpusValidation )
         totalMissing += missing.size();
         totalExtra += extra.size();
 
-        BOOST_TEST_MESSAGE( "  CHECK   " << rel << " : " << matched << "/" << expected.size()
-                                         << " refs (" << int( 100.0 * matched / expected.size() )
-                                         << "%), extra " << extra.size() << " [" << source << "]" );
+        BOOST_TEST_MESSAGE( "  CHECK   " << rel << " : " << matched << "/" << expected.size() << " refs ("
+                                         << int( 100.0 * matched / expected.size() ) << "%), extra " << extra.size()
+                                         << " [" << source << "]" );
+
+        if( debug )
+        {
+            for( const std::string& ref : missing )
+                BOOST_TEST_MESSAGE( "          missing ref: " << ref );
+
+            for( const std::string& ref : extra )
+                BOOST_TEST_MESSAGE( "          extra ref: " << ref );
+        }
 
         // .NET ground truth carries terminal connectivity; verify pins group per net after rebuild.
         std::filesystem::path net = dsn;
@@ -587,21 +1047,44 @@ BOOST_AUTO_TEST_CASE( CorpusValidation )
 
             if( !nets.empty() )
             {
-                auto [consistent, checkableNets] = checkConnectivity( *schematic, nets );
+                std::vector<std::set<std::string>> inconsistent;
+                auto [consistent, checkableNets] = checkConnectivity( *schematic, nets, &inconsistent );
                 netConsistent += consistent;
                 netCheckable += checkableNets;
                 netTotal += static_cast<int>( nets.size() );
 
                 BOOST_TEST_MESSAGE( "          connectivity: " << consistent << "/" << checkableNets
-                                    << " nets consistent" );
+                                                               << " nets consistent" );
+
+                if( debug )
+                {
+                    for( const std::set<std::string>& terminals : inconsistent )
+                    {
+                        std::string joined;
+
+                        for( const std::string& terminal : terminals )
+                        {
+                            if( !joined.empty() )
+                                joined += ", ";
+
+                            joined += terminal;
+                        }
+
+                        BOOST_TEST_MESSAGE( "          inconsistent net: " << joined );
+                    }
+                }
             }
         }
     }
 
     BOOST_TEST_MESSAGE( "==== OrCAD corpus summary ====" );
-    BOOST_TEST_MESSAGE( "  designs: " << designs.size() << "  imported: " << imported
-                                      << "  crashed: " << crashed << "  unsupported: " << unsupported
-                                      << "  rejected: " << rejected );
+    BOOST_TEST_MESSAGE( "  designs: " << designs.size() << "  imported: " << imported << "  crashed: " << crashed
+                                      << "  unsupported: " << unsupported << "  rejected: " << rejected );
+    BOOST_TEST_MESSAGE( "  objects: pages "
+                        << importedPages << "  components " << importedComponents << "  power " << importedPowerSymbols
+                        << "  pins " << importedPins << "  wires " << importedWires << "  buses " << importedBuses
+                        << "  labels " << importedLabels << "  shapes " << importedShapes << "  texts " << importedTexts
+                        << "  bitmaps " << importedBitmaps );
 
     if( checked )
     {
@@ -621,18 +1104,30 @@ BOOST_AUTO_TEST_CASE( CorpusValidation )
     // Only pre-2003 format may throw; anything else is a crash
     BOOST_CHECK_MESSAGE( crashed == 0, crashed << " design(s) crashed during import." );
 
-    // Guard against vacuous pass when no companion files present
-    BOOST_REQUIRE_MESSAGE( checked > 0, "No ground-truth .BOM/.NET companions were validated." );
+    const char* snapshotEnv = std::getenv( "KICAD_ORCAD_CORPUS_SNAPSHOT" );
+
+    // Guard against vacuous pass when no companion files present.
+    if( designFilter.empty() )
+        BOOST_REQUIRE_MESSAGE( checked > 0, "No ground-truth .BOM/.NET companions were validated." );
+
+    if( designFilter.empty() && snapshotEnv && *snapshotEnv )
+    {
+        BOOST_CHECK_EQUAL( imported, 92 );
+        BOOST_CHECK_EQUAL( rejected, 1 );
+        BOOST_CHECK_EQUAL( importedPages, 854u );
+        BOOST_CHECK_EQUAL( importedBitmaps, 616u );
+    }
 
     // Occurrence-annotation decode holds this above 95%; dropped Hierarchy-stream ref overlay collapses it.
-    BOOST_CHECK_GE( 100.0 * totalMatched / totalExpected, 95.0 );
+    if( checked )
+        BOOST_CHECK_GE( 100.0 * totalMatched / totalExpected, 95.0 );
 
     // Pin-placement/geometry regression breaking connectivity collapses this. Checkable floor
     // (>= 2 resolvable terminals per net) stops broad pin loss passing vacuously.
     if( netTotal )
     {
         BOOST_CHECK_GE( 100.0 * netCheckable / netTotal, 80.0 );
-        BOOST_CHECK_GE( 100.0 * netConsistent / netCheckable, 90.0 );
+        BOOST_CHECK_EQUAL( netConsistent, netCheckable );
     }
 }
 

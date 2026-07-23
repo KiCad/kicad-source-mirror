@@ -1,0 +1,12 @@
+		if (im->trueColor) {
+			a->tweencolor = gdTrueColorAlpha(im,
+				(pixel * gdTrueColorGetRed(fg) + npixel * gdTrueColorGetRed(bg)) / NUMCOLORS,
+				(pixel * gdTrueColorGetGreen(fg) + npixel * gdTrueColorGetGreen(bg)) / NUMCOLORS,
+				(pixel * gdTrueColorGetBlue(fg) + npixel * gdTrueColorGetBlue(bg)) / NUMCOLORS,
+				(pixel * gdTrueColorGetAlpha(fg) + npixel * gdTrueColorGetAlpha(bg)) / NUMCOLORS);
+		} else {
+			a->tweencolor = gdImageColorResolve(im,
+				(pixel * im->red[fg] + npixel * im->red[bg]) / NUMCOLORS,
+				(pixel * im->green[fg] + npixel * im->green[bg]) / NUMCOLORS,
+				(pixel * im->blue[fg] + npixel * im->blue[bg]) / NUMCOLORS);
+		}

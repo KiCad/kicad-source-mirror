@@ -115,23 +115,24 @@ enum ORCAD_ST : int
  */
 enum ORCAD_PRIM : int
 {
-    ORCAD_PRIM_RECT          = 40,
-    ORCAD_PRIM_LINE          = 41,
-    ORCAD_PRIM_ARC           = 42,
-    ORCAD_PRIM_ELLIPSE       = 43,
-    ORCAD_PRIM_POLYGON       = 44,
-    ORCAD_PRIM_POLYLINE      = 45,
-    ORCAD_PRIM_COMMENT_TEXT  = 46,
-    ORCAD_PRIM_BITMAP        = 47,  ///< plain DIB (BITMAPINFOHEADER + pixels)
-    ORCAD_PRIM_SYMBOL_VECTOR = 48,  ///< nested prefix-framed vector graphic
-    ORCAD_PRIM_BEZIER        = 87,
-    ORCAD_PRIM_OLE_IMAGE     = 90   ///< OLE compound document embed (unsupported; warn+skip)
+    ORCAD_PRIM_RECT = 40,
+    ORCAD_PRIM_LINE = 41,
+    ORCAD_PRIM_ARC = 42,
+    ORCAD_PRIM_ELLIPSE = 43,
+    ORCAD_PRIM_POLYGON = 44,
+    ORCAD_PRIM_POLYLINE = 45,
+    ORCAD_PRIM_COMMENT_TEXT = 46,
+    ORCAD_PRIM_BITMAP = 47,        ///< plain DIB (BITMAPINFOHEADER + pixels)
+    ORCAD_PRIM_SYMBOL_VECTOR = 48, ///< nested prefix-framed vector graphic
+    ORCAD_PRIM_BEZIER = 87,
+    ORCAD_PRIM_OLE_IMAGE = 90 ///< OLE compound document embed
 };
 
 
 /// Decoded primitive kind after parsing.
 enum class ORCAD_PRIM_KIND
 {
+    GROUP,
     RECT,
     LINE,
     ARC,
@@ -233,7 +234,10 @@ struct ORCAD_WIRE
     int                      y1 = 0;
     int                      x2 = 0;
     int                      y2 = 0;
-    bool                     isBus = false;  ///< true for structure type 21
+    bool                     isBus = false; ///< true for structure type 21
+    int                      color = 0;
+    int                      lineWidth = 0;
+    int                      lineStyle = 0;
     std::vector<ORCAD_ALIAS> aliases;
 };
 
@@ -354,19 +358,22 @@ struct ORCAD_GRAPHIC_INST
  */
 struct ORCAD_PRIMITIVE
 {
-    ORCAD_PRIM_KIND            kind = ORCAD_PRIM_KIND::LINE;
-    int                        x1 = 0;
-    int                        y1 = 0;
-    int                        x2 = 0;
-    int                        y2 = 0;
-    std::optional<ORCAD_POINT> start;      ///< arc start point
-    std::optional<ORCAD_POINT> end;        ///< arc end point
-    std::vector<ORCAD_POINT>   points;     ///< polygon/polyline/bezier vertices
-    std::string                text;       ///< kind == TEXT
-    int                        fontIdx = 0;
-    bool                       fill = false;
-    int                        lineWidth = 0;
-    std::vector<uint8_t>       data;       ///< kind == IMAGE: raw embedded payload
+    ORCAD_PRIM_KIND              kind = ORCAD_PRIM_KIND::LINE;
+    int                          x1 = 0;
+    int                          y1 = 0;
+    int                          x2 = 0;
+    int                          y2 = 0;
+    std::optional<ORCAD_POINT>   start;  ///< arc start point
+    std::optional<ORCAD_POINT>   end;    ///< arc end point
+    std::vector<ORCAD_POINT>     points; ///< polygon/polyline/bezier vertices
+    std::string                  text;   ///< kind == TEXT
+    int                          fontIdx = 0;
+    int                          lineStyle = 0; ///< 0 solid/default, 1 dashed, 2 dotted
+    int                          lineWidth = 0; ///< Capture width enum: 0 default, 1 thin, 2 medium, 3 thick
+    int                          fillStyle = 0; ///< 0 hollow, 1 solid, 2 hatched
+    int                          hatchStyle = 0;
+    std::vector<uint8_t>         data;     ///< kind == IMAGE: raw embedded payload
+    std::vector<ORCAD_PRIMITIVE> children; ///< kind == GROUP, translated by (x1, y1)
 };
 
 
@@ -382,6 +389,7 @@ struct ORCAD_PRIMITIVE
 struct ORCAD_SYMBOL_PIN
 {
     std::string     name;
+    int             position = -1; ///< slot in the parent symbol pin vector
     int             startX = 0;
     int             startY = 0;
     int             hotptX = 0;
@@ -410,6 +418,7 @@ struct ORCAD_SYMBOL_DEF
     int                                typeId = 0;    ///< ORCAD_ST value
     std::string                        name;          ///< cache name, e.g. "C.Normal"
     std::string                        sourceLib;
+    int                                color = 0;
     std::vector<ORCAD_PRIMITIVE>       primitives;
     std::vector<ORCAD_SYMBOL_PIN>      pins;
     std::optional<ORCAD_BBOX>          bbox;          ///< symbol-space body box
@@ -545,6 +554,14 @@ struct ORCAD_PAGE_SETTINGS
 };
 
 
+struct ORCAD_NET_GROUP
+{
+    uint32_t              id = 0;
+    std::string           name;
+    std::vector<uint32_t> members;
+};
+
+
 /**
  * Decoded Library stream: format version, fonts, and the string table that all
  * property name/value indices reference throughout the file.
@@ -592,9 +609,10 @@ struct ORCAD_RAW_PAGE
     std::vector<ORCAD_GRAPHIC_INST>    offpage;     ///< off-page connectors
     std::vector<ORCAD_GRAPHIC_INST>    ercObjects;  ///< no-connect markers
     std::vector<ORCAD_BUS_ENTRY>       busEntries;
-    std::vector<ORCAD_GRAPHIC_INST>    graphics;    ///< free comment text/shapes/images
-    std::map<uint32_t, std::string>    netmap;      ///< net db id -> net name
-    std::vector<ORCAD_DRAWN_INSTANCE>  blocks;      ///< hierarchical blocks (detection only)
+    std::vector<ORCAD_GRAPHIC_INST>    graphics;  ///< free comment text/shapes/images
+    std::map<uint32_t, std::string>    netmap;    ///< net db id -> net name
+    std::vector<ORCAD_NET_GROUP>       netGroups; ///< bus net id -> member net ids
+    std::vector<ORCAD_DRAWN_INSTANCE>  blocks;    ///< hierarchical blocks (detection only)
 };
 
 

@@ -59,10 +59,12 @@
 
 #include <math/box2.h>
 #include <math/vector2d.h>
+#include <gal/color4d.h>
 
 #include <sch_io/orcad/orcad_records.h>
 
 class LIB_SYMBOL;
+class EDA_TEXT;
 class PROGRESS_REPORTER;
 class REPORTER;
 class SCHEMATIC;
@@ -75,6 +77,8 @@ class wxMemoryBuffer;
 
 /// Schematic internal units per OrCAD DBU: 10 mil * 254 IU/mil.
 inline constexpr int ORCAD_IU_PER_DBU = 2540;
+
+KIGFX::COLOR4D OrcadColor( int aColorIndex );
 
 inline VECTOR2I OrcadDbuToIu( int aX, int aY )
 {
@@ -375,10 +379,12 @@ private:
      * (arcs are drawn counter-clockwise in the Y-down source space); polygons
      * are closed by repeating the first vertex; text becomes a symbol text item.
      */
-    void addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMITIVE& aPrim, int aUnit );
+    void addSymbolPrimitive( LIB_SYMBOL* aSymbol, const ORCAD_PRIMITIVE& aPrim, int aUnit, int aColor, int aOffsetX = 0,
+                             int aOffsetY = 0 );
 
     /// Polyline approximation of an arc primitive.  Helper of addSymbolPrimitive().
-    void addSymbolArc( LIB_SYMBOL* aSymbol, const ORCAD_PRIMITIVE& aPrim, int aUnit );
+    void addSymbolArc( LIB_SYMBOL* aSymbol, const ORCAD_PRIMITIVE& aPrim, int aUnit, int aColor, int aOffsetX = 0,
+                       int aOffsetY = 0 );
 
     /**
      * Add one pin: position = hot point, length = |start - hot|,
@@ -470,6 +476,8 @@ private:
      * without a baseline, height * 25.4 * 0.75 / 96 mm with a 0.7 mm floor.
      */
     int textSizeIU( int aFontIdx ) const;
+
+    void applyFont( EDA_TEXT* aText, int aFontIdx ) const;
 
     /// LIB_ID-safe symbol name: ':', '"', '/' and whitespace runs -> '_'; "SYM" if empty.
     static std::string SymbolId( const std::string& aName );
@@ -612,13 +620,19 @@ private:
 
     /**
      * One image primitive -> SCH_BITMAP centered on the primitive's page extent,
-     * scaled from the DIB's native pixel size to the extent.  Only plain DIB
-     * payloads (primitive 47) are supported: a BMP file header is synthesized in
-     * front of the DIB (see MakeBmpFromDib) and loaded from memory.  OLE embeds
-     * and undecodable payloads are skipped with a warning.  Extents smaller than
-     * 2 DBU or empty payloads are ignored.
+     * scaled from its native pixel size to the extent.  Plain DIB payloads have
+     * a BMP file header synthesized in front of them (see MakeBmpFromDib).  OLE
+     * payloads use their native bitmap or rasterized WMF preview.  Undecodable
+     * payloads are skipped with a warning.  Extents smaller than 2 DBU or empty
+     * payloads are ignored.
      */
-    void placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aScreen );
+    void placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aScreen, int aOrient = 0 );
+
+    void placeDefinitionImages( const ORCAD_SYMBOL_DEF& aDefinition, int aBaseX, int aBaseY, int aOrient,
+                                SCH_SCREEN* aScreen );
+
+    void placeDefinitionVectors( const ORCAD_SYMBOL_DEF& aDefinition, int aBaseX, int aBaseY, int aOrient,
+                                 SCH_SCREEN* aScreen );
 
     /**
      * Synthesize a .BMP in front of a raw DIB (BITMAPINFOHEADER + optional

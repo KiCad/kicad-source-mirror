@@ -1,0 +1,16 @@
+This directory contains the sources for gd-2.0.1 (beta)
+
+1. Makefile has been renamed Makefile.gd
+2. This file (Readme.wmf), Makefile.am & Makefile.in have been added
+3. Especially when clipping, fill needs to check that initial point is in
+   bounds!
+
+Other minor changes have been made. Please see the file gd.html for
+information regarding gd.
+
+Possible changes: make the following extern...?
+
+/* draw_bitmap - transfers glyph bitmap to GD image */
+static char *
+gdft_draw_bitmap(gdImage *im, int fg, FT_Bitmap bitmap, int pen_x, int pen_y) {
+

@@ -1,0 +1,215 @@
+libwmf-0.2.15 Release Notes
+---------------------------
+
+- Various image and record parsing fixes
+- Add basic test suite
+- MSVC build fixes
+
+libwmf-0.2.14 Release Notes
+---------------------------
+
+- Fix missing includes on macOS
+- Fix isExponentNegative expectedWidth accounting
+- Fix font installation dir
+- Use pkg-config for libxml2 when no explicit directory given
+- Automake cleanup and distcheck fixes
+
+libwmf-0.2.13 Release Notes
+---------------------------
+
+- https://github.com/caolanm/libwmf/issues/2
+- https://github.com/caolanm/libwmf/issues/4
+
+libwmf-0.2.12 Release Notes
+---------------------------
+
+fix abi
+
+libwmf-0.2.11 Release Notes
+---------------------------
+
+merge in fixes for libgd CVE-2019-6978
+
+libwmf-0.2.10 Release Notes
+---------------------------
+
+release with coverity, clang and shellcheck fixes
+
+libwmf-0.2.9 Release Notes
+--------------------------
+
+Seeing as wvware.sourceforge.net seems to be dead, but libwmf is still in use
+and has had a bunch of security bugs reported against, and I've a history with
+libwmf, I'll call this libwmf 0.2.9 and merge in my (Red Hat) fixes.
+
+libwmf-0.2.2 Release Notes
+--------------------------
+
+While there have been some improvements to text placement and rendering in the
+X and gd layers, most changes are in the configuration. (It is now possible to
+build libwmf without any device layers, but this has not been tested extensively
+and is not recommended for general use.)
+
+Special thanks to Bob Friesenhahn, Leonard Rosenthol, David C Sterratt and
+Tomasz Kłoczko.
+
+Hopefully this release will build on Solaris. My apologies to everyone who had
+problems with libwmf-0.2.1.
+
+libwmf-0.2.1 Release Notes
+--------------------------
+
+In adherence with the ancient philosophy of `It's my birthday and I'll release
+if I want to,' today, August 22nd 2001, sees the release of libwmf-0.2.1,
+a.k.a. `The Inspector General's Nose'.
+
+I was, in fact, tempted to call it version 0.3.0, but I've been calling it
+0.2.1 for so many preview snapshots that, well, to do otherwise now would seem
+like a betrayal.
+
+The most significant change is the introduction of redirectable character
+output streams (i.e., wmfStream) which should facilitate the writing of WMF
+importers. - Speaking of which, CVS sodipodi now has optional support for
+importing WMF, requiring libwmf-0.2.1, and an importer for AbiWord is in the
+works.
+
+This has, however, necessitated a slight change in the API, and people who use
+libwmf in conjuction with wv will need to upgrade to wv-0.7.0 or later.
+
+Other significant changes are support for a ghostscript-style fontmap and the
+beginnings of doxygen-generated documentation (which will grow more complete
+with future releases).
+
+Otherwise, there has been considerable clean-up, bug-fixes and improvement of
+both the source and the build system, and some additional functionality,
+including:
+(a) The .fig export uses scaling now, and has options to save images as PNG
+    or JPEG.
+(b) The .svg export now supports inline (data URI) images and compression to
+    .svgz (plus sodipodi-specific workarounds).
+(c) Use of metafile size info., if any (a mixed blessing).
+
+Special thanks to:
+(a) Matej Vila, for helping to make libwmf more Debian-friendly;
+(b) Michael Cree, for helping me to get libwmf working on Tru64;
+(c) Steve Oney, whose help I have not yet done justice to...
+
+Thanks also to: Bob Friesenhahn, Michal Jaegermann, Anil Madhavapeddy,
+Jacqueline Signore, Shuang Wang, Sean Young, and Kees Zeelenberg.
+
+Finally, having just assumed the mantle of maintainership, I would like to
+take this opportunity once again to thank Martin Vermeer for all of his work
+on libwmf.
+
+Francis James Franklin <fjf@alinameridon.com>                 22nd August, 2001
+===============================================================================
+
+Amendment #1
+------------
+
+This version of libwmf is now officially part of the wvWare project, available
+by CVS under the module named `libwmf2'.
+
+I have added device layers for SVG (W3C's XML-based vector graphic format) and
+MVG (ImageMagick's proprietary vector graphic format); the X device layer has
+not been changed and I have no intention of changing it in the near future, but
+it works. I have also added a device layer for GNU plotutils, but currently it
+is only a shell, so don't use it.
+
+The MVG work is based on information supplied by Bob Friesenhahn who did the
+WMF coder for ImageMagick. (ImageMagick's WMF coder links against libwmf(1),
+not this version.) I am using version ImageMagick-5.3.3, and I don't know
+whether earlier (or later) versions will be compatible with the MVG format
+assumed by libwmf. In fact, I am already finding bugs, particularly with
+dashed lines... Also, I don't really know how to implement fonts; I suspect
+ImageMagick could do with some serious hacking on this point...
+
+Martin Vermeer has added a FIG device layer, so now there are two routes
+available if anyone wants to *edit* the images as vector graphics:
+(a) WMF->FIG for editing with xfig;
+(b) WMF->SVG for editing with, for example, sodipodi (best to get the *very*
+    latest source for sodipodi; the GNOME-1.4 release and earlier are colour-
+    blind).
+
+The svg & magick device layers write all bitmap data as PNG images, using
+filenames provided via the device layer interface.
+
+The current version of the GD library subsumed within libwmf is gd-2.0.0, with
+my additions. This supports 24-bit colour.
+
+There is some documentation, but the best way to learn how to use the various
+the device layers is to read the source in src/convert/
+
+Francis James Franklin <fjf@alinameridon.com>                    13th May, 2001
+===============================================================================
+
+This is my own (i.e., unofficial) development version of libwmf which I propose
+as a candidate for release as (official) libwmf version 0.2.0.
+
+Although based on Caolan's excellent libwmf, there has been an almost complete
+restructuring to take libwmf away from it's batch-process origins and make it
+as well-behaved a library as possible.
+
+(1) The names have been changed to protect the innocent. All global / external
+    variables have the prefix `wmf' (or, since the GD library is subsumed
+    within libwmf, `gd'). With very few exceptions:
+    (a) functions: wmf_function_name (...)
+    (b) types:     wmfType, or wmfType_t
+    (c) macros:    WMF_Macro (...)
+
+(2) It is my belief that device-layer (e.g., output) implementations should
+    not need to know anything about wmf files or the interpreter's methods.
+    In addition, the writing of such device-layers should be made as simple
+    as possible, though not of course at the expense of image fidelity or
+    quality.
+
+    As such, I have crafted a new interface between the interpreter and the
+    device layer, which I choose to call the `ipa' (as opposed to the `api'
+    which is the `application / program interface'). There must also be an
+    interface between the application and the device layer, but this third
+    interface is independent of the interpreter.
+
+    Although this may sound unnecessarily complicated, in fact it makes
+    programming applications or device layers significantly easier.
+
+(3) With very few exceptions, all function calls refer to a variable of type
+    `wmfAPI' which incorporates all data associated with a given wmf file.
+    A final call to wmf_api_destroy frees up all memory allocated during the
+    initialization and processing of the metafile.
+
+(4) (a) There is no longer any dependence on temporary files; all processing
+        of the metafile is performed in-memory or w.r.t. original metafile.
+    (b) Metafiles can be in-memory if desired; or applications can specify
+        their own read/seek/tell functions for reading the metafile.
+
+(5) (a) Xpm dependence & system calls have been removed; libwmf provides
+        bitmap scaling functionality.
+    (b) Bitmaps are read using code taken from ImageMagick [?? - are there
+        licensing issues to be addressed here?]
+    (c) libwmf now uses freetype (2) for stringwidth calculations, and is
+        bundled with the standard thirteen ghostscript fonts [?? - are there
+        licensing issues to be addressed here?]
+    (d) libwmf incorporates GD (gd-1.8.4 at time of writing) which supports
+        freetype (2), with some enhancements (filled arcs & clipping).
+     *  
+     *  libz, libpng and freetype(2) are the sole required external libraries.
+     *  
+
+(6) (a) The build system uses automake and libtool, and the only library
+        created is `libwmf', which includes the eps and gd device layers and
+        the GD library as well as the interpreter and api.
+    (b) Header files are installed in a `libwmf' sub-directory.
+
+(7) I have added the wmf examples with Tor Lillqvist's plug-in for the Gimp:
+    http://www.iki.fi/tml/gimp/wmf
+    [?? - are there licensing issues to be addressed here?]
+
+Currently the only device layers are eps [eps & ps] and gd [png & jpeg].
+Implementing more should be relatively straight-forward. I recognize that,
+until device layers for X, xfig and magick exist, this proposed revision of
+libwmf is at a disadvantage...
+
+I have tested only with PPC Linux 2000 and (x86) Linux RH7.
+
+Francis James Franklin <fjf@alinameridon.com>                   4th March, 2001
+===============================================================================
