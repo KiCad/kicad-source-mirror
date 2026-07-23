@@ -73,9 +73,11 @@ public:
     virtual LIBEVAL::FUNC_CALL_REF CreateFuncCall( const wxString& aName ) override;
 
     bool HasGeometryDependentFunctions() const { return m_hasGeometryDependentFunctions; }
+    bool RequiresPairItems() const { return m_requiresPairItems; }
 
 private:
     bool m_hasGeometryDependentFunctions = false;
+    bool m_requiresPairItems = false;
 };
 
 

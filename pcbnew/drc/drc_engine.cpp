@@ -821,7 +821,7 @@ void DRC_ENGINE::InitEngine( const std::shared_ptr<DRC_RULE>& rule )
         throw original_parse_error;
     }
 
-    for( int ii = DRCE_FIRST; ii < DRCE_LAST; ++ii )
+    for( int ii = DRCE_FIRST; ii <= DRCE_LAST; ++ii )
         m_errorLimits[ii] = ERROR_LIMIT;
 
     m_rulesValid = true;
@@ -2974,8 +2974,7 @@ std::vector<BOARD_ITEM*> DRC_ENGINE::GetItemsMatchingRule( const std::shared_ptr
     if( !m_board || !aRule )
         return matches;
 
-    const wxString        condition = aRule->m_Condition ? aRule->m_Condition->GetExpression() : wxString();
-    const bool            requiresPairwise = condition.Contains( wxS( "B." ) );
+    const bool requiresPairwise = aRule->m_Condition && aRule->m_Condition->RequiresPairItems();
     std::set<BOARD_ITEM*> matchedItems;
 
     if( std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity() )

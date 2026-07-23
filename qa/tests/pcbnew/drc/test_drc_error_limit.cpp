@@ -22,10 +22,12 @@
 #include <atomic>
 #include <functional>
 
+#include <board.h>
 #include <math/vector2d.h>
 #include <pcb_marker.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
+#include <drc/drc_rule.h>
 
 
 BOOST_AUTO_TEST_SUITE( DRCErrorLimit )
@@ -67,6 +69,25 @@ BOOST_AUTO_TEST_CASE( CapIsExact )
         emit();
 
     BOOST_TEST( reported.load() == capped );
+}
+
+
+BOOST_AUTO_TEST_CASE( InitEngineResetsLastErrorCode )
+{
+    BOARD      board;
+    DRC_ENGINE engine( &board, &board.GetDesignSettings() );
+
+    while( !engine.IsErrorLimitExceeded( DRCE_LAST ) )
+    {
+        engine.ReportViolation( DRC_ITEM::Create( DRCE_LAST ), VECTOR2I(), 0,
+                                []( PCB_MARKER* ) {} );
+    }
+
+    BOOST_REQUIRE( engine.IsErrorLimitExceeded( DRCE_LAST ) );
+
+    engine.InitEngine( std::make_shared<DRC_RULE>( wxT( "Reset limits" ) ) );
+
+    BOOST_CHECK( !engine.IsErrorLimitExceeded( DRCE_LAST ) );
 }
 
 

@@ -503,6 +503,11 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
     }
     else
     {
+        if( !PROPERTY_MANAGER::Instance().IsAvailableFor( TYPE_HASH( *item ), it->second.property, item ) )
+        {
+            return new LIBEVAL::VALUE();
+        }
+
         switch( it->second.kind )
         {
         case PCBEXPR_PROPERTY_KIND::INT:
@@ -695,11 +700,16 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
                 return nullptr;
         }
 
-        // Navigation is only meaningful for the item operands; the layer pseudo-item "L" has
-        // no parent.
-        if( baseVar != wxT( "A" ) && baseVar != wxT( "AB" ) && baseVar != wxT( "B" ) )
+        // Navigation requires one concrete item; combined-item "AB" and layer "L" have no parent.
+        if( baseVar != wxT( "A" ) && baseVar != wxT( "B" ) )
             return nullptr;
     }
+
+    if( !aField.IsEmpty() && ( baseVar == wxT( "AB" ) || baseVar == wxT( "L" ) ) )
+        return nullptr;
+
+    if( baseVar == wxT( "B" ) || baseVar == wxT( "AB" ) )
+        m_requiresPairItems = true;
 
     auto withNav =
             [&navigation]( std::unique_ptr<PCBEXPR_VAR_REF> aRef ) -> std::unique_ptr<PCBEXPR_VAR_REF>

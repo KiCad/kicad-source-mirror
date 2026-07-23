@@ -95,8 +95,8 @@ const static std::vector<EXPR_TO_TEST> introspectionExpressions = {
     { "A.Width > B.Width", false, VAL( 0.0 ) },
     { "A.Width + B.Width", false, VAL( pcbIUScale.MilsToIU(10) + pcbIUScale.MilsToIU(20) ) },
     { "A.Netclass", false, VAL( "HV_LINE" ) },
-    { "(A.Netclass == 'HV_LINE') && (B.netclass == 'otherClass') && (B.netclass != 'F.Cu')", false,
-      VAL( 1.0 ) },
+    { "A.Net_Class == 'HV_LINE'", false, VAL( 1.0 ) },
+    { "(A.Netclass == 'HV_LINE') && (B.netclass == 'otherClass') && (B.netclass != 'F.Cu')", false, VAL( 1.0 ) },
     { "A.Netclass + 1.0", false, VAL( 1.0 ) },
     { "A.hasNetclass('HV_LINE')", false, VAL( 1.0 ) },
     { "A.hasNetclass('HV_*')", false, VAL( 1.0 ) },
@@ -154,6 +154,30 @@ static bool testEvalExpr( const wxString& expr, const LIBEVAL::VALUE& expectedRe
     }
 
     return ok;
+}
+
+
+static void expectCompileError( const wxString& aExpr )
+{
+    PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
+    PCBEXPR_UCODE    ucode;
+    PCBEXPR_CONTEXT  preflight( NULL_CONSTRAINT, UNDEFINED_LAYER );
+
+    compiler.Compile( aExpr, &ucode, &preflight );
+
+    BOOST_CHECK_MESSAGE( compiler.IsErrorPending(), "Expected a compile error for: " << aExpr.mb_str() );
+}
+
+
+static void expectCompileSuccess( const wxString& aExpr )
+{
+    PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
+    PCBEXPR_UCODE    ucode;
+    PCBEXPR_CONTEXT  preflight( NULL_CONSTRAINT, UNDEFINED_LAYER );
+
+    compiler.Compile( aExpr, &ucode, &preflight );
+
+    BOOST_CHECK_MESSAGE( !compiler.IsErrorPending(), "Expected expression to compile: " << aExpr.mb_str() );
 }
 
 
@@ -219,6 +243,17 @@ BOOST_AUTO_TEST_CASE( IntrospectedExtendedNumericProperties )
     ellipse.SetEllipseRotation( EDA_ANGLE( 30.0, DEGREES_T ) );
 
     testEvalExpr( wxT( "A.Ellipse_Rotation == 30deg" ), VAL( 1.0 ), false, &ellipse );
+
+    FOOTPRINT footprint( &brd );
+    footprint.SetLocalSolderPasteMarginRatio( 0.125 );
+
+    testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == 0.125" ), VAL( 1.0 ), false,
+                  &footprint );
+
+    footprint.SetLocalSolderPasteMarginRatio( std::nullopt );
+
+    testEvalExpr( wxT( "A.Solderpaste_Margin_Ratio_Override == null" ), VAL( 1.0 ), false,
+                  &footprint );
 }
 
 BOOST_AUTO_TEST_CASE( IntrospectedColorProperties )
@@ -229,23 +264,26 @@ BOOST_AUTO_TEST_CASE( IntrospectedColorProperties )
     BOARD     brd;
     PCB_TABLE table( &brd, 0 );
 
-    const auto checkColor = [&]( const COLOR4D& aColor )
+    const auto checkColor = [&]( const COLOR4D& aColor, const wxString& aExpectedCss )
     {
         table.SetBorderColor( aColor );
-        wxString expression = wxT( "A.Border_Color == '" ) + aColor.ToCSSString() + wxT( "'" );
+        BOOST_CHECK_EQUAL( aColor.ToCSSString(), aExpectedCss );
+
+        wxString expression = wxT( "A.Border_Color == '" ) + aExpectedCss + wxT( "'" );
         testEvalExpr( expression, VAL( 1.0 ), false, &table );
     };
 
-    checkColor( COLOR4D( 0.25, 0.5, 0.75, 0.5 ) );
-    checkColor( COLOR4D( wxString( wxT( "red" ) ) ) );
+    checkColor( COLOR4D( 0.25, 0.5, 0.75, 0.5 ), wxT( "rgba(64, 128, 191, 0.502)" ) );
+    checkColor( COLOR4D( wxString( wxT( "red" ) ) ), wxT( "rgb(255, 0, 0)" ) );
 }
 
-BOOST_AUTO_TEST_CASE( RuleVisiblePropertyTypesAreSupported )
+BOOST_AUTO_TEST_CASE( ExpressionPropertyTypesAreSupported )
 {
     PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
     propMgr.Rebuild();
 
     std::set<std::pair<TYPE_ID, PROPERTY_BASE*>> seen;
+    std::map<wxString, std::set<LIBEVAL::VAR_TYPE_T>> fieldTypes;
 
     for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
     {
@@ -254,17 +292,54 @@ BOOST_AUTO_TEST_CASE( RuleVisiblePropertyTypesAreSupported )
 
         for( PROPERTY_BASE* prop : cls.properties )
         {
-            if( prop->IsHiddenFromRulesEditor() || !seen.emplace( cls.type, prop ).second )
+            if( !seen.emplace( cls.type, prop ).second )
                 continue;
 
             PCBEXPR_PROPERTY_KIND kind = PCBEXPR_VAR_REF::ClassifyProperty( prop );
 
             BOOST_CHECK_MESSAGE( kind != PCBEXPR_PROPERTY_KIND::UNSUPPORTED,
-                                 "Unsupported Rules Editor property: class=" << cls.name.mb_str()
-                                                                             << ", property=" << prop->Name().mb_str()
-                                                                             << ", type_hash=" << prop->TypeHash() );
+                                 "Unsupported expression property: class=" << cls.name.mb_str()
+                                                                           << ", property=" << prop->Name().mb_str()
+                                                                           << ", type_hash=" << prop->TypeHash() );
+
+            if( kind != PCBEXPR_PROPERTY_KIND::UNSUPPORTED )
+                fieldTypes[prop->Name()].insert( PCBEXPR_VAR_REF::ExpressionType( kind ) );
         }
     }
+
+    // PCB_TARGET::Shape is numeric while EDA_SHAPE::Shape is an enum, so a global
+    // expression reference cannot have one stable public type.
+    auto shapeTypes = fieldTypes.find( wxT( "Shape" ) );
+    BOOST_REQUIRE( shapeTypes != fieldTypes.end() );
+    BOOST_CHECK_EQUAL( shapeTypes->second.size(), 2u );
+    fieldTypes.erase( shapeTypes );
+
+    for( const auto& [field, types] : fieldTypes )
+    {
+        BOOST_CHECK_MESSAGE( types.size() == 1,
+                             "Incompatible expression types for property: " << field.mb_str() );
+    }
+
+    expectCompileError( wxT( "A.Shape" ) );
+}
+
+BOOST_AUTO_TEST_CASE( IntrospectedPropertyAvailability )
+{
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.Rebuild();
+
+    BOARD brd;
+    ZONE  zone( &brd );
+
+    zone.SetLayer( F_Cu );
+    zone.SetAssignedPriority( 7 );
+    zone.SetIsRuleArea( true );
+
+    testEvalExpr( wxT( "A.Priority == 7" ), VAL( 0.0 ), false, &zone );
+
+    zone.SetIsRuleArea( false );
+
+    testEvalExpr( wxT( "A.Priority == 7" ), VAL( 1.0 ), false, &zone );
 }
 
 BOOST_AUTO_TEST_CASE( InNetChainClassWildcard )
@@ -352,24 +427,45 @@ BOOST_AUTO_TEST_CASE( ParentNavigation )
     // testEvalExpr does not observe through Compile()'s return value, so check the pending-error
     // status directly.  None of these expressions contain a bare number, so the only error that
     // can be raised is the unrecognized item/property we are testing for.
-    auto expectCompileError =
-            []( const wxString& aExpr )
-            {
-                PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
-                PCBEXPR_UCODE    ucode;
-                PCBEXPR_CONTEXT  preflight( NULL_CONSTRAINT, UNDEFINED_LAYER );
-
-                compiler.Compile( aExpr, &ucode, &preflight );
-
-                BOOST_CHECK_MESSAGE( compiler.IsErrorPending(),
-                                     "Expected a compile error for: " << aExpr.mb_str() );
-            };
-
     // An unknown property on the parent, an unknown navigation step, and navigation on the
     // layer pseudo-item (which has no parent).
     expectCompileError( wxT( "A.Parent.bogusProperty" ) );
     expectCompileError( wxT( "A.bogus.Reference == 'J1'" ) );
     expectCompileError( wxT( "L.Parent.Type == 'Footprint'" ) );
 }
+
+
+BOOST_AUTO_TEST_CASE( ReceiverValidation )
+{
+    expectCompileSuccess( wxT( "L == 'F.Cu'" ) );
+    expectCompileSuccess( wxT( "AB.isCoupledDiffPair()" ) );
+    expectCompileSuccess( wxT( "A.Parent.Reference == 'J1'" ) );
+    expectCompileSuccess( wxT( "A.Width == 1mm" ) );
+
+    expectCompileError( wxT( "L.Width == 1mm" ) );
+    expectCompileError( wxT( "AB.Width == A.Width" ) );
+    expectCompileError( wxT( "AB.Parent.Reference == 'J1'" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( PairItemDependency )
+{
+    auto requiresPairItems =
+            []( const wxString& aExpr )
+            {
+                PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
+                PCBEXPR_UCODE    ucode;
+                PCBEXPR_CONTEXT  preflight( NULL_CONSTRAINT, UNDEFINED_LAYER );
+
+                BOOST_REQUIRE( compiler.Compile( aExpr, &ucode, &preflight ) );
+                return ucode.RequiresPairItems();
+            };
+
+    BOOST_CHECK( !requiresPairItems( wxT( "A.Width == 1mm" ) ) );
+    BOOST_CHECK( requiresPairItems( wxT( "B.Width == 1mm" ) ) );
+    BOOST_CHECK( requiresPairItems( wxT( "AB.isCoupledDiffPair()" ) ) );
+    BOOST_CHECK( !requiresPairItems( wxT( "A.Reference == 'B.Width'" ) ) );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

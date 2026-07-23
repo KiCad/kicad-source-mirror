@@ -19,6 +19,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <wx/ffile.h>
+#include <board.h>
 #include <core/typeinfo.h>
 #include <drc/rule_editor/drc_rule_editor_utils.h>
 #include <drc/rule_editor/drc_re_via_style_constraint_data.h>
@@ -39,7 +40,10 @@
 #include <drc/rule_editor/drc_re_panel_matcher.h>
 #include <drc/rule_editor/drc_re_rule_loader.h>
 #include <drc/rule_editor/drc_re_rule_saver.h>
+#include <drc/drc_engine.h>
+#include <drc/drc_rule_condition.h>
 #include <dialogs/rule_editor_dialog_base.h>
+#include <footprint.h>
 
 BOOST_AUTO_TEST_SUITE( DRC_RULE_EDITOR )
 
@@ -69,6 +73,30 @@ BOOST_AUTO_TEST_CASE( RoundTripViaStyle )
     BOOST_CHECK_CLOSE( parsed->GetMinViaHoleSize(), original.GetMinViaHoleSize(), 0.0001 );
     BOOST_CHECK_CLOSE( parsed->GetMaxViaHoleSize(), original.GetMaxViaHoleSize(), 0.0001 );
 }
+
+
+BOOST_AUTO_TEST_CASE( ShowMatchesIgnoresPairTokensInStringLiterals )
+{
+    BOARD board;
+
+    FOOTPRINT* footprint = new FOOTPRINT( &board );
+    footprint->SetReference( wxT( "B.Width" ) );
+    board.Add( footprint );
+
+    auto rule = std::make_shared<DRC_RULE>( wxT( "String literal" ) );
+    rule->m_Condition = new DRC_RULE_CONDITION( wxT( "A.Reference == 'B.Width'" ) );
+    BOOST_REQUIRE( rule->m_Condition->Compile( nullptr ) );
+
+    DRC_CONSTRAINT constraint( COURTYARD_CLEARANCE_CONSTRAINT );
+    rule->AddConstraint( constraint );
+
+    DRC_ENGINE engine( &board, &board.GetDesignSettings() );
+    std::vector<BOARD_ITEM*> matches = engine.GetItemsMatchingRule( rule, nullptr );
+
+    BOOST_REQUIRE_EQUAL( matches.size(), 1u );
+    BOOST_CHECK_EQUAL( matches.front(), footprint );
+}
+
 
 BOOST_AUTO_TEST_CASE( RoundTripRoutingWidth )
 {
