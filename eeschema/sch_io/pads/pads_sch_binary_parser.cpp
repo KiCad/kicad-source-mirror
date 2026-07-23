@@ -2474,9 +2474,12 @@ namespace
             junction.source = source;
             junction.sheet = { aModel.sheets[aSheetIndex].id, source };
             junction.position = junctionPosition( record );
+            SOURCE_PROVENANCE connectionSource = source;
+            connectionSource.absoluteOffset += 8;
+            connectionSource.length = 2;
             junction.properties.push_back( sourceProperty( wxS( "connection_record" ),
                                                            wxString::Format( wxS( "%u" ), aCursor.U16At( offset + 8 ) ),
-                                                           source ) );
+                                                           connectionSource ) );
             aModel.junctions.push_back( std::move( junction ) );
         }
 
@@ -2548,9 +2551,10 @@ namespace
             }
         };
 
-        std::vector<MODEL_CONNECTION*> connections( controllers.pools[20].count, nullptr );
-        std::vector<MODEL_NET*>        connectionNets( controllers.pools[20].count, nullptr );
-        std::vector<size_t>            connectionCounts( sheetNets.size(), 0 );
+        std::vector<MODEL_CONNECTION*>       connections( controllers.pools[20].count, nullptr );
+        std::vector<MODEL_NET*>              connectionNets( controllers.pools[20].count, nullptr );
+        std::vector<std::array<uint16_t, 2>> connectionEndpointHandles( controllers.pools[20].count );
+        std::vector<size_t>                  connectionCounts( sheetNets.size(), 0 );
 
         for( size_t record = 0; record < controllers.pools[20].count; ++record )
         {
@@ -2642,11 +2646,85 @@ namespace
             connection.endpoints.push_back( endpoint( 12 ) );
             connection.endpoints.push_back( endpoint( 14 ) );
             appendVertices( connection.vertices, controllers.pools[17].count + record );
+
+            if( connection.vertices.size() < 2 )
+                throwDecodeError( source, wxS( "connection lacks explicit endpoint vertices" ) );
+
+            for( size_t endpointIndex = 0; endpointIndex < connection.endpoints.size(); ++endpointIndex )
+            {
+                MODEL_CONNECTION_ENDPOINT& decodedEndpoint = connection.endpoints[endpointIndex];
+                const SOURCE_POINT&        wirePoint =
+                        endpointIndex == 0 ? connection.vertices.front() : connection.vertices.back();
+
+                if( decodedEndpoint.kind == MODEL_ENDPOINT_KIND::POINT
+                    && ( decodedEndpoint.point.x != wirePoint.x || decodedEndpoint.point.y != wirePoint.y ) )
+                {
+                    throwDecodeError( decodedEndpoint.source,
+                                      wxS( "typed endpoint position does not match wire endpoint vertex" ) );
+                }
+
+                decodedEndpoint.point = { wirePoint.x, wirePoint.y, wirePoint.source };
+            }
+
+            connectionEndpointHandles[record] = { aCursor.U16At( offset + 12 ), aCursor.U16At( offset + 14 ) };
             connection.properties.push_back(
                     sourceProperty( wxS( "raw_connection_marker" ), wxString::Format( wxS( "%u" ), marker ), source ) );
             sheetNets[netHandle]->connections.push_back( std::move( connection ) );
             connections[record] = &sheetNets[netHandle]->connections.back();
             connectionNets[record] = sheetNets[netHandle];
+        }
+
+        auto connectionPointsBack = [&]( size_t aConnection, uint16_t aObjectClass, size_t aRecord )
+        {
+            if( aConnection >= connectionEndpointHandles.size() || aRecord > 0x0FFF )
+                return false;
+
+            const uint16_t expected = static_cast<uint16_t>( ( aObjectClass << 12 ) | aRecord );
+            return connectionEndpointHandles[aConnection][0] == expected
+                   || connectionEndpointHandles[aConnection][1] == expected;
+        };
+
+        for( size_t record = 0; record < controllers.pools[18].count; ++record )
+        {
+            const size_t      offset = junctionBase + record * JUNCTION_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "junction" ), 19, record, offset,
+                                                 JUNCTION_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            const uint16_t    owner = aCursor.U16At( offset + 8 );
+            SOURCE_PROVENANCE ownerSource = source;
+            ownerSource.absoluteOffset += 8;
+            ownerSource.length = 2;
+
+            if( owner >= connections.size() || !connections[owner] )
+                throwDecodeError( ownerSource, wxS( "junction connection handle leaves controller 21" ) );
+
+            if( !connectionPointsBack( owner, 3, record ) )
+                throwDecodeError( ownerSource, wxS( "junction connection handle does not point back" ) );
+
+            for( size_t connection = 0; connection < connections.size(); ++connection )
+            {
+                if( connectionPointsBack( connection, 3, record )
+                    && connectionNets[connection] != connectionNets[owner] )
+                {
+                    throwDecodeError( ownerSource, wxS( "junction is shared across different nets" ) );
+                }
+            }
+        }
+
+        for( size_t record = 0; record < controllers.pools[19].count; ++record )
+        {
+            const size_t      offset = offpageBase + record * OFFPAGE_RECORD_BYTES;
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "off-page reference" ), 20, record,
+                                                 offset, OFFPAGE_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            const uint16_t    owner = aCursor.U16At( offset + 8 );
+            SOURCE_PROVENANCE ownerSource = source;
+            ownerSource.absoluteOffset += 8;
+            ownerSource.length = 2;
+
+            if( owner >= connections.size() || !connections[owner] )
+                throwDecodeError( ownerSource, wxS( "off-page net handle leaves controller 21" ) );
+
+            if( !connectionPointsBack( owner, 2, record ) )
+                throwDecodeError( ownerSource, wxS( "off-page connection handle does not point back" ) );
         }
 
         std::vector<bool> claimedBusEntries( controllers.pools[19].count, false );
@@ -2829,7 +2907,6 @@ namespace
             label.text = ownerNet->name;
             label.position = offpagePosition( record );
             label.angle = NormalizeAngle( aCursor.U16At( offset + 26 ) );
-            label.presentation.source = source;
 
             switch( rawKind )
             {
@@ -2837,7 +2914,7 @@ namespace
             case 0:
             case 1:
             {
-                label.kind = MODEL_LABEL_KIND::POWER;
+                label.kind = rawKind == 0 ? MODEL_LABEL_KIND::GROUND : MODEL_LABEL_KIND::POWER;
                 const uint16_t decalHandle = aCursor.U16At( offset + 4 );
 
                 if( decalHandle >= controllers.pools[6].count )

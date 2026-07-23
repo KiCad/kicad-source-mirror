@@ -536,6 +536,7 @@ enum class MODEL_LABEL_KIND
     LOCAL,
     GLOBAL,
     HIERARCHICAL,
+    GROUND,
     POWER,
     BUS,
     UNSUPPORTED

@@ -485,6 +485,7 @@ static CANONICAL_PROPERTY canonicalLabelKind( MODEL_LABEL_KIND aKind )
     case MODEL_LABEL_KIND::LOCAL: return { "local" };
     case MODEL_LABEL_KIND::GLOBAL: return { "global" };
     case MODEL_LABEL_KIND::HIERARCHICAL: return { "hierarchical" };
+    case MODEL_LABEL_KIND::GROUND: return { "ground" };
     case MODEL_LABEL_KIND::POWER: return { "power" };
     case MODEL_LABEL_KIND::BUS: return { "bus" };
     case MODEL_LABEL_KIND::UNSUPPORTED: return unknownEnum( static_cast<int64_t>( aKind ) );
@@ -545,6 +546,19 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
         r.properties["visible"] = { aGraphic.presentation.visible };
         r.properties["height_half_mils"] = { aGraphic.presentation.height };
         r.properties["width_half_mils"] = { aGraphic.presentation.width };
+
+        if( aGraphic.kind == MODEL_GRAPHIC_KIND::ARC )
+        {
+            r.properties["arc_center_x_half_mils"] = { aGraphic.arcCenter.x };
+            r.properties["arc_center_y_half_mils"] = { aGraphic.arcCenter.y };
+            r.properties["arc_bounds_x1_half_mils"] = { aGraphic.arcBoundsStart.x };
+            r.properties["arc_bounds_y1_half_mils"] = { aGraphic.arcBoundsStart.y };
+            r.properties["arc_bounds_x2_half_mils"] = { aGraphic.arcBoundsEnd.x };
+            r.properties["arc_bounds_y2_half_mils"] = { aGraphic.arcBoundsEnd.y };
+            r.properties["arc_sweep_tenths"] = { int64_t( aGraphic.arcSweepAngle ) };
+            r.properties["arc_clockwise"] = { aGraphic.arcClockwise };
+        }
+
         for( const SOURCE_POINT& p : aGraphic.points )
             r.geometry.points.push_back( point( p ) );
         r.geometry.angleTenths = canonicalAngle( aGraphic.angle );
@@ -767,13 +781,18 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
     {
         auto& r = addOwned( CANONICAL_KIND::LABEL, l.sheet, l.text.text.ToStdString() );
         r.properties["kind"] = canonicalLabelKind( l.kind );
-        r.properties["visible"] = { l.presentation.visible };
-        r.properties["font"] = { l.presentation.font.text.ToStdString() };
-        r.properties["bold"] = { l.presentation.bold };
-        r.properties["italic"] = { l.presentation.italic };
-        r.properties["underline"] = { l.presentation.underline };
-        r.properties["horizontal_justification"] = canonicalJustification( l.presentation.horizontalJustification );
-        r.properties["vertical_justification"] = canonicalVerticalJustification( l.presentation.verticalJustification );
+        std::vector<std::string> linkedSheets;
+
+        for( const SHEET_REFERENCE& linked : l.linkedSheets )
+        {
+            auto sheet = std::ranges::find( aModel.sheets, linked.id, &MODEL_SHEET::id );
+
+            if( sheet != aModel.sheets.end() )
+                linkedSheets.push_back( sheet->name.text.ToStdString() );
+        }
+
+        std::ranges::sort( linkedSheets );
+        r.properties["linked_sheets"] = { linkedSheets };
         r.geometry.points.push_back( point( l.position ) );
         r.geometry.angleTenths = canonicalAngle( l.angle );
         addSourceProperties( r, l.properties );
@@ -853,6 +872,25 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
 
         for( const auto& q : aGraphic.points )
             r.geometry.points.push_back( point( q.coord ) );
+
+        auto arcPoint = std::ranges::find_if( aGraphic.points,
+                                              []( const PADS_SCH::GRAPHIC_POINT& aPoint )
+                                              {
+                                                  return aPoint.arc.has_value();
+                                              } );
+
+        if( arcPoint != aGraphic.points.end() )
+        {
+            const PADS_SCH::ARC_DATA& arc = *arcPoint->arc;
+            r.properties["arc_center_x_half_mils"] = { int64_t( std::llround( ( arc.bbox_x1 + arc.bbox_x2 ) ) ) };
+            r.properties["arc_center_y_half_mils"] = { int64_t( std::llround( ( arc.bbox_y1 + arc.bbox_y2 ) ) ) };
+            r.properties["arc_bounds_x1_half_mils"] = { int64_t( std::llround( arc.bbox_x1 * 2 ) ) };
+            r.properties["arc_bounds_y1_half_mils"] = { int64_t( std::llround( arc.bbox_y1 * 2 ) ) };
+            r.properties["arc_bounds_x2_half_mils"] = { int64_t( std::llround( arc.bbox_x2 * 2 ) ) };
+            r.properties["arc_bounds_y2_half_mils"] = { int64_t( std::llround( arc.bbox_y2 * 2 ) ) };
+            r.properties["arc_sweep_tenths"] = { int64_t( std::llround( std::abs( arc.bulge ) ) ) };
+            r.properties["arc_clockwise"] = { arc.angle < 0 };
+        }
     };
     for( const auto& s : aParser.GetSheetHeaders() )
     {
@@ -1034,14 +1072,34 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
         auto& r = addOwned( CANONICAL_KIND::LABEL, l.source_sheet - 1, l.signal_name );
         r.properties["kind"] = { l.symbol_lib == "@TERM"              ? "local"
                                  : l.symbol_lib.starts_with( "$OSR" ) ? "global"
-                                                                      : "power" };
-        r.properties["visible"] = { true };
-        r.properties["font"] = { std::string() };
-        r.properties["bold"] = { false };
-        r.properties["italic"] = { false };
-        r.properties["underline"] = { false };
-        r.properties["horizontal_justification"] = canonicalJustification( MODEL_JUSTIFICATION::LEFT );
-        r.properties["vertical_justification"] = canonicalVerticalJustification( MODEL_JUSTIFICATION::CENTER );
+                                 : l.symbol_lib.starts_with( "$GND" ) ? "ground"
+                                 : l.symbol_lib.starts_with( "$PWR" ) ? "power"
+                                                                      : "unsupported" };
+        std::vector<std::string> linkedSheets;
+
+        if( l.symbol_lib.starts_with( "$OSR" ) )
+        {
+            for( const auto& peer : aParser.GetOffPageConnectors() )
+            {
+                if( peer.signal_name != l.signal_name || peer.source_sheet == l.source_sheet
+                    || !peer.symbol_lib.starts_with( "$OSR" ) )
+                {
+                    continue;
+                }
+
+                auto sheet = std::ranges::find_if( aParser.GetSheetHeaders(),
+                                                   [&]( const PADS_SCH::SHEET_HEADER& aHeader )
+                                                   {
+                                                       return aHeader.sheet_num == peer.source_sheet;
+                                                   } );
+
+                if( sheet != aParser.GetSheetHeaders().end() )
+                    linkedSheets.push_back( sheet->sheet_name );
+            }
+        }
+
+        std::ranges::sort( linkedSheets );
+        r.properties["linked_sheets"] = { linkedSheets };
         r.geometry.points.push_back( point( l.position ) );
         r.geometry.angleTenths = canonicalAngle( l.rotation * 10 );
     }
@@ -1089,6 +1147,16 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             {
                 point.xHalfMils /= 2;
                 point.yHalfMils /= 2;
+            }
+
+            for( const std::string& name :
+                 { "arc_center_x_half_mils", "arc_center_y_half_mils", "arc_bounds_x1_half_mils",
+                   "arc_bounds_y1_half_mils", "arc_bounds_x2_half_mils", "arc_bounds_y2_half_mils" } )
+            {
+                auto property = out.back().properties.find( name );
+
+                if( property != out.back().properties.end() )
+                    std::get<int64_t>( property->second.value ) /= 2;
             }
 
             out.back().geometry.angleTenths = 0;
@@ -2745,7 +2813,8 @@ BOOST_AUTO_TEST_CASE( LabelsAndPower )
 
     BOOST_REQUIRE_EQUAL( model.labels.size(), 16 );
     BOOST_CHECK_EQUAL( std::ranges::count( model.labels, MODEL_LABEL_KIND::LOCAL, &MODEL_LABEL::kind ), 13 );
-    BOOST_CHECK_EQUAL( std::ranges::count( model.labels, MODEL_LABEL_KIND::POWER, &MODEL_LABEL::kind ), 2 );
+    BOOST_CHECK_EQUAL( std::ranges::count( model.labels, MODEL_LABEL_KIND::GROUND, &MODEL_LABEL::kind ), 1 );
+    BOOST_CHECK_EQUAL( std::ranges::count( model.labels, MODEL_LABEL_KIND::POWER, &MODEL_LABEL::kind ), 1 );
     BOOST_CHECK_EQUAL( std::ranges::count( model.labels, MODEL_LABEL_KIND::GLOBAL, &MODEL_LABEL::kind ), 1 );
 
     auto global = std::ranges::find_if( model.labels,
@@ -2982,6 +3051,72 @@ BOOST_AUTO_TEST_CASE( ConnectivityHandleErrors )
                                return aError.What().Contains( wxS( "controller 20" ) )
                                       && aError.What().Contains( wxS( "off-page net handle leaves controller 21" ) );
                            } );
+
+    std::vector<uint8_t> wrongJunctionOwner = loadBinaryFixture( "connectivity_topology.sch" );
+    const size_t         junction = sheetControllerOffset( wrongJunctionOwner, 19 );
+    const uint16_t       junctionOwner = readU16( wrongJunctionOwner, junction + 8 );
+    BOOST_REQUIRE_GT( sheetControllerCount( wrongJunctionOwner, 21 ), 1 );
+    writeU16( wrongJunctionOwner, junction + 8, junctionOwner == 0 ? 1 : 0 );
+    const wxString junctionOwnerOffset =
+            wxString::Format( wxS( "offset 0x%llX" ), static_cast<unsigned long long>( junction + 8 ) );
+    BOOST_CHECK_EXCEPTION( parser.Parse( wrongJunctionOwner, wxS( "wrong-junction-owner.sch" ) ), IO_ERROR,
+                           [&]( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 19" ) )
+                                      && aError.What().Contains( wxS( "does not point back" ) )
+                                      && aError.What().Contains( junctionOwnerOffset );
+                           } );
+
+    std::vector<uint8_t> crossNetJunction = loadBinaryFixture( "connectivity_topology.sch" );
+    const size_t         crossNetJunctions = sheetControllerOffset( crossNetJunction, 19 );
+    const size_t         crossNetConnections = sheetControllerOffset( crossNetJunction, 21 );
+    const uint16_t       tiedDotHandle = 0x3000;
+    const uint16_t       tiedDotOwner = readU16( crossNetJunction, crossNetJunctions + 8 );
+    size_t               sharedConnection = std::numeric_limits<size_t>::max();
+    uint32_t             differentNet = std::numeric_limits<uint32_t>::max();
+    const uint32_t       ownerNet = readU32( crossNetJunction, crossNetConnections + tiedDotOwner * 40 + 8 );
+
+    for( size_t record = 0; record < sheetControllerCount( crossNetJunction, 21 ); ++record )
+    {
+        const size_t offset = crossNetConnections + record * 40;
+
+        if( record != tiedDotOwner
+            && ( readU16( crossNetJunction, offset + 12 ) == tiedDotHandle
+                 || readU16( crossNetJunction, offset + 14 ) == tiedDotHandle ) )
+        {
+            sharedConnection = record;
+        }
+
+        if( readU32( crossNetJunction, offset + 8 ) != ownerNet )
+            differentNet = readU32( crossNetJunction, offset + 8 );
+    }
+
+    BOOST_REQUIRE_NE( sharedConnection, std::numeric_limits<size_t>::max() );
+    BOOST_REQUIRE_NE( differentNet, std::numeric_limits<uint32_t>::max() );
+    writeU32( crossNetJunction, crossNetConnections + sharedConnection * 40 + 8, differentNet );
+    const wxString crossNetOffset =
+            wxString::Format( wxS( "offset 0x%llX" ), static_cast<unsigned long long>( crossNetJunctions + 8 ) );
+    BOOST_CHECK_EXCEPTION( parser.Parse( crossNetJunction, wxS( "cross-net-junction.sch" ) ), IO_ERROR,
+                           [&]( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 19" ) )
+                                      && aError.What().Contains( wxS( "shared across different nets" ) )
+                                      && aError.What().Contains( crossNetOffset );
+                           } );
+
+    std::vector<uint8_t> wrongOffpageOwner = loadBinaryFixture( "connectivity_topology.sch" );
+    const size_t         offpageOwner = sheetControllerOffset( wrongOffpageOwner, 20 );
+    const uint16_t       connectionOwner = readU16( wrongOffpageOwner, offpageOwner + 8 );
+    writeU16( wrongOffpageOwner, offpageOwner + 8, connectionOwner == 0 ? 1 : 0 );
+    const wxString offpageOwnerOffset =
+            wxString::Format( wxS( "offset 0x%llX" ), static_cast<unsigned long long>( offpageOwner + 8 ) );
+    BOOST_CHECK_EXCEPTION( parser.Parse( wrongOffpageOwner, wxS( "wrong-offpage-owner.sch" ) ), IO_ERROR,
+                           [&]( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 20" ) )
+                                      && aError.What().Contains( wxS( "does not point back" ) )
+                                      && aError.What().Contains( offpageOwnerOffset );
+                           } );
 }
 
 
@@ -2990,7 +3125,8 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
     PADS_SCH_BINARY_PARSER binaryParser;
 
     for( const std::string& fixture :
-         { "minimal_v13", "connectivity_topology", "multisheet_connectivity", "page_graphics" } )
+         { "minimal_v13", "placement_transform", "fields", "connectors", "text_encoding", "page_graphics",
+           "connectivity_topology", "multisheet_connectivity", "symbol_primitives", "pin_styles", "multigate" } )
     {
         PADS_SCH_MODEL binary =
                 binaryParser.Parse( loadBinaryFixture( fixture + ".sch" ), wxString::FromUTF8( fixture + ".sch" ) );
@@ -3013,25 +3149,41 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
                                            || !aRecord.properties.contains( "page_graphic_group" ) );
                            } );
 
-            for( CANONICAL_SEMANTIC_RECORD& record : aRecords )
-            {
-                record.properties.erase( "global_net_record" );
-                record.properties.erase( "preserved_net_identity" );
-                record.properties.erase( "preserved_net_relationship" );
-                record.properties.erase( "raw_endpoint_handle" );
-                record.properties.erase( "raw_connection_marker" );
-                record.properties.erase( "raw_label_kind" );
-                record.properties.erase( "connection_record" );
-            }
-
             return aRecords;
+        };
+
+        const SNAPSHOT_ALLOWLIST sourceProperties = {
+            { "global_net_record", PROPERTY_DISPOSITION::EXACT },
+            { "preserved_net_identity", PROPERTY_DISPOSITION::PRESERVED },
+            { "preserved_net_relationship", PROPERTY_DISPOSITION::PRESERVED },
+            { "raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT },
+            { "raw_connection_marker", PROPERTY_DISPOSITION::EXACT },
+            { "raw_label_kind", PROPERTY_DISPOSITION::EXACT },
+            { "connection_record", PROPERTY_DISPOSITION::EXACT },
+            { "preserved_bus_alias_members", PROPERTY_DISPOSITION::UNSUPPORTED },
+            { "preserved_drawing_text_relationship", PROPERTY_DISPOSITION::UNSUPPORTED },
         };
 
         BOOST_TEST_CONTEXT( fixture )
         {
+            for( const MODEL_NET& net : binary.nets )
+            {
+                for( const MODEL_CONNECTION& connection : net.connections )
+                {
+                    BOOST_REQUIRE_GE( connection.vertices.size(), 2 );
+                    BOOST_REQUIRE_EQUAL( connection.endpoints.size(), 2 );
+                    BOOST_CHECK_EQUAL( connection.endpoints[0].point.x, connection.vertices.front().x );
+                    BOOST_CHECK_EQUAL( connection.endpoints[0].point.y, connection.vertices.front().y );
+                    BOOST_CHECK_EQUAL( connection.endpoints[1].point.x, connection.vertices.back().x );
+                    BOOST_CHECK_EQUAL( connection.endpoints[1].point.y, connection.vertices.back().y );
+                    BOOST_CHECK( connection.vertices.front().x != connection.vertices.back().x
+                                 || connection.vertices.front().y != connection.vertices.back().y );
+                }
+            }
+
             auto expected = task10( normalizeAsciiModel( ascii ) );
             auto actual = task10( normalizeBinaryModel( binary ) );
-            BOOST_CHECK( snapshotsMatch( expected, actual ) );
+            BOOST_CHECK( snapshotsMatch( expected, actual, sourceProperties ) );
         }
     }
 }

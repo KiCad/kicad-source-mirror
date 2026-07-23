@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE( CheckFileHeader_ValidPowerLogicFile )
 }
 
 
-BOOST_AUTO_TEST_CASE( ParseBusses )
+BOOST_AUTO_TEST_CASE( BussesSection )
 {
     std::string               testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/buses.txt";
     PADS_SCH::PADS_SCH_PARSER parser;

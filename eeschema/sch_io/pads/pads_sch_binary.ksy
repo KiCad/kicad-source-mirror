@@ -49,7 +49,7 @@ enums:
     2: dash_dot
     0xff: solid
   offpage_kind:
-    0: ground_or_power
+    0: ground
     1: power
     2: preserved_kind_2
     3: global_label
@@ -637,7 +637,11 @@ types:
       - id: global_net_record
         type: u4
       - id: preserved_relationship_0c
-        size: 12
+        type: u4
+      - id: preserved_relationship_10
+        type: u4
+      - id: preserved_relationship_14
+        type: u4
       - id: tail_bus_entry_handle
         type: u2
       - id: preserved_relationship_1a
@@ -751,7 +755,7 @@ types:
       - id: preserved_relationship_10
         type: u4
       - id: preserved_relationship_14
-        size: 4
+        type: u4
       - id: bounds_x1_biased_quarter_mil
         type: u2
       - id: bounds_y1_biased_quarter_mil
