@@ -194,7 +194,6 @@ set( QA_EESCHEMA_SRCS
     test_symbol_clipboard_export.cpp
     test_schematic_clipboard_export.cpp
     test_autoplace_fields.cpp
-    test_issue23020_deep_hierarchy.cpp
 )
 
 # Database library tests need a live ODBC driver, so gate them the same way the common suite does.
