@@ -72,6 +72,28 @@ RULE_AREA* findRuleAreaByPartialName( MULTICHANNEL_TOOL* aTool, const wxString& 
     return nullptr;
 }
 
+RULE_AREA* findSheetRuleAreaByPath( MULTICHANNEL_TOOL* aTool, wxString aPath )
+{
+    if( aPath.EndsWith( wxT( "/" ) ) )
+        aPath.RemoveLast();
+
+    for( RULE_AREA& ra : aTool->GetData()->m_areas )
+    {
+        if( ra.m_sourceType != PLACEMENT_SOURCE_T::SHEETNAME )
+            continue;
+
+        wxString path = ra.m_sheetPath;
+
+        if( path.EndsWith( wxT( "/" ) ) )
+            path.RemoveLast();
+
+        if( path == aPath )
+            return &ra;
+    }
+
+    return nullptr;
+}
+
 RULE_AREA* findRuleAreaByPlacementGroup( MULTICHANNEL_TOOL* aTool, const wxString& aGroupName )
 {
     for( RULE_AREA& ra : aTool->GetData()->m_areas )
@@ -82,6 +104,7 @@ RULE_AREA* findRuleAreaByPlacementGroup( MULTICHANNEL_TOOL* aTool, const wxStrin
 
     return nullptr;
 }
+
 
 int countZonesByNameInRuleArea( BOARD* aBoard, const wxString& aZoneName, const RULE_AREA& aRuleArea )
 {
@@ -153,7 +176,8 @@ BOOST_FIXTURE_TEST_CASE( MultichannelToolRegressions, MULTICHANNEL_TEST_FIXTURE 
         BOOST_TEST_MESSAGE( wxString::Format( "RA multichannel sheets = %d",
                                               static_cast<int>( ruleData->m_areas.size() ) ) );
 
-        BOOST_CHECK_EQUAL( ruleData->m_areas.size(), 72 );
+        // 73 counts the /fpga/ container sheet, now offered as a channel.
+        BOOST_CHECK_EQUAL( ruleData->m_areas.size(), 73 );
 
         int cnt = 0;
 
