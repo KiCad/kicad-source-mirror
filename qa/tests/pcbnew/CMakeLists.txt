@@ -62,6 +62,7 @@ set( QA_PCBNEW_SRCS
     test_footprint_load_save.cpp
     test_footprint_rescue_layer.cpp
     test_issue24901.cpp
+    test_issue24967.cpp
     test_fp_lib_load_save.cpp
     test_io_mgr.cpp
     test_active_layer_update.cpp

@@ -2119,6 +2119,12 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
 
     auto connectivity = board()->GetConnectivity();
 
+    // Don't let expansion select outside an entered group, or select() would ExitGroup mid-walk.
+    auto inScope = [this]( BOARD_ITEM* aItem )
+    {
+        return isWithinEnteredGroup( aItem, m_enteredGroup, m_isFootprintEditor );
+    };
+
     std::set<PAD*>                     startPadSet;
     std::vector<BOARD_CONNECTED_ITEM*> cleanupItems;
 
@@ -2131,7 +2137,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
         // Select any starting track items
         if( startItem->IsType( { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
         {
-            if( itemPassesFilter( startItem, true ) )
+            if( itemPassesFilter( startItem, true ) && inScope( startItem ) )
                 select( startItem );
         }
     }
@@ -2344,7 +2350,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
                     if( !itemPassesFilter( track, true ) )
                         continue;
 
-                    if( !track->IsSelected() )
+                    if( !track->IsSelected() && inScope( track ) )
                         select( track );
 
                     if( !track->HasFlag( SKIP_STRUCT ) )
@@ -2370,7 +2376,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
                     if( !itemPassesFilter( shape, true ) )
                         continue;
 
-                    if( !shape->IsSelected() )
+                    if( !shape->IsSelected() && inScope( shape ) )
                         select( shape );
 
                     if( !shape->HasFlag( SKIP_STRUCT ) )
@@ -2393,7 +2399,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
 
                 if( hitVia )
                 {
-                    if( !hitVia->IsSelected() )
+                    if( !hitVia->IsSelected() && inScope( hitVia ) )
                         select( hitVia );
 
                     if( !hitVia->HasFlag( SKIP_STRUCT ) )
@@ -4586,6 +4592,17 @@ bool PCB_SELECTION_TOOL::HasLockedDescendant( const BOARD_ITEM* aItem )
             RECURSE_MODE::RECURSE );
 
     return lockedDescendant;
+}
+
+
+bool PCB_SELECTION_TOOL::isWithinEnteredGroup( BOARD_ITEM* aItem, PCB_GROUP* aEnteredGroup, bool aIsFootprintEditor )
+{
+    if( aEnteredGroup )
+        return PCB_GROUP::WithinScope( aItem, aEnteredGroup, aIsFootprintEditor );
+
+    // Not entered: keep expansion at the top level so it can't reach into a group and
+    // silently pull the whole group into a later delete.
+    return aItem->GetParentGroup() == nullptr;
 }
 
 
