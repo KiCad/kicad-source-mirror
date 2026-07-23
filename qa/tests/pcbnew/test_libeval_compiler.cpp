@@ -23,13 +23,18 @@
 #include <wx/wx.h>
 
 #include <layer_ids.h>
+#include <gal/color4d.h>
+#include <geometry/eda_angle.h>
 #include <pcbnew/pcbexpr_evaluator.h>
 #include <drc/drc_rule.h>
 #include <pcbnew/board.h>
 #include <board_design_settings.h>
+#include <pcbnew/pcb_shape.h>
+#include <pcbnew/pcb_table.h>
 #include <pcbnew/pcb_track.h>
 #include <pcbnew/footprint.h>
 #include <pcbnew/pcb_text.h>
+#include <pcbnew/zone.h>
 #include <project/net_settings.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
@@ -190,6 +195,75 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
     for( const auto& expr : introspectionExpressions )
     {
         testEvalExpr( expr.expression, expr.expectedResult, expr.expectError, &trackA, &trackB );
+    }
+}
+
+BOOST_AUTO_TEST_CASE( IntrospectedExtendedNumericProperties )
+{
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.Rebuild();
+
+    BOARD brd;
+    ZONE  zone( &brd );
+
+    zone.SetLayer( F_Cu );
+    zone.SetAssignedPriority( 7 );
+    zone.SetHatchOrientation( EDA_ANGLE( 45.0, DEGREES_T ) );
+    zone.SetMinIslandArea( 123456789LL );
+
+    testEvalExpr( wxT( "A.Priority == 7" ), VAL( 1.0 ), false, &zone );
+    testEvalExpr( wxT( "A.Hatch_Orientation == 45deg" ), VAL( 1.0 ), false, &zone );
+    testEvalExpr( wxT( "A.Minimum_Island_Area == 123456789" ), VAL( 1.0 ), false, &zone );
+
+    PCB_SHAPE ellipse( &brd, SHAPE_T::ELLIPSE );
+    ellipse.SetEllipseRotation( EDA_ANGLE( 30.0, DEGREES_T ) );
+
+    testEvalExpr( wxT( "A.Ellipse_Rotation == 30deg" ), VAL( 1.0 ), false, &ellipse );
+}
+
+BOOST_AUTO_TEST_CASE( IntrospectedColorProperties )
+{
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.Rebuild();
+
+    BOARD     brd;
+    PCB_TABLE table( &brd, 0 );
+
+    const auto checkColor = [&]( const COLOR4D& aColor )
+    {
+        table.SetBorderColor( aColor );
+        wxString expression = wxT( "A.Border_Color == '" ) + aColor.ToCSSString() + wxT( "'" );
+        testEvalExpr( expression, VAL( 1.0 ), false, &table );
+    };
+
+    checkColor( COLOR4D( 0.25, 0.5, 0.75, 0.5 ) );
+    checkColor( COLOR4D( wxString( wxT( "red" ) ) ) );
+}
+
+BOOST_AUTO_TEST_CASE( RuleVisiblePropertyTypesAreSupported )
+{
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.Rebuild();
+
+    std::set<std::pair<TYPE_ID, PROPERTY_BASE*>> seen;
+
+    for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
+    {
+        if( !propMgr.IsOfType( cls.type, TYPE_HASH( BOARD_ITEM ) ) )
+            continue;
+
+        for( PROPERTY_BASE* prop : cls.properties )
+        {
+            if( prop->IsHiddenFromRulesEditor() || !seen.emplace( cls.type, prop ).second )
+                continue;
+
+            PCBEXPR_PROPERTY_KIND kind = PCBEXPR_VAR_REF::ClassifyProperty( prop );
+
+            BOOST_CHECK_MESSAGE( kind != PCBEXPR_PROPERTY_KIND::UNSUPPORTED,
+                                 "Unsupported Rules Editor property: class=" << cls.name.mb_str()
+                                                                             << ", property=" << prop->Name().mb_str()
+                                                                             << ", type_hash=" << prop->TypeHash() );
+        }
     }
 }
 
