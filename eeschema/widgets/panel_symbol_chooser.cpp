@@ -572,6 +572,7 @@ void PANEL_SYMBOL_CHOOSER::showFootprintFor( LIB_ID const& aLibId )
     SCH_FIELD* fp_field = symbol->GetField( FIELD_T::FOOTPRINT );
     wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
+    m_fp_override.Empty();
     showFootprint( fp_name );
 }
 
@@ -628,9 +629,12 @@ void PANEL_SYMBOL_CHOOSER::populateFootprintSelector( LIB_ID const& aLibId )
 
     if( symbol != nullptr )
     {
-    int        pinCount = symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ).size();
+        int        pinCount = symbol->GetGraphicalPins( 0 /* all units */, 1 /* single bodyStyle */ ).size();
         SCH_FIELD* fp_field = symbol->GetField( FIELD_T::FOOTPRINT );
         wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
+
+        if( !m_fp_override.IsEmpty() )
+            fp_name = m_fp_override;
 
         // Explicitly associated footprints (issue #2282) are listed ahead of the glob matches in
         // written order and bypass the pin-count filter; a mapped EP/NC footprint legally has more
@@ -656,10 +660,11 @@ void PANEL_SYMBOL_CHOOSER::onFootprintSelected( wxCommandEvent& aEvent )
 {
     m_fp_override = aEvent.GetString();
 
-    std::erase_if( m_field_edits, []( std::pair<FIELD_T, wxString> const& i )
-                                   {
-                                       return i.first == FIELD_T::FOOTPRINT;
-                                   } );
+    std::erase_if( m_field_edits,
+            []( std::pair<FIELD_T, wxString> const& i )
+            {
+                return i.first == FIELD_T::FOOTPRINT;
+            } );
 
     m_field_edits.emplace_back( std::make_pair( FIELD_T::FOOTPRINT, m_fp_override ) );
 
@@ -676,9 +681,15 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
         m_symbol_preview->DisplaySymbol( node->m_LibId, node->m_Unit );
 
         if( !node->m_Footprint.IsEmpty() )
-            showFootprint( node->m_Footprint );
+        {
+            wxCommandEvent evt( EVT_FOOTPRINT_SELECTED );
+            evt.SetString( node->m_Footprint);
+            onFootprintSelected( evt );
+        }
         else
+        {
             showFootprintFor( node->m_LibId );
+        }
 
         populateFootprintSelector( node->m_LibId );
 
