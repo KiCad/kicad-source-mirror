@@ -500,7 +500,10 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         text.Replace( wxS( "\r" ), wxS( "\n" ) );
 #endif
 
-        if( text.IsEmpty() && !m_currentLabel->IsNew() )
+        wxString visibleText = text;
+        visibleText.Trim( false ).Trim( true );
+
+        if( visibleText.IsEmpty() )
         {
             DisplayError( this, _( "Label can not be empty." ) );
             return false;

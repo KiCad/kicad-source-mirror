@@ -91,6 +91,11 @@ public:
     int TestFieldNameWhitespace();
 
     /**
+     * Check for labels with empty or whitespace-only names.
+     */
+    int TestEmptyLabelNames();
+
+    /**
      * Test if all units of each multiunit symbol have the same footprint assigned.
      * @return The error count.
      */

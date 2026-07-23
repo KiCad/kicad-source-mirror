@@ -97,8 +97,9 @@ enum ERCE_T
     ERCE_PIN_MAP_UNMAPPED_PIN,              ///< A connected pin resolves to no footprint pad.
     ERCE_PIN_MAP_DUPLICATE_PAD,             ///< Two symbol pins map to one pad (not stacked/jumper).
     ERCE_PIN_MAP_STALE_PIN,                 ///< Pin map references a pin number not on the symbol.
+    ERCE_EMPTY_LABEL_NAME,                  ///< Label has an empty or whitespace-only name.
 
-    ERCE_LAST = ERCE_PIN_MAP_STALE_PIN,
+    ERCE_LAST = ERCE_EMPTY_LABEL_NAME,
 
     ERCE_DUPLICATE_PIN_ERROR,
     ERCE_PIN_TO_PIN_WARNING, // pin connected to an other pin: warning level

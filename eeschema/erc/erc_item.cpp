@@ -171,6 +171,9 @@ ERC_ITEM ERC_ITEM::fieldNameWhitespace( ERCE_FIELD_NAME_WHITESPACE,
         _HKI( "Field name has leading or trailing whitespace" ),
         wxT( "field_name_whitespace" ) );
 
+ERC_ITEM ERC_ITEM::emptyLabelName( ERCE_EMPTY_LABEL_NAME, _HKI( "Label has an empty name" ),
+                                   wxT( "empty_label_name" ) );
+
 ERC_ITEM ERC_ITEM::pinMapBadPad( ERCE_PIN_MAP_BAD_PAD,
                                  _HKI( "Pin map references a pad that does not exist on the footprint" ),
                                  wxT( "pin_map_bad_pad" ) );
@@ -265,6 +268,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
           ERC_ITEM::isolatedPinLabel, ERC_ITEM::singleGlobalLabel, ERC_ITEM::sameLocalGlobalLabel,
           ERC_ITEM::sameLocalGlobalPower, ERC_ITEM::wireDangling, ERC_ITEM::busEntryNeeded, ERC_ITEM::endpointOffGrid,
           ERC_ITEM::fourWayJunction, ERC_ITEM::labelMultipleWires, ERC_ITEM::unconnectedWireEndpoint,
+          ERC_ITEM::emptyLabelName,
 
           ERC_ITEM::heading_conflicts, ERC_ITEM::duplicateReference, ERC_ITEM::pinTableWarning,
           ERC_ITEM::differentUnitValue, ERC_ITEM::differentUnitFootprint, ERC_ITEM::differentUnitNet,
@@ -344,6 +348,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_UNCONNECTED_WIRE_ENDPOINT: return std::make_shared<ERC_ITEM>( unconnectedWireEndpoint );
     case ERCE_STACKED_PIN_SYNTAX:      return std::make_shared<ERC_ITEM>( stackedPinName );
     case ERCE_FIELD_NAME_WHITESPACE:   return std::make_shared<ERC_ITEM>( fieldNameWhitespace );
+    case ERCE_EMPTY_LABEL_NAME: return std::make_shared<ERC_ITEM>( emptyLabelName );
     case ERCE_PIN_MAP_BAD_PAD: return std::make_shared<ERC_ITEM>( pinMapBadPad );
     case ERCE_PIN_MAP_UNMAPPED_PIN: return std::make_shared<ERC_ITEM>( pinMapUnmappedPin );
     case ERCE_PIN_MAP_DUPLICATE_PAD: return std::make_shared<ERC_ITEM>( pinMapDuplicatePad );

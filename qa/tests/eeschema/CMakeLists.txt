@@ -65,6 +65,7 @@ set( QA_EESCHEMA_SRCS
     sch_io/orcad/test_orcad_sch_import.cpp
     sch_io/cadstar/test_issue14447_arc_connection.cpp
 
+    erc/test_erc_empty_label.cpp
     erc/test_erc_four_way.cpp
 	erc/test_erc_label_not_connected.cpp
 	erc/test_erc_multiple_pin_to_pin.cpp

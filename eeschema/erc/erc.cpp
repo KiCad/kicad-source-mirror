@@ -667,6 +667,45 @@ void ERC_TESTER::TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet )
 }
 
 
+int ERC_TESTER::TestEmptyLabelNames()
+{
+    int errors = 0;
+
+    // No directive labels, they carry no text (the netclass lives in a field)
+    static const KICAD_T labelTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T };
+
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        for( KICAD_T labelType : labelTypes )
+        {
+            for( SCH_ITEM* item : screen->Items().OfType( labelType ) )
+            {
+                SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
+
+                wxString text = label->GetText();
+                text.Trim( false ).Trim( true );
+
+                if( text.IsEmpty() )
+                {
+                    auto ercItem = ERC_ITEM::Create( ERCE_EMPTY_LABEL_NAME );
+                    ercItem->SetItems( label );
+                    ercItem->SetItemsSheetPaths( sheet );
+                    ercItem->SetSheetSpecificPath( sheet );
+
+                    SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), label->GetPosition() );
+                    screen->Append( marker );
+                    errors++;
+                }
+            }
+        }
+    }
+
+    return errors;
+}
+
+
 int ERC_TESTER::TestFieldNameWhitespace()
 {
     int warnings = 0;
@@ -2624,6 +2663,14 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking field names..." ) );
 
         TestFieldNameWhitespace();
+    }
+
+    if( m_settings.IsTestEnabled( ERCE_EMPTY_LABEL_NAME ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking for empty label names..." ) );
+
+        TestEmptyLabelNames();
     }
 
     if( m_settings.IsTestEnabled( ERCE_SIMULATION_MODEL ) )
