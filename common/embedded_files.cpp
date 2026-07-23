@@ -174,6 +174,24 @@ void EMBEDDED_FILES::RemoveFile( const wxString& name, bool aErase )
 }
 
 
+void EMBEDDED_FILES::AssignSharedFrom( const EMBEDDED_FILES& aSource,
+                                       const std::set<wxString>& aExcludedNames )
+{
+    // Build the filtered set before touching m_files so self-assignment stays safe.
+    std::map<wxString, std::shared_ptr<EMBEDDED_FILE>> filtered;
+
+    for( const auto& [name, file] : aSource.m_files )
+    {
+        if( aExcludedNames.count( file->name ) )
+            continue;
+
+        filtered[name] = file;
+    }
+
+    m_files = std::move( filtered );
+}
+
+
 void EMBEDDED_FILES::ClearEmbeddedFonts()
 {
     for( auto it = m_files.begin(); it != m_files.end(); )
