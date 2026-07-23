@@ -1661,14 +1661,14 @@ static FT_Face ipa_font_face_open (wmfAPI* API,char* ps_name,char* glyphs,char* 
 
 	struct stat stat_buf;
 
-#ifdef _WIN32
+#if defined (_WIN32) && !defined (LIBWMF_STATIC)
 	glyphs = remap_font_file_name (API,glyphs);
 #endif
 	if (stat (glyphs,&stat_buf))
 	{	WMF_ERROR (API,"unable to stat font file:");
 		WMF_ERROR (API,glyphs);
 		API->err = wmf_E_BadFile;
-#ifdef _WIN32
+#if defined (_WIN32) && !defined (LIBWMF_STATIC)
 		wmf_free (API,glyphs);
 #endif
 		return (0);
@@ -1678,13 +1678,13 @@ static FT_Face ipa_font_face_open (wmfAPI* API,char* ps_name,char* glyphs,char* 
 	{	WMF_ERROR (API,"Failed to open font:");
 		WMF_ERROR (API,glyphs);
 		API->err = wmf_E_DeviceError;
-#ifdef _WIN32
+#if defined (_WIN32) && !defined (LIBWMF_STATIC)
 		wmf_free (API,glyphs);
 #endif
 		return (0);
 	}
 
-#ifdef _WIN32
+#if defined (_WIN32) && !defined (LIBWMF_STATIC)
 	if (metrics)
 	{
 		metrics = remap_font_file_name (API,metrics);
