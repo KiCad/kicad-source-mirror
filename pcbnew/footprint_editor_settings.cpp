@@ -32,6 +32,7 @@
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
+#include <settings/snap_settings_params.h>
 #include <base_units.h>
 
 #include <wx/config.h>
@@ -115,6 +116,8 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "editing.magnetic_all_layers",
             &m_MagneticItems.allLayers, false ) );
+
+    AddSnapInferenceParams( m_params, m_SnapInference );
 
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords",
             &m_PolarCoords, false ) );

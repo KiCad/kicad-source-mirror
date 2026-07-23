@@ -525,6 +525,25 @@ BOOST_AUTO_TEST_CASE( HoldingEditedCircleKeepsTypedRadius )
 }
 
 
+BOOST_AUTO_TEST_CASE( HoldingEditedReportsConflictBeforeWritingAnyCluster )
+{
+    BOARD board;
+    PCB_SHAPE* edited = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* locked = addSegment( board, { 10 * MM, 0 }, { 20 * MM, 0 } );
+    locked->SetLocked( true );
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::COINCIDENT,
+                   { { edited->m_Uuid, CONSTRAINT_ANCHOR::END },
+                     { locked->m_Uuid, CONSTRAINT_ANCHOR::START } } );
+
+    edited->Move( { 5 * MM, 0 } );
+    VECTOR2I lockedStart = locked->GetStart();
+
+    BOOST_CHECK( !ReSolveShapeClustersHoldingEdited( &board, { edited }, nullptr ) );
+    BOOST_CHECK_EQUAL( locked->GetStart(), lockedStart );
+}
+
+
 // A properties edit of a polygon's geometry is authoritative, so the hold-edited re-solve keeps the
 // edited outline exactly, the vertex-bound segment follows, and the unbound vertices hold.
 BOOST_AUTO_TEST_CASE( HoldingEditedPolygonResizeMovesBoundNeighbor )

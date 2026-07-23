@@ -45,14 +45,6 @@ static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleSelectMap =
 };
 
 
-static const UTIL::CFG_MAP<KIGFX::GRID_SNAPPING> gridSnapConfigVals =
-{
-    { KIGFX::GRID_SNAPPING::ALWAYS,     0 },
-    { KIGFX::GRID_SNAPPING::WITH_GRID,  1 },
-    { KIGFX::GRID_SNAPPING::NEVER,      2 }
-};
-
-
 PANEL_GAL_OPTIONS::PANEL_GAL_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aAppSettings ) :
         PANEL_GAL_OPTIONS_BASE( aParent ),
         m_cfg( aAppSettings )
@@ -78,8 +70,6 @@ PANEL_GAL_OPTIONS::PANEL_GAL_OPTIONS( wxWindow* aParent, APP_SETTINGS_BASE* aApp
 
 bool PANEL_GAL_OPTIONS::TransferDataToWindow()
 {
-    m_gridSnapOptions->SetSelection( m_cfg->m_Window.grid.snap );
-
     if( m_cfg->m_Window.grid.style == 0 )
         m_rbDots->SetValue( true );
     else if( m_cfg->m_Window.grid.style == 1 )
@@ -104,8 +94,6 @@ bool PANEL_GAL_OPTIONS::TransferDataToWindow()
 
 bool PANEL_GAL_OPTIONS::TransferDataFromWindow()
 {
-    m_cfg->m_Window.grid.snap = m_gridSnapOptions->GetSelection();
-
     if( m_rbDots->GetValue() )
         m_cfg->m_Window.grid.style = 0;
     else if( m_rbLines->GetValue() )

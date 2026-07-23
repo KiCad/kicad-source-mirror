@@ -69,16 +69,6 @@ PANEL_GAL_OPTIONS_BASE::PANEL_GAL_OPTIONS_BASE( wxWindow* parent, wxWindowID id,
 	l_gridMinSpacingUnits->Wrap( -1 );
 	gbGridSettings->Add( l_gridMinSpacingUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	l_gridSnapOptions = new wxStaticText( this, wxID_ANY, _("Snap to grid:"), wxDefaultPosition, wxDefaultSize, 0 );
-	l_gridSnapOptions->Wrap( -1 );
-	gbGridSettings->Add( l_gridSnapOptions, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-	wxString m_gridSnapOptionsChoices[] = { _("Always"), _("When grid shown"), _("Never") };
-	int m_gridSnapOptionsNChoices = sizeof( m_gridSnapOptionsChoices ) / sizeof( wxString );
-	m_gridSnapOptions = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridSnapOptionsNChoices, m_gridSnapOptionsChoices, 0 );
-	m_gridSnapOptions->SetSelection( 0 );
-	gbGridSettings->Add( m_gridSnapOptions, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
-
 
 	gbGridSettings->AddGrowableCol( 1 );
 

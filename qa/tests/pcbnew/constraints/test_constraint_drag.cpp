@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <vector>
 
@@ -42,13 +43,26 @@ namespace
 constexpr int MM = 1000000;
 
 
+SNAP_TARGET_ID targetId( const char* aName )
+{
+    return KIID::FromName( aName ).AsBytes();
+}
+
+
+SNAP_STABLE_ID testSnapId( const char* aName, SNAP_ID_KIND aKind = SNAP_ID_KIND::ITEM_GEOMETRY )
+{
+    return { aKind, targetId( aName ) };
+}
+
+
 struct DRAG_FIXTURE
 {
     BOARD                board;
     TOOL_MANAGER         mgr;
     KI_TEST::DUMMY_TOOL* tool;
 
-    DRAG_FIXTURE() : tool( new KI_TEST::DUMMY_TOOL() )
+    DRAG_FIXTURE() :
+            tool( new KI_TEST::DUMMY_TOOL() )
     {
         mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
         mgr.RegisterTool( tool );
@@ -125,9 +139,12 @@ void simulateDrag( BOARD_COMMIT& aCommit, BOARD* aBoard, PCB_SHAPE* aShape,
         aShape->SetCenter( aCursor );
 
     SolveCluster( aBoard, { aShape->m_Uuid, aAnchor }, aCursor, aModified,
-                  [&]( BOARD_ITEM* aNeighbor ) { aCommit.Modify( aNeighbor ); } );
+                  [&]( BOARD_ITEM* aNeighbor )
+                  {
+                      aCommit.Modify( aNeighbor );
+                  } );
 }
-}
+} // namespace
 
 
 // Dragging one end of a corner re-derives the coincident neighbor; reverting the same commit
@@ -159,6 +176,375 @@ BOOST_FIXTURE_TEST_CASE( DragReDerivesNeighborRevertRestores, DRAG_FIXTURE )
     commit.Revert();
     BOOST_CHECK_EQUAL( a->GetEnd(), aEnd0 );
     BOOST_CHECK_EQUAL( b->GetStart(), bStart0 );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentDragSessionWarmStartsSuccessivePreviewFrames, DRAG_FIXTURE )
+{
+    PCB_SHAPE* a = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* b = addSegment( { 10 * MM, 0 }, { 10 * MM, 10 * MM } );
+    addCoincident( a, CONSTRAINT_ANCHOR::END, b, CONSTRAINT_ANCHOR::START );
+
+    CONSTRAINT_MEMBER             dragged( a->m_Uuid, CONSTRAINT_ANCHOR::END );
+    BOARD_CONSTRAINT_DRAG_SESSION session;
+    std::vector<PCB_SHAPE*>       modified;
+    BOARD_COMMIT                  commit( tool );
+    const VECTOR2I                originalAEnd = a->GetEnd();
+    const VECTOR2I                originalBStart = b->GetStart();
+
+    BOOST_REQUIRE( session.Build( &board, dragged ) );
+    BOOST_CHECK( session.Matches( dragged ) );
+    commit.Modify( a );
+
+    CONSTRAINT_DIAGNOSIS first = session.Solve(
+            { 12 * MM, 2 * MM }, &modified,
+            [&]( BOARD_ITEM* aItem )
+            {
+                commit.Modify( aItem );
+            },
+            false, false );
+    BOOST_REQUIRE( first.solved );
+    BOOST_CHECK_LE( ( a->GetEnd() - b->GetStart() ).EuclideanNorm(), 100 );
+
+    CONSTRAINT_DIAGNOSIS second = session.Solve(
+            { 14 * MM, 4 * MM }, &modified,
+            [&]( BOARD_ITEM* aItem )
+            {
+                commit.Modify( aItem );
+            },
+            false, false );
+    BOOST_REQUIRE( second.solved );
+    BOOST_CHECK_LE( ( a->GetEnd() - b->GetStart() ).EuclideanNorm(), 100 );
+    BOOST_CHECK_LE( ( a->GetEnd() - VECTOR2I( 14 * MM, 4 * MM ) ).EuclideanNorm(), 100 );
+
+    commit.Revert();
+    BOOST_CHECK_EQUAL( a->GetEnd(), originalAEnd );
+    BOOST_CHECK_EQUAL( b->GetStart(), originalBStart );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentDragSessionRejectsInexactSnapTarget, DRAG_FIXTURE )
+{
+    PCB_SHAPE* seg = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* length = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+    length->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    length->SetValue( 10.0 * MM );
+    board.Add( length );
+
+    BOARD_CONSTRAINT_DRAG_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, CONSTRAINT_MEMBER( seg->m_Uuid, CONSTRAINT_ANCHOR::END ) ) );
+    BOOST_CHECK( session.IsExactFeasible( { 10 * MM, 0 } ) );
+    BOOST_CHECK( session.IsExactFeasible( { 10 * MM, 0 } ) );
+    BOOST_CHECK( !session.IsExactFeasible( { 20 * MM, 0 } ) );
+    BOOST_CHECK_EQUAL( seg->GetEnd(), VECTOR2I( 10 * MM, 0 ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentDragSessionExactifiesEqualGapTarget, DRAG_FIXTURE )
+{
+    PCB_SHAPE* seg = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* length = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+    length->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    length->SetValue( 10.0 * MM );
+    board.Add( length );
+
+    PCB_CONSTRAINT* horizontal = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::HORIZONTAL );
+    horizontal->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    board.Add( horizontal );
+
+    BOARD_CONSTRAINT_DRAG_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, CONSTRAINT_MEMBER( seg->m_Uuid, CONSTRAINT_ANCHOR::END ) ) );
+
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 10 * MM, 0 };
+    SNAP_CANDIDATE gap =
+            SNAP_CANDIDATE::AxisX( testSnapId( "gap", SNAP_ID_KIND::EQUAL_GAP_X ), SNAP_PRIORITY_TIER::OBJECT,
+                                   SNAP_CANDIDATE_SUBTYPE::BBOX_LAYOUT, 10 * MM, 0.0 );
+    gap.relation = SNAP_RELATION::BBOX_EQUAL_GAP;
+
+    SNAP_RESULT result = session.ResolveCandidates( context, { gap } );
+    BOOST_REQUIRE( result.status == SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_REQUIRE_EQUAL( result.quantizedResiduals.size(), 1 );
+    BOOST_CHECK_EQUAL( result.quantizedResiduals.front(), 0.0 );
+    BOOST_CHECK_EQUAL( seg->GetEnd(), VECTOR2I( 10 * MM, 0 ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentMoveSessionArbitratesBeforeApplying, DRAG_FIXTURE )
+{
+    PCB_SHAPE* moved = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* neighbor = addSegment( { 10 * MM, 0 }, { 20 * MM, 0 } );
+    addCoincident( moved, CONSTRAINT_ANCHOR::END, neighbor, CONSTRAINT_ANCHOR::START );
+
+    BOARD_CONSTRAINT_MOVE_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, { moved }, { 0, 0 } ) );
+
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 5 * MM, 0 };
+    SNAP_CANDIDATE target = SNAP_CANDIDATE::Point( testSnapId( "target" ), SNAP_PRIORITY_TIER::OBJECT,
+                                                   SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR, context.sourcePoint, 0.0 );
+
+    // A feasibility callback reports the residual and the freedom consumed; SNAP_RESOLVER owns
+    // the accepted list, so honouring a two-degree candidate shows up as zero freedom left.
+    SNAP_RESULT result = session.ResolveCandidates( context, { target } );
+    BOOST_REQUIRE( result.status == SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_CHECK_EQUAL( result.position, context.sourcePoint );
+    BOOST_REQUIRE_EQUAL( result.quantizedResiduals.size(), 1 );
+    BOOST_CHECK_EQUAL( result.quantizedResiduals.front(), 0.0 );
+    BOOST_CHECK_EQUAL( result.remainingDof, 0 );
+    BOOST_CHECK_EQUAL( moved->GetStart(), VECTOR2I( 0, 0 ) );
+    BOOST_CHECK_EQUAL( neighbor->GetStart(), VECTOR2I( 10 * MM, 0 ) );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOOST_REQUIRE( session.Solve( result.position, &modified, {} ) );
+    BOOST_CHECK_EQUAL( moved->GetStart(), VECTOR2I( 5 * MM, 0 ) );
+    BOOST_CHECK_EQUAL( moved->GetEnd(), VECTOR2I( 15 * MM, 0 ) );
+    BOOST_CHECK_EQUAL( neighbor->GetStart(), VECTOR2I( 15 * MM, 0 ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( RigidTranslationPreservesRoundShapeRadii, DRAG_FIXTURE )
+{
+    PCB_SHAPE* circle = addCircle( { 0, 0 }, 4 * MM );
+    PCB_SHAPE* arc = addArc( { 20 * MM, 0 }, { 17 * MM, 3 * MM }, { 14 * MM, 0 } );
+    PCB_SHAPE* ellipse = new PCB_SHAPE( &board, SHAPE_T::ELLIPSE );
+    ellipse->SetEllipseCenter( { 30 * MM, 0 } );
+    ellipse->SetEllipseMajorRadius( 6 * MM );
+    ellipse->SetEllipseMinorRadius( 3 * MM );
+    board.Add( ellipse );
+
+    const int circleRadius = circle->GetRadius();
+    const int arcRadius = arc->GetRadius();
+    const int ellipseMinorRadius = ellipse->GetEllipseMinorRadius();
+
+    BOARD_CONSTRAINT_ADAPTER adapter;
+    BOOST_REQUIRE( adapter.Build( { circle, arc, ellipse }, {} ) );
+    BOOST_REQUIRE(
+            adapter.SolveRigidTranslation( { circle->m_Uuid, arc->m_Uuid, ellipse->m_Uuid }, { 3 * MM, 2 * MM } ) );
+    adapter.Apply();
+
+    BOOST_CHECK_EQUAL( circle->GetRadius(), circleRadius );
+    BOOST_CHECK_EQUAL( arc->GetRadius(), arcRadius );
+    BOOST_CHECK_EQUAL( ellipse->GetEllipseMinorRadius(), ellipseMinorRadius );
+}
+
+
+BOOST_AUTO_TEST_CASE( UnbuiltMoveSessionRejectsCandidates )
+{
+    BOARD_CONSTRAINT_MOVE_SESSION session;
+    SNAP_SOURCE_CONTEXT           context;
+    context.sourcePoint = { 10, 20 };
+    SNAP_CANDIDATE candidate = SNAP_CANDIDATE::Point( testSnapId( "point" ), SNAP_PRIORITY_TIER::OBJECT,
+                                                      SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR, { 10, 20 }, 0.0 );
+
+    SNAP_RESULT result = session.ResolveCandidates( context, { candidate } );
+
+    BOOST_CHECK( result.status == SNAP_RESULT_STATUS::INCOMPATIBLE );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentMoveSessionRejectsIncompatibleTarget, DRAG_FIXTURE )
+{
+    PCB_SHAPE* moved = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* locked = addSegment( { 10 * MM, 0 }, { 20 * MM, 0 } );
+    locked->SetLocked( true );
+    addCoincident( moved, CONSTRAINT_ANCHOR::END, locked, CONSTRAINT_ANCHOR::START );
+
+    BOARD_CONSTRAINT_MOVE_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, { moved }, { 0, 0 } ) );
+
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 5 * MM, 0 };
+    SNAP_CANDIDATE target = SNAP_CANDIDATE::Point( testSnapId( "blocked" ), SNAP_PRIORITY_TIER::OBJECT,
+                                                   SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR, context.sourcePoint, 0.0 );
+
+    BOOST_CHECK( session.ResolveCandidates( context, { target } ).status == SNAP_RESULT_STATUS::INCOMPATIBLE );
+    BOOST_CHECK_EQUAL( moved->GetStart(), VECTOR2I( 0, 0 ) );
+    BOOST_CHECK_EQUAL( locked->GetStart(), VECTOR2I( 10 * MM, 0 ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentMoveSessionFallsBackAfterRejectedObject, DRAG_FIXTURE )
+{
+    PCB_SHAPE* moved = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* locked = addSegment( { 10 * MM, 0 }, { 20 * MM, 0 } );
+    locked->SetLocked( true );
+    addCoincident( moved, CONSTRAINT_ANCHOR::END, locked, CONSTRAINT_ANCHOR::START );
+
+    auto session = std::make_shared<BOARD_CONSTRAINT_MOVE_SESSION>();
+    BOOST_REQUIRE( session->Build( &board, { moved }, { 0, 0 } ) );
+
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 5 * MM, 0 };
+    SNAP_STABLE_ID objectId = testSnapId( "blocked" );
+    SNAP_STABLE_ID gridId = testSnapId( "grid-x", SNAP_ID_KIND::GRID_X );
+    SNAP_RESOLVER  resolver;
+    resolver.SetFeasibilityCallback(
+            [session]( const SNAP_SOURCE_CONTEXT& aContext, const std::vector<SNAP_CANDIDATE>& aCandidates )
+            {
+                return session->ResolveCandidates( aContext, aCandidates );
+            } );
+    resolver.AddCandidate( SNAP_CANDIDATE::Point( objectId, SNAP_PRIORITY_TIER::OBJECT,
+                                                  SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR, context.sourcePoint,
+                                                  0.0 ) );
+    resolver.AddCandidate(
+            SNAP_CANDIDATE::AxisX( gridId, SNAP_PRIORITY_TIER::GRID, SNAP_CANDIDATE_SUBTYPE::GRID_AXIS, 0, 1.0 ) );
+
+    SNAP_RESULT result = resolver.Resolve( context );
+    BOOST_REQUIRE( result.status == SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_CHECK( !result.Accepted( objectId ) );
+    BOOST_CHECK( result.Accepted( gridId ) );
+    BOOST_CHECK_EQUAL( result.position, VECTOR2I( 0, 0 ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentMoveSessionReportsEachAcceptedSnapOnce, DRAG_FIXTURE )
+{
+    PCB_SHAPE* moved = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* neighbor = addSegment( { 10 * MM, 0 }, { 20 * MM, 0 } );
+    addCoincident( moved, CONSTRAINT_ANCHOR::END, neighbor, CONSTRAINT_ANCHOR::START );
+
+    auto session = std::make_shared<BOARD_CONSTRAINT_MOVE_SESSION>();
+    BOOST_REQUIRE( session->Build( &board, { moved }, { 0, 0 } ) );
+
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 5 * MM, 0 };
+    SNAP_STABLE_ID targetId = testSnapId( "target" );
+    SNAP_CANDIDATE target = SNAP_CANDIDATE::Point( targetId, SNAP_PRIORITY_TIER::OBJECT,
+                                                   SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR, context.sourcePoint, 0.0 );
+    target.guides.push_back( { { 0, 0 }, context.sourcePoint } );
+
+    SNAP_RESOLVER resolver;
+    resolver.SetFeasibilityCallback(
+            [session]( const SNAP_SOURCE_CONTEXT& aContext, const std::vector<SNAP_CANDIDATE>& aCandidates )
+            {
+                return session->ResolveCandidates( aContext, aCandidates );
+            } );
+    resolver.AddCandidate( target );
+
+    // The resolver appends the id and the guides itself.  A session that reported them too would
+    // enter the snap in the sticky set twice and draw its guide twice every frame.
+    SNAP_RESULT result = resolver.Resolve( context );
+    BOOST_REQUIRE( result.status == SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_CHECK_EQUAL( std::count( result.accepted.begin(), result.accepted.end(), targetId ), 1 );
+    BOOST_CHECK_EQUAL( result.guides.size(), 1 );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentMoveSessionJointlySolvesAuthoredAndObjectManifolds, DRAG_FIXTURE )
+{
+    PCB_SHAPE* moved = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* guide = addSegment( { -20 * MM, 0 }, { 20 * MM, 0 } );
+    guide->SetLocked( true );
+
+    PCB_CONSTRAINT* onLine = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::POINT_ON_LINE );
+    onLine->AddMember( moved->m_Uuid, CONSTRAINT_ANCHOR::START );
+    onLine->AddMember( guide->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    board.Add( onLine );
+
+    BOARD_CONSTRAINT_MOVE_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, { moved }, { 0, 0 } ) );
+
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 5 * MM, 3 * MM };
+    SNAP_CANDIDATE vertical = SNAP_CANDIDATE::Line( testSnapId( "vertical" ), SNAP_PRIORITY_TIER::OBJECT,
+                                                    SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, { 5 * MM, -20 * MM },
+                                                    { 0.0, 40.0 * MM }, 0.0 );
+
+    SNAP_RESULT base = session.ResolveCandidates( context, {} );
+    BOOST_REQUIRE( base.status == SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_CHECK_EQUAL( base.position, VECTOR2I( 5 * MM, 0 ) );
+
+    SNAP_RESULT result = session.ResolveCandidates( context, { vertical } );
+    BOOST_REQUIRE( result.status == SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_REQUIRE_EQUAL( result.quantizedResiduals.size(), 1 );
+    BOOST_CHECK_EQUAL( result.quantizedResiduals.front(), 0.0 );
+    BOOST_CHECK_EQUAL( result.remainingDof, 1 );
+    BOOST_CHECK_EQUAL( result.position, VECTOR2I( 5 * MM, 0 ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentMoveSessionJointlySolvesDisconnectedClusters, DRAG_FIXTURE )
+{
+    PCB_SHAPE* first = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* firstGuide = addSegment( { -100 * MM, 0 }, { 100 * MM, 0 } );
+    PCB_SHAPE* second = addSegment( { 0, 10 * MM }, { 10 * MM, 10 * MM } );
+    PCB_SHAPE* secondGuide = addSegment( { -100 * MM, 9 * MM }, { 100 * MM, 11 * MM } );
+    firstGuide->SetLocked( true );
+    secondGuide->SetLocked( true );
+
+    PCB_CONSTRAINT* firstOnLine = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::POINT_ON_LINE );
+    firstOnLine->AddMember( first->m_Uuid, CONSTRAINT_ANCHOR::START );
+    firstOnLine->AddMember( firstGuide->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    board.Add( firstOnLine );
+
+    PCB_CONSTRAINT* secondOnLine = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::POINT_ON_LINE );
+    secondOnLine->AddMember( second->m_Uuid, CONSTRAINT_ANCHOR::START );
+    secondOnLine->AddMember( secondGuide->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    board.Add( secondOnLine );
+
+    BOARD_CONSTRAINT_MOVE_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, { first, second }, { 0, 0 } ) );
+
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 20 * MM, 5 * MM };
+    SNAP_RESULT result = session.ResolveCandidates( context, {} );
+
+    BOOST_REQUIRE( result.status == SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_CHECK_EQUAL( result.position, VECTOR2I( 0, 0 ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentDragSessionFindsJointlyFeasibleManifoldPoint, DRAG_FIXTURE )
+{
+    PCB_SHAPE* seg = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+
+    PCB_CONSTRAINT* horizontal = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::HORIZONTAL );
+    horizontal->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    board.Add( horizontal );
+
+    BOARD_CONSTRAINT_DRAG_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, CONSTRAINT_MEMBER( seg->m_Uuid, CONSTRAINT_ANCHOR::END ) ) );
+
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 6 * MM, 7 * MM };
+    SNAP_CANDIDATE manifold = SNAP_CANDIDATE::Line( testSnapId( "vertical" ), SNAP_PRIORITY_TIER::OBJECT,
+                                                    SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, { 6 * MM, -20 * MM },
+                                                    { 0.0, 40.0 * MM }, 0.0 );
+
+    SNAP_RESULT result = session.ResolveCandidates( context, { manifold } );
+
+    BOOST_REQUIRE( result.status == SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_CHECK_EQUAL( result.position.x, 6 * MM );
+    BOOST_CHECK_LE( std::abs( result.position.y ), 1000 );
+    BOOST_CHECK_EQUAL( seg->GetEnd(), VECTOR2I( 10 * MM, 0 ) );
+
+    manifold.origin = { -20 * MM, 20 * MM };
+    manifold.direction = { 40.0 * MM, 0.0 };
+    BOOST_CHECK( session.ResolveCandidates( context, { manifold } ).status == SNAP_RESULT_STATUS::INCOMPATIBLE );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PersistentDragSessionPreservesGeometryOnBaseConflict, DRAG_FIXTURE )
+{
+    PCB_SHAPE* seg = addSegment( { 0, 0 }, { 12 * MM, 0 } );
+
+    PCB_CONSTRAINT* length = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_LENGTH );
+    length->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    length->SetValue( 10.0 * MM );
+    board.Add( length );
+
+    BOARD_CONSTRAINT_DRAG_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, CONSTRAINT_MEMBER( seg->m_Uuid, CONSTRAINT_ANCHOR::END ) ) );
+
+    seg->SetEnd( { 20 * MM, 0 } );
+    CONSTRAINT_DIAGNOSIS diagnosis = session.Solve( { 20 * MM, 0 }, nullptr, {}, false, false );
+
+    BOOST_CHECK( !diagnosis.solved );
+    BOOST_CHECK_EQUAL( seg->GetEnd(), VECTOR2I( 12 * MM, 0 ) );
+    BOOST_CHECK( !session.IsExactFeasible( { 12 * MM, 0 } ) );
 }
 
 
@@ -324,6 +710,37 @@ BOOST_FIXTURE_TEST_CASE( MoveReSolveStagesNeighborsRevertRestores, DRAG_FIXTURE 
     BOOST_CHECK_EQUAL( a->GetStart(), aStart0 );
     BOOST_CHECK_EQUAL( a->GetEnd(), aEnd0 );
     BOOST_CHECK_EQUAL( b->GetStart(), bStart0 );
+}
+
+
+// Mouse-up pushes the last painted preview without another solve.  The pushed transaction must
+// therefore preserve every coordinate that was visible in the final preview frame.
+BOOST_FIXTURE_TEST_CASE( MoveCommitEqualsLastPaintedPreview, DRAG_FIXTURE )
+{
+    PCB_SHAPE* a = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* b = addSegment( { 10 * MM, 0 }, { 10 * MM, 10 * MM } );
+
+    addCoincident( a, CONSTRAINT_ANCHOR::END, b, CONSTRAINT_ANCHOR::START );
+
+    BOARD_COMMIT            commit( tool );
+    std::vector<PCB_SHAPE*> modified;
+
+    commit.Modify( a );
+    a->Move( { 2 * MM, 4 * MM } );
+
+    ReSolveShapeClusters( &board, { a }, &modified,
+                          [&]( BOARD_ITEM* aItem )
+                          {
+                              commit.Modify( aItem );
+                          } );
+
+    const std::array<VECTOR2I, 4> painted = { a->GetStart(), a->GetEnd(), b->GetStart(), b->GetEnd() };
+
+    commit.Push( wxT( "Move" ) );
+
+    const std::array<VECTOR2I, 4> committed = { a->GetStart(), a->GetEnd(), b->GetStart(), b->GetEnd() };
+
+    BOOST_CHECK_EQUAL_COLLECTIONS( committed.begin(), committed.end(), painted.begin(), painted.end() );
 }
 
 
@@ -703,7 +1120,7 @@ PCB_CONSTRAINT* addDrivingVertexLength( BOARD& aBoard, PCB_SHAPE* aShape, int aI
     aBoard.Add( c );
     return c;
 }
-}
+} // namespace
 
 
 // Driving width on top side must survive adjacent side drag where side handles used to bypass solver and violate length
@@ -909,15 +1326,20 @@ BOOST_FIXTURE_TEST_CASE( ArcCentreDragHoldsEndpoints, DRAG_FIXTURE )
 
     const VECTOR2I start0 = arc->GetStart();
     const VECTOR2I end0 = arc->GetEnd();
+    const int      radius0 = arc->GetRadius();
 
     std::vector<PCB_SHAPE*> modified;
     BOARD_COMMIT            commit( tool );
     SolveCluster( &board, { arc->m_Uuid, CONSTRAINT_ANCHOR::CENTER }, { 1 * MM, 1 * MM }, &modified,
-                  [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+                  [&]( BOARD_ITEM* aItem )
+                  {
+                      commit.Modify( aItem );
+                  } );
 
     BOOST_CHECK_LE( ( arc->GetStart() - start0 ).EuclideanNorm(), 20000.0 );
     BOOST_CHECK_LE( ( arc->GetEnd() - end0 ).EuclideanNorm(), 20000.0 );
     BOOST_CHECK( ( arc->GetCenter() - VECTOR2I( 0, 0 ) ).EuclideanNorm() > 100000.0 );
+    BOOST_CHECK_GT( std::abs( arc->GetRadius() - radius0 ), 100000 );
 }
 
 

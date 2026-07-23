@@ -875,8 +875,9 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        cursorPos = GetClampedCoords( grid.BestSnapAnchor( m_controls->GetMousePosition(),
-                                                           { m_frame->GetActiveLayer() }, GRID_GRAPHICS ),
+        cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(),
+                                                        { m_frame->GetActiveLayer() }, GRID_GRAPHICS )
+                                              .position,
                                       COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1076,7 +1077,8 @@ struct POINT_PLACER : public INTERACTIVE_PLACER_BASE
         KIGFX::VIEW_CONTROLS& viewControls = *m_drawingTool.GetManager()->GetViewControls();
         const VECTOR2I        position = viewControls.GetMousePosition();
 
-        VECTOR2I cursorPos = m_gridHelper.BestSnapAnchor( position, aItem->GetLayerSet() );
+        VECTOR2I cursorPos =
+                m_gridHelper.ResolveSnap( position, aItem->GetLayerSet() ).position;
         viewControls.ForceCursorPosition( true, cursorPos );
         aItem->SetPosition( cursorPos );
     }
@@ -1174,8 +1176,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = GetClampedCoords( grid.BestSnapAnchor( m_controls->GetMousePosition(),
-                                                                    { m_frame->GetActiveLayer() }, GRID_TEXT ),
+        VECTOR2I cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(),
+                                                                 { m_frame->GetActiveLayer() }, GRID_TEXT )
+                                                       .position,
                                                COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1417,8 +1420,9 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
         setCursor();
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = GetClampedCoords( grid.BestSnapAnchor( m_controls->GetMousePosition(),
-                                                                    { m_frame->GetActiveLayer() }, GRID_TEXT ),
+        VECTOR2I cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(),
+                                                                 { m_frame->GetActiveLayer() }, GRID_TEXT )
+                                                       .position,
                                                COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1651,8 +1655,9 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = GetClampedCoords( grid.BestSnapAnchor( m_controls->GetMousePosition(),
-                                                                    { m_frame->GetActiveLayer() }, GRID_TEXT ),
+        VECTOR2I cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(),
+                                                                 { m_frame->GetActiveLayer() }, GRID_TEXT )
+                                                       .position,
                                                COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -1850,7 +1855,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         }
 
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
-        cursorPos = GetClampedCoords( grid.BestSnapAnchor( cursorPos, nullptr, GRID_GRAPHICS ),
+        cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, nullptr, GRID_GRAPHICS ).position,
                                       COORDS_PADDING );
 
         m_controls->ForceCursorPosition( true, cursorPos );
@@ -2378,7 +2383,9 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        cursorPos = GetClampedCoords( grid.BestSnapAnchor( m_controls->GetMousePosition(), { layer }, GRID_GRAPHICS ),
+        cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(), { layer },
+                                                        GRID_GRAPHICS )
+                                              .position,
                                       COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -2481,7 +2488,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), LSET::AllLayersMask() );
+        VECTOR2I cursorPos =
+                grid.ResolveSnap( m_controls->GetMousePosition(), LSET::AllLayersMask() ).position;
         m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
@@ -2710,7 +2718,9 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         }
 
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        cursorPos = GetClampedCoords( grid.BestSnapAnchor( m_controls->GetMousePosition(), { m_layer }, GRID_GRAPHICS ),
+        cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(), { m_layer },
+                                                        GRID_GRAPHICS )
+                                              .position,
                                       COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -3177,8 +3187,9 @@ bool DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PC
             angleSnap = LEADER_MODE::DIRECT;
 
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        VECTOR2I cursorPos = GetClampedCoords( grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic,
-                                                                    GRID_GRAPHICS ),
+        VECTOR2I cursorPos = GetClampedCoords( grid.ResolveSnap( m_controls->GetMousePosition(), graphic,
+                                                                 GRID_GRAPHICS )
+                                                       .position,
                                                COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
@@ -3531,7 +3542,8 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         VECTOR2I cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
-        cursorPos = GetClampedCoords( grid.BestSnapAnchor( cursorPos, layers, GRID_GRAPHICS ), COORDS_PADDING );
+        cursorPos = GetClampedCoords(
+                grid.ResolveSnap( cursorPos, layers, GRID_GRAPHICS ).position, COORDS_PADDING );
 
         m_controls->ForceCursorPosition( true, cursorPos );
 

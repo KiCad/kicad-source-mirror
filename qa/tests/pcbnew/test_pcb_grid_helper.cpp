@@ -32,7 +32,10 @@
 class MOCK_BOARD_ITEM : public BOARD_ITEM
 {
 public:
-    MOCK_BOARD_ITEM( KICAD_T aType ) : BOARD_ITEM( nullptr, aType ) {}
+    MOCK_BOARD_ITEM( KICAD_T aType ) :
+            BOARD_ITEM( nullptr, aType )
+    {
+    }
 
     // Required virtual functions
     wxString GetClass() const override { return "MockEDAItem"; }
@@ -58,6 +61,13 @@ public:
         helper.SetSnap( true );
     }
 
+    static BOX2I LayoutBounds( const BOARD_ITEM& aItem ) { return PCB_GRID_HELPER::layoutBounds( aItem ); }
+
+    static SNAP_REFERENCE_PREFERENCE ClassifyReference( const VECTOR2I& aPoint, const BOX2I& aBounds, bool aPadCenter )
+    {
+        return PCB_GRID_HELPER::classifyReference( aPoint, aBounds, aPadCenter );
+    }
+
     PCB_GRID_HELPER helper;
 };
 
@@ -74,6 +84,49 @@ BOOST_AUTO_TEST_CASE( DefaultConstructor )
     // Test that GetSnapped returns nullptr initially
     BOOST_CHECK( helper.GetSnapped() == nullptr );
 }
+
+
+BOOST_AUTO_TEST_CASE( FootprintLayoutBoundsExcludeText )
+{
+    FOOTPRINT footprint( nullptr );
+    footprint.SetPosition( { 0, 0 } );
+    footprint.Reference().SetVisible( false );
+    footprint.Value().SetVisible( false );
+
+    PCB_SHAPE* rectangle = new PCB_SHAPE( &footprint, SHAPE_T::RECTANGLE );
+    rectangle->SetStart( { -1000, -500 } );
+    rectangle->SetEnd( { 1000, 500 } );
+    rectangle->SetLayer( F_Fab );
+    footprint.Add( rectangle, ADD_MODE::APPEND );
+
+    PCB_TEXT* text = new PCB_TEXT( &footprint );
+    text->SetText( wxString( "far away" ) );
+    text->SetTextPos( { 100000, 100000 } );
+    text->SetLayer( F_SilkS );
+    footprint.Add( text, ADD_MODE::APPEND );
+
+    BOOST_CHECK( PCBGridHelperTestFixture::LayoutBounds( footprint ) == footprint.GetBoundingBox( false ) );
+    BOOST_CHECK( PCBGridHelperTestFixture::LayoutBounds( footprint ) != footprint.GetBoundingBox( true ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( DragReferenceClassificationFollowsChosenPoint )
+{
+    BOX2I bounds( { 0, 0 }, { 100, 60 } );
+
+    SNAP_REFERENCE_PREFERENCE center = PCBGridHelperTestFixture::ClassifyReference( { 50, 30 }, bounds, false );
+    BOOST_CHECK( center.kind == SNAP_REFERENCE_KIND::BOUNDS_FEATURE );
+    BOOST_CHECK_EQUAL( center.horizontalFeature, 1 );
+    BOOST_CHECK_EQUAL( center.verticalFeature, 1 );
+
+    SNAP_REFERENCE_PREFERENCE topLeft = PCBGridHelperTestFixture::ClassifyReference( { 0, 0 }, bounds, false );
+    BOOST_CHECK_EQUAL( topLeft.horizontalFeature, 0 );
+    BOOST_CHECK_EQUAL( topLeft.verticalFeature, 0 );
+
+    SNAP_REFERENCE_PREFERENCE pad = PCBGridHelperTestFixture::ClassifyReference( { 0, 0 }, bounds, true );
+    BOOST_CHECK( pad.kind == SNAP_REFERENCE_KIND::ANCHOR_POINT );
+}
+
 
 BOOST_AUTO_TEST_CASE( AlignToSegmentBasic )
 {

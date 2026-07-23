@@ -138,7 +138,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
 
         if( !evt->IsActivate() && !evt->IsCancelInteractive() )
         {
-            cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
+            cursorPos = grid.ResolveSnap( cursorPos, nullptr ).position;
         }
         else
         {

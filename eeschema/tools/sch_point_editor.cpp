@@ -52,22 +52,90 @@ static const std::vector<KICAD_T> pointEditorTypes = { SCH_SHAPE_T,
                                                        SCH_BITMAP_T };
 
 
+static std::optional<SNAP_CANDIDATE> authoredSnapRelation( const EDIT_RELATION& aRelation )
+{
+    const SNAP_STABLE_ID id{ SNAP_ID_KIND::INTRINSIC_ANCHOR, {}, static_cast<int>( aRelation.Kind() ), 0 };
+    const EDIT_POINT*    reference = aRelation.Reference();
+
+    switch( aRelation.Kind() )
+    {
+    case EDIT_RELATION_KIND::SAME_X:
+        if( !reference )
+            return std::nullopt;
+
+        return SNAP_CANDIDATE::AxisX( id, SNAP_PRIORITY_TIER::AUTHORED_INTRINSIC,
+                                      SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR, reference->GetPosition().x, 0.0 );
+
+    case EDIT_RELATION_KIND::SAME_Y:
+        if( !reference )
+            return std::nullopt;
+
+        return SNAP_CANDIDATE::AxisY( id, SNAP_PRIORITY_TIER::AUTHORED_INTRINSIC,
+                                      SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR, reference->GetPosition().y, 0.0 );
+
+    case EDIT_RELATION_KIND::POINT_ON_LINE:
+        if( !reference )
+            return std::nullopt;
+
+        return SNAP_CANDIDATE::Line( id, SNAP_PRIORITY_TIER::AUTHORED_INTRINSIC,
+                                     SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, reference->GetPosition(),
+                                     aRelation.Direction(), 0.0 );
+
+    case EDIT_RELATION_KIND::POINT_ON_CIRCLE:
+    {
+        const EDIT_POINT* secondary = aRelation.SecondaryReference();
+
+        if( !reference || !secondary )
+            return std::nullopt;
+
+        SNAP_CANDIDATE candidate;
+        candidate.id = id;
+        candidate.priority = SNAP_PRIORITY_TIER::AUTHORED_INTRINSIC;
+        candidate.subtype = SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD;
+        candidate.relation = SNAP_RELATION::POINT_ON_CIRCLE;
+        candidate.origin = reference->GetPosition();
+        candidate.consumedDof = 1;
+        candidate.manifold =
+                CIRCLE( reference->GetPosition(), reference->GetPosition().Distance( secondary->GetPosition() ) );
+        return candidate;
+    }
+
+    case EDIT_RELATION_KIND::PERPENDICULAR_TRANSLATION:
+        return SNAP_CANDIDATE::Line( id, SNAP_PRIORITY_TIER::AUTHORED_INTRINSIC,
+                                     SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, aRelation.Origin(), aRelation.Direction(),
+                                     0.0 );
+
+    default: return std::nullopt;
+    }
+}
+
+
 // Few constants to avoid using bare numbers for point indices
 enum ARC_POINTS
 {
-    ARC_START, ARC_END, ARC_CENTER
+    ARC_START,
+    ARC_END,
+    ARC_CENTER
 };
 
 
 enum RECTANGLE_POINTS
 {
-    RECT_TOPLEFT, RECT_TOPRIGHT, RECT_BOTLEFT, RECT_BOTRIGHT, RECT_CENTER, RECT_RADIUS
+    RECT_TOPLEFT,
+    RECT_TOPRIGHT,
+    RECT_BOTLEFT,
+    RECT_BOTRIGHT,
+    RECT_CENTER,
+    RECT_RADIUS
 };
 
 
 enum RECTANGLE_LINES
 {
-    RECT_TOP, RECT_RIGHT, RECT_BOT, RECT_LEFT
+    RECT_TOP,
+    RECT_RIGHT,
+    RECT_BOT,
+    RECT_LEFT
 };
 
 
@@ -184,7 +252,8 @@ class BITMAP_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 public:
     BITMAP_POINT_EDIT_BEHAVIOR( SCH_BITMAP& aBitmap ) :
             m_bitmap( aBitmap )
-    {}
+    {
+    }
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -400,13 +469,13 @@ public:
         aPoints.Point( RECT_RADIUS ).SetDrawCircle();
 
         aPoints.AddLine( aPoints.Point( RECT_TOPLEFT ), aPoints.Point( RECT_TOPRIGHT ) );
-        aPoints.Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_TOP ) ) );
+        aPoints.Line( RECT_TOP ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_TOP ) ) );
         aPoints.AddLine( aPoints.Point( RECT_TOPRIGHT ), aPoints.Point( RECT_BOTRIGHT ) );
-        aPoints.Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_RIGHT ) ) );
+        aPoints.Line( RECT_RIGHT ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_RIGHT ) ) );
         aPoints.AddLine( aPoints.Point( RECT_BOTRIGHT ), aPoints.Point( RECT_BOTLEFT ) );
-        aPoints.Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_BOT ) ) );
+        aPoints.Line( RECT_BOT ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_BOT ) ) );
         aPoints.AddLine( aPoints.Point( RECT_BOTLEFT ), aPoints.Point( RECT_TOPLEFT ) );
-        aPoints.Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_LEFT ) ) );
+        aPoints.Line( RECT_LEFT ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_LEFT ) ) );
     }
 
     static void UpdatePoints( SCH_SHAPE& aRect, EDIT_POINTS& aPoints )
@@ -537,7 +606,7 @@ public:
         {
             if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
             {
-                aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
+                aPoints.Line( i ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( i ) ) );
             }
         }
     }
@@ -628,14 +697,14 @@ public:
         {
             if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
             {
-                aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
+                aPoints.Line( i ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( i ) ) );
             }
         }
     }
 
 private:
-    void dragPinsOnEdge( const std::vector<SEG>& aOldEdges, const std::vector<VECTOR2I>& aMoveVecs,
-                         int aEdgeUnit, COMMIT& aCommit, std::vector<EDA_ITEM*>& aUpdatedItems ) const
+    void dragPinsOnEdge( const std::vector<SEG>& aOldEdges, const std::vector<VECTOR2I>& aMoveVecs, int aEdgeUnit,
+                         COMMIT& aCommit, std::vector<EDA_ITEM*>& aUpdatedItems ) const
     {
         wxCHECK( aOldEdges.size() == aMoveVecs.size(), /* void */ );
 
@@ -710,7 +779,8 @@ class TEXTBOX_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
 public:
     TEXTBOX_POINT_EDIT_BEHAVIOR( SCH_TEXTBOX& aTextbox ) :
             m_textbox( aTextbox )
-    {}
+    {
+    }
 
     void MakePoints( EDIT_POINTS& aPoints ) override
     {
@@ -783,13 +853,13 @@ public:
         aPoints.AddPoint( botRight );
 
         aPoints.AddLine( aPoints.Point( RECT_TOPLEFT ), aPoints.Point( RECT_TOPRIGHT ) );
-        aPoints.Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_TOP ) ) );
+        aPoints.Line( RECT_TOP ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_TOP ) ) );
         aPoints.AddLine( aPoints.Point( RECT_TOPRIGHT ), aPoints.Point( RECT_BOTRIGHT ) );
-        aPoints.Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_RIGHT ) ) );
+        aPoints.Line( RECT_RIGHT ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_RIGHT ) ) );
         aPoints.AddLine( aPoints.Point( RECT_BOTRIGHT ), aPoints.Point( RECT_BOTLEFT ) );
-        aPoints.Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_BOT ) ) );
+        aPoints.Line( RECT_BOT ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_BOT ) ) );
         aPoints.AddLine( aPoints.Point( RECT_BOTLEFT ), aPoints.Point( RECT_TOPLEFT ) );
-        aPoints.Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_LEFT ) ) );
+        aPoints.Line( RECT_LEFT ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_LEFT ) ) );
     }
 
     bool UpdatePoints( EDIT_POINTS& aPoints ) override
@@ -859,7 +929,7 @@ public:
         {
             if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
             {
-                aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
+                aPoints.Line( i ).SetRelation( EDIT_RELATION::PerpendicularTranslation( aPoints.Line( i ) ) );
             }
         }
 
@@ -943,18 +1013,14 @@ void SCH_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
                 m_arcEditMode = cfg->m_Drawing.arc_edit_mode;
             }
 
-            m_editBehavior = std::make_unique<EDA_ARC_POINT_EDIT_BEHAVIOR>(
-                    *shape, m_arcEditMode, *getViewControls(), schIUScale );
+            m_editBehavior = std::make_unique<EDA_ARC_POINT_EDIT_BEHAVIOR>( *shape, m_arcEditMode, *getViewControls(),
+                                                                            schIUScale );
             break;
-        case SHAPE_T::CIRCLE:
-            m_editBehavior = std::make_unique<EDA_CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
-            break;
+        case SHAPE_T::CIRCLE: m_editBehavior = std::make_unique<EDA_CIRCLE_POINT_EDIT_BEHAVIOR>( *shape ); break;
         case SHAPE_T::RECTANGLE:
             m_editBehavior = std::make_unique<RECTANGLE_POINT_EDIT_BEHAVIOR>( *shape, *m_frame );
             break;
-        case SHAPE_T::POLY:
-            m_editBehavior = std::make_unique<EDA_POLYGON_POINT_EDIT_BEHAVIOR>( *shape );
-            break;
+        case SHAPE_T::POLY: m_editBehavior = std::make_unique<EDA_POLYGON_POINT_EDIT_BEHAVIOR>( *shape ); break;
         case SHAPE_T::BEZIER:
         {
             int maxError = schIUScale.mmToIU( ARC_LOW_DEF_MM );
@@ -1158,10 +1224,11 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER*       grid = new EE_GRID_HELPER( m_toolMgr );
-    VECTOR2I              cursorPos;
-    KIGFX::VIEW*          view = getView();
-    EDA_ITEM*             item = selection.Front();
-    SCH_COMMIT            commit( m_toolMgr );
+    grid->SetPointEditProfile( true );
+    VECTOR2I     cursorPos;
+    KIGFX::VIEW* view = getView();
+    EDA_ITEM*    item = selection.Front();
+    SCH_COMMIT   commit( m_toolMgr );
 
     controls->ShowCursor( true );
 
@@ -1192,7 +1259,7 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         if( !m_editPoints || evt->IsSelectionEvent() )
             break;
 
-        if ( !inDrag )
+        if( !inDrag )
             updateEditedPoint( *evt );
 
         if( evt->IsDrag( BUT_LEFT ) && m_editedPoint )
@@ -1216,13 +1283,149 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 inDrag = true;
             }
 
-            bool snap = !evt->DisableGridSnapping();
+            bool           snap = !evt->DisableGridSnapping();
+            VECTOR2I       rawPosition = controls->GetMousePosition();
+            EDIT_RELATION* relation = m_editedPoint->GetRelation();
+            bool           angleRelation = relation
+                                 && ( relation->Kind() == EDIT_RELATION_KIND::ANGLE_STEP_45
+                                      || relation->Kind() == EDIT_RELATION_KIND::ANGLE_STEP_90 );
 
-            cursorPos = grid->Align( controls->GetMousePosition(),
-                                     GRID_HELPER_GRIDS::GRID_GRAPHICS );
+            if( angleRelation && relation->Reference() )
+            {
+                grid->SetAngleRestriction( relation->Reference()->GetPosition(),
+                                           relation->Kind() == EDIT_RELATION_KIND::ANGLE_STEP_45 ? 45.0 : 90.0 );
+            }
+            else
+            {
+                grid->SetAngleRestriction( std::nullopt, 0.0 );
+            }
+
+            std::vector<VECTOR2I> stationarySelfPoints;
+            std::vector<SEG>      stationarySelfSegments;
+
+            if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+            {
+                int editedIndex = getEditedPointIndex();
+
+                if( shape->GetShape() == SHAPE_T::POLY )
+                {
+                    const EDIT_LINE* editedLine = dynamic_cast<const EDIT_LINE*>( m_editedPoint );
+
+                    for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
+                    {
+                        const EDIT_POINT& point = m_editPoints->Point( i );
+
+                        if( &point != m_editedPoint
+                            && ( !editedLine
+                                 || ( &point != &editedLine->GetOrigin() && &point != &editedLine->GetEnd() ) ) )
+                        {
+                            stationarySelfPoints.push_back( point.GetPosition() );
+                        }
+                    }
+
+                    for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
+                    {
+                        const EDIT_LINE& line = m_editPoints->Line( i );
+
+                        if( &line != editedLine && &line.GetOrigin() != m_editedPoint && &line.GetEnd() != m_editedPoint
+                            && ( !editedLine
+                                 || ( &line.GetOrigin() != &editedLine->GetOrigin()
+                                      && &line.GetOrigin() != &editedLine->GetEnd()
+                                      && &line.GetEnd() != &editedLine->GetOrigin()
+                                      && &line.GetEnd() != &editedLine->GetEnd() ) ) )
+                        {
+                            stationarySelfSegments.emplace_back( line.GetOrigin().GetPosition(),
+                                                                 line.GetEnd().GetPosition() );
+                        }
+                    }
+                }
+                else if( shape->GetShape() == SHAPE_T::RECTANGLE && editedIndex >= RECT_TOPLEFT
+                         && editedIndex <= RECT_BOTRIGHT )
+                {
+                    stationarySelfPoints.push_back( m_editPoints->Point( RECT_BOTRIGHT - editedIndex ).GetPosition() );
+                }
+                else if( shape->GetShape() == SHAPE_T::RECTANGLE )
+                {
+                    for( unsigned i = 0; i < m_editPoints->LinesSize() && i < 4; ++i )
+                    {
+                        if( m_editedPoint != &m_editPoints->Line( i ) )
+                            continue;
+
+                        const EDIT_LINE& opposite = m_editPoints->Line( ( i + 2 ) % 4 );
+                        stationarySelfPoints.push_back( opposite.GetOrigin().GetPosition() );
+                        stationarySelfPoints.push_back( opposite.GetEnd().GetPosition() );
+                        stationarySelfSegments.emplace_back( opposite.GetOrigin().GetPosition(),
+                                                             opposite.GetEnd().GetPosition() );
+                        break;
+                    }
+                }
+                else if( shape->GetShape() == SHAPE_T::ARC )
+                {
+                    constexpr int arcStart = 0;
+                    constexpr int arcMid = 1;
+                    constexpr int arcEnd = 2;
+                    constexpr int arcCenter = 3;
+
+                    if( m_arcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION )
+                    {
+                        if( editedIndex != arcStart )
+                            stationarySelfPoints.push_back( m_editPoints->Point( arcStart ).GetPosition() );
+
+                        if( editedIndex != arcEnd )
+                            stationarySelfPoints.push_back( m_editPoints->Point( arcEnd ).GetPosition() );
+                    }
+                    else if( editedIndex == arcStart || editedIndex == arcMid || editedIndex == arcEnd )
+                    {
+                        stationarySelfPoints.push_back( m_editPoints->Point( arcCenter ).GetPosition() );
+                    }
+                }
+            }
+
+            grid->SetStationarySelfGeometry( std::move( stationarySelfPoints ), std::move( stationarySelfSegments ) );
+            grid->SetFeasibilityCallback( {} );
+
+            if( relation && !angleRelation )
+            {
+                if( std::optional<SNAP_CANDIDATE> authored = authoredSnapRelation( *relation ) )
+                {
+                    grid->SetFeasibilityCallback(
+                            [authored = std::move( *authored )]( const SNAP_SOURCE_CONTEXT&         aContext,
+                                                                 const std::vector<SNAP_CANDIDATE>& aCandidates )
+                            {
+                                SNAP_RESOLVER resolver;
+                                resolver.AddCandidate( authored );
+
+                                for( const SNAP_CANDIDATE& candidate : aCandidates )
+                                    resolver.AddCandidate( candidate );
+
+                                SNAP_RESULT result = resolver.Resolve( aContext );
+
+                                if( !result.Accepted( authored.id ) )
+                                {
+                                    result.status = SNAP_RESULT_STATUS::BASE_CONFLICT;
+                                    return result;
+                                }
+
+                                for( const SNAP_CANDIDATE& candidate : aCandidates )
+                                {
+                                    if( !result.Accepted( candidate.id ) )
+                                    {
+                                        result.status = SNAP_RESULT_STATUS::INCOMPATIBLE;
+                                        break;
+                                    }
+                                }
+
+                                return result;
+                            } );
+                }
+            }
+
+            m_editedPoint->SetPosition(
+                    grid->ResolveSnap( rawPosition, GRID_HELPER_GRIDS::GRID_GRAPHICS, static_cast<SCH_ITEM*>( item ) )
+                            .position );
+
+            cursorPos = m_editedPoint->GetPosition();
             controls->ForceCursorPosition( true, cursorPos );
-
-            m_editedPoint->SetPosition( controls->GetCursorPosition( snap ) );
 
             updateParentItem( snap, commit );
             updatePoints();
@@ -1490,7 +1693,7 @@ int SCH_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     if( idx == 0 && poly.GetPoint( 0 ) == poly.GetPoint( last ) )
     {
         poly.Remove( idx );
-        poly.SetPoint( last-1, poly.GetPoint( 0 ) );
+        poly.SetPoint( last - 1, poly.GetPoint( 0 ) );
     }
     else
     {

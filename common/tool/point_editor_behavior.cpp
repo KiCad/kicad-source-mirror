@@ -48,7 +48,8 @@ void POLYGON_POINT_EDIT_BEHAVIOR::BuildForPolyOutline( EDIT_POINTS&          aPo
         else
             aPoints.AddLine( aPoints.Point( i ), aPoints.Point( i + 1 ) );
 
-        aPoints.Line( i ).SetConstraint( new EC_CONVERGING( aPoints.Line( i ), aPoints ) );
+        aPoints.Line( i ).SetDragPolicy(
+                std::make_unique<POLYGON_EDGE_DRAG_POLICY>( aPoints.Line( i ), aPoints ) );
     }
 
     // The last missing line, connecting the last and the first polygon point
@@ -56,7 +57,8 @@ void POLYGON_POINT_EDIT_BEHAVIOR::BuildForPolyOutline( EDIT_POINTS&          aPo
                      aPoints.Point( aPoints.GetContourStartIdx( cornersCount - 1 ) ) );
 
     aPoints.Line( aPoints.LinesSize() - 1 )
-            .SetConstraint( new EC_CONVERGING( aPoints.Line( aPoints.LinesSize() - 1 ), aPoints ) );
+            .SetDragPolicy( std::make_unique<POLYGON_EDGE_DRAG_POLICY>(
+                    aPoints.Line( aPoints.LinesSize() - 1 ), aPoints ) );
 }
 
 
@@ -90,7 +92,8 @@ void POLYGON_POINT_EDIT_BEHAVIOR::UpdateOutlineFromPoints( SHAPE_POLY_SET&   aOu
     for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
     {
         if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
-            aPoints.Line( i ).SetConstraint( new EC_CONVERGING( aPoints.Line( i ), aPoints ) );
+            aPoints.Line( i ).SetDragPolicy(
+                    std::make_unique<POLYGON_EDGE_DRAG_POLICY>( aPoints.Line( i ), aPoints ) );
     }
 }
 

@@ -19,11 +19,25 @@
 #include <boost/test/unit_test.hpp>
 
 #include <tool/grid_helper.h>
+#include <tool/snap_frame.h>
 
 void TEST_CLEAR_ANCHORS( GRID_HELPER& helper )
 {
     helper.clearAnchors();
 }
+
+
+namespace
+{
+class TEST_GRID_HELPER : public GRID_HELPER
+{
+public:
+    using GRID_HELPER::applySnapResultGuides;
+
+    const std::vector<SEG>& DimensionBrackets() { return getSnapManager().GetViewItem().DimensionBrackets(); }
+};
+} // namespace
+
 
 BOOST_AUTO_TEST_SUITE( GridHelperTest )
 
@@ -48,6 +62,66 @@ BOOST_AUTO_TEST_CASE( DefaultConstructor )
     BOOST_CHECK_EQUAL( origin.x, 50 );
     BOOST_CHECK_EQUAL( origin.y, 50 );
 }
+
+
+BOOST_AUTO_TEST_CASE( SnapResultGuideUpdateClearsStaleDimensionBrackets )
+{
+    TEST_GRID_HELPER helper;
+    SNAP_RESULT      equalGap;
+    equalGap.guides = { { { 0, 0 }, { 5, 0 }, SNAP_GUIDE_STYLE::DIMENSION_BRACKET },
+                        { { 10, 0 }, { 15, 0 }, SNAP_GUIDE_STYLE::DIMENSION_BRACKET } };
+
+    helper.applySnapResultGuides( equalGap );
+    BOOST_REQUIRE_EQUAL( helper.DimensionBrackets().size(), 2 );
+
+    SNAP_RESULT alignment;
+    alignment.guides = { { { 0, 0 }, { 0, 10 }, SNAP_GUIDE_STYLE::SNAP_LINE } };
+    helper.applySnapResultGuides( alignment );
+    BOOST_CHECK( helper.DimensionBrackets().empty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( SnapFrameSelectsPayloadForAcceptedId )
+{
+    const SNAP_STABLE_ID  rejectedId = MakePointSnapId( SNAP_ID_KIND::INTRINSIC_ANCHOR, { 10, 10 }, 1 );
+    const SNAP_STABLE_ID  acceptedId = MakePointSnapId( SNAP_ID_KIND::INTRINSIC_ANCHOR, { 10, 10 }, 2 );
+    SNAP_FRAME_INPUT<int> input;
+    input.context.sourcePoint = { 9, 9 };
+    input.candidates.push_back( SNAP_CANDIDATE::Point( rejectedId, SNAP_PRIORITY_TIER::OBJECT,
+                                                       SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR, { 10, 10 }, 0.1 ) );
+    input.candidates.push_back( SNAP_CANDIDATE::Point( acceptedId, SNAP_PRIORITY_TIER::OBJECT,
+                                                       SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR, { 10, 10 }, 0.1 ) );
+    input.presentation.emplace( rejectedId, 1 );
+    input.presentation.emplace( acceptedId, 2 );
+    input.feasibility =
+            [rejectedId]( const SNAP_SOURCE_CONTEXT& aContext, const std::vector<SNAP_CANDIDATE>& aCandidates )
+    {
+        SNAP_RESULT result;
+        result.position = aContext.sourcePoint;
+
+        if( aCandidates.empty() )
+            return result;
+
+        if( aCandidates.back().id == rejectedId )
+        {
+            result.status = SNAP_RESULT_STATUS::INCOMPATIBLE;
+            return result;
+        }
+
+        result.position = { 10, 10 };
+        result.remainingDof = 0;
+        return result;
+    };
+
+    SNAP_FRAME_OUTPUT<int> output = ResolveSnapFrame( std::move( input ) );
+
+    BOOST_REQUIRE_EQUAL( output.result.accepted.size(), 1 );
+    BOOST_CHECK( output.result.accepted.front() == acceptedId );
+    BOOST_REQUIRE( output.presentation );
+    BOOST_CHECK( output.presentation->id == acceptedId );
+    BOOST_CHECK_EQUAL( output.presentation->payload, 2 );
+}
+
 
 BOOST_AUTO_TEST_CASE( AlignBasic )
 {
@@ -464,9 +538,8 @@ BOOST_AUTO_TEST_CASE( MovementFromOffGridAnchor )
             VECTOR2D offsetD( 0, 0 );
 
             // Simulate the cursor snapping to grid at the target mouse position. This is
-            // what BestSnapAnchor does during the move loop.
-            VECTOR2I snappedTarget = helper.AlignGrid( VECTOR2I( tc.mouseTargetX, tc.mouseTargetY ),
-                                                       gridD, offsetD );
+            // what ResolveSnap does during the move loop.
+            VECTOR2I snappedTarget = helper.AlignGrid( VECTOR2I( tc.mouseTargetX, tc.mouseTargetY ), gridD, offsetD );
 
             // The movement delta starts from the actual anchor (off-grid), not a grid-snapped ref
             VECTOR2I anchor( tc.anchorX, tc.anchorY );

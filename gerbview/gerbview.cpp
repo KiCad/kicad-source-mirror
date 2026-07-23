@@ -37,6 +37,7 @@
 #include <dialogs/panel_gerbview_display_options.h>
 #include <dialogs/panel_gerbview_excellon_settings.h>
 #include <dialogs/panel_grid_settings.h>
+#include <dialogs/panel_snapping.h>
 #include <dialogs/panel_gerbview_color_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/ffile.h>
@@ -86,6 +87,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
             return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_GERBER );
         }
+
+        case PANEL_GBR_SNAPPING:
+            return CreateSnappingPanel( aParent, GetAppSettings<GERBVIEW_SETTINGS>( "gerbview" ), FRAME_GERBER );
 
         case PANEL_GBR_COLORS: return new PANEL_GERBVIEW_COLOR_SETTINGS( aParent );
 

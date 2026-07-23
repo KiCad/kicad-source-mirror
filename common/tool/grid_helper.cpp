@@ -19,15 +19,17 @@
 
 #include "tool/grid_helper.h"
 
+#include <array>
 #include <functional>
 #include <cmath>
 #include <limits>
+#include <numbers>
 
 #include <advanced_config.h>
 #include <trace_helpers.h>
 #include <wx/log.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <math/util.h>      // for KiROUND
+#include <math/util.h> // for KiROUND
 #include <math/vector2d.h>
 #include <tool/tool_manager.h>
 #include <tool/tools_holder.h>
@@ -84,7 +86,9 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, int aConstructionLayer ) :
                     view->SetVisible( &m_constructionGeomPreview, aAnythingShown );
                 }
 
-                m_toolMgr->GetToolHolder()->RefreshCanvas();
+                // Headless tests and benchmarks have a view but no canvas holder.
+                if( TOOLS_HOLDER* holder = m_toolMgr->GetToolHolder() )
+                    holder->RefreshCanvas();
             } );
 
     // Initialise manual values from view for compatibility
@@ -156,16 +160,92 @@ void GRID_HELPER::ClearSnapLine()
 }
 
 
-std::optional<VECTOR2I> GRID_HELPER::SnapToConstructionLines( const VECTOR2I& aPoint,
-                                                              const VECTOR2I& aNearestGrid,
-                                                              const VECTOR2D& aGrid,
-                                                              double aSnapRange ) const
+void GRID_HELPER::applySnapResultGuides( const SNAP_RESULT& aResult )
+{
+    std::vector<SEG>  dimensionBrackets;
+    const SNAP_GUIDE* snapLine = nullptr;
+
+    for( const SNAP_GUIDE& guide : aResult.guides )
+    {
+        if( guide.style == SNAP_GUIDE_STYLE::DIMENSION_BRACKET )
+        {
+            dimensionBrackets.emplace_back( guide.start, guide.end );
+            wxLogTrace( wxT( "KICAD_SNAP_RESOLVER" ), "bracket axis=%c start=(%d,%d) end=(%d,%d)",
+                        guide.start.x == guide.end.x ? 'y' : 'x', guide.start.x, guide.start.y, guide.end.x,
+                        guide.end.y );
+        }
+        else if( !snapLine )
+        {
+            snapLine = &guide;
+        }
+    }
+
+    m_snapManager.SetDimensionBrackets( std::move( dimensionBrackets ) );
+
+    if( snapLine )
+    {
+        SNAP_LINE_MANAGER& manager = m_snapManager.GetSnapLineManager();
+        manager.SetSnapLineOrigin( snapLine->start );
+        manager.SetSnapLineEnd( snapLine->end );
+    }
+}
+
+
+SNAP_REFERENCE_PREFERENCE GRID_HELPER::classifyReference( const VECTOR2I& aPoint, const BOX2I& aBounds,
+                                                          bool aAnchorPoint )
+{
+    if( aAnchorPoint )
+        return { SNAP_REFERENCE_KIND::ANCHOR_POINT, -1, -1 };
+
+    const std::array<int, 3> xFeatures = { aBounds.GetLeft(), aBounds.Centre().x, aBounds.GetRight() };
+    const std::array<int, 3> yFeatures = { aBounds.GetTop(), aBounds.Centre().y, aBounds.GetBottom() };
+    const auto               nearestFeature = []( int aCoordinate, const std::array<int, 3>& aFeatures )
+    {
+        int best = 0;
+
+        for( int index = 1; index < 3; ++index )
+        {
+            if( std::abs( aCoordinate - aFeatures[index] ) < std::abs( aCoordinate - aFeatures[best] ) )
+            {
+                best = index;
+            }
+        }
+
+        return best;
+    };
+
+    return { SNAP_REFERENCE_KIND::BOUNDS_FEATURE, nearestFeature( aPoint.x, xFeatures ),
+             nearestFeature( aPoint.y, yFeatures ) };
+}
+
+
+void GRID_HELPER::setLayoutReference( const VECTOR2I& aPoint, const std::optional<BOX2I>& aBounds, bool aAnchorPoint )
+{
+    if( aBounds )
+        m_layoutReferencePreference = classifyReference( aPoint, *aBounds, aAnchorPoint );
+    else
+        m_layoutReferencePreference = {};
+
+    const char* referenceKind = "none";
+
+    if( m_layoutReferencePreference.kind == SNAP_REFERENCE_KIND::BOUNDS_FEATURE )
+        referenceKind = "bounds";
+    else if( m_layoutReferencePreference.kind == SNAP_REFERENCE_KIND::ANCHOR_POINT )
+        referenceKind = "anchor-point";
+
+    wxLogTrace( wxT( "KICAD_SNAP_RESOLVER" ), "drag reference kind=%s x-feature=%d y-feature=%d", referenceKind,
+                m_layoutReferencePreference.horizontalFeature, m_layoutReferencePreference.verticalFeature );
+}
+
+
+std::optional<VECTOR2I> GRID_HELPER::SnapToConstructionLines( const VECTOR2I& aPoint, const VECTOR2I& aNearestGrid,
+                                                              const VECTOR2D& aGrid, double aSnapRange ) const
 {
     const SNAP_LINE_MANAGER& snapLineManager = m_snapManager.GetSnapLineManager();
     const OPT_VECTOR2I&      snapOrigin = snapLineManager.GetSnapLineOrigin();
 
-    wxLogTrace( traceSnap, "SnapToConstructionLines: aPoint=(%d, %d), nearestGrid=(%d, %d), snapRange=%.1f",
-                aPoint.x, aPoint.y, aNearestGrid.x, aNearestGrid.y, aSnapRange );
+    wxLogTrace( traceSnap, "SnapToConstructionLines: aPoint=(%d, %d), nearestGrid=(%d, %d), snapRange=%.1f", aPoint.x,
+                aPoint.y, aNearestGrid.x, aNearestGrid.y, aSnapRange );
 
     if( !snapOrigin || snapLineManager.GetDirections().empty() )
     {
@@ -237,16 +317,16 @@ std::optional<VECTOR2I> GRID_HELPER::SnapToConstructionLines( const VECTOR2I& aP
                 // Vertical construction line: snap to grid intersection
                 candidate.x = origin.x;
                 candidate.y = aNearestGrid.y;
-                wxLogTrace( traceSnap, "      Vertical snap: candidate=(%d, %d)",
-                            (int)candidate.x, (int)candidate.y );
+                wxLogTrace( traceSnap, "      Vertical snap: candidate=(%d, %d)", (int) candidate.x,
+                            (int) candidate.y );
             }
             else if( dir.y == 0 && dir.x != 0 )
             {
                 // Horizontal construction line: snap to grid intersection
                 candidate.x = aNearestGrid.x;
                 candidate.y = origin.y;
-                wxLogTrace( traceSnap, "      Horizontal snap: candidate=(%d, %d)",
-                            (int)candidate.x, (int)candidate.y );
+                wxLogTrace( traceSnap, "      Horizontal snap: candidate=(%d, %d)", (int) candidate.x,
+                            (int) candidate.y );
             }
             else
             {
@@ -491,4 +571,142 @@ std::optional<VECTOR2I> GRID_HELPER::GetSnappedPoint() const
         return m_snapItem->pos;
 
     return std::nullopt;
+}
+
+
+GRID_HELPER::SNAP_RANGES GRID_HELPER::computeSnapRanges( bool aClampToVisibleGrid ) const
+{
+    KIGFX::VIEW* view = m_toolMgr->GetView();
+    SNAP_RANGES  ranges;
+
+    ranges.scale = view->ToWorld( SNAP_SCREEN_RADIUS );
+
+    // GetVisibleGrid().x sometimes exceeds INT_MAX, so the comparison stays in double.
+    ranges.range = KiROUND( aClampToVisibleGrid ? std::min( ranges.scale, GetVisibleGrid().x ) : ranges.scale );
+
+    const double hysteresisPixels = ADVANCED_CFG::GetCfg().m_SnapHysteresis;
+    const int    hysteresisWorld = KiROUND( view->ToWorld( hysteresisPixels ) );
+
+    ranges.in = std::max( 0, ranges.range - hysteresisWorld );
+    ranges.out = ranges.range + hysteresisWorld;
+    ranges.rankingHysteresis = hysteresisPixels / SNAP_SCREEN_RADIUS;
+
+    return ranges;
+}
+
+
+void GRID_HELPER::emitAngleBranchCandidates( std::vector<SNAP_CANDIDATE>& aCandidates, const VECTOR2I& aOrigin,
+                                             double aSnapScale ) const
+{
+    if( !m_angleOrigin || m_angleStepDegrees <= 0.0 || aOrigin == *m_angleOrigin )
+        return;
+
+    VECTOR2D delta( aOrigin - *m_angleOrigin );
+    double   step = m_angleStepDegrees * std::numbers::pi / 180.0;
+    double   rawAngle = std::atan2( delta.y, delta.x );
+    int      lowerBranch = static_cast<int>( std::floor( rawAngle / step ) );
+
+    for( int branch : { lowerBranch, lowerBranch + 1 } )
+    {
+        double   angle = branch * step;
+        VECTOR2D direction( std::cos( angle ), std::sin( angle ) );
+        double   residual = std::abs( delta.x * direction.y - delta.y * direction.x ) / aSnapScale;
+        aCandidates.push_back( SNAP_CANDIDATE::Line( { SNAP_ID_KIND::ANGLE_BRANCH, {}, 0, branch },
+                                                     SNAP_PRIORITY_TIER::ANGLE, SNAP_CANDIDATE_SUBTYPE::ANGLE_BRANCH,
+                                                     *m_angleOrigin, direction, residual ) );
+    }
+}
+
+
+SNAP_RESOLVER::TRACE_CALLBACK GRID_HELPER::snapTraceCallback( const SNAP_SOURCE_CONTEXT& aContext ) const
+{
+    static const wxString traceCategory = wxT( "KICAD_SNAP_RESOLVER" );
+    const auto            callback = []( const std::string& aMessage )
+    {
+        wxLogTrace( traceCategory, "%s", aMessage.c_str() );
+    };
+
+    if( !wxLog::IsAllowedTraceMask( traceCategory ) )
+        return {};
+
+    if( !aContext.movingBounds )
+    {
+        wxLogTrace( traceCategory, "context raw=(%d,%d) reference=none bounds=none", aContext.sourcePoint.x,
+                    aContext.sourcePoint.y );
+        return callback;
+    }
+
+    BOX2I projectedBounds = *aContext.movingBounds;
+
+    if( aContext.movingReferencePoint )
+        projectedBounds.Offset( aContext.sourcePoint - *aContext.movingReferencePoint );
+
+    wxLogTrace( traceCategory, "context raw=(%d,%d) reference=(%d,%d) bounds=(%d,%d,%d,%d) projected=(%d,%d,%d,%d)",
+                aContext.sourcePoint.x, aContext.sourcePoint.y,
+                aContext.movingReferencePoint ? aContext.movingReferencePoint->x : aContext.sourcePoint.x,
+                aContext.movingReferencePoint ? aContext.movingReferencePoint->y : aContext.sourcePoint.y,
+                aContext.movingBounds->GetLeft(), aContext.movingBounds->GetTop(), aContext.movingBounds->GetRight(),
+                aContext.movingBounds->GetBottom(), projectedBounds.GetLeft(), projectedBounds.GetTop(),
+                projectedBounds.GetRight(), projectedBounds.GetBottom() );
+
+    return callback;
+}
+
+
+void GRID_HELPER::emitSelfAndGridCandidates( std::vector<SNAP_CANDIDATE>& aCandidates,
+                                             const SNAP_SOURCE_CONTEXT& aContext, const VECTOR2I& aOrigin,
+                                             const VECTOR2I& aNearestGrid, double aSnapScale, int aSnapRange,
+                                             bool aUseGrid ) const
+{
+    const bool pointEdit = aContext.profile == SNAP_EDITOR_PROFILE::POINT_EDIT && aContext.movingItem;
+
+    if( pointEdit && aContext.stationarySourceLeg
+        && aContext.stationarySourceLeg->Distance( aOrigin ) <= aSnapRange )
+    {
+        SNAP_STABLE_ID id = MakeDerivedSnapId( SNAP_ID_KIND::SELF_ENDPOINT, *aContext.movingItem );
+        aCandidates.push_back( SNAP_CANDIDATE::Point(
+                std::move( id ), SNAP_PRIORITY_TIER::OBJECT, SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR,
+                *aContext.stationarySourceLeg, aContext.stationarySourceLeg->Distance( aOrigin ) / aSnapScale ) );
+    }
+
+    if( pointEdit )
+    {
+        for( size_t i = 0; i < m_stationarySelfPoints.size(); ++i )
+        {
+            if( m_stationarySelfPoints[i].Distance( aOrigin ) > aSnapRange )
+                continue;
+
+            SNAP_STABLE_ID id =
+                    MakeDerivedSnapId( SNAP_ID_KIND::SELF_POINT, *aContext.movingItem, static_cast<int>( i ) );
+            aCandidates.push_back( SNAP_CANDIDATE::Point(
+                    std::move( id ), SNAP_PRIORITY_TIER::OBJECT, SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR,
+                    m_stationarySelfPoints[i], m_stationarySelfPoints[i].Distance( aOrigin ) / aSnapScale ) );
+        }
+    }
+
+    if( aUseGrid )
+    {
+        aCandidates.push_back( SNAP_CANDIDATE::AxisX( { SNAP_ID_KIND::GRID_X }, SNAP_PRIORITY_TIER::GRID,
+                                                      SNAP_CANDIDATE_SUBTYPE::GRID_AXIS, aNearestGrid.x,
+                                                      std::abs( aNearestGrid.x - aOrigin.x ) / aSnapScale ) );
+        aCandidates.push_back( SNAP_CANDIDATE::AxisY( { SNAP_ID_KIND::GRID_Y }, SNAP_PRIORITY_TIER::GRID,
+                                                      SNAP_CANDIDATE_SUBTYPE::GRID_AXIS, aNearestGrid.y,
+                                                      std::abs( aNearestGrid.y - aOrigin.y ) / aSnapScale ) );
+    }
+}
+
+
+void GRID_HELPER::retainAcceptedSnaps( const SNAP_RESULT& aResult )
+{
+    m_stickySnapIds = aResult.accepted;
+    m_retainedAngleBranch.reset();
+
+    for( const SNAP_STABLE_ID& id : aResult.accepted )
+    {
+        if( id.kind == SNAP_ID_KIND::ANGLE_BRANCH )
+        {
+            m_retainedAngleBranch = id;
+            break;
+        }
+    }
 }

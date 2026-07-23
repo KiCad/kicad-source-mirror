@@ -111,6 +111,16 @@ public:
         m_timer.Stop();
     }
 
+    template <typename Func>
+    void InspectPendingProposal( Func&& aFunc ) const
+    {
+        std::lock_guard<std::mutex> lock( m_mutex );
+
+        // The callback observes protected state and must not retain it or re-enter this helper.
+        if( m_pendingProposalTag )
+            aFunc( m_lastProposal );
+    }
+
 private:
     /**
      * Timer expiry callback in the UI thread.
@@ -222,28 +232,12 @@ void CONSTRUCTION_MANAGER::ProposeConstructionItems(
         return;
     }
 
-    bool acceptImmediately = false;
-
-    {
-        std::lock_guard<std::mutex> lock( m_batchesMutex );
-
-        if( aIsPersistent )
-        {
-            acceptImmediately = true;
-        }
-        else
-        {
-            // If the batch is temporary, we can accept it immediately if there's room
-            acceptImmediately = m_temporaryConstructionBatches.size() < getMaxTemporaryBatches();
-        }
-    }
-
     auto pendingBatch =
             std::make_unique<PENDING_BATCH>( PENDING_BATCH{ std::move( *aBatch ), aIsPersistent } );
     const std::size_t hash = HashConstructionBatchSources( pendingBatch->Batch, aIsPersistent );
 
     // Immediate or not, propose the batch via the activation helper as this handles duplicates
-    m_activationHelper->ProposeActivation( std::move( pendingBatch ), hash, acceptImmediately );
+    m_activationHelper->ProposeActivation( std::move( pendingBatch ), hash, aIsPersistent );
 }
 
 
@@ -381,6 +375,17 @@ void CONSTRUCTION_MANAGER::GetConstructionItems(
     {
         aToExtend.push_back( batch );
     }
+}
+
+
+void CONSTRUCTION_MANAGER::GetPendingConstructionItems( std::vector<CONSTRUCTION_ITEM_BATCH>& aToExtend ) const
+{
+    m_activationHelper->InspectPendingProposal(
+            [&]( const std::unique_ptr<PENDING_BATCH>& aPending )
+            {
+                if( aPending )
+                    aToExtend.push_back( aPending->Batch );
+            } );
 }
 
 
@@ -757,11 +762,23 @@ void SNAP_MANAGER::updateView()
     {
         bool showAnything = m_constructionManager.HasActiveConstruction()
                             || m_snapLineManager.HasCompleteSnapLine()
+                            || GetViewItem().HasDimensionBrackets()
                             || ( m_snapLineManager.GetSnapLineOrigin()
                                  && !m_snapLineManager.GetDirections().empty() );
 
         m_updateCallback( showAnything );
     }
+}
+
+
+void SNAP_MANAGER::SetDimensionBrackets( std::vector<SEG> aBrackets )
+{
+    // Every resolve calls this, so an unchanged set must not force a canvas refresh.
+    if( aBrackets == GetViewItem().DimensionBrackets() )
+        return;
+
+    GetViewItem().SetDimensionBrackets( std::move( aBrackets ) );
+    updateView();
 }
 
 
@@ -882,5 +899,6 @@ void SNAP_MANAGER::Clear()
 {
     m_snapLineManager.ClearSnapLine();
     m_constructionManager.Clear();
+    GetViewItem().SetDimensionBrackets( {} );
     UpdateSnapGuides();
 }

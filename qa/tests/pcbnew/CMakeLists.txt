@@ -265,6 +265,10 @@ set( QA_PCBNEW_SRCS
 
     # Geometric constraint solver (planegcs adapter)
     constraints/test_planegcs_smoke.cpp
+    constraints/test_constraint_system_2d.cpp
+    constraints/test_snap_resolver.cpp
+    constraints/test_snap_inference.cpp
+    constraints/test_pcb_snap_pipeline.cpp
     constraints/test_pcb_constraint.cpp
     constraints/test_constraint_ownership.cpp
     constraints/test_constraint_commit.cpp

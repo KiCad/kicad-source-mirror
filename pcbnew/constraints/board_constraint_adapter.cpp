@@ -55,7 +55,7 @@ static constexpr int MAX_SOLVE_ITERATIONS = 100;
 // Shares the drag and stabilize temporary subsystem kept far weaker so it only fills the null space
 // and never fights a real drive or cursor pin
 static constexpr double STAY_PUT_WEIGHT = 1e-4;
-
+static constexpr double CURSOR_WEIGHT = 1e-2;
 
 
 // Every constraint owned by the board or by any of its footprints.  In the footprint editor the
@@ -285,24 +285,37 @@ static double arcSweepTarget( double aStartAngle, double aEndAngle, double aSwee
 
 
 BOARD_CONSTRAINT_ADAPTER::BOARD_CONSTRAINT_ADAPTER() :
-        m_gcs( std::make_unique<GCS::System>() )
+        m_gcs( &m_system.Solver() ),
+        m_params( m_system.ParameterStorage() )
 {
 }
 
 
 BOARD_CONSTRAINT_ADAPTER::~BOARD_CONSTRAINT_ADAPTER()
 {
-    // GCS::System frees the Constraint objects it owns; m_params outlives it (member order).
-    m_gcs->clear();
 }
 
 
 int BOARD_CONSTRAINT_ADAPTER::pushParam( double aValue )
 {
-    // Pin and hold targets pushed here never reclaimed since the deque cannot shrink while GCS holds
-    // pointers into it and growth stays bounded since every caller builds a fresh adapter per solve
-    m_params.push_back( aValue );
-    return static_cast<int>( m_params.size() ) - 1;
+    return m_system.AddParameter( aValue );
+}
+
+
+int BOARD_CONSTRAINT_ADAPTER::temporaryParam( double aValue )
+{
+    if( m_nextTemporaryParam == m_temporaryParams.size() )
+        m_temporaryParams.push_back( pushParam( aValue ) );
+
+    int index = m_temporaryParams[m_nextTemporaryParam++];
+    m_params[index] = aValue;
+    return index;
+}
+
+
+void BOARD_CONSTRAINT_ADAPTER::beginTemporaryParameters()
+{
+    m_nextTemporaryParam = 0;
 }
 
 
@@ -396,7 +409,8 @@ void BOARD_CONSTRAINT_ADAPTER::ApplyReferenceValues( const std::function<void( B
 
             const PCB_SHAPE* shapeB = other->second.shape;
             value = MeasureCornerAngle( SEG( shape->GetStart(), shape->GetEnd() ),
-                                        SEG( shapeB->GetStart(), shapeB->GetEnd() ) ).AsDegrees();
+                                        SEG( shapeB->GetStart(), shapeB->GetEnd() ) )
+                            .AsDegrees();
             tol = 1e-3;
             break;
         }
@@ -426,8 +440,7 @@ void BOARD_CONSTRAINT_ADAPTER::ApplyReferenceValues( const std::function<void( B
 }
 
 
-BOARD_CONSTRAINT_ADAPTER::ANCHOR_PARAMS
-BOARD_CONSTRAINT_ADAPTER::anchorParams( const CONSTRAINT_MEMBER& aMember ) const
+BOARD_CONSTRAINT_ADAPTER::ANCHOR_PARAMS BOARD_CONSTRAINT_ADAPTER::anchorParams( const CONSTRAINT_MEMBER& aMember ) const
 {
     auto it = m_shapeVars.find( aMember.m_item );
 
@@ -493,16 +506,14 @@ BOARD_CONSTRAINT_ADAPTER::anchorParams( const CONSTRAINT_MEMBER& aMember ) const
             return pairAt( vars.arcEndX );
 
         return hasEndpoints ? pairAt( vars.endX ) : ANCHOR_PARAMS();
-    case CONSTRAINT_ANCHOR::CENTER:
-        return hasEndpoints ? ANCHOR_PARAMS() : pairAt( vars.startX );
-    default:
-        return {};
+    case CONSTRAINT_ANCHOR::CENTER: return hasEndpoints ? ANCHOR_PARAMS() : pairAt( vars.startX );
+    default: return {};
     }
 }
 
 
-PCB_DIM_ORTHOGONAL* BOARD_CONSTRAINT_ADAPTER::orthogonalDimensionForMembers(
-        const std::vector<CONSTRAINT_MEMBER>& aMembers ) const
+PCB_DIM_ORTHOGONAL*
+BOARD_CONSTRAINT_ADAPTER::orthogonalDimensionForMembers( const std::vector<CONSTRAINT_MEMBER>& aMembers ) const
 {
     if( aMembers.size() != 2 || aMembers[0].m_item != aMembers[1].m_item )
         return nullptr;
@@ -533,7 +544,7 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
                                       const std::set<KIID>*                   aFixedShapes,
                                       const std::vector<PCB_DIMENSION_BASE*>& aDimensions )
 {
-    m_params.clear();
+    m_system.Clear();
     m_shapeVars.clear();
     m_tagToConstraint.clear();
     m_nonDrivingTags.clear();
@@ -541,8 +552,12 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
     m_referenceConstraints.clear();
     m_unmapped.clear();
     m_angleConstrainedShapes.clear();
-    m_gcs->clear();
     m_built = false;
+
+    // The temporary-parameter pool aliases indices into the parameter store just cleared above.
+    // Rebuilding without resetting it would hand out stale indices past the new store's end.
+    m_temporaryParams.clear();
+    m_nextTemporaryParam = 0;
 
     if( aShapes.empty() && aDimensions.empty() )
         return false;
@@ -550,10 +565,9 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
     // Centre on the first item's start point so normalized coordinates stay small for a board far
     // from the origin.
     VECTOR2I origin = !aShapes.empty() ? aShapes.front()->GetStart() : aDimensions.front()->GetStart();
-    m_originX = origin.x;
-    m_originY = origin.y;
     m_scale = IU_PER_NORM_UNIT;
     m_invScale = 1.0 / m_scale;
+    m_system.SetCoordinateFrame( origin, m_scale );
 
     // [first, last) parameter spans of locked shapes, folded into fixedParams below so the solver
     // treats a locked shape as an immovable reference.
@@ -1367,6 +1381,11 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
     m_gcs->initSolution();
     m_gcs->maxIter = MAX_SOLVE_ITERATIONS;
 
+    m_dragTargetX = pushParam( 0.0 );
+    m_dragTargetY = pushParam( 0.0 );
+    m_coDragTargetX = pushParam( 0.0 );
+    m_coDragTargetY = pushParam( 0.0 );
+
     m_built = true;
     return true;
 }
@@ -1376,6 +1395,8 @@ bool BOARD_CONSTRAINT_ADAPTER::Solve( bool aStabilize )
 {
     if( !m_built )
         return false;
+
+    beginTemporaryParameters();
 
     // A hard hold here (no drag pin) so a contradiction cannot hide by collapsing a segment or arc.
     if( aStabilize )
@@ -1408,6 +1429,8 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveAfterResize( const KIID& aResizedShape )
     if( !m_built )
         return false;
 
+    beginTemporaryParameters();
+
     for( const auto& [kiid, vars] : m_shapeVars )
     {
         // Preserve every curve's free radius while re-solving the resized cluster.  This covers
@@ -1416,7 +1439,7 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveAfterResize( const KIID& aResizedShape )
         if( vars.radius < 0 )
             continue;
 
-        int         target = pushParam( m_params[vars.radius] );
+        int         target = temporaryParam( m_params[vars.radius] );
         GCS::Circle c;
         c.center = GCS::Point{ &m_params[vars.startX], &m_params[vars.startX + 1] };
         c.rad = &m_params[vars.radius];
@@ -1427,8 +1450,8 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveAfterResize( const KIID& aResizedShape )
             // only if a locked neighbour leaves no other way to stay tangent.
             m_gcs->addConstraintCircleRadius( c, &m_params[target], m_resizeRadiusTag, true );
 
-            int cx = pushParam( m_params[vars.startX] );
-            int cy = pushParam( m_params[vars.startX + 1] );
+            int cx = temporaryParam( m_params[vars.startX] );
+            int cy = temporaryParam( m_params[vars.startX + 1] );
             m_gcs->addConstraintCoordinateX( c.center, &m_params[cx], GCS::DefaultTemporaryConstraint );
             m_gcs->addConstraintCoordinateY( c.center, &m_params[cy], GCS::DefaultTemporaryConstraint );
         }
@@ -1461,11 +1484,13 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveAfterResize( const KIID& aResizedShape )
 
 
 bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize,
-                                     const std::set<KIID>& aEdited,
-                                     const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged )
+                                      const std::set<KIID>&                                        aEdited,
+                                      const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged )
 {
     if( !m_built )
         return false;
+
+    beginTemporaryParameters();
 
     ANCHOR_PARAMS params = anchorParams( aDragged );
 
@@ -1474,12 +1499,6 @@ bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const V
 
     // Reuse fixed backing slots for the cursor target so repeated drag solves (warm-started from
     // the previous solution still in m_params) never grow the backing store.
-    if( m_dragTargetX < 0 )
-    {
-        m_dragTargetX = pushParam( 0.0 );
-        m_dragTargetY = pushParam( 0.0 );
-    }
-
     double targetX = normalizeX( aCursor.x );
     double targetY = normalizeY( aCursor.y );
 
@@ -1544,12 +1563,6 @@ bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const V
         {
             coDragged = &aCoDragged->first;
 
-            if( m_coDragTargetX < 0 )
-            {
-                m_coDragTargetX = pushParam( 0.0 );
-                m_coDragTargetY = pushParam( 0.0 );
-            }
-
             m_params[m_coDragTargetX] = normalizeX( aCoDragged->second.x );
             m_params[m_coDragTargetY] = normalizeY( aCoDragged->second.y );
 
@@ -1604,11 +1617,394 @@ bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const V
 }
 
 
+bool BOARD_CONSTRAINT_ADAPTER::addSnapRelations( const ANCHOR_PARAMS&               aAnchor,
+                                                 const std::vector<SNAP_CANDIDATE>& aCandidates,
+                                                 const VECTOR2I&                    aOffset )
+{
+    GCS::Point anchor{ &m_params[aAnchor.x], &m_params[aAnchor.y] };
+    bool       addedRelation = false;
+
+    const auto addCoordinateX = [&]( double aCoordinate )
+    {
+        int target = temporaryParam( normalizeX( KiROUND( aCoordinate ) + aOffset.x ) );
+        m_gcs->addConstraintCoordinateX( anchor, &m_params[target], GCS::DefaultTemporaryConstraint );
+        addedRelation = true;
+    };
+    const auto addCoordinateY = [&]( double aCoordinate )
+    {
+        int target = temporaryParam( normalizeY( KiROUND( aCoordinate ) + aOffset.y ) );
+        m_gcs->addConstraintCoordinateY( anchor, &m_params[target], GCS::DefaultTemporaryConstraint );
+        addedRelation = true;
+    };
+    const auto addLine = [&]( const SNAP_CANDIDATE& aCandidate )
+    {
+        if( aCandidate.direction.SquaredEuclideanNorm() <= 1e-12 )
+            return;
+
+        VECTOR2D  direction = aCandidate.direction * ( 1000000.0 / aCandidate.direction.EuclideanNorm() );
+        VECTOR2D  origin = aCandidate.origin + VECTOR2D( aOffset );
+        int       x1 = temporaryParam( normalizeX( KiROUND( origin.x ) ) );
+        int       y1 = temporaryParam( normalizeY( KiROUND( origin.y ) ) );
+        int       x2 = temporaryParam( normalizeX( KiROUND( origin.x + direction.x ) ) );
+        int       y2 = temporaryParam( normalizeY( KiROUND( origin.y + direction.y ) ) );
+        GCS::Line line;
+        line.p1 = GCS::Point{ &m_params[x1], &m_params[y1] };
+        line.p2 = GCS::Point{ &m_params[x2], &m_params[y2] };
+        m_gcs->addConstraintPointOnLine( anchor, line, GCS::DefaultTemporaryConstraint );
+        addedRelation = true;
+    };
+
+    for( const SNAP_CANDIDATE& candidate : aCandidates )
+    {
+        switch( candidate.relation )
+        {
+        case SNAP_RELATION::COINCIDENCE:
+        case SNAP_RELATION::TANGENT:
+        case SNAP_RELATION::NORMAL:
+            addCoordinateX( candidate.origin.x );
+            addCoordinateY( candidate.origin.y );
+            break;
+
+        case SNAP_RELATION::X_COORDINATE:
+        case SNAP_RELATION::GRID_X: addCoordinateX( candidate.origin.x ); break;
+
+        case SNAP_RELATION::Y_COORDINATE:
+        case SNAP_RELATION::GRID_Y: addCoordinateY( candidate.origin.y ); break;
+
+        case SNAP_RELATION::BBOX_ALIGNMENT:
+        case SNAP_RELATION::BBOX_EQUAL_GAP:
+            if( candidate.direction.x != 0.0 )
+                addCoordinateX( candidate.origin.x );
+            else if( candidate.direction.y != 0.0 )
+                addCoordinateY( candidate.origin.y );
+
+            break;
+
+        case SNAP_RELATION::POINT_ON_LINE:
+        case SNAP_RELATION::POINT_ON_RAY:
+        case SNAP_RELATION::POINT_ON_SEGMENT:
+        case SNAP_RELATION::ANGLE: addLine( candidate ); break;
+
+        case SNAP_RELATION::POINT_ON_CIRCLE:
+        case SNAP_RELATION::POINT_ON_ARC:
+        {
+            if( !candidate.manifold )
+                break;
+
+            VECTOR2I center;
+            int      radius = 0;
+
+            if( const CIRCLE* circle = std::get_if<CIRCLE>( &*candidate.manifold ) )
+            {
+                center = circle->Center;
+                radius = circle->Radius;
+            }
+            else if( const SHAPE_ARC* arc = std::get_if<SHAPE_ARC>( &*candidate.manifold ) )
+            {
+                center = arc->GetCenter();
+                radius = arc->GetRadius();
+            }
+            else
+            {
+                break;
+            }
+
+            center += aOffset;
+            int         centerX = temporaryParam( normalizeX( center.x ) );
+            int         centerY = temporaryParam( normalizeY( center.y ) );
+            int         radiusParam = temporaryParam( radius * m_invScale );
+            GCS::Circle circle;
+            circle.center = GCS::Point{ &m_params[centerX], &m_params[centerY] };
+            circle.rad = &m_params[radiusParam];
+            m_gcs->addConstraintPointOnCircle( anchor, circle, GCS::DefaultTemporaryConstraint );
+            addedRelation = true;
+            break;
+        }
+        }
+    }
+
+    return addedRelation;
+}
+
+
+BOARD_CONSTRAINT_ADAPTER::RIGID_STATE
+BOARD_CONSTRAINT_ADAPTER::collectRigidState( const std::set<KIID>& aEditedShapes ) const
+{
+    RIGID_STATE state;
+
+    const auto addPoint = [&]( int aPointX )
+    {
+        if( aPointX >= 0 )
+            state.points.insert( aPointX );
+    };
+
+    for( const KIID& id : aEditedShapes )
+    {
+        auto it = m_shapeVars.find( id );
+
+        if( it == m_shapeVars.end() )
+            continue;
+
+        const SHAPE_VARS& vars = it->second;
+
+        switch( vars.kind )
+        {
+        case SHAPE_KIND::SEGMENT:
+        case SHAPE_KIND::RECT:
+        case SHAPE_KIND::BEZIER:
+        case SHAPE_KIND::POINT_PAIR:
+            addPoint( vars.startX );
+            addPoint( vars.endX );
+            break;
+
+        case SHAPE_KIND::CIRCLE:
+            addPoint( vars.startX );
+            state.radii.push_back( { vars.startX, vars.radius } );
+            break;
+
+        case SHAPE_KIND::ELLIPSE:
+            addPoint( vars.startX );
+            addPoint( vars.focusX );
+            state.radii.push_back( { vars.startX, vars.radius } );
+            break;
+
+        case SHAPE_KIND::ARC:
+            addPoint( vars.startX );
+            addPoint( vars.arcStartX );
+            addPoint( vars.arcEndX );
+            state.radii.push_back( { vars.startX, vars.radius } );
+            break;
+
+        case SHAPE_KIND::ELLIPSE_ARC:
+            addPoint( vars.startX );
+            addPoint( vars.focusX );
+            addPoint( vars.arcStartX );
+            addPoint( vars.arcEndX );
+            state.radii.push_back( { vars.startX, vars.radius } );
+            break;
+
+        case SHAPE_KIND::POLYGON:
+            for( int i = 0; i < vars.vertexCount; ++i )
+                addPoint( vars.startX + 2 * i );
+
+            break;
+        }
+    }
+
+    return state;
+}
+
+
+void BOARD_CONSTRAINT_ADAPTER::holdRigidRadii( const std::vector<RIGID_RADIUS_HOLD>& aRadii )
+{
+    for( const RIGID_RADIUS_HOLD& hold : aRadii )
+    {
+        int         target = temporaryParam( m_params[hold.radius] );
+        GCS::Circle circle;
+        circle.center = GCS::Point{ &m_params[hold.centerX], &m_params[hold.centerX + 1] };
+        circle.rad = &m_params[hold.radius];
+        m_gcs->addConstraintCircleRadius( circle, &m_params[target], GCS::DefaultTemporaryConstraint );
+    }
+}
+
+
+bool BOARD_CONSTRAINT_ADAPTER::SolveSnapRelations( const CONSTRAINT_MEMBER&           aDragged,
+                                                   const std::vector<SNAP_CANDIDATE>& aCandidates,
+                                                   const VECTOR2I&                    aCursor )
+{
+    if( !m_built )
+        return false;
+
+    ANCHOR_PARAMS params = anchorParams( aDragged );
+
+    if( !params.IsValid() )
+        return false;
+
+    beginTemporaryParameters();
+
+    if( !addSnapRelations( params, aCandidates, {} ) )
+        return false;
+
+    GCS::Point anchor{ &m_params[params.x], &m_params[params.y] };
+
+    int cursorX = temporaryParam( normalizeX( aCursor.x ) );
+    int cursorY = temporaryParam( normalizeY( aCursor.y ) );
+    int xPin = m_gcs->addConstraintCoordinateX( anchor, &m_params[cursorX], GCS::DefaultTemporaryConstraint );
+    int yPin = m_gcs->addConstraintCoordinateY( anchor, &m_params[cursorY], GCS::DefaultTemporaryConstraint );
+    m_gcs->rescaleConstraint( xPin, CURSOR_WEIGHT );
+    m_gcs->rescaleConstraint( yPin, CURSOR_WEIGHT );
+
+    pinDraggedShapeRest( aDragged, GCS::DefaultTemporaryConstraint );
+    pinUneditedShapes( { aDragged.m_item }, GCS::DefaultTemporaryConstraint );
+
+    m_gcs->initSolution();
+    int ret = m_gcs->solve();
+    m_gcs->applySolution();
+    bool solved = solveSucceeded( ret );
+
+    m_gcs->clearByTag( GCS::DefaultTemporaryConstraint );
+    return solved;
+}
+
+
+bool BOARD_CONSTRAINT_ADAPTER::SolveRigidTranslation( const std::set<KIID>& aEditedShapes,
+                                                      const VECTOR2I&       aTranslation )
+{
+    if( !m_built || aEditedShapes.empty() )
+        return false;
+
+    RIGID_STATE state = collectRigidState( aEditedShapes );
+
+    if( state.points.empty() )
+        return false;
+
+    const double            dx = aTranslation.x * m_invScale;
+    const double            dy = aTranslation.y * m_invScale;
+    std::map<int, VECTOR2I> exactTargets;
+
+    for( int pointX : state.points )
+    {
+        m_params[pointX] += dx;
+        m_params[pointX + 1] += dy;
+        exactTargets.emplace( pointX, VECTOR2I( KiROUND( denormalizeX( m_params[pointX] ) ),
+                                                KiROUND( denormalizeY( m_params[pointX + 1] ) ) ) );
+    }
+
+    beginTemporaryParameters();
+
+    for( int pointX : state.points )
+        softPinPoint( pointX, GCS::DefaultTemporaryConstraint );
+
+    holdRigidRadii( state.radii );
+
+    pinUneditedShapes( aEditedShapes, GCS::DefaultTemporaryConstraint );
+    m_gcs->initSolution();
+    int ret = m_gcs->solve();
+    m_gcs->applySolution();
+    bool solved = solveSucceeded( ret );
+
+    for( const auto& [pointX, target] : exactTargets )
+    {
+        VECTOR2I resolved( KiROUND( denormalizeX( m_params[pointX] ) ),
+                           KiROUND( denormalizeY( m_params[pointX + 1] ) ) );
+        solved = solved && resolved == target;
+    }
+
+    m_gcs->clearByTag( GCS::DefaultTemporaryConstraint );
+    return solved && QuantizedRelationsSatisfied();
+}
+
+
+bool BOARD_CONSTRAINT_ADAPTER::SolveRigidSnapRelations( const std::set<KIID>& aEditedShapes, const VECTOR2I& aReference,
+                                                        const std::vector<SNAP_CANDIDATE>& aCandidates,
+                                                        const VECTOR2I& aCursor, VECTOR2I& aResolvedCursor )
+{
+    if( !m_built || aEditedShapes.empty() )
+        return false;
+
+    RIGID_STATE state = collectRigidState( aEditedShapes );
+
+    if( state.points.empty() )
+        return false;
+
+    beginTemporaryParameters();
+    const int               anchorX = *state.points.begin();
+    const VECTOR2I          anchorAtBaseline( KiROUND( denormalizeX( m_params[anchorX] ) ),
+                                              KiROUND( denormalizeY( m_params[anchorX + 1] ) ) );
+    const VECTOR2I          cursorToAnchor = anchorAtBaseline - aReference;
+    std::map<int, VECTOR2I> baselinePoints;
+
+    for( int pointX : state.points )
+    {
+        baselinePoints.emplace( pointX, VECTOR2I( KiROUND( denormalizeX( m_params[pointX] ) ),
+                                                  KiROUND( denormalizeY( m_params[pointX + 1] ) ) ) );
+
+        if( pointX == anchorX )
+            continue;
+
+        int offsetX = temporaryParam( m_params[pointX] - m_params[anchorX] );
+        int offsetY = temporaryParam( m_params[pointX + 1] - m_params[anchorX + 1] );
+        m_gcs->addConstraintDifference( &m_params[anchorX], &m_params[pointX], &m_params[offsetX],
+                                        GCS::DefaultTemporaryConstraint );
+        m_gcs->addConstraintDifference( &m_params[anchorX + 1], &m_params[pointX + 1], &m_params[offsetY],
+                                        GCS::DefaultTemporaryConstraint );
+    }
+
+    bool addedRelation = addSnapRelations( { anchorX, anchorX + 1 }, aCandidates, cursorToAnchor );
+    holdRigidRadii( state.radii );
+
+    GCS::Point anchor{ &m_params[anchorX], &m_params[anchorX + 1] };
+    int        cursorX = temporaryParam( normalizeX( aCursor.x + cursorToAnchor.x ) );
+    int        cursorY = temporaryParam( normalizeY( aCursor.y + cursorToAnchor.y ) );
+    int        xPin = m_gcs->addConstraintCoordinateX( anchor, &m_params[cursorX], GCS::DefaultTemporaryConstraint );
+    int        yPin = m_gcs->addConstraintCoordinateY( anchor, &m_params[cursorY], GCS::DefaultTemporaryConstraint );
+    m_gcs->rescaleConstraint( xPin, CURSOR_WEIGHT );
+    m_gcs->rescaleConstraint( yPin, CURSOR_WEIGHT );
+    pinUneditedShapes( aEditedShapes, GCS::DefaultTemporaryConstraint );
+    m_gcs->initSolution();
+    int ret = m_gcs->solve();
+    m_gcs->applySolution();
+    bool solved = solveSucceeded( ret ) && ( addedRelation || aCandidates.empty() );
+
+    VECTOR2I resolvedAnchor( KiROUND( denormalizeX( m_params[anchorX] ) ),
+                             KiROUND( denormalizeY( m_params[anchorX + 1] ) ) );
+    aResolvedCursor = resolvedAnchor - cursorToAnchor;
+    VECTOR2I translation = aResolvedCursor - aReference;
+
+    for( const auto& [pointX, baseline] : baselinePoints )
+    {
+        VECTOR2I resolved( KiROUND( denormalizeX( m_params[pointX] ) ),
+                           KiROUND( denormalizeY( m_params[pointX + 1] ) ) );
+        solved = solved && resolved == baseline + translation;
+    }
+
+    m_gcs->clearByTag( GCS::DefaultTemporaryConstraint );
+
+    if( !solved || !QuantizedRelationsSatisfied() )
+        return false;
+
+    SNAP_SOURCE_CONTEXT verifyContext;
+    verifyContext.sourcePoint = aResolvedCursor;
+    SNAP_RESOLVER verify;
+
+    for( const SNAP_CANDIDATE& candidate : aCandidates )
+        verify.AddCandidate( candidate );
+
+    SNAP_RESULT verified = verify.Resolve( verifyContext );
+
+    for( const SNAP_CANDIDATE& candidate : aCandidates )
+    {
+        if( !verified.Accepted( candidate.id ) )
+            return false;
+    }
+
+    return verified.position == aResolvedCursor;
+}
+
+
+std::optional<VECTOR2I> BOARD_CONSTRAINT_ADAPTER::AnchorPosition( const CONSTRAINT_MEMBER& aMember ) const
+{
+    ANCHOR_PARAMS params = anchorParams( aMember );
+
+    if( !params.IsValid() )
+        return std::nullopt;
+
+    return VECTOR2I( KiROUND( denormalizeX( m_params[params.x] ) ),
+                     KiROUND( denormalizeY( m_params[params.y] ) ) );
+}
+
+
 bool BOARD_CONSTRAINT_ADAPTER::solveSucceeded( int aSolveResult )
 {
     if( aSolveResult == GCS::Success || aSolveResult == GCS::Converged )
         return true;
 
+    return hardRelationsSatisfied();
+}
+
+
+bool BOARD_CONSTRAINT_ADAPTER::hardRelationsSatisfied() const
+{
     // planegcs bases Success only on the hard subsystem residual but the soft stay-put subsystem
     // perturbs the SQP trajectory so a valid solve often still reports Failed judge the hard
     // constraints directly instead a genuine contradiction still leaves a large or non-finite residual
@@ -1637,6 +2033,56 @@ bool BOARD_CONSTRAINT_ADAPTER::solveSucceeded( int aSolveResult )
 }
 
 
+bool BOARD_CONSTRAINT_ADAPTER::QuantizedRelationsSatisfied()
+{
+    SNAPSHOT snapshot = Snapshot();
+    std::set<int> xParams;
+    std::set<int> yParams;
+    std::set<int> radiusParams;
+
+    const auto addPoint =
+            [&]( int aX )
+            {
+                if( aX >= 0 )
+                {
+                    xParams.insert( aX );
+                    yParams.insert( aX + 1 );
+                }
+            };
+
+    for( const auto& [kiid, vars] : m_shapeVars )
+    {
+        addPoint( vars.startX );
+        addPoint( vars.endX );
+        addPoint( vars.arcStartX );
+        addPoint( vars.arcEndX );
+        addPoint( vars.focusX );
+
+        if( vars.kind == SHAPE_KIND::POLYGON )
+        {
+            for( int i = 0; i < vars.vertexCount; ++i )
+                addPoint( vars.startX + 2 * i );
+        }
+
+        if( vars.radius >= 0 )
+            radiusParams.insert( vars.radius );
+    }
+
+    for( int index : xParams )
+        m_params[index] = normalizeX( KiROUND( denormalizeX( m_params[index] ) ) );
+
+    for( int index : yParams )
+        m_params[index] = normalizeY( KiROUND( denormalizeY( m_params[index] ) ) );
+
+    for( int index : radiusParams )
+        m_params[index] = KiROUND( m_params[index] * m_scale ) * m_invScale;
+
+    bool valid = hardRelationsSatisfied();
+    Restore( snapshot );
+    return valid;
+}
+
+
 void BOARD_CONSTRAINT_ADAPTER::softPinPoint( const ANCHOR_PARAMS& aPoint, int aTag, std::optional<double> aWeight )
 {
     // A zero weight would neutralize the pin instead of tiering it
@@ -1645,8 +2091,8 @@ void BOARD_CONSTRAINT_ADAPTER::softPinPoint( const ANCHOR_PARAMS& aPoint, int aT
     if( !aPoint.IsValid() )
         return;
 
-    int        pinX = pushParam( m_params[aPoint.x] );
-    int        pinY = pushParam( m_params[aPoint.y] );
+    int        pinX = temporaryParam( m_params[aPoint.x] );
+    int        pinY = temporaryParam( m_params[aPoint.y] );
     GCS::Point point{ &m_params[aPoint.x], &m_params[aPoint.y] };
 
     int cx = m_gcs->addConstraintCoordinateX( point, &m_params[pinX], aTag );
@@ -1741,7 +2187,7 @@ void BOARD_CONSTRAINT_ADAPTER::pinUneditedShapes( const std::set<KIID>& aEdited,
         circle.center = GCS::Point{ &m_params[aVars.startX], &m_params[aVars.startX + 1] };
         circle.rad = &m_params[aVars.radius];
 
-        int rad = pushParam( m_params[aVars.radius] );
+        int rad = temporaryParam( m_params[aVars.radius] );
         m_gcs->rescaleConstraint( m_gcs->addConstraintCircleRadius( circle, &m_params[rad], aTag ), STAY_PUT_WEIGHT );
     };
 
@@ -1826,7 +2272,7 @@ void BOARD_CONSTRAINT_ADAPTER::holdFreeSegmentLengths( int aTag, const std::set<
         GCS::Point p2{ &m_params[vars.endX], &m_params[vars.endX + 1] };
         double     dx = m_params[vars.endX] - m_params[vars.startX];
         double     dy = m_params[vars.endX + 1] - m_params[vars.startX + 1];
-        int        len = pushParam( std::hypot( dx, dy ) );
+        int        len = temporaryParam( std::hypot( dx, dy ) );
         m_gcs->addConstraintP2PDistance( p1, p2, &m_params[len], aTag );
     }
 }
@@ -1838,7 +2284,7 @@ void BOARD_CONSTRAINT_ADAPTER::holdArcRadius( const SHAPE_VARS& aVars, int aTag 
     circle.center = GCS::Point{ &m_params[aVars.startX], &m_params[aVars.startX + 1] };
     circle.rad = &m_params[aVars.radius];
 
-    int rad = pushParam( m_params[aVars.radius] );
+    int rad = temporaryParam( m_params[aVars.radius] );
     m_gcs->addConstraintCircleRadius( circle, &m_params[rad], aTag );
 }
 
@@ -2264,6 +2710,448 @@ CONSTRAINT_DIAGNOSIS BOARD_CONSTRAINT_ADAPTER::Diagnose()
 }
 
 
+void BOARD_CONSTRAINT_SESSION::reset()
+{
+    m_adapter.reset();
+    m_baseline.clear();
+    m_baseConflict = false;
+}
+
+
+bool BOARD_CONSTRAINT_SESSION::buildCluster( BOARD* aBoard,
+                                             const std::unordered_set<KIID>& aClusterShapes,
+                                             const std::vector<PCB_CONSTRAINT*>& aConstraints )
+{
+    m_board = aBoard;
+    reset();
+
+    std::vector<PCB_SHAPE*>          shapes = resolveClusterShapes( aBoard, aClusterShapes );
+    std::vector<PCB_DIMENSION_BASE*> dimensions = resolveClusterDimensions( aBoard, aClusterShapes );
+
+    if( ( shapes.empty() && dimensions.empty() ) || aConstraints.empty() )
+        return false;
+
+    auto adapter = std::make_unique<BOARD_CONSTRAINT_ADAPTER>();
+
+    if( !adapter->Build( shapes, aConstraints, nullptr, dimensions ) )
+        return false;
+
+    m_adapter = std::move( adapter );
+    m_baseline = m_adapter->Snapshot();
+    m_baseConflict = !m_adapter->CurrentRelationsSatisfied();
+    return true;
+}
+
+
+SNAP_RESULT BOARD_CONSTRAINT_SESSION::startResult( const SNAP_SOURCE_CONTEXT& aContext ) const
+{
+    SNAP_RESULT result;
+    result.position = aContext.sourcePoint;
+
+    if( m_baseConflict )
+        result.status = SNAP_RESULT_STATUS::BASE_CONFLICT;
+    else if( !m_adapter )
+        result.status = SNAP_RESULT_STATUS::INCOMPATIBLE;
+
+    return result;
+}
+
+
+void BOARD_CONSTRAINT_SESSION::accept( SNAP_RESULT& aResult, const SNAP_CANDIDATE& aCandidate,
+                                       double aResidual )
+{
+    aResult.quantizedResiduals.push_back( aResidual );
+    aResult.remainingDof = std::max( 0, aResult.remainingDof - aCandidate.consumedDof );
+}
+
+
+bool BOARD_CONSTRAINT_MOVE_SESSION::Build( BOARD* aBoard,
+                                           const std::vector<PCB_SHAPE*>& aEditedShapes,
+                                           const VECTOR2I& aReference )
+{
+    m_reference = aReference;
+    m_edited.clear();
+    reset();
+
+    if( !aBoard || aEditedShapes.empty() )
+        return false;
+
+    auto shapeToConstraints = buildShapeConstraintMap( aBoard, collectAllConstraints( aBoard ) );
+    std::set<KIID>               visited;
+    std::unordered_set<KIID>     sessionShapes;
+    std::vector<PCB_CONSTRAINT*> sessionConstraints;
+
+    // Every seed's cluster joins one adapter: a move is rigid, so shapes that constrain each
+    // other must be solved together even when the user grabbed them separately.
+    for( PCB_SHAPE* seed : aEditedShapes )
+    {
+        if( !seed || visited.contains( seed->m_Uuid )
+            || !shapeToConstraints.contains( seed->m_Uuid ) )
+        {
+            continue;
+        }
+
+        std::unordered_set<KIID>     clusterShapes;
+        std::vector<PCB_CONSTRAINT*> clusterConstraints;
+        collectConstraintCluster( shapeToConstraints, seed->m_Uuid, clusterShapes,
+                                  clusterConstraints, &visited );
+
+        for( PCB_SHAPE* edited : aEditedShapes )
+        {
+            if( edited && clusterShapes.contains( edited->m_Uuid ) )
+                m_edited.insert( edited->m_Uuid );
+        }
+
+        sessionShapes.insert( clusterShapes.begin(), clusterShapes.end() );
+        sessionConstraints.insert( sessionConstraints.end(), clusterConstraints.begin(),
+                                   clusterConstraints.end() );
+    }
+
+    if( m_edited.empty() )
+        return false;
+
+    return buildCluster( aBoard, sessionShapes, sessionConstraints );
+}
+
+
+bool BOARD_CONSTRAINT_MOVE_SESSION::feasibleAt( const VECTOR2I& aTarget )
+{
+    if( !usable() )
+        return false;
+
+    bool feasible = rewind() && m_adapter->SolveRigidTranslation( m_edited, aTarget - m_reference );
+    rewind();
+    return feasible;
+}
+
+
+SNAP_RESULT BOARD_CONSTRAINT_MOVE_SESSION::ResolveCandidates(
+        const SNAP_SOURCE_CONTEXT& aContext, const std::vector<SNAP_CANDIDATE>& aCandidates )
+{
+    SNAP_RESULT result = startResult( aContext );
+
+    if( result.status != SNAP_RESULT_STATUS::SUCCESS )
+        return result;
+
+    // The cluster may already sit on every candidate, in which case the move is a no-op and the
+    // unconstrained answer is the right one.
+    if( !aCandidates.empty() && feasibleAt( m_reference ) )
+    {
+        SNAP_SOURCE_CONTEXT referenceContext = aContext;
+        referenceContext.sourcePoint = m_reference;
+        SNAP_RESOLVER referenceResolver;
+
+        for( const SNAP_CANDIDATE& candidate : aCandidates )
+            referenceResolver.AddCandidate( candidate );
+
+        SNAP_RESULT referenceResult = referenceResolver.Resolve( referenceContext );
+        bool        allAccepted = referenceResult.position == m_reference;
+
+        for( const SNAP_CANDIDATE& candidate : aCandidates )
+            allAccepted = allAccepted && referenceResult.Accepted( candidate.id );
+
+        if( allAccepted )
+            return referenceResult;
+    }
+
+    VECTOR2I projected;
+    bool     solved = rewind()
+                  && m_adapter->SolveRigidSnapRelations( m_edited, m_reference, aCandidates,
+                                                         aContext.sourcePoint, projected );
+    rewind();
+
+    if( !solved )
+    {
+        if( aCandidates.empty() && feasibleAt( m_reference ) )
+        {
+            result.position = m_reference;
+            return result;
+        }
+
+        result.status = SNAP_RESULT_STATUS::INCOMPATIBLE;
+        return result;
+    }
+
+    if( !feasibleAt( projected ) )
+    {
+        result.status = SNAP_RESULT_STATUS::INCOMPATIBLE;
+        return result;
+    }
+
+    result.position = projected;
+
+    // A rigid move lands the cluster exactly on whatever it accepted, so every residual is zero.
+    for( const SNAP_CANDIDATE& candidate : aCandidates )
+        accept( result, candidate, 0.0 );
+
+    return result;
+}
+
+
+bool BOARD_CONSTRAINT_MOVE_SESSION::Solve(
+        const VECTOR2I& aTarget, std::vector<PCB_SHAPE*>* aModified,
+        const std::function<void( BOARD_ITEM* )>& aBeforeModify )
+{
+    if( !usable() )
+        return false;
+
+    if( !rewind() || !m_adapter->SolveRigidTranslation( m_edited, aTarget - m_reference ) )
+    {
+        rewind();
+        return false;
+    }
+
+    std::vector<PCB_SHAPE*> changed = m_adapter->Apply( aBeforeModify );
+    m_adapter->ApplyReferenceValues( aBeforeModify );
+
+    if( aModified )
+        aModified->insert( aModified->end(), changed.begin(), changed.end() );
+
+    return true;
+}
+
+
+bool BOARD_CONSTRAINT_DRAG_SESSION::Build( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged )
+{
+    m_board = aBoard;
+    m_dragged = aDragged;
+    m_draggedShape = nullptr;
+    reset();
+
+    if( !m_board )
+        return false;
+
+    auto shapeToConstraints = buildShapeConstraintMap( m_board, collectAllConstraints( m_board ) );
+    std::unordered_set<KIID>     clusterShapes;
+    std::vector<PCB_CONSTRAINT*> clusterConstraints;
+    collectConstraintCluster( shapeToConstraints, m_dragged.m_item, clusterShapes, clusterConstraints );
+
+    if( !buildCluster( m_board, clusterShapes, clusterConstraints ) )
+        return false;
+
+    m_draggedShape = dynamic_cast<PCB_SHAPE*>( m_board->ResolveItem( m_dragged.m_item, true ) );
+    return true;
+}
+
+
+bool BOARD_CONSTRAINT_DRAG_SESSION::Matches( const CONSTRAINT_MEMBER& aDragged ) const
+{
+    return m_adapter && m_dragged.m_item == aDragged.m_item
+           && m_dragged.m_anchor == aDragged.m_anchor && m_dragged.m_index == aDragged.m_index;
+}
+
+
+bool BOARD_CONSTRAINT_DRAG_SESSION::IsExactFeasible( const VECTOR2I& aTarget )
+{
+    if( !usable() || !rewind() )
+        return false;
+
+    bool solved = m_adapter->Solve( m_dragged, aTarget, false );
+    std::optional<VECTOR2I> resolved = solved ? m_adapter->AnchorPosition( m_dragged ) : std::nullopt;
+    bool quantizedValid = resolved && *resolved == aTarget && m_adapter->QuantizedRelationsSatisfied();
+    rewind();
+    return quantizedValid;
+}
+
+
+SNAP_RESULT BOARD_CONSTRAINT_DRAG_SESSION::ResolveCandidates(
+        const SNAP_SOURCE_CONTEXT& aContext, const std::vector<SNAP_CANDIDATE>& aCandidates )
+{
+    SNAP_RESULT result = startResult( aContext );
+
+    if( result.status != SNAP_RESULT_STATUS::SUCCESS || aCandidates.empty() )
+        return result;
+
+    if( !rewind() )
+    {
+        result.status = SNAP_RESULT_STATUS::INCOMPATIBLE;
+        return result;
+    }
+
+    if( !m_adapter->SolveSnapRelations( m_dragged, aCandidates, aContext.sourcePoint ) )
+    {
+        rewind();
+        result.status = SNAP_RESULT_STATUS::INCOMPATIBLE;
+        return result;
+    }
+
+    std::optional<VECTOR2I> resolved = m_adapter->AnchorPosition( m_dragged );
+
+    if( !resolved )
+    {
+        rewind();
+        result.status = SNAP_RESULT_STATUS::INVALID_GEOMETRY;
+        return result;
+    }
+
+    result.position = *resolved;
+
+    const auto candidateResidual =
+            [&]( const SNAP_CANDIDATE& aCandidate ) -> std::optional<double>
+            {
+                VECTOR2D point( result.position );
+
+                switch( aCandidate.relation )
+                {
+                case SNAP_RELATION::COINCIDENCE:
+                case SNAP_RELATION::TANGENT:
+                case SNAP_RELATION::NORMAL:
+                    return ( point - aCandidate.origin ).EuclideanNorm();
+
+                case SNAP_RELATION::X_COORDINATE:
+                case SNAP_RELATION::GRID_X:
+                    return std::abs( point.x - aCandidate.origin.x );
+
+                case SNAP_RELATION::Y_COORDINATE:
+                case SNAP_RELATION::GRID_Y:
+                    return std::abs( point.y - aCandidate.origin.y );
+
+                case SNAP_RELATION::BBOX_ALIGNMENT:
+                case SNAP_RELATION::BBOX_EQUAL_GAP:
+                    if( aCandidate.direction.x != 0.0 )
+                        return std::abs( point.x - aCandidate.origin.x );
+
+                    if( aCandidate.direction.y != 0.0 )
+                        return std::abs( point.y - aCandidate.origin.y );
+
+                    return std::nullopt;
+
+                case SNAP_RELATION::POINT_ON_LINE:
+                case SNAP_RELATION::POINT_ON_RAY:
+                case SNAP_RELATION::POINT_ON_SEGMENT:
+                case SNAP_RELATION::ANGLE:
+                {
+                    double divisor = aCandidate.direction.SquaredEuclideanNorm();
+
+                    if( divisor <= 1e-12 )
+                        return std::nullopt;
+
+                    VECTOR2D offset = point - aCandidate.origin;
+                    double parameter = offset.Dot( aCandidate.direction ) / divisor;
+
+                    if( aCandidate.relation == SNAP_RELATION::POINT_ON_RAY && parameter < 0.0 )
+                        return std::nullopt;
+
+                    if( aCandidate.relation == SNAP_RELATION::POINT_ON_SEGMENT
+                        && ( parameter < 0.0 || parameter > 1.0 ) )
+                    {
+                        return std::nullopt;
+                    }
+
+                    return std::abs( offset.x * aCandidate.direction.y
+                                     - offset.y * aCandidate.direction.x )
+                           / std::sqrt( divisor );
+                }
+
+                case SNAP_RELATION::POINT_ON_CIRCLE:
+                case SNAP_RELATION::POINT_ON_ARC:
+                {
+                    if( !aCandidate.manifold )
+                        return std::nullopt;
+
+                    if( const CIRCLE* circle = std::get_if<CIRCLE>( &*aCandidate.manifold ) )
+                    {
+                        return std::abs( result.position.Distance( circle->Center )
+                                         - circle->Radius );
+                    }
+
+                    if( const SHAPE_ARC* arc = std::get_if<SHAPE_ARC>( &*aCandidate.manifold ) )
+                    {
+                        if( !arc->Collide( result.position, 2 ) )
+                            return std::nullopt;
+
+                        return std::abs( result.position.Distance( arc->GetCenter() )
+                                         - arc->GetRadius() );
+                    }
+
+                    return std::nullopt;
+                }
+                }
+
+                return std::nullopt;
+            };
+
+    for( const SNAP_CANDIDATE& candidate : aCandidates )
+    {
+        std::optional<double> residual = candidateResidual( candidate );
+        bool discrete = candidate.relation == SNAP_RELATION::COINCIDENCE
+                        || candidate.relation == SNAP_RELATION::TANGENT
+                        || candidate.relation == SNAP_RELATION::NORMAL
+                        || candidate.relation == SNAP_RELATION::X_COORDINATE
+                        || candidate.relation == SNAP_RELATION::Y_COORDINATE
+                        || candidate.relation == SNAP_RELATION::GRID_X
+                        || candidate.relation == SNAP_RELATION::GRID_Y
+                        || candidate.relation == SNAP_RELATION::BBOX_ALIGNMENT
+                        || candidate.relation == SNAP_RELATION::BBOX_EQUAL_GAP;
+
+        if( !residual || ( discrete ? *residual != 0.0 : *residual > 2.0 ) )
+        {
+            rewind();
+            result.status = SNAP_RESULT_STATUS::INCOMPATIBLE;
+            return result;
+        }
+
+        accept( result, candidate, *residual );
+    }
+
+    if( !m_adapter->QuantizedRelationsSatisfied() )
+        result.status = SNAP_RESULT_STATUS::INCOMPATIBLE;
+
+    rewind();
+    return result;
+}
+
+
+CONSTRAINT_DIAGNOSIS BOARD_CONSTRAINT_DRAG_SESSION::Solve(
+        const VECTOR2I& aCursor, std::vector<PCB_SHAPE*>* aModified,
+        const std::function<void( BOARD_ITEM* )>& aBeforeModify, bool aIncludeDragged,
+        bool aStabilize, const std::set<KIID>& aEdited,
+        const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged )
+{
+    CONSTRAINT_DIAGNOSIS diag;
+
+    if( !rewind() )
+        return diag;
+
+    const auto notifyModify = [&]( BOARD_ITEM* aItem )
+    {
+        if( ( aIncludeDragged || aItem != m_draggedShape ) && aBeforeModify )
+            aBeforeModify( aItem );
+    };
+
+    if( m_baseConflict )
+    {
+        m_adapter->Apply( notifyModify );
+        return m_adapter->Diagnose();
+    }
+
+    if( !m_adapter->Solve( m_dragged, aCursor, aStabilize, aEdited, aCoDragged ) )
+    {
+        rewind();
+        m_adapter->Apply( notifyModify );
+        return diag;
+    }
+
+    std::vector<PCB_SHAPE*> changed = m_adapter->Apply( notifyModify );
+
+    m_adapter->ApplyReferenceValues( aBeforeModify );
+    m_baseline = m_adapter->Snapshot();
+    diag = m_adapter->Diagnose();
+    diag.solved = true;
+
+    if( aModified )
+    {
+        std::ranges::copy_if( changed, std::back_inserter( *aModified ),
+                              [&]( const PCB_SHAPE* aShape )
+                              {
+                                  return aIncludeDragged || aShape != m_draggedShape;
+                              } );
+    }
+
+    return diag;
+}
+
+
 CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor,
                                    std::vector<PCB_SHAPE*>*                  aModified,
                                    const std::function<void( BOARD_ITEM* )>& aBeforeModify, bool aIncludeDragged,
@@ -2401,22 +3289,23 @@ void ReSolveShapeClusters( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aShapes
                 edited.insert( other->m_Uuid );
         }
 
-        SolveCluster( aBoard, { shape->m_Uuid, anchors.front().anchor, anchors.front().index },
-                      anchors.front().pos, aModified, aBeforeModify,
+        SolveCluster( aBoard, { shape->m_Uuid, anchors.front().anchor, anchors.front().index }, anchors.front().pos,
+                      aModified, aBeforeModify,
                       /* aIncludeDragged */ true, /* aStabilize */ false, edited );
     }
 }
 
 
-void ReSolveShapeClustersHoldingEdited( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aEditedShapes,
-                                        std::vector<PCB_SHAPE*>* aModified,
+bool ReSolveShapeClustersHoldingEdited( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aEditedShapes,
+                                        std::vector<PCB_SHAPE*>*                  aModified,
                                         const std::function<void( BOARD_ITEM* )>& aBeforeModify )
 {
     if( !aBoard )
-        return;
+        return false;
 
     auto           shapeToConstraints = buildShapeConstraintMap( aBoard, collectAllConstraints( aBoard ) );
     std::set<KIID> visited;
+    std::vector<std::unique_ptr<BOARD_CONSTRAINT_ADAPTER>> solvedClusters;
 
     for( PCB_SHAPE* seed : aEditedShapes )
     {
@@ -2443,20 +3332,30 @@ void ReSolveShapeClustersHoldingEdited( BOARD* aBoard, const std::vector<PCB_SHA
                 fixed.insert( edited->m_Uuid );
         }
 
-        BOARD_CONSTRAINT_ADAPTER adapter;
+        auto adapter = std::make_unique<BOARD_CONSTRAINT_ADAPTER>();
 
-        if( !adapter.Build( shapes, clusterConstraints, &fixed, dimensions ) || !adapter.Solve( true ) )
-            continue;
+        if( !adapter->Build( shapes, clusterConstraints, &fixed, dimensions )
+            || !adapter->Solve( true ) || !adapter->CurrentRelationsSatisfied() )
+        {
+            return false;
+        }
 
-        std::vector<PCB_SHAPE*> changed = adapter.Apply( aBeforeModify );
+        solvedClusters.push_back( std::move( adapter ) );
+    }
+
+    for( const std::unique_ptr<BOARD_CONSTRAINT_ADAPTER>& adapter : solvedClusters )
+    {
+        std::vector<PCB_SHAPE*> changed = adapter->Apply( aBeforeModify );
 
         // Driven reference values re-measure against the held geometry so a dimension bound to an
         // edited shape reads its new size instead of the stale one
-        adapter.ApplyReferenceValues( aBeforeModify );
+        adapter->ApplyReferenceValues( aBeforeModify );
 
         if( aModified )
             aModified->insert( aModified->end(), changed.begin(), changed.end() );
     }
+
+    return true;
 }
 
 

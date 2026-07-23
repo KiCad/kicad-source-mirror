@@ -653,8 +653,10 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
                 ignored_items.insert( ignored_items.end(), graphics.begin(), graphics.end() );
             }
 
-            VECTOR2I cursorPos = m_gridHelper.BestSnapAnchor( position, LSET::AllLayersMask(), GRID_CURRENT,
-                                                              ignored_items );
+            VECTOR2I cursorPos =
+                    m_gridHelper.ResolveSnap( position, LSET::AllLayersMask(), GRID_CURRENT,
+                                              ignored_items )
+                            .position;
             viewControls->ForceCursorPosition( true, cursorPos );
             aItem->SetPosition( cursorPos );
         }

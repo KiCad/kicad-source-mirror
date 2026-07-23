@@ -22,6 +22,7 @@
 #include <vector>
 
 #include <settings/app_settings.h>
+#include <settings/snap_settings.h>
 #include <project/sch_project_settings.h>
 
 
@@ -100,6 +101,8 @@ public:
     bool m_UseEeschemaColorSettings;
 
     ARC_EDIT_MODE m_ArcEditMode;
+
+    SNAP_INFERENCE_SETTINGS m_SnapInference;
 
     SCH_SELECTION_FILTER_OPTIONS m_SelectionFilter;
 

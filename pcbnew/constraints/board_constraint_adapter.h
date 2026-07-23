@@ -26,10 +26,13 @@
 #include <memory>
 #include <optional>
 #include <set>
+#include <unordered_set>
 #include <vector>
 
+#include <constraints/constraint_system_2d.h>
 #include <kiid.h>
 #include <math/vector2d.h>
+#include <snap/snap_resolver.h>
 
 #include <constraints/pcb_constraint.h>
 
@@ -96,11 +99,9 @@ struct BOARD_CONSTRAINT_DIAGNOSTICS
  * to a cursor position), Apply() writes the solution back to the shapes in IU, and Diagnose()
  * reports the constraint state.
  *
- * The adapter owns a pointer-stable std::deque<double> backing store for every value the solver
- * touches, both point coordinates and driving constants (lengths, pin targets).  planegcs holds
- * raw double* into this deque, so it must never reallocate, erase, or reorder while the
- * GCS::System is alive.  std::deque keeps element pointers stable across push_back, the only
- * growth used.
+ * #CONSTRAINT_SYSTEM_2D owns the normalized coordinate frame, planegcs system, and pointer-stable
+ * parameter storage.  This adapter maps board geometry and authored constraints into that shared
+ * solver-neutral lifetime.
  */
 class BOARD_CONSTRAINT_ADAPTER
 {
@@ -146,8 +147,17 @@ public:
     /// @p aStabilize holds free segment lengths so an angle constraint rotates a segment instead of
     /// collapsing it. Off for live dragging.
     bool Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize = false,
-                const std::set<KIID>& aEdited = {},
+                const std::set<KIID>&                                        aEdited = {},
                 const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged = std::nullopt );
+    bool SolveSnapRelations( const CONSTRAINT_MEMBER& aDragged,
+                             const std::vector<SNAP_CANDIDATE>& aCandidates,
+                             const VECTOR2I& aCursor );
+    bool SolveRigidTranslation( const std::set<KIID>& aEditedShapes,
+                                const VECTOR2I& aTranslation );
+    bool SolveRigidSnapRelations( const std::set<KIID>& aEditedShapes,
+                                  const VECTOR2I& aReference,
+                                  const std::vector<SNAP_CANDIDATE>& aCandidates,
+                                  const VECTOR2I& aCursor, VECTOR2I& aResolvedCursor );
 
     /// Solve with no drag pin. @p aStabilize holds free segment lengths (see the dragged overload).
     bool Solve( bool aStabilize = false );
@@ -182,20 +192,28 @@ public:
     /// finite residuals it leaves behind are what flag the conflict.
     CONSTRAINT_DIAGNOSIS Diagnose();
 
+    using SNAPSHOT = CONSTRAINT_SYSTEM_2D::SNAPSHOT;
+
+    SNAPSHOT Snapshot() const { return m_system.Snapshot(); }
+    bool     Restore( const SNAPSHOT& aSnapshot ) { return m_system.RestorePrefix( aSnapshot ); }
+    std::optional<VECTOR2I> AnchorPosition( const CONSTRAINT_MEMBER& aMember ) const;
+    bool QuantizedRelationsSatisfied();
+    bool CurrentRelationsSatisfied() const { return hardRelationsSatisfied(); }
+
 private:
     enum class SHAPE_KIND
     {
         SEGMENT,
-        BEZIER,      ///< A cubic bezier only its start and end endpoints are exposed as free points
+        BEZIER, ///< A cubic bezier only its start and end endpoints are exposed as free points
         CIRCLE,
         ARC,
         ELLIPSE,
         ELLIPSE_ARC,
-        POINT_PAIR,  ///< A dimension's two feature points (start + end); no line/curve geometry.
-        RECT,        ///< An axis-aligned rectangle whose four corners alias the two stored corners
-                     ///< params so rectness holds by construction with no extra DOF
-        POLYGON      ///< A single hole-free outline with one free param pair per vertex since
-                     ///< write-back rebuilds one outline only
+        POINT_PAIR, ///< A dimension's two feature points (start + end); no line/curve geometry.
+        RECT,       ///< An axis-aligned rectangle whose four corners alias the two stored corners
+                    ///< params so rectness holds by construction with no extra DOF
+        POLYGON     ///< A single hole-free outline with one free param pair per vertex since
+                    ///< write-back rebuilds one outline only
     };
 
     /// Per-shape indices into m_params.  A segment stores start/end; a circle stores center
@@ -237,8 +255,27 @@ private:
         bool IsValid() const { return x >= 0 && y >= 0; }
     };
 
+    struct RIGID_RADIUS_HOLD
+    {
+        int centerX;
+        int radius;
+    };
+
+    struct RIGID_STATE
+    {
+        std::set<int>                  points;
+        std::vector<RIGID_RADIUS_HOLD> radii;
+    };
+
     /// Append a normalized coordinate to the backing store, returning its stable index.
     int pushParam( double aValue );
+    int temporaryParam( double aValue );
+    void beginTemporaryParameters();
+    bool addSnapRelations( const ANCHOR_PARAMS& aAnchor,
+                           const std::vector<SNAP_CANDIDATE>& aCandidates,
+                           const VECTOR2I& aOffset );
+    RIGID_STATE collectRigidState( const std::set<KIID>& aEditedShapes ) const;
+    void holdRigidRadii( const std::vector<RIGID_RADIUS_HOLD>& aRadii );
 
     /// Note a non-driving valued constraint so its measured value can be read back after a solve.
     /// A driving constraint is ignored here -- its value is an input, never overwritten.
@@ -278,6 +315,7 @@ private:
     /// Decide whether a solve reached a usable result a raw Success or Converged always qualifies
     /// while a Failed code is accepted only when every driving hard constraint is still satisfied
     bool solveSucceeded( int aSolveResult );
+    bool hardRelationsSatisfied() const;
 
     /// Indices into m_params of the coordinates an anchor maps to invalid if the shape has no
     /// such anchor for example a circle has no endpoints
@@ -288,36 +326,37 @@ private:
     PCB_DIM_ORTHOGONAL* orthogonalDimensionForMembers( const std::vector<CONSTRAINT_MEMBER>& aMembers ) const;
 
     /// IU <-> normalized (millimetre, cluster-centred) frame, per axis.
-    double normalizeX( int aIU ) const { return ( aIU - m_originX ) * m_invScale; }
-    double normalizeY( int aIU ) const { return ( aIU - m_originY ) * m_invScale; }
-    double denormalizeX( double aNorm ) const { return aNorm * m_scale + m_originX; }
-    double denormalizeY( double aNorm ) const { return aNorm * m_scale + m_originY; }
+    double normalizeX( int aIU ) const { return m_system.NormalizeX( aIU ); }
+    double normalizeY( int aIU ) const { return m_system.NormalizeY( aIU ); }
+    double denormalizeX( double aNorm ) const { return m_system.DenormalizeX( aNorm ); }
+    double denormalizeY( double aNorm ) const { return m_system.DenormalizeY( aNorm ); }
 
-    std::unique_ptr<GCS::System> m_gcs;
+    CONSTRAINT_SYSTEM_2D m_system;
+    GCS::System*         m_gcs;
 
-    // Pointer-stable backing store for every solver double (see class comment).
-    std::deque<double> m_params;
+    // Compatibility alias while board geometry mapping remains in this adapter.
+    std::deque<double>& m_params;
 
-    std::map<KIID, SHAPE_VARS>    m_shapeVars;
-    std::map<int, KIID>           m_tagToConstraint;
-    std::set<int>                 m_nonDrivingTags;   ///< Measurement-only; excluded from conflict residuals.
-    std::map<int, std::vector<KIID>> m_tagMembers;    ///< Member items per tag, for collapse attribution.
-    std::vector<PCB_CONSTRAINT*>  m_referenceConstraints;   ///< Non-driving valued, read back after a solve.
-    std::vector<KIID>             m_unmapped;   ///< Constraints Build() could not map (not enforced).
+    std::map<KIID, SHAPE_VARS>       m_shapeVars;
+    std::map<int, KIID>              m_tagToConstraint;
+    std::set<int>                    m_nonDrivingTags;       ///< Measurement-only; excluded from conflict residuals.
+    std::map<int, std::vector<KIID>> m_tagMembers;           ///< Member items per tag, for collapse attribution.
+    std::vector<PCB_CONSTRAINT*>     m_referenceConstraints; ///< Non-driving valued, read back after a solve.
+    std::vector<KIID>                m_unmapped;             ///< Constraints Build() could not map (not enforced).
 
     /// Shapes a direction or angle constraint could collapse to a point only these get a
     /// stabilize length or radius hold
-    std::set<KIID>                m_angleConstrainedShapes;
+    std::set<KIID> m_angleConstrainedShapes;
 
-    double m_originX = 0.0;    ///< IU offset subtracted from x before scaling (cluster anchor).
-    double m_originY = 0.0;    ///< IU offset subtracted from y before scaling.
-    double m_scale = 1.0;      ///< IU per normalized unit.
-    double m_invScale = 1.0;   ///< 1 / m_scale.
+    double m_scale = 1.0;    ///< IU per normalized unit.
+    double m_invScale = 1.0; ///< 1 / m_scale.
 
-    int m_dragTargetX = -1;    ///< Stable backing slot for the drag pin's x target (-1 = unset).
-    int m_dragTargetY = -1;    ///< Stable backing slot for the drag pin's y target.
-    int m_coDragTargetX = -1;  ///< Backing slot for the co-dragged pin x target
-    int m_coDragTargetY = -1;  ///< Backing slot for the co-dragged pin y target
+    int m_dragTargetX = -1;   ///< Stable backing slot for the drag pin's x target (-1 = unset).
+    int m_dragTargetY = -1;   ///< Stable backing slot for the drag pin's y target.
+    int m_coDragTargetX = -1; ///< Backing slot for the co-dragged pin x target
+    int m_coDragTargetY = -1; ///< Backing slot for the co-dragged pin y target
+    std::vector<int> m_temporaryParams;
+    size_t           m_nextTemporaryParam = 0;
 
     // Hold tags reserved by Build() just past the mapped constraints' tags, so a hold can never
     // collide with (and clear) a real constraint on a large cluster.
@@ -325,6 +364,95 @@ private:
     int m_resizeRadiusTag = -1;
 
     bool m_built = false;
+};
+
+
+/**
+ * One editing session over a constraint cluster.
+ *
+ * The session owns the cluster's adapter plus the baseline it rewinds to.  Speculative solves
+ * always run from the baseline and restore it, so the board changes only when the caller applies
+ * a result.  Subclasses differ in what they drag and how they judge a candidate; everything about
+ * owning and rewinding the cluster is here.
+ */
+class BOARD_CONSTRAINT_SESSION
+{
+public:
+    bool HasBaseConflict() const { return m_baseConflict; }
+
+protected:
+    /**
+     * Assemble the adapter for one cluster and record its baseline.
+     *
+     * Sets the base-conflict flag when the cluster's relations were already unsatisfied, which
+     * every solve then refuses rather than trying to repair an edit the user did not make.
+     */
+    bool buildCluster( BOARD* aBoard, const std::unordered_set<KIID>& aClusterShapes,
+                       const std::vector<PCB_CONSTRAINT*>& aConstraints );
+
+    /// Drop the built cluster, leaving the session unusable until the next successful build.
+    void reset();
+
+    bool usable() const { return m_adapter && !m_baseConflict; }
+
+    /// Rewind to the state the next speculative solve starts from.
+    bool rewind() { return m_adapter && m_adapter->Restore( m_baseline ); }
+
+    /// Seed a snap result at the cursor, rejecting a cluster that was already broken.
+    SNAP_RESULT startResult( const SNAP_SOURCE_CONTEXT& aContext ) const;
+
+    /**
+     * Record one candidate the session honoured.
+     *
+     * Only the residual and the freedom consumed belong here.  #SNAP_RESOLVER appends the id and
+     * the guides to whatever a feasibility callback returns, so reporting them again would draw
+     * every guide twice and enter the id in the sticky set twice.
+     */
+    static void accept( SNAP_RESULT& aResult, const SNAP_CANDIDATE& aCandidate, double aResidual );
+
+    BOARD*                                    m_board = nullptr;
+    std::unique_ptr<BOARD_CONSTRAINT_ADAPTER> m_adapter;
+    BOARD_CONSTRAINT_ADAPTER::SNAPSHOT        m_baseline;
+    bool                                      m_baseConflict = false;
+};
+
+
+class BOARD_CONSTRAINT_DRAG_SESSION : public BOARD_CONSTRAINT_SESSION
+{
+public:
+    bool Build( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged );
+    bool Matches( const CONSTRAINT_MEMBER& aDragged ) const;
+    bool IsExactFeasible( const VECTOR2I& aTarget );
+    SNAP_RESULT ResolveCandidates( const SNAP_SOURCE_CONTEXT& aContext,
+                                   const std::vector<SNAP_CANDIDATE>& aCandidates );
+
+    CONSTRAINT_DIAGNOSIS
+    Solve( const VECTOR2I& aCursor, std::vector<PCB_SHAPE*>* aModified,
+           const std::function<void( BOARD_ITEM* )>& aBeforeModify, bool aIncludeDragged,
+           bool aStabilize, const std::set<KIID>& aEdited = {},
+           const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged = std::nullopt );
+
+private:
+    CONSTRAINT_MEMBER m_dragged;
+    PCB_SHAPE*        m_draggedShape = nullptr;
+};
+
+
+class BOARD_CONSTRAINT_MOVE_SESSION : public BOARD_CONSTRAINT_SESSION
+{
+public:
+    bool Build( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aEditedShapes,
+                const VECTOR2I& aReference );
+    SNAP_RESULT ResolveCandidates( const SNAP_SOURCE_CONTEXT& aContext,
+                                   const std::vector<SNAP_CANDIDATE>& aCandidates );
+    bool Solve( const VECTOR2I& aTarget, std::vector<PCB_SHAPE*>* aModified,
+                const std::function<void( BOARD_ITEM* )>& aBeforeModify );
+
+private:
+    bool feasibleAt( const VECTOR2I& aTarget );
+
+    VECTOR2I       m_reference;
+    std::set<KIID> m_edited;
 };
 
 
@@ -352,13 +480,12 @@ private:
  *                  drag pinned at the same weight as the primary
  * @return the diagnosis; .solved is false if the cluster could not be built or did not converge.
  */
-CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor,
-                                   std::vector<PCB_SHAPE*>*                  aModified = nullptr,
-                                   const std::function<void( BOARD_ITEM* )>& aBeforeModify = {},
-                                   bool aIncludeDragged = false, bool aStabilize = false,
-                                   const std::set<KIID>& aEdited = {},
-                                   const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged =
-                                           std::nullopt );
+CONSTRAINT_DIAGNOSIS
+SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor,
+              std::vector<PCB_SHAPE*>*                  aModified = nullptr,
+              const std::function<void( BOARD_ITEM* )>& aBeforeModify = {}, bool aIncludeDragged = false,
+              bool aStabilize = false, const std::set<KIID>& aEdited = {},
+              const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged = std::nullopt );
 
 
 /**
@@ -397,7 +524,7 @@ void ReSolveShapeClusters( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aShapes
 
 /// Re-solve clusters whose new geometry is authoritative holding every edited shape fully fixed
 /// so only constrained neighbors move a failed solve leaves that cluster untouched
-void ReSolveShapeClustersHoldingEdited( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aEditedShapes,
+bool ReSolveShapeClustersHoldingEdited( BOARD* aBoard, const std::vector<PCB_SHAPE*>& aEditedShapes,
                                         std::vector<PCB_SHAPE*>*                  aModified = nullptr,
                                         const std::function<void( BOARD_ITEM* )>& aBeforeModify = {} );
 

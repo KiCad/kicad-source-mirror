@@ -61,6 +61,7 @@ public:
      * This is a mask of POINT_TYPE.
      */
     void SetSnapTypes( int aSnapTypes ) { m_snapTypes = aSnapTypes; }
+    int  GetSnapTypes() const { return m_snapTypes; }
 
 private:
     int m_snapTypes = POINT_TYPE::PT_NONE;

@@ -139,7 +139,7 @@ public:
     {
     }
 
-    ~PCBEXPR_VAR_REF() {};
+    ~PCBEXPR_VAR_REF() override = default;
 
     static PCBEXPR_PROPERTY_KIND ClassifyProperty( const PROPERTY_BASE* aProperty );
     static LIBEVAL::VAR_TYPE_T   ExpressionType( PCBEXPR_PROPERTY_KIND aKind );

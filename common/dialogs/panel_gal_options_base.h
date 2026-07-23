@@ -47,8 +47,6 @@ class PANEL_GAL_OPTIONS_BASE : public wxPanel
 		wxStaticText* l_gridMinSpacing;
 		wxSpinCtrl* m_gridMinSpacing;
 		wxStaticText* l_gridMinSpacingUnits;
-		wxStaticText* l_gridSnapOptions;
-		wxChoice* m_gridSnapOptions;
 		wxStaticText* m_stGridLabel;
 		wxStaticLine* m_staticline2;
 		wxRadioButton* m_rbSmallCrosshairs;

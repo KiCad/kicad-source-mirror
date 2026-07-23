@@ -34,8 +34,6 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnit
         m_rotationAngle( aUnitsProvider, aEventSource, m_rotationAngleLabel, m_rotationAngleCtrl,
                          m_rotationAngleUnits )
 {
-    m_magneticPads->Show( m_isFootprintEditor );
-    m_magneticGraphics->Show( m_isFootprintEditor );
     m_sizerBoardEdit->Show( !m_isFootprintEditor );
 
     m_rotationAngle.SetUnits( EDA_UNITS::DEGREES );
@@ -66,6 +64,7 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( wxWindow* aParent, UNITS_PROVIDER* aUnit
 #endif
 
     m_optionsBook->SetSelection( isFootprintEditor ? 0 : 1 );
+    Layout();
 }
 
 
@@ -111,9 +110,6 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
     m_allowFreePads->SetValue( aCfg->m_AllowFreePads );
     m_autoRefillZones->SetValue( aCfg->m_AutoRefillZones );
 
-    m_magneticPadChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.pads ) );
-    m_magneticTrackChoice->SetSelection( static_cast<int>( aCfg->m_MagneticItems.tracks ) );
-    m_magneticGraphicsChoice->SetSelection( !aCfg->m_MagneticItems.graphics );
 
     /* Set display options */
     m_OptDisplayCurvedRatsnestLines->SetValue( aCfg->m_Display.m_DisplayRatsnestLinesCurved );
@@ -141,8 +137,6 @@ void PANEL_EDIT_OPTIONS::loadPCBSettings( PCBNEW_SETTINGS* aCfg )
 void PANEL_EDIT_OPTIONS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
 {
     m_rotationAngle.SetAngleValue( aCfg->m_RotationAngle );
-    m_magneticPads->SetValue( aCfg->m_MagneticItems.pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
-    m_magneticGraphics->SetValue( aCfg->m_MagneticItems.graphics );
     m_cbConstrainHV45Mode->SetValue( aCfg->m_AngleSnapMode != LEADER_MODE::DIRECT );
     m_arcEditMode->SetSelection( arcEditModeToComboIndex( aCfg->m_ArcEditMode ) );
 }
@@ -166,10 +160,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
         {
             cfg->m_RotationAngle = m_rotationAngle.GetAngleValue();
-
-            cfg->m_MagneticItems.pads = m_magneticPads->GetValue() ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
-                                                                   : MAGNETIC_OPTIONS::NO_EFFECT;
-            cfg->m_MagneticItems.graphics = m_magneticGraphics->GetValue();
 
             cfg->m_AngleSnapMode = m_cbConstrainHV45Mode->GetValue() ? LEADER_MODE::DEG45
                                                                     : LEADER_MODE::DIRECT;
@@ -195,10 +185,6 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 
             cfg->m_AllowFreePads = m_allowFreePads->GetValue();
             cfg->m_AutoRefillZones = m_autoRefillZones->GetValue();
-
-            cfg->m_MagneticItems.pads = static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
-            cfg->m_MagneticItems.tracks = static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
-            cfg->m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
 
             cfg->m_ESCClearsNetHighlight = m_escClearsNetHighlight->GetValue();
             cfg->m_ShowPageLimits = m_showPageLimits->GetValue();

@@ -3580,7 +3580,7 @@ bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
                 refPt = nonFieldsBBox.GetCenter();
         }
 
-        aSelection.SetReferencePoint( grid.BestSnapAnchor( refPt, nullptr ) );
+        aSelection.SetReferencePoint( grid.ResolveSnap( refPt, nullptr ).position );
     }
 
     return true;

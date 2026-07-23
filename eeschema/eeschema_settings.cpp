@@ -29,6 +29,7 @@
 #include <settings/common_settings.h>
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
+#include <settings/snap_settings_params.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <settings/aui_settings.h>
@@ -385,6 +386,8 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "editing.arc_edit_mode",
             reinterpret_cast<int*>( &m_Drawing.arc_edit_mode ),
             static_cast<int>( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ) ) );
+
+    AddSnapInferenceParams( m_params, m_SnapInference );
 
     m_params.emplace_back( new PARAM<bool>( "drawing.auto_start_wires",
             &m_Drawing.auto_start_wires, true ) );

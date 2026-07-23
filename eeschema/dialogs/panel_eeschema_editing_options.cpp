@@ -84,6 +84,8 @@ PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindo
 #else
     m_leftClickCmdsBook->SetSelection( 0 );
 #endif
+
+    Layout();
 }
 
 

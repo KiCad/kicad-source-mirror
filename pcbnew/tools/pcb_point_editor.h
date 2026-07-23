@@ -38,6 +38,7 @@ class PCB_SELECTION_TOOL;
 class POINT_EDIT_BEHAVIOR;
 class RECT_RADIUS_TEXT_ITEM;
 class SHAPE_POLY_SET;
+class BOARD_CONSTRAINT_DRAG_SESSION;
 
 /**
  * Tool that displays edit points allowing to modify items by dragging the points.
@@ -150,7 +151,7 @@ private:
     RECT_RADIUS_TEXT_ITEM*        m_radiusHelper;
 
     // Alternative constraint, enabled while a modifier key is held
-    std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_altConstraint;
+    std::unique_ptr<EDIT_RELATION> m_altConstraint;
     EDIT_POINT                                   m_altConstrainer;
 
     bool                          m_inPointEditorTool; // Re-entrancy guard
@@ -162,6 +163,7 @@ private:
     // This handles the edit process for a specific tpye of item (not
     // just C++ type, because PCB_SHAPE is one type that has many subtypes)
     std::unique_ptr<POINT_EDIT_BEHAVIOR> m_editorBehavior;
+    std::shared_ptr<BOARD_CONSTRAINT_DRAG_SESSION> m_constraintDragSession;
 
     static const unsigned int COORDS_PADDING; // Padding from coordinates limits for this tool
 };

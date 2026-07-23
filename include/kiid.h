@@ -26,6 +26,8 @@
 #include <boost/uuid/uuid.hpp>
 #include <nlohmann/json_fwd.hpp>
 
+#include <array>
+#include <cstdint>
 #include <string>
 
 class wxString;
@@ -58,13 +60,15 @@ public:
      * Return a KIID derived from a name, the same name always gives the same KIID.
      */
     static KIID FromName( const std::string& aName );
+    static KIID FromBytes( const std::array<uint8_t, 16>& aBytes );
 
     bool        IsLegacyTimestamp() const;
     timestamp_t AsLegacyTimestamp() const;
 
-    wxString AsString() const;
-    wxString AsLegacyTimestampString() const;
-    std::string AsStdString() const;
+    wxString                AsString() const;
+    wxString                AsLegacyTimestampString() const;
+    std::string             AsStdString() const;
+    std::array<uint8_t, 16> AsBytes() const;
 
     /**
      * Returns true if a string has the correct formatting to be a KIID.
@@ -169,9 +173,7 @@ KICOMMON_API KIID& NilUuid();
 class KICOMMON_API KIID_PATH : public std::vector<KIID>
 {
 public:
-    KIID_PATH()
-    {
-    }
+    KIID_PATH() {}
 
     KIID_PATH( const wxString& aString );
 
@@ -259,31 +261,24 @@ public:
 class KICOMMON_API KIID_NIL_SET_RESET
 {
 public:
-    KIID_NIL_SET_RESET()
-    {
-        KIID::CreateNilUuids( true );
-    };
+    KIID_NIL_SET_RESET() { KIID::CreateNilUuids( true ); };
 
-    ~KIID_NIL_SET_RESET()
-    {
-        KIID::CreateNilUuids( false );
-    }
+    ~KIID_NIL_SET_RESET() { KIID::CreateNilUuids( false ); }
 };
 
 KICOMMON_API void to_json( nlohmann::json& aJson, const KIID& aKIID );
 
 KICOMMON_API void from_json( const nlohmann::json& aJson, KIID& aKIID );
 
-template<> struct KICOMMON_API std::hash<KIID>
+template <>
+struct KICOMMON_API std::hash<KIID>
 {
-    std::size_t operator()( const KIID& aId ) const
-    {
-        return aId.Hash();
-    }
+    std::size_t operator()( const KIID& aId ) const { return aId.Hash(); }
 };
 
 
-template<> struct std::hash<KIID_PATH>
+template <>
+struct std::hash<KIID_PATH>
 {
     std::size_t operator()( const KIID_PATH& aPath ) const
     {

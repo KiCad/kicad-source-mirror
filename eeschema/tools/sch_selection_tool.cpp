@@ -1631,7 +1631,7 @@ void SCH_SELECTION_TOOL::ExitGroup( bool aSelectGroup )
 OPT_TOOL_EVENT SCH_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HELPER& aGrid,
                                                    SCH_ITEM* aItem )
 {
-    VECTOR2I pos = aGrid.BestSnapAnchor( aEvent->Position(), aGrid.GetItemGrid( aItem ) );
+    VECTOR2I pos = aGrid.ResolveSnap( aEvent->Position(), aGrid.GetItemGrid( aItem ) ).position;
 
     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
             && !m_toolMgr->GetTool<SCH_POINT_EDITOR>()->HasPoint()
@@ -4029,7 +4029,7 @@ bool SCH_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos
                 EE_GRID_HELPER    grid( m_toolMgr );
                 GRID_HELPER_GRIDS pinGrid = grid.GetItemGrid( pin );
 
-                if( pin->IsPointClickableAnchor( grid.BestSnapAnchor( *aPos, pinGrid ) ) )
+                if( pin->IsPointClickableAnchor( grid.ResolveSnap( *aPos, pinGrid ).position ) )
                     return true;
             }
 

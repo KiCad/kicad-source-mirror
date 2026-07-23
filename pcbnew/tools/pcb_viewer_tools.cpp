@@ -318,7 +318,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         if( !evt->IsActivate() && !evt->IsCancelInteractive() )
         {
             // If we are switching, the canvas may not be valid any more
-            cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
+            cursorPos = grid.ResolveSnap( cursorPos, nullptr ).position;
             controls.ForceCursorPosition( true, cursorPos );
         }
         else

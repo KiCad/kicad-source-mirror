@@ -24,14 +24,19 @@
 
 #include <math/vector2d.h>
 #include <origin_viewitem.h>
+#include <settings/snap_settings.h>
 #include <tool/grid_helper.h>
+#include <snap/snap_resolver.h>
 #include "sch_selection.h"
 
 class SCH_ITEM;
+class SCH_PIN;
 
 
 class EE_GRID_HELPER : public GRID_HELPER
 {
+    friend class EEGridHelperTestFixture;
+
 public:
 
     EE_GRID_HELPER();
@@ -50,17 +55,33 @@ public:
     VECTOR2D GetGridSize( GRID_HELPER_GRIDS aGrid ) const override;
     using GRID_HELPER::GetGrid;
 
-    GRID_HELPER_GRIDS GetSelectionGrid( const SELECTION& aItem ) const override;
     GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const override;
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_GRIDS aGrid,
                              const SCH_SELECTION& aItems );
 
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid, SCH_ITEM* aSkip );
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid,
-                             const SCH_SELECTION& aSkip = {} );
+    SNAP_RESULT ResolveSnap( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid, SCH_ITEM* aSkip );
+    SNAP_RESULT ResolveSnap( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid, const SCH_SELECTION& aSkip = {},
+                             std::optional<VECTOR2I> aMovingReferencePoint = std::nullopt );
+
+    void AddConstructionItems( std::vector<SCH_ITEM*> aItems, bool aExtensionOnly,
+                               bool aIsPersistent );
 
 private:
+    /**
+     * Bounds a layout relation should align to.
+     *
+     * Fields travel with their symbol and are moved independently, so including them would make
+     * a symbol's alignment edges shift for reasons unrelated to the symbol's placement.
+     */
+    static BOX2I layoutBounds( const SCH_ITEM& aItem );
+
+    /// Pin connection points the item offers as alignment anchors.
+    static std::vector<std::pair<const SCH_PIN*, VECTOR2I>> layoutPins( SCH_ITEM& aItem );
+
+    /// Snap inference settings for whichever editor owns this helper.
+    SNAP_INFERENCE_SETTINGS snapInferenceSettings() const;
+
     std::set<SCH_ITEM*> queryVisible( const BOX2I& aArea, const SCH_SELECTION& aSkipList ) const;
 
     ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, GRID_HELPER_GRIDS aGrid );

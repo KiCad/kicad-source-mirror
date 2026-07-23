@@ -353,7 +353,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
         grid.SetSnap( !aEvent.Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !aEvent.DisableGridSnapping() );
 
-        VECTOR2D cursorPos = grid.BestSnapAnchor( aEvent.Position(), gridType, nullptr );
+        VECTOR2D cursorPos = grid.ResolveSnap( aEvent.Position(), gridType, nullptr ).position;
         startSegments( commit, params->layer, cursorPos, params->sourceSegment );
     }
 
@@ -746,7 +746,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
         VECTOR2D eventPosition = evt->HasPosition() ? evt->Position()
                                                     : controls->GetMousePosition();
 
-        VECTOR2I cursorPos = grid.BestSnapAnchor( eventPosition, gridType, segment );
+        VECTOR2I cursorPos = grid.ResolveSnap( eventPosition, gridType, segment ).position;
         controls->ForceCursorPosition( true, cursorPos );
 
         // Need to handle change in H/V mode while drawing

@@ -517,8 +517,8 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
         {
             std::optional<int> val = item->Get<std::optional<int>>( it->second.property );
 
-            if( val.has_value() )
-                return new LIBEVAL::VALUE( static_cast<double>( val.value() ) );
+            if( val )
+                return new LIBEVAL::VALUE( static_cast<double>( *val ) );
 
             return LIBEVAL::VALUE::MakeNullValue();
         }
@@ -535,8 +535,8 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
         {
             std::optional<double> val = item->Get<std::optional<double>>( it->second.property );
 
-            if( val.has_value() )
-                return new LIBEVAL::VALUE( val.value() );
+            if( val )
+                return new LIBEVAL::VALUE( *val );
 
             return LIBEVAL::VALUE::MakeNullValue();
         }

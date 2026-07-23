@@ -23,6 +23,8 @@
 
 #include <functional>
 #include <algorithm>
+#include <cmath>
+#include <unordered_set>
 
 #include <advanced_config.h>
 #include <board_item.h>
@@ -50,8 +52,12 @@
 #include <macros.h>
 #include <math/util.h> // for KiROUND
 #include <gal/painter.h>
+#include <footprint_editor_settings.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
+#include <settings/snap_settings.h>
+#include <snap/snap_inference.h>
+#include <tool/snap_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_tool_base.h>
 #include <view/view.h>
@@ -59,7 +65,6 @@
 
 namespace
 {
-
 /**
  * Get the INTERSECTABLE_GEOM for a BOARD_ITEM if it's supported.
  *
@@ -199,10 +204,12 @@ PCB_GRID_HELPER::~PCB_GRID_HELPER()
 }
 
 
-void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, bool aExtensionOnly,
-                                            bool aIsPersistent )
+void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, bool aExtensionOnly, bool aIsPersistent )
 {
     if( !ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps )
+        return;
+
+    if( !snapInferenceSettings().constructionExtensions )
         return;
 
     // For all the elements that get drawn construction geometry,
@@ -508,9 +515,57 @@ void PCB_GRID_HELPER::OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM
 }
 
 
-VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos,
-                                          std::vector<BOARD_ITEM*>& aItems,
-                                          GRID_HELPER_GRIDS aGrid,
+BOX2I PCB_GRID_HELPER::layoutBounds( const BOARD_ITEM& aItem )
+{
+    if( aItem.Type() == PCB_FOOTPRINT_T )
+        return static_cast<const FOOTPRINT&>( aItem ).GetBoundingBox( false );
+
+    return aItem.GetBoundingBox();
+}
+
+
+bool PCB_GRID_HELPER::editingInsideFootprint() const
+{
+    if( !m_toolMgr )
+        return false;
+
+    const PCB_TOOL_BASE* tool = dynamic_cast<PCB_TOOL_BASE*>( m_toolMgr->GetCurrentTool() );
+
+    return tool && tool->IsFootprintEditor();
+}
+
+
+SNAP_INFERENCE_SETTINGS PCB_GRID_HELPER::snapInferenceSettings() const
+{
+    SNAP_INFERENCE_SETTINGS settings;
+
+    if( !m_toolMgr )
+        return settings;
+
+    if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() ) )
+    {
+        if( editingInsideFootprint() )
+        {
+            if( FOOTPRINT_EDITOR_SETTINGS* cfg = frame->GetFootprintEditorSettings() )
+                settings = cfg->m_SnapInference;
+        }
+        else if( PCBNEW_SETTINGS* cfg = frame->GetPcbNewSettings() )
+        {
+            settings = cfg->m_SnapInference;
+        }
+    }
+    else if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( m_toolMgr->GetSettings() ) )
+    {
+        // Headless callers have settings but no PCB frame.
+        settings = cfg->m_SnapInference;
+    }
+
+    return settings;
+}
+
+
+VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItems,
+                                          GRID_HELPER_GRIDS                   aGrid,
                                           const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter )
 {
     wxLogTrace( traceSnap, "BestDragOrigin: mouse pos (%d, %d), items count: %zu", aMousePos.x, aMousePos.y,
@@ -564,15 +619,44 @@ VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos,
     }
 
     VECTOR2I ret = best ? best->pos : aMousePos;
+
+    if( best )
+    {
+        std::optional<BOX2I> movingBounds;
+
+        for( BOARD_ITEM* item : aItems )
+        {
+            if( !item )
+                continue;
+
+            if( movingBounds )
+                movingBounds->Merge( layoutBounds( *item ) );
+            else
+                movingBounds = layoutBounds( *item );
+        }
+
+        bool padCenter = ( best->pointTypes & POINT_TYPE::PT_CENTER )
+                         && std::any_of( best->items.begin(), best->items.end(),
+                                         []( const EDA_ITEM* aItem )
+                                         {
+                                             return aItem && aItem->Type() == PCB_PAD_T;
+                                         } );
+
+        setLayoutReference( ret, movingBounds, padCenter );
+    }
+    else
+    {
+        setLayoutReference( ret, std::nullopt, false );
+    }
+
     wxLogTrace( traceSnap, "  have best: %s, returning (%d, %d)", best ? "yes" : "no", ret.x, ret.y );
     return ret;
 }
 
 
-VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem,
-                                          GRID_HELPER_GRIDS aGrid )
+SNAP_RESULT PCB_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem, GRID_HELPER_GRIDS aGrid )
 {
-    LSET layers;
+    LSET                     layers;
     std::vector<BOARD_ITEM*> item;
 
     if( aReferenceItem )
@@ -590,55 +674,308 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* a
         layers = LSET::AllLayersMask();
     }
 
-    return BestSnapAnchor( aOrigin, layers, aGrid, item );
+    return ResolveSnap( aOrigin, layers, aGrid, item );
 }
 
 
-VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
-                                          GRID_HELPER_GRIDS               aGrid,
-                                          const std::vector<BOARD_ITEM*>& aSkip )
+SNAP_RESULT PCB_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, const LSET& aLayers, GRID_HELPER_GRIDS aGrid,
+                                          const std::vector<BOARD_ITEM*>& aSkip,
+                                          std::optional<VECTOR2I>         aMovingReferencePoint )
 {
-    wxLogTrace( traceSnap, "BestSnapAnchor: origin (%d, %d), enableSnap=%d, enableGrid=%d, enableSnapLine=%d",
-                aOrigin.x, aOrigin.y, m_enableSnap, m_enableGrid, m_enableSnapLine );
+    wxLogTrace( traceSnap, "ResolveSnap: origin (%d, %d), enableSnap=%d, enableGrid=%d, enableSnapLine=%d", aOrigin.x,
+                aOrigin.y, m_enableSnap, m_enableGrid, m_enableSnapLine );
 
-    // Tuning constant: snap radius in screen space
-    const int snapSize = 25;
+    const SNAP_RANGES ranges = computeSnapRanges( m_enableGrid );
+    const double      snapScale = ranges.scale;
+    const int         snapRange = ranges.range;
 
-    // Snapping distance is in screen space, clamped to the current grid to ensure that the grid
-    // points that are visible can always be snapped to.
-    // see https://gitlab.com/kicad/code/kicad/-/issues/5638
-    // see https://gitlab.com/kicad/code/kicad/-/issues/7125
-    // see https://gitlab.com/kicad/code/kicad/-/issues/12303
-    double snapScale = m_toolMgr->GetView()->ToWorld( snapSize );
-    // warning: GetVisibleGrid().x sometimes returns a value > INT_MAX. Intermediate calculation
-    // needs double.
-    int snapRange = KiROUND( m_enableGrid ? std::min( snapScale, GetVisibleGrid().x ) : snapScale );
+    const SNAP_INFERENCE_SETTINGS inferenceSettings = snapInferenceSettings();
+
+    const bool constructionEnabled =
+            m_enableSnap && inferenceSettings.constructionExtensions && ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps;
+
+    if( !constructionEnabled )
+        getSnapManager().GetConstructionManager().Clear();
 
     //Respect limits of coordinates representation
-    const BOX2I visibilityHorizon = BOX2ISafe( VECTOR2D( aOrigin ) - snapRange / 2.0,
-                                               VECTOR2D( snapRange, snapRange ) );
+    const BOX2I visibilityHorizon =
+            BOX2ISafe( VECTOR2D( aOrigin ) - snapRange / 2.0, VECTOR2D( snapRange, snapRange ) );
 
     clearAnchors();
 
-    const std::vector<BOARD_ITEM*> visibleItems = queryVisible( visibilityHorizon, aSkip );
+    const std::vector<BOARD_ITEM*> visibleItems = queryVisible( { visibilityHorizon }, aSkip );
     computeAnchors( visibleItems, aOrigin, false, nullptr, &aLayers, false );
 
-    ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE );
-    VECTOR2I nearestGrid = Align( aOrigin, aGrid );
+    ANCHOR*        nearest = nearestAnchor( aOrigin, SNAPPABLE );
+    VECTOR2I       nearestGrid = Align( aOrigin, aGrid );
     const VECTOR2D gridSize = GetGridSize( aGrid );
 
-    const int hysteresisWorld = KiROUND( m_toolMgr->GetView()->ToWorld( ADVANCED_CFG::GetCfg().m_SnapHysteresis ) );
-    const int snapIn = std::max( 0, snapRange - hysteresisWorld );
-    const int snapOut = snapRange + hysteresisWorld;
+    SNAP_SOURCE_CONTEXT context;
+    context.profile = aSkip.empty() ? SNAP_EDITOR_PROFILE::PICKER : SNAP_EDITOR_PROFILE::RIGID_PLACEMENT;
+    context.sourcePoint = aOrigin;
+    context.movingReferencePoint = aMovingReferencePoint;
+    context.referencePreference = m_layoutReferencePreference;
 
-    wxLogTrace( traceSnap, "  snapRange=%d, snapIn=%d, snapOut=%d, hysteresis=%d",
-                snapRange, snapIn, snapOut, hysteresisWorld );
-    wxLogTrace( traceSnap, "  visibleItems count=%zu, anchors count=%zu",
-                visibleItems.size(), m_anchors.size() );
-    wxLogTrace( traceSnap, "  nearest anchor: %s at (%d, %d), distance=%f",
-                nearest ? "found" : "none",
-                nearest ? nearest->pos.x : 0,
-                nearest ? nearest->pos.y : 0,
+    for( BOARD_ITEM* item : aSkip )
+    {
+        if( !item )
+            continue;
+
+        if( context.movingBounds )
+            context.movingBounds->Merge( layoutBounds( *item ) );
+        else
+            context.movingBounds = layoutBounds( *item );
+    }
+
+    if( aSkip.size() == 1 && aSkip.front() )
+    {
+        BOARD_ITEM* sourceItem = aSkip.front();
+        context.movingItem = SNAP_STABLE_ID{ SNAP_ID_KIND::ITEM_GEOMETRY, SnapTargetId( sourceItem->m_Uuid ) };
+        std::optional<std::pair<VECTOR2I, VECTOR2I>> endpoints;
+
+        if( m_pointEditProfile )
+            context.profile = SNAP_EDITOR_PROFILE::POINT_EDIT;
+
+        if( sourceItem->Type() == PCB_TRACE_T )
+        {
+            PCB_TRACK* track = static_cast<PCB_TRACK*>( sourceItem );
+            endpoints = std::pair( track->GetStart(), track->GetEnd() );
+        }
+        else if( sourceItem->Type() == PCB_SHAPE_T )
+        {
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( sourceItem );
+
+            if( shape->GetShape() == SHAPE_T::SEGMENT )
+                endpoints = std::pair( shape->GetStart(), shape->GetEnd() );
+        }
+
+        if( endpoints && m_pointEditProfile )
+        {
+            context.stationarySourceLeg =
+                    endpoints->first.SquaredDistance( aOrigin ) > endpoints->second.SquaredDistance( aOrigin )
+                            ? endpoints->first
+                            : endpoints->second;
+        }
+    }
+
+    SNAP_INFERENCE_PROVIDER inferenceProvider;
+    const bool              inferenceEnabled = m_enableSnap
+                                  && ( inferenceSettings.objectGeometry || inferenceSettings.tangentNormal
+                                       || inferenceSettings.alignmentDistribution );
+    const bool geometryEnabled =
+            m_enableSnap && ( inferenceSettings.objectGeometry || inferenceSettings.tangentNormal );
+
+    if( geometryEnabled && context.movingItem )
+    {
+        for( size_t i = 0; i < m_stationarySelfSegments.size(); ++i )
+        {
+            SNAP_STABLE_ID id =
+                    MakeDerivedSnapId( SNAP_ID_KIND::SELF_SEGMENT, *context.movingItem, static_cast<int>( i ) );
+            context.stationarySelfFeatures.push_back( id );
+            inferenceProvider.AddPath( { id, m_stationarySelfSegments[i], false } );
+        }
+    }
+
+    if( inferenceEnabled )
+    {
+        const auto eligibleInferenceTarget = [&]( BOARD_ITEM* aItem )
+        {
+            if( !m_magneticSettings->allLayers && !( aLayers & aItem->GetLayerSet() ).any() )
+            {
+                return false;
+            }
+
+            switch( aItem->Type() )
+            {
+            case PCB_TRACE_T:
+            case PCB_ARC_T: return m_magneticSettings->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+
+            case PCB_PAD_T: return m_magneticSettings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+
+            default: return m_magneticSettings->graphics;
+            }
+        };
+
+        for( BOARD_ITEM* item : visibleItems )
+        {
+            if( !eligibleInferenceTarget( item ) )
+                continue;
+
+            if( !geometryEnabled )
+                continue;
+
+            std::optional<INTERSECTABLE_GEOM> geometry = GetBoardIntersectable( *item );
+
+            if( !geometry )
+                continue;
+
+            inferenceProvider.AddPath( { { SNAP_ID_KIND::ITEM_GEOMETRY, SnapTargetId( item->m_Uuid ),
+                                           static_cast<int>( item->Type() ), 0 },
+                                         std::move( *geometry ),
+                                         false } );
+        }
+
+        if( inferenceSettings.alignmentDistribution && context.movingBounds )
+        {
+            std::vector<BOARD_ITEM*> layoutItems;
+            const BOX2I              viewport = BOX2ISafe( m_toolMgr->GetView()->GetViewport() );
+            BOX2I                    movingBounds = *context.movingBounds;
+
+            if( context.movingReferencePoint )
+                movingBounds.Offset( context.sourcePoint - *context.movingReferencePoint );
+
+            // Alignment ignores separation along its guide; equal spacing only requires overlap
+            // perpendicular to its axis.  Their exact query closure is therefore a cross.
+            BOX2I verticalStrip =
+                    BOX2ISafe( VECTOR2D( static_cast<double>( movingBounds.GetLeft() ) - snapRange, viewport.GetTop() ),
+                               VECTOR2D( movingBounds.GetWidth() + 2.0 * snapRange, viewport.GetHeight() ) );
+            BOX2I horizontalStrip =
+                    BOX2ISafe( VECTOR2D( viewport.GetLeft(), static_cast<double>( movingBounds.GetTop() ) - snapRange ),
+                               VECTOR2D( viewport.GetWidth(), movingBounds.GetHeight() + 2.0 * snapRange ) );
+            verticalStrip = verticalStrip.Intersect( viewport );
+            horizontalStrip = horizontalStrip.Intersect( viewport );
+            std::vector<BOARD_ITEM*> visibleLayoutItems = queryVisible( { verticalStrip, horizontalStrip }, aSkip );
+
+            const bool insideFootprint = editingInsideFootprint();
+
+            for( BOARD_ITEM* item : visibleLayoutItems )
+            {
+                FOOTPRINT* footprint = item->GetParentFootprint();
+
+                if( footprint && !insideFootprint )
+                    layoutItems.push_back( footprint );
+                else
+                    layoutItems.push_back( item );
+            }
+
+            std::sort( layoutItems.begin(), layoutItems.end(), std::less<>() );
+            layoutItems.erase( std::unique( layoutItems.begin(), layoutItems.end() ), layoutItems.end() );
+
+            // Moving items and their containers.  A container's bounds enclose what is being
+            // moved, and pads reached through their footprint bypass the queryVisible skip list.
+            std::unordered_set<BOARD_ITEM*> moving( aSkip.begin(), aSkip.end() );
+
+            for( BOARD_ITEM* item : aSkip )
+            {
+                for( FOOTPRINT* parent = item ? item->GetParentFootprint() : nullptr; parent;
+                     parent = parent->GetParentFootprint() )
+                {
+                    moving.insert( parent );
+                }
+            }
+
+            for( BOARD_ITEM* item : layoutItems )
+            {
+                // Aligning to a container of the move would align the move to itself.  The
+                // container's other children remain valid targets.
+                if( !eligibleInferenceTarget( item ) || moving.count( item ) )
+                    continue;
+
+                std::optional<SNAP_TARGET_ID> parent;
+
+                if( item->GetParent() )
+                    parent = SnapTargetId( item->GetParent()->m_Uuid );
+
+                inferenceProvider.AddBounds( { { SNAP_ID_KIND::ITEM_GEOMETRY, SnapTargetId( item->m_Uuid ),
+                                                 static_cast<int>( item->Type() ), 0 },
+                                               layoutBounds( *item ),
+                                               std::move( parent ) } );
+            }
+
+            size_t padCenters = 0;
+
+            const auto addPadCenter = [&]( PAD* aPad )
+            {
+                if( !eligibleInferenceTarget( aPad ) || moving.count( aPad ) )
+                    return;
+
+                std::optional<SNAP_TARGET_ID> parent;
+
+                if( FOOTPRINT* footprint = aPad->GetParentFootprint() )
+                    parent = SnapTargetId( footprint->m_Uuid );
+
+                inferenceProvider.AddAlignmentPoint( { { SNAP_ID_KIND::INTRINSIC_ANCHOR, SnapTargetId( aPad->m_Uuid ) },
+                                                       aPad->GetPosition(),
+                                                       std::move( parent ) } );
+                ++padCenters;
+            };
+
+            for( BOARD_ITEM* item : layoutItems )
+            {
+                if( item->Type() == PCB_PAD_T )
+                {
+                    addPadCenter( static_cast<PAD*>( item ) );
+                }
+                else if( item->Type() == PCB_FOOTPRINT_T )
+                {
+                    for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
+                        addPadCenter( pad );
+                }
+            }
+
+            wxLogTrace( wxT( "KICAD_SNAP_RESOLVER" ), "layout targets=%zu pad-centers=%zu", layoutItems.size(),
+                        padCenters );
+        }
+    }
+
+    enum class PRESENTATION_KIND
+    {
+        ANCHOR_MARKER,
+        GUIDE,
+        POINT_ON_ELEMENT
+    };
+
+    struct PRESENTATION
+    {
+        PRESENTATION_KIND     kind;
+        std::optional<ANCHOR> anchor;
+        bool                  proposeConstruction = false;
+    };
+
+    SNAP_FRAME_INPUT<PRESENTATION> frame;
+    frame.context = context;
+    frame.stickyIds = m_stickySnapIds;
+    frame.rankingHysteresis = ranges.rankingHysteresis;
+    frame.feasibility = m_feasibilityCallback;
+    frame.trace = snapTraceCallback( context );
+    emitAngleBranchCandidates( frame.candidates, aOrigin, snapScale );
+
+    if( m_enableSnap && inferenceSettings.objectGeometry )
+    {
+        for( SNAP_CANDIDATE& candidate : inferenceProvider.CollectObjectGeometry( context, snapRange ) )
+            frame.candidates.push_back( std::move( candidate ) );
+    }
+
+    if( m_enableSnap && inferenceSettings.tangentNormal && context.stationarySourceLeg )
+    {
+        for( SNAP_CANDIDATE& candidate : inferenceProvider.CollectTangentNormal( context, snapRange, true, true ) )
+            frame.candidates.push_back( std::move( candidate ) );
+    }
+
+    if( m_enableSnap && inferenceSettings.alignmentDistribution && context.movingBounds )
+    {
+        std::vector<SNAP_CANDIDATE> alignment = inferenceProvider.CollectAlignment( context, snapRange );
+        std::vector<SNAP_CANDIDATE> spacing = inferenceProvider.CollectEqualSpacing( context, snapRange );
+
+        wxLogTrace( wxT( "KICAD_SNAP_RESOLVER" ), "layout candidates alignment=%zu spacing=%zu", alignment.size(),
+                    spacing.size() );
+
+        for( SNAP_CANDIDATE& candidate : alignment )
+            frame.candidates.push_back( std::move( candidate ) );
+
+        for( SNAP_CANDIDATE& candidate : spacing )
+            frame.candidates.push_back( std::move( candidate ) );
+    }
+
+    emitSelfAndGridCandidates( frame.candidates, context, aOrigin, nearestGrid, snapScale, snapRange, m_enableGrid );
+
+    const int snapIn = ranges.in;
+    const int snapOut = ranges.out;
+
+    wxLogTrace( traceSnap, "  snapRange=%d, snapIn=%d, snapOut=%d", snapRange, snapIn, snapOut );
+    wxLogTrace( traceSnap, "  visibleItems count=%zu, anchors count=%zu", visibleItems.size(), m_anchors.size() );
+    wxLogTrace( traceSnap, "  nearest anchor: %s at (%d, %d), distance=%f", nearest ? "found" : "none",
+                nearest ? nearest->pos.x : 0, nearest ? nearest->pos.y : 0,
                 nearest ? nearest->Distance( aOrigin ) : -1.0 );
     wxLogTrace( traceSnap, "  nearestGrid: (%d, %d)", nearestGrid.x, nearestGrid.y );
 
@@ -666,68 +1003,113 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
             snapDist = existingDist;
     }
 
-    wxLogTrace( traceSnap, "  snapDist: %s (value=%d)",
-                snapDist ? "set" : "none", snapDist ? *snapDist : -1 );
+    wxLogTrace( traceSnap, "  snapDist: %s (value=%d)", snapDist ? "set" : "none", snapDist ? *snapDist : -1 );
     wxLogTrace( traceSnap, "  m_snapItem: %s", m_snapItem ? "exists" : "none" );
 
-    showConstructionGeometry( m_enableSnap );
+    showConstructionGeometry( constructionEnabled );
 
     SNAP_MANAGER&      snapManager = getSnapManager();
     SNAP_LINE_MANAGER& snapLineManager = snapManager.GetSnapLineManager();
 
-    const auto ptIsReferenceOnly =
-            [&]( const VECTOR2I& aPt )
+    const auto ptIsReferenceOnly = [&]( const VECTOR2I& aPt )
+    {
+        const std::vector<VECTOR2I>& referenceOnlyPoints = snapManager.GetReferenceOnlyPoints();
+        return std::find( referenceOnlyPoints.begin(), referenceOnlyPoints.end(), aPt ) != referenceOnlyPoints.end();
+    };
+
+    const auto proposeConstructionForItems = [&]( const std::vector<EDA_ITEM*>& aItems )
+    {
+        // Add any involved item as a temporary construction item
+        // (de-duplication with existing construction items is handled later)
+        std::vector<BOARD_ITEM*> items;
+
+        for( EDA_ITEM* item : aItems )
+        {
+            if( !item->IsBOARD_ITEM() )
+                continue;
+
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
+            // Null items are allowed to arrive here as they represent geometry that isn't
+            // specifically tied to a board item. For example snap lines from some
+            // other anchor.
+            // But they don't produce new construction items.
+            if( boardItem )
             {
-                const std::vector<VECTOR2I>& referenceOnlyPoints = snapManager.GetReferenceOnlyPoints();
-                return std::find( referenceOnlyPoints.begin(), referenceOnlyPoints.end(), aPt )
-                       != referenceOnlyPoints.end();
-            };
+                if( m_magneticSettings->allLayers || ( ( aLayers & boardItem->GetLayerSet() ).any() ) )
+                    items.push_back( boardItem );
+            }
+        }
 
-    const auto proposeConstructionForItems =
-            [&]( const std::vector<EDA_ITEM*>& aItems )
-            {
-                // Add any involved item as a temporary construction item
-                // (de-duplication with existing construction items is handled later)
-                std::vector<BOARD_ITEM*> items;
+        // Temporary construction items are not persistent and don't
+        // overlay the items themselves (as the items will not be moved)
+        if( constructionEnabled )
+            AddConstructionItems( items, true, false );
+    };
 
-                for( EDA_ITEM* item : aItems )
-                {
-                    if( !item->IsBOARD_ITEM() )
-                        continue;
+    const auto anchorId = [&]( const ANCHOR& aAnchor )
+    {
+        std::vector<SNAP_TARGET_ID> targets;
 
-                    BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+        for( const EDA_ITEM* item : aAnchor.items )
+        {
+            if( item )
+                targets.push_back( SnapTargetId( item->m_Uuid ) );
+        }
 
-                    // Null items are allowed to arrive here as they represent geometry that isn't
-                    // specifically tied to a board item. For example snap lines from some
-                    // other anchor.
-                    // But they don't produce new construction items.
-                    if( boardItem )
-                    {
-                        if( m_magneticSettings->allLayers || ( ( aLayers & boardItem->GetLayerSet() ).any() ) )
-                            items.push_back( boardItem );
-                    }
-                }
+        SNAP_ID_KIND kind =
+                aAnchor.flags & CONSTRUCTED ? SNAP_ID_KIND::CONSTRUCTED_ANCHOR : SNAP_ID_KIND::INTRINSIC_ANCHOR;
+        SNAP_STABLE_ID pointId = MakePointSnapId( kind, aAnchor.pos, aAnchor.pointTypes );
 
-                // Temporary construction items are not persistent and don't
-                // overlay the items themselves (as the items will not be moved)
-                AddConstructionItems( items, true, false );
-            };
+        if( targets.empty() )
+            return pointId;
 
-    bool snapValid = false;
+        targets.push_back( pointId.target );
+        return MakeCompositeSnapId( kind, targets, aAnchor.pointTypes );
+    };
+
+    const auto addAnchorCandidate = [&]( const ANCHOR& aAnchor, bool aRetained )
+    {
+        SNAP_STABLE_ID id = anchorId( aAnchor );
+
+        if( frame.presentation.contains( id ) )
+        {
+            if( aRetained )
+                frame.retainedId = id;
+
+            return;
+        }
+
+        const bool constructed = aAnchor.flags & CONSTRUCTED;
+        frame.candidates.push_back( SNAP_CANDIDATE::Point( id, SNAP_PRIORITY_TIER::OBJECT,
+                                                           constructed ? SNAP_CANDIDATE_SUBTYPE::CONSTRUCTED_POINT
+                                                                       : SNAP_CANDIDATE_SUBTYPE::INTRINSIC_ANCHOR,
+                                                           aAnchor.pos, aAnchor.Distance( aOrigin ) / snapScale ) );
+        frame.presentation.emplace(
+                id, PRESENTATION{ PRESENTATION_KIND::ANCHOR_MARKER, aAnchor, !aRetained && !constructed } );
+
+        if( aRetained )
+            frame.retainedId = id;
+    };
+
+    // Hover activation, snap-line suppression and anchor acceptance are all the same question.
+    const bool nearestCaptured = nearest && nearest->Distance( aOrigin ) <= snapIn;
+    bool       keepConstructionProposal = false;
+    bool       allowHoverActivation = false;
 
     if( m_enableSnap )
     {
         wxLogTrace( traceSnap, "  Snap enabled, checking snap options..." );
+        allowHoverActivation = !nearestCaptured;
 
-        // Existing snap lines need priority over new snaps
         if( m_enableSnapLine )
         {
             wxLogTrace( traceSnap, "    Checking snap lines..." );
 
-            OPT_VECTOR2I snapLineSnap = snapLineManager.GetNearestSnapLinePoint(
-                    aOrigin, nearestGrid, snapDist, snapRange, gridSize, GetOrigin() );
+            OPT_VECTOR2I snapLineSnap = snapLineManager.GetNearestSnapLinePoint( aOrigin, nearestGrid, snapDist,
+                                                                                 snapRange, gridSize, GetOrigin() );
 
-            if( !snapLineSnap )
+            if( !snapLineSnap && constructionEnabled )
             {
                 std::optional<VECTOR2I> constructionSnap =
                         SnapToConstructionLines( aOrigin, nearestGrid, gridSize, snapRange );
@@ -736,62 +1118,25 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
                     snapLineSnap = *constructionSnap;
             }
 
-            // We found a better snap point that the nearest one
             if( snapLineSnap && m_skipPoint != *snapLineSnap )
             {
-                wxLogTrace( traceSnap, "    Snap line found at (%d, %d)",
-                            snapLineSnap->x, snapLineSnap->y );
+                wxLogTrace( traceSnap, "    Snap line found at (%d, %d)", snapLineSnap->x, snapLineSnap->y );
 
-                // Check if we have a nearby anchor that should take precedence
-                // Prefer actual anchors over construction line grid intersections
-                bool preferAnchor = false;
-                if( nearest && nearest->Distance( aOrigin ) <= snapIn )
+                if( !nearestCaptured )
                 {
-                    preferAnchor = true;
-                    wxLogTrace( traceSnap, "    Preferring anchor over snap line (anchorDist=%f, snapRange=%d)",
-                                nearest->Distance( aOrigin ), snapRange );
-                }
-                else
-                {
-                    if( nearest )
-                    {
-                        wxLogTrace( traceSnap, "    Nearest anchor at (%d, %d), distance=%f is out of range (snapRange=%d)",
-                                    nearest->pos.x, nearest->pos.y,
-                                    nearest->Distance( aOrigin ),
-                                    snapRange );
-                    }
-                    else
-                    {
-                        wxLogTrace( traceSnap, "    No nearest anchor to consider" );
-                    }
-                }
-
-                if( !preferAnchor )
-                {
-                    snapLineManager.SetSnapLineEnd( *snapLineSnap );
-                    snapValid = true;
-
-                    // Don't show a snap point if we're snapping to a grid rather than an anchor
-                    m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
-                    m_viewSnapPoint.SetSnapTypes( POINT_TYPE::PT_NONE );
-
-                    // Only return the snap line end as a snap if it's not a reference point
-                    // (we don't snap to reference points, but we can use them to update the snap line,
-                    // without actually snapping)
                     if( !ptIsReferenceOnly( *snapLineSnap ) )
                     {
-                        wxLogTrace( traceSnap, "  RETURNING snap line point (non-reference): (%d, %d)",
-                                    snapLineSnap->x, snapLineSnap->y );
-                        return *snapLineSnap;
+                        SNAP_STABLE_ID id = MakePointSnapId( SNAP_ID_KIND::CONSTRUCTION, *snapLineSnap );
+                        frame.candidates.push_back( SNAP_CANDIDATE::Point(
+                                id, SNAP_PRIORITY_TIER::OBJECT, SNAP_CANDIDATE_SUBTYPE::CONSTRUCTED_POINT,
+                                *snapLineSnap, snapLineSnap->Distance( aOrigin ) / snapScale ) );
+                        frame.presentation.emplace( id, PRESENTATION{ PRESENTATION_KIND::GUIDE, std::nullopt, false } );
                     }
                     else
                     {
                         wxLogTrace( traceSnap, "    Snap line point is reference-only, continuing..." );
+                        keepConstructionProposal = true;
                     }
-                }
-                else
-                {
-                    wxLogTrace( traceSnap, "    Skipping snap line, will use anchor instead" );
                 }
             }
         }
@@ -800,137 +1145,116 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& a
         {
             int dist = m_snapItem->Distance( aOrigin );
 
-            wxLogTrace( traceSnap, "    Checking existing m_snapItem, dist=%d (snapOut=%d)",
-                        dist, snapOut );
+            wxLogTrace( traceSnap, "    Checking existing m_snapItem, dist=%d (snapOut=%d)", dist, snapOut );
 
-            if( dist <= snapOut )
+            if( dist <= snapOut && !ptIsReferenceOnly( m_snapItem->pos ) )
             {
-                if( nearest && ptIsReferenceOnly( nearest->pos ) &&
-                        nearest->Distance( aOrigin ) <= snapRange )
+                if( nearest && ptIsReferenceOnly( nearest->pos ) && nearest->Distance( aOrigin ) <= snapRange )
                     snapLineManager.SetSnapLineOrigin( nearest->pos );
 
-                snapLineManager.SetSnappedAnchor( m_snapItem->pos );
-                updateSnapPoint( { m_snapItem->pos, m_snapItem->pointTypes } );
-
-                wxLogTrace( traceSnap, "  RETURNING existing m_snapItem: (%d, %d)",
-                            m_snapItem->pos.x, m_snapItem->pos.y );
-                return m_snapItem->pos;
+                addAnchorCandidate( *m_snapItem, true );
             }
-
-            wxLogTrace( traceSnap, "    m_snapItem too far, clearing..." );
-            m_snapItem = std::nullopt;
         }
 
-        // If there's a snap anchor within range, use it if we can
-        if( nearest && nearest->Distance( aOrigin ) <= snapIn )
+        if( nearestCaptured )
         {
             wxLogTrace( traceSnap, "    Nearest anchor within snapIn range" );
 
-            const bool anchorIsConstructed = nearest->flags & ANCHOR_FLAGS::CONSTRUCTED;
-
-            // If the nearest anchor is a reference point, we don't snap to it,
-            // but we can update the snap line origin
             if( ptIsReferenceOnly( nearest->pos ) )
             {
                 wxLogTrace( traceSnap, "    Nearest anchor is reference-only, setting snap line origin" );
-                // We can set the snap line origin, but don't mess with the
-                // accepted snap point
                 snapLineManager.SetSnapLineOrigin( nearest->pos );
+                keepConstructionProposal = true;
             }
             else
             {
-                wxLogTrace( traceSnap, "    Nearest anchor accepted, constructed=%d", anchorIsConstructed );
-
-                // 'Intrinsic' points of items can trigger adding construction geometry
-                // for _that_ item by proximity. E.g. just mousing over the intersection
-                // of an item doesn't  add a construction item for the second item).
-                // This is to make construction items less intrusive and more
-                // a result of user intent.
-                if( !anchorIsConstructed )
-                    proposeConstructionForItems( nearest->items );
-
-                m_snapItem = *nearest;
-
-                // Set the snap line origin or end as needed
-                snapLineManager.SetSnappedAnchor( m_snapItem->pos );
-                // Show the correct snap point marker
-                updateSnapPoint( { m_snapItem->pos, m_snapItem->pointTypes } );
-
-                wxLogTrace( traceSnap, "  RETURNING nearest anchor: (%d, %d)",
-                            m_snapItem->pos.x, m_snapItem->pos.y );
-                return m_snapItem->pos;
-            }
-
-            snapValid = true;
-        }
-        else
-        {
-            wxLogTrace( traceSnap, "    No nearest anchor within snapIn range" );
-
-            static const bool canActivateByHitTest = ADVANCED_CFG::GetCfg().m_ExtensionSnapActivateOnHover;
-
-            if( canActivateByHitTest )
-            {
-                wxLogTrace( traceSnap, "    Checking hit test for construction activation..." );
-
-                // An exact hit on an item, even if not near a snap point
-                // If it's tool hard to hit by hover, this can be increased
-                // to make it non-exact.
-                const int hoverAccuracy = 0;
-
-                for( BOARD_ITEM* item : visibleItems )
-                {
-                    if( item->HitTest( aOrigin, hoverAccuracy ) )
-                    {
-                        wxLogTrace( traceSnap, "    Hit item, proposing construction geometry" );
-                        proposeConstructionForItems( { item } );
-                        snapValid = true;
-                        break;
-                    }
-                }
+                addAnchorCandidate( *nearest, false );
             }
         }
 
-        // If we got here, we didn't snap to an anchor or snap line
-
-        // If we're snapping to a grid, on-element snaps would be too intrusive
-        // but they're useful when there isn't a grid to snap to
         if( !m_enableGrid )
         {
             wxLogTrace( traceSnap, "    Grid disabled, checking point-on-element snap..." );
 
             OPT_VECTOR2I nearestPointOnAnElement = GetNearestPoint( m_pointOnLineCandidates, aOrigin );
 
-            // Got any nearest point - snap if in range
             if( nearestPointOnAnElement && nearestPointOnAnElement->Distance( aOrigin ) <= snapRange )
             {
-                wxLogTrace( traceSnap, "  RETURNING point-on-element: (%d, %d)",
-                            nearestPointOnAnElement->x, nearestPointOnAnElement->y );
-
-                updateSnapPoint( { *nearestPointOnAnElement, POINT_TYPE::PT_ON_ELEMENT } );
-
-                // Clear the snap end, but keep the origin so touching another line
-                // doesn't kill a snap line
-                snapLineManager.SetSnapLineEnd( std::nullopt );
-                return *nearestPointOnAnElement;
+                SNAP_STABLE_ID id = MakePointSnapId( SNAP_ID_KIND::ITEM_GEOMETRY, *nearestPointOnAnElement );
+                frame.candidates.push_back( SNAP_CANDIDATE::Point(
+                        id, SNAP_PRIORITY_TIER::OBJECT, SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD,
+                        *nearestPointOnAnElement, nearestPointOnAnElement->Distance( aOrigin ) / snapScale ) );
+                frame.presentation.emplace( id,
+                                            PRESENTATION{ PRESENTATION_KIND::POINT_ON_ELEMENT, std::nullopt, false } );
             }
         }
     }
 
-    // Completely failed to find any snap point, so snap to the grid
+    // Object retention wins because its tier already outranks angle restriction.
+    if( !frame.retainedId && m_retainedAngleBranch )
+        frame.retainedId = m_retainedAngleBranch;
 
-    wxLogTrace( traceSnap, "  RETURNING grid snap: (%d, %d)", nearestGrid.x, nearestGrid.y );
+    SNAP_FRAME_OUTPUT<PRESENTATION> output = ResolveSnapFrame( std::move( frame ) );
+    SNAP_RESULT&                    result = output.result;
+    retainAcceptedSnaps( result );
 
     m_snapItem = std::nullopt;
+    snapLineManager.SetSnapLineEnd( std::nullopt );
+    bool suppressHoverActivation = false;
 
-    if( !snapValid )
+    if( output.presentation )
+    {
+        const PRESENTATION& presentation = output.presentation->payload;
+        keepConstructionProposal = true;
+
+        if( presentation.kind == PRESENTATION_KIND::ANCHOR_MARKER && presentation.anchor )
+        {
+            suppressHoverActivation = true;
+            m_snapItem = *presentation.anchor;
+            snapLineManager.SetSnappedAnchor( m_snapItem->pos );
+            updateSnapPoint( { m_snapItem->pos, m_snapItem->pointTypes } );
+
+            if( presentation.proposeConstruction )
+                proposeConstructionForItems( m_snapItem->items );
+        }
+        else if( presentation.kind == PRESENTATION_KIND::GUIDE )
+        {
+            suppressHoverActivation = true;
+            snapLineManager.SetSnapLineEnd( result.position );
+            m_viewSnapPoint.SetSnapTypes( POINT_TYPE::PT_NONE );
+            m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
+        }
+        else if( presentation.kind == PRESENTATION_KIND::POINT_ON_ELEMENT )
+        {
+            updateSnapPoint( { result.position, POINT_TYPE::PT_ON_ELEMENT } );
+        }
+    }
+    else
+    {
+        m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
+    }
+
+    applySnapResultGuides( result );
+
+    static const bool canActivateByHitTest = ADVANCED_CFG::GetCfg().m_ExtensionSnapActivateOnHover;
+
+    if( constructionEnabled && canActivateByHitTest && allowHoverActivation && !suppressHoverActivation )
+    {
+        for( BOARD_ITEM* item : visibleItems )
+        {
+            if( item->HitTest( aOrigin, 0 ) )
+            {
+                proposeConstructionForItems( { item } );
+                keepConstructionProposal = true;
+                break;
+            }
+        }
+    }
+
+    if( !keepConstructionProposal )
         snapManager.GetConstructionManager().CancelProposal();
 
-    snapLineManager.SetSnapLineEnd( std::nullopt );
-
-    m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
-
-    return nearestGrid;
+    return result;
 }
 
 
@@ -945,6 +1269,16 @@ BOARD_ITEM* PCB_GRID_HELPER::GetSnapped() const
         return nullptr;
 
     return static_cast<BOARD_ITEM*>( m_snapItem->items[0] );
+}
+
+
+void PCB_GRID_HELPER::ClearSnapFeedback()
+{
+    m_snapItem = std::nullopt;
+    getSnapManager().SetDimensionBrackets( {} );
+    SNAP_LINE_MANAGER& manager = getSnapManager().GetSnapLineManager();
+    manager.ClearSnapLine();
+    m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
 }
 
 
@@ -1036,10 +1370,10 @@ VECTOR2D PCB_GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
 }
 
 
-std::vector<BOARD_ITEM*>
-PCB_GRID_HELPER::queryVisible( const BOX2I& aArea, const std::vector<BOARD_ITEM*>& aSkip ) const
+std::vector<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( std::initializer_list<BOX2I>    aAreas,
+                                                        const std::vector<BOARD_ITEM*>& aSkip ) const
 {
-    std::set<BOARD_ITEM*> items;
+    std::vector<BOARD_ITEM*>                  items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> visibleItems;
 
     PCB_TOOL_BASE*       currentTool = static_cast<PCB_TOOL_BASE*>( m_toolMgr->GetCurrentTool() );
@@ -1048,9 +1382,13 @@ PCB_GRID_HELPER::queryVisible( const BOX2I& aArea, const std::vector<BOARD_ITEM*
     const std::set<int>& activeLayers = settings->GetHighContrastLayers();
     bool                 isHighContrast = settings->GetHighContrast();
 
-    view->Query( aArea, visibleItems );
+    for( const BOX2I& area : aAreas )
+    {
+        if( area.GetWidth() > 0 && area.GetHeight() > 0 )
+            view->Query( area, visibleItems );
+    }
 
-    for( const auto& [ viewItem, layer ] : visibleItems )
+    for( const auto& [viewItem, layer] : visibleItems )
     {
         if( !viewItem->IsBOARD_ITEM() )
             continue;
@@ -1074,31 +1412,37 @@ PCB_GRID_HELPER::queryVisible( const BOX2I& aArea, const std::vector<BOARD_ITEM*
         }
 
         // The boardItem must be visible and on an active layer
-        if( view->IsVisible( boardItem )
-                && ( !isHighContrast || activeLayers.count( layer ) )
-                && boardItem->ViewGetLOD( layer, view ) < view->GetScale() )
+        if( view->IsVisible( boardItem ) && ( !isHighContrast || activeLayers.count( layer ) )
+            && boardItem->ViewGetLOD( layer, view ) < view->GetScale() )
         {
-            items.insert ( boardItem );
+            items.push_back( boardItem );
         }
     }
 
-    std::function<void( BOARD_ITEM* )> skipItem =
-            [&]( BOARD_ITEM* aItem )
-            {
-                items.erase( aItem );
+    std::sort( items.begin(), items.end(), std::less<>() );
+    items.erase( std::unique( items.begin(), items.end() ), items.end() );
 
-                aItem->RunOnChildren(
-                        [&]( BOARD_ITEM* aChild )
-                        {
-                            skipItem( aChild );
-                        },
-                        RECURSE_MODE::RECURSE );
-            };
+    std::unordered_set<BOARD_ITEM*> skippedItems;
 
     for( BOARD_ITEM* item : aSkip )
-        skipItem( item );
+    {
+        skippedItems.insert( item );
+        item->RunOnChildren(
+                [&]( BOARD_ITEM* aChild )
+                {
+                    skippedItems.insert( aChild );
+                },
+                RECURSE_MODE::RECURSE );
+    }
 
-    return {items.begin(), items.end()};
+    items.erase( std::remove_if( items.begin(), items.end(),
+                                 [&]( BOARD_ITEM* aItem )
+                                 {
+                                     return skippedItems.contains( aItem );
+                                 } ),
+                 items.end() );
+
+    return items;
 }
 
 
@@ -1116,12 +1460,12 @@ struct PCB_INTERSECTABLE
 };
 
 
-void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems,
-                                      const VECTOR2I& aRefPos, bool aFrom,
-                                      const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter,
-                                      const LSET* aMatchLayers, bool aForDrag )
+void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems, const VECTOR2I& aRefPos, bool aFrom,
+                                      const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter, const LSET* aMatchLayers,
+                                      bool aForDrag )
 {
     std::vector<PCB_INTERSECTABLE> intersectables;
+    intersectables.reserve( aItems.size() );
 
     // These could come from a more granular snap mode filter
     // But when looking for drag points, we don't want construction geometry

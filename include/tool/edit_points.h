@@ -30,7 +30,7 @@
 #include <deque>
 #include <memory>
 
-#include "edit_constraints.h"
+#include "edit_relations.h"
 #include <view/view.h>
 
 
@@ -121,30 +121,22 @@ public:
     bool WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const;
 
     /**
-     * Set a constraint for an EDIT_POINT.
+     * Set a relation for an EDIT_POINT.
      *
-     * @param aConstraint is the constraint to be set.
+     * @param aRelation is the relation to be set.
      */
-    void SetConstraint( EDIT_CONSTRAINT<EDIT_POINT>* aConstraint )
+    void SetRelation( std::unique_ptr<EDIT_RELATION> aRelation )
     {
-        m_constraint.reset( aConstraint );
+        m_relation = std::move( aRelation );
     }
 
     /**
-     * Return the constraint imposed on an EDIT_POINT. If there are no constraints, NULL is
+     * Return the relation imposed on an EDIT_POINT. If there is no relation, NULL is
      * returned.
      */
-    EDIT_CONSTRAINT<EDIT_POINT>* GetConstraint() const
+    EDIT_RELATION* GetRelation() const
     {
-        return m_constraint.get();
-    }
-
-    /**
-     * Remove previously set constraint.
-     */
-    inline void ClearConstraint()
-    {
-        m_constraint.reset();
+        return m_relation.get();
     }
 
     /**
@@ -154,16 +146,16 @@ public:
      */
     virtual bool IsConstrained() const
     {
-        return m_constraint != nullptr;
+        return m_relation != nullptr;
     }
 
     /**
-     * Correct coordinates of an EDIT_POINT by applying previously set constraint.
+     * Correct coordinates of an EDIT_POINT by applying its relation.
      */
-    virtual void ApplyConstraint( const GRID_HELPER& aGrid )
+    virtual void ApplyRelation( const GRID_HELPER& aGrid )
     {
-        if( m_constraint )
-            m_constraint->Apply( aGrid );
+        if( m_relation )
+            m_relation->Apply( *this, aGrid );
     }
 
     bool IsActive() const { return m_isActive; }
@@ -209,8 +201,8 @@ private:
     /// line segments.
     std::pair<EDA_ITEM*, int>                     m_connected;
 
-    /// Constraint for the point, NULL if none.
-    std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_constraint;
+    /// Relation for the point, NULL if none.
+    std::shared_ptr<EDIT_RELATION> m_relation;
 };
 
 
@@ -250,41 +242,51 @@ public:
         m_end.SetPosition( m_end.GetPosition() + difference );
     }
 
-    /// @copydoc EDIT_POINT::ApplyConstraint()
-    virtual void ApplyConstraint( const GRID_HELPER& aGrid ) override
+    /// @copydoc EDIT_POINT::ApplyRelation()
+    virtual void ApplyRelation( const GRID_HELPER& aGrid ) override
     {
-        if( m_constraint )
-            m_constraint->Apply( aGrid );
+        if( m_dragPolicy )
+            m_dragPolicy->Apply( *this, aGrid );
 
-        m_origin.ApplyConstraint( aGrid );
-        m_end.ApplyConstraint( aGrid );
+        if( m_relation )
+            m_relation->Apply( *this, aGrid );
+
+        m_origin.ApplyRelation( aGrid );
+        m_end.ApplyRelation( aGrid );
     }
 
     /**
-     * Set a constraint for and EDIT_POINT.
+     * Set a relation for an EDIT_LINE.
      *
-     * @param aConstraint is the constraint to be set.
+     * @param aRelation is the relation to be set.
      */
-    void SetConstraint( EDIT_CONSTRAINT<EDIT_LINE>* aConstraint )
+    void SetRelation( std::unique_ptr<EDIT_RELATION> aRelation )
     {
-        m_constraint.reset( aConstraint );
+        m_relation = std::move( aRelation );
     }
 
     /**
-     * Return the constraint imposed on an EDIT_POINT. If there are no constraints, NULL is
+     * Return the relation imposed on an EDIT_LINE. If there is no relation, NULL is
      * returned.
      */
-    EDIT_CONSTRAINT<EDIT_LINE>* GetConstraint() const
+    EDIT_RELATION* GetRelation() const
     {
-        return m_constraint.get();
+        return m_relation.get();
     }
+
+    void SetDragPolicy( std::unique_ptr<POLYGON_EDGE_DRAG_POLICY> aPolicy )
+    {
+        m_dragPolicy = std::move( aPolicy );
+    }
+
+    POLYGON_EDGE_DRAG_POLICY* GetDragPolicy() const { return m_dragPolicy.get(); }
 
     /**
      * Check if line is constrained.
      */
     bool IsConstrained() const override
     {
-        return m_constraint != nullptr;
+        return m_relation != nullptr || m_dragPolicy != nullptr;
     }
 
     /**
@@ -350,8 +352,9 @@ private:
     bool m_hasCenterPoint = true; ///< True if the line has a (useful) center point.
     bool m_showLine = false;      ///< True if the line itself should be drawn.
 
-    /// Constraint for the point, NULL if none.
-    std::shared_ptr<EDIT_CONSTRAINT<EDIT_LINE> > m_constraint;
+    /// Relation and geometry policy for the line, NULL if absent.
+    std::shared_ptr<EDIT_RELATION>            m_relation;
+    std::shared_ptr<POLYGON_EDGE_DRAG_POLICY> m_dragPolicy;
 };
 
 

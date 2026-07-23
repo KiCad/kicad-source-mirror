@@ -127,6 +127,14 @@ BOOST_AUTO_TEST_CASE( CombineDeterministic )
 }
 
 
+BOOST_AUTO_TEST_CASE( ByteRoundTrip )
+{
+    const KIID id( "01234567-89ab-cdef-0123-456789abcdef" );
+
+    BOOST_CHECK( KIID::FromBytes( id.AsBytes() ) == id );
+}
+
+
 BOOST_AUTO_TEST_CASE( CombineWithKnownValues )
 {
     // Test with known UUID strings to verify XOR behavior

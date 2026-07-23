@@ -25,6 +25,7 @@
 
 #include <remote_provider_settings.h>
 #include <settings/app_settings.h>
+#include <settings/snap_settings.h>
 #include <sim/sim_preferences.h>
 
 using KIGFX::COLOR4D;
@@ -334,6 +335,7 @@ public:
     INPUT                     m_Input;
     AUTOPLACE_FIELDS          m_AutoplaceFields;
     SELECTION                 m_Selection;
+    SNAP_INFERENCE_SETTINGS   m_SnapInference;
 
     PAGE_SETTINGS             m_PageSettings;
     PANEL_ANNOTATE            m_AnnotatePanel;

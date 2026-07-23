@@ -24,6 +24,7 @@
 #include <geometry/eda_angle.h>
 #include <geometry/geometry_utils.h>
 #include <settings/app_settings.h>
+#include <settings/snap_settings.h>
 #include <pcb_display_options.h>
 
 namespace PNS
@@ -47,30 +48,6 @@ struct CONVERT_SETTINGS
     int              m_Gap;
     int              m_LineWidth;
     bool             m_DeleteOriginals;
-};
-
-
-enum class MAGNETIC_OPTIONS
-{
-    NO_EFFECT = 0,
-    CAPTURE_CURSOR_IN_TRACK_TOOL,
-    CAPTURE_ALWAYS
-};
-
-
-struct MAGNETIC_SETTINGS
-{
-    MAGNETIC_OPTIONS pads;
-    MAGNETIC_OPTIONS tracks;
-    bool             graphics;
-    bool             allLayers;
-
-    MAGNETIC_SETTINGS() :
-            pads( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
-            tracks( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ),
-            graphics( false ),
-            allLayers( false )
-    { }
 };
 
 
@@ -249,6 +226,7 @@ public:
     DISPLAY_OPTIONS    m_Display;
 
     MAGNETIC_SETTINGS  m_MagneticItems;
+    SNAP_INFERENCE_SETTINGS m_SnapInference;
     TRACK_DRAG_ACTION  m_TrackDragAction;
     ARC_EDIT_MODE      m_ArcEditMode;
 
@@ -287,4 +265,3 @@ public:
 
     DIFF_PHASE_SKEW_SETTINGS m_DiffPhaseSkewSettings;
 };
-

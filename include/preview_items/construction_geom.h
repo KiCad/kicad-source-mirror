@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <array>
 #include <variant>
 #include <vector>
 
@@ -51,6 +52,8 @@ public:
 
     CONSTRUCTION_GEOM();
 
+    static std::array<SEG, 3> DimensionBracketSegments( const SEG& aSpan, int aTickLength, int aOffset = 0 );
+
     wxString GetClass() const override { return wxT( "CONSTRUCTION_GEOM" ); }
 
     const BOX2I ViewBBox() const override;
@@ -64,6 +67,9 @@ public:
 
     void AddDrawable( const DRAWABLE& aItem, bool aIsPersistent, int aLineWidth = 1 );
     void SetSnapGuides( std::vector<SNAP_GUIDE> aGuides );
+    void SetDimensionBrackets( std::vector<SEG> aBrackets );
+    const std::vector<SEG>& DimensionBrackets() const { return m_dimensionBrackets; }
+    bool HasDimensionBrackets() const { return !m_dimensionBrackets.empty(); }
     void ClearDrawables();
 
     void SetSnapLine( const SEG& aLine ) { m_snapLine = aLine; }
@@ -82,6 +88,7 @@ private:
     // The items to draw
     std::vector<DRAWABLE_INFO> m_drawables;
     std::vector<SNAP_GUIDE>    m_snapGuides;
+    std::vector<SEG>           m_dimensionBrackets;
 
     // The snap line to draw
     std::optional<SEG> m_snapLine;

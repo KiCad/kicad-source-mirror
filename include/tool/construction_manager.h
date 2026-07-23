@@ -221,6 +221,11 @@ public:
      */
     void GetConstructionItems( std::vector<CONSTRUCTION_ITEM_BATCH>& aToExtend ) const;
 
+    /**
+     * Get the construction proposal awaiting activation.
+     */
+    void GetPendingConstructionItems( std::vector<CONSTRUCTION_ITEM_BATCH>& aToExtend ) const;
+
     bool HasActiveConstruction() const;
 
 private:
@@ -305,6 +310,7 @@ public:
 
     void SetSnapGuideColors( const KIGFX::COLOR4D& aBase, const KIGFX::COLOR4D& aHighlight );
     void UpdateSnapGuides();
+    void SetDimensionBrackets( std::vector<SEG> aBrackets );
 
     void Clear();
 

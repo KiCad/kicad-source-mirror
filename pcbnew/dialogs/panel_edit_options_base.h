@@ -35,7 +35,6 @@
 class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 {
 	private:
-		wxStaticText* stMagneticPtsLabel1;
 		wxStaticText* stRatsnestLabel;
 		wxStaticText* stMiscellaneousLabel;
 
@@ -66,17 +65,6 @@ class PANEL_EDIT_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxRadioButton* m_rbToggleSelMac;
 		wxRadioButton* m_rbHighlightNetMac;
 		wxSimplebook* m_optionsBook;
-		wxStaticText* m_staticText34;
-		wxStaticLine* m_staticline5;
-		wxCheckBox* m_magneticPads;
-		wxCheckBox* m_magneticGraphics;
-		wxStaticLine* m_staticline6;
-		wxStaticText* m_staticText2;
-		wxChoice* m_magneticPadChoice;
-		wxStaticText* m_staticText21;
-		wxChoice* m_magneticTrackChoice;
-		wxStaticText* m_staticText211;
-		wxChoice* m_magneticGraphicsChoice;
 		wxStaticLine* m_staticline7;
 		wxCheckBox* m_showSelectedRatsnest;
 		wxCheckBox* m_OptDisplayCurvedRatsnestLines;

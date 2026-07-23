@@ -772,21 +772,14 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 
         if( doMoveSelection( aEvent, &localCommit, false, &constraintShapes ) )
         {
-            // Moved shape may have broken its geometric constraints drag already solved live each tick
-            // run one final solve into this commit before push so move and neighbor adjustments undo as one action
+            // The last painted motion frame already contains the validated constrained cluster.
+            // Mouse-up must commit that exact state, including when a newer motion event is pending.
+            localCommit.Push( _( "Move" ) );
+
             if( !constraintShapes.empty() && BoardHasConstraints( board() ) )
             {
-                ReSolveShapeClusters( board(), constraintShapes, nullptr,
-                                      [&]( BOARD_ITEM* aItem ) { localCommit.Modify( aItem ); } );
-
-                localCommit.Push( _( "Move" ) );
-
                 if( CONSTRAINT_EDIT_TOOL* constraintTool = m_toolMgr->GetTool<CONSTRAINT_EDIT_TOOL>() )
                     constraintTool->DiagnoseAfterMove( constraintShapes );
-            }
-            else
-            {
-                localCommit.Push( _( "Move" ) );
             }
         }
         else
@@ -1020,6 +1013,11 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     bool            updateBBox = true;
     LSET            layers( { editFrame->GetActiveLayer() } );
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
+    std::shared_ptr<BOARD_CONSTRAINT_MOVE_SESSION> constraintMoveSession;
+
+    // Scans every footprint, and cannot change for the duration of the move
+    const bool boardHasConstraints = BoardHasConstraints( board );
+
     TOOL_EVENT      copy = aEvent;
     TOOL_EVENT*     evt = &copy;
     VECTOR2I        prevPos;
@@ -1029,6 +1027,32 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     bool eatFirstMouseUp = true;
     bool allowRedraw3D   = cfg->m_Display.m_Live3DRefresh;
     bool showCourtyardConflicts = !m_isFootprintEditor && cfg->m_ShowCourtyardCollisions;
+
+    const auto buildConstraintMoveSession =
+            [&]( const VECTOR2I& aReference )
+            {
+                grid.SetFeasibilityCallback( {} );
+                constraintMoveSession.reset();
+
+                if( moveIndividually || !aConstraintShapes || aConstraintShapes->empty()
+                    || !boardHasConstraints )
+                {
+                    return;
+                }
+
+                auto session = std::make_shared<BOARD_CONSTRAINT_MOVE_SESSION>();
+
+                if( session->Build( board, *aConstraintShapes, aReference ) )
+                {
+                    constraintMoveSession = session;
+                    grid.SetFeasibilityCallback(
+                            [session]( const SNAP_SOURCE_CONTEXT& aContext,
+                                       const std::vector<SNAP_CANDIDATE>& aCandidates )
+                            {
+                                return session->ResolveCandidates( aContext, aCandidates );
+                            } );
+                }
+            };
 
     // Axis locking for arrow key movement
     enum class AXIS_LOCK { NONE, HORIZONTAL, VERTICAL };
@@ -1179,7 +1203,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 {
                     VECTOR2I mousePos( controls->GetMousePosition() );
 
-                    m_cursor = grid.BestSnapAnchor( mousePos, layers, selectionGrid, sel_items );
+                    m_cursor = grid.ResolveSnap( mousePos, layers, selectionGrid, sel_items, prevPos ).position;
                 }
 
                 if( axisLock == AXIS_LOCK::HORIZONTAL )
@@ -1202,6 +1226,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 }
 
                 // Constrain selection bounding box to coordinates limits
+                VECTOR2I previousCursor = prevPos;
                 movement = getSafeMovement( m_cursor - prevPos, originalBBox, bboxMovement );
 
                 // Apply constrained movement
@@ -1240,12 +1265,12 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 // Constrained neighbors sit unselected with no IS_MOVING flag outside the move overlay
                 // only local commit drag previews them stage touched neighbors so cancel Revert restores them
                 if( aConstraintShapes && !aConstraintShapes->empty() && movement != VECTOR2I()
-                    && BoardHasConstraints( board ) )
+                    && boardHasConstraints )
                 {
                     std::vector<PCB_SHAPE*>  solved;
                     std::vector<BOARD_ITEM*> dimensions;
 
-                    ReSolveShapeClusters( board, *aConstraintShapes, &solved,
+                    const auto beforeConstraintModify =
                             [&]( BOARD_ITEM* aItem )
                             {
                                 aCommit->Modify( aItem );
@@ -1254,13 +1279,40 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                                 // or it looks frozen until the drag ends
                                 if( aItem->Type() != PCB_SHAPE_T )
                                     dimensions.push_back( aItem );
-                            } );
+                            };
 
-                    for( PCB_SHAPE* neighbor : solved )
-                        view()->Update( neighbor, KIGFX::GEOMETRY );
+                    bool solvedConstraints =
+                            constraintMoveSession
+                                    ? constraintMoveSession->Solve(
+                                              m_cursor, &solved, beforeConstraintModify )
+                                    : ReSolveShapeClustersHoldingEdited(
+                                              board, *aConstraintShapes, &solved,
+                                              beforeConstraintModify );
 
-                    for( BOARD_ITEM* dimension : dimensions )
-                        view()->Update( dimension, KIGFX::GEOMETRY );
+                    if( solvedConstraints )
+                    {
+                        for( PCB_SHAPE* neighbor : solved )
+                            view()->Update( neighbor, KIGFX::GEOMETRY );
+
+                        for( BOARD_ITEM* dimension : dimensions )
+                            view()->Update( dimension, KIGFX::GEOMETRY );
+                    }
+                    else
+                    {
+                        for( BOARD_ITEM* item : sel_items )
+                        {
+                            if( !item->GetParent() || !moved_items.count( item->GetParent() ) )
+                                item->Move( -movement );
+                        }
+
+                        m_cursor = previousCursor;
+                        prevPos = previousCursor;
+                        bboxMovement -= movement;
+                        movement = VECTOR2I();
+                        selection.SetReferencePoint( m_cursor );
+                        controls->ForceCursorPosition( true, m_cursor );
+                        grid.ClearSnapFeedback();
+                    }
                 }
 
                 if( redraw3D && allowRedraw3D )
@@ -1325,6 +1377,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 {
                     // start moving with the reference point attached to the cursor
                     grid.SetAuxAxes( false );
+                    buildConstraintMoveSession( selection.GetReferencePoint() );
 
                     movement = m_cursor - selection.GetReferencePoint();
 
@@ -1407,6 +1460,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     }
 
                     originalPos = selection.GetReferencePoint();
+                    buildConstraintMoveSession( originalPos );
                 }
 
                 // Update variables for bounding box collision calculations

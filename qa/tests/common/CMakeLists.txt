@@ -47,6 +47,7 @@ set( QA_COMMON_SRCS
     test_eda_shape.cpp
     test_eda_text.cpp
     test_editor_tabs_panel.cpp
+    test_edit_relations.cpp
     test_unit_binder.cpp
     test_wx_dataviewctrl.cpp
     test_wx_grid.cpp
@@ -90,6 +91,7 @@ set( QA_COMMON_SRCS
     test_reset_print_to_file.cpp
     test_wx_data_view_hyperlink_renderer.cpp
     test_grid_helper.cpp
+    test_snapping_options.cpp
     test_string_utils.cpp
     test_richio.cpp
     test_template_fieldnames.cpp
@@ -152,6 +154,7 @@ set( QA_COMMON_SRCS
     test_gal_resize_strategy.cpp
 
     # Preview item / drawing utility tests
+    test_construction_geom.cpp
     test_dashed_line.cpp
 
     # Graphics import tests
@@ -243,6 +246,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/common
+    ${CMAKE_SOURCE_DIR}/common/dialogs
     ${CMAKE_SOURCE_DIR}/common/io/pads
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${INC_AFTER}

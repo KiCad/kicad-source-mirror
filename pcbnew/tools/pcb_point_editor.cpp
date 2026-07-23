@@ -75,36 +75,41 @@ static void appendDirection( std::vector<VECTOR2I>& aDirections, const VECTOR2I&
         aDirections.push_back( aDirection );
 }
 
-static std::vector<VECTOR2I> getConstraintDirections( EDIT_CONSTRAINT<EDIT_POINT>* aConstraint )
+static std::vector<VECTOR2I> getConstraintDirections( EDIT_RELATION* aRelation )
 {
     std::vector<VECTOR2I> directions;
 
-    if( !aConstraint )
+    if( !aRelation )
         return directions;
 
-    if( dynamic_cast<EC_90DEGREE*>( aConstraint ) )
+    switch( aRelation->Kind() )
     {
+    case EDIT_RELATION_KIND::ANGLE_STEP_90:
         appendDirection( directions, VECTOR2I( 1, 0 ) );
         appendDirection( directions, VECTOR2I( 0, 1 ) );
-    }
-    else if( dynamic_cast<EC_45DEGREE*>( aConstraint ) )
-    {
+        break;
+
+    case EDIT_RELATION_KIND::ANGLE_STEP_45:
         appendDirection( directions, VECTOR2I( 1, 0 ) );
         appendDirection( directions, VECTOR2I( 0, 1 ) );
         appendDirection( directions, VECTOR2I( 1, 1 ) );
         appendDirection( directions, VECTOR2I( 1, -1 ) );
-    }
-    else if( dynamic_cast<EC_VERTICAL*>( aConstraint ) )
-    {
+        break;
+
+    case EDIT_RELATION_KIND::SAME_X:
         appendDirection( directions, VECTOR2I( 0, 1 ) );
-    }
-    else if( dynamic_cast<EC_HORIZONTAL*>( aConstraint ) )
-    {
+        break;
+
+    case EDIT_RELATION_KIND::SAME_Y:
         appendDirection( directions, VECTOR2I( 1, 0 ) );
-    }
-    else if( EC_LINE* lineConstraint = dynamic_cast<EC_LINE*>( aConstraint ) )
-    {
-        appendDirection( directions, lineConstraint->GetLineVector() );
+        break;
+
+    case EDIT_RELATION_KIND::POINT_ON_LINE:
+        appendDirection( directions, aRelation->Direction() );
+        break;
+
+    default:
+        break;
     }
 
     return directions;
@@ -128,6 +133,63 @@ enum RECT_LINES
 {
     RECT_TOP, RECT_RIGHT, RECT_BOT, RECT_LEFT
 };
+
+
+static std::optional<CONSTRAINT_MEMBER> constraintMemberForEditPoint(
+        PCB_SHAPE* aShape, EDIT_POINTS* aPoints, EDIT_POINT* aEditedPoint )
+{
+    if( !aShape || !aPoints || !aEditedPoint )
+        return std::nullopt;
+
+    SHAPE_T type = aShape->GetShape();
+    VECTOR2I position = aEditedPoint->GetPosition();
+
+    if( type == SHAPE_T::SEGMENT || type == SHAPE_T::ARC || type == SHAPE_T::BEZIER )
+    {
+        if( position == aShape->GetStart() )
+            return CONSTRAINT_MEMBER( aShape->m_Uuid, CONSTRAINT_ANCHOR::START );
+
+        if( position == aShape->GetEnd() )
+            return CONSTRAINT_MEMBER( aShape->m_Uuid, CONSTRAINT_ANCHOR::END );
+
+        if( type == SHAPE_T::ARC && position == aShape->GetCenter() )
+            return CONSTRAINT_MEMBER( aShape->m_Uuid, CONSTRAINT_ANCHOR::CENTER );
+    }
+    else if( type == SHAPE_T::CIRCLE && position == aShape->GetCenter() )
+    {
+        return CONSTRAINT_MEMBER( aShape->m_Uuid, CONSTRAINT_ANCHOR::CENTER );
+    }
+    else if( type == SHAPE_T::RECTANGLE && aPoints->PointsSize() >= RECT_MAX_POINTS )
+    {
+        for( unsigned i = RECT_TOP_LEFT; i <= RECT_BOT_LEFT; ++i )
+        {
+            if( aEditedPoint == &aPoints->Point( i ) )
+                return CONSTRAINT_MEMBER( aShape->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, i );
+        }
+
+        for( unsigned i = 0; i < aPoints->LinesSize() && i < 4; ++i )
+        {
+            if( aEditedPoint == &aPoints->Line( i ) )
+                return CONSTRAINT_MEMBER( aShape->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, i );
+        }
+    }
+    else if( type == SHAPE_T::POLY && ConstraintPolygonIsModelable( aShape ) )
+    {
+        for( unsigned i = 0; i < aPoints->PointsSize(); ++i )
+        {
+            if( aEditedPoint == &aPoints->Point( i ) )
+                return CONSTRAINT_MEMBER( aShape->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, i );
+        }
+
+        for( unsigned i = 0; i < aPoints->LinesSize(); ++i )
+        {
+            if( aEditedPoint == &aPoints->Line( i ) )
+                return CONSTRAINT_MEMBER( aShape->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, i );
+        }
+    }
+
+    return std::nullopt;
+}
 
 
 enum DIMENSION_POINTS
@@ -258,13 +320,17 @@ public:
         aPoints.Point( RECT_RADIUS ).SetDrawCircle();
 
         aPoints.AddLine( aPoints.Point( RECT_TOP_LEFT ), aPoints.Point( RECT_TOP_RIGHT ) );
-        aPoints.Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_TOP ) ) );
+        aPoints.Line( RECT_TOP ).SetRelation(
+                EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_TOP ) ) );
         aPoints.AddLine( aPoints.Point( RECT_TOP_RIGHT ), aPoints.Point( RECT_BOT_RIGHT ) );
-        aPoints.Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_RIGHT ) ) );
+        aPoints.Line( RECT_RIGHT ).SetRelation(
+                EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_RIGHT ) ) );
         aPoints.AddLine( aPoints.Point( RECT_BOT_RIGHT ), aPoints.Point( RECT_BOT_LEFT ) );
-        aPoints.Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_BOT ) ) );
+        aPoints.Line( RECT_BOT ).SetRelation(
+                EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_BOT ) ) );
         aPoints.AddLine( aPoints.Point( RECT_BOT_LEFT ), aPoints.Point( RECT_TOP_LEFT ) );
-        aPoints.Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( aPoints.Line( RECT_LEFT ) ) );
+        aPoints.Line( RECT_LEFT ).SetRelation(
+                EDIT_RELATION::PerpendicularTranslation( aPoints.Line( RECT_LEFT ) ) );
     }
 
     static void UpdateItem( PCB_SHAPE& aRectangle, const EDIT_POINT& aEditedPoint,
@@ -352,7 +418,8 @@ public:
         for( unsigned i = 0; i < aPoints.LinesSize(); ++i )
         {
             if( !isModified( aEditedPoint, aPoints.Line( i ) ) )
-                aPoints.Line( i ).SetConstraint( new EC_PERPLINE( aPoints.Line( i ) ) );
+                aPoints.Line( i ).SetRelation(
+                        EDIT_RELATION::PerpendicularTranslation( aPoints.Line( i ) ) );
         }
     }
 
@@ -703,7 +770,7 @@ public:
         auto set45Constraint =
                 [&]( int a, int b )
                 {
-                    aPoints.Point( a ).SetConstraint( new EC_45DEGREE( aPoints.Point( a ), aPoints.Point( b ) ) );
+                    aPoints.Point( a ).SetRelation( EDIT_RELATION::Angle45( aPoints.Point( b ) ) );
                 };
 
         RECTANGLE_POINT_EDIT_BEHAVIOR::MakePoints( makeDummyRect(), aPoints );
@@ -1212,10 +1279,12 @@ public:
         if( m_dimension.Type() == PCB_DIM_ALIGNED_T )
         {
             // Dimension height setting - edit points should move only along the feature lines
-            aPoints.Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
-                                                                           aPoints.Point( DIM_START ) ) );
-            aPoints.Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
-                                                                         aPoints.Point( DIM_END ) ) );
+            aPoints.Point( DIM_CROSSBARSTART )
+                    .SetRelation( EDIT_RELATION::PointOnLine(
+                            aPoints.Point( DIM_CROSSBARSTART ), aPoints.Point( DIM_START ) ) );
+            aPoints.Point( DIM_CROSSBAREND )
+                    .SetRelation( EDIT_RELATION::PointOnLine(
+                            aPoints.Point( DIM_CROSSBAREND ), aPoints.Point( DIM_END ) ) );
         }
     }
 
@@ -1293,20 +1362,24 @@ private:
             m_dimension.SetStart( aEditedPoint.GetPosition() );
             m_dimension.Update();
 
-            aPoints.Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
-                                                                           aPoints.Point( DIM_START ) ) );
-            aPoints.Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
-                                                                         aPoints.Point( DIM_END ) ) );
+            aPoints.Point( DIM_CROSSBARSTART )
+                    .SetRelation( EDIT_RELATION::PointOnLine(
+                            aPoints.Point( DIM_CROSSBARSTART ), aPoints.Point( DIM_START ) ) );
+            aPoints.Point( DIM_CROSSBAREND )
+                    .SetRelation( EDIT_RELATION::PointOnLine(
+                            aPoints.Point( DIM_CROSSBAREND ), aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
         {
             m_dimension.SetEnd( aEditedPoint.GetPosition() );
             m_dimension.Update();
 
-            aPoints.Point( DIM_CROSSBARSTART ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBARSTART ),
-                                                                           aPoints.Point( DIM_START ) ) );
-            aPoints.Point( DIM_CROSSBAREND ).SetConstraint( new EC_LINE( aPoints.Point( DIM_CROSSBAREND ),
-                                                                         aPoints.Point( DIM_END ) ) );
+            aPoints.Point( DIM_CROSSBARSTART )
+                    .SetRelation( EDIT_RELATION::PointOnLine(
+                            aPoints.Point( DIM_CROSSBARSTART ), aPoints.Point( DIM_START ) ) );
+            aPoints.Point( DIM_CROSSBAREND )
+                    .SetRelation( EDIT_RELATION::PointOnLine(
+                            aPoints.Point( DIM_CROSSBAREND ), aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_TEXT ) ) )
         {
@@ -1407,8 +1480,7 @@ public:
 
         aPoints.Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
 
-        aPoints.Point( DIM_END ).SetConstraint(new EC_45DEGREE( aPoints.Point( DIM_END ),
-                                                                 aPoints.Point( DIM_START ) ) );
+        aPoints.Point( DIM_END ).SetRelation( EDIT_RELATION::Angle45( aPoints.Point( DIM_START ) ) );
         aPoints.Point( DIM_END ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
@@ -1464,12 +1536,12 @@ public:
         aPoints.Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
         aPoints.Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
 
-        aPoints.Point( DIM_KNEE ).SetConstraint( new EC_LINE( aPoints.Point( DIM_START ),
-                                                              aPoints.Point( DIM_END ) ) );
+        aPoints.Point( DIM_KNEE )
+                .SetRelation( EDIT_RELATION::PointOnLine( aPoints.Point( DIM_START ),
+                                                          aPoints.Point( DIM_END ) ) );
         aPoints.Point( DIM_KNEE ).SetSnapConstraint( IGNORE_SNAPS );
 
-        aPoints.Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( aPoints.Point( DIM_TEXT ),
-                                                                  aPoints.Point( DIM_KNEE ) ) );
+        aPoints.Point( DIM_TEXT ).SetRelation( EDIT_RELATION::Angle45( aPoints.Point( DIM_KNEE ) ) );
         aPoints.Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
@@ -1494,8 +1566,9 @@ public:
             m_dimension.SetStart( aEditedPoint.GetPosition() );
             m_dimension.Update();
 
-            aPoints.Point( DIM_KNEE ).SetConstraint( new EC_LINE( aPoints.Point( DIM_START ),
-                                                                  aPoints.Point( DIM_END ) ) );
+            aPoints.Point( DIM_KNEE )
+                    .SetRelation( EDIT_RELATION::PointOnLine( aPoints.Point( DIM_START ),
+                                                              aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_END ) ) )
         {
@@ -1508,8 +1581,9 @@ public:
             m_dimension.SetTextPos( m_dimension.GetTextPos() + kneeDelta );
             m_dimension.Update();
 
-            aPoints.Point( DIM_KNEE ).SetConstraint( new EC_LINE( aPoints.Point( DIM_START ),
-                                                                  aPoints.Point( DIM_END ) ) );
+            aPoints.Point( DIM_KNEE )
+                    .SetRelation( EDIT_RELATION::PointOnLine( aPoints.Point( DIM_START ),
+                                                              aPoints.Point( DIM_END ) ) );
         }
         else if( isModified( aEditedPoint, aPoints.Point( DIM_KNEE ) ) )
         {
@@ -1559,8 +1633,7 @@ public:
         aPoints.Point( DIM_START ).SetSnapConstraint( ALL_LAYERS );
         aPoints.Point( DIM_END ).SetSnapConstraint( ALL_LAYERS );
 
-        aPoints.Point( DIM_TEXT ).SetConstraint( new EC_45DEGREE( aPoints.Point( DIM_TEXT ),
-                                                                  aPoints.Point( DIM_END ) ) );
+        aPoints.Point( DIM_TEXT ).SetRelation( EDIT_RELATION::Angle45( aPoints.Point( DIM_END ) ) );
         aPoints.Point( DIM_TEXT ).SetSnapConstraint( IGNORE_SNAPS );
     }
 
@@ -2204,6 +2277,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     getViewControls()->ShowCursor( true );
 
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
+    grid.SetPointEditProfile( true );
+    m_constraintDragSession.reset();
 
     // Use the original object as a construction item
     std::vector<std::unique_ptr<BOARD_ITEM>> clones;
@@ -2287,14 +2362,14 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                 if( inDrag && m_editedPoint )
                 {
-                    EDIT_CONSTRAINT<EDIT_POINT>* constraint = nullptr;
+                    EDIT_RELATION* relation = nullptr;
 
                     if( m_altConstraint )
-                        constraint = m_altConstraint.get();
+                        relation = m_altConstraint.get();
                     else if( m_editedPoint->IsConstrained() )
-                        constraint = m_editedPoint->GetConstraint();
+                        relation = m_editedPoint->GetRelation();
 
-                    directions = getConstraintDirections( constraint );
+                    directions = getConstraintDirections( relation );
                 }
 
                 if( directions.empty() )
@@ -2316,11 +2391,30 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT commit( editFrame );
 
+    auto installFeasibilityCallback =
+            [&]()
+            {
+                grid.SetFeasibilityCallback( {} );
+
+                if( !m_constraintDragSession || dynamic_cast<EDIT_LINE*>( m_editedPoint ) )
+                    return;
+
+                std::shared_ptr<BOARD_CONSTRAINT_DRAG_SESSION> session = m_constraintDragSession;
+
+                grid.SetFeasibilityCallback(
+                        [session]( const SNAP_SOURCE_CONTEXT& aContext,
+                                   const std::vector<SNAP_CANDIDATE>& aCandidates )
+                        {
+                            return session->ResolveCandidates( aContext, aCandidates );
+                        } );
+            };
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        installFeasibilityCallback();
 
         if( editFrame->IsType( FRAME_PCB_EDITOR ) )
             m_arcEditMode = editFrame->GetPcbNewSettings()->m_ArcEditMode;
@@ -2361,6 +2455,20 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_original = *m_editedPoint;    // Save the original position
                 getViewControls()->SetAutoPan( true );
                 inDrag = true;
+
+                if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
+                {
+                    if( std::optional<CONSTRAINT_MEMBER> member =
+                                constraintMemberForEditPoint( shape, m_editPoints.get(), m_editedPoint ) )
+                    {
+                        m_constraintDragSession = std::make_shared<BOARD_CONSTRAINT_DRAG_SESSION>();
+
+                        if( !m_constraintDragSession->Build( board(), *member ) )
+                            m_constraintDragSession.reset();
+
+                        installFeasibilityCallback();
+                    }
+                }
 
                 if( m_editedPoint->GetGridConstraint() != SNAP_BY_GRID )
                     grid.SetAuxAxes( true, m_original.GetPosition() );
@@ -2406,6 +2514,17 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 updateSnapLineDirections();
             }
 
+            if( need_constraint )
+            {
+                VECTOR2I origin = m_altConstraint ? m_altConstrainer.GetPosition()
+                                                  : m_original.GetPosition();
+                grid.SetAngleRestriction( origin, Is45Limited() ? 45.0 : 90.0 );
+            }
+            else
+            {
+                grid.SetAngleRestriction( std::nullopt, 0.0 );
+            }
+
             // For polygon lines, Ctrl temporarily toggles between CONVERGING and FIXED_LENGTH modes
 
             if( line )
@@ -2428,16 +2547,15 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                 if( isPoly )
                 {
-                    EC_CONVERGING* constraint =
-                            dynamic_cast<EC_CONVERGING*>( line->GetConstraint() );
+                    POLYGON_EDGE_DRAG_POLICY* policy = line->GetDragPolicy();
 
-                    if( constraint )
+                    if( policy )
                     {
                         POLYGON_LINE_MODE targetMode = ctrlHeld ? POLYGON_LINE_MODE::FIXED_LENGTH
                                                                 : POLYGON_LINE_MODE::CONVERGING;
 
-                        if( constraint->GetMode() != targetMode )
-                            constraint->SetMode( targetMode );
+                        if( policy->GetMode() != targetMode )
+                            policy->SetMode( targetMode );
                     }
                 }
             }
@@ -2457,12 +2575,12 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( grid.GetUseGrid() )
                 {
-                    EC_CONVERGING* convergingConstraint =
-                            line ? dynamic_cast<EC_CONVERGING*>( line->GetConstraint() ) : nullptr;
+                    POLYGON_EDGE_DRAG_POLICY* dragPolicy =
+                            line ? line->GetDragPolicy() : nullptr;
 
                     bool snappedAlongPerp = false;
 
-                    if( convergingConstraint )
+                    if( dragPolicy )
                     {
                         // For a polygon edge, the line moves only perpendicular to itself.
                         // Snapping pos.x and pos.y independently to the axis-aligned grid
@@ -2471,8 +2589,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                         // half-grid threshold first), causing the rendered edge to flicker
                         // between two positions. Quantize the perpendicular displacement
                         // directly so each grid step produces one stable line position.
-                        const VECTOR2I& origCenter = convergingConstraint->GetOriginalCenter();
-                        const VECTOR2I& perpVec = convergingConstraint->GetPerpVector();
+                        const VECTOR2I& origCenter = dragPolicy->GetOriginalCenter();
+                        const VECTOR2I& perpVec = dragPolicy->GetPerpVector();
                         double perpLen = VECTOR2D( perpVec ).EuclideanNorm();
 
                         if( perpLen > 0 )
@@ -2498,14 +2616,16 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                     if( !snappedAlongPerp )
                     {
-                        VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, grid.GetItemGrid( item ),
-                                                                { item } );
+                        VECTOR2I gridPt =
+                                grid.ResolveSnap( pos, {}, grid.GetItemGrid( item ), { item } )
+                                        .position;
 
                         VECTOR2I last = m_editedPoint->GetPosition();
                         VECTOR2I delta = pos - last;
-                        VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {},
-                                                                           grid.GetItemGrid( item ),
-                                                                           { item } );
+                        VECTOR2I deltaGrid =
+                                gridPt
+                                - grid.ResolveSnap( last, {}, grid.GetItemGrid( item ), { item } )
+                                          .position;
 
                         if( abs( delta.x ) > grid.GetGrid().x / 2 )
                             pos.x = last.x + deltaGrid.x;
@@ -2560,7 +2680,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                         if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID && grid.GetSnap() )
                         {
-                            VECTOR2I gridded = grid.BestSnapAnchor( snapped, {}, grid.GetItemGrid( item ), { item } );
+                            VECTOR2I gridded =
+                                    grid.ResolveSnap( snapped, {}, grid.GetItemGrid( item ), { item } )
+                                            .position;
                             double   griddedAng = SEG( gridded, prev ).Angle( SEG( gridded, next ) ).AsDegrees();
 
                             snapped = std::abs( griddedAng - snapAng ) < 2.0 ? gridded : pos;
@@ -2578,38 +2700,109 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             bool constraintSnapped = false;
+            std::vector<VECTOR2I> stationarySelfPoints;
+            std::vector<SEG>      stationarySelfSegments;
+
+            if( item->Type() == PCB_ZONE_T
+                || ( item->Type() == PCB_SHAPE_T
+                     && static_cast<PCB_SHAPE*>( item )->GetShape() == SHAPE_T::POLY ) )
+            {
+                const EDIT_LINE* editedLine = dynamic_cast<const EDIT_LINE*>( m_editedPoint );
+
+                for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
+                {
+                    const EDIT_POINT& point = m_editPoints->Point( i );
+
+                    if( &point != m_editedPoint
+                        && ( !editedLine
+                             || ( &point != &editedLine->GetOrigin()
+                                  && &point != &editedLine->GetEnd() ) ) )
+                    {
+                        stationarySelfPoints.push_back( point.GetPosition() );
+                    }
+                }
+
+                for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
+                {
+                    const EDIT_LINE& stationaryLine = m_editPoints->Line( i );
+
+                    if( &stationaryLine != editedLine
+                        && &stationaryLine.GetOrigin() != m_editedPoint
+                        && &stationaryLine.GetEnd() != m_editedPoint
+                        && ( !editedLine
+                             || ( &stationaryLine.GetOrigin() != &editedLine->GetOrigin()
+                                  && &stationaryLine.GetOrigin() != &editedLine->GetEnd()
+                                  && &stationaryLine.GetEnd() != &editedLine->GetOrigin()
+                                  && &stationaryLine.GetEnd() != &editedLine->GetEnd() ) ) )
+                    {
+                        stationarySelfSegments.emplace_back(
+                                stationaryLine.GetOrigin().GetPosition(),
+                                stationaryLine.GetEnd().GetPosition() );
+                    }
+                }
+            }
+            else if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
+            {
+                int editedIndex = getEditedPointIndex();
+
+                if( shape->GetShape() == SHAPE_T::RECTANGLE && editedIndex >= RECT_TOP_LEFT
+                    && editedIndex <= RECT_BOT_LEFT )
+                {
+                    int opposite = ( editedIndex + 2 ) % 4;
+                    stationarySelfPoints.push_back( m_editPoints->Point( opposite ).GetPosition() );
+                }
+                else if( shape->GetShape() == SHAPE_T::RECTANGLE )
+                {
+                    for( unsigned i = 0; i < m_editPoints->LinesSize() && i < 4; ++i )
+                    {
+                        if( m_editedPoint != &m_editPoints->Line( i ) )
+                            continue;
+
+                        const EDIT_LINE& opposite = m_editPoints->Line( ( i + 2 ) % 4 );
+                        stationarySelfPoints.push_back( opposite.GetOrigin().GetPosition() );
+                        stationarySelfPoints.push_back( opposite.GetEnd().GetPosition() );
+                        stationarySelfSegments.emplace_back( opposite.GetOrigin().GetPosition(),
+                                                             opposite.GetEnd().GetPosition() );
+                        break;
+                    }
+                }
+                else if( shape->GetShape() == SHAPE_T::ARC )
+                {
+                    constexpr int arcStart = 0;
+                    constexpr int arcMid = 1;
+                    constexpr int arcEnd = 2;
+                    constexpr int arcCenter = 3;
+
+                    if( m_arcEditMode == ARC_EDIT_MODE::KEEP_ENDPOINTS_OR_START_DIRECTION )
+                    {
+                        if( editedIndex != arcStart )
+                            stationarySelfPoints.push_back( m_editPoints->Point( arcStart ).GetPosition() );
+
+                        if( editedIndex != arcEnd )
+                            stationarySelfPoints.push_back( m_editPoints->Point( arcEnd ).GetPosition() );
+                    }
+                    else if( editedIndex == arcStart || editedIndex == arcMid || editedIndex == arcEnd )
+                    {
+                        stationarySelfPoints.push_back( m_editPoints->Point( arcCenter ).GetPosition() );
+                    }
+                }
+            }
+
+            grid.SetStationarySelfGeometry( std::move( stationarySelfPoints ),
+                                            std::move( stationarySelfSegments ) );
 
             // Apply 45 degree or other constraints
             if( !m_angleSnapActive && m_altConstraint )
             {
-                m_editedPoint->SetPosition( pos );
-                m_altConstraint->Apply( grid );
+                m_editedPoint->SetPosition(
+                        grid.ResolveSnap( pos, snapLayers, grid.GetItemGrid( item ), { item } )
+                                .position );
                 constraintSnapped = true;
-
-                // For constrained lines (like zone edges), try to snap to nearby anchors
-                // that lie on the constraint line
-                if( grid.GetSnap() && !snapLayers.empty() )
-                {
-                    VECTOR2I constrainedPos = m_editedPoint->GetPosition();
-                    VECTOR2I snapPos = grid.BestSnapAnchor( constrainedPos, snapLayers,
-                                                            grid.GetItemGrid( item ), { item } );
-
-                    if( snapPos != constrainedPos )
-                    {
-                        m_editedPoint->SetPosition( snapPos );
-                        m_altConstraint->Apply( grid );
-                        VECTOR2I projectedPos = m_editedPoint->GetPosition();
-                        const int snapTolerance = KiROUND( getView()->ToWorld( 5 ) );
-
-                        if( ( projectedPos - snapPos ).EuclideanNorm() > snapTolerance )
-                            m_editedPoint->SetPosition( constrainedPos );
-                    }
-                }
             }
             else if( !m_angleSnapActive && m_editedPoint->IsConstrained() )
             {
                 m_editedPoint->SetPosition( pos );
-                m_editedPoint->ApplyConstraint( grid );
+                m_editedPoint->ApplyRelation( grid );
                 constraintSnapped = true;
 
                 // For constrained lines (like zone edges), try to snap to nearby anchors
@@ -2618,31 +2811,28 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 if( grid.GetSnap() && !snapLayers.empty() )
                 {
                     VECTOR2I constrainedPos = m_editedPoint->GetPosition();
-                    VECTOR2I snapPos = grid.BestSnapAnchor( constrainedPos, snapLayers,
-                                                            grid.GetItemGrid( item ), { item } );
+                    VECTOR2I snapPos =
+                            grid.ResolveSnap( constrainedPos, snapLayers, grid.GetItemGrid( item ),
+                                              { item } )
+                                    .position;
 
-                    // If we found a snap anchor different from the constrained position,
-                    // check if setting the point there and reapplying the constraint
-                    // results in a position close to the snap point
+                    // Require the relation to preserve the discrete anchor exactly.
                     if( snapPos != constrainedPos )
                     {
                         m_editedPoint->SetPosition( snapPos );
-                        m_editedPoint->ApplyConstraint( grid );
+                        m_editedPoint->ApplyRelation( grid );
                         VECTOR2I projectedPos = m_editedPoint->GetPosition();
 
-                        // If the projection is close to the snap anchor, use it
-                        // Otherwise revert to the original constrained position
-                        const int snapTolerance = KiROUND( getView()->ToWorld( 5 ) );
-
-                        if( ( projectedPos - snapPos ).EuclideanNorm() > snapTolerance )
+                        if( projectedPos != snapPos )
                             m_editedPoint->SetPosition( constrainedPos );
                     }
                 }
             }
             else if( !m_angleSnapActive && m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
-                m_editedPoint->SetPosition( grid.BestSnapAnchor( pos, snapLayers, grid.GetItemGrid( item ),
-                                                                 { item } ) );
+                m_editedPoint->SetPosition(
+                        grid.ResolveSnap( pos, snapLayers, grid.GetItemGrid( item ), { item } )
+                                .position );
             }
             else
             {
@@ -2754,6 +2944,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             inDrag = false;
+            m_constraintDragSession.reset();
             frame()->UndoRedoBlock( false );
             updateSnapLineDirections();
 
@@ -2778,6 +2969,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
 
                 inDrag = false;
+                m_constraintDragSession.reset();
                 frame()->UndoRedoBlock( false );
                 updateSnapLineDirections();
             }
@@ -2828,6 +3020,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     m_preview.FreeItems();
     m_radiusHelper = nullptr;
+    m_constraintDragSession.reset();
 
     if( getView()->HasItem( &m_preview ) )
         getView()->Remove( &m_preview );
@@ -3052,8 +3245,25 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT& aCommit )
 
         if( member.has_value() )
         {
-            SolveCluster( board(), member.value(), cursor, &modified, stageNeighbor,
-                          /* aIncludeDragged */ false, /* aStabilize */ false, {}, coDragged );
+            if( !m_constraintDragSession || !m_constraintDragSession->Matches( *member ) )
+            {
+                m_constraintDragSession = std::make_shared<BOARD_CONSTRAINT_DRAG_SESSION>();
+
+                if( !m_constraintDragSession->Build( board(), *member ) )
+                    m_constraintDragSession.reset();
+            }
+
+            if( m_constraintDragSession )
+            {
+                m_constraintDragSession->Solve( cursor, &modified, stageNeighbor,
+                                                /* aIncludeDragged */ false,
+                                                /* aStabilize */ false, {}, coDragged );
+            }
+            else
+            {
+                SolveCluster( board(), member.value(), cursor, &modified, stageNeighbor,
+                              /* aIncludeDragged */ false, /* aStabilize */ false, {}, coDragged );
+            }
         }
         else if( isCurve )
         {
@@ -3251,10 +3461,10 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
         {
             // For polygon lines, toggle the mode on the existing constraint rather than
             // creating a new one. This preserves the original reference positions.
-            EC_CONVERGING* constraint = dynamic_cast<EC_CONVERGING*>( line->GetConstraint() );
+            POLYGON_EDGE_DRAG_POLICY* policy = line->GetDragPolicy();
 
-            if( constraint )
-                constraint->SetMode( POLYGON_LINE_MODE::FIXED_LENGTH );
+            if( policy )
+                policy->SetMode( POLYGON_LINE_MODE::FIXED_LENGTH );
 
             // Don't set m_altConstraint - we're modifying the line's own constraint
         }
@@ -3264,9 +3474,9 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
             m_altConstrainer = get45DegConstrainer();
 
             if( Is90Limited() )
-                m_altConstraint.reset( new EC_90DEGREE( *m_editedPoint, m_altConstrainer ) );
+                m_altConstraint = EDIT_RELATION::Angle90( m_altConstrainer );
             else
-                m_altConstraint.reset( new EC_45DEGREE( *m_editedPoint, m_altConstrainer ) );
+                m_altConstraint = EDIT_RELATION::Angle45( m_altConstrainer );
         }
     }
     else
@@ -3274,10 +3484,10 @@ void PCB_POINT_EDITOR::setAltConstraint( bool aEnabled )
         if( line && isPoly )
         {
             // Restore the line's constraint to CONVERGING mode
-            EC_CONVERGING* constraint = dynamic_cast<EC_CONVERGING*>( line->GetConstraint() );
+            POLYGON_EDGE_DRAG_POLICY* policy = line->GetDragPolicy();
 
-            if( constraint )
-                constraint->SetMode( POLYGON_LINE_MODE::CONVERGING );
+            if( policy )
+                policy->SetMode( POLYGON_LINE_MODE::CONVERGING );
         }
 
         m_altConstraint.reset();

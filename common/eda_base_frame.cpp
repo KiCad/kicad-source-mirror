@@ -1631,6 +1631,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
                 book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_DISP_OPTIONS ), _( "Display Options" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_SNAPPING ), _( "Snapping" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_COLORS ), _( "Colors" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_TOOLBARS ), _( "Toolbars" ) );
@@ -1641,6 +1642,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
                 book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_SNAPPING ), _( "Snapping" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_COLORS ), _( "Colors" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_TOOLBARS ), _( "Toolbars" ) );
@@ -1665,6 +1667,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
                 book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_FP_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_FP_SNAPPING ), _( "Snapping" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_FP_ORIGINS_AXES ), _( "Origins & Axes" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
@@ -1679,6 +1682,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
                 book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_DISPLAY_OPTS ), _( "Display Options" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_SNAPPING ), _( "Snapping" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_COLORS ), _( "Colors" ) );
@@ -1713,6 +1717,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
                 book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_COLORS ), _( "Colors" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_TOOLBARS ), _( "Toolbars" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_SNAPPING ), _( "Snapping" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
             }
         }
@@ -1732,6 +1737,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
                 book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_DS_GRIDS ), _( "Grids" ) );
+                book->AddLazySubPage( LAZY_CTOR( PANEL_DS_SNAPPING ), _( "Snapping" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_DS_COLORS ), _( "Colors" ) );
                 book->AddLazySubPage( LAZY_CTOR( PANEL_DS_TOOLBARS ), _( "Toolbars" ) );
 

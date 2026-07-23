@@ -22,6 +22,7 @@
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
+#include <settings/snap_settings_params.h>
 #include "symbol_editor_settings.h"
 #include <default_values.h>
 
@@ -101,6 +102,8 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "editing.arc_edit_mode",
             reinterpret_cast<int*>( &m_ArcEditMode ),
             static_cast<int>( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ) ) );
+
+    AddSnapInferenceParams( m_params, m_SnapInference );
 
     m_params.emplace_back( new PARAM_MAP<int>( "lib_field_editor.field_widths",
             &m_LibFieldEditor.field_widths, {} ) );

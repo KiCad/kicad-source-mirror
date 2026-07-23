@@ -47,6 +47,7 @@
 #include <symbol_viewer_frame.h>
 #include <symbol_chooser_frame.h>
 #include <dialogs/panel_grid_settings.h>
+#include <dialogs/panel_snapping.h>
 #include <dialogs/panel_simulator_preferences.h>
 #include <dialogs/panel_design_block_lib_table.h>
 #include <dialogs/panel_sym_lib_table.h>
@@ -294,6 +295,10 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_SCH_SYMBOL_EDITOR );
         }
 
+        case PANEL_SYM_SNAPPING:
+            return CreateSnappingPanel( aParent, GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ),
+                                        FRAME_SCH_SYMBOL_EDITOR, &SYMBOL_EDITOR_SETTINGS::m_SnapInference );
+
         case PANEL_SYM_EDIT_OPTIONS:
         {
             EDA_BASE_FRAME* frame = aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
@@ -349,6 +354,10 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
             return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_SCH );
         }
+
+        case PANEL_SCH_SNAPPING:
+            return CreateSnappingPanel( aParent, GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ), FRAME_SCH,
+                                        &EESCHEMA_SETTINGS::m_SnapInference );
 
         case PANEL_SCH_EDIT_OPTIONS:
         {

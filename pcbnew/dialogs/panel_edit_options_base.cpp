@@ -291,26 +291,6 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* fpOptionsSizer;
 	fpOptionsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticText34 = new wxStaticText( fpPage, wxID_ANY, _("Magnetic Points"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText34->Wrap( -1 );
-	fpOptionsSizer->Add( m_staticText34, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
-
-	m_staticline5 = new wxStaticLine( fpPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	fpOptionsSizer->Add( m_staticline5, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
-
-	wxBoxSizer* bSizer13;
-	bSizer13 = new wxBoxSizer( wxVERTICAL );
-
-	m_magneticPads = new wxCheckBox( fpPage, wxID_ANY, _("Magnetic pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_magneticPads->SetValue(true);
-	bSizer13->Add( m_magneticPads, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
-
-	m_magneticGraphics = new wxCheckBox( fpPage, wxID_ANY, _("Magnetic graphics"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer13->Add( m_magneticGraphics, 0, wxBOTTOM|wxLEFT, 5 );
-
-
-	fpOptionsSizer->Add( bSizer13, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
 
 	fpPage->SetSizer( fpOptionsSizer );
 	fpPage->Layout();
@@ -320,63 +300,6 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	pcbPage = new wxPanel( m_optionsBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* pcbOptionsSizer;
 	pcbOptionsSizer = new wxBoxSizer( wxVERTICAL );
-
-	stMagneticPtsLabel1 = new wxStaticText( pcbPage, wxID_ANY, _("Magnetic Points"), wxDefaultPosition, wxDefaultSize, 0 );
-	stMagneticPtsLabel1->Wrap( -1 );
-	pcbOptionsSizer->Add( stMagneticPtsLabel1, 0, wxTOP|wxLEFT, 13 );
-
-	m_staticline6 = new wxStaticLine( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	pcbOptionsSizer->Add( m_staticline6, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
-
-	wxFlexGridSizer* fgMagneticPoints;
-	fgMagneticPoints = new wxFlexGridSizer( 0, 2, 5, 0 );
-	fgMagneticPoints->SetFlexibleDirection( wxVERTICAL );
-	fgMagneticPoints->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_staticText2 = new wxStaticText( pcbPage, wxID_ANY, _("Snap to pads:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	m_staticText2->SetToolTip( _("Capture cursor when the mouse enters a pad area") );
-
-	fgMagneticPoints->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	wxString m_magneticPadChoiceChoices[] = { _("Never"), _("When routing tracks"), _("Always") };
-	int m_magneticPadChoiceNChoices = sizeof( m_magneticPadChoiceChoices ) / sizeof( wxString );
-	m_magneticPadChoice = new wxChoice( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_magneticPadChoiceNChoices, m_magneticPadChoiceChoices, 0 );
-	m_magneticPadChoice->SetSelection( 1 );
-	m_magneticPadChoice->SetToolTip( _("Capture cursor when the mouse enters a pad area") );
-
-	fgMagneticPoints->Add( m_magneticPadChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_staticText21 = new wxStaticText( pcbPage, wxID_ANY, _("Snap to tracks and vias:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText21->Wrap( -1 );
-	m_staticText21->SetToolTip( _("Capture cursor when the mouse approaches a track") );
-
-	fgMagneticPoints->Add( m_staticText21, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	wxString m_magneticTrackChoiceChoices[] = { _("Never"), _("When routing tracks"), _("Always") };
-	int m_magneticTrackChoiceNChoices = sizeof( m_magneticTrackChoiceChoices ) / sizeof( wxString );
-	m_magneticTrackChoice = new wxChoice( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_magneticTrackChoiceNChoices, m_magneticTrackChoiceChoices, 0 );
-	m_magneticTrackChoice->SetSelection( 1 );
-	m_magneticTrackChoice->SetToolTip( _("Capture cursor when the mouse approaches a track") );
-
-	fgMagneticPoints->Add( m_magneticTrackChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
-	m_staticText211 = new wxStaticText( pcbPage, wxID_ANY, _("Snap to graphics:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText211->Wrap( -1 );
-	m_staticText211->SetToolTip( _("Capture cursor when the mouse approaches graphical control points") );
-
-	fgMagneticPoints->Add( m_staticText211, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-	wxString m_magneticGraphicsChoiceChoices[] = { _("Always"), _("Never") };
-	int m_magneticGraphicsChoiceNChoices = sizeof( m_magneticGraphicsChoiceChoices ) / sizeof( wxString );
-	m_magneticGraphicsChoice = new wxChoice( pcbPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_magneticGraphicsChoiceNChoices, m_magneticGraphicsChoiceChoices, 0 );
-	m_magneticGraphicsChoice->SetSelection( 0 );
-	m_magneticGraphicsChoice->SetToolTip( _("Capture cursor when the mouse approaches graphical control points") );
-
-	fgMagneticPoints->Add( m_magneticGraphicsChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	pcbOptionsSizer->Add( fgMagneticPoints, 0, wxEXPAND|wxALL, 5 );
 
 
 	pcbOptionsSizer->Add( 0, 5, 0, wxEXPAND, 5 );

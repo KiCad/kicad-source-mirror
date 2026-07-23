@@ -1493,7 +1493,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         cursorPos = evt->IsPrime() ? evt->Position() : controls->GetMousePosition();
-        cursorPos = grid.BestSnapAnchor( cursorPos, grid.GetItemGrid( previewItem ), nullptr );
+        cursorPos =
+                grid.ResolveSnap( cursorPos, grid.GetItemGrid( previewItem ), nullptr ).position;
         controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsCancelInteractive() )
@@ -2023,7 +2024,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
 
         VECTOR2I cursorPos = controls->GetMousePosition();
-        cursorPos = grid.BestSnapAnchor( cursorPos, snapGrid, item );
+        cursorPos = grid.ResolveSnap( cursorPos, snapGrid, item ).position;
         controls->ForceCursorPosition( true, cursorPos );
 
         // The tool hotkey is interpreted as a click when drawing
@@ -2192,7 +2193,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                     getViewControls()->PinCursorInsideNonAutoscrollArea( true );
                     cursorPos = getViewControls()->GetMousePosition();
-                    cursorPos = grid.BestSnapAnchor( cursorPos, snapGrid, item );
+                    cursorPos = grid.ResolveSnap( cursorPos, snapGrid, item ).position;
                 }
 
                 if( !itemsToPlace.empty() )

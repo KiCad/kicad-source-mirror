@@ -23,6 +23,7 @@
 
 #include <board_design_settings.h>
 #include <settings/app_settings.h>
+#include <settings/snap_settings.h>
 #include <pcbnew_settings.h>
 #include <project/board_project_settings.h>
 
@@ -59,6 +60,8 @@ public:
 
     // Only the magneticPads element is used
     MAGNETIC_SETTINGS m_MagneticItems;
+
+    SNAP_INFERENCE_SETTINGS m_SnapInference;
 
     PCB_DISPLAY_OPTIONS m_Display;
 

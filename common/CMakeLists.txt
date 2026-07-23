@@ -593,6 +593,8 @@ set( COMMON_DLG_SRCS
     dialogs/panel_maintenance_base.cpp
     dialogs/panel_mouse_settings.cpp
     dialogs/panel_mouse_settings_base.cpp
+    dialogs/panel_snapping.cpp
+    dialogs/panel_snapping_base.cpp
     dialogs/panel_spacemouse.cpp
     dialogs/panel_spacemouse_base.cpp
     dialogs/panel_packages_and_updates.cpp
@@ -867,7 +869,7 @@ set( COMMON_SRCS
     tool/common_tools.cpp
     tool/conditional_menu.cpp
     tool/design_block_control.cpp
-    tool/edit_constraints.cpp
+    tool/edit_relations.cpp
     tool/edit_points.cpp
     tool/editor_conditions.cpp
     tool/embed_tool.cpp
@@ -958,6 +960,7 @@ target_link_libraries( common
     kimath
     kinng
     kiplatform
+    snap
     kicommon
     core
     fmt::fmt

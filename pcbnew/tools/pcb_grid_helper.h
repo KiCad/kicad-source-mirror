@@ -22,9 +22,12 @@
 #ifndef PCB_GRID_HELPER_H
 #define PCB_GRID_HELPER_H
 
+#include <initializer_list>
 #include <vector>
 
+#include <settings/snap_settings.h>
 #include <tool/grid_helper.h>
+#include <snap/snap_resolver.h>
 #include <geometry/intersection.h>
 #include <geometry/nearest.h>
 
@@ -81,11 +84,13 @@ public:
      * @param aReferenceItem Reference item for layer/type special casing
      * @return snapped screen point
      */
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem,
+    SNAP_RESULT ResolveSnap( const VECTOR2I& aOrigin, BOARD_ITEM* aReferenceItem,
                              GRID_HELPER_GRIDS aGrid = GRID_HELPER_GRIDS::GRID_CURRENT );
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
+    SNAP_RESULT ResolveSnap( const VECTOR2I& aOrigin, const LSET& aLayers,
                              GRID_HELPER_GRIDS aGrid = GRID_HELPER_GRIDS::GRID_CURRENT,
-                             const std::vector<BOARD_ITEM*>& aSkip = {} );
+                             const std::vector<BOARD_ITEM*>& aSkip = {},
+                             std::optional<VECTOR2I>         aMovingReferencePoint = std::nullopt );
+    void ClearSnapFeedback();
 
     GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const override;
 
@@ -124,7 +129,21 @@ public:
     static std::vector<ANCHOR_SPEC> GetArcAnchors( const PCB_ARC& aArc, bool aFrom );
 
 private:
-    std::vector<BOARD_ITEM*> queryVisible( const BOX2I&                    aArea,
+    static BOX2I layoutBounds( const BOARD_ITEM& aItem );
+
+    /**
+     * True when the footprint's own contents are the layout objects.
+     *
+     * The board arranges footprints, so a footprint's children collapse into it.  The footprint
+     * editor arranges those children, where the same collapse would leave a single object and
+     * make alignment and equal spacing impossible.
+     */
+    bool editingInsideFootprint() const;
+
+    /// Snap inference settings for whichever editor owns this helper.
+    SNAP_INFERENCE_SETTINGS snapInferenceSettings() const;
+
+    std::vector<BOARD_ITEM*> queryVisible( std::initializer_list<BOX2I>    aAreas,
                                            const std::vector<BOARD_ITEM*>& aSkip ) const;
 
     /**

@@ -28,6 +28,7 @@
 #include <settings/common_settings.h>
 #include <settings/nested_settings.h>
 #include <settings/parameters.h>
+#include <settings/snap_settings_params.h>
 #include <settings/settings_manager.h>
 #include <wx/config.h>
 #include <wx/tokenzr.h>
@@ -167,6 +168,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "editing.magnetic_all_layers",
             &m_MagneticItems.allLayers, false ) );
+
+    AddSnapInferenceParams( m_params, m_SnapInference );
 
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords",
             &m_PolarCoords, false ) );

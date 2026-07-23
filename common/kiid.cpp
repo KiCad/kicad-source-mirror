@@ -247,6 +247,14 @@ KIID KIID::FromName( const std::string& aName )
 }
 
 
+KIID KIID::FromBytes( const std::array<uint8_t, 16>& aBytes )
+{
+    KIID id( 0 );
+    std::copy( aBytes.begin(), aBytes.end(), id.m_uuid.begin() );
+    return id;
+}
+
+
 void KIID::Clone( const KIID& aUUID )
 {
     m_uuid = aUUID.m_uuid;
@@ -262,6 +270,14 @@ wxString KIID::AsString() const
 std::string KIID::AsStdString() const
 {
     return boost::uuids::to_string( m_uuid );
+}
+
+
+std::array<uint8_t, 16> KIID::AsBytes() const
+{
+    std::array<uint8_t, 16> result;
+    std::copy( m_uuid.begin(), m_uuid.end(), result.begin() );
+    return result;
 }
 
 
