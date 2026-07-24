@@ -912,13 +912,11 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
         return;
     }
 
-    // If the frame is currently disabled then a quasi-modal/modal dialog is open on top
-    // of it (for example the symbol properties dialog).  Reloading the library now would
-    // delete the LIB_SYMBOL the dialog is editing and crash on dialog close.  Defer the
-    // reload until the dialog is dismissed.
-    if( !IsEnabled() )
+    // A modal dialog may be registered before wxGTK disables the frame.  Reloading the
+    // library while either state is active would delete the LIB_SYMBOL being edited.
+    if( !IsEnabled() || Kiway().HasBlockingDialog() )
     {
-        wxLogTrace( traceLibWatch, "Frame disabled (dialog open); restarting debounce timer" );
+        wxLogTrace( traceLibWatch, "Dialog open; restarting debounce timer" );
         m_watcherDebounceTimer.StartOnce( 1000 );
         return;
     }

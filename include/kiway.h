@@ -487,6 +487,7 @@ public:
      * @return Pointer to blocking dialog window or null if none
      */
     wxWindow* GetBlockingDialog();
+    bool HasBlockingDialog() const { return m_blockingDialog != wxID_NONE; }
     void SetBlockingDialog( wxWindow* aWin );
 
 private:

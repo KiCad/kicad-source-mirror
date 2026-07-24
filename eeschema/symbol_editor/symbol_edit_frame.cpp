@@ -1953,10 +1953,9 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         // buffer copy afterwards would be a use-after-free.
         const wxString refreshSymbolName = symbol->GetName();
 
-        // If the frame is disabled then a modal/quasi-modal dialog (such as the symbol properties dialog) is
-        // editing the current LIB_SYMBOL.  Refreshing it here would delete the symbol out from under the dialog
-        // and crash on dismissal.  The file watcher timer will retry the reload once the dialog has closed.
-        if( !IsEnabled() )
+        // A modal dialog may be registered before wxGTK disables the frame.  Refreshing the
+        // symbol in either state would delete the LIB_SYMBOL being edited by the dialog.
+        if( !IsEnabled() || Kiway().HasBlockingDialog() )
         {
             wxLogTrace( traceLibWatch, "Deferring symbol refresh; dialog is open on the symbol editor." );
             break;
