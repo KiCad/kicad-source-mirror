@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-24 06:01+0000\n"
+"PO-Revision-Date: 2026-07-24 13:05+0000\n"
 "Last-Translator: BoneNI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://hosted.weblate.org/projects/kicad/master-source/"
 "lo/>\n"
@@ -3145,7 +3145,7 @@ msgstr "ອ້າງອີງພື້ນຖານ:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:32
 msgid "Head ref:"
-msgstr "Head ref:"
+msgstr "ເລກອ້າງອີງຫຼັກ:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
 msgid "Compare"
@@ -4240,7 +4240,7 @@ msgstr "ຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜ່ານ"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr "SSH key"
+msgstr "ຄີ SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -4254,7 +4254,7 @@ msgstr "ຊື່ຜູ້ໃຊ້:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
 msgid "SSH key:"
-msgstr "SSH key:"
+msgstr "ຄີ SSH:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 msgid "Select SSH private key"
@@ -4353,7 +4353,7 @@ msgstr "ທ້ອງຖິ່ນ"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:91
 msgid "SSH private key:     "
-msgstr "SSH private key:     "
+msgstr "ຄີ SSH ສ່ວນຕົວ:     "
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
 msgid "Select SSH private key file"
@@ -4833,7 +4833,7 @@ msgstr "ແບບເພີ່ມຂຶ້ນ (Incremental)"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
 msgid "Zip archive"
-msgstr "Zip archive"
+msgstr "ໄຟລ໌ບີບອັດ"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -6105,7 +6105,7 @@ msgstr "<b>Nets ທີ່ກົງກັບ '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
 msgid "Netclasses"
-msgstr "Netclasses"
+msgstr "ລາສຂອງເນັດ"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:840
@@ -6214,7 +6214,7 @@ msgstr "ຮູບແບບ"
 #: eeschema/sch_label.cpp:221 pcbnew/board_connected_item.cpp:248
 #: pcbnew/pad.cpp:3796 pcbnew/zone.cpp:2302
 msgid "Net Class"
-msgstr "Net Class"
+msgstr "ຄລາສເນັດ"
 
 #: common/dialogs/panel_setup_severities.cpp:40 common/kidialog.cpp:119
 #: common/paths.cpp:572 eeschema/dialogs/dialog_erc.cpp:996
@@ -7162,7 +7162,7 @@ msgstr "ໜ້າຈໍ"
 #: pcbnew/pcb_barcode.cpp:642 pcbnew/pcb_shape.cpp:1524 pcbnew/pcb_text.cpp:301
 #: pcbnew/plot_board_layers.cpp:168
 msgid "Footprint"
-msgstr "Footprint"
+msgstr "ຟຸດພຣິນ"
 
 #: common/eda_item.cpp:443 pcbnew/board_statistics_report.cpp:681
 #: pcbnew/board_statistics_report.cpp:852
@@ -7214,7 +7214,7 @@ msgstr "ເສັ້ນວົງຈອນ"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:400 pcbnew/pcb_track.cpp:2318
 #: pcbnew/pcb_track.cpp:2433 pcbnew/widgets/search_handlers.cpp:918
 msgid "Via"
-msgstr "Via"
+msgstr "ເວຍ"
 
 #: common/eda_item.cpp:455 common/eda_item.cpp:469 eeschema/sch_marker.cpp:356
 #: pcbnew/pcb_marker.cpp:234
@@ -7513,7 +7513,7 @@ msgstr "ຄວາມສູງ"
 
 #: common/eda_shape.cpp:3397
 msgid "Bezier"
-msgstr "Bezier"
+msgstr "ເບຊີເອ"
 
 #: common/eda_shape.cpp:3418
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
@@ -10695,7 +10695,7 @@ msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:276
 msgid "Semicolons"
-msgstr "Semicolons"
+msgstr "ຈ້ຳຈຸດ"
 
 #: common/settings/color_settings.cpp:400
 msgid "(Footprints)"
@@ -12051,11 +12051,11 @@ msgstr "ຄ່າຂອງຊ່ອງຂໍ້ມູນບໍ່ສາມາດ
 
 #: common/validators.cpp:309
 msgid "carriage return"
-msgstr "carriage return"
+msgstr "ການປັດແຖວ"
 
 #: common/validators.cpp:311
 msgid "line feed"
-msgstr "line feed"
+msgstr "ການຂຶ້ນແຖວໃໝ່"
 
 #: common/validators.cpp:313
 msgid "tab"
@@ -23694,7 +23694,7 @@ msgstr "ເສັ້ນຜ່ານສູນກາງ"
 
 #: eeschema/sch_label.cpp:102
 msgid "Tri-State"
-msgstr "Tri-State"
+msgstr "ສາມສະຖານະ"
 
 #: eeschema/sch_label.cpp:219
 msgid "Sheet References"
@@ -27306,9 +27306,8 @@ msgstr "ນຳເຂົ້າ %d ສັນຍະລັກ, ຂ້າມ %d."
 #: eeschema/symbol_editor/toolbars_symbol_editor.cpp:96
 #: eeschema/toolbars_sch_editor.cpp:131
 #: pcbnew/toolbars_footprint_editor.cpp:126 pcbnew/toolbars_pcb_editor.cpp:279
-#, fuzzy
 msgid "Text objects"
-msgstr "ຄຸນສົມບັດຂໍ້ຄວາມ"
+msgstr "ວັດຖຸຂໍ້ຄວາມ"
 
 #: eeschema/symbol_library_manager.cpp:198
 #, c-format
@@ -29953,7 +29952,7 @@ msgstr "ບັນທຶກຂໍ້ມູນພລັອດ"
 
 #: eeschema/tools/simulator_control.cpp:543
 msgid "SPICE Netlist"
-msgstr "SPICE Netlist"
+msgstr "ລາຍການເນັດລິສ SPICE"
 
 #: eeschema/tools/symbol_editor_control.cpp:312
 #, c-format
@@ -31168,7 +31167,7 @@ msgstr "ບໍ່ພົບໄຟລ໌:"
 #: gerbview/files.cpp:301
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr "<b>ຟລ໌ວຽກ gerber ບໍ່ສາມາດໂຫຼດເປັນໄຟລ໌ພລັອດໄດ້</b> <i>%s</i>"
+msgstr "<b>ໄຟລ໌ວຽກ Gerber ບໍ່ສາມາດໂຫຼດເປັນໄຟລ໌ພລັອດໄດ້</b> <i>%s</i>"
 
 #: gerbview/files.cpp:314
 msgid "Load Files"
@@ -31343,7 +31342,7 @@ msgstr "ຊື່ຮູບ: '%s'  ຊື່ຊັ້ນ: '%s'"
 
 #: gerbview/gerbview_frame.cpp:712
 msgid "X2 attr"
-msgstr "X2 attr"
+msgstr "ຄຸນລັກສະນະ X2"
 
 #: gerbview/job_file_reader.cpp:150
 msgid "This job file uses an outdated format. Please recreate it."
@@ -31446,7 +31445,7 @@ msgstr "ເນັ້ນລາຍການທີ່ມີຄຸນລັກສະ
 
 #: gerbview/toolbars_gerber.cpp:254 gerbview/toolbars_gerber.cpp:256
 msgid "DCode:"
-msgstr "DCode:"
+msgstr "ລະຫັດ D:"
 
 #: gerbview/toolbars_gerber.cpp:301 gerbview/toolbars_gerber.cpp:302
 msgid "Text info entry"
@@ -33320,13 +33319,12 @@ msgid "Import a non-KiCad schematic file to KiCad format"
 msgstr "ນຳເຂົ້າໄຟລ໌ຜັງວົງຈອນທີ່ບໍ່ແມ່ນ KiCad ມາເປັນຮູບແບບ KiCad"
 
 #: kicad/cli/command_sch_import.cpp:44
-#, fuzzy
 msgid ""
 "Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
 "ltspice, pads, diptrace, pcad, orcad (default: auto)"
 msgstr ""
-"ການລະບຸຮູບແບບການນຳເຂົ້າ: auto, altium, eagle, cadstar, easyeda, easyedapro, "
-"ltspice, pads, diptrace, pcad (ເລີ່ມຕົ້ນ: auto)"
+"ຄຳແນະນຳຮູບແບບຂໍ້ມູນເຂົ້າ: auto, altium, eagle, cadstar, easyeda, easyedapro, "
+"ltspice, pads, diptrace, pcad, orcad (ຄ່າເລີ່ມຕົ້ນ: auto)"
 
 #: kicad/cli/command_sch_upgrade.cpp:31
 msgid "Upgrade the schematic file's format to the latest one"
@@ -33418,9 +33416,8 @@ msgid "Include extra files (legacy and output files)"
 msgstr "ລວມໄຟລ໌ເພີ່ມເຕີມ (ໄຟລ໌ແບບເກົ່າ ແລະ ໄຟລ໌ຜົນອອກ)"
 
 #: kicad/dialogs/dialog_archive_job_settings_base.h:45
-#, fuzzy
 msgid "Archive Project Job Settings"
-msgstr "ຈັດເກັບໄຟລ໌ໂຄງການ"
+msgstr "ການຕັ້ງຄ່າງານເກັບມ້ຽນໂຄງການ"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:33
 msgid "Destination:"
@@ -33998,9 +33995,8 @@ msgid "Import Allegro Board"
 msgstr "ນຳເຂົ້າບອດ Allegro"
 
 #: kicad/import_proj.cpp:720
-#, fuzzy
 msgid "Locate Allegro Board"
-msgstr "ໝູນແຜ່ນວົງຈອນ"
+msgstr "ລະບຸຕຳແໜ່ງ Allegro Board"
 
 #: kicad/import_project.cpp:69
 msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
@@ -34064,9 +34060,8 @@ msgid "Import DipTrace Project Files"
 msgstr "ນຳເຂົ້າໄຟລ໌ໂຄງການ DipTrace"
 
 #: kicad/import_project.cpp:249
-#, fuzzy
 msgid "Import OrCAD Project Files"
-msgstr "ນຳເຂົ້າໄຟລ໌ໂຄງການ P-CAD"
+msgstr "ນຳເຂົ້າໄຟລ໌ໂຄງການ OrCAD"
 
 #: kicad/jobs_runner.cpp:274
 #, c-format
@@ -34320,9 +34315,8 @@ msgid "Import DipTrace schematic and PCB (*.dch, *.dip)"
 msgstr "ນຳເຂົ້າຜັງວົງຈອນ ແລະ PCB ຂອງ DipTrace (*.dch, *.dip)"
 
 #: kicad/menubar.cpp:163
-#, fuzzy
 msgid "OrCAD Project..."
-msgstr "ໂຄງການ P-CAD..."
+msgstr "ໂຄງການ OrCAD..."
 
 #: kicad/menubar.cpp:164
 msgid "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)"
@@ -35284,7 +35278,7 @@ msgstr "ຕ້ອງການ Force Push ບໍ່?"
 
 #: kicad/project_tree_pane.cpp:2222
 msgid "&Force Push"
-msgstr "&Force Push"
+msgstr "&ບັງຄັບສົ່ງ"
 
 #: kicad/project_tree_pane.cpp:2231
 msgid "Push failed."
@@ -37214,7 +37208,7 @@ msgstr "ຄວາມຕ້ານທານທີ່ຕ້ອງການ:"
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:47
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:58
 msgid "kOhm"
-msgstr "kOhm"
+msgstr "ກິໂລໂອມ"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:40
 msgid "Exclude value 1:"
@@ -37402,7 +37396,7 @@ msgstr "R2:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:210
 msgid "Vout:"
-msgstr "Vout:"
+msgstr "ໂວນ:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:234
 msgid "Vref:"
@@ -51932,14 +51926,12 @@ msgid "Please select at least one option from %s list."
 msgstr "ກະລຸນາເລືອກຢ່າງໜ້ອຍໜຶ່ງຕົວເລືອກຈາກລາຍຊື່ %s."
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header_base.cpp:30
-#, fuzzy
 msgid "Rule Type"
-msgstr "ປະເພດກົດລະບຽບ"
+msgstr "ປະເພດກົດເກນ"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header_base.cpp:31
-#, fuzzy
 msgid "Rule Name"
-msgstr "ຊື່ກົດລະບຽບ"
+msgstr "ຊື່ກົດເກນ"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:440
 msgid "Rule name must be unique."
@@ -52840,9 +52832,9 @@ msgstr ""
 "Footprint '%s' ທີ່ນຳພວກເຮົາມີການກຳນົດການວາງທີ່ຂັດແຍ້ງກັນ; ຈະຮັກສາອັນທຳອິດໄວ້."
 
 #: pcbnew/footprint_import_reconciler.cpp:270
-#, fuzzy
 msgid "Cannot reconcile imported footprints: no KiCad footprint writer."
-msgstr "ບໍ່ສາມາດລຶບຮອຍຕີນອຸປະກອນ %s ທີ່ບໍ່ໄດ້ໃຊ້ອອກໄດ້ (ຮອຍຕີນອຸປະກອນຖືກລັອກໄວ້)."
+msgstr ""
+"ບໍ່ສາມາດປັບ footprint ທີ່ນຳເຂົ້າໃຫ້ກົງກັນໄດ້: ບໍ່ມີຕົວຂຽນ footprint ຂອງ KiCad."
 
 #: pcbnew/footprint_import_reconciler.cpp:312
 #, c-format
@@ -52866,9 +52858,8 @@ msgid "Cannot register imported footprint cache: no project library table."
 msgstr "ບໍ່ສາມາດລົງທະບຽນແຄຊ footprint ທີ່ນຳເຂົ້າ: ບໍ່ມີຕາຕະລາງຄັງຂອງໂຄງການ."
 
 #: pcbnew/footprint_import_reconciler.cpp:393
-#, fuzzy
 msgid "Error saving project footprint library table."
-msgstr "ເກີດຂໍ້ຜິດພາດໃນການບັນທຶກຕາຕະລາງຄັງສັບຟຸດພຣິນສະເພາະຂອງໂຄງການ."
+msgstr "ຂໍ້ຜິດພາດໃນການບັນທຶກຕາຕະລາງຄັງ footprint ຂອງໂຄງການ."
 
 #: pcbnew/footprint_info_impl.cpp:199
 msgid "Loading footprints..."
@@ -56036,9 +56027,8 @@ msgid "PCB document '%s' not found in '%s'"
 msgstr "ບໍ່ພົບເອກະສານ PCB '%s' ໃນ '%s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.h:46
-#, fuzzy
 msgid "EasyEDA (JLCEDA) Pro v3 project"
-msgstr "ໂຄງການ EasyEDA (JLCEDA) Pro"
+msgstr "ໂຄງການ EasyEDA (JLCEDA) Pro v3"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3_parser.cpp:1450
 #, c-format
@@ -63932,7 +63922,7 @@ msgstr "ເຄື່ອງຄິດເລກສຳລັບການຄຳນວ
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
-msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
+msgstr "pcbnew;ແຜ່ນວົງຈອນພິມ;ວົງຈອນ;ເລເອົາ;ການອອກແບບ;ຕົວແກ້ໄຂ;ຟຸດພຣິນ;"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
