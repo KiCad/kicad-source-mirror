@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-10 10:01+0000\n"
+"PO-Revision-Date: 2026-07-24 06:01+0000\n"
 "Last-Translator: BoneNI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://hosted.weblate.org/projects/kicad/master-source/"
 "lo/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:54
 #: common/dialogs/panel_embedded_files.cpp:391
@@ -8954,49 +8954,46 @@ msgstr "ບໍ່ສາມາດແປງ JSON ແຖວ %d ໃນ '%s': %s"
 #: common/io/easyedapro/easyedapro_import_utils.cpp:642
 #, c-format
 msgid "EasyEDA Pro v3 blob in '%s' was skipped due to parse error: %s"
-msgstr ""
+msgstr "EasyEDA Pro v3 blob ໃນ '%s' ຖືກຂ້າມເນື່ອງຈາກຂໍ້ຜິດພາດໃນການວິເຄາະ: %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:929
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse EasyEDA Pro v3 device metadata: %s"
-msgstr "ບໍ່ສາມາດວິເຄາະຂໍ້ມູນເມຕາຂອງຜູ້ໃຫ້ບໍລິການທາງໄກ: %s"
+msgstr "ບໍ່ສາມາດວິເຄາະເມຕາເດຕາຂອງອຸປະກອນ EasyEDA Pro v3: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:310
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid DOCHEAD in '%s' at line %d"
-msgstr ""
-"ໄອດີຟຸດພຣິນບໍ່ຖືກຕ້ອງໃນ\n"
-"ໄຟລ໌: '%s'\n"
-"ແຖວ: %d"
+msgstr "DOCHEAD ບໍ່ຖືກຕ້ອງ ໃນ '%s' ທີ່ແຖວທີ %d"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:321
 #, c-format
 msgid "Expected DOCHEAD in '%s' at line %d"
-msgstr ""
+msgstr "ຄາດວ່າຈະມີ DOCHEAD ໃນ '%s' ທີ່ແຖວທີ %d"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:351
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error in '%s' at line %d: %s"
-msgstr "ເກີດຂໍ້ຜິດພາດ JSON ຂະນະອ່ານ '%s': %s"
+msgstr "ຂໍ້ຜິດພາດ JSON ໃນ '%s' ທີ່ແຖວທີ %d: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 project. Cannot "
 "find project2.json and .epru documents."
 msgstr ""
-"'%s' ບໍ່ແມ່ນໂຄງການ ຫຼື ຄັງອຸປະກອນ EasyEDA (JLCEDA) Pro ທີ່ຖືກຕ້ອງ. ບໍ່ພົບ project.json ຫຼື "
-"device.json."
+"'%s' ເບິ່ງຄືວ່າບໍ່ແມ່ນໂຄງການ EasyEDA (JLCEDA) Pro v3 ທີ່ຖືກຕ້ອງ. ບໍ່ພົບເອກະສານ "
+"project2.json ແລະ .epru."
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 library. Cannot "
 "find symbol2.json, footprint2.json or device2.json and .elibu documents."
 msgstr ""
-"'%s' ບໍ່ແມ່ນໂຄງການ ຫຼື ຄັງອຸປະກອນ EasyEDA (JLCEDA) Pro ທີ່ຖືກຕ້ອງ. ບໍ່ພົບ project.json ຫຼື "
-"device.json."
+"'%s' ເບິ່ງຄືວ່າບໍ່ແມ່ນຄັງ EasyEDA (JLCEDA) Pro v3 ທີ່ຖືກຕ້ອງ. ບໍ່ພົບເອກະສານ symbol2.json, "
+"footprint2.json ຫຼື device2.json ແລະ .elibu."
 
 #: common/io/io_base.cpp:139
 msgid "Loading file canceled by user."
@@ -9417,9 +9414,8 @@ msgid "Schematic Import Job Settings"
 msgstr "ການຕັ້ງຄ່າວຽກນຳເຂົ້າຜັງວົງຈອນ"
 
 #: common/jobs/job_special_archive.cpp:38
-#, fuzzy
 msgid "Special: Archive Project"
-msgstr "ຈັດເກັບ (Archive) ໂຄງການ..."
+msgstr "ພິເສດ: ຈັດເກັບໂຄງການ"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
@@ -11311,7 +11307,7 @@ msgstr "ສະຫຼັບຮູບແບບເສັ້ນໂຄ້ງ"
 
 #: common/tool/actions.cpp:612
 msgid "Switch arc posture between clockwise and counter-clockwise"
-msgstr ""
+msgstr "ສະລັບຮູບແບບເສັ້ນໂຄ້ງລະຫວ່າງຕາມເຂັມໂມງ ແລະ ທວນເຂັມໂມງ"
 
 #: common/tool/actions.cpp:618
 msgid "Cycle Arc Editing Mode"
@@ -12670,9 +12666,8 @@ msgstr "ໄຟລ໌ DipTrace"
 
 #: common/wildcards_and_files_ext.cpp:366
 #: eeschema/sch_io/orcad/sch_io_orcad.h:71
-#, fuzzy
 msgid "OrCAD Capture schematic files"
-msgstr "ໄຟລ໌ຜັງວົງຈອນ P-CAD"
+msgstr "ໄຟລ໌ຜັງວົງຈອນ OrCAD Capture"
 
 #: common/wildcards_and_files_ext.cpp:372
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:35
@@ -22253,9 +22248,9 @@ msgid "Show Field Name"
 msgstr "ສະແດງຊື່ຟີວ"
 
 #: eeschema/sch_footprint_field_reconciler.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
-msgstr "ປ່ຽນການກຳນົດຟຸດປຣິນຂອງ %s ຈາກ '%s' ເປັນ '%s'."
+msgstr "ເຊື່ອມຕໍ່ຄືນໃໝ່ %d ການກຳນົດ footprint ທີ່ນຳເຂົ້າ ໄປຫາຄັງ '%s'."
 
 #: eeschema/sch_group.cpp:399 pcbnew/pcb_group.cpp:412
 #, c-format
@@ -22928,7 +22923,7 @@ msgstr "ບໍ່ສາມາດແຍກວິເຄາະຄ່າ: '%s'"
 #: eeschema/sch_io/easyedapro/sch_easyedapro_v3_parser.cpp:1419
 #, c-format
 msgid "EasyEDA Pro v3 component '%s': missing Symbol attribute, skipping."
-msgstr ""
+msgstr "ອົງປະກອບ EasyEDA Pro v3 '%s': ຂາດຄຸນລັກສະນະ Symbol, ກຳລັງຂ້າມ."
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_v3_parser.cpp:1445
 #, c-format
@@ -22936,60 +22931,62 @@ msgid ""
 "EasyEDA Pro v3 component '%s': partId '%s' not found in symbol '%s', using "
 "unit 1."
 msgstr ""
+"ອົງປະກອບ EasyEDA Pro v3 '%s': ບໍ່ພົບ partId '%s' ໃນສັນຍາລັກ '%s', ຈະໃຊ້ຫົວໜ່ວຍທີ 1."
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:199
 #, c-format
 msgid "EasyEDA Pro v3 symbol '%s' in '%s' was skipped due to parse error: %s"
 msgstr ""
+"ສັນຍາລັກ EasyEDA Pro v3 '%s' ໃນ '%s' ຖືກຂ້າມເນື່ອງຈາກຂໍ້ຜິດພາດໃນການວິເຄາະ: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load symbol '%s' from '%s': %s"
-msgstr "ບໍ່ສາມາດໂຫຼດສັນຍະລັກ '%s' ຈາກໄລບຣາຣີ '%s'."
+msgstr "ບໍ່ສາມາດໂຫລດສັນຍາລັກ '%s' ຈາກ '%s': %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic document '%s' not found in '%s'"
-msgstr "ບໍ່ພົບໄຟລ໌ຜັງວົງຈອນ '%s'."
+msgstr "ບໍ່ພົບເອກະສານຜັງວົງຈອນ '%s' ໃນ '%s'"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse EasyEDA Pro v3 symbol/device metadata: %s"
-msgstr "ບໍ່ສາມາດວິເຄາະຂໍ້ມູນເມຕາຂອງຜູ້ໃຫ້ບໍລິການທາງໄກ: %s"
+msgstr "ບໍ່ສາມາດວິເຄາະເມຕາເດຕາຂອງສັນຍາລັກ/ອຸປະກອນ EasyEDA Pro v3: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:372
 #, c-format
 msgid "EasyEDA Pro v3 symbol '%s' was skipped due to parse error: %s"
-msgstr ""
+msgstr "ສັນຍາລັກ EasyEDA Pro v3 '%s' ຖືກຂ້າມເນື່ອງຈາກຂໍ້ຜິດພາດໃນການວິເຄາະ: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:405
 #, c-format
 msgid "EasyEDA Pro v3 schematic page '%s' was not found and was skipped."
-msgstr ""
+msgstr "ບໍ່ພົບໜ້າຜັງວົງຈອນ EasyEDA Pro v3 '%s' ແລະ ຖືກຂ້າມໄປ."
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:428
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:476
 #, c-format
 msgid "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s"
 msgstr ""
+"ໜ້າຜັງວົງຈອນ EasyEDA Pro v3 '%s' ຖືກຂ້າມເນື່ອງຈາກຂໍ້ຜິດພາດໃນການວິເຄາະ: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:531
 #, c-format
 msgid "EasyEDA Pro v3 device '%s' was skipped due to parse error: %s"
-msgstr ""
+msgstr "ອຸປະກອນ EasyEDA Pro v3 '%s' ຖືກຂ້າມເນື່ອງຈາກຂໍ້ຜິດພາດໃນການວິເຄາະ: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:594
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "EasyEDA (JLCEDA) Pro v3 import skipped %d unsupported object(s)."
-msgstr "ໂຄງການ EasyEDA (JLCEDA) Pro"
+msgstr "ການນຳເຂົ້າ EasyEDA (JLCEDA) Pro v3 ໄດ້ຂ້າມ %d ວັດຖຸທີ່ບໍ່ຮອງຮັບ."
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.h:50
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.h:55
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.h:51
-#, fuzzy
 msgid "EasyEDA (JLCEDA) Pro v3 files"
-msgstr "ໄຟລ໌ EasyEDA (JLCEDA) Pro"
+msgstr "ໄຟລ໌ EasyEDA (JLCEDA) Pro v3"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3646
 #, c-format
@@ -23504,9 +23501,9 @@ msgid "LTspice schematic files"
 msgstr "ໄຟລ໌ຜັງວົງຈອນ LTspice"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Converting page '%s'..."
-msgstr "ກຳລັງຕິດຕັ້ງແພັກເກັດ '%s'."
+msgstr "ກຳລັງແປງໜ້າ '%s'..."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:917
 #, c-format
@@ -23514,6 +23511,8 @@ msgid ""
 "Page '%s': the off-page connector at (%d, %d) is unconnected in the source "
 "design; skipped."
 msgstr ""
+"ໜ້າ '%s': ຕົວເຊື່ອມຕໍ່ນອກໜ້າ (off-page connector) ທີ່ (%d, %d) ບໍ່ມີການເຊື່ອມຕໍ່ໃນການອອກແບບຕົ້ນ"
+"ສະບັບ; ຖືກຂ້າມໄປ."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:1118
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:1139
@@ -23521,18 +23520,19 @@ msgid ""
 "An embedded picture could not be decoded and was skipped; only plain bitmap "
 "images are supported."
 msgstr ""
+"ຮູບພາບທີ່ຝັງມາບໍ່ສາມາດຖອດລະຫັດໄດ້ ແລະ ຖືກຂ້າມໄປ; ຮອງຮັບສະເພາະຮູບພາບແບບ bitmap ທຳມະດາເທົັ້ນ."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:167
 #, c-format
 msgid ""
 "Symbol '%s' is absent from the design cache; synthesized placeholder from %d "
 "instance(s)."
-msgstr ""
+msgstr "ສັນຍາລັກ '%s' ບໍ່ມີຢູ່ໃນແຄຊການອອກແບບ; ໄດ້ສ້າງຕົວແທນຈາກ %d instance."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:565
 #, c-format
 msgid "No cached symbol for '%s' (%s); placeholder emitted."
-msgstr ""
+msgstr "ບໍ່ມີສັນຍາລັກໃນແຄຊສຳລັບ '%s' (%s); ໄດ້ສ້າງຕົວແທນແທນ."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1132
 #, c-format
@@ -23540,45 +23540,50 @@ msgid ""
 "Page %s: %s uses a synthesized placeholder at a different orientation; pin "
 "layout approximate."
 msgstr ""
+"ໜ້າ %s: %s ໃຊ້ຕົວແທນທີ່ສ້າງຂຶ້ນໃນທິດທາງທີ່ແຕກຕ່າງກັນ; ການວາງຂາ (pin) ອາດຈະເປັນຄ່າປະມານ."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1139
 #, c-format
 msgid ""
 "Page %s: %s pin positions mismatch (orientation %d); geometry may be off."
 msgstr ""
+"ໜ້າ %s: ຕຳແໜ່ງຂາຂອງ %s ບໍ່ກົງກັນ (ທິດທາງ %d); ຮູບຊົງເລຂາຄະນິດອາດຈະຄາດເຄື່ອນ."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:224
 msgid ""
 "The file does not contain the 'Library' stream of an OrCAD Capture design."
-msgstr ""
+msgstr "ໄຟລ໌ນີ້ບໍ່ມີສະຕຣີມ 'Library' ຂອງການອອກແບບ OrCAD Capture."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:237
 msgid ""
 "This is a pre-2003 OrCAD design; symbol graphics are synthesized as "
 "placeholders (the legacy symbol cache format is not decoded)."
 msgstr ""
+"ນີ້ແມ່ນການອອກແບບ OrCAD ກ່ອນປີ 2003; ກຣາຟິກສັນຍາລັກຖືກສ້າງຂຶ້ນເປັນຕົວແທນ (ຮູບແບບແຄຊສັນຍາລັກແບບເ"
+"ກົ່າບໍ່ໄດ້ຖືກຖອດລະຫັດ)."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:248
 msgid ""
 "The design has no 'Cache' stream; placeholder symbols will be synthesized "
 "for all parts."
 msgstr ""
+"ການອອກແບບບໍ່ມີສະຕຣີມ 'Cache'; ສັນຍາລັກຕົວແທນຈະຖືກສ້າງຂຶ້ນສຳລັບທຸກພາກສ່ວນ."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Package stream '%s' could not be parsed: %s"
-msgstr "ບໍ່ສາມາດອ່ານ entrypoint '%s'"
+msgstr "ສະຕຣີມແພັກເກັດ '%s' ບໍ່ສາມາດວິເຄາະໄດ້: %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:285
 msgid ""
 "The file does not contain a 'Views' storage; it is not a supported OrCAD "
 "Capture design."
 msgstr ""
+"ໄຟລ໌ນີ້ບໍ່ມີບ່ອນເກັບຂໍ້ມູນ 'Views'; ມັນບໍ່ແມ່ນການອອກແບບ OrCAD Capture ທີ່ຮອງຮັບ."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:301
-#, fuzzy
 msgid "The design contains no schematic folders."
-msgstr "ບລັອກການອອກແບບບໍ່ມີຜັງວົງຈອນທີ່ຈະວາງ."
+msgstr "ການອອກແບບນີ້ບໍ່ມີໂຟນເດີຜັງວົງຈອນ."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:375
 #, c-format
@@ -23586,32 +23591,32 @@ msgid ""
 "The page display order for schematic folder '%s' could not be read (%s); "
 "pages are imported in name order."
 msgstr ""
+"ບໍ່ສາມາດອ່ານລຳດັບການສະແດງໜ້າສຳລັບໂຟນເດີຜັງວົງຈອນ '%s' ໄດ້ (%s); ໜ້າຕ່າງໆຈະຖືກນຳເຂົ້າຕາມລຳດັບ"
+"ຊື່."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' could not be parsed and was skipped: %s"
-msgstr "ຊັ້ນ '%s' ບໍ່ສາມາດຈັບຄູ່ໄດ້ ແລະ ຈະຖືກຂ້າມໄປ."
+msgstr "ໜ້າ '%s' ບໍ່ສາມາດວິເຄາະໄດ້ ແລະ ຖືກຂ້າມໄປ: %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:457
-#, fuzzy
 msgid "No schematic pages could be read from the design."
-msgstr "ບໍ່ສາມາດໂຫຼດສັນຍະລັກຈາກຄັງໄດ້."
+msgstr "ບໍ່ສາມາດອ່ານໜ້າຜັງວົງຈອນໃດໆຈາກການອອກແບບນີ້ໄດ້."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:538
 msgid "The file is not an OrCAD Capture library (no 'Library' stream)."
-msgstr ""
+msgstr "ໄຟລ໌ນີ້ບໍ່ແມ່ນຄັງ OrCAD Capture (ບໍ່ມີສະຕຣີມ 'Library')."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:617
 #, c-format
 msgid ""
 "The OrCAD library could not be fully parsed (%s); some symbols may be "
 "missing."
-msgstr ""
+msgstr "ຄັງ OrCAD ບໍ່ສາມາດວິເຄາະໄດ້ທັງໝົດ (%s); ບາງສັນຍາລັກອາດຈະຫາຍໄປ."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.h:76
-#, fuzzy
 msgid "OrCAD Capture symbol library files"
-msgstr "ໄຟລ໌ຄັງສັນຍະລັກ KiCad"
+msgstr "ໄຟລ໌ຄັງສັນຍາລັກ OrCAD Capture"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1460
 #, c-format
@@ -33397,19 +33402,20 @@ msgid "Invalid output format '%s' (expected 'json', 'text', 'png', or 'svg')\n"
 msgstr "ຮູບແບບການສົ່ງອອກ '%s' ບໍ່ຖືກຕ້ອງ (ຕ້ອງການ 'json', 'text', 'png', ຫຼື 'svg')\n"
 
 #: kicad/dialogs/dialog_archive_job_settings_base.cpp:24
-#, fuzzy
 msgid "Archive file:"
-msgstr "ຈັດເກັບໄຟລ໌ '%s' ແລ້ວ."
+msgstr "ໄຟລ໌ຈັດເກັບ:"
 
 #: kicad/dialogs/dialog_archive_job_settings_base.cpp:29
 msgid ""
 "Text variables such as ${PROJECTNAME} are expanded. A relative path is "
 "resolved against the working directory."
 msgstr ""
+"ຕົວປ່ຽນຂໍ້ຄວາມເຊັ່ນ ${PROJECTNAME} ຈະຖືກຂະຫຍາຍອອກ. ເສັ້ນທາງສຳພັນ (relative path) ຈະຖືກກຳ"
+"ນົດທຽບກັບໄດເຣັກທໍຣີທີ່ກຳລັງເຮັດວຽກຢູ່."
 
 #: kicad/dialogs/dialog_archive_job_settings_base.cpp:40
 msgid "Include extra files (legacy and output files)"
-msgstr ""
+msgstr "ລວມໄຟລ໌ເພີ່ມເຕີມ (ໄຟລ໌ແບບເກົ່າ ແລະ ໄຟລ໌ຜົນອອກ)"
 
 #: kicad/dialogs/dialog_archive_job_settings_base.h:45
 #, fuzzy
@@ -33731,7 +33737,7 @@ msgstr "ເລືອກງານທັງໝົດ"
 #: kicad/dialogs/panel_jobset.cpp:704
 #, c-format
 msgid "This version of KiCad does not support the '%s' job type."
-msgstr ""
+msgstr "KiCad ເວີຊັນນີ້ບໍ່ຮອງຮັບປະເພດວຽກ '%s'."
 
 #: kicad/dialogs/panel_jobset.cpp:751
 msgid "Job Types"
@@ -33981,16 +33987,15 @@ msgstr "ຄົ້ນຫາ PCB ຂອງ gEDA / Lepton EDA"
 #: kicad/import_proj.cpp:708
 #, c-format
 msgid "Import the associated Allegro board '%s'?"
-msgstr ""
+msgstr "ນຳເຂົ້າບອດ Allegro '%s' ທີ່ກ່ຽວຂ້ອງຫຼືບໍ່?"
 
 #: kicad/import_proj.cpp:710
-#, fuzzy
 msgid "Import an associated Allegro board file?"
-msgstr "ນຳເຂົ້າໄຟລ໌ບອດທີ່ບໍ່ແມ່ນ KiCad"
+msgstr "ນຳເຂົ້າໄຟລ໌ບອດ Allegro ທີ່ກ່ຽວຂ້ອງຫຼືບໍ່?"
 
 #: kicad/import_proj.cpp:712
 msgid "Import Allegro Board"
-msgstr ""
+msgstr "ນຳເຂົ້າບອດ Allegro"
 
 #: kicad/import_proj.cpp:720
 #, fuzzy
@@ -34321,7 +34326,7 @@ msgstr "ໂຄງການ P-CAD..."
 
 #: kicad/menubar.cpp:164
 msgid "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)"
-msgstr ""
+msgstr "ນຳເຂົ້າຜັງວົງຈອນ OrCAD (.dsn) ແລະ ບອດ Allegro (.brd) ຖ້າມີ"
 
 #: kicad/menubar.cpp:193
 msgid "Edit Advanced Config..."
@@ -50132,6 +50137,7 @@ msgstr "%s ບໍ່ມີທອງແດງ. ຂໍ້ກຳນົດຖືກ�
 #: pcbnew/drc/drc_engine.cpp:1654
 msgid "Keepout belongs to the footprint under test; constraint ignored."
 msgstr ""
+"Keepout ເປັນຂອງ footprint ທີ່ກຳລັງທົດສອບ; ຂໍ້ກຳນົດ (constraint) ຖືກລະເລີຍ."
 
 #: pcbnew/drc/drc_engine.cpp:1709
 msgid "Keepout constraint not met."
@@ -52572,9 +52578,9 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reconcile imported footprint libraries: %s"
-msgstr "ບັນທຶກຄັງສຳຮອງຟຸດພຣິນທີ່ຮ່ວມກັນບໍ່ສຳເລັດ: %s\n"
+msgstr "ບໍ່ສາມາດປັບປຸງຄັງ Footprint ທີ່ນຳເຂົ້າໃຫ້ສອດຄ່ອງກັນໄດ້: %s"
 
 #: pcbnew/files.cpp:1285
 msgid "Generate ODB++ Files"
@@ -52831,6 +52837,7 @@ msgid ""
 "Imported footprint '%s' has conflicting placed definitions; keeping the "
 "first."
 msgstr ""
+"Footprint '%s' ທີ່ນຳພວກເຮົາມີການກຳນົດການວາງທີ່ຂັດແຍ້ງກັນ; ຈະຮັກສາອັນທຳອິດໄວ້."
 
 #: pcbnew/footprint_import_reconciler.cpp:270
 #, fuzzy
@@ -52838,24 +52845,25 @@ msgid "Cannot reconcile imported footprints: no KiCad footprint writer."
 msgstr "ບໍ່ສາມາດລຶບຮອຍຕີນອຸປະກອນ %s ທີ່ບໍ່ໄດ້ໃຊ້ອອກໄດ້ (ຮອຍຕີນອຸປະກອນຖືກລັອກໄວ້)."
 
 #: pcbnew/footprint_import_reconciler.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported footprint cache '%s': %s"
-msgstr "ເກີດຂໍ້ຜິດພາດໃນການຂຽນໄຟລ໌ລາຍງານການເຈາະ '%s'"
+msgstr "ຂໍ້ຜິດພາດໃນການຂຽນແຄຊ footprint ທີ່ນຳເຂົ້າ '%s': %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:335
 #, c-format
 msgid ""
 "A library already exists at '%s'; leaving imported footprints unresolved."
 msgstr ""
+"ມີຄັງຢູ່ແລ້ວທີ່ '%s'; ຈະປ່ອຍໃຫ້ footprint ທີ່ນຳເຂົ້າຍັງບໍ່ທັນໄດ້ຮັບການແກ້ໄຂ."
 
 #: pcbnew/footprint_import_reconciler.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported footprint cache to '%s'."
-msgstr "ບໍ່ສາມາດເລີ່ມຕົວຊ່ວຍສ້າງຟຸດພຣິນ '%s' ໄດ້"
+msgstr "ບໍ່ສາມາດເຜີຍແຜ່ແຄຊ footprint ທີ່ນຳເຂົ້າໄປຫາ '%s'."
 
 #: pcbnew/footprint_import_reconciler.cpp:369
 msgid "Cannot register imported footprint cache: no project library table."
-msgstr ""
+msgstr "ບໍ່ສາມາດລົງທະບຽນແຄຊ footprint ທີ່ນຳເຂົ້າ: ບໍ່ມີຕາຕະລາງຄັງຂອງໂຄງການ."
 
 #: pcbnew/footprint_import_reconciler.cpp:393
 #, fuzzy
@@ -56018,14 +56026,14 @@ msgid "EasyEDA (JLCEDA) Pro project"
 msgstr "ໂຄງການ EasyEDA (JLCEDA) Pro"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load footprint '%s' from '%s': %s"
-msgstr "ບໍ່ສາມາດໂຫລດຟຸດພຣິນ '%s' ຈາກ '%s'"
+msgstr "ບໍ່ສາມາດໂຫລດ footprint '%s' ຈາກ '%s': %s"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:308
-#, fuzzy, c-format
+#, c-format
 msgid "PCB document '%s' not found in '%s'"
-msgstr "ບໍ່ພົບຮອຍຕີນອຸປະກອນ '%s' ໃນ '%s'."
+msgstr "ບໍ່ພົບເອກະສານ PCB '%s' ໃນ '%s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.h:46
 #, fuzzy
@@ -56035,7 +56043,7 @@ msgstr "ໂຄງການ EasyEDA (JLCEDA) Pro"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3_parser.cpp:1450
 #, c-format
 msgid "EasyEDA Pro v3 component '%s' (%s): no footprint mapping, skipping."
-msgstr ""
+msgstr "ອົງປະກອບ EasyEDA Pro v3 '%s' (%s): ບໍ່ມີການຈັບຄູ່ footprint, ກຳລັງຂ້າມ."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:265
 #, c-format
@@ -58645,9 +58653,8 @@ msgstr ""
 "ແກ້ໄຂບັນຫາ ແລະ ລອງໃໝ່ອີກຄັ້ງ"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:77
-#, fuzzy
 msgid "Import Specctra Session"
-msgstr "ນຳເຂົ້າ Specctra Session..."
+msgstr "ນຳເຂົ້າເຊດຊັນ Specctra"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:79
 msgid "Session file imported and merged OK."
@@ -58692,9 +58699,9 @@ msgid "Session file is missing the \"library_out\" section"
 msgstr "ໄຟລ໌ເຊດຊັນຂາດສ່ວນ \"library_out\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported wire shape: '%s' for net: '%s'"
-msgstr "ບໍ່ຮອງຮັບຮູບຮ່າງວຽກ: %s"
+msgstr "ຮູບຮ່າງສາຍໄຟທີ່ບໍ່ຮອງຮັບ: '%s' ສຳລັບເນັດ: '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:542
 #, c-format
@@ -58707,6 +58714,8 @@ msgid ""
 "%d session item(s) were skipped due to unresolved reference, layer, or "
 "padstack."
 msgstr ""
+"ລາຍການເຊດຊັນ %d ລາຍການຖືກຂ້າມເນື່ອງຈາກການອ້າງອີງ, ເລເຢີ (layer), ຫຼື ແພັດສະແຕັກ "
+"(padstack) ທີ່ຍັງບໍ່ທັນໄດ້ຮັບການແກ້ໄຂ."
 
 #: pcbnew/toolbars_footprint_editor.cpp:130 pcbnew/toolbars_pcb_editor.cpp:283
 msgid "Dimension objects"
