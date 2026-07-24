@@ -1228,6 +1228,9 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         break;
 
     case MAIL_RELOAD_LIB:
+        if( m_cannotClose )
+            break;
+
         m_cannotClose = true;
         LoadFootprintFiles();
         BuildFootprintsList();
