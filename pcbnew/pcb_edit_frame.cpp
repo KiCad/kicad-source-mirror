@@ -1480,6 +1480,24 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( ACTIONS::gridSetOrigin );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::createArray );
 
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintCoincident );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintPointOnLine );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintMidpoint );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintSymmetric );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintParallel );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintPerpendicular );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintCollinear );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintHorizontal );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintVertical );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintTangent );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintEqualLength );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintEqualRadius );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintConcentric );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintFixedLength );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintFixedRadius );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintArcAngle );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintAngular );
+
     CURRENT_EDIT_TOOL( PCB_ACTIONS::microwaveCreateLine );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::microwaveCreateGap );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::microwaveCreateStub );
