@@ -29,9 +29,14 @@
 #include <schematic.h>
 #include <sch_line.h>
 #include <sch_label.h>
+#include <sch_text.h>
 #include <sch_edit_frame.h>
 #include <sch_shape.h>
 #include <sch_bus_entry.h>
+#include <wx/buffer.h>
+#include <wx/ffile.h>
+#include <wx/filename.h>
+#include <wx/strconv.h>
 
 
 void SCH_IO_LTSPICE_PARSER::Parse( SCH_SHEET_PATH* aSheet,
@@ -62,43 +67,91 @@ void SCH_IO_LTSPICE_PARSER::Parse( SCH_SHEET_PATH* aSheet,
 
     m_originOffset = ( m_originOffset / grid ) * grid;
 
-    readIncludes( outLT_ASCs );
     CreateKicadSYMBOLs( aSheet, outLT_ASCs, aAsyFileNames );
     CreateKicadSCH_ITEMs( aSheet, outLT_ASCs );
-}
 
+    // Convert LTspice standard device libs to UTF-8 into ltspice_cmp/ and .include them.
+    wxString projectPath;
+    wxString includeText;
 
-void SCH_IO_LTSPICE_PARSER::readIncludes( std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs )
-{
-    wxFileName ltSubDir( m_lt_schematic->GetLTspiceDataDir().GetFullPath(), wxEmptyString );
-    ltSubDir.AppendDir( wxS( "sub" ) );
+    if( SCHEMATIC* schematic = aSheet->LastScreen()->Schematic() )
+        projectPath = schematic->Project().GetProjectPath();
 
-    for( const LTSPICE_SCHEMATIC::LT_ASC& asc : outLT_ASCs )
+    if( !projectPath.IsEmpty() )
     {
-        for( const LTSPICE_SCHEMATIC::TEXT& lt_text : asc.Texts )
+        wxFileName cmpDir( m_lt_schematic->GetLTspiceDataDir().GetFullPath(), wxEmptyString );
+        cmpDir.AppendDir( wxS( "cmp" ) );
+
+        wxFileName outDir( projectPath, wxEmptyString );
+        outDir.AppendDir( wxS( "ltspice_cmp" ) );
+        outDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+        for( const wxString& name :
+             { wxS( "standard.dio" ), wxS( "standard.bjt" ), wxS( "standard.jft" ), wxS( "standard.mos" ) } )
         {
-            for( wxString& line : wxSplit( lt_text.Value, '\n' ) )
-            {
-                if( line.StartsWith( wxS( ".include " ) ) || line.StartsWith( wxS( ".inc " ) )
-                    || line.StartsWith( wxS( ".lib " ) ) )
-                {
-                    wxString path = line.AfterFirst( ' ' );
+            includeText << wxS( ".include ltspice_cmp/" ) << name << wxS( "\n" );
 
-                    path.Replace( '\\', '/' );
-                    wxFileName fileName( path );
+            wxFileName src = cmpDir;
+            src.SetFullName( name );
 
-                    if( fileName.IsAbsolute() )
-                    {
-                        m_includes[fileName.GetName()] = fileName.GetFullPath();
-                    }
-                    else
-                    {
-                        fileName.MakeAbsolute( ltSubDir.GetFullPath() );
-                        m_includes[fileName.GetName()] = fileName.GetFullPath();
-                    }
-                }
-            }
+            if( !src.FileExists() )
+                continue;
+
+            wxFileName dst = outDir;
+            dst.SetFullName( name );
+
+            if( dst.FileExists() )
+                continue;
+
+            wxFFile in( src.GetFullPath(), wxS( "rb" ) );
+
+            if( !in.IsOpened() )
+                continue;
+
+            wxFileOffset len = in.Length();
+
+            if( len <= 0 )
+                continue;
+
+            wxMemoryBuffer buffer( static_cast<size_t>( len ) );
+            void*          writePtr = buffer.GetWriteBuf( static_cast<size_t>( len ) );
+
+            if( !writePtr || in.Read( writePtr, len ) != static_cast<size_t>( len ) )
+                continue;
+
+            buffer.UngetWriteBuf( static_cast<size_t>( len ) );
+
+            const char* data = static_cast<const char*>( buffer.GetData() );
+            wxString    text;
+
+            // UTF-16 LE looks like c \0 c \0 ...; else try UTF-8, then CP1252.
+            if( len >= 4 && ( len % 2 ) == 0 && data[1] == 0 && data[3] == 0 )
+                text = wxString( data, wxMBConvUTF16LE(), len );
+            else
+                text = wxString::FromUTF8( data, len );
+
+            if( text.empty() )
+                text = wxString( data, wxCSConv( wxFONTENCODING_CP1252 ), len );
+
+            wxFFile out( dst.GetFullPath(), wxS( "wb" ) );
+
+            if( !out.IsOpened() )
+                continue;
+
+            out.Write( text, wxConvUTF8 );
         }
+    }
+
+    if( !includeText.IsEmpty() )
+    {
+        SCH_TEXT* textItem = new SCH_TEXT( VECTOR2I( 0, 0 ), includeText );
+
+        textItem->SetVisible( true );
+        textItem->SetMultilineAllowed( true );
+        textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        textItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+
+        aSheet->LastScreen()->Append( textItem );
     }
 }
 
@@ -511,16 +564,7 @@ void SCH_IO_LTSPICE_PARSER::CreateKicadSCH_ITEMs( SCH_SHEET_PATH* aSheet,
 
         for( const LTSPICE_SCHEMATIC::TEXT& lt_text : lt_asc.Texts )
         {
-            wxString textVal = lt_text.Value;
-
-            // Includes are already handled through Sim.Library, comment them out
-            if( textVal.StartsWith( ".include " ) || textVal.StartsWith( ".inc " )
-                || textVal.StartsWith( ".lib " ) )
-            {
-                textVal = wxS( "* " ) + textVal;
-            }
-
-            screen->Append( CreateSCH_TEXT( lt_text.Offset, textVal, lt_text.FontSize,
+            screen->Append( CreateSCH_TEXT( lt_text.Offset, lt_text.Value, lt_text.FontSize,
                                             lt_text.Justification ) );
         }
 
@@ -984,7 +1028,6 @@ SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
 void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
                                           SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheet )
 {
-    wxString libPath = m_lt_schematic->GetLTspiceDataDir().GetFullPath();
     wxString symbolName = aLTSymbol.Name.Upper();
     wxString type = aLTSymbol.SymAttributes[wxS( "TYPE" )].Upper();
     wxString prefix = aLTSymbol.SymAttributes[wxS( "PREFIX" )].Upper();
@@ -1089,19 +1132,7 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
         {
             if( type.IsEmpty() )
                 type = symbolName;
-
-            if( value == "DIODE" )
-                libFile = libPath + wxS( "cmp/standard.dio" );
-            else if( value == "NPN" || value == "PNP" )
-                libFile = libPath + wxS( "cmp/standard.bjt" );
-            else if( value == "NJF" || value == "PJF" )
-                libFile = libPath + wxS( "cmp/standard.jft" );
-            else if( value == "NMOS" || value == "PMOS" )
-                libFile = libPath + wxS( "cmp/standard.mos" );
         }
-
-        if( libFile.IsEmpty() )
-            libFile = m_includes[value];
 
         if( !libFile.IsEmpty() )
         {
