@@ -688,6 +688,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
             {
                 const auto prefix = "endpoint_" + std::to_string( i ) + "_";
                 r.properties[prefix + "kind"] = canonicalEndpointKind( c.endpoints[i].kind );
+                addSourceProperties( r, c.endpoints[i].properties );
 
                 if( c.endpoints[i].placement )
                 {
@@ -788,7 +789,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
             auto sheet = std::ranges::find( aModel.sheets, linked.id, &MODEL_SHEET::id );
 
             if( sheet != aModel.sheets.end() )
-                linkedSheets.push_back( sheet->name.text.ToStdString() );
+                linkedSheets.push_back( std::to_string( sheet->index ) );
         }
 
         std::ranges::sort( linkedSheets );
@@ -1094,7 +1095,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
                                                    } );
 
                 if( sheet != aParser.GetSheetHeaders().end() )
-                    linkedSheets.push_back( sheet->sheet_name );
+                    linkedSheets.push_back( std::to_string( sheet->sheet_num - 1 ) );
             }
         }
 
@@ -1212,6 +1213,55 @@ static bool snapshotsMatch( std::vector<CANONICAL_SEMANTIC_RECORD> aExpected,
     strip( aExpected );
     strip( aActual );
     return aExpected == aActual;
+}
+
+
+static bool task10SourcePropertiesPresent( const std::vector<CANONICAL_SEMANTIC_RECORD>& aRecords )
+{
+    auto has =
+            []( const CANONICAL_SEMANTIC_RECORD& aRecord, const std::string& aName, PROPERTY_DISPOSITION aDisposition )
+    {
+        auto property = aRecord.properties.find( aName );
+        return property != aRecord.properties.end() && property->second.disposition == aDisposition;
+    };
+
+    for( const CANONICAL_SEMANTIC_RECORD& record : aRecords )
+    {
+        if( record.kind == CANONICAL_KIND::NET
+            && ( !has( record, "global_net_record", PROPERTY_DISPOSITION::EXACT )
+                 || !has( record, "preserved_net_identity", PROPERTY_DISPOSITION::PRESERVED )
+                 || !has( record, "preserved_net_relationship", PROPERTY_DISPOSITION::PRESERVED ) ) )
+        {
+            return false;
+        }
+
+        if( record.kind == CANONICAL_KIND::CONNECTION
+            && ( !has( record, "raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT )
+                 || !has( record, "raw_connection_marker", PROPERTY_DISPOSITION::EXACT ) ) )
+        {
+            return false;
+        }
+
+        if( record.kind == CANONICAL_KIND::LABEL && !has( record, "raw_label_kind", PROPERTY_DISPOSITION::EXACT ) )
+        {
+            return false;
+        }
+
+        if( record.kind == CANONICAL_KIND::JUNCTION
+            && !has( record, "connection_record", PROPERTY_DISPOSITION::EXACT ) )
+        {
+            return false;
+        }
+
+        if( record.kind == CANONICAL_KIND::BUS
+            && ( !has( record, "preserved_net_identity", PROPERTY_DISPOSITION::PRESERVED )
+                 || !has( record, "preserved_net_relationship", PROPERTY_DISPOSITION::PRESERVED ) ) )
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 } // namespace
@@ -2837,6 +2887,26 @@ BOOST_AUTO_TEST_CASE( LabelsAndPower )
                                                          && aLabel.text.text == wxS( "CROSS_SHEET" );
                                               } ),
                        2 );
+    std::vector<const MODEL_LABEL*> crossSheetLabels;
+
+    for( const MODEL_LABEL& label : multisheet.labels )
+    {
+        if( label.kind == MODEL_LABEL_KIND::GLOBAL && label.text.text == wxS( "CROSS_SHEET" ) )
+            crossSheetLabels.push_back( &label );
+    }
+
+    BOOST_REQUIRE_EQUAL( crossSheetLabels.size(), 2 );
+    std::ranges::sort( crossSheetLabels,
+                       []( const MODEL_LABEL* aLeft, const MODEL_LABEL* aRight )
+                       {
+                           return aLeft->source.sheet < aRight->source.sheet;
+                       } );
+    BOOST_REQUIRE_EQUAL( crossSheetLabels[0]->linkedSheets.size(), 1 );
+    BOOST_REQUIRE_EQUAL( crossSheetLabels[1]->linkedSheets.size(), 1 );
+    BOOST_CHECK_EQUAL( crossSheetLabels[0]->source.sheet, 0 );
+    BOOST_CHECK_EQUAL( crossSheetLabels[1]->source.sheet, 1 );
+    BOOST_CHECK_EQUAL( crossSheetLabels[0]->linkedSheets[0].id.Value(), multisheet.sheets[1].id.Value() );
+    BOOST_CHECK_EQUAL( crossSheetLabels[1]->linkedSheets[0].id.Value(), multisheet.sheets[0].id.Value() );
 }
 
 
@@ -3117,12 +3187,43 @@ BOOST_AUTO_TEST_CASE( ConnectivityHandleErrors )
                                       && aError.What().Contains( wxS( "does not point back" ) )
                                       && aError.What().Contains( offpageOwnerOffset );
                            } );
+
+    std::vector<uint8_t> crossNetOffpage = loadBinaryFixture( "connectivity_topology.sch" );
+    const size_t         crossNetOffpages = sheetControllerOffset( crossNetOffpage, 20 );
+    const size_t         crossNetOffpageConnections = sheetControllerOffset( crossNetOffpage, 21 );
+    const size_t         crossNetVertices = sheetControllerOffset( crossNetOffpage, 22 );
+    const uint16_t       offpageConnection = readU16( crossNetOffpage, crossNetOffpages + 8 );
+    const uint32_t offpageNet = readU32( crossNetOffpage, crossNetOffpageConnections + offpageConnection * 40 + 8 );
+    size_t         foreignConnection = std::numeric_limits<size_t>::max();
+
+    for( size_t record = 0; record < sheetControllerCount( crossNetOffpage, 21 ); ++record )
+    {
+        if( readU32( crossNetOffpage, crossNetOffpageConnections + record * 40 + 8 ) != offpageNet )
+        {
+            foreignConnection = record;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE_NE( foreignConnection, std::numeric_limits<size_t>::max() );
+    const size_t foreignOffset = crossNetOffpageConnections + foreignConnection * 40;
+    const size_t firstVertex = crossNetVertices + readU32( crossNetOffpage, foreignOffset + 4 ) * 8;
+    writeU16( crossNetOffpage, foreignOffset + 12, 0x2000 );
+    writeU16( crossNetOffpage, firstVertex + 4, readU16( crossNetOffpage, crossNetOffpages + 22 ) );
+    writeU16( crossNetOffpage, firstVertex + 6, readU16( crossNetOffpage, crossNetOffpages + 24 ) );
+    BOOST_CHECK_EXCEPTION( parser.Parse( crossNetOffpage, wxS( "cross-net-offpage.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 20" ) )
+                                      && aError.What().Contains( wxS( "shared across different nets" ) );
+                           } );
 }
 
 
 BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
 {
-    PADS_SCH_BINARY_PARSER binaryParser;
+    PADS_SCH_BINARY_PARSER                 binaryParser;
+    std::vector<CANONICAL_SEMANTIC_RECORD> allActual;
 
     for( const std::string& fixture :
          { "minimal_v13", "placement_transform", "fields", "connectors", "text_encoding", "page_graphics",
@@ -3184,8 +3285,18 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
             auto expected = task10( normalizeAsciiModel( ascii ) );
             auto actual = task10( normalizeBinaryModel( binary ) );
             BOOST_CHECK( snapshotsMatch( expected, actual, sourceProperties ) );
+            allActual.insert( allActual.end(), actual.begin(), actual.end() );
         }
     }
+
+    BOOST_CHECK( task10SourcePropertiesPresent( allActual ) );
+    auto missingRawKind = allActual;
+
+    auto label = std::ranges::find( missingRawKind, CANONICAL_KIND::LABEL, &CANONICAL_SEMANTIC_RECORD::kind );
+    BOOST_REQUIRE( label != missingRawKind.end() );
+    label->properties.erase( "raw_label_kind" );
+
+    BOOST_CHECK( !task10SourcePropertiesPresent( missingRawKind ) );
 }
 
 

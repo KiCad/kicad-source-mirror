@@ -2554,6 +2554,8 @@ namespace
         std::vector<MODEL_CONNECTION*>       connections( controllers.pools[20].count, nullptr );
         std::vector<MODEL_NET*>              connectionNets( controllers.pools[20].count, nullptr );
         std::vector<std::array<uint16_t, 2>> connectionEndpointHandles( controllers.pools[20].count );
+        std::vector<std::vector<size_t>>     junctionBacklinks( controllers.pools[18].count );
+        std::vector<std::vector<size_t>>     offpageBacklinks( controllers.pools[19].count );
         std::vector<size_t>                  connectionCounts( sheetNets.size(), 0 );
 
         for( size_t record = 0; record < controllers.pools[20].count; ++record )
@@ -2667,22 +2669,40 @@ namespace
             }
 
             connectionEndpointHandles[record] = { aCursor.U16At( offset + 12 ), aCursor.U16At( offset + 14 ) };
+
+            for( size_t endpointIndex = 0; endpointIndex < connectionEndpointHandles[record].size(); ++endpointIndex )
+            {
+                const uint16_t       raw = connectionEndpointHandles[record][endpointIndex];
+                const size_t         objectClass = raw >> 12;
+                const size_t         objectRecord = raw & 0x0FFF;
+                std::vector<size_t>* backlinks = nullptr;
+
+                if( objectClass == 2 )
+                    backlinks = &offpageBacklinks[objectRecord];
+                else if( objectClass == 3 )
+                    backlinks = &junctionBacklinks[objectRecord];
+
+                if( backlinks )
+                {
+                    if( endpointIndex == 1 && connectionEndpointHandles[record][0] == raw )
+                    {
+                        SOURCE_PROVENANCE endpointSource = source;
+                        endpointSource.objectClass = wxS( "connection endpoint" );
+                        endpointSource.absoluteOffset += endpointIndex == 0 ? 12 : 14;
+                        endpointSource.length = 2;
+                        throwDecodeError( endpointSource, wxS( "duplicate typed endpoint backlink" ) );
+                    }
+
+                    backlinks->push_back( record );
+                }
+            }
+
             connection.properties.push_back(
                     sourceProperty( wxS( "raw_connection_marker" ), wxString::Format( wxS( "%u" ), marker ), source ) );
             sheetNets[netHandle]->connections.push_back( std::move( connection ) );
             connections[record] = &sheetNets[netHandle]->connections.back();
             connectionNets[record] = sheetNets[netHandle];
         }
-
-        auto connectionPointsBack = [&]( size_t aConnection, uint16_t aObjectClass, size_t aRecord )
-        {
-            if( aConnection >= connectionEndpointHandles.size() || aRecord > 0x0FFF )
-                return false;
-
-            const uint16_t expected = static_cast<uint16_t>( ( aObjectClass << 12 ) | aRecord );
-            return connectionEndpointHandles[aConnection][0] == expected
-                   || connectionEndpointHandles[aConnection][1] == expected;
-        };
 
         for( size_t record = 0; record < controllers.pools[18].count; ++record )
         {
@@ -2697,13 +2717,12 @@ namespace
             if( owner >= connections.size() || !connections[owner] )
                 throwDecodeError( ownerSource, wxS( "junction connection handle leaves controller 21" ) );
 
-            if( !connectionPointsBack( owner, 3, record ) )
+            if( std::ranges::find( junctionBacklinks[record], owner ) == junctionBacklinks[record].end() )
                 throwDecodeError( ownerSource, wxS( "junction connection handle does not point back" ) );
 
-            for( size_t connection = 0; connection < connections.size(); ++connection )
+            for( size_t connection : junctionBacklinks[record] )
             {
-                if( connectionPointsBack( connection, 3, record )
-                    && connectionNets[connection] != connectionNets[owner] )
+                if( connectionNets[connection] != connectionNets[owner] )
                 {
                     throwDecodeError( ownerSource, wxS( "junction is shared across different nets" ) );
                 }
@@ -2723,8 +2742,14 @@ namespace
             if( owner >= connections.size() || !connections[owner] )
                 throwDecodeError( ownerSource, wxS( "off-page net handle leaves controller 21" ) );
 
-            if( !connectionPointsBack( owner, 2, record ) )
+            if( std::ranges::find( offpageBacklinks[record], owner ) == offpageBacklinks[record].end() )
                 throwDecodeError( ownerSource, wxS( "off-page connection handle does not point back" ) );
+
+            for( size_t connection : offpageBacklinks[record] )
+            {
+                if( connectionNets[connection] != connectionNets[owner] )
+                    throwDecodeError( ownerSource, wxS( "off-page reference is shared across different nets" ) );
+            }
         }
 
         std::vector<bool> claimedBusEntries( controllers.pools[19].count, false );
