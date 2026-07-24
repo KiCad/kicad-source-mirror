@@ -109,6 +109,48 @@ BOOST_AUTO_TEST_CASE( WireTee )
     BOOST_CHECK( !info.hasBusEntryToMultipleWires );
 }
 
+BOOST_AUTO_TEST_CASE( WireFourWayStubCross )
+{
+    /*
+     * LTspice-style four-wire cross: four stubs meet at endpoints.
+     * Collinear pairs must not be merged away into an unmarked crossing.
+     *
+     *       |
+     *       |
+     *  -----O-----
+     *       |
+     *       |
+     */
+    items.insert( make_wire( { 0, 0 }, { 100, 0 } ) );
+    items.insert( make_wire( { 0, 0 }, { -100, 0 } ) );
+    items.insert( make_wire( { 0, 0 }, { 0, 100 } ) );
+    items.insert( make_wire( { 0, 0 }, { 0, -100 } ) );
+
+    const POINT_INFO info = AnalyzePoint( items, { 0, 0 }, false );
+
+    BOOST_CHECK( info.isJunction );
+}
+
+BOOST_AUTO_TEST_CASE( WireMidsegmentCross )
+{
+    /*
+     * Two continuous wires crossing mid-segment are not a junction
+     * (KiCad allows wires to cross without connecting).
+     *
+     *       |
+     *       |
+     *  ------------
+     *       |
+     *       |
+     */
+    items.insert( make_wire( { -100, 0 }, { 100, 0 } ) );
+    items.insert( make_wire( { 0, -100 }, { 0, 100 } ) );
+
+    const POINT_INFO info = AnalyzePoint( items, { 0, 0 }, false );
+
+    BOOST_CHECK( !info.isJunction );
+}
+
 BOOST_AUTO_TEST_CASE( BusEntryOnBus )
 {
     /*
