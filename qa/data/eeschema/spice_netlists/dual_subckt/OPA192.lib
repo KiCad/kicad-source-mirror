@@ -1,0 +1,11 @@
+* Synthetic single-supply opamp subcircuit for the dual_subckt QA fixture.
+*
+* This is NOT a real device model.  It exists only so that two schematic
+* symbols can share one .subckt library model, exercising the SPICE export
+* path that must keep both references on the library name (see
+* NetlistExporterSpice/SharedSubcktModelKeepsItsName).  The body is a trivial
+* ideal VCVS; only the .SUBCKT name and pin list matter to the test.
+
+.SUBCKT OPA192 +IN -IN V+ V- Vout
+Eout Vout 0 +IN -IN 1e6
+.ENDS OPA192

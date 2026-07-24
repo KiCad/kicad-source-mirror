@@ -522,8 +522,9 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
 
     std::string modelName = aItem.model->SpiceGenerator().ModelName( aItem );
 
-    // Only uniquify names KiCad defines itself with a .model line. Subcircuit names must
-    // match their library definition and stay shared between instances.
+    // Only uniquify names that KiCad itself defines with a .model line.  A subcircuit (or other
+    // externally defined) name has to match the definition pulled in from its library verbatim, and
+    // several symbols sharing one subcircuit must resolve to that same name, so it is left untouched.
     if( aItem.model->requiresSpiceModelLine( aItem ) )
         aItem.modelName = m_modelNameGenerator.Generate( modelName );
     else

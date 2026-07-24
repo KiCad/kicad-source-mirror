@@ -365,4 +365,37 @@ BOOST_AUTO_TEST_CASE( NameGeneratorUniqueness )
 }
 
 
+// Two symbols that share one .subckt library model must both reference the name the library
+// defines (the definition is pulled in verbatim from the .lib, and nothing emits one under a
+// uniquified alias).  The uniquifier used to rename the second reference to OPA192#1, which has no
+// definition, so ngspice rejected the netlist with "unknown subckt: ... opa192#1".
+BOOST_AUTO_TEST_CASE( SharedSubcktModelKeepsItsName )
+{
+    LOCALE_IO dummy;
+
+    LoadSchematic( SchematicQAPath( wxS( "dual_subckt" ) ) );
+
+    NETLIST_EXPORTER_SPICE exporter( m_schematic.get() );
+
+    wxString           path = GetNetlistPath( true );
+    WX_STRING_REPORTER reporter;
+
+    BOOST_REQUIRE( exporter.WriteNetlist( path, GetNetlistOptions(), reporter ) );
+
+    wxFFile file( path, "rt" );
+    BOOST_REQUIRE( file.IsOpened() );
+
+    wxString netlist;
+    file.ReadAll( &netlist );
+    file.Close();
+
+    BOOST_TEST_INFO( "Netlist:\n" << netlist );
+
+    BOOST_CHECK( !netlist.Contains( wxS( "OPA192#1" ) ) );
+    BOOST_CHECK( netlist.Contains( wxS( "OPA192" ) ) );
+
+    Cleanup();
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
