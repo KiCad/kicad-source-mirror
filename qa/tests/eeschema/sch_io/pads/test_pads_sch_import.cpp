@@ -26,9 +26,13 @@
 #include <sch_label.h>
 #include <schematic.h>
 #include <sch_io/pads/sch_io_pads.h>
+#include <sch_io/pads/pads_sch_binary_builder.h>
+#include <sch_io/pads/pads_sch_binary_parser.h>
+#include <sch_io/pads/pads_sch_binary_reader.h>
 #include <sch_io/sch_io_mgr.h>
 #include <sch_line.h>
 #include <sch_screen.h>
+#include <sch_shape.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
@@ -36,10 +40,12 @@
 #include <settings/settings_manager.h>
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <map>
+#include <set>
 #include <vector>
 
 
@@ -63,6 +69,114 @@ struct PADS_SCH_IMPORT_FIXTURE
     SETTINGS_MANAGER m_settingsManager;
     SCHEMATIC        m_schematic;
 };
+
+
+static wxString binaryFixture( const wxString& aName )
+{
+    return wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() ) + wxS( "/plugins/pads/binary/" ) + aName
+           + wxS( ".sch" );
+}
+
+
+static PADS_SCH_BINARY::PADS_SCH_MODEL parseBinaryFixture( const wxString& aName )
+{
+    wxString             path = binaryFixture( aName );
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE( PADS_SCH_BINARY::PADS_SCH_BINARY_READER::ReadFile( path, bytes ) );
+    return PADS_SCH_BINARY::PADS_SCH_BINARY_PARSER().Parse( bytes, path );
+}
+
+
+struct OBJECT_GRAPH_SNAPSHOT
+{
+    std::vector<const SCH_SHEET*> topLevelSheets;
+    std::vector<const SCH_ITEM*>  rootItems;
+    std::vector<const SCH_ITEM*>  appendItems;
+    int                           pageWidth = 0;
+    int                           pageHeight = 0;
+    wxString                      title;
+
+    bool operator==( const OBJECT_GRAPH_SNAPSHOT& ) const = default;
+};
+
+
+static OBJECT_GRAPH_SNAPSHOT objectGraphSnapshot( const SCHEMATIC& aSchematic, const SCH_SHEET* aAppendToMe )
+{
+    OBJECT_GRAPH_SNAPSHOT snapshot;
+    std::vector<SCH_SHEET*> topLevelSheets = aSchematic.GetTopLevelSheets();
+    snapshot.topLevelSheets.assign( topLevelSheets.begin(), topLevelSheets.end() );
+
+    for( const SCH_ITEM* item : aSchematic.Root().GetScreen()->Items() )
+        snapshot.rootItems.push_back( item );
+
+    if( aAppendToMe && aAppendToMe->GetScreen() )
+    {
+        for( const SCH_ITEM* item : aAppendToMe->GetScreen()->Items() )
+            snapshot.appendItems.push_back( item );
+
+        snapshot.pageWidth = aAppendToMe->GetScreen()->GetPageSettings().GetWidthMils();
+        snapshot.pageHeight = aAppendToMe->GetScreen()->GetPageSettings().GetHeightMils();
+        snapshot.title = aAppendToMe->GetScreen()->GetTitleBlock().GetTitle();
+    }
+
+    return snapshot;
+}
+
+
+static size_t itemCount( SCH_SCREEN* aScreen, KICAD_T aType )
+{
+    size_t count = 0;
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( aType ) )
+    {
+        (void) item;
+        ++count;
+    }
+
+    return count;
+}
+
+
+static VECTOR2I localPoint( const PADS_SCH_BINARY::SOURCE_POINT& aPoint )
+{
+    return { schIUScale.MilsToIU( static_cast<double>( aPoint.x ) / 2.0 ),
+             -schIUScale.MilsToIU( static_cast<double>( aPoint.y ) / 2.0 ) };
+}
+
+
+static PIN_ORIENTATION pinOrientation( int aAngle )
+{
+    switch( PADS_SCH_BINARY::NormalizeAngle( aAngle ) )
+    {
+    case 900: return PIN_ORIENTATION::PIN_UP;
+    case 1800: return PIN_ORIENTATION::PIN_LEFT;
+    case 2700: return PIN_ORIENTATION::PIN_DOWN;
+    default: return PIN_ORIENTATION::PIN_RIGHT;
+    }
+}
+
+
+static ELECTRICAL_PINTYPE pinType( uint32_t aType )
+{
+    const std::array<ELECTRICAL_PINTYPE, 9> types = {
+        ELECTRICAL_PINTYPE::PT_PASSIVE,     ELECTRICAL_PINTYPE::PT_INPUT,    ELECTRICAL_PINTYPE::PT_OUTPUT,
+        ELECTRICAL_PINTYPE::PT_BIDI,        ELECTRICAL_PINTYPE::PT_TRISTATE, ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR,
+        ELECTRICAL_PINTYPE::PT_OPENEMITTER, ELECTRICAL_PINTYPE::PT_POWER_IN, ELECTRICAL_PINTYPE::PT_UNSPECIFIED
+    };
+    return aType < types.size() ? types[aType] : ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
+}
+
+
+static GRAPHIC_PINSHAPE pinShape( uint32_t aStyle )
+{
+    switch( aStyle )
+    {
+    case 1: return GRAPHIC_PINSHAPE::INVERTED;
+    case 2: return GRAPHIC_PINSHAPE::CLOCK;
+    case 3: return GRAPHIC_PINSHAPE::INVERTED_CLOCK;
+    default: return GRAPHIC_PINSHAPE::LINE;
+    }
+}
 
 } // namespace
 
@@ -480,6 +594,435 @@ BOOST_AUTO_TEST_CASE( Issue23855_RotatedPartFieldPositions )
 }
 
 
+
+
+BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
+{
+    using namespace PADS_SCH_BINARY;
+
+    const PADS_SCH_MODEL model = parseBinaryFixture( wxS( "symbol_primitives" ) );
+    SCH_SHEET*           destination = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( destination );
+    BOOST_REQUIRE( destination->GetScreen() );
+
+    PADS_SCH_BINARY_BUILDER builder;
+    BUILD_RESULT            result =
+            builder.Build( model, &m_schematic, destination, binaryFixture( wxS( "symbol_primitives" ) ) );
+
+    BOOST_CHECK_EQUAL( result.counts.sheets, 1u );
+    BOOST_CHECK_EQUAL( result.counts.symbols, model.placements.size() );
+
+    SCH_SHEET_PATH path;
+    path.push_back( destination );
+    std::map<wxString, SCH_SYMBOL*> symbols;
+
+    for( SCH_ITEM* item : destination->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+        symbols.emplace( symbol->GetRef( &path ), symbol );
+    }
+
+    for( const MODEL_PLACEMENT& placement : model.placements )
+    {
+        auto it = symbols.find( placement.reference.text );
+        BOOST_REQUIRE_MESSAGE( it != symbols.end(), placement.reference.text );
+        SCH_SYMBOL* symbol = it->second;
+        BOOST_CHECK_EQUAL( symbol->GetUnit(), placement.unit );
+        BOOST_CHECK_EQUAL( symbol->GetPosition().x,
+                           schIUScale.MilsToIU( static_cast<double>( placement.position.x ) / 2.0 ) );
+        BOOST_CHECK_EQUAL( symbol->GetLibPins().size(), placement.pins.size() );
+        BOOST_REQUIRE( symbol->GetLibSymbolRef() );
+        BOOST_CHECK( !symbol->GetLibSymbolRef()->GetDrawItems().empty() );
+    }
+
+    SCH_SYMBOL*                    primitiveSymbol = symbols.at( wxS( "U1" ) );
+    const MODEL_SYMBOL_DEFINITION& primitiveDefinition =
+            *std::ranges::find_if( model.definitions,
+                                   []( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                   {
+                                       return aDefinition.name.text == wxS( "BATCHB_PRIMITIVES" );
+                                   } );
+    std::vector<SCH_SHAPE*> primitiveShapes;
+    std::vector<SCH_TEXT*>  primitiveTexts;
+
+    for( const SCH_ITEM& item : primitiveSymbol->GetLibSymbolRef()->GetDrawItems() )
+    {
+        if( item.Type() == SCH_SHAPE_T )
+            primitiveShapes.push_back( static_cast<SCH_SHAPE*>( const_cast<SCH_ITEM*>( &item ) ) );
+        else if( item.Type() == SCH_TEXT_T )
+            primitiveTexts.push_back( static_cast<SCH_TEXT*>( const_cast<SCH_ITEM*>( &item ) ) );
+    }
+
+    BOOST_REQUIRE_EQUAL( primitiveShapes.size(), 5u );
+    auto shapeOfType = [&]( SHAPE_T aType )
+    {
+        return std::ranges::find_if( primitiveShapes,
+                                     [&]( const SCH_SHAPE* aShape )
+                                     {
+                                         return aShape->GetShape() == aType;
+                                     } );
+    };
+    BOOST_CHECK_EQUAL( std::ranges::count_if( primitiveShapes,
+                                              []( const SCH_SHAPE* aShape )
+                                              {
+                                                  return aShape->GetShape() == SHAPE_T::POLY;
+                                              } ),
+                       3 );
+    auto circle = shapeOfType( SHAPE_T::CIRCLE );
+    auto arc = shapeOfType( SHAPE_T::ARC );
+    BOOST_REQUIRE( circle != primitiveShapes.end() );
+    BOOST_REQUIRE( arc != primitiveShapes.end() );
+    BOOST_CHECK_EQUAL(
+            ( *arc )->GetStroke().GetWidth(),
+            schIUScale.MilsToIU( static_cast<double>( primitiveDefinition.graphics[3].strokeWidth ) / 2.0 ) );
+    BOOST_CHECK( ( *arc )->GetEffectiveLineStyle() == LINE_STYLE::SOLID );
+    BOOST_CHECK_EQUAL(
+            ( *arc )->GetCenter().x,
+            schIUScale.MilsToIU( static_cast<double>( primitiveDefinition.graphics[3].arcCenter.x ) / 2.0 ) );
+    BOOST_CHECK_EQUAL(
+            ( *arc )->GetCenter().y,
+            -schIUScale.MilsToIU( static_cast<double>( primitiveDefinition.graphics[3].arcCenter.y ) / 2.0 ) );
+    BOOST_CHECK( std::ranges::any_of( primitiveShapes,
+                                      []( const SCH_SHAPE* aShape )
+                                      {
+                                          return aShape->GetFillMode() == FILL_T::FILLED_SHAPE;
+                                      } ) );
+    BOOST_REQUIRE_EQUAL( primitiveTexts.size(), 1u );
+    BOOST_CHECK_EQUAL( primitiveTexts[0]->GetText(), primitiveDefinition.graphics[5].text.text );
+    BOOST_CHECK_EQUAL( primitiveTexts[0]->GetPosition(), localPoint( primitiveDefinition.graphics[5].points[0] ) );
+    BOOST_CHECK_EQUAL(
+            primitiveTexts[0]->GetTextHeight(),
+            schIUScale.MilsToIU( static_cast<double>( primitiveDefinition.graphics[5].presentation.height ) / 2.0 ) );
+
+    BOOST_CHECK_EQUAL( destination->GetScreen()->GetPageSettings().GetWidthMils(),
+                       model.sheets.front().pageSize.x / 2 );
+    BOOST_CHECK_EQUAL( destination->GetScreen()->GetPageSettings().GetHeightMils(),
+                       model.sheets.front().pageSize.y / 2 );
+    BOOST_CHECK_EQUAL( destination->GetScreen()->GetTitleBlock().GetTitle(), model.sheets.front().title.text );
+    const TITLE_BLOCK& titleBlock = destination->GetScreen()->GetTitleBlock();
+    int                commentIndex = 0;
+
+    for( const MODEL_FIELD& field : model.sheets.front().titleBlockFields )
+    {
+        if( field.name.text.CmpNoCase( wxS( "Title" ) ) == 0 )
+            BOOST_CHECK_EQUAL( titleBlock.GetTitle(), field.value.text );
+        else if( field.name.text.CmpNoCase( wxS( "Revision" ) ) == 0 )
+            BOOST_CHECK_EQUAL( titleBlock.GetRevision(), field.value.text );
+        else if( field.name.text.CmpNoCase( wxS( "Drawn Date" ) ) == 0 )
+            BOOST_CHECK_EQUAL( titleBlock.GetDate(), field.value.text );
+        else if( field.name.text.CmpNoCase( wxS( "Company Name" ) ) == 0 )
+            BOOST_CHECK_EQUAL( titleBlock.GetCompany(), field.value.text );
+        else
+            BOOST_CHECK_EQUAL( titleBlock.GetComment( commentIndex++ ),
+                               wxString::Format( wxS( "%s: %s" ), field.name.text, field.value.text ) );
+    }
+
+    BOOST_CHECK_EQUAL( result.counts.graphics, std::ranges::count_if( model.sheets.front().border,
+                                                                      []( const MODEL_GRAPHIC& aGraphic )
+                                                                      {
+                                                                          return aGraphic.kind
+                                                                                 != MODEL_GRAPHIC_KIND::TEXT;
+                                                                      } ) );
+
+    m_schematic.Reset();
+    destination = m_schematic.GetTopLevelSheet();
+    const PADS_SCH_MODEL pinModel = parseBinaryFixture( wxS( "pin_styles" ) );
+    result = builder.Build( pinModel, &m_schematic, destination, binaryFixture( wxS( "pin_styles" ) ) );
+    SCH_SHEET_PATH pinPath;
+    pinPath.push_back( destination );
+    SCH_SYMBOL* pinSymbol = nullptr;
+
+    for( SCH_ITEM* item : destination->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( symbol->GetRef( &pinPath ) == wxS( "U2" ) )
+            pinSymbol = symbol;
+    }
+
+    BOOST_REQUIRE( pinSymbol );
+    const MODEL_SYMBOL_DEFINITION& pinDefinition =
+            *std::ranges::find_if( pinModel.definitions,
+                                   []( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                   {
+                                       return aDefinition.name.text == wxS( "BATCHB_PIN_STYLES" );
+                                   } );
+    std::vector<SCH_PIN*>  builtPins = pinSymbol->GetLibPins();
+    const MODEL_PART_TYPE& pinPart = *std::ranges::find_if( pinModel.partTypes,
+                                                            []( const MODEL_PART_TYPE& aPart )
+                                                            {
+                                                                return aPart.name.text == wxS( "BATCHB-PIN-STYLES" );
+                                                            } );
+    BOOST_REQUIRE_EQUAL( builtPins.size(), pinDefinition.pins.size() + pinPart.signalPins.size() );
+
+    for( const MODEL_PIN_DEFINITION& sourcePin : pinDefinition.pins )
+    {
+        auto built = std::ranges::find( builtPins, sourcePin.number.text, &SCH_PIN::GetNumber );
+        BOOST_REQUIRE_MESSAGE( built != builtPins.end(), sourcePin.number.text );
+        BOOST_CHECK_EQUAL( ( *built )->GetName(), sourcePin.name.text );
+        BOOST_CHECK_EQUAL( ( *built )->GetPosition(), localPoint( sourcePin.position ) );
+        BOOST_CHECK_EQUAL( ( *built )->GetLength(),
+                           schIUScale.MilsToIU( static_cast<double>( sourcePin.length ) / 2.0 ) );
+        BOOST_CHECK( ( *built )->GetOrientation() == pinOrientation( sourcePin.angle ) );
+        BOOST_CHECK( ( *built )->GetType() == pinType( sourcePin.electricalType ) );
+        BOOST_CHECK( ( *built )->GetShape() == pinShape( sourcePin.graphicStyle ) );
+        BOOST_CHECK_EQUAL( ( *built )->IsVisible(), sourcePin.presentation.visible );
+        BOOST_CHECK_EQUAL( ( *built )->GetNameTextSize(),
+                           schIUScale.MilsToIU( static_cast<double>( sourcePin.namePresentation.height ) / 2.0 ) );
+        BOOST_CHECK_EQUAL( ( *built )->GetNumberTextSize(),
+                           schIUScale.MilsToIU( static_cast<double>( sourcePin.numberPresentation.height ) / 2.0 ) );
+    }
+
+    m_schematic.Reset();
+    destination = m_schematic.GetTopLevelSheet();
+    const PADS_SCH_MODEL transformModel = parseBinaryFixture( wxS( "placement_transform" ) );
+    result = builder.Build( transformModel, &m_schematic, destination, binaryFixture( wxS( "placement_transform" ) ) );
+    SCH_SHEET_PATH transformPath;
+    transformPath.push_back( destination );
+
+    for( SCH_ITEM* item : destination->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL*            symbol = static_cast<SCH_SYMBOL*>( item );
+        const MODEL_PLACEMENT& placement =
+                *std::ranges::find_if( transformModel.placements,
+                                       [&]( const MODEL_PLACEMENT& aPlacement )
+                                       {
+                                           return aPlacement.reference.text == symbol->GetRef( &transformPath );
+                                       } );
+        int expectedOrientation = SYM_ORIENT_0;
+
+        switch( placement.angle )
+        {
+        case 900: expectedOrientation = SYM_ORIENT_90; break;
+        case 1800: expectedOrientation = SYM_ORIENT_180; break;
+        case 2700: expectedOrientation = SYM_ORIENT_270; break;
+        default: break;
+        }
+
+        if( placement.mirrored )
+            expectedOrientation |= SYM_MIRROR_X;
+
+        BOOST_CHECK_EQUAL( symbol->GetOrientation(), expectedOrientation );
+    }
+
+    BOOST_CHECK_EQUAL( itemCount( destination->GetScreen(), SCH_SYMBOL_T ), transformModel.placements.size() );
+
+    m_schematic.Reset();
+    destination = m_schematic.GetTopLevelSheet();
+    const PADS_SCH_MODEL multiModel = parseBinaryFixture( wxS( "multigate" ) );
+    result = builder.Build( multiModel, &m_schematic, destination, binaryFixture( wxS( "multigate" ) ) );
+    SCH_SHEET_PATH multiPath;
+    multiPath.push_back( destination );
+    std::vector<SCH_SYMBOL*> multiSymbols;
+
+    for( SCH_ITEM* item : destination->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( symbol->GetRef( &multiPath ) == wxS( "U3" ) )
+            multiSymbols.push_back( symbol );
+    }
+
+    BOOST_REQUIRE_EQUAL( multiSymbols.size(), 2u );
+    std::ranges::sort( multiSymbols, {}, &SCH_SYMBOL::GetUnit );
+    BOOST_CHECK_EQUAL( multiSymbols[0]->GetUnit(), 1 );
+    BOOST_CHECK_EQUAL( multiSymbols[1]->GetUnit(), 2 );
+    BOOST_CHECK_EQUAL( multiSymbols[0]->GetUnitCount(), 2 );
+    BOOST_CHECK_EQUAL( multiSymbols[1]->GetUnitCount(), 2 );
+    const MODEL_PART_TYPE& multiPart = *std::ranges::find_if( multiModel.partTypes,
+                                                              []( const MODEL_PART_TYPE& aPart )
+                                                              {
+                                                                  return aPart.name.text == wxS( "BATCHD-MULTIGATE" );
+                                                              } );
+    BOOST_CHECK_EQUAL( multiSymbols[0]->GetLibPins().size(),
+                       multiModel.placements[1].pins.size() + multiPart.signalPins.size() );
+    BOOST_CHECK_EQUAL( multiSymbols[1]->GetLibPins().size(),
+                       multiModel.placements[2].pins.size() + multiPart.signalPins.size() );
+
+    m_schematic.Reset();
+    destination = m_schematic.GetTopLevelSheet();
+    const PADS_SCH_MODEL connectorModel = parseBinaryFixture( wxS( "connectors" ) );
+    result = builder.Build( connectorModel, &m_schematic, destination, binaryFixture( wxS( "connectors" ) ) );
+    SCH_SHEET_PATH connectorPath;
+    connectorPath.push_back( destination );
+    SCH_SYMBOL* connector = nullptr;
+
+    for( SCH_ITEM* item : destination->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( symbol->GetRef( &connectorPath ) == wxS( "P1" ) )
+            connector = symbol;
+    }
+
+    BOOST_REQUIRE( connector );
+    BOOST_CHECK_EQUAL( connector->GetUnit(), 1 );
+    BOOST_CHECK_EQUAL( connector->GetUnitCount(), 26 );
+    BOOST_CHECK( std::ranges::any_of( connector->GetLibPins(),
+                                      []( const SCH_PIN* aPin )
+                                      {
+                                          return aPin->GetNumber() == wxS( "1" );
+                                      } ) );
+
+    m_schematic.Reset();
+    destination = m_schematic.GetTopLevelSheet();
+    const PADS_SCH_MODEL fieldModel = parseBinaryFixture( wxS( "fields" ) );
+    result = builder.Build( fieldModel, &m_schematic, destination, binaryFixture( wxS( "fields" ) ) );
+    BOOST_REQUIRE_EQUAL( result.counts.symbols, fieldModel.placements.size() );
+
+    SCH_SHEET_PATH fieldPath;
+    fieldPath.push_back( destination );
+    SCH_SYMBOL* r1 = nullptr;
+
+    for( SCH_ITEM* item : destination->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( symbol->GetRef( &fieldPath ) == wxS( "R1" ) )
+            r1 = symbol;
+    }
+
+    BOOST_REQUIRE( r1 );
+
+    for( const MODEL_FIELD& sourceField : fieldModel.placements.front().fields )
+    {
+        SCH_FIELD* builtField = nullptr;
+
+        if( sourceField.name.text == wxS( "REF-DES" ) )
+            builtField = r1->GetField( FIELD_T::REFERENCE );
+        else if( sourceField.name.text == wxS( "PART-TYPE" ) )
+            builtField = r1->GetField( FIELD_T::VALUE );
+        else
+            builtField = r1->GetField( sourceField.name.text );
+
+        BOOST_REQUIRE_MESSAGE( builtField, sourceField.name.text );
+        BOOST_CHECK_EQUAL( builtField->GetText(), sourceField.value.text );
+        BOOST_CHECK_EQUAL( builtField->IsVisible(), sourceField.visible );
+        BOOST_CHECK_EQUAL( builtField->GetTextHeight(),
+                           schIUScale.MilsToIU( static_cast<double>( sourceField.presentation.height ) / 2.0 ) );
+        BOOST_CHECK_EQUAL( builtField->GetTextThickness(),
+                           schIUScale.MilsToIU( static_cast<double>( sourceField.presentation.width ) / 2.0 ) );
+        BOOST_CHECK_EQUAL( builtField->GetTextAngle().AsTenthsOfADegree(), sourceField.angle );
+        BOOST_CHECK_EQUAL( builtField->GetPosition(), r1->GetPosition() + localPoint( sourceField.position ) );
+        BOOST_CHECK_EQUAL( builtField->IsBold(), sourceField.presentation.bold );
+        BOOST_CHECK_EQUAL( builtField->IsItalic(), sourceField.presentation.italic );
+    }
+
+    BOOST_CHECK( std::ranges::any_of( result.diagnostics,
+                                      []( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                      {
+                                          return aDiagnostic.message.Contains( wxS( "Bold Verdana" ) )
+                                                 && aDiagnostic.source.controller == 17;
+                                      } ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
+{
+    const PADS_SCH_BINARY::PADS_SCH_MODEL    model = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
+    PADS_SCH_BINARY::PADS_SCH_BINARY_BUILDER builder;
+    PADS_SCH_BINARY::BUILD_RESULT            result =
+            builder.Build( model, &m_schematic, nullptr, binaryFixture( wxS( "multisheet_connectivity" ) ) );
+    BOOST_CHECK_EQUAL( result.counts.sheets, model.sheets.size() );
+    SCH_SHEET* root = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( root );
+    BOOST_REQUIRE( root->GetScreen() );
+
+    std::vector<SCH_SHEET*> children;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+        children.push_back( static_cast<SCH_SHEET*>( item ) );
+
+    BOOST_REQUIRE_EQUAL( children.size(), model.sheets.size() );
+    BOOST_CHECK_EQUAL( root->GetScreen()->Items().size(), children.size() );
+    BOOST_CHECK( root->GetScreen()->Items().OfType( SCH_SYMBOL_T ).empty() );
+    BOOST_CHECK( root->GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ).empty() );
+
+    std::set<wxString> filenames;
+
+    for( size_t i = 0; i < children.size(); ++i )
+    {
+        BOOST_CHECK_EQUAL( children[i]->GetField( FIELD_T::SHEET_NAME )->GetText(), model.sheets[i].name.text );
+        wxString filename = children[i]->GetField( FIELD_T::SHEET_FILENAME )->GetText();
+        BOOST_CHECK( !filename.Contains( wxS( "/" ) ) );
+        BOOST_CHECK( !filename.Contains( wxS( ":" ) ) );
+        BOOST_CHECK( !filename.Contains( wxS( "*" ) ) );
+        BOOST_CHECK( filenames.insert( filename ).second );
+        BOOST_REQUIRE( children[i]->GetScreen() );
+        BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 1 ) );
+        BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageSettings().GetWidthMils(), model.sheets[i].pageSize.x / 2 );
+        BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageSettings().GetHeightMils(),
+                           model.sheets[i].pageSize.y / 2 );
+
+        std::multiset<wxString> expectedLabels;
+        std::multiset<wxString> builtLabels;
+
+        for( const PADS_SCH_BINARY::MODEL_LABEL& label : model.labels )
+        {
+            if( label.sheet.id == model.sheets[i].id && !label.linkedSheets.empty() )
+                expectedLabels.insert( label.text.text );
+        }
+
+        for( SCH_ITEM* item : children[i]->GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+            builtLabels.insert( static_cast<SCH_GLOBALLABEL*>( item )->GetText() );
+
+        BOOST_CHECK( builtLabels == expectedLabels );
+    }
+
+    BOOST_CHECK_EQUAL( result.counts.labels,
+                       std::ranges::count_if( model.labels,
+                                              []( const PADS_SCH_BINARY::MODEL_LABEL& aLabel )
+                                              {
+                                                  return !aLabel.linkedSheets.empty();
+                                              } ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( BinaryAppendIsAtomic )
+{
+    using namespace PADS_SCH_BINARY;
+
+    SCH_SHEET* destination = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( destination );
+    BOOST_REQUIRE( destination->GetScreen() );
+    PADS_SCH_BINARY_BUILDER builder;
+
+    PADS_SCH_MODEL single = parseBinaryFixture( wxS( "placement_transform" ) );
+    size_t         beforeSymbols = itemCount( destination->GetScreen(), SCH_SYMBOL_T );
+    BUILD_RESULT   singleResult =
+            builder.Build( single, &m_schematic, destination, binaryFixture( wxS( "placement_transform" ) ) );
+    BOOST_CHECK_EQUAL( itemCount( destination->GetScreen(), SCH_SYMBOL_T ),
+                       beforeSymbols + singleResult.counts.symbols );
+
+    PADS_SCH_MODEL multi = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
+    auto       existingChild = std::make_unique<SCH_SHEET>( destination );
+    SCH_SHEET* existingChildPtr = existingChild.get();
+    existingChild->SetScreen( new SCH_SCREEN( &m_schematic ) );
+    existingChild->GetField( FIELD_T::SHEET_NAME )->SetText( wxS( "Existing" ) );
+    existingChild->GetField( FIELD_T::SHEET_FILENAME )->SetText( wxS( "existing.kicad_sch" ) );
+    destination->GetScreen()->Append( existingChild.release() );
+    size_t         beforeChildren = itemCount( destination->GetScreen(), SCH_SHEET_T );
+    BUILD_RESULT   multiResult =
+            builder.Build( multi, &m_schematic, destination, binaryFixture( wxS( "multisheet_connectivity" ) ) );
+    BOOST_CHECK_EQUAL( itemCount( destination->GetScreen(), SCH_SHEET_T ), beforeChildren + multiResult.counts.sheets );
+    BOOST_CHECK( destination->GetScreen()->Items().contains( existingChildPtr ) );
+
+    PADS_SCH_MODEL malformed = single;
+    BOOST_REQUIRE( !malformed.placements.empty() );
+    auto definition = std::find_if( malformed.definitions.begin(), malformed.definitions.end(),
+                                    [&]( const MODEL_SYMBOL_DEFINITION& aDefinition )
+                                    {
+                                        return aDefinition.id == malformed.placements.front().definition.id;
+                                    } );
+    BOOST_REQUIRE( definition != malformed.definitions.end() );
+    BOOST_REQUIRE( !definition->graphics.empty() );
+    definition->graphics.front().kind = MODEL_GRAPHIC_KIND::TEXT;
+    definition->graphics.front().text.text = wxS( "broken staged text" );
+    definition->graphics.front().points.clear();
+    OBJECT_GRAPH_SNAPSHOT before = objectGraphSnapshot( m_schematic, destination );
+    BOOST_CHECK_THROW( builder.Build( malformed, &m_schematic, destination, wxS( "malformed.sch" ) ), IO_ERROR );
+    BOOST_CHECK( objectGraphSnapshot( m_schematic, destination ) == before );
+}
 
 
 BOOST_AUTO_TEST_SUITE_END()
