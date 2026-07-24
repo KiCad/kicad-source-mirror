@@ -688,19 +688,26 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                         {
                             if( !ADVANCED_CFG::GetCfg().m_ImportSkipLayerMapping )
                             {
-                                mappable_pi->RegisterCallback( std::bind( DIALOG_MAP_LAYERS::RunModal,
-                                                                          this,
-                                                                          std::placeholders::_1 ) );
+                                const auto layerMapCallback =
+                                        [this]( const std::vector<INPUT_LAYER_DESC>& aLayers )
+                                        {
+                                            return DIALOG_MAP_LAYERS::RunModal( this, aLayers );
+                                        };
+
+                                mappable_pi->RegisterCallback( layerMapCallback );
                             }
                         }
 
                         if( PROJECT_CHOOSER_PLUGIN* chooser_pi =
                                     dynamic_cast<PROJECT_CHOOSER_PLUGIN*>( &aPlugin ) )
                         {
-                            chooser_pi->RegisterCallback(
-                                    std::bind( DIALOG_IMPORT_CHOOSE_PROJECT::RunModal,
-                                               this,
-                                               std::placeholders::_1 ) );
+                            const auto chooseProjectCallback =
+                                    [this]( const std::vector<IMPORT_PROJECT_DESC>& aProjects )
+                                    {
+                                        return DIALOG_IMPORT_CHOOSE_PROJECT::RunModal( this, aProjects );
+                                    };
+
+                            chooser_pi->RegisterCallback( chooseProjectCallback );
                         }
 
                         aPlugin.SetQueryUserCallback(
