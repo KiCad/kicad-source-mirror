@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-07-12 03:38+0000\n"
+"PO-Revision-Date: 2026-07-24 06:01+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2732,7 +2732,6 @@ msgstr ""
 "niezapisane zmiany."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
 msgstr "Przywróć z autozapisu"
 
@@ -2745,7 +2744,6 @@ msgstr ""
 "zawartość zostanie usunięta."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep Current"
 msgstr "Zachowaj bieżący"
 
@@ -2755,7 +2753,6 @@ msgstr ""
 "Zachowuje zapisany plik bez zmian i odrzuca automatycznie zapisane zmiany."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
 msgstr "Zachowaj oba"
 
@@ -2768,7 +2765,6 @@ msgstr ""
 "jako osobny plik ze znacznikiem czasu, który można później przejrzeć."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
 msgstr "Anuluj otwieranie"
 
@@ -9606,20 +9602,22 @@ msgid "Restore Failed"
 msgstr "Przywracanie nie powiodło się"
 
 #: common/local_history.cpp:2260
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Zresetuj do wersji zdalnej."
+msgstr "Przywrócić projekt do wersji z %s?"
 
 #: common/local_history.cpp:2262
-#, fuzzy
 msgid "Restore Version"
-msgstr "Przywracanie sesji"
+msgstr "Przywróć wersję"
 
 #: common/local_history.cpp:2265
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
 msgstr ""
+"Najpierw tworzona jest kopia zapasowa bieżących plików, dzięki czemu można "
+"cofnąć przywracanie. Pliki, które nie są częścią tej wersji, pozostają "
+"nienaruszone."
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1228 pcbnew/zone.cpp:989
@@ -15275,9 +15273,8 @@ msgid "Delete extra units from symbol?"
 msgstr "Usunąć dodatkowe części z symbolu?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:551
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "Symbol musi posiadać przynajmniej jeden styl prezentacji"
+msgstr "Niestandardowe style reprezentacji muszą zawierać co najmniej 2 wpisy"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:557
 msgid "Delete extra body styles from symbol?"
@@ -25511,12 +25508,12 @@ msgid "Add Symbol Library"
 msgstr "Dodaj bibliotekę symboli"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Nie można utworzyć pliku biblioteki '%s'.\n"
+"Nie można nadpisać pliku biblioteki '%s'.\n"
 "Należy upewnić się, czy użytkownik posiada uprawnienia do zapisu i spróbować "
 "ponownie."
 
@@ -27021,9 +27018,8 @@ msgid "Set the exclude from board attribute"
 msgstr "Ustaw atrybut wykluczania z płytki"
 
 #: eeschema/tools/sch_actions.cpp:1098
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "Ustaw atrybut wykluczenia z symulacji"
+msgstr "Ustawia atrybut wykluczenia z pliku położeń"
 
 #: eeschema/tools/sch_actions.cpp:1104
 msgid "Set the do not populate attribute"
@@ -27864,9 +27860,8 @@ msgid "Modify schematic item"
 msgstr "Modyfikuje elementy na schemacie"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3844
-#, fuzzy
 msgid "Auto-place Sheet Pins"
-msgstr "Automatycznie rozmieść wszystkie piny arkusza"
+msgstr "Automatycznie rozmieść piny arkusza"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3891
 msgid "No sub schematic found in the current project"
@@ -28817,7 +28812,6 @@ msgid "Excl. Board"
 msgstr "Wyklucz z płytki"
 
 #: eeschema/widgets/search_handlers.cpp:169
-#, fuzzy
 msgid "Excl. Pos Files"
 msgstr "Wyklucz z plików położeń"
 
@@ -31104,11 +31098,10 @@ msgstr ""
 "nazwa predefiniowanego wyglądu"
 
 #: kicad/cli/command_pcb_render.cpp:266
-#, fuzzy
 msgid "Use colors defined in the board stackup instead of those in the preset"
 msgstr ""
-"Kolory zdefiniowane w stosie warstw pokryją te znajdujące się w predefinicji "
-"kolorów"
+"Użyj kolorów zdefiniowanych w stosie warstw, zamiast tych z ustawienień "
+"wstępnych"
 
 #: kicad/cli/command_pcb_render.cpp:271
 msgid ""
@@ -47373,9 +47366,8 @@ msgstr "Nazwa strefy:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:39
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:44
-#, fuzzy
 msgid "A unique name for this zone, used to identify it in DRC rules"
-msgstr "Unikalna nazwa strefy by zidentyfikować ją podczas kontroli DRC"
+msgstr "Unikalna nazwa strefy aby zidentyfikować ją podczas kontroli DRC"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:76
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -47941,9 +47933,8 @@ msgid "Items not allowed"
 msgstr "Elementy niedopuszczalne"
 
 #: pcbnew/drc/drc_item.cpp:64
-#, fuzzy
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "Tekst (lub linia wymiarowa) na warstwie Edge.Cuts"
+msgstr "Tekst lub grafika na warstwie Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
@@ -50111,6 +50102,8 @@ msgid ""
 "Could not post-process GLB line primitives; the exported model may not "
 "import in strict glTF viewers."
 msgstr ""
+"Nie można wykonać postprodukcji prymitywów linii GLB; wyeksportowany model "
+"może nie zostać zaimportowany w przeglądarkach obsługujących standard glTF."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4098
 #: pcbnew/exporters/step/step_pcb_model.cpp:4145
@@ -51624,14 +51617,14 @@ msgid "Changed group library link from '%s' to '%s'."
 msgstr "Zmieniono łącze grupy biblioteki z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1971
-#, fuzzy, c-format
+#, c-format
 msgid "Add group '%s' to group '%s'."
-msgstr "Dodaje %s do grupy '%s'."
+msgstr "Dodaje grupę '%s' do grupy '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1976
-#, fuzzy, c-format
+#, c-format
 msgid "Added group '%s' to group '%s'."
-msgstr "Dodano %s do grupy '%s'."
+msgstr "Dodano grupę '%s' do grupy '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2016
 #, c-format
@@ -52893,9 +52886,9 @@ msgid "Loading unicode strings..."
 msgstr "Wczytywanie treści Unicode..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4629
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "Wzorce dostrajania długości"
+msgstr "Zaimportowano %d wzorców dostrajania długości."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4640
 msgid "Loading text..."
@@ -54055,6 +54048,8 @@ msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"Znaleziono jeden lub więcej elementów na niezdefiniowanych warstwach (%s). "
+"Otwórz płytkę w edytorze PCB, aby rozwiązać problem."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1587
 #, c-format
@@ -55384,9 +55379,8 @@ msgid "Loading Footprint Libraries"
 msgstr "Ładowanie bibliotek footprintów"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:455
-#, fuzzy
 msgid "Failed to load board"
-msgstr "Nie można wczytać obwodu drukowanego\n"
+msgstr "Nie można wczytać obwodu drukowanego"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:527
 #, c-format
@@ -55699,9 +55693,10 @@ msgstr ""
 "zawierają _N/_P lub +/-."
 
 #: pcbnew/router/pns_dragger.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drag arc tracks of %.1f degrees or greater."
-msgstr "Nie można zmienić rozmiaru ścieżek po łuku o %s lub więcej."
+msgstr ""
+"Nie można przeciągnąć ścieżek łuku o rozmiarze %.1f stopni lub większym."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1109
 #: pcbnew/router/pns_kicad_iface.cpp:1225 pcbnew/router/router_tool.cpp:919
@@ -57112,6 +57107,8 @@ msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
 msgstr ""
+"Pominięto grupy zawierające footprinty lub inne elementy, których nie można "
+"odbić lustrzanie."
 
 #: pcbnew/tools/edit_tool.cpp:2714 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
@@ -57431,9 +57428,8 @@ msgid "Copied to %d Rule Areas."
 msgstr "Skopiowano do %d stref z z regułami."
 
 #: pcbnew/tools/multichannel_tool.cpp:1960
-#, fuzzy
 msgid "Target Rule Area shares components with the reference area"
-msgstr "Grupuje komponenty według ich reguł stref układania"
+msgstr "Obszar reguły docelowej współdzieli komponenty z obszarem odniesienia"
 
 #: pcbnew/tools/multichannel_tool.cpp:1963
 msgid ""
@@ -57441,14 +57437,18 @@ msgid ""
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
+"Ten docelowy obszar z regułami zawiera te same komponenty, co obszar "
+"odniesienia. Powtarzającego się układu nie można skopiować na siebie. "
+"Przypisz każdemu obszarowi z regułami oddzielny arkusz, klasę komponentów "
+"lub grupę."
 
 #: pcbnew/tools/multichannel_tool.cpp:1966
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Shared components:\n"
 "%s"
 msgstr ""
-"Komponentów na obszarze docelowym: \n"
+"Współdzielone komponenty: \n"
 "%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2104
@@ -57808,9 +57808,8 @@ msgid "Toggle the exclude from bill of materials attribute"
 msgstr "Przełącza atrybut Wyklucz z listy materiałowej"
 
 #: pcbnew/tools/pcb_actions.cpp:579
-#, fuzzy
 msgid "Toggle the exclude from position files attribute"
-msgstr "Przełącz atrybut wykluczania z symulacji"
+msgstr "Przełącz atrybut wykluczania z plików położeń"
 
 #: pcbnew/tools/pcb_actions.cpp:587
 msgid ""
@@ -61160,9 +61159,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Usuwanie izolowanych obszarów miedzi..."
 
 #: pcbnew/zone_filler.cpp:1201
-#, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "Wypełniam wszystkie strefy..."
+msgstr "Wypełniam nakładające się strefy..."
 
 #: pcbnew/zone_filler.cpp:1362
 #, c-format
