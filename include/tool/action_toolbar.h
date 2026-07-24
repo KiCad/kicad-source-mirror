@@ -162,6 +162,8 @@ public:
      */
     void Popup( wxWindow* aFocus = nullptr ) override;
 
+    wxSize GetFittedSize();
+
     /**
      * Set the action group that this palette contains the actions for
      */
