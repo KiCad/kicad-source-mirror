@@ -1273,7 +1273,7 @@ void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
     aRectangle->SetEnd( ToKicadCoords( lt_rect.TopLeft ) );
     aRectangle->SetStroke( getStroke(  lt_rect.LineWidth, lt_rect.LineStyle ) );
 
-    if( aLTSymbol.SymAttributes[wxS( "Prefix" )] == wxS( "X" ) )
+    if( aLTSymbol.SymAttributes[wxS( "PREFIX" )] == wxS( "X" ) )
         aRectangle->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
 }
 
