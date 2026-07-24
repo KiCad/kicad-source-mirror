@@ -2693,9 +2693,8 @@ int SCH_EDIT_TOOL::SetVariantSymbol( const TOOL_EVENT& aEvent )
     }
     catch( const IO_ERROR& )
     {
-        wxString symLabel = picked.LibId.Format().empty()
-                                    ? wxString( picked.LibId.GetLibItemName() )
-                                    : wxString( picked.LibId.Format() );
+        wxString symLabel =
+                picked.LibId.Format().empty() ? picked.LibId.GetLibItemName().wx_str() : picked.LibId.Format().wx_str();
 
         DisplayErrorMessage( m_frame, wxString::Format(
                 _( "Could not load symbol '%s' from library." ), symLabel ) );
@@ -2717,8 +2716,8 @@ int SCH_EDIT_TOOL::SetVariantSymbol( const TOOL_EVENT& aEvent )
             wxString msg = wxString::Format(
                     _( "The selected symbol '%s' is not pin-compatible with the base symbol "
                        "'%s'.\n\n" ),
-                    wxString( picked.LibId.Format() ),
-                    wxString( symbol->GetLibId().Format() ) );
+                    picked.LibId.Format().wx_str(),
+                    symbol->GetLibId().Format().wx_str() );
 
             for( const VARIANT_COMPAT_RESULT& issue : issues )
                 msg += wxS( "\u2022 " ) + issue.detail + wxS( "\n" );
