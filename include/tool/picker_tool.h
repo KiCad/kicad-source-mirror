@@ -38,6 +38,9 @@ public:
     typedef std::function<void(void)> CANCEL_HANDLER;
     typedef std::function<void(const int&)> FINALIZE_HANDLER;
 
+    /// Called once a rubber-band drag has left its result in the selection.
+    typedef std::function<bool(void)> AREA_HANDLER;
+
     enum pickerEndState
     {
         WAIT_CANCEL,
@@ -65,6 +68,7 @@ public:
     {
         m_clickHandler.reset();
         m_motionHandler.reset();
+        m_areaHandler.reset();
         m_cancelHandler.reset();
         m_finalizeHandler.reset();
     }
@@ -89,6 +93,18 @@ public:
     {
         wxASSERT( !m_motionHandler );
         m_motionHandler = aHandler;
+    }
+
+    /**
+     * Set a handler for a rubber-band drag.  The picker otherwise swallows it.
+     *
+     * The drag runs the selection tool's own area loop, so the selection already holds what the
+     * box caught.  Return true to stay armed, as with the click handler.
+     */
+    inline void SetAreaHandler( AREA_HANDLER aHandler )
+    {
+        wxASSERT( !m_areaHandler );
+        m_areaHandler = aHandler;
     }
 
     /**
@@ -124,6 +140,7 @@ protected:
 
     std::optional<CLICK_HANDLER>    m_clickHandler;
     std::optional<MOTION_HANDLER>   m_motionHandler;
+    std::optional<AREA_HANDLER>     m_areaHandler;
     std::optional<CANCEL_HANDLER>   m_cancelHandler;
     std::optional<FINALIZE_HANDLER> m_finalizeHandler;
 

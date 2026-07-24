@@ -1112,6 +1112,21 @@ TOOL_ACTION PCB_ACTIONS::properties( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Properties..." ) )
         .Icon( BITMAPS::edit ) );
 
+TOOL_ACTION PCB_ACTIONS::matchProperties( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.MatchProperties.match" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Match Properties" ) )
+        .Tooltip( _( "Copy selected properties from a source item to compatible target items" ) )
+        .Flags( AF_ACTIVATE ) );
+
+// Context scope so the hotkey only takes over from Preferences while the tool has the pointer.
+TOOL_ACTION PCB_ACTIONS::matchPropertiesSettings( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.MatchProperties.settings" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( MD_CTRL + ',' )
+        .FriendlyName( _( "Match Properties Settings..." ) )
+        .Tooltip( _( "Choose the properties copied by Match Properties" ) ) );
+
 // ARRAY
 //
 TOOL_ACTION PCB_ACTIONS::createArray( TOOL_ACTION_ARGS()

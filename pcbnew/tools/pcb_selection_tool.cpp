@@ -1434,6 +1434,12 @@ bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
 
 int PCB_SELECTION_TOOL::SelectRectArea( const TOOL_EVENT& aEvent )
 {
+    return DragSelectionArea( *this );
+}
+
+
+bool PCB_SELECTION_TOOL::DragSelectionArea( TOOL_INTERACTIVE& aTool, AREA_PREVIEW aPreview )
+{
     bool cancelled = false;     // Was the tool canceled while it was running?
     m_multiple = true;          // Multiple selection mode is active
     KIGFX::VIEW*   view = getView();
@@ -1441,8 +1447,15 @@ int PCB_SELECTION_TOOL::SelectRectArea( const TOOL_EVENT& aEvent )
     KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
 
-    while( TOOL_EVENT* evt = Wait() )
+    while( TOOL_EVENT* evt = aTool.Wait() )
     {
+        // Main() is not pumping events while another tool drives this loop.  Track modifiers
+        // here.  On our own path Main() is awake and already latched them from the drag.  Per
+        // event there would drop a modifier released before the button.  Command events carry
+        // none.
+        if( &aTool != this )
+            setModifiersState( evt->Modifier( MD_SHIFT ), evt->Modifier( MD_CTRL ), evt->Modifier( MD_ALT ) );
+
         /* Selection mode depends on direction of drag-selection:
         * Left > Right : Select objects that are fully enclosed by selection
         * Right > Left : Select objects that are crossed by selection
@@ -1483,6 +1496,9 @@ int PCB_SELECTION_TOOL::SelectRectArea( const TOOL_EVENT& aEvent )
             view->SetVisible( &area, true );
             view->Update( &area );
             getViewControls()->SetAutoPan( true );
+
+            if( aPreview )
+                aPreview( area );
         }
 
         if( evt->IsMouseUp( BUT_LEFT ) )
@@ -1711,13 +1727,9 @@ std::vector<BOARD_ITEM*> PCB_SELECTION_TOOL::CollectPoint( const VECTOR2I&      
 }
 
 
-void PCB_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, bool aSubtractive,
-                                         bool aExclusiveOr )
+std::vector<BOARD_ITEM*> PCB_SELECTION_TOOL::CollectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea )
 {
     KIGFX::VIEW* view = getView();
-
-    bool anyAdded = false;
-    bool anySubtracted = false;
 
     SELECTION_MODE selectionMode = aArea.GetMode();
     bool containedMode = (    selectionMode == SELECTION_MODE::INSIDE_RECTANGLE
@@ -1817,13 +1829,26 @@ void PCB_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, 
                    return aPos.y < bPos.y;
                } );
 
+    std::vector<BOARD_ITEM*> items;
+
     for( EDA_ITEM* i : collector )
     {
-        if( !i->IsBOARD_ITEM() )
-            continue;
+        if( i->IsBOARD_ITEM() )
+            items.push_back( static_cast<BOARD_ITEM*>( i ) );
+    }
 
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
+    return items;
+}
 
+
+void PCB_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, bool aSubtractive,
+                                         bool aExclusiveOr )
+{
+    bool anyAdded = false;
+    bool anySubtracted = false;
+
+    for( BOARD_ITEM* item : CollectMultiple( aArea ) )
+    {
         if( aSubtractive || ( aExclusiveOr && item->IsSelected() ) )
         {
             unselect( item );

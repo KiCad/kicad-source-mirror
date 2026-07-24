@@ -79,6 +79,8 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     PCB_GRID_HELPER       grid( m_toolMgr, frame->GetMagneticItemsSettings() );
     int                   finalize_state = WAIT_CANCEL;
 
+    grid.SetConstructionGeometryEnabled( m_constructionGeometry );
+
     TOOL_EVENT sourceEvent;
 
     if( aEvent.IsAction( &ACTIONS::pickerTool ) )
@@ -189,6 +191,36 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
         }
+        else if( evt->IsDrag( BUT_LEFT ) && m_areaHandler )
+        {
+            bool getNext = false;
+
+            // Wait() suspends the coroutine of the tool it is called on.  The selection tool
+            // cannot pump its own area loop while we own the stream.
+            if( m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->DragSelectionArea( *this, m_areaPreviewHandler ) )
+            {
+                finalize_state = EVT_CANCEL;
+                break;
+            }
+
+            try
+            {
+                getNext = (*m_areaHandler)();
+            }
+            catch( std::exception& )
+            {
+                finalize_state = EXCEPTION_CANCEL;
+                break;
+            }
+
+            if( !getNext )
+            {
+                finalize_state = CLICK_CANCEL;
+                break;
+            }
+
+            setControls();
+        }
         else if( evt->IsDblClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) )
         {
             // Not currently used, but we don't want to pass them either
@@ -235,6 +267,8 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 void PCB_PICKER_TOOL::reset()
 {
     m_layerMask = LSET::AllLayersMask();
+    m_areaPreviewHandler = nullptr;
+    m_constructionGeometry = true;
     PICKER_TOOL_BASE::reset();
 }
 

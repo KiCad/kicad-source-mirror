@@ -94,6 +94,14 @@ public:
                              std::optional<VECTOR2I>         aMovingReferencePoint = std::nullopt );
     void ClearSnapFeedback();
 
+    /**
+     * Turn off the geometry the snap system draws across the canvas to explain itself.
+     *
+     * A tool that only wants a point on an item never follows an extension anywhere, so the
+     * lines are noise over the board it is asking the user to read.
+     */
+    void SetConstructionGeometryEnabled( bool aEnable ) { m_constructionGeometryEnabled = aEnable; }
+
     GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const override;
 
     VECTOR2D GetGridSize( GRID_HELPER_GRIDS aGrid ) const override;
@@ -178,7 +186,9 @@ private:
 private:
     MAGNETIC_SETTINGS*         m_magneticSettings;
 
-    std::vector<NEARABLE_GEOM> m_pointOnLineCandidates;
+    std::vector<NEARABLE_GEOM>      m_pointOnLineCandidates;
+
+    bool                             m_constructionGeometryEnabled = true;
 };
 
 #endif

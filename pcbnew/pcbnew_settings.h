@@ -27,6 +27,8 @@
 #include <settings/snap_settings.h>
 #include <pcb_display_options.h>
 
+#include <set>
+
 namespace PNS
 {
     class ROUTING_SETTINGS;
@@ -98,6 +100,9 @@ public:
 
     VIEWERS_DISPLAY_OPTIONS m_ViewersDisplay;
 
+    /// Keyed as "family/Property Name"; see MATCH_PROPERTIES_CATALOG.
+    std::set<wxString> m_MatchProperties;
+
     PCB_VIEWERS_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion ):
         APP_SETTINGS_BASE( aFilename, aSchemaVersion ),
         m_FootprintViewerZoom( 1.0 ),
@@ -111,6 +116,11 @@ public:
     }
 
     virtual ~PCB_VIEWERS_SETTINGS_BASE() {};
+
+protected:
+    /// Opt-in.  The two editors share one key and one default.  cvpcb derives from this class
+    /// but cannot edit, so it keeps the key out of its file.
+    void addMatchPropertiesParam();
 };
 
 

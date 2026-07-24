@@ -164,6 +164,9 @@ PCB_GRID_HELPER::~PCB_GRID_HELPER()
 
 void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, bool aExtensionOnly, bool aIsPersistent )
 {
+    if( !m_constructionGeometryEnabled )
+        return;
+
     if( !ADVANCED_CFG::GetCfg().m_EnableExtensionSnaps )
         return;
 
@@ -562,8 +565,18 @@ SNAP_INFERENCE_SETTINGS PCB_GRID_HELPER::snapInferenceSettings() const
 {
     SNAP_INFERENCE_SETTINGS settings;
 
+    // The caller's own switch wins over the user's preference, so apply it after the read.
+    auto applyOverride =
+            [&]() -> SNAP_INFERENCE_SETTINGS
+            {
+                if( !m_constructionGeometryEnabled )
+                    settings.constructionExtensions = false;
+
+                return settings;
+            };
+
     if( !m_toolMgr )
-        return settings;
+        return applyOverride();
 
     if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() ) )
     {
@@ -583,7 +596,7 @@ SNAP_INFERENCE_SETTINGS PCB_GRID_HELPER::snapInferenceSettings() const
         settings = cfg->m_SnapInference;
     }
 
-    return settings;
+    return applyOverride();
 }
 
 

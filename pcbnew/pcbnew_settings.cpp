@@ -30,6 +30,7 @@
 #include <settings/parameters.h>
 #include <settings/snap_settings_params.h>
 #include <settings/settings_manager.h>
+#include <tools/match_properties.h>
 #include <wx/config.h>
 #include <wx/tokenzr.h>
 #include <base_units.h>
@@ -39,6 +40,13 @@
 
 ///! Update the schema version whenever a migration is required
 const int pcbnewSchemaVersion = 5;
+
+
+void PCB_VIEWERS_SETTINGS_BASE::addMatchPropertiesParam()
+{
+    m_params.emplace_back( new PARAM_SET<wxString>( "pcb_editing.match_properties", &m_MatchProperties,
+                                                    MATCH_PROPERTIES_CATALOG::DefaultKeys() ) );
+}
 
 
 PCBNEW_SETTINGS::PCBNEW_SETTINGS() :
@@ -67,6 +75,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() :
         m_FootprintViewerLibListWidth( 200 ),
         m_FootprintViewerFPListWidth( 300 )
 {
+    addMatchPropertiesParam();
+
     m_MagneticItems.pads      = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
     m_MagneticItems.tracks    = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
     m_MagneticItems.graphics  = false;

@@ -62,6 +62,9 @@ namespace KIGFX
 class PCB_SELECTION_TOOL : public SELECTION_TOOL
 {
 public:
+    /// Called with the drag box every time it changes, before anything is selected.
+    using AREA_PREVIEW = std::function<void( KIGFX::PREVIEW::SELECTION_AREA& aArea )>;
+
     PCB_SELECTION_TOOL();
     ~PCB_SELECTION_TOOL();
 
@@ -126,6 +129,18 @@ public:
     int SelectRectArea( const TOOL_EVENT& aEvent );
 
     /**
+     * Drive the rectangle drag-selection loop from another tool's event loop.
+     *
+     * Wait() suspends the coroutine of the tool it is invoked on, so a tool that owns the
+     * event stream must pump this loop itself rather than call SelectRectArea().
+     *
+     * @param aTool is the tool currently owning the event stream.
+     * @param aPreview is called with the box each time it changes.
+     * @return true if the operation was canceled (i.e. a CancelEvent was received).
+     */
+    bool DragSelectionArea( TOOL_INTERACTIVE& aTool, AREA_PREVIEW aPreview = nullptr );
+
+    /**
      * Handles drawing a lasso selection area that allows multiple items to be selected
      * simultaneously.
      *
@@ -144,6 +159,14 @@ public:
      */
     std::vector<BOARD_ITEM*> CollectPoint( const VECTOR2I& aWhere,
                                            CLIENT_SELECTION_FILTER aClientFilter = nullptr );
+
+    /**
+     * The items a drag over aArea would take, in the order SelectMultiple() would take them.
+     *
+     * Splitting this out keeps a live drag preview honest: whatever shows this way is what the
+     * mouse-up actually selects, however the group, pad and hierarchy filters fall.
+     */
+    std::vector<BOARD_ITEM*> CollectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea );
 
     /**
      * Selects multiple PCB items within a specified area.

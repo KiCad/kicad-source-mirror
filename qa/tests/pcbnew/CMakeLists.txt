@@ -80,6 +80,7 @@ set( QA_PCBNEW_SRCS
     test_active_layer_update.cpp
     test_line_ending_load_save.cpp
     test_lset.cpp
+    test_match_properties.cpp
     test_meander_corner_radius.cpp
     test_odb_dimension_export.cpp
     test_odb_soldermask_shape_export.cpp

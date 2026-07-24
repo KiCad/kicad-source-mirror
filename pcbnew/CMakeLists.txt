@@ -499,6 +499,7 @@ set( PCBNEW_CLASS_SRCS
     tools/footprint_wizard_tools.cpp
     tools/hover_picker.cpp
     tools/item_modification_routine.cpp
+    tools/match_properties_tool.cpp
     tools/pad_tool.cpp
     tools/pcb_control.cpp
     tools/pcb_design_block_control.cpp

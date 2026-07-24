@@ -33,6 +33,7 @@ void PICKER_TOOL_BASE::reset()
     m_picked = std::nullopt;
     m_clickHandler = std::nullopt;
     m_motionHandler = std::nullopt;
+    m_areaHandler = std::nullopt;
     m_cancelHandler = std::nullopt;
     m_finalizeHandler = std::nullopt;
 }

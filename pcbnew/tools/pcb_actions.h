@@ -174,6 +174,8 @@ public:
 
     /// Activation of the edit tool
     static TOOL_ACTION properties;
+    static TOOL_ACTION matchProperties;
+    static TOOL_ACTION matchPropertiesSettings;
 
     /// Activation of the exact move tool
     static TOOL_ACTION moveExact;
