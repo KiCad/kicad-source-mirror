@@ -254,11 +254,12 @@ static CANONICAL_POINT point( const PADS_SCH::POINT& aPoint )
              static_cast<int64_t>( std::llround( aPoint.y * 2.0 ) ) };
 }
 
-static void addSourceProperties( CANONICAL_SEMANTIC_RECORD& aRecord, const std::vector<SOURCE_PROPERTY>& aProperties )
+static void addSourceProperties( CANONICAL_SEMANTIC_RECORD& aRecord, const std::vector<SOURCE_PROPERTY>& aProperties,
+                                 const std::string& aPrefix = {} )
 {
     for( const SOURCE_PROPERTY& property : aProperties )
-        aRecord.properties[property.name.text.ToStdString()] = { property.value.text.ToStdString(),
-                                                                 property.disposition };
+        aRecord.properties[aPrefix + property.name.text.ToStdString()] = { property.value.text.ToStdString(),
+                                                                           property.disposition };
 }
 
 static CANONICAL_PROPERTY unknownEnum( int64_t aValue )
@@ -688,7 +689,7 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeBinaryModel( const PADS_S
             {
                 const auto prefix = "endpoint_" + std::to_string( i ) + "_";
                 r.properties[prefix + "kind"] = canonicalEndpointKind( c.endpoints[i].kind );
-                addSourceProperties( r, c.endpoints[i].properties );
+                addSourceProperties( r, c.endpoints[i].properties, prefix );
 
                 if( c.endpoints[i].placement )
                 {
@@ -1236,7 +1237,8 @@ static bool task10SourcePropertiesPresent( const std::vector<CANONICAL_SEMANTIC_
         }
 
         if( record.kind == CANONICAL_KIND::CONNECTION
-            && ( !has( record, "raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT )
+            && ( !has( record, "endpoint_0_raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT )
+                 || !has( record, "endpoint_1_raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT )
                  || !has( record, "raw_connection_marker", PROPERTY_DISPOSITION::EXACT ) ) )
         {
             return false;
@@ -3257,7 +3259,8 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
             { "global_net_record", PROPERTY_DISPOSITION::EXACT },
             { "preserved_net_identity", PROPERTY_DISPOSITION::PRESERVED },
             { "preserved_net_relationship", PROPERTY_DISPOSITION::PRESERVED },
-            { "raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT },
+            { "endpoint_0_raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT },
+            { "endpoint_1_raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT },
             { "raw_connection_marker", PROPERTY_DISPOSITION::EXACT },
             { "raw_label_kind", PROPERTY_DISPOSITION::EXACT },
             { "connection_record", PROPERTY_DISPOSITION::EXACT },
@@ -3297,6 +3300,16 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
     label->properties.erase( "raw_label_kind" );
 
     BOOST_CHECK( !task10SourcePropertiesPresent( missingRawKind ) );
+
+    for( const std::string& endpoint : { "endpoint_0_raw_endpoint_handle", "endpoint_1_raw_endpoint_handle" } )
+    {
+        auto missingEndpoint = allActual;
+        auto connection =
+                std::ranges::find( missingEndpoint, CANONICAL_KIND::CONNECTION, &CANONICAL_SEMANTIC_RECORD::kind );
+        BOOST_REQUIRE( connection != missingEndpoint.end() );
+        connection->properties.erase( endpoint );
+        BOOST_CHECK( !task10SourcePropertiesPresent( missingEndpoint ) );
+    }
 }
 
 
