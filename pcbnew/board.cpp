@@ -1910,6 +1910,21 @@ void BOARD::DetachAllFootprints()
 }
 
 
+static PCB_TABLECELL* findTableCell( const BOARD_ITEM* aDrawing, const KIID& aID )
+{
+    if( aDrawing->Type() != PCB_TABLE_T )
+        return nullptr;
+
+    for( PCB_TABLECELL* cell : static_cast<const PCB_TABLE*>( aDrawing )->GetCells() )
+    {
+        if( cell->m_Uuid == aID )
+            return cell;
+    }
+
+    return nullptr;
+}
+
+
 BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) const
 {
     if( aID == niluuid )
@@ -1966,6 +1981,9 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
 
         for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
         {
+            if( PCB_TABLECELL* cell = findTableCell( drawing, aID ) )
+                return CacheAndReturnItemById( aID, cell );
+
             if( drawing->m_Uuid == aID )
                 return CacheAndReturnItemById( aID, drawing );
         }
@@ -1997,14 +2015,8 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
 
     for( BOARD_ITEM* drawing : Drawings() )
     {
-        if( drawing->Type() == PCB_TABLE_T )
-        {
-            for( PCB_TABLECELL* cell : static_cast<PCB_TABLE*>( drawing )->GetCells() )
-            {
-                if( cell->m_Uuid == aID )
-                    return CacheAndReturnItemById( aID, drawing );
-            }
-        }
+        if( PCB_TABLECELL* cell = findTableCell( drawing, aID ) )
+            return CacheAndReturnItemById( aID, cell );
 
         if( drawing->m_Uuid == aID )
             return CacheAndReturnItemById( aID, drawing );

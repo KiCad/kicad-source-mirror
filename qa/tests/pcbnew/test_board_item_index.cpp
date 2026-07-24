@@ -25,6 +25,8 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_shape.h>
+#include <pcb_table.h>
+#include <pcb_tablecell.h>
 
 
 BOOST_AUTO_TEST_SUITE( BoardItemIndex )
@@ -230,6 +232,50 @@ BOOST_AUTO_TEST_CASE( RemovingResolvedChildEvictsCacheOnFootprintHolder )
     delete board;
 
     BOOST_CHECK( !staleEntrySurvived );
+}
+
+
+BOOST_AUTO_TEST_CASE( TableCellResolvesToTheCellNotItsTable )
+{
+    // A cell carries its own KIID and is an editable item in its own right, so handing back the
+    // parent table forced every caller that can select a cell to special-case it.  The cache is
+    // cleared to exercise the linear scan, which is the path that got this wrong.
+    BOARD board;
+    auto* table = new PCB_TABLE( &board, 0 );
+    auto* cell = new PCB_TABLECELL( table );
+
+    table->AddCell( cell );
+    board.Add( table );
+    board.ClearItemByIdCache();
+
+    const KIID tableId = table->m_Uuid;
+    const KIID cellId = cell->m_Uuid;
+
+    BOOST_CHECK_EQUAL( board.ResolveItem( cellId, true ), cell );
+    BOOST_CHECK_EQUAL( board.ResolveItem( tableId, true ), table );
+
+    // Caching the table under the cell's id also made the two lookups evict each other.
+    BOOST_CHECK_EQUAL( board.ResolveItem( cellId, true ), cell );
+    BOOST_CHECK( board.GetItemByIdCache().contains( tableId ) );
+    BOOST_CHECK( board.GetItemByIdCache().contains( cellId ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( FootprintTableCellResolvesByItsOwnId )
+{
+    // The footprint branch walked GraphicalItems() without ever descending into a table, so a
+    // cell inside a footprint table could not be resolved at all.
+    BOARD board;
+    auto* footprint = new FOOTPRINT( &board );
+    auto* table = new PCB_TABLE( footprint, 0 );
+    auto* cell = new PCB_TABLECELL( table );
+
+    table->AddCell( cell );
+    footprint->Add( table, ADD_MODE::APPEND );
+    board.Add( footprint );
+    board.ClearItemByIdCache();
+
+    BOOST_CHECK_EQUAL( board.ResolveItem( cell->m_Uuid, true ), cell );
 }
 
 
