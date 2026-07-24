@@ -99,12 +99,35 @@ POINT_INFO JUNCTION_HELPERS::AnalyzePoint( const EE_RTREE& aItems, const VECTOR2
     if( mergedLines.size() + filtered.size() < 2 )
         return info;
 
+    // Skip collinear merging when enough distinct endpoints already meet here.
+    // Merging would turn an N-way stub junction (e.g. LTspice four-wire cross:
+    // two opposite stubs on each axis) into an unmarked mid-segment crossing
+    // and hide the needed junction.
+    std::unordered_set<int> preMergeWireExits;
+    std::unordered_set<int> preMergeBusExits;
+
+    for( const auto& line : mergedLines )
+    {
+        if( line->GetStartPoint() == line->GetEndPoint() )
+            continue;
+
+        if( !line->IsConnected( aPosition ) )
+            continue;
+
+        if( line->GetLayer() == LAYER_WIRE )
+            preMergeWireExits.insert( line->GetAngleFrom( aPosition ) );
+        else if( line->GetLayer() == LAYER_BUS )
+            preMergeBusExits.insert( line->GetAngleFrom( aPosition ) );
+    }
+
+    const bool keepStubJunction = preMergeWireExits.size() >= 3 || preMergeBusExits.size() >= 3;
+
     // Merge collinear wire segments
     bool merged = false;
 
     do
     {
-        if( info.hasExplicitJunctionDot || aBreakCrossings )
+        if( info.hasExplicitJunctionDot || aBreakCrossings || keepStubJunction )
             break;
 
         merged = false;
