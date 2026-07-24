@@ -368,7 +368,7 @@ static void fillArcPOLY( GERBER_DRAW_ITEM* aGbrItem, const VECTOR2I& aStart, con
     // Approximate arc by segments with a approximation error = err_max
     // a max err = 5 microns looks good
     const int approx_err_max =  gerbIUScale.mmToIU( 0.005 );
-    int radius = VECTOR2I( aStart - rel_center ).EuclideanNorm();
+    int       radius = start.EuclideanNorm();
     int count = GetArcToSegmentCount( radius, approx_err_max, arc_angle );
     EDA_ANGLE increment_angle = std::abs( arc_angle ) / count;
 

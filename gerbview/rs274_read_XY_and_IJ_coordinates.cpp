@@ -200,7 +200,7 @@ VECTOR2I GERBER_FILE_IMAGE::ReadIJCoord( char*& aText )
             line.push_back( *( aText++ ) );
         }
 
-        double val;
+        double   val = 0.0;
         wxString text( line.data() );
         text.Trim( true ).Trim( false );
         text.ToCDouble( &val );

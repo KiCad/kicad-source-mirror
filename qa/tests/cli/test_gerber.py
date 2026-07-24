@@ -37,6 +37,8 @@ GERBER_FILE_BCU = "cli/artwork_generation_regressions/ZoneFill-4.0.7-B_Cu.gbr"
 GERBER_FILE_LEGACY_FCU = "cli/artwork_generation_regressions/ZoneFill-Legacy-F_Cu.gbr"
 GERBER_FILE_APERTURE_MACRO_TRANSFORM = "cli/artwork_generation_regressions/ApertureMacroPngTransform.gbr"
 GERBER_FILE_APERTURE_MACRO_TRANSFORM_PNG = "cli/artwork_generation_regressions/ApertureMacroPngTransform.png"
+GERBER_FILE_MALFORMED_EMPTY_IJ = "cli/artwork_generation_regressions/MalformedEmptyIJArcComponents.gbr"
+GERBER_FILE_MALFORMED_EMPTY_IJ_PNG = "cli/artwork_generation_regressions/MalformedEmptyIJArcComponents.png"
 GERBER_FILE_DRILL = "cli/basic_test/basic_test-PTH-drl.gbr"
 EXCELLON_FILE = "cli/basic_test/basic_test_excellon_default.drl"
 
@@ -439,11 +441,29 @@ class TestGerberConvertPng:
 
         command = [utils.kicad_cli(), "gerber", "convert", "png",
                    "--width", "64", "--no-antialias", "-o", str( output_file ), input_file]
+
         stdout, stderr, exitcode = utils.run_and_capture( command )
 
         assert exitcode == 0
         assert output_file.exists()
         # Compare against the equivalent valid Gerber using a filled region instead of an aperture macro.
+        assert utils.images_are_equal( str( output_file ), expected_file, kitest.add_attachment )
+
+        kitest.add_attachment( str( output_file ) )
+
+    def test_export_malformed_empty_ij_arc_components( self, kitest: KiTestFixture ):
+        """Test PNG export with malformed empty I/J arc components."""
+        input_file = kitest.get_data_file_path( GERBER_FILE_MALFORMED_EMPTY_IJ )
+        expected_file = kitest.get_data_file_path( GERBER_FILE_MALFORMED_EMPTY_IJ_PNG )
+        output_file = get_output_path( kitest, "export_malformed_empty_ij", "output.png" )
+
+        command = [utils.kicad_cli(), "gerber", "convert", "png",
+                   "--width", "64", "--no-antialias", "-o", str( output_file ), input_file]
+        stdout, stderr, exitcode = utils.run_and_capture( command )
+
+        assert exitcode == 0
+        assert output_file.exists()
+        # Compare against the equivalent valid Gerber with empty I/J fields written as explicit zero.
         assert utils.images_are_equal( str( output_file ), expected_file, kitest.add_attachment )
 
         kitest.add_attachment( str( output_file ) )
