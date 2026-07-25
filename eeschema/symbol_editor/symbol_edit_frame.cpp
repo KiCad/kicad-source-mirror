@@ -117,7 +117,7 @@ END_EVENT_TABLE()
 
 
 SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-        SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_SYMBOL_EDITOR, _( "Library Editor" ),
+        SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_SYMBOL_EDITOR, _( "Symbol Editor" ),
                         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE,
                         LIB_EDIT_FRAME_NAME ),
         m_unitSelectBox( nullptr ),
@@ -185,7 +185,6 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     configureToolbars();
     RecreateToolbars();
 
-    UpdateTitle();
     UpdateSymbolMsgPanelInfo();
     RebuildSymbolUnitAndBodyStyleLists();
 
@@ -752,10 +751,7 @@ bool SYMBOL_EDIT_FRAME::CanCloseSymbolFromSchematic( bool doClose )
     }
 
     if( doClose )
-    {
         SetCurSymbol( nullptr, false );
-        UpdateTitle();
-    }
 
     return true;
 }
@@ -1178,9 +1174,6 @@ void SYMBOL_EDIT_FRAME::OnModify()
     }
 
     GetLibTree()->RefreshLibTree();
-
-    if( !GetTitle().StartsWith( "*" ) )
-        UpdateTitle();
 }
 
 
@@ -2140,7 +2133,6 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
         Refresh();
     }
 
-    UpdateTitle();
     RebuildSymbolUnitAndBodyStyleLists();
     UpdateSymbolMsgPanelInfo();
 

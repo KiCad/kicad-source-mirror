@@ -113,8 +113,8 @@ END_EVENT_TABLE()
 
 
 FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-        PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_FOOTPRINT_EDITOR, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                             KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() ),
+        PCB_BASE_EDIT_FRAME( aKiway, aParent, FRAME_FOOTPRINT_EDITOR, _( "Footprint Editor" ), wxDefaultPosition,
+                             wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GetFootprintEditorFrameName() ),
         m_show_layer_manager_tools( true ),
         m_tabsPanel( nullptr ),
         m_activeTab( nullptr ),
@@ -371,7 +371,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ActivateGalCanvas();
 
     GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
-    UpdateTitle();
     setupUnits( GetSettings() );
 
     resolveCanvasType();
@@ -1209,7 +1208,7 @@ FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootpri
     // Re-editing the same placed footprint focuses the live tab rather than duplicating it.
     if( int existing = m_tabsPanel->FindTab( key ); existing >= 0 )
     {
-        m_tabsPanel->AddTab( key, reference, false );
+        m_tabsPanel->AddTab( key, reference + wxS( " " ) + _( "[from board]" ), false );
         return m_tabContexts[existing].get();
     }
 
@@ -1280,7 +1279,7 @@ FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootpri
 
     // Index-aligned with the panel model; the context is at its final index before AddTab fires
     // onActivateTab.
-    m_tabsPanel->AddTab( key, reference, false );
+    m_tabsPanel->AddTab( key, reference + wxS( " " ) + _( "[from board]" ), false );
 
     return raw;
 }
@@ -1451,7 +1450,6 @@ void FOOTPRINT_EDIT_FRAME::RenameFootprintTab( const LIB_ID& aOldId, const LIB_I
         m_tabContexts[idx]->SetName( newName );
 
     m_tabsPanel->RenameTab( oldKey, newLib + wxT( ":" ) + newName, newName );
-    UpdateTitle();
 }
 
 
@@ -1814,7 +1812,6 @@ bool FOOTPRINT_EDIT_FRAME::CanCloseFPFromBoard( bool doClose )
     {
         GetInfoBar()->ShowMessageFor( wxEmptyString, 1 );
         Clear_Pcb( false );
-        UpdateTitle();
     }
 
     return true;
@@ -1958,66 +1955,12 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 
     Update3DView( true, true );
     GetLibTree()->RefreshLibTree();
-
-    if( !GetTitle().StartsWith( wxT( "*" ) ) )
-        UpdateTitle();
 }
 
 
 void FOOTPRINT_EDIT_FRAME::UpdateTitle()
 {
-    wxString   title;
-    LIB_ID     fpid = GetLoadedFPID();
-    FOOTPRINT* footprint = GetBoard() ? GetBoard()->GetFirstFootprint() : nullptr;
-    bool       writable = true;
-
-    if( IsCurrentFPFromBoard() )
-    {
-        if( IsContentModified() )
-            title = wxT( "*" );
-
-        title += footprint->GetReference();
-        title += wxS( " " ) + wxString::Format( _( "[from %s]" ), Prj().GetProjectName()
-                                                                              + wxT( "." )
-                                                                              + FILEEXT::PcbFileExtension );
-    }
-    else if( fpid.IsValid() )
-    {
-        try
-        {
-            writable = PROJECT_PCB::FootprintLibAdapter( &Prj() )->IsFootprintLibWritable( fpid.GetLibNickname() );
-        }
-        catch( const IO_ERROR& )
-        {
-            // best efforts...
-        }
-
-        // Note: don't used GetLoadedFPID(); footprint name may have been edited
-        if( IsContentModified() )
-            title = wxT( "*" );
-
-        title += From_UTF8( footprint->GetFPID().Format().c_str() );
-
-        if( !writable )
-            title += wxS( " " ) + _( "[Read Only]" );
-    }
-    else if( !fpid.GetLibItemName().empty() )
-    {
-        // Note: don't used GetLoadedFPID(); footprint name may have been edited
-        if( IsContentModified() )
-            title = wxT( "*" );
-
-        title += From_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
-        title += wxS( " " ) + _( "[Unsaved]" );
-    }
-    else
-    {
-        title = _( "[no footprint loaded]" );
-    }
-
-    title += wxT( " \u2014 " ) + _( "Footprint Editor" );
-
-    SetTitle( title );
+    SetTitle( _( "Footprint Editor" ) );
 }
 
 
@@ -2033,7 +1976,6 @@ void FOOTPRINT_EDIT_FRAME::UpdateView()
     GetCanvas()->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     m_propertiesPanel->UpdateData();
-    UpdateTitle();
 }
 
 

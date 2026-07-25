@@ -104,7 +104,8 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
     }
 
     RebuildSymbolUnitAndBodyStyleLists();
-    UpdateTitle();
+
+    RenameSymbolTab( oldSymbol->GetLibId(), symbol->GetLibId() );
 
     RebuildView();
     OnModify();
@@ -156,7 +157,8 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
     }
 
     RebuildSymbolUnitAndBodyStyleLists();
-    UpdateTitle();
+
+    RenameSymbolTab( oldSymbol->GetLibId(), symbol->GetLibId() );
 
     RebuildView();
     OnModify();

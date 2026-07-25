@@ -84,7 +84,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     fileMenu->Add( SCH_ACTIONS::symbolProperties );
 
     fileMenu->AppendSeparator();
-    fileMenu->AddClose( _( "Library Editor" ) );
+    fileMenu->AddClose( _( "Symbol Editor" ) );
 
 
     //-- Edit menu -----------------------------------------------

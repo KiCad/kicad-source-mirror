@@ -224,7 +224,6 @@ void SYMBOL_EDIT_FRAME::activateSymbolTab( SYMBOL_EDITOR_TAB_CONTEXT* aContext )
 
     restoreSymbolSelectionKiids( aContext->SavedSelection() );
 
-    UpdateTitle();
     RebuildSymbolUnitAndBodyStyleLists();
 
     if( m_propertiesPanel )
@@ -402,8 +401,7 @@ SYMBOL_EDITOR_TAB_CONTEXT* SYMBOL_EDIT_FRAME::findOrCreateSymbolTab( const wxStr
         if( !buffer )
             return nullptr;
 
-        m_tabContexts.push_back(
-                std::make_unique<SYMBOL_EDITOR_TAB_CONTEXT>( aLib, aName, buffer ) );
+        m_tabContexts.push_back( std::make_unique<SYMBOL_EDITOR_TAB_CONTEXT>( aLib, aName, buffer ) );
         ctx = m_tabContexts.back().get();
 
         if( aWasCreated )
@@ -426,11 +424,8 @@ SYMBOL_EDITOR_TAB_CONTEXT* SYMBOL_EDIT_FRAME::findOrCreateSymbolTab( const wxStr
             const std::vector<EDITOR_TABS_MODEL::ENTRY>& entries = m_tabsPanel->Model().Entries();
             const int previewIdx = m_tabsPanel->Model().PreviewIndex();
 
-            if( previewIdx >= 0 && previewIdx < static_cast<int>( entries.size() )
-                    && entries[previewIdx].key != key )
-            {
+            if( previewIdx >= 0 && previewIdx < static_cast<int>( entries.size() ) && entries[previewIdx].key != key )
                 replacedKey = entries[previewIdx].key;
-            }
         }
 
         m_tabsPanel->AddTab( key, aName, aAsPreview );
@@ -467,22 +462,22 @@ SYMBOL_EDIT_FRAME::findOrCreateSymbolInstanceTab( LIB_SYMBOL* aSymbol, SCH_SCREE
         existing->SetBodyStyle( bodyStyle );
 
         if( m_tabsPanel )
-            m_tabsPanel->AddTab( key, existing->GetReference(), false );
+            m_tabsPanel->AddTab( key, existing->GetReference() + wxS( " " ) + _( "[from schematic]" ), false );
         else
             activateSymbolTab( existing );
 
         return existing;
     }
 
-    m_tabContexts.push_back( std::make_unique<SYMBOL_EDITOR_TAB_CONTEXT>(
-            aSymbol, aScreen, aSchematicSymbolUUID, aReference ) );
+    m_tabContexts.push_back( std::make_unique<SYMBOL_EDITOR_TAB_CONTEXT>( aSymbol, aScreen, aSchematicSymbolUUID,
+                                                                          aReference ) );
     SYMBOL_EDITOR_TAB_CONTEXT* ctx = m_tabContexts.back().get();
 
     ctx->SetUnit( unit );
     ctx->SetBodyStyle( bodyStyle );
 
     if( m_tabsPanel )
-        m_tabsPanel->AddTab( key, aReference, false );
+        m_tabsPanel->AddTab( key, aReference + wxS( " " ) + _( "[from schematic]" ), false );
     else
         activateSymbolTab( ctx );
 
@@ -518,7 +513,6 @@ bool SYMBOL_EDIT_FRAME::promptAndCloseSymbolTab( int aIdx )
             if( IsLibraryTreeShown() )
                 m_treePane->GetLibTree()->RefreshLibTree();
 
-            UpdateTitle();
             break;
 
         case wxID_NO:
@@ -693,7 +687,6 @@ void SYMBOL_EDIT_FRAME::RenameSymbolTab( const LIB_ID& aOldId, const LIB_ID& aNe
 
         ctx->SetName( newName );
         m_tabsPanel->RenameTab( oldKey, newKey, newName );
-        UpdateTitle();
     }
 }
 

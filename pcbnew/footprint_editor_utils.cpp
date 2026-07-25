@@ -273,7 +273,8 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( FOOTPRINT* aFootprint )
     // Update library tree and title in case of a name change
     wxDataViewItem treeItem = m_adapter->FindItem( oldFPID );
     UpdateLibraryTree( treeItem, aFootprint );
-    UpdateTitle();
+
+    RenameFootprintTab( oldFPID, aFootprint->GetFPID() );
 
     UpdateMsgPanel();
     UpdateUserInterface();

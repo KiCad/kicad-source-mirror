@@ -55,35 +55,7 @@
 
 void SYMBOL_EDIT_FRAME::UpdateTitle()
 {
-    wxString title;
-
-    if( GetCurSymbol() && IsSymbolFromSchematic() )
-    {
-        if( GetScreen() && GetScreen()->IsContentModified() )
-            title = wxT( "*" );
-
-        title += m_reference;
-        title += wxS( " " ) + _( "[from schematic]" );
-    }
-    else if( GetCurSymbol() )
-    {
-        if( GetScreen() && GetScreen()->IsContentModified() )
-            title = wxT( "*" );
-
-        title += UnescapeString( GetCurSymbol()->GetLibId().Format() );
-
-        wxString libName = GetCurSymbol()->GetLibNickname();
-
-        if( m_libMgr && m_libMgr->LibraryExists( libName ) && m_libMgr->IsLibraryReadOnly( libName ) )
-            title += wxS( " " ) + _( "[Read Only Library]" );
-    }
-    else
-    {
-        title = _( "[no symbol loaded]" );
-    }
-
-    title += wxT( " \u2014 " ) + _( "Symbol Editor" );
-    SetTitle( title );
+    SetTitle( _( "Symbol Editor" ) );
 }
 
 
@@ -285,7 +257,6 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbol( LIB_SYMBOL* aEntry, const wxString
         GetInfoBar()->Dismiss();
     }
 
-    UpdateTitle();
     RebuildSymbolUnitAndBodyStyleLists();
 
     // Only a freshly-created tab gets a clean undo history; re-focusing preserves the live stack.
@@ -422,8 +393,6 @@ void SYMBOL_EDIT_FRAME::Save()
 
     if( IsLibraryTreeShown() )
         m_treePane->GetLibTree()->RefreshLibTree();
-
-    UpdateTitle();
 }
 
 
@@ -1223,7 +1192,9 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
         UpdateLibraryTree( treeItem, m_symbol );
 
     RebuildSymbolUnitAndBodyStyleLists();
-    UpdateTitle();
+
+    if( aOldName )
+        RenameSymbolTab( LIB_ID( lib, *aOldName ), m_symbol->GetLibId() );
 
     // N.B. The view needs to be rebuilt first as the Symbol Properties change may invalidate
     // the view pointers by rebuilting the field table
@@ -1727,7 +1698,6 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
         }
     }
 
-    UpdateTitle();
     return retv;
 }
 

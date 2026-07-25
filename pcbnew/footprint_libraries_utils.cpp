@@ -1102,8 +1102,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 
     SetMsgPanel( aFootprint );
 
-    wxString libraryName = aFootprint->GetFPID().GetLibNickname();
-    wxString footprintName = aFootprint->GetFPID().GetLibItemName();
+    LIB_ID   old_FPID = aFootprint->GetFPID();
+    wxString libraryName = old_FPID.GetLibNickname();
+    wxString footprintName = old_FPID.GetLibItemName();
     bool     updateValue = aFootprint->GetValue() == footprintName;
     bool     done = false;
     bool     footprintExists = false;
@@ -1196,7 +1197,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 
     wxString msg = wxString::Format( fmt, footprintName.GetData(), libraryName.GetData() );
     SetStatusText( msg );
-    UpdateTitle();
+    RenameFootprintTab( old_FPID, aFootprint->GetFPID() );
     ReCreateHToolbar();
 
     return true;
