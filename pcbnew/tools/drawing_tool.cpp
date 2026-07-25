@@ -23,6 +23,8 @@
 #include "geometry/shape_rect.h"
 #include "dialog_table_properties.h"
 
+#include <set>
+
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
@@ -81,6 +83,7 @@
 #include <pcb_tablecell.h>
 #include <pcb_track.h>
 #include <pcb_dimension.h>
+#include <constraints/board_constraint_adapter.h>
 #include <constraints/constraint_builder.h>
 #include <constraints/pcb_constraint.h>
 #include <pcbnew_id.h>
@@ -93,27 +96,6 @@
 const unsigned int DRAWING_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
-
-
-// True if board already carries same constraint so a redrawn dimension does not stack a conflicting duplicate
-static bool dimensionBindingIsDuplicate( BOARD* aBoard, const PCB_CONSTRAINT* aConstraint )
-{
-    auto scan = [&]( const CONSTRAINTS& aList )
-    {
-        return std::ranges::any_of( aList,
-                                    [&]( const PCB_CONSTRAINT* aExisting )
-                                    { return ConstraintsAreDuplicate( *aExisting, *aConstraint ); } );
-    };
-
-    if( scan( aBoard->Constraints() ) )
-        return true;
-
-    // Dimension coincidences parent to their own footprint not necessarily the first
-    // so every footprint constraints must be scanned to find where bindings are stored
-    return std::ranges::any_of( aBoard->Footprints(),
-                                [&]( FOOTPRINT* aFootprint )
-                                { return scan( aFootprint->Constraints() ); } );
-}
 
 
 // Bind dimension feature points coincident to measured geometry so it follows that geometry
@@ -144,7 +126,7 @@ static void bindDimensionEndpoints( BOARD* aBoard, PCB_DIMENSION_BASE* aDimensio
             constraint->AddMember( aDimension->m_Uuid, aDimAnchor );
             constraint->AddMember( *arc, aTargetAnchor );
 
-            if( !dimensionBindingIsDuplicate( aBoard, constraint.get() ) )
+            if( !ConstraintIsDuplicateOnBoard( aBoard, constraint.get() ) )
                 aCommit.Add( constraint.release() );
         };
 
@@ -167,20 +149,64 @@ static void bindDimensionEndpoints( BOARD* aBoard, PCB_DIMENSION_BASE* aDimensio
         break;
     }
 
-    std::vector<DIMENSION_ENDPOINT_BINDING> bindings =
-            SelectDimensionEndpointBindings( aBoard, aDimension->m_Uuid, aDimension->GetStart(), end, tol );
+    std::vector<ENDPOINT_BINDING> bindings =
+            SelectEndpointBindings( aBoard, aDimension->m_Uuid, aDimension->GetStart(), end, tol );
 
-    for( const DIMENSION_ENDPOINT_BINDING& binding : bindings )
+    for( const ENDPOINT_BINDING& binding : bindings )
     {
         auto constraint = std::make_unique<PCB_CONSTRAINT>( aParent, PCB_CONSTRAINT_TYPE::COINCIDENT );
-        constraint->AddMember( aDimension->m_Uuid, binding.dimAnchor );
+        constraint->AddMember( aDimension->m_Uuid, binding.sourceAnchor );
         constraint->AddMember( binding.target.m_item, binding.target.m_anchor, binding.target.m_index );
 
-        if( dimensionBindingIsDuplicate( aBoard, constraint.get() ) )
+        if( ConstraintIsDuplicateOnBoard( aBoard, constraint.get() ) )
             continue;
 
         aCommit.Add( constraint.release() );
     }
+}
+
+
+// Stage the auto constraints for a freshly drawn shape on the same commit as the shape
+// Returns the ones the caller must solve after the push to snap the drawn geometry
+static std::vector<PCB_CONSTRAINT*> stageAutoConstraints( BOARD* aBoard, PCB_SHAPE* aShape, BOARD_ITEM* aParent,
+                                                          BOARD_COMMIT& aCommit, bool aAxisConstraint )
+{
+    std::vector<PCB_CONSTRAINT*> snaps;
+
+    for( AUTO_CONSTRAINT& entry : SelectShapeAutoConstraints( aBoard, aShape, aParent, aAxisConstraint ) )
+    {
+        PCB_CONSTRAINT* added = entry.constraint.get();
+        aCommit.Add( entry.constraint.release() );
+
+        if( entry.needsSolve )
+            snaps.push_back( added );
+    }
+
+    return snaps;
+}
+
+
+// Solve after the push since a constraint only goes live at push time
+// Append so the draw the bindings and the snap undo as one action
+static void snapAutoConstraints( PCB_BASE_EDIT_FRAME* aFrame, BOARD* aBoard,
+                                 const std::vector<PCB_CONSTRAINT*>& aConstraints )
+{
+    if( aConstraints.empty() )
+        return;
+
+    BOARD_COMMIT commit( aFrame );
+
+    for( PCB_CONSTRAINT* constraint : aConstraints )
+    {
+        ApplyConstraintImmediately( aBoard, constraint, nullptr,
+                                    [&]( BOARD_ITEM* aItem )
+                                    {
+                                        commit.Modify( aItem );
+                                    } );
+    }
+
+    if( !commit.Empty() )
+        commit.Push( _( "Apply Geometric Constraint" ), APPEND_UNDO );
 }
 
 
@@ -478,7 +504,17 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         if( line )
         {
             commit.Add( line );
+
+            std::vector<PCB_CONSTRAINT*> snaps;
+
+            if( GetAutoConstraints() )
+            {
+                snaps = stageAutoConstraints( m_board, line, parent, commit,
+                                              GetAngleSnapMode() != LEADER_MODE::DIRECT );
+            }
+
             commit.Push( _( "Draw Line" ) );
+            snapAutoConstraints( m_frame, m_board, snaps );
             startingPoint = VECTOR2D( line->GetEnd() );
             committedLines.push( line );
         }
@@ -612,7 +648,14 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         {
             PCB_SHAPE* committedArc = arc.get();
             commit.Add( arc.release() );
+
+            std::vector<PCB_CONSTRAINT*> snaps;
+
+            if( GetAutoConstraints() )
+                snaps = stageAutoConstraints( m_board, committedArc, parent, commit, false );
+
             commit.Push( _( "Draw Arc" ) );
+            snapAutoConstraints( m_frame, m_board, snaps );
 
             m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, committedArc );
         }
@@ -660,7 +703,14 @@ int DRAWING_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
         {
             PCB_SHAPE* committedArc = arc.get();
             commit.Add( arc.release() );
+
+            std::vector<PCB_CONSTRAINT*> snaps;
+
+            if( GetAutoConstraints() )
+                snaps = stageAutoConstraints( m_board, committedArc, parent, commit, false );
+
             commit.Push( _( "Draw Elliptical Arc" ) );
+            snapAutoConstraints( m_frame, m_board, snaps );
 
             m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, committedArc );
         }
@@ -721,7 +771,14 @@ int DRAWING_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
 
             PCB_SHAPE* committedBezier = bezier.get();
             commit.Add( bezier.release() );
+
+            std::vector<PCB_CONSTRAINT*> snaps;
+
+            if( GetAutoConstraints() )
+                snaps = stageAutoConstraints( m_board, committedBezier, parent, commit, false );
+
             commit.Push( _( "Draw Bezier" ) );
+            snapAutoConstraints( m_frame, m_board, snaps );
 
             m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, committedBezier );
         }
@@ -1959,7 +2016,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 commit.Add( dimension );
 
                 // Bind feature points to measured geometry so it tracks that geometry interactive draw only
-                bindDimensionEndpoints( m_board, dimension, m_frame->GetModel(), commit );
+                if( GetAutoConstraints() )
+                    bindDimensionEndpoints( m_board, dimension, m_frame->GetModel(), commit );
 
                 commit.Push( _( "Draw Dimension" ) );
 
@@ -2830,7 +2888,17 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                         BOARD_COMMIT commit( m_frame );
 
                         commit.Add( graphic );
+
+                        std::vector<PCB_CONSTRAINT*> snaps;
+
+                        if( GetAutoConstraints() )
+                        {
+                            snaps = stageAutoConstraints( m_board, graphic, m_frame->GetModel(), commit,
+                                                          GetAngleSnapMode() != LEADER_MODE::DIRECT );
+                        }
+
                         commit.Push( _( "Draw Line" ) );
+                        snapAutoConstraints( m_frame, m_board, snaps );
                         m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, graphic );
 
                         graphic = nullptr;
@@ -4391,7 +4459,14 @@ int DRAWING_TOOL::runSimpleShapeDraw(
         if( shape )
         {
             commit.Add( shape );
+
+            std::vector<PCB_CONSTRAINT*> snaps;
+
+            if( GetAutoConstraints() )
+                snaps = stageAutoConstraints( m_board, shape, parent, commit, false );
+
             commit.Push( aCommitLabel );
+            snapAutoConstraints( m_frame, m_board, snaps );
             m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, shape );
         }
 

@@ -2000,6 +2000,12 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
                 return CacheAndReturnItemById( aID, group );
         }
 
+        for( PCB_CONSTRAINT* constraint : footprint->Constraints() )
+        {
+            if( constraint->m_Uuid == aID )
+                return CacheAndReturnItemById( aID, constraint );
+        }
+
         for( PCB_POINT* point : footprint->Points() )
         {
             if( point->m_Uuid == aID )

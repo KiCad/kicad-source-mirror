@@ -2293,6 +2293,14 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
                 return GetDisplayOptions().m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL;
             };
 
+    auto autoConstraintsCond = [this]( const SELECTION& )
+    {
+        FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
+        return cfg && cfg->m_AutoConstraints;
+    };
+
+    mgr->SetConditions( PCB_ACTIONS::toggleAutoConstraints, CHECK( autoConstraintsCond ) );
+
     auto boardFlippedCond = [this]( const SELECTION& )
     {
         return GetDisplayOptions().m_FlipBoardView;

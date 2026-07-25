@@ -1198,6 +1198,15 @@ void PCB_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes, CHECK( cond.BoundingBoxes() ) );
 
+    auto autoConstraintsCond =
+            [this]( const SELECTION& )
+            {
+                PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+                return cfg && cfg->m_AutoConstraints;
+            };
+
+    mgr->SetConditions( PCB_ACTIONS::toggleAutoConstraints, CHECK( autoConstraintsCond ) );
+
     auto boardFlippedCond =
             [this]( const SELECTION& )
             {

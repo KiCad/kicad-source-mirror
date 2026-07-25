@@ -140,27 +140,60 @@ std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( BOARD* aBoard, const V
 BOARD_ITEM* ResolveConstrainableItem( BOARD* aBoard, const KIID& aId );
 
 
-/// One of a dimension feature points bound coincident to an object anchor by draw time auto
-/// constrain @p dimAnchor is the dimension START or END @p target is the anchor it binds to
-struct DIMENSION_ENDPOINT_BINDING
+/// The shape whose outline is nearest aPos within aMaxDist. Circles, arcs and ellipses count
+/// only when aAllowCircle is set.
+std::optional<KIID> NearestOutlineShape( BOARD* aBoard, const VECTOR2I& aPos, double aMaxDist, bool aAllowCircle );
+
+
+/// One of a drawn item feature points bound coincident to an object anchor by draw time auto
+/// constrain @p sourceAnchor is the drawn item START or END @p target is the anchor it binds to
+struct ENDPOINT_BINDING
 {
-    CONSTRAINT_ANCHOR dimAnchor;
+    CONSTRAINT_ANCHOR sourceAnchor;
     CONSTRAINT_MEMBER target;
 };
 
 
 /**
- * Choose the coincident bindings a freshly drawn dimension endpoints should take so it tracks
- * the geometry it measures
+ * Choose the coincident bindings a freshly drawn item endpoints should take so it tracks
+ * the geometry it landed on
  *
  * Prefers one object near both endpoints binding START and END to it else binds each endpoint to
  * its own nearest anchor independently possibly on different objects and partial binding is fine
- * Excludes the dimension own anchors @p aEnd is std::nullopt for a leader or centre mark which
- * binds only START
+ * Excludes the item own anchors @p aEnd is std::nullopt for a single point item like a leader or
+ * centre mark which binds only START
  */
-std::vector<DIMENSION_ENDPOINT_BINDING>
-SelectDimensionEndpointBindings( BOARD* aBoard, const KIID& aDimension, const VECTOR2I& aStart,
-                                 const std::optional<VECTOR2I>& aEnd, double aMaxDist );
+std::vector<ENDPOINT_BINDING> SelectEndpointBindings( BOARD* aBoard, const KIID& aItem, const VECTOR2I& aStart,
+                                                      const std::optional<VECTOR2I>& aEnd, double aMaxDist );
+
+
+/// One constraint chosen for a freshly drawn shape. needsSolve marks the inexact ones the
+/// caller must solve after its commit push so the drawn geometry snaps into place.
+struct AUTO_CONSTRAINT
+{
+    std::unique_ptr<PCB_CONSTRAINT> constraint;
+    bool                            needsSolve = false;
+};
+
+
+/**
+ * Choose the constraints a freshly drawn shape should get from what its features landed on.
+ *
+ * Segments and arcs bind endpoints coincident to anchors, point on line or midpoint on an
+ * outline, tangent within a few degrees, and pin anchors the segment passes near.  Circles
+ * and ellipses bind their centre concentric coincident or point on line.  A segment gets
+ * horizontal or vertical when @p aAxisConstraint is set and it lies exactly on the axis.
+ *
+ * The shape need not be on the board yet.  Duplicates of existing constraints are dropped.
+ * Split out from the drawing tool so the decision logic is unit testable without the
+ * interactive tool framework.
+ */
+std::vector<AUTO_CONSTRAINT> SelectShapeAutoConstraints( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_ITEM* aParent,
+                                                         bool aAxisConstraint );
+
+
+/// True if the board or one of its footprints already carries an equal constraint
+bool ConstraintIsDuplicateOnBoard( BOARD* aBoard, const PCB_CONSTRAINT* aConstraint );
 
 
 /**

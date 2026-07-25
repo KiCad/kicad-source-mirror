@@ -62,6 +62,7 @@ public:
     int RemoveConstraints( const TOOL_EVENT& aEvent );
     int ShowConstraints( const TOOL_EVENT& aEvent );
     int ManageConstraints( const TOOL_EVENT& aEvent );
+    int ToggleAutoConstraints( const TOOL_EVENT& aEvent );
 
     /// Select the constraint whose on-canvas badge is at @p aPos (enlarge it, highlight the panel
     /// row); returns true if a badge was hit.  Called by the selection tool so badge clicks work

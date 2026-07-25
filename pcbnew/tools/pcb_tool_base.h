@@ -121,6 +121,11 @@ public:
      */
     LEADER_MODE GetAngleSnapMode() const;
 
+    /**
+     * Should drawing tools author constraints automatically?
+     */
+    bool GetAutoConstraints() const;
+
 protected:
     /**
      * Options for placing items interactively.

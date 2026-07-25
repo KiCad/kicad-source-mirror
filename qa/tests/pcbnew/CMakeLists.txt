@@ -273,6 +273,7 @@ set( QA_PCBNEW_SRCS
     constraints/test_constraint_serialization.cpp
     constraints/test_constraint_drag.cpp
     constraints/test_constraint_authoring.cpp
+    constraints/test_constraint_auto.cpp
     constraints/test_constraint_diagnostics.cpp
     constraints/test_constraint_protobuf.cpp
     constraints/test_constraint_clipboard.cpp

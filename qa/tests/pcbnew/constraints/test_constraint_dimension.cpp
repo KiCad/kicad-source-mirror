@@ -381,13 +381,13 @@ BOOST_AUTO_TEST_CASE( DimensionBindsRectCornerToCorner )
     PCB_SHAPE* rect = addRect( board, { 0, 0 }, { 10 * MM, 10 * MM } );
 
     KIID fakeDim;   // dimension uuid not on the board as during interactive draw
-    std::vector<DIMENSION_ENDPOINT_BINDING> bindings =
-            SelectDimensionEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 10 * MM, 10 * MM ), 1000.0 );
+    std::vector<ENDPOINT_BINDING> bindings =
+            SelectEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 10 * MM, 10 * MM ), 1000.0 );
 
     BOOST_REQUIRE_EQUAL( bindings.size(), 2 );
-    BOOST_CHECK( bindings[0].dimAnchor == CONSTRAINT_ANCHOR::START );
+    BOOST_CHECK( bindings[0].sourceAnchor == CONSTRAINT_ANCHOR::START );
     BOOST_CHECK( bindings[0].target == CONSTRAINT_MEMBER( rect->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 0 ) );
-    BOOST_CHECK( bindings[1].dimAnchor == CONSTRAINT_ANCHOR::END );
+    BOOST_CHECK( bindings[1].sourceAnchor == CONSTRAINT_ANCHOR::END );
     BOOST_CHECK( bindings[1].target == CONSTRAINT_MEMBER( rect->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 2 ) );
 
     // Rect stored end before start still enumerates canonically index 0 always TL
@@ -399,6 +399,30 @@ BOOST_AUTO_TEST_CASE( DimensionBindsRectCornerToCorner )
     BOOST_CHECK_EQUAL( anchors[0].pos, VECTOR2I( 20 * MM, 20 * MM ) );
     BOOST_CHECK_EQUAL( anchors[2].index, 2 );
     BOOST_CHECK_EQUAL( anchors[2].pos, VECTOR2I( 30 * MM, 30 * MM ) );
+}
+
+
+// Drawn segment starting on a committed segment end binds coincident there the free end binds nothing
+BOOST_AUTO_TEST_CASE( ShapeEndpointBindsAtDrawTolerance )
+{
+    BOARD      board;
+    PCB_SHAPE* first = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+
+    const double tol = 0.01 * MM;
+
+    KIID                          newSeg; // uuid not on the board as during interactive draw
+    std::vector<ENDPOINT_BINDING> bindings =
+            SelectEndpointBindings( &board, newSeg, { 10 * MM, 0 }, VECTOR2I( 10 * MM, 20 * MM ), tol );
+
+    BOOST_REQUIRE_EQUAL( bindings.size(), 1 );
+    BOOST_CHECK( bindings[0].sourceAnchor == CONSTRAINT_ANCHOR::START );
+    BOOST_CHECK( bindings[0].target == CONSTRAINT_MEMBER( first->m_Uuid, CONSTRAINT_ANCHOR::END ) );
+
+    // Near the corner but outside draw tolerance binds nothing
+    bindings = SelectEndpointBindings( &board, newSeg, VECTOR2I( 10 * MM + MM / 10, 0 ), VECTOR2I( 30 * MM, 20 * MM ),
+                                       tol );
+
+    BOOST_CHECK( bindings.empty() );
 }
 
 
@@ -415,13 +439,12 @@ BOOST_AUTO_TEST_CASE( DimensionBindsPolygonVertices )
     PCB_SHAPE*            poly = addPoly( board, pts );
 
     KIID fakeDim;
-    std::vector<DIMENSION_ENDPOINT_BINDING> bindings =
-            SelectDimensionEndpointBindings( &board, fakeDim, pts[1], pts[3], 1000.0 );
+    std::vector<ENDPOINT_BINDING> bindings = SelectEndpointBindings( &board, fakeDim, pts[1], pts[3], 1000.0 );
 
     BOOST_REQUIRE_EQUAL( bindings.size(), 2 );
-    BOOST_CHECK( bindings[0].dimAnchor == CONSTRAINT_ANCHOR::START );
+    BOOST_CHECK( bindings[0].sourceAnchor == CONSTRAINT_ANCHOR::START );
     BOOST_CHECK( bindings[0].target == CONSTRAINT_MEMBER( poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 ) );
-    BOOST_CHECK( bindings[1].dimAnchor == CONSTRAINT_ANCHOR::END );
+    BOOST_CHECK( bindings[1].sourceAnchor == CONSTRAINT_ANCHOR::END );
     BOOST_CHECK( bindings[1].target == CONSTRAINT_MEMBER( poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 3 ) );
 
     // Anchor lookup must honour vertex index not just the VERTEX tag
@@ -445,15 +468,15 @@ BOOST_AUTO_TEST_CASE( DimensionBindingPrefersSinglePolygonOverSplit )
     PCB_SHAPE* b = addSegment( board, { 2 * MM, 1 * MM }, { 2 * MM, 20 * MM } );
 
     KIID fakeDim;
-    std::vector<DIMENSION_ENDPOINT_BINDING> bindings =
-            SelectDimensionEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 2 * MM, 0 ), 12.0 * MM );
+    std::vector<ENDPOINT_BINDING> bindings =
+            SelectEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 2 * MM, 0 ), 12.0 * MM );
 
     BOOST_REQUIRE_EQUAL( bindings.size(), 2 );
     BOOST_CHECK( bindings[0].target == CONSTRAINT_MEMBER( poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 0 ) );
     BOOST_CHECK( bindings[1].target == CONSTRAINT_MEMBER( poly->m_Uuid, CONSTRAINT_ANCHOR::VERTEX, 1 ) );
 
     // Decoy segment never enters binding despite its start being nearest END
-    for( const DIMENSION_ENDPOINT_BINDING& binding : bindings )
+    for( const ENDPOINT_BINDING& binding : bindings )
         BOOST_CHECK( binding.target.m_item != b->m_Uuid );
 }
 

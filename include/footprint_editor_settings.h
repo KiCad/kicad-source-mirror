@@ -76,6 +76,8 @@ public:
 
     LEADER_MODE m_AngleSnapMode;
 
+    bool m_AutoConstraints;
+
     ARC_EDIT_MODE m_ArcEditMode;
 
     int m_LibWidth;

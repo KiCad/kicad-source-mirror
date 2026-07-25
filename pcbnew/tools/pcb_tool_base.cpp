@@ -387,6 +387,15 @@ LEADER_MODE PCB_TOOL_BASE::GetAngleSnapMode() const
 }
 
 
+bool PCB_TOOL_BASE::GetAutoConstraints() const
+{
+    if( frame<PCB_BASE_FRAME>()->IsType( FRAME_PCB_EDITOR ) )
+        return GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" )->m_AutoConstraints;
+    else
+        return GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" )->m_AutoConstraints;
+}
+
+
 void INTERACTIVE_PLACER_BASE::SnapItem( BOARD_ITEM *aItem )
 {
     // Base implementation performs no snapping

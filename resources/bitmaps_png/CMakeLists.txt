@@ -776,6 +776,7 @@ set( BMAPS_CONSTRAINTS_GEOM
     angular-dimension
     tangent
     arc-angle
+    auto
     )
 
 # Images in this section are generated at whatever resolution is set in the source SVG file

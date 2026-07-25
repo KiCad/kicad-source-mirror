@@ -22,7 +22,9 @@
 #include <algorithm>
 #include <cmath>
 #include <ranges>
+#include <set>
 
+#include <base_units.h>
 #include <board.h>
 #include <core/kicad_algo.h>
 #include <footprint.h>
@@ -458,11 +460,10 @@ std::optional<CONSTRAINT_MEMBER> NearestConstraintAnchor( BOARD* aBoard, const V
 }
 
 
-std::vector<DIMENSION_ENDPOINT_BINDING>
-SelectDimensionEndpointBindings( BOARD* aBoard, const KIID& aDimension, const VECTOR2I& aStart,
-                                 const std::optional<VECTOR2I>& aEnd, double aMaxDist )
+std::vector<ENDPOINT_BINDING> SelectEndpointBindings( BOARD* aBoard, const KIID& aItem, const VECTOR2I& aStart,
+                                                      const std::optional<VECTOR2I>& aEnd, double aMaxDist )
 {
-    std::vector<DIMENSION_ENDPOINT_BINDING> bindings;
+    std::vector<ENDPOINT_BINDING> bindings;
 
     if( !aBoard )
         return bindings;
@@ -471,9 +472,9 @@ SelectDimensionEndpointBindings( BOARD* aBoard, const KIID& aDimension, const VE
     // Distinct anchors required or endpoints merge and pairs judged jointly not per end nearest
     using ANCHOR_PAIR = std::pair<CONSTRAINT_MEMBER, CONSTRAINT_MEMBER>;
 
-    auto bestPairOn = [&]( BOARD_ITEM* aItem ) -> std::optional<std::pair<ANCHOR_PAIR, double>>
+    auto bestPairOn = [&]( BOARD_ITEM* aCandidate ) -> std::optional<std::pair<ANCHOR_PAIR, double>>
     {
-        std::vector<CONSTRAINT_ANCHOR_POINT> anchors = ConstraintItemAnchors( aItem );
+        std::vector<CONSTRAINT_ANCHOR_POINT> anchors = ConstraintItemAnchors( aCandidate );
 
         // Sum decomposes per endpoint best and runner up END anchors computed once serve every
         // START candidate keeps a dense polygon linear in vertex count instead of quadratic
@@ -522,10 +523,8 @@ SelectDimensionEndpointBindings( BOARD* aBoard, const KIID& aDimension, const VE
             if( !best || sum < best->second )
             {
                 best = std::make_pair(
-                        ANCHOR_PAIR{ CONSTRAINT_MEMBER( aItem->m_Uuid, anchors[i].anchor,
-                                                        anchors[i].index ),
-                                     CONSTRAINT_MEMBER( aItem->m_Uuid, anchors[j].anchor,
-                                                        anchors[j].index ) },
+                        ANCHOR_PAIR{ CONSTRAINT_MEMBER( aCandidate->m_Uuid, anchors[i].anchor, anchors[i].index ),
+                                     CONSTRAINT_MEMBER( aCandidate->m_Uuid, anchors[j].anchor, anchors[j].index ) },
                         sum );
             }
         }
@@ -542,7 +541,7 @@ SelectDimensionEndpointBindings( BOARD* aBoard, const KIID& aDimension, const VE
 
         for( BOARD_ITEM* item : CollectConstrainableItems( aBoard ) )
         {
-            if( item->m_Uuid == aDimension )
+            if( item->m_Uuid == aItem )
                 continue;
 
             auto pair = bestPairOn( item );
@@ -567,8 +566,7 @@ SelectDimensionEndpointBindings( BOARD* aBoard, const KIID& aDimension, const VE
 
     // Else bind each endpoint to its own nearest anchor the two may land on different objects
     // and either may find nothing
-    std::vector<CONSTRAINT_MEMBER> exclude{ { aDimension, CONSTRAINT_ANCHOR::START },
-                                            { aDimension, CONSTRAINT_ANCHOR::END } };
+    std::vector<CONSTRAINT_MEMBER> exclude{ { aItem, CONSTRAINT_ANCHOR::START }, { aItem, CONSTRAINT_ANCHOR::END } };
 
     if( auto startTarget = NearestConstraintAnchor( aBoard, aStart, aMaxDist, exclude ) )
     {
@@ -596,6 +594,60 @@ BOARD_ITEM* ResolveConstrainableItem( BOARD* aBoard, const KIID& aId )
     return item && ( item->Type() == PCB_SHAPE_T || dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
                    ? item
                    : nullptr;
+}
+
+
+std::optional<KIID> NearestOutlineShape( BOARD* aBoard, const VECTOR2I& aPos, double aMaxDist, bool aAllowCircle )
+{
+    double              best = aMaxDist;
+    std::optional<KIID> result;
+
+    for( PCB_SHAPE* shape : CollectConstraintShapes( aBoard ) )
+    {
+        const SHAPE_T shapeType = shape->GetShape();
+        double        dist = 0;
+
+        if( shapeType == SHAPE_T::SEGMENT )
+        {
+            dist = SEG( shape->GetStart(), shape->GetEnd() ).Distance( aPos );
+        }
+        else if( aAllowCircle && ( shapeType == SHAPE_T::CIRCLE || shapeType == SHAPE_T::ARC ) )
+        {
+            dist = std::abs( ( aPos - shape->GetCenter() ).EuclideanNorm() - shape->GetRadius() );
+        }
+        else if( aAllowCircle && ( shapeType == SHAPE_T::ELLIPSE || shapeType == SHAPE_T::ELLIPSE_ARC ) )
+        {
+            // Radial distance to the outline at the click's polar angle in the ellipse frame.
+            // Not the exact outline distance, but exact on the outline, which is all a snap needs.
+            double   a = shape->GetEllipseMajorRadius();
+            double   b = shape->GetEllipseMinorRadius();
+            double   phi = shape->GetEllipseRotation().AsRadians();
+            VECTOR2D d = VECTOR2D( aPos - shape->GetEllipseCenter() );
+            double   lx = d.x * std::cos( phi ) + d.y * std::sin( phi );
+            double   ly = -d.x * std::sin( phi ) + d.y * std::cos( phi );
+            double   r = std::hypot( lx, ly );
+
+            if( a <= 0 || b <= 0 )
+                continue;
+
+            double theta = std::atan2( ly, lx );
+            double re = a * b / std::hypot( b * std::cos( theta ), a * std::sin( theta ) );
+
+            dist = std::abs( r - re );
+        }
+        else
+        {
+            continue;
+        }
+
+        if( dist <= best )
+        {
+            best = dist;
+            result = shape->m_Uuid;
+        }
+    }
+
+    return result;
 }
 
 
@@ -1027,4 +1079,351 @@ void RemapPolygonVertexMembers( BOARD* aBoard, const KIID& aPoly, int aChangedIn
 
     for( FOOTPRINT* footprint : aBoard->Footprints() )
         remapIn( footprint->Constraints() );
+}
+
+
+bool ConstraintIsDuplicateOnBoard( BOARD* aBoard, const PCB_CONSTRAINT* aConstraint )
+{
+    auto scan = [&]( const CONSTRAINTS& aList )
+    {
+        return std::ranges::any_of( aList,
+                                    [&]( const PCB_CONSTRAINT* aExisting )
+                                    {
+                                        return ConstraintsAreDuplicate( *aExisting, *aConstraint );
+                                    } );
+    };
+
+    if( scan( aBoard->Constraints() ) )
+        return true;
+
+    return std::ranges::any_of( aBoard->Footprints(),
+                                [&]( FOOTPRINT* aFootprint )
+                                {
+                                    return scan( aFootprint->Constraints() );
+                                } );
+}
+
+
+namespace
+{
+// Tuning knobs for draw time auto constraints
+// The bind tolerance accepts only exact landings while the corridor also captures near misses
+constexpr double AUTO_BIND_TOL_MM = 0.01;
+constexpr double AUTO_CORRIDOR_MM = 0.25;
+constexpr double AUTO_TANGENT_TOL_DEG = 10.0;
+
+
+// Tangent direction of a segment or circular shape at aPos or nullopt for other kinds
+std::optional<double> tangentDirAt( const PCB_SHAPE* aShape, const VECTOR2I& aPos )
+{
+    switch( aShape->GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+    {
+        VECTOR2D dir( aShape->GetEnd() - aShape->GetStart() );
+
+        if( dir.EuclideanNorm() == 0 )
+            return std::nullopt;
+
+        return std::atan2( dir.y, dir.x );
+    }
+
+    case SHAPE_T::ARC:
+    case SHAPE_T::CIRCLE:
+    {
+        VECTOR2D radial( aPos - aShape->GetCenter() );
+
+        if( radial.EuclideanNorm() == 0 )
+            return std::nullopt;
+
+        return std::atan2( radial.y, radial.x ) + M_PI / 2;
+    }
+
+    default: return std::nullopt;
+    }
+}
+
+
+// A drawn shape meeting aTarget within a few degrees of tangency gets a tangent constraint
+// The target is the first member so the snap solve moves the drawn shape not the board
+std::unique_ptr<PCB_CONSTRAINT> makeTangent( const PCB_SHAPE* aShape, const PCB_SHAPE* aTarget, const VECTOR2I& aPos,
+                                             BOARD_ITEM* aParent )
+{
+    const double tangentTol = AUTO_TANGENT_TOL_DEG * M_PI / 180.0;
+
+    bool curveInvolved = aShape->GetShape() == SHAPE_T::ARC || aTarget->GetShape() == SHAPE_T::ARC
+                         || aTarget->GetShape() == SHAPE_T::CIRCLE;
+
+    if( !curveInvolved )
+        return nullptr;
+
+    std::optional<double> myDir = tangentDirAt( aShape, aPos );
+    std::optional<double> otherDir = tangentDirAt( aTarget, aPos );
+
+    if( !myDir || !otherDir )
+        return nullptr;
+
+    double diff = std::fabs( std::fmod( *myDir - *otherDir, M_PI ) );
+    diff = std::min( diff, M_PI - diff );
+
+    if( diff > tangentTol )
+        return nullptr;
+
+    auto constraint = std::make_unique<PCB_CONSTRAINT>( aParent, PCB_CONSTRAINT_TYPE::TANGENT );
+    constraint->AddMember( aTarget->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+    constraint->AddMember( aShape->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+
+    return constraint;
+}
+
+
+// Append unless an equal constraint exists on the board or already in this batch
+// One draw can touch the same target twice so the batch check matters
+void addUnlessDuplicate( BOARD* aBoard, std::vector<AUTO_CONSTRAINT>& aResult,
+                         std::unique_ptr<PCB_CONSTRAINT> aConstraint, bool aNeedsSolve )
+{
+    if( ConstraintIsDuplicateOnBoard( aBoard, aConstraint.get() ) )
+        return;
+
+    if( std::ranges::any_of( aResult,
+                             [&]( const AUTO_CONSTRAINT& aEntry )
+                             {
+                                 return ConstraintsAreDuplicate( *aEntry.constraint, *aConstraint );
+                             } ) )
+    {
+        return;
+    }
+
+    aResult.push_back( { std::move( aConstraint ), aNeedsSolve } );
+}
+
+
+// A circle or closed ellipse has no endpoints so only its centre binds
+// Another curve centre reads as concentric an anchor coincides and an outline holds the centre
+std::vector<AUTO_CONSTRAINT> selectCenterBindings( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_ITEM* aParent )
+{
+    std::vector<AUTO_CONSTRAINT> result;
+
+    const double tol = pcbIUScale.mmToIU( AUTO_BIND_TOL_MM );
+    VECTOR2I     center = aShape->GetCenter();
+
+    std::vector<CONSTRAINT_MEMBER> exclude = { { aShape->m_Uuid, CONSTRAINT_ANCHOR::CENTER } };
+
+    if( std::optional<CONSTRAINT_MEMBER> target = NearestConstraintAnchor( aBoard, center, tol, exclude ) )
+    {
+        std::unique_ptr<PCB_CONSTRAINT> constraint;
+
+        if( target->m_anchor == CONSTRAINT_ANCHOR::CENTER )
+        {
+            constraint = std::make_unique<PCB_CONSTRAINT>( aParent, PCB_CONSTRAINT_TYPE::CONCENTRIC );
+            constraint->AddMember( target->m_item, CONSTRAINT_ANCHOR::WHOLE );
+            constraint->AddMember( aShape->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+        }
+        else
+        {
+            constraint = std::make_unique<PCB_CONSTRAINT>( aParent, PCB_CONSTRAINT_TYPE::COINCIDENT );
+            constraint->AddMember( aShape->m_Uuid, CONSTRAINT_ANCHOR::CENTER );
+            constraint->AddMember( target->m_item, target->m_anchor, target->m_index );
+        }
+
+        addUnlessDuplicate( aBoard, result, std::move( constraint ), false );
+    }
+    else if( std::optional<KIID> outline = NearestOutlineShape( aBoard, center, tol, true ) )
+    {
+        if( *outline != aShape->m_Uuid )
+        {
+            auto constraint = std::make_unique<PCB_CONSTRAINT>( aParent, PCB_CONSTRAINT_TYPE::POINT_ON_LINE );
+            constraint->AddMember( aShape->m_Uuid, CONSTRAINT_ANCHOR::CENTER );
+            constraint->AddMember( *outline, CONSTRAINT_ANCHOR::WHOLE );
+
+            addUnlessDuplicate( aBoard, result, std::move( constraint ), false );
+        }
+    }
+
+    return result;
+}
+
+
+// Endpoints landing on existing anchors bind coincident
+void selectEndpointCoincidents( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_ITEM* aParent,
+                                std::vector<AUTO_CONSTRAINT>& aResult, std::set<CONSTRAINT_ANCHOR>& aBound,
+                                std::vector<std::pair<VECTOR2I, KIID>>& aTouches )
+{
+    const double tol = pcbIUScale.mmToIU( AUTO_BIND_TOL_MM );
+
+    std::vector<ENDPOINT_BINDING> bindings =
+            SelectEndpointBindings( aBoard, aShape->m_Uuid, aShape->GetStart(), aShape->GetEnd(), tol );
+
+    for( const ENDPOINT_BINDING& binding : bindings )
+    {
+        auto constraint = std::make_unique<PCB_CONSTRAINT>( aParent, PCB_CONSTRAINT_TYPE::COINCIDENT );
+        constraint->AddMember( aShape->m_Uuid, binding.sourceAnchor );
+        constraint->AddMember( binding.target.m_item, binding.target.m_anchor, binding.target.m_index );
+
+        aBound.insert( binding.sourceAnchor );
+
+        VECTOR2I pos = binding.sourceAnchor == CONSTRAINT_ANCHOR::START ? aShape->GetStart() : aShape->GetEnd();
+        aTouches.emplace_back( pos, binding.target.m_item );
+
+        addUnlessDuplicate( aBoard, aResult, std::move( constraint ), false );
+    }
+}
+
+
+// An endpoint with no anchor to coincide with but sitting on an outline binds point on line
+// Landing on a segment midpoint means the midpoint snap was used so bind midpoint instead
+void selectOutlineFallbacks( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_ITEM* aParent,
+                             std::vector<AUTO_CONSTRAINT>& aResult, const std::set<CONSTRAINT_ANCHOR>& aBound,
+                             std::vector<std::pair<VECTOR2I, KIID>>& aTouches )
+{
+    const double tol = pcbIUScale.mmToIU( AUTO_BIND_TOL_MM );
+
+    for( CONSTRAINT_ANCHOR anchor : { CONSTRAINT_ANCHOR::START, CONSTRAINT_ANCHOR::END } )
+    {
+        if( aBound.contains( anchor ) )
+            continue;
+
+        VECTOR2I            pos = anchor == CONSTRAINT_ANCHOR::START ? aShape->GetStart() : aShape->GetEnd();
+        std::optional<KIID> target = NearestOutlineShape( aBoard, pos, tol, true );
+
+        if( !target || *target == aShape->m_Uuid )
+            continue;
+
+        PCB_CONSTRAINT_TYPE type = PCB_CONSTRAINT_TYPE::POINT_ON_LINE;
+        PCB_SHAPE*          targetShape = dynamic_cast<PCB_SHAPE*>( aBoard->ResolveItem( *target, true ) );
+
+        if( targetShape && targetShape->GetShape() == SHAPE_T::SEGMENT )
+        {
+            VECTOR2I mid = targetShape->GetStart() + ( targetShape->GetEnd() - targetShape->GetStart() ) / 2;
+
+            if( ( pos - mid ).EuclideanNorm() <= tol )
+                type = PCB_CONSTRAINT_TYPE::MIDPOINT;
+        }
+
+        auto constraint = std::make_unique<PCB_CONSTRAINT>( aParent, type );
+        constraint->AddMember( aShape->m_Uuid, anchor );
+        constraint->AddMember( *target, CONSTRAINT_ANCHOR::WHOLE );
+
+        aTouches.emplace_back( pos, *target );
+
+        addUnlessDuplicate( aBoard, aResult, std::move( constraint ), false );
+    }
+}
+
+
+// A segment drawn through or near an existing shape anchor pins that point on the new segment
+// Near misses within the corridor bind too and the post push solve pulls the line onto them
+void selectCorridorPins( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_ITEM* aParent,
+                         std::vector<AUTO_CONSTRAINT>& aResult )
+{
+    if( aShape->GetShape() != SHAPE_T::SEGMENT || aShape->GetStart() == aShape->GetEnd() )
+        return;
+
+    const double tol = pcbIUScale.mmToIU( AUTO_BIND_TOL_MM );
+    const double corridor = pcbIUScale.mmToIU( AUTO_CORRIDOR_MM );
+
+    SEG                   span( aShape->GetStart(), aShape->GetEnd() );
+    std::vector<VECTOR2I> boundPos;
+
+    for( BOARD_ITEM* item : CollectConstrainableItems( aBoard ) )
+    {
+        if( item->m_Uuid == aShape->m_Uuid || item->Type() != PCB_SHAPE_T )
+            continue;
+
+        for( const CONSTRAINT_ANCHOR_POINT& anchor : ConstraintItemAnchors( item ) )
+        {
+            if( span.Distance( anchor.pos ) > corridor )
+                continue;
+
+            // The drawn endpoints already bound above so only true mid span hits count
+            if( ( anchor.pos - aShape->GetStart() ).EuclideanNorm() <= corridor
+                || ( anchor.pos - aShape->GetEnd() ).EuclideanNorm() <= corridor )
+            {
+                continue;
+            }
+
+            // Chained corners stack two anchors on one spot and one binding is enough
+            if( std::ranges::any_of( boundPos,
+                                     [&]( const VECTOR2I& aP )
+                                     {
+                                         return ( anchor.pos - aP ).EuclideanNorm() <= tol;
+                                     } ) )
+            {
+                continue;
+            }
+
+            boundPos.push_back( anchor.pos );
+
+            auto constraint = std::make_unique<PCB_CONSTRAINT>( aParent, PCB_CONSTRAINT_TYPE::POINT_ON_LINE );
+            constraint->AddMember( item->m_Uuid, anchor.anchor, anchor.index );
+            constraint->AddMember( aShape->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+
+            addUnlessDuplicate( aBoard, aResult, std::move( constraint ), true );
+        }
+    }
+}
+
+
+// Tangents where the drawn shape touched another shape near tangency
+void selectTangents( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_ITEM* aParent, std::vector<AUTO_CONSTRAINT>& aResult,
+                     const std::vector<std::pair<VECTOR2I, KIID>>& aTouches )
+{
+    for( const auto& [pos, id] : aTouches )
+    {
+        PCB_SHAPE* target = dynamic_cast<PCB_SHAPE*>( aBoard->ResolveItem( id, true ) );
+
+        if( target && target != aShape )
+        {
+            if( std::unique_ptr<PCB_CONSTRAINT> tangent = makeTangent( aShape, target, pos, aParent ) )
+                addUnlessDuplicate( aBoard, aResult, std::move( tangent ), true );
+        }
+    }
+}
+
+
+// A segment drawn in a constrained line mode keeps its axis
+void selectAxisConstraint( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_ITEM* aParent,
+                           std::vector<AUTO_CONSTRAINT>& aResult )
+{
+    if( aShape->GetShape() != SHAPE_T::SEGMENT || aShape->GetStart() == aShape->GetEnd() )
+        return;
+
+    bool horizontal = aShape->GetStart().y == aShape->GetEnd().y;
+    bool vertical = aShape->GetStart().x == aShape->GetEnd().x;
+
+    if( !horizontal && !vertical )
+        return;
+
+    auto constraint = std::make_unique<PCB_CONSTRAINT>( aParent, horizontal ? PCB_CONSTRAINT_TYPE::HORIZONTAL
+                                                                            : PCB_CONSTRAINT_TYPE::VERTICAL );
+    constraint->AddMember( aShape->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+
+    addUnlessDuplicate( aBoard, aResult, std::move( constraint ), false );
+}
+} // namespace
+
+
+std::vector<AUTO_CONSTRAINT> SelectShapeAutoConstraints( BOARD* aBoard, const PCB_SHAPE* aShape, BOARD_ITEM* aParent,
+                                                         bool aAxisConstraint )
+{
+    std::vector<AUTO_CONSTRAINT> result;
+
+    if( !aBoard || !aShape )
+        return result;
+
+    if( aShape->GetShape() == SHAPE_T::CIRCLE || aShape->GetShape() == SHAPE_T::ELLIPSE )
+        return selectCenterBindings( aBoard, aShape, aParent );
+
+    std::set<CONSTRAINT_ANCHOR>            bound;
+    std::vector<std::pair<VECTOR2I, KIID>> touches;
+
+    selectEndpointCoincidents( aBoard, aShape, aParent, result, bound, touches );
+    selectOutlineFallbacks( aBoard, aShape, aParent, result, bound, touches );
+    selectCorridorPins( aBoard, aShape, aParent, result );
+    selectTangents( aBoard, aShape, aParent, result, touches );
+
+    if( aAxisConstraint )
+        selectAxisConstraint( aBoard, aShape, aParent, result );
+
+    return result;
 }

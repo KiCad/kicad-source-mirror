@@ -268,6 +268,14 @@ TOOL_ACTION PCB_ACTIONS::showConstraintsPanel( TOOL_ACTION_ARGS()
         .Tooltip( _( "Show/hide the geometric constraints panel" ) )
         .Icon( BITMAPS::measurement ) );
 
+TOOL_ACTION PCB_ACTIONS::toggleAutoConstraints( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ConstraintEditor.toggleAutoConstraints" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Automatic Constraints" ) )
+        .Tooltip( _( "Automatically add geometric constraints while drawing" ) )
+        .Icon( BITMAPS::constraint_auto )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE ) );
+
 TOOL_ACTION PCB_ACTIONS::convertToKeepout( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Convert.convertToKeepout" )
         .Scope( AS_GLOBAL )

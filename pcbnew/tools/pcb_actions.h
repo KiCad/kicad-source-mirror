@@ -657,6 +657,7 @@ public:
     static TOOL_ACTION hideConstraints;     ///< Same toggle, shown while the overlay is visible.
     static TOOL_ACTION manageConstraints;      ///< Open the constraint list dialog.
     static TOOL_ACTION showConstraintsPanel;   ///< Toggle the docked constraints pane (board editor).
+    static TOOL_ACTION toggleAutoConstraints;  ///< Toggle authoring constraints automatically while drawing.
 
     /// Canonical ordered list of the geometric-constraint "add" actions, shared by the context
     /// submenu (gated per selection) and the Place menu (ungated) so the two cannot drift.

@@ -5153,6 +5153,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_auto].emplace_back( BITMAPS::constraint_auto, wxT( "constraint_auto_24.png" ),
+                                                             24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical_dark_24.png" ), 24, wxT( "dark" ) );
@@ -5171,6 +5173,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_auto].emplace_back( BITMAPS::constraint_auto,
+                                                             wxT( "constraint_auto_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical_16.png" ), 16, wxT( "light" ) );
@@ -5189,6 +5193,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_auto].emplace_back( BITMAPS::constraint_auto, wxT( "constraint_auto_16.png" ),
+                                                             16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical_dark_16.png" ), 16, wxT( "dark" ) );
@@ -5207,6 +5213,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_auto].emplace_back( BITMAPS::constraint_auto,
+                                                             wxT( "constraint_auto_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical_32.png" ), 32, wxT( "light" ) );
@@ -5225,6 +5233,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_auto].emplace_back( BITMAPS::constraint_auto, wxT( "constraint_auto_32.png" ),
+                                                             32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical_dark_32.png" ), 32, wxT( "dark" ) );
@@ -5243,6 +5253,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_auto].emplace_back( BITMAPS::constraint_auto,
+                                                             wxT( "constraint_auto_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical_48.png" ), 48, wxT( "light" ) );
@@ -5261,6 +5273,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_auto].emplace_back( BITMAPS::constraint_auto, wxT( "constraint_auto_48.png" ),
+                                                             48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical_dark_48.png" ), 48, wxT( "dark" ) );
@@ -5279,6 +5293,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::constraint_auto].emplace_back( BITMAPS::constraint_auto,
+                                                             wxT( "constraint_auto_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical_64.png" ), 64, wxT( "light" ) );
@@ -5297,6 +5313,8 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::constraint_auto].emplace_back( BITMAPS::constraint_auto, wxT( "constraint_auto_64.png" ),
+                                                             64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::constraint_coincident].emplace_back( BITMAPS::constraint_coincident, wxT( "constraint_coincident_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_horizontal].emplace_back( BITMAPS::constraint_horizontal, wxT( "constraint_horizontal_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_vertical].emplace_back( BITMAPS::constraint_vertical, wxT( "constraint_vertical_dark_64.png" ), 64, wxT( "dark" ) );
@@ -5315,5 +5333,6 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::constraint_angular_dimension].emplace_back( BITMAPS::constraint_angular_dimension, wxT( "constraint_angular_dimension_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_tangent].emplace_back( BITMAPS::constraint_tangent, wxT( "constraint_tangent_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::constraint_arc_angle].emplace_back( BITMAPS::constraint_arc_angle, wxT( "constraint_arc_angle_dark_64.png" ), 64, wxT( "dark" ) );
-
+    aBitmapInfoCache[BITMAPS::constraint_auto].emplace_back( BITMAPS::constraint_auto,
+                                                             wxT( "constraint_auto_dark_64.png" ), 64, wxT( "dark" ) );
 };

@@ -53,71 +53,15 @@
 #include <dialogs/dialog_constraint_list.h>
 #include <widgets/panel_constraints.h>
 #include <pcb_edit_frame.h>
+#include <settings/settings_manager.h>
+#include <pcbnew_settings.h>
+#include <footprint_editor_settings.h>
 #include <constraints/pcb_constraint.h>
 #include <constraints/constraint_builder.h>
 #include <constraints/board_constraint_adapter.h>
 
 #include <base_units.h>
 #include <geometry/seg.h>
-
-
-namespace
-{
-// The whole shape whose outline is nearest aPos within aMaxDist. Circles and arcs count only when
-// aAllowCircle is set (point-on-line targets), never for midpoint or symmetry-axis picks.
-std::optional<KIID> nearestOutline( BOARD* aBoard, const VECTOR2I& aPos, double aMaxDist, bool aAllowCircle )
-{
-    double              best = aMaxDist;
-    std::optional<KIID> result;
-
-    for( PCB_SHAPE* shape : CollectConstraintShapes( aBoard ) )
-    {
-        const SHAPE_T shapeType = shape->GetShape();
-        double        dist = 0;
-
-        if( shapeType == SHAPE_T::SEGMENT )
-        {
-            dist = SEG( shape->GetStart(), shape->GetEnd() ).Distance( aPos );
-        }
-        else if( aAllowCircle && ( shapeType == SHAPE_T::CIRCLE || shapeType == SHAPE_T::ARC ) )
-        {
-            dist = std::abs( ( aPos - shape->GetCenter() ).EuclideanNorm() - shape->GetRadius() );
-        }
-        else if( aAllowCircle && ( shapeType == SHAPE_T::ELLIPSE || shapeType == SHAPE_T::ELLIPSE_ARC ) )
-        {
-            // Radial distance to the outline at the click's polar angle in the ellipse frame.
-            // Not the exact outline distance, but exact on the outline, which is all a snap needs.
-            double   a = shape->GetEllipseMajorRadius();
-            double   b = shape->GetEllipseMinorRadius();
-            double   phi = shape->GetEllipseRotation().AsRadians();
-            VECTOR2D d = VECTOR2D( aPos - shape->GetEllipseCenter() );
-            double   lx = d.x * std::cos( phi ) + d.y * std::sin( phi );
-            double   ly = -d.x * std::sin( phi ) + d.y * std::cos( phi );
-            double   r = std::hypot( lx, ly );
-
-            if( a <= 0 || b <= 0 )
-                continue;
-
-            double theta = std::atan2( ly, lx );
-            double re = a * b / std::hypot( b * std::cos( theta ), a * std::sin( theta ) );
-
-            dist = std::abs( r - re );
-        }
-        else
-        {
-            continue;
-        }
-
-        if( dist <= best )
-        {
-            best = dist;
-            result = shape->m_Uuid;
-        }
-    }
-
-    return result;
-}
-}
 
 
 CONSTRAINT_EDIT_TOOL::CONSTRAINT_EDIT_TOOL() :
@@ -948,6 +892,23 @@ int CONSTRAINT_EDIT_TOOL::ManageConstraints( const TOOL_EVENT& )
 }
 
 
+int CONSTRAINT_EDIT_TOOL::ToggleAutoConstraints( const TOOL_EVENT& )
+{
+    if( frame()->IsType( FRAME_PCB_EDITOR ) )
+    {
+        PCBNEW_SETTINGS* cfg = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+        cfg->m_AutoConstraints = !cfg->m_AutoConstraints;
+    }
+    else
+    {
+        FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" );
+        cfg->m_AutoConstraints = !cfg->m_AutoConstraints;
+    }
+
+    return 0;
+}
+
+
 int CONSTRAINT_EDIT_TOOL::refreshOverlay( const TOOL_EVENT& aEvent )
 {
     m_diagDirty = true;   // the model changed, so the cached diagnosis is stale
@@ -1255,7 +1216,7 @@ int CONSTRAINT_EDIT_TOOL::pickShapeConstraint( PCB_CONSTRAINT_TYPE aType, const 
             [&]( const VECTOR2D& aPoint ) -> bool
             {
                 VECTOR2I            pos( KiROUND( aPoint.x ), KiROUND( aPoint.y ) );
-                std::optional<KIID> target = nearestOutline( board(), pos, snapTol, allowCircle );
+                std::optional<KIID> target = NearestOutlineShape( board(), pos, snapTol, allowCircle );
 
                 if( !target || alg::contains( picked, *target ) )
                     return true; // nothing new snapped, keep picking
@@ -1302,7 +1263,7 @@ int CONSTRAINT_EDIT_TOOL::pickShapeConstraint( PCB_CONSTRAINT_TYPE aType, const 
                     return;
 
                 VECTOR2I            pos( KiROUND( aPoint.x ), KiROUND( aPoint.y ) );
-                std::optional<KIID> target = nearestOutline( board(), pos, snapTol, allowCircle );
+                std::optional<KIID> target = NearestOutlineShape( board(), pos, snapTol, allowCircle );
 
                 // Mirror the click handler rejection so an already picked shape is not advertised
                 // as eligible for the remaining picks
@@ -1397,7 +1358,7 @@ int CONSTRAINT_EDIT_TOOL::pickLinearConstraint( PCB_CONSTRAINT_TYPE aType, const
                 // Once a point is held only a second point completes the pair
                 if( members.empty() )
                 {
-                    if( std::optional<KIID> target = nearestOutline( board(), pos, snapTol, false ) )
+                    if( std::optional<KIID> target = NearestOutlineShape( board(), pos, snapTol, false ) )
                     {
                         std::unique_ptr<PCB_CONSTRAINT> constraint =
                                 std::make_unique<PCB_CONSTRAINT>( constraintParent(), aType );
@@ -1426,7 +1387,7 @@ int CONSTRAINT_EDIT_TOOL::pickLinearConstraint( PCB_CONSTRAINT_TYPE aType, const
                 }
                 else if( members.empty() )
                 {
-                    if( std::optional<KIID> target = nearestOutline( board(), pos, snapTol, false ) )
+                    if( std::optional<KIID> target = NearestOutlineShape( board(), pos, snapTol, false ) )
                         m_overlay->SetPickPreview( *target, true, std::nullopt );
                     else
                         m_overlay->ClearPickPreview();
@@ -1513,7 +1474,7 @@ int CONSTRAINT_EDIT_TOOL::AddPointConstraint( const TOOL_EVENT& aEvent )
                 else // wants a whole shape
                 {
                     std::optional<KIID> target =
-                            nearestOutline( board(), pos, snapTol, type == PCB_CONSTRAINT_TYPE::POINT_ON_LINE );
+                            NearestOutlineShape( board(), pos, snapTol, type == PCB_CONSTRAINT_TYPE::POINT_ON_LINE );
 
                     if( !target )
                         return true;
@@ -1577,8 +1538,8 @@ int CONSTRAINT_EDIT_TOOL::AddPointConstraint( const TOOL_EVENT& aEvent )
                         anchorPos = ConstraintAnchorPosition( board(), *anchor );
                     }
                 }
-                else if( std::optional<KIID> target = nearestOutline( board(), pos, snapTol,
-                                                                      type == PCB_CONSTRAINT_TYPE::POINT_ON_LINE ) )
+                else if( std::optional<KIID> target = NearestOutlineShape(
+                                 board(), pos, snapTol, type == PCB_CONSTRAINT_TYPE::POINT_ON_LINE ) )
                 {
                     element = *target;
                 }
@@ -1687,6 +1648,7 @@ void CONSTRAINT_EDIT_TOOL::setTransitions()
     Go( &CONSTRAINT_EDIT_TOOL::ShowConstraints,   PCB_ACTIONS::showConstraints.MakeEvent() );
     Go( &CONSTRAINT_EDIT_TOOL::ShowConstraints, PCB_ACTIONS::hideConstraints.MakeEvent() );
     Go( &CONSTRAINT_EDIT_TOOL::ManageConstraints, PCB_ACTIONS::manageConstraints.MakeEvent() );
+    Go( &CONSTRAINT_EDIT_TOOL::ToggleAutoConstraints, PCB_ACTIONS::toggleAutoConstraints.MakeEvent() );
 
     // Keep the diagnostics overlay current as the board changes underneath it.  Undo/redo posts its
     // own event (not TA_MODEL_CHANGE), so listen for it too or a restored/removed constraint's badge

@@ -1559,15 +1559,15 @@ BOOST_AUTO_TEST_CASE( DimensionBindingPrefersSameObject )
     PCB_SHAPE* seg = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
 
     KIID fakeDim;   // a dimension uuid that is not on the board, as during interactive draw
-    std::vector<DIMENSION_ENDPOINT_BINDING> bindings =
-            SelectDimensionEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 10 * MM, 0 ), 1000.0 );
+    std::vector<ENDPOINT_BINDING> bindings =
+            SelectEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 10 * MM, 0 ), 1000.0 );
 
     BOOST_REQUIRE_EQUAL( bindings.size(), 2 );
 
     // Both ends bind to the same segment, one to START and one to END.
-    BOOST_CHECK( bindings[0].dimAnchor == CONSTRAINT_ANCHOR::START );
+    BOOST_CHECK( bindings[0].sourceAnchor == CONSTRAINT_ANCHOR::START );
     BOOST_CHECK( bindings[0].target == CONSTRAINT_MEMBER( seg->m_Uuid, CONSTRAINT_ANCHOR::START ) );
-    BOOST_CHECK( bindings[1].dimAnchor == CONSTRAINT_ANCHOR::END );
+    BOOST_CHECK( bindings[1].sourceAnchor == CONSTRAINT_ANCHOR::END );
     BOOST_CHECK( bindings[1].target == CONSTRAINT_MEMBER( seg->m_Uuid, CONSTRAINT_ANCHOR::END ) );
 }
 
@@ -1582,8 +1582,8 @@ BOOST_AUTO_TEST_CASE( DimensionBindingPerEndpointDifferentObjects )
     PCB_SHAPE* b = addSegment( board, { 20 * MM, 0 }, { 25 * MM, 5 * MM } );
 
     KIID fakeDim;
-    std::vector<DIMENSION_ENDPOINT_BINDING> bindings =
-            SelectDimensionEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 20 * MM, 0 ), 1000.0 );
+    std::vector<ENDPOINT_BINDING> bindings =
+            SelectEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 20 * MM, 0 ), 1000.0 );
 
     BOOST_REQUIRE_EQUAL( bindings.size(), 2 );
     BOOST_CHECK( bindings[0].target == CONSTRAINT_MEMBER( a->m_Uuid, CONSTRAINT_ANCHOR::START ) );
@@ -1599,11 +1599,11 @@ BOOST_AUTO_TEST_CASE( DimensionBindingPartial )
     PCB_SHAPE* a = addSegment( board, { 0, 0 }, { 5 * MM, 5 * MM } );
 
     KIID fakeDim;
-    std::vector<DIMENSION_ENDPOINT_BINDING> bindings =
-            SelectDimensionEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 50 * MM, 50 * MM ), 1000.0 );
+    std::vector<ENDPOINT_BINDING> bindings =
+            SelectEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 50 * MM, 50 * MM ), 1000.0 );
 
     BOOST_REQUIRE_EQUAL( bindings.size(), 1 );
-    BOOST_CHECK( bindings[0].dimAnchor == CONSTRAINT_ANCHOR::START );
+    BOOST_CHECK( bindings[0].sourceAnchor == CONSTRAINT_ANCHOR::START );
     BOOST_CHECK( bindings[0].target == CONSTRAINT_MEMBER( a->m_Uuid, CONSTRAINT_ANCHOR::START ) );
     (void) a;
 }
@@ -1619,16 +1619,15 @@ BOOST_AUTO_TEST_CASE( DimensionBindingDistinctPairOverSplit )
     PCB_SHAPE* b = addSegment( board, { 2 * MM, 1 * MM }, { 2 * MM, 20 * MM } );
 
     KIID fakeDim;
-    std::vector<DIMENSION_ENDPOINT_BINDING> bindings =
-            SelectDimensionEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 2 * MM, 0 ),
-                                             12.0 * MM );
+    std::vector<ENDPOINT_BINDING> bindings =
+            SelectEndpointBindings( &board, fakeDim, { 0, 0 }, VECTOR2I( 2 * MM, 0 ), 12.0 * MM );
 
     BOOST_REQUIRE_EQUAL( bindings.size(), 2 );
 
     // Both ends bind to segment A on distinct anchors; segment B never enters the binding.
-    BOOST_CHECK( bindings[0].dimAnchor == CONSTRAINT_ANCHOR::START );
+    BOOST_CHECK( bindings[0].sourceAnchor == CONSTRAINT_ANCHOR::START );
     BOOST_CHECK( bindings[0].target == CONSTRAINT_MEMBER( a->m_Uuid, CONSTRAINT_ANCHOR::START ) );
-    BOOST_CHECK( bindings[1].dimAnchor == CONSTRAINT_ANCHOR::END );
+    BOOST_CHECK( bindings[1].sourceAnchor == CONSTRAINT_ANCHOR::END );
     BOOST_CHECK( bindings[1].target == CONSTRAINT_MEMBER( a->m_Uuid, CONSTRAINT_ANCHOR::END ) );
     (void) b;
 }

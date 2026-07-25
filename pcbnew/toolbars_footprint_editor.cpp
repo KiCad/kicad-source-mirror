@@ -75,7 +75,8 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Line modes" ) )
                             .AddAction( PCB_ACTIONS::lineModeFree )
                             .AddAction( PCB_ACTIONS::lineMode90 )
-                            .AddAction( PCB_ACTIONS::lineMode45 ) );
+                            .AddAction( PCB_ACTIONS::lineMode45 ) )
+              .AppendAction( PCB_ACTIONS::toggleAutoConstraints );
 
         config.AppendSeparator()
               .AppendAction( PCB_ACTIONS::padDisplayMode )
