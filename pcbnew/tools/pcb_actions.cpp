@@ -1072,6 +1072,13 @@ TOOL_ACTION PCB_ACTIONS::extendLines( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Extend Lines to Meet" ) )
         .Tooltip( _( "Extend lines to meet each other" ) ) );
 
+TOOL_ACTION PCB_ACTIONS::extendGraphic( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.GraphicEdit.extend" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Extend Line or Arc" ) )
+        .Tooltip( _( "Hover a graphical line or arc to extend it until it meets another" ) )
+        .Flags( AF_ACTIVATE ) );
+
 TOOL_ACTION PCB_ACTIONS::mergePolygons( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.mergePolygons" )
         .Scope( AS_GLOBAL )

@@ -121,6 +121,7 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     editMenu->Add( PCB_ACTIONS::showLibFootprintFieldsTable );
     editMenu->Add( PCB_ACTIONS::padTable );
     editMenu->Add( PCB_ACTIONS::defaultPadProperties );
+    editMenu->Add( PCB_ACTIONS::extendGraphic );
     editMenu->Add( PCB_ACTIONS::enumeratePads );
     editMenu->Add( ACTIONS::gridOrigin );
 

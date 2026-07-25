@@ -131,6 +131,7 @@
 #include <tools/zone_filler_tool.h>
 #include <tools/multichannel_tool.h>
 #include <tools/match_properties_tool.h>
+#include <tools/graphic_edit_tool.h>
 #include <router/router_tool.h>
 #include <autorouter/autoplace_tool.h>
 #include <netlist_reader/netlist_reader.h>
@@ -1057,6 +1058,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PROPERTIES_TOOL );
     m_toolManager->RegisterTool( new MULTICHANNEL_TOOL );
     m_toolManager->RegisterTool( new MATCH_PROPERTIES_TOOL );
+    m_toolManager->RegisterTool( new GRAPHIC_EDIT_TOOL );
     m_toolManager->RegisterTool( new EMBED_TOOL );
     m_toolManager->RegisterTool( new DRC_RULE_EDITOR_TOOL );
     m_toolManager->RegisterTool( new DIFF_PHASE_SKEW_TOOL );

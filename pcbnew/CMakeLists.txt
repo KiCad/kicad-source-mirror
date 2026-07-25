@@ -492,6 +492,9 @@ set( PCBNEW_CLASS_SRCS
     tools/drc_tool.cpp
     tools/edit_tool.cpp
     tools/edit_tool_move_fct.cpp
+    tools/graphic_edit.cpp
+    tools/graphic_edit_tool.cpp
+    tools/graphic_extend.cpp
     tools/pcb_edit_table_tool.cpp
     tools/global_edit_tool.cpp
     tools/footprint_editor_control.cpp

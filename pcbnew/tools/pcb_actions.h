@@ -158,6 +158,8 @@ public:
     static TOOL_ACTION healShapes;
     /// Extend selected lines to meet at a point
     static TOOL_ACTION extendLines;
+    /// Extend one graphical line or arc to the nearest boundary
+    static TOOL_ACTION extendGraphic;
     /// Simplify polygon outlines
     static TOOL_ACTION simplifyPolygons;
     /// Edit polygon vertices in a table

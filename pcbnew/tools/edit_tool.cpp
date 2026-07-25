@@ -54,6 +54,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/constraint_edit_tool.h>
 #include <tools/edit_tool.h>
+#include <tools/graphic_edit.h>
 #include <tools/item_modification_routine.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/pcb_point_editor.h>
@@ -344,6 +345,8 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
     menu->AddItem( PCB_ACTIONS::dogboneCorners, SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
     menu->AddItem( PCB_ACTIONS::extendLines,    SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
                                                     && SELECTION_CONDITIONS::Count( 2 ) );
+    // Extend picks its own shape from under the pointer, so the selection says nothing about it.
+    menu->AddItem( PCB_ACTIONS::extendGraphic,  SELECTION_CONDITIONS::ShowAlways );
 
     menu->AddSeparator( SELECTION_CONDITIONS::Count( 1 ) );
 
