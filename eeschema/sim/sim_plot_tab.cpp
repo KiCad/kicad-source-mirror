@@ -260,6 +260,627 @@ private:
 };
 
 
+bool SMITH_GRID::GetChartView( mpWindow& aWindow, double aZoom, const wxRealPoint& aPan, SMITH_VIEW& aView )
+{
+    int mL = aWindow.GetMarginLeft(), mT = aWindow.GetMarginTop();
+    int plotW = aWindow.GetScrX() - mL - aWindow.GetMarginRight();
+    int plotH = aWindow.GetScrY() - mT - aWindow.GetMarginBottom();
+    int radius = std::min( plotW, plotH ) / 2 - 15;
+
+    if( radius <= 20 )
+        return false;
+
+    aView.center = wxPoint( mL + plotW / 2, mT + plotH / 2 );
+    aView.radius = radius * aZoom;
+    aView.zoom = aZoom;
+    aView.pan = aPan;
+    aView.plotRect = wxRect( mL, mT, plotW, plotH );
+
+    return true;
+}
+
+
+static bool smithView( mpWindow& aWindow, SMITH_VIEW& aView )
+{
+    SIM_PLOT_TAB* tab = dynamic_cast<SIM_PLOT_TAB*>( aWindow.GetParent() );
+    double        zoom = tab ? tab->GetSmithZoom() : 1.0;
+    wxRealPoint   pan = tab ? tab->GetSmithPan() : wxRealPoint( 0.0, 0.0 );
+
+    return SMITH_GRID::GetChartView( aWindow, zoom, pan, aView );
+}
+
+
+void SMITH_GRID::Plot( wxDC& aDC, mpWindow& aWindow )
+{
+    if( !m_visible )
+        return;
+
+    SMITH_VIEW view;
+
+    if( !smithView( aWindow, view ) )
+        return;
+
+    const wxRect& plotRect = view.plotRect;
+    int           mL = plotRect.x, mT = plotRect.y, plotW = plotRect.width, plotH = plotRect.height;
+
+    aDC.SetClippingRegion( plotRect );
+
+    // enough segments to keep the chord error under a pixel at this circle's screen radius
+    auto segmentsFor = [&]( double aR ) -> int
+    {
+        return std::clamp( KiROUND( M_PI * std::sqrt( aR * view.radius ) ), 64, 4096 );
+    };
+
+    // draw a gamma-plane circle, keeping only the parts inside the unit circle
+    auto drawClippedCircle = [&]( double aCx, double aCy, double aR )
+    {
+        constexpr double LIMIT = 1.0002;
+
+        std::vector<wxPoint> run;
+        int                  segments = segmentsFor( aR );
+
+        for( int ii = 0; ii <= segments; ii++ )
+        {
+            double angle = 2.0 * M_PI * ii / segments;
+            double re = aCx + aR * cos( angle );
+            double im = aCy + aR * sin( angle );
+
+            if( re * re + im * im <= LIMIT )
+            {
+                run.push_back( view.ToScreen( re, im ) );
+            }
+            else
+            {
+                if( run.size() > 1 )
+                    aDC.DrawLines( (int) run.size(), run.data() );
+
+                run.clear();
+            }
+        }
+
+        if( run.size() > 1 )
+            aDC.DrawLines( (int) run.size(), run.data() );
+    };
+
+    auto formatValue = []( double aValue ) -> wxString
+    {
+        return wxString::Format( wxS( "%g" ), aValue );
+    };
+
+    // ohm labels for a single reference impedance, normalized labels when the traces disagree
+    double labelScale = m_normalized ? 1.0 : m_z0;
+
+    static const std::vector<double> baseVals = { 0.2, 0.5, 1.0, 2.0, 5.0 };
+    std::vector<double>              gridVals = baseVals;
+
+    if( view.zoom >= 2.0 )
+        gridVals.insert( gridVals.end(), { 0.1, 0.3, 0.4, 0.7, 1.5, 3.0, 10.0 } );
+
+    if( view.zoom >= 5.0 )
+        gridVals.insert( gridVals.end(), { 0.05, 0.15, 0.6, 0.8, 1.2, 1.7, 2.5, 4.0, 7.0, 20.0 } );
+
+    wxPen gridPen = m_pen;
+    gridPen.SetStyle( wxPENSTYLE_DOT );
+
+    aDC.SetBrush( *wxTRANSPARENT_BRUSH );
+    aDC.SetFont( m_font );
+    aDC.SetTextForeground( m_pen.GetColour() );
+    aDC.SetPen( gridPen );
+
+    // constant resistance circles, centered on the real axis, tangent at gamma = 1
+    for( double r : gridVals )
+        drawClippedCircle( r / ( 1.0 + r ), 0.0, 1.0 / ( 1.0 + r ) );
+
+    // constant reactance arcs, one per sign, clipped to the unit circle
+    for( double x : gridVals )
+    {
+        drawClippedCircle( 1.0, 1.0 / x, 1.0 / x );
+        drawClippedCircle( 1.0, -1.0 / x, 1.0 / x );
+    }
+
+    aDC.SetPen( m_pen );
+    aDC.DrawLine( view.ToScreen( -1.0, 0.0 ), view.ToScreen( 1.0, 0.0 ) );
+    aDC.DrawCircle( view.ToScreen( 0.0, 0.0 ), KiROUND( view.radius ) );
+
+    // Label each gridline at its axis/rim anchor, or at the plot edge when the anchor is
+    // panned/zoomed out of view.
+    constexpr double LABEL_LIMIT = 1.0002;
+
+    auto anchorPos = [&]( double aRe, double aIm, wxPoint& aOut ) -> bool
+    {
+        if( aRe * aRe + aIm * aIm > LABEL_LIMIT )
+            return false;
+
+        wxPoint p = view.ToScreen( aRe, aIm );
+
+        if( !plotRect.Contains( p ) )
+            return false;
+
+        aOut = p;
+        return true;
+    };
+
+    // anchor off-screen, put the label where the gridline meets the plot edge
+    auto edgePos = [&]( double aCx, double aCy, double aR, wxPoint& aOut ) -> bool
+    {
+        int  bestMargin = std::numeric_limits<int>::max();
+        bool found = false;
+        int  segments = segmentsFor( aR );
+
+        for( int ii = 0; ii <= segments; ii++ )
+        {
+            double angle = 2.0 * M_PI * ii / segments;
+            double re = aCx + aR * cos( angle );
+            double im = aCy + aR * sin( angle );
+
+            if( re * re + im * im > LABEL_LIMIT )
+                continue;
+
+            wxPoint p = view.ToScreen( re, im );
+
+            if( !plotRect.Contains( p ) )
+                continue;
+
+            int margin = std::min( { p.x - mL, mL + plotW - p.x, p.y - mT, mT + plotH - p.y } );
+
+            if( margin < bestMargin )
+            {
+                bestMargin = margin;
+                aOut = p;
+                found = true;
+            }
+        }
+
+        return found;
+    };
+
+    auto clampToPlot = [&]( const wxPoint& aPos, const wxSize& aExt ) -> wxPoint
+    {
+        return wxPoint( std::clamp( aPos.x, mL + 1, mL + plotW - aExt.x - 1 ),
+                        std::clamp( aPos.y, mT + 1, mT + plotH - aExt.y - 1 ) );
+    };
+
+    auto drawEdgeLabel = [&]( const wxString& aLabel, const wxPoint& aAt )
+    {
+        wxSize ext = aDC.GetTextExtent( aLabel );
+
+        aDC.DrawText( aLabel, clampToPlot( wxPoint( aAt.x - ext.x / 2, aAt.y + 3 ), ext ) );
+    };
+
+    // push reactance labels just outside the rim, clamped so j50 and -j50 are not clipped
+    auto drawRimLabel = [&]( const wxString& aLabel, const wxPoint& aAt, double aRe, double aIm )
+    {
+        wxSize  ext = aDC.GetTextExtent( aLabel );
+        wxPoint pos = aAt;
+
+        pos.x += KiROUND( aRe * 6 );
+        pos.y -= KiROUND( aIm * 6 );
+        pos.x -= KiROUND( ext.x * ( 1.0 - aRe ) / 2.0 );
+        pos.y -= KiROUND( ext.y * ( 1.0 + aIm ) / 2.0 );
+
+        aDC.DrawText( aLabel, clampToPlot( pos, ext ) );
+    };
+
+    wxPoint at;
+
+    // short (r = 0)
+    if( anchorPos( -1.0, 0.0, at ) )
+        drawRimLabel( wxS( "0" ), at, -1.0, 0.0 );
+    else if( edgePos( 0.0, 0.0, 1.0, at ) )
+        drawEdgeLabel( wxS( "0" ), at );
+
+    for( double r : gridVals )
+    {
+        if( anchorPos( ( r - 1.0 ) / ( r + 1.0 ), 0.0, at ) || edgePos( r / ( 1.0 + r ), 0.0, 1.0 / ( 1.0 + r ), at ) )
+        {
+            drawEdgeLabel( formatValue( r * labelScale ), at );
+        }
+    }
+
+    for( double x : gridVals )
+    {
+        double   d = x * x + 1.0;
+        double   re = ( x * x - 1.0 ) / d;
+        double   im = 2.0 * x / d;
+        wxString posLabel = wxS( "j" ) + formatValue( x * labelScale );
+        wxString negLabel = wxS( "-j" ) + formatValue( x * labelScale );
+
+        if( anchorPos( re, im, at ) )
+            drawRimLabel( posLabel, at, re, im );
+        else if( edgePos( 1.0, 1.0 / x, 1.0 / x, at ) )
+            drawEdgeLabel( posLabel, at );
+
+        if( anchorPos( re, -im, at ) )
+            drawRimLabel( negLabel, at, re, -im );
+        else if( edgePos( 1.0, -1.0 / x, 1.0 / x, at ) )
+            drawEdgeLabel( negLabel, at );
+    }
+
+    if( m_normalized )
+    {
+        wxString note = _( "normalized" );
+        wxSize   ext = aDC.GetTextExtent( note );
+
+        aDC.DrawText( note, mL + 4, mT + plotH - ext.y - 4 );
+    }
+
+    aDC.DestroyClippingRegion();
+}
+
+
+void SMITH_TRACE::Plot( wxDC& aDC, mpWindow& aWindow )
+{
+    if( !m_visible )
+        return;
+
+    SMITH_VIEW view;
+
+    if( !smithView( aWindow, view ) )
+        return;
+
+    const std::vector<double>& xs = GetDataX();
+    const std::vector<double>& ys = GetDataY();
+    size_t                     count = std::min( xs.size(), ys.size() );
+
+    if( count == 0 )
+        return;
+
+    aDC.SetPen( m_pen );
+    aDC.SetClippingRegion( view.plotRect );
+
+    size_t chunk = GetSweepSize();
+
+    if( GetSweepCount() <= 1 || chunk == std::numeric_limits<size_t>::max() || chunk == 0 )
+        chunk = count;
+
+    std::vector<wxPoint> pts;
+
+    auto flush = [&]()
+    {
+        if( pts.size() > 1 )
+        {
+            aDC.DrawLines( (int) pts.size(), pts.data() );
+        }
+        else if( pts.size() == 1 )
+        {
+            aDC.SetBrush( wxBrush( m_pen.GetColour() ) );
+            aDC.DrawCircle( pts[0], 2 );
+        }
+
+        pts.clear();
+    };
+
+    for( size_t start = 0; start < count; start += chunk )
+    {
+        size_t end = std::min( count, start + chunk );
+
+        for( size_t ii = start; ii < end; ii++ )
+        {
+            // a non-finite sample breaks the locus rather than drawing a bogus segment
+            if( !std::isfinite( xs[ii] ) || !std::isfinite( ys[ii] ) )
+            {
+                flush();
+                continue;
+            }
+
+            pts.emplace_back( view.ToScreen( xs[ii], ys[ii] ) );
+        }
+
+        flush();
+    }
+
+    aDC.DestroyClippingRegion();
+}
+
+
+void SMITH_CURSOR::snapToIndex( int aIndex )
+{
+    const std::vector<double>& re = m_trace->GetDataX();
+    const std::vector<double>& im = m_trace->GetDataY();
+    const std::vector<double>& freqs = static_cast<SMITH_TRACE*>( m_trace )->GetFrequencies();
+
+    size_t count = std::min( re.size(), im.size() );
+
+    if( count == 0 )
+        return;
+
+    m_index = std::clamp( aIndex, 0, (int) count - 1 );
+    m_gamma = wxRealPoint( re[m_index], im[m_index] );
+
+    // no frequency data for this sample, keep the previous x so a saved position stays finite
+    double freq = m_index < (int) freqs.size() ? freqs[m_index] : m_coords.x;
+
+    m_coords = wxRealPoint( freq, std::hypot( m_gamma.x, m_gamma.y ) );
+}
+
+
+void SMITH_CURSOR::snapToFrequency( double aFreq )
+{
+    const std::vector<double>& freqs = static_cast<SMITH_TRACE*>( m_trace )->GetFrequencies();
+    const std::vector<double>& re = m_trace->GetDataX();
+    const std::vector<double>& im = m_trace->GetDataY();
+
+    // frequencies repeat identically per run, search only the run the cursor is on
+    // so a frequency-keyed move cannot silently hop to run 0
+    size_t begin = 0;
+    size_t end = freqs.size();
+    size_t chunk = m_trace->GetSweepSize();
+
+    if( m_trace->GetSweepCount() > 1 && chunk > 0 && chunk != std::numeric_limits<size_t>::max() && m_index >= 0
+        && (size_t) m_index < freqs.size() )
+    {
+        begin = ( (size_t) m_index / chunk ) * chunk;
+        end = std::min( freqs.size(), begin + chunk );
+    }
+
+    int    best = -1;
+    double bestDist = std::numeric_limits<double>::max();
+
+    for( size_t ii = begin; ii < end; ii++ )
+    {
+        if( !std::isfinite( freqs[ii] ) )
+            continue;
+
+        if( ii < re.size() && ii < im.size() && ( !std::isfinite( re[ii] ) || !std::isfinite( im[ii] ) ) )
+            continue;
+
+        double dist = std::fabs( freqs[ii] - aFreq );
+
+        if( dist < bestDist )
+        {
+            bestDist = dist;
+            best = (int) ii;
+        }
+    }
+
+    if( best >= 0 )
+        snapToIndex( best );
+}
+
+
+void SMITH_CURSOR::SetCoordX( double aValue )
+{
+    if( static_cast<SMITH_TRACE*>( m_trace )->GetFrequencies().empty() )
+    {
+        // no data yet, remember the frequency and resolve it once the sim fills in
+        m_coords.x = aValue;
+        m_pendingFreq = true;
+        m_updateRequired = false;
+        return;
+    }
+
+    snapToFrequency( aValue );
+    m_pendingFreq = false;
+    m_updateRequired = false;
+    m_updateRef = true;
+
+    if( m_window )
+        m_window->Refresh();
+}
+
+
+void SMITH_CURSOR::Move( wxPoint aDelta )
+{
+    m_dragging = true;
+    Update();
+    mpInfoLayer::Move( aDelta );
+}
+
+
+void SMITH_CURSOR::UpdateReference()
+{
+    // skip CURSOR's axis reference, the marker follows the locus
+    mpInfoLayer::UpdateReference();
+}
+
+
+bool SMITH_CURSOR::Inside( const wxPoint& aPoint ) const
+{
+    if( !m_window || m_index < 0 )
+        return false;
+
+    SMITH_VIEW view;
+
+    if( !smithView( *m_window, view ) )
+        return false;
+
+    wxPoint marker = view.ToScreen( m_gamma.x, m_gamma.y );
+
+    return std::abs( aPoint.x - marker.x ) <= DRAG_MARGIN && std::abs( aPoint.y - marker.y ) <= DRAG_MARGIN;
+}
+
+
+void SMITH_CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
+{
+    if( !m_window )
+        m_window = &aWindow;
+
+    if( !m_visible )
+        return;
+
+    SMITH_VIEW view;
+
+    if( !smithView( aWindow, view ) )
+        return;
+
+    const std::vector<double>& re = m_trace->GetDataX();
+    const std::vector<double>& im = m_trace->GetDataY();
+    size_t                     count = std::min( re.size(), im.size() );
+
+    if( count == 0 )
+        return;
+
+    if( m_pendingFreq )
+    {
+        // sim data has arrived, restore the frequency saved from the workbook
+        snapToFrequency( m_coords.x );
+        m_pendingFreq = false;
+        m_updateRequired = false;
+        m_updateRef = true;
+    }
+    else if( m_updateRequired )
+    {
+        if( m_dragging )
+        {
+            // snap to the locus sample closest to the drag position
+            int    best = -1;
+            double bestDist = std::numeric_limits<double>::max();
+
+            for( size_t ii = 0; ii < count; ii++ )
+            {
+                if( !std::isfinite( re[ii] ) || !std::isfinite( im[ii] ) )
+                    continue;
+
+                wxPoint p = view.ToScreen( re[ii], im[ii] );
+                double  dx = (double) p.x - m_dim.x;
+                double  dy = (double) p.y - m_dim.y;
+                double  dist = dx * dx + dy * dy;
+
+                if( dist < bestDist )
+                {
+                    bestDist = dist;
+                    best = (int) ii;
+                }
+            }
+
+            if( best >= 0 )
+                snapToIndex( best );
+
+            m_dragging = false;
+        }
+        else
+        {
+            // the trace data changed under the cursor, follow the frequency rather than
+            // the screen position so a re-run cannot hop to another point of the locus
+            snapToFrequency( m_coords.x );
+            m_updateRef = true;
+        }
+
+        m_updateRequired = false;
+
+        // Notify the parent window about the changes
+        wxQueueEvent( aWindow.GetParent(), new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+    }
+    else
+    {
+        if( m_index < 0 )
+            snapToIndex( (int) count / 2 );
+
+        m_updateRef = true;
+    }
+
+    wxPoint marker = view.ToScreen( m_gamma.x, m_gamma.y );
+
+    m_dim.SetX( marker.x );
+    m_dim.SetY( marker.y );
+
+    if( m_updateRef )
+    {
+        mpInfoLayer::UpdateReference();
+        m_updateRef = false;
+    }
+
+    wxPen    pen = GetPen();
+    wxColour fg = aWindow.GetForegroundColour();
+    COLOR4D  cursorColor = COLOR4D( m_trace->GetTraceColour() ).Mix( fg, 0.6 );
+
+    pen.SetColour( cursorColor.ToColour() );
+    pen.SetStyle( wxPENSTYLE_SOLID );
+    aDC.SetPen( pen );
+    aDC.SetBrush( *wxTRANSPARENT_BRUSH );
+
+    aDC.DrawCircle( marker, 4 );
+    aDC.DrawLine( marker.x - 8, marker.y, marker.x - 4, marker.y );
+    aDC.DrawLine( marker.x + 4, marker.y, marker.x + 8, marker.y );
+    aDC.DrawLine( marker.x, marker.y - 8, marker.x, marker.y - 4 );
+    aDC.DrawLine( marker.x, marker.y + 4, marker.x, marker.y + 8 );
+
+    double gm = std::hypot( m_gamma.x, m_gamma.y );
+    double z0 = static_cast<SMITH_TRACE*>( m_trace )->GetReferenceImpedance();
+    double freq = m_coords.x;
+    double zr, zi;
+
+    auto formatSI = []( double aValue, const wxString& aUnit ) -> wxString
+    {
+        if( std::isnan( aValue ) )
+            return wxS( "--" );
+
+        int      power = 0;
+        wxString suffix;
+
+        getSISuffix( aValue, aUnit, power, suffix );
+
+        double sf = pow( 10.0, power );
+
+        return formatFloat( aValue / sf, 3 ) + wxS( " " ) + suffix;
+    };
+
+    std::vector<wxString> lines;
+
+    lines.push_back( getID() + wxS( ":  f = " ) + formatSI( freq, wxS( "Hz" ) ) );
+
+    if( !SMITH_MATH::GammaToImpedance( m_gamma.x, m_gamma.y, z0, zr, zi ) )
+    {
+        lines.push_back( wxS( "Z = inf" ) );
+    }
+    else
+    {
+        lines.push_back( wxString::Format( wxS( "Z = %s %s j%s" ), formatSI( zr, wxS( "Ω" ) ),
+                                           zi < 0 ? wxS( "-" ) : wxS( "+" ),
+                                           formatSI( std::fabs( zi ), wxS( "Ω" ) ) ) );
+
+        // series equivalent of the reactance at the marker frequency
+        if( std::isfinite( freq ) && freq > 0.0 && zi != 0.0 )
+        {
+            if( zi > 0.0 )
+                lines.push_back( wxS( "L = " ) + formatSI( SMITH_MATH::SeriesInductance( zi, freq ), wxS( "H" ) ) );
+            else
+                lines.push_back( wxS( "C = " ) + formatSI( SMITH_MATH::SeriesCapacitance( zi, freq ), wxS( "F" ) ) );
+        }
+    }
+
+    double rl = SMITH_MATH::ReturnLoss( gm );
+    double vswr = SMITH_MATH::VSWR( gm );
+
+    if( std::isfinite( rl ) )
+        lines.push_back( wxString::Format( wxS( "RL = %s dB" ), formatFloat( rl, 1 ) ) );
+    else
+        lines.push_back( wxS( "RL = inf" ) );
+
+    if( std::isfinite( vswr ) )
+        lines.push_back( wxString::Format( wxS( "VSWR = %s" ), formatFloat( vswr, 2 ) ) );
+    else
+        lines.push_back( wxS( "VSWR = inf" ) );
+
+    aDC.SetFont( GetFont() );
+
+    int boxW = 0;
+    int boxH = 0;
+    int lineH = aDC.GetTextExtent( wxS( "M" ) ).y;
+
+    for( const wxString& line : lines )
+        boxW = std::max( boxW, aDC.GetTextExtent( line ).x );
+
+    boxW += 8;
+    boxH = (int) lines.size() * lineH + 6;
+
+    wxPoint boxPos( marker.x + ( marker.x < aWindow.GetScrX() / 2 ? 12 : -12 - boxW ),
+                    marker.y + ( marker.y < aWindow.GetScrY() / 2 ? 12 : -12 - boxH ) );
+
+    boxPos.x = std::clamp( boxPos.x, 0, std::max( 0, aWindow.GetScrX() - boxW ) );
+    boxPos.y = std::clamp( boxPos.y, 0, std::max( 0, aWindow.GetScrY() - boxH ) );
+
+    wxBrush labelBrush( aWindow.GetBackgroundColour() );
+
+    aDC.SetBrush( labelBrush );
+    aDC.DrawRectangle( wxRect( boxPos, wxSize( boxW, boxH ) ) );
+    aDC.SetTextForeground( cursorColor.ToColour() );
+
+    for( size_t ii = 0; ii < lines.size(); ii++ )
+        aDC.DrawText( lines[ii], boxPos.x + 4, boxPos.y + 3 + (int) ii * lineH );
+}
+
+
 void CURSOR::SetCoordX( double aValue )
 {
     wxRealPoint oldCoords = m_coords;
@@ -611,7 +1232,12 @@ SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
         m_axis_y1( nullptr ),
         m_axis_y2( nullptr ),
         m_axis_y3( nullptr ),
-        m_dotted_cp( false )
+        m_smithGrid( nullptr ),
+        m_dotted_cp( false ),
+        m_smithMode( false ),
+        m_smithZoom( 1.0 ),
+        m_smithPanning( false ),
+        m_smithLeftSkipped( false )
 {
     m_sizer   = new wxBoxSizer( wxVERTICAL );
     m_plotWin = new mpWindow( this, wxID_ANY );
@@ -619,6 +1245,21 @@ SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
     m_plotWin->LimitView( true );
     m_plotWin->SetMargins( 30, 70, 45, 70 );
     UpdatePlotColors();
+
+    // Smith-mode pan/zoom, these run before mpWindow's handlers and skip when not in Smith mode
+    m_plotWin->Bind( wxEVT_MOUSEWHEEL, &SIM_PLOT_TAB::onSmithMouseWheel, this );
+    m_plotWin->Bind( wxEVT_MAGNIFY, &SIM_PLOT_TAB::onSmithMagnify, this );
+    m_plotWin->Bind( wxEVT_MIDDLE_DOWN, &SIM_PLOT_TAB::onSmithMiddleDown, this );
+    m_plotWin->Bind( wxEVT_LEFT_DOWN, &SIM_PLOT_TAB::onSmithLeftDown, this );
+    m_plotWin->Bind( wxEVT_MOTION, &SIM_PLOT_TAB::onSmithMotion, this );
+    m_plotWin->Bind( wxEVT_LEFT_UP, &SIM_PLOT_TAB::onSmithLeftUp, this );
+    m_plotWin->Bind( wxEVT_LEFT_DCLICK, &SIM_PLOT_TAB::onSmithDClick, this );
+    m_plotWin->Bind( wxEVT_RIGHT_DOWN, &SIM_PLOT_TAB::onSmithRightDown, this );
+    m_plotWin->Bind( wxEVT_RIGHT_UP, &SIM_PLOT_TAB::onSmithRightUp, this );
+
+    // route the context-menu zoom commands to the Smith view
+    for( int id : { mpID_ZOOM_IN, mpID_ZOOM_OUT, mpID_FIT, mpID_CENTER } )
+        m_plotWin->Bind( wxEVT_MENU, &SIM_PLOT_TAB::onSmithMenuCommand, this, id );
 
     updateAxes();
 
@@ -1004,6 +1645,9 @@ void SIM_PLOT_TAB::UpdatePlotColors()
                                m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::FOREGROUND ),
                                m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ) );
 
+    if( m_smithGrid )
+        m_smithGrid->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ), 1 ) );
+
     m_plotWin->UpdateAll();
 }
 
@@ -1065,7 +1709,10 @@ TRACE* SIM_PLOT_TAB::GetOrAddTrace( const wxString& aVectorName, int aType )
             }
         }
 
-        trace = new TRACE( aVectorName, (SIM_TRACE_TYPE) aType );
+        if( aType & SPT_SP_SMITH )
+            trace = new SMITH_TRACE( aVectorName, (SIM_TRACE_TYPE) aType );
+        else
+            trace = new TRACE( aVectorName, (SIM_TRACE_TYPE) aType );
 
         if( m_sessionTraceColors.count( aVectorName ) )
             trace->SetTraceColour( m_sessionTraceColors[ aVectorName ] );
@@ -1086,7 +1733,10 @@ void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vec
                                  int aSweepCount, size_t aSweepSize, bool aIsMultiRun,
                                  const std::vector<wxString>& aMultiRunLabels )
 {
-    if( dynamic_cast<LOG_SCALE<mpScaleXLog>*>( m_axis_x ) )
+    // smith traces carry Re/Im of the reflection coefficient, not frequency
+    bool smithTrace = ( trace->GetType() & SPT_SP_SMITH ) > 0;
+
+    if( dynamic_cast<LOG_SCALE<mpScaleXLog>*>( m_axis_x ) && !smithTrace )
     {
         // log( 0 ) is not valid.
         if( aX.size() > 0 && aX[0] == 0 )
@@ -1121,8 +1771,13 @@ void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vec
     trace->SetMultiRunLabels( aMultiRunLabels );
 
     // Phase and currents on second Y axis, except for AC currents, those use the same axis as voltage
-    if( ( trace->GetType() & SPT_AC_PHASE )
-        || ( ( GetSimType() != ST_AC ) && ( trace->GetType() & SPT_CURRENT ) ) )
+    if( smithTrace )
+    {
+        // drawn through the chart geometry, not the axis transforms
+        trace->SetScale( nullptr, nullptr );
+    }
+    else if( ( trace->GetType() & SPT_AC_PHASE )
+             || ( ( GetSimType() != ST_AC ) && ( trace->GetType() & SPT_CURRENT ) ) )
     {
         trace->SetScale( m_axis_x, m_axis_y2 );
     }
@@ -1151,27 +1806,36 @@ void SIM_PLOT_TAB::UpdateAxisVisibility()
     bool hasY2Traces = false;
     bool hasY3Traces = false;
 
-    for( const auto& [ name, trace ] : m_traces )
+    if( !m_smithMode )
     {
-        if( !trace )
-            continue;
+        for( const auto& [name, trace] : m_traces )
+        {
+            if( !trace )
+                continue;
 
-        if( trace->GetType() & SPT_POWER )
-        {
-            hasY3Traces = true;
-        }
-        else if( ( trace->GetType() & SPT_AC_PHASE )
-                 || ( ( GetSimType() != ST_AC ) && ( trace->GetType() & SPT_CURRENT ) ) )
-        {
-            hasY2Traces = true;
-        }
-        else
-        {
-            hasY1Traces = true;
+            if( trace->GetType() & SPT_POWER )
+            {
+                hasY3Traces = true;
+            }
+            else if( ( trace->GetType() & SPT_AC_PHASE )
+                     || ( ( GetSimType() != ST_AC ) && ( trace->GetType() & SPT_CURRENT ) ) )
+            {
+                hasY2Traces = true;
+            }
+            else
+            {
+                hasY1Traces = true;
+            }
         }
     }
 
     bool visibilityChanged = false;
+
+    if( m_axis_x && m_axis_x->IsVisible() != !m_smithMode )
+    {
+        m_axis_x->SetVisible( !m_smithMode );
+        visibilityChanged = true;
+    }
 
     if( m_axis_y1 && m_axis_y1->IsVisible() != hasY1Traces )
     {
@@ -1216,6 +1880,7 @@ void SIM_PLOT_TAB::DeleteTrace( TRACE* aTrace )
     m_plotWin->DelLayer( aTrace, true, true );
     ResetScales( false );
     UpdateAxisVisibility();
+    UpdateSmithReferenceImpedance();
 }
 
 
@@ -1231,16 +1896,330 @@ bool SIM_PLOT_TAB::DeleteTrace( const wxString& aVectorName, int aTraceType )
 }
 
 
+void SIM_PLOT_TAB::SetSmithMode( bool aEnable )
+{
+    // only S-parameter tabs have a Smith view, a stale workbook cannot force one elsewhere
+    if( aEnable && GetSimType() != ST_SP )
+        return;
+
+    if( m_smithMode == aEnable )
+        return;
+
+    m_smithMode = aEnable;
+
+    // a mode switch mid-gesture must not leave a pan or a skipped click behind
+    m_smithPanning = false;
+    m_smithLeftSkipped = false;
+
+    if( aEnable && !m_smithGrid )
+    {
+        m_smithGrid = new SMITH_GRID();
+        m_smithGrid->SetFont( KIUI::GetStatusFont( m_plotWin ) );
+        m_smithGrid->SetPen( wxPen( m_colors.GetPlotColor( SIM_PLOT_COLORS::COLOR_SET::AXIS ), 1 ) );
+        m_plotWin->AddLayer( m_smithGrid );
+    }
+
+    if( m_smithGrid )
+        m_smithGrid->SetVisible( aEnable );
+
+    if( aEnable )
+        UpdateSmithReferenceImpedance();
+
+    ResetSmithView();
+
+    UpdateAxisVisibility();
+    m_plotWin->UpdateAll();
+}
+
+
+void SIM_PLOT_TAB::UpdateSmithReferenceImpedance()
+{
+    if( !m_smithGrid )
+        return;
+
+    double z0 = 0.0;
+    bool   mixed = false;
+
+    for( const auto& [name, trace] : m_traces )
+    {
+        SMITH_TRACE* smithTrace = dynamic_cast<SMITH_TRACE*>( trace );
+
+        if( !smithTrace )
+            continue;
+
+        if( z0 == 0.0 )
+            z0 = smithTrace->GetReferenceImpedance();
+        else if( smithTrace->GetReferenceImpedance() != z0 )
+            mixed = true;
+    }
+
+    // with no smith traces the grid keeps its last z0
+    if( z0 > 0.0 )
+        m_smithGrid->SetReferenceImpedance( z0 );
+
+    m_smithGrid->SetNormalizedLabels( mixed );
+}
+
+
+bool SIM_PLOT_TAB::getSmithView( SMITH_VIEW& aView ) const
+{
+    return SMITH_GRID::GetChartView( *m_plotWin, m_smithZoom, m_smithPan, aView );
+}
+
+
+void SIM_PLOT_TAB::SmithZoomAt( const wxPoint& aPos, double aFactor )
+{
+    SMITH_VIEW view;
+
+    if( !getSmithView( view ) )
+        return;
+
+    double newZoom = std::clamp( m_smithZoom * aFactor, 1.0, 50.0 );
+
+    if( newZoom <= 1.0 )
+    {
+        ResetSmithView();
+        m_plotWin->Refresh();
+        return;
+    }
+
+    // keep the point under the cursor fixed while zooming
+    m_smithPan = SMITH_MATH::ZoomAboutPoint( view, aPos, newZoom );
+    m_smithZoom = newZoom;
+
+    m_plotWin->Refresh();
+}
+
+
+void SIM_PLOT_TAB::SmithPanBy( const wxPoint& aDelta )
+{
+    SMITH_VIEW view;
+
+    if( !getSmithView( view ) )
+        return;
+
+    m_smithPan.x -= aDelta.x / view.radius;
+    m_smithPan.y += aDelta.y / view.radius;
+
+    m_plotWin->Refresh();
+}
+
+
+void SIM_PLOT_TAB::onSmithMouseWheel( wxMouseEvent& aEvent )
+{
+    if( !m_smithMode )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    // swallow horizontal scroll too, mpWindow would pan its hidden axes with it
+    if( aEvent.GetWheelAxis() != wxMOUSE_WHEEL_VERTICAL || aEvent.GetWheelRotation() == 0 )
+        return;
+
+    // do not skip, or mpWindow would also zoom its hidden axes
+    SmithZoomAt( aEvent.GetPosition(), aEvent.GetWheelRotation() > 0 ? 1.2 : 1.0 / 1.2 );
+}
+
+
+void SIM_PLOT_TAB::onSmithMagnify( wxMouseEvent& aEvent )
+{
+    if( !m_smithMode )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    double factor = aEvent.GetMagnification() + 1.0;
+
+    if( factor > 0.0 )
+        SmithZoomAt( aEvent.GetPosition(), factor );
+}
+
+
+void SIM_PLOT_TAB::onSmithMiddleDown( wxMouseEvent& aEvent )
+{
+    // keep mpWindow's middle-button pan off the hidden axes
+    if( !m_smithMode )
+        aEvent.Skip();
+}
+
+
+void SIM_PLOT_TAB::onSmithLeftDown( wxMouseEvent& aEvent )
+{
+    // clear stale pan state so it cannot hijack a cursor grab
+    m_smithPanning = false;
+    m_smithLeftSkipped = false;
+
+    wxPoint pos = aEvent.GetPosition();
+
+    if( m_smithMode && !m_plotWin->IsInsideInfoLayer( pos ) )
+    {
+        m_smithPanning = true;
+        m_smithPanLast = pos;
+        return;
+    }
+
+    // on a cursor or the legend, let mpWindow drag it, and remember that it saw the click
+    // so the matching motions and release reach it too
+    m_smithLeftSkipped = true;
+    aEvent.Skip();
+}
+
+
+void SIM_PLOT_TAB::onSmithMotion( wxMouseEvent& aEvent )
+{
+    if( m_smithMode && aEvent.Dragging() )
+    {
+        if( aEvent.LeftIsDown() && !m_smithLeftSkipped )
+        {
+            // a left drag mpWindow did not see the start of, pan if one is active, and
+            // swallow either way so mpWindow cannot rubber-band from a stale click point
+            if( m_smithPanning )
+            {
+                wxPoint pos = aEvent.GetPosition();
+
+                SmithPanBy( pos - m_smithPanLast );
+                m_smithPanLast = pos;
+            }
+
+            return;
+        }
+
+        // keep mpWindow's middle-button pan off the hidden axes
+        if( aEvent.MiddleIsDown() )
+            return;
+    }
+
+    aEvent.Skip();
+}
+
+
+void SIM_PLOT_TAB::onSmithLeftUp( wxMouseEvent& aEvent )
+{
+    if( m_smithMode )
+    {
+        m_smithPanning = false;
+
+        // a release mpWindow saw no click for would zoom the hidden axes to the rect
+        // between its stale click point and this position
+        if( !m_smithLeftSkipped )
+            return;
+
+        m_smithLeftSkipped = false;
+    }
+
+    aEvent.Skip();
+}
+
+
+void SIM_PLOT_TAB::onSmithDClick( wxMouseEvent& aEvent )
+{
+    wxPoint pos = aEvent.GetPosition();
+
+    if( m_smithMode && !m_plotWin->IsInsideInfoLayer( pos ) )
+    {
+        ResetSmithView();
+        m_plotWin->Refresh();
+        return;
+    }
+
+    aEvent.Skip();
+}
+
+
+void SIM_PLOT_TAB::onSmithRightDown( wxMouseEvent& aEvent )
+{
+    // remember where the menu opened, for its zoom commands
+    if( m_smithMode )
+        m_smithMenuPos = aEvent.GetPosition();
+
+    aEvent.Skip();
+}
+
+
+void SIM_PLOT_TAB::onSmithRightUp( wxMouseEvent& aEvent )
+{
+    if( !m_smithMode )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    // no zoom history here, so grey out Undo/Redo and show the menu ourselves
+    wxMenu* menu = m_plotWin->GetPopupMenu();
+
+    menu->Enable( mpID_ZOOM_UNDO, false );
+    menu->Enable( mpID_ZOOM_REDO, false );
+
+    m_plotWin->PopupMenu( menu, aEvent.GetPosition() );
+}
+
+
+void SIM_PLOT_TAB::onSmithMenuCommand( wxCommandEvent& aEvent )
+{
+    if( !m_smithMode )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    switch( aEvent.GetId() )
+    {
+    case mpID_ZOOM_IN: SmithZoomAt( m_smithMenuPos, 1.5 ); break;
+    case mpID_ZOOM_OUT: SmithZoomAt( m_smithMenuPos, 1.0 / 1.5 ); break;
+
+    case mpID_FIT:
+        ResetSmithView();
+        m_plotWin->Refresh();
+        break;
+
+    case mpID_CENTER:
+    {
+        SMITH_VIEW view;
+
+        if( getSmithView( view ) )
+        {
+            m_smithPan = view.ToGamma( m_smithMenuPos );
+            m_plotWin->Refresh();
+        }
+
+        break;
+    }
+
+    default: aEvent.Skip();
+    }
+}
+
+
 void SIM_PLOT_TAB::EnableCursor( TRACE* aTrace, int aCursorId, const wxString& aSignalName )
 {
-    CURSOR*   cursor = new CURSOR( aTrace, this );
-    mpWindow* win = GetPlotWin();
-    int       width = win->GetXScreen() - win->GetMarginLeft() - win->GetMarginRight();
-    int       center = win->GetMarginLeft() + KiROUND( width * ( aCursorId == 1 ? 0.4 : 0.6 ) );
+    CURSOR* cursor;
+
+    if( aTrace->GetType() & SPT_SP_SMITH )
+    {
+        SMITH_TRACE* smithTrace = static_cast<SMITH_TRACE*>( aTrace );
+
+        cursor = new SMITH_CURSOR( smithTrace, this );
+
+        // start somewhere on the locus, biased per cursor id like the rectangular case
+        const std::vector<double>& freqs = smithTrace->GetFrequencies();
+
+        if( !freqs.empty() )
+            cursor->SetCoordX( freqs[freqs.size() * ( aCursorId == 1 ? 2 : 3 ) / 5] );
+    }
+    else
+    {
+        mpWindow* win = GetPlotWin();
+        int       width = win->GetXScreen() - win->GetMarginLeft() - win->GetMarginRight();
+        int       center = win->GetMarginLeft() + KiROUND( width * ( aCursorId == 1 ? 0.4 : 0.6 ) );
+
+        cursor = new CURSOR( aTrace, this );
+
+        cursor->SetX( center );
+    }
 
     cursor->SetName( aSignalName );
-    cursor->SetX( center );
-
     aTrace->SetCursor( aCursorId, cursor );
     m_plotWin->AddLayer( cursor );
 

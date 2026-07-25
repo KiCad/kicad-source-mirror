@@ -137,6 +137,7 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::toggleGrid,               ACTION_MENU::CHECK );
     viewMenu->Add( SCH_ACTIONS::toggleLegend,          ACTION_MENU::CHECK );
     viewMenu->Add( SCH_ACTIONS::toggleDottedSecondary, ACTION_MENU::CHECK );
+    viewMenu->Add( SCH_ACTIONS::toggleSmithChart,      ACTION_MENU::CHECK );
     viewMenu->Add( SCH_ACTIONS::toggleDarkModePlots,   ACTION_MENU::CHECK );
 
 

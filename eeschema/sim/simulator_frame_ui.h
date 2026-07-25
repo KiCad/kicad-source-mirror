@@ -180,6 +180,9 @@ public:
     bool DarkModePlots() const { return m_darkMode; }
     void ToggleDarkModePlots();
 
+    ///< Toggle the current S-parameter tab between Smith chart and amplitude/phase views.
+    void ToggleSmithChart();
+
     void ShowChangedLanguage();
 
     /**
@@ -288,6 +291,9 @@ private:
      */
     void updateTrace( const wxString& aVectorName, int aTraceType, SIM_PLOT_TAB* aPlotTab,
                       std::vector<double>* aDataX = nullptr, bool aClearData = false );
+
+    ///< Reference impedance of the response port for an S-parameter vector, defaults to 50 Ohm.
+    double getSmithPortImpedance( const wxString& aVectorName );
 
     /**
      * A common toggler for the two main wxSplitterWindow s
@@ -413,6 +419,9 @@ private:
         int traceType = SPT_UNKNOWN;
         std::vector<double> xValues;
         std::vector<std::vector<double>> yValues;
+
+        // smith traces carry Re(gamma) in x, different every run, stored per run here
+        std::vector<std::vector<double>> xRuns;
     };
 
     struct MULTI_RUN_STEP

@@ -628,6 +628,12 @@ void SIMULATOR_FRAME::ToggleSimSidePanel()
 }
 
 
+void SIMULATOR_FRAME::ToggleSmithChart()
+{
+    m_ui->ToggleSmithChart();
+}
+
+
 void SIMULATOR_FRAME::ToggleDarkModePlots()
 {
     m_ui->ToggleDarkModePlots();
@@ -744,6 +750,20 @@ void SIMULATOR_FRAME::setupUIConditions()
                 return m_ui->DarkModePlots();
             };
 
+    auto smithChartCondition =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->IsSmithMode();
+            };
+
+    auto haveSPPlot =
+            [this]( const SELECTION& aSel )
+            {
+                SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
+                return plotTab && plotTab->GetSimType() == ST_SP;
+            };
+
     auto simRunning =
             [this]( const SELECTION& aSel )
             {
@@ -826,6 +846,8 @@ void SIMULATOR_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::toggleGrid,            CHECK( showGridCondition ) );
     mgr->SetConditions( SCH_ACTIONS::toggleLegend,          CHECK( showLegendCondition ) );
     mgr->SetConditions( SCH_ACTIONS::toggleDottedSecondary, CHECK( showDottedCondition ) );
+    mgr->SetConditions( SCH_ACTIONS::toggleSmithChart,
+                        ACTION_CONDITIONS().Check( smithChartCondition ).Enable( haveSPPlot ) );
     mgr->SetConditions( SCH_ACTIONS::toggleDarkModePlots,   CHECK( darkModePlotCondition ) );
 
     mgr->SetConditions( SCH_ACTIONS::newAnalysisTab,        ENABLE( SELECTION_CONDITIONS::ShowAlways ) );

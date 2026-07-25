@@ -28,9 +28,11 @@
 #include <map>
 #include <limits>
 #include <widgets/mathplot.h>
+#include <math/util.h>
 #include <wx/colour.h>
 #include <wx/sizer.h>
 #include "sim_tab.h"
+#include "smith_math.h"
 #include "sim_plot_colors.h"
 
 class SIMULATOR_FRAME;
@@ -100,14 +102,15 @@ public:
         return m_coords;
     }
 
-    void SetCoordX( double aValue );
+    virtual void SetCoordX( double aValue );
 
 private:
     void doSetCoordX( double aValue );
 
+protected:
     wxString getID();
 
-private:
+protected:
     TRACE*       m_trace;
     bool         m_updateRequired;
     bool         m_updateRef;
@@ -195,6 +198,111 @@ protected:
     wxColour               m_traceColour;
     bool                   m_isMultiRun;
     std::vector<wxString>  m_multiRunLabels;
+};
+
+
+///< Overlay layer drawing the Smith chart grid (constant resistance and reactance circles)
+class SMITH_GRID : public mpLayer
+{
+public:
+    SMITH_GRID() { m_type = mpLAYER_AXIS; }
+
+    void Plot( wxDC& aDC, mpWindow& aWindow ) override;
+
+    bool HasBBox() const override { return false; }
+
+    void SetReferenceImpedance( double aZ0 ) { m_z0 = aZ0; }
+
+    void SetNormalizedLabels( bool aNormalized ) { m_normalized = aNormalized; }
+
+    ///< Chart placement including pan/zoom.
+    static bool GetChartView( mpWindow& aWindow, double aZoom, const wxRealPoint& aPan, SMITH_VIEW& aView );
+
+private:
+    double m_z0 = 50.0;
+    bool   m_normalized = false;
+};
+
+
+///< Reflection coefficient locus, Re in X and Im in Y, drawn on the Smith chart
+class SMITH_TRACE : public TRACE
+{
+public:
+    SMITH_TRACE( const wxString& aName, SIM_TRACE_TYPE aType ) :
+            TRACE( aName, aType )
+    {
+    }
+
+    void Plot( wxDC& aDC, mpWindow& aWindow ) override;
+
+    // drawn directly, keep the locus out of the axis auto-fit
+    bool HasBBox() const override { return false; }
+
+    void                       SetFrequencies( const std::vector<double>& aFreqs ) { m_frequencies = aFreqs; }
+    const std::vector<double>& GetFrequencies() const { return m_frequencies; }
+
+    void   SetReferenceImpedance( double aZ0 ) { m_z0 = aZ0; }
+    double GetReferenceImpedance() const { return m_z0; }
+
+private:
+    std::vector<double> m_frequencies;
+    double              m_z0 = 50.0;
+};
+
+
+///< Cursor that snaps along a Smith chart locus, keyed by frequency.
+///< m_coords holds ( frequency, gamma magnitude ) so the cursor grid and workbook still work.
+class SMITH_CURSOR : public CURSOR
+{
+public:
+    SMITH_CURSOR( SMITH_TRACE* aTrace, SIM_PLOT_TAB* aPlotTab ) :
+            CURSOR( aTrace, aPlotTab ),
+            m_index( -1 ),
+            m_gamma( 0.0, 0.0 ),
+            m_pendingFreq( false ),
+            m_dragging( false )
+    {
+    }
+
+    void Plot( wxDC& aDC, mpWindow& aWindow ) override;
+
+    bool Inside( const wxPoint& aPoint ) const override;
+
+    void Move( wxPoint aDelta ) override;
+
+    void UpdateReference() override;
+
+    void SetCoordX( double aValue ) override;
+
+private:
+    void snapToIndex( int aIndex );
+    void snapToFrequency( double aFreq );
+
+private:
+    int         m_index;
+    wxRealPoint m_gamma;
+    bool        m_pendingFreq; // a saved frequency waiting for the sim data to load
+    bool        m_dragging;    // the pending update comes from a drag, not a data refresh
+};
+
+
+///< Trace hidden while the tab is in Smith mode, kept so leaving the mode restores it.
+struct SMITH_STASHED_TRACE
+{
+    wxString vectorName;
+    wxString displayName;
+    int      baseType;
+};
+
+
+///< Cursor recorded when entering Smith mode, so leaving restores it to its original trace.
+struct SMITH_STASHED_CURSOR
+{
+    int      id;
+    wxString vectorName;
+    int      baseType;
+    int      subType; // the SP subtype bit the cursor lived on before Smith mode
+    double   frequency;
 };
 
 
@@ -341,6 +449,36 @@ public:
         return m_dotted_cp;
     }
 
+    void SetSmithMode( bool aEnable );
+    bool IsSmithMode() const { return m_smithMode; }
+
+    ///< Refresh the grid z0 from the shown Smith traces.
+    void UpdateSmithReferenceImpedance();
+
+    double             GetSmithZoom() const { return m_smithZoom; }
+    const wxRealPoint& GetSmithPan() const { return m_smithPan; }
+
+    void ResetSmithView()
+    {
+        m_smithZoom = 1.0;
+        m_smithPan = wxRealPoint( 0.0, 0.0 );
+    }
+
+    ///< Restore a saved view, values are validated and clamped.
+    void SetSmithView( double aZoom, double aPanX, double aPanY )
+    {
+        m_smithZoom = std::isfinite( aZoom ) ? std::clamp( aZoom, 1.0, 50.0 ) : 1.0;
+        m_smithPan.x = std::isfinite( aPanX ) ? std::clamp( aPanX, -100.0, 100.0 ) : 0.0;
+        m_smithPan.y = std::isfinite( aPanY ) ? std::clamp( aPanY, -100.0, 100.0 ) : 0.0;
+    }
+
+    void SmithZoomAt( const wxPoint& aPos, double aFactor );
+    void SmithPanBy( const wxPoint& aDelta );
+
+    ///< Traces and cursors set aside while in Smith mode, restored when leaving it.
+    std::vector<SMITH_STASHED_TRACE>&  SmithStashedTraces() { return m_smithStashedTraces; }
+    std::vector<SMITH_STASHED_CURSOR>& SmithStashedCursors() { return m_smithStashedCursors; }
+
     ///< Turn on/off the cursor for a particular trace.
     void EnableCursor( TRACE* aTrace, int aCursorId, const wxString& aSignalName );
     void DisableCursor( TRACE* aTrace, int aCursorId );
@@ -407,6 +545,19 @@ private:
 
     void UpdateAxisVisibility();
 
+    void onSmithMouseWheel( wxMouseEvent& aEvent );
+    void onSmithMagnify( wxMouseEvent& aEvent );
+    void onSmithMiddleDown( wxMouseEvent& aEvent );
+    void onSmithLeftDown( wxMouseEvent& aEvent );
+    void onSmithMotion( wxMouseEvent& aEvent );
+    void onSmithLeftUp( wxMouseEvent& aEvent );
+    void onSmithDClick( wxMouseEvent& aEvent );
+    void onSmithRightDown( wxMouseEvent& aEvent );
+    void onSmithRightUp( wxMouseEvent& aEvent );
+    void onSmithMenuCommand( wxCommandEvent& aEvent );
+
+    bool getSmithView( SMITH_VIEW& aView ) const;
+
 private:
     SIM_PLOT_COLORS              m_colors;
     std::map<wxString, wxColour> m_sessionTraceColors;
@@ -423,8 +574,19 @@ private:
     mpScaleY*                    m_axis_y2;
     mpScaleY*                    m_axis_y3;
     mpInfoLegend*                m_legend;
+    SMITH_GRID*                  m_smithGrid;
 
     bool                         m_dotted_cp;
+    bool                         m_smithMode;
+    double                       m_smithZoom;
+    wxRealPoint                  m_smithPan;
+    bool                         m_smithPanning;
+    bool                         m_smithLeftSkipped;
+    wxPoint                      m_smithPanLast;
+    wxPoint                      m_smithMenuPos;
+
+    std::vector<SMITH_STASHED_TRACE>  m_smithStashedTraces;
+    std::vector<SMITH_STASHED_CURSOR> m_smithStashedCursors;
 
     // Measurements (and their format strings)
     std::vector<std::pair<wxString, wxString>> m_measurements;

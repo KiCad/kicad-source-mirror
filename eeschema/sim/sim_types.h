@@ -51,6 +51,8 @@ enum SIM_TRACE_TYPE
     SPT_AC_GAIN       = 0x0008,
     SPT_POWER         = 0x0010,
     SPT_SP_AMP        = 0x0020,
+    SPT_SP_SMITH      = 0x0040,
+    SPT_SP_MASK       = SPT_SP_AMP | SPT_AC_PHASE | SPT_SP_SMITH,
     SPT_Y_AXIS_MASK   = 0x00FF,
 
     // X axis

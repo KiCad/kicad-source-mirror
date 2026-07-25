@@ -156,6 +156,11 @@ public:
      */
     void ToggleDarkModePlots();
 
+    /**
+     * Toggle the current S-parameter tab between Smith chart and amplitude/phase views.
+     */
+    void ToggleSmithChart();
+
     void ShowChangedLanguage() override;
 
     /**

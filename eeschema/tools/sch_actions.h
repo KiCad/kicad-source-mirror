@@ -317,6 +317,7 @@ public:
     static TOOL_ACTION toggleSimSidePanel;
     static TOOL_ACTION toggleLegend;
     static TOOL_ACTION toggleDottedSecondary;
+    static TOOL_ACTION toggleSmithChart;
     static TOOL_ACTION toggleDarkModePlots;
     static TOOL_ACTION simAnalysisProperties;
     static TOOL_ACTION runSimulation;

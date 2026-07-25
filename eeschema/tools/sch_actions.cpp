@@ -1845,6 +1845,12 @@ TOOL_ACTION SCH_ACTIONS::toggleDottedSecondary( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Dotted Current/Phase" ) )
         .Tooltip( _( "Draw secondary signal trace (current or phase) with a dotted line" ) ) );
 
+TOOL_ACTION SCH_ACTIONS::toggleSmithChart( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulator.toggleSmithChart" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Smith Chart" ) )
+        .Tooltip( _( "Show S-parameter results on a Smith chart" ) ) );
+
 TOOL_ACTION SCH_ACTIONS::toggleDarkModePlots( TOOL_ACTION_ARGS()
         .Name( "eeschema.Simulator.toggleDarkModePlots" )
         .Scope( AS_GLOBAL )

@@ -305,6 +305,51 @@ int SIMULATOR_CONTROL::ExportPlotAsCSV( const TOOL_EVENT& aEvent )
 
         SIM_TYPE simType = plotTab->GetSimType();
 
+        if( plotTab->IsSmithMode() )
+        {
+            // smith traces hold Re/Im of the reflection coefficient, frequency lives beside them
+            std::vector<SMITH_TRACE*> smithTraces;
+
+            for( const auto& [name, trace] : traces )
+            {
+                if( SMITH_TRACE* smithTrace = dynamic_cast<SMITH_TRACE*>( trace ) )
+                    smithTraces.push_back( smithTrace );
+            }
+
+            if( smithTraces.empty() )
+                return -1;
+
+            const std::vector<double>& freqs = smithTraces[0]->GetFrequencies();
+
+            out.Write( wxString::Format( wxT( "%s%c" ), wxS( "frequency" ), SEPARATOR ) );
+
+            for( SMITH_TRACE* trace : smithTraces )
+            {
+                out.Write( wxString::Format( wxT( "%s Re%c%s Im%c" ), trace->GetDisplayName(), SEPARATOR,
+                                             trace->GetDisplayName(), SEPARATOR ) );
+            }
+
+            out.Write( wxS( "\r\n" ) );
+
+            for( std::size_t curRow = 0; curRow < freqs.size(); curRow++ )
+            {
+                out.Write( wxString::Format( wxT( "%g%c" ), freqs[curRow], SEPARATOR ) );
+
+                for( SMITH_TRACE* trace : smithTraces )
+                {
+                    double re = curRow < trace->GetDataX().size() ? trace->GetDataX()[curRow] : 0.0;
+                    double im = curRow < trace->GetDataY().size() ? trace->GetDataY()[curRow] : 0.0;
+
+                    out.Write( wxString::Format( wxT( "%g%c%g%c" ), re, SEPARATOR, im, SEPARATOR ) );
+                }
+
+                out.Write( wxS( "\r\n" ) );
+            }
+
+            out.Close();
+            return 0;
+        }
+
         std::size_t rowCount = traces.begin()->second->GetDataX().size();
 
         // write column header names on the first row
@@ -351,6 +396,28 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
     {
         mpWindow* plot = plotTab->GetPlotWin();
 
+        if( plotTab->IsSmithMode() )
+        {
+            // the chart is drawn from the Smith view, not the hidden axes
+            wxPoint center( plot->GetScrX() / 2, plot->GetScrY() / 2 );
+
+            if( aEvent.IsAction( &ACTIONS::zoomInCenter ) )
+            {
+                plotTab->SmithZoomAt( center, 1.5 );
+            }
+            else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) )
+            {
+                plotTab->SmithZoomAt( center, 1.0 / 1.5 );
+            }
+            else if( aEvent.IsAction( &ACTIONS::zoomFitScreen ) )
+            {
+                plotTab->ResetSmithView();
+                plot->Refresh();
+            }
+
+            return 0;
+        }
+
         if( aEvent.IsAction( &ACTIONS::zoomInCenter ) )
         {
             plot->ZoomIn();
@@ -389,7 +456,11 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 int SIMULATOR_CONTROL::UndoZoom( const TOOL_EVENT& aEvent )
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
-        plotTab->GetPlotWin()->ZoomUndo();
+    {
+        // the Smith view keeps no zoom history, and the hidden axes must not move
+        if( !plotTab->IsSmithMode() )
+            plotTab->GetPlotWin()->ZoomUndo();
+    }
 
     return 0;
 }
@@ -398,7 +469,10 @@ int SIMULATOR_CONTROL::UndoZoom( const TOOL_EVENT& aEvent )
 int SIMULATOR_CONTROL::RedoZoom( const TOOL_EVENT& aEvent )
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
-        plotTab->GetPlotWin()->ZoomRedo();
+    {
+        if( !plotTab->IsSmithMode() )
+            plotTab->GetPlotWin()->ZoomRedo();
+    }
 
     return 0;
 }
@@ -454,6 +528,13 @@ int SIMULATOR_CONTROL::ToggleDottedSecondary( const TOOL_EVENT& aEvent )
         m_simulatorFrame->OnModify();
     }
 
+    return 0;
+}
+
+
+int SIMULATOR_CONTROL::ToggleSmithChart( const TOOL_EVENT& aEvent )
+{
+    m_simulatorFrame->ToggleSmithChart();
     return 0;
 }
 
@@ -671,6 +752,7 @@ void SIMULATOR_CONTROL::setTransitions()
     Go( &SIMULATOR_CONTROL::ToggleGrid,             ACTIONS::toggleGrid.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleLegend,           SCH_ACTIONS::toggleLegend.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleDottedSecondary,  SCH_ACTIONS::toggleDottedSecondary.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ToggleSmithChart,       SCH_ACTIONS::toggleSmithChart.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ToggleDarkModePlots,    SCH_ACTIONS::toggleDarkModePlots.MakeEvent() );
 
     Go( &SIMULATOR_CONTROL::EditAnalysisTab,        SCH_ACTIONS::simAnalysisProperties.MakeEvent() );
