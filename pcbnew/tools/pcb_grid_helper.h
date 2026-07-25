@@ -23,6 +23,7 @@
 #define PCB_GRID_HELPER_H
 
 #include <initializer_list>
+#include <set>
 #include <vector>
 
 #include <settings/snap_settings.h>
@@ -101,6 +102,17 @@ public:
      * lines are noise over the board it is asking the user to read.
      */
     void SetConstructionGeometryEnabled( bool aEnable ) { m_constructionGeometryEnabled = aEnable; }
+
+    /**
+     * Drop snap candidates of these kinds before anything is ranked.
+     *
+     * For a tool that reads which side of a crossing the pointer is on, a snap onto the
+     * crossing itself lands exactly where the question has no answer.
+     */
+    void SetSuppressedSnapSubtypes( std::set<SNAP_CANDIDATE_SUBTYPE> aSubtypes )
+    {
+        m_suppressedSnapSubtypes = std::move( aSubtypes );
+    }
 
     GRID_HELPER_GRIDS GetItemGrid( const EDA_ITEM* aItem ) const override;
 
@@ -184,11 +196,13 @@ private:
                          const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter );
 
 private:
-    MAGNETIC_SETTINGS*         m_magneticSettings;
+    MAGNETIC_SETTINGS*               m_magneticSettings;
 
-    std::vector<NEARABLE_GEOM>      m_pointOnLineCandidates;
+    std::vector<NEARABLE_GEOM>       m_pointOnLineCandidates;
 
     bool                             m_constructionGeometryEnabled = true;
+
+    std::set<SNAP_CANDIDATE_SUBTYPE> m_suppressedSnapSubtypes;
 };
 
 #endif

@@ -17,31 +17,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHIC_EXTEND_H
-#define GRAPHIC_EXTEND_H
+#ifndef GRAPHIC_TRIM_H
+#define GRAPHIC_TRIM_H
 
-#include <math/box2.h>
 #include <tools/graphic_edit.h>
 
 class BOARD_ITEM;
 
-enum class GRAPHIC_ENDPOINT
-{
-    START,
-    END
-};
-
-namespace GRAPHIC_EXTEND_PLANNER
+namespace GRAPHIC_TRIM_PLANNER
 {
 
-GRAPHIC_ENDPOINT NearestEndpoint( const BOARD_ITEM& aSource, const VECTOR2I& aPointer );
-BOX2I QueryBounds( const BOARD_ITEM& aSource, GRAPHIC_ENDPOINT aEndpoint, const BOX2I& aWorldBounds );
-
-GRAPHIC_EDIT_RESULT Plan( const BOARD_ITEM& aSource, GRAPHIC_ENDPOINT aEndpoint,
-                          const std::vector<const BOARD_ITEM*>& aBoundaries );
-
-/// Take the endpoint from the pointer.  What an interactive caller wants.
-BOX2I QueryBounds( const BOARD_ITEM& aSource, const VECTOR2I& aPointer, const BOX2I& aWorldBounds );
+/**
+ * Plan removal of the part of aSource under aPointer.
+ *
+ * A cut past an end leaves one piece.  A middle cut leaves two, ordered along the source.
+ * The caller creates the second item.
+ */
 GRAPHIC_EDIT_RESULT Plan( const BOARD_ITEM& aSource, const VECTOR2I& aPointer,
                           const std::vector<const BOARD_ITEM*>& aBoundaries );
 

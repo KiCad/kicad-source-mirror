@@ -67,16 +67,28 @@ struct GRAPHIC_EDIT_RESULT
 
     GRAPHIC_EDIT_REFUSAL m_Refusal = GRAPHIC_EDIT_REFUSAL::NO_INTERSECTION;
 
-    /// What the source becomes.  Two entries mean a split.
+    /// What the source becomes.  Empty means the whole source goes.
     std::vector<GRAPHIC_EDIT_GEOMETRY> m_Geometry;
+
+    /// What the preview draws.  Trim shows the span it would remove, so it is not m_Geometry.
+    /// Left empty, the tool falls back to m_Geometry.
+    std::vector<GRAPHIC_EDIT_GEOMETRY> m_Preview;
+
     std::vector<const BOARD_ITEM*>     m_Boundaries;
 };
 
-/// Graphical segments and arcs only.  Anything else gives null.
+/// Any graphical shape a planner or a boundary search might use.  Anything else gives null.
 const PCB_SHAPE* GraphicEditShape( const EDA_ITEM* aItem );
 
-/// The shape to edit, or null with the reason in aResult.
-const PCB_SHAPE* GraphicEditSource( const BOARD_ITEM& aSource, GRAPHIC_EDIT_RESULT& aResult );
+/// Extend needs two ends to work with.
+bool IsGraphicExtendSource( const PCB_SHAPE& aShape );
+
+/// Trim also takes the closed shapes, which it opens up.
+bool IsGraphicTrimSource( const PCB_SHAPE& aShape );
+
+/// The shape to edit, or null with the reason in aResult.  aAccepts decides the kinds.
+const PCB_SHAPE* GraphicEditSource( const BOARD_ITEM& aSource, bool ( *aAccepts )( const PCB_SHAPE& ),
+                                    GRAPHIC_EDIT_RESULT& aResult );
 
 /// A boundary usable against aSource.  Null if it is the source, off-layer or unusable.
 const PCB_SHAPE* GraphicEditBoundary( const BOARD_ITEM* aBoundary, const PCB_SHAPE& aSource );

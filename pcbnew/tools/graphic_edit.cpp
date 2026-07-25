@@ -32,18 +32,35 @@ const PCB_SHAPE* GraphicEditShape( const EDA_ITEM* aItem )
 
     const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
 
-    if( shape->GetShape() != SHAPE_T::SEGMENT && shape->GetShape() != SHAPE_T::ARC )
-        return nullptr;
-
-    return shape;
+    switch( shape->GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::ARC:
+    case SHAPE_T::CIRCLE:
+    case SHAPE_T::RECTANGLE: return shape;
+    default:                 return nullptr;
+    }
 }
 
 
-const PCB_SHAPE* GraphicEditSource( const BOARD_ITEM& aSource, GRAPHIC_EDIT_RESULT& aResult )
+bool IsGraphicExtendSource( const PCB_SHAPE& aShape )
+{
+    return aShape.GetShape() == SHAPE_T::SEGMENT || aShape.GetShape() == SHAPE_T::ARC;
+}
+
+
+bool IsGraphicTrimSource( const PCB_SHAPE& aShape )
+{
+    return GraphicEditShape( &aShape ) != nullptr;
+}
+
+
+const PCB_SHAPE* GraphicEditSource( const BOARD_ITEM& aSource, bool ( *aAccepts )( const PCB_SHAPE& ),
+                                    GRAPHIC_EDIT_RESULT& aResult )
 {
     const PCB_SHAPE* source = GraphicEditShape( &aSource );
 
-    if( !source )
+    if( !source || !aAccepts( *source ) )
     {
         aResult.m_Refusal = GRAPHIC_EDIT_REFUSAL::UNSUPPORTED_SOURCE;
         return nullptr;

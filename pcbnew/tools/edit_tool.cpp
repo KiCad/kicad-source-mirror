@@ -345,8 +345,9 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
     menu->AddItem( PCB_ACTIONS::dogboneCorners, SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
     menu->AddItem( PCB_ACTIONS::extendLines,    SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
                                                     && SELECTION_CONDITIONS::Count( 2 ) );
-    // Extend picks its own shape from under the pointer, so the selection says nothing about it.
+    // Both pick their own shape from under the pointer, so the selection says nothing about them.
     menu->AddItem( PCB_ACTIONS::extendGraphic,  SELECTION_CONDITIONS::ShowAlways );
+    menu->AddItem( PCB_ACTIONS::trimGraphic,    SELECTION_CONDITIONS::ShowAlways );
 
     menu->AddSeparator( SELECTION_CONDITIONS::Count( 1 ) );
 

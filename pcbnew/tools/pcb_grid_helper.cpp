@@ -1230,6 +1230,17 @@ SNAP_RESULT PCB_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, const LSET& a
     if( !frame.retainedId && m_retainedAngleBranch )
         frame.retainedId = m_retainedAngleBranch;
 
+    // A caller that reads meaning from where between two items the pointer lands cannot use
+    // the snaps that sit exactly between them.
+    if( !m_suppressedSnapSubtypes.empty() )
+    {
+        std::erase_if( frame.candidates,
+                       [&]( const SNAP_CANDIDATE& aCandidate )
+                       {
+                           return m_suppressedSnapSubtypes.contains( aCandidate.subtype );
+                       } );
+    }
+
     SNAP_FRAME_OUTPUT<PRESENTATION> output = ResolveSnapFrame( std::move( frame ) );
     SNAP_RESULT&                    result = output.result;
     retainAcceptedSnaps( result );

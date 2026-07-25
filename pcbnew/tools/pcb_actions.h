@@ -160,6 +160,8 @@ public:
     static TOOL_ACTION extendLines;
     /// Extend one graphical line or arc to the nearest boundary
     static TOOL_ACTION extendGraphic;
+    /// Trim a section from one graphical line or arc
+    static TOOL_ACTION trimGraphic;
     /// Simplify polygon outlines
     static TOOL_ACTION simplifyPolygons;
     /// Edit polygon vertices in a table

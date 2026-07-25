@@ -24,6 +24,8 @@
 #define PCB_PICKER_TOOL_H
 
 #include <layer_ids.h>
+#include <set>
+#include <snap/snap_resolver.h>
 #include <tool/picker_tool.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_tool_base.h>
@@ -87,6 +89,13 @@ public:
     /// Whether the snap system may draw its explanatory geometry over the board this run.
     inline void SetConstructionGeometry( bool aEnable ) { m_constructionGeometry = aEnable; }
 
+    /// Snap kinds this run never wants.  Trim reads which side of a crossing the pointer is
+    /// on, so a snap onto the crossing leaves the question no answer.
+    inline void SetSuppressedSnaps( std::set<SNAP_CANDIDATE_SUBTYPE> aSubtypes )
+    {
+        m_suppressedSnaps = std::move( aSubtypes );
+    }
+
     /// Handlers only.  A caller sets this run's options and then clears the handlers, so
     /// anything reset here would go before Main() read it.  reset() puts the options back.
     inline void ClearHandlers()
@@ -112,6 +121,8 @@ private:
     PCB_SELECTION_TOOL::AREA_PREVIEW  m_areaPreviewHandler;
 
     bool                              m_constructionGeometry = true;
+
+    std::set<SNAP_CANDIDATE_SUBTYPE>  m_suppressedSnaps;
 };
 
 #endif /* PCB_PICKER_TOOL_H */

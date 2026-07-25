@@ -1079,6 +1079,13 @@ TOOL_ACTION PCB_ACTIONS::extendGraphic( TOOL_ACTION_ARGS()
         .Tooltip( _( "Hover a graphical line or arc to extend it until it meets another" ) )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::trimGraphic( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.GraphicEdit.trim" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Trim Shape" ) )
+        .Tooltip( _( "Hover the part of a graphical shape to remove between the nearest crossings" ) )
+        .Flags( AF_ACTIVATE ) );
+
 TOOL_ACTION PCB_ACTIONS::mergePolygons( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.mergePolygons" )
         .Scope( AS_GLOBAL )

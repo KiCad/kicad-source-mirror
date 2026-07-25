@@ -81,6 +81,8 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     grid.SetConstructionGeometryEnabled( m_constructionGeometry );
 
+    grid.SetSuppressedSnapSubtypes( m_suppressedSnaps );
+
     TOOL_EVENT sourceEvent;
 
     if( aEvent.IsAction( &ACTIONS::pickerTool ) )
@@ -269,6 +271,7 @@ void PCB_PICKER_TOOL::reset()
     m_layerMask = LSET::AllLayersMask();
     m_areaPreviewHandler = nullptr;
     m_constructionGeometry = true;
+    m_suppressedSnaps.clear();
     PICKER_TOOL_BASE::reset();
 }
 

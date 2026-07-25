@@ -64,7 +64,7 @@ BOX2I GRAPHIC_EXTEND_PLANNER::QueryBounds( const BOARD_ITEM& aSource, GRAPHIC_EN
 {
     const PCB_SHAPE* source = GraphicEditShape( &aSource );
 
-    if( !source )
+    if( !source || !IsGraphicExtendSource( *source ) )
         return {};
 
     if( source->GetShape() == SHAPE_T::ARC )
@@ -103,7 +103,7 @@ GRAPHIC_EDIT_RESULT GRAPHIC_EXTEND_PLANNER::Plan( const BOARD_ITEM& aSource, GRA
                                                   const std::vector<const BOARD_ITEM*>& aBoundaries )
 {
     GRAPHIC_EDIT_RESULT result;
-    const PCB_SHAPE*    source = GraphicEditSource( aSource, result );
+    const PCB_SHAPE*    source = GraphicEditSource( aSource, IsGraphicExtendSource, result );
 
     if( !source )
         return result;
@@ -260,4 +260,18 @@ GRAPHIC_EDIT_RESULT GRAPHIC_EXTEND_PLANNER::Plan( const BOARD_ITEM& aSource, GRA
     result.m_Geometry.push_back( extended );
     result.m_Boundaries.push_back( bestBoundary );
     return result;
+}
+
+
+BOX2I GRAPHIC_EXTEND_PLANNER::QueryBounds( const BOARD_ITEM& aSource, const VECTOR2I& aPointer,
+                                           const BOX2I& aWorldBounds )
+{
+    return QueryBounds( aSource, NearestEndpoint( aSource, aPointer ), aWorldBounds );
+}
+
+
+GRAPHIC_EDIT_RESULT GRAPHIC_EXTEND_PLANNER::Plan( const BOARD_ITEM& aSource, const VECTOR2I& aPointer,
+                                                  const std::vector<const BOARD_ITEM*>& aBoundaries )
+{
+    return Plan( aSource, NearestEndpoint( aSource, aPointer ), aBoundaries );
 }

@@ -31,11 +31,14 @@
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/graphic_extend.h>
+#include <tools/graphic_trim.h>
 #include <tools/hover_picker.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/pcb_selection_tool.h>
 
+#include <algorithm>
+#include <cmath>
 #include <limits>
 
 /// How far aPointer is from the shape's outline.  A fill does not count as a hit, so a shape
@@ -51,11 +54,26 @@ static double outlineProximity( const BOARD_ITEM& aItem, const VECTOR2I& aPointe
     {
     case SHAPE_T::SEGMENT: return SEG( shape->GetStart(), shape->GetEnd() ).Distance( aPointer );
 
+    case SHAPE_T::CIRCLE:
+        return std::abs( shape->GetCenter().Distance( aPointer ) - (double) shape->GetRadius() );
+
     case SHAPE_T::ARC:
     {
         SHAPE_ARC arc = GraphicEditArc( *shape );
 
         return arc.NearestPoint( aPointer ).Distance( aPointer );
+    }
+
+    case SHAPE_T::RECTANGLE:
+    {
+        std::vector<VECTOR2I> corners = shape->GetRectCorners();
+        double                nearest = std::numeric_limits<double>::infinity();
+
+        for( size_t i = 0; i < corners.size(); i++ )
+            nearest = std::min( nearest, (double) SEG( corners[i], corners[( i + 1 ) % corners.size()] )
+                                                         .Distance( aPointer ) );
+
+        return nearest;
     }
 
     default: return std::numeric_limits<double>::infinity();
@@ -97,15 +115,16 @@ static KIGFX::CONSTRUCTION_GEOM::DRAWABLE drawable( const GRAPHIC_EDIT_GEOMETRY&
 }
 
 
-static wxString refusalMessage( GRAPHIC_EDIT_REFUSAL aRefusal )
+/// aNoResult carries wording only the operation can supply.
+static wxString refusalMessage( GRAPHIC_EDIT_REFUSAL aRefusal, const wxString& aNoResult )
 {
     switch( aRefusal )
     {
-    case GRAPHIC_EDIT_REFUSAL::AMBIGUOUS: return _( "Two boundaries are the same distance away." );
+    case GRAPHIC_EDIT_REFUSAL::AMBIGUOUS: return _( "More than one shape meets this one here." );
     case GRAPHIC_EDIT_REFUSAL::DEGENERATE:
         return _( "That shape is too small or too near a full circle to work with." );
     case GRAPHIC_EDIT_REFUSAL::LOCKED_SOURCE: return _( "That shape is locked." );
-    default: return _( "There is nothing to reach in that direction." );
+    default: return aNoResult;
     }
 }
 
@@ -120,8 +139,7 @@ bool GRAPHIC_EDIT_TOOL::Init()
 {
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
-    // The context menu entry lives in EDIT_TOOL's Shape Modification submenu, next to the other
-    // line and arc operations.
+    // Menu entries live in EDIT_TOOL's Shape Modification submenu.
 
     return true;
 }
@@ -129,11 +147,31 @@ bool GRAPHIC_EDIT_TOOL::Init()
 
 int GRAPHIC_EDIT_TOOL::Extend( const TOOL_EVENT& aEvent )
 {
-    return runInteractive( aEvent );
+    return runInteractive( aEvent,
+                           { .m_NoResult = _( "There is nothing to reach in that direction." ),
+                             .m_CommitDescription = _( "Extend Line or Arc" ),
+                             .m_Accepts = IsGraphicExtendSource,
+                             .m_PreviewLayer = LAYER_AUX_ITEMS,
+                             .m_QueryBounds = GRAPHIC_EXTEND_PLANNER::QueryBounds,
+                             .m_Plan = GRAPHIC_EXTEND_PLANNER::Plan } );
 }
 
 
-int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent )
+int GRAPHIC_EDIT_TOOL::Trim( const TOOL_EVENT& aEvent )
+{
+    return runInteractive( aEvent,
+                           { .m_NoResult = _( "Nothing crosses the shape here." ),
+                             .m_CommitDescription = _( "Trim Shape" ),
+                             .m_Accepts = IsGraphicTrimSource,
+                             .m_SuppressedSnaps = { SNAP_CANDIDATE_SUBTYPE::INTERSECTION,
+                                                    SNAP_CANDIDATE_SUBTYPE::CONSTRUCTED_POINT },
+                             .m_PreviewLayer = LAYER_DRC_ERROR,
+                             .m_QueryBounds = nullptr,
+                             .m_Plan = GRAPHIC_TRIM_PLANNER::Plan } );
+}
+
+
+int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent, const OPERATION& aOperation )
 {
     PCB_PICKER_TOOL*         picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
     KIGFX::CONSTRUCTION_GEOM preview;
@@ -152,7 +190,9 @@ int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent )
     {
         auto accepts = [&]( BOARD_ITEM& aItem )
         {
-            return GraphicEditShape( &aItem ) != nullptr;
+            const PCB_SHAPE* shape = GraphicEditShape( &aItem );
+
+            return shape && aOperation.m_Accepts( *shape );
         };
 
         return static_cast<PCB_SHAPE*>( hover.Pick( aPointer, accepts, outlineProximity ) );
@@ -209,12 +249,15 @@ int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent )
             return nullptr;
         }
 
-        BOX2I rayBounds = worldBounds;
+        BOX2I queryBounds = source->GetBoundingBox();
 
-        rayBounds.Merge( source->GetBoundingBox() );
+        if( aOperation.m_QueryBounds )
+        {
+            BOX2I rayBounds = worldBounds;
 
-        const GRAPHIC_ENDPOINT endpoint = GRAPHIC_EXTEND_PLANNER::NearestEndpoint( *source, aPointer );
-        const BOX2I queryBounds = GRAPHIC_EXTEND_PLANNER::QueryBounds( *source, endpoint, rayBounds );
+            rayBounds.Merge( queryBounds );
+            queryBounds = aOperation.m_QueryBounds( *source, aPointer, rayBounds );
+        }
 
         if( !queryBounds.IsValid() )
         {
@@ -226,14 +269,17 @@ int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent )
 
         std::vector<const BOARD_ITEM*> candidates = collectBoundaries( queryBounds, *source );
 
-        aResult = GRAPHIC_EXTEND_PLANNER::Plan( *source, endpoint, candidates );
+        aResult = aOperation.m_Plan( *source, aPointer, candidates );
 
         // The shape under the pointer is worth marking whether or not it can be edited here.
         std::vector<BOARD_ITEM*> lit{ source };
 
         if( aResult )
         {
-            for( const GRAPHIC_EDIT_GEOMETRY& geometry : aResult.m_Geometry )
+            const std::vector<GRAPHIC_EDIT_GEOMETRY>& shown =
+                    aResult.m_Preview.empty() ? aResult.m_Geometry : aResult.m_Preview;
+
+            for( const GRAPHIC_EDIT_GEOMETRY& geometry : shown )
                 preview.AddDrawable( drawable( geometry ), false, 4 );
 
             for( const BOARD_ITEM* boundary : aResult.m_Boundaries )
@@ -246,9 +292,9 @@ int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent )
     };
 
     KIGFX::RENDER_SETTINGS* settings = view()->GetPainter()->GetSettings();
-    KIGFX::COLOR4D          previewColor = settings->GetLayerColor( LAYER_AUX_ITEMS );
+    KIGFX::COLOR4D          previewColor = settings->GetLayerColor( aOperation.m_PreviewLayer );
 
-    // LAYER_AUX_ITEMS is not always a good choice.  Compare with the background.
+    // The borrowed colour is not always a good choice.  Compare with the background.
     if( view()->GetGAL()->GetClearColor().Distance( previewColor ) < 0.5 )
         previewColor.Invert();
 
@@ -269,6 +315,7 @@ int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent )
 
     // Nothing here follows an extension, so the lines the snap system draws are just noise.
     picker->SetConstructionGeometry( false );
+    picker->SetSuppressedSnaps( aOperation.m_SuppressedSnaps );
     picker->ClearHandlers();
     picker->SetMotionHandler(
             [&]( const VECTOR2D& aPointer )
@@ -288,7 +335,7 @@ int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent )
 
                 if( !result )
                 {
-                    frame()->ShowInfoBarError( refusalMessage( result.m_Refusal ) );
+                    frame()->ShowInfoBarError( refusalMessage( result.m_Refusal, aOperation.m_NoResult ) );
                     return true;
                 }
 
@@ -299,9 +346,34 @@ int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent )
 
                 BOARD_COMMIT commit( this );
 
-                commit.Modify( source );
-                applyGeometry( *source, result.m_Geometry.front() );
-                commit.Push( _( "Extend Line or Arc" ) );
+                if( result.m_Geometry.empty() )
+                {
+                    commit.Remove( source );
+                }
+                else
+                {
+                    std::vector<PCB_SHAPE*> pieces;
+
+                    // Duplicate off the untouched source, before its own geometry is replaced.
+                    for( size_t i = 1; i < result.m_Geometry.size(); i++ )
+                    {
+                        PCB_SHAPE* piece = static_cast<PCB_SHAPE*>( source->Duplicate( true, &commit ) );
+
+                        piece->ClearSelected();
+                        pieces.push_back( piece );
+                    }
+
+                    commit.Modify( source );
+                    applyGeometry( *source, result.m_Geometry.front() );
+
+                    for( size_t i = 0; i < pieces.size(); i++ )
+                    {
+                        applyGeometry( *pieces[i], result.m_Geometry[i + 1] );
+                        commit.Add( pieces[i] );
+                    }
+                }
+
+                commit.Push( aOperation.m_CommitDescription );
 
                 updatePreview( aPointer, result );
                 return true;
@@ -338,4 +410,5 @@ int GRAPHIC_EDIT_TOOL::runInteractive( const TOOL_EVENT& aEvent )
 void GRAPHIC_EDIT_TOOL::setTransitions()
 {
     Go( &GRAPHIC_EDIT_TOOL::Extend, PCB_ACTIONS::extendGraphic.MakeEvent() );
+    Go( &GRAPHIC_EDIT_TOOL::Trim, PCB_ACTIONS::trimGraphic.MakeEvent() );
 }
