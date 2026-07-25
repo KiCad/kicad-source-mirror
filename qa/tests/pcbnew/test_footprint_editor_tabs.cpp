@@ -27,6 +27,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <lib_id.h>
+#include <pcb_text.h>
 
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
@@ -106,6 +107,69 @@ BOOST_AUTO_TEST_CASE( ReusedPreviewTabBoardOutlivesInstall )
     BOOST_CHECK_EQUAL( contexts[0].get(), newRaw );
     BOOST_CHECK_EQUAL( installed, newRaw );
     BOOST_CHECK_EQUAL( contexts[0]->GetName(), wxS( "B" ) );
+}
+
+
+/// A new footprint is parented to the active board, which opening its tab frees.  It must be
+/// detached before the switch, or the FOOTPRINT::Clone() in ReloadFootprint walks freed memory.
+BOOST_AUTO_TEST_CASE( NewFootprintDetachedFromOutgoingBoard )
+{
+    int dtorCount = 0;
+
+    auto outgoing = std::make_unique<INSTRUMENTED_BOARD>( &dtorCount );
+    outgoing->SetBoardUse( BOARD_USE::FPHOLDER );
+
+    // CreateNewFootprint parents the footprint to the board without adding it, and gives it default
+    // text items, so the copy constructor reaches FOOTPRINT::Add() and from there GetBoard().
+    auto fp = std::make_unique<FOOTPRINT>( outgoing.get() );
+    fp->SetFPID( LIB_ID( wxS( "Lib" ), wxS( "Untitled" ) ) );
+    fp->Add( new PCB_TEXT( fp.get() ), ADD_MODE::APPEND );
+
+    BOOST_CHECK( FOOTPRINT_EDIT_FRAME::prepareFootprintTabHandoff( fp.get(), true ) );
+    BOOST_CHECK( fp->GetBoard() == nullptr );
+
+    outgoing.reset();
+    BOOST_REQUIRE_EQUAL( dtorCount, 1 );
+
+    std::unique_ptr<FOOTPRINT> clone( static_cast<FOOTPRINT*>( fp->Clone() ) );
+
+    BOOST_CHECK( clone->GetBoard() == nullptr );
+    BOOST_CHECK_EQUAL( clone->GraphicalItems().size(), 1u );
+}
+
+
+/// A footprint opened from the board keeps the legacy single-board path, so no tab is opened and
+/// nothing detaches it from the board it is being edited on.
+BOOST_AUTO_TEST_CASE( BoardSourcedFootprintKeepsItsBoard )
+{
+    std::unique_ptr<BOARD> board = makeFpHolder( wxS( "Lib" ), wxS( "R_0402" ) );
+
+    FOOTPRINT* fp = board->GetFirstFootprint();
+    fp->SetLink( KIID() );
+
+    BOOST_CHECK( !FOOTPRINT_EDIT_FRAME::prepareFootprintTabHandoff( fp, true ) );
+    BOOST_CHECK_EQUAL( fp->GetBoard(), board.get() );
+}
+
+
+/// Without a tab strip, or without a library nickname to key a tab on, the load stays on the active
+/// board and the footprint keeps its parent.
+BOOST_AUTO_TEST_CASE( TablessAndAnonymousLoadsKeepTheirBoard )
+{
+    std::unique_ptr<BOARD> board = makeFpHolder( wxS( "Lib" ), wxS( "R_0402" ) );
+
+    FOOTPRINT* fp = board->GetFirstFootprint();
+
+    BOOST_CHECK( !FOOTPRINT_EDIT_FRAME::prepareFootprintTabHandoff( fp, false ) );
+    BOOST_CHECK_EQUAL( fp->GetBoard(), board.get() );
+
+    // An imported footprint carries no nickname, so there is no library tab for it to land on.
+    fp->SetFPID( LIB_ID( wxEmptyString, wxS( "R_0402" ) ) );
+
+    BOOST_CHECK( !FOOTPRINT_EDIT_FRAME::prepareFootprintTabHandoff( fp, true ) );
+    BOOST_CHECK_EQUAL( fp->GetBoard(), board.get() );
+
+    BOOST_CHECK( !FOOTPRINT_EDIT_FRAME::prepareFootprintTabHandoff( nullptr, true ) );
 }
 
 

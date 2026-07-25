@@ -74,6 +74,20 @@ public:
             std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT> aNew,
             const std::function<void( const FOOTPRINT_EDITOR_TAB_CONTEXT& )>& aInstallSuccessor );
 
+    /**
+     * Decide whether @p aFootprint opens in its own tab and, if so, detach it from the board it
+     * arrived parented to.
+     *
+     * Only a library footprint with a resolvable identity gets a tab; board-sourced loads and
+     * footprints with no nickname keep the legacy single-board behavior.  A footprint that does get
+     * a tab must not hold a parent across the switch, which frees the outgoing board.
+     *
+     * Exposed for unit testing of the hand-off.
+     *
+     * @return true if the caller should open a tab for @p aFootprint.
+     */
+    static bool prepareFootprintTabHandoff( FOOTPRINT* aFootprint, bool aHasTabs );
+
     ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
     SELECTION&            GetCurrentSelection() override;

@@ -894,16 +894,26 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
+bool FOOTPRINT_EDIT_FRAME::prepareFootprintTabHandoff( FOOTPRINT* aFootprint, bool aHasTabs )
 {
-    // Route the load through the tab strip so the footprint lands on its own tab. Tabs only apply to
-    // library footprints with a resolvable identity; board-sourced and new-footprint loads keep the
-    // legacy single-board behavior.
     const bool fromBoard = aFootprint && aFootprint->GetLink() != niluuid;
 
+    if( !aHasTabs || !aFootprint || fromBoard || !aFootprint->GetFPID().IsValid() )
+        return false;
+
+    // A new footprint is parented to the board the tab switch is about to free, so drop the parent
+    // before the switch; ReloadFootprint reparents it to the incoming board
+    aFootprint->SetParent( nullptr );
+
+    return true;
+}
+
+
+void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
+{
     // Opening from the library is a preview that the next library-open reuses; editing promotes it
     // to a permanent tab.
-    if( m_tabsPanel && aFootprint && !fromBoard && aFootprint->GetFPID().IsValid() )
+    if( prepareFootprintTabHandoff( aFootprint, m_tabsPanel != nullptr ) )
         findOrCreateFootprintTab( aFootprint->GetFPID(), true );
 
     ReloadFootprint( aFootprint );
