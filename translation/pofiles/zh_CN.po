@@ -48,7 +48,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-11 12:01+0000\n"
+"PO-Revision-Date: 2026-07-26 13:15+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -23712,9 +23712,8 @@ msgid "Symbol definition '%s' for '%s' not found."
 msgstr "符号库 '%s' 未找到。"
 
 #: eeschema/sch_io/pcad/sch_io_pcad.h:56
-#, fuzzy
 msgid "P-CAD schematic files"
-msgstr "PADS Logic 原理图文件"
+msgstr "P-CAD 原理图文件"
 
 #: eeschema/sch_io/pcad/sch_io_pcad.h:61
 #, fuzzy
