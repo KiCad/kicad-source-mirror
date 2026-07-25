@@ -66,6 +66,14 @@ const VECTOR2I& GetOtherEnd( const SEG& aSeg, const VECTOR2I& aPoint );
 OPT_VECTOR2I GetSharedEndpoint( const SEG& aSegA, const SEG& aSegB );
 
 /**
+ * Position of a point along a segment.  0 is aSeg.A, 1 is aSeg.B.
+ *
+ * Normalises SEG::TCoef(), so it inherits that overflow: a segment longer than the coordinate
+ * range wraps.  Zero for a degenerate segment.
+ */
+double ParameterAlong( const SEG& aSeg, const VECTOR2I& aPoint );
+
+/**
  * Decompose a BOX2 into four segments.
  *
  * Segments are returned in the order: Top, Right, Bottom, Left.

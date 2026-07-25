@@ -28,6 +28,17 @@
 #include <geometry/shape_rect.h>
 
 
+double KIGEOM::ParameterAlong( const SEG& aSeg, const VECTOR2I& aPoint )
+{
+    SEG::ecoord length = aSeg.SquaredLength();
+
+    if( length == 0 )
+        return 0.0;
+
+    return static_cast<double>( aSeg.TCoef( aPoint ) ) / length;
+}
+
+
 SEG KIGEOM::NormalisedSeg( const SEG& aSeg )
 {
     if( LexicographicalCompare( aSeg.A, aSeg.B ) <= 0 )
