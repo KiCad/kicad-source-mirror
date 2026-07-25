@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-06 11:10+0000\n"
+"PO-Revision-Date: 2026-07-26 13:15+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -126,7 +126,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -3788,6 +3788,7 @@ msgstr ""
 #, c-format
 msgid "Remove the previously embedded drawing sheet file '%s'?"
 msgstr ""
+"Rimuovere il file del foglio di disegno incorporato precedentemente '%s'?"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -8749,6 +8750,8 @@ msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"Impossibile creare la firma del commit. Impostare user.name e user.email "
+"nella configurazione git."
 
 #: common/git/libgit_backend.cpp:1536
 #, c-format
@@ -8786,7 +8789,7 @@ msgstr "Chiusura rebase fallita: %s"
 
 #: common/git/libgit_backend.cpp:1633 common/git/libgit_backend.cpp:1679
 msgid "Another git operation is in progress."
-msgstr ""
+msgstr "È in corso un'altra operazione git."
 
 #: common/git/libgit_backend.cpp:1641 common/git/libgit_backend.cpp:1694
 #, fuzzy
@@ -8815,6 +8818,8 @@ msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"Il rebase ha incontrato dei conflitti.  Questo problema è meglio risolverlo "
+"da riga di comando git."
 
 #: common/grid_tricks.cpp:391 common/tool/actions.cpp:309
 #: common/widgets/listbox_tricks.cpp:205 eeschema/tools/sch_actions.cpp:261
@@ -9166,7 +9171,7 @@ msgstr "Impossibile scrivere il rapporto nel file '%s'."
 #: common/io/diptrace/diptrace_binary_reader.cpp:63
 #, c-format
 msgid "DipTrace file '%s' is too large (%ld bytes)."
-msgstr ""
+msgstr "Il file DipTrace '%s' è troppo grande (%ld byte)."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:85
 #, c-format
@@ -9176,7 +9181,7 @@ msgstr "Errore nel leggere il file '%s'."
 #: common/io/diptrace/diptrace_binary_reader.cpp:102
 #, c-format
 msgid "Seek past end of file (offset %zu, size %zu)."
-msgstr ""
+msgstr "Seek oltre la fine del file (offset %zu, dimensione %zu)."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:209
 #, c-format
@@ -9184,6 +9189,8 @@ msgid ""
 "Unexpected end of file at offset 0x%06zX: need 3 bytes for int3, have %zu "
 "remaining."
 msgstr ""
+"Fine del file imprevista all'offset 0x%06zX: sono necessari 3 byte per int3, "
+"restano %zu."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:227
 #, c-format
@@ -9191,48 +9198,53 @@ msgid ""
 "Unexpected end of file at offset 0x%06zX: need 4 bytes for int4, have %zu "
 "remaining."
 msgstr ""
+"Fine file non prevista all'offset 0x%06zX: servono 4 byte per int4, ma "
+"restano %zu."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:248
 #, c-format
 msgid "Unexpected end of file at offset 0x%06zX: need 1 byte."
-msgstr ""
+msgstr "Fine file non prevista all'offset 0x%06zX: servono 1 byte."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:393
 #, c-format
 msgid "Unreasonable string length %d at offset 0x%06zX."
-msgstr ""
+msgstr "Lunghezza stringa %d insensata all'offset 0x%06zX."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:422
 #, c-format
 msgid "Unreasonable v37 string length %d at offset 0x%06zX."
-msgstr ""
+msgstr "Lunghezza stringa v37 %d insensata all'offset 0x%06zX."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:556
 #, c-format
 msgid ""
 "Unexpected end of file at offset 0x%06zX: need %zu bytes, have %zu remaining."
 msgstr ""
+"Fine file non prevista all'offset 0x%06zX: servono %zu byte, ma ne restano "
+"%zu."
 
 #: common/io/eagle/eagle_bin_parser.cpp:911
 msgid "Short read in Eagle binary file (field out of bounds)."
-msgstr ""
+msgstr "Lettura corta nel file binario Eagle (campo fuori limiti)."
 
 #: common/io/eagle/eagle_bin_parser.cpp:1023
 msgid "Short read in Eagle binary file (truncated block)."
-msgstr ""
+msgstr "Lettura corta nel file binario Eagle (blocco troncato)."
 
 #: common/io/eagle/eagle_bin_parser.cpp:1075
 #, c-format
 msgid "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
 msgstr ""
+"Identificativo blocco binario Eagle sconosciuto 0x%02x%02x all'offset %zu."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2428
 msgid "Eagle binary file has no drawing section."
-msgstr ""
+msgstr "Il file binario Eagle non ha una sezione disegni."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2446
 msgid "Eagle binary layout is missing a board/libraries node."
-msgstr ""
+msgstr "Nel layout binario Eagle manca un nodo scheda/librerie."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2552
 msgid "File is too small to be an Eagle binary board."
@@ -9240,7 +9252,7 @@ msgstr "Il file è troppo piccolo per essere un binario Eagle."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2617
 msgid "Eagle binary schematic has no drawing section."
-msgstr ""
+msgstr "Lo schema binario Eagle non ha una sezione disegni."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2622
 #, fuzzy
@@ -9302,6 +9314,8 @@ msgstr "Impossibile analizzare la riga JSON %d in '%s': %s"
 #, c-format
 msgid "EasyEDA Pro v3 blob in '%s' was skipped due to parse error: %s"
 msgstr ""
+"Il BLOB EasyEDA Pro v3 in '%s' è stato ignorato a causa di un errore di "
+"analisi: %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:929
 #, fuzzy, c-format
@@ -9319,7 +9333,7 @@ msgstr ""
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:321
 #, c-format
 msgid "Expected DOCHEAD in '%s' at line %d"
-msgstr ""
+msgstr "DOCCHEAD previsto in '%s' alla riga %d"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:351
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:427
