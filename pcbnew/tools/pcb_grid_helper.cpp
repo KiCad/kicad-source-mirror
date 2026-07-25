@@ -42,6 +42,7 @@
 #include <zone.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/intersection.h>
+#include <tools/board_item_geometry.h>
 #include <geometry/nearest.h>
 #include <geometry/oval.h>
 #include <geometry/shape_circle.h>
@@ -66,66 +67,6 @@
 namespace
 {
 /**
- * Get the INTERSECTABLE_GEOM for a BOARD_ITEM if it's supported.
- *
- * This is the idealised geometry, e.g. a zero-width line or circle.
- */
-std::optional<INTERSECTABLE_GEOM> GetBoardIntersectable( const BOARD_ITEM& aItem )
-{
-    switch( aItem.Type() )
-    {
-    case PCB_SHAPE_T:
-    {
-        const PCB_SHAPE& shape = static_cast<const PCB_SHAPE&>( aItem );
-
-        switch( shape.GetShape() )
-        {
-        case SHAPE_T::SEGMENT:   return SEG{ shape.GetStart(), shape.GetEnd() };
-        case SHAPE_T::CIRCLE:    return CIRCLE{ shape.GetCenter(), shape.GetRadius() };
-        case SHAPE_T::ARC:       return SHAPE_ARC{ shape.GetStart(), shape.GetArcMid(), shape.GetEnd(), 0 };
-        case SHAPE_T::RECTANGLE: return BOX2I::ByCorners( shape.GetStart(), shape.GetEnd() );
-
-        case SHAPE_T::ELLIPSE:
-            return SHAPE_ELLIPSE{ shape.GetEllipseCenter(), shape.GetEllipseMajorRadius(),
-                                  shape.GetEllipseMinorRadius(), shape.GetEllipseRotation() };
-
-        case SHAPE_T::ELLIPSE_ARC:
-            return SHAPE_ELLIPSE{ shape.GetEllipseCenter(),      shape.GetEllipseMajorRadius(),
-                                  shape.GetEllipseMinorRadius(), shape.GetEllipseRotation(),
-                                  shape.GetEllipseStartAngle(),  shape.GetEllipseEndAngle() };
-
-        default:                 break;
-        }
-
-        break;
-    }
-
-    case PCB_TRACE_T:
-    {
-        const PCB_TRACK& track = static_cast<const PCB_TRACK&>( aItem );
-        return SEG{ track.GetStart(), track.GetEnd() };
-    }
-
-    case PCB_ARC_T:
-    {
-        const PCB_ARC& arc = static_cast<const PCB_ARC&>( aItem );
-        return SHAPE_ARC{ arc.GetStart(), arc.GetMid(), arc.GetEnd(), 0 };
-    }
-
-    case PCB_REFERENCE_IMAGE_T:
-    {
-        const PCB_REFERENCE_IMAGE& refImage = static_cast<const PCB_REFERENCE_IMAGE&>( aItem );
-        return refImage.GetBoundingBox();
-    }
-
-    default:
-        break;
-    }
-
-    return std::nullopt;
-}
-
-/**
  * Find the closest point on a BOARD_ITEM to a given point.
  *
  * Only works for items that have a NEARABLE_GEOM defined, it's
@@ -136,7 +77,7 @@ std::optional<INTERSECTABLE_GEOM> GetBoardIntersectable( const BOARD_ITEM& aItem
  */
 std::optional<int64_t> FindSquareDistanceToItem( const BOARD_ITEM& item, const VECTOR2I& aPos )
 {
-    std::optional<INTERSECTABLE_GEOM> intersectable = GetBoardIntersectable( item );
+    std::optional<INTERSECTABLE_GEOM> intersectable = BoardItemIntersectable( item );
     std::optional<NEARABLE_GEOM>      nearable;
 
     if( intersectable )
@@ -886,7 +827,7 @@ SNAP_RESULT PCB_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, const LSET& a
             if( !geometryEnabled )
                 continue;
 
-            std::optional<INTERSECTABLE_GEOM> geometry = GetBoardIntersectable( *item );
+            std::optional<INTERSECTABLE_GEOM> geometry = BoardItemIntersectable( *item );
 
             if( !geometry )
                 continue;
@@ -1588,11 +1529,11 @@ void PCB_GRID_HELPER::computeAnchors( const std::vector<BOARD_ITEM*>& aItems, co
                     if( !excludeGraphics
                         && ( item.Type() == PCB_SHAPE_T || item.Type() == PCB_REFERENCE_IMAGE_T ) )
                     {
-                        intersectableGeom = GetBoardIntersectable( item );
+                        intersectableGeom = BoardItemIntersectable( item );
                     }
                     else if( !excludeTracks && ( item.Type() == PCB_TRACE_T || item.Type() == PCB_ARC_T ) )
                     {
-                        intersectableGeom = GetBoardIntersectable( item );
+                        intersectableGeom = BoardItemIntersectable( item );
                     }
 
                     if( intersectableGeom )

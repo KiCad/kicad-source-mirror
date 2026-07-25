@@ -1120,6 +1120,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/eagle/pcb_io_eagle.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/geda/pcb_io_geda.cpp
 
+    ${CMAKE_SOURCE_DIR}/pcbnew/tools/board_item_geometry.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_grid_helper.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_actions.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_editor_conditions.cpp
