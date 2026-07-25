@@ -216,8 +216,6 @@ public:
         DOC_PATH,
         SCH_LIB_PATH,
         SCH_LIB_SELECT, // eeschema/selpart.cpp
-        SCH_LIBEDIT_CUR_LIB,
-        SCH_LIBEDIT_CUR_SYMBOL, // eeschema/libeditframe.cpp
 
         VIEWER_3D_PATH,
         VIEWER_3D_FILTER_INDEX,

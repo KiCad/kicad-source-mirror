@@ -72,7 +72,9 @@ void SYMBOL_EDIT_FRAME::UpdateTitle()
 
         title += UnescapeString( GetCurSymbol()->GetLibId().Format() );
 
-        if( m_libMgr && m_libMgr->LibraryExists( GetCurLib() ) && m_libMgr->IsLibraryReadOnly( GetCurLib() ) )
+        wxString libName = GetCurSymbol()->GetLibNickname();
+
+        if( m_libMgr && m_libMgr->LibraryExists( libName ) && m_libMgr->IsLibraryReadOnly( libName ) )
             title += wxS( " " ) + _( "[Read Only Library]" );
     }
     else
@@ -82,20 +84,6 @@ void SYMBOL_EDIT_FRAME::UpdateTitle()
 
     title += wxT( " \u2014 " ) + _( "Symbol Editor" );
     SetTitle( title );
-}
-
-
-void SYMBOL_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
-{
-    wxString selectedLib = aLibrary;
-
-    if( selectedLib.empty() )
-        selectedLib = SelectLibrary( _( "Select Symbol Library" ), _( "Library:" ) );
-
-    if( !selectedLib.empty() )
-        SetCurLib( selectedLib );
-
-    UpdateTitle();
 }
 
 
@@ -150,8 +138,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aBodySt
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
 
     // Some libraries can't be edited, so load the underlying chosen symbol
-    if( auto optRow = manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, aLibId.GetLibNickname() );
-        optRow.has_value() )
+    if( auto optRow = manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, aLibId.GetLibNickname() ); optRow.has_value() )
     {
         const LIBRARY_TABLE_ROW* row = *optRow;
         SCH_IO_MGR::SCH_FILE_T type = SCH_IO_MGR::EnumFromStr( row->Type() );
@@ -172,14 +159,16 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aBodySt
                 wxString msg;
 
                 msg.Printf( _( "Error loading symbol %s from library '%s'." ),
-                            aLibId.GetUniStringLibId(), aLibId.GetUniStringLibItemName() );
+                            aLibId.GetUniStringLibId(),
+                            aLibId.GetUniStringLibItemName() );
                 DisplayErrorMessage( this, msg, ioe.What() );
                 return false;
             }
         }
     }
 
-    if( GetCurSymbol() && !IsSymbolFromSchematic()
+    if( GetCurSymbol()
+            && !IsSymbolFromSchematic()
             && GetCurSymbol()->GetLibId() == libId
             && GetUnit() == aUnit
             && GetBodyStyle() == aBodyStyle )
@@ -199,9 +188,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbol( const LIB_ID& aLibId, int aUnit, int aBodySt
         }
     }
 
-    SelectActiveLibrary( libId.GetLibNickname() );
-
-    if( LoadSymbolFromCurrentLib( libId.GetLibItemName(), aUnit, aBodyStyle ) )
+    if( LoadSymbolFromLib( libId.GetLibNickname(), libId.GetLibItemName(), aUnit, aBodyStyle ) )
     {
         m_treePane->GetLibTree()->SelectLibId( libId );
         m_treePane->GetLibTree()->ExpandLibId( libId );
@@ -224,26 +211,27 @@ void SYMBOL_EDIT_FRAME::centerItemIdleHandler( wxIdleEvent& aEvent )
 }
 
 
-bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aSymbolName, int aUnit, int aBodyStyle )
+bool SYMBOL_EDIT_FRAME::LoadSymbolFromLib( const wxString& aLibName, const wxString& aSymbolName, int aUnit,
+                                           int aBodyStyle )
 {
     LIB_SYMBOL* symbol = nullptr;
 
     try
     {
-        symbol = PROJECT_SCH::SymbolLibAdapter( &Prj() )->LoadSymbol( GetCurLib(), aSymbolName );
+        symbol = PROJECT_SCH::SymbolLibAdapter( &Prj() )->LoadSymbol( aLibName, aSymbolName );
     }
     catch( const IO_ERROR& ioe )
     {
         wxString msg;
 
         msg.Printf( _( "Error loading symbol %s from library '%s'." ),
-                    aSymbolName,
-                    GetCurLib() );
+                    UnescapeString( aSymbolName ),
+                    UnescapeString( aLibName ) );
         DisplayErrorMessage( this, msg, ioe.What() );
         return false;
     }
 
-    if( !symbol || !LoadOneLibrarySymbolAux( symbol, GetCurLib(), aUnit, aBodyStyle ) )
+    if( !symbol || !LoadOneLibrarySymbol( symbol, aLibName, aUnit, aBodyStyle ) )
         return false;
 
     // Enable synchronized pin edit mode for symbols with interchangeable units
@@ -257,8 +245,7 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aSymbolName, i
 }
 
 
-bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxString& aLibrary,
-                                                 int aUnit, int aBodyStyle )
+bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbol( LIB_SYMBOL* aEntry, const wxString& aLibrary, int aUnit, int aBodyStyle )
 {
     bool rebuildMenuAndToolbar = false;
 
@@ -1393,7 +1380,7 @@ void SYMBOL_EDIT_FRAME::DuplicateSymbol( bool aFromClipboard )
         ensureUniqueName( symbol, lib );
         m_libMgr->UpdateSymbol( symbol, lib );
 
-        LoadOneLibrarySymbolAux( symbol, lib, GetUnit(), GetBodyStyle() );
+        LoadOneLibrarySymbol( symbol, lib, GetUnit(), GetBodyStyle() );
     }
 
     SyncLibraries( false );
@@ -1518,7 +1505,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbol( const wxString& aAlias, const wxString& aLib
     // and if units are interchangeable, graphic items are common to units
     SetDrawSpecificUnit( symbol->UnitsLocked() );
 
-    LoadOneLibrarySymbolAux( symbol, aLibrary, aUnit, 0 );
+    LoadOneLibrarySymbol( symbol, aLibrary, aUnit, 0 );
 }
 
 

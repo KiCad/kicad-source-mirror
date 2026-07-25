@@ -1087,7 +1087,7 @@ int SYMBOL_EDITOR_CONTROL::CompareLibraryWithFile( const TOOL_EVENT& aEvent )
 
     wxCHECK( editFrame, 0 );
 
-    const wxString currentLib = editFrame->GetCurLib();
+    const wxString currentLib = editFrame->GetTreeLIBID().GetLibNickname();
 
     if( currentLib.IsEmpty() )
     {
