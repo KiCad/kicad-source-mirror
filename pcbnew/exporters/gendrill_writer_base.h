@@ -458,13 +458,21 @@ protected:
     /// Get unique layer pairs by examining the micro and blind_buried vias.
     std::vector<DRILL_SPAN> getUniqueLayerPairs() const;
 
+    /// Selects which subset of m_toolListBuffer a summary covers.
+    enum class TOOL_SUMMARY
+    {
+        PLATED,     ///< Plated holes.
+        UNPLATED,   ///< Non-plated holes, excluding backdrills.
+        BACKDRILL   ///< Backdrills, which are non-plated by construction.
+    };
+
     /**
      * Print m_toolListBuffer[] tools to aOut and returns total hole count.
      *
      * @param aOut is the current OUTPUTFORMATTER to print summary.
-     * @param aSummaryNPTH is true to print summary for NPTH, false for PTH.
+     * @param aSummary selects which tools the summary covers.
      */
-    unsigned printToolSummary( FILE* out, bool aSummaryNPTH ) const;
+    unsigned printToolSummary( FILE* out, TOOL_SUMMARY aSummary ) const;
 
     /**
      * @return a string from aPair to identify the layer layer pair.
