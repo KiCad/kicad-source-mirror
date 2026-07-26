@@ -253,7 +253,6 @@ BOOST_AUTO_TEST_CASE( DesignRuleType )
                                 DRCE_CREEPAGE,
                                 DRCE_TRACKS_CROSSING,
                                 DRCE_EDGE_CLEARANCE,
-                                DRCE_ZONES_INTERSECT,
                                 DRCE_ISOLATED_COPPER,
                                 DRCE_STARVED_THERMAL,
                                 DRCE_DANGLING_VIA,

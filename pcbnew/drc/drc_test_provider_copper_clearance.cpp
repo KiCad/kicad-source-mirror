@@ -50,7 +50,6 @@
     - DRCE_CLEARANCE
     - DRCE_HOLE_CLEARANCE
     - DRCE_TRACKS_CROSSING
-    - DRCE_ZONES_INTERSECT
     - DRCE_SHORTING_ITEMS
 */
 
@@ -175,13 +174,6 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
             return false; // DRC cancelled
 
         testTeardropClearances();
-    }
-    else if( !m_drcEngine->IsErrorLimitExceeded( DRCE_ZONES_INTERSECT ) )
-    {
-        if( !reportPhase( _( "Checking zones..." ) ) )
-            return false;   // DRC cancelled
-
-        testZonesToZones();
     }
 
     return !m_drcEngine->IsCancelled();
@@ -1230,9 +1222,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 {
     using SEG_RTREE = KIRTREE::PACKED_RTREE<size_t, int, 2>;
 
-    bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
-    bool testIntersects = !m_drcEngine->IsErrorLimitExceeded( DRCE_ZONES_INTERSECT );
-
     std::vector<std::map<PCB_LAYER_ID, std::vector<SEG>>> poly_segments( m_board->m_DRCCopperZones.size() );
     std::vector<std::map<PCB_LAYER_ID, SEG_RTREE>>        seg_rtrees( m_board->m_DRCCopperZones.size() );
 
@@ -1246,101 +1235,74 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
             {
                 std::shared_ptr<DRC_ITEM> drcItem;
 
-                if( constraint.IsNull() )
-                {
-                    drcItem = DRC_ITEM::Create( DRCE_ZONES_INTERSECT );
-                    drcItem->SetErrorDetail( _( "(intersecting zones must have distinct priorities)" ) );
-                    drcItem->SetItems( zoneA, zoneB );
-                    reportViolation( drcItem, pt, layer );
-                }
-                else
-                {
-                    drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
-                    drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                                        constraint.GetName(),
-                                                        constraint.GetValue().Min(),
-                                                        std::max( actual, 0 ) ) );
-                    drcItem->SetItems( zoneA, zoneB );
-                    drcItem->SetViolatingRule( constraint.GetParentRule() );
-                    reportTwoItemGeometry( drcItem, pt, zoneA, zoneB, layer, actual );
-                }
+                drcItem = DRC_ITEM::Create( DRCE_CLEARANCE );
+                drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                                    constraint.GetName(),
+                                                    constraint.GetValue().Min(),
+                                                    std::max( actual, 0 ) ) );
+                drcItem->SetItems( zoneA, zoneB );
+                drcItem->SetViolatingRule( constraint.GetParentRule() );
+                reportTwoItemGeometry( drcItem, pt, zoneA, zoneB, layer, actual );
             };
 
     auto checkZones =
-            [this, testClearance, testIntersects, reportZoneZoneViolation,
-             &poly_segments, &seg_rtrees, &done]
-            ( int zoneA_idx, int zoneB_idx, bool sameNet, PCB_LAYER_ID layer ) -> void
+            [this, reportZoneZoneViolation, &poly_segments, &seg_rtrees, &done]
+            ( int zoneA_idx, int zoneB_idx, PCB_LAYER_ID layer ) -> void
             {
-                ZONE*    zoneA = m_board->m_DRCCopperZones[zoneA_idx];
-                ZONE*    zoneB = m_board->m_DRCCopperZones[zoneB_idx];
-                int      actual = 0;
-                VECTOR2I pt;
+                ZONE*          zoneA = m_board->m_DRCCopperZones[zoneA_idx];
+                ZONE*          zoneB = m_board->m_DRCCopperZones[zoneB_idx];
+                int            actual = 0;
+                VECTOR2I       pt;
+                DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, zoneA, zoneB, layer );
+                int            clearance = constraint.GetValue().Min();
 
-                if( sameNet && testIntersects )
+                if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
                 {
-                    SHAPE_POLY_SET zoneAOutline = zoneA->GetBoardOutline();
-                    SHAPE_POLY_SET zoneBOutline = zoneB->GetBoardOutline();
+                    std::vector<SEG>& refSegments = poly_segments[zoneA_idx][layer];
+                    std::vector<SEG>& testSegments = poly_segments[zoneB_idx][layer];
 
-                    if( zoneAOutline.Collide( &zoneBOutline, 0, &actual, &pt ) )
+                    auto testIt = seg_rtrees[zoneB_idx].find( layer );
+
+                    if( testIt != seg_rtrees[zoneB_idx].end() && !testIt->second.empty() )
                     {
-                        done.fetch_add( 1 );
-                        reportZoneZoneViolation( zoneA, zoneB, pt, actual, DRC_CONSTRAINT(), layer );
-                        return;
-                    }
-                }
-                else if( !sameNet && testClearance )
-                {
-                    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, zoneA, zoneB, layer );
-                    int            clearance = constraint.GetValue().Min();
+                        const SEG_RTREE& testTree = testIt->second;
 
-                    if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance > 0 )
-                    {
-                        std::vector<SEG>& refSegments = poly_segments[zoneA_idx][layer];
-                        std::vector<SEG>& testSegments = poly_segments[zoneB_idx][layer];
-
-                        auto testIt = seg_rtrees[zoneB_idx].find( layer );
-
-                        if( testIt != seg_rtrees[zoneB_idx].end() && !testIt->second.empty() )
+                        for( SEG& refSegment : refSegments )
                         {
-                            const SEG_RTREE& testTree = testIt->second;
+                            int minX = std::min( refSegment.A.x, refSegment.B.x ) - clearance;
+                            int minY = std::min( refSegment.A.y, refSegment.B.y ) - clearance;
+                            int maxX = std::max( refSegment.A.x, refSegment.B.x ) + clearance;
+                            int maxY = std::max( refSegment.A.y, refSegment.B.y ) + clearance;
+                            int qmin[2] = { minX, minY };
+                            int qmax[2] = { maxX, maxY };
+                            bool found = false;
 
-                            for( SEG& refSegment : refSegments )
+                            auto visitor = [&]( size_t segIdx ) -> bool
                             {
-                                int minX = std::min( refSegment.A.x, refSegment.B.x ) - clearance;
-                                int minY = std::min( refSegment.A.y, refSegment.B.y ) - clearance;
-                                int maxX = std::max( refSegment.A.x, refSegment.B.x ) + clearance;
-                                int maxY = std::max( refSegment.A.y, refSegment.B.y ) + clearance;
-                                int qmin[2] = { minX, minY };
-                                int qmax[2] = { maxX, maxY };
-                                bool found = false;
+                                SEG& testSegment = testSegments[segIdx];
+                                int64_t  dist_sq = 0;
+                                VECTOR2I other_pt;
 
-                                auto visitor = [&]( size_t segIdx ) -> bool
+                                refSegment.NearestPoints( testSegment, pt, other_pt, dist_sq );
+                                actual = std::floor( std::sqrt( dist_sq ) + 0.5 );
+
+                                if( actual < clearance )
                                 {
-                                    SEG& testSegment = testSegments[segIdx];
-                                    int64_t  dist_sq = 0;
-                                    VECTOR2I other_pt;
-
-                                    refSegment.NearestPoints( testSegment, pt, other_pt, dist_sq );
-                                    actual = std::floor( std::sqrt( dist_sq ) + 0.5 );
-
-                                    if( actual < clearance )
-                                    {
-                                        found = true;
-                                        return false;
-                                    }
-
-                                    return true;
-                                };
-
-                                testTree.Search( qmin, qmax, visitor );
-
-                                if( found )
-                                {
-                                    done.fetch_add( 1 );
-                                    reportZoneZoneViolation( zoneA, zoneB, pt, actual, constraint,
-                                                            layer );
-                                    return;
+                                    found = true;
+                                    return false;
                                 }
+
+                                return true;
+                            };
+
+                            testTree.Search( qmin, qmax, visitor );
+
+                            if( found )
+                            {
+                                done.fetch_add( 1 );
+                                reportZoneZoneViolation( zoneA, zoneB, pt, actual, constraint,
+                                                        layer );
+                                return;
                             }
                         }
                     }
@@ -1419,7 +1381,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
                 bool sameNet = zoneA->GetNetCode() == zoneB->GetNetCode() && zoneA->GetNetCode() >= 0;
 
-                if( sameNet && zoneA->GetAssignedPriority() != zoneB->GetAssignedPriority() )
+                if( sameNet )
                     continue;
 
                 // rule areas may overlap at will
@@ -1429,33 +1391,17 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                 // Examine a candidate zone: compare zoneB to zoneA
                 SHAPE_POLY_SET  zoneAOutline;
                 SHAPE_POLY_SET  zoneBOutline;
-                SHAPE_POLY_SET* polyA = nullptr;
-                SHAPE_POLY_SET* polyB = nullptr;
+                SHAPE_POLY_SET* polyA = zoneA->GetFill( layer );
+                SHAPE_POLY_SET* polyB = zoneB->GetFill( layer );
 
-                if( sameNet )
-                {
-                    zoneAOutline = zoneA->GetBoardOutline();
-                    zoneBOutline = zoneB->GetBoardOutline();
-                    zoneAOutline.BuildBBoxCaches();
-                    zoneBOutline.BuildBBoxCaches();
-                    polyA = &zoneAOutline;
-                    polyB = &zoneBOutline;
-                }
-                else
-                {
-                    polyA = zoneA->GetFill( layer );
-                    polyB = zoneB->GetFill( layer );
-                }
-
-                if( !polyA || !polyB
-                        || !polyA->BBoxFromCaches().Intersects( polyB->BBoxFromCaches() ) )
+                if( !polyA || !polyB || !polyA->BBoxFromCaches().Intersects( polyB->BBoxFromCaches() ) )
                     continue;
 
                 count++;
                 (void)tp.submit_task(
-                        [checkZones, ia, ia2, sameNet, layer]()
+                        [checkZones, ia, ia2, layer]()
                         {
-                            checkZones( ia, ia2, sameNet, layer );
+                            checkZones( ia, ia2, layer );
                         } );
             }
         }

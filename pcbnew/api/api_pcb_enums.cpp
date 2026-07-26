@@ -1989,7 +1989,6 @@ DrcErrorType ToProtoEnum( PCB_DRC_CODE aValue )
     case DRCE_CREEPAGE:                         return DrcErrorType::DRCET_CREEPAGE;
     case DRCE_TRACKS_CROSSING:                  return DrcErrorType::DRCET_TRACKS_CROSSING;
     case DRCE_EDGE_CLEARANCE:                   return DrcErrorType::DRCET_EDGE_CLEARANCE;
-    case DRCE_ZONES_INTERSECT:                  return DrcErrorType::DRCET_ZONES_INTERSECT;
     case DRCE_ISOLATED_COPPER:                  return DrcErrorType::DRCET_ISOLATED_COPPER;
     case DRCE_STARVED_THERMAL:                  return DrcErrorType::DRCET_STARVED_THERMAL;
     case DRCE_DANGLING_VIA:                     return DrcErrorType::DRCET_DANGLING_VIA;
@@ -2068,7 +2067,6 @@ PCB_DRC_CODE FromProtoEnum( DrcErrorType aValue )
     case DrcErrorType::DRCET_CREEPAGE:                    return DRCE_CREEPAGE;
     case DrcErrorType::DRCET_TRACKS_CROSSING:             return DRCE_TRACKS_CROSSING;
     case DrcErrorType::DRCET_EDGE_CLEARANCE:              return DRCE_EDGE_CLEARANCE;
-    case DrcErrorType::DRCET_ZONES_INTERSECT:             return DRCE_ZONES_INTERSECT;
     case DrcErrorType::DRCET_ISOLATED_COPPER:             return DRCE_ISOLATED_COPPER;
     case DrcErrorType::DRCET_STARVED_THERMAL:             return DRCE_STARVED_THERMAL;
     case DrcErrorType::DRCET_DANGLING_VIA:                return DRCE_DANGLING_VIA;

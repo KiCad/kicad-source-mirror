@@ -77,10 +77,6 @@ DRC_ITEM DRC_ITEM::edgeClearance( DRCE_EDGE_CLEARANCE,
         _HKI( "Board edge clearance violation" ),
         wxT( "copper_edge_clearance" ) );
 
-DRC_ITEM DRC_ITEM::zonesIntersect( DRCE_ZONES_INTERSECT,
-        _HKI( "Copper zones intersect" ),
-        wxT( "zones_intersect" ) );
-
 DRC_ITEM DRC_ITEM::isolatedCopper( DRCE_ISOLATED_COPPER,
         _HKI( "Isolated copper fill" ),
         wxT( "isolated_copper" ) );
@@ -390,7 +386,6 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
         DRC_ITEM::heading_misc,
         DRC_ITEM::itemsNotAllowed,
         DRC_ITEM::textOnEdgeCuts,
-        DRC_ITEM::zonesIntersect,
         DRC_ITEM::isolatedCopper,
         DRC_ITEM::footprint,
         DRC_ITEM::padstack,
@@ -427,7 +422,6 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_CREEPAGE:                 return std::make_shared<DRC_ITEM>( creepage );
     case DRCE_TRACKS_CROSSING:          return std::make_shared<DRC_ITEM>( tracksCrossing );
     case DRCE_EDGE_CLEARANCE:           return std::make_shared<DRC_ITEM>( edgeClearance );
-    case DRCE_ZONES_INTERSECT:          return std::make_shared<DRC_ITEM>( zonesIntersect );
     case DRCE_ISOLATED_COPPER:          return std::make_shared<DRC_ITEM>( isolatedCopper );
     case DRCE_STARVED_THERMAL:          return std::make_shared<DRC_ITEM>( starvedThermal );
     case DRCE_DANGLING_VIA:             return std::make_shared<DRC_ITEM>( viaDangling );
