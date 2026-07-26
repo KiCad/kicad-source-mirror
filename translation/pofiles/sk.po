@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-07-22 19:01+0000\n"
+"PO-Revision-Date: 2026-07-27 14:02+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -2710,7 +2710,6 @@ msgstr ""
 "zvyčajne znamená, že KiCad sa neočakávane zatvoril, pri neuloženej práci."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
 msgstr "Obnoviť automaticky uložené"
 
@@ -2723,16 +2722,14 @@ msgstr ""
 "uložený obsah bude zahodený."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep Current"
-msgstr "Zachovať aktuálnu"
+msgstr "Zachovať aktuálne"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr "Ponechá uložený súbor tak, ako je, a zahodí automaticky uložené zmeny."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
 msgstr "Zachovať obe"
 
@@ -2745,7 +2742,6 @@ msgstr ""
 "samostatný súbor s časovou pečiatkou, ktorý si môžete neskôr pozrieť."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
 msgstr "Zrušiť otvorenie"
 
@@ -9555,14 +9551,13 @@ msgid "Restore Failed"
 msgstr "Obnovenie zlyhalo"
 
 #: common/local_history.cpp:2260
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Obnoviť na vzdialenú verziu."
+msgstr "Obnoviť projekt na verziu z %s?"
 
 #: common/local_history.cpp:2262
-#, fuzzy
 msgid "Restore Version"
-msgstr "Obnovuje sa relácia"
+msgstr "Obnoviť verziu"
 
 #: common/local_history.cpp:2265
 msgid ""
@@ -49764,6 +49759,8 @@ msgid ""
 "Could not post-process GLB line primitives; the exported model may not "
 "import in strict glTF viewers."
 msgstr ""
+"Nepodarilo sa následne spracovať základné tvary GLB; exportovaný model sa "
+"nemusí importovať do striktných glTF prehliadačov."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4098
 #: pcbnew/exporters/step/step_pcb_model.cpp:4145
