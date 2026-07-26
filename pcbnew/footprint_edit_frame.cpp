@@ -410,8 +410,7 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 {
     // Hand the borrowed canvas back before the base destructor deletes it, or the later-destroyed
     // panel would reparent already-freed memory. The canvas then frees exactly once.
-    if( m_tabsPanel )
-        m_tabsPanel->ReleaseSharedCanvas();
+    m_tabsPanel->ReleaseSharedCanvas();
 
     // Shutdown all running tools
     if( m_toolManager )
@@ -452,7 +451,8 @@ void FOOTPRINT_EDIT_FRAME::UpdateMsgPanel()
 
 bool FOOTPRINT_EDIT_FRAME::IsContentModified() const
 {
-    return GetScreen() && GetScreen()->IsContentModified()
+    return GetScreen()
+                && GetScreen()->IsContentModified()
                 && GetBoard() && GetBoard()->GetFirstFootprint();
 }
 
@@ -590,7 +590,7 @@ void FOOTPRINT_EDIT_FRAME::ClearModify()
     // OnModify() mirrors the dirty flag onto the active tab context and the panel model, so clear both
     // here too. Tab rendering and close prompting read the context's flag, so a save that only cleared
     // the shared screen would leave the tab starred and re-prompting to save.
-    if( m_tabsPanel && m_activeTab )
+    if( m_activeTab )
     {
         m_activeTab->SetModified( false );
 
@@ -642,9 +642,7 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
                     if( FOOTPRINT* footprint = LoadFootprint( id ) )
                     {
                         AddFootprintToBoard( footprint );
-
-                        if( m_tabsPanel )
-                            findOrCreateFootprintTab( id, aTab.m_preview );
+                        findOrCreateFootprintTab( id, aTab.m_preview );
 
                         return true;
                     }
@@ -693,8 +691,7 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
             AddFootprintToBoard( footprint );
 
             // The last-session footprint is a real document, so promote its tab to permanent.
-            if( m_tabsPanel )
-                findOrCreateFootprintTab( id, false );
+            findOrCreateFootprintTab( id, false );
         }
     }
 }
@@ -717,21 +714,16 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
                 switch( aMode )
                 {
                 case FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS:
-                {
                     enabledLayers |= LSET{ F_Cu, In1_Cu, B_Cu };
                     board.SetLayerName( In1_Cu, _( "Inner layers" ) );
                     break;
-                }
 
                 case FOOTPRINT_STACKUP::CUSTOM_LAYERS:
-                {
                     // Nothing extra to add
 
                     // Clear layer name defaults
                     board.SetLayerName( In1_Cu, wxEmptyString );
                     break;
-                }
-
                 }
 
                 enabledLayers |= aLayerSet;
@@ -750,14 +742,14 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
     if( m_originalFootprintCopy )
     {
         m_originalFootprintCopy->RunOnChildren(
-            [&]( BOARD_ITEM* child )
-            {
-                LSET childLayers = child->GetLayerSet() & LSET::UserDefinedLayersMask();
+                [&]( BOARD_ITEM* child )
+                {
+                    LSET childLayers = child->GetLayerSet() & LSET::UserDefinedLayersMask();
 
-                for( PCB_LAYER_ID layer : childLayers )
-                    enabledLayers.set( layer );
-            },
-            RECURSE_MODE::RECURSE );
+                    for( PCB_LAYER_ID layer : childLayers )
+                        enabledLayers.set( layer );
+                },
+                RECURSE_MODE::RECURSE );
     }
 
     // Enable the user-configured number of user layers, plus any specifically named layers
@@ -799,10 +791,12 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
     // members are only a borrowed view of the active context's baseline).
     if( m_activeTab )
     {
-        m_activeTab->SetOriginalFootprintCopy(
-                std::unique_ptr<FOOTPRINT>( static_cast<FOOTPRINT*>( m_originalFootprintCopy
-                                                                             ? m_originalFootprintCopy->Clone()
-                                                                             : nullptr ) ) );
+        FOOTPRINT* fp_copy = nullptr;
+
+        if( m_originalFootprintCopy )
+            fp_copy = static_cast<FOOTPRINT*>( m_originalFootprintCopy->Clone() );
+
+        m_activeTab->SetOriginalFootprintCopy( std::unique_ptr<FOOTPRINT>( fp_copy ) );
         m_activeTab->SetFootprintNameWhenLoaded( m_footprintNameWhenLoaded );
         m_activeTab->SetName( aFootprint->GetFPID().GetLibItemName() );
     }
@@ -1114,12 +1108,8 @@ void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEX
 }
 
 
-FOOTPRINT_EDITOR_TAB_CONTEXT*
-FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( const LIB_ID& aLibId, bool aAsPreview )
+FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( const LIB_ID& aLibId, bool aAsPreview )
 {
-    if( !m_tabsPanel )
-        return nullptr;
-
     const wxString lib = aLibId.GetLibNickname();
     const wxString name = aLibId.GetLibItemName();
     const wxString key = lib + wxT( ":" ) + name;
@@ -1195,10 +1185,9 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::placeReusedTabContext(
 }
 
 
-FOOTPRINT_EDITOR_TAB_CONTEXT*
-FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootprint )
+FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootprint )
 {
-    if( !m_tabsPanel || !aBoardFootprint )
+    if( !aBoardFootprint )
         return nullptr;
 
     const KIID     sourceUuid = aBoardFootprint->m_Uuid;
@@ -1219,8 +1208,7 @@ FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootpri
     board->SetVisibleAlls();
     board->GetDesignSettings().m_DRCSeverities[DRCE_MISSING_COURTYARD] = RPT_SEVERITY_WARNING;
 
-    auto ctx = std::make_unique<FOOTPRINT_EDITOR_TAB_CONTEXT>( sourceUuid, reference,
-                                                               std::move( board ) );
+    auto ctx = std::make_unique<FOOTPRINT_EDITOR_TAB_CONTEXT>( sourceUuid, reference, std::move( board ) );
     BOARD*                        ctxBoard = ctx->GetBoard();
     std::map<KIID, KIID>&         uuidMap = ctx->BoardFootprintUuids();
     FOOTPRINT_EDITOR_TAB_CONTEXT* raw = ctx.get();
@@ -1286,7 +1274,7 @@ FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootpri
 
 
 void FOOTPRINT_EDIT_FRAME::freeUndoRedoCommandsWithItems( UNDO_REDO_CONTAINER& aUndo,
-                                                         UNDO_REDO_CONTAINER& aRedo )
+                                                          UNDO_REDO_CONTAINER& aRedo )
 {
     // Free the UR_TRANSIENT board items each command owns and the command wrappers. The frame's own
     // ClearUndoRedoList() and the bare container destructor delete only the wrappers and leak the
@@ -1412,9 +1400,6 @@ bool FOOTPRINT_EDIT_FRAME::promptAndCloseFootprintTab( int aIdx )
 
 void FOOTPRINT_EDIT_FRAME::CloseFootprintTab( const LIB_ID& aFPID )
 {
-    if( !m_tabsPanel )
-        return;
-
     const wxString lib = aFPID.GetLibNickname();
     const wxString name = aFPID.GetLibItemName();
     const int      idx = m_tabsPanel->FindTab( lib + wxT( ":" ) + name );
@@ -1432,9 +1417,6 @@ void FOOTPRINT_EDIT_FRAME::CloseFootprintTab( const LIB_ID& aFPID )
 
 void FOOTPRINT_EDIT_FRAME::RenameFootprintTab( const LIB_ID& aOldId, const LIB_ID& aNewId )
 {
-    if( !m_tabsPanel )
-        return;
-
     const wxString oldLib = aOldId.GetLibNickname();
     const wxString oldName = aOldId.GetLibItemName();
     const wxString oldKey = oldLib + wxT( ":" ) + oldName;
@@ -1483,9 +1465,7 @@ bool FOOTPRINT_EDIT_FRAME::promptToSaveInactiveInstanceTabs()
 
     for( FOOTPRINT_EDITOR_TAB_CONTEXT* ctx : dirty )
     {
-        wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ),
-                                         ctx->GetDisplayName() );
-
+        wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ), ctx->GetDisplayName() );
         KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxCANCEL | wxICON_WARNING );
         dlg.SetYesNoCancelLabels( _( "Save" ), _( "Discard Changes" ), _( "Cancel" ) );
 
@@ -1521,8 +1501,7 @@ bool FOOTPRINT_EDIT_FRAME::promptToSaveInactiveInstanceTabs()
 
 void FOOTPRINT_EDIT_FRAME::refreshFootprintTabState()
 {
-    if( m_tabsPanel )
-        m_tabsPanel->RefreshTabLabels();
+    m_tabsPanel->RefreshTabLabels();
 }
 
 
@@ -1536,17 +1515,18 @@ void FOOTPRINT_EDIT_FRAME::detachTabsForFullClear( BOARD* aReplacement )
 
     // Tear the strip down without re-prompting to save, since unsaved changes were already handled.
     // Suppress the host close callback and tab activation so CloseAll only does panel bookkeeping.
-    if( m_tabsPanel )
-    {
-        std::function<bool( int )> savedCb = std::move( m_tabsPanel->onCloseTabRequested );
-        m_tabsPanel->onCloseTabRequested = []( int ) { return true; };
+    std::function<bool( int )> savedCb = std::move( m_tabsPanel->onCloseTabRequested );
+    m_tabsPanel->onCloseTabRequested =
+            []( int )
+            {
+                return true;
+            };
 
-        m_suppressTabActivation = true;
-        m_tabsPanel->CloseAll();
-        m_suppressTabActivation = false;
+    m_suppressTabActivation = true;
+    m_tabsPanel->CloseAll();
+    m_suppressTabActivation = false;
 
-        m_tabsPanel->onCloseTabRequested = std::move( savedCb );
-    }
+    m_tabsPanel->onCloseTabRequested = std::move( savedCb );
 
     wxASSERT_MSG( m_pcb == aReplacement,
                   wxT( "m_pcb must alias the frame-owned replacement before contexts are freed" ) );
@@ -1560,15 +1540,13 @@ void FOOTPRINT_EDIT_FRAME::detachTabsForFullClear( BOARD* aReplacement )
 
 void FOOTPRINT_EDIT_FRAME::AdvanceFootprintTab( bool aForward )
 {
-    if( m_tabsPanel )
-        m_tabsPanel->AdvanceTab( aForward );
+    m_tabsPanel->AdvanceTab( aForward );
 }
 
 
 void FOOTPRINT_EDIT_FRAME::CloseActiveFootprintTab()
 {
-    if( m_tabsPanel )
-        m_tabsPanel->CloseTab( m_tabsPanel->GetActiveTab() );
+    m_tabsPanel->CloseTab( m_tabsPanel->GetActiveTab() );
 }
 
 
@@ -1944,7 +1922,7 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
     // An edit promotes the active tab from preview to permanent and flags it dirty. Reflect the
     // shared screen's dirty state onto the context and panel model so the tab shows bold + "*" and a
     // later library-open opens its own tab instead of replacing this one.
-    if( m_tabsPanel && m_activeTab )
+    if( m_activeTab )
     {
         m_activeTab->SetPreview( false );
         m_activeTab->SetModified( true );
@@ -2208,14 +2186,10 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::selectAll,              ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::unselectAll,            ENABLE( cond.HasItems() ) );
 
-    mgr->SetConditions( PCB_ACTIONS::rotateCw,
-                        ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( cond.HasItems() ) );
-    mgr->SetConditions( PCB_ACTIONS::rotateCcw,
-                        ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( cond.HasItems() ) );
-    mgr->SetConditions( PCB_ACTIONS::mirrorH,
-                        ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( cond.HasItems() ) );
-    mgr->SetConditions( PCB_ACTIONS::mirrorV,
-                        ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::rotateCw,           ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::rotateCcw,          ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::mirrorH,            ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( cond.HasItems() ) );
+    mgr->SetConditions( PCB_ACTIONS::mirrorV,            ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::group,                  ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
     mgr->SetConditions( ACTIONS::ungroup,                ENABLE( SELECTION_CONDITIONS::HasType( PCB_GROUP_T ) ) );
 
