@@ -209,6 +209,11 @@ public:
         return m_updateLock;
     }
 
+    /**
+     * Address some long-standing bugs regarding infobars comming up only partial-width.
+     */
+    void FixSize();
+
 protected:
     /**
      * Event handler for showing the infobar using a wxCommandEvent of the type
@@ -240,6 +245,7 @@ protected:
     void onTimer( wxTimerEvent& aEvent );
 
     void onSize( wxSizeEvent& aEvent );
+    void doSize();
 
     /**
      * Update the AUI pane to show or hide this infobar.

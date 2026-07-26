@@ -167,6 +167,9 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
 
     wxInfoBarGeneric::ShowMessage( m_message, aFlags );
 
+    // Force infoBar to full-width.  Yes, this should happen automatically, and it does -- sometimes.
+    FixSize();
+
     if( m_auiManager )
         updateAuiLayout( true );
 
@@ -229,7 +232,38 @@ void WX_INFOBAR::onThemeChange( wxSysColourChangedEvent& aEvent )
 }
 
 
+// Big hack here.  We've had many bugs for a long time with the info bar not being full-width.  Things got
+// better in the 9.0 time-frame, but then started to degrade again in 10.0/11.0.
+//
+// This attempts to fix things by correcting the size every time the infobar is shown.  But even that has
+// flies in the ointment, as the "normal" infobar height is calculated before the icon is added to it, and
+// is shorter.
+//
+// So we have to squirrel away the icon, calculate the size, and then re-attach the icon.
+
+void WX_INFOBAR::FixSize()
+{
+    wxSizer* sizer = GetSizer();
+
+    wxWindow* icon = sizer->GetItem( (size_t) 0 )->GetWindow();
+    sizer->Detach( 0 );
+
+    doSize();
+
+    sizer->Prepend( icon, 0, wxLEFT | wxRIGHT, 5 );
+    Layout();
+}
+
+
 void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
+{
+    doSize();
+
+    aEvent.Skip();
+}
+
+
+void WX_INFOBAR::doSize()
 {
     int barWidth = GetSize().GetWidth();
     wxSizer* sizer = GetSizer();
@@ -299,8 +333,6 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
             textCtrl->Wrap( -1 );
         }
     }
-
-    aEvent.Skip();
 }
 
 
@@ -401,7 +433,10 @@ void WX_INFOBAR::RemoveAllButtons()
         if( sItem->IsSpacer() )
             break;
 
-        delete sItem->GetWindow();
+        wxWindow* button = sItem->GetWindow();
+
+        sizer->Detach( button );
+        button->Destroy();
     }
 }
 
