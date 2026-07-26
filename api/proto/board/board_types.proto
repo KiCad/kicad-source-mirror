@@ -981,6 +981,62 @@ message ReferenceImage
   kiapi.common.types.LockedState locked = 7;
 }
 
+message GridItemAffects
+{
+  bool cursor = 1;
+  bool routing = 2;
+  bool placement = 3;
+}
+
+message CartesianGridItemAttributes
+{
+  // Half the width of the grid in x/y axis
+  kiapi.common.types.Vector2 extent = 1;
+
+  // Spacing between snap points on x/y axis
+  kiapi.common.types.Vector2 spacing = 2;
+}
+
+message PolarGridItemAttributes
+{
+  // Radial extent from the center
+  kiapi.common.types.Distance radius_extent = 1;
+
+  // Radial spacing of snap points
+  kiapi.common.types.Distance radius_spacing = 2;
+
+  // Angle covered by the grid
+  kiapi.common.types.Angle phi_extent = 3;
+
+  // Angular spacing between snap points
+  kiapi.common.types.Angle phi_spacing = 4;
+}
+
+// A local grid placed on the board, overriding the background grid inside its coverage.
+// Since: 11.0.0
+message GridItem
+{
+  kiapi.common.types.KIID id = 1;
+
+  // Centre and rotation of the grid
+  kiapi.common.types.Vector2 position = 2;
+  kiapi.common.types.Angle orientation = 3;
+
+  oneof geometry {
+    CartesianGridItemAttributes cartesian = 4;
+    PolarGridItemAttributes polar = 5;
+  }
+
+  uint32 priority = 6;
+
+  // Every Nth line is drawn ephasized; 0 for no major ticks
+  uint32 tick_interval = 7;
+
+  GridItemAffects affects = 8;
+
+  kiapi.common.types.LockedState locked = 9;
+}
+
 message Group
 {
   kiapi.common.types.KIID id = 1;

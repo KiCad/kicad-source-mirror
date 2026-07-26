@@ -31,6 +31,7 @@
 #include <footprint.h>
 #include <pcb_barcode.h>
 #include <pcb_dimension.h>
+#include <pcb_griditem.h>
 #include <pcb_reference_image.h>
 #include <pcb_track.h>
 #include <zone.h>
@@ -217,6 +218,58 @@ BOOST_FIXTURE_TEST_CASE( CopperThievingZoneRoundTrip, PROTO_TEST_FIXTURE )
     BOOST_CHECK_EQUAL( loaded.line_width, thieving.line_width );
     BOOST_CHECK_EQUAL( loaded.stagger, true );
     BOOST_CHECK( loaded.orientation == EDA_ANGLE( 15.0, DEGREES_T ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( GridItems )
+{
+    const auto makeGridItem = []()
+    {
+        return std::make_unique<PCB_GRIDITEM>( nullptr );
+    };
+
+    PCB_GRIDITEM cartesian( nullptr );
+    cartesian.SetGridItemType( PCB_GRIDITEM_TYPE::CARTESIAN );
+    cartesian.SetPosition( VECTOR2I( 1000000, -2000000 ) );
+    cartesian.SetOrientationDegrees( 30.0 );
+    cartesian.SetExtent( VECTOR2I( 5000000, 4000000 ) );
+    cartesian.SetSpacing( VECTOR2I( 250000, 500000 ) );
+    cartesian.SetAssignedPriority( 3 );
+    cartesian.SetTickInterval( 5 );
+    cartesian.SetAffectsRouting( false );
+    cartesian.SetLocked( true );
+
+    testProtoFromKiCadObject<kiapi::board::types::GridItem>( &cartesian, makeGridItem );
+
+    PCB_GRIDITEM polar( nullptr );
+    polar.SetGridItemType( PCB_GRIDITEM_TYPE::POLAR );
+    polar.SetPosition( VECTOR2I( -750000, 125000 ) );
+    polar.SetRadiusExtent( 8000000 );
+    polar.SetRadiusSpacing( 1000000 );
+    polar.SetPhiExtentDegrees( 270.0 );
+    polar.SetPhiSpacingDegrees( 7.5 );
+    polar.SetAssignedPriority( 1 );
+    polar.SetAffectsCursor( false );
+    polar.SetAffectsPlacement( false );
+
+    testProtoFromKiCadObject<kiapi::board::types::GridItem>( &polar, makeGridItem );
+
+    // The polar half of the grid must survive, not just the shared linear fields.
+    google::protobuf::Any any;
+    polar.Serialize( any );
+
+    std::unique_ptr<PCB_GRIDITEM> roundTripped = makeGridItem();
+    BOOST_REQUIRE( roundTripped->Deserialize( any ) );
+
+    BOOST_CHECK( roundTripped->GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR );
+    BOOST_CHECK_EQUAL( roundTripped->GetRadiusExtent(), 8000000 );
+    BOOST_CHECK_EQUAL( roundTripped->GetRadiusSpacing(), 1000000 );
+    BOOST_CHECK( roundTripped->GetPhiExtent() == EDA_ANGLE( 270.0, DEGREES_T ) );
+    BOOST_CHECK( roundTripped->GetPhiSpacing() == EDA_ANGLE( 7.5, DEGREES_T ) );
+    BOOST_CHECK_EQUAL( roundTripped->GetAffectsCursor(), false );
+    BOOST_CHECK_EQUAL( roundTripped->GetAffectsRouting(), true );
+    BOOST_CHECK_EQUAL( roundTripped->GetAffectsPlacement(), false );
+    BOOST_CHECK_EQUAL( roundTripped->IsLocked(), false );
 }
 
 

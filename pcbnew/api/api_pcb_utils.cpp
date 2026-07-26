@@ -28,6 +28,7 @@
 #include <pcb_group.h>
 #include <constraints/pcb_constraint.h>
 #include <pcb_barcode.h>
+#include <pcb_griditem.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
@@ -53,6 +54,7 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
     case PCB_GROUP_T:   return std::make_unique<PCB_GROUP>( aContainer );
     case PCB_CONSTRAINT_T: return std::make_unique<PCB_CONSTRAINT>( aContainer );
     case PCB_REFERENCE_IMAGE_T: return std::make_unique<PCB_REFERENCE_IMAGE>( aContainer );
+    case PCB_GRIDITEM_T: return std::make_unique<PCB_GRIDITEM>( aContainer );
 
     case PCB_PAD_T:
     {

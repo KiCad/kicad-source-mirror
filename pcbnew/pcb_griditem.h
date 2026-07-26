@@ -72,6 +72,9 @@ public:
 
     wxString GetClass() const override { return wxT( "PCB_GRIDITEM" ); }
 
+    void Serialize( google::protobuf::Any& aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any& aContainer ) override;
+
     void     SetPosition( const VECTOR2I& aPos ) override { m_pos = aPos; }
     VECTOR2I GetPosition() const override { return m_pos; }
 

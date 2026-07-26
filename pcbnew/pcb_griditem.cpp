@@ -21,6 +21,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/board/board_types.pb.h>
 #include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -39,6 +42,8 @@
 #include <geometry/shape_null.h>
 #include <properties/property_mgr.h>
 #include <properties/property.h>
+
+#include <google/protobuf/any.pb.h>
 
 PCB_GRIDITEM::PCB_GRIDITEM( BOARD_ITEM* aParent ) :
         BOARD_ITEM( aParent, PCB_GRIDITEM_T )
@@ -77,6 +82,102 @@ GRID_GEOMETRY PCB_GRIDITEM::AsGridGeometry() const
     }
 
     return g;
+}
+
+
+void PCB_GRIDITEM::Serialize( google::protobuf::Any& aContainer ) const
+{
+    using namespace kiapi::board::types;
+
+    GridItem grid;
+
+    grid.mutable_id()->set_value( m_Uuid.AsStdString() );
+
+    kiapi::common::PackVector2( *grid.mutable_position(), m_pos );
+    grid.mutable_orientation()->set_value_degrees( m_orientation.AsDegrees() );
+
+    switch( m_type )
+    {
+    case PCB_GRIDITEM_TYPE::CARTESIAN:
+    {
+        CartesianGridItemAttributes* cartesian = grid.mutable_cartesian();
+
+        kiapi::common::PackVector2( *cartesian->mutable_extent(), m_extent );
+        kiapi::common::PackVector2( *cartesian->mutable_spacing(), m_spacing );
+        break;
+    }
+
+    case PCB_GRIDITEM_TYPE::POLAR:
+    {
+        PolarGridItemAttributes* polar = grid.mutable_polar();
+
+        kiapi::common::PackDistance( *polar->mutable_radius_extent(), m_extent.x );
+        kiapi::common::PackDistance( *polar->mutable_radius_spacing(), m_spacing.x );
+        polar->mutable_phi_extent()->set_value_degrees( m_phiExtent.AsDegrees() );
+        polar->mutable_phi_spacing()->set_value_degrees( m_phiSpacing.AsDegrees() );
+        break;
+    }
+
+    default: wxFAIL_MSG( wxT( "Serialize: unhandled PCB_GRIDITEM_TYPE" ) ); break;
+    }
+
+    grid.set_priority( m_priority );
+    grid.set_tick_interval( m_tickInterval );
+
+    grid.mutable_affects()->set_cursor( m_affects.cursor );
+    grid.mutable_affects()->set_routing( m_affects.routing );
+    grid.mutable_affects()->set_placement( m_affects.placement );
+
+    grid.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
+                                : kiapi::common::types::LockedState::LS_UNLOCKED );
+
+    aContainer.PackFrom( grid );
+}
+
+
+bool PCB_GRIDITEM::Deserialize( const google::protobuf::Any& aContainer )
+{
+    using namespace kiapi::board::types;
+
+    GridItem grid;
+
+    if( !aContainer.UnpackTo( &grid ) )
+        return false;
+
+    SetUuidDirect( KIID( grid.id().value() ) );
+
+    SetPosition( kiapi::common::UnpackVector2( grid.position() ) );
+    SetOrientationDegrees( grid.orientation().value_degrees() );
+
+    // setters enforce range sanitation
+    if( grid.has_polar() )
+    {
+        SetGridItemType( PCB_GRIDITEM_TYPE::POLAR );
+        SetRadiusExtent( kiapi::common::UnpackDistance( grid.polar().radius_extent() ) );
+        SetRadiusSpacing( kiapi::common::UnpackDistance( grid.polar().radius_spacing() ) );
+        SetPhiExtentDegrees( grid.polar().phi_extent().value_degrees() );
+        SetPhiSpacingDegrees( grid.polar().phi_spacing().value_degrees() );
+    }
+    else
+    {
+        SetGridItemType( PCB_GRIDITEM_TYPE::CARTESIAN );
+        SetExtent( kiapi::common::UnpackVector2( grid.cartesian().extent() ) );
+        SetSpacing( kiapi::common::UnpackVector2( grid.cartesian().spacing() ) );
+    }
+
+    SetAssignedPriority( grid.priority() );
+    SetTickInterval( grid.tick_interval() );
+
+    if( grid.has_affects() )
+    {
+        m_affects.cursor = grid.affects().cursor();
+        m_affects.routing = grid.affects().routing();
+        m_affects.placement = grid.affects().placement();
+    }
+
+    SetLocked( grid.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+
+    return true;
 }
 
 
