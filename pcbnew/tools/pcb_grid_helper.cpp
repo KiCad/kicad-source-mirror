@@ -528,11 +528,11 @@ bool PCB_GRID_HELPER::editingInsideFootprint() const
     if( !m_toolMgr )
         return false;
 
-    // Keyed off the frame rather than the current tool: PCB_TOOL_BASE lives in the pcbnew
+    // Keyed off the board rather than the current tool: PCB_TOOL_BASE lives in the pcbnew
     // kiface, so casting to it from pcbcommon leaves cvpcb with an undefined typeinfo
-    const PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
+    const BOARD* board = static_cast<const BOARD*>( m_toolMgr->GetModel() );
 
-    return frame && frame->IsType( FRAME_FOOTPRINT_EDITOR );
+    return board && board->IsFootprintHolder();
 }
 
 

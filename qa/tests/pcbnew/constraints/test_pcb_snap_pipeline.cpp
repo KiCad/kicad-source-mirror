@@ -336,7 +336,7 @@ BOOST_FIXTURE_TEST_CASE( FootprintEditorSpacesPadsEvenly, PCB_SNAP_FIXTURE )
     std::vector<PAD*> pads = AddFootprintPads( { { 2 * MM, 2 * MM }, { 12 * MM, 2 * MM }, { 22 * MM, 2 * MM } } );
     view.SetViewport( BOX2D( { 0, 0 }, { 50 * MM, 50 * MM } ) );
     settings.m_SnapInference.alignmentDistribution = true;
-    tool->SetIsFootprintEditor( true );
+    board.SetBoardUse( BOARD_USE::FPHOLDER );
 
     PAD*        moving = pads.back();
     SNAP_RESULT result = helper->ResolveSnap( moving->GetPosition(), LSET( { F_Cu } ), GRID_CURRENT, { moving },
