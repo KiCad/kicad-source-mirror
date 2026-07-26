@@ -556,12 +556,6 @@ private:
     void drawGridCoverageShape( const GRID_SOURCE& aSrc );
 
     /**
-     * @return the visible screen area expressed in aSrc's frame (relative to its
-     *         origin and counter-rotated by its orientation).
-     */
-    BOX2D gridScreenBBox( const GRID_SOURCE& aSrc ) const;
-
-    /**
      * Compute a size of text drawn using bitmap font with current text setting applied.
      *
      * @param aText is the text to be drawn.

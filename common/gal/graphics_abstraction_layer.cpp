@@ -260,6 +260,28 @@ void GAL::SetGridSources( std::vector<GRID_SOURCE> aSources )
 }
 
 
+BOX2D GAL::gridScreenBBox( const GRID_SOURCE& aSrc ) const
+{
+    const VECTOR2D corners[4] = { m_screenWorldMatrix * VECTOR2D( 0, 0 ),
+                                  m_screenWorldMatrix * VECTOR2D( m_screenSize.x, 0 ),
+                                  m_screenWorldMatrix * VECTOR2D( 0, m_screenSize.y ),
+                                  m_screenWorldMatrix * VECTOR2D( m_screenSize ) };
+
+    const double co = std::cos( aSrc.orientation );
+    const double so = std::sin( aSrc.orientation );
+
+    BOX2D bbox;
+
+    for( const VECTOR2D& w : corners )
+    {
+        const VECTOR2D off = w - aSrc.origin;
+        bbox.Merge( VECTOR2D( co * off.x - so * off.y, so * off.x + co * off.y ) );
+    }
+
+    return bbox;
+}
+
+
 VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 {
     // m_gridSources is precedence-ordered by SetGridSources, so the first cursor-snap

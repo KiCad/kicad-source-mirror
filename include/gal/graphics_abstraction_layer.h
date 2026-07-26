@@ -86,6 +86,17 @@ struct GRID_SOURCE : public GRID_GEOMETRY
 };
 
 
+/// Opacity of the background wash laid over a selected grid item's area, to fade the
+/// grids showing through it.
+constexpr double GRID_DIM_ALPHA = 0.4;
+
+/// How far the hairline round a grid's coverage sits below its own colour.
+constexpr double GRID_EDGE_DARKEN = 0.75;
+
+/// How far the grid being edited is lifted above its own colour.
+constexpr double GRID_SELECTED_BRIGHTEN = 0.5;
+
+
 /**
  * Abstract interface for drawing on a 2D-surface.
  *
@@ -1158,6 +1169,12 @@ protected:
      * @return the minimum spacing to use for drawing the grid
      */
     double computeMinGridSpacing() const;
+
+    /**
+     * @return the visible screen area expressed in aSrc's frame (relative to its
+     *         origin and counter-rotated by its orientation).
+     */
+    BOX2D gridScreenBBox( const GRID_SOURCE& aSrc ) const;
 
     /// Possible depth range
     static const int MIN_DEPTH;

@@ -285,11 +285,31 @@ protected:
      *
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
+     * @param aColor is the colour to stroke it in.
      */
-    void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
-    void drawGridCross( const VECTOR2D& aPoint );
-    void drawGridPoint( const VECTOR2D& aPoint, double aWidth, double aHeight );
+    void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
+                       const COLOR4D& aColor );
+    void drawGridCross( const VECTOR2D& aPoint, const COLOR4D& aColor );
+    void drawGridPoint( const VECTOR2D& aPoint, double aWidth, double aHeight,
+                        const COLOR4D& aColor );
     void drawAxes( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+
+    /**
+     * Render m_gridSources precedence-ascending; each bounded source paints its coverage
+     * out first, so the last drawn wins.  Cairo has no stencil, so paint order stands in.
+     */
+    void drawGridSources();
+
+    /**
+     * Paint one source: coverage wash, grid content, then hairline.  The unbounded
+     * background source gets neither wash nor hairline.
+     */
+    void drawGridSource( const GRID_SOURCE& aSrc );
+
+    /**
+     * Fill or stroke a source's coverage region in its own frame, per the current state.
+     */
+    void drawGridCoverageShape( const GRID_SOURCE& aSrc );
 
 
     void flushPath();

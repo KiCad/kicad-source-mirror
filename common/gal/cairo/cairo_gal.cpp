@@ -39,6 +39,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <ranges>
 
 #include <pixman.h>
 
@@ -1141,21 +1142,21 @@ void CAIRO_GAL_BASE::drawAxes( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
 }
 
 
-void CAIRO_GAL_BASE::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
+void CAIRO_GAL_BASE::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
+                                   const COLOR4D& aColor )
 {
     syncLineWidth();
     VECTOR2D p0 = roundp( xform( aStartPoint ) );
     VECTOR2D p1 = roundp( xform( aEndPoint ) );
 
-    cairo_set_source_rgba( m_currentContext, m_gridColor.r, m_gridColor.g, m_gridColor.b,
-                           m_gridColor.a );
+    cairo_set_source_rgba( m_currentContext, aColor.r, aColor.g, aColor.b, aColor.a );
     cairo_move_to( m_currentContext, p0.x, p0.y );
     cairo_line_to( m_currentContext, p1.x, p1.y );
     cairo_stroke( m_currentContext );
 }
 
 
-void CAIRO_GAL_BASE::drawGridCross( const VECTOR2D& aPoint )
+void CAIRO_GAL_BASE::drawGridCross( const VECTOR2D& aPoint, const COLOR4D& aColor )
 {
     syncLineWidth();
     VECTOR2D offset( 0, 0 );
@@ -1166,8 +1167,7 @@ void CAIRO_GAL_BASE::drawGridCross( const VECTOR2D& aPoint )
     VECTOR2D p2 = roundp( xform( aPoint ) ) - VECTOR2D( 0, size ) + offset;
     VECTOR2D p3 = roundp( xform( aPoint ) ) + VECTOR2D( 0, size ) + offset;
 
-    cairo_set_source_rgba( m_currentContext, m_gridColor.r, m_gridColor.g, m_gridColor.b,
-                           m_gridColor.a );
+    cairo_set_source_rgba( m_currentContext, aColor.r, aColor.g, aColor.b, aColor.a );
     cairo_move_to( m_currentContext, p0.x, p0.y );
     cairo_line_to( m_currentContext, p1.x, p1.y );
     cairo_move_to( m_currentContext, p2.x, p2.y );
@@ -1176,15 +1176,15 @@ void CAIRO_GAL_BASE::drawGridCross( const VECTOR2D& aPoint )
 }
 
 
-void CAIRO_GAL_BASE::drawGridPoint( const VECTOR2D& aPoint, double aWidth, double aHeight )
+void CAIRO_GAL_BASE::drawGridPoint( const VECTOR2D& aPoint, double aWidth, double aHeight,
+                                    const COLOR4D& aColor )
 {
     VECTOR2D p = roundp( xform( aPoint ) );
 
     double sw = std::max( 1.0, aWidth );
     double sh = std::max( 1.0, aHeight );
 
-    cairo_set_source_rgba( m_currentContext, m_gridColor.r, m_gridColor.g, m_gridColor.b,
-                           m_gridColor.a );
+    cairo_set_source_rgba( m_currentContext, aColor.r, aColor.g, aColor.b, aColor.a );
     cairo_rectangle( m_currentContext, p.x - std::floor( sw / 2 ) - 0.5,
                      p.y - std::floor( sh / 2 ) - 0.5, sw, sh );
 
@@ -1823,125 +1823,362 @@ void CAIRO_GAL::onSetNativeCursor( wxSetCursorEvent& aEvent )
 
 void CAIRO_GAL_BASE::DrawGrid()
 {
-    // TODO: GRID_SOURCE rendering is not implemented on Cairo yet.
     SetTarget( TARGET_NONCACHED );
 
-    // Draw the grid
-    // For the drawing the start points, end points and increments have
-    // to be calculated in world coordinates
-    VECTOR2D worldStartPoint = m_screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
-    VECTOR2D worldEndPoint = m_screenWorldMatrix * VECTOR2D( m_screenSize );
-
-    // Compute the line marker or point radius of the grid
-    // Note: generic grids can't handle sub-pixel lines without
-    // either losing fine/course distinction or having some dots
-    // fail to render
     float marker = std::fmax( 1.0f, m_gridLineWidth ) / m_worldScale;
-    float doubleMarker = 2.0f * marker;
 
-    // Draw axes if desired
     if( m_axesEnabled )
     {
+        VECTOR2D worldStartPoint = m_screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
+        VECTOR2D worldEndPoint = m_screenWorldMatrix * VECTOR2D( m_screenSize );
+
         SetLineWidth( marker );
         drawAxes( worldStartPoint, worldEndPoint );
     }
 
-    if( !m_gridVisibility || m_gridSize.x == 0 || m_gridSize.y == 0 )
-        return;
+    const bool renderGlobalGrid = m_gridVisibility && m_gridSize.x != 0 && m_gridSize.y != 0;
 
-    VECTOR2D gridScreenSize( m_gridSize );
-
-    double gridThreshold = KiROUND( computeMinGridSpacing() / m_worldScale );
-
-    if( m_gridStyle == GRID_STYLE::SMALL_CROSS )
-        gridThreshold *= 2.0;
-
-    // If we cannot display the grid density, scale down by a tick size and
-    // try again.  Eventually, we get some representation of the grid
-    while( std::min( gridScreenSize.x, gridScreenSize.y ) <= gridThreshold )
+    if( renderGlobalGrid )
     {
-        gridScreenSize = gridScreenSize * static_cast<double>( m_gridTick );
+        GRID_SOURCE globalGrid;
+        globalGrid.unbounded = true;
+        globalGrid.axesEnabled = m_axesEnabled;
+        globalGrid.kind = GRID_SOURCE::KIND::CARTESIAN;
+        globalGrid.origin = m_gridOrigin;
+        globalGrid.pitch = GetVisibleGridSize();
+        globalGrid.tick = static_cast<unsigned>( m_gridTick );
+        globalGrid.style = m_gridStyle;
+        globalGrid.color = m_gridColor;
+        globalGrid.priority = 0;
+
+        m_gridSources.push_back( globalGrid );
     }
 
-    // Compute grid starting and ending indexes to draw grid points on the
-    // visible screen area
-    // Note: later any point coordinate will be offsetted by m_gridOrigin
-    int gridStartX = KiROUND( ( worldStartPoint.x - m_gridOrigin.x ) / gridScreenSize.x );
-    int gridEndX = KiROUND( ( worldEndPoint.x - m_gridOrigin.x ) / gridScreenSize.x );
-    int gridStartY = KiROUND( ( worldStartPoint.y - m_gridOrigin.y ) / gridScreenSize.y );
-    int gridEndY = KiROUND( ( worldEndPoint.y - m_gridOrigin.y ) / gridScreenSize.y );
+    if( !m_gridSources.empty() )
+        drawGridSources();
 
-    // Ensure start coordinate < end coordinate
-    normalize( gridStartX, gridEndX );
-    normalize( gridStartY, gridEndY );
+    if( renderGlobalGrid )
+        m_gridSources.pop_back();
+}
 
-    // Ensure the grid fills the screen
-    --gridStartX;
-    ++gridEndX;
-    --gridStartY;
-    ++gridEndY;
+
+void CAIRO_GAL_BASE::drawGridSources()
+{
+    if( m_gridSources.empty() )
+        return;
 
     // Draw the grid behind all other layers
     SetLayerDepth( m_depthRange.y * 0.75 );
 
-    if( m_gridStyle == GRID_STYLE::LINES )
+
+    for(auto & m_gridSource : std::ranges::reverse_view(m_gridSources))
     {
-        // Now draw the grid, every coarse grid line gets the double width
-
-        // Vertical lines
-        for( int j = gridStartY; j <= gridEndY; j++ )
-        {
-            const double y = j * gridScreenSize.y + m_gridOrigin.y;
-
-            if( m_axesEnabled && y == 0.0 )
-                continue;
-
-            SetLineWidth( ( j % m_gridTick ) ? marker : doubleMarker );
-            drawGridLine( VECTOR2D( gridStartX * gridScreenSize.x + m_gridOrigin.x, y ),
-                          VECTOR2D( gridEndX * gridScreenSize.x + m_gridOrigin.x, y ) );
-        }
-
-        // Horizontal lines
-        for( int i = gridStartX; i <= gridEndX; i++ )
-        {
-            const double x = i * gridScreenSize.x + m_gridOrigin.x;
-
-            if( m_axesEnabled && x == 0.0 )
-                continue;
-
-            SetLineWidth( ( i % m_gridTick ) ? marker : doubleMarker );
-            drawGridLine( VECTOR2D( x, gridStartY * gridScreenSize.y + m_gridOrigin.y ),
-                          VECTOR2D( x, gridEndY * gridScreenSize.y + m_gridOrigin.y ) );
-        }
+        if( !m_gridSource.highlighted )
+            drawGridSource( m_gridSource );
     }
-    else // Dots or Crosses grid
+
+    for(auto & m_gridSource : std::ranges::reverse_view(m_gridSources))
     {
-        m_lineWidthIsOdd = true;
-        m_isStrokeEnabled = true;
+        if( m_gridSource.highlighted )
+            drawGridSource( m_gridSource );
+    }
+}
 
-        for( int j = gridStartY; j <= gridEndY; j++ )
+
+void CAIRO_GAL_BASE::drawGridCoverageShape( const GRID_SOURCE& aSrc )
+{
+    Save();
+    Translate( aSrc.origin );
+    Rotate( -aSrc.orientation );
+
+    if( aSrc.unbounded )
+    {
+        const BOX2D screen = gridScreenBBox( aSrc );
+
+        DrawRectangle( screen.GetOrigin(), screen.GetEnd() );
+        Restore();
+        return;
+    }
+
+    switch( aSrc.kind )
+    {
+    case GRID_SOURCE::KIND::POLAR:
+    {
+        const double rMax = aSrc.extent.x;
+        const double phiMax = aSrc.extent.y;
+
+        if( rMax > 0.0 && phiMax > 0.0 )
         {
-            bool tickY = ( j % m_gridTick == 0 );
-
-            for( int i = gridStartX; i <= gridEndX; i++ )
+            if( phiMax >= 2 * M_PI - 1e-6 )
             {
-                bool     tickX = ( i % m_gridTick == 0 );
-                VECTOR2D pos{ i * gridScreenSize.x + m_gridOrigin.x,
-                              j * gridScreenSize.y + m_gridOrigin.y };
+                DrawCircle( VECTOR2D( 0, 0 ), rMax );
+            }
+            else
+            {
+                const int            kArcSegments = std::max( 16, (int) ( phiMax / ( M_PI / 16 ) ) );
+                std::deque<VECTOR2D> poly;
 
-                if( m_gridStyle == GRID_STYLE::SMALL_CROSS )
+                poly.emplace_back( 0.0, 0.0 );
+
+                for( int i = 0; i <= kArcSegments; ++i )
                 {
-                    SetLineWidth( ( tickX && tickY ) ? doubleMarker : marker );
-                    drawGridCross( pos );
+                    const double phi = phiMax * i / kArcSegments;
+                    poly.emplace_back( rMax * std::cos( phi ), rMax * std::sin( phi ) );
                 }
-                else if( m_gridStyle == GRID_STYLE::DOTS )
+
+                poly.emplace_back( 0.0, 0.0 );
+
+                DrawPolygon( poly );
+            }
+        }
+
+        break;
+    }
+
+    case GRID_SOURCE::KIND::CARTESIAN:
+        DrawRectangle( VECTOR2D( -aSrc.extent.x, -aSrc.extent.y ),
+                       VECTOR2D( aSrc.extent.x, aSrc.extent.y ) );
+        break;
+
+    default: wxFAIL_MSG( wxT( "drawGridCoverageShape: unhandled GRID_SOURCE::KIND" ) ); break;
+    }
+
+    Restore();
+}
+
+
+void CAIRO_GAL_BASE::drawGridSource( const GRID_SOURCE& aSrc )
+{
+    COLOR4D color = aSrc.color.a > 0 ? aSrc.color : m_gridColor;
+    COLOR4D wash = m_clearColor;
+
+    if( aSrc.highlighted )
+    {
+        color.Brighten( GRID_SELECTED_BRIGHTEN );
+        wash.a = GRID_DIM_ALPHA;
+    }
+
+    // "Clear" coverage area by filling it with either m_clearColor or the
+    // dimming layer
+    if( !aSrc.unbounded )
+    {
+        SetIsFill( true );
+        SetIsStroke( false );
+        SetFillColor( wash );
+        drawGridCoverageShape( aSrc );
+    }
+
+    const float    marker = (float)(std::fmax( 1.0f, m_gridLineWidth ) / m_worldScale);
+    const float    doubleMarker = 2.0f * marker;
+    const unsigned tick = ( aSrc.tick > 0 ) ? aSrc.tick : (unsigned) m_gridTick;
+
+    double threshold = computeMinGridSpacing() / m_worldScale;
+
+    if( aSrc.style == GRID_STYLE::SMALL_CROSS )
+        threshold *= 2.0;
+
+    auto isMajor = [&]( int aIdx )
+    {
+        return tick > 0 && aIdx % (int) tick == 0;
+    };
+
+    auto drawCrossAt = [&]( const VECTOR2D& aPos, bool aMajor, double aArmAngle )
+    {
+        const float    w = aMajor ? doubleMarker : marker;
+        const double   len = 2.0 * w;
+        const VECTOR2D arm1( std::cos( aArmAngle ) * len, std::sin( aArmAngle ) * len );
+        const VECTOR2D arm2( -arm1.y, arm1.x );
+
+        SetLineWidth( w );
+        drawGridLine( aPos - arm1, aPos + arm1, color );
+        drawGridLine( aPos - arm2, aPos + arm2, color );
+    };
+
+    auto drawDotAt = [&]( const VECTOR2D& aPos, bool aMajorX, bool aMajorY )
+    {
+        // drawGridPoint doesn't syncLineWidth, so pin the half-pixel rounding itself.
+        m_lineWidthIsOdd = true;
+
+        drawGridPoint( aPos, aMajorX ? m_gridLineWidth * 2.0 : m_gridLineWidth,
+                       aMajorY ? m_gridLineWidth * 2.0 : m_gridLineWidth, color );
+    };
+
+    Save();
+    Translate( aSrc.origin );
+    // GAL Rotate is math-convention; grid orientation is screen-convention.
+    Rotate( -aSrc.orientation );
+
+    SetIsFill( false );
+    SetIsStroke( true );
+    SetStrokeColor( color );
+
+    switch( aSrc.kind )
+    {
+    case GRID_SOURCE::KIND::POLAR:
+    {
+        double rMax;
+        double phiMax;
+
+        if( aSrc.unbounded )
+        {
+            const BOX2D  screen = gridScreenBBox( aSrc );
+            const double farX = std::max( std::abs( screen.GetLeft() ), std::abs( screen.GetRight() ) );
+            const double farY = std::max( std::abs( screen.GetTop() ), std::abs( screen.GetBottom() ) );
+
+            rMax = std::hypot( farX, farY ) * 1.01; // bleed past the farthest corner
+            phiMax = 2 * M_PI;
+        }
+        else
+        {
+            rMax = aSrc.extent.x;
+            phiMax = aSrc.extent.y;
+        }
+
+        if( rMax <= 0.0 || phiMax <= 0.0 )
+            break;
+
+        const double dr = AutoSparsePitch( aSrc.pitch.x, tick, threshold );
+        const double dPhi = AutoSparsePitch( aSrc.pitch.y, tick, threshold / rMax );
+
+        if( aSrc.style == GRID_STYLE::LINES )
+        {
+            int rIdx = 0;
+
+            for( double r = 0; r <= rMax + 1e-6; r += dr, ++rIdx )
+            {
+                if( r == 0.0 )
+                    continue;
+
+                SetLineWidth( isMajor( rIdx ) ? doubleMarker : marker );
+                DrawArc( VECTOR2D( 0, 0 ), r, EDA_ANGLE( 0, RADIANS_T ),
+                         EDA_ANGLE( phiMax, RADIANS_T ) );
+            }
+
+            int pIdx = 0;
+
+            for( double phi = 0; phi <= phiMax + 1e-6; phi += dPhi, ++pIdx )
+            {
+                SetLineWidth( isMajor( pIdx ) ? doubleMarker : marker );
+                drawGridLine( VECTOR2D( 0, 0 ),
+                              VECTOR2D( rMax * std::cos( phi ), rMax * std::sin( phi ) ), color );
+            }
+        }
+        else
+        {
+            int rIdx = 0;
+
+            for( double r = 0; r <= rMax + 1e-6; r += dr, ++rIdx )
+            {
+                int pIdx = 0;
+
+                for( double phi = 0; phi <= phiMax + 1e-6; phi += dPhi, ++pIdx )
                 {
-                    double doubleGridLineWidth = m_gridLineWidth * 2.0f;
-                    drawGridPoint( pos, ( tickX ) ? doubleGridLineWidth : m_gridLineWidth,
-                                   ( tickY ) ? doubleGridLineWidth : m_gridLineWidth );
+                    const VECTOR2D pos( r * std::cos( phi ), r * std::sin( phi ) );
+
+                    if( aSrc.style == GRID_STYLE::DOTS )
+                        drawDotAt( pos, isMajor( rIdx ), isMajor( pIdx ) );
+                    else
+                        drawCrossAt( pos, isMajor( rIdx ) && isMajor( pIdx ), phi );
                 }
             }
         }
+
+        break;
+    }
+
+    case GRID_SOURCE::KIND::CARTESIAN:
+    {
+        double dx = aSrc.pitch.x;
+        double dy = aSrc.pitch.y;
+
+        // Sparse both axes by the same factor to preserve aspect ratio.
+        const double minPitch = std::min( dx, dy );
+        const double sparsed = AutoSparsePitch( minPitch, tick, threshold );
+
+        dx *= sparsed / minPitch;
+        dy *= sparsed / minPitch;
+
+        BOX2D visible = gridScreenBBox( aSrc );
+
+        // One-pitch bleed so lines just off-screen still paint.
+        visible.Inflate( dx, dy );
+
+        double xMin = visible.GetLeft();
+        double xMax = visible.GetRight();
+        double yMin = visible.GetTop();
+        double yMax = visible.GetBottom();
+
+        int ixMin = (int) std::floor( xMin / dx );
+        int ixMax = (int) std::ceil( xMax / dx );
+        int iyMin = (int) std::floor( yMin / dy );
+        int iyMax = (int) std::ceil( yMax / dy );
+
+        if( !aSrc.unbounded )
+        {
+            xMin = std::max( xMin, -aSrc.extent.x );
+            xMax = std::min( xMax, aSrc.extent.x );
+            yMin = std::max( yMin, -aSrc.extent.y );
+            yMax = std::min( yMax, aSrc.extent.y );
+
+            ixMin = std::max( ixMin, -(int) ( aSrc.extent.x / dx ) );
+            ixMax = std::min( ixMax, (int) ( aSrc.extent.x / dx ) );
+            iyMin = std::max( iyMin, -(int) ( aSrc.extent.y / dy ) );
+            iyMax = std::min( iyMax, (int) ( aSrc.extent.y / dy ) );
+        }
+
+        if( aSrc.style == GRID_STYLE::LINES )
+        {
+            for( int ix = ixMin; ix <= ixMax; ++ix )
+            {
+                // Skip the line that would cover the world Y axis when axes are drawn.
+                if( aSrc.axesEnabled && ix * dx + aSrc.origin.x == 0.0 )
+                    continue;
+
+                SetLineWidth( isMajor( ix ) ? doubleMarker : marker );
+                drawGridLine( VECTOR2D( ix * dx, yMin ), VECTOR2D( ix * dx, yMax ), color );
+            }
+
+            for( int iy = iyMin; iy <= iyMax; ++iy )
+            {
+                if( aSrc.axesEnabled && iy * dy + aSrc.origin.y == 0.0 )
+                    continue;
+
+                SetLineWidth( isMajor( iy ) ? doubleMarker : marker );
+                drawGridLine( VECTOR2D( xMin, iy * dy ), VECTOR2D( xMax, iy * dy ), color );
+            }
+        }
+        else
+        {
+            for( int ix = ixMin; ix <= ixMax; ++ix )
+            {
+                for( int iy = iyMin; iy <= iyMax; ++iy )
+                {
+                    const VECTOR2D pos( ix * dx, iy * dy );
+
+                    if( aSrc.style == GRID_STYLE::DOTS )
+                        drawDotAt( pos, isMajor( ix ), isMajor( iy ) );
+                    else
+                        drawCrossAt( pos, isMajor( ix ) && isMajor( iy ), 0.0 );
+                }
+            }
+        }
+
+        break;
+    }
+
+    default: wxFAIL_MSG( wxT( "drawGridSource: unhandled GRID_SOURCE::KIND" ) ); break;
+    }
+
+    Restore();
+
+    // Outline the coverage, so a grid too sparse to render still reads as an area.
+    if( !aSrc.unbounded )
+    {
+        SetIsFill( false );
+        SetIsStroke( true );
+        SetStrokeColor( color.Darkened( GRID_EDGE_DARKEN ) );
+        SetLineWidth( static_cast<float>( 1.0 / m_worldScale ) );
+        drawGridCoverageShape( aSrc );
     }
 }
 

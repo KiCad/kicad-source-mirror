@@ -82,14 +82,6 @@ constexpr GLuint STENCIL_DOTS_MARKER = 0x01;   // Set at every dot position by t
 constexpr GLuint STENCIL_GRID_COVERAGE = 0x80; // Set inside a PCB_GRIDITEM's coverage
                                                // area to cut the display grid (and
                                                // lower-priority grid-items) out.
-
-constexpr double GRID_DIM_ALPHA = 0.5;         // Opacity of the background wash laid
-                                               // over a selected grid item's area, to
-                                               // fade the grids showing through it.
-constexpr double GRID_EDGE_DARKEN = 0.75;      // How far the hairline round a grid's
-                                               // coverage sits below its own colour.
-constexpr double GRID_SELECTED_BRIGHTEN = 0.5; // How far the grid being edited is
-                                               // lifted above its own colour.
 } // namespace
 
 static wxGLAttributes getGLAttribs()
@@ -2136,28 +2128,6 @@ void OPENGL_GAL::DrawGrid()
 
     if( renderGlobalGrid )
         m_gridSources.pop_back();
-}
-
-
-BOX2D OPENGL_GAL::gridScreenBBox( const GRID_SOURCE& src ) const
-{
-    const VECTOR2D corners[4] = { m_screenWorldMatrix * VECTOR2D( 0, 0 ),
-                                  m_screenWorldMatrix * VECTOR2D( m_screenSize.x, 0 ),
-                                  m_screenWorldMatrix * VECTOR2D( 0, m_screenSize.y ),
-                                  m_screenWorldMatrix * VECTOR2D( m_screenSize ) };
-
-    const double co = std::cos( src.orientation );
-    const double so = std::sin( src.orientation );
-
-    BOX2D bbox;
-
-    for( const VECTOR2D& w : corners )
-    {
-        const VECTOR2D off = w - src.origin;
-        bbox.Merge( VECTOR2D( co * off.x - so * off.y, so * off.x + co * off.y ) );
-    }
-
-    return bbox;
 }
 
 
