@@ -27,9 +27,12 @@
 #include <pcbnew/exporters/gendrill_gerber_writer.h>
 #include <pcbnew/pcb_io/odbpp/pcb_io_odbpp.h>
 #include <pcbnew/pcb_track.h>
+#include <pcbnew_utils/board_test_utils.h>
+#include <settings/settings_manager.h>
 #include <base_units.h>
 
 #include <map>
+#include <memory>
 
 #include <core/utf8.h>
 
@@ -625,5 +628,101 @@ BOOST_AUTO_TEST_CASE( OdbPpPlatedSlotDrill )
     BOOST_CHECK_EQUAL( countLinesStartingWith( nonPlatedToolsContents, wxT( "TYPE=PLATED" ) ), 0 );
 
     wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25021
+// Backdrill holes are recorded as non-plated, so the report's backdrill sections asked
+// printToolSummary() for plated tools only and always claimed zero holes, even though
+// the matching Excellon files carried them.
+BOOST_AUTO_TEST_CASE( DrillReportBackdrillHoleCount )
+{
+    SETTINGS_MANAGER       settingsManager;
+    std::unique_ptr<BOARD> board;
+
+    KI_TEST::LoadBoard( settingsManager, wxT( "issue25021/backdrill" ), board );
+    BOOST_REQUIRE( board );
+
+    wxFileName tempDir = MakeTempDir();
+    wxFileName boardFile( tempDir.GetFullPath(), wxT( "backdrill.kicad_pcb" ) );
+
+    // Keep the derived drill file names out of the source tree
+    board->SetFileName( boardFile.GetFullPath() );
+
+    wxFileName reportFile( tempDir.GetFullPath(), wxT( "backdrill-drl.rpt" ) );
+
+    EXCELLON_WRITER excellon( board.get() );
+    excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
+    excellon.SetFormat( true );
+    BOOST_REQUIRE( excellon.GenDrillReportFile( reportFile.GetFullPath() ) );
+
+    wxFFile  reportStream( reportFile.GetFullPath(), wxT( "rb" ) );
+    wxString reportContents;
+    BOOST_REQUIRE( reportStream.ReadAll( &reportContents ) );
+    reportStream.Close();
+
+    struct BACKDRILL_SECTION
+    {
+        long holes = -1;
+        int  toolLines = 0;
+    };
+
+    std::map<wxString, BACKDRILL_SECTION> sections;
+    wxString                              currentFile;
+    wxStringTokenizer                     lines( reportContents, wxT( "\n" ) );
+
+    while( lines.HasMoreTokens() )
+    {
+        wxString line = lines.GetNextToken();
+        line.Trim( true ).Trim( false );
+
+        if( line.StartsWith( wxT( "Drill file '" ) ) )
+            currentFile = line.AfterFirst( '\'' ).BeforeFirst( '\'' );
+
+        if( line.StartsWith( wxT( "T" ) ) && line.Contains( wxT( "0.330mm" ) ) )
+            sections[currentFile].toolLines++;
+
+        wxString count;
+
+        if( line.StartsWith( wxT( "Total backdrilled holes count " ), &count ) )
+        {
+            long value = -1;
+            BOOST_REQUIRE( count.ToLong( &value ) );
+            sections[currentFile].holes = value;
+        }
+    }
+
+    // The board backdrills two vias from F.Cu down to In3.Cu, and one via each from
+    // B.Cu up to In3.Cu and to In6.Cu
+    const std::map<wxString, long> expected = {
+        { wxT( "backdrill_Backdrills_Drill_1_4.drl" ), 2 },
+        { wxT( "backdrill_Backdrills_Drill_10_4.drl" ), 1 },
+        { wxT( "backdrill_Backdrills_Drill_10_7.drl" ), 1 }
+    };
+
+    // No backdrill section beyond the three expected ones
+    BOOST_CHECK_EQUAL( sections.size(), expected.size() );
+
+    for( const auto& [file, holes] : expected )
+    {
+        auto section = sections.find( file );
+
+        if( section == sections.end() )
+        {
+            BOOST_ERROR( "No backdrill section for " << file );
+            continue;
+        }
+
+        BOOST_CHECK_EQUAL( section->second.holes, holes );
+
+        // The section must also list the 0.33mm backdrill tool it counted
+        BOOST_CHECK_EQUAL( section->second.toolLines, 1 );
+    }
+
+    // Plated through holes and the unplated summary must be unaffected
+    BOOST_CHECK( reportContents.Contains( wxT( "Total plated holes count 4" ) ) );
+    BOOST_CHECK( reportContents.Contains( wxT( "Total unplated holes count 0" ) ) );
+
     wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
