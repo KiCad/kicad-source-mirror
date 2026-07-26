@@ -58,7 +58,6 @@ private:
     UNITS_PROVIDER m_unitsProvider;
 
     wxChoice*     m_viaTypeChoice;
-    wxStaticText* m_viaTypeLabel;
 
     // Unit binders for via diameter fields
     std::unique_ptr<UNIT_BINDER> m_minViaDiameterBinder;
