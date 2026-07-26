@@ -147,7 +147,11 @@ void SELECTION_TOOL::AddItemsToSel( EDA_ITEMS* aList, bool aQuietMode )
     if( aList )
     {
         for( EDA_ITEM* item : *aList )
-            select( item );
+        {
+            // select() dereferences before the item reaches the selection, so nulls die here
+            if( item )
+                select( item );
+        }
 
         // Inform other potentially interested tools
         if( !aQuietMode )

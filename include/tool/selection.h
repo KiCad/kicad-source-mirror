@@ -87,6 +87,9 @@ public:
         return m_isHover;
     }
 
+    /**
+     * A null @a aItem is ignored; the selection never holds null members.
+     */
     virtual void Add( EDA_ITEM* aItem );
 
     virtual void Remove( EDA_ITEM *aItem );

@@ -37,6 +37,10 @@ bool SELECTION::operator==( const SELECTION& aOther ) const
 
 void SELECTION::Add( EDA_ITEM* aItem )
 {
+    // Consumers dereference selection members unconditionally, so a null faults far from its source
+    if( !aItem )
+        return;
+
     // We're not sorting here; this is just a time-optimized way to do an
     // inclusion check.  std::lower_bound will return the first i >= aItem
     // and the second i > aItem check rules out i == aItem.

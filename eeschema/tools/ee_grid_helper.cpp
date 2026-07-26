@@ -341,7 +341,10 @@ VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I& aMousePos, GRID_HELPER_
 SNAP_RESULT EE_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, GRID_HELPER_GRIDS aGrid, SCH_ITEM* aSkip )
 {
     SCH_SELECTION skipItems;
-    skipItems.Add( aSkip );
+
+    // No skip item means nothing is moving, which selects the picker snap profile
+    if( aSkip )
+        skipItems.Add( aSkip );
 
     return ResolveSnap( aOrigin, aGrid, skipItems );
 }

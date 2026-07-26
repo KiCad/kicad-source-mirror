@@ -1427,6 +1427,9 @@ std::vector<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( std::initializer_list<BO
 
     for( BOARD_ITEM* item : aSkip )
     {
+        if( !item )
+            continue;
+
         skippedItems.insert( item );
         item->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
