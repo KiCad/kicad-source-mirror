@@ -59,7 +59,6 @@
 #include <snap/snap_inference.h>
 #include <tool/snap_frame.h>
 #include <tool/tool_manager.h>
-#include <tools/pcb_tool_base.h>
 #include <view/view.h>
 #include <trace_helpers.h>
 
@@ -529,9 +528,11 @@ bool PCB_GRID_HELPER::editingInsideFootprint() const
     if( !m_toolMgr )
         return false;
 
-    const PCB_TOOL_BASE* tool = dynamic_cast<PCB_TOOL_BASE*>( m_toolMgr->GetCurrentTool() );
+    // Keyed off the frame rather than the current tool: PCB_TOOL_BASE lives in the pcbnew
+    // kiface, so casting to it from pcbcommon leaves cvpcb with an undefined typeinfo
+    const PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
 
-    return tool && tool->IsFootprintEditor();
+    return frame && frame->IsType( FRAME_FOOTPRINT_EDITOR );
 }
 
 
@@ -1376,7 +1377,7 @@ std::vector<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( std::initializer_list<BO
     std::vector<BOARD_ITEM*>                  items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> visibleItems;
 
-    PCB_TOOL_BASE*       currentTool = static_cast<PCB_TOOL_BASE*>( m_toolMgr->GetCurrentTool() );
+    const bool           inFootprintEditor = editingInsideFootprint();
     KIGFX::VIEW*         view = m_toolMgr->GetView();
     RENDER_SETTINGS*     settings = view->GetPainter()->GetSettings();
     const std::set<int>& activeLayers = settings->GetHighContrastLayers();
@@ -1395,7 +1396,7 @@ std::vector<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( std::initializer_list<BO
 
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( viewItem );
 
-        if( currentTool->IsFootprintEditor() )
+        if( inFootprintEditor )
         {
             // If we are in the footprint editor, don't use the footprint itself
             if( boardItem->Type() == PCB_FOOTPRINT_T )
