@@ -315,15 +315,13 @@ namespace
             {
                 std::unique_ptr<SCH_TEXT> text = makeGraphicText( graphic, aDiagnostics );
                 text->SetUnit( aUnit );
-                aLibrary->AddDrawItem( text.get() );
-                text.release();
+                aLibrary->AddDrawItem( text.release() );
             }
             else
             {
                 std::unique_ptr<SCH_SHAPE> shape = makeShape( graphic, false, 0 );
                 shape->SetUnit( aUnit );
-                aLibrary->AddDrawItem( shape.get() );
-                shape.release();
+                aLibrary->AddDrawItem( shape.release() );
             }
         }
 
@@ -341,8 +339,7 @@ namespace
                 }
 
                 pin->SetUnit( aUnit );
-                aLibrary->AddDrawItem( pin.get() );
-                pin.release();
+                aLibrary->AddDrawItem( pin.release() );
             }
         }
         else
@@ -359,8 +356,7 @@ namespace
                 }
 
                 pin->SetUnit( aUnit );
-                aLibrary->AddDrawItem( pin.get() );
-                pin.release();
+                aLibrary->AddDrawItem( pin.release() );
             }
         }
     }
@@ -438,8 +434,7 @@ namespace
             pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
             pin->SetVisible( false );
             pin->SetLength( 0 );
-            library->AddDrawItem( pin.get() );
-            pin.release();
+            library->AddDrawItem( pin.release() );
         }
 
         library->SetShowPinNames( true );
@@ -493,8 +488,7 @@ namespace
         libId.SetLibItemName( library->GetName() );
         symbol->SetLibId( libId );
         auto libraryCopy = std::make_unique<LIB_SYMBOL>( *library );
-        symbol->SetLibSymbol( libraryCopy.get() );
-        libraryCopy.release();
+        symbol->SetLibSymbol( libraryCopy.release() );
         symbol->SetPosition( pagePoint( aPlacement.position, aPageHeight ) );
 
         int orientation = SYM_ORIENT_0;
@@ -588,6 +582,7 @@ namespace
         EE_RTREE                               appendIndex;
         std::vector<std::unique_ptr<SCH_ITEM>> appendItems;
         SCH_SHEET_LIST                         hierarchy;
+        std::optional<SCH_SHEET_PATH>          replacementCurrentSheet;
         std::unique_ptr<CONNECTION_GRAPH>      connectionGraph;
         BUILD_RESULT                           result;
 
@@ -629,7 +624,7 @@ namespace
             if( aAppending && ( replacementScreen || !appendCache ) )
                 THROW_IO_ERROR( wxS( "append staging has invalid screen ownership" ) );
 
-            if( !aAppending && ( !destinationRoot || !replacementScreen ) )
+            if( !aAppending && ( !destinationRoot || !replacementScreen || !replacementCurrentSheet ) )
                 THROW_IO_ERROR( wxS( "replacement staging has no destination root or screen" ) );
 
             std::set<wxString> filenames;
@@ -689,7 +684,14 @@ namespace
             {
                 replacementScreen->IncRefCount();
                 SCH_SCREEN* previousScreen = destinationRoot->AdoptImportedScreen( replacementScreen.get() );
-                previousGraph = aSchematic->AdoptImportedHierarchy( std::move( hierarchy ), connectionGraph.get() );
+
+                for( SCH_SHEET_PATH& path : hierarchy )
+                    path.Rehash();
+
+                replacementCurrentSheet->Rehash();
+                previousGraph = aSchematic->AdoptImportedHierarchy( std::move( hierarchy ),
+                                                                    &*replacementCurrentSheet,
+                                                                    connectionGraph.get() );
                 replacementScreen.release();
                 connectionGraph.release();
                 previousScreen->DecRefCount();
@@ -700,7 +702,8 @@ namespace
             else
             {
                 aAppendToMe->GetScreen()->AdoptImportedContent( std::move( appendIndex ), *appendCache );
-                previousGraph = aSchematic->AdoptImportedHierarchy( std::move( hierarchy ), connectionGraph.get() );
+                previousGraph =
+                        aSchematic->AdoptImportedHierarchy( std::move( hierarchy ), nullptr, connectionGraph.get() );
                 connectionGraph.release();
 
                 for( std::unique_ptr<SCH_ITEM>& item : appendItems )
@@ -904,8 +907,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
                 THROW_IO_ERROR( wxString::Format( wxS( "destination library cache entry '%s' is null" ), name ) );
 
             auto clone = std::make_unique<LIB_SYMBOL>( *symbol );
-            staged.appendCache->AddLibSymbol( clone.get() );
-            clone.release();
+            staged.appendCache->AddLibSymbol( name, std::move( clone ) );
         }
 
         for( SCH_ITEM* item : aAppendToMe->GetScreen()->Items().OfType( SCH_SHEET_T ) )
@@ -929,6 +931,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
         SCH_SHEET_PATH rootPath;
         rootPath.push_back( staged.destinationRoot );
         staged.hierarchy.push_back( rootPath );
+        staged.replacementCurrentSheet.emplace( rootPath );
 
         if( !multiSheet )
         {
@@ -976,9 +979,16 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
 
         for( SCH_ITEM* item : temporaryItems )
         {
-            temporaryScreen->Items().remove( item );
+            std::unique_ptr<SCH_ITEM> itemOwner( item );
+
+            if( !temporaryScreen->Items().remove( item ) )
+            {
+                itemOwner.release();
+                THROW_IO_ERROR( wxS( "staged append item is missing from its spatial index" ) );
+            }
+
             item->SetParent( aAppendToMe->GetScreen() );
-            staged.appendItems.emplace_back( item );
+            staged.appendItems.emplace_back( std::move( itemOwner ) );
         }
 
     }

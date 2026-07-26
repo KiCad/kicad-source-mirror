@@ -512,6 +512,8 @@ public:
      */
     void AddLibSymbol( LIB_SYMBOL* aLibSymbol );
 
+    void AddLibSymbol( const wxString& aKey, std::unique_ptr<LIB_SYMBOL> aLibSymbol );
+
     /**
      * After loading a file from disk, the library symbols do not yet contain the full
      * data for their embedded files, only a reference.  This iterates over all lib symbols

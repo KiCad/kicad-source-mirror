@@ -419,9 +419,14 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
 
 
 CONNECTION_GRAPH* SCHEMATIC::AdoptImportedHierarchy( SCH_SHEET_LIST&&  aHierarchy,
+                                                     SCH_SHEET_PATH*  aCurrentSheet,
                                                      CONNECTION_GRAPH* aConnectionGraph ) noexcept
 {
     m_hierarchy.swap( aHierarchy );
+
+    if( aCurrentSheet )
+        m_currentSheet->Swap( *aCurrentSheet );
+
     m_labelToPageRefsMap.clear();
     return std::exchange( m_connectionGraph, aConnectionGraph );
 }

@@ -1457,19 +1457,23 @@ SCH_LABEL_BASE* SCH_SCREEN::GetLabel( const VECTOR2I& aPosition, int aAccuracy )
 
 void SCH_SCREEN::AddLibSymbol( LIB_SYMBOL* aLibSymbol )
 {
+    std::unique_ptr<LIB_SYMBOL> symbol( aLibSymbol );
+    wxCHECK( symbol, /* void */ );
+
+    wxString key = symbol->GetLibId().Format().wx_str();
+    AddLibSymbol( key, std::move( symbol ) );
+}
+
+
+void SCH_SCREEN::AddLibSymbol( const wxString& aKey, std::unique_ptr<LIB_SYMBOL> aLibSymbol )
+{
     wxCHECK( aLibSymbol, /* void */ );
 
-    wxString libSymbolName = aLibSymbol->GetLibId().Format().wx_str();
+    auto        insertion = m_libSymbols.try_emplace( aKey, nullptr );
+    auto        it = insertion.first;
+    LIB_SYMBOL* previous = std::exchange( it->second, aLibSymbol.release() );
 
-    auto it = m_libSymbols.find( libSymbolName );
-
-    if( it != m_libSymbols.end() )
-    {
-        delete it->second;
-        m_libSymbols.erase( it );
-    }
-
-    m_libSymbols[libSymbolName] = aLibSymbol;
+    delete previous;
 }
 
 

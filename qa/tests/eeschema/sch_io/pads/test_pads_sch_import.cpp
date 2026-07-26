@@ -1094,12 +1094,37 @@ BOOST_AUTO_TEST_CASE( BinaryAppendIsAtomic )
     BOOST_REQUIRE( destination->GetScreen() );
     PADS_SCH_BINARY_BUILDER builder;
 
+    LIB_ID preservedLibId;
+    preservedLibId.SetLibNickname( wxS( "source_library" ) );
+    preservedLibId.SetLibItemName( wxS( "source_symbol" ) );
+    auto preservedSymbol = std::make_unique<LIB_SYMBOL>( wxS( "source_symbol" ) );
+    preservedSymbol->SetLibId( preservedLibId );
+    const wxString preservedKey = wxS( "pads_import:preserved_cache_key" );
+    destination->GetScreen()->AddLibSymbol( preservedKey, std::move( preservedSymbol ) );
+
     PADS_SCH_MODEL single = parseBinaryFixture( wxS( "placement_transform" ) );
     size_t         beforeSymbols = itemCount( destination->GetScreen(), SCH_SYMBOL_T );
     BUILD_RESULT   singleResult =
             builder.Build( single, &m_schematic, destination, binaryFixture( wxS( "placement_transform" ) ) );
     BOOST_CHECK_EQUAL( itemCount( destination->GetScreen(), SCH_SYMBOL_T ),
                        beforeSymbols + singleResult.counts.symbols );
+    BOOST_REQUIRE( destination->GetScreen()->GetLibSymbols().contains( preservedKey ) );
+    BOOST_CHECK( destination->GetScreen()->GetLibSymbols().at( preservedKey )->GetLibId() == preservedLibId );
+
+    std::set<wxString> cacheKeys;
+
+    for( const auto& [key, symbol] : destination->GetScreen()->GetLibSymbols() )
+        cacheKeys.insert( key );
+
+    builder.Build( single, &m_schematic, destination, binaryFixture( wxS( "placement_transform" ) ) );
+    std::set<wxString> repeatedCacheKeys;
+
+    for( const auto& [key, symbol] : destination->GetScreen()->GetLibSymbols() )
+        repeatedCacheKeys.insert( key );
+
+    BOOST_CHECK( repeatedCacheKeys == cacheKeys );
+    BOOST_REQUIRE( destination->GetScreen()->GetLibSymbols().contains( preservedKey ) );
+    BOOST_CHECK( destination->GetScreen()->GetLibSymbols().at( preservedKey )->GetLibId() == preservedLibId );
 
     PADS_SCH_MODEL multi = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
     auto       existingChild = std::make_unique<SCH_SHEET>( destination );
@@ -1140,6 +1165,24 @@ BOOST_AUTO_TEST_CASE( BinaryAppendIsAtomic )
     BOOST_CHECK_THROW( commitFailure.Build( single, &m_schematic, destination, wxS( "commit_failure.sch" ) ),
                        IO_ERROR );
     BOOST_CHECK( objectGraphSnapshot( m_schematic, destination ) == before );
+
+    auto oldCurrentChild = std::make_unique<SCH_SHEET>( destination );
+    oldCurrentChild->SetScreen( new SCH_SCREEN( &m_schematic ) );
+    SCH_SHEET_PATH oldCurrentPath;
+    oldCurrentPath.push_back( destination );
+    oldCurrentPath.push_back( oldCurrentChild.get() );
+    destination->GetScreen()->Append( oldCurrentChild.get() );
+    oldCurrentChild.release();
+    m_schematic.SetCurrentSheet( oldCurrentPath );
+    BOOST_REQUIRE_EQUAL( m_schematic.CurrentSheet().size(), 2u );
+
+    builder.Build( single, &m_schematic, nullptr, wxS( "replacement.sch" ) );
+    BOOST_REQUIRE_EQUAL( m_schematic.CurrentSheet().size(), 1u );
+    BOOST_CHECK( m_schematic.CurrentSheet().at( 0 ) == destination );
+    BOOST_CHECK( m_schematic.CurrentSheet().LastScreen() == destination->GetScreen() );
+    SCH_SHEET_PATH freshRootPath;
+    freshRootPath.push_back( destination );
+    BOOST_CHECK_EQUAL( m_schematic.CurrentSheet().GetCurrentHash(), freshRootPath.GetCurrentHash() );
 }
 
 

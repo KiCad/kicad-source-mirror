@@ -254,6 +254,8 @@ public:
     // Move assignment operator
     SCH_SHEET_PATH& operator=( SCH_SHEET_PATH&& aOther );
 
+    void Swap( SCH_SHEET_PATH& aOther ) noexcept;
+
     SCH_SHEET_PATH operator+( const SCH_SHEET_PATH& aOther );
 
     ~SCH_SHEET_PATH() = default;

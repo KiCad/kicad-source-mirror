@@ -176,7 +176,7 @@ public:
 
     void SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets );
 
-    CONNECTION_GRAPH* AdoptImportedHierarchy( SCH_SHEET_LIST&& aHierarchy,
+    CONNECTION_GRAPH* AdoptImportedHierarchy( SCH_SHEET_LIST&& aHierarchy, SCH_SHEET_PATH* aCurrentSheet,
                                                CONNECTION_GRAPH* aConnectionGraph ) noexcept;
 
     /**
