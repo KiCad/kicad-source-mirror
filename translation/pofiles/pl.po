@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-07-24 06:01+0000\n"
+"PO-Revision-Date: 2026-07-26 13:15+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -8921,7 +8921,7 @@ msgstr "Schemat: Przeprowadź kontrolę ERC"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
-msgstr "Narzędzia specjalne: Kopiuj pliki"
+msgstr "Specjalne: Kopiuj pliki"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -51517,7 +51517,7 @@ msgstr "Nie obsadzony"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1561
 msgid "exclude from position files"
-msgstr "Wyklucz z plików położeń"
+msgstr "wyklucz z plików położeń"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1587
 #, c-format
