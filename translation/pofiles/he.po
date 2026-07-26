@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-04-24 15:22+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-07-27 14:02+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/v10/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:395
@@ -933,7 +933,7 @@ msgstr "צבע סוף מדרג הרקע"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:274
 #: pcbnew/dialogs/dialog_render_job_base.cpp:96
 msgid "Use board stackup colors"
-msgstr "השתמש בצבעי מחסנית שכבות הלוח"
+msgstr "השתמש בצבעי מבנה שכבות הלוח"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:187
 msgid "Use PCB editor copper colors"
@@ -975,8 +975,7 @@ msgstr "לחץ לחיצה כפולה שמאלית או לחיצה אמצעית �
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:585
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
-"בטל את הסימון של 'השתמש בצבעי מחסנית שכבות הלוח' כדי לאפשר עריכת צבעים."
+msgstr "בטל את הסימון של 'השתמש בצבעי מבנה שכבות הלוח' כדי לאפשר עריכת צבעים."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:641
 #: pcbnew/widgets/appearance_controls.cpp:2349
@@ -2034,95 +2033,90 @@ msgstr "שינוי מ-API"
 #: common/api/api_plugin.cpp:60
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "תצורת תוסף לא חוקית ב-'%s':‏ %s"
 
 #: common/api/api_plugin.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "שם פין לא חוקי"
+msgstr "זמן ריצה של תוסף לא חוקי: %s"
 
 #: common/api/api_plugin.cpp:112
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "לא ניתן לגשת לתצורת המאגר"
+msgstr "לא ניתן לקרוא את קובץ תצורת התוסף"
 
 #: common/api/api_plugin.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "שגיאת תצורה"
+msgstr "שגיאה בקובץ תצורת התוסף: %s"
 
 #: common/api/api_plugin.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "ערך טווח טמפרטורה חסר או לא תקין."
+msgstr "מפתחות נדרשים חסרים או לא חוקיים: %s"
 
 #: common/api/api_plugin.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "מזהה ספריית סמל %s אינו תקף."
+msgstr "המזהה '%s' אינו חוקי"
 
 #: common/api/api_plugin.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "החיבור למסד הנתונים נכשל: %s"
+msgstr "מקטע הפעולות אינו חוקי: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "אפשרויות תוסף"
+msgstr "פעולת תוסף '%s':‏ %s"
 
 #: common/api/api_plugin_manager.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s': %s"
-msgstr "תוספים (%d)"
+msgstr "תוסף '%s':‏ %s"
 
 #: common/api/api_plugin_manager.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "exited with code %d"
-msgstr "התהליך נכשל עם קוד יציאה %d"
+msgstr "יצא עם קוד %d"
 
 #: common/api/api_plugin_manager.cpp:351 common/api/api_plugin_manager.cpp:691
 #: common/api/api_plugin_manager.cpp:775
-#, fuzzy
 msgid "missing plugin environment"
-msgstr "צור מחדש סביבת תוסף"
+msgstr "חסרה סביבת תוסף"
 
 #: common/api/api_plugin_manager.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' could not be read"
-msgstr "לא ניתן ליצור את הקובץ '%s'."
+msgstr "לא ניתן לקרוא את נקודת הכניסה '%s'"
 
 #: common/api/api_plugin_manager.cpp:407
-#, fuzzy
 msgid "process could not be created"
 msgstr "לא ניתן ליצור תהליך"
 
 #: common/api/api_plugin_manager.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' is not executable"
-msgstr "התיקייה '%s' אינה ניתנת לכתיבה."
+msgstr "נקודת הכניסה '%s' אינה ניתנת להרצה"
 
 #: common/api/api_plugin_manager.cpp:500
-#, fuzzy
 msgid "could not launch plugin"
-msgstr "לא ניתן להשתמש ב-OpenGL"
+msgstr "לא ניתן להפעיל את התוסף"
 
 #: common/api/api_plugin_manager.cpp:661 common/api/api_plugin_manager.cpp:743
 #: common/api/api_plugin_manager.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "error code %d"
-msgstr "קוד שגיאה: %d"
+msgstr "קוד שגיאה %d"
 
 #: common/api/api_plugin_manager.cpp:663 common/api/api_plugin_manager.cpp:745
 #: common/api/api_plugin_manager.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "צור מחדש סביבת תוסף"
+msgstr "לא ניתן ליצור סביבת תוסף: %s"
 
 #: common/api/api_plugin_manager.cpp:784
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "לא ניתן ליצור תהליך"
+msgstr "לא ניתן לקרוא את requirements.txt"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
@@ -2653,78 +2647,74 @@ msgid "Add Netclass Assignment"
 msgstr "הוסף שיוך מחלקת רשת"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(קובץ חסר)"
+msgstr "(חסר)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
-#, fuzzy
 msgid "File"
-msgstr "&קובץ"
+msgstr "קובץ"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "הצג את כל הגרסאות"
+msgstr "גרסה שמורה"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
 msgid "Auto-saved copy"
-msgstr ""
+msgstr "עותק שנשמר אוטומטית"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad מצא שינויים שלא נשמרו מהפגישה האחרונה שלך שהם חדשים יותר מקבצי הפרויקט "
-"השמורים."
+"KiCad מצא שינויים שנשמרו אוטומטית מפגישה קודמת. בדרך כלל משמעות הדבר היא ש-"
+"KiCad נסגר באופן בלתי צפוי בזמן שהייתה לך עבודה שלא נשמרה."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
-msgstr "שחזר ברירות מחדל"
+msgstr "שחזר שמירה אוטומטית"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
-msgstr ""
+msgstr "מחליף את הקובץ השמור בגרסה שנשמרה אוטומטית. התוכן השמור הקודם יימחק."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep Current"
-msgstr "שמור זקוף"
+msgstr "שמור נוכחי"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
-msgstr ""
+msgstr "משאיר את הקובץ השמור כמות שהוא ומוחק את השינויים שנשמרו אוטומטית."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
-msgstr "אזור אסור"
+msgstr "שמור את שניהם"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"משאיר את הקובץ השמור וכותב לצדו את הגרסה שנשמרה אוטומטית כקובץ נפרד עם חותמת "
+"זמן שניתן לבדוק מאוחר יותר."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
-msgstr "בטל טעינה"
+msgstr "בטל פתיחה"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"סוגר את החלון ללא ביצוע שינויים. הקבצים שנשמרו אוטומטית יישארו בדיסק ויוצעו "
+"שוב בפעם הבאה שתפתח את הפרויקט."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "שחזור שמירה אוטומטית"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -3153,11 +3143,11 @@ msgstr "עריכת מאפייני קבוצה"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "קבוצה אינה יכולה להכיל את עצמה."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "לא ניתן להוסיף קבוצה זו מכיוון שהיא כבר מכילה את הקבוצה הנוכחית."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -3942,31 +3932,29 @@ msgid "Commit message cannot be empty"
 msgstr "הודעת Commit לא יכולה להיות ריקה"
 
 #: common/dialogs/git/dialog_git_commit.cpp:196
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "בחר לפחות מאפיין אחד לעדכון לאחור."
+msgstr "בחר לפחות קובץ אחד ל-commit"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
-msgstr ""
+msgstr "משפט סיסמה למפתח:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "סיסמה:"
+msgstr "סיסמה / אסימון:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "נדרש אימות לגישה אל:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "שם משתמש וסיסמה"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "מפתח SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -3979,14 +3967,12 @@ msgid "Username:"
 msgstr "שם משתמש:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "סיסמת מפתח SSH:"
+msgstr "מפתח SSH:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "בחר קובץ מפתח פרטי SSH"
+msgstr "בחר מפתח SSH פרטי"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -3994,14 +3980,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "שמור את כל הזרמים"
+msgstr "שמור אישורי גישה"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "אימות"
+msgstr "נדרש אימות Git"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:401
@@ -4505,9 +4489,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "גורם עמעום במצב ניגודיות גבוהה:"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
-#, fuzzy
 msgid "App theme:"
-msgstr "השתמש בערכה:"
+msgstr "ערכת נושא של היישום:"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 msgid "Scaling"
@@ -4567,14 +4550,12 @@ msgid ""
 msgstr "צור אוטומטית ארכיוני גיבוי של הפרויקט הנוכחי בעת שמירת קבצים"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Incremental"
-msgstr "הגדל"
+msgstr "מצטבר"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Zip archive"
-msgstr "ארכיון"
+msgstr "ארכיון Zip"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -4582,22 +4563,25 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"מצטבר: תחזק מאגר git מוסתר בשם ‎.history עם שינויים רציפים.\n"
+"Zip: צור ארכיוני zip עם חותמת זמן בעת שמירה; שמירה אוטומטית משתמשת בקבצי "
+"שחזור."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "שלח פרויקט ישירות"
+msgstr "תיקיית הפרויקט"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "User data directory"
-msgstr "'%s' אינה תיקייה"
+msgstr "תיקיית נתוני המשתמש"
 
 #: common/dialogs/panel_common_settings_base.cpp:453
 msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"פרויקט: אחסן גיבויים וקבצי שמירה אוטומטית בתוך תיקיית הפרויקט.\n"
+"משתמש: אחסן אותם בתיקיית נתוני המשתמש של KiCad."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -6054,9 +6038,8 @@ msgid "How would you like KiCad to create them?"
 msgstr "כיצד תרצה ש-KiCad ייצור אותן?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries"
-msgstr "התחל עם ספריות KiCad המובנות (מומלץ)"
+msgstr "התחל עם ספריות KiCad המובנות"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 msgid "Import tables from the previous version"
@@ -6072,15 +6055,14 @@ msgstr ""
 "עם ספריות KiCad של ברירת המחדל."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:53
-#, fuzzy
 msgid "Migrate built-in libraries to the latest version (recommended)"
-msgstr "התחל עם ספריות KiCad המובנות (מומלץ)"
+msgstr "העבר ספריות מובנות לגרסה האחרונה (מומלץ)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:55
 msgid ""
 "When enabled, KiCad will replace any existing references to built-in "
 "libraries with references to the latest version"
-msgstr ""
+msgstr "כשמופעל, KiCad יחליף כל הפניה קיימת לספריות מובנות בהפניה לגרסה האחרונה"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:62
 msgid "Start with no libraries"
@@ -6222,9 +6204,8 @@ msgid "Insert Group"
 msgstr "הוסף קבוצה"
 
 #: common/dialogs/panel_toolbar_customization.cpp:176
-#, fuzzy
 msgid "Filter actions"
-msgstr "הגדרות סינון"
+msgstr "סנן פעולות"
 
 #: common/dialogs/panel_toolbar_customization.cpp:472
 #: common/dialogs/panel_toolbar_customization.cpp:797
@@ -6299,19 +6280,16 @@ msgid "Graphics error"
 msgstr "שגיאת גרפיקה"
 
 #: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "שגיאת גרפיקה"
+msgstr "שגיאת גרפיקה במהלך השחזור"
 
 #: common/draw_panel_gal.cpp:241
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "חריגת OCC בבניית פנים: %s"
+msgstr "חריגה לא ידועה במהלך החלפת מנוע התצוגה"
 
 #: common/draw_panel_gal.cpp:416
-#, fuzzy
 msgid "Unknown exception"
-msgstr "פעולת ניקוי לא ידועה"
+msgstr "חריגה לא ידועה"
 
 #: common/draw_panel_gal.cpp:630
 msgid "Could not use OpenGL"
@@ -6520,14 +6498,14 @@ msgid "Invalid floating point number"
 msgstr "מספר נקודה צפה לא חוקי"
 
 #: common/eda_base_frame.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "יצירת הקובץ '%s' נכשלה."
+msgstr "שחזור הקובץ שנשמר אוטומטית '%s' נכשל."
 
 #: common/eda_base_frame.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "כתיבת הקובץ '%s' נכשלה."
+msgstr "כתיבת הקובץ המשוחזר '%s' נכשלה."
 
 #: common/eda_base_frame.cpp:664 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
@@ -7799,9 +7777,9 @@ msgid "Could not create directory '%s'"
 msgstr "לא ניתן ליצור את התיקייה '%s'"
 
 #: common/git/libgit_backend.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "לא ניתן לשבט את המאגר '%s'"
+msgstr "לא ניתן לשבט את המאגר '%s' :‏ %s"
 
 #: common/git/libgit_backend.cpp:197 common/git/libgit_backend.cpp:339
 #, c-format
@@ -7850,37 +7828,37 @@ msgstr "יצירת commit נכשלה: %s"
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2834
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "לא ניתן לתקן: לענף אין עדיין commits."
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "קבלת commit נכשלה: %s"
+msgstr "קבלת ה-commit של HEAD נכשלה: %s"
 
 #: common/git/libgit_backend.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "קבלת commit נכשלה: %s"
+msgstr "קבלת commit האב נכשלה: %s"
 
 #: common/git/libgit_backend.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "קבלת הפניית HEAD נכשלה: %s"
+msgstr "קבלת עץ HEAD נכשלה: %s"
 
 #: common/git/libgit_backend.cpp:372 common/git/libgit_backend.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "כתיבת אינדקס נכשלה: %s"
+msgstr "איפוס האינדקס נכשל: %s"
 
 #: common/git/libgit_backend.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "כתיבת עץ נכשלה: %s"
+msgstr "קבלת עץ האב נכשלה: %s"
 
 #: common/git/libgit_backend.cpp:464 kicad/project_tree_pane.cpp:3087
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "קבלת commit נכשלה: %s"
+msgstr "תיקון ה-commit נכשל: %s"
 
 #: common/git/libgit_backend.cpp:491 common/git/libgit_backend.cpp:1065
 #, c-format
@@ -7911,9 +7889,9 @@ msgid "No repository available to set up remote"
 msgstr "אין מאגר זמין להגדרת remote"
 
 #: common/git/libgit_backend.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "יצירת remote נכשלה: %s"
+msgstr "הגדרת המאגר המרוחק נכשלה: %s"
 
 #: common/git/libgit_backend.cpp:931
 msgid "No repository available"
@@ -7935,9 +7913,9 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "מעבר לענף '%s' נכשל: %s"
 
 #: common/git/libgit_backend.cpp:998
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "חיפוש ענף '%s' נכשל: %s"
+msgstr "יצירת הענף המקומי '%s' נכשלה: %s"
 
 #: common/git/libgit_backend.cpp:1012
 #, c-format
@@ -7961,7 +7939,7 @@ msgstr "לא ניתן לקרוא את 'FETCH_HEAD'"
 #: common/git/libgit_backend.cpp:1170
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
-msgstr ""
+msgstr "אין מה למשוך: למאגר המרוחק אין ענף התואם לענף המקומי הנוכחי."
 
 #: common/git/libgit_backend.cpp:1179
 msgid "Could not lookup commit"
@@ -8028,40 +8006,37 @@ msgid "Merge failed: %s"
 msgstr "מיזוג נכשל: %s"
 
 #: common/git/libgit_backend.cpp:1462
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "לא ניתן לקבל את ראש המאגר"
+msgstr "לא ניתן לקרוא את אינדקס המאגר לאחר המיזוג."
 
 #: common/git/libgit_backend.cpp:1494
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "לא ניתן לכתוב קבצי שרטוט לתיקייה '%s'."
+msgstr "לא ניתן לכתוב את תוצאת המיזוג."
 
 #: common/git/libgit_backend.cpp:1502
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "לא ניתן לקבל את ראש המאגר"
+msgstr "לא ניתן לקבל את ראש המאגר."
 
 #: common/git/libgit_backend.cpp:1512
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "לא ניתן לאתר את commit היעד"
+msgstr "לא ניתן לאתר את ה-commits למיזוג."
 
 #: common/git/libgit_backend.cpp:1521 common/git/libgit_backend.cpp:1706
 msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"לא ניתן ליצור חתימת commit. הגדר את user.name ו-user.email בתצורת git שלך."
 
 #: common/git/libgit_backend.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "מזג גרפיקה חופפת לתוך פדים"
+msgstr "מזג ענף מעקב מרוחק אל %s"
 
 #: common/git/libgit_backend.cpp:1538
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "לא ניתן ליצור את התיקייה '%s'"
+msgstr "לא ניתן ליצור commit מיזוג: %s"
 
 #: common/git/libgit_backend.cpp:1555
 msgid ""
@@ -8088,36 +8063,33 @@ msgstr "סיום rebase נכשל: %s"
 
 #: common/git/libgit_backend.cpp:1627 common/git/libgit_backend.cpp:1673
 msgid "Another git operation is in progress."
-msgstr ""
+msgstr "פעולת git אחרת מתבצעת כעת."
 
 #: common/git/libgit_backend.cpp:1635 common/git/libgit_backend.cpp:1688
-#, fuzzy
 msgid "Could not find the matching remote branch."
-msgstr "לא ניתן למצוא את '%s' בספרייה המיובאת."
+msgstr "לא ניתן למצוא את הענף המרוחק המתאים."
 
 #: common/git/libgit_backend.cpp:1644 common/git/libgit_backend.cpp:1697
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "לא ניתן לפתוח את נתיב התבנית '%s'"
+msgstr "לא ניתן לקרוא את הענף המרוחק."
 
 #: common/git/libgit_backend.cpp:1653
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "לא ניתן לדחוף ל-remote: %s"
+msgstr "לא ניתן לאפס אל הענף המרוחק: %s"
 
 #: common/git/libgit_backend.cpp:1679
-#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"לא ניתן למזג: יש לך שינויים שלא הוכנסו לאינדקס. בצע commit או stash לפני "
-"משיכה."
+"לא ניתן לבצע rebase: יש לך שינויים שלא הועברו לאזור ההכנה. בצע להם commit או "
+"stash תחילה."
 
 #: common/git/libgit_backend.cpp:1737 common/git/libgit_backend.cpp:1748
 msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
-msgstr ""
+msgstr "פעולת ה-rebase נתקלה בהתנגשויות. מומלץ לפתור זאת משורת הפקודה של git."
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -9423,14 +9395,13 @@ msgid "The library table path '%s' does not exist"
 msgstr "נתיב טבלת הספריות '%s' אינו קיים"
 
 #: common/libraries/library_table.cpp:87
-#, fuzzy
 msgid "The library table is of wrong type"
-msgstr "נתיב טבלת הספריות '%s' אינו קיים"
+msgstr "טבלת הספריות היא מסוג שגוי"
 
 #: common/libraries/library_table.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "הספרייה '%s' היא לקריאה בלבד."
+msgstr "טבלת הספריות '%s' היא לקריאה בלבד"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -9449,15 +9420,15 @@ msgstr "אירעה שגיאה בלתי צפויה בעת קריאת טבלת ס�
 
 #: common/local_history.cpp:1646
 msgid "Compacting local history..."
-msgstr ""
+msgstr "מכווץ היסטוריה מקומית..."
 
 #: common/local_history.cpp:1843
 msgid "Trimming local history..."
-msgstr ""
+msgstr "מקצץ היסטוריה מקומית..."
 
 #: common/local_history.cpp:1936
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "מכווץ היסטוריה מקוצצת..."
 
 #: common/local_history.cpp:2213
 msgid "Cannot restore - the following files are open by another user:"
@@ -9468,20 +9439,21 @@ msgid "Restore Failed"
 msgstr "השחזור נכשל"
 
 #: common/local_history.cpp:2260
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "אפס לזווית הנוכחית מנקודת הייחוס."
+msgstr "לשחזר את הפרויקט לגרסה מ-%s?"
 
 #: common/local_history.cpp:2262
-#, fuzzy
 msgid "Restore Version"
-msgstr "משחזר פגישה"
+msgstr "שחזר גרסה"
 
 #: common/local_history.cpp:2265
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
 msgstr ""
+"הקבצים הנוכחיים שלך מגובים תחילה כדי שתוכל לבטל את השחזור. קבצים שאינם חלק "
+"מגרסה זו יישארו ללא שינוי."
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1228 pcbnew/zone.cpp:989
@@ -11609,14 +11581,13 @@ msgid "View load messages"
 msgstr "הצג הודעות טעינה"
 
 #: common/widgets/kistatusbar.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "View %zu message(s)"
-msgstr "הצג %zu הודעות טעינה"
+msgstr "הצג %zu הודעות"
 
 #: common/widgets/kistatusbar.cpp:546
-#, fuzzy
 msgid "View messages"
-msgstr "הצג הודעות טעינה"
+msgstr "הצג הודעות"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -11812,9 +11783,8 @@ msgid "Confirm change"
 msgstr "אשר שינוי"
 
 #: common/widgets/widget_hotkey_list.cpp:537
-#, fuzzy
 msgid "Command"
-msgstr "פקודה:"
+msgstr "פקודה"
 
 #: common/widgets/widget_hotkey_list.cpp:539
 msgid "Command (double-click to edit)"
@@ -13228,7 +13198,7 @@ msgstr "עדכן צורת סמל ופינים"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:166
 msgid "Update keywords and footprint filters"
-msgstr "עדכן מילות מפתח ומסנני פוטפרינט"
+msgstr "עדכן מילות מפתח ומסנני תצורת רכיב"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:175
 msgid "Update/reset pin name/number visibilities"
@@ -13500,9 +13470,8 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "שנה חומרה לשגיאה עבור כל הפרות '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:793 eeschema/dialogs/dialog_erc.cpp:800
-#, fuzzy
 msgid "Violation severities can also be edited in Schematic Setup"
-msgstr "ניתן לערוך חומרת הפרות גם בדו-שיח הגדרת סכימה..."
+msgstr "ניתן לערוך את חומרת ההפרות גם בהגדרות הסכימה"
 
 #: eeschema/dialogs/dialog_erc.cpp:798 pcbnew/dialogs/dialog_drc.cpp:867
 #, c-format
@@ -13524,9 +13493,8 @@ msgstr "ערוך מפת התנגשויות פין-לפין..."
 
 #: eeschema/dialogs/dialog_erc.cpp:814 eeschema/dialogs/dialog_erc.cpp:820
 #: eeschema/dialogs/dialog_erc.cpp:827
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
-msgstr "פתח את דו-שיח הגדרת סכימה..."
+msgstr "פתח את חלון הגדרות הסכימה"
 
 #: eeschema/dialogs/dialog_erc.cpp:819 pcbnew/dialogs/dialog_drc.cpp:879
 msgid "Edit violation severities..."
@@ -14774,13 +14742,13 @@ msgstr "צור סמל חדש הנגזר מהסמל הנבחר"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:117
 #: eeschema/fields_grid_table.cpp:1200
 msgid "Select Footprint..."
-msgstr "בחר פוטפרינט..."
+msgstr "בחר תצורת רכיב..."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:136
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:117
 #: eeschema/fields_grid_table.cpp:1200
 msgid "Browse for footprint"
-msgstr "חפש פוטפרינט"
+msgstr "חפש תצורת רכיב"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:141
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:122
@@ -14999,7 +14967,7 @@ msgstr "שמור גיליון נתונים מקושר"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:98
 msgid "Keep linked footprint"
-msgstr "שמור פוטפרינט מקושר"
+msgstr "שמור תצורת רכיב מקושרת"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:101
 msgid "Transfer user-defined fields"
@@ -15043,18 +15011,17 @@ msgid "Derived symbol must have a parent selected"
 msgstr "לסמל נגזר חייב להיות סמל אב נבחר"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:508
-#, fuzzy, c-format
+#, c-format
 msgid "The unit name '%s' is already in use."
-msgstr "השם '%s' כבר בשימוש."
+msgstr "שם היחידה '%s' כבר בשימוש."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:523
 msgid "Delete extra units from symbol?"
 msgstr "למחוק יחידות עודפות מהסמל?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:551
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "לסמל חייבת להיות לפחות צורת סמל אחת"
+msgstr "סגנונות גוף מותאמים אישית חייבים לכלול לפחות 2 רשומות"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:557
 msgid "Delete extra body styles from symbol?"
@@ -15104,11 +15071,11 @@ msgstr "%d השדות הראשונים הם חובה."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1118
 msgid "Add Footprint Filter"
-msgstr "הוסף מסנן פוטפרינט"
+msgstr "הוסף מסנן תצורת רכיב"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1145
 msgid "Edit Footprint Filter"
-msgstr "ערוך מסנן פוטפרינט"
+msgstr "ערוך מסנן תצורת רכיב"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:144
 msgid "Derive from symbol:"
@@ -15147,7 +15114,7 @@ msgid ""
 "They will not be included in the BOM and cannot be assigned a footprint."
 msgstr ""
 "סמלי הספקה מגדירים רשת גלובלית עם הערך כשם רשת.\n"
-"הם לא ייכללו ב-BOM ולא ניתן להקצות להם פוטפרינט."
+"הם לא ייכללו ב-BOM ולא ניתן להקצות להם תצורת רכיב."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
 msgid "Define as local power symbol"
@@ -15299,7 +15266,7 @@ msgstr "יחידות && צורות סמל"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:444
 msgid "Footprint filters:"
-msgstr "מסנני פוטפרינט:"
+msgstr "מסנני תצורת רכיב:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:446
 msgid ""
@@ -15307,25 +15274,25 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
-"רשימת שמות פוטפרינטים שניתן להשתמש בהם עבור סמל זה.\n"
-"שמות פוטפרינטים יכולים להשתמש בתווים כלליים כמו sm* כדי לאפשר את כל שמות "
+"רשימת שמות תצורות רכיב שניתן להשתמש בהם עבור סמל זה.\n"
+"שמות תצורות רכיב יכולים להשתמש בתווים כלליים כמו sm* כדי לאפשר את כל שמות "
 "הפוטפרינטים שמתחילים ב-sm."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:457
 msgid "Add footprint filter"
-msgstr "הוסף מסנן פוטפרינט"
+msgstr "הוסף מסנן תצורת רכיב"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:462
 msgid "Edit footprint filter"
-msgstr "ערוך מסנן פוטפרינט"
+msgstr "ערוך מסנן תצורת רכיב"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:470
 msgid "Delete footprint filter"
-msgstr "מחק מסנן פוטפרינט"
+msgstr "מחק מסנן תצורת רכיב"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:484
 msgid "Footprint Filters"
-msgstr "מסנני פוטפרינט"
+msgstr "מסנני תצורת רכיב"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:492
 msgid "All pins with duplicate numbers are jumpers"
@@ -17197,15 +17164,14 @@ msgid "Copy Design Variant"
 msgstr "העתק גרסת עיצוב"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2995
-#, fuzzy
 msgid "Cannot edit the default variant description."
-msgstr "לא ניתן למחוק את גרסת ברירת המחדל."
+msgstr "לא ניתן לערוך את תיאור הווריאנט המוגדר כברירת מחדל."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:3003
 #: eeschema/sch_edit_frame.cpp:3098
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Description for '%s'"
-msgstr "ערוך תיאור משימה"
+msgstr "ערוך תיאור עבור '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -18651,9 +18617,8 @@ msgid "Symbol Library Tables"
 msgstr "טבלאות ספריות סמלים"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:201
-#, fuzzy
 msgid "Unable to load library table."
-msgstr "לא ניתן לטעון ספרייה\n"
+msgstr "לא ניתן לטעון את טבלת הספריות."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:424
 msgid "folder with .kicad_sym files"
@@ -20404,9 +20369,9 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "לא ניתן לגשת לתוסף סמלי KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "לא ניתן לשמור את הסמל שהורד."
+msgstr "לא ניתן לשמור את הסמל שהורד: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
 msgid "No symbol asset was available to place."
@@ -20574,9 +20539,8 @@ msgid "Resolved Netclass"
 msgstr "מחלקת רשת שנפתרה"
 
 #: eeschema/sch_bus_entry.cpp:652 eeschema/sch_line.cpp:1286
-#, fuzzy
 msgid "Wire Style"
-msgstr "סגנון קו"
+msgstr "סגנון החוט"
 
 #: eeschema/sch_connection.cpp:480
 msgid "Connection Name"
@@ -20732,19 +20696,16 @@ msgid "Find in Net Inspector"
 msgstr "חיפוש במפקח הרשתות"
 
 #: eeschema/sch_edit_frame.cpp:3080
-#, fuzzy
 msgid "No design variants to edit."
-msgstr "הוסף גרסת עיצוב חדשה לסכימה."
+msgstr "אין וריאנטים של התכן לעריכה."
 
 #: eeschema/sch_edit_frame.cpp:3084
-#, fuzzy
 msgid "Select variant to edit description:"
-msgstr "בחר שם גרסה להסרה:"
+msgstr "בחר וריאנט לעריכת התיאור:"
 
 #: eeschema/sch_edit_frame.cpp:3085
-#, fuzzy
 msgid "Edit Variant Description"
-msgstr "ערוך תיאור משימה"
+msgstr "ערוך תיאור וריאנט"
 
 #: eeschema/sch_edit_frame.cpp:3145
 msgid "Select variant name to remove:"
@@ -21834,14 +21795,14 @@ msgid "LTspice schematic files"
 msgstr "קבצי סכימה של LTspice"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
-msgstr "'%s' אינו ערך SPICE חוקי."
+msgstr "‏'%s' אינו קובץ PADS Logic ASCII."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1483
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "קריאת הקובץ '%s' נכשלה."
+msgstr "ניתוח קובץ PADS Logic ‏'%s' נכשל."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -24034,9 +23995,8 @@ msgid "Incorrect inv_pin name"
 msgstr "שם inv_pin שגוי"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2839
-#, fuzzy
 msgid "Wrong number of columns for series pin mapping."
-msgstr "מספר עמודות שגוי למיפוי פינים."
+msgstr "מספר עמודות שגוי עבור מיפוי פינים טורי."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2949
 msgid "Internal error detected, a waveform should exist"
@@ -24210,13 +24170,12 @@ msgid "Unable to load ngspice shared library. Please check your install."
 msgstr "לא ניתן לטעון את הספרייה המשותפת של ngspice. נא לבדוק את ההתקנה."
 
 #: eeschema/sim/ngspice.cpp:787
-#, fuzzy
 msgid ""
 "Simulation terminated by ngspice. This may be caused by insufficient memory "
 "or an internal error. The simulator will be reset."
 msgstr ""
-"ההדמיה קרסה (%s). הדבר נגרם בדרך כלל מבאג ב-ngspice או מרשימת רשתות לא "
-"חוקית. הסימולטור יאופס."
+"הסימולציה הופסקה על ידי ngspice. ייתכן שהסיבה היא זיכרון לא מספיק או שגיאה "
+"פנימית. הסימולטור יאופס."
 
 #: eeschema/sim/sim_lib_mgr.cpp:109 eeschema/sim/sim_lib_mgr.cpp:162
 #, c-format
@@ -25045,13 +25004,13 @@ msgid "Add Symbol Library"
 msgstr "הוסף ספריית סמלים"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"לא ניתן היה ליצור את קובץ הספרייה '%s'.\n"
-"וודא שיש לך הרשאות כתיבה ונסה שנית."
+"לא ניתן היה לדרוס את קובץ הספרייה '%s'.\n"
+"ודא שיש לך הרשאות כתיבה ונסה שוב."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1230
 #, c-format
@@ -25505,7 +25464,7 @@ msgstr "טען קובץ קישור סמל-תצורת רכיב"
 
 #: eeschema/tools/assign_footprints.cpp:221
 msgid "Keep existing footprint field visibility"
-msgstr "שמור על נראות שדה פוטפרינט קיים"
+msgstr "שמור על נראות שדה תצורת רכיב קיים"
 
 #: eeschema/tools/assign_footprints.cpp:222
 msgid "Show all footprint fields"
@@ -25567,7 +25526,7 @@ msgstr ""
 
 #: eeschema/tools/backannotate.cpp:485
 msgid "Re-linking footprints requires a fully annotated schematic."
-msgstr "קישור מחדש של פוטפרינטים דורש סכימה עם מספור מלא."
+msgstr "קישור מחדש של תצורות רכיב דורש סכימה עם מספור מלא."
 
 #: eeschema/tools/backannotate.cpp:488
 msgid "Footprint re-linking canceled by user."
@@ -25612,9 +25571,9 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "שנה את 'אל תכלול ברשימת חומרים' של %s מ-'%s' ל-'%s'."
 
 #: eeschema/tools/backannotate.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "שנה את 'אל תכלול ברשימת חומרים' של %s מ-'%s' ל-'%s'."
+msgstr "שנה את %s 'החרג מקובצי מיקום' מ-'%s' ל-'%s'."
 
 #: eeschema/tools/backannotate.cpp:925
 #, c-format
@@ -26300,7 +26259,7 @@ msgstr "ערוך ערך..."
 #: eeschema/tools/sch_actions.cpp:857
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:230
 msgid "Edit Footprint..."
-msgstr "ערוך פוטפרינט..."
+msgstr "ערוך תצורת רכיב..."
 
 #: eeschema/tools/sch_actions.cpp:865 eeschema/tools/sch_edit_tool.cpp:2500
 msgid "Autoplace Fields"
@@ -26520,9 +26479,8 @@ msgid "Set the exclude from board attribute"
 msgstr "הגדר את התכונה 'החרג מהלוח'"
 
 #: eeschema/tools/sch_actions.cpp:1098
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "הגדר את התכונה 'אל תכלול בהדמיה'"
+msgstr "הגדר את המאפיין 'החרג מקובצי מיקום'"
 
 #: eeschema/tools/sch_actions.cpp:1104
 msgid "Set the do not populate attribute"
@@ -26546,20 +26504,20 @@ msgstr "ערוך טבלת קישורים בין סמלי הסכימה לסמלי
 
 #: eeschema/tools/sch_actions.cpp:1131
 msgid "Assign Footprints..."
-msgstr "הקצה פוטפרינטים..."
+msgstr "הקצה תצורות רכיב..."
 
 #: eeschema/tools/sch_actions.cpp:1132
 msgid "Run footprint assignment tool"
-msgstr "הפעל כלי הקצאת פוטפרינט"
+msgstr "הפעל כלי הקצאת תצורת רכיב"
 
 #: eeschema/tools/sch_actions.cpp:1138
 msgid "Import Footprint Assignments..."
-msgstr "ייבא הקצאות פוטפרינט..."
+msgstr "ייבא הקצאות תצורת רכיב..."
 
 #: eeschema/tools/sch_actions.cpp:1139
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
-msgstr "ייבא הקצאות פוטפרינט לסמלים מקובץ .cmp שנוצר על ידי עורך הלוח המודפס"
+msgstr "ייבא הקצאות תצורת רכיב לסמלים מקובץ .cmp שנוצר על ידי עורך הלוח המודפס"
 
 #: eeschema/tools/sch_actions.cpp:1145
 msgid "Annotate Schematic..."
@@ -26645,9 +26603,8 @@ msgid "Import 2D drawing file"
 msgstr "ייבא קובץ שרטוט דו-ממדי"
 
 #: eeschema/tools/sch_actions.cpp:1218
-#, fuzzy
 msgid "Import Non-KiCad Schematic..."
-msgstr "סכימה שאינה של KiCad..."
+msgstr "ייבא סכימה שאינה של KiCad..."
 
 #: eeschema/tools/sch_actions.cpp:1219
 msgid ""
@@ -27153,14 +27110,12 @@ msgid "Remove an existing design variant from the schematic."
 msgstr "הסר גרסת עיצוב קיימת מהסכימה."
 
 #: eeschema/tools/sch_actions.cpp:1793
-#, fuzzy
 msgid "Edit Variant Description..."
-msgstr "ערוך תיאור משימה"
+msgstr "ערוך תיאור וריאנט..."
 
 #: eeschema/tools/sch_actions.cpp:1794
-#, fuzzy
 msgid "Edit the description of an existing design variant."
-msgstr "ערוך את קובץ הסקריפט בעורך הטקסט"
+msgstr "ערוך את התיאור של וריאנט תכן קיים."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -27335,9 +27290,8 @@ msgid "Modify schematic item"
 msgstr "שנה פריט סכימה"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3844
-#, fuzzy
 msgid "Auto-place Sheet Pins"
-msgstr "מקם אוטומטית את כל פיני הגיליון"
+msgstr "מקם אוטומטית פיני גיליון"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3891
 msgid "No sub schematic found in the current project"
@@ -27602,19 +27556,17 @@ msgid "Reached end of sheet."
 msgstr "הגענו לסוף הגיליון."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:398
-#, fuzzy
 msgid "No matches found."
-msgstr "לא נמצאו תבניות"
+msgstr "לא נמצאו התאמות."
 
 #: eeschema/tools/sch_group_tool.cpp:46 eeschema/tools/sch_group_tool.cpp:72
 #: pcbnew/tools/pcb_group_tool.cpp:49 pcbnew/tools/pcb_group_tool.cpp:64
-#, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "חלק מהפריטים לא ניתנו להרחבה החוצה."
+msgstr "לא ניתן לקבץ חלק מהפריטים שנבחרו."
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 msgid "Child items cannot be grouped separately from their parent item."
-msgstr ""
+msgstr "לא ניתן לקבץ פריטי בן בנפרד מפריט האב שלהם."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -28127,7 +28079,7 @@ msgstr "סוג רכיב לא נתמך '%s'."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1261
 msgid "Unsupported footprint payload type."
-msgstr "סוג מטען פוטפרינט אינו נתמך."
+msgstr "סוג מטען תצורת רכיב אינו נתמך."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1389
 msgid "Remote provider metadata is not loaded."
@@ -28214,11 +28166,11 @@ msgstr "צורות גרפיות"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:577
 msgid "No footprint specified"
-msgstr "לא צוין פוטפרינט"
+msgstr "לא צוין תצורת רכיב"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:590
 msgid "Invalid footprint specified"
-msgstr "צוין פוטפרינט לא חוקי"
+msgstr "צוין תצורת רכיב לא חוקי"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:42
 msgid "Place as sheet"
@@ -28272,9 +28224,8 @@ msgid "Excl. Board"
 msgstr "החרג לוח"
 
 #: eeschema/widgets/search_handlers.cpp:169
-#, fuzzy
 msgid "Excl. Pos Files"
-msgstr "החרג מקבצי מיקום"
+msgstr "החרג מקובצי מיקום"
 
 #: eeschema/widgets/search_handlers.cpp:481
 msgid "Hierarchical"
@@ -29212,7 +29163,7 @@ msgstr "תכונה:"
 
 #: gerbview/toolbars_gerber.cpp:231 gerbview/toolbars_gerber.cpp:314
 msgid "Highlight items with this aperture attribute"
-msgstr "הדגש פריטים עם תכונת אפרטורה זו"
+msgstr "הדגש פריטים עם תכונת פתח זו"
 
 #: gerbview/toolbars_gerber.cpp:254 gerbview/toolbars_gerber.cpp:256
 msgid "DCode:"
@@ -29232,7 +29183,7 @@ msgstr "הדגשת רשת חשמלית"
 
 #: gerbview/toolbars_gerber.cpp:313
 msgid "Aperture highlight"
-msgstr "הדגשת אפרטורה"
+msgstr "הדגשת פתח"
 
 #: gerbview/toolbars_gerber.cpp:317
 msgid "DCode selector"
@@ -29462,7 +29413,7 @@ msgstr "הדגש פריטים של רשת חשמלית '%s'"
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "הדגש סוג אפרטורה '%s'"
+msgstr "הדגש סוג פתח '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:94
 #, c-format
@@ -29711,7 +29662,6 @@ msgstr ""
 "השתמש בפורמט '--define-var key=value' או '-D key=value'"
 
 #: kicad/cli/command.cpp:235
-#, fuzzy
 msgid ""
 "The variant name(s) to output, can be used multiple times to specify "
 "multiple variants.\n"
@@ -29719,10 +29669,10 @@ msgid ""
 "generate separate files for each variant.\n"
 "When no --variant argument is provided, the default variant is output."
 msgstr ""
-"שם הוריאנטים לפלט, ניתן לשימוש מספר פעמים לציון מספר וריאנטים.\n"
-"כאשר מציינים מספר וריאנטים, השתמש ב-${VARIANT} בנתיב הפלט כדי ליצור קבצים "
-"נפרדים לכל וריאנט.\n"
-"כאשר לא מסופק ארגומנט --variant, וריאנט ברירת המחדל ייוצר."
+"שמות הווריאנטים לפלט, ניתן להשתמש כמה פעמים כדי לציין כמה וריאנטים.\n"
+"בעת ציון כמה וריאנטים, השתמש ב-${VARIANT} בנתיב הפלט כדי ליצור קבצים נפרדים "
+"עבור כל וריאנט.\n"
+"כאשר לא סופק ארגומנט ‎--variant, מופק וריאנט ברירת המחדל."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -30241,7 +30191,7 @@ msgstr "אל תייצר תכונות רשימת רשתות"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:82
 msgid "Disable aperture macros"
-msgstr "השבת מאקרו אפרטורה"
+msgstr "השבת מאקרו פתח"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:86
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:119
@@ -30297,9 +30247,8 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "שרטט את השכבות לקובץ PDF בודד עם מספר עמודים"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:128
-#, fuzzy
 msgid "Suppress footprint property popups"
-msgstr "צור חלוניות מאפיינים"
+msgstr "הסתר חלוניות קופצות של מאפייני תצורת רכיב"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:192
 msgid "Cannot use more than one mode flag\n"
@@ -30503,9 +30452,8 @@ msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr "הגדרה מראש של מראה. אפשרויות: %s, %s, או שם הגדרה מראש מותאם אישית"
 
 #: kicad/cli/command_pcb_render.cpp:266
-#, fuzzy
 msgid "Use colors defined in the board stackup instead of those in the preset"
-msgstr "צבעים המוגדרים במחסנית שכבות הלוח דורסים את אלה שבהגדרה מראש"
+msgstr "השתמש בצבעים המוגדרים במבנה שכבות הלוח במקום באלה שבהגדרה הקבועה מראש"
 
 #: kicad/cli/command_pcb_render.cpp:271
 msgid ""
@@ -31230,7 +31178,7 @@ msgstr "סקור הגדרות"
 
 #: kicad/dialogs/template_default_html.h:425
 msgid "Verify libraries, design rules, and board stackup match your needs."
-msgstr "ודא שהספריות, כללי העיצוב ומחסנית השכבות מתאימים לצרכיך."
+msgstr "ודא שהספריות, כללי העיצוב ומבנה השכבות מתאימים לצרכיך."
 
 #: kicad/dialogs/template_default_html.h:432
 msgid "Add a description by creating"
@@ -32265,13 +32213,12 @@ msgid "Initialize a new repository"
 msgstr "אתחל מאגר חדש"
 
 #: kicad/project_tree_pane.cpp:1040
-#, fuzzy
 msgid "Configure Default Remote..."
-msgstr "הגדר נתיבים..."
+msgstr "הגדר מאגר מרוחק כברירת מחדל..."
 
 #: kicad/project_tree_pane.cpp:1041
 msgid "Set or change the default remote URL and credentials"
-msgstr ""
+msgstr "הגדר או שנה את כתובת ה-URL וההרשאות של המאגר המרוחק כברירת מחדל"
 
 #: kicad/project_tree_pane.cpp:1044
 msgid "Commit Project..."
@@ -32282,13 +32229,12 @@ msgid "Commit changes to the local repository"
 msgstr "בצע Commit של שינויים למאגר המקומי"
 
 #: kicad/project_tree_pane.cpp:1048
-#, fuzzy
 msgid "Amend Last Commit..."
-msgstr "Commit אחרון"
+msgstr "תקן את ה-commit האחרון..."
 
 #: kicad/project_tree_pane.cpp:1049
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "כתוב מחדש את ה-commit האחרון בענף הנוכחי"
 
 #: kicad/project_tree_pane.cpp:1052
 msgid "Push"
@@ -32299,14 +32245,14 @@ msgid "Pull"
 msgstr "משיכה"
 
 #: kicad/project_tree_pane.cpp:1057
-#, fuzzy, c-format
+#, c-format
 msgid "Push %s to %s"
-msgstr "%s %s על %s"
+msgstr "דחוף את %s אל %s"
 
 #: kicad/project_tree_pane.cpp:1058
-#, fuzzy, c-format
+#, c-format
 msgid "Pull from %s"
-msgstr "מ-%s"
+msgstr "משוך מ-%s"
 
 #: kicad/project_tree_pane.cpp:1062
 msgid "Push committed local changes to remote repository"
@@ -32366,29 +32312,28 @@ msgid "Please wait"
 msgstr "אנא המתן"
 
 #: kicad/project_tree_pane.cpp:1731
-#, fuzzy
 msgid "Closing project..."
-msgstr "בצע Commit לפרויקט..."
+msgstr "סוגר פרויקט..."
 
 #: kicad/project_tree_pane.cpp:1748
 msgid ""
 "A Git operation is still running.\n"
 "Keep waiting, or abandon?"
 msgstr ""
+"פעולת Git עדיין מתבצעת.\n"
+"להמשיך להמתין, או לנטוש?"
 
 #: kicad/project_tree_pane.cpp:1750
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "השהיית התקדמות ליחידת אורך:"
+msgstr "פעולת Git מתעכבת"
 
 #: kicad/project_tree_pane.cpp:1752
-#, fuzzy
 msgid "Keep Waiting"
-msgstr "שמור מספורים"
+msgstr "המשך להמתין"
 
 #: kicad/project_tree_pane.cpp:1752
 msgid "Abandon"
-msgstr ""
+msgstr "נטוש"
 
 #: kicad/project_tree_pane.cpp:1935
 msgid "The selected directory is already a Git project."
@@ -32412,43 +32357,39 @@ msgid "Fetch Remote"
 msgstr "Fetch ממאגר מרוחק"
 
 #: kicad/project_tree_pane.cpp:2037
-#, fuzzy
 msgid "Configure Default Remote"
-msgstr "הגדר מאגר מרוחק ברירת מחדל"
+msgstr "הגדר מאגר מרוחק כברירת מחדל"
 
 #: kicad/project_tree_pane.cpp:2053
-#, fuzzy
 msgid "Failed to configure remote."
-msgstr "יצירת remote נכשלה: %s"
+msgstr "הגדרת המאגר המרוחק נכשלה."
 
 #: kicad/project_tree_pane.cpp:2106
-#, fuzzy
 msgid "Already up to date."
-msgstr "כבר מוצב"
+msgstr "כבר מעודכן."
 
 #: kicad/project_tree_pane.cpp:2107
-#, fuzzy, c-format
+#, c-format
 msgid "Already up to date with %s."
-msgstr "רוחב זרוע שנקבע: %s."
+msgstr "כבר מעודכן מול %s."
 
 #: kicad/project_tree_pane.cpp:2113
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "השינויים נמשכו (קידום מהיר)."
 
 #: kicad/project_tree_pane.cpp:2114
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "‏%s נמשך אל %s (קידום מהיר)."
 
 #: kicad/project_tree_pane.cpp:2119
-#, fuzzy
 msgid "Pulled changes."
-msgstr "בנה שינויים"
+msgstr "השינויים נמשכו."
 
 #: kicad/project_tree_pane.cpp:2120
-#, fuzzy, c-format
+#, c-format
 msgid "Pulled %s into %s."
-msgstr "פד %s על %s"
+msgstr "‏%s נמשך אל %s."
 
 #: kicad/project_tree_pane.cpp:2130
 msgid ""
@@ -32458,63 +32399,60 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"השינויים המקומיים שלך והשינויים המרוחקים מתנגשים, ולכן המשיכה בוטלה ודבר לא "
+"השתנה.\n"
+"\n"
+"ניתן לבטל את ה-commits המקומיים ולהשתמש בגרסה המרוחקת, או לבצע rebase של ה-"
+"commits שלך מעל הגרסה המרוחקת."
 
 #: kicad/project_tree_pane.cpp:2134
-#, fuzzy
 msgid "Pull Conflict"
-msgstr "התנגשויות"
+msgstr "התנגשות במשיכה"
 
 #: kicad/project_tree_pane.cpp:2137
 msgid "&Use Remote (discard my changes)"
-msgstr ""
+msgstr "&השתמש במרוחק (בטל את השינויים שלי)"
 
 #: kicad/project_tree_pane.cpp:2137
 msgid "&Rebase"
-msgstr ""
+msgstr "&Rebase"
 
 #: kicad/project_tree_pane.cpp:2144
-#, fuzzy
 msgid "Reset to the remote version."
-msgstr "אפס לזווית הנוכחית מנקודת הייחוס."
+msgstr "אופס לגרסה המרוחקת."
 
 #: kicad/project_tree_pane.cpp:2146
-#, fuzzy
 msgid "Failed to reset to remote"
-msgstr "נכשל בהגדרת מאגר מרוחק ברירת מחדל."
+msgstr "האיפוס לגרסה המרוחקת נכשל"
 
 #: kicad/project_tree_pane.cpp:2153
-#, fuzzy
 msgid "Rebased your changes onto the remote."
-msgstr "דחיפת שינויים למאגר מרוחק נכשלה."
+msgstr "השינויים שלך עברו rebase מעל הגרסה המרוחקת."
 
 #: kicad/project_tree_pane.cpp:2155
-#, fuzzy
 msgid "Could not rebase"
-msgstr "לא ניתן לקרוא את הקובץ "
+msgstr "לא ניתן היה לבצע rebase"
 
 #: kicad/project_tree_pane.cpp:2159
-#, fuzzy
 msgid "Pull cancelled."
-msgstr "בוטל"
+msgstr "המשיכה בוטלה."
 
 #: kicad/project_tree_pane.cpp:2168
-#, fuzzy
 msgid "Pull failed."
-msgstr "כל הקבצים"
+msgstr "המשיכה נכשלה."
 
 #: kicad/project_tree_pane.cpp:2169
 msgid "Failed to pull project"
 msgstr "נכשל במשיכת פרויקט"
 
 #: kicad/project_tree_pane.cpp:2203
-#, fuzzy
 msgid "Pushed to remote."
-msgstr "לא ניתן לאתר remote"
+msgstr "נדחף למאגר המרוחק."
 
 #: kicad/project_tree_pane.cpp:2204
-#, fuzzy, c-format
+#, c-format
 msgid "Pushed %s to %s."
-msgstr "פד %s על %s"
+msgstr "‏%s נדחף אל %s."
 
 #: kicad/project_tree_pane.cpp:2217
 #, c-format
@@ -32526,19 +32464,24 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
+"הדחיפה נדחתה: הענף המקומי שלך ו-%s התפצלו.\n"
+"\n"
+"זה קורה בדרך כלל לאחר תיקון או כתיבה מחדש של commit שכבר נדחף. לדחוף בכוח "
+"כדי לדרוס את המאגר המרוחק?\n"
+"\n"
+"כל מי שכבר משך את הגרסה הקודמת יצטרך לאפס את העותק שלו."
 
 #: kicad/project_tree_pane.cpp:2223
 msgid "Force Push?"
-msgstr ""
+msgstr "לדחוף בכוח?"
 
 #: kicad/project_tree_pane.cpp:2225
 msgid "&Force Push"
-msgstr ""
+msgstr "&דחוף בכוח"
 
 #: kicad/project_tree_pane.cpp:2234
-#, fuzzy
 msgid "Push failed."
-msgstr "המשימה נכשלה"
+msgstr "הדחיפה נכשלה."
 
 #: kicad/project_tree_pane.cpp:2235
 msgid "Failed to push project"
@@ -32549,34 +32492,32 @@ msgid "The selected directory is not a Git project."
 msgstr "התיקייה שנבחרה אינה פרויקט Git."
 
 #: kicad/project_tree_pane.cpp:2636
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"לכללים הבאים יש שינויים שלא נשמרו:\n"
+"בעורכים הבאים יש שינויים שלא נשמרו:%s\n"
 "\n"
+"לשמור אותם לפני ה-commit?"
 
 #: kicad/project_tree_pane.cpp:2639 kicad/project_tree_pane.cpp:2925
-#, fuzzy
 msgid "Unsaved Changes"
-msgstr "שחזר שינויים"
+msgstr "שינויים שלא נשמרו"
 
 #: kicad/project_tree_pane.cpp:2642
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "שמור עותק..."
+msgstr "&שמור ובצע commit"
 
 #: kicad/project_tree_pane.cpp:2642
-#, fuzzy
 msgid "Commit &Anyway"
-msgstr "(%s כדי לאשר בכל זאת.)"
+msgstr "בצע commit &בכל זאת"
 
 #: kicad/project_tree_pane.cpp:2659 kicad/project_tree_pane.cpp:2945
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save %s."
-msgstr "לא ניתן לקרוא את הקובץ: %s"
+msgstr "לא ניתן היה לשמור את %s."
 
 #: kicad/project_tree_pane.cpp:2776
 msgid "Discarding commit due to empty commit message."
@@ -32594,54 +32535,54 @@ msgid ""
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"ה-commit האחרון כבר נדחף אל %s.\n"
+"\n"
+"תיקון כותב מחדש היסטוריה ציבורית. כל מי שמשך commit זה יצטרך לאפס את העותק "
+"שלו."
 
 #: kicad/project_tree_pane.cpp:2881
 msgid "Amend Published Commit?"
-msgstr ""
+msgstr "לתקן commit שפורסם?"
 
 #: kicad/project_tree_pane.cpp:2883 kicad/project_tree_pane.cpp:2928
-#, fuzzy
 msgid "Amend &Anyway"
-msgstr "הוסף בכל זאת"
+msgstr "תקן &בכל זאת"
 
 #: kicad/project_tree_pane.cpp:2922
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before amending?"
 msgstr ""
-"לכללים הבאים יש שינויים שלא נשמרו:\n"
+"בעורכים הבאים יש שינויים שלא נשמרו:%s\n"
 "\n"
+"לשמור אותם לפני התיקון?"
 
 #: kicad/project_tree_pane.cpp:2928
 msgid "&Save and Amend"
-msgstr ""
+msgstr "&שמור ותקן"
 
 #: kicad/project_tree_pane.cpp:3068
-#, fuzzy
 msgid "Amend Last Commit"
-msgstr "Commit אחרון"
+msgstr "תקן את ה-commit האחרון"
 
 #: kicad/project_tree_pane.cpp:3077
-#, fuzzy
 msgid "Discarding amend due to empty commit message."
-msgstr "מבטל Commit עקב הודעת Commit ריקה."
+msgstr "מבטל את התיקון עקב הודעת commit ריקה."
 
 #: kicad/project_tree_pane.cpp:3158
-#, fuzzy
 msgid "Fetched from remote."
-msgstr "Fetch ממאגר מרוחק"
+msgstr "נשלף מהמאגר המרוחק."
 
 #: kicad/project_tree_pane.cpp:3159
-#, fuzzy, c-format
+#, c-format
 msgid "Fetched from %s."
-msgstr "מ-%s"
+msgstr "נשלף מ-%s."
 
 #: kicad/project_tree_pane.cpp:3166
-#, fuzzy
 msgid "Fetch failed."
-msgstr "המשימה נכשלה"
+msgstr "השליפה נכשלה."
 
 #: kicad/project_tree_traverser.cpp:217
 #, c-format
@@ -36122,7 +36063,7 @@ msgstr "שכבות נחושת:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:24
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:32
 msgid "Select the number of copper layers in the stackup"
-msgstr "בחר את מספר שכבות הנחושת במחסנית השכבות"
+msgstr "בחר את מספר שכבות הנחושת במבנה השכבות"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:204
@@ -36212,7 +36153,7 @@ msgstr "מזהה"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:131
 msgid "Board thickness from stackup:"
-msgstr "עובי לוח ממחסנית השכבות:"
+msgstr "עובי לוח ממבנה השכבות:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:141
 msgid "Adjust Dielectric Thickness"
@@ -36429,7 +36370,7 @@ msgstr "קוטר קידוח מינימלי"
 
 #: pcbnew/board_statistics_report.cpp:577
 msgid "Board stackup thickness"
-msgstr "עובי מחסנית שכבות הלוח"
+msgstr "עובי מבנה שכבות הלוח"
 
 #: pcbnew/board_statistics_report.cpp:581
 msgid "Front footprint area"
@@ -36844,9 +36785,9 @@ msgid "Custom Rules"
 msgstr "כללים מותאמים אישית"
 
 #: pcbnew/cross-probing.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying footprint library '%s'."
-msgstr "שגיאה בשמירת ספריית תצורות רכיבים"
+msgstr "שגיאה בהעתקת ספריית תצורות הרכיב '%s'."
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:243
 msgid "Barcode Error"
@@ -37221,7 +37162,7 @@ msgstr "ייבא הגדרות מלוח אחר..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:94
 msgid "Board Stackup"
-msgstr "מחסנית שכבות הלוח"
+msgstr "מבנה שכבות הלוח"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:107
 msgid "Board Editor Layers"
@@ -37229,7 +37170,7 @@ msgstr "שכבות עורך הלוח"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:116
 msgid "Physical Stackup"
-msgstr "מחסנית שכבות פיזית"
+msgstr "מבנה שכבות פיזי"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:123
 msgid "Board Finish"
@@ -37335,7 +37276,7 @@ msgstr "קוטר קידוח מינימלי:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:139
 msgid "Board stackup thickness:"
-msgstr "עובי מחסנית שכבות הלוח:"
+msgstr "עובי מבנה שכבות הלוח:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:140
 msgid "Front footprint area:"
@@ -38297,9 +38238,9 @@ msgid "Run DRC"
 msgstr "הרץ DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Elapsed: %s"
-msgstr "כלל: %s"
+msgstr "חלף: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:313
 msgid "Report All Errors for Each Track"
@@ -38323,31 +38264,31 @@ msgstr "הצג כללי עיצוב."
 
 #: pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Elapsed: 0 s"
-msgstr ""
+msgstr "חלף: 0 שנ'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:473
 #, c-format
 msgid "%1$d min %2$d s"
-msgstr ""
+msgstr "%1$d דק' %2$d שנ'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:475
 #, c-format
 msgid "%.2f s"
-msgstr ""
+msgstr "%.2f שנ'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:480
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC בוטל על ידי המשתמש.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:483
-#, fuzzy, c-format
+#, c-format
 msgid "Canceled after %s"
-msgstr "בטל שינויים"
+msgstr "בוטל לאחר %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "Completed in %s"
-msgstr "קבץ פינים נבחרים"
+msgstr "הושלם תוך %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:817
 #, c-format
@@ -38370,14 +38311,12 @@ msgid "They will be excluded from the %s list"
 msgstr "הן יוחרגו מרשימת %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:862 pcbnew/dialogs/dialog_drc.cpp:869
-#, fuzzy
 msgid "Violation severities can also be edited in Board Setup"
-msgstr "ניתן לערוך חומרת הפרות גם בתיבת הדו-שיח הגדרות הלוח..."
+msgstr "ניתן לערוך את חומרת ההפרות גם בהגדרות הלוח"
 
 #: pcbnew/dialogs/dialog_drc.cpp:880
-#, fuzzy
 msgid "Open the Board Setup dialog"
-msgstr "פתח את תיבת הדו-שיח הגדרות הלוח..."
+msgstr "פתח את חלון הגדרות הלוח"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1184
 #, c-format
@@ -38913,34 +38852,35 @@ msgstr "קובץ פלט מודל תלת-ממד"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:422
 msgid "Please save the board before exporting STEP."
-msgstr ""
+msgstr "שמור את הלוח לפני ייצוא ל-STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:429
 msgid ""
 "Board file not found on disk.\n"
 "Save the board before exporting STEP."
 msgstr ""
+"קובץ הלוח לא נמצא בדיסק.\n"
+"שמור את הלוח לפני ייצוא ל-STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:441
 msgid ""
 "The board directory no longer exists.\n"
 "Save the board to a valid location before exporting STEP."
 msgstr ""
+"תיקיית הלוח כבר אינה קיימת.\n"
+"שמור את הלוח למיקום תקף לפני ייצוא ל-STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:451
-#, fuzzy
 msgid "Failed to reserve a temporary filename for STEP export."
-msgstr "לא ניתן ליצור קובץ זמני עבור מטען הסמל."
+msgstr "שמירת שם קובץ זמני עבור ייצוא STEP נכשלה."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:470
-#, fuzzy
 msgid "Failed to save the current board state for export."
-msgstr "שמירת טבלת ספריית תצורות הרכיבים נכשלה."
+msgstr "שמירת מצב הלוח הנוכחי לייצוא נכשלה."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:483
-#, fuzzy
 msgid "Failed to stage the project file for STEP export."
-msgstr "דחיפת שינויים למאגר מרוחק נכשלה."
+msgstr "העברת קובץ הפרויקט לאזור ההכנה עבור ייצוא STEP נכשלה."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:522
 msgid "No filename for output file"
@@ -39759,7 +39699,7 @@ msgstr "שכבות מותאמות אישית"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:197
 msgid "Use custom stackup"
-msgstr "השתמש במחסנית שכבות מותאמת אישית"
+msgstr "השתמש במבנה שכבות מותאם אישית"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:200
 msgid "Copper layers"
@@ -40663,7 +40603,7 @@ msgstr "הגדר לערכי ברירת מחדל של שכבה:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:336
 msgid "(auto)"
-msgstr ""
+msgstr "(אוטומטי)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "PCB graphic items"
@@ -40896,7 +40836,7 @@ msgstr "בטל בחירת הכול"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:51
 msgid "Board layers and physical stackup"
-msgstr "שכבות לוח ומחסנית שכבות פיזית"
+msgstr "שכבות לוח ומבנה שכבות פיזי"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 msgid "Solder mask/paste defaults"
@@ -40980,15 +40920,16 @@ msgid "Automatically match any unmatched layers to their KiCad equivalent."
 msgstr "התאם אוטומטית שכבות לא מותאמות למקבילה שלהן ב-KiCad."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:99
-#, fuzzy
 msgid "Keep KiCad layer names"
-msgstr "שמור על שכבות &חיצוניות"
+msgstr "שמור על שמות שכבות KiCad"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:100
 msgid ""
 "If checked, layers will keep their standard KiCad names instead of being "
 "renamed to the imported layer names."
 msgstr ""
+"אם מסומן, השכבות ישמרו על שמות KiCad הסטנדרטיים שלהן במקום לקבל את שמות "
+"השכבות המיובאות."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:67
 msgid "Edit Mapping of Imported Layers"
@@ -41037,72 +40978,63 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:437
 msgid "Auto-migrate 3D model references"
-msgstr ""
+msgstr "העבר אוטומטית הפניות למודלים תלת-ממדיים"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:663
-#, fuzzy
 msgid "(keep existing reference)"
-msgstr "שמור סמני ייחוס קיימים"
+msgstr "(שמור על ההפניה הקיימת)"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:870
 msgid "Add 3D Model Search Directory"
-msgstr ""
+msgstr "הוסף תיקיית חיפוש למודלים תלת-ממדיים"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:964
-#, fuzzy
 msgid "Select 3D Model File"
-msgstr "בחר מודל תלת-ממד"
+msgstr "בחר קובץ מודל תלת-ממד"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:981
-#, fuzzy
 msgid "user-selected"
-msgstr "לא נבחר אפיק"
+msgstr "נבחר על ידי המשתמש"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1065
-#, fuzzy
 msgid "Migrate 3D model references"
-msgstr "הדפס הפניות מסגרת."
+msgstr "העבר הפניות למודלים תלת-ממדיים"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:19
 msgid ""
 "This board references 3D models that are no longer present on your system.\n"
 "Select replacements below, or keep the existing references unchanged."
 msgstr ""
+"לוח זה מפנה למודלים תלת-ממדיים שאינם קיימים עוד במערכת שלך.\n"
+"בחר תחליפים להלן, או השאר את ההפניות הקיימות ללא שינוי."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
-#, fuzzy
 msgid "Missing 3D model references:"
-msgstr "הדפס הפניות מסגרת."
+msgstr "הפניות חסרות למודלים תלת-ממדיים:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "לא נטענה תצורת רכיב."
+msgstr "תחליפים אפשריים:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
-#, fuzzy
 msgid "Add Search Directory..."
-msgstr "תיקייה חדשה..."
+msgstr "הוסף תיקיית חיפוש..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
-#, fuzzy
 msgid "Open External File..."
-msgstr "פתח קבצי קידוח Excellon..."
+msgstr "פתח קובץ חיצוני..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
-#, fuzzy
 msgid "Replace Models"
-msgstr "החלף הכל"
+msgstr "החלף מודלים"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:108
-#, fuzzy
 msgid "Keep Existing"
-msgstr "השתמש בקיים"
+msgstr "שמור קיים"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.h:68
-#, fuzzy
 msgid "Migrate 3D Models"
-msgstr "עדכן מודלים תלת-ממדיים"
+msgstr "העבר מודלים תלת-ממדיים"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:96
 msgid "Rotate around item anchor"
@@ -41603,7 +41535,7 @@ msgstr "שם רשת:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:92
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:288
 msgid "Padstack mode:"
-msgstr "מצב מחסנית פדים:"
+msgstr "מצב מבנה פדים:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:292
@@ -42070,7 +42002,7 @@ msgstr "בטל בחירת כל השכבות"
 
 #: pcbnew/dialogs/dialog_plot.cpp:737
 msgid "Order as Board Stackup"
-msgstr "סדר לפי מחסנית שכבות הלוח"
+msgstr "סדר לפי מבנה שכבות הלוח"
 
 #: pcbnew/dialogs/dialog_plot.cpp:1085
 msgid "X scale constrained."
@@ -42286,20 +42218,20 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"כלול מטא-נתונים של רשימת רשתות ותכונות אפרטורה בקבצי גרבר.\n"
+"כלול מטא-נתונים של רשימת רשתות ותכונות פתח בקבצי גרבר.\n"
 "הם הערות בפורמט X1.\n"
 "משמשים לבדיקת קישוריות בכלי CAM ובכלי צפייה של גרבר."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:261
 msgid "Disable aperture macros (not recommended)"
-msgstr "השבת מאקרו אפרטורה (לא מומלץ)"
+msgstr "השבת מאקרו פתח (לא מומלץ)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:262
 msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"השבת מאקרו אפרטורה בקבצי גרבר\n"
+"השבת מאקרו פתח בקבצי גרבר\n"
 "השתמש *רק* עבור כלי צפייה גרבר פגומים."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:274
@@ -43405,15 +43337,16 @@ msgid "Unused Pads"
 msgstr "פדים שאינם בשימוש"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
-#, fuzzy
 msgid "Apply design block layouts to new groups"
-msgstr "החל פריסת בלוק עיצוב מקושר על הקבוצה הנבחרת"
+msgstr "החל פריסות בלוקי עיצוב על קבוצות חדשות"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
 msgid ""
 "For each new group created from a design block, apply the block's saved "
 "footprint placement and routing automatically."
 msgstr ""
+"עבור כל קבוצה חדשה הנוצרת מבלוק עיצוב, החל אוטומטית את מיקום תצורות הרכיב "
+"והניתוב השמורים של הבלוק."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
 msgid "Update Footprints"
@@ -44279,7 +44212,7 @@ msgstr "כוונון אורך"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:472
 msgid "Include stackup height in track length calculations"
-msgstr "כלול גובה מחסנית שכבות בחישובי אורך מוליך"
+msgstr "כלול גובה מבנה שכבות בחישובי אורך מוליך"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:473
 msgid ""
@@ -44288,7 +44221,7 @@ msgid ""
 "is ignored."
 msgstr ""
 "כשמופעל, המרחק בין שכבות נחושת ייכלל בחישובי אורך מוליך עבור מוליכים עם קדחי "
-"מעבר. כשמושבת, גובה מחסנית קדחי המעבר יתעלם."
+"מעבר. כשמושבת, גובה מבנה קדחי המעבר יתעלם."
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:17
 msgid "Default Properties for New Dimension Objects"
@@ -44442,7 +44375,7 @@ msgstr "אם ברצונך בשכבה עבור שרטוטי תיעוד"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:475
 msgid "Use the Physical Stackup page to change the number of copper layers."
-msgstr "השתמש בדף מחסנית השכבות הפיזית כדי לשנות את מספר שכבות הנחושת."
+msgstr "השתמש בדף מבנה השכבות הפיזי כדי לשנות את מספר שכבות הנחושת."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:486
 msgid "signal"
@@ -44662,13 +44595,12 @@ msgid "Cancel Changes?"
 msgstr "לבטל שינויים?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:156
-#, fuzzy
 msgid "Show Matching Items"
-msgstr "הצג התאמות"
+msgstr "הצג פריטים תואמים"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:209
 msgid "Cannot show matching items without an open project."
-msgstr ""
+msgstr "לא ניתן להציג פריטים תואמים ללא פרויקט פתוח."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:231
 #: pcbnew/dialogs/panel_setup_rules.cpp:249
@@ -44684,31 +44616,31 @@ msgid "ERROR:"
 msgstr "שגיאה:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Could not scan rules text: %s"
-msgstr "לא ניתן לדחוף ל-remote: %s"
+msgstr "לא ניתן היה לסרוק את טקסט הכללים: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:337
 msgid "Place the cursor inside a (rule ...) block to show matching items."
-msgstr ""
+msgstr "מקם את הסמן בתוך בלוק ‎(rule ...)‎ כדי להציג פריטים תואמים."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:346
 msgid "The rule under the cursor has no name; add a name to identify it."
-msgstr ""
+msgstr "לכלל שמתחת לסמן אין שם; הוסף שם כדי לזהות אותו."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' could not be located after parsing."
-msgstr "לא ניתן ליצור את הקובץ '%s'."
+msgstr "לא ניתן היה לאתר את הכלל '%s' לאחר הניתוח."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:385
 msgid "DRC engine not available."
-msgstr ""
+msgstr "מנוע ה-DRC אינו זמין."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:408
 #, c-format
 msgid "Rule '%s': %zu matching item(s)."
-msgstr ""
+msgstr "כלל '%s': ‏%zu פריטים תואמים."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:998
 #, c-format
@@ -45775,7 +45707,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -45937,166 +45868,161 @@ msgid ""
 "        (condition \"A.intersectsArea('guard_ring')\")\n"
 "        (severity ignore))\n"
 msgstr ""
-"### More Examples\n"
+"### דוגמאות נוספות\n"
 "\n"
-"    (rule \"copper keepout\"\n"
-"       (constraint disallow track via zone)\n"
-"       (condition \"A.intersectsArea('zone3')\"))\n"
-"\n"
-"\n"
-"    (rule \"BGA neckdown\"\n"
-"       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
-"       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-"       (condition \"A.intersectsCourtyard('U3')\"))\n"
+"(rule \"copper keepout\"\n"
+"(constraint disallow track via zone)\n"
+"(condition \"A.intersectsArea('zone3')\"))\n"
 "\n"
 "\n"
-"    # prevent silk over tented vias\n"
-"    (rule silk_over_via\n"
-"       (constraint silk_clearance (min 0.2mm))\n"
-"       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
+"(rule \"BGA neckdown\"\n"
+"(constraint track_width (min 0.2mm) (opt 0.25mm))\n"
+"(constraint clearance (min 0.05mm) (opt 0.08mm))\n"
+"(condition \"A.intersectsCourtyard('U3')\"))\n"
 "\n"
 "\n"
-"    (rule \"Distance between Vias of Different Nets\"\n"
-"        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
-"\n"
-"    (rule \"Clearance between Pads of Different Nets\"\n"
-"        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"# מנע הדפס משי מעל קדחי מעבר מכוסים\n"
+"(rule silk_over_via\n"
+"(constraint silk_clearance (min 0.2mm))\n"
+"(condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
 "\n"
 "\n"
-"    (rule \"Via Hole to Track Clearance\"\n"
-"        (constraint hole_clearance (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
+"(rule \"Distance between Vias of Different Nets\"\n"
+"(constraint hole_to_hole (min 0.254mm))\n"
+"(condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))\n"
 "\n"
-"    (rule \"Pad to Track Clearance\"\n"
-"        (constraint clearance (min 0.2mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
-"\n"
-"\n"
-"    (rule \"clearance-to-1mm-cutout\"\n"
-"        (constraint edge_clearance (min 0.8mm))\n"
-"        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
+"(rule \"Clearance between Pads of Different Nets\"\n"
+"(constraint clearance (min 3.0mm))\n"
+"(condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))\n"
 "\n"
 "\n"
-"    (rule \"Max Drill Hole Size Mechanical\"\n"
-"        (constraint hole_size (max 6.3mm))\n"
-"        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
+"(rule \"Via Hole to Track Clearance\"\n"
+"(constraint hole_clearance (min 0.254mm))\n"
+"(condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
 "\n"
-"    (rule \"Max Drill Hole Size PTH\"\n"
-"        (constraint hole_size (max 6.35mm))\n"
-"        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
-"\n"
-"\n"
-"    # Specify an optimal gap for a particular diff-pair\n"
-"    (rule \"dp clock gap\"\n"
-"        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('/CLK')\"))\n"
-"\n"
-"    # Specify a larger clearance around any diff-pair\n"
-"    (rule \"dp clearance\"\n"
-"        (constraint clearance (min \"1.5mm\"))\n"
-"        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
+"(rule \"Pad to Track Clearance\"\n"
+"(constraint clearance (min 0.2mm))\n"
+"(condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
 "\n"
-"    # Don't use thermal reliefs on heatsink pads\n"
-"    (rule heat_sink_pad\n"
-"        (constraint zone_connection solid)\n"
-"        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
-"\n"
-"    # Require all four thermal relief spokes to connect to parent zone\n"
-"    (rule fully_spoked_pads\n"
-"        (constraint min_resolved_spokes 4))\n"
-"\n"
-"    # Set thermal relief gap & spoke width for all zones\n"
-"    (rule defined_relief\n"
-"        (constraint thermal_relief_gap (min 10mil))\n"
-"        (constraint thermal_spoke_width (min 12mil)))\n"
-"\n"
-"    # Override thermal relief gap & spoke width for GND and PWR zones\n"
-"    (rule defined_relief_pwr\n"
-"        (constraint thermal_relief_gap (min 10mil))\n"
-"        (constraint thermal_spoke_width (min 12mil))\n"
-"        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
-"\n"
-"    # Prevent copper fills under the courtyards of capacitors\n"
-"    (rule no_copper_under_caps\n"
-"        (constraint physical_clearance (min 0mm))\n"
-"        (condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
+"(rule \"clearance-to-1mm-cutout\"\n"
+"(constraint edge_clearance (min 0.8mm))\n"
+"(condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
 "\n"
 "\n"
-"    # Prevent solder wicking from SMD pads\n"
-"    (rule holes_in_pads\n"
-"        (constraint physical_hole_clearance (min 0.2mm))\n"
-"        (condition \"B.Pad_Type == 'SMD'\"))\n"
+"(rule \"Max Drill Hole Size Mechanical\"\n"
+"(constraint hole_size (max 6.3mm))\n"
+"(condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
 "\n"
-"    # Disallow solder mask margin overrides\n"
-"    (rule \"disallow solder mask margin overrides\"\n"
-"        (constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
-"        (condition \"A.Type == 'Pad'\"))\n"
+"(rule \"Max Drill Hole Size PTH\"\n"
+"(constraint hole_size (max 6.35mm))\n"
+"(condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
 "\n"
-"    # Enforce a mechanical clearance between components and board edge\n"
-"    (rule front_mechanical_board_edge_clearance\n"
-"        (layer \"F.Courtyard\")\n"
-"        (constraint physical_clearance (min 3mm))\n"
-"        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
+"# ציין מרווח מיטבי עבור זוג דיפרנציאלי מסוים\n"
+"(rule \"dp clock gap\"\n"
+"(constraint diff_pair_gap (opt \"0.8mm\"))\n"
+"(condition \"A.inDiffPair('/CLK')\"))\n"
+"\n"
+"# ציין מרווח גדול יותר סביב כל זוג דיפרנציאלי\n"
+"(rule \"dp clearance\"\n"
+"(constraint clearance (min \"1.5mm\"))\n"
+"(condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
 "\n"
-"    # Allow silk intersection with board edge for connectors\n"
-"    (rule silk_board_edge_clearance\n"
-"        (constraint silk_clearance)\n"
-"        (severity ignore)\n"
-"        (condition \"A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'\"))\n"
+"# אל תשתמש בשחרור תרמי בפדי מפזר חום\n"
+"(rule heat_sink_pad\n"
+"(constraint zone_connection solid)\n"
+"(condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
+"\n"
+"# דרוש שכל ארבע זרועות השחרור התרמי יתחברו לאזור האב\n"
+"(rule fully_spoked_pads\n"
+"(constraint min_resolved_spokes 4))\n"
+"\n"
+"# הגדר מרווח שחרור תרמי ורוחב זרוע עבור כל האזורים\n"
+"(rule defined_relief\n"
+"(constraint thermal_relief_gap (min 10mil))\n"
+"(constraint thermal_spoke_width (min 12mil)))\n"
+"\n"
+"# דרוס מרווח שחרור תרמי ורוחב זרוע עבור אזורי GND ו-PWR\n"
+"(rule defined_relief_pwr\n"
+"(constraint thermal_relief_gap (min 10mil))\n"
+"(constraint thermal_spoke_width (min 12mil))\n"
+"(condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
+"\n"
+"# מנע מילויי נחושת מתחת לחצרות של קבלים\n"
+"(rule no_copper_under_caps\n"
+"(constraint physical_clearance (min 0mm))\n"
+"(condition \"A.Type == 'Zone' && B.Reference == 'C*'\"))\n"
 "\n"
 "\n"
-"    # Check current-carrying capacity\n"
-"    (rule high-current\n"
-"        (constraint track_width (min 1.0mm))\n"
-"        (constraint connection_width (min 0.8mm))\n"
-"        (condition \"A.hasNetclass('Power')\"))\n"
+"# מנע נדידת בדיל מפדי SMD\n"
+"(rule holes_in_pads\n"
+"(constraint physical_hole_clearance (min 0.2mm))\n"
+"(condition \"B.Pad_Type == 'SMD'\"))\n"
+"\n"
+"# אסור דריסות של שולי מסכת ההלחמה\n"
+"(rule \"disallow solder mask margin overrides\"\n"
+"(constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
+"(condition \"A.Type == 'Pad'\"))\n"
 "\n"
 "\n"
-"    # Separate drill bit and milling cutter size constraints\n"
-"    (rule \"Plated through-hole size\"\n"
-"        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
-"        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
-"    (rule \"Plated slot size\"\n"
-"        (constraint hole_size (min 0.5mm))\n"
-"        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
+"# אכוף מרווח מכני בין רכיבים לבין קצה הלוח\n"
+"(rule front_mechanical_board_edge_clearance\n"
+"(layer \"F.Courtyard\")\n"
+"(constraint physical_clearance (min 3mm))\n"
+"(condition \"B.Layer == 'Edge.Cuts'\"))\n"
 "\n"
 "\n"
-"    # Allow blind/buried to micro-via hole-to-hole violations when it is "
-"known that\n"
-"    # the fab will mechanically drill blind/buried via holes -before- laser "
-"drilling \n"
-"    # micro-vias.\n"
-"    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
-"        (constraint hole_to_hole)\n"
-"        (severity ignore))\n"
+"# אפשר חיתוך של הדפס המשי עם קצה הלוח עבור מחברים\n"
+"(rule silk_board_edge_clearance\n"
+"(constraint silk_clearance)\n"
+"(severity ignore)\n"
+"(condition \"A.memberOfFootprint('J*') && B.Layer=='Edge.Cuts'\"))\n"
 "\n"
 "\n"
-"    # No solder mask expansion for vias.\n"
-"    (rule \"no mask expansion on vias\"\n"
-"        (constraint solder_mask_expansion (opt 0mm))\n"
-"        (condition \"A.type == via\"))\n"
+"# בדוק כושר נשיאת זרם\n"
+"(rule high-current\n"
+"(constraint track_width (min 1.0mm))\n"
+"(constraint connection_width (min 0.8mm))\n"
+"(condition \"A.hasNetclass('Power')\"))\n"
 "\n"
 "\n"
-"    # Remove solder paste from DNP footprints.\n"
-"    (rule remove_solder_paste_from_DNP\n"
-"        (constraint solder_paste_abs_margin (opt -50mm))\n"
-"        (condition \"A.Do_not_Populate\"))\n"
+"# הפרד בין אילוצי גודל של מקדח ושל כרסום\n"
+"(rule \"Plated through-hole size\"\n"
+"(constraint hole_size (min 0.2mm) (max 6.35mm))\n"
+"(condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
+"(rule \"Plated slot size\"\n"
+"(constraint hole_size (min 0.5mm))\n"
+"(condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
 "\n"
 "\n"
-"    # Allow solder mask bridging under guard ring mask apertures\n"
-"    (rule guard_ring_bridging\n"
-"        (constraint bridged_mask)\n"
-"        (condition \"A.intersectsArea('guard_ring')\")\n"
-"        (severity ignore))\n"
+"# אפשר הפרות חור-לחור בין קדח סמוי למיקרו-קדח כאשר ידוע\n"
+"# שבית הייצור יקדח את הקדחים הסמויים מכנית -לפני- קדיחת הלייזר\n"
+"# של מיקרו-הקדחים.\n"
+"(rule hole_to_hole_uvia_exclusion\n"
+"(condition \"A.Via_Type == 'Blind' && B.Via_Type == 'Micro'\")\n"
+"(constraint hole_to_hole)\n"
+"(severity ignore))\n"
+"\n"
+"\n"
+"# ללא הרחבת מסכת הלחמה עבור קדחי מעבר.\n"
+"(rule \"no mask expansion on vias\"\n"
+"(constraint solder_mask_expansion (opt 0mm))\n"
+"(condition \"A.type == via\"))\n"
+"\n"
+"\n"
+"# הסר משחת הלחמה מתצורות רכיב שאינן מורכבות.\n"
+"(rule remove_solder_paste_from_DNP\n"
+"(constraint solder_paste_abs_margin (opt -50mm))\n"
+"(condition \"A.Do_not_Populate\"))\n"
+"\n"
+"\n"
+"# אפשר גישור מסכת הלחמה מתחת לפתחי מסכה של טבעת מגן\n"
+"(rule guard_ring_bridging\n"
+"(constraint bridged_mask)\n"
+"(condition \"A.intersectsArea('guard_ring')\")\n"
+"(severity ignore))\n"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 msgid "Default Properties for Round Shapes"
@@ -46197,7 +46123,7 @@ msgstr "תצורת שכבת אותות כפולה בפרופיל כוונון"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:940
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:946
 msgid "Signal layer not found in stackup"
-msgstr "שכבת אותות לא נמצאה במחסנית השכבות"
+msgstr "שכבת אותות לא נמצאה במבנה השכבות"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:879
 msgid "Internal error: Microstrip can only be on an outer copper layer"
@@ -46210,7 +46136,7 @@ msgstr "עובי שכבת אותות חייב להיות גדול מ-0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:901
 msgid "Reference layer not found in stackup"
-msgstr "שכבת ייחוס לא נמצאה במחסנית השכבות"
+msgstr "שכבת ייחוס לא נמצאה במבנה השכבות"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:907
 msgid "Reference layer must be different to signal layer"
@@ -46222,19 +46148,19 @@ msgstr "גובה הדיאלקטרי חייב להיות גדול מ-0"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:958
 msgid "Top reference layer not found in stackup"
-msgstr "שכבת ייחוס עליונה לא נמצאה במחסנית השכבות"
+msgstr "שכבת ייחוס עליונה לא נמצאה במבנה השכבות"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:964
 msgid "Top reference layer must be above signal layer in board stackup"
-msgstr "שכבת הייחוס העליונה חייבת להיות מעל שכבת האותות במחסנית השכבות"
+msgstr "שכבת הייחוס העליונה חייבת להיות מעל שכבת האותות במבנה השכבות"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:970
 msgid "Bottom reference layer not found in stackup"
-msgstr "שכבת ייחוס תחתונה לא נמצאה במחסנית השכבות"
+msgstr "שכבת ייחוס תחתונה לא נמצאה במבנה השכבות"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:976
 msgid "Bottom reference layer must be below signal layer in board stackup"
-msgstr "שכבת הייחוס התחתונה חייבת להיות מתחת לשכבת האותות במחסנית השכבות"
+msgstr "שכבת הייחוס התחתונה חייבת להיות מתחת לשכבת האותות במבנה השכבות"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:999
 msgid "Dielectric heights must be greater than 0"
@@ -46379,9 +46305,8 @@ msgstr "שם אזור מילוי:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:39
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:44
-#, fuzzy
 msgid "A unique name for this zone, used to identify it in DRC rules"
-msgstr "שם ייחודי לאזור כללים זה לשימוש בכללי DRC"
+msgstr "שם ייחודי לאזור זה, המשמש לזיהויו בכללי DRC"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:76
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -46943,9 +46868,8 @@ msgid "Items not allowed"
 msgstr "פריטים אסורים"
 
 #: pcbnew/drc/drc_item.cpp:64
-#, fuzzy
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "טקסט (או מימד) על שכבת Edge.Cuts"
+msgstr "טקסט או גרפיקה בשכבת Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
@@ -47025,11 +46949,11 @@ msgstr "קוטר קדח מעבר"
 
 #: pcbnew/drc/drc_item.cpp:144
 msgid "Padstack is questionable"
-msgstr "מחסנית פדים מפוקפקת"
+msgstr "מבנה פדים מפוקפק"
 
 #: pcbnew/drc/drc_item.cpp:148
 msgid "Padstack is not valid"
-msgstr "מחסנית פדים לא תקפה"
+msgstr "מבנה פדים לא תקף"
 
 #: pcbnew/drc/drc_item.cpp:152
 msgid "Micro via hole size out of range"
@@ -47410,9 +47334,8 @@ msgid "Checking copper zone clearances..."
 msgstr "בודק מרווחי אזורי נחושת..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:177
-#, fuzzy
 msgid "Checking teardrop clearances..."
-msgstr "בודק מרווחי פדים..."
+msgstr "בודק מרווחי טיפות..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:292
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:583
@@ -47835,7 +47758,7 @@ msgstr "פינות %s שונות."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:715
 msgid "Footprint stackup mode differs."
-msgstr "מצב מחסנית שכבות של תצורת רכיב שונה."
+msgstr "מצב מבנה שכבות של תצורת רכיב שונה."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:721
 msgid "Footprint layers differ."
@@ -47866,7 +47789,7 @@ msgstr "הגדרות '%s' שונות."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:848
 msgid "Footprint stackup differs."
-msgstr "מחסנית שכבות תצורת הרכיב שונה."
+msgstr "מבנה שכבות תצורת הרכיב שונה."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:866
 msgid "Pad clearance overridden."
@@ -48715,7 +48638,7 @@ msgstr "נוצר קובץ עבודת Gerber '%s'."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:570
 msgid "Board stackup settings not up to date."
-msgstr "הגדרות מחסנית שכבות הלוח אינן מעודכנות."
+msgstr "הגדרות מבנה שכבות הלוח אינן מעודכנות."
 
 #: pcbnew/exporters/step/exporter_step.cpp:592
 #, c-format
@@ -49088,6 +49011,8 @@ msgid ""
 "Could not post-process GLB line primitives; the exported model may not "
 "import in strict glTF viewers."
 msgstr ""
+"לא ניתן היה לעבד פרימיטיבים של קווי GLB; ייתכן שהמודל המיוצא לא ייובא במציגי "
+"glTF קפדניים."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4098
 #: pcbnew/exporters/step/step_pcb_model.cpp:4145
@@ -50579,14 +50504,14 @@ msgid "Changed group library link from '%s' to '%s'."
 msgstr "קישור ספרייה של קבוצה שונה מ-'%s' ל-'%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1971
-#, fuzzy, c-format
+#, c-format
 msgid "Add group '%s' to group '%s'."
-msgstr "הוסף %s לקבוצה '%s'."
+msgstr "הוסף את הקבוצה '%s' לקבוצה '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1976
-#, fuzzy, c-format
+#, c-format
 msgid "Added group '%s' to group '%s'."
-msgstr "%s נוסף לקבוצה '%s'."
+msgstr "הקבוצה '%s' נוספה לקבוצה '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2016
 #, c-format
@@ -51277,15 +51202,14 @@ msgstr "קובץ מעגל מודפס חדש לא נשמר"
 #, c-format
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "לא ניתן היה להתאים %d מודל תלת-ממד מסוג WRL למודל STEP מקביל."
+msgstr[1] "לא ניתן היה להתאים %d מודלים תלת-ממדיים מסוג WRL למודלי STEP מקבילים."
+msgstr[2] "לא ניתן היה להתאים %d מודלים תלת-ממדיים מסוג WRL למודלי STEP מקבילים."
+msgstr[3] "לא ניתן היה להתאים %d מודלים תלת-ממדיים מסוג WRL למודלי STEP מקבילים."
 
 #: pcbnew/pcb_edit_frame.cpp:1988
-#, fuzzy
 msgid "Show options"
-msgstr "אפשרויות SVG"
+msgstr "הצג אפשרויות"
 
 #: pcbnew/pcb_edit_frame.cpp:2016
 msgid "Board file is read only."
@@ -51780,7 +51704,7 @@ msgstr "לפד לא-נחושתי %s יש חור, דבר שאינו נתמך."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4015
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr "לפד לא-נחושתי %s יש מחסנית פדים מורכבת (עדיין לא נתמך)."
+msgstr "לפד לא-נחושתי %s יש מבנה פדים מורכב (עדיין לא נתמך)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4162
 #, c-format
@@ -51806,9 +51730,9 @@ msgid "Loading unicode strings..."
 msgstr "טוען מחרוזות Unicode..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4629
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "דפוסי כוונון אורך"
+msgstr "יובאו %d תבניות כוונון אורך."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4640
 msgid "Loading text..."
@@ -51927,7 +51851,7 @@ msgstr ""
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:591
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr "שכבה לא צפויה '%s' במחסנית השכבות."
+msgstr "שכבה לא צפויה '%s' במבנה השכבות."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:748
 #, c-format
@@ -51960,8 +51884,8 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
-"הגדרת הפד של CADSTAR ‏'%s' היא מחסנית פדים מורכבת, שאינה נתמכת ב-KiCad. נא "
-"לבדוק את הפדים המיובאים כיוון שייתכן שיידרש תיקון ידני."
+"הגדרת הפד של CADSTAR ‏'%s' היא מבנה פדים מורכב, שאינה נתמכת ב-KiCad. נא לבדוק "
+"את הפדים המיובאים כיוון שייתכן שיידרש תיקון ידני."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1295
 #, c-format
@@ -52275,9 +52199,9 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "מתעלם ממצולע כיוון ששכבת Eagle‏ '%s' ‏(%d) לא מופתה"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1537
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): less than 3 vertices"
-msgstr "מדלג על מצולע בשכבה '%s' ‏(%d): מספר קווי מתאר אינו 1"
+msgstr "מדלג על מצולע בשכבה '%s' ‏(%d): פחות מ-3 קודקודים"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1583
 #, c-format
@@ -52447,7 +52371,7 @@ msgstr "תבנית לא חוקית עבור מחרוזת מזהה '%s' בשור�
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1065
 #, c-format
 msgid "Could not insert graphical item %d into padstack '%s'."
-msgstr "לא ניתן להכניס פריט גרפי %d לתוך מחסנית פדים '%s'."
+msgstr "לא ניתן להכניס פריט גרפי %d לתוך מבנה פדים '%s'."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1072
 #, c-format
@@ -52497,7 +52421,7 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2721
 #, c-format
 msgid "Unable to locate padstack %s in file %s\n"
-msgstr "לא ניתן לאתר מחסנית פדים %s בקובץ %s\n"
+msgstr "לא ניתן לאתר מבנה פדים %s בקובץ %s\n"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2821
 #, c-format
@@ -52505,6 +52429,8 @@ msgid ""
 "Pad '%s' has custom shape with per-layer geometry; custom primitives not "
 "supported in padstack mode."
 msgstr ""
+"לפד '%s' יש צורה מותאמת אישית עם גאומטריה לכל שכבה; פרימיטיבים מותאמים אישית "
+"אינם נתמכים במצב מבנה פדים."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2894
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2926
@@ -52667,11 +52593,11 @@ msgstr "מייצא שכבה %s, רשת %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3633
 msgid "Via uses unsupported padstack; omitted from drill data."
-msgstr "קדח מעבר משתמש במחסנית פדים לא נתמכת; הושמט מנתוני הקידוח."
+msgstr "קדח מעבר משתמש במבנה פדים לא נתמך; הושמט מנתוני הקידוח."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3660
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
-msgstr "פד משתמש במחסנית פדים לא נתמכת; החור הושמט מנתוני הקידוח."
+msgstr "פד משתמש במבנה פדים לא נתמך; החור הושמט מנתוני הקידוח."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3803
 msgid ""
@@ -52882,6 +52808,8 @@ msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"פריט אחד או יותר נמצאו בשכבות לא מוגדרות (%s). פתח את הלוח בעורך הלוח כדי "
+"לפתור."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1587
 #, c-format
@@ -52929,19 +52857,19 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5761
 #, c-format
 msgid "Invalid stackup in footprint: odd number of copper layers (%d)."
-msgstr "מחסנית שכבות לא חוקית בתצורת רכיב: מספר אי-זוגי של שכבות נחושת (%d)."
+msgstr "מבנה שכבות לא חוקי בתצורת רכיב: מספר אי-זוגי של שכבות נחושת (%d)."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5769
 msgid "Invalid stackup in footprint: copper layers are not contiguous."
-msgstr "מחסנית שכבות לא חוקית בתצורת רכיב: שכבות הנחושת אינן רציפות."
+msgstr "מבנה שכבות לא חוקי בתצורת רכיב: שכבות הנחושת אינן רציפות."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5775
 msgid ""
 "Invalid stackup in footprint: technology layers are implicit in footprints "
 "and should not be specified in the stackup."
 msgstr ""
-"מחסנית שכבות לא חוקית בתצורת רכיב: שכבות טכניות הן מרומזות בתצורות רכיבים "
-"ואין לציין אותן במחסנית השכבות."
+"מבנה שכבות לא חוקי בתצורת רכיב: שכבות טכניות הן מרומזות בתצורות רכיבים ואין "
+"לציין אותן במבנה השכבות."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6080
 #, c-format
@@ -52987,7 +52915,7 @@ msgid ""
 "line: %d\n"
 "offset: %d."
 msgstr ""
-"שכבת מחסנית פדים לא חוקית ב-\n"
+"שכבת מבנה פדים לא חוקית ב-\n"
 "קובץ: %s\n"
 "שורה: %d\n"
 "היסט: %d."
@@ -52996,7 +52924,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7823
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr "שכבת מחסנית פדים לא חוקית '%s' בקובץ '%s' בשורה %d, היסט %d."
+msgstr "שכבת מבנה פדים לא חוקית '%s' בקובץ '%s' בשורה %d, היסט %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8477
 msgid ""
@@ -53915,7 +53843,7 @@ msgstr "שכבת קדח מעבר חייבת להיות שכבת נחושת."
 
 #: pcbnew/pcb_track.cpp:1846
 msgid "Via layer is outside the board stack."
-msgstr "שכבת קדח מעבר מחוץ למחסנית השכבות של הלוח."
+msgstr "שכבת קדח מעבר מחוץ למבנה השכבות של הלוח."
 
 #: pcbnew/pcb_track.cpp:1864
 msgid "Via start layer and end layer cannot be the same"
@@ -53989,7 +53917,7 @@ msgstr "מוליך %s על %s, אורך %s"
 #: pcbnew/pcb_track.cpp:2897 pcbnew/pcb_track.cpp:2903
 #: pcbnew/pcb_track.cpp:2909
 msgid "From board stackup"
-msgstr "ממחסנית שכבות הלוח"
+msgstr "ממבנה שכבות הלוח"
 
 #: pcbnew/pcb_track.cpp:2886
 msgid "Tented"
@@ -54189,9 +54117,8 @@ msgid "Loading Footprint Libraries"
 msgstr "טוען ספריות תצורות רכיבים"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:455
-#, fuzzy
 msgid "Failed to load board"
-msgstr "טעינת הלוח נכשלה\n"
+msgstr "טעינת הלוח נכשלה"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:527
 #, c-format
@@ -54491,9 +54418,9 @@ msgstr ""
 "השייכות לזוג דיפרנציאלי מסתיימות ב-‎_N/_P או ב-+/-."
 
 #: pcbnew/router/pns_dragger.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drag arc tracks of %.1f degrees or greater."
-msgstr "לא ניתן לשנות גודל מוליכי קשת של %s או יותר."
+msgstr "לא ניתן לגרור מוליכי קשת של %.1f מעלות או יותר."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1109
 #: pcbnew/router/pns_kicad_iface.cpp:1225 pcbnew/router/router_tool.cpp:919
@@ -54912,7 +54839,7 @@ msgstr "קובץ הפעלה משתמש במזהה שכבה לא חוקי '%s'."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:245
 msgid "Session via padstack has no shapes"
-msgstr "למחסנית פדים של קדח מעבר בסשן אין צורות"
+msgstr "למבנה פדים של קדח מעבר בסשן אין צורות"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:253
 #, c-format
@@ -54950,7 +54877,7 @@ msgstr "הפניה '%s' לא נמצאה."
 #: pcbnew/specctra_import_export/specctra_import.cpp:550
 #, c-format
 msgid "A wire_via refers to missing padstack '%s'."
-msgstr "wire_via מפנה למחסנית פדים חסרה '%s'."
+msgstr "wire_via מפנה למבנה פדים חסר '%s'."
 
 #: pcbnew/toolbars_footprint_editor.cpp:125 pcbnew/toolbars_pcb_editor.cpp:284
 msgid "Dimension objects"
@@ -55025,9 +54952,8 @@ msgid "Align/Distribute"
 msgstr "יישור/פיזור"
 
 #: pcbnew/tools/board_editor_control.cpp:212
-#, fuzzy
 msgid "Zone Priority"
-msgstr "עדיפות"
+msgstr "עדיפות אזור"
 
 #: pcbnew/tools/board_editor_control.cpp:310
 msgid "Locking"
@@ -55145,24 +55071,20 @@ msgid "Duplicate Zone"
 msgstr "שכפל אזור מילוי"
 
 #: pcbnew/tools/board_editor_control.cpp:1930
-#, fuzzy
 msgid "Move Zone to Top Priority"
-msgstr "הזז פינה למיקום"
+msgstr "העבר את האזור לעדיפות עליונה"
 
 #: pcbnew/tools/board_editor_control.cpp:1984
-#, fuzzy
 msgid "Raise Zone Priority"
-msgstr "עריכת מאפייני אזור מילוי"
+msgstr "העלה את עדיפות האזור"
 
 #: pcbnew/tools/board_editor_control.cpp:2038
-#, fuzzy
 msgid "Lower Zone Priority"
-msgstr "מאפייני אזור נחושת"
+msgstr "הורד את עדיפות האזור"
 
 #: pcbnew/tools/board_editor_control.cpp:2119
-#, fuzzy
 msgid "Move Zone to Bottom Priority"
-msgstr "הזז פינה למיקום"
+msgstr "העבר את האזור לעדיפות תחתונה"
 
 #: pcbnew/tools/board_editor_control.cpp:2195
 msgid "Selection contains no items with labeled nets."
@@ -55862,12 +55784,13 @@ msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 msgstr ""
+"לא ניתן לשקף תצורות רכיב. השתמש בהיפוך כדי להעביר אותן לצדו השני של הלוח."
 
 #: pcbnew/tools/edit_tool.cpp:2541
 msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
-msgstr ""
+msgstr "קבוצות המכילות תצורות רכיב או פריטים אחרים שלא ניתן לשקף דולגו."
 
 #: pcbnew/tools/edit_tool.cpp:2714 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
@@ -56175,7 +56098,7 @@ msgstr "הועתק ל-%d אזורי כלל."
 
 #: pcbnew/tools/multichannel_tool.cpp:1960
 msgid "Target Rule Area shares components with the reference area"
-msgstr ""
+msgstr "אזור הכללים היעד חולק רכיבים עם אזור הייחוס"
 
 #: pcbnew/tools/multichannel_tool.cpp:1963
 msgid ""
@@ -56183,14 +56106,17 @@ msgid ""
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
+"אזור כללים יעד זה בוחר את אותם רכיבים כמו אזור הייחוס. חזרה על פריסה אינה "
+"יכולה להעתיק אזור כללים על עצמו. תן לכל אזור כללים של מיקום גיליון, מחלקת "
+"רכיבים או קבוצה נפרדים."
 
 #: pcbnew/tools/multichannel_tool.cpp:1966
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Shared components:\n"
 "%s"
 msgstr ""
-"רכיבים באזור היעד:\n"
+"רכיבים משותפים:\n"
 "%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2104
@@ -56346,11 +56272,11 @@ msgstr "הוסף טבלת מאפייני לוח בשכבה גרפית"
 
 #: pcbnew/tools/pcb_actions.cpp:186
 msgid "Add Stackup Table"
-msgstr "הוסף טבלת מחסנית שכבות"
+msgstr "הוסף טבלת מבנה שכבות"
 
 #: pcbnew/tools/pcb_actions.cpp:187
 msgid "Add a board stackup table on a graphic layer"
-msgstr "הוסף טבלת מחסנית שכבות של הלוח בשכבה גרפית"
+msgstr "הוסף טבלת מבנה שכבות של הלוח בשכבה גרפית"
 
 #: pcbnew/tools/pcb_actions.cpp:194
 msgid "Place Point"
@@ -56539,14 +56465,12 @@ msgid "Open in Footprint Editor"
 msgstr "פתח בעורך תצורת רכיב"
 
 #: pcbnew/tools/pcb_actions.cpp:573
-#, fuzzy
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "הגדר את התכונה 'אל תכלול ברשימת חומרים'"
+msgstr "החלף את המאפיין 'החרג מרשימת הרכיבים'"
 
 #: pcbnew/tools/pcb_actions.cpp:579
-#, fuzzy
 msgid "Toggle the exclude from position files attribute"
-msgstr "הגדר את התכונה 'אל תכלול בהדמיה'"
+msgstr "החלף את המאפיין 'החרג מקובצי מיקום'"
 
 #: pcbnew/tools/pcb_actions.cpp:587
 msgid ""
@@ -56854,13 +56778,12 @@ msgid "Update footprints to include any changes from the library"
 msgstr "עדכן תצורות רכיב כדי לכלול שינויים מהספרייה"
 
 #: pcbnew/tools/pcb_actions.cpp:1008
-#, fuzzy
 msgid "Migrate 3D Models..."
-msgstr "טוען מודלים תלת-ממדיים..."
+msgstr "העבר מודלים תלת-ממדיים..."
 
 #: pcbnew/tools/pcb_actions.cpp:1009
 msgid "Replace obsolete WRL 3D model references with current STEP models"
-msgstr ""
+msgstr "החלף הפניות מיושנות למודלים תלת-ממדיים מסוג WRL במודלי STEP נוכחיים"
 
 #: pcbnew/tools/pcb_actions.cpp:1015
 msgid "Remove Unused Pads..."
@@ -57061,9 +56984,8 @@ msgstr ""
 "נקה את הלוח וטען את קובץ השחזור האחרון שנשמר אוטומטית על ידי עורך מעגל מודפס"
 
 #: pcbnew/tools/pcb_actions.cpp:1227
-#, fuzzy
 msgid "Import Non-KiCad Board File..."
-msgstr "ייבא קובץ לוח שאינו KiCad"
+msgstr "ייבא קובץ לוח שאינו של KiCad..."
 
 #: pcbnew/tools/pcb_actions.cpp:1228
 msgid "Import board file from other applications"
@@ -57264,23 +57186,20 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "שכפל אזור מילוי לשכבה..."
 
 #: pcbnew/tools/pcb_actions.cpp:1440
-#, fuzzy
 msgid "Move to Top"
-msgstr "העבר לאשפה"
+msgstr "העבר לראש"
 
 #: pcbnew/tools/pcb_actions.cpp:1446
 msgid "Raise"
-msgstr ""
+msgstr "הרם"
 
 #: pcbnew/tools/pcb_actions.cpp:1452
-#, fuzzy
 msgid "Lower"
-msgstr "הספק"
+msgstr "הורד"
 
 #: pcbnew/tools/pcb_actions.cpp:1458
-#, fuzzy
 msgid "Move to Bottom"
-msgstr "ישר למטה"
+msgstr "העבר לתחתית"
 
 #: pcbnew/tools/pcb_actions.cpp:1466
 msgid "Place Footprints"
@@ -58175,9 +58094,8 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "הצג חלון ניהול עבור אובייקטי מחולל"
 
 #: pcbnew/tools/pcb_actions.cpp:2814
-#, fuzzy
 msgid "Length Tuning Settings"
-msgstr "הגדרות כוונון אורך..."
+msgstr "הגדרות כוונון אורך"
 
 #: pcbnew/tools/pcb_actions.cpp:2815
 msgid "Length Tuning Settings..."
@@ -58282,88 +58200,78 @@ msgid "Design block has no layout to place."
 msgstr "לבלוק העיצוב אין פריסה למיקום."
 
 #: pcbnew/tools/pcb_control.cpp:1494
-#, fuzzy
 msgid "No groups with a linked design block are selected."
-msgstr "החל פריסת בלוק עיצוב מקושר על הקבוצה הנבחרת"
+msgstr "לא נבחרו קבוצות עם בלוק עיצוב מקושר."
 
 #: pcbnew/tools/pcb_control.cpp:1519 pcbnew/tools/pcb_selection_tool.cpp:4567
 msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
-msgstr ""
+msgstr "הבחירה מכילה פריטים נעולים. אפשר 'עקוף נעילות' כדי לפעול עליהם."
 
 #: pcbnew/tools/pcb_control.cpp:1543
-#, fuzzy
 msgid "Applying Design Block Layouts"
-msgstr "החל פריסת בלוק עיצוב"
+msgstr "מחיל פריסות בלוקי עיצוב"
 
 #: pcbnew/tools/pcb_control.cpp:1574
-#, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "לבלוק העיצוב אין מזהה ספרייה תקין."
+msgstr "בלוק העיצוב אינו נמצא בספריות הטעונות"
 
 #: pcbnew/tools/pcb_control.cpp:1580
-#, fuzzy
 msgid "design block has no saved PCB layout"
-msgstr "לבלוק העיצוב אין פריסה למיקום."
+msgstr "לבלוק העיצוב אין פריסת PCB שמורה"
 
 #: pcbnew/tools/pcb_control.cpp:1611
-#, fuzzy
 msgid "could not load the design block's layout"
-msgstr "לא ניתן למצוא את בלוק העיצוב %s."
+msgstr "לא ניתן היה לטעון את פריסת בלוק העיצוב"
 
 #: pcbnew/tools/pcb_control.cpp:1638
-#, fuzzy
 msgid "design block contains no items to apply"
-msgstr "לבלוק העיצוב אין סכימה למיקום."
+msgstr "בלוק העיצוב אינו מכיל פריטים להחלה"
 
 #: pcbnew/tools/pcb_control.cpp:1688
 msgid "group is empty"
-msgstr ""
+msgstr "הקבוצה ריקה"
 
 #: pcbnew/tools/pcb_control.cpp:1740
-#, fuzzy
 msgid "layout copy failed"
-msgstr "לא ניתן להעתיק את הקובץ '%s'."
+msgstr "העתקת הפריסה נכשלה"
 
 #: pcbnew/tools/pcb_control.cpp:1758
 #, c-format
 msgid "Applying layout to group %zu of %zu..."
-msgstr ""
+msgstr "מחיל פריסה על קבוצה %zu מתוך %zu..."
 
 #: pcbnew/tools/pcb_control.cpp:1781
-#, fuzzy
 msgid "Apply design block layout cancelled."
-msgstr "החל פריסת בלוק עיצוב"
+msgstr "החלת פריסת בלוק העיצוב בוטלה."
 
 #: pcbnew/tools/pcb_control.cpp:1787
-#, fuzzy, c-format
+#, c-format
 msgid "Apply design block layout to %d group(s)"
-msgstr "החל פריסת בלוק עיצוב מקושר על הקבוצה הנבחרת"
+msgstr "החל פריסת בלוק עיצוב על %d קבוצות"
 
 #: pcbnew/tools/pcb_control.cpp:1790
 msgid "Copied copper has no net assigned. Assign nets to connect it."
-msgstr ""
+msgstr "לנחושת שהועתקה לא הוקצתה רשת. הקצה רשתות כדי לחבר אותה."
 
 #: pcbnew/tools/pcb_control.cpp:1802
-#, fuzzy, c-format
+#, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr "החל פריסת בלוק עיצוב מקושר על הקבוצה הנבחרת"
+msgstr "פריסת בלוק העיצוב הוחלה על %d מתוך %d קבוצות."
 
 #: pcbnew/tools/pcb_control.cpp:1809
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
-msgstr "שמור קבוצה נבחרת לבלוק עיצוב מקושר"
+msgstr "%d פריטים שנבחרו דולגו מכיוון שאינם קבוצות המקושרות לבלוק עיצוב."
 
 #: pcbnew/tools/pcb_control.cpp:1817
-#, fuzzy
 msgid "The following groups could not be processed:"
-msgstr "הספריות הבאות לא נמצאו:"
+msgstr "לא ניתן היה לעבד את הקבוצות הבאות:"
 
 #: pcbnew/tools/pcb_control.cpp:1821
-#, fuzzy
 msgid "(unnamed group)"
-msgstr "קבוצות מגשרים:"
+msgstr "(קבוצה ללא שם)"
 
 #: pcbnew/tools/pcb_control.cpp:1872
 #, c-format
@@ -58451,7 +58359,7 @@ msgstr "מקם מאפייני לוח"
 
 #: pcbnew/tools/pcb_control.cpp:2937
 msgid "Place Board Stackup Table"
-msgstr "מקם טבלת מחסנית שכבות הלוח"
+msgstr "מקם טבלת מבנה שכבות הלוח"
 
 #: pcbnew/tools/pcb_control.cpp:3068
 msgid "Embed 3D Models"
@@ -58465,7 +58373,7 @@ msgstr "%d מודלים תלת-ממדיים הוטמעו בהצלחה."
 #: pcbnew/tools/pcb_group_tool.cpp:58
 msgid ""
 "Footprint items cannot be grouped separately from their parent footprint."
-msgstr ""
+msgstr "לא ניתן לקבץ פריטי תצורת רכיב בנפרד מתצורת הרכיב שהיא האב שלהם."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2739
 msgid "Resize Table Cells"
@@ -59832,9 +59740,8 @@ msgid "Removing isolated copper islands..."
 msgstr "מסיר איי נחושת מנותקים..."
 
 #: pcbnew/zone_filler.cpp:1201
-#, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "ממלא מחדש את כל האזורים..."
+msgstr "ממלא מחדש אזורים חופפים..."
 
 #: pcbnew/zone_filler.cpp:1362
 #, c-format
@@ -59845,6 +59752,9 @@ msgid ""
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
 msgstr ""
+"ייתכן שמילויי האזורים שגויים: מילוי חוזר איטרטיבי לא התכנס לאחר %d מעברים.\n"
+"\n"
+"זה יכול לקרות עם אזורים חופפים מורכבים. שקול לפשט את האזורים שלך."
 
 #: pcbnew/zone_filler.cpp:1634
 msgid "Prototype zone fill enabled. Disable setting and refill?"
@@ -59889,7 +59799,7 @@ msgstr ""
 msgid ""
 "Automatically assign zone priorities based on connectivity analysis of "
 "overlapping regions."
-msgstr ""
+msgstr "הקצה אוטומטית עדיפויות אזורים על בסיס ניתוח קישוריות של אזורים חופפים."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:146
 msgid "Refill zones"
