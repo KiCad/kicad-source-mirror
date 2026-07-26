@@ -396,8 +396,12 @@ set( KICOMMON_SRCS
     mdw/mdw_backend.cpp
     mdw/mdw_backend_registry.cpp
     mdw/mdw_backend_supervisor.cpp
+    mdw/mdw_claim_text.cpp
     mdw/mdw_credentials.cpp
+    mdw/mdw_dirty_tracker.cpp
+    mdw/mdw_event_bus.cpp
     mdw/mdw_event_ingress.cpp
+    mdw/mdw_lock_tracker.cpp
     mdw/mdw_serial_worker.cpp
     mdw/mdw_types.cpp
 
