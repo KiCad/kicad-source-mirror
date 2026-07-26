@@ -1495,7 +1495,7 @@ bool PCB_VIA::IsOnLayer( PCB_LAYER_ID aLayer ) const
 }
 
 
-bool PCB_VIA::HasValidLayerPair( int aCopperLayerCount )
+bool PCB_VIA::HasValidLayerPair( int aCopperLayerCount ) const
 {
     // return true if top and bottom layers are valid, depending on the copper layer count
     // aCopperLayerCount is expected >= 2

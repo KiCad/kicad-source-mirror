@@ -25,6 +25,7 @@
 #include <footprint.h>
 #include <kicad_clipboard.h>
 #include <lset.h>
+#include <pcb_group.h>
 #include <pcb_shape.h>
 #include <tools/pcb_selection.h>
 #include <constraints/pcb_constraint.h>
@@ -98,6 +99,46 @@ BOOST_AUTO_TEST_CASE( ConstraintCopiedWhenAllMembersSelected )
     // Every member resolves to an item actually in the pasted board (remapped, not dangling).
     for( const CONSTRAINT_MEMBER& member : pastedConstraint->GetMembers() )
         BOOST_CHECK( pasted->ResolveItem( member.m_item, true ) != nullptr );
+}
+
+
+// Paste prunes what the destination board has no layer for.  A constraint offers no layer at all,
+// so the naive test dropped it -- and raised a "layers not present" warning about an item that was
+// never on a layer.  Only an item that really claims an absent layer may be pruned.
+BOOST_AUTO_TEST_CASE( LayerPruningKeepsLayerAgnosticItems )
+{
+    BOARD      board;
+    const LSET enabled( { F_SilkS } );
+    const int  copperLayers = 2;
+
+    PCB_CONSTRAINT constraint( &board, PCB_CONSTRAINT_TYPE::PARALLEL );
+
+    // The empty layer set is what the layer test trips over.
+    BOOST_REQUIRE( constraint.GetLayerSet().none() );
+    BOOST_CHECK( constraint.FitsEnabledLayers( enabled, copperLayers ) );
+
+    // A group is governed by its members' layers, not its own.
+    PCB_GROUP group( &board );
+    BOOST_CHECK( group.FitsEnabledLayers( enabled, copperLayers ) );
+
+    // An item that does claim a layer is still judged on it.
+    PCB_SHAPE present( &board, SHAPE_T::SEGMENT );
+    present.SetLayer( F_SilkS );
+    BOOST_CHECK( present.FitsEnabledLayers( enabled, copperLayers ) );
+
+    PCB_SHAPE absent( &board, SHAPE_T::SEGMENT );
+    absent.SetLayer( B_SilkS );
+    BOOST_CHECK( !absent.FitsEnabledLayers( enabled, copperLayers ) );
+
+    // A footprint's children are exempt, but a footprint naming no side is malformed.  The IPC
+    // CreateItems path shares this rule and used to reject such a footprint by accident.
+    FOOTPRINT mounted( &board );
+    mounted.SetLayer( F_Cu );
+    BOOST_CHECK( mounted.FitsEnabledLayers( enabled, copperLayers ) );
+
+    FOOTPRINT sideless( &board );
+    sideless.SetLayer( UNDEFINED_LAYER );
+    BOOST_CHECK( !sideless.FitsEnabledLayers( enabled, copperLayers ) );
 }
 
 

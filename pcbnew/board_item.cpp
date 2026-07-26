@@ -34,6 +34,12 @@
 #include <properties/property_mgr.h>
 
 
+bool BOARD_ITEM::FitsEnabledLayers( const LSET& aEnabledLayers, int aCopperLayerCount ) const
+{
+    return IsLayerAgnostic() || ( GetLayerSet() & aEnabledLayers ).any();
+}
+
+
 bool BOARD_ITEM::IsGroupableType() const
 {
     switch ( Type() )

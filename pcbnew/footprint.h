@@ -639,6 +639,19 @@ public:
         return ( m_fpStatus & FP_is_LOCKED ) != 0;
     }
 
+    /// @copydoc BOARD_ITEM::IsLayerAgnostic
+    /// A footprint's children may sit on layers this board has disabled; masking them off would
+    /// break the footprint and lose the contents when those layers are re-enabled.
+    bool IsLayerAgnostic() const override { return true; }
+
+    /// @copydoc BOARD_ITEM::FitsEnabledLayers
+    /// Only the mounting side is judged -- the children are exempt per IsLayerAgnostic, but a
+    /// footprint that names no side at all is malformed and no board can hold it.
+    bool FitsEnabledLayers( const LSET& aEnabledLayers, int aCopperLayerCount ) const override
+    {
+        return GetLayer() == F_Cu || GetLayer() == B_Cu;
+    }
+
     /**
      * Set the #MODULE_is_LOCKED bit in the m_ModuleStatus.
      *

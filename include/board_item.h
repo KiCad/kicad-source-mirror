@@ -265,6 +265,25 @@ public:
      */
     virtual bool HasLineStroke() const { return false; }
 
+    /**
+     * Check if this item's layer set must not be confined to a board's enabled layers.
+     *
+     * A container's layer set is its members', and those are confined individually; a footprint's
+     * children come from a library that knows no board's layers and must survive those layers being
+     * re-enabled; a geometric constraint has no layer at all.  Masking any of them would corrupt
+     * the item.  Whether the board accepts it at all is #FitsEnabledLayers.
+     */
+    virtual bool IsLayerAgnostic() const { return false; }
+
+    /**
+     * Check if a board offering \a aEnabledLayers can hold this item.
+     *
+     * A layer-agnostic item always fits; anything else needs at least one of its own layers
+     * enabled.  \a aCopperLayerCount is passed rather than read from the item because the item may
+     * still belong to the board it is being copied from.
+     */
+    virtual bool FitsEnabledLayers( const LSET& aEnabledLayers, int aCopperLayerCount ) const;
+
     virtual STROKE_PARAMS GetStroke() const;
     virtual void SetStroke( const STROKE_PARAMS& aStroke );
 

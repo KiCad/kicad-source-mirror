@@ -349,7 +349,8 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             continue;
         }
 
-        if( aCreate && !( board->GetEnabledLayers() & item->GetLayerSet() ).any() )
+        if( aCreate
+            && !item->FitsEnabledLayers( board->GetEnabledLayers(), board->GetCopperLayerCount() ) )
         {
             status.set_code( ItemStatusCode::ISC_INVALID_DATA );
             status.set_error_message(

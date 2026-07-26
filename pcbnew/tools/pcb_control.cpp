@@ -1026,53 +1026,27 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
         return;
 
     LSET                     enabledLayers = board()->GetEnabledLayers();
+    const int                copperLayers = board()->GetCopperLayerCount();
     std::vector<BOARD_ITEM*> returnItems;
-    bool                     fpItemDeleted = false;
 
     for( BOARD_ITEM* item : aItems )
     {
-        if( item->Type() == PCB_FOOTPRINT_T )
+        if( !item->FitsEnabledLayers( enabledLayers, copperLayers ) )
         {
-            FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
+            if( EDA_GROUP* parentGroup = item->GetParentGroup() )
+                parentGroup->RemoveItem( item );
 
-            // Items living in a parent footprint are never removed, even if their
-            // layer does not exist in the board editor
-            // Otherwise the parent footprint could be seriously broken especially
-            // if some layers are later re-enabled.
-            // Moreover a fp lives in a fp library, that does not know the enabled
-            // layers of a given board, so fp items are just ignored when on not
-            // enabled layers in board editor
-            returnItems.push_back( fp );
+            continue;
         }
-        else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
-        {
-            returnItems.push_back( item );
-        }
-        else
-        {
-            LSET allowed = item->GetLayerSet() & enabledLayers;
-            bool item_valid = true;
 
-            // Ensure, for vias, the top and bottom layers are compatible with
-            // the current board copper layers.
-            // Otherwise they must be skipped, even is one layer is valid
-            if( item->Type() == PCB_VIA_T )
-                item_valid = static_cast<PCB_VIA*>( item )->HasValidLayerPair( board()->GetCopperLayerCount() );
+        // Confine a kept item to the layers this board has; a layer-agnostic one has none to confine
+        if( !item->IsLayerAgnostic() )
+            item->SetLayerSet( item->GetLayerSet() & enabledLayers );
 
-            if( allowed.any() && item_valid )
-            {
-                item->SetLayerSet( allowed );
-                returnItems.push_back( item );
-            }
-            else
-            {
-                if( EDA_GROUP* parentGroup = item->GetParentGroup() )
-                    parentGroup->RemoveItem( item );
-            }
-        }
+        returnItems.push_back( item );
     }
 
-    if( ( returnItems.size() < aItems.size() ) || fpItemDeleted )
+    if( returnItems.size() < aItems.size() )
     {
         DisplayError( m_frame, _( "Warning: some pasted items were on layers which are not "
                                   "present in the current board.\n"
@@ -1304,9 +1278,19 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 }
             }
 
+            // Board-scoped constraints ride along like the footprint-scoped ones above, so a
+            // constrained sketch keeps its relations when pasted into a footprint.  The clipboard
+            // only carries a constraint whose every member was copied, and placeBoardItems repoints
+            // those members at the pasted copies.
+            for( PCB_CONSTRAINT* constraint : clipBoard->Constraints() )
+            {
+                constraint->SetParent( editorFootprint );
+                pastedItems.push_back( constraint );
+            }
+
             // NB: PCB_SHAPE_T actually removes everything in Drawings() (including PCB_TEXTs,
             // PCB_TABLEs, PCB_BARCODEs, dimensions, etc.), not just PCB_SHAPEs.)
-            clipBoard->RemoveAll( { PCB_SHAPE_T } );
+            clipBoard->RemoveAll( { PCB_SHAPE_T, PCB_CONSTRAINT_T } );
 
             clipBoard->Visit(
                     [&]( EDA_ITEM* item, void* testData )

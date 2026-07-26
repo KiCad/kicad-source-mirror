@@ -101,6 +101,9 @@ public:
     /// @copydoc BOARD_ITEM::GetLayerSet
     LSET GetLayerSet() const override;
 
+    /// @copydoc BOARD_ITEM::IsLayerAgnostic
+    bool IsLayerAgnostic() const override { return true; }
+
     /// @copydoc BOARD_ITEM::SetLayer
     void SetLayer( PCB_LAYER_ID aLayer ) override
     {

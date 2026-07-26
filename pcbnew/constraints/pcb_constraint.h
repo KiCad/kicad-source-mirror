@@ -194,6 +194,9 @@ public:
     VECTOR2I GetPosition() const override { return VECTOR2I(); }
     void     SetPosition( const VECTOR2I& ) override {}
 
+    /// @copydoc BOARD_ITEM::IsLayerAgnostic
+    bool IsLayerAgnostic() const override { return true; }
+
     const BOX2I GetBoundingBox() const override { return BOX2I(); }
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override { return false; }

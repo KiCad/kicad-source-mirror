@@ -389,7 +389,15 @@ public:
     /**
      * @return true if top and bottom layers are valid, depending on the copper layer count
      */
-    bool HasValidLayerPair( int aCopperLayerCount );
+    bool HasValidLayerPair( int aCopperLayerCount ) const;
+
+    /// @copydoc BOARD_ITEM::FitsEnabledLayers
+    /// A via spans from one end layer to the other, so one enabled layer is not enough.
+    bool FitsEnabledLayers( const LSET& aEnabledLayers, int aCopperLayerCount ) const override
+    {
+        return BOARD_ITEM::FitsEnabledLayers( aEnabledLayers, aCopperLayerCount )
+               && HasValidLayerPair( aCopperLayerCount );
+    }
 
     VIATYPE GetViaType() const { return m_viaType; }
     void    SetViaType( VIATYPE aViaType )
