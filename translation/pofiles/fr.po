@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-06-27 10:01+0000\n"
-"Last-Translator: Gingko Biloba <from_weblate@gingko.ovh>\n"
+"PO-Revision-Date: 2026-07-27 14:02+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/kicad/v10/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-Basepath: ../../../git_dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -161,7 +161,6 @@ msgstr "Chargement OpenGL, couche %s"
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:937
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:892
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2270
-#, fuzzy
 msgid "Loading 3D models..."
 msgstr "Chargement des modèles 3D..."
 
@@ -220,9 +219,8 @@ msgstr "Rendu: shader de post traitement"
 #: common/eda_base_frame.cpp:1692 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1270 pcbnew/footprint_chooser_frame.cpp:398
 #: pcbnew/footprint_viewer_frame.cpp:968 pcbnew/pcb_base_frame.cpp:684
-#, fuzzy
 msgid "3D Viewer"
-msgstr "Visualisation 3D"
+msgstr "Visualisateur 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:76
 msgid "3D Grid"
@@ -239,9 +237,8 @@ msgid "Move Board"
 msgstr "Déplacer PCB"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
-#, fuzzy
 msgid "Reset to Default Settings"
-msgstr "Rétablir les paramètres d'origine"
+msgstr "Rétablir les Paramètres par Défaut"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:142
 #: bitmap2component/bitmap2cmp_frame.cpp:313 cvpcb/menubar.cpp:79
@@ -372,7 +369,6 @@ msgid "Can't save file"
 msgstr "Impossible de sauver le  fichier"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
-#, fuzzy
 msgid "Reload board"
 msgstr "Recharger le circuit imprimé"
 
@@ -1689,9 +1685,8 @@ msgid "Light 8:"
 msgstr "Lumière 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:468
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Options de prévisualisation 3D"
+msgstr "Options de Prévisualisation 3D"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:468
 msgid "Board thickness:"
@@ -1701,7 +1696,6 @@ msgstr "Epaisseur du PCB:"
 #: common/dialogs/dialog_print_generic_base.cpp:67 eeschema/sch_bitmap.cpp:197
 #: eeschema/sch_bitmap.cpp:319 pcbnew/pcb_reference_image.cpp:306
 #: pcbnew/pcb_reference_image.cpp:442
-#, fuzzy
 msgid "Scale"
 msgstr "Échelle"
 
@@ -1792,9 +1786,8 @@ msgstr "Rechargement circuit et modèles 3D"
 #: bitmap2component/bitmap2cmp_frame.cpp:299
 #: bitmap2component/bitmap2cmp_frame.cpp:362
 #: kicad/tools/kicad_manager_actions.cpp:159
-#, fuzzy
 msgid "Image Converter"
-msgstr "Convertisseur d'image"
+msgstr "Convertisseur d'Image"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
@@ -1815,9 +1808,8 @@ msgstr "Ouvrir Récent"
 #: bitmap2component/bitmap2cmp_frame.cpp:289 eeschema/menubar.cpp:74
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
-#, fuzzy
 msgid "Clear Recent Files"
-msgstr "Effacer la liste de fichiers récents"
+msgstr "Effacer les Fichiers Récents"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:402
 #: eeschema/tools/sch_drawing_tools.cpp:1277
@@ -1878,9 +1870,8 @@ msgid "Errors"
 msgstr "Erreurs"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:589
-#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Écraser le fichier chargé?"
+msgstr "Remplacer le fichier chargé?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:590
 msgid "There is already a file loaded. Do you want to replace it?"
@@ -1932,9 +1923,8 @@ msgid "bits"
 msgstr "bits"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
-#, fuzzy
 msgid "Load Source Image"
-msgstr "Charger une image source"
+msgstr "Charger l'Image Source"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
 msgid "Output Size"
@@ -1991,9 +1981,8 @@ msgstr "Négatif"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:159
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
-#, fuzzy
 msgid "Output Format"
-msgstr "Format de sortie"
+msgstr "Format de Sortie"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:166
 msgid "Symbol (.kicad_sym file)"
@@ -2063,9 +2052,8 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Feuille de dessin (fichier .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
-#, fuzzy
 msgid "Export to File..."
-msgstr "Exporter au fichier..."
+msgstr "Exporter vers Fichier..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -2085,95 +2073,90 @@ msgstr "Modification a partir de l'API"
 #: common/api/api_plugin.cpp:60
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "configuration de plugin invalide dans '%s': %s"
 
 #: common/api/api_plugin.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "Nom de pin invalide"
+msgstr "environnement d'exécution du plugin invalide: %s"
 
 #: common/api/api_plugin.cpp:112
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "Impossible d'accéder à la configuration du dépôt"
+msgstr "impossible de lire le fichier de configuration du plugin"
 
 #: common/api/api_plugin.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "Erreur de Configuration"
+msgstr "erreur du fichier de configuration du plugin: %s"
 
 #: common/api/api_plugin.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "Valeur de Plage de Température manquante ou non valide."
+msgstr "clés requises manquantes ou invalides: %s"
 
 #: common/api/api_plugin.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "L'identificateur de symbole de librairie '%s' n'est pas valide."
+msgstr "l'identifiant '%s' est invalide"
 
 #: common/api/api_plugin.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "La connexion à la base de données a échoué : %s"
+msgstr "la section actions est invalide: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "Options Plugins"
+msgstr "Action du plugin '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s': %s"
-msgstr "Plugins (%d)"
+msgstr "Plugin '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "exited with code %d"
-msgstr "Le processus a échoué avec le code de sortie %d"
+msgstr "terminé avec le code %d"
 
 #: common/api/api_plugin_manager.cpp:351 common/api/api_plugin_manager.cpp:691
 #: common/api/api_plugin_manager.cpp:775
-#, fuzzy
 msgid "missing plugin environment"
-msgstr "Recréer Environnement Plugin"
+msgstr "environnement du plugin manquant"
 
 #: common/api/api_plugin_manager.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' could not be read"
-msgstr "Le fichier '%s' n'a pas pu être créé."
+msgstr "le point d'entrée '%s' n'a pas pu être lu"
 
 #: common/api/api_plugin_manager.cpp:407
-#, fuzzy
 msgid "process could not be created"
-msgstr "Le fichier '%s' n'a pas pu être créé."
+msgstr "le processus n'a pas pu être créé"
 
 #: common/api/api_plugin_manager.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' is not executable"
-msgstr "Répertoire '%s' non inscriptible."
+msgstr "le point d'entrée '%s' n'est pas exécutable"
 
 #: common/api/api_plugin_manager.cpp:500
-#, fuzzy
 msgid "could not launch plugin"
-msgstr "Impossible d’utiliser OpenGL"
+msgstr "impossible de lancer le plugin"
 
 #: common/api/api_plugin_manager.cpp:661 common/api/api_plugin_manager.cpp:743
 #: common/api/api_plugin_manager.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "error code %d"
-msgstr "Code d’erreur: %d"
+msgstr "code erreur %d"
 
 #: common/api/api_plugin_manager.cpp:663 common/api/api_plugin_manager.cpp:745
 #: common/api/api_plugin_manager.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "Recréer Environnement Plugin"
+msgstr "impossible de créer l'environnement du plugin: %s"
 
 #: common/api/api_plugin_manager.cpp:784
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "Le fichier '%s' n'a pas pu être créé."
+msgstr "requirements.txt n'a pas pu être lu"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
@@ -2721,79 +2704,80 @@ msgid "Add Netclass Assignment"
 msgstr "Ajouter Affectation Netclasse"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(fichier manquant)"
+msgstr "(manquant)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
-#, fuzzy
 msgid "File"
-msgstr "&Fichiers"
+msgstr "Fichier"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Montrer toutes les versions"
+msgstr "Version sauvegardée"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Sauvegarde &Auto:"
+msgstr "Copie auto-sauvegardée"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad a détecté des modifications non enregistrées depuis votre dernière "
-"session qui sont plus récentes que les fichiers de projet enregistrés."
+"KiCad a trouvé des modifications auto-sauvegardées lors d'une session "
+"précédente. Cela signifie généralement que KiCad s'est fermé de façon "
+"inattendue alors que vous aviez du travail non sauvegardé."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
-msgstr "Réinitialiser àux Défauts"
+msgstr "Restaurer la Version Auto-sauvegardée"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"Remplace votre fichier sauvegardé par la version auto-sauvegardée. Le "
+"contenu précédemment sauvegardé est abandonné."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep Current"
-msgstr "Limiter rot -90° .. +90°"
+msgstr "Conserver l'Actuel"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
+"Conserve votre fichier sauvegardé tel quel et abandonne les modifications "
+"auto-sauvegardées."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
-msgstr "Zone d'exclusion"
+msgstr "Conserver les Deux"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"Conserve votre fichier sauvegardé et écrit la version auto-sauvegardée à "
+"côté, dans un fichier horodaté distinct que vous pourrez examiner plus tard."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
-msgstr "Annuler Chargement"
+msgstr "Annuler l'Ouverture"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"Ferme ce dialogue sans effectuer de modification. Les fichiers auto-"
+"sauvegardés restent sur le disque et seront proposés à nouveau à la "
+"prochaine ouverture du projet."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "Récupération de Sauvegarde Automatique"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -3233,7 +3217,7 @@ msgstr "Un groupe ne peut se contenir lui-même."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "Impossible d'ajouter ce groupe car il contient déjà le groupe courant."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -4024,31 +4008,29 @@ msgid "Commit message cannot be empty"
 msgstr "Le message de commit ne peut pas être vide"
 
 #: common/dialogs/git/dialog_git_commit.cpp:196
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "Sélectionner au moins une propriété pour retroannotation."
+msgstr "Sélectionner au moins un fichier à commiter"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
-msgstr ""
+msgstr "Phrase secrète de la clé:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Mot de passe :"
+msgstr "Mot de passe / jeton:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "Une authentification est requise pour accéder à:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Identifiant et mot de passe"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "Clé SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -4061,14 +4043,12 @@ msgid "Username:"
 msgstr "Identifiant :"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "Mot de passe clé SSH:"
+msgstr "Clé SSH:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Sélectionner le fichier de clé privée SSH"
+msgstr "Sélectionner la clé privée SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4076,14 +4056,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Sauvegarder tous les courants"
+msgstr "Sauvegarder les identifiants"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Authentication"
+msgstr "Authentification Git Requise"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:401
@@ -4607,9 +4585,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Facteur d'assombrissement du mode à contraste élevé :"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
-#, fuzzy
 msgid "App theme:"
-msgstr "Utiliser le thème :"
+msgstr "Thème de l'application:"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 msgid "Scaling"
@@ -4672,14 +4649,12 @@ msgstr ""
 "l’enregistrement de fichiers"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Incremental"
-msgstr "Incrément"
+msgstr "Incrémental"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Zip archive"
-msgstr "Archive"
+msgstr "Archive zip"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -4687,22 +4662,27 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"Incrémental: maintenir un dépôt git .history caché avec les modifications en "
+"continu.\n"
+"Zip: créer des archives zip horodatées à la sauvegarde; l'auto-sauvegarde "
+"utilise des fichiers de récupération."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "Envoyer le projet directement"
+msgstr "Répertoire du projet"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "User data directory"
-msgstr "'%s' n'est pas un répertoire"
+msgstr "Répertoire de données utilisateur"
 
 #: common/dialogs/panel_common_settings_base.cpp:453
 msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"Projet: stocker les sauvegardes et les fichiers d'auto-sauvegarde dans le "
+"répertoire du projet.\n"
+"Utilisateur: les stocker dans votre répertoire de données utilisateur KiCad."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -6207,9 +6187,8 @@ msgid "How would you like KiCad to create them?"
 msgstr "Comment souhaitez-vous que KiCad les crée ?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries"
-msgstr "Commencer par les librairies intégrées de KiCad (recommandé)"
+msgstr "Démarrer avec les librairies KiCad intégrées"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 msgid "Import tables from the previous version"
@@ -6226,15 +6205,16 @@ msgstr ""
 "importées seront créées avec les librairies par défaut de KiCad."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:53
-#, fuzzy
 msgid "Migrate built-in libraries to the latest version (recommended)"
-msgstr "Commencer par les librairies intégrées de KiCad (recommandé)"
+msgstr "Migrer les librairies intégrées vers la dernière version (recommandé)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:55
 msgid ""
 "When enabled, KiCad will replace any existing references to built-in "
 "libraries with references to the latest version"
 msgstr ""
+"Lorsque activé, KiCad remplacera toute référence existante aux librairies "
+"intégrées par des références à la dernière version"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:62
 msgid "Start with no libraries"
@@ -6383,9 +6363,8 @@ msgid "Insert Group"
 msgstr "Insérer Groupe"
 
 #: common/dialogs/panel_toolbar_customization.cpp:176
-#, fuzzy
 msgid "Filter actions"
-msgstr "Ajustage du Filtrage"
+msgstr "Filtrer les actions"
 
 #: common/dialogs/panel_toolbar_customization.cpp:472
 #: common/dialogs/panel_toolbar_customization.cpp:797
@@ -6460,19 +6439,16 @@ msgid "Graphics error"
 msgstr "Graphics error"
 
 #: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "Graphics error"
+msgstr "Erreur graphique pendant la récupération"
 
 #: common/draw_panel_gal.cpp:241
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "OCC exception building face : %s"
+msgstr "Exception inconnue lors du changement de backend"
 
 #: common/draw_panel_gal.cpp:416
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Action de nettoyage inconnue"
+msgstr "Exception inconnue"
 
 #: common/draw_panel_gal.cpp:630
 msgid "Could not use OpenGL"
@@ -6683,14 +6659,14 @@ msgid "Invalid floating point number"
 msgstr "Nombre flottant non valide"
 
 #: common/eda_base_frame.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "Impossible de créer le fichier '%s'."
+msgstr "Échec de la récupération du fichier auto-sauvegardé '%s'."
 
 #: common/eda_base_frame.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Impossible d'écrire le fichier '%s'."
+msgstr "Échec de l'écriture du fichier récupéré '%s'."
 
 #: common/eda_base_frame.cpp:664 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
@@ -7975,9 +7951,9 @@ msgid "Could not create directory '%s'"
 msgstr "Impossible de créer le répertoire '%s'"
 
 #: common/git/libgit_backend.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "Impossible de cloner le dépôt '%s'"
+msgstr "Impossible de cloner le dépôt '%s' : %s"
 
 #: common/git/libgit_backend.cpp:197 common/git/libgit_backend.cpp:339
 #, c-format
@@ -8026,37 +8002,37 @@ msgstr "Échec de la création du commit: %s"
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2834
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "Amend impossible: la branche n'a encore aucun commit."
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Échec de l'obtention du commit : %s"
+msgstr "Échec de la récupération du commit HEAD: %s"
 
 #: common/git/libgit_backend.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Échec de l'obtention du commit : %s"
+msgstr "Échec de la récupération du commit parent: %s"
 
 #: common/git/libgit_backend.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "Échec de l'obtention de la référence HEAD : %s"
+msgstr "Échec de la récupération de l'arbre HEAD: %s"
 
 #: common/git/libgit_backend.cpp:372 common/git/libgit_backend.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "Échec de l'écriture de l'index : %s"
+msgstr "Échec de la réinitialisation de l'index: %s"
 
 #: common/git/libgit_backend.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "Échec de l'écriture de l'arbre : %s"
+msgstr "Échec de la récupération de l'arbre parent: %s"
 
 #: common/git/libgit_backend.cpp:464 kicad/project_tree_pane.cpp:3087
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "Échec de l'obtention du commit : %s"
+msgstr "Échec de l'amend du commit: %s"
 
 #: common/git/libgit_backend.cpp:491 common/git/libgit_backend.cpp:1065
 #, c-format
@@ -8087,9 +8063,9 @@ msgid "No repository available to set up remote"
 msgstr "Aucun dépôt disponible pour mettre en place un système distant"
 
 #: common/git/libgit_backend.cpp:899
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "Échec de la création d'un dépôt distant : %s"
+msgstr "Échec de la configuration du dépôt distant: %s"
 
 #: common/git/libgit_backend.cpp:931
 msgid "No repository available"
@@ -8111,9 +8087,9 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "Échec de la commutation à la branche '%s': %s"
 
 #: common/git/libgit_backend.cpp:998
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "Échec de recherche de la branche '%s' : %s"
+msgstr "Échec de la création de la branche locale '%s': %s"
 
 #: common/git/libgit_backend.cpp:1012
 #, c-format
@@ -8138,6 +8114,8 @@ msgstr "Impossible de lire 'FETCH_HEAD'"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Rien à extraire: le dépôt distant n'a aucune branche correspondant à la "
+"branche locale courante."
 
 #: common/git/libgit_backend.cpp:1179
 msgid "Could not lookup commit"
@@ -8204,40 +8182,38 @@ msgid "Merge failed: %s"
 msgstr "Échec de la fusion : %s"
 
 #: common/git/libgit_backend.cpp:1462
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Impossible d'obtenir l'index du dépot"
+msgstr "Impossible de lire l'index du dépôt après la fusion."
 
 #: common/git/libgit_backend.cpp:1494
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "Impossible d'écrire les fichiers de tracés dans le répertoire '%s'."
+msgstr "Impossible d'écrire le résultat de la fusion."
 
 #: common/git/libgit_backend.cpp:1502
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Impossible d'obtenir l'en-tête du dépot"
+msgstr "Impossible d'obtenir le head du dépôt."
 
 #: common/git/libgit_backend.cpp:1512
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Impossible de rechercher le commit cible"
+msgstr "Impossible de retrouver les commits à fusionner."
 
 #: common/git/libgit_backend.cpp:1521 common/git/libgit_backend.cpp:1706
 msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"Impossible de créer une signature de commit.  Définissez user.name et "
+"user.email dans votre configuration git."
 
 #: common/git/libgit_backend.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Fusionner les graphiques qui se chevauchent dans des pads"
+msgstr "Fusion de la branche de suivi distant dans %s"
 
 #: common/git/libgit_backend.cpp:1538
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Impossible de fusionner les commits"
+msgstr "Impossible de créer le commit de fusion: %s"
 
 #: common/git/libgit_backend.cpp:1555
 msgid ""
@@ -8265,36 +8241,35 @@ msgstr "L'opération de fin de \"rebase\" a échoué: %s"
 
 #: common/git/libgit_backend.cpp:1627 common/git/libgit_backend.cpp:1673
 msgid "Another git operation is in progress."
-msgstr ""
+msgstr "Une autre opération git est en cours."
 
 #: common/git/libgit_backend.cpp:1635 common/git/libgit_backend.cpp:1688
-#, fuzzy
 msgid "Could not find the matching remote branch."
-msgstr "Ne peut trouver '%s' dans la bibliothèque importée."
+msgstr "Impossible de trouver la branche distante correspondante."
 
 #: common/git/libgit_backend.cpp:1644 common/git/libgit_backend.cpp:1697
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Ne peut pas ouvrir le chemin de modèle '%s'"
+msgstr "Impossible de lire la branche distante."
 
 #: common/git/libgit_backend.cpp:1653
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Impossible d'envoyer sur le dépôt distant : %s"
+msgstr "Impossible de se réinitialiser sur la branche distante: %s"
 
 #: common/git/libgit_backend.cpp:1679
-#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Impossible de fusionner : vous avez des modifications non enregistrées. "
-"Veuillez les valider ou les mettre de côté avant d'effectuer le pull."
+"Rebase impossible: vous avez des modifications non indexées.  Veuillez les "
+"commiter ou les remiser d'abord."
 
 #: common/git/libgit_backend.cpp:1737 common/git/libgit_backend.cpp:1748
 msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"Le rebase a rencontré des conflits.  Cela se résout au mieux depuis une "
+"ligne de commande git."
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -9614,14 +9589,13 @@ msgid "The library table path '%s' does not exist"
 msgstr "Le chemin d'accès de la table de librairies '%s' n'existe pas"
 
 #: common/libraries/library_table.cpp:87
-#, fuzzy
 msgid "The library table is of wrong type"
-msgstr "Le chemin d'accès de la table de librairies '%s' n'existe pas"
+msgstr "La table des librairies est du mauvais type"
 
 #: common/libraries/library_table.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "La librairie '%s' est en lecture seule."
+msgstr "La table des librairies '%s' est en lecture seule"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -9644,15 +9618,15 @@ msgstr ""
 
 #: common/local_history.cpp:1646
 msgid "Compacting local history..."
-msgstr ""
+msgstr "Compactage de l'historique local..."
 
 #: common/local_history.cpp:1843
 msgid "Trimming local history..."
-msgstr ""
+msgstr "Élagage de l'historique local..."
 
 #: common/local_history.cpp:1936
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "Compactage de l'historique élagué..."
 
 #: common/local_history.cpp:2213
 msgid "Cannot restore - the following files are open by another user:"
@@ -9665,20 +9639,22 @@ msgid "Restore Failed"
 msgstr "Echec de la Restauration"
 
 #: common/local_history.cpp:2260
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Réinitialisez à l’angle actuel par rapport à la position de référence."
+msgstr "Restaurer le projet à la version du %s?"
 
 #: common/local_history.cpp:2262
-#, fuzzy
 msgid "Restore Version"
-msgstr "Restauration de la session"
+msgstr "Restaurer Version"
 
 #: common/local_history.cpp:2265
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
 msgstr ""
+"Vos fichiers actuels sont sauvegardés au préalable afin que vous puissiez "
+"annuler la restauration. Les fichiers qui ne font pas partie de cette "
+"version ne sont pas modifiés."
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1228 pcbnew/zone.cpp:989
@@ -9803,27 +9779,27 @@ msgstr "Il n'y a pas de notifications disponibles"
 
 #: common/oauth/oauth_loopback_server.cpp:126
 msgid "Missing HTTP method in callback request."
-msgstr ""
+msgstr "Méthode HTTP manquante dans la requête de rappel."
 
 #: common/oauth/oauth_loopback_server.cpp:134
 msgid "Missing callback URL in request."
-msgstr ""
+msgstr "URL de rappel manquante dans la requête."
 
 #: common/oauth/oauth_loopback_server.cpp:145
 msgid "Unexpected callback path."
-msgstr ""
+msgstr "Chemin de rappel inattendu."
 
 #: common/oauth/oauth_loopback_server.cpp:153
 msgid "OAuth callback state did not match."
-msgstr ""
+msgstr "L'état du rappel OAuth ne correspond pas."
 
 #: common/oauth/oauth_loopback_server.cpp:163
 msgid "Authorization server returned an OAuth error."
-msgstr ""
+msgstr "Le serveur d'autorisation a retourné une erreur OAuth."
 
 #: common/oauth/oauth_loopback_server.cpp:171
 msgid "Missing authorization code in callback."
-msgstr ""
+msgstr "Code d'autorisation manquant dans le rappel."
 
 #: common/page_info.cpp:48
 msgid "A5 148 x 210mm"
@@ -10061,92 +10037,97 @@ msgstr "Erreur: "
 
 #: common/remote_provider_client.cpp:287
 msgid "Sign in required for this provider."
-msgstr ""
+msgstr "Connexion requise pour ce fournisseur."
 
 #: common/remote_provider_client.cpp:329
 msgid "Provider metadata does not include a session bootstrap URL."
 msgstr ""
+"Les métadonnées du fournisseur n'incluent pas d'URL d'amorçage de session."
 
 #: common/remote_provider_client.cpp:352
 msgid "Bootstrap response did not include a nonce URL."
-msgstr ""
+msgstr "La réponse d'amorçage n'incluait pas d'URL de nonce."
 
 #: common/remote_provider_client.cpp:371
 msgid "Bootstrap nonce URL origin does not match the bootstrap endpoint."
 msgstr ""
+"L'origine de l'URL de nonce d'amorçage ne correspond pas au point de "
+"terminaison d'amorçage."
 
 #: common/remote_provider_client.cpp:407
 #, c-format
 msgid "Remote provider request failed with HTTP %d."
-msgstr ""
+msgstr "La requête au fournisseur distant a échoué avec le code HTTP %d."
 
 #: common/remote_provider_client.cpp:432
 #, c-format
 msgid "Remote provider returned invalid JSON: %s"
-msgstr ""
+msgstr "Le fournisseur distant a retourné du JSON invalide: %s"
 
 #: common/remote_provider_client.cpp:453
 #, c-format
 msgid "Remote provider returned invalid token JSON: %s"
-msgstr ""
+msgstr "Le fournisseur distant a retourné un JSON de jeton invalide: %s"
 
 #: common/remote_provider_client.cpp:485
 #, c-format
 msgid "Remote provider token response was incomplete: %s"
-msgstr ""
+msgstr "La réponse de jeton du fournisseur distant était incomplète: %s"
 
 #: common/remote_provider_metadata.cpp:53
 #, c-format
 msgid "Remote provider metadata schema '%s' is not readable."
-msgstr ""
+msgstr "Le schéma de métadonnées du fournisseur distant '%s' n'est pas lisible."
 
 #: common/remote_provider_metadata.cpp:64
 #, c-format
 msgid "Remote provider metadata failed schema validation: %s"
 msgstr ""
+"Les métadonnées du fournisseur distant n'ont pas passé la validation du "
+"schéma: %s"
 
 #: common/remote_provider_metadata.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported provider capability '%s'."
-msgstr "Type de composant non pris en charge '%s'."
+msgstr "Capacité de fournisseur non supportée '%s'."
 
 #: common/remote_provider_metadata.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse remote provider metadata: %s"
-msgstr ""
-"Impossible d'analyser les métadonnées du paquet:\n"
-"\n"
-"%s"
+msgstr "Impossible d'analyser les métadonnées du fournisseur distant: %s"
 
 #: common/remote_provider_metadata.cpp:154
 msgid "Remote provider metadata must enable web_ui_v1."
-msgstr ""
+msgstr "Les métadonnées du fournisseur distant doivent activer web_ui_v1."
 
 #: common/remote_provider_metadata.cpp:161
 msgid ""
 "Remote provider metadata must enable direct_downloads_v1, "
 "inline_payloads_v1, or both."
 msgstr ""
+"Les métadonnées du fournisseur distant doivent activer direct_downloads_v1, "
+"inline_payloads_v1, ou les deux."
 
 #: common/remote_provider_metadata.cpp:168
 msgid "Remote provider metadata must define session_bootstrap_url for oauth2."
 msgstr ""
+"Les métadonnées du fournisseur distant doivent définir session_bootstrap_url "
+"pour oauth2."
 
 #: common/remote_provider_metadata.cpp:191
 msgid "session_bootstrap_url must share the same origin as panel_url."
-msgstr ""
+msgstr "session_bootstrap_url doit partager la même origine que panel_url."
 
 #: common/remote_provider_models.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse OAuth metadata: %s"
-msgstr ""
-"Impossible d'analyser les métadonnées du paquet:\n"
-"\n"
-"%s"
+msgstr "Impossible d'analyser les métadonnées OAuth: %s"
 
 #: common/remote_provider_models.cpp:50
 msgid "OAuth metadata must include authorization_endpoint and token_endpoint."
 msgstr ""
+"Les métadonnées OAuth doivent inclure authorization_endpoint et "
+"token_endpoint."
 
 #: common/remote_provider_models.cpp:55
 msgid "authorization_endpoint"
@@ -10163,21 +10144,22 @@ msgstr ""
 #: common/remote_provider_models.cpp:98
 #, c-format
 msgid "Remote provider manifest schema '%s' is not readable."
-msgstr ""
+msgstr "Le schéma de manifeste du fournisseur distant '%s' n'est pas lisible."
 
 #: common/remote_provider_models.cpp:109
 #, c-format
 msgid "Remote provider manifest failed schema validation: %s"
 msgstr ""
+"Le manifeste du fournisseur distant n'a pas passé la validation du schéma: %s"
 
 #: common/remote_provider_models.cpp:136
 msgid "assets[].download_url"
 msgstr ""
 
 #: common/remote_provider_models.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse remote provider manifest: %s"
-msgstr "Impossible d'analyser le dépôt : %s"
+msgstr "Impossible d'analyser le manifeste du fournisseur distant: %s"
 
 #: common/remote_provider_utils.cpp:94
 #, c-format
@@ -10185,6 +10167,8 @@ msgid ""
 "%s must use HTTPS unless allow_insecure_localhost is enabled for a loopback "
 "URL."
 msgstr ""
+"%s doit utiliser HTTPS sauf si allow_insecure_localhost est activé pour une "
+"URL de bouclage."
 
 #: common/richio.cpp:59 eeschema/tools/sch_drawing_tools.cpp:3270
 #, c-format
@@ -11859,14 +11843,13 @@ msgid "View load messages"
 msgstr "Afficher les messages de chargement"
 
 #: common/widgets/kistatusbar.cpp:533
-#, fuzzy, c-format
+#, c-format
 msgid "View %zu message(s)"
-msgstr "Afficher %zu message(s) de chargement"
+msgstr "Voir %zu message(s)"
 
 #: common/widgets/kistatusbar.cpp:546
-#, fuzzy
 msgid "View messages"
-msgstr "Afficher les messages de chargement"
+msgstr "Voir les messages"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -13812,11 +13795,10 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "Changer la gravité en Erreur pour toutes les violations '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:793 eeschema/dialogs/dialog_erc.cpp:800
-#, fuzzy
 msgid "Violation severities can also be edited in Schematic Setup"
 msgstr ""
-"Les sévérités de violation peuvent également être modifiées dans le dialogue "
-"\"Configuration Schématique\""
+"Les sévérités de violation peuvent aussi être modifiées dans Configuration "
+"Schématique"
 
 #: eeschema/dialogs/dialog_erc.cpp:798 pcbnew/dialogs/dialog_drc.cpp:867
 #, c-format
@@ -13838,9 +13820,8 @@ msgstr "Editer la carte des conflits de pins..."
 
 #: eeschema/dialogs/dialog_erc.cpp:814 eeschema/dialogs/dialog_erc.cpp:820
 #: eeschema/dialogs/dialog_erc.cpp:827
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
-msgstr "Ouvrir le Dialogue Configuration Schématique"
+msgstr "Ouvrir le dialogue Configuration Schématique"
 
 #: eeschema/dialogs/dialog_erc.cpp:819 pcbnew/dialogs/dialog_drc.cpp:879
 msgid "Edit violation severities..."
@@ -15375,18 +15356,17 @@ msgid "Derived symbol must have a parent selected"
 msgstr "Le symbole dérivé doit avoir un parent sélectionné"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:508
-#, fuzzy, c-format
+#, c-format
 msgid "The unit name '%s' is already in use."
-msgstr "Le nom '%s' est déjà utilisé."
+msgstr "Le nom d'unité '%s' est déjà utilisé."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:523
 msgid "Delete extra units from symbol?"
 msgstr "Supprimer les unités supplémentaires du symbole?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:551
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "Le symbole doit avoir au moins 1 style de corps"
+msgstr "Les styles de corps personnalisés doivent avoir au moins 2 entrées"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:557
 msgid "Delete extra body styles from symbol?"
@@ -16113,63 +16093,54 @@ msgid "Remote Symbol Settings"
 msgstr "Réglages Symbole Distant"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:66
-#, fuzzy
 msgid ""
 "Configure remote symbol providers and where downloaded libraries are stored."
 msgstr ""
-"Configurer l'emplacement de stockage des librairies distantes téléchargées "
-"et leur nom."
+"Configurer les fournisseurs de symboles distants et l'emplacement de "
+"stockage des librairies téléchargées."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:70
 msgid "Providers"
-msgstr ""
+msgstr "Fournisseurs"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:78
-#, fuzzy
 msgid "Add / Update"
-msgstr "Mise à jour"
+msgstr "Ajouter / Mettre à jour"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:80
-#, fuzzy
 msgid "Refresh Metadata"
-msgstr "Recherche dans Métadonnées"
+msgstr "Rafraîchir Métadonnées"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:81
 msgid "Sign Out"
-msgstr ""
+msgstr "Déconnexion"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:91
-#, fuzzy
 msgid "Metadata URL:"
-msgstr "Metadonnées"
+msgstr "URL des métadonnées:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
-#, fuzzy
 msgid "Display name:"
-msgstr "Nom fichier:"
+msgstr "Nom d'affichage:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:99
-#, fuzzy
 msgid "Last account:"
-msgstr "Nombre de pads:"
+msgstr "Dernier compte:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:101
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:462
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:471
-#, fuzzy
 msgid "Not signed in"
-msgstr "Non spécifié"
+msgstr "Non connecté"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:103
-#, fuzzy
 msgid "Auth status:"
-msgstr "Statut: "
+msgstr "Statut d'authentification:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:105
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:463
-#, fuzzy
 msgid "Not configured"
-msgstr "Non couvert"
+msgstr "Non configuré"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:114
 msgid "Destination directory:"
@@ -16233,11 +16204,11 @@ msgstr "Sélection Répertoire de Destination"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:313
 msgid "Enter a provider metadata URL first."
-msgstr ""
+msgstr "Saisissez d'abord une URL de métadonnées de fournisseur."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:384
 msgid "Provider metadata refreshed."
-msgstr ""
+msgstr "Métadonnées du fournisseur rafraîchies."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:474
 #: eeschema/generate_alias_info.cpp:124 kicad/pcm/pcm.cpp:819
@@ -17597,15 +17568,14 @@ msgid "Copy Design Variant"
 msgstr "Copier Variante de Conception"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2995
-#, fuzzy
 msgid "Cannot edit the default variant description."
-msgstr "Impossible de supprimer la variante par défaut."
+msgstr "Impossible de modifier la description de la variante par défaut."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:3003
 #: eeschema/sch_edit_frame.cpp:3098
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Description for '%s'"
-msgstr "Edit Description de Job"
+msgstr "Éditer la Description de '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -19095,9 +19065,8 @@ msgid "Symbol Library Tables"
 msgstr "Tables de Librairies de Symboles"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:201
-#, fuzzy
 msgid "Unable to load library table."
-msgstr "Impossible de charger la librairie\n"
+msgstr "Impossible de charger la table des librairies."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:424
 msgid "folder with .kicad_sym files"
@@ -20467,6 +20436,8 @@ msgstr "Panneaux"
 msgid ""
 "Search signed-in remote symbol providers and download verified libraries."
 msgstr ""
+"Rechercher dans les fournisseurs de symboles distants connectés et "
+"télécharger des librairies vérifiées."
 
 #: eeschema/menubar.cpp:327
 msgid "Variants"
@@ -20822,64 +20793,70 @@ msgstr "Les librairies suivantes n'ont pas pu être trouvées:"
 
 #: eeschema/remote_symbol_download_manager.cpp:35
 msgid "Remote asset URL"
-msgstr ""
+msgstr "URL de la ressource distante"
 
 #: eeschema/remote_symbol_download_manager.cpp:49
 msgid "Remote asset URL origin must match the selected provider."
 msgstr ""
+"L'origine de l'URL de la ressource distante doit correspondre au fournisseur "
+"sélectionné."
 
 #: eeschema/remote_symbol_download_manager.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to set download URL '%s'."
-msgstr "Impossible de lire '%s'."
+msgstr "Impossible de définir l'URL de téléchargement '%s'."
 
 #: eeschema/remote_symbol_download_manager.cpp:124
 msgid "Remote asset manifest declared an invalid size."
-msgstr ""
+msgstr "Le manifeste de la ressource distante a déclaré une taille invalide."
 
 #: eeschema/remote_symbol_download_manager.cpp:130
 msgid "Remote asset manifest must declare sha256 for URL-based downloads."
 msgstr ""
+"Le manifeste de la ressource distante doit déclarer sha256 pour les "
+"téléchargements par URL."
 
 #: eeschema/remote_symbol_download_manager.cpp:139
 msgid "Remote asset exceeds the provider download limit."
 msgstr ""
+"La ressource distante dépasse la limite de téléchargement du fournisseur."
 
 #: eeschema/remote_symbol_download_manager.cpp:150
 #, c-format
 msgid "Remote download failed with HTTP %d."
-msgstr ""
+msgstr "Le téléchargement distant a échoué avec le code HTTP %d."
 
 #: eeschema/remote_symbol_download_manager.cpp:156
 msgid "Remote asset content type did not match the manifest."
 msgstr ""
+"Le type de contenu de la ressource distante ne correspond pas au manifeste."
 
 #: eeschema/remote_symbol_download_manager.cpp:162
 msgid "Remote asset size did not match the manifest."
-msgstr ""
+msgstr "La taille de la ressource distante ne correspond pas au manifeste."
 
 #: eeschema/remote_symbol_download_manager.cpp:168
 msgid "Remote asset exceeds the remaining download limit."
-msgstr ""
+msgstr "La ressource distante dépasse la limite de téléchargement restante."
 
 #: eeschema/remote_symbol_download_manager.cpp:174
 msgid "Remote asset digest did not match the manifest."
-msgstr ""
+msgstr "L'empreinte de la ressource distante ne correspond pas au manifeste."
 
 #: eeschema/remote_symbol_import_job.cpp:52
-#, fuzzy
 msgid "Downloaded symbol payload was empty."
-msgstr "La \"payload\" du symbole était vide."
+msgstr "Le contenu de symbole téléchargé était vide."
 
 #: eeschema/remote_symbol_import_job.cpp:60
-#, fuzzy
 msgid "Downloaded symbol payload was not a KiCad symbol library."
-msgstr "Aucun symbole '%s' trouvé dans la table des librairies de symboles."
+msgstr ""
+"Le contenu de symbole téléchargé n'était pas une librairie de symboles KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "Downloaded symbol payload did not include expected symbol '%s'."
-msgstr "La \"payload\" du symbole ne comprenait pas le symbole attendu."
+msgstr ""
+"Le contenu de symbole téléchargé n'incluait pas le symbole attendu '%s'."
 
 #: eeschema/remote_symbol_import_job.cpp:104
 #: eeschema/remote_symbol_import_utils.cpp:117
@@ -20899,14 +20876,13 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "Impossible d'accéder au plugin de symboles KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "Impossible de sauver le symbole téléchargé."
+msgstr "Impossible de sauvegarder le symbole téléchargé: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
-#, fuzzy
 msgid "No symbol asset was available to place."
-msgstr "Aucun éditeur schématique n'est disponible pour le placement."
+msgstr "Aucune ressource de symbole n'était disponible pour le placement."
 
 #: eeschema/remote_symbol_import_utils.cpp:79
 msgid "Payload was empty."
@@ -20937,23 +20913,20 @@ msgid "Unable to create directory '%s'."
 msgstr "Impossible de créer le répertoire '%s'."
 
 #: eeschema/remote_symbol_import_utils.cpp:161
-#, fuzzy
 msgid "Unable to access the library table."
-msgstr "Impossible d'accéder à la table de librairies de symboles."
+msgstr "Impossible d'accéder à la table des librairies."
 
 #: eeschema/remote_symbol_import_utils.cpp:181
-#, fuzzy
 msgid "Failed to update the library table."
-msgstr "Échec de la mise à jour de la table de librairies de symbole."
+msgstr "Échec de la mise à jour de la table des librairies."
 
 #: eeschema/remote_symbol_import_utils.cpp:195
 msgid "Remote download"
 msgstr "Téléchargement du distant"
 
 #: eeschema/remote_symbol_import_utils.cpp:200
-#, fuzzy
 msgid "Failed to save the library table."
-msgstr "Impossible de sauver la table de librairies de symboles."
+msgstr "Échec de la sauvegarde de la table des librairies."
 
 #: eeschema/remote_symbol_import_utils.cpp:213
 msgid "No schematic editor is available for placement."
@@ -21074,9 +21047,8 @@ msgid "Resolved Netclass"
 msgstr "NetClasses Résolues"
 
 #: eeschema/sch_bus_entry.cpp:652 eeschema/sch_line.cpp:1286
-#, fuzzy
 msgid "Wire Style"
-msgstr "Style de Ligne"
+msgstr "Style de Fil"
 
 #: eeschema/sch_connection.cpp:480
 msgid "Connection Name"
@@ -21241,19 +21213,16 @@ msgid "Find in Net Inspector"
 msgstr "Rechercher dans Net Inspector"
 
 #: eeschema/sch_edit_frame.cpp:3080
-#, fuzzy
 msgid "No design variants to edit."
-msgstr "Ajouter une nouvelle variante de conception à la schématique."
+msgstr "Aucune variante de conception à modifier."
 
 #: eeschema/sch_edit_frame.cpp:3084
-#, fuzzy
 msgid "Select variant to edit description:"
-msgstr "Sélectionner le nom de la variante à supprimer:"
+msgstr "Sélectionner la variante dont modifier la description:"
 
 #: eeschema/sch_edit_frame.cpp:3085
-#, fuzzy
 msgid "Edit Variant Description"
-msgstr "Edit Description de Job"
+msgstr "Éditer la Description de la Variante"
 
 #: eeschema/sch_edit_frame.cpp:3145
 msgid "Select variant name to remove:"
@@ -22278,9 +22247,8 @@ msgid "Empty sheet pin name"
 msgstr "Nom de pin de feuille vide"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2941
-#, fuzzy
 msgid "Schematic polyline has too few points"
-msgstr "La forme n'a pas de points."
+msgstr "La poly-ligne de schématique a trop peu de points"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3030
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3043
@@ -22297,19 +22265,16 @@ msgid "Invalid symbol library ID"
 msgstr "ID de librairie de symbole invalide"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3979
-#, fuzzy
 msgid "Missing sheet name property"
-msgstr "Argument nom de feuille manquant dans %s."
+msgstr "Propriété nom de feuille manquante"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3985
-#, fuzzy
 msgid "Missing sheet file property"
-msgstr "Argument nom de feuille manquant dans %s."
+msgstr "Propriété fichier de feuille manquante"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5079
-#, fuzzy
 msgid "Invalid table: no cells defined"
-msgstr "Format de carte non valide spécifié\n"
+msgstr "Table invalide: aucune cellule définie"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5204
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7032
@@ -22400,14 +22365,14 @@ msgid "LTspice schematic files"
 msgstr "Fichiers schématiques Ltspice"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1471
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
-msgstr "'%s' n’est pas une valeur valide pour SPICE."
+msgstr "'%s' n'est pas un fichier ASCII PADS Logic."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1483
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "Échec de la lecture du fichier '%s'."
+msgstr "Échec de l'analyse du fichier PADS Logic '%s'."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -24625,9 +24590,8 @@ msgid "Incorrect inv_pin name"
 msgstr "Nom inv_pin incorrect"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2839
-#, fuzzy
 msgid "Wrong number of columns for series pin mapping."
-msgstr "Mauvais nombre de colonnes pour le mappage des pins."
+msgstr "Mauvais nombre de colonnes pour le mappage des pins série."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2949
 msgid "Internal error detected, a waveform should exist"
@@ -24814,13 +24778,12 @@ msgstr ""
 "installation."
 
 #: eeschema/sim/ngspice.cpp:787
-#, fuzzy
 msgid ""
 "Simulation terminated by ngspice. This may be caused by insufficient memory "
 "or an internal error. The simulator will be reset."
 msgstr ""
-"La simulation s'est bloquée (%s). Cela est généralement dû à un bug dans "
-"ngspice ou à une netliste non valide. Le simulateur sera réinitialisé."
+"Simulation interrompue par ngspice. Cela peut être dû à une mémoire "
+"insuffisante ou à une erreur interne. Le simulateur va être réinitialisé."
 
 #: eeschema/sim/sim_lib_mgr.cpp:109 eeschema/sim/sim_lib_mgr.cpp:162
 #, c-format
@@ -25686,13 +25649,13 @@ msgid "Add Symbol Library"
 msgstr "Ajouter Librairie de Symboles"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Impossible de créer le fichier librairie '%s'.\n"
-"Vérifier l’autorisation d’écriture et réessayez."
+"Impossible d'écraser le fichier de librairie '%s'.\n"
+"Assurez-vous d'avoir les permissions d'écriture et réessayez."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1230
 #, c-format
@@ -26276,9 +26239,9 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Modifier %s 'Exclure de la nomenclature' de \"%s\" à \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "Modifier %s 'Exclure de la nomenclature' de \"%s\" à \"%s\"."
+msgstr "Changer %s 'Exclure des fichiers de position' de '%s' à '%s'."
 
 #: eeschema/tools/backannotate.cpp:925
 #, c-format
@@ -26666,14 +26629,12 @@ msgid "Show Hidden Fields"
 msgstr "Afficher les Champs Cachés"
 
 #: eeschema/tools/sch_actions.cpp:364
-#, fuzzy
 msgid "Display previous symbol"
-msgstr "Afficher empreinte précédente"
+msgstr "Afficher le symbole précédent"
 
 #: eeschema/tools/sch_actions.cpp:370
-#, fuzzy
 msgid "Display next symbol"
-msgstr "Afficher empreinte suivante"
+msgstr "Afficher le symbole suivant"
 
 #: eeschema/tools/sch_actions.cpp:381
 msgid "Draw Pins"
@@ -27215,9 +27176,8 @@ msgid "Set the exclude from board attribute"
 msgstr "Activer l'attribut exclure du circuit imprimé"
 
 #: eeschema/tools/sch_actions.cpp:1098
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "Activer l'attribut exclure de la simulation"
+msgstr "Définir l'attribut d'exclusion des fichiers de position"
 
 #: eeschema/tools/sch_actions.cpp:1104
 msgid "Set the do not populate attribute"
@@ -27350,9 +27310,8 @@ msgid "Import 2D drawing file"
 msgstr "Importer fichier dessins 2D"
 
 #: eeschema/tools/sch_actions.cpp:1218
-#, fuzzy
 msgid "Import Non-KiCad Schematic..."
-msgstr "Fichier Schématique Non  Kicad..."
+msgstr "Importer Schématique Non-KiCad..."
 
 #: eeschema/tools/sch_actions.cpp:1219
 msgid ""
@@ -27899,14 +27858,12 @@ msgid "Remove an existing design variant from the schematic."
 msgstr "Supprimer une variante de conception existante de la schématique."
 
 #: eeschema/tools/sch_actions.cpp:1793
-#, fuzzy
 msgid "Edit Variant Description..."
-msgstr "Edit Description de Job"
+msgstr "Éditer la Description de la Variante..."
 
 #: eeschema/tools/sch_actions.cpp:1794
-#, fuzzy
 msgid "Edit the description of an existing design variant."
-msgstr "Editer le fichier de script avec l’éditeur de texte"
+msgstr "Éditer la description d'une variante de conception existante."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -28083,9 +28040,8 @@ msgid "Modify schematic item"
 msgstr "Modification élément de schéma"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3844
-#, fuzzy
 msgid "Auto-place Sheet Pins"
-msgstr "Auto-placer Toutes Pins de Hiérarchie"
+msgstr "Autoplacement des Pins de Feuille"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3891
 msgid "No sub schematic found in the current project"
@@ -28364,19 +28320,19 @@ msgid "Reached end of sheet."
 msgstr "Fin de la feuille atteinte."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:398
-#, fuzzy
 msgid "No matches found."
-msgstr "Pas de Modèle Trouvé"
+msgstr "Aucune correspondance trouvée."
 
 #: eeschema/tools/sch_group_tool.cpp:46 eeschema/tools/sch_group_tool.cpp:72
 #: pcbnew/tools/pcb_group_tool.cpp:49 pcbnew/tools/pcb_group_tool.cpp:64
-#, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "Certains éléments n'ont pas pu être mis en enveloppe."
+msgstr "Certains éléments sélectionnés ne peuvent pas être groupés."
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 msgid "Child items cannot be grouped separately from their parent item."
 msgstr ""
+"Les éléments enfants ne peuvent pas être groupés séparément de leur élément "
+"parent."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -28786,7 +28742,7 @@ msgstr "La \"payload\" compressée était vide."
 #: eeschema/widgets/panel_remote_symbol.cpp:132
 #, c-format
 msgid "Decompressed size %llu exceeds limit %llu."
-msgstr ""
+msgstr "La taille décompressée %llu dépasse la limite %llu."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:143
 #, c-format
@@ -28795,41 +28751,35 @@ msgstr "Échec de la décompression ZSTD : %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:183
 msgid "Reload current provider page"
-msgstr ""
+msgstr "Recharger la page du fournisseur courant"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:188
-#, fuzzy
 msgid "Configure remote providers"
-msgstr "Configurer les sources de données distantes."
+msgstr "Configurer les fournisseurs distants"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:326
-#, fuzzy
 msgid "No remote providers configured."
-msgstr "Aucune branche d'amont n'est configurée."
+msgstr "Aucun fournisseur distant configuré."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:401
-#, fuzzy
 msgid "Unable to load remote provider metadata."
-msgstr "Impossible de charger les données distantes pour '%s'."
+msgstr "Impossible de charger les métadonnées du fournisseur distant."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:646
 msgid "A remote provider sign-in flow is already in progress."
-msgstr ""
+msgstr "Un processus de connexion à un fournisseur distant est déjà en cours."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:678
-#, fuzzy
 msgid "Unable to start the local OAuth callback listener."
-msgstr "Impossible de démarrer le programme d'écoute de connexion locale."
+msgstr "Impossible de démarrer l'écouteur de rappel OAuth local."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:688
-#, fuzzy
 msgid "Unable to open the system browser for sign-in."
-msgstr "Impossible d'ouvrir '%s' pour écriture."
+msgstr "Impossible d'ouvrir le navigateur système pour la connexion."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:718
-#, fuzzy
 msgid "Failed to delete stored remote provider tokens."
-msgstr "Échec de l'analyse du fichier 'repository.json' stocké localement."
+msgstr "Échec de la suppression des jetons de fournisseur distant stockés."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:758
 #, c-format
@@ -28843,16 +28793,16 @@ msgstr "Identifieur de session manquant."
 #: eeschema/widgets/panel_remote_symbol.cpp:774
 msgid "Session identifier did not match the active provider session."
 msgstr ""
+"L'identifiant de session ne correspond pas à la session de fournisseur "
+"active."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:862
-#, fuzzy
 msgid "No remote provider is currently selected."
-msgstr "Zoom sur les éléments actuellement sélectionnés"
+msgstr "Aucun fournisseur distant n'est actuellement sélectionné."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:983
-#, fuzzy
 msgid "Unable to process provider payload."
-msgstr "Impossible de stocker le \"payload\"."
+msgstr "Impossible de traiter le contenu du fournisseur."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:989
 #, c-format
@@ -28877,14 +28827,13 @@ msgid "Unable to access the symbol library manager."
 msgstr "Impossible d'accéder au gestionnaire de librairies de symboles."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse component list: %s"
-msgstr "Échec de l'ajout des données du composant"
+msgstr "Échec de l'analyse de la liste de composants: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1122
-#, fuzzy
 msgid "Component list must be a non-empty array."
-msgstr "La liste des composants doit être un tableau."
+msgstr "La liste de composants doit être un tableau non vide."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1143
 msgid "Component entries must be objects."
@@ -28905,26 +28854,27 @@ msgstr "Type de \"payload\" d'empreinte non pris en charge."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1389
 msgid "Remote provider metadata is not loaded."
-msgstr ""
+msgstr "Les métadonnées du fournisseur distant ne sont pas chargées."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1419
 msgid ""
 "Manifest assets require asset_type, content_type, size_bytes, and "
 "download_url."
 msgstr ""
+"Les ressources du manifeste nécessitent asset_type, content_type, size_bytes "
+"et download_url."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1455
 msgid "Remote provider sign-in was cancelled or failed."
-msgstr ""
+msgstr "La connexion au fournisseur distant a été annulée ou a échoué."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1466
 msgid "Remote provider sign-in failed."
-msgstr ""
+msgstr "Échec de la connexion au fournisseur distant."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1482
-#, fuzzy
 msgid "Failed to store remote provider tokens securely."
-msgstr "Échec du transfert des modifications vers le dépôt distant."
+msgstr "Échec du stockage sécurisé des jetons du fournisseur distant."
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:189
 #: pcbnew/widgets/panel_selection_filter.cpp:180
@@ -29048,9 +28998,8 @@ msgid "Excl. Board"
 msgstr "Excl. PCB"
 
 #: eeschema/widgets/search_handlers.cpp:169
-#, fuzzy
 msgid "Excl. Pos Files"
-msgstr "Exclure des Fichiers de Position"
+msgstr "Excl. Fichiers Pos"
 
 #: eeschema/widgets/search_handlers.cpp:481
 msgid "Hierarchical"
@@ -30506,7 +30455,6 @@ msgstr ""
 "À utiliser sous la forme '--define-var key=valeur' ou '-D key=valeur'"
 
 #: kicad/cli/command.cpp:235
-#, fuzzy
 msgid ""
 "The variant name(s) to output, can be used multiple times to specify "
 "multiple variants.\n"
@@ -30514,11 +30462,12 @@ msgid ""
 "generate separate files for each variant.\n"
 "When no --variant argument is provided, the default variant is output."
 msgstr ""
-"Le ou les noms de variante à générer peuvent être utilisés plusieurs fois "
-"pour spécifier plusieurs variantes.\n"
-"Lorsque vous spécifiez plusieurs variantes, utilisez ${VARIANT} dans le "
+"Le ou les noms de variante à produire, peut être utilisé plusieurs fois pour "
+"spécifier plusieurs variantes.\n"
+"Lorsque plusieurs variantes sont spécifiées, utilisez ${VARIANT} dans le "
 "chemin de sortie pour générer des fichiers distincts pour chaque variante.\n"
-"Si aucun argument --variant n'est fourni, la variante par défaut est générée."
+"Si aucun argument --variant n'est fourni, la variante par défaut est "
+"produite."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -31144,9 +31093,8 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "Tracer les couches dans un seul fichier PDF avec multiples pages"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:128
-#, fuzzy
 msgid "Suppress footprint property popups"
-msgstr "Générer fenêtres contextuelles de propriété"
+msgstr "Supprimer les fenêtres contextuelles de propriété d'empreinte"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:192
 msgid "Cannot use more than one mode flag\n"
@@ -31358,10 +31306,10 @@ msgstr ""
 "l'utilisateur"
 
 #: kicad/cli/command_pcb_render.cpp:266
-#, fuzzy
 msgid "Use colors defined in the board stackup instead of those in the preset"
 msgstr ""
-"Les couleurs définies dans le \"stackup\" remplacent celles du préréglage"
+"Utiliser les couleurs définies dans l'empilage du circuit imprimé au lieu de "
+"celles du préréglage"
 
 #: kicad/cli/command_pcb_render.cpp:271
 msgid ""
@@ -33203,13 +33151,13 @@ msgid "Initialize a new repository"
 msgstr "Initialiser un nouveau dépot"
 
 #: kicad/project_tree_pane.cpp:1040
-#, fuzzy
 msgid "Configure Default Remote..."
-msgstr "Configurer les Chemins..."
+msgstr "Configurer le Dépôt Distant par Défaut..."
 
 #: kicad/project_tree_pane.cpp:1041
 msgid "Set or change the default remote URL and credentials"
 msgstr ""
+"Définir ou modifier l'URL et les identifiants du dépôt distant par défaut"
 
 #: kicad/project_tree_pane.cpp:1044
 msgid "Commit Project..."
@@ -33220,13 +33168,12 @@ msgid "Commit changes to the local repository"
 msgstr "Enregistrer les modifications dans le dépot local"
 
 #: kicad/project_tree_pane.cpp:1048
-#, fuzzy
 msgid "Amend Last Commit..."
-msgstr "Dernier Commit"
+msgstr "Amender le Dernier Commit..."
 
 #: kicad/project_tree_pane.cpp:1049
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "Réécrire le commit le plus récent de la branche courante"
 
 #: kicad/project_tree_pane.cpp:1052
 msgid "Push"
@@ -33237,14 +33184,14 @@ msgid "Pull"
 msgstr "Importer"
 
 #: kicad/project_tree_pane.cpp:1057
-#, fuzzy, c-format
+#, c-format
 msgid "Push %s to %s"
-msgstr "%s %s sur %s"
+msgstr "Transférer %s vers %s"
 
 #: kicad/project_tree_pane.cpp:1058
-#, fuzzy, c-format
+#, c-format
 msgid "Pull from %s"
-msgstr "de %s"
+msgstr "Extraire depuis %s"
 
 #: kicad/project_tree_pane.cpp:1062
 msgid "Push committed local changes to remote repository"
@@ -33304,29 +33251,28 @@ msgid "Please wait"
 msgstr "Merci de patienter"
 
 #: kicad/project_tree_pane.cpp:1731
-#, fuzzy
 msgid "Closing project..."
-msgstr "Commit Projet..."
+msgstr "Fermeture du projet..."
 
 #: kicad/project_tree_pane.cpp:1748
 msgid ""
 "A Git operation is still running.\n"
 "Keep waiting, or abandon?"
 msgstr ""
+"Une opération Git est encore en cours.\n"
+"Continuer à attendre, ou abandonner?"
 
 #: kicad/project_tree_pane.cpp:1750
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "Unité de temps de propagation :"
+msgstr "Opération Git Retardée"
 
 #: kicad/project_tree_pane.cpp:1752
-#, fuzzy
 msgid "Keep Waiting"
-msgstr "Garder numérotations"
+msgstr "Continuer à Attendre"
 
 #: kicad/project_tree_pane.cpp:1752
 msgid "Abandon"
-msgstr ""
+msgstr "Abandonner"
 
 #: kicad/project_tree_pane.cpp:1935
 msgid "The selected directory is already a Git project."
@@ -33350,43 +33296,39 @@ msgid "Fetch Remote"
 msgstr "Recherche Dépôt"
 
 #: kicad/project_tree_pane.cpp:2037
-#, fuzzy
 msgid "Configure Default Remote"
-msgstr "Définir le dépôt distant par défaut"
+msgstr "Configurer le Dépôt Distant par Défaut"
 
 #: kicad/project_tree_pane.cpp:2053
-#, fuzzy
 msgid "Failed to configure remote."
-msgstr "Échec de la création d'un dépôt distant : %s"
+msgstr "Échec de la configuration du dépôt distant."
 
 #: kicad/project_tree_pane.cpp:2106
-#, fuzzy
 msgid "Already up to date."
-msgstr "Déjà Placé"
+msgstr "Déjà à jour."
 
 #: kicad/project_tree_pane.cpp:2107
-#, fuzzy, c-format
+#, c-format
 msgid "Already up to date with %s."
-msgstr "Résolu largeur rayon de frein thermique: %s."
+msgstr "Déjà à jour avec %s."
 
 #: kicad/project_tree_pane.cpp:2113
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "Modifications extraites (fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2114
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "%s extrait dans %s (fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2119
-#, fuzzy
 msgid "Pulled changes."
-msgstr "Génération des changements"
+msgstr "Modifications extraites."
 
 #: kicad/project_tree_pane.cpp:2120
-#, fuzzy, c-format
+#, c-format
 msgid "Pulled %s into %s."
-msgstr "Pad %s sur %s"
+msgstr "%s extrait dans %s."
 
 #: kicad/project_tree_pane.cpp:2130
 msgid ""
@@ -33396,63 +33338,60 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"Vos modifications locales et les modifications distantes sont en conflit, le "
+"pull a donc été annulé et rien n'a été modifié.\n"
+"\n"
+"Vous pouvez abandonner vos commits locaux et utiliser la version distante, "
+"ou rebaser vos commits sur la version distante."
 
 #: kicad/project_tree_pane.cpp:2134
-#, fuzzy
 msgid "Pull Conflict"
-msgstr "Conflits"
+msgstr "Conflit de Pull"
 
 #: kicad/project_tree_pane.cpp:2137
 msgid "&Use Remote (discard my changes)"
-msgstr ""
+msgstr "&Utiliser la Version Distante (abandonner mes modifications)"
 
 #: kicad/project_tree_pane.cpp:2137
 msgid "&Rebase"
-msgstr ""
+msgstr "&Rebaser"
 
 #: kicad/project_tree_pane.cpp:2144
-#, fuzzy
 msgid "Reset to the remote version."
-msgstr "Réinitialisez à l’angle actuel par rapport à la position de référence."
+msgstr "Réinitialisé à la version distante."
 
 #: kicad/project_tree_pane.cpp:2146
-#, fuzzy
 msgid "Failed to reset to remote"
-msgstr "Échec de la définition du dépôt distant par défaut."
+msgstr "Échec de la réinitialisation vers le dépôt distant"
 
 #: kicad/project_tree_pane.cpp:2153
-#, fuzzy
 msgid "Rebased your changes onto the remote."
-msgstr "Échec du transfert des modifications vers le dépôt distant."
+msgstr "Vos modifications ont été rebasées sur la version distante."
 
 #: kicad/project_tree_pane.cpp:2155
-#, fuzzy
 msgid "Could not rebase"
-msgstr "Impossible de lire le fichier "
+msgstr "Impossible de rebaser"
 
 #: kicad/project_tree_pane.cpp:2159
-#, fuzzy
 msgid "Pull cancelled."
-msgstr "Annulé"
+msgstr "Pull annulé."
 
 #: kicad/project_tree_pane.cpp:2168
-#, fuzzy
 msgid "Pull failed."
-msgstr "Tous les fichiers"
+msgstr "Échec du pull."
 
 #: kicad/project_tree_pane.cpp:2169
 msgid "Failed to pull project"
 msgstr "Echec de récupération du projet"
 
 #: kicad/project_tree_pane.cpp:2203
-#, fuzzy
 msgid "Pushed to remote."
-msgstr "Impossible de rechercher le dépôt distant"
+msgstr "Transféré vers le dépôt distant."
 
 #: kicad/project_tree_pane.cpp:2204
-#, fuzzy, c-format
+#, c-format
 msgid "Pushed %s to %s."
-msgstr "Pad %s sur %s"
+msgstr "%s transféré vers %s."
 
 #: kicad/project_tree_pane.cpp:2217
 #, c-format
@@ -33464,19 +33403,25 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
+"Push rejeté: votre branche locale et %s ont divergé.\n"
+"\n"
+"Cela arrive généralement après avoir amendé ou réécrit un commit déjà "
+"transféré.  Forcer le push pour écraser le dépôt distant?\n"
+"\n"
+"Toute personne ayant déjà extrait la version précédente devra réinitialiser "
+"sa copie."
 
 #: kicad/project_tree_pane.cpp:2223
 msgid "Force Push?"
-msgstr ""
+msgstr "Forcer le Push?"
 
 #: kicad/project_tree_pane.cpp:2225
 msgid "&Force Push"
-msgstr ""
+msgstr "&Forcer le Push"
 
 #: kicad/project_tree_pane.cpp:2234
-#, fuzzy
 msgid "Push failed."
-msgstr "Tâche échouée"
+msgstr "Échec du push."
 
 #: kicad/project_tree_pane.cpp:2235
 msgid "Failed to push project"
@@ -33487,34 +33432,32 @@ msgid "The selected directory is not a Git project."
 msgstr "Le répertoire sélectionné est déjà un projet Git."
 
 #: kicad/project_tree_pane.cpp:2636
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"Les règles suivantes ont des modifications non sauvées :\n"
+"Les éditeurs suivants ont des modifications non sauvegardées:%s\n"
 "\n"
+"Les sauvegarder avant de commiter?"
 
 #: kicad/project_tree_pane.cpp:2639 kicad/project_tree_pane.cpp:2925
-#, fuzzy
 msgid "Unsaved Changes"
-msgstr "Défaire Changements"
+msgstr "Modifications Non Sauvegardées"
 
 #: kicad/project_tree_pane.cpp:2642
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "Sauver Copie..."
+msgstr "&Sauvegarder et Commiter"
 
 #: kicad/project_tree_pane.cpp:2642
-#, fuzzy
 msgid "Commit &Anyway"
-msgstr "(%s pour modifier quand même.)"
+msgstr "Commiter &Quand Même"
 
 #: kicad/project_tree_pane.cpp:2659 kicad/project_tree_pane.cpp:2945
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save %s."
-msgstr "Impossible de lire le fichier: %s"
+msgstr "Impossible de sauvegarder %s."
 
 #: kicad/project_tree_pane.cpp:2776
 msgid "Discarding commit due to empty commit message."
@@ -33532,54 +33475,54 @@ msgid ""
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"Le dernier commit a déjà été transféré vers %s.\n"
+"\n"
+"L'amender réécrit l'historique public.  Toute personne ayant extrait ce "
+"commit devra réinitialiser sa copie."
 
 #: kicad/project_tree_pane.cpp:2881
 msgid "Amend Published Commit?"
-msgstr ""
+msgstr "Amender un Commit Publié?"
 
 #: kicad/project_tree_pane.cpp:2883 kicad/project_tree_pane.cpp:2928
-#, fuzzy
 msgid "Amend &Anyway"
-msgstr "Ajouter de Toute Façon"
+msgstr "Amender &Quand Même"
 
 #: kicad/project_tree_pane.cpp:2922
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before amending?"
 msgstr ""
-"Les règles suivantes ont des modifications non sauvées :\n"
+"Les éditeurs suivants ont des modifications non sauvegardées:%s\n"
 "\n"
+"Les sauvegarder avant d'amender?"
 
 #: kicad/project_tree_pane.cpp:2928
 msgid "&Save and Amend"
-msgstr ""
+msgstr "&Sauvegarder et Amender"
 
 #: kicad/project_tree_pane.cpp:3068
-#, fuzzy
 msgid "Amend Last Commit"
-msgstr "Dernier Commit"
+msgstr "Amender le Dernier Commit"
 
 #: kicad/project_tree_pane.cpp:3077
-#, fuzzy
 msgid "Discarding amend due to empty commit message."
-msgstr "Rejet du commit en raison d'un message de commit vide."
+msgstr "Amendement abandonné en raison d'un message de commit vide."
 
 #: kicad/project_tree_pane.cpp:3158
-#, fuzzy
 msgid "Fetched from remote."
-msgstr "Recherche Dépôt"
+msgstr "Récupéré depuis le dépôt distant."
 
 #: kicad/project_tree_pane.cpp:3159
-#, fuzzy, c-format
+#, c-format
 msgid "Fetched from %s."
-msgstr "de %s"
+msgstr "Récupéré depuis %s."
 
 #: kicad/project_tree_pane.cpp:3166
-#, fuzzy
 msgid "Fetch failed."
-msgstr "Tâche échouée"
+msgstr "Échec de la récupération."
 
 #: kicad/project_tree_traverser.cpp:217
 #, c-format
@@ -37869,9 +37812,9 @@ msgid "Custom Rules"
 msgstr "Règles Utilisateur"
 
 #: pcbnew/cross-probing.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying footprint library '%s'."
-msgstr "Erreur lors du chargement de l'empreinte %s de la librairie '%s'."
+msgstr "Erreur lors de la copie de la librairie d'empreintes '%s'."
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:243
 msgid "Barcode Error"
@@ -39355,9 +39298,9 @@ msgid "Run DRC"
 msgstr "Exécuter DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Elapsed: %s"
-msgstr "Règle: %s"
+msgstr "Écoulé: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:313
 msgid "Report All Errors for Each Track"
@@ -39386,31 +39329,31 @@ msgstr "Monter règles de conception."
 
 #: pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Elapsed: 0 s"
-msgstr ""
+msgstr "Écoulé: 0 s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:473
 #, c-format
 msgid "%1$d min %2$d s"
-msgstr ""
+msgstr "%1$d min %2$d s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f s"
-msgstr "%.2f"
+msgstr "%.2f s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:480
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC annulée par l’utilisateur.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:483
-#, fuzzy, c-format
+#, c-format
 msgid "Canceled after %s"
-msgstr "Annuler les Modifications"
+msgstr "Annulé après %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "Completed in %s"
-msgstr "Grouper Pins Sélectionnées"
+msgstr "Terminé en %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:817
 #, c-format
@@ -39433,16 +39376,13 @@ msgid "They will be excluded from the %s list"
 msgstr "Elles seront excluses de la liste %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:862 pcbnew/dialogs/dialog_drc.cpp:869
-#, fuzzy
 msgid "Violation severities can also be edited in Board Setup"
 msgstr ""
-"Les sévérités de violation peuvent également être modifiées dans le dialogue "
-"\"Option de C.I.\""
+"Les sévérités de violation peuvent aussi être modifiées dans Options du CI"
 
 #: pcbnew/dialogs/dialog_drc.cpp:880
-#, fuzzy
 msgid "Open the Board Setup dialog"
-msgstr "Ouvrir le dialogue de Propriétés du CI"
+msgstr "Ouvrir le dialogue Options du CI"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1184
 #, c-format
@@ -39736,9 +39676,8 @@ msgid "BOM Columns"
 msgstr "Colonnes de nomenclature"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
-#, fuzzy
 msgid "BOM revision:"
-msgstr "Révision:"
+msgstr "Révision de la nomenclature:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:123
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:128
@@ -39746,6 +39685,8 @@ msgid ""
 "Revision string for the BOM section. Auto-populated from schematic title "
 "block revision"
 msgstr ""
+"Chaîne de révision pour la section nomenclature. Remplie automatiquement "
+"depuis la révision du cartouche de la schématique"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:132
 msgid "Internal ID:"
@@ -39986,35 +39927,38 @@ msgstr "Fichier de Sortie Modèle 3D"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:422
 msgid "Please save the board before exporting STEP."
-msgstr ""
+msgstr "Veuillez sauvegarder le circuit imprimé avant d'exporter en STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:429
 msgid ""
 "Board file not found on disk.\n"
 "Save the board before exporting STEP."
 msgstr ""
+"Fichier de circuit imprimé introuvable sur le disque.\n"
+"Sauvegardez le circuit imprimé avant d'exporter en STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:441
 msgid ""
 "The board directory no longer exists.\n"
 "Save the board to a valid location before exporting STEP."
 msgstr ""
+"Le répertoire du circuit imprimé n'existe plus.\n"
+"Sauvegardez le circuit imprimé à un emplacement valide avant d'exporter en "
+"STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:451
-#, fuzzy
 msgid "Failed to reserve a temporary filename for STEP export."
 msgstr ""
-"Impossible de créer un fichier temporaire pour la \"payload\" du symbole."
+"Échec de la réservation d'un nom de fichier temporaire pour l'export STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:470
-#, fuzzy
 msgid "Failed to save the current board state for export."
-msgstr "Impossible de sauver la librairie d'empreintes ."
+msgstr ""
+"Échec de la sauvegarde de l'état courant du circuit imprimé pour l'export."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:483
-#, fuzzy
 msgid "Failed to stage the project file for STEP export."
-msgstr "Échec du transfert des modifications vers le dépôt distant."
+msgstr "Échec de la préparation du fichier projet pour l'export STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:522
 msgid "No filename for output file"
@@ -41781,7 +41725,7 @@ msgstr "Mettre aux valeurs par défaut de la couche:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:336
 msgid "(auto)"
-msgstr ""
+msgstr "(auto)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "PCB graphic items"
@@ -42109,15 +42053,16 @@ msgstr ""
 "KiCad."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:99
-#, fuzzy
 msgid "Keep KiCad layer names"
-msgstr "Garder les couches &extérieures"
+msgstr "Conserver les noms de couches KiCad"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:100
 msgid ""
 "If checked, layers will keep their standard KiCad names instead of being "
 "renamed to the imported layer names."
 msgstr ""
+"Si coché, les couches conserveront leurs noms KiCad standard au lieu d'être "
+"renommées avec les noms des couches importées."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:67
 msgid "Edit Mapping of Imported Layers"
@@ -42167,72 +42112,65 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:437
 msgid "Auto-migrate 3D model references"
-msgstr ""
+msgstr "Migrer automatiquement les références de modèles 3D"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:663
-#, fuzzy
 msgid "(keep existing reference)"
-msgstr "Garder la référence schématique existante"
+msgstr "(conserver la référence existante)"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:870
 msgid "Add 3D Model Search Directory"
-msgstr ""
+msgstr "Ajouter un Répertoire de Recherche de Modèles 3D"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:964
-#, fuzzy
 msgid "Select 3D Model File"
-msgstr "Sélection Modèle 3D"
+msgstr "Sélectionner le Fichier de Modèle 3D"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:981
-#, fuzzy
 msgid "user-selected"
-msgstr "Pas de bus sélectionné"
+msgstr "sélectionné par l'utilisateur"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1065
-#, fuzzy
 msgid "Migrate 3D model references"
-msgstr "Imprimer le cartouche."
+msgstr "Migrer les références de modèles 3D"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:19
 msgid ""
 "This board references 3D models that are no longer present on your system.\n"
 "Select replacements below, or keep the existing references unchanged."
 msgstr ""
+"Ce circuit imprimé référence des modèles 3D qui ne sont plus présents sur "
+"votre système.\n"
+"Sélectionnez des remplacements ci-dessous, ou conservez les références "
+"existantes inchangées."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
-#, fuzzy
 msgid "Missing 3D model references:"
-msgstr "Imprimer le cartouche."
+msgstr "Références de modèles 3D manquantes:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "Placement Composants"
+msgstr "Remplacements potentiels:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
-#, fuzzy
 msgid "Add Search Directory..."
-msgstr "Nouveau Répertoire..."
+msgstr "Ajouter Répertoire de Recherche..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
-#, fuzzy
 msgid "Open External File..."
-msgstr "Ouvrir Fichier(s) de Perçage Excellon..."
+msgstr "Ouvrir Fichier Externe..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
-#, fuzzy
 msgid "Replace Models"
-msgstr "Tout Remplacer"
+msgstr "Remplacer les Modèles"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:108
-#, fuzzy
 msgid "Keep Existing"
-msgstr "Réutiliser Existant"
+msgstr "Conserver Existants"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.h:68
-#, fuzzy
 msgid "Migrate 3D Models"
-msgstr "Mise à jour modèles 3D"
+msgstr "Migrer les Modèles 3D"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:96
 msgid "Rotate around item anchor"
@@ -43171,9 +43109,8 @@ msgstr "Le backdrill doit traverser cette couche"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1224
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
-#, fuzzy
 msgid "Top backdrill size:"
-msgstr "Taille Backdrill Dessus"
+msgstr "Taille backdrill dessus:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1246
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:493
@@ -43182,9 +43119,8 @@ msgstr "Backdrill dessous devant couper:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1257
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:476
-#, fuzzy
 msgid "Bottom backdrill size:"
-msgstr "Taille du Backdrill Dessous"
+msgstr "Taille backdrill dessous:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1421
 msgid "Preview pad in sketch mode"
@@ -44608,16 +44544,17 @@ msgid "Unused Pads"
 msgstr "Pads Inutilisées"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
-#, fuzzy
 msgid "Apply design block layouts to new groups"
 msgstr ""
-"Appliquer la disposition des blocs de conception liés au groupe sélectionné"
+"Appliquer les implantations des blocs de conception aux nouveaux groupes"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
 msgid ""
 "For each new group created from a design block, apply the block's saved "
 "footprint placement and routing automatically."
 msgstr ""
+"Pour chaque nouveau groupe créé à partir d'un bloc de conception, appliquer "
+"automatiquement le placement d'empreintes et le routage sauvegardés du bloc."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
 msgid "Update Footprints"
@@ -45922,13 +45859,12 @@ msgid "Cancel Changes?"
 msgstr "Annuler les Modifications?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:156
-#, fuzzy
 msgid "Show Matching Items"
-msgstr "Afficher Correspondances"
+msgstr "Afficher les Éléments Correspondants"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:209
 msgid "Cannot show matching items without an open project."
-msgstr ""
+msgstr "Impossible d'afficher les éléments correspondants sans projet ouvert."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:231
 #: pcbnew/dialogs/panel_setup_rules.cpp:249
@@ -45944,31 +45880,34 @@ msgid "ERROR:"
 msgstr "ERREUR:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Could not scan rules text: %s"
-msgstr "Impossible d'envoyer sur le dépôt distant : %s"
+msgstr "Impossible d'analyser le texte des règles: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:337
 msgid "Place the cursor inside a (rule ...) block to show matching items."
 msgstr ""
+"Placez le curseur dans un bloc (rule ...) pour afficher les éléments "
+"correspondants."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:346
 msgid "The rule under the cursor has no name; add a name to identify it."
 msgstr ""
+"La règle sous le curseur n'a pas de nom; ajoutez un nom pour l'identifier."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' could not be located after parsing."
-msgstr "Le fichier '%s' n'a pas pu être créé."
+msgstr "La règle '%s' n'a pas pu être localisée après analyse."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:385
 msgid "DRC engine not available."
-msgstr ""
+msgstr "Moteur DRC non disponible."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:408
 #, c-format
 msgid "Rule '%s': %zu matching item(s)."
-msgstr ""
+msgstr "Règle '%s': %zu élément(s) correspondant(s)."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:998
 #, c-format
@@ -47691,9 +47630,9 @@ msgstr "Nom de Zone:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:39
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:44
-#, fuzzy
 msgid "A unique name for this zone, used to identify it in DRC rules"
-msgstr "Un nom unique pour cette zone pour l’identifier pour le test DRC"
+msgstr ""
+"Un nom unique pour cette zone, utilisé pour l'identifier dans les règles DRC"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:76
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -48261,9 +48200,8 @@ msgid "Items not allowed"
 msgstr "Éléments non autorisés"
 
 #: pcbnew/drc/drc_item.cpp:64
-#, fuzzy
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "Texte (ou cote) sur la couche Edge.Cuts"
+msgstr "Texte ou graphique sur la couche Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
@@ -48503,7 +48441,7 @@ msgstr "Piste connectée à une couche post-usinée ou \"backdrilled\""
 
 #: pcbnew/drc/drc_item.cpp:317
 msgid "Track endpoint not centered on via"
-msgstr ""
+msgstr "Extrémité de piste non centrée sur le via"
 
 #: pcbnew/drc/drc_item.cpp:521
 #, c-format
@@ -48728,9 +48666,8 @@ msgid "Checking copper zone clearances..."
 msgstr "Vérification des isolations des zones de cuivre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:177
-#, fuzzy
 msgid "Checking teardrop clearances..."
-msgstr "Vérification des isolations des pads..."
+msgstr "Contrôle des isolations des teardrops..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:292
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:583
@@ -49611,23 +49548,22 @@ msgid "Optimum Length must be greater than 0"
 msgstr "La Longueur Optimale doit être plus grande que 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:84
-#, fuzzy
 msgid "Tolerance must be greater than or equal to 0"
-msgstr "Le Skew Maximum doit être plus grand que 0"
+msgstr "La tolérance doit être supérieure ou égale à 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:89
 msgid "Tolerance is too large: resulting minimum length is not positive"
 msgstr ""
+"La tolérance est trop grande: la longueur minimale résultante n'est pas "
+"positive"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:148
-#, fuzzy
 msgid "Within diff pairs"
-msgstr "Routage Paire Différentielle: %s"
+msgstr "Au sein des paires différentielles"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:206
-#, fuzzy
 msgid "At least one constraint must be defined"
-msgstr "Au moins une couche doit être spécifiée\n"
+msgstr "Au moins une contrainte doit être définie"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:212
 msgid "Maximum Skew must be greater than or equal to 0"
@@ -49780,41 +49716,35 @@ msgid "At least one layer must be selected"
 msgstr "Au moins une couche doit être sélectionnée"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:69
-#, fuzzy
 msgid "Optimum Width must be greater than 0"
-msgstr "La Largeur Minimum doit être plus grande que 0"
+msgstr "La Largeur Optimale doit être supérieure à 0"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:72
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:80
-#, fuzzy
 msgid "Width Tolerance must be greater than or equal to 0"
-msgstr "Le Skew Maximum doit être plus grand que 0"
+msgstr "La Tolérance de Largeur doit être supérieure ou égale à 0"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:75
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:83
-#, fuzzy
 msgid "Width Tolerance must be less than Optimum Width"
-msgstr "La Largeur Minimale ne peut pas être supérieure à la Largeur Maximale."
+msgstr "La Tolérance de Largeur doit être inférieure à la Largeur Optimale"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:91
-#, fuzzy
 msgid "Gap Tolerance must be greater than or equal to 0"
-msgstr "Le Skew Maximum doit être plus grand que 0"
+msgstr "La Tolérance d'Écart doit être supérieure ou égale à 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:94
 msgid "Gap Tolerance must be less than Optimum Gap"
-msgstr ""
+msgstr "La Tolérance d'Écart doit être inférieure à l'Écart Optimal"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:98
-#, fuzzy
 msgid "Maximum Uncoupled Length must be greater than or equal to 0"
-msgstr "La Longueur Non Couplée Maximum doit être plus grande que 0"
+msgstr "La Longueur Découplée Maximale doit être supérieure ou égale à 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:101
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:113
-#, fuzzy
 msgid "At least one constraint must be specified"
-msgstr "Au moins une couche doit être spécifiée\n"
+msgstr "Au moins une contrainte doit être spécifiée"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:91
 msgid "Minimum Via Diameter must be greater than 0"
@@ -49845,9 +49775,8 @@ msgstr ""
 "Maximale du Trous de Via"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:73
-#, fuzzy
 msgid "At least one via type must be selected"
-msgstr "Au moins une couche doit être sélectionnée"
+msgstr "Au moins un type de via doit être sélectionné"
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:337
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:379
@@ -50442,6 +50371,8 @@ msgid ""
 "Could not post-process GLB line primitives; the exported model may not "
 "import in strict glTF viewers."
 msgstr ""
+"Impossible de post-traiter les primitives de ligne GLB; le modèle exporté "
+"peut ne pas s'importer dans les visualiseurs glTF stricts."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4098
 #: pcbnew/exporters/step/step_pcb_model.cpp:4145
@@ -51824,7 +51755,7 @@ msgid "Invalid footprint ID '%s' for variant '%s' on %s."
 msgstr "ID d'empreinte invalide '%s' pour la variante '%s' sur %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1405
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s '%s' attribute to variant %s (footprint %s)."
 msgstr "Ajout attribut %s '%s' à la variante %s (empreinte %s)."
 
@@ -51834,7 +51765,7 @@ msgid "Remove %s '%s' attribute from variant %s (footprint %s)."
 msgstr "Suppression attribut %s « %s » de la variante %s (empreinte %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s '%s' attribute to variant %s."
 msgstr "Ajout attribut %s '%s' à la variante %s."
 
@@ -51844,9 +51775,9 @@ msgid "Remove %s '%s' attribute from variant %s."
 msgstr "Suppression %s:%s attribut de variante %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1425
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s '%s' attribute to variant %s (footprint %s)."
-msgstr "Ajout attribut %s '%s' à la variante %s (empreinte %s)."
+msgstr "Attribut %s '%s' ajouté à la variante %s (empreinte %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1426
 #, c-format
@@ -51854,9 +51785,9 @@ msgid "Removed %s '%s' attribute from variant %s (footprint %s)."
 msgstr "Supprimé %s:%s attribut de variante %s (empreinte %s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1434
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s '%s' attribute to variant %s."
-msgstr "Ajout attribut %s '%s' à la variante %s."
+msgstr "Attribut %s '%s' ajouté à la variante %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1435
 #, c-format
@@ -51970,14 +51901,14 @@ msgid "Changed group library link from '%s' to '%s'."
 msgstr "Modification du lien de librairie du groupe de '%s' en '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1971
-#, fuzzy, c-format
+#, c-format
 msgid "Add group '%s' to group '%s'."
-msgstr "Ajout %s au groupe '%s'."
+msgstr "Ajout du groupe '%s' au groupe '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1976
-#, fuzzy, c-format
+#, c-format
 msgid "Added group '%s' to group '%s'."
-msgstr "Ajout %s au groupe '%s'."
+msgstr "Groupe '%s' ajouté au groupe '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2016
 #, c-format
@@ -52688,13 +52619,13 @@ msgstr "Le nouveau fichier PCB n'est pas sauvé"
 #, c-format
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr[0] ""
+msgstr[0] "%d modèle 3D WRL n'a pas pu être associé à un modèle STEP équivalent."
 msgstr[1] ""
+"%d modèles 3D WRL n'ont pas pu être associés à un modèle STEP équivalent."
 
 #: pcbnew/pcb_edit_frame.cpp:1988
-#, fuzzy
 msgid "Show options"
-msgstr "Options SVG"
+msgstr "Afficher les options"
 
 #: pcbnew/pcb_edit_frame.cpp:2016
 msgid "Board file is read only."
@@ -53233,9 +53164,9 @@ msgid "Loading unicode strings..."
 msgstr "Chargement de chaînes unicode..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4629
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "Modèles d'ajustage de longueur"
+msgstr "%d motif(s) d'ajustement de longueur importé(s)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4640
 msgid "Loading text..."
@@ -53748,11 +53679,9 @@ msgstr ""
 "Ignorer un polygone puisque la couche Eagle '%s' (%d) n’a pas été associée"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1537
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): less than 3 vertices"
-msgstr ""
-"Ignore un polygone sur la couche '%s' (%d) : le nombre de contours n'est pas "
-"1"
+msgstr "Polygone ignoré sur la couche '%s' (%d): moins de 3 sommets"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1583
 #, c-format
@@ -53995,6 +53924,8 @@ msgid ""
 "Pad '%s' has custom shape with per-layer geometry; custom primitives not "
 "supported in padstack mode."
 msgstr ""
+"Le pad '%s' a une forme personnalisée avec une géométrie par couche; les "
+"primitives personnalisées ne sont pas supportées en mode padstack."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2894
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2926
@@ -54388,6 +54319,8 @@ msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"Un ou plusieurs éléments ont été trouvés sur des couches non définies (%s). "
+"Ouvrez le circuit imprimé dans l'Éditeur de PCB pour résoudre."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1587
 #, c-format
@@ -55557,9 +55490,8 @@ msgid "Via Properties"
 msgstr "Propriétés des Vias"
 
 #: pcbnew/pcb_track.cpp:3180
-#, fuzzy
 msgid "Post-machining"
-msgstr "Post-usinage Dessus"
+msgstr "Post-usinage"
 
 #: pcbnew/pcb_track.cpp:3191 pcbnew/widgets/pcb_properties_panel.cpp:667
 msgid "Layer Top"
@@ -55719,9 +55651,8 @@ msgid "Loading Footprint Libraries"
 msgstr "Chargement Librairies d'Empreintes"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:455
-#, fuzzy
 msgid "Failed to load board"
-msgstr "Échec du chargement de la carte\n"
+msgstr "Échec du chargement du circuit imprimé"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:527
 #, c-format
@@ -56031,9 +55962,9 @@ msgstr ""
 "différentielle pour qu'ils finissent par _N/_P ou +/-."
 
 #: pcbnew/router/pns_dragger.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drag arc tracks of %.1f degrees or greater."
-msgstr "Impossible de redimensionner les arcs de pistes de %s ou plus."
+msgstr "Impossible de déplacer des pistes en arc de %.1f degrés ou plus."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1109
 #: pcbnew/router/pns_kicad_iface.cpp:1225 pcbnew/router/router_tool.cpp:919
@@ -56090,7 +56021,7 @@ msgstr ""
 msgid "Diff pair gap is less than board minimum clearance."
 msgstr ""
 "La distance de la paire différentielle est inférieure à l'isolation minimale "
-"(%s)."
+"du circuit imprimé."
 
 #: pcbnew/router/pns_router.cpp:262
 msgid "Cannot start routing from a non-plated hole."
@@ -56579,9 +56510,8 @@ msgid "Align/Distribute"
 msgstr "Aligner/Distribuer"
 
 #: pcbnew/tools/board_editor_control.cpp:212
-#, fuzzy
 msgid "Zone Priority"
-msgstr "Priorité"
+msgstr "Priorité de Zone"
 
 #: pcbnew/tools/board_editor_control.cpp:310
 msgid "Locking"
@@ -56702,24 +56632,20 @@ msgid "Duplicate Zone"
 msgstr "Dupliquer Zone"
 
 #: pcbnew/tools/board_editor_control.cpp:1930
-#, fuzzy
 msgid "Move Zone to Top Priority"
-msgstr "Déplacer Sommet vers Emplacement"
+msgstr "Placer la Zone en Priorité Maximale"
 
 #: pcbnew/tools/board_editor_control.cpp:1984
-#, fuzzy
 msgid "Raise Zone Priority"
-msgstr "Niveau de priorité de la zone:"
+msgstr "Augmenter la Priorité de Zone"
 
 #: pcbnew/tools/board_editor_control.cpp:2038
-#, fuzzy
 msgid "Lower Zone Priority"
-msgstr "Propriétés de la Zone sur Cuivre"
+msgstr "Diminuer la Priorité de Zone"
 
 #: pcbnew/tools/board_editor_control.cpp:2119
-#, fuzzy
 msgid "Move Zone to Bottom Priority"
-msgstr "Déplacer Sommet vers Emplacement"
+msgstr "Placer la Zone en Priorité Minimale"
 
 #: pcbnew/tools/board_editor_control.cpp:2195
 msgid "Selection contains no items with labeled nets."
@@ -57070,9 +56996,8 @@ msgid "Courtyard clearance resolution for:"
 msgstr "Résolution d'isolation de zone d'occupation pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1532
-#, fuzzy
 msgid "Physical Clearances"
-msgstr "Isolations physiques"
+msgstr "Isolations Physiques"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1573
 #, c-format
@@ -57121,9 +57046,8 @@ msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "Résolu contraintes de taille des trous: min %s ; opt %s ; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1777
-#, fuzzy
 msgid "Solder Mask"
-msgstr "Masque de soudure"
+msgstr "Masque de Soudure"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1778
 msgid "Solder mask expansion resolution for:"
@@ -57179,9 +57103,8 @@ msgid "Run DRC for a full analysis."
 msgstr "Exécuter DRC pour une analyse complète."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1877
-#, fuzzy
 msgid "Item <b>disallowed</b> at current location."
-msgstr "Élément <b>interdit</b> à l’emplacement actuel."
+msgstr "Élément <b>interdit</b> à la position actuelle."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1879
 msgid "Item allowed at current location."
@@ -57433,12 +57356,16 @@ msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 msgstr ""
+"Les empreintes ne peuvent pas être mises en miroir. Utilisez Retourner pour "
+"les déplacer sur l'autre face du circuit imprimé."
 
 #: pcbnew/tools/edit_tool.cpp:2541
 msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
 msgstr ""
+"Les groupes contenant des empreintes ou d'autres éléments ne pouvant être "
+"mis en miroir ont été ignorés."
 
 #: pcbnew/tools/edit_tool.cpp:2714 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
@@ -57766,6 +57693,7 @@ msgstr "Copié sur %d Zones à Règles."
 #: pcbnew/tools/multichannel_tool.cpp:1960
 msgid "Target Rule Area shares components with the reference area"
 msgstr ""
+"La Surface à Règles cible partage des composants avec la surface de référence"
 
 #: pcbnew/tools/multichannel_tool.cpp:1963
 msgid ""
@@ -57773,13 +57701,19 @@ msgid ""
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
+"Cette Surface à Règles cible sélectionne les mêmes composants que la surface "
+"de référence. La répétition d'implantation ne peut pas copier une Surface à "
+"Règles sur elle-même. Donnez à chaque Surface à Règles de placement une "
+"feuille, une classe de composants ou un groupe distinct."
 
 #: pcbnew/tools/multichannel_tool.cpp:1966
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Shared components:\n"
 "%s"
-msgstr "Composants de la zone cible : %s"
+msgstr ""
+"Composants partagés:\n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2104
 #, c-format
@@ -58131,14 +58065,12 @@ msgid "Open in Footprint Editor"
 msgstr "Ouvrir l'Éditeur d'Empreintes"
 
 #: pcbnew/tools/pcb_actions.cpp:573
-#, fuzzy
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "Activer l'attribut exclure de la nomenclature"
+msgstr "Basculer l'attribut d'exclusion de la nomenclature"
 
 #: pcbnew/tools/pcb_actions.cpp:579
-#, fuzzy
 msgid "Toggle the exclude from position files attribute"
-msgstr "Activer l'attribut exclure de la simulation"
+msgstr "Basculer l'attribut d'exclusion des fichiers de position"
 
 #: pcbnew/tools/pcb_actions.cpp:587
 msgid ""
@@ -58459,13 +58391,14 @@ msgstr ""
 "Mise à jour des empreintes pour inclure tous les changements des librairies"
 
 #: pcbnew/tools/pcb_actions.cpp:1008
-#, fuzzy
 msgid "Migrate 3D Models..."
-msgstr "Chargement modèles 3D..."
+msgstr "Migrer les Modèles 3D..."
 
 #: pcbnew/tools/pcb_actions.cpp:1009
 msgid "Replace obsolete WRL 3D model references with current STEP models"
 msgstr ""
+"Remplacer les références de modèles 3D WRL obsolètes par des modèles STEP "
+"actuels"
 
 #: pcbnew/tools/pcb_actions.cpp:1015
 msgid "Remove Unused Pads..."
@@ -58681,9 +58614,8 @@ msgstr ""
 "sauvé par l'éditeur de PCB"
 
 #: pcbnew/tools/pcb_actions.cpp:1227
-#, fuzzy
 msgid "Import Non-KiCad Board File..."
-msgstr "Importation Fichier C.I. Non  Kicad"
+msgstr "Importer Fichier de Circuit Imprimé Non-KiCad..."
 
 #: pcbnew/tools/pcb_actions.cpp:1228
 msgid "Import board file from other applications"
@@ -58892,23 +58824,20 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "Dupliquer Zone sur Couche..."
 
 #: pcbnew/tools/pcb_actions.cpp:1440
-#, fuzzy
 msgid "Move to Top"
-msgstr "Mettre à la Corbeille"
+msgstr "Placer au Sommet"
 
 #: pcbnew/tools/pcb_actions.cpp:1446
 msgid "Raise"
-msgstr ""
+msgstr "Monter"
 
 #: pcbnew/tools/pcb_actions.cpp:1452
-#, fuzzy
 msgid "Lower"
-msgstr "Puissance"
+msgstr "Descendre"
 
 #: pcbnew/tools/pcb_actions.cpp:1458
-#, fuzzy
 msgid "Move to Bottom"
-msgstr "Aligner en Bas"
+msgstr "Placer au Fond"
 
 #: pcbnew/tools/pcb_actions.cpp:1466
 msgid "Place Footprints"
@@ -59840,9 +59769,8 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Afficher une boîte de dialogue pour les objets du Générateur"
 
 #: pcbnew/tools/pcb_actions.cpp:2814
-#, fuzzy
 msgid "Length Tuning Settings"
-msgstr "Paramètres de Réglage de Longueur..."
+msgstr "Paramètres d'Ajustement de Longueur"
 
 #: pcbnew/tools/pcb_actions.cpp:2815
 msgid "Length Tuning Settings..."
@@ -59948,91 +59876,83 @@ msgid "Design block has no layout to place."
 msgstr "Le Bloc de Conception n'a pas de layout à placer."
 
 #: pcbnew/tools/pcb_control.cpp:1494
-#, fuzzy
 msgid "No groups with a linked design block are selected."
-msgstr ""
-"Appliquer la disposition des blocs de conception liés au groupe sélectionné"
+msgstr "Aucun groupe avec un bloc de conception lié n'est sélectionné."
 
 #: pcbnew/tools/pcb_control.cpp:1519 pcbnew/tools/pcb_selection_tool.cpp:4567
 msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr ""
+"La sélection contient des éléments verrouillés. Activez 'Ignorer les "
+"verrous' pour agir dessus."
 
 #: pcbnew/tools/pcb_control.cpp:1543
-#, fuzzy
 msgid "Applying Design Block Layouts"
-msgstr "Appliquer la Disposition des Blocs de Conception"
+msgstr "Application des Implantations de Blocs de Conception"
 
 #: pcbnew/tools/pcb_control.cpp:1574
-#, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "Le bloc de conception n'a pas d'identifiant de librairie valide."
+msgstr "le bloc de conception n'est pas dans les librairies chargées"
 
 #: pcbnew/tools/pcb_control.cpp:1580
-#, fuzzy
 msgid "design block has no saved PCB layout"
-msgstr "Le Bloc de Conception n'a pas de layout à placer."
+msgstr "le bloc de conception n'a pas d'implantation PCB sauvegardée"
 
 #: pcbnew/tools/pcb_control.cpp:1611
-#, fuzzy
 msgid "could not load the design block's layout"
-msgstr "Impossible de trouver le bloc de conception %s."
+msgstr "impossible de charger l'implantation du bloc de conception"
 
 #: pcbnew/tools/pcb_control.cpp:1638
-#, fuzzy
 msgid "design block contains no items to apply"
-msgstr "Le bloc de conception n'a pas de schéma à placer."
+msgstr "le bloc de conception ne contient aucun élément à appliquer"
 
 #: pcbnew/tools/pcb_control.cpp:1688
 msgid "group is empty"
-msgstr ""
+msgstr "le groupe est vide"
 
 #: pcbnew/tools/pcb_control.cpp:1740
-#, fuzzy
 msgid "layout copy failed"
-msgstr "Impossible de copier le  fichier '%s'."
+msgstr "échec de la copie de l'implantation"
 
 #: pcbnew/tools/pcb_control.cpp:1758
 #, c-format
 msgid "Applying layout to group %zu of %zu..."
-msgstr ""
+msgstr "Application de l'implantation au groupe %zu sur %zu..."
 
 #: pcbnew/tools/pcb_control.cpp:1781
-#, fuzzy
 msgid "Apply design block layout cancelled."
-msgstr "Appliquer la Disposition des Blocs de Conception"
+msgstr "Application de l'implantation du bloc de conception annulée."
 
 #: pcbnew/tools/pcb_control.cpp:1787
-#, fuzzy, c-format
+#, c-format
 msgid "Apply design block layout to %d group(s)"
-msgstr ""
-"Appliquer la disposition des blocs de conception liés au groupe sélectionné"
+msgstr "Appliquer l'implantation du bloc de conception à %d groupe(s)"
 
 #: pcbnew/tools/pcb_control.cpp:1790
 msgid "Copied copper has no net assigned. Assign nets to connect it."
 msgstr ""
+"Le cuivre copié n'a aucun net affecté. Affectez des nets pour le connecter."
 
 #: pcbnew/tools/pcb_control.cpp:1802
-#, fuzzy, c-format
+#, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr ""
-"Appliquer la disposition des blocs de conception liés au groupe sélectionné"
+msgstr "Implantation du bloc de conception appliquée à %d groupe(s) sur %d."
 
 #: pcbnew/tools/pcb_control.cpp:1809
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
-msgstr "Sauver le groupe sélectionné dans un bloc de dessin lié"
+msgstr ""
+"%d élément(s) sélectionné(s) ignoré(s) qui ne sont pas des groupes liés à un "
+"bloc de conception."
 
 #: pcbnew/tools/pcb_control.cpp:1817
-#, fuzzy
 msgid "The following groups could not be processed:"
-msgstr "Le fichier d'auto sauvegarde '%s' n'a pas pu être restauré\n"
+msgstr "Les groupes suivants n'ont pas pu être traités:"
 
 #: pcbnew/tools/pcb_control.cpp:1821
-#, fuzzy
 msgid "(unnamed group)"
-msgstr "Groupes de jumpers:"
+msgstr "(groupe sans nom)"
 
 #: pcbnew/tools/pcb_control.cpp:1872
 #, c-format
@@ -60135,6 +60055,8 @@ msgstr "%d Modèle(s) 3D incorporé(s) avec succès."
 msgid ""
 "Footprint items cannot be grouped separately from their parent footprint."
 msgstr ""
+"Les éléments d'empreinte ne peuvent pas être groupés séparément de leur "
+"empreinte parente."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2739
 msgid "Resize Table Cells"
@@ -61519,9 +61441,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Suppression des îlots de cuivre isolés..."
 
 #: pcbnew/zone_filler.cpp:1201
-#, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "Remplissage de toutes les zones..."
+msgstr "Remplissage des zones superposées..."
 
 #: pcbnew/zone_filler.cpp:1362
 #, c-format
@@ -61532,6 +61453,11 @@ msgid ""
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
 msgstr ""
+"Les remplissages de zones peuvent être incorrects: le remplissage itératif "
+"n'a pas convergé après %d passes.\n"
+"\n"
+"Cela peut arriver avec des zones superposées complexes.  Envisagez de "
+"simplifier vos zones."
 
 #: pcbnew/zone_filler.cpp:1634
 msgid "Prototype zone fill enabled. Disable setting and refill?"
@@ -61580,6 +61506,8 @@ msgid ""
 "Automatically assign zone priorities based on connectivity analysis of "
 "overlapping regions."
 msgstr ""
+"Affecter automatiquement les priorités de zones d'après l'analyse de "
+"connectivité des régions superposées."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:146
 msgid "Refill zones"
@@ -61773,9 +61701,8 @@ msgid "KiCad Drawing Sheet"
 msgstr "Feuille de Dessin KiCad"
 
 #: scripting/python_manager.cpp:135
-#, fuzzy
 msgid "Process could not be created"
-msgstr "Le fichier '%s' n'a pas pu être créé."
+msgstr "Le processus n'a pas pu être créé"
 
 #: scripting/python_scripting.cpp:367
 #, fuzzy, c-format
