@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-24 06:01+0000\n"
+"PO-Revision-Date: 2026-07-26 13:15+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -3453,7 +3453,6 @@ msgstr "Dodano"
 
 #: common/dialogs/dialog_kicad_diff.cpp:123
 #: common/diff_merge/diff_tree_grouping.cpp:38
-#, fuzzy
 msgid "Removed"
 msgstr "Usunięto"
 
@@ -9186,9 +9185,9 @@ msgstr ""
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:351
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error in '%s' at line %d: %s"
-msgstr "Błąd podczas odczytywania JSON '%s': %s"
+msgstr "Błąd JSON w '%s' w linii %d: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:544
 #, fuzzy, c-format
@@ -9636,13 +9635,12 @@ msgid "Schematic Import Job Settings"
 msgstr "Ustawienia zadania importowania schematu"
 
 #: common/jobs/job_special_archive.cpp:38
-#, fuzzy
 msgid "Special: Archive Project"
-msgstr "Archiwizuj projekt..."
+msgstr "Specjalne: Archiwizuj projekt"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
-msgstr "Narzędzia specjalne: Kopiuj pliki"
+msgstr "Specjalne: Kopiuj pliki"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -22795,9 +22793,11 @@ msgid "Show Field Name"
 msgstr "Pokaż nazwę pola"
 
 #: eeschema/sch_footprint_field_reconciler.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
-msgstr "Zmieniam %s przypisań footprintów '%s' na '%s'."
+msgstr ""
+"Ponownie połączono %d zaimportowanych przypisań footprintów do biblioteki "
+"'%s'."
 
 #: eeschema/sch_group.cpp:399 pcbnew/pcb_group.cpp:412
 #, c-format
@@ -23519,14 +23519,14 @@ msgid "EasyEDA Pro v3 symbol '%s' in '%s' was skipped due to parse error: %s"
 msgstr ""
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load symbol '%s' from '%s': %s"
-msgstr "Nie można załadować symbolu '%s' z biblioteki '%s'."
+msgstr "Nie można załadować symbolu '%s' z '%s': %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic document '%s' not found in '%s'"
-msgstr "Plik ze schematem '%s' nie został znaleziony."
+msgstr "Dokument ze schematem '%s' nie został znaleziony w '%s'"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:344
 #, fuzzy, c-format
@@ -23556,9 +23556,9 @@ msgstr ""
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:594
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "EasyEDA (JLCEDA) Pro v3 import skipped %d unsupported object(s)."
-msgstr "Projekt EasyEDA (JLCEDA)"
+msgstr "Import EasyEDA (JLCEDA) Pro v3 pominął %d nieobsługiwanych obiektów."
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.h:50
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.h:55
@@ -24152,9 +24152,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Package stream '%s' could not be parsed: %s"
-msgstr "Arkusz z rysunkiem '%s' nie mógł zostać otwarty."
+msgstr "Nie można przeanalizować strumienia pakietu '%s': %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:285
 msgid ""
@@ -24175,9 +24175,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' could not be parsed and was skipped: %s"
-msgstr "Warstwa '%s' nie może zostać zmapowana i zostanie pominięta."
+msgstr "Nie można przeanalizować strony '%s' i została ona pominięta: %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:457
 #, fuzzy
@@ -34307,9 +34307,8 @@ msgid "Invalid output format '%s' (expected 'json', 'text', 'png', or 'svg')\n"
 msgstr ""
 
 #: kicad/dialogs/dialog_archive_job_settings_base.cpp:24
-#, fuzzy
 msgid "Archive file:"
-msgstr "Plik archiwum '%s'."
+msgstr "Plik archiwum:"
 
 #: kicad/dialogs/dialog_archive_job_settings_base.cpp:29
 msgid ""
@@ -34646,9 +34645,9 @@ msgid "Select all jobs"
 msgstr "Wybierz wszystkie zadania"
 
 #: kicad/dialogs/panel_jobset.cpp:704
-#, fuzzy, c-format
+#, c-format
 msgid "This version of KiCad does not support the '%s' job type."
-msgstr "Ta instalacja programu KiCad nie posiada włączonego wsparcia API."
+msgstr "Ta wersja programu KiCad nie wspiera zadania typu '%s'."
 
 #: kicad/dialogs/panel_jobset.cpp:751
 msgid "Job Types"
@@ -34918,9 +34917,8 @@ msgid "Import the associated Allegro board '%s'?"
 msgstr ""
 
 #: kicad/import_proj.cpp:710
-#, fuzzy
 msgid "Import an associated Allegro board file?"
-msgstr "Importuj płytkę spoza programu KiCad"
+msgstr "Zaimportować skojarzony plik z obwodem drukowanym Allegro?"
 
 #: kicad/import_proj.cpp:712
 msgid "Import Allegro Board"
@@ -53939,9 +53937,9 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1242
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reconcile imported footprint libraries: %s"
-msgstr "Nie można było zapisać połączonych bibliotek footprintów: %s\n"
+msgstr "Nie udało się uzgodnić zaimportowanych bibliotek footprintów: %s"
 
 #: pcbnew/files.cpp:1285
 msgid "Generate ODB++ Files"
@@ -54210,9 +54208,10 @@ msgstr ""
 "Nie można usunąć nieużywanego footprintu %s (footprint jest zablokowany)."
 
 #: pcbnew/footprint_import_reconciler.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported footprint cache '%s': %s"
-msgstr "Błąd podczas zapisywania raportu wierceń '%s'"
+msgstr ""
+"Błąd podczas zapisu zaimportowanej pamięci podręcznej footprintów '%s': %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:335
 #, c-format
@@ -54221,9 +54220,10 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_import_reconciler.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported footprint cache to '%s'."
-msgstr "Nie można uruchomić kreatora footprintu '%s'"
+msgstr ""
+"Nie można opublikować zaimportowanej pamięci podręcznej footprintu do '%s'."
 
 #: pcbnew/footprint_import_reconciler.cpp:369
 msgid "Cannot register imported footprint cache: no project library table."
@@ -55346,7 +55346,7 @@ msgstr "Nie obsadzony"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1594
 msgid "exclude from position files"
-msgstr "Wyklucz z plików położeń"
+msgstr "wyklucz z plików położeń"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1620
 #, c-format
@@ -57502,14 +57502,14 @@ msgid "EasyEDA (JLCEDA) Pro project"
 msgstr "Projekt EasyEDA (JLCEDA)"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load footprint '%s' from '%s': %s"
-msgstr "Nie można załadować footprintu '%s z '%s'"
+msgstr "Nie można załadować footprintu '%s z '%s': %s"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:308
-#, fuzzy, c-format
+#, c-format
 msgid "PCB document '%s' not found in '%s'"
-msgstr "Footprint '%s' nie został znaleziony w '%s'."
+msgstr "Dokument PCB '%s' nie został znaleziony w '%s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.h:46
 #, fuzzy
@@ -60234,9 +60234,8 @@ msgstr ""
 " Napraw problem i spróbuj ponownie"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:77
-#, fuzzy
 msgid "Import Specctra Session"
-msgstr "Importuj sesję Specctra..."
+msgstr "Importuj sesję Specctra"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:79
 msgid "Session file imported and merged OK."
@@ -60281,9 +60280,9 @@ msgid "Session file is missing the \"library_out\" section"
 msgstr "Plik sesji nie zawiera sekcji \"library_out\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported wire shape: '%s' for net: '%s'"
-msgstr "Niewspierany kształt przelotki: %s"
+msgstr "Niewspierany kształt połączenia '%s' dla sieci: '%s'"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:542
 #, c-format
