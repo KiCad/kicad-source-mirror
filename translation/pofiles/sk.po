@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-22 19:02+0000\n"
+"PO-Revision-Date: 2026-07-27 14:02+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -2748,7 +2748,6 @@ msgstr ""
 "zvyčajne znamená, že KiCad sa neočakávane zatvoril, pri neuloženej práci."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
 msgstr "Obnoviť automaticky uložené"
 
@@ -2761,16 +2760,14 @@ msgstr ""
 "uložený obsah bude zahodený."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep Current"
-msgstr "Zachovať aktuálnu"
+msgstr "Zachovať aktuálne"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr "Ponechá uložený súbor tak, ako je, a zahodí automaticky uložené zmeny."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep Both"
 msgstr "Zachovať obe"
 
@@ -2783,7 +2780,6 @@ msgstr ""
 "samostatný súbor s časovou pečiatkou, ktorý si môžete neskôr pozrieť."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
 msgstr "Zrušiť otvorenie"
 
@@ -3645,7 +3641,7 @@ msgstr ""
 #: common/dialogs/dialog_page_settings.cpp:809
 #, c-format
 msgid "Remove the previously embedded drawing sheet file '%s'?"
-msgstr ""
+msgstr "Odstrániť predtým vložený súbor listu výkresu '%s'?"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -9102,49 +9098,46 @@ msgstr "Nepodarilo sa získať riadok JSON %d v '%s': %s"
 #: common/io/easyedapro/easyedapro_import_utils.cpp:642
 #, c-format
 msgid "EasyEDA Pro v3 blob in '%s' was skipped due to parse error: %s"
-msgstr ""
+msgstr "Blok v EasyEDA Pro v3 v '%s' bol preskočený kvôli chybe spracovania: %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:929
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse EasyEDA Pro v3 device metadata: %s"
-msgstr "Nepodarilo sa spracovať vzdialené metadáta poskytovateľa: %s"
+msgstr "Nepodarilo sa spracovať EasyEDA Pro v3 metadáta: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:310
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid DOCHEAD in '%s' at line %d"
-msgstr ""
-"Neplatné ID puzdra v\n"
-"súbore: '%s'\n"
-"riadok: %d"
+msgstr "Neplatný DOCHEAD v '%s' na riadku %d"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:321
 #, c-format
 msgid "Expected DOCHEAD in '%s' at line %d"
-msgstr ""
+msgstr "Očakávané DOCHEAD v '%s' na riadku %d"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:351
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error in '%s' at line %d: %s"
-msgstr "Pri načítavaní JSON súboru nastala chyba '%s': %s"
+msgstr "JSON chyba v '%s' na riadku %d: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 project. Cannot "
 "find project2.json and .epru documents."
 msgstr ""
-"Súbor '%s' zrejme nie je platný súbor projektu EasyEDA (JLCEDA). project."
-"json alebo device.json nebol nájdený."
+"'%s' sa nezdá byť platným projektom EasyEDA (JLCEDA) Pro v3. Nemožno nájsť "
+"project2.json a .epru dokumenty."
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:594
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 library. Cannot "
 "find symbol2.json, footprint2.json or device2.json and .elibu documents."
 msgstr ""
-"Súbor '%s' zrejme nie je platný súbor projektu EasyEDA (JLCEDA). project."
-"json alebo device.json nebol nájdený."
+"Zdá sa, že '%s' nie je platnou knižnicou EasyEDA (JLCEDA) Pro v3. Nemožno "
+"nájsť dokumenty symbol2.json, footprint2.json alebo device2.json a .elibu."
 
 #: common/io/io_base.cpp:139
 msgid "Loading file canceled by user."
@@ -9564,14 +9557,12 @@ msgid "Import schematic"
 msgstr "Importovať schému"
 
 #: common/jobs/job_sch_import.cpp:58
-#, fuzzy
 msgid "Schematic Import Job Settings"
-msgstr "Nastavenia úlohy ERC schémy"
+msgstr "Nastavenia úlohy importu schémy"
 
 #: common/jobs/job_special_archive.cpp:38
-#, fuzzy
 msgid "Special: Archive Project"
-msgstr "Archivovať projekt..."
+msgstr "Špeciálne: Archivovať projekt"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
@@ -9582,14 +9573,12 @@ msgid "Special: Execute Command"
 msgstr "Špeciálne: Vykonať príkaz"
 
 #: common/jobs/job_sym_diff.cpp:37
-#, fuzzy
 msgid "Diff two .kicad_sym libraries"
-msgstr "adresár s .kicad_sym súbormi"
+msgstr "Porovnať dve knižnice .kicad_sym"
 
 #: common/jobs/job_sym_diff.cpp:41
-#, fuzzy
 msgid "Symbol Library: Diff"
-msgstr "Knižnice symbolov"
+msgstr "Knižnica symbolov: rozdiely"
 
 #: common/jobs/jobs_output_archive.cpp:127 common/jobs/jobset.cpp:47
 msgid "Archive"
@@ -10272,14 +10261,13 @@ msgid "Restore Failed"
 msgstr "Obnovenie zlyhalo"
 
 #: common/local_history.cpp:2323
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Obnoviť na vzdialenú verziu."
+msgstr "Obnoviť projekt na verziu z %s?"
 
 #: common/local_history.cpp:2325
-#, fuzzy
 msgid "Restore Version"
-msgstr "Obnovuje sa relácia"
+msgstr "Obnoviť verziu"
 
 #: common/local_history.cpp:2328
 msgid ""
@@ -11492,6 +11480,7 @@ msgstr "Prepnúť orientáciu oblúka"
 #: common/tool/actions.cpp:612
 msgid "Switch arc posture between clockwise and counter-clockwise"
 msgstr ""
+"Prepnúť orientáciu oblúka medzi v smere a proti smeru hodinových ručičiek"
 
 #: common/tool/actions.cpp:618
 msgid "Cycle Arc Editing Mode"
@@ -12393,23 +12382,20 @@ msgid "Overwrite existing design block?"
 msgstr "Prepísať existujúci blok návrhu?"
 
 #: common/widgets/editor_tabs_panel.cpp:639
-#, fuzzy
 msgid "Close Tab"
-msgstr "Zatvoriť"
+msgstr "Zatvoriť kartu"
 
 #: common/widgets/editor_tabs_panel.cpp:640
-#, fuzzy
 msgid "Close Other Tabs"
-msgstr "Ignorovať ďalšie snímky"
+msgstr "Zatvoriť ostatné karty"
 
 #: common/widgets/editor_tabs_panel.cpp:641
 msgid "Close Tabs to the Right"
 msgstr "Zatvoriť karty vpravo"
 
 #: common/widgets/editor_tabs_panel.cpp:642
-#, fuzzy
 msgid "Close All Tabs"
-msgstr "Vymazať všetky vrstvy"
+msgstr "Zatvoriť všetky karty"
 
 #: common/widgets/filter_combobox.cpp:68
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1158
@@ -12665,18 +12651,17 @@ msgid "Restore Defaults"
 msgstr "Obnoviť predvolené"
 
 #: common/widgets/widget_hotkey_list.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Both bindings are kept, "
 "but only one runs per key press. Continue?"
 msgstr ""
-"Premenná '%s' je už priradená k '%s' v sekcii '%s'. Naozaj chcete zmeniť jej "
-"priradenie?"
+"'%s' je už priradený '%s' v sekcii '%s'. Obe väzby sa zachovajú, ale pri "
+"každom stlačení klávesu sa spustí iba jedna. Pokračovať?"
 
 #: common/widgets/widget_hotkey_list.cpp:512
-#, fuzzy
 msgid "Hotkey conflict"
-msgstr "Zoznam klávesových skratiek"
+msgstr "Konflikt klávesových skratiek"
 
 #: common/widgets/widget_hotkey_list.cpp:525
 msgid "Command"
@@ -12819,9 +12804,8 @@ msgid "Eagle XML files"
 msgstr "Eagle XML súbory"
 
 #: common/wildcards_and_files_ext.cpp:304
-#, fuzzy
 msgid "P-CAD ASCII files"
-msgstr "PADS ASCII súbory"
+msgstr "P-CAD ASCII súbory"
 
 #: common/wildcards_and_files_ext.cpp:310
 msgid "PADS ASCII files"
@@ -12859,15 +12843,13 @@ msgid "EasyEDA (JLCEDA) Pro files"
 msgstr "EasyEDA (JLCEDA) Pro súbory"
 
 #: common/wildcards_and_files_ext.cpp:360
-#, fuzzy
 msgid "DipTrace files"
-msgstr "Zip Súbory"
+msgstr "DipTrace súbory"
 
 #: common/wildcards_and_files_ext.cpp:366
 #: eeschema/sch_io/orcad/sch_io_orcad.h:71
-#, fuzzy
 msgid "OrCAD Capture schematic files"
-msgstr "PADS Logic súbory schém"
+msgstr "OrCAD Capture schematické súbory"
 
 #: common/wildcards_and_files_ext.cpp:372
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:35
@@ -14175,9 +14157,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Aktualizovať/resetovať atribúty symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
-#, fuzzy
 msgid "Update/reset pin map overrides"
-msgstr "Aktualizovať/resetovať prepísanie odstupu"
+msgstr "Aktualizovať/obnoviť prepísania mapy vývodov"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:193
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:158
@@ -14189,14 +14170,12 @@ msgid "Update Symbols from Library"
 msgstr "Aktualizovať symboly z knižnice"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:63
-#, fuzzy
 msgid "Filter chains by name or net..."
-msgstr "Filtrovať položky podľa siete:"
+msgstr "Filtrovať reťazce podľa názvu alebo spoja..."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:77
-#, fuzzy
 msgid "Create"
-msgstr "Vytvoriť DPS"
+msgstr "Vytvoriť"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:129
 #, c-format
@@ -14204,9 +14183,8 @@ msgid "Chain created (%d total). Select another or close."
 msgstr "Reťazec vytvorený (celkovo %d). Vybrať ďalší alebo zatvoriť."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
-#, fuzzy
 msgid "Please select a chain from the list."
-msgstr "Prosím, vyberte aspoň jednu možnosť zo zoznamu %s."
+msgstr "Prosím, vyberte aspoň jedno reťazenie zo zoznamu."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
@@ -14217,43 +14195,37 @@ msgstr "Prosím, vyberte aspoň jednu možnosť zo zoznamu %s."
 #: eeschema/dialogs/dialog_create_net_chain.cpp:222
 #: eeschema/dialogs/dialog_create_net_chain_base.h:79
 #: eeschema/tools/sch_editor_control.cpp:1931
-#, fuzzy
 msgid "Create Net Chain"
-msgstr "Vytvoriť nový list"
+msgstr "Vytvoriť nové reťazenie spoja"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
-#, fuzzy
 msgid "Please enter a name for the net chain."
-msgstr "Prosím, zadajte názov repozitára"
+msgstr "Prosím, zadajte názov reťazenia spoja."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:169
-#, fuzzy
 msgid "Chain name cannot contain spaces, quotes, or parentheses."
-msgstr "Názvy signálov nemôžu obsahovať medzery"
+msgstr "Názov reťazenia nemôže obsahovať medzery, úvodzovky ani zátvorky."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:178
 msgid "Connection graph not available."
 msgstr "Graf prepojení nie je k dispozícii."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "A net chain named '%s' already exists."
-msgstr "Položka s prezývkou '%s' už existuje."
+msgstr "Reťazenie spoja s názvom '%s' už existuje."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:197
-#, fuzzy
 msgid "Failed to create the net chain."
-msgstr "Nepodarilo sa vytvoriť tag."
+msgstr "Nepodarilo sa vytvoriť reťazenie spoja."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:222
-#, fuzzy
 msgid "Failed to create the manual net chain."
-msgstr "Nepodarilo sa vytvoriť vetvu."
+msgstr "Nepodarilo sa vytvoriť manuálne reťazenie spoja."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
-#, fuzzy
 msgid "Please select both a From and To component."
-msgstr "Prosím, vyberte súbor pre import."
+msgstr "Prosím, vyberte oba - od aj do súčiastku."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
@@ -14261,19 +14233,17 @@ msgstr "Prosím, vyberte súbor pre import."
 #: eeschema/dialogs/dialog_create_net_chain.cpp:406
 #: eeschema/dialogs/dialog_create_net_chain.cpp:439
 #: eeschema/dialogs/dialog_create_net_chain.cpp:513
-#, fuzzy
 msgid "Find Path"
-msgstr "Nájsť ďalšie"
+msgstr "Nájsť cestu"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
-#, fuzzy
 msgid "From and To must be different components."
-msgstr "Zdroj 1 a Zdroj 2 musia byť odlišné."
+msgstr "Od aj do musia byť rozdielne súčiastky."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find component '%s' or '%s'."
-msgstr "Nepodarilo sa nájsť komponent IBIS '%s'"
+msgstr "Nepodarilo sa nájsť súčiastku '%s' alebo '%s'."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:401
 #, c-format
@@ -23407,7 +23377,7 @@ msgstr "Nepodarilo sa spracovať hodnotu: '%s'"
 #: eeschema/sch_io/easyedapro/sch_easyedapro_v3_parser.cpp:1419
 #, c-format
 msgid "EasyEDA Pro v3 component '%s': missing Symbol attribute, skipping."
-msgstr ""
+msgstr "Komponent EasyEDA Pro v3 '%s': chýba atribút Symbol, preskakuje sa."
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_v3_parser.cpp:1445
 #, c-format
@@ -23415,11 +23385,14 @@ msgid ""
 "EasyEDA Pro v3 component '%s': partId '%s' not found in symbol '%s', using "
 "unit 1."
 msgstr ""
+"Komponent EasyEDA Pro v3 '%s': partId '%s' sa nenašiel v symbole '%s', "
+"používa sa jednotka číslo 1."
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:199
 #, c-format
 msgid "EasyEDA Pro v3 symbol '%s' in '%s' was skipped due to parse error: %s"
 msgstr ""
+"EasyEDA Pro v3 symbol '%s' v '%s' bol preskočený kvôli chybe spracovania: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:231
 #, fuzzy, c-format
@@ -23439,23 +23412,26 @@ msgstr "Nepodarilo sa spracovať vzdialené metadáta poskytovateľa: %s"
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:372
 #, c-format
 msgid "EasyEDA Pro v3 symbol '%s' was skipped due to parse error: %s"
-msgstr ""
+msgstr "EasyEDA Pro v3 symbol '%s' bol preskočený kvôli chybe spracovania: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:405
 #, c-format
 msgid "EasyEDA Pro v3 schematic page '%s' was not found and was skipped."
-msgstr ""
+msgstr "Stránka so schémou EasyEDA Pro v3 '%s' sa nenašla a bola preskočená."
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:428
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:476
 #, c-format
 msgid "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s"
 msgstr ""
+"Stránka schémy EasyEDA Pro v3 '%s' bola preskočená kvôli chybe spracovania: "
+"%s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:531
 #, c-format
 msgid "EasyEDA Pro v3 device '%s' was skipped due to parse error: %s"
 msgstr ""
+"Súčiastka EasyEDA Pro v3 '%s' bola preskočená kvôli chybe spracovania: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:594
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:353
@@ -24001,6 +23977,8 @@ msgid ""
 "Page '%s': the off-page connector at (%d, %d) is unconnected in the source "
 "design; skipped."
 msgstr ""
+"Stránka '%s': konektor mimo stránky na (%d, %d) nie je zapojený v zdrojovom "
+"návrhu; preskočené."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:1118
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:1139
@@ -24008,6 +23986,8 @@ msgid ""
 "An embedded picture could not be decoded and was skipped; only plain bitmap "
 "images are supported."
 msgstr ""
+"Vložený obrázok nebolo možné dekódovať a bol preskočený; sú podporované iba "
+"obyčajné bitmapové obrázky."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:167
 #, c-format
@@ -24015,11 +23995,15 @@ msgid ""
 "Symbol '%s' is absent from the design cache; synthesized placeholder from %d "
 "instance(s)."
 msgstr ""
+"Symbol '%s' chýba vo vyrovnávacej pamäti návrhu; syntetizovaný zástupný "
+"symbol z %d inštancií."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:565
 #, c-format
 msgid "No cached symbol for '%s' (%s); placeholder emitted."
 msgstr ""
+"Žiadny symbol nie je uložený vo vyrovnávacej pamäti pre '%s' (%s); bol "
+"emitovaný zástupný symbol."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1132
 #, c-format
@@ -24027,29 +24011,38 @@ msgid ""
 "Page %s: %s uses a synthesized placeholder at a different orientation; pin "
 "layout approximate."
 msgstr ""
+"Stránka %s: %s používa syntetizovaný zástupný symbol v inej orientácii; "
+"rozloženie vývodov je približné."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1139
 #, c-format
 msgid ""
 "Page %s: %s pin positions mismatch (orientation %d); geometry may be off."
 msgstr ""
+"Stránka %s: %s pozícií pinov sa nezhoduje (orientácia %d); geometria môže "
+"byť vypnutá."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:224
 msgid ""
 "The file does not contain the 'Library' stream of an OrCAD Capture design."
-msgstr ""
+msgstr "Súbor neobsahuje dáta 'Knižnice' návrhu OrCAD Capture."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:237
 msgid ""
 "This is a pre-2003 OrCAD design; symbol graphics are synthesized as "
 "placeholders (the legacy symbol cache format is not decoded)."
 msgstr ""
+"Toto je návrh OrCAD spred roku 2003; grafika symbolov sa syntetizuje ako "
+"zástupné symboly (starý formát vyrovnávacej pamäte symbolov nebol dekódovaný)"
+"."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:248
 msgid ""
 "The design has no 'Cache' stream; placeholder symbols will be synthesized "
 "for all parts."
 msgstr ""
+"Návrh nemá dátový tok 'Cache'; zástupné symboly budú syntetizované pre "
+"všetky časti."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:269
 #, fuzzy, c-format
@@ -24061,6 +24054,8 @@ msgid ""
 "The file does not contain a 'Views' storage; it is not a supported OrCAD "
 "Capture design."
 msgstr ""
+"Súbor neobsahuje úložisko „Zobrazenia“; nie je to podporovaný návrh OrCAD "
+"Capture."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:301
 #, fuzzy
@@ -24073,6 +24068,8 @@ msgid ""
 "The page display order for schematic folder '%s' could not be read (%s); "
 "pages are imported in name order."
 msgstr ""
+"Nebolo možné prečítať poradie zobrazenia stránky pre schematický priečinok "
+"'%s' (%s); stránky sa importujú v poradí podľa názvu."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:409
 #, fuzzy, c-format
@@ -24086,7 +24083,7 @@ msgstr "Z knižnice sa nepodarilo načítať žiadne súvisiace symboly."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:538
 msgid "The file is not an OrCAD Capture library (no 'Library' stream)."
-msgstr ""
+msgstr "Súbor nie je knižnica OrCAD Capture (žiadne dáta pre 'Knižnicu')."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:617
 #, c-format
@@ -24094,6 +24091,8 @@ msgid ""
 "The OrCAD library could not be fully parsed (%s); some symbols may be "
 "missing."
 msgstr ""
+"Knižnicu OrCAD nebolo možné úplne spracovať (%s); niektoré symboly môžu "
+"chýbať."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.h:76
 #, fuzzy
@@ -34186,10 +34185,12 @@ msgid ""
 "Text variables such as ${PROJECTNAME} are expanded. A relative path is "
 "resolved against the working directory."
 msgstr ""
+"Textové premenné, ako napríklad ${PROJECTNAME}, sú vyplnené. Relatívna cesta "
+"sa rieši voči pracovnému adresáru."
 
 #: kicad/dialogs/dialog_archive_job_settings_base.cpp:40
 msgid "Include extra files (legacy and output files)"
-msgstr ""
+msgstr "Zahrnúť ďalšie súbory (staršie a výstupné súbory)"
 
 #: kicad/dialogs/dialog_archive_job_settings_base.h:45
 #, fuzzy
@@ -34778,7 +34779,7 @@ msgstr "Nájsť gEDA / Lepton EDA DPS"
 #: kicad/import_proj.cpp:708
 #, c-format
 msgid "Import the associated Allegro board '%s'?"
-msgstr ""
+msgstr "Importovať súvisiacu dosku Allegro '%s'?"
 
 #: kicad/import_proj.cpp:710
 #, fuzzy
@@ -34787,7 +34788,7 @@ msgstr "Importovať súbor dosky z iného ako KiCad formátu"
 
 #: kicad/import_proj.cpp:712
 msgid "Import Allegro Board"
-msgstr ""
+msgstr "Importovať dosku Allegro"
 
 #: kicad/import_proj.cpp:720
 #, fuzzy
@@ -35130,7 +35131,7 @@ msgstr "Projekt PADS..."
 
 #: kicad/menubar.cpp:164
 msgid "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)"
-msgstr ""
+msgstr "Importovať schému OrCAD (*.dsn) a voliteľnú dosku Allegro (*.brd)"
 
 #: kicad/menubar.cpp:193
 msgid "Edit Advanced Config..."
@@ -51358,7 +51359,7 @@ msgstr "%s neobsahuje meď.  Pravidlo ignorované."
 
 #: pcbnew/drc/drc_engine.cpp:1654
 msgid "Keepout belongs to the footprint under test; constraint ignored."
-msgstr ""
+msgstr "Zakázaná oblasť patrí k testovanému puzdru; obmedzenie ignorované."
 
 #: pcbnew/drc/drc_engine.cpp:1709
 msgid "Keepout constraint not met."
@@ -53725,6 +53726,8 @@ msgid ""
 "Could not post-process GLB line primitives; the exported model may not "
 "import in strict glTF viewers."
 msgstr ""
+"Nepodarilo sa následne spracovať základné tvary GLB; exportovaný model sa "
+"nemusí importovať do striktných glTF prehliadačov."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4261
 #: pcbnew/exporters/step/step_pcb_model.cpp:4308
@@ -54087,6 +54090,8 @@ msgid ""
 "Imported footprint '%s' has conflicting placed definitions; keeping the "
 "first."
 msgstr ""
+"Importované puzdro '%s' má konfliktné umiestnené definície; dodržané bude "
+"prvé."
 
 #: pcbnew/footprint_import_reconciler.cpp:270
 #, fuzzy
@@ -54102,7 +54107,7 @@ msgstr "Pri zapisovaní súboru protokolu vŕtania '%s' nastala chyba"
 #, c-format
 msgid ""
 "A library already exists at '%s'; leaving imported footprints unresolved."
-msgstr ""
+msgstr "Knižnica už existuje na '%s'; importované puzdrá sú vynechané."
 
 #: pcbnew/footprint_import_reconciler.cpp:346
 #, fuzzy, c-format
@@ -54112,6 +54117,8 @@ msgstr "Nebolo možné spustiť sprievodcu puzdrom '%s'"
 #: pcbnew/footprint_import_reconciler.cpp:369
 msgid "Cannot register imported footprint cache: no project library table."
 msgstr ""
+"Nie je možné zaregistrovať importovanú vyrovnávaciu pamäť puzdra: nie je "
+"tabuľka knižnice projektu."
 
 #: pcbnew/footprint_import_reconciler.cpp:393
 #, fuzzy
@@ -57376,6 +57383,7 @@ msgstr "EasyEDA (JLCEDA) Pre projekt"
 #, c-format
 msgid "EasyEDA Pro v3 component '%s' (%s): no footprint mapping, skipping."
 msgstr ""
+"Komponent EasyEDA Pro v3 '%s' (%s): žiadne namapované puzdro, preskočené."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:265
 #, c-format
@@ -60115,6 +60123,8 @@ msgid ""
 "%d session item(s) were skipped due to unresolved reference, layer, or "
 "padstack."
 msgstr ""
+"%d položiek relácie bolo preskočených z dôvodu nevyriešenej referencie, "
+"vrstvy alebo padstacku."
 
 #: pcbnew/toolbars_footprint_editor.cpp:130 pcbnew/toolbars_pcb_editor.cpp:283
 msgid "Dimension objects"
