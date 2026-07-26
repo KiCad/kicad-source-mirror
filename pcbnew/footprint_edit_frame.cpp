@@ -309,10 +309,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 if( aIdx < 0 || aIdx >= static_cast<int>( entries.size() ) )
                     return TAB_VISUAL_STATE{};
 
-                const FOOTPRINT_EDITOR_TAB_CONTEXT* ctx =
-                        aIdx < static_cast<int>( m_tabContexts.size() ) ? m_tabContexts[aIdx].get()
-                                                                        : nullptr;
-                const bool modified = ctx ? ctx->IsModified() : entries[aIdx].modified;
+                bool modified = entries[aIdx].modified;
+
+                if( aIdx < (int) m_tabContexts.size() && m_tabContexts[aIdx].get() )
+                    modified = m_tabContexts[aIdx]->IsModified();
 
                 return ResolveTabVisualState( entries[aIdx].preview, modified );
             };

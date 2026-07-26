@@ -234,8 +234,10 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 if( aIdx < 0 || aIdx >= static_cast<int>( entries.size() ) )
                     return TAB_VISUAL_STATE{};
 
-                const SYMBOL_EDITOR_TAB_CONTEXT* ctx = symbolTabContextForIndex( aIdx );
-                const bool modified = ctx ? ctx->IsModified() : entries[aIdx].modified;
+                bool modified = entries[aIdx].modified;
+
+                if( SYMBOL_EDITOR_TAB_CONTEXT* ctx = symbolTabContextForIndex( aIdx ) )
+                    modified = ctx->IsModified();
 
                 return ResolveTabVisualState( entries[aIdx].preview, modified );
             };
