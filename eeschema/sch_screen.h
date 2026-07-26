@@ -115,6 +115,14 @@ public:
     EE_RTREE& Items() { return m_rtree; }
     const EE_RTREE& Items() const { return m_rtree; }
 
+    /// Replace import-owned screen state after all items and links are staged.
+    void AdoptImportedContent( EE_RTREE&& aItems, SCH_SCREEN& aStagedScreen ) noexcept
+    {
+        m_rtree = std::move( aItems );
+        m_libSymbols.swap( aStagedScreen.m_libSymbols );
+        --m_modification_sync;
+    }
+
     bool IsEmpty() const
     {
         return m_rtree.empty();

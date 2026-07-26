@@ -13,6 +13,7 @@
 
 #include <lib_id.h>
 #include <lib_symbol.h>
+#include <connection_graph.h>
 #include <page_info.h>
 #include <pin_type.h>
 #include <sch_field.h>
@@ -33,6 +34,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
@@ -313,13 +315,15 @@ namespace
             {
                 std::unique_ptr<SCH_TEXT> text = makeGraphicText( graphic, aDiagnostics );
                 text->SetUnit( aUnit );
-                aLibrary->AddDrawItem( text.release() );
+                aLibrary->AddDrawItem( text.get() );
+                text.release();
             }
             else
             {
                 std::unique_ptr<SCH_SHAPE> shape = makeShape( graphic, false, 0 );
                 shape->SetUnit( aUnit );
-                aLibrary->AddDrawItem( shape.release() );
+                aLibrary->AddDrawItem( shape.get() );
+                shape.release();
             }
         }
 
@@ -337,7 +341,8 @@ namespace
                 }
 
                 pin->SetUnit( aUnit );
-                aLibrary->AddDrawItem( pin.release() );
+                aLibrary->AddDrawItem( pin.get() );
+                pin.release();
             }
         }
         else
@@ -354,7 +359,8 @@ namespace
                 }
 
                 pin->SetUnit( aUnit );
-                aLibrary->AddDrawItem( pin.release() );
+                aLibrary->AddDrawItem( pin.get() );
+                pin.release();
             }
         }
     }
@@ -432,7 +438,8 @@ namespace
             pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
             pin->SetVisible( false );
             pin->SetLength( 0 );
-            library->AddDrawItem( pin.release() );
+            library->AddDrawItem( pin.get() );
+            pin.release();
         }
 
         library->SetShowPinNames( true );
@@ -485,7 +492,9 @@ namespace
         libId.SetLibNickname( wxS( "pads_import" ) );
         libId.SetLibItemName( library->GetName() );
         symbol->SetLibId( libId );
-        symbol->SetLibSymbol( new LIB_SYMBOL( *library ) );
+        auto libraryCopy = std::make_unique<LIB_SYMBOL>( *library );
+        symbol->SetLibSymbol( libraryCopy.get() );
+        libraryCopy.release();
         symbol->SetPosition( pagePoint( aPlacement.position, aPageHeight ) );
 
         int orientation = SYM_ORIENT_0;
@@ -573,10 +582,13 @@ namespace
 
     struct STAGED_SCHEMATIC
     {
-        std::unique_ptr<SCH_SHEET>             replacementRoot;
+        SCH_SHEET*                             destinationRoot = nullptr;
+        std::unique_ptr<SCH_SCREEN>            replacementScreen;
+        std::unique_ptr<SCH_SCREEN>            appendCache;
+        EE_RTREE                               appendIndex;
         std::vector<std::unique_ptr<SCH_ITEM>> appendItems;
-        std::optional<PAGE_INFO>               appendPage;
-        std::optional<TITLE_BLOCK>             appendTitle;
+        SCH_SHEET_LIST                         hierarchy;
+        std::unique_ptr<CONNECTION_GRAPH>      connectionGraph;
         BUILD_RESULT                           result;
 
         static void ValidateScreen( const SCH_SCREEN* aScreen )
@@ -614,21 +626,21 @@ namespace
 
         void Validate( bool aAppending ) const
         {
-            if( aAppending && replacementRoot )
-                THROW_IO_ERROR( wxS( "append staging unexpectedly owns a replacement root" ) );
+            if( aAppending && ( replacementScreen || !appendCache ) )
+                THROW_IO_ERROR( wxS( "append staging has invalid screen ownership" ) );
 
-            if( !aAppending && !replacementRoot )
-                THROW_IO_ERROR( wxS( "replacement staging has no root sheet" ) );
+            if( !aAppending && ( !destinationRoot || !replacementScreen ) )
+                THROW_IO_ERROR( wxS( "replacement staging has no destination root or screen" ) );
 
             std::set<wxString> filenames;
 
-            if( replacementRoot )
+            if( replacementScreen )
             {
-                ValidateScreen( replacementRoot->GetScreen() );
+                ValidateScreen( replacementScreen.get() );
 
                 size_t childCount = 0;
 
-                for( SCH_ITEM* item : replacementRoot->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+                for( SCH_ITEM* item : replacementScreen->Items().OfType( SCH_SHEET_T ) )
                 {
                     ValidateChildSheet( static_cast<SCH_SHEET*>( item ), filenames );
                     ++childCount;
@@ -664,28 +676,46 @@ namespace
 
             if( aAppending && result.counts.sheets > 1 && appendedSheetCount != result.counts.sheets )
                 THROW_IO_ERROR( wxS( "staged append hierarchy does not own every source sheet" ) );
+
+            if( hierarchy.empty() || !connectionGraph )
+                THROW_IO_ERROR( wxS( "staged schematic has incomplete hierarchy state" ) );
         }
 
-        void Commit( SCHEMATIC* aSchematic, SCH_SHEET* aAppendToMe )
+        void CommitNoexcept( SCHEMATIC* aSchematic, SCH_SHEET* aAppendToMe ) noexcept
         {
-            if( replacementRoot )
+            CONNECTION_GRAPH* previousGraph = nullptr;
+
+            if( replacementScreen )
             {
-                SCH_SHEET* root = replacementRoot.get();
-                aSchematic->SetTopLevelSheets( { root } );
-                replacementRoot.release();
-                return;
+                replacementScreen->IncRefCount();
+                SCH_SCREEN* previousScreen = destinationRoot->AdoptImportedScreen( replacementScreen.get() );
+                previousGraph = aSchematic->AdoptImportedHierarchy( std::move( hierarchy ), connectionGraph.get() );
+                replacementScreen.release();
+                connectionGraph.release();
+                previousScreen->DecRefCount();
+
+                if( previousScreen->GetRefCount() == 0 )
+                    delete previousScreen;
+            }
+            else
+            {
+                aAppendToMe->GetScreen()->AdoptImportedContent( std::move( appendIndex ), *appendCache );
+                previousGraph = aSchematic->AdoptImportedHierarchy( std::move( hierarchy ), connectionGraph.get() );
+                connectionGraph.release();
+
+                for( std::unique_ptr<SCH_ITEM>& item : appendItems )
+                    item.release();
             }
 
-            SCH_SCREEN* screen = aAppendToMe->GetScreen();
+            delete previousGraph;
+        }
 
-            if( appendPage )
-                screen->SetPageSettings( *appendPage );
+        void Commit( SCHEMATIC* aSchematic, SCH_SHEET* aAppendToMe, const std::function<void()>& aBeforeCommit )
+        {
+            if( aBeforeCommit )
+                aBeforeCommit();
 
-            if( appendTitle )
-                screen->SetTitleBlock( *appendTitle );
-
-            for( std::unique_ptr<SCH_ITEM>& item : appendItems )
-                screen->Append( item.release() );
+            CommitNoexcept( aSchematic, aAppendToMe );
         }
     };
 
@@ -805,7 +835,10 @@ namespace
             if( placement.sheet.id != aSourceSheet.id )
                 continue;
 
-            aScreen->Append( makeSymbol( aModel, placement, aPath, pageHeight, aStaged.result.diagnostics ).release() );
+            std::unique_ptr<SCH_SYMBOL> symbol =
+                    makeSymbol( aModel, placement, aPath, pageHeight, aStaged.result.diagnostics );
+            aScreen->Append( symbol.get() );
+            symbol.release();
             ++aStaged.result.counts.symbols;
         }
 
@@ -814,7 +847,9 @@ namespace
             if( graphic.kind == MODEL_GRAPHIC_KIND::TEXT )
                 continue;
 
-            aScreen->Append( makeShape( graphic, true, pageHeight ).release() );
+            std::unique_ptr<SCH_SHAPE> shape = makeShape( graphic, true, pageHeight );
+            aScreen->Append( shape.get() );
+            shape.release();
             ++aStaged.result.counts.graphics;
         }
 
@@ -826,7 +861,8 @@ namespace
             auto global = std::make_unique<SCH_GLOBALLABEL>( pagePoint( label.position, pageHeight ), label.text.text );
             global->SetTextAngle( EDA_ANGLE( label.angle, TENTHS_OF_A_DEGREE_T ) );
             applyTextPresentation( global.get(), label.presentation, aStaged.result.diagnostics );
-            aScreen->Append( global.release() );
+            aScreen->Append( global.get() );
+            global.release();
             ++aStaged.result.counts.labels;
         }
     }
@@ -852,6 +888,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
     aModel.ValidateOrThrow();
     STAGED_SCHEMATIC staged;
     staged.result.counts.sheets = aModel.sheets.size();
+    staged.connectionGraph = std::make_unique<CONNECTION_GRAPH>( aSchematic );
     validatePropertyDispositions( aModel, staged.result.diagnostics );
 
     const bool         multiSheet = aModel.sheets.size() > 1;
@@ -859,6 +896,18 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
 
     if( aAppendToMe )
     {
+        staged.appendCache = std::make_unique<SCH_SCREEN>( aSchematic );
+
+        for( const auto& [name, symbol] : aAppendToMe->GetScreen()->GetLibSymbols() )
+        {
+            if( !symbol )
+                THROW_IO_ERROR( wxString::Format( wxS( "destination library cache entry '%s' is null" ), name ) );
+
+            auto clone = std::make_unique<LIB_SYMBOL>( *symbol );
+            staged.appendCache->AddLibSymbol( clone.get() );
+            clone.release();
+        }
+
         for( SCH_ITEM* item : aAppendToMe->GetScreen()->Items().OfType( SCH_SHEET_T ) )
         {
             const SCH_SHEET* child = static_cast<const SCH_SHEET*>( item );
@@ -868,15 +917,18 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
 
     if( !aAppendToMe )
     {
-        staged.replacementRoot = std::make_unique<SCH_SHEET>( aSchematic );
-        staged.replacementRoot->SetFileName( aSourcePath );
-        auto rootScreen = new SCH_SCREEN( aSchematic );
-        rootScreen->SetFileName( aSourcePath );
-        staged.replacementRoot->SetScreen( rootScreen );
-        const_cast<KIID&>( staged.replacementRoot->m_Uuid ) = rootScreen->GetUuid();
+        staged.destinationRoot = aSchematic->GetTopLevelSheet();
+
+        if( !staged.destinationRoot || !staged.destinationRoot->GetScreen() )
+            THROW_IO_ERROR( wxS( "cannot replace a schematic without a top-level sheet and screen" ) );
+
+        staged.replacementScreen = std::make_unique<SCH_SCREEN>( aSchematic );
+        staged.replacementScreen->SetFileName( aSourcePath );
+        SCH_SCREEN* rootScreen = staged.replacementScreen.get();
 
         SCH_SHEET_PATH rootPath;
-        rootPath.push_back( staged.replacementRoot.get() );
+        rootPath.push_back( staged.destinationRoot );
+        staged.hierarchy.push_back( rootPath );
 
         if( !multiSheet )
         {
@@ -890,7 +942,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
                 VECTOR2I           position( schIUScale.MilsToIU( 500 + static_cast<int>( index % 4 ) * 2500 ),
                                              schIUScale.MilsToIU( 500 + static_cast<int>( index / 4 ) * 2000 ) );
                 auto               child = std::make_unique<SCH_SHEET>(
-                        staged.replacementRoot.get(), position,
+                        staged.destinationRoot, position,
                         VECTOR2I( schIUScale.MilsToIU( 2000 ), schIUScale.MilsToIU( 1500 ) ) );
                 auto childScreen = new SCH_SCREEN( aSchematic );
                 child->SetScreen( childScreen );
@@ -903,16 +955,16 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
                 childPath.push_back( child.get() );
                 childPath.SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
                 stageSheetContent( staged, aModel, sourceSheet, childScreen, childPath );
-                rootScreen->Append( child.release() );
+                staged.hierarchy.push_back( childPath );
+                rootScreen->Append( child.get() );
+                child.release();
             }
         }
     }
     else if( !multiSheet )
     {
         const MODEL_SHEET& sourceSheet = aModel.sheets.front();
-        auto               temporarySheet = std::make_unique<SCH_SHEET>( aSchematic );
-        auto               temporaryScreen = new SCH_SCREEN( aSchematic );
-        temporarySheet->SetScreen( temporaryScreen );
+        SCH_SCREEN*        temporaryScreen = staged.appendCache.get();
         SCH_SHEET_PATH path;
         path.push_back( aAppendToMe );
         stageSheetContent( staged, aModel, sourceSheet, temporaryScreen, path );
@@ -924,12 +976,11 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
 
         for( SCH_ITEM* item : temporaryItems )
         {
-            temporaryScreen->Remove( item );
+            temporaryScreen->Items().remove( item );
+            item->SetParent( aAppendToMe->GetScreen() );
             staged.appendItems.emplace_back( item );
         }
 
-        staged.appendPage = temporaryScreen->GetPageSettings();
-        staged.appendTitle = temporaryScreen->GetTitleBlock();
     }
     else
     {
@@ -954,13 +1005,36 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
             childPath.push_back( child.get() );
             childPath.SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
             stageSheetContent( staged, aModel, sourceSheet, childScreen, childPath );
-            staged.appendItems.emplace_back( child.release() );
+            child->SetParent( aAppendToMe->GetScreen() );
+            staged.appendItems.emplace_back( std::move( child ) );
+        }
+    }
+
+    if( aAppendToMe )
+    {
+        SCH_SHEET_LIST currentHierarchy = aSchematic->Hierarchy();
+        staged.hierarchy.assign( currentHierarchy.begin(), currentHierarchy.end() );
+
+        for( SCH_ITEM* item : aAppendToMe->GetScreen()->Items() )
+            staged.appendIndex.insert( item );
+
+        for( const std::unique_ptr<SCH_ITEM>& item : staged.appendItems )
+        {
+            staged.appendIndex.insert( item.get() );
+
+            if( item->Type() == SCH_SHEET_T )
+            {
+                SCH_SHEET_PATH path;
+                path.push_back( aAppendToMe );
+                path.push_back( static_cast<SCH_SHEET*>( item.get() ) );
+                staged.hierarchy.push_back( path );
+            }
         }
     }
 
     staged.Validate( aAppendToMe != nullptr );
     BUILD_RESULT result = staged.result;
-    staged.Commit( aSchematic, aAppendToMe );
+    staged.Commit( aSchematic, aAppendToMe, m_beforeCommit );
     return result;
 }
 

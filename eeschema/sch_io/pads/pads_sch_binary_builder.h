@@ -14,6 +14,8 @@
 #include <sch_io/pads/pads_sch_binary_model.h>
 
 #include <cstddef>
+#include <functional>
+#include <utility>
 #include <vector>
 
 class SCHEMATIC;
@@ -48,8 +50,16 @@ struct BUILD_RESULT
 class PADS_SCH_BINARY_BUILDER
 {
 public:
+    explicit PADS_SCH_BINARY_BUILDER( std::function<void()> aBeforeCommit = {} ) :
+            m_beforeCommit( std::move( aBeforeCommit ) )
+    {
+    }
+
     BUILD_RESULT Build( const PADS_SCH_MODEL& aModel, SCHEMATIC* aSchematic, SCH_SHEET* aAppendToMe,
                         const wxString& aSourcePath );
+
+private:
+    std::function<void()> m_beforeCommit;
 };
 
 } // namespace PADS_SCH_BINARY

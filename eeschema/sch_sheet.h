@@ -179,6 +179,9 @@ public:
      */
     void SetScreen( SCH_SCREEN* aScreen );
 
+    /// Swap an already reference-counted imported screen without allocation.
+    SCH_SCREEN* AdoptImportedScreen( SCH_SCREEN* aScreen ) noexcept;
+
     /**
      * Take the identity of the screen this sheet owns.
      *

@@ -26,6 +26,8 @@
 
 #include <geometry/rtree/dynamic_rtree.h>
 
+#include <utility>
+
 /**
  * Implement an R-tree for fast spatial and type indexing of schematic items.
  * Non-owning.
@@ -37,6 +39,25 @@ private:
 
 public:
     EE_RTREE() = default;
+    EE_RTREE( const EE_RTREE& ) = delete;
+    EE_RTREE& operator=( const EE_RTREE& ) = delete;
+
+    EE_RTREE( EE_RTREE&& aOther ) noexcept :
+            m_tree( std::move( aOther.m_tree ) ),
+            m_count( std::exchange( aOther.m_count, 0 ) )
+    {}
+
+    EE_RTREE& operator=( EE_RTREE&& aOther ) noexcept
+    {
+        if( this != &aOther )
+        {
+            m_tree = std::move( aOther.m_tree );
+            m_count = std::exchange( aOther.m_count, 0 );
+        }
+
+        return *this;
+    }
+
     ~EE_RTREE() = default;
 
     /**

@@ -418,6 +418,15 @@ void SCHEMATIC::SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets )
 }
 
 
+CONNECTION_GRAPH* SCHEMATIC::AdoptImportedHierarchy( SCH_SHEET_LIST&&  aHierarchy,
+                                                     CONNECTION_GRAPH* aConnectionGraph ) noexcept
+{
+    m_hierarchy.swap( aHierarchy );
+    m_labelToPageRefsMap.clear();
+    return std::exchange( m_connectionGraph, aConnectionGraph );
+}
+
+
 SCH_SCREEN* SCHEMATIC::RootScreen() const
 {
     // Virtual root's screen is just a container - return the first top-level sheet's screen

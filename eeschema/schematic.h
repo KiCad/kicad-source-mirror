@@ -176,6 +176,9 @@ public:
 
     void SetTopLevelSheets( const std::vector<SCH_SHEET*>& aSheets );
 
+    CONNECTION_GRAPH* AdoptImportedHierarchy( SCH_SHEET_LIST&& aHierarchy,
+                                               CONNECTION_GRAPH* aConnectionGraph ) noexcept;
+
     /**
      * Add a new top-level sheet to the schematic.
      *
