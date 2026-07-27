@@ -333,7 +333,7 @@ wxString DRC_TOOL::FixDRCErrorMenuText( const std::shared_ptr<RC_ITEM>& aDRCItem
     else if( aDRCItem->GetErrorCode() == DRCE_TEXT_HEIGHT
                 || aDRCItem->GetErrorCode() == DRCE_TEXT_THICKNESS
                 || aDRCItem->GetErrorCode() == DRCE_MIRRORED_TEXT_ON_FRONT_LAYER
-                || aDRCItem->GetErrorCode() == DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER )
+                || aDRCItem->GetErrorCode() == DRCE_UNMIRRORED_TEXT_ON_BACK_LAYER )
     {
         BOARD_ITEM* item = m_pcb->ResolveItem( aDRCItem->GetMainItemID() );
 
@@ -387,7 +387,7 @@ void DRC_TOOL::FixDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem )
                 || aDRCItem->GetErrorCode() == DRCE_TEXT_HEIGHT
                 || aDRCItem->GetErrorCode() == DRCE_TEXT_THICKNESS
                 || aDRCItem->GetErrorCode() == DRCE_MIRRORED_TEXT_ON_FRONT_LAYER
-                || aDRCItem->GetErrorCode() == DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER)
+                || aDRCItem->GetErrorCode() == DRCE_UNMIRRORED_TEXT_ON_BACK_LAYER)
 
     {
         BOARD_ITEM* item = m_pcb->ResolveItem( aDRCItem->GetMainItemID() );

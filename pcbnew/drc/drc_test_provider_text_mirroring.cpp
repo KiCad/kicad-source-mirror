@@ -54,7 +54,7 @@ public:
 bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_MIRRORED_TEXT_ON_FRONT_LAYER )
-            && m_drcEngine->IsErrorLimitExceeded( DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER ) )
+            && m_drcEngine->IsErrorLimitExceeded( DRCE_UNMIRRORED_TEXT_ON_BACK_LAYER ) )
     {
         REPORT_AUX( wxT( "Text mirroring violations ignored. Tests not run." ) );
         return true;        // continue with other tests
@@ -117,7 +117,7 @@ bool DRC_TEST_PROVIDER_TEXT_MIRRORING::Run()
                     }
 
                     checkTextMirroring( item, text, true, DRCE_MIRRORED_TEXT_ON_FRONT_LAYER );
-                    checkTextMirroring( item, text, false, DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER );
+                    checkTextMirroring( item, text, false, DRCE_UNMIRRORED_TEXT_ON_BACK_LAYER );
                 }
 
                 return true;

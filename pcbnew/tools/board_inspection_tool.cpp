@@ -516,7 +516,7 @@ wxString BOARD_INSPECTION_TOOL::InspectDRCErrorMenuText( const std::shared_ptr<R
     }
     else if( aDRCItem->GetErrorCode() == DRCE_TEXT_HEIGHT
             || aDRCItem->GetErrorCode() == DRCE_TEXT_THICKNESS
-            || aDRCItem->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG
+            || aDRCItem->GetErrorCode() == DRCE_DP_UNCOUPLED_LENGTH_TOO_LONG
             || aDRCItem->GetErrorCode() == DRCE_TRACK_WIDTH
             || aDRCItem->GetErrorCode() == DRCE_TRACK_ANGLE
             || aDRCItem->GetErrorCode() == DRCE_TRACK_SEGMENT_LENGTH
@@ -574,7 +574,7 @@ void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDR
 
     switch( aDRCItem->GetErrorCode() )
     {
-    case DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG:
+    case DRCE_DP_UNCOUPLED_LENGTH_TOO_LONG:
     {
         for( KIID id : aDRCItem->GetIDs() )
         {

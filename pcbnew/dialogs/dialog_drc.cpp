@@ -722,7 +722,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
             focus( item );
         }
     }
-    else if( rc_item->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG )
+    else if( rc_item->GetErrorCode() == DRCE_DP_UNCOUPLED_LENGTH_TOO_LONG )
     {
         BOARD_CONNECTED_ITEM*    track = dynamic_cast<PCB_TRACK*>( item );
         std::vector<BOARD_ITEM*> items;

@@ -57,7 +57,7 @@ BOOST_FIXTURE_TEST_CASE( DRCIncorrectTextMirror, DRC_INCORRECT_TEXT_MIRROR_TEST_
 
         // Ensure that our desired errors are fired
         bds.m_DRCSeverities[DRCE_MIRRORED_TEXT_ON_FRONT_LAYER] = SEVERITY::RPT_SEVERITY_ERROR;
-        bds.m_DRCSeverities[DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER] = SEVERITY::RPT_SEVERITY_ERROR;
+        bds.m_DRCSeverities[DRCE_UNMIRRORED_TEXT_ON_BACK_LAYER] = SEVERITY::RPT_SEVERITY_ERROR;
 
         bds.m_DRCEngine->SetViolationHandler(
                 [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
