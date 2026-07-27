@@ -73,6 +73,7 @@ DIALOG_FIND::DIALOG_FIND( PCB_EDIT_FRAME *aFrame ) :
     {
         wxString hotkeyHint = wxString::Format( wxT( " (%s)" ), KeyNameFromKeyCode( hotkey ) );
         m_searchPanelLink->SetLabel( m_searchPanelLink->GetLabel() + hotkeyHint );
+        m_searchPanelLink->GetParent()->Layout();
     }
 
     m_findNext->SetDefault();

@@ -80,6 +80,7 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_BASE_FRAME* aParent, SCH_SEARCH_DATA* aDat
     {
         wxString hotkeyHint = wxString::Format( wxT( " (%s)" ), KeyNameFromKeyCode( hotkey ) );
         m_searchPanelLink->SetLabel( m_searchPanelLink->GetLabel() + hotkeyHint );
+        m_searchPanelLink->GetParent()->Layout();
     }
 
     m_buttonFind->SetDefault();
