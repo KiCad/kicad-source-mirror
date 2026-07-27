@@ -82,12 +82,37 @@ void transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLaye
 {
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        if( item->Type() == PCB_SHAPE_T
-                || item->Type() == PCB_BARCODE_T
-                || BaseType( item->Type() ) == PCB_DIMENSION_T )
+        if( !item->IsOnLayer( aLayer ) )
+            continue;
+
+        switch( item->Type() )
         {
-            if( item->IsOnLayer( aLayer ) )
-                item->TransformShapeToPolySet( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
+        case PCB_SHAPE_T:
+        {
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+            int        margin = 0;
+
+            if( IsSolderMaskLayer( aLayer ) && shape->HasSolderMask() )
+                margin = shape->GetSolderMaskExpansion();
+
+            item->TransformShapeToPolySet( aBuffer, aLayer, margin, aMaxError, aErrorLoc );
+            break;
+        }
+
+        case PCB_BARCODE_T:
+            item->TransformShapeToPolySet( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
+            break;
+
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_DIM_LEADER_T:
+            item->TransformShapeToPolySet( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
+            break;
+
+        default:
+            break;
         }
     }
 }
@@ -1513,7 +1538,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         // Add item contours.  We need these if we're building vertical walls or if this is a
         // mask layer and we're differentiating copper from plated copper.
         if( ( cfg.engine == RENDER_ENGINE::OPENGL && cfg.opengl_copper_thickness )
-                || ( cfg.DifferentiatePlatedCopper() && ( layer == F_Mask || layer == B_Mask ) ) )
+                || ( cfg.DifferentiatePlatedCopper() && IsSolderMaskLayer( layer ) ) )
         {
             // DRAWINGS
             for( BOARD_ITEM* item : m_board->Drawings() )
@@ -1524,8 +1549,16 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 switch( item->Type() )
                 {
                 case PCB_SHAPE_T:
-                    item->TransformShapeToPolySet( *layerPoly, layer, 0, item->GetMaxError(), ERROR_INSIDE );
+                {
+                    PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+                    int        margin = 0;
+
+                    if( IsSolderMaskLayer( layer ) && shape->HasSolderMask() )
+                        margin = shape->GetSolderMaskExpansion();
+
+                    item->TransformShapeToPolySet( *layerPoly, layer, margin, item->GetMaxError(), ERROR_INSIDE );
                     break;
+                }
 
                 case PCB_TEXT_T:
                 {
