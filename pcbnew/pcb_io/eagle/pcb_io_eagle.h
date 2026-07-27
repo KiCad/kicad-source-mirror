@@ -71,6 +71,10 @@ struct ERULES
         // rvPadBottom      ( 0.25 ),
         rlMinPadTop         ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  10 ) ),
         rlMaxPadTop         ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  20 ) ),
+        rlMinPadInner       ( 0.0 ),
+        rlMaxPadInner       ( 0.0 ),
+        rlMinPadBottom      ( 0.0 ),
+        rlMaxPadBottom      ( 0.0 ),
 
         rvViaOuter          ( 0.25 ),
         rlMinViaOuter       ( EDA_UNIT_UTILS::Mils2IU( pcbIUScale,  10 ) ),
@@ -111,8 +115,12 @@ struct ERULES
     double rvPadTop;            ///< top pad size as percent of drill size
     // double   rvPadBottom;    ///< bottom pad size as percent of drill size
 
-    double rlMinPadTop;         ///< minimum copper annulus on through hole pads
-    double rlMaxPadTop;         ///< maximum copper annulus on through hole pads
+    double rlMinPadTop;         ///< Minimum top layer copper annulus on through hole pads.
+    double rlMaxPadTop;         ///< Maximum top layer copper annulus on through hole pads
+    double rlMinPadInner;       ///< Minimum inner layer copper annulus on through hole pads.
+    double rlMaxPadInner;       ///< Maximum inner layer copper annulus on through hole pads.
+    double rlMinPadBottom;      ///< Minimum bottom layer copper annulus on through hole pads.
+    double rlMaxPadBottom;      ///< Maximum bottom layer copper annulus on through hole pads.
 
     double rvViaOuter;          ///< copper annulus is this percent of via hole
     double rlMinViaOuter;       ///< minimum copper annulus on via
@@ -287,6 +295,24 @@ private:
     void orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_TEXT* aFPText, const EATTR* aAttr,
                        double aTextDefAngle = 0.0, bool aTextDefMirror = false, bool aTextDefSpin = false );
 
+
+    /**
+     * Reconcile all required footprint design rule adjustments.
+     *
+     * Eagle adjusts footprints post library parsing to determine the final footprint.  This method
+     * performs the same adjustment when importing the Eagle board file.  Please note that the adjusted
+     * footprint will **not** match the footprint defined in the `library` section of the Eagle board
+     * file.
+     *
+     * @note This currently only adjusts the #rlMinPadTop, #rlMinPadInner, and #rlMinPadBottom for round
+     *       through hole pads.
+     *
+     * @note This code assumes that there is no `designrule` section in Eagle footprint library (.lbr)
+     *       files.  If this is not the case, this code should be adjusted accordingly.
+     *
+     * @param aFootprint is the footprint to adjust.
+     */
+    void adjustFootprintForDesignRules( FOOTPRINT* aFootprint );
 
     /// move the BOARD into the center of the page
     void centerBoard();
