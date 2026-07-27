@@ -18,7 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "command_sch_export_bom.h"
+#include "command_export_bom.h"
 #include <cli/exit_codes.h>
 #include "jobs/job_export_sch_bom.h"
 #include <kiface_base.h>
@@ -31,7 +31,9 @@
 #include <macros.h>
 
 
-CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
+CLI::EXPORT_BOM_COMMAND::EXPORT_BOM_COMMAND( KIWAY::FACE_T aFaceId ) :
+        COMMAND( "bom" ),
+        m_faceId( aFaceId )
 {
     m_argParser.add_description( UTF8STDSTR( _( "Generate a Bill of Materials (BOM)" ) ) );
     addCommonArgs( true, true, IO_TYPE::FILE, IO_TYPE::FILE );
@@ -121,7 +123,7 @@ CLI::SCH_EXPORT_BOM_COMMAND::SCH_EXPORT_BOM_COMMAND() : COMMAND( "bom" )
 }
 
 
-std::vector<wxString> CLI::SCH_EXPORT_BOM_COMMAND::convertStringList( const wxString& aList )
+std::vector<wxString> CLI::EXPORT_BOM_COMMAND::convertStringList( const wxString& aList )
 {
     std::vector<wxString> v;
 
@@ -136,7 +138,7 @@ std::vector<wxString> CLI::SCH_EXPORT_BOM_COMMAND::convertStringList( const wxSt
     return v;
 }
 
-int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_SCH_BOM> bomJob = std::make_unique<JOB_EXPORT_SCH_BOM>();
 
@@ -182,7 +184,7 @@ int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, bomJob.get() );
+    int exitCode = aKiway.ProcessJob( m_faceId, bomJob.get() );
 
     return exitCode;
 }

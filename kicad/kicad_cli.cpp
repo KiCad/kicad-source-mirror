@@ -52,6 +52,7 @@
 #include "cli/command_jobset_run.h"
 #include "cli/command_pcb.h"
 #include "cli/command_pcb_export.h"
+#include "cli/command_export_bom.h"
 #include "cli/command_fp_diff.h"
 #include "cli/command_pcb_diff.h"
 #include "cli/command_pcb_drc.h"
@@ -75,7 +76,6 @@
 #include "cli/command_pcb_export_ps.h"
 #include "cli/command_pcb_export_stats.h"
 #include "cli/command_pcb_export_svg.h"
-#include "cli/command_sch_export_bom.h"
 #include "cli/command_sch_export_pythonbom.h"
 #include "cli/command_sch_export_netlist.h"
 #include "cli/command_sch_export_plot.h"
@@ -191,7 +191,7 @@ static CLI::SCH_COMMAND                  schCmd{};
 static CLI::SCH_DIFF_COMMAND             schDiffCmd{};
 static CLI::SCH_ERC_COMMAND              schErcCmd{};
 static CLI::SCH_UPGRADE_COMMAND          schUpgradeCmd{};
-static CLI::SCH_EXPORT_BOM_COMMAND       exportSchBomCmd{};
+static CLI::EXPORT_BOM_COMMAND           exportSchBomCmd{ KIWAY::FACE_SCH };
 static CLI::SCH_EXPORT_PYTHONBOM_COMMAND exportSchPythonBomCmd{};
 static CLI::SCH_EXPORT_NETLIST_COMMAND   exportSchNetlistCmd{};
 static CLI::SCH_EXPORT_PLOT_COMMAND      exportSchDxfCmd{ "dxf", UTF8STDSTR( _( "Export DXF" ) ), SCH_PLOT_FORMAT::DXF,

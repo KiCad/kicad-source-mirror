@@ -83,12 +83,14 @@ namespace CLI
 #define DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM_WARNING "--include-excluded-from-bom has been deprecated as of " \
                                                          "KiCad 10.0.0.  It will have no effect."
 
-class SCH_EXPORT_BOM_COMMAND : public COMMAND
+class EXPORT_BOM_COMMAND : public COMMAND
 {
 public:
-    SCH_EXPORT_BOM_COMMAND();
+    EXPORT_BOM_COMMAND( KIWAY::FACE_T aFaceId );
 
 protected:
+    // Lets us track which editor, e.g. sch or pcb, we are exporting the BOM from
+    KIWAY::FACE_T m_faceId;
     int doPerform( KIWAY& aKiway ) override;
 
 private:

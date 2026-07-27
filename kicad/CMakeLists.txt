@@ -56,6 +56,7 @@ set( KICAD_SRCS
 set( KICAD_CLI_SRCS
     cli/command.cpp
     cli/command_api_server.cpp
+    cli/command_export_bom.cpp
     cli/command_jobset_run.cpp
     cli/command_pcb_export_base.cpp
     cli/command_pcb_diff.cpp
@@ -89,7 +90,6 @@ set( KICAD_CLI_SRCS
     cli/command_fp_export_svg.cpp
     cli/command_fp_upgrade.cpp
     cli/command_sch_upgrade.cpp
-    cli/command_sch_export_bom.cpp
     cli/command_sch_export_pythonbom.cpp
     cli/command_sch_export_netlist.cpp
     cli/command_sch_export_plot.cpp
