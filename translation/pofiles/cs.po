@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-09 09:44+0000\n"
+"PO-Revision-Date: 2026-07-27 14:01+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -4871,9 +4871,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Koeficient zatemnění v režimu s vysokým kontrastem:"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
-#, fuzzy
 msgid "App theme:"
-msgstr "Použít motiv:"
+msgstr "Motiv aplikace:"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 msgid "Scaling"
@@ -6503,7 +6502,7 @@ msgstr ""
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1611
 msgid "Data Collection"
-msgstr "Shromážděná data"
+msgstr "Sběr dat"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:38
 msgid ""
@@ -9151,9 +9150,9 @@ msgstr ""
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:351
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:427
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error in '%s' at line %d: %s"
-msgstr "Chyba JSON při čtení '%s': %s"
+msgstr "Chyba JSON v '%s' na řádce %d: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:544
 #, fuzzy, c-format
@@ -37678,7 +37677,7 @@ msgstr "Jednoduché řešení:"
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:131
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:151
 msgid "Approximation:"
-msgstr "Přiblížení:"
+msgstr "Aproximace:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:122
 msgid "3R solution:"
@@ -38343,7 +38342,7 @@ msgstr "pikosekund"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:320
 msgid "Inductance:"
-msgstr "Cívka:"
+msgstr "Indukčnost:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:328
 msgid "nH"
@@ -63857,7 +63856,7 @@ msgstr "Uživatelem definovaný význam"
 
 #: pcbnew/widgets/appearance_controls.cpp:1769
 msgid "Board's perimeter definition"
-msgstr "Definice obvodu desky"
+msgstr "Definice obrysu desky"
 
 #: pcbnew/widgets/appearance_controls.cpp:1770
 msgid "Board's edge setback outline"
