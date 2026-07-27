@@ -425,7 +425,7 @@ void WX_INFOBAR::RemoveAllButtons()
     if( sizer->GetItem( sizer->GetItemCount() - 1 )->IsSpacer() )
         return;
 
-    for( int i = sizer->GetItemCount() - 1; i >= 0; i-- )
+    for( int i = (int) sizer->GetItemCount() - 1; i >= 0; i-- )
     {
         wxSizerItem* sItem = sizer->GetItem( i );
 
@@ -433,10 +433,11 @@ void WX_INFOBAR::RemoveAllButtons()
         if( sItem->IsSpacer() )
             break;
 
-        wxWindow* button = sItem->GetWindow();
-
-        sizer->Detach( button );
-        button->Destroy();
+        if( wxWindow* button = sItem->GetWindow() )
+        {
+            sizer->Detach( button );
+            button->Destroy();
+        }
     }
 }
 
