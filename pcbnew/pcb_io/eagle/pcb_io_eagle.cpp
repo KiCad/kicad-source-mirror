@@ -207,6 +207,14 @@ void ERULES::parse( wxXmlNode* aRules, std::function<void()> aCheckpoint )
                 rlMinPadTop = parseEagle( value );
             else if( name == wxT( "rlMaxPadTop" ) )
                 rlMaxPadTop = parseEagle( value );
+            else if( name == wxT( "rlMinPadInner" ) )
+                rlMinPadInner = parseEagle( value );
+            else if( name == wxT( "rlMaxPadInner" ) )
+                rlMaxPadInner = parseEagle( value );
+            else if( name == wxT( "rlMinPadBottom" ) )
+                rlMinPadBottom = parseEagle( value );
+            else if( name == wxT( "rlMaxPadBottom" ) )
+                rlMaxPadBottom = parseEagle( value );
             else if( name == wxT( "rvViaOuter" ) )
                 value.ToCDouble( &rvViaOuter );
             else if( name == wxT( "rlMinViaOuter" ) )
@@ -1482,6 +1490,7 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
         }
 
         orientFootprintAndText( footprint, e, nameAttr, valueAttr );
+        adjustFootprintForDesignRules( footprint );
 
         // Get next element
         element = element->GetNext();
@@ -1769,6 +1778,61 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
                                       elementMirror, elementSpin );
     }
 }
+
+
+void PCB_IO_EAGLE::adjustFootprintForDesignRules( FOOTPRINT* aFootprint )
+{
+    // If there is no `designrules` section in the board or library file, there is nothing to do.
+    if( !aFootprint || !m_rules )
+        return;
+
+    // Adjust through hole pads per rlMinPadTop, rlMinPadInner, and rlMinPatBottom design rule settings.
+    for( PAD* pad : aFootprint->Pads() )
+    {
+        if( !pad || !pad->HasDrilledHole() || ( pad->GetFrontShape() != PAD_SHAPE::CIRCLE ) )
+            continue;
+
+        int adjustedPadDiameter = 0.0;
+        PADSTACK& padstack = pad->Padstack();
+
+        if( m_rules->rlMinPadTop != 0.0 && padstack.LayerSet().test( F_Cu ) )
+        {
+            adjustedPadDiameter = padstack.Drill().size.x + ( m_rules->rlMinPadTop * 2 );
+
+            if(  ( padstack.Size( F_Cu ).x < adjustedPadDiameter ) )
+                padstack.SetSize( VECTOR2I( adjustedPadDiameter, adjustedPadDiameter ), F_Cu );
+
+            // For normal pad stacks, the first layer defines the pad for all layers.
+            if( padstack.Mode() == PADSTACK::MODE::NORMAL )
+                continue;
+        }
+
+        if( m_rules->rlMinPadBottom != 0.0 && padstack.LayerSet().test( B_Cu ) )
+        {
+            adjustedPadDiameter = padstack.Drill().size.x + ( m_rules->rlMinPadBottom * 2 );
+
+            if( padstack.Size( B_Cu ).x < adjustedPadDiameter )
+                padstack.SetSize( VECTOR2I( adjustedPadDiameter, adjustedPadDiameter ), B_Cu );
+        }
+
+        if( m_rules->rlMinPadInner != 0.0 )
+        {
+            LSET innerLayers = padstack.LayerSet() & LSET::InternalCuMask();
+
+            for( PCB_LAYER_ID layerId : innerLayers.Seq() )
+            {
+                if( !padstack.LayerSet().test( layerId ) )
+                    continue;
+
+                adjustedPadDiameter = padstack.Drill().size.x + ( m_rules->rlMinPadInner * 2 );
+
+                if( padstack.Size( layerId ).x < adjustedPadDiameter )
+                    padstack.SetSize( VECTOR2I( adjustedPadDiameter, adjustedPadDiameter ), layerId );
+            }
+        }
+    }
+}
+
 
 
 FOOTPRINT* PCB_IO_EAGLE::makeFootprint( wxXmlNode* aPackage, const wxString& aPkgName )
