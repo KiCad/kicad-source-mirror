@@ -491,10 +491,10 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
 
 std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( const wxString& aErrorKey )
 {
-    for( const RC_ITEM& item : allItemTypes )
+    for( const std::reference_wrapper<RC_ITEM>& item : allItemTypes )
     {
-        if( aErrorKey == item.GetSettingsKey() )
-            return std::make_shared<DRC_ITEM>( static_cast<const DRC_ITEM&>( item ) );
+        if( aErrorKey == item.get().GetSettingsKey() )
+            return std::make_shared<DRC_ITEM>( static_cast<const DRC_ITEM&>( item.get() ) );
     }
 
     // This can happen if a project has old-format exclusions.  Just drop these items.
@@ -653,7 +653,7 @@ int DRC_ITEMS_PROVIDER::GetSeverities() const
 int DRC_ITEMS_PROVIDER::GetCount( int aSeverity ) const
 {
     if( aSeverity < 0 )
-        return m_filteredMarkers.size();
+        return (int) m_filteredMarkers.size();
 
     int count = 0;
 
