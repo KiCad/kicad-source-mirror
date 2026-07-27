@@ -86,7 +86,7 @@ void transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLaye
                 || item->Type() == PCB_BARCODE_T
                 || BaseType( item->Type() ) == PCB_DIMENSION_T )
         {
-            if( item->GetLayer() == aLayer )
+            if( item->IsOnLayer( aLayer ) )
                 item->TransformShapeToPolySet( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
         }
     }
@@ -99,9 +99,6 @@ void transformFPTextToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
 {
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        if( item->GetLayer() != aLayer )
-            continue;
-
         if( item->Type() == PCB_TEXT_T )
         {
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
@@ -115,7 +112,7 @@ void transformFPTextToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
             if( text->GetText() == wxT( "${VALUE}" ) && !aFlags.test( LAYER_FP_VALUES ) )
                 continue;
 
-            if( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer )
+            if( text->IsOnLayer( aLayer ) )
                 text->TransformTextToPolySet( aBuffer, 0, aMaxError, aErrorLoc );
         }
 
@@ -123,7 +120,7 @@ void transformFPTextToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
         {
             PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
-            if( aLayer != UNDEFINED_LAYER && textbox->GetLayer() == aLayer )
+            if( textbox->IsOnLayer( aLayer ) )
             {
                 // border
                 if( textbox->IsBorderEnabled() )
@@ -148,7 +145,7 @@ void transformFPTextToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
         if( field->IsValue() && !aFlags.test( LAYER_FP_VALUES ) )
             continue;
 
-        if(  field->GetLayer() == aLayer && field->IsVisible() )
+        if( field->IsOnLayer( aLayer ) && field->IsVisible() )
             field->TransformTextToPolySet( aBuffer, 0, aMaxError, aErrorLoc );
     }
 }
