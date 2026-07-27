@@ -637,7 +637,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
 
     if( IsSolderMaskLayer( aLayer )
             && aShape->HasSolderMask()
-            && IsExternalCopperLayer( aShape->GetLayer() ) )
+            && ( aShape->IsOnLayer( F_Cu ) || aShape->IsOnLayer( B_Cu ) ) )
     {
         margin = aShape->GetSolderMaskExpansion();
         linewidth += margin * 2;
