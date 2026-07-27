@@ -76,8 +76,7 @@ private:
      * @param other item against which to test the track item
      * @return false if there is a clearance violation reported, true if there is none
      */
-    bool testSingleLayerItemAgainstItem( BOARD_ITEM* item, SHAPE* itemShape, PCB_LAYER_ID layer,
-                                         BOARD_ITEM* other );
+    bool testSingleLayerItemAgainstItem( BOARD_ITEM* item, SHAPE* itemShape, PCB_LAYER_ID layer, BOARD_ITEM* other );
 
     void testTrackClearances();
 
@@ -180,10 +179,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 }
 
 
-bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_ITEM* item,
-                                                                         SHAPE* itemShape,
-                                                                         PCB_LAYER_ID layer,
-                                                                         BOARD_ITEM* other )
+bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_ITEM* item, SHAPE* itemShape,
+                                                                         PCB_LAYER_ID layer, BOARD_ITEM* other )
 {
     bool           testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
     bool           testShorting = !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS );
@@ -627,8 +624,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                                 // need for a shared checkedPairs mutex.
                                 KICAD_T otherType = other->Type();
 
-                                if( ( otherType == PCB_TRACE_T || otherType == PCB_ARC_T
-                                            || otherType == PCB_VIA_T )
+                                if( ( otherType == PCB_TRACE_T || otherType == PCB_ARC_T || otherType == PCB_VIA_T )
                                         && static_cast<void*>( track ) > static_cast<void*>( other ) )
                                 {
                                     return false;
@@ -661,8 +657,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                                     }
                                 }
 
-                                if( !testSingleLayerItemAgainstItem( track, trackShape.get(),
-                                                                     layer, other ) )
+                                if( !testSingleLayerItemAgainstItem( track, trackShape.get(), layer, other ) )
                                 {
                                     if( !m_drcEngine->GetReportAllTrackErrors() )
                                         return false;
@@ -691,8 +686,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
     thread_pool& tp = GetKiCadThreadPool();
 
-    auto track_futures = tp.submit_loop( 0, m_board->Tracks().size(), testTrack,
-                                            m_board->Tracks().size() );
+    auto track_futures = tp.submit_loop( 0, m_board->Tracks().size(), testTrack, m_board->Tracks().size() );
 
     while( done < count )
     {
@@ -710,8 +704,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 }
 
 
-bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* padShape,
-                                                             PCB_LAYER_ID aLayer,
+bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* padShape, PCB_LAYER_ID aLayer,
                                                              BOARD_ITEM* other )
 {
     bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
@@ -740,9 +733,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             testClearance = testShorting = false;
     }
 
-    BOARD_CONNECTED_ITEM* otherCItem = other->IsConnected()
-                                              ? static_cast<BOARD_CONNECTED_ITEM*>( other )
-                                              : nullptr;
+    BOARD_CONNECTED_ITEM* otherCItem = other->IsConnected() ? static_cast<BOARD_CONNECTED_ITEM*>( other )
+                                                            : nullptr;
     PAD*                  otherPad = nullptr;
     PCB_VIA*              otherVia = nullptr;
 
@@ -957,8 +949,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                                     // For pad-vs-pad pairs, use pointer ordering to ensure
                                     // each pair is tested only once across all threads.
                                     if( other->Type() == PCB_PAD_T
-                                            && static_cast<void*>( pad )
-                                                       > static_cast<void*>( other ) )
+                                            && static_cast<void*>( pad ) > static_cast<void*>( other ) )
                                     {
                                         return false;
                                     }
@@ -995,9 +986,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     auto returns = tp.submit_loop( 0, numFootprints, fp_check, numFootprints );
 
     // Wait for all threads to finish
-    for( size_t ii = 0; ii < returns.size(); ++ii )
+    for( const std::future<void>& ret : returns )
     {
-        while( returns[ii].wait_for( std::chrono::milliseconds( 250 ) ) != std::future_status::ready )
+        while( ret.wait_for( std::chrono::milliseconds( 250 ) ) != std::future_status::ready )
             reportProgress( done, numFootprints );
     }
 }
@@ -1017,8 +1008,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
     auto isKnockoutText =
             []( BOARD_ITEM* item )
             {
-                return ( item->Type() == PCB_TEXT_T || item->Type() == PCB_FIELD_T )
-                        && static_cast<PCB_TEXT*>( item )->IsKnockout();
+                return ( item->Type() == PCB_TEXT_T || item->Type() == PCB_FIELD_T ) && item->IsKnockout();
             };
 
     auto testGraphicAgainstZone =
@@ -1062,18 +1052,19 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                         // Filter:
                         [&]( BOARD_ITEM* other ) -> bool
                         {
-                             // Graphics are often compound shapes so ignore collisions
-                             // between shapes in a single footprint.
-                             if( graphic->Type() == PCB_SHAPE_T && other->Type() == PCB_SHAPE_T
-                                      && graphic->GetParentFootprint()
-                                      && graphic->GetParentFootprint()
-                                                 == other->GetParentFootprint() )
+                             // Graphics are often compound shapes so ignore collisions between shapes
+                             // in a single footprint.
+                             if( graphic->Type() == PCB_SHAPE_T
+                                        && other->Type() == PCB_SHAPE_T
+                                        && graphic->GetParentFootprint()
+                                        && graphic->GetParentFootprint() == other->GetParentFootprint() )
                              {
                                  return false;
                              }
 
                             // Track clearances are tested in testTrackClearances()
-                            if( other->Type() == PCB_TRACE_T || other->Type() == PCB_ARC_T
+                            if( other->Type() == PCB_TRACE_T
+                                    || other->Type() == PCB_ARC_T
                                     || other->Type() == PCB_VIA_T )
                             {
                                 return false;
@@ -1093,8 +1084,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                             if( ( other->Type() == PCB_SHAPE_T
                                         || other->Type() == PCB_TEXTBOX_T
                                         || other->Type() == PCB_BARCODE_T )
-                                    && static_cast<void*>( graphic )
-                                               > static_cast<void*>( other ) )
+                                    && static_cast<void*>( graphic ) > static_cast<void*>( other ) )
                             {
                                 return false;
                             }
@@ -1247,7 +1237,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
     auto checkZones =
             [this, reportZoneZoneViolation, &poly_segments, &seg_rtrees, &done]
-            ( int zoneA_idx, int zoneB_idx, PCB_LAYER_ID layer ) -> void
+            ( size_t zoneA_idx, size_t zoneB_idx, PCB_LAYER_ID layer ) -> void
             {
                 ZONE*          zoneA = m_board->m_DRCCopperZones[zoneA_idx];
                 ZONE*          zoneB = m_board->m_DRCCopperZones[zoneB_idx];
@@ -1277,31 +1267,31 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                             int qmax[2] = { maxX, maxY };
                             bool found = false;
 
-                            auto visitor = [&]( size_t segIdx ) -> bool
-                            {
-                                SEG& testSegment = testSegments[segIdx];
-                                int64_t  dist_sq = 0;
-                                VECTOR2I other_pt;
+                            auto visitor =
+                                    [&]( size_t segIdx ) -> bool
+                                    {
+                                        SEG& testSegment = testSegments[segIdx];
+                                        int64_t  dist_sq = 0;
+                                        VECTOR2I other_pt;
 
-                                refSegment.NearestPoints( testSegment, pt, other_pt, dist_sq );
-                                actual = std::floor( std::sqrt( dist_sq ) + 0.5 );
+                                        refSegment.NearestPoints( testSegment, pt, other_pt, dist_sq );
+                                        actual = std::floor( std::sqrt( dist_sq ) + 0.5 );
 
-                                if( actual < clearance )
-                                {
-                                    found = true;
-                                    return false;
-                                }
+                                        if( actual < clearance )
+                                        {
+                                            found = true;
+                                            return false;
+                                        }
 
-                                return true;
-                            };
+                                        return true;
+                                    };
 
                             testTree.Search( qmin, qmax, visitor );
 
                             if( found )
                             {
                                 done.fetch_add( 1 );
-                                reportZoneZoneViolation( zoneA, zoneB, pt, actual, constraint,
-                                                        layer );
+                                reportZoneZoneViolation( zoneA, zoneB, pt, actual, constraint, layer );
                                 return;
                             }
                         }

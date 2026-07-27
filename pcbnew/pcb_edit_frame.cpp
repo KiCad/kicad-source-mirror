@@ -1578,26 +1578,30 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     }
 
     // Don't allow closing while the modal footprint chooser is open
-    auto* chooser = (FOOTPRINT_CHOOSER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_CHOOSER, false );
+    // Use C-style cast due to Mac's inability to dynamic cast between compile modules
+    FOOTPRINT_CHOOSER_FRAME* chooser = (FOOTPRINT_CHOOSER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_CHOOSER, false );
 
     if( chooser && chooser->IsModal() ) // Can close footprint chooser?
         return false;
 
     if( Kiface().IsSingle() )
     {
-        auto* fpEditor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
+        // Use C-style cast due to Mac's inability to dynamic cast between compile modules
+        FOOTPRINT_EDIT_FRAME* fpEditor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
 
         if( fpEditor && !fpEditor->Close() )   // Can close footprint editor?
             return false;
 
-        auto* fpViewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER, false );
+        // Use C-style cast due to Mac's inability to dynamic cast between compile modules
+        FOOTPRINT_VIEWER_FRAME* fpViewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER, false );
 
         if( fpViewer && !fpViewer->Close() )   // Can close footprint viewer?
             return false;
     }
     else
     {
-        auto* fpEditor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
+        // Use C-style cast due to Mac's inability to dynamic cast between compile modules
+        FOOTPRINT_EDIT_FRAME* fpEditor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
 
         if( fpEditor && fpEditor->IsCurrentFPFromBoard() )
         {
@@ -1706,9 +1710,9 @@ void PCB_EDIT_FRAME::doCloseWindow()
         m_footprintDiffDlg = nullptr;
     }
 
-    // Delete the auto save file if it exists.  Only sweep when the board was actually
-    // dirtied in this session; otherwise an existing autosave is a previous-session
-    // leftover the user explicitly deferred in the recovery dialog.
+    // Delete the auto save file if it exists.  Only sweep when the board was actually dirtied in this session;
+    // otherwise an existing autosave is a previous-session leftover the user explicitly deferred in the recovery
+    // dialog.
     if( !Prj().IsNullProject() && GetBoard() && IsContentModified() )
     {
         Kiway().LocalHistory().RemoveAutosaveFiles( Prj().GetProjectPath(), { GetBoard()->GetFileName() } );
@@ -1725,9 +1729,8 @@ void PCB_EDIT_FRAME::doCloseWindow()
         wxLogTrace( traceAutoSave, wxT( "Skipping auto-save of migrated local settings" ) );
     }
 
-    // Do not show the layer manager during closing to avoid flicker
-    // on some platforms (Windows) that generate useless redraw of items in
-    // the Layer Manager
+    // Do not show the layer manager during closing to avoid flicker on some platforms (Windows) that
+    // generate useless redraw of items in the Layer Manager
     if( m_ShowLayerManagerTools )
     {
         m_auimgr.GetPane( wxS( "LayersManager" ) ).Show( false );
@@ -1737,12 +1740,11 @@ void PCB_EDIT_FRAME::doCloseWindow()
     // Unlink the old project if needed
     GetBoard()->ClearProject();
 
-    // Delete board structs and undo/redo lists, to avoid crash on exit
-    // when deleting some structs (mainly in undo/redo lists) too late
+    // Delete board structs and undo/redo lists, to avoid crash on exit when deleting some structs
+    // (mainly in undo/redo lists) too late
     Clear_Pcb( false, true );
 
-    // do not show the window because ScreenPcb will be deleted and we do not
-    // want any paint event
+    // do not show the window because ScreenPcb will be deleted and we do not want any paint event
     Show( false );
 
     PCB_BASE_EDIT_FRAME::doCloseWindow();
@@ -1797,8 +1799,8 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, wxWindo
         {
             m_infoBar->RemoveAllButtons();
             m_infoBar->AddCloseButton();
-            m_infoBar->ShowMessage( _( "Could not load component class assignment rules" ),
-                                    wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::GENERIC );
+            m_infoBar->ShowMessage( _( "Could not load component class assignment rules" ), wxICON_WARNING,
+                                    WX_INFOBAR::MESSAGE_TYPE::GENERIC );
         }
 
         // We don't know if anything was modified, so err on the side of requiring a save
@@ -1948,7 +1950,9 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.design_blocks_show = designBlocksPane.IsShown();
 
         if( designBlocksPane.IsDocked() )
+        {
             cfg->m_AuiPanels.design_blocks_panel_docked_width = m_designBlocksPane->GetSize().x;
+        }
         else
         {
             cfg->m_AuiPanels.design_blocks_panel_float_height = designBlocksPane.floating_size.y;
@@ -2011,13 +2015,14 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer, bool aForceRedraw )
     * have their own set of independent clearance layers to allow track clearance
     * to be shown for more layers.
     */
-    const auto getClearanceLayerForActive = []( PCB_LAYER_ID aActiveLayer ) -> std::optional<int>
-    {
-        if( IsCopperLayer( aActiveLayer ) )
-            return CLEARANCE_LAYER_FOR( aActiveLayer );
+    const auto getClearanceLayerForActive =
+            []( PCB_LAYER_ID aActiveLayer ) -> std::optional<int>
+            {
+                if( IsCopperLayer( aActiveLayer ) )
+                    return CLEARANCE_LAYER_FOR( aActiveLayer );
 
-        return std::nullopt;
-    };
+                return std::nullopt;
+            };
 
     if( std::optional<int> oldClearanceLayer = getClearanceLayerForActive( oldLayer ) )
         GetCanvas()->GetView()->SetLayerVisible( *oldClearanceLayer, false );
@@ -2119,8 +2124,8 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
     {
         m_infoBar->RemoveAllButtons();
         m_infoBar->AddCloseButton();
-        m_infoBar->ShowMessage( _( "Board file is read only." ),
-                                wxICON_WARNING, WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
+        m_infoBar->ShowMessage( _( "Board file is read only." ), wxICON_WARNING,
+                                WX_INFOBAR::MESSAGE_TYPE::OUTDATED_SAVE );
     }
 
     ReCreateLayerBox();
@@ -2449,8 +2454,7 @@ int PCB_EDIT_FRAME::TestStandalone()
     if( !frame->IsShownOnScreen() )
     {
         wxEventBlocker blocker( this );
-        wxFileName fn( Prj().GetProjectPath(), Prj().GetProjectName(),
-                       FILEEXT::KiCadSchematicFileExtension );
+        wxFileName fn( Prj().GetProjectPath(), Prj().GetProjectName(), FILEEXT::KiCadSchematicFileExtension );
 
         // Maybe the file hasn't been converted to the new s-expression file format so
         // see if the legacy schematic file is still in play.
@@ -2479,17 +2483,15 @@ int PCB_EDIT_FRAME::TestStandalone()
 }
 
 
-bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
-                                                const wxString& aAnnotateMessage )
+bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, const wxString& aAnnotateMessage )
 {
     int standalone = TestStandalone();
 
     if( standalone == 0 )
     {
-        DisplayErrorMessage( this, _( "Cannot update the PCB because PCB editor is opened in "
-                                      "stand-alone mode. In order to create or update PCBs from "
-                                      "schematics, you must launch the KiCad project manager and "
-                                      "create a project." ) );
+        DisplayErrorMessage( this, _( "Cannot update the PCB because PCB editor is opened in stand-alone mode. "
+                                      "In order to create or update PCBs from schematics, you must launch the "
+                                      "KiCad project manager and create a project." ) );
         return false;       // Not in standalone mode
     }
 
@@ -2522,9 +2524,9 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist,
         // Do not translate extra_info strings.  These are for developers
         wxString extra_info = e.Problem() + wxT( " : " ) + e.What() + wxT( " at " ) + e.Where();
 
-        DisplayErrorMessage( this, _( "Received an error while reading netlist.  Please "
-                                      "report this issue to the KiCad team using the menu "
-                                      "Help->Report Bug."), extra_info );
+        DisplayErrorMessage( this, _( "Received an error while reading netlist.  Please report this issue to "
+                                      "the KiCad team using the menu Help->Report Bug." ),
+                             extra_info );
         return false;
     }
 
@@ -2635,8 +2637,7 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( int aFlags )
     }
     catch( PARSE_ERROR& )
     {
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Edit design rules" ),
-                                                       wxEmptyString );
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, _( "Edit design rules" ), wxEmptyString );
 
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                 [&]( wxHyperlinkEvent& aEvent )

@@ -234,7 +234,7 @@ public:
      * Display the preferences and settings of all opened editors paged dialog, starting with
      * a particular page
      */
-    void ShowPreferences( wxString aStartPage, wxString aStartParentPage );
+    void ShowPreferences( const wxString& aStartPage, const wxString& aStartParentPage );
 
     void PrintMsg( const wxString& text );
 

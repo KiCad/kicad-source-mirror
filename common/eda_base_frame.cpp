@@ -165,8 +165,7 @@ void EDA_BASE_FRAME::commonInit( FRAME_T aFrameType )
     // Store dimensions of the user area of the main window.
     GetClientSize( &m_frameSize.x, &m_frameSize.y );
 
-    Connect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER,
-             wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
+    Connect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER, wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
 
     // hook wxEVT_CLOSE_WINDOW so we can call SaveSettings().  This function seems
     // to be called before any other hook for wxCloseEvent, which is necessary.
@@ -303,8 +302,7 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
     }
 
 
-    if( event.GetId() == wxEVT_QUERY_END_SESSION
-        || event.GetId() == wxEVT_END_SESSION )
+    if( event.GetId() == wxEVT_QUERY_END_SESSION || event.GetId() == wxEVT_END_SESSION )
     {
         // End session means the OS is going to terminate us
         m_isNonUserClose = true;
@@ -341,8 +339,7 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 
 EDA_BASE_FRAME::~EDA_BASE_FRAME()
 {
-    Disconnect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER,
-                wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
+    Disconnect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER, wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
     Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_BASE_FRAME::windowClosing ) );
 
     delete m_autoSaveTimer;
@@ -462,9 +459,7 @@ static wxString buildRecoveredFileName( const wxFileName& aSrcFn, const wxDateTi
     int seq = 1;
 
     while( recovered.FileExists() )
-    {
         recovered.SetName( aSrcFn.GetName() + wxS( ".recovered." ) + stamp + wxString::Format( wxS( ".%d" ), seq++ ) );
-    }
 
     return recovered.GetFullPath();
 }
@@ -788,9 +783,9 @@ void EDA_BASE_FRAME::RecreateToolbars()
     {
         if( !m_tbRight )
         {
-            m_tbRight =
-                    new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL | wxAUI_TB_TEXT | wxAUI_TB_OVERFLOW );
+            m_tbRight = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL | wxAUI_TB_TEXT
+                                                    | wxAUI_TB_OVERFLOW );
             m_tbRight->SetAuiManager( &m_auimgr );
         }
 
@@ -1032,12 +1027,8 @@ void EDA_BASE_FRAME::LoadWindowState( const wxString& aFileName )
     if( !Pgm().GetCommonSettings()->m_Session.remember_open_files )
         return;
 
-    const PROJECT_FILE_STATE* state = Prj().GetLocalSettings().GetFileState( aFileName );
-
-    if( state != nullptr )
-    {
+    if( const PROJECT_FILE_STATE* state = Prj().GetLocalSettings().GetFileState( aFileName ) )
         LoadWindowState( state->window );
-    }
 }
 
 
@@ -1061,8 +1052,7 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
         m_frameSize = defaultSize( m_ident, this );
         wasDefault  = true;
 
-        wxLogTrace( traceDisplayLocation, wxS( "Using minimum size (%d, %d)" ),
-                    m_frameSize.x, m_frameSize.y );
+        wxLogTrace( traceDisplayLocation, wxS( "Using minimum size (%d, %d)" ), m_frameSize.x, m_frameSize.y );
     }
 
     wxLogTrace( traceDisplayLocation, wxS( "Number of displays: %d" ), wxDisplay::GetCount() );
@@ -1112,16 +1102,14 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
         // larger external monitor that is no longer attached.
         if( m_frameSize.x > clientSize.width )
         {
-            wxLogTrace( traceDisplayLocation,
-                        wxS( "Clamping window width %d to display width %d" ),
+            wxLogTrace( traceDisplayLocation, wxS( "Clamping window width %d to display width %d" ),
                         m_frameSize.x, clientSize.width );
             m_frameSize.x = clientSize.width;
         }
 
         if( m_frameSize.y > clientSize.height )
         {
-            wxLogTrace( traceDisplayLocation,
-                        wxS( "Clamping window height %d to display height %d" ),
+            wxLogTrace( traceDisplayLocation, wxS( "Clamping window height %d to display height %d" ),
                         m_frameSize.y, clientSize.height );
             m_frameSize.y = clientSize.height;
         }
@@ -1162,23 +1150,20 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
     wxPoint   pos        = GetPosition();
     wxSize    size       = GetWindowSize();
 
-    wxLogTrace( traceDisplayLocation,
-                wxS( "ensureWindowIsOnScreen: clientArea (%d, %d) w %d h %d" ),
+    wxLogTrace( traceDisplayLocation, wxS( "ensureWindowIsOnScreen: clientArea (%d, %d) w %d h %d" ),
                 clientSize.x, clientSize.y,
                 clientSize.width, clientSize.height );
 
     if( pos.y < clientSize.y )
     {
-        wxLogTrace( traceDisplayLocation,
-                    wxS( "ensureWindowIsOnScreen: y pos %d below minimum, setting to %d" ), pos.y,
-                    clientSize.y );
+        wxLogTrace( traceDisplayLocation, wxS( "ensureWindowIsOnScreen: y pos %d below minimum, setting to %d" ),
+                    pos.y, clientSize.y );
         pos.y = clientSize.y;
     }
 
     if( pos.x < clientSize.x )
     {
-        wxLogTrace( traceDisplayLocation,
-                    wxS( "ensureWindowIsOnScreen: x pos %d is off the client rect, setting to %d" ),
+        wxLogTrace( traceDisplayLocation, wxS( "ensureWindowIsOnScreen: x pos %d below minimum, setting to %d" ),
                     pos.x, clientSize.x );
         pos.x = clientSize.x;
     }
@@ -1186,18 +1171,16 @@ void EDA_BASE_FRAME::ensureWindowIsOnScreen()
     if( pos.x + size.x - clientSize.x > clientSize.width )
     {
         int newWidth = clientSize.width - ( pos.x - clientSize.x );
-        wxLogTrace( traceDisplayLocation,
-                    wxS( "ensureWindowIsOnScreen: effective width %d above available %d, setting "
-                         "to %d" ), pos.x + size.x, clientSize.width, newWidth );
+        wxLogTrace( traceDisplayLocation, wxS( "ensureWindowIsOnScreen: width %d above available %d, setting to %d" ),
+                    pos.x + size.x, clientSize.width, newWidth );
         size.x = newWidth;
     }
 
     if( pos.y + size.y - clientSize.y > clientSize.height )
     {
         int newHeight = clientSize.height - ( pos.y - clientSize.y );
-        wxLogTrace( traceDisplayLocation,
-                    wxS( "ensureWindowIsOnScreen: effective height %d above available %d, setting "
-                         "to %d" ), pos.y + size.y, clientSize.height, newHeight );
+        wxLogTrace( traceDisplayLocation, wxS( "ensureWindowIsOnScreen: height %d above available %d, setting to %d" ),
+                    pos.y + size.y, clientSize.height, newHeight );
         size.y = newHeight;
     }
 
@@ -1281,8 +1264,7 @@ void EDA_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     int fileHistorySize = Pgm().GetCommonSettings()->m_System.file_history_size;
 
     // Load the recently used files into the history menu
-    m_fileHistory = new FILE_HISTORY( (unsigned) std::max( 1, fileHistorySize ),
-                                      ID_FILE1, ID_FILE_LIST_CLEAR );
+    m_fileHistory = new FILE_HISTORY( (unsigned) std::max( 1, fileHistorySize ), ID_FILE1, ID_FILE_LIST_CLEAR );
     m_fileHistory->Load( *aCfg );
 }
 
@@ -1550,7 +1532,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 }
 
 
-void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParentPage )
+void EDA_BASE_FRAME::ShowPreferences( const wxString& aStartPage, const wxString& aStartParentPage )
 {
     PAGED_DIALOG dlg( this, _( "Preferences" ), true, true, wxEmptyString,
                       wxWindow::FromDIP( wxSize( 980, 560 ), nullptr ) );
@@ -1830,11 +1812,9 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName, bool aVerbose )
     if( fn.GetPath().IsEmpty() && fn.HasName() )
         fn.MakeAbsolute();
 
-    wxCHECK_MSG( fn.IsOk(), false,
-                 wxT( "File name object is invalid.  Bad programmer!" ) );
+    wxCHECK_MSG( fn.IsOk(), false, wxT( "File name object is invalid.  Bad programmer!" ) );
     wxCHECK_MSG( !fn.GetPath().IsEmpty(), false,
-                 wxT( "File name object path <" ) + fn.GetFullPath() +
-                 wxT( "> is not set.  Bad programmer!" ) );
+                 wxT( "File name object path <" ) + fn.GetFullPath() + wxT( "> is not set.  Bad programmer!" ) );
 
     if( fn.IsDir() && !fn.IsDirWritable() )
     {
@@ -1975,8 +1955,7 @@ void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
     {
         m_normalFrameSize = GetWindowSize();
         m_normalFramePos  = GetPosition();
-        wxLogTrace( traceDisplayLocation,
-                    "Maximizing window - Saving position (%d, %d) with size (%d, %d)",
+        wxLogTrace( traceDisplayLocation, "Maximizing window - Saving position (%d, %d) with size (%d, %d)",
                     m_normalFramePos.x, m_normalFramePos.y,
                     m_normalFrameSize.x, m_normalFrameSize.y );
     }
@@ -2079,10 +2058,8 @@ void EDA_BASE_FRAME::AddMenuLanguageList( ACTION_MENU* aMasterMenu, TOOL_INTERAC
         else
             label = wxGetTranslation( LanguagesList[ii].m_Lang_Label );
 
-        wxMenuItem* item =
-                new wxMenuItem( langsMenu,
-                                LanguagesList[ii].m_KI_Lang_Identifier, // wxMenuItem wxID
-                                label, tooltip, wxITEM_CHECK );
+        wxMenuItem* item = new wxMenuItem( langsMenu, LanguagesList[ii].m_KI_Lang_Identifier, // wxMenuItem wxID
+                                           label, tooltip, wxITEM_CHECK );
 
         langsMenu->Append( item );
     }
