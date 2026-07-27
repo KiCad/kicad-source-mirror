@@ -1050,44 +1050,44 @@ static struct PCB_TABLE_DESC
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "External Border" ),
                     &PCB_TABLE::SetStrokeExternal, &PCB_TABLE::StrokeExternal ),
-                    tableProps );
+                    tableProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Header Border" ),
                     &PCB_TABLE::SetStrokeHeaderSeparator, &PCB_TABLE::StrokeHeaderSeparator ),
-                    tableProps );
+                    tableProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Border Width" ),
                     &PCB_TABLE::SetBorderWidth, &PCB_TABLE::GetBorderWidth,
                     PROPERTY_DISPLAY::PT_SIZE ),
-                    tableProps );
+                    tableProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TABLE, LINE_STYLE>( _HKI( "Border Style" ),
                     &PCB_TABLE::SetBorderStyle, &PCB_TABLE::GetBorderStyle ),
-                    tableProps );
+                    tableProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, COLOR4D>( _HKI( "Border Color" ),
                     &PCB_TABLE::SetBorderColor, &PCB_TABLE::GetBorderColor ),
-                    tableProps );
+                    tableProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Row Separators" ),
                     &PCB_TABLE::SetStrokeRows, &PCB_TABLE::StrokeRows ),
-                    tableProps );
+                    tableProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, bool>( _HKI( "Cell Separators" ),
                     &PCB_TABLE::SetStrokeColumns, &PCB_TABLE::StrokeColumns ),
-                    tableProps );
+                    tableProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, int>( _HKI( "Separators Width" ),
                     &PCB_TABLE::SetSeparatorsWidth, &PCB_TABLE::GetSeparatorsWidth,
                     PROPERTY_DISPLAY::PT_SIZE ),
-                    tableProps );
+                    tableProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TABLE, LINE_STYLE>( _HKI( "Separators Style" ),
                     &PCB_TABLE::SetSeparatorsStyle, &PCB_TABLE::GetSeparatorsStyle ),
-                    tableProps );
+                    tableProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_TABLE, COLOR4D>( _HKI( "Separators Color" ),
                     &PCB_TABLE::SetSeparatorsColor, &PCB_TABLE::GetSeparatorsColor ),
-                    tableProps );
+                    tableProps ).SetIsCopyable();
     }
 } _PCB_TABLE_DESC;

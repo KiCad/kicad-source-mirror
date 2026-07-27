@@ -1372,20 +1372,20 @@ static struct EDA_TEXT_DESC
                                 fonts.Add( wxString( fontName ) );
 
                             return fonts;
-                        } );
+                        } ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Auto Thickness" ),
                     &EDA_TEXT::SetAutoThickness, &EDA_TEXT::GetAutoThickness ),
                     textProps );
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Thickness" ),
                     &EDA_TEXT::SetTextThickness, &EDA_TEXT::GetTextThicknessProperty, PROPERTY_DISPLAY::PT_SIZE ),
-                    textProps );
+                    textProps ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Italic" ),
                     &EDA_TEXT::SetItalic, &EDA_TEXT::IsItalic ),
-                    textProps );
+                    textProps ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Bold" ),
                     &EDA_TEXT::SetBold, &EDA_TEXT::IsBold ),
-                    textProps );
+                    textProps ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Mirrored" ),
                     &EDA_TEXT::SetMirrored, &EDA_TEXT::IsMirrored ),
                     textProps );
@@ -1402,22 +1402,22 @@ static struct EDA_TEXT_DESC
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, bool>( _HKI( "Visible" ),
                     &EDA_TEXT::SetVisible, &EDA_TEXT::IsVisible ),
                     textProps )
-                .SetAvailableFunc( isField );
+                .SetAvailableFunc( isField ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Width" ),
                     &EDA_TEXT::SetTextWidth, &EDA_TEXT::GetTextWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                    textProps );
+                    textProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, int>( _HKI( "Height" ),
                     &EDA_TEXT::SetTextHeight, &EDA_TEXT::GetTextHeight, PROPERTY_DISPLAY::PT_SIZE ),
-                    textProps );
+                    textProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, GR_TEXT_H_ALIGN_T>( _HKI( "Horizontal Justification" ),
                     &EDA_TEXT::SetHorizJustify, &EDA_TEXT::GetHorizJustify ),
-                    textProps );
+                    textProps ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, GR_TEXT_V_ALIGN_T>( _HKI( "Vertical Justification" ),
                     &EDA_TEXT::SetVertJustify, &EDA_TEXT::GetVertJustify ),
-                    textProps );
+                    textProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, COLOR4D>( _HKI( "Color" ),
                     &EDA_TEXT::SetTextColor, &EDA_TEXT::GetTextColor ),

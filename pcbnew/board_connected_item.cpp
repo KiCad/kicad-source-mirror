@@ -229,7 +229,7 @@ static struct BOARD_CONNECTED_ITEM_DESC
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
                     new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, PCB_LAYER_ID>( _HKI( "Layer" ),
                                 &BOARD_CONNECTED_ITEM::SetLayer, &BOARD_CONNECTED_ITEM::GetLayer ) )
-                            .SetChoices( layerEnum.Choices() );
+                            .SetIsCopyable().SetChoices( layerEnum.Choices() );
 
         propMgr.AddProperty( new PROPERTY_ENUM<BOARD_CONNECTED_ITEM, int>( _HKI( "Net" ),
                     &BOARD_CONNECTED_ITEM::SetNetCode, &BOARD_CONNECTED_ITEM::GetNetCode, PT_NET ) )

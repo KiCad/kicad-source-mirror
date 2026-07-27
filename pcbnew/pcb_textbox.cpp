@@ -1049,7 +1049,7 @@ static struct PCB_TEXTBOX_DESC
 
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, bool, BOARD_ITEM>( _HKI( "Knockout" ),
                     &BOARD_ITEM::SetIsKnockout, &BOARD_ITEM::IsKnockout ),
-                    _HKI( "Text Properties" ) );
+                    _HKI( "Text Properties" ) ).SetIsCopyable();
 
         const wxString borderProps = _( "Border Properties" );
 
@@ -1058,30 +1058,30 @@ static struct PCB_TEXTBOX_DESC
 
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, bool>( _HKI( "Border" ),
                     &PCB_TEXTBOX::SetBorderEnabled, &PCB_TEXTBOX::IsBorderEnabled ),
-                    borderProps );
+                    borderProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<PCB_TEXTBOX, LINE_STYLE>( _HKI( "Border Style" ),
                     lineStyleSetter, lineStyleGetter ),
-                    borderProps );
+                    borderProps ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, int>( _HKI( "Border Width" ),
                     &PCB_TEXTBOX::SetBorderWidth, &PCB_TEXTBOX::GetBorderWidth, PROPERTY_DISPLAY::PT_SIZE ),
-                    borderProps );
+                    borderProps ).SetIsCopyable();
 
         const wxString marginProps = _( "Margins" );
 
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, int>( _HKI( "Margin Left" ),
                     &PCB_TEXTBOX::SetMarginLeft, &PCB_TEXTBOX::GetMarginLeft, PROPERTY_DISPLAY::PT_SIZE ),
-                    marginProps );
+                    marginProps ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, int>( _HKI( "Margin Top" ),
                     &PCB_TEXTBOX::SetMarginTop, &PCB_TEXTBOX::GetMarginTop, PROPERTY_DISPLAY::PT_SIZE ),
-                    marginProps );
+                    marginProps ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, int>( _HKI( "Margin Right" ),
                     &PCB_TEXTBOX::SetMarginRight, &PCB_TEXTBOX::GetMarginRight, PROPERTY_DISPLAY::PT_SIZE ),
-                    marginProps );
+                    marginProps ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<PCB_TEXTBOX, int>( _HKI( "Margin Bottom" ),
                     &PCB_TEXTBOX::SetMarginBottom, &PCB_TEXTBOX::GetMarginBottom, PROPERTY_DISPLAY::PT_SIZE ),
-                    marginProps );
+                    marginProps ).SetIsCopyable();
 
         propMgr.Mask( TYPE_HASH( PCB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
     }

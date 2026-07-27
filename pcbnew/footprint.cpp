@@ -5439,18 +5439,18 @@ static struct FOOTPRINT_DESC
                     groupOverrides );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<int>>( _HKI( "Clearance Override" ),
                     &FOOTPRINT::SetLocalClearance, &FOOTPRINT::GetLocalClearance, PROPERTY_DISPLAY::PT_SIZE ),
-                    groupOverrides );
+                    groupOverrides ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<int>>( _HKI( "Solderpaste Margin Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::PT_SIZE ),
-                    groupOverrides );
+                    groupOverrides ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, std::optional<double>>( _HKI( "Solderpaste Margin Ratio Override" ),
                     &FOOTPRINT::SetLocalSolderPasteMarginRatio, &FOOTPRINT::GetLocalSolderPasteMarginRatio,
                     PROPERTY_DISPLAY::PT_RATIO ),
-                    groupOverrides );
+                    groupOverrides ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY_ENUM<FOOTPRINT, ZONE_CONNECTION>( _HKI( "Zone Connection Style" ),
                     &FOOTPRINT::SetLocalZoneConnection, &FOOTPRINT::GetLocalZoneConnection ),
-                    groupOverrides );
+                    groupOverrides ).SetIsCopyable();
     }
 } _FOOTPRINT_DESC;
 

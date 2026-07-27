@@ -424,7 +424,7 @@ static struct PCB_REFERENCE_IMAGE_DESC
 
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ),
                     new PROPERTY_ENUM<PCB_REFERENCE_IMAGE, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Associated Layer" ),
-                                &PCB_REFERENCE_IMAGE::SetLayer, &PCB_REFERENCE_IMAGE::GetLayer ) );
+                                &PCB_REFERENCE_IMAGE::SetLayer, &PCB_REFERENCE_IMAGE::GetLayer ) ).SetIsCopyable();
 
         const wxString groupImage = _HKI( "Image Properties" );
 

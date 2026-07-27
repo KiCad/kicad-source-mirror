@@ -207,6 +207,7 @@ public:
             m_hideFromLibraryEditors( false ),
             m_hideFromDesignEditors( false ),
             m_hideFromRulesEditor( false ),
+            m_copyable( false ),
             m_availFunc( [](INSPECTABLE*)->bool { return true; } ),
             m_writeableFunc( [](INSPECTABLE*)->bool { return true; } ),
             m_validator( NullValidator )
@@ -348,6 +349,19 @@ public:
         return *this;
     }
 
+    /**
+     * True for a property that says how an item looks, not what or where it is.
+     *
+     * Opt-in.  The safe answer for anything unexamined is no.  Identity, position, size and
+     * connectivity stay off.  Copying those between items would move or rewire them.
+     */
+    bool IsCopyable() const { return m_copyable; }
+    PROPERTY_BASE& SetIsCopyable( bool aIsCopyable = true )
+    {
+        m_copyable = aIsCopyable;
+        return *this;
+    }
+
     wxString Group() const { return m_group; }
     PROPERTY_BASE& SetGroup( const wxString& aGroup ) { m_group = aGroup; return *this; }
 
@@ -449,6 +463,7 @@ private:
     bool m_hideFromDesignEditors;       // Do not show in Properties Manager of schematic or
                                         //   board editors
     bool m_hideFromRulesEditor;         // Do not show in Custom Rules editor autocomplete
+    bool m_copyable;                    // May be copied from one item to another
 
     /// Optional group identifier
     wxString m_group;

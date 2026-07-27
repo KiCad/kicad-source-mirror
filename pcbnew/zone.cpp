@@ -2325,27 +2325,27 @@ static struct ZONE_DESC
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Tracks" ),
                     &ZONE::SetDoNotAllowTracks, &ZONE::GetDoNotAllowTracks ),
                     groupKeepout )
-                .SetAvailableFunc( isRuleArea );
+                .SetAvailableFunc( isRuleArea ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Vias" ),
                     &ZONE::SetDoNotAllowVias, &ZONE::GetDoNotAllowVias ),
                     groupKeepout )
-                .SetAvailableFunc( isRuleArea );
+                .SetAvailableFunc( isRuleArea ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Pads" ),
                     &ZONE::SetDoNotAllowPads, &ZONE::GetDoNotAllowPads ),
                     groupKeepout )
-                .SetAvailableFunc( isRuleArea );
+                .SetAvailableFunc( isRuleArea ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Zone Fills" ),
                     &ZONE::SetDoNotAllowZoneFills, &ZONE::GetDoNotAllowZoneFills ),
                     groupKeepout )
-                .SetAvailableFunc( isRuleArea );
+                .SetAvailableFunc( isRuleArea ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Keep Out Footprints" ),
                     &ZONE::SetDoNotAllowFootprints, &ZONE::GetDoNotAllowFootprints ),
                     groupKeepout )
-                .SetAvailableFunc( isRuleArea );
+                .SetAvailableFunc( isRuleArea ).SetIsCopyable();
 
 
         const wxString groupPlacement = _HKI( "Placement" );
@@ -2371,13 +2371,13 @@ static struct ZONE_DESC
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>( _HKI( "Fill Mode" ),
                     &ZONE::SetFillMode, &ZONE::GetFillMode ),
                     groupFill )
-                .SetAvailableFunc( isCopperZone );
+                .SetAvailableFunc( isCopperZone ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Hatch Orientation" ),
                     &ZONE::SetHatchOrientation, &ZONE::GetHatchOrientation, PROPERTY_DISPLAY::PT_DEGREE ),
                     groupFill )
                 .SetAvailableFunc( isNonThievingCopperZone )
-                .SetWriteableFunc( isHatchedFill );
+                .SetWriteableFunc( isHatchedFill ).SetIsCopyable();
 
         auto atLeastMinWidthValidator =
                 []( const wxAny&& aValue, EDA_ITEM* aZone ) -> VALIDATOR_RESULT
@@ -2397,39 +2397,39 @@ static struct ZONE_DESC
                     groupFill )
                 .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isHatchedFill )
-                .SetValidator( atLeastMinWidthValidator );
+                .SetValidator( atLeastMinWidthValidator ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Hatch Gap" ),
                     &ZONE::SetHatchGap, &ZONE::GetHatchGap, PROPERTY_DISPLAY::PT_SIZE ),
                     groupFill )
                 .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isHatchedFill )
-                .SetValidator( atLeastMinWidthValidator );
+                .SetValidator( atLeastMinWidthValidator ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, double>( _HKI( "Hatch Minimum Hole Ratio" ),
                      &ZONE::SetHatchHoleMinArea, &ZONE::GetHatchHoleMinArea ),
                      groupFill )
                 .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isHatchedFill )
-                .SetValidator( PROPERTY_VALIDATORS::PositiveRatioValidator );
+                .SetValidator( PROPERTY_VALIDATORS::PositiveRatioValidator ).SetIsCopyable();
 
         // TODO: Smoothing effort needs to change to enum (in dialog too)
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Smoothing Effort" ),
                     &ZONE::SetHatchSmoothingLevel, &ZONE::GetHatchSmoothingLevel ),
                     groupFill )
                 .SetAvailableFunc( isNonThievingCopperZone )
-                .SetWriteableFunc( isHatchedFill );
+                .SetWriteableFunc( isHatchedFill ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, double>( _HKI( "Smoothing Amount" ),
                     &ZONE::SetHatchSmoothingValue, &ZONE::GetHatchSmoothingValue ),
                     groupFill )
                 .SetAvailableFunc( isNonThievingCopperZone )
-                .SetWriteableFunc( isHatchedFill );
+                .SetWriteableFunc( isHatchedFill ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, THIEVING_PATTERN>( _HKI( "Thieving Pattern" ),
                     &ZONE::SetThievingPattern, &ZONE::GetThievingPattern ),
                     groupFill )
-                .SetAvailableFunc( isThievingFill );
+                .SetAvailableFunc( isThievingFill ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thieving Element Size" ),
                     &ZONE::SetThievingElementSize, &ZONE::GetThievingElementSize,
@@ -2437,7 +2437,7 @@ static struct ZONE_DESC
                     groupFill )
                 .SetAvailableFunc( isThievingFill )
                 .SetWriteableFunc( isThievingNonHatch )
-                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator ).SetIsCopyable();
 
         // Gap is meaningful for all three patterns: edge-to-edge spacing between
         // adjacent stamps for dots/squares, line-to-line edge spacing for hatch.
@@ -2445,7 +2445,7 @@ static struct ZONE_DESC
                     &ZONE::SetThievingGap, &ZONE::GetThievingGap, PROPERTY_DISPLAY::PT_SIZE ),
                     groupFill )
                 .SetAvailableFunc( isThievingFill )
-                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thieving Line Width" ),
                     &ZONE::SetThievingLineWidth, &ZONE::GetThievingLineWidth,
@@ -2453,29 +2453,29 @@ static struct ZONE_DESC
                     groupFill )
                 .SetAvailableFunc( isThievingFill )
                 .SetWriteableFunc( isThievingHatch )
-                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Thieving Stagger" ),
                     &ZONE::SetThievingStagger, &ZONE::GetThievingStagger ),
                     groupFill )
-                .SetAvailableFunc( isThievingFill );
+                .SetAvailableFunc( isThievingFill ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Thieving Orientation" ),
                     &ZONE::SetThievingOrientation, &ZONE::GetThievingOrientation,
                     PROPERTY_DISPLAY::PT_DEGREE ),
                     groupFill )
-                .SetAvailableFunc( isThievingFill );
+                .SetAvailableFunc( isThievingFill ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ISLAND_REMOVAL_MODE>( _HKI( "Remove Islands" ),
                     &ZONE::SetIslandRemovalMode, &ZONE::GetIslandRemovalMode ),
                     groupFill )
-                .SetAvailableFunc( isNonThievingCopperZone );
+                .SetAvailableFunc( isNonThievingCopperZone ).SetIsCopyable();
 
         propMgr.AddProperty( new PROPERTY<ZONE, long long int>( _HKI( "Minimum Island Area" ),
                     &ZONE::SetMinIslandArea, &ZONE::GetMinIslandArea, PROPERTY_DISPLAY::PT_AREA ),
                     groupFill )
                 .SetAvailableFunc( isNonThievingCopperZone )
-                .SetWriteableFunc( isAreaBasedIslandRemoval );
+                .SetWriteableFunc( isAreaBasedIslandRemoval ).SetIsCopyable();
 
         const wxString groupElectrical = _HKI( "Electrical" );
 

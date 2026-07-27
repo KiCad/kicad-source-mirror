@@ -493,7 +493,7 @@ static struct BOARD_ITEM_DESC
                     &BOARD_ITEM::SetY, &BOARD_ITEM::GetY, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
         propMgr.AddProperty( new PROPERTY_ENUM<BOARD_ITEM, PCB_LAYER_ID>( _HKI( "Layer" ),
-                    &BOARD_ITEM::SetLayer, &BOARD_ITEM::GetLayer ) );
+                    &BOARD_ITEM::SetLayer, &BOARD_ITEM::GetLayer ) ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<BOARD_ITEM, bool>( _HKI( "Locked" ),
                     &BOARD_ITEM::SetLocked, &BOARD_ITEM::IsLocked ) )
                .SetAvailableFunc( isNotFootprintHolder );

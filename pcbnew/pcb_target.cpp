@@ -242,13 +242,13 @@ static struct PCB_TARGET_DESC
         REGISTER_TYPE( PCB_TARGET );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TARGET ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _HKI( "Size" ),
-                    &PCB_TARGET::SetSize, &PCB_TARGET::GetSize, PROPERTY_DISPLAY::PT_SIZE ) );
+                    &PCB_TARGET::SetSize, &PCB_TARGET::GetSize, PROPERTY_DISPLAY::PT_SIZE ) ).SetIsCopyable();
         propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _HKI( "Width" ),
-                    &PCB_TARGET::SetWidth, &PCB_TARGET::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
+                    &PCB_TARGET::SetWidth, &PCB_TARGET::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) ).SetIsCopyable();
 
         // TODO change the integer to an enum?
         //shape->SetValues( { { 0, _HKI( "Cross" ) }, { 1, ( "Plus" ) } } );
         propMgr.AddProperty( new PROPERTY<PCB_TARGET, int>( _HKI( "Shape" ),
-                &PCB_TARGET::SetShape, &PCB_TARGET::GetShape ) );
+                &PCB_TARGET::SetShape, &PCB_TARGET::GetShape ) ).SetIsCopyable();
     }
 } _PCB_TARGET_DESC;
