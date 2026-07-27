@@ -404,6 +404,7 @@ set( KICOMMON_SRCS
     mdw/mdw_lock_tracker.cpp
     mdw/mdw_serial_worker.cpp
     mdw/mdw_types.cpp
+    mdw/mdw_workspace_service.cpp
 
     startwizard/startwizard.cpp
     startwizard/startwizard_provider_libraries.cpp

@@ -374,6 +374,15 @@ public:
     void SyncGlobalFieldNameTemplatesToProjects();
 
     /**
+     * Reread aProject's project file after something outside KiCad's settings code replaced it on
+     * disk, such as a workspace download, and tell the open editors to apply the new settings.
+     * Otherwise the next save from any editor writes the stale settings back over the new file.
+     *
+     * @return false when the file could not be read.
+     */
+    bool ProjectFileReplaced( PROJECT& aProject );
+
+    /**
      * Save a loaded project.
      *
      * @param aFullPath is the project name to save.  If empty, will save the first loaded project.

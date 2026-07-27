@@ -219,6 +219,9 @@ public:
      */
     virtual std::shared_ptr<KIGIT_COMMON> GetGitCommon() const;
 
+    /// Tell the views of the project's Git session that its files changed. Does nothing before a session exists.
+    void NotifyGitRefresh() const;
+
     /**
      * Find the Git repository containing the project directory and bind it to the session.
      * Does nothing when Git integration is disabled for this project.

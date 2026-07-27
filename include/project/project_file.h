@@ -24,10 +24,13 @@
 
 #include <common.h> // needed for wxstring hash template
 #include <kiid.h>
+#include <mdw/client/mdw_client_types.h>
 #include <project/board_project_settings.h>
 #include <settings/json_settings.h>
 #include <settings/nested_settings.h>
 #include <template_fieldnames.h>
+
+#include <optional>
 
 class BOARD_DESIGN_SETTINGS;
 class ERC_SETTINGS;
@@ -232,6 +235,29 @@ public:
 
     /// Drawing sheet file
     wxString m_BoardDrawingSheetFile;
+
+    /// The Managed Design Workspace binding, if this project is bound. These are
+    /// parsed and round-tripped even when the framework is disabled, so the
+    /// (workspace ...) section is never dropped from .kicad_pro.
+    wxString m_WorkspaceBackend;
+    wxString m_WorkspaceId;
+    wxString m_WorkspaceBinding;
+
+    MDW_PROJECT_BINDING WorkspaceBinding() const
+    {
+        return { m_WorkspaceBackend, m_WorkspaceId, m_WorkspaceBinding };
+    }
+
+    void SetWorkspaceBinding( const MDW_PROJECT_BINDING& aBinding )
+    {
+        m_WorkspaceBackend = aBinding.backend_id;
+        m_WorkspaceId = aBinding.workspace_id;
+        m_WorkspaceBinding = aBinding.binding;
+    }
+
+    /// The library sources the project's libraries come from. Locators never carry credentials, and an
+    /// entry without a backend or locator, or naming one already listed, is dropped on load.
+    std::vector<MDW_LIBRARY_REQUIREMENT> m_WorkspaceLibrarySources;
 
     /// Recent queries for Find by Properties dialog
     std::vector<wxString> m_FindByPropertiesQueries;

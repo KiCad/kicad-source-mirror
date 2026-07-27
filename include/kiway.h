@@ -390,6 +390,14 @@ public:
     virtual KIFACE* KiFACE( FACE_T aFaceId, bool doLoad = true );
 
     /**
+     * Under the project manager the libraries of a face load once an editor that uses them is open, since they
+     * stay in memory for as long as the process lives.  Call from the main thread only.
+     *
+     * @return true when the kiface of aFace should preload its libraries now.
+     */
+    bool IsLibraryPreloadWanted( FACE_T aFace );
+
+    /**
      * Return the #KIWAY_PLAYER* given a FRAME_T.
      *
      * If it is not already created, the required KIFACE is found and loaded and initialized
@@ -556,6 +564,9 @@ private:
      *         or NULL if this KIWAY_PLAYER was not yet created, or was closed
      */
     KIWAY_PLAYER* GetPlayerFrame( FRAME_T aFrameType );
+
+    /// True when an editor or viewer that uses the libraries of aFace is open
+    bool hasLibraryPlayer( FACE_T aFace );
 
     static std::array<KIFACE*,KIWAY_FACE_COUNT>  m_kiface;
     static std::array<int,KIWAY_FACE_COUNT>      m_kiface_version;

@@ -21,6 +21,7 @@
 #pragma once
 
 #include <memory>
+#include <mutex>
 #include <vector>
 #include <mouse_drag_action.h>
 #include <project/board_opacity_defaults.h>
@@ -229,9 +230,19 @@ public:
         bool enable_server;
     };
 
+    struct WORKSPACE
+    {
+        bool                         enable_integration;
+        wxString                     default_backend_id;
+        std::map<wxString, wxString> accounts; ///< Username by KIGIT::CredentialRealm(), under AccountsMutex()
+    };
+
     COMMON_SETTINGS();
 
     virtual ~COMMON_SETTINGS();
+
+    /// Held by every read of m_Workspace.accounts or the m_Git author off the UI thread and every write of them
+    static std::mutex& AccountsMutex();
 
     COMMON_SETTINGS_INTERNALS& CsInternals()             { return *m_csInternals; }
     const COMMON_SETTINGS_INTERNALS& CsInternals() const { return *m_csInternals; }
@@ -293,6 +304,7 @@ public:
     PACKAGE_MANAGER     m_PackageManager;
     GIT                 m_Git;
     API                 m_Api;
+    WORKSPACE           m_Workspace;
 
     /// Global field name templates shared by all project editors.
     TEMPLATES           m_FieldNameTemplates;

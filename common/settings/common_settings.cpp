@@ -50,6 +50,38 @@ const int commonSchemaVersion = 7;
 
 COMMON_SETTINGS::~COMMON_SETTINGS() = default;
 
+
+std::mutex& COMMON_SETTINGS::AccountsMutex()
+{
+    static std::mutex mutex;
+    return mutex;
+}
+
+
+namespace
+{
+
+// Workers read the accounts while a load or reset replaces them
+class PARAM_ACCOUNTS : public PARAM_WXSTRING_MAP
+{
+public:
+    using PARAM_WXSTRING_MAP::PARAM_WXSTRING_MAP;
+
+    void Load( const JSON_SETTINGS& aSettings, bool aResetIfMissing = true ) const override
+    {
+        std::lock_guard<std::mutex> lock( COMMON_SETTINGS::AccountsMutex() );
+        PARAM_WXSTRING_MAP::Load( aSettings, aResetIfMissing );
+    }
+
+    void SetDefault() override
+    {
+        std::lock_guard<std::mutex> lock( COMMON_SETTINGS::AccountsMutex() );
+        PARAM_WXSTRING_MAP::SetDefault();
+    }
+};
+
+} // namespace
+
 COMMON_SETTINGS::COMMON_SETTINGS() :
         JSON_SETTINGS( "kicad_common", SETTINGS_LOC::USER, commonSchemaVersion ),
         m_Appearance(),
@@ -551,6 +583,16 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "api.enable_server",
             &m_Api.enable_server, false ) );
 
+    // The Managed Design Workspace is opt-in and off by default; until the user
+    // enables it no backend loads and no workspace UI appears anywhere
+    m_params.emplace_back( new PARAM<bool>( "workspace.enable_integration",
+            &m_Workspace.enable_integration, false ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "workspace.default_backend_id",
+            &m_Workspace.default_backend_id, wxS( "" ) ) );
+
+    m_params.emplace_back( new PARAM_ACCOUNTS( "workspace.accounts", &m_Workspace.accounts, {} ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "dialog.controls",
             [&]() -> nlohmann::json
             {
@@ -975,6 +1017,7 @@ void COMMON_SETTINGS::InitializeEnvironment()
     addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ), PATHS::GetStock3dmodelsPath() );
     addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) ), PATHS::GetStockTemplatesPath() );
     addVar( wxT( "KICAD_USER_TEMPLATE_DIR" ), PATHS::GetUserTemplatesPath() );
+    addVar( wxT( "KICAD_TEAM_LIBRARIES" ), PATHS::GetUserTeamLibrariesPath() );
     addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ), PATHS::GetDefault3rdPartyPath() );
     addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) ), PATHS::GetStockSymbolsPath() );
     addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "DESIGN_BLOCK_DIR" ) ), PATHS::GetStockDesignBlocksPath() );

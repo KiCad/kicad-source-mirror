@@ -632,6 +632,19 @@ const nlohmann::json& JSON_SETTINGS::originalJson() const
 }
 
 
+void JSON_SETTINGS::eraseKey( const std::string& aPath )
+{
+    const nlohmann::json::json_pointer key = JSON_SETTINGS_INTERNALS::PointerFromString( aPath );
+
+    // A save merges memory over the file as loaded, so the key has to leave both
+    for( nlohmann::json* json : { static_cast<nlohmann::json*>( m_internals.get() ), &m_internals->m_original } )
+    {
+        if( json->contains( key ) )
+            json->at( key.parent_pointer() ).erase( key.back() );
+    }
+}
+
+
 std::string JSON_SETTINGS::formatFileContents()
 {
     LOCALE_IO dummy;

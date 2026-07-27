@@ -33,6 +33,7 @@
 #include <kiplatform/environment.h>
 #include <kiplatform/io.h>
 #include <kiway.h>
+#include <mail_type.h>
 #include <lockfile.h>
 #include <macros.h>
 #include <pgm_base.h>
@@ -1327,6 +1328,28 @@ std::vector<wxString> SETTINGS_MANAGER::GetOpenProjects() const
 }
 
 
+bool SETTINGS_MANAGER::ProjectFileReplaced( PROJECT& aProject )
+{
+    bool loaded = aProject.GetProjectFile().LoadFromFile( aProject.GetProjectPath() );
+
+    if( !m_kiway || &aProject != &Prj() )
+        return loaded;
+
+    // Editors cache what they resolved from the settings, such as each net's netclass
+    for( auto [frame, mail] : { std::pair( FRAME_SCH, MAIL_SCH_PROJECT_SETTINGS_CHANGED ),
+                                std::pair( FRAME_PCB_EDITOR, MAIL_PCB_PROJECT_SETTINGS_CHANGED ) } )
+    {
+        if( m_kiway->Player( frame, false ) )
+        {
+            std::string payload;
+            m_kiway->ExpressMail( frame, mail, payload );
+        }
+    }
+
+    return loaded;
+}
+
+
 bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath, PROJECT* aProject )
 {
     if( !aProject )
@@ -1353,7 +1376,11 @@ bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath, PROJECT* aProject
     // Project file is "real" data; report all save errors
     project->SaveToFile( projectPath );
 
-    return !project->LastSaveFailed();
+    if( project->LastSaveFailed() )
+        return false;
+
+    aProject->NotifyGitRefresh();
+    return true;
 }
 
 

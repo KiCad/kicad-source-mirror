@@ -294,6 +294,9 @@ protected:
     /// @return the file contents as loaded, before migration and parameter storage
     const nlohmann::json& originalJson() const;
 
+    /// Drop a key no parameter owns any more, from memory and from what the next save writes back.
+    void eraseKey( const std::string& aPath );
+
     /**
      * Registers a migration from one schema version to another.  If the schema version in the file
      * loaded from disk is less than the schema version of the JSON_SETTINGS class, migration

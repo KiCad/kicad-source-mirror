@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <cstring>
 
 #include <app_monitor.h>
@@ -403,6 +404,34 @@ KIWAY_PLAYER* KIWAY::GetPlayerFrame( FRAME_T aFrameType )
 }
 
 
+namespace
+{
+
+// The frames that read the libraries a preload loads
+const FRAME_T LIBRARY_FRAMES[] = { FRAME_SCH,        FRAME_SCH_SYMBOL_EDITOR, FRAME_SCH_VIEWER,
+                                   FRAME_PCB_EDITOR, FRAME_FOOTPRINT_EDITOR,  FRAME_FOOTPRINT_VIEWER };
+
+} // namespace
+
+
+bool KIWAY::hasLibraryPlayer( FACE_T aFace )
+{
+    for( FRAME_T frame : LIBRARY_FRAMES )
+    {
+        if( KifaceType( frame ) == aFace && GetPlayerFrame( frame ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool KIWAY::IsLibraryPreloadWanted( FACE_T aFace )
+{
+    return !( m_ctl & KFCTL_CPP_PROJECT_SUITE ) || hasLibraryPlayer( aFace );
+}
+
+
 KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow* aParent )
 {
     // Since this will be called from python, cannot assume that code will
@@ -438,6 +467,12 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
                 return nullptr;
             }
 
+            // The manager skips its preload while no editor is open, so the first editor of a face loads for all
+            // The schematic editor preloads for itself once its project is open
+            const bool preload = ( m_ctl & KFCTL_CPP_PROJECT_SUITE ) && aFrameType != FRAME_SCH
+                                 && std::ranges::find( LIBRARY_FRAMES, aFrameType ) != std::end( LIBRARY_FRAMES )
+                                 && !hasLibraryPlayer( face_type );
+
             frame = (KIWAY_PLAYER*) kiface->CreateKiWindow(
                                             aParent,    // Parent window of frame in modal mode,
                                                         // NULL in non modal mode
@@ -447,7 +482,12 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
                                                         // were passed to KIFACE::OnKifaceStart()
                                             );
             if( frame )
+            {
                 m_playerFrameId[aFrameType].store( frame->GetId() );
+
+                if( preload )
+                    kiface->PreloadLibraries( this );
+            }
 
             return frame;
         }

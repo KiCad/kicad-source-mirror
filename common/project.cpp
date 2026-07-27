@@ -34,6 +34,7 @@
 #include <lockfile.h>
 #include <macros.h>
 #include <git/kicad_git_common.h>
+#include <git/kigit_platform.h>
 #include <git/kigit_ssh_keys.h>
 #include <git/project_git_utils.h>
 #include <git2.h>
@@ -88,6 +89,13 @@ std::shared_ptr<KIGIT_COMMON> PROJECT::GetGitCommon() const
         m_gitCommon = std::make_shared<KIGIT_COMMON>( nullptr, GetProjectPath() );
 
     return m_gitCommon;
+}
+
+
+void PROJECT::NotifyGitRefresh() const
+{
+    if( m_gitCommon )
+        m_gitCommon->NotifyRefreshListeners();
 }
 
 
@@ -158,6 +166,12 @@ bool PROJECT::AttachGitRepository()
     // Reading the URL clears a username it does not name, and one it does name wins
     if( m_localSettings && common->GetUsername().IsEmpty() )
         common->SetUsername( m_localSettings->m_GitRepoUsername );
+
+    // A sign-in to the same server from another project or a workspace serves this one too
+    wxString saved = KIGIT::PlatformServices().getAccount( KIGIT::CredentialRealm( remote ) );
+
+    if( common->GetUsername().IsEmpty() && !saved.IsEmpty() )
+        common->SetUsername( saved );
 
     return true;
 }

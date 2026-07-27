@@ -109,4 +109,17 @@ BOOST_AUTO_TEST_CASE( MissingKifaceIsReportedOnceNotThrown )
 }
 
 
+BOOST_AUTO_TEST_CASE( ManagerPreloadsLibrariesOnlyForOpenEditors )
+{
+    KIWAY manager( KFCTL_CPP_PROJECT_SUITE );
+    KIWAY standalone( KFCTL_STANDALONE );
+    KIWAY cli( KFCTL_CLI );
+
+    BOOST_CHECK( !manager.IsLibraryPreloadWanted( KIWAY::FACE_SCH ) );
+    BOOST_CHECK( !manager.IsLibraryPreloadWanted( KIWAY::FACE_PCB ) );
+    BOOST_CHECK( standalone.IsLibraryPreloadWanted( KIWAY::FACE_SCH ) );
+    BOOST_CHECK( cli.IsLibraryPreloadWanted( KIWAY::FACE_PCB ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

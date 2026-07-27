@@ -28,6 +28,7 @@
 #include <functional>
 #include <memory>
 #include <mutex>
+#include <set>
 #include <shared_mutex>
 #include <vector>
 
@@ -157,6 +158,12 @@ private:
     void jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob );
 
     /**
+     * Post a refresh of aStatusBar from the front job unless one is already queued.
+     * Call with m_mutex held so the status bar cannot be unregistered and freed meanwhile.
+     */
+    void queueStatusBarUpdate( KISTATUSBAR* aStatusBar );
+
+    /**
      * Holds a reference to all active background jobs
      * Access to this vector should be protected by locks since threads may Create or Remove at will
      * to register their activity
@@ -168,6 +175,10 @@ private:
 
     /// Mutex to protect access to m_jobs, m_shownDialogs and m_statusBars
     mutable std::shared_mutex m_mutex;
+
+    /// Status bars with a refresh queued, so a burst of job updates costs each one a single refresh
+    std::set<KISTATUSBAR*> m_pendingStatusBars;
+    std::mutex             m_pendingMutex;
 };
 
 #endif

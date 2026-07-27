@@ -272,17 +272,11 @@ void BACKGROUND_JOBS_MONITOR::Remove( std::shared_ptr<BACKGROUND_JOB> aJob )
                     } );
         }
 
+        // Hidden by the coalesced refresh, since a separate hide could run after it showed a newer job
         if( m_jobs.empty() )
         {
             for( KISTATUSBAR* statusBar : m_statusBars )
-            {
-                statusBar->CallAfter(
-                        [=]()
-                        {
-                            statusBar->HideBackgroundProgressBar();
-                            statusBar->SetBackgroundStatusText( wxT( "" ) );
-                        } );
-            }
+                queueStatusBarUpdate( statusBar );
         }
         else
         {
@@ -348,18 +342,8 @@ void BACKGROUND_JOBS_MONITOR::jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob )
     //for now, we go and update the status bar if its the first job in the vector
     if( !m_jobs.empty() && m_jobs.front() == aJob )
     {
-        // update all status bar entries
         for( KISTATUSBAR* statusBar : m_statusBars )
-        {
-            statusBar->CallAfter(
-                    [=]()
-                    {
-                        statusBar->ShowBackgroundProgressBar();
-                        statusBar->SetBackgroundProgressMax( aJob->m_maxProgress );
-                        statusBar->SetBackgroundProgress( aJob->m_currentProgress );
-                        statusBar->SetBackgroundStatusText( aJob->GetStatus() );
-                    } );
-        }
+            queueStatusBarUpdate( statusBar );
     }
 
     for( BACKGROUND_JOB_LIST* list : m_shownDialogs )
@@ -373,26 +357,61 @@ void BACKGROUND_JOBS_MONITOR::jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob )
 }
 
 
+void BACKGROUND_JOBS_MONITOR::queueStatusBarUpdate( KISTATUSBAR* aStatusBar )
+{
+    {
+        std::lock_guard<std::mutex> lock( m_pendingMutex );
+
+        // The queued refresh reads the job when it runs, so it already covers this update
+        if( !m_pendingStatusBars.insert( aStatusBar ).second )
+            return;
+    }
+
+    aStatusBar->CallAfter(
+            [this, aStatusBar]()
+            {
+                // Cleared before reading, so an update arriving now queues a fresh refresh
+                {
+                    std::lock_guard<std::mutex> lock( m_pendingMutex );
+                    m_pendingStatusBars.erase( aStatusBar );
+                }
+
+                std::shared_ptr<BACKGROUND_JOB> job;
+
+                {
+                    std::shared_lock<std::shared_mutex> lock( m_mutex );
+
+                    if( !m_jobs.empty() )
+                        job = m_jobs.front();
+                }
+
+                if( !job )
+                {
+                    aStatusBar->HideBackgroundProgressBar();
+                    aStatusBar->SetBackgroundStatusText( wxEmptyString );
+                    return;
+                }
+
+                aStatusBar->ShowBackgroundProgressBar();
+                aStatusBar->SetBackgroundProgressMax( job->m_maxProgress );
+                aStatusBar->SetBackgroundProgress( job->m_currentProgress );
+                aStatusBar->SetBackgroundStatusText( job->GetStatus() );
+            } );
+}
+
+
 void BACKGROUND_JOBS_MONITOR::RegisterStatusBar( KISTATUSBAR* aStatusBar )
 {
     // Frames without a status bar (e.g. the symbol chooser) pass nullptr
     if( !aStatusBar )
         return;
 
-    std::shared_ptr<BACKGROUND_JOB> frontJob;
-
-    {
-        std::lock_guard<std::shared_mutex> lock( m_mutex );
-        m_statusBars.push_back( aStatusBar );
-
-        // Capture front job while holding lock
-        if( !m_jobs.empty() )
-            frontJob = m_jobs.front();
-    }
+    std::lock_guard<std::shared_mutex> lock( m_mutex );
+    m_statusBars.push_back( aStatusBar );
 
     // Make sure the newly-registered bar gets the active job, if any
-    if( frontJob )
-        jobUpdated( frontJob );
+    if( !m_jobs.empty() )
+        queueStatusBarUpdate( aStatusBar );
 }
 
 
@@ -405,4 +424,8 @@ void BACKGROUND_JOBS_MONITOR::UnregisterStatusBar( KISTATUSBAR* aStatusBar )
                                             return statusBar == aStatusBar;
                                         } ),
                         m_statusBars.end() );
+
+    // A later status bar can reuse the address, and its first refresh must not look queued
+    std::lock_guard<std::mutex> pendingLock( m_pendingMutex );
+    m_pendingStatusBars.erase( aStatusBar );
 }

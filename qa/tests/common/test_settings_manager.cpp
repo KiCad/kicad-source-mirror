@@ -30,6 +30,7 @@
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
 
+#include <git/kicad_git_common.h>
 #include <json_common.h>
 #include <kiplatform/io.h>
 #include <kiway.h>
@@ -209,6 +210,40 @@ BOOST_AUTO_TEST_CASE( GetProjectMatchesAnySpellingOfTheLoadedPath )
 
     BOOST_REQUIRE( project );
     BOOST_CHECK_EQUAL( project->GetProjectFullName(), projectPath );
+}
+
+
+// The Version Control pane learns of a project save only through the repository session's listeners
+BOOST_AUTO_TEST_CASE( SaveProjectRefreshesGitListeners )
+{
+    wxString projectPath = Path( "listeners.kicad_pro" );
+
+    {
+        std::ofstream out( projectPath.ToStdString() );
+        out << R"({"meta": {"filename": "listeners.kicad_pro", "version": 3}})";
+    }
+
+    SETTINGS_MANAGER mgr;
+    BOOST_REQUIRE( mgr.LoadProject( projectPath, false ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_REQUIRE( project );
+
+    int refreshed = 0;
+    int saved = 0;
+    int owner = 0;
+
+    // A listener that saves again must not be called again by its own save
+    project->GetGitCommon()->AddRefreshListener( &owner,
+                                                 [&]()
+                                                 {
+                                                     refreshed++;
+                                                     saved += mgr.SaveProject( wxEmptyString, project ) ? 1 : 0;
+                                                 } );
+
+    BOOST_REQUIRE( mgr.SaveProject( wxEmptyString, project ) );
+    BOOST_CHECK_EQUAL( refreshed, 1 );
+    BOOST_CHECK_EQUAL( saved, 1 );
 }
 
 

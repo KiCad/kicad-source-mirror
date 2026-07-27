@@ -23,6 +23,7 @@
 #define KICAD_PROJECT_LOCAL_SETTINGS_H
 
 #include <layer_ids.h>
+#include <mdw/client/mdw_client_types.h>
 #include <project/board_opacity_defaults.h>
 #include <project/board_project_settings.h>
 #include <project/sch_project_settings.h>
@@ -170,7 +171,73 @@ public:
     /// If true, KiCad will not use Git integration for this project even if a .git directory exists
     bool m_GitIntegrationDisabled;
 
+    /// If true, this computer does not use the project's Design Workspace binding, which the project file still holds
+    bool m_WorkspaceDisabledHere;
+
+    /// Which workspace item each checked-out file came from, keyed by project-relative path, or none when
+    /// they were recorded under another binding than the project file now holds.
+    const std::map<wxString, wxString>& WorkspaceItems() const;
+
+    /// The item a checked-out file belongs to, or empty when the file is not
+    /// under workspace control. aLocalPath may be absolute or project-relative.
+    wxString GetWorkspaceItemId( const wxString& aLocalPath ) const;
+
+    /// Record that aLocalPath holds aItemId. An empty item id removes the entry,
+    /// which is what abandoning a checkout means. A different item drops the old base,
+    /// and any other file recorded for aItemId is forgotten with its base.
+    void SetWorkspaceItemId( const wxString& aLocalPath, const wxString& aItemId );
+
+    /// The base of aLocalPath, or nothing when no checkout, download or check-in recorded one.
+    std::optional<MDW_ITEM_BASE> GetWorkspaceBase( const wxString& aLocalPath ) const;
+
+    /// Record aBase for aLocalPath, which must already hold an item; an empty revision id removes it.
+    void SetWorkspaceBase( const wxString& aLocalPath, const MDW_ITEM_BASE& aBase );
+
+    /// Forget every checkout and its base, and record later ones under the binding the project file holds now.
+    void ClearWorkspaceItems();
+
+    /// Every checkout, its base and the binding they were recorded under, to put back after a failed save.
+    struct WORKSPACE_CHECKOUTS
+    {
+        std::map<wxString, wxString>      items;
+        std::map<wxString, MDW_ITEM_BASE> bases;
+        MDW_PROJECT_BINDING               binding;
+    };
+
+    WORKSPACE_CHECKOUTS WorkspaceCheckouts() const
+    {
+        return { m_workspaceItems, m_workspaceBases, m_workspaceItemsBinding };
+    }
+
+    void RestoreWorkspaceCheckouts( const WORKSPACE_CHECKOUTS& aCheckouts )
+    {
+        m_workspaceItems = aCheckouts.items;
+        m_workspaceBases = aCheckouts.bases;
+        m_workspaceItemsBinding = aCheckouts.binding;
+    }
+
+    /// True when aLocalPath is this project's local settings file, which holds the copy's own checkouts and is
+    /// never a workspace item.
+    bool IsLocalSettingsFile( const wxString& aLocalPath ) const;
+
 private:
+    wxString projectRelativePath( const wxString& aLocalPath ) const;
+
+    /// True when the checkouts were recorded under the binding the project file holds now
+    bool workspaceItemsCurrent() const;
+
+    /// Keyed by project-relative path so the binding survives moving the project. Kept here with the
+    /// bases because both describe this copy. Users check out different files, and a project file
+    /// shared through the workspace, git or a synced folder would carry a teammate's.
+    std::map<wxString, wxString> m_workspaceItems;
+
+    /// The revision each file in m_workspaceItems was last checked out, downloaded or checked in at.
+    std::map<wxString, MDW_ITEM_BASE> m_workspaceBases;
+
+    /// The binding m_workspaceItems was recorded under. A pull can bring a teammate's rebind while
+    /// this copy is open, and the recorded ids then name items of another workspace.
+    MDW_PROJECT_BINDING m_workspaceItemsBinding;
+
     /// A link to the owning project
     PROJECT* m_project;
 
