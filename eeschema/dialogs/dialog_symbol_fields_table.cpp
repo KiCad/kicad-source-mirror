@@ -54,7 +54,7 @@
 #include <fields_data_model.h>
 #include <eda_list_dialog.h>
 #include <project_sch.h>
-#include <jobs/job_export_sch_bom.h>
+#include <jobs/job_export_bom.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 #include <sch_sheet_path.h>
@@ -233,7 +233,7 @@ private:
 };
 
 
-DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_SCH_BOM* aJob ) :
+DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob ) :
         DIALOG_SYMBOL_FIELDS_TABLE_BASE( parent ),
         m_currentBomPreset( nullptr ),
         m_lastSelectedBomPreset( nullptr ),

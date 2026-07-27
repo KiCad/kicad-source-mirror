@@ -18,7 +18,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
-#include <jobs/job_export_sch_bom.h>
+#include <jobs/job_export_bom.h>
 #include <nlohmann/json.hpp>
 #include <settings/bom_settings.h>
 
@@ -52,14 +52,14 @@ BOOST_AUTO_TEST_CASE( ByteOrderMarkFormatPresetRoundTripAndLegacyDefault )
 
 BOOST_AUTO_TEST_CASE( VariantRoundTrip )
 {
-    JOB_EXPORT_SCH_BOM job;
+    JOB_EXPORT_BOM job;
     job.SetSelectedVariant( wxS( "VAR A" ) );
     job.m_includeByteOrderMark = true;
 
     nlohmann::json j;
     job.ToJson( j );
 
-    JOB_EXPORT_SCH_BOM loaded;
+    JOB_EXPORT_BOM loaded;
     loaded.FromJson( j );
 
     BOOST_CHECK( loaded.GetSelectedVariant() == wxS( "VAR A" ) );
@@ -69,12 +69,12 @@ BOOST_AUTO_TEST_CASE( VariantRoundTrip )
 
 BOOST_AUTO_TEST_CASE( EmptyVariantRoundTrip )
 {
-    JOB_EXPORT_SCH_BOM job;
+    JOB_EXPORT_BOM job;
 
     nlohmann::json j;
     job.ToJson( j );
 
-    JOB_EXPORT_SCH_BOM loaded;
+    JOB_EXPORT_BOM loaded;
     loaded.FromJson( j );
 
     BOOST_CHECK( loaded.GetSelectedVariant().IsEmpty() );
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE( EmptyVariantRoundTrip )
 // without bound. Setting the selection must replace the list, never grow it.
 BOOST_AUTO_TEST_CASE( VariantNoAccumulation )
 {
-    JOB_EXPORT_SCH_BOM job;
+    JOB_EXPORT_BOM job;
     job.SetSelectedVariant( wxS( "VAR A" ) );
     job.SetSelectedVariant( wxS( "VAR A" ) );
     job.SetSelectedVariant( wxS( "VAR B" ) );
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE( VariantNoAccumulation )
 // Selecting the default variant leaves the list empty.
 BOOST_AUTO_TEST_CASE( DefaultVariantClearsList )
 {
-    JOB_EXPORT_SCH_BOM job;
+    JOB_EXPORT_BOM job;
     job.SetSelectedVariant( wxS( "VAR A" ) );
     job.SetSelectedVariant( wxEmptyString );
 
@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE( VariantFromList )
 {
     nlohmann::json j = { { "variant_names", { "VAR A", "VAR B" } } };
 
-    JOB_EXPORT_SCH_BOM loaded;
+    JOB_EXPORT_BOM loaded;
     loaded.m_includeByteOrderMark = true;
     loaded.FromJson( j );
 

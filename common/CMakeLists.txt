@@ -150,6 +150,7 @@ set( KICOMMON_SRCS
     jobs/job_registry.cpp
     jobs/jobs_output_archive.cpp
     jobs/jobs_output_folder.cpp
+    jobs/job_export_bom.cpp
     jobs/job_export_pcb_drill.cpp
     jobs/job_export_pcb_dxf.cpp
     jobs/job_export_pcb_gerber.cpp
@@ -167,7 +168,6 @@ set( KICOMMON_SRCS
     jobs/job_export_pcb_svg.cpp
     jobs/job_export_pcb_gencad.cpp
     jobs/job_export_pcb_3d.cpp
-    jobs/job_export_sch_bom.cpp
     jobs/job_export_sch_netlist.cpp
     jobs/job_export_sch_plot.cpp
     jobs/job_export_sch_pythonbom.cpp

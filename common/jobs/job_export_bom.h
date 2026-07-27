@@ -18,17 +18,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_EXPORT_SCH_BOM_H
-#define JOB_EXPORT_SCH_BOM_H
+#ifndef JOB_EXPORT_BOM_H
+#define JOB_EXPORT_BOM_H
 
 #include <kicommon.h>
 #include <vector>
 #include "job.h"
 
-class KICOMMON_API JOB_EXPORT_SCH_BOM : public JOB
+class KICOMMON_API JOB_EXPORT_BOM : public JOB
 {
 public:
-    JOB_EXPORT_SCH_BOM();
+    JOB_EXPORT_BOM();
     wxString GetDefaultDescription() const override;
     wxString GetSettingsDialogTitle() const override;
 
@@ -41,7 +41,7 @@ public:
     // Basic options
     wxString m_filename;
 
-    // Preset options (from schematic)
+    // Existing Preset, for that editor, e.g. sch and pcb will potentially have different presets
     wxString m_bomPresetName;
     wxString m_bomFmtPresetName;
 

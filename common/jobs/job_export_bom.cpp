@@ -18,12 +18,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <jobs/job_export_sch_bom.h>
+#include <jobs/job_export_bom.h>
 #include <jobs/job_registry.h>
 #include <i18n_utility.h>
 
 
-JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
+JOB_EXPORT_BOM::JOB_EXPORT_BOM() :
     JOB( "bom", false ),
     m_filename(),
 
@@ -92,7 +92,7 @@ JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM() :
 }
 
 
-wxString JOB_EXPORT_SCH_BOM::GetSelectedVariant() const
+wxString JOB_EXPORT_BOM::GetSelectedVariant() const
 {
     if( !m_variantNames.empty() )
         return m_variantNames.front();
@@ -101,7 +101,7 @@ wxString JOB_EXPORT_SCH_BOM::GetSelectedVariant() const
 }
 
 
-void JOB_EXPORT_SCH_BOM::SetSelectedVariant( const wxString& aVariant )
+void JOB_EXPORT_BOM::SetSelectedVariant( const wxString& aVariant )
 {
     m_variantNames.clear();
 
@@ -110,17 +110,17 @@ void JOB_EXPORT_SCH_BOM::SetSelectedVariant( const wxString& aVariant )
 }
 
 
-wxString JOB_EXPORT_SCH_BOM::GetDefaultDescription() const
+wxString JOB_EXPORT_BOM::GetDefaultDescription() const
 {
     return wxString::Format( _( "Generate bill of materials" ) );
 }
 
 
-wxString JOB_EXPORT_SCH_BOM::GetSettingsDialogTitle() const
+wxString JOB_EXPORT_BOM::GetSettingsDialogTitle() const
 {
     return wxString::Format( _( "Generate Bill of Materials Job Settings" ) );
 }
 
 
 REGISTER_JOB( sch_export_bom, _HKI( "Schematic: Generate Bill of Materials" ), KIWAY::FACE_SCH,
-              JOB_EXPORT_SCH_BOM );
+              JOB_EXPORT_BOM );

@@ -27,7 +27,7 @@
 #include <sch_plotter.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <font/kicad_font_name.h>
-#include <jobs/job_export_sch_bom.h>
+#include <jobs/job_export_bom.h>
 #include <jobs/job_export_sch_pythonbom.h>
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
@@ -102,7 +102,7 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
     Register( "bom", std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
-                  JOB_EXPORT_SCH_BOM* bomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( job );
+                  JOB_EXPORT_BOM* bomJob = dynamic_cast<JOB_EXPORT_BOM*>( job );
 
                   SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
 
@@ -575,7 +575,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
 int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 {
-    JOB_EXPORT_SCH_BOM* aBomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( aJob );
+    JOB_EXPORT_BOM* aBomJob = dynamic_cast<JOB_EXPORT_BOM*>( aJob );
 
     wxCHECK( aBomJob, CLI::EXIT_CODES::ERR_UNKNOWN );
 

@@ -25,7 +25,7 @@
 #include <api/sch_context.h>
 #include <magic_enum.hpp>
 #include <base_screen.h>
-#include <jobs/job_export_sch_bom.h>
+#include <jobs/job_export_bom.h>
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
 #include <kiway.h>
@@ -1181,7 +1181,7 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    JOB_EXPORT_SCH_BOM bomJob;
+    JOB_EXPORT_BOM bomJob;
     bomJob.m_filename = m_context->GetCurrentFileName();
 
     if( !aCtx.Request.job_settings().output_path().empty() )

@@ -31,13 +31,13 @@ wxDECLARE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
 class SCHEMATIC_SETTINGS;
 class SCH_EDIT_FRAME;
-class JOB_EXPORT_SCH_BOM;
+class JOB_EXPORT_BOM;
 
 
 class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_SYMBOL_FIELDS_TABLE_BASE, public SCHEMATIC_LISTENER
 {
 public:
-    DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_SCH_BOM* aJob = nullptr );
+    DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob = nullptr );
     ~DIALOG_SYMBOL_FIELDS_TABLE() override;
 
     bool TransferDataToWindow() override;
@@ -191,7 +191,7 @@ private:
 
     SCHEMATIC_SETTINGS&                m_schSettings;
 
-    JOB_EXPORT_SCH_BOM* m_job;
+    JOB_EXPORT_BOM* m_job;
 
     bool m_aborted = false;
 

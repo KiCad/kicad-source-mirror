@@ -20,7 +20,7 @@
 
 #include "command_export_bom.h"
 #include <cli/exit_codes.h>
-#include "jobs/job_export_sch_bom.h"
+#include "jobs/job_export_bom.h"
 #include <kiface_base.h>
 #include <layer_ids.h>
 #include <string_utils.h>
@@ -140,7 +140,7 @@ std::vector<wxString> CLI::EXPORT_BOM_COMMAND::convertStringList( const wxString
 
 int CLI::EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
 {
-    std::unique_ptr<JOB_EXPORT_SCH_BOM> bomJob = std::make_unique<JOB_EXPORT_SCH_BOM>();
+    std::unique_ptr<JOB_EXPORT_BOM> bomJob = std::make_unique<JOB_EXPORT_BOM>();
 
     // Basic options
     bomJob->m_filename = m_argInput;
@@ -180,7 +180,7 @@ int CLI::EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
 
     if( !wxFile::Exists( bomJob->m_filename ) )
     {
-        wxFprintf( stderr, _( "Schematic file does not exist or is not accessible\n" ) );
+        wxFprintf( stderr, _( "Input file does not exist or is not accessible\n" ) );
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 

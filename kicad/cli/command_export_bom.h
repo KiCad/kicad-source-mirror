@@ -18,8 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_EXPORT_SCH_BOM_H
-#define COMMAND_EXPORT_SCH_BOM_H
+#ifndef COMMAND_EXPORT_BOM_H
+#define COMMAND_EXPORT_BOM_H
 
 #include "command_pcb_export_base.h"
 
@@ -27,10 +27,10 @@ namespace CLI
 {
 // Options for selecting presets of the export, e.g. GroupedByValue and CSV
 #define ARG_PRESET "--preset"
-#define ARG_PRESET_DESC "Use a named BOM preset setting from the schematic, e.g. \"Grouped By Value\"."
+#define ARG_PRESET_DESC "Use a named BOM preset setting from this editor, e.g. \"Grouped By Value\"."
 
 #define ARG_FMT_PRESET "--format-preset"
-#define ARG_FMT_PRESET_DESC "Use a named BOM format preset setting from the schematic, e.g. CSV."
+#define ARG_FMT_PRESET_DESC "Use a named BOM format preset setting from this editor, e.g. CSV."
 
 // Options for setting the format of the export, e.g. CSV
 #define ARG_FIELD_DELIMITER "--field-delimiter"
@@ -76,7 +76,7 @@ namespace CLI
 #define ARG_FILTER_DESC "Filter string to remove output lines."
 
 #define ARG_EXCLUDE_DNP "--exclude-dnp"
-#define ARG_EXCLUDE_DNP_DESC "Exclude symbols marked Do-Not-Populate."
+#define ARG_EXCLUDE_DNP_DESC "Exclude components marked Do-Not-Populate."
 
 #define DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM "--include-excluded-from-bom"
 #define DEPRECATED_ARG_INCLUDE_EXCLUDED_FROM_BOM_DESC "Deprecated.  Has no effect."
