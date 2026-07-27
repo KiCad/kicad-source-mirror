@@ -39,12 +39,8 @@
 #include <json_common.h>
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
-#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <io/easyedapro/easyedapro_import_utils.h>
 #include <core/map_helpers.h>
-#include <project_sch.h>
-#include <libraries/library_table.h>
-#include <libraries/symbol_library_adapter.h>
 
 
 struct SCH_IO_EASYEDAPRO::PRJ_DATA
@@ -233,6 +229,19 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
     }
 
     return symbol;
+}
+
+
+std::vector<LIB_SYMBOL*> SCH_IO_EASYEDAPRO::GetImportedCachedLibrarySymbols()
+{
+    std::vector<LIB_SYMBOL*> result;
+
+    result.reserve( m_importedLibSymbols.size() );
+
+    for( const std::unique_ptr<LIB_SYMBOL>& symbol : m_importedLibSymbols )
+        result.push_back( new LIB_SYMBOL( *symbol ) );
+
+    return result;
 }
 
 
@@ -459,8 +468,6 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
     wxFileName            fname( aFileName );
     wxString              libName = EASYEDAPRO::ShortenLibName( fname.GetName() );
 
-    wxFileName libFileName( fname.GetPath(), libName, FILEEXT::KiCadSymbolLibFileExtension );
-
     if( fname.GetExt() != wxS( "epro" ) && fname.GetExt() != wxS( "zip" ) )
         return rootSheet;
 
@@ -480,13 +487,18 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
         {
             schematicToLoad = prjSchematics.begin()->first;
         }
-        else
+        else if( m_choose_project_handler )
         {
             std::vector<IMPORT_PROJECT_DESC> chosen = m_choose_project_handler(
                     EASYEDAPRO::ProjectToSelectorDialog( project, false, true ) );
 
             if( chosen.size() > 0 )
                 schematicToLoad = chosen[0].SchematicId;
+        }
+        else if( !prjSchematics.empty() )
+        {
+            // No chooser registered (headless), so take the first rather than throwing
+            schematicToLoad = prjSchematics.begin()->first;
         }
     }
 
@@ -595,38 +607,14 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
     };
     EASYEDAPRO::IterateZipFiles( aFileName, cbs );
 
-    IO_RELEASER<SCH_IO> sch_plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-
-    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aSchematic->Project() );
-    LIBRARY_TABLE* table = adapter->ProjectTable().value_or( nullptr );
-    wxCHECK_MSG( table, nullptr, "Could not load symbol lib table." );
-
-    if( !table->HasRow( libName ) )
-    {
-        // Create a new empty symbol library.
-        sch_plugin->CreateLibrary( libFileName.GetFullPath() );
-        wxString libTableUri = wxS( "${KIPRJMOD}/" ) + libFileName.GetFullName();
-
-        // Add the new library to the project symbol library table.
-        LIBRARY_TABLE_ROW& row = table->InsertRow();
-        row.SetNickname( libName );
-        row.SetURI( libTableUri );
-        row.SetType( "KiCad" );
-
-        table->Save();
-
-        adapter->LoadOne( libName );
-    }
-
-    // set properties to prevent save file on every symbol save
-    std::map<std::string, UTF8> properties;
-    properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
+    // Loading a schematic must not write to disk, so the project library is left to the reconciler
+    m_importedLibSymbols.clear();
 
     for( auto& [symbolUuid, symInfo] : m_projectData->m_Symbols )
-        sch_plugin->SaveSymbol( libFileName.GetFullPath(), symInfo.libSymbol.release(),
-                                &properties );
-
-    sch_plugin->SaveLibrary( libFileName.GetFullPath() );
+    {
+        if( symInfo.libSymbol )
+            m_importedLibSymbols.emplace_back( std::move( symInfo.libSymbol ) );
+    }
 
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
     aSchematic->FixupJunctionsAfterImport();

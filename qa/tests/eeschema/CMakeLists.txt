@@ -147,6 +147,7 @@ set( QA_EESCHEMA_SRCS
     test_crossing_label.cpp
     test_eagle_plugin.cpp
     test_sch_footprint_field_reconciler.cpp
+    test_symbol_import_reconciler.cpp
     test_easyedapro_v3_import.cpp
     test_easyedapro_v3_plugin.cpp
     test_junction_helpers.cpp

@@ -63,6 +63,7 @@
 #include <schematic.h>
 #include <settings/settings_manager.h>
 #include <sim/simulator_frame.h>
+#include <symbol_import_reconciler.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_editor_control.h>
@@ -1625,6 +1626,10 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                 // that back to the returned sheet.
                 if( !loadedIsTopLevel && !loadedIsVirtualRoot )
                     Schematic().SetTopLevelSheets( { loadedSheet } );
+
+                // extract a project symbol library and re-link LIB_IDs so every symbol resolves
+                ReconcileImportedSymbols( *pi, Schematic(), Prj(), aFileName, aProperties,
+                                          loadReporter );
 
                 // re-link footprint fields to the project lib so update-from-schematic works
                 {

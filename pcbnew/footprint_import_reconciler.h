@@ -22,13 +22,18 @@
 
 #include <map>
 #include <memory>
+#include <string>
 #include <vector>
 #include <wx/string.h>
+
+#include <reporter.h>
 
 class BOARD;
 class FOOTPRINT;
 class FOOTPRINT_LIBRARY_ADAPTER;
-class REPORTER;
+class PCB_IO;
+class PROJECT;
+class UTF8;
 
 /**
  * Outcome of a post-import footprint-library reconciliation pass.
@@ -40,9 +45,6 @@ struct FOOTPRINT_IMPORT_RECONCILE_RESULT
     int      m_unresolved     = 0;   ///< board FPIDs left unresolved
     int      m_savedToCache   = 0;   ///< distinct definitions written into the cache library
     wxString m_cacheNickname;        ///< nickname of the generated cache, empty if none written
-    wxString m_cacheLibraryPath;     ///< absolute path to the generated .pretty, empty if none
-
-    bool Ok() const { return m_unresolved == 0; }
 };
 
 /**
@@ -62,7 +64,7 @@ class FOOTPRINT_IMPORT_RECONCILER
 {
 public:
     FOOTPRINT_IMPORT_RECONCILER( FOOTPRINT_LIBRARY_ADAPTER& aAdapter, const wxString& aProjectPath,
-                                 REPORTER* aReporter = nullptr );
+                                 REPORTER& aReporter = NULL_REPORTER::GetInstance() );
 
     /**
      * Reconcile @p aBoard against the importer definitions and the provenance source libraries.
@@ -79,9 +81,6 @@ public:
     Reconcile( BOARD* aBoard, std::vector<std::unique_ptr<FOOTPRINT>> aDefinitions,
                const wxString& aCacheNickname, const std::vector<wxString>& aSourceLibNicknames );
 
-    /// Options string identifying a footprint-library table row as a generated import cache.
-    static const wxString& ManagedCacheOption();
-
 private:
     /// Write the residual definitions into an atomically-published .pretty and register its row.
     void writeAndRegisterCache( const wxString&                       aCacheNickname,
@@ -94,7 +93,31 @@ private:
 
     FOOTPRINT_LIBRARY_ADAPTER& m_adapter;
     wxString                   m_projectPath;
-    REPORTER*                  m_reporter;
+    REPORTER&                  m_reporter;
 };
+
+/**
+ * Reconcile @p aBoard against the definitions an importer retained while loading it.
+ *
+ * Shared by the interactive import and the `kicad-cli pcb import` job so both materialize the
+ * project footprint library and re-point FPIDs.  A reconciliation failure is reported rather than
+ * thrown so an import is never aborted by it.
+ *
+ * @param aProperties carries the manager-chosen cache nickname and provenance source libraries;
+ *                    a standalone import passes nullptr and the nickname is derived from
+ *                    @p aBoardPath.
+ */
+FOOTPRINT_IMPORT_RECONCILE_RESULT
+ReconcileImportedFootprints( std::vector<std::unique_ptr<FOOTPRINT>> aDefinitions, BOARD& aBoard,
+                             PROJECT& aProject, const wxString& aBoardPath,
+                             const std::map<std::string, UTF8>* aProperties, REPORTER& aReporter );
+
+/**
+ * Overload taking the definitions straight from @p aPlugin, for callers that still hold it.
+ */
+FOOTPRINT_IMPORT_RECONCILE_RESULT
+ReconcileImportedFootprints( PCB_IO& aPlugin, BOARD& aBoard, PROJECT& aProject,
+                             const wxString& aBoardPath,
+                             const std::map<std::string, UTF8>* aProperties, REPORTER& aReporter );
 
 #endif // FOOTPRINT_IMPORT_RECONCILER_H

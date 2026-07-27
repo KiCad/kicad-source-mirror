@@ -71,6 +71,12 @@ SCH_SHEET* SCH_IO::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSch
 }
 
 
+std::vector<LIB_SYMBOL*> SCH_IO::GetImportedCachedLibrarySymbols()
+{
+    NOT_IMPLEMENTED( __FUNCTION__ );
+}
+
+
 void SCH_IO::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
                                 const std::map<std::string, UTF8>* aProperties )
 {

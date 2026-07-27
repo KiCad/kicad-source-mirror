@@ -26,6 +26,8 @@ from pathlib import Path
 import pytest
 import json
 import os
+import re
+import shutil
 from conftest import KiTestFixture
 
 
@@ -38,6 +40,23 @@ def get_output_path( kitest: KiTestFixture, test_name: str, filename: str ) -> P
         output_path.unlink()
 
     return output_path
+
+
+def get_easyedapro_v3_test_file() -> str:
+    """Get path to an EasyEDA Pro v3 archive, an importer that retains footprint definitions."""
+    test_data_dir = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "pcbnew",
+                                  "plugins", "easyedapro" )
+    archive = os.path.join( test_data_dir, "ProProject_LS2K0300Core_2025-11-14.epro2" )
+
+    if os.path.exists( archive ):
+        return archive
+
+    return None
+
+
+def board_lib_nicknames( path: Path ) -> set:
+    """Every library nickname referenced by a board's footprints."""
+    return set( re.findall( r'\(footprint "([^:"]+):', path.read_text() ) )
 
 
 def get_pads_test_file() -> str:
@@ -405,3 +424,46 @@ class TestPcbImportPads:
             report = json.load( f )
 
         assert any( "No Such Source Layer" in w for w in report.get( "warnings", [] ) )
+
+
+@pytest.mark.skipif( get_easyedapro_v3_test_file() is None,
+                     reason="EasyEDA Pro v3 test file not available" )
+class TestPcbImportLibraryReconciliation:
+    """The CLI must materialize the project footprint library the board editor's import produces"""
+
+    def test_import_generates_registered_footprint_library( self, kitest: KiTestFixture ):
+        """Imported FPIDs resolve through a generated cache registered in fp-lib-table"""
+        archive = get_easyedapro_v3_test_file()
+        output_path = get_output_path( kitest, "reconcile", "imported.kicad_pcb" )
+        out_dir = output_path.parent
+
+        for stale in list( out_dir.glob( "*.pretty" ) ):
+            shutil.rmtree( stale )
+
+        table = out_dir / "fp-lib-table"
+
+        if table.exists():
+            table.unlink()
+
+        command = [
+            utils.kicad_cli(),
+            "pcb", "import",
+            archive,
+            "-o", str( output_path )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+        assert output_path.exists()
+
+        libs = list( out_dir.glob( "*.pretty" ) )
+        assert len( libs ) == 1
+
+        nickname = libs[0].stem
+
+        assert table.exists()
+        assert f'(name "{nickname}")' in table.read_text()
+
+        # every placed footprint points at the registered cache, none at a dangling nickname
+        assert board_lib_nicknames( output_path ) == { nickname }

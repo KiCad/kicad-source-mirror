@@ -64,6 +64,8 @@ public:
     SCH_SHEET* LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic, SCH_SHEET* aAppendToMe = nullptr,
                                   const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
+    std::vector<LIB_SYMBOL*> GetImportedCachedLibrarySymbols() override;
+
     void EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
@@ -81,6 +83,9 @@ private:
     mutable wxString                                   m_cachedLibraryPath;
     mutable long long                                  m_cachedLibraryTimestamp = -1;
     mutable std::unique_ptr<EASYEDAPRO::V3_DOC_PARSER> m_cachedLibraryParser;
+
+    /// Definitions from the last LoadSchematicFile, cloned out to the import reconciler on request.
+    std::vector<std::unique_ptr<LIB_SYMBOL>> m_importedLibSymbols;
 };
 
 

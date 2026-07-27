@@ -112,6 +112,28 @@ PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::EnumFromStr( const wxString& aType )
 }
 
 
+bool PCB_IO_MGR::ImportGeneratesProjectLibrary( PCB_FILE_T aFileType )
+{
+    switch( aFileType )
+    {
+    case CADSTAR_PCB_ARCHIVE:
+    case EAGLE:
+    case EASYEDA:
+    case EASYEDAPRO:
+    case EASYEDAPRO_V3:
+    case GEDA_PCB:
+    case ALTIUM_DESIGNER:
+    case ALTIUM_CIRCUIT_MAKER:
+    case ALTIUM_CIRCUIT_STUDIO:
+    case ALLEGRO:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+
 // The KIWAY_PLAYER::OpenProjectFiles() API knows nothing about plugins, so
 // determine how to load the BOARD here
 PCB_IO_MGR::PCB_FILE_T PCB_IO_MGR::FindPluginTypeFromBoardPath( const wxString& aFileName, int aCtl )

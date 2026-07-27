@@ -28,6 +28,7 @@
 #include <pcb_io/pcb_io.h>
 
 #include <memory>
+#include <vector>
 
 namespace EASYEDAPRO
 {
@@ -63,6 +64,8 @@ public:
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath, bool aBestEfforts,
                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
+    std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
+
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, bool aKeepUUID = false,
                               const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
@@ -74,6 +77,9 @@ private:
     mutable wxString                                   m_cachedLibraryPath;
     mutable long long                                  m_cachedLibraryTimestamp = -1;
     mutable std::unique_ptr<EASYEDAPRO::V3_DOC_PARSER> m_cachedLibraryParser;
+
+    /// Definitions from the last LoadBoard, cloned out to the import reconciler on request.
+    std::vector<std::unique_ptr<FOOTPRINT>> m_importedLibFootprints;
 };
 
 

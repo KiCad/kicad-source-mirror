@@ -38,11 +38,22 @@
  */
 namespace IMPORT_PROJ_PROPS
 {
-inline constexpr char FP_CACHE_NICKNAME[] = "import_fp_cache_nickname";
-inline constexpr char SOURCE_FP_LIBS[]    = "import_source_fp_libs";
+inline constexpr char FP_CACHE_NICKNAME[]  = "import_fp_cache_nickname";
+inline constexpr char SOURCE_FP_LIBS[]     = "import_source_fp_libs";
+inline constexpr char SYM_CACHE_NICKNAME[] = "import_sym_cache_nickname";
+inline constexpr char SOURCE_SYM_LIBS[]    = "import_source_sym_libs";
 
 /// Separator joining a list value within a single property.
 inline constexpr char LIST_SEPARATOR = '\x1f';
+
+/// Library-table row option key marking a row as a generated import cache.
+inline constexpr char MANAGED_CACHE_KEY[] = "kicad_import_cache";
+
+/// Options string identifying a library-table row as a generated import cache.
+inline wxString ManagedCacheOption()
+{
+    return wxString( MANAGED_CACHE_KEY ) + wxS( "=1" );
+}
 
 /// Encode library nicknames into a single list-property value.
 inline wxString JoinList( const wxArrayString& aItems )
@@ -78,10 +89,30 @@ inline void ReadFootprintProps( const std::map<std::string, UTF8>* aProps, wxStr
         aSourceFpLibs = SplitList( it->second.wx_str() );
 }
 
+/// Read the symbol-import coordination properties out of a properties map.
+inline void ReadSymbolProps( const std::map<std::string, UTF8>* aProps, wxString& aCacheNickname,
+                             std::vector<wxString>& aSourceSymLibs )
+{
+    if( !aProps )
+        return;
+
+    if( auto it = aProps->find( SYM_CACHE_NICKNAME ); it != aProps->end() )
+        aCacheNickname = it->second.wx_str();
+
+    if( auto it = aProps->find( SOURCE_SYM_LIBS ); it != aProps->end() )
+        aSourceSymLibs = SplitList( it->second.wx_str() );
+}
+
 /// Derive the generated footprint-cache nickname from a project or file stem.
 inline wxString MakeCacheNickname( const wxString& aStem )
 {
     return LIB_ID::FixIllegalChars( aStem + wxS( "-import-fps" ), true ).wx_str();
+}
+
+/// Derive the generated symbol-cache nickname from a project or file stem.
+inline wxString MakeSymbolCacheNickname( const wxString& aStem )
+{
+    return LIB_ID::FixIllegalChars( aStem + wxS( "-import-syms" ), true ).wx_str();
 }
 }
 

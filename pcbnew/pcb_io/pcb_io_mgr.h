@@ -183,6 +183,14 @@ public:
     static PCB_FILE_T FindPluginTypeFromBoardPath( const wxString& aFileName, int aCtl = 0 );
 
     /**
+     * Return true when importing \a aFileType should materialize a project footprint library.
+     *
+     * Single source for the board editor's import gate and the `kicad-cli pcb import` job so the
+     * two cannot drift.
+     */
+    static bool ImportGeneratesProjectLibrary( PCB_FILE_T aFileType );
+
+    /**
      * Return a plugin type given a footprint library's libPath.
      */
     static PCB_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath, int aCtl = 0 );

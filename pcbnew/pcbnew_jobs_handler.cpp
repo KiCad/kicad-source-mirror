@@ -45,6 +45,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <footprint.h>
+#include <footprint_import_reconciler.h>
 #include <jobs/job_fp_export_svg.h>
 #include <jobs/job_fp_upgrade.h>
 #include <jobs/job_export_pcb_ipc2581.h>
@@ -2972,6 +2973,49 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     if( outputPath.IsEmpty() )
         outputPath = DefaultImportOutputPath( job->m_inputFile, FILEEXT::KiCadPcbFileExtension );
 
+    // The generated footprint library and its table row belong to the *active* project, so an
+    // import with no project loaded needs a transient active one at the output location (never
+    // written to disk; LoadProject returns false yet still registers it, hence the GetProject()
+    // check).
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PROJECT*          projectPtr = nullptr;
+    bool              createdTransientProject = false;
+
+    if( mgr.IsProjectOpenNotDummy() )
+    {
+        projectPtr = &mgr.Prj();
+    }
+    else
+    {
+        wxFileName projectFn( outputPath );
+        projectFn.SetExt( FILEEXT::ProjectFileExtension );
+
+        mgr.LoadProject( projectFn.GetFullPath(), true );
+        projectPtr = mgr.GetProject( projectFn.GetFullPath() );
+        createdTransientProject = ( projectPtr != nullptr );
+    }
+
+    if( !projectPtr )
+    {
+        m_reporter->Report( _( "Could not establish a project for the import\n" ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    // unloads the transient project on every exit path
+    struct TRANSIENT_PROJECT_GUARD
+    {
+        SETTINGS_MANAGER& m_mgr;
+        PROJECT*          m_project;
+        bool              m_active;
+
+        ~TRANSIENT_PROJECT_GUARD()
+        {
+            if( m_active )
+                m_mgr.UnloadProject( m_project, false );
+        }
+    } transientProjectGuard{ mgr, projectPtr, createdTransientProject };
+
     BOARD*                board = nullptr;
     wxString              formatName = PCB_IO_MGR::ShowType( fileType );
     std::vector<wxString> warnings;
@@ -3079,6 +3123,14 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
         {
             m_reporter->Report( _( "Failed to load board\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+
+        // Extract a project footprint library and re-link FPIDs, as the board editor's import
+        // does; without it the saved board references a nickname no library table row resolves.
+        if( PCB_IO_MGR::ImportGeneratesProjectLibrary( fileType ) )
+        {
+            ReconcileImportedFootprints( *pi, *board, *projectPtr, job->m_inputFile, nullptr,
+                                         *m_reporter );
         }
 
         // Flag explicit map entries that never matched a source layer so typos do not pass silently.

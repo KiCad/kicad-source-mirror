@@ -28,22 +28,16 @@
 
 #include <pcb_io/easyedapro/pcb_io_easyedapro_v3_parser.h>
 #include <pcb_io/easyedapro/pcb_io_easyedapro_parser.h>
-#include <pcb_io/pcb_io_mgr.h>
 
 #include <board.h>
 #include <font/fontconfig.h>
 #include <footprint.h>
-#include <footprint_library_adapter.h>
 #include <ki_exception.h>
-#include <libraries/library_table.h>
 #include <progress_reporter.h>
-#include <project_pcb.h>
 #include <reporter.h>
-#include <wildcards_and_files_ext.h>
 
 #include <set>
 
-#include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/log.h>
 
@@ -114,6 +108,19 @@ void PCB_IO_EASYEDAPRO_V3::FootprintEnumerate( wxArrayString& aFootprintNames, c
 
     for( const auto& [name, uuid] : footprintMap )
         aFootprintNames.Add( name );
+}
+
+
+std::vector<FOOTPRINT*> PCB_IO_EASYEDAPRO_V3::GetImportedCachedLibraryFootprints()
+{
+    std::vector<FOOTPRINT*> result;
+
+    result.reserve( m_importedLibFootprints.size() );
+
+    for( const std::unique_ptr<FOOTPRINT>& footprint : m_importedLibFootprints )
+        result.push_back( static_cast<FOOTPRINT*>( footprint->Clone() ) );
+
+    return result;
 }
 
 
@@ -270,15 +277,9 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
 
     wxFileName sourceName( aFileName );
     wxString   fpLibName = EASYEDAPRO::ShortenLibName( sourceName.GetName() );
-    wxString   prettyDirName = fpLibName + wxS( "." ) + wxString::FromUTF8( FILEEXT::KiCadFootprintLibPathExtension );
 
-    wxFileName libDirName;
-    libDirName.AssignDir( sourceName.GetPath() );
-    libDirName.AppendDir( prettyDirName );
-    wxString libPath = libDirName.GetPath();
-
-    // PCB components reference Footprint (geometry) and Device (BOM / 3D attrs) separately.
-    // Project .pretty entries are named by footprint package title (e.g. C0402).
+    // PCB components reference Footprint (geometry) and Device (BOM / 3D attrs) separately, so
+    // definitions are keyed by footprint package title (e.g. C0402)
     std::map<wxString, std::unique_ptr<FOOTPRINT>> footprints;
     std::set<wxString>                             usedLibNames;
 
@@ -312,40 +313,13 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
 
     parser.ParseBoard( m_board, project, footprints, blobs, poured, *pcbRawDoc, fpLibName );
 
-    // Create a project-local .pretty library (one entry per footprint geometry).
-    if( !footprints.empty() )
+    // Loading a board must not write to disk, so the project library is left to the reconciler
+    m_importedLibFootprints.clear();
+
+    for( auto& [uuid, footprint] : footprints )
     {
-        IO_RELEASER<PCB_IO> pcbPlugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
-
-        if( !wxDir::Exists( libPath ) )
-            pcbPlugin->CreateLibrary( libPath );
-
-        PROJECT* proj = aProject ? aProject : m_board->GetProject();
-
-        if( proj )
-        {
-            FOOTPRINT_LIBRARY_ADAPTER* fpAdapter = PROJECT_PCB::FootprintLibAdapter( proj );
-            LIBRARY_TABLE*             table = fpAdapter->ProjectTable().value_or( nullptr );
-
-            if( table && !table->HasRow( fpLibName ) )
-            {
-                wxString libTableUri = wxS( "${KIPRJMOD}/" ) + prettyDirName;
-
-                LIBRARY_TABLE_ROW& row = table->InsertRow();
-                row.SetNickname( fpLibName );
-                row.SetURI( libTableUri );
-                row.SetType( "KiCad" );
-
-                table->Save();
-                fpAdapter->LoadOne( fpLibName );
-            }
-        }
-
-        for( auto& [uuid, footprint] : footprints )
-        {
-            if( footprint )
-                pcbPlugin->FootprintSave( libPath, footprint.get() );
-        }
+        if( footprint )
+            m_importedLibFootprints.emplace_back( std::move( footprint ) );
     }
 
     if( adapter.GetSkippedCount() > 0 )

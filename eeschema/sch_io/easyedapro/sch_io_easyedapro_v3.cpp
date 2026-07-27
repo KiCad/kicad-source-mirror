@@ -31,13 +31,8 @@
 
 #include <font/fontconfig.h>
 #include <kiplatform/environment.h>
-#include <libraries/library_table.h>
-#include <libraries/symbol_library_adapter.h>
-#include <project_sch.h>
 #include <reporter.h>
 #include <schematic.h>
-#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
-#include <sch_io/sch_io_mgr.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <string_utils.h>
@@ -156,6 +151,19 @@ bool SCH_IO_EASYEDAPRO_V3::CanReadLibrary( const wxString& aFileName ) const
         return false;
 
     return EASYEDAPRO::V3_DOC_PARSER::IsV3Library( aFileName, wxS( "SYMBOL" ) );
+}
+
+
+std::vector<LIB_SYMBOL*> SCH_IO_EASYEDAPRO_V3::GetImportedCachedLibrarySymbols()
+{
+    std::vector<LIB_SYMBOL*> result;
+
+    result.reserve( m_importedLibSymbols.size() );
+
+    for( const std::unique_ptr<LIB_SYMBOL>& symbol : m_importedLibSymbols )
+        result.push_back( new LIB_SYMBOL( *symbol ) );
+
+    return result;
 }
 
 
@@ -309,8 +317,6 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
 
     wxFileName sourceName( aFileName );
     wxString   libName = EASYEDAPRO::ShortenLibName( sourceName.GetName() );
-
-    wxFileName libFileName( sourceName.GetPath(), libName, FILEEXT::KiCadSymbolLibFileExtension );
 
     wxString rootBaseName = EscapeString( prjSchIt->second.name, CTX_FILENAME );
 
@@ -482,30 +488,10 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
         subSheetIndex++;
     }
 
-    IO_RELEASER<SCH_IO> schPlugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    // Loading a schematic must not write to disk, so the project library is left to the reconciler
+    m_importedLibSymbols.clear();
 
-    SYMBOL_LIBRARY_ADAPTER* symAdapter = PROJECT_SCH::SymbolLibAdapter( &aSchematic->Project() );
-    LIBRARY_TABLE*          table = symAdapter->ProjectTable().value_or( nullptr );
-    wxCHECK_MSG( table, nullptr, "Could not load symbol lib table." );
-
-    if( !table->HasRow( libName ) )
-    {
-        schPlugin->CreateLibrary( libFileName.GetFullPath() );
-        wxString libTableUri = wxS( "${KIPRJMOD}/" ) + libFileName.GetFullName();
-
-        LIBRARY_TABLE_ROW& row = table->InsertRow();
-        row.SetNickname( libName );
-        row.SetURI( libTableUri );
-        row.SetType( "KiCad" );
-
-        table->Save();
-        symAdapter->LoadOne( libName );
-    }
-
-    std::map<std::string, UTF8> properties;
-    properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
-
-    std::set<wxString> symbolsSavedViaDevices;
+    std::set<wxString> symbolsFromDevices;
 
     // Project library entries are devices: geometry from Symbol + BOM fields from Device.
     for( const auto& [devUuid, device] : prjDevices )
@@ -565,14 +551,14 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
         if( !keywords.empty() )
             deviceSymInfo.libSymbol->SetKeyWords( keywords );
 
-        schPlugin->SaveSymbol( libFileName.GetFullPath(), deviceSymInfo.libSymbol.release(), &properties );
-        symbolsSavedViaDevices.insert( *symbolAttr );
+        m_importedLibSymbols.emplace_back( std::move( deviceSymInfo.libSymbol ) );
+        symbolsFromDevices.insert( *symbolAttr );
     }
 
     // Keep geometry-only entries for symbols not referenced by any device (e.g. some helpers).
     for( auto& [symbolUuid, symInfo] : symbols )
     {
-        if( !symInfo.libSymbol || symbolsSavedViaDevices.contains( symbolUuid ) )
+        if( !symInfo.libSymbol || symbolsFromDevices.contains( symbolUuid ) )
             continue;
 
         wxString itemName = EASYEDAPRO::MakeUniqueLibName( usedLibNames, symInfo.libSymbol->GetName(),
@@ -581,10 +567,8 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
         symInfo.libSymbol->SetLibId( libID );
         symInfo.libSymbol->SetName( itemName );
 
-        schPlugin->SaveSymbol( libFileName.GetFullPath(), symInfo.libSymbol.release(), &properties );
+        m_importedLibSymbols.emplace_back( std::move( symInfo.libSymbol ) );
     }
-
-    schPlugin->SaveLibrary( libFileName.GetFullPath() );
 
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
     aSchematic->FixupJunctionsAfterImport();

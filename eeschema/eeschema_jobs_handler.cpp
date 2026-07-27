@@ -43,6 +43,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_commit.h>
+#include <symbol_import_reconciler.h>
 #include <save_project_utils.h>
 #include <tool/tool_manager.h>
 #include <project.h>
@@ -1570,18 +1571,19 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
     wxString   formatName = SCH_IO_MGR::ShowType( fileType );
     SCH_SHEET* loadedSheet = nullptr;
 
+    // outlives the load so the retained symbol definitions can be reconciled below
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( fileType ) );
+
+    if( !pi )
+    {
+        m_reporter->Report( wxString::Format( _( "No plugin found for file type '%s'\n" ),
+                                              formatName ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
     try
     {
-        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( fileType ) );
-
-        if( !pi )
-        {
-            m_reporter->Report( wxString::Format( _( "No plugin found for file type '%s'\n" ),
-                                                  formatName ),
-                                RPT_SEVERITY_ERROR );
-            return CLI::EXIT_CODES::ERR_UNKNOWN;
-        }
-
         m_reporter->Report( wxString::Format( _( "Importing '%s' using %s format...\n" ),
                                               inputFn.GetFullPath(), formatName ),
                             RPT_SEVERITY_INFO );
@@ -1617,6 +1619,11 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
         if( !loadedIsTopLevel && !loadedIsVirtualRoot )
             schematic->SetTopLevelSheets( { loadedSheet } );
 
+        // Extract a project symbol library and re-link LIB_IDs, as importFile() does; without it
+        // the saved schematic references nicknames no library table row resolves.
+        ReconcileImportedSymbols( *pi, *schematic, project, inputFn.GetFullPath(), nullptr,
+                                  *m_reporter );
+
         // Recompute connectivity so instance data is valid before saving, as importFile() does.
         std::unique_ptr<TOOL_MANAGER> toolManager = std::make_unique<TOOL_MANAGER>();
         toolManager->SetEnvironment( schematic.get(), nullptr, nullptr, Kiface().KifaceSettings(),
@@ -1651,7 +1658,7 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
 
         // PrepareSaveAsFiles seeds an entry (empty for sheets it does not relocate) for every
         // screen; empty paths are skipped.
-        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        IO_RELEASER<SCH_IO> kicadPi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
         for( size_t i = 0; i < screens.GetCount(); i++ )
         {
@@ -1664,7 +1671,7 @@ int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
             wxFileName fn( path );
             fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
-            pi->SaveSchematicFile( fn.GetFullPath(), screens.GetSheet( i ), schematic.get() );
+            kicadPi->SaveSchematicFile( fn.GetFullPath(), screens.GetSheet( i ), schematic.get() );
             sheetCount++;
 
             auto symbols = screen->Items().OfType( SCH_SYMBOL_T );

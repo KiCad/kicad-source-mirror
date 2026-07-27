@@ -55,6 +55,8 @@ public:
                                   SCH_SHEET*             aAppendToMe = nullptr,
                                   const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
+    std::vector<LIB_SYMBOL*> GetImportedCachedLibrarySymbols() override;
+
     void EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
@@ -71,6 +73,9 @@ public:
 private:
     struct PRJ_DATA; // Opaque data structure
     PRJ_DATA* m_projectData = nullptr;
+
+    /// Definitions from the last LoadSchematicFile, cloned out to the import reconciler on request.
+    std::vector<std::unique_ptr<LIB_SYMBOL>> m_importedLibSymbols;
 };
 
 

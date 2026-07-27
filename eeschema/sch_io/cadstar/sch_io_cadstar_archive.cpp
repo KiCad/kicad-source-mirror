@@ -25,15 +25,10 @@
 #include <font/fontconfig.h>
 #include <lib_symbol.h>
 #include <progress_reporter.h>
-#include <project_sch.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <schematic.h>
-#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
-#include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
-#include <libraries/library_table.h>
-#include <libraries/symbol_library_adapter.h>
 #include <reporter.h>
 #include <wx/dir.h>
 #include <wx/wfstream.h>
@@ -102,46 +97,19 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     CADSTAR_SCH_ARCHIVE_LOADER csaLoader( aFileName, m_reporter, m_progressReporter );
     csaLoader.Load( aSchematic, rootSheet );
 
-    // Save symbols to project library
-    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aSchematic->Project() );
-    LIBRARY_TABLE* table = adapter->ProjectTable().value_or( nullptr );
-    wxCHECK_MSG( table, nullptr, "Could not load symbol lib table." );
-
+    // Loading a schematic must not write to disk, so the project library is left to the reconciler
     wxFileName prj_fn = aSchematic->Project().GetProjectFullName();
-    wxString libName = CADSTAR_SCH_ARCHIVE_LOADER::CreateLibName( prj_fn, nullptr );
+    wxString   libName = CADSTAR_SCH_ARCHIVE_LOADER::CreateLibName( prj_fn, nullptr );
 
-    wxFileName libFileName( aSchematic->Project().GetProjectPath(), libName,
-                            FILEEXT::KiCadSymbolLibFileExtension );
+    m_importedLibSymbols.clear();
 
-    IO_RELEASER<SCH_IO> sch_plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-
-    if( !table->HasRow( libName ) )
+    for( LIB_SYMBOL* symbol : csaLoader.GetLoadedSymbols() )
     {
-        // Create a new empty symbol library.
-        sch_plugin->CreateLibrary( libFileName.GetFullPath() );
-        wxString libTableUri = "${KIPRJMOD}/" + libFileName.GetFullName();
-
-        // Add the new library to the project symbol library table.
-        LIBRARY_TABLE_ROW& row = table->InsertRow();
-        row.SetNickname( libName );
-        row.SetURI( libTableUri );
-        row.SetType( "KiCad" );
-
-        table->Save();
-
-        adapter->LoadOne( libName );
+        if( symbol )
+            m_importedLibSymbols.emplace_back( std::make_unique<LIB_SYMBOL>( *symbol ) );
     }
 
-    // set properties to prevent save file on every symbol save
-    std::map<std::string, UTF8> properties;
-    properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, "" );
-
-    for( LIB_SYMBOL* const& symbol : csaLoader.GetLoadedSymbols() )
-        sch_plugin->SaveSymbol( libFileName.GetFullPath(), symbol, &properties );
-
-    sch_plugin->SaveLibrary( libFileName.GetFullPath() );
-
-    // Link up all symbols in the design to the newly created library
+    // Legacy IDs carry no nickname, so give the reconciler a stable one to key the lookup on
     for( SCH_SHEET_PATH& sheet : aSchematic->Hierarchy() )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
@@ -161,6 +129,19 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
     aSchematic->FixupJunctionsAfterImport();
 
     return rootSheet;
+}
+
+
+std::vector<LIB_SYMBOL*> SCH_IO_CADSTAR_ARCHIVE::GetImportedCachedLibrarySymbols()
+{
+    std::vector<LIB_SYMBOL*> result;
+
+    result.reserve( m_importedLibSymbols.size() );
+
+    for( const std::unique_ptr<LIB_SYMBOL>& symbol : m_importedLibSymbols )
+        result.push_back( new LIB_SYMBOL( *symbol ) );
+
+    return result;
 }
 
 

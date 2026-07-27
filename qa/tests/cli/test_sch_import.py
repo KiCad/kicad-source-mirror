@@ -28,6 +28,7 @@ from pathlib import Path
 import pytest
 import json
 import os
+import re
 from conftest import KiTestFixture
 
 
@@ -52,6 +53,23 @@ def get_pcad_test_file() -> str:
         return pcad_file
 
     return None
+
+
+def get_easyedapro_v3_test_file() -> str:
+    """Get path to an EasyEDA Pro v3 archive, an importer that retains symbol definitions."""
+    test_data_dir = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "pcbnew",
+                                  "plugins", "easyedapro" )
+    archive = os.path.join( test_data_dir, "ProProject_LS2K0300Core_2025-11-14.epro2" )
+
+    if os.path.exists( archive ):
+        return archive
+
+    return None
+
+
+def sch_lib_nicknames( path: Path ) -> set:
+    """Every library nickname referenced by a schematic's symbol instances."""
+    return set( re.findall( r'\(lib_id "([^:"]+):', path.read_text() ) )
 
 
 def get_eagle_test_file() -> str:
@@ -238,3 +256,42 @@ class TestSchImportPcad:
         assert return_code == 0
         assert "P-CAD" in stdout
         assert output_path.exists()
+
+
+@pytest.mark.skipif( get_easyedapro_v3_test_file() is None,
+                     reason="EasyEDA Pro v3 test file not available" )
+class TestSchImportLibraryReconciliation:
+    """The CLI must materialize the project symbol library the GUI import produces"""
+
+    def test_import_generates_registered_symbol_library( self, kitest: KiTestFixture ):
+        """Imported LIB_IDs resolve through a generated cache registered in sym-lib-table"""
+        archive = get_easyedapro_v3_test_file()
+        output_path = get_output_path( kitest, "reconcile", "imported.kicad_sch" )
+        out_dir = output_path.parent
+
+        for stale in list( out_dir.glob( "*.kicad_sym" ) ) + list( out_dir.glob( "sym-lib-table" ) ):
+            stale.unlink()
+
+        command = [
+            utils.kicad_cli(),
+            "sch", "import",
+            archive,
+            "-o", str( output_path )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+        assert output_path.exists()
+
+        symbol_libs = list( out_dir.glob( "*.kicad_sym" ) )
+        assert len( symbol_libs ) == 1
+
+        nickname = symbol_libs[0].stem
+        table = out_dir / "sym-lib-table"
+
+        assert table.exists()
+        assert f'(name "{nickname}")' in table.read_text()
+
+        # every placed symbol points at the registered cache, none at a dangling nickname
+        assert sch_lib_nicknames( output_path ) == { nickname }

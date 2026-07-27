@@ -119,6 +119,15 @@ public:
                                           const std::map<std::string, UTF8>* aProperties = nullptr );
 
     /**
+     * Return the canonical symbol definitions produced by the last LoadSchematicFile().
+     *
+     * An importer implements this so a caller can materialize a project symbol library through
+     * #SYMBOL_IMPORT_RECONCILER instead of the importer writing one itself.  Ownership of the
+     * returned symbols passes to the caller.
+     */
+    virtual std::vector<LIB_SYMBOL*> GetImportedCachedLibrarySymbols();
+
+    /**
      * Write \a aSchematic to a storage file in a format that this #SCH_IO implementation
      * knows about, or it can be used to write a portion of \a aSchematic to a special kind
      * of export file.

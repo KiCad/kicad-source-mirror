@@ -28,6 +28,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
 
 #include <pcbnew/pcb_io/pcb_io.h>
 #include <pcbnew/pcb_io/pcb_io_mgr.h>
@@ -35,7 +36,13 @@
 #include <board.h>
 #include <footprint.h>
 
+#include <wx/dir.h>
+#include <wx/filefn.h>
+#include <wx/filename.h>
+
+#include <algorithm>
 #include <memory>
+#include <vector>
 
 
 BOOST_AUTO_TEST_SUITE( EasyedaproV3Import )
@@ -51,6 +58,27 @@ static wxString getEasyEdaProV3FootprintLibPath()
 {
     return wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir()
                                + "plugins/easyedapro/LS2K0300_Footprint_2025-11-14.elibz2" );
+}
+
+
+static std::vector<wxString> listDirEntries( const wxString& aPath )
+{
+    std::vector<wxString> entries;
+    wxDir                 dir( aPath );
+    wxString              name;
+
+    if( !dir.IsOpened() )
+        return entries;
+
+    for( bool more = dir.GetFirst( &name, wxEmptyString, wxDIR_DIRS | wxDIR_FILES ); more;
+         more = dir.GetNext( &name ) )
+    {
+        entries.push_back( name );
+    }
+
+    std::sort( entries.begin(), entries.end() );
+
+    return entries;
 }
 
 
@@ -86,9 +114,15 @@ BOOST_AUTO_TEST_CASE( FootprintLibraryEnumeratesAndLoadsElibz2 )
 
 BOOST_AUTO_TEST_CASE( BoardLoadImportsInnerLayers )
 {
-    wxString dataPath = wxString::FromUTF8(
-            KI_TEST::GetPcbnewTestDataDir()
-            + "plugins/easyedapro/ProProject_LS2K0300Core_2025-11-14.epro2" );
+    // Import from a private copy so a stray write lands here rather than in the shared test data
+    KI_TEST::TEMPORARY_DIRECTORY tempDir( "easyedapro_v3_board_load", "" );
+
+    const wxString archiveName = wxS( "ProProject_LS2K0300Core_2025-11-14.epro2" );
+    wxString       sourceDir = wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + "plugins/easyedapro/" );
+    wxString       tempDirPath = wxString::FromUTF8( tempDir.GetPath().string() );
+
+    wxFileName dataFile( tempDirPath, archiveName );
+    BOOST_REQUIRE( wxCopyFile( sourceDir + archiveName, dataFile.GetFullPath() ) );
 
     std::map<std::string, UTF8> properties;
     properties["pcb_id"] = "eb9fbfba682940f7a002816e66fbb3d7";
@@ -96,8 +130,22 @@ BOOST_AUTO_TEST_CASE( BoardLoadImportsInnerLayers )
     IO_RELEASER<PCB_IO> plugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::EASYEDAPRO_V3 ) );
     BOOST_REQUIRE( plugin );
 
-    std::unique_ptr<BOARD> board( plugin->LoadBoard( dataPath, nullptr, &properties ) );
+    std::unique_ptr<BOARD> board( plugin->LoadBoard( dataFile.GetFullPath(), nullptr, &properties ) );
     BOOST_REQUIRE( board );
+
+    // Loading a board is a read, so nothing may appear beside the archive
+    std::vector<wxString> entries = listDirEntries( tempDirPath );
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0], archiveName );
+
+    std::vector<FOOTPRINT*> definitions = plugin->GetImportedCachedLibraryFootprints();
+    BOOST_CHECK( definitions.size() > 0 );
+
+    for( FOOTPRINT* definition : definitions )
+    {
+        BOOST_CHECK( !definition->GetFPID().GetLibItemName().empty() );
+        delete definition;
+    }
 
     BOOST_CHECK( board->Footprints().size() > 0 );
     BOOST_CHECK( board->GetNetCount() > 0 );

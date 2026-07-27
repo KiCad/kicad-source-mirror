@@ -1196,7 +1196,9 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
     m_importProperties = aProperties;
 
-    switch( (PCB_IO_MGR::PCB_FILE_T) aFileType )
+    PCB_IO_MGR::PCB_FILE_T fileType = (PCB_IO_MGR::PCB_FILE_T) aFileType;
+
+    switch( fileType )
     {
     case PCB_IO_MGR::CADSTAR_PCB_ARCHIVE:
     case PCB_IO_MGR::EAGLE:
@@ -1208,11 +1210,16 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
     case PCB_IO_MGR::ALTIUM_CIRCUIT_MAKER:
     case PCB_IO_MGR::ALTIUM_CIRCUIT_STUDIO:
     case PCB_IO_MGR::ALLEGRO:
-        return OpenProjectFiles( std::vector<wxString>( 1, aFileName ), KICTL_NONKICAD_ONLY | KICTL_IMPORT_LIB );
-
     case PCB_IO_MGR::SOLIDWORKS_PCB:
     case PCB_IO_MGR::PADS:
-        return OpenProjectFiles( std::vector<wxString>( 1, aFileName ), KICTL_NONKICAD_ONLY );
+    {
+        int ctl = KICTL_NONKICAD_ONLY;
+
+        if( PCB_IO_MGR::ImportGeneratesProjectLibrary( fileType ) )
+            ctl |= KICTL_IMPORT_LIB;
+
+        return OpenProjectFiles( std::vector<wxString>( 1, aFileName ), ctl );
+    }
 
     default:
         return false;
@@ -1223,33 +1230,10 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 void PCB_EDIT_FRAME::reconcileImportedFootprintLibraries(
         std::vector<std::unique_ptr<FOOTPRINT>> aDefinitions, const wxString& aBoardPath )
 {
-    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
+    WX_STRING_REPORTER reporter;
 
-    if( !adapter )
-        return;
-
-    // manager pre-commits the cache nickname + source libs; standalone import derives from filename
-    wxString              cacheNick;
-    std::vector<wxString> sourceLibs;
-    IMPORT_PROJ_PROPS::ReadFootprintProps( m_importProperties, cacheNick, sourceLibs );
-
-    if( cacheNick.IsEmpty() )
-        cacheNick = IMPORT_PROJ_PROPS::MakeCacheNickname( wxFileName( aBoardPath ).GetName() );
-
-    WX_STRING_REPORTER          reporter;
-    FOOTPRINT_IMPORT_RECONCILER reconciler( *adapter, Prj().GetProjectPath(), &reporter );
-
-    // reconciliation failure must not abort the import
-    try
-    {
-        reconciler.Reconcile( GetBoard(), std::move( aDefinitions ), cacheNick, sourceLibs );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        reporter.Report( wxString::Format( _( "Could not reconcile imported footprint "
-                                              "libraries: %s" ), ioe.What() ),
-                         RPT_SEVERITY_ERROR );
-    }
+    ReconcileImportedFootprints( std::move( aDefinitions ), *GetBoard(), Prj(), aBoardPath,
+                                 m_importProperties, reporter );
 
     if( reporter.HasMessage() )
     {
