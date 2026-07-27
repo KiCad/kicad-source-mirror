@@ -231,7 +231,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	bMainSizer->Add( m_notebookShapeDefs, 0, wxEXPAND | wxALL, 5 );
 
 	m_locked = new wxCheckBox( this, wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, 0 );
-	bMainSizer->Add( m_locked, 0, wxALL, 10 );
+	bMainSizer->Add( m_locked, 0, wxTOP|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bSizerRoundRect;
 	bSizerRoundRect = new wxBoxSizer( wxHORIZONTAL );
@@ -254,7 +254,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	bSizerRoundRect->Add( m_cornerRadiusUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bMainSizer->Add( bSizerRoundRect, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bSizerRoundRect, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_upperSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -268,14 +268,20 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_thicknessLabel->Wrap( -1 );
 	gbSizer2->Add( m_thicknessLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
+	wxBoxSizer* bSizer181;
+	bSizer181 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessCtrl->SetMinSize( wxSize( 140,-1 ) );
 
-	gbSizer2->Add( m_thicknessCtrl, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer181->Add( m_thicknessCtrl, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessUnits->Wrap( -1 );
-	gbSizer2->Add( m_thicknessUnits, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizer181->Add( m_thicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+
+	gbSizer2->Add( bSizer181, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_lineStyleLabel = new wxStaticText( this, wxID_ANY, _("Line style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineStyleLabel->Wrap( -1 );
@@ -284,7 +290,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_lineStyleCombo = new wxBitmapComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_lineStyleCombo->SetMinSize( wxSize( 210,-1 ) );
 
-	gbSizer2->Add( m_lineStyleCombo, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	gbSizer2->Add( m_lineStyleCombo, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 	m_fillLabel = new wxStaticText( this, wxID_ANY, _("Fill:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fillLabel->Wrap( -1 );
@@ -294,21 +300,21 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	int m_fillCtrlNChoices = sizeof( m_fillCtrlChoices ) / sizeof( wxString );
 	m_fillCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fillCtrlNChoices, m_fillCtrlChoices, 0 );
 	m_fillCtrl->SetSelection( 0 );
-	gbSizer2->Add( m_fillCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	gbSizer2->Add( m_fillCtrl, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 	m_netLabel = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_netLabel->Wrap( -1 );
 	gbSizer2->Add( m_netLabel, wxGBPosition( 4, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_netSelector = new NET_SELECTOR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_netSelector, wxGBPosition( 4, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	gbSizer2->Add( m_netSelector, wxGBPosition( 4, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerLabel->Wrap( -1 );
 	gbSizer2->Add( m_LayerLabel, wxGBPosition( 6, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	gbSizer2->Add( m_LayerSelectionCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
+	gbSizer2->Add( m_LayerSelectionCtrl, wxGBPosition( 6, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
 	gbSizer2->AddGrowableCol( 1 );
@@ -320,13 +326,13 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_techLayersLabel = new wxStaticText( this, wxID_ANY, _("Technical Layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_techLayersLabel->Wrap( -1 );
-	bSizer14->Add( m_techLayersLabel, 0, wxALL, 5 );
+	bSizer14->Add( m_techLayersLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer14->Add( m_staticline1, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 4 );
 
 
-	m_upperSizer->Add( bSizer14, 1, wxEXPAND, 5 );
+	m_upperSizer->Add( bSizer14, 0, wxEXPAND|wxTOP, 5 );
 
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 5, 0, 0 );
