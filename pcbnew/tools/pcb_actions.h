@@ -652,6 +652,7 @@ public:
     static TOOL_ACTION addConstraintPointOnLine;
     static TOOL_ACTION addConstraintMidpoint;
     static TOOL_ACTION addConstraintSymmetric;
+    static TOOL_ACTION addConstraintFixedPosition;   ///< Ground a point, and the cluster holding it.
     static TOOL_ACTION removeConstraints;
     static TOOL_ACTION showConstraints;     ///< Toggle the constraint diagnostics overlay.
     static TOOL_ACTION hideConstraints;     ///< Same toggle, shown while the overlay is visible.

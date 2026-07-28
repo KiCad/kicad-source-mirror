@@ -1493,6 +1493,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintPointOnLine );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintMidpoint );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintSymmetric );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintFixedPosition );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintParallel );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintPerpendicular );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintCollinear );

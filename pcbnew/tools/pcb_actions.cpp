@@ -191,6 +191,16 @@ TOOL_ACTION PCB_ACTIONS::addConstraintArcAngle( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( PCB_CONSTRAINT_TYPE::ARC_ANGLE ) );
 
+TOOL_ACTION PCB_ACTIONS::addConstraintFixedPosition( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ConstraintEditor.addFixedPosition" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Fix in Place..." ) )
+        .Tooltip( _( "Click a point to pin it where it is, grounding the shapes constrained to it" ) )
+        .Icon( BITMAPS::constraint_fixed_position )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Flags( AF_ACTIVATE )
+        .Parameter( PCB_CONSTRAINT_TYPE::FIXED_POSITION ) );
+
 TOOL_ACTION PCB_ACTIONS::addConstraintCoincident( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ConstraintEditor.addCoincident" )
         .Scope( AS_GLOBAL )
@@ -3173,7 +3183,7 @@ const std::vector<const TOOL_ACTION*>& PCB_ACTIONS::ConstraintAddActions()
         &addConstraintHorizontal,    &addConstraintVertical,      &addConstraintFixedLength,
         &addConstraintConcentric,    &addConstraintEqualRadius,   &addConstraintFixedRadius,
         &addConstraintArcAngle,      &addConstraintCoincident,    &addConstraintPointOnLine,
-        &addConstraintMidpoint,      &addConstraintSymmetric
+        &addConstraintMidpoint,      &addConstraintSymmetric,     &addConstraintFixedPosition
     };
 
     return actions;

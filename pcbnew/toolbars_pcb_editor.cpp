@@ -279,6 +279,7 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
                             .AddAction( PCB_ACTIONS::addConstraintPointOnLine )
                             .AddAction( PCB_ACTIONS::addConstraintMidpoint )
                             .AddAction( PCB_ACTIONS::addConstraintSymmetric )
+                            .AddAction( PCB_ACTIONS::addConstraintFixedPosition )
                             .AddAction( PCB_ACTIONS::addConstraintParallel )
                             .AddAction( PCB_ACTIONS::addConstraintPerpendicular )
                             .AddAction( PCB_ACTIONS::addConstraintCollinear )
