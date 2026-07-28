@@ -245,6 +245,15 @@ void WX_INFOBAR::FixSize()
 {
     wxSizer* sizer = GetSizer();
 
+    if( !sizer || sizer->GetItemCount() == 0 )
+        return;
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+    // On wx 3.3 item 0 is not the icon. It is a nested sizer that holds everything.
+    // Detaching it leaves the infobar empty. Then doSize() reads a null item and crashes.
+    doSize();
+    Layout();
+#else
     wxWindow* icon = sizer->GetItem( (size_t) 0 )->GetWindow();
     sizer->Detach( 0 );
 
@@ -252,6 +261,7 @@ void WX_INFOBAR::FixSize()
 
     sizer->Prepend( icon, 0, wxLEFT | wxRIGHT, 5 );
     Layout();
+#endif
 }
 
 
