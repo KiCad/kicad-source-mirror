@@ -223,11 +223,6 @@ struct PropertiesFixture
 
 BOOST_FIXTURE_TEST_SUITE( Properties, PropertiesFixture )
 
-BOOST_AUTO_TEST_CASE( Init )
-{
-    propMgr.Rebuild();
-}
-
 // Basic Set() & Get()
 BOOST_AUTO_TEST_CASE( SetGet )
 {
