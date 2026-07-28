@@ -304,7 +304,6 @@ SCH_SCREEN* SCH_SHEET::AdoptImportedScreen( SCH_SCREEN* aScreen ) noexcept
 {
     SCH_SCREEN* previous = m_screen;
     m_screen = aScreen;
-    const_cast<KIID&>( m_Uuid ) = aScreen->GetUuid();
     return previous;
 }
 

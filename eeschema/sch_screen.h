@@ -540,6 +540,8 @@ public:
 
     void AssignNewUuid() { m_uuid = KIID(); }
 
+    void SetImportStagingUuid( const KIID& aUuid ) { m_uuid = aUuid; }
+
     /**
      * Update the symbol value and footprint instance data for legacy designs.
      */

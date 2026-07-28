@@ -684,11 +684,6 @@ namespace
             {
                 replacementScreen->IncRefCount();
                 SCH_SCREEN* previousScreen = destinationRoot->AdoptImportedScreen( replacementScreen.get() );
-
-                for( SCH_SHEET_PATH& path : hierarchy )
-                    path.Rehash();
-
-                replacementCurrentSheet->Rehash();
                 previousGraph = aSchematic->AdoptImportedHierarchy( std::move( hierarchy ),
                                                                     &*replacementCurrentSheet,
                                                                     connectionGraph.get() );
@@ -925,6 +920,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
             THROW_IO_ERROR( wxS( "cannot replace a schematic without a top-level sheet and screen" ) );
 
         staged.replacementScreen = std::make_unique<SCH_SCREEN>( aSchematic );
+        staged.replacementScreen->SetImportStagingUuid( staged.destinationRoot->m_Uuid );
         staged.replacementScreen->SetFileName( aSourcePath );
         SCH_SCREEN* rootScreen = staged.replacementScreen.get();
 

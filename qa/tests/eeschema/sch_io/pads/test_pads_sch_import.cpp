@@ -1025,12 +1025,21 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
 {
     const PADS_SCH_BINARY::PADS_SCH_MODEL    model = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
     PADS_SCH_BINARY::PADS_SCH_BINARY_BUILDER builder;
+    SCH_SHEET*                               originalRoot = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( originalRoot );
+    const KIID originalRootUuid = originalRoot->m_Uuid;
     PADS_SCH_BINARY::BUILD_RESULT            result =
             builder.Build( model, &m_schematic, nullptr, binaryFixture( wxS( "multisheet_connectivity" ) ) );
     BOOST_CHECK_EQUAL( result.counts.sheets, model.sheets.size() );
     SCH_SHEET* root = m_schematic.GetTopLevelSheet();
     BOOST_REQUIRE( root );
     BOOST_REQUIRE( root->GetScreen() );
+    BOOST_CHECK( root == originalRoot );
+    BOOST_CHECK( root->m_Uuid == originalRootUuid );
+    BOOST_CHECK( root->GetScreen()->GetUuid() == originalRootUuid );
+
+    SCH_SHEET_PATH rootPath;
+    rootPath.push_back( root );
 
     std::vector<SCH_SHEET*> children;
 
@@ -1056,6 +1065,13 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
                 i == 0 ? wxS( "[1]DUP_SAFE__.kicad_sch" ) : wxS( "[2]DUP_SAFE__.kicad_sch" );
         BOOST_CHECK_EQUAL( filename, expectedFilename );
         BOOST_REQUIRE( children[i]->GetScreen() );
+        SCH_SHEET_PATH childPath( rootPath );
+        childPath.push_back( children[i] );
+        BOOST_CHECK_EQUAL( childPath.GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 1 ) );
+        BOOST_REQUIRE_EQUAL( children[i]->GetInstances().size(), 1u );
+        BOOST_CHECK( children[i]->GetInstances().front().m_Path == rootPath.Path() );
+        BOOST_REQUIRE_EQUAL( children[i]->GetInstances().front().m_Path.size(), 1u );
+        BOOST_CHECK( children[i]->GetInstances().front().m_Path.front() == originalRootUuid );
         BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 1 ) );
         BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageSettings().GetWidthMils(), model.sheets[i].pageSize.x / 2 );
         BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageSettings().GetHeightMils(),
@@ -1074,6 +1090,15 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
             builtLabels.insert( static_cast<SCH_GLOBALLABEL*>( item )->GetText() );
 
         BOOST_CHECK( builtLabels == expectedLabels );
+
+        for( SCH_ITEM* item : children[i]->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*        symbol = static_cast<SCH_SYMBOL*>( item );
+            SCH_SYMBOL_INSTANCE instance;
+            BOOST_REQUIRE( symbol->GetInstance( instance, childPath.Path(), false ) );
+            BOOST_CHECK( instance.m_Path == childPath.Path() );
+            BOOST_CHECK_EQUAL( symbol->GetRef( &childPath ), instance.m_Reference );
+        }
     }
 
     BOOST_CHECK_EQUAL( result.counts.labels,
