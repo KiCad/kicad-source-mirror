@@ -208,10 +208,21 @@ bool DATABASE_CONNECTION::IsConnected() const
 
 
 bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
-                                          const std::set<std::string>& aColumns )
+                                          const std::set<std::string>& aRequiredColumns,
+                                          const std::set<std::string>& aOptionalColumns )
 {
     if( !m_conn )
         return false;
+
+    // Catalog names are lowercase; normalize here so differently-cased columns still match
+    std::set<std::string> requiredLower;
+    std::set<std::string> optionalLower;
+
+    for( const std::string& col : aRequiredColumns )
+        requiredLower.insert( boost::to_lower_copy( col ) );
+
+    for( const std::string& col : aOptionalColumns )
+        optionalLower.insert( boost::to_lower_copy( col ) );
 
     try
     {
@@ -240,21 +251,21 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
                 std::string columnKey = toUTF8( columns.column_name() );
                 std::string columnKeyLower = boost::to_lower_copy( columnKey );
 
-                if( aColumns.count( columnKeyLower ) )
+                if( requiredLower.count( columnKeyLower )
+                    || optionalLower.count( columnKeyLower ) )
                 {
                     m_columnCache[key][columnKey] = columns.data_type();
                     columnsInCatalog.insert( columnKeyLower );
                 }
             }
 
-            // Some ODBC drivers (notably SQLite) don't report all columns via SQLColumns.
-            // For example, SQLite's PRAGMA table_info used by its ODBC driver doesn't return
-            // generated columns. Trust the user's configuration and add any requested columns
-            // that weren't found in the catalog. The actual query will fail with a clear error
-            // if the column doesn't exist, which is better than silently ignoring it.
-            for( const std::string& requestedCol : aColumns )
+            // SQLite's ODBC driver doesn't report generated columns via SQLColumns, so required
+            // columns are trusted and added even when absent from the catalog
+            for( const std::string& requestedCol : aRequiredColumns )
             {
-                if( !columnsInCatalog.count( requestedCol ) && !requestedCol.empty() )
+                std::string requestedColLower = boost::to_lower_copy( requestedCol );
+
+                if( !columnsInCatalog.count( requestedColLower ) && !requestedCol.empty() )
                 {
                     wxLogTrace( traceDatabase,
                                 wxT( "CacheTableInfo: column '%s' not found in catalog for table "
@@ -262,6 +273,20 @@ bool DATABASE_CONNECTION::CacheTableInfo( const std::string& aTable,
                                 requestedCol, key );
 
                     m_columnCache[key][requestedCol] = SQL_VARCHAR;
+                }
+            }
+
+            // Unlike required columns, a missing optional column is dropped, not added, but is
+            // still worth a warning since it usually means a misconfigured .kicad_dbl mapping
+            for( const std::string& requestedCol : aOptionalColumns )
+            {
+                std::string requestedColLower = boost::to_lower_copy( requestedCol );
+
+                if( !columnsInCatalog.count( requestedColLower ) && !requestedCol.empty() )
+                {
+                    wxLogWarning( wxT( "Database table '%s' has no column '%s'; ignoring the "
+                                       "misconfigured properties mapping." ),
+                                  key, requestedCol );
                 }
             }
         }

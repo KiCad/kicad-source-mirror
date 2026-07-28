@@ -438,23 +438,23 @@ void SCH_IO_DATABASE::connect()
 
         for( const DATABASE_LIB_TABLE& tableIter : m_settings->m_Tables )
         {
-            std::set<std::string> columns;
-
-            columns.insert( boost::to_lower_copy( tableIter.key_col ) );
-            columns.insert( boost::to_lower_copy( tableIter.footprints_col ) );
-            columns.insert( boost::to_lower_copy( tableIter.symbols_col ) );
-
-            columns.insert( boost::to_lower_copy( tableIter.properties.description ) );
-            columns.insert( boost::to_lower_copy( tableIter.properties.footprint_filters ) );
-            columns.insert( boost::to_lower_copy( tableIter.properties.keywords ) );
-            columns.insert( boost::to_lower_copy( tableIter.properties.exclude_from_sim ) );
-            columns.insert( boost::to_lower_copy( tableIter.properties.exclude_from_bom ) );
-            columns.insert( boost::to_lower_copy( tableIter.properties.exclude_from_board ) );
+            // Trusted even if unreported by the driver, to support generated columns (#16952)
+            std::set<std::string> requiredColumns{ tableIter.key_col,
+                                                   tableIter.footprints_col,
+                                                   tableIter.symbols_col };
 
             for( const DATABASE_FIELD_MAPPING& field : tableIter.fields )
-                columns.insert( boost::to_lower_copy( field.column ) );
+                requiredColumns.insert( field.column );
 
-            m_conn->CacheTableInfo( tableIter.table, columns );
+            // Only used if confirmed present, so a misconfigured mapping can't break the table (#23532)
+            std::set<std::string> optionalColumns{ tableIter.properties.description,
+                                                   tableIter.properties.footprint_filters,
+                                                   tableIter.properties.keywords,
+                                                   tableIter.properties.exclude_from_sim,
+                                                   tableIter.properties.exclude_from_bom,
+                                                   tableIter.properties.exclude_from_board };
+
+            m_conn->CacheTableInfo( tableIter.table, requiredColumns, optionalColumns );
         }
 
         m_conn->SetCacheParams( m_settings->m_Cache.max_size, m_settings->m_Cache.max_age );
