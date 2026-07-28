@@ -16,8 +16,11 @@
 #include <connection_graph.h>
 #include <page_info.h>
 #include <pin_type.h>
+#include <sch_bus_entry.h>
 #include <sch_field.h>
+#include <sch_junction.h>
 #include <sch_label.h>
+#include <sch_line.h>
 #include <sch_pin.h>
 #include <sch_screen.h>
 #include <sch_shape.h>
@@ -26,6 +29,7 @@
 #include <sch_symbol.h>
 #include <sch_text.h>
 #include <schematic.h>
+#include <sch_io/pads/pads_sch_symbol_builder.h>
 #include <stroke_params.h>
 #include <title_block.h>
 
@@ -80,7 +84,14 @@ namespace
 
     FILL_T fillStyle( MODEL_FILL_STYLE aFill )
     {
-        return aFill == MODEL_FILL_STYLE::NONE ? FILL_T::NO_FILL : FILL_T::FILLED_SHAPE;
+        switch( aFill )
+        {
+        case MODEL_FILL_STYLE::NONE: return FILL_T::NO_FILL;
+        case MODEL_FILL_STYLE::FILLED: return FILL_T::FILLED_SHAPE;
+        case MODEL_FILL_STYLE::HATCHED: return FILL_T::HATCH;
+        }
+
+        return FILL_T::NO_FILL;
     }
 
 
@@ -157,6 +168,7 @@ namespace
         aText->SetVertJustify( verticalJustification( aPresentation.verticalJustification ) );
         aText->SetBold( aPresentation.bold );
         aText->SetItalic( aPresentation.italic );
+        aText->SetVisible( aPresentation.visible );
 
         if( aPresentation.width > 0 )
             aText->SetTextThickness( toIU( aPresentation.width ) );
@@ -250,6 +262,104 @@ namespace
         text->SetTextAngle( EDA_ANGLE( aGraphic.angle, TENTHS_OF_A_DEGREE_T ) );
         applyTextPresentation( text.get(), aGraphic.presentation, aDiagnostics );
         return text;
+    }
+
+
+    std::unique_ptr<SCH_TEXT> makePageText( const SOURCE_STRING& aText, const SOURCE_POINT& aPosition, int aAngle,
+                                            const MODEL_TEXT_PRESENTATION& aPresentation, int aPageHeight,
+                                            std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    {
+        auto text = std::make_unique<SCH_TEXT>( pagePoint( aPosition, aPageHeight ), aText.text, LAYER_NOTES );
+        text->SetTextAngle( EDA_ANGLE( aAngle, TENTHS_OF_A_DEGREE_T ) );
+        applyTextPresentation( text.get(), aPresentation, aDiagnostics );
+        return text;
+    }
+
+
+    size_t appendPageGraphic( SCH_SCREEN* aScreen, const MODEL_GRAPHIC& aGraphic, int aPageHeight,
+                              std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    {
+        if( aGraphic.kind == MODEL_GRAPHIC_KIND::TEXT )
+        {
+            if( aGraphic.points.empty() )
+                THROW_IO_ERROR( FormatParserError( aGraphic.source, wxS( "page text has no position" ) ) );
+
+            std::unique_ptr<SCH_TEXT> text = makePageText( aGraphic.text, aGraphic.points.front(), aGraphic.angle,
+                                                           aGraphic.presentation, aPageHeight, aDiagnostics );
+            aScreen->Append( text.get() );
+            text.release();
+            return 1;
+        }
+
+        if( ( aGraphic.kind == MODEL_GRAPHIC_KIND::LINE || aGraphic.kind == MODEL_GRAPHIC_KIND::POLYLINE )
+            && aGraphic.fill == MODEL_FILL_STYLE::NONE )
+        {
+            if( aGraphic.points.size() < 2 )
+                THROW_IO_ERROR(
+                        FormatParserError( aGraphic.source, wxS( "page polyline has inconsistent geometry" ) ) );
+
+            for( size_t point = 1; point < aGraphic.points.size(); ++point )
+            {
+                auto line =
+                        std::make_unique<SCH_LINE>( pagePoint( aGraphic.points[point - 1], aPageHeight ), LAYER_NOTES );
+                line->SetEndPoint( pagePoint( aGraphic.points[point], aPageHeight ) );
+                line->SetStroke( STROKE_PARAMS( toIU( aGraphic.strokeWidth ), lineStyle( aGraphic.lineStyle ) ) );
+                aScreen->Append( line.get() );
+                line.release();
+            }
+
+            return aGraphic.points.size() - 1;
+        }
+
+        std::unique_ptr<SCH_SHAPE> shape = makeShape( aGraphic, true, aPageHeight );
+
+        if( aGraphic.fill == MODEL_FILL_STYLE::FILLED )
+            shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
+
+        aScreen->Append( shape.get() );
+        shape.release();
+        return 1;
+    }
+
+
+    std::unique_ptr<SCH_SYMBOL> makePowerSymbol( const MODEL_LABEL& aLabel, const SCH_SHEET_PATH& aPath,
+                                                 int aPageHeight, size_t aOrdinal,
+                                                 std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    {
+        PADS_SCH::PARAMETERS              params;
+        PADS_SCH::PADS_SCH_SYMBOL_BUILDER symbolBuilder( params );
+        const std::string                 style = aLabel.kind == MODEL_LABEL_KIND::GROUND ? "GND" : "VCC";
+        std::unique_ptr<LIB_SYMBOL>       library( symbolBuilder.BuildKiCadPowerSymbol( style ) );
+
+        if( !library )
+            THROW_IO_ERROR( FormatParserError( aLabel.source, wxS( "could not construct power symbol" ) ) );
+
+        auto   symbol = std::make_unique<SCH_SYMBOL>();
+        LIB_ID libId;
+        libId.SetLibNickname( wxS( "pads_import" ) );
+        libId.SetLibItemName( library->GetName() );
+        symbol->SetLibId( libId );
+        auto libraryCopy = std::make_unique<LIB_SYMBOL>( *library );
+        symbol->SetLibSymbol( libraryCopy.release() );
+        symbol->SetPosition( pagePoint( aLabel.position, aPageHeight ) );
+        symbol->SetOrientation( NormalizeAngle( aLabel.angle ) == 900    ? SYM_ORIENT_90
+                                : NormalizeAngle( aLabel.angle ) == 1800 ? SYM_ORIENT_180
+                                : NormalizeAngle( aLabel.angle ) == 2700 ? SYM_ORIENT_270
+                                                                         : SYM_ORIENT_0 );
+        const wxString reference = wxString::Format( wxS( "#PWR%04zu" ), aOrdinal + 1 );
+        symbol->SetRef( &aPath, reference );
+        symbol->AddHierarchicalReference( aPath.Path(), reference, 1 );
+        symbol->SetValueFieldText( aLabel.text.text, &aPath );
+
+        if( SCH_FIELD* value = symbol->GetField( FIELD_T::VALUE ) )
+        {
+            value->SetText( aLabel.text.text );
+            value->SetPosition( symbol->GetPosition() );
+            value->SetTextAngle( EDA_ANGLE( aLabel.angle, TENTHS_OF_A_DEGREE_T ) );
+            applyTextPresentation( value, aLabel.presentation, aDiagnostics );
+        }
+
+        return symbol;
     }
 
 
@@ -737,6 +847,13 @@ namespace
     }
 
 
+    void collectPresentationDiagnostics( const MODEL_TEXT_PRESENTATION&  aPresentation,
+                                         std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    {
+        collectDispositionDiagnostics( aPresentation.properties, aDiagnostics );
+    }
+
+
     void validatePropertyDispositions( const PADS_SCH_MODEL& aModel, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
         collectDispositionDiagnostics( aModel.settings.properties, aDiagnostics );
@@ -745,8 +862,17 @@ namespace
         {
             collectDispositionDiagnostics( sheet.properties, aDiagnostics );
 
+            for( const MODEL_GRAPHIC& graphic : sheet.border )
+            {
+                collectDispositionDiagnostics( graphic.properties, aDiagnostics );
+                collectPresentationDiagnostics( graphic.presentation, aDiagnostics );
+            }
+
             for( const MODEL_FIELD& field : sheet.titleBlockFields )
+            {
                 collectDispositionDiagnostics( field.properties, aDiagnostics );
+                collectPresentationDiagnostics( field.presentation, aDiagnostics );
+            }
         }
 
         for( const MODEL_SYMBOL_DEFINITION& definition : aModel.definitions )
@@ -754,10 +880,24 @@ namespace
             collectDispositionDiagnostics( definition.properties, aDiagnostics );
 
             for( const MODEL_GRAPHIC& graphic : definition.graphics )
+            {
                 collectDispositionDiagnostics( graphic.properties, aDiagnostics );
+                collectPresentationDiagnostics( graphic.presentation, aDiagnostics );
+            }
 
             for( const MODEL_PIN_DEFINITION& pin : definition.pins )
+            {
                 collectDispositionDiagnostics( pin.properties, aDiagnostics );
+                collectPresentationDiagnostics( pin.presentation, aDiagnostics );
+                collectPresentationDiagnostics( pin.namePresentation, aDiagnostics );
+                collectPresentationDiagnostics( pin.numberPresentation, aDiagnostics );
+            }
+
+            for( const MODEL_FIELD& field : definition.fields )
+            {
+                collectDispositionDiagnostics( field.properties, aDiagnostics );
+                collectPresentationDiagnostics( field.presentation, aDiagnostics );
+            }
         }
 
         for( const MODEL_PART_TYPE& part : aModel.partTypes )
@@ -768,7 +908,10 @@ namespace
                 collectDispositionDiagnostics( gate.properties, aDiagnostics );
 
             for( const MODEL_FIELD& field : part.fields )
+            {
                 collectDispositionDiagnostics( field.properties, aDiagnostics );
+                collectPresentationDiagnostics( field.presentation, aDiagnostics );
+            }
         }
 
         for( const MODEL_PLACEMENT& placement : aModel.placements )
@@ -776,7 +919,10 @@ namespace
             collectDispositionDiagnostics( placement.properties, aDiagnostics );
 
             for( const MODEL_FIELD& field : placement.fields )
+            {
                 collectDispositionDiagnostics( field.properties, aDiagnostics );
+                collectPresentationDiagnostics( field.presentation, aDiagnostics );
+            }
         }
 
         for( const MODEL_NET& net : aModel.nets )
@@ -801,16 +947,25 @@ namespace
         }
 
         for( const MODEL_LABEL& label : aModel.labels )
+        {
             collectDispositionDiagnostics( label.properties, aDiagnostics );
+            collectPresentationDiagnostics( label.presentation, aDiagnostics );
+        }
 
         for( const MODEL_JUNCTION& junction : aModel.junctions )
             collectDispositionDiagnostics( junction.properties, aDiagnostics );
 
         for( const MODEL_TEXT& text : aModel.texts )
+        {
             collectDispositionDiagnostics( text.properties, aDiagnostics );
+            collectPresentationDiagnostics( text.presentation, aDiagnostics );
+        }
 
         for( const MODEL_PAGE_GRAPHIC& graphic : aModel.graphics )
+        {
             collectDispositionDiagnostics( graphic.graphic.properties, aDiagnostics );
+            collectPresentationDiagnostics( graphic.graphic.presentation, aDiagnostics );
+        }
 
         for( const PRESERVED_CONTROLLER_PAYLOAD& payload : aModel.preservedControllerPayloads )
         {
@@ -843,25 +998,242 @@ namespace
         for( const MODEL_GRAPHIC& graphic : aSourceSheet.border )
         {
             if( graphic.kind == MODEL_GRAPHIC_KIND::TEXT )
+            {
+                appendPageGraphic( aScreen, graphic, pageHeight, aStaged.result.diagnostics );
+                ++aStaged.result.counts.texts;
+                continue;
+            }
+
+            aStaged.result.counts.graphics +=
+                    appendPageGraphic( aScreen, graphic, pageHeight, aStaged.result.diagnostics );
+        }
+
+        using SEGMENT_KEY = std::tuple<int64_t, int64_t, int64_t, int64_t>;
+        std::set<SEGMENT_KEY> busEntrySegments;
+
+        auto segmentKey = []( const SOURCE_POINT& aStart, const SOURCE_POINT& aEnd )
+        {
+            if( std::tie( aStart.x, aStart.y ) <= std::tie( aEnd.x, aEnd.y ) )
+                return SEGMENT_KEY( aStart.x, aStart.y, aEnd.x, aEnd.y );
+
+            return SEGMENT_KEY( aEnd.x, aEnd.y, aStart.x, aStart.y );
+        };
+
+        auto samePoint = []( const SOURCE_POINT& aLeft, const SOURCE_POINT& aRight )
+        {
+            return aLeft.x == aRight.x && aLeft.y == aRight.y;
+        };
+
+        for( const MODEL_BUS& bus : aModel.buses )
+        {
+            if( bus.sheet.id != aSourceSheet.id )
                 continue;
 
-            std::unique_ptr<SCH_SHAPE> shape = makeShape( graphic, true, pageHeight );
-            aScreen->Append( shape.get() );
-            shape.release();
-            ++aStaged.result.counts.graphics;
+            if( bus.vertices.size() < 2 )
+                THROW_IO_ERROR( FormatParserError( bus.source, wxS( "bus has inconsistent geometry" ) ) );
+
+            for( size_t vertex = 1; vertex < bus.vertices.size(); ++vertex )
+            {
+                auto line = std::make_unique<SCH_LINE>( pagePoint( bus.vertices[vertex - 1], pageHeight ), LAYER_BUS );
+                line->SetEndPoint( pagePoint( bus.vertices[vertex], pageHeight ) );
+                line->SetStroke( STROKE_PARAMS( toIU( aSourceSheet.defaultBusWidth ), LINE_STYLE::SOLID ) );
+                aScreen->Append( line.get() );
+                line.release();
+                ++aStaged.result.counts.buses;
+            }
+
+            wxString busLabel = bus.name.text;
+
+            if( !bus.memberNets.empty() )
+            {
+                busLabel += wxS( "{" );
+
+                for( size_t member = 0; member < bus.memberNets.size(); ++member )
+                {
+                    auto net = std::ranges::find( aModel.nets, bus.memberNets[member].id, &MODEL_NET::id );
+
+                    if( net == aModel.nets.end() )
+                        THROW_IO_ERROR( FormatParserError( bus.memberNets[member].source,
+                                                           wxS( "resolved bus member is missing during staging" ) ) );
+
+                    if( member )
+                        busLabel += wxS( " " );
+
+                    busLabel += net->name.text;
+                }
+
+                busLabel += wxS( "}" );
+            }
+
+            auto label = std::make_unique<SCH_LABEL>( pagePoint( bus.vertices.front(), pageHeight ), busLabel );
+            aScreen->Append( label.get() );
+            label.release();
+            ++aStaged.result.counts.labels;
+
+            for( const MODEL_BUS_ENTRY& entry : bus.entries )
+            {
+                auto ownerNet = std::ranges::find( aModel.nets, entry.memberNet.id, &MODEL_NET::id );
+
+                if( ownerNet == aModel.nets.end() )
+                    THROW_IO_ERROR( FormatParserError( entry.memberNet.source,
+                                                       wxS( "resolved bus-entry net is missing during staging" ) ) );
+
+                std::optional<SOURCE_POINT> wireEnd;
+
+                for( const MODEL_CONNECTION& connection : ownerNet->connections )
+                {
+                    if( connection.vertices.size() < 2 )
+                        continue;
+
+                    if( samePoint( connection.vertices.front(), entry.position ) )
+                    {
+                        if( wireEnd )
+                            THROW_IO_ERROR(
+                                    FormatParserError( entry.source, wxS( "bus-entry geometry is ambiguous" ) ) );
+
+                        wireEnd = connection.vertices[1];
+                    }
+                    else if( samePoint( connection.vertices.back(), entry.position ) )
+                    {
+                        if( wireEnd )
+                            THROW_IO_ERROR(
+                                    FormatParserError( entry.source, wxS( "bus-entry geometry is ambiguous" ) ) );
+
+                        wireEnd = connection.vertices[connection.vertices.size() - 2];
+                    }
+                }
+
+                if( !wireEnd )
+                    THROW_IO_ERROR( FormatParserError( entry.source, wxS( "bus-entry geometry is unresolved" ) ) );
+
+                const VECTOR2I start = pagePoint( entry.position, pageHeight );
+                const VECTOR2I end = pagePoint( *wireEnd, pageHeight );
+                auto           entryItem = std::make_unique<SCH_BUS_WIRE_ENTRY>( start );
+                entryItem->SetSize( end - start );
+                aScreen->Append( entryItem.get() );
+                entryItem.release();
+                busEntrySegments.insert( segmentKey( entry.position, *wireEnd ) );
+                ++aStaged.result.counts.busEntries;
+            }
         }
+
+        for( const MODEL_NET& net : aModel.nets )
+        {
+            if( net.sheet.id != aSourceSheet.id )
+                continue;
+
+            for( const MODEL_CONNECTION& connection : net.connections )
+            {
+                if( connection.vertices.size() < 2 )
+                    THROW_IO_ERROR(
+                            FormatParserError( connection.source, wxS( "connection has inconsistent geometry" ) ) );
+
+                for( size_t vertex = 1; vertex < connection.vertices.size(); ++vertex )
+                {
+                    if( busEntrySegments.contains(
+                                segmentKey( connection.vertices[vertex - 1], connection.vertices[vertex] ) ) )
+                    {
+                        continue;
+                    }
+
+                    auto line = std::make_unique<SCH_LINE>( pagePoint( connection.vertices[vertex - 1], pageHeight ),
+                                                            LAYER_WIRE );
+                    line->SetEndPoint( pagePoint( connection.vertices[vertex], pageHeight ) );
+                    line->SetStroke( STROKE_PARAMS( toIU( aSourceSheet.defaultLineWidth ), LINE_STYLE::SOLID ) );
+                    aScreen->Append( line.get() );
+                    line.release();
+                    ++aStaged.result.counts.wires;
+                }
+            }
+        }
+
+        for( const MODEL_JUNCTION& junction : aModel.junctions )
+        {
+            if( junction.sheet.id != aSourceSheet.id )
+                continue;
+
+            auto item = std::make_unique<SCH_JUNCTION>( pagePoint( junction.position, pageHeight ) );
+            aScreen->Append( item.get() );
+            item.release();
+            ++aStaged.result.counts.junctions;
+        }
+
+        size_t powerOrdinal = 0;
 
         for( const MODEL_LABEL& label : aModel.labels )
         {
-            if( label.sheet.id != aSourceSheet.id || label.linkedSheets.empty() )
+            if( label.sheet.id != aSourceSheet.id )
                 continue;
 
-            auto global = std::make_unique<SCH_GLOBALLABEL>( pagePoint( label.position, pageHeight ), label.text.text );
-            global->SetTextAngle( EDA_ANGLE( label.angle, TENTHS_OF_A_DEGREE_T ) );
-            applyTextPresentation( global.get(), label.presentation, aStaged.result.diagnostics );
-            aScreen->Append( global.get() );
-            global.release();
+            std::unique_ptr<SCH_ITEM> item;
+
+            switch( label.kind )
+            {
+            case MODEL_LABEL_KIND::LOCAL:
+            case MODEL_LABEL_KIND::BUS:
+                item = std::make_unique<SCH_LABEL>( pagePoint( label.position, pageHeight ), label.text.text );
+                break;
+
+            case MODEL_LABEL_KIND::GLOBAL:
+                item = std::make_unique<SCH_GLOBALLABEL>( pagePoint( label.position, pageHeight ), label.text.text );
+                break;
+
+            case MODEL_LABEL_KIND::HIERARCHICAL:
+                item = std::make_unique<SCH_HIERLABEL>( pagePoint( label.position, pageHeight ), label.text.text );
+                break;
+
+            case MODEL_LABEL_KIND::GROUND:
+            case MODEL_LABEL_KIND::POWER:
+                item = makePowerSymbol( label, aPath, pageHeight, powerOrdinal++, aStaged.result.diagnostics );
+                ++aStaged.result.counts.symbols;
+                break;
+
+            case MODEL_LABEL_KIND::UNSUPPORTED:
+                aStaged.result.diagnostics.push_back(
+                        { RPT_SEVERITY_WARNING, label.source,
+                          wxS( "PADS unsupported label has no KiCad schematic representation" ) } );
+                continue;
+            }
+
+            if( auto* text = dynamic_cast<EDA_TEXT*>( item.get() ) )
+            {
+                text->SetTextAngle( EDA_ANGLE( label.angle, TENTHS_OF_A_DEGREE_T ) );
+                applyTextPresentation( text, label.presentation, aStaged.result.diagnostics );
+            }
+
+            aScreen->Append( item.get() );
+            item.release();
             ++aStaged.result.counts.labels;
+        }
+
+        for( const MODEL_TEXT& sourceText : aModel.texts )
+        {
+            if( sourceText.sheet.id != aSourceSheet.id )
+                continue;
+
+            std::unique_ptr<SCH_TEXT> text =
+                    makePageText( sourceText.text, sourceText.position, sourceText.angle, sourceText.presentation,
+                                  pageHeight, aStaged.result.diagnostics );
+            aScreen->Append( text.get() );
+            text.release();
+            ++aStaged.result.counts.texts;
+        }
+
+        for( const MODEL_PAGE_GRAPHIC& pageGraphic : aModel.graphics )
+        {
+            if( pageGraphic.sheet.id != aSourceSheet.id )
+                continue;
+
+            if( pageGraphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT )
+            {
+                appendPageGraphic( aScreen, pageGraphic.graphic, pageHeight, aStaged.result.diagnostics );
+                ++aStaged.result.counts.texts;
+            }
+            else
+            {
+                aStaged.result.counts.graphics +=
+                        appendPageGraphic( aScreen, pageGraphic.graphic, pageHeight, aStaged.result.diagnostics );
+            }
         }
     }
 

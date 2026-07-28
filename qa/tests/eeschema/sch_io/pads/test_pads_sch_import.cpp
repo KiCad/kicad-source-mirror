@@ -21,8 +21,12 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <base_units.h>
+#include <connection_graph.h>
 #include <lib_symbol.h>
 #include <sch_field.h>
+#include <sch_bus_entry.h>
+#include <sch_connection.h>
+#include <sch_junction.h>
 #include <sch_label.h>
 #include <schematic.h>
 #include <sch_io/pads/sch_io_pads.h>
@@ -30,6 +34,7 @@
 #include <sch_io/pads/pads_sch_binary_parser.h>
 #include <sch_io/pads/pads_sch_binary_reader.h>
 #include <sch_io/sch_io_mgr.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_shape.h>
@@ -47,6 +52,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <wx/filename.h>
 
 
 namespace
@@ -144,6 +150,107 @@ static VECTOR2I localPoint( const PADS_SCH_BINARY::SOURCE_POINT& aPoint )
 }
 
 
+static VECTOR2I pagePoint( const PADS_SCH_BINARY::SOURCE_POINT& aPoint, int aPageHeight )
+{
+    return { schIUScale.MilsToIU( static_cast<double>( aPoint.x ) / 2.0 ),
+             aPageHeight - schIUScale.MilsToIU( static_cast<double>( aPoint.y ) / 2.0 ) };
+}
+
+
+static std::multiset<wxString> connectivitySnapshot( SCHEMATIC& aSchematic )
+{
+    std::multiset<wxString> result;
+    SCH_SHEET_LIST          hierarchy = aSchematic.BuildSheetListSortedByPageNumbers();
+    aSchematic.ConnectionGraph()->Recalculate( hierarchy, true );
+
+    for( const SCH_SHEET_PATH& path : hierarchy )
+    {
+        SCH_SCREEN* screen = path.LastScreen();
+        BOOST_REQUIRE( screen );
+
+        for( SCH_ITEM* item : screen->Items() )
+        {
+            wxString geometry;
+
+            if( auto* line = dynamic_cast<SCH_LINE*>( item ) )
+            {
+                geometry = wxString::Format( wxS( "%d:%d,%d:%d,%d:%d:%d" ), line->GetLayer(), line->GetStartPoint().x,
+                                             line->GetStartPoint().y, line->GetEndPoint().x, line->GetEndPoint().y,
+                                             line->GetStroke().GetWidth(),
+                                             static_cast<int>( line->GetStroke().GetLineStyle() ) );
+            }
+            else if( auto* entry = dynamic_cast<SCH_BUS_WIRE_ENTRY*>( item ) )
+            {
+                geometry = wxString::Format( wxS( "entry:%d,%d:%d,%d" ), entry->GetPosition().x, entry->GetPosition().y,
+                                             entry->GetSize().x, entry->GetSize().y );
+            }
+            else if( auto* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+            {
+                geometry = wxString::Format( wxS( "shape:%d:%d:%d:%d" ), static_cast<int>( shape->GetShape() ),
+                                             static_cast<int>( shape->GetFillMode() ), shape->GetStroke().GetWidth(),
+                                             static_cast<int>( shape->GetStroke().GetLineStyle() ) );
+
+                if( shape->GetShape() == SHAPE_T::CIRCLE )
+                {
+                    const VECTOR2I center = shape->GetCenter();
+                    const int      radius =
+                            KiROUND( std::hypot( static_cast<double>( shape->GetEnd().x - shape->GetStart().x ),
+                                                 static_cast<double>( shape->GetEnd().y - shape->GetStart().y ) ) );
+                    geometry += wxString::Format( wxS( ":%d,%d:%d" ), center.x, center.y, radius );
+                }
+                else
+                {
+                    geometry += wxString::Format( wxS( ":%d,%d:%d,%d:%d,%d" ), shape->GetStart().x, shape->GetStart().y,
+                                                  shape->GetEnd().x, shape->GetEnd().y, shape->GetArcMid().x,
+                                                  shape->GetArcMid().y );
+                }
+
+                for( const VECTOR2I& point : shape->GetPolyPoints() )
+                    geometry += wxString::Format( wxS( ":%d,%d" ), point.x, point.y );
+            }
+            else if( auto* text = dynamic_cast<EDA_TEXT*>( item ) )
+            {
+                geometry = wxString::Format(
+                        wxS( "text:%d,%d:%g:%d,%d:%d:%d:%d:%d:%d:%s" ), text->GetTextPos().x, text->GetTextPos().y,
+                        text->GetTextAngleDegrees(), text->GetTextSize().x, text->GetTextSize().y,
+                        text->GetTextThickness(), static_cast<int>( text->GetHorizJustify() ),
+                        static_cast<int>( text->GetVertJustify() ), text->IsBold(), text->IsItalic(), text->GetText() );
+            }
+            else
+            {
+                geometry = wxString::Format( wxS( "point:%d,%d" ), item->GetPosition().x, item->GetPosition().y );
+            }
+
+            result.insert( wxString::Format( wxS( "%d:%s" ), static_cast<int>( item->Type() ), geometry ) );
+
+            if( SCH_CONNECTION* connection = item->Connection( &path ) )
+                result.insert( wxS( "net:" ) + connection->GetNetName() );
+
+            if( auto* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+            {
+                for( SCH_PIN* pin : symbol->GetPins( &path ) )
+                {
+                    if( SCH_CONNECTION* connection = pin->Connection( &path ) )
+                        result.insert( wxS( "net:" ) + connection->GetNetName() );
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+
+static bool hasNetName( const std::multiset<wxString>& aSnapshot, const wxString& aName )
+{
+    return std::ranges::any_of( aSnapshot,
+                                [&]( const wxString& aValue )
+                                {
+                                    return aValue == wxS( "net:" ) + aName || aValue.EndsWith( wxS( "/" ) + aName );
+                                } );
+}
+
+
 static PIN_ORIENTATION pinOrientation( int aAngle )
 {
     switch( PADS_SCH_BINARY::NormalizeAngle( aAngle ) )
@@ -175,6 +282,18 @@ static GRAPHIC_PINSHAPE pinShape( uint32_t aStyle )
     case 2: return GRAPHIC_PINSHAPE::CLOCK;
     case 3: return GRAPHIC_PINSHAPE::INVERTED_CLOCK;
     default: return GRAPHIC_PINSHAPE::LINE;
+    }
+}
+
+
+static LINE_STYLE lineStyle( PADS_SCH_BINARY::MODEL_LINE_STYLE aStyle )
+{
+    switch( aStyle )
+    {
+    case PADS_SCH_BINARY::MODEL_LINE_STYLE::DASH: return LINE_STYLE::DASH;
+    case PADS_SCH_BINARY::MODEL_LINE_STYLE::DOT: return LINE_STYLE::DOT;
+    case PADS_SCH_BINARY::MODEL_LINE_STYLE::DASH_DOT: return LINE_STYLE::DASHDOT;
+    default: return LINE_STYLE::SOLID;
     }
 }
 
@@ -741,12 +860,15 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
                                wxString::Format( wxS( "%s: %s" ), field.name.text, field.value.text ) );
     }
 
-    BOOST_CHECK_EQUAL( result.counts.graphics, std::ranges::count_if( model.sheets.front().border,
-                                                                      []( const MODEL_GRAPHIC& aGraphic )
-                                                                      {
-                                                                          return aGraphic.kind
-                                                                                 != MODEL_GRAPHIC_KIND::TEXT;
-                                                                      } ) );
+    size_t builtGraphics = itemCount( destination->GetScreen(), SCH_SHAPE_T );
+
+    for( SCH_ITEM* item : destination->GetScreen()->Items().OfType( SCH_LINE_T ) )
+    {
+        if( item->GetLayer() == LAYER_NOTES )
+            ++builtGraphics;
+    }
+
+    BOOST_CHECK_EQUAL( result.counts.graphics, builtGraphics );
 
     m_schematic.Reset();
     destination = m_schematic.GetTopLevelSheet();
@@ -1102,11 +1224,13 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
     }
 
     BOOST_CHECK_EQUAL( result.counts.labels,
-                       std::ranges::count_if( model.labels,
-                                              []( const PADS_SCH_BINARY::MODEL_LABEL& aLabel )
-                                              {
-                                                  return !aLabel.linkedSheets.empty();
-                                              } ) );
+                       model.buses.size()
+                               + std::ranges::count_if( model.labels,
+                                                        []( const PADS_SCH_BINARY::MODEL_LABEL& aLabel )
+                                                        {
+                                                            return aLabel.kind
+                                                                   != PADS_SCH_BINARY::MODEL_LABEL_KIND::UNSUPPORTED;
+                                                        } ) );
 }
 
 
@@ -1208,6 +1332,577 @@ BOOST_AUTO_TEST_CASE( BinaryAppendIsAtomic )
     SCH_SHEET_PATH freshRootPath;
     freshRootPath.push_back( destination );
     BOOST_CHECK_EQUAL( m_schematic.CurrentSheet().GetCurrentHash(), freshRootPath.GetCurrentHash() );
+}
+
+
+BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
+{
+    using namespace PADS_SCH_BINARY;
+
+    PADS_SCH_BINARY_BUILDER builder;
+    PADS_SCH_MODEL          connectivity = parseBinaryFixture( wxS( "connectivity_topology" ) );
+    SCH_SHEET*              root = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( root );
+    builder.Build( connectivity, &m_schematic, nullptr, binaryFixture( wxS( "connectivity_topology" ) ) );
+
+    size_t expectedWires = 0;
+
+    for( const MODEL_NET& net : connectivity.nets )
+    {
+        for( const MODEL_CONNECTION& connection : net.connections )
+            expectedWires += connection.vertices.size() - 1;
+    }
+
+    for( const MODEL_BUS& bus : connectivity.buses )
+        expectedWires -= bus.entries.size();
+
+    size_t builtWires = 0;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_LINE_T ) )
+    {
+        if( item->GetLayer() == LAYER_WIRE )
+            ++builtWires;
+    }
+
+    BOOST_CHECK_EQUAL( builtWires, expectedWires );
+    BOOST_CHECK_EQUAL( itemCount( root->GetScreen(), SCH_JUNCTION_T ), connectivity.junctions.size() );
+
+    const int pageHeight = root->GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+
+    for( const MODEL_JUNCTION& junction : connectivity.junctions )
+    {
+        bool found = false;
+
+        for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_JUNCTION_T ) )
+            found |= item->GetPosition() == pagePoint( junction.position, pageHeight );
+
+        BOOST_CHECK( found );
+    }
+
+    size_t expectedPower = std::ranges::count_if( connectivity.labels,
+                                                  []( const MODEL_LABEL& aLabel )
+                                                  {
+                                                      return aLabel.kind == MODEL_LABEL_KIND::POWER
+                                                             || aLabel.kind == MODEL_LABEL_KIND::GROUND;
+                                                  } );
+    size_t builtPower = 0;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        auto* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( symbol->GetRef( &m_schematic.CurrentSheet() ).StartsWith( wxS( "#PWR" ) ) )
+        {
+            ++builtPower;
+            std::vector<SCH_PIN*> pins = symbol->GetPins( &m_schematic.CurrentSheet() );
+            BOOST_REQUIRE_EQUAL( pins.size(), 1u );
+            BOOST_CHECK( pins.front()->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN );
+            BOOST_CHECK_EQUAL( pins.front()->GetPosition(), symbol->GetPosition() );
+        }
+    }
+
+    BOOST_CHECK_EQUAL( builtPower, expectedPower );
+
+    const SCH_SHEET_PATH& rootPath = m_schematic.CurrentSheet();
+
+    for( const MODEL_LABEL& sourceLabel : connectivity.labels )
+    {
+        if( sourceLabel.kind == MODEL_LABEL_KIND::UNSUPPORTED )
+            continue;
+
+        bool found = false;
+
+        if( sourceLabel.kind == MODEL_LABEL_KIND::POWER || sourceLabel.kind == MODEL_LABEL_KIND::GROUND )
+        {
+            for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            {
+                auto* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                if( symbol->GetPosition() == pagePoint( sourceLabel.position, pageHeight )
+                    && symbol->GetValue( false, &rootPath, false ) == sourceLabel.text.text )
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            KICAD_T type = sourceLabel.kind == MODEL_LABEL_KIND::GLOBAL         ? SCH_GLOBAL_LABEL_T
+                           : sourceLabel.kind == MODEL_LABEL_KIND::HIERARCHICAL ? SCH_HIER_LABEL_T
+                                                                                : SCH_LABEL_T;
+
+            for( SCH_ITEM* item : root->GetScreen()->Items().OfType( type ) )
+            {
+                auto* label = static_cast<SCH_LABEL_BASE*>( item );
+
+                if( label->GetPosition() == pagePoint( sourceLabel.position, pageHeight )
+                    && label->GetText() == sourceLabel.text.text )
+                {
+                    BOOST_CHECK_CLOSE( label->GetTextAngleDegrees(), sourceLabel.angle / 10.0, 0.001 );
+
+                    if( sourceLabel.presentation.height > 0 )
+                    {
+                        BOOST_CHECK_EQUAL( label->GetTextHeight(),
+                                           schIUScale.MilsToIU( sourceLabel.presentation.height / 2.0 ) );
+                    }
+
+                    BOOST_CHECK( label->GetHorizJustify()
+                                 == horizontalJustification( sourceLabel.presentation.horizontalJustification ) );
+                    BOOST_CHECK( label->GetVertJustify()
+                                 == verticalJustification( sourceLabel.presentation.verticalJustification ) );
+                    BOOST_CHECK_EQUAL( label->IsVisible(), sourceLabel.presentation.visible );
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        BOOST_CHECK_MESSAGE( found, sourceLabel.text.text );
+    }
+
+    std::multiset<wxString> singleSnapshot = connectivitySnapshot( m_schematic );
+
+    for( const MODEL_NET& net : connectivity.nets )
+        BOOST_CHECK_MESSAGE( hasNetName( singleSnapshot, net.name.text ), net.name.text );
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_LINE_T ) )
+    {
+        auto* line = static_cast<SCH_LINE*>( item );
+
+        if( line->GetLayer() != LAYER_WIRE )
+            continue;
+
+        SCH_CONNECTION* connection = line->Connection( &rootPath );
+        BOOST_REQUIRE( connection );
+        BOOST_CHECK( std::ranges::any_of( connectivity.nets,
+                                          [&]( const MODEL_NET& aNet )
+                                          {
+                                              return connection->GetNetName() == aNet.name.text
+                                                     || connection->GetNetName().EndsWith( wxS( "/" )
+                                                                                           + aNet.name.text );
+                                          } ) );
+    }
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        auto* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( !symbol->GetRef( &rootPath ).StartsWith( wxS( "#PWR" ) ) )
+            continue;
+
+        for( SCH_PIN* pin : symbol->GetPins( &rootPath ) )
+        {
+            SCH_CONNECTION* connection = pin->Connection( &rootPath );
+            BOOST_REQUIRE( connection );
+            BOOST_CHECK(
+                    connection->GetNetName() == symbol->GetValue( false, &rootPath, false )
+                    || connection->GetNetName().EndsWith( wxS( "/" ) + symbol->GetValue( false, &rootPath, false ) ) );
+        }
+    }
+
+    m_schematic.Reset();
+    root = m_schematic.GetTopLevelSheet();
+    PADS_SCH_MODEL buses = parseBinaryFixture( wxS( "connectivity_topology" ) );
+    builder.Build( buses, &m_schematic, nullptr, binaryFixture( wxS( "connectivity_topology" ) ) );
+    connectivitySnapshot( m_schematic );
+    size_t expectedBusSegments = 0;
+    size_t expectedBusEntries = 0;
+
+    for( const MODEL_BUS& bus : buses.buses )
+    {
+        expectedBusSegments += bus.vertices.size() - 1;
+        expectedBusEntries += bus.entries.size();
+    }
+
+    BOOST_CHECK_EQUAL( itemCount( root->GetScreen(), SCH_BUS_WIRE_ENTRY_T ), expectedBusEntries );
+    size_t builtBusSegments = 0;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_LINE_T ) )
+    {
+        if( item->GetLayer() == LAYER_BUS )
+            ++builtBusSegments;
+    }
+
+    BOOST_CHECK_EQUAL( builtBusSegments, expectedBusSegments );
+
+    for( const MODEL_BUS& bus : buses.buses )
+    {
+        for( const MODEL_BUS_ENTRY& sourceEntry : bus.entries )
+        {
+            bool found = false;
+            auto sourceNet = std::ranges::find( buses.nets, sourceEntry.memberNet.id, &MODEL_NET::id );
+            BOOST_REQUIRE( sourceNet != buses.nets.end() );
+
+            for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_BUS_WIRE_ENTRY_T ) )
+            {
+                if( item->GetPosition()
+                    == pagePoint( sourceEntry.position,
+                                  root->GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS ) ) )
+                {
+                    found = true;
+                    SCH_CONNECTION* connection = item->Connection( &m_schematic.CurrentSheet() );
+                    BOOST_REQUIRE( connection );
+                    BOOST_CHECK( connection->GetNetName() == sourceNet->name.text
+                                 || connection->GetNetName().EndsWith( wxS( "/" ) + sourceNet->name.text ) );
+                }
+            }
+
+            BOOST_CHECK( found );
+        }
+    }
+
+    m_schematic.Reset();
+    root = m_schematic.GetTopLevelSheet();
+    PADS_SCH_MODEL graphics = parseBinaryFixture( wxS( "page_graphics" ) );
+    builder.Build( graphics, &m_schematic, nullptr, binaryFixture( wxS( "page_graphics" ) ) );
+    size_t expectedShapes = 0;
+    size_t expectedTexts = graphics.texts.size();
+    size_t expectedNoteLines = 0;
+
+    auto countGraphic = [&]( const MODEL_GRAPHIC& aGraphic )
+    {
+        if( aGraphic.kind == MODEL_GRAPHIC_KIND::TEXT )
+            ++expectedTexts;
+        else if( ( aGraphic.kind == MODEL_GRAPHIC_KIND::LINE || aGraphic.kind == MODEL_GRAPHIC_KIND::POLYLINE )
+                 && aGraphic.fill == MODEL_FILL_STYLE::NONE )
+            expectedNoteLines += aGraphic.points.size() - 1;
+        else
+            ++expectedShapes;
+    };
+
+    for( const MODEL_PAGE_GRAPHIC& graphic : graphics.graphics )
+        countGraphic( graphic.graphic );
+
+    for( const MODEL_GRAPHIC& graphic : graphics.sheets.front().border )
+        countGraphic( graphic );
+
+    size_t builtNoteLines = 0;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_LINE_T ) )
+    {
+        if( item->GetLayer() == LAYER_NOTES )
+            ++builtNoteLines;
+    }
+
+    BOOST_CHECK_EQUAL( itemCount( root->GetScreen(), SCH_TEXT_T ), expectedTexts );
+    BOOST_CHECK_EQUAL( itemCount( root->GetScreen(), SCH_SHAPE_T ), expectedShapes );
+    BOOST_CHECK_EQUAL( builtNoteLines, expectedNoteLines );
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SHAPE_T ) )
+    {
+        auto* shape = static_cast<SCH_SHAPE*>( item );
+
+        if( shape->GetShape() == SHAPE_T::POLY )
+            BOOST_CHECK( shape->GetFillMode() != FILL_T::NO_FILL );
+    }
+
+    const int graphicsPageHeight = root->GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+
+    auto checkGraphic = [&]( const MODEL_GRAPHIC& aGraphic )
+    {
+        if( aGraphic.kind == MODEL_GRAPHIC_KIND::TEXT )
+        {
+            bool found = false;
+
+            for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_TEXT_T ) )
+            {
+                auto* text = static_cast<SCH_TEXT*>( item );
+
+                if( text->GetText() == aGraphic.text.text
+                    && text->GetPosition() == pagePoint( aGraphic.points.front(), graphicsPageHeight ) )
+                {
+                    BOOST_CHECK_CLOSE( text->GetTextAngleDegrees(), aGraphic.angle / 10.0, 0.001 );
+                    BOOST_CHECK_EQUAL( text->IsVisible(), aGraphic.presentation.visible );
+                    found = true;
+                    break;
+                }
+            }
+
+            BOOST_CHECK_MESSAGE( found, aGraphic.text.text );
+            return;
+        }
+
+        if( ( aGraphic.kind == MODEL_GRAPHIC_KIND::LINE || aGraphic.kind == MODEL_GRAPHIC_KIND::POLYLINE )
+            && aGraphic.fill == MODEL_FILL_STYLE::NONE )
+        {
+            for( size_t point = 1; point < aGraphic.points.size(); ++point )
+            {
+                bool found = false;
+
+                for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_LINE_T ) )
+                {
+                    auto* line = static_cast<SCH_LINE*>( item );
+
+                    if( line->GetLayer() == LAYER_NOTES
+                        && line->GetStartPoint() == pagePoint( aGraphic.points[point - 1], graphicsPageHeight )
+                        && line->GetEndPoint() == pagePoint( aGraphic.points[point], graphicsPageHeight ) )
+                    {
+                        BOOST_CHECK_EQUAL( line->GetStroke().GetWidth(),
+                                           schIUScale.MilsToIU( aGraphic.strokeWidth / 2.0 ) );
+                        BOOST_CHECK( line->GetStroke().GetLineStyle() == lineStyle( aGraphic.lineStyle ) );
+                        found = true;
+                        break;
+                    }
+                }
+
+                BOOST_CHECK( found );
+            }
+
+            return;
+        }
+
+        SHAPE_T expectedType = aGraphic.kind == MODEL_GRAPHIC_KIND::RECTANGLE ? SHAPE_T::RECTANGLE
+                               : aGraphic.kind == MODEL_GRAPHIC_KIND::CIRCLE  ? SHAPE_T::CIRCLE
+                               : aGraphic.kind == MODEL_GRAPHIC_KIND::ARC     ? SHAPE_T::ARC
+                                                                              : SHAPE_T::POLY;
+        bool    found = false;
+
+        for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SHAPE_T ) )
+        {
+            auto* shape = static_cast<SCH_SHAPE*>( item );
+
+            if( shape->GetShape() != expectedType )
+                continue;
+
+            if( expectedType == SHAPE_T::POLY )
+            {
+                std::vector<VECTOR2I> expectedPoints;
+
+                for( const SOURCE_POINT& point : aGraphic.points )
+                    expectedPoints.push_back( pagePoint( point, graphicsPageHeight ) );
+
+                if( shape->GetPolyPoints() != expectedPoints )
+                    continue;
+            }
+            else if( expectedType == SHAPE_T::ARC )
+            {
+                if( shape->GetStart() != pagePoint( aGraphic.points.front(), graphicsPageHeight )
+                    || shape->GetEnd() != pagePoint( aGraphic.points.back(), graphicsPageHeight )
+                    || shape->GetCenter() != pagePoint( aGraphic.arcCenter, graphicsPageHeight ) )
+                {
+                    continue;
+                }
+
+                BOOST_CHECK_EQUAL( std::abs( shape->GetArcAngle().AsTenthsOfADegree() ),
+                                   std::abs( aGraphic.arcSweepAngle ) );
+            }
+            else if( expectedType == SHAPE_T::CIRCLE )
+            {
+                const VECTOR2I expectedCenter = pagePoint( aGraphic.points.front(), graphicsPageHeight );
+                const VECTOR2I expectedEdge = pagePoint( aGraphic.points.back(), graphicsPageHeight );
+                const int      expectedRadius =
+                        KiROUND( std::hypot( static_cast<double>( expectedEdge.x - expectedCenter.x ),
+                                             static_cast<double>( expectedEdge.y - expectedCenter.y ) ) );
+                const int actualRadius =
+                        KiROUND( std::hypot( static_cast<double>( shape->GetEnd().x - shape->GetStart().x ),
+                                             static_cast<double>( shape->GetEnd().y - shape->GetStart().y ) ) );
+
+                if( shape->GetCenter() != expectedCenter || actualRadius != expectedRadius )
+                    continue;
+            }
+            else if( expectedType == SHAPE_T::RECTANGLE )
+            {
+                if( shape->GetStart() != pagePoint( aGraphic.points.front(), graphicsPageHeight )
+                    || shape->GetEnd() != pagePoint( aGraphic.points.back(), graphicsPageHeight ) )
+                {
+                    continue;
+                }
+            }
+            else if( shape->GetStart() != pagePoint( aGraphic.points.front(), graphicsPageHeight ) )
+            {
+                continue;
+            }
+
+            BOOST_CHECK_EQUAL( shape->GetStroke().GetWidth(), schIUScale.MilsToIU( aGraphic.strokeWidth / 2.0 ) );
+            BOOST_CHECK( shape->GetStroke().GetLineStyle() == lineStyle( aGraphic.lineStyle ) );
+            BOOST_CHECK( shape->GetFillMode()
+                         == ( aGraphic.fill == MODEL_FILL_STYLE::NONE      ? FILL_T::NO_FILL
+                              : aGraphic.fill == MODEL_FILL_STYLE::HATCHED ? FILL_T::HATCH
+                                                                           : FILL_T::FILLED_WITH_BG_BODYCOLOR ) );
+            found = true;
+            break;
+        }
+
+        BOOST_CHECK( found );
+    };
+
+    for( const MODEL_PAGE_GRAPHIC& graphic : graphics.graphics )
+        checkGraphic( graphic.graphic );
+
+    for( const MODEL_GRAPHIC& graphic : graphics.sheets.front().border )
+        checkGraphic( graphic );
+
+    for( const MODEL_TEXT& sourceText : graphics.texts )
+    {
+        bool found = false;
+
+        for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_TEXT_T ) )
+        {
+            auto* text = static_cast<SCH_TEXT*>( item );
+
+            if( text->GetText() == sourceText.text.text
+                && text->GetPosition() == pagePoint( sourceText.position, graphicsPageHeight ) )
+            {
+                BOOST_CHECK_CLOSE( text->GetTextAngleDegrees(), sourceText.angle / 10.0, 0.001 );
+                BOOST_CHECK_EQUAL( text->IsVisible(), sourceText.presentation.visible );
+                found = true;
+                break;
+            }
+        }
+
+        BOOST_CHECK_MESSAGE( found, sourceText.text.text );
+    }
+
+    m_schematic.Reset();
+    PADS_SCH_MODEL multi = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
+    builder.Build( multi, &m_schematic, nullptr, binaryFixture( wxS( "multisheet_connectivity" ) ) );
+    std::multiset<wxString> multiSnapshot = connectivitySnapshot( m_schematic );
+
+    for( const MODEL_NET& net : multi.nets )
+        BOOST_CHECK_MESSAGE( hasNetName( multiSnapshot, net.name.text ), net.name.text );
+}
+
+
+BOOST_AUTO_TEST_CASE( BinaryConnectivityRoundTrip )
+{
+    using namespace PADS_SCH_BINARY;
+
+    const PADS_SCH_MODEL model = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
+    SCH_SHEET*           root = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( root );
+    PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, nullptr, binaryFixture( wxS( "multisheet_connectivity" ) ) );
+    std::multiset<wxString> before = connectivitySnapshot( m_schematic );
+
+    for( const MODEL_NET& net : model.nets )
+        BOOST_CHECK_MESSAGE( hasNetName( before, net.name.text ), net.name.text );
+
+    wxString tempDir = wxFileName::CreateTempFileName( wxS( "pads_binary_connectivity_" ) );
+    BOOST_REQUIRE( wxRemoveFile( tempDir ) );
+    BOOST_REQUIRE( wxFileName::Mkdir( tempDir ) );
+    wxString           fileName = tempDir + wxFileName::GetPathSeparator() + wxS( "root.kicad_sch" );
+    SCH_IO_KICAD_SEXPR io;
+
+    for( const SCH_SHEET_PATH& path : m_schematic.BuildSheetListSortedByPageNumbers() )
+    {
+        if( path.size() == 1 )
+            continue;
+
+        wxString childFile =
+                tempDir + wxFileName::GetPathSeparator() + path.Last()->GetField( FIELD_T::SHEET_FILENAME )->GetText();
+        BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( childFile, path.Last(), &m_schematic ) );
+    }
+
+    BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( fileName, root, &m_schematic ) );
+    m_schematic.Reset();
+    SCH_SHEET* defaultSheet = m_schematic.GetTopLevelSheet();
+    SCH_SHEET* loaded = nullptr;
+    BOOST_REQUIRE_NO_THROW( loaded = io.LoadSchematicFile( fileName, &m_schematic ) );
+    BOOST_REQUIRE( loaded );
+    m_schematic.AddTopLevelSheet( loaded );
+    m_schematic.RemoveTopLevelSheet( defaultSheet );
+    delete defaultSheet;
+    m_schematic.RefreshHierarchy();
+    std::multiset<wxString> after = connectivitySnapshot( m_schematic );
+
+    for( const wxString& value : before )
+    {
+        if( before.count( value ) != after.count( value ) )
+            BOOST_TEST_MESSAGE( "before-only/count mismatch: " << value );
+    }
+
+    for( const wxString& value : after )
+    {
+        if( before.count( value ) != after.count( value ) )
+            BOOST_TEST_MESSAGE( "after-only/count mismatch: " << value );
+    }
+
+    BOOST_CHECK( before == after );
+
+    for( const MODEL_NET& net : model.nets )
+        BOOST_CHECK_MESSAGE( hasNetName( after, net.name.text ), net.name.text );
+
+    BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
+
+    m_schematic.Reset();
+    const PADS_SCH_MODEL graphics = parseBinaryFixture( wxS( "page_graphics" ) );
+    SCH_SHEET*           graphicsRoot = m_schematic.GetTopLevelSheet();
+    PADS_SCH_BINARY_BUILDER().Build( graphics, &m_schematic, nullptr, binaryFixture( wxS( "page_graphics" ) ) );
+    std::multiset<wxString> graphicsBefore = connectivitySnapshot( m_schematic );
+    wxString                graphicsFile = wxFileName::CreateTempFileName( wxS( "pads_binary_graphics_" ) );
+    SCH_IO_KICAD_SEXPR      graphicsIo;
+    BOOST_REQUIRE_NO_THROW( graphicsIo.SaveSchematicFile( graphicsFile, graphicsRoot, &m_schematic ) );
+    m_schematic.Reset();
+    defaultSheet = m_schematic.GetTopLevelSheet();
+    loaded = nullptr;
+    BOOST_REQUIRE_NO_THROW( loaded = graphicsIo.LoadSchematicFile( graphicsFile, &m_schematic ) );
+    BOOST_REQUIRE( loaded );
+    m_schematic.AddTopLevelSheet( loaded );
+    m_schematic.RemoveTopLevelSheet( defaultSheet );
+    delete defaultSheet;
+    m_schematic.RefreshHierarchy();
+    std::multiset<wxString> graphicsAfter = connectivitySnapshot( m_schematic );
+
+    for( const wxString& value : graphicsBefore )
+    {
+        if( graphicsBefore.count( value ) != graphicsAfter.count( value ) )
+            BOOST_TEST_MESSAGE( "graphics before-only/count mismatch: " << value );
+    }
+
+    for( const wxString& value : graphicsAfter )
+    {
+        if( graphicsBefore.count( value ) != graphicsAfter.count( value ) )
+            BOOST_TEST_MESSAGE( "graphics after-only/count mismatch: " << value );
+    }
+
+    BOOST_CHECK( graphicsBefore == graphicsAfter );
+    BOOST_CHECK( wxRemoveFile( graphicsFile ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
+{
+    using namespace PADS_SCH_BINARY;
+
+    PADS_SCH_MODEL model = parseBinaryFixture( wxS( "connectivity_topology" ) );
+    BOOST_REQUIRE( !model.labels.empty() );
+    SOURCE_PROPERTY approximate;
+    approximate.name.text = wxS( "qa_approximate_label_presentation" );
+    approximate.value.text = wxS( "retained" );
+    approximate.source = model.labels.front().source;
+    approximate.disposition = PROPERTY_DISPOSITION::APPROXIMATE;
+    model.labels.front().presentation.properties.push_back( approximate );
+    SOURCE_PROPERTY exact = approximate;
+    exact.name.text = wxS( "qa_exact_label_presentation" );
+    exact.disposition = PROPERTY_DISPOSITION::EXACT;
+    model.labels.front().presentation.properties.push_back( exact );
+    SOURCE_PROPERTY preserved = approximate;
+    preserved.name.text = wxS( "qa_preserved_label_presentation" );
+    preserved.disposition = PROPERTY_DISPOSITION::PRESERVED;
+    model.labels.front().presentation.properties.push_back( preserved );
+    SOURCE_PROPERTY unsupported = approximate;
+    unsupported.name.text = wxS( "qa_unsupported_label_presentation" );
+    unsupported.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+    model.labels.front().presentation.properties.push_back( unsupported );
+
+    BUILD_RESULT result = PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, nullptr,
+                                                           binaryFixture( wxS( "connectivity_topology" ) ) );
+    for( const SOURCE_PROPERTY* property : { &approximate, &preserved, &unsupported } )
+    {
+        BOOST_CHECK_EQUAL( std::ranges::count_if( result.diagnostics,
+                                                  [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                                  {
+                                                      return aDiagnostic.source == property->source
+                                                             && aDiagnostic.message.Contains( property->name.text );
+                                                  } ),
+                           1 );
+    }
+
+    BOOST_CHECK( std::ranges::none_of( result.diagnostics,
+                                       [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                       {
+                                           return aDiagnostic.message.Contains( exact.name.text );
+                                       } ) );
 }
 
 
