@@ -84,6 +84,7 @@ set( QA_COMMON_SRCS
     test_markup_parser.cpp
     test_notifications_manager.cpp
     test_property.cpp
+    test_svg_plotter.cpp
     test_property_holder.cpp
     test_reporting.cpp
     test_rc_tree_model.cpp
