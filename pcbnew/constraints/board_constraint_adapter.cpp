@@ -1485,7 +1485,8 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveAfterResize( const KIID& aResizedShape )
 
 bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize,
                                       const std::set<KIID>&                                        aEdited,
-                                      const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged )
+                                      const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged,
+                                      bool                                                         aHoldDraggedRigid )
 {
     if( !m_built )
         return false;
@@ -1584,6 +1585,9 @@ bool BOARD_CONSTRAINT_ADAPTER::Solve( const CONSTRAINT_MEMBER& aDragged, const V
     {
         holdFreeSegmentLengths( GCS::DefaultTemporaryConstraint, m_angleConstrainedShapes );
         holdFreeArcRadii( GCS::DefaultTemporaryConstraint, m_angleConstrainedShapes );
+
+        if( aHoldDraggedRigid )
+            holdShapesRigid( GCS::DefaultTemporaryConstraint, { aDragged.m_item } );
     }
 
     // Hold every other cluster shape where it sits so only edited shapes and whatever a hard
@@ -1795,7 +1799,7 @@ BOARD_CONSTRAINT_ADAPTER::collectRigidState( const std::set<KIID>& aEditedShapes
 }
 
 
-void BOARD_CONSTRAINT_ADAPTER::holdRigidRadii( const std::vector<RIGID_RADIUS_HOLD>& aRadii )
+void BOARD_CONSTRAINT_ADAPTER::holdRigidRadii( const std::vector<RIGID_RADIUS_HOLD>& aRadii, int aTag )
 {
     for( const RIGID_RADIUS_HOLD& hold : aRadii )
     {
@@ -1803,7 +1807,7 @@ void BOARD_CONSTRAINT_ADAPTER::holdRigidRadii( const std::vector<RIGID_RADIUS_HO
         GCS::Circle circle;
         circle.center = GCS::Point{ &m_params[hold.centerX], &m_params[hold.centerX + 1] };
         circle.rad = &m_params[hold.radius];
-        m_gcs->addConstraintCircleRadius( circle, &m_params[target], GCS::DefaultTemporaryConstraint );
+        m_gcs->addConstraintCircleRadius( circle, &m_params[target], aTag );
     }
 }
 
@@ -1875,7 +1879,7 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveRigidTranslation( const std::set<KIID>& aEdi
     for( int pointX : state.points )
         softPinPoint( pointX, GCS::DefaultTemporaryConstraint );
 
-    holdRigidRadii( state.radii );
+    holdRigidRadii( state.radii, GCS::DefaultTemporaryConstraint );
 
     pinUneditedShapes( aEditedShapes, GCS::DefaultTemporaryConstraint );
     m_gcs->initSolution();
@@ -1931,7 +1935,7 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveRigidSnapRelations( const std::set<KIID>& aE
     }
 
     bool addedRelation = addSnapRelations( { anchorX, anchorX + 1 }, aCandidates, cursorToAnchor );
-    holdRigidRadii( state.radii );
+    holdRigidRadii( state.radii, GCS::DefaultTemporaryConstraint );
 
     GCS::Point anchor{ &m_params[anchorX], &m_params[anchorX + 1] };
     int        cursorX = temporaryParam( normalizeX( aCursor.x + cursorToAnchor.x ) );
@@ -2302,6 +2306,39 @@ void BOARD_CONSTRAINT_ADAPTER::holdFreeArcRadii( int aTag, const std::set<KIID>&
             continue;
 
         holdArcRadius( vars, aTag );
+    }
+}
+
+
+void BOARD_CONSTRAINT_ADAPTER::holdShapesRigid( int aTag, const std::set<KIID>& aShapes )
+{
+    for( const auto& [kiid, vars] : m_shapeVars )
+    {
+        // A dimension has no shape params to hold, and a locked shape is frozen at Build already.
+        if( !vars.shape || ConstraintItemIsLocked( vars.shape ) || !aShapes.contains( kiid ) )
+            continue;
+
+        RIGID_STATE state = collectRigidState( { kiid } );
+
+        if( state.points.empty() )
+            continue;
+
+        // Every other point holds its offset from the first, so the shape travels but cannot deform.
+        const int anchorX = *state.points.begin();
+
+        for( int pointX : state.points )
+        {
+            if( pointX == anchorX )
+                continue;
+
+            int offsetX = temporaryParam( m_params[pointX] - m_params[anchorX] );
+            int offsetY = temporaryParam( m_params[pointX + 1] - m_params[anchorX + 1] );
+
+            m_gcs->addConstraintDifference( &m_params[anchorX], &m_params[pointX], &m_params[offsetX], aTag );
+            m_gcs->addConstraintDifference( &m_params[anchorX + 1], &m_params[pointX + 1], &m_params[offsetY], aTag );
+        }
+
+        holdRigidRadii( state.radii, aTag );
     }
 }
 
@@ -3156,7 +3193,8 @@ CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDrag
                                    std::vector<PCB_SHAPE*>*                  aModified,
                                    const std::function<void( BOARD_ITEM* )>& aBeforeModify, bool aIncludeDragged,
                                    bool aStabilize, const std::set<KIID>& aEdited,
-                                   const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged )
+                                   const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged,
+                                   const std::set<KIID>& aFixedShapes, bool aHoldDraggedRigid )
 {
     CONSTRAINT_DIAGNOSIS diag;
 
@@ -3179,10 +3217,10 @@ CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDrag
 
     BOARD_CONSTRAINT_ADAPTER adapter;
 
-    if( !adapter.Build( shapes, clusterConstraints, nullptr, dimensions ) )
+    if( !adapter.Build( shapes, clusterConstraints, &aFixedShapes, dimensions ) )
         return diag;
 
-    bool solved = adapter.Solve( aDragged, aCursor, aStabilize, aEdited, aCoDragged );
+    bool solved = adapter.Solve( aDragged, aCursor, aStabilize, aEdited, aCoDragged, aHoldDraggedRigid );
 
     if( !solved )
         return diag;   // leave geometry untouched on a failed/diverged solve
@@ -3214,9 +3252,49 @@ CONSTRAINT_DIAGNOSIS SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDrag
 }
 
 
+std::set<KIID> ConstraintReferenceShapes( BOARD* aBoard, const PCB_CONSTRAINT* aConstraint )
+{
+    if( !aBoard || !aConstraint )
+        return {};
+
+    PCB_CONSTRAINT_TYPE type = aConstraint->GetConstraintType();
+
+    if( type != PCB_CONSTRAINT_TYPE::POINT_ON_LINE && type != PCB_CONSTRAINT_TYPE::MIDPOINT )
+        return {};
+
+    const std::vector<CONSTRAINT_MEMBER>& members = aConstraint->GetMembers();
+
+    if( members.size() != 2 || members.front().m_item == members.back().m_item )
+        return {};
+
+    // Build freezes shapes only, so a reference it cannot freeze must not be named as one.
+    if( members.back().m_anchor != CONSTRAINT_ANCHOR::WHOLE
+        || !dynamic_cast<PCB_SHAPE*>( aBoard->ResolveItem( members.back().m_item, true ) ) )
+    {
+        return {};
+    }
+
+    // Freezing the line as well would leave nothing able to move, so let the line move to the point.
+    if( ConstraintItemIsLocked( aBoard->ResolveItem( members.front().m_item, true ) ) )
+        return {};
+
+    auto pinsThePoint = [&]( const PCB_CONSTRAINT* aOther )
+    {
+        return aOther->GetConstraintType() == PCB_CONSTRAINT_TYPE::FIXED_POSITION && !aOther->GetMembers().empty()
+               && aOther->GetMembers().front() == members.front();
+    };
+
+    if( std::ranges::any_of( collectAllConstraints( aBoard ), pinsThePoint ) )
+        return {};
+
+    return { members.back().m_item };
+}
+
+
 CONSTRAINT_DIAGNOSIS ApplyConstraintImmediately( BOARD* aBoard, const PCB_CONSTRAINT* aConstraint,
                                                  std::vector<PCB_SHAPE*>*                  aModified,
-                                                 const std::function<void( BOARD_ITEM* )>& aBeforeModify )
+                                                 const std::function<void( BOARD_ITEM* )>& aBeforeModify,
+                                                 const std::set<KIID>&                     aFixedShapes )
 {
     if( !aBoard || !aConstraint || aConstraint->GetMembers().empty() )
         return {};
@@ -3250,7 +3328,8 @@ CONSTRAINT_DIAGNOSIS ApplyConstraintImmediately( BOARD* aBoard, const PCB_CONSTR
     // The pinned shape itself can move (e.g. a fixed-length segment's far end), and the caller does
     // not stage it separately, so report it too.
     return SolveCluster( aBoard, pin, *pos, aModified, aBeforeModify, /* aIncludeDragged */ true,
-                         /* aStabilize */ true );
+                         /* aStabilize */ true, /* aEdited */ {}, /* aCoDragged */ std::nullopt, aFixedShapes,
+                         /* aHoldDraggedRigid */ !aFixedShapes.empty() );
 }
 
 

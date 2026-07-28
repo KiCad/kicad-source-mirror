@@ -146,9 +146,12 @@ public:
      */
     /// @p aStabilize holds free segment lengths so an angle constraint rotates a segment instead of
     /// collapsing it. Off for live dragging.
+    /// @p aHoldDraggedRigid holds the dragged shape's own geometry, so it travels whole instead of
+    /// stretching to meet the relation.
     bool Solve( const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& aCursor, bool aStabilize = false,
                 const std::set<KIID>&                                        aEdited = {},
-                const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged = std::nullopt );
+                const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged = std::nullopt,
+                bool                                                         aHoldDraggedRigid = false );
     bool SolveSnapRelations( const CONSTRAINT_MEMBER& aDragged,
                              const std::vector<SNAP_CANDIDATE>& aCandidates,
                              const VECTOR2I& aCursor );
@@ -275,7 +278,7 @@ private:
                            const std::vector<SNAP_CANDIDATE>& aCandidates,
                            const VECTOR2I& aOffset );
     RIGID_STATE collectRigidState( const std::set<KIID>& aEditedShapes ) const;
-    void holdRigidRadii( const std::vector<RIGID_RADIUS_HOLD>& aRadii );
+    void        holdRigidRadii( const std::vector<RIGID_RADIUS_HOLD>& aRadii, int aTag );
 
     /// Note a non-driving valued constraint so its measured value can be read back after a solve.
     /// A driving constraint is ignored here -- its value is an input, never overwritten.
@@ -288,6 +291,10 @@ private:
     /// Radius hold on the free arcs in @p aShapes tagged @p aTag so an angle change rotates an
     /// endpoint instead of collapsing the arc a real FIXED_RADIUS still wins
     void holdFreeArcRadii( int aTag, const std::set<KIID>& aShapes );
+
+    /// Hold the shapes in @p aShapes rigid, tagged @p aTag, so a shape the solve moves translates
+    /// instead of stretching
+    void holdShapesRigid( int aTag, const std::set<KIID>& aShapes );
 
     /// Hold @p aVars's arc at its current radius (tagged @p aTag).
     void holdArcRadius( const SHAPE_VARS& aVars, int aTag );
@@ -478,6 +485,9 @@ private:
  *                  of stay-pinned back
  * @param aCoDragged second anchor moved by the same handle with its own target for a polygon edge
  *                  drag pinned at the same weight as the primary
+ * @param aFixedShapes shapes to freeze whole, so the solve moves the rest of the cluster around them
+ * @param aHoldDraggedRigid holds the dragged shape's geometry, so it travels whole instead of
+ *                  stretching to meet the relation
  * @return the diagnosis; .solved is false if the cluster could not be built or did not converge.
  */
 CONSTRAINT_DIAGNOSIS
@@ -485,7 +495,24 @@ SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& 
               std::vector<PCB_SHAPE*>*                  aModified = nullptr,
               const std::function<void( BOARD_ITEM* )>& aBeforeModify = {}, bool aIncludeDragged = false,
               bool aStabilize = false, const std::set<KIID>& aEdited = {},
-              const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged = std::nullopt );
+              const std::optional<std::pair<CONSTRAINT_MEMBER, VECTOR2I>>& aCoDragged = std::nullopt,
+              const std::set<KIID>& aFixedShapes = {}, bool aHoldDraggedRigid = false );
+
+
+/**
+ * The shapes a just-authored constraint should treat as an immovable reference, for the caller to
+ * pass to ApplyConstraintImmediately().
+ *
+ * The point-on-line and midpoint pickers always take the point first, so the line is the reference
+ * and the point is what should move.  Empty for every other type, and for the cases where freezing
+ * would leave nothing able to move.
+ *
+ * Only the interactive authoring path may pass this.  The drawing tool's auto-bindings build the
+ * same types with the same member roles, so nothing here can tell them apart -- they are safe only
+ * because they never call this.  Do not wire it into snapAutoConstraints(): a corridor pin's line
+ * is the shape just drawn, and freezing it would drag existing board geometry instead.
+ */
+std::set<KIID> ConstraintReferenceShapes( BOARD* aBoard, const PCB_CONSTRAINT* aConstraint );
 
 
 /**
@@ -496,11 +523,13 @@ SolveCluster( BOARD* aBoard, const CONSTRAINT_MEMBER& aDragged, const VECTOR2I& 
  * @param aModified [out] the shapes the solve moved, for the caller to stage in a commit.
  * @param aBeforeModify if set, invoked with each moved shape and each reference constraint whose
  *                  value changed, just before it changes, so the caller can stage it in the commit.
+ * @param aFixedShapes shapes to freeze whole for this solve, for a caller that knows which member
+ *                  is the reference the others should move to.
  */
-CONSTRAINT_DIAGNOSIS ApplyConstraintImmediately(
-        BOARD* aBoard, const PCB_CONSTRAINT* aConstraint,
-        std::vector<PCB_SHAPE*>* aModified = nullptr,
-        const std::function<void( BOARD_ITEM* )>& aBeforeModify = {} );
+CONSTRAINT_DIAGNOSIS ApplyConstraintImmediately( BOARD* aBoard, const PCB_CONSTRAINT* aConstraint,
+                                                 std::vector<PCB_SHAPE*>*                  aModified = nullptr,
+                                                 const std::function<void( BOARD_ITEM* )>& aBeforeModify = {},
+                                                 const std::set<KIID>&                     aFixedShapes = {} );
 
 
 /// True if the board or any of its footprints carries at least one geometric constraint. Cheap,

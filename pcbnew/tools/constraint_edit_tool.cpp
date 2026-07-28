@@ -768,8 +768,13 @@ void CONSTRAINT_EDIT_TOOL::solveAddedConstraint( PCB_CONSTRAINT* aConstraint )
     BOARD_COMMIT            commit( this );
     std::vector<PCB_SHAPE*> modified;
 
-    ApplyConstraintImmediately( board(), aConstraint, &modified,
-                                [&]( BOARD_ITEM* aItem ) { commit.Modify( aItem ); } );
+    ApplyConstraintImmediately(
+            board(), aConstraint, &modified,
+            [&]( BOARD_ITEM* aItem )
+            {
+                commit.Modify( aItem );
+            },
+            ConstraintReferenceShapes( board(), aConstraint ) );
 
     // Push if the snap moved a shape or re-measured a reference value in this cluster.
     if( !commit.Empty() )
