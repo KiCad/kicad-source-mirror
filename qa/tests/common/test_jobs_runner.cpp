@@ -156,9 +156,11 @@ BOOST_AUTO_TEST_CASE( ExitCodePropagation )
 }
 
 
+// Single-quote passthrough is a POSIX shell contract; cmd.exe has no equivalent, so the case is
+// not registered on Windows rather than registered with an empty body.
+#ifndef __WXMSW__
 BOOST_AUTO_TEST_CASE( CommandWithSingleQuotes )
 {
-#ifndef __WXMSW__
     wxString cmd = wxS( "echo \"it's working\"" );
     wxString output;
     int result = executeViaShell( cmd, output );
@@ -166,8 +168,8 @@ BOOST_AUTO_TEST_CASE( CommandWithSingleQuotes )
     BOOST_CHECK_EQUAL( result, 0 );
     BOOST_CHECK_MESSAGE( output.Contains( wxS( "it's working" ) ),
                          "Should handle single quotes in output, got: " + output );
-#endif
 }
+#endif
 
 
 #ifdef __WXMSW__
