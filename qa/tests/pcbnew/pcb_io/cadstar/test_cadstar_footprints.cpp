@@ -157,8 +157,6 @@ BOOST_AUTO_TEST_CASE( CadstarRevision7FormatImport )
  */
 BOOST_AUTO_TEST_CASE( UnknownReassignShapeIsSkipped )
 {
-    wxLogNull suppress;
-
     XNODE padReassign( wxXML_ELEMENT_NODE, wxT( "PADREASSIGN" ) );
     padReassign.AddAttribute( wxT( "attr0" ), wxT( "TOP" ) );
     padReassign.AddChild( new XNODE( wxXML_ELEMENT_NODE, wxT( "FUTURE_SHAPE" ) ) );

@@ -122,7 +122,7 @@ bool PCB_IO_ODBPP::ExportODB( const wxString& aFileName )
     }
     catch( const std::exception& e )
     {
-        wxLogError( "Exception in ODB++ ExportODB process: %s", e.what() );
+        Report( wxString::Format( "Exception in ODB++ ExportODB process: %s", e.what() ), RPT_SEVERITY_ERROR );
         std::cerr << e.what() << std::endl;
         return false;
     }

@@ -36,6 +36,7 @@
 
 #include <math/vector2d.h>
 #include <io/cadstar/cadstar_archive_objects.h>
+#include <trace_helpers.h>
 
 // THROW_IO_ERROR definitions to ensure consistent wording is used in the error messages
 
@@ -54,14 +55,15 @@
 #define THROW_PARSING_IO_ERROR( param, location ) \
     THROW_IO_ERROR( wxString::Format( _( "Unable to parse '%s' in '%s'" ), param, location ) )
 
-// Warning variants that log instead of throwing, allowing import to continue
-// when encountering unknown nodes from newer CADSTAR versions
+// Trace variants that log instead of throwing, allowing import to continue when encountering
+// unknown nodes from newer CADSTAR versions. These are developer diagnostics rather than
+// anything the user can act on, so they stay silent unless KICAD_CADSTAR_IO is traced.
 
 #define WARN_UNKNOWN_NODE_IO_ERROR( nodename, location ) \
-    wxLogWarning( wxString::Format( _( "Unknown node '%s' in '%s'" ), nodename, location ) )
+    wxLogTrace( traceCadstarIo, wxT( "Unknown node '%s' in '%s'" ), nodename, location )
 
 #define WARN_UNKNOWN_PARAMETER_IO_ERROR( param, location ) \
-    wxLogWarning( wxString::Format( _( "Unknown Parameter '%s' in '%s'" ), param, location ) )
+    wxLogTrace( traceCadstarIo, wxT( "Unknown Parameter '%s' in '%s'" ), param, location )
 
 //=================================
 // MACRO DEFINITIONS

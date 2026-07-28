@@ -51,6 +51,7 @@
 #include <font/font.h>
 #include <core/mirror.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <trace_helpers.h>
 
 using namespace EASYEDAPRO;
 
@@ -1446,9 +1447,8 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
 
         if( fpId.empty() )
         {
-            wxLogWarning( wxString::Format(
-                    _( "EasyEDA Pro v3 component '%s' (%s): no footprint mapping, skipping." ),
-                    compId, fpDesignator ) );
+            wxLogTrace( traceEasyEdaIo, wxT( "EasyEDA Pro v3 component '%s' (%s): no footprint mapping, skipping." ),
+                    compId, fpDesignator );
             continue;
         }
 
@@ -1456,7 +1456,7 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
 
         if( it == aFootprintMap.end() )
         {
-            wxLogError( "Footprint of '%s' with uuid '%s' not found.", fpDesignator, fpId );
+            wxLogTrace( traceEasyEdaIo, "Footprint of '%s' with uuid '%s' not found.", fpDesignator, fpId );
             continue;
         }
 

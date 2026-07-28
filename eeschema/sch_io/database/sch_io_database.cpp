@@ -688,7 +688,9 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         {
             // Surface a malformed pin-map payload to the user instead of silently dropping it; the
             // symbol still loads without the map (issue #2282).
-            wxLogError( _( "Error parsing pin map for database symbol '%s': %s" ), aSymbolName, e.what() );
+            Report( wxString::Format( _( "Error parsing pin map for database symbol '%s': %s" ),
+                                      aSymbolName, e.what() ),
+                    RPT_SEVERITY_ERROR );
         }
     }
 

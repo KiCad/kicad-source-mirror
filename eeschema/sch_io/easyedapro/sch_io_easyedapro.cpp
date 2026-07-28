@@ -52,7 +52,6 @@ struct SCH_IO_EASYEDAPRO::PRJ_DATA
 
 SCH_IO_EASYEDAPRO::SCH_IO_EASYEDAPRO() : SCH_IO( wxS( "EasyEDA Pro (JLCEDA) Schematic" ) )
 {
-    m_reporter = &WXLOG_REPORTER::GetInstance();
 }
 
 

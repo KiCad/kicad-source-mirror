@@ -60,6 +60,7 @@
 #include "odb_feature.h"
 #include "odb_util.h"
 #include "pcb_io_odbpp.h"
+#include <trace_helpers.h>
 
 
 bool ODB_ENTITY_BASE::CreateDirectoryTree( ODB_TREE_WRITER& writer )
@@ -737,7 +738,7 @@ ODB_COMPONENT& ODB_LAYER_ENTITY::InitComponentData( const FOOTPRINT*         aFp
     {
         if( !m_compBot.has_value() )
         {
-            m_compBot.emplace();
+            m_compBot.emplace( m_plugin );
         }
         return m_compBot.value().AddComponent( aFp, aPkg );
     }
@@ -745,7 +746,7 @@ ODB_COMPONENT& ODB_LAYER_ENTITY::InitComponentData( const FOOTPRINT*         aFp
     {
         if( !m_compTop.has_value() )
         {
-            m_compTop.emplace();
+            m_compTop.emplace( m_plugin );
         }
 
         return m_compTop.value().AddComponent( aFp, aPkg );
@@ -1246,7 +1247,7 @@ void ODB_STEP_ENTITY::InitEdaData()
 
         if( iter == m_layerEntityMap.end() )
         {
-            wxLogError( _( "Failed to add component data" ) );
+            wxLogTrace( traceOdbppIo, wxT( "Failed to add component data" ) );
             return;
         }
 
@@ -1357,10 +1358,10 @@ void ODB_STEP_ENTITY::GenerateProfileFile( ODB_TREE_WRITER& writer )
     SHAPE_POLY_SET board_outline;
 
     if( !m_board->GetBoardPolygonOutlines( board_outline, true ) )
-        wxLogError( "Failed to get board outline" );
+        wxLogTrace( traceOdbppIo, "Failed to get board outline" );
 
     if( !m_profile->AddContour( board_outline, 0 ) )
-        wxLogError( "Failed to add polygon to profile" );
+        wxLogTrace( traceOdbppIo, "Failed to add polygon to profile" );
 
     m_profile->GenerateProfileFeatures( fileproxy.GetStream() );
 }

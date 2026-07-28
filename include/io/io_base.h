@@ -212,7 +212,8 @@ public:
      */
     virtual DIALOG_SHIM* CreateConfigurationDialog( wxWindow* aParent ) { return nullptr; }
 
-    virtual void Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED );
+    virtual void Report( const wxString& aText,
+                         SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) const;
 
     virtual void AdvanceProgressPhase();
 

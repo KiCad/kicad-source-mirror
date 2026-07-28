@@ -108,10 +108,10 @@ FOOTPRINT* PCB_IO::ImportFootprint( const wxString& aFootprintPath, wxString& aF
 
     if( footprintNames.size() > 1 )
     {
-        wxLogWarning( _( "Selected file contains multiple footprints. Only the first one will be "
-                         "imported.\nTo load all footprints, add it as a library using Preferences "
-                         "-> Manage Footprint "
-                         "Libraries..." ) );
+        Report( _( "Selected file contains multiple footprints. Only the first one will be "
+                   "imported.\nTo load all footprints, add it as a library using Preferences "
+                   "-> Manage Footprint "
+                   "Libraries..." ) , RPT_SEVERITY_WARNING );
     }
 
     aFootprintNameOut = footprintNames.front();

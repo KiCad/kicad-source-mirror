@@ -30,10 +30,12 @@
 #include "odb_eda_data.h"
 
 class ODB_COMPONENT;
+class PCB_IO_ODBPP;
+
 class COMPONENTS_MANAGER : public ATTR_MANAGER
 {
 public:
-    COMPONENTS_MANAGER() = default;
+    explicit COMPONENTS_MANAGER( PCB_IO_ODBPP* aPlugin = nullptr ) : m_plugin( aPlugin ) {}
 
     virtual ~COMPONENTS_MANAGER() { m_compList.clear(); }
 
@@ -42,6 +44,8 @@ public:
     void Write( std::ostream& ost ) const;
 
 private:
+    /// Plugin the export runs under, used to report designator changes; may be nullptr.
+    PCB_IO_ODBPP*            m_plugin;
     std::list<ODB_COMPONENT> m_compList;
     std::set<wxString>       m_usedCompNames;
 };

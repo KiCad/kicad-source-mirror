@@ -1861,7 +1861,7 @@ void PCB_PARSER::FindAndParseComponents()
 
     if( validated.empty() )
     {
-        wxLogWarning( _( "DipTrace: no validated component boundaries found" ) );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: no validated component boundaries found" ) );
         return;
     }
 
@@ -4943,7 +4943,7 @@ void PCB_PARSER::CreateBoardOutline()
 
         if( steps >= maxSteps )
         {
-            wxLogWarning( _( "DipTrace: outline traversal aborted after %zu steps (%zu vertices)" ),
+            wxLogTrace( traceDiptraceIo, wxT( "DipTrace: outline traversal aborted after %zu steps (%zu vertices)" ),
                           steps, n );
 
             // Fallback: emit a closed polyline through all outline vertices.
@@ -5514,7 +5514,7 @@ void PCB_PARSER::CreateNets()
 
             if( !inserted && it->second != netinfo )
             {
-                wxLogWarning( _( "DipTrace: net index %d maps to multiple net names (%s, %s)" ),
+                wxLogTrace( traceDiptraceIo, wxT( "DipTrace: net index %d maps to multiple net names (%s, %s)" ),
                               net.index, it->second->GetNetname(), netinfo->GetNetname() );
             }
 
@@ -5522,7 +5522,7 @@ void PCB_PARSER::CreateNets()
 
             if( !dtInserted && dtIt->second != &net )
             {
-                wxLogWarning( _( "DipTrace: duplicate net metadata for net index %d" ),
+                wxLogTrace( traceDiptraceIo, wxT( "DipTrace: duplicate net metadata for net index %d" ),
                               net.index );
             }
         }

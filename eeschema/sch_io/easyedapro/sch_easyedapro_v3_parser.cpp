@@ -46,6 +46,7 @@
 #include <import_gfx/svg_import_plugin.h>
 #include <import_gfx/graphics_importer_lib_symbol.h>
 #include <import_gfx/graphics_importer_sch.h>
+#include <trace_helpers.h>
 
 using namespace EASYEDAPRO;
 
@@ -1415,9 +1416,8 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
 
         if( symbolId.IsEmpty() )
         {
-            wxLogWarning( wxString::Format(
-                    _( "EasyEDA Pro v3 component '%s': missing Symbol attribute, skipping." ),
-                    parentId ) );
+            wxLogTrace( traceEasyEdaIo, wxT( "EasyEDA Pro v3 component '%s': missing Symbol attribute, skipping." ),
+                    parentId );
             continue;
         }
 
@@ -1425,7 +1425,7 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
         if( it == aSymbolMap.end() )
         {
             wxString compName = EASYEDAPRO::V3GetString( componentRow->inner, "name", wxS( "?" ) );
-            wxLogError( "Symbol of '%s' with uuid '%s' not found.", compName, symbolId );
+            wxLogTrace( traceEasyEdaIo, "Symbol of '%s' with uuid '%s' not found.", compName, symbolId );
             continue;
         }
 
@@ -1441,9 +1441,10 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
                 unitId = *unitOpt;
             else
             {
-                wxLogWarning( wxString::Format(
-                        _( "EasyEDA Pro v3 component '%s': partId '%s' not found in symbol '%s', using unit 1." ),
-                        parentId, unitName, symbolId ) );
+                wxLogTrace( traceEasyEdaIo,
+                            wxT( "EasyEDA Pro v3 component '%s': partId '%s' not found in "
+                                 "symbol '%s', using unit 1." ),
+                        parentId, unitName, symbolId );
             }
         }
 

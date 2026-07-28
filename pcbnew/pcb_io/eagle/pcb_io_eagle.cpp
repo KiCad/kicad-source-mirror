@@ -1432,7 +1432,7 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
                     nameAttr = &name;
 
                     // do we have a display attribute ?
-                    if( a.display  )
+                    if( a.display )
                     {
                         // Yes!
                         switch( *a.display )
@@ -1486,7 +1486,7 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
                     value = a;
                     valueAttr = &value;
 
-                    if( a.display  )
+                    if( a.display )
                     {
                         // Yes!
                         switch( *a.display )
@@ -1564,9 +1564,9 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
     // unmapped layer must not drop them.
     if( !keepout && layer == UNDEFINED_LAYER )
     {
-        wxLogMessage( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped" ),
-                                        eagle_layer_name( p.layer ),
-                                        p.layer ) );
+        Report( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped" ),
+                                  eagle_layer_name( p.layer ),
+                                  p.layer ) , RPT_SEVERITY_INFO );
         return nullptr;
     }
 
@@ -1603,9 +1603,9 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
 
     if( vertices.size() < 3 )
     {
-        wxLogMessage( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): less than 3 vertices" ),
-                                        eagle_layer_name( p.layer ),
-                                        p.layer ) );
+        Report( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): less than 3 vertices" ),
+                                  eagle_layer_name( p.layer ),
+                                  p.layer ) , RPT_SEVERITY_INFO );
         return nullptr;
     }
 
@@ -1649,9 +1649,9 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
 
     if( polygon.OutlineCount() != 1 )
     {
-        wxLogMessage( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): outline count is not 1" ),
-                                        eagle_layer_name( p.layer ),
-                                        p.layer ) );
+        Report( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): outline count is not 1" ),
+                                  eagle_layer_name( p.layer ),
+                                  p.layer ) , RPT_SEVERITY_INFO );
 
         return nullptr;
     }
@@ -1948,9 +1948,9 @@ void PCB_IO_EAGLE::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     if( layer == UNDEFINED_LAYER )
     {
-        wxLogMessage( wxString::Format( _( "Ignoring a wire since Eagle layer '%s' (%d) was not mapped" ),
-                                        eagle_layer_name( w.layer ),
-                                        w.layer ) );
+        Report( wxString::Format( _( "Ignoring a wire since Eagle layer '%s' (%d) was not mapped" ),
+                                  eagle_layer_name( w.layer ),
+                                  w.layer ) , RPT_SEVERITY_INFO );
         return;
     }
 
@@ -2116,9 +2116,11 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         wxFileName fileName( m_lib_path );
 
         if( m_board)
-            wxLogError( _( "Invalid zero-sized pad ignored in\nfile: %s" ), m_board->GetFileName() );
+            Report( wxString::Format( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
+                                      m_board->GetFileName() ), RPT_SEVERITY_ERROR );
         else
-            wxLogError( _( "Invalid zero-sized pad ignored in\nfile: %s" ), fileName.GetFullName() );
+            Report( wxString::Format( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
+                                      fileName.GetFullName() ), RPT_SEVERITY_ERROR );
     }
 }
 
@@ -2130,9 +2132,9 @@ void PCB_IO_EAGLE::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 
     if( layer == UNDEFINED_LAYER )
     {
-        wxLogMessage( wxString::Format( _( "Ignoring a text since Eagle layer '%s' (%d) was not mapped" ),
-                                        eagle_layer_name( t.layer ),
-                                        t.layer ) );
+        Report( wxString::Format( _( "Ignoring a text since Eagle layer '%s' (%d) was not mapped" ),
+                                  eagle_layer_name( t.layer ),
+                                  t.layer ) , RPT_SEVERITY_INFO );
         return;
     }
 
@@ -2229,9 +2231,9 @@ void PCB_IO_EAGLE::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
 
         if( layer == UNDEFINED_LAYER )
         {
-            wxLogMessage( wxString::Format( _( "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped" ),
-                                            eagle_layer_name( r.layer ),
-                                            r.layer ) );
+            Report( wxString::Format( _( "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped" ),
+                                      eagle_layer_name( r.layer ),
+                                      r.layer ) , RPT_SEVERITY_INFO );
             return;
         }
 
@@ -2291,9 +2293,9 @@ void PCB_IO_EAGLE::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
     // than dereferencing an empty vertex list.
     if( vertices.size() < 3 )
     {
-        wxLogMessage( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): less than 3 vertices" ),
-                                        eagle_layer_name( p.layer ),
-                                        p.layer ) );
+        Report( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): less than 3 vertices" ),
+                                  eagle_layer_name( p.layer ),
+                                  p.layer ) , RPT_SEVERITY_INFO );
         return;
     }
 
@@ -2355,9 +2357,9 @@ void PCB_IO_EAGLE::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
     {
         if( layer == UNDEFINED_LAYER )
         {
-            wxLogMessage( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped" ),
-                                            eagle_layer_name( p.layer ),
-                                            p.layer ) );
+            Report( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped" ),
+                                      eagle_layer_name( p.layer ),
+                                      p.layer ) , RPT_SEVERITY_INFO );
             return;
         }
 
@@ -2431,9 +2433,9 @@ void PCB_IO_EAGLE::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
 
         if( layer == UNDEFINED_LAYER )
         {
-            wxLogMessage( wxString::Format( _( "Ignoring a circle since Eagle layer '%s' (%d) was not mapped" ),
-                                            eagle_layer_name( e.layer ),
-                                            e.layer ) );
+            Report( wxString::Format( _( "Ignoring a circle since Eagle layer '%s' (%d) was not mapped" ),
+                                      eagle_layer_name( e.layer ),
+                                      e.layer ) , RPT_SEVERITY_INFO );
             return;
         }
 
@@ -2926,7 +2928,7 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
                     VECTOR2I pos( kicad_x( v.x ), kicad_y( v.y ) );
 
                     via->SetLayerPair( layer_front_most, layer_back_most );
-                    via->SetPosition( pos  );
+                    via->SetPosition( pos );
                     via->SetEnd( pos );
 
                     via->SetNetCode( netCode );

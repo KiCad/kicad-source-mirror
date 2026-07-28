@@ -30,6 +30,7 @@
 #include "sch_io/altium/altium_parser_sch.h"
 #include "io/altium/altium_binary_parser.h"
 #include "io/altium/altium_props_utils.h"
+#include <trace_helpers.h>
 
 
 ALTIUM_SCH_RECORD ReadRecord( const std::map<wxString, wxString>& aProps )
@@ -269,7 +270,7 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProps ) :
         break;
 
     default:
-        wxLogWarning( "Pin has unexpected orientation" );
+        wxLogTrace( traceAltiumIo, "Pin has unexpected orientation" );
         break;
     }
 

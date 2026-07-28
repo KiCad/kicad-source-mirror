@@ -121,7 +121,7 @@ bool IO_BASE::CanReadLibrary( const wxString& aFileName ) const
 }
 
 
-void IO_BASE::Report( const wxString& aText, SEVERITY aSeverity )
+void IO_BASE::Report( const wxString& aText, SEVERITY aSeverity ) const
 {
     if( !m_reporter )
         return;

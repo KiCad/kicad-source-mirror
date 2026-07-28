@@ -52,6 +52,7 @@
 #include <footprint_editor_settings.h>
 #include <footprint_viewer_frame.h>
 #include <io/kicad/kicad_io_utils.h>
+#include <reporter.h>
 #include <view/view_controls.h>
 #include <wx/filedlg.h>
 #include <wx/fswatcher.h>
@@ -186,6 +187,10 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
     try
     {
         IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( fileType ) );
+
+        // This is a direct user action, so surface any import warnings rather than
+        // relying on a reporter that only the board loader would have attached.
+        pi->SetReporter( &WXLOG_REPORTER::GetInstance() );
 
         footprint = pi->ImportFootprint( fn.GetFullPath(), footprintName);
 

@@ -30,6 +30,7 @@
 #include <pcb_io_cadstar_archive.h>
 #include <board.h>
 #include <footprint.h>
+#include <reporter.h>
 
 #include <memory>
 #include <set>
@@ -44,9 +45,11 @@ public:
     explicit CADSTAR_PCB_ARCHIVE_LOADER( wxString              aFilename,
                                          LAYER_MAPPING_HANDLER aLayerMappingHandler,
                                          bool                  aLogLayerWarnings,
-                                         PROGRESS_REPORTER*    aProgressReporter )
+                                         PROGRESS_REPORTER*    aProgressReporter,
+                                         REPORTER*             aReporter = nullptr )
             : CADSTAR_PCB_ARCHIVE_PARSER( aFilename )
     {
+        m_reporter                = aReporter;
         m_layerMappingHandler     = aLayerMappingHandler;
         m_logLayerWarnings        = aLogLayerWarnings;
         m_board                   = nullptr;
@@ -94,6 +97,29 @@ public:
     std::vector<FOOTPRINT*> GetLoadedLibraryFootpints() const;
 
 private:
+    /**
+     * Report an import issue the user can act on. Silent when no reporter is attached, which
+     * is the case for QA and any other non-interactive caller.
+     */
+    void reportError( const wxString& aMsg ) const
+    {
+        if( m_reporter )
+            m_reporter->Report( aMsg, RPT_SEVERITY_ERROR );
+    }
+
+    void reportWarning( const wxString& aMsg ) const
+    {
+        if( m_reporter )
+            m_reporter->Report( aMsg, RPT_SEVERITY_WARNING );
+    }
+
+    void reportInfo( const wxString& aMsg ) const
+    {
+        if( m_reporter )
+            m_reporter->Report( aMsg, RPT_SEVERITY_INFO );
+    }
+
+    REPORTER*                        m_reporter;            ///< Optional; may be nullptr
     LAYER_MAPPING_HANDLER            m_layerMappingHandler; ///< Callback to get layer mapping
     bool                             m_logLayerWarnings;    ///< Used in loadBoardStackup()
     BOARD*                           m_board;

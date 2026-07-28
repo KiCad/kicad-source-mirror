@@ -27,6 +27,7 @@
 
 #include <ki_exception.h>
 #include <wx/log.h>
+#include <trace_helpers.h>
 
 namespace PADS_IO
 {
@@ -232,7 +233,7 @@ void BINARY_PARSER::parseFooter()
 
     if( sizeCheck != expected )
     {
-        wxLogWarning( "PADS binary footer size mismatch: stored=%u, expected=%u",
+        wxLogTrace( tracePadsIo, "PADS binary footer size mismatch: stored=%u, expected=%u",
                       sizeCheck, expected );
     }
 }

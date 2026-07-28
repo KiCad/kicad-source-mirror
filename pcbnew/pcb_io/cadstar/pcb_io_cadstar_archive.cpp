@@ -103,7 +103,8 @@ BOARD* PCB_IO_CADSTAR_ARCHIVE::LoadBoard( const wxString& aFileName, BOARD* aApp
     FONTCONFIG_REPORTER_SCOPE fontconfigScope( &LOAD_INFO_REPORTER::GetInstance() );
 
     CADSTAR_PCB_ARCHIVE_LOADER tempPCB( aFileName, m_layer_mapping_handler,
-                                        m_show_layer_mapping_warnings, m_progressReporter );
+                                        m_show_layer_mapping_warnings, m_progressReporter,
+                                        m_reporter );
     tempPCB.Load( m_board, aProject );
 
     //center the board:
@@ -251,7 +252,8 @@ void PCB_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath )
     }
 
     CADSTAR_PCB_ARCHIVE_LOADER csLoader( aLibraryPath, m_layer_mapping_handler,
-                                         false /*don't log stackup warnings*/, nullptr );
+                                         false /*don't log stackup warnings*/, nullptr,
+                                         m_reporter );
 
     NAME_TO_FOOTPRINT_MAP                   footprintMap;
     std::vector<std::unique_ptr<FOOTPRINT>> footprints = csLoader.LoadLibrary();

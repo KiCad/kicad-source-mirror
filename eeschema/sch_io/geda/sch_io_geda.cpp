@@ -1479,7 +1479,6 @@ SCH_IO_GEDA::SCH_IO_GEDA() :
         m_powerCounter( 0 ),
         m_properties( nullptr )
 {
-    m_reporter = &WXLOG_REPORTER::GetInstance();
 }
 
 
@@ -4416,6 +4415,7 @@ void SCH_IO_GEDA::loadDeferredSheets()
         // clobbering parse state. Share the import stack for recursion detection
         // and the symbol library cache to avoid redundant filesystem scanning.
         SCH_IO_GEDA subImporter;
+        subImporter.SetReporter( m_reporter );
         subImporter.m_importStack = m_importStack;
         subImporter.m_importStack.insert( m_filename.GetFullPath() );
         for( const auto& [name, entry] : m_symLibrary )
@@ -4843,6 +4843,7 @@ SCH_SHEET* SCH_IO_GEDA::LoadSchematicFile( const wxString& aFileName, SCHEMATIC*
                     subSheetPtr->SetScreen( subScreen );
 
                     SCH_IO_GEDA subImporter;
+                    subImporter.SetReporter( m_reporter );
 
                     for( const auto& [name, entry] : m_symLibrary )
                     {

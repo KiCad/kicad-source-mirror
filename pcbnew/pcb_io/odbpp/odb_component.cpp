@@ -28,6 +28,7 @@
 #include "odb_util.h"
 #include "hash_eda.h"
 #include "pcb_io_odbpp.h"
+#include <trace_helpers.h>
 
 
 ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
@@ -69,9 +70,14 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
     // Warn if non-ASCII characters were converted
     if( comp.m_comp_name != originalRef )
     {
-        wxLogWarning( _( "Component '%s' has non-ASCII characters in its designator; "
-                         "converted to '%s' for ODB++ export." ),
-                      originalRef, comp.m_comp_name );
+        if( m_plugin )
+        {
+            m_plugin->Report( wxString::Format(
+                                      _( "Component '%s' has non-ASCII characters in its "
+                                         "designator; converted to '%s' for ODB++ export." ),
+                                      originalRef, comp.m_comp_name ),
+                              RPT_SEVERITY_WARNING );
+        }
     }
 
     wxString base_comp_name = comp.m_comp_name;
@@ -86,9 +92,14 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
             candidate = wxString::Format( "%s_%zu", base_comp_name, suffix++ );
         } while( !m_usedCompNames.insert( candidate ).second );
 
-        wxLogWarning( _( "Component '%s' has an ambiguous designator after conversion; "
-                         "renamed to '%s' for ODB++ export." ),
-                      originalRef, candidate );
+        if( m_plugin )
+        {
+            m_plugin->Report( wxString::Format(
+                                      _( "Component '%s' has an ambiguous designator after "
+                                         "conversion; renamed to '%s' for ODB++ export." ),
+                                      originalRef, candidate ),
+                              RPT_SEVERITY_WARNING );
+        }
 
         comp.m_comp_name = candidate;
     }

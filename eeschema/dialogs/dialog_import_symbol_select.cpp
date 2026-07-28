@@ -25,6 +25,7 @@
 #include <kiway.h>
 #include <lib_symbol.h>
 #include <lib_symbol_library_manager.h>
+#include <reporter.h>
 #include <symbol_edit_frame.h>
 #include <widgets/symbol_preview_widget.h>
 #include <wx/filename.h>
@@ -79,6 +80,10 @@ DIALOG_IMPORT_SYMBOL_SELECT::DIALOG_IMPORT_SYMBOL_SELECT( SYMBOL_EDIT_FRAME* aPa
         m_plugin( SCH_IO_MGR::FindPlugin( aPluginType ) ),
         m_preview( nullptr )
 {
+    // This is a direct user action, so surface any import warnings the plugin reports.
+    if( m_plugin )
+        m_plugin->SetReporter( &WXLOG_REPORTER::GetInstance() );
+
     wxFileName fn( aFilePath );
     SetTitle( wxString::Format( _( "Import Symbols from %s" ), fn.GetFullName() ) );
 

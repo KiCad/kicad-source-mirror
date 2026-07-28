@@ -90,11 +90,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
 
     if( Layout.NetSynch == NETSYNCH::WARNING )
     {
-        wxLogWarning(
-                _( "The selected file indicates that nets might be out of synchronisation "
-                   "with the schematic. It is recommended that you carry out an 'Align Nets' "
-                   "procedure in CADSTAR and re-import, to avoid inconsistencies between the "
-                   "PCB and the schematic. " ) );
+        reportWarning(
+                 _( "The selected file indicates that nets might be out of synchronisation "
+                    "with the schematic. It is recommended that you carry out an 'Align Nets' "
+                    "procedure in CADSTAR and re-import, to avoid inconsistencies between the "
+                    "PCB and the schematic. " ) );
     }
 
     if( m_progressReporter )
@@ -131,11 +131,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
     {
         if( !calculateZonePriorities( id ) )
         {
-            wxLogError( wxString::Format( _( "Unable to determine zone fill priorities for layer "
-                                             "'%s'. A best attempt has been made but it is "
-                                             "possible that DRC errors exist and that manual "
-                                             "editing of the zone priorities is required." ),
-                                          m_board->GetLayerName( id ) ) );
+            reportError( wxString::Format( _( "Unable to determine zone fill priorities for layer "
+                                              "'%s'. A best attempt has been made but it is "
+                                              "possible that DRC errors exist and that manual "
+                                              "editing of the zone priorities is required." ),
+                                           m_board->GetLayerName( id ) ) );
         }
     }
 
@@ -144,33 +144,33 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
 
     if( Layout.Trunks.size() > 0 )
     {
-        wxLogWarning(
-                _( "The CADSTAR design contains Trunk routing elements, which have no KiCad "
-                   "equivalent. These elements were not loaded." ) );
+        reportWarning(
+                 _( "The CADSTAR design contains Trunk routing elements, which have no KiCad "
+                    "equivalent. These elements were not loaded." ) );
     }
 
     if( Layout.VariantHierarchy.Variants.size() > 0 )
     {
-        wxLogWarning( wxString::Format(
-                _( "The CADSTAR design contains variants which has no KiCad equivalent. Only "
-                   "the variant '%s' was loaded." ),
-                Layout.VariantHierarchy.Variants.begin()->second.Name ) );
+        reportWarning( wxString::Format(
+                 _( "The CADSTAR design contains variants which has no KiCad equivalent. Only "
+                    "the variant '%s' was loaded." ),
+                 Layout.VariantHierarchy.Variants.begin()->second.Name ) );
     }
 
     if( Layout.ReuseBlocks.size() > 0 )
     {
-        wxLogWarning(
-                _( "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
-                   "re-use block information has been discarded during the import." ) );
+        reportWarning(
+                 _( "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
+                    "re-use block information has been discarded during the import." ) );
     }
 
-    wxLogWarning( _( "CADSTAR fonts are different to the ones in KiCad. This will likely result "
-                     "in alignment issues that may cause DRC errors. Please review the imported "
-                     "text elements carefully and correct manually if required." ) );
+    reportWarning( _( "CADSTAR fonts are different to the ones in KiCad. This will likely result "
+                      "in alignment issues that may cause DRC errors. Please review the imported "
+                      "text elements carefully and correct manually if required." ) );
 
-    wxLogMessage(
-            _( "The CADSTAR design has been imported successfully.\n"
-               "Please review the import errors and warnings (if any)." ) );
+    reportInfo(
+          _( "The CADSTAR design has been imported successfully.\n"
+             "Please review the import errors and warnings (if any)." ) );
 }
 
 std::vector<FOOTPRINT*> CADSTAR_PCB_ARCHIVE_LOADER::GetLoadedLibraryFootpints() const
@@ -239,10 +239,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupWarning( const wxString& aCadsta
 {
     if( m_logLayerWarnings )
     {
-        wxLogWarning( wxString::Format(
-                _( "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this "
-                   "layer have been mapped to KiCad layer '%s' instead." ),
-                aCadstarLayerName, LSET::Name( aKiCadLayer ) ) );
+        reportWarning( wxString::Format(
+                 _( "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this "
+                    "layer have been mapped to KiCad layer '%s' instead." ),
+                 aCadstarLayerName, LSET::Name( aKiCadLayer ) ) );
     }
 }
 
@@ -252,10 +252,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupMessage( const wxString& aCadsta
 {
     if( m_logLayerWarnings )
     {
-        wxLogMessage( wxString::Format(
-                _( "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
-                   "elements on this layer have been mapped to KiCad layer '%s'." ),
-                aCadstarLayerName, LSET::Name( aKiCadLayer ) ) );
+        reportInfo( wxString::Format(
+              _( "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
+                 "elements on this layer have been mapped to KiCad layer '%s'." ),
+              aCadstarLayerName, LSET::Name( aKiCadLayer ) ) );
     }
 }
 
@@ -325,10 +325,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         {
             if( first )
             {
-                wxLogWarning( wxString::Format( _( "The CADSTAR construction layer '%s' is on "
-                                                   "the outer surface of the board. It has been "
-                                                   "ignored." ),
-                                                cadstarLayer.Name ) );
+                reportWarning( wxString::Format( _( "The CADSTAR construction layer '%s' is on "
+                                                    "the outer surface of the board. It has been "
+                                                    "ignored." ),
+                                                 cadstarLayer.Name ) );
             }
             else
             {
@@ -349,10 +349,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         {
             LAYER cadstarLayer = Assignments.Layerdefs.Layers.at( layerID );
 
-            wxLogWarning( wxString::Format( _( "The CADSTAR construction layer '%s' is on "
-                                               "the outer surface of the board. It has been "
-                                               "ignored." ),
-                                            cadstarLayer.Name ) );
+            reportWarning( wxString::Format( _( "The CADSTAR construction layer '%s' is on "
+                                                "the outer surface of the board. It has been "
+                                                "ignored." ),
+                                             cadstarLayer.Name ) );
         }
 
         cadstarBoardStackup.back().ConstructionLayers.clear();
@@ -745,7 +745,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
             [&]( wxString aID, int* aVal )
             {
                 if( spacingCodes.find( aID ) == spacingCodes.end() )
-                    wxLogWarning( _( "Design rule %s was not found. This was ignored." ) );
+                {
+                    reportWarning( wxString::Format(
+                            _( "Design rule %s was not found. This was ignored." ), aID ) );
+                }
                 else
                     *aVal = getKiCadLength( spacingCodes.at( aID ).Spacing );
             };
@@ -774,9 +777,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
 
     applyNetClassRule( "T_T", bds.m_NetSettings->GetDefaultNetclass() );
 
-    wxLogWarning( _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
-                     "design rules were imported. It is recommended that you review the design "
-                     "rules that have been applied." ) );
+    reportWarning( _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
+                      "design rules were imported. It is recommended that you review the design "
+                      "rules that have been applied." ) );
 }
 
 
@@ -978,10 +981,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
             if( !aComponent.Alternate.IsEmpty() )
                 libName << wxT( " (" ) << aComponent.Alternate << wxT( ")" );
 
-            wxLogError( wxString::Format( _( "The CADSTAR area '%s' in library component '%s' does not "
-                                             "have a KiCad equivalent. The area is neither a via nor "
-                                             "route keepout area. The area was not imported." ),
-                                          area.ID, libName ) );
+            reportError( wxString::Format( _( "The CADSTAR area '%s' in library component '%s' does not "
+                                              "have a KiCad equivalent. The area is neither a via nor "
+                                              "route keepout area. The area was not imported." ),
+                                           area.ID, libName ) );
         }
     }
 }
@@ -1322,9 +1325,9 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     //log warnings:
     if( m_padcodesTested.find( csPadcode.ID ) == m_padcodesTested.end() && !errorMSG.IsEmpty() )
     {
-        wxLogError( _( "The CADSTAR pad definition '%s' has import errors: %s" ),
-                    csPadcode.Name,
-                    errorMSG );
+        reportError( wxString::Format( _( "The CADSTAR pad definition '%s' has import errors: %s" ),
+                                       csPadcode.Name,
+                                       errorMSG ) );
 
         m_padcodesTested.insert( csPadcode.ID );
     }
@@ -1339,7 +1342,7 @@ PAD*& CADSTAR_PCB_ARCHIVE_LOADER::getPadReference( FOOTPRINT* aFootprint, const 
 
     if( !( index < aFootprint->Pads().size() ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Unable to find pad index '%d' in footprint '%s'." ),
+        THROW_IO_ERROR( wxString::Format( _( "Unable to find pad index '%ld' in footprint '%s'." ),
                                           (long) aCadstarPadID,
                                           aFootprint->GetReference() ) );
     }
@@ -1453,20 +1456,20 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
             switch( csDim.Subtype )
             {
             case DIMENSION::SUBTYPE::ANGLED:
-                wxLogWarning( wxString::Format( _( "Dimension ID %s is an angled dimension, which has no KiCad "
-                                                   "equivalent. An aligned dimension was loaded instead." ),
-                                                csDim.ID ) );
+                reportWarning( wxString::Format( _( "Dimension ID %s is an angled dimension, which has no KiCad "
+                                                    "equivalent. An aligned dimension was loaded instead." ),
+                                                 csDim.ID ) );
                 KI_FALLTHROUGH;
             case DIMENSION::SUBTYPE::DIRECT:
             case DIMENSION::SUBTYPE::ORTHOGONAL:
             {
                 if( csDim.Line.Style == DIMENSION::LINE::STYLE::EXTERNAL )
                 {
-                    wxLogWarning( wxString::Format( _( "Dimension ID %s has 'External' style in CADSTAR. External "
-                                                       "dimension styles are not yet supported in KiCad. The "
-                                                       "dimension object was imported with an internal dimension "
-                                                       "style instead." ),
-                                                    csDim.ID ) );
+                    reportWarning( wxString::Format( _( "Dimension ID %s has 'External' style in CADSTAR. External "
+                                                        "dimension styles are not yet supported in KiCad. The "
+                                                        "dimension object was imported with an internal dimension "
+                                                        "style instead." ),
+                                                     csDim.ID ) );
                 }
 
                 PCB_DIM_ALIGNED* dimension = nullptr;
@@ -1519,7 +1522,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
             default:
                 // Radius and diameter dimensions are LEADERDIM (even if not actually leader)
                 // Angular dimensions are always ANGLEDIM
-                wxLogError(  _( "Unexpected Dimension type (ID %s). This was not imported." ), csDim.ID );
+                reportError( wxString::Format( _( "Unexpected Dimension type (ID %s). This was "
+                                                  "not imported." ),
+                                               csDim.ID ) );
                 continue;
             }
             break;
@@ -1653,9 +1658,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
 
         case DIMENSION::TYPE::ANGLEDIM:
             //TODO: update import when KiCad supports angular dimensions
-            wxLogError( _( "Dimension %s is an angular dimension which has no KiCad equivalent. "
-                           "The object was not imported." ),
-                        csDim.ID );
+            reportError( wxString::Format( _( "Dimension %s is an angular dimension which has no KiCad equivalent. "
+                                              "The object was not imported." ),
+                                           csDim.ID ) );
             break;
         }
     }
@@ -1693,17 +1698,17 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadAreas()
 
             if( area.Placement )
             {
-                wxLogWarning( wxString::Format( _( "The CADSTAR area '%s' is marked as a placement area in "
-                                                   "CADSTAR. Placement areas are not supported in KiCad. Only "
-                                                   "the supported elements for the area were imported." ),
-                                                area.Name ) );
+                reportWarning( wxString::Format( _( "The CADSTAR area '%s' is marked as a placement area in "
+                                                    "CADSTAR. Placement areas are not supported in KiCad. Only "
+                                                    "the supported elements for the area were imported." ),
+                                                 area.Name ) );
             }
         }
         else
         {
-            wxLogError( wxString::Format( _( "The CADSTAR area '%s' does not have a KiCad equivalent. Pure "
-                                             "Placement areas are not supported." ),
-                                          area.Name ) );
+            reportError( wxString::Format( _( "The CADSTAR area '%s' does not have a KiCad equivalent. Pure "
+                                              "Placement areas are not supported." ),
+                                           area.Name ) );
         }
 
         //todo Process area.AreaHeight when KiCad supports 3D design rules
@@ -1917,26 +1922,26 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
 
         if( csTemplate.Pouring.AllowInNoRouting )
         {
-            wxLogWarning( wxString::Format( _( "The CADSTAR template '%s' has the setting 'Allow in No Routing "
-                                               "Areas' enabled. This setting has no KiCad equivalent, so it has "
-                                               "been ignored." ),
-                                            csTemplate.Name ) );
+            reportWarning( wxString::Format( _( "The CADSTAR template '%s' has the setting 'Allow in No Routing "
+                                                "Areas' enabled. This setting has no KiCad equivalent, so it has "
+                                                "been ignored." ),
+                                             csTemplate.Name ) );
         }
 
         if( csTemplate.Pouring.BoxIsolatedPins )
         {
-            wxLogWarning( wxString::Format( _( "The CADSTAR template '%s' has the setting 'Box Isolated Pins' "
-                                               "enabled. This setting has no KiCad equivalent, so it has been "
-                                               "ignored." ),
-                                            csTemplate.Name ) );
+            reportWarning( wxString::Format( _( "The CADSTAR template '%s' has the setting 'Box Isolated Pins' "
+                                                "enabled. This setting has no KiCad equivalent, so it has been "
+                                                "ignored." ),
+                                             csTemplate.Name ) );
         }
 
         if( csTemplate.Pouring.AutomaticRepour )
         {
-            wxLogWarning( wxString::Format( _( "The CADSTAR template '%s' has the setting 'Automatic Repour' "
-                                               "enabled. This setting has no KiCad equivalent, so it has been "
-                                               "ignored." ),
-                                            csTemplate.Name ) );
+            reportWarning( wxString::Format( _( "The CADSTAR template '%s' has the setting 'Automatic Repour' "
+                                                "enabled. This setting has no KiCad equivalent, so it has been "
+                                                "ignored." ),
+                                             csTemplate.Name ) );
         }
 
         // Sliver width has different behaviour to KiCad Zone's minimum thickness
@@ -1944,22 +1949,22 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
         // Kicad it is the opposite.
         if( csTemplate.Pouring.SliverWidth != 0 )
         {
-            wxLogWarning( wxString::Format(
-                    _( "The CADSTAR template '%s' has a non-zero value defined for the "
-                       "'Sliver Width' setting. There is no KiCad equivalent for "
-                       "this, so this setting was ignored." ),
-                    csTemplate.Name ) );
+            reportWarning( wxString::Format(
+                     _( "The CADSTAR template '%s' has a non-zero value defined for the "
+                        "'Sliver Width' setting. There is no KiCad equivalent for "
+                        "this, so this setting was ignored." ),
+                     csTemplate.Name ) );
         }
 
 
         if( csTemplate.Pouring.MinIsolatedCopper != csTemplate.Pouring.MinDisjointCopper )
         {
-            wxLogWarning( wxString::Format(
-                    _( "The CADSTAR template '%s' has different settings for 'Retain Poured Copper "
-                       "- Disjoint' and 'Retain Poured Copper - Isolated'. KiCad does not "
-                       "distinguish between these two settings. The setting for disjoint copper "
-                       "has been applied as the minimum island area of the KiCad Zone." ),
-                    csTemplate.Name ) );
+            reportWarning( wxString::Format(
+                     _( "The CADSTAR template '%s' has different settings for 'Retain Poured Copper "
+                        "- Disjoint' and 'Retain Poured Copper - Isolated'. KiCad does not "
+                        "distinguish between these two settings. The setting for disjoint copper "
+                        "has been applied as the minimum island area of the KiCad Zone." ),
+                     csTemplate.Name ) );
         }
 
         long long minIslandArea = -1;
@@ -2005,11 +2010,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
             || csTemplate.Pouring.ThermalReliefPadsAngle
                        != csTemplate.Pouring.ThermalReliefViasAngle )
         {
-            wxLogWarning( wxString::Format(
-                    _( "The CADSTAR template '%s' has different settings for thermal relief "
-                       "in pads and vias. KiCad only supports one single setting for both. The "
-                       "setting for pads has been applied." ),
-                    csTemplate.Name ) );
+            reportWarning( wxString::Format(
+                     _( "The CADSTAR template '%s' has different settings for thermal relief "
+                        "in pads and vias. KiCad only supports one single setting for both. The "
+                        "setting for pads has been applied." ),
+                     csTemplate.Name ) );
         }
 
         COPPERCODE reliefCopperCode = getCopperCode( csTemplate.Pouring.ReliefCopperCodeID );
@@ -2022,15 +2027,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
         {
             if( spokeWidth < minThickness )
             {
-                wxLogWarning( wxString::Format(
-                        _( "The CADSTAR template '%s' has thermal reliefs in the original design "
-                           "but the spoke width (%.2f mm) is thinner than the minimum thickness of " //format:allow
-                           "the zone (%.2f mm). KiCad requires the minimum thickness of the zone "   //format:allow
-                           "to be preserved. Therefore the minimum thickness has been applied as "
-                           "the new spoke width and will be applied next time the zones are "
-                           "filled." ),
-                        csTemplate.Name, (double) getKiCadLength( spokeWidth ) / 1E6,
-                        (double) getKiCadLength( minThickness ) / 1E6 ) );
+                reportWarning( wxString::Format(
+                         _( "The CADSTAR template '%s' has thermal reliefs in the original design "
+                            "but the spoke width (%.2f mm) is thinner than the minimum thickness of " //format:allow
+                            "the zone (%.2f mm). KiCad requires the minimum thickness of the zone "   //format:allow
+                            "to be preserved. Therefore the minimum thickness has been applied as "
+                            "the new spoke width and will be applied next time the zones are "
+                            "filled." ),
+                         csTemplate.Name, (double) getKiCadLength( spokeWidth ) / 1E6,
+                         (double) getKiCadLength( minThickness ) / 1E6 ) );
 
                 spokeWidth = minThickness;
             }
@@ -2069,9 +2074,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
 
         if( netid.IsEmpty() )
         {
-            wxLogError( _( "The CADSTAR layer '%s' is defined as a power plane layer. However no net with "
-                           "such name exists. The layer has been loaded but no copper zone was created." ),
-                        powerPlaneLayerName );
+            reportError( wxString::Format( _( "The CADSTAR layer '%s' is defined as a power "
+                                              "plane layer. However no net with such name "
+                                              "exists. The layer has been loaded but no copper "
+                                              "zone was created." ),
+                                           powerPlaneLayerName ) );
         }
         else
         {
@@ -2164,10 +2171,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadCoppers()
 
         if( !m_doneCopperWarning )
         {
-            wxLogWarning( _( "The CADSTAR design contains COPPER elements, which have no direct KiCad "
-                             "equivalent. These have been imported as a KiCad Zone if solid or hatch "
-                             "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
-                             "closed)." ) );
+            reportWarning( _( "The CADSTAR design contains COPPER elements, which have no direct KiCad "
+                              "equivalent. These have been imported as a KiCad Zone if solid or hatch "
+                              "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
+                              "closed)." ) );
             m_doneCopperWarning = true;
         }
 
@@ -2266,17 +2273,21 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
 
             if( footprint == nullptr )
             {
-                wxLogWarning( wxString::Format( _( "The net '%s' references component ID '%s' which does not exist. "
-                                                   "This has been ignored." ),
-                                                netnameForErrorReporting, pin.ComponentID ) );
+                reportWarning( wxString::Format( _( "The net '%s' references component ID '%s' which does not exist. "
+                                                    "This has been ignored." ),
+                                                 netnameForErrorReporting, pin.ComponentID ) );
             }
-            else if( ( pin.PadID - (long) 1 ) > (long) footprint->Pads().size() )
+            else if( pin.PadID <= 0
+                     || static_cast<size_t>( pin.PadID ) > footprint->Pads().size() )
             {
-                wxLogWarning( wxString::Format( _( "The net '%s' references non-existent pad index '%d' in "
-                                                   "component '%s'. This has been ignored." ),
-                                                netnameForErrorReporting,
-                                                pin.PadID,
-                                                footprint->GetReference() ) );
+                // Pad IDs are one-based, so the valid range is [1, Pads().size()]. Anything
+                // else would throw out of getPadReference() and abort the whole import.
+                reportWarning( wxString::Format( _( "The net '%s' references non-existent pad "
+                                                    "index '%ld' in component '%s'. This has "
+                                                    "been ignored." ),
+                                                 netnameForErrorReporting,
+                                                 pin.PadID,
+                                                 footprint->GetReference() ) );
             }
             else
             {
@@ -2471,7 +2482,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTextVariables()
     }
     else
     {
-        wxLogError( _( "Text Variables could not be set as there is no project loaded." ) );
+        reportError( _( "Text Variables could not be set as there is no project loaded." ) );
     }
 }
 
@@ -2555,8 +2566,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNetTracks( const NET_ID&         aCadstarNe
         if( !m_doneTearDropWarning && ( v.TeardropAtEnd || v.TeardropAtStart ) )
         {
             // TODO: load teardrops
-            wxLogError( _( "The CADSTAR design contains teardrops. This importer does not yet "
-                           "support them, so the teardrops in the design have been ignored." ) );
+            reportError( _( "The CADSTAR design contains teardrops. This importer does not yet "
+                            "support them, so the teardrops in the design have been ignored." ) );
 
             m_doneTearDropWarning = true;
         }
@@ -2585,11 +2596,12 @@ int CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia( const NET_ID& aCadstarNetID, const N
 
     if( csViaCode.Shape.ShapeType != PAD_SHAPE_TYPE::CIRCLE )
     {
-        wxLogError( _( "The CADSTAR via code '%s' has different shape from a circle defined. "
-                       "KiCad only supports circular vias so this via type has been changed to "
-                       "be a via with circular shape of %.2f mm diameter." ),                   //format:allow
-                    csViaCode.Name,
-                    (double) ( (double) getKiCadLength( csViaCode.Shape.Size ) / 1E6 ) );
+        reportError( wxString::Format( _( "The CADSTAR via code '%s' has different shape from a "
+                                          "circle defined. KiCad only supports circular vias so "
+                                          "this via type has been changed to be a via with "
+                                          "circular shape of %.2f mm diameter." ), //format:allow
+                                       csViaCode.Name,
+                                       (double) ( (double) getKiCadLength( csViaCode.Shape.Size ) / 1E6 ) ) );
     }
 
     via->SetWidth( PADSTACK::ALL_LAYERS, getKiCadLength( csViaCode.Shape.Size ) );
@@ -3559,50 +3571,50 @@ void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCads
 
         if( hcode.Hatches.size() != 2 )
         {
-            wxLogWarning( wxString::Format(
-                    _( "The CADSTAR Hatching code '%s' has %d hatches defined. "
-                       "KiCad only supports 2 hatches (crosshatching) 90 degrees apart. "
-                       "The imported hatching is crosshatched." ),
-                    hcode.Name, (int) hcode.Hatches.size() ) );
+            reportWarning( wxString::Format(
+                     _( "The CADSTAR Hatching code '%s' has %d hatches defined. "
+                        "KiCad only supports 2 hatches (crosshatching) 90 degrees apart. "
+                        "The imported hatching is crosshatched." ),
+                     hcode.Name, (int) hcode.Hatches.size() ) );
         }
         else
         {
             if( hcode.Hatches.at( 0 ).LineWidth != hcode.Hatches.at( 1 ).LineWidth )
             {
-                wxLogWarning( wxString::Format(
-                        _( "The CADSTAR Hatching code '%s' has different line widths for each "
-                           "hatch. KiCad only supports one width for the hatching. The imported "
-                           "hatching uses the width defined in the first hatch definition, i.e. "
-                           "%.2f mm." ),    //format:allow
-                        hcode.Name,
-                        (double) ( (double) getKiCadLength( hcode.Hatches.at( 0 ).LineWidth ) )
-                                / 1E6 ) );
+                reportWarning( wxString::Format(
+                         _( "The CADSTAR Hatching code '%s' has different line widths for each "
+                            "hatch. KiCad only supports one width for the hatching. The imported "
+                            "hatching uses the width defined in the first hatch definition, i.e. "
+                            "%.2f mm." ),    //format:allow
+                         hcode.Name,
+                         (double) ( (double) getKiCadLength( hcode.Hatches.at( 0 ).LineWidth ) )
+                                 / 1E6 ) );
             }
 
             if( hcode.Hatches.at( 0 ).Step != hcode.Hatches.at( 1 ).Step )
             {
-                wxLogWarning( wxString::Format(
-                        _( "The CADSTAR Hatching code '%s' has different step sizes for each "
-                           "hatch. KiCad only supports one step size for the hatching. The imported "
-                           "hatching uses the step size defined in the first hatching definition, "
-                           "i.e. %.2f mm." ), //format:allow
-                        hcode.Name,
-                        (double) ( (double) getKiCadLength( hcode.Hatches.at( 0 ).Step ) )
-                                / 1E6 ) );
+                reportWarning( wxString::Format(
+                         _( "The CADSTAR Hatching code '%s' has different step sizes for each "
+                            "hatch. KiCad only supports one step size for the hatching. The imported "
+                            "hatching uses the step size defined in the first hatching definition, "
+                            "i.e. %.2f mm." ), //format:allow
+                         hcode.Name,
+                         (double) ( (double) getKiCadLength( hcode.Hatches.at( 0 ).Step ) )
+                                 / 1E6 ) );
             }
 
             if( abs( hcode.Hatches.at( 0 ).OrientAngle - hcode.Hatches.at( 1 ).OrientAngle )
                     != 90000 )
             {
-                wxLogWarning( wxString::Format(
-                        _( "The hatches in CADSTAR Hatching code '%s' have an angle  "
-                           "difference of %.1f degrees. KiCad only supports hatching 90 "   //format:allow
-                           "degrees apart.  The imported hatching has two hatches 90 "
-                           "degrees apart, oriented %.1f degrees from horizontal." ),       //format:allow
-                        hcode.Name,
-                        getAngle( abs( hcode.Hatches.at( 0 ).OrientAngle
-                                         - hcode.Hatches.at( 1 ).OrientAngle ) ).AsDegrees(),
-                        getAngle( hcode.Hatches.at( 0 ).OrientAngle ).AsDegrees() ) );
+                reportWarning( wxString::Format(
+                         _( "The hatches in CADSTAR Hatching code '%s' have an angle  "
+                            "difference of %.1f degrees. KiCad only supports hatching 90 "   //format:allow
+                            "degrees apart.  The imported hatching has two hatches 90 "
+                            "degrees apart, oriented %.1f degrees from horizontal." ),       //format:allow
+                         hcode.Name,
+                         getAngle( abs( hcode.Hatches.at( 0 ).OrientAngle
+                                          - hcode.Hatches.at( 1 ).OrientAngle ) ).AsDegrees(),
+                         getAngle( hcode.Hatches.at( 0 ).OrientAngle ).AsDegrees() ) );
             }
         }
 
@@ -3665,10 +3677,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
     case UNITS::METER:
     case UNITS::CENTIMETER:
     case UNITS::MICROMETRE:
-        wxLogWarning( wxString::Format( _( "Dimension ID %s uses a type of unit that "
-                                           "is not supported in KiCad. Millimeters were "
-                                           "applied instead." ),
-                                        aCadstarDim.ID ) );
+        reportWarning( wxString::Format( _( "Dimension ID %s uses a type of unit that "
+                                            "is not supported in KiCad. Millimeters were "
+                                            "applied instead." ),
+                                         aCadstarDim.ID ) );
         KI_FALLTHROUGH;
     case UNITS::MM:
         aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::MM );
@@ -3943,19 +3955,19 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
 
         if( !m_doneNetClassWarning && !csNet.NetClassID.IsEmpty() && csNet.NetClassID != wxT( "NONE" ) )
         {
-            wxLogMessage( _( "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad "
-                             "does not have an equivalent to CADSTAR's Net Class so these elements "
-                             "were not imported. Note: KiCad's version of 'Net Class' is closer to "
-                             "CADSTAR's 'Net Route Code' (which has been imported for all nets)." ) );
+            reportInfo( _( "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad "
+                           "does not have an equivalent to CADSTAR's Net Class so these elements "
+                           "were not imported. Note: KiCad's version of 'Net Class' is closer to "
+                           "CADSTAR's 'Net Route Code' (which has been imported for all nets)." ) );
             m_doneNetClassWarning = true;
         }
 
         if( !m_doneSpacingClassWarning && !csNet.SpacingClassID.IsEmpty() && csNet.SpacingClassID != wxT( "NONE" ) )
         {
-            wxLogWarning( _( "The CADSTAR design contains nets with a 'Spacing Class' assigned. "
-                             "KiCad does not have an equivalent to CADSTAR's Spacing Class so "
-                             "these elements were not imported. Please review the design rules as "
-                             "copper pours may be affected by this." ) );
+            reportWarning( _( "The CADSTAR design contains nets with a 'Spacing Class' assigned. "
+                              "KiCad does not have an equivalent to CADSTAR's Spacing Class so "
+                              "these elements were not imported. Please review the design rules as "
+                              "copper pours may be affected by this." ) );
             m_doneSpacingClassWarning = true;
         }
 

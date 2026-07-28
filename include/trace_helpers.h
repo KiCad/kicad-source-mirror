@@ -298,6 +298,55 @@ extern KICOMMON_API const wxChar* const traceEagleIo;
 extern KICOMMON_API const wxChar* const traceDiptraceIo;
 
 /*
+ * Flag to enable CADSTAR I/O debug tracing.
+ *
+ * Use "KICAD_CADSTAR_IO" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceCadstarIo;
+
+/*
+ * Flag to enable FABMASTER I/O debug tracing.
+ *
+ * Use "KICAD_FABMASTER" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceFabmaster;
+
+/*
+ * Flag to enable Altium I/O debug tracing.
+ *
+ * Use "KICAD_ALTIUM_IO" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceAltiumIo;
+
+/*
+ * Flag to enable ODB++ I/O debug tracing.
+ *
+ * Use "KICAD_ODBPP_IO" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceOdbppIo;
+
+/*
+ * Flag to enable EasyEDA I/O debug tracing.
+ *
+ * Use "KICAD_EASYEDA_IO" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceEasyEdaIo;
+
+/*
+ * Flag to enable PADS I/O debug tracing.
+ *
+ * Use "KICAD_PADS_IO" to enable.
+ */
+extern KICOMMON_API const wxChar* const tracePadsIo;
+
+/*
+ * Flag to enable P-CAD I/O debug tracing.
+ *
+ * Use "KICAD_PCAD_IO" to enable.
+ */
+extern KICOMMON_API const wxChar* const tracePcadIo;
+
+/*
  * Flag to enable Design Block O debug tracing.
  *
  * Use "KICAD_EAGLE_IO" to enable.

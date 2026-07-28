@@ -43,6 +43,7 @@
 #include <import_gfx/svg_import_plugin.h>
 #include <import_gfx/graphics_importer_lib_symbol.h>
 #include <import_gfx/graphics_importer_sch.h>
+#include <trace_helpers.h>
 
 
 SCH_EASYEDAPRO_PARSER::SCH_EASYEDAPRO_PARSER( SCHEMATIC*         aSchematic,
@@ -1102,7 +1103,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             auto it = aSymbolMap.find( symbolId );
             if( it == aSymbolMap.end() )
             {
-                wxLogError( "Symbol of '%s' with uuid '%s' not found.", component->name, symbolId );
+                wxLogTrace( traceEasyEdaIo, "Symbol of '%s' with uuid '%s' not found.", component->name, symbolId );
                 continue;
             }
 

@@ -47,6 +47,7 @@
 #include "pcb_io_odbpp.h"
 #include <callback_gal.h>
 #include <string_utils.h>
+#include <trace_helpers.h>
 
 
 void FEATURES_MANAGER::AddFeatureLine( const VECTOR2I& aStart, const VECTOR2I& aEnd,
@@ -278,7 +279,7 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
     }
 
     default:
-        wxLogError( wxT( "Unknown shape when adding ODB++ layer feature" ) );
+        wxLogTrace( traceOdbppIo, wxT( "Unknown shape when adding ODB++ layer feature" ) );
         break;
     }
 
@@ -426,7 +427,7 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
 
         break;
     }
-    default: wxLogError( wxT( "Unknown pad type" ) ); break;
+    default: wxLogTrace( traceOdbppIo, wxT( "Unknown pad type" ) ); break;
     }
 }
 
@@ -439,7 +440,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
 
         if( iter == GetODBPlugin()->GetViaTraceSubnetMap().end() )
         {
-            wxLogError( wxT( "Failed to get subnet track data" ) );
+            wxLogTrace( traceOdbppIo, wxT( "Failed to get subnet track data" ) );
             return;
         }
 
@@ -532,7 +533,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
 
             if( iter == GetODBPlugin()->GetPlaneSubnetMap().end() )
             {
-                wxLogError( wxT( "Failed to get subnet plane data" ) );
+                wxLogTrace( traceOdbppIo, wxT( "Failed to get subnet plane data" ) );
                 return;
             }
 
@@ -793,7 +794,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
 
         if( iter == GetODBPlugin()->GetPadSubnetMap().end() )
         {
-            wxLogError( wxT( "Failed to get subnet top data" ) );
+            wxLogTrace( traceOdbppIo, wxT( "Failed to get subnet top data" ) );
             return;
         }
 

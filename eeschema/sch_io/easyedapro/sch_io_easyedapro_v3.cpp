@@ -116,7 +116,6 @@ static LIB_SYMBOL* LoadV3LibrarySymbolItem( const EASYEDAPRO::V3_DOC_PARSER&    
 SCH_IO_EASYEDAPRO_V3::SCH_IO_EASYEDAPRO_V3() :
         SCH_IO( wxS( "EasyEDA Pro (JLCEDA) Schematic v3" ) )
 {
-    m_reporter = &WXLOG_REPORTER::GetInstance();
 }
 
 
@@ -203,9 +202,9 @@ void SCH_IO_EASYEDAPRO_V3::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbol
         }
         catch( nlohmann::json::exception& e )
         {
-            wxLogWarning(
-                    wxString::Format( _( "EasyEDA Pro v3 symbol '%s' in '%s' was skipped due to parse error: %s" ),
-                                      symbolName, aLibraryPath, e.what() ) );
+            Report(
+              wxString::Format( _( "EasyEDA Pro v3 symbol '%s' in '%s' was skipped due to parse error: %s" ),
+                                symbolName, aLibraryPath, e.what() ) , RPT_SEVERITY_WARNING );
         }
     }
 }
@@ -375,8 +374,8 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
         }
         catch( nlohmann::json::exception& e )
         {
-            wxLogWarning( wxString::Format( _( "EasyEDA Pro v3 symbol '%s' was skipped due to parse error: %s" ),
-                                            symbolUuid, e.what() ) );
+            Report( wxString::Format( _( "EasyEDA Pro v3 symbol '%s' was skipped due to parse error: %s" ),
+                                      symbolUuid, e.what() ) , RPT_SEVERITY_WARNING );
             continue;
         }
 
@@ -408,8 +407,8 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
 
         if( !pageRawDoc )
         {
-            wxLogWarning( wxString::Format( _( "EasyEDA Pro v3 schematic page '%s' was not found and was skipped." ),
-                                            prjSheet.uuid ) );
+            Report( wxString::Format( _( "EasyEDA Pro v3 schematic page '%s' was not found and was skipped." ),
+                                      prjSheet.uuid ) , RPT_SEVERITY_WARNING );
             continue;
         }
 
@@ -430,9 +429,9 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
             }
             catch( nlohmann::json::exception& e )
             {
-                wxLogWarning(
-                        wxString::Format( _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
-                                          prjSheet.uuid, e.what() ) );
+                Report(
+                  wxString::Format( _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
+                                    prjSheet.uuid, e.what() ) , RPT_SEVERITY_WARNING );
                 continue;
             }
 
@@ -478,9 +477,9 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
         }
         catch( nlohmann::json::exception& e )
         {
-            wxLogWarning(
-                    wxString::Format( _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
-                                      prjSheet.uuid, e.what() ) );
+            Report(
+              wxString::Format( _( "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s" ),
+                                prjSheet.uuid, e.what() ) , RPT_SEVERITY_WARNING );
             continue;
         }
 
@@ -514,8 +513,8 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
         }
         catch( nlohmann::json::exception& e )
         {
-            wxLogWarning( wxString::Format( _( "EasyEDA Pro v3 device '%s' was skipped due to parse error: %s" ),
-                                            device.title, e.what() ) );
+            Report( wxString::Format( _( "EasyEDA Pro v3 device '%s' was skipped due to parse error: %s" ),
+                                      device.title, e.what() ) , RPT_SEVERITY_WARNING );
             continue;
         }
 
@@ -575,8 +574,8 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
 
     if( v3.GetSkippedCount() > 0 )
     {
-        wxLogWarning( wxString::Format( _( "EasyEDA (JLCEDA) Pro v3 import skipped %d unsupported object(s)." ),
-                                        v3.GetSkippedCount() ) );
+        Report( wxString::Format( _( "EasyEDA (JLCEDA) Pro v3 import skipped %d unsupported object(s)." ),
+                                  v3.GetSkippedCount() ) , RPT_SEVERITY_WARNING );
     }
 
     return rootSheet;

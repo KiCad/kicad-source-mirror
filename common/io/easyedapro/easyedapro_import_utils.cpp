@@ -38,6 +38,7 @@
 #include <wx/wfstream.h>
 #include <wx/mstream.h>
 #include <wx/txtstrm.h>
+#include <trace_helpers.h>
 
 
 namespace
@@ -361,8 +362,8 @@ std::vector<nlohmann::json> EASYEDAPRO::ParseJsonLines( wxInputStream&  aInput,
         }
         catch( nlohmann::json::exception& e )
         {
-            wxLogWarning( wxString::Format( _( "Cannot parse JSON line %d in '%s': %s" ),
-                                            currentLine, aSource, e.what() ) );
+            wxLogTrace( traceEasyEdaIo, wxT( "Cannot parse JSON line %d in '%s': %s" ),
+                                            currentLine, aSource, e.what() );
         }
 
         currentLine++;
@@ -400,8 +401,8 @@ EASYEDAPRO::ParseJsonLinesWithSeparation( wxInputStream& aInput, const wxString&
         }
         catch( nlohmann::json::exception& e )
         {
-            wxLogWarning( wxString::Format( _( "Cannot parse JSON line %d in '%s': %s" ),
-                                            currentLine, aSource, e.what() ) );
+            wxLogTrace( traceEasyEdaIo, wxT( "Cannot parse JSON line %d in '%s': %s" ),
+                                            currentLine, aSource, e.what() );
         }
 
         currentLine++;
@@ -639,8 +640,8 @@ std::map<wxString, EASYEDAPRO::BLOB> EASYEDAPRO::BuildV3BlobMap( const V3_DOC_PA
             }
             catch( nlohmann::json::exception& e )
             {
-                wxLogWarning( wxString::Format( _( "EasyEDA Pro v3 blob in '%s' was skipped due to parse error: %s" ),
-                                                blobDocUuid, e.what() ) );
+                wxLogTrace( traceEasyEdaIo, wxT( "EasyEDA Pro v3 blob in '%s' was skipped due to parse error: %s" ),
+                                                blobDocUuid, e.what() );
             }
         }
     }
@@ -926,7 +927,7 @@ std::map<wxString, EASYEDAPRO::V3_SYMBOL_LIB_ITEM> EASYEDAPRO::BuildV3SymbolLibr
         }
         catch( nlohmann::json::exception& e )
         {
-            wxLogWarning( wxString::Format( _( "Failed to parse EasyEDA Pro v3 device metadata: %s" ), e.what() ) );
+            wxLogTrace( traceEasyEdaIo, wxT( "Failed to parse EasyEDA Pro v3 device metadata: %s" ), e.what() );
             return {};
         }
 

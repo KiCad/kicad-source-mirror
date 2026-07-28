@@ -168,8 +168,6 @@ void ApplyAltiumProjectParametersToProject( PROJECT* aProject,
 PCB_IO_ALTIUM_DESIGNER::PCB_IO_ALTIUM_DESIGNER() :
         PCB_IO( wxS( "Altium Designer" ) )
 {
-    m_reporter = &WXLOG_REPORTER::GetInstance();
-
     RegisterCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
 }
 

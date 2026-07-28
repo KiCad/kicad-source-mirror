@@ -586,8 +586,10 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
             }
             else
             {
-                wxLogError( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
-                            aLineReader->GetSource() );
+                m_owner->Report( wxString::Format( _( "Invalid zero-sized pad ignored in\n"
+                                                      "file: %s" ),
+                                                   aLineReader->GetSource() ),
+                                 RPT_SEVERITY_ERROR );
             }
 
             continue;
@@ -844,7 +846,7 @@ void PCB_IO_GEDA::init( const std::map<std::string, UTF8>* aProperties )
 }
 
 
-void PCB_IO_GEDA::validateCache( const wxString& aLibraryPath, bool checkModified  )
+void PCB_IO_GEDA::validateCache( const wxString& aLibraryPath, bool checkModified )
 {
     if( !m_cache || ( checkModified && m_cache->IsModified() ) )
     {

@@ -99,6 +99,9 @@ BOARD* PCB_IO_FABMASTER::LoadBoard( const wxString& aFileName, BOARD* aAppendToM
 {
     m_props = aProperties;
 
+    // Must be set before Read()/Process(), which emit most of the parse diagnostics.
+    m_fabmaster.SetReporter( m_reporter );
+
     m_board = aAppendToMe ? aAppendToMe : new BOARD();
 
     // Give the filename to the board if it's new

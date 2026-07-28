@@ -37,7 +37,6 @@
 PCB_IO_SOLIDWORKS::PCB_IO_SOLIDWORKS() :
         PCB_IO( wxS( "Solidworks PCB" ) )
 {
-    m_reporter = &WXLOG_REPORTER::GetInstance();
     RegisterCallback( PCB_IO_ALTIUM_DESIGNER::DefaultLayerMappingCallback );
 }
 

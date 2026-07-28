@@ -216,7 +216,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadDocs()
 
         if( it == m_symbols.end() )
         {
-            wxLogWarning( "Symbol '%s' not found in library:\n\n"
+            wxLogTrace( traceSchLegacyPlugin, "Symbol '%s' not found in library:\n\n"
                           "'%s'\n\nat line %d offset %d",
                           aliasName,
                           fn.GetFullPath(),

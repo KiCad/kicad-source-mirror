@@ -281,7 +281,7 @@ long long int ECOORD::ConvertToNm( int aValue, enum EAGLE_UNIT aUnit )
     }
 
     if( ( ret > 0 ) != ( aValue > 0 ) )
-        wxLogError( _( "Invalid size %lld: too large" ), aValue );
+        wxLogTrace( traceEagleIo, wxT( "Invalid size %d: too large" ), aValue );
 
     return ret;
 }

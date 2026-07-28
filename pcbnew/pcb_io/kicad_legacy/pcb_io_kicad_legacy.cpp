@@ -1585,8 +1585,8 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
             }
             else
             {
-                wxLogError( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
-                            m_reader->GetSource() );
+                Report( wxString::Format( _( "Invalid zero-sized pad ignored in\nfile: %s" ),
+                                          m_reader->GetSource() ), RPT_SEVERITY_ERROR );
             }
 
             return;     // preferred exit
@@ -2482,7 +2482,7 @@ void PCB_IO_KICAD_LEGACY::loadZONE_CONTAINER()
         else if( TESTLINE( "ZInfo" ) )      // general info found
         {
             // e.g. 'ZInfo 68183921-93a5-49ac-91b0-49d05a0e1647 310 "COMMON"'
-            char* uuid    = strtok_r( (char*) line + SZ( "ZInfo" ), delims, (char**) &data  );
+            char* uuid    = strtok_r( (char*) line + SZ( "ZInfo" ), delims, (char**) &data );
             int   netcode = intParse( data, &data );
 
             if( ReadDelimitedText( buf, data, sizeof(buf) ) > (int) sizeof(buf) )
@@ -2586,8 +2586,8 @@ void PCB_IO_KICAD_LEGACY::loadZONE_CONTAINER()
             {
                 if( m_showLegacySegmentZoneWarning )
                 {
-                    wxLogWarning( _( "The legacy segment zone fill mode is no longer supported.\n"
-                                     "Zone fills will be converted on a best-effort basis." ) );
+                    Report( _( "The legacy segment zone fill mode is no longer supported.\n"
+                               "Zone fills will be converted on a best-effort basis." ) , RPT_SEVERITY_WARNING );
 
                     m_showLegacySegmentZoneWarning = false;
                 }
@@ -2879,7 +2879,7 @@ void PCB_IO_KICAD_LEGACY::loadPCB_TARGET()
             BIU   pos_y     = biuParse( data, &data );
             BIU   size      = biuParse( data, &data );
             BIU   width     = biuParse( data, &data );
-            char* uuid      = strtok_r( (char*) data, delims, (char**) &data  );
+            char* uuid      = strtok_r( (char*) data, delims, (char**) &data );
 
             if( layer_num < FIRST_NON_COPPER_LAYER )
                 layer_num = FIRST_NON_COPPER_LAYER;

@@ -324,8 +324,8 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
 
     if( adapter.GetSkippedCount() > 0 )
     {
-        wxLogWarning( wxString::Format( _( "EasyEDA (JLCEDA) Pro v3 import skipped %d unsupported object(s)." ),
-                                        adapter.GetSkippedCount() ) );
+        Report( wxString::Format( _( "EasyEDA (JLCEDA) Pro v3 import skipped %d unsupported object(s)." ),
+                                  adapter.GetSkippedCount() ) , RPT_SEVERITY_WARNING );
     }
 
     return m_board;

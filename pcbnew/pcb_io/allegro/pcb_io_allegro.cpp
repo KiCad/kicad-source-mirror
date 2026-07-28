@@ -84,8 +84,6 @@ allegroDefaultLayerMappingCallback( const std::vector<INPUT_LAYER_DESC>& aInputL
 
 PCB_IO_ALLEGRO::PCB_IO_ALLEGRO() : PCB_IO( wxS( "Allegro" ) )
 {
-    m_reporter = &WXLOG_REPORTER::GetInstance();
-
     LAYER_MAPPABLE_PLUGIN::RegisterCallback( allegroDefaultLayerMappingCallback );
 }
 

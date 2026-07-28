@@ -113,9 +113,9 @@ BOARD* PCB_IO_DIPTRACE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe
             if( drcFile.IsOpened() )
                 drcFile.Write( rules );
             else
-                wxLogWarning( _( "DipTrace import: could not write design rules to '%s'; "
-                                 "imported board is missing DipTrace-specific clearance rules." ),
-                              drcPath.GetFullPath() );
+                Report( wxString::Format( _( "DipTrace import: could not write design rules to '%s'; "
+                                             "imported board is missing DipTrace-specific clearance rules." ),
+                                          drcPath.GetFullPath() ), RPT_SEVERITY_WARNING );
         }
     }
 

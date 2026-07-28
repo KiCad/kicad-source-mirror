@@ -94,8 +94,6 @@ void PCAD_PCB::reportUnknownLayer( int aPCadLayer ) const
 
     if( m_reporter )
         m_reporter->Report( msg, RPT_SEVERITY_WARNING );
-    else
-        wxLogWarning( msg );
 }
 
 

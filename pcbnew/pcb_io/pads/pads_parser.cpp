@@ -28,6 +28,7 @@
 #include <cstdlib>
 #include <limits>
 #include <wx/log.h>
+#include <trace_helpers.h>
 
 namespace PADS_IO
 {
@@ -79,7 +80,7 @@ static std::vector<std::string> expandShortcutPattern( const std::string& aPatte
 
     if( std::abs( end - start ) > MAX_EXPANSION )
     {
-        wxLogWarning( wxT( "PADS Import: shortcut range {%d-%d} exceeds limit, skipped" ),
+        wxLogTrace( tracePadsIo, wxT( "PADS Import: shortcut range {%d-%d} exceeds limit, skipped" ),
                       start, end );
         result.push_back( aPattern );
         return result;

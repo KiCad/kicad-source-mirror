@@ -333,7 +333,6 @@ SCH_IO_EAGLE::SCH_IO_EAGLE() : SCH_IO( wxS( "EAGLE" ) ),
     m_schematic( nullptr ),
     m_sheetIndex( 1 )
 {
-    m_reporter = &WXLOG_REPORTER::GetInstance();
 }
 
 

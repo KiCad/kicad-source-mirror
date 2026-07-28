@@ -56,6 +56,7 @@
 #include <fix_board_shape.h>
 #include <pcb_reference_image.h>
 #include <core/mirror.h>
+#include <trace_helpers.h>
 
 
 static const wxString QUERY_MODEL_UUID_KEY = wxS( "JLC_3DModel_Q" );
@@ -1707,7 +1708,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
         auto it = aFootprintMap.find( fpId );
         if( it == aFootprintMap.end() )
         {
-            wxLogError( "Footprint of '%s' with uuid '%s' not found.", fpDesignator, fpId );
+            wxLogTrace( traceEasyEdaIo, "Footprint of '%s' with uuid '%s' not found.", fpDesignator, fpId );
             continue;
         }
 
