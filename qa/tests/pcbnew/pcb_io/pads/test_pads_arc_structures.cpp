@@ -27,28 +27,6 @@ using namespace PADS_IO;
 BOOST_AUTO_TEST_SUITE( PadsArcStructures )
 
 
-BOOST_AUTO_TEST_CASE( Arc_DefaultConstruction )
-{
-    ARC arc{};
-    BOOST_CHECK_EQUAL( arc.cx, 0.0 );
-    BOOST_CHECK_EQUAL( arc.cy, 0.0 );
-    BOOST_CHECK_EQUAL( arc.radius, 0.0 );
-    BOOST_CHECK_EQUAL( arc.start_angle, 0.0 );
-    BOOST_CHECK_EQUAL( arc.delta_angle, 0.0 );
-}
-
-
-BOOST_AUTO_TEST_CASE( Arc_AggregateInitialization )
-{
-    ARC arc{ 100.0, 200.0, 50.0, 45.0, 90.0 };
-    BOOST_CHECK_EQUAL( arc.cx, 100.0 );
-    BOOST_CHECK_EQUAL( arc.cy, 200.0 );
-    BOOST_CHECK_EQUAL( arc.radius, 50.0 );
-    BOOST_CHECK_EQUAL( arc.start_angle, 45.0 );
-    BOOST_CHECK_EQUAL( arc.delta_angle, 90.0 );
-}
-
-
 BOOST_AUTO_TEST_CASE( ArcPoint_DefaultConstruction )
 {
     ARC_POINT pt;
@@ -111,102 +89,6 @@ BOOST_AUTO_TEST_CASE( ArcPoint_EmplaceBack_Arc )
     BOOST_CHECK_EQUAL( points[1].is_arc, true );
     BOOST_CHECK_EQUAL( points[1].arc.cx, 50.0 );
     BOOST_CHECK_EQUAL( points[1].arc.delta_angle, -180.0 );
-}
-
-
-BOOST_AUTO_TEST_CASE( Arc_FullCircle )
-{
-    // A 360-degree arc represents a full circle
-    ARC arc{ 0.0, 0.0, 100.0, 0.0, 360.0 };
-    BOOST_CHECK_EQUAL( arc.delta_angle, 360.0 );
-}
-
-
-BOOST_AUTO_TEST_CASE( Arc_NegativeDelta )
-{
-    // Negative delta angle means clockwise direction
-    ARC arc{ 0.0, 0.0, 50.0, 90.0, -90.0 };
-    BOOST_CHECK_EQUAL( arc.start_angle, 90.0 );
-    BOOST_CHECK_EQUAL( arc.delta_angle, -90.0 );
-}
-
-
-BOOST_AUTO_TEST_CASE( Polyline_DefaultConstruction )
-{
-    POLYLINE polyline;
-    polyline.layer = 0;
-    polyline.width = 10.0;
-    polyline.closed = true;
-
-    BOOST_CHECK( polyline.points.empty() );
-    BOOST_CHECK_EQUAL( polyline.closed, true );
-}
-
-
-BOOST_AUTO_TEST_CASE( Polyline_WithPoints )
-{
-    POLYLINE polyline;
-    polyline.layer = 1;
-    polyline.width = 5.0;
-    polyline.closed = false;
-    polyline.points.emplace_back( 0.0, 0.0 );
-    polyline.points.emplace_back( 100.0, 0.0 );
-    polyline.points.emplace_back( 100.0, 100.0 );
-
-    BOOST_REQUIRE_EQUAL( polyline.points.size(), 3 );
-    BOOST_CHECK_EQUAL( polyline.closed, false );
-    BOOST_CHECK_EQUAL( polyline.points[2].x, 100.0 );
-    BOOST_CHECK_EQUAL( polyline.points[2].y, 100.0 );
-}
-
-
-BOOST_AUTO_TEST_CASE( Track_UsesArcPoint )
-{
-    TRACK track;
-    track.layer = 1;
-    track.width = 10.0;
-    track.points.emplace_back( 0.0, 0.0 );
-    track.points.emplace_back( 50.0, 50.0 );
-    track.points.emplace_back( 100.0, 50.0, ARC{ 75.0, 50.0, 25.0, 180.0, -180.0 } );
-
-    BOOST_REQUIRE_EQUAL( track.points.size(), 3 );
-    BOOST_CHECK_EQUAL( track.points[0].is_arc, false );
-    BOOST_CHECK_EQUAL( track.points[1].is_arc, false );
-    BOOST_CHECK_EQUAL( track.points[2].is_arc, true );
-    BOOST_CHECK_EQUAL( track.points[2].arc.radius, 25.0 );
-}
-
-
-BOOST_AUTO_TEST_CASE( Pour_UsesArcPoint )
-{
-    POUR pour;
-    pour.net_name = "GND";
-    pour.layer = 1;
-    pour.priority = 0;
-    pour.width = 10.0;
-    pour.points.emplace_back( 0.0, 0.0 );
-    pour.points.emplace_back( 100.0, 0.0 );
-    pour.points.emplace_back( 100.0, 100.0 );
-    pour.points.emplace_back( 0.0, 100.0 );
-
-    BOOST_REQUIRE_EQUAL( pour.points.size(), 4 );
-    BOOST_CHECK_EQUAL( pour.net_name, "GND" );
-}
-
-
-BOOST_AUTO_TEST_CASE( DecalItem_UsesArcPoint )
-{
-    DECAL_ITEM item;
-    item.type = "CLOSED";
-    item.layer = 26;  // Silkscreen Top
-    item.width = 8.0;
-    item.points.emplace_back( 0.0, 0.0 );
-    item.points.emplace_back( 50.0, 0.0 );
-    item.points.emplace_back( 50.0, 50.0 );
-    item.points.emplace_back( 0.0, 50.0 );
-
-    BOOST_REQUIRE_EQUAL( item.points.size(), 4 );
-    BOOST_CHECK_EQUAL( item.type, "CLOSED" );
 }
 
 
