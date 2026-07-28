@@ -234,7 +234,7 @@ private:
 
 
 DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob ) :
-        DIALOG_SYMBOL_FIELDS_TABLE_BASE( parent ),
+        DIALOG_FIELDS_TABLE_BASE( parent ),
         m_currentBomPreset( nullptr ),
         m_lastSelectedBomPreset( nullptr ),
         m_parent( parent ),
@@ -358,6 +358,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     if( m_job )
         SetTitle( m_job->GetSettingsDialogTitle() );
+    else
+        SetTitle( _( "Symbol Fields Table" ) );
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
     // non-job versions (which have different sizes).

@@ -39,12 +39,14 @@ class WX_GRID;
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
+#include "kicommon.h"
+
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_SYMBOL_FIELDS_TABLE_BASE
+/// Class DIALOG_FIELDS_TABLE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
+class KICOMMON_API DIALOG_FIELDS_TABLE_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -144,9 +146,9 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Fields Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
+		DIALOG_FIELDS_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fields Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
 
-		~DIALOG_SYMBOL_FIELDS_TABLE_BASE();
+		~DIALOG_FIELDS_TABLE_BASE();
 
 };
 

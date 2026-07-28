@@ -3,7 +3,7 @@
   <FileVersion major="1" minor="18"/>
   <object class="Project" expanded="true">
     <property name="code_generation">C++</property>
-    <property name="cpp_class_decoration"></property>
+    <property name="cpp_class_decoration">KICOMMON_API; kicommon.h; </property>
     <property name="cpp_disconnect_events">1</property>
     <property name="cpp_event_generation">connect</property>
     <property name="cpp_help_provider">none</property>
@@ -13,12 +13,12 @@
     <property name="cpp_use_enum">0</property>
     <property name="embedded_files_path">res</property>
     <property name="encoding">UTF-8</property>
-    <property name="file">dialog_symbol_fields_table_base</property>
+    <property name="file">dialog_fields_table_base</property>
     <property name="first_id">1000</property>
     <property name="internationalize">1</property>
     <property name="lua_skip_events">1</property>
     <property name="lua_ui_table">UI</property>
-    <property name="name">dialog_symbol_fields_table_base</property>
+    <property name="name">dialog_fields_table_base</property>
     <property name="path">.</property>
     <property name="php_disconnect_events">0</property>
     <property name="php_disconnect_mode">source_name</property>
@@ -48,12 +48,12 @@
       <property name="id">wxID_ANY</property>
       <property name="maximum_size"></property>
       <property name="minimum_size">-1,-1</property>
-      <property name="name">DIALOG_SYMBOL_FIELDS_TABLE_BASE</property>
+      <property name="name">DIALOG_FIELDS_TABLE_BASE</property>
       <property name="pos"></property>
       <property name="size">-1,-1</property>
       <property name="style">wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER</property>
       <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-      <property name="title">Symbol Fields Table</property>
+      <property name="title">Fields Table</property>
       <property name="tooltip"></property>
       <property name="two_step_creation">0</property>
       <property name="window_extra_style"></property>
@@ -1544,7 +1544,7 @@
                         <property name="border">5</property>
                         <property name="flag">wxEXPAND|wxALL</property>
                         <property name="proportion">1</property>
-                        <object class="wxNotebook" expanded="false">
+                        <object class="wxNotebook" expanded="true">
                           <property name="BottomDockable">1</property>
                           <property name="LeftDockable">1</property>
                           <property name="RightDockable">1</property>
@@ -1602,7 +1602,7 @@
                           <object class="notebookpage" expanded="false">
                             <property name="bitmap"></property>
                             <property name="label">Edit</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="false">
                               <property name="BottomDockable">1</property>
                               <property name="LeftDockable">1</property>
@@ -2294,10 +2294,10 @@
                               </object>
                             </object>
                           </object>
-                          <object class="notebookpage" expanded="false">
+                          <object class="notebookpage" expanded="true">
                             <property name="bitmap"></property>
                             <property name="label">Export</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="false">
                               <property name="BottomDockable">1</property>
                               <property name="LeftDockable">1</property>
@@ -3053,14 +3053,14 @@
                                         <event name="OnCheckBox">OnPreviewRefresh</event>
                                       </object>
                                     </object>
-                                    <object class="gbsizeritem" expanded="true">
+                                    <object class="gbsizeritem" expanded="false">
                                       <property name="border">5</property>
                                       <property name="colspan">2</property>
                                       <property name="column">0</property>
                                       <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                                       <property name="row">6</property>
                                       <property name="rowspan">1</property>
-                                      <object class="wxCheckBox" expanded="true">
+                                      <object class="wxCheckBox" expanded="false">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>

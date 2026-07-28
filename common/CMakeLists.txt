@@ -237,6 +237,7 @@ set( KICOMMON_SRCS
     tool/ui/toolbar_configuration.cpp
     tool/ui/toolbar_context_menu_registry.cpp
 
+    dialogs/dialog_fields_table_base.cpp
     dialogs/dialog_rc_job.cpp
     dialogs/dialog_rc_job_base.cpp
     dialogs/dialog_restore_local_history.cpp

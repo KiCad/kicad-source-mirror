@@ -22,7 +22,7 @@
 
 #include <set>
 
-#include <dialog_symbol_fields_table_base.h>
+#include <dialog_fields_table_base.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
 #include <fields_data_model.h>
@@ -34,7 +34,7 @@ class SCH_EDIT_FRAME;
 class JOB_EXPORT_BOM;
 
 
-class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_SYMBOL_FIELDS_TABLE_BASE, public SCHEMATIC_LISTENER
+class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE, public SCHEMATIC_LISTENER
 {
 public:
     DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob = nullptr );
