@@ -39,6 +39,7 @@
 #include <cmath>
 #include <cstdio>   // used only for debug
 #include <ctime>    // used for representation of x axes involving date
+#include <limits>
 #include <set>
 
 // Memory leak debugging
@@ -52,6 +53,33 @@
 
 // See doxygen comments.
 double mpWindow::zoomIncrementalFactor = 1.1;
+
+
+bool mpFiniteRange( const std::vector<double>& aValues, double& aMin, double& aMax )
+{
+    bool found = false;
+
+    for( const double value : aValues )
+    {
+        if( !std::isfinite( value ) )
+            continue;
+
+        if( found )
+        {
+            aMin = std::min( aMin, value );
+            aMax = std::max( aMax, value );
+        }
+        else
+        {
+            aMin = value;
+            aMax = value;
+            found = true;
+        }
+    }
+
+    return found;
+}
+
 
 // -----------------------------------------------------------------------------
 // mpLayer
@@ -475,11 +503,15 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
     double x, y;
     // Do this to reset the counters to evaluate bounding box for label positioning
     Rewind();
-    GetNextXY( x, y );
-    maxDrawX = x;
-    minDrawX = x;
-    maxDrawY = y;
-    minDrawY = y;
+
+    if( GetNextXY( x, y ) && std::isfinite( x ) && std::isfinite( y ) )
+    {
+        maxDrawX = x;
+        minDrawX = x;
+        maxDrawY = y;
+        minDrawY = y;
+    }
+
     // drawnPoints = 0;
     Rewind();
 
@@ -493,6 +525,10 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
         while( GetNextXY( x, y ) )
         {
+            // a non-finite sample has no position on the axis, so there is nothing to draw
+            if( !std::isfinite( x ) || !std::isfinite( y ) )
+                continue;
+
             double px = m_scaleX->TransformToPlot( x );
             double py = m_scaleY->TransformToPlot( y );
             wxCoord newX = w.x2p( px );
@@ -554,6 +590,87 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
         // because at least on Windows dc.DrawLines() can hang for a lot of points.  Note that
         // this includes the intermediate points when drawing dotted lines.
 
+        // A buffer for the merged points, reused across the runs of a fragmented trace
+        std::vector<wxPoint> drawPoints;
+        drawPoints.reserve( ( endPx - startPx ) * 2 );
+
+        // Short verticals spoil anti-aliasing on Retina displays, so only significant
+        // aggregations are worth the ink; the user can zoom in for detail
+        auto flushVertical =
+                [&]()
+                {
+                    if( count && dupx0 > 1 && abs( ymax0 - ymin0 ) > 2 )
+                        dc.DrawLine( x0, ymin0, x0, ymax0 );
+                };
+
+        auto flushPolyline =
+                [&]()
+                {
+                    if( pointList.size() > 1 )
+                    {
+                        // Second pass optimization is to merge horizontal segments.  This improves
+                        // the look of dotted lines, keeps the point count down, and it's easy.
+                        //
+                        // This pass also includes a final protection to keep MSW from hanging by
+                        // chunking to a size it can handle.
+                        drawPoints.clear();
+
+#ifdef __WXMSW__
+                        int chunkSize = 10000;
+#else
+                        int chunkSize = 100000;
+#endif
+                        wxPenStyle penStyle = dc.GetPen().GetStyle();
+                        bool isSolidPen = ( penStyle == wxPENSTYLE_SOLID
+                                            || penStyle == wxPENSTYLE_TRANSPARENT );
+
+                        if( !isSolidPen )
+                            chunkSize /= 500;
+
+                        drawPoints.push_back( pointList[0] );   // push the first point in list
+
+                        for( size_t ii = 1; ii < pointList.size()-1; ii++ )
+                        {
+                            // Skip intermediate points between the first point and the last point
+                            // of the segment candidate. This optimization merges horizontal line
+                            // segments, which breaks non-solid pen styles by altering segment
+                            // lengths.
+                            if( isSolidPen
+                                && drawPoints.back().y == pointList[ii].y
+                                && drawPoints.back().y == pointList[ii+1].y )
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                drawPoints.push_back( pointList[ii] );
+
+                                if( (int) drawPoints.size() > chunkSize )
+                                {
+                                    dc.DrawLines( (int) drawPoints.size(), &drawPoints[0] );
+                                    drawPoints.clear();
+
+                                    // Restart the line with the current point
+                                    drawPoints.push_back( pointList[ii] );
+                                }
+                            }
+                        }
+
+                        // push the last point to draw in list
+                        if( drawPoints.back() != pointList.back() )
+                            drawPoints.push_back( pointList.back() );
+
+                        dc.DrawLines( (int) drawPoints.size(), &drawPoints[0] );
+                    }
+
+                    pointList.clear();
+                    count = 0;
+
+                    // offRight allows one point past the right edge so the line reaches it; each
+                    // run of points gets that allowance for itself
+                    offRight = false;
+                };
+
         // Our first-pass optimization is to exclude points outside the view, and aggregate all
         // contiguous y values found at a single x value into a vertical line.
         while( hasNext )
@@ -561,6 +678,15 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
             x = nextX;
             y = nextY;
             hasNext = GetNextXY( nextX, nextY );
+
+            // A non-finite sample has no position on the axis, so end the run of points here and
+            // let the trace show a gap rather than a line bridging the missing data
+            if( !std::isfinite( x ) || !std::isfinite( y ) )
+            {
+                flushVertical();
+                flushPolyline();
+                continue;
+            }
 
             double px = m_scaleX->TransformToPlot( x );
             double py = m_scaleY->TransformToPlot( y );
@@ -574,6 +700,10 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
             // is drawn, the x1 low limit is startPx-1 in plot coordinates
             if( x1 < startPx-1 )
             {
+                // a non-finite neighbour cannot pull this point into view
+                if( !std::isfinite( nextX ) )
+                    continue;
+
                 wxCoord nextX1 = w.x2p( m_scaleX->TransformToPlot( nextX ) );
 
                 if( nextX1 < startPx-1 )
@@ -589,12 +719,7 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
             if( !count || line_start.x != x1 )
             {
-                // We've aggregated a bunch of y values with a shared x value, so we need to draw
-                // a vertical line.  However, short vertical segments spoil anti-aliasing on
-                // Retina displays, so only draw them if they're "significant" (the user should
-                // zoom in if they need a more accurate picture).
-                if( count && dupx0 > 1 && abs( ymax0 - ymin0 ) > 2 )
-                    dc.DrawLine( x0, ymin0, x0, ymax0 );
+                flushVertical();
 
                 x0 = x1;
                 ymin0 = ymax0 = y1;
@@ -615,62 +740,7 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
             }
         }
 
-        if( pointList.size() > 1 )
-        {
-            // Second pass optimization is to merge horizontal segments.  This improves the look
-            // of dotted lines, keeps the point count down, and it's easy.
-            //
-            // This pass also includes a final protection to keep MSW from hanging by chunking to
-            // a size it can handle.
-            std::vector<wxPoint> drawPoints;
-            drawPoints.reserve( ( endPx - startPx ) * 2 );
-
-#ifdef __WXMSW__
-            int chunkSize = 10000;
-#else
-            int chunkSize = 100000;
-#endif
-            wxPenStyle penStyle = dc.GetPen().GetStyle();
-            bool isSolidPen = ( penStyle == wxPENSTYLE_SOLID
-                                || penStyle == wxPENSTYLE_TRANSPARENT );
-
-            if( !isSolidPen )
-                chunkSize /= 500;
-
-            drawPoints.push_back( pointList[0] );   // push the first point in list
-
-            for( size_t ii = 1; ii < pointList.size()-1; ii++ )
-            {
-                // Skip intermediate points between the first point and the last point of the
-                // segment candidate. This optimization merges horizontal line segments, which
-                // breaks non-solid pen styles by altering segment lengths.
-                if( isSolidPen
-                    && drawPoints.back().y == pointList[ii].y
-                    && drawPoints.back().y == pointList[ii+1].y )
-                {
-                    continue;
-                }
-                else
-                {
-                    drawPoints.push_back( pointList[ii] );
-
-                    if( (int) drawPoints.size() > chunkSize )
-                    {
-                        dc.DrawLines( (int) drawPoints.size(), &drawPoints[0] );
-                        drawPoints.clear();
-
-                        // Restart the line with the current point
-                        drawPoints.push_back( pointList[ii] );
-                    }
-                }
-            }
-
-            // push the last point to draw in list
-            if( drawPoints.back() != pointList.back() )
-                drawPoints.push_back( pointList.back() );
-
-            dc.DrawLines( (int) drawPoints.size(), &drawPoints[0] );
-        }
+        flushPolyline();
     }
 
     if( !m_name.IsEmpty() && m_showName )
@@ -2709,39 +2779,15 @@ void mpFXYVector::SetData( const std::vector<double>& xs, const std::vector<doub
     m_xs    = xs;
     m_ys    = ys;
 
-    // Update internal variables for the bounding box.
-    if( xs.size() > 0 )
-    {
-        m_minX  = xs[0];
-        m_maxX  = xs[0];
-        m_minY  = ys[0];
-        m_maxY  = ys[0];
+    // An axis with nothing finite to show is left NaN so UpdateScales() knows this layer cannot
+    // constrain it
+    const double unbounded = std::numeric_limits<double>::quiet_NaN();
 
-        for( const double x : xs )
-        {
-            if( x < m_minX )
-                m_minX = x;
+    if( !mpFiniteRange( m_xs, m_minX, m_maxX ) )
+        m_minX = m_maxX = unbounded;
 
-            if( x > m_maxX )
-                m_maxX = x;
-        }
-
-        for( const double y : ys )
-        {
-            if( y < m_minY )
-                m_minY = y;
-
-            if( y > m_maxY )
-                m_maxY = y;
-        }
-    }
-    else
-    {
-        m_minX  = 0;
-        m_maxX  = 0;
-        m_minY  = 0;
-        m_maxY  = 0;
-    }
+    if( !mpFiniteRange( m_ys, m_minY, m_maxY ) )
+        m_minY = m_maxY = unbounded;
 }
 
 
@@ -2756,10 +2802,12 @@ void mpFXY::SetScale( mpScaleBase* scaleX, mpScaleBase* scaleY )
 
 void mpFXY::UpdateScales()
 {
-    if( m_scaleX )
+    // Bounds are NaN when the layer holds nothing plottable on that axis; extending the range
+    // with them would poison it for every other layer
+    if( m_scaleX && std::isfinite( GetMinX() ) && std::isfinite( GetMaxX() ) )
         m_scaleX->ExtendDataRange( GetMinX(), GetMaxX() );
 
-    if( m_scaleY )
+    if( m_scaleY && std::isfinite( GetMinY() ) && std::isfinite( GetMaxY() ) )
         m_scaleY->ExtendDataRange( GetMinY(), GetMaxY() );
 }
 
