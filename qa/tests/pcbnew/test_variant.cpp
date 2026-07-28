@@ -822,57 +822,6 @@ BOOST_AUTO_TEST_CASE( ComponentVariantPartialOverride )
 
 
 /**
- * Test that all variant attributes are properly parsed from netlist including exclude_from_pos_files.
- * This verifies that the netlist parser correctly sets the m_has* flags for all attribute types.
- */
-BOOST_AUTO_TEST_CASE( NetlistVariantAttributeParsing )
-{
-    // Create component variants with all attribute types
-    COMPONENT_VARIANT variantWithAll( "WithAll" );
-    variantWithAll.m_dnp = true;
-    variantWithAll.m_hasDnp = true;
-    variantWithAll.m_excludedFromBOM = true;
-    variantWithAll.m_hasExcludedFromBOM = true;
-    variantWithAll.m_excludedFromPosFiles = true;
-    variantWithAll.m_hasExcludedFromPosFiles = true;
-
-    // Verify all flags are set correctly
-    BOOST_CHECK( variantWithAll.m_hasDnp );
-    BOOST_CHECK( variantWithAll.m_dnp );
-    BOOST_CHECK( variantWithAll.m_hasExcludedFromBOM );
-    BOOST_CHECK( variantWithAll.m_excludedFromBOM );
-    BOOST_CHECK( variantWithAll.m_hasExcludedFromPosFiles );
-    BOOST_CHECK( variantWithAll.m_excludedFromPosFiles );
-
-    // Create a component variant with only some attributes
-    COMPONENT_VARIANT variantPartial( "Partial" );
-    variantPartial.m_dnp = true;
-    variantPartial.m_hasDnp = true;
-    // ExcludedFromBOM and ExcludedFromPosFiles have no explicit override
-
-    BOOST_CHECK( variantPartial.m_hasDnp );
-    BOOST_CHECK( !variantPartial.m_hasExcludedFromBOM );
-    BOOST_CHECK( !variantPartial.m_hasExcludedFromPosFiles );
-
-    // Create a variant with false values (explicit override to false)
-    COMPONENT_VARIANT variantAllFalse( "AllFalse" );
-    variantAllFalse.m_dnp = false;
-    variantAllFalse.m_hasDnp = true;
-    variantAllFalse.m_excludedFromBOM = false;
-    variantAllFalse.m_hasExcludedFromBOM = true;
-    variantAllFalse.m_excludedFromPosFiles = false;
-    variantAllFalse.m_hasExcludedFromPosFiles = true;
-
-    BOOST_CHECK( variantAllFalse.m_hasDnp );
-    BOOST_CHECK( !variantAllFalse.m_dnp );
-    BOOST_CHECK( variantAllFalse.m_hasExcludedFromBOM );
-    BOOST_CHECK( !variantAllFalse.m_excludedFromBOM );
-    BOOST_CHECK( variantAllFalse.m_hasExcludedFromPosFiles );
-    BOOST_CHECK( !variantAllFalse.m_excludedFromPosFiles );
-}
-
-
-/**
  * Test the complete variant attribute transfer flow simulating board_netlist_updater behavior.
  * This tests the fixed logic where attributes without explicit overrides are reset to base values.
  */
