@@ -109,6 +109,16 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY;
 class WXDLLIMPEXP_MATHPLOT mpWindow;
 class WXDLLIMPEXP_MATHPLOT mpPrintout;
 
+/** Find the smallest and largest finite value in \a aValues.
+ *  Non-finite samples have no position on an axis, so they are left out of the range instead of
+ *  poisoning it.
+ *  @param aMin receives the smallest finite value.
+ *  @param aMax receives the largest finite value.
+ *  @return false if \a aValues holds no finite value, in which case aMin and aMax are untouched.
+ */
+bool WXDLLIMPEXP_MATHPLOT mpFiniteRange( const std::vector<double>& aValues, double& aMin,
+                                         double& aMax );
+
 /** Command IDs used by mpWindow */
 enum
 {

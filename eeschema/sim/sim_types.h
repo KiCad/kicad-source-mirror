@@ -27,6 +27,9 @@
 #ifndef SIM_TYPES_H
 #define SIM_TYPES_H
 
+#include <cmath>
+#include <limits>
+
 ///< Possible simulation types
 enum SIM_TYPE
 {
@@ -66,5 +69,25 @@ enum SIM_TRACE_TYPE
 
     SPT_UNKNOWN       = 0x0000
 };
+
+
+/**
+ * Convert a linear magnitude to decibels.
+ *
+ * A node carrying no signal is a routine AC result, not an error, and its zero magnitude has no
+ * logarithm.  Reporting NaN lets consumers leave a gap rather than draw the node at some finite
+ * level it never had.
+ *
+ * @param aMagnitude is a linear magnitude, normally non-negative.
+ * @return the magnitude in dB, or NaN if it has none.
+ */
+inline double MagnitudeToDb( double aMagnitude )
+{
+    // Also catches a NaN magnitude, which has no dB value either
+    if( !( aMagnitude > 0.0 ) )
+        return std::numeric_limits<double>::quiet_NaN();
+
+    return 20.0 * std::log10( aMagnitude );
+}
 
 #endif /* SIM_TYPES_H */
