@@ -139,20 +139,7 @@ int REFDES_TRACKER::GetNextRefDesForUnits( const SCH_REFERENCE& aRef,
                 continue;
             }
 
-            // Check if required units are available
-            bool unitsAvailable;
-            if( m_externalUnitsChecker )
-            {
-                // Use external units checker if available
-                unitsAvailable = m_externalUnitsChecker( aRef, mapIt->second, validUnits );
-            }
-            else
-            {
-                // Use default implementation
-                unitsAvailable = areUnitsAvailable( aRef, mapIt->second, validUnits );
-            }
-
-            if( unitsAvailable )
+            if( areUnitsAvailable( aRef, mapIt->second, validUnits ) )
             {
                 // All required units are available - this is our answer
                 // Note: Don't insert into tracker since reference is already in use
@@ -583,26 +570,4 @@ std::vector<std::string> REFDES_TRACKER::splitString( const std::string& aStr, c
         result.push_back( current );
 
     return result;
-}
-
-
-void REFDES_TRACKER::SetUnitsChecker( const UNITS_CHECKER_FUNC<SCH_REFERENCE>& aChecker )
-{
-    std::unique_lock<std::mutex> lock;
-
-    if( m_threadSafe )
-        lock = std::unique_lock<std::mutex>( m_mutex );
-
-    m_externalUnitsChecker = aChecker;
-}
-
-
-void REFDES_TRACKER::ClearUnitsChecker()
-{
-    std::unique_lock<std::mutex> lock;
-
-    if( m_threadSafe )
-        lock = std::unique_lock<std::mutex>( m_mutex );
-
-    m_externalUnitsChecker = nullptr;
 }

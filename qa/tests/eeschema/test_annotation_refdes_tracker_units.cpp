@@ -20,19 +20,32 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include "eeschema_test_utils.h"
 
+#include <lib_id.h>
 #include <refdes_tracker.h>
 #include <sch_reference_list.h>
+#include <sch_symbol.h>
+
+#include <memory>
+
+/// One existing reference occupying a reference number.
+struct EXISTING_REF
+{
+    std::string m_value;
+    std::string m_libName;
+    int         m_unit;
+};
 
 struct REFDES_UNITS_TEST_CASE
 {
-    std::string m_caseName;
-    std::string m_testRefPrefix;
-    std::string m_testRefValue;
-    std::map<int, std::vector<std::tuple<std::string, int>>> m_refNumberMap; // Map of ref number to vector of (value, unit) tuples
-    std::vector<int> m_requiredUnits;
-    int m_minValue;
-    int m_expectedResult;
-    std::vector<std::string> m_trackerPreloads; // References to preload in tracker
+    std::string                                m_caseName;
+    std::string                                m_testRefPrefix;
+    std::string                                m_testRefValue;
+    std::string                                m_testRefLibName;
+    std::map<int, std::vector<EXISTING_REF>>   m_refNumberMap;
+    std::vector<int>                           m_requiredUnits;
+    int                                        m_minValue;
+    int                                        m_expectedResult;
+    std::vector<std::string>                   m_trackerPreloads;
 };
 
 class TEST_REFDES_TRACKER_UNITS : public KI_TEST::SCHEMATIC_TEST_FIXTURE
@@ -40,13 +53,16 @@ class TEST_REFDES_TRACKER_UNITS : public KI_TEST::SCHEMATIC_TEST_FIXTURE
 protected:
     void runTestCase( const REFDES_UNITS_TEST_CASE& testCase );
 
-    // Helper method to create test references
-    SCH_REFERENCE createTestReference( const std::string& aRefPrefix, const std::string& aValue, int aUnit )
+    /// SCH_REFERENCE holds a raw pointer to its symbol and CompareLibName dereferences it, so the
+    /// fixture has to own every symbol it hands out.
+    SCH_REFERENCE createTestReference( const std::string& aRefPrefix, const std::string& aValue, int aUnit,
+                                       const std::string& aLibName = "TestPart" )
     {
-        SCH_SYMBOL dummySymbol;
-        SCH_SHEET_PATH dummyPath;
+        SCH_SYMBOL* symbol = m_symbols.emplace_back( std::make_unique<SCH_SYMBOL>() ).get();
+        symbol->SetLibId( LIB_ID( wxEmptyString, aLibName ) );
 
-        SCH_REFERENCE ref( &dummySymbol, dummyPath );
+        SCH_SHEET_PATH path;
+        SCH_REFERENCE  ref( symbol, path );
         ref.SetRef( aRefPrefix );
         ref.SetValue( aValue );
         ref.SetUnit( aUnit );
@@ -54,175 +70,237 @@ protected:
         return ref;
     }
 
-    // Helper method to setup units checker
-    void setupRefDesTracker( REFDES_TRACKER& tracker )
-    {
-        tracker.SetReuseRefDes( false ); // Disable reuse for these tests
-        tracker.SetUnitsChecker( []( const SCH_REFERENCE& aTestRef,
-                                     const std::vector<SCH_REFERENCE>& aExistingRefs,
-                                     const std::vector<int>& aRequiredUnits )
-        {
-            // Check if all required units are available
-            for( int unit : aRequiredUnits )
-            {
-                for( const auto& ref : aExistingRefs )
-                {
-                    if( ref.GetUnit() == unit
-                        || ref.CompareValue( aTestRef ) != 0 )
-                    {
-                        return false; // Conflict found
-                    }
-                }
-            }
-            return true; // All required units are available
-        } );
-    }
+private:
+    std::vector<std::unique_ptr<SCH_SYMBOL>> m_symbols;
 };
 
 void TEST_REFDES_TRACKER_UNITS::runTestCase( const REFDES_UNITS_TEST_CASE& testCase )
 {
+    BOOST_TEST_INFO_SCOPE( testCase.m_caseName );
+
     REFDES_TRACKER tracker;
+    tracker.SetReuseRefDes( false );
 
-    // Preload tracker with existing references
     for( const std::string& ref : testCase.m_trackerPreloads )
-    {
         tracker.Insert( ref );
-    }
 
-    // Create test reference
-    SCH_REFERENCE testRef = createTestReference( testCase.m_testRefPrefix, testCase.m_testRefValue, 1 );
+    SCH_REFERENCE testRef = createTestReference( testCase.m_testRefPrefix, testCase.m_testRefValue, 1,
+                                                 testCase.m_testRefLibName );
 
-    // Convert test case data to actual SCH_REFERENCE map
     std::map<int, std::vector<SCH_REFERENCE>> refNumberMap;
-    for( const auto& [refNum, tupleVec] : testCase.m_refNumberMap )
+
+    for( const auto& [refNum, existing] : testCase.m_refNumberMap )
     {
         std::vector<SCH_REFERENCE> refs;
-        for( const auto& [value, unit] : tupleVec )
-        {
-            refs.push_back( createTestReference( testCase.m_testRefPrefix, value, unit ) );
-        }
+
+        for( const EXISTING_REF& e : existing )
+            refs.push_back( createTestReference( testCase.m_testRefPrefix, e.m_value, e.m_unit, e.m_libName ) );
+
         refNumberMap[refNum] = refs;
     }
 
-    BOOST_TEST_INFO( "Testing case: " + testCase.m_caseName );
-
-    setupRefDesTracker( tracker );
-
-    // Test GetNextRefDesForUnits logic using the 4-parameter method
-    int result = tracker.GetNextRefDesForUnits( testRef,
-                                               refNumberMap,
-                                               testCase.m_requiredUnits,
-                                               testCase.m_minValue );
+    int result = tracker.GetNextRefDesForUnits( testRef, refNumberMap, testCase.m_requiredUnits,
+                                                testCase.m_minValue );
 
     BOOST_CHECK_EQUAL( result, testCase.m_expectedResult );
+    BOOST_CHECK_GE( result, testCase.m_minValue );
 
-    // Additional verification: check that the result reference is in the tracker
-    // (unless it was a case where units were available in existing reference)
-    std::string resultRefDes = testCase.m_testRefPrefix + std::to_string( result );
+    const std::string resultRefDes = testCase.m_testRefPrefix + std::to_string( result );
+    auto              selected = testCase.m_refNumberMap.find( result );
 
-    // Check if this reference number was already in use
-    bool wasInUse = testCase.m_refNumberMap.find( result ) != testCase.m_refNumberMap.end();
-
-    if( !wasInUse && !testCase.m_requiredUnits.empty() )
+    if( selected == testCase.m_refNumberMap.end() )
     {
-        // For completely new references, it should be added to tracker
+        // A freshly allocated number is reserved, and must not have been preloaded as used
         BOOST_CHECK( tracker.Contains( resultRefDes ) );
+        BOOST_CHECK( std::find( testCase.m_trackerPreloads.begin(), testCase.m_trackerPreloads.end(),
+                                resultRefDes ) == testCase.m_trackerPreloads.end() );
+    }
+    else
+    {
+        // Sharing an occupied number is only legal when every requested unit is genuinely free on
+        // a part with the same library item and value
+        for( int unit : testCase.m_requiredUnits )
+        {
+            if( unit < 0 )
+                continue;
+
+            for( const EXISTING_REF& e : selected->second )
+            {
+                BOOST_CHECK( e.m_unit != unit );
+                BOOST_CHECK_EQUAL( e.m_value, testCase.m_testRefValue );
+                BOOST_CHECK_EQUAL( e.m_libName, testCase.m_testRefLibName );
+            }
+        }
     }
 }
 
 static const std::vector<REFDES_UNITS_TEST_CASE> refdesUnitsTestCases = {
     {
-        "Case 1: Completely unused reference - empty units",
-        "U", "LM358",
-        {}, // No currently used references
-        {}, // Empty required units (need completely unused)
-        1,  // Min value
-        1,  // Expected: U1
-        {}  // No preloaded references
+        "Completely unused reference - empty units",
+        "U", "LM358", "OpAmp_Dual",
+        {}, // no existing references for any refdes
+        {}, // no required units, so any brand new refdes is acceptable
+        1,  // min value
+        1,  // expected U1
+        {}  // no preloaded refdes
     },
     {
-        "Case 2: Completely unused reference - with units",
-        "U", "LM358",
-        {}, // No currently used references
-        {1, 2}, // Need units 1 and 2
-        1,  // Min value
-        1,  // Expected: U1
-        {}  // No preloaded references
+        "Completely unused reference - with units",
+        "U", "LM358", "OpAmp_Dual",
+        {}, // no existing references for any refdes
+        { 1, 2 }, // need units 1 and 2
+        1,  // min value
+        1,  // expected U1
+        {}  // no preloaded refdes
     },
     {
-        "Case 3: Skip currently in use reference",
-        "U", "LM358",
-        {
-            { 1, { std::make_tuple("LM358", 1) } } // U1 unit 1 in use
-        },
-        {1, 2}, // Need units 1 and 2
-        1,  // Min value
-        2,  // Expected: U2 (U1 conflicts with unit 1)
+        "Skip currently in use reference",
+        "U", "LM358", "OpAmp_Dual",
+        { { 1, { { "LM358", "OpAmp_Dual", 1 } } } }, // U1 unit 1 in use
+        { 1, 2 }, // need units 1 and 2
+        1,  // min value
+        2,  // expected U2, U1 conflicts on unit 1
         {}
     },
     {
-        "Case 4: Units available in currently used reference",
-        "U", "LM358",
-        {
-            { 1, { std::make_tuple("LM358", 3),
-                   std::make_tuple("LM358", 4) } } // U1 units 3,4 in use
-        },
-        {1, 2}, // Need units 1 and 2 (available)
-        1,  // Min value
-        1,  // Expected: U1 (units 1,2 are free)
+        "Units available in currently used reference",
+        "U", "LM358", "OpAmp_Dual",
+        { { 1, { { "LM358", "OpAmp_Dual", 3 }, { "LM358", "OpAmp_Dual", 4 } } } }, // U1 units 3,4 in use
+        { 1, 2 }, // need units 1 and 2, both free on U1
+        1,  // min value
+        1,  // expected U1, units 1,2 are free
         {}
     },
     {
-        "Case 5: Different value conflict",
-        "U", "LM358",
-        {
-            { 1, { std::make_tuple("LM741", 1) } } // U1 different value
-        },
-        {1}, // Need unit 1
-        1,  // Min value
-        2,  // Expected: U2 (can't share with different value)
+        "Different value conflict",
+        "U", "LM358", "OpAmp_Dual",
+        { { 1, { { "LM741", "OpAmp_Dual", 1 } } } }, // U1 has a different value
+        { 1 }, // need unit 1
+        1,  // min value
+        2,  // expected U2, can't share U1 with a different value
         {}
     },
     {
-        "Case 6: Previously used reference in tracker",
-        "U", "LM358",
-        {}, // No currently used references
-        {1}, // Need unit 1
-        1,   // Min value
-        2,   // Expected: U2 (U1 was previously used)
-        {"U1"} // U1 preloaded in tracker
+        "Previously used reference in tracker",
+        "U", "LM358", "OpAmp_Dual",
+        {}, // no currently used references
+        { 1 }, // need unit 1
+        1,  // min value
+        2,  // expected U2, U1 was previously used
+        { "U1" } // U1 preloaded in tracker
     },
     {
-        "Case 7: Min value higher than available",
-        "U", "LM358",
-        {
-            { 5, { std::make_tuple("LM358", 1) } } // U5 unit 1 in use
-        },
-        {2}, // Need unit 2
-        10,  // Min value = 10
-        10,  // Expected: U10 (U5 has unit 2 available, but min value is 10)
+        "Min value higher than available",
+        "U", "LM358", "OpAmp_Dual",
+        { { 5, { { "LM358", "OpAmp_Dual", 1 } } } }, // U5 unit 1 in use
+        { 2 },  // need unit 2
+        10, // min value
+        10, // expected U10, U5 has unit 2 free but min value forces 10
         {}
     },
     {
-        "Case 8: Negative units filtered out",
-        "U", "LM358",
-        {},
-        {-1, 1, -5, 2}, // Mix of negative and positive units
-        1,  // Min value
-        1,  // Expected: U1 (only units 1,2 considered)
+        "Negative units filtered out",
+        "U", "LM358", "OpAmp_Dual",
+        {}, // no existing references
+        { -1, 1, -5, 2 }, // mix of negative and positive units
+        1,  // min value
+        1,  // expected U1, only units 1,2 are considered
         {}
     },
     {
-        "Case 9: Complex scenario with gaps",
-        "IC", "74HC00",
-        {
-            { 2, { std::make_tuple("74HC00", 1) } }, // IC2 unit 1 used
-            { 4, { std::make_tuple("74HC00", 2) } }  // IC4 unit 2 used
-        },
-        {1, 3}, // Need units 1 and 3
-        1,      // Min value
-        3,      // Expected: IC3 (IC1 unused, IC2 conflicts unit 1, IC3 available)
-        {"IC1"} // IC1 previously used
+        "Complex scenario with gaps",
+        "IC", "74HC00", "Logic_Gate",
+        { { 2, { { "74HC00", "Logic_Gate", 1 } } },  // IC2 unit 1 used
+          { 4, { { "74HC00", "Logic_Gate", 2 } } } }, // IC4 unit 2 used
+        { 1, 3 }, // need units 1 and 3
+        1,  // min value
+        3,  // expected IC3, IC1 was previously used, IC2 conflicts on unit 1
+        { "IC1" } // IC1 preloaded in tracker
+    },
+
+    // Conflict vectors preserved from the removed ValidateUnitConflictDetection table, now decided
+    // by REFDES_TRACKER::areUnitsAvailable instead of a copy of it
+    {
+        "Units available - no conflicts",
+        "U", "LM358", "OpAmp_Dual",
+        { { 1, { { "LM358", "OpAmp_Dual", 3 }, { "LM358", "OpAmp_Dual", 4 } } } }, // U1 units 3,4 in use
+        { 1, 2 }, // need units 1 and 2
+        1,  // min value
+        1,  // expected U1, requested units don't conflict with existing units
+        {}
+    },
+    {
+        "Units conflict - same unit requested",
+        "U", "LM358", "OpAmp_Dual",
+        { { 1, { { "LM358", "OpAmp_Dual", 1 }, { "LM358", "OpAmp_Dual", 2 } } } }, // U1 units 1,2 in use
+        { 2, 3 }, // need units 2 and 3
+        1,  // min value
+        2,  // expected U2, unit 2 is already in use on U1
+        {}
+    },
+    {
+        "Value mismatch - can't share reference",
+        "R", "1k", "Resistor",
+        { { 1, { { "2k", "Resistor", 1 } } } }, // R1 has a different value
+        { 2 }, // need unit 2
+        1,  // min value
+        2,  // expected R2, can't share a refdes with a different value
+        {}
+    },
+    {
+        "Library mismatch - can't share reference",
+        "U", "LM358", "OpAmp_Dual",
+        { { 1, { { "LM358", "OpAmp_Single", 1 } } } }, // U1 has a different library part
+        { 2 }, // need unit 2
+        1,  // min value
+        2,  // expected U2, can't share a refdes with a different library part
+        {}
+    },
+    {
+        "Empty existing units - should be available",
+        "IC", "74HC00", "Logic_Gate",
+        {}, // no existing units to conflict with
+        { 1, 2, 3, 4 }, // requesting all 4 units
+        1,  // min value
+        1,  // expected IC1
+        {}
+    },
+    {
+        "Negative units filtered out with occupied neighbour",
+        "U", "LM324", "OpAmp_Quad",
+        { { 1, { { "LM324", "OpAmp_Quad", 2 } } } }, // U1 unit 2 in use
+        { -1, 1, -5, 3 }, // only units 1,3 are considered, neither conflicts
+        1,  // min value
+        1,  // expected U1
+        {}
+    },
+    {
+        "All units conflict",
+        "U", "LM324", "OpAmp_Quad",
+        { { 1, { { "LM324", "OpAmp_Quad", 1 }, { "LM324", "OpAmp_Quad", 2 },
+                 { "LM324", "OpAmp_Quad", 3 }, { "LM324", "OpAmp_Quad", 4 } } } }, // U1 all units in use
+        { 1, 2, 3, 4 }, // requesting all units
+        1,  // min value
+        2,  // expected U2, all requested units are already in use on U1
+        {}
+    },
+    {
+        "Partial conflict with mixed values",
+        "R", "1k", "Resistor",
+        { { 1, { { "1k", "Resistor", 1 } } } }, // R1 unit 1 in use, same value
+        { 1, 2 }, // need units 1 and 2
+        1,  // min value
+        2,  // expected R2, unit 1 conflicts even with a matching value
+        {}
+    },
+    {
+        "Complex multi-unit scenario",
+        "U", "LM339", "Comparator_Quad",
+        { { 1, { { "LM339", "Comparator_Quad", 1 }, { "LM339", "Comparator_Quad", 3 } } } }, // U1 units 1,3 in use
+        { 2, 4 }, // need units 2 and 4, neither conflicts with existing 1,3
+        1,  // min value
+        1,  // expected U1
+        {}
     }
 };
 
@@ -231,9 +309,7 @@ BOOST_FIXTURE_TEST_SUITE( RefDesTrackerUnits, TEST_REFDES_TRACKER_UNITS )
 BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_BasicCases )
 {
     for( const REFDES_UNITS_TEST_CASE& testCase : refdesUnitsTestCases )
-    {
         runTestCase( testCase );
-    }
 }
 
 BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_EdgeCases )
@@ -245,7 +321,7 @@ BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_EdgeCases )
     std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
     std::vector<int> emptyUnits;
 
-    setupRefDesTracker( tracker );
+    tracker.SetReuseRefDes( false );
     int result = tracker.GetNextRefDesForUnits( testRef, emptyMap, emptyUnits, 1 );
     BOOST_CHECK_EQUAL( result, 1 );
     BOOST_CHECK( tracker.Contains( "R1" ) );
@@ -278,7 +354,7 @@ BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_UsagePattern )
     // Specify required units for new symbol
     std::vector<int> requiredUnits = {1, 2};
 
-    setupRefDesTracker( tracker );
+    tracker.SetReuseRefDes( false );
 
     // Get next available reference number
     int nextRefNum = tracker.GetNextRefDesForUnits( testRef, refNumberMap, requiredUnits, 1 );
@@ -311,7 +387,7 @@ BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_ThreadSafety )
     std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
     std::vector<int> requiredUnits = {1, 2};
 
-    setupRefDesTracker( tracker );
+    tracker.SetReuseRefDes( false );
     int result = tracker.GetNextRefDesForUnits( testRef, emptyMap, requiredUnits, 1 );
     BOOST_CHECK_EQUAL( result, 1 );
     BOOST_CHECK( tracker.Contains( "U1" ) );
@@ -346,7 +422,7 @@ BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_Integration )
     std::map<int, std::vector<SCH_REFERENCE>> emptyMap;
     std::vector<int> requiredUnits = {1, 2};
 
-    setupRefDesTracker( tracker );
+    tracker.SetReuseRefDes( false );
 
     // Should get U2 since U1 is already in tracker (preloaded) and U3 is also preloaded
     int next = tracker.GetNextRefDesForUnits( testRef, emptyMap, requiredUnits, 1 );
@@ -369,7 +445,7 @@ BOOST_AUTO_TEST_CASE( GetNextRefDesForUnits_Integration )
     BOOST_CHECK( tracker2.Contains( "U3" ) );
     BOOST_CHECK( tracker2.Contains( "U5" ) );
 
-    setupRefDesTracker( tracker2 );
+    tracker2.SetReuseRefDes( false );
 
     // GetNextRefDesForUnits should work with deserialized tracker
     next = tracker2.GetNextRefDesForUnits( testRef, emptyMap, requiredUnits, 1 );
@@ -384,7 +460,7 @@ BOOST_AUTO_TEST_CASE( Serialization_WithTrackedReferences )
     tracker.Insert( "R1" );
     tracker.Insert( "R3" );
 
-    setupRefDesTracker( tracker );
+    tracker.SetReuseRefDes( false );
 
     // Use GetNextRefDesForUnits to get next reference
     SCH_REFERENCE testRef = createTestReference( "R", "1k", 1 );
@@ -412,7 +488,7 @@ BOOST_AUTO_TEST_CASE( Serialization_WithTrackedReferences )
     BOOST_CHECK( tracker2.Contains( "R3" ) );
     BOOST_CHECK( tracker2.Contains( "C5" ) );
 
-    setupRefDesTracker( tracker2 );
+    tracker2.SetReuseRefDes( false );
 
     // Test GetNextRefDesForUnits with deserialized tracker
     next = tracker2.GetNextRefDesForUnits( testRef, emptyMap, requiredUnits, 1 );
