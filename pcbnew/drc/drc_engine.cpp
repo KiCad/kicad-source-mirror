@@ -681,6 +681,9 @@ void DRC_ENGINE::loadRules( const wxFileName& aPath )
             std::function<bool( wxString* )> resolver =
                     [&]( wxString* token ) -> bool
                     {
+                        if( IsComponentClassSelector( *token ) )
+                            return false;
+
                         return m_board->ResolveTextVar( token, 0 );
                     };
 
