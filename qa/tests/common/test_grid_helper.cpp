@@ -32,9 +32,23 @@ namespace
 class TEST_GRID_HELPER : public GRID_HELPER
 {
 public:
+    using GRID_HELPER::addAnchor;
     using GRID_HELPER::applySnapResultGuides;
 
     const std::vector<SEG>& DimensionBrackets() { return getSnapManager().GetViewItem().DimensionBrackets(); }
+
+    size_t AnchorCount() const { return m_anchors.size(); }
+
+    /// Positions the mask actually admitted, in the order production accepted them.
+    std::vector<VECTOR2I> AnchorPositions() const
+    {
+        std::vector<VECTOR2I> positions;
+
+        for( const ANCHOR& anchor : m_anchors )
+            positions.push_back( anchor.pos );
+
+        return positions;
+    }
 };
 } // namespace
 
@@ -278,26 +292,66 @@ BOOST_AUTO_TEST_CASE( SnapFlags )
 
 BOOST_AUTO_TEST_CASE( MaskOperations )
 {
-    GRID_HELPER helper;
+    TEST_GRID_HELPER helper;
 
-    // Test mask operations
+    // An anchor is admitted only when the mask allows every one of its flags
     helper.SetMask( GRID_HELPER::CORNER | GRID_HELPER::OUTLINE );
-    helper.SetMaskFlag( GRID_HELPER::SNAPPABLE );
-    helper.ClearMaskFlag( GRID_HELPER::CORNER );
 
-    // These don't have getters, so we can't verify the mask state directly
-    // but we can verify the methods don't crash
+    helper.addAnchor( VECTOR2I( 10, 10 ), GRID_HELPER::CORNER, nullptr );
+    BOOST_CHECK_EQUAL( helper.AnchorCount(), 1 );
+
+    helper.addAnchor( VECTOR2I( 20, 20 ), GRID_HELPER::SNAPPABLE, nullptr );
+    BOOST_CHECK_EQUAL( helper.AnchorCount(), 1 );
+
+    // A partially allowed anchor is rejected as a whole
+    helper.addAnchor( VECTOR2I( 30, 30 ), GRID_HELPER::CORNER | GRID_HELPER::SNAPPABLE, nullptr );
+    BOOST_CHECK_EQUAL( helper.AnchorCount(), 1 );
+
+    helper.SetMask( GRID_HELPER::ALL );
+    helper.addAnchor( VECTOR2I( 40, 40 ), GRID_HELPER::SNAPPABLE, nullptr );
+    BOOST_REQUIRE_EQUAL( helper.AnchorCount(), 2 );
+
+    helper.ClearMaskFlag( GRID_HELPER::SNAPPABLE );
+    helper.addAnchor( VECTOR2I( 50, 50 ), GRID_HELPER::SNAPPABLE, nullptr );
+    BOOST_CHECK_EQUAL( helper.AnchorCount(), 2 );
+
+    const std::vector<VECTOR2I> admitted = helper.AnchorPositions();
+    BOOST_CHECK( admitted == std::vector<VECTOR2I>( { VECTOR2I( 10, 10 ), VECTOR2I( 40, 40 ) } ) );
 }
 
 BOOST_AUTO_TEST_CASE( SkipPoint )
 {
     GRID_HELPER helper;
-
-    // Test skip point operations
-    helper.SetSkipPoint( VECTOR2I( 100, 100 ) );
+    helper.SetGridSize( VECTOR2D( 100, 100 ) );
+    helper.SetOrigin( VECTOR2I( 0, 0 ) );
+    helper.SetGridSnapping( true );
     helper.ClearSkipPoint();
 
-    // These methods should not crash
+    // A horizontal construction line snaps to the grid column nearest the cursor, held at the
+    // line's own height
+    const VECTOR2D grid( 100, 100 );
+    const VECTOR2I cursor( 720, 510 );
+
+    helper.SetSnapLineOrigin( VECTOR2I( 500, 500 ) );
+    helper.SetSnapLineDirections( { VECTOR2I( 1, 0 ) } );
+
+    const VECTOR2I nearestGrid = helper.AlignGrid( cursor );
+
+    std::optional<VECTOR2I> snap = helper.SnapToConstructionLines( cursor, nearestGrid, grid, 50.0 );
+
+    BOOST_REQUIRE( snap.has_value() );
+    BOOST_CHECK_EQUAL( snap->x, 700 );
+    BOOST_CHECK_EQUAL( snap->y, 500 );
+
+    helper.SetSkipPoint( *snap );
+    BOOST_CHECK( !helper.SnapToConstructionLines( cursor, nearestGrid, grid, 50.0 ).has_value() );
+
+    // A skip point elsewhere leaves the candidate alone
+    helper.SetSkipPoint( VECTOR2I( 800, 500 ) );
+    BOOST_CHECK( helper.SnapToConstructionLines( cursor, nearestGrid, grid, 50.0 ) == snap );
+
+    helper.ClearSkipPoint();
+    BOOST_CHECK( helper.SnapToConstructionLines( cursor, nearestGrid, grid, 50.0 ) == snap );
 }
 
 BOOST_AUTO_TEST_CASE( GridTypeAlignment )
