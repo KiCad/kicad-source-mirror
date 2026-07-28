@@ -346,6 +346,42 @@ BOOST_AUTO_TEST_CASE( GerberDrillPrecision )
 }
 
 
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23452
+// Drill files for vias spanning inner-to-back or back-to-inner layers produced
+// reversed layer order in the generated file name (e.g. "back-in2" instead of "in2-back").
+BOOST_AUTO_TEST_CASE( DrillFileLayerOrderInFilename )
+{
+    wxFileName tempDir = MakeTempDir();
+    wxFileName boardFile( tempDir.GetFullPath(), wxT( "layer_order_board.kicad_pcb" ) );
+
+    BOARD board;
+    board.SetCopperLayerCount( 4 );
+    board.SetFileName( boardFile.GetFullPath() );
+
+    // Via spanning In2 (bottom inner) to B_Cu: file must be named "in2-back", not "back-in2".
+    auto via = new PCB_VIA( &board );
+    via->SetPosition( VECTOR2I( 0, 0 ) );
+    via->SetViaType( VIATYPE::BURIED );
+    via->SetLayerPair( In2_Cu, B_Cu );
+    via->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
+    via->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    board.Add( via );
+
+    EXCELLON_WRITER excellon( &board );
+    excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
+    excellon.SetFormat( true );
+    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false, nullptr ) );
+
+    // Correct order: top inner layer first, then back layer.
+    wxFileName correctFile( tempDir.GetFullPath(), wxT( "layer_order_board-in2-back.drl" ) );
+    wxFileName reversedFile( tempDir.GetFullPath(), wxT( "layer_order_board-back-in2.drl" ) );
+    BOOST_CHECK_MESSAGE( correctFile.FileExists(), "Expected drill file 'in2-back' not found" );
+    BOOST_CHECK_MESSAGE( !reversedFile.FileExists(), "Incorrectly named drill file 'back-in2' found" );
+
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
+
+
 // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23005
 // GenDrillReportFile crashed when aReporter was null (the default)
 BOOST_AUTO_TEST_CASE( DrillReportNullReporter )
