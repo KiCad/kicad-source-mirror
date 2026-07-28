@@ -33,6 +33,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/eeschema/symbol_editor
     # dialog_sim_model.h (white-box tested for issue 23687) includes <dialog_sim_model_base.h>.
     ${CMAKE_SOURCE_DIR}/eeschema/dialogs
+    ${CMAKE_SOURCE_DIR}/common/dialogs
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
     ${CMAKE_SOURCE_DIR}/qa
