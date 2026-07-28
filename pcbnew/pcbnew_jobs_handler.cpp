@@ -2515,9 +2515,13 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
             }
         }
 
-        if( netlist_str == annotateMsg )
+        if( netlist_str == MAIL_SCH_GET_NETLIST_CANCELLED )
         {
-            m_reporter->Report( wxString( netlist_str ) + wxT( "\n" ), RPT_SEVERITY_ERROR );
+            checkParity = false;
+        }
+        else if( netlist_str == annotateMsg )
+        {
+            m_reporter->Report( annotateMsg + wxT( "\n" ), RPT_SEVERITY_ERROR );
             checkParity = false;
         }
     }

@@ -186,8 +186,11 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 }
 
 
-bool SCH_EDIT_FRAME::ReadyToNetlist( const wxString& aAnnotateMessage )
+bool SCH_EDIT_FRAME::ReadyToNetlist( const wxString& aAnnotateMessage, bool* aUserCancelled )
 {
+    if( aUserCancelled )
+        *aUserCancelled = false;
+
     // Ensure all power symbols have a valid reference
     Schematic().Hierarchy().AnnotatePowerSymbols();
 
@@ -209,7 +212,12 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( const wxString& aAnnotateMessage )
     if( erc.TestDuplicateSheetNames( false ) > 0 )
     {
         if( !IsOK( this, _( "Error: duplicate sheet names. Continue?" ) ) )
+        {
+            if( aUserCancelled )
+                *aUserCancelled = true;
+
             return false;
+        }
     }
 
     return true;

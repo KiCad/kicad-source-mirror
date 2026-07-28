@@ -346,9 +346,12 @@ public:
      * Test for some issues (missing or duplicate references and sheet names).
      *
      * @param aAnnotateMessage a message to put up in case annotation needs to be performed.
+     * @param aUserCancelled if non-null, set to true when the failure is a deliberate user
+     *                       cancel (answering No to the duplicate-sheet-names prompt) rather
+     *                       than an unresolved annotation problem.
      * @return true if all is well (i.e. you can call WriteNetListFile next).
      */
-    bool ReadyToNetlist( const wxString& aAnnotateMessage );
+    bool ReadyToNetlist( const wxString& aAnnotateMessage, bool* aUserCancelled = nullptr );
 
     /**
      * Create a netlist file.

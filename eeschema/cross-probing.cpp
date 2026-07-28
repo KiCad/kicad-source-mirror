@@ -1060,8 +1060,17 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
             wxString annotationMessage( payload );
 
             // Ensure schematic is OK for netlist creation (especially that it is fully annotated):
-            if( !ReadyToNetlist( annotationMessage ) )
+            bool userCancelled = false;
+
+            if( !ReadyToNetlist( annotationMessage, &userCancelled ) )
+            {
+                // Cancel replies with a sentinel so the caller aborts silently; an unannotated
+                // schematic echoes the annotation message so the caller shows its own error
+                if( userCancelled )
+                    payload = MAIL_SCH_GET_NETLIST_CANCELLED;
+
                 return;
+            }
         }
 
         if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )

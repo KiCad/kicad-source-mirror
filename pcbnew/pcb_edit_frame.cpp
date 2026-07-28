@@ -2505,6 +2505,26 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, const wxStrin
 
     Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_GET_NETLIST, payload, this );
 
+    // Sentinel reply means the user explicitly aborted; silently cancel and return focus to
+    // the schematic rather than re-showing the annotation error
+    if( payload == MAIL_SCH_GET_NETLIST_CANCELLED )
+    {
+        if( KIWAY_PLAYER* schFrame = Kiway().Player( FRAME_SCH, false ) )
+        {
+            if( schFrame->IsIconized() )
+                schFrame->Iconize( false );
+
+            schFrame->Raise();
+
+            // Raising the window does not set the focus on Linux.  This should work on
+            // any platform.
+            if( wxWindow::FindFocus() != schFrame )
+                schFrame->SetFocus();
+        }
+
+        return false;
+    }
+
     if( payload == aAnnotateMessage )
     {
         Raise();
