@@ -105,40 +105,6 @@ static VECTOR2I getPinLineEnd( const SCH_PIN* pin, const TRANSFORM& transform )
 }
 
 /**
- * Check if a box intersects with a line segment
- */
-static bool boxIntersectsLine( const BOX2I& box, const VECTOR2I& lineStart, const VECTOR2I& lineEnd )
-{
-    // Simple bbox vs line segment intersection
-    // First check if line bbox intersects text bbox
-    BOX2I lineBbox;
-    lineBbox.SetOrigin( std::min( lineStart.x, lineEnd.x ), std::min( lineStart.y, lineEnd.y ) );
-    lineBbox.SetEnd( std::max( lineStart.x, lineEnd.x ), std::max( lineStart.y, lineEnd.y ) );
-
-    if( !lineBbox.Intersects( box ) )
-        return false;
-
-    // For vertical/horizontal lines, do precise check
-    if( lineStart.x == lineEnd.x ) // vertical line
-    {
-        int lineX = lineStart.x;
-        return ( lineX >= box.GetLeft() && lineX <= box.GetRight() &&
-                 box.GetTop() <= std::max( lineStart.y, lineEnd.y ) &&
-                 box.GetBottom() >= std::min( lineStart.y, lineEnd.y ) );
-    }
-    else if( lineStart.y == lineEnd.y ) // horizontal line
-    {
-        int lineY = lineStart.y;
-        return ( lineY >= box.GetBottom() && lineY <= box.GetTop() &&
-                 box.GetLeft() <= std::max( lineStart.x, lineEnd.x ) &&
-                 box.GetRight() >= std::min( lineStart.x, lineEnd.x ) );
-    }
-
-    // For diagonal lines, use the bbox intersection as approximation
-    return true;
-}
-
-/**
  * Test that pin numbers don't overlap with pin geometry across all rotations
  */
 BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
@@ -184,86 +150,28 @@ BOOST_AUTO_TEST_CASE( PinNumbersNoOverlapAllRotations )
             // Create layout cache for this pin
             PIN_LAYOUT_CACHE cache( *pin );
 
-            // Get pin number text info (shadow width 0 for testing)
-            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numberInfoOpt = cache.GetPinNumberInfo( 0 );
+            // Production geometry, font metrics and all; no character-count estimate can stand in
+            // for it across rotations
+            OPT_BOX2I numberBox = cache.GetPinNumberBBox();
 
-            if( !numberInfoOpt.has_value() )
-                continue;
+            BOOST_REQUIRE_MESSAGE( numberBox.has_value(),
+                                   "Pin '" << pin->GetNumber() << "' has no number box at rotation " << rotName );
 
-            const PIN_LAYOUT_CACHE::TEXT_INFO& numberInfo = numberInfoOpt.value();
-
-            if( numberInfo.m_Text.IsEmpty() )
-                continue;
-
-            // Get pin line geometry
             VECTOR2I pinStart = pin->GetPosition();
             VECTOR2I pinEnd = getPinLineEnd( pin, transform );
 
-            // Get text bounding box - we need to estimate this since we don't have full font rendering
-            // For now, use a simple estimation based on text size and string length
-            int textHeight = numberInfo.m_TextSize;
-            int textWidth = numberInfo.m_Text.Length() * numberInfo.m_TextSize * 0.6; // rough char width
+            BOOST_CHECK_MESSAGE( !numberBox->Intersects( pinStart, pinEnd ),
+                                 "Pin number '" << pin->GetNumber() << "' overlaps pin geometry at rotation "
+                                 << rotName );
 
-            // Handle multi-line text
-            if( numberInfo.m_Text.Contains( '\n' ) )
-            {
-                wxArrayString lines;
-                wxStringSplit( numberInfo.m_Text, lines, '\n' );
+            // Control: the same box grown over the pin line must be reported as overlapping,
+            // otherwise the non-overlap result above says nothing
+            BOX2I grown = *numberBox;
+            grown.Inflate( pin->GetLength() * 2 );
 
-                if( numberInfo.m_Angle == ANGLE_VERTICAL )
-                {
-                    // For vertical text, lines are spaced horizontally
-                    int lineSpacing = textHeight * 1.3;
-                    textWidth = lines.size() * lineSpacing;
-                    // Find longest line for height
-                    size_t maxLen = 0;
-
-                    for( const wxString& line : lines )
-                        maxLen = std::max( maxLen, line.Length() );
-
-                    textHeight = maxLen * textHeight * 0.6;
-                }
-                else
-                {
-                    // For horizontal text, lines are spaced vertically
-                    int lineSpacing = textHeight * 1.3;
-                    textHeight = lines.size() * lineSpacing;
-                    // Find longest line for width
-                    size_t maxLen = 0;
-
-                    for( const wxString& line : lines )
-                        maxLen = std::max( maxLen, line.Length() );
-
-                    textWidth = maxLen * textHeight * 0.6;
-                }
-            }
-            else if( numberInfo.m_Angle == ANGLE_VERTICAL )
-            {
-                // Single line vertical number, perpendicular extent is its height.
-                std::swap( textWidth, textHeight );
-            }
-
-            // Create text bounding box around text position
-            BOX2I textBbox;
-            textBbox.SetOrigin( numberInfo.m_TextPosition.x - textWidth/2,
-                                numberInfo.m_TextPosition.y - textHeight/2 );
-            textBbox.SetSize( textWidth, textHeight );
-
-            // Check for intersection
-            bool overlaps = boxIntersectsLine( textBbox, pinStart, pinEnd );
-
-            // Log detailed info for debugging
-            wxLogTrace( "KICAD_PINS", wxT("Rotation %s, Pin %s: pos=(%d,%d) textPos=(%d,%d) pinLine=(%d,%d)-(%d,%d) textBox=(%d,%d,%dx%d) overlap=%s"),
-                          rotName, pin->GetNumber(),
-                          pinStart.x, pinStart.y,
-                          numberInfo.m_TextPosition.x, numberInfo.m_TextPosition.y,
-                          pinStart.x, pinStart.y, pinEnd.x, pinEnd.y,
-                          (int)textBbox.GetLeft(), (int)textBbox.GetTop(), (int)textBbox.GetWidth(), (int)textBbox.GetHeight(),
-                          overlaps ? wxT("YES") : wxT("NO") );
-
-            // Test assertion
-            BOOST_CHECK_MESSAGE( !overlaps,
-                                 "Pin number '" << pin->GetNumber() << "' overlaps with pin geometry at rotation " << rotName );
+            BOOST_CHECK_MESSAGE( grown.Intersects( pinStart, pinEnd ),
+                                 "Inflated number box for '" << pin->GetNumber()
+                                 << "' should reach the pin line at rotation " << rotName );
         }
 
         // Restore original transform

@@ -81,28 +81,6 @@ static std::unique_ptr<LIB_SYMBOL> createAdjacentPinsSymbol()
 
 
 /**
- * Get the bounding box of pin text (name or number) for a given pin.
- */
-static BOX2I getTextBoundingBox( const PIN_LAYOUT_CACHE::TEXT_INFO& textInfo )
-{
-    // Estimate text dimensions based on character count and font size
-    int textHeight = textInfo.m_TextSize;
-    int textWidth = textInfo.m_Text.Length() * textInfo.m_TextSize * 6 / 10;
-
-    // Handle vertical text - swap width and height
-    if( textInfo.m_Angle == ANGLE_VERTICAL )
-        std::swap( textWidth, textHeight );
-
-    BOX2I bbox;
-    bbox.SetOrigin( textInfo.m_TextPosition.x - textWidth / 2,
-                    textInfo.m_TextPosition.y - textHeight / 2 );
-    bbox.SetSize( textWidth, textHeight );
-
-    return bbox;
-}
-
-
-/**
  * Calculate perpendicular distance from pin line to text center.
  * For horizontal pins (PIN_LEFT/PIN_RIGHT), this is the Y distance.
  * For vertical pins (PIN_UP/PIN_DOWN), this is the X distance.
@@ -188,25 +166,37 @@ BOOST_AUTO_TEST_CASE( AdjacentPinTextNoOverlap )
 
             PIN_LAYOUT_CACHE cache( *pin );
 
-            // Get name bounding box
-            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> nameInfo = cache.GetPinNameInfo( 0 );
+            // The painter controls font rotation, so we need to transform here as well before
+            // comparison
+            const VECTOR2I shift = transform.TransformCoordinate( pin->GetPosition() ) - pin->GetPosition();
 
-            if( nameInfo.has_value() && !nameInfo->m_Text.IsEmpty() )
+            if( OPT_BOX2I nameBox = cache.GetPinNameBBox() )
             {
-                boxes.nameBBox = getTextBoundingBox( *nameInfo );
+                boxes.nameBBox = *nameBox;
+                boxes.nameBBox.Move( shift );
                 boxes.hasName = true;
             }
 
-            // Get number bounding box
-            std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numberInfo = cache.GetPinNumberInfo( 0 );
-
-            if( numberInfo.has_value() && !numberInfo->m_Text.IsEmpty() )
+            if( OPT_BOX2I numberBox = cache.GetPinNumberBBox() )
             {
-                boxes.numberBBox = getTextBoundingBox( *numberInfo );
+                boxes.numberBBox = *numberBox;
+                boxes.numberBBox.Move( shift );
                 boxes.hasNumber = true;
             }
 
             pinBoxes.push_back( boxes );
+        }
+
+        BOOST_REQUIRE_GE( pinBoxes.size(), 2 );
+
+        // Control: the separation above is only meaningful if these boxes can collide at all, so
+        // slide the first name box onto its neighbour and require the overlap to be seen
+        {
+            BOX2I collided = pinBoxes[0].nameBBox;
+            collided.Move( pinBoxes[1].nameBBox.GetCenter() - pinBoxes[0].nameBBox.GetCenter() );
+
+            BOOST_CHECK_MESSAGE( collided.Intersects( pinBoxes[1].nameBBox ),
+                                 "At " << rotName << ": coincident name boxes were not reported as overlapping" );
         }
 
         // Check that names and numbers of different pins don't overlap
