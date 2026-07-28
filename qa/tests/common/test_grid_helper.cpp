@@ -354,6 +354,26 @@ BOOST_AUTO_TEST_CASE( SkipPoint )
     BOOST_CHECK( helper.SnapToConstructionLines( cursor, nearestGrid, grid, 50.0 ) == snap );
 }
 
+BOOST_AUTO_TEST_CASE( SkipPointDefaultsToUnreachable )
+{
+    GRID_HELPER helper;
+    helper.SetGridSize( VECTOR2D( 100, 100 ) );
+    helper.SetOrigin( VECTOR2I( 0, 0 ) );
+    helper.SetGridSnapping( true );
+
+    // No ClearSkipPoint() here: a helper nobody has configured must still snap to the origin
+    helper.SetSnapLineOrigin( VECTOR2I( 0, 0 ) );
+    helper.SetSnapLineDirections( { VECTOR2I( 1, 0 ) } );
+
+    const VECTOR2I          cursor( 10, 5 );
+    std::optional<VECTOR2I> snap =
+            helper.SnapToConstructionLines( cursor, helper.AlignGrid( cursor ), VECTOR2D( 100, 100 ), 50.0 );
+
+    BOOST_REQUIRE( snap.has_value() );
+    BOOST_CHECK_EQUAL( snap->x, 0 );
+    BOOST_CHECK_EQUAL( snap->y, 0 );
+}
+
 BOOST_AUTO_TEST_CASE( GridTypeAlignment )
 {
     GRID_HELPER helper;

@@ -47,6 +47,9 @@ GRID_HELPER::GRID_HELPER() :
     m_enableGrid = true;
     m_snapItem = std::nullopt;
 
+    // Default-constructing the point would park it on the origin and suppress snapping there
+    ClearSkipPoint();
+
     m_manualGrid = VECTOR2D( 1, 1 );
     m_manualVisibleGrid = VECTOR2D( 1, 1 );
     m_manualOrigin = VECTOR2I( 0, 0 );
