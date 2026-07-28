@@ -64,8 +64,8 @@
     PyObject* Get()
     {
         PyObject* tup = PyTuple_New(2);
-        PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
-        PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
+        PyTuple_SET_ITEM(tup, 0, PyLong_FromLong(self->x));
+        PyTuple_SET_ITEM(tup, 1, PyLong_FromLong(self->y));
         return tup;
     }
 

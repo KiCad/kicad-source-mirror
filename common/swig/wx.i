@@ -79,10 +79,10 @@ public:
        PyObject* Get()
        {
             PyObject* res = PyTuple_New(4);
-            PyTuple_SET_ITEM(res, 0, PyInt_FromLong(self->x));
-            PyTuple_SET_ITEM(res, 1, PyInt_FromLong(self->y));
-            PyTuple_SET_ITEM(res, 2, PyInt_FromLong(self->width));
-            PyTuple_SET_ITEM(res, 3, PyInt_FromLong(self->height));
+            PyTuple_SET_ITEM(res, 0, PyLong_FromLong(self->x));
+            PyTuple_SET_ITEM(res, 1, PyLong_FromLong(self->y));
+            PyTuple_SET_ITEM(res, 2, PyLong_FromLong(self->width));
+            PyTuple_SET_ITEM(res, 3, PyLong_FromLong(self->height));
             return res;
         }
     }
@@ -122,8 +122,8 @@ public:
        PyObject* Get()
        {
             PyObject* res = PyTuple_New(2);
-            PyTuple_SET_ITEM(res, 0, PyInt_FromLong(self->x));
-            PyTuple_SET_ITEM(res, 1, PyInt_FromLong(self->y));
+            PyTuple_SET_ITEM(res, 0, PyLong_FromLong(self->x));
+            PyTuple_SET_ITEM(res, 1, PyLong_FromLong(self->y));
             return res;
         }
     }
@@ -174,8 +174,8 @@ public:
         PyObject* Get()
         {
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
-            PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
+            PyTuple_SET_ITEM(tup, 0, PyLong_FromLong(self->x));
+            PyTuple_SET_ITEM(tup, 1, PyLong_FromLong(self->y));
             return tup;
         }
     }
@@ -301,7 +301,7 @@ public:
 
 
 %typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxString& {
-    $1 = PyString_Check($input) || PyUnicode_Check($input);
+    $1 = PyBytes_Check($input) || PyUnicode_Check($input);
 }
 
 %apply wxString& { wxString* }
