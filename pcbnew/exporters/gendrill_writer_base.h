@@ -154,9 +154,8 @@ public:
     EDA_ANGLE    m_Hole_Orient;          // Hole rotation (= pad rotation) for oblong holes
     int          m_Hole_Shape;           // hole shape: round (0) or oval (1)
     VECTOR2I     m_Hole_Pos;             // hole position
-    PCB_LAYER_ID m_Hole_Bottom_Layer;    // hole ending layer (usually back layer)
-    PCB_LAYER_ID m_Hole_Top_Layer;       // hole starting layer (usually front layer):
-                                         // m_Hole_Top_Layer < m_Hole_Bottom_Layer
+    PCB_LAYER_ID m_Hole_Bottom_Layer;    // physically lowest layer reached by the hole
+    PCB_LAYER_ID m_Hole_Top_Layer;       // physically highest layer reached by the hole
     bool         m_Hole_NotPlated;       // hole not plated. Must be in a specific drill file or
                                          // section.
     HOLE_ATTRIBUTE m_HoleAttribute;      // Attribute, used in Excellon drill file and to sort holes
@@ -210,12 +209,14 @@ struct DRILL_SPAN
 
     PCB_LAYER_ID TopLayer() const
     {
-        return m_StartLayer < m_EndLayer ? m_StartLayer : m_EndLayer;
+        // B_Cu (id=2) is numerically less than inner layers (id>=4), but is physically
+        // at the bottom of the stack. Use IsCopperLayerLowerThan for correct ordering.
+        return IsCopperLayerLowerThan( m_StartLayer, m_EndLayer ) ? m_EndLayer : m_StartLayer;
     }
 
     PCB_LAYER_ID BottomLayer() const
     {
-        return m_StartLayer < m_EndLayer ? m_EndLayer : m_StartLayer;
+        return IsCopperLayerLowerThan( m_StartLayer, m_EndLayer ) ? m_StartLayer : m_EndLayer;
     }
 
     PCB_LAYER_ID DrillStartLayer() const

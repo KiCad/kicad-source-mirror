@@ -80,7 +80,7 @@ void GENDRILL_WRITER_BASE::buildHolesList( const DRILL_SPAN& aSpan, bool aGenera
     m_holeListBuffer.clear();
     m_toolListBuffer.clear();
 
-    wxASSERT( aSpan.TopLayer() < aSpan.BottomLayer() );  // fix the caller
+    wxASSERT( IsCopperLayerLowerThan( aSpan.BottomLayer(), aSpan.TopLayer() ) );  // fix the caller
 
     auto computeStubLength = [&]( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer )
     {
@@ -107,10 +107,9 @@ void GENDRILL_WRITER_BASE::buildHolesList( const DRILL_SPAN& aSpan, bool aGenera
                     if( aDrill.start == UNDEFINED_LAYER || aDrill.end == UNDEFINED_LAYER )
                         return false;
 
-                    DRILL_LAYER_PAIR drillPair( std::min( aDrill.start, aDrill.end ),
-                                                std::max( aDrill.start, aDrill.end ) );
+                    DRILL_SPAN drillSpan( aDrill.start, aDrill.end, true, false );
 
-                    if( drillPair != aSpan.Pair() )
+                    if( drillSpan.Pair() != aSpan.Pair() )
                         return false;
 
                     if( aDrill.start != aSpan.DrillStartLayer()
