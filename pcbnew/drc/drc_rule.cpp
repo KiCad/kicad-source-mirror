@@ -27,6 +27,12 @@
 #include <drc/drc_rule_condition.h>
 
 
+bool IsComponentClassSelector( const wxString& aToken )
+{
+    return aToken.Upper().StartsWith( wxT( "CLASS:" ) );
+}
+
+
 DRC_RULE::DRC_RULE() :
         m_Unary( false ),
         m_ImplicitItemId( 0 ),

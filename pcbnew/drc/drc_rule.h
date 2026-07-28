@@ -266,4 +266,12 @@ const DRC_CONSTRAINT* GetConstraint( const BOARD_ITEM* aItem, const BOARD_ITEM* 
                                      wxString* aRuleName = nullptr );
 
 
+/**
+ * ${Class:X} inside a DRC rule is a component-class selector consumed by testFootprintSelector(),
+ * not a text variable. Text-variable expansion and unresolved-variable checks must leave it intact.
+ * aToken is the contents between ${ and }.
+ */
+bool IsComponentClassSelector( const wxString& aToken );
+
+
 #endif // DRC_RULE_H
