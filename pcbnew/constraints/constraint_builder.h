@@ -118,6 +118,17 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
 
 
 /**
+ * A sentence naming what @p aType needs selected, for the moment a selection does not fit it and
+ * the tool falls back to click-to-pick.
+ *
+ * Empty for the point-anchored families, which are always authored by clicking and so have no
+ * selection to reject.  Kept beside #BuildConstraintFromItems so the wording cannot drift from the
+ * rules it describes.
+ */
+wxString ConstraintSelectionHint( PCB_CONSTRAINT_TYPE aType );
+
+
+/**
  * Find the constrainable-item anchor (a shape's segment/arc endpoint or centre, or a dimension's
  * feature point) nearest @p aPos within @p aMaxDist, for point-anchored constraint authoring
  * (coincident, midpoint, ...).

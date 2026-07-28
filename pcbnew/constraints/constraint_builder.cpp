@@ -262,6 +262,71 @@ std::unique_ptr<PCB_CONSTRAINT> BuildConstraintFromItems( BOARD_ITEM* aParent,
 }
 
 
+wxString ConstraintSelectionHint( PCB_CONSTRAINT_TYPE aType )
+{
+    wxString format;
+
+    // No default: an added type must be classified here, or the build fails rather than shipping
+    // a silently hintless constraint.  Each arm mirrors the matching BuildConstraintFromItems rule.
+    switch( aType )
+    {
+    case PCB_CONSTRAINT_TYPE::PARALLEL:
+    case PCB_CONSTRAINT_TYPE::PERPENDICULAR:
+    case PCB_CONSTRAINT_TYPE::EQUAL_LENGTH:
+    case PCB_CONSTRAINT_TYPE::COLLINEAR:
+        format = _( "%s needs two line segments.  Click them to constrain." );
+        break;
+
+    // A zero-length segment has no direction, so the corner angle would be singular
+    case PCB_CONSTRAINT_TYPE::ANGULAR_DIMENSION:
+        format = _( "%s needs two line segments of nonzero length.  Click them to constrain." );
+        break;
+
+    case PCB_CONSTRAINT_TYPE::HORIZONTAL:
+    case PCB_CONSTRAINT_TYPE::VERTICAL:
+        format = _( "%s needs one line segment, or two anchor points.  Click them to constrain." );
+        break;
+
+    case PCB_CONSTRAINT_TYPE::FIXED_LENGTH:
+        format = _( "%s needs one line segment.  Click it to constrain." );
+        break;
+
+    // allCentered also accepts ellipses, which have a centre but no single radius
+    case PCB_CONSTRAINT_TYPE::CONCENTRIC:
+        format = _( "%s needs two arcs, circles or ellipses.  Click them to constrain." );
+        break;
+
+    case PCB_CONSTRAINT_TYPE::EQUAL_RADIUS:
+        format = _( "%s needs two arcs or circles.  Click them to constrain." );
+        break;
+
+    case PCB_CONSTRAINT_TYPE::FIXED_RADIUS:
+        format = _( "%s needs one arc or circle.  Click it to constrain." );
+        break;
+
+    case PCB_CONSTRAINT_TYPE::ARC_ANGLE:
+        format = _( "%s needs one arc.  Click it to constrain." );
+        break;
+
+    // Two curves must both be arcs or circles; an ellipse pairs only with a line
+    case PCB_CONSTRAINT_TYPE::TANGENT:
+        format = _( "%s needs a line and a curve, or two arcs or circles.  Click them to constrain." );
+        break;
+
+    // Authored by clicking anchors, so there is never a selection to reject
+    case PCB_CONSTRAINT_TYPE::COINCIDENT:
+    case PCB_CONSTRAINT_TYPE::POINT_ON_LINE:
+    case PCB_CONSTRAINT_TYPE::MIDPOINT:
+    case PCB_CONSTRAINT_TYPE::SYMMETRIC:
+    case PCB_CONSTRAINT_TYPE::FIXED_POSITION:
+    case PCB_CONSTRAINT_TYPE::UNDEFINED:
+        return wxEmptyString;
+    }
+
+    return wxString::Format( format, ConstraintTypeLabel( aType ) );
+}
+
+
 std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintShapeAnchors( const PCB_SHAPE* aShape )
 {
     std::vector<CONSTRAINT_ANCHOR_POINT> anchors;

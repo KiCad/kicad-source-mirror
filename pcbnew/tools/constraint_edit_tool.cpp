@@ -1106,6 +1106,14 @@ int CONSTRAINT_EDIT_TOOL::AddConstraint( const TOOL_EVENT& aEvent )
     // so the toolbar and hotkeys can author a constraint by clicking the items on the canvas.
     if( !constraint )
     {
+        // Switching to click-to-pick silently reads as the tool ignoring the selection, so say what
+        // the type wanted.  Only when something was selected: an empty one is the normal toolbar path.
+        if( !items.empty() && frame() )
+        {
+            if( wxString hint = ConstraintSelectionHint( type ); !hint.IsEmpty() )
+                frame()->ShowInfoBarWarning( hint );
+        }
+
         // Horizontal and vertical also accept two point anchors so levelling a corner needs no segment
         // The linear picker offers both paths
         if( type == PCB_CONSTRAINT_TYPE::HORIZONTAL || type == PCB_CONSTRAINT_TYPE::VERTICAL )
