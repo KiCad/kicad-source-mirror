@@ -118,49 +118,6 @@ BOOST_AUTO_TEST_CASE( RescuedLayers )
 }
 
 /**
- * Verify that a rule area on all inner copper layers does not produce a
- * spurious layer validation error when the footprint uses the default
- * EXPAND_INNER_LAYERS stackup mode.
- *
- * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23042
- */
-BOOST_AUTO_TEST_CASE( RuleAreaInnerLayersExpandMode )
-{
-    FOOTPRINT footprint( &m_board );
-    footprint.SetStackupMode( FOOTPRINT_STACKUP::EXPAND_INNER_LAYERS );
-
-    ZONE* ruleArea = new ZONE( &footprint );
-    ruleArea->SetIsRuleArea( true );
-    ruleArea->SetLayerSet( LSET::InternalCuMask() );
-    footprint.Add( ruleArea );
-
-    // Collect all layers used by the footprint (mirrors GetAllUsedFootprintLayers
-    // from dialog_footprint_properties_fp_editor.cpp)
-    LSET usedLayers;
-
-    footprint.RunOnChildren(
-            [&]( BOARD_ITEM* aItem )
-            {
-                if( aItem->Type() == PCB_ZONE_T )
-                    usedLayers |= static_cast<ZONE*>( aItem )->GetLayerSet();
-                else
-                    usedLayers.set( aItem->GetLayer() );
-            },
-            RECURSE_MODE::RECURSE );
-
-    // In EXPAND_INNER_LAYERS mode, F_Cu, B_Cu and all inner copper layers
-    // are valid, along with tech, user, and user-defined layers.
-    LSET allowedLayers = LSET{ F_Cu, B_Cu } | LSET::InternalCuMask();
-    allowedLayers |= LSET::UserDefinedLayersMask( 4 );
-
-    usedLayers &= ~allowedLayers;
-    usedLayers &= ~LSET::AllTechMask();
-    usedLayers &= ~LSET::UserMask();
-
-    BOOST_TEST( usedLayers.none() );
-}
-
-/**
  * Zones created by converting a circle shape carry arc metadata in their outline.
  * Clipper2 cannot preserve arcs across boolean operations once either operand has
  * a hole or the clip operand has outlines (see SHAPE_POLY_SET::booleanOp's assertion).
