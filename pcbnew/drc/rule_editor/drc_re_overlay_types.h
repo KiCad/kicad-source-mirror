@@ -49,7 +49,6 @@ struct DRC_RE_FIELD_POSITION
     int xStart;     ///< Left edge X coordinate where the field starts
     int xEnd;       ///< Right edge X coordinate where the field ends
     int yCenter;    ///< Vertical center Y coordinate of the field
-    int tabOrder;   ///< Tab navigation order (1-based, lower numbers receive focus first)
 
     wxString       labelText;      ///< Optional label text (empty for no label)
     LABEL_POSITION labelPosition;  ///< Position of label relative to field
@@ -59,21 +58,19 @@ struct DRC_RE_FIELD_POSITION
             xStart( 0 ),
             xEnd( 0 ),
             yCenter( 0 ),
-            tabOrder( 0 ),
             labelText(),
             labelPosition( LABEL_POSITION::NONE ),
             prefixText()
     {
     }
 
-    DRC_RE_FIELD_POSITION( int aXStart, int aXEnd, int aYCenter, int aTabOrder,
+    DRC_RE_FIELD_POSITION( int aXStart, int aXEnd, int aYCenter,
                            const wxString& aLabelText = wxEmptyString,
                            LABEL_POSITION  aLabelPos = LABEL_POSITION::NONE,
                            const wxString& aPrefixText = wxEmptyString ) :
             xStart( aXStart ),
             xEnd( aXEnd ),
             yCenter( aYCenter ),
-            tabOrder( aTabOrder ),
             labelText( aLabelText ),
             labelPosition( aLabelPos ),
             prefixText( aPrefixText )

@@ -53,14 +53,14 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         // Positions measured from constraint_routing_diff_pair.png bitmap (~423x133)
-        // Format: { xStart, xEnd, yCenter, tabOrder }
+        // Format: { xStart, xEnd, yCenter }
         // TODO: measure actual positions from PNG
         return {
-            { 0, 55, 147, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },                     // opt_width
-            { 105, 160, 147, 2, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
-            { 185, 240, 123, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },                  // opt_gap
-            { 290, 345, 123, 4, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // gap_tolerance (±)
-            { 85, 140, 20, 5, wxS( "mm" ), LABEL_POSITION::RIGHT },                    // max_uncoupled
+            { 0, 55, 147, wxS( "mm" ), LABEL_POSITION::RIGHT },                     // opt_width
+            { 105, 160, 147, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // width_tolerance (±)
+            { 185, 240, 123, wxS( "mm" ), LABEL_POSITION::RIGHT },                  // opt_gap
+            { 290, 345, 123, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // gap_tolerance (±)
+            { 85, 140, 20, wxS( "mm" ), LABEL_POSITION::RIGHT },                    // max_uncoupled
         };
     }
 

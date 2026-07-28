@@ -47,9 +47,9 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         // Positions measured from constraint_vias_under_smd.png (~280x160)
-        // Format: { xStart, xEnd, yCenter, tabOrder }
+        // Format: { xStart, xEnd, yCenter }
         return {
-            { 90, 205, 162, 1, _( "Disallow" ), LABEL_POSITION::RIGHT }, // checkbox (bottom left corner)
+            { 90, 205, 162, _( "Disallow" ), LABEL_POSITION::RIGHT }, // checkbox (bottom left corner)
         };
     }
 

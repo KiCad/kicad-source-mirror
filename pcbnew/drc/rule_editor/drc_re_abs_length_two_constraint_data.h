@@ -48,11 +48,11 @@ public:
 
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        // Format: { xStart, xEnd, yCenter, tabOrder }
+        // Format: { xStart, xEnd, yCenter }
         // Two fields side-by-side, opt_length and tolerance
         return {
-            { 80, 135, 127, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },                   // opt_length
-            { 185, 240, 127, 2, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // tolerance (±)
+            { 80, 135, 127, wxS( "mm" ), LABEL_POSITION::RIGHT },                   // opt_length
+            { 185, 240, 127, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // tolerance (±)
         };
     }
 
@@ -138,10 +138,10 @@ public:
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
         return {
-            { 80, 135, 142, 1, wxS( "mm" ), LABEL_POSITION::RIGHT },                   // opt_length
-            { 185, 240, 142, 2, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // tolerance (±)
-            { 17, 72, 15, 3, wxS( "mm" ), LABEL_POSITION::RIGHT },                     // max_skew
-            { 113, 313, 15, 4, _( "Within diff pairs" ), LABEL_POSITION::RIGHT },      // checkbox (within_diff_pairs)
+            { 80, 135, 142, wxS( "mm" ), LABEL_POSITION::RIGHT },                   // opt_length
+            { 185, 240, 142, wxS( "mm" ), LABEL_POSITION::RIGHT, wxS( "\u00B1" ) }, // tolerance (±)
+            { 17, 72, 15, wxS( "mm" ), LABEL_POSITION::RIGHT },                     // max_skew
+            { 113, 313, 15, _( "Within diff pairs" ), LABEL_POSITION::RIGHT },      // checkbox (within_diff_pairs)
         };
     }
 
