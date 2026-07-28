@@ -39,6 +39,7 @@
 #include <netinfo.h>
 #include <netclass.h>
 #include <pcb_track.h>
+#include <pcb_shape.h>
 #include <pcb_generator.h>
 #include <generators/pcb_tuning_pattern.h>
 #include <project.h>
@@ -744,6 +745,62 @@ BOOST_AUTO_TEST_CASE( Issue24847_FootprintKeepoutPlacement )
     // PCB1.PcbDoc carries exactly three footprint-local keepouts (Z1, Z2, R1); dropping any is a
     // regression the placement check alone would not catch.
     BOOST_CHECK_EQUAL( keepoutZoneCount, 3 );
+}
+
+
+// https://gitlab.com/kicad/code/kicad/-/issues/13750
+// Copper regions can carry a soldermask relief; the importer dropped it, losing the aperture
+BOOST_AUTO_TEST_CASE( RegionSolderMaskExpansion )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/altium/issue13750/"
+                             "altium2kicad_region_soldermask_expansion.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+    BOOST_REQUIRE( board );
+
+    std::vector<PCB_SHAPE*> copperPolys;
+    std::vector<PCB_SHAPE*> maskPolys;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() != PCB_SHAPE_T )
+            continue;
+
+        PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+        if( shape->GetShape() != SHAPE_T::POLY )
+            continue;
+
+        if( shape->GetLayer() == F_Cu )
+            copperPolys.push_back( shape );
+        else if( shape->GetLayer() == F_Mask )
+            maskPolys.push_back( shape );
+    }
+
+    // Two top-copper regions, exactly one of which carries the soldermask relief
+    BOOST_REQUIRE_EQUAL( copperPolys.size(), 2 );
+    BOOST_REQUIRE_EQUAL( maskPolys.size(), 1 );
+
+    // Zero expansion here, so the mask aperture must exactly match its region, not just overlap it,
+    // and must match exactly one region, else an off-by-one primitive association would still pass
+    PCB_SHAPE* mask = maskPolys.front();
+    int        exactMatches = 0;
+
+    for( PCB_SHAPE* copper : copperPolys )
+    {
+        SHAPE_POLY_SET missing = copper->GetPolyShape().CloneDropTriangulation();
+        missing.BooleanSubtract( mask->GetPolyShape() );
+
+        SHAPE_POLY_SET extra = mask->GetPolyShape().CloneDropTriangulation();
+        extra.BooleanSubtract( copper->GetPolyShape() );
+
+        if( missing.IsEmpty() && extra.IsEmpty() )
+            exactMatches++;
+    }
+
+    BOOST_CHECK_MESSAGE( exactMatches == 1, "F_Mask relief aperture must exactly match exactly one copper region" );
 }
 
 

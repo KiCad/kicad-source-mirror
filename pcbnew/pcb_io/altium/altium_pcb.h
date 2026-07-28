@@ -223,10 +223,11 @@ private:
                                 const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ParseShapeBasedRegions6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                       const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem );
+    void ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem, const int aPrimitiveIndex );
     void ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT* aFootprint, const AREGION6& aElem,
                                                    const int aPrimitiveIndex );
-    void ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aElem, PCB_LAYER_ID aLayer );
+    void ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aElem, PCB_LAYER_ID aLayer,
+                                                      const int aPrimitiveIndex );
     void ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*      aFootprint,
                                                           const AREGION6& aElem,
                                                           PCB_LAYER_ID    aLayer,

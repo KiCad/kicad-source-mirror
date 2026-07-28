@@ -2651,7 +2651,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_PCB_COMPOUND_FILE&   
             || elem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
         {
             // TODO: implement all different types for footprints
-            ConvertShapeBasedRegions6ToBoardItem( elem );
+            ConvertShapeBasedRegions6ToBoardItem( elem, primitiveIndex );
         }
         else
         {
@@ -2665,7 +2665,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_PCB_COMPOUND_FILE&   
 }
 
 
-void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
+void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem, const int aPrimitiveIndex )
 {
     if( aElem.kind == ALTIUM_REGION_KIND::BOARD_CUTOUT )
     {
@@ -2788,7 +2788,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
         if( aElem.polygon == ALTIUM_POLYGON_NONE )
         {
             for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aElem.layer ) )
-                ConvertShapeBasedRegions6ToBoardItemOnLayer( aElem, klayer );
+                ConvertShapeBasedRegions6ToBoardItemOnLayer( aElem, klayer, aPrimitiveIndex );
         }
     }
     else
@@ -2955,8 +2955,8 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
 }
 
 
-void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aElem,
-                                                              PCB_LAYER_ID    aLayer )
+void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aElem, PCB_LAYER_ID aLayer,
+                                                              const int aPrimitiveIndex )
 {
     SHAPE_LINE_CHAIN linechain;
     HelperShapeLineChainFromAltiumVertices( linechain, aElem.outline );
@@ -2997,6 +2997,36 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aE
     }
 
     m_board->Add( shape.release(), ADD_MODE::APPEND );
+
+    // Guard skips dup mask shapes when a MULTI_LAYER region iterates every copper layer
+    if( aLayer == F_Cu || aLayer == B_Cu )
+    {
+        for( const auto& layerExpansionMask :
+             HelperGetSolderAndPasteMaskExpansions( ALTIUM_RECORD::REGION, aPrimitiveIndex, aElem.layer ) )
+        {
+            const PCB_LAYER_ID maskLayer = layerExpansionMask.first;
+
+            if( ( ( maskLayer == F_Mask || maskLayer == F_Paste ) && aLayer != F_Cu )
+                || ( ( maskLayer == B_Mask || maskLayer == B_Paste ) && aLayer != B_Cu ) )
+            {
+                continue;
+            }
+
+            int expansion = layerExpansionMask.second;
+
+            SHAPE_POLY_SET expandedPolySet = polySet;
+            expandedPolySet.Inflate( expansion, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+
+            std::unique_ptr<PCB_SHAPE> maskShape = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::POLY );
+
+            maskShape->SetPolyShape( expandedPolySet );
+            maskShape->SetFilled( true );
+            maskShape->SetLayer( maskLayer );
+            maskShape->SetStroke( STROKE_PARAMS( 0 ) );
+
+            m_board->Add( maskShape.release(), ADD_MODE::APPEND );
+        }
+    }
 }
 
 
@@ -5391,8 +5421,7 @@ std::vector<std::pair<PCB_LAYER_ID, int>> ALTIUM_PCB::HelperGetSolderAndPasteMas
     if( m_extendedPrimitiveInformationMaps.count( aType ) == 0 )
         return {}; // there is nothing to parse
 
-    auto elems =
-            m_extendedPrimitiveInformationMaps[ALTIUM_RECORD::TRACK].equal_range( aPrimitiveIndex );
+    auto elems = m_extendedPrimitiveInformationMaps[aType].equal_range( aPrimitiveIndex );
 
     if( elems.first == elems.second )
         return {}; // there is nothing to parse
