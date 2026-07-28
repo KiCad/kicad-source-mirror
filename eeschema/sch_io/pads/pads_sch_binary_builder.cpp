@@ -42,6 +42,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <tuple>
 #include <utility>
 
 namespace PADS_SCH_BINARY
@@ -158,7 +159,7 @@ namespace
     }
 
 
-    void applyTextPresentation( EDA_TEXT* aText, const MODEL_TEXT_PRESENTATION& aPresentation,
+    void applyTextPresentation( EDA_TEXT* aText, const MODEL_TEXT_PRESENTATION& aPresentation, bool aVisible,
                                 std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
         if( aPresentation.height > 0 )
@@ -168,7 +169,7 @@ namespace
         aText->SetVertJustify( verticalJustification( aPresentation.verticalJustification ) );
         aText->SetBold( aPresentation.bold );
         aText->SetItalic( aPresentation.italic );
-        aText->SetVisible( aPresentation.visible );
+        aText->SetVisible( aVisible );
 
         if( aPresentation.width > 0 )
             aText->SetTextThickness( toIU( aPresentation.width ) );
@@ -260,7 +261,7 @@ namespace
         auto text =
                 std::make_unique<SCH_TEXT>( localPoint( aGraphic.points.front() ), aGraphic.text.text, LAYER_DEVICE );
         text->SetTextAngle( EDA_ANGLE( aGraphic.angle, TENTHS_OF_A_DEGREE_T ) );
-        applyTextPresentation( text.get(), aGraphic.presentation, aDiagnostics );
+        applyTextPresentation( text.get(), aGraphic.presentation, aGraphic.presentation.visible, aDiagnostics );
         return text;
     }
 
@@ -271,7 +272,7 @@ namespace
     {
         auto text = std::make_unique<SCH_TEXT>( pagePoint( aPosition, aPageHeight ), aText.text, LAYER_NOTES );
         text->SetTextAngle( EDA_ANGLE( aAngle, TENTHS_OF_A_DEGREE_T ) );
-        applyTextPresentation( text.get(), aPresentation, aDiagnostics );
+        applyTextPresentation( text.get(), aPresentation, aPresentation.visible, aDiagnostics );
         return text;
     }
 
@@ -356,7 +357,7 @@ namespace
             value->SetText( aLabel.text.text );
             value->SetPosition( symbol->GetPosition() );
             value->SetTextAngle( EDA_ANGLE( aLabel.angle, TENTHS_OF_A_DEGREE_T ) );
-            applyTextPresentation( value, aLabel.presentation, aDiagnostics );
+            applyTextPresentation( value, aLabel.presentation, aLabel.presentation.visible, aDiagnostics );
         }
 
         return symbol;
@@ -580,8 +581,8 @@ namespace
         field->SetText( aSource.value.text );
         field->SetPosition( aSymbol->GetPosition() + localPoint( aSource.position ) );
         field->SetTextAngle( EDA_ANGLE( aSource.angle, TENTHS_OF_A_DEGREE_T ) );
-        field->SetVisible( aSource.visible && aSource.presentation.visible );
-        applyTextPresentation( field, aSource.presentation, aDiagnostics );
+        applyTextPresentation( field, aSource.presentation, aSource.visible && aSource.presentation.visible,
+                               aDiagnostics );
     }
 
 
@@ -975,21 +976,81 @@ namespace
     }
 
 
-    void stageSheetContent( STAGED_SCHEMATIC& aStaged, const PADS_SCH_MODEL& aModel, const MODEL_SHEET& aSourceSheet,
-                            SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath )
+    struct MODEL_INDEX
+    {
+        using POINT_KEY = std::tuple<uint32_t, int64_t, int64_t>;
+
+        explicit MODEL_INDEX( const PADS_SCH_MODEL& aModel )
+        {
+            for( const MODEL_PLACEMENT& placement : aModel.placements )
+                placementsBySheet[placement.sheet.id].push_back( &placement );
+
+            for( const MODEL_NET& net : aModel.nets )
+            {
+                netsById.emplace( net.id, &net );
+                netsBySheet[net.sheet.id].push_back( &net );
+
+                for( const MODEL_CONNECTION& connection : net.connections )
+                {
+                    if( connection.vertices.size() < 2 )
+                        continue;
+
+                    endpointAdjacency[{ net.id.Value(), connection.vertices.front().x, connection.vertices.front().y }]
+                            .push_back( connection.vertices[1] );
+                    endpointAdjacency[{ net.id.Value(), connection.vertices.back().x, connection.vertices.back().y }]
+                            .push_back( connection.vertices[connection.vertices.size() - 2] );
+                }
+            }
+
+            for( const MODEL_BUS& bus : aModel.buses )
+                busesBySheet[bus.sheet.id].push_back( &bus );
+
+            for( const MODEL_LABEL& label : aModel.labels )
+                labelsBySheet[label.sheet.id].push_back( &label );
+
+            for( const MODEL_JUNCTION& junction : aModel.junctions )
+                junctionsBySheet[junction.sheet.id].push_back( &junction );
+
+            for( const MODEL_TEXT& text : aModel.texts )
+                textsBySheet[text.sheet.id].push_back( &text );
+
+            for( const MODEL_PAGE_GRAPHIC& graphic : aModel.graphics )
+                graphicsBySheet[graphic.sheet.id].push_back( &graphic );
+        }
+
+        template <typename T>
+        static const std::vector<const T*>& ForSheet( const std::map<SHEET_ID, std::vector<const T*>>& aMap,
+                                                      SHEET_ID                                         aSheet )
+        {
+            static const std::vector<const T*> empty;
+            auto                               found = aMap.find( aSheet );
+            return found == aMap.end() ? empty : found->second;
+        }
+
+        std::map<SHEET_ID, std::vector<const MODEL_PLACEMENT*>>    placementsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_NET*>>          netsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_BUS*>>          busesBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_LABEL*>>        labelsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_JUNCTION*>>     junctionsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_TEXT*>>         textsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_PAGE_GRAPHIC*>> graphicsBySheet;
+        std::map<NET_ID, const MODEL_NET*>                         netsById;
+        std::map<POINT_KEY, std::vector<SOURCE_POINT>>             endpointAdjacency;
+    };
+
+
+    void stageSheetContent( STAGED_SCHEMATIC& aStaged, const PADS_SCH_MODEL& aModel, const MODEL_INDEX& aIndex,
+                            const MODEL_SHEET& aSourceSheet, SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath )
     {
         PAGE_INFO page = pageInfo( aSourceSheet );
         aScreen->SetPageSettings( page );
         applyTitleBlock( aScreen, aSourceSheet );
         const int pageHeight = page.GetHeightIU( schIUScale.IU_PER_MILS );
 
-        for( const MODEL_PLACEMENT& placement : aModel.placements )
+        for( const MODEL_PLACEMENT* placement : MODEL_INDEX::ForSheet( aIndex.placementsBySheet, aSourceSheet.id ) )
         {
-            if( placement.sheet.id != aSourceSheet.id )
-                continue;
-
             std::unique_ptr<SCH_SYMBOL> symbol =
-                    makeSymbol( aModel, placement, aPath, pageHeight, aStaged.result.diagnostics );
+                    makeSymbol( aModel, *placement, aPath, pageHeight, aStaged.result.diagnostics );
             aScreen->Append( symbol.get() );
             symbol.release();
             ++aStaged.result.counts.symbols;
@@ -1008,121 +1069,92 @@ namespace
                     appendPageGraphic( aScreen, graphic, pageHeight, aStaged.result.diagnostics );
         }
 
-        using SEGMENT_KEY = std::tuple<int64_t, int64_t, int64_t, int64_t>;
+        using SEGMENT_KEY = std::tuple<uint32_t, uint32_t, int64_t, int64_t, int64_t, int64_t>;
         std::set<SEGMENT_KEY> busEntrySegments;
 
-        auto segmentKey = []( const SOURCE_POINT& aStart, const SOURCE_POINT& aEnd )
+        auto segmentKey = []( SHEET_ID aSheet, NET_ID aNet, const SOURCE_POINT& aStart, const SOURCE_POINT& aEnd )
         {
             if( std::tie( aStart.x, aStart.y ) <= std::tie( aEnd.x, aEnd.y ) )
-                return SEGMENT_KEY( aStart.x, aStart.y, aEnd.x, aEnd.y );
+                return SEGMENT_KEY( aSheet.Value(), aNet.Value(), aStart.x, aStart.y, aEnd.x, aEnd.y );
 
-            return SEGMENT_KEY( aEnd.x, aEnd.y, aStart.x, aStart.y );
+            return SEGMENT_KEY( aSheet.Value(), aNet.Value(), aEnd.x, aEnd.y, aStart.x, aStart.y );
         };
 
-        auto samePoint = []( const SOURCE_POINT& aLeft, const SOURCE_POINT& aRight )
+        for( const MODEL_BUS* bus : MODEL_INDEX::ForSheet( aIndex.busesBySheet, aSourceSheet.id ) )
         {
-            return aLeft.x == aRight.x && aLeft.y == aRight.y;
-        };
+            if( bus->vertices.size() < 2 )
+                THROW_IO_ERROR( FormatParserError( bus->source, wxS( "bus has inconsistent geometry" ) ) );
 
-        for( const MODEL_BUS& bus : aModel.buses )
-        {
-            if( bus.sheet.id != aSourceSheet.id )
-                continue;
-
-            if( bus.vertices.size() < 2 )
-                THROW_IO_ERROR( FormatParserError( bus.source, wxS( "bus has inconsistent geometry" ) ) );
-
-            for( size_t vertex = 1; vertex < bus.vertices.size(); ++vertex )
+            for( size_t vertex = 1; vertex < bus->vertices.size(); ++vertex )
             {
-                auto line = std::make_unique<SCH_LINE>( pagePoint( bus.vertices[vertex - 1], pageHeight ), LAYER_BUS );
-                line->SetEndPoint( pagePoint( bus.vertices[vertex], pageHeight ) );
+                auto line = std::make_unique<SCH_LINE>( pagePoint( bus->vertices[vertex - 1], pageHeight ), LAYER_BUS );
+                line->SetEndPoint( pagePoint( bus->vertices[vertex], pageHeight ) );
                 line->SetStroke( STROKE_PARAMS( toIU( aSourceSheet.defaultBusWidth ), LINE_STYLE::SOLID ) );
                 aScreen->Append( line.get() );
                 line.release();
                 ++aStaged.result.counts.buses;
             }
 
-            wxString busLabel = bus.name.text;
+            wxString busLabel = bus->name.text;
 
-            if( !bus.memberNets.empty() )
+            if( !bus->memberNets.empty() )
             {
                 busLabel += wxS( "{" );
 
-                for( size_t member = 0; member < bus.memberNets.size(); ++member )
+                for( size_t member = 0; member < bus->memberNets.size(); ++member )
                 {
-                    auto net = std::ranges::find( aModel.nets, bus.memberNets[member].id, &MODEL_NET::id );
+                    auto net = aIndex.netsById.find( bus->memberNets[member].id );
 
-                    if( net == aModel.nets.end() )
-                        THROW_IO_ERROR( FormatParserError( bus.memberNets[member].source,
+                    if( net == aIndex.netsById.end() )
+                        THROW_IO_ERROR( FormatParserError( bus->memberNets[member].source,
                                                            wxS( "resolved bus member is missing during staging" ) ) );
 
                     if( member )
                         busLabel += wxS( " " );
 
-                    busLabel += net->name.text;
+                    busLabel += net->second->name.text;
                 }
 
                 busLabel += wxS( "}" );
             }
 
-            auto label = std::make_unique<SCH_LABEL>( pagePoint( bus.vertices.front(), pageHeight ), busLabel );
+            auto label = std::make_unique<SCH_LABEL>( pagePoint( bus->vertices.front(), pageHeight ), busLabel );
             aScreen->Append( label.get() );
             label.release();
             ++aStaged.result.counts.labels;
 
-            for( const MODEL_BUS_ENTRY& entry : bus.entries )
+            for( const MODEL_BUS_ENTRY& entry : bus->entries )
             {
-                auto ownerNet = std::ranges::find( aModel.nets, entry.memberNet.id, &MODEL_NET::id );
+                auto ownerNet = aIndex.netsById.find( entry.memberNet.id );
 
-                if( ownerNet == aModel.nets.end() )
+                if( ownerNet == aIndex.netsById.end() )
                     THROW_IO_ERROR( FormatParserError( entry.memberNet.source,
                                                        wxS( "resolved bus-entry net is missing during staging" ) ) );
 
-                std::optional<SOURCE_POINT> wireEnd;
+                auto adjacency = aIndex.endpointAdjacency.find(
+                        { entry.memberNet.id.Value(), entry.position.x, entry.position.y } );
 
-                for( const MODEL_CONNECTION& connection : ownerNet->connections )
-                {
-                    if( connection.vertices.size() < 2 )
-                        continue;
-
-                    if( samePoint( connection.vertices.front(), entry.position ) )
-                    {
-                        if( wireEnd )
-                            THROW_IO_ERROR(
-                                    FormatParserError( entry.source, wxS( "bus-entry geometry is ambiguous" ) ) );
-
-                        wireEnd = connection.vertices[1];
-                    }
-                    else if( samePoint( connection.vertices.back(), entry.position ) )
-                    {
-                        if( wireEnd )
-                            THROW_IO_ERROR(
-                                    FormatParserError( entry.source, wxS( "bus-entry geometry is ambiguous" ) ) );
-
-                        wireEnd = connection.vertices[connection.vertices.size() - 2];
-                    }
-                }
-
-                if( !wireEnd )
+                if( adjacency == aIndex.endpointAdjacency.end() )
                     THROW_IO_ERROR( FormatParserError( entry.source, wxS( "bus-entry geometry is unresolved" ) ) );
 
+                if( adjacency->second.size() != 1 )
+                    THROW_IO_ERROR( FormatParserError( entry.source, wxS( "bus-entry geometry is ambiguous" ) ) );
+
                 const VECTOR2I start = pagePoint( entry.position, pageHeight );
-                const VECTOR2I end = pagePoint( *wireEnd, pageHeight );
+                const VECTOR2I end = pagePoint( adjacency->second.front(), pageHeight );
                 auto           entryItem = std::make_unique<SCH_BUS_WIRE_ENTRY>( start );
                 entryItem->SetSize( end - start );
                 aScreen->Append( entryItem.get() );
                 entryItem.release();
-                busEntrySegments.insert( segmentKey( entry.position, *wireEnd ) );
+                busEntrySegments.insert(
+                        segmentKey( aSourceSheet.id, entry.memberNet.id, entry.position, adjacency->second.front() ) );
                 ++aStaged.result.counts.busEntries;
             }
         }
 
-        for( const MODEL_NET& net : aModel.nets )
+        for( const MODEL_NET* net : MODEL_INDEX::ForSheet( aIndex.netsBySheet, aSourceSheet.id ) )
         {
-            if( net.sheet.id != aSourceSheet.id )
-                continue;
-
-            for( const MODEL_CONNECTION& connection : net.connections )
+            for( const MODEL_CONNECTION& connection : net->connections )
             {
                 if( connection.vertices.size() < 2 )
                     THROW_IO_ERROR(
@@ -1130,8 +1162,9 @@ namespace
 
                 for( size_t vertex = 1; vertex < connection.vertices.size(); ++vertex )
                 {
-                    if( busEntrySegments.contains(
-                                segmentKey( connection.vertices[vertex - 1], connection.vertices[vertex] ) ) )
+                    if( busEntrySegments.contains( segmentKey( aSourceSheet.id, net->id,
+                                                               connection.vertices[vertex - 1],
+                                                               connection.vertices[vertex] ) ) )
                     {
                         continue;
                     }
@@ -1147,12 +1180,9 @@ namespace
             }
         }
 
-        for( const MODEL_JUNCTION& junction : aModel.junctions )
+        for( const MODEL_JUNCTION* junction : MODEL_INDEX::ForSheet( aIndex.junctionsBySheet, aSourceSheet.id ) )
         {
-            if( junction.sheet.id != aSourceSheet.id )
-                continue;
-
-            auto item = std::make_unique<SCH_JUNCTION>( pagePoint( junction.position, pageHeight ) );
+            auto item = std::make_unique<SCH_JUNCTION>( pagePoint( junction->position, pageHeight ) );
             aScreen->Append( item.get() );
             item.release();
             ++aStaged.result.counts.junctions;
@@ -1160,10 +1190,9 @@ namespace
 
         size_t powerOrdinal = 0;
 
-        for( const MODEL_LABEL& label : aModel.labels )
+        for( const MODEL_LABEL* labelPointer : MODEL_INDEX::ForSheet( aIndex.labelsBySheet, aSourceSheet.id ) )
         {
-            if( label.sheet.id != aSourceSheet.id )
-                continue;
+            const MODEL_LABEL& label = *labelPointer;
 
             std::unique_ptr<SCH_ITEM> item;
 
@@ -1198,7 +1227,8 @@ namespace
             if( auto* text = dynamic_cast<EDA_TEXT*>( item.get() ) )
             {
                 text->SetTextAngle( EDA_ANGLE( label.angle, TENTHS_OF_A_DEGREE_T ) );
-                applyTextPresentation( text, label.presentation, aStaged.result.diagnostics );
+                applyTextPresentation( text, label.presentation, label.presentation.visible,
+                                       aStaged.result.diagnostics );
             }
 
             aScreen->Append( item.get() );
@@ -1206,10 +1236,9 @@ namespace
             ++aStaged.result.counts.labels;
         }
 
-        for( const MODEL_TEXT& sourceText : aModel.texts )
+        for( const MODEL_TEXT* sourceTextPointer : MODEL_INDEX::ForSheet( aIndex.textsBySheet, aSourceSheet.id ) )
         {
-            if( sourceText.sheet.id != aSourceSheet.id )
-                continue;
+            const MODEL_TEXT& sourceText = *sourceTextPointer;
 
             std::unique_ptr<SCH_TEXT> text =
                     makePageText( sourceText.text, sourceText.position, sourceText.angle, sourceText.presentation,
@@ -1219,10 +1248,10 @@ namespace
             ++aStaged.result.counts.texts;
         }
 
-        for( const MODEL_PAGE_GRAPHIC& pageGraphic : aModel.graphics )
+        for( const MODEL_PAGE_GRAPHIC* pageGraphicPointer :
+             MODEL_INDEX::ForSheet( aIndex.graphicsBySheet, aSourceSheet.id ) )
         {
-            if( pageGraphic.sheet.id != aSourceSheet.id )
-                continue;
+            const MODEL_PAGE_GRAPHIC& pageGraphic = *pageGraphicPointer;
 
             if( pageGraphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT )
             {
@@ -1256,6 +1285,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
         THROW_IO_ERROR( wxS( "cannot append a PADS schematic to a sheet without a screen" ) );
 
     aModel.ValidateOrThrow();
+    MODEL_INDEX      modelIndex( aModel );
     STAGED_SCHEMATIC staged;
     staged.result.counts.sheets = aModel.sheets.size();
     staged.connectionGraph = std::make_unique<CONNECTION_GRAPH>( aSchematic );
@@ -1303,7 +1333,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
 
         if( !multiSheet )
         {
-            stageSheetContent( staged, aModel, aModel.sheets.front(), rootScreen, rootPath );
+            stageSheetContent( staged, aModel, modelIndex, aModel.sheets.front(), rootScreen, rootPath );
         }
         else
         {
@@ -1325,7 +1355,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
                 SCH_SHEET_PATH childPath( rootPath );
                 childPath.push_back( child.get() );
                 childPath.SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
-                stageSheetContent( staged, aModel, sourceSheet, childScreen, childPath );
+                stageSheetContent( staged, aModel, modelIndex, sourceSheet, childScreen, childPath );
                 staged.hierarchy.push_back( childPath );
                 rootScreen->Append( child.get() );
                 child.release();
@@ -1338,7 +1368,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
         SCH_SCREEN*        temporaryScreen = staged.appendCache.get();
         SCH_SHEET_PATH path;
         path.push_back( aAppendToMe );
-        stageSheetContent( staged, aModel, sourceSheet, temporaryScreen, path );
+        stageSheetContent( staged, aModel, modelIndex, sourceSheet, temporaryScreen, path );
 
         std::vector<SCH_ITEM*> temporaryItems;
 
@@ -1382,7 +1412,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
             SCH_SHEET_PATH childPath( rootPath );
             childPath.push_back( child.get() );
             childPath.SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
-            stageSheetContent( staged, aModel, sourceSheet, childScreen, childPath );
+            stageSheetContent( staged, aModel, modelIndex, sourceSheet, childScreen, childPath );
             child->SetParent( aAppendToMe->GetScreen() );
             staged.appendItems.emplace_back( std::move( child ) );
         }

@@ -210,18 +210,20 @@ static std::multiset<wxString> connectivitySnapshot( SCHEMATIC& aSchematic )
             }
             else if( auto* text = dynamic_cast<EDA_TEXT*>( item ) )
             {
-                geometry = wxString::Format(
-                        wxS( "text:%d,%d:%g:%d,%d:%d:%d:%d:%d:%d:%s" ), text->GetTextPos().x, text->GetTextPos().y,
-                        text->GetTextAngleDegrees(), text->GetTextSize().x, text->GetTextSize().y,
-                        text->GetTextThickness(), static_cast<int>( text->GetHorizJustify() ),
-                        static_cast<int>( text->GetVertJustify() ), text->IsBold(), text->IsItalic(), text->GetText() );
+                geometry = wxString::Format( wxS( "text:%d,%d:%g:%d,%d:%d:%d:%d:%d:%d:%d:%s" ), text->GetTextPos().x,
+                                             text->GetTextPos().y, text->GetTextAngleDegrees(), text->GetTextSize().x,
+                                             text->GetTextSize().y, text->GetTextThickness(),
+                                             static_cast<int>( text->GetHorizJustify() ),
+                                             static_cast<int>( text->GetVertJustify() ), text->IsBold(),
+                                             text->IsItalic(), text->IsVisible(), text->GetText() );
             }
             else
             {
                 geometry = wxString::Format( wxS( "point:%d,%d" ), item->GetPosition().x, item->GetPosition().y );
             }
 
-            result.insert( wxString::Format( wxS( "%d:%s" ), static_cast<int>( item->Type() ), geometry ) );
+            result.insert( wxString::Format( wxS( "%s:%s:%d:%s" ), path.Path().AsString(), path.GetPageNumber(),
+                                             static_cast<int>( item->Type() ), geometry ) );
 
             if( SCH_CONNECTION* connection = item->Connection( &path ) )
                 result.insert( wxS( "net:" ) + connection->GetNetName() );
@@ -248,6 +250,488 @@ static bool hasNetName( const std::multiset<wxString>& aSnapshot, const wxString
                                 {
                                     return aValue == wxS( "net:" ) + aName || aValue.EndsWith( wxS( "/" ) + aName );
                                 } );
+}
+
+
+static bool netNameMatches( const wxString& aActual, const wxString& aExpected )
+{
+    return aActual == aExpected || aActual.EndsWith( wxS( "/" ) + aExpected );
+}
+
+
+static SCH_SHEET_PATH sourceSheetPath( SCHEMATIC& aSchematic, const PADS_SCH_BINARY::PADS_SCH_MODEL& aModel,
+                                       PADS_SCH_BINARY::SHEET_ID aSheetId )
+{
+    using namespace PADS_SCH_BINARY;
+
+    auto sourceSheet = std::ranges::find( aModel.sheets, aSheetId, &MODEL_SHEET::id );
+    BOOST_REQUIRE( sourceSheet != aModel.sheets.end() );
+    SCH_SHEET_LIST hierarchy = aSchematic.BuildSheetListSortedByPageNumbers();
+
+    if( aModel.sheets.size() == 1 )
+    {
+        BOOST_REQUIRE_EQUAL( hierarchy.size(), 1u );
+        return hierarchy.front();
+    }
+
+    wxString expectedPage = wxString::Format( wxS( "%zu" ), sourceSheet->index + 1 );
+    auto     path = std::ranges::find_if( hierarchy,
+                                          [&]( const SCH_SHEET_PATH& aPath )
+                                          {
+                                          return aPath.size() > 1 && aPath.GetPageNumber() == expectedPage;
+                                      } );
+    BOOST_REQUIRE_MESSAGE( path != hierarchy.end(), "missing typed source sheet index " << sourceSheet->index );
+    BOOST_CHECK_EQUAL( path->Last()->GetField( FIELD_T::SHEET_NAME )->GetText(), sourceSheet->name.text );
+    return *path;
+}
+
+
+static void assertSourceConnectivity( const PADS_SCH_BINARY::PADS_SCH_MODEL& aModel, SCHEMATIC& aSchematic )
+{
+    using namespace PADS_SCH_BINARY;
+
+    SCH_SHEET_LIST hierarchy = aSchematic.BuildSheetListSortedByPageNumbers();
+    aSchematic.ConnectionGraph()->Recalculate( hierarchy, true );
+
+    auto samePoint = []( const SOURCE_POINT& aLeft, const SOURCE_POINT& aRight )
+    {
+        return aLeft.x == aRight.x && aLeft.y == aRight.y;
+    };
+
+    using OWNED_SEGMENT = std::tuple<uint32_t, uint32_t, int64_t, int64_t, int64_t, int64_t>;
+    std::set<OWNED_SEGMENT> busEntrySegments;
+
+    auto segmentKey = []( SHEET_ID aSheet, NET_ID aNet, const SOURCE_POINT& aStart, const SOURCE_POINT& aEnd )
+    {
+        if( std::tie( aStart.x, aStart.y ) <= std::tie( aEnd.x, aEnd.y ) )
+            return OWNED_SEGMENT( aSheet.Value(), aNet.Value(), aStart.x, aStart.y, aEnd.x, aEnd.y );
+
+        return OWNED_SEGMENT( aSheet.Value(), aNet.Value(), aEnd.x, aEnd.y, aStart.x, aStart.y );
+    };
+
+    for( const MODEL_BUS& bus : aModel.buses )
+    {
+        SCH_SHEET_PATH path = sourceSheetPath( aSchematic, aModel, bus.sheet.id );
+        SCH_SCREEN*    screen = path.LastScreen();
+        BOOST_REQUIRE( screen );
+        const int pageHeight = screen->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+        auto      sourceSheet = std::ranges::find( aModel.sheets, bus.sheet.id, &MODEL_SHEET::id );
+        BOOST_REQUIRE( sourceSheet != aModel.sheets.end() );
+
+        for( size_t vertex = 1; vertex < bus.vertices.size(); ++vertex )
+        {
+            bool found = false;
+
+            for( SCH_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
+            {
+                auto* line = static_cast<SCH_LINE*>( item );
+
+                if( line->GetLayer() == LAYER_BUS
+                    && line->GetStartPoint() == pagePoint( bus.vertices[vertex - 1], pageHeight )
+                    && line->GetEndPoint() == pagePoint( bus.vertices[vertex], pageHeight ) )
+                {
+                    BOOST_CHECK_EQUAL( line->GetStroke().GetWidth(),
+                                       schIUScale.MilsToIU( sourceSheet->defaultBusWidth / 2.0 ) );
+                    found = true;
+                    break;
+                }
+            }
+
+            BOOST_CHECK_MESSAGE( found, "missing bus segment " << bus.source.recordIndex << ':' << vertex );
+        }
+
+        wxString memberSuffix = wxS( "{" );
+
+        for( size_t member = 0; member < bus.memberNets.size(); ++member )
+        {
+            auto sourceNet = std::ranges::find( aModel.nets, bus.memberNets[member].id, &MODEL_NET::id );
+            BOOST_REQUIRE( sourceNet != aModel.nets.end() );
+
+            if( member )
+                memberSuffix += wxS( " " );
+
+            memberSuffix += sourceNet->name.text;
+        }
+
+        memberSuffix += wxS( "}" );
+        std::vector<wxString> aliases;
+
+        if( bus.aliases.empty() )
+            aliases.push_back( bus.name.text );
+        else
+        {
+            for( const SOURCE_STRING& alias : bus.aliases )
+                aliases.push_back( alias.text );
+        }
+
+        for( const wxString& alias : aliases )
+        {
+            bool foundBusLabel = false;
+
+            for( SCH_ITEM* item : screen->Items().OfType( SCH_LABEL_T ) )
+            {
+                auto* label = static_cast<SCH_LABEL*>( item );
+                foundBusLabel |= label->GetText() == alias + memberSuffix
+                                 && label->GetPosition() == pagePoint( bus.vertices.front(), pageHeight );
+            }
+
+            BOOST_CHECK_MESSAGE( foundBusLabel, alias );
+        }
+
+        for( const MODEL_BUS_ENTRY& entry : bus.entries )
+        {
+            auto ownerNet = std::ranges::find( aModel.nets, entry.memberNet.id, &MODEL_NET::id );
+            BOOST_REQUIRE( ownerNet != aModel.nets.end() );
+            std::vector<SOURCE_POINT> adjacent;
+
+            for( const MODEL_CONNECTION& connection : ownerNet->connections )
+            {
+                if( connection.vertices.size() >= 2 && samePoint( connection.vertices.front(), entry.position ) )
+                    adjacent.push_back( connection.vertices[1] );
+                else if( connection.vertices.size() >= 2 && samePoint( connection.vertices.back(), entry.position ) )
+                    adjacent.push_back( connection.vertices[connection.vertices.size() - 2] );
+            }
+
+            BOOST_REQUIRE_EQUAL( adjacent.size(), 1u );
+            busEntrySegments.insert( segmentKey( bus.sheet.id, ownerNet->id, entry.position, adjacent.front() ) );
+            bool found = false;
+
+            for( SCH_ITEM* item : screen->Items().OfType( SCH_BUS_WIRE_ENTRY_T ) )
+            {
+                auto* builtEntry = static_cast<SCH_BUS_WIRE_ENTRY*>( item );
+
+                if( builtEntry->GetPosition() == pagePoint( entry.position, pageHeight )
+                    && builtEntry->GetSize()
+                               == pagePoint( adjacent.front(), pageHeight ) - pagePoint( entry.position, pageHeight ) )
+                {
+                    SCH_CONNECTION* connection = builtEntry->Connection( &path );
+                    BOOST_REQUIRE( connection );
+                    BOOST_CHECK( netNameMatches( connection->GetNetName(), ownerNet->name.text ) );
+                    found = true;
+                    break;
+                }
+            }
+
+            BOOST_CHECK_MESSAGE( found, "missing bus entry " << entry.source.recordIndex );
+        }
+    }
+
+    for( const MODEL_NET& net : aModel.nets )
+    {
+        SCH_SHEET_PATH path = sourceSheetPath( aSchematic, aModel, net.sheet.id );
+        SCH_SCREEN*    screen = path.LastScreen();
+        BOOST_REQUIRE( screen );
+        const int          pageHeight = screen->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+        const MODEL_SHEET& sourceSheet = *std::ranges::find( aModel.sheets, net.sheet.id, &MODEL_SHEET::id );
+
+        for( const MODEL_CONNECTION& sourceConnection : net.connections )
+        {
+            BOOST_REQUIRE_GE( sourceConnection.vertices.size(), 2u );
+
+            for( size_t vertex = 1; vertex < sourceConnection.vertices.size(); ++vertex )
+            {
+                if( busEntrySegments.contains( segmentKey( net.sheet.id, net.id, sourceConnection.vertices[vertex - 1],
+                                                           sourceConnection.vertices[vertex] ) ) )
+                {
+                    continue;
+                }
+
+                bool found = false;
+
+                for( SCH_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
+                {
+                    auto* line = static_cast<SCH_LINE*>( item );
+
+                    if( line->GetLayer() == LAYER_WIRE
+                        && line->GetStartPoint() == pagePoint( sourceConnection.vertices[vertex - 1], pageHeight )
+                        && line->GetEndPoint() == pagePoint( sourceConnection.vertices[vertex], pageHeight ) )
+                    {
+                        BOOST_CHECK_EQUAL( line->GetStroke().GetWidth(),
+                                           schIUScale.MilsToIU( sourceSheet.defaultLineWidth / 2.0 ) );
+                        SCH_CONNECTION* connection = line->Connection( &path );
+                        BOOST_REQUIRE( connection );
+                        BOOST_CHECK( netNameMatches( connection->GetNetName(), net.name.text ) );
+                        found = true;
+                        break;
+                    }
+                }
+
+                BOOST_CHECK_MESSAGE( found, "missing owned wire segment " << sourceConnection.source.recordIndex << ':'
+                                                                          << vertex );
+            }
+
+            for( const MODEL_CONNECTION_ENDPOINT& endpoint : sourceConnection.endpoints )
+            {
+                BOOST_CHECK( samePoint( endpoint.point, sourceConnection.vertices.front() )
+                             || samePoint( endpoint.point, sourceConnection.vertices.back() ) );
+
+                if( endpoint.kind != MODEL_ENDPOINT_KIND::PIN )
+                    continue;
+
+                BOOST_REQUIRE( endpoint.placement );
+                BOOST_REQUIRE( endpoint.pin );
+                auto placement = std::ranges::find( aModel.placements, endpoint.placement->id, &MODEL_PLACEMENT::id );
+                BOOST_REQUIRE( placement != aModel.placements.end() );
+                BOOST_CHECK_EQUAL( placement->sheet.id.Value(), net.sheet.id.Value() );
+                BOOST_CHECK( std::ranges::any_of( placement->pins,
+                                                  [&]( const PIN_REFERENCE& aPin )
+                                                  {
+                                                      return aPin.id == endpoint.pin->id;
+                                                  } ) );
+                SCH_SYMBOL* builtSymbol = nullptr;
+
+                for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+                {
+                    auto* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                    if( !symbol->GetRef( &path ).StartsWith( wxS( "#PWR" ) )
+                        && symbol->GetPosition() == pagePoint( placement->position, pageHeight ) )
+                    {
+                        builtSymbol = symbol;
+                        break;
+                    }
+                }
+
+                BOOST_REQUIRE( builtSymbol );
+                std::vector<SCH_PIN*> builtPins = builtSymbol->GetPins( &path );
+                auto                  builtPin =
+                        std::ranges::find_if( builtPins,
+                                              [&]( SCH_PIN* aPin )
+                                              {
+                                                  return aPin->GetPosition() == pagePoint( endpoint.point, pageHeight );
+                                              } );
+                BOOST_REQUIRE( builtPin != builtPins.end() );
+                SCH_CONNECTION* pinConnection = ( *builtPin )->Connection( &path );
+                BOOST_REQUIRE( pinConnection );
+                BOOST_CHECK( netNameMatches( pinConnection->GetNetName(), net.name.text ) );
+            }
+        }
+    }
+
+    for( const MODEL_LABEL& label : aModel.labels )
+    {
+        if( label.kind == MODEL_LABEL_KIND::POWER || label.kind == MODEL_LABEL_KIND::GROUND
+            || label.kind == MODEL_LABEL_KIND::UNSUPPORTED )
+        {
+            continue;
+        }
+
+        SCH_SHEET_PATH path = sourceSheetPath( aSchematic, aModel, label.sheet.id );
+        SCH_SCREEN*    screen = path.LastScreen();
+        BOOST_REQUIRE( screen );
+        const int pageHeight = screen->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+        auto      ownerNet =
+                std::ranges::find_if( aModel.nets,
+                                      [&]( const MODEL_NET& aNet )
+                                      {
+                                          return aNet.sheet.id == label.sheet.id && aNet.name.text == label.text.text;
+                                      } );
+        BOOST_REQUIRE( ownerNet != aModel.nets.end() );
+        KICAD_T type = label.kind == MODEL_LABEL_KIND::GLOBAL         ? SCH_GLOBAL_LABEL_T
+                       : label.kind == MODEL_LABEL_KIND::HIERARCHICAL ? SCH_HIER_LABEL_T
+                                                                      : SCH_LABEL_T;
+        bool    found = false;
+
+        for( SCH_ITEM* item : screen->Items().OfType( type ) )
+        {
+            auto* builtLabel = static_cast<SCH_LABEL_BASE*>( item );
+
+            if( builtLabel->GetText() == label.text.text
+                && builtLabel->GetPosition() == pagePoint( label.position, pageHeight ) )
+            {
+                SCH_CONNECTION* connection = builtLabel->Connection( &path );
+                BOOST_REQUIRE( connection );
+                BOOST_CHECK( netNameMatches( connection->GetNetName(), ownerNet->name.text ) );
+                found = true;
+                break;
+            }
+        }
+
+        BOOST_CHECK_MESSAGE( found, "missing exact label net " << label.text.text );
+    }
+
+    for( const MODEL_JUNCTION& junction : aModel.junctions )
+    {
+        auto relationship = std::ranges::find_if( junction.properties,
+                                                  []( const SOURCE_PROPERTY& aProperty )
+                                                  {
+                                                      return aProperty.name.text == wxS( "connection_record" );
+                                                  } );
+        BOOST_REQUIRE( relationship != junction.properties.end() );
+        unsigned long connectionRecord = 0;
+        BOOST_REQUIRE( relationship->value.text.ToULong( &connectionRecord ) );
+        const MODEL_NET* ownerNet = nullptr;
+
+        for( const MODEL_NET& net : aModel.nets )
+        {
+            if( net.sheet.id != junction.sheet.id )
+                continue;
+
+            auto connection = std::ranges::find_if( net.connections,
+                                                    [&]( const MODEL_CONNECTION& aConnection )
+                                                    {
+                                                        return aConnection.source.recordIndex == connectionRecord;
+                                                    } );
+
+            if( connection != net.connections.end() )
+            {
+                BOOST_REQUIRE( !ownerNet );
+                ownerNet = &net;
+            }
+        }
+
+        BOOST_REQUIRE( ownerNet );
+        SCH_SHEET_PATH path = sourceSheetPath( aSchematic, aModel, junction.sheet.id );
+        SCH_SCREEN*    screen = path.LastScreen();
+        BOOST_REQUIRE( screen );
+        const int pageHeight = screen->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+        bool      found = false;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_JUNCTION_T ) )
+        {
+            if( item->GetPosition() != pagePoint( junction.position, pageHeight ) )
+                continue;
+
+            SCH_CONNECTION* connection = item->Connection( &path );
+            BOOST_REQUIRE( connection );
+            BOOST_CHECK( netNameMatches( connection->GetNetName(), ownerNet->name.text ) );
+            found = true;
+            break;
+        }
+
+        BOOST_CHECK_MESSAGE( found, "missing typed junction " << junction.source.recordIndex );
+    }
+}
+
+
+static std::vector<const PADS_SCH_BINARY::SOURCE_PROPERTY*>
+allSourceProperties( const PADS_SCH_BINARY::PADS_SCH_MODEL& aModel )
+{
+    using namespace PADS_SCH_BINARY;
+
+    std::vector<const SOURCE_PROPERTY*> result;
+    auto                                append = [&]( const std::vector<SOURCE_PROPERTY>& aProperties )
+    {
+        for( const SOURCE_PROPERTY& property : aProperties )
+            result.push_back( &property );
+    };
+    auto appendPresentation = [&]( const MODEL_TEXT_PRESENTATION& aPresentation )
+    {
+        append( aPresentation.properties );
+    };
+
+    append( aModel.settings.properties );
+
+    for( const MODEL_SHEET& sheet : aModel.sheets )
+    {
+        append( sheet.properties );
+
+        for( const MODEL_GRAPHIC& graphic : sheet.border )
+        {
+            append( graphic.properties );
+            appendPresentation( graphic.presentation );
+        }
+
+        for( const MODEL_FIELD& field : sheet.titleBlockFields )
+        {
+            append( field.properties );
+            appendPresentation( field.presentation );
+        }
+    }
+
+    for( const MODEL_SYMBOL_DEFINITION& definition : aModel.definitions )
+    {
+        append( definition.properties );
+
+        for( const MODEL_GRAPHIC& graphic : definition.graphics )
+        {
+            append( graphic.properties );
+            appendPresentation( graphic.presentation );
+        }
+
+        for( const MODEL_PIN_DEFINITION& pin : definition.pins )
+        {
+            append( pin.properties );
+            appendPresentation( pin.presentation );
+            appendPresentation( pin.namePresentation );
+            appendPresentation( pin.numberPresentation );
+        }
+
+        for( const MODEL_FIELD& field : definition.fields )
+        {
+            append( field.properties );
+            appendPresentation( field.presentation );
+        }
+    }
+
+    for( const MODEL_PART_TYPE& part : aModel.partTypes )
+    {
+        append( part.properties );
+
+        for( const MODEL_GATE& gate : part.gates )
+            append( gate.properties );
+
+        for( const MODEL_FIELD& field : part.fields )
+        {
+            append( field.properties );
+            appendPresentation( field.presentation );
+        }
+    }
+
+    for( const MODEL_PLACEMENT& placement : aModel.placements )
+    {
+        append( placement.properties );
+
+        for( const MODEL_FIELD& field : placement.fields )
+        {
+            append( field.properties );
+            appendPresentation( field.presentation );
+        }
+    }
+
+    for( const MODEL_NET& net : aModel.nets )
+    {
+        append( net.properties );
+
+        for( const MODEL_CONNECTION& connection : net.connections )
+        {
+            append( connection.properties );
+
+            for( const MODEL_CONNECTION_ENDPOINT& endpoint : connection.endpoints )
+                append( endpoint.properties );
+        }
+    }
+
+    for( const MODEL_BUS& bus : aModel.buses )
+    {
+        append( bus.properties );
+
+        for( const MODEL_BUS_ENTRY& entry : bus.entries )
+            append( entry.properties );
+    }
+
+    for( const MODEL_LABEL& label : aModel.labels )
+    {
+        append( label.properties );
+        appendPresentation( label.presentation );
+    }
+
+    for( const MODEL_JUNCTION& junction : aModel.junctions )
+        append( junction.properties );
+
+    for( const MODEL_TEXT& text : aModel.texts )
+    {
+        append( text.properties );
+        appendPresentation( text.presentation );
+    }
+
+    for( const MODEL_PAGE_GRAPHIC& graphic : aModel.graphics )
+    {
+        append( graphic.graphic.properties );
+        appendPresentation( graphic.graphic.presentation );
+    }
+
+    return result;
 }
 
 
@@ -317,6 +801,26 @@ static GR_TEXT_V_ALIGN_T verticalJustification( PADS_SCH_BINARY::MODEL_JUSTIFICA
     case PADS_SCH_BINARY::MODEL_JUSTIFICATION::RIGHT: return GR_TEXT_V_ALIGN_BOTTOM;
     default: return GR_TEXT_V_ALIGN_CENTER;
     }
+}
+
+
+static void checkTextPresentation( const EDA_TEXT&                                 aText,
+                                   const PADS_SCH_BINARY::MODEL_TEXT_PRESENTATION& aPresentation )
+{
+    if( aPresentation.height > 0 )
+    {
+        BOOST_CHECK_EQUAL( aText.GetTextSize().x, schIUScale.MilsToIU( aPresentation.height / 2.0 ) );
+        BOOST_CHECK_EQUAL( aText.GetTextSize().y, schIUScale.MilsToIU( aPresentation.height / 2.0 ) );
+    }
+
+    if( aPresentation.width > 0 )
+        BOOST_CHECK_EQUAL( aText.GetTextThickness(), schIUScale.MilsToIU( aPresentation.width / 2.0 ) );
+
+    BOOST_CHECK( aText.GetHorizJustify() == horizontalJustification( aPresentation.horizontalJustification ) );
+    BOOST_CHECK( aText.GetVertJustify() == verticalJustification( aPresentation.verticalJustification ) );
+    BOOST_CHECK_EQUAL( aText.IsBold(), aPresentation.bold );
+    BOOST_CHECK_EQUAL( aText.IsItalic(), aPresentation.italic );
+    BOOST_CHECK_EQUAL( aText.IsVisible(), aPresentation.visible );
 }
 
 } // namespace
@@ -1340,10 +1844,51 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
     using namespace PADS_SCH_BINARY;
 
     PADS_SCH_BINARY_BUILDER builder;
+
+    PADS_SCH_MODEL fieldVisibility = parseBinaryFixture( wxS( "fields" ) );
+    BOOST_REQUIRE( !fieldVisibility.placements.empty() );
+    BOOST_REQUIRE_GE( fieldVisibility.placements.front().fields.size(), 2u );
+    MODEL_PLACEMENT& visibilityPlacement = fieldVisibility.placements.front();
+    visibilityPlacement.fields[0].visible = false;
+    visibilityPlacement.fields[0].presentation.visible = true;
+    visibilityPlacement.fields[1].visible = true;
+    visibilityPlacement.fields[1].presentation.visible = false;
+    builder.Build( fieldVisibility, &m_schematic, nullptr, binaryFixture( wxS( "fields" ) ) );
+    SCH_SHEET_PATH visibilityPath = m_schematic.CurrentSheet();
+    SCH_SYMBOL*    visibilitySymbol = nullptr;
+
+    for( SCH_ITEM* item : visibilityPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        auto* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( symbol->GetRef( &visibilityPath ) == visibilityPlacement.reference.text )
+        {
+            visibilitySymbol = symbol;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( visibilitySymbol );
+
+    for( size_t index = 0; index < 2; ++index )
+    {
+        const MODEL_FIELD& sourceField = visibilityPlacement.fields[index];
+        SCH_FIELD*         field = sourceField.name.text.CmpNoCase( wxS( "REF-DES" ) ) == 0
+                                           ? visibilitySymbol->GetField( FIELD_T::REFERENCE )
+                                   : sourceField.name.text.CmpNoCase( wxS( "PART-TYPE" ) ) == 0
+                                           || sourceField.name.text.CmpNoCase( wxS( "VALUE" ) ) == 0
+                                           ? visibilitySymbol->GetField( FIELD_T::VALUE )
+                                           : visibilitySymbol->GetField( sourceField.name.text );
+        BOOST_REQUIRE( field );
+        BOOST_CHECK_EQUAL( field->IsVisible(), sourceField.visible && sourceField.presentation.visible );
+    }
+
+    m_schematic.Reset();
     PADS_SCH_MODEL          connectivity = parseBinaryFixture( wxS( "connectivity_topology" ) );
     SCH_SHEET*              root = m_schematic.GetTopLevelSheet();
     BOOST_REQUIRE( root );
     builder.Build( connectivity, &m_schematic, nullptr, binaryFixture( wxS( "connectivity_topology" ) ) );
+    assertSourceConnectivity( connectivity, m_schematic );
 
     size_t expectedWires = 0;
 
@@ -1447,11 +1992,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
                                            schIUScale.MilsToIU( sourceLabel.presentation.height / 2.0 ) );
                     }
 
-                    BOOST_CHECK( label->GetHorizJustify()
-                                 == horizontalJustification( sourceLabel.presentation.horizontalJustification ) );
-                    BOOST_CHECK( label->GetVertJustify()
-                                 == verticalJustification( sourceLabel.presentation.verticalJustification ) );
-                    BOOST_CHECK_EQUAL( label->IsVisible(), sourceLabel.presentation.visible );
+                    checkTextPresentation( *label, sourceLabel.presentation );
                     found = true;
                     break;
                 }
@@ -1552,10 +2093,79 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
         }
     }
 
+    PADS_SCH_MODEL coincident = parseBinaryFixture( wxS( "connectivity_topology" ) );
+    BOOST_REQUIRE( !coincident.buses.empty() );
+    BOOST_REQUIRE( !coincident.buses.front().entries.empty() );
+    const MODEL_BUS_ENTRY& coincidentEntry = coincident.buses.front().entries.front();
+    auto ownerNet = std::ranges::find( coincident.nets, coincidentEntry.memberNet.id, &MODEL_NET::id );
+    BOOST_REQUIRE( ownerNet != coincident.nets.end() );
+    auto otherNet = std::ranges::find_if( coincident.nets,
+                                          [&]( const MODEL_NET& aNet )
+                                          {
+                                              return aNet.sheet.id == ownerNet->sheet.id && aNet.id != ownerNet->id;
+                                          } );
+    BOOST_REQUIRE( otherNet != coincident.nets.end() );
+    auto ownerConnection = std::ranges::find_if(
+            ownerNet->connections,
+            [&]( const MODEL_CONNECTION& aConnection )
+            {
+                auto samePoint = []( const SOURCE_POINT& aLeft, const SOURCE_POINT& aRight )
+                {
+                    return aLeft.x == aRight.x && aLeft.y == aRight.y;
+                };
+                return aConnection.vertices.size() >= 2
+                       && ( samePoint( aConnection.vertices.front(), coincidentEntry.position )
+                            || samePoint( aConnection.vertices.back(), coincidentEntry.position ) );
+            } );
+    BOOST_REQUIRE( ownerConnection != ownerNet->connections.end() );
+    SOURCE_POINT     adjacent = ownerConnection->vertices.front().x == coincidentEntry.position.x
+                                            && ownerConnection->vertices.front().y == coincidentEntry.position.y
+                                        ? ownerConnection->vertices[1]
+                                        : ownerConnection->vertices[ownerConnection->vertices.size() - 2];
+    MODEL_CONNECTION distinctNetConnection = *ownerConnection;
+    distinctNetConnection.vertices = { coincidentEntry.position, adjacent };
+    distinctNetConnection.endpoints.resize( 2 );
+
+    for( size_t endpoint = 0; endpoint < distinctNetConnection.endpoints.size(); ++endpoint )
+    {
+        distinctNetConnection.endpoints[endpoint].kind = MODEL_ENDPOINT_KIND::POINT;
+        distinctNetConnection.endpoints[endpoint].placement.reset();
+        distinctNetConnection.endpoints[endpoint].pin.reset();
+        distinctNetConnection.endpoints[endpoint].point = distinctNetConnection.vertices[endpoint];
+    }
+
+    otherNet->connections.push_back( distinctNetConnection );
+
+    m_schematic.Reset();
+    root = m_schematic.GetTopLevelSheet();
+    builder.Build( coincident, &m_schematic, nullptr, binaryFixture( wxS( "connectivity_topology" ) ) );
+    const int      coincidentPageHeight = root->GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+    const VECTOR2I entryStart = pagePoint( coincidentEntry.position, coincidentPageHeight );
+    const VECTOR2I entryEnd = pagePoint( adjacent, coincidentPageHeight );
+    size_t         coincidentWireSegments = 0;
+    bool           exactEntry = false;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items() )
+    {
+        if( auto* line = dynamic_cast<SCH_LINE*>( item ); line && line->GetLayer() == LAYER_WIRE )
+        {
+            coincidentWireSegments += ( line->GetStartPoint() == entryStart && line->GetEndPoint() == entryEnd )
+                                      || ( line->GetStartPoint() == entryEnd && line->GetEndPoint() == entryStart );
+        }
+        else if( auto* entry = dynamic_cast<SCH_BUS_WIRE_ENTRY*>( item ) )
+        {
+            exactEntry |= entry->GetPosition() == entryStart && entry->GetSize() == entryEnd - entryStart;
+        }
+    }
+
+    BOOST_CHECK( exactEntry );
+    BOOST_CHECK_EQUAL( coincidentWireSegments, 1u );
+
     m_schematic.Reset();
     root = m_schematic.GetTopLevelSheet();
     PADS_SCH_MODEL graphics = parseBinaryFixture( wxS( "page_graphics" ) );
-    builder.Build( graphics, &m_schematic, nullptr, binaryFixture( wxS( "page_graphics" ) ) );
+    BUILD_RESULT   graphicsResult =
+            builder.Build( graphics, &m_schematic, nullptr, binaryFixture( wxS( "page_graphics" ) ) );
     size_t expectedShapes = 0;
     size_t expectedTexts = graphics.texts.size();
     size_t expectedNoteLines = 0;
@@ -1613,7 +2223,17 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
                     && text->GetPosition() == pagePoint( aGraphic.points.front(), graphicsPageHeight ) )
                 {
                     BOOST_CHECK_CLOSE( text->GetTextAngleDegrees(), aGraphic.angle / 10.0, 0.001 );
-                    BOOST_CHECK_EQUAL( text->IsVisible(), aGraphic.presentation.visible );
+                    checkTextPresentation( *text, aGraphic.presentation );
+                    const bool approximatedFont = !aGraphic.presentation.font.text.IsEmpty()
+                                                  && aGraphic.presentation.font.text != wxS( "Default Font" );
+                    BOOST_CHECK_EQUAL(
+                            std::ranges::count_if( graphicsResult.diagnostics,
+                                                   [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                                   {
+                                                       return aDiagnostic.source == aGraphic.presentation.source
+                                                              && aDiagnostic.message.Contains( wxS( "font" ) );
+                                                   } ),
+                            approximatedFont ? 1u : 0u );
                     found = true;
                     break;
                 }
@@ -1686,6 +2306,18 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
 
                 BOOST_CHECK_EQUAL( std::abs( shape->GetArcAngle().AsTenthsOfADegree() ),
                                    std::abs( aGraphic.arcSweepAngle ) );
+                BOOST_CHECK_EQUAL( shape->GetArcAngle().AsTenthsOfADegree(),
+                                   aGraphic.arcClockwise ? std::abs( aGraphic.arcSweepAngle )
+                                                         : -std::abs( aGraphic.arcSweepAngle ) );
+                const VECTOR2I boundsStart = pagePoint( aGraphic.arcBoundsStart, graphicsPageHeight );
+                const VECTOR2I boundsEnd = pagePoint( aGraphic.arcBoundsEnd, graphicsPageHeight );
+                const int      expectedRadiusX = std::abs( boundsEnd.x - boundsStart.x ) / 2;
+                const int      expectedRadiusY = std::abs( boundsEnd.y - boundsStart.y ) / 2;
+                const int      actualRadius =
+                        KiROUND( std::hypot( static_cast<double>( shape->GetStart().x - shape->GetCenter().x ),
+                                             static_cast<double>( shape->GetStart().y - shape->GetCenter().y ) ) );
+                BOOST_CHECK_EQUAL( actualRadius, expectedRadiusX );
+                BOOST_CHECK_EQUAL( actualRadius, expectedRadiusY );
             }
             else if( expectedType == SHAPE_T::CIRCLE )
             {
@@ -1745,7 +2377,17 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
                 && text->GetPosition() == pagePoint( sourceText.position, graphicsPageHeight ) )
             {
                 BOOST_CHECK_CLOSE( text->GetTextAngleDegrees(), sourceText.angle / 10.0, 0.001 );
-                BOOST_CHECK_EQUAL( text->IsVisible(), sourceText.presentation.visible );
+                checkTextPresentation( *text, sourceText.presentation );
+                const bool approximatedFont = !sourceText.presentation.font.text.IsEmpty()
+                                              && sourceText.presentation.font.text != wxS( "Default Font" );
+                BOOST_CHECK_EQUAL( std::ranges::count_if( graphicsResult.diagnostics,
+                                                          [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                                          {
+                                                              return aDiagnostic.source
+                                                                             == sourceText.presentation.source
+                                                                     && aDiagnostic.message.Contains( wxS( "font" ) );
+                                                          } ),
+                                   approximatedFont ? 1u : 0u );
                 found = true;
                 break;
             }
@@ -1757,6 +2399,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
     m_schematic.Reset();
     PADS_SCH_MODEL multi = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
     builder.Build( multi, &m_schematic, nullptr, binaryFixture( wxS( "multisheet_connectivity" ) ) );
+    assertSourceConnectivity( multi, m_schematic );
     std::multiset<wxString> multiSnapshot = connectivitySnapshot( m_schematic );
 
     for( const MODEL_NET& net : multi.nets )
@@ -1772,6 +2415,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityRoundTrip )
     SCH_SHEET*           root = m_schematic.GetTopLevelSheet();
     BOOST_REQUIRE( root );
     PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, nullptr, binaryFixture( wxS( "multisheet_connectivity" ) ) );
+    assertSourceConnectivity( model, m_schematic );
     std::multiset<wxString> before = connectivitySnapshot( m_schematic );
 
     for( const MODEL_NET& net : model.nets )
@@ -1803,6 +2447,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityRoundTrip )
     m_schematic.RemoveTopLevelSheet( defaultSheet );
     delete defaultSheet;
     m_schematic.RefreshHierarchy();
+    assertSourceConnectivity( model, m_schematic );
     std::multiset<wxString> after = connectivitySnapshot( m_schematic );
 
     for( const wxString& value : before )
@@ -1864,6 +2509,50 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
 {
     using namespace PADS_SCH_BINARY;
 
+    for( const wxString& fixture :
+         { wxS( "connectivity_topology" ), wxS( "multisheet_connectivity" ), wxS( "page_graphics" ) } )
+    {
+        m_schematic.Reset();
+        PADS_SCH_MODEL                      corpusModel = parseBinaryFixture( fixture );
+        std::vector<const SOURCE_PROPERTY*> properties = allSourceProperties( corpusModel );
+        BOOST_REQUIRE_MESSAGE( !properties.empty(), fixture );
+        BUILD_RESULT corpusResult =
+                PADS_SCH_BINARY_BUILDER().Build( corpusModel, &m_schematic, nullptr, binaryFixture( fixture ) );
+
+        for( const SOURCE_PROPERTY* property : properties )
+        {
+            const size_t expected =
+                    property->disposition == PROPERTY_DISPOSITION::EXACT
+                            ? 0
+                            : std::ranges::count_if( properties,
+                                                     [&]( const SOURCE_PROPERTY* aOther )
+                                                     {
+                                                         return aOther->source == property->source
+                                                                && aOther->name.text == property->name.text
+                                                                && aOther->disposition == property->disposition;
+                                                     } );
+            const size_t actual =
+                    std::ranges::count_if( corpusResult.diagnostics,
+                                           [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                           {
+                                               return aDiagnostic.source == property->source
+                                                      && aDiagnostic.message.Contains( property->name.text );
+                                           } );
+            BOOST_CHECK_EQUAL( actual, expected );
+        }
+
+        for( const PARSER_DIAGNOSTIC& parserDiagnostic : corpusModel.diagnostics )
+        {
+            BOOST_CHECK( std::ranges::none_of( corpusResult.diagnostics,
+                                               [&]( const PARSER_DIAGNOSTIC& aBuilderDiagnostic )
+                                               {
+                                                   return aBuilderDiagnostic.source == parserDiagnostic.source
+                                                          && aBuilderDiagnostic.message == parserDiagnostic.message;
+                                               } ) );
+        }
+    }
+
+    m_schematic.Reset();
     PADS_SCH_MODEL model = parseBinaryFixture( wxS( "connectivity_topology" ) );
     BOOST_REQUIRE( !model.labels.empty() );
     SOURCE_PROPERTY approximate;
