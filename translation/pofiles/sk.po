@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-27 14:02+0000\n"
+"PO-Revision-Date: 2026-07-29 22:08+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -14291,9 +14291,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:80
 #: eeschema/dialogs/panel_setup_net_chains.cpp:646
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:87
-#, fuzzy
 msgid "Member Nets"
-msgstr "Meno člena"
+msgstr "Začlenené spoje"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:794
 #, c-format
@@ -14313,9 +14312,9 @@ msgstr "spoj '%s'"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1084
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid "component %s"
-msgstr "Súčiastka"
+msgstr "súčiastka %s"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1108
 #, c-format
@@ -14334,9 +14333,8 @@ msgstr ""
 "reťazenie spoja."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:53
-#, fuzzy
 msgid "Suggested Name"
-msgstr "Názov listu"
+msgstr "Navrhovaný názov"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:54
 #: eeschema/net_navigator.cpp:391 pcbnew/board.cpp:2571
@@ -14351,9 +14349,8 @@ msgid "Nets"
 msgstr "Spoje"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:97
-#, fuzzy
 msgid "Manual endpoint selection"
-msgstr "Nepodarilo sa previesť výber"
+msgstr "Ručný výber koncového bodu"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:106
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:270
