@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-07-27 14:01+0000\n"
+"PO-Revision-Date: 2026-07-29 22:08+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
@@ -5645,7 +5645,7 @@ msgstr "Obecné"
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
 #: common/dialogs/panel_startwizard_privacy_base.cpp:27
 msgid "Check for KiCad updates on startup"
-msgstr "Zkontrolovat aktualizace KiCadu při spuštění"
+msgstr "Kontrolovat aktualizace KiCadu při spuštění"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/pcm/dialogs/dialog_pcm.cpp:230
