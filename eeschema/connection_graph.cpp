@@ -4189,10 +4189,10 @@ void CONNECTION_GRAPH::ApplyNetChainNetclasses()
 
     // The common no-chain path must not wipe the effective-netclass cache on every connectivity
     // rebuild.  Only rebuild when a chain carries an override or a prior pass left stale entries.
-    if( !anyOverride && !netSettings->HasChainPatternAssignments() )
+    if( !anyOverride && !netSettings->HasChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC ) )
         return;
 
-    netSettings->ClearChainPatternAssignments();
+    netSettings->ClearChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC );
 
     for( const std::unique_ptr<SCH_NETCHAIN>& chain : m_committedNetChains )
     {
@@ -4210,7 +4210,7 @@ void CONNECTION_GRAPH::ApplyNetChainNetclasses()
             if( net.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
                 continue;
 
-            netSettings->SetChainPatternAssignment( net, netclass );
+            netSettings->SetChainPatternAssignment( NET_CHAIN_SOURCE::SCHEMATIC, net, netclass );
         }
     }
 }

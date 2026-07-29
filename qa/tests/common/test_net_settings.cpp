@@ -22,6 +22,13 @@
 #include <project/net_settings.h>
 #include <netclass.h>
 #include <settings/json_settings_internals.h>
+#include <settings/settings_manager.h>
+
+#include <wx/filename.h>
+#include <wx/stdpaths.h>
+#include <wx/utils.h>
+
+#include <fstream>
 
 
 BOOST_AUTO_TEST_SUITE( NetSettingsTests )
@@ -123,11 +130,11 @@ BOOST_AUTO_TEST_CASE( ChainPatternAssignmentResolvesAndClears )
     classes[wxS( "HighSpeed" )] = highSpeed;
     settings.SetNetclasses( classes );
 
-    settings.SetChainPatternAssignment( wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
+    settings.SetChainPatternAssignment( NET_CHAIN_SOURCE::SCHEMATIC, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
 
     BOOST_CHECK( resolvesToNetclass( settings, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) ) );
 
-    settings.ClearChainPatternAssignments();
+    settings.ClearChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC );
 
     BOOST_CHECK( !resolvesToNetclass( settings, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) ) );
 }
@@ -146,14 +153,49 @@ BOOST_AUTO_TEST_CASE( ClearChainPatternAssignmentsLeavesUserPatterns )
     settings.SetNetclasses( classes );
 
     settings.SetNetclassPatternAssignment( wxS( "VCC_*" ), wxS( "Power" ) );
-    settings.SetChainPatternAssignment( wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
+    settings.SetChainPatternAssignment( NET_CHAIN_SOURCE::SCHEMATIC, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
 
     BOOST_CHECK( resolvesToNetclass( settings, wxS( "VCC_3V3" ), wxS( "Power" ) ) );
     BOOST_CHECK( resolvesToNetclass( settings, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) ) );
 
-    settings.ClearChainPatternAssignments();
+    settings.ClearChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC );
 
     BOOST_CHECK( resolvesToNetclass( settings, wxS( "VCC_3V3" ), wxS( "Power" ) ) );
+    BOOST_CHECK( !resolvesToNetclass( settings, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) ) );
+}
+
+
+// The schematic and the board share one NET_SETTINGS and each derives chain patterns from the
+// membership only it can see.  A rebuild by one must leave the other's entries alone, otherwise a
+// board resync before DRC or save reverts the schematic's chain netclasses.
+BOOST_AUTO_TEST_CASE( ChainPatternAssignmentSourcesAreIndependent )
+{
+    NET_SETTINGS settings( nullptr, "" );
+
+    std::shared_ptr<NETCLASS> highSpeed = std::make_shared<NETCLASS>( wxS( "HighSpeed" ), false );
+    std::shared_ptr<NETCLASS> power = std::make_shared<NETCLASS>( wxS( "Power" ), false );
+    std::map<wxString, std::shared_ptr<NETCLASS>> classes;
+    classes[wxS( "HighSpeed" )] = highSpeed;
+    classes[wxS( "Power" )] = power;
+    settings.SetNetclasses( classes );
+
+    settings.SetChainPatternAssignment( NET_CHAIN_SOURCE::SCHEMATIC, wxS( "DDR_DQ0" ),
+                                        wxS( "HighSpeed" ) );
+    settings.SetChainPatternAssignment( NET_CHAIN_SOURCE::BOARD, wxS( "VCC_3V3" ),
+                                        wxS( "Power" ) );
+
+    BOOST_REQUIRE( resolvesToNetclass( settings, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) ) );
+    BOOST_REQUIRE( resolvesToNetclass( settings, wxS( "VCC_3V3" ), wxS( "Power" ) ) );
+
+    settings.ClearChainPatternAssignments( NET_CHAIN_SOURCE::BOARD );
+
+    BOOST_CHECK( resolvesToNetclass( settings, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) ) );
+    BOOST_CHECK( !resolvesToNetclass( settings, wxS( "VCC_3V3" ), wxS( "Power" ) ) );
+    BOOST_CHECK( settings.HasChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC ) );
+    BOOST_CHECK( !settings.HasChainPatternAssignments( NET_CHAIN_SOURCE::BOARD ) );
+
+    settings.ClearChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC );
+
     BOOST_CHECK( !resolvesToNetclass( settings, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) ) );
 }
 
@@ -175,10 +217,10 @@ BOOST_AUTO_TEST_CASE( ClearNetChainClassesRemovesAllEntries )
 }
 
 
-// m_netClassChainPatternAssignments is derived state rebuilt on every netlist update from
-// m_netChainClasses plus board NETINFO.  It must NOT contribute to operator==, otherwise a
-// no-op netlist rebuild marks the project dirty even when the user made no edit.  The
-// persisted m_netChainClasses map (covered above) is the source of truth for equality.
+// m_netClassChainPatternAssignments is derived state rebuilt from m_netChainNetClasses plus the
+// current chain membership.  It must NOT contribute to operator==, otherwise a no-op netlist
+// rebuild marks the project dirty even when the user made no edit.  The persisted
+// m_netChainNetClasses map (covered below) is the source of truth for equality.
 BOOST_AUTO_TEST_CASE( ChainPatternAssignmentExcludedFromEquality )
 {
     NET_SETTINGS a( nullptr, "" );
@@ -195,16 +237,16 @@ BOOST_AUTO_TEST_CASE( ChainPatternAssignmentExcludedFromEquality )
 
     BOOST_CHECK( a == b );
 
-    a.SetChainPatternAssignment( wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
+    a.SetChainPatternAssignment( NET_CHAIN_SOURCE::SCHEMATIC, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
 
     BOOST_CHECK( a == b );
 
-    a.SetChainPatternAssignment( wxS( "VCC_3V3" ), wxS( "Power" ) );
-    b.SetChainPatternAssignment( wxS( "OTHER" ), wxS( "HighSpeed" ) );
+    a.SetChainPatternAssignment( NET_CHAIN_SOURCE::SCHEMATIC, wxS( "VCC_3V3" ), wxS( "Power" ) );
+    b.SetChainPatternAssignment( NET_CHAIN_SOURCE::BOARD, wxS( "OTHER" ), wxS( "HighSpeed" ) );
 
     BOOST_CHECK( a == b );
 
-    a.ClearChainPatternAssignments();
+    a.ClearChainPatternAssignments( NET_CHAIN_SOURCE::SCHEMATIC );
 
     BOOST_CHECK( a == b );
 }
@@ -316,6 +358,162 @@ BOOST_AUTO_TEST_CASE( NetChainClassesJsonDropsEmptyValues )
     BOOST_CHECK_EQUAL( sink.GetNetChainClasses().size(), 1u );
     BOOST_CHECK( sink.GetNetChainClass( wxS( "KEEP" ) ) == wxS( "Default" ) );
     BOOST_CHECK( sink.GetNetChainClass( wxS( "EMPTY" ) ).IsEmpty() );
+}
+
+
+// Without m_netChainNetClasses in operator==, assigning a netclass to a chain reported "no
+// change" and the project was never written, so the assignment vanished on reopen.
+BOOST_AUTO_TEST_CASE( ChainNetclassAssignmentAffectsEquality )
+{
+    NET_SETTINGS a( nullptr, "" );
+    NET_SETTINGS b( nullptr, "" );
+
+    a.SetNetChainNetClass( wxS( "CHAIN_A" ), wxS( "HighSpeed" ) );
+
+    BOOST_CHECK( a != b );
+
+    b.SetNetChainNetClass( wxS( "CHAIN_A" ), wxS( "Power" ) );
+
+    BOOST_CHECK( a != b );
+
+    b.SetNetChainNetClass( wxS( "CHAIN_A" ), wxS( "HighSpeed" ) );
+
+    BOOST_CHECK( a == b );
+
+    a.SetNetChainNetClass( wxS( "CHAIN_A" ), wxString() );
+
+    BOOST_CHECK( a != b );
+
+    b.ClearNetChainNetClasses();
+
+    BOOST_CHECK( a == b );
+}
+
+
+// Persisted-state regression guard for the "net_chain_netclasses" JSON key.  This map is the
+// only record of a chain's netclass on the board side, so a renamed key or broken lambda
+// presents as the netclass resolving until the next reload and then silently reverting.
+BOOST_AUTO_TEST_CASE( ChainNetclassesJsonRoundTrip )
+{
+    NET_SETTINGS source( nullptr, "" );
+
+    source.SetNetChainNetClass( wxS( "CHAIN_A" ), wxS( "HighSpeed" ) );
+    source.SetNetChainNetClass( wxS( "Unicode_éèê" ), wxS( "RF_µwave" ) );
+
+    BOOST_REQUIRE( source.Store() );
+
+    nlohmann::json reparsed = nlohmann::json::parse( source.FormatAsString() );
+
+    BOOST_REQUIRE( reparsed.contains( "net_chain_netclasses" ) );
+    BOOST_REQUIRE( reparsed["net_chain_netclasses"].is_object() );
+
+    // A hand-crafted empty value must be dropped, matching SetNetChainNetClass's clear
+    // semantics.
+    reparsed["net_chain_netclasses"]["EMPTY"] = "";
+
+    NET_SETTINGS sink( nullptr, "" );
+
+    // A no-op reader would leave this behind; the read lambda must clear() first.
+    sink.SetNetChainNetClass( wxS( "STALE_CHAIN" ), wxS( "Default" ) );
+
+    JSON_SETTINGS_INTERNALS reparsedInternals;
+    static_cast<nlohmann::json&>( reparsedInternals ) = reparsed;
+    sink.Internals()->CloneFrom( reparsedInternals );
+    sink.Load();
+
+    BOOST_CHECK( sink.GetNetChainNetClasses() == source.GetNetChainNetClasses() );
+    BOOST_CHECK( sink.GetNetChainNetClass( wxS( "CHAIN_A" ) ) == wxS( "HighSpeed" ) );
+    BOOST_CHECK( sink.GetNetChainNetClass( wxS( "Unicode_éèê" ) ) == wxS( "RF_µwave" ) );
+    BOOST_CHECK( sink.GetNetChainNetClass( wxS( "EMPTY" ) ).IsEmpty() );
+    BOOST_CHECK( sink.GetNetChainNetClass( wxS( "STALE_CHAIN" ) ).IsEmpty() );
+    BOOST_CHECK( source == sink );
+}
+
+
+// A disk-backed stand-in for the project file.  The merge that decides whether a removed key
+// survives runs against the parent's on-disk baseline, which the FormatAsString round trips
+// above never populate.
+class TEST_PROJECT_SETTINGS : public JSON_SETTINGS
+{
+public:
+    TEST_PROJECT_SETTINGS( const wxString& aFilename ) :
+            JSON_SETTINGS( aFilename, SETTINGS_LOC::NONE, 0, true, true, true )
+    {
+    }
+};
+
+
+// NESTED_SETTINGS flushes into the parent with a merge, which adds and updates but never deletes.
+// Without SetClearUnknownKeys() on the chain maps, a removed or renamed chain stays in the project
+// file and reappears with its old netclass on the next reload.
+BOOST_AUTO_TEST_CASE( RemovedChainNetclassIsDroppedFromProjectFile )
+{
+    wxFileName tempDir( wxStandardPaths::Get().GetTempDir(), wxEmptyString );
+    wxString   tempName = wxString::Format( wxT( "kicad_qa_25065_%ld" ), wxGetProcessId() );
+    tempDir.AppendDir( tempName );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( tempDir.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    wxFileName tempFile( tempDir.GetPath(), wxT( "project.json" ) );
+
+    {
+        TEST_PROJECT_SETTINGS parent( tempFile.GetFullPath() );
+        parent.SetManager( reinterpret_cast<SETTINGS_MANAGER*>( 1 ) );
+
+        NET_SETTINGS netSettings( &parent, "net_settings" );
+
+        netSettings.SetNetChainClass( wxS( "CHAIN_A" ), wxS( "DDR" ) );
+        netSettings.SetNetChainClass( wxS( "CHAIN_B" ), wxS( "DDR" ) );
+        netSettings.SetNetChainNetClass( wxS( "CHAIN_A" ), wxS( "HighSpeed" ) );
+        netSettings.SetNetChainNetClass( wxS( "CHAIN_B" ), wxS( "Power" ) );
+
+        parent.ReleaseNestedSettings( &netSettings );
+
+        BOOST_REQUIRE( parent.SaveToFile( wxEmptyString, true ) );
+    }
+
+    // Reopening from disk is what gives the parent its baseline; without it the merge has nothing
+    // to resurrect and the defect stays invisible.
+    {
+        TEST_PROJECT_SETTINGS parent( tempFile.GetFullPath() );
+        parent.SetManager( reinterpret_cast<SETTINGS_MANAGER*>( 1 ) );
+
+        BOOST_REQUIRE( parent.LoadFromFile() );
+
+        NET_SETTINGS netSettings( &parent, "net_settings" );
+
+        BOOST_REQUIRE( netSettings.LoadFromFile() );
+        BOOST_REQUIRE_EQUAL( netSettings.GetNetChainNetClasses().size(), 2u );
+        BOOST_REQUIRE_EQUAL( netSettings.GetNetChainClasses().size(), 2u );
+
+        netSettings.SetNetChainNetClass( wxS( "CHAIN_B" ), wxString() );
+        netSettings.SetNetChainClass( wxS( "CHAIN_B" ), wxString() );
+
+        parent.ReleaseNestedSettings( &netSettings );
+
+        // Deliberately unchecked: resurrected keys make the payload match the bytes already on
+        // disk, so the no-op-rewrite guard declines the write.  Assert on the file instead.
+        parent.SaveToFile();
+    }
+
+    std::ifstream in( tempFile.GetFullPath().fn_str(), std::ios::in | std::ios::binary );
+    std::string   contents( ( std::istreambuf_iterator<char>( in ) ),
+                            std::istreambuf_iterator<char>() );
+
+    nlohmann::json onDisk = nlohmann::json::parse( contents );
+
+    BOOST_REQUIRE( onDisk.contains( "net_settings" ) );
+
+    const nlohmann::json& netChainNetClasses = onDisk["net_settings"]["net_chain_netclasses"];
+    const nlohmann::json& netChainClasses = onDisk["net_settings"]["net_chain_classes"];
+
+    BOOST_CHECK( netChainNetClasses.contains( "CHAIN_A" ) );
+    BOOST_CHECK( !netChainNetClasses.contains( "CHAIN_B" ) );
+    BOOST_CHECK( netChainClasses.contains( "CHAIN_A" ) );
+    BOOST_CHECK( !netChainClasses.contains( "CHAIN_B" ) );
+
+    wxRemoveFile( tempFile.GetFullPath() );
+    wxFileName::Rmdir( tempDir.GetPath() );
 }
 
 
@@ -490,7 +688,7 @@ BOOST_AUTO_TEST_CASE( CopyFromClearsStaleChainDerivedPatterns )
     std::map<wxString, std::shared_ptr<NETCLASS>> classes;
     classes[wxS( "HighSpeed" )] = highSpeed;
     sink.SetNetclasses( classes );
-    sink.SetChainPatternAssignment( wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
+    sink.SetChainPatternAssignment( NET_CHAIN_SOURCE::SCHEMATIC, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
 
     BOOST_REQUIRE( resolvesToNetclass( sink, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) ) );
 

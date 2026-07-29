@@ -33,6 +33,19 @@
 #include <eda_pattern_match.h>
 
 /**
+ * Owner of a set of chain-derived netclass pattern assignments.
+ *
+ * The schematic and the board share one NET_SETTINGS through the project, and each expands the
+ * chain-to-netclass overrides using the chain membership it knows about.  Tagging the derived
+ * entries with their producer keeps one editor's rebuild from dropping the other's.
+ */
+enum class NET_CHAIN_SOURCE
+{
+    SCHEMATIC,
+    BOARD
+};
+
+/**
  * NET_SETTINGS stores various net-related settings in a project context.  These settings are
  * accessible and editable from both the schematic and PCB editors.
  */
@@ -144,20 +157,26 @@ public:
     /// @brief Clears all netclass pattern assignments
     void ClearNetclassPatternAssignments();
 
-    /// @brief Sets a chain-derived netclass pattern assignment.
+    /// @brief Sets a chain-derived netclass pattern assignment owned by aSource.
     ///
-    /// Chain-derived assignments are recomputed from the netlist on every netlist update and are
-    /// kept separate from the user-authored pattern list so that stale chain entries can be
+    /// Chain-derived assignments are recomputed whenever aSource's chain membership changes and
+    /// are kept separate from the user-authored pattern list so that stale chain entries can be
     /// dropped without disturbing user pattern rules.
     /// Calling this method will reset the effective netclass calculation caches.
-    void SetChainPatternAssignment( const wxString& pattern, const wxString& netclass );
+    void SetChainPatternAssignment( NET_CHAIN_SOURCE aSource, const wxString& pattern,
+                                    const wxString& netclass );
 
-    /// @brief Clears all chain-derived pattern assignments.
+    /// @brief Clears the chain-derived pattern assignments owned by aSource, leaving the other
+    /// source's entries in place.
     /// Calling this method will reset the effective netclass calculation caches.
-    void ClearChainPatternAssignments();
+    void ClearChainPatternAssignments( NET_CHAIN_SOURCE aSource );
 
-    /// @brief Returns true if any chain-derived pattern assignment is present.
-    bool HasChainPatternAssignments() const { return !m_netClassChainPatternAssignments.empty(); }
+    /// @brief Returns true if aSource has contributed any chain-derived pattern assignment.
+    bool HasChainPatternAssignments( NET_CHAIN_SOURCE aSource ) const
+    {
+        auto it = m_netClassChainPatternAssignments.find( aSource );
+        return it != m_netClassChainPatternAssignments.end() && !it->second.empty();
+    }
 
     /// @brief Clears effective netclass cache for the given net
     void ClearCacheForNet( const wxString& netName );
@@ -206,6 +225,33 @@ public:
     void ClearNetChainClasses()
     {
         m_netChainClasses.clear();
+    }
+
+    /// @brief Assign the netclass a net chain applies to all of its member nets.
+    void SetNetChainNetClass( const wxString& aChain, const wxString& aNetclass )
+    {
+        if( aNetclass.IsEmpty() )
+            m_netChainNetClasses.erase( aChain );
+        else
+            m_netChainNetClasses[aChain] = aNetclass;
+    }
+
+    /// @brief Look up the netclass a chain applies to its members.  Empty string means "none".
+    wxString GetNetChainNetClass( const wxString& aChain ) const
+    {
+        auto it = m_netChainNetClasses.find( aChain );
+        return it != m_netChainNetClasses.end() ? it->second : wxString();
+    }
+
+    const std::map<wxString, wxString>& GetNetChainNetClasses() const
+    {
+        return m_netChainNetClasses;
+    }
+
+    /// @brief Removes all chain-to-netclass assignments.
+    void ClearNetChainNetClasses()
+    {
+        m_netChainNetClasses.clear();
     }
 
     /// @brief Determines if an effective netclass for the given net name has been cached
@@ -298,7 +344,8 @@ private:
     void addSinglePatternAssignment( const wxString& pattern, const wxString& netclass );
 
     /// @brief Adds a single chain-derived pattern assignment without bus expansion (internal helper)
-    void addSingleChainPatternAssignment( const wxString& pattern, const wxString& netclass );
+    void addSingleChainPatternAssignment( NET_CHAIN_SOURCE aSource, const wxString& pattern,
+                                          const wxString& netclass );
 
     /// @brief The default netclass
     std::shared_ptr<NETCLASS> m_defaultNetClass;
@@ -313,12 +360,14 @@ private:
     std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>
             m_netClassPatternAssignments;
 
-    /// @brief List of chain-derived netclass pattern assignments
+    /// @brief Chain-derived netclass pattern assignments, keyed by the editor that derived them
     ///
-    /// Populated each netlist update from net-chain class overrides.  Held separately from the
-    /// user pattern list so removed/changed chain assignments do not leave stale entries in the
-    /// user list.  Not serialised — these are recomputed each netlist update.
-    std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>
+    /// Held separately from the user pattern list so removed/changed chain assignments do not
+    /// leave stale entries there, and keyed by source because the schematic and the board share
+    /// this object while each rebuilds only from the chain membership it can see.  Resolution
+    /// unions both sets.  Not serialised — recomputed from m_netChainNetClasses.
+    std::map<NET_CHAIN_SOURCE,
+             std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>>
             m_netClassChainPatternAssignments;
 
     /// @brief Map of netclass names to netclass definitions for
@@ -351,6 +400,15 @@ private:
      * Serialised under "net_chain_classes" in the net_settings JSON.
      */
     std::map<wxString, wxString> m_netChainClasses;
+
+    /**
+     * Map of net-chain name -> netclass name applied to every net in the chain.  This is the
+     * persisted input from which m_netClassChainPatternAssignments is derived; the board carries
+     * chain membership but not the override, so without this the netclass would resolve only
+     * until the next reload.
+     * Serialised under "net_chain_netclasses" in the net_settings JSON.
+     */
+    std::map<wxString, wxString> m_netChainNetClasses;
 
     // TODO: Add diff pairs, bus information, etc.
 };

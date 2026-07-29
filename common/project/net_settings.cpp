@@ -283,6 +283,43 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             {} ) );
 
+    // Let the save drop removed chains instead of merging them back in
+    m_params.back()->SetClearUnknownKeys();
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "net_chain_netclasses",
+            [&]() -> nlohmann::json
+            {
+                // Force object type so an empty map round-trips as {} rather than null;
+                // the reader rejects non-objects, which would otherwise leave stale
+                // chain assignments in place after the user clears them all.
+                nlohmann::json ret = nlohmann::json::object();
+
+                for( const auto& [chain, netclass] : m_netChainNetClasses )
+                    ret[ std::string( chain.ToUTF8() ) ] = std::string( netclass.ToUTF8() );
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                if( !aJson.is_object() )
+                    return;
+
+                m_netChainNetClasses.clear();
+
+                for( const auto& pair : aJson.items() )
+                {
+                    wxString chain( pair.key().c_str(), wxConvUTF8 );
+                    wxString netclass = pair.value().get<wxString>();
+
+                    if( !netclass.IsEmpty() )
+                        m_netChainNetClasses[ std::move( chain ) ] = std::move( netclass );
+                }
+            },
+            {} ) );
+
+    // Let the save drop removed chain netclasses instead of merging them back in
+    m_params.back()->SetClearUnknownKeys();
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "netclass_assignments",
             [&]() -> nlohmann::json
             {
@@ -442,10 +479,10 @@ bool NET_SETTINGS::operator==( const NET_SETTINGS& aOther ) const
                      patternEqual ) )
         return false;
 
-    // m_netClassChainPatternAssignments is derived state, rebuilt from m_netChainClasses and
-    // board NETINFO on every netlist update.  Equality is defined by persisted inputs only;
-    // including the derived list here would mark the project dirty whenever a rebuild produced
-    // a transient ordering difference.
+    // m_netClassChainPatternAssignments is derived state, rebuilt from m_netChainNetClasses and
+    // the current chain membership.  Equality is defined by persisted inputs only; including the
+    // derived list here would mark the project dirty whenever a rebuild produced a transient
+    // ordering difference.
 
     if( !std::equal( std::begin( m_netClassLabelAssignments ),
                      std::end( m_netClassLabelAssignments ),
@@ -459,6 +496,9 @@ bool NET_SETTINGS::operator==( const NET_SETTINGS& aOther ) const
         return false;
 
     if( m_netChainClasses != aOther.m_netChainClasses )
+        return false;
+
+    if( m_netChainNetClasses != aOther.m_netChainNetClasses )
         return false;
 
     return true;
@@ -753,22 +793,27 @@ void NET_SETTINGS::ClearNetclassPatternAssignments()
 }
 
 
-void NET_SETTINGS::SetChainPatternAssignment( const wxString& pattern, const wxString& netclass )
+void NET_SETTINGS::SetChainPatternAssignment( NET_CHAIN_SOURCE aSource, const wxString& pattern,
+                                              const wxString& netclass )
 {
     ForEachBusMember( pattern,
                       [&]( const wxString& memberPattern )
                       {
-                          addSingleChainPatternAssignment( memberPattern, netclass );
+                          addSingleChainPatternAssignment( aSource, memberPattern, netclass );
                       } );
 
     ClearAllCaches();
 }
 
 
-void NET_SETTINGS::addSingleChainPatternAssignment( const wxString& pattern,
+void NET_SETTINGS::addSingleChainPatternAssignment( NET_CHAIN_SOURCE aSource,
+                                                    const wxString& pattern,
                                                     const wxString& netclass )
 {
-    for( auto& assignment : m_netClassChainPatternAssignments )
+    std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>& assignments =
+            m_netClassChainPatternAssignments[aSource];
+
+    for( auto& assignment : assignments )
     {
         if( !assignment.first )
             continue;
@@ -777,14 +822,14 @@ void NET_SETTINGS::addSingleChainPatternAssignment( const wxString& pattern,
             return;
     }
 
-    m_netClassChainPatternAssignments.push_back(
+    assignments.push_back(
             { std::make_unique<EDA_COMBINED_MATCHER>( pattern, CTX_NETCLASS ), netclass } );
 }
 
 
-void NET_SETTINGS::ClearChainPatternAssignments()
+void NET_SETTINGS::ClearChainPatternAssignments( NET_CHAIN_SOURCE aSource )
 {
-    m_netClassChainPatternAssignments.clear();
+    m_netClassChainPatternAssignments[aSource].clear();
     ClearAllCaches();
 }
 
@@ -974,7 +1019,9 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
             };
 
     applyPatternList( m_netClassPatternAssignments );
-    applyPatternList( m_netClassChainPatternAssignments );
+
+    for( const auto& [source, chainPatterns] : m_netClassChainPatternAssignments )
+        applyPatternList( chainPatterns );
 
     // Handle zero resolved netclasses
     if( resolvedNetclasses.size() == 0 )

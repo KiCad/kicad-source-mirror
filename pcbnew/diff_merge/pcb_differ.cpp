@@ -812,6 +812,12 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
             hashCombine( std::hash<std::string>{}( className.ToStdString() ) );
         }
 
+        for( const auto& [chain, netclass] : aSettings.GetNetChainNetClasses() )
+        {
+            hashCombine( std::hash<std::string>{}( chain.ToStdString() ) );
+            hashCombine( std::hash<std::string>{}( netclass.ToStdString() ) );
+        }
+
         for( const auto& [netname, color] : aSettings.GetNetColorAssignments() )
         {
             hashCombine( std::hash<std::string>{}( netname.ToStdString() ) );

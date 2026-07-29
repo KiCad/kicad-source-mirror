@@ -109,6 +109,29 @@ void BOARD_NETLIST_UPDATER::ApplyChainAssignments( BOARD* aBoard, const NETLIST&
 }
 
 
+void BOARD_NETLIST_UPDATER::ApplyChainNetclasses( BOARD* aBoard, const NETLIST& aNetlist )
+{
+    const std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
+
+    if( !netSettings )
+        return;
+
+    netSettings->ClearNetChainClasses();
+    netSettings->ClearNetChainNetClasses();
+
+    for( const auto& [chain, className] : aNetlist.GetSignalChainClasses() )
+        netSettings->SetNetChainClass( chain, className );
+
+    for( const auto& [chain, netclass] : aNetlist.GetNetChainNetClasses() )
+        netSettings->SetNetChainNetClass( chain, netclass );
+
+    // Chain membership on the board has just been refreshed from the netlist, so assignments
+    // derived from the previous membership are stale.  The caller's
+    // SynchronizeNetsAndNetClasses() rebuilds them from the maps set above.
+    netSettings->ClearChainPatternAssignments( NET_CHAIN_SOURCE::BOARD );
+}
+
+
 // These functions allow inspection of pad nets during dry runs by keeping a cache of
 // current pad netnames indexed by pad.
 
@@ -2584,49 +2607,11 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             }
         }
 
-        // Net chain class assignments stored in the netlist are mirrored into
-        // the project-level NET_SETTINGS map so the inNetChainClass() rule
-        // function can resolve them at DRC time.  Both the chain->class map and the
-        // chain-derived pattern assignments are rebuilt from scratch on each netlist
-        // update so that removed or renamed chains do not leave stale entries.
-        std::shared_ptr<NET_SETTINGS>& netSettings = m_board->GetDesignSettings().m_NetSettings;
+        ApplyChainNetclasses( m_board, aNetlist );
 
-        if( netSettings )
-        {
-            netSettings->ClearNetChainClasses();
-            netSettings->ClearChainPatternAssignments();
-
-            for( const auto& [chain, className] : aNetlist.GetSignalChainClasses() )
-                netSettings->SetNetChainClass( chain, className );
-
-            // Net chains may specify a netclass that applies to every member net.
-            // Push that assignment into the board's netclass map before resyncing.
-            const std::map<wxString, wxString>& chainClasses = aNetlist.GetNetChainNetClasses();
-
-            for( NETINFO_ITEM* net : m_board->GetNetInfo() )
-            {
-                const wxString& chainName = net->GetNetChain();
-
-                if( chainName.IsEmpty() )
-                    continue;
-
-                auto it = chainClasses.find( chainName );
-
-                if( it == chainClasses.end() || it->second.IsEmpty() )
-                    continue;
-
-                if( netSettings->HasNetclass( it->second ) )
-                    netSettings->SetChainPatternAssignment( net->GetNetname(), it->second );
-            }
-
-            // Always resync after chain cleanup so existing NETINFO_ITEM effective-netclass
-            // pointers pick up cleared/changed chain entries even when chainClasses is empty.
-            m_board->SynchronizeNetsAndNetClasses( true );
-        }
-        else
-        {
-            m_board->SynchronizeNetsAndNetClasses( true );
-        }
+        // Always resync after chain cleanup so existing NETINFO_ITEM effective-netclass
+        // pointers pick up cleared/changed chain entries even when no chain carries a netclass.
+        m_board->SynchronizeNetsAndNetClasses( true );
 
         for( const auto& sig : aNetlist.GetNetChainTerminalPins() )
         {

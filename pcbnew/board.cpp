@@ -3121,6 +3121,46 @@ void BOARD::SynchronizeTuningProfileProperties()
 }
 
 
+void BOARD::ApplyNetChainNetclasses()
+{
+    if( !m_project )
+        return;
+
+    const std::shared_ptr<NET_SETTINGS>& netSettings = GetDesignSettings().m_NetSettings;
+
+    if( !netSettings )
+        return;
+
+    const std::map<wxString, wxString>& chainNetclasses = netSettings->GetNetChainNetClasses();
+
+    // Nothing to derive and nothing left from a prior pass, so skip the cache wipe a rebuild
+    // would cost on every resync of a board without chain overrides.
+    if( chainNetclasses.empty()
+            && !netSettings->HasChainPatternAssignments( NET_CHAIN_SOURCE::BOARD ) )
+    {
+        return;
+    }
+
+    netSettings->ClearChainPatternAssignments( NET_CHAIN_SOURCE::BOARD );
+
+    for( NETINFO_ITEM* net : m_NetInfo )
+    {
+        const wxString& chainName = net->GetNetChain();
+
+        if( chainName.IsEmpty() )
+            continue;
+
+        auto it = chainNetclasses.find( chainName );
+
+        if( it == chainNetclasses.end() || !netSettings->HasNetclass( it->second ) )
+            continue;
+
+        netSettings->SetChainPatternAssignment( NET_CHAIN_SOURCE::BOARD, net->GetNetname(),
+                                                it->second );
+    }
+}
+
+
 void BOARD::SynchronizeNetsAndNetClasses( bool aResetTrackAndViaSizes )
 {
     if( !m_project )
@@ -3128,6 +3168,8 @@ void BOARD::SynchronizeNetsAndNetClasses( bool aResetTrackAndViaSizes )
 
     BOARD_DESIGN_SETTINGS&           bds = GetDesignSettings();
     const std::shared_ptr<NETCLASS>& defaultNetClass = bds.m_NetSettings->GetDefaultNetclass();
+
+    ApplyNetChainNetclasses();
 
     bds.m_NetSettings->ClearAllCaches();
 
