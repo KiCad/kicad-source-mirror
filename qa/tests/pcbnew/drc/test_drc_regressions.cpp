@@ -358,3 +358,54 @@ BOOST_FIXTURE_TEST_CASE( DRCTeardropOverCopperField, DRC_REGRESSION_TEST_FIXTURE
                          "knockout copper reference field; found "
                                  << fieldShorts );
 }
+
+
+BOOST_FIXTURE_TEST_CASE( DRCHoleToHoleReportsRuleValue, DRC_REGRESSION_TEST_FIXTURE )
+{
+    // The hole-to-hole test relaxes its comparison by the DRC epsilon, but it also reported that
+    // relaxed value as the rule minimum, so the violation quoted a different number than the one
+    // entered in Board Setup.
+    // See https://gitlab.com/kicad/code/kicad/-/issues/22267
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue22267", m_board );
+
+    std::vector<DRC_ITEM>  violations;
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    bds.m_DRCSeverities[ DRCE_UNCONNECTED_ITEMS ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_ISSUES ] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[ DRCE_LIB_FOOTPRINT_MISMATCH ] = SEVERITY::RPT_SEVERITY_IGNORE;
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I&, int,
+                 const std::function<void( PCB_MARKER* )>& )
+            {
+                if( aItem->GetErrorCode() == DRCE_DRILLED_HOLES_TOO_CLOSE )
+                    violations.push_back( *aItem );
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    BOOST_REQUIRE_MESSAGE( !violations.empty(), "Expected at least one hole-to-hole violation" );
+
+    UNITS_PROVIDER unitsProvider( pcbIUScale, EDA_UNITS::MM );
+    wxString       ruleValue = unitsProvider.MessageTextFromValue( bds.m_HoleToHoleMin );
+    wxString       relaxedValue = unitsProvider.MessageTextFromValue( bds.m_HoleToHoleMin
+                                                                     - bds.GetDRCEpsilon() );
+
+    BOOST_REQUIRE( ruleValue != relaxedValue );
+
+    // Match on the values alone; the surrounding detail text is translated at format time
+    for( const DRC_ITEM& item : violations )
+    {
+        wxString msg = item.GetErrorMessage( false );
+
+        BOOST_CHECK_MESSAGE( msg.Contains( ruleValue ),
+                             wxString::Format( "Expected the configured minimum '%s' but got: %s",
+                                               ruleValue, msg ) );
+
+        BOOST_CHECK_MESSAGE( !msg.Contains( relaxedValue ),
+                             wxString::Format( "Reported the epsilon-relaxed minimum '%s': %s",
+                                               relaxedValue, msg ) );
+    }
+}
