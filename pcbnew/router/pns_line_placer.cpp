@@ -2061,6 +2061,21 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, PNS::PNS_MO
 
     PNS_DBG( Dbg(), AddPoint, m_p_start, WHITE, 10000, wxT( "pstart [buildInitial]" ) );
 
+    if( m_mouseTrailTracer.IsManuallyForced() )
+    {    
+        // If head+tail together forms a 'typical' obtuse initial track,
+        // erase the tail instead of guessing the direction from it. This results in more deterministic
+        // posture switching in walkaround & shove modes.
+        if( m_tail.SegmentCount() == 1 && m_head.SegmentCount() > 0 )
+        {
+            bool dirMatch = DIRECTION_45( m_tail.CSegment(0) ) == DIRECTION_45( m_head.CSegment( 0 ) );
+            if( dirMatch || m_head.SegmentCount() == 1 )
+            {
+                m_p_start = m_tail.CLine().CPoint( 0 );
+                m_tail.Clear();
+            }
+        }
+    }
 
     if( m_p_start == aP )
     {
