@@ -140,10 +140,7 @@ LIB_SYMBOL* loadSymbol( const wxString& aLibraryPath, nlohmann::json aFileData,
         EASYEDA::DOC_TYPE  topDocType;
 
         if( !FindSchFileInStream( aLibraryPath, in, js, topDoc, topDocType ) )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to find a valid schematic file in '%s'" ),
-                                              aLibraryPath ) );
-        }
+            THROW_IO_ERRORF( _( "Unable to find a valid schematic file in '%s'" ), aLibraryPath );
 
         if( topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_SHEET
             || topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_LIST )
@@ -287,13 +284,17 @@ LIB_SYMBOL* loadSymbol( const wxString& aLibraryPath, nlohmann::json aFileData,
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error loading symbol '%s' from library '%s': %s" ),
-                                          aAliasName, aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error loading symbol '%s' from library '%s': %s" ),
+                         aAliasName,
+                         aLibraryPath,
+                         e.what() );
     }
     catch( std::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error loading symbol '%s' from library '%s': %s" ),
-                                          aAliasName, aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error loading symbol '%s' from library '%s': %s" ),
+                         aAliasName,
+                         aLibraryPath,
+                         e.what() );
     }
 
     return nullptr;
@@ -317,10 +318,7 @@ void SCH_IO_EASYEDA::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
         EASYEDA::DOC_TYPE  topDocType;
 
         if( !FindSchFileInStream( aLibraryPath, in, js, topDoc, topDocType ) )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to find a valid schematic file in '%s'" ),
-                                              aLibraryPath ) );
-        }
+            THROW_IO_ERRORF( _( "Unable to find a valid schematic file in '%s'" ), aLibraryPath );
 
         if( topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_SHEET
             || topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_LIST )
@@ -415,13 +413,11 @@ void SCH_IO_EASYEDA::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error enumerating symbol library '%s': %s" ),
-                                          aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error enumerating symbol library '%s': %s" ), aLibraryPath, e.what() );
     }
     catch( std::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error enumerating symbol library '%s': %s" ),
-                                          aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error enumerating symbol library '%s': %s" ), aLibraryPath, e.what() );
     }
 }
 
@@ -436,10 +432,7 @@ void SCH_IO_EASYEDA::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     EASYEDA::DOC_TYPE  topDocType;
 
     if( !FindSchFileInStream( aLibraryPath, in, js, topDoc, topDocType ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Unable to find a valid schematic file in '%s'" ),
-                                          aLibraryPath ) );
-    }
+        THROW_IO_ERRORF( _( "Unable to find a valid schematic file in '%s'" ), aLibraryPath );
 
     try
     {
@@ -457,13 +450,11 @@ void SCH_IO_EASYEDA::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error enumerating symbol library '%s': %s" ),
-                                          aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error enumerating symbol library '%s': %s" ), aLibraryPath, e.what() );
     }
     catch( std::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error enumerating symbol library '%s': %s" ),
-                                          aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error enumerating symbol library '%s': %s" ), aLibraryPath, e.what() );
     }
 }
 
@@ -480,22 +471,17 @@ LIB_SYMBOL* SCH_IO_EASYEDA::LoadSymbol( const wxString&        aLibraryPath,
         EASYEDA::DOC_TYPE  topDocType;
 
         if( !FindSchFileInStream( aLibraryPath, in, js, topDoc, topDocType ) )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to find a valid schematic file in '%s'" ),
-                                              aLibraryPath ) );
-        }
+            THROW_IO_ERRORF( _( "Unable to find a valid schematic file in '%s'" ), aLibraryPath );
 
         return loadSymbol( aLibraryPath, js, aAliasName, aProperties );
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error loading symbol '%s' from library '%s': %s" ),
-                                          aAliasName, aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error loading symbol '%s' from library '%s': %s" ), aAliasName, aLibraryPath, e.what() );
     }
     catch( std::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error loading symbol '%s' from library '%s': %s" ),
-                                          aAliasName, aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error loading symbol '%s' from library '%s': %s" ), aAliasName, aLibraryPath, e.what() );
     }
 }
 
@@ -512,13 +498,9 @@ static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const w
         EASYEDA::DOC_TYPE  topDocType;
 
         if( !FindSchFileInStream( aFileName, in, js, topDoc, topDocType ) )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to find a valid schematic file in '%s'" ),
-                                              aFileName ) );
-        }
+            THROW_IO_ERRORF( _( "Unable to find a valid schematic file in '%s'" ), aFileName );
 
-        if( topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_SHEET
-            || topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_LIST )
+        if( topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_SHEET || topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_LIST )
         {
             int                          pageNum = 1;
             EASYEDA::DOCUMENT_SCHEMATICS schDoc = js.get<EASYEDA::DOCUMENT_SCHEMATICS>();
@@ -540,19 +522,16 @@ static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const w
 
                 if( schDoc.schematics->size() > 1 )
                 {
-                    wxString sheetTitle =
-                            !subDoc.title.empty() ? subDoc.title : ( wxString() << pageNum );
+                    wxString sheetTitle = !subDoc.title.empty() ? subDoc.title : ( wxString() << pageNum );
 
                     wxString sheetBaseName = EscapeString( sheetTitle, CTX_FILENAME );
 
                     wxFileName sheetFname( aFileName );
-                    sheetFname.SetFullName(
-                            sheetBaseName + wxS( "." )
-                            + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
+                    sheetFname.SetFullName( sheetBaseName + wxS( "." )
+                                            + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
 
                     wxFileName relSheetPath( sheetFname );
-                    relSheetPath.MakeRelativeTo(
-                            wxFileName( aRootSheet->GetFileName() ).GetPath() );
+                    relSheetPath.MakeRelativeTo( wxFileName( aRootSheet->GetFileName() ).GetPath() );
 
                     std::unique_ptr<SCH_SHEET> subSheet = std::make_unique<SCH_SHEET>( aSchematic );
                     subSheet->SetFileName( relSheetPath.GetFullPath() );
@@ -566,8 +545,7 @@ static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const w
                     VECTOR2I pos;
                     pos.x = schIUScale.MilsToIU( 200 );
                     pos.y = schIUScale.MilsToIU( 200 )
-                            + ( subSheet->GetSize().y + schIUScale.MilsToIU( 200 ) )
-                                      * ( pageNum - 1 );
+                            + ( subSheet->GetSize().y + schIUScale.MilsToIU( 200 ) ) * ( pageNum - 1 );
 
                     subSheet->SetPosition( pos );
 
@@ -577,8 +555,7 @@ static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const w
                     sheetPath.SetPageNumber( wxString() << pageNum );
                     aSchematic->SetCurrentSheet( sheetPath );
 
-                    parser.ParseSchematic( aSchematic, subSheet.get(), aFileName,
-                                           dataStrDoc.shape );
+                    parser.ParseSchematic( aSchematic, subSheet.get(), aFileName, dataStrDoc.shape );
 
                     aRootSheet->GetScreen()->Append( subSheet.release() );
                 }
@@ -593,13 +570,11 @@ static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const w
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Error loading schematic '%s': %s" ), aFileName, e.what() ) );
+        THROW_IO_ERRORF( _( "Error loading schematic '%s': %s" ), aFileName, e.what() );
     }
     catch( std::exception& e )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Error loading schematic '%s': %s" ), aFileName, e.what() ) );
+        THROW_IO_ERRORF( _( "Error loading schematic '%s': %s" ), aFileName, e.what()  );
     }
 }
 

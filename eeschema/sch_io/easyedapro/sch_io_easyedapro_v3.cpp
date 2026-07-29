@@ -234,8 +234,7 @@ LIB_SYMBOL* SCH_IO_EASYEDAPRO_V3::LoadSymbol( const wxString& aLibraryPath, cons
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Cannot load symbol '%s' from '%s': %s" ), aAliasName, aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Cannot load symbol '%s' from '%s': %s" ), aAliasName, aLibraryPath, e.what() );
     }
 }
 
@@ -309,10 +308,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
     auto prjSchIt = prjSchematics.find( schematicToLoad );
 
     if( prjSchIt == prjSchematics.end() )
-    {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Schematic document '%s' not found in '%s'" ), schematicToLoad, aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "Schematic document '%s' not found in '%s'" ), schematicToLoad, aFileName );
 
     wxFileName sourceName( aFileName );
     wxString   libName = EASYEDAPRO::ShortenLibName( sourceName.GetName() );
@@ -345,8 +341,7 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName, S
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Failed to parse EasyEDA Pro v3 symbol/device metadata: %s" ), e.what() ) );
+        THROW_IO_ERRORF( _( "Failed to parse EasyEDA Pro v3 symbol/device metadata: %s" ), e.what() );
     }
 
     // Schematic components reference Symbol (geometry) and Device (BOM attrs) separately.

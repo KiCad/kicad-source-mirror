@@ -312,18 +312,18 @@ void SPRINT_LAYOUT_PARSER::parseFileStart( const wxString& aFileName )
     wxFFileInputStream stream( aFileName );
 
     if( !stream.IsOk() )
-        THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'" ), aFileName ) );
+        THROW_IO_ERRORF( _( "Cannot open file '%s'" ), aFileName );
 
     size_t fileSize = stream.GetLength();
 
     if( fileSize < 8 )
-        THROW_IO_ERROR( wxString::Format( _( "File '%s' is too small to be a Sprint Layout file" ), aFileName ) );
+        THROW_IO_ERRORF( _( "File '%s' is too small to be a Sprint Layout file" ), aFileName );
 
     m_buffer.resize( fileSize );
     stream.Read( m_buffer.data(), fileSize );
 
     if( stream.LastRead() != fileSize )
-        THROW_IO_ERROR( wxString::Format( _( "Failed to read file '%s'" ), aFileName ) );
+        THROW_IO_ERRORF( _( "Failed to read file '%s'" ), aFileName );
 
     m_start = m_buffer.data();
     m_pos = m_start;
@@ -478,7 +478,7 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
         && aObj.type != SPRINT_LAYOUT::OBJ_CIRCLE && aObj.type != SPRINT_LAYOUT::OBJ_LINE
         && aObj.type != SPRINT_LAYOUT::OBJ_STROKE_TEXT && aObj.type != SPRINT_LAYOUT::OBJ_SMD_PAD )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Unknown object type %d in Sprint Layout file" ), aObj.type ) );
+        THROW_IO_ERRORF( _( "Unknown object type %d in Sprint Layout file" ), aObj.type );
     }
 
     aObj.x = readCoord();
@@ -638,9 +638,7 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
     }
 
     default:
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Unknown object type %d in Sprint Layout file" ), aObj.type ) );
-    }
+        THROW_IO_ERRORF( _( "Unknown object type %d in Sprint Layout file" ), aObj.type );
     }
 }
 

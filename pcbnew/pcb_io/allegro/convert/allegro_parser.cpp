@@ -182,7 +182,7 @@ FMT_VER HEADER_PARSER::FormatFromMagic( uint32_t aMagic )
 
     // Struct sizes depend on version, so we can't do anything useful with
     // unrecognized formats. Report the magic and ask the user to report it.
-    THROW_IO_ERROR( wxString::Format( "Unknown Allegro file version %#010x (rev %d)", aMagic, majorVer - 3 ) );
+    THROW_IO_ERRORF( _( "Unknown Allegro file version %#010x (rev %d)" ), aMagic, majorVer - 3 );
 }
 
 
@@ -286,7 +286,7 @@ std::unique_ptr<ALLEGRO::FILE_HEADER> HEADER_PARSER::ParseHeader()
             break;
 
         default:
-            THROW_IO_ERROR( wxString::Format( "Unknown board units %d", units ) );
+            THROW_IO_ERRORF( _( "Unknown board units %d" ), units );
         }
 
         m_stream.Skip( 3 );
@@ -460,9 +460,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
 
         if( sub.m_NumEntries > 1000000 )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    "Block 0x03 subtype 0x6C entry count %u exceeds limit at offset %#010zx",
-                    sub.m_NumEntries, aStream.Position() ) );
+            THROW_IO_ERRORF( wxT( "Block 0x03 subtype 0x6C entry count %u exceeds limit at offset %#010zx" ),
+                             sub.m_NumEntries, aStream.Position() );
         }
 
         sub.m_Entries.reserve( sub.m_NumEntries );
@@ -516,8 +515,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x03( FILE_STREAM& aStream, FMT_VE
         }
         else
         {
-            THROW_IO_ERROR(
-                    wxString::Format( "Unknown substruct type %#02x with size %d", data.m_SubType, data.m_Size ) );
+            THROW_IO_ERRORF( wxT( "Unknown substruct type %#02x with size %d" ), data.m_SubType, data.m_Size );
         }
         break;
     }
@@ -1044,7 +1042,7 @@ static PAD_TYPE decodePadType( uint8_t aVal )
         return PAD_TYPE::NPTH;
         break;
     default:
-        THROW_IO_ERROR( wxString::Format( "Unknown padstack type 0x%x", aVal ) );
+        THROW_IO_ERRORF( wxT( "Unknown padstack type 0x%x" ), aVal );
         break;
     }
 };
@@ -1346,8 +1344,8 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x21( FILE_STREAM& aStream, FMT_VE
 
     if( data.m_Size < 12 )
     {
-        THROW_IO_ERROR( wxString::Format( "Block 0x21 size %u too small (minimum 12) at offset %#010zx",
-                                          data.m_Size, aStream.Position() ) );
+        THROW_IO_ERRORF( wxT( "Block 0x21 size %u too small (minimum 12) at offset %#010zx" ),
+                         data.m_Size, aStream.Position() );
     }
 
     data.m_Key = aStream.ReadU32();
@@ -2041,16 +2039,17 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
 
     if( data.m_NumItems > 1000000 )
     {
-        THROW_IO_ERROR( wxString::Format(
-                "Block 0x36 item count %u exceeds limit at offset %#010zx",
-                data.m_NumItems, aStream.Position() ) );
+        THROW_IO_ERRORF( wxT( "Block 0x36 item count %u exceeds limit at offset %#010zx" ),
+                         data.m_NumItems,
+                         aStream.Position() );
     }
 
     if( data.m_Count > data.m_NumItems )
     {
-        THROW_IO_ERROR( wxString::Format(
-                "Block 0x36 filled count %u exceeds capacity %u at offset %#010zx",
-                data.m_Count, data.m_NumItems, aStream.Position() ) );
+        THROW_IO_ERRORF( wxT( "Block 0x36 filled count %u exceeds capacity %u at offset %#010zx" ),
+                         data.m_Count,
+                         data.m_NumItems,
+                         aStream.Position() );
     }
 
     // Each block has m_NumItems slots but only m_Count are populated; the rest are
@@ -2168,8 +2167,10 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
             item.m_Key = aStream.ReadU32();
             ReadArrayU32( aStream, item.m_Ptrs );
             item.m_Ptr2 = aStream.ReadU32();
+
             if( keep )
                 data.m_Items.emplace_back( std::move( item ) );
+
             break;
         }
         case 0x10:
@@ -2177,8 +2178,10 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
             BLK_0x36_DEF_TABLE::X10 item;
             aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
             ReadCond( aStream, aVer, item.m_Unknown2 );
+
             if( keep )
                 data.m_Items.emplace_back( std::move( item ) );
+
             break;
         }
         case 0x12:
@@ -2186,11 +2189,13 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
             BLK_0x36_DEF_TABLE::X12 item;
             // aStream.ReadBytes( item.m_Unknown.data(), item.m_Unknown.size() );
             aStream.Skip( 1052 );
+
             if( keep )
                 data.m_Items.emplace_back( std::move( item ) );
+
             break;
         }
-        default: THROW_IO_ERROR( wxString::Format( "Unknown substruct type %#02x in block 0x36", data.m_Code ) );
+        default: THROW_IO_ERRORF( wxT( "Unknown substruct type %#02x in block 0x36" ), data.m_Code );
         }
     }
 
@@ -2340,16 +2345,15 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x3C( FILE_STREAM& aStream, FMT_VE
 
     if( data.m_NumEntries > 1000000 )
     {
-        THROW_IO_ERROR( wxString::Format(
-                "Block 0x3C entry count %u exceeds limit at offset %#010zx",
-                data.m_NumEntries, aStream.Position() ) );
+        THROW_IO_ERRORF( wxT( "Block 0x3C entry count %u exceeds limit at offset %#010zx" ),
+                         data.m_NumEntries,
+                         aStream.Position() );
     }
 
     data.m_Entries.reserve( data.m_NumEntries );
+
     for( uint32_t i = 0; i < data.m_NumEntries; ++i )
-    {
         data.m_Entries.push_back( aStream.ReadU32() );
-    }
 
     return block;
 }
@@ -2521,10 +2525,10 @@ std::unique_ptr<BLOCK_BASE> ALLEGRO::BLOCK_PARSER::ParseBlock( bool& aEndOfObjec
     {
         if( m_x27_end <= m_stream.Position() )
         {
-            THROW_IO_ERROR(
-                    wxString::Format( "Current offset %#010zx is at or past the expected end of block 0x27 at %#010zx",
-                                      m_stream.Position(), m_x27_end ) );
+            THROW_IO_ERRORF( wxT( "Current offset %#010zx is at or past the expected end of block 0x27 at %#010zx" ),
+                             m_stream.Position(), m_x27_end );
         }
+
         block = ParseBlock_0x27( m_stream, m_ver, m_x27_end );
         break;
     }
@@ -2732,9 +2736,10 @@ void ALLEGRO::PARSER::readObjects( BRD_DB& aBoard )
         {
             if( !m_endAtUnknownBlock )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        "Do not have parser for block index %zu type %#02x available at offset %#010zx",
-                        aBoard.GetObjectCount() + 1, blockTypeByte, offset ) );
+                THROW_IO_ERRORF( wxT( "Do not have parser for block index %zu type %#02x available at offset %#010zx" ),
+                                 aBoard.GetObjectCount() + 1,
+                                 blockTypeByte,
+                                 offset );
             }
             else
             {
@@ -2774,8 +2779,7 @@ void dumpLL( const char* name, const T& aLL )
     {
         wxLogTrace( traceAllegroParser, "  LL %-20s head=%#010x tail=%#010x", name, aLL.m_Head, aLL.m_Tail );
     }
-    else if constexpr( VERSIONED_COND_FIELD<T> &&
-                       std::is_same_v<typename T::value_type, FILE_HEADER::LINKED_LIST> )
+    else if constexpr( VERSIONED_COND_FIELD<T> && std::is_same_v<typename T::value_type, FILE_HEADER::LINKED_LIST> )
     {
         if( aLL.has_value() )
             dumpLL( name, aLL.value() );
@@ -2801,15 +2805,12 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
         board->m_Header = headerParser.ParseHeader();
 
         if( !board->m_Header )
-        {
-            THROW_IO_ERROR( "Failed to parse file header" );
-        }
+            THROW_IO_ERROR( wxT( "Failed to parse file header" ) );
 
         board->m_FmtVer = headerParser.GetFormatVersion();
 
         {
-            wxLogTrace( traceAllegroParser, "Header linked lists (ver=%#010x):",
-                        board->m_Header->m_Magic );
+            wxLogTrace( traceAllegroParser, "Header linked lists (ver=%#010x):", board->m_Header->m_Magic );
 
             dumpLL( "V18_1", board->m_Header->m_LL_V18_1 );
             dumpLL( "V18_2", board->m_Header->m_LL_V18_2 );
@@ -2865,12 +2866,10 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
         wxString verStr( board->m_Header->m_AllegroVersion.data(), 60 );
         verStr.Trim();
 
-        THROW_IO_ERROR( wxString::Format(
-                _( "This file was created with %s, which uses a binary format that "
-                   "predates Allegro 16.0 and is not supported by this importer.\n\n"
-                   "To import this design, open it in Cadence Allegro PCB Editor "
-                   "version 16.0 or later and re-save, then import the resulting file." ),
-                verStr ) );
+        THROW_IO_ERRORF( _( "This file was created with %s, which uses a binary format that predates Allegro 16.0 "
+                            "and is not supported by this importer.\n\n"
+                            "To import this design, open it in Cadence Allegro PCB Editor version 16.0 or later "
+                            "and re-save, then import the resulting file." ), verStr );
     }
 
     const uint32_t stringsCount = board->m_Header->GetStringsCount();

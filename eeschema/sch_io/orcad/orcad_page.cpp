@@ -76,11 +76,7 @@ ORCAD_RAW_PAGE OrcadParsePage( const std::vector<char>& aData,
     ORCAD_PREFIXES prefixes = reader.ReadPrefixes();
 
     if( prefixes.typeId != ORCAD_ST_PAGE )
-    {
-        THROW_IO_ERROR( wxString::Format( wxS( "OrCAD page stream: expected Page structure, "
-                                               "got type %d" ),
-                                          prefixes.typeId ) );
-    }
+        THROW_IO_ERRORF( wxS( "OrCAD page stream: expected Page structure,vgot type %d" ), prefixes.typeId );
 
     page.name = stream.ReadLzt();
     page.pageSize = stream.ReadLzt();
@@ -275,8 +271,7 @@ static uint8_t readOccHeader( ORCAD_STREAM& aStream, int aExpectType )
     aStream.Skip( aStream.ReadU32() );          // trailer
 
     if( aExpectType >= 0 && type != aExpectType )
-        THROW_IO_ERROR( wxString::Format( wxS( "occurrence record type %d != expected %d" ),
-                                          (int) type, aExpectType ) );
+        THROW_IO_ERRORF( wxS( "occurrence record type %d != expected %d" ), (int) type, aExpectType );
 
     return type;
 }
@@ -398,9 +393,8 @@ static void v2CheckCount( ORCAD_STREAM& aStream, uint32_t aCount )
 {
     if( aCount > 30000 || aCount > aStream.Remaining() )
     {
-        THROW_IO_ERROR( wxString::Format( wxS( "v2 repeat count %u exceeds the sane bound "
-                                               "(%zu bytes remain)" ),
-                                          aCount, aStream.Remaining() ) );
+        THROW_IO_ERRORF( wxS( "v2 repeat count %u exceeds the sane bound (%zu bytes remain)" ),
+                         aCount, aStream.Remaining() );
     }
 }
 
@@ -413,7 +407,7 @@ static uint8_t v2Prefix( ORCAD_STREAM& aStream, const std::vector<std::string>& 
     int16_t count = aStream.ReadI16();
 
     if( count > 1000 )
-        THROW_IO_ERROR( wxString::Format( wxS( "v2 prefix: absurd property count %d" ), count ) );
+        THROW_IO_ERRORF( wxS( "v2 prefix: absurd property count %d" ), count );
 
     for( int i = 0; i < count; i++ )
     {
@@ -738,15 +732,14 @@ static ORCAD_PRIMITIVE v2PrimBody( ORCAD_STREAM& aStream, uint8_t aType, int aDe
         break;
 
     default:
-        THROW_IO_ERROR( wxString::Format( wxS( "v2 primitive: unhandled type %d" ), (int) type ) );
+        THROW_IO_ERRORF( wxS( "v2 primitive: unhandled type %d" ), (int) type );
     }
 
     return prim;
 }
 
 
-static ORCAD_GRAPHIC_INST v2GraphicInst( ORCAD_STREAM& aStream,
-                                         const std::vector<std::string>& aStrings )
+static ORCAD_GRAPHIC_INST v2GraphicInst( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings )
 {
     ORCAD_GRAPHIC_INST inst;
     inst.typeId = v2Prefix( aStream, aStrings, &inst.props );
@@ -799,8 +792,7 @@ static void v2Structure( ORCAD_STREAM& aStream, const std::vector<std::string>& 
     case ORCAD_ST_WIRE_SCALAR:
     case ORCAD_ST_WIRE_BUS:            v2Wire( aStream, aStrings ); break;
     default:
-        THROW_IO_ERROR( wxString::Format( wxS( "v2 nested structure: unhandled type %d" ),
-                                          aStream.PeekU8() ) );
+        THROW_IO_ERRORF( wxS( "v2 nested structure: unhandled type %d" ), aStream.PeekU8() );
     }
 }
 
@@ -814,8 +806,7 @@ static ORCAD_PORT_TYPE v2PortType( uint32_t aRaw )
 
 
 // One symbol pin (type 26 scalar / 27 bus); lone 0x00 = skipped slot
-static bool v2SymbolPin( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings,
-                         ORCAD_SYMBOL_PIN& aOut )
+static bool v2SymbolPin( ORCAD_STREAM& aStream, const std::vector<std::string>& aStrings, ORCAD_SYMBOL_PIN& aOut )
 {
     if( aStream.PeekU8() == 0x00 )
     {
@@ -997,7 +988,7 @@ ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData,
     uint8_t type = v2Prefix( stream, aStrings );
 
     if( type != ORCAD_ST_PAGE )
-        THROW_IO_ERROR( wxString::Format( wxS( "v2 page: unexpected root type %d" ), (int) type ) );
+        THROW_IO_ERRORF( wxS( "v2 page: unexpected root type %d" ), (int) type );
 
     page.name = stream.ReadLzt();
     page.pageSize = stream.ReadLzt();

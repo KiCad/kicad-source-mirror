@@ -2193,10 +2193,7 @@ void SCH_IO_KICAD_LEGACY::CreateLibrary( const wxString& aLibraryPath,
                                          const std::map<std::string, UTF8>* aProperties )
 {
     if( wxFileExists( aLibraryPath ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Symbol library '%s' already exists." ),
-                                          aLibraryPath.GetData() ) );
-    }
+        THROW_IO_ERRORF( _( "Symbol library '%s' already exists." ), aLibraryPath.GetData() );
 
     delete m_cache;
     m_cache = new SCH_IO_KICAD_LEGACY_LIB_CACHE( aLibraryPath );
@@ -2217,10 +2214,7 @@ bool SCH_IO_KICAD_LEGACY::DeleteLibrary( const wxString& aLibraryPath,
     // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
     // we don't want that.  we want bare metal portability with no UI here.
     if( wxRemove( aLibraryPath ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Symbol library '%s' cannot be deleted." ),
-                                          aLibraryPath.GetData() ) );
-    }
+        THROW_IO_ERRORF( _( "Symbol library '%s' cannot be deleted." ), aLibraryPath.GetData() );
 
     if( m_cache && m_cache->IsFile( aLibraryPath ) )
     {

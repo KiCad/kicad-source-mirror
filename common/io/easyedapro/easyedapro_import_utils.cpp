@@ -250,7 +250,7 @@ nlohmann::json EASYEDAPRO::FindJsonFile( const wxString&           aZipFileName,
     wxFFileInputStream          in( aZipFileName );
     wxZipInputStream            zip( in );
 
-    while( entry.reset( zip.GetNextEntry() ), entry.get() != NULL )
+    while( entry.reset( zip.GetNextEntry() ), entry.get() )
     {
         wxString name = entry->GetName();
 
@@ -262,20 +262,18 @@ nlohmann::json EASYEDAPRO::FindJsonFile( const wxString&           aZipFileName,
                 memos << zip;
                 wxStreamBuffer* buf = memos.GetOutputStreamBuffer();
 
-                wxString str =
-                        wxString::FromUTF8( (char*) buf->GetBufferStart(), buf->GetBufferSize() );
+                wxString str = wxString::FromUTF8( (char*) buf->GetBufferStart(), buf->GetBufferSize() );
 
                 return nlohmann::json::parse( str );
             }
         }
         catch( nlohmann::json::exception& e )
         {
-            THROW_IO_ERROR(
-                    wxString::Format( _( "JSON error reading '%s': %s" ), name, e.what() ) );
+            THROW_IO_ERRORF( _( "JSON error reading '%s': %s" ), name, e.what() );
         }
         catch( std::exception& e )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Error reading '%s': %s" ), name, e.what() ) );
+            THROW_IO_ERRORF( _( "Error reading '%s': %s" ), name, e.what() );
         }
     }
 
@@ -293,10 +291,8 @@ nlohmann::json EASYEDAPRO::ReadProjectOrDeviceFile( const wxString& aZipFileName
     if( !j.is_null() )
         return j;
 
-    THROW_IO_ERROR( wxString::Format(
-            _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro "
-               "project or library file. Cannot find project.json or device.json." ),
-            aZipFileName ) );
+    THROW_IO_ERRORF(  _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library file. "
+                         "Cannot find project.json or device.json." ), aZipFileName );
 }
 
 
@@ -309,11 +305,9 @@ void EASYEDAPRO::IterateZipFiles(
     wxZipInputStream            zip( in );
 
     if( !zip.IsOk() )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot read ZIP archive '%s'" ), aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "Cannot read ZIP archive '%s'" ), aFileName );
 
-    while( entry.reset( zip.GetNextEntry() ), entry.get() != NULL )
+    while( entry.reset( zip.GetNextEntry() ), entry.get() )
     {
         wxString name = entry->GetName();
         wxString baseName = name.AfterLast( '\\' ).AfterLast( '/' ).BeforeFirst( '.' );
@@ -325,19 +319,17 @@ void EASYEDAPRO::IterateZipFiles(
         }
         catch( nlohmann::json::exception& e )
         {
-            THROW_IO_ERROR(
-                    wxString::Format( _( "JSON error reading '%s': %s" ), name, e.what() ) );
+            THROW_IO_ERRORF( _( "JSON error reading '%s': %s" ), name, e.what() );
         }
         catch( std::exception& e )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Error reading '%s': %s" ), name, e.what() ) );
+            THROW_IO_ERRORF( _( "Error reading '%s': %s" ), name, e.what() );
         }
     }
 }
 
 
-std::vector<nlohmann::json> EASYEDAPRO::ParseJsonLines( wxInputStream&  aInput,
-                                                        const wxString& aSource )
+std::vector<nlohmann::json> EASYEDAPRO::ParseJsonLines( wxInputStream&  aInput, const wxString& aSource )
 {
     wxTextInputStream txt( aInput, wxS( " " ), wxConvUTF8 );
 

@@ -651,10 +651,8 @@ void NETLIST_EXPORTER_SPICE::readModel( SCH_SHEET_PATH& aSheet, SCH_SYMBOL& aSym
         // instances, so reject them with a clear error rather than emit a broken netlist.
         if( libModel.model.GetType() != SIM_MODEL::TYPE::SUBCKT || libModel.name.empty() )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Symbol '%s' uses repeat-per-unit decomposition, which requires a named "
-                       "subcircuit model." ),
-                    aSymbol.GetRef( &aSheet ) ) );
+            THROW_IO_ERRORF( _( "Symbol '%s' uses repeat-per-unit decomposition, which requires a named "
+                                "subcircuit model." ), aSymbol.GetRef( &aSheet ) );
         }
 
         std::vector<UNIT_PIN_MAP> unitMaps = collectUnitPinMaps( aSymbol, aSheet, aVariantName );
@@ -752,8 +750,7 @@ void NETLIST_EXPORTER_SPICE::getNodePattern( SPICE_ITEM&               aItem,
     }
     catch( const tao::pegtl::parse_error& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error in parsing model '%s', error: '%s'" ),
-                                          aItem.refName, e.what() ) );
+        THROW_IO_ERRORF( _( "Error in parsing model '%s', error: '%s'" ), aItem.refName, e.what() );
     }
 }
 void NETLIST_EXPORTER_SPICE::readNodePattern( SPICE_ITEM& aItem )
@@ -766,10 +763,8 @@ void NETLIST_EXPORTER_SPICE::readNodePattern( SPICE_ITEM& aItem )
 
     if( xspicePattern.size() != aItem.pinNetNames.size() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error in parsing model '%s', wrong number of nodes "
-                                             "'?' in Sim.NodesFormat compared to connections" ),
-                                          aItem.refName ) );
-        return;
+        THROW_IO_ERRORF( _( "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat compared "
+                            "to connections" ), aItem.refName );
     }
 
     auto itNetNames = aItem.pinNetNames.begin();

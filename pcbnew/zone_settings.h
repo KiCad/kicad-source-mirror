@@ -210,7 +210,7 @@ public:
      * copies settings from a given zone into this object.
      * @param aSource: the given zone
      */
-    ZONE_SETTINGS& operator << ( const ZONE& aSource );
+    ZONE_SETTINGS& operator<<( const ZONE& aSource );
 
     /**
      * @return Default ZONE_SETTINGS
@@ -233,19 +233,6 @@ public:
      *   Currently: m_ZonePriority, m_Layers & m_LayersProperties, m_Name and m_Netcode
      */
     void ExportSetting( ZONE& aTarget, bool aFullExport = true ) const;
-
-    /**
-     * Function CopyFrom
-     * copy settings from a different ZONE_SETTINGS object
-     *
-     * @param aOther the other ZONE_SETTINGS
-     * @param aCopyFull if false: some parameters are not copied.
-     * This option is used specifically to copy zone settings from
-     * a zone to the default zone settings.
-     * There, the layer information is not needed, plus layer specific
-     * properties should not be overridden in the zone default settings.
-     */
-    void CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull = true );
 
     void SetCornerSmoothingType( int aType) { m_cornerSmoothingType = aType; }
     int GetCornerSmoothingType() const { return m_cornerSmoothingType; }

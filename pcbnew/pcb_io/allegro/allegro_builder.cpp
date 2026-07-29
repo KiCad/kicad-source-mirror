@@ -78,9 +78,10 @@ static uint32_t PadGetNextInFootprint( const BLOCK_BASE& aBlock )
 
     if( type != 0x32 )
     {
-        THROW_IO_ERROR(
-                wxString::Format( "Unexpected next item in 0x32 pad list: block type %#04x, offset %#lx, key %#010x",
-                                  type, aBlock.GetOffset(), aBlock.GetKey() ) );
+        THROW_IO_ERRORF( wxT( "Unexpected next item in 0x32 pad list: block type %#04x, offset %#lx, key %#010x" ),
+                         type,
+                         aBlock.GetOffset(),
+                         aBlock.GetKey() );
     }
 
     // When iterating in a footprint use this field, not m_Next.

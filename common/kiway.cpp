@@ -236,20 +236,15 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             }
         }
 
-        wxString msg;
-
 #ifdef KICAD_WIN32_VERIFY_CODESIGN
         bool codeSignOk = KIPLATFORM::ENV::VerifyFileSignature( dname );
+
         if( !codeSignOk )
-        {
-            msg.Printf( _( "Failed to verify kiface library '%s' signature." ), dname );
-            THROW_IO_ERROR( msg );
-        }
+            THROW_IO_ERRORF( _( "Failed to verify kiface library '%s' signature." ), dname );
 #endif
 
         wxDynamicLibrary dso;
-
-        void*   addr = nullptr;
+        void*            addr = nullptr;
 
         // For some reason wxDynamicLibrary::Load() crashes in some languages
         // (chinese for instance) when loading the dynamic library.
@@ -263,8 +258,7 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
         setlocale( lc_new_type, user_locale.c_str() );
 
-        msg = wxString::Format( "Loading kiface %d", aFaceId );
-        APP_MONITOR::AddNavigationBreadcrumb( msg, "kiway.kiface" );
+        APP_MONITOR::AddNavigationBreadcrumb( wxString::Format( "Loading kiface %d", aFaceId ), "kiway.kiface" );
 
         if( !success )
         {
@@ -274,17 +268,14 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             // here and catching it in the KiCad launcher resolves the crash issue.  See bug
             // report https://bugs.launchpad.net/kicad/+bug/1577786.
 
-            msg.Printf( _( "Failed to load kiface library '%s'." ), dname );
-            THROW_IO_ERROR( msg );
+            THROW_IO_ERRORF( _( "Failed to load kiface library '%s'." ), dname );
         }
         else if( ( addr = dso.GetSymbol( wxT( KIFACE_INSTANCE_NAME_AND_VERSION ) ) ) == nullptr )
         {
             // Failure: error reporting UI was done via wxLogSysError().
             // No further reporting required here.  Assume the same thing applies here as
             // above with the Load() call.  This has not been tested.
-            msg.Printf( _( "Could not read instance name and version from kiface library '%s'." ),
-                        dname );
-            THROW_IO_ERROR( msg );
+            THROW_IO_ERRORF( _( "Could not read instance name and version from kiface library '%s'." ), dname );
         }
         else
         {
@@ -293,8 +284,7 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             KIFACE* kiface = ki_getter( &m_kiface_version[aFaceId], KIFACE_VERSION, &Pgm() );
 
             // KIFACE_GETTER_FUNC function comment (API) says the non-NULL is unconditional.
-            wxASSERT_MSG( kiface,
-                          wxT( "attempted DSO has a bug, failed to return a KIFACE*" ) );
+            wxASSERT_MSG( kiface, wxT( "attempted DSO has a bug, failed to return a KIFACE*" ) );
 
             wxDllType dsoHandle = dso.Detach();
 

@@ -101,7 +101,7 @@ void PCAD_VIA::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     }
 
     if ( !lNode )
-        THROW_IO_ERROR( wxString::Format( _( "Unable to find viaStyleDef %s." ), m_Name.text ) );
+        THROW_IO_ERRORF( _( "Unable to find viaStyleDef %s." ), m_Name.text );
 
     if( lNode )
     {

@@ -63,13 +63,11 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
         m_libFileName.AssignDir( m_libFileName.GetFullPath() );
 
     if( !isLibraryPathValid() )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Library '%s' not found." ), m_libFileName.GetFullPath() ) );
-    }
+        THROW_IO_ERRORF( _( "Library '%s' not found." ), m_libFileName.GetFullPath() );
 
     wxCHECK_RET( m_libFileName.IsAbsolute(),
-                 wxString::Format( "Cannot use relative file paths in sexpr plugin to "
-                                   "open library '%s'.", m_libFileName.GetFullPath() ) );
+                 wxString::Format( wxT( "Cannot use relative file paths in sexpr plugin to open library '%s'." ),
+                                   m_libFileName.GetFullPath() ) );
 
     if( !m_libFileName.IsDir() )
     {
@@ -216,11 +214,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
     // lose all symbols after the error point. See issue #22241.
     if( HasParseError() )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "Cannot save library '%s' because it had a parse error during loading.\n\n"
-                   "Saving would permanently lose symbols that could not be loaded.\n"
-                   "Please fix the library file manually before saving." ),
-                m_libFileName.GetFullPath() ) );
+        THROW_IO_ERRORF( _( "Cannot save library '%s' because it had a parse error during loading.\n\n"
+                            "Saving would permanently lose symbols that could not be loaded.\n"
+                            "Please fix the library file manually before saving." ),
+                         m_libFileName.GetFullPath() );
     }
 
     // Write through symlinks, don't replace them.
@@ -270,7 +267,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
         if( !fn.DirExists() )
         {
             if( !fn.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-                THROW_IO_ERROR( wxString::Format( _( "Cannot create symbol library path '%s'." ), fn.GetPath() ) );
+                THROW_IO_ERRORF( _( "Cannot create symbol library path '%s'." ), fn.GetPath() );
         }
 
         // Detect renamed symbols whose old source file entries are now orphaned.
@@ -879,8 +876,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::DeleteSymbol( const wxString& aSymbolName )
     LIB_SYMBOL_MAP::iterator it = m_symbols.find( aSymbolName );
 
     if( it == m_symbols.end() )
-        THROW_IO_ERROR( wxString::Format( _( "library %s does not contain a symbol named %s" ),
-                                          m_libFileName.GetFullName(), aSymbolName ) );
+        THROW_IO_ERRORF( _( "library %s does not contain a symbol named %s" ), m_libFileName.GetFullName(), aSymbolName );
 
     LIB_SYMBOL* symbol = it->second;
 

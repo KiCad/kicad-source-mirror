@@ -364,7 +364,7 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         m_progressReporter->Report( wxString::Format( _( "Loading %s..." ), aFileName ) );
 
         if( !m_progressReporter->KeepRefreshing() )
-            THROW_IO_ERROR( ( "Open canceled by user." ) );
+            THROW_IO_ERROR( _( "Open canceled by user." ) );
     }
 
     // Load the document
@@ -595,10 +595,7 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
     wxFFileInputStream stream( m_filename.GetFullPath() );
 
     if( !stream.IsOk() )
-    {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
-    }
+        THROW_IO_ERRORF( _( "Unable to read file '%s'." ), m_filename.GetFullPath() );
 
     // Pre-v6 schematics are a binary stream identified by a two-byte magic. Decode
     // them into an XML-compatible DOM and adopt that tree, mirroring PCB_IO_EAGLE.
@@ -613,10 +610,7 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
         stream.Read( bytes.data(), bytes.size() );
 
         if( stream.LastRead() != bytes.size() )
-        {
-            THROW_IO_ERROR(
-                    wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
-        }
+            THROW_IO_ERRORF( _( "Unable to read file '%s'." ), m_filename.GetFullPath() );
 
         EAGLE_BIN_PARSER               binParser;
         std::unique_ptr<wxXmlDocument> binDocument = binParser.Parse( bytes );
@@ -632,9 +626,8 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
     if( !line.StartsWith( wxT( "<?xml" ) ) && !line.StartsWith( wxT( "<!--" ) )
         && !line.StartsWith( wxT( "<eagle " ) ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "'%s' is an Eagle binary-format file; "
-                                             "only Eagle XML-format files can be imported." ),
-                                          m_filename.GetFullPath() ) );
+        THROW_IO_ERRORF( _( "'%s' is an Eagle binary-format file; only Eagle XML-format files can be imported." ),
+                         m_filename.GetFullPath() );
     }
 
 #if wxCHECK_VERSION( 3, 3, 0 )
@@ -662,14 +655,13 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
 
             if( !xmlDocument.Load( memInput, wxXMLDOC_NONE, &err ) )
             {
-                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
+                THROW_IO_ERRORF( _( "Unable to read file '%s'." ), m_filename.GetFullPath() );
             }
         }
         else
         {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'.\n'%s' at line %d, column %d, offset %d" ),
-                                              m_filename.GetFullPath(), err.message, err.line, err.column,
-                                              err.offset ) );
+            THROW_IO_ERRORF( _( "Unable to read file '%s'.\n'%s' at line %d, column %d, offset %d" ),
+                             m_filename.GetFullPath(), err.message, err.line, err.column, err.offset );
         }
     }
 #else
@@ -692,9 +684,7 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
         wxMemoryInputStream memInput( memOutput );
 
         if( !xmlDocument.Load( memInput ) )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
-        }
+            THROW_IO_ERRORF( _( "Unable to read file '%s'." ), m_filename.GetFullPath() );
     }
 #endif
 
@@ -1112,9 +1102,8 @@ void SCH_IO_EAGLE::loadModuleInstance( const std::unique_ptr<EMODULEINST>& aModu
     // Find the module referenced by the module instance.
     if( it == m_eagleDoc->drawing->schematic->modules.end() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "No module instance '%s' found in schematic "
-                                             "file:\n%s" ),
-                                          aModuleInstance->name, m_filename.GetFullPath() ) );
+        THROW_IO_ERRORF( _( "No module instance '%s' found in schematic file:\n%s" ),
+                         aModuleInstance->name, m_filename.GetFullPath() );
     }
 
     wxFileName fn = m_filename;

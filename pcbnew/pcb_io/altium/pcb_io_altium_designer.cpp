@@ -364,10 +364,7 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
             const CFB::COMPOUND_FILE_ENTRY* libraryData = altiumLibFile->FindStream( streamName );
 
             if( libraryData == nullptr )
-            {
-                THROW_IO_ERROR( wxString::Format( _( "File not found: '%s'." ),
-                                                  FormatPath( streamName ) ) );
-            }
+                THROW_IO_ERRORF( _( "File not found: '%s'." ), FormatPath( streamName ) );
 
             ALTIUM_BINARY_PARSER parser( *altiumLibFile, libraryData );
 
@@ -402,28 +399,18 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
                 auto it = patternMap.find( fpPattern );
 
                 if( it != patternMap.end() )
-                {
                     aFootprintNames.Add( it->second ); // Proper unicode name
-                }
                 else
-                {
-                    THROW_IO_ERROR( wxString::Format( "Component name not found: '%s'", fpPattern ) );
-                }
+                    THROW_IO_ERRORF( _( "Component name not found: '%s'" ), fpPattern );
 
                 parser.SkipSubrecord();
             }
 
             if( parser.HasParsingError() )
-            {
-                THROW_IO_ERROR( wxString::Format( "%s stream was not parsed correctly",
-                                                  FormatPath( streamName ) ) );
-            }
+                THROW_IO_ERRORF( wxT( "%s stream was not parsed correctly" ), FormatPath( streamName ) );
 
             if( footprintListNotTruncated && parser.GetRemainingBytes() != 0 )
-            {
-                THROW_IO_ERROR( wxString::Format( "%s stream is not fully parsed",
-                                                  FormatPath( streamName ) ) );
-            }
+                THROW_IO_ERRORF( wxT( "%s stream is not fully parsed" ), FormatPath( streamName ) );
         }
     }
     catch( CFB::CFBException& exception )
@@ -440,7 +427,7 @@ FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
     loadAltiumLibrary( aLibraryPath );
 
     if( !m_fplibFiles.contains( aLibraryPath ) )
-        THROW_IO_ERROR( wxString::Format( _( "No footprints in library '%s'" ), aLibraryPath ) );
+        THROW_IO_ERRORF( _( "No footprints in library '%s'" ), aLibraryPath );
 
     try
     {
@@ -462,9 +449,7 @@ FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
         THROW_IO_ERROR( exception.what() );
     }
 
-    THROW_IO_ERROR( wxString::Format( _( "Footprint '%s' not found in '%s'." ),
-                                      aFootprintName,
-                                      aLibraryPath ) );
+    THROW_IO_ERRORF( _( "Footprint '%s' not found in '%s'." ), aFootprintName, aLibraryPath );
 }
 
 

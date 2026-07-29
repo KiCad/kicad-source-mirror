@@ -380,10 +380,11 @@ static void ExpectSubrecordLengthAtLeast( const std::string& aStreamType,
 {
     if( aActualLength < aExpectedLength )
     {
-        THROW_IO_ERROR( wxString::Format( "%s stream %s has length %d, "
-                                          "which is unexpected (expected at least %d)",
-                                          aStreamType, aSubrecordName, aActualLength,
-                                          aExpectedLength ) );
+        THROW_IO_ERRORF( wxT( "%s stream %s has length %d, which is unexpected (expected at least %d)" ),
+                         aStreamType,
+                         aSubrecordName,
+                         aActualLength,
+                         aExpectedLength );
     }
 }
 
@@ -400,12 +401,11 @@ AEXTENDED_PRIMITIVE_INFORMATION::AEXTENDED_PRIMITIVE_INFORMATION( ALTIUM_BINARY_
     type = ReadAltiumExtendedPrimitiveInformationTypeFromProperties( props, wxT( "TYPE" ) );
 
     pastemaskexpansionmode = ReadAltiumModeFromProperties( props, wxT( "PASTEMASKEXPANSIONMODE" ) );
-    pastemaskexpansionmanual = ALTIUM_PROPS_UTILS::ReadKicadUnit(
-            props, wxT( "PASTEMASKEXPANSION_MANUAL" ), wxT( "0mil" ) );
-    soldermaskexpansionmode =
-            ReadAltiumModeFromProperties( props, wxT( "SOLDERMASKEXPANSIONMODE" ) );
-    soldermaskexpansionmanual = ALTIUM_PROPS_UTILS::ReadKicadUnit(
-            props, wxT( "SOLDERMASKEXPANSION_MANUAL" ), wxT( "0mil" ) );
+    pastemaskexpansionmanual = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "PASTEMASKEXPANSION_MANUAL" ),
+                                                                  wxT( "0mil" ) );
+    soldermaskexpansionmode = ReadAltiumModeFromProperties( props, wxT( "SOLDERMASKEXPANSIONMODE" ) );
+    soldermaskexpansionmanual = ALTIUM_PROPS_UTILS::ReadKicadUnit( props, wxT( "SOLDERMASKEXPANSION_MANUAL" ),
+                                                                   wxT( "0mil" ) );
 }
 
 
@@ -1123,10 +1123,8 @@ APAD6::APAD6( ALTIUM_BINARY_PARSER& aReader )
         const uint32_t unknown = aReader.ReadKicadUnit(); // to 110
 
         if( unknown != 0 )
-        {
-            THROW_IO_ERROR( wxString::Format( "Pads6 stream subrecord5 + 106 has value %d, which is unexpected",
-                                              unknown ) );
-        }
+            THROW_IO_ERRORF( wxT( "Pads6 stream subrecord5 + 106 has value %d, which is unexpected" ), unknown );
+
         holerotation = 0;
     }
     else

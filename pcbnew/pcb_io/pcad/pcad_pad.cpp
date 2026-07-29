@@ -142,7 +142,7 @@ void PCAD_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     }
 
     if ( !lNode )
-        THROW_IO_ERROR( wxString::Format( wxT( "Unable to find padStyleDef " ) + m_Name.text ) );
+        THROW_IO_ERRORF( wxT( "Unable to find padStyleDef %s" ), m_Name.text );
 
     cNode = FindNode( lNode, wxT( "holeDiam" ) );
 

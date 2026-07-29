@@ -56,13 +56,13 @@ wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType )
     // the IsOpened check would be logical, but on linux you can fopen (in read mode) a directory
     // And then everything else in here will barf
     if( !wxFileExists( aFilePath ) )
-        THROW_IO_ERROR( wxString::Format( _( "File '%s' does not exist." ), aFilePath ) );
+        THROW_IO_ERRORF( _( "File '%s' does not exist." ), aFilePath );
 
     wxString contents;
     wxFFile  ff( aFilePath );
 
     if( !ff.IsOpened() )
-        THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'." ), aFilePath ) );
+        THROW_IO_ERRORF( _( "Cannot open file '%s'." ), aFilePath );
 
     // Try to determine encoding
     char bytes[2]{ 0 };
@@ -85,7 +85,7 @@ wxString SafeReadFile( const wxString& aFilePath, const wxString& aReadType )
     }
 
     if( contents.empty() )
-        THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ), aFilePath ) );
+        THROW_IO_ERRORF( _( "Unable to read file '%s'." ), aFilePath );
 
     // I'm not sure what the source of this style of line-endings is, but it can be
     // found in some Fairchild Semiconductor SPICE files.
@@ -160,11 +160,7 @@ FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName, unsigned aStartin
     m_fp = KIPLATFORM::IO::SeqFOpen( aFileName, wxT( "rt" ) );
 
     if( !m_fp )
-    {
-        wxString msg = wxString::Format( _( "Unable to open %s for reading." ),
-                                         aFileName.GetData() );
-        THROW_IO_ERROR( msg );
-    }
+        THROW_IO_ERRORF( _( "Unable to open %s for reading." ), aFileName.GetData() );
 
     m_source  = aFileName;
     m_lineNum = aStartingLineNumber;
@@ -553,8 +549,7 @@ void atomicCommit( FILE*& aFp, const wxString& aTempPath, const wxString& aFinal
         fclose( aFp );
         aFp = nullptr;
         wxRemoveFile( aTempPath );
-        THROW_IO_ERROR( wxString::Format( _( "Cannot flush '%s' to disk: %s" ), aTempPath,
-                                          wxString::FromUTF8( strerror( err ) ) ) );
+        THROW_IO_ERRORF( _( "Cannot flush '%s' to disk: %s" ), aTempPath, wxString::FromUTF8( strerror( err ) ) );
     }
 
     fclose( aFp );
@@ -618,8 +613,7 @@ void finalizeFormatter( FILE*& aFp, const wxString& aTempPath, const wxString& a
 } // anonymous namespace
 
 
-FILE_OUTPUTFORMATTER::FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxChar* aMode,
-                                            char aQuoteChar ):
+FILE_OUTPUTFORMATTER::FILE_OUTPUTFORMATTER( const wxString& aFileName, const wxChar* aMode, char aQuoteChar ):
     OUTPUTFORMATTER( OUTPUTFMTBUFZ, aQuoteChar ),
     m_fp( nullptr ),
     m_filename( KIPLATFORM::IO::ResolveSymlinkTarget( aFileName ) ),
@@ -714,8 +708,7 @@ bool PRETTIFIED_FILE_OUTPUTFORMATTER::Finish()
         fclose( m_fp );
         m_fp = nullptr;
         wxRemoveFile( m_tempPath );
-        THROW_IO_ERROR( wxString::Format( _( "Write failed to '%s': %s" ), m_tempPath,
-                                          wxString::FromUTF8( strerror( err ) ) ) );
+        THROW_IO_ERRORF( _( "Write failed to '%s': %s" ), m_tempPath, wxString::FromUTF8( strerror( err ) ) );
     }
 
     atomicCommit( m_fp, m_tempPath, m_filename );

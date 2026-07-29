@@ -4552,10 +4552,10 @@ SCH_SHEET* SCH_IO_GEDA::LoadSchematicFile( const wxString& aFileName, SCHEMATIC*
     wxTextFile file;
 
     if( !file.Open( aFileName ) )
-        THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'." ), aFileName ) );
+        THROW_IO_ERRORF( _( "Cannot open file '%s'." ), aFileName );
 
     if( file.GetLineCount() == 0 )
-        THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty." ), aFileName ) );
+        THROW_IO_ERRORF( _( "File '%s' is empty." ), aFileName );
 
     // First pass: scan for max Y coordinate to set up the Y-flip transform.
     // We need this before creating objects because coordinates are transformed during creation.
@@ -4709,10 +4709,7 @@ SCH_SHEET* SCH_IO_GEDA::LoadSchematicFile( const wxString& aFileName, SCHEMATIC*
     lineIdx++;
 
     if( !parseVersionLine( firstLine ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "File '%s' is not a valid gEDA schematic." ),
-                                           aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "File '%s' is not a valid gEDA schematic." ), aFileName );
 
     // Main parse loop
     while( lineIdx < file.GetLineCount() )

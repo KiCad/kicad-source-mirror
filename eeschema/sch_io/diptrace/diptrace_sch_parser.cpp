@@ -234,9 +234,7 @@ void SCH_PARSER::Parse()
         // would otherwise silently select the modern layout and walk the file with wrong field
         // offsets. Reject up front rather than misparsing.
         if( m_version < 1 || m_version > 200 )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unsupported DipTrace schematic format version %d." ), m_version ) );
-        }
+            THROW_IO_ERRORF( _( "Unsupported DipTrace schematic format version %d." ), m_version );
 
         parseSheetDefinitions();
         parseDisplaySettings();
@@ -258,9 +256,7 @@ void SCH_PARSER::Parse()
         }
 
         if( m_magicMajor != 1 && ( m_busSectionOffset == 0 || m_busSectionOffset >= m_reader.GetFileSize() ) )
-        {
             m_busSectionOffset = m_tailOffset;
-        }
 
         parseComponents( m_busSectionOffset );
 
@@ -281,8 +277,8 @@ void SCH_PARSER::Parse()
     }
     catch( const std::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: unexpected error at offset 0x%06zX: %s" ),
-                                          m_reader.GetOffset(), wxString::FromUTF8( e.what() ) ) );
+        THROW_IO_ERRORF( _( "DipTrace import: unexpected error at offset 0x%06zX: %s" ),
+                         m_reader.GetOffset(), wxString::FromUTF8( e.what() ) );
     }
 
     createKiCadObjects();
@@ -294,10 +290,7 @@ void SCH_PARSER::parseHeader()
     uint8_t magicLen = m_reader.ReadByte();
 
     if( magicLen != 7 && magicLen != 11 )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Invalid DipTrace schematic magic length: %d (expected 7 or 11)." ),
-                                          (int) magicLen ) );
-    }
+        THROW_IO_ERRORF( _( "Invalid DipTrace schematic magic length: %d (expected 7 or 11)." ), (int) magicLen );
 
     std::vector<uint8_t> magicBuf( magicLen );
     m_reader.ReadBytes( magicBuf.data(), magicLen );
@@ -331,9 +324,7 @@ void SCH_PARSER::parseHeader()
     m_numSheets = m_reader.ReadInt3();
 
     if( m_numSheets < 0 || m_numSheets > 100 )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Invalid DipTrace schematic sheet count: %d." ), m_numSheets ) );
-    }
+        THROW_IO_ERRORF( _( "Invalid DipTrace schematic sheet count: %d." ), m_numSheets );
 }
 
 
@@ -393,9 +384,7 @@ void SCH_PARSER::parseTextStyles()
     int numStyles = m_reader.ReadInt3();
 
     if( numStyles < 0 || numStyles > 2000 )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Invalid text style count: %d." ), numStyles ) );
-    }
+        THROW_IO_ERRORF( _( "Invalid text style count: %d." ), numStyles );
 
     for( int i = 0; i < numStyles; i++ )
     {
@@ -451,9 +440,7 @@ void SCH_PARSER::parsePreComponentSettings()
     }
 
     if( m_componentCount < 0 || m_componentCount > 100000 )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid component count %d." ), m_componentCount ) );
-    }
+        THROW_IO_ERRORF( _( "DipTrace import: invalid component count %d." ), m_componentCount );
 }
 
 
@@ -478,9 +465,7 @@ size_t SCH_PARSER::findBusSection( size_t aSearchStart ) const
                 return off;
 
             if( count > 1000 && count <= 10000 )
-            {
-                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid bus count %d." ), count ) );
-            }
+                THROW_IO_ERRORF( _( "DipTrace import: invalid bus count %d." ), count );
         }
     }
 
@@ -694,17 +679,15 @@ void SCH_PARSER::parseComponents( size_t aBusSectionOffset )
         }
         catch( const std::exception& e )
         {
-            THROW_IO_ERROR(
-                    wxString::Format( _( "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s" ), ci,
-                                      compStarts[ci], wxString::FromUTF8( e.what() ) ) );
+            THROW_IO_ERRORF( _( "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s" ),
+                             ci, compStarts[ci], wxString::FromUTF8( e.what() ) );
         }
     }
 
     if( m_componentCount >= 0 && static_cast<int>( m_components.size() ) != m_componentCount )
     {
-        THROW_IO_ERROR(
-                wxString::Format( _( "DipTrace import: found %zu components, but the file header declares %d." ),
-                                  m_components.size(), m_componentCount ) );
+        THROW_IO_ERRORF( _( "DipTrace import: found %zu components, but the file header declares %d." ),
+                         m_components.size(), m_componentCount );
     }
 }
 
@@ -960,9 +943,8 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
 
             if( extraChars >= 10000 && extraHdr[0] == 0 && extraHdr[1] == 0 )
             {
-                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid component extra-tail length %u at "
-                                                     "offset 0x%06zX." ),
-                                                  extraChars, extraStart ) );
+                THROW_IO_ERRORF( _( "DipTrace import: invalid component extra-tail length %u at offset 0x%06zX." ),
+                                 extraChars, extraStart );
             }
 
             if( extraChars > 0 )
@@ -1108,9 +1090,7 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             return;
         }
 
-        THROW_IO_ERROR( wxString::Format( _( "Invalid pin count %d at component offset "
-                                             "0x%06zX." ),
-                                          numPins, comp.fileOffset ) );
+        THROW_IO_ERRORF( _( "Invalid pin count %d at component offset 0x%06zX." ), numPins, comp.fileOffset );
     }
 
     for( int pinIdx = 0; pinIdx < numPins; pinIdx++ )
@@ -1184,10 +1164,8 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             if( aUseCompEnd && !simpleModernTail )
                 break;
 
-            THROW_IO_ERROR( wxString::Format( _( "DipTrace import: failed to parse pin %d in component at 0x%06zX "
-                                                 "(offset 0x%06zX): %s" ),
-                                              pinIdx, comp.fileOffset, m_reader.GetOffset(),
-                                              wxString::FromUTF8( e.what() ) ) );
+            THROW_IO_ERRORF( _( "DipTrace import: failed to parse pin %d in component at 0x%06zX (offset 0x%06zX): %s" ),
+                             pinIdx, comp.fileOffset, m_reader.GetOffset(), wxString::FromUTF8( e.what() ) );
         }
     }
 
@@ -1308,9 +1286,8 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             if( m_version >= V31_CUTOVER && readShapePointCountIfHeaderPrefix( shapeOffset, shapePointCount )
                 && ( shapePointCount < 1 || shapePointCount > 100 ) )
             {
-                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid component shape point count %d at "
-                                                     "offset 0x%06zX." ),
-                                                  shapePointCount, shapeOffset ) );
+                THROW_IO_ERRORF( _( "DipTrace import: invalid component shape point count %d at offset 0x%06zX." ),
+                                 shapePointCount, shapeOffset );
             }
 
             // End of the shape list (or a record layout not fully understood). The
@@ -1937,9 +1914,8 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
 
             if( count < 0 || count > aMax )
             {
-                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid embedded pattern %s count %d at "
-                                                     "offset 0x%06zX." ),
-                                                  wxString::FromUTF8( aName ), count, startOffset ) );
+                THROW_IO_ERRORF( _( "DipTrace import: invalid embedded pattern %s count %d at offset 0x%06zX." ),
+                                 wxString::FromUTF8( aName ), count, startOffset );
             }
 
             return count;
@@ -2203,9 +2179,7 @@ void SCH_PARSER::parseBusSection()
     int busCount = m_reader.ReadInt3();
 
     if( busCount < 0 || busCount > 1000 )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid bus count %d." ), busCount ) );
-    }
+        THROW_IO_ERRORF( _( "DipTrace import: invalid bus count %d." ), busCount );
 
     for( int i = 0; i < busCount; i++ )
     {
@@ -2227,11 +2201,7 @@ void SCH_PARSER::parseBusSection()
             int terminator = m_reader.ReadInt3();
 
             if( terminator != -1 )
-            {
-                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: bus entry %d has "
-                                                     "unexpected terminator %d." ),
-                                                  i, terminator ) );
-            }
+                THROW_IO_ERRORF( _( "DipTrace import: bus entry %d has unexpected terminator %d." ), i, terminator );
 
             entry.name = m_reader.ReadString();
             m_reader.ReadByte();
@@ -2244,9 +2214,8 @@ void SCH_PARSER::parseBusSection()
         }
         catch( const std::exception& e )
         {
-            THROW_IO_ERROR( wxString::Format( _( "DipTrace import: failed to parse bus entry "
-                                                 "%d: %s" ),
-                                              i, wxString::FromUTF8( e.what() ) ) );
+            THROW_IO_ERRORF( _( "DipTrace import: failed to parse bus entry %d: %s" ),
+                             i, wxString::FromUTF8( e.what() ) );
         }
     }
 }
@@ -3731,9 +3700,8 @@ void SCH_PARSER::parseWireSection()
 
             if( !decodeWireNetName( nameOffset, candidateName, afterName, nameError ) )
             {
-                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid wire-net name for net index %d at "
-                                                     "offset 0x%06zX: %s." ),
-                                                  aExpectedIndex, nameOffset, nameError ) );
+                THROW_IO_ERRORF( _( "DipTrace import: invalid wire-net name for net index %d at offset 0x%06zX: %s." ),
+                                 aExpectedIndex, nameOffset, nameError );
             }
 
             if( isPlausibleNetName( data, nameOffset, sectionEnd ) )
@@ -3764,9 +3732,8 @@ void SCH_PARSER::parseWireSection()
 
         if( !decodeWireNetName( o, netName, afterName, nameError ) )
         {
-            THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid wire-net name for net index %d at "
-                                                 "offset 0x%06zX: %s." ),
-                                              expectedWireNetIndex, o, nameError ) );
+            THROW_IO_ERRORF( _( "DipTrace import: invalid wire-net name for net index %d at offset 0x%06zX: %s." ),
+                             expectedWireNetIndex, o, nameError );
         }
 
         o = afterName;
@@ -3781,9 +3748,8 @@ void SCH_PARSER::parseWireSection()
 
         if( pinCount < 0 || pinCount > 4000 || o + static_cast<size_t>( pinCount ) * 6 + 3 > sectionEnd )
         {
-            THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid wire-net pin count %d for net '%s' at "
-                                                 "offset 0x%06zX." ),
-                                              pinCount, netName, pinCountOffset ) );
+            THROW_IO_ERRORF( _( "DipTrace import: invalid wire-net pin count %d for net '%s' at offset 0x%06zX." ),
+                             pinCount, netName, pinCountOffset );
         }
 
         o += static_cast<size_t>( pinCount ) * 6;
@@ -3794,9 +3760,8 @@ void SCH_PARSER::parseWireSection()
 
         if( wireCount < 0 || wireCount > 100000 )
         {
-            THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid wire count %d for net '%s' at offset "
-                                                 "0x%06zX." ),
-                                              wireCount, netName, wireCountOffset ) );
+            THROW_IO_ERRORF( _( "DipTrace import: invalid wire count %d for net '%s' at offset 0x%06zX." ),
+                             wireCount, netName, wireCountOffset );
         }
 
         bool brokeEarly = false;
@@ -3827,9 +3792,8 @@ void SCH_PARSER::parseWireSection()
 
             if( pointCount < 0 || pointCount > 4000 || o + static_cast<size_t>( pointCount ) * 11 + 8 > sectionEnd )
             {
-                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid wire point count %d for net '%s' at "
-                                                     "offset 0x%06zX." ),
-                                                  pointCount, netName, pointCountOffset ) );
+                THROW_IO_ERRORF( _( "DipTrace import: invalid wire point count %d for net '%s' at offset 0x%06zX." ),
+                                 pointCount, netName, pointCountOffset );
             }
 
             wire.points.reserve( pointCount );

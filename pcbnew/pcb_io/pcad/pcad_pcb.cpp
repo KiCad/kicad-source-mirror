@@ -579,7 +579,7 @@ void PCAD_PCB::MapLayer( XNODE* aNode )
         FindNode( aNode, wxT( "layerNum" ) )->GetNodeContent().ToLong( &num );
 
     if( num < 0 )
-        THROW_IO_ERROR( wxString::Format( wxT( "layerNum = %ld is out of range" ), num ) );
+        THROW_IO_ERRORF( wxT( "layerNum = %ld is out of range" ), num );
 
     TLAYER newlayer;
     newlayer.KiCadLayer = KiCadLayer;

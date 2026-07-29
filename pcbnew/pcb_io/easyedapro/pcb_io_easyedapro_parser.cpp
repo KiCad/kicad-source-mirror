@@ -70,7 +70,7 @@ double PCB_IO_EASYEDAPRO_PARSER::Convert( wxString aValue )
     double value = 0;
 
     if( !aValue.ToCDouble( &value ) )
-        THROW_IO_ERROR( wxString::Format( _( "Failed to parse value: '%s'" ), aValue ) );
+        THROW_IO_ERRORF( _( "Failed to parse value: '%s'" ), aValue );
 
     return value;
 }

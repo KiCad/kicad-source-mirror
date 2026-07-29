@@ -31,7 +31,7 @@ double EASYEDA_PARSER_BASE::Convert( const wxString& aValue )
     double value = 0;
 
     if( !aValue.ToCDouble( &value ) )
-        THROW_IO_ERROR( wxString::Format( _( "Failed to parse number from '%s'" ), aValue ) );
+        THROW_IO_ERRORF( _( "Failed to parse number from '%s'" ), aValue );
 
     return value;
 }

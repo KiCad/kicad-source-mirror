@@ -231,40 +231,31 @@ void SCH_IO_HTTP_LIB::ensureSettings( const wxString& aSettingsPath )
             [&]()
             {
                 if( !m_settings->LoadFromFile() )
-                {
-                    THROW_IO_ERROR( wxString::Format( _( "HTTP library settings file %s missing or invalid." ),
-                                                      aSettingsPath ) );
-                }
+                    THROW_IO_ERRORF( _( "HTTP library settings file %s missing or invalid." ), aSettingsPath );
 
                 if( m_settings->m_Source.api_version.empty() )
                 {
-                    THROW_IO_ERROR( wxString::Format( _( "HTTP library settings file %s is missing the API version "
-                                                         "number." ),
-                                                      aSettingsPath ) );
+                    THROW_IO_ERRORF( _( "HTTP library settings file %s is missing the API version number." ),
+                                     aSettingsPath );
                 }
 
                 if( m_settings->getSupportedAPIVersion() != m_settings->m_Source.api_version )
                 {
-                    THROW_IO_ERROR( wxString::Format( _( "HTTP library settings file %s uses API version %s, but "
-                                                         "KiCad requires version %s." ),
-                                                      aSettingsPath, m_settings->m_Source.api_version,
-                                                      m_settings->getSupportedAPIVersion() ) );
+                    THROW_IO_ERRORF( _( "HTTP library settings file %s uses API version %s, but KiCad requires "
+                                        "version %s." ),
+                                     aSettingsPath,
+                                     m_settings->m_Source.api_version,
+                                     m_settings->getSupportedAPIVersion() );
                 }
 
                 if( m_settings->m_Source.root_url.empty() )
-                {
-                    THROW_IO_ERROR( wxString::Format( _( "HTTP library settings file %s is missing the root URL." ),
-                                                      aSettingsPath ) );
-                }
+                    THROW_IO_ERRORF( _( "HTTP library settings file %s is missing the root URL." ), aSettingsPath );
 
                 // map lib source type
                 m_settings->m_Source.type = m_settings->get_HTTP_LIB_SOURCE_TYPE();
 
                 if( m_settings->m_Source.type == HTTP_LIB_SOURCE_TYPE::INVALID )
-                {
-                    THROW_IO_ERROR( wxString::Format( _( "HTTP library settings file %s has invalid library type." ),
-                                                      aSettingsPath ) );
-                }
+                    THROW_IO_ERRORF( _( "HTTP library settings file %s has invalid library type." ), aSettingsPath );
 
                 // make sure that the root url finishes with a forward slash
                 if( m_settings->m_Source.root_url.at( m_settings->m_Source.root_url.length() - 1 ) != '/' )
@@ -302,11 +293,7 @@ void SCH_IO_HTTP_LIB::ensureConnection()
     connect();
 
     if( !m_conn || !m_conn->IsValidEndpoint() )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Could not connect to %s. Errors: %s" ),
-                                          m_settings->m_Source.root_url,
-                                          m_lastError ) );
-    }
+        THROW_IO_ERRORF( _( "Could not connect to %s. Errors: %s" ), m_settings->m_Source.root_url, m_lastError );
 }
 
 
@@ -361,9 +348,8 @@ void SCH_IO_HTTP_LIB::syncCache( const HTTP_LIB_CATEGORY& category )
     {
         if( !m_conn->GetLastError().empty() )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Error retrieving data from HTTP library %s: %s" ),
-                                              category.name,
-                                              m_conn->GetLastError() ) );
+            THROW_IO_ERRORF( _( "Error retrieving data from HTTP library %s: %s" ),
+                             category.name, m_conn->GetLastError() );
         }
 
         return;
@@ -378,10 +364,8 @@ void SCH_IO_HTTP_LIB::syncCache( const HTTP_LIB_CATEGORY& category )
 }
 
 
-LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
-                                                 const wxString& aSymbolName,
-                                                 const HTTP_LIB_CATEGORY& aCategory,
-                                                 const HTTP_LIB_PART& aPart )
+LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath, const wxString& aSymbolName,
+                                                 const HTTP_LIB_CATEGORY& aCategory, const HTTP_LIB_PART& aPart )
 {
     LIB_SYMBOL* symbol = nullptr;
     LIB_SYMBOL* originalSymbol = nullptr;

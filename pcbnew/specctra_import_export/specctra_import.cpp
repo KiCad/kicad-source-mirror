@@ -133,10 +133,7 @@ PCB_TRACK* SPECCTRA_DB::makeTRACK( WIRE* wire, PATH* aPath, int aPointIndex, int
     int layerNdx = findLayerName( aPath->layer_id );
 
     if( layerNdx == -1 )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Session file uses invalid layer id '%s'." ),
-                                          From_UTF8( aPath->layer_id.c_str() ) ) );
-    }
+        THROW_IO_ERRORF( _( "Session file uses invalid layer id '%s'." ), From_UTF8( aPath->layer_id.c_str() ) );
 
     PCB_TRACK* track = new PCB_TRACK( m_sessionBoard );
 
@@ -163,10 +160,7 @@ PCB_ARC* SPECCTRA_DB::makeARC( WIRE* wire, QARC* aQarc, int aNetcode )
     int layerNdx = findLayerName( aQarc->layer_id );
 
     if( layerNdx == -1 )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Session file uses invalid layer id '%s'." ),
-                                          From_UTF8( aQarc->layer_id.c_str() ) ) );
-    }
+        THROW_IO_ERRORF( _( "Session file uses invalid layer id '%s'." ), From_UTF8( aQarc->layer_id.c_str() ) );
 
     PCB_ARC* arc = new PCB_ARC( m_sessionBoard );
 
@@ -235,7 +229,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
         DSN_T type = shape->shape->Type();
 
         if( type != T_circle )
-            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s." ), GetTokenString( type ) ) );
+            THROW_IO_ERRORF( _( "Unsupported via shape: %s." ), GetTokenString( type ) );
 
         CIRCLE* circle = static_cast<CIRCLE*>( shape->shape );
         int viaDiam = scale( circle->diameter, m_routeResolution );
@@ -253,9 +247,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
         DSN_T type = shape->shape->Type();
 
         if( type != T_circle )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
-        }
+            THROW_IO_ERRORF( _( "Unsupported via shape: %s" ), GetTokenString( type ) );
 
         CIRCLE* circle = static_cast<CIRCLE*>( shape->shape );
         int viaDiam = scale( circle->diameter, m_routeResolution );
@@ -280,7 +272,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
             DSN_T type = shape->shape->Type();
 
             if( type != T_circle )
-                THROW_IO_ERROR( wxString::Format( _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
+                THROW_IO_ERRORF( _( "Unsupported via shape: %s" ), GetTokenString( type ) );
 
             CIRCLE* circle = static_cast<CIRCLE*>( shape->shape );
 
@@ -289,7 +281,7 @@ PCB_VIA* SPECCTRA_DB::makeVIA( WIRE_VIA* aVia, PADSTACK* aPadstack, const POINT&
             if( layerNdx == -1 )
             {
                 wxString layerName = From_UTF8( circle->layer_id.c_str() );
-                THROW_IO_ERROR( wxString::Format( _( "Session file uses invalid layer id '%s'" ), layerName ) );
+                THROW_IO_ERRORF( _( "Session file uses invalid layer id '%s'" ), layerName );
             }
 
             if( layerNdx > topLayerNdx )
@@ -501,9 +493,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
                 else
                 {
                     wxString netId = From_UTF8( wire.m_net_id.c_str() );
-                    THROW_IO_ERROR(
-                            wxString::Format( _( "Unsupported wire shape: '%s' for net: '%s'" ),
-                                              GetTokenText( shape ), netId ) );
+                    THROW_IO_ERRORF(_( "Unsupported wire shape: '%s' for net: '%s'" ), GetTokenText( shape ), netId );
                 }
             } );
         }
@@ -526,8 +516,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
 
                 // example: (via Via_15:8_mil 149000 -71000 )
 
-                PADSTACK* padstack =
-                        m_session->route->library->FindPADSTACK( wire_via.GetPadstackId() );
+                PADSTACK* padstack = m_session->route->library->FindPADSTACK( wire_via.GetPadstackId() );
 
                 if( !padstack )
                 {
@@ -539,8 +528,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
                     // from its name as a work around.
                     wxString psid( From_UTF8( wire_via.GetPadstackId().c_str() ) );
 
-                    THROW_IO_ERROR( wxString::Format( _( "A wire_via refers to missing padstack '%s'." ),
-                                                      psid ) );
+                    THROW_IO_ERRORF( _( "A wire_via refers to missing padstack '%s'." ), psid );
                 }
 
                 std::shared_ptr<NET_SETTINGS>& netSettings = aBoard->GetDesignSettings().m_NetSettings;
@@ -548,10 +536,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard, COMMIT& aCommit )
                 int via_drill_default = netSettings->GetDefaultNetclass()->GetViaDrill();
 
                 for( unsigned v = 0; v < wire_via.m_vertexes.size(); ++v )
-                {
-                    aCommit.Add( makeVIA( &wire_via, padstack, wire_via.m_vertexes[v], netCode,
-                                          via_drill_default ) );
-                }
+                    aCommit.Add( makeVIA( &wire_via, padstack, wire_via.m_vertexes[v], netCode, via_drill_default ) );
             } );
         }
     }

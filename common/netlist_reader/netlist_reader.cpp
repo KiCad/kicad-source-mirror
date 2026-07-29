@@ -181,11 +181,8 @@ bool CMP_READER::Load( NETLIST* aNetlist )
 
             if( !footprint.IsEmpty() && fpid.Parse( footprint, true ) >= 0 )
             {
-                wxString error;
-                error.Printf( _( "Invalid footprint ID in\nfile: '%s'\nline: %d" ),
-                              m_lineReader->GetSource(), m_lineReader->LineNumber() );
-
-                THROW_IO_ERROR( error );
+                THROW_IO_ERRORF( _( "Invalid footprint ID in\nfile: '%s'\nline: %d" ),
+                                 m_lineReader->GetSource(), m_lineReader->LineNumber() );
             }
 
             // For checking purpose, store the existing LIB_ID (if any) in the alternate fpid copy

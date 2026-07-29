@@ -325,9 +325,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
     std::string filename( aFileName.ToUTF8() );
 
     if( !parser.Parse( filename ) )
-    {
-        THROW_IO_ERROR( wxString::Format( wxT( "Failed to parse PADS file: %s" ), aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "Failed to parse PADS file: %s" ), aFileName );
 
     if( m_progressReporter )
         m_progressReporter->BeginPhase( 1 );
@@ -1456,10 +1454,7 @@ void SCH_IO_PADS::ensureLoadedLibrary( const wxString& aLibraryPath )
     m_cachedLibraryTimestamp = timestamp;
 
     if( !checkFileHeader( aLibraryPath ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "'%s' is not a PADS Logic ASCII file." ),
-                                          aLibraryPath ) );
-    }
+        THROW_IO_ERRORF( _( "'%s' is not a PADS Logic ASCII file." ), aLibraryPath );
 
     LOCALE_IO setlocale;
 
@@ -1467,10 +1462,7 @@ void SCH_IO_PADS::ensureLoadedLibrary( const wxString& aLibraryPath )
     std::string               filename( aLibraryPath.ToUTF8() );
 
     if( !parser.Parse( filename ) )
-    {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Failed to parse PADS Logic file '%s'." ), aLibraryPath ) );
-    }
+        THROW_IO_ERRORF( _( "Failed to parse PADS Logic file '%s'." ), aLibraryPath );
 
     const PADS_SCH::PARAMETERS&       params = parser.GetParameters();
     PADS_SCH::PADS_SCH_SYMBOL_BUILDER symbolBuilder( params );

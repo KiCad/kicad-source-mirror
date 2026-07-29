@@ -106,10 +106,7 @@ std::vector<std::pair<wxString, wxString>> ParseSimPinsTokens( const wxString& a
         int      pos = token.Find( wxS( '=' ) );
 
         if( pos == wxNOT_FOUND || pos == 0 || pos == (int) token.length() - 1 )
-        {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Symbol '%s' has a malformed Sim.Pins entry '%s'." ), aRef, token ) );
-        }
+            THROW_IO_ERRORF( _( "Symbol '%s' has a malformed Sim.Pins entry '%s'." ), aRef, token );
 
         wxString symbolPin = token.Left( pos );
         wxString modelPin  = token.Mid( pos + 1 );
@@ -120,9 +117,11 @@ std::vector<std::pair<wxString, wxString>> ParseSimPinsTokens( const wxString& a
         {
             if( it->second != modelPin )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Symbol '%s' maps pin '%s' to both '%s' and '%s'." ),
-                        aRef, symbolPin, it->second, modelPin ) );
+                THROW_IO_ERRORF( _( "Symbol '%s' maps pin '%s' to both '%s' and '%s'." ),
+                                 aRef,
+                                 symbolPin,
+                                 it->second,
+                                 modelPin );
             }
 
             continue;
@@ -191,10 +190,8 @@ SIM_MODEL_MULTIUNIT::SIM_MODEL_MULTIUNIT( const SIM_MODEL& aBaseModel, const wxS
     {
         if( aBaseModel.GetParam( ii ).info.isSpiceInstanceParam )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Repeat-per-unit decomposition does not support model '%s' because it has "
-                       "subcircuit parameters." ),
-                    aBaseModelName ) );
+            THROW_IO_ERRORF( _( "Repeat-per-unit decomposition does not support model '%s' because it has "
+                                "subcircuit parameters." ), aBaseModelName );
         }
     }
 
@@ -213,10 +210,7 @@ SIM_MODEL_MULTIUNIT::SIM_MODEL_MULTIUNIT( const SIM_MODEL& aBaseModel, const wxS
     for( const wxString& shared : aSharedModelPins )
     {
         if( !basePinSet.count( shared ) )
-        {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Shared pin '%s' is not a pin of model '%s'." ), shared, aBaseModelName ) );
-        }
+            THROW_IO_ERRORF( _( "Shared pin '%s' is not a pin of model '%s'." ), shared, aBaseModelName );
 
         sharedSet.insert( shared );
     }
@@ -241,18 +235,21 @@ SIM_MODEL_MULTIUNIT::SIM_MODEL_MULTIUNIT( const SIM_MODEL& aBaseModel, const wxS
             // still counting the unit as an instance, so reject it.
             if( !basePinSet.count( modelPin ) )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Unit %d maps to unknown pin '%s' of model '%s'." ), unitMap.unit,
-                        modelPin, aBaseModelName ) );
+                THROW_IO_ERRORF( _( "Unit %d maps to unknown pin '%s' of model '%s'." ),
+                                 unitMap.unit,
+                                 modelPin,
+                                 aBaseModelName );
             }
 
             auto [it, inserted] = info.modelToSymbol.emplace( modelPin, symbolPin );
 
             if( !inserted && it->second != symbolPin )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Unit %d maps model pin '%s' to both symbol pins '%s' and '%s'." ),
-                        unitMap.unit, modelPin, it->second, symbolPin ) );
+                THROW_IO_ERRORF( _( "Unit %d maps model pin '%s' to both symbol pins '%s' and '%s'." ),
+                                 unitMap.unit,
+                                 modelPin,
+                                 it->second,
+                                 symbolPin );
             }
         }
 
@@ -285,16 +282,10 @@ SIM_MODEL_MULTIUNIT::SIM_MODEL_MULTIUNIT( const SIM_MODEL& aBaseModel, const wxS
         }
 
         if( symbolPins.empty() )
-        {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Shared pin '%s' is not connected on any unit." ), shared ) );
-        }
+            THROW_IO_ERRORF( _( "Shared pin '%s' is not connected on any unit." ), shared );
 
         if( symbolPins.size() > 1 )
-        {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Shared pin '%s' resolves to more than one net." ), shared ) );
-        }
+            THROW_IO_ERRORF( _( "Shared pin '%s' resolves to more than one net." ), shared );
 
         sharedNode[shared] = nodeName( *symbolPins.begin() );
     }
@@ -316,9 +307,8 @@ SIM_MODEL_MULTIUNIT::SIM_MODEL_MULTIUNIT( const SIM_MODEL& aBaseModel, const wxS
 
         if( !mapped )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Model '%s' pin '%s' is neither shared nor assigned to any unit." ),
-                    aBaseModelName, basePin ) );
+            THROW_IO_ERRORF( _( "Model '%s' pin '%s' is neither shared nor assigned to any unit." ),
+                             aBaseModelName, basePin );
         }
     }
 

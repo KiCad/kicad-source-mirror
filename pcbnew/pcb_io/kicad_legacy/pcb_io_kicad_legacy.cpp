@@ -644,10 +644,7 @@ int PCB_IO_KICAD_LEGACY::getVersion( LINE_READER* aReader )
 
 #if !defined( DEBUG )
     if( ver > LEGACY_BOARD_FILE_VERSION )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "File '%s' has an unrecognized version: %d." ),
-                                          aReader->GetSource().GetData(), ver ) );
-    }
+        THROW_IO_ERRORF( _( "File '%s' has an unrecognized version: %d." ), aReader->GetSource().GetData(), ver );
 #endif
 
     return ver;
@@ -1368,9 +1365,7 @@ void PCB_IO_KICAD_LEGACY::loadFOOTPRINT( FOOTPRINT* aFootprint )
         }
     }
 
-    wxString msg = wxString::Format( _( "Missing '$EndMODULE' for MODULE '%s'." ),
-                                     aFootprint->GetFPID().GetLibItemName().wx_str() );
-    THROW_IO_ERROR( msg );
+    THROW_IO_ERRORF( _( "Missing '$EndMODULE' for MODULE '%s'." ), aFootprint->GetFPID().GetLibItemName().wx_str() );
 }
 
 
@@ -3101,10 +3096,10 @@ void LP_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
     char* data;
 
     if( !line )
-        THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty." ), m_lib_path ) );
+        THROW_IO_ERRORF( _( "File '%s' is empty." ), m_lib_path );
 
     if( !TESTLINE( "PCBNEW-LibModule-V1" ) )
-        THROW_IO_ERROR( wxString::Format( _( "File '%s' is not a legacy library." ), m_lib_path ) );
+        THROW_IO_ERRORF( _( "File '%s' is not a legacy library." ), m_lib_path );
 
     while( ( line = aReader->ReadLine() ) != nullptr )
     {
@@ -3321,10 +3316,7 @@ bool PCB_IO_KICAD_LEGACY::DeleteLibrary( const wxString& aLibraryPath,
     // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
     // we don't want that.  we want bare metal portability with no UI here.
     if( wxRemove( aLibraryPath ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Footprint library '%s' cannot be deleted." ),
-                                          aLibraryPath.GetData() ) );
-    }
+        THROW_IO_ERRORF( _( "Footprint library '%s' cannot be deleted." ), aLibraryPath.GetData() );
 
     if( m_cache && m_cache->m_lib_path == aLibraryPath )
     {

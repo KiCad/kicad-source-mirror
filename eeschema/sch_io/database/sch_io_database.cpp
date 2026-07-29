@@ -159,8 +159,7 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
 
     for( const DATABASE_LIB_TABLE* table : tablesToTry )
     {
-        if( m_conn->SelectOne( table->table, std::make_pair( table->key_col, symbolName ),
-                               result ) )
+        if( m_conn->SelectOne( table->table, std::make_pair( table->key_col, symbolName ), result ) )
         {
             foundTable = table;
             wxLogTrace( traceDatabase, wxT( "LoadSymbol: SelectOne (%s, %s) found in %s" ),
@@ -207,8 +206,7 @@ void SCH_IO_DATABASE::GetAvailableSymbolFields( std::vector<wxString>& aNames )
 
 void SCH_IO_DATABASE::GetDefaultSymbolFields( std::vector<wxString>& aNames )
 {
-    std::copy( m_defaultShownFields.begin(), m_defaultShownFields.end(),
-               std::back_inserter( aNames ) );
+    std::copy( m_defaultShownFields.begin(), m_defaultShownFields.end(), std::back_inserter( aNames ) );
 }
 
 
@@ -242,11 +240,8 @@ void SCH_IO_DATABASE::cacheLib()
     // underlying row data has actually changed. The global library modify hash must not gate this:
     // the async library loader bumps it whenever any unrelated library finishes loading, which
     // would otherwise freeze the symbol chooser for seconds at a time.
-    if( m_cachePopulated
-        && ( currentTimestampSeconds - m_cacheTimestamp ) < m_settings->m_Cache.max_age )
-    {
+    if( m_cachePopulated && ( currentTimestampSeconds - m_cacheTimestamp ) < m_settings->m_Cache.max_age )
         return;
-    }
 
     m_inCacheLib = true;
 
@@ -269,11 +264,7 @@ void SCH_IO_DATABASE::cacheLib()
         if( !m_conn->SelectAll( table.table, table.key_col, results ) )
         {
             if( !m_conn->GetLastError().empty() )
-            {
-                wxString msg = wxString::Format( _( "Error reading database table %s: %s" ),
-                                                 table.table, m_conn->GetLastError() );
-                THROW_IO_ERROR( msg );
-            }
+                THROW_IO_ERRORF( _( "Error reading database table %s: %s" ), table.table, m_conn->GetLastError() );
 
             continue;
         }
@@ -337,8 +328,8 @@ void SCH_IO_DATABASE::cacheLib()
             std::string rawName = std::any_cast<std::string>( result.at( table->key_col ) );
             UTF8        sanitizedName = LIB_ID::FixIllegalChars( rawName, false );
             std::string sanitizedKey = sanitizedName.c_str();
-            std::string prefix =
-                    ( m_settings->m_GloballyUniqueKeys || table->name.empty() ) ? "" : fmt::format( "{}/", table->name );
+            std::string prefix = ( m_settings->m_GloballyUniqueKeys || table->name.empty() ) ? ""
+                                                                                             : fmt::format( "{}/", table->name );
             std::string sanitizedDisplayName = fmt::format( "{}{}", prefix, sanitizedKey );
             wxString    name( sanitizedDisplayName );
 
@@ -366,11 +357,8 @@ void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )
             {
                 if( !m_settings->LoadFromFile() )
                 {
-                    wxString msg = wxString::Format(
-                        _( "Could not load database library: settings file %s missing or invalid" ),
-                        aSettingsPath );
-
-                    THROW_IO_ERROR( msg );
+                    THROW_IO_ERRORF( _( "Could not load database library: settings file %s missing or invalid" ),
+                                     aSettingsPath );
                 }
             };
 
@@ -407,11 +395,8 @@ void SCH_IO_DATABASE::ensureConnection()
 
     if( !m_conn || !m_conn->IsConnected() )
     {
-        wxString msg = wxString::Format(
-                    _( "Could not load database library: could not connect to database %s (%s)" ),
-                    m_settings->m_Source.dsn, m_lastError );
-
-        THROW_IO_ERROR( msg );
+        THROW_IO_ERRORF( _( "Could not load database library: could not connect to database %s (%s)" ),
+                         m_settings->m_Source.dsn, m_lastError );
     }
 }
 
@@ -568,9 +553,8 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
 
             if( cycle )
             {
-                wxLogTrace( traceDatabase,
-                            wxT( "loadSymbolFromRow: cycle detected resolving '%s' "
-                                 "(row '%s' in table '%s'); skipping recursive load" ),
+                wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: cycle detected resolving '%s' "
+                                                "(row '%s' in table '%s'); skipping recursive load" ),
                             symbolIdStr, aSymbolName, aTable.name );
             }
             else
@@ -581,16 +565,14 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
 
         if( originalSymbol )
         {
-            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: found original symbol '%s'" ),
-                        symbolIdStr );
+            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: found original symbol '%s'" ), symbolIdStr );
             symbol.reset( originalSymbol->Duplicate() );
             symbol->SetSourceLibId( symbolId );
         }
         else if( cycle )
         {
-            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: source symbol '%s' is a "
-                                            "self-reference, will create empty symbol" ),
-                        symbolIdStr );
+            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: source symbol '%s' is a self-reference, "
+                                            "will create empty symbol" ), symbolIdStr );
         }
         else if( !symbolId.IsValid() )
         {
@@ -636,8 +618,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
     }
     else
     {
-        wxLogTrace( traceDatabase, wxT( "loadSymboFromRow: footprint field %s not found." ),
-                    aTable.footprints_col );
+        wxLogTrace( traceDatabase, wxT( "loadSymboFromRow: footprint field %s not found." ), aTable.footprints_col );
     }
 
     // Pin-to-pad maps (issue #2282): attach non-destructively.  The pins column carries either the
@@ -790,8 +771,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
     {
         if( !aRow.count( mapping.column ) )
         {
-            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: field %s not found in result" ),
-                        mapping.column );
+            wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: field %s not found in result" ), mapping.column );
             continue;
         }
 
@@ -822,6 +802,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
                 field.SetVisible( mapping.visible_on_add );
                 field.SetNameShown( mapping.show_name );
             }
+
             continue;
         }
         else if( mapping.name_wx == c_datasheetFieldName )

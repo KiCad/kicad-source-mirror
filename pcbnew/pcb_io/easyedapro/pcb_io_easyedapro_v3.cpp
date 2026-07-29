@@ -155,14 +155,11 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_V3::FootprintLoad( const wxString& aLibraryPath, co
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot load footprint '%s' from '%s': %s" ), aFootprintName, aLibraryPath,
-                                          e.what() ) );
+        THROW_IO_ERRORF( _( "Cannot load footprint '%s' from '%s': %s" ), aFootprintName, aLibraryPath, e.what() );
     }
 
     if( !footprint )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot load footprint '%s' from '%s'" ), aFootprintName, aLibraryPath ) );
-    }
+        THROW_IO_ERRORF( _( "Cannot load footprint '%s' from '%s'" ), aFootprintName, aLibraryPath );
 
     // Library footprints are keyed by footprint geometry; pick any matching device's 3D model.
     if( index.contains( "devices" ) && index.at( "devices" ).is_object() )
@@ -305,9 +302,7 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
     const EASYEDAPRO::V3_DOC_RAW* pcbRawDoc = adapter.FindRawDoc( wxS( "PCB" ), pcbToLoad );
 
     if( !pcbRawDoc )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "PCB document '%s' not found in '%s'" ), pcbToLoad, aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "PCB document '%s' not found in '%s'" ), pcbToLoad, aFileName );
 
     std::multimap<wxString, EASYEDAPRO::POURED> poured; // Empty - v3 parser extracts from raw doc
 

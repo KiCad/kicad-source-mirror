@@ -154,10 +154,7 @@ BOARD* PCB_IO_SPRINT_LAYOUT::LoadBoard( const wxString& aFileName, BOARD* aAppen
     SPRINT_LAYOUT_PARSER parser;
 
     if( !parser.ParseBoard( aFileName ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Failed to parse Sprint Layout file '%s'" ),
-                                          aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "Failed to parse Sprint Layout file '%s'" ), aFileName );
 
     const auto& fileData = parser.GetFileData();
     size_t      boardIndex = 0;
@@ -196,10 +193,7 @@ BOARD* PCB_IO_SPRINT_LAYOUT::LoadBoard( const wxString& aFileName, BOARD* aAppen
     std::unique_ptr<BOARD> newBoard( parser.CreateBoard( m_loadedFootprints, boardIndex ) );
 
     if( !newBoard )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Failed to create board from Sprint Layout file '%s'" ),
-                                          aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "Failed to create board from Sprint Layout file '%s'" ), aFileName );
 
     if( aAppendToMe )
     {

@@ -221,6 +221,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
         aTarget.SetPadConnection( ZONE_CONNECTION::NONE );
     else
         aTarget.SetPadConnection( m_padConnection );
+
     aTarget.SetCornerSmoothingType( m_cornerSmoothingType );
     aTarget.SetCornerRadius( m_cornerRadius );
     aTarget.SetIsRuleArea( GetIsRuleArea() );
@@ -235,12 +236,12 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
     aTarget.SetLocked( m_Locked );
     aTarget.SetIslandRemovalMode( GetIslandRemovalMode() );
     aTarget.SetMinIslandArea( GetMinIslandArea() );
+
     // Currently, the teardrop area type is not imported from a ZONE_SETTINGS, because
     // it is not really a ZONE_SETTINGS parameter, but a ZONE parameter only
 #if 0
     aTarget.SetTeardropAreaType( m_TeardropType );
 #endif
-
 
     if( aFullExport )
     {
@@ -259,54 +260,8 @@ void ZONE_SETTINGS::ExportSetting( ZONE& aTarget, bool aFullExport ) const
 
     // call SetBorderDisplayStyle last, because hatch lines will be rebuilt,
     // using new parameters values
-    aTarget.SetBorderDisplayStyle( m_ZoneBorderDisplayStyle,
-                                   m_BorderHatchPitch, true );
+    aTarget.SetBorderDisplayStyle( m_ZoneBorderDisplayStyle, m_BorderHatchPitch, true );
 }
-
-void ZONE_SETTINGS::CopyFrom( const ZONE_SETTINGS& aOther, bool aCopyFull )
-{
-    m_ZonePriority                = aOther.m_ZonePriority;
-    m_FillMode                    = aOther.m_FillMode;
-    m_ZoneClearance               = aOther.m_ZoneClearance;
-    m_ZoneMinThickness            = aOther.m_ZoneMinThickness;
-    m_HatchThickness              = aOther.m_HatchThickness;
-    m_HatchGap                    = aOther.m_HatchGap;
-    m_HatchOrientation            = aOther.m_HatchOrientation;
-    m_HatchSmoothingLevel         = aOther.m_HatchSmoothingLevel;
-    m_HatchSmoothingValue         = aOther.m_HatchSmoothingValue;
-    m_HatchBorderAlgorithm        = aOther.m_HatchBorderAlgorithm;
-    m_HatchHoleMinArea            = aOther.m_HatchHoleMinArea;
-    m_ThievingSettings            = aOther.m_ThievingSettings;
-    m_Netcode                     = aOther.m_Netcode;
-    m_Name                        = aOther.m_Name;
-    m_ZoneBorderDisplayStyle      = aOther.m_ZoneBorderDisplayStyle;
-    m_BorderHatchPitch            = aOther.m_BorderHatchPitch;
-    m_ThermalReliefGap            = aOther.m_ThermalReliefGap;
-    m_ThermalReliefSpokeWidth     = aOther.m_ThermalReliefSpokeWidth;
-    m_padConnection               = aOther.m_padConnection;
-    m_cornerSmoothingType         = aOther.m_cornerSmoothingType;
-    m_cornerRadius                = aOther.m_cornerRadius;
-    m_isRuleArea                  = aOther.m_isRuleArea;
-    m_placementAreaEnabled        = aOther.m_placementAreaEnabled;
-    m_placementAreaSourceType     = aOther.m_placementAreaSourceType;
-    m_placementAreaSource         = aOther.m_placementAreaSource;
-    m_keepoutDoNotAllowZoneFills  = aOther.m_keepoutDoNotAllowZoneFills;
-    m_keepoutDoNotAllowVias       = aOther.m_keepoutDoNotAllowVias;
-    m_keepoutDoNotAllowTracks     = aOther.m_keepoutDoNotAllowTracks;
-    m_keepoutDoNotAllowPads       = aOther.m_keepoutDoNotAllowPads;
-    m_keepoutDoNotAllowFootprints = aOther.m_keepoutDoNotAllowFootprints;
-    m_Locked                      = aOther.m_Locked;
-    m_removeIslands               = aOther.m_removeIslands;
-    m_minIslandArea               = aOther.m_minIslandArea;
-    m_LayerProperties             = aOther.m_LayerProperties;
-
-    if( aCopyFull )
-    {
-        m_TeardropType    = aOther.m_TeardropType;
-        m_Layers          = aOther.m_Layers;
-    }
-}
-
 
 void ZONE_SETTINGS::SetCornerRadius( int aRadius )
 {

@@ -72,16 +72,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( BOARD* aBoard, PROJECT* aProject )
     {
         // Note that we allow the floating point output here because this message is displayed to the user and should
         // be in their locale.
-        THROW_IO_ERROR( wxString::Format(
-                _( "The design is too large and cannot be imported into KiCad. \n"
-                   "Please reduce the maximum design size in CADSTAR by navigating to: \n"
-                   "Design Tab -> Properties -> Design Options -> Maximum Design Size. \n"
-                   "Current Design size: %.2f, %.2f millimeters. \n"                //format:allow
-                   "Maximum permitted design size: %.2f, %.2f millimeters.\n" ),    //format:allow
-                (double) designSizeXkicad / PCB_IU_PER_MM,
-                (double) designSizeYkicad / PCB_IU_PER_MM,
-                (double) maxDesignSizekicad / PCB_IU_PER_MM,
-                (double) maxDesignSizekicad / PCB_IU_PER_MM ) );
+        THROW_IO_ERRORF( _( "The design is too large and cannot be imported into KiCad. \n"
+                            "Please reduce the maximum design size in CADSTAR by navigating to: \n"
+                            "Design Tab -> Properties -> Design Options -> Maximum Design Size. \n"
+                            "Current Design size: %.2f, %.2f millimeters. \n"                //format:allow
+                            "Maximum permitted design size: %.2f, %.2f millimeters.\n" ),    //format:allow
+                        (double) designSizeXkicad / PCB_IU_PER_MM,
+                        (double) designSizeYkicad / PCB_IU_PER_MM,
+                        (double) maxDesignSizekicad / PCB_IU_PER_MM,
+                        (double) maxDesignSizekicad / PCB_IU_PER_MM );
     }
 
     m_designCenter =
@@ -588,8 +587,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
         case LAYER_TYPE::ASSCOMPCOPP:
         case LAYER_TYPE::NOLAYER:
             //Shouldn't be here if CPA file is correctly parsed and not corrupt
-            THROW_IO_ERROR( wxString::Format( _( "Unexpected layer '%s' in layer stack." ),
-                                              curLayer.Name ) );
+            THROW_IO_ERRORF( _( "Unexpected layer '%s' in layer stack." ), curLayer.Name );
             break;
 
         case LAYER_TYPE::JUMPERLAYER:
@@ -1342,9 +1340,8 @@ PAD*& CADSTAR_PCB_ARCHIVE_LOADER::getPadReference( FOOTPRINT* aFootprint, const 
 
     if( !( index < aFootprint->Pads().size() ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Unable to find pad index '%ld' in footprint '%s'." ),
-                                          (long) aCadstarPadID,
-                                          aFootprint->GetReference() ) );
+        THROW_IO_ERRORF( _( "Unable to find pad index '%ld' in footprint '%s'." ),
+                         (long) aCadstarPadID, aFootprint->GetReference() );
     }
 
     return aFootprint->Pads().at( index );
@@ -1375,16 +1372,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadGroups()
         {
             if( m_groupMap.find( csGroup.ID ) == m_groupMap.end() )
             {
-                THROW_IO_ERROR( wxString::Format( _( "Unable to find group ID %s in the group definitions." ),
-                                                  csGroup.ID ) );
+                THROW_IO_ERRORF( _( "Unable to find group ID %s in the group definitions." ), csGroup.ID );
             }
             else if( m_groupMap.find( csGroup.ID ) == m_groupMap.end() )
             {
-                THROW_IO_ERROR( wxString::Format( _( "Unable to find sub group %s in the group map (parent "
-                                                     "group ID=%s, Name=%s)." ),
-                                                  csGroup.GroupID,
-                                                  csGroup.ID,
-                                                  csGroup.Name ) );
+                THROW_IO_ERRORF( _( "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)." ),
+                                 csGroup.GroupID,
+                                 csGroup.ID,
+                                 csGroup.Name );
             }
             else
             {
@@ -1733,9 +1728,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
 
         if( fpIter == m_libraryMap.end() )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to find component '%s' in the library (Symdef ID: '%s')" ),
-                                              comp.Name,
-                                              comp.SymdefID ) );
+            THROW_IO_ERRORF( _( "Unable to find component '%s' in the library (Symdef ID: '%s')" ),
+                             comp.Name, comp.SymdefID );
         }
 
         FOOTPRINT* libFootprint = fpIter->second;
@@ -1855,9 +1849,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDocumentationSymbols()
 
         if( docSymIter == Library.ComponentDefinitions.end() )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to find documentation symbol in the "
-                                                 "library (Symdef ID: '%s')" ),
-                                              docSymInstance.SymdefID ) );
+            THROW_IO_ERRORF( _( "Unable to find documentation symbol in the library (Symdef ID: '%s')" ),
+                             docSymInstance.SymdefID );
         }
 
         SYMDEF_PCB& docSymDefinition = ( *docSymIter ).second;

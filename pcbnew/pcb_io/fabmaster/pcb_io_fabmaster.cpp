@@ -117,12 +117,7 @@ BOARD* PCB_IO_FABMASTER::LoadBoard( const wxString& aFileName, BOARD* aAppendToM
     }
 
     if( !m_fabmaster.Read( aFileName.ToStdString() ) )
-    {
-        std::string readerr;
-
-        readerr = _( "Could not read file " ) + aFileName.ToStdString();
-        THROW_IO_ERROR( readerr );
-    }
+        THROW_IO_ERRORF( _( "Could not read file %s." ), aFileName );
 
     m_fabmaster.Process();
     m_fabmaster.LoadBoard( m_board, m_progressReporter );

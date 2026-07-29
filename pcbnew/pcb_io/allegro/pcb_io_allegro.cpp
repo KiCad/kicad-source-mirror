@@ -125,11 +125,11 @@ BOARD* PCB_IO_ALLEGRO::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     }
     catch( const std::runtime_error& e )
     {
-        THROW_IO_ERROR( wxString::Format( wxS( "%s" ), e.what() ) );
+        THROW_IO_ERROR( e.what() );
     }
 
     if( !mappedFile->Data() || mappedFile->Size() == 0 )
-        THROW_IO_ERROR( wxString::Format( wxS( "File is empty: %s" ), aFileName ) );
+        THROW_IO_ERRORF( _( "File is empty: %s" ), aFileName );
 
     if( !LoadBoardFromData( mappedFile->Data(), mappedFile->Size(), *m_board ) )
         return nullptr;

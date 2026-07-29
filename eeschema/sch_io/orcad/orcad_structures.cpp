@@ -67,9 +67,7 @@ ORCAD_PREFIXES ORCAD_STRUCT_READER::TryReadPrefixes( int aCount )
         }
         else if( typeId != first )
         {
-            THROW_IO_ERROR( wxString::Format( wxS( "OrCAD structure: prefix type mismatch "
-                                                   "%d != %d" ),
-                                              typeId, first ) );
+            THROW_IO_ERRORF( wxS( "OrCAD structure: prefix type mismatch %d != %d" ), typeId, first );
         }
 
         if( i == aCount - 1 )
@@ -135,9 +133,7 @@ ORCAD_PREFIXES ORCAD_STRUCT_READER::ReadPrefixes()
     if( !found )
     {
         m_stream.Seek( saved );
-        THROW_IO_ERROR( wxString::Format( wxS( "OrCAD structure: no valid prefix chain at "
-                                               "0x%zx: %s" ),
-                                          saved, lastErr ) );
+        THROW_IO_ERRORF( wxS( "OrCAD structure: no valid prefix chain at 0x%zx: %s" ), saved, lastErr );
     }
 
     m_stream.ExpectPreamble( wxS( "structure preamble" ) );
@@ -191,8 +187,7 @@ void ORCAD_STRUCT_READER::SkipStructure( const ORCAD_PREFIXES& aPrefixes, const 
     }
     else
     {
-        THROW_IO_ERROR( wxString::Format( wxS( "OrCAD structure: cannot skip structure %s" ),
-                                          aWhat ) );
+        THROW_IO_ERRORF( wxS( "OrCAD structure: cannot skip structure %s" ), aWhat );
     }
 }
 

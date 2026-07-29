@@ -57,9 +57,10 @@ void ORCAD_STREAM::requireBytes( size_t aCount ) const
 {
     if( m_offset > m_size || aCount > m_size - m_offset )
     {
-        THROW_IO_ERROR( wxString::Format( wxS( "OrCAD stream: read of %zu bytes past end at 0x%zx "
-                                               "(stream size 0x%zx)" ),
-                                          aCount, m_offset, m_size ) );
+        THROW_IO_ERRORF( wxS( "OrCAD stream: read of %zu bytes past end at 0x%zx (stream size 0x%zx)" ),
+                         aCount,
+                         m_offset,
+                         m_size );
     }
 }
 
@@ -117,21 +118,13 @@ std::string ORCAD_STREAM::ReadLzt()
     uint16_t len = ReadU16();
 
     if( m_offset > m_size || static_cast<size_t>( len ) + 1 > m_size - m_offset )
-    {
-        THROW_IO_ERROR( wxString::Format( wxS( "OrCAD stream: string of length %u at 0x%zx "
-                                               "exceeds stream" ),
-                                          len, lenPos ) );
-    }
+        THROW_IO_ERRORF( wxS( "OrCAD stream: string of length %u at 0x%zx exceeds stream" ), len, lenPos );
 
     std::string s( reinterpret_cast<const char*>( m_data + m_offset ), len );
     m_offset += len;
 
     if( m_data[m_offset] != 0 )
-    {
-        THROW_IO_ERROR( wxString::Format( wxS( "OrCAD stream: string at 0x%zx missing NUL "
-                                               "terminator" ),
-                                          lenPos ) );
-    }
+        THROW_IO_ERRORF( wxS( "OrCAD stream: string at 0x%zx missing NUL terminator" ), lenPos );
 
     m_offset++;
     return s;
@@ -141,15 +134,12 @@ std::string ORCAD_STREAM::ReadLzt()
 std::string ORCAD_STREAM::ReadZt()
 {
     if( m_offset >= m_size )
-        THROW_IO_ERROR( wxString::Format( wxS( "OrCAD stream: read past end at 0x%zx" ), m_offset ) );
+        THROW_IO_ERRORF( wxS( "OrCAD stream: read past end at 0x%zx" ), m_offset );
 
     const void* nul = memchr( m_data + m_offset, 0, m_size - m_offset );
 
     if( !nul )
-    {
-        THROW_IO_ERROR( wxString::Format( wxS( "OrCAD stream: unterminated string at 0x%zx" ),
-                                          m_offset ) );
-    }
+        THROW_IO_ERRORF( wxS( "OrCAD stream: unterminated string at 0x%zx" ), m_offset );
 
     size_t      end = static_cast<const uint8_t*>( nul ) - m_data;
     std::string s( reinterpret_cast<const char*>( m_data + m_offset ), end - m_offset );
@@ -171,9 +161,10 @@ void ORCAD_STREAM::Skip( size_t aCount )
 {
     if( m_offset > m_size || aCount > m_size - m_offset )
     {
-        THROW_IO_ERROR( wxString::Format( wxS( "OrCAD stream: skip of %zu bytes past end at 0x%zx "
-                                               "(stream size 0x%zx)" ),
-                                          aCount, m_offset, m_size ) );
+        THROW_IO_ERRORF( wxS( "OrCAD stream: skip of %zu bytes past end at 0x%zx (stream size 0x%zx)" ),
+                         aCount,
+                         m_offset,
+                         m_size );
     }
 
     m_offset += aCount;
@@ -239,9 +230,11 @@ void ORCAD_STREAM::Expect( const uint8_t* aBytes, size_t aCount, const wxString&
 
     if( memcmp( got.data(), aBytes, aCount ) != 0 )
     {
-        THROW_IO_ERROR( wxString::Format( wxS( "OrCAD stream: expected %s got %s at 0x%zx (%s)" ),
-                                          hexOf( aBytes, aCount ), hexOf( got.data(), aCount ),
-                                          pos, aWhat ) );
+        THROW_IO_ERRORF( wxS( "OrCAD stream: expected %s got %s at 0x%zx (%s)" ),
+                         hexOf( aBytes, aCount ),
+                         hexOf( got.data(), aCount ),
+                         pos,
+                         aWhat );
     }
 }
 

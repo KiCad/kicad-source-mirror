@@ -2026,16 +2026,11 @@ void SCH_IO_KICAD_SEXPR::CreateLibrary( const wxString& aLibraryPath,
     if( !fn.IsDir() && wxFileName::DirExists( fn.GetFullPath() ) )
         fn.AssignDir( fn.GetFullPath() );
 
-    if( !fn.IsDir() )
-    {
-        if( fn.FileExists() )
-            THROW_IO_ERROR( wxString::Format( _( "Symbol library file '%s' already exists." ), fn.GetFullPath() ) );
-    }
-    else
-    {
-        if( fn.DirExists() )
-            THROW_IO_ERROR( wxString::Format( _( "Symbol library path '%s' already exists." ), fn.GetPath() ) );
-    }
+    if( !fn.IsDir() && fn.FileExists() )
+        THROW_IO_ERRORF( _( "Symbol library file '%s' already exists." ), fn.GetFullPath() );
+
+    if( fn.IsDir() && fn.DirExists() )
+        THROW_IO_ERRORF( _( "Symbol library path '%s' already exists." ), fn.GetPath() );
 
     delete m_cache;
     m_cache = new SCH_IO_KICAD_SEXPR_LIB_CACHE( aLibraryPath );
@@ -2063,20 +2058,14 @@ bool SCH_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
     if( !fn.IsDir() )
     {
         if( wxRemove( aLibraryPath ) )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Symbol library file '%s' cannot be deleted." ),
-                                              aLibraryPath.GetData() ) );
-        }
+            THROW_IO_ERRORF( _( "Symbol library file '%s' cannot be deleted." ), aLibraryPath.GetData() );
     }
     else
     {
         // This may be overly agressive.  Perhaps in the future we should remove all of the *.kicad_sym
         // files and only delete the folder if it's empty.
         if( !fn.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Symbol library folder '%s' cannot be deleted." ),
-                                              fn.GetPath() ) );
-        }
+            THROW_IO_ERRORF( _( "Symbol library folder '%s' cannot be deleted." ), fn.GetPath() );
     }
 
     if( m_cache && m_cache->IsFile( aLibraryPath ) )

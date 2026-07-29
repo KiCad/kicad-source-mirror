@@ -251,23 +251,16 @@ void SCH_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath,
 
             if( !csafn.FileExists() )
             {
-                csafn = wxDir::FindFirst( csafn.GetPath(), wxS( "*.csa" ),
-                                          wxDIR_FILES | wxDIR_HIDDEN );
+                csafn = wxDir::FindFirst( csafn.GetPath(), wxS( "*.csa" ), wxDIR_FILES | wxDIR_HIDDEN );
 
                 if( !csafn.FileExists() )
-                {
-                    THROW_IO_ERROR( wxString::Format(
-                            _( "Cannot find the .csa file corresponding to library '%s'." ),
-                            aLibraryPath ) );
-                }
+                    THROW_IO_ERRORF( _( "Cannot find the .csa file corresponding to library '%s'." ), aLibraryPath );
             }
         }
     }
 
     if( aProperties && aProperties->contains( "fplib" ) )
-    {
         fplibname = wxString::FromUTF8( aProperties->at( "fplib" ) );
-    }
 
     // Get timestamp
     long long  timestamp = 0;

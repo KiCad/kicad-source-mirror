@@ -598,12 +598,8 @@ void LEGACY_SYMBOL_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress
         }
         catch( const IO_ERROR& ioe )
         {
-            wxString msg = wxString::Format( _( "Error loading symbol library '%s'." )
-                                             + wxS( "\n%s" ),
-                                             cache_name,
-                                             ioe.What() );
-
-            THROW_IO_ERROR( msg );
+            THROW_IO_ERRORF( _( "Error loading symbol library '%s'." ) + wxS( "\n%s" ),
+                             cache_name, ioe.What() );
         }
     }
 

@@ -54,9 +54,7 @@ ALTIUM_COMPOUND_FILE::ALTIUM_COMPOUND_FILE( const wxString& aFilePath )
     FILE* fp = wxFopen( aFilePath, "rb" );
 
     if( fp == nullptr )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'." ), aFilePath ) );
-    }
+        THROW_IO_ERRORF( _( "Cannot open file '%s'." ), aFilePath );
 
     fseek( fp, 0, SEEK_END );
     long len = ftell( fp );

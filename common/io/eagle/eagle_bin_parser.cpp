@@ -1072,14 +1072,14 @@ int EAGLE_BIN_PARSER::readBlock( long& aNumBlocks, EGB_NODE* aParent )
 
     if( sc == nullptr )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Unknown Eagle binary block id 0x%02x%02x at offset %zu." ),
-                                          (unsigned) ( *m_buf )[blockStart], (unsigned) ( *m_buf )[blockStart + 1],
-                                          blockStart ) );
+        THROW_IO_ERRORF( _( "Unknown Eagle binary block id 0x%02x%02x at offset %zu." ),
+                         (unsigned) ( *m_buf )[blockStart],
+                         (unsigned) ( *m_buf )[blockStart + 1],
+                         blockStart );
     }
 
-    EGB_NODE* node =
-            aParent->AddChild( static_cast<int>( sc->cmd ),
-                               sc->name ? wxString::FromUTF8( sc->name ) : wxString( wxS( "UNKNOWN" ) ) );
+    EGB_NODE* node = aParent->AddChild( static_cast<int>( sc->cmd ),
+                                        sc->name ? wxString::FromUTF8( sc->name ) : wxString( wxS( "UNKNOWN" ) ) );
 
     for( const ATTR* at = sc->attrs; at->name != nullptr; at++ )
     {

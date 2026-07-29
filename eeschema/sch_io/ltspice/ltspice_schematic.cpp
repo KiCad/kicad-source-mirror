@@ -357,46 +357,32 @@ bool LTSPICE_SCHEMATIC::IsAsySubsheet( const wxString& aAsyFile )
 }
 
 
-int LTSPICE_SCHEMATIC::integerCheck( const wxString& aToken, int aLineNumber,
-                                     const wxString& aFileName )
+int LTSPICE_SCHEMATIC::integerCheck( const wxString& aToken, int aLineNumber, const wxString& aFileName )
 {
     long result;
 
     if( !aToken.ToLong( &result ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Expecting integer at line %d in file %s" ),
-                                          aLineNumber,
-                                          aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "Expecting integer at line %d in file %s" ), aLineNumber, aFileName );
 
     return (int) result;
 }
 
 
-VECTOR2I LTSPICE_SCHEMATIC::pointCheck( const wxString& aTokenX, const wxString& aTokenY,
-                                        int aLineNumber, const wxString& aFileName )
+VECTOR2I LTSPICE_SCHEMATIC::pointCheck( const wxString& aTokenX, const wxString& aTokenY, int aLineNumber,
+                                        const wxString& aFileName )
 {
     return VECTOR2I( integerCheck( aTokenX, aLineNumber, aFileName ),
                      integerCheck( aTokenY, aLineNumber, aFileName ) );
 }
 
 
-void LTSPICE_SCHEMATIC::tokensSizeRangeCheck( size_t aActualSize, int aExpectedMin,
-                                              int aExpectedMax, int aLineNumber,
-                                              const wxString& aFileName )
+void LTSPICE_SCHEMATIC::tokensSizeRangeCheck( size_t aActualSize, int aExpectedMin, int aExpectedMax,
+                                              int aLineNumber, const wxString& aFileName )
 {
     if( (int) aActualSize < aExpectedMin )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Expected data missing on line %d in file %s" ),
-                                          aLineNumber,
-                                          aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "Expected data missing on line %d in file %s" ), aLineNumber, aFileName );
     else if( (int) aActualSize > aExpectedMax )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Extra data found on line %d in file %s" ),
-                                          aLineNumber,
-                                          aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "Extra data found on line %d in file %s" ), aLineNumber, aFileName );
 }
 
 
@@ -551,7 +537,7 @@ LTSPICE_SCHEMATIC::LT_SYMBOL LTSPICE_SCHEMATIC::SymbolBuilder( const wxString& a
     const std::map<wxString, wxString>& asyFiles = m_fileCache[ wxS( "asyFiles" ) ];
 
     if( !asyFiles.count( aAscFileName.Lower() ) )
-        THROW_IO_ERROR( wxString::Format( _( "Symbol '%s.asy' not found" ), aAscFileName ) );
+        THROW_IO_ERRORF( _( "Symbol '%s.asy' not found" ), aAscFileName );
 
     return SymbolBuilder( aAscFileName, asyFiles.at( aAscFileName.Lower() ), aAscFile );
 }

@@ -105,9 +105,8 @@ ASCH_STORAGE_FILE::ASCH_STORAGE_FILE( const std::map<wxString, wxString>& aProps
 
     if( charCount != dataSize * 2 )
     {
-        THROW_IO_ERROR( wxString::Format( "Invalid binary file hex data size. Chars expected: %d, "
-                                          "hex string length: %d",
-                                          int( dataSize * 2 ), int( hexData.size() ) ) );
+        THROW_IO_ERRORF( _( "Invalid binary file hex data size. Chars expected: %d, hex string length: %d" ),
+                         int( dataSize * 2 ), int( hexData.size() ) );
     }
 
     data.resize( dataSize );
@@ -137,7 +136,7 @@ ASCH_STORAGE_FILE::ASCH_STORAGE_FILE( ALTIUM_BINARY_PARSER& aReader )
     data = aReader.ReadVector( dataSize );
 
     if( aReader.HasParsingError() )
-        THROW_IO_ERROR( "Storage stream was not parsed correctly" );
+        THROW_IO_ERROR( _( "Storage stream was not parsed correctly" ) );
 }
 
 
@@ -149,7 +148,7 @@ ASCH_ADDITIONAL_FILE::ASCH_ADDITIONAL_FILE( ALTIUM_BINARY_PARSER& aReader )
     Data = aReader.ReadVector( dataSize );
 
     if( aReader.HasParsingError() )
-        THROW_IO_ERROR( "Additional stream was not parsed correctly" );
+        THROW_IO_ERROR( _( "Additional stream was not parsed correctly" ) );
 }
 
 

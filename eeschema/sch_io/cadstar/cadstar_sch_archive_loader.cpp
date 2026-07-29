@@ -537,16 +537,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::checkDesignLimits()
 
     if( designSizeXkicad > maxDesignSizekicad || designSizeYkicad > maxDesignSizekicad )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "The design is too large and cannot be imported into KiCad. \n"
-                   "Please reduce the maximum design size in CADSTAR by navigating to: \n"
-                   "Design Tab -> Properties -> Design Options -> Maximum Design Size. \n"
-                   "Current Design size: %.2f, %.2f millimeters. \n" //format:allow
-                   "Maximum permitted design size: %.2f, %.2f millimeters.\n" ), //format:allow
-                (double) designSizeXkicad / SCH_IU_PER_MM,
-                (double) designSizeYkicad / SCH_IU_PER_MM,
-                (double) maxDesignSizekicad / SCH_IU_PER_MM,
-                (double) maxDesignSizekicad / SCH_IU_PER_MM ) );
+        THROW_IO_ERRORF( _( "The design is too large and cannot be imported into KiCad. \n"
+                            "Please reduce the maximum design size in CADSTAR by navigating to: \n"
+                            "Design Tab -> Properties -> Design Options -> Maximum Design Size. \n"
+                            "Current Design size: %.2f, %.2f millimeters. \n" //format:allow
+                            "Maximum permitted design size: %.2f, %.2f millimeters.\n" ), //format:allow
+                            (double) designSizeXkicad / SCH_IU_PER_MM,
+                            (double) designSizeYkicad / SCH_IU_PER_MM,
+                            (double) maxDesignSizekicad / SCH_IU_PER_MM,
+                            (double) maxDesignSizekicad / SCH_IU_PER_MM );
     }
 }
 
@@ -842,24 +841,20 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
         {
             if( Library.SymbolDefinitions.find( sym.SymdefID ) == Library.SymbolDefinitions.end() )
             {
-                THROW_IO_ERROR( wxString::Format( _( "Symbol ID '%s' references library symbol "
-                                                     "'%s' which could not be found in the "
-                                                     "library. Did you export all items of the "
-                                                     "design?" ),
-                                                  sym.ID,
-                                                  sym.PartRef.RefID ) );
+                THROW_IO_ERRORF( _( "Symbol ID '%s' references library symbol '%s' which could not be found "
+                                    "in the library. Did you export all items of the design?" ),
+                                 sym.ID,
+                                 sym.PartRef.RefID );
             }
 
             SYMDEF_SCM libSymDef = Library.SymbolDefinitions.at( sym.SymdefID );
 
             if( libSymDef.Terminals.size() != 1 )
             {
-                THROW_IO_ERROR( wxString::Format( _( "Symbol ID '%s' is a signal reference or "
-                                                     "global signal but it has too many pins. The "
-                                                     "expected number of pins is 1 but %d were "
-                                                     "found." ),
-                                                  sym.ID,
-                                                  libSymDef.Terminals.size() ) );
+                THROW_IO_ERRORF( _( "Symbol ID '%s' is a signal reference or global signal but it has too "
+                                    "many pins. The expected number of pins is 1 but %d were found." ),
+                                 sym.ID,
+                                 libSymDef.Terminals.size() );
             }
 
             if( sym.SymbolVariant.Type == SYMBOLVARIANT::TYPE::GLOBALSIGNAL )

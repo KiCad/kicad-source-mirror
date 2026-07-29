@@ -773,7 +773,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             }
             else
             {
-                THROW_IO_ERROR( wxString::Format( _( "Unknown SVGNODE nodeType %d" ), nodeType ) );
+                THROW_IO_ERRORF( _( "Unknown SVGNODE nodeType %d" ), nodeType );
             }
         }
         else if( elType == wxS( "TEXT" ) )

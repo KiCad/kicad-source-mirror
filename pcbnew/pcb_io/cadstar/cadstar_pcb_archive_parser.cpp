@@ -81,15 +81,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse( bool aLibrary )
             {
                 if( Header.Format.Type == wxT( "LIBRARY" ) )
                 {
-                    THROW_IO_ERROR(
-                            wxT( "The selected file is a CADSTAR library file (as opposed "
-                                 "to a layout file). You can import this library by adding it "
-                                 "to the library table." ) );
+                    THROW_IO_ERROR( wxT( "The selected file is a CADSTAR library file (as opposed to a layout file). "
+                                         "You can import this library by adding it to the library table." ) );
                 }
                 else
                 {
-                    THROW_IO_ERROR( wxT( "The selected file is an unknown CADSTAR format so "
-                                         "cannot be imported into KiCad." ) );
+                    THROW_IO_ERROR( wxT( "The selected file is an unknown CADSTAR format so cannot be imported into "
+                                         "KiCad." ) );
                 }
             }
         }

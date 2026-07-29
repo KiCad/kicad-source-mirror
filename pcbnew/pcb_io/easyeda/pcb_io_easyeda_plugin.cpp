@@ -163,10 +163,7 @@ BOARD* PCB_IO_EASYEDA::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
         EASYEDA::DOCUMENT  doc;
 
         if( !FindBoardInStream( aFileName, in, js, doc ) )
-        {
-            THROW_IO_ERROR(
-                    wxString::Format( _( "Unable to find a valid board in '%s'" ), aFileName ) );
-        }
+            THROW_IO_ERRORF( _( "Unable to find a valid board in '%s'" ), aFileName );
 
         EASYEDA::DOCUMENT_PCB pcbDoc = js.get<EASYEDA::DOCUMENT_PCB>();
 
@@ -262,11 +259,11 @@ BOARD* PCB_IO_EASYEDA::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error loading board '%s': %s" ), aFileName, e.what() ) );
+        THROW_IO_ERRORF( _( "Error loading board '%s': %s" ), aFileName, e.what() );
     }
     catch( std::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error loading board '%s': %s" ), aFileName, e.what() ) );
+        THROW_IO_ERRORF( _( "Error loading board '%s': %s" ), aFileName, e.what() );
     }
 }
 
@@ -288,10 +285,7 @@ void PCB_IO_EASYEDA::FootprintEnumerate( wxArrayString&  aFootprintNames,
         EASYEDA::DOCUMENT  doc;
 
         if( !FindBoardInStream( aLibraryPath, in, js, doc ) )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to find valid footprints in '%s'" ),
-                                              aLibraryPath ) );
-        }
+            THROW_IO_ERRORF( _( "Unable to find valid footprints in '%s'" ), aLibraryPath );
 
         if( doc.head.docType == EASYEDA::DOC_TYPE::PCB
             || doc.head.docType == EASYEDA::DOC_TYPE::PCB_MODULE )
@@ -360,13 +354,11 @@ void PCB_IO_EASYEDA::FootprintEnumerate( wxArrayString&  aFootprintNames,
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error enumerating footprints in library '%s': %s" ),
-                                          aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error enumerating footprints in library '%s': %s" ), aLibraryPath, e.what() );
     }
     catch( std::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error enumerating footprints in library '%s': %s" ),
-                                          aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error enumerating footprints in library '%s': %s" ), aLibraryPath, e.what() );
     }
 }
 
@@ -389,10 +381,7 @@ FOOTPRINT* PCB_IO_EASYEDA::FootprintLoad( const wxString& aLibraryPath,
         EASYEDA::DOCUMENT  doc;
 
         if( !FindBoardInStream( aLibraryPath, in, js, doc ) )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to find valid footprints in '%s'" ),
-                                              aLibraryPath ) );
-        }
+            THROW_IO_ERRORF( _( "Unable to find valid footprints in '%s'" ), aLibraryPath );
 
         if( doc.head.docType == EASYEDA::DOC_TYPE::PCB
             || doc.head.docType == EASYEDA::DOC_TYPE::PCB_MODULE )
@@ -520,13 +509,17 @@ FOOTPRINT* PCB_IO_EASYEDA::FootprintLoad( const wxString& aLibraryPath,
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error reading footprint '%s' from library '%s': %s" ),
-                                          aFootprintName, aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error reading footprint '%s' from library '%s': %s" ),
+                         aFootprintName,
+                         aLibraryPath,
+                         e.what() );
     }
     catch( std::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Error reading footprint '%s' from library '%s': %s" ),
-                                          aFootprintName, aLibraryPath, e.what() ) );
+        THROW_IO_ERRORF( _( "Error reading footprint '%s' from library '%s': %s" ),
+                         aFootprintName,
+                         aLibraryPath,
+                         e.what() );
     }
 
     return nullptr;

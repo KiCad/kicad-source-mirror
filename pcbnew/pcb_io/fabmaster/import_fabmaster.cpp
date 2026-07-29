@@ -323,7 +323,7 @@ int FABMASTER::getColFromName( size_t aRow, const std::string& aStr )
             return i;
     }
 
-    THROW_IO_ERROR( wxString::Format( _( "Could not find column label %s." ), aStr.c_str() ) );
+    THROW_IO_ERRORF( _( "Could not find column label %s." ), aStr.c_str() );
     return -1;
 }
 

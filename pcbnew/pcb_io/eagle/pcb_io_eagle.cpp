@@ -368,10 +368,7 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
         wxFFileInputStream stream( fn.GetFullPath() );
 
         if( !stream.IsOk() )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
-                                              fn.GetFullPath() ) );
-        }
+            THROW_IO_ERRORF( _( "Unable to read file '%s'" ), fn.GetFullPath() );
 
         // The binary parser synthesizes a DOM identical to what the XML loader
         // produces; both paths then share the common tail below. The document
@@ -390,10 +387,7 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
             stream.Read( bytes.data(), bytes.size() );
 
             if( stream.LastRead() != bytes.size() )
-            {
-                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
-                                                  fn.GetFullPath() ) );
-            }
+                THROW_IO_ERRORF( _( "Unable to read file '%s'" ), fn.GetFullPath() );
 
             EAGLE_BIN_PARSER binParser;
             binDocument = binParser.Parse( bytes );
@@ -402,10 +396,7 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
         else
         {
             if( !xmlDocument.Load( stream ) )
-            {
-                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
-                                                  fn.GetFullPath() ) );
-            }
+                THROW_IO_ERRORF( _( "Unable to read file '%s'" ), fn.GetFullPath() );
 
             doc = xmlDocument.GetRoot();
         }
@@ -481,12 +472,7 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
     }
     catch( const XML_PARSER_ERROR &exc )
     {
-        wxString errmsg = exc.what();
-
-        errmsg += wxT( "\n@ " );
-        errmsg += m_xpath->Contents();
-
-        THROW_IO_ERROR( errmsg );
+        THROW_IO_ERRORF( wxT( "%s\n@ %s" ), exc.what(), m_xpath->Contents() );
     }
 
     // IO_ERROR exceptions are left uncaught, they pass upwards from here.
@@ -1239,13 +1225,9 @@ void PCB_IO_EAGLE::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
         if( !r.second /* && !( m_props && m_props->Value( "ignore_duplicates" ) ) */ )
         {
-            wxString lib = aLibName ? *aLibName : m_lib_path;
-            const wxString& pkg = pack_ref;
-
-            wxString emsg = wxString::Format( _( "<package> '%s' duplicated in <library> '%s'" ),
-                                              pkg,
-                                              lib );
-            THROW_IO_ERROR( emsg );
+            THROW_IO_ERRORF( _( "<package> '%s' duplicated in <library> '%s'" ),
+                             pack_ref,
+                             aLibName ? *aLibName : m_lib_path );
         }
 
         m_xpath->pop();
@@ -1326,11 +1308,7 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
         auto     it = m_templates.find( pkg_key );
 
         if( it == m_templates.end() )
-        {
-            wxString emsg = wxString::Format( _( "No '%s' package in library '%s'." ),
-                                              e.package, e.library );
-            THROW_IO_ERROR( emsg );
-        }
+            THROW_IO_ERRORF( _( "No '%s' package in library '%s'." ), e.package, e.library );
 
         FOOTPRINT* footprint = static_cast<FOOTPRINT*>( it->second->Duplicate( IGNORE_PARENT_GROUP ) );
 
@@ -3305,7 +3283,7 @@ void PCB_IO_EAGLE::cacheLib( const wxString& aLibPath )
             wxXmlDocument xmlDocument;
 
             if( !stream.IsOk() || !xmlDocument.Load( stream ) )
-                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'." ), fn.GetFullPath() ) );
+                THROW_IO_ERRORF( _( "Unable to read file '%s'." ), fn.GetFullPath() );
 
             doc = xmlDocument.GetRoot();
 

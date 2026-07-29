@@ -39,9 +39,7 @@ BINARY_READER::BINARY_READER( const wxString& aFileName ) :
     FILE* fp = wxFopen( aFileName, wxT( "rb" ) );
 
     if( fp == nullptr )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Cannot open file '%s'." ), aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "Cannot open file '%s'." ), aFileName );
 
     fseek( fp, 0, SEEK_END );
     long len = ftell( fp );
@@ -49,8 +47,7 @@ BINARY_READER::BINARY_READER( const wxString& aFileName ) :
     if( len < 0 )
     {
         fclose( fp );
-        THROW_IO_ERROR(
-                wxString::Format( _( "Cannot determine length of file '%s'." ), aFileName ) );
+        THROW_IO_ERRORF( _( "Cannot determine length of file '%s'." ), aFileName );
     }
 
     // Reject absurd sizes before allocating so a corrupt or hostile length cannot drive an
@@ -60,8 +57,7 @@ BINARY_READER::BINARY_READER( const wxString& aFileName ) :
     if( len > MAX_FILE_SIZE )
     {
         fclose( fp );
-        THROW_IO_ERROR( wxString::Format( _( "DipTrace file '%s' is too large (%ld bytes)." ),
-                                          aFileName, len ) );
+        THROW_IO_ERRORF( _( "DipTrace file '%s' is too large (%ld bytes)." ), aFileName, len );
     }
 
     // resize() can throw (bad_alloc/length_error); close the handle on that path too.
@@ -81,9 +77,7 @@ BINARY_READER::BINARY_READER( const wxString& aFileName ) :
     fclose( fp );
 
     if( bytesRead != m_data.size() )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Error reading file '%s'." ), aFileName ) );
-    }
+        THROW_IO_ERRORF( _( "Error reading file '%s'." ), aFileName );
 }
 
 
@@ -98,10 +92,7 @@ BINARY_READER::~BINARY_READER()
 void BINARY_READER::SetOffset( size_t aOffset )
 {
     if( aOffset > m_data.size() )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Seek past end of file (offset %zu, size %zu)." ),
-                                          aOffset, m_data.size() ) );
-    }
+        THROW_IO_ERRORF( _( "Seek past end of file (offset %zu, size %zu)." ), aOffset, m_data.size() );
 
     m_offset = aOffset;
 }
@@ -205,10 +196,9 @@ int BINARY_READER::PeekInt3() const
 {
     if( m_offset + 3 > m_data.size() )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "Unexpected end of file at offset 0x%06zX: need 3 bytes for int3, "
-                   "have %zu remaining." ),
-                m_offset, m_data.size() - m_offset ) );
+        THROW_IO_ERRORF( _( "Unexpected end of file at offset 0x%06zX: need 3 bytes for int3, have %zu remaining." ),
+                         m_offset,
+                         m_data.size() - m_offset );
     }
 
     const uint8_t* p = &m_data[m_offset];
@@ -223,10 +213,9 @@ int BINARY_READER::PeekInt4() const
 {
     if( m_offset + 4 > m_data.size() )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "Unexpected end of file at offset 0x%06zX: need 4 bytes for int4, "
-                   "have %zu remaining." ),
-                m_offset, m_data.size() - m_offset ) );
+        THROW_IO_ERRORF( _( "Unexpected end of file at offset 0x%06zX: need 4 bytes for int4, have %zu remaining." ),
+                         m_offset,
+                         m_data.size() - m_offset );
     }
 
     const uint8_t* p = &m_data[m_offset];
@@ -243,10 +232,7 @@ int BINARY_READER::PeekInt4() const
 uint8_t BINARY_READER::PeekByte() const
 {
     if( m_offset >= m_data.size() )
-    {
-        THROW_IO_ERROR( wxString::Format(
-                _( "Unexpected end of file at offset 0x%06zX: need 1 byte." ), m_offset ) );
-    }
+        THROW_IO_ERRORF( _( "Unexpected end of file at offset 0x%06zX: need 1 byte." ), m_offset );
 
     return m_data[m_offset];
 }
@@ -388,11 +374,7 @@ wxString BINARY_READER::ReadStringUTF16()
         return wxString();
 
     if( charCount < 0 || charCount > MAX_STRING_CHARS )
-    {
-        THROW_IO_ERROR( wxString::Format(
-                _( "Unreasonable string length %d at offset 0x%06zX." ),
-                charCount, m_offset - 2 ) );
-    }
+        THROW_IO_ERRORF( _( "Unreasonable string length %d at offset 0x%06zX." ), charCount, m_offset - 2 );
 
     size_t byteCount = static_cast<size_t>( charCount ) * 2;
 
@@ -417,11 +399,7 @@ wxString BINARY_READER::ReadStringASCII()
         return wxString();
 
     if( byteCount < 0 || byteCount > MAX_STRING_CHARS )
-    {
-        THROW_IO_ERROR( wxString::Format(
-                _( "Unreasonable v37 string length %d at offset 0x%06zX." ),
-                byteCount, m_offset - 3 ) );
-    }
+        THROW_IO_ERRORF( _( "Unreasonable v37 string length %d at offset 0x%06zX." ), byteCount, m_offset - 3 );
 
     size_t count = static_cast<size_t>( byteCount );
 
@@ -552,7 +530,8 @@ void BINARY_READER::ThrowEOFError( size_t aBytesNeeded ) const
 {
     size_t remaining = ( m_offset < m_data.size() ) ? ( m_data.size() - m_offset ) : 0;
 
-    THROW_IO_ERROR( wxString::Format(
-            _( "Unexpected end of file at offset 0x%06zX: need %zu bytes, have %zu remaining." ),
-            m_offset, aBytesNeeded, remaining ) );
+    THROW_IO_ERRORF( _( "Unexpected end of file at offset 0x%06zX: need %zu bytes, have %zu remaining." ),
+                     m_offset,
+                     aBytesNeeded,
+                     remaining );
 }

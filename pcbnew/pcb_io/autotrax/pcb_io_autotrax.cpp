@@ -144,7 +144,7 @@ BOARD* PCB_IO_AUTOTRAX::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe
     wxString contents;
 
     if( !readFile( aFileName, contents ) )
-        THROW_IO_ERROR( wxString::Format( _( "Could not read file '%s'." ), aFileName ) );
+        THROW_IO_ERRORF( _( "Could not read file '%s'." ), aFileName );
 
     REPORTER&  reporter = m_reporter ? *m_reporter : NULL_REPORTER::GetInstance();
     BOARD_DATA data;
@@ -152,7 +152,7 @@ BOARD* PCB_IO_AUTOTRAX::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe
     AUTOTRAX_PARSER parser( &reporter );
 
     if( !parser.Parse( contents, data ) )
-        THROW_IO_ERROR( wxString::Format( _( "'%s' is not a valid Protel Autotrax file." ), aFileName ) );
+        THROW_IO_ERRORF( _( "'%s' is not a valid Protel Autotrax file." ), aFileName );
 
     buildBoard( data );
 

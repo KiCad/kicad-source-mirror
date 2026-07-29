@@ -77,40 +77,32 @@ std::string SPICE_GENERATOR_IBIS::IbisDevice( const SPICE_ITEM& aItem, SCHEMATIC
     kibis.m_Reporter = &aReporter;
 
     if( !kibis.m_valid )
-        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS file '%s'" ), ibisLibFilename ) );
+        THROW_IO_ERRORF( _( "Invalid IBIS file '%s'" ), ibisLibFilename );
 
     KIBIS_COMPONENT* kcomp = kibis.GetComponent( std::string( ibisCompName ) );
 
     if( !kcomp )
-        THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS component '%s'" ), ibisCompName ) );
+        THROW_IO_ERRORF( _( "Could not find IBIS component '%s'" ), ibisCompName );
 
     KIBIS_PIN* kpin = kcomp->GetPin( ibisPinName );
 
 
     if( !kcomp->m_valid )
-        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS component '%s'" ), ibisCompName ) );
+        THROW_IO_ERRORF( _( "Invalid IBIS component '%s'" ), ibisCompName );
 
     if( !kpin )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS pin '%s' in component '%s'" ),
-                                          ibisPinName,
-                                          ibisCompName ) );
-    }
+        THROW_IO_ERRORF( _( "Could not find IBIS pin '%s' in component '%s'" ), ibisPinName, ibisCompName );
 
     if( !kpin->m_valid )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS pin '%s' in component '%s'" ),
-                                          ibisPinName,
-                                          ibisCompName ) );
-    }
+        THROW_IO_ERRORF( _( "Invalid IBIS pin '%s' in component '%s'" ), ibisPinName, ibisCompName );
 
     KIBIS_MODEL* kmodel = kibis.GetModel( ibisModelName );
 
     if( !kmodel )
-        THROW_IO_ERROR( wxString::Format( _( "Could not find IBIS model '%s'" ), ibisModelName ) );
+        THROW_IO_ERRORF( _( "Could not find IBIS model '%s'" ), ibisModelName );
 
     if( !kmodel->m_valid )
-        THROW_IO_ERROR( wxString::Format( _( "Invalid IBIS model '%s'" ), ibisModelName ) );
+        THROW_IO_ERRORF( _( "Invalid IBIS model '%s'" ), ibisModelName );
 
     KIBIS_PARAMETER kparams;
 

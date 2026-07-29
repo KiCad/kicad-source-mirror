@@ -306,10 +306,7 @@ static void ParseEpruStream( wxInputStream& aInput, const wxString& aSource,
                 doc.uuid = ParseDocUuid( inner );
 
                 if( doc.docType.empty() || doc.uuid.empty() )
-                {
-                    THROW_IO_ERROR( wxString::Format( _( "Invalid DOCHEAD in '%s' at line %d" ),
-                                                      aSource, currentLine ) );
-                }
+                    THROW_IO_ERRORF( _( "Invalid DOCHEAD in '%s' at line %d" ), aSource, currentLine );
 
                 currentDoc = std::move( doc );
                 currentLine++;
@@ -317,10 +314,7 @@ static void ParseEpruStream( wxInputStream& aInput, const wxString& aSource,
             }
 
             if( !currentDoc )
-            {
-                THROW_IO_ERROR( wxString::Format( _( "Expected DOCHEAD in '%s' at line %d" ),
-                                                  aSource, currentLine ) );
-            }
+                THROW_IO_ERRORF( _( "Expected DOCHEAD in '%s' at line %d" ), aSource, currentLine );
 
             V3_ROW row;
             row.outer = std::move( outer );
@@ -348,8 +342,7 @@ static void ParseEpruStream( wxInputStream& aInput, const wxString& aSource,
         }
         catch( nlohmann::json::exception& e )
         {
-            THROW_IO_ERROR( wxString::Format( _( "JSON error in '%s' at line %d: %s" ),
-                                              aSource, currentLine, e.what() ) );
+            THROW_IO_ERRORF( _( "JSON error in '%s' at line %d: %s" ), aSource, currentLine, e.what() );
         }
 
         currentLine++;
@@ -423,8 +416,7 @@ static void ScanEpruDocTypes( wxInputStream& aInput, const wxString& aSource, st
         }
         catch( nlohmann::json::exception& e )
         {
-            THROW_IO_ERROR(
-                    wxString::Format( _( "JSON error in '%s' at line %d: %s" ), aSource, currentLine, e.what() ) );
+            THROW_IO_ERRORF( _( "JSON error in '%s' at line %d: %s" ), aSource, currentLine, e.what() );
         }
 
         currentLine++;
@@ -446,7 +438,7 @@ static nlohmann::json ReadJsonEntry( wxInputStream& aInput, const wxString& aEnt
     }
     catch( nlohmann::json::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format( _( "JSON error reading '%s': %s" ), aEntryName, e.what() ) );
+        THROW_IO_ERRORF( _( "JSON error reading '%s': %s" ), aEntryName, e.what() );
     }
 }
 
@@ -480,9 +472,9 @@ static V3_LIBRARY_CONTENTS ScanV3LibraryArchive( const wxString& aFileName, cons
     wxZipInputStream            zip( in );
 
     if( !zip.IsOk() )
-        THROW_IO_ERROR( wxString::Format( _( "Cannot read ZIP archive '%s'" ), aFileName ) );
+        THROW_IO_ERRORF( _( "Cannot read ZIP archive '%s'" ), aFileName );
 
-    while( entry.reset( zip.GetNextEntry() ), entry.get() != NULL )
+    while( entry.reset( zip.GetNextEntry() ), entry.get() )
     {
         wxString entryName = entry->GetName();
         wxString baseName = entryName.AfterLast( '\\' ).AfterLast( '/' ).Lower();
@@ -520,9 +512,9 @@ static std::vector<V3_DOC_RAW> ParseV3DocsFromArchive( const wxString& aFileName
     wxZipInputStream            zip( in );
 
     if( !zip.IsOk() )
-        THROW_IO_ERROR( wxString::Format( _( "Cannot read ZIP archive '%s'" ), aFileName ) );
+        THROW_IO_ERRORF( _( "Cannot read ZIP archive '%s'" ), aFileName );
 
-    while( entry.reset( zip.GetNextEntry() ), entry.get() != NULL )
+    while( entry.reset( zip.GetNextEntry() ), entry.get() )
     {
         wxString entryName = entry->GetName();
         wxString baseName = entryName.AfterLast( '\\' ).AfterLast( '/' );
@@ -541,9 +533,8 @@ static std::vector<V3_DOC_RAW> ParseV3DocsFromArchive( const wxString& aFileName
 
     if( !hasProject2 || !hasEpru )
     {
-        THROW_IO_ERROR( wxString::Format( _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 project. "
-                   "Cannot find project2.json and .epru documents." ),
-                aFileName ) );
+        THROW_IO_ERRORF( _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 project. "
+                            "Cannot find project2.json and .epru documents." ), aFileName );
     }
 
     return docs;
@@ -560,11 +551,11 @@ static std::vector<V3_DOC_RAW> ParseV3DocsFromLibraryArchive( const wxString& aF
     wxZipInputStream            zip( in );
 
     if( !zip.IsOk() )
-        THROW_IO_ERROR( wxString::Format( _( "Cannot read ZIP archive '%s'" ), aFileName ) );
+        THROW_IO_ERRORF( _( "Cannot read ZIP archive '%s'" ), aFileName );
 
     aLibraryIndex = nlohmann::json::object();
 
-    while( entry.reset( zip.GetNextEntry() ), entry.get() != NULL )
+    while( entry.reset( zip.GetNextEntry() ), entry.get() )
     {
         wxString entryName = entry->GetName();
         wxString baseName = entryName.AfterLast( '\\' ).AfterLast( '/' );
@@ -591,10 +582,9 @@ static std::vector<V3_DOC_RAW> ParseV3DocsFromLibraryArchive( const wxString& aF
 
     if( !HasValidV3LibraryContents( contents, wxEmptyString ) )
     {
-        THROW_IO_ERROR( wxString::Format( _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 library. "
-                                             "Cannot find symbol2.json, footprint2.json or device2.json and .elibu "
-                                             "documents." ),
-                                          aFileName ) );
+        THROW_IO_ERRORF( _( "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 library. Cannot find "
+                            "symbol2.json, footprint2.json or device2.json and .elibu documents." ),
+                         aFileName );
     }
 
     return docs;

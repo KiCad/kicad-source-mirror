@@ -280,11 +280,7 @@ std::optional<ORCAD_PRIMITIVE> readPrimitiveBody( ORCAD_STREAM& aStream, int t1 
         }
 
         if( !found )
-        {
-            THROW_IO_ERROR( wxString::Format( wxS( "poly primitive at 0x%zx: no consistent "
-                                                   "point count for size %zu" ),
-                                              start, size ) );
-        }
+            THROW_IO_ERRORF( wxS( "poly primitive at 0x%zx: no consistent point count for size %zu" ), start, size );
 
         ORCAD_PRIMITIVE p;
 
@@ -378,10 +374,7 @@ std::optional<ORCAD_PRIMITIVE> readPrimitiveBody( ORCAD_STREAM& aStream, int t1 
     }
 
     if( aStream.GetOffset() > end )
-    {
-        THROW_IO_ERROR( wxString::Format( wxS( "primitive type %d overran (0x%zx > 0x%zx)" ), t1,
-                                          aStream.GetOffset(), end ) );
-    }
+        THROW_IO_ERRORF( wxS( "primitive type %d overran (0x%zx > 0x%zx)" ), t1, aStream.GetOffset(), end );
 
     aStream.Seek( end );
     aStream.SkipOptionalPreambleBlock();
@@ -397,10 +390,7 @@ std::optional<ORCAD_PRIMITIVE> OrcadReadPrimitive( ORCAD_STREAM& aStream )
     int t2 = aStream.ReadU8();
 
     if( t1 != t2 || !isPrimType( t1 ) )
-    {
-        THROW_IO_ERROR(
-                wxString::Format( wxS( "bad primitive prefix %d/%d at 0x%zx" ), t1, t2, aStream.GetOffset() - 2 ) );
-    }
+        THROW_IO_ERRORF( wxS( "bad primitive prefix %d/%d at 0x%zx" ), t1, t2, aStream.GetOffset() - 2 );
 
     if( t1 == ORCAD_PRIM_SYMBOL_VECTOR )
         return readSymbolVector( aStream );
@@ -423,7 +413,7 @@ std::optional<ORCAD_SYMBOL_PIN> OrcadReadSymbolPin( ORCAD_STRUCT_READER& aReader
     ORCAD_PREFIXES pfx = aReader.ReadPrefixes();
 
     if( pfx.typeId != ORCAD_ST_SYMBOL_PIN_SCALAR && pfx.typeId != ORCAD_ST_SYMBOL_PIN_BUS )
-        THROW_IO_ERROR( wxString::Format( wxS( "expected symbol pin, got type %d" ), pfx.typeId ) );
+        THROW_IO_ERRORF( wxS( "expected symbol pin, got type %d" ), pfx.typeId );
 
     ORCAD_SYMBOL_PIN pin;
     pin.name = stream.ReadLzt();
@@ -589,8 +579,8 @@ ORCAD_DRAWN_INSTANCE OrcadReadDrawnInstance( ORCAD_STRUCT_READER& aReader,
 
     if( flag != ORCAD_ST_LIBRARY_PART )
     {
-        THROW_IO_ERROR( wxString::Format( wxS( "drawn instance nested flag %d at 0x%zx" ),
-                                          static_cast<int>( flag ), stream.GetOffset() - 1 ) );
+        THROW_IO_ERRORF( wxS( "drawn instance nested flag %d at 0x%zx" ),
+                         static_cast<int>( flag ), stream.GetOffset() - 1 );
     }
 
     ORCAD_PREFIXES   nestedPfx = aReader.ReadPrefixes();
@@ -654,7 +644,7 @@ ORCAD_DEVICE OrcadReadDevice( ORCAD_STRUCT_READER& aReader )
     ORCAD_PREFIXES pfx = aReader.ReadPrefixes();
 
     if( pfx.typeId != ORCAD_ST_DEVICE )
-        THROW_IO_ERROR( wxString::Format( wxS( "expected Device, got type %d" ), pfx.typeId ) );
+        THROW_IO_ERRORF( wxS( "expected Device, got type %d" ), pfx.typeId );
 
     ORCAD_DEVICE device;
     device.unitRef = stream.ReadLzt();

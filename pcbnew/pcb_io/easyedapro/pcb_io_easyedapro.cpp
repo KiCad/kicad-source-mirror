@@ -406,10 +406,7 @@ FOOTPRINT* PCB_IO_EASYEDAPRO::FootprintLoad( const wxString& aLibraryPath,
         footprint = parser.ParseFootprint( nlohmann::json(), wxEmptyString, lines );
 
         if( !footprint )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Cannot load footprint '%s' from '%s'" ),
-                                              aFootprintName, aLibraryPath ) );
-        }
+            THROW_IO_ERRORF( _( "Cannot load footprint '%s' from '%s'" ), aFootprintName, aLibraryPath );
 
         LIB_ID fpID = EASYEDAPRO::ToKiCadLibID( wxEmptyString, aFootprintName );
         footprint->SetFPID( fpID );
@@ -444,10 +441,7 @@ FOOTPRINT* PCB_IO_EASYEDAPRO::FootprintLoad( const wxString& aLibraryPath,
         }
 
         if( !fpUuid )
-        {
-            THROW_IO_ERROR( wxString::Format( _( "Footprint '%s' not found in project '%s'" ),
-                                              aFootprintName, aLibraryPath ) );
-        }
+            THROW_IO_ERRORF( _( "Footprint '%s' not found in project '%s'" ), aFootprintName, aLibraryPath );
 
         auto cb = [&]( const wxString& name, const wxString& baseName, wxInputStream& zip ) -> bool
         {
@@ -462,10 +456,7 @@ FOOTPRINT* PCB_IO_EASYEDAPRO::FootprintLoad( const wxString& aLibraryPath,
             footprint = parser.ParseFootprint( project, fpUuid, lines );
 
             if( !footprint )
-            {
-                THROW_IO_ERROR( wxString::Format( _( "Cannot load footprint '%s' from '%s'" ),
-                                                  aFootprintName, aLibraryPath ) );
-            }
+                THROW_IO_ERRORF( _( "Cannot load footprint '%s' from '%s'" ), aFootprintName, aLibraryPath );
 
             LIB_ID fpID = EASYEDAPRO::ToKiCadLibID( wxEmptyString, aFootprintName );
             footprint->SetFPID( fpID );

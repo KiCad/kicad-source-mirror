@@ -67,11 +67,7 @@ IFSTREAM_LINE_READER::IFSTREAM_LINE_READER( const wxFileName& aFileName )  :
         m_fStream( aFileName.GetFullPath().fn_str() )
 {
     if( !m_fStream.is_open() )
-    {
-        wxString msg = wxString::Format(
-            _( "Unable to open filename '%s' for reading" ), aFileName.GetFullPath().GetData() );
-        THROW_IO_ERROR( msg );
-    }
+        THROW_IO_ERRORF( _( "Unable to open filename '%s' for reading" ), aFileName.GetFullPath().GetData() );
 
     SetStream( m_fStream );
 

@@ -1066,9 +1066,8 @@ void PCB_PARSER::Parse()
     }
     catch( const std::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "DipTrace parse error at offset 0x%06zX: %s" ),
-                m_reader.GetOffset(), wxString::FromUTF8( e.what() ) ) );
+        THROW_IO_ERRORF( _( "DipTrace parse error at offset 0x%06zX: %s" ),
+                         m_reader.GetOffset(), wxString::FromUTF8( e.what() ) );
     }
 }
 
@@ -1151,18 +1150,13 @@ void PCB_PARSER::ParseMagic()
     uint8_t magicLen = m_reader.ReadByte();
 
     if( magicLen != 7 && magicLen != 11 )
-    {
-        THROW_IO_ERROR( wxString::Format(
-                _( "DipTrace: invalid magic length %u (expected 7 or 11)" ), magicLen ) );
-    }
+        THROW_IO_ERRORF( _( "DipTrace: invalid magic length %u (expected 7 or 11)" ), magicLen );
 
     std::array<uint8_t, 11> magic = {};
     m_reader.ReadBytes( magic.data(), magicLen );
 
     if( std::memcmp( magic.data(), "DTBOARD", 7 ) != 0 )
-    {
         THROW_IO_ERROR( _( "DipTrace: not a valid .dip board file (bad magic)" ) );
-    }
 
     m_hasInlineVersion = ( magicLen == 7 );
     m_hasLegacyMagicLayout = !m_hasInlineVersion;
@@ -1221,8 +1215,7 @@ void PCB_PARSER::ParseOutline()
     // A negative count would sign-extend to a huge size_t in reserve() (std::length_error); a wild
     // positive count would over-allocate. Reject before touching the vector, like the other sections.
     if( vertexCount < 0 || vertexCount > 1000000 )
-        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid outline vertex count %d." ),
-                                          vertexCount ) );
+        THROW_IO_ERRORF( _( "DipTrace import: invalid outline vertex count %d." ), vertexCount );
 
     m_outline.clear();
     m_outline.reserve( vertexCount );
@@ -1261,8 +1254,7 @@ void PCB_PARSER::ParseLayers()
 
     // Guard against a negative (huge size_t in reserve) or wild positive count before allocating.
     if( layerCount < 0 || layerCount > 100000 )
-        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid layer count %d." ),
-                                          layerCount ) );
+        THROW_IO_ERRORF( _( "DipTrace import: invalid layer count %d." ), layerCount );
 
     m_layers.clear();
     m_copperLayerOrdinalById.clear();
@@ -1359,9 +1351,8 @@ void PCB_PARSER::ParsePatternNameGroups( int aGroupCount )
 {
     if( aGroupCount < 0 || aGroupCount > 10000 )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "DipTrace: invalid pattern-name group count %d at offset 0x%06zX" ),
-                aGroupCount, m_reader.GetOffset() - 3 ) );
+        THROW_IO_ERRORF( _( "DipTrace: invalid pattern-name group count %d at offset 0x%06zX" ),
+                         aGroupCount, m_reader.GetOffset() - 3 );
     }
 
     for( int i = 0; i < aGroupCount; i++ )
@@ -1371,10 +1362,7 @@ void PCB_PARSER::ParsePatternNameGroups( int aGroupCount )
         int blockCount = m_reader.ReadInt3();
 
         if( blockCount < 0 || blockCount > 10000 )
-        {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "DipTrace: invalid pattern-name block count %d" ), blockCount ) );
-        }
+            THROW_IO_ERRORF( _( "DipTrace: invalid pattern-name block count %d" ), blockCount );
 
         for( int j = 0; j < blockCount; j++ )
         {
@@ -1389,9 +1377,8 @@ void PCB_PARSER::ParsePatternStyleGroups( int aGroupCount )
 {
     if( aGroupCount < 0 || aGroupCount > 10000 )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "DipTrace: invalid pattern-style group count %d at offset 0x%06zX" ),
-                aGroupCount, m_reader.GetOffset() - 3 ) );
+        THROW_IO_ERRORF( _( "DipTrace: invalid pattern-style group count %d at offset 0x%06zX" ),
+                         aGroupCount, m_reader.GetOffset() - 3 );
     }
 
     m_ruleNameCount = 0;
@@ -1410,10 +1397,7 @@ void PCB_PARSER::ParsePatternStyleGroups( int aGroupCount )
         int entryCount = m_reader.ReadInt3();
 
         if( entryCount < 0 || entryCount > 10000 )
-        {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "DipTrace: invalid pattern-style entry count %d" ), entryCount ) );
-        }
+            THROW_IO_ERRORF( _( "DipTrace: invalid pattern-style entry count %d" ), entryCount );
 
         m_ruleNameCount += entryCount;
     }
@@ -1430,11 +1414,7 @@ void PCB_PARSER::ParseImplicitPatternStyleGroup()
     m_ruleNameCount = m_reader.ReadInt3();
 
     if( m_ruleNameCount < 0 || m_ruleNameCount > 10000 )
-    {
-        THROW_IO_ERROR( wxString::Format(
-                _( "DipTrace: invalid implicit pattern-style entry count %d" ),
-                m_ruleNameCount ) );
-    }
+        THROW_IO_ERRORF( _( "DipTrace: invalid implicit pattern-style entry count %d" ), m_ruleNameCount );
 }
 
 
@@ -1513,10 +1493,7 @@ void PCB_PARSER::ParseDesignRules()
         int extraCount = m_reader.ReadInt3();
 
         if( extraCount < 0 || extraCount > 10000 )
-        {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "DipTrace: invalid design-rule extra count %d" ), extraCount ) );
-        }
+            THROW_IO_ERRORF( _( "DipTrace: invalid design-rule extra count %d" ), extraCount );
 
         for( int e = 0; e < extraCount; e++ )
             m_reader.ReadInt3();
@@ -1541,10 +1518,7 @@ void PCB_PARSER::SkipInterRulesetTransition()
     m_reader.ReadBytes( actual, sizeof( actual ) );
 
     if( std::memcmp( actual, marker, sizeof( marker ) ) != 0 )
-    {
-        THROW_IO_ERROR( wxString::Format(
-                _( "DipTrace: invalid ruleset transition marker at 0x%06zX" ), markerOffset ) );
-    }
+        THROW_IO_ERRORF( _( "DipTrace: invalid ruleset transition marker at 0x%06zX" ), markerOffset );
 
     m_reader.ReadInt4();    // field_a
     m_reader.ReadInt4();    // field_b
@@ -2108,9 +2082,8 @@ bool PCB_PARSER::ParseSingleComponent( size_t aBoundaryOffset, size_t aUpperBoun
                          || aComp.libraryPath.Contains( wxT( ":" ) ) ) )
                 {
                     fatalHeaderError = true;
-                    THROW_IO_ERROR( wxString::Format(
-                            _( "DipTrace: invalid component flag byte %u at boundary 0x%06zX" ),
-                            static_cast<unsigned int>( aComp.flags[i] ), aBoundaryOffset ) );
+                    THROW_IO_ERRORF( _( "DipTrace: invalid component flag byte %u at boundary 0x%06zX" ),
+                                     static_cast<unsigned int>( aComp.flags[i] ), aBoundaryOffset );
                 }
 
                 return false;
@@ -3338,9 +3311,7 @@ void PCB_PARSER::ParseTextRecords( int aCount )
         }
         catch( const IO_ERROR& e )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "DipTrace: text object [%d] parse error: %s" ),
-                    ti, e.What() ) );
+            THROW_IO_ERRORF( _( "DipTrace: text object [%d] parse error: %s" ), ti, e.What() );
         }
     }
 }
@@ -3419,10 +3390,8 @@ void PCB_PARSER::FindAndParseNets( size_t aSearchStart, size_t aSearchEnd )
             {
                 if( expectedNetIndex )
                 {
-                    THROW_IO_ERROR( wxString::Format(
-                            _( "DipTrace import: invalid net name for net index %d at "
-                               "offset 0x%06zX." ),
-                            netIndex, m_reader.GetOffset() ) );
+                    THROW_IO_ERRORF( _( "DipTrace import: invalid net name for net index %d at offset 0x%06zX." ),
+                                     netIndex, m_reader.GetOffset() );
                 }
 
                 continue;
@@ -3706,10 +3675,11 @@ void PCB_PARSER::ParseNetRouting( DT_NET& aNet )
         {
             if( chainIdx >= 0 && firstNodeLooksPlausible() )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "DipTrace import: invalid route-chain node count %d for net '%s' "
-                           "at offset 0x%06zX." ),
-                        nodeCount, aNet.name, headerStart + 3 ) );
+                THROW_IO_ERRORF( _( "DipTrace import: invalid route-chain node count %d for net '%s' at offset "
+                                    "0x%06zX." ),
+                                 nodeCount,
+                                 aNet.name,
+                                 headerStart + 3 );
             }
 
             pos = chainPos + 1;
@@ -3723,10 +3693,11 @@ void PCB_PARSER::ParseNetRouting( DT_NET& aNet )
         {
             if( firstNodeLooksPlausible() )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "DipTrace import: route-chain node count %d for net '%s' overruns "
-                           "record at offset 0x%06zX." ),
-                        nodeCount, aNet.name, headerStart + 3 ) );
+                THROW_IO_ERRORF( _( "DipTrace import: route-chain node count %d for net '%s' overruns record at "
+                                    "offset 0x%06zX." ),
+                                 nodeCount,
+                                 aNet.name,
+                                 headerStart + 3 );
             }
 
             pos = chainPos + 1;
@@ -4448,10 +4419,8 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
         if( preambleHeaderStart + 30 <= aSearchEnd
             && headerHasZoneSectionShape( preambleHeaderStart ) )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "DipTrace import: invalid copper-pour zone header after font preamble "
-                       "at offset 0x%06zX." ),
-                    preambleHeaderStart ) );
+            THROW_IO_ERRORF( _( "DipTrace import: invalid copper-pour zone header after font preamble "
+                                "at offset 0x%06zX." ), preambleHeaderStart );
         }
 
         zoneDataStart = findZoneFontPreambleDataStart( zoneDataStart + 1 );

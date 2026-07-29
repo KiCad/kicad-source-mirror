@@ -80,7 +80,7 @@ std::vector<char> readStream( const ALTIUM_COMPOUND_FILE& aFile,
     uint64_t size = reader.GetStreamSize( aEntry );
 
     if( size > reader.GetBufferLen() )
-        THROW_IO_ERROR( wxS( "OrCAD stream size exceeds the compound file" ) );
+        THROW_IO_ERROR( _( "OrCAD stream size exceeds the compound file" ) );
 
     std::vector<char> data( static_cast<size_t>( size ) );
 
