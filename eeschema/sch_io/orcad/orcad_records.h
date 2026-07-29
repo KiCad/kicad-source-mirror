@@ -434,8 +434,8 @@ struct ORCAD_SYMBOL_DEF
      */
     std::vector<ORCAD_SYMBOL_DEF>      variants;
 
-    /// LibraryPart GeneralProperties flags (-1 = absent); bit0 = pin numbers visible,
-    /// bit2 = pin names hidden.
+    /// LibraryPart GeneralProperties flags (-1 = absent); bit0 = pin names visible,
+    /// bit2 = pin numbers hidden.
     int                                generalFlags = -1;
 
     bool                               synthesized = false;  ///< placeholder built from T0x10 data
@@ -471,6 +471,10 @@ struct ORCAD_PACKAGE
     std::string               refDes;
     std::string               pcbFootprint;
     std::vector<ORCAD_DEVICE> devices;
+
+    /// Part-level properties shared by every placement (Description, Tolerance, ...).
+    /// Placements carry only their own overrides, so these must be merged in.
+    std::map<std::string, std::string> props;
 };
 
 

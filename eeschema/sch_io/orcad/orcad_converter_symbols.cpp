@@ -594,6 +594,37 @@ ORCAD_CONVERTER::pickVariant( const ORCAD_PLACED_INSTANCE& aInst ) const
 }
 
 
+const ORCAD_PACKAGE* ORCAD_CONVERTER::packageFor( const ORCAD_PLACED_INSTANCE& aInst ) const
+{
+    std::string base = !aInst.sourcePackage.empty()
+                               ? aInst.sourcePackage
+                               : aInst.pkgName.substr( 0, aInst.pkgName.find( '.' ) );
+
+    auto it = m_design.packages.find( base );
+
+    return it != m_design.packages.end() ? &it->second : nullptr;
+}
+
+
+std::map<std::string, std::string>
+ORCAD_CONVERTER::effectiveProps( const ORCAD_PLACED_INSTANCE& aInst,
+                                 const ORCAD_SYMBOL_DEF& aDef ) const
+{
+    std::map<std::string, std::string> props = aDef.props;
+
+    if( const ORCAD_PACKAGE* pkg = packageFor( aInst ) )
+    {
+        for( const auto& [name, value] : pkg->props )
+            props[name] = value;
+    }
+
+    for( const auto& [name, value] : aInst.props )
+        props[name] = value;
+
+    return props;
+}
+
+
 std::pair<std::string, int> ORCAD_CONVERTER::libForInstance( const ORCAD_PLACED_INSTANCE& aInst )
 {
     auto [sym, vi] = pickVariant( aInst );
@@ -798,15 +829,15 @@ LIB_SYMBOL* ORCAD_CONVERTER::kicadSymbolFor( const std::string& aLibName )
     symbol->SetLibId( LIB_ID( wxString::FromUTF8( LIB_NICK ), name ) );
     symbol->SetPinNameOffset( schMm( 0.254 ) );
 
-    // Pin number/name visibility from LibraryPart flags; bit0=numbers visible,
-    // bit2=names hidden.
+    // Pin number/name visibility from LibraryPart flags; bit0=names visible,
+    // bit2=numbers hidden
     for( const UNIT_INFO& unit : entry.units )
     {
         if( unit.symbol && unit.symbol->generalFlags >= 0 )
         {
             int flags = unit.symbol->generalFlags;
-            symbol->SetShowPinNumbers( ( flags & 0x01 ) != 0 );
-            symbol->SetShowPinNames( ( flags & 0x04 ) == 0 );
+            symbol->SetShowPinNumbers( ( flags & 0x04 ) == 0 );
+            symbol->SetShowPinNames( ( flags & 0x01 ) != 0 );
             break;
         }
     }
@@ -1256,13 +1287,15 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
 
     symbol->SetOrientation( toKicadOrientation( ori ) );
 
+    std::map<std::string, std::string> props = effectiveProps( aInst, def );
+
     std::string value = aInst.value;
 
     if( value.empty() )
     {
-        auto vIt = aInst.props.find( "Value" );
+        auto vIt = props.find( "Value" );
 
-        if( vIt != aInst.props.end() )
+        if( vIt != props.end() )
             value = vIt->second;
     }
 
@@ -1270,9 +1303,9 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
         value = entry.name;
 
     std::string footprint;
-    auto        fIt = aInst.props.find( "PCB Footprint" );
+    auto        fIt = props.find( "PCB Footprint" );
 
-    if( fIt != aInst.props.end() )
+    if( fIt != props.end() )
         footprint = fIt->second;
 
     if( footprint.empty() )
@@ -1566,10 +1599,22 @@ void ORCAD_CONVERTER::placeSymbolFields( SCH_SYMBOL* aSymbol, const ORCAD_PLACED
     applyDisplayPos( refField, "Part Reference" );
     applyDisplayPos( valField, "Value" );
 
-    for( const auto& [propName, propValue] : aInst.props )
+    for( const auto& [propName, propValue] : effectiveProps( aInst, aDef ) )
     {
         if( propName == "Value" || propName == "PCB Footprint" || isBookkeepingProp( propName ) )
             continue;
+
+        // An unset part property reads back empty or as the literal "<PropertyName>"
+        // placeholder, neither of which Capture draws
+        if( propValue.empty() || propValue == "<" + propName + ">" )
+            continue;
+
+        // OrCAD carries Description as an ordinary part property and never draws it
+        if( propName == "Description" )
+        {
+            aSymbol->GetField( FIELD_T::DESCRIPTION )->SetText( FromOrcadString( propValue ) );
+            continue;
+        }
 
         SCH_FIELD field( aSymbol, FIELD_T::USER, FromOrcadString( propName ) );
         field.SetText( FromOrcadString( propValue ) );

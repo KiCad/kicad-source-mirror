@@ -449,6 +449,19 @@ private:
                             const ORCAD_SYMBOL_DEF& aDef, int aOrient, const std::string& aValue,
                             const std::string& aFootprint );
 
+    /// The cache package backing a placement, or nullptr when the design has none.
+    const ORCAD_PACKAGE* packageFor( const ORCAD_PLACED_INSTANCE& aInst ) const;
+
+    /**
+     * Properties in effect for a placement.  The cached part definition and package
+     * properties are overlaid with the placement's own overrides.  OrCAD stores a
+     * property once on the part and repeats it on an instance only where that
+     * instance differs, so reading the instance alone drops everything the library
+     * defines.
+     */
+    std::map<std::string, std::string> effectiveProps( const ORCAD_PLACED_INSTANCE& aInst,
+                                                       const ORCAD_SYMBOL_DEF& aDef ) const;
+
     /**
      * Map an orientation code to the composed SYMBOL_ORIENTATION_T value for
      * SCH_SYMBOL::SetOrientation():

@@ -84,6 +84,9 @@ namespace
 /// OrCAD DBU (10 mil) -> millimetres.
 constexpr double DBU_TO_MM = 0.254;
 
+/// Comment slots a KiCad title block exposes, ${COMMENT1}..${COMMENT9}
+constexpr int COMMENT_COUNT = 9;
+
 
 
 std::string trimmed( const std::string& aText )
@@ -611,6 +614,26 @@ void ORCAD_CONVERTER::applyPageSettings( ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScr
 {
     BOX2I extent = pageExtentDbu( aPage );
 
+    // Nominal paper from stored page size; mils, or micrometres when metric.
+    double k = aPage.isMetric ? 0.001 : 0.0254;
+    double nominalWmm = aPage.width * k;
+    double nominalHmm = aPage.height * k;
+
+    // The clearance shift below pushes a full-page drawing past its own paper, so a
+    // named size only survives while the content stays at source coordinates
+    PAGE_INFO named;
+
+    if( !aPage.pageSize.empty()
+        && named.SetType( FromOrcadString( aPage.pageSize ), nominalHmm > nominalWmm )
+        && named.GetType() != PAGE_SIZE_TYPE::User
+        && extent.GetLeft() >= 0 && extent.GetTop() >= 0
+        && extent.GetRight() * DBU_TO_MM <= nominalWmm
+        && extent.GetBottom() * DBU_TO_MM <= nominalHmm )
+    {
+        aScreen->SetPageSettings( named );
+        return;
+    }
+
     // Shift content clear of frame, round up to 10-DBU grid to keep points on grid.
     int dx = std::max( 0, MARGIN_L_DBU - extent.GetLeft() );
     int dy = std::max( 0, MARGIN_T_DBU - extent.GetTop() );
@@ -627,11 +650,6 @@ void ORCAD_CONVERTER::applyPageSettings( ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScr
         maxX += dx;
         maxY += dy;
     }
-
-    // Nominal paper from stored page size; mils, or micrometres when metric.
-    double k = aPage.isMetric ? 0.001 : 0.0254;
-    double nominalWmm = aPage.width * k;
-    double nominalHmm = aPage.height * k;
 
     // Needed paper = shifted content extent plus right/bottom margins.
     double neededWmm = ( maxX + MARGIN_R_DBU ) * DBU_TO_MM;
@@ -879,9 +897,31 @@ void ORCAD_CONVERTER::applyTitleBlock( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* 
         titleBlock.SetDate( date );
         titleBlock.SetRevision( get( "RevCode" ) );
         titleBlock.SetCompany( get( "OrgName" ) );
-        titleBlock.SetComment( 0, get( "Doc" ) );
-        titleBlock.SetComment( 1, get( "OrgAddr1" ) );
-        titleBlock.SetComment( 2, get( "OrgAddr2" ) );
+
+        int slot = 0;
+
+        for( const char* stock : { "Doc", "OrgAddr1", "OrgAddr2" } )
+        {
+            if( wxString text = get( stock ); !text.IsEmpty() )
+                titleBlock.SetComment( slot++, text );
+        }
+
+        // Custom title blocks name their own fields and KiCad has no slot for them, so
+        // spill into the free comments.  Page number and count KiCad resolves itself
+        static const std::set<std::string> mapped = {
+            "Title",    "RevCode",  "OrgName",    "Doc",         "OrgAddr1",
+            "OrgAddr2", "Doc Date", "Page Count", "Page Number", "Page Modify Date"
+        };
+
+        for( const auto& [propName, propValue] : tbInst.props )
+        {
+            if( slot >= COMMENT_COUNT || propValue.empty() || mapped.count( propName ) )
+                continue;
+
+            titleBlock.SetComment( slot++, wxString::Format( wxS( "%s: %s" ),
+                                                             FromOrcadString( propName ),
+                                                             FromOrcadString( propValue ) ) );
+        }
 
         aScreen->SetTitleBlock( titleBlock );
         return;

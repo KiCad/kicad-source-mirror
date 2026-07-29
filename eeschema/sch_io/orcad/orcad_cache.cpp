@@ -694,6 +694,8 @@ ORCAD_PACKAGE OrcadReadPackage( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIX
     for( uint16_t i = 0; i < deviceCount; i++ )
         pkg.devices.push_back( OrcadReadDevice( aReader ) );
 
+    pkg.props = aReader.PropsDict( aPrefixes );
+
     if( aPrefixes.end != 0 && aPrefixes.end > stream.GetOffset() )
         stream.Seek( aPrefixes.end );
 
