@@ -22,6 +22,7 @@
 #include <dialog_lib_fields_table_base.h>
 #include <sch_reference_list.h>
 #include <lib_fields_data_model.h>
+#include <fields_view_controls_grid_data_model.h>
 
 class SYMBOL_EDIT_FRAME;
 class LIB_SYMBOL;

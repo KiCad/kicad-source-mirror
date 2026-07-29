@@ -22,7 +22,8 @@
 
 #include <set>
 
-#include <dialog_fields_table_base.h>
+#include <dialogs/dialog_fields_table.h>
+#include <fields_view_controls_grid_data_model.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
 #include <fields_data_model.h>
@@ -34,7 +35,7 @@ class SCH_EDIT_FRAME;
 class JOB_EXPORT_BOM;
 
 
-class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE, public SCHEMATIC_LISTENER
+class DIALOG_SYMBOL_FIELDS_TABLE : public DIALOG_FIELDS_TABLE, public SCHEMATIC_LISTENER
 {
 public:
     DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, JOB_EXPORT_BOM* aJob = nullptr );
@@ -43,16 +44,7 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void ShowEditTab();
-    void ShowExportTab();
     void ShowHideColumn( int aCol, bool aShow );
-
-    /**
-     * Derive the default BOM output file name from the schematic file name by swapping the
-     * extension to CSV. Returns an empty string when the schematic has no name (unsaved), so
-     * callers can distinguish "use the default" from "no destination is available".
-     */
-    static wxString GetDefaultBomFileName( const wxString& aSchematicFileName );
 
 private:
     void SetupColumnProperties( int aCol );
@@ -60,8 +52,6 @@ private:
     void AddField( const wxString& displayName, const wxString& aCanonicalName, bool show,
                    bool groupBy, bool addedByUser = false );
     void setScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
-    // Set bitmap and tooltip according to left panel visibility
-    void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
 
     /**
      * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
@@ -70,7 +60,6 @@ private:
     void LoadFieldNames();
 
     void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
-    void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
     void OnAddField( wxCommandEvent& event ) override;
     void OnRemoveField( wxCommandEvent& event ) override;
     void OnRenameField( wxCommandEvent& event ) override;
@@ -80,16 +69,13 @@ private:
     void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent );
 
     void OnFilterText( wxCommandEvent& aEvent ) override;
-    void OnFilterMouseMoved( wxMouseEvent& event ) override;
     void OnScope( wxCommandEvent& event ) override;
     void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
     void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
     void OnMenu( wxCommandEvent& event ) override;
 
-    void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableCellClick( wxGridEvent& event ) override;
     void OnGridMouseMove( wxMouseEvent& aEvent );
-    void OnTableColSize( wxGridSizeEvent& event ) override;
 
     void OnSidebarToggle( wxCommandEvent& event ) override;
     void OnExport( wxCommandEvent& aEvent ) override;

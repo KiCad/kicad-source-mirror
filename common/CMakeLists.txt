@@ -238,6 +238,7 @@ set( KICOMMON_SRCS
     tool/ui/toolbar_context_menu_registry.cpp
 
     dialogs/dialog_fields_table_base.cpp
+    dialogs/dialog_fields_table.cpp
     dialogs/dialog_rc_job.cpp
     dialogs/dialog_rc_job_base.cpp
     dialogs/dialog_restore_local_history.cpp
@@ -571,6 +572,7 @@ set( COMMON_DLG_SRCS
     dialogs/eda_reorderable_list_dialog_base.cpp
     dialogs/eda_view_switcher.cpp
     dialogs/eda_view_switcher_base.cpp
+    dialogs/fields_view_controls_grid_data_model.cpp
     dialogs/hotkey_cycle_popup.cpp
     dialogs/html_message_box.cpp
     dialogs/panel_color_settings_base.cpp
