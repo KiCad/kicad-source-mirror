@@ -34,7 +34,6 @@
 
 #include "spice_circuit_model.h"
 #include "ngspice.h"
-#include "simulator_reporter.h"
 #include "spice_settings.h"
 
 #include <wx/stdpaths.h>
@@ -765,8 +764,8 @@ int NGSPICE::cbBGThreadRunning( NG_BOOL aFinished, int aId, void* aUser )
     if( aFinished )
         sim->restoreSignalHandlers();
 
-    if( sim->m_reporter )
-        sim->m_reporter->OnSimStateChange( sim, aFinished ? SIM_IDLE : SIM_RUNNING );
+    if( sim->m_stateListener )
+        sim->m_stateListener->OnSimStateChange( sim, aFinished ? SIM_IDLE : SIM_RUNNING );
 
     return 0;
 }
@@ -787,7 +786,8 @@ int NGSPICE::cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQ
                 _( "Simulation terminated by ngspice. This may be caused by insufficient "
                    "memory or an internal error. The simulator will be reset." ) );
 
-        sim->m_reporter->OnSimStateChange( sim, SIM_IDLE );
+        if( sim->m_stateListener )
+            sim->m_stateListener->OnSimStateChange( sim, SIM_IDLE );
     }
 
     return 0;

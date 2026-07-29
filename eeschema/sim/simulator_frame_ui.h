@@ -44,7 +44,6 @@ class SPICE_SETTINGS;
 class EESCHEMA_SETTINGS;
 class SPICE_CIRCUIT_MODEL;
 
-class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
 
 
@@ -270,8 +269,8 @@ public:
     void OnPlotSettingsChanged();
 
     void OnSimUpdate();
-    void OnSimReport( const wxString& aMsg );
     void OnSimRefresh( bool aFinal );
+    void FlushSimConsole();
 
     void OnModify();
 

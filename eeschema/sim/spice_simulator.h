@@ -39,9 +39,25 @@
 
 #include <wx/string.h>
 
-class SIMULATOR_REPORTER;
-
 typedef std::complex<double> COMPLEX;
+
+enum SIM_STATE
+{
+    SIM_IDLE,
+    SIM_RUNNING
+};
+
+
+/**
+ * Interface to receive simulation state transitions from SPICE_SIMULATOR.
+ */
+class SIM_STATE_LISTENER
+{
+public:
+    virtual ~SIM_STATE_LISTENER() {}
+
+    virtual void OnSimStateChange( SIMULATOR* aObject, SIM_STATE aNewState ) = 0;
+};
 
 
 class SPICE_SIMULATOR : public SIMULATOR
@@ -50,6 +66,7 @@ public:
     SPICE_SIMULATOR() :
         SIMULATOR(),
         m_reporter( nullptr ),
+        m_stateListener( nullptr ),
         m_settings( nullptr )
     {}
 
@@ -80,10 +97,16 @@ public:
     ///< Return X axis name for a given simulation type
     virtual wxString GetXAxis( SIM_TYPE aType ) const = 0;
 
-    ///< Set a #SIMULATOR_REPORTER object to receive the simulation log.
-    virtual void SetReporter( SIMULATOR_REPORTER* aReporter )
+    ///< Set a #REPORTER object to receive the simulation log.
+    virtual void SetReporter( REPORTER* aReporter )
     {
         m_reporter = aReporter;
+    }
+
+    ///< Set a #SIM_STATE_LISTENER object to receive simulation state transitions.
+    virtual void SetSimStateListener( SIM_STATE_LISTENER* aListener )
+    {
+        m_stateListener = aListener;
     }
 
     /**
@@ -182,7 +205,8 @@ public:
 
 protected:
     ///< Reporter object to receive simulation log.
-    SIMULATOR_REPORTER* m_reporter;
+    REPORTER* m_reporter;
+    SIM_STATE_LISTENER* m_stateListener;
 
     ///< We don't own this.  We are just borrowing it from the #SCHEMATIC_SETTINGS.
     std::shared_ptr<SPICE_SETTINGS> m_settings;

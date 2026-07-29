@@ -26,7 +26,6 @@
 #include <eeschema_test_utils.h>
 #include <netlist_exporter_spice.h>
 #include <sim/ngspice.h>
-#include <sim/simulator_reporter.h>
 #include <wx/ffile.h>
 #include <mock_pgm_base.h>
 #include <locale_io.h>
@@ -38,7 +37,7 @@
 class TEST_NETLIST_EXPORTER_SPICE_FIXTURE : public TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_SPICE>
 {
 public:
-    class SPICE_TEST_REPORTER : public SIMULATOR_REPORTER
+    class SPICE_TEST_REPORTER : public REPORTER
     {
     public:
         SPICE_TEST_REPORTER( std::shared_ptr<wxString> aLog ) :
@@ -55,8 +54,6 @@ public:
         }
 
         bool HasMessage() const override { return false; }
-
-        void OnSimStateChange( SIMULATOR* aObject, SIM_STATE aNewState ) override { }
 
     private:
         std::shared_ptr<wxString> m_log;
@@ -96,6 +93,7 @@ public:
                                          "Timed out waiting for ngspice to stop during teardown" );
                 }
 
+                m_simulator->SetSimStateListener( nullptr );
                 m_simulator->SetReporter( nullptr );
             }
             catch( ... )
