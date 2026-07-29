@@ -973,6 +973,37 @@ namespace
             aDiagnostics.push_back( { RPT_SEVERITY_WARNING, payload.source,
                                       wxS( "PADS controller payload retained without schematic construction" ) } );
         }
+
+        std::erase_if(
+                aDiagnostics,
+                [&]( const PARSER_DIAGNOSTIC& aBuilderDiagnostic )
+                {
+                    const wxString prefix = wxS( "PADS property '" );
+
+                    if( !aBuilderDiagnostic.message.StartsWith( prefix ) )
+                        return false;
+
+                    const size_t nameEnd = aBuilderDiagnostic.message.find( '\'', prefix.length() );
+
+                    if( nameEnd == wxString::npos )
+                        return false;
+
+                    const wxString name = aBuilderDiagnostic.message.Mid( prefix.length(), nameEnd - prefix.length() );
+                    const wxString disposition = aBuilderDiagnostic.message.EndsWith( wxS( "approximate disposition" ) )
+                                                         ? wxS( "approximate" )
+                                                 : aBuilderDiagnostic.message.EndsWith( wxS( "preserved disposition" ) )
+                                                         ? wxS( "preserved" )
+                                                         : wxS( "unsupported" );
+
+                    return std::ranges::any_of( aModel.diagnostics,
+                                                [&]( const PARSER_DIAGNOSTIC& aParserDiagnostic )
+                                                {
+                                                    return aParserDiagnostic.source == aBuilderDiagnostic.source
+                                                           && aParserDiagnostic.message.Contains( wxS( "'" ) + name
+                                                                                                  + wxS( "'" ) )
+                                                           && aParserDiagnostic.message.Contains( disposition );
+                                                } );
+                } );
     }
 
 

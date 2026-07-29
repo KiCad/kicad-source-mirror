@@ -50,6 +50,7 @@
 #include <filesystem>
 #include <fstream>
 #include <map>
+#include <numeric>
 #include <set>
 #include <vector>
 #include <wx/filename.h>
@@ -286,10 +287,19 @@ static SCH_SHEET_PATH sourceSheetPath( SCHEMATIC& aSchematic, const PADS_SCH_BIN
 }
 
 
-static void assertSourceConnectivity( const PADS_SCH_BINARY::PADS_SCH_MODEL& aModel, SCHEMATIC& aSchematic )
+struct CONNECTIVITY_ORACLE_COUNTS
+{
+    size_t pinEndpoints = 0;
+    size_t powerLabels = 0;
+};
+
+
+static CONNECTIVITY_ORACLE_COUNTS assertSourceConnectivity( const PADS_SCH_BINARY::PADS_SCH_MODEL& aModel,
+                                                            SCHEMATIC&                             aSchematic )
 {
     using namespace PADS_SCH_BINARY;
 
+    CONNECTIVITY_ORACLE_COUNTS counts;
     SCH_SHEET_LIST hierarchy = aSchematic.BuildSheetListSortedByPageNumbers();
     aSchematic.ConnectionGraph()->Recalculate( hierarchy, true );
 
@@ -470,6 +480,7 @@ static void assertSourceConnectivity( const PADS_SCH_BINARY::PADS_SCH_MODEL& aMo
 
                 BOOST_REQUIRE( endpoint.placement );
                 BOOST_REQUIRE( endpoint.pin );
+                ++counts.pinEndpoints;
                 auto placement = std::ranges::find( aModel.placements, endpoint.placement->id, &MODEL_PLACEMENT::id );
                 BOOST_REQUIRE( placement != aModel.placements.end() );
                 BOOST_CHECK_EQUAL( placement->sheet.id.Value(), net.sheet.id.Value() );
@@ -478,6 +489,20 @@ static void assertSourceConnectivity( const PADS_SCH_BINARY::PADS_SCH_MODEL& aMo
                                                   {
                                                       return aPin.id == endpoint.pin->id;
                                                   } ) );
+                const MODEL_PIN_DEFINITION* sourcePin = nullptr;
+
+                for( const MODEL_SYMBOL_DEFINITION& definition : aModel.definitions )
+                {
+                    auto pin = std::ranges::find( definition.pins, endpoint.pin->id, &MODEL_PIN_DEFINITION::id );
+
+                    if( pin != definition.pins.end() )
+                    {
+                        BOOST_REQUIRE( !sourcePin );
+                        sourcePin = &*pin;
+                    }
+                }
+
+                BOOST_REQUIRE( sourcePin );
                 SCH_SYMBOL* builtSymbol = nullptr;
 
                 for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
@@ -485,7 +510,8 @@ static void assertSourceConnectivity( const PADS_SCH_BINARY::PADS_SCH_MODEL& aMo
                     auto* symbol = static_cast<SCH_SYMBOL*>( item );
 
                     if( !symbol->GetRef( &path ).StartsWith( wxS( "#PWR" ) )
-                        && symbol->GetPosition() == pagePoint( placement->position, pageHeight ) )
+                        && symbol->GetPosition() == pagePoint( placement->position, pageHeight )
+                        && symbol->GetUnit() == static_cast<int>( placement->unit ) )
                     {
                         builtSymbol = symbol;
                         break;
@@ -494,12 +520,14 @@ static void assertSourceConnectivity( const PADS_SCH_BINARY::PADS_SCH_MODEL& aMo
 
                 BOOST_REQUIRE( builtSymbol );
                 std::vector<SCH_PIN*> builtPins = builtSymbol->GetPins( &path );
-                auto                  builtPin =
-                        std::ranges::find_if( builtPins,
-                                              [&]( SCH_PIN* aPin )
-                                              {
-                                                  return aPin->GetPosition() == pagePoint( endpoint.point, pageHeight );
-                                              } );
+                auto                  builtPin = std::ranges::find_if( builtPins,
+                                                                       [&]( SCH_PIN* aPin )
+                                                                       {
+                                                          return aPin->GetNumber() == sourcePin->number.text
+                                                                 && aPin->GetName() == sourcePin->name.text
+                                                                 && aPin->GetPosition()
+                                                                            == pagePoint( endpoint.point, pageHeight );
+                                                      } );
                 BOOST_REQUIRE( builtPin != builtPins.end() );
                 SCH_CONNECTION* pinConnection = ( *builtPin )->Connection( &path );
                 BOOST_REQUIRE( pinConnection );
@@ -510,8 +538,7 @@ static void assertSourceConnectivity( const PADS_SCH_BINARY::PADS_SCH_MODEL& aMo
 
     for( const MODEL_LABEL& label : aModel.labels )
     {
-        if( label.kind == MODEL_LABEL_KIND::POWER || label.kind == MODEL_LABEL_KIND::GROUND
-            || label.kind == MODEL_LABEL_KIND::UNSUPPORTED )
+        if( label.kind == MODEL_LABEL_KIND::UNSUPPORTED )
         {
             continue;
         }
@@ -527,6 +554,38 @@ static void assertSourceConnectivity( const PADS_SCH_BINARY::PADS_SCH_MODEL& aMo
                                           return aNet.sheet.id == label.sheet.id && aNet.name.text == label.text.text;
                                       } );
         BOOST_REQUIRE( ownerNet != aModel.nets.end() );
+
+        if( label.kind == MODEL_LABEL_KIND::POWER || label.kind == MODEL_LABEL_KIND::GROUND )
+        {
+            ++counts.powerLabels;
+            bool foundPower = false;
+
+            for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+            {
+                auto* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                if( !symbol->GetRef( &path ).StartsWith( wxS( "#PWR" ) )
+                    || symbol->GetPosition() != pagePoint( label.position, pageHeight )
+                    || symbol->GetValue( false, &path, false ) != label.text.text )
+                {
+                    continue;
+                }
+
+                std::vector<SCH_PIN*> pins = symbol->GetPins( &path );
+                BOOST_REQUIRE_EQUAL( pins.size(), 1u );
+                BOOST_CHECK_EQUAL( pins.front()->IsVisible(), false );
+                BOOST_CHECK_EQUAL( pins.front()->GetPosition(), pagePoint( label.position, pageHeight ) );
+                SCH_CONNECTION* connection = pins.front()->Connection( &path );
+                BOOST_REQUIRE( connection );
+                BOOST_CHECK( netNameMatches( connection->GetNetName(), ownerNet->name.text ) );
+                foundPower = true;
+                break;
+            }
+
+            BOOST_CHECK_MESSAGE( foundPower, "missing exact power net " << label.text.text );
+            continue;
+        }
+
         KICAD_T type = label.kind == MODEL_LABEL_KIND::GLOBAL         ? SCH_GLOBAL_LABEL_T
                        : label.kind == MODEL_LABEL_KIND::HIERARCHICAL ? SCH_HIER_LABEL_T
                                                                       : SCH_LABEL_T;
@@ -601,6 +660,8 @@ static void assertSourceConnectivity( const PADS_SCH_BINARY::PADS_SCH_MODEL& aMo
 
         BOOST_CHECK_MESSAGE( found, "missing typed junction " << junction.source.recordIndex );
     }
+
+    return counts;
 }
 
 
@@ -2469,6 +2530,93 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityRoundTrip )
 
     BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
 
+    size_t pinEndpointsBefore = 0;
+    size_t pinEndpointsAfter = 0;
+    size_t powerLabelsBefore = 0;
+    size_t powerLabelsAfter = 0;
+
+    for( const wxString& fixture :
+         { wxS( "minimal_v13" ), wxS( "placement_transform" ), wxS( "fields" ), wxS( "connectors" ),
+           wxS( "text_encoding" ), wxS( "page_graphics" ), wxS( "connectivity_topology" ),
+           wxS( "multisheet_connectivity" ), wxS( "symbol_primitives" ), wxS( "pin_styles" ), wxS( "multigate" ) } )
+    {
+        const PADS_SCH_MODEL sourceModel = parseBinaryFixture( fixture );
+
+        if( sourceModel.nets.empty() && sourceModel.buses.empty() && sourceModel.labels.empty()
+            && sourceModel.junctions.empty() )
+        {
+            continue;
+        }
+
+        m_schematic.Reset();
+        SCH_SHEET* sourceRoot = m_schematic.GetTopLevelSheet();
+        BOOST_REQUIRE( sourceRoot );
+        PADS_SCH_BINARY_BUILDER().Build( sourceModel, &m_schematic, nullptr, binaryFixture( fixture ) );
+        CONNECTIVITY_ORACLE_COUNTS beforeCounts = assertSourceConnectivity( sourceModel, m_schematic );
+        const size_t               expectedPinEndpoints =
+                std::accumulate( sourceModel.nets.begin(), sourceModel.nets.end(), size_t( 0 ),
+                                 []( size_t aCount, const MODEL_NET& aNet )
+                                 {
+                                     for( const MODEL_CONNECTION& connection : aNet.connections )
+                                         aCount += std::ranges::count( connection.endpoints, MODEL_ENDPOINT_KIND::PIN,
+                                                                       &MODEL_CONNECTION_ENDPOINT::kind );
+
+                                     return aCount;
+                                 } );
+        const size_t expectedPowerLabels = std::ranges::count_if( sourceModel.labels,
+                                                                  []( const MODEL_LABEL& aLabel )
+                                                                  {
+                                                                      return aLabel.kind == MODEL_LABEL_KIND::POWER
+                                                                             || aLabel.kind == MODEL_LABEL_KIND::GROUND;
+                                                                  } );
+        BOOST_CHECK_EQUAL( beforeCounts.pinEndpoints, expectedPinEndpoints );
+        BOOST_CHECK_EQUAL( beforeCounts.powerLabels, expectedPowerLabels );
+
+        if( fixture == wxS( "minimal_v13" ) )
+            BOOST_CHECK_GT( beforeCounts.pinEndpoints, 0u );
+
+        pinEndpointsBefore += beforeCounts.pinEndpoints;
+        powerLabelsBefore += beforeCounts.powerLabels;
+
+        wxString fixtureTemp = wxFileName::CreateTempFileName( wxS( "pads_binary_source_oracle_" ) );
+        BOOST_REQUIRE( wxRemoveFile( fixtureTemp ) );
+        BOOST_REQUIRE( wxFileName::Mkdir( fixtureTemp ) );
+        wxString fixtureRootFile = fixtureTemp + wxFileName::GetPathSeparator() + fixture + wxS( ".kicad_sch" );
+        SCH_IO_KICAD_SEXPR fixtureIo;
+
+        for( const SCH_SHEET_PATH& path : m_schematic.BuildSheetListSortedByPageNumbers() )
+        {
+            if( path.size() == 1 )
+                continue;
+
+            wxString childFile = fixtureTemp + wxFileName::GetPathSeparator()
+                                 + path.Last()->GetField( FIELD_T::SHEET_FILENAME )->GetText();
+            BOOST_REQUIRE_NO_THROW( fixtureIo.SaveSchematicFile( childFile, path.Last(), &m_schematic ) );
+        }
+
+        BOOST_REQUIRE_NO_THROW( fixtureIo.SaveSchematicFile( fixtureRootFile, sourceRoot, &m_schematic ) );
+        m_schematic.Reset();
+        SCH_SHEET* fixtureDefault = m_schematic.GetTopLevelSheet();
+        SCH_SHEET* fixtureLoaded = nullptr;
+        BOOST_REQUIRE_NO_THROW( fixtureLoaded = fixtureIo.LoadSchematicFile( fixtureRootFile, &m_schematic ) );
+        BOOST_REQUIRE( fixtureLoaded );
+        m_schematic.AddTopLevelSheet( fixtureLoaded );
+        m_schematic.RemoveTopLevelSheet( fixtureDefault );
+        delete fixtureDefault;
+        m_schematic.RefreshHierarchy();
+        CONNECTIVITY_ORACLE_COUNTS afterCounts = assertSourceConnectivity( sourceModel, m_schematic );
+        BOOST_CHECK_EQUAL( afterCounts.pinEndpoints, beforeCounts.pinEndpoints );
+        BOOST_CHECK_EQUAL( afterCounts.powerLabels, beforeCounts.powerLabels );
+        pinEndpointsAfter += afterCounts.pinEndpoints;
+        powerLabelsAfter += afterCounts.powerLabels;
+        BOOST_CHECK( wxFileName::Rmdir( fixtureTemp, wxPATH_RMDIR_RECURSIVE ) );
+    }
+
+    BOOST_CHECK_GT( pinEndpointsBefore, 0u );
+    BOOST_CHECK_EQUAL( pinEndpointsAfter, pinEndpointsBefore );
+    BOOST_CHECK_GT( powerLabelsBefore, 0u );
+    BOOST_CHECK_EQUAL( powerLabelsAfter, powerLabelsBefore );
+
     m_schematic.Reset();
     const PADS_SCH_MODEL graphics = parseBinaryFixture( wxS( "page_graphics" ) );
     SCH_SHEET*           graphicsRoot = m_schematic.GetTopLevelSheet();
@@ -2510,7 +2658,9 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
     using namespace PADS_SCH_BINARY;
 
     for( const wxString& fixture :
-         { wxS( "connectivity_topology" ), wxS( "multisheet_connectivity" ), wxS( "page_graphics" ) } )
+         { wxS( "minimal_v13" ), wxS( "placement_transform" ), wxS( "fields" ), wxS( "connectors" ),
+           wxS( "text_encoding" ), wxS( "page_graphics" ), wxS( "connectivity_topology" ),
+           wxS( "multisheet_connectivity" ), wxS( "symbol_primitives" ), wxS( "pin_styles" ), wxS( "multigate" ) } )
     {
         m_schematic.Reset();
         PADS_SCH_MODEL                      corpusModel = parseBinaryFixture( fixture );
@@ -2521,34 +2671,48 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
 
         for( const SOURCE_PROPERTY* property : properties )
         {
-            const size_t expected =
+            const size_t multiplicity =
+                    std::ranges::count_if( properties,
+                                           [&]( const SOURCE_PROPERTY* aOther )
+                                           {
+                                               return aOther->source == property->source
+                                                      && aOther->name.text == property->name.text
+                                                      && aOther->disposition == property->disposition;
+                                           } );
+            const wxString disposition =
+                    property->disposition == PROPERTY_DISPOSITION::APPROXIMATE ? wxS( "approximate" )
+                    : property->disposition == PROPERTY_DISPOSITION::PRESERVED ? wxS( "preserved" )
+                                                                               : wxS( "unsupported" );
+            const size_t parserOwned =
                     property->disposition == PROPERTY_DISPOSITION::EXACT
                             ? 0
-                            : std::ranges::count_if( properties,
-                                                     [&]( const SOURCE_PROPERTY* aOther )
+                            : std::ranges::count_if( corpusModel.diagnostics,
+                                                     [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
                                                      {
-                                                         return aOther->source == property->source
-                                                                && aOther->name.text == property->name.text
-                                                                && aOther->disposition == property->disposition;
+                                                         return aDiagnostic.source == property->source
+                                                                && aDiagnostic.message.Contains(
+                                                                        wxS( "'" ) + property->name.text + wxS( "'" ) )
+                                                                && aDiagnostic.message.Contains( disposition );
                                                      } );
-            const size_t actual =
+            const size_t builderOwned =
                     std::ranges::count_if( corpusResult.diagnostics,
                                            [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
                                            {
                                                return aDiagnostic.source == property->source
                                                       && aDiagnostic.message.Contains( property->name.text );
                                            } );
-            BOOST_CHECK_EQUAL( actual, expected );
-        }
+            BOOST_CHECK_LE( parserOwned, multiplicity );
 
-        for( const PARSER_DIAGNOSTIC& parserDiagnostic : corpusModel.diagnostics )
-        {
-            BOOST_CHECK( std::ranges::none_of( corpusResult.diagnostics,
-                                               [&]( const PARSER_DIAGNOSTIC& aBuilderDiagnostic )
-                                               {
-                                                   return aBuilderDiagnostic.source == parserDiagnostic.source
-                                                          && aBuilderDiagnostic.message == parserDiagnostic.message;
-                                               } ) );
+            if( property->disposition == PROPERTY_DISPOSITION::EXACT )
+            {
+                BOOST_CHECK_EQUAL( builderOwned, 0u );
+                BOOST_CHECK_EQUAL( parserOwned, 0u );
+            }
+            else
+            {
+                BOOST_CHECK_EQUAL( builderOwned + parserOwned, multiplicity );
+                BOOST_CHECK( builderOwned == 0u || parserOwned == 0u );
+            }
         }
     }
 
@@ -2569,6 +2733,9 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
     preserved.name.text = wxS( "qa_preserved_label_presentation" );
     preserved.disposition = PROPERTY_DISPOSITION::PRESERVED;
     model.labels.front().presentation.properties.push_back( preserved );
+    model.diagnostics.push_back(
+            { RPT_SEVERITY_WARNING, preserved.source,
+              wxS( "PADS property 'qa_preserved_label_presentation' retained with preserved disposition" ) } );
     SOURCE_PROPERTY unsupported = approximate;
     unsupported.name.text = wxS( "qa_unsupported_label_presentation" );
     unsupported.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
@@ -2576,7 +2743,7 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
 
     BUILD_RESULT result = PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, nullptr,
                                                            binaryFixture( wxS( "connectivity_topology" ) ) );
-    for( const SOURCE_PROPERTY* property : { &approximate, &preserved, &unsupported } )
+    for( const SOURCE_PROPERTY* property : { &approximate, &unsupported } )
     {
         BOOST_CHECK_EQUAL( std::ranges::count_if( result.diagnostics,
                                                   [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
@@ -2586,6 +2753,13 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
                                                   } ),
                            1 );
     }
+
+    BOOST_CHECK( std::ranges::none_of( result.diagnostics,
+                                       [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                       {
+                                           return aDiagnostic.source == preserved.source
+                                                  && aDiagnostic.message.Contains( preserved.name.text );
+                                       } ) );
 
     BOOST_CHECK( std::ranges::none_of( result.diagnostics,
                                        [&]( const PARSER_DIAGNOSTIC& aDiagnostic )

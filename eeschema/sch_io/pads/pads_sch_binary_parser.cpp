@@ -2848,8 +2848,9 @@ namespace
                         sourceProperty( wxS( "preserved_bus_alias_members" ), preservedMembers, global.source );
                 members.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
                 bus.properties.push_back( std::move( members ) );
-                aModel.diagnostics.push_back( { RPT_SEVERITY_WARNING, source,
-                                                wxS( "unsupported expanded bus-alias membership preserved" ) } );
+                aModel.diagnostics.push_back( { RPT_SEVERITY_WARNING, global.source,
+                                                wxS( "PADS property 'preserved_bus_alias_members' retained with "
+                                                     "unsupported disposition" ) } );
             }
 
             for( size_t entry = 0; entry < entryRecords.size(); ++entry )
