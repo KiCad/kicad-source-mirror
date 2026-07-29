@@ -47,11 +47,11 @@
 #include <length_delay_calculation/length_delay_calculation.h>
 #include <lockfile.h>
 #include <wx/snglinst.h>
-#include <netlist_reader/pcb_netlist.h>
 #include <pcbnew_id.h>
 #include <wildcards_and_files_ext.h>
 #include <tool/tool_manager.h>
 #include <board.h>
+#include <footprint.h>
 #include <collectors.h>
 #include <component_classes/component_class_manager.h>
 #include <kiplatform/app.h>
