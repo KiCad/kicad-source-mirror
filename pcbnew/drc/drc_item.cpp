@@ -265,6 +265,10 @@ DRC_ITEM DRC_ITEM::netChainReturnPathBreak( DRCE_NET_CHAIN_RETURN_PATH_BREAK,
         _HKI( "Net chain routed without continuous copper on the required reference layer" ),
         wxT( "net_chain_return_path" ) );
 
+DRC_ITEM DRC_ITEM::netChainTuningProfiles( DRCE_NET_CHAIN_TUNING_PROFILES,
+                                           _HKI( "Net chain nets do not have consistent tuning profile assignment" ),
+                                           wxT( "net_chain_tuning_profiles" ) );
+
 DRC_ITEM DRC_ITEM::skewOutOfRange( DRCE_SKEW_OUT_OF_RANGE,
         _HKI( "Skew between tracks out of range" ),
         wxT( "skew_out_of_range" ) );
@@ -369,6 +373,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
         DRC_ITEM::lengthOutOfRange,
         DRC_ITEM::netChainStubTooLong,
         DRC_ITEM::netChainReturnPathBreak,
+        DRC_ITEM::netChainTuningProfiles,
         DRC_ITEM::skewOutOfRange,
         DRC_ITEM::viaCountOutOfRange,
         DRC_ITEM::diffPairGapOutOfRange,
@@ -469,6 +474,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_LENGTH_OUT_OF_RANGE:           return std::make_shared<DRC_ITEM>( lengthOutOfRange );
     case DRCE_NET_CHAIN_STUB_TOO_LONG:       return std::make_shared<DRC_ITEM>( netChainStubTooLong );
     case DRCE_NET_CHAIN_RETURN_PATH_BREAK:   return std::make_shared<DRC_ITEM>( netChainReturnPathBreak );
+    case DRCE_NET_CHAIN_TUNING_PROFILES: return std::make_shared<DRC_ITEM>( netChainTuningProfiles );
     case DRCE_SKEW_OUT_OF_RANGE:             return std::make_shared<DRC_ITEM>( skewOutOfRange );
     case DRCE_VIA_COUNT_OUT_OF_RANGE:        return std::make_shared<DRC_ITEM>( viaCountOutOfRange );
     case DRCE_DP_GAP_OUT_OF_RANGE:           return std::make_shared<DRC_ITEM>( diffPairGapOutOfRange );
