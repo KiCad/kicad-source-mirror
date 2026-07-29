@@ -303,9 +303,6 @@ public:
     unsigned int GetChildren( wxDataViewItem const& aItem,
                               wxDataViewItemArray&  aChildren ) const override;
 
-    // Simple, single-text-column model
-    unsigned int GetColumnCount() const override { return 1; }
-    wxString GetColumnType( unsigned int aCol ) const override { return "string"; }
     bool HasContainerColumns( wxDataViewItem const& aItem ) const override { return true; }
 
     bool HasValue( const wxDataViewItem& item, unsigned col ) const override
