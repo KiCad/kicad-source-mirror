@@ -1205,6 +1205,101 @@ BOOST_FIXTURE_TEST_CASE( RegressionTeardropSpike, ZONE_FILL_TEST_FIXTURE )
 
 
 /**
+ * A track entering one lobe of a custom pad whose anchor sits ~7mm away, alongside a circular
+ * pad of the same number covering the same track end.
+ *
+ * The teardrop must be built around the copper the track enters, not around the pad anchor.
+ * Unlike RegressionTeardropSpike the bad vertex stays inside the pad's snake-shaped copper, so
+ * a corridor test misses it; what marks it wrong is how far from the track the teardrop reaches.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionTeardropCustomPadAnchor, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "teardrop_custom_pad_anchor", m_board );
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    BOARD_COMMIT     commit( dummyTool );
+    TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+    teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+    if( !commit.Empty() )
+        commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+    // A teardrop reaches at most its max length along the track plus the pad's minor width into
+    // the pad, so their sum bounds every legitimate vertex and still sits far below the 7mm spike
+    int maxReach = 0;
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            const TEARDROP_PARAMETERS& prms = pad->GetTeardropParams();
+            VECTOR2I                   size = pad->GetSize( PADSTACK::ALL_LAYERS );
+
+            maxReach = std::max( maxReach, prms.m_TdMaxLen + std::min( size.x, size.y ) );
+        }
+    }
+
+    BOOST_REQUIRE( maxReach > 0 );
+
+    int  teardropCount = 0;
+    bool foundSpike = false;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->IsTeardropArea() )
+            continue;
+
+        teardropCount++;
+
+        PCB_LAYER_ID layer = zone->GetFirstLayer();
+
+        for( const VECTOR2I& pt : zone->Outline()->Outline( 0 ).CPoints() )
+        {
+            SEG::ecoord bestSq = std::numeric_limits<SEG::ecoord>::max();
+
+            for( PCB_TRACK* track : m_board->Tracks() )
+            {
+                if( !track->IsOnLayer( layer ) )
+                    continue;
+
+                bestSq = std::min( bestSq,
+                                   SEG( track->GetStart(), track->GetEnd() ).SquaredDistance( pt ) );
+            }
+
+            double dist = std::sqrt( (double) bestSq );
+
+            if( dist > maxReach )
+            {
+                foundSpike = true;
+                BOOST_TEST_MESSAGE( wxString::Format(
+                        "Teardrop vertex (%.4f, %.4f) is %.4f mm from the nearest track, "
+                        "max allowed %.4f mm",
+                        pcbIUScale.IUTomm( pt.x ), pcbIUScale.IUTomm( pt.y ),
+                        pcbIUScale.IUTomm( KiROUND( dist ) ),
+                        pcbIUScale.IUTomm( maxReach ) ) );
+            }
+        }
+    }
+
+    // Both pads numbered "2" cover the track end, so without this a dropped custom-pad teardrop
+    // would leave the circular pad's teardrop passing the spike check alone
+    BOOST_CHECK_MESSAGE( teardropCount == 2,
+                         wxString::Format( "Expected a teardrop on each of the two pads covering "
+                                           "the track end, found %d",
+                                           teardropCount ) );
+    BOOST_CHECK_MESSAGE( !foundSpike,
+                         "A teardrop reaches far past the track it anchors on, indicating it was "
+                         "built around the custom pad's anchor position instead of the copper the "
+                         "track enters" );
+}
+
+
+/**
  * Test that teardrops connecting to oval pads at their curved ends have proper tangent curves.
  *
  * Oval pads have semicircular ends. When a track connects to the curved end, the teardrop

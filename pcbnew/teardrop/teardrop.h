@@ -86,9 +86,10 @@ private:
  * The 2 sides joining a point on the track to the corresponding point on the pad/via
  * outline can be a straight line or a curved shape (defined from a Bezier curve)
  * This curved shape is built by segments (3 to 10) from this Bezier curve
- * Because one cannot build a suitable shape for a custom pad, custom pads are ignored.
  * Size of area (height and length) are defined from the pad/via size or for pads having
  * a size X and a size Y, the smallest of X,Y size.
+ * For a custom pad that size and position describe only the anchor; the copper may lie far away
+ * and need not be convex or connected, so anchor-derived geometry must be clamped to that copper
  */
 class TEARDROP_MANAGER
 {
