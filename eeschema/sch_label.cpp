@@ -1244,6 +1244,7 @@ bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemL
 {
     bool     previousState = m_isDangling;
     VECTOR2I text_pos = GetTextPos();
+    bool     pinOrNoConnect = false;
     m_isDangling = true;
     m_connectionType = CONNECTION_TYPE::NONE;
 
@@ -1258,26 +1259,29 @@ bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemL
         switch( item.GetType() )
         {
         case PIN_END:
+        case NO_CONNECT_END:
+            pinOrNoConnect = true;
+            KI_FALLTHROUGH;
+
         case LABEL_END:
         case SHEET_LABEL_END:
-        case NO_CONNECT_END:
-            if( text_pos == item.GetPosition() )
-            {
-                m_isDangling = false;
+            m_isDangling = false;
 
-                if( aPath && item.GetType() != PIN_END )
-                    AddConnectionTo( *aPath, static_cast<SCH_ITEM*>( item.GetItem() ) );
-            }
+            if( aPath && item.GetType() != PIN_END )
+                AddConnectionTo( *aPath, static_cast<SCH_ITEM*>( item.GetItem() ) );
+
             break;
 
         default: break;
         }
 
-        if( !m_isDangling )
+        if( pinOrNoConnect )
             break;
     }
 
-    if( m_isDangling )
+    // A coincident label leaves us unattached to a wire merely passing through, so keep scanning
+    // A pin or no-connect sits on a wire end the connection graph already ties us to
+    if( !pinOrNoConnect )
     {
         for( auto it = DANGLING_END_ITEM_HELPER::get_lower_type( aItemListByType, BUS_END );
              it < aItemListByType.end() && it->GetType() == BUS_END; it++ )
@@ -1287,11 +1291,10 @@ bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemL
 
             int accuracy = 1; // We have rounding issues with an accuracy of 0
 
-            m_isDangling = !TestSegmentHit( text_pos, item.GetPosition(), nextItem.GetPosition(), accuracy );
-
-            if( m_isDangling )
+            if( !TestSegmentHit( text_pos, item.GetPosition(), nextItem.GetPosition(), accuracy ) )
                 continue;
 
+            m_isDangling = false;
             m_connectionType = CONNECTION_TYPE::BUS;
 
             // Add the line to the connected items, since it won't be picked
@@ -1306,7 +1309,7 @@ bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemL
             break;
         }
 
-        if( m_isDangling )
+        if( m_connectionType != CONNECTION_TYPE::BUS )
         {
             for( auto it = DANGLING_END_ITEM_HELPER::get_lower_type( aItemListByType, WIRE_END );
                  it < aItemListByType.end() && it->GetType() == WIRE_END; it++ )
@@ -1316,11 +1319,10 @@ bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemL
 
                 int accuracy = 1; // We have rounding issues with an accuracy of 0
 
-                m_isDangling = !TestSegmentHit( text_pos, item.GetPosition(), nextItem.GetPosition(), accuracy );
-
-                if( m_isDangling )
+                if( !TestSegmentHit( text_pos, item.GetPosition(), nextItem.GetPosition(), accuracy ) )
                     continue;
 
+                m_isDangling = false;
                 m_connectionType = CONNECTION_TYPE::NET;
 
                 // Add the line to the connected items, since it won't be picked

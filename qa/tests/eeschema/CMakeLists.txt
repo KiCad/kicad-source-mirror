@@ -103,6 +103,7 @@ set( QA_EESCHEMA_SRCS
     test_issue18119_bus_hierarchy.cpp
     test_issue18299_bus_member_rename.cpp
     test_issue23840_bus_group_to_vector.cpp
+    test_issue19951_directive_label_coincident.cpp
     test_issue20173_paste_subsheet.cpp
     test_issue21401_paste_pin_numbers.cpp
     test_issue21798_bus_sheet_copy.cpp
