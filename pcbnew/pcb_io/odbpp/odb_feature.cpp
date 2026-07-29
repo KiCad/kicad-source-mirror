@@ -673,12 +673,20 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
                 push_pts();
         };
 
-        bool isKnockout = false;
+        PCB_TEXT*    text = nullptr;
+        PCB_TEXTBOX* textbox = nullptr;
+        bool         isKnockout = false;
 
         if( item->Type() == PCB_TEXT_T || item->Type() == PCB_FIELD_T )
-            isKnockout = static_cast<PCB_TEXT*>( item )->IsKnockout();
+        {
+            text = static_cast<PCB_TEXT*>( item );
+            isKnockout = text->IsKnockout();
+        }
         else if( item->Type() == PCB_TEXTBOX_T )
-            isKnockout = static_cast<PCB_TEXTBOX*>( item )->IsKnockout();
+        {
+            textbox = static_cast<PCB_TEXTBOX*>( item );
+            isKnockout = textbox->IsKnockout();
+        }
 
         const KIFONT::METRICS& fontMetrics = item->GetFontMetrics();
         KIFONT::FONT*          font = text_item->GetDrawFont( nullptr );
@@ -696,11 +704,14 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
 
         if( isKnockout )
         {
-            PCB_TEXT*      text = static_cast<PCB_TEXT*>( item );
             SHAPE_POLY_SET finalpolyset;
+            int            maxError = m_board->GetDesignSettings().m_MaxError;
 
-            text->TransformTextToPolySet( finalpolyset, 0, m_board->GetDesignSettings().m_MaxError,
-                                          ERROR_INSIDE );
+            if( text )
+                text->TransformTextToPolySet( finalpolyset, 0, maxError, ERROR_INSIDE );
+            else if( textbox )
+                textbox->TransformTextToPolySet( finalpolyset, 0, maxError, ERROR_INSIDE );
+
             finalpolyset.Fracture();
 
             for( int ii = 0; ii < finalpolyset.OutlineCount(); ++ii )
