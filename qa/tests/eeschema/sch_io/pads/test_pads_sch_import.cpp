@@ -2657,6 +2657,74 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
 {
     using namespace PADS_SCH_BINARY;
 
+    SOURCE_PROVENANCE keySource{ wxS( "key.sch" ), 13, wxS( "placement" ), 17, 23, 41, 8, 2 };
+    PARSER_DIAGNOSTIC keyDiagnostic = MakePropertyDiagnostic( RPT_SEVERITY_WARNING, keySource, wxS( "property" ),
+                                                              PROPERTY_DISPOSITION::PRESERVED, wxS( "message" ) );
+    std::set<DIAGNOSTIC_PROPERTY_KEY> propertyKeys;
+    BOOST_REQUIRE( DiagnosticPropertyKey( keyDiagnostic ) );
+    propertyKeys.insert( *DiagnosticPropertyKey( keyDiagnostic ) );
+    propertyKeys.insert( *DiagnosticPropertyKey( keyDiagnostic ) );
+
+    auto insertChangedKey = [&]( auto aMutator )
+    {
+        PARSER_DIAGNOSTIC changed = keyDiagnostic;
+        aMutator( changed );
+        BOOST_REQUIRE( DiagnosticPropertyKey( changed ) );
+        propertyKeys.insert( *DiagnosticPropertyKey( changed ) );
+    };
+    insertChangedKey(
+            []( PARSER_DIAGNOSTIC& aDiagnostic )
+            {
+                aDiagnostic.source.file += 'x';
+            } );
+    insertChangedKey(
+            []( PARSER_DIAGNOSTIC& aDiagnostic )
+            {
+                ++aDiagnostic.source.version;
+            } );
+    insertChangedKey(
+            []( PARSER_DIAGNOSTIC& aDiagnostic )
+            {
+                aDiagnostic.source.objectClass += 'x';
+            } );
+    insertChangedKey(
+            []( PARSER_DIAGNOSTIC& aDiagnostic )
+            {
+                ++aDiagnostic.source.controller;
+            } );
+    insertChangedKey(
+            []( PARSER_DIAGNOSTIC& aDiagnostic )
+            {
+                ++aDiagnostic.source.recordIndex;
+            } );
+    insertChangedKey(
+            []( PARSER_DIAGNOSTIC& aDiagnostic )
+            {
+                ++aDiagnostic.source.absoluteOffset;
+            } );
+    insertChangedKey(
+            []( PARSER_DIAGNOSTIC& aDiagnostic )
+            {
+                ++aDiagnostic.source.length;
+            } );
+    insertChangedKey(
+            []( PARSER_DIAGNOSTIC& aDiagnostic )
+            {
+                ++aDiagnostic.source.sheet;
+            } );
+    insertChangedKey(
+            []( PARSER_DIAGNOSTIC& aDiagnostic )
+            {
+                aDiagnostic.property->name += 'x';
+            } );
+    insertChangedKey(
+            []( PARSER_DIAGNOSTIC& aDiagnostic )
+            {
+                aDiagnostic.property->disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+            } );
+    BOOST_CHECK_EQUAL( propertyKeys.size(), 11u );
+    BOOST_CHECK( !DiagnosticPropertyKey( PARSER_DIAGNOSTIC{} ) );
+
     for( const wxString& fixture :
          { wxS( "minimal_v13" ), wxS( "placement_transform" ), wxS( "fields" ), wxS( "connectors" ),
            wxS( "text_encoding" ), wxS( "page_graphics" ), wxS( "connectivity_topology" ),

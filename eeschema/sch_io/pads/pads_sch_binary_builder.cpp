@@ -977,19 +977,19 @@ namespace
                     wxS( "PADS controller payload retained without schematic construction" ) ) );
         }
 
+        std::set<DIAGNOSTIC_PROPERTY_KEY> parserOwnedProperties;
+
+        for( const PARSER_DIAGNOSTIC& diagnostic : aModel.diagnostics )
+        {
+            if( std::optional key = DiagnosticPropertyKey( diagnostic ) )
+                parserOwnedProperties.insert( std::move( *key ) );
+        }
+
         std::erase_if( aDiagnostics,
                        [&]( const PARSER_DIAGNOSTIC& aBuilderDiagnostic )
                        {
-                           if( !aBuilderDiagnostic.property )
-                               return false;
-
-                           return std::ranges::any_of( aModel.diagnostics,
-                                                       [&]( const PARSER_DIAGNOSTIC& aParserDiagnostic )
-                                                       {
-                                                           return aParserDiagnostic.source == aBuilderDiagnostic.source
-                                                                  && aParserDiagnostic.property
-                                                                             == aBuilderDiagnostic.property;
-                                                       } );
+                           std::optional key = DiagnosticPropertyKey( aBuilderDiagnostic );
+                           return key && parserOwnedProperties.contains( *key );
                        } );
     }
 

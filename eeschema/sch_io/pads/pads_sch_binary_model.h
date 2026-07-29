@@ -87,6 +87,16 @@ struct DIAGNOSTIC_PROPERTY_IDENTITY
 };
 
 
+struct DIAGNOSTIC_PROPERTY_KEY
+{
+    SOURCE_PROVENANCE            source;
+    DIAGNOSTIC_PROPERTY_IDENTITY property;
+
+    bool operator==( const DIAGNOSTIC_PROPERTY_KEY& ) const = default;
+    bool operator<( const DIAGNOSTIC_PROPERTY_KEY& aOther ) const;
+};
+
+
 struct PARSER_DIAGNOSTIC
 {
     PARSER_DIAGNOSTIC() = default;
@@ -106,6 +116,8 @@ struct PARSER_DIAGNOSTIC
 
     bool operator==( const PARSER_DIAGNOSTIC& ) const = default;
 };
+
+std::optional<DIAGNOSTIC_PROPERTY_KEY> DiagnosticPropertyKey( const PARSER_DIAGNOSTIC& aDiagnostic );
 
 wxString FormatParserError( const SOURCE_PROVENANCE& aSource, const wxString& aMessage );
 

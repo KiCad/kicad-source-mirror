@@ -27,6 +27,7 @@
 #include <iterator>
 #include <map>
 #include <ranges>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -3044,6 +3045,25 @@ wxString FormatParserError( const SOURCE_PROVENANCE& aSource, const wxString& aM
             aSource.file, aSource.version, aSource.objectClass, aSource.controller,
             static_cast<unsigned long long>( aSource.recordIndex ), aSource.sheet,
             static_cast<unsigned long long>( aSource.absoluteOffset ), aMessage );
+}
+
+
+bool DIAGNOSTIC_PROPERTY_KEY::operator<( const DIAGNOSTIC_PROPERTY_KEY& aOther ) const
+{
+    return std::tie( source.file, source.version, source.objectClass, source.controller, source.recordIndex,
+                     source.absoluteOffset, source.length, source.sheet, property.name, property.disposition )
+           < std::tie( aOther.source.file, aOther.source.version, aOther.source.objectClass, aOther.source.controller,
+                       aOther.source.recordIndex, aOther.source.absoluteOffset, aOther.source.length,
+                       aOther.source.sheet, aOther.property.name, aOther.property.disposition );
+}
+
+
+std::optional<DIAGNOSTIC_PROPERTY_KEY> DiagnosticPropertyKey( const PARSER_DIAGNOSTIC& aDiagnostic )
+{
+    if( !aDiagnostic.property )
+        return std::nullopt;
+
+    return DIAGNOSTIC_PROPERTY_KEY{ aDiagnostic.source, *aDiagnostic.property };
 }
 
 
