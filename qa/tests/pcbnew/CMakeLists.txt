@@ -71,6 +71,7 @@ set( QA_PCBNEW_SRCS
     test_meander_corner_radius.cpp
     test_odb_dimension_export.cpp
     test_odb_soldermask_shape_export.cpp
+    test_issue25074_odb_knockout_textbox.cpp
     test_pcb_control_rehatch.cpp
     test_pns_basics.cpp
     test_pad_flashing.cpp
