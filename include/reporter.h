@@ -188,7 +188,7 @@ public:
 
     void Clear() override;
 
-private:
+protected:
     REPORTER&          m_reporter;
     mutable std::mutex m_mutex;
 };

@@ -30,7 +30,6 @@
 
 #include "spice_circuit_model.h"
 #include "ngspice.h"
-#include "simulator_reporter.h"
 #include "spice_settings.h"
 
 #include <wx/stdpaths.h>
@@ -382,7 +381,7 @@ bool NGSPICE::IsRunning()
         // Report the crash to the user
         std::lock_guard<std::mutex> lock( m_reporterMutex );
 
-        if( SIMULATOR_REPORTER* reporter = m_reporter.load( std::memory_order_acquire ) )
+        if( REPORTER* reporter = m_reporter.load( std::memory_order_acquire ) )
         {
             wxString signalName;
 
@@ -734,7 +733,7 @@ int NGSPICE::cbSendChar( char* aWhat, int aId, void* aUser )
     NGSPICE* sim = reinterpret_cast<NGSPICE*>( aUser );
 
     std::lock_guard<std::mutex> lock( sim->m_reporterMutex );
-    SIMULATOR_REPORTER* reporter = sim->m_reporter.load( std::memory_order_acquire );
+    REPORTER*                   reporter = sim->m_reporter.load( std::memory_order_acquire );
 
     if( reporter )
     {
@@ -770,8 +769,10 @@ int NGSPICE::cbBGThreadRunning( NG_BOOL aFinished, int aId, void* aUser )
     // can serve as a barrier before the caller destroys the reporter.
     std::lock_guard<std::mutex> lock( sim->m_reporterMutex );
 
-    if( SIMULATOR_REPORTER* reporter = sim->m_reporter.load( std::memory_order_acquire ) )
-        reporter->OnSimStateChange( sim, aFinished ? SIM_IDLE : SIM_RUNNING );
+    SIM_STATE_LISTENER* stateListener = sim->m_stateListener.load( std::memory_order_acquire );
+
+    if( stateListener )
+        stateListener->OnSimStateChange( sim, aFinished ? SIM_IDLE : SIM_RUNNING );
 
     return 0;
 }
@@ -787,15 +788,20 @@ int NGSPICE::cbControlledExit( int aStatus, NG_BOOL aImmediate, NG_BOOL aExitOnQ
     // 'quit' command. For error exits, we must notify the UI before ngspice crashes during
     // cleanup, since cbBGThreadRunning may never fire if the background thread is terminated.
     std::lock_guard<std::mutex> lock( sim->m_reporterMutex );
-    SIMULATOR_REPORTER* reporter = sim->m_reporter.load( std::memory_order_acquire );
 
-    if( !aExitOnQuit && reporter )
+    REPORTER*           reporter = sim->m_reporter.load( std::memory_order_acquire );
+    SIM_STATE_LISTENER* stateListener = sim->m_stateListener.load( std::memory_order_acquire );
+
+    if( !aExitOnQuit )
     {
-        reporter->Report(
-                _( "Simulation terminated by ngspice. This may be caused by insufficient "
-                   "memory or an internal error. The simulator will be reset." ) );
+        if( reporter )
+        {
+            reporter->Report( _( "Simulation terminated by ngspice. This may be caused by insufficient "
+                                 "memory or an internal error. The simulator will be reset." ) );
+        }
 
-        reporter->OnSimStateChange( sim, SIM_IDLE );
+        if( stateListener )
+            stateListener->OnSimStateChange( sim, SIM_IDLE );
     }
 
     return 0;

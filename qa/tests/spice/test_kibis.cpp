@@ -25,7 +25,6 @@
 #include <sim/sim_model_ibis.h>
 #include <sim/spice_generator.h>
 #include <sim/spice_simulator.h>
-#include <sim/simulator_reporter.h>
 #include <sch_pin.h>
 #include <wx/utils.h>
 
@@ -732,24 +731,6 @@ BOOST_AUTO_TEST_CASE( Load_v4_1_RSeries, *boost::unit_test::tolerance( 1e-15 ) )
 
 namespace
 {
-class CAPTURE_REPORTER : public SIMULATOR_REPORTER
-{
-public:
-    REPORTER& Report( const wxString& aText,
-                      SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
-    {
-        m_messages << aText.ToStdString() << "\n";
-        return *this;
-    }
-
-    bool HasMessage() const override { return !m_messages.str().empty(); }
-
-    void OnSimStateChange( SIMULATOR* aObject, SIM_STATE aNewState ) override {}
-
-    std::stringstream m_messages;
-};
-
-
 // Wrap an emitted SUBCKT in a 1V .op rig.  Returns NaN if ngspice fails.
 double RunSeriesOP( const std::string& aSubckt, const std::string& aSubcktName,
                     const std::string& aExtraParams = "" )
@@ -762,7 +743,7 @@ double RunSeriesOP( const std::string& aSubckt, const std::string& aSubcktName,
         return std::nan( "" );
     }
 
-    CAPTURE_REPORTER reporter;
+    WX_STRING_REPORTER reporter;
     sim->SetReporter( &reporter );
 
     // ngspice is a singleton; clear prior plots/circuits.
@@ -802,7 +783,7 @@ double RunSeriesOP( const std::string& aSubckt, const std::string& aSubcktName,
     // bg callbacks may still fire briefly after IsRunning() flips.
     sim->SetReporter( nullptr );
 
-    BOOST_TEST_MESSAGE( "RunSeriesOP: ngspice log:\n" << reporter.m_messages.str() );
+    BOOST_TEST_MESSAGE( "RunSeriesOP: ngspice log:\n" << reporter.GetMessages() );
     BOOST_TEST_MESSAGE( "RunSeriesOP: current plot = " << sim->CurrentPlotName().ToStdString() );
 
     // Node voltages survive plot indirection that branch currents do not.
