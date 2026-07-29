@@ -99,15 +99,26 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
     {
     case SHAPE_T::CIRCLE:
     {
-        int      diameter = aShape.GetRadius() * 2;
+        // GetRadius() can reach INT_MAX / 2 rounded up, which overflows a signed int when doubled
+        int64_t  diameter = static_cast<int64_t>( aShape.GetRadius() ) * 2;
         VECTOR2I center = ODB::GetShapePosition( aShape );
-        wxString innerDim = ODB::SymDouble2String( ( diameter - stroke_width / 2 ) );
-        wxString outerDim = ODB::SymDouble2String( ( stroke_width + diameter ) );
 
-        if( aShape.IsSolidFill() )
+        // The stroke straddles the radius, so in diameter terms the whole width comes off the
+        // inner edge and goes onto the outer
+        int64_t  innerDiameter = diameter - stroke_width;
+        wxString outerDim = ODB::SymDouble2String( diameter + stroke_width );
+
+        // donut_r has no spelling for a hole closed by its own stroke
+        if( aShape.IsSolidFill() || innerDiameter <= 0 )
+        {
             AddFeature<ODB_PAD>( ODB::AddXY( center ), AddCircleSymbol( outerDim ) );
+        }
         else
-            AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRoundDonutSymbol( outerDim, innerDim ) );
+        {
+            AddFeature<ODB_PAD>( ODB::AddXY( center ),
+                                 AddRoundDonutSymbol( outerDim,
+                                                      ODB::SymDouble2String( innerDiameter ) ) );
+        }
 
         break;
     }

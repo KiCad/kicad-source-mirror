@@ -514,6 +514,117 @@ BOOST_AUTO_TEST_CASE( OdbPpUnfilledRectangleOnSilk )
 }
 
 
+// Export aBoard to a fresh ODB++ tree below aTempDir and return the root of that tree.  Symbol
+// dimensions come out in micrometres because the file units are millimetres.
+static wxFileName ExportOdbTree( BOARD* aBoard, const wxFileName& aTempDir )
+{
+    wxFileName odbRoot( aTempDir.GetFullPath(), wxEmptyString );
+    odbRoot.AppendDir( wxT( "odb_out" ) );
+    BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    PCB_IO_ODBPP                odbExporter;
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["sigfig"] = "4";
+    BOOST_REQUIRE_NO_THROW( odbExporter.SaveBoard( odbRoot.GetFullPath(), aBoard, &props ) );
+
+    return odbRoot;
+}
+
+
+static wxString ReadOdbLayerFeatures( const wxFileName& aOdbRoot, const wxString& aLayerDir )
+{
+    wxFileName features( aOdbRoot.GetFullPath(), wxT( "features" ) );
+    features.AppendDir( wxT( "steps" ) );
+    features.AppendDir( wxT( "pcb" ) );
+    features.AppendDir( wxT( "layers" ) );
+    features.AppendDir( aLayerDir );
+    BOOST_REQUIRE( features.FileExists() );
+
+    wxFFile  stream( features.GetFullPath(), wxT( "rb" ) );
+    wxString contents;
+    BOOST_REQUIRE( stream.ReadAll( &contents ) );
+    stream.Close();
+
+    return contents;
+}
+
+
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25089
+// The inner diameter of the donut_r symbol standing in for an unfilled circle subtracted only
+// half the line width from the diameter, so the exported annulus was a quarter width too thin
+// and sat off-centre from the circle it came from.  The board is the reporter's own project.
+BOOST_AUTO_TEST_CASE( OdbPpUnfilledCircleAnnulus )
+{
+    SETTINGS_MANAGER       settingsManager;
+    std::unique_ptr<BOARD> board;
+
+    KI_TEST::LoadBoard( settingsManager, wxT( "issue25089/odb_circles" ), board );
+    BOOST_REQUIRE( board );
+
+    wxFileName tempDir = MakeTempDir();
+    wxFileName odbRoot = ExportOdbTree( board.get(), tempDir );
+
+    // Every circle in the project is 2 mm across with a 0.1 mm stroke, so the ring spans radius
+    // 0.95 mm to 1.05 mm
+    for( const wxString& layerDir : { wxString( wxT( "f.cu" ) ), wxString( wxT( "edge.cuts" ) ) } )
+    {
+        wxString contents = ReadOdbLayerFeatures( odbRoot, layerDir );
+
+        BOOST_CHECK_MESSAGE( contents.Contains( wxT( "donut_r2100.0x1900.0" ) ),
+                             "Wrong annulus on " + layerDir + ", features file holds:\n"
+                                     + contents );
+    }
+
+    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// Companion to OdbPpUnfilledCircleAnnulus covering the two circles that have no donut_r spelling,
+// derived from the same project.  On F.Cu the stroke is as wide as the circle and closes the hole;
+// on B.Cu the radius sits at the EDA_SHAPE clamp of INT_MAX / 2, where the doubled diameter used to
+// overflow a signed int and emit a negative dimension.
+BOOST_AUTO_TEST_CASE( OdbPpUnfilledCircleWithoutHole )
+{
+    SETTINGS_MANAGER       settingsManager;
+    std::unique_ptr<BOARD> board;
+
+    KI_TEST::LoadBoard( settingsManager, wxT( "issue25089/odb_circle_edge_cases" ), board );
+    BOOST_REQUIRE( board );
+
+    wxFileName tempDir = MakeTempDir();
+    wxFileName odbRoot = ExportOdbTree( board.get(), tempDir );
+
+    wxString frontContents = ReadOdbLayerFeatures( odbRoot, wxT( "f.cu" ) );
+
+    BOOST_CHECK_MESSAGE( frontContents.Contains( wxT( "r400.0" ) )
+                                 && !frontContents.Contains( wxT( "donut" ) ),
+                         "Circle with a hole-closing stroke should export as a solid pad, "
+                         "features file holds:\n"
+                                 + frontContents );
+
+    // Feature records carry signed Y coordinates, so only the symbol definitions can be checked
+    wxString          backContents = ReadOdbLayerFeatures( odbRoot, wxT( "b.cu" ) );
+    wxStringTokenizer backLines( backContents, wxT( "\n" ) );
+
+    while( backLines.HasMoreTokens() )
+    {
+        wxString line = backLines.GetNextToken();
+
+        if( line.StartsWith( wxT( "$" ) ) )
+        {
+            BOOST_CHECK_MESSAGE( !line.Contains( wxT( "-" ) ),
+                                 "Oversized circle overflowed to a negative symbol dimension: "
+                                         + line );
+        }
+    }
+
+    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
+
+
 namespace
 {
 PAD* AddSlotPad( FOOTPRINT* aFootprint, const VECTOR2I& aPos, PAD_ATTRIB aAttribute )
