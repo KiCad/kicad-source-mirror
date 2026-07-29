@@ -26,6 +26,7 @@
 #include <ki_exception.h>
 
 #include <wx/log.h>
+#include <wx/translation.h>
 
 #include "sch_io/altium/altium_parser_sch.h"
 #include "io/altium/altium_binary_parser.h"
