@@ -958,13 +958,6 @@ namespace
                         groupTextCount == 0
                         || ( groupLastText < textCount && groupTextCount <= static_cast<size_t>( groupLastText ) + 1 );
 
-                if( !hasContiguousTextOwnership )
-                {
-                    aModel.diagnostics.push_back(
-                            { RPT_SEVERITY_WARNING, source,
-                              wxS( "unsupported class-zero drawing text relationship preserved" ) } );
-                }
-
                 if( aCursor.U16At( offset + 42 ) != pieceEnd - firstPiece )
                     throwDecodeError( source, wxS( "page-graphic piece count does not match controller 4 slice" ) );
 
@@ -1063,6 +1056,9 @@ namespace
                                 wxS( "preserved_drawing_text_relationship" ),
                                 wxString::Format( wxS( "%u,%u" ), groupTextCount, groupLastText ), relationshipSource );
                         relationship.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                        aModel.diagnostics.push_back( MakePropertyDiagnostic(
+                                RPT_SEVERITY_WARNING, relationship,
+                                wxS( "unsupported class-zero drawing text relationship preserved" ) ) );
                         graphic.properties.push_back( std::move( relationship ) );
                     }
                     aModel.graphics.push_back(
@@ -1891,9 +1887,10 @@ namespace
                         sourceProperty( wxS( "inline_font_payload" ),
                                         wxString::Format( wxS( "%u" ), uint16_t( aHandle ) ), aHandleSource );
                 property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                aModel.diagnostics.push_back(
+                        MakePropertyDiagnostic( RPT_SEVERITY_WARNING, property,
+                                                wxS( "unsupported inline placement font payload preserved" ) ) );
                 aPresentation.properties.push_back( std::move( property ) );
-                aModel.diagnostics.push_back( { RPT_SEVERITY_WARNING, aHandleSource,
-                                                wxS( "unsupported inline placement font payload preserved" ) } );
                 return;
             }
 
@@ -1924,9 +1921,9 @@ namespace
                 SOURCE_PROPERTY property = sourceProperty( wxS( "unsupported_font_style_flags" ),
                                                            wxString::Format( wxS( "%u" ), style & ~3U ), fontSource );
                 property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                aModel.diagnostics.push_back( MakePropertyDiagnostic(
+                        RPT_SEVERITY_WARNING, property, wxS( "unsupported placement font style flags preserved" ) ) );
                 aPresentation.properties.push_back( std::move( property ) );
-                aModel.diagnostics.push_back( { RPT_SEVERITY_WARNING, fontSource,
-                                                wxS( "unsupported placement font style flags preserved" ) } );
             }
         };
 
@@ -2847,10 +2844,9 @@ namespace
                 SOURCE_PROPERTY members =
                         sourceProperty( wxS( "preserved_bus_alias_members" ), preservedMembers, global.source );
                 members.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                aModel.diagnostics.push_back( MakePropertyDiagnostic(
+                        RPT_SEVERITY_WARNING, members, wxS( "unsupported expanded bus-alias membership preserved" ) ) );
                 bus.properties.push_back( std::move( members ) );
-                aModel.diagnostics.push_back( { RPT_SEVERITY_WARNING, global.source,
-                                                wxS( "PADS property 'preserved_bus_alias_members' retained with "
-                                                     "unsupported disposition" ) } );
             }
 
             for( size_t entry = 0; entry < entryRecords.size(); ++entry )
@@ -2971,10 +2967,16 @@ namespace
             case 2:
             case 4:
             case 5:
+            {
                 label.kind = MODEL_LABEL_KIND::UNSUPPORTED;
-                aModel.diagnostics.push_back(
-                        { RPT_SEVERITY_WARNING, source, wxS( "unsupported off-page label kind preserved" ) } );
+                SOURCE_PROPERTY unsupportedKind = sourceProperty( wxS( "unsupported_label_kind" ),
+                                                                  wxString::Format( wxS( "%u" ), rawKind ), source );
+                unsupportedKind.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                aModel.diagnostics.push_back( MakePropertyDiagnostic(
+                        RPT_SEVERITY_WARNING, unsupportedKind, wxS( "unsupported off-page label kind preserved" ) ) );
+                label.properties.push_back( std::move( unsupportedKind ) );
                 break;
+            }
             default: throwDecodeError( source, wxS( "unknown off-page label kind" ) );
             }
 
@@ -3042,6 +3044,20 @@ wxString FormatParserError( const SOURCE_PROVENANCE& aSource, const wxString& aM
             aSource.file, aSource.version, aSource.objectClass, aSource.controller,
             static_cast<unsigned long long>( aSource.recordIndex ), aSource.sheet,
             static_cast<unsigned long long>( aSource.absoluteOffset ), aMessage );
+}
+
+
+PARSER_DIAGNOSTIC MakePropertyDiagnostic( SEVERITY aSeverity, const SOURCE_PROPERTY& aProperty,
+                                          const wxString& aMessage )
+{
+    return MakePropertyDiagnostic( aSeverity, aProperty.source, aProperty.name.text, aProperty.disposition, aMessage );
+}
+
+
+PARSER_DIAGNOSTIC MakePropertyDiagnostic( SEVERITY aSeverity, const SOURCE_PROVENANCE& aSource, const wxString& aName,
+                                          PROPERTY_DISPOSITION aDisposition, const wxString& aMessage )
+{
+    return { aSeverity, aSource, aMessage, DIAGNOSTIC_PROPERTY_IDENTITY{ aName, aDisposition } };
 }
 
 

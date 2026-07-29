@@ -2679,10 +2679,6 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
                                                       && aOther->name.text == property->name.text
                                                       && aOther->disposition == property->disposition;
                                            } );
-            const wxString disposition =
-                    property->disposition == PROPERTY_DISPOSITION::APPROXIMATE ? wxS( "approximate" )
-                    : property->disposition == PROPERTY_DISPOSITION::PRESERVED ? wxS( "preserved" )
-                                                                               : wxS( "unsupported" );
             const size_t parserOwned =
                     property->disposition == PROPERTY_DISPOSITION::EXACT
                             ? 0
@@ -2690,16 +2686,18 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
                                                      [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
                                                      {
                                                          return aDiagnostic.source == property->source
-                                                                && aDiagnostic.message.Contains(
-                                                                        wxS( "'" ) + property->name.text + wxS( "'" ) )
-                                                                && aDiagnostic.message.Contains( disposition );
+                                                                && aDiagnostic.property
+                                                                && aDiagnostic.property->name == property->name.text
+                                                                && aDiagnostic.property->disposition
+                                                                           == property->disposition;
                                                      } );
             const size_t builderOwned =
                     std::ranges::count_if( corpusResult.diagnostics,
                                            [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
                                            {
-                                               return aDiagnostic.source == property->source
-                                                      && aDiagnostic.message.Contains( property->name.text );
+                                               return aDiagnostic.source == property->source && aDiagnostic.property
+                                                      && aDiagnostic.property->name == property->name.text
+                                                      && aDiagnostic.property->disposition == property->disposition;
                                            } );
             BOOST_CHECK_LE( parserOwned, multiplicity );
 
@@ -2715,6 +2713,89 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
             }
         }
     }
+
+    auto assertParserOwnership =
+            [&]( PADS_SCH_MODEL& aModel, const SOURCE_PROPERTY& aProperty, const wxString& aFixture )
+    {
+        m_schematic.Reset();
+        BUILD_RESULT ownedResult =
+                PADS_SCH_BINARY_BUILDER().Build( aModel, &m_schematic, nullptr, binaryFixture( aFixture ) );
+        BOOST_CHECK_EQUAL( std::ranges::count_if( aModel.diagnostics,
+                                                  [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                                  {
+                                                      return aDiagnostic.source == aProperty.source
+                                                             && aDiagnostic.property
+                                                             && aDiagnostic.property->name == aProperty.name.text
+                                                             && aDiagnostic.property->disposition
+                                                                        == aProperty.disposition;
+                                                  } ),
+                           1u );
+        BOOST_CHECK_EQUAL( std::ranges::count_if( ownedResult.diagnostics,
+                                                  [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                                  {
+                                                      return aDiagnostic.source == aProperty.source
+                                                             && aDiagnostic.property
+                                                             && aDiagnostic.property->name == aProperty.name.text
+                                                             && aDiagnostic.property->disposition
+                                                                        == aProperty.disposition;
+                                                  } ),
+                           0u );
+    };
+
+    PADS_SCH_MODEL pageRelationship = parseBinaryFixture( wxS( "page_graphics" ) );
+    BOOST_REQUIRE( !pageRelationship.graphics.empty() );
+    SOURCE_PROPERTY relationship;
+    relationship.name.text = wxS( "preserved_drawing_text_relationship" );
+    relationship.value.text = wxS( "synthetic" );
+    relationship.source = pageRelationship.graphics.front().graphic.source;
+    relationship.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+    pageRelationship.graphics.front().graphic.properties.push_back( relationship );
+    pageRelationship.diagnostics.push_back( MakePropertyDiagnostic(
+            RPT_SEVERITY_WARNING, relationship, wxS( "parser retained a page drawing relationship" ) ) );
+    assertParserOwnership( pageRelationship, relationship, wxS( "page_graphics" ) );
+
+    PADS_SCH_MODEL fontPayloads = parseBinaryFixture( wxS( "fields" ) );
+    BOOST_REQUIRE( !fontPayloads.placements.empty() );
+    SOURCE_PROPERTY inlineFont;
+    inlineFont.name.text = wxS( "inline_font_payload" );
+    inlineFont.value.text = wxS( "synthetic" );
+    inlineFont.source = fontPayloads.placements.front().source;
+    inlineFont.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+    fontPayloads.placements.front().properties.push_back( inlineFont );
+    fontPayloads.diagnostics.push_back(
+            MakePropertyDiagnostic( RPT_SEVERITY_WARNING, inlineFont, wxS( "parser retained inline font bytes" ) ) );
+    SOURCE_PROPERTY fontFlags = inlineFont;
+    fontFlags.name.text = wxS( "unsupported_font_style_flags" );
+    fontPayloads.placements.front().properties.push_back( fontFlags );
+    fontPayloads.diagnostics.push_back(
+            MakePropertyDiagnostic( RPT_SEVERITY_WARNING, fontFlags, wxS( "parser retained font flag bits" ) ) );
+    assertParserOwnership( fontPayloads, inlineFont, wxS( "fields" ) );
+    assertParserOwnership( fontPayloads, fontFlags, wxS( "fields" ) );
+
+    PADS_SCH_MODEL busAlias = parseBinaryFixture( wxS( "connectivity_topology" ) );
+    BOOST_REQUIRE( !busAlias.buses.empty() );
+    SOURCE_PROPERTY aliasMembers;
+    aliasMembers.name.text = wxS( "preserved_bus_alias_members" );
+    aliasMembers.value.text = wxS( "synthetic" );
+    aliasMembers.source = busAlias.buses.front().source;
+    aliasMembers.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+    busAlias.buses.front().properties.push_back( aliasMembers );
+    busAlias.diagnostics.push_back( MakePropertyDiagnostic( RPT_SEVERITY_WARNING, aliasMembers,
+                                                            wxS( "parser retained expanded bus membership" ) ) );
+    assertParserOwnership( busAlias, aliasMembers, wxS( "connectivity_topology" ) );
+
+    PADS_SCH_MODEL unsupportedLabel = parseBinaryFixture( wxS( "connectivity_topology" ) );
+    BOOST_REQUIRE( !unsupportedLabel.labels.empty() );
+    unsupportedLabel.labels.front().kind = MODEL_LABEL_KIND::UNSUPPORTED;
+    SOURCE_PROPERTY labelKind;
+    labelKind.name.text = wxS( "unsupported_label_kind" );
+    labelKind.value.text = wxS( "synthetic" );
+    labelKind.source = unsupportedLabel.labels.front().source;
+    labelKind.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+    unsupportedLabel.labels.front().properties.push_back( labelKind );
+    unsupportedLabel.diagnostics.push_back(
+            MakePropertyDiagnostic( RPT_SEVERITY_WARNING, labelKind, wxS( "parser retained label kind" ) ) );
+    assertParserOwnership( unsupportedLabel, labelKind, wxS( "connectivity_topology" ) );
 
     m_schematic.Reset();
     PADS_SCH_MODEL model = parseBinaryFixture( wxS( "connectivity_topology" ) );
@@ -2733,9 +2814,8 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
     preserved.name.text = wxS( "qa_preserved_label_presentation" );
     preserved.disposition = PROPERTY_DISPOSITION::PRESERVED;
     model.labels.front().presentation.properties.push_back( preserved );
-    model.diagnostics.push_back(
-            { RPT_SEVERITY_WARNING, preserved.source,
-              wxS( "PADS property 'qa_preserved_label_presentation' retained with preserved disposition" ) } );
+    model.diagnostics.push_back( MakePropertyDiagnostic(
+            RPT_SEVERITY_WARNING, preserved, wxS( "synthetic parser-owned warning with unrelated prose" ) ) );
     SOURCE_PROPERTY unsupported = approximate;
     unsupported.name.text = wxS( "qa_unsupported_label_presentation" );
     unsupported.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
@@ -2749,7 +2829,10 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
                                                   [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
                                                   {
                                                       return aDiagnostic.source == property->source
-                                                             && aDiagnostic.message.Contains( property->name.text );
+                                                             && aDiagnostic.property
+                                                             && aDiagnostic.property->name == property->name.text
+                                                             && aDiagnostic.property->disposition
+                                                                        == property->disposition;
                                                   } ),
                            1 );
     }
@@ -2757,14 +2840,16 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
     BOOST_CHECK( std::ranges::none_of( result.diagnostics,
                                        [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
                                        {
-                                           return aDiagnostic.source == preserved.source
-                                                  && aDiagnostic.message.Contains( preserved.name.text );
+                                           return aDiagnostic.source == preserved.source && aDiagnostic.property
+                                                  && aDiagnostic.property->name == preserved.name.text
+                                                  && aDiagnostic.property->disposition == preserved.disposition;
                                        } ) );
 
     BOOST_CHECK( std::ranges::none_of( result.diagnostics,
                                        [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
                                        {
-                                           return aDiagnostic.message.Contains( exact.name.text );
+                                           return aDiagnostic.property && aDiagnostic.property->name == exact.name.text
+                                                  && aDiagnostic.property->disposition == exact.disposition;
                                        } ) );
 }
 

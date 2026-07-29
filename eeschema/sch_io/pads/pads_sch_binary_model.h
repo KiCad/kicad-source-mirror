@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <limits>
 #include <optional>
+#include <utility>
 #include <vector>
 
 #include <widgets/report_severity.h>
@@ -77,11 +78,31 @@ enum class PROPERTY_DISPOSITION
 };
 
 
+struct DIAGNOSTIC_PROPERTY_IDENTITY
+{
+    wxString             name;
+    PROPERTY_DISPOSITION disposition = PROPERTY_DISPOSITION::EXACT;
+
+    bool operator==( const DIAGNOSTIC_PROPERTY_IDENTITY& ) const = default;
+};
+
+
 struct PARSER_DIAGNOSTIC
 {
-    SEVERITY          severity = RPT_SEVERITY_UNDEFINED;
-    SOURCE_PROVENANCE source;
-    wxString          message;
+    PARSER_DIAGNOSTIC() = default;
+    PARSER_DIAGNOSTIC( SEVERITY aSeverity, SOURCE_PROVENANCE aSource, wxString aMessage,
+                       std::optional<DIAGNOSTIC_PROPERTY_IDENTITY> aProperty = std::nullopt ) :
+            severity( aSeverity ),
+            source( std::move( aSource ) ),
+            message( std::move( aMessage ) ),
+            property( std::move( aProperty ) )
+    {
+    }
+
+    SEVERITY                                    severity = RPT_SEVERITY_UNDEFINED;
+    SOURCE_PROVENANCE                           source;
+    wxString                                    message;
+    std::optional<DIAGNOSTIC_PROPERTY_IDENTITY> property;
 
     bool operator==( const PARSER_DIAGNOSTIC& ) const = default;
 };
@@ -98,6 +119,11 @@ struct SOURCE_PROPERTY
 
     bool operator==( const SOURCE_PROPERTY& ) const = default;
 };
+
+PARSER_DIAGNOSTIC MakePropertyDiagnostic( SEVERITY aSeverity, const SOURCE_PROPERTY& aProperty,
+                                          const wxString& aMessage );
+PARSER_DIAGNOSTIC MakePropertyDiagnostic( SEVERITY aSeverity, const SOURCE_PROVENANCE& aSource, const wxString& aName,
+                                          PROPERTY_DISPOSITION aDisposition, const wxString& aMessage );
 
 
 template <typename Tag, typename ValueType = uint32_t>

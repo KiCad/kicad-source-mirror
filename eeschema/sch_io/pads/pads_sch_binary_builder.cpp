@@ -176,16 +176,18 @@ namespace
 
         if( !aPresentation.font.text.IsEmpty() && aPresentation.font.text != wxS( "Default Font" ) )
         {
-            aDiagnostics.push_back(
-                    { RPT_SEVERITY_WARNING, aPresentation.source,
-                      wxString::Format( wxS( "PADS font '%s' is not embedded; using KiCad stroke font" ),
-                                        aPresentation.font.text ) } );
+            aDiagnostics.push_back( MakePropertyDiagnostic(
+                    RPT_SEVERITY_WARNING, aPresentation.source, wxS( "font_substitution" ),
+                    PROPERTY_DISPOSITION::APPROXIMATE,
+                    wxString::Format( wxS( "PADS font '%s' is not embedded; using KiCad stroke font" ),
+                                      aPresentation.font.text ) ) );
         }
 
         if( aPresentation.underline )
         {
-            aDiagnostics.push_back( { RPT_SEVERITY_WARNING, aPresentation.source,
-                                      wxS( "PADS underline presentation is unsupported" ) } );
+            aDiagnostics.push_back( MakePropertyDiagnostic( RPT_SEVERITY_WARNING, aPresentation.source,
+                                                            wxS( "underline" ), PROPERTY_DISPOSITION::UNSUPPORTED,
+                                                            wxS( "PADS underline presentation is unsupported" ) ) );
         }
     }
 
@@ -837,13 +839,13 @@ namespace
             if( property.disposition == PROPERTY_DISPOSITION::EXACT )
                 continue;
 
-            aDiagnostics.push_back(
-                    { RPT_SEVERITY_WARNING, property.source,
-                      wxString::Format( wxS( "PADS property '%s' retained with %s disposition" ), property.name.text,
-                                        property.disposition == PROPERTY_DISPOSITION::APPROXIMATE ? wxS( "approximate" )
-                                        : property.disposition == PROPERTY_DISPOSITION::PRESERVED
-                                                ? wxS( "preserved" )
-                                                : wxS( "unsupported" ) ) } );
+            aDiagnostics.push_back( MakePropertyDiagnostic(
+                    RPT_SEVERITY_WARNING, property,
+                    wxString::Format( wxS( "PADS property '%s' retained with %s disposition" ), property.name.text,
+                                      property.disposition == PROPERTY_DISPOSITION::APPROXIMATE ? wxS( "approximate" )
+                                      : property.disposition == PROPERTY_DISPOSITION::PRESERVED
+                                              ? wxS( "preserved" )
+                                              : wxS( "unsupported" ) ) ) );
         }
     }
 
@@ -970,40 +972,25 @@ namespace
 
         for( const PRESERVED_CONTROLLER_PAYLOAD& payload : aModel.preservedControllerPayloads )
         {
-            aDiagnostics.push_back( { RPT_SEVERITY_WARNING, payload.source,
-                                      wxS( "PADS controller payload retained without schematic construction" ) } );
+            aDiagnostics.push_back( MakePropertyDiagnostic(
+                    RPT_SEVERITY_WARNING, payload.source, wxS( "controller_payload" ), payload.disposition,
+                    wxS( "PADS controller payload retained without schematic construction" ) ) );
         }
 
-        std::erase_if(
-                aDiagnostics,
-                [&]( const PARSER_DIAGNOSTIC& aBuilderDiagnostic )
-                {
-                    const wxString prefix = wxS( "PADS property '" );
+        std::erase_if( aDiagnostics,
+                       [&]( const PARSER_DIAGNOSTIC& aBuilderDiagnostic )
+                       {
+                           if( !aBuilderDiagnostic.property )
+                               return false;
 
-                    if( !aBuilderDiagnostic.message.StartsWith( prefix ) )
-                        return false;
-
-                    const size_t nameEnd = aBuilderDiagnostic.message.find( '\'', prefix.length() );
-
-                    if( nameEnd == wxString::npos )
-                        return false;
-
-                    const wxString name = aBuilderDiagnostic.message.Mid( prefix.length(), nameEnd - prefix.length() );
-                    const wxString disposition = aBuilderDiagnostic.message.EndsWith( wxS( "approximate disposition" ) )
-                                                         ? wxS( "approximate" )
-                                                 : aBuilderDiagnostic.message.EndsWith( wxS( "preserved disposition" ) )
-                                                         ? wxS( "preserved" )
-                                                         : wxS( "unsupported" );
-
-                    return std::ranges::any_of( aModel.diagnostics,
-                                                [&]( const PARSER_DIAGNOSTIC& aParserDiagnostic )
-                                                {
-                                                    return aParserDiagnostic.source == aBuilderDiagnostic.source
-                                                           && aParserDiagnostic.message.Contains( wxS( "'" ) + name
-                                                                                                  + wxS( "'" ) )
-                                                           && aParserDiagnostic.message.Contains( disposition );
-                                                } );
-                } );
+                           return std::ranges::any_of( aModel.diagnostics,
+                                                       [&]( const PARSER_DIAGNOSTIC& aParserDiagnostic )
+                                                       {
+                                                           return aParserDiagnostic.source == aBuilderDiagnostic.source
+                                                                  && aParserDiagnostic.property
+                                                                             == aBuilderDiagnostic.property;
+                                                       } );
+                       } );
     }
 
 
@@ -1249,10 +1236,23 @@ namespace
                 break;
 
             case MODEL_LABEL_KIND::UNSUPPORTED:
-                aStaged.result.diagnostics.push_back(
-                        { RPT_SEVERITY_WARNING, label.source,
-                          wxS( "PADS unsupported label has no KiCad schematic representation" ) } );
+            {
+                auto property = std::ranges::find_if( label.properties,
+                                                      []( const SOURCE_PROPERTY& aProperty )
+                                                      {
+                                                          return aProperty.name.text == wxS( "unsupported_label_kind" );
+                                                      } );
+
+                if( property == label.properties.end() )
+                {
+                    aStaged.result.diagnostics.push_back( MakePropertyDiagnostic(
+                            RPT_SEVERITY_WARNING, label.source, wxS( "unsupported_label_kind" ),
+                            PROPERTY_DISPOSITION::UNSUPPORTED,
+                            wxS( "PADS unsupported label has no KiCad schematic representation" ) ) );
+                }
+
                 continue;
+            }
             }
 
             if( auto* text = dynamic_cast<EDA_TEXT*>( item.get() ) )
