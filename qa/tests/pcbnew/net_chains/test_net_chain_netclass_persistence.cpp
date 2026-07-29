@@ -130,7 +130,7 @@ struct FIXTURE
     {
         NETINFO_ITEM* net = m_board->FindNet( aNetname );
 
-        return net ? net->GetNetClass()->GetHumanReadableName() : wxS( "<no such net>" );
+        return net ? net->GetNetClass()->GetHumanReadableName() : wxString( wxS( "<no such net>" ) );
     }
 
     bool ResolvesTo( const wxString& aNetname, const wxString& aNetclass ) const
