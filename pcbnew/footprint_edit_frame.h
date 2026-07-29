@@ -400,6 +400,11 @@ protected:
     void updateEnabledLayers();
 
     /**
+     * Update the infobar for the currently-active tab.
+     */
+    void updateInfoBar();
+
+    /**
      * @brief (Re)Create the menubar for the Footprint Editor frame
      */
     void doReCreateMenuBar() override;

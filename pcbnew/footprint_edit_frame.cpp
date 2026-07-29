@@ -774,40 +774,8 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
+void FOOTPRINT_EDIT_FRAME::updateInfoBar()
 {
-    // Cancel a mid-draw tool before the footprint it points into is freed (#24975).
-    if( GetToolManager() )
-        GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
-
-    GetBoard()->DeleteAllFootprints();
-
-    m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
-    m_originalFootprintCopy->SetParent( nullptr );
-
-    m_footprintNameWhenLoaded = aFootprint->GetFPID().GetUniStringLibItemName();
-
-    // Mirror the load baseline into the active tab context so it survives a tab switch (the frame
-    // members are only a borrowed view of the active context's baseline).
-    if( m_activeTab )
-    {
-        FOOTPRINT* fp_copy = nullptr;
-
-        if( m_originalFootprintCopy )
-            fp_copy = static_cast<FOOTPRINT*>( m_originalFootprintCopy->Clone() );
-
-        m_activeTab->SetOriginalFootprintCopy( std::unique_ptr<FOOTPRINT>( fp_copy ) );
-        m_activeTab->SetFootprintNameWhenLoaded( m_footprintNameWhenLoaded );
-        m_activeTab->SetName( aFootprint->GetFPID().GetLibItemName() );
-    }
-
-    PCB_BASE_EDIT_FRAME::AddFootprintToBoard( aFootprint );
-    // Ensure item UUIDs are valid
-    // ("old" footprints can have null uuids that create issues in fp editor)
-    aFootprint->FixUuids();
-
-    updateEnabledLayers();
-
     // Use CallAfter so that we update the canvas before waiting for the infobar animation
     CallAfter(
             [this]()
@@ -881,7 +849,43 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
                         infobar->Dismiss();
                 }
             } );
+}
 
+
+void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
+{
+    // Cancel a mid-draw tool before the footprint it points into is freed (#24975).
+    if( GetToolManager() )
+        GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+    GetBoard()->DeleteAllFootprints();
+
+    m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
+    m_originalFootprintCopy->SetParent( nullptr );
+
+    m_footprintNameWhenLoaded = aFootprint->GetFPID().GetUniStringLibItemName();
+
+    // Mirror the load baseline into the active tab context so it survives a tab switch (the frame
+    // members are only a borrowed view of the active context's baseline).
+    if( m_activeTab )
+    {
+        FOOTPRINT* fp_copy = nullptr;
+
+        if( m_originalFootprintCopy )
+            fp_copy = static_cast<FOOTPRINT*>( m_originalFootprintCopy->Clone() );
+
+        m_activeTab->SetOriginalFootprintCopy( std::unique_ptr<FOOTPRINT>( fp_copy ) );
+        m_activeTab->SetFootprintNameWhenLoaded( m_footprintNameWhenLoaded );
+        m_activeTab->SetName( aFootprint->GetFPID().GetLibItemName() );
+    }
+
+    PCB_BASE_EDIT_FRAME::AddFootprintToBoard( aFootprint );
+    // Ensure item UUIDs are valid
+    // ("old" footprints can have null uuids that create issues in fp editor)
+    aFootprint->FixUuids();
+
+    updateEnabledLayers();
+    updateInfoBar();
     UpdateMsgPanel();
     UpdateUserInterface();
 }
@@ -1034,8 +1038,7 @@ void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEX
     }
 
     m_originalFootprintCopy.reset( aCtx && aCtx->GetOriginalFootprintCopy()
-                                           ? static_cast<FOOTPRINT*>(
-                                                     aCtx->GetOriginalFootprintCopy()->Clone() )
+                                           ? static_cast<FOOTPRINT*>( aCtx->GetOriginalFootprintCopy()->Clone() )
                                            : nullptr );
     m_footprintNameWhenLoaded = aCtx ? aCtx->GetFootprintNameWhenLoaded() : wxString();
 
@@ -1062,6 +1065,7 @@ void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEX
     if( !aCtx )
     {
         updateEnabledLayers();
+        updateInfoBar();
         UpdateMsgPanel();
         UpdateUserInterface();
         GetCanvas()->ForceRefresh();
@@ -1102,6 +1106,7 @@ void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEX
         m_propertiesPanel->UpdateData();
 
     updateEnabledLayers();
+    updateInfoBar();
     UpdateMsgPanel();
     UpdateUserInterface();
     GetCanvas()->ForceRefresh();
@@ -1787,10 +1792,7 @@ bool FOOTPRINT_EDIT_FRAME::CanCloseFPFromBoard( bool doClose )
     }
 
     if( doClose )
-    {
-        GetInfoBar()->ShowMessageFor( wxEmptyString, 1 );
         Clear_Pcb( false );
-    }
 
     return true;
 }
