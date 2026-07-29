@@ -2371,8 +2371,17 @@ std::vector<PCB_SHAPE*> BOARD_CONSTRAINT_ADAPTER::Apply( const std::function<voi
             if( aBeforeWrite )
                 aBeforeWrite( vars.dimension );
 
+            PCB_DIM_RADIAL* radial = vars.dimension->Type() == PCB_DIM_RADIAL_T
+                                             ? static_cast<PCB_DIM_RADIAL*>( vars.dimension )
+                                             : nullptr;
+            VECTOR2I        oldKnee = radial ? radial->GetKnee() : VECTOR2I();
+
             vars.dimension->SetStart( start );
             vars.dimension->SetEnd( end );
+
+            if( radial )
+                radial->SetTextPos( radial->GetTextPos() + radial->GetKnee() - oldKnee );
+
             vars.dimension->Update();   // SetStart/SetEnd alone do not re-derive the crossbar and text
             continue;
         }

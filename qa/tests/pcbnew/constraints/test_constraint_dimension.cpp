@@ -305,6 +305,36 @@ BOOST_AUTO_TEST_CASE( RadialDrivingLengthDrivesCircleRadius )
 }
 
 
+// Radial text is hand placed so a driving radius change must carry it with the leader knee
+BOOST_AUTO_TEST_CASE( RadialDrivingLengthCarriesTextWithKnee )
+{
+    BOARD      board;
+    PCB_SHAPE* circle = addCircle( board, { 0, 0 }, 5 * MM );
+
+    PCB_DIM_RADIAL* dim = addRadialDim( board, { 0, 0 }, { 5 * MM, 0 } );
+
+    const VECTOR2I textOffset( 3 * MM, -2 * MM );
+
+    dim->SetTextPos( dim->GetKnee() + textOffset );
+    dim->Update();
+
+    addConstraint( board, PCB_CONSTRAINT_TYPE::COINCIDENT,
+                   { { dim->m_Uuid, CONSTRAINT_ANCHOR::START }, { circle->m_Uuid, CONSTRAINT_ANCHOR::CENTER } } );
+    addConstraint( board, PCB_CONSTRAINT_TYPE::POINT_ON_LINE,
+                   { { dim->m_Uuid, CONSTRAINT_ANCHOR::END }, { circle->m_Uuid, CONSTRAINT_ANCHOR::WHOLE } } );
+
+    PCB_CONSTRAINT* driving = addDrivingLength( board, dim->m_Uuid, 12 * MM );
+
+    ApplyConstraintImmediately( &board, driving );
+
+    BOOST_CHECK_LE( std::abs( circle->GetRadius() - 12 * MM ), 5000 );
+    BOOST_CHECK_LE( std::abs( ( dim->GetEnd() - dim->GetStart() ).EuclideanNorm() - 12 * MM ), 5000.0 );
+
+    // Knee moved with the rim point so the text must have moved the same way
+    BOOST_CHECK_LE( ( ( dim->GetTextPos() - dim->GetKnee() ) - textOffset ).EuclideanNorm(), 5000.0 );
+}
+
+
 // Horizontal driving orthogonal fixes x gap only y stays free
 BOOST_AUTO_TEST_CASE( OrthogonalHorizontalDrivingSetsXAxisOnly )
 {
