@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-17 10:01+0000\n"
+"PO-Revision-Date: 2026-07-31 18:02+0000\n"
 "Last-Translator: Che-Hsien Su <jonassu1101@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -3412,11 +3412,11 @@ msgstr "屬性"
 
 #: common/dialogs/dialog_kicad_diff.cpp:63
 msgid "Before"
-msgstr ""
+msgstr "之前"
 
 #: common/dialogs/dialog_kicad_diff.cpp:64
 msgid "After"
-msgstr ""
+msgstr "之後"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
 #, fuzzy
@@ -6715,7 +6715,7 @@ msgstr "圖像數據讀取失敗。"
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
-msgstr ""
+msgstr "衝突"
 
 #: common/diff_merge/diff_tree_grouping.cpp:41
 #, fuzzy
@@ -7508,7 +7508,7 @@ msgstr "多邊形"
 #: common/eda_shape.cpp:469 common/eda_shape.cpp:1463 common/eda_shape.cpp:3398
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:213
 msgid "Ellipse"
-msgstr ""
+msgstr "橢圓"
 
 #: common/eda_shape.cpp:470 common/eda_shape.cpp:1464 common/eda_shape.cpp:3399
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:229
@@ -8352,7 +8352,7 @@ msgstr "無法建立提交: %s"
 
 #: common/git/libgit_backend.cpp:307 kicad/project_tree_pane.cpp:2831
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "無法修改：這分支還沒有任何提交記錄."
 
 #: common/git/libgit_backend.cpp:326
 #, fuzzy, c-format
@@ -8464,7 +8464,7 @@ msgstr "無法讀取 'FETCH_HEAD'"
 #: common/git/libgit_backend.cpp:1176
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
-msgstr ""
+msgstr "沒有能抓取的:遠端沒有分支能對應當前本地分支."
 
 #: common/git/libgit_backend.cpp:1185
 msgid "Could not lookup commit"
@@ -9028,11 +9028,11 @@ msgstr ""
 
 #: common/io/eagle/eagle_bin_parser.cpp:2428
 msgid "Eagle binary file has no drawing section."
-msgstr ""
+msgstr "Eagle二進制文件沒有繪圖區域."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2446
 msgid "Eagle binary layout is missing a board/libraries node."
-msgstr ""
+msgstr "Eagle二進制佈局缺少電路板/元件庫節點."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2552
 #, fuzzy
@@ -9043,7 +9043,7 @@ msgstr ""
 
 #: common/io/eagle/eagle_bin_parser.cpp:2617
 msgid "Eagle binary schematic has no drawing section."
-msgstr ""
+msgstr "Eagle二進制原理圖缺少繪圖區域."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2622
 #, fuzzy
@@ -26655,7 +26655,7 @@ msgstr "打不開 '%s' 檔案來寫入 IBIS 模型"
 
 #: eeschema/sim/sim_model_ibis.cpp:323
 msgid "Switch state (1 = on, 0 = off)"
-msgstr ""
+msgstr "開關狀態 (1=開, 0=關)"
 
 #: eeschema/sim/sim_model_ibis.cpp:470
 msgid "Power supply"
@@ -26718,6 +26718,8 @@ msgid ""
 "Repeat-per-unit decomposition does not support model '%s' because it has "
 "subcircuit parameters."
 msgstr ""
+"重複單元分解 (repeat-per-unit decomposition) 不支援模型 '%s'，因為它具有子電"
+"路參數(subcircuit parameters)."
 
 #: eeschema/sim/sim_model_multiunit.cpp:218
 #, c-format
@@ -32617,7 +32619,7 @@ msgstr "顯示幫助資訊並退出"
 
 #: kicad/cli/command_api_server.cpp:51
 msgid "Run the KiCad IPC API server in headless mode"
-msgstr ""
+msgstr "用無頭模式運行KiCad IPC API伺服器"
 
 #: kicad/cli/command_api_server.cpp:56
 msgid ""
@@ -32730,7 +32732,7 @@ msgstr ""
 
 #: kicad/cli/command_gerber_convert_png.cpp:73
 msgid "Use transparent background (default)"
-msgstr ""
+msgstr "使用透明背景 (預設)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:76
 #: kicad/cli/command_gerber_diff.cpp:86 kicad/cli/command_gerber_info.cpp:56
@@ -32762,17 +32764,17 @@ msgstr ""
 
 #: kicad/cli/command_gerber_convert_png.cpp:109
 msgid "Foreground color as hex (e.g., '#FFFFFF')"
-msgstr ""
+msgstr "十六進制表示前景顏色 (例如: '#FFFFFF')"
 
 #: kicad/cli/command_gerber_convert_png.cpp:114
 msgid "Background color as hex (e.g., '#000000')"
-msgstr ""
+msgstr "十六進制表示背景顏色 (例如: '#000000')"
 
 #: kicad/cli/command_gerber_convert_png.cpp:147
 #: kicad/cli/command_gerber_info.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid units: %s\n"
-msgstr "指定的單位無效\n"
+msgstr "指定的單位無效: %s\n"
 
 #: kicad/cli/command_gerber_convert_png.cpp:158
 msgid ""
@@ -32781,7 +32783,7 @@ msgstr ""
 
 #: kicad/cli/command_gerber_diff.cpp:47
 msgid "Compare two Gerber or Excellon files and show differences"
-msgstr ""
+msgstr "比較兩個Gerber或Excellon文件並顯示區別"
 
 #: kicad/cli/command_gerber_diff.cpp:50
 msgid "Reference file (first Gerber/Excellon file)"
