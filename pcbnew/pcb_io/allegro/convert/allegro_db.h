@@ -67,8 +67,10 @@ public:
     /**
      * Pre-allocate storage for the expected number of objects and strings.
      * Avoids incremental rehashing as elements are inserted.
+     *
+     * @param aFileSize size of the source file, used to bound the header's claimed counts.
      */
-    void ReserveCapacity( size_t aObjectCount, size_t aStringCount );
+    void ReserveCapacity( size_t aObjectCount, size_t aStringCount, size_t aFileSize );
 
     /**
      * Populate sentinel keys from the file header linked lists.

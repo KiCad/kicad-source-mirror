@@ -2873,7 +2873,7 @@ std::unique_ptr<BRD_DB> ALLEGRO::PARSER::Parse()
     }
 
     const uint32_t stringsCount = board->m_Header->GetStringsCount();
-    board->ReserveCapacity( board->m_Header->m_ObjectCount, stringsCount );
+    board->ReserveCapacity( board->m_Header->m_ObjectCount, stringsCount, m_stream.Size() );
 
     try
     {

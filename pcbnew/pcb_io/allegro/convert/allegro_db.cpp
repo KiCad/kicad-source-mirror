@@ -31,12 +31,15 @@
 using namespace ALLEGRO;
 
 
-void BRD_DB::ReserveCapacity( size_t aObjectCount, size_t aStringCount )
+void BRD_DB::ReserveCapacity( size_t aObjectCount, size_t aStringCount, size_t aFileSize )
 {
-    // The object and strings count come from user input directly
-    // clamp them in case we get a gigantic number
-    aObjectCount = std::min( aObjectCount, static_cast<size_t>( 1e6 ) );
-    aStringCount = std::min( aStringCount, static_cast<size_t>( 1e6 ) );
+    // The counts come from the file header, so clamp them to what the file could hold. A fixed
+    // ceiling starves real designs and costs a full rehash of the key map at every doubling
+    constexpr size_t minBlockBytes = 16;
+    constexpr size_t minStringBytes = 2;
+
+    aObjectCount = std::min( aObjectCount, aFileSize / minBlockBytes );
+    aStringCount = std::min( aStringCount, aFileSize / minStringBytes );
 
     m_Blocks.reserve( aObjectCount );
     m_ObjectKeyMap.reserve( aObjectCount );

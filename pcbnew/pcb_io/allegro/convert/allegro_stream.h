@@ -47,6 +47,8 @@ public:
 
     size_t Position() const { return m_pos; }
 
+    size_t Size() const { return m_size; }
+
     void Seek( size_t aPos )
     {
         if( aPos > m_size )
