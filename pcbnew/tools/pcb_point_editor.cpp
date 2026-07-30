@@ -2191,8 +2191,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     }
 
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
+    bool        overrideLocks = editFrame->GetOverrideLocks();
 
-    if( !item || item->IsLocked() )
+    if( !item || ( item->IsLocked() && !overrideLocks ) )
         return 0;
 
     Activate();
@@ -2229,7 +2230,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
         }
 
-        if( allShapes && shapes.size() > 1 && !anyLocked )
+        if( allShapes && shapes.size() > 1 && ( !anyLocked || overrideLocks ) )
         {
             m_editorBehavior = std::make_unique<SHAPE_GROUP_POINT_EDIT_BEHAVIOR>(
                     std::move( shapes ), item );
