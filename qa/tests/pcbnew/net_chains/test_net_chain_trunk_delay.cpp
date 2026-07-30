@@ -66,36 +66,35 @@ void tagChainNets( BOARD* aBoard, const wxString& aChain )
 }
 
 
-void setTerminals( BOARD* aBoard, const wxString& aChain, double aTermAxMm, double aTermBxMm )
+// Anchor terminals at the extreme-X footprints; the fixture routes in a single
+// row and carries no Reference strings to match on
+void setTerminals( BOARD* aBoard, const wxString& aChain )
 {
-    PAD* termA = nullptr;
-    PAD* termB = nullptr;
-    constexpr int  EPS = 100;
-    const VECTOR2I targetA( static_cast<int>( aTermAxMm * 1000000 ), 0 );
-    const VECTOR2I targetB( static_cast<int>( aTermBxMm * 1000000 ), 0 );
+    FOOTPRINT* first = nullptr;
+    FOOTPRINT* last = nullptr;
 
     for( FOOTPRINT* fp : aBoard->Footprints() )
     {
         if( fp->Pads().empty() )
             continue;
 
-        VECTOR2I pos = fp->GetPosition();
+        if( !first || fp->GetPosition().x < first->GetPosition().x )
+            first = fp;
 
-        if( std::abs( pos.x - targetA.x ) <= EPS && std::abs( pos.y - targetA.y ) <= EPS )
-            termA = fp->Pads().front();
-
-        if( std::abs( pos.x - targetB.x ) <= EPS && std::abs( pos.y - targetB.y ) <= EPS )
-            termB = fp->Pads().front();
+        if( !last || fp->GetPosition().x > last->GetPosition().x )
+            last = fp;
     }
+
+    BOOST_REQUIRE( first );
+    BOOST_REQUIRE( last );
+    BOOST_REQUIRE( first != last );
 
     for( NETINFO_ITEM* n : aBoard->GetNetInfo() )
     {
         if( n && n->GetNetChain() == aChain )
         {
-            if( termA )
-                n->SetTerminalPad( 0, termA );
-            if( termB )
-                n->SetTerminalPad( 1, termB );
+            n->SetTerminalPad( 0, first->Pads().front() );
+            n->SetTerminalPad( 1, last->Pads().front() );
         }
     }
 }
@@ -136,7 +135,7 @@ BOOST_AUTO_TEST_CASE( DaisyTrunkDelayEqualsBridgeWithoutStackup )
 {
     auto board = loadBoard( DAISY_PCB_FILE );
     tagChainNets( board.get(), wxS( "DSY" ) );
-    setTerminals( board.get(), wxS( "DSY" ), 0.0, 50.0 );
+    setTerminals( board.get(), wxS( "DSY" ) );
 
     CHAIN_TOPOLOGY topo( board.get(), wxS( "DSY" ), collectChainItems( board.get(), wxS( "DSY" ) ),
                          DEFAULT_PROPAGATION_DELAY_PS_PER_MM );

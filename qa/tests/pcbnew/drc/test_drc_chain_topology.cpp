@@ -150,9 +150,10 @@ BOOST_AUTO_TEST_CASE( TopologyDetectsTStub )
     BOOST_CHECK( topo.IsValid() );
     BOOST_REQUIRE_EQUAL( topo.Stubs().size(), 1u );
 
+    // Fixture trunk runs (32,49) to (82,49); the stub taps it at the midpoint
     const CHAIN_TOPOLOGY::STUB& stub = topo.Stubs().front();
-    BOOST_CHECK_LE( std::abs( stub.branchPoint.x - 25 * MM ), 100 );
-    BOOST_CHECK_LE( std::abs( stub.branchPoint.y ), 100 );
+    BOOST_CHECK_LE( std::abs( stub.branchPoint.x - 57 * MM ), 100 );
+    BOOST_CHECK_LE( std::abs( stub.branchPoint.y - 49 * MM ), 100 );
     BOOST_CHECK_CLOSE( stub.length, 5.0 * MM, 5.0 );
 
     // Trunk length is 50 mm and the stub does not contribute.
