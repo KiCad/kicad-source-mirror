@@ -1272,6 +1272,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 PCB_VIA* via = static_cast<PCB_VIA*>( track );
                 bool     updatePadstack = m_padstackDirty;
 
+                // Edit each via's own padstack.  Only a mode change replaces it wholesale.
+                PADSTACK viaStack = m_padstackDirty ? *m_viaStack : via->Padstack();
+
                 if( !m_viaX.IsIndeterminate() )
                     via->SetPosition( VECTOR2I( m_viaX.GetIntValue(), via->GetPosition().y ) );
 
@@ -1288,7 +1291,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                     if( currentSize.x != newDiameter || currentSize.y != newDiameter )
                     {
-                        m_viaStack->SetSize( { newDiameter, newDiameter }, m_editLayer );
+                        viaStack.SetSize( { newDiameter, newDiameter }, m_editLayer );
                         updatePadstack = true;
                     }
                 }
@@ -1317,7 +1320,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     case BACKDRILL_MODE::BACKDRILL_BOTTOM:
                         if( m_backdrillBackSize.IsIndeterminate() || m_backdrillBackSize.IsNull() )
                         {
-                            tertiaryDrill.size = m_viaStack->TertiaryDrill().size;
+                            tertiaryDrill.size = viaStack.TertiaryDrill().size;
                         }
                         else
                         {
@@ -1336,7 +1339,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     case BACKDRILL_MODE::BACKDRILL_TOP:
                         if( m_backdrillFrontSize.IsIndeterminate() || m_backdrillFrontSize.IsNull() )
                         {
-                            secondaryDrill.size = m_viaStack->SecondaryDrill().size;
+                            secondaryDrill.size = viaStack.SecondaryDrill().size;
                         }
                         else
                         {
@@ -1355,7 +1358,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     case BACKDRILL_MODE::BACKDRILL_BOTH:
                         if( m_backdrillFrontSize.IsIndeterminate() || m_backdrillFrontSize.IsNull() )
                         {
-                            secondaryDrill.size = m_viaStack->SecondaryDrill().size;
+                            secondaryDrill.size = viaStack.SecondaryDrill().size;
                         }
                         else
                         {
@@ -1371,7 +1374,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                         if( m_backdrillBackSize.IsIndeterminate() || m_backdrillBackSize.IsNull() )
                         {
-                            tertiaryDrill.size = m_viaStack->TertiaryDrill().size;
+                            tertiaryDrill.size = viaStack.TertiaryDrill().size;
                         }
                         else
                         {
@@ -1390,13 +1393,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                     if( via->Padstack().SecondaryDrill() != secondaryDrill )
                     {
-                        m_viaStack->SecondaryDrill() = secondaryDrill;
+                        viaStack.SecondaryDrill() = secondaryDrill;
                         updatePadstack = true;
                     }
 
                     if( via->Padstack().TertiaryDrill() != tertiaryDrill )
                     {
-                        m_viaStack->TertiaryDrill() = tertiaryDrill;
+                        viaStack.TertiaryDrill() = tertiaryDrill;
                         updatePadstack = true;
                     }
                 }
@@ -1406,9 +1409,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     {
                         int frontSize = m_backdrillFrontSize.GetIntValue();
 
-                        if( m_viaStack->SecondaryDrill().size != VECTOR2I( frontSize, frontSize ) )
+                        if( viaStack.SecondaryDrill().size != VECTOR2I( frontSize, frontSize ) )
                         {
-                            m_viaStack->SecondaryDrill().size = VECTOR2I( frontSize, frontSize );
+                            viaStack.SecondaryDrill().size = VECTOR2I( frontSize, frontSize );
                             updatePadstack = true;
                         }
                     }
@@ -1417,9 +1420,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     {
                         int backSize = m_backdrillBackSize.GetIntValue();
 
-                        if( m_viaStack->TertiaryDrill().size != VECTOR2I( backSize, backSize ) )
+                        if( viaStack.TertiaryDrill().size != VECTOR2I( backSize, backSize ) )
                         {
-                            m_viaStack->TertiaryDrill().size = VECTOR2I( backSize, backSize );
+                            viaStack.TertiaryDrill().size = VECTOR2I( backSize, backSize );
                             updatePadstack = true;
                         }
                     }
@@ -1457,7 +1460,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                     if( via->Padstack().FrontPostMachining() != props )
                     {
-                        m_viaStack->FrontPostMachining() = props;
+                        viaStack.FrontPostMachining() = props;
                         updatePadstack = true;
                     }
                 }
@@ -1493,7 +1496,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                     if( via->Padstack().BackPostMachining() != props )
                     {
-                        m_viaStack->BackPostMachining() = props;
+                        viaStack.BackPostMachining() = props;
                         updatePadstack = true;
                     }
                 }
@@ -1514,7 +1517,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 {
                     if( via->Padstack().Drill().start != startLayer )
                     {
-                        m_viaStack->Drill().start = startLayer;
+                        viaStack.Drill().start = startLayer;
                         updatePadstack = true;
                     }
 
@@ -1525,7 +1528,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 {
                     if( via->Padstack().Drill().end != endLayer )
                     {
-                        m_viaStack->Drill().end = endLayer;
+                        viaStack.Drill().end = endLayer;
                         updatePadstack = true;
                     }
 
@@ -1534,7 +1537,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                 if( updatePadstack )
                 {
-                    via->SetPadstack( *m_viaStack );
+                    via->SetPadstack( viaStack );
                     via->SanitizeLayers();
                 }
 
@@ -1741,8 +1744,14 @@ void DIALOG_TRACK_VIA_PROPERTIES::onEditLayerChanged( wxCommandEvent& aEvent )
     // Save data from the previous layer
     if( !m_viaDiameter.IsIndeterminate() )
     {
-        int diameter = m_viaDiameter.GetIntValue();
-        m_viaStack->SetSize( { diameter, diameter }, m_editLayer );
+        int             diameter = m_viaDiameter.GetIntValue();
+        const VECTOR2I& currentSize = m_viaStack->Size( m_editLayer );
+
+        if( currentSize.x != diameter || currentSize.y != diameter )
+        {
+            m_viaStack->SetSize( { diameter, diameter }, m_editLayer );
+            m_padstackDirty = true;
+        }
     }
 
     switch( m_viaStack->Mode() )
