@@ -35,7 +35,7 @@ void json_uri::update(const std::string &uri)
 			}
 
 			std::string hex = pointer.substr(pos + 1, 2);
-			char ascii = (char) std::strtoul(hex.c_str(), nullptr, 16);
+			char ascii = static_cast<char>(std::strtoul(hex.c_str(), nullptr, 16));
 			pointer.replace(pos, 3, 1, ascii);
 
 			pos--;

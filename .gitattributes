@@ -31,6 +31,10 @@ bitmaps_png/cpp_*/*.cpp     generated
 common/libeval/grammar.c    generated
 common/libeval/grammar.h    generated
 
+# Vendored json-schema-validator sources are upstream sources and must not be reformatted
+thirdparty/json_schema_validator/**    -format.clang-format-kicad -whitespace
+
+
 # Scripts
 *.sh    text eol=lf
 *.bat   text eol=crlf
