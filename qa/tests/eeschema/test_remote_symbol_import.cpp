@@ -29,6 +29,9 @@
 #include <sch_io/sch_io_mgr.h>
 #include <settings/settings_manager.h>
 
+#include <qa_utils/wx_utils/unit_test_utils.h>
+
+#include <wx/ffile.h>
 #include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
@@ -36,40 +39,22 @@
 
 namespace
 {
+// The served payload is the shared qa/data library with its symbol renamed, so a download
+// under a different name still yields a parseable .kicad_sym.
 std::string symbolPayload( const char* aName )
 {
-    return wxString::Format(
-                   wxS( "(kicad_symbol_lib (version 20220914) (generator kicad_symbol_editor)\n"
-                        "  (symbol \"%s\" (in_bom yes) (on_board yes)\n"
-                        "    (property \"Reference\" \"R\" (at 0 0 0)\n"
-                        "      (effects (font (size 1.27 1.27)))\n"
-                        "    )\n"
-                        "    (property \"Value\" \"%s\" (at 0 0 0)\n"
-                        "      (effects (font (size 1.27 1.27)))\n"
-                        "    )\n"
-                        "    (property \"Footprint\" \"\" (at 0 0 0)\n"
-                        "      (effects (font (size 1.27 1.27)) hide)\n"
-                        "    )\n"
-                        "    (property \"Datasheet\" \"\" (at 0 0 0)\n"
-                        "      (effects (font (size 1.27 1.27)) hide)\n"
-                        "    )\n"
-                        "    (symbol \"%s_0_1\"\n"
-                        "      (rectangle (start -1.27 -1.27) (end 1.27 1.27)\n"
-                        "        (stroke (width 0) (type default))\n"
-                        "        (fill (type background))\n"
-                        "      )\n"
-                        "    )\n"
-                        "    (symbol \"%s_1_1\"\n"
-                        "      (pin passive line (at -3.81 0 0) (length 2.54)\n"
-                        "        (name \"PIN\" (effects (font (size 1.27 1.27))))\n"
-                        "        (number \"1\" (effects (font (size 1.27 1.27))))\n"
-                        "      )\n"
-                        "    )\n"
-                        "  )\n"
-                        ")\n" ),
-                   wxString::FromUTF8( aName ), wxString::FromUTF8( aName ),
-                   wxString::FromUTF8( aName ), wxString::FromUTF8( aName ) )
-            .ToStdString();
+    wxString libPath = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() )
+                       + wxS( "remote_symbol_lib.kicad_sym" );
+
+    wxFFile file( libPath, wxS( "rb" ) );
+    BOOST_REQUIRE_MESSAGE( file.IsOpened(), "Could not open " << libPath );
+
+    wxString body;
+    BOOST_REQUIRE( file.ReadAll( &body ) );
+
+    body.Replace( wxS( "TestResistor" ), wxString::FromUTF8( aName ) );
+
+    return std::string( body.ToUTF8() );
 }
 
 

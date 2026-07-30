@@ -33,6 +33,7 @@ import argparse
 import base64
 import hashlib
 import json
+from pathlib import Path
 from typing import Dict, List, Optional
 
 import uvicorn
@@ -144,36 +145,16 @@ provider_parts = [
 ]
 
 
-def symbol_payload(symbol_name: str) -> str:
-    return f"""(kicad_symbol_lib (version 20220914) (generator kicad_symbol_editor)
-  (symbol "{symbol_name}" (in_bom yes) (on_board yes)
-    (property "Reference" "R" (at 0 0 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "{symbol_name}" (at 0 0 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "" (at 0 0 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" "" (at 0 0 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (symbol "{symbol_name}_0_1"
-      (rectangle (start -1.27 -1.27) (end 1.27 1.27)
-        (stroke (width 0) (type default))
-        (fill (type background))
-      )
-    )
-    (symbol "{symbol_name}_1_1"
-      (pin passive line (at -3.81 0 0) (length 2.54)
-        (name "PIN" (effects (font (size 1.27 1.27))))
-        (number "1" (effects (font (size 1.27 1.27))))
-      )
-    )
-  )
+SYMBOL_LIB_TEMPLATE = (
+    Path(__file__).resolve().parents[2] / "data" / "eeschema" / "remote_symbol_lib.kicad_sym"
 )
-"""
+
+
+def symbol_payload(symbol_name: str) -> str:
+    """Serve the shared qa/data library with its symbol renamed."""
+    return SYMBOL_LIB_TEMPLATE.read_text(encoding="utf-8").replace(
+        "TestResistor", symbol_name
+    )
 
 
 def asset_size_and_sha256(asset_name: str) -> tuple[int, str]:

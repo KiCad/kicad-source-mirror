@@ -19,8 +19,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <filesystem>
-#include <fstream>
+#include <pcbnew_utils/board_file_utils.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -38,103 +37,30 @@
 // Two-net daisy chain through a single bridge, terminals set.  The trunk
 // length should equal the sum of both routed segments + the bridge span.
 // A `(constraint net_chain_length (max 80mm))` rule passes when trunk == 50 mm.
-static const char* DAISY_PCB = R"(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-        (44 "Edge.Cuts" user)
-    )
-    (net 0 "")
-    (net 1 "/NET_A")
-    (net 2 "/NET_B")
-    (gr_line (start -5 -5) (end 60 -5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 60 -5) (end 60 5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 60 5) (end -5 5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start -5 5) (end -5 -5) (layer "Edge.Cuts") (width 0.05))
-    (footprint "Term1" (layer "F.Cu") (uuid "00000000-0000-0000-0000-000000000a01")
-        (at 0 0)
-        (pad "1" smd rect (at 0 0) (size 0.8 0.8) (layers "F.Cu") (net 1 "/NET_A") (uuid "00000000-0000-0000-0000-000000000a02"))
-    )
-    (footprint "Bridge" (layer "F.Cu") (uuid "00000000-0000-0000-0000-000000000b01")
-        (at 22.5 0)
-        (pad "1" smd rect (at -2.5 0) (size 0.8 0.8) (layers "F.Cu") (net 1 "/NET_A") (uuid "00000000-0000-0000-0000-000000000b02"))
-        (pad "2" smd rect (at  2.5 0) (size 0.8 0.8) (layers "F.Cu") (net 2 "/NET_B") (uuid "00000000-0000-0000-0000-000000000b03"))
-    )
-    (footprint "Term2" (layer "F.Cu") (uuid "00000000-0000-0000-0000-000000000c01")
-        (at 50 0)
-        (pad "1" smd rect (at 0 0) (size 0.8 0.8) (layers "F.Cu") (net 2 "/NET_B") (uuid "00000000-0000-0000-0000-000000000c02"))
-    )
-    (segment (start 0 0) (end 20 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 25 0) (end 50 0) (width 0.2) (layer "F.Cu") (net 2))
-)
-)";
+static const char* DAISY_PCB_FILE = "net_chains/chain_length_daisy.kicad_pcb";
 
 
-// Same trunk as DAISY_PCB but adding three perpendicular branches off the trunk
+// Same trunk as the daisy fixture but adding three perpendicular branches off the trunk
 // (T-junctions in the routed copper) all carrying the same chain so the trunk
 // stays unaffected — provides a regression check that branches don't add to
 // the trunk length when terminals are set.
-static const char* BRANCHED_PCB = R"(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-        (44 "Edge.Cuts" user)
-    )
-    (net 0 "")
-    (net 1 "/NET_A")
-    (gr_line (start -5 -25) (end 60 -25) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 60 -25) (end 60 25) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 60 25) (end -5 25) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start -5 25) (end -5 -25) (layer "Edge.Cuts") (width 0.05))
-    (footprint "Term1" (layer "F.Cu") (uuid "00000000-0000-0000-0000-000000000d01")
-        (at 0 0)
-        (pad "1" smd rect (at 0 0) (size 0.8 0.8) (layers "F.Cu") (net 1 "/NET_A") (uuid "00000000-0000-0000-0000-000000000d02"))
-    )
-    (footprint "Term2" (layer "F.Cu") (uuid "00000000-0000-0000-0000-000000000e01")
-        (at 50 0)
-        (pad "1" smd rect (at 0 0) (size 0.8 0.8) (layers "F.Cu") (net 1 "/NET_A") (uuid "00000000-0000-0000-0000-000000000e02"))
-    )
-    (segment (start 0 0) (end 50 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 12.5 0) (end 12.5 15) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 25 0) (end 25 -20) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 37.5 0) (end 37.5 18) (width 0.2) (layer "F.Cu") (net 1))
-)
-)";
+static const char* BRANCHED_PCB_FILE = "net_chains/chain_length_branched.kicad_pcb";
 
 
 namespace
 {
-std::unique_ptr<BOARD> loadBoard( const char* aText, const std::string& aSubdir )
+std::unique_ptr<BOARD> loadBoard( const char* aBoardFile )
 {
-    namespace fs = std::filesystem;
-    fs::path tmpDir = fs::temp_directory_path() / aSubdir;
-    fs::create_directories( tmpDir );
-    fs::path pcbPath = tmpDir / "trunk.kicad_pcb";
-
-    {
-        std::ofstream out( pcbPath );
-        out << aText;
-    }
-
     PCB_IO_KICAD_SEXPR     plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    plugin.LoadBoard( pcbPath.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + aBoardFile, board.get() );
     board->BuildConnectivity();
-    fs::remove( pcbPath );
     return board;
 }
 
 // Tag every "/NET_*" net into the named chain.  Terminal pads come from the
-// footprints whose anchor matches the given X positions (in mm) — the inline
-// PCB strings here don't set explicit Reference properties.
+// footprints whose anchor matches the given X positions (in mm) — the fixture
+// boards don't set explicit Reference properties.
 void tagAndSetTerminals( BOARD* aBoard, const wxString& aChain,
                          double aTermAxMm, double aTermBxMm )
 {
@@ -185,7 +111,7 @@ BOOST_AUTO_TEST_SUITE( DRCChainLengthTrunk )
 // Two-net daisy with terminals: trunk = (20 + 25 + 5 bridge) = 50 mm.
 BOOST_AUTO_TEST_CASE( DaisyChainTrunkEqualsSumExplicit )
 {
-    auto board = loadBoard( DAISY_PCB, "kicad_drc_trunk_daisy" );
+    auto board = loadBoard( DAISY_PCB_FILE );
     tagAndSetTerminals( board.get(), wxS( "DSY" ), 0.0, 50.0 );
 
     std::set<BOARD_CONNECTED_ITEM*> items;
@@ -216,7 +142,7 @@ BOOST_AUTO_TEST_CASE( DaisyChainTrunkEqualsSumExplicit )
 // reported as stubs (3 of them).
 BOOST_AUTO_TEST_CASE( BranchedChainTrunkExcludesStubs )
 {
-    auto board = loadBoard( BRANCHED_PCB, "kicad_drc_trunk_branched" );
+    auto board = loadBoard( BRANCHED_PCB_FILE );
     tagAndSetTerminals( board.get(), wxS( "BR" ), 0.0, 50.0 );
 
     std::set<BOARD_CONNECTED_ITEM*> items;

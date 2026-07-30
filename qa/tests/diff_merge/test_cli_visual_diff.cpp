@@ -24,8 +24,10 @@
 #include <boost/test/unit_test.hpp>
 
 #include <jobs/job_pcb_diff.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <wx/file.h>
+#include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/process.h>
 #include <wx/stdpaths.h>
@@ -128,12 +130,14 @@ COMMAND_RESULT runCli( const std::vector<wxString>& aArgs )
 }
 
 
-void writeTextFile( const wxString& aPath, const char* aContent )
+// The A/B fixtures live in qa/data; kicad-cli writes its diff output next to its inputs so
+// each run gets a scratch copy rather than touching the source tree.
+void copyFixture( const wxString& aName, const wxString& aDest )
 {
-    wxFile file;
-    BOOST_REQUIRE_MESSAGE( file.Create( aPath, true ), "Could not create " << aPath );
-    BOOST_REQUIRE( file.Write( wxString::FromUTF8( aContent ) ) );
-    file.Close();
+    wxString src = wxString::FromUTF8( KI_TEST::GetTestDataRootDir() )
+                   + wxS( "diff_merge/visual_diff/" ) + aName;
+
+    BOOST_REQUIRE_MESSAGE( wxCopyFile( src, aDest ), "Could not copy " << src );
 }
 
 
@@ -233,52 +237,14 @@ struct CLI_FIXTURES
 
     void writePcbFixtures()
     {
-        writeTextFile( pcbA, R"(
-(kicad_pcb (version 20241228) (generator "pcbnew") (generator_version "9.0")
-  (general (thickness 1.6))
-  (paper "A4")
-  (layers
-    (0 "F.Cu" signal)
-    (31 "B.Cu" signal)
-    (44 "Edge.Cuts" user)
-  )
-)
-)" );
-
-        writeTextFile( pcbB, R"(
-(kicad_pcb (version 20241228) (generator "pcbnew") (generator_version "9.0")
-  (general (thickness 1.6))
-  (paper "A4")
-  (layers
-    (0 "F.Cu" signal)
-    (31 "B.Cu" signal)
-    (44 "Edge.Cuts" user)
-  )
-  (gr_line (start 10 10) (end 40 10)
-    (stroke (width 0.15) (type solid)) (layer "Edge.Cuts") (uuid "11111111-1111-1111-1111-111111111111"))
-)
-)" );
+        copyFixture( wxS( "pcb_a.kicad_pcb" ), pcbA );
+        copyFixture( wxS( "pcb_b.kicad_pcb" ), pcbB );
     }
 
     void writeSchFixtures()
     {
-        writeTextFile( schA, R"(
-(kicad_sch (version 20230121) (generator "eeschema")
-  (uuid "00000000-0000-0000-0000-000000000001")
-  (paper "A4")
-)
-)" );
-
-        writeTextFile( schB, R"(
-(kicad_sch (version 20230121) (generator "eeschema")
-  (uuid "00000000-0000-0000-0000-000000000001")
-  (paper "A4")
-  (wire (pts (xy 25.4 25.4) (xy 50.8 25.4))
-    (stroke (width 0) (type default))
-    (uuid "11111111-1111-1111-1111-111111111111")
-  )
-)
-)" );
+        copyFixture( wxS( "sch_a.kicad_sch" ), schA );
+        copyFixture( wxS( "sch_b.kicad_sch" ), schB );
     }
 
     void writeFpFixtures()
@@ -286,51 +252,15 @@ struct CLI_FIXTURES
         BOOST_REQUIRE( wxFileName::Mkdir( fpA, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
         BOOST_REQUIRE( wxFileName::Mkdir( fpB, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
-        writeTextFile( fpB + wxFILE_SEP_PATH + wxS( "VisualDiff.kicad_mod" ), R"(
-(footprint "VisualDiff"
-  (version 20240108)
-  (generator "pcbnew")
-  (layer "F.Cu")
-  (fp_line
-    (start 0 0)
-    (end 2 0)
-    (stroke (width 0.12) (type solid))
-    (layer "F.SilkS")
-    (uuid "11111111-1111-1111-1111-111111111111")
-  )
-)
-)" );
+        // fp_a stays empty so the diff reports VisualDiff as added
+        copyFixture( wxS( "fp_b.pretty/VisualDiff.kicad_mod" ),
+                     fpB + wxFILE_SEP_PATH + wxS( "VisualDiff.kicad_mod" ) );
     }
 
     void writeSymFixtures()
     {
-        writeTextFile( symA, R"(
-(kicad_symbol_lib
-  (version 20241209)
-  (generator "kicad_symbol_editor")
-  (generator_version "9.0")
-)
-)" );
-
-        writeTextFile( symB, R"(
-(kicad_symbol_lib
-  (version 20241209)
-  (generator "kicad_symbol_editor")
-  (generator_version "9.0")
-  (symbol "VisualDiff"
-    (exclude_from_sim no)
-    (in_bom yes)
-    (on_board yes)
-    (property "Reference" "U" (at 0 2.54 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "VisualDiff" (at 0 -2.54 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (property "Datasheet" "" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (symbol "VisualDiff_1_1"
-      (rectangle (start -2.54 -2.54) (end 5.08 2.54) (stroke (width 0.254) (type default)) (fill (type none)))
-    )
-  )
-)
-)" );
+        copyFixture( wxS( "sym_a.kicad_sym" ), symA );
+        copyFixture( wxS( "sym_b.kicad_sym" ), symB );
     }
 
     wxString pcbA;

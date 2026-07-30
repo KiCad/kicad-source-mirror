@@ -19,8 +19,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <filesystem>
-#include <fstream>
+#include <pcbnew_utils/board_file_utils.h>
 
 #include <base_units.h>
 #include <board.h>
@@ -41,61 +40,18 @@ constexpr double DEFAULT_PROPAGATION_DELAY_PS_PER_MM = 5.9 * pcbIUScale.IU_PER_P
 // item with zero delay (trackDelay() does not fall back when Type != UNKNOWN);
 // only the bridge edge carries delay, derived from the chain-wide fallback
 // 5.9 ps/mm.  This pins the trunk-delay equal-to-bridge contract.
-static const char* DAISY_PCB = R"(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-        (44 "Edge.Cuts" user)
-    )
-    (net 0 "")
-    (net 1 "/NET_A")
-    (net 2 "/NET_B")
-    (gr_line (start -5 -5) (end 60 -5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 60 -5) (end 60 5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 60 5) (end -5 5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start -5 5) (end -5 -5) (layer "Edge.Cuts") (width 0.05))
-    (footprint "Term1" (layer "F.Cu") (uuid "00000000-0000-0000-0000-000000000a01")
-        (at 0 0)
-        (pad "1" smd rect (at 0 0) (size 0.8 0.8) (layers "F.Cu") (net 1 "/NET_A") (uuid "00000000-0000-0000-0000-000000000a02"))
-    )
-    (footprint "Bridge" (layer "F.Cu") (uuid "00000000-0000-0000-0000-000000000b01")
-        (at 22.5 0)
-        (pad "1" smd rect (at -2.5 0) (size 0.8 0.8) (layers "F.Cu") (net 1 "/NET_A") (uuid "00000000-0000-0000-0000-000000000b02"))
-        (pad "2" smd rect (at  2.5 0) (size 0.8 0.8) (layers "F.Cu") (net 2 "/NET_B") (uuid "00000000-0000-0000-0000-000000000b03"))
-    )
-    (footprint "Term2" (layer "F.Cu") (uuid "00000000-0000-0000-0000-000000000c01")
-        (at 50 0)
-        (pad "1" smd rect (at 0 0) (size 0.8 0.8) (layers "F.Cu") (net 2 "/NET_B") (uuid "00000000-0000-0000-0000-000000000c02"))
-    )
-    (segment (start 0 0) (end 20 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 25 0) (end 50 0) (width 0.2) (layer "F.Cu") (net 2))
-)
-)";
+static const char* DAISY_PCB_FILE = "net_chains/net_chain_trunk_delay.kicad_pcb";
 
 
 namespace
 {
-std::unique_ptr<BOARD> loadBoard( const char* aText, const std::string& aSubdir )
+std::unique_ptr<BOARD> loadBoard( const char* aBoardFile )
 {
-    namespace fs = std::filesystem;
-    fs::path tmpDir = fs::temp_directory_path() / aSubdir;
-    fs::create_directories( tmpDir );
-    fs::path pcbPath = tmpDir / "trunk_delay.kicad_pcb";
-
-    {
-        std::ofstream out( pcbPath );
-        out << aText;
-    }
-
     PCB_IO_KICAD_SEXPR     plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    plugin.LoadBoard( pcbPath.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + aBoardFile, board.get() );
     board->BuildConnectivity();
-    fs::remove( pcbPath );
+
     return board;
 }
 
@@ -178,7 +134,7 @@ BOOST_AUTO_TEST_SUITE( NetChainTrunkDelay )
 // derived consistently with BoardChainBridging() and folded into TrunkDelay().
 BOOST_AUTO_TEST_CASE( DaisyTrunkDelayEqualsBridgeWithoutStackup )
 {
-    auto board = loadBoard( DAISY_PCB, "kicad_chain_trunk_delay" );
+    auto board = loadBoard( DAISY_PCB_FILE );
     tagChainNets( board.get(), wxS( "DSY" ) );
     setTerminals( board.get(), wxS( "DSY" ), 0.0, 50.0 );
 
@@ -206,7 +162,7 @@ BOOST_AUTO_TEST_CASE( DaisyTrunkDelayEqualsBridgeWithoutStackup )
 // fallback per-mm rate.
 BOOST_AUTO_TEST_CASE( NoTerminalsFallbackUsesBridgingDelay )
 {
-    auto board = loadBoard( DAISY_PCB, "kicad_chain_trunk_delay_noterms" );
+    auto board = loadBoard( DAISY_PCB_FILE );
     tagChainNets( board.get(), wxS( "DSY" ) );
     // Intentionally do NOT call setTerminals.
 

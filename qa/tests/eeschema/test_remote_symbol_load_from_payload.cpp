@@ -32,52 +32,16 @@
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_io/sch_io_mgr.h>
 
-#include <wx/filefn.h>
 #include <wx/filename.h>
-#include <wx/ffile.h>
 
 
 namespace
 {
-const char* kMinimalSymbolLib =
-        "(kicad_symbol_lib (version 20220914) (generator kicad_symbol_editor)\n"
-        "  (symbol \"TestResistor\" (in_bom yes) (on_board yes)\n"
-        "    (property \"Reference\" \"R\" (at 0 0 0)\n"
-        "      (effects (font (size 1.27 1.27)))\n"
-        "    )\n"
-        "    (property \"Value\" \"TestResistor\" (at 0 0 0)\n"
-        "      (effects (font (size 1.27 1.27)))\n"
-        "    )\n"
-        "    (property \"Footprint\" \"\" (at 0 0 0)\n"
-        "      (effects (font (size 1.27 1.27)) hide)\n"
-        "    )\n"
-        "    (property \"Datasheet\" \"\" (at 0 0 0)\n"
-        "      (effects (font (size 1.27 1.27)) hide)\n"
-        "    )\n"
-        "    (symbol \"TestResistor_0_1\"\n"
-        "      (rectangle (start -1.27 -1.27) (end 1.27 1.27)\n"
-        "        (stroke (width 0) (type default))\n"
-        "        (fill (type background))\n"
-        "      )\n"
-        "    )\n"
-        "    (symbol \"TestResistor_1_1\"\n"
-        "      (pin passive line (at -3.81 0 0) (length 2.54)\n"
-        "        (name \"PIN\" (effects (font (size 1.27 1.27))))\n"
-        "        (number \"1\" (effects (font (size 1.27 1.27))))\n"
-        "      )\n"
-        "    )\n"
-        "  )\n"
-        ")\n";
-
-
-wxString writeTempSymbolLib()
+// LoadSymbol only reads, so the library is used in place from qa/data
+wxString symbolLibPath()
 {
-    wxString path = wxFileName::CreateTempFileName( wxS( "qa_remote_sym" ) );
-    wxFFile  file( path, wxS( "wb" ) );
-    BOOST_REQUIRE( file.IsOpened() );
-    file.Write( kMinimalSymbolLib, strlen( kMinimalSymbolLib ) );
-    file.Close();
-    return path;
+    return wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() )
+           + wxS( "remote_symbol_lib.kicad_sym" );
 }
 } // namespace
 
@@ -87,14 +51,14 @@ BOOST_AUTO_TEST_SUITE( RemoteSymbolLoadFromPayload )
 
 BOOST_AUTO_TEST_CASE( CopiedSymbolSurvivesPluginDestruction )
 {
-    const wxString tempPath = writeTempSymbolLib();
+    const wxString libPath = symbolLibPath();
     std::unique_ptr<LIB_SYMBOL> symbol;
 
     {
         IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
         BOOST_REQUIRE( plugin );
 
-        LIB_SYMBOL* loaded = plugin->LoadSymbol( tempPath, wxS( "TestResistor" ) );
+        LIB_SYMBOL* loaded = plugin->LoadSymbol( libPath, wxS( "TestResistor" ) );
         BOOST_REQUIRE( loaded );
 
         // The fix for #23286: copy the symbol so it is independent of the
@@ -106,22 +70,18 @@ BOOST_AUTO_TEST_CASE( CopiedSymbolSurvivesPluginDestruction )
     // be valid and accessible without triggering a use-after-free.
     BOOST_CHECK( symbol );
     BOOST_CHECK( symbol->GetName() == wxS( "TestResistor" ) );
-
-    wxRemoveFile( tempPath );
 }
 
 
 BOOST_AUTO_TEST_CASE( LoadSymbolReturnsNullForMissingName )
 {
-    const wxString tempPath = writeTempSymbolLib();
+    const wxString libPath = symbolLibPath();
 
     IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
     BOOST_REQUIRE( plugin );
 
-    LIB_SYMBOL* loaded = plugin->LoadSymbol( tempPath, wxS( "NonExistentSymbol" ) );
+    LIB_SYMBOL* loaded = plugin->LoadSymbol( libPath, wxS( "NonExistentSymbol" ) );
     BOOST_CHECK( loaded == nullptr );
-
-    wxRemoveFile( tempPath );
 }
 
 

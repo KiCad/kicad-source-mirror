@@ -19,6 +19,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <pcbnew_utils/board_file_utils.h>
+
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -64,10 +66,10 @@ std::string makeChainBudgetRule( const wxString& aName, const wxString& aMinMM,
 }
 
 
-// Build a temp board file plus a DRU file, run the matched-length DRC, return the count of
-// DRCE_LENGTH_OUT_OF_RANGE markers raised on the chain "SIG".  Both nets named "/NET_*" are
-// auto-tagged into chain "SIG".
-size_t runChainLengthDrc( const std::string& aBoardText, const std::string& aRuleText,
+// Load a board from the test data dir, write a temp DRU file, run the matched-length DRC and
+// return the count of DRCE_LENGTH_OUT_OF_RANGE markers raised on the chain "SIG".  Both nets
+// named "/NET_*" are auto-tagged into chain "SIG".
+size_t runChainLengthDrc( const std::string& aBoardFile, const std::string& aRuleText,
                           const std::string& aTmpSubdir )
 {
     namespace fs = std::filesystem;
@@ -75,13 +77,7 @@ size_t runChainLengthDrc( const std::string& aBoardText, const std::string& aRul
     fs::path tmpDir = fs::temp_directory_path() / aTmpSubdir;
     fs::create_directories( tmpDir );
 
-    fs::path pcbPath = tmpDir / "chain_bridge.kicad_pcb";
     fs::path druPath = tmpDir / "chain_bridge.kicad_dru";
-
-    {
-        std::ofstream pcbOut( pcbPath );
-        pcbOut << aBoardText;
-    }
 
     {
         std::ofstream druOut( druPath );
@@ -90,7 +86,7 @@ size_t runChainLengthDrc( const std::string& aBoardText, const std::string& aRul
 
     PCB_IO_KICAD_SEXPR     plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    plugin.LoadBoard( pcbPath.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + aBoardFile, board.get() );
     board->BuildConnectivity();
 
     for( NETINFO_ITEM* net : board->GetNetInfo() )
@@ -127,7 +123,6 @@ size_t runChainLengthDrc( const std::string& aBoardText, const std::string& aRul
     drcEngine->RunTests( EDA_UNITS::MM, true, false );
 
     std::error_code ec;
-    fs::remove( pcbPath, ec );
     fs::remove( druPath, ec );
 
     return lengthViolations;
@@ -144,32 +139,11 @@ BOOST_AUTO_TEST_SUITE( DRCChainBridgingMultipad )
 // pairs span max 5 mm (-2.5 NET_A to +2.5 NET_B).  Total bridged chain = 25 mm.
 BOOST_AUTO_TEST_CASE( ThreePadTwoNetFootprintContributesMaxPairwiseSpan )
 {
-    static const char* boardText = R"KICAD(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-    )
-    (net 0 "")
-    (net 1 "/NET_A")
-    (net 2 "/NET_B")
-    (segment (start 0 0) (end 10 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 15 0) (end 25 0) (width 0.2) (layer "F.Cu") (net 2))
-    (footprint "TestFP:FB_3PAD" (layer "F.Cu") (at 12.5 0)
-        (property "Reference" "FB1")
-        (pad "1" smd rect (at -2.5 0) (size 0.5 0.5) (layers "F.Cu") (net 1 "/NET_A"))
-        (pad "2" smd rect (at 0 0)    (size 0.5 0.5) (layers "F.Cu") (net 1 "/NET_A"))
-        (pad "3" smd rect (at 2.5 0)  (size 0.5 0.5) (layers "F.Cu") (net 2 "/NET_B"))
-    )
-)
-)KICAD";
+    static const char* boardFile = "net_chains/chain_bridging_3pad_2net.kicad_pcb";
 
     // 26 mm budget passes (chain ~25 mm).
     size_t pass =
-            runChainLengthDrc( boardText, makeChainBudgetRule( "Pass", "0", "26" ),
+            runChainLengthDrc( boardFile, makeChainBudgetRule( "Pass", "0", "26" ),
                                "kicad_drc_chain_bridging_3pad_pass" );
     BOOST_CHECK_MESSAGE( pass == 0, "Expected no length violation under 26 mm budget, got "
                                             << pass );
@@ -177,7 +151,7 @@ BOOST_AUTO_TEST_CASE( ThreePadTwoNetFootprintContributesMaxPairwiseSpan )
     // 22 mm budget fails: pre-fix would silently drop bridging and report ~20 mm.  Post-fix
     // the 5 mm max pairwise span is included.
     size_t fail =
-            runChainLengthDrc( boardText, makeChainBudgetRule( "Fail", "0", "22" ),
+            runChainLengthDrc( boardFile, makeChainBudgetRule( "Fail", "0", "22" ),
                                "kicad_drc_chain_bridging_3pad_fail" );
     BOOST_CHECK_MESSAGE( fail == 1, "Expected one length violation under 22 mm budget, got "
                                             << fail );
@@ -189,34 +163,11 @@ BOOST_AUTO_TEST_CASE( ThreePadTwoNetFootprintContributesMaxPairwiseSpan )
 // footprint was silently skipped because chainPads.size() > 2 broke the gather loop.
 BOOST_AUTO_TEST_CASE( ThreePadThreeNetFootprintContributesMaxPairwiseSpan )
 {
-    static const char* boardText = R"KICAD(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-    )
-    (net 0 "")
-    (net 1 "/NET_A")
-    (net 2 "/NET_B")
-    (net 3 "/NET_C")
-    (segment (start 0 0)  (end 10 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 15 0) (end 25 0) (width 0.2) (layer "F.Cu") (net 2))
-    (segment (start 30 0) (end 40 0) (width 0.2) (layer "F.Cu") (net 3))
-    (footprint "TestFP:XFMR_3PAD" (layer "F.Cu") (at 12.5 0)
-        (property "Reference" "T1")
-        (pad "1" smd rect (at -2.5 0) (size 0.5 0.5) (layers "F.Cu") (net 1 "/NET_A"))
-        (pad "2" smd rect (at 0 0)    (size 0.5 0.5) (layers "F.Cu") (net 2 "/NET_B"))
-        (pad "3" smd rect (at 2.5 0)  (size 0.5 0.5) (layers "F.Cu") (net 3 "/NET_C"))
-    )
-)
-)KICAD";
+    static const char* boardFile = "net_chains/chain_bridging_3pad_3net.kicad_pcb";
 
     // Single T1 footprint gives 30 mm copper + 5 mm bridging = 35 mm.  Budget 36 mm passes.
     size_t pass =
-            runChainLengthDrc( boardText, makeChainBudgetRule( "Pass", "0", "36" ),
+            runChainLengthDrc( boardFile, makeChainBudgetRule( "Pass", "0", "36" ),
                                "kicad_drc_chain_bridging_3net_pass" );
     BOOST_CHECK_MESSAGE( pass == 0, "Expected no length violation under 36 mm budget, got "
                                             << pass );
@@ -224,7 +175,7 @@ BOOST_AUTO_TEST_CASE( ThreePadThreeNetFootprintContributesMaxPairwiseSpan )
     // 32 mm budget fails: pre-fix the 3-pad-3-net footprint was silently dropped (reporting
     // 30 mm copper).  Post-fix the 5 mm max pairwise span pushes total to 35 mm.
     size_t fail =
-            runChainLengthDrc( boardText, makeChainBudgetRule( "Fail", "0", "32" ),
+            runChainLengthDrc( boardFile, makeChainBudgetRule( "Fail", "0", "32" ),
                                "kicad_drc_chain_bridging_3net_fail" );
     BOOST_CHECK_MESSAGE( fail == 1, "Expected one length violation under 32 mm budget, got "
                                             << fail );
@@ -236,40 +187,18 @@ BOOST_AUTO_TEST_CASE( ThreePadThreeNetFootprintContributesMaxPairwiseSpan )
 // (-3 A, +1 B) = 4, (-3 A, +3 B) = 6, (-1 A, +1 B) = 2, (-1 A, +3 B) = 4.  Max = 6 mm.
 BOOST_AUTO_TEST_CASE( FourPadFootprintContributesMaxPairwiseSpan )
 {
-    static const char* boardText = R"KICAD(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-    )
-    (net 0 "")
-    (net 1 "/NET_A")
-    (net 2 "/NET_B")
-    (segment (start 0 0)  (end 10 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 16 0) (end 26 0) (width 0.2) (layer "F.Cu") (net 2))
-    (footprint "TestFP:DUAL_4PAD" (layer "F.Cu") (at 13 0)
-        (property "Reference" "U1")
-        (pad "1" smd rect (at -3 0) (size 0.5 0.5) (layers "F.Cu") (net 1 "/NET_A"))
-        (pad "2" smd rect (at -1 0) (size 0.5 0.5) (layers "F.Cu") (net 1 "/NET_A"))
-        (pad "3" smd rect (at 1 0)  (size 0.5 0.5) (layers "F.Cu") (net 2 "/NET_B"))
-        (pad "4" smd rect (at 3 0)  (size 0.5 0.5) (layers "F.Cu") (net 2 "/NET_B"))
-    )
-)
-)KICAD";
+    static const char* boardFile = "net_chains/chain_bridging_4pad.kicad_pcb";
 
     // Chain total: 20 mm copper + 6 mm bridging = 26 mm.  Budget 27 mm passes.
     size_t pass =
-            runChainLengthDrc( boardText, makeChainBudgetRule( "Pass", "0", "27" ),
+            runChainLengthDrc( boardFile, makeChainBudgetRule( "Pass", "0", "27" ),
                                "kicad_drc_chain_bridging_4pad_pass" );
     BOOST_CHECK_MESSAGE( pass == 0, "Expected no length violation under 27 mm budget, got "
                                             << pass );
 
     // 24 mm budget fails: pre-fix dropped bridging, post-fix adds 6 mm max pairwise span.
     size_t fail =
-            runChainLengthDrc( boardText, makeChainBudgetRule( "Fail", "0", "24" ),
+            runChainLengthDrc( boardFile, makeChainBudgetRule( "Fail", "0", "24" ),
                                "kicad_drc_chain_bridging_4pad_fail" );
     BOOST_CHECK_MESSAGE( fail == 1, "Expected one length violation under 24 mm budget, got "
                                             << fail );
@@ -279,32 +208,11 @@ BOOST_AUTO_TEST_CASE( FourPadFootprintContributesMaxPairwiseSpan )
 // 3-pad footprint, single net.  All pads on NET_A.  No cross-net bridging; must contribute 0.
 BOOST_AUTO_TEST_CASE( ThreePadSingleNetFootprintContributesZero )
 {
-    static const char* boardText = R"KICAD(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-    )
-    (net 0 "")
-    (net 1 "/NET_A")
-    (net 2 "/NET_B")
-    (segment (start 0 0) (end 10 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 20 0) (end 30 0) (width 0.2) (layer "F.Cu") (net 2))
-    (footprint "TestFP:STAR_3PAD" (layer "F.Cu") (at 5 5)
-        (property "Reference" "U2")
-        (pad "1" smd rect (at -2 0) (size 0.5 0.5) (layers "F.Cu") (net 1 "/NET_A"))
-        (pad "2" smd rect (at 0 0)  (size 0.5 0.5) (layers "F.Cu") (net 1 "/NET_A"))
-        (pad "3" smd rect (at 2 0)  (size 0.5 0.5) (layers "F.Cu") (net 1 "/NET_A"))
-    )
-)
-)KICAD";
+    static const char* boardFile = "net_chains/chain_bridging_3pad_1net.kicad_pcb";
 
     // Pure copper sum is 20 mm with no bridging contribution.  Budget 21 mm passes.
     size_t pass =
-            runChainLengthDrc( boardText, makeChainBudgetRule( "Pass", "0", "21" ),
+            runChainLengthDrc( boardFile, makeChainBudgetRule( "Pass", "0", "21" ),
                                "kicad_drc_chain_bridging_singlenet_pass" );
     BOOST_CHECK_MESSAGE( pass == 0, "Single-net 3-pad footprint must not contribute bridging; "
                                     "got " << pass << " violations under 21 mm budget" );

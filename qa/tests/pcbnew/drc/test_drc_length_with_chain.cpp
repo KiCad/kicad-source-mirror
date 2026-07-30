@@ -19,6 +19,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <pcbnew_utils/board_file_utils.h>
+
 #include <filesystem>
 #include <fstream>
 
@@ -34,22 +36,7 @@
 // Two-net board.  CHAIN_NET is 25 mm long and tagged with chain "SIG"; PLAIN_NET is 25 mm long
 // and not in any chain.  The .kicad_dru rule matches the default netclass that both nets
 // inherit.
-static const char* BOARD_TEXT = R"KICAD(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-    )
-    (net 0 "")
-    (net 1 "/CHAIN_NET")
-    (net 2 "/PLAIN_NET")
-    (segment (start 0 0) (end 25 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 0 5) (end 25 5) (width 0.2) (layer "F.Cu") (net 2))
-)
-)KICAD";
+static const char* BOARD_FILE = "net_chains/length_with_chain.kicad_pcb";
 
 
 // length 0..5 mm fails for any 25 mm net.  net_chain_length 0..200 mm passes for the chain.
@@ -75,13 +62,7 @@ BOOST_AUTO_TEST_CASE( PerNetLengthFiresAlongsideChainLength )
     fs::path tmpDir = fs::temp_directory_path() / "kicad_drc_length_chain";
     fs::create_directories( tmpDir );
 
-    fs::path pcbPath = tmpDir / "len_chain.kicad_pcb";
     fs::path druPath = tmpDir / "len_chain.kicad_dru";
-
-    {
-        std::ofstream pcbOut( pcbPath );
-        pcbOut << BOARD_TEXT;
-    }
 
     {
         std::ofstream druOut( druPath );
@@ -90,7 +71,7 @@ BOOST_AUTO_TEST_CASE( PerNetLengthFiresAlongsideChainLength )
 
     PCB_IO_KICAD_SEXPR     plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    plugin.LoadBoard( pcbPath.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + BOARD_FILE, board.get() );
     board->BuildConnectivity();
 
     // Tag CHAIN_NET into a signal chain so the chain branch fires; leave PLAIN_NET unchained
@@ -162,7 +143,6 @@ BOOST_AUTO_TEST_CASE( PerNetLengthFiresAlongsideChainLength )
     BOOST_CHECK_MESSAGE( plainNetFlagged, "Length violation missing for non-chain net" );
 
     std::error_code ec;
-    fs::remove( pcbPath, ec );
     fs::remove( druPath, ec );
 }
 

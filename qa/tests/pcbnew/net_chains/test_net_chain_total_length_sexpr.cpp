@@ -25,58 +25,11 @@
 #include <pad.h>
 #include <footprint.h>
 #include <router/pns_kicad_iface.h>
-#include <filesystem>
-#include <fstream>
+#include <pcbnew_utils/board_file_utils.h>
 
 static const long long MM = 1000000LL; // internal units
 
-static const char* BOARD_TEXT = R"KICAD(
-(kicad_pcb
-	(version 20250904)
-	(generator "pcbnew")
-	(generator_version "9.99")
-	(layers
-		(0 "F.Cu" signal)
-		(2 "B.Cu" signal)
-	)
-	(net 0 "")
-	(net 1 "Net-(R1-Pad1)")
-	(net 2 "Net-(R1-Pad2)")
-	(net 3 "Net-(R2-Pad2)")
-	(net 4 "Net-(R3-Pad2)")
-	(segment (start 17.015 0.005) (end 17.005 -0.005) (width 0.2) (layer "F.Cu") (net 3))
-	(segment (start 15.355 -0.005) (end 15.345 0.005) (width 0.2) (layer "F.Cu") (net 2))
-	(segment (start 30 0.125) (end 29.75 -0.125) (width 0.2) (layer "F.Cu") (net 4))
-	(segment (start 22.15 0) (end 30 0) (width 0.2) (layer "F.Cu") (net 4))
-	(segment (start 8 -0.1) (end 7.8 0.1) (width 0.2) (layer "F.Cu") (net 1))
-	(segment (start 9.65 0) (end 15.355 0) (width 0.2) (layer "F.Cu") (net 2))
-	(footprint "MountingHole:MountingHole_2.2mm_M2_DIN965_Pad" (layer "F.Cu") (at 0 0)
-		(property "Reference" "TP2")
-		(pad "1" thru_hole circle (at 0 0) (size 3.8 3.8) (drill 2.2) (layers "*.Cu" "*.Mask") (net 1 "Net-(R1-Pad1)"))
-	)
-	(segment (start 17.005 0) (end 20.5 0) (width 0.2) (layer "F.Cu") (net 3))
-	(footprint "MountingHole:MountingHole_2.2mm_M2_DIN965_Pad" (layer "F.Cu") (at 30 0)
-		(property "Reference" "TP1")
-		(pad "1" thru_hole circle (at 0 0) (size 3.8 3.8) (drill 2.2) (layers "*.Cu" "*.Mask") (net 4 "Net-(R3-Pad2)"))
-	)
-	(segment (start 0 0) (end 8 0) (width 0.2) (layer "F.Cu") (net 1))
-	(footprint "Resistor_SMD:R_0603_1608Metric" (layer "F.Cu") (at 8.825 0)
-		(property "Reference" "R1")
-		(pad "1" smd roundrect (at -0.825 0) (size 0.8 0.95) (layers "F.Cu" "F.Mask" "F.Paste") (net 1 "Net-(R1-Pad1)"))
-		(pad "2" smd roundrect (at 0.825 0) (size 0.8 0.95) (layers "F.Cu" "F.Mask" "F.Paste") (net 2 "Net-(R1-Pad2)"))
-	)
-	(footprint "Resistor_SMD:R_0603_1608Metric" (layer "F.Cu") (at 16.18 0)
-		(property "Reference" "R2")
-		(pad "1" smd roundrect (at -0.825 0) (size 0.8 0.95) (layers "F.Cu" "F.Mask" "F.Paste") (net 2 "Net-(R1-Pad2)"))
-		(pad "2" smd roundrect (at 0.825 0) (size 0.8 0.95) (layers "F.Cu" "F.Mask" "F.Paste") (net 3 "Net-(R2-Pad2)"))
-	)
-	(footprint "Resistor_SMD:R_0603_1608Metric" (layer "F.Cu") (at 21.325 0)
-		(property "Reference" "R3")
-		(pad "1" smd roundrect (at -0.825 0) (size 0.8 0.95) (layers "F.Cu" "F.Mask" "F.Paste") (net 3 "Net-(R2-Pad2)"))
-		(pad "2" smd roundrect (at 0.825 0) (size 0.8 0.95) (layers "F.Cu" "F.Mask" "F.Paste") (net 4 "Net-(R3-Pad2)"))
-	)
-)
-)KICAD";
+static const char* BOARD_FILE = "net_chains/net_chain_total_length.kicad_pcb";
 
 BOOST_AUTO_TEST_SUITE( SignalTotalLengthSexpr )
 
@@ -84,12 +37,7 @@ BOOST_AUTO_TEST_CASE( SignalAggregateMatchesPadSpacing )
 {
     PCB_IO_KICAD_SEXPR plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    auto tmpFile = std::filesystem::temp_directory_path() / "net_chain_total_length_sexpr.kicad_pcb";
-    {
-        std::ofstream ofs( tmpFile );
-        ofs << BOARD_TEXT;
-    }
-    plugin.LoadBoard( tmpFile.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + BOARD_FILE, board.get() );
     board->BuildConnectivity();
 
     // Assign signal name
@@ -112,7 +60,7 @@ BOOST_AUTO_TEST_CASE( SignalAggregateMatchesPadSpacing )
         }
     }
 
-    NETINFO_ITEM* n1 = board->FindNet( 1 );
+    NETINFO_ITEM* n1 = board->FindNet( wxS( "Net-(R1-Pad1)" ) );
     BOOST_REQUIRE( n1 );
 
     PNS_KICAD_IFACE_BASE ifaceBase; ifaceBase.SetBoard( board.get() );
@@ -125,7 +73,7 @@ BOOST_AUTO_TEST_CASE( SignalAggregateMatchesPadSpacing )
 	bool havePoint = false; long long minX = 0, maxX = 0;
 	for( BOARD_ITEM* bi : board->Tracks() )
 		if( auto tr = dynamic_cast<PCB_TRACK*>( bi ) )
-			if( tr->GetNetCode() == 1 )
+			if( tr->GetNetCode() == n1->GetNetCode() )
 			{
 				net1TrackLen += ( tr->GetStart() - tr->GetEnd() ).EuclideanNorm();
 				long long sx = tr->GetStart().x; long long ex = tr->GetEnd().x;

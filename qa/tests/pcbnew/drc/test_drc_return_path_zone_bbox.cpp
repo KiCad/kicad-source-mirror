@@ -19,6 +19,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <pcbnew_utils/board_file_utils.h>
+
 #include <filesystem>
 #include <fstream>
 
@@ -35,41 +37,7 @@
 // (0,0)..(30,1) corridor; CHAIN_UNCOVERED is at y=20 with no overlying B.Cu zone.
 // Pre-fix the global zone count is 1 board-wide so the return-path check never fires.
 // Post-fix the spatial test catches CHAIN_UNCOVERED while leaving CHAIN_COVERED clean.
-static const char* BOARD_TEXT = R"KICAD(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-        (44 "Edge.Cuts" user)
-    )
-    (net 0 "")
-    (net 1 "/CHAIN_COVERED")
-    (net 2 "/CHAIN_UNCOVERED")
-    (net 3 "/GND")
-    (gr_line (start 0 -5) (end 40 -5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 40 -5) (end 40 30) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 40 30) (end 0 30) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 0 30) (end 0 -5) (layer "Edge.Cuts") (width 0.05))
-    (segment (start 0 0) (end 30 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 0 20) (end 30 20) (width 0.2) (layer "F.Cu") (net 2))
-    (zone (net 3) (net_name "/GND") (layer "B.Cu") (name "gnd_corridor") (hatch edge 0.508)
-        (connect_pads (clearance 0))
-        (min_thickness 0.254) (filled_areas_thickness no)
-        (fill (thermal_gap 0.508) (thermal_bridge_width 0.508))
-        (polygon
-            (pts
-                (xy -1 -1)
-                (xy 31 -1)
-                (xy 31 1)
-                (xy -1 1)
-            )
-        )
-    )
-)
-)KICAD";
+static const char* BOARD_FILE = "net_chains/return_path_zone_bbox.kicad_pcb";
 
 
 // length 0..200 mm passes; the only firing constraint is return_path which requires a
@@ -94,13 +62,7 @@ BOOST_AUTO_TEST_CASE( ZoneSpatialFilterFiresForUnshadowedChain )
     fs::path tmpDir = fs::temp_directory_path() / "kicad_drc_return_path_bbox";
     fs::create_directories( tmpDir );
 
-    fs::path pcbPath = tmpDir / "ret_path.kicad_pcb";
     fs::path druPath = tmpDir / "ret_path.kicad_dru";
-
-    {
-        std::ofstream pcbOut( pcbPath );
-        pcbOut << BOARD_TEXT;
-    }
 
     {
         std::ofstream druOut( druPath );
@@ -109,7 +71,7 @@ BOOST_AUTO_TEST_CASE( ZoneSpatialFilterFiresForUnshadowedChain )
 
     PCB_IO_KICAD_SEXPR     plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    plugin.LoadBoard( pcbPath.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + BOARD_FILE, board.get() );
     board->BuildConnectivity();
 
     NETINFO_ITEM* coveredNet = board->FindNet( wxS( "/CHAIN_COVERED" ) );
@@ -175,7 +137,6 @@ BOOST_AUTO_TEST_CASE( ZoneSpatialFilterFiresForUnshadowedChain )
                          "Return-path break missing for chain with no overlying zone" );
 
     std::error_code ec;
-    fs::remove( pcbPath, ec );
     fs::remove( druPath, ec );
 }
 

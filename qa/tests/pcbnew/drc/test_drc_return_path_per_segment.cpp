@@ -19,6 +19,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <pcbnew_utils/board_file_utils.h>
+
 #include <filesystem>
 #include <fstream>
 
@@ -34,68 +36,13 @@
 // Trunk on F.Cu from x=0..30 at y=0.  B.Cu zone covers only x=0..15.  Per-segment
 // check should report exactly one return-path break, anchored at the
 // uncovered run (around x=22.5).
-static const char* PARTIAL_PCB = R"(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-        (44 "Edge.Cuts" user)
-    )
-    (net 0 "")
-    (net 1 "/CHAIN_PARTIAL")
-    (net 2 "/GND")
-    (gr_line (start -5 -5) (end 35 -5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 35 -5) (end 35 5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 35 5) (end -5 5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start -5 5) (end -5 -5) (layer "Edge.Cuts") (width 0.05))
-    (segment (start 0 0) (end 15 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 15 0) (end 30 0) (width 0.2) (layer "F.Cu") (net 1))
-    (zone (net 2) (net_name "/GND") (layer "B.Cu") (name "gnd_left") (hatch edge 0.508)
-        (connect_pads (clearance 0))
-        (min_thickness 0.254) (filled_areas_thickness no)
-        (fill (thermal_gap 0.508) (thermal_bridge_width 0.508))
-        (polygon
-            (pts (xy -1 -1) (xy 15 -1) (xy 15 1) (xy -1 1))
-        )
-    )
-)
-)";
+static const char* PARTIAL_PCB = "net_chains/return_path_partial.kicad_pcb";
 
 
 // Trunk fully off-zone: a single track from (0,0) to (30,0) with a B.Cu
 // zone only at x=40..50 — no overlap.  Expect exactly one marker (covering
 // the whole track with no zone overlap).
-static const char* FULLY_UNSHADOWED_PCB = R"(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-        (44 "Edge.Cuts" user)
-    )
-    (net 0 "")
-    (net 1 "/CHAIN_FULL")
-    (net 2 "/GND")
-    (gr_line (start -5 -5) (end 55 -5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 55 -5) (end 55 5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 55 5) (end -5 5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start -5 5) (end -5 -5) (layer "Edge.Cuts") (width 0.05))
-    (segment (start 0 0) (end 30 0) (width 0.2) (layer "F.Cu") (net 1))
-    (zone (net 2) (net_name "/GND") (layer "B.Cu") (name "gnd_far") (hatch edge 0.508)
-        (connect_pads (clearance 0))
-        (min_thickness 0.254) (filled_areas_thickness no)
-        (fill (thermal_gap 0.508) (thermal_bridge_width 0.508))
-        (polygon
-            (pts (xy 40 -1) (xy 50 -1) (xy 50 1) (xy 40 1))
-        )
-    )
-)
-)";
+static const char* FULLY_UNSHADOWED_PCB = "net_chains/return_path_unshadowed.kicad_pcb";
 
 
 static const char* DRU_TEXT = R"((version 1)
@@ -109,20 +56,14 @@ static const char* DRU_TEXT = R"((version 1)
 
 namespace
 {
-size_t runReturnPathDrc( const char* aPcb, const wxString& aChainName,
+size_t runReturnPathDrc( const char* aBoardFile, const wxString& aChainName,
                          const wxString& aChainTag,
                          const std::string& aSubdir )
 {
     namespace fs = std::filesystem;
     fs::path tmpDir = fs::temp_directory_path() / aSubdir;
     fs::create_directories( tmpDir );
-    fs::path pcbPath = tmpDir / "ret.kicad_pcb";
     fs::path druPath = tmpDir / "ret.kicad_dru";
-
-    {
-        std::ofstream out( pcbPath );
-        out << aPcb;
-    }
 
     {
         std::ofstream out( druPath );
@@ -131,7 +72,7 @@ size_t runReturnPathDrc( const char* aPcb, const wxString& aChainName,
 
     PCB_IO_KICAD_SEXPR     plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    plugin.LoadBoard( pcbPath.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + aBoardFile, board.get() );
     board->BuildConnectivity();
 
     NETINFO_ITEM* sig = board->FindNet( aChainName );
@@ -165,7 +106,6 @@ size_t runReturnPathDrc( const char* aPcb, const wxString& aChainName,
 
     drcEngine->RunTests( EDA_UNITS::MM, true, false );
 
-    fs::remove( pcbPath );
     fs::remove( druPath );
 
     return markerCount;

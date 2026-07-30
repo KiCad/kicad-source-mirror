@@ -155,31 +155,11 @@ BOOST_AUTO_TEST_CASE( TranslatedFieldNameRoundTripsAsCanonical )
 {
     m_schematic->CreateDefaultScreens();
 
-    // First write a synthetic file containing the legacy translated form so we exercise the
-    // loader's migration path directly.
-    wxString legacyFile = MakeTempSchematicPath( "issue24403_legacy_de" );
-
-    {
-        wxFFile out( legacyFile, "wb" );
-        BOOST_REQUIRE( out.IsOpened() );
-
-        const wxString body = wxT(
-                "(kicad_sch (version 20260512) (generator \"qa_test\") (generator_version \"9.99\")\n"
-                "  (paper \"A4\")\n"
-                "  (lib_symbols)\n"
-                "  (directive_label \"\" (length 2.54) (shape round)\n"
-                "    (at 0 0 0)\n"
-                "    (effects (font (size 1.27 1.27)) (justify left bottom))\n"
-                "    (uuid \"00000000-0000-0000-0000-000000024403\")\n"
-                "    (property  \"Netzklasse\" \"HighSpeed\" (at 0 -1 0)\n"
-                "      (effects (font (size 1.27 1.27)) (justify left bottom))\n"
-                "    )\n"
-                "  )\n"
-                "  (sheet_instances (path \"/\" (page \"1\")))\n"
-                ")\n" );
-
-        BOOST_REQUIRE( out.Write( body ) );
-    }
+    // A file written by a German UI, kept verbatim in qa/data so it still carries the
+    // pre-migration "Netzklasse" field name.  Never re-save it from KiCad; the loader
+    // migrates the token and the fixture loses its purpose.
+    wxString legacyFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() )
+                          + wxS( "issue24403_legacy_de.kicad_sch" );
 
     SCH_IO_KICAD_SEXPR io;
     SCH_SHEET*         loaded = nullptr;

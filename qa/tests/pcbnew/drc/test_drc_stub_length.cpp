@@ -19,6 +19,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <pcbnew_utils/board_file_utils.h>
+
 #include <filesystem>
 #include <fstream>
 
@@ -44,48 +46,7 @@
 // MID_B as the only chain member without an endpoint assignment. Once real
 // topological stub detection lands the segments will need to actually meet at
 // series components.
-static const char* BOARD_TEXT = R"KICAD(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-    )
-    (net 0 "")
-    (net 1 "/TRUNK_A")
-    (net 2 "/MID_B")
-    (net 3 "/TRUNK_C")
-    (footprint "lib:UA"
-        (layer "F.Cu")
-        (uuid "11111111-1111-1111-1111-111111111111")
-        (at 0 0)
-        (pad "1" smd rect
-            (at 0 0)
-            (size 1 1)
-            (layers "F.Cu")
-            (uuid "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa01")
-            (net 1 "/TRUNK_A")
-        )
-    )
-    (footprint "lib:UC"
-        (layer "F.Cu")
-        (uuid "33333333-3333-3333-3333-333333333333")
-        (at 40 0)
-        (pad "1" smd rect
-            (at 0 0)
-            (size 1 1)
-            (layers "F.Cu")
-            (uuid "cccccccc-cccc-cccc-cccc-cccccccccc01")
-            (net 3 "/TRUNK_C")
-        )
-    )
-    (segment (start 0 0) (end 2 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 5 0) (end 35 0) (width 0.2) (layer "F.Cu") (net 2))
-    (segment (start 38 0) (end 40 0) (width 0.2) (layer "F.Cu") (net 3))
-)
-)KICAD";
+static const char* BOARD_FILE = "net_chains/stub_length.kicad_pcb";
 
 
 // stub_length 0..5 mm. The 30 mm middle net is well over budget; the 2 mm
@@ -109,13 +70,7 @@ BOOST_AUTO_TEST_CASE( StubLengthFiresOnIntermediateNetOnly )
     fs::path tmpDir = fs::temp_directory_path() / "kicad_drc_stub_length";
     fs::create_directories( tmpDir );
 
-    fs::path pcbPath = tmpDir / "stub_length.kicad_pcb";
     fs::path druPath = tmpDir / "stub_length.kicad_dru";
-
-    {
-        std::ofstream pcbOut( pcbPath );
-        pcbOut << BOARD_TEXT;
-    }
 
     {
         std::ofstream druOut( druPath );
@@ -124,7 +79,7 @@ BOOST_AUTO_TEST_CASE( StubLengthFiresOnIntermediateNetOnly )
 
     PCB_IO_KICAD_SEXPR     plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    plugin.LoadBoard( pcbPath.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + BOARD_FILE, board.get() );
     board->BuildConnectivity();
 
     NETINFO_ITEM* netA = board->FindNet( wxS( "/TRUNK_A" ) );
@@ -210,7 +165,6 @@ BOOST_AUTO_TEST_CASE( StubLengthFiresOnIntermediateNetOnly )
                          "Trunk endpoint net TRUNK_C (owns terminal_pad_1) must not fire" );
 
     std::error_code ec;
-    fs::remove( pcbPath, ec );
     fs::remove( druPath, ec );
 }
 
@@ -222,52 +176,12 @@ BOOST_AUTO_TEST_CASE( StubLengthQuietOnTwoNetChain )
     fs::path tmpDir = fs::temp_directory_path() / "kicad_drc_stub_length";
     fs::create_directories( tmpDir );
 
-    fs::path pcbPath = tmpDir / "stub_length_2net.kicad_pcb";
     fs::path druPath = tmpDir / "stub_length_2net.kicad_dru";
 
     // Two-net chain: every member owns a terminal pad assignment, so no member
     // is a stub. With the 30 mm trace on each net, a per-net stub_length would
     // fire if the trunk classifier wrongly excluded one of them.
-    static const char* TWO_NET_BOARD = R"KICAD(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-    )
-    (net 0 "")
-    (net 1 "/A")
-    (net 2 "/B")
-    (footprint "lib:UA"
-        (layer "F.Cu")
-        (uuid "44444444-4444-4444-4444-444444444444")
-        (at 0 0)
-        (pad "1" smd rect
-            (at 0 0)
-            (size 1 1)
-            (layers "F.Cu")
-            (uuid "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa02")
-            (net 1 "/A")
-        )
-    )
-    (footprint "lib:UB"
-        (layer "F.Cu")
-        (uuid "55555555-5555-5555-5555-555555555555")
-        (at 60 0)
-        (pad "1" smd rect
-            (at 0 0)
-            (size 1 1)
-            (layers "F.Cu")
-            (uuid "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb02")
-            (net 2 "/B")
-        )
-    )
-    (segment (start 0 0) (end 30 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 30 0) (end 60 0) (width 0.2) (layer "F.Cu") (net 2))
-)
-)KICAD";
+    static const char* TWO_NET_BOARD_FILE = "net_chains/stub_length_two_net.kicad_pcb";
 
     static const char* TWO_NET_DRU = R"KICAD((version 1)
 
@@ -278,18 +192,13 @@ BOOST_AUTO_TEST_CASE( StubLengthQuietOnTwoNetChain )
 )KICAD";
 
     {
-        std::ofstream pcbOut( pcbPath );
-        pcbOut << TWO_NET_BOARD;
-    }
-
-    {
         std::ofstream druOut( druPath );
         druOut << TWO_NET_DRU;
     }
 
     PCB_IO_KICAD_SEXPR     plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    plugin.LoadBoard( pcbPath.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + TWO_NET_BOARD_FILE, board.get() );
     board->BuildConnectivity();
 
     NETINFO_ITEM* netA = board->FindNet( wxS( "/A" ) );
@@ -355,7 +264,6 @@ BOOST_AUTO_TEST_CASE( StubLengthQuietOnTwoNetChain )
                                  << stubCount );
 
     std::error_code ec;
-    fs::remove( pcbPath, ec );
     fs::remove( druPath, ec );
 }
 
@@ -367,67 +275,13 @@ BOOST_AUTO_TEST_CASE( StubLengthIncludesPadToDie )
     fs::path tmpDir = fs::temp_directory_path() / "kicad_drc_stub_length";
     fs::create_directories( tmpDir );
 
-    fs::path pcbPath = tmpDir / "stub_length_pad_to_die.kicad_pcb";
     fs::path druPath = tmpDir / "stub_length_pad_to_die.kicad_dru";
 
     // Three-net chain whose middle net (MID_B) is a stub. The stub's routed
     // copper is a short 2 mm trace, well under the 5 mm budget. A 10 mm
     // pad-to-die length is attached to the MID_B pad, so the *total* stub
     // length (route + pad-to-die) is 12 mm and must violate the constraint.
-    static const char* PAD_TO_DIE_BOARD = R"KICAD(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-    )
-    (net 0 "")
-    (net 1 "/TRUNK_A")
-    (net 2 "/MID_B")
-    (net 3 "/TRUNK_C")
-    (footprint "lib:UA"
-        (layer "F.Cu")
-        (uuid "66666666-6666-6666-6666-666666666666")
-        (at 0 0)
-        (pad "1" smd rect
-            (at 0 0)
-            (size 1 1)
-            (layers "F.Cu")
-            (uuid "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa03")
-            (net 1 "/TRUNK_A")
-        )
-    )
-    (footprint "lib:UB"
-        (layer "F.Cu")
-        (uuid "77777777-7777-7777-7777-777777777777")
-        (at 5 0)
-        (pad "1" smd rect
-            (at 0 0)
-            (size 1 1)
-            (layers "F.Cu")
-            (uuid "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb03")
-            (net 2 "/MID_B")
-        )
-    )
-    (footprint "lib:UC"
-        (layer "F.Cu")
-        (uuid "88888888-8888-8888-8888-888888888888")
-        (at 10 0)
-        (pad "1" smd rect
-            (at 0 0)
-            (size 1 1)
-            (layers "F.Cu")
-            (uuid "cccccccc-cccc-cccc-cccc-cccccccccc03")
-            (net 3 "/TRUNK_C")
-        )
-    )
-    (segment (start 0 0) (end 2 0) (width 0.2) (layer "F.Cu") (net 1))
-    (segment (start 3 0) (end 5 0) (width 0.2) (layer "F.Cu") (net 2))
-    (segment (start 8 0) (end 10 0) (width 0.2) (layer "F.Cu") (net 3))
-)
-)KICAD";
+    static const char* PAD_TO_DIE_BOARD_FILE = "net_chains/stub_length_pad_to_die.kicad_pcb";
 
     static const char* PAD_TO_DIE_DRU = R"KICAD((version 1)
 
@@ -438,18 +292,13 @@ BOOST_AUTO_TEST_CASE( StubLengthIncludesPadToDie )
 )KICAD";
 
     {
-        std::ofstream pcbOut( pcbPath );
-        pcbOut << PAD_TO_DIE_BOARD;
-    }
-
-    {
         std::ofstream druOut( druPath );
         druOut << PAD_TO_DIE_DRU;
     }
 
     PCB_IO_KICAD_SEXPR     plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    plugin.LoadBoard( pcbPath.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + PAD_TO_DIE_BOARD_FILE, board.get() );
 
     NETINFO_ITEM* netA = board->FindNet( wxS( "/TRUNK_A" ) );
     NETINFO_ITEM* netB = board->FindNet( wxS( "/MID_B" ) );
@@ -538,7 +387,6 @@ BOOST_AUTO_TEST_CASE( StubLengthIncludesPadToDie )
                          "the 5 mm stub_length budget" );
 
     std::error_code ec;
-    fs::remove( pcbPath, ec );
     fs::remove( druPath, ec );
 }
 

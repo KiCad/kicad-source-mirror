@@ -19,6 +19,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <pcbnew_utils/board_file_utils.h>
+
 #include <filesystem>
 #include <fstream>
 
@@ -36,43 +38,7 @@
 // filter the check passes.  With `(net "GND")` the GND zone alone qualifies
 // and the trunk is still covered.  With `(net "PWR_*")` no zone qualifies and
 // the trunk is reported as uncovered.
-static const char* DUAL_ZONE_PCB = R"(
-(kicad_pcb
-    (version 20250904)
-    (generator "pcbnew")
-    (generator_version "9.99")
-    (layers
-        (0 "F.Cu" signal)
-        (2 "B.Cu" signal)
-        (44 "Edge.Cuts" user)
-    )
-    (net 0 "")
-    (net 1 "/CHAIN_RN")
-    (net 2 "/GND")
-    (net 3 "/VCC")
-    (gr_line (start -5 -5) (end 35 -5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 35 -5) (end 35 5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start 35 5) (end -5 5) (layer "Edge.Cuts") (width 0.05))
-    (gr_line (start -5 5) (end -5 -5) (layer "Edge.Cuts") (width 0.05))
-    (segment (start 0 0) (end 30 0) (width 0.2) (layer "F.Cu") (net 1))
-    (zone (net 2) (net_name "/GND") (layer "B.Cu") (name "gnd_full") (hatch edge 0.508)
-        (connect_pads (clearance 0))
-        (min_thickness 0.254) (filled_areas_thickness no)
-        (fill (thermal_gap 0.508) (thermal_bridge_width 0.508))
-        (polygon
-            (pts (xy -1 -1) (xy 31 -1) (xy 31 1) (xy -1 1))
-        )
-    )
-    (zone (net 3) (net_name "/VCC") (layer "B.Cu") (name "vcc_strip") (hatch edge 0.508)
-        (connect_pads (clearance 0))
-        (min_thickness 0.254) (filled_areas_thickness no)
-        (fill (thermal_gap 0.508) (thermal_bridge_width 0.508))
-        (polygon
-            (pts (xy -1 1.5) (xy 31 1.5) (xy 31 2) (xy -1 2))
-        )
-    )
-)
-)";
+static const char* DUAL_ZONE_PCB = "net_chains/return_path_dual_zone.kicad_pcb";
 
 
 namespace
@@ -82,13 +48,7 @@ size_t runDrc( const std::string& aDru, const std::string& aSubdir )
     namespace fs = std::filesystem;
     fs::path tmpDir = fs::temp_directory_path() / aSubdir;
     fs::create_directories( tmpDir );
-    fs::path pcbPath = tmpDir / "rn.kicad_pcb";
     fs::path druPath = tmpDir / "rn.kicad_dru";
-
-    {
-        std::ofstream out( pcbPath );
-        out << DUAL_ZONE_PCB;
-    }
 
     {
         std::ofstream out( druPath );
@@ -97,7 +57,7 @@ size_t runDrc( const std::string& aDru, const std::string& aSubdir )
 
     PCB_IO_KICAD_SEXPR     plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    plugin.LoadBoard( pcbPath.string(), board.get() );
+    plugin.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + DUAL_ZONE_PCB, board.get() );
     board->BuildConnectivity();
 
     NETINFO_ITEM* sig = board->FindNet( wxS( "/CHAIN_RN" ) );
@@ -129,7 +89,6 @@ size_t runDrc( const std::string& aDru, const std::string& aSubdir )
 
     drcEngine->RunTests( EDA_UNITS::MM, true, false );
 
-    fs::remove( pcbPath );
     fs::remove( druPath );
     return markerCount;
 }
