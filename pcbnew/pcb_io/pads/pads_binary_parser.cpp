@@ -34,6 +34,7 @@
 #include <set>
 #include <unordered_set>
 
+#include <fmt/format.h>
 #include <io/pads/pads_binary_utils.h>
 #include <ki_exception.h>
 #include <wx/log.h>
@@ -187,7 +188,7 @@ static void logParsePhase( const char* aWhat, std::chrono::steady_clock::time_po
 
     const double ms = std::chrono::duration<double, std::milli>( std::chrono::steady_clock::now() - aStart ).count();
 
-    fprintf( stderr, "PROF %-32s %8.1f ms\n", aWhat, ms );
+    fputs( fmt::format( "PROF {:<32} {:>8.1f} ms\n", aWhat, ms ).c_str(), stderr );
 }
 
 
@@ -2761,11 +2762,11 @@ void BINARY_PARSER::parseRouteVertices()
                 {
                     const ARC_POINT& first = track.points.front();
                     const ARC_POINT& last = track.points.back();
-                    THROW_IO_ERROR( wxString::Format( "Missing PADS route-object net relationship "
-                                                      "(object %zu, handle 0x%08X, layer %d, cells %u, "
-                                                      "first %.0f,%.0f, last %.0f,%.0f)",
-                                                      chunk.objectIndex, objectHandles[chunk.objectIndex], track.layer,
-                                                      object.cellCount, first.x, first.y, last.x, last.y ) );
+                    THROW_IO_ERROR( fmt::format( "Missing PADS route-object net relationship "
+                                                 "(object {}, handle 0x{:08X}, layer {}, cells {}, "
+                                                 "first {:.0f},{:.0f}, last {:.0f},{:.0f})",
+                                                 chunk.objectIndex, objectHandles[chunk.objectIndex], track.layer,
+                                                 object.cellCount, first.x, first.y, last.x, last.y ) );
                 }
 
                 decodedPieces.push_back( { std::move( track ), m_nets[*netIndex].name } );
