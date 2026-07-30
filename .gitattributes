@@ -41,6 +41,9 @@ thirdparty/eigen/**    -format.clang-format-kicad -whitespace
 # Vendored libwmf sources are upstream sources and must not be reformatted
 thirdparty/libwmf/**    -format.clang-format-kicad -whitespace
 
+# Vendored json-schema-validator sources are upstream sources and must not be reformatted
+thirdparty/json_schema_validator/**    -format.clang-format-kicad -whitespace
+
 # Scripts
 *.sh    text eol=lf
 *.bat   text eol=crlf

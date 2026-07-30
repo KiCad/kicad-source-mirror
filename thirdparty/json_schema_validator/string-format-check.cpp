@@ -9,6 +9,18 @@
 #include <utility>
 #include <vector>
 
+#ifdef JSON_SCHEMA_BOOST_REGEX
+#	include <boost/regex.hpp>
+#	define REGEX_NAMESPACE boost
+#elif defined(JSON_SCHEMA_NO_REGEX)
+// KiCad patch: upstream defines NO_STD_REGEX here, then uses REGEX_NAMESPACE unconditionally
+// below, so this configuration has never compiled.  Say so here instead of failing later.
+#	error "JSON_SCHEMA_NO_REGEX is unsupported: every format check below needs a regex backend"
+#else
+#	include <regex>
+#	define REGEX_NAMESPACE std
+#endif
+
 /**
  * Many of the RegExes are from @see http://jmrware.com/articles/2009/uri_regexp/URI_regex.html
  */
@@ -28,10 +40,10 @@ void range_check(const T value, const T min, const T max)
 /** @see date_time_check */
 void rfc3339_date_check(const std::string &value)
 {
-	const static std::regex dateRegex{R"(^([0-9]{4})\-([0-9]{2})\-([0-9]{2})$)"};
+	const static REGEX_NAMESPACE::regex dateRegex{R"(^([0-9]{4})\-([0-9]{2})\-([0-9]{2})$)"};
 
-	std::smatch matches;
-	if (!std::regex_match(value, matches, dateRegex)) {
+	REGEX_NAMESPACE::smatch matches;
+	if (!REGEX_NAMESPACE::regex_match(value, matches, dateRegex)) {
 		throw std::invalid_argument(value + " is not a date string according to RFC 3339.");
 	}
 
@@ -54,10 +66,10 @@ void rfc3339_date_check(const std::string &value)
 /** @see date_time_check */
 void rfc3339_time_check(const std::string &value)
 {
-	const static std::regex timeRegex{R"(^([0-9]{2})\:([0-9]{2})\:([0-9]{2})(\.[0-9]+)?(?:[Zz]|((?:\+|\-)[0-9]{2})\:([0-9]{2}))$)"};
+	const static REGEX_NAMESPACE::regex timeRegex{R"(^([0-9]{2})\:([0-9]{2})\:([0-9]{2})(\.[0-9]+)?(?:[Zz]|((?:\+|\-)[0-9]{2})\:([0-9]{2}))$)"};
 
-	std::smatch matches;
-	if (!std::regex_match(value, matches, timeRegex)) {
+	REGEX_NAMESPACE::smatch matches;
+	if (!REGEX_NAMESPACE::regex_match(value, matches, timeRegex)) {
 		throw std::invalid_argument(value + " is not a time string according to RFC 3339.");
 	}
 
@@ -129,10 +141,10 @@ void rfc3339_time_check(const std::string &value)
  */
 void rfc3339_date_time_check(const std::string &value)
 {
-	const static std::regex dateTimeRegex{R"(^([0-9]{4}\-[0-9]{2}\-[0-9]{2})[Tt]([0-9]{2}\:[0-9]{2}\:[0-9]{2}(?:\.[0-9]+)?(?:[Zz]|(?:\+|\-)[0-9]{2}\:[0-9]{2}))$)"};
+	const static REGEX_NAMESPACE::regex dateTimeRegex{R"(^([0-9]{4}\-[0-9]{2}\-[0-9]{2})[Tt]([0-9]{2}\:[0-9]{2}\:[0-9]{2}(?:\.[0-9]+)?(?:[Zz]|(?:\+|\-)[0-9]{2}\:[0-9]{2}))$)"};
 
-	std::smatch matches;
-	if (!std::regex_match(value, matches, dateTimeRegex)) {
+	REGEX_NAMESPACE::smatch matches;
+	if (!REGEX_NAMESPACE::regex_match(value, matches, dateTimeRegex)) {
 		throw std::invalid_argument(value + " is not a date-time string according to RFC 3339.");
 	}
 
@@ -394,9 +406,9 @@ void rfc3986_uri_check(const std::string &value)
 	    R"((?:\#((?:[A-Za-z0-9\-._~!$&'()*+,;=:@\/?]|%[0-9A-Fa-f]{2})*))?)"};
 	const static std::string uriFormat{scheme + hierPart + query + fragment};
 
-	const static std::regex uriRegex{uriFormat};
+	const static REGEX_NAMESPACE::regex uriRegex{uriFormat};
 
-	if (!std::regex_match(value, uriRegex)) {
+	if (!REGEX_NAMESPACE::regex_match(value, uriRegex)) {
 		throw std::invalid_argument(value + " is not a URI string according to RFC 3986.");
 	}
 }
@@ -425,33 +437,33 @@ void default_string_format_check(const std::string &format, const std::string &v
 	} else if (format == "uri") {
 		rfc3986_uri_check(value);
 	} else if (format == "email") {
-		static const std::regex emailRegex{email};
-		if (!std::regex_match(value, emailRegex)) {
+		static const REGEX_NAMESPACE::regex emailRegex{email};
+		if (!REGEX_NAMESPACE::regex_match(value, emailRegex)) {
 			throw std::invalid_argument(value + " is not a valid email according to RFC 5322.");
 		}
 	} else if (format == "hostname") {
-		static const std::regex hostRegex{hostname};
-		if (!std::regex_match(value, hostRegex)) {
+		static const REGEX_NAMESPACE::regex hostRegex{hostname};
+		if (!REGEX_NAMESPACE::regex_match(value, hostRegex)) {
 			throw std::invalid_argument(value + " is not a valid hostname according to RFC 3986 Appendix A.");
 		}
 	} else if (format == "ipv4") {
-		const static std::regex ipv4Regex{"^" + ipv4Address + "$"};
-		if (!std::regex_match(value, ipv4Regex)) {
+		const static REGEX_NAMESPACE::regex ipv4Regex{"^" + ipv4Address + "$"};
+		if (!REGEX_NAMESPACE::regex_match(value, ipv4Regex)) {
 			throw std::invalid_argument(value + " is not an IPv4 string according to RFC 2673.");
 		}
 	} else if (format == "ipv6") {
-		static const std::regex ipv6Regex{ipv6Address};
-		if (!std::regex_match(value, ipv6Regex)) {
+		static const REGEX_NAMESPACE::regex ipv6Regex{ipv6Address};
+		if (!REGEX_NAMESPACE::regex_match(value, ipv6Regex)) {
 			throw std::invalid_argument(value + " is not an IPv6 string according to RFC 5954.");
 		}
 	} else if (format == "uuid") {
-		static const std::regex uuidRegex{uuid};
-		if (!std::regex_match(value, uuidRegex)) {
+		static const REGEX_NAMESPACE::regex uuidRegex{uuid};
+		if (!REGEX_NAMESPACE::regex_match(value, uuidRegex)) {
 			throw std::invalid_argument(value + " is not an uuid string according to RFC 4122.");
 		}
 	} else if (format == "regex") {
 		try {
-			std::regex re(value, std::regex::ECMAScript);
+			REGEX_NAMESPACE::regex re(value, std::regex::ECMAScript);
 		} catch (std::exception &exception) {
 			throw exception;
 		}

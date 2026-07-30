@@ -62,6 +62,7 @@ set( QA_COMMON_SRCS
     test_increment.cpp
     test_inplace_function.cpp
     test_item_realignment.cpp
+    test_json_schema_validator.cpp
     test_ki_any.cpp
     test_library_tables.cpp
     test_local_history_autosave_walk.cpp
@@ -227,6 +228,7 @@ target_link_libraries( qa_common
     Boost::unit_test_framework
     ${wxWidgets_LIBRARIES}
     ZLIB::ZLIB
+    ${CMAKE_DL_LIBS}
     )
 
 if( TARGET api_schema_build_copy )
@@ -254,7 +256,7 @@ include_directories(
 )
 
 set_source_files_properties( test_remote_provider_metadata.cpp test_remote_provider_client.cpp
-        test_translation_format_strings.cpp PROPERTIES
+        test_translation_format_strings.cpp test_json_schema_validator.cpp PROPERTIES
         COMPILE_DEFINITIONS "QA_SRC_ROOT=(\"${CMAKE_SOURCE_DIR}\")"
         )
 
