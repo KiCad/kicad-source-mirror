@@ -426,16 +426,24 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
 bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
-    if( !Clear_Pcb( true ) )
+    // The import opens in its own tab, leaving the open documents alone; only the legacy single-board
+    // path has to clear first
+    if( !m_tabsPanel && !Clear_Pcb( true ) )
         return false;                  // this command is aborted
 
     GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    ImportFootprint( aFileSet[ 0 ] );
+
+    if( !ImportFootprint( aFileSet[ 0 ] ) )
+        return false;
 
     if( GetBoard()->GetFirstFootprint() )
         GetBoard()->GetFirstFootprint()->ClearFlags();
 
-    GetScreen()->SetContentModified( false );
+    // An unsaved import stays dirty so closing its tab offers to save it; only the legacy path, where
+    // the footprint keeps its file identity, starts out clean
+    if( !m_tabsPanel )
+        GetScreen()->SetContentModified( false );
+
     Zoom_Automatique( false );
     GetCanvas()->Refresh();
 

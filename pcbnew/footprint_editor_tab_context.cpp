@@ -19,6 +19,8 @@
 
 #include <footprint_editor_tab_context.h>
 
+#include <wx/translation.h>
+
 #include <board.h>
 #include <footprint.h>
 
@@ -38,14 +40,54 @@ FOOTPRINT_EDITOR_TAB_CONTEXT::FOOTPRINT_EDITOR_TAB_CONTEXT( const KIID&         
                                                             const wxString&        aReference,
                                                             std::unique_ptr<BOARD> aBoard ) :
         m_board( std::move( aBoard ) ),
-        m_fromBoard( true ),
+        m_kind( KIND::BOARD_INSTANCE ),
         m_sourceUuid( aSourceUuid ),
         m_reference( aReference )
 {
 }
 
 
+FOOTPRINT_EDITOR_TAB_CONTEXT::FOOTPRINT_EDITOR_TAB_CONTEXT( KIND aKind, std::unique_ptr<BOARD> aBoard ) :
+        m_board( std::move( aBoard ) ),
+        m_kind( aKind )
+{
+}
+
+
 FOOTPRINT_EDITOR_TAB_CONTEXT::~FOOTPRINT_EDITOR_TAB_CONTEXT() = default;
+
+
+std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>
+FOOTPRINT_EDITOR_TAB_CONTEXT::MakeUnsaved( std::unique_ptr<BOARD> aBoard )
+{
+    return std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>(
+            new FOOTPRINT_EDITOR_TAB_CONTEXT( KIND::UNSAVED, std::move( aBoard ) ) );
+}
+
+
+wxString FOOTPRINT_EDITOR_TAB_CONTEXT::GetDisplayName() const
+{
+    switch( m_kind )
+    {
+    case KIND::BOARD_INSTANCE: return m_reference;
+
+    // The imported name is not an identity the editor can save to, so the tab reads as unnamed
+    case KIND::UNSAVED:        return _( "<unnamed>" );
+
+    default:                   return m_name;
+    }
+}
+
+
+void FOOTPRINT_EDITOR_TAB_CONTEXT::PromoteToLibrary( const wxString& aLib, const wxString& aName )
+{
+    wxCHECK( m_kind == KIND::UNSAVED, /* void */ );
+
+    m_kind = KIND::LIBRARY;
+    m_lib = aLib;
+    m_name = aName;
+    m_footprintNameWhenLoaded = aName;
+}
 
 
 bool FOOTPRINT_EDITOR_TAB_CONTEXT::IsModified() const

@@ -40,8 +40,10 @@
 #include <zone.h>
 #include <pcb_group.h>
 #include <footprint_edit_frame.h>
+#include <footprint_editor_tab_context.h>
 #include <wildcards_and_files_ext.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <widgets/editor_tabs_panel.h>
 #include <widgets/filedlg_hook_new_library.h>
 #include <env_paths.h>
 #include <paths.h>
@@ -217,6 +219,16 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
     footprint->SetFPID( LIB_ID( wxEmptyString, footprintName ) );
 
+    // An import has no library home to key a tab on and must not replace the document being edited, so
+    // it gets its own unnamed tab that a later save-as promotes
+    if( m_tabsPanel )
+    {
+        // The plugin's own board does not survive the tab switch; ReloadFootprint reparents the
+        // footprint to the incoming board
+        footprint->SetParent( nullptr );
+        createUnsavedFootprintTab();
+    }
+
     // Insert footprint in list
     AddFootprintToBoard( footprint );
 
@@ -228,6 +240,11 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 
     GetBoard()->BuildListOfNets();
     UpdateView();
+
+    // The import lives only in its tab until saved to a library, so flag it dirty or closing the tab
+    // would silently discard it
+    if( m_tabsPanel )
+        OnModify();
 
     return footprint;
 }
@@ -736,7 +753,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
     {
         if( SaveFootprintAs( aFootprint ) )
         {
-            m_footprintNameWhenLoaded = footprintName;
+            // Re-read the name the save-as settled on; keeping the pre-save one would make the next
+            // save look like a rename and delete a library entry that was never ours
+            m_footprintNameWhenLoaded = aFootprint->GetFPID().GetUniStringLibItemName();
             SyncLibraryTree( true );
             return true;
         }
@@ -1218,15 +1237,38 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
 
         if( ConfirmRevertDialog( this, msg ) )
         {
-            Clear_Pcb( false );
-            AddFootprintToBoard( static_cast<FOOTPRINT*>( m_originalFootprintCopy->Clone() ) );
+            // Clone the baseline up front; a full clear drops the frame's copy of it
+            std::unique_ptr<FOOTPRINT> restored(
+                    static_cast<FOOTPRINT*>( m_originalFootprintCopy->Clone() ) );
+
+            if( m_tabsPanel )
+            {
+                // Reverting one tab must leave the others open, so reload in place instead of
+                // clearing the editor
+                const wxString oldKey = m_activeTab ? m_activeTab->GetTabKey() : wxString();
+
+                freeUndoRedoCommandsWithItems( m_undoList, m_redoList );
+                installFootprintOnActiveBoard( restored.release() );
+
+                // The tab is keyed on the footprint name, which the revert may have rolled back
+                if( m_activeTab && m_activeTab->GetTabKey() != oldKey )
+                {
+                    m_tabsPanel->RenameTab( oldKey, m_activeTab->GetTabKey(),
+                                            m_activeTab->GetDisplayName() );
+                }
+            }
+            else
+            {
+                Clear_Pcb( false );
+                installFootprintOnActiveBoard( restored.release() );
+            }
 
             Zoom_Automatique( false );
 
             Update3DView( true, true );
 
             ClearUndoRedoList();
-            GetScreen()->SetContentModified( false );
+            ClearModify();
 
             UpdateView();
             GetCanvas()->Refresh();

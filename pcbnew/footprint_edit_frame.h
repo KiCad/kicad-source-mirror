@@ -472,6 +472,23 @@ private:
     FOOTPRINT_EDITOR_TAB_CONTEXT* findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootprint );
 
     /**
+     * Open a session-only tab for an imported footprint over a fresh fp-holder board and make it the
+     * active tab.
+     *
+     * An import carries no library identity, so the tab reads as unnamed and is never de-duplicated
+     * against another tab; RenameFootprintTab() promotes it once a save-as names it.
+     */
+    FOOTPRINT_EDITOR_TAB_CONTEXT* createUnsavedFootprintTab();
+
+    /**
+     * Replace the active board's footprint with aFootprint and re-point the file watcher at it.
+     *
+     * Takes ownership. Does no tab bookkeeping, so callers that need a tab for aFootprint must open
+     * it first.
+     */
+    void installFootprintOnActiveBoard( FOOTPRINT* aFootprint );
+
+    /**
      * Make aCtx the active tab, borrowing its board without deleting the outgoing one.
      */
     void activateFootprintTab( FOOTPRINT_EDITOR_TAB_CONTEXT* aCtx );
@@ -505,17 +522,20 @@ private:
     bool promptAndCloseFootprintTab( int aIdx );
 
     /**
-     * Prompt to save each dirty instance (board) tab that is not the active one, since the active
-     * tab's unsaved state is handled by the main canCloseWindow check. Returns false if the user
-     * cancels so the window close can be vetoed.
+     * Prompt to save each dirty session-only tab that is not the active one, since the active tab's
+     * unsaved state is handled by the main canCloseWindow check. Returns false if the user cancels so
+     * the window close can be vetoed.
+     *
+     * Instance and unsaved-import tabs are never persisted, so edits left in them are lost on close
+     * unless they are offered here.
      */
-    bool promptToSaveInactiveInstanceTabs();
+    bool promptToSaveInactiveTransientTabs();
 
     /**
-     * True if any non-active instance (board) tab has unsaved edits. Used to veto a session-end query
+     * True if any non-active session-only tab has unsaved edits. Used to veto a session-end query
      * early, since those tabs are invisible to IsContentModified (which sees only the active tab).
      */
-    bool hasDirtyInactiveInstanceTabs() const;
+    bool hasDirtyInactiveTransientTabs() const;
 
     /**
      * Free the transient board items a detached context's lists own before it is destroyed, which

@@ -320,7 +320,11 @@ int FOOTPRINT_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
     if( !footprint() )     // no loaded footprint
         return 0;
 
-    if( m_frame->GetTargetFPID() == m_frame->GetLoadedFPID() )
+    const LIB_ID loadedId = m_frame->GetLoadedFPID();
+
+    // An unsaved import has no library identity for the tree selection to match, and save-as is the only
+    // way to give it one, so never let an unrelated selection swallow its save
+    if( m_frame->GetTargetFPID() == loadedId || loadedId.GetLibNickname().empty() )
     {
         if( m_frame->SaveFootprint( footprint() ) )
         {
@@ -587,11 +591,16 @@ int FOOTPRINT_EDITOR_CONTROL::ImportFootprint( const TOOL_EVENT& aEvent )
 {
     bool is_last_fp_from_brd = m_frame->IsCurrentFPFromBoard();
 
-    if( !m_frame->Clear_Pcb( true ) )
+    // The import opens in its own tab, leaving the open documents alone; only the legacy single-board
+    // path has to clear first
+    if( !m_frame->GetTabsPanel() && !m_frame->Clear_Pcb( true ) )
         return -1;                  // this command is aborted
 
     getViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    m_frame->ImportFootprint();
+
+    // A cancelled file dialog must leave the editor exactly as it was
+    if( !m_frame->ImportFootprint() )
+        return 0;
 
     if( m_frame->GetBoard()->GetFirstFootprint() )
         m_frame->GetBoard()->GetFirstFootprint()->ClearFlags();

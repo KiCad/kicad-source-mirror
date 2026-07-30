@@ -35,14 +35,26 @@ class FOOTPRINT;
 /**
  * One open footprint tab owning its fp-holder board, lent to the frame by raw pointer while active.
  *
- * A tab is one of two kinds.  A library tab edits a library footprint, is keyed by its library:name
+ * A tab is one of three kinds.  A library tab edits a library footprint, is keyed by its library:name
  * pair and persisted across sessions.  An instance tab edits a footprint pulled from a placed board
  * footprint (Ctrl-E); it is keyed by the source board footprint UUID, carries the board-uuid remap
- * used to save the edits back to that instance, and is session-only so it is never persisted.
+ * used to save the edits back to that instance, and is session-only so it is never persisted.  An
+ * unsaved tab edits an imported footprint that has no library home yet; it is keyed by a session id
+ * and is promoted to a library tab by the save-as that gives it an identity.
  */
 class FOOTPRINT_EDITOR_TAB_CONTEXT : public EDITOR_TAB_CONTEXT
 {
 public:
+    /**
+     * What the tab edits, which decides its key, its label and whether it is persisted.
+     */
+    enum class KIND
+    {
+        LIBRARY,        ///< A library footprint, keyed library:name and persisted across sessions
+        BOARD_INSTANCE, ///< A footprint pulled off a placed board footprint, session-only
+        UNSAVED         ///< An imported footprint with no library home yet, session-only
+    };
+
     FOOTPRINT_EDITOR_TAB_CONTEXT( const wxString& aLib, const wxString& aName,
                                   std::unique_ptr<BOARD> aBoard );
 
@@ -59,6 +71,14 @@ public:
     ~FOOTPRINT_EDITOR_TAB_CONTEXT() override;
 
     /**
+     * Construct a tab for an imported footprint that has no library identity yet.
+     *
+     * Each import gets its own session id, so importing the same file twice opens two tabs rather
+     * than one clobbering the other.
+     */
+    static std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT> MakeUnsaved( std::unique_ptr<BOARD> aBoard );
+
+    /**
      * De-duplication key for a placed board footprint, in a namespace disjoint from library keys.
      *
      * The leading control character cannot appear in a library nickname, so an instance key can never
@@ -69,19 +89,42 @@ public:
         return wxString( wxT( "\x01@fp:" ) ) + aSourceUuid.AsString();
     }
 
-    wxString GetTabKey() const override
+    /**
+     * De-duplication key for an imported footprint, in a namespace disjoint from the library and
+     * instance keys.
+     */
+    static wxString MakeUnsavedTabKey( const KIID& aSessionId )
     {
-        return m_fromBoard ? MakeInstanceTabKey( m_sourceUuid ) : m_lib + wxT( ":" ) + m_name;
+        return wxString( wxT( "\x01@import:" ) ) + aSessionId.AsString();
     }
 
-    wxString GetDisplayName() const override { return m_fromBoard ? m_reference : m_name; }
+    wxString GetTabKey() const override
+    {
+        switch( m_kind )
+        {
+        case KIND::BOARD_INSTANCE: return MakeInstanceTabKey( m_sourceUuid );
+        case KIND::UNSAVED:        return MakeUnsavedTabKey( m_sessionId );
+        default:                   return m_lib + wxT( ":" ) + m_name;
+        }
+    }
+
+    wxString GetDisplayName() const override;
 
     /**
-     * True for an instance (board) tab, which is session-only and never persisted.
+     * Give an imported footprint the library identity a save-as just assigned it.
+     *
+     * The key changes with the kind, so the caller must re-key the tab strip entry using the key it
+     * captured before this call.
      */
-    bool IsTransient() const { return m_fromBoard; }
+    void PromoteToLibrary( const wxString& aLib, const wxString& aName );
 
-    bool        IsFromBoard() const            { return m_fromBoard; }
+    /**
+     * True for a tab that is session-only and never persisted.
+     */
+    bool IsTransient() const { return m_kind != KIND::LIBRARY; }
+
+    bool        IsFromBoard() const            { return m_kind == KIND::BOARD_INSTANCE; }
+    bool        IsUnsaved() const              { return m_kind == KIND::UNSAVED; }
     const KIID& GetSourceUuid() const          { return m_sourceUuid; }
     const wxString& GetReference() const       { return m_reference; }
 
@@ -117,6 +160,8 @@ public:
     void SetFootprintNameWhenLoaded( const wxString& aName ) { m_footprintNameWhenLoaded = aName; }
 
 private:
+    FOOTPRINT_EDITOR_TAB_CONTEXT( KIND aKind, std::unique_ptr<BOARD> aBoard );
+
     wxString                   m_lib;
     wxString                   m_name;
     std::unique_ptr<BOARD>     m_board;
@@ -124,11 +169,13 @@ private:
     wxString                   m_footprintNameWhenLoaded;
     bool                       m_modified = false;
 
-    ///< True for an instance tab edited in place from a placed board footprint.
-    bool                       m_fromBoard = false;
+    KIND                       m_kind = KIND::LIBRARY;
 
     ///< Source board footprint UUID, used as the de-dup key and save-back target.
     KIID                       m_sourceUuid;
+
+    ///< Identity of an unsaved import, which has no library:name pair to key on.
+    KIID                       m_sessionId;
 
     ///< Reference designator of the source footprint, shown as the tab label.
     wxString                   m_reference;
