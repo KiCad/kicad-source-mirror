@@ -291,7 +291,7 @@ private:
     void updateTrace( const wxString& aVectorName, int aTraceType, SIM_PLOT_TAB* aPlotTab,
                       std::vector<double>* aDataX = nullptr, bool aClearData = false );
 
-    ///< Reference impedance of the response port for an S-parameter vector, defaults to 50 Ohm.
+    ///< Reference impedance of the response port for an S-parameter vector, zero when unresolved.
     double getSmithPortImpedance( const wxString& aVectorName );
 
     /**

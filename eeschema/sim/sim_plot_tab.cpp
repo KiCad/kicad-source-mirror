@@ -347,8 +347,8 @@ void SMITH_GRID::Plot( wxDC& aDC, mpWindow& aWindow )
         return wxString::Format( wxS( "%g" ), aValue );
     };
 
-    // ohm labels for a single reference impedance, normalized labels when the traces disagree
-    double labelScale = m_normalized ? 1.0 : m_z0;
+    // ohm labels for a single reference impedance, normalized labels without one
+    double labelScale = m_z0 > 0.0 ? m_z0 : 1.0;
 
     static const std::vector<double> baseVals = { 0.2, 0.5, 1.0, 2.0, 5.0 };
     std::vector<double>              gridVals = baseVals;
@@ -496,13 +496,19 @@ void SMITH_GRID::Plot( wxDC& aDC, mpWindow& aWindow )
             drawEdgeLabel( negLabel, at );
     }
 
-    if( m_normalized )
-    {
-        wxString note = _( "normalized" );
-        wxSize   ext = aDC.GetTextExtent( note );
+    // the ohm labels mean nothing unless the reference impedance is named
+    wxString note;
 
-        aDC.DrawText( note, mL + 4, mT + plotH - ext.y - 4 );
-    }
+    if( m_z0 > 0.0 )
+        note = wxString::Format( wxS( "Z0 = %s Ω" ), formatValue( m_z0 ) );
+    else if( m_mixedReferences )
+        note = _( "Normalized Z/Z0 (ports differ)" );
+    else
+        note = _( "Normalized Z/Z0" );
+
+    wxSize ext = aDC.GetTextExtent( note );
+
+    aDC.DrawText( note, mL + 4, mT + plotH - ext.y - 4 );
 
     aDC.DestroyClippingRegion();
 }
@@ -819,11 +825,14 @@ void SMITH_CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 
     lines.push_back( getID() + wxS( ":  f = " ) + formatSI( freq, wxS( "Hz" ) ) );
 
-    if( !SMITH_MATH::GammaToImpedance( m_gamma.x, m_gamma.y, z0, zr, zi ) )
+    // ohms need the port impedance, without one only the normalized z is known
+    bool absolute = z0 > 0.0;
+
+    if( !SMITH_MATH::GammaToImpedance( m_gamma.x, m_gamma.y, absolute ? z0 : 1.0, zr, zi ) )
     {
         lines.push_back( wxS( "Z = inf" ) );
     }
-    else
+    else if( absolute )
     {
         lines.push_back( wxString::Format( wxS( "Z = %s %s j%s" ), formatSI( zr, wxS( "Ω" ) ),
                                            zi < 0 ? wxS( "-" ) : wxS( "+" ),
@@ -837,6 +846,11 @@ void SMITH_CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
             else
                 lines.push_back( wxS( "C = " ) + formatSI( SMITH_MATH::SeriesCapacitance( zi, freq ), wxS( "F" ) ) );
         }
+    }
+    else
+    {
+        lines.push_back( wxString::Format( wxS( "z = %s %s j%s" ), formatFloat( zr, 3 ),
+                                           zi < 0 ? wxS( "-" ) : wxS( "+" ), formatFloat( std::fabs( zi ), 3 ) ) );
     }
 
     double rl = SMITH_MATH::ReturnLoss( gm );
@@ -1950,6 +1964,7 @@ void SIM_PLOT_TAB::UpdateSmithReferenceImpedance()
 
     double z0 = 0.0;
     bool   mixed = false;
+    bool   unresolved = false;
 
     for( const auto& [name, trace] : m_traces )
     {
@@ -1958,17 +1973,19 @@ void SIM_PLOT_TAB::UpdateSmithReferenceImpedance()
         if( !smithTrace )
             continue;
 
-        if( z0 == 0.0 )
-            z0 = smithTrace->GetReferenceImpedance();
-        else if( smithTrace->GetReferenceImpedance() != z0 )
+        double traceZ0 = smithTrace->GetReferenceImpedance();
+
+        if( traceZ0 <= 0.0 )
+            unresolved = true;
+        else if( z0 == 0.0 )
+            z0 = traceZ0;
+        else if( traceZ0 != z0 )
             mixed = true;
     }
 
-    // with no smith traces the grid keeps its last z0
-    if( z0 > 0.0 )
-        m_smithGrid->SetReferenceImpedance( z0 );
-
-    m_smithGrid->SetNormalizedLabels( mixed );
+    // a trace whose port impedance is unknown leaves no single reference to name either
+    m_smithGrid->SetReferenceImpedance( mixed || unresolved ? 0.0 : z0 );
+    m_smithGrid->SetMixedReferences( mixed );
 }
 
 

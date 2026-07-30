@@ -1976,7 +1976,7 @@ double SIMULATOR_FRAME_UI::getSmithPortImpedance( const wxString& aVectorName )
 
     // normalize to the response port z0
     if( !SMITH_MATH::ParseSParamPorts( aVectorName, &responsePort, &drivePort ) )
-        return 50.0;
+        return 0.0;
 
     for( const SPICE_ITEM& item : circuitModel()->GetItems() )
     {
@@ -2004,7 +2004,7 @@ double SIMULATOR_FRAME_UI::getSmithPortImpedance( const wxString& aVectorName )
         // this item has no usable z0, another item may still carry it for this port
     }
 
-    return 50.0;
+    return 0.0;
 }
 
 

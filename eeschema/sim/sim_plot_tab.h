@@ -211,16 +211,17 @@ public:
 
     bool HasBBox() const override { return false; }
 
+    ///< Zero when no single reference applies, which labels the grid normalized.
     void SetReferenceImpedance( double aZ0 ) { m_z0 = aZ0; }
 
-    void SetNormalizedLabels( bool aNormalized ) { m_normalized = aNormalized; }
+    void SetMixedReferences( bool aMixed ) { m_mixedReferences = aMixed; }
 
     ///< Chart placement including pan/zoom.
     static bool GetChartView( mpWindow& aWindow, double aZoom, const wxRealPoint& aPan, SMITH_VIEW& aView );
 
 private:
-    double m_z0 = 50.0;
-    bool   m_normalized = false;
+    double m_z0 = 0.0;
+    bool   m_mixedReferences = false;
 };
 
 
@@ -241,12 +242,13 @@ public:
     void                       SetFrequencies( const std::vector<double>& aFreqs ) { m_frequencies = aFreqs; }
     const std::vector<double>& GetFrequencies() const { return m_frequencies; }
 
+    ///< Zero until the response port resolves one, which leaves only normalized values readable.
     void   SetReferenceImpedance( double aZ0 ) { m_z0 = aZ0; }
     double GetReferenceImpedance() const { return m_z0; }
 
 private:
     std::vector<double> m_frequencies;
-    double              m_z0 = 50.0;
+    double              m_z0 = 0.0;
 };
 
 
