@@ -3372,7 +3372,7 @@ void BOARD_BUILDER::createTracks()
                 for( std::unique_ptr<BOARD_ITEM>& newItem : newItemList )
                 {
                     newItems.push_back( newItem.get() );
-                    m_board.Add( newItem.release(), ADD_MODE::BULK_APPEND );
+                    m_board.Add( newItem.release(), ADD_MODE::BULK_APPEND, true );
                 }
             }
         }
@@ -3511,7 +3511,7 @@ void BOARD_BUILDER::createBoardShapes()
     for( std::unique_ptr<BOARD_ITEM>& item : newItems )
     {
         addedItems.push_back( item.get() );
-        m_board.Add( item.release(), ADD_MODE::BULK_APPEND );
+        m_board.Add( item.release(), ADD_MODE::BULK_APPEND, true );
     }
 
     m_board.FinalizeBulkAdd( addedItems );
@@ -4002,7 +4002,7 @@ void BulkAddToBoard( BOARD& aBoard, std::vector<std::unique_ptr<T>>&& aItems )
     for( std::unique_ptr<T>& item : aItems )
     {
         rawPointers.push_back( item.get() );
-        aBoard.Add( item.release(), ADD_MODE::BULK_APPEND );
+        aBoard.Add( item.release(), ADD_MODE::BULK_APPEND, true );
     }
 
     aBoard.FinalizeBulkAdd( rawPointers );
