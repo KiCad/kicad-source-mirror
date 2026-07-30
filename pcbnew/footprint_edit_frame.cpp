@@ -774,17 +774,56 @@ void FOOTPRINT_EDIT_FRAME::updateEnabledLayers()
 }
 
 
+FOOTPRINT_EDIT_FRAME::EDIT_NOTICE FOOTPRINT_EDIT_FRAME::editNoticeFor(
+        const FOOTPRINT* aFootprint, bool aIsFromBoard,
+        const std::function<bool( const wxString& )>& aIsLibWritable )
+{
+    if( !aFootprint )
+        return EDIT_NOTICE::NONE;
+
+    if( aIsFromBoard )
+        return EDIT_NOTICE::FROM_BOARD;
+
+    const wxString libName = aFootprint->GetFPID().GetLibNickname();
+
+    // An empty libname is OK - you get that when creating a new footprint from the main menu
+    // In that case. treat is as editable, and the user will be prompted for save-as when saving.
+    if( libName.empty() || aIsLibWritable( libName ) )
+        return EDIT_NOTICE::NONE;
+
+    return EDIT_NOTICE::READ_ONLY_LIB;
+}
+
+
 void FOOTPRINT_EDIT_FRAME::updateInfoBar()
 {
     // Use CallAfter so that we update the canvas before waiting for the infobar animation
     CallAfter(
             [this]()
             {
-                FOOTPRINT* fp = GetBoard()->GetFirstFootprint();
-                wxString   libName = fp->GetFPID().GetLibNickname();
-                wxString   msg, link;
+                BOARD*     board = GetBoard();
+                FOOTPRINT* fp = board ? board->GetFirstFootprint() : nullptr;
 
-                if( IsCurrentFPFromBoard() )
+                const EDIT_NOTICE notice = editNoticeFor( fp, IsCurrentFPFromBoard(),
+                        [this]( const wxString& aLib )
+                        {
+                            return PROJECT_PCB::FootprintLibAdapter( &Prj() )->IsFootprintLibWritable( aLib );
+                        } );
+
+                // Clear_Pcb() queues this against an empty board and then opens a modal dialog whose
+                // event loop runs it, so there may be no footprint left to describe
+                if( notice == EDIT_NOTICE::NONE )
+                {
+                    if( WX_INFOBAR* infobar = GetInfoBar() )
+                        infobar->Dismiss();
+
+                    return;
+                }
+
+                wxString libName = fp->GetFPID().GetLibNickname();
+                wxString msg, link;
+
+                if( notice == EDIT_NOTICE::FROM_BOARD )
                 {
                     msg.Printf( _( "Editing %s from board.  Saving will update the board only." ), fp->GetReference() );
                     link.Printf( _( "Open in library %s" ), UnescapeString( libName ) );
@@ -806,10 +845,7 @@ void FOOTPRINT_EDIT_FRAME::updateInfoBar()
                         infobar->ShowMessage( msg, wxICON_INFORMATION );
                     }
                 }
-                // An empty libname is OK - you get that when creating a new footprint from the main menu
-                // In that case. treat is as editable, and the user will be prompted for save-as when saving.
-                else if( !libName.empty()
-                         && !PROJECT_PCB::FootprintLibAdapter( &Prj() )->IsFootprintLibWritable( libName ) )
+                else
                 {
                     msg.Printf( _( "Editing footprint from read-only library %s." ), UnescapeString( libName ) );
 
@@ -842,11 +878,6 @@ void FOOTPRINT_EDIT_FRAME::updateInfoBar()
                         infobar->AddCloseButton();
                         infobar->ShowMessage( msg, wxICON_INFORMATION );
                     }
-                }
-                else
-                {
-                    if( WX_INFOBAR* infobar = GetInfoBar() )
-                        infobar->Dismiss();
                 }
             } );
 }

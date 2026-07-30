@@ -88,6 +88,30 @@ public:
      */
     static bool prepareFootprintTabHandoff( FOOTPRINT* aFootprint, bool aHasTabs );
 
+    /**
+     * The infobar notice that applies to the footprint being edited.
+     */
+    enum class EDIT_NOTICE
+    {
+        NONE,           ///< Nothing to report, so any existing notice is dismissed
+        FROM_BOARD,     ///< Editing a footprint pulled off a board, so saving updates the board only
+        READ_ONLY_LIB   ///< Editing a footprint whose library cannot be written
+    };
+
+    /**
+     * Decide which infobar notice applies to @p aFootprint.
+     *
+     * @p aFootprint is null while the editor holds an empty board, which is the state between
+     * Clear_Pcb() and the next load.
+     *
+     * Exposed for unit testing of the notice selection.
+     *
+     * @param aIsFromBoard is true when the footprint is an instance pulled off a board.
+     * @param aIsLibWritable answers whether a named library can be written to.
+     */
+    static EDIT_NOTICE editNoticeFor( const FOOTPRINT* aFootprint, bool aIsFromBoard,
+                                      const std::function<bool( const wxString& )>& aIsLibWritable );
+
     ///< @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
     SELECTION&            GetCurrentSelection() override;
