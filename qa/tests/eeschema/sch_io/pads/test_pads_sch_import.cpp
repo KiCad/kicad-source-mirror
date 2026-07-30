@@ -78,6 +78,18 @@ struct PADS_SCH_IMPORT_FIXTURE
 };
 
 
+struct CAPTURING_REPORTER : REPORTER
+{
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
+    {
+        messages.emplace_back( aText, aSeverity );
+        return *this;
+    }
+
+    std::vector<std::pair<wxString, SEVERITY>> messages;
+};
+
+
 static wxString binaryFixture( const wxString& aName )
 {
     return wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() ) + wxS( "/plugins/pads/binary/" ) + aName
@@ -912,6 +924,99 @@ BOOST_AUTO_TEST_CASE( CanReadSchematicFile_RejectNonPads )
 }
 
 
+BOOST_AUTO_TEST_CASE( BinaryDispatch )
+{
+    using namespace PADS_SCH_BINARY;
+
+    SCH_IO_PADS          plugin;
+    std::vector<uint8_t> v13;
+    BOOST_REQUIRE( PADS_SCH_BINARY_READER::ReadFile( binaryFixture( wxS( "page_graphics" ) ), v13 ) );
+    BOOST_REQUIRE_GE( v13.size(), 0x250u );
+    BOOST_CHECK( PADS_SCH_BINARY_READER::IsBinaryFamily( v13 ) );
+    BOOST_CHECK( PADS_SCH_BINARY_READER::IsBinarySch( v13 ) );
+    BOOST_CHECK( PADS_SCH_BINARY_READER::IsSupportedVersion( 0x000C ) );
+    BOOST_CHECK( PADS_SCH_BINARY_READER::IsSupportedVersion( 0x000D ) );
+
+    std::vector<uint8_t> v12 = v13;
+    v12[2] = 0x0C;
+    v12[3] = 0x00;
+    v12[4] = 0x01;
+    v12[5] = 0x00;
+    BOOST_CHECK( PADS_SCH_BINARY_READER::IsBinaryFamily( v12 ) );
+    BOOST_CHECK( PADS_SCH_BINARY_READER::IsBinarySch( v12 ) );
+
+    std::vector<uint8_t> malformed = v13;
+    malformed[1] = 0xFF;
+    BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinaryFamily( malformed ) );
+    BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinarySch( malformed ) );
+    BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinaryFamily( { 0x00, 0xFE, 0x0D, 0x00 } ) );
+
+    const wxString ascii =
+            wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() ) + wxS( "/plugins/pads/simple_schematic.txt" );
+    BOOST_CHECK( plugin.CanReadSchematicFile( ascii ) );
+
+    wxString unrelatedBase = wxFileName::CreateTempFileName( wxS( "pads_unrelated_" ) );
+    BOOST_REQUIRE( wxRemoveFile( unrelatedBase ) );
+    wxString unrelated = unrelatedBase + wxS( ".sch" );
+    {
+        std::ofstream output( unrelated.fn_str(), std::ios::binary );
+        output << "unrelated schematic";
+    }
+    BOOST_CHECK( !plugin.CanReadSchematicFile( unrelated ) );
+
+    std::vector<uint8_t> unsupported = v13;
+    unsupported[2] = 0x00;
+    unsupported[3] = 0xFE;
+    wxString unsupportedBase = wxFileName::CreateTempFileName( wxS( "pads_unsupported_" ) );
+    BOOST_REQUIRE( wxRemoveFile( unsupportedBase ) );
+    wxString unsupportedPath = unsupportedBase + wxS( ".sch" );
+    {
+        std::ofstream output( unsupportedPath.fn_str(), std::ios::binary );
+        output.write( reinterpret_cast<const char*>( unsupported.data() ), unsupported.size() );
+    }
+    BOOST_CHECK( plugin.CanReadSchematicFile( unsupportedPath ) );
+    wxString unsupportedError;
+
+    try
+    {
+        plugin.LoadSchematicFile( unsupportedPath, &m_schematic );
+        BOOST_FAIL( "unsupported binary schematic was accepted" );
+    }
+    catch( const IO_ERROR& error )
+    {
+        unsupportedError = error.What();
+    }
+
+    BOOST_CHECK( unsupportedError.Contains( wxS( "v0xFE00" ) ) );
+    BOOST_CHECK( unsupportedError.Contains( wxS( "unsupported PADS Logic binary version" ) ) );
+    BOOST_CHECK( !unsupportedError.Contains( wxS( "ASCII" ) ) );
+
+    PADS_SCH_MODEL model = PADS_SCH_BINARY_PARSER().Parse( v13, binaryFixture( wxS( "page_graphics" ) ) );
+    m_schematic.Reset();
+    BUILD_RESULT expected =
+            PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, nullptr, binaryFixture( wxS( "page_graphics" ) ) );
+    m_schematic.Reset();
+    CAPTURING_REPORTER reporter;
+    plugin.SetReporter( &reporter );
+    BOOST_REQUIRE_NO_THROW( plugin.LoadSchematicFile( binaryFixture( wxS( "page_graphics" ) ), &m_schematic ) );
+    const wxString countText = wxString::Format(
+            wxS( "%zu sheets, %zu symbols, %zu wires, %zu buses, %zu bus entries, %zu junctions, %zu labels, "
+                 "%zu texts, %zu graphics" ),
+            expected.counts.sheets, expected.counts.symbols, expected.counts.wires, expected.counts.buses,
+            expected.counts.busEntries, expected.counts.junctions, expected.counts.labels, expected.counts.texts,
+            expected.counts.graphics );
+    BOOST_CHECK_EQUAL( std::ranges::count_if( reporter.messages,
+                                              [&]( const auto& aMessage )
+                                              {
+                                                  return aMessage.second == RPT_SEVERITY_INFO
+                                                         && aMessage.first.Contains( countText );
+                                              } ),
+                       1u );
+    BOOST_CHECK( wxRemoveFile( unrelated ) );
+    BOOST_CHECK( wxRemoveFile( unsupportedPath ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( FindPlugin )
 {
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_PADS ) );
@@ -1298,8 +1403,6 @@ BOOST_AUTO_TEST_CASE( Issue23855_RotatedPartFieldPositions )
     BOOST_CHECK_EQUAL( valF->GetHorizJustify(), GR_TEXT_H_ALIGN_LEFT );
     BOOST_CHECK_EQUAL( valF->GetVertJustify(), GR_TEXT_V_ALIGN_TOP );
 }
-
-
 
 
 BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
@@ -2780,6 +2883,39 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
                 BOOST_CHECK( builderOwned == 0u || parserOwned == 0u );
             }
         }
+
+        m_schematic.Reset();
+        SCH_IO_PADS        plugin;
+        CAPTURING_REPORTER reporter;
+        plugin.SetReporter( &reporter );
+        BOOST_REQUIRE_NO_THROW( plugin.LoadSchematicFile( binaryFixture( fixture ), &m_schematic ) );
+        std::vector<PARSER_DIAGNOSTIC> expectedDiagnostics = corpusModel.diagnostics;
+        expectedDiagnostics.insert( expectedDiagnostics.end(), corpusResult.diagnostics.begin(),
+                                    corpusResult.diagnostics.end() );
+        std::map<std::pair<wxString, SEVERITY>, size_t> expectedWarningCounts;
+
+        for( const PARSER_DIAGNOSTIC& diagnostic : expectedDiagnostics )
+        {
+            const wxString formatted = FormatParserError( diagnostic.source, diagnostic.message );
+            ++expectedWarningCounts[{ formatted, diagnostic.severity }];
+            BOOST_CHECK( formatted.Contains( wxString::Format( wxS( "v0x%04X" ), diagnostic.source.version ) ) );
+            BOOST_CHECK( formatted.Contains( diagnostic.source.objectClass ) );
+            BOOST_CHECK( formatted.Contains(
+                    wxString::Format( wxS( "controller %d, record %llu" ), diagnostic.source.controller,
+                                      static_cast<unsigned long long>( diagnostic.source.recordIndex ) ) ) );
+            BOOST_CHECK( formatted.Contains( wxString::Format(
+                    wxS( "offset 0x%llX" ), static_cast<unsigned long long>( diagnostic.source.absoluteOffset ) ) ) );
+        }
+
+        std::map<std::pair<wxString, SEVERITY>, size_t> reportedWarningCounts;
+
+        for( const auto& [message, severity] : reporter.messages )
+        {
+            if( severity != RPT_SEVERITY_INFO )
+                ++reportedWarningCounts[{ message, severity }];
+        }
+
+        BOOST_CHECK( reportedWarningCounts == expectedWarningCounts );
     }
 
     auto assertParserOwnership =

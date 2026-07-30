@@ -182,7 +182,7 @@ int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels( const std::vector<SCH_SIGNAL>& 
 
         // Collect label placements from OPC wire endpoints. Each OPC produces one label.
         // The anchor ref (@@@O..) is retained so the authoritative *NETNAMES* orientation
-        // can be looked up; the wire direction is only a fallback when no entry exists.
+        // can be looked up; the wire direction is used only when no entry exists.
         struct PLACEMENT
         {
             VECTOR2I    labelPos;

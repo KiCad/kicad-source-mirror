@@ -396,7 +396,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
     // The proprietary binary .sch is read by a separate structural path; the
     // ASCII export remains the route for net-label and free-text bindings.
     if( isBinarySchematicFile( aFileName ) )
-        return loadBinarySchematicFile( aFileName, aSchematic, aAppendToMe );
+        return loadBinarySchematicFile( aFileName, aSchematic, aAppendToMe, aProperties );
 
     SCH_SHEET* rootSheet = nullptr;
 
@@ -1318,10 +1318,20 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
 }
 
 
-SCH_SHEET* SCH_IO_PADS::loadBinarySchematicFile( const wxString& aFileName,
-                                                 SCHEMATIC*      aSchematic,
-                                                 SCH_SHEET*      aAppendToMe )
+SCH_SHEET* SCH_IO_PADS::loadBinarySchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
+                                                 SCH_SHEET*                         aAppendToMe,
+                                                 const std::map<std::string, UTF8>* aProperties )
 {
+    // Adopting a whole document cannot satisfy the hierarchical-sheet loader's contract that the
+    // caller owns the returned sheet
+    if( aProperties && aProperties->count( "hierarchical_sheet_load" ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "'%s' contains a complete PADS Logic binary schematic and "
+                                             "cannot be loaded as a hierarchical sheet. Use File > Import > "
+                                             "Non-KiCad Schematic... instead." ),
+                                          aFileName ) );
+    }
+
     std::vector<uint8_t> data;
 
     if( !PADS_SCH_BINARY::PADS_SCH_BINARY_READER::ReadFile( aFileName, data ) )
@@ -1329,60 +1339,36 @@ SCH_SHEET* SCH_IO_PADS::loadBinarySchematicFile( const wxString& aFileName,
 
     PADS_SCH_BINARY::PADS_SCH_BINARY_READER reader;
 
-    if( !reader.Parse( data ) )
+    if( !reader.Parse( data, aFileName ) )
         THROW_IO_ERROR( wxString::Format( _( "'%s' is not a valid PADS Logic binary schematic." ),
                                           aFileName ) );
 
-    SCH_SHEET* rootSheet = nullptr;
-
-    if( aAppendToMe )
-    {
-        wxCHECK_MSG( aSchematic->IsValid(), nullptr, "Can't append to a schematic with no root!" );
-        rootSheet = aAppendToMe;
-    }
-    else
-    {
-        rootSheet = new SCH_SHEET( aSchematic );
-        rootSheet->SetFileName( aFileName );
-        aSchematic->SetTopLevelSheets( { rootSheet } );
-    }
-
-    if( !rootSheet->GetScreen() )
-    {
-        SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
-        screen->SetFileName( aFileName );
-        rootSheet->SetScreen( screen );
-
-        const_cast<KIID&>( rootSheet->m_Uuid ) = screen->GetUuid();
-    }
-
-    SCH_SCREEN* rootScreen = rootSheet->GetScreen();
-    wxCHECK( rootScreen, nullptr );
-
-    SCH_SHEET_PATH rootPath;
-    rootPath.push_back( rootSheet );
-
-    SCH_SHEET_INSTANCE sheetInstance;
-    sheetInstance.m_Path = rootPath.Path();
-    sheetInstance.m_PageNumber = wxT( "#" );
-    rootScreen->m_sheetInstances.emplace_back( sheetInstance );
-
-    reader.BuildSchematic( aSchematic, rootSheet );
+    PADS_SCH_BINARY::BUILD_RESULT result = reader.BuildSchematic( aSchematic, aAppendToMe, aFileName );
 
     if( m_reporter )
     {
+        auto reportDiagnostics = [&]( const std::vector<PADS_SCH_BINARY::PARSER_DIAGNOSTIC>& aDiagnostics )
+        {
+            for( const PADS_SCH_BINARY::PARSER_DIAGNOSTIC& diagnostic : aDiagnostics )
+            {
+                m_reporter->Report( PADS_SCH_BINARY::FormatParserError( diagnostic.source, diagnostic.message ),
+                                    diagnostic.severity );
+            }
+        };
+
+        reportDiagnostics( reader.GetModel().diagnostics );
+        reportDiagnostics( result.diagnostics );
         m_reporter->Report(
                 wxString::Format(
-                        _( "Imported PADS Logic binary schematic '%s': %zu symbols, "
-                           "%zu wire connections, %zu free-text items, %zu junctions, "
-                           "%zu net labels." ),
-                        aFileName, reader.GetPlacements().size(),
-                        reader.GetWirePolylines().size(), reader.GetTexts().size(),
-                        reader.GetJunctions().size(), reader.GetNetLabels().size() ),
+                        _( "Imported PADS Logic binary schematic '%s': %zu sheets, %zu symbols, %zu wires, "
+                           "%zu buses, %zu bus entries, %zu junctions, %zu labels, %zu texts, %zu graphics." ),
+                        aFileName, result.counts.sheets, result.counts.symbols, result.counts.wires,
+                        result.counts.buses, result.counts.busEntries, result.counts.junctions, result.counts.labels,
+                        result.counts.texts, result.counts.graphics ),
                 RPT_SEVERITY_INFO );
     }
 
-    return rootSheet;
+    return aAppendToMe ? aAppendToMe : aSchematic->GetTopLevelSheet();
 }
 
 
@@ -1608,11 +1594,10 @@ bool SCH_IO_PADS::isBinarySchematicFile( const wxString& aFileName ) const
     {
         std::vector<uint8_t> data;
 
-        // The reader predicate is the single source of truth: it checks the
-        // magic, version, AND a minimum container size, so a stray 4-byte file
-        // with the right magic is not falsely claimed and later rejected.
+        // Recognition intentionally does not test the version.  A PADS binary from an unsupported
+        // producer belongs to this importer and must receive the binary parser's version diagnostic.
         return PADS_SCH_BINARY::PADS_SCH_BINARY_READER::ReadFile( aFileName, data )
-               && PADS_SCH_BINARY::PADS_SCH_BINARY_READER::IsBinarySch( data );
+               && PADS_SCH_BINARY::PADS_SCH_BINARY_READER::IsBinaryFamily( data );
     }
     catch( ... )
     {

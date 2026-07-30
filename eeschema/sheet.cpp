@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <map>
+#include <core/utf8.h>
 #include <sch_draw_panel.h>
 #include <common.h>
 #include <confirm.h>
@@ -438,16 +440,21 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
 
     wxString fullFilename = fileName.GetFullPath();
 
+    // The caller owns the sheet a plugin returns here, so name the context. An importer that can
+    // only adopt a whole document into the schematic cannot satisfy that and refuses instead.
+    std::map<std::string, UTF8> loadProps;
+    loadProps["hierarchical_sheet_load"] = "1";
+
     try
     {
         if( aSheet->GetScreen() != nullptr )
         {
-            tmpSheet.reset( pi->LoadSchematicFile( fullFilename, &Schematic() ) );
+            tmpSheet.reset( pi->LoadSchematicFile( fullFilename, &Schematic(), nullptr, &loadProps ) );
         }
         else
         {
             tmpSheet->SetFileName( fullFilename );
-            pi->LoadSchematicFile( fullFilename, &Schematic(), tmpSheet.get() );
+            pi->LoadSchematicFile( fullFilename, &Schematic(), tmpSheet.get(), &loadProps );
         }
 
         if( !pi->GetError().IsEmpty() )

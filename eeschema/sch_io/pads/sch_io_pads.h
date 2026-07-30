@@ -76,13 +76,14 @@ private:
     bool checkFileHeader( const wxString& aFileName ) const;
 
     /**
-     * Check whether the file is the proprietary PADS Logic binary schematic rather than
-     * the ASCII export.
+     * Recognize the PADS Logic binary family independently of version support so unsupported
+     * producer versions receive a binary-format diagnostic instead of reaching the ASCII parser.
      */
     bool isBinarySchematicFile( const wxString& aFileName ) const;
 
     SCH_SHEET* loadBinarySchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                        SCH_SHEET* aAppendToMe );
+                                        SCH_SHEET*                         aAppendToMe,
+                                        const std::map<std::string, UTF8>* aProperties );
 
     /**
      * Parse the PADS Logic ASCII file and populate the library symbol cache.

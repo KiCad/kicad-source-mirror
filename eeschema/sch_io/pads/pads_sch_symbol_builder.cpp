@@ -1173,7 +1173,7 @@ std::optional<LIB_ID> PADS_SCH_SYMBOL_BUILDER::GetKiCadPowerSymbolId( const std:
         }
     }
 
-    // Generic fallback for +/- prefixed names not in the table
+    // Generic handling for +/- prefixed names not in the table
     if( upper.length() >= 2 && upper[0] == '+' )
     {
         LIB_ID libId;
