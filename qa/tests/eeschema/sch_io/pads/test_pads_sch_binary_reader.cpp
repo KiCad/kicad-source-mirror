@@ -56,7 +56,15 @@ BOOST_AUTO_TEST_CASE( RecognizesFamilyIndependentlyOfVersionSupport )
     bytes[1] = 0xFF;
     BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinaryFamily( bytes ) );
     BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinarySch( bytes ) );
-    BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinaryFamily( { 0x00, 0xFE, 0x0D, 0x00 } ) );
+    BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinaryFamily( { 0x00 } ) );
+    BOOST_CHECK( PADS_SCH_BINARY_READER::IsBinaryFamily( { 0x00, 0xFE } ) );
+    BOOST_CHECK( PADS_SCH_BINARY_READER::IsBinaryFamily( { 0x00, 0xFE, 0x0D } ) );
+    BOOST_CHECK( PADS_SCH_BINARY_READER::IsBinaryFamily( { 0x00, 0xFE, 0x0D, 0x00 } ) );
+    BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinaryFamily( std::vector<uint8_t>( 31, 0x00 ) ) );
+
+    std::vector<uint8_t> truncatedHeader( 31, 0x00 );
+    truncatedHeader[1] = 0xFE;
+    BOOST_CHECK( PADS_SCH_BINARY_READER::IsBinaryFamily( truncatedHeader ) );
 }
 
 
@@ -76,7 +84,7 @@ BOOST_AUTO_TEST_CASE( OwnsTypedParserModel )
 BOOST_AUTO_TEST_CASE( ParseRejectsMalformedAndReportsUnsupportedVersion )
 {
     PADS_SCH_BINARY_READER reader;
-    BOOST_CHECK( !reader.Parse( { 0x00, 0xFE, 0x0D, 0x00 }, wxS( "truncated.sch" ) ) );
+    BOOST_CHECK_THROW( reader.Parse( { 0x00, 0xFE }, wxS( "truncated.sch" ) ), IO_ERROR );
     BOOST_CHECK_THROW( reader.GetModel(), IO_ERROR );
 
     std::vector<uint8_t> bytes = fixtureBytes( wxS( "minimal_v13" ) );

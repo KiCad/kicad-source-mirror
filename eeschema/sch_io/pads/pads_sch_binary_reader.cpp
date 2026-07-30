@@ -12,30 +12,22 @@
 #include <sch_io/pads/pads_sch_binary_reader.h>
 
 #include <sch_io/pads/pads_sch_binary_parser.h>
+#include <sch_io/pads/pads_sch_sdb.h>
 
 #include <io/pads/pads_binary_utils.h>
 #include <ki_exception.h>
 
 namespace PADS_SCH_BINARY
 {
-namespace
-{
-    constexpr size_t   HEADER_SIZE = 32;
-    constexpr uint8_t  MAGIC1 = 0xFE;
-    constexpr uint16_t VERSION_12 = 0x000C;
-    constexpr uint16_t VERSION_13 = 0x000D;
-}
-
-
 bool PADS_SCH_BINARY_READER::IsBinaryFamily( const std::vector<uint8_t>& aData )
 {
-    return aData.size() >= HEADER_SIZE && PADS_IO::HasSdbMagic( aData, MAGIC1 );
+    return PADS_SCH_SDB::HasFamilyMagic( aData );
 }
 
 
 bool PADS_SCH_BINARY_READER::IsSupportedVersion( uint16_t aVersion )
 {
-    return aVersion == VERSION_12 || aVersion == VERSION_13;
+    return PADS_SCH_SDB::IsSupportedVersion( aVersion );
 }
 
 

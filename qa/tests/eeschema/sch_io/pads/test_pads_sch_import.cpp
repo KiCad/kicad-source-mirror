@@ -949,7 +949,47 @@ BOOST_AUTO_TEST_CASE( BinaryDispatch )
     malformed[1] = 0xFF;
     BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinaryFamily( malformed ) );
     BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinarySch( malformed ) );
-    BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinaryFamily( { 0x00, 0xFE, 0x0D, 0x00 } ) );
+    BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinaryFamily( { 0x00 } ) );
+
+    std::vector<uint8_t> truncatedHeader( 31, 0x00 );
+    truncatedHeader[1] = 0xFE;
+    truncatedHeader[2] = 0x0D;
+
+    const std::vector<std::pair<std::vector<uint8_t>, wxString>> truncations = {
+        { { 0x00, 0xFE }, wxS( "file too small for PADS Logic binary version" ) },
+        { { 0x00, 0xFE, 0x0D }, wxS( "file too small for PADS Logic binary version" ) },
+        { { 0x00, 0xFE, 0x0D, 0x00 }, wxS( "file too small for PADS Logic binary header" ) },
+        { truncatedHeader, wxS( "file too small for PADS Logic binary header" ) }
+    };
+
+    for( const auto& [truncated, expectedError] : truncations )
+    {
+        BOOST_CHECK( PADS_SCH_BINARY_READER::IsBinaryFamily( truncated ) );
+        wxString truncatedBase = wxFileName::CreateTempFileName( wxS( "pads_truncated_" ) );
+        BOOST_REQUIRE( wxRemoveFile( truncatedBase ) );
+        wxString truncatedPath = truncatedBase + wxS( ".sch" );
+        {
+            std::ofstream output( truncatedPath.fn_str(), std::ios::binary );
+            output.write( reinterpret_cast<const char*>( truncated.data() ), truncated.size() );
+        }
+        BOOST_CHECK( plugin.CanReadSchematicFile( truncatedPath ) );
+        wxString truncatedError;
+
+        try
+        {
+            plugin.LoadSchematicFile( truncatedPath, &m_schematic );
+            BOOST_FAIL( "truncated binary schematic was accepted" );
+        }
+        catch( const IO_ERROR& error )
+        {
+            truncatedError = error.What();
+        }
+
+        BOOST_CHECK( truncatedError.Contains( wxS( "PADS Logic binary v0x" ) ) );
+        BOOST_CHECK( truncatedError.Contains( expectedError ) );
+        BOOST_CHECK( !truncatedError.Contains( wxS( "ASCII" ) ) );
+        BOOST_CHECK( wxRemoveFile( truncatedPath ) );
+    }
 
     const wxString ascii =
             wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() ) + wxS( "/plugins/pads/simple_schematic.txt" );
