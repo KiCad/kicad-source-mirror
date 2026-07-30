@@ -1710,11 +1710,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
                                       return false;
                                   } ) )
         {
-            if( IsQuasiModal() )
-                EndQuasiModal( retval );
-            else
-                EndDialog( retval );
-
+            EndDialogShim( retval );
             return;
         }
         else
@@ -1725,10 +1721,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
     }
 
     // No change in dialog: we can close it
-    if( IsQuasiModal() )
-        EndQuasiModal( retval );
-    else
-        EndDialog( retval );
+    EndDialogShim( retval );
 }
 
 

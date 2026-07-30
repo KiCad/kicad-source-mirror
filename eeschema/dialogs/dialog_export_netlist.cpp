@@ -805,10 +805,7 @@ void DIALOG_EXPORT_NETLIST::OnDelGenerator( wxCommandEvent& event )
 
     WriteCurrentNetlistSetup();
 
-    if( IsQuasiModal() )
-        EndQuasiModal( NET_PLUGIN_CHANGE );
-    else
-        EndDialog( NET_PLUGIN_CHANGE );
+    EndDialogShim( NET_PLUGIN_CHANGE );
 }
 
 
@@ -850,10 +847,7 @@ void DIALOG_EXPORT_NETLIST::OnAddGenerator( wxCommandEvent& event )
 
     WriteCurrentNetlistSetup();
 
-    if( IsQuasiModal() )
-        EndQuasiModal( NET_PLUGIN_CHANGE );
-    else
-        EndDialog( NET_PLUGIN_CHANGE );
+    EndDialogShim( NET_PLUGIN_CHANGE );
 }
 
 

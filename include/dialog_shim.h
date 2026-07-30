@@ -194,6 +194,20 @@ public:
      */
     void UnregisterUnitBinder( UNIT_BINDER* aUnitBinder );
 
+    /**
+     * A mode agnostic way to close a dialog.
+     *
+     * This replaces the protected method wxDialog::EndDialog() which unfortunately was not made virtual
+     * and knows nothing of our custom QuasiModal behavior.
+     *
+     * @warning Do not call EndModal or EndQuasimodal directly.  This is a bug because it's not
+     *          known in advance how the dialog was opened and cannot be guaranteed not to change in
+     *          the future.
+     *
+     * @param aReturnCode is the return code from ending Modal and QuasiModal dialogs.
+     */
+    void EndDialogShim( int aReturnCode );
+
 protected:
     /**
      * In all dialogs, we must call the same functions to fix minimal dlg size, the default

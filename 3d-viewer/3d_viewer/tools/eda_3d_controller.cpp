@@ -143,10 +143,7 @@ int EDA_3D_CONTROLLER::Main( const TOOL_EVENT& aEvent )
             {
                 DIALOG_SHIM* dialog = static_cast<DIALOG_SHIM*>( parent );
 
-                if( dialog->IsQuasiModal() )
-                    dialog->EndQuasiModal( wxID_CANCEL );
-                else
-                    dialog->EndModal( wxID_CANCEL );
+                dialog->EndDialogShim( wxID_CANCEL );
             }
             else
             {

@@ -322,8 +322,8 @@ private:
 	void onCancel( wxCommandEvent& event ) override
     {
         // Just skipping the event doesn't work after the library browser was run
-        if( IsQuasiModal() )
-            EndQuasiModal( wxID_CANCEL );
+        if( IsQuasiModal() || IsModal() )
+            EndDialogShim( wxID_CANCEL );
         else
             event.Skip();
     }

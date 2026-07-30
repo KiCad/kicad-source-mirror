@@ -1148,7 +1148,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnCancelButtonClick( wxCommandEvent& event )
 {
     // Running the Footprint Browser gums up the works and causes the automatic cancel
     // stuff to no longer work.  So we do it here ourselves.
-    EndQuasiModal( wxID_CANCEL );
+    EndDialogShim( wxID_CANCEL );
 }
 
 

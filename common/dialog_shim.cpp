@@ -1941,3 +1941,12 @@ void DIALOG_SHIM::SetupStandardButtons( std::map<int, wxString> aLabels )
 {
     recursiveDescent( GetSizer(), aLabels );
 }
+
+
+void DIALOG_SHIM::EndDialogShim( int aReturnCode )
+{
+    if( IsQuasiModal() )
+        EndQuasiModal( aReturnCode );
+    else
+        EndDialog( aReturnCode );       // Call the default handler for modal and mode-less dialogs.
+}

@@ -51,10 +51,7 @@ void DIALOG_PUSH_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         KI_FALLTHROUGH;
 
     case wxID_OK:
-        if( IsQuasiModal() )
-            EndQuasiModal( returncode );
-        else
-            EndDialog( returncode );
+        EndDialogShim( returncode );
 
         break;
     }

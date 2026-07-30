@@ -713,7 +713,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnCancelButtonClick( wxCommandEvent& event )
 {
     // Running the Footprint Browser gums up the works and causes the automatic cancel
     // stuff to no longer work.  So we do it here ourselves.
-    EndQuasiModal( wxID_CANCEL );
+    EndDialogShim( wxID_CANCEL );
 }
 
 
@@ -1074,21 +1074,21 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 void DIALOG_SYMBOL_PROPERTIES::OnEditSymbol( wxCommandEvent&  )
 {
     if( TransferDataFromWindow() )
-        EndQuasiModal( SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL );
+        EndDialogShim( SYMBOL_PROPS_EDIT_SCHEMATIC_SYMBOL );
 }
 
 
 void DIALOG_SYMBOL_PROPERTIES::OnEditLibrarySymbol( wxCommandEvent&  )
 {
     if( TransferDataFromWindow() )
-        EndQuasiModal( SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL );
+        EndDialogShim( SYMBOL_PROPS_EDIT_LIBRARY_SYMBOL );
 }
 
 
 void DIALOG_SYMBOL_PROPERTIES::OnUpdateSymbol( wxCommandEvent&  )
 {
     if( TransferDataFromWindow() )
-        EndQuasiModal( SYMBOL_PROPS_WANT_UPDATE_SYMBOL );
+        EndDialogShim( SYMBOL_PROPS_WANT_UPDATE_SYMBOL );
 }
 
 
@@ -1098,16 +1098,16 @@ void DIALOG_SYMBOL_PROPERTIES::OnExchangeSymbol( wxCommandEvent& )
         return;
 
     if( !GetParent()->Schematic().GetCurrentVariant().IsEmpty() )
-        EndQuasiModal( SYMBOL_PROPS_WANT_SET_VARIANT_SYMBOL );
+        EndDialogShim( SYMBOL_PROPS_WANT_SET_VARIANT_SYMBOL );
     else
-        EndQuasiModal( SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL );
+        EndDialogShim( SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL );
 }
 
 
 void DIALOG_SYMBOL_PROPERTIES::OnClearVariantSymbol( wxCommandEvent& )
 {
     if( TransferDataFromWindow() )
-        EndQuasiModal( SYMBOL_PROPS_WANT_CLEAR_VARIANT_SYMBOL );
+        EndDialogShim( SYMBOL_PROPS_WANT_CLEAR_VARIANT_SYMBOL );
 }
 
 

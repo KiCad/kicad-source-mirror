@@ -240,12 +240,7 @@ void PCB_ONE_LAYER_SELECTOR::onCharHook( wxKeyEvent& event )
     if( layer != UNDEFINED_LAYER )
     {
         m_layerSelected = layer;
-
-        if( IsQuasiModal() )
-            EndQuasiModal( 1 );
-        else
-            EndDialog( 1 );
-
+        EndDialogShim( 1 );
         return;
     }
 
@@ -320,10 +315,7 @@ void PCB_ONE_LAYER_SELECTOR::OnLeftGridCellClick( wxGridEvent& event )
 {
     m_layerSelected = m_layersIdLeftColumn[event.GetRow()];
 
-    if( IsQuasiModal() )
-        EndQuasiModal( 1 );
-    else
-        EndDialog( 1 );
+    EndDialogShim( 1 );
 }
 
 
@@ -331,10 +323,7 @@ void PCB_ONE_LAYER_SELECTOR::OnRightGridCellClick( wxGridEvent& event )
 {
     m_layerSelected = m_layersIdRightColumn[event.GetRow()];
 
-    if( IsQuasiModal() )
-        EndQuasiModal( 2 );
-    else
-        EndDialog( 2 );
+    EndDialogShim( 2 );
 }
 
 
