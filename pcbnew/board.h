@@ -1746,6 +1746,9 @@ private:
     // Refresh user layer opposites.
     void recalcOpposites();
 
+    /// Get a simple vector of the board's pointers
+    std::vector<BOARD_ITEM*> collectOwnedItems() const;
+
     friend class PCB_EDIT_FRAME;
 
 private:

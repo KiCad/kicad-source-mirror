@@ -169,6 +169,8 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
+    // Clears m_indexedInBoard as it goes. Items that outlive the board rely on that to know
+    // ~BOARD_ITEM must not walk their parent chain back into freed memory
     ClearItemByIdCache();
 
     // Clean up the owned elements
@@ -176,7 +178,10 @@ BOARD::~BOARD()
 
     delete m_SolderMaskBridges;
 
-    BOARD_ITEM_SET ownedItems = GetItemSet();
+    std::vector<BOARD_ITEM*> ownedItems = collectOwnedItems();
+
+    std::sort( ownedItems.begin(), ownedItems.end() );
+    ownedItems.erase( std::unique( ownedItems.begin(), ownedItems.end() ), ownedItems.end() );
 
     m_zones.clear();
     m_footprints.clear();
@@ -2079,28 +2084,35 @@ void BOARD::CacheItemById( BOARD_ITEM* aItem ) const
     if( IsFootprintHolder() )
         return;
 
-    if( auto prev = m_cachedIdByItem.find( aItem );
-        prev != m_cachedIdByItem.end() && prev->second != aItem->m_Uuid )
+    // Called once per item on load, so probe and insert in one lookup per map and pay for the
+    // aliasing fixups only when a key was already taken
+    auto [idIt, idInserted] = m_itemByIdCache.try_emplace( aItem->m_Uuid, aItem );
+    auto [itemIt, itemInserted] = m_cachedIdByItem.try_emplace( aItem, aItem->m_Uuid );
+
+    if( !itemInserted && itemIt->second != aItem->m_Uuid )
     {
-        auto prevIt = m_itemByIdCache.find( prev->second );
+        // The item was indexed under an older UUID; drop that forward alias
+        auto prevIt = m_itemByIdCache.find( itemIt->second );
 
         if( prevIt != m_itemByIdCache.end() && prevIt->second == aItem )
             m_itemByIdCache.erase( prevIt );
+
+        itemIt->second = aItem->m_Uuid;
     }
 
-    if( auto existing = m_itemByIdCache.find( aItem->m_Uuid );
-        existing != m_itemByIdCache.end() && existing->second != aItem )
+    if( !idInserted && idIt->second != aItem )
     {
-        if( auto prev = m_cachedIdByItem.find( existing->second );
+        // Another item already claims this UUID; evict it
+        if( auto prev = m_cachedIdByItem.find( idIt->second );
             prev != m_cachedIdByItem.end() && prev->second == aItem->m_Uuid )
         {
-            existing->second->m_indexedInBoard = false;
+            idIt->second->m_indexedInBoard = false;
             m_cachedIdByItem.erase( prev );
         }
+
+        idIt->second = aItem;
     }
 
-    m_itemByIdCache.insert_or_assign( aItem->m_Uuid, aItem );
-    m_cachedIdByItem.insert_or_assign( aItem, aItem->m_Uuid );
     aItem->m_indexedInBoard = true;
 }
 
@@ -4053,21 +4065,33 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
 }
 
 
-const BOARD_ITEM_SET BOARD::GetItemSet()
+std::vector<BOARD_ITEM*> BOARD::collectOwnedItems() const
 {
-    BOARD_ITEM_SET items;
+    std::vector<BOARD_ITEM*> items;
 
-    std::copy( m_tracks.begin(), m_tracks.end(), std::inserter( items, items.end() ) );
-    std::copy( m_zones.begin(), m_zones.end(), std::inserter( items, items.end() ) );
-    std::copy( m_generators.begin(), m_generators.end(), std::inserter( items, items.end() ) );
-    std::copy( m_footprints.begin(), m_footprints.end(), std::inserter( items, items.end() ) );
-    std::copy( m_drawings.begin(), m_drawings.end(), std::inserter( items, items.end() ) );
-    std::copy( m_markers.begin(), m_markers.end(), std::inserter( items, items.end() ) );
-    std::copy( m_groups.begin(), m_groups.end(), std::inserter( items, items.end() ) );
-    std::copy( m_constraints.begin(), m_constraints.end(), std::inserter( items, items.end() ) );
-    std::copy( m_points.begin(), m_points.end(), std::inserter( items, items.end() ) );
+    items.reserve( m_tracks.size() + m_zones.size() + m_generators.size() + m_footprints.size()
+                   + m_drawings.size() + m_markers.size() + m_groups.size() + m_constraints.size()
+                   + m_points.size() );
+
+    items.insert( items.end(), m_tracks.begin(), m_tracks.end() );
+    items.insert( items.end(), m_zones.begin(), m_zones.end() );
+    items.insert( items.end(), m_generators.begin(), m_generators.end() );
+    items.insert( items.end(), m_footprints.begin(), m_footprints.end() );
+    items.insert( items.end(), m_drawings.begin(), m_drawings.end() );
+    items.insert( items.end(), m_markers.begin(), m_markers.end() );
+    items.insert( items.end(), m_groups.begin(), m_groups.end() );
+    items.insert( items.end(), m_constraints.begin(), m_constraints.end() );
+    items.insert( items.end(), m_points.begin(), m_points.end() );
 
     return items;
+}
+
+
+const BOARD_ITEM_SET BOARD::GetItemSet()
+{
+    std::vector<BOARD_ITEM*> items = collectOwnedItems();
+
+    return BOARD_ITEM_SET( items.begin(), items.end() );
 }
 
 
