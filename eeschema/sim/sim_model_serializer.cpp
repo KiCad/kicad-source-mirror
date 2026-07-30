@@ -28,7 +28,6 @@
 #include <fmt/core.h>
 #include <pegtl.hpp>
 #include <pegtl/contrib/parse_tree.hpp>
-#include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <string_utils.h>
@@ -213,14 +212,42 @@ bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
     std::string paramName;
     bool        isPrimaryValueSet = false;
 
+    auto unescapeQuoted = []( const std::string& aString ) -> std::string
+    {
+        std::string result;
+        result.reserve( aString.size() );
+
+        for( size_t i = 0; i < aString.size(); ++i )
+        {
+            if( aString[i] == '\\' && i + 1 < aString.size() && ( aString[i + 1] == '"' || aString[i + 1] == '\\' ) )
+            {
+                result.push_back( aString[++i] );
+            }
+            else
+            {
+                result.push_back( aString[i] );
+            }
+        }
+
+        return result;
+    };
+
     for( const auto& node : root->children )
     {
         if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::param>() )
         {
             paramName = node->string();
         }
-        else if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::quotedStringContent>()
-            || node->is_type<SIM_MODEL_SERIALIZER_PARSER::unquotedString>() )
+        else if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::quotedStringContent>() )
+        {
+            wxASSERT( paramName != "" );
+
+            m_model.SetParamValue( paramName, unescapeQuoted( node->string() ), SIM_VALUE_GRAMMAR::NOTATION::SI );
+
+            if( m_model.GetParam( 0 ).Matches( paramName ) )
+                isPrimaryValueSet = true;
+        }
+        else if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::unquotedString>() )
         {
             wxASSERT( paramName != "" );
 
@@ -228,15 +255,6 @@ bool SIM_MODEL_SERIALIZER::ParseParams( const std::string& aParams )
 
             if( m_model.GetParam( 0 ).Matches( paramName ) )
                 isPrimaryValueSet = true;
-        }
-        else if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::quotedString>() )
-        {
-            std::string str = node->string();
-
-            // Unescape quotes.
-            boost::replace_all( str, "\\\"", "\"" );
-
-            m_model.SetParamValue( paramName, str, SIM_VALUE_GRAMMAR::NOTATION::SI );
         }
         else if( node->is_type<SIM_MODEL_SERIALIZER_PARSER::flagParam>() )
         {
@@ -310,8 +328,22 @@ std::string SIM_MODEL_SERIALIZER::generateParamValuePair( const SIM_MODEL::PARAM
     if( aParam.info.category == SIM_MODEL::PARAM::CATEGORY::FLAGS )
         return value == "1" ? name : "";
 
-    if( value == "" || value.find( ' ' ) != std::string::npos )
-        value = fmt::format( "\"{}\"", value );
+    if( value.empty() || value.find( ' ' ) != std::string::npos || value.find( '"' ) != std::string::npos
+        || value.find( '\\' ) != std::string::npos )
+    {
+        std::string escaped;
+        escaped.reserve( value.size() + 8 );
+
+        for( char c : value )
+        {
+            if( c == '\\' || c == '"' )
+                escaped.push_back( '\\' );
+
+            escaped.push_back( c );
+        }
+
+        value = fmt::format( "\"{}\"", escaped );
+    }
 
     return fmt::format( "{}={}", name, value );
 }
