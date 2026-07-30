@@ -239,6 +239,9 @@ void EDA_DRAW_FRAME::configureToolbars()
                     m_overrideLocksCb->Bind( wxEVT_CHECKBOX,
                                              [this]( wxCommandEvent& aEvent )
                                              {
+                                                 if( m_toolManager )
+                                                     m_toolManager->PostEvent( EVENTS::SelectedEvent );
+
                                                  if( m_canvas )
                                                      m_canvas->SetFocus();
 
