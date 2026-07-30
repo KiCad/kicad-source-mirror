@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-07-24 06:01+0000\n"
+"PO-Revision-Date: 2026-07-31 18:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -5416,7 +5416,7 @@ msgstr "カーソルを中心にしてズーム"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:36
 msgid "Center the cursor on screen when zooming."
-msgstr "ズーム時にスクリーン上のカーソル位置を中心にします。"
+msgstr "ズーム時に画面上のカーソル位置を中心にします。"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:43
 msgid "Automatically pan while moving object"
@@ -6905,7 +6905,7 @@ msgstr "ネット インスペクター"
 
 #: common/eda_item.cpp:443
 msgid "Screen"
-msgstr "スクリーン"
+msgstr "画面"
 
 #: common/eda_item.cpp:446 eeschema/lib_symbol.cpp:2655
 #: eeschema/sch_symbol.cpp:2756 eeschema/widgets/search_handlers.cpp:162
@@ -7081,7 +7081,7 @@ msgstr "シート"
 
 #: common/eda_item.cpp:502
 msgid "SCH Screen"
-msgstr "SCH スクリーン"
+msgstr "回路図 画面"
 
 #: common/eda_item.cpp:506
 msgid "Gerber Layout"
@@ -10838,7 +10838,7 @@ msgstr "すべてのオブジェクトにズーム"
 
 #: common/tool/actions.cpp:735
 msgid "Zoom to all objects on screen"
-msgstr "スクリーン上の全てのオブジェクトにズーム"
+msgstr "画面上の全てのオブジェクトにズーム"
 
 #: common/tool/actions.cpp:741
 msgid "Zoom to items currently selected"
@@ -11757,7 +11757,7 @@ msgstr "プロット表示の中心をこの位置へ合わせる"
 
 #: common/widgets/mathplot.cpp:1419
 msgid "Fit on Screen"
-msgstr "スクリーンにフィット"
+msgstr "画面にフィット"
 
 #: common/widgets/mathplot.cpp:1419
 msgid "Set plot view to show all items"
@@ -31963,7 +31963,7 @@ msgstr "EAGLE CAD XML 回路図と基板図をインポートします"
 
 #: kicad/menubar.cpp:140
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr "EasyEDA(JLCEDA) Std Backup..."
+msgstr "EasyEDA (JLCEDA) Std バックアップ..."
 
 #: kicad/menubar.cpp:141
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
