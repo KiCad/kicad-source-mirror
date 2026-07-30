@@ -37,6 +37,7 @@
 #include <pcb_text.h>
 #include <pcb_track.h>
 #include <zone.h>
+#include <board_connected_item.h>
 #include <netinfo.h>
 #include <netclass.h>
 #include <board_design_settings.h>
@@ -544,6 +545,67 @@ BOOST_AUTO_TEST_CASE( CopperText )
 
     BOOST_CHECK_MESSAGE( foundTestingText, "Board should contain 'TESTING' text on F.Cu" );
     BOOST_CHECK_EQUAL( copperTextCount, 1 );
+}
+
+
+BOOST_AUTO_TEST_CASE( CoincidentGraphicsAreDropped )
+{
+    // Allegro stacks graphics that land on top of each other, on some designs a third of all
+    // items. They draw the same picture, so the importer keeps only the first of each
+    std::unique_ptr<BOARD> board = LoadAllegroBoard( "TRS80_POWER/TRS80_POWER.brd" );
+
+    const auto netOf = []( const BOARD_ITEM* aItem )
+    {
+        const BOARD_CONNECTED_ITEM* connected = dynamic_cast<const BOARD_CONNECTED_ITEM*>( aItem );
+        return connected ? connected->GetNetCode() : NETINFO_LIST::UNCONNECTED;
+    };
+
+    const auto coincident = [&]( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond )
+    {
+        if( aFirst->Type() != aSecond->Type() || aFirst->GetLayer() != aSecond->GetLayer()
+            || netOf( aFirst ) != netOf( aSecond ) )
+        {
+            return false;
+        }
+
+        if( aFirst->Type() == PCB_SHAPE_T )
+        {
+            return static_cast<const PCB_SHAPE*>( aFirst )->Compare(
+                           static_cast<const PCB_SHAPE*>( aSecond ) ) == 0;
+        }
+
+        if( aFirst->Type() == PCB_TEXT_T )
+        {
+            return static_cast<const PCB_TEXT*>( aFirst )->Compare(
+                           static_cast<const PCB_TEXT*>( aSecond ) ) == 0;
+        }
+
+        return false;
+    };
+
+    const auto countCoincident = [&]( const DRAWINGS& aItems )
+    {
+        int count = 0;
+
+        for( size_t ii = 0; ii < aItems.size(); ++ii )
+        {
+            for( size_t jj = ii + 1; jj < aItems.size(); ++jj )
+            {
+                if( coincident( aItems[ii], aItems[jj] ) )
+                    count++;
+            }
+        }
+
+        return count;
+    };
+
+    BOOST_REQUIRE( !board->Drawings().empty() );
+    BOOST_CHECK_EQUAL( countCoincident( board->Drawings() ), 0 );
+
+    BOOST_REQUIRE( !board->Footprints().empty() );
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+        BOOST_CHECK_EQUAL( countCoincident( footprint->GraphicalItems() ), 0 );
 }
 
 

@@ -105,6 +105,38 @@ private:
 
     PCB_LAYER_ID getLayer( const LAYER_INFO& aLayerInfo ) const;
 
+    struct GRAPHIC_KEY_HASH
+    {
+        size_t operator()( const BOARD_ITEM* aItem ) const;
+    };
+
+    struct GRAPHIC_KEY_EQ
+    {
+        bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
+    };
+
+    /**
+     * Rejects graphics that repeat one already accepted into the same container.
+     *
+     * Allegro stacks coincident graphics on documentation layers, up to a third of the items on
+     * some designs.  They are indistinguishable once drawn, so keeping them only inflates the
+     * board.  Scope one of these per container: footprint graphics are in footprint-relative
+     * coordinates, so identical shapes in different instances are not duplicates.
+     */
+    class GRAPHIC_DEDUP
+    {
+    public:
+        /// True when this graphic has not been seen before, and records it
+        bool IsFirst( const BOARD_ITEM* aItem );
+
+    private:
+        std::unordered_set<const BOARD_ITEM*, GRAPHIC_KEY_HASH, GRAPHIC_KEY_EQ> m_seen;
+    };
+
+    /// Coincidence filter for everything added straight to the board, which is one container
+    GRAPHIC_DEDUP m_boardGraphics;
+
+
     /**
      * Give @a aItem and its children ids derived from the Allegro block they came from.
      *

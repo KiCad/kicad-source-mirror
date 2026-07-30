@@ -40,6 +40,7 @@
 #include <board_design_settings.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_utils.h>
+#include <hash.h>
 #include <project/net_settings.h>
 #include <footprint.h>
 #include <netclass.h>
@@ -2167,6 +2168,71 @@ PCB_LAYER_ID BOARD_BUILDER::getLayer( const LAYER_INFO& aLayerInfo ) const
 }
 
 
+// Only PCB_SHAPE carries a net among the types the filter handles, so no dynamic_cast on a path
+// that runs once per graphic
+static int graphicNetCode( const BOARD_ITEM& aItem )
+{
+    if( aItem.Type() == PCB_SHAPE_T )
+        return static_cast<const PCB_SHAPE&>( aItem ).GetNetCode();
+
+    return NETINFO_LIST::UNCONNECTED;
+}
+
+
+size_t BOARD_BUILDER::GRAPHIC_KEY_HASH::operator()( const BOARD_ITEM* aItem ) const
+{
+    size_t seed = 0;
+    hash_combine( seed, (int) aItem->Type(), (int) aItem->GetLayer(), graphicNetCode( *aItem ) );
+
+    if( aItem->Type() == PCB_SHAPE_T )
+    {
+        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
+
+        hash_combine( seed, (int) shape->GetShape(), shape->GetStart().x, shape->GetStart().y,
+                      shape->GetEnd().x, shape->GetEnd().y, shape->GetWidth() );
+    }
+    else if( aItem->Type() == PCB_TEXT_T )
+    {
+        const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aItem );
+
+        hash_combine( seed, text->GetPosition().x, text->GetPosition().y, text->GetText().ToStdString() );
+    }
+
+    return seed;
+}
+
+
+bool BOARD_BUILDER::GRAPHIC_KEY_EQ::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
+{
+    if( aFirst->Type() != aSecond->Type() || aFirst->GetLayer() != aSecond->GetLayer()
+        || graphicNetCode( *aFirst ) != graphicNetCode( *aSecond ) )
+    {
+        return false;
+    }
+
+    if( aFirst->Type() == PCB_SHAPE_T )
+    {
+        return static_cast<const PCB_SHAPE*>( aFirst )->Compare( static_cast<const PCB_SHAPE*>( aSecond ) ) == 0;
+    }
+
+    if( aFirst->Type() == PCB_TEXT_T )
+    {
+        return static_cast<const PCB_TEXT*>( aFirst )->Compare( static_cast<const PCB_TEXT*>( aSecond ) ) == 0;
+    }
+
+    return false;
+}
+
+
+bool BOARD_BUILDER::GRAPHIC_DEDUP::IsFirst( const BOARD_ITEM* aItem )
+{
+    if( aItem->Type() != PCB_SHAPE_T && aItem->Type() != PCB_TEXT_T )
+        return true;
+
+    return m_seen.insert( aItem ).second;
+}
+
+
 void BOARD_BUILDER::stampIds( BOARD_ITEM& aItem, uint32_t aKey, uint32_t& aSeq )
 {
     // RFC 4122 name-based UUID, naming the item by the block it came from and its position
@@ -2913,6 +2979,12 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
     const VECTOR2I fpPos = scale( VECTOR2I{ aFpInstance.m_CoordX, aFpInstance.m_CoordY } );
     fp->SetPosition( fpPos );
 
+    // Coincidence filters. Pad geometry is placed before the footprint is flipped and rotated
+    // and everything else after, so it is filtered in its own space first and folded into the
+    // shared filter once the transform has been applied
+    GRAPHIC_DEDUP padDedup;
+    GRAPHIC_DEDUP fpGraphics;
+
     // Find the pads.
     // Pads are in non-flipped local footprint's coordinate system
     TYPED_LL_WALKER<BLK_0x32_PLACED_PAD> padWalker{ aFpInstance.m_FirstPadPtr, aFpInstance.m_Key, m_brdDb,
@@ -2960,7 +3032,8 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
 
             item->SetFPRelativePosition( padLocalPos );
 
-            fp->Add( item.release() );
+            if( padDedup.IsFirst( item.get() ) )
+                fp->Add( item.release() );
         }
     }
 
@@ -2972,6 +3045,11 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
 
         fp->Rotate( fpPos, rotation );
     }
+
+    // Pad geometry has landed in the same space as everything that follows, so record it and
+    // let the graphics coming next be filtered against it too
+    for( BOARD_ITEM* placed : fp->GraphicalItems() )
+        fpGraphics.IsFirst( placed );
 
     // Graphics, text, and areas are stored in Allegro as board-absolute geometry
     // on their final layers. Pads were already placed in local footprint space and
@@ -2991,7 +3069,10 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         std::vector<std::unique_ptr<PCB_SHAPE>> shapes = buildShapes( graphics, *fp );
 
         for( std::unique_ptr<PCB_SHAPE>& shape : shapes )
-            fp->Add( shape.release() );
+        {
+            if( fpGraphics.IsFirst( shape.get() ) )
+                fp->Add( shape.release() );
+        }
     }
 
     bool valueFieldSet = false;
@@ -3076,7 +3157,7 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
             field->SetVisible( true );
             fp->Add( field, ADD_MODE::APPEND );
         }
-        else
+        else if( fpGraphics.IsFirst( text.get() ) )
         {
             fp->Add( text.release() );
         }
@@ -3090,7 +3171,10 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
         std::vector<std::unique_ptr<BOARD_ITEM>> shapes = buildGraphicItems( *assemblyBlock, *fp );
 
         for( std::unique_ptr<BOARD_ITEM>& item : shapes )
-            fp->Add( item.release() );
+        {
+            if( fpGraphics.IsFirst( item.get() ) )
+                fp->Add( item.release() );
+        }
     }
 
     // Areas (courtyards, etc)
@@ -3130,7 +3214,8 @@ std::unique_ptr<FOOTPRINT> BOARD_BUILDER::buildFootprint( const BLK_0x2D_FOOTPRI
                     }
                 }
 
-                fp->Add( item.release() );
+                if( fpGraphics.IsFirst( item.get() ) )
+                    fp->Add( item.release() );
             }
         }
     }
@@ -3549,13 +3634,24 @@ void BOARD_BUILDER::createBoardShapes()
     wxLogTrace( traceAllegroBuilder, "  Found %d graphic container items", blockCount );
 
     std::vector<BOARD_ITEM*> addedItems;
+    int                      dropped = 0;
+
     for( std::unique_ptr<BOARD_ITEM>& item : newItems )
     {
+        if( !m_boardGraphics.IsFirst( item.get() ) )
+        {
+            dropped++;
+            continue;
+        }
+
         addedItems.push_back( item.get() );
         m_board.Add( item.release(), ADD_MODE::BULK_APPEND, true );
     }
 
     m_board.FinalizeBulkAdd( addedItems );
+
+    if( dropped > 0 )
+        wxLogTrace( traceAllegroBuilder, "Dropped %d coincident board graphics", dropped );
 
     wxLogTrace( traceAllegroBuilder, "Created %zu board shapes", addedItems.size() );
 }
@@ -4026,6 +4122,9 @@ void BOARD_BUILDER::createBoardText()
                     text->GetText(), m_board.GetLayerName( text->GetLayer() ),
                     text->GetPosition().x, text->GetPosition().y );
 
+        if( !m_boardGraphics.IsFirst( text.get() ) )
+            continue;
+
         stampIds( *text, strWrapper.m_Key );
         m_board.Add( text.release(), ADD_MODE::APPEND );
         textCount++;
@@ -4258,7 +4357,8 @@ void BOARD_BUILDER::createTables()
 
                     for( std::unique_ptr<BOARD_ITEM>& newItem : buildGraphicItems( *entryBlock, m_board ) )
                     {
-                        newItems.push_back( std::move( newItem ) );
+                        if( m_boardGraphics.IsFirst( newItem.get() ) )
+                            newItems.push_back( std::move( newItem ) );
                     }
                 }
 
@@ -4372,6 +4472,9 @@ void BOARD_BUILDER::applyZoneFills()
                 shape->SetLayer( fill.layer );
                 shape->SetNetCode( fill.netCode );
                 shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+
+                if( !m_boardGraphics.IsFirst( shape.get() ) )
+                    continue;
 
                 stampIds( *shape, fillKey, idSeq );
                 m_board.Add( shape.release(), ADD_MODE::APPEND );

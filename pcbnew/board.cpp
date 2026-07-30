@@ -3920,46 +3920,56 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM
     if( aFirst->GetLayer() != aSecond->GetLayer() )
         return aFirst->GetLayer() < aSecond->GetLayer();
 
+    // Callers keep these in a std::set, so any branch reporting equality for two distinct items
+    // loses one of them. Every branch has to fall through to the uuid
+    int cmp = 0;
+
     if( aFirst->Type() == PCB_SHAPE_T )
     {
         const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aFirst );
         const PCB_SHAPE* other = static_cast<const PCB_SHAPE*>( aSecond );
-        return shape->Compare( other ) < 0;
+
+        cmp = shape->Compare( other );
     }
     else if( aFirst->Type() == PCB_TEXT_T || aFirst->Type() == PCB_FIELD_T )
     {
         const PCB_TEXT* text = static_cast<const PCB_TEXT*>( aFirst );
         const PCB_TEXT* other = static_cast<const PCB_TEXT*>( aSecond );
-        return text->Compare( other ) < 0;
+
+        cmp = text->Compare( other );
     }
     else if( aFirst->Type() == PCB_TEXTBOX_T )
     {
         const PCB_TEXTBOX* textbox = static_cast<const PCB_TEXTBOX*>( aFirst );
         const PCB_TEXTBOX* other = static_cast<const PCB_TEXTBOX*>( aSecond );
 
-        int shapeCmp = textbox->PCB_SHAPE::Compare( other );
+        cmp = textbox->PCB_SHAPE::Compare( other );
 
-        if( shapeCmp != 0 )
-            return shapeCmp < 0;
-
-        return textbox->EDA_TEXT::Compare( other ) < 0;
+        if( cmp == 0 )
+            cmp = textbox->EDA_TEXT::Compare( other );
     }
     else if( aFirst->Type() == PCB_TABLE_T )
     {
         const PCB_TABLE* table = static_cast<const PCB_TABLE*>( aFirst );
         const PCB_TABLE* other = static_cast<const PCB_TABLE*>( aSecond );
 
-        return PCB_TABLE::Compare( table, other ) < 0;
+        cmp = PCB_TABLE::Compare( table, other );
     }
     else if( aFirst->Type() == PCB_BARCODE_T )
     {
         const PCB_BARCODE* barcode = static_cast<const PCB_BARCODE*>( aFirst );
         const PCB_BARCODE* other = static_cast<const PCB_BARCODE*>( aSecond );
 
-        return PCB_BARCODE::Compare( barcode, other ) < 0;
+        cmp = PCB_BARCODE::Compare( barcode, other );
     }
 
-    return aFirst->m_Uuid < aSecond->m_Uuid;
+    if( cmp != 0 )
+        return cmp < 0;
+
+    if( aFirst->m_Uuid != aSecond->m_Uuid )
+        return aFirst->m_Uuid < aSecond->m_Uuid;
+
+    return aFirst < aSecond;
 }
 
 

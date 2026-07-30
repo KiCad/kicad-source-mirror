@@ -146,6 +146,40 @@ BOOST_AUTO_TEST_CASE( Issue23125_EmptyZoneDiscarded )
  * Even though the KiCad file writter doesn't write using scientific notation anymore, at one
  * point it did, so the parser must still support reading it.
  */
+BOOST_AUTO_TEST_CASE( CoincidentDrawingsSurviveSave )
+{
+    // The writer sorts drawings into a std::set, so a cmp_drawings that reports equality for
+    // two coincident shapes silently drops one of them
+    BOARD board;
+
+    for( int ii = 0; ii < 2; ++ii )
+    {
+        PCB_SHAPE* line = new PCB_SHAPE( &board, SHAPE_T::SEGMENT );
+
+        line->SetLayer( F_SilkS );
+        line->SetStart( VECTOR2I( 0, 0 ) );
+        line->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 5.0 ), 0 ) );
+        line->SetWidth( pcbIUScale.mmToIU( 0.1 ) );
+
+        board.Add( line, ADD_MODE::APPEND );
+    }
+
+    BOOST_REQUIRE_EQUAL( board.Drawings().size(), 2u );
+
+    const wxString path =
+            ( std::filesystem::temp_directory_path() / "qa_coincident_drawings.kicad_pcb" ).string();
+
+    kicadPlugin.SaveBoard( path, &board );
+
+    BOARD reloaded;
+    kicadPlugin.LoadBoard( path, &reloaded );
+
+    BOOST_CHECK_EQUAL( reloaded.Drawings().size(), 2u );
+
+    std::filesystem::remove( path.ToStdString() );
+}
+
+
 BOOST_AUTO_TEST_CASE( ScientificNotationLoading )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
