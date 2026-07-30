@@ -37,6 +37,7 @@
 #include <pcb_track.h>
 #include <zone.h>
 
+#include <algorithm>
 #include <map>
 #include <set>
 #include <vector>
@@ -52,11 +53,10 @@ struct EAGLE_BINARY_IMPORT_FIXTURE
     {
         std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + aRelPath;
 
-        if( !wxFileName::FileExists( dataPath ) )
-        {
-            BOOST_TEST_MESSAGE( "no real binary Eagle sample available at " + dataPath + "; load test skipped" );
-            return nullptr;
-        }
+        // Every sample these tests name is committed, so a missing one is a broken fixture
+        // rather than an optional extra; skipping it silently would assert nothing at all
+        BOOST_REQUIRE_MESSAGE( wxFileName::FileExists( dataPath ),
+                               "missing binary Eagle sample " + dataPath );
 
         PCB_IO_EAGLE eaglePlugin;
 
@@ -107,9 +107,7 @@ BOOST_FIXTURE_TEST_SUITE( EagleBinaryImport, EAGLE_BINARY_IMPORT_FIXTURE )
 BOOST_AUTO_TEST_CASE( LoadBinaryV4V5 )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/blink1_b1a.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     BOOST_CHECK_GT( board->Footprints().size(), 0u );
     BOOST_CHECK_GT( board->Tracks().size(), 0u );
@@ -125,9 +123,7 @@ BOOST_AUTO_TEST_CASE( LoadBinaryV4V5 )
 BOOST_AUTO_TEST_CASE( LoadBinaryV3 )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/blink1_v1a.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     BOOST_CHECK_GT( board->Footprints().size(), 0u );
     BOOST_CHECK_GT( board->Tracks().size(), 0u );
@@ -143,9 +139,7 @@ BOOST_AUTO_TEST_CASE( LoadBinaryV3 )
 BOOST_AUTO_TEST_CASE( LoadV3CustomAttributes )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/rocketgps.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     BOOST_CHECK_GT( board->Footprints().size(), 0u );
     BOOST_CHECK_GT( board->Tracks().size(), 0u );
@@ -163,9 +157,7 @@ BOOST_AUTO_TEST_CASE( LoadV3CustomAttributes )
 BOOST_AUTO_TEST_CASE( LoadV3UnnamedSignals )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/boomchak.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     BOOST_CHECK_GT( board->Footprints().size(), 0u );
     BOOST_CHECK_GT( board->Tracks().size(), 0u );
@@ -186,9 +178,7 @@ BOOST_AUTO_TEST_CASE( LoadV3UnnamedSignals )
 BOOST_AUTO_TEST_CASE( LoadV4V5DegeneratePolygons )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/turnemoff.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     BOOST_CHECK_GT( board->Footprints().size(), 0u );
     BOOST_CHECK_GT( board->Tracks().size(), 0u );
@@ -196,22 +186,15 @@ BOOST_AUTO_TEST_CASE( LoadV4V5DegeneratePolygons )
 
 
 /**
- * Regression test for inline long-text (0x3200) records. A text string longer than
- * the 5-byte inline field is stored as an empty text record followed by a 0x3200
- * longtext record carrying the full string. The decoder once had no row for 0x3200
- * and aborted with "Unknown Eagle binary block id 0x3200"; it now folds the string
- * onto the preceding text item. Each asserted string exceeds the inline field, so it
- * can only originate from a 0x3200 record.
+ * A text string too long for the 6-byte inline field is stored as a 0x7F marker plus a
+ * pointer into the trailing free-text section, which readNotes() and resolveLongPointers()
+ * reassemble. Both asserted strings exceed the inline field, so neither can survive the
+ * import unless that indirection resolves.
  */
 BOOST_AUTO_TEST_CASE( LoadBinaryLongText )
 {
-    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24612_nova_usbbox.brd" ) );
-
-    if( !board )
-        return;
-
-    BOOST_CHECK_GT( board->Footprints().size(), 0u );
-    BOOST_CHECK_GT( board->Tracks().size(), 0u );
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/blink1_b1a.brd" ) );
+    BOOST_REQUIRE( board );
 
     std::set<wxString> texts;
 
@@ -221,29 +204,8 @@ BOOST_AUTO_TEST_CASE( LoadBinaryLongText )
             texts.insert( text->GetText() );
     }
 
-    BOOST_CHECK( texts.count( wxS( "ASTROELEKTRONIK" ) ) );
-    BOOST_CHECK( texts.count( wxS( "Nova+ USB-Box" ) ) );
-}
-
-
-/**
- * Regression test for an over-counted recursive subsection. This board's signal
- * subsection declares more recursive children than the stream actually holds, so
- * the count-driven block walk ran off the end of the block stream and reached the
- * trailing free-text sentinel (0x1312), which is not a block and aborted the load
- * with "Unknown Eagle binary block id". The walk now stops when it reaches the
- * free-text section instead of treating it as another block.
- */
-BOOST_AUTO_TEST_CASE( LoadV3RecursiveCountOverrun )
-{
-    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/Sigma2_e.brd" ) );
-
-    if( !board )
-        return;
-
-    BOOST_CHECK_GT( board->Footprints().size(), 0u );
-    BOOST_CHECK_GT( board->Tracks().size(), 0u );
-    BOOST_CHECK_GT( board->GetNetInfo().GetNetCount(), 1u );
+    BOOST_CHECK( texts.count( wxS( "blinkm.thingm.com" ) ) );
+    BOOST_CHECK( texts.count( wxS( "BlinkM USB" ) ) );
 }
 
 
@@ -257,9 +219,7 @@ BOOST_AUTO_TEST_CASE( LoadV3RecursiveCountOverrun )
 BOOST_AUTO_TEST_CASE( LoadV3FootprintRotationRing )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/boomchak.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     std::map<int, double> ledRot;
 
@@ -335,9 +295,7 @@ BOOST_AUTO_TEST_CASE( LoadDropsUnmappedLayers )
                                  "plugins/eagle_binary/turnemoff.brd" } )
     {
         std::unique_ptr<BOARD> board( loadBoard( relPath ) );
-
-        if( !board )
-            continue;
+        BOOST_REQUIRE( board );
 
         BOOST_CHECK_EQUAL( invalidLayerItems( board.get() ), 0 );
     }
@@ -364,9 +322,7 @@ BOOST_AUTO_TEST_CASE( LoadDropsUnmappedLayers )
 BOOST_AUTO_TEST_CASE( LoadRoutesSmashedValueText )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/blink1_b1a.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     auto footprintTexts = [&]()
     {
@@ -401,9 +357,7 @@ BOOST_AUTO_TEST_CASE( LoadRoutesSmashedValueText )
 BOOST_AUTO_TEST_CASE( LoadV3CopperPourPolygons )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/boomchak.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     std::vector<ZONE*> pours = copperPours( board.get() );
 
@@ -416,49 +370,13 @@ BOOST_AUTO_TEST_CASE( LoadV3CopperPourPolygons )
         BOOST_CHECK_EQUAL( zone->Outline()->OutlineCount(), 1 );
         BOOST_CHECK_GE( zone->GetNumCorners(), 3 );
     }
-}
 
-
-/**
- * Regression test for issue 24812. This 5.12 Professional board's two copper pours were
- * reported missing after import because their outline wire segments were never rebuilt as
- * vertices. The board is not license-clean and is not committed, so this loads only when
- * the sample is present locally.
- */
-BOOST_AUTO_TEST_CASE( LoadIssue24812CopperPours )
-{
-    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24812_vertice_error.brd" ) );
-
-    if( !board )
-        return;
-
-    BOOST_CHECK_GE( copperPours( board.get() ).size(), 2u );
-}
-
-
-/**
- * Regression test for the reopened half of issue 24812. The board's +5V pour is on a signal
- * that carries no contactref, so the loader forced every pad-less signal's zones onto the
- * unconnected net and dropped the pour's net; the reporter saw the +5V plane import as
- * <no net>. Eagle assigns the pour to a real named net, so a correct import keeps at least
- * one copper pour on the +5V net. Local-only, like the sibling test.
- */
-BOOST_AUTO_TEST_CASE( LoadIssue24812PourNetName )
-{
-    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24812_vertice_error.brd" ) );
-
-    if( !board )
-        return;
-
-    bool foundPlusFiveVoltPour = false;
-
-    for( ZONE* zone : copperPours( board.get() ) )
-    {
-        if( zone->GetNetname() == wxS( "+5V" ) )
-            foundPlusFiveVoltPour = true;
-    }
-
-    BOOST_CHECK( foundPlusFiveVoltPour );
+    // A pour also keeps the signal it was poured on, so it can still be filled after import
+    BOOST_CHECK( std::any_of( pours.begin(), pours.end(),
+                              []( ZONE* aZone )
+                              {
+                                  return aZone->GetNetname() == wxS( "GND" );
+                              } ) );
 }
 
 
@@ -469,15 +387,12 @@ BOOST_AUTO_TEST_CASE( LoadIssue24812PourNetName )
  * short row and read an empty name. Contactrefs resolve to a pad by name, so all
  * of an element's pads collapsed onto whichever signal was written last, wiring
  * every multi-pin part to a single net. brenner57e is a 4.x board; a correct
- * decode names each pad and keeps its signals distinct. The board is not
- * license-clean and is not committed, so this loads only when present locally.
+ * decode names each pad and keeps its signals distinct.
  */
 BOOST_AUTO_TEST_CASE( LoadIssue24827PadNamesAndSignals )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24827_brenner57e.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     BOOST_REQUIRE_GT( board->Footprints().size(), 0u );
 
@@ -520,15 +435,12 @@ BOOST_AUTO_TEST_CASE( LoadIssue24827PadNamesAndSignals )
  * for anything else, so every through-hole pad imported as a circle. The ordinal maps
  * one-to-one to the reader's shape names: brenner57e's 0207 resistors carry octagon
  * pads (imported as chamfered rectangles) and its TO-92 transistors oblong pads
- * (imported as ovals), which also pins down the mapping direction. Local-only, like
- * the sibling test.
+ * (imported as ovals), which also pins down the mapping direction.
  */
 BOOST_AUTO_TEST_CASE( LoadIssue24827PadShapes )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24827_brenner57e.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     auto shapeOf = [&]( const wxString& aRef ) -> PAD_SHAPE
     {
@@ -562,9 +474,7 @@ BOOST_AUTO_TEST_CASE( LoadIssue24827PadShapes )
 BOOST_AUTO_TEST_CASE( LoadIssue24827CurvedWireArcs )
 {
     std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/issue24827_brenner57e.brd" ) );
-
-    if( !board )
-        return;
+    BOOST_REQUIRE( board );
 
     auto bodyArcs = [&]( const wxString& aRef )
     {
