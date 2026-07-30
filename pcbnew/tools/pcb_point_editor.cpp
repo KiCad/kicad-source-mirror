@@ -3012,10 +3012,15 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( PCB_SHAPE* shape= dynamic_cast<PCB_SHAPE*>( item ) )
+    // IS_MOVING is only still set if the loop broke mid-drag, and a null m_editPoints means
+    // Reset() ran while we were suspended, so the board and item have already been destroyed
+    if( inDrag && m_editPoints )
     {
-        shape->ClearFlags( IS_MOVING );
-        shape->UpdateHatching();
+        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( m_editPoints->GetParent() ) )
+        {
+            shape->ClearFlags( IS_MOVING );
+            shape->UpdateHatching();
+        }
     }
 
     m_preview.FreeItems();
