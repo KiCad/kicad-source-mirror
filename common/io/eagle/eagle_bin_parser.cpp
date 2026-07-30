@@ -372,7 +372,7 @@ const SCRIPT_ROW g_script[] = {
       { { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
         { "half_width", T_INT, 20, 2 },
         { "stflags", T_BMB, 22, 0x33 },
-        { "clockwise", T_BMB, 22, 0x20 },
+        { "ccw", T_BMB, 22, 0x20 },
         { "linetype", T_UBF, 23, BITFIELD( 1, 0, 7 ) },
         { "linetype_0_x1", T_INT, 4, 4 },
         { "linetype_0_y1", T_INT, 8, 4 },
@@ -394,7 +394,7 @@ const SCRIPT_ROW g_script[] = {
       { TERM_S },
       { { "layer", T_UBF, 3, BITFIELD( 1, 0, 7 ) },
         { "half_width", T_INT, 20, 2 },
-        { "clockwise", T_BMB, 22, 0x20 },
+        { "ccw", T_BMB, 22, 0x20 },
         { "arctype", T_UBF, 23, BITFIELD( 1, 0, 7 ) },
         { "arc_negflags", T_UBF, 19, BITFIELD( 1, 0, 7 ) },
         { "arc_c1", T_INT, 7, 1 },
@@ -1523,59 +1523,64 @@ void EAGLE_BIN_PARSER::arcDecode( EGB_NODE* aElem, int aArcType, int aLineType )
         }
 
         bool cxyOk = true;
-        auto setAngles = [&]( const char* aStart, const char* aDelta )
+
+        // The arc type fixes only the swept magnitude; direction comes from the ccw flag,
+        // cleared for the clockwise sweeps Eagle writes as a negative curve
+        long dir = aElem->Prop( wxS( "ccw" ) ) == wxS( "yes" ) ? 1 : -1;
+
+        auto setAngles = [&]( int aStart, int aDelta )
         {
-            aElem->props[wxS( "StartAngle" )] = wxString::FromUTF8( aStart );
-            aElem->props[wxS( "Delta" )] = wxString::FromUTF8( aDelta );
+            setLong( wxS( "StartAngle" ), aStart );
+            setLong( wxS( "Delta" ), dir * aDelta );
         };
 
         if( aLineType == 0x78 || aArcType == 0x01 )
         {
             cx = std::min( x1, x2 );
             cy = std::min( y1, y2 );
-            setAngles( "180", "90" );
+            setAngles( 180, 90 );
         }
         else if( aLineType == 0x79 || aArcType == 0x02 )
         {
             cx = std::max( x1, x2 );
             cy = std::min( y1, y2 );
-            setAngles( "270", "90" );
+            setAngles( 270, 90 );
         }
         else if( aLineType == 0x7a || aArcType == 0x03 )
         {
             cx = std::max( x1, x2 );
             cy = std::max( y1, y2 );
-            setAngles( "0", "90" );
+            setAngles( 0, 90 );
         }
         else if( aLineType == 0x7b || aArcType == 0x04 )
         {
             cx = std::min( x1, x2 );
             cy = std::max( y1, y2 );
-            setAngles( "90", "90" );
+            setAngles( 90, 90 );
         }
         else if( aLineType == 0x7c || aArcType == 0x05 )
         {
             cx = ( x1 + x2 ) / 2;
             cy = ( y1 + y2 ) / 2;
-            setAngles( "90", "180" );
+            setAngles( 90, 180 );
         }
         else if( aLineType == 0x7d || aArcType == 0x06 )
         {
             cx = ( x1 + x2 ) / 2;
             cy = ( y1 + y2 ) / 2;
-            setAngles( "270", "180" );
+            setAngles( 270, 180 );
         }
         else if( aLineType == 0x7e || aArcType == 0x07 )
         {
             cx = ( x1 + x2 ) / 2;
             cy = ( y1 + y2 ) / 2;
-            setAngles( "180", "180" );
+            setAngles( 180, 180 );
         }
         else if( aLineType == 0x7f || aArcType == 0x08 )
         {
             cx = ( x1 + x2 ) / 2;
             cy = ( y1 + y2 ) / 2;
-            setAngles( "0", "180" );
+            setAngles( 0, 180 );
         }
         else
         {
