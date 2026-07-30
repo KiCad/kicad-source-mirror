@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-07-17 16:01+0000\n"
+"PO-Revision-Date: 2026-07-31 18:02+0000\n"
 "Last-Translator: Che-Hsien Su <jonassu1101@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hant/>\n"
@@ -7902,7 +7902,7 @@ msgstr "無法建立提交: %s"
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2834
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "無法修改：這分支還沒有任何提交記錄."
 
 #: common/git/libgit_backend.cpp:329
 #, fuzzy, c-format
@@ -8014,7 +8014,7 @@ msgstr "無法讀取 'FETCH_HEAD'"
 #: common/git/libgit_backend.cpp:1170
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
-msgstr ""
+msgstr "沒有能抓取的:遠端沒有分支能對應當前本地分支."
 
 #: common/git/libgit_backend.cpp:1179
 msgid "Could not lookup commit"
