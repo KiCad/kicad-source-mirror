@@ -25,6 +25,7 @@
 #include <limits>
 #include <regex>
 #include <set>
+#include <string>
 #include <tuple>
 #include <unordered_set>
 
@@ -2166,6 +2167,28 @@ PCB_LAYER_ID BOARD_BUILDER::getLayer( const LAYER_INFO& aLayerInfo ) const
 }
 
 
+void BOARD_BUILDER::stampIds( BOARD_ITEM& aItem, uint32_t aKey, uint32_t& aSeq )
+{
+    // RFC 4122 name-based UUID, naming the item by the block it came from and its position
+    // within that block
+    aItem.SetUuidDirect(
+            KIID::FromName( "allegro:" + std::to_string( aKey ) + ":" + std::to_string( aSeq++ ) ) );
+
+    // A group's children are board items in their own right, stamped where they are built.
+    // Descending into them here would also re-stamp them in the order of the group's
+    // pointer-keyed member set, which varies between runs
+    if( aItem.Type() == PCB_GROUP_T )
+        return;
+
+    aItem.RunOnChildren(
+            [&]( BOARD_ITEM* aChild )
+            {
+                stampIds( *aChild, aKey, aSeq );
+            },
+            RECURSE_MODE::NO_RECURSE );
+}
+
+
 std::vector<std::unique_ptr<PCB_SHAPE>> BOARD_BUILDER::buildShapes( const BLK_0x14_GRAPHIC&       aGraphic,
                                                                     BOARD_ITEM_CONTAINER& aParent )
 {
@@ -3369,8 +3392,11 @@ void BOARD_BUILDER::createTracks()
                 }
                 }
 
+                uint32_t idSeq = 0;
+
                 for( std::unique_ptr<BOARD_ITEM>& newItem : newItemList )
                 {
+                    stampIds( *newItem, connItemBlock->GetKey(), idSeq );
                     newItems.push_back( newItem.get() );
                     m_board.Add( newItem.release(), ADD_MODE::BULK_APPEND, true );
                 }
@@ -3409,6 +3435,7 @@ void BOARD_BUILDER::createBoardShapes()
                 continue;
 
             std::unique_ptr<PCB_SHAPE> rectShape = buildRect( rectData, m_board );
+            stampIds( *rectShape, rectData.m_Key );
             newItems.push_back( std::move( rectShape ) );
             break;
         }
@@ -3421,9 +3448,13 @@ void BOARD_BUILDER::createBoardShapes()
                 continue;
 
             std::vector<std::unique_ptr<PCB_SHAPE>> shapeItems = buildPolygonShapes( shapeData, m_board );
+            uint32_t                                idSeq = 0;
 
             for( auto& shapeItem : shapeItems )
+            {
+                stampIds( *shapeItem, shapeData.m_Key, idSeq );
                 newItems.push_back( std::move( shapeItem ) );
+            }
             break;
         }
         default:
@@ -3452,6 +3483,7 @@ void BOARD_BUILDER::createBoardShapes()
                 continue;
 
             std::unique_ptr<PCB_SHAPE> rectShape = buildRect( rectData, m_board );
+            stampIds( *rectShape, rectData.m_Key );
             newItems.push_back( std::move( rectShape ) );
             break;
         }
@@ -3463,6 +3495,7 @@ void BOARD_BUILDER::createBoardShapes()
                 continue;
 
             std::unique_ptr<PCB_SHAPE> rectShape = buildRect( rectData, m_board );
+            stampIds( *rectShape, rectData.m_Key );
             newItems.push_back( std::move( rectShape ) );
             break;
         }
@@ -3474,9 +3507,13 @@ void BOARD_BUILDER::createBoardShapes()
                 continue;
 
             std::vector<std::unique_ptr<PCB_SHAPE>> shapeItems = buildPolygonShapes( shapeData, m_board );
+            uint32_t                                idSeq = 0;
 
             for( auto& shapeItem : shapeItems )
+            {
+                stampIds( *shapeItem, shapeData.m_Key, idSeq );
                 newItems.push_back( std::move( shapeItem ) );
+            }
             break;
         }
         default:
@@ -3500,9 +3537,13 @@ void BOARD_BUILDER::createBoardShapes()
             continue;
 
         std::vector<std::unique_ptr<PCB_SHAPE>> graphicItems = buildShapes( graphicContainer, m_board );
+        uint32_t                                idSeq = 0;
 
         for( auto& item : graphicItems )
+        {
+            stampIds( *item, graphicContainer.m_Key, idSeq );
             newItems.push_back( std::move( item ) );
+        }
     }
 
     wxLogTrace( traceAllegroBuilder, "  Found %d graphic container items", blockCount );
@@ -3985,6 +4026,7 @@ void BOARD_BUILDER::createBoardText()
                     text->GetText(), m_board.GetLayerName( text->GetLayer() ),
                     text->GetPosition().x, text->GetPosition().y );
 
+        stampIds( *text, strWrapper.m_Key );
         m_board.Add( text.release(), ADD_MODE::APPEND );
         textCount++;
     }
@@ -4076,6 +4118,7 @@ void BOARD_BUILDER::createZones()
                         zone->GetNetCode(), m_board.GetLayerName( zone->GetFirstLayer() ), layerInfo.m_Class,
                         layerInfo.m_Subclass );
 
+            stampIds( *zone, block->GetKey() );
             newZones.push_back( std::move( zone ) );
         }
     }
@@ -4121,6 +4164,7 @@ void BOARD_BUILDER::createZones()
 
         if( zone )
         {
+            stampIds( *zone, block->GetKey() );
             newZones.push_back( std::move( zone ) );
         }
     }
@@ -4244,9 +4288,15 @@ void BOARD_BUILDER::createTables()
             std::unique_ptr<PCB_GROUP> group = std::make_unique<PCB_GROUP>( &m_board );
             group->SetName( tableName );
 
-            for( const auto& item : newItems )
-                group->AddItem( item.get() );
+            uint32_t idSeq = 0;
 
+            for( const auto& item : newItems )
+            {
+                stampIds( *item, tableData.m_Key, idSeq );
+                group->AddItem( item.get() );
+            }
+
+            stampIds( *group, tableData.m_Key, idSeq );
             newItems.push_back( std::move( group ) );
 
             BulkAddToBoard( m_board, std::move( newItems ) );
@@ -4281,6 +4331,8 @@ void BOARD_BUILDER::applyZoneFills()
         SHAPE_POLY_SET polySet = shapeToPolySet( *fill.shape );
         polySet.Simplify();
 
+        uint32_t idSeq = 0;
+
         for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
         {
             SHAPE_POLY_SET fractured( poly );
@@ -4308,6 +4360,7 @@ void BOARD_BUILDER::applyZoneFills()
                 zone->SetNeedRefill( false );
                 zone->CalculateFilledArea();
 
+                stampIds( *zone, fillKey, idSeq );
                 m_board.Add( zone.release(), ADD_MODE::APPEND );
                 teardropCount++;
             }
@@ -4320,6 +4373,7 @@ void BOARD_BUILDER::applyZoneFills()
                 shape->SetNetCode( fill.netCode );
                 shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
 
+                stampIds( *shape, fillKey, idSeq );
                 m_board.Add( shape.release(), ADD_MODE::APPEND );
                 copperShapeCount++;
             }
@@ -4502,6 +4556,7 @@ bool BOARD_BUILDER::BuildBoard()
 
             if( fp )
             {
+                stampIds( *fp, inst.m_Key );
                 bulkAddedItems.push_back( fp.get() );
                 m_board.Add( fp.release(), ADD_MODE::BULK_APPEND, true );
             }

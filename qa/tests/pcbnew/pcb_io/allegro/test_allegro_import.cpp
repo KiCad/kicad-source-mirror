@@ -43,7 +43,9 @@
 #include <project/net_settings.h>
 #include <reporter.h>
 
+#include <algorithm>
 #include <filesystem>
+#include <functional>
 #include <fstream>
 #include <map>
 #include <set>
@@ -542,6 +544,53 @@ BOOST_AUTO_TEST_CASE( CopperText )
 
     BOOST_CHECK_MESSAGE( foundTestingText, "Board should contain 'TESTING' text on F.Cu" );
     BOOST_CHECK_EQUAL( copperTextCount, 1 );
+}
+
+
+BOOST_AUTO_TEST_CASE( ImportIsRepeatable )
+{
+    // Item ids are derived from the Allegro block keys, so importing a design twice has to
+    // produce the same ids. Random ids reshuffle the whole saved file on every import, because
+    // the s-expr writer orders items by uuid
+    const auto collectIds = []( const BOARD& aBoard )
+    {
+        std::vector<wxString> ids;
+
+        std::function<void( const BOARD_ITEM* )> walk =
+                [&]( const BOARD_ITEM* aItem )
+                {
+                    ids.push_back( aItem->m_Uuid.AsString() );
+
+                    // Group members are collected where they live on the board
+                    if( aItem->Type() == PCB_GROUP_T )
+                        return;
+
+                    aItem->RunOnChildren(
+                            [&]( BOARD_ITEM* aChild )
+                            {
+                                walk( aChild );
+                            },
+                            RECURSE_MODE::NO_RECURSE );
+                };
+
+        for( const BOARD_ITEM* item : const_cast<BOARD&>( aBoard ).GetItemSet() )
+            walk( item );
+
+        std::sort( ids.begin(), ids.end() );
+        return ids;
+    };
+
+    std::unique_ptr<BOARD> first = LoadAllegroBoard( "ProiectBoard/ProiectBoard.brd" );
+    std::unique_ptr<BOARD> second = LoadAllegroBoard( "ProiectBoard/ProiectBoard.brd" );
+
+    const std::vector<wxString> firstIds = collectIds( *first );
+    const std::vector<wxString> secondIds = collectIds( *second );
+
+    BOOST_REQUIRE( !firstIds.empty() );
+    BOOST_CHECK_EQUAL( firstIds.size(), secondIds.size() );
+    BOOST_CHECK( firstIds == secondIds );
+
+    BOOST_CHECK( std::adjacent_find( firstIds.begin(), firstIds.end() ) == firstIds.end() );
 }
 
 

@@ -106,6 +106,20 @@ private:
     PCB_LAYER_ID getLayer( const LAYER_INFO& aLayerInfo ) const;
 
     /**
+     * Give @a aItem and its children ids derived from the Allegro block they came from.
+     *
+     * @param aSeq is advanced once per item stamped, so several items sharing one source block
+     *             still get distinct ids.
+     */
+    static void stampIds( BOARD_ITEM& aItem, uint32_t aKey, uint32_t& aSeq );
+
+    static void stampIds( BOARD_ITEM& aItem, uint32_t aKey )
+    {
+        uint32_t seq = 0;
+        stampIds( aItem, aKey, seq );
+    }
+
+    /**
      * Get just the string value from a 0x31 STRING WRAPPER -> 0x30 STRING GRAPHIC pair
      *
      * Throws away all the other string data like pos/size/etc.
