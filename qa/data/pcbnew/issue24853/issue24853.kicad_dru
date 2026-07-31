@@ -1,0 +1,9 @@
+(version 1)
+(rule creep
+(constraint clearance (min 20mm))
+  (constraint creepage  (min 25mm))
+  (condition "A.intersectsArea('forcreepage') && B.intersectsArea('forcreepage')"))
+
+(rule creep2
+  (constraint creepage  (min 25mm))
+  (condition "!A.intersectsArea('forcreepage') && !B.intersectsArea('forcreepage')"))
