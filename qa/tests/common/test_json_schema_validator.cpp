@@ -197,20 +197,19 @@ BOOST_AUTO_TEST_CASE( BothDefinitionContainersResolve )
         "definitions": { "Legacy": { "type": "integer" } }
     })" );
 
-    nlohmann::json_schema::json_validator validator;
-    validator.set_root_schema( schema );
+    JSON_SCHEMA_VALIDATOR validator( schema );
 
     for( const std::string& fragment : { "#/$defs/Modern", "#/definitions/Legacy" } )
     {
         nlohmann::json_uri uri( fragment );
 
         COLLECTING_JSON_ERROR_HANDLER resolved;
-        validator.validate( 42, resolved, uri );
+        validator.Validate( 42, resolved, uri );
         BOOST_CHECK_MESSAGE( !resolved.HasErrors(),
                              fragment << " did not resolve: " << resolved.FirstError() );
 
         COLLECTING_JSON_ERROR_HANDLER enforced;
-        validator.validate( "not an integer", enforced, uri );
+        validator.Validate( "not an integer", enforced, uri );
         BOOST_CHECK_MESSAGE( enforced.HasErrors(), fragment << " did not enforce its type" );
     }
 }

@@ -25,10 +25,17 @@
 #include <json_common.h>
 #include <nlohmann/json-schema.hpp>
 
+/**
+ * Code outside of kicommon must validate through this class rather than instantiating
+ * nlohmann::json_schema::json_validator, whose static library objects carry nlohmann::json
+ * definitions that collide under MSVC with the ones kicommon.dll exports.
+ */
 class KICOMMON_API JSON_SCHEMA_VALIDATOR
 {
 public:
     JSON_SCHEMA_VALIDATOR( const wxFileName& aSchemaFile );
+
+    JSON_SCHEMA_VALIDATOR( const nlohmann::json& aSchema );
 
     ~JSON_SCHEMA_VALIDATOR() = default;
 
@@ -37,6 +44,8 @@ public:
                              const nlohmann::json_uri& aInitialUri = nlohmann::json_uri("#") ) const;
 
 private:
+    void setRootSchema( const nlohmann::json& aSchema );
+
     nlohmann::json_schema::json_validator m_validator;
 };
 
