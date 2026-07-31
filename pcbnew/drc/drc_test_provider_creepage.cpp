@@ -60,11 +60,16 @@ public:
 
     virtual const wxString GetName() const override { return wxT( "creepage" ); };
 
-    double GetMaxConstraint( const std::vector<int>& aNetCodes );
+    double GetMaxConstraint();
 
 private:
     int testCreepage();
-    int testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCodeA, int aNetCodeB, PCB_LAYER_ID aLayer );
+    int testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCodeA, int aNetCodeB, PCB_LAYER_ID aLayer,
+                      double aMaxCreepage, bool aHasConditional );
+
+    /// Constraint from geometry-less net/layer placeholders; exact only when no rule is conditional.
+    DRC_CONSTRAINT placeholderConstraint( int aNetCodeA, int aNetCodeB, PCB_LAYER_ID aLayer );
+
 
     void CollectBoardEdges( std::vector<BOARD_ITEM*>& aVector,
                             std::vector<std::unique_ptr<PCB_SHAPE>>& aOwned );
@@ -97,8 +102,8 @@ bool DRC_TEST_PROVIDER_CREEPAGE::Run()
 }
 
 
-int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCodeA, int aNetCodeB,
-                                              PCB_LAYER_ID aLayer )
+DRC_CONSTRAINT DRC_TEST_PROVIDER_CREEPAGE::placeholderConstraint( int aNetCodeA, int aNetCodeB,
+                                                                 PCB_LAYER_ID aLayer )
 {
     PCB_TRACK bci1( m_board );
     PCB_TRACK bci2( m_board );
@@ -107,12 +112,32 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
     bci1.SetLayer( aLayer );
     bci2.SetLayer( aLayer );
 
-    DRC_CONSTRAINT constraint;
-    constraint = m_drcEngine->EvalRules( CREEPAGE_CONSTRAINT, &bci1, &bci2, aLayer );
-    double creepageValue = constraint.Value().Min();
-    aGraph.SetTarget( creepageValue );
+    return m_drcEngine->EvalRules( CREEPAGE_CONSTRAINT, &bci1, &bci2, aLayer );
+}
 
-    if( creepageValue <= 0 )
+
+int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCodeA, int aNetCodeB,
+                                              PCB_LAYER_ID aLayer, double aMaxCreepage,
+                                              bool aHasConditional )
+{
+    // Placeholders at the origin never satisfy intersectsArea(), so conditional rules need a
+    // worst-case target and a per-path resolve below. Path cost scales with target, hence the split
+    DRC_CONSTRAINT netConstraint;
+    double         target;
+
+    if( aHasConditional )
+    {
+        target = aMaxCreepage;
+    }
+    else
+    {
+        netConstraint = placeholderConstraint( aNetCodeA, aNetCodeB, aLayer );
+        target = netConstraint.Value().Min();
+    }
+
+    aGraph.SetTarget( target );
+
+    if( target <= 0 )
         return 0;
 
     // Let's make a quick "clearance test"
@@ -122,13 +147,13 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
     if ( !netA || !netB )
         return 0;
 
-    if ( netA->GetBoundingBox().Distance( netB->GetBoundingBox() ) > creepageValue )
+    if ( netA->GetBoundingBox().Distance( netB->GetBoundingBox() ) > target )
         return 0;
 
-    std::shared_ptr<GRAPH_NODE> NetA = aGraph.AddNetElements( aNetCodeA, aLayer, creepageValue );
-    std::shared_ptr<GRAPH_NODE> NetB = aGraph.AddNetElements( aNetCodeB, aLayer, creepageValue );
+    std::shared_ptr<GRAPH_NODE> NetA = aGraph.AddNetElements( aNetCodeA, aLayer, target );
+    std::shared_ptr<GRAPH_NODE> NetB = aGraph.AddNetElements( aNetCodeB, aLayer, target );
 
-    aGraph.GeneratePaths( creepageValue, aLayer );
+    aGraph.GeneratePaths( target, aLayer );
 
     std::vector<std::shared_ptr<GRAPH_NODE>> temp_nodes;
 
@@ -161,75 +186,71 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage( CREEPAGE_GRAPH& aGraph, int aNetCo
     shortestPath.clear();
     double distance = aGraph.Solve( NetA, NetB, shortestPath );
 
-    if( !shortestPath.empty() && ( shortestPath.size() >= 4 ) && ( distance - creepageValue < 0 ) )
+    if( shortestPath.empty() || shortestPath.size() < 4 )
+        return 1;
+
+    std::shared_ptr<GRAPH_CONNECTION> gc1 = shortestPath[1];
+    std::shared_ptr<GRAPH_CONNECTION> gc2 = shortestPath[shortestPath.size() - 2];
+
+    const BOARD_ITEM* item1 = gc1->n1 && gc1->n1->m_parent ? gc1->n1->m_parent->GetParent() : nullptr;
+    const BOARD_ITEM* item2 = gc2->n2 && gc2->n2->m_parent ? gc2->n2->m_parent->GetParent() : nullptr;
+
+    DRC_CONSTRAINT constraint;
+
+    if( !aHasConditional )
+        constraint = netConstraint;
+    else if( item1 && item2 )
+        constraint = m_drcEngine->EvalRules( CREEPAGE_CONSTRAINT, item1, item2, aLayer );
+    else
+        constraint = placeholderConstraint( aNetCodeA, aNetCodeB, aLayer );
+
+    double creepageValue = constraint.Value().Min();
+
+    if( creepageValue <= 0 || distance - creepageValue >= 0 )
+        return 1;
+
+    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CREEPAGE );
+    drcItem->SetErrorDetail( formatMsg( _( "(%s creepage %s; actual %s)" ),
+                                        constraint.GetName(),
+                                        creepageValue,
+                                        distance ) );
+    drcItem->SetViolatingRule( constraint.GetParentRule() );
+
+    if( item1 && item2 )
     {
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_CREEPAGE );
-        drcItem->SetErrorDetail( formatMsg( _( "(%s creepage %s; actual %s)" ),
-                                            constraint.GetName(),
-                                            creepageValue,
-                                            distance ) );
-        drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-        std::shared_ptr<GRAPH_CONNECTION> gc1 = shortestPath[1];
-        std::shared_ptr<GRAPH_CONNECTION> gc2 = shortestPath[shortestPath.size() - 2];
-
-        if( gc1->n1 && gc2->n2 )
-        {
-            const BOARD_ITEM* item1 = gc1->n1->m_parent->GetParent();
-            const BOARD_ITEM* item2 = gc2->n2->m_parent->GetParent();
-
-            if( m_reportedPairs.insert( std::make_pair( item1, item2 ) ).second )
-                drcItem->SetItems( item1, item2 );
-            else
-                return 1;
-        }
-
-        VECTOR2I               startPoint = gc1->m_path.a2;
-        VECTOR2I               endPoint = gc2->m_path.a2;
-        std::vector<PCB_SHAPE> path;
-
-        for( const std::shared_ptr<GRAPH_CONNECTION>& gc : shortestPath )
-            gc->GetShapes( path );
-
-        reportViolation( drcItem, gc1->m_path.a2, aLayer,
-                         [&]( PCB_MARKER* aMarker )
-                         {
-                             aMarker->SetPath( path, startPoint, endPoint );
-                         } );
+        if( m_reportedPairs.insert( std::make_pair( item1, item2 ) ).second )
+            drcItem->SetItems( item1, item2 );
+        else
+            return 1;
     }
+
+    VECTOR2I               startPoint = gc1->m_path.a2;
+    VECTOR2I               endPoint = gc2->m_path.a2;
+    std::vector<PCB_SHAPE> path;
+
+    for( const std::shared_ptr<GRAPH_CONNECTION>& gc : shortestPath )
+        gc->GetShapes( path );
+
+    reportViolation( drcItem, gc1->m_path.a2, aLayer,
+                     [&]( PCB_MARKER* aMarker )
+                     {
+                         aMarker->SetPath( path, startPoint, endPoint );
+                     } );
 
     return 1;
 }
 
 
-double DRC_TEST_PROVIDER_CREEPAGE::GetMaxConstraint( const std::vector<int>& aNetCodes )
+double DRC_TEST_PROVIDER_CREEPAGE::GetMaxConstraint()
 {
-    double         maxConstraint = 0;
-    DRC_CONSTRAINT constraint;
+    // Upper bound to size the graph only; the governing rule is resolved per path in testCreepage.
+    // Per-pair placeholder eval would miss conditional rules raising the value inside an area
+    DRC_CONSTRAINT worst;
 
-    PCB_TRACK bci1( m_board );
-    PCB_TRACK bci2( m_board );
+    if( m_drcEngine->QueryWorstConstraint( CREEPAGE_CONSTRAINT, worst ) )
+        return worst.Value().Min();
 
-    alg::for_all_pairs( aNetCodes.begin(), aNetCodes.end(),
-            [&]( int aNet1, int aNet2 )
-            {
-                if( aNet1 == aNet2 )
-                    return;
-
-                bci1.SetNetCode( aNet1 );
-                bci2.SetNetCode( aNet2 );
-
-                for( PCB_LAYER_ID layer : LSET::AllCuMask( m_board->GetCopperLayerCount() ) )
-                {
-                    bci1.SetLayer( layer );
-                    bci2.SetLayer( layer );
-                    constraint = m_drcEngine->EvalRules( CREEPAGE_CONSTRAINT, &bci1, &bci2, layer );
-                    double value = constraint.Value().Min();
-                    maxConstraint = value > maxConstraint ? value : maxConstraint;
-                }
-            } );
-
-    return maxConstraint;
+    return 0;
 }
 
 
@@ -344,10 +365,14 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
     std::vector<int> netcodes;
 
     this->CollectNetCodes( netcodes );
-    double maxConstraint = GetMaxConstraint( netcodes );
+    double maxConstraint = GetMaxConstraint();
 
     if( maxConstraint <= 0 )
         return 0;
+
+    // No conditional rule means the per-pair placeholder target is exact and the graph stays tight
+    bool hasConditional = m_drcEngine->HasConditionalConstraint( CREEPAGE_CONSTRAINT );
+
 
     SHAPE_POLY_SET outline;
 
@@ -422,7 +447,8 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
                                     }
                                 }
 
-                                prevTestChangedGraph = testCreepage( graph, aNet1, aNet2, layer );
+                                prevTestChangedGraph = testCreepage( graph, aNet1, aNet2, layer,
+                                                                     maxConstraint, hasConditional );
                             }
                         } );
 
