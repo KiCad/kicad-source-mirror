@@ -39,6 +39,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <limits>
 #include <map>
 #include <memory>
 #include <set>
@@ -1343,9 +1344,26 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
 
     const bool         multiSheet = aModel.sheets.size() > 1;
     std::set<wxString> usedFilenames;
+    size_t             firstChildPage = 2;
 
     if( aAppendToMe )
     {
+        for( const SCH_SHEET_PATH& path : aSchematic->BuildSheetListSortedByPageNumbers() )
+        {
+            unsigned long page = 0;
+
+            if( path.GetPageNumber().ToULong( &page ) )
+            {
+                if( page >= std::numeric_limits<size_t>::max() )
+                    THROW_IO_ERROR( wxS( "existing schematic page number leaves no append range" ) );
+
+                firstChildPage = std::max( firstChildPage, static_cast<size_t>( page ) + 1 );
+            }
+        }
+
+        if( multiSheet && sourceSheets.size() > std::numeric_limits<size_t>::max() - firstChildPage )
+            THROW_IO_ERROR( wxS( "imported hierarchy page range overflows" ) );
+
         staged.appendCache = std::make_unique<SCH_SCREEN>( aSchematic );
 
         for( const auto& [name, symbol] : aAppendToMe->GetScreen()->GetLibSymbols() )
@@ -1401,10 +1419,10 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
                 wxString filename = sanitizedFilename( sourceSheet.name.text, index, usedFilenames );
                 child->GetField( FIELD_T::SHEET_FILENAME )->SetText( filename );
                 childScreen->SetFileName( filename );
-                childScreen->SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
+                childScreen->SetPageNumber( wxString::Format( wxS( "%zu" ), firstChildPage + index ) );
                 SCH_SHEET_PATH childPath( rootPath );
                 childPath.push_back( child.get() );
-                childPath.SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
+                childPath.SetPageNumber( wxString::Format( wxS( "%zu" ), firstChildPage + index ) );
                 stageSheetContent( staged, aModel, modelIndex, sourceSheet, childScreen, childPath );
                 staged.hierarchy.push_back( childPath );
                 rootScreen->Append( child.get() );
@@ -1458,10 +1476,10 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
             wxString filename = sanitizedFilename( sourceSheet.name.text, index, usedFilenames );
             child->GetField( FIELD_T::SHEET_FILENAME )->SetText( filename );
             childScreen->SetFileName( filename );
-            childScreen->SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
+            childScreen->SetPageNumber( wxString::Format( wxS( "%zu" ), firstChildPage + index ) );
             SCH_SHEET_PATH childPath( rootPath );
             childPath.push_back( child.get() );
-            childPath.SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
+            childPath.SetPageNumber( wxString::Format( wxS( "%zu" ), firstChildPage + index ) );
             stageSheetContent( staged, aModel, modelIndex, sourceSheet, childScreen, childPath );
             child->SetParent( aAppendToMe->GetScreen() );
             staged.appendItems.emplace_back( std::move( child ) );

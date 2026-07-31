@@ -287,7 +287,7 @@ static SCH_SHEET_PATH sourceSheetPath( SCHEMATIC& aSchematic, const PADS_SCH_BIN
         return hierarchy.front();
     }
 
-    wxString expectedPage = wxString::Format( wxS( "%zu" ), sourceSheet->index + 1 );
+    wxString expectedPage = wxString::Format( wxS( "%zu" ), sourceSheet->index + 2 );
     auto     path = std::ranges::find_if( hierarchy,
                                           [&]( const SCH_SHEET_PATH& aPath )
                                           {
@@ -1982,12 +1982,12 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
         BOOST_REQUIRE( children[i]->GetScreen() );
         SCH_SHEET_PATH childPath( rootPath );
         childPath.push_back( children[i] );
-        BOOST_CHECK_EQUAL( childPath.GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 1 ) );
+        BOOST_CHECK_EQUAL( childPath.GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 2 ) );
         BOOST_REQUIRE_EQUAL( children[i]->GetInstances().size(), 1u );
         BOOST_CHECK( children[i]->GetInstances().front().m_Path == rootPath.Path() );
         BOOST_REQUIRE_EQUAL( children[i]->GetInstances().front().m_Path.size(), 1u );
         BOOST_CHECK( children[i]->GetInstances().front().m_Path.front() == originalRootUuid );
-        BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 1 ) );
+        BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 2 ) );
         BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageSettings().GetWidthMils(), model.sheets[i].pageSize.x / 2 );
         BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageSettings().GetHeightMils(),
                            model.sheets[i].pageSize.y / 2 );
@@ -2048,11 +2048,15 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
     {
         SCH_SHEET_LIST hierarchy = aSchematic.BuildSheetListSortedByPageNumbers();
         BOOST_REQUIRE_EQUAL( hierarchy.size(), 12u );
+        std::set<wxString> pageNumbers;
+
+        for( const SCH_SHEET_PATH& path : hierarchy )
+            BOOST_CHECK( pageNumbers.insert( path.GetPageNumber() ).second );
 
         for( size_t sourceIndex = 0; sourceIndex < 11; ++sourceIndex )
         {
             const SCH_SHEET_PATH& path = hierarchy[sourceIndex + 1];
-            BOOST_CHECK_EQUAL( path.GetPageNumber(), wxString::Format( wxS( "%zu" ), sourceIndex + 1 ) );
+            BOOST_CHECK_EQUAL( path.GetPageNumber(), wxString::Format( wxS( "%zu" ), sourceIndex + 2 ) );
             BOOST_CHECK_EQUAL( path.Last()->GetField( FIELD_T::SHEET_NAME )->GetText(),
                                wxString::Format( wxS( "[%zu]SOURCE_ORDER" ), sourceIndex + 1 ) );
         }
