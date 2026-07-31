@@ -329,6 +329,19 @@ private:
     void updatePlotCursors();
 
     /**
+     * Add or remove the Smith-only cursor columns, carrying their shown/hidden state across.
+     */
+    void updateSmithCursorColumns( bool aSmithMode );
+
+    void fillSmithCursorRow( int aRow, CURSOR* aCursor, TRACE* aTrace );
+
+    void setSmithCursorColumnLabels();
+
+    void rememberSmithCursorColumns();
+
+    void applySmithCursorColumns();
+
+    /**
      * Updates m_signalsGrid cursor widget, column rendering and attributes
      *
      * @param t is the type of the enum that holds m_signalsGrid column indexing
@@ -449,6 +462,9 @@ private:
 
     // Holds cursor formating for m_cursorsGrid, includes m_cursorFormats[3][2], TODO: merge.
     std::vector<std::vector<SPICE_VALUE_FORMAT>> m_cursorFormatsDyn;
+
+    wxString m_smithCursorColumns;
+    std::vector<int> m_smithCursorWidths;
 
     // Variables for temporary storage:
     int                          m_splitterLeftRightSashPosition;

@@ -586,6 +586,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "simulator.white_background",
             &m_Simulator.view.white_background, false ) );
 
+    m_params.emplace_back(
+            new PARAM<wxString>( "simulator.smith_cursor_columns", &m_Simulator.view.smith_cursor_columns, "" ) );
+
     m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>( "simulator.mouse_wheel_actions.vertical_unmodified",
             &m_Simulator.preferences.mouse_wheel_actions.vertical_unmodified,
             SIM_MOUSE_WHEEL_ACTION::ZOOM, SIM_MOUSE_WHEEL_ACTION::NONE,

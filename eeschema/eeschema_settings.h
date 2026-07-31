@@ -286,6 +286,8 @@ public:
             int  cursors_panel_height;
             int  measurements_panel_height;
             bool white_background;
+
+            wxString smith_cursor_columns;
         };
 
         VIEW            view;

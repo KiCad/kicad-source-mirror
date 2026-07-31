@@ -79,8 +79,27 @@ enum CURSORS_GRID_COLUMNS
     COL_CURSOR_NAME = 0,
     COL_CURSOR_SIGNAL,
     COL_CURSOR_X,
-    COL_CURSOR_Y
+    COL_CURSOR_Y,
+
+    // everything from here on is appended only while the tab shows a Smith chart
+    COL_CURSOR_SMITH_FIRST,
+
+    COL_CURSOR_R = COL_CURSOR_SMITH_FIRST,
+    COL_CURSOR_REACTANCE,
+    COL_CURSOR_RL,
+    COL_CURSOR_VSWR,
+
+    COL_CURSOR_SMITH_END
 };
+
+
+static constexpr int SMITH_CURSOR_COLS = COL_CURSOR_SMITH_END - COL_CURSOR_SMITH_FIRST;
+
+
+static bool smithColumnsShown( const WX_GRID* aGrid )
+{
+    return aGrid->GetNumberCols() > COL_CURSOR_SMITH_FIRST;
+}
 
 
 enum MEASUREMENTS_GIRD_COLUMNS
@@ -742,6 +761,7 @@ void SIMULATOR_FRAME_UI::ShowChangedLanguage()
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_SIGNAL, _( "Signal" ) );
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, _( "Time" ) );
     m_cursorsGrid->SetColLabelValue( COL_CURSOR_Y, _( "Value" ) );
+    setSmithCursorColumnLabels();
     updatePlotCursors();
 
     for( TUNER_SLIDER* tuner : m_tuners )
@@ -760,6 +780,7 @@ void SIMULATOR_FRAME_UI::LoadSettings( EESCHEMA_SETTINGS* aCfg )
     m_splitterCursorsSashPosition        = settings.view.cursors_panel_height;
     m_splitterTuneValuesSashPosition     = settings.view.measurements_panel_height;
     m_darkMode                           = !settings.view.white_background;
+    m_smithCursorColumns = settings.view.smith_cursor_columns;
 
     m_preferences = settings.preferences;
 }
@@ -775,6 +796,11 @@ void SIMULATOR_FRAME_UI::SaveSettings( EESCHEMA_SETTINGS* aCfg )
     settings.view.cursors_panel_height      = m_splitterCursors->GetSashPosition();
     settings.view.measurements_panel_height = m_splitterMeasurements->GetSashPosition();
     settings.view.white_background          = !m_darkMode;
+
+    if( smithColumnsShown( m_cursorsGrid ) )
+        rememberSmithCursorColumns();
+
+    settings.view.smith_cursor_columns = m_smithCursorColumns;
 }
 
 
@@ -3551,6 +3577,132 @@ std::shared_ptr<SPICE_CIRCUIT_MODEL> SIMULATOR_FRAME_UI::circuitModel() const
 }
 
 
+void SIMULATOR_FRAME_UI::updateSmithCursorColumns( bool aSmithMode )
+{
+    if( aSmithMode == smithColumnsShown( m_cursorsGrid ) )
+        return;
+
+    if( aSmithMode )
+    {
+        m_cursorsGrid->AppendCols( SMITH_CURSOR_COLS );
+
+        for( int col = COL_CURSOR_SMITH_FIRST; col < COL_CURSOR_SMITH_END; ++col )
+        {
+            wxGridCellAttr* attr = new wxGridCellAttr;
+            attr->SetReadOnly();
+            m_cursorsGrid->SetColAttr( col, attr );
+        }
+
+        // the panel is narrow, so keep the added columns off the horizontal scrollbar
+        m_cursorsGrid->SetColSize( COL_CURSOR_R, 80 );
+        m_cursorsGrid->SetColSize( COL_CURSOR_REACTANCE, 80 );
+        m_cursorsGrid->SetColSize( COL_CURSOR_RL, 85 );
+        m_cursorsGrid->SetColSize( COL_CURSOR_VSWR, 55 );
+
+        // a hidden column reports zero, so only a width the user really dragged overrides
+        for( size_t ii = 0; ii < m_smithCursorWidths.size(); ++ii )
+        {
+            if( m_smithCursorWidths[ii] > 0 )
+                m_cursorsGrid->SetColSize( COL_CURSOR_SMITH_FIRST + (int) ii, m_smithCursorWidths[ii] );
+        }
+
+        setSmithCursorColumnLabels();
+        applySmithCursorColumns();
+    }
+    else
+    {
+        rememberSmithCursorColumns();
+
+        // DeleteCols would otherwise throw away anything the user dragged
+        m_smithCursorWidths.clear();
+
+        for( int col = COL_CURSOR_SMITH_FIRST; col < COL_CURSOR_SMITH_END; ++col )
+            m_smithCursorWidths.push_back( m_cursorsGrid->GetColSize( col ) );
+
+        m_cursorsGrid->DeleteCols( COL_CURSOR_SMITH_FIRST, SMITH_CURSOR_COLS );
+    }
+}
+
+
+void SIMULATOR_FRAME_UI::setSmithCursorColumnLabels()
+{
+    if( !smithColumnsShown( m_cursorsGrid ) )
+        return;
+
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_R, wxS( "R" ) );
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_REACTANCE, wxS( "X" ) );
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_RL, _( "Return loss" ) );
+    m_cursorsGrid->SetColLabelValue( COL_CURSOR_VSWR, wxS( "VSWR" ) );
+}
+
+
+void SIMULATOR_FRAME_UI::rememberSmithCursorColumns()
+{
+    // only the Smith columns, so hiding one cannot follow the user onto a non-Smith tab
+    m_smithCursorColumns.Empty();
+
+    for( int col = COL_CURSOR_SMITH_FIRST; col < COL_CURSOR_SMITH_END; ++col )
+    {
+        if( !m_cursorsGrid->IsColShown( col ) )
+            m_smithCursorColumns << col - COL_CURSOR_SMITH_FIRST << ' ';
+    }
+}
+
+
+void SIMULATOR_FRAME_UI::applySmithCursorColumns()
+{
+    wxStringTokenizer tokens( m_smithCursorColumns, wxS( " " ), wxTOKEN_STRTOK );
+
+    while( tokens.HasMoreTokens() )
+    {
+        long offset;
+
+        if( tokens.GetNextToken().ToLong( &offset ) && offset >= 0 && offset < SMITH_CURSOR_COLS )
+            m_cursorsGrid->HideCol( COL_CURSOR_SMITH_FIRST + (int) offset );
+    }
+}
+
+
+void SIMULATOR_FRAME_UI::fillSmithCursorRow( int aRow, CURSOR* aCursor, TRACE* aTrace )
+{
+    SMITH_CURSOR* smithCursor = dynamic_cast<SMITH_CURSOR*>( aCursor );
+    SMITH_TRACE*  smithTrace = dynamic_cast<SMITH_TRACE*>( aTrace );
+
+    if( !smithCursor || !smithTrace )
+        return;
+
+    for( int col = COL_CURSOR_SMITH_FIRST; col < COL_CURSOR_SMITH_END; ++col )
+        m_cursorsGrid->SetCellValue( aRow, col, wxS( "--" ) );
+
+    // gamma sits at the origin until the trace has a locus to snap to, which would read as a
+    // perfect match rather than as no answer
+    if( smithTrace->GetDataX().empty() )
+        return;
+
+    const wxRealPoint&       gamma = smithCursor->GetGamma();
+    double                   z0 = smithTrace->GetReferenceImpedance();
+    double                   zr, zi;
+    const SPICE_VALUE_FORMAT ohms = { 3, wxS( "~Ω" ) };
+
+    // ohms need the port impedance, the match figures only need the magnitude
+    if( z0 > 0.0 && SMITH_MATH::GammaToImpedance( gamma.x, gamma.y, z0, zr, zi ) )
+    {
+        m_cursorsGrid->SetCellValue( aRow, COL_CURSOR_R, SPICE_VALUE( zr ).ToString( ohms ) );
+        m_cursorsGrid->SetCellValue( aRow, COL_CURSOR_REACTANCE, SPICE_VALUE( zi ).ToString( ohms ) );
+    }
+
+    double gm = std::hypot( gamma.x, gamma.y );
+    double rl = SMITH_MATH::ReturnLoss( gm );
+    double vswr = SMITH_MATH::VSWR( gm );
+
+    if( std::isfinite( rl ) )
+        m_cursorsGrid->SetCellValue( aRow, COL_CURSOR_RL, wxString::Format( wxS( "%.1f dB" ), rl ) );
+
+    if( std::isfinite( vswr ) )
+        m_cursorsGrid->SetCellValue( aRow, COL_CURSOR_VSWR, wxString::Format( wxS( "%.2f" ), vswr ) );
+}
+
+
 void SIMULATOR_FRAME_UI::updatePlotCursors()
 {
     SUPPRESS_GRID_CELL_EVENTS raii( this );
@@ -3560,7 +3712,12 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
     SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() );
 
     if( !plotTab )
+    {
+        updateSmithCursorColumns( false );
         return;
+    }
+
+    updateSmithCursorColumns( plotTab->GetSimType() == ST_SP && plotTab->IsSmithMode() );
 
     // Update cursor values
     CURSOR*  cursor1 = nullptr;
@@ -3645,6 +3802,7 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_SIGNAL, cursor->GetName() );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_X, formatValue( coords.x, 0, 0 ) );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_Y, formatValue( coords.y, 0, 1 ) );
+            fillSmithCursorRow( row, cursor, trace );
             break;
         }
     }
@@ -3668,6 +3826,7 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_SIGNAL, cursor->GetName() );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_X, formatValue( coords.x, 1, 0 ) );
             m_cursorsGrid->SetCellValue( row, COL_CURSOR_Y, formatValue( coords.y, 1, 1 ) );
+            fillSmithCursorRow( row, cursor, trace );
             break;
         }
     }
@@ -3731,6 +3890,7 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
                     m_cursorsGrid->SetCellValue( row, COL_CURSOR_SIGNAL, curs->GetName() );
                     m_cursorsGrid->SetCellValue( row, COL_CURSOR_X, formatValue( coords.x, i, 0 ) );
                     m_cursorsGrid->SetCellValue( row, COL_CURSOR_Y, formatValue( coords.y, i, 1 ) );
+                    fillSmithCursorRow( row, curs, trace );
 
                     // Set up the labels
                     m_cursorsGrid->SetColLabelValue( COL_CURSOR_X, plotTab->GetLabelX() );

@@ -276,6 +276,8 @@ public:
 
     void SetCoordX( double aValue ) override;
 
+    const wxRealPoint& GetGamma() const { return m_gamma; }
+
 private:
     void snapToIndex( int aIndex );
     void snapToFrequency( double aFreq );
