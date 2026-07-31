@@ -162,26 +162,36 @@ types:
             0x000c: preserved_v12_connectivity_controller
             0x000d: global_net_controller(_root.pool_directory[8].used_count)
         size: _root.pool_directory[8].used_bytes
-      - id: controller_payload_9
+      - id: preserved_controller_9_payload
         size: _root.pool_directory[9].used_bytes
-      - id: controller_payload_10
+        doc: Exact pool-directory-bounded bytes; audited private files contain records but no paired diff proves their semantics. Schema disposition is UNSUPPORTED and the bytes remain ledger-owned.
+      - id: preserved_controller_10_payload
         size: _root.pool_directory[10].used_bytes
-      - id: controller_payload_11
+        doc: Exact pool-directory-bounded bytes; audited private files contain records but no paired diff proves their semantics. Schema disposition is UNSUPPORTED and the bytes remain ledger-owned.
+      - id: preserved_controller_11_payload
         size: _root.pool_directory[11].used_bytes
-      - id: controller_payload_12
+        doc: Exact pool-directory-bounded bytes; audited public and private files contain records but no paired diff proves their semantics. Schema disposition is UNSUPPORTED and the bytes remain ledger-owned.
+      - id: preserved_controller_12_payload
         size: _root.pool_directory[12].used_bytes
-      - id: controller_payload_13
+        doc: Exact pool-directory-bounded bytes; every audited file contains this payload but no paired diff proves its semantics. Schema disposition is UNSUPPORTED and the bytes remain ledger-owned.
+      - id: preserved_controller_13_payload
         size: _root.pool_directory[13].used_bytes
-      - id: controller_payload_14
+        doc: Exact pool-directory-bounded bytes; every audited file contains this payload but no paired diff proves its semantics. Schema disposition is UNSUPPORTED and the bytes remain ledger-owned.
+      - id: preserved_controller_14_payload
         size: _root.pool_directory[14].used_bytes
-      - id: controller_payload_15
+        doc: Exact pool-directory-bounded bytes; every audited file contains this payload but no paired diff proves its semantics. Schema disposition is UNSUPPORTED and the bytes remain ledger-owned.
+      - id: preserved_controller_15_payload
         size: _root.pool_directory[15].used_bytes
-      - id: controller_payload_16
+        doc: Exact pool-directory-bounded bytes; all 28 audited files leave this controller empty. Schema disposition is PRESERVED if encountered.
+      - id: preserved_controller_16_payload
         size: _root.pool_directory[16].used_bytes
-      - id: controller_payload_17
+        doc: Exact pool-directory-bounded bytes; all 28 audited files leave this controller empty. Schema disposition is PRESERVED if encountered.
+      - id: preserved_controller_17_payload
         size: _root.pool_directory[17].used_bytes
-      - id: controller_payload_18
+        doc: Exact pool-directory-bounded bytes; all 28 audited files leave this controller empty. Schema disposition is PRESERVED if encountered.
+      - id: preserved_controller_18_payload
         size: _root.pool_directory[18].used_bytes
+        doc: Exact pool-directory-bounded bytes; audited public and private files contain records but no paired diff proves their semantics. Schema disposition is UNSUPPORTED and the bytes remain ledger-owned.
       - id: controller_payload_19
         type: placement_font_controller(_root.pool_directory[19].used_count)
         size: _root.pool_directory[19].used_bytes
@@ -216,6 +226,7 @@ types:
     seq:
       - id: preserved_net_identity
         type: u4
+        doc: Exact v0x000D value; generated net fixtures use zero and minimal_v13 is nonzero, so semantics are unproved and importer disposition is PRESERVED.
       - id: sheet_membership_start
         type: u4
       - id: alias_string_offset
@@ -238,6 +249,7 @@ types:
         contents: [0xff, 0xff, 0xff, 0xff]
       - id: preserved_net_relationship_54
         type: u4
+        doc: Exact v0x000D tail link; private files prove nonzero values without a paired semantic change, so importer disposition is PRESERVED.
 
   global_string_record:
     params:
@@ -318,6 +330,7 @@ types:
         type: u4
       - id: preserved_design_settings_18
         size: 12
+        doc: Exact fixed-offset design-settings bytes; controlled diffs do not associate them with an exported setting, so importer disposition is PRESERVED.
       - id: pin_name_height_mils
         type: u2
       - id: pin_name_width_mils
@@ -328,11 +341,13 @@ types:
         type: u2
       - id: preserved_design_settings_2c
         size: 220
+        doc: Exact fixed-offset design-settings bytes; controlled page and width diffs leave their semantics unproved, so importer disposition is PRESERVED.
       - id: page_size_storage
         type: page_size_slot
         size: 11
       - id: preserved_design_settings_113
         size: 125
+        doc: Exact fixed-offset design-settings bytes; no paired ASCII field owns them, so importer disposition is PRESERVED.
 
   sheet_text_controller:
     params:
@@ -454,6 +469,7 @@ types:
         size: pool_directory[0].used_bytes
       - id: indexed_string_heap
         size: pool_directory[1].used_bytes
+        doc: Exact controller-2 NUL-terminated string bytes; typed controller offsets select individual strings and raw bytes remain preserved.
       - id: controller_payload_3
         type:
           switch-on: _root.version
@@ -599,24 +615,28 @@ types:
     seq:
       - id: preserved_payload
         size-eos: true
+        doc: All eight v0x000C files contribute exact controller bytes; importer disposition is UNSUPPORTED with raw bytes preserved.
 
   preserved_v12_placement_controller:
     doc: Exact bounded v0x000C placement payload; semantics unsupported without paired ASCII evidence.
     seq:
       - id: preserved_payload
         size-eos: true
+        doc: All eight v0x000C files contribute exact controller bytes; importer disposition is UNSUPPORTED with raw bytes preserved.
 
   preserved_v12_connectivity_controller:
     doc: Exact bounded v0x000C connectivity payload; semantics unsupported without paired ASCII evidence.
     seq:
       - id: preserved_payload
         size-eos: true
+        doc: All eight v0x000C files contribute exact controller bytes; importer disposition is UNSUPPORTED with raw bytes preserved.
 
   preserved_connectivity_tail_controller:
     doc: Exact bounded controller 23 payload; empty in every public v0x000D fixture and preserved if encountered.
     seq:
       - id: preserved_payload
         size-eos: true
+        doc: Controller 23 is empty in all public v0x000D fixtures; nonempty input is retained with importer disposition PRESERVED.
 
   bus_controller:
     params:
@@ -638,14 +658,18 @@ types:
         type: u4
       - id: preserved_relationship_0c
         type: u4
+        doc: Exact bus relationship word; generated bus diffs do not identify an exported property, so importer disposition is PRESERVED.
       - id: preserved_relationship_10
         type: u4
+        doc: Exact bus relationship word; generated bus diffs do not identify an exported property, so importer disposition is PRESERVED.
       - id: preserved_relationship_14
         type: u4
+        doc: Exact bus relationship word; generated bus diffs do not identify an exported property, so importer disposition is PRESERVED.
       - id: tail_bus_entry_handle
         type: u2
       - id: preserved_relationship_1a
         type: u2
+        doc: Exact bus relationship word; generated bus diffs do not identify an exported property, so importer disposition is PRESERVED.
       - id: bounds_x1_biased_quarter_mil
         type: u2
       - id: bounds_y1_biased_quarter_mil
@@ -656,6 +680,7 @@ types:
         type: u2
       - id: preserved_relationship_24
         type: u2
+        doc: Exact bus relationship word; generated bus diffs do not identify an exported property, so importer disposition is PRESERVED.
       - id: class_and_status
         type: u2
       - id: reserved_zero_28
@@ -702,10 +727,12 @@ types:
         type: u2
       - id: preserved_relationship_06
         type: u2
+        doc: Exact off-page relationship word; label-kind and ownership diffs do not prove semantics, so importer disposition is PRESERVED.
       - id: connection_record
         type: u2
       - id: preserved_relationship_0a
         type: u2
+        doc: Exact off-page relationship word; label-kind and ownership diffs do not prove semantics, so importer disposition is PRESERVED.
       - id: bounds_x1_biased_quarter_mil
         type: u2
       - id: bounds_y1_biased_quarter_mil
@@ -716,6 +743,7 @@ types:
         type: u2
       - id: preserved_relationship_14
         type: u2
+        doc: Exact off-page relationship word; label-kind and ownership diffs do not prove semantics, so importer disposition is PRESERVED.
       - id: x_biased_quarter_mil
         type: u2
       - id: y_biased_quarter_mil
@@ -724,9 +752,11 @@ types:
         type: u2
       - id: preserved_relationship_1c
         type: u2
+        doc: Exact off-page relationship word; label-kind and ownership diffs do not prove semantics, so importer disposition is PRESERVED.
       - id: kind
         type: u1
         enum: offpage_kind
+        doc: Generated fixtures prove 0 ground, 1 power, 3 global, 0xfe local, and 0xff bus entry; private-only 2, 4, and 5 have importer disposition UNSUPPORTED with raw value preserved.
       - id: reserved_zero_1f
         contents: [0]
 
@@ -754,8 +784,10 @@ types:
         type: u2
       - id: preserved_relationship_10
         type: u4
+        doc: Exact connection relationship word; endpoint and net controlled diffs leave semantics unproved, so importer disposition is PRESERVED.
       - id: preserved_relationship_14
         type: u4
+        doc: Exact connection relationship word; endpoint and net controlled diffs leave semantics unproved, so importer disposition is PRESERVED.
       - id: bounds_x1_biased_quarter_mil
         type: u2
       - id: bounds_y1_biased_quarter_mil
@@ -766,10 +798,12 @@ types:
         type: u2
       - id: preserved_relationship_20
         type: u2
+        doc: Exact connection relationship word; endpoint and net controlled diffs leave semantics unproved, so importer disposition is PRESERVED.
       - id: class_and_status
         type: u2
       - id: preserved_connection_tail_24
         type: u4
+        doc: Exact connection tail word; generated topology diffs do not identify an exported property, so importer disposition is PRESERVED.
 
   connection_vertex_controller:
     params:
@@ -795,6 +829,7 @@ types:
     seq:
       - id: indexed_attribute_bytes
         size-eos: true
+        doc: Exact length-bounded string heap; validated outer-controller offsets select slots and raw bytes remain preserved.
 
   placement_group_controller:
     params:
@@ -812,10 +847,12 @@ types:
         type: u4
       - id: preserved_group_properties
         size: 16
+        doc: Exact component-group bytes; placement and field controlled diffs do not prove individual semantics, so importer disposition is PRESERVED.
       - id: attribute_count
         type: u2
       - id: preserved_group_tail
         size: 2
+        doc: Exact component-group tail; all paired placement exports leave semantics unproved, so importer disposition is PRESERVED.
 
   placement_attribute_offset_controller:
     params:
@@ -868,6 +905,7 @@ types:
         type: s2
       - id: preserved_field_link_properties
         size: 12
+        doc: Exact placement field-link bytes; field fixtures prove the adjacent handles only, so importer disposition is PRESERVED.
       - id: placed_pin_start
         type: u4
       - id: component_identity
@@ -902,12 +940,14 @@ types:
         type: u2
       - id: preserved_instance_properties_38
         size: 10
+        doc: Exact placement-instance bytes; transform and field diffs leave these values unchanged or semantically unowned, so importer disposition is PRESERVED.
       - id: part_type_handle
         type: u2
       - id: used_decal_handle
         type: u2
       - id: preserved_decal_link_properties
         size: 4
+        doc: Exact placement decal-link bytes; typed part, gate, and decal joins use adjacent fields, so importer disposition is PRESERVED.
       - id: gate_index
         type: u2
       - id: placed_pin_count
@@ -920,18 +960,21 @@ types:
         type: u2
       - id: preserved_text_size_properties
         size: 4
+        doc: Exact placement text-size bytes; independent proven heights and widths are adjacent, so importer disposition is PRESERVED.
       - id: reference_width_half_mil
         type: u1
       - id: part_type_width_half_mil
         type: u1
       - id: preserved_text_presentation
         size: 4
+        doc: Exact placement text-presentation bytes; generated ASCII pairs do not expose their semantics, so importer disposition is PRESERVED.
       - id: reference_designator
         type: strz
         size: 40
         encoding: windows-1252
       - id: preserved_instance_tail
         size: 2
+        doc: Exact placement tail; all generated transform tuples leave semantics unproved, so importer disposition is PRESERVED.
 
   placed_pin_controller:
     params:
@@ -947,10 +990,12 @@ types:
     seq:
       - id: preserved_pin_link_prefix
         size: 4
+        doc: Exact placed-pin link prefix; controller-16 ordinal diffs prove only the adjacent pin ordinal, so importer disposition is PRESERVED.
       - id: definition_pin_ordinal
         type: u2
       - id: preserved_pin_link_tail
         size: 6
+        doc: Exact placed-pin link tail; controller-16 ordinal diffs do not expose these bytes in ASCII, so importer disposition is PRESERVED.
 
   placement_field_controller:
     params:
@@ -968,6 +1013,7 @@ types:
         type: s2
       - id: preserved_field_link
         size: 6
+        doc: Exact custom-field link bytes; generated field diffs prove the adjacent font and presentation fields only, so importer disposition is PRESERVED.
       - id: x_half_mil
         type: s2
       - id: y_half_mil
@@ -988,12 +1034,14 @@ types:
         type: u1
       - id: preserved_field_tail
         type: u2
+        doc: Exact custom-field tail; generated field exports provide no corresponding property, so importer disposition is PRESERVED.
 
   preserved_definition_controller:
     doc: Exact bounded controller payload whose semantics are not yet proven.
     seq:
       - id: preserved_payload
         size-eos: true
+        doc: Controller bytes are bounded by the owning sheet pool; importer disposition is UNSUPPORTED with raw bytes preserved.
 
   symbol_definition_controller:
     params:
@@ -1013,22 +1061,27 @@ types:
         encoding: windows-1252
       - id: preserved_name_class_byte_26
         type: u1
+        doc: Exact definition name/class byte; all generated primitive classes leave its semantics unproved, so importer disposition is PRESERVED.
       - id: preserved_name_class_byte_27
         type: u1
+        doc: Exact definition name/class byte; all generated primitive classes leave its semantics unproved, so importer disposition is PRESERVED.
       - id: preserved_name_class_byte_28
         type: u1
+        doc: Exact definition name/class byte; all generated primitive classes leave its semantics unproved, so importer disposition is PRESERVED.
       - id: object_class
         type: u1
       - id: graphic_piece_count
         type: u2
       - id: preserved_definition_word_2c
         type: u4
+        doc: Exact definition word; primitive count and ownership diffs prove adjacent fields only, so importer disposition is PRESERVED.
       - id: terminal_prefix_index
         type: u4
       - id: vertex_prefix_index
         type: u4
       - id: preserved_definition_word_38
         type: u4
+        doc: Exact definition word; vertex and terminal ownership diffs prove adjacent indexes only, so importer disposition is PRESERVED.
       - id: timestamp
         type: u4
       - id: embedded_text_count_or_preserved_relationship
@@ -1037,16 +1090,22 @@ types:
         type: u2
       - id: preserved_definition_style_word_44
         type: s2
+        doc: Exact definition style word; generated line/fill/text variants expose no ASCII counterpart, so importer disposition is PRESERVED.
       - id: preserved_definition_style_word_46
         type: s2
+        doc: Exact definition style word; generated line/fill/text variants expose no ASCII counterpart, so importer disposition is PRESERVED.
       - id: preserved_definition_style_word_48
         type: s2
+        doc: Exact definition style word; generated line/fill/text variants expose no ASCII counterpart, so importer disposition is PRESERVED.
       - id: preserved_definition_style_word_4a
         type: s2
+        doc: Exact definition style word; generated line/fill/text variants expose no ASCII counterpart, so importer disposition is PRESERVED.
       - id: preserved_definition_style_word_4c
         type: s2
+        doc: Exact definition style word; generated line/fill/text variants expose no ASCII counterpart, so importer disposition is PRESERVED.
       - id: preserved_definition_style_word_4e
         type: s2
+        doc: Exact definition style word; generated line/fill/text variants expose no ASCII counterpart, so importer disposition is PRESERVED.
 
   symbol_piece_controller:
     params:
@@ -1068,8 +1127,9 @@ types:
         enum: graphic_line_style
       - id: vertex_count
         type: u2
-      - id: stroke_width_mils
+      - id: stroke_width_mils_or_preserved_private_value
         type: u2
+        doc: Direct mil width for the native-export-correlated values 1, 2, 5, 7, 8, 10, 11, 15, 20, 25, 30, 31, and 40. Other observed private definition and DRW values do not match the native Logic 9.0 export and are preserved as unsupported rather than rendered as destructive widths.
 
   symbol_vertex_controller:
     params:
@@ -1108,6 +1168,7 @@ types:
         type: s2
       - id: preserved_arc_word_04
         type: s2
+        doc: Exact arc marker between direction and bounds; generated clockwise/counterclockwise arcs do not prove semantics, so importer disposition is PRESERVED.
       - id: bounding_x1_half_mil_divided_by_2
         type: s2
       - id: bounding_y1_half_mil_divided_by_2
@@ -1135,7 +1196,7 @@ types:
         encoding: windows-1252
       - id: preserved_decal_flags
         type: u2
-        doc: Exact preserved value; controlled fixtures do not prove individual bit semantics.
+        doc: Exact used-decal flag word; controlled fixtures do not prove individual bit semantics, so importer disposition is PRESERVED.
       - id: terminal_count
         type: u1
       - id: pin_origin_code
@@ -1144,6 +1205,7 @@ types:
         type: u2
       - id: preserved_used_decal_word_2e
         type: u2
+        doc: Exact used-decal word; definition and terminal controlled diffs leave semantics unproved, so importer disposition is PRESERVED.
       - id: definition_index
         type: u4
       - id: definition_field_index
@@ -1176,8 +1238,10 @@ types:
         type: s2
       - id: preserved_decal_word_54
         type: u2
+        doc: Exact used-decal presentation word; field geometry is proven by adjacent values, so importer disposition is PRESERVED.
       - id: preserved_decal_word_56
         type: u2
+        doc: Exact used-decal presentation word; field geometry is proven by adjacent values, so importer disposition is PRESERVED.
       - id: reference_height_half_mil_divided_by_2
         type: u2
       - id: part_type_height_half_mil_divided_by_2
@@ -1260,10 +1324,13 @@ types:
         type: u4
       - id: preserved_part_type_word_34
         type: u4
+        doc: Exact part-type word; multigate and connector diffs prove adjacent prefix indexes only, so importer disposition is PRESERVED.
       - id: preserved_part_type_word_38
         type: u4
+        doc: Exact part-type word; multigate and connector diffs prove adjacent prefix indexes only, so importer disposition is PRESERVED.
       - id: preserved_part_type_word_3c
         type: u4
+        doc: Exact part-type word; multigate and connector diffs prove adjacent prefix indexes only, so importer disposition is PRESERVED.
       - id: timestamp
         type: u4
       - id: gate_count
@@ -1378,6 +1445,7 @@ types:
                    0x42, 0x43, 0x6e, 0x74, 0x72, 0x49, 0x74, 0x65, 0x6d]
       - id: item_state
         size: 18
+        doc: The purpose of this field is not known.
       - id: len_cfb
         type: u4
       - id: preview
@@ -1413,10 +1481,13 @@ types:
                    0x30, 0x30, 0x30, 0x30, 0x30, 0x7d]
       - id: extent
         size: 16
+        doc: The purpose of this field is not known.
       - id: rectangle
         size: 16
+        doc: The purpose of this field is not known.
       - id: item_state
         size: 28
+        doc: The purpose of this field is not known.
       - id: next_len_cfb
         type: u4
       - id: next_preview
@@ -1432,10 +1503,13 @@ types:
                    0x30, 0x30, 0x30, 0x30, 0x30, 0x7d]
       - id: extent
         size: 16
+        doc: The purpose of this field is not known.
       - id: rectangle
         size: 16
+        doc: The purpose of this field is not known.
       - id: item_state
         size: 8
+        doc: The purpose of this field is not known.
 
   database_footer:
     seq:

@@ -1851,6 +1851,91 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
 }
 
 
+BOOST_AUTO_TEST_CASE( BinaryAlternateDefinitionPins )
+{
+    using namespace PADS_SCH_BINARY;
+
+    PADS_SCH_MODEL model = parseBinaryFixture( wxS( "multigate" ) );
+    auto hasPlacedPins = []( const MODEL_PLACEMENT& aPlacement )
+    {
+        return aPlacement.gate.has_value() && !aPlacement.pins.empty();
+    };
+    auto placement = std::ranges::find_if( model.placements, hasPlacedPins );
+    BOOST_REQUIRE( placement != model.placements.end() );
+
+    auto part = std::ranges::find( model.partTypes, placement->partType.id, &MODEL_PART_TYPE::id );
+    BOOST_REQUIRE( part != model.partTypes.end() );
+    auto gate = std::ranges::find( part->gates, placement->gate->id, &MODEL_GATE::id );
+    BOOST_REQUIRE( gate != part->gates.end() );
+    auto primary = std::ranges::find( model.definitions, gate->definition.id, &MODEL_SYMBOL_DEFINITION::id );
+    BOOST_REQUIRE( primary != model.definitions.end() );
+
+    MODEL_SYMBOL_DEFINITION alternate = *primary;
+    alternate.id = DEFINITION_ID( 0x00F00000 );
+    alternate.name.text += wxS( "_ALTERNATE" );
+    alternate.fields.clear();
+    std::map<uint32_t, PIN_ID> alternatePinIds;
+
+    for( size_t index = 0; index < alternate.pins.size(); ++index )
+    {
+        const uint32_t primaryId = alternate.pins[index].id.Value();
+        alternate.pins[index].id = PIN_ID( 0x00F10000 + static_cast<uint32_t>( index ) );
+        alternate.pins[index].number.text.Prepend( wxS( "ALT-" ) );
+        alternatePinIds.emplace( primaryId, alternate.pins[index].id );
+    }
+
+    gate->alternateDefinitions.push_back( { alternate.id, gate->source } );
+    placement->definition = { alternate.id, placement->definition.source };
+
+    for( PIN_REFERENCE& pin : placement->pins )
+    {
+        auto alternatePin = alternatePinIds.find( pin.id.Value() );
+        BOOST_REQUIRE( alternatePin != alternatePinIds.end() );
+        pin.id = alternatePin->second;
+    }
+
+    for( MODEL_NET& net : model.nets )
+    {
+        for( MODEL_CONNECTION& connection : net.connections )
+        {
+            for( MODEL_CONNECTION_ENDPOINT& endpoint : connection.endpoints )
+            {
+                if( endpoint.placement && endpoint.placement->id == placement->id && endpoint.pin )
+                {
+                    auto alternatePin = alternatePinIds.find( endpoint.pin->id.Value() );
+                    BOOST_REQUIRE( alternatePin != alternatePinIds.end() );
+                    endpoint.pin->id = alternatePin->second;
+                }
+            }
+        }
+    }
+
+    const wxString reference = placement->reference.text;
+    model.definitions.push_back( std::move( alternate ) );
+    BOOST_REQUIRE_NO_THROW( model.ValidateOrThrow() );
+
+    PADS_SCH_BINARY_BUILDER builder;
+    BOOST_REQUIRE_NO_THROW( builder.Build( model, &m_schematic, nullptr, wxS( "alternate_definition.sch" ) ) );
+
+    SCH_SHEET_PATH path;
+    path.push_back( m_schematic.GetTopLevelSheet() );
+    SCH_SYMBOL* builtSymbol = nullptr;
+
+    for( SCH_ITEM* item : m_schematic.GetTopLevelSheet()->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( symbol->GetRef( &path ) == reference )
+            builtSymbol = symbol;
+    }
+
+    BOOST_REQUIRE( builtSymbol );
+
+    for( const SCH_PIN* pin : builtSymbol->GetLibPins() )
+        BOOST_CHECK( pin->GetNumber().StartsWith( wxS( "ALT-" ) ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
 {
     const PADS_SCH_BINARY::PADS_SCH_MODEL    model = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
@@ -1939,6 +2024,70 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
                                                             return aLabel.kind
                                                                    != PADS_SCH_BINARY::MODEL_LABEL_KIND::UNSUPPORTED;
                                                         } ) );
+
+    using namespace PADS_SCH_BINARY;
+
+    PADS_SCH_MODEL orderedModel;
+    orderedModel.version = 0x000D;
+    constexpr std::array<size_t, 11> physicalOrder{ 0, 2, 10, 7, 4, 1, 9, 5, 3, 8, 6 };
+
+    for( size_t sourceIndex : physicalOrder )
+    {
+        MODEL_SHEET sheet;
+        sheet.id = SHEET_ID( static_cast<uint32_t>( sourceIndex + 1 ) );
+        sheet.index = sourceIndex;
+        sheet.name.text = wxString::Format( wxS( "[%zu]SOURCE_ORDER" ), sourceIndex + 1 );
+        sheet.pageSize = { 34000, 22000 };
+        orderedModel.sheets.push_back( std::move( sheet ) );
+    }
+
+    m_schematic.Reset();
+    BOOST_REQUIRE_NO_THROW( builder.Build( orderedModel, &m_schematic, nullptr, wxS( "source_order.sch" ) ) );
+
+    auto checkSourceOrder = [&]( const SCHEMATIC& aSchematic )
+    {
+        SCH_SHEET_LIST hierarchy = aSchematic.BuildSheetListSortedByPageNumbers();
+        BOOST_REQUIRE_EQUAL( hierarchy.size(), 12u );
+
+        for( size_t sourceIndex = 0; sourceIndex < 11; ++sourceIndex )
+        {
+            const SCH_SHEET_PATH& path = hierarchy[sourceIndex + 1];
+            BOOST_CHECK_EQUAL( path.GetPageNumber(), wxString::Format( wxS( "%zu" ), sourceIndex + 1 ) );
+            BOOST_CHECK_EQUAL( path.Last()->GetField( FIELD_T::SHEET_NAME )->GetText(),
+                               wxString::Format( wxS( "[%zu]SOURCE_ORDER" ), sourceIndex + 1 ) );
+        }
+    };
+
+    checkSourceOrder( m_schematic );
+
+    wxString tempDir = wxFileName::CreateTempFileName( wxS( "pads_binary_sheet_order_" ) );
+    BOOST_REQUIRE( wxRemoveFile( tempDir ) );
+    BOOST_REQUIRE( wxFileName::Mkdir( tempDir ) );
+    wxString           rootFile = tempDir + wxFileName::GetPathSeparator() + wxS( "root.kicad_sch" );
+    SCH_IO_KICAD_SEXPR io;
+
+    for( const SCH_SHEET_PATH& path : m_schematic.BuildSheetListSortedByPageNumbers() )
+    {
+        if( path.size() == 1 )
+            continue;
+
+        wxString childFile =
+                tempDir + wxFileName::GetPathSeparator() + path.Last()->GetField( FIELD_T::SHEET_FILENAME )->GetText();
+        BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( childFile, path.Last(), &m_schematic ) );
+    }
+
+    BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( rootFile, m_schematic.GetTopLevelSheet(), &m_schematic ) );
+    m_schematic.Reset();
+    SCH_SHEET* defaultSheet = m_schematic.GetTopLevelSheet();
+    SCH_SHEET* loaded = nullptr;
+    BOOST_REQUIRE_NO_THROW( loaded = io.LoadSchematicFile( rootFile, &m_schematic ) );
+    BOOST_REQUIRE( loaded );
+    m_schematic.AddTopLevelSheet( loaded );
+    m_schematic.RemoveTopLevelSheet( defaultSheet );
+    delete defaultSheet;
+    m_schematic.RefreshHierarchy();
+    checkSourceOrder( m_schematic );
+    BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
 }
 
 

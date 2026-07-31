@@ -1598,8 +1598,21 @@ BOOST_AUTO_TEST_CASE( TextEncodingWarnings )
 BOOST_AUTO_TEST_CASE( GlobalRecordCorruption )
 {
     PADS_SCH_BINARY_PARSER parser;
+    std::vector<uint8_t>   reordered = loadBinaryFixture( "multisheet_connectivity.sch" );
+    size_t                 sheetIndex = outerControllerOffset( reordered, 3 );
+    writeU16( reordered, sheetIndex + 8, 2 );
+    writeU16( reordered, sheetIndex + 48 + 8, 1 );
+    PADS_SCH_MODEL reorderedModel = parser.Parse( reordered, wxS( "reordered.sch" ) );
+    BOOST_REQUIRE_EQUAL( reorderedModel.sheets.size(), 2u );
+    BOOST_CHECK_EQUAL( reorderedModel.sheets[0].id.Value(), 2u );
+    BOOST_CHECK_EQUAL( reorderedModel.sheets[0].index, 1u );
+    BOOST_CHECK_EQUAL( reorderedModel.sheets[0].source.recordIndex, 0u );
+    BOOST_CHECK_EQUAL( reorderedModel.sheets[1].id.Value(), 1u );
+    BOOST_CHECK_EQUAL( reorderedModel.sheets[1].index, 0u );
+    BOOST_CHECK_EQUAL( reorderedModel.sheets[1].source.recordIndex, 1u );
+
     std::vector<uint8_t>   duplicate = loadBinaryFixture( "multisheet_connectivity.sch" );
-    size_t                 sheetIndex = outerControllerOffset( duplicate, 3 );
+    sheetIndex = outerControllerOffset( duplicate, 3 );
     writeU16( duplicate, sheetIndex + 48 + 8, 1 );
     BOOST_CHECK_EXCEPTION( parser.Parse( duplicate, wxS( "duplicate.sch" ) ), IO_ERROR,
                            []( const IO_ERROR& aError )
@@ -2322,6 +2335,33 @@ BOOST_AUTO_TEST_CASE( SymbolPrimitives )
     BOOST_CHECK_EQUAL( definition.pins[0].position.y, 300 );
     BOOST_CHECK_EQUAL( definition.pins[1].position.x, 1200 );
     BOOST_CHECK_EQUAL( definition.pins[1].position.y, 300 );
+
+    std::vector<uint8_t> privateStroke = loadBinaryFixture( "symbol_primitives.sch" );
+    const size_t         privatePiece =
+            sheetControllerOffset( privateStroke, 4 ) + definition.graphics[0].source.recordIndex * 6;
+    writeU16( privateStroke, privatePiece + 4, 61199 );
+    PADS_SCH_MODEL                 preservedStroke = parser.Parse( privateStroke, wxS( "private-symbol-stroke.sch" ) );
+    const MODEL_SYMBOL_DEFINITION& preservedDefinition =
+            itemNamed( preservedStroke.definitions, wxS( "BATCHB_PRIMITIVES" ) );
+    auto privateGraphic = std::ranges::find_if( preservedDefinition.graphics,
+                                                [&]( const MODEL_GRAPHIC& aGraphic )
+                                                {
+                                                    return aGraphic.source.controller == 4
+                                                           && aGraphic.source.recordIndex
+                                                                      == definition.graphics[0].source.recordIndex;
+                                                } );
+    BOOST_REQUIRE( privateGraphic != preservedDefinition.graphics.end() );
+    BOOST_CHECK_EQUAL( privateGraphic->strokeWidth, 0 );
+    auto rawStroke = std::ranges::find_if( privateGraphic->properties,
+                                           []( const SOURCE_PROPERTY& aProperty )
+                                           {
+                                               return aProperty.name.text == wxS( "unsupported_graphic_stroke_width" );
+                                           } );
+    BOOST_REQUIRE( rawStroke != privateGraphic->properties.end() );
+    BOOST_CHECK_EQUAL( rawStroke->value.text, wxS( "61199" ) );
+    BOOST_CHECK( rawStroke->disposition == PROPERTY_DISPOSITION::UNSUPPORTED );
+    BOOST_CHECK_EQUAL( rawStroke->source.absoluteOffset, privatePiece + 4 );
+    BOOST_CHECK_EQUAL( rawStroke->source.length, 2 );
 }
 
 
@@ -3034,6 +3074,42 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
     auto expectedPage = pageRecords( normalizeAsciiModel( ascii ) );
     auto actualPage = pageRecords( normalizeBinaryModel( model ) );
     BOOST_CHECK( snapshotsMatch( expectedPage, actualPage ) );
+
+    std::vector<uint8_t> privateStroke = loadBinaryFixture( "page_graphics.sch" );
+    const size_t         privatePiece = sheetControllerOffset( privateStroke, 4 ) + 81 * 6;
+    writeU16( privateStroke, privatePiece + 4, 61199 );
+    PADS_SCH_MODEL preservedStroke = parser.Parse( privateStroke, wxS( "private-stroke.sch" ) );
+    auto privateGraphic = std::ranges::find_if( preservedStroke.graphics,
+                                                []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                                                {
+                                                    return aGraphic.graphic.source.controller == 4
+                                                           && aGraphic.graphic.source.recordIndex == 81;
+                                                } );
+    BOOST_REQUIRE( privateGraphic != preservedStroke.graphics.end() );
+    BOOST_CHECK_EQUAL( privateGraphic->graphic.strokeWidth, 0 );
+    auto rawStroke = std::ranges::find_if( privateGraphic->graphic.properties,
+                                           []( const SOURCE_PROPERTY& aProperty )
+                                           {
+                                               return aProperty.name.text
+                                                      == wxS( "unsupported_graphic_stroke_width" );
+                                           } );
+    BOOST_REQUIRE( rawStroke != privateGraphic->graphic.properties.end() );
+    BOOST_CHECK_EQUAL( rawStroke->value.text, wxS( "61199" ) );
+    BOOST_CHECK( rawStroke->disposition == PROPERTY_DISPOSITION::UNSUPPORTED );
+    BOOST_CHECK_EQUAL( rawStroke->source.controller, 4 );
+    BOOST_CHECK_EQUAL( rawStroke->source.recordIndex, 81 );
+    BOOST_CHECK_EQUAL( rawStroke->source.absoluteOffset, privatePiece + 4 );
+    BOOST_CHECK_EQUAL( rawStroke->source.length, 2 );
+    BOOST_CHECK_EQUAL( std::ranges::count_if( preservedStroke.diagnostics,
+                                              [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                              {
+                                                  return aDiagnostic.source == rawStroke->source
+                                                         && aDiagnostic.property
+                                                         && aDiagnostic.property->name == rawStroke->name.text
+                                                         && aDiagnostic.property->disposition
+                                                                    == rawStroke->disposition;
+                                              } ),
+                       1u );
 }
 
 

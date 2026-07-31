@@ -420,7 +420,8 @@ namespace
 
     void addDefinitionUnit( LIB_SYMBOL* aLibrary, const MODEL_SYMBOL_DEFINITION& aDefinition, const MODEL_GATE* aGate,
                             int aUnit, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics,
-                            const MODEL_CONNECTOR_PIN* aConnectorPin = nullptr )
+                            const std::vector<PIN_REFERENCE>* aPlacementPins = nullptr,
+                            const MODEL_CONNECTOR_PIN*        aConnectorPin = nullptr )
     {
         for( const MODEL_GRAPHIC& graphic : aDefinition.graphics )
         {
@@ -438,9 +439,16 @@ namespace
             }
         }
 
-        if( aGate && !aGate->pins.empty() )
+        const std::vector<PIN_REFERENCE>* pinReferences = nullptr;
+
+        if( aPlacementPins && !aPlacementPins->empty() )
+            pinReferences = aPlacementPins;
+        else if( aGate && !aGate->pins.empty() )
+            pinReferences = &aGate->pins;
+
+        if( pinReferences )
         {
-            for( const PIN_REFERENCE& pinReference : aGate->pins )
+            for( const PIN_REFERENCE& pinReference : *pinReferences )
             {
                 std::unique_ptr<SCH_PIN> pin = makePin( pinById( aDefinition, pinReference.id ), aLibrary );
 
@@ -509,7 +517,7 @@ namespace
             {
                 const MODEL_CONNECTOR_PIN& connectorPin = connectorGate->connectorPins[index];
                 addDefinitionUnit( library.get(), definition, connectorGate, static_cast<int>( index + 1 ),
-                                   aDiagnostics, &connectorPin );
+                                   aDiagnostics, &aPlacement.pins, &connectorPin );
 
                 if( aPlacement.reference.text.EndsWith( wxS( "-" ) + connectorPin.number.text ) )
                     aUnit = static_cast<int>( index + 1 );
@@ -529,14 +537,17 @@ namespace
                 const MODEL_SYMBOL_DEFINITION& definition = gate.unit == aPlacement.unit
                                                                     ? definitionById( aModel, aPlacement.definition.id )
                                                                     : definitionById( aModel, gate.definition.id );
-                addDefinitionUnit( library.get(), definition, &gate, static_cast<int>( gate.unit ), aDiagnostics );
+                const std::vector<PIN_REFERENCE>* placementPins =
+                        gate.unit == aPlacement.unit ? &aPlacement.pins : nullptr;
+                addDefinitionUnit( library.get(), definition, &gate, static_cast<int>( gate.unit ), aDiagnostics,
+                                   placementPins );
             }
         }
         else
         {
             const MODEL_SYMBOL_DEFINITION& definition = definitionById( aModel, aPlacement.definition.id );
             const MODEL_GATE*              gate = part.gates.empty() ? nullptr : &part.gates.front();
-            addDefinitionUnit( library.get(), definition, gate, 0, aDiagnostics );
+            addDefinitionUnit( library.get(), definition, gate, 0, aDiagnostics, &aPlacement.pins );
         }
 
         for( const MODEL_SIGNAL_PIN& signalPin : part.signalPins )
@@ -1316,6 +1327,14 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
         THROW_IO_ERROR( wxS( "cannot append a PADS schematic to a sheet without a screen" ) );
 
     aModel.ValidateOrThrow();
+    std::vector<const MODEL_SHEET*> sourceSheets;
+    sourceSheets.reserve( aModel.sheets.size() );
+
+    for( const MODEL_SHEET& sheet : aModel.sheets )
+        sourceSheets.push_back( &sheet );
+
+    std::ranges::sort( sourceSheets, {}, &MODEL_SHEET::index );
+
     MODEL_INDEX      modelIndex( aModel );
     STAGED_SCHEMATIC staged;
     staged.result.counts.sheets = aModel.sheets.size();
@@ -1364,13 +1383,13 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
 
         if( !multiSheet )
         {
-            stageSheetContent( staged, aModel, modelIndex, aModel.sheets.front(), rootScreen, rootPath );
+            stageSheetContent( staged, aModel, modelIndex, *sourceSheets.front(), rootScreen, rootPath );
         }
         else
         {
-            for( size_t index = 0; index < aModel.sheets.size(); ++index )
+            for( size_t index = 0; index < sourceSheets.size(); ++index )
             {
-                const MODEL_SHEET& sourceSheet = aModel.sheets[index];
+                const MODEL_SHEET& sourceSheet = *sourceSheets[index];
                 VECTOR2I           position( schIUScale.MilsToIU( 500 + static_cast<int>( index % 4 ) * 2500 ),
                                              schIUScale.MilsToIU( 500 + static_cast<int>( index / 4 ) * 2000 ) );
                 auto               child = std::make_unique<SCH_SHEET>(
@@ -1395,7 +1414,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
     }
     else if( !multiSheet )
     {
-        const MODEL_SHEET& sourceSheet = aModel.sheets.front();
+        const MODEL_SHEET& sourceSheet = *sourceSheets.front();
         SCH_SCREEN*        temporaryScreen = staged.appendCache.get();
         SCH_SHEET_PATH path;
         path.push_back( aAppendToMe );
@@ -1426,9 +1445,9 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
         SCH_SHEET_PATH rootPath;
         rootPath.push_back( aAppendToMe );
 
-        for( size_t index = 0; index < aModel.sheets.size(); ++index )
+        for( size_t index = 0; index < sourceSheets.size(); ++index )
         {
-            const MODEL_SHEET& sourceSheet = aModel.sheets[index];
+            const MODEL_SHEET& sourceSheet = *sourceSheets[index];
             VECTOR2I           position( schIUScale.MilsToIU( 500 + static_cast<int>( index % 4 ) * 2500 ),
                                          schIUScale.MilsToIU( 500 + static_cast<int>( index / 4 ) * 2000 ) );
             auto               child = std::make_unique<SCH_SHEET>(

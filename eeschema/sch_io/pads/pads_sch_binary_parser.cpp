@@ -263,6 +263,35 @@ namespace
     }
 
 
+    bool isProvenGraphicStrokeWidth( uint16_t aWidth )
+    {
+        constexpr std::array<uint16_t, 13> widths{ 1, 2, 5, 7, 8, 10, 11, 15, 20, 25, 30, 31, 40 };
+        return std::ranges::binary_search( widths, aWidth );
+    }
+
+
+    void decodeGraphicStrokeWidth( uint16_t aRawWidth, const SOURCE_PROVENANCE& aGraphicSource,
+                                   MODEL_GRAPHIC& aGraphic, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    {
+        if( isProvenGraphicStrokeWidth( aRawWidth ) )
+        {
+            aGraphic.strokeWidth = static_cast<int64_t>( aRawWidth ) * 2;
+            return;
+        }
+
+        SOURCE_PROVENANCE strokeSource = aGraphicSource;
+        strokeSource.absoluteOffset += 4;
+        strokeSource.length = 2;
+        SOURCE_PROPERTY stroke = sourceProperty( wxS( "unsupported_graphic_stroke_width" ),
+                                                 wxString::Format( wxS( "%u" ), aRawWidth ), strokeSource );
+        stroke.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+        aDiagnostics.push_back( MakePropertyDiagnostic(
+                RPT_SEVERITY_WARNING, stroke,
+                wxS( "unproved private graphic stroke encoding preserved; using hairline" ) ) );
+        aGraphic.properties.push_back( std::move( stroke ) );
+    }
+
+
     SOURCE_STRING decodedDefinitionFont( int16_t aHandle, const SOURCE_PROVENANCE& aSource )
     {
         SOURCE_STRING font;
@@ -978,7 +1007,8 @@ namespace
 
                     MODEL_GRAPHIC graphic;
                     graphic.source = graphicSource;
-                    graphic.strokeWidth = static_cast<int64_t>( aCursor.U16At( pieceOffset + 4 ) ) * 2;
+                    decodeGraphicStrokeWidth( aCursor.U16At( pieceOffset + 4 ), graphicSource, graphic,
+                                              aModel.diagnostics );
 
                     switch( lineStyle )
                     {
@@ -1097,7 +1127,8 @@ namespace
                                   SYMBOL_PIECE_BYTES, static_cast<int>( aSheetIndex ) );
                 MODEL_GRAPHIC graphic;
                 graphic.source = graphicSource;
-                graphic.strokeWidth = static_cast<int64_t>( aCursor.U16At( pieceOffset + 4 ) ) * 2;
+                decodeGraphicStrokeWidth( aCursor.U16At( pieceOffset + 4 ), graphicSource, graphic,
+                                          aModel.diagnostics );
                 graphic.lineStyle = MODEL_LINE_STYLE::SOLID;
 
                 switch( pieceKind )
@@ -3364,6 +3395,19 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
     validateUniqueIds( nets, wxS( "net" ), id, provenance );
     validateUniqueIds( buses, wxS( "bus" ), id, provenance );
 
+    std::vector<bool> sheetIndexes( sheets.size() );
+
+    for( const MODEL_SHEET& sheet : sheets )
+    {
+        if( sheet.index >= sheetIndexes.size() )
+            throwValidationError( sheet.source, wxS( "sheet source index leaves the declared sheet range" ) );
+
+        if( sheetIndexes[sheet.index] )
+            throwValidationError( sheet.source, wxS( "duplicate sheet source index" ) );
+
+        sheetIndexes[sheet.index] = true;
+    }
+
     std::unordered_map<uint32_t, SOURCE_PROVENANCE> gateDeclarations;
     std::unordered_map<uint32_t, SOURCE_PROVENANCE> pinDeclarations;
     std::unordered_map<uint64_t, SOURCE_PROVENANCE> fieldDeclarations;
@@ -3871,7 +3915,7 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
 
         MODEL_SHEET sheet;
         sheet.id = SHEET_ID( cursor.U16At( recordOffset + 8 ) );
-        sheet.index = index;
+        sheet.index = sheet.id.IsValid() ? sheet.id.Value() - 1 : std::numeric_limits<size_t>::max();
         sheet.source = provenance;
         sheet.name = DecodeString( nameBytes, DEFAULT_CODE_PAGE, nameSource, model.diagnostics );
 
