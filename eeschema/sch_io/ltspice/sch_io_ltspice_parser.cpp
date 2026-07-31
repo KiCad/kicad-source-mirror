@@ -37,6 +37,131 @@
 #include <wx/ffile.h>
 #include <wx/filename.h>
 #include <wx/strconv.h>
+#include <wx/tokenzr.h>
+#include <wx/txtstrm.h>
+#include <wx/wfstream.h>
+#include <sim/spice_value.h>
+#include <fmt/format.h>
+#include <cmath>
+
+
+// Split PWL argument strings on whitespace while keeping quoted spans intact.
+// Example input: REPEAT FOREVER FILE="data 3.txt" ENDREPEAT
+// Example tokens: [REPEAT] [FOREVER] [FILE="data 3.txt"] [ENDREPEAT]
+static std::vector<wxString> tokenizeQuoted( const wxString& aText )
+{
+    std::vector<wxString> tokens;
+    wxString              token;
+    bool                  inQuotes = false;
+
+    for( wxUniChar ch : aText )
+    {
+        if( ch == '"' )
+            inQuotes = !inQuotes;
+
+        if( !inQuotes && wxIsspace( ch ) )
+        {
+            if( !token.IsEmpty() )
+            {
+                tokens.push_back( token );
+                token.clear();
+            }
+        }
+        else
+        {
+            token += ch;
+        }
+    }
+
+    if( !token.IsEmpty() )
+        tokens.push_back( token );
+
+    return tokens;
+}
+
+
+// Convert an LTspice PWL data file to an ngspice-friendly version.
+// Input semantics: "+t" is relative and plain "t" is absolute time.
+// Output semantics: emit relative step durations on every line.
+static bool convertPwlFileToNgspice( const wxFileName& aSourceFile, const wxFileName& aDestFile )
+{
+    wxFFileInputStream inputStream( aSourceFile.GetFullPath() );
+
+    if( !inputStream.IsOk() )
+        return false;
+
+    wxFFileOutputStream outputStream( aDestFile.GetFullPath() );
+
+    if( !outputStream.IsOk() )
+        return false;
+
+    wxTextInputStream  textIn( inputStream, wxS( " \t" ), wxConvUTF8 );
+    wxTextOutputStream textOut( outputStream, wxEOL_UNIX, wxConvUTF8 );
+    double             prevAbsoluteTime = 0.0;
+
+    while( inputStream.CanRead() )
+    {
+        wxString line = textIn.ReadLine();
+        line.Trim( true ).Trim( false );
+
+        // Convert comments to # format known by ngspice
+        wxString commentRest;
+        if( line.StartsWith( wxS( "*" ), &commentRest ) || line.StartsWith( wxS( ";" ), &commentRest ) )
+        {
+            textOut << wxS( "#" ) << commentRest << '\n';
+            continue;
+        }
+
+        wxStringTokenizer pointTokenizer( line, wxS( " \t" ), wxTOKEN_STRTOK );
+
+        if( pointTokenizer.CountTokens() < 2 )
+        {
+            textOut << line << '\n';
+            continue;
+        }
+
+        wxString timeToken = pointTokenizer.GetNextToken();
+        wxString valueToken = pointTokenizer.GetNextToken();
+
+        // LTspice semantics: "+t" means offset from previous point, plain "t"
+        // means absolute time from 0.
+        // Example: 0 0, +100n 0, 300n 1  => absolute times 0, 100n, 300n.
+        wxString timeRest = timeToken;
+        bool     isRelative = timeToken.StartsWith( wxS( "+" ), &timeRest );
+
+        if( timeRest.IsEmpty() )
+        {
+            textOut << line << '\n';
+            continue;
+        }
+
+        // Parse LTspice time token to seconds
+        SPICE_VALUE spiceValue( timeRest );
+        double      timeValueSeconds = spiceValue.ToDouble();
+
+        // Convert to relative time
+        double absoluteTime = isRelative ? prevAbsoluteTime + timeValueSeconds : timeValueSeconds;
+        double relativeTime = absoluteTime - prevAbsoluteTime;
+        prevAbsoluteTime = absoluteTime;
+
+        // Format seconds using explicit engineering notation (e.g. 1e-7 -> 100e-9).
+        wxString relativeTimeStr = wxS( "0" );
+
+        if( relativeTime != 0.0 )
+        {
+            double absSeconds = std::fabs( relativeTime );
+            int    exp10 = static_cast<int>( std::floor( std::log10( absSeconds ) ) );
+            int    engExp = exp10 - ( ( exp10 % 3 + 3 ) % 3 );
+            double mantissa = relativeTime / std::pow( 10.0, engExp );
+
+            relativeTimeStr = wxString::FromUTF8( fmt::format( "{:.9g}e{}", mantissa, engExp ) );
+        }
+
+        textOut << relativeTimeStr << '\t' << valueToken << '\n';
+    }
+
+    return outputStream.IsOk();
+}
 
 
 void SCH_IO_LTSPICE_PARSER::Parse( SCH_SHEET_PATH* aSheet,
@@ -141,6 +266,14 @@ void SCH_IO_LTSPICE_PARSER::Parse( SCH_SHEET_PATH* aSheet,
             out.Write( text, wxConvUTF8 );
         }
     }
+
+    // Add filesource subcircuit template for PWL file sources
+    includeText << wxS( "\n" );
+    includeText << wxS( ".subckt pwl_file outp outn file=\"\" timerelative=1\n" );
+    includeText << wxS( "Afs %vd([outp outn]) filesrc\n" );
+    includeText << wxS( ".model filesrc filesource (file={file} amploffset=[0] amplscale=[1] timeoffset=0 "
+                        "timescale=1 timerelative={timerelative})\n" );
+    includeText << wxS( ".ends\n" );
 
     if( !includeText.IsEmpty() )
     {
@@ -1050,11 +1183,6 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
                 aSymbol->AddField( newField );
             };
 
-    aSymbol->SetRef( aSheet, instName );
-    aSymbol->SetValueFieldText( value );
-
-    if( !value2.IsEmpty() )
-        addField( wxS( "Value2" ), value2 );
 
     auto setupNonInferredPassive =
             [&]( const wxString& aDevice, const wxString& aValueKey )
@@ -1110,6 +1238,69 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
         addField( wxS( "Sim.Device" ), wxS( "SPICE" ) );
 
         wxString simParams;
+        wxString pwlArgs;
+
+        if( value.Upper().StartsWith( wxS( "PWL " ), &pwlArgs ) && value.Upper().Contains( wxS( "FILE=" ) ) )
+        {
+            // TODO: support REPEAT statements
+
+            if( !value2.IsEmpty() )
+                pwlArgs << wxS( " " ) << value2;
+
+            pwlArgs.Trim( true ).Trim( false );
+
+            std::vector<wxString> ltspiceArgs = tokenizeQuoted( pwlArgs );
+            std::vector<wxString> ngspiceArgs;
+            wxString              fileRef;
+
+            for( wxString& arg : ltspiceArgs )
+            {
+                wxString argValue;
+                wxString argKey = arg.BeforeFirst( '=', &argValue );
+
+                // Unquote the arg value
+                if( argValue.length() >= 2 && argValue.StartsWith( wxS( "\"" ) ) && argValue.EndsWith( wxS( "\"" ) ) )
+                    argValue = argValue.Mid( 1, argValue.length() - 2 );
+
+                if( argKey.Upper() == wxS( "FILE" ) )
+                {
+                    wxString fileValue = argValue;
+
+                    if( fileValue.IsEmpty() )
+                        continue;
+
+                    // Convert the data file to ngspice format
+                    wxFileName sourceFile( fileValue );
+
+                    wxString sanitizedName = sourceFile.GetName();
+                    sanitizedName.MakeLower();
+                    sanitizedName.Replace( wxS( " " ), wxS( "_" ) );
+
+                    wxFileName convertedFile = sourceFile;
+                    convertedFile.SetName( sanitizedName + wxS( "_ngspice" ) );
+                    convertedFile.SetExt( sourceFile.GetExt().Lower() );
+
+                    if( sourceFile.FileExists() )
+                    {
+                        if( !convertPwlFileToNgspice( sourceFile, convertedFile ) )
+                        {
+                            wxLogWarning( wxS( "Failed to convert PWL data file to ngspice format: " )
+                                          + sourceFile.GetFullPath() );
+                        }
+                    }
+
+                    // Avoid \\ escape issues in Sim.Params quoted values.
+                    fileRef = convertedFile.GetFullPath();
+                    fileRef.Replace( wxS( "\\" ), wxS( "/" ) );
+                }
+            }
+
+            // Use a subcircuit instance for the PWL data file
+            prefix = "X";
+            value2 = "";
+            value = wxS( "pwl_file file=\\\"" ) + fileRef + wxS( "\\\" timerelative=1" );
+        }
+
         simParams << "type=" << '"' << prefix << '"' << ' ';
 
         if( value2.IsEmpty() )
@@ -1159,6 +1350,13 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
                 addField( wxS( "Sim.Params" ), "model=\"" + value + "\"" );
         }
     }
+
+    // Set this at the end, as we may have changed the variables
+    aSymbol->SetRef( aSheet, instName );
+    aSymbol->SetValueFieldText( value );
+
+    if( !value2.IsEmpty() )
+        addField( wxS( "Value2" ), value2 );
 
     for( LTSPICE_SCHEMATIC::LT_WINDOW& lt_window : aLTSymbol.Windows )
     {
