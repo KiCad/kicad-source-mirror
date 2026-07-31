@@ -79,6 +79,15 @@ protected:
 
     wxString getSelectedVariant() const;
 
+    /**
+     * Return the component filter implied by the component mode radio buttons.
+     *
+     * "Only selected" is resolved to the references currently selected in the board editor, so
+     * that a stored job stays reproducible when it is run later without a selection.  "All
+     * components" yields an empty filter, which the exporter treats as no filtering.
+     */
+    wxString getComponentFilter() const;
+
 private:
     PCB_EDIT_FRAME*    m_editFrame;
     JOB_EXPORT_PCB_3D* m_job;

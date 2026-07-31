@@ -149,6 +149,7 @@ set( QA_COMMON_SRCS
     test_secure_token_store.cpp
 
     # Job tests
+    test_job_export_pcb_3d.cpp
     test_job_export_pcb_variants.cpp
     test_job_export_sch_bom.cpp
     test_job_export_sch_plot.cpp

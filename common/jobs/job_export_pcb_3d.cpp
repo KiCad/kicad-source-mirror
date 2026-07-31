@@ -20,7 +20,27 @@
 
 #include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_registry.h>
+#include <base_units.h>
 #include <i18n_utility.h>
+
+
+/// A coordinate held in PCB internal units, as every consumer of EXPORTER_STEP_PARAMS expects,
+/// but written to the jobset in millimetres, which is what jobsets have always stored
+class JOB_PARAM_MM_TO_PCB_IU : public JOB_PARAM<double>
+{
+public:
+    JOB_PARAM_MM_TO_PCB_IU( const std::string& aJsonPath, double* aPtr, double aDefaultMM ) :
+            JOB_PARAM<double>( aJsonPath, aPtr, aDefaultMM )
+    {
+    }
+
+    void FromJson( const nlohmann::json& j ) const override
+    {
+        *m_ptr = j.value( m_jsonPath, m_default ) * pcbIUScale.IU_PER_MM;
+    }
+
+    void ToJson( nlohmann::json& j ) override { j[m_jsonPath] = *m_ptr / pcbIUScale.IU_PER_MM; }
+};
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_3D::FORMAT,
                               {
@@ -111,10 +131,12 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
                                                 m_3dparams.m_SubstModels ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "optimize_step", &m_3dparams.m_OptimizeStep,
                                                 m_3dparams.m_OptimizeStep ) );
-    m_params.emplace_back( new JOB_PARAM<double>( "user_origin.x", &m_3dparams.m_Origin.x,
-                                                  m_3dparams.m_Origin.x ) );
-    m_params.emplace_back( new JOB_PARAM<double>( "user_origin.y", &m_3dparams.m_Origin.y,
-                                                  m_3dparams.m_Origin.y ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "has_user_origin", &m_hasUserOrigin,
+                                                m_hasUserOrigin ) );
+    m_params.emplace_back( new JOB_PARAM_MM_TO_PCB_IU( "user_origin.x", &m_3dparams.m_Origin.x,
+                                                       m_3dparams.m_Origin.x ) );
+    m_params.emplace_back( new JOB_PARAM_MM_TO_PCB_IU( "user_origin.y", &m_3dparams.m_Origin.y,
+                                                       m_3dparams.m_Origin.y ) );
     m_params.emplace_back( new JOB_PARAM<double>( "board_outlines_chaining_epsilon",
                                                   &m_3dparams.m_BoardOutlinesChainingEpsilon,
                                                   m_3dparams.m_BoardOutlinesChainingEpsilon ) );
@@ -133,16 +155,24 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D() :
     m_params.emplace_back( new JOB_PARAM<bool>( "export_inner_copper", &m_3dparams.m_ExportInnerCopper,
                                                 m_3dparams.m_ExportInnerCopper ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "export_silkscreen", &m_3dparams.m_ExportSilkscreen,
-                                                m_3dparams.m_ExportInnerCopper ) );
+                                                m_3dparams.m_ExportSilkscreen ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "export_soldermask", &m_3dparams.m_ExportSoldermask,
                                                 m_3dparams.m_ExportSoldermask ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "fuse_shapes", &m_3dparams.m_FuseShapes,
                                                 m_3dparams.m_FuseShapes ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "fill_all_vias", &m_3dparams.m_FillAllVias,
                                                 m_3dparams.m_FillAllVias ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "extra_pad_thickness", &m_3dparams.m_ExtraPadThickness,
+                                                m_3dparams.m_ExtraPadThickness ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "net_filter", &m_3dparams.m_NetFilter,
+                                                    m_3dparams.m_NetFilter ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "component_filter", &m_3dparams.m_ComponentFilter,
+                                                    m_3dparams.m_ComponentFilter ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "vrml_model_dir", &m_vrmlModelDir, m_vrmlModelDir ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "vrml_relative_paths", &m_vrmlRelativePaths,
                                                 m_vrmlRelativePaths ) );
+    m_params.emplace_back( new JOB_PARAM<JOB_EXPORT_PCB_3D::VRML_UNITS>( "vrml_units", &m_vrmlUnits,
+                                                                        m_vrmlUnits ) );
     m_params.emplace_back( new JOB_PARAM<JOB_EXPORT_PCB_3D::FORMAT>( "format", &m_format, m_format ) );
     m_params.emplace_back( new JOB_PARAM<EXPORTER_STEP_PARAMS::FORMAT>( "occt_format", &m_3dparams.m_Format,
                                                                         m_3dparams.m_Format ) );
