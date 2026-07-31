@@ -1823,18 +1823,15 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                     // To keep the right margin around the corners, we need to modify the corner radius.
                     // We must have only one radius correction, so use the smallest absolute margin.
                     int radius_margin = std::max( margin.x, margin.y );     // radius_margin is < 0
-                    dummyPad->SetRoundRectCornerRadius(
-                            pcbLayer, std::max( initial_radius + radius_margin, 0 ) );
+                    dummyPad->SetRoundRectCornerRadius( pcbLayer, std::max( initial_radius + radius_margin, 0 ) );
                 }
 
-                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>(
-                        dummyPad->GetEffectiveShape( pcbLayer ) );
+                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( dummyPad->GetEffectiveShape( pcbLayer ) );
                 margin.x = margin.y = 0;
             }
             else
             {
-                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>(
-                        aPad->GetEffectiveShape( pcbLayer ) );
+                shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape( pcbLayer ) );
             }
 
             // The dynamic cast above will fail if the pad returned the hole shape or a null shape

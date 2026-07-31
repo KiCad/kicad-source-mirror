@@ -224,8 +224,7 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                                 // Visitor:
                                 [&]( BOARD_ITEM* other ) -> bool
                                 {
-                                    if( testItemAgainstItem( item, itemShape.get(), layer,
-                                                                other ) > 0 )
+                                    if( testItemAgainstItem( item, itemShape.get(), layer, other ) > 0 )
                                     {
                                         BOARD_ITEM* a = item;
                                         BOARD_ITEM* b = other;
@@ -781,8 +780,7 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
 
             if( IsCopperLayer( aLayer ) && zoneRTree )
             {
-                colliding = zoneRTree->QueryColliding( itemBBox, itemShape.get(), aLayer, clearance,
-                                                       &actual, &pos );
+                colliding = zoneRTree->QueryColliding( itemBBox, itemShape.get(), aLayer, clearance, &actual, &pos );
             }
             else
             {
@@ -826,8 +824,8 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
                 {
                     if( IsCopperLayer( aLayer ) && zoneRTree )
                     {
-                        colliding = zoneRTree->QueryColliding( itemBBox, holeShape.get(), aLayer,
-                                                               clearance, &actual, &pos );
+                        colliding = zoneRTree->QueryColliding( itemBBox, holeShape.get(), aLayer, clearance,
+                                                               &actual, &pos );
                     }
                     else
                     {
