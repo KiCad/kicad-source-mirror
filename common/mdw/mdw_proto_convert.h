@@ -33,10 +33,12 @@
 #define MDW_PROTO_CONVERT_H
 
 #include <mdw/client/mdw_auth.h>
+#include <mdw/client/mdw_baseline.h>
 #include <mdw/client/mdw_capabilities.h>
 #include <mdw/client/mdw_client_types.h>
 #include <mdw/client/mdw_events.h>
 #include <mdw/client/mdw_item.h>
+#include <mdw/client/mdw_library.h>
 #include <mdw/client/mdw_lock.h>
 #include <mdw/client/mdw_navigation.h>
 #include <mdw/client/mdw_revision.h>
@@ -44,6 +46,8 @@
 #include <mdw/client/mdw_types.h>
 
 #include <api/mdw/backend_base.pb.h>
+#include <api/mdw/backend_revisions.pb.h>
+#include <api/mdw/backend_shared_libs.pb.h>
 #include <api/workspace/workspace_types.pb.h>
 
 #include <cstdint>
@@ -246,6 +250,61 @@ inline MDW_EVENT_TYPE MdwFromProto( kiapi::workspace::EventType aType )
     case kiapi::workspace::ET_LOCKS_CHANGED:              return MDW_EVENT_TYPE::LOCKS_CHANGED;
     case kiapi::workspace::ET_UNKNOWN:
     default:                                              return MDW_EVENT_TYPE::UNKNOWN;
+    }
+}
+
+
+inline MDW_MEMBER_KIND MdwFromProto( kiapi::workspace::MemberKind aKind )
+{
+    switch( aKind )
+    {
+    case kiapi::workspace::MK_SYMBOL:    return MDW_MEMBER_KIND::SYMBOL;
+    case kiapi::workspace::MK_FOOTPRINT: return MDW_MEMBER_KIND::FOOTPRINT;
+    case kiapi::workspace::MK_UNKNOWN:
+    default:                             return MDW_MEMBER_KIND::UNKNOWN;
+    }
+}
+
+
+inline MDW_LIBRARY_TYPE MdwFromProto( kiapi::mdw::SharedLibType aType )
+{
+    switch( aType )
+    {
+    case kiapi::mdw::SLT_SYMBOL:    return MDW_LIBRARY_TYPE::SYMBOL;
+    case kiapi::mdw::SLT_FOOTPRINT: return MDW_LIBRARY_TYPE::FOOTPRINT;
+    case kiapi::mdw::SLT_MODEL_3D:  return MDW_LIBRARY_TYPE::MODEL_3D;
+    case kiapi::mdw::SLT_UNKNOWN:
+    default:                        return MDW_LIBRARY_TYPE::UNKNOWN;
+    }
+}
+
+
+/// A severity this build does not know blocks, since only an exception may release such a part
+inline MDW_SEVERITY MdwFromProto( kiapi::mdw::Severity aSeverity )
+{
+    switch( aSeverity )
+    {
+    case kiapi::mdw::SEV_NONE:    return MDW_SEVERITY::NONE;
+    case kiapi::mdw::SEV_WARNING: return MDW_SEVERITY::WARNING;
+    case kiapi::mdw::SEV_ERROR:
+    case kiapi::mdw::SEV_UNKNOWN:
+    default:                      return MDW_SEVERITY::BLOCKING;
+    }
+}
+
+
+/// An unset or unknown hold reads as LOCKED, the one hold no release step clears
+inline MDW_BASELINE_HOLD MdwFromProto( kiapi::mdw::BaselineHold aHold )
+{
+    switch( aHold )
+    {
+    case kiapi::mdw::HOLD_UNCOMMITTED: return MDW_BASELINE_HOLD::UNCOMMITTED;
+    case kiapi::mdw::HOLD_DETACHED:    return MDW_BASELINE_HOLD::DETACHED;
+    case kiapi::mdw::HOLD_NO_REMOTE:   return MDW_BASELINE_HOLD::NO_REMOTE;
+    case kiapi::mdw::HOLD_NONE:        return MDW_BASELINE_HOLD::NONE;
+    case kiapi::mdw::HOLD_LOCKED:
+    case kiapi::mdw::HOLD_UNKNOWN:
+    default:                           return MDW_BASELINE_HOLD::LOCKED;
     }
 }
 
