@@ -80,11 +80,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     if( NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_Netcode ) )
         aZone->SetNetCode( net->GetNetCode() );
 
-    // restore default net properties
-    zoneInfo.m_Netcode = NETINFO_LIST::ORPHANED;
-
-    m_pcb->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );
-
     commit.Push( _( "Edit Zone Properties" ), SKIP_CONNECTIVITY );
     rebuildConnectivity();
 }
