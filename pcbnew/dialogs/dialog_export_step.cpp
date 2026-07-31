@@ -122,6 +122,10 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aEditFrame, wxWindow* aP
 
         m_browseButton->Hide();
         SetupStandardButtons();
+
+        // Every control here belongs to the job, so the global control-state cache must not
+        // supply values for one job that were left behind by another
+        OptOut( this );
     }
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
@@ -221,8 +225,8 @@ bool DIALOG_EXPORT_STEP::TransferDataToWindow()
         else if( m_job->m_3dparams.m_UsePcbCenterOrigin )
             m_rbBoardCenterOrigin->SetValue( true );
 
-        m_originX.SetValue( pcbIUScale.mmToIU( m_job->m_3dparams.m_Origin.x ) );
-        m_originY.SetValue( pcbIUScale.mmToIU( m_job->m_3dparams.m_Origin.y ) );
+        m_originX.SetValue( KiROUND( m_job->m_3dparams.m_Origin.x ) );
+        m_originY.SetValue( KiROUND( m_job->m_3dparams.m_Origin.y ) );
 
         m_txtNetFilter->SetValue( m_job->m_3dparams.m_NetFilter );
         m_cbOptimizeStep->SetValue( m_job->m_3dparams.m_OptimizeStep );
@@ -248,6 +252,12 @@ bool DIALOG_EXPORT_STEP::TransferDataToWindow()
             m_choiceTolerance->SetSelection( 0 );
         else
             m_choiceTolerance->SetSelection( 1 );
+
+        // The job stores the resolved filter only, so an empty one means every component
+        if( m_job->m_3dparams.m_ComponentFilter.IsEmpty() )
+            m_rbAllComponents->SetValue( true );
+        else
+            m_rbFilteredComponents->SetValue( true );
 
         m_txtComponentFilter->SetValue( m_job->m_3dparams.m_ComponentFilter );
         m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
@@ -288,6 +298,29 @@ wxString DIALOG_EXPORT_STEP::getSelectedVariant() const
         variant = m_choiceVariant->GetString( selection );
 
     return variant;
+}
+
+
+wxString DIALOG_EXPORT_STEP::getComponentFilter() const
+{
+    if( m_rbOnlySelected->GetValue() )
+    {
+        wxArrayString components;
+        SELECTION&    selection = m_editFrame->GetCurrentSelection();
+
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->Type() == PCB_FOOTPRINT_T )
+                components.push_back( static_cast<FOOTPRINT*>( item )->GetReference() );
+        }
+
+        return wxJoin( components, ',' );
+    }
+
+    if( m_rbFilteredComponents->GetValue() )
+        return m_txtComponentFilter->GetValue();
+
+    return wxEmptyString;
 }
 
 
@@ -646,25 +679,10 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
                                              dblquote, m_txtNetFilter->GetValue(), dblquote ) );
         }
 
-        if( m_rbOnlySelected->GetValue() )
-        {
-            wxArrayString components;
-            SELECTION& selection = m_editFrame->GetCurrentSelection();
-
-            std::for_each( selection.begin(), selection.end(),
-                           [&components]( EDA_ITEM* item )
-                           {
-                               if( item->Type() == PCB_FOOTPRINT_T )
-                                   components.push_back( static_cast<FOOTPRINT*>( item )->GetReference() );
-                           } );
-
-            cmdK2S.Append( wxString::Format( wxT( " --component-filter %c%s%c" ),
-                                             dblquote, wxJoin( components, ',' ), dblquote ) );
-        }
-        else if( m_rbFilteredComponents->GetValue() )
+        if( !m_rbAllComponents->GetValue() )
         {
             cmdK2S.Append( wxString::Format( wxT( " --component-filter %c%s%c" ),
-                                             dblquote, m_txtComponentFilter->GetValue(), dblquote ) );
+                                             dblquote, getComponentFilter(), dblquote ) );
         }
 
         if( m_rbDrillAndPlotOrigin->GetValue() )
@@ -738,7 +756,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         m_job->SetConfiguredOutputPath( path );
         m_job->m_variant = getSelectedVariant();
         m_job->m_3dparams.m_NetFilter = m_txtNetFilter->GetValue();
-        m_job->m_3dparams.m_ComponentFilter = m_txtComponentFilter->GetValue();
+        m_job->m_3dparams.m_ComponentFilter = getComponentFilter();
         m_job->m_3dparams.m_ExportBoardBody = m_cbExportBody->GetValue();
         m_job->m_3dparams.m_ExportComponents = m_cbExportComponents->GetValue();
         m_job->m_3dparams.m_ExportTracksVias = m_cbExportTracks->GetValue();
@@ -786,6 +804,10 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         m_job->m_3dparams.m_UseDefinedOrigin = false;
         m_job->m_3dparams.m_UsePcbCenterOrigin = false;
 
+        // VRML export reads m_Origin only when this is set, and otherwise takes the live board
+        // center, which is what the board center mode wants
+        m_job->m_hasUserOrigin = m_rbUserDefinedOrigin->GetValue();
+
         if( m_rbDrillAndPlotOrigin->GetValue() )
         {
             m_job->m_3dparams.m_UseDrillOrigin = true;
@@ -796,21 +818,15 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         }
         else if( m_rbUserDefinedOrigin->GetValue() )
         {
-            double xOrg = pcbIUScale.IUTomm( m_originX.GetIntValue() );
-            double yOrg = pcbIUScale.IUTomm( m_originY.GetIntValue() );
-
             m_job->m_3dparams.m_UseDefinedOrigin = true;
-            m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
+            m_job->m_3dparams.m_Origin = VECTOR2D( m_originX.GetIntValue(), m_originY.GetIntValue() );
         }
         else if( m_rbBoardCenterOrigin->GetValue() )
         {
-            BOX2I     bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true, true );
-            double    xOrg = pcbIUScale.IUTomm( bbox.GetCenter().x );
-            double    yOrg = pcbIUScale.IUTomm( bbox.GetCenter().y );
-            LOCALE_IO dummy;
+            BOX2I bbox = m_editFrame->GetBoard()->ComputeBoundingBox( true, true );
 
             m_job->m_3dparams.m_UsePcbCenterOrigin = true;
-            m_job->m_3dparams.m_Origin = VECTOR2D( xOrg, yOrg );
+            m_job->m_3dparams.m_Origin = VECTOR2D( bbox.GetCenter() );
         }
 
         EndModal( wxID_OK );
