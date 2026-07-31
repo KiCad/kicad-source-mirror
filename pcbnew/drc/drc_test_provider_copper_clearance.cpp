@@ -640,14 +640,13 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                                     return false;
                                 }
 
-                                // For track-vs-track pairs, use pointer ordering to ensure each
-                                // pair is tested exactly once across all threads, eliminating the
-                                // need for a shared checkedPairs mutex.
+                                // Dedup on UUID, not heap address, so that exclusion checking
+                                // against previously-generated violations will work
                                 KICAD_T otherType = other->Type();
 
                                 if( ( otherType == PCB_TRACE_T || otherType == PCB_ARC_T
                                             || otherType == PCB_VIA_T )
-                                        && static_cast<void*>( track ) > static_cast<void*>( other ) )
+                                        && track->m_Uuid > other->m_Uuid )
                                 {
                                     return false;
                                 }
@@ -915,7 +914,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             doTestHole( pad, padShape, otherPad, otherPad->GetEffectiveHoleShape().get(), clearance );
     }
 
-    // Pad pairs are deduplicated by pointer order in testPadClearances.
+    // Pad pairs are deduplicated by UUID order in testPadClearances.
     // Run the swapped direction so we don't miss any violations.
     if( testHoles && pad->HasHole() && otherPad && otherPad->FlashLayer( aLayer ) )
     {
@@ -965,11 +964,9 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                                 // Filter:
                                 [&]( BOARD_ITEM* other ) -> bool
                                 {
-                                    // For pad-vs-pad pairs, use pointer ordering to ensure
-                                    // each pair is tested only once across all threads.
-                                    if( other->Type() == PCB_PAD_T
-                                            && static_cast<void*>( pad )
-                                                       > static_cast<void*>( other ) )
+                                    // Dedup on UUID, not heap address, so that exclusion
+                                    // checking against previously-generated violations will work
+                                    if( other->Type() == PCB_PAD_T && pad->m_Uuid > other->m_Uuid )
                                     {
                                         return false;
                                     }
@@ -1089,12 +1086,12 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                             if( graphicNet && graphicNet == otherNet )
                                 return false;
 
-                            // For graphic-graphic pairs, use pointer ordering for dedup
+                            // Dedup on UUID, not heap address, so that exclusion checking
+                            // against previously-generated violations will work
                             if( ( other->Type() == PCB_SHAPE_T
                                         || other->Type() == PCB_TEXTBOX_T
                                         || other->Type() == PCB_BARCODE_T )
-                                    && static_cast<void*>( graphic )
-                                               > static_cast<void*>( other ) )
+                                    && graphic->m_Uuid > other->m_Uuid )
                             {
                                 return false;
                             }

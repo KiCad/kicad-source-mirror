@@ -87,7 +87,7 @@ struct DRC_BASE_FIXTURE
     void        runDrcOnBoard();
     void        saveBoardAndProjectToTempFiles( const wxString& aBoardNameStem, FileCleaner& aCleaner,
                                                 wxString& aTempBoardFullPath, wxString& aTempProjectFullPath,
-                                                wxString& aTempBoardStemName );
+                                                wxString& aTempBoardStemName, bool aCopyBoardVerbatim = false );
     void        reloadBoardAndVerifyExclusions( const wxString& aTempBoardStemName, int aExpectedExclusions );
 
 
@@ -209,7 +209,7 @@ void DRC_BASE_FIXTURE::runDrcOnBoard()
 
 void DRC_BASE_FIXTURE::saveBoardAndProjectToTempFiles( const wxString& aBoardNameStem, FileCleaner& aCleaner,
                                                        wxString& aTempBoardFullPath, wxString& aTempProjectFullPath,
-                                                       wxString& aTempBoardStemName )
+                                                       wxString& aTempBoardStemName, bool aCopyBoardVerbatim )
 {
     wxString tempPrefix = "tmp_test_drc_";
     aTempBoardStemName = tempPrefix + aBoardNameStem.ToStdString();
@@ -219,7 +219,18 @@ void DRC_BASE_FIXTURE::saveBoardAndProjectToTempFiles( const wxString& aBoardNam
     aTempProjectFullPath = KI_TEST::GetPcbnewTestDataDir() + aTempBoardStemName + ".kicad_pro";
     aCleaner.AddFile( aTempProjectFullPath );
 
-    bool boardSaved = SaveBoardToFile( m_board->GetBoard(), aTempBoardFullPath );
+    bool boardSaved;
+
+    if( aCopyBoardVerbatim )
+    {
+        // Re-saving perturbs geometry slightly, which moves violation positions
+        boardSaved = wxCopyFile( KI_TEST::GetPcbnewTestDataDir() + aBoardNameStem + ".kicad_pcb", aTempBoardFullPath );
+    }
+    else
+    {
+        boardSaved = SaveBoardToFile( m_board->GetBoard(), aTempBoardFullPath );
+    }
+
     BOOST_REQUIRE_MESSAGE( boardSaved, "Save board to temporary file: " << aTempBoardFullPath );
 
     m_settingsManager.SaveProjectAs( aTempProjectFullPath, m_board->GetProject() );
@@ -327,5 +338,116 @@ BOOST_FIXTURE_TEST_CASE( DRCUnconnectedItemsExclusionsSaveLoad, DRC_REGRESSION_T
                                "Save project to temporary file: " << tempProjectFullPath );
 
         reloadBoardAndVerifyExclusions( tempBoardStemName, expectedExclusions );
+    }
+}
+
+
+static void runDrcAndCreateMarkers( BOARD* aBoard )
+{
+    aBoard->DeleteMARKERs();
+
+    BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+
+    bds.m_DRCEngine->InitEngine( wxFileName() );
+    bds.m_DRCEngine->SetViolationHandler(
+            [aBoard]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                      const std::function<void( PCB_MARKER* )>& aPathGenerator )
+            {
+                PCB_MARKER* marker = new PCB_MARKER( aItem, aPos, aLayer );
+
+                aPathGenerator( marker );
+                aBoard->Add( marker );
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, true );
+    bds.m_DRCEngine->ClearViolationHandler();
+}
+
+
+// Courtyard overlaps are positioned by SHAPE_POLY_SET::Collide(), which walks a triangulation
+// whose triangle order is not reproducible between loads, so their keys move on their own.  That
+// is a separate defect in the geometry layer, not in the exclusion bookkeeping under test here.
+static bool isCourtyardOverlap( PCB_MARKER* aMarker )
+{
+    return aMarker->GetRCItem()->GetErrorCode() == DRCE_OVERLAPPING_FOOTPRINTS;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( DRCExclusionsSurviveProjectRoundTrip, DRC_REGRESSION_TEST_FIXTURE )
+{
+    // Exclude every violation on the board, write the exclusions to the project file, then load
+    // the project back and run DRC again.  Nothing may be reported the second time round.  The
+    // board file itself is copied rather than re-saved, so both runs see identical geometry.
+
+    FileCleaner tempFileCleaner;
+    wxString    tempBoardPath, tempProjectPath, tempStem;
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue25101", m_board );
+    BOOST_REQUIRE( m_board );
+
+    runDrcAndCreateMarkers( m_board.get() );
+
+    std::map<wxString, int> keyCounts;
+    std::map<wxString, int> expectedKeys;
+
+    for( PCB_MARKER* marker : m_board->Markers() )
+    {
+        wxString serialized = marker->SerializeToString();
+
+        keyCounts[serialized]++;
+
+        if( !isCourtyardOverlap( marker ) )
+            expectedKeys[serialized]++;
+    }
+
+    // A violation found on several copper layers is reported once per layer but serializes to a
+    // single key, so one stored exclusion has to cover every marker that shares it
+    bool sharedKeys = std::any_of( keyCounts.begin(), keyCounts.end(),
+                                   []( const std::pair<const wxString, int>& aEntry )
+                                   {
+                                       return aEntry.second > 1;
+                                   } );
+
+    BOOST_REQUIRE_MESSAGE( sharedKeys, "board no longer produces multi-layer violations" );
+    BOOST_TEST_MESSAGE( "Markers: " << m_board->Markers().size() << "  distinct keys: " << keyCounts.size() );
+
+    for( PCB_MARKER* marker : m_board->Markers() )
+        marker->SetExcluded( true );
+
+    m_board->RecordDRCExclusions();
+    BOOST_CHECK_EQUAL( m_board->GetDesignSettings().m_DrcExclusions.size(), keyCounts.size() );
+
+    saveBoardAndProjectToTempFiles( "issue25101", tempFileCleaner, tempBoardPath, tempProjectPath, tempStem, true );
+
+    KI_TEST::LoadBoard( m_settingsManager, tempStem, m_board );
+    BOOST_REQUIRE( m_board );
+
+    BOARD_DESIGN_SETTINGS& reloadedBds = m_board->GetDesignSettings();
+    BOOST_REQUIRE_EQUAL( reloadedBds.m_DrcExclusions.size(), keyCounts.size() );
+
+    runDrcAndCreateMarkers( m_board.get() );
+
+    // Violations have to be reported against the same items, at the same place, and just as
+    // often, on a board that has just been reloaded, or no exclusion can survive the trip
+    std::map<wxString, int> reloadedKeys;
+
+    for( PCB_MARKER* marker : m_board->Markers() )
+    {
+        if( !isCourtyardOverlap( marker ) )
+            reloadedKeys[marker->SerializeToString()]++;
+    }
+
+    for( const std::pair<const wxString, int>& entry : expectedKeys )
+        BOOST_CHECK_MESSAGE( reloadedKeys[entry.first] == entry.second, "key not reproduced: " << entry.first );
+
+    for( const std::pair<const wxString, int>& entry : reloadedKeys )
+        BOOST_CHECK_MESSAGE( expectedKeys.count( entry.first ), "key appeared only after reload: " << entry.first );
+
+    m_board->ResolveDRCExclusions( false );
+
+    for( PCB_MARKER* marker : m_board->Markers() )
+    {
+        BOOST_CHECK_MESSAGE( marker->IsExcluded() || isCourtyardOverlap( marker ),
+                             "exclusion lost for " << marker->SerializeToString() );
     }
 }
