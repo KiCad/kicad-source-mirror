@@ -2280,6 +2280,14 @@ bool DRC_ENGINE::IsErrorLimitExceeded( int error_code )
 }
 
 
+int DRC_ENGINE::GetErrorLimit( int error_code )
+{
+    assert( error_code >= 0 && error_code <= DRCE_LAST );
+    std::lock_guard<std::mutex> lock( m_errorLimitsMutex );
+    return std::max( 0, m_errorLimits[ error_code ] );
+}
+
+
 void DRC_ENGINE::ReportViolation( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos,
                                   int aMarkerLayer, const std::function<void( PCB_MARKER* )>& aPathGenerator )
 {

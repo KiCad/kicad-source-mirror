@@ -23,9 +23,13 @@
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>
 #include <pcb_marker.h>
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <settings/settings_manager.h>
+
+#include <algorithm>
+#include <array>
+#include <utility>
+#include <vector>
 
 
 struct DRC_SOLDER_MASK_BRIDGING_TEST_FIXTURE
@@ -88,5 +92,77 @@ BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgingTest, DRC_SOLDER_MASK_BRIDGING_TES
             BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
 
         BOOST_ERROR( wxString::Format( "DRC solder mask bridge test failed board <%s>", brd_name ) );
+    }
+}
+
+
+BOOST_FIXTURE_TEST_CASE( DRCSolderMaskBridgeDeterminismTest, DRC_SOLDER_MASK_BRIDGING_TEST_FIXTURE )
+{
+    // Dense autorouted board from issue 24951 has more solder_mask_bridge violations than the DRC
+    // error-limit cap.  The count is stable at the cap, but which violations were kept depended on
+    // worker arrival order, so the report entries wobbled run-to-run.  Require the full set of
+    // reported violations (position + participating items) to be identical every run.
+    KI_TEST::LoadBoard( m_settingsManager, wxT( "issue24951/issue24951" ), m_board );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    std::vector<wxString>                            sig;
+    std::vector<std::pair<int, std::array<KIID, 3>>> emissionKeys;
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::function<void( PCB_MARKER* )>& )
+            {
+                if( aItem->GetErrorCode() != DRCE_SOLDERMASK_BRIDGE )
+                    return;
+
+                sig.push_back( wxString::Format( "%d,%d,%d,%s,%s,%s", aLayer, aPos.x, aPos.y,
+                                                 aItem->GetMainItemID().AsString(),
+                                                 aItem->GetAuxItemID().AsString(),
+                                                 aItem->GetAuxItem2ID().AsString() ) );
+
+                // Mirror of the provider's reporting order: layer, then the UUIDs of the
+                // participating items.  Only the populated ids are sorted, so the unused third slot
+                // of a two-item violation stays trailing exactly as the provider leaves it.
+                std::array<KIID, 3> ids = { aItem->GetMainItemID(), aItem->GetAuxItemID(),
+                                            aItem->GetAuxItem2ID() };
+
+                std::sort( ids.begin(), ids.end() - ( ids[2] == niluuid ? 1 : 0 ) );
+
+                emissionKeys.push_back( { aLayer, ids } );
+            } );
+
+    auto runDrc =
+            [&]() -> std::vector<wxString>
+            {
+                KI_TEST::FillZones( m_board.get() );
+                sig.clear();
+                emissionKeys.clear();
+                bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+                return sig;
+            };
+
+    std::vector<wxString> ref = runDrc();
+
+    BOOST_TEST_MESSAGE( wxString::Format( "solder_mask_bridge violations: %zu", ref.size() ) );
+
+    // The board must saturate the cap, or the capped path this test exists for is never taken.
+    BOOST_REQUIRE( bds.m_DRCEngine->IsErrorLimitExceeded( DRCE_SOLDERMASK_BRIDGE ) );
+    BOOST_REQUIRE_GT( ref.size(), 100u );
+
+    // The cap keeps a prefix of the provider's total order, so the kept violations must come out
+    // in that order.  A broken heap would still report a stable set, just not the right one.
+    // Mirrors PENDING_BRIDGE::operator<, so a change to that ordering must be made here too.
+    BOOST_CHECK_MESSAGE( std::is_sorted( emissionKeys.begin(), emissionKeys.end() ),
+                         "solder_mask_bridge violations not reported in sorted order" );
+
+    for( int run = 0; run < 8; ++run )
+    {
+        std::vector<wxString> cur = runDrc();
+
+        BOOST_CHECK_MESSAGE( cur == ref,
+                             wxString::Format( "solder_mask_bridge report differs on run %d "
+                                               "(%zu vs %zu violations)",
+                                               run, cur.size(), ref.size() ) );
     }
 }

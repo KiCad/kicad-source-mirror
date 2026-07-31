@@ -203,6 +203,14 @@ public:
 
     bool IsErrorLimitExceeded( int error_code );
 
+    /**
+     * Return the number of violations of \a error_code that may still be reported.
+     *
+     * Providers which collect candidates before reporting them can use this to bound the
+     * collection instead of accumulating violations the report will discard.
+     */
+    int GetErrorLimit( int error_code );
+
     DRC_CONSTRAINT EvalRules( DRC_CONSTRAINT_T aConstraintType, const BOARD_ITEM* a,
                               const BOARD_ITEM* b, PCB_LAYER_ID aLayer,
                               REPORTER* aReporter = nullptr );
