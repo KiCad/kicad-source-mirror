@@ -1689,6 +1689,14 @@ void mpWindow::onMouseLeftDown( wxMouseEvent& event )
     wxPoint pointClicked = event.GetPosition();
     m_movingInfoLayer = IsInsideInfoLayer( pointClicked );
 
+    // the grabbed overlay draws last, so it stays readable where overlays have to overlap
+    if( m_movingInfoLayer )
+    {
+        DelLayer( m_movingInfoLayer, false, false );
+        AddLayer( m_movingInfoLayer, false );
+        Refresh( false );
+    }
+
     event.Skip();
 }
 
