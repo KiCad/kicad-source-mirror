@@ -32,14 +32,8 @@ JSON_SCHEMA_VALIDATOR::JSON_SCHEMA_VALIDATOR( const wxFileName& aSchemaFile )
 
     try
     {
-        // For some obscure reason on MINGW, using UCRT option,
-        // m_schema_validator.set_root_schema() hangs without switching to locale "C"
-#if defined(__MINGW32__) && defined(_UCRT)
-        LOCALE_IO dummy;
-#endif
-
         schema_stream >> schema;
-        m_validator.set_root_schema( schema );
+        setRootSchema( schema );
     }
     catch( std::exception& e )
     {
@@ -53,6 +47,31 @@ JSON_SCHEMA_VALIDATOR::JSON_SCHEMA_VALIDATOR( const wxFileName& aSchemaFile )
             wxLogError( wxString::Format( _( "Error loading schema: %s" ), e.what() ) );
         }
     }
+}
+
+
+JSON_SCHEMA_VALIDATOR::JSON_SCHEMA_VALIDATOR( const nlohmann::json& aSchema )
+{
+    try
+    {
+        setRootSchema( aSchema );
+    }
+    catch( std::exception& e )
+    {
+        wxLogError( wxString::Format( _( "Error loading schema: %s" ), e.what() ) );
+    }
+}
+
+
+void JSON_SCHEMA_VALIDATOR::setRootSchema( const nlohmann::json& aSchema )
+{
+    // For some obscure reason on MINGW, using UCRT option,
+    // m_schema_validator.set_root_schema() hangs without switching to locale "C"
+#if defined(__MINGW32__) && defined(_UCRT)
+    LOCALE_IO dummy;
+#endif
+
+    m_validator.set_root_schema( aSchema );
 }
 
 
