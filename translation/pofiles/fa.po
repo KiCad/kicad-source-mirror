@@ -5,15 +5,15 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-04-24 15:10+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-07-31 18:02+0000\n"
+"Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/v10/fa/>\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:395
@@ -853,7 +853,7 @@ msgstr "نمایش لایه تعریف شده توسط کاربر، شماره 4
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 msgid "Through-hole Models"
-msgstr "مدل‌های سوراخ دار (THT)"
+msgstr "مدل‌های سوراخ گذر (THT)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:119
 msgid "SMD Models"
@@ -951,8 +951,8 @@ msgstr "استفاده از رنگ های ویرایشگر PCB"
 msgid ""
 "Use the board editor layer colors for copper layers (realtime renderer only)"
 msgstr ""
-"از رنگ‌ های استفاده شده درلایه های محیط ویرایشگر PCB برای مسیر های مسی "
-"استفاده کنید (فقط در پزدازشگر بلادرنگ (Real-Time))"
+"استفاده از رنگ های لایه های ویرایشگر برد برای لایه های مسی (فقط در Realtime "
+"Renderer)"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:206
 #, c-format
@@ -1345,32 +1345,29 @@ msgid "Height:"
 msgstr "ارتفاع:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:108
-#, fuzzy
 msgid "Resolution"
-msgstr "چرخش"
+msgstr "وضوح تصویر"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:116
 msgid "X resolution:"
-msgstr ""
+msgstr "وضوح X:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:124
-#, fuzzy
 msgid "pixels/in"
-msgstr "پیکسل ها"
+msgstr "پیکسل بر اینچ"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:125
-#, fuzzy
 msgid "pixels/mm"
-msgstr "پیکسل ها"
+msgstr "پیکسل بر میلی متر"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:130
 msgid "Y resolution:"
-msgstr ""
+msgstr "وضوح Y:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:330
 #, c-format
 msgid "%d × %d pixels"
-msgstr ""
+msgstr "%d در %d پیکسل"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:94
 #, c-format
@@ -1810,11 +1807,11 @@ msgstr "فایل '%s' ایجاد نشد."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:480
 msgid "Create PostScript File"
-msgstr "ایجاد فایل PostScript"
+msgstr "ایجاد فایل پست اسکریپت PostScript"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:515
 msgid "Create Symbol Library"
-msgstr "ایجاد کتابخانه نماد"
+msgstr "ایجاد کتابخانه نماد (Symbol Library)"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:550
 msgid "Create Footprint Library"
@@ -2011,23 +2008,23 @@ msgstr "یادداشت های کاربر"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Eco1"
-msgstr "کاربر ECO1"
+msgstr "کاربر.Eco1"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Eco2"
-msgstr "کاربر ECO2"
+msgstr "کاربر.Eco1"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Fab"
-msgstr ""
+msgstr "لایه ساخت جلو (F.Fab)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:188
 msgid "Postscript (.ps file)"
-msgstr ""
+msgstr "پست اسکریپت Postscript (فایل .ps)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:191
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr ""
+msgstr "برگه ترسیم Drawing Sheet (فایل .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
@@ -2050,101 +2047,98 @@ msgstr "تغییر از طریق API"
 #: common/api/api_plugin.cpp:60
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "پیکربندی افزونه (Plugin) در '%s' نامعتبر است: %s"
 
 #: common/api/api_plugin.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "مسیر کتابخانه نامعتبر است: ‏'%s'"
+msgstr "زمان اجرای افزونه (Plugin) نامعتبر است: ‏'%s'"
 
 #: common/api/api_plugin.cpp:112
 msgid "could not read plugin configuration file"
-msgstr ""
+msgstr "امکان خواندن فایل پیکربندی افزونه (Plugin) وجود ندارد"
 
 #: common/api/api_plugin.cpp:132
 #, c-format
 msgid "plugin configuration file error: %s"
-msgstr ""
+msgstr "خطا در فایل پیکربندی افزونه (Plugin): %s"
 
 #: common/api/api_plugin.cpp:165
 #, c-format
 msgid "missing or invalid required keys: %s"
-msgstr ""
+msgstr "کلید های مورد نیاز وجود ندارند یا نامعتبر هستند: %s"
 
 #: common/api/api_plugin.cpp:174
 #, c-format
 msgid "identifier '%s' is invalid"
-msgstr ""
+msgstr "شناسه '%s' نامعتبر است"
 
 #: common/api/api_plugin.cpp:201
 #, c-format
 msgid "actions section is invalid: %s"
-msgstr ""
+msgstr "بخش اقدامات (Actions Section) نامعتبر است: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "گزینه های افزونه (Plugin)"
+msgstr "%s اقدام افزونه (Plugin): %s"
 
 #: common/api/api_plugin_manager.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s': %s"
-msgstr "مسیر کتابخانه:"
+msgstr "%s افزونه (Plugin): %s"
 
 #: common/api/api_plugin_manager.cpp:124
 #, c-format
 msgid "exited with code %d"
-msgstr ""
+msgstr "با کد %d خارج شد"
 
 #: common/api/api_plugin_manager.cpp:351 common/api/api_plugin_manager.cpp:691
 #: common/api/api_plugin_manager.cpp:775
 msgid "missing plugin environment"
-msgstr ""
+msgstr "محیط افزونه (Plugin) وجود ندارد"
 
 #: common/api/api_plugin_manager.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' could not be read"
-msgstr "فایل '%s' ایجاد نشد."
+msgstr "نقطه ورود (Entrypoint) '%s' قابل خواندن نیست"
 
 #: common/api/api_plugin_manager.cpp:407
-#, fuzzy
 msgid "process could not be created"
-msgstr "فایل '%s' ایجاد نشد."
+msgstr "فرآیند ایجاد نشد"
 
 #: common/api/api_plugin_manager.cpp:452
 #, c-format
 msgid "entrypoint '%s' is not executable"
-msgstr ""
+msgstr "نقطه ورود (Entrypoint) '%s' قابل اجرا نیست"
 
 #: common/api/api_plugin_manager.cpp:500
 msgid "could not launch plugin"
-msgstr ""
+msgstr "امکان اجرای افزونه (Plugin) وجود ندارد"
 
 #: common/api/api_plugin_manager.cpp:661 common/api/api_plugin_manager.cpp:743
 #: common/api/api_plugin_manager.cpp:833
 #, c-format
 msgid "error code %d"
-msgstr ""
+msgstr "کد خطا %d"
 
 #: common/api/api_plugin_manager.cpp:663 common/api/api_plugin_manager.cpp:745
 #: common/api/api_plugin_manager.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "امکان ایجاد پوشه خروجی '%s' وجود ندارد."
+msgstr "امکان ایجاد محیط افزونه (Plugin) وجود ندارد: %s"
 
 #: common/api/api_plugin_manager.cpp:784
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "فایل '%s' ایجاد نشد."
+msgstr "فایل requirements.txt قابل خواندن نیست"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
-msgstr "فرآیند های پس زمینه"
+msgstr "وظایف پس زمینه"
 
 #: common/common.cpp:351 pcbnew/dialogs/dialog_board_reannotate.cpp:290
-#, fuzzy
 msgid "unannotated footprint"
-msgstr "فوت پرینت KiCad"
+msgstr "فوت پرینت (Footprint) بدون مرجع"
 
 #: common/common.cpp:544
 #, c-format
@@ -2389,22 +2383,22 @@ msgstr "پوشه بلوک طراحی (Design Block) '%s' حذف نشد."
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:127
 #: pcbnew/footprint_library_adapter.cpp:520
-#, fuzzy, c-format
+#, c-format
 msgid "Nested table '%s' not found."
-msgstr "فایل '%s' یافت نشد."
+msgstr "جدول تو در تو '%s' پیدا نشد."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:134
 #: pcbnew/footprint_library_adapter.cpp:527
 #, c-format
 msgid "Unknown library type %s "
-msgstr ""
+msgstr "نوع کتابخانه %s ناشناخته است "
 
 #: common/design_block_library_adapter.cpp:84
 #: eeschema/libraries/symbol_library_adapter.cpp:139
 #: pcbnew/footprint_library_adapter.cpp:532
 msgid "Internal error"
-msgstr ""
+msgstr "خطای داخلی"
 
 #: common/design_block_tree_model_adapter.cpp:125 cvpcb/cvpcb_mainframe.cpp:793
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1049
@@ -2541,7 +2535,7 @@ msgstr "توسعه‌دهندگان بسته (Package)"
 #: common/dialog_about/dialog_about.cpp:108
 #, c-format
 msgid "GDI objects in use %u"
-msgstr ""
+msgstr "اشیاء GDI در حال استفاده: %u"
 
 #: common/dialog_about/dialog_about.cpp:115
 #, c-format
@@ -2679,71 +2673,79 @@ msgstr "افزودن گروه اتصال ‭(Net Class)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
 msgid "(missing)"
-msgstr ""
+msgstr "(وجود ندارد)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
-#, fuzzy
 msgid "File"
-msgstr "&فایل"
+msgstr "فایل"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "نمایش همه نسخه ها"
+msgstr "نسخه ذخیره شده"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
 msgid "Auto-saved copy"
-msgstr ""
+msgstr "نسخه ذخیره خودکار"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
+"KiCad تغییرات ذخیره خودکار را از نشست قبلی پیدا کرد. این معمولاً به این معناست "
+"که KiCad به طور ناگهانی بسته شده است در حالی که شما کار ذخیره نشده داشتید."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore Auto-saved"
-msgstr "فایل های تصویری"
+msgstr "بازیابی نسخه ذخیره خودکار"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"فایل ذخیره شده شما را با نسخه ذخیره خودکار جایگزین می کند. محتوای ذخیره شده "
+"قبلی کنار گذاشته می شود."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
 msgid "Keep Current"
-msgstr ""
+msgstr "نگه داشتن نسخه فعلی"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
+"فایل ذخیره شده شما را به همان صورت نگه می دارد و تغییرات ذخیره خودکار را "
+"کنار می گذارد."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
 msgid "Keep Both"
-msgstr ""
+msgstr "نگه داشتن هر دو"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"فایل ذخیره شده شما را نگه می دارد و نسخه ذخیره خودکار را به همراه آن به "
+"عنوان یک فایل مجزا با زمان بندی نوشته شده ذخیره می کند تا بتوانید بعداً آن را "
+"بررسی کنید."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel Open"
-msgstr "لغو"
+msgstr "انصراف از باز کردن"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"این پنجره را بدون انجام هیچ تغییری می بندد. فایل های ذخیره خودکار روی حافظه "
+"ذخیره سازی (Disk) باقی می مانند و دفعه بعد که پروژه را باز کنید، دوباره "
+"پیشنهاد می شوند."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "بازیابی ذخیره خودکار"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -3012,9 +3014,8 @@ msgid "Design Block Properties"
 msgstr "ویژگی های بلوک طراحی"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:34
-#, fuzzy
 msgid "Generate Database Connection"
-msgstr "آزمایش اتصال"
+msgstr "ایجاد اتصال پایگاه داده (Database)"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:46
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
@@ -3024,17 +3025,15 @@ msgstr "آزمایش اتصال"
 #: pcbnew/via_protection_ui_mixin.h:136
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:854
 msgid "Custom"
-msgstr ""
+msgstr "سفارشی"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "بارگذاری تصویر منبع"
+msgstr "نام منبع داده (Data)"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
-#, fuzzy
 msgid "Username"
-msgstr "نام کاربری:"
+msgstr "نام کاربری"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:58
 msgid "Password"
@@ -3042,12 +3041,11 @@ msgstr "رمز عبور"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:63
 msgid "Timeout"
-msgstr ""
+msgstr "زمان انتظار به پایان رسید (Timeout)"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
-#, fuzzy
 msgid "Connection String"
-msgstr "اتصال"
+msgstr "رشته اتصال"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
@@ -3056,18 +3054,16 @@ msgid "Test Connection"
 msgstr "آزمایش اتصال"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:79
-#, fuzzy
 msgid "Tables"
-msgstr "فعال کردن"
+msgstr "جداول"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
-#, fuzzy
 msgid "Unable to connect to database"
-msgstr "امکان خروجی گرفتن به کلیپ بورد (Clipboard) وجود ندارد"
+msgstr "امکان اتصال به پایگاه داده (Database) وجود ندارد"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:154
 msgid "Database Error"
-msgstr ""
+msgstr "خطای پایگاه داده (Database)"
 
 #: common/dialogs/dialog_grid_settings.cpp:85
 msgid "Grid size X out of range."
@@ -3181,11 +3177,12 @@ msgstr "ویرایش ویژگی های گروه"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "یک گروه نمی تواند شامل خودش باشد."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
 msgstr ""
+"نمی‌توان این گروه را اضافه کرد زیرا از قبل گروه فعلی را در خود جای داده است."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -3327,7 +3324,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
-msgstr "متن ساختگی"
+msgstr "متن نمونه"
 
 #: common/dialogs/dialog_page_settings_base.cpp:50
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:234
@@ -3341,7 +3338,7 @@ msgstr "متن ساختگی"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:204
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:204
 msgid "Orientation:"
-msgstr "چیدمان:"
+msgstr "جهت گیری:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:60
 msgid "Custom paper size:"
@@ -3507,36 +3504,36 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
-"یک <b> گزینه </b> از لیست بالا انتخاب کنید، سپس روی دکمه <b> افزودن گزینه "
-"انتخاب شده </b> کلیک کنید."
+"یک <b> انتخاب گزینه (Option) </b> را در کادر لیست بالا انتخاب کنید و سپس روی "
+"دکمه <b> افزودن گزینه (Option) انتخاب شده </b> کلیک کنید."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, c-format
 msgid "Options for Library '%s'"
-msgstr "گزینه ها برای کتابخانه '%s'"
+msgstr "گزینه (Option) ها برای کتابخانه '%s'"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:26
 msgid "Plugin Options"
-msgstr "گزینه های افزونه (Plugin)"
+msgstr "گزینه (Option) های افزونه (Plugin)"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:43
 #: common/dialogs/panel_mouse_settings.cpp:47
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:253
 #: eeschema/dialogs/panel_simulator_preferences.cpp:33
 msgid "Option"
-msgstr "گزینه"
+msgstr "گزینه (Option)"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:78
 msgid "Option Choices"
-msgstr "گزینه های انتخابی"
+msgstr "گزینه (Option) های انتخابی"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:81
 msgid "Options supported by current plugin"
-msgstr "گزینه های پشتیبانی شده توسط افزونه (Plugin) فعلی"
+msgstr "گزینه (Option) های پشتیبانی شده توسط افزونه (Plugin) فعلی"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr "<< افزودن گزینه انتخاب شده"
+msgstr "<<    افزودن گزینه (Option) انتخاب شده"
 
 #: common/dialogs/dialog_print_generic.cpp:97
 #: common/dialogs/dialog_print_generic.cpp:300
@@ -3589,27 +3586,26 @@ msgid "Close"
 msgstr "بستن"
 
 #: common/dialogs/dialog_print_generic.cpp:144
-#, fuzzy
 msgid "Warning: custom scale is not a number."
-msgstr "هشدار: مقیاس عددی نیست."
+msgstr "هشدار: مقیاس سفارشی یک عدد نیست."
 
 #: common/dialogs/dialog_print_generic.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too large.\n"
 "It will be clamped to %f."
 msgstr ""
-"هشدار: مقدار مقیاس بسیار بزرگ تنظیم شده است.\n"
-"مقدار آن به %f محدود خواهد شد."
+"هشدار: مقیاس سفارشی بیش از حد بزرگ است.\n"
+"به %f محدود خواهد شد."
 
 #: common/dialogs/dialog_print_generic.cpp:160
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Warning: custom scale is too small.\n"
 "It will be clamped to %f."
 msgstr ""
-"هشدار: مقدار مقیاس بسیار کوچک تنظیم شده است.\n"
-"مقدار آن به %f محدود خواهد شد."
+"هشدار: مقیاس سفارشی بیش از حد کوچک است.\n"
+"به %f محدود خواهد شد."
 
 #: common/dialogs/dialog_print_generic.cpp:228
 #: common/dialogs/dialog_print_generic.cpp:285
@@ -3734,9 +3730,7 @@ msgstr "هشدارها"
 
 #: common/dialogs/dialog_rc_job_base.cpp:68
 msgid "Report job failure when violations present"
-msgstr ""
-"اگر در هنگام اجرای یک کار خطا یا نقض قوانینی وجود داشته باشد، آن کار به "
-"عنوان شکست خورده گزارش شود"
+msgstr "گزارش شکست کار در صورت وجود خطا"
 
 #: common/dialogs/dialog_rc_job_base.cpp:74 kicad/cli/command_pcb_drc.cpp:58
 msgid "Report all errors for each track"
@@ -3755,14 +3749,14 @@ msgstr "پر کردن مجدد تمام ناحیه ها قبل از اجرای D
 #: common/dialogs/dialog_restore_local_history.cpp:34
 #: kicad/tools/kicad_manager_actions.cpp:238
 msgid "Restore Project from Local History..."
-msgstr ""
+msgstr "بازیابی پروژه از تاریخچه محلی..."
 
 #: common/dialogs/dialog_restore_local_history.cpp:47
 #: eeschema/dialogs/dialog_sim_format_value.cpp:48
 #: eeschema/sim/sim_plot_tab.cpp:833 eeschema/sim/simulator_frame_ui.cpp:747
 #: eeschema/sim/simulator_frame_ui_base.cpp:169 kicad/local_history_pane.cpp:44
 msgid "Time"
-msgstr ""
+msgstr "زمان"
 
 #: common/dialogs/dialog_restore_local_history.cpp:48
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:559
@@ -3774,7 +3768,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:159
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
 msgid "Action"
-msgstr ""
+msgstr "عمل"
 
 #: common/dialogs/dialog_restore_local_history.cpp:49
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:69
@@ -3784,12 +3778,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:239
 #: pcbnew/widgets/search_handlers.cpp:630
 msgid "Count"
-msgstr ""
+msgstr "تعداد"
 
 #: common/dialogs/dialog_restore_local_history.cpp:55
 #: common/local_history.cpp:2264 kicad/kicad_manager_frame.cpp:1007
 msgid "Restore"
-msgstr ""
+msgstr "بازیابی"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_unit_entry_base.cpp:21
@@ -3838,7 +3832,7 @@ msgstr "انتقال نقطه به موقعیت مکانی"
 #: pcbnew/widgets/net_inspector_panel.cpp:42
 #: pcbnew/widgets/net_inspector_panel.cpp:96
 msgid "Filter"
-msgstr "فیلتر"
+msgstr "پالودن (Filter)"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
@@ -3895,11 +3889,11 @@ msgstr "حرکت به سمت پایین"
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr "تغییر نمای ذخیره شده"
+msgstr "تغییر دهندهٔ سریع نمای تنظیم شده"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
 msgid "Commit Changes"
-msgstr "ثبت تغییرات"
+msgstr "تغییرات Commit"
 
 #: common/dialogs/git/dialog_git_commit.cpp:51
 #: common/dialogs/panel_embedded_files_base.cpp:36
@@ -3932,7 +3926,7 @@ msgstr "حذف شد"
 
 #: common/dialogs/git/dialog_git_commit.cpp:132
 msgid "Commit Message:"
-msgstr "شرح تغییرات:"
+msgstr "پیام Commit:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:142
 msgid "Author:"
@@ -3968,7 +3962,7 @@ msgstr "لغو"
 
 #: common/dialogs/git/dialog_git_commit.cpp:163
 msgid "C&ommit"
-msgstr "ثبت تغییرات (Commit Message)"
+msgstr "C&ommit"
 
 #: common/dialogs/git/dialog_git_commit.cpp:194
 msgid "Commit message cannot be empty"
@@ -3976,29 +3970,28 @@ msgstr "پیام ثبت تغییرات (Commit Message) باید پر شود، �
 
 #: common/dialogs/git/dialog_git_commit.cpp:196
 msgid "Select at least one file to commit"
-msgstr ""
+msgstr "حداقل یک فایل برای Commit انتخاب کنید"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
-msgstr ""
+msgstr "گذرواژه کلید:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "رمز عبور:"
+msgstr "رمز عبور (Password) / توکن (Token):"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "برای دسترسی به موارد زیر، احراز هویت لازم است:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "نام کاربری و رمز عبور"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "کلید SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -4008,17 +4001,15 @@ msgstr "احراز هویت"
 #: common/dialogs/git/dialog_git_credentials_base.cpp:43
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
 msgid "Username:"
-msgstr ""
+msgstr "نام کاربری:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "رمز عبور کلید SSH:"
+msgstr "کلید SSH:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "فایل کلید خصوصی SSH را انتخاب کنید"
+msgstr "انتخاب کلید خصوصی SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4026,14 +4017,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "ذخیره پیش تنظیم ..."
+msgstr "ذخیره اطلاعات ورود"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "احراز هویت"
+msgstr "احراز هویت Git لازم است"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:401
@@ -4436,14 +4425,15 @@ msgid "When enabled, use a different color for every other table row"
 msgstr "وقتی فعال باشد، برای هر سطر جدول دیگر از رنگ متفاوتی استفاده می کند"
 
 #: common/dialogs/panel_common_settings_base.cpp:197
-#, fuzzy
 msgid "Disable custom cursors"
-msgstr "غیرفعال کردن ضخامت"
+msgstr "غیرفعال کردن نشانگر های سفارشی"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
 "When enabled, KiCad will use default system cursors instead of custom ones"
 msgstr ""
+"در صورت فعال بودن، KiCad به جای نشانگر های سفارشی از نشانگر های پیش‌فرض سیستم "
+"استفاده می‌کند."
 
 #: common/dialogs/panel_common_settings_base.cpp:205
 msgid "Icon theme:"
@@ -4543,26 +4533,24 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:264
 msgid "Canvas scale:"
-msgstr ""
+msgstr "مقیاس بوم (Scale):"
 
 #: common/dialogs/panel_common_settings_base.cpp:281
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "ضریب کدر شدن در حالت کنتراست بالا:"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
-#, fuzzy
 msgid "App theme:"
-msgstr "ظاهر آیکن:"
+msgstr "ظاهر (Theme) برنامه:"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
-#, fuzzy
 msgid "Scaling"
-msgstr "مقیاس"
+msgstr "مقیاس بندی"
 
 #: common/dialogs/panel_common_settings_base.cpp:345
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:20
 msgid "Editing"
-msgstr ""
+msgstr "درحال ویرایش"
 
 #: common/dialogs/panel_common_settings_base.cpp:355
 msgid "Warp mouse to anchor of moved object"
@@ -6830,7 +6818,7 @@ msgstr ""
 #: pcbnew/footprint_edit_frame.cpp:236 pcbnew/pcb_edit_frame.cpp:384
 #: pcbnew/pcb_edit_frame.cpp:2097
 msgid "Properties"
-msgstr ""
+msgstr "ویژگی ها (Properties)"
 
 #: common/eda_draw_frame.cpp:1331 pcbnew/pcb_edit_frame.cpp:396
 #: pcbnew/pcb_edit_frame.cpp:2098 pcbnew/tools/pcb_actions.cpp:1669
@@ -18990,7 +18978,7 @@ msgstr ""
 
 #: eeschema/erc/erc_item.cpp:42
 msgid "Conflicts"
-msgstr ""
+msgstr "تداخل ها (Conflicts)"
 
 #: eeschema/erc/erc_item.cpp:43 pcbnew/dialogs/panel_edit_options_base.cpp:417
 #: pcbnew/drc/drc_item.cpp:48
@@ -36539,7 +36527,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:24
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:25
 msgid "Layers:"
-msgstr ""
+msgstr "لایه‌ها:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:53
 msgid "Open Zone Manager..."
@@ -41860,7 +41848,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_text_properties.cpp:125
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:159
 msgid "Reference:"
-msgstr ""
+msgstr "مرجع:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:129
 msgid "Footprint Value Properties"
@@ -53686,7 +53674,7 @@ msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:89
 msgid "(none)"
-msgstr ""
+msgstr "(هیچکدام)"
 
 #: pcbnew/tools/multichannel_tool.cpp:139
 #: pcbnew/tools/multichannel_tool.cpp:2098
@@ -57604,9 +57592,8 @@ msgid "KiCad Drawing Sheet"
 msgstr "برگه طراحی KiCad"
 
 #: scripting/python_manager.cpp:135
-#, fuzzy
 msgid "Process could not be created"
-msgstr "فایل '%s' ایجاد نشد."
+msgstr "فرآیند ایجاد نشد"
 
 #: scripting/python_scripting.cpp:367
 #, fuzzy, c-format
