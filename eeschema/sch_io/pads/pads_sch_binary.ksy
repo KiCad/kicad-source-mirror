@@ -615,21 +615,21 @@ types:
     seq:
       - id: preserved_payload
         size-eos: true
-        doc: All eight v0x000C files contribute exact controller bytes; importer disposition is UNSUPPORTED with raw bytes preserved.
+        doc: All seven v0x000C files contribute exact controller bytes; importer disposition is UNSUPPORTED with raw bytes preserved.
 
   preserved_v12_placement_controller:
     doc: Exact bounded v0x000C placement payload; semantics unsupported without paired ASCII evidence.
     seq:
       - id: preserved_payload
         size-eos: true
-        doc: All eight v0x000C files contribute exact controller bytes; importer disposition is UNSUPPORTED with raw bytes preserved.
+        doc: All seven v0x000C files contribute exact controller bytes; importer disposition is UNSUPPORTED with raw bytes preserved.
 
   preserved_v12_connectivity_controller:
     doc: Exact bounded v0x000C connectivity payload; semantics unsupported without paired ASCII evidence.
     seq:
       - id: preserved_payload
         size-eos: true
-        doc: All eight v0x000C files contribute exact controller bytes; importer disposition is UNSUPPORTED with raw bytes preserved.
+        doc: All seven v0x000C files contribute exact controller bytes; importer disposition is UNSUPPORTED with raw bytes preserved.
 
   preserved_connectivity_tail_controller:
     doc: Exact bounded controller 23 payload; empty in every public v0x000D fixture and preserved if encountered.
@@ -1086,8 +1086,10 @@ types:
         type: u4
       - id: embedded_text_count_or_preserved_relationship
         type: u2
+        doc: Generated definition and page pairs prove the embedded-text count when the adjacent endpoint forms the validated controller-1 slice; otherwise the exact relationship word is retained with importer disposition UNSUPPORTED.
       - id: embedded_text_last_record_or_preserved_relationship
         type: u2
+        doc: Generated definition and page pairs prove the inclusive last controller-1 record for a validated embedded-text slice; unmatched private relationship values remain exact with importer disposition UNSUPPORTED.
       - id: preserved_definition_style_word_44
         type: s2
         doc: Exact definition style word; generated line/fill/text variants expose no ASCII counterpart, so importer disposition is PRESERVED.
