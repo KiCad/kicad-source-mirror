@@ -466,36 +466,43 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
-        std::set<wxString>::iterator it;
-        wxString                     serialized = marker->SerializeToString();
-        wxString                     matchedExclusion;
+        wxString serialized = marker->SerializeToString();
+        wxString matchedExclusion;
+        bool     matched = false;
 
         if( !serialized.Contains( "unconnected_items" ) )
         {
-            it = exclusions.find( serialized );
-
-            if( it != exclusions.end() )
-                matchedExclusion = *it;
+            // Markers reported on several layers serialize identically, so one stored exclusion
+            // has to cover them all or the extras can never be excluded
+            matched = exclusions.count( serialized ) > 0;
+            matchedExclusion = serialized;
         }
         else
         {
             const int  numberOfFieldsExcludingIds = 3;
             const char delimiter = '|';
-            it = FindByFirstNFields( exclusions, serialized, delimiter, numberOfFieldsExcludingIds );
+            auto       it = FindByFirstNFields( exclusions, serialized, delimiter, numberOfFieldsExcludingIds );
 
             if( it != exclusions.end() )
+            {
                 matchedExclusion = *it;
+                matched = true;
+
+                // Unlike the exact match above this one is a prefix match, so it has to be
+                // consumed or a single exclusion swallows every violation at that position
+                exclusions.erase( it );
+            }
         }
 
-        if( it != exclusions.end() )
+        if( matched )
         {
-            marker->SetExcluded( true, comments[matchedExclusion] );
+            const wxString& comment = comments[matchedExclusion];
+
+            marker->SetExcluded( true, comment );
 
             // Exclusion still valid; store back to BOARD_DESIGN_SETTINGS
             m_designSettings->m_DrcExclusions.insert( matchedExclusion );
-            m_designSettings->m_DrcExclusionComments[matchedExclusion] = comments[matchedExclusion];
-
-            exclusions.erase( it );
+            m_designSettings->m_DrcExclusionComments[matchedExclusion] = comment;
         }
     }
 
@@ -505,6 +512,10 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
     {
         for( const wxString& serialized : exclusions )
         {
+            // Exact matches aren't consumed above, so skip the ones a marker already claimed
+            if( m_designSettings->m_DrcExclusions.count( serialized ) )
+                continue;
+
             PCB_MARKER* marker = PCB_MARKER::DeserializeFromString( serialized );
 
             if( !marker )
