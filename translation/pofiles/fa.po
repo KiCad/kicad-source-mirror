@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-07-31 18:02+0000\n"
+"PO-Revision-Date: 2026-08-01 16:45+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/v10/fa/>\n"
 "Language: fa\n"
@@ -548,7 +548,7 @@ msgstr "نمایش مدل های سه بعدی SMD"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:325
 msgid "Show 3D models for 'Surface mount' type footprints"
 msgstr ""
-"نمایش مدل های سه بعدی بر اساس نصب از طریق' پایه های SMD' در فوت پرینت "
+"نمایش مدل های سه بعدی بر اساس نصب از طریق' نصب سطحی (SMD)' در فوت پرینت "
 "(Footprints)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:333
@@ -2012,7 +2012,7 @@ msgstr "کاربر.Eco1"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "User.Eco2"
-msgstr "کاربر.Eco1"
+msgstr "کاربر.Eco2"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:179
 msgid "F.Fab"
@@ -4392,20 +4392,20 @@ msgstr "این تغییر پس از راه اندازی مجدد ویرایشگ�
 #: common/dialogs/panel_common_settings_base.cpp:179
 msgid "Focus follows mouse between schematic and PCB editors"
 msgstr ""
-"جا به جایی خودکار فوکوس بین ویرایشگر شماتیک (Schematic) و مدارچاپی (PCB) "
-"هنگام حرکت ماوس"
+"تمرکز (Focus) با حرکت موشواره (Mouse) بین ویرایشگر شماتیک (Schematic) و "
+"ویرایشگر مدارچاپی (PCB) دنبال می شود"
 
 #: common/dialogs/panel_common_settings_base.cpp:180
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
-"جا به جایی موشواره روی ویرایشگر بوم شماتیک (Schematic) یا مدارچاپی (PCB)، "
-"پنجره‌ی مربوطه را در اولویت نمایش قرار می‌دهد."
+"جا به جایی موشواره (Mouse) روی ویرایشگر بوم شماتیک (Schematic) یا مدارچاپی "
+"(PCB)، پنجره‌ی مربوطه را در اولویت نمایش قرار می‌دهد."
 
 #: common/dialogs/panel_common_settings_base.cpp:184
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr "نمایش اعلان پنجره بازشو(popup) هنگام تغییر تنظیمات با میانبر ها"
+msgstr "هنگام تغییر وضعیت تنظیمات با کلید های میانبر، نشانگر بازشو نمایش بده"
 
 #: common/dialogs/panel_common_settings_base.cpp:185
 msgid ""
@@ -4554,56 +4554,62 @@ msgstr "درحال ویرایش"
 
 #: common/dialogs/panel_common_settings_base.cpp:355
 msgid "Warp mouse to anchor of moved object"
-msgstr ""
+msgstr "پرش موشواره (Mouse) به نقطه اتصال جسم جا به جا شده"
 
 #: common/dialogs/panel_common_settings_base.cpp:359
 msgid "First hotkey selects tool"
-msgstr ""
+msgstr "کلید میانبر، اول ابزار را انتخاب می کند"
 
 #: common/dialogs/panel_common_settings_base.cpp:360
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
 msgstr ""
+"اگر بررسی نشود، کلید های میانبر بلافاصله عملیات را انجام می دهند، حتی اگر "
+"ابزار مربوطه قبلاً انتخاب نشده باشد."
 
 #: common/dialogs/panel_common_settings_base.cpp:370
 msgid "Session"
-msgstr ""
+msgstr "نشست (Session)"
 
 #: common/dialogs/panel_common_settings_base.cpp:380
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "به خاطر سپردن فایل های باز برای اجرای بعدی پروژه"
 
 #: common/dialogs/panel_common_settings_base.cpp:382
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
+"اگر برسی شود، باز کردن یک پروژه، ابزارهایی مانند ویرایشگر شماتیک (Schematic) "
+"و ویرایشگر بُرد را نیز با فایل های قبلاً باز شده راه اندازی می‌کند"
 
 #: common/dialogs/panel_common_settings_base.cpp:395
 msgid "File history size:"
-msgstr ""
+msgstr "تعداد فایل های تاریخچه:"
 
 #: common/dialogs/panel_common_settings_base.cpp:413
 msgid "Project Backup"
-msgstr ""
+msgstr "پشتیبان گیری پروژه"
 
 #: common/dialogs/panel_common_settings_base.cpp:428
 msgid "Automatically backup projects"
-msgstr ""
+msgstr "پشتیبان گیری (Backup) خودکار پروژه ها"
 
 #: common/dialogs/panel_common_settings_base.cpp:429
 msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
+"هنگام ذخیره فایل ها، به طور خودکار از پروژه فعلی در بایگانی پشتیبان (Backup) "
+"ایجاد کن"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
 msgid "Incremental"
-msgstr ""
+msgstr "افزایشی"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
 msgid "Zip archive"
-msgstr ""
+msgstr "بایگانی (Archive) Zip"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -4611,35 +4617,41 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"افزایشی: نگهداری یک مخزن git مخفی به نام .history با تغییرات پیوسته.\n"
+"Zip: ایجاد بایگانی (Archive) های zip دارای زمان بندی هنگام ذخیره؛ ذخیره "
+"خودکار از فایل های بازیابی استفاده می کند."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "ایجاد کتابخانه نماد"
+msgstr "پوشه پروژه"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
 msgid "User data directory"
-msgstr ""
+msgstr "پوشه داده های کاربر"
 
 #: common/dialogs/panel_common_settings_base.cpp:453
 msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"پروژه: ذخیره فایل های پشتیبان (Backup) و ذخیره خودکار در داخل پوشه پروژه.\n"
+"کاربر: ذخیره آنها در پوشه داده های کاربر KiCad."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
-msgstr ""
+msgstr "حداکثر حجم کل پشتیبان (Backup):"
 
 #: common/dialogs/panel_common_settings_base.cpp:459
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
+"اگر حجم کل فایل های پشتیبان (Backup) از این حد بیشتر شود، پشتیبان های قدیمی "
+"حذف می شوند (برای عدم محدودیت، مقدار را 0 قرار دهید)"
 
 #: common/dialogs/panel_common_settings_base.cpp:466
 msgid "MB"
-msgstr ""
+msgstr "مگابایت (MB)"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
 msgid ""
@@ -4667,9 +4679,8 @@ msgid "Reset Unique Id"
 msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
-#, fuzzy
 msgid "Design Block Library Tables"
-msgstr "ویژگی های بلوک طراحی"
+msgstr "جدول های کتابخانه بلوک طراحی"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:181
 #: common/dialogs/panel_design_block_lib_table.cpp:184
@@ -4755,20 +4766,20 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:604
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:692
 msgid "Warning: Duplicate Nicknames"
-msgstr ""
+msgstr "هشدار: نام های مستعار تکراری"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:764
 #: eeschema/dialogs/panel_sym_lib_table.cpp:605
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:693
-#, fuzzy, c-format
+#, c-format
 msgid "An item nicknamed '%s' already exists."
-msgstr "قالب از قبل وجود دارد!"
+msgstr "یک فقره (Item) با نام مستعار '%s' از قبل وجود دارد."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:765
 #: eeschema/dialogs/panel_sym_lib_table.cpp:606
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:694
 msgid "One of the nicknames will need to be changed."
-msgstr ""
+msgstr "یکی از نام های مستعار باید تغییر کند."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:782
 #: common/dialogs/panel_embedded_files.cpp:478
@@ -4779,24 +4790,23 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:1962 pcbnew/dialogs/panel_fp_lib_table.cpp:714
 #: pcbnew/tools/pcb_actions.cpp:739
 msgid "Skip"
-msgstr ""
+msgstr "پرش (Skip)"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:782
 #: eeschema/dialogs/panel_sym_lib_table.cpp:620
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:714
 msgid "Add Anyway"
-msgstr ""
+msgstr "به هر حال اضافه کن"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:857
 #: eeschema/dialogs/panel_sym_lib_table.cpp:898
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:881
-#, fuzzy
 msgid ""
 "Error saving global library table:\n"
 "\n"
 msgstr ""
-"خطا در خواندن جدول کتابخانه بلوک طراحی '%s'.\n"
-"%s"
+"خطا در ذخیره جدول کتابخانه عمومی (Global Library):\n"
+"\n"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:858
 #: common/dialogs/panel_design_block_lib_table.cpp:877
@@ -4812,18 +4822,17 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:901
 #: pcbnew/footprint_libraries_utils.cpp:556
 msgid "File Save Error"
-msgstr ""
+msgstr "خطای ذخیره فایل"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:876
 #: eeschema/dialogs/panel_sym_lib_table.cpp:917
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:900
-#, fuzzy
 msgid ""
 "Error saving project library table:\n"
 "\n"
 msgstr ""
-"خطا در خواندن جدول کتابخانه بلوک طراحی '%s'.\n"
-"%s"
+"خطا در ذخیره جدول کتابخانه پروژه:\n"
+"\n"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:966
 msgid "Design Block Libraries"
@@ -4892,9 +4901,9 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_embedded_files.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read file '%s'."
-msgstr "چیزی برای چاپ وجود ندارد"
+msgstr "خواندن فایل '%s' انجام نشد."
 
 #: common/dialogs/panel_embedded_files.cpp:348
 #, c-format
@@ -16899,9 +16908,8 @@ msgid "Highlight corresponding item on canvas when it is selected in the table"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:999
-#, fuzzy
 msgid "Select on Cross-probe"
-msgstr "رنگ انتخابی:"
+msgstr "انتخاب هنگام کاوش متقابل (Cross-Probe)"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1000
 msgid "Select corresponding item on canvas when it is selected in the table"
@@ -17053,9 +17061,8 @@ msgid "View presets:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:137
-#, fuzzy
 msgid "Schematic variants:"
-msgstr "شماتیک (Schematic)"
+msgstr "نسخه های جایگزین شماتیک (Schematic):"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:210
 #, fuzzy
@@ -17135,9 +17142,8 @@ msgid "Alternate Assignment"
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:411
-#, fuzzy
 msgid " Design Variant"
-msgstr "نگهدارندگان کتابخانه"
+msgstr " نگهدارندگان کتابخانه"
 
 #: eeschema/dialogs/dialog_symbol_properties.cpp:512
 #: eeschema/lib_symbol.cpp:470 eeschema/symbol_editor/symbol_edit_frame.h:47
