@@ -253,10 +253,18 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 
         for( auto it = commonProps.begin(); it != commonProps.end(); )
         {
-            if( !propMgr.GetProperty( type, it->first ) )
-                it = commonProps.erase( it );
-            else
+            if( PROPERTY_BASE* prop = propMgr.GetProperty( type, it->first ) )
+            {
+                // A dummy property won't have the enum values, etc., so replace them with a "real" property
+                if( it->second->IgnoreValue() )
+                    it->second = prop;
+
                 ++it;
+            }
+            else
+            {
+                it = commonProps.erase( it );
+            }
         }
     }
 
@@ -455,6 +463,9 @@ bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection, 
 
         if( getItemValue( item, property, value ) )
         {
+            if( property->IgnoreValue() )
+                continue;
+
             // Null value indicates different property values between items
             if( !different && !aValue.IsNull() && value != aValue )
             {

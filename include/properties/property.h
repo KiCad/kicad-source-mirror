@@ -279,6 +279,11 @@ public:
         return *this;
     }
 
+    virtual bool IgnoreValue() const
+    {
+        return false;
+    }
+
     virtual bool Writeable( INSPECTABLE* aObject ) const
     {
         return m_writeableFunc( aObject );
@@ -562,6 +567,35 @@ protected:
 
     ///< Property value type-id
     const size_t m_typeHash;
+};
+
+
+template<typename Owner, typename T, typename Base = Owner>
+class DUMMY_PROPERTY : public PROPERTY_BASE
+{
+public:
+    using BASE_TYPE = typename std::decay<T>::type;
+
+    DUMMY_PROPERTY( const wxString& aName ) :
+            PROPERTY_BASE( aName )
+    {
+    }
+
+    size_t OwnerHash() const override { return TYPE_HASH( Owner ); }
+    size_t BaseHash() const override { return TYPE_HASH( Base ); }
+    size_t TypeHash() const override { return TYPE_HASH( BASE_TYPE ); }
+
+    bool IgnoreValue() const override { return true; }
+
+protected:
+    void setter( void* obj, wxAny& v ) override
+    {
+    }
+
+    wxAny getter( const void* obj ) const override
+    {
+        return wxAny();
+    }
 };
 
 

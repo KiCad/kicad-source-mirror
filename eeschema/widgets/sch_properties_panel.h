@@ -101,6 +101,9 @@ protected:
     PG_FPID_EDITOR*     m_fpEditorInstance;
     PG_URL_EDITOR*      m_urlEditorInstance;
 
+    static bool               m_selContainsJunctions;
+    static bool               m_selContainsWiresOrBuses;
+
     static std::set<wxString> m_currentSymbolFieldNames;
     static std::set<wxString> m_currentSheetFieldNames;
 

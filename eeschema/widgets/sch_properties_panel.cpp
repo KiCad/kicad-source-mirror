@@ -39,6 +39,8 @@
 #include <schematic.h>
 #include <sch_symbol.h>
 #include <lib_symbol.h>
+#include <sch_line.h>
+#include <sch_junction.h>
 #include <sch_field.h>
 #include <pin_map.h>
 #include <template_fieldnames.h>
@@ -565,6 +567,8 @@ private:
 };
 
 
+bool SCH_PROPERTIES_PANEL::m_selContainsJunctions;
+bool SCH_PROPERTIES_PANEL::m_selContainsWiresOrBuses;
 std::set<wxString> SCH_PROPERTIES_PANEL::m_currentSymbolFieldNames;
 std::set<wxString> SCH_PROPERTIES_PANEL::m_currentSheetFieldNames;
 std::set<wxString> SCH_PROPERTIES_PANEL::m_currentPinMapPinNumbers;
@@ -763,6 +767,8 @@ void SCH_PROPERTIES_PANEL::AfterCommit()
 
 void SCH_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 {
+    m_selContainsJunctions = false;
+    m_selContainsWiresOrBuses = false;
     m_currentSymbolFieldNames.clear();
     m_currentSheetFieldNames.clear();
     m_currentPinMapPinNumbers.clear();
@@ -812,6 +818,38 @@ void SCH_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 
                 m_currentSheetFieldNames.insert( field.GetCanonicalName() );
             }
+        }
+        else if( item->Type() == SCH_JUNCTION_T )
+        {
+            m_selContainsJunctions = true;
+
+            // Dummy property which allows concurrently-selected wires to be edited
+            m_propMgr.AddProperty( new DUMMY_PROPERTY<SCH_JUNCTION, WIRE_STYLE>( _HKI( "Wire Style" ) ) )
+                    .SetAvailableFunc(
+                            []( INSPECTABLE* )
+                            {
+                                return m_selContainsWiresOrBuses;
+                            } );
+
+            // Dummy property which allows concurrently-selected wires to be edited
+            m_propMgr.AddProperty( new DUMMY_PROPERTY<SCH_JUNCTION, int>( _HKI( "Line Width" ) ) )
+                    .SetAvailableFunc(
+                            []( INSPECTABLE* )
+                            {
+                                return m_selContainsWiresOrBuses;
+                            } );
+        }
+        else if( item->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } ) )
+        {
+            m_selContainsWiresOrBuses = true;
+
+            // Dummy property which allows concurrently-selected junctions to be edited
+            m_propMgr.AddProperty( new DUMMY_PROPERTY<SCH_LINE, int>( _HKI( "Diameter" ) ) )
+                    .SetAvailableFunc(
+                            []( INSPECTABLE* )
+                            {
+                                return m_selContainsJunctions;
+                            } );
         }
     }
 
