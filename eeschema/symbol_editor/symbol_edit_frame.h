@@ -469,6 +469,8 @@ private:
     // Set up the tool framework
     void setupTools();
 
+    void updateInfoBar();
+
     void saveSymbolCopyAs( bool aOpenCopy );
 
     /**
