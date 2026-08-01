@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-27 14:02+0000\n"
+"PO-Revision-Date: 2026-08-01 16:45+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -33247,12 +33247,12 @@ msgstr ""
 
 #: kicad/cli/command_git_mergedriver.cpp:57
 msgid "Document kind: pcb, sch, sym, or fp"
-msgstr ""
+msgstr "Dokumentart: pcb, sch, sym oder fp"
 
 #: kicad/cli/command_git_mergedriver.cpp:105
 #, c-format
 msgid "Unknown --kind '%s' (expected pcb, sch, sym, or fp)\n"
-msgstr ""
+msgstr "Unbekanntes --kind \"%s\" (erwartet pcb, sch, sym oder fp)\n"
 
 #: kicad/cli/command_git_mergedriver.cpp:121
 msgid "Could not create a temporary directory for the merge.\n"
@@ -33286,12 +33286,19 @@ msgid ""
 "kicad_pcb and/or <stem>.kicad_sch beside it. Defaults to the first input's "
 "name in the current directory."
 msgstr ""
+"Ausgabe des Projektpfadstammes; erzeugt <Stamm>.kicad_pro und zusätzlich die "
+"importierten <Stamm>.kicad_pcb und/oder <Stamm>.kicad_sch. Standardmäßig "
+"wird der Name der ersten Eingabe im aktuellen Verzeichnis verwendet."
 
 #: kicad/cli/command_import.cpp:64
+#, fuzzy
 msgid ""
 "JSON file mapping source layer names to KiCad layer names for imported "
 "boards; unmapped layers use the automatic best-guess"
 msgstr ""
+"JSON-Datei, die die Quelllagennamen zu KiCad-Lagennamen für importierte "
+"Platinen zuordnet; für nicht zugeordnete Lagen wird die automatische "
+"bestmögliche Schätzung verwendet"
 
 #: kicad/cli/command_import.cpp:77
 msgid "At least one input file is required\n"
@@ -33394,6 +33401,8 @@ msgid ""
 "Unsupported output extension '%s'. Expected .kicad_pcb, .kicad_sch, ."
 "kicad_sym, or .kicad_mod\n"
 msgstr ""
+"Nicht unterstützte Ausgabeerweiterung \"%s\". Erwartet wird .kicad_pcb, "
+".kicad_sch, .kicad_sym oder .kicad_mod\n"
 
 #: kicad/cli/command_mergetool.cpp:141
 msgid "Cannot find the main kicad binary alongside kicad-cli.\n"
@@ -33407,6 +33416,8 @@ msgstr "Konnte \"%s\" nicht starten\n"
 #: kicad/cli/command_pcb_diff.cpp:28
 msgid "Diff two .kicad_pcb files and emit JSON, text, PNG, or SVG"
 msgstr ""
+"Unterschiede zweier .kicad_pcb-Dateien finden und als JSON, Text, PNG oder "
+"SVG ausgeben"
 
 #: kicad/cli/command_pcb_diff.cpp:29
 #, fuzzy
