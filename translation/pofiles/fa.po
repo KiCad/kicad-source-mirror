@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-08-01 18:15+0000\n"
+"PO-Revision-Date: 2026-08-02 19:02+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/master-"
 "source/fa/>\n"
@@ -5197,23 +5197,29 @@ msgstr "این یک جدول فقط خواندنی است که متغیرهای 
 
 #: common/dialogs/panel_embedded_files.cpp:54
 msgid "Copy Embedded Reference"
-msgstr ""
+msgstr "کپی ارجاع تعبیه شده"
 
 #: common/dialogs/panel_embedded_files.cpp:55
 msgid "Copy the reference for this embedded file"
-msgstr ""
+msgstr "مرجع این فایل تعبیه شده را کپی کنید"
 
 #: common/dialogs/panel_embedded_files.cpp:201
 msgid ""
 "Deleted embedded files are also referenced in some footprints.\n"
 "Delete from footprints as well?"
 msgstr ""
+"فایل های تعبیه شدۀ حذف شده در برخی فوت پرینت ها (Footprints) نیز ارجاع داده "
+"شده اند.\n"
+"آیا از فوت پرینت ها (Footprints) نیز حذف شوند؟"
 
 #: common/dialogs/panel_embedded_files.cpp:206
 msgid ""
 "Deleted embedded files are also referenced in some symbols.\n"
 "Delete from symbols as well?"
 msgstr ""
+"فایل های جاسازی شدۀ حذف شده در برخی نماد (Symbol) ها نیز ارجاع داده شده "
+"اند.\n"
+"آیا از نماد (Symbol) ها نیز حذف شوند؟"
 
 #: common/dialogs/panel_embedded_files.cpp:332
 #, c-format
@@ -5228,41 +5234,47 @@ msgid ""
 "\n"
 "Do you want to replace the embedded file with the new version?"
 msgstr ""
+"یک فایل با نام '%s' قبلاً تعبیه شده است، اما محتوای فایل روی حافظه (Disk) "
+"متفاوت است.\n"
+"\n"
+"آیا می‌خواهید فایل جاسازی شده را با نسخه جدید جایگزین کنید؟"
 
 #: common/dialogs/panel_embedded_files.cpp:348
 msgid "Embedded File Conflict"
-msgstr ""
+msgstr "تداخل فایل تعبیه شده"
 
 #: common/dialogs/panel_embedded_files.cpp:350
 #: eeschema/dialogs/dialog_sch_find_base.cpp:127
 msgid "Replace"
-msgstr ""
+msgstr "جایگزینی"
 
 #: common/dialogs/panel_embedded_files.cpp:350
 msgid "Reuse Existing"
-msgstr ""
+msgstr "استفادۀ مجدد از نسخه موجود"
 
 #: common/dialogs/panel_embedded_files.cpp:376
 #, c-format
 msgid "Failed to add file '%s'."
-msgstr ""
+msgstr "افزودن فایل '%s' انجام نشد."
 
 #: common/dialogs/panel_embedded_files.cpp:390
 msgid "Select a file to embed"
-msgstr ""
+msgstr "یک فایل برای تعبیه انتخاب کنید"
 
 #: common/dialogs/panel_embedded_files.cpp:416
 msgid "Embedded files inherited from a parent symbol cannot be removed."
 msgstr ""
+"فایل های تعبیه شده ای که از یک نماد (Symbol) مادر به ارث رسیده اند، قابل حذف "
+"نیستند."
 
 #: common/dialogs/panel_embedded_files.cpp:458
 msgid "Select a directory to export files"
-msgstr ""
+msgstr "یک پوشه برای خروجی گرفتن از فایل ها انتخاب کنید"
 
 #: common/dialogs/panel_embedded_files.cpp:471
 #, c-format
 msgid "File '%s' already exists."
-msgstr ""
+msgstr "فایل '%s' از قبل وجود دارد."
 
 #: common/dialogs/panel_embedded_files.cpp:474
 #: common/widgets/design_block_pane.cpp:196
@@ -5287,26 +5299,26 @@ msgstr ""
 #: pcbnew/pcb_design_block_utils.cpp:55 pcbnew/pcb_design_block_utils.cpp:69
 #: pcbnew/tools/footprint_editor_control.cpp:492
 msgid "Overwrite"
-msgstr ""
+msgstr "بازنویسی"
 
 #: common/dialogs/panel_embedded_files.cpp:488
 #, c-format
 msgid "Directory '%s' is not writable."
-msgstr ""
+msgstr "پوشۀ دایرکتوری (Directory) '%s' قابل نوشتن نیست."
 
 #: common/dialogs/panel_embedded_files.cpp:490
 #, c-format
 msgid "Folder '%s' is not writable."
-msgstr ""
+msgstr "پوشۀ فولدر (Folder) '%s' قابل نوشتن نیست."
 
 #: common/dialogs/panel_embedded_files.cpp:494
 msgid "Retry"
-msgstr ""
+msgstr "تلاش مجدد"
 
 #: common/dialogs/panel_embedded_files.cpp:522
 #, c-format
 msgid "Failed to open file '%s'."
-msgstr ""
+msgstr "باز کردن فایل '%s' انجام نشد."
 
 #: common/dialogs/panel_embedded_files.cpp:533
 #: pcbnew/exporters/gendrill_excellon_writer.cpp:154
