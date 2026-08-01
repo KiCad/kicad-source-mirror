@@ -329,9 +329,9 @@ HANDLER_RESULT<DeleteItemsResponse> API_HANDLER_EDITOR::handleDeleteItems(
 
     for( const auto& [id, status] : itemsToDelete )
     {
-        ItemDeletionResult result;
-        result.mutable_id()->set_value( id.AsStdString() );
-        result.set_status( status );
+        ItemDeletionResult* result = response.add_deleted_items();
+        result->mutable_id()->set_value( id.AsStdString() );
+        result->set_status( status );
     }
 
     response.set_status( kiapi::common::types::ItemRequestStatus::IRS_OK );
