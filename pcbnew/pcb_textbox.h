@@ -161,7 +161,7 @@ public:
      * Circles and arcs are approximated by segments
      * @param aBuffer = SHAPE_POLY_SET to store the polygon corners
      * @param aClearance = the clearance around the text
-     * @param aError = the maximum error to allow when approximating curves
+     * @param aMaxError = the maximum error to allow when approximating curves
      */
     void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aMaxError,
                                  ERROR_LOC aErrorLoc ) const;
@@ -172,7 +172,8 @@ public:
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-                                              FLASHING aFlash = FLASHING::DEFAULT ) const override;
+                                              FLASHING aFlash = FLASHING::DEFAULT,
+                                              DRC_CONSTRAINT_T aUsage = NULL_CONSTRAINT ) const override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 

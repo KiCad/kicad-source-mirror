@@ -1312,6 +1312,38 @@ LSET PADSTACK::RelevantShapeLayers( const PADSTACK& aOther ) const
 }
 
 
+int PADSTACK::GetMaxHoleSize() const
+{
+    int maxHoleSize = Drill().size.x;
+
+    const PADSTACK::POST_MACHINING_PROPS& frontPM = FrontPostMachining();
+    const PADSTACK::POST_MACHINING_PROPS& backPM = BackPostMachining();
+
+    if( frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+        && frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+    {
+        maxHoleSize = std::max( maxHoleSize, frontPM.size );
+    }
+
+    if( backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
+        && backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+    {
+        maxHoleSize = std::max( maxHoleSize, backPM.size );
+    }
+
+    const PADSTACK::DRILL_PROPS& secondaryDrill = SecondaryDrill();
+    const PADSTACK::DRILL_PROPS& tertiaryDrill = TertiaryDrill();
+
+    if( secondaryDrill.start != UNDEFINED_LAYER && secondaryDrill.end != UNDEFINED_LAYER )
+        maxHoleSize = std::max( maxHoleSize, secondaryDrill.size.x );
+
+    if( tertiaryDrill.start != UNDEFINED_LAYER && tertiaryDrill.end != UNDEFINED_LAYER )
+        maxHoleSize = std::max( maxHoleSize, tertiaryDrill.size.x );
+
+    return maxHoleSize;
+}
+
+
 std::optional<bool> PADSTACK::IsTented( PCB_LAYER_ID aSide ) const
 {
     if( IsFrontLayer( aSide ) )

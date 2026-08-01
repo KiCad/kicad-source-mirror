@@ -85,7 +85,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     if( zone->GetDoNotAllowTracks() )
                     {
                         for( PCB_LAYER_ID layer : zone->GetLayerSet() )
-                            antiTrackKeepouts->Insert( zone, layer );
+                            antiTrackKeepouts->Insert( zone, layer, CLEARANCE_CONSTRAINT );
                     }
                 }
                 else if( zone->IsOnCopperLayer() )

@@ -383,7 +383,7 @@ bool BOARD_ITEM::ptr_cmp::operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b 
 }
 
 
-std::shared_ptr<SHAPE> BOARD_ITEM::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> BOARD_ITEM::GetEffectiveShape( PCB_LAYER_ID, FLASHING, DRC_CONSTRAINT_T ) const
 {
     static std::shared_ptr<SHAPE> shape;
 
@@ -393,7 +393,7 @@ std::shared_ptr<SHAPE> BOARD_ITEM::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASH
 }
 
 
-std::shared_ptr<SHAPE_SEGMENT> BOARD_ITEM::GetEffectiveHoleShape() const
+std::shared_ptr<SHAPE_SEGMENT> BOARD_ITEM::GetEffectiveHoleShape( PCB_LAYER_ID, DRC_CONSTRAINT_T ) const
 {
     static std::shared_ptr<SHAPE_SEGMENT> slot;
 

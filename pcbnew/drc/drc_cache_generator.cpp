@@ -182,7 +182,8 @@ bool DRC_CACHE_GENERATOR::Run()
                 copperLayers.RunOnLayers(
                         [&]( PCB_LAYER_ID layer )
                         {
-                            m_board->m_CopperItemRTreeCache->Insert( item, layer, largestClearance );
+                            m_board->m_CopperItemRTreeCache->Insert( item, layer, CLEARANCE_CONSTRAINT,
+                                                                     largestClearance );
                         } );
 
                 done.fetch_add( 1 );
@@ -257,7 +258,7 @@ bool DRC_CACHE_GENERATOR::Run()
                            [&]( PCB_LAYER_ID layer )
                            {
                                if( IsCopperLayer( layer ) )
-                                   rtree->Insert( aZone, layer );
+                                   rtree->Insert( aZone, layer, CLEARANCE_CONSTRAINT );
                            } );
 
                    rtree->Build();

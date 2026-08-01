@@ -841,22 +841,25 @@ bool PAD::IsBackdrilledOrPostMachined( PCB_LAYER_ID aLayer ) const
     // Check secondary drill (backdrill from top)
     const PADSTACK::DRILL_PROPS& secondaryDrill = m_padStack.SecondaryDrill();
 
-    if( secondaryDrill.size.x > 0 && secondaryDrill.start != UNDEFINED_LAYER
-            && secondaryDrill.end != UNDEFINED_LAYER )
+    if( secondaryDrill.size.x > 0 && secondaryDrill.start != UNDEFINED_LAYER && secondaryDrill.end != UNDEFINED_LAYER )
     {
         // Secondary drill goes from start to end layer, removing copper on those layers
         int startOrdinal = board->IsLayerEnabled( secondaryDrill.start )
-                                   ? board->IsLayerEnabled( F_Cu ) ? ( secondaryDrill.start == F_Cu ? 0 : secondaryDrill.start / 2 + 1 )
-                                                                    : secondaryDrill.start / 2
-                                   : -1;
+                ? board->IsLayerEnabled( F_Cu ) ? ( secondaryDrill.start == F_Cu ? 0
+                                                                                 : secondaryDrill.start / 2 + 1 )
+                                                 : secondaryDrill.start / 2
+                : -1;
         int endOrdinal = board->IsLayerEnabled( secondaryDrill.end )
-                                 ? board->IsLayerEnabled( F_Cu ) ? ( secondaryDrill.end == B_Cu ? board->GetCopperLayerCount() - 1 : secondaryDrill.end / 2 + 1 )
-                                                                  : secondaryDrill.end / 2
-                                 : -1;
+                ? board->IsLayerEnabled( F_Cu ) ? ( secondaryDrill.end == B_Cu ? board->GetCopperLayerCount() - 1
+                                                                               : secondaryDrill.end / 2 + 1 )
+                                                : secondaryDrill.end / 2
+                : -1;
         int layerOrdinal = board->IsLayerEnabled( aLayer )
-                                   ? board->IsLayerEnabled( F_Cu ) ? ( aLayer == F_Cu ? 0 : aLayer == B_Cu ? board->GetCopperLayerCount() - 1 : aLayer / 2 + 1 )
-                                                                    : aLayer / 2
-                                   : -1;
+                ? board->IsLayerEnabled( F_Cu ) ? ( aLayer == F_Cu ? 0
+                                                                   : aLayer == B_Cu ? board->GetCopperLayerCount() - 1
+                                                                                    : aLayer / 2 + 1 )
+                                                : aLayer / 2
+                : -1;
 
         if( layerOrdinal >= 0 && startOrdinal >= 0 && endOrdinal >= 0 )
         {
@@ -871,21 +874,24 @@ bool PAD::IsBackdrilledOrPostMachined( PCB_LAYER_ID aLayer ) const
     // Check tertiary drill (backdrill from bottom)
     const PADSTACK::DRILL_PROPS& tertiaryDrill = m_padStack.TertiaryDrill();
 
-    if( tertiaryDrill.size.x > 0 && tertiaryDrill.start != UNDEFINED_LAYER
-            && tertiaryDrill.end != UNDEFINED_LAYER )
+    if( tertiaryDrill.size.x > 0 && tertiaryDrill.start != UNDEFINED_LAYER && tertiaryDrill.end != UNDEFINED_LAYER )
     {
         int startOrdinal = board->IsLayerEnabled( tertiaryDrill.start )
-                                   ? board->IsLayerEnabled( F_Cu ) ? ( tertiaryDrill.start == F_Cu ? 0 : tertiaryDrill.start / 2 + 1 )
-                                                                    : tertiaryDrill.start / 2
-                                   : -1;
+                ? board->IsLayerEnabled( F_Cu ) ? ( tertiaryDrill.start == F_Cu ? 0
+                                                                                : tertiaryDrill.start / 2 + 1 )
+                                                : tertiaryDrill.start / 2
+                : -1;
         int endOrdinal = board->IsLayerEnabled( tertiaryDrill.end )
-                                 ? board->IsLayerEnabled( F_Cu ) ? ( tertiaryDrill.end == B_Cu ? board->GetCopperLayerCount() - 1 : tertiaryDrill.end / 2 + 1 )
-                                                                  : tertiaryDrill.end / 2
-                                 : -1;
+                ? board->IsLayerEnabled( F_Cu ) ? ( tertiaryDrill.end == B_Cu ? board->GetCopperLayerCount() - 1
+                                                                              : tertiaryDrill.end / 2 + 1 )
+                                                : tertiaryDrill.end / 2
+                : -1;
         int layerOrdinal = board->IsLayerEnabled( aLayer )
-                                   ? board->IsLayerEnabled( F_Cu ) ? ( aLayer == F_Cu ? 0 : aLayer == B_Cu ? board->GetCopperLayerCount() - 1 : aLayer / 2 + 1 )
-                                                                    : aLayer / 2
-                                   : -1;
+                ? board->IsLayerEnabled( F_Cu ) ? ( aLayer == F_Cu ? 0
+                                                                   : aLayer == B_Cu ? board->GetCopperLayerCount() - 1
+                                                                                    : aLayer / 2 + 1 )
+                                                : aLayer / 2
+                : -1;
 
         if( layerOrdinal >= 0 && startOrdinal >= 0 && endOrdinal >= 0 )
         {
@@ -926,8 +932,7 @@ int PAD::GetPostMachiningKnockout( PCB_LAYER_ID aLayer ) const
         int pmDepth = frontPM.depth;
 
         // For countersink without explicit depth, calculate from diameter and angle
-        if( pmDepth <= 0 && *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK
-                && frontPM.angle > 0 )
+        if( pmDepth <= 0 && *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && frontPM.angle > 0 )
         {
             double halfAngleRad = ( frontPM.angle / 10.0 ) * M_PI / 180.0 / 2.0;
             pmDepth = static_cast<int>( ( frontPM.size / 2.0 ) / tan( halfAngleRad ) );
@@ -965,8 +970,7 @@ int PAD::GetPostMachiningKnockout( PCB_LAYER_ID aLayer ) const
         int pmDepth = backPM.depth;
 
         // For countersink without explicit depth, calculate from diameter and angle
-        if( pmDepth <= 0 && *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK
-                && backPM.angle > 0 )
+        if( pmDepth <= 0 && *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && backPM.angle > 0 )
         {
             double halfAngleRad = ( backPM.angle / 10.0 ) * M_PI / 180.0 / 2.0;
             pmDepth = static_cast<int>( ( backPM.size / 2.0 ) / tan( halfAngleRad ) );
@@ -1191,8 +1195,7 @@ void PAD::SetChamferRectRatio( PCB_LAYER_ID aLayer, double aChamferScale )
 }
 
 
-const std::shared_ptr<SHAPE_POLY_SET>& PAD::GetEffectivePolygon( PCB_LAYER_ID aLayer,
-                                                                 ERROR_LOC aErrorLoc ) const
+const std::shared_ptr<SHAPE_POLY_SET>& PAD::GetEffectivePolygon( PCB_LAYER_ID aLayer, ERROR_LOC aErrorLoc ) const
 {
     if( m_polyDirty[ aErrorLoc ] )
         BuildEffectivePolygon( aErrorLoc );
@@ -1205,63 +1208,22 @@ const std::shared_ptr<SHAPE_POLY_SET>& PAD::GetEffectivePolygon( PCB_LAYER_ID aL
 }
 
 
-std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING flashPTHPads ) const
+std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash, DRC_CONSTRAINT_T aUsage ) const
 {
     if( aLayer == Edge_Cuts )
     {
-        std::shared_ptr<SHAPE_COMPOUND> effective_compund = std::make_shared<SHAPE_COMPOUND>();
+        std::shared_ptr<SHAPE_COMPOUND> effective_compound = std::make_shared<SHAPE_COMPOUND>();
 
         if( GetAttribute() == PAD_ATTRIB::PTH || GetAttribute() == PAD_ATTRIB::NPTH )
         {
-            effective_compund->AddShape( GetEffectiveHoleShape() );
-            return effective_compund;
+            effective_compound->AddShape( GetEffectiveHoleShape( aLayer, aUsage ) );
+            return effective_compound;
         }
         else
         {
-            effective_compund->AddShape( std::make_shared<SHAPE_NULL>() );
-            return effective_compund;
+            effective_compound->AddShape( std::make_shared<SHAPE_NULL>() );
+            return effective_compound;
         }
-    }
-
-    // Check if this layer has copper removed by backdrill or post-machining
-    if( IsBackdrilledOrPostMachined( aLayer ) )
-    {
-        std::shared_ptr<SHAPE_COMPOUND> effective_compound = std::make_shared<SHAPE_COMPOUND>();
-
-        // Return the larger of the backdrill or post-machining hole
-        int holeSize = 0;
-
-        const PADSTACK::POST_MACHINING_PROPS& frontPM = Padstack().FrontPostMachining();
-        const PADSTACK::POST_MACHINING_PROPS& backPM = Padstack().BackPostMachining();
-
-        if( frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
-            && frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
-        {
-            holeSize = std::max( holeSize, frontPM.size );
-        }
-
-        if( backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
-            && backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
-        {
-            holeSize = std::max( holeSize, backPM.size );
-        }
-
-        const PADSTACK::DRILL_PROPS& secDrill = Padstack().SecondaryDrill();
-
-        if( secDrill.start != UNDEFINED_LAYER && secDrill.end != UNDEFINED_LAYER )
-            holeSize = std::max( holeSize, secDrill.size.x );
-
-        if( holeSize > 0 )
-        {
-            effective_compound->AddShape(
-                    std::make_shared<SHAPE_CIRCLE>( GetPosition(), holeSize / 2 ) );
-        }
-        else
-        {
-            effective_compound->AddShape( GetEffectiveHoleShape() );
-        }
-
-        return effective_compound;
     }
 
     if( GetAttribute() == PAD_ATTRIB::PTH )
@@ -1269,9 +1231,9 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING fla
         bool flash;
         std::shared_ptr<SHAPE_COMPOUND> effective_compund = std::make_shared<SHAPE_COMPOUND>();
 
-        if( flashPTHPads == FLASHING::NEVER_FLASHED )
+        if( aFlash == FLASHING::NEVER_FLASHED )
             flash = false;
-        else if( flashPTHPads == FLASHING::ALWAYS_FLASHED )
+        else if( aFlash == FLASHING::ALWAYS_FLASHED )
             flash = true;
         else
             flash = FlashLayer( aLayer );
@@ -1280,7 +1242,7 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING fla
         {
             if( GetAttribute() == PAD_ATTRIB::PTH )
             {
-                effective_compund->AddShape( GetEffectiveHoleShape() );
+                effective_compund->AddShape( GetEffectiveHoleShape( aLayer, aUsage ) );
                 return effective_compund;
             }
             else
@@ -1294,25 +1256,48 @@ std::shared_ptr<SHAPE> PAD::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING fla
     if( m_shapesDirty )
         BuildEffectiveShapes();
 
-    aLayer = Padstack().EffectiveLayerFor( aLayer );
+    // In some cases we want to add in any backdrill or post-machining
+    if( ( aUsage == PHYSICAL_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) )
+            || ( aUsage == SILK_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) ) )
+    {
+        std::shared_ptr<SHAPE_COMPOUND> effective_compound = std::make_shared<SHAPE_COMPOUND>();
+        effective_compound->AddShape( m_drawCache->m_effectiveShapes.at( aLayer ) );
+        effective_compound->AddShape( GetEffectiveHoleShape( aLayer, aUsage ) );
+        return effective_compound;
+    }
+
+    PCB_LAYER_ID effectiveLayer = Padstack().EffectiveLayerFor( aLayer );
 
     const PAD_DRAW_CACHE_DATA& drawCache = getDrawCache();
 
-    wxCHECK_MSG( drawCache.m_effectiveShapes.contains( aLayer ), nullptr,
+    wxCHECK_MSG( drawCache.m_effectiveShapes.contains( effectiveLayer ), nullptr,
                  wxString::Format( wxT( "Missing shape in PAD::GetEffectiveShape for layer %s." ),
-                                   magic_enum::enum_name( aLayer ) ) );
-    wxCHECK_MSG( drawCache.m_effectiveShapes.at( aLayer ), nullptr,
+                                   magic_enum::enum_name( effectiveLayer ) ) );
+    wxCHECK_MSG( drawCache.m_effectiveShapes.at( effectiveLayer ), nullptr,
                  wxString::Format( wxT( "Null shape in PAD::GetEffectiveShape for layer %s." ),
-                                   magic_enum::enum_name( aLayer ) ) );
+                                   magic_enum::enum_name( effectiveLayer ) ) );
 
-    return drawCache.m_effectiveShapes.at( aLayer );
+    return drawCache.m_effectiveShapes.at( effectiveLayer );
 }
 
 
-std::shared_ptr<SHAPE_SEGMENT> PAD::GetEffectiveHoleShape() const
+std::shared_ptr<SHAPE_SEGMENT> PAD::GetEffectiveHoleShape( PCB_LAYER_ID aLayer, DRC_CONSTRAINT_T aUsage ) const
 {
     if( m_shapesDirty )
         BuildEffectiveShapes();
+
+    if( aUsage == HOLE_TO_HOLE_CONSTRAINT
+            || ( aUsage == HOLE_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) )
+            || ( aUsage == ANNULAR_WIDTH_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) )
+            || ( aUsage == PHYSICAL_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) )
+            || ( aUsage == SILK_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) ) )
+    {
+        int maxHoleSize = Padstack().GetMaxHoleSize();
+
+        // If it's bigger than the pad's hole, return it
+        if( maxHoleSize > getDrawCache().m_effectiveHoleShape->GetWidth() )
+            return std::make_shared<SHAPE_SEGMENT>( GetPosition(), GetPosition(), maxHoleSize );
+    }
 
     return getDrawCache().m_effectiveHoleShape;
 }
@@ -1378,7 +1363,14 @@ void PAD::BuildEffectiveShapes() const
 
     VECTOR2I pos = GetPosition();
     drawCache.m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( pos - half_len, pos + half_len, half_width * 2 );
+
     drawCache.m_effectiveBoundingBox.Merge( drawCache.m_effectiveHoleShape->BBox() );
+
+    if( m_padStack.Drill().shape == PAD_DRILL_SHAPE::CIRCLE )
+    {
+        int maxHole = m_padStack.GetMaxHoleSize();
+        drawCache.m_effectiveBoundingBox.Merge( BOX2I::ByCenter( pos, VECTOR2I( maxHole, maxHole ) ) );
+    }
 
     // All done
     m_shapesDirty = false;
@@ -2951,7 +2943,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
     // minimal segment count to approximate a circle to create the polygonal pad shape
     // This minimal value is mainly for very small pads, like SM0402.
     // Most of time pads are using the segment count given by aError value.
-    const int pad_min_seg_per_circle_count = 16;
+    const int      pad_min_seg_per_circle_count = 16;
     const VECTOR2I padSize = GetSize( aLayer );
     int            dx = padSize.x / 2;
     int            dy = padSize.y / 2;

@@ -148,6 +148,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
                 clearance += static_cast<PAD*>( aItem )->GetSolderMaskExpansion( layer );
             else if( aItem->Type() == PCB_VIA_T )
                 clearance += static_cast<PCB_VIA*>( aItem )->GetSolderMaskExpansion();
+            else if( aItem->Type() == PCB_TRACE_T )
+                clearance += static_cast<PCB_TRACK*>( aItem )->GetSolderMaskExpansion();
             else if( aItem->Type() == PCB_SHAPE_T )
                 clearance += static_cast<PCB_SHAPE*>( aItem )->GetSolderMaskExpansion();
 
@@ -162,7 +164,7 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
                 aItem->TransformShapeToPolygon( *solderMask, layer, clearance, m_maxError, ERROR_OUTSIDE );
             }
 
-            m_itemTree->Insert( aItem, layer, m_largestClearance );
+            m_itemTree->Insert( aItem, layer, NULL_CONSTRAINT, m_largestClearance );
         }
     }
 }
@@ -215,8 +217,8 @@ void DRC_TEST_PROVIDER_SOLDER_MASK::buildRTrees()
 
     solderMask->CacheTriangulation();
 
-    m_fullSolderMaskRTree->Insert( solderMask, F_Mask );
-    m_fullSolderMaskRTree->Insert( solderMask, B_Mask );
+    m_fullSolderMaskRTree->Insert( solderMask, F_Mask, NULL_CONSTRAINT );
+    m_fullSolderMaskRTree->Insert( solderMask, B_Mask, NULL_CONSTRAINT );
     m_fullSolderMaskRTree->Build();
 
     m_itemTree->Build();

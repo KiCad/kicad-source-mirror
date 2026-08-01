@@ -655,10 +655,13 @@ public:
      * @param aFlash optional parameter allowing a caller to force the pad to be flashed (or not
      *               flashed) on the current layer (default is to honour the pad's setting and
      *               the current connections for the given layer).
+    * @param aUsage optional parameter specifying the query type.  This can, for instance, allow
+     *              backdrilling, countersinking, etc. to affect the shape used for resolving the
+     *              physical_clearance.
      */
-    virtual std::shared_ptr<SHAPE>
-    GetEffectiveShape( PCB_LAYER_ID aLayer,
-                       FLASHING flashPTHPads = FLASHING::DEFAULT ) const override;
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                                              FLASHING aFlash = FLASHING::DEFAULT,
+                                              DRC_CONSTRAINT_T aUsage = NULL_CONSTRAINT ) const override;
 
     const std::shared_ptr<SHAPE_POLY_SET>& GetEffectivePolygon( PCB_LAYER_ID aLayer,
                                                                 ERROR_LOC aErrorLoc = ERROR_INSIDE ) const;
@@ -666,7 +669,8 @@ public:
     /**
      * Return a SHAPE_SEGMENT object representing the pad's hole.
      */
-    std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const override;
+    std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                                                          DRC_CONSTRAINT_T aUsage = NULL_CONSTRAINT ) const override;
 
     /**
      * Return the radius of a minimum sized circle which fully encloses this pad.

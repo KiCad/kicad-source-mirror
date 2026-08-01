@@ -144,8 +144,7 @@ const BOX2I PCB_REFERENCE_IMAGE::GetBoundingBox() const
 }
 
 
-std::shared_ptr<SHAPE> PCB_REFERENCE_IMAGE::GetEffectiveShape( PCB_LAYER_ID aLayer,
-                                                               FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_REFERENCE_IMAGE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING, DRC_CONSTRAINT_T ) const
 {
     const BOX2I box = GetBoundingBox();
     return std::make_shared<SHAPE_RECT>( box.GetPosition(), box.GetWidth(), box.GetHeight() );

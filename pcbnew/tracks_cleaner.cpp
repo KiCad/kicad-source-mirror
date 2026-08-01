@@ -383,7 +383,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
     for( PCB_TRACK* track : m_brd->Tracks() )
     {
         track->ClearFlags( IS_DELETED | SKIP_STRUCT );
-        rtree.Insert( track, track->GetLayer() );
+        rtree.Insert( track, track->GetLayer(), NULL_CONSTRAINT );
     }
 
     rtree.Build();

@@ -613,7 +613,7 @@ void PCB_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, con
 }
 
 
-std::shared_ptr<SHAPE> PCB_TABLE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_TABLE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING, DRC_CONSTRAINT_T ) const
 {
     EDA_ANGLE             angle = GetCell( 0, 0 )->GetDrawRotation();
     std::vector<VECTOR2I> topLeft = GetCell( 0, 0 )->GetCornersInSequence( angle );

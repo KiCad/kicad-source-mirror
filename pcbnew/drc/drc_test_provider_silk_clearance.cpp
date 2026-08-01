@@ -124,7 +124,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
                 {
                     if( item->IsOnLayer( layer ) )
-                        silkTree.Insert( item, layer, 0, ATOMIC_TABLES );
+                        silkTree.Insert( item, layer, SILK_CLEARANCE_CONSTRAINT, 0, ATOMIC_TABLES );
                 }
 
                 return true;
@@ -140,7 +140,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                     return true;
 
                 for( PCB_LAYER_ID layer : LSET( item->GetLayerSet() & targetLayers ) )
-                    targetTree.Insert( item, layer, 0, ATOMIC_TABLES );
+                    targetTree.Insert( item, layer, SILK_CLEARANCE_CONSTRAINT, 0, ATOMIC_TABLES );
 
                 return true;
             };

@@ -106,7 +106,7 @@ void TEARDROP_MANAGER::BuildTrackCaches()
     {
         if( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T )
         {
-            m_tracksRTree.Insert( track, track->GetLayer() );
+            m_tracksRTree.Insert( track, track->GetLayer(), CLEARANCE_CONSTRAINT );
             m_trackLookupList.AddTrack( track, track->GetLayer(), track->GetNetCode() );
         }
     }

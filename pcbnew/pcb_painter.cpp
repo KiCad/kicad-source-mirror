@@ -1791,12 +1791,6 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         // Drawing components of compound shapes in outline mode produces a mess.
         bool simpleShapes = !outline_mode;
 
-        // When this layer has post-machining (counterbore/countersink), GetEffectiveShape returns
-        // the counterbore hole circle (for DRC purposes), not the actual copper shape.  Force the
-        // slower TransformShapeToPolygon path which always returns the correct copper shape.
-        if( IsCopperLayer( pcbLayer ) && aPad->GetPostMachiningKnockout( pcbLayer ) > 0 )
-            simpleShapes = false;
-
         if( simpleShapes )
         {
             if( ( margin.x != margin.y && aPad->GetShape( pcbLayer ) != PAD_SHAPE::CUSTOM )
@@ -3590,7 +3584,7 @@ void PCB_PAINTER::drawBackdrillIndicator( const BOARD_ITEM* aItem, const VECTOR2
                                           int aDrillSize, PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer )
 {
     double backdrillRadius = aDrillSize / 2.0;
-    double lineWidth = std::max( backdrillRadius / 8.0, m_pcbSettings.m_outlineWidth * 2.0 );
+    double lineWidth = std::max( backdrillRadius / 16.0, m_pcbSettings.m_outlineWidth * 2.0 );
 
     // Inset so entire graphic is within backdrill extent
     backdrillRadius -= lineWidth / 2;
@@ -3632,7 +3626,7 @@ void PCB_PAINTER::drawPostMachiningIndicator( const BOARD_ITEM* aItem, const VEC
 
     double pmRadius = size / 2.0;
     // Use a line width proportional to the radius for visibility
-    double lineWidth = std::max( pmRadius / 8.0, m_pcbSettings.m_outlineWidth * 2.0 );
+    double lineWidth = std::max( pmRadius / 16.0, m_pcbSettings.m_outlineWidth * 2.0 );
 
     // Inset so entire graphic is within post machining extent
     pmRadius -= lineWidth / 2;

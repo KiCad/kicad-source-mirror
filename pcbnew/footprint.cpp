@@ -3826,7 +3826,8 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 }
 
 
-std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash,
+                                                     DRC_CONSTRAINT_T aUsage ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
 
@@ -3849,14 +3850,14 @@ std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
     else
     {
         for( PAD* pad : Pads() )
-            shape->AddShape( pad->GetEffectiveShape( aLayer, aFlash )->Clone() );
+            shape->AddShape( pad->GetEffectiveShape( aLayer, aFlash, aUsage )->Clone() );
 
         for( BOARD_ITEM* item : GraphicalItems() )
         {
             if( item->Type() == PCB_SHAPE_T )
-                shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
+                shape->AddShape( item->GetEffectiveShape( aLayer, aFlash, aUsage )->Clone() );
             else if( item->Type() == PCB_BARCODE_T )
-                shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
+                shape->AddShape( item->GetEffectiveShape( aLayer, aFlash, aUsage )->Clone() );
         }
     }
 
@@ -4195,8 +4196,7 @@ void FOOTPRINT::CheckPads( UNITS_PROVIDER* aUnitsProvider,
 }
 
 
-void FOOTPRINT::CheckShortingPads( const std::function<void( const PAD*, const PAD*,
-                                                             int aErrorCode,
+void FOOTPRINT::CheckShortingPads( const std::function<void( const PAD*, const PAD*, int aErrorCode,
                                                              const VECTOR2I& )>& aErrorHandler )
 {
     std::unordered_map<PTR_PTR_CACHE_KEY, int> checkedPairs;
@@ -4231,8 +4231,10 @@ void FOOTPRINT::CheckShortingPads( const std::function<void( const PAD*, const P
                     }
                     else
                     {
-                        std::shared_ptr<SHAPE_SEGMENT> holeA = pad->GetEffectiveHoleShape();
-                        std::shared_ptr<SHAPE_SEGMENT> holeB = other->GetEffectiveHoleShape();
+                        std::shared_ptr<SHAPE_SEGMENT> holeA = pad->GetEffectiveHoleShape( UNDEFINED_LAYER,
+                                                                                           HOLE_TO_HOLE_CONSTRAINT );
+                        std::shared_ptr<SHAPE_SEGMENT> holeB = other->GetEffectiveHoleShape( UNDEFINED_LAYER,
+                                                                                             HOLE_TO_HOLE_CONSTRAINT );
 
                         if( holeA->Collide( holeB->GetSeg(), 0 ) )
                             aErrorHandler( pad, other, DRCE_DRILLED_HOLES_TOO_CLOSE, pos );

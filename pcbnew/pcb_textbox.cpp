@@ -807,12 +807,13 @@ void PCB_TEXTBOX::swapData( BOARD_ITEM* aImage )
 }
 
 
-std::shared_ptr<SHAPE> PCB_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash,
+                                                       DRC_CONSTRAINT_T aUsage ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = GetEffectiveTextShape();
 
     if( PCB_SHAPE::GetStroke().GetWidth() >= 0 )
-        shape->AddShape( PCB_SHAPE::GetEffectiveShape( aLayer, aFlash ) );
+        shape->AddShape( PCB_SHAPE::GetEffectiveShape( aLayer, aFlash, aUsage ) );
 
     return shape;
 }

@@ -201,7 +201,7 @@ const BOX2I PCB_POINT::GetBoundingBox() const
 }
 
 
-std::shared_ptr<SHAPE> PCB_POINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_POINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING, DRC_CONSTRAINT_T ) const
 {
     return std::make_shared<SHAPE_RECT>( GetBoundingBox() );
 }

@@ -60,25 +60,6 @@ private:
 };
 
 
-static std::shared_ptr<SHAPE_SEGMENT> getHoleShape( BOARD_ITEM* aItem )
-{
-    if( aItem->Type() == PCB_VIA_T )
-    {
-        PCB_VIA* via = static_cast<PCB_VIA*>( aItem );
-        return std::make_shared<SHAPE_SEGMENT>( via->GetCenter(), via->GetCenter(),
-                                                via->GetDrillValue() );
-    }
-    else if( aItem->Type() == PCB_PAD_T )
-    {
-        // Round drills come back as a zero-length segment; oval (slotted) holes carry the
-        // slot axis, so the same shape models both round holes and milled slots exactly.
-        return static_cast<PAD*>( aItem )->GetEffectiveHoleShape();
-    }
-
-    return std::make_shared<SHAPE_SEGMENT>( VECTOR2I( 0, 0 ), VECTOR2I( 0, 0 ), 0 );
-}
-
-
 bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
 {
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE )
@@ -133,13 +114,13 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
                     // Index every drilled or milled hole, including oval (slotted) holes.  A
                     // slot too close to another hole or slot is still a manufacturing defect.
                     if( pad->HasHole() )
-                        m_holeTree.Insert( item, Edge_Cuts, m_largestHoleToHoleClearance );
+                        m_holeTree.Insert( item, Edge_Cuts, HOLE_CLEARANCE_CONSTRAINT, m_largestHoleToHoleClearance );
                 }
                 else if( item->Type() == PCB_VIA_T )
                 {
                     // Blind/buried/microvias will be drilled/burned _prior_ to lamination, so
                     // subsequently drilled holes need to avoid them.
-                    m_holeTree.Insert( item, Edge_Cuts, m_largestHoleToHoleClearance );
+                    m_holeTree.Insert( item, Edge_Cuts, HOLE_CLEARANCE_CONSTRAINT, m_largestHoleToHoleClearance );
                 }
 
                 return true;
@@ -164,7 +145,8 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
         // holes (which are generally drilled post laminataion).
         if( via->GetViaType() != VIATYPE::MICROVIA )
         {
-            std::shared_ptr<SHAPE_SEGMENT> holeShape = getHoleShape( via );
+            std::shared_ptr<SHAPE_SEGMENT> holeShape = via->GetEffectiveHoleShape( UNDEFINED_LAYER,
+                                                                                   HOLE_TO_HOLE_CONSTRAINT );
 
             m_holeTree.QueryColliding( via, Edge_Cuts, Edge_Cuts,
                     // Filter:
@@ -210,7 +192,8 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::Run()
             // Test every drilled or milled hole, including oval (slotted) holes
             if( pad->HasHole() )
             {
-                std::shared_ptr<SHAPE_SEGMENT> holeShape = getHoleShape( pad );
+                std::shared_ptr<SHAPE_SEGMENT> holeShape = pad->GetEffectiveHoleShape( UNDEFINED_LAYER,
+                                                                                       HOLE_TO_HOLE_CONSTRAINT );
 
                 m_holeTree.QueryColliding( pad, Edge_Cuts, Edge_Cuts,
                         // Filter:
@@ -260,7 +243,8 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
     if( !reportCoLocation && !reportHole2Hole )
         return false;
 
-    std::shared_ptr<SHAPE_SEGMENT> otherHole = getHoleShape( aOther );
+    std::shared_ptr<SHAPE_SEGMENT> otherHole = aOther->GetEffectiveHoleShape( UNDEFINED_LAYER,
+                                                                              HOLE_TO_HOLE_CONSTRAINT );
     int                            epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
     SEG::ecoord                    epsilon_sq = SEG::Square( epsilon );
 

@@ -213,7 +213,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
             if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
                 testClearance = testShorting = false;
 
-            otherShape_shared_ptr = pad->GetEffectiveHoleShape();
+            otherShape_shared_ptr = pad->GetEffectiveHoleShape( layer, HOLE_CLEARANCE_CONSTRAINT );
         }
     }
     else if( other->Type() == PCB_VIA_T )
@@ -221,7 +221,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
         PCB_VIA* via = static_cast<PCB_VIA*>( other );
 
         if( !via->FlashLayer( layer ) )
-            otherShape_shared_ptr = via->GetEffectiveHoleShape();
+            otherShape_shared_ptr = via->GetEffectiveHoleShape( layer, HOLE_CLEARANCE_CONSTRAINT );
     }
 
     if( !otherShape_shared_ptr )
@@ -318,14 +318,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testSingleLayerItemAgainstItem( BOARD_I
             if( b[ii]->Type() == PCB_VIA_T )
             {
                 if( b[ii]->GetLayerSet().Contains( layer ) )
-                    holeShape = b[ii]->GetEffectiveHoleShape();
+                    holeShape = b[ii]->GetEffectiveHoleShape( layer, HOLE_CLEARANCE_CONSTRAINT );
                 else
                     continue;
             }
             else
             {
                 if( b[ii]->HasHole() )
-                    holeShape = b[ii]->GetEffectiveHoleShape();
+                    holeShape = b[ii]->GetEffectiveHoleShape( layer, HOLE_CLEARANCE_CONSTRAINT );
                 else
                     continue;
             }
@@ -476,11 +476,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
         if( aItem->Type() == PCB_VIA_T )
         {
             if( aItem->GetLayerSet().Contains( aLayer ) )
-                holeShape = aItem->GetEffectiveHoleShape();
+                holeShape = aItem->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT );
         }
         else
         {
-            holeShape = aItem->GetEffectiveHoleShape();
+            holeShape = aItem->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT );
         }
 
         if( holeShape )
@@ -889,7 +889,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         clearance = constraint.GetValue().Min();
 
         if( clearance > 0 )
-            doTestHole( pad, padShape, otherPad, otherPad->GetEffectiveHoleShape().get(), clearance );
+        {
+            SHAPE_SEGMENT* otherHole = otherPad->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT ).get();
+            doTestHole( pad, padShape, otherPad, otherHole, clearance );
+        }
     }
 
     // Pad pairs are deduplicated by UUID order in testPadClearances.
@@ -899,7 +902,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         clearance = constraint.GetValue().Min();
 
         if( clearance > 0 )
-            doTestHole( otherPad, otherShape.get(), pad, pad->GetEffectiveHoleShape().get(), clearance );
+        {
+            SHAPE_SEGMENT* hole = pad->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT ).get();
+            doTestHole( otherPad, otherShape.get(), pad, hole, clearance );
+        }
     }
 
     if( testHoles && otherVia && otherVia->HasHole() )
@@ -910,7 +916,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             clearance = 0;
 
         if( clearance > 0 )
-            doTestHole( pad, padShape, otherVia, otherVia->GetEffectiveHoleShape().get(), clearance );
+        {
+            SHAPE_SEGMENT* viaHole = otherVia->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT ).get();
+            doTestHole( pad, padShape, otherVia, viaHole, clearance );
+        }
     }
 
     return !has_error;

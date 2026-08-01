@@ -1629,7 +1629,7 @@ const BOX2I PCB_SHAPE::ViewBBox() const
 }
 
 
-std::shared_ptr<SHAPE> PCB_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING, DRC_CONSTRAINT_T ) const
 {
     return std::make_shared<SHAPE_COMPOUND>( MakeEffectiveShapes() );
 }

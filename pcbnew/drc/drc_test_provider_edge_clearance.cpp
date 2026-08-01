@@ -384,7 +384,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
         for( PCB_LAYER_ID layer : { Edge_Cuts, Margin } )
         {
             if( edge->IsOnLayer( layer ) )
-                m_edgesTree.Insert( edge.get(), layer, m_largestEdgeClearance );
+                m_edgesTree.Insert( edge.get(), layer, EDGE_CLEARANCE_CONSTRAINT, m_largestEdgeClearance );
         }
     }
 

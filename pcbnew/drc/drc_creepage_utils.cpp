@@ -104,6 +104,8 @@ void BuildCreepageBoardEdges( BOARD& aBoard, std::vector<BOARD_ITEM*>& aVector,
         if( excluded( p ) )
             continue;
 
+        // TODO: handle backdrilling and post-machining
+
         std::shared_ptr<SHAPE_SEGMENT> hole = p->GetEffectiveHoleShape();
 
         if( !hole )

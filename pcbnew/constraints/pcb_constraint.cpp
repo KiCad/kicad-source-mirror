@@ -459,7 +459,7 @@ BITMAPS PCB_CONSTRAINT::GetMenuImage() const
 }
 
 
-std::shared_ptr<SHAPE> PCB_CONSTRAINT::GetEffectiveShape( PCB_LAYER_ID, FLASHING ) const
+std::shared_ptr<SHAPE> PCB_CONSTRAINT::GetEffectiveShape( PCB_LAYER_ID, FLASHING, DRC_CONSTRAINT_T ) const
 {
     return std::make_shared<SHAPE_COMPOUND>();
 }

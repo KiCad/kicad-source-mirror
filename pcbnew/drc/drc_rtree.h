@@ -88,9 +88,10 @@ public:
      * Insert an item into the tree on a particular layer with an optional worst clearance.
      * Items are staged into per-layer builders; call Build() to finalize.
      */
-    void Insert( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aWorstClearance = 0, bool aAtomicTables = false )
+    void Insert( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, DRC_CONSTRAINT_T aConstraintType,
+                 int aWorstClearance = 0, bool aAtomicTables = false )
     {
-        Insert( aItem, aLayer, aLayer, aWorstClearance, aAtomicTables );
+        Insert( aItem, aLayer, aLayer, aConstraintType, aWorstClearance, aAtomicTables );
     }
 
     /**
@@ -98,11 +99,10 @@ public:
      * source layer to be different from the tree layer.
      */
     void Insert( BOARD_ITEM* aItem, PCB_LAYER_ID aRefLayer, PCB_LAYER_ID aTargetLayer,
-                 int aWorstClearance, bool aAtomicTables = false )
+                 DRC_CONSTRAINT_T aConstraintType, int aWorstClearance, bool aAtomicTables = false )
     {
         wxCHECK( aTargetLayer != UNDEFINED_LAYER, /* void */ );
-        wxCHECK_MSG( !m_tree.count( aTargetLayer ), /* void */,
-                     wxT( "Insert after Build() is silently wrong" ) );
+        wxCHECK_MSG( !m_tree.count( aTargetLayer ), /* void */, wxT( "Insert after Build() is silently wrong" ) );
 
         if( aItem->Type() == PCB_FIELD_T && !static_cast<PCB_FIELD*>( aItem )->IsVisible() )
             return;
@@ -113,7 +113,7 @@ public:
             parent = aItem->GetParent();
 
         std::vector<const SHAPE*> subshapes;
-        std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( aRefLayer );
+        std::shared_ptr<SHAPE> shape = aItem->GetEffectiveShape( aRefLayer, FLASHING::DEFAULT, aConstraintType );
 
         wxCHECK2_MSG( shape, return, wxT( "Item does not have a valid shape for this layer" ) );
 

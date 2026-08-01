@@ -33,6 +33,7 @@
 #include <stroke_params.h>
 #include <geometry/eda_angle.h>
 #include "macros.h"
+#include "drc/drc_rule.h"
 
 class BOARD;
 class BOARD_DESIGN_SETTINGS;
@@ -219,11 +220,16 @@ public:
      * @param aFlash optional parameter allowing a caller to force the pad to be flashed (or not
      *               flashed) on the current layer (default is to honour the pad's setting and
      *               the current connections for the given layer).
+     * @param aUsage optional parameter specifying the query type.  This can, for instance, allow
+     *               backdrilling, countersinking, etc. to affect the shape used for resolving the
+     *               physical_clearance.
      */
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
-                                                      FLASHING aFlash = FLASHING::DEFAULT ) const;
+                                                      FLASHING aFlash = FLASHING::DEFAULT,
+                                                      DRC_CONSTRAINT_T aUsage = NULL_CONSTRAINT ) const;
 
-    virtual std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape() const;
+    virtual std::shared_ptr<SHAPE_SEGMENT> GetEffectiveHoleShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+                                                                  DRC_CONSTRAINT_T aUsage = NULL_CONSTRAINT ) const;
 
     /**
      * Invoke a function on all children.

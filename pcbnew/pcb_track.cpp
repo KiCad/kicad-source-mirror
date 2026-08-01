@@ -978,15 +978,7 @@ const BOX2I PCB_TRACK::GetBoundingBox() const
     int radius = ( m_width + 1 ) / 2;
     int ymax, xmax, ymin, xmin;
 
-    if( Type() == PCB_VIA_T )
-    {
-        ymax = m_Start.y;
-        xmax = m_Start.x;
-
-        ymin = m_Start.y;
-        xmin = m_Start.x;
-    }
-    else if( Type() == PCB_ARC_T )
+    if( Type() == PCB_ARC_T )
     {
         std::shared_ptr<SHAPE> arc = GetEffectiveShape();
         BOX2I bbox = arc->BBox();
@@ -1019,16 +1011,18 @@ const BOX2I PCB_TRACK::GetBoundingBox() const
 
 const BOX2I PCB_VIA::GetBoundingBox() const
 {
-    int radius = 0;
+    int diameter = 0;
 
     Padstack().ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
             {
-                radius = std::max( radius, GetWidth( aLayer ) );
+                diameter = std::max( diameter, GetWidth( aLayer ) );
             } );
 
+    diameter = std::max( diameter, Padstack().GetMaxHoleSize() );
+
     // via is round, this is its radius, rounded up
-    radius = ( radius + 1 ) / 2;
+    int radius = ( diameter + 1 ) / 2;
 
     int ymax = m_Start.y + radius;
     int xmax = m_Start.x + radius;
@@ -1044,10 +1038,13 @@ const BOX2I PCB_VIA::GetBoundingBox() const
 
 const BOX2I PCB_VIA::GetBoundingBox( PCB_LAYER_ID aLayer ) const
 {
-    int radius = GetWidth( aLayer );
+    int diameter = GetWidth( aLayer );
+
+    if( IsBackdrilledOrPostMachined( aLayer ) )
+        diameter = std::max( diameter, Padstack().GetMaxHoleSize() );
 
     // via is round, this is its radius, rounded up
-    radius = ( radius + 1 ) / 2;
+    int radius = ( diameter + 1 ) / 2;
 
     int ymax = m_Start.y + radius;
     int xmax = m_Start.x + radius;
@@ -1202,9 +1199,21 @@ INSPECT_RESULT PCB_TRACK::Visit( INSPECTOR inspector, void* testData, const std:
 }
 
 
-std::shared_ptr<SHAPE_SEGMENT> PCB_VIA::GetEffectiveHoleShape() const
+std::shared_ptr<SHAPE_SEGMENT> PCB_VIA::GetEffectiveHoleShape( PCB_LAYER_ID aLayer, DRC_CONSTRAINT_T aUsage ) const
 {
-    return std::make_shared<SHAPE_SEGMENT>( SEG( m_Start, m_Start ), Padstack().Drill().size.x );
+    int holeSize = Padstack().Drill().size.x;
+
+    // See if we want to include a larger backdrill or post-machining hole
+    if( aUsage == HOLE_TO_HOLE_CONSTRAINT
+            || ( aUsage == HOLE_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) )
+            || ( aUsage == ANNULAR_WIDTH_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) )
+            || ( aUsage == PHYSICAL_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) )
+            || ( aUsage == SILK_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) ) )
+    {
+        holeSize = std::max( holeSize, Padstack().GetMaxHoleSize() );
+    }
+
+    return std::make_shared<SHAPE_SEGMENT>( SEG( m_Start, m_Start ), holeSize );
 }
 
 // clang-format off: the suggestion is slightly less readable
@@ -2740,7 +2749,7 @@ bool PCB_TRACK::cmp_tracks::operator() ( const PCB_TRACK* a, const PCB_TRACK* b 
 }
 
 
-std::shared_ptr<SHAPE> PCB_TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING, DRC_CONSTRAINT_T ) const
 {
     int width = m_width;
 
@@ -2751,71 +2760,44 @@ std::shared_ptr<SHAPE> PCB_TRACK::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 }
 
 
-std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_VIA::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash,
+                                                   DRC_CONSTRAINT_T aUsage ) const
 {
-    // Check if this layer has copper removed by backdrill or post-machining
-    if( aLayer != UNDEFINED_LAYER && IsBackdrilledOrPostMachined( aLayer ) )
+    int diameter = 0;
+
+    if( aFlash == FLASHING::ALWAYS_FLASHED || ( aFlash == FLASHING::DEFAULT && FlashLayer( aLayer ) ) )
     {
-        // Return the larger of the backdrill or post-machining hole
-        int holeSize = 0;
-
-        const PADSTACK::POST_MACHINING_PROPS& frontPM = Padstack().FrontPostMachining();
-        const PADSTACK::POST_MACHINING_PROPS& backPM = Padstack().BackPostMachining();
-
-        if( frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
-            && frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
-        {
-            holeSize = std::max( holeSize, frontPM.size );
-        }
-
-        if( backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
-            && backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
-        {
-            holeSize = std::max( holeSize, backPM.size );
-        }
-
-        const PADSTACK::DRILL_PROPS& secDrill = Padstack().SecondaryDrill();
-
-        if( secDrill.start != UNDEFINED_LAYER && secDrill.end != UNDEFINED_LAYER )
-            holeSize = std::max( holeSize, secDrill.size.x );
-
-        if( holeSize > 0 )
-            return std::make_shared<SHAPE_CIRCLE>( m_Start, holeSize / 2 );
-        else
-            return std::make_shared<SHAPE_CIRCLE>( m_Start, GetDrillValue() / 2 );
-    }
-
-    if( aFlash == FLASHING::ALWAYS_FLASHED
-            || ( aFlash == FLASHING::DEFAULT && FlashLayer( aLayer ) ) )
-    {
-        int width = 0;
-
         if( aLayer == UNDEFINED_LAYER )
         {
             Padstack().ForEachUniqueLayer(
-                [&]( PCB_LAYER_ID layer )
-                {
-                    width = std::max( width, GetWidth( layer ) );
-                } );
-
-            width /= 2;
+                    [&]( PCB_LAYER_ID layer )
+                    {
+                        diameter = std::max( diameter, GetWidth( layer ) );
+                    } );
         }
         else
         {
             PCB_LAYER_ID cuLayer = m_padStack.EffectiveLayerFor( aLayer );
-            width = GetWidth( cuLayer ) / 2;
+            diameter = GetWidth( cuLayer );
         }
-
-        return std::make_shared<SHAPE_CIRCLE>( m_Start, width );
     }
     else
     {
-        return std::make_shared<SHAPE_CIRCLE>( m_Start, GetDrillValue() / 2 );
+        diameter = GetDrillValue();
     }
+
+    // In some cases we want to add in any backdrill or post-machining
+    if( ( aUsage == PHYSICAL_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) )
+            || ( aUsage == SILK_CLEARANCE_CONSTRAINT && IsBackdrilledOrPostMachined( aLayer ) ) )
+    {
+        diameter = std::max( diameter, Padstack().GetMaxHoleSize() );
+    }
+
+    return std::make_shared<SHAPE_CIRCLE>( m_Start, diameter / 2 );
 }
 
 
-std::shared_ptr<SHAPE> PCB_ARC::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_ARC::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING, DRC_CONSTRAINT_T ) const
 {
     int width = GetWidth();
 
@@ -2831,12 +2813,10 @@ std::shared_ptr<SHAPE> PCB_ARC::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING
 }
 
 
-void PCB_TRACK::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
-                                         int aClearance, int aError, ERROR_LOC aErrorLoc,
-                                         bool ignoreLineWidth ) const
+void PCB_TRACK::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
+                                         int aError, ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, wxT( "IgnoreLineWidth has no meaning for tracks." ) );
-
 
     switch( Type() )
     {
@@ -2855,8 +2835,7 @@ void PCB_TRACK::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID a
         if( IsSolderMaskLayer( aLayer ) )
             width += 2 * GetSolderMaskExpansion();
 
-        TransformArcToPolygon( aBuffer, arc->GetStart(), arc->GetMid(), arc->GetEnd(), width,
-                               aError, aErrorLoc );
+        TransformArcToPolygon( aBuffer, arc->GetStart(), arc->GetMid(), arc->GetEnd(), width, aError, aErrorLoc );
         break;
     }
 

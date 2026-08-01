@@ -363,6 +363,8 @@ public:
     POST_MACHINING_PROPS& BackPostMachining() { return m_backPostMachining; }
     const POST_MACHINING_PROPS& BackPostMachining() const { return m_backPostMachining; }
 
+    int GetMaxHoleSize() const;
+
     UNCONNECTED_LAYER_MODE UnconnectedLayerMode() const { return m_unconnectedLayerMode; }
     void SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE aMode ) { m_unconnectedLayerMode = aMode; }
 

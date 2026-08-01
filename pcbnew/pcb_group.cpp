@@ -331,12 +331,13 @@ const BOX2I PCB_GROUP::GetBoundingBox() const
 }
 
 
-std::shared_ptr<SHAPE> PCB_GROUP::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_GROUP::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash,
+                                                     DRC_CONSTRAINT_T aUsage ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
 
     for( BOARD_ITEM* item : GetBoardItems() )
-        shape->AddShape( item->GetEffectiveShape( aLayer, aFlash )->Clone() );
+        shape->AddShape( item->GetEffectiveShape( aLayer, aFlash, aUsage )->Clone() );
 
     return shape;
 }
