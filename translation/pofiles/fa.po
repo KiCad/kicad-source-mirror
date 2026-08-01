@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-08-01 16:45+0000\n"
+"PO-Revision-Date: 2026-08-01 18:15+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/master-"
 "source/fa/>\n"
@@ -4964,14 +4964,28 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
+"KiCad می تواند به طور ناشناس گزارش های خرابی و داده های رویداد های خاص را "
+"برای توسعه دهندگان ارسال کند تا به شناسایی مؤثرتر باگ های حیاتی در بین "
+"کاربران کمک کرده و به مشخصات عملکرد برای هدایت بهبود ها یاری رساند.\n"
+"\n"
+"برای مرتبط کردن گزارش های خودکار از همان نصب KiCad، یک شناسه منحصر به فرد "
+"تولید می شود که کاملاً تصادفی است و فقط برای اهداف گزارش دهی خرابی استفاده می "
+"شود. هیچ اطلاعات شخصی قابل شناسایی (PII) از جمله آدرس IP ذخیره یا به این "
+"شناسه متصل نمی شود. شما می توانید این شناسه را در هر زمان در صفحه تنظیمات "
+"برای جمع آوری داده بازنشانی کنید.\n"
+"\n"
+"اگر داوطلبانه شرکت کنید، KiCad به طور خودکار ارسال گزارش های مذکور را هنگامی "
+"که خرابی ها یا رویداد ها رخ می دهند، مدیریت می کند. فایل های طراحی شما مانند "
+"شماتیک (Schematic) یا مدارچاپی (PCB) هرگز در این فرآیند به اشتراک گذاشته نمی "
+"شوند."
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "ارسال گزارش های ناشناس را می پذیرم"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
 msgid "Reset Unique Id"
-msgstr ""
+msgstr "بازنشانی شناسه ID منحصر به فرد"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:175
 msgid "Design Block Library Tables"
@@ -4985,25 +4999,25 @@ msgstr "جدول های کتابخانه بلوک طراحی"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:115
 #, c-format
 msgid " (%s)|%s"
-msgstr ""
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:392
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:330
 msgid "Global Libraries"
-msgstr ""
+msgstr "کتابخانه های عمومی (Global Libraries)"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:398
 #: eeschema/dialogs/panel_sym_lib_table.cpp:366
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:336
 msgid "Project Specific Libraries"
-msgstr ""
+msgstr "کتابخانه های مخصوص پروژه"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:441
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:376
 #, c-format
 msgid "folder with %s files"
-msgstr ""
+msgstr "پوشه حاوی فایل های %s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:641
 #: eeschema/dialogs/panel_sym_lib_table.cpp:835
@@ -5011,18 +5025,22 @@ msgstr ""
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
+"یک یا چند ردیف حاوی کتابخانه ها را برای ذخیره به عنوان فرمت فعلی KiCad "
+"انتخاب کنید."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:648
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:566
 #, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
-msgstr ""
+msgstr "این '%s' به عنوان فرمت فعلی KiCad ذخیره شود و ورودی جدول جایگزین گردد؟"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:653
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:571
 #, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
+"این %d کتابخانه به عنوان فرمت فعلی KiCad ذخیره شوند و ورودی های جدول جایگزین "
+"گردند؟"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:669
 #: eeschema/dialogs/dialog_symbol_remap.cpp:230
@@ -5031,31 +5049,33 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:587
 #, c-format
 msgid "Library '%s' not found."
-msgstr ""
+msgstr "کتابخانه '%s' پیدا نشد."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:681
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
 msgstr ""
+"پوشه '%s' از قبل وجود دارد. آیا می‌خواهید بلوک های طراحی موجود را بازنویسی "
+"کنید؟"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:684
 #: eeschema/dialogs/panel_sym_lib_table.cpp:875
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:602
 msgid "Migrate Library"
-msgstr ""
+msgstr "مهاجرت کتابخانه"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:704
 #, c-format
 msgid "Failed to save design block library file '%s'."
-msgstr ""
+msgstr "ذخیره فایل کتابخانه بلوک طراحی '%s' انجام نشد."
 
 #: common/dialogs/panel_design_block_lib_table.cpp:736
 #: eeschema/dialogs/panel_sym_lib_table.cpp:588
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:669
 #, c-format
 msgid "Select %s Library"
-msgstr ""
+msgstr "انتخاب کتابخانه %s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:785
 #: eeschema/dialogs/panel_sym_lib_table.cpp:630
@@ -5131,13 +5151,13 @@ msgstr ""
 
 #: common/dialogs/panel_design_block_lib_table.cpp:976
 msgid "Design Block Libraries"
-msgstr ""
+msgstr "کتابخانه های بلوک طراحی"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:28
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:28
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:28
 msgid "Add empty row to table"
-msgstr ""
+msgstr "افزودن ردیف خالی به جدول"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:32
 #: common/dialogs/panel_design_block_lib_table_base.cpp:33
@@ -5147,33 +5167,33 @@ msgstr ""
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:32
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:33
 msgid "Add Existing"
-msgstr ""
+msgstr "افزودن از موجود"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:51
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:51
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:51
 msgid "Remove library from table"
-msgstr ""
+msgstr "حذف کتابخانه از جدول"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:58
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:64
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:64
 msgid "Migrate Libraries"
-msgstr ""
+msgstr "مهاجرت کتابخانه ها"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:65
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:72
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:74
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:71
 msgid "Available path substitutions:"
-msgstr ""
+msgstr "جایگزین های مسیر در دسترس:"
 
 #: common/dialogs/panel_design_block_lib_table_base.cpp:99
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:108
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:126
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:105
 msgid "This is a read-only table which shows pertinent environment variables."
-msgstr ""
+msgstr "این یک جدول فقط خواندنی است که متغیرهای محیطی مرتبط را نشان می دهد."
 
 #: common/dialogs/panel_embedded_files.cpp:54
 msgid "Copy Embedded Reference"
