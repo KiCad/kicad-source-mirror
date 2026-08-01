@@ -2397,7 +2397,7 @@
                             <property name="center_pane">0</property>
                             <property name="class">PCB_DRAW_PANEL_GAL</property>
                             <property name="close_button">1</property>
-                            <property name="construction">m_panelShowBarcodeGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, m_galOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO);</property>
+                            <property name="construction">m_panelShowBarcodeGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, m_galOptions, EDA_DRAW_PANEL_GAL::GAL_FALLBACK);</property>
                             <property name="context_help"></property>
                             <property name="context_menu">1</property>
                             <property name="declaration">PCB_DRAW_PANEL_GAL* m_panelShowBarcodeGal;&#x0A;KIGFX::GAL_DISPLAY_OPTIONS m_galOptions;</property>

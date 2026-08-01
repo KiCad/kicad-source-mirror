@@ -204,7 +204,7 @@ DIALOG_BARCODE_PROPERTIES_BASE::DIALOG_BARCODE_PROPERTIES_BASE( wxWindow* parent
 	wxBoxSizer* bSizerDisplayPad;
 	bSizerDisplayPad = new wxBoxSizer( wxVERTICAL );
 
-	m_panelShowBarcodeGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, m_galOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO);
+	m_panelShowBarcodeGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, m_galOptions, EDA_DRAW_PANEL_GAL::GAL_FALLBACK);
 	m_panelShowBarcodeGal->SetMinSize( wxSize( 280,-1 ) );
 
 	bSizerDisplayPad->Add( m_panelShowBarcodeGal, 12, wxEXPAND|wxALL, 5 );

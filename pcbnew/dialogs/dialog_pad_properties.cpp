@@ -336,8 +336,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     opts.m_forceDisplayCursor = false;
 
     // Initialize the canvas to display the pad
-    m_padPreviewGAL = new PCB_DRAW_PANEL_GAL( m_boardViewPanel, -1, wxDefaultPosition,
-                                              wxDefaultSize, opts,
+    m_padPreviewGAL = new PCB_DRAW_PANEL_GAL( m_boardViewPanel, -1, wxDefaultPosition, wxDefaultSize, opts,
                                               m_parent->GetCanvas()->GetBackend() );
 
     m_padPreviewSizer->Add( m_padPreviewGAL, 12, wxEXPAND | wxALL, 5 );

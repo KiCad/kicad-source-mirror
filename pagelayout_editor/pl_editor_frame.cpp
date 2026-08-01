@@ -206,7 +206,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     FinishAUIInitialization();
 
     resolveCanvasType();
-    SwitchCanvas( m_canvasType );
 
     // Add the exit key handler
     setupUnits( config() );

@@ -181,8 +181,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     resolveCanvasType();
 
-    SwitchCanvas( m_canvasType );
-
     setupUnits( config() );
 
     // Enable the axes to match legacy draw style

@@ -228,9 +228,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     ReCreateLibraryList();
     UpdateTitle();
 
-    // Call resolveCanvasType after loading settings:
-    resolveCanvasType();
-
     // If a footprint was previously loaded, reload it
     if( getCurNickname().size() && getCurFootprintName().size() )
     {
@@ -279,6 +276,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // The canvas should not steal the focus from the list boxes
     GetCanvas()->SetCanFocus( false );
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
+
+    // Call resolveCanvasType after loading settings:
+    resolveCanvasType();
     ActivateGalCanvas();
 
     // Restore last zoom and auto zoom option.  (If auto-zooming we'll adjust when we load the footprint.)

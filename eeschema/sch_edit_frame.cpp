@@ -415,7 +415,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             } );
 
     resolveCanvasType();
-    SwitchCanvas( m_canvasType );
 
     GetCanvas()->GetGAL()->SetAxesEnabled( false );
 

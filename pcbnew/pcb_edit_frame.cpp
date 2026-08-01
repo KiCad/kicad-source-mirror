@@ -519,8 +519,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
               aEvent.Skip();
           } );
 
-    resolveCanvasType();
-
     setupUnits( config() );
 
     // Ensure the DRC engine is initialized so that constraints can be resolved even before a
@@ -545,7 +543,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         Pgm().GetApiServer().RegisterHandler( m_apiHandlerCommon.get() );
     }
 
-    GetCanvas()->SwitchBackend( m_canvasType );
+    resolveCanvasType();
     ActivateGalCanvas();
 
     // Default shutdown reason until a file is loaded

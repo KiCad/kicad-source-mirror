@@ -369,23 +369,7 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( int aFlags )
         m_lastToolbarIconSize = settings->m_Appearance.toolbar_icon_size;
     }
 
-#ifndef __WXMAC__
     resolveCanvasType();
-
-    if( m_canvasType != GetCanvas()->GetBackend() )
-    {
-        // Try to switch (will automatically fallback if necessary)
-        SwitchCanvas( m_canvasType );
-        EDA_DRAW_PANEL_GAL::GAL_TYPE newGAL = GetCanvas()->GetBackend();
-        bool                         success = newGAL == m_canvasType;
-
-        if( !success )
-        {
-            m_canvasType = newGAL;
-            m_openGLFailureOccured = true; // Store failure for other EDA_DRAW_FRAMEs
-        }
-    }
-#endif
 
     // Notify all tools the preferences have changed
     if( m_toolManager )
@@ -1383,6 +1367,20 @@ void EDA_DRAW_FRAME::resolveCanvasType()
 
     if( m_openGLFailureOccured && m_canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
         m_canvasType = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
+
+#ifndef __WXMAC__
+    if( m_canvasType != GetCanvas()->GetBackend() )
+    {
+        // Try to switch (will automatically fallback if necessary)
+        SwitchCanvas( m_canvasType );
+
+        if( GetCanvas()->GetBackend() != m_canvasType )
+        {
+            m_canvasType = GetCanvas()->GetBackend();
+            m_openGLFailureOccured = true; // Store failure for other EDA_DRAW_FRAMEs
+        }
+    }
+#endif
 }
 
 

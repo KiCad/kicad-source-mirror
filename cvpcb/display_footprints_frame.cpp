@@ -84,9 +84,10 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
 
     // Create GAL canvas before loading settings
-    auto* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
-                                                  GetGalDisplayOptions(),
-                                                  EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
+    m_canvasType = loadCanvasTypeSetting();
+
+    PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
+                                                                GetGalDisplayOptions(), m_canvasType );
     SetCanvas( gal_drawPanel );
 
     // Don't show the default board solder mask expansion.  Only the footprint or pad expansion
@@ -136,9 +137,11 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     RestoreAuiLayout();
     FinishAUIInitialization();
 
-    auto& galOpts = GetGalDisplayOptions();
+    GAL_DISPLAY_OPTIONS_IMPL& galOpts = GetGalDisplayOptions();
     galOpts.m_axesEnabled = true;
 
+    // Call resolveCanvasType after loading settings:
+    resolveCanvasType();
     ActivateGalCanvas();
 
     setupUnits( config() );

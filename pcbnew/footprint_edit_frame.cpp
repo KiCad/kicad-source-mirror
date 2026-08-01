@@ -205,12 +205,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetActiveLayer( F_SilkS );
 
-    // Fetch a COPY of the config as a lot of these initializations are going to overwrite our
-    // data.
-    int libWidth = 0;
+    // Fetch a COPY of the config as a lot of these initializations are going to overwrite our data.
     FOOTPRINT_EDITOR_SETTINGS::AUI_PANELS aui_cfg;
+    int                                   libWidth = 0;
 
-    if( FOOTPRINT_EDITOR_SETTINGS* cfg = dynamic_cast<FOOTPRINT_EDITOR_SETTINGS*>( GetSettings() ) )
+    if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings() )
     {
         libWidth = cfg->m_LibWidth;
         aui_cfg = cfg->m_AuiPanels;
@@ -367,13 +366,13 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         Pgm().GetApiServer().RegisterHandler( m_apiHandlerCommon.get() );
     }
 
-    // This displays the last footprint loaded, if any, so it must be done after restoreLastFootprint()
-    ActivateGalCanvas();
-
     GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
     setupUnits( GetSettings() );
 
     resolveCanvasType();
+
+    // This displays the last footprint loaded, if any, so it must be done after restoreLastFootprint()
+    ActivateGalCanvas();
 
     // Default shutdown reason until a file is loaded
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "Footprint changes are unsaved" ) );
