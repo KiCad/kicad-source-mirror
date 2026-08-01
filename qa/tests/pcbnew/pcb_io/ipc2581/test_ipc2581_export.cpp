@@ -40,6 +40,7 @@
 #include <netinfo.h>
 #include <pad.h>
 #include <pcb_shape.h>
+#include <pcb_textbox.h>
 #include <pcb_track.h>
 #include <base_units.h>
 
@@ -51,6 +52,7 @@
 
 #include <cmath>
 #include <fstream>
+#include <regex>
 #include <sstream>
 
 
@@ -111,6 +113,20 @@ bool FileContainsPattern( const wxString& aFilePath, const wxString& aPattern )
     std::string content = buffer.str();
 
     return content.find( aPattern.ToStdString() ) != std::string::npos;
+}
+
+
+bool XmlRegionHasCoordinateNear( const std::string& aRegion, char aAxis, double aExpected, double aTolerance )
+{
+    std::regex coordinateRegex( std::string( 1, aAxis ) + "=\"(-?[0-9]+(?:\\.[0-9]+)?)\"" );
+
+    for( std::sregex_iterator it( aRegion.begin(), aRegion.end(), coordinateRegex ), end; it != end; ++it )
+    {
+        if( std::abs( std::stod( ( *it )[1].str() ) - aExpected ) <= aTolerance )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -595,6 +611,60 @@ BOOST_AUTO_TEST_CASE( DegenerateTrackArcExportsAsLine )
 
     BOOST_CHECK( FileContainsPattern( tempPath, wxT( "<Line " ) ) );
     BOOST_CHECK( !FileContainsPattern( tempPath, wxT( "<Arc " ) ) );
+}
+
+
+/**
+ * Test that text boxes use their calculated drawing position in IPC-2581 output.
+ *
+ * Unlike ordinary text, PCB_TEXTBOX stores its anchor in the box geometry and
+ * overrides GetDrawPos() to calculate it.  GetTextPos() is normally zero, so
+ * using it places the exported text at the board origin.
+ */
+BOOST_AUTO_TEST_CASE( TextBoxUsesDrawPosition )
+{
+    BOARD board;
+
+    PCB_TEXTBOX* textbox = new PCB_TEXTBOX( &board );
+    textbox->SetLayer( F_SilkS );
+    textbox->SetStart( { pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 50 ) } );
+    textbox->SetEnd( { pcbIUScale.mmToIU( 120 ), pcbIUScale.mmToIU( 60 ) } );
+    textbox->SetText( wxT( "IPC textbox" ) );
+    textbox->SetTextSize( { pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) } );
+    textbox->SetTextThickness( pcbIUScale.mmToIU( 0.15 ) );
+    textbox->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+    textbox->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+    textbox->SetMarginLeft( 0 );
+    textbox->SetMarginTop( 0 );
+    textbox->SetBorderEnabled( false );
+    board.Add( textbox );
+
+    wxString tempPath = CreateTempFile();
+
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "6";
+
+    m_ipc2581Plugin.SaveBoard( tempPath, &board, &props );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    std::ifstream xmlFile( tempPath.ToStdString() );
+    BOOST_REQUIRE( xmlFile.is_open() );
+
+    std::string xmlContent( ( std::istreambuf_iterator<char>( xmlFile ) ), std::istreambuf_iterator<char>() );
+    size_t      textStart = xmlContent.find( "value=\"IPC textbox\"" );
+    BOOST_REQUIRE_MESSAGE( textStart != std::string::npos, "Export should contain the text box feature" );
+
+    size_t setEnd = xmlContent.find( "</Set>", textStart );
+    BOOST_REQUIRE( setEnd != std::string::npos );
+
+    std::string textFeature = xmlContent.substr( textStart, setEnd - textStart );
+
+    BOOST_CHECK_MESSAGE( XmlRegionHasCoordinateNear( textFeature, 'x', 100.0, 5.0 ),
+                         "Text box geometry should use its X drawing position" );
+    BOOST_CHECK_MESSAGE( XmlRegionHasCoordinateNear( textFeature, 'y', -50.0, 5.0 ),
+                         "Text box geometry should use its Y drawing position" );
 }
 
 

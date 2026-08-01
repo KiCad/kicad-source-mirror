@@ -1112,8 +1112,7 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText,
 
     //TODO: handle multiline text
 
-    font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetTextPos(), attrs,
-                aFontMetrics );
+    font->Draw( &callback_gal, aText->GetShownText( true ), aText->GetDrawPos(), attrs, aFontMetrics );
 
     if( !pts.empty() )
         push_pts();
