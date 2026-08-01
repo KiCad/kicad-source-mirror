@@ -68,7 +68,6 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
-#include <geometry/shape_ellipse.h>
 #include <stroke_params.h>
 #include <bezier_curves.h>
 #include <kiface_base.h>
@@ -2554,25 +2553,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             m_gal->SetIsStroke( false );
         }
 
-        std::vector<SHAPE*> shapes;
-
-        // For ellipses, use SHAPE_ELLIPSE directly so STROKE_PARAMS::Stroke can
-        // distribute dashes uniformly by arc length instead of per-tessellation-segment.
-        if( aShape->GetShape() == SHAPE_T::ELLIPSE )
-        {
-            shapes.push_back( new SHAPE_ELLIPSE( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
-                                                 aShape->GetEllipseMinorRadius(), aShape->GetEllipseRotation() ) );
-        }
-        else if( aShape->GetShape() == SHAPE_T::ELLIPSE_ARC )
-        {
-            shapes.push_back( new SHAPE_ELLIPSE( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
-                                                 aShape->GetEllipseMinorRadius(), aShape->GetEllipseRotation(),
-                                                 aShape->GetEllipseStartAngle(), aShape->GetEllipseEndAngle() ) );
-        }
-        else
-        {
-            shapes = aShape->MakeEffectiveShapesForStroking();
-        }
+        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking();
 
         for( SHAPE* shape : shapes )
         {

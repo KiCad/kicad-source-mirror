@@ -31,7 +31,6 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
 #include <geometry/roundrect.h>
-#include <geometry/shape_ellipse.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_utils.h>
 #include <gr_text.h>
@@ -2255,28 +2254,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
             }
             else
             {
-                std::vector<SHAPE*> shapes;
-
-                // For ellipses pass the SHAPE_ELLIPSE directly so the dash pattern is
-                // continuous around the curve.  Otherwise MakeEffectiveShapes returns
-                // many SHAPE_SEGMENTs and STROKE_PARAMS restarts the pattern on each.
-                if( aShape->GetShape() == SHAPE_T::ELLIPSE )
-                {
-                    shapes.push_back( new SHAPE_ELLIPSE( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
-                                                         aShape->GetEllipseMinorRadius(),
-                                                         aShape->GetEllipseRotation() ) );
-                }
-                else if( aShape->GetShape() == SHAPE_T::ELLIPSE_ARC )
-                {
-                    shapes.push_back( new SHAPE_ELLIPSE( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
-                                                         aShape->GetEllipseMinorRadius(), aShape->GetEllipseRotation(),
-                                                         aShape->GetEllipseStartAngle(),
-                                                         aShape->GetEllipseEndAngle() ) );
-                }
-                else
-                {
-                    shapes = aShape->MakeEffectiveShapesForStroking();
-                }
+                std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking();
 
                 for( SHAPE* shape : shapes )
                 {

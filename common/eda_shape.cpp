@@ -2237,6 +2237,9 @@ std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapesForStroking() const
     // Bezier ever becomes a SHAPE of its own.
     case SHAPE_T::BEZIER: return { new SHAPE_LINE_CHAIN( buildBezierToSegmentsPointsList( getMaxError() ) ) };
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC: return { new SHAPE_ELLIPSE( buildShapeEllipse() ) };
+
     default: return MakeEffectiveShapes( true );
     }
 }
