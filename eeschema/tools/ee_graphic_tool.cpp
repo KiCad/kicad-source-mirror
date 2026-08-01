@@ -358,8 +358,9 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
                 m_selectionTool->AddItemToSel( item.get() );
 
                 SCH_COMMIT commit( m_toolMgr );
-                commitItem( commit, std::move( item ), wxString::Format( _( "Draw %s" ), item->GetClass() ) );
+                wxString   msg = wxString::Format( _( "Draw %s" ), item->GetClass() );
 
+                commitItem( commit, std::move( item ), msg );
                 item = nullptr;
 
                 m_view->ClearPreview();
@@ -822,9 +823,7 @@ bool EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr
     frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     if( cancelled )
-    {
         aShape.reset();
-    }
 
     return !cancelled;
 }
@@ -898,14 +897,14 @@ int EE_GRAPHIC_TOOL::ImportGraphics( const TOOL_EVENT& aEvent )
 
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
     {
-        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( ptr.get() );
-        wxCHECK2_MSG( item, continue, wxString::Format( "Bad item type: ", ptr->Type() ) );
+        EDA_ITEM* eda_item = ptr.release();
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( eda_item );
+
+        wxCHECK2_MSG( item, continue, wxString::Format( "Bad item type: ", eda_item->Type() ) );
 
         newItems.push_back( item );
         selectedItems.push_back( item );
         preview.Add( item );
-
-        ptr.release();
     }
 
     if( !dlg.IsPlacementInteractive() )
