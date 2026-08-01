@@ -1076,9 +1076,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         showPage( *m_gbsLineByEnds, true );
         showPage( *m_gbsLineByLengthAngle );
         showPage( *m_gbsLineByStartMid );
-
-        m_cbRoundRect->Show( false );
-        m_cornerRadius.Show( false );
         break;
 
     case SHAPE_T::ARC:
@@ -1094,9 +1091,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
         showPage( *m_gbsArcByCSA, true );
         showPage( *m_gbsArcBySME );
-
-        m_cbRoundRect->Show( false );
-        m_cornerRadius.Show( false );
         break;
 
     case SHAPE_T::CIRCLE:
@@ -1110,9 +1104,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
 
         showPage( *m_gbsCircleCenterRadius, true );
         showPage( *m_gbsCircleCenterPoint );
-
-        m_cbRoundRect->Show( false );
-        m_cornerRadius.Show( false );
         break;
 
     case SHAPE_T::BEZIER:
@@ -1129,9 +1120,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     case SHAPE_T::POLY:
         m_notebookShapeDefs->Hide();
         // Nothing to do here...yet
-
-        m_cbRoundRect->Show( false );
-        m_cornerRadius.Show( false );
         break;
 
     case SHAPE_T::ELLIPSE:
@@ -1146,9 +1134,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         m_geomSync = std::make_unique<ELLIPSE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
         showPage( *m_gbsEllipse, true );
-
-        m_cbRoundRect->Show( false );
-        m_cornerRadius.Show( false );
         break;
 
     case SHAPE_T::ELLIPSE_ARC:
@@ -1167,9 +1152,6 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         m_geomSync = std::make_unique<ELLIPSE_ARC_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
 
         showPage( *m_gbsEllipseArc, true );
-
-        m_cbRoundRect->Show( false );
-        m_cornerRadius.Show( false );
         break;
 
     case SHAPE_T::UNDEFINED:
@@ -1237,6 +1219,12 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     {
         m_fillLabel->Show( false );
         m_fillCtrl->Show( false );
+    }
+
+    if( m_item->GetShape() != SHAPE_T::RECTANGLE )
+    {
+        m_cbRoundRect->Show( false );
+        m_cornerRadius.Show( false );
     }
 
     SetupStandardButtons();
