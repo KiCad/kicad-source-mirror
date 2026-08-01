@@ -1178,7 +1178,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
     }
     else
     {
-        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
+        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking();
 
         for( SHAPE* shape : shapes )
         {

@@ -2228,6 +2228,20 @@ void EDA_SHAPE::SetPolyPoints( const std::vector<VECTOR2I>& aPoints )
 }
 
 
+std::vector<SHAPE*> EDA_SHAPE::MakeEffectiveShapesForStroking() const
+{
+    switch( m_shape )
+    {
+    // Stroke() has no Bezier primitive, so it gets the flattened polyline.  One chain, not
+    // loose segments, or the pattern restarts at every vertex.  This case goes away if
+    // Bezier ever becomes a SHAPE of its own.
+    case SHAPE_T::BEZIER: return { new SHAPE_LINE_CHAIN( buildBezierToSegmentsPointsList( getMaxError() ) ) };
+
+    default: return MakeEffectiveShapes( true );
+    }
+}
+
+
 std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly, bool aHittesting ) const
 {
     std::vector<SHAPE*> effectiveShapes;

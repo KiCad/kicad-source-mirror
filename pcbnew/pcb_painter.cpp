@@ -2571,7 +2571,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         }
         else
         {
-            shapes = aShape->MakeEffectiveShapes( true );
+            shapes = aShape->MakeEffectiveShapesForStroking();
         }
 
         for( SHAPE* shape : shapes )

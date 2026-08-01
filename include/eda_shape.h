@@ -469,6 +469,16 @@ public:
         return makeEffectiveShapes( false, false, true );
     }
 
+    /**
+     * Make a set of SHAPE objects to hand to STROKE_PARAMS::Stroke().
+     *
+     * A Bezier comes back as a single SHAPE_LINE_CHAIN so the pattern runs continuously along
+     * the curve instead of restarting at every point of its polyline approximation.
+     *
+     * Caller owns the objects.
+     */
+    std::vector<SHAPE*> MakeEffectiveShapesForStroking() const;
+
     void ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 
     void SetRectangleHeight( const int& aHeight );
