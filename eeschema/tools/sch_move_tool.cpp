@@ -821,6 +821,12 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
             if( sheet != hoverSheet )
             {
+                if( hoverSheet )
+                {
+                    hoverSheet->ClearFlags( BRIGHTENED );
+                    m_frame->UpdateItem( hoverSheet, false );
+                }
+
                 hoverSheet = sheet;
 
                 if( hoverSheet )
