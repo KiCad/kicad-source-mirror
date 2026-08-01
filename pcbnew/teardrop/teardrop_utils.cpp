@@ -197,8 +197,7 @@ int TEARDROP_MANAGER::computeChordThroughShape( PCB_TRACK* aTrack, BOARD_ITEM* a
     else
     {
         wxCHECK_MSG( aOther->Type() == PCB_PAD_T, 0, wxT( "Expected non-round item to be PAD" ) );
-        static_cast<PAD*>( aOther )->TransformShapeToPolygon( shapebuffer, aLayer, 0, maxError,
-                                                              ERROR_INSIDE );
+        static_cast<PAD*>( aOther )->TransformShapeToPolygon( shapebuffer, aLayer, 0, maxError, ERROR_INSIDE );
     }
 
     // Measure the chord on the extended centerline, not the short track segment.
@@ -378,10 +377,8 @@ void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aP
     double biasBC = 0.5 * SEG( pts[1], pts[2] ).Length();
     double biasAE = 0.5 * SEG( pts[4], pts[0] ).Length();
 
-    VECTOR2I tangentC = VECTOR2I( pts[2].x - vecC.y * biasBC * weaken,
-                                pts[2].y + vecC.x * biasBC * weaken );
-    VECTOR2I tangentE = VECTOR2I( pts[4].x + vecE.y * biasAE * weaken,
-                                pts[4].y - vecE.x * biasAE * weaken );
+    VECTOR2I tangentC = VECTOR2I( pts[2].x - vecC.y * biasBC * weaken, pts[2].y + vecC.x * biasBC * weaken );
+    VECTOR2I tangentE = VECTOR2I( pts[4].x + vecE.y * biasAE * weaken, pts[4].y - vecE.x * biasAE * weaken );
 
     VECTOR2I tangentB = VECTOR2I( pts[1].x - aTrackDir.x * biasBC, pts[1].y - aTrackDir.y * biasBC );
     VECTOR2I tangentA = VECTOR2I( pts[0].x - aTrackDir.x * biasAE, pts[0].y - aTrackDir.y * biasAE );
@@ -452,9 +449,8 @@ static VECTOR2I computeCornerTangentControlPoint( const VECTOR2I& aAnchor,
  * @param aArcCenter [out] if on curved end, receives the semicircle center
  * @return true if point is on a curved end of the oval
  */
-static bool isPointOnOvalEnd( const VECTOR2I& aPoint, const VECTOR2I& aPadPos,
-                              const VECTOR2I& aPadSize, const EDA_ANGLE& aRotation,
-                              VECTOR2I& aArcCenter )
+static bool isPointOnOvalEnd( const VECTOR2I& aPoint, const VECTOR2I& aPadPos, const VECTOR2I& aPadSize,
+                              const EDA_ANGLE& aRotation, VECTOR2I& aArcCenter )
 {
     // Transform point to pad-local coordinates (unrotated)
     VECTOR2I localPt = aPoint - aPadPos;
@@ -515,9 +511,8 @@ static bool isPointOnOvalEnd( const VECTOR2I& aPoint, const VECTOR2I& aPadPos,
  * @param aCornerCenter [out] if in corner, receives the corner arc center
  * @return true if point is in a corner arc region
  */
-static bool isPointOnRoundedCorner( const VECTOR2I& aPoint, const VECTOR2I& aPadPos,
-                                    const VECTOR2I& aPadSize, int aCornerRadius,
-                                    const EDA_ANGLE& aRotation, VECTOR2I& aCornerCenter )
+static bool isPointOnRoundedCorner( const VECTOR2I& aPoint, const VECTOR2I& aPadPos, const VECTOR2I& aPadSize,
+                                    int aCornerRadius, const EDA_ANGLE& aRotation, VECTOR2I& aCornerCenter )
 {
     // Transform point to pad-local coordinates (unrotated)
     VECTOR2I localPt = aPoint - aPadPos;
@@ -621,8 +616,7 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aPa
     {
         VECTOR2I cornerCenter;
 
-        if( isPointOnRoundedCorner( aPts[2], aOtherPos, padSize, cornerRadius,
-                                    padRotation, cornerCenter ) )
+        if( isPointOnRoundedCorner( aPts[2], aOtherPos, padSize, cornerRadius, padRotation, cornerCenter ) )
         {
             // Anchor is on a corner arc - use tangent-based control point
             double bias = 0.5 * side1.EuclideanNorm();
@@ -658,8 +652,7 @@ void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aPa
     {
         VECTOR2I cornerCenter;
 
-        if( isPointOnRoundedCorner( aPts[4], aOtherPos, padSize, cornerRadius,
-                                    padRotation, cornerCenter ) )
+        if( isPointOnRoundedCorner( aPts[4], aOtherPos, padSize, cornerRadius, padRotation, cornerCenter ) )
         {
             // Anchor is on a corner arc - use tangent-based control point
             double bias = 0.5 * side2.EuclideanNorm();
@@ -717,8 +710,7 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
     // (only reduce the size of polygonal shape does not give good anchor points)
     if( IsRound( aItem, aLayer ) )
     {
-        TransformCircleToPolygon( c_buffer, aPos, GetWidth( aItem, aLayer ) / 2, maxError,
-                                  ERROR_INSIDE, 16 );
+        TransformCircleToPolygon( c_buffer, aPos, GetWidth( aItem, aLayer ) / 2, maxError, ERROR_INSIDE, 16 );
     }
     else    // Only PADS can have a not round shape
     {
