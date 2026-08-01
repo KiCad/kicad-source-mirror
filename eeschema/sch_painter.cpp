@@ -2162,7 +2162,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
             }
             else
             {
-                std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
+                std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking();
 
                 for( SHAPE* shape : shapes )
                 {

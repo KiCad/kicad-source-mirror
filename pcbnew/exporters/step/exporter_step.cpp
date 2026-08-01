@@ -982,7 +982,7 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
         }
         else
         {
-            std::vector<SHAPE*>        shapes = graphic->MakeEffectiveShapes( true );
+            std::vector<SHAPE*>        shapes = graphic->MakeEffectiveShapesForStroking();
             const PCB_PLOT_PARAMS&     plotParams = m_board->GetPlotOptions();
             KIGFX::PCB_RENDER_SETTINGS renderSettings;
 

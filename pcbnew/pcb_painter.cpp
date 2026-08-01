@@ -2375,7 +2375,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             m_gal->SetIsStroke( false );
         }
 
-        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
+        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapesForStroking();
 
         for( SHAPE* shape : shapes )
         {

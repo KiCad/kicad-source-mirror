@@ -29,6 +29,7 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
+#include <geometry/shape_line_chain.h>
 #include <macros.h>
 #include <trigo.h>
 #include <widgets/msgpanel.h>
@@ -132,6 +133,60 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
             SEG seg = poly->GetSegment( (int) ii );
             SHAPE_SEGMENT line( seg.A, seg.B );
             STROKE_PARAMS::Stroke( &line, aLineStyle, aWidth, aRenderSettings, aStroker );
+        }
+
+        break;
+    }
+
+    case SH_LINE_CHAIN:
+    {
+        const SHAPE_LINE_CHAIN* chain = static_cast<const SHAPE_LINE_CHAIN*>( aShape );
+
+        double patternLength = 0.0;
+
+        for( int ii = 0; ii < wrapAround; ++ii )
+            patternLength += strokes[ii];
+
+        // A zero-width shape makes every element zero long, and the walk would never advance.
+        if( patternLength <= 0.0 )
+            break;
+
+        int    element = 0;
+        double remaining = strokes[0];
+
+        for( int ii = 0; ii < chain->SegmentCount(); ++ii )
+        {
+            SEG      seg = chain->CSegment( ii );
+            VECTOR2D segVec( seg.B - seg.A );
+            double   segLength = segVec.EuclideanNorm();
+
+            if( segLength == 0.0 )
+                continue;
+
+            // The pattern carries across the vertices, so calculations MUST be done in
+            // doubles to keep from accumulating rounding errors along the chain.
+            VECTOR2D step = segVec / segLength;
+            VECTOR2D start( seg.A );
+            double   walked = 0.0;
+
+            while( walked < segLength )
+            {
+                double   length = std::min( remaining, segLength - walked );
+                VECTOR2D next = start + step * length;
+
+                if( element % 2 == 0 )
+                    aStroker( KiROUND( start ), KiROUND( next ) );
+
+                walked += length;
+                remaining -= length;
+                start = next;
+
+                if( remaining <= 0.0 )
+                {
+                    element++;
+                    remaining = strokes[element % wrapAround];
+                }
+            }
         }
 
         break;
