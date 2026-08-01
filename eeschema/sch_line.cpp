@@ -35,7 +35,6 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <trigo.h>
-#include <board_item.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>

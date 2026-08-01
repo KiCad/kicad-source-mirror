@@ -33,7 +33,6 @@
 #include <settings/color_settings.h>
 #include <netclass.h>
 #include <trigo.h>
-#include <board_item.h>
 #include <connection_graph.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>
