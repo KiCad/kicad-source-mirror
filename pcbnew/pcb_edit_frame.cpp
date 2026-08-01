@@ -241,9 +241,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     }
 
     // Create GAL canvas
-    auto canvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
-                                          GetGalDisplayOptions(),
-                                          EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
+    PCB_DRAW_PANEL_GAL* canvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
+                                                         GetGalDisplayOptions(),
+                                                         EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
 
     SetCanvas( canvas );
     SetBoard( new BOARD() );
@@ -474,29 +474,29 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_appearancePanel->SetTabIndex( aui_cfg.appearance_panel_tab );
 
-    {
-        m_layerPairSettings = std::make_unique<LAYER_PAIR_SETTINGS>();
+    m_layerPairSettings = std::make_unique<LAYER_PAIR_SETTINGS>();
 
-        m_layerPairSettings->Bind( PCB_LAYER_PAIR_PRESETS_CHANGED, [&]( wxCommandEvent& aEvt )
-        {
-            // Update the project file list
-            std::span<const LAYER_PAIR_INFO> newPairInfos = m_layerPairSettings->GetLayerPairs();
-            Prj().GetProjectFile().m_LayerPairInfos =
-                    std::vector<LAYER_PAIR_INFO>{ newPairInfos.begin(), newPairInfos.end() };
-        });
+    m_layerPairSettings->Bind( PCB_LAYER_PAIR_PRESETS_CHANGED,
+            [&]( wxCommandEvent& aEvt )
+            {
+                // Update the project file list
+                std::span<const LAYER_PAIR_INFO> newPairInfos = m_layerPairSettings->GetLayerPairs();
+                Prj().GetProjectFile().m_LayerPairInfos = std::vector<LAYER_PAIR_INFO>{ newPairInfos.begin(),
+                                                                                        newPairInfos.end() };
+            } );
 
-        m_layerPairSettings->Bind( PCB_CURRENT_LAYER_PAIR_CHANGED, [&]( wxCommandEvent& aEvt )
-        {
-            const LAYER_PAIR& layerPair = m_layerPairSettings->GetCurrentLayerPair();
-            PCB_SCREEN& screen = *GetScreen();
+    m_layerPairSettings->Bind( PCB_CURRENT_LAYER_PAIR_CHANGED,
+            [&]( wxCommandEvent& aEvt )
+            {
+                const LAYER_PAIR& layerPair = m_layerPairSettings->GetCurrentLayerPair();
+                PCB_SCREEN& screen = *GetScreen();
 
-            screen.m_Route_Layer_TOP = layerPair.GetLayerA();
-            screen.m_Route_Layer_BOTTOM = layerPair.GetLayerB();
+                screen.m_Route_Layer_TOP = layerPair.GetLayerA();
+                screen.m_Route_Layer_BOTTOM = layerPair.GetLayerB();
 
-            // Update the toolbar icon
-            PrepareLayerIndicator();
-        });
-    }
+                // Update the toolbar icon
+                PrepareLayerIndicator();
+            } );
 
     GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
 
@@ -707,8 +707,7 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
         {
             if( item->IsMoving() )
             {
-                wxLogTrace( traceCrossProbeFlash,
-                            "Timer(PCB) phase=%d: items are moving, stopping flash",
+                wxLogTrace( traceCrossProbeFlash, "Timer(PCB) phase=%d: items are moving, stopping flash",
                             m_crossProbeFlashPhase );
                 m_crossProbeFlashing = false;
                 m_crossProbeFlashTimer.Stop();
@@ -744,8 +743,7 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
     if( GetCanvas() )
     {
         GetCanvas()->ForceRefresh();
-        wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): forced canvas refresh",
-                    m_crossProbeFlashPhase );
+        wxLogTrace( traceCrossProbeFlash, "Phase %d (PCB): forced canvas refresh", m_crossProbeFlashPhase );
     }
 
     m_ProbingSchToPcb = prevGuard;
@@ -1272,13 +1270,13 @@ void PCB_EDIT_FRAME::setupUIConditions()
     auto netHighlightCond =
             [this]( const SELECTION& )
             {
-                if( auto* canvas = GetCanvas() )
+                if( PCB_DRAW_PANEL_GAL* canvas = GetCanvas() )
                 {
-                    if( auto* view = canvas->GetView() )
+                    if( KIGFX::PCB_VIEW* view = canvas->GetView() )
                     {
-                        if( auto* painter = view->GetPainter() )
+                        if( KIGFX::PAINTER* painter = view->GetPainter() )
                         {
-                            if( auto* settings = painter->GetSettings() )
+                            if( RENDER_SETTINGS* settings = painter->GetSettings() )
                                 return !settings->GetHighlightNetCodes().empty();
                         }
                     }
@@ -2534,7 +2532,7 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, const wxStrin
 
     try
     {
-        auto lineReader = new STRING_LINE_READER( payload, _( "Eeschema netlist" ) );
+        STRING_LINE_READER* lineReader = new STRING_LINE_READER( payload, _( "Eeschema netlist" ) );
         KICAD_NETLIST_READER netlistReader( lineReader, &aNetlist );
         netlistReader.LoadNetlist();
     }
