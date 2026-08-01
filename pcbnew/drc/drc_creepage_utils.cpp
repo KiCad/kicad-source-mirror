@@ -30,57 +30,59 @@ void BuildCreepageBoardEdges( BOARD& aBoard, std::vector<BOARD_ITEM*>& aVector,
 {
     const int errorMax = aBoard.GetDesignSettings().m_MaxError;
 
-    auto excluded = [&]( const BOARD_ITEM* aItem ) -> bool
-    {
-        if( !aExclude || !aItem )
-            return false;
+    auto excluded =
+            [&]( const BOARD_ITEM* aItem ) -> bool
+            {
+                if( !aExclude || !aItem )
+                    return false;
 
-        if( aExclude->count( aItem ) )
-            return true;
+                if( aExclude->count( aItem ) )
+                    return true;
 
-        const BOARD_ITEM* parent = dynamic_cast<const BOARD_ITEM*>( aItem->GetParent() );
+                const BOARD_ITEM* parent = dynamic_cast<const BOARD_ITEM*>( aItem->GetParent() );
 
-        return parent && aExclude->count( parent );
-    };
+                return parent && aExclude->count( parent );
+            };
 
     // The creepage graph only handles SEGMENT/ARC/CIRCLE/RECTANGLE/POLY, so Bezier curves must be
     // flattened to segments or they are silently ignored and creepage paths pass through them
-    auto addEdgeDrawing = [&]( BOARD_ITEM* aDrawing )
-    {
-        if( !aDrawing || !aDrawing->IsOnLayer( Edge_Cuts ) )
-            return;
+    auto addEdgeDrawing =
+            [&]( BOARD_ITEM* aDrawing )
+            {
+                if( !aDrawing || !aDrawing->IsOnLayer( Edge_Cuts ) )
+                    return;
 
-        if( excluded( aDrawing ) )
-            return;
+                if( excluded( aDrawing ) )
+                    return;
 
-        // Downstream code static_casts every item in m_boardEdge to PCB_SHAPE, so non-shape items
-        // (text, dimensions, ...) on Edge.Cuts must not enter the graph
-        PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aDrawing );
+                // Downstream code static_casts every item in m_boardEdge to PCB_SHAPE, so non-shape items
+                // (text, dimensions, ...) on Edge.Cuts must not enter the graph
+                PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aDrawing );
 
-        if( !shape )
-            return;
+                if( !shape )
+                    return;
 
-        if( shape->GetShape() != SHAPE_T::BEZIER )
-        {
-            aVector.push_back( shape );
-            return;
-        }
+                if( shape->GetShape() != SHAPE_T::BEZIER )
+                {
+                    aVector.push_back( shape );
+                    return;
+                }
 
-        shape->RebuildBezierToSegmentsPointsList( errorMax );
-        const std::vector<VECTOR2I>& pts = shape->GetBezierPoints();
+                shape->RebuildBezierToSegmentsPointsList( errorMax );
+                const std::vector<VECTOR2I>& pts = shape->GetBezierPoints();
 
-        for( size_t i = 1; i < pts.size(); ++i )
-        {
-            if( pts[i - 1] == pts[i] )
-                continue;
+                for( size_t i = 1; i < pts.size(); ++i )
+                {
+                    if( pts[i - 1] == pts[i] )
+                        continue;
 
-            auto seg = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::SEGMENT );
-            seg->SetStart( pts[i - 1] );
-            seg->SetEnd( pts[i] );
-            aVector.push_back( seg.get() );
-            aOwned.push_back( std::move( seg ) );
-        }
-    };
+                    auto seg = std::make_unique<PCB_SHAPE>( nullptr, SHAPE_T::SEGMENT );
+                    seg->SetStart( pts[i - 1] );
+                    seg->SetEnd( pts[i] );
+                    aVector.push_back( seg.get() );
+                    aOwned.push_back( std::move( seg ) );
+                }
+            };
 
     for( BOARD_ITEM* drawing : aBoard.Drawings() )
         addEdgeDrawing( drawing );
@@ -175,10 +177,11 @@ bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2
     const VECTOR2I::extended_type tolerance = 50;
     const VECTOR2I::extended_type toleranceSq = tolerance * tolerance;
 
-    auto coincident = [&]( const VECTOR2I& a, const VECTOR2I& b )
-    {
-        return ( a - b ).SquaredEuclideanNorm() <= toleranceSq;
-    };
+    auto coincident =
+            [&]( const VECTOR2I& a, const VECTOR2I& b )
+            {
+                return ( a - b ).SquaredEuclideanNorm() <= toleranceSq;
+            };
 
     for( const VECTOR2I& ip : rawPoints )
     {
