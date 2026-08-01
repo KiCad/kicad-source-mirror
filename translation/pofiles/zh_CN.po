@@ -48,7 +48,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-26 13:15+0000\n"
+"PO-Revision-Date: 2026-08-01 16:45+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -12713,9 +12713,8 @@ msgid "Eagle XML files"
 msgstr "Eagle XML 文件"
 
 #: common/wildcards_and_files_ext.cpp:304
-#, fuzzy
 msgid "P-CAD ASCII files"
-msgstr "PADS ASCII 文件"
+msgstr "P-CAD ASCII 文件"
 
 #: common/wildcards_and_files_ext.cpp:310
 msgid "PADS ASCII files"
@@ -12758,9 +12757,8 @@ msgstr "DipTrace 文件"
 
 #: common/wildcards_and_files_ext.cpp:366
 #: eeschema/sch_io/orcad/sch_io_orcad.h:71
-#, fuzzy
 msgid "OrCAD Capture schematic files"
-msgstr "PADS Logic 原理图文件"
+msgstr "OrCAD Capture 原理图文件"
 
 #: common/wildcards_and_files_ext.cpp:372
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:35
