@@ -63,7 +63,21 @@ public:
 
     bool IsConnected() const;
 
-    bool CacheTableInfo( const std::string& aTable, const std::set<std::string>& aColumns );
+    /**
+     * Caches schema information for a table so that subsequent queries know which columns exist.
+     *
+     * Required columns are trusted even if the driver doesn't report them (e.g. SQLite generated
+     * columns).  Optional columns are added only if confirmed present; otherwise they are dropped
+     * with a warning rather than breaking every query against the table.  Matching is case-insensitive.
+     *
+     * @param aTable the name of a table in the database
+     * @param aRequiredColumns columns that must be present in queries even if the driver does not
+     *                         report them
+     * @param aOptionalColumns columns that are added only when the driver confirms they exist
+     * @return true on success
+     */
+    bool CacheTableInfo( const std::string& aTable, const std::set<std::string>& aRequiredColumns,
+                         const std::set<std::string>& aOptionalColumns = {} );
 
     /**
      * Retrieves a single row from a database table.  Table and column names are cached when the
