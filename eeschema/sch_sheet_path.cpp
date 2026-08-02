@@ -185,8 +185,7 @@ void SCH_SHEET_PATH::Swap( SCH_SHEET_PATH& aOther ) noexcept
     std::swap( m_virtualPageNumber, aOther.m_virtualPageNumber );
     std::swap( m_current_hash, aOther.m_current_hash );
     m_cached_page_number.swap( aOther.m_cached_page_number );
-    std::swap( m_cached_path_valid, aOther.m_cached_path_valid );
-    m_cached_path.swap( aOther.m_cached_path );
+    m_path.swap( aOther.m_path );
     m_recursion_test_cache.swap( aOther.m_recursion_test_cache );
 }
 
