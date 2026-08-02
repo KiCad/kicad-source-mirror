@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-08-01 16:45+0000\n"
+"PO-Revision-Date: 2026-08-02 19:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -34696,7 +34696,7 @@ msgstr "CADSTAR アーカイブ プロジェクト ファイルをインポー�
 
 #: kicad/import_project.cpp:193
 msgid "Import P-CAD Project Files"
-msgstr "P-CADプロジェクトファイルをインポート"
+msgstr "P-CAD プロジェクトファイルをインポート"
 
 #: kicad/import_project.cpp:201
 msgid "Import Eagle Project Files"
@@ -34704,7 +34704,7 @@ msgstr "Eagle プロジェクト ファイルをインポート"
 
 #: kicad/import_project.cpp:208
 msgid "Import EasyEDA Std Backup"
-msgstr "EasyEDA Std Backup をインポート"
+msgstr "EasyEDA Std バックアップ をインポート"
 
 #: kicad/import_project.cpp:216
 msgid "Import EasyEDA Pro Project"
@@ -34961,7 +34961,7 @@ msgstr ""
 
 #: kicad/menubar.cpp:149
 msgid "P-CAD Project..."
-msgstr "P-CADプロジェクト..."
+msgstr "P-CAD プロジェクト..."
 
 #: kicad/menubar.cpp:150
 msgid "Import P-CAD ASCII schematic and board"
@@ -41408,8 +41408,8 @@ msgid ""
 "\n"
 "Proceed anyway?"
 msgstr ""
-"配列構成では、%d 個のアイテムが同じ位置と回転角度で配置され、互いに積み重ねら"
-"れます。\n"
+"この配列構成では、%d 個のアイテムが同じ位置と回転角度で配置され、互いに積み重"
+"ねられます。\n"
 "\n"
 "それでも続行しますか？"
 
