@@ -255,7 +255,7 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
             &m_Input.warp_mouse_on_move, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.horizontal_pan",
-            &m_Input.horizontal_pan, false ) );
+            &m_Input.horizontal_pan, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "input.hotkey_feedback",
             &m_Input.hotkey_feedback, true ) );

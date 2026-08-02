@@ -420,11 +420,13 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     const double wheelPanSpeed = 0.001;
     const int    axis = aEvent.GetWheelAxis();
 
-    // Native horizontal wheel events (from mice with tilt wheels, side-button scroll combos, or
-    // touchpads) are always handled as horizontal pan. The m_horizontalPan setting only controls
-    // whether a keyboard modifier can convert vertical scroll into horizontal pan.
+    // Native horizontal wheel events (tilt wheels, side-button scroll combos, touchpads) pan the
+    // view when "Pan left/right with horizontal movement" is enabled, otherwise they are ignored
     if( axis == wxMOUSE_WHEEL_HORIZONTAL )
     {
+        if( !m_settings.m_horizontalPan )
+            return;
+
         VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false )
                              * ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
 
