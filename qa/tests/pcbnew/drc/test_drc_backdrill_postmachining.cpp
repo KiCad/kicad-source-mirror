@@ -107,8 +107,7 @@ struct BACKDRILL_TEST_FIXTURE
      * @param aFrontDepth Depth of front post-machining
      * @return Pointer to the created via
      */
-    PCB_VIA* CreatePostMachinedVia( const VECTOR2I& aPos, int aNetCode,
-                                    PAD_DRILL_POST_MACHINING_MODE aFrontMode,
+    PCB_VIA* CreatePostMachinedVia( const VECTOR2I& aPos, int aNetCode, PAD_DRILL_POST_MACHINING_MODE aFrontMode,
                                     int aFrontSize, int aFrontDepth )
     {
         PCB_VIA* via = new PCB_VIA( m_board.get() );
@@ -129,8 +128,7 @@ struct BACKDRILL_TEST_FIXTURE
     /**
      * Create a simple track segment
      */
-    PCB_TRACK* CreateTrack( const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                            PCB_LAYER_ID aLayer, int aNetCode )
+    PCB_TRACK* CreateTrack( const VECTOR2I& aStart, const VECTOR2I& aEnd, PCB_LAYER_ID aLayer, int aNetCode )
     {
         PCB_TRACK* track = new PCB_TRACK( m_board.get() );
         track->SetStart( aStart );
@@ -145,8 +143,7 @@ struct BACKDRILL_TEST_FIXTURE
     /**
      * Create a footprint with a PTH pad
      */
-    FOOTPRINT* CreateFootprintWithPad( const VECTOR2I& aPos, int aNetCode,
-                                       const wxString& aPadNumber = "1" )
+    FOOTPRINT* CreateFootprintWithPad( const VECTOR2I& aPos, int aNetCode, const wxString& aPadNumber = "1" )
     {
         FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
         fp->SetPosition( aPos );
@@ -180,8 +177,7 @@ struct BACKDRILL_TEST_FIXTURE
     /**
      * Set post-machining on a pad
      */
-    void SetPadPostMachining( PAD* aPad, bool aFront,
-                               PAD_DRILL_POST_MACHINING_MODE aMode, int aSize, int aDepth )
+    void SetPadPostMachining( PAD* aPad, bool aFront, PAD_DRILL_POST_MACHINING_MODE aMode, int aSize, int aDepth )
     {
         if( aFront )
         {
@@ -204,8 +200,7 @@ struct BACKDRILL_TEST_FIXTURE
     /**
      * Create a zone on a specific layer
      */
-    ZONE* CreateZone( const VECTOR2I& aCorner1, const VECTOR2I& aCorner2,
-                      PCB_LAYER_ID aLayer, int aNetCode )
+    ZONE* CreateZone( const VECTOR2I& aCorner1, const VECTOR2I& aCorner2, PCB_LAYER_ID aLayer, int aNetCode )
     {
         ZONE* zone = new ZONE( m_board.get() );
         zone->SetLayer( aLayer );
@@ -257,15 +252,16 @@ struct BACKDRILL_TEST_FIXTURE
     int GetNetCode( const wxString& aNetName )
     {
         NETINFO_ITEM* net = m_board->FindNet( aNetName );
+
         if( !net )
         {
             net = new NETINFO_ITEM( m_board.get(), aNetName );
             m_board->Add( net );
         }
+
         return net->GetNetCode();
     }
 
-    SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
 };
 
@@ -278,12 +274,11 @@ BOOST_FIXTURE_TEST_CASE( ViaBackdrillLayerDetection, BACKDRILL_TEST_FIXTURE )
     int netCode = GetNetCode( "TestNet" );
 
     // Create a via with backdrill from F_Cu to In2_Cu (removing In1_Cu copper)
-    PCB_VIA* via = CreateBackdrilledVia(
-            VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ),
-            netCode,
-            F_Cu, B_Cu,          // Primary drill: full through-hole
-            F_Cu, In2_Cu,        // Backdrill removes copper on F_Cu, In1_Cu
-            pcbIUScale.mmToIU( 0.5 ) );
+    PCB_VIA* via = CreateBackdrilledVia( VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ),
+                                         netCode,
+                                         F_Cu, B_Cu,          // Primary drill: full through-hole
+                                         F_Cu, In2_Cu,        // Backdrill removes copper on F_Cu, In1_Cu
+                                         pcbIUScale.mmToIU( 0.5 ) );
 
     // F_Cu should be affected (within backdrill range)
     BOOST_CHECK( via->IsBackdrilledOrPostMachined( F_Cu ) );
@@ -311,12 +306,11 @@ BOOST_FIXTURE_TEST_CASE( ViaBottomBackdrillLayerDetection, BACKDRILL_TEST_FIXTUR
 
     // 6-layer stackup top to bottom is F_Cu, In1_Cu, In2_Cu, In3_Cu, In4_Cu, B_Cu.  Back-drilling
     // from the bottom (B_Cu) up to In3_Cu removes copper on In3_Cu, In4_Cu and B_Cu only.
-    PCB_VIA* via = CreateBackdrilledVia(
-            VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 30 ) ),
-            netCode,
-            F_Cu, B_Cu,          // Primary drill: full through-hole
-            B_Cu, In3_Cu,        // Backdrill from the bottom up to In3_Cu
-            pcbIUScale.mmToIU( 0.5 ) );
+    PCB_VIA* via = CreateBackdrilledVia( VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 30 ) ),
+                                         netCode,
+                                         F_Cu, B_Cu,          // Primary drill: full through-hole
+                                         B_Cu, In3_Cu,        // Backdrill from the bottom up to In3_Cu
+                                         pcbIUScale.mmToIU( 0.5 ) );
 
     // Top-side layers must NOT be reported as backdrilled.
     BOOST_CHECK( !via->IsBackdrilledOrPostMachined( F_Cu ) );
@@ -339,12 +333,12 @@ BOOST_FIXTURE_TEST_CASE( ViaPostMachiningLayerDetection, BACKDRILL_TEST_FIXTURE 
 
     // Create a via with front countersink post-machining
     // Post-machining depth determines which layers are affected
-    PCB_VIA* via = CreatePostMachinedVia(
-            VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 10 ) ),
-            netCode,
-            PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,
-            pcbIUScale.mmToIU( 1.0 ),    // Size
-            pcbIUScale.mmToIU( 0.5 ) );  // Depth - should affect F_Cu and potentially In1_Cu
+    PCB_VIA* via = CreatePostMachinedVia( VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 10 ) ),
+                                                    netCode,
+                                                    PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,
+                                                    pcbIUScale.mmToIU( 1.0 ),    // Size
+                                                    pcbIUScale.mmToIU( 0.5 ) );  // Depth - should affect F_Cu
+                                                                                 //   and potentially In1_Cu
 
     // F_Cu should be affected (front post-machining starts there)
     BOOST_CHECK( via->IsBackdrilledOrPostMachined( F_Cu ) );
@@ -361,9 +355,8 @@ BOOST_FIXTURE_TEST_CASE( PadBackdrillLayerDetection, BACKDRILL_TEST_FIXTURE )
 {
     int netCode = GetNetCode( "TestNet" );
 
-    FOOTPRINT* fp = CreateFootprintWithPad(
-            VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 10 ) ),
-            netCode );
+    FOOTPRINT* fp = CreateFootprintWithPad( VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 10 ) ),
+                                            netCode );
 
     PAD* pad = fp->Pads().front();
 
@@ -394,12 +387,11 @@ BOOST_FIXTURE_TEST_CASE( ViaEffectiveShapeOnBackdrilledLayer, BACKDRILL_TEST_FIX
     int backdillSize = pcbIUScale.mmToIU( 0.6 );
     int viaWidth = pcbIUScale.mmToIU( 0.8 );
 
-    PCB_VIA* via = CreateBackdrilledVia(
-            VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 10 ) ),
-            netCode,
-            F_Cu, B_Cu,
-            F_Cu, In2_Cu,
-            backdillSize );
+    PCB_VIA* via = CreateBackdrilledVia( VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 10 ) ),
+                                         netCode,
+                                         F_Cu, B_Cu,
+                                         F_Cu, In2_Cu,
+                                         backdillSize );
 
     via->SetWidth( PADSTACK::ALL_LAYERS, viaWidth );
 
@@ -431,18 +423,16 @@ BOOST_FIXTURE_TEST_CASE( ZoneConnectivityWithBackdrill, BACKDRILL_TEST_FIXTURE )
     int netCode = GetNetCode( "TestNet" );
 
     // Create a via with backdrill
-    PCB_VIA* via = CreateBackdrilledVia(
-            VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ),
-            netCode,
-            F_Cu, B_Cu,
-            F_Cu, In2_Cu,  // Backdrill removes F_Cu and In1_Cu
-            pcbIUScale.mmToIU( 0.5 ) );
+    PCB_VIA* via = CreateBackdrilledVia( VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ),
+                                         netCode,
+                                         F_Cu, B_Cu,
+                                         F_Cu, In2_Cu,  // Backdrill removes F_Cu and In1_Cu
+                                         pcbIUScale.mmToIU( 0.5 ) );
 
     // Create a zone on F_Cu (backdrilled layer) with same net
-    ZONE* zone = CreateZone(
-            VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 40 ) ),
-            VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 60 ) ),
-            F_Cu, netCode );
+    ZONE* zone = CreateZone( VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 40 ) ),
+                             VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 60 ) ),
+                             F_Cu, netCode );
 
     FillZones();
     RebuildConnectivity();
@@ -456,6 +446,7 @@ BOOST_FIXTURE_TEST_CASE( ZoneConnectivityWithBackdrill, BACKDRILL_TEST_FIXTURE )
 
     // Check if zone is in connected items
     bool zoneConnected = false;
+
     for( BOARD_CONNECTED_ITEM* item : connectedItems )
     {
         if( item == zone )
@@ -477,18 +468,16 @@ BOOST_FIXTURE_TEST_CASE( DRCTrackOnPostMachinedLayer, BACKDRILL_TEST_FIXTURE )
     int netCode = GetNetCode( "TestNet" );
 
     // Create a via with post-machining on F_Cu
-    PCB_VIA* via = CreatePostMachinedVia(
-            VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 10 ) ),
-            netCode,
-            PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE,
-            pcbIUScale.mmToIU( 1.2 ),
-            pcbIUScale.mmToIU( 0.3 ) );
+    PCB_VIA* via = CreatePostMachinedVia( VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 10 ) ),
+                                          netCode,
+                                          PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE,
+                                          pcbIUScale.mmToIU( 1.2 ),
+                                          pcbIUScale.mmToIU( 0.3 ) );
 
     // Create a track on F_Cu connected to the via (this should trigger DRC error)
-    PCB_TRACK* track = CreateTrack(
-            via->GetPosition(),
-            VECTOR2I( pcbIUScale.mmToIU( 70 ), pcbIUScale.mmToIU( 10 ) ),
-            F_Cu, netCode );
+    PCB_TRACK* track = CreateTrack( via->GetPosition(),
+                                    VECTOR2I( pcbIUScale.mmToIU( 70 ), pcbIUScale.mmToIU( 10 ) ),
+                                    F_Cu, netCode );
 
     RebuildConnectivity();
 
@@ -507,18 +496,16 @@ BOOST_FIXTURE_TEST_CASE( DRCTrackOnBackdrilledLayer, BACKDRILL_TEST_FIXTURE )
     int netCode = GetNetCode( "TestNet" );
 
     // Create a via with backdrill removing In1_Cu
-    PCB_VIA* via = CreateBackdrilledVia(
-            VECTOR2I( pcbIUScale.mmToIU( 70 ), pcbIUScale.mmToIU( 10 ) ),
-            netCode,
-            F_Cu, B_Cu,
-            F_Cu, In2_Cu,  // Backdrill affects F_Cu, In1_Cu
-            pcbIUScale.mmToIU( 0.5 ) );
+    PCB_VIA* via = CreateBackdrilledVia( VECTOR2I( pcbIUScale.mmToIU( 70 ), pcbIUScale.mmToIU( 10 ) ),
+                                         netCode,
+                                         F_Cu, B_Cu,
+                                         F_Cu, In2_Cu,  // Backdrill affects F_Cu, In1_Cu
+                                         pcbIUScale.mmToIU( 0.5 ) );
 
     // Create a track on In1_Cu connected to the via (this should trigger DRC error)
-    PCB_TRACK* track = CreateTrack(
-            via->GetPosition(),
-            VECTOR2I( pcbIUScale.mmToIU( 80 ), pcbIUScale.mmToIU( 10 ) ),
-            In1_Cu, netCode );
+    PCB_TRACK* track = CreateTrack( via->GetPosition(),
+                                    VECTOR2I( pcbIUScale.mmToIU( 80 ), pcbIUScale.mmToIU( 10 ) ),
+                                    In1_Cu, netCode );
 
     RebuildConnectivity();
 
@@ -537,18 +524,16 @@ BOOST_FIXTURE_TEST_CASE( DRCTrackOnUnaffectedLayerNoDRC, BACKDRILL_TEST_FIXTURE 
     int netCode = GetNetCode( "TestNet" );
 
     // Create a via with backdrill removing F_Cu and In1_Cu
-    PCB_VIA* via = CreateBackdrilledVia(
-            VECTOR2I( pcbIUScale.mmToIU( 80 ), pcbIUScale.mmToIU( 10 ) ),
-            netCode,
-            F_Cu, B_Cu,
-            F_Cu, In2_Cu,
-            pcbIUScale.mmToIU( 0.5 ) );
+    PCB_VIA* via = CreateBackdrilledVia( VECTOR2I( pcbIUScale.mmToIU( 80 ), pcbIUScale.mmToIU( 10 ) ),
+                                         netCode,
+                                         F_Cu, B_Cu,
+                                         F_Cu, In2_Cu,
+                                         pcbIUScale.mmToIU( 0.5 ) );
 
     // Create a track on B_Cu (not affected by backdrill) - should NOT trigger error
-    PCB_TRACK* track = CreateTrack(
-            via->GetPosition(),
-            VECTOR2I( pcbIUScale.mmToIU( 90 ), pcbIUScale.mmToIU( 10 ) ),
-            B_Cu, netCode );
+    PCB_TRACK* track = CreateTrack( via->GetPosition(),
+                                    VECTOR2I( pcbIUScale.mmToIU( 90 ), pcbIUScale.mmToIU( 10 ) ),
+                                    B_Cu, netCode );
 
     RebuildConnectivity();
 
@@ -557,6 +542,7 @@ BOOST_FIXTURE_TEST_CASE( DRCTrackOnUnaffectedLayerNoDRC, BACKDRILL_TEST_FIXTURE 
 
     // Filter to only violations involving our track
     int trackViolations = 0;
+
     for( const DRC_ITEM& item : violations )
     {
         if( item.GetMainItemID() == track->m_Uuid || item.GetAuxItemID() == track->m_Uuid )
@@ -574,9 +560,8 @@ BOOST_FIXTURE_TEST_CASE( DRCTrackOnBackdrilledPadLayer, BACKDRILL_TEST_FIXTURE )
 {
     int netCode = GetNetCode( "TestNet" );
 
-    FOOTPRINT* fp = CreateFootprintWithPad(
-            VECTOR2I( pcbIUScale.mmToIU( 90 ), pcbIUScale.mmToIU( 10 ) ),
-            netCode );
+    FOOTPRINT* fp = CreateFootprintWithPad( VECTOR2I( pcbIUScale.mmToIU( 90 ), pcbIUScale.mmToIU( 10 ) ),
+                                            netCode );
 
     PAD* pad = fp->Pads().front();
 
@@ -584,10 +569,9 @@ BOOST_FIXTURE_TEST_CASE( DRCTrackOnBackdrilledPadLayer, BACKDRILL_TEST_FIXTURE )
     SetPadBackdrill( pad, F_Cu, In2_Cu, pcbIUScale.mmToIU( 1.0 ) );
 
     // Create a track on In1_Cu connected to the pad (should trigger DRC)
-    PCB_TRACK* track = CreateTrack(
-            pad->GetPosition(),
-            VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 10 ) ),
-            In1_Cu, netCode );
+    PCB_TRACK* track = CreateTrack( pad->GetPosition(),
+                                    VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 10 ) ),
+                                    In1_Cu, netCode );
 
     RebuildConnectivity();
 
@@ -604,17 +588,16 @@ BOOST_FIXTURE_TEST_CASE( PadPostMachiningLayerDetection, BACKDRILL_TEST_FIXTURE 
 {
     int netCode = GetNetCode( "TestNet" );
 
-    FOOTPRINT* fp = CreateFootprintWithPad(
-            VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 10 ) ),
-            netCode );
+    FOOTPRINT* fp = CreateFootprintWithPad( VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 10 ) ),
+                                            netCode );
 
     PAD* pad = fp->Pads().front();
 
     // Set front post-machining (counterbore)
     SetPadPostMachining( pad, true,
-                          PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE,
-                          pcbIUScale.mmToIU( 1.5 ),
-                          pcbIUScale.mmToIU( 0.4 ) );
+                         PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE,
+                         pcbIUScale.mmToIU( 1.5 ),
+                         pcbIUScale.mmToIU( 0.4 ) );
 
     // F_Cu should be affected by front post-machining
     BOOST_CHECK( pad->IsBackdrilledOrPostMachined( F_Cu ) );
@@ -631,17 +614,16 @@ BOOST_FIXTURE_TEST_CASE( PadBackPostMachiningLayerDetection, BACKDRILL_TEST_FIXT
 {
     int netCode = GetNetCode( "TestNet" );
 
-    FOOTPRINT* fp = CreateFootprintWithPad(
-            VECTOR2I( pcbIUScale.mmToIU( 110 ), pcbIUScale.mmToIU( 10 ) ),
-            netCode );
+    FOOTPRINT* fp = CreateFootprintWithPad( VECTOR2I( pcbIUScale.mmToIU( 110 ), pcbIUScale.mmToIU( 10 ) ),
+                                            netCode );
 
     PAD* pad = fp->Pads().front();
 
     // Set back post-machining (countersink)
     SetPadPostMachining( pad, false,
-                          PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,
-                          pcbIUScale.mmToIU( 1.5 ),
-                          pcbIUScale.mmToIU( 0.4 ) );
+                         PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,
+                         pcbIUScale.mmToIU( 1.5 ),
+                         pcbIUScale.mmToIU( 0.4 ) );
 
     // B_Cu should be affected by back post-machining
     BOOST_CHECK( pad->IsBackdrilledOrPostMachined( B_Cu ) );
