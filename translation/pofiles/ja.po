@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-08-01 16:45+0000\n"
+"PO-Revision-Date: 2026-08-02 19:02+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -31745,7 +31745,7 @@ msgstr "Eagle プロジェクト ファイルをインポート"
 
 #: kicad/import_project.cpp:204
 msgid "Import EasyEDA Std Backup"
-msgstr "EasyEDA Std Backup をインポート"
+msgstr "EasyEDA Std バックアップ をインポート"
 
 #: kicad/import_project.cpp:211
 msgid "Import EasyEDA Pro Project"
