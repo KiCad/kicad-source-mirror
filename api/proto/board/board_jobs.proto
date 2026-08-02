@@ -294,13 +294,42 @@ message RunBoardJobExportPs
     bool use_global_settings = 8;
 }
 
+// Gerber coordinate precision
+enum GerberPrecision
+{
+    GP_UNKNOWN = 0;
+    GP_5 = 1;
+    GP_6 = 2;
+}
+
 // Plots a board to Gerber files. Returns RunJobResponse.
 message RunBoardJobExportGerbers
 {
     kiapi.common.types.RunJobSettings job_settings = 1;
 
-    // One or more board layers to export.
-    repeated kiapi.board.types.BoardLayer layers = 2;
+    BoardPlotSettings plot_settings = 2;
+
+    // If true, the Gerber plot settings stored in the board file are used instead of the
+    // settings provided in this message.  When set, the layers list is derived from the
+    // board's plot layer selection.
+    bool use_board_plot_params = 3;
+
+    // If true, a Gerber job file (.gbrjob) is created alongside the plot outputs.
+    bool create_gerber_job_file = 4;
+
+    // If true, Gerber X2 netlist attributes are included in the plot outputs.
+    bool include_netlist_attributes = 5;
+
+    // If true, Gerber X2 format is used.
+    bool use_x2_format = 6;
+
+    // If true, aperture macros are disabled in the plot outputs.
+    bool disable_aperture_macros = 7;
+
+    // If true, Protel-style file extensions are used (e.g. .gbr → .gtl).
+    bool use_protel_file_extensions = 8;
+
+    GerberPrecision precision = 9;
 }
 
 enum DrillFormat

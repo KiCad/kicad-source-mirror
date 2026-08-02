@@ -2215,33 +2215,29 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportGe
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    if( aCtx.Request.layers().empty() )
-    {
-        ApiResponseStatus e;
-        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-        e.set_error_message( "RunBoardJobExportGerbers requires at least one layer" );
-        return tl::unexpected( e );
-    }
-
     JOB_EXPORT_PCB_GERBERS job;
     job.m_filename = pcbContext()->GetCurrentFileName();
     job.SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    for( int layer : aCtx.Request.layers() )
+    job.m_useBoardPlotParams = aCtx.Request.use_board_plot_params();
+
+    if( !job.m_useBoardPlotParams )
     {
-        PCB_LAYER_ID layerId =
-                FromProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>(
-                        static_cast<board::types::BoardLayer>( layer ) );
+        if( std::optional<ApiResponseStatus> err = ApplyBoardPlotSettings( aCtx.Request.plot_settings(), job ) )
+            return tl::unexpected( *err );
+    }
 
-        if( layerId == PCB_LAYER_ID::UNDEFINED_LAYER )
-        {
-            ApiResponseStatus e;
-            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-            e.set_error_message( "RunBoardJobExportGerbers contains an invalid layer" );
-            return tl::unexpected( e );
-        }
+    job.m_createJobsFile = aCtx.Request.create_gerber_job_file();
+    job.m_includeNetlistAttributes = aCtx.Request.include_netlist_attributes();
+    job.m_useX2Format = aCtx.Request.use_x2_format();
+    job.m_disableApertureMacros = aCtx.Request.disable_aperture_macros();
+    job.m_useProtelFileExtension = aCtx.Request.use_protel_file_extensions();
 
-        job.m_plotLayerSequence.push_back( layerId );
+    switch( aCtx.Request.precision() )
+    {
+    default:
+    case GerberPrecision::GP_5: job.m_precision = 5; break;
+    case GerberPrecision::GP_6: job.m_precision = 6; break;
     }
 
     return ExecuteBoardJob( pcbContext(), job );
