@@ -2096,31 +2096,29 @@ std::vector<LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
 {
     std::vector<LIB_SYMBOL_UNIT> units;
 
+    for( int unit = 1; unit <= GetUnitCount(); unit++ )
+    {
+        for( int bodyStyle = 1; bodyStyle <= GetBodyStyleCount(); bodyStyle++ )
+        {
+            LIB_SYMBOL_UNIT record;
+            record.m_unit = unit;
+            record.m_bodyStyle = bodyStyle;
+            units.push_back( std::move( record ) );
+        }
+    }
+
     for( SCH_ITEM& item : m_drawings )
     {
         if( item.Type() == SCH_FIELD_T )
             continue;
 
-        int unit = item.GetUnit();
-        int bodyStyle = item.GetBodyStyle();
-
-        auto it = std::find_if( units.begin(), units.end(),
-                                [unit, bodyStyle]( const LIB_SYMBOL_UNIT& a )
-                                {
-                                    return a.m_unit == unit && a.m_bodyStyle == bodyStyle;
-                                } );
-
-        if( it == units.end() )
+        for( LIB_SYMBOL_UNIT& unit : units )
         {
-            LIB_SYMBOL_UNIT newUnit;
-            newUnit.m_unit = item.GetUnit();
-            newUnit.m_bodyStyle = item.GetBodyStyle();
-            newUnit.m_items.push_back( &item );
-            units.emplace_back( newUnit );
-        }
-        else
-        {
-            it->m_items.push_back( &item );
+            if( unit.m_unit == item.GetUnit() && unit.m_bodyStyle == item.GetBodyStyle() )
+            {
+                unit.m_items.push_back( &item );
+                break;
+            }
         }
     }
 

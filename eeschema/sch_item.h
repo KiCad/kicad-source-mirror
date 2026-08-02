@@ -229,6 +229,7 @@ public:
      */
     SCH_ITEM* Duplicate( bool addToParentGroup, SCH_COMMIT* aCommit = nullptr, bool doClone = false ) const;
 
+    // Note: 0 represents "All Units", NOT the first unit
     virtual void SetUnit( int aUnit ) { m_unit = aUnit; }
     int GetUnit() const { return m_unit; }
 
@@ -238,6 +239,7 @@ public:
     virtual wxString GetUnitDisplayName( int aUnit, bool aLabel ) const;
     virtual wxString GetBodyStyleDescription( int aBodyStyle, bool aLabel ) const;
 
+    // Note: 0 represents "All Body Styles, NOT the first body style
     virtual void SetBodyStyle( int aBodyStyle ) { m_bodyStyle = aBodyStyle; }
     int  GetBodyStyle() const { return m_bodyStyle; }
 
