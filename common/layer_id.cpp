@@ -33,6 +33,7 @@ wxString LayerName( int aLayer )
     switch( aLayer )
     {
     // PCB_LAYER_ID
+    case UNSELECTED_LAYER:
     case UNDEFINED_LAYER:                 return _( "undefined" );
 
     // Copper
