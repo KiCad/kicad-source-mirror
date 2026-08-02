@@ -162,6 +162,19 @@ public:
     void RequestRefresh();
 
     /**
+     * Resize the GAL to the current client size of this panel.
+     *
+     * This must be used in preference to calling GAL::ResizeScreen() directly: it holds the
+     * GL context lock while the compositor buffers are reallocated, clamps degenerate sizes
+     * and invalidates the view.
+     *
+     * @param aForce reallocates even when the client size is unchanged, which is required
+     *               after a display scale factor change because the buffers are sized in
+     *               native pixels rather than client units.
+     */
+    void ResizeGal( bool aForce = false );
+
+    /**
      * Set a dispatcher that processes events and forwards them to tools.
      *
      * #DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event

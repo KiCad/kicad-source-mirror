@@ -697,9 +697,11 @@ void EDA_DRAW_FRAME::OnMove( wxMoveEvent& aEvent )
 
     if( oldFactor != m_galDisplayOptions.m_scaleFactor && m_canvas )
     {
-        wxSize clientSize = GetClientSize();
-        GetCanvas()->GetGAL()->ResizeScreen( clientSize.x, clientSize.y );
-        GetCanvas()->GetView()->MarkDirty();
+        // wx has not laid the frame out for the new DPI yet, so defer until the canvas has
+        // reached its final size
+        EDA_DRAW_PANEL_GAL* canvas = GetCanvas();
+
+        canvas->CallAfter( [canvas]() { canvas->ResizeGal( true ); } );
     }
 
     aEvent.Skip();
