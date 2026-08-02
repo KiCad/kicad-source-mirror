@@ -139,10 +139,10 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
         m_actionContext( aActionContext )
 {
     // Copy the tools and controls into the internal maps
-    for( auto& tool : aTools )
+    for( TOOL_ACTION* tool : aTools )
         m_availableTools.emplace( tool->GetName(), tool );
 
-    for( auto& control : aControls )
+    for( ACTION_TOOLBAR_CONTROL* control : aControls )
         m_availableControls.emplace( control->GetName(), control );
 
     // Configure the Ui elements
@@ -160,10 +160,8 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
     insertMenu->Append( ID_SPACER_MENU, _( "Insert Spacer" ) );
     insertMenu->Append( ID_GROUP_MENU, _( "Insert Group" ) );
 
-    insertMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_TOOLBAR_CUSTOMIZATION::onSpacerPress,
-                      this, ID_SPACER_MENU );
-    insertMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_TOOLBAR_CUSTOMIZATION::onGroupPress,
-                      this, ID_GROUP_MENU );
+    insertMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_TOOLBAR_CUSTOMIZATION::onSpacerPress, this, ID_SPACER_MENU );
+    insertMenu->Bind( wxEVT_COMMAND_MENU_SELECTED, &PANEL_TOOLBAR_CUSTOMIZATION::onGroupPress, this, ID_GROUP_MENU );
 
     // This is the button only press for the browse button instead of the menu
     m_insertButton->Bind( wxEVT_BUTTON, &PANEL_TOOLBAR_CUSTOMIZATION::onSeparatorPress, this );
@@ -193,8 +191,7 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
 PANEL_TOOLBAR_CUSTOMIZATION::~PANEL_TOOLBAR_CUSTOMIZATION()
 {
     m_actionFilter->Unbind( wxEVT_TEXT, &PANEL_TOOLBAR_CUSTOMIZATION::onActionFilterText, this );
-    m_actionFilter->Unbind( wxEVT_SEARCHCTRL_CANCEL_BTN,
-                            &PANEL_TOOLBAR_CUSTOMIZATION::onActionFilterText, this );
+    m_actionFilter->Unbind( wxEVT_SEARCHCTRL_CANCEL_BTN, &PANEL_TOOLBAR_CUSTOMIZATION::onActionFilterText, this );
     m_actionsList->Unbind( wxEVT_MOTION, &PANEL_TOOLBAR_CUSTOMIZATION::onActionListMouseMove, this );
     m_actionsList->Unbind( wxEVT_LEAVE_WINDOW, &PANEL_TOOLBAR_CUSTOMIZATION::onActionListMouseMove, this );
     m_toolbarTree->Unbind( wxEVT_TREE_ITEM_ACTIVATED, &PANEL_TOOLBAR_CUSTOMIZATION::onTreeItemActivated, this );
@@ -205,10 +202,11 @@ bool PANEL_TOOLBAR_CUSTOMIZATION::isActionSupported( const TOOL_ACTION& aAction 
 {
     const std::string& name = aAction.GetName();
 
-    auto hasPrefix = [&]( const char* aPrefix ) -> bool
-    {
-        return name.rfind( aPrefix, 0 ) == 0;
-    };
+    auto hasPrefix =
+            [&]( const char* aPrefix ) -> bool
+            {
+                return name.rfind( aPrefix, 0 ) == 0;
+            };
 
     if( m_actionContext == FRAME_PCB_DISPLAY3D )
     {
@@ -234,10 +232,10 @@ void PANEL_TOOLBAR_CUSTOMIZATION::ResetPanel()
     m_toolbarChoices.clear();
 
     // Go over every toolbar and initialize things
-    for( auto& tb : magic_enum::enum_values<TOOLBAR_LOC>() )
+    for( const TOOLBAR_LOC& tb : magic_enum::enum_values<TOOLBAR_LOC>() )
     {
         // Create a shadow toolbar
-        auto tbConfig = m_appTbSettings->DefaultToolbarConfig( tb );
+        std::optional<TOOLBAR_CONFIGURATION> tbConfig = m_appTbSettings->DefaultToolbarConfig( tb );
 
         if( !tbConfig.has_value() )
             continue;
@@ -264,10 +262,10 @@ bool PANEL_TOOLBAR_CUSTOMIZATION::TransferDataToWindow()
     m_toolbarChoices.clear();
 
     // Go over every toolbar and initialize things
-    for( auto& tb : magic_enum::enum_values<TOOLBAR_LOC>() )
+    for( const TOOLBAR_LOC& tb : magic_enum::enum_values<TOOLBAR_LOC>() )
     {
         // Create a shadow toolbar
-        auto tbConfig = m_appTbSettings->GetToolbarConfig( tb );
+        std::optional<TOOLBAR_CONFIGURATION> tbConfig = m_appTbSettings->GetToolbarConfig( tb );
 
         if( !tbConfig.has_value() )
             continue;
@@ -695,13 +693,12 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onGroupPress( wxCommandEvent& aEvent )
             }
         }
 
-        newItem = m_toolbarTree->InsertItem( m_toolbarTree->GetRootItem(), selItem, treeItem->GetName(),
-                                             -1, -1, treeItem );
+        newItem = m_toolbarTree->InsertItem( m_toolbarTree->GetRootItem(), selItem, treeItem->GetName(), -1, -1,
+                                             treeItem );
     }
     else
     {
-        newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), treeItem->GetName(), -1, -1,
-                                             treeItem );
+        newItem = m_toolbarTree->AppendItem( m_toolbarTree->GetRootItem(), treeItem->GetName(), -1, -1, treeItem );
     }
 
     if( newItem.IsOk() )
@@ -901,8 +898,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onBtnAddAction( wxCommandEvent& event )
 
     if( selItem.IsOk() )
     {
-        TOOLBAR_TREE_ITEM_DATA* data =
-                dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( selItem ) );
+        TOOLBAR_TREE_ITEM_DATA* data = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( selItem ) );
 
         if( data && data->GetType() == TOOLBAR_ITEM_TYPE::TB_GROUP )
         {
@@ -1016,7 +1012,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onTreeItemActivated( wxTreeEvent& event )
 {
     wxTreeItemId id = event.GetItem();
 
-    if( auto* tbData = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( id ) ) )
+    if( TOOLBAR_TREE_ITEM_DATA* tbData = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( id ) ) )
     {
         if( tbData->GetType() == TOOLBAR_ITEM_TYPE::TB_GROUP )
         {
@@ -1036,7 +1032,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onTreeEndLabelEdit( wxTreeEvent& event )
 
     wxTreeItemId id = event.GetItem();
 
-    if( auto* tbData = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( id ) ) )
+    if( TOOLBAR_TREE_ITEM_DATA* tbData = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( id ) ) )
     {
         if( tbData->GetType() == TOOLBAR_ITEM_TYPE::TB_GROUP )
         {
@@ -1113,8 +1109,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::removeControlFromCurrentTree( const std::strin
         id.IsOk();
         id = m_toolbarTree->GetNextChild( rootId, cookie ) )
     {
-        TOOLBAR_TREE_ITEM_DATA* data =
-                dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( id ) );
+        TOOLBAR_TREE_ITEM_DATA* data = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( id ) );
 
         if( data
             && data->GetType() == TOOLBAR_ITEM_TYPE::CONTROL

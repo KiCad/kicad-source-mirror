@@ -21,11 +21,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <wx/wupdlock.h>
-#include <wx/choice.h>
-
-#include <bitmaps.h>
-#include <dialogs/eda_view_switcher.h>
 #include <eda_3d_viewer_frame.h>
 #include <tool/action_toolbar.h>
 #include <tools/eda_3d_actions.h>
@@ -45,6 +40,7 @@ std::optional<TOOLBAR_CONFIGURATION> EDA_3D_VIEWER_TOOLBAR_SETTINGS::DefaultTool
     case TOOLBAR_LOC::RIGHT:
     case TOOLBAR_LOC::TOP_AUX:
         return std::nullopt;
+
     case TOOLBAR_LOC::TOP_MAIN:
         config.AppendAction( EDA_3D_ACTIONS::reloadBoard );
 
@@ -86,6 +82,7 @@ std::optional<TOOLBAR_CONFIGURATION> EDA_3D_VIEWER_TOOLBAR_SETTINGS::DefaultTool
 
         config.AppendSeparator()
               .AppendAction( EDA_3D_ACTIONS::showLayersManager );
+
         break;
     }
 
