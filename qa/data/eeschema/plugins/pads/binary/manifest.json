@@ -194,6 +194,21 @@
         "signal_pin_15_vcc_hidden"
       ],
       "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. The source follows production-observed asymmetric multi-gate syntax and uses only fixture-owned decals. A clean new-design import reported NO ERRORS FOUND; native v13 save and all-section Logic 9.0 re-export retained U3-A and U3-B, gate pin counts 7 and 2, the distinct BATCHD_SPECIAL_GATE decal, gate swap flag 1, pin swap group 1, and SIGPIN 15 VCC_HIDDEN. No third-party design content"
+    },
+    {
+      "binary": "ole_images.sch",
+      "ascii": "ole_images.txt",
+      "binary_sha256": "e73c5dbe9248cac458ef6528ecb817d56431bf1f616d779a97c63458c9bc3d71",
+      "ascii_sha256": "0e32e92ba843453f59cf5d1f00857220c116a2d0a2cf50ff3594d9d153b92357",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "embedded_static_dib",
+        "embedded_wmf_package",
+        "ole_contents_stream",
+        "ole_native_stream",
+        "save_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned SVG artwork exported as BMP3 and WMF, then inserted through Edit > Insert New Object in PADS Logic VX.2.4. PADS renders the BMP as a Paintbrush Picture. The guest has no registered WMF presentation server, so PADS preserves the WMF as a package/icon rather than claiming a rendered metafile. Native v13 save, close/reopen, and all-section Logic 9.0 export were completed through vncdo. No third-party design content"
     }
   ]
 }
