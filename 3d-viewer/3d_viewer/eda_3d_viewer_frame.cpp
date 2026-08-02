@@ -235,6 +235,12 @@ EDA_3D_VIEWER_FRAME::~EDA_3D_VIEWER_FRAME()
 }
 
 
+APP_SETTINGS_BASE* EDA_3D_VIEWER_FRAME::config() const
+{
+    return GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+}
+
+
 void EDA_3D_VIEWER_FRAME::setupUIConditions()
 {
     EDA_BASE_FRAME::setupUIConditions();
