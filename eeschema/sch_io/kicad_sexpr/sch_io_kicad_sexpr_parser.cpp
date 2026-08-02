@@ -530,9 +530,6 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
 
             m_bodyStyle = static_cast<int>( tmp );
 
-            if( m_bodyStyle > symbol->GetBodyStyleCount() )
-                symbol->SetBodyStyleCount( m_bodyStyle, false, false );
-
             if( m_unit > symbol->GetUnitCount() )
                 symbol->SetUnitCount( m_unit, false );
 
@@ -641,9 +638,14 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
             RECURSE_MODE::NO_RECURSE );
 
     // Before V10 we didn't store the number of body styles in a symbol, we just looked at all its
-    // drawings each time we wanted to know.
-    if( m_requiredVersion < 20250827 )
+    // drawings each time we wanted to know.  Symbol libraries kept their old version for a while
+    // after custom body styles landed, so only infer De Morgan when nothing was declared.
+    if( m_requiredVersion < 20250827 && !symbol->IsMultiBodyStyle() )
         symbol->SetHasDeMorganBodyStyles( symbol->HasLegacyAlternateBodyStyle() );
+
+    // The declaration wins over the drawings, which lets libraries written by a version that
+    // failed to delete a body style load without its leftovers
+    symbol->PruneBodyStyleDrawItems( symbol->GetBodyStyleCount() );
 
     symbol->RefreshLibraryTreeCaches();
 

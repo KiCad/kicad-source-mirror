@@ -846,17 +846,24 @@ public:
     void SetBodyStyleNames( const std::vector<wxString>& aBodyStyleNames ) { m_bodyStyleNames = aBodyStyleNames; }
 
     /**
-     * Set or clear the alternate body style (DeMorgan) for the symbol.
+     * Set the number of body styles for the symbol.
      *
-     * If the symbol already has an alternate body style set and aHasAlternate is false, all
-     * of the existing draw items for the alternate body style are remove.  If the alternate
-     * body style is not set and aHasAlternate is true, than the base draw items are duplicated
-     * and added to the symbol.
+     * Draw items belonging to body styles beyond \a aCount are always deleted.  Draw items for
+     * the new body styles are duplicated from the standard body style when the symbol gains
+     * body styles and the caller asks for it.
      *
-     * @param aHasAlternate - Set or clear the symbol alternate body style.
-     * @param aDuplicatePins - Duplicate all pins from original body style if true.
+     * @param aCount - Number of body styles, at least 1.
+     * @param aDuplicateDrawItems - Duplicate all graphics from the standard body style if true.
+     * @param aDuplicatePins - Duplicate all pins from the standard body style if true.
      */
     void SetBodyStyleCount( int aCount, bool aDuplicateDrawItems, bool aDuplicatePins );
+
+    /**
+     * Delete the draw items belonging to a body style beyond \a aBodyStyleCount.
+     *
+     * @param aBodyStyleCount - Number of body styles to keep.
+     */
+    void PruneBodyStyleDrawItems( int aBodyStyleCount );
 
     /**
      * Comparison test that can be used for operators.

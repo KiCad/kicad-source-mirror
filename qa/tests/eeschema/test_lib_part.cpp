@@ -32,6 +32,12 @@
 #include <sch_shape.h>
 #include <sch_pin.h>
 #include <lib_symbol.h>
+#include <sch_file_versions.h>
+#include <sch_io/sch_io.h>
+#include <sch_io/sch_io_mgr.h>
+
+#include <wx/file.h>
+#include <wx/filename.h>
 
 #include "lib_field_test_utils.h"
 
@@ -46,6 +52,83 @@ public:
     ///< Part with no extra data set
     LIB_SYMBOL m_part_no_data;
 };
+
+
+/**
+ * A temporary symbol library that is removed when it goes out of scope.
+ */
+class SCOPED_TEMP_LIB
+{
+public:
+    SCOPED_TEMP_LIB()
+    {
+        m_dir = wxFileName::CreateTempFileName( wxS( "kicad_lib_part_" ) );
+        wxRemoveFile( m_dir );
+        wxFileName::Mkdir( m_dir );
+
+        m_path = wxFileName( m_dir, wxS( "test_lib.kicad_sym" ) ).GetFullPath();
+    }
+
+    ~SCOPED_TEMP_LIB()
+    {
+        if( wxFileName::DirExists( m_dir ) )
+            wxFileName::Rmdir( m_dir, wxPATH_RMDIR_RECURSIVE );
+    }
+
+    const wxString& GetPath() const { return m_path; }
+
+private:
+    wxString m_dir;
+    wxString m_path;
+};
+
+
+/**
+ * Return the number of draw items belonging to a body style beyond the standard one.
+ */
+static int alternateBodyStyleItemCount( LIB_SYMBOL& aSymbol )
+{
+    int count = 0;
+
+    for( SCH_ITEM& item : aSymbol.GetDrawItems() )
+    {
+        if( item.GetBodyStyle() > BODY_STYLE::BASE )
+            count++;
+    }
+
+    return count;
+}
+
+
+/**
+ * Load 4001, a four unit NOR gate carrying a De Morgan alternate body style.
+ */
+static std::unique_ptr<LIB_SYMBOL> loadDeMorganSymbol()
+{
+    wxFileName libPath( KI_TEST::GetEeschemaTestDataDir() );
+    libPath.AppendDir( "libs" );
+    libPath.SetFullName( "4xxx.kicad_sym" );
+
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+    // The plugin cache owns the returned symbol, so hand back a copy
+    LIB_SYMBOL* cached = pi->LoadSymbol( libPath.GetFullPath(), wxS( "4001" ) );
+
+    return cached ? std::make_unique<LIB_SYMBOL>( *cached ) : nullptr;
+}
+
+
+/**
+ * Write a symbol to its own library file.
+ */
+static void saveToLib( const wxString& aLibPath, const LIB_SYMBOL& aSymbol )
+{
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+    pi->CreateLibrary( aLibPath );
+    pi->SaveSymbol( aLibPath, new LIB_SYMBOL( aSymbol ) );
+    pi->SaveLibrary( aLibPath );
+}
 
 
 /**
@@ -790,6 +873,72 @@ BOOST_AUTO_TEST_CASE( SetUnitCountRejectsInvalidValues )
     negativeCount.SetUnitCount( -1, true );
 #endif
     checkMandatoryFields( negativeCount );
+}
+
+
+/**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25004
+ *
+ * Dropping a symbol back to a single body style must delete the alternate drawings whichever
+ * order the caller updates the body style metadata in.  DIALOG_LIB_SYMBOL_PROPERTIES cleared
+ * the De Morgan flag first, which made SetBodyStyleCount() see a previous count of 1 and skip
+ * the deletion.  The orphans then drew on top of the standard body style because renderers ask
+ * for body style 0 (all) when a symbol has only one.
+ */
+BOOST_AUTO_TEST_CASE( DeleteDeMorganBodyStyleDrawItems )
+{
+    for( bool clearFlagFirst : { false, true } )
+    {
+        std::unique_ptr<LIB_SYMBOL> symbol = loadDeMorganSymbol();
+        BOOST_REQUIRE( symbol );
+        BOOST_REQUIRE( symbol->HasDeMorganBodyStyles() );
+        BOOST_REQUIRE( alternateBodyStyleItemCount( *symbol ) > 0 );
+
+        if( clearFlagFirst )
+        {
+            symbol->SetHasDeMorganBodyStyles( false );
+            symbol->SetBodyStyleCount( 1, false, false );
+        }
+        else
+        {
+            symbol->SetBodyStyleCount( 1, false, false );
+            symbol->SetHasDeMorganBodyStyles( false );
+        }
+
+        symbol->SetBodyStyleNames( {} );
+
+        BOOST_CHECK_EQUAL( symbol->GetBodyStyleCount(), 1 );
+        BOOST_CHECK_EQUAL( alternateBodyStyleItemCount( *symbol ), 0 );
+    }
+}
+
+
+/**
+ * Libraries already written with orphaned alternate drawings must load without them.  The
+ * declared body style count is authoritative for V10 and later files.
+ */
+BOOST_AUTO_TEST_CASE( OrphanedBodyStyleItemsAreNotLoaded )
+{
+    std::unique_ptr<LIB_SYMBOL> symbol = loadDeMorganSymbol();
+    BOOST_REQUIRE( symbol );
+
+    // Reproduce what a broken save left on disk: no De Morgan declaration, alternate drawings
+    symbol->SetHasDeMorganBodyStyles( false );
+    BOOST_REQUIRE( alternateBodyStyleItemCount( *symbol ) > 0 );
+
+    SCOPED_TEMP_LIB tempLib;
+    saveToLib( tempLib.GetPath(), *symbol );
+
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    LIB_SYMBOL* reloaded = pi->LoadSymbol( tempLib.GetPath(), wxS( "4001" ) );
+
+    BOOST_REQUIRE( reloaded );
+    BOOST_CHECK_EQUAL( reloaded->GetBodyStyleCount(), 1 );
+    BOOST_CHECK_EQUAL( alternateBodyStyleItemCount( *reloaded ), 0 );
+
+    // The standard body style must survive the pruning
+    BOOST_CHECK( !reloaded->GetUnitDrawItems( 1, BODY_STYLE::BASE ).empty() );
+    BOOST_CHECK_EQUAL( reloaded->GetUnitCount(), symbol->GetUnitCount() );
 }
 
 
