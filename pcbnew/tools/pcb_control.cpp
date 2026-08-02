@@ -1264,6 +1264,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 case PCB_DIM_LEADER_T:
                 case PCB_DIM_ORTHOGONAL_T:
                 case PCB_DIM_RADIAL_T:
+                case PCB_POINT_T:
                     clipDrawItem->SetParent( editorFootprint );
                     pastedItems.push_back( clipDrawItem );
                     break;
