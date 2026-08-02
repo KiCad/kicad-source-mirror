@@ -80,6 +80,10 @@ void HIDPI_GL_3D_CANVAS::OnMouseWheelCamera( wxMouseEvent& event, bool aPan )
     if( m_camera_is_moving )
         return;
 
+    // Honor the "Pan left/right with horizontal movement" setting for native horizontal wheel
+    if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL && !m_settings.m_horizontalPan )
+        return;
+
     // Pick the modifier, if any.  Shift beats control beats alt, we don't support more than one.
     int modifiers =
             event.ShiftDown() ? WXK_SHIFT : ( event.ControlDown() ? WXK_CONTROL : ( event.AltDown() ? WXK_ALT : 0 ) );
