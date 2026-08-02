@@ -446,4 +446,135 @@ BOOST_AUTO_TEST_CASE( SaveLibraryAsToNewFile )
 }
 
 
+/**
+ * Test that querying the derived symbols of a name that is not in the buffer is harmless.
+ *
+ * The symbol editor evaluates its context menu conditions against whatever LIB_ID the library
+ * tree or the open symbol names, and that symbol need not be buffered.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24970
+ */
+BOOST_AUTO_TEST_CASE( DerivedSymbolNamesForUnbufferedSymbol )
+{
+    LIB_BUFFER libBuffer( wxS( "TestLibrary" ) );
+
+    auto        parent = std::make_unique<LIB_SYMBOL>( wxS( "Parent" ) );
+    LIB_SYMBOL& parentRef = *parent;
+
+    libBuffer.CreateBuffer( std::move( parent ), std::make_unique<SCH_SCREEN>() );
+
+    auto child = std::make_unique<LIB_SYMBOL>( wxS( "Child" ) );
+    child->SetParent( &parentRef );
+    libBuffer.CreateBuffer( std::move( child ), std::make_unique<SCH_SCREEN>() );
+
+    wxArrayString names;
+
+    BOOST_CHECK_EQUAL( libBuffer.GetDerivedSymbolNames( wxS( "NeverBuffered" ), names ), 0 );
+    BOOST_CHECK( names.IsEmpty() );
+
+    // Deleting a symbol drops it from the buffer while the tree selection and the open symbol can
+    // still name it.
+    std::shared_ptr<SYMBOL_BUFFER> parentBuf = libBuffer.GetBuffer( wxS( "Parent" ) );
+    BOOST_REQUIRE( parentBuf != nullptr );
+    BOOST_CHECK( libBuffer.DeleteBuffer( *parentBuf ) );
+    BOOST_CHECK( libBuffer.GetSymbol( wxS( "Parent" ) ) == nullptr );
+
+    names.Clear();
+    BOOST_CHECK_EQUAL( libBuffer.GetDerivedSymbolNames( wxS( "Parent" ), names ), 0 );
+    BOOST_CHECK( names.IsEmpty() );
+}
+
+
+/**
+ * Test that the inheritance walk follows symbol names rather than parent object identity.
+ *
+ * SYMBOL_LIBRARY_MANAGER::getLibraryBuffer() copies the original symbols in an unspecified order,
+ * so a buffered child can point at a copy of its parent that is not the buffered one.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24970
+ */
+BOOST_AUTO_TEST_CASE( DerivedSymbolNamesAcrossRebufferedParent )
+{
+    // The originals, as the library adapter owns them.  The buffer only ever holds copies.
+    auto originalRoot = std::make_unique<LIB_SYMBOL>( wxS( "Root" ) );
+    auto originalMid = std::make_unique<LIB_SYMBOL>( wxS( "Mid" ) );
+    auto originalLeaf = std::make_unique<LIB_SYMBOL>( wxS( "Leaf" ) );
+
+    originalMid->SetParent( originalRoot.get() );
+    originalLeaf->SetParent( originalMid.get() );
+
+    LIB_BUFFER libBuffer( wxS( "TestLibrary" ) );
+
+    // Reaching Leaf first buffers a copy of Mid whose parent link still points at the unbuffered
+    // original Root.
+    auto        midCopy = std::make_unique<LIB_SYMBOL>( *originalMid );
+    LIB_SYMBOL* midCopyPtr = midCopy.get();
+
+    libBuffer.CreateBuffer( std::move( midCopy ), std::make_unique<SCH_SCREEN>() );
+
+    auto leafCopy = std::make_unique<LIB_SYMBOL>( *originalLeaf );
+    leafCopy->SetParent( midCopyPtr );
+    libBuffer.CreateBuffer( std::move( leafCopy ), std::make_unique<SCH_SCREEN>() );
+
+    auto        rootCopy = std::make_unique<LIB_SYMBOL>( *originalRoot );
+    LIB_SYMBOL* rootCopyPtr = rootCopy.get();
+
+    libBuffer.CreateBuffer( std::move( rootCopy ), std::make_unique<SCH_SCREEN>() );
+
+    // Reaching Mid itself then buffers a second copy, this time parented to the buffered Root.
+    // The duplicate entry is a separate getLibraryBuffer() defect; the walk has to tolerate it.
+    auto midDuplicate = std::make_unique<LIB_SYMBOL>( *originalMid );
+    midDuplicate->SetParent( rootCopyPtr );
+    libBuffer.CreateBuffer( std::move( midDuplicate ), std::make_unique<SCH_SCREEN>() );
+
+    wxArrayString names;
+
+    BOOST_CHECK_EQUAL( libBuffer.GetDerivedSymbolNames( wxS( "Root" ), names ), 2 );
+    BOOST_CHECK( names.Index( wxS( "Mid" ) ) != wxNOT_FOUND );
+    BOOST_CHECK( names.Index( wxS( "Leaf" ) ) != wxNOT_FOUND );
+
+    // HasDerivedSymbols() has always matched on the name.  The two have to agree or DeleteBuffer()
+    // reports failure and orphans the children it did not remove.
+    BOOST_CHECK( libBuffer.HasDerivedSymbols( wxS( "Root" ) ) );
+    BOOST_CHECK( libBuffer.HasDerivedSymbols( wxS( "Mid" ) ) );
+}
+
+
+/**
+ * Test that a symbol is never reported as derived from itself.
+ *
+ * A hand-edited library can name a cycle, and reporting the root as its own descendant would have
+ * removeChildSymbols() erase the buffer DeleteBuffer() is in the middle of removing.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24970
+ */
+BOOST_AUTO_TEST_CASE( DerivedSymbolNamesExcludeRootFromNameCycle )
+{
+    // Unbuffered originals that close the cycle by name
+    auto originalA = std::make_unique<LIB_SYMBOL>( wxS( "A" ) );
+    auto originalB = std::make_unique<LIB_SYMBOL>( wxS( "B" ) );
+
+    LIB_BUFFER libBuffer( wxS( "TestLibrary" ) );
+
+    auto symbolA = std::make_unique<LIB_SYMBOL>( wxS( "A" ) );
+    symbolA->SetParent( originalB.get() );
+    libBuffer.CreateBuffer( std::move( symbolA ), std::make_unique<SCH_SCREEN>() );
+
+    auto symbolB = std::make_unique<LIB_SYMBOL>( wxS( "B" ) );
+    symbolB->SetParent( originalA.get() );
+    libBuffer.CreateBuffer( std::move( symbolB ), std::make_unique<SCH_SCREEN>() );
+
+    wxArrayString names;
+
+    BOOST_CHECK_EQUAL( libBuffer.GetDerivedSymbolNames( wxS( "A" ), names ), 1 );
+    BOOST_REQUIRE_EQUAL( names.GetCount(), 1 );
+    BOOST_CHECK_EQUAL( names[0], wxS( "B" ) );
+
+    std::shared_ptr<SYMBOL_BUFFER> bufferA = libBuffer.GetBuffer( wxS( "A" ) );
+    BOOST_REQUIRE( bufferA != nullptr );
+    BOOST_CHECK( libBuffer.DeleteBuffer( *bufferA ) );
+    BOOST_CHECK( libBuffer.GetBuffers().empty() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

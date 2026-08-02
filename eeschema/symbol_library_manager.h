@@ -157,7 +157,7 @@ public:
      * @param aList is the list of symbols names derived from \a aSymbolName.
      * @return a size_t count of the number of symbols derived from \a aSymbolName.
      */
-    size_t GetDerivedSymbolNames( const wxString& aSymbolName, wxArrayString& aList );
+    size_t GetDerivedSymbolNames( const wxString& aSymbolName, wxArrayString& aList ) const;
 
 private:
     /**
@@ -374,6 +374,11 @@ public:
      * Fetch all of the symbols derived from a \a aSymbolName into \a aList.
      */
     size_t GetDerivedSymbolNames( const wxString& aSymbolName, const wxString& aLibraryName, wxArrayString& aList );
+
+    /**
+     * Check whether any symbol inherits from \a aSymbolName, without building the list of names.
+     */
+    bool HasDerivedSymbols( const wxString& aSymbolName, const wxString& aLibraryName );
 
     size_t GetLibraryCount() const;
 
