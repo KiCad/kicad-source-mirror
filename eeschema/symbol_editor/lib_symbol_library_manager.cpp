@@ -85,7 +85,11 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL_LIBRARY_MANAGER::CreateSymbol( const NEW_
             new_symbol->LockUnits( false );
 
         if( aProps.alternateBodyStyle )
+        {
+            // The count is derived from the flag, so set it after the pins have been duplicated
             new_symbol->SetBodyStyleCount( 2, false, true );
+            new_symbol->SetHasDeMorganBodyStyles( true );
+        }
     }
     else
     {

@@ -2021,54 +2021,55 @@ int LIB_SYMBOL::GetUnitCount() const
 
 void LIB_SYMBOL::SetBodyStyleCount( int aCount, bool aDuplicateDrawItems, bool aDuplicatePins )
 {
+    wxCHECK_RET( aCount >= 1,
+                 wxString::Format( wxT( "Invalid body style count %d, ignoring." ), aCount ) );
+
     int prevCount = GetBodyStyleCount();
 
-    if( prevCount == aCount )
-        return;
-
-    // Duplicate items to create the converted shape
-    if( prevCount < aCount )
+    // Populate the new body styles from the standard one
+    if( prevCount < aCount && ( aDuplicateDrawItems || aDuplicatePins ) )
     {
-        if( aDuplicateDrawItems || aDuplicatePins )
+        std::vector<SCH_ITEM*> tmp; // Adding to m_drawings while iterating it invalidates the iterator
+
+        for( SCH_ITEM& item : m_drawings )
         {
-            std::vector<SCH_ITEM*> tmp; // Temporarily store the duplicated pins here.
+            if( item.Type() != SCH_PIN_T && !aDuplicateDrawItems )
+                continue;
 
-            for( SCH_ITEM& item : m_drawings )
+            if( item.m_bodyStyle == BODY_STYLE::BASE )
             {
-                if( item.Type() != SCH_PIN_T && !aDuplicateDrawItems )
-                    continue;
-
-                if( item.m_bodyStyle == 1 )
+                for( int j = prevCount + 1; j <= aCount; j++ )
                 {
-                    for( int j = prevCount + 1; j <= aCount; j++ )
-                    {
-                        SCH_ITEM* newItem = item.Duplicate( IGNORE_PARENT_GROUP );
-                        newItem->m_bodyStyle = j;
-                        tmp.push_back( newItem );
-                    }
+                    SCH_ITEM* newItem = item.Duplicate( IGNORE_PARENT_GROUP );
+                    newItem->m_bodyStyle = j;
+                    tmp.push_back( newItem );
                 }
             }
-
-            // Transfer the new pins to the LIB_SYMBOL.
-            for( SCH_ITEM* item : tmp )
-                m_drawings.push_back( item );
         }
+
+        for( SCH_ITEM* item : tmp )
+            m_drawings.push_back( item );
+
+        m_drawings.sort();
     }
-    else
+
+    // A caller that already cleared the De Morgan flag or the body style names reports a
+    // previous count of 1, so the deletion cannot be conditional on the count dropping
+    PruneBodyStyleDrawItems( aCount );
+}
+
+
+void LIB_SYMBOL::PruneBodyStyleDrawItems( int aBodyStyleCount )
+{
+    LIB_ITEMS_CONTAINER::ITERATOR i = m_drawings.begin();
+
+    while( i != m_drawings.end() )
     {
-        // Delete converted shape items because the converted shape does not exist
-        LIB_ITEMS_CONTAINER::ITERATOR i = m_drawings.begin();
-
-        while( i != m_drawings.end() )
-        {
-            if( i->m_bodyStyle > aCount )
-                i = m_drawings.erase( i );
-            else
-                ++i;
-        }
+        if( i->m_bodyStyle > aBodyStyleCount )
+            i = m_drawings.erase( i );
+        else
+            ++i;
     }
-
-    m_drawings.sort();
 }
 
 
