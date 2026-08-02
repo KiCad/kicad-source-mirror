@@ -2112,15 +2112,34 @@ std::vector<LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
         if( item.Type() == SCH_FIELD_T )
             continue;
 
-        for( LIB_SYMBOL_UNIT& unit : units )
+        int unit = item.GetUnit();
+        int bodyStyle = item.GetBodyStyle();
+
+        auto it = std::find_if( units.begin(), units.end(),
+                                [unit, bodyStyle]( const LIB_SYMBOL_UNIT& a )
+                                {
+                                    return a.m_unit == unit && a.m_bodyStyle == bodyStyle;
+                                } );
+
+        if( it == units.end() )
         {
-            if( unit.m_unit == item.GetUnit() && unit.m_bodyStyle == item.GetBodyStyle() )
-            {
-                unit.m_items.push_back( &item );
-                break;
-            }
+            LIB_SYMBOL_UNIT record;
+            record.m_unit = unit;
+            record.m_bodyStyle = bodyStyle;
+            it = units.insert( units.end(), std::move( record ) );
         }
+
+        it->m_items.push_back( &item );
     }
+
+    std::sort( units.begin(), units.end(),
+               []( const LIB_SYMBOL_UNIT& a, const LIB_SYMBOL_UNIT& b )
+               {
+                   if( a.m_unit == b.m_unit )
+                       return a.m_bodyStyle < b.m_bodyStyle;
+
+                   return a.m_unit < b.m_unit;
+               } );
 
     return units;
 }
