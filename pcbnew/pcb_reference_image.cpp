@@ -208,6 +208,11 @@ void PCB_REFERENCE_IMAGE::Serialize( google::protobuf::Any& aContainer ) const
         }
     }
 
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        refImage.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+    else if( const BOARD* board = GetBoard() )
+        refImage.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
     aContainer.PackFrom( refImage );
 }
 

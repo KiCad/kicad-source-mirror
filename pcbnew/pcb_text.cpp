@@ -130,6 +130,11 @@ void PCB_TEXT::Serialize( google::protobuf::Any& aContainer ) const
 
     PackVector2( *text->mutable_position(), GetPosition() );
 
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        boardText.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+    else if( const BOARD* board = GetBoard() )
+        boardText.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
     aContainer.PackFrom( boardText );
 }
 

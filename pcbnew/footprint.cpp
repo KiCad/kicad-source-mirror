@@ -316,6 +316,9 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     footprint.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                      : kiapi::common::types::LockedState::LS_UNLOCKED );
 
+    if( const BOARD* board = GetBoard() )
+        footprint.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
     google::protobuf::Any buf;
     GetField( FIELD_T::REFERENCE )->Serialize( buf );
     buf.UnpackTo( footprint.mutable_reference_field() );

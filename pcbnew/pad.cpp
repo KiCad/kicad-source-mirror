@@ -211,6 +211,9 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
         pad.mutable_symbol_pin()->set_no_connect( pt->second );
     }
 
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        pad.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+
     aContainer.PackFrom( pad );
 }
 

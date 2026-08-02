@@ -273,6 +273,11 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
     zone.set_priority( m_priority );
     zone.set_filled( m_isFilled );
 
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        zone.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+    else if( const BOARD* board = GetBoard() )
+        zone.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
     if( m_isRuleArea )
     {
         types::RuleAreaSettings* ra = zone.mutable_rule_area_settings();
