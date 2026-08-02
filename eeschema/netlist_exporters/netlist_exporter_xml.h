@@ -138,7 +138,7 @@ protected:
     XNODE* makeLibraries();
 
     void addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheet,
-                          const SCH_SHEET_LIST& aSheetList);
+                          const SCH_SHEET_LIST& aSheetList, const wxString& aVariant );
 
     /**
      * Finds all component class names attached to any sub-unit of a given symbol
