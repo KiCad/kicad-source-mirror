@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-08-02 19:01+0000\n"
+"PO-Revision-Date: 2026-08-03 21:01+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/v10/fa/>\n"
 "Language: fa\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.8.1.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:395
@@ -5030,36 +5030,36 @@ msgstr "باز کردن فایل '%s' انجام نشد."
 #: pcbnew/exporters/gendrill_excellon_writer.cpp:707
 #, c-format
 msgid "Failed to write file '%s'."
-msgstr ""
+msgstr "نوشتن فایل '%s' انجام نشد."
 
 #: common/dialogs/panel_embedded_files_base.cpp:37
 msgid "Embedded Reference"
-msgstr ""
+msgstr "ارجاع تعبیه (Embedded) شده"
 
 #: common/dialogs/panel_embedded_files_base.cpp:59
 msgid "Add embedded file"
-msgstr ""
+msgstr "افزودن فایل تعبیه (Embedded) شده"
 
 #: common/dialogs/panel_embedded_files_base.cpp:67
 msgid "Remove embedded file"
-msgstr ""
+msgstr "حذف فایل تعبیه (Embedded) شده"
 
 #: common/dialogs/panel_embedded_files_base.cpp:74
 msgid "Embed fonts"
-msgstr ""
+msgstr "تعبیه قلم ها (Embed fonts)"
 
 #: common/dialogs/panel_embedded_files_base.cpp:75
 msgid "Store a copy of all fonts used"
-msgstr ""
+msgstr "یک رونوشت (Copy) از همۀ قلم (Font) های استفاده شده ذخیره کن"
 
 #: common/dialogs/panel_embedded_files_base.cpp:82
 msgid "&Export..."
-msgstr ""
+msgstr "&گرفتن خروجی ..."
 
 #: common/dialogs/panel_gal_options_base.cpp:17
 #: common/widgets/gal_options_panel_base.cpp:17
 msgid "Grid Display"
-msgstr ""
+msgstr "نحوۀ نمایش شبکۀ راهنمای چینش در صفحه (Grid Display)"
 
 #: common/dialogs/panel_gal_options_base.cpp:27
 #: common/widgets/gal_options_panel_base.cpp:27
@@ -5073,37 +5073,37 @@ msgstr ""
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:87
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:122
 msgid "Style:"
-msgstr ""
+msgstr "طرح:"
 
 #: common/dialogs/panel_gal_options_base.cpp:31
 #: common/widgets/gal_options_panel_base.cpp:31
 msgid "Dots"
-msgstr ""
+msgstr "نقطه ای"
 
 #: common/dialogs/panel_gal_options_base.cpp:34
 #: common/widgets/gal_options_panel_base.cpp:34
 msgid "Lines"
-msgstr ""
+msgstr "خطوط"
 
 #: common/dialogs/panel_gal_options_base.cpp:37
 #: common/widgets/gal_options_panel_base.cpp:37
 msgid "Small crosses"
-msgstr ""
+msgstr "علامت بعلاوه کوچک"
 
 #: common/dialogs/panel_gal_options_base.cpp:48
 #: common/widgets/gal_options_panel_base.cpp:48
 msgid "Grid thickness:"
-msgstr ""
+msgstr "ضخامت شبکۀ راهنما (Grid):"
 
 #: common/dialogs/panel_gal_options_base.cpp:61
 #: common/widgets/gal_options_panel_base.cpp:61
 msgid "Minimum grid spacing:"
-msgstr ""
+msgstr "حداقل فاصلۀ شبکۀ راهنما (Grid):"
 
 #: common/dialogs/panel_gal_options_base.cpp:72
 #: common/widgets/gal_options_panel_base.cpp:72
 msgid "Snap to grid:"
-msgstr ""
+msgstr "چسبیدن به شبکۀ راهنما (Grid):"
 
 #: common/dialogs/panel_gal_options_base.cpp:76
 #: common/widgets/gal_options_panel_base.cpp:76
@@ -5112,12 +5112,12 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:370
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:360 pcbnew/zone.cpp:1953
 msgid "Always"
-msgstr ""
+msgstr "همیشه"
 
 #: common/dialogs/panel_gal_options_base.cpp:76
 #: common/widgets/gal_options_panel_base.cpp:76
 msgid "When grid shown"
-msgstr ""
+msgstr "زمانی که شبکۀ راهنما (Grid) نشان داده می شود"
 
 #: common/dialogs/panel_gal_options_base.cpp:76
 #: common/widgets/gal_options_panel_base.cpp:76
@@ -5126,52 +5126,52 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:370
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:360 pcbnew/zone.cpp:1954
 msgid "Never"
-msgstr ""
+msgstr "هیچ وقت"
 
 #: common/dialogs/panel_gal_options_base.cpp:90 common/layer_id.cpp:110
 #: common/layer_id.cpp:149 common/widgets/gal_options_panel_base.cpp:90
 #: eeschema/sim/simulator_frame_ui.cpp:745
 #: eeschema/sim/simulator_frame_ui_base.cpp:167
 msgid "Cursor"
-msgstr ""
+msgstr "مکان نما"
 
 #: common/dialogs/panel_gal_options_base.cpp:102 common/tool/actions.cpp:1185
 #: common/widgets/gal_options_panel_base.cpp:102
 msgid "Small crosshairs"
-msgstr ""
+msgstr "نشانگر بعلاوه کوچک"
 
 #: common/dialogs/panel_gal_options_base.cpp:105
 #: common/widgets/gal_options_panel_base.cpp:105
 msgid "Full window crosshairs"
-msgstr ""
+msgstr "نشانگر بعلاوه تمام صفحه"
 
 #: common/dialogs/panel_gal_options_base.cpp:108
 #: common/widgets/gal_options_panel_base.cpp:108
 msgid "45 degree crosshairs"
-msgstr ""
+msgstr "نشانگر ضربدری (45 درجه)"
 
 #: common/dialogs/panel_gal_options_base.cpp:114
 #: common/widgets/gal_options_panel_base.cpp:114
 msgid "Always show crosshairs"
-msgstr ""
+msgstr "همیشه نشانگر را نمایش بده"
 
 #: common/dialogs/panel_grid_settings.cpp:53
 msgid "Pads:"
-msgstr ""
+msgstr "لحیم گاه ها (Pads):"
 
 #: common/dialogs/panel_grid_settings.cpp:61
 msgid "Footprints/pads:"
-msgstr ""
+msgstr "فوت‌پرینت (Footprint) ها / لحیم گاه (Pad) ها:"
 
 #: common/dialogs/panel_grid_settings.cpp:62
 #: pcbnew/dialogs/panel_display_options_base.cpp:59
 msgid "Tracks:"
-msgstr ""
+msgstr "مسیر (Track) ها:"
 
 #: common/dialogs/panel_grid_settings.cpp:145 common/tool/grid_menu.cpp:99
-#, c-format
+#, c-format, fuzzy
 msgid "%s%s (%s)"
-msgstr ""
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:273
 #: common/dialogs/panel_grid_settings.cpp:317
@@ -5358,9 +5358,8 @@ msgid "\"Don't show again\" dialogs reset."
 msgstr ""
 
 #: common/dialogs/panel_maintenance.cpp:134
-#, fuzzy
 msgid "All dialogs reset to defaults."
-msgstr "بازنشانی به حالت پیش فرض"
+msgstr "همۀ پنجره (Dialog) ها به حالت پیش فرض بازنشانی شدند."
 
 #: common/dialogs/panel_maintenance_base.cpp:23
 msgid "3D cache file duration:"
