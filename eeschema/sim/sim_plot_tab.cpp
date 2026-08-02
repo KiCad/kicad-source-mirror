@@ -353,10 +353,24 @@ void SMITH_GRID::Plot( wxDC& aDC, mpWindow& aWindow )
     static const std::vector<double> baseVals = { 0.2, 0.5, 1.0, 2.0, 5.0 };
     std::vector<double>              gridVals = baseVals;
 
-    if( view.zoom >= 2.0 )
+    constexpr double FINEST_SCALE = 2.0 / ( 1.0 + 20.0 );
+
+    wxRealPoint lowGamma = view.ToGamma( wxPoint( mL, mT + plotH ) );
+    wxRealPoint highGamma = view.ToGamma( wxPoint( mL + plotW, mT ) );
+
+    auto poleDistance = [&]( double aRe )
+    {
+        return std::hypot( std::max( { lowGamma.x - aRe, aRe - highGamma.x, 0.0 } ),
+                           std::max( { lowGamma.y, -highGamma.y, 0.0 } ) );
+    };
+
+    bool zoomedIn = ( plotW / 2.0 ) / view.radius < 1.0;
+    bool converged = zoomedIn && std::min( poleDistance( 1.0 ), poleDistance( -1.0 ) ) < FINEST_SCALE;
+
+    if( view.zoom >= 2.0 && !converged )
         gridVals.insert( gridVals.end(), { 0.1, 0.3, 0.4, 0.7, 1.5, 3.0, 10.0 } );
 
-    if( view.zoom >= 5.0 )
+    if( view.zoom >= 5.0 && !converged )
         gridVals.insert( gridVals.end(), { 0.05, 0.15, 0.6, 0.8, 1.2, 1.7, 2.5, 4.0, 7.0, 20.0 } );
 
     wxPen gridPen = m_pen;
@@ -440,11 +454,30 @@ void SMITH_GRID::Plot( wxDC& aDC, mpWindow& aWindow )
                         std::clamp( aPos.y, mT + 1, mT + plotH - aExt.y - 1 ) );
     };
 
+    std::vector<wxRect> placed;
+
+    auto drawLabel = [&]( const wxString& aLabel, const wxPoint& aPos, const wxSize& aExt )
+    {
+        wxPoint pos = clampToPlot( aPos, aExt );
+        wxRect  box( pos, aExt );
+
+        box.Inflate( 2, 1 );
+
+        for( const wxRect& seen : placed )
+        {
+            if( seen.Intersects( box ) )
+                return;
+        }
+
+        placed.push_back( box );
+        aDC.DrawText( aLabel, pos );
+    };
+
     auto drawEdgeLabel = [&]( const wxString& aLabel, const wxPoint& aAt )
     {
         wxSize ext = aDC.GetTextExtent( aLabel );
 
-        aDC.DrawText( aLabel, clampToPlot( wxPoint( aAt.x - ext.x / 2, aAt.y + 3 ), ext ) );
+        drawLabel( aLabel, wxPoint( aAt.x - ext.x / 2, aAt.y + 3 ), ext );
     };
 
     // push reactance labels just outside the rim, clamped so j50 and -j50 are not clipped
@@ -458,7 +491,7 @@ void SMITH_GRID::Plot( wxDC& aDC, mpWindow& aWindow )
         pos.x -= KiROUND( ext.x * ( 1.0 - aRe ) / 2.0 );
         pos.y -= KiROUND( ext.y * ( 1.0 + aIm ) / 2.0 );
 
-        aDC.DrawText( aLabel, clampToPlot( pos, ext ) );
+        drawLabel( aLabel, pos, ext );
     };
 
     wxPoint at;
