@@ -45,6 +45,21 @@
 extern APIIMPORT wxPGGlobalVarsClass* wxPGGlobalVars;
 #endif
 
+
+class PROPERTIES_PANEL_GRID : public wxPropertyGrid
+{
+public:
+    PROPERTIES_PANEL_GRID( wxWindow* aParent ) :
+            wxPropertyGrid( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxPG_DEFAULT_STYLE | wxPG_TOOLTIPS )
+    {
+    }
+
+#if wxUSE_STATUSBAR
+    wxStatusBar* GetStatusBar() override { return nullptr; }
+#endif
+};
+
+
 PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         wxPanel( aParent ),
         m_SuppressGridChangeEvents( 0 ),
@@ -84,9 +99,8 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
     m_caption = new wxStaticText( this, wxID_ANY, _( "No objects selected" ) );
     mainSizer->Add( m_caption, 0, wxALL | wxEXPAND, 5 );
 
-    m_grid = new wxPropertyGrid( this );
+    m_grid = new PROPERTIES_PANEL_GRID( this );
     m_grid->SetUnspecifiedValueAppearance( wxPGCell( wxT( "<...>" ) ) );
-    m_grid->SetExtraStyle( wxPG_EX_HELP_AS_TOOLTIPS );
 
 #if wxCHECK_VERSION( 3, 3, 0 )
     m_grid->SetValidationFailureBehavior( wxPGVFBFlags::MarkCell );
