@@ -25,6 +25,7 @@
 #include <sch_edit_frame.h>
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
+#include <common.h>
 #include <core/mirror.h>
 #include "lib_symbol.h"
 #include <sch_shape.h>
@@ -1655,8 +1656,21 @@ const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aInsta
     {
         const wxString& fieldName = GetField( FIELD_T::VALUE )->GetName();
 
+        auto resolve = [&]( const wxString& aText ) -> wxString
+        {
+            if( !aResolve )
+                return aText;
+
+            std::function<bool( wxString* )> resolver = [&]( wxString* token ) -> bool
+            {
+                return ResolveTextVar( aInstance, token, aVariantName, 1 );
+            };
+
+            return ExpandTextVars( aText, &resolver );
+        };
+
         if( variant->m_Fields.contains( fieldName ) )
-            return variant->m_Fields[fieldName];
+            return resolve( variant->m_Fields[fieldName] );
 
         LIB_SYMBOL* altSymbol = GetVariantLibSymbol( aVariantName, *aInstance );
 
@@ -1665,7 +1679,7 @@ const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aInsta
             const SCH_FIELD* altField = altSymbol->GetField( FIELD_T::VALUE );
 
             if( altField && !altField->GetText().IsEmpty() )
-                return altField->GetText();
+                return resolve( altField->GetText() );
         }
     }
 

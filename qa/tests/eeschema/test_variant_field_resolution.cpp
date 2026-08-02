@@ -273,3 +273,30 @@ BOOST_FIXTURE_TEST_CASE( VariantFieldWriteRoundTrip, TEST_VARIANT_FIELD_RESOLUTI
         BOOST_CHECK( !variant->m_Fields.contains( wxS( "Value" ) ) );
     }
 }
+
+
+BOOST_FIXTURE_TEST_CASE( VariantOverrideResolvesTextVars, TEST_VARIANT_FIELD_RESOLUTION_FIXTURE )
+{
+    LoadTestSchematic();
+
+    SCH_SYMBOL* r1 = GetR1();
+    BOOST_REQUIRE( r1 );
+
+    SCH_SHEET_LIST  hierarchy = m_schematic->Hierarchy();
+    SCH_SHEET_PATH& sheet = hierarchy[0];
+
+    BOOST_REQUIRE( !r1->GetField( FIELD_T::VALUE )->GetText().Contains( wxS( "${" ) ) );
+
+    ClearVariants( r1 );
+    SetVariantField( r1, wxS( "TextVars" ), wxS( "Value" ), wxS( "${MPN}-ALT" ) );
+    SetVariantField( r1, wxS( "TextVars" ), wxS( "Description" ), wxS( "${MPN}-DESC" ) );
+
+    const wxString mpn = r1->GetFieldText( wxS( "MPN" ), &sheet, wxEmptyString );
+    SCH_FIELD*     description = r1->GetField( wxS( "Description" ) );
+
+    BOOST_REQUIRE( !mpn.IsEmpty() );
+    BOOST_REQUIRE( description );
+
+    BOOST_CHECK_EQUAL( r1->GetValue( true, &sheet, false, wxS( "TextVars" ) ), mpn + wxS( "-ALT" ) );
+    BOOST_CHECK_EQUAL( description->GetShownText( &sheet, false, 0, wxS( "TextVars" ) ), mpn + wxS( "-DESC" ) );
+}
