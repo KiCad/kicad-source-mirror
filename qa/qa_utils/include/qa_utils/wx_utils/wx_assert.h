@@ -21,6 +21,7 @@
 #define UNIT_TEST_UTILS_WX_ASSERT__H
 
 #include <wx/string.h>
+#include <wx/thread.h>
 
 #include <exception>
 #include <string>
@@ -59,6 +60,19 @@ public:
 };
 
 
+/**
+ * Print a wx assertion that fired outside the main thread, then exit the process.
+ *
+ * Worker threads reach wx assertions through the thread pool, whose tasks are detached and
+ * therefore cannot transport an exception back to a caller.  Throwing there unwinds straight
+ * into std::terminate, which reports only the last exception to escape - typically some
+ * unrelated assertion raised while the process was already coming apart.  Reporting from the
+ * faulting thread keeps the assertion and its stack together.
+ */
+[[noreturn]] void ReportAssertOffMainThread( const wxString& aFile, int aLine,
+                                             const wxString& aFunc, const wxString& aCond,
+                                             const wxString& aMsg );
+
 /*
  * Simple function to handle a WX assertion and throw a real exception.
  *
@@ -67,6 +81,9 @@ public:
 inline void wxAssertThrower( const wxString& aFile, int aLine, const wxString& aFunc,
                              const wxString& aCond, const wxString& aMsg )
 {
+    if( !wxThread::IsMain() )
+        ReportAssertOffMainThread( aFile, aLine, aFunc, aCond, aMsg );
+
     throw KI_TEST::WX_ASSERT_ERROR( aFile, aLine, aFunc, aCond, aMsg );
 }
 
