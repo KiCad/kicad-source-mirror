@@ -396,11 +396,11 @@ BOOST_FIXTURE_TEST_CASE( ViaEffectiveShapeOnBackdrilledLayer, BACKDRILL_TEST_FIX
     via->SetWidth( PADSTACK::ALL_LAYERS, viaWidth );
 
     // On a non-affected layer, should return full via size
-    std::shared_ptr<SHAPE> shapeB = via->GetEffectiveShape( B_Cu );
+    std::shared_ptr<SHAPE> shapeB = via->GetEffectiveShape( B_Cu, FLASHING::DEFAULT, PHYSICAL_CLEARANCE_CONSTRAINT );
     BOOST_REQUIRE( shapeB );
 
     // On an affected layer, should return backdrill hole size
-    std::shared_ptr<SHAPE> shapeF = via->GetEffectiveShape( F_Cu );
+    std::shared_ptr<SHAPE> shapeF = via->GetEffectiveShape( F_Cu, FLASHING::DEFAULT, PHYSICAL_CLEARANCE_CONSTRAINT );
     BOOST_REQUIRE( shapeF );
 
     // The effective shape on the backdrilled layer should be smaller (hole only)
