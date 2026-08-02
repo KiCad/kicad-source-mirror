@@ -233,6 +233,11 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
     EDA_SHAPE::Serialize( any );
     any.UnpackTo( msg.mutable_shape() );
 
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        msg.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+    else if( const BOARD* board = GetBoard() )
+        msg.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
     // TODO m_hasSolderMask and m_solderMaskMargin
 
     aContainer.PackFrom( msg );

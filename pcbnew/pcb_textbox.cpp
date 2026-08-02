@@ -94,6 +94,11 @@ void PCB_TEXTBOX::Serialize( google::protobuf::Any& aContainer ) const
     if( GetFont() )
         attrs->set_font_name( GetFont()->GetName().ToStdString() );
 
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        boardText.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+    else if( const BOARD* board = GetBoard() )
+        boardText.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
     attrs->set_horizontal_alignment( ToProtoEnum<GR_TEXT_H_ALIGN_T, HorizontalAlignment>( GetHorizJustify() ) );
 
     attrs->set_vertical_alignment( ToProtoEnum<GR_TEXT_V_ALIGN_T, VerticalAlignment>( GetVertJustify() ) );

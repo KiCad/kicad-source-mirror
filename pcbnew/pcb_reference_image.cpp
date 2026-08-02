@@ -186,6 +186,11 @@ void PCB_REFERENCE_IMAGE::Serialize( google::protobuf::Any& aContainer ) const
     refImage.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                     : kiapi::common::types::LockedState::LS_UNLOCKED );
 
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        refImage.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+    else if( const BOARD* board = GetBoard() )
+        refImage.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
     m_referenceImage.PackToBytes( *refImage.mutable_image_data() );
 
     aContainer.PackFrom( refImage );

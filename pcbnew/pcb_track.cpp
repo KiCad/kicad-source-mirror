@@ -410,6 +410,10 @@ void PCB_TRACK::Serialize( google::protobuf::Any &aContainer ) const
     track.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                  : kiapi::common::types::LockedState::LS_UNLOCKED );
     PackNet( track.mutable_net() );
+
+    if( const BOARD* board = GetBoard() )
+        track.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
     // TODO m_hasSolderMask and m_solderMaskMargin
 
     aContainer.PackFrom( track );
@@ -452,6 +456,10 @@ void PCB_ARC::Serialize( google::protobuf::Any &aContainer ) const
     arc.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
     PackNet( arc.mutable_net() );
+
+    if( const BOARD* board = GetBoard() )
+        arc.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
     // TODO m_hasSolderMask and m_solderMaskMargin
 
     aContainer.PackFrom( arc );
@@ -501,6 +509,9 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
     via.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
     PackNet( via.mutable_net() );
+
+    if( const BOARD* board = GetBoard() )
+        via.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
     aContainer.PackFrom( via );
 }

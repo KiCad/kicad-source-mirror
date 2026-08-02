@@ -186,6 +186,12 @@ void PCB_BARCODE::Serialize( google::protobuf::Any& aContainer ) const
 
     kiapi::common::PackVector2( *barcode.mutable_position(), GetPosition() );
     barcode.mutable_orientation()->set_value_degrees( GetAngle().AsDegrees() );
+
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        barcode.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+    else if( const BOARD* board = GetBoard() )
+        barcode.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
     barcode.set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( GetLayer() ) );
 
     barcode.mutable_width()->set_value_nm( m_width );

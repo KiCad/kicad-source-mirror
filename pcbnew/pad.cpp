@@ -421,6 +421,9 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
 
     pad.set_sim_electrical_type( ToProtoEnum<PAD_SIM_ELECTRICAL_TYPE, PadSimElectricalType>( GetSimElectricalType() ) );
 
+    if( FOOTPRINT* parent = GetParentFootprint() )
+        pad.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
+
     aContainer.PackFrom( pad );
 }
 
