@@ -298,7 +298,7 @@ const BOX2I PCB_GRIDITEM::GetBoundingBox() const
 }
 
 
-std::shared_ptr<SHAPE> PCB_GRIDITEM::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+std::shared_ptr<SHAPE> PCB_GRIDITEM::GetEffectiveShape( PCB_LAYER_ID, FLASHING, DRC_CONSTRAINT_T ) const
 {
     // No board geometry - return a null shape.
     return std::make_shared<SHAPE_NULL>();
