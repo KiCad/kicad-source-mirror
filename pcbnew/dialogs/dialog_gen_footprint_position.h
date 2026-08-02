@@ -24,9 +24,9 @@
 #pragma once
 
 #include <dialog_gen_footprint_position_file_base.h>
+#include <jobs/job_export_pcb_pos.h>
 
 class PCB_EDIT_FRAME;
-class JOB_EXPORT_PCB_POS;
 
 /**
  * The dialog to create footprint position files and choose options (one or 2 files, units
@@ -51,6 +51,14 @@ private:
     void onUpdateUInegXcoord( wxUpdateUIEvent& event ) override;
     void onUpdateUIExcludeTH( wxUpdateUIEvent& event ) override;
     void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) override;
+
+    /**
+     * Enable the checkbox that raised @a aEvent, clearing it when the selected output format
+     * cannot apply the option it controls.
+     */
+    void updateOptionCheckbox( wxUpdateUIEvent& aEvent, bool aSupported );
+
+    JOB_EXPORT_PCB_POS::FORMAT selectedFormat() const;
 
     /**
      * Creates files in text or csv format

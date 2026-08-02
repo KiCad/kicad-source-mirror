@@ -153,69 +153,66 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::TransferDataToWindow()
 }
 
 
+JOB_EXPORT_PCB_POS::FORMAT DIALOG_GEN_FOOTPRINT_POSITION::selectedFormat() const
+{
+    return static_cast<JOB_EXPORT_PCB_POS::FORMAT>( m_formatCtrl->GetSelection() );
+}
+
+
+void DIALOG_GEN_FOOTPRINT_POSITION::updateOptionCheckbox( wxUpdateUIEvent& aEvent, bool aSupported )
+{
+    if( !aSupported )
+        static_cast<wxCheckBox*>( aEvent.GetEventObject() )->SetValue( false );
+
+    aEvent.Enable( aSupported );
+}
+
+
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIUnits( wxUpdateUIEvent& event )
 {
-    m_unitsLabel->Enable( m_formatCtrl->GetSelection() != 2 );
-    m_unitsCtrl->Enable( m_formatCtrl->GetSelection() != 2 );
+    bool textFormat = selectedFormat() != JOB_EXPORT_PCB_POS::FORMAT::GERBER;
+
+    m_unitsLabel->Enable( textFormat );
+    m_unitsCtrl->Enable( textFormat );
 }
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIFileOpt( wxUpdateUIEvent& event )
 {
-    m_singleFile->Enable( m_formatCtrl->GetSelection() != 2 );
+    m_singleFile->Enable( selectedFormat() != JOB_EXPORT_PCB_POS::FORMAT::GERBER );
 }
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIOnlySMD( wxUpdateUIEvent& event )
 {
-    if( m_formatCtrl->GetSelection() == 2 )
-    {
-        m_onlySMD->SetValue( false );
-        m_onlySMD->Enable( false );
-    }
-    else
-    {
-        m_onlySMD->Enable( true );
-    }
+    JOB_EXPORT_PCB_POS::FILTER filter = JOB_EXPORT_PCB_POS::FILTER::SMD_ONLY;
+
+    updateOptionCheckbox( event, JOB_EXPORT_PCB_POS::FormatSupportsFilter( selectedFormat(), filter ) );
 }
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUInegXcoord( wxUpdateUIEvent& event )
 {
-    if( m_formatCtrl->GetSelection() == 2 )
-    {
-        m_negateXcb->SetValue( false );
-        m_negateXcb->Enable( false );
-    }
-    else
-    {
-        m_negateXcb->Enable( true );
-    }
+    updateOptionCheckbox( event, selectedFormat() != JOB_EXPORT_PCB_POS::FORMAT::GERBER );
 }
+
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIExcludeTH( wxUpdateUIEvent& event )
 {
-    if( m_formatCtrl->GetSelection() == 2 )
-    {
-        if( event.GetEventObject() == m_excludeTH )
-            m_excludeTH->SetValue( false );
-        else if( event.GetEventObject() == m_excludeDNP )
-            m_excludeDNP->SetValue( false );
-        else if( event.GetEventObject() == m_excludeBOM )
-            m_excludeBOM->SetValue( false );
+    JOB_EXPORT_PCB_POS::FILTER filter = JOB_EXPORT_PCB_POS::FILTER::EXCLUDE_TH;
 
-        event.Enable( false );
-    }
-    else
-    {
-        event.Enable( true );
-    }
+    if( event.GetEventObject() == m_excludeDNP )
+        filter = JOB_EXPORT_PCB_POS::FILTER::EXCLUDE_DNP;
+    else if( event.GetEventObject() == m_excludeBOM )
+        filter = JOB_EXPORT_PCB_POS::FILTER::EXCLUDE_BOM;
+
+    updateOptionCheckbox( event, JOB_EXPORT_PCB_POS::FormatSupportsFilter( selectedFormat(), filter ) );
 }
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event )
 {
-    m_cbIncludeBoardEdge->Enable( m_formatCtrl->GetSelection() == 2 );
+    m_cbIncludeBoardEdge->Enable( selectedFormat() == JOB_EXPORT_PCB_POS::FORMAT::GERBER );
 }
 
 
@@ -257,7 +254,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
         // Keep unix directory format convention in cfg files
         m_outputDirectory.Replace( wxT( "\\" ), wxT( "/" ) );
 
-        if( m_formatCtrl->GetSelection() == 2 )
+        if( selectedFormat() == JOB_EXPORT_PCB_POS::FORMAT::GERBER )
             CreateGerberFiles();
         else
             CreateAsciiFiles();
@@ -267,7 +264,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::onGenerate( wxCommandEvent& event )
         m_job->SetConfiguredOutputPath( m_outputDirectoryName->GetValue() );
         m_job->m_units = m_unitsCtrl->GetSelection() == 0 ? JOB_EXPORT_PCB_POS::UNITS::INCH
                                                           : JOB_EXPORT_PCB_POS::UNITS::MM;
-        m_job->m_format = static_cast<JOB_EXPORT_PCB_POS::FORMAT>( m_formatCtrl->GetSelection() );
+        m_job->m_format = selectedFormat();
         m_job->m_side = JOB_EXPORT_PCB_POS::SIDE::BOTH;
         m_job->m_singleFile = m_singleFile->GetValue();
         m_job->m_gerberBoardEdge = m_cbIncludeBoardEdge->GetValue();
@@ -328,7 +325,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     wxString                filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
 
     int fpcount = exporter.CreatePlaceFile( filename, F_Cu, m_cbIncludeBoardEdge->GetValue(),
-                                            m_excludeDNP->GetValue(), ExcludeBOM() );
+                                            ExcludeDNP(), ExcludeBOM() );
 
     if( fpcount < 0 )
     {
@@ -350,7 +347,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     filename = exporter.GetPlaceFileName( fn.GetFullPath(), B_Cu );
 
     fpcount = exporter.CreatePlaceFile( filename, B_Cu, m_cbIncludeBoardEdge->GetValue(),
-                                        m_excludeDNP->GetValue(), ExcludeBOM() );
+                                        ExcludeDNP(), ExcludeBOM() );
 
     if( fpcount < 0 )
     {
@@ -382,7 +379,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
     BOARD*     brd = m_editFrame->GetBoard();
     wxString   msg;
     bool       singleFile = OneFileOnly();
-    bool       useCSVfmt = m_formatCtrl->GetSelection() == 1;
+    bool       useCSVfmt = selectedFormat() == JOB_EXPORT_PCB_POS::FORMAT::CSV;
     bool       useAuxOrigin = m_useDrillPlaceOrigin->GetValue();
     int        fullcount = 0;
     int        topSide = true;

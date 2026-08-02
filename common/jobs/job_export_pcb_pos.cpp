@@ -98,6 +98,26 @@ JOB_EXPORT_PCB_POS::JOB_EXPORT_PCB_POS() :
 }
 
 
+bool JOB_EXPORT_PCB_POS::FormatSupportsFilter( FORMAT aFormat, FILTER aFilter )
+{
+    if( aFormat != FORMAT::GERBER )
+        return true;
+
+    // Gerber X3 records each footprint's mount type, so the pad technology filters are left to
+    // the consumer of the file
+    switch( aFilter )
+    {
+    case FILTER::SMD_ONLY:
+    case FILTER::EXCLUDE_TH:  return false;
+    case FILTER::EXCLUDE_DNP:
+    case FILTER::EXCLUDE_BOM: return true;
+    }
+
+    // Left unhandled so that a new filter trips -Wswitch rather than silently defaulting
+    return true;
+}
+
+
 wxString JOB_EXPORT_PCB_POS::GetDefaultDescription() const
 {
     return _( "Export position data" );

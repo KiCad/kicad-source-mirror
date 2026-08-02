@@ -54,6 +54,22 @@ public:
         GERBER
     };
 
+    /**
+     * The footprint selection filters that may be applied while generating position data.
+     */
+    enum class FILTER
+    {
+        SMD_ONLY,
+        EXCLUDE_TH,
+        EXCLUDE_DNP,
+        EXCLUDE_BOM
+    };
+
+    /**
+     * @return true if @a aFormat honours @a aFilter when choosing the footprints to export.
+     */
+    static bool FormatSupportsFilter( FORMAT aFormat, FILTER aFilter );
+
 public:
     wxString m_filename;
 
