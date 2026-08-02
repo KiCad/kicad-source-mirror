@@ -365,6 +365,19 @@ private:
     // named field values like ${DNP}
     bool     isAttribute( const wxString& aFieldName );
 
+    /**
+     * Test whether a field's storage is common to every sheet path that reaches a symbol.
+     *
+     * Shared sheets present one symbol under several paths.  Edits to storage they have in
+     * common must be recorded against all of those paths, while variant overrides belong to
+     * a single symbol instance.
+     *
+     * @param aFieldName is the canonical field or attribute name.
+     * @retval true if the field is stored on the symbol.
+     * @retval false if the field is stored on the symbol instance.
+     */
+    bool storageIsSharedAcrossPaths( const wxString& aFieldName ) const;
+
     // True when an ancestor sheet forces this attribute on, not the symbol itself.
     bool attributeInheritedFromSheet( const SCH_REFERENCE& aRef, const wxString& aAttributeName ) const;
     bool rowAttributeInheritedFromSheet( const DATA_MODEL_ROW& aGroup, int aCol );

@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <set>
+
 #include <nlohmann/json.hpp>
 #include <wx/string.h>
 #include <wx/debug.h>
@@ -671,45 +674,32 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
     if( aValue == INDETERMINATE_STATE )
         return;
 
-    DATA_MODEL_ROW& rowGroup = m_rows[aRow];
+    const DATA_MODEL_ROW& rowGroup = m_rows[aRow];
+    const wxString&       fieldName = m_cols[aCol].m_fieldName;
 
-    const SCH_SYMBOL* sharedSymbol = nullptr;
-    bool isSharedInstance = false;
+    std::set<const SCH_SYMBOL*> editedSymbols;
 
     for( const SCH_REFERENCE& ref : rowGroup.m_Refs )
     {
-        const SCH_SCREEN* screen = nullptr;
-
-        // Check to see if the symbol associated with this row has more than one instance.
-        if( const SCH_SYMBOL* symbol = ref.GetSymbol() )
-        {
-            screen = static_cast<const SCH_SCREEN*>( symbol->GetParent() );
-
-            isSharedInstance = ( screen && ( screen->GetRefCount() > 1 ) );
-            sharedSymbol = symbol;
-        }
+        editedSymbols.insert( ref.GetSymbol() );
 
         KIID_PATH key = makeDataStoreKey( ref.GetSheetPath(), *ref.GetSymbol() );
-        m_dataStore[key][m_cols[aCol].m_fieldName] = aValue;
+        m_dataStore[key][fieldName] = aValue;
     }
 
-    // Update all of the other instances for the shared symbol as required.
-    if( isSharedInstance
-      && ( ( rowGroup.m_Flag == GROUP_SINGLETON ) || ( rowGroup.m_Flag == CHILD_ITEM ) ) )
+    // ApplyData walks every path a symbol is reachable through, so an edit to storage those
+    // paths have in common must also reach the ones the current scope and filter hide
+    if( storageIsSharedAcrossPaths( fieldName ) )
     {
-        for( DATA_MODEL_ROW& row : m_rows )
+        for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
         {
-            if( row.m_ItemNumber == aRow + 1 )
+            const SCH_REFERENCE& ref = m_symbolsList[ii];
+
+            if( !editedSymbols.contains( ref.GetSymbol() ) )
                 continue;
 
-            for( const SCH_REFERENCE& ref : row.m_Refs )
-            {
-                if( ref.GetSymbol() != sharedSymbol )
-                    continue;
-
-                KIID_PATH key = makeDataStoreKey( ref.GetSheetPath(), *ref.GetSymbol() );
-                m_dataStore[key][m_cols[aCol].m_fieldName] = aValue;
-            }
+            KIID_PATH key = makeDataStoreKey( ref.GetSheetPath(), *ref.GetSymbol() );
+            m_dataStore[key][fieldName] = aValue;
         }
     }
 
@@ -943,6 +933,17 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::isAttribute( const wxString& aFieldName )
     return aFieldName == wxS( "${DNP}" ) || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) || aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_SIM}" );
+}
+
+
+bool FIELDS_EDITOR_GRID_DATA_MODEL::storageIsSharedAcrossPaths( const wxString& aFieldName ) const
+{
+    // Variant edits are kept on the symbol instance, but SCH_REFERENCE has no variant form of
+    // the board exclusion so that one always lands on the symbol
+    if( aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
+        return true;
+
+    return m_currentVariant.IsEmpty();
 }
 
 
