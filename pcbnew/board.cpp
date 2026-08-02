@@ -1378,21 +1378,33 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
 
     switch( aBoardItem->Type() )
     {
-    case PCB_NETINFO_T: m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem ); break;
+    case PCB_NETINFO_T:
+        m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem );
+        break;
 
     // this one uses a vector
-    case PCB_MARKER_T: m_markers.push_back( (PCB_MARKER*) aBoardItem ); break;
+    case PCB_MARKER_T:
+        m_markers.push_back( (PCB_MARKER*) aBoardItem );
+        break;
 
     // this one uses a vector
-    case PCB_GROUP_T: m_groups.push_back( (PCB_GROUP*) aBoardItem ); break;
+    case PCB_GROUP_T:
+        m_groups.push_back( (PCB_GROUP*) aBoardItem );
+        break;
 
-    case PCB_CONSTRAINT_T: m_constraints.push_back( (PCB_CONSTRAINT*) aBoardItem ); break;
+    case PCB_CONSTRAINT_T:
+        m_constraints.push_back( (PCB_CONSTRAINT*) aBoardItem );
+        break;
 
     // this one uses a vector
-    case PCB_GENERATOR_T: m_generators.push_back( (PCB_GENERATOR*) aBoardItem ); break;
+    case PCB_GENERATOR_T:
+        m_generators.push_back( (PCB_GENERATOR*) aBoardItem );
+        break;
 
     // this one uses a vector
-    case PCB_ZONE_T: m_zones.push_back( (ZONE*) aBoardItem ); break;
+    case PCB_ZONE_T:
+        m_zones.push_back( (ZONE*) aBoardItem );
+        break;
 
     case PCB_VIA_T:
         if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
@@ -1447,14 +1459,12 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     case PCB_TABLE_T:
     case PCB_TARGET_T:
     case PCB_GRIDITEM_T:
-    {
         if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
             m_drawings.push_back( aBoardItem );
         else
             m_drawings.push_front( aBoardItem );
 
         break;
-    }
 
     case PCB_POINT_T:
         // These aren't graphics as they have no physical presence
@@ -1549,29 +1559,41 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
         break;
     }
 
-    case PCB_MARKER_T: std::erase( m_markers, aBoardItem ); break;
+    case PCB_MARKER_T:
+        std::erase( m_markers, aBoardItem );
+        break;
 
-    case PCB_GROUP_T: std::erase( m_groups, aBoardItem ); break;
+    case PCB_GROUP_T:
+        std::erase( m_groups, aBoardItem );
+        break;
 
-    case PCB_CONSTRAINT_T: std::erase( m_constraints, aBoardItem ); break;
+    case PCB_CONSTRAINT_T:
+        std::erase( m_constraints, aBoardItem );
+        break;
 
-    case PCB_ZONE_T: std::erase( m_zones, aBoardItem ); break;
+    case PCB_ZONE_T:
+        std::erase( m_zones, aBoardItem );
+        break;
 
-    case PCB_POINT_T: std::erase( m_points, aBoardItem ); break;
+    case PCB_POINT_T:
+        std::erase( m_points, aBoardItem );
+        break;
 
-    case PCB_GENERATOR_T: std::erase( m_generators, aBoardItem ); break;
+    case PCB_GENERATOR_T:
+        std::erase( m_generators, aBoardItem );
+        break;
 
     case PCB_FOOTPRINT_T:
-    {
         std::erase( m_footprints, aBoardItem );
         UncacheChildrenById( aBoardItem );
 
         break;
-    }
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
-    case PCB_VIA_T: std::erase( m_tracks, aBoardItem ); break;
+    case PCB_VIA_T:
+        std::erase( m_tracks, aBoardItem );
+        break;
 
     case PCB_BARCODE_T:
     case PCB_DIM_ALIGNED_T:
@@ -1587,16 +1609,12 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_TABLE_T:
     case PCB_TARGET_T:
     case PCB_GRIDITEM_T:
-    {
         std::erase( m_drawings, aBoardItem );
 
         if( aBoardItem->Type() == PCB_TABLE_T )
-        {
             UncacheChildrenById( aBoardItem );
-        }
 
         break;
-    }
 
     case PCB_TABLECELL_T:
         // Handled by parent table
@@ -1678,7 +1696,9 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
             break;
 
         case PCB_ARC_T:
-        case PCB_VIA_T: wxFAIL_MSG( wxT( "Use PCB_TRACE_T to remove all tracks, arcs, and vias" ) ); break;
+        case PCB_VIA_T:
+            wxFAIL_MSG( wxT( "Use PCB_TRACE_T to remove all tracks, arcs, and vias" ) );
+            break;
 
         case PCB_SHAPE_T:
             std::copy( m_drawings.begin(), m_drawings.end(), std::back_inserter( removed ) );
@@ -1696,9 +1716,12 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         case PCB_TEXTBOX_T:
         case PCB_TABLE_T:
         case PCB_TARGET_T:
-        case PCB_BARCODE_T: wxFAIL_MSG( wxT( "Use PCB_SHAPE_T to remove all graphics and text" ) ); break;
+        case PCB_BARCODE_T:
+            wxFAIL_MSG( wxT( "Use PCB_SHAPE_T to remove all graphics and text" ) );
+            break;
 
-        default: wxFAIL_MSG( wxT( "BOARD::RemoveAll() needs more ::Type() support" ) );
+        default:
+            wxFAIL_MSG( wxT( "BOARD::RemoveAll() needs more ::Type() support" ) );
         }
     }
 
@@ -2792,7 +2815,8 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vec
 
             break;
 
-        default: break;
+        default:
+            break;
         }
     }
 
@@ -4083,7 +4107,8 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
             break;
         }
 
-        default: break;
+        default:
+            break;
         }
     }
 }
