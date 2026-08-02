@@ -27,6 +27,7 @@ import "common/types/enums.proto";
 import "common/types/project_settings.proto";
 import "board/board.proto";
 import "board/board_types.proto";
+import "board/board_jobs.proto";
 
 /*
  * Board stackup and properties
@@ -521,6 +522,23 @@ message GetBoardEditorAppearanceSettings
 message SetBoardEditorAppearanceSettings
 {
   BoardEditorAppearanceSettings settings = 1;
+}
+
+// Returns BoardPlotSettingsResponse
+message GetBoardPlotSettings
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+}
+
+message SetBoardPlotSettings
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+  kiapi.board.jobs.BoardPlotSettings plot_settings = 2;
+}
+
+message BoardPlotSettingsResponse
+{
+  kiapi.board.jobs.BoardPlotSettings plot_settings = 1;
 }
 
 //// Interactive commands ////

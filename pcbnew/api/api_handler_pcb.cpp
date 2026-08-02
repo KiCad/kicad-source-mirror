@@ -62,6 +62,7 @@
 #include <jobs/job_export_pcb_ps.h>
 #include <jobs/job_export_pcb_stats.h>
 #include <jobs/job_export_pcb_svg.h>
+#include <pcb_plot_params.h>
 #include <jobs/job_pcb_render.h>
 #include <layer_ids.h>
 #include <netlist_reader/board_netlist_updater.h>
@@ -130,6 +131,8 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
             &API_HANDLER_PCB::handleGetBoardEditorAppearanceSettings );
     registerHandler<SetBoardEditorAppearanceSettings, Empty>(
             &API_HANDLER_PCB::handleSetBoardEditorAppearanceSettings );
+    registerHandler<GetBoardPlotSettings, BoardPlotSettingsResponse>( &API_HANDLER_PCB::handleGetBoardPlotSettings );
+    registerHandler<SetBoardPlotSettings, Empty>( &API_HANDLER_PCB::handleSetBoardPlotSettings );
     registerHandler<InjectDrcError, InjectDrcErrorResponse>(
             &API_HANDLER_PCB::handleInjectDrcError );
 
@@ -1775,6 +1778,111 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardEditorAppearanceSettings(
     frame()->SetDisplayOptions( options );
     frame()->GetCanvas()->GetView()->UpdateAllLayersColor();
     frame()->GetCanvas()->Refresh();
+
+    return Empty();
+}
+
+
+HANDLER_RESULT<BoardPlotSettingsResponse>
+API_HANDLER_PCB::handleGetBoardPlotSettings( const HANDLER_CONTEXT<GetBoardPlotSettings>& aCtx )
+{
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    const PCB_PLOT_PARAMS& plotOpts = board()->GetPlotOptions();
+
+    BoardPlotSettingsResponse response;
+    BoardPlotSettings*        settings = response.mutable_plot_settings();
+
+    board::PackLayerSet( *settings->mutable_layers(), plotOpts.GetLayerSelection() );
+
+    for( PCB_LAYER_ID layer : plotOpts.GetPlotOnAllLayersSequence() )
+        settings->add_common_layers( ToProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( layer ) );
+
+    settings->set_mirror( plotOpts.GetMirror() );
+    settings->set_black_and_white( plotOpts.GetBlackAndWhite() );
+    settings->set_negative( plotOpts.GetNegative() );
+    settings->set_scale( plotOpts.GetScale() );
+
+    settings->set_sketch_pads_on_fab_layers( plotOpts.GetSketchPadsOnFabLayers() );
+    settings->set_hide_dnp_footprints_on_fab_layers( plotOpts.GetHideDNPFPsOnFabLayers() );
+    settings->set_sketch_dnp_footprints_on_fab_layers( plotOpts.GetSketchDNPFPsOnFabLayers() );
+    settings->set_crossout_dnp_footprints_on_fab_layers( plotOpts.GetCrossoutDNPFPsOnFabLayers() );
+
+    settings->set_plot_footprint_values( plotOpts.GetPlotValue() );
+    settings->set_plot_reference_designators( plotOpts.GetPlotReference() );
+    settings->set_plot_drawing_sheet( plotOpts.GetPlotFrameRef() );
+    settings->set_subtract_solder_mask_from_silk( plotOpts.GetSubtractMaskFromSilk() );
+    settings->set_plot_pad_numbers( plotOpts.GetPlotPadNumbers() );
+
+    settings->set_drill_marks( ToProtoEnum<DRILL_MARKS, PlotDrillMarks>( plotOpts.GetDrillMarksType() ) );
+    settings->set_use_drill_origin( plotOpts.GetUseAuxOrigin() );
+
+    return response;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardPlotSettings( const HANDLER_CONTEXT<SetBoardPlotSettings>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    const BoardPlotSettings& settings = aCtx.Request.plot_settings();
+    PCB_PLOT_PARAMS          plotOpts = board()->GetPlotOptions();
+
+    plotOpts.SetLayerSelection( board::UnpackLayerSet( settings.layers() ) );
+
+    LSEQ commonLayers;
+
+    for( int layer : settings.common_layers() )
+    {
+        PCB_LAYER_ID layerId =
+                FromProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>( static_cast<board::types::BoardLayer>( layer ) );
+
+        if( !IsPcbLayer( layerId ) )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( fmt::format( "SetBoardPlotSettings contains an invalid layer {}",
+                                              magic_enum::enum_name( layerId ) ) );
+            return tl::unexpected( e );
+        }
+
+        commonLayers.push_back( layerId );
+    }
+
+    plotOpts.SetPlotOnAllLayersSequence( commonLayers );
+
+    plotOpts.SetMirror( settings.mirror() );
+    plotOpts.SetBlackAndWhite( settings.black_and_white() );
+    plotOpts.SetNegative( settings.negative() );
+    plotOpts.SetScale( settings.scale() );
+
+    plotOpts.SetSketchPadsOnFabLayers( settings.sketch_pads_on_fab_layers() );
+    plotOpts.SetHideDNPFPsOnFabLayers( settings.hide_dnp_footprints_on_fab_layers() );
+    plotOpts.SetSketchDNPFPsOnFabLayers( settings.sketch_dnp_footprints_on_fab_layers() );
+    plotOpts.SetCrossoutDNPFPsOnFabLayers( settings.crossout_dnp_footprints_on_fab_layers() );
+
+    plotOpts.SetPlotValue( settings.plot_footprint_values() );
+    plotOpts.SetPlotReference( settings.plot_reference_designators() );
+    plotOpts.SetPlotFrameRef( settings.plot_drawing_sheet() );
+    plotOpts.SetSubtractMaskFromSilk( settings.subtract_solder_mask_from_silk() );
+    plotOpts.SetPlotPadNumbers( settings.plot_pad_numbers() );
+
+    plotOpts.SetDrillMarksType( FromProtoEnum<DRILL_MARKS>( settings.drill_marks() ) );
+    plotOpts.SetUseAuxOrigin( settings.use_drill_origin() );
+
+    board()->SetPlotOptions( plotOpts );
+
+    if( frame() )
+        frame()->OnModify();
 
     return Empty();
 }

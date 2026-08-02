@@ -109,6 +109,11 @@ private:
     HANDLER_RESULT<Empty> handleSetBoardEditorAppearanceSettings(
             const HANDLER_CONTEXT<SetBoardEditorAppearanceSettings>& aCtx );
 
+    HANDLER_RESULT<BoardPlotSettingsResponse>
+    handleGetBoardPlotSettings( const HANDLER_CONTEXT<GetBoardPlotSettings>& aCtx );
+
+    HANDLER_RESULT<Empty> handleSetBoardPlotSettings( const HANDLER_CONTEXT<SetBoardPlotSettings>& aCtx );
+
     HANDLER_RESULT<InjectDrcErrorResponse> handleInjectDrcError(
             const HANDLER_CONTEXT<InjectDrcError>& aCtx );
 
