@@ -428,6 +428,37 @@ public:
         m_pad_die_delay -= aValue;
     }
 
+    int64_t GetUnroutedLength() const { return m_unrouted_length; }
+
+    bool UnroutedLengthChanged() const { return m_column_changed[COLUMN_UNROUTED_LENGTH]; }
+
+    void SetUnroutedLength( int64_t aValue )
+    {
+        if( m_parent )
+            m_parent->SetUnroutedLength( m_parent->GetUnroutedLength() - m_unrouted_length + aValue );
+
+        m_column_changed[COLUMN_UNROUTED_LENGTH] |= ( m_unrouted_length != aValue );
+        m_unrouted_length = aValue;
+    }
+
+    void AddUnroutedLength( int64_t aValue )
+    {
+        if( m_parent )
+            m_parent->AddUnroutedLength( aValue );
+
+        m_column_changed[COLUMN_UNROUTED_LENGTH] |= ( aValue != 0 );
+        m_unrouted_length += aValue;
+    }
+
+    void SubUnroutedLength( int64_t aValue )
+    {
+        if( m_parent )
+            m_parent->SubUnroutedLength( aValue );
+
+        m_column_changed[COLUMN_UNROUTED_LENGTH] |= ( aValue != 0 );
+        m_unrouted_length -= aValue;
+    }
+
     // the total length column is always computed, never stored.
     unsigned long long int GetTotalLength() const
     {
@@ -463,6 +494,7 @@ public:
 
             m_parent->SubPadDieLength( GetPadDieLength() );
             m_parent->SubPadDieDelay( GetPadDieDelay() );
+            m_parent->SubUnroutedLength( GetUnroutedLength() );
 
             m_parent->m_children.erase( std::find( m_parent->m_children.begin(),
                                                    m_parent->m_children.end(), this ) );
@@ -485,6 +517,7 @@ public:
 
             m_parent->AddPadDieLength( GetPadDieLength() );
             m_parent->AddPadDieDelay( GetPadDieDelay() );
+            m_parent->AddUnroutedLength( GetUnroutedLength() );
 
             m_parent->m_children.push_back( this );
         }
@@ -505,6 +538,7 @@ private:
     int64_t       m_pad_die_delay = 0;
     int64_t       m_netChainLength = 0;
     int64_t       m_netChainDelay = 0;
+    int64_t       m_unrouted_length = 0;
 
     std::map<PCB_LAYER_ID, int64_t> m_layer_wire_length{};
     std::map<PCB_LAYER_ID, int64_t> m_layer_wire_delay{};
@@ -871,6 +905,9 @@ public:
         else if( aCol == COLUMN_PAD_DIE_LENGTH )
             return aItem->PadDieLengthChanged();
 
+        else if( aCol == COLUMN_UNROUTED_LENGTH )
+            return aItem->UnroutedLengthChanged();
+
         else if( aCol == COLUMN_TOTAL_LENGTH )
             return aItem->TotalLengthChanged();
 
@@ -970,6 +1007,10 @@ protected:
                     aOutValue = m_parent.formatDelay( i->GetPadDieDelay() );
                 else
                     aOutValue = m_parent.formatLength( i->GetPadDieLength() );
+            }
+            else if( aCol == COLUMN_UNROUTED_LENGTH )
+            {
+                aOutValue = m_parent.formatLength( i->GetUnroutedLength() );
             }
             else if( aCol == COLUMN_TOTAL_LENGTH )
             {
@@ -1080,6 +1121,10 @@ protected:
 
             if( !m_show_time_domain_details && i1.GetPadDieLength() != i2.GetPadDieLength() )
                 return compareUInt( i1.GetPadDieLength(), i2.GetPadDieLength(), aAsc );
+        }
+        else if( aCol == COLUMN_UNROUTED_LENGTH && i1.GetUnroutedLength() != i2.GetUnroutedLength() )
+        {
+            return compareUInt( i1.GetUnroutedLength(), i2.GetUnroutedLength(), aAsc );
         }
         else if( aCol == COLUMN_TOTAL_LENGTH )
         {

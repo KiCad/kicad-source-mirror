@@ -25,6 +25,8 @@
 #include <board_design_settings.h>
 #include <confirm.h>
 #include <connectivity/connectivity_algo.h>
+#include <connectivity/connectivity_data.h>
+#include <ratsnest/ratsnest_data.h>
 #include <dialogs/dialog_text_entry.h>
 #include <footprint.h>
 #include <length_delay_calculation/length_delay_calculation.h>
@@ -159,7 +161,11 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
                                 true );
     }
 
-    m_columns.emplace_back( 9u, UNDEFINED_LAYER, _( "Pad Count" ), _( "Pad Count" ), CSV_COLUMN_DESC::CSV_NONE, false );
+    m_columns.emplace_back( 9u, UNDEFINED_LAYER, _( "Unrouted Length" ), _( "Unrouted Length" ),
+                            CSV_COLUMN_DESC::CSV_NONE, true );
+
+    m_columns.emplace_back( 10u, UNDEFINED_LAYER, _( "Pad Count" ), _( "Pad Count" ), CSV_COLUMN_DESC::CSV_NONE,
+                            false );
 
     const std::vector<std::function<void( void )>> add_col{
         [&]()
@@ -215,6 +221,13 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
             m_netsList->AppendTextColumn( m_columns[COLUMN_PAD_DIE_LENGTH].display_name,
                                           m_columns[COLUMN_PAD_DIE_LENGTH], wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
                                           wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
+        },
+        [&]()
+        {
+            m_netsList->AppendTextColumn( m_columns[COLUMN_UNROUTED_LENGTH].display_name,
+                                          m_columns[COLUMN_UNROUTED_LENGTH], wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
+                                          wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_REORDERABLE
+                                                  | wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
         {
@@ -777,6 +790,16 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
                     new_item->SetViaDelay( lengthDetails.ViaDelay );
                     new_item->SetLayerWireLengths( *lengthDetails.LayerLengths );
 
+                    // Estimated unrouted length: sum of the optimized ratsnest airline edges
+                    // for this net, as maintained by the connectivity engine.  Uses the
+                    // unsorted accessor to avoid the stable sort in RN_NET::GetEdges().
+                    int64_t unroutedLength = 0;
+
+                    if( RN_NET* rnNet = m_board->GetConnectivity()->GetRatsnestForNet( netCode ) )
+                        unroutedLength = rnNet->GetTotalAirlineLength();
+
+                    new_item->SetUnroutedLength( unroutedLength );
+
                     if( m_showTimeDomainDetails )
                         new_item->SetLayerWireDelays( *lengthDetails.LayerDelays );
 
@@ -1073,6 +1096,7 @@ void PCB_NET_INSPECTOR_PANEL::updateNets( const std::vector<NETINFO_ITEM*>& aNet
             curListItem->SetViaCount( newListItem->GetViaCount() );
             curListItem->SetViaLength( newListItem->GetViaLength() );
             curListItem->SetViaDelay( newListItem->GetViaDelay() );
+            curListItem->SetUnroutedLength( newListItem->GetUnroutedLength() );
             curListItem->SetLayerWireLengths( newListItem->GetLayerWireLengths() );
             curListItem->SetNetChainName( newListItem->GetNetChainName() );
             curListItem->SetNetChainLength( newListItem->GetNetChainLength() );

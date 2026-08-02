@@ -113,6 +113,21 @@ public:
         return m_rnEdges;
     }
 
+    /**
+     * Return the total length of the ratsnest airlines (unrouted connections) for this net.
+     *
+     * Unlike GetEdges(), this does not sort the edges, so it is cheap to call repeatedly.
+     */
+    int64_t GetTotalAirlineLength() const
+    {
+        int64_t total = 0;
+
+        for( const CN_EDGE& edge : m_rnEdges )
+            total += edge.GetLength();
+
+        return total;
+    }
+
     bool NearestBicoloredPair( RN_NET* aOtherNet, VECTOR2I& aPos1, VECTOR2I& aPos2 ) const;
 
 protected:
