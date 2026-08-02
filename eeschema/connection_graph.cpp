@@ -814,6 +814,20 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
                         }
                     }
                 }
+                // updateItemConnectivity() rebuilds the sheet's pins too, so clear their dirty
+                // flags or the painter keeps ignoring their connections
+                else if( item->Type() == SCH_SHEET_T )
+                {
+                    SCH_SHEET* sheetItem = static_cast<SCH_SHEET*>( item );
+
+                    for( SCH_SHEET_PIN* pin : sheetItem->GetPins() )
+                    {
+                        if( pin->IsConnectivityDirty() )
+                        {
+                            dirty_items.insert( pin );
+                        }
+                    }
+                }
             }
             // If the symbol isn't dirty, look at the pins
             // TODO: remove symbols from connectivity graph and only use pins
