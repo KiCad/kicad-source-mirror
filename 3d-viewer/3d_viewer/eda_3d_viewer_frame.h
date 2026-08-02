@@ -145,6 +145,8 @@ public:
     void ExportImage( EDA_3D_VIEWER_EXPORT_FORMAT aFormat, const wxSize& aSize );
 
 protected:
+    APP_SETTINGS_BASE* config() const override;
+
     void setupUIConditions() override;
 
     void handleIconizeEvent( wxIconizeEvent& aEvent ) override;
