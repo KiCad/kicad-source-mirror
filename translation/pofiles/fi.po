@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-24 06:01+0000\n"
+"PO-Revision-Date: 2026-08-03 21:01+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.8.1.dev0\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -2103,14 +2103,13 @@ msgid "invalid plugin configuration at '%s': %s"
 msgstr "Virheellinen laajennuksen määritys kohdassa '%s':%s"
 
 #: common/api/api_plugin.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "Virheellinen laajennuksen suoritusympäristö: %s"
+msgstr "virheellinen laajennuksen suoritusympäristö: %s"
 
 #: common/api/api_plugin.cpp:105
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "Ei voitu käyttää tietovaraston määrityksiä"
+msgstr "laajennuksen konfiguraatiotiedostoa ei voitu lukea"
 
 #: common/api/api_plugin.cpp:125
 #, c-format
@@ -61247,23 +61246,20 @@ msgid "Error renaming footprint"
 msgstr "Vanhemman jalanjäljestä"
 
 #: pcbnew/tools/footprint_editor_control.cpp:632
-#, fuzzy
 msgid "Select a library to compare against another."
-msgstr "Valitse selattava kirjasto"
+msgstr "Valitse kirjasto jota verrataan toiseen."
 
 #: pcbnew/tools/footprint_editor_control.cpp:657
 msgid "Choose .pretty Folder to Compare With"
 msgstr ""
 
 #: pcbnew/tools/footprint_editor_control.cpp:670
-#, fuzzy
 msgid "Select a KiCad footprint library folder (ends with .pretty)."
-msgstr "Liitoskuvakirjastoselain"
+msgstr "Valitse KiCad jalanjälkikirjastokansio (loppuu .pretty)."
 
 #: pcbnew/tools/footprint_editor_control.cpp:677
-#, fuzzy
 msgid "Select a different .pretty folder than the active library."
-msgstr "Poista osa työkirjastosta"
+msgstr "Valitse toinen .pretty kansio, kuin aktiivinen kirjasto."
 
 #: pcbnew/tools/footprint_editor_control.cpp:836
 msgid "No datasheet found in the footprint."
@@ -61460,11 +61456,13 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:2064
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Shared components:\n"
 "%s"
-msgstr "Komponenttitietojen lisääminen epäonnistui"
+msgstr ""
+"Jaetut komponentit:\n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2202
 #, c-format
@@ -61472,23 +61470,27 @@ msgid "Reference area total components: %d"
 msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:2203
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Reference area components:\n"
 "%s"
-msgstr "Viitekuvan ominaisuudet"
+msgstr ""
+"Referenssialueen komponentit:\n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2206
-#, fuzzy, c-format
+#, c-format
 msgid "Target area total components: %d"
-msgstr "Komponenttitietojen lisääminen epäonnistui"
+msgstr "Kohdealueen komponenttimäärä: %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:2207
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Target area components:\n"
 "%s"
-msgstr "Komponenttitietojen lisääminen epäonnistui"
+msgstr ""
+"Kohdealueen komponentit:\n"
+"%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2259
 msgid ""
@@ -61806,9 +61808,8 @@ msgid "Apply Design Block Layout"
 msgstr "Suunnittelun lohkokirjastot"
 
 #: pcbnew/tools/pcb_actions.cpp:509
-#, fuzzy
 msgid "Apply linked design block layout to selected group"
-msgstr "Aseta suunnittelulohko uutena arkkina."
+msgstr "Aseta linkitetyn suunnittelulohkon asetelma valitulle ryhmälle"
 
 #: pcbnew/tools/pcb_actions.cpp:531
 #, fuzzy
@@ -61872,18 +61873,16 @@ msgid "Moves the selected items one-by-one"
 msgstr "Siirtää valitut kohteet yksitellen"
 
 #: pcbnew/tools/pcb_actions.cpp:639
-#, fuzzy
 msgid "Move with Reference..."
-msgstr "Siirrä viitteellä"
+msgstr "Siirrä viitteellä..."
 
 #: pcbnew/tools/pcb_actions.cpp:640
 msgid "Moves the selected item(s) with a specified starting point"
 msgstr "Siirtää valitut kohteet määritetyllä aloituspisteellä"
 
 #: pcbnew/tools/pcb_actions.cpp:648
-#, fuzzy
 msgid "Copy with Reference..."
-msgstr "Kopioi viitteellä"
+msgstr "Kopioi viitteellä..."
 
 #: pcbnew/tools/pcb_actions.cpp:649
 msgid "Copy selected item(s) to clipboard with a specified starting point"
@@ -62392,18 +62391,16 @@ msgstr ""
 "pelastustiedosto"
 
 #: pcbnew/tools/pcb_actions.cpp:1259
-#, fuzzy
 msgid "Import Non-KiCad Board File..."
-msgstr "Tuo muu kuin KiCad-levytiedosto"
+msgstr "Tuo ei-KiCad levytiedosto..."
 
 #: pcbnew/tools/pcb_actions.cpp:1260
 msgid "Import board file from other applications"
 msgstr "Tuo levytiedosto muista sovelluksista"
 
 #: pcbnew/tools/pcb_actions.cpp:1266
-#, fuzzy
 msgid "Export Footprints..."
-msgstr "Ylimääräiset liitoskuvat"
+msgstr "Vie jalanjälkiä..."
 
 #: pcbnew/tools/pcb_actions.cpp:1267
 #, fuzzy
@@ -62511,27 +62508,24 @@ msgid "Create bill of materials from board"
 msgstr "Luo materiaalilista piirilevyltä"
 
 #: pcbnew/tools/pcb_actions.cpp:1358
-#, fuzzy
 msgid "Export GenCAD..."
-msgstr "Vie SVG-tiedosto"
+msgstr "Vie GenCAD..."
 
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid "Export GenCAD board representation"
 msgstr "Vie GenCAD-levyn edustus"
 
 #: pcbnew/tools/pcb_actions.cpp:1365
-#, fuzzy
 msgid "Export VRML..."
-msgstr "Vie VRML"
+msgstr "Vie VRML..."
 
 #: pcbnew/tools/pcb_actions.cpp:1366
 msgid "Export VRML 3D board representation"
 msgstr "Vie VRML 3D -taulun esitys"
 
 #: pcbnew/tools/pcb_actions.cpp:1372
-#, fuzzy
 msgid "Export IDFv3..."
-msgstr "Vie IDFv3"
+msgstr "Vie IDFv3..."
 
 #: pcbnew/tools/pcb_actions.cpp:1373
 msgid "Export IDF 3D board representation"
@@ -63757,20 +63751,21 @@ msgstr ""
 "se."
 
 #: pcbnew/tools/pcb_control.cpp:1800
-#, fuzzy, c-format
+#, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr "Aseta suunnittelulohko uutena arkkina."
+msgstr "Asetettiin suunnittelulohkon asetelma %d ryhmälle %d:sta."
 
 #: pcbnew/tools/pcb_control.cpp:1807
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
-msgstr "Tallenna valinta suunnittelulohkona..."
+msgstr ""
+"Ohitettiin %d valittua kohdetta, jotka eivät ole suunnittelulohkoon "
+"linkitettyjä ryhmiä."
 
 #: pcbnew/tools/pcb_control.cpp:1815
-#, fuzzy
 msgid "The following groups could not be processed:"
-msgstr "Seuraavia hakemistoja ei voitu avata: \n"
+msgstr "Seuraavia ryhmiä ei voitu prosessoida:"
 
 #: pcbnew/tools/pcb_control.cpp:1819
 msgid "(unnamed group)"
@@ -64934,8 +64929,9 @@ msgid "Track Length"
 msgstr "Johtimen Pituus"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:158
+#, fuzzy
 msgid "Die Length"
-msgstr "IC-Piirin Pituus"
+msgstr "Ytimen pituus"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:162
 msgid "Pad Count"
@@ -64946,18 +64942,16 @@ msgid "Highlight Selected Net"
 msgstr "Korosta Valittu Verkko"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1221
-#, fuzzy
 msgid "Rename Selected Net..."
-msgstr "Nimeä valittu verkko uudelleen"
+msgstr "Nimeä valittu verkko uudelleen..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1225
 msgid "Delete Selected Net"
 msgstr "Poista valittu verkko"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1231
-#, fuzzy
 msgid "Add Net..."
-msgstr "Lisää tekstiä"
+msgstr "Lisää verkko..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1244
 msgid "Highlight Selected Nets"
@@ -65012,9 +65006,8 @@ msgid "Group by Net Chain"
 msgstr "Ryhmittele verkkoluokan mukaan"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
-#, fuzzy
 msgid "Add Custom Group..."
-msgstr "Lisää mukautettu ryhmä"
+msgstr "Lisää mukautettu ryhmä..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1402
 msgid "Remove All Custom Groups"
@@ -65034,9 +65027,8 @@ msgid "Show Time Domain Details"
 msgstr "Näytä Piilotetut Nastat"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1430
-#, fuzzy
 msgid "Save Net Inspector Report..."
-msgstr "Tallenna verkkotarkastajan raportti"
+msgstr "Tallenna verkkotarkastajan raportti..."
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1439
 msgid "Show / Hide Columns"
@@ -65091,9 +65083,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:794
-#, fuzzy
 msgid "Scale footprint with pads?"
-msgstr "Sulje pois jalanjäljet ilman anturoita"
+msgstr "Skaalaa jalanjälki anturoiden kanssa?"
 
 #: pcbnew/widgets/search_handlers.cpp:229 pcbnew/zone.cpp:1119
 #: pcbnew/zone.cpp:2305
@@ -65173,7 +65164,7 @@ msgstr "Täytetty alue"
 #: pcbnew/zone.cpp:1190
 #, fuzzy
 msgid "Outline Area"
-msgstr "Sääntöalue"
+msgstr "Reuna-alue"
 
 #: pcbnew/zone.cpp:1202
 msgid "Corner Count"
@@ -65217,9 +65208,9 @@ msgid "Rule Area %s"
 msgstr "Sääntöalue %s"
 
 #: pcbnew/zone.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "Rule area '%s' %s"
-msgstr "Sääntöalue %s"
+msgstr "Sääntöalue '%s' %s"
 
 #: pcbnew/zone.cpp:1476
 #, c-format
@@ -65227,23 +65218,23 @@ msgid "Teardrop %s %s"
 msgstr "Kupariviiste %s %s"
 
 #: pcbnew/zone.cpp:1484
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s %s, priority %d"
-msgstr "Vyöhykkeen prioriteettitaso:"
+msgstr "Vyöhyke %s %s, tärkeys %d"
 
 #: pcbnew/zone.cpp:1491
-#, fuzzy, c-format
+#, c-format
 msgid "Zone '%s' %s %s, priority %d"
-msgstr "%s, %s, %s tai %s"
+msgstr "Vyöhyke '%s' %s %s, tärkeys %d"
 
 #: pcbnew/zone.cpp:2157
 #, fuzzy
 msgid "Copper thieving"
-msgstr "Kuparin resistiivisyys:"
+msgstr "Kuparin tasaus"
 
 #: pcbnew/zone.cpp:2166
 msgid "Squares"
-msgstr ""
+msgstr "Neliöt"
 
 #: pcbnew/zone.cpp:2312
 msgid "Keepout"
@@ -65300,6 +65291,7 @@ msgid "Hatch Gap"
 msgstr "Täyttöviivan väli"
 
 #: pcbnew/zone.cpp:2399
+#, fuzzy
 msgid "Hatch Minimum Hole Ratio"
 msgstr "Kuvioviivoita minimi reikäsuhde"
 
@@ -65357,16 +65349,15 @@ msgstr "Tarkastetaan vyöhykkeen täyttämistä ..."
 
 #: pcbnew/zone_filler.cpp:495
 msgid "Building zone fills..."
-msgstr "Rakennusalueen täytöt ..."
+msgstr "Rakennetaan vyöhykkeiden täyttöjä..."
 
 #: pcbnew/zone_filler.cpp:966
 msgid "Removing isolated copper islands..."
 msgstr "Poistetaan eristetyt kuparisaarekkeet..."
 
 #: pcbnew/zone_filler.cpp:1225
-#, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "Uudelleentäytetään kaikki alueet..."
+msgstr "Uudelleentäytetään päällekkäisiä vyöhykkeitä..."
 
 #: pcbnew/zone_filler.cpp:1392
 #, c-format
@@ -65383,9 +65374,8 @@ msgid "Prototype zone fill enabled. Disable setting and refill?"
 msgstr ""
 
 #: pcbnew/zone_filler.cpp:1666
-#, fuzzy
 msgid "Disable and refill"
-msgstr "Poista reunojenpehmennys käytöstä"
+msgstr "Kytke pois ja uudelleentäytä"
 
 #: pcbnew/zone_filler.cpp:1666 pcbnew/zone_filler.cpp:1683
 msgid "Continue without Refill"
@@ -65408,9 +65398,9 @@ msgid "Offset Y"
 msgstr "Siirtymä Y"
 
 #: pcbnew/zone_manager/dialog_zone_manager.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Delete zone '%s'?"
-msgstr "Poistetaanko kaikki verkot ryhmässä %s?"
+msgstr "Poista vyöhyke '%s'?"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:74
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:79
@@ -65425,9 +65415,8 @@ msgstr ""
 "toisesta vyöhykkeestä."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:94
-#, fuzzy
 msgid "Delete selected zone"
-msgstr "Poista valitut työt"
+msgstr "Poista valittu vyöhyke"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:102
 msgid ""
