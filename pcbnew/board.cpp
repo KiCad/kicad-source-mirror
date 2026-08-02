@@ -2402,9 +2402,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vec
             if( !footprintsScanned )
             {
                 if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
-                {
                     return INSPECT_RESULT::QUIT;
-                }
 
                 footprintsScanned = true;
             }
@@ -2412,9 +2410,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vec
             if( !drawingsScanned )
             {
                 if( IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
-                {
                     return INSPECT_RESULT::QUIT;
-                }
 
                 drawingsScanned = true;
             }
@@ -2427,9 +2423,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vec
             if( !tracksScanned )
             {
                 if( IterateForward<PCB_TRACK*>( m_tracks, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
-                {
                     return INSPECT_RESULT::QUIT;
-                }
 
                 tracksScanned = true;
             }
@@ -2458,9 +2452,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vec
             if( !footprintsScanned )
             {
                 if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
-                {
                     return INSPECT_RESULT::QUIT;
-                }
 
                 footprintsScanned = true;
             }
@@ -2477,9 +2469,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vec
             if( !footprintsScanned )
             {
                 if( IterateForward<FOOTPRINT*>( m_footprints, inspector, testData, scanTypes ) == INSPECT_RESULT::QUIT )
-                {
                     return INSPECT_RESULT::QUIT;
-                }
 
                 footprintsScanned = true;
             }
@@ -2494,9 +2484,7 @@ INSPECT_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const std::vec
 
         case PCB_GROUP_T:
             if( IterateForward<PCB_GROUP*>( m_groups, inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
-            {
                 return INSPECT_RESULT::QUIT;
-            }
 
             break;
 

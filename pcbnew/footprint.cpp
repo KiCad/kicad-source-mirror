@@ -790,6 +790,7 @@ void FOOTPRINT::ApplyDefaultSettings( const BOARD& board, bool aStyleFields, boo
         case PCB_BARCODE_T:
             if( aStyleBarcodes )
                 item->StyleFromSettings( board.GetDesignSettings(), true );
+
             break;
 
         default:
@@ -2619,29 +2620,20 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
             break;
 
         case PCB_PAD_T:
-            if( IterateForward<PAD*>( m_pads, inspector, testData, { scanType } )
-                    == INSPECT_RESULT::QUIT )
-            {
+            if( IterateForward<PAD*>( m_pads, inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
                 return INSPECT_RESULT::QUIT;
-            }
 
             break;
 
         case PCB_ZONE_T:
-            if( IterateForward<ZONE*>( m_zones, inspector, testData, { scanType } )
-                    == INSPECT_RESULT::QUIT )
-            {
+            if( IterateForward<ZONE*>( m_zones, inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
                 return INSPECT_RESULT::QUIT;
-            }
 
             break;
 
         case PCB_FIELD_T:
-            if( IterateForward<PCB_FIELD*>( m_fields, inspector, testData, { scanType } )
-                == INSPECT_RESULT::QUIT )
-            {
+            if( IterateForward<PCB_FIELD*>( m_fields, inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
                 return INSPECT_RESULT::QUIT;
-            }
 
             break;
 
@@ -2658,11 +2650,8 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
         case PCB_TABLECELL_T:
             if( !drawingsScanned )
             {
-                if( IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, aScanTypes )
-                        == INSPECT_RESULT::QUIT )
-                {
+                if( IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, aScanTypes ) == INSPECT_RESULT::QUIT )
                     return INSPECT_RESULT::QUIT;
-                }
 
                 drawingsScanned = true;
             }
@@ -2670,20 +2659,14 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
             break;
 
         case PCB_GROUP_T:
-            if( IterateForward<PCB_GROUP*>( m_groups, inspector, testData, { scanType } )
-                    == INSPECT_RESULT::QUIT )
-            {
+            if( IterateForward<PCB_GROUP*>( m_groups, inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
                 return INSPECT_RESULT::QUIT;
-            }
 
             break;
 
         case PCB_POINT_T:
-            if( IterateForward<PCB_POINT*>( m_points, inspector, testData, { scanType } )
-                    == INSPECT_RESULT::QUIT )
-            {
+            if( IterateForward<PCB_POINT*>( m_points, inspector, testData, { scanType } ) == INSPECT_RESULT::QUIT )
                 return INSPECT_RESULT::QUIT;
-            }
 
             break;
 

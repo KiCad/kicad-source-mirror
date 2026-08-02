@@ -454,6 +454,10 @@ void CheckFootprint( const FOOTPRINT* expected, const FOOTPRINT* fp )
             // TODO
             break;
 
+        case PCB_POINT_T:
+            // TODO
+            break;
+
         default:
             BOOST_ERROR( "KICAD_T not known" );
             break;
