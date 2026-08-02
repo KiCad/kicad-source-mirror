@@ -3131,6 +3131,9 @@ std::shared_ptr<GRAPH_NODE> CREEPAGE_GRAPH::AddNetElements( int aNetCode, PCB_LA
             if( pad->GetNetCode() != aNetCode || !pad->IsOnLayer( aLayer ) )
                 continue;
 
+            if( pad->HasCopperRemoved( aLayer ) )
+                continue;
+
             if( std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( aLayer ) )
                 Addshape( *padShape, virtualNode, pad );
         }
@@ -3139,6 +3142,9 @@ std::shared_ptr<GRAPH_NODE> CREEPAGE_GRAPH::AddNetElements( int aNetCode, PCB_LA
     for( PCB_TRACK* track : m_board.Tracks() )
     {
         if( track->GetNetCode() != aNetCode || !track->IsOnLayer( aLayer ) )
+            continue;
+
+        if( track->Type() == PCB_VIA_T && static_cast<const PCB_VIA*>( track )->HasCopperRemoved( aLayer ) )
             continue;
 
         if( std::shared_ptr<SHAPE> shape = track->GetEffectiveShape() )

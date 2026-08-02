@@ -871,176 +871,37 @@ void PAD::SetPrimaryDrillEndLayer( PCB_LAYER_ID aLayer )
 
 bool PAD::IsBackdrilledOrPostMachined( PCB_LAYER_ID aLayer ) const
 {
-    if( !IsCopperLayer( aLayer ) )
-        return false;
+    return GetBackdrillOrPostMachiningKnockout( aLayer ) > 0;
+}
 
+
+bool PAD::HasCopperRemoved( PCB_LAYER_ID aLayer ) const
+{
+    int knockout = GetBackdrillOrPostMachiningKnockout( aLayer );
+
+    return knockout > 0 && knockout >= 2LL * GetBoundingRadius();
+}
+
+
+int PAD::GetBackdrillOrPostMachiningKnockout( PCB_LAYER_ID aLayer ) const
+{
     const BOARD* board = GetBoard();
 
-    if( !board )
-        return false;
+    if( !IsCopperLayer( aLayer ) || !board )
+        return 0;
 
-    // Check secondary drill (backdrill from top)
-    const PADSTACK::DRILL_PROPS& secondaryDrill = m_padStack.SecondaryDrill();
-
-    if( secondaryDrill.size.x > 0 && secondaryDrill.start != UNDEFINED_LAYER && secondaryDrill.end != UNDEFINED_LAYER )
-    {
-        // Secondary drill goes from start to end layer, removing copper on those layers
-        int startOrdinal = board->IsLayerEnabled( secondaryDrill.start )
-                ? board->IsLayerEnabled( F_Cu ) ? ( secondaryDrill.start == F_Cu ? 0
-                                                                                 : secondaryDrill.start / 2 + 1 )
-                                                 : secondaryDrill.start / 2
-                : -1;
-        int endOrdinal = board->IsLayerEnabled( secondaryDrill.end )
-                ? board->IsLayerEnabled( F_Cu ) ? ( secondaryDrill.end == B_Cu ? board->GetCopperLayerCount() - 1
-                                                                               : secondaryDrill.end / 2 + 1 )
-                                                : secondaryDrill.end / 2
-                : -1;
-        int layerOrdinal = board->IsLayerEnabled( aLayer )
-                ? board->IsLayerEnabled( F_Cu ) ? ( aLayer == F_Cu ? 0
-                                                                   : aLayer == B_Cu ? board->GetCopperLayerCount() - 1
-                                                                                    : aLayer / 2 + 1 )
-                                                : aLayer / 2
-                : -1;
-
-        if( layerOrdinal >= 0 && startOrdinal >= 0 && endOrdinal >= 0 )
-        {
-            if( startOrdinal > endOrdinal )
-                std::swap( startOrdinal, endOrdinal );
-
-            if( layerOrdinal >= startOrdinal && layerOrdinal <= endOrdinal )
-                return true;
-        }
-    }
-
-    // Check tertiary drill (backdrill from bottom)
-    const PADSTACK::DRILL_PROPS& tertiaryDrill = m_padStack.TertiaryDrill();
-
-    if( tertiaryDrill.size.x > 0 && tertiaryDrill.start != UNDEFINED_LAYER && tertiaryDrill.end != UNDEFINED_LAYER )
-    {
-        int startOrdinal = board->IsLayerEnabled( tertiaryDrill.start )
-                ? board->IsLayerEnabled( F_Cu ) ? ( tertiaryDrill.start == F_Cu ? 0
-                                                                                : tertiaryDrill.start / 2 + 1 )
-                                                : tertiaryDrill.start / 2
-                : -1;
-        int endOrdinal = board->IsLayerEnabled( tertiaryDrill.end )
-                ? board->IsLayerEnabled( F_Cu ) ? ( tertiaryDrill.end == B_Cu ? board->GetCopperLayerCount() - 1
-                                                                              : tertiaryDrill.end / 2 + 1 )
-                                                : tertiaryDrill.end / 2
-                : -1;
-        int layerOrdinal = board->IsLayerEnabled( aLayer )
-                ? board->IsLayerEnabled( F_Cu ) ? ( aLayer == F_Cu ? 0
-                                                                   : aLayer == B_Cu ? board->GetCopperLayerCount() - 1
-                                                                                    : aLayer / 2 + 1 )
-                                                : aLayer / 2
-                : -1;
-
-        if( layerOrdinal >= 0 && startOrdinal >= 0 && endOrdinal >= 0 )
-        {
-            if( startOrdinal > endOrdinal )
-                std::swap( startOrdinal, endOrdinal );
-
-            if( layerOrdinal >= startOrdinal && layerOrdinal <= endOrdinal )
-                return true;
-        }
-    }
-
-    // Check if the layer is affected by post-machining
-    if( GetPostMachiningKnockout( aLayer ) > 0 )
-        return true;
-
-    return false;
+    return m_padStack.MachiningKnockout( *board, aLayer );
 }
 
 
 int PAD::GetPostMachiningKnockout( PCB_LAYER_ID aLayer ) const
 {
-    if( !IsCopperLayer( aLayer ) )
-        return 0;
-
     const BOARD* board = GetBoard();
 
-    if( !board )
+    if( !IsCopperLayer( aLayer ) || !board )
         return 0;
 
-    const BOARD_STACKUP& stackup = board->GetDesignSettings().GetStackupDescriptor();
-
-    // Check front post-machining (counterbore/countersink from top)
-    const PADSTACK::POST_MACHINING_PROPS& frontPM = m_padStack.FrontPostMachining();
-
-    if( frontPM.mode.has_value() && *frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
-            && *frontPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN && frontPM.size > 0 )
-    {
-        int pmDepth = frontPM.depth;
-
-        // For countersink without explicit depth, calculate from diameter and angle
-        if( pmDepth <= 0 && *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && frontPM.angle > 0 )
-        {
-            double halfAngleRad = ( frontPM.angle / 10.0 ) * M_PI / 180.0 / 2.0;
-            pmDepth = static_cast<int>( ( frontPM.size / 2.0 ) / tan( halfAngleRad ) );
-        }
-
-        if( pmDepth > 0 )
-        {
-            // Calculate distance from F_Cu to aLayer
-            int layerDist = stackup.GetLayerDistance( F_Cu, aLayer );
-
-            if( layerDist < pmDepth )
-            {
-                // For countersink, diameter decreases with depth
-                if( *frontPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && frontPM.angle > 0 )
-                {
-                    double halfAngleRad = ( frontPM.angle / 10.0 ) * M_PI / 180.0 / 2.0;
-                    int diameterAtLayer = frontPM.size - static_cast<int>( 2.0 * layerDist * tan( halfAngleRad ) );
-                    return std::max( 0, diameterAtLayer );
-                }
-                else
-                {
-                    // Counterbore - constant diameter
-                    return frontPM.size;
-                }
-            }
-        }
-    }
-
-    // Check back post-machining (counterbore/countersink from bottom)
-    const PADSTACK::POST_MACHINING_PROPS& backPM = m_padStack.BackPostMachining();
-
-    if( backPM.mode.has_value() && *backPM.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED
-            && *backPM.mode != PAD_DRILL_POST_MACHINING_MODE::UNKNOWN && backPM.size > 0 )
-    {
-        int pmDepth = backPM.depth;
-
-        // For countersink without explicit depth, calculate from diameter and angle
-        if( pmDepth <= 0 && *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && backPM.angle > 0 )
-        {
-            double halfAngleRad = ( backPM.angle / 10.0 ) * M_PI / 180.0 / 2.0;
-            pmDepth = static_cast<int>( ( backPM.size / 2.0 ) / tan( halfAngleRad ) );
-        }
-
-        if( pmDepth > 0 )
-        {
-            // Calculate distance from B_Cu to aLayer
-            int layerDist = stackup.GetLayerDistance( B_Cu, aLayer );
-
-            if( layerDist < pmDepth )
-            {
-                // For countersink, diameter decreases with depth
-                if( *backPM.mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK && backPM.angle > 0 )
-                {
-                    double halfAngleRad = ( backPM.angle / 10.0 ) * M_PI / 180.0 / 2.0;
-                    int diameterAtLayer = backPM.size - static_cast<int>( 2.0 * layerDist * tan( halfAngleRad ) );
-                    return std::max( 0, diameterAtLayer );
-                }
-                else
-                {
-                    // Counterbore - constant diameter
-                    return backPM.size;
-                }
-            }
-        }
-    }
-
-    return 0;
+    return m_padStack.PostMachiningKnockout( board->GetDesignSettings().GetStackupDescriptor(), aLayer );
 }
 
 

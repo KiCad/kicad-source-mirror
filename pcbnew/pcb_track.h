@@ -788,6 +788,24 @@ public:
      */
     int GetPostMachiningKnockout( PCB_LAYER_ID aLayer ) const;
 
+    /**
+     * @see PADSTACK::MachiningKnockout
+     *
+     * A result of zero is equivalent to IsBackdrilledOrPostMachined() returning false.
+     */
+    int GetBackdrillOrPostMachiningKnockout( PCB_LAYER_ID aLayer ) const;
+
+    /**
+     * Check whether backdrilling or post-machining left no copper at all on a layer.
+     *
+     * A narrower operation only hollows the barrel and leaves an annular ring, which still
+     * conducts and whose outer edge is unmoved, so this is stricter than
+     * IsBackdrilledOrPostMachined().
+     *
+     * @param aLayer the copper layer to check
+     */
+    bool HasCopperRemoved( PCB_LAYER_ID aLayer ) const;
+
     void SetPrimaryDrillFilled( const std::optional<bool>& aFilled );
     void SetPrimaryDrillFilledFlag( bool aFilled );
     std::optional<bool> GetPrimaryDrillFilled() const { return m_padStack.Drill().is_filled; }
