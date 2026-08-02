@@ -173,6 +173,16 @@ message BoardLayerNameResponse
   string name = 1;
 }
 
+// Since: 10.0.6
+// Returns BoardLayerResponse
+message GetBoardLayerByName
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  // A name to retrieve the layer ID for, which may be a user-customized or a KiCad standard one.
+  string name = 2;
+}
+
 /*
  * Net management
  */
