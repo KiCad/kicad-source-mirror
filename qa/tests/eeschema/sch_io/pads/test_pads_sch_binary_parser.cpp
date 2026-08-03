@@ -1272,6 +1272,64 @@ static bool task10SourcePropertiesPresent( const std::vector<CANONICAL_SEMANTIC_
 BOOST_AUTO_TEST_SUITE( PadsSchBinaryParser )
 
 
+BOOST_AUTO_TEST_CASE( EmbeddedOleImages )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    std::vector<uint8_t>   bytes = loadBinaryFixture( "ole_images.sch" );
+    PADS_SCH_MODEL         model = parser.Parse( bytes, wxS( "ole_images.sch" ) );
+
+    BOOST_REQUIRE_EQUAL( model.images.size(), 2 );
+    BOOST_CHECK_EQUAL( model.images[0].id.Value(), 0 );
+    BOOST_CHECK_EQUAL( model.images[0].sheet.id.Value(), 1 );
+    BOOST_CHECK( model.images[0].type == MODEL_EMBEDDED_IMAGE_TYPE::BMP );
+    BOOST_CHECK_EQUAL( model.images[0].streamName, wxS( "\\x01Ole10Native" ) );
+    BOOST_CHECK( ( model.images[0].extent == std::array<int32_t, 4>{ 30, 30, 350, 210 } ) );
+    BOOST_CHECK( ( model.images[0].databaseBox == std::array<int32_t, 4>{ -15766, -10366, -13296, -11755 } ) );
+    BOOST_CHECK_EQUAL( model.images[0].position.x, 5876 );
+    BOOST_CHECK_EQUAL( model.images[0].position.y, 19758 );
+    BOOST_CHECK_EQUAL( model.images[0].size.x, 9880 );
+    BOOST_CHECK_EQUAL( model.images[0].size.y, 5556 );
+    BOOST_CHECK_EQUAL( model.images[0].flags, 1 );
+    BOOST_REQUIRE_GE( model.images[0].data.size(), 2 );
+    BOOST_CHECK_EQUAL( model.images[0].data[0], 'B' );
+    BOOST_CHECK_EQUAL( model.images[0].data[1], 'M' );
+    BOOST_CHECK_EQUAL( model.images[0].source.objectClass, wxS( "embedded OLE image" ) );
+    BOOST_CHECK_EQUAL( model.images[0].source.recordIndex, 0 );
+    BOOST_CHECK_GT( model.images[0].source.absoluteOffset, 0 );
+    BOOST_CHECK_GT( model.images[0].source.length, 512 );
+
+    BOOST_CHECK_EQUAL( model.images[1].id.Value(), 1 );
+    BOOST_CHECK_EQUAL( model.images[1].sheet.id.Value(), 1 );
+    BOOST_CHECK( model.images[1].type == MODEL_EMBEDDED_IMAGE_TYPE::WMF );
+    BOOST_CHECK_EQUAL( model.images[1].streamName, wxS( "\\x01Ole10Native" ) );
+    BOOST_CHECK( ( model.images[1].extent == std::array<int32_t, 4>{ 30, 30, 170, 84 } ) );
+    BOOST_CHECK( ( model.images[1].databaseBox == std::array<int32_t, 4>{ -15766, -10366, -14686, -10782 } ) );
+    BOOST_CHECK_EQUAL( model.images[1].position.x, 3096 );
+    BOOST_CHECK_EQUAL( model.images[1].position.y, 21704 );
+    BOOST_CHECK_EQUAL( model.images[1].size.x, 4320 );
+    BOOST_CHECK_EQUAL( model.images[1].size.y, 1664 );
+    BOOST_CHECK_EQUAL( model.images[1].flags, 1 );
+    BOOST_REQUIRE_GE( model.images[1].data.size(), 4 );
+    BOOST_CHECK_EQUAL( model.images[1].data[0], 0xD7 );
+    BOOST_CHECK_EQUAL( model.images[1].data[1], 0xCD );
+    BOOST_CHECK_EQUAL( model.images[1].data[2], 0xC6 );
+    BOOST_CHECK_EQUAL( model.images[1].data[3], 0x9A );
+
+    PADS_SCH_SDB sdb;
+    sdb.Load( bytes );
+    BOOST_REQUIRE_EQUAL( sdb.OleItems().size(), 2u );
+    std::vector<uint8_t> zeroWidth = bytes;
+    writeU32( zeroWidth, sdb.OleItems()[0].boxOffset + 8,
+              static_cast<uint32_t>( sdb.OleItems()[0].left ) );
+    BOOST_CHECK_EXCEPTION( parser.Parse( zeroWidth, wxS( "ole-zero-width.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "embedded OLE image database box" ) )
+                                      && aError.What().Contains( wxS( "zero size" ) );
+                           } );
+}
+
+
 BOOST_AUTO_TEST_CASE( GlobalsAndSheets )
 {
     PADS_SCH_BINARY_PARSER parser;

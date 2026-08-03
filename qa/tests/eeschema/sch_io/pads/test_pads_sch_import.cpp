@@ -21,10 +21,12 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <base_units.h>
+#include <bitmap_base.h>
 #include <connection_graph.h>
 #include <lib_symbol.h>
 #include <sch_field.h>
 #include <sch_bus_entry.h>
+#include <sch_bitmap.h>
 #include <sch_connection.h>
 #include <sch_junction.h>
 #include <sch_label.h>
@@ -902,6 +904,72 @@ static void checkTextPresentation( const EDA_TEXT&                              
 BOOST_FIXTURE_TEST_SUITE( PadsSchImport, PADS_SCH_IMPORT_FIXTURE )
 
 
+// A zero OLE trailer box must be skipped before the aspect-ratio divide. llround on the inf that
+// divide produces is undefined, and the page-size guard that would have caught it runs after the
+// rescale.
+BOOST_AUTO_TEST_CASE( BinaryEmbeddedImageDegenerateBoxIsSkipped )
+{
+    using namespace PADS_SCH_BINARY;
+
+    PADS_SCH_MODEL model = parseBinaryFixture( wxS( "ole_images" ) );
+
+    BOOST_REQUIRE( !model.images.empty() );
+
+    for( MODEL_EMBEDDED_IMAGE& image : model.images )
+        image.size.x = 0;
+
+    SCH_SHEET* root = m_schematic.GetTopLevelSheet();
+
+    BOOST_REQUIRE( root );
+    BOOST_REQUIRE( root->GetScreen() );
+
+    BUILD_RESULT result =
+            PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, nullptr, binaryFixture( wxS( "ole_images" ) ) );
+
+    BOOST_CHECK_EQUAL( result.counts.images, 0u );
+    BOOST_CHECK_EQUAL( itemCount( root->GetScreen(), SCH_BITMAP_T ), 0u );
+}
+
+
+BOOST_AUTO_TEST_CASE( BinaryEmbeddedImages )
+{
+    using namespace PADS_SCH_BINARY;
+
+    const PADS_SCH_MODEL model = parseBinaryFixture( wxS( "ole_images" ) );
+    SCH_SHEET*           root = m_schematic.GetTopLevelSheet();
+    BOOST_REQUIRE( root );
+    BOOST_REQUIRE( root->GetScreen() );
+
+    BUILD_RESULT result =
+            PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, nullptr, binaryFixture( wxS( "ole_images" ) ) );
+
+    BOOST_CHECK_EQUAL( result.counts.images, 2u );
+    BOOST_REQUIRE_EQUAL( itemCount( root->GetScreen(), SCH_BITMAP_T ), 2u );
+    const int pageHeight = root->GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+    std::vector<SCH_BITMAP*> bitmaps;
+
+    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_BITMAP_T ) )
+        bitmaps.push_back( static_cast<SCH_BITMAP*>( item ) );
+
+    std::ranges::sort( bitmaps, {}, []( const SCH_BITMAP* aBitmap ) { return aBitmap->GetPosition().x; } );
+
+    for( size_t index = 0; index < bitmaps.size(); ++index )
+    {
+        const MODEL_EMBEDDED_IMAGE& source = model.images[1 - index];
+        const SCH_BITMAP&           bitmap = *bitmaps[index];
+        BOOST_CHECK_EQUAL( bitmap.GetPosition(), pagePoint( source.position, pageHeight ) );
+        BOOST_CHECK_LE( std::abs( bitmap.GetReferenceImage().GetSize().x -
+                                  schIUScale.MilsToIU( static_cast<double>( source.size.x ) / 2.0 ) ),
+                        2 );
+        BOOST_CHECK_LE( std::abs( bitmap.GetReferenceImage().GetSize().y -
+                                  schIUScale.MilsToIU( static_cast<double>( source.size.y ) / 2.0 ) ),
+                        schIUScale.MilsToIU( 2 ) );
+        BOOST_REQUIRE( bitmap.GetReferenceImage().GetImage().GetOriginalImageData() );
+        BOOST_CHECK( bitmap.GetReferenceImage().GetImage().GetOriginalImageData()->IsOk() );
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( CanReadSchematicFile )
 {
     SCH_IO_PADS plugin;
@@ -1041,10 +1109,10 @@ BOOST_AUTO_TEST_CASE( BinaryDispatch )
     BOOST_REQUIRE_NO_THROW( plugin.LoadSchematicFile( binaryFixture( wxS( "page_graphics" ) ), &m_schematic ) );
     const wxString countText = wxString::Format(
             wxS( "%zu sheets, %zu symbols, %zu wires, %zu buses, %zu bus entries, %zu junctions, %zu labels, "
-                 "%zu texts, %zu graphics" ),
+                 "%zu texts, %zu graphics, %zu images" ),
             expected.counts.sheets, expected.counts.symbols, expected.counts.wires, expected.counts.buses,
             expected.counts.busEntries, expected.counts.junctions, expected.counts.labels, expected.counts.texts,
-            expected.counts.graphics );
+            expected.counts.graphics, expected.counts.images );
     BOOST_CHECK_EQUAL( std::ranges::count_if( reporter.messages,
                                               [&]( const auto& aMessage )
                                               {

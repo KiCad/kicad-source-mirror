@@ -17,6 +17,7 @@
 #include <page_info.h>
 #include <pin_type.h>
 #include <sch_bus_entry.h>
+#include <sch_bitmap.h>
 #include <sch_field.h>
 #include <sch_junction.h>
 #include <sch_label.h>
@@ -30,6 +31,7 @@
 #include <sch_text.h>
 #include <schematic.h>
 #include <sch_io/pads/pads_sch_symbol_builder.h>
+#include <sch_io/ole_image.h>
 #include <stroke_params.h>
 #include <title_block.h>
 
@@ -45,6 +47,9 @@
 #include <set>
 #include <tuple>
 #include <utility>
+#include <wx/buffer.h>
+#include <wx/image.h>
+#include <wx/log.h>
 
 namespace PADS_SCH_BINARY
 {
@@ -66,6 +71,100 @@ namespace
     VECTOR2I pagePoint( const SOURCE_POINT& aPoint, int aPageHeight )
     {
         return { toIU( aPoint.x ), aPageHeight - toIU( aPoint.y ) };
+    }
+
+
+    std::unique_ptr<SCH_BITMAP> makeEmbeddedImage( const MODEL_EMBEDDED_IMAGE& aSource, int aPageHeight,
+                                                   std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    {
+        if( aSource.size.x <= 0 || aSource.size.y <= 0 )
+        {
+            aDiagnostics.emplace_back( RPT_SEVERITY_WARNING, aSource.source,
+                                       wxS( "embedded OLE image has a degenerate page box and was skipped" ) );
+            return nullptr;
+        }
+
+        auto             bitmap = std::make_unique<SCH_BITMAP>( pagePoint( aSource.position, aPageHeight ) );
+        REFERENCE_IMAGE& refImage = bitmap->GetReferenceImage();
+        bool             decoded = false;
+        wxMemoryBuffer   buffer;
+
+        switch( aSource.type )
+        {
+        case MODEL_EMBEDDED_IMAGE_TYPE::BMP:
+            buffer.AppendData( aSource.data.data(), aSource.data.size() );
+            {
+                wxLogNull noLog;
+                decoded = refImage.ReadImageFile( buffer );
+            }
+            break;
+
+        case MODEL_EMBEDDED_IMAGE_TYPE::DIB:
+            if( OleMakeBmpFromDib( aSource.data, buffer ) )
+            {
+                wxLogNull noLog;
+                decoded = refImage.ReadImageFile( buffer );
+            }
+            break;
+
+        case MODEL_EMBEDDED_IMAGE_TYPE::WMF:
+        {
+            wxImage image;
+            int width = std::clamp<int64_t>( std::abs( static_cast<int64_t>( aSource.extent[2] )
+                                                       - aSource.extent[0] ),
+                                             1, 4096 );
+            int height = std::clamp<int64_t>( std::abs( static_cast<int64_t>( aSource.extent[3] )
+                                                        - aSource.extent[1] ),
+                                              1, 4096 );
+
+            if( OleRenderWmf( aSource.data, width, height, image ) )
+            {
+                // Clamp before rounding; llround on an out-of-range double is undefined
+                double scaledHeight = static_cast<double>( width ) * aSource.size.y / aSource.size.x;
+                int    fittedHeight =
+                        static_cast<int>( std::llround( std::clamp( scaledHeight, 1.0, 4096.0 ) ) );
+                image.Rescale( width, fittedHeight, wxIMAGE_QUALITY_HIGH );
+                decoded = refImage.SetImage( image );
+            }
+
+            break;
+        }
+
+        case MODEL_EMBEDDED_IMAGE_TYPE::UNSUPPORTED: break;
+        }
+
+        if( !decoded )
+        {
+            aDiagnostics.emplace_back( RPT_SEVERITY_WARNING, aSource.source,
+                                       wxS( "embedded OLE image could not be rasterized and was skipped" ) );
+            return nullptr;
+        }
+
+        const int targetWidth = toIU( aSource.size.x );
+        const int targetHeight = toIU( aSource.size.y );
+
+        if( targetWidth <= 0 || targetHeight <= 0 )
+            THROW_IO_ERROR( FormatParserError( aSource.source, wxS( "embedded image has invalid page size" ) ) );
+
+        refImage.SetWidth( targetWidth );
+
+        if( std::abs( refImage.GetSize().y - targetHeight ) > schIUScale.MilsToIU( 2 ) )
+        {
+            aDiagnostics.push_back( MakePropertyDiagnostic(
+                    RPT_SEVERITY_WARNING, aSource.source, wxS( "embedded_image_aspect_ratio" ),
+                    PROPERTY_DISPOSITION::APPROXIMATE,
+                    wxS( "embedded image aspect ratio differs from its PADS database box; width retained" ) ) );
+        }
+
+        const VECTOR2I center = bitmap->GetPosition();
+
+        if( aSource.mirrorHorizontal )
+            bitmap->MirrorHorizontally( center.x );
+
+        if( aSource.mirrorVertical )
+            bitmap->MirrorVertically( center.y );
+
+        return bitmap;
     }
 
 
@@ -982,6 +1081,9 @@ namespace
             collectPresentationDiagnostics( graphic.graphic.presentation, aDiagnostics );
         }
 
+        for( const MODEL_EMBEDDED_IMAGE& image : aModel.images )
+            collectDispositionDiagnostics( image.properties, aDiagnostics );
+
         for( const PRESERVED_CONTROLLER_PAYLOAD& payload : aModel.preservedControllerPayloads )
         {
             aDiagnostics.push_back( MakePropertyDiagnostic(
@@ -1046,6 +1148,9 @@ namespace
 
             for( const MODEL_PAGE_GRAPHIC& graphic : aModel.graphics )
                 graphicsBySheet[graphic.sheet.id].push_back( &graphic );
+
+            for( const MODEL_EMBEDDED_IMAGE& image : aModel.images )
+                imagesBySheet[image.sheet.id].push_back( &image );
         }
 
         template <typename T>
@@ -1064,6 +1169,7 @@ namespace
         std::map<SHEET_ID, std::vector<const MODEL_JUNCTION*>>     junctionsBySheet;
         std::map<SHEET_ID, std::vector<const MODEL_TEXT*>>         textsBySheet;
         std::map<SHEET_ID, std::vector<const MODEL_PAGE_GRAPHIC*>> graphicsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_EMBEDDED_IMAGE*>> imagesBySheet;
         std::map<NET_ID, const MODEL_NET*>                         netsById;
         std::map<POINT_KEY, std::vector<SOURCE_POINT>>             endpointAdjacency;
     };
@@ -1306,6 +1412,20 @@ namespace
                 aStaged.result.counts.graphics +=
                         appendPageGraphic( aScreen, pageGraphic.graphic, pageHeight, aStaged.result.diagnostics );
             }
+        }
+
+        for( const MODEL_EMBEDDED_IMAGE* sourceImage :
+             MODEL_INDEX::ForSheet( aIndex.imagesBySheet, aSourceSheet.id ) )
+        {
+            std::unique_ptr<SCH_BITMAP> bitmap =
+                    makeEmbeddedImage( *sourceImage, pageHeight, aStaged.result.diagnostics );
+
+            if( !bitmap )
+                continue;
+
+            aScreen->Append( bitmap.get() );
+            bitmap.release();
+            ++aStaged.result.counts.images;
         }
     }
 

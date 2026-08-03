@@ -35,6 +35,7 @@ struct BUILD_COUNTS
     size_t labels = 0;
     size_t texts = 0;
     size_t graphics = 0;
+    size_t images = 0;
 
     bool operator==( const BUILD_COUNTS& ) const = default;
 };

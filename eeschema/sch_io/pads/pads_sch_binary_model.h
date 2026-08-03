@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <limits>
@@ -168,6 +169,7 @@ struct GATE_ID_TAG;
 struct PLACEMENT_ID_TAG;
 struct NET_ID_TAG;
 struct BUS_ID_TAG;
+struct IMAGE_ID_TAG;
 
 using SHEET_ID = CONTROLLER_ID<SHEET_ID_TAG>;
 using DEFINITION_ID = CONTROLLER_ID<DEFINITION_ID_TAG>;
@@ -178,6 +180,7 @@ using GATE_ID = CONTROLLER_ID<GATE_ID_TAG>;
 using PLACEMENT_ID = CONTROLLER_ID<PLACEMENT_ID_TAG>;
 using NET_ID = CONTROLLER_ID<NET_ID_TAG>;
 using BUS_ID = CONTROLLER_ID<BUS_ID_TAG>;
+using IMAGE_ID = CONTROLLER_ID<IMAGE_ID_TAG>;
 
 enum class FIELD_ID_DOMAIN : uint8_t
 {
@@ -622,6 +625,36 @@ struct MODEL_TEXT
 };
 
 
+enum class MODEL_EMBEDDED_IMAGE_TYPE
+{
+    BMP,
+    DIB,
+    WMF,
+    UNSUPPORTED
+};
+
+
+struct MODEL_EMBEDDED_IMAGE
+{
+    IMAGE_ID                     id;
+    SOURCE_PROVENANCE            source;
+    SHEET_REFERENCE              sheet;
+    MODEL_EMBEDDED_IMAGE_TYPE    type = MODEL_EMBEDDED_IMAGE_TYPE::UNSUPPORTED;
+    wxString                     streamName;
+    std::array<int32_t, 4>       extent{};
+    std::array<int32_t, 4>       databaseBox{};
+    SOURCE_POINT                 position;
+    SOURCE_POINT                 size;
+    bool                         mirrorHorizontal = false;
+    bool                         mirrorVertical = false;
+    uint32_t                     flags = 0;
+    std::vector<uint8_t>         data;
+    std::vector<SOURCE_PROPERTY> properties;
+
+    bool operator==( const MODEL_EMBEDDED_IMAGE& ) const = default;
+};
+
+
 struct PRESERVED_CONTROLLER_PAYLOAD
 {
     SOURCE_PROVENANCE    source;
@@ -648,6 +681,7 @@ struct PADS_SCH_MODEL
     std::vector<MODEL_JUNCTION>               junctions;
     std::vector<MODEL_TEXT>                   texts;
     std::vector<MODEL_PAGE_GRAPHIC>           graphics;
+    std::vector<MODEL_EMBEDDED_IMAGE>         images;
     std::vector<PRESERVED_CONTROLLER_PAYLOAD> preservedControllerPayloads;
     std::vector<PARSER_DIAGNOSTIC>            diagnostics;
 

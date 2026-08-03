@@ -21,6 +21,8 @@
 
 #include "pads_sch_sdb.h"
 
+#include <sch_io/ole_image.h>
+
 #include <algorithm>
 #include <array>
 #include <functional>
@@ -225,6 +227,15 @@ namespace
     int64_t decodeCoordinate( uint16_t aRaw )
     {
         return static_cast<int64_t>( aRaw ) * 4 - 198144;
+    }
+
+
+    int64_t decodeDatabaseCoordinate( int32_t aRaw, const SOURCE_PROVENANCE& aSource )
+    {
+        if( aRaw < std::numeric_limits<int16_t>::min() || aRaw > std::numeric_limits<int16_t>::max() )
+            throwDecodeError( aSource, wxS( "embedded OLE database coordinate is not sign-extended 16-bit" ) );
+
+        return decodeCoordinate( static_cast<uint16_t>( static_cast<int16_t>( aRaw ) ) );
     }
 
 
@@ -3115,7 +3126,7 @@ PARSER_DIAGNOSTIC MakePropertyDiagnostic( SEVERITY aSeverity, const SOURCE_PROVE
 bool PADS_SCH_MODEL::HasUniqueTypedIds() const
 {
     if( !idsAreUnique( sheets ) || !idsAreUnique( definitions ) || !idsAreUnique( partTypes )
-        || !idsAreUnique( placements ) || !idsAreUnique( nets ) || !idsAreUnique( buses ) )
+        || !idsAreUnique( placements ) || !idsAreUnique( nets ) || !idsAreUnique( buses ) || !idsAreUnique( images ) )
     {
         return false;
     }
@@ -3374,6 +3385,12 @@ bool PADS_SCH_MODEL::AllReferencesResolved() const
             return false;
     }
 
+    for( const MODEL_EMBEDDED_IMAGE& image : images )
+    {
+        if( !index.sheets.contains( image.sheet.id.Value() ) )
+            return false;
+    }
+
     return true;
 }
 
@@ -3394,6 +3411,7 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
     validateUniqueIds( placements, wxS( "placement" ), id, provenance );
     validateUniqueIds( nets, wxS( "net" ), id, provenance );
     validateUniqueIds( buses, wxS( "bus" ), id, provenance );
+    validateUniqueIds( images, wxS( "embedded image" ), id, provenance );
 
     std::vector<bool> sheetIndexes( sheets.size() );
 
@@ -3711,6 +3729,15 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
     {
         if( !index.sheets.contains( graphic.sheet.id.Value() ) )
             throwValidationError( graphic.sheet.source, wxS( "unresolved page-graphic sheet reference" ) );
+    }
+
+    for( const MODEL_EMBEDDED_IMAGE& image : images )
+    {
+        if( !index.sheets.contains( image.sheet.id.Value() ) )
+            throwValidationError( image.sheet.source, wxS( "unresolved embedded-image sheet reference" ) );
+
+        if( image.type != MODEL_EMBEDDED_IMAGE_TYPE::UNSUPPORTED && image.data.empty() )
+            throwValidationError( image.source, wxS( "embedded image has no decoded payload" ) );
     }
 
     enum class VISIT_STATE : uint8_t
@@ -4068,6 +4095,63 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
         decodePlacements( aBytes, cursor, block, sheetIndex, aSourceName, *placementData, model );
         decodeConnectivity( aBytes, cursor, block, sheetIndex, aSourceName, *connectivityData, model );
         ++sheetIndex;
+    }
+
+    for( size_t index = 0; index < sdb.OleItems().size(); ++index )
+    {
+        const SCH_SDB_OLE_ITEM& item = sdb.OleItems()[index];
+        SOURCE_PROVENANCE       source =
+                sourceAt( aSourceName, model.version, wxS( "embedded OLE image" ), item.cfb.controller, index,
+                          item.cfb.offset, item.cfb.bytes, static_cast<int>( item.sheetPlane ) );
+        OLE_IMAGE_PAYLOAD    payload = ExtractOleImage( aBytes.data() + item.cfb.offset, item.cfb.bytes );
+        MODEL_EMBEDDED_IMAGE image;
+        image.id = IMAGE_ID( index );
+        image.source = source;
+        image.sheet = { model.sheets[item.sheetPlane].id, source };
+        image.streamName = wxString::FromUTF8( payload.streamName );
+        image.extent = item.extent;
+        image.databaseBox = { item.left, item.bottom, item.right, item.top };
+        SOURCE_PROVENANCE boxSource = source;
+        boxSource.objectClass = wxS( "embedded OLE image database box" );
+        boxSource.absoluteOffset = item.boxOffset;
+        boxSource.length = 16;
+        int64_t left = decodeDatabaseCoordinate( item.left, boxSource );
+        int64_t bottom = decodeDatabaseCoordinate( item.bottom, boxSource );
+        int64_t right = decodeDatabaseCoordinate( item.right, boxSource );
+        int64_t top = decodeDatabaseCoordinate( item.top, boxSource );
+
+        if( right == left || bottom == top )
+            throwDecodeError( boxSource, wxS( "embedded OLE database box has zero size" ) );
+
+        image.position = { left + ( right - left ) / 2, top + ( bottom - top ) / 2, boxSource };
+        image.size = { std::abs( right - left ), std::abs( bottom - top ), boxSource };
+        image.mirrorHorizontal = right < left;
+        image.mirrorVertical = bottom < top;
+        image.flags = item.flags;
+        image.data = std::move( payload.data );
+
+        switch( payload.type )
+        {
+        case OLE_IMAGE_TYPE::BMP: image.type = MODEL_EMBEDDED_IMAGE_TYPE::BMP; break;
+        case OLE_IMAGE_TYPE::DIB: image.type = MODEL_EMBEDDED_IMAGE_TYPE::DIB; break;
+        case OLE_IMAGE_TYPE::WMF: image.type = MODEL_EMBEDDED_IMAGE_TYPE::WMF; break;
+        case OLE_IMAGE_TYPE::NONE:
+            image.type = MODEL_EMBEDDED_IMAGE_TYPE::UNSUPPORTED;
+            model.diagnostics.emplace_back( RPT_SEVERITY_WARNING, source,
+                                            wxS( "embedded OLE object has no supported BMP, DIB, or WMF stream" ) );
+            break;
+        }
+
+        if( item.flags != 1 )
+        {
+            SOURCE_PROVENANCE flagsSource = source;
+            flagsSource.objectClass = wxS( "embedded OLE image flags" );
+            flagsSource.absoluteOffset = item.boxOffset + 20;
+            flagsSource.length = 4;
+            RecordUnknownEnum( wxS( "embedded OLE image flags" ), item.flags, flagsSource, model.diagnostics );
+        }
+
+        model.images.push_back( std::move( image ) );
     }
 
     assignFieldIds( model );
