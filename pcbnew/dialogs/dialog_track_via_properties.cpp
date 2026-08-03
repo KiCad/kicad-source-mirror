@@ -216,6 +216,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
 
     m_padstackDirty = false;
 
+    const int annularRingChoices = static_cast<int>( m_annularRingsCtrl->GetCount() );
+
     auto getAnnularRingSelection =
             []( const PCB_VIA* via ) -> int
             {
@@ -418,10 +420,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
 
                     if( m_annularRingsCtrl->GetSelection() != getAnnularRingSelection( v ) )
                     {
-                        if( m_annularRingsCtrl->GetStrings().size() < 4 )
+                        if( m_annularRingsCtrl->GetSelection() != annularRingChoices )
                             m_annularRingsCtrl->AppendString( INDETERMINATE_STATE );
 
-                        m_annularRingsCtrl->SetSelection( 3 );
+                        m_annularRingsCtrl->SetSelection( annularRingChoices );
                     }
 
                     if( m_cbTeardrops->GetValue() != v->GetTeardropParams().m_Enabled )
