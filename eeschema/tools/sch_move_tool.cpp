@@ -1015,11 +1015,11 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         m_frame->UpdateItem( hoverSheet, false );
     }
 
-    for( const HIDDEN_JUNCTION& hidden : m_hiddenJunctions )
-        m_view->Hide( hidden.m_junction, false );
-
     if( restore_state )
     {
+        for( const HIDDEN_JUNCTION& hidden : m_hiddenJunctions )
+            m_view->Hide( hidden.m_junction, false );
+
         m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
 
         // Clear the split-segment selection that preprocessBreakOrSliceSelection() built
@@ -1266,44 +1266,7 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
     setupItemsForDrag( aSelection, aCommit );
     setupItemsForMove( aSelection, aInternalPoints );
 
-    // Hide junctions connected to line endpoints that are not selected
-    m_hiddenJunctions.clear();
-
-    for( EDA_ITEM* item : aSelection )
-        item->SetFlags( STRUCT_DELETED );
-
-    for( EDA_ITEM* edaItem : aSelection )
-    {
-        if( edaItem->Type() != SCH_LINE_T )
-            continue;
-
-        SCH_LINE* line = static_cast<SCH_LINE*>( edaItem );
-
-        for( const VECTOR2I& pt : line->GetConnectionPoints() )
-        {
-            SCH_JUNCTION* jct = static_cast<SCH_JUNCTION*>( m_frame->GetScreen()->GetItem( pt, 0, SCH_JUNCTION_T ) );
-
-            if( jct && !jct->IsSelected()
-                && std::none_of( m_hiddenJunctions.begin(), m_hiddenJunctions.end(),
-                                 [jct]( const HIDDEN_JUNCTION& aHidden )
-                                 {
-                                     return aHidden.m_junction == jct;
-                                 } ) )
-            {
-                JUNCTION_HELPERS::POINT_INFO info = JUNCTION_HELPERS::AnalyzePoint( m_frame->GetScreen()->Items(),
-                                                                                    pt, false );
-
-                if( !info.isJunction )
-                {
-                    m_hiddenJunctions.push_back( { jct, line->m_Uuid, pt == line->GetStartPoint() } );
-                    m_view->Hide( jct, true );
-                }
-            }
-        }
-    }
-
-    for( EDA_ITEM* item : aSelection )
-        item->ClearFlags( STRUCT_DELETED );
+    recordRedundantJunctions( aSelection );
 
     // Generic setup
     aSnapLayer = grid.GetSelectionGrid( aSelection );
@@ -1842,6 +1805,75 @@ void SCH_MOVE_TOOL::updateStoredPositions( const SCH_SELECTION& aSelection )
 }
 
 
+void SCH_MOVE_TOOL::recordRedundantJunctions( SCH_SELECTION& aSelection )
+{
+    m_hiddenJunctions.clear();
+
+    for( EDA_ITEM* item : aSelection )
+        item->SetFlags( STRUCT_DELETED );
+
+    for( EDA_ITEM* edaItem : aSelection )
+    {
+        if( edaItem->Type() != SCH_LINE_T )
+            continue;
+
+        SCH_LINE* line = static_cast<SCH_LINE*>( edaItem );
+
+        for( const VECTOR2I& pt : line->GetConnectionPoints() )
+        {
+            SCH_JUNCTION* jct = static_cast<SCH_JUNCTION*>( m_frame->GetScreen()->GetItem( pt, 0, SCH_JUNCTION_T ) );
+
+            if( jct && !jct->IsSelected()
+                && std::none_of( m_hiddenJunctions.begin(), m_hiddenJunctions.end(),
+                                 [jct]( const HIDDEN_JUNCTION& aHidden )
+                                 {
+                                     return aHidden.m_junction == jct;
+                                 } ) )
+            {
+                JUNCTION_HELPERS::POINT_INFO info =
+                        JUNCTION_HELPERS::AnalyzePoint( m_frame->GetScreen()->Items(), pt, false );
+
+                if( !info.isJunction )
+                {
+                    m_hiddenJunctions.push_back( { jct, line->m_Uuid, pt == line->GetStartPoint() } );
+                    m_view->Hide( jct, true );
+                }
+            }
+        }
+    }
+
+    for( EDA_ITEM* item : aSelection )
+        item->ClearFlags( STRUCT_DELETED );
+}
+
+
+void SCH_MOVE_TOOL::migrateHiddenJunctions( SCH_COMMIT* aCommit )
+{
+    SCH_SCREEN* screen = m_frame->GetScreen();
+
+    for( const HIDDEN_JUNCTION& hidden : m_hiddenJunctions )
+    {
+        m_view->Hide( hidden.m_junction, false );
+
+        SCH_LINE* line = dynamic_cast<SCH_LINE*>( m_frame->Schematic().ResolveItem( hidden.m_lineId, nullptr, true ) );
+
+        if( !line )
+            continue;
+
+        VECTOR2I newPos = hidden.m_atLineStart ? line->GetStartPoint() : line->GetEndPoint();
+
+        if( newPos != hidden.m_junction->GetPosition()
+            && !screen->IsExplicitJunction( hidden.m_junction->GetPosition() )
+            && screen->IsExplicitJunctionNeeded( newPos ) )
+        {
+            aCommit->Modify( hidden.m_junction, screen );
+            hidden.m_junction->SetPosition( newPos );
+            m_frame->UpdateItem( hidden.m_junction, false, true );
+        }
+    }
+}
+
+
 void SCH_MOVE_TOOL::finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit, bool aUnselect,
                                            const std::vector<DANGLING_END_ITEM>& aInternalPoints )
 {
@@ -1905,25 +1937,7 @@ void SCH_MOVE_TOOL::finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT
 
     lwbTool->TrimOverLappingWires( aCommit, &selectionCopy );
 
-    for( const HIDDEN_JUNCTION& hidden : m_hiddenJunctions )
-    {
-        SCH_LINE* line = dynamic_cast<SCH_LINE*>( m_frame->Schematic().ResolveItem( hidden.m_lineId, nullptr, true ) );
-
-        if( !line )
-            continue;
-
-        SCH_SCREEN* screen = m_frame->GetScreen();
-        VECTOR2I    newPos = hidden.m_atLineStart ? line->GetStartPoint() : line->GetEndPoint();
-
-        if( newPos != hidden.m_junction->GetPosition()
-            && !screen->IsExplicitJunction( hidden.m_junction->GetPosition() )
-            && screen->IsExplicitJunctionNeeded( newPos ) )
-        {
-            aCommit->Modify( hidden.m_junction, screen );
-            hidden.m_junction->SetPosition( newPos );
-            m_frame->UpdateItem( hidden.m_junction, false, true );
-        }
-    }
+    migrateHiddenJunctions( aCommit );
 
     lwbTool->AddJunctionsIfNeeded( aCommit, &selectionCopy );
 
@@ -2766,11 +2780,14 @@ int SCH_MOVE_TOOL::AlignToGrid( const TOOL_EVENT& aEvent )
                 updateItem( aItem, true );
             };
 
+    recordRedundantJunctions( selection );
+
     std::vector<EDA_ITEM*> items( selection.begin(), selection.end() );
     AlignSchematicItemsToGrid( m_frame->GetScreen(), items, grid, selectionGrid, callbacks );
 
     SCH_LINE_WIRE_BUS_TOOL* lwbTool = m_toolMgr->GetTool<SCH_LINE_WIRE_BUS_TOOL>();
     lwbTool->TrimOverLappingWires( &commit, &selection );
+    migrateHiddenJunctions( &commit );
     lwbTool->AddJunctionsIfNeeded( &commit, &selection );
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );

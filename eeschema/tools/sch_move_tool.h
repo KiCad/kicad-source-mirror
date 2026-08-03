@@ -158,6 +158,13 @@ private:
     ///< Update stored positions after transformations (rotation, mirroring, etc.) during move
     void updateStoredPositions( const SCH_SELECTION& aSelection );
 
+    ///< Hide the junction dots that the pending edit will make redundant, noting the line end
+    ///< each one marks
+    void recordRedundantJunctions( SCH_SELECTION& aSelection );
+
+    ///< Move those junction dots to wherever the line end they marked has ended up
+    void migrateHiddenJunctions( SCH_COMMIT* aCommit );
+
     ///< Finalize the move operation, updating junctions and cleaning up
     void finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit, bool aUnselect,
                                 const std::vector<DANGLING_END_ITEM>& aInternalPoints );
