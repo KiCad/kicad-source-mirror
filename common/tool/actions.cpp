@@ -395,11 +395,8 @@ TOOL_ACTION ACTIONS::duplicate( TOOL_ACTION_ARGS()
 TOOL_ACTION ACTIONS::doDelete( TOOL_ACTION_ARGS()
         .Name( "common.Interactive.delete" )
         .Scope( AS_GLOBAL )
-#if defined( __WXMAC__ )
-        .DefaultHotkey( WXK_BACK )
-#else
         .DefaultHotkey( WXK_DELETE )
-#endif
+        .DefaultHotkeyAlt( WXK_BACK )
         .LegacyHotkeyName( "Delete Item" )
         .FriendlyName( _( "Delete" ) )
         .Tooltip( _( "Delete selected item(s)" ) )  // differentiation from deleteTool, below
