@@ -299,10 +299,16 @@ wxString SCH_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
         const SCH_SHEET_PATH& currentSheet = schematic->CurrentSheet();
         wxString variantName = schematic->GetCurrentVariant();
 
-        wxLogTrace( traceSchFieldRendering,
-                    "GetShownText (no path arg): field=%s, current sheet path='%s', variant='%s', size=%zu, empty=%d",
-                    GetName(), currentSheet.Path().AsString(), variantName, currentSheet.size(),
-                    currentSheet.empty() ? 1 : 0 );
+        // Path() builds a KIID_PATH, so keep it off the render path unless the trace is on
+        if( wxLog::IsAllowedTraceMask( traceSchFieldRendering ) )
+        {
+            wxLogTrace( traceSchFieldRendering,
+                        "GetShownText (no path arg): field=%s, current sheet path='%s', variant='%s', "
+                        "size=%zu, empty=%d",
+                        GetName(), currentSheet.Path().AsString(), variantName, currentSheet.size(),
+                        currentSheet.empty() ? 1 : 0 );
+        }
+
         return GetShownText( &currentSheet, aAllowExtraText, aDepth, variantName );
     }
     else

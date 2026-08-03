@@ -35,7 +35,9 @@
 #include <sch_sheet.h>
 #include <schematic.h>
 
+#include <atomic>
 #include <sstream>
+#include <thread>
 
 class TEST_SCH_SHEET_PATH_FIXTURE
 {
@@ -217,6 +219,73 @@ BOOST_AUTO_TEST_CASE( PathHumanReadableWithSlashes )
     // Test with stripping trailing separator
     wxString escapedNoTrail = pathWithSlash.PathHumanReadable( true, true, true );
     BOOST_CHECK_EQUAL( escapedNoTrail, "/Power{slash}Supply/SubSheet" );
+}
+
+
+/**
+ * Check that Path() answers from the current sheet list rather than from stale state.
+ */
+BOOST_AUTO_TEST_CASE( PathFollowsSheetListChanges )
+{
+    const KIID_PATH before = m_linear.Path();
+
+    BOOST_REQUIRE_EQUAL( before.size(), 3u );
+
+    m_linear.push_back( &m_sheets[3] );
+
+    const KIID_PATH grown = m_linear.Path();
+
+    BOOST_CHECK_EQUAL( grown.size(), 4u );
+    BOOST_CHECK( grown != before );
+
+    m_linear.pop_back();
+
+    BOOST_CHECK( m_linear.Path() == before );
+}
+
+
+/**
+ * The parallel connectivity workers all resolve names against sheet paths they share, so Path()
+ * has to stay correct when several threads reach the same path at once.  It used to fill a lazy
+ * member cache, and concurrent fills reallocated that buffer under each other.
+ */
+BOOST_AUTO_TEST_CASE( PathIsSafeOnSharedPaths )
+{
+    // Copy before asking m_linear for its path: a lazily filled cache would otherwise come
+    // across already populated and the threads would never race to fill it
+    std::vector<SCH_SHEET_PATH> shared( 4000, m_linear );
+
+    const KIID_PATH expected = m_linear.Path();
+
+    unsigned threadCount = std::max( 4u, std::min( 8u, std::thread::hardware_concurrency() ) );
+
+    std::atomic<unsigned> live( 0 );
+    std::atomic<unsigned> mismatches( 0 );
+    std::vector<std::thread> threads;
+
+    for( unsigned ii = 0; ii < threadCount; ++ii )
+    {
+        threads.emplace_back(
+                [&]()
+                {
+                    // Walk in step with the other threads so they collide on the same path
+                    live.fetch_add( 1 );
+
+                    while( live.load() < threadCount )
+                        std::this_thread::yield();
+
+                    for( const SCH_SHEET_PATH& path : shared )
+                    {
+                        if( path.Path() != expected )
+                            mismatches.fetch_add( 1 );
+                    }
+                } );
+    }
+
+    for( std::thread& thread : threads )
+        thread.join();
+
+    BOOST_CHECK_EQUAL( mismatches.load(), 0u );
 }
 
 

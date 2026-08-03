@@ -279,11 +279,7 @@ public:
     }
 
     /// Forwarded method from std::vector
-    void push_back( SCH_SHEET* aSheet )
-    {
-        m_sheets.push_back( aSheet );
-        Rehash();
-    }
+    void push_back( SCH_SHEET* aSheet );
 
     /// Forwarded method from std::vector
     size_t size() const { return m_sheets.size(); }
@@ -408,6 +404,10 @@ public:
      * Get the sheet path as an #KIID_PATH.
      *
      * @note This #KIID_PATH includes the root sheet UUID prefixed to the path.
+     *
+     * @note Returns state built by Rehash(), so like GetCurrentHash() it goes stale if a sheet's
+     *       UUID changes without a Rehash().  Reading it writes nothing, which is what lets the
+     *       parallel connectivity workers call it on a sheet path they share.
      */
     KIID_PATH Path() const;
 
@@ -568,8 +568,9 @@ protected:
 
     size_t                  m_current_hash;
     mutable wxString        m_cached_page_number;
-    mutable bool            m_cached_path_valid = false;
-    mutable KIID_PATH       m_cached_path;
+
+    /// The UUID path of m_sheets, kept in step with it by Rehash().
+    KIID_PATH               m_path;
 
     int m_virtualPageNumber;           ///< Page numbers are maintained by the sheet load order.
 
