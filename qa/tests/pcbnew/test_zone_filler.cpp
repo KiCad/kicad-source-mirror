@@ -3548,3 +3548,112 @@ BOOST_FIXTURE_TEST_CASE( ZoneFillDependencyKnockoutMargin, ZONE_FILL_TEST_FIXTUR
                          "Lower-priority zone filled before the higher-priority knockout was "
                          "published; the fill depends on thread scheduling." );
 }
+
+
+// Issue 23790: the iterative refill's min-width cycle runs after the fill has been trimmed to the
+// zone outline, so without the same-net apron a border shared with an abutting same-net zone looks
+// like a free convex corner and gets rounded off.  Both fill modes must agree along such a border.
+BOOST_FIXTURE_TEST_CASE( SameNetBorderIdenticalAcrossFillModes, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    struct ScopeGuard { bool& ref; bool orig; ~ScopeGuard() { ref = orig; } }
+        guard{ cfg.m_ZoneFillIterativeRefill, cfg.m_ZoneFillIterativeRefill };
+
+    const PCB_LAYER_ID layer = F_Cu;
+
+    auto fill =
+            [&]( bool aIterativeRefill, std::unique_ptr<BOARD>& aBoard )
+            {
+                cfg.m_ZoneFillIterativeRefill = aIterativeRefill;
+                KI_TEST::LoadBoard( m_settingsManager, "issue23790/issue23790", aBoard );
+                KI_TEST::FillZones( aBoard.get() );
+            };
+
+    std::unique_ptr<BOARD> incremental;
+    std::unique_ptr<BOARD> oneShot;
+
+    fill( true, incremental );
+    fill( false, oneShot );
+
+    std::map<KIID, SHAPE_POLY_SET> incrementalFills;
+
+    for( ZONE* zone : incremental->Zones() )
+    {
+        if( !zone->GetIsRuleArea() && zone->HasFilledPolysForLayer( layer ) )
+            incrementalFills[zone->m_Uuid] = *zone->GetFilledPolysList( layer );
+    }
+
+    // The band in which a zone can be reached by an abutting same-net zone's copper.  Confining the
+    // comparison to it excludes free outer corners, where the two modes legitimately round a little
+    // differently.
+    auto sameNetBorderBand =
+            [&]( ZONE* aZone ) -> SHAPE_POLY_SET
+            {
+                SHAPE_POLY_SET self = aZone->Outline()->CloneDropTriangulation();
+                self.ClearArcs();
+                self.Inflate( aZone->GetMinThickness(), CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                              ARC_HIGH_DEF );
+
+                SHAPE_POLY_SET band;
+
+                for( ZONE* other : oneShot->Zones() )
+                {
+                    if( other == aZone || other->GetIsRuleArea()
+                            || other->GetNetCode() != aZone->GetNetCode()
+                            || !other->GetLayerSet().Contains( layer ) )
+                    {
+                        continue;
+                    }
+
+                    SHAPE_POLY_SET reach = other->Outline()->CloneDropTriangulation();
+                    reach.ClearArcs();
+                    reach.Inflate( other->GetMinThickness(), CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                                   ARC_HIGH_DEF );
+                    reach.BooleanIntersection( self );
+                    band.BooleanAdd( reach );
+                }
+
+                return band;
+            };
+
+    const double sqMM = pcbIUScale.IU_PER_MM * (double) pcbIUScale.IU_PER_MM;
+    int          checkedZones = 0;
+
+    for( ZONE* zone : oneShot->Zones() )
+    {
+        if( zone->GetIsRuleArea() || zone->GetNetCode() <= 0
+                || !zone->HasFilledPolysForLayer( layer ) )
+        {
+            continue;
+        }
+
+        SHAPE_POLY_SET band = sameNetBorderBand( zone );
+
+        if( band.OutlineCount() == 0 )
+            continue;
+
+        auto incrementalIt = incrementalFills.find( zone->m_Uuid );
+
+        BOOST_REQUIRE_MESSAGE( incrementalIt != incrementalFills.end(),
+                               wxString::Format( "Zone %s is missing from the incremental fill.",
+                                                 zone->m_Uuid.AsString() ) );
+
+        SHAPE_POLY_SET difference = *zone->GetFilledPolysList( layer );
+        difference.BooleanXor( incrementalIt->second );
+        difference.BooleanIntersection( band );
+
+        const double differenceArea = difference.Area() / sqMM;
+
+        BOOST_CHECK_MESSAGE( differenceArea < 0.01,
+                wxString::Format( "Zone %s (priority %d) fills %.4f mm^2 differently along a "
+                                  "shared same-net border depending on the fill mode; the two "
+                                  "must agree there (issue 23790).",
+                                  zone->m_Uuid.AsString(), zone->GetAssignedPriority(),
+                                  differenceArea ) );
+        checkedZones++;
+    }
+
+    BOOST_REQUIRE_MESSAGE( checkedZones >= 3,
+                           wxString::Format( "Expected at least three zones sharing a same-net "
+                                             "border, found %d.", checkedZones ) );
+}

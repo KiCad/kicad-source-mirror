@@ -174,8 +174,13 @@ private:
      * Remove minimum-width violations introduced by zone-to-zone knockouts.
      * Runs a deflate/reconnect/inflate cycle and intersects with the pre-deflate boundary
      * to avoid re-inflating into cleared areas.
+     *
+     * @param aSameNetApron copper an abutting same-net zone will supply just outside this
+     * zone's boundary.  It is unioned in for the deflate/inflate cycle and clipped back off
+     * afterwards, so a shared border is not treated as a convex corner and rounded away.
      */
-    void postKnockoutMinWidthPrune( const ZONE* aZone, SHAPE_POLY_SET& aFillPolys );
+    void postKnockoutMinWidthPrune( const ZONE* aZone, SHAPE_POLY_SET& aFillPolys,
+                                    const SHAPE_POLY_SET& aSameNetApron );
 
     /**
      * Snapshot of zone fill polygons captured before an iterative refill wave.
@@ -214,6 +219,10 @@ private:
 
     // Un-hatched extent per (zone, layer); lets the refiller re-border carved hatch zones (#24758).
     std::map<std::pair<const ZONE*, PCB_LAYER_ID>, SHAPE_POLY_SET> m_preHatchSolidFillCache;
+
+    // Band just outside each (zone, layer) that an abutting same-net zone pours into.  Buffers the
+    // refiller's min-width cycle the way the smoothed outline buffers the initial one (#23790).
+    std::map<std::pair<const ZONE*, PCB_LAYER_ID>, SHAPE_POLY_SET> m_sameNetApronCache;
 
     // Refill result keyed by (zone, layer); value is the knockout-geometry hash + cached fill.
     // Hit lets an unchanged-knockout zone skip the refill subtract + prune.  Cleared each Fill().
