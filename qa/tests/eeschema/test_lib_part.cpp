@@ -233,6 +233,25 @@ BOOST_AUTO_TEST_CASE( AddedFields )
  */
 BOOST_AUTO_TEST_CASE( AddedDrawItems )
 {
+    const size_t defaultCount = m_part_no_data.GetDrawItems().size();
+
+    SCH_PIN* pin = new SCH_PIN( &m_part_no_data );
+    pin->SetNumber( "1" );
+    m_part_no_data.AddDrawItem( pin );
+
+    BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), defaultCount + 1 );
+    BOOST_CHECK( pin->GetParentSymbol() == &m_part_no_data );
+    BOOST_CHECK_EQUAL( m_part_no_data.GetPinCount(), 1 );
+
+    m_part_no_data.RemoveDrawItem( pin );
+
+    BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), defaultCount );
+    BOOST_CHECK_EQUAL( m_part_no_data.GetPinCount(), 0 );
+
+    // Mandatory fields are never removable, so the accessors can't be left dangling
+    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetReferenceField() );
+
+    BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), defaultCount );
 }
 
 
@@ -644,18 +663,53 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
  */
 BOOST_AUTO_TEST_CASE( GetUnitDrawItems )
 {
-    // There are no unit draw items in the empty LIB_SYMBOL object.
-    BOOST_CHECK( m_part_no_data.GetUnitDrawItems().size() == 0 );
+    // An empty symbol still reports its unit and body style so the saver writes them out
+    std::vector<struct LIB_SYMBOL_UNIT> units = m_part_no_data.GetUnitDrawItems();
 
-    // A single unique unit with 1 pin common to all units and all body styles.
+    BOOST_REQUIRE_EQUAL( units.size(), 1u );
+    BOOST_CHECK_EQUAL( units[0].m_unit, 1 );
+    BOOST_CHECK_EQUAL( units[0].m_bodyStyle, 1 );
+    BOOST_CHECK( units[0].m_items.empty() );
+
+    // A pin common to all units and all body styles matches no numbered unit and gets a
+    // record of its own rather than being dropped
     SCH_PIN* pin1 = new SCH_PIN( &m_part_no_data );
     pin1->SetNumber( "1" );
     m_part_no_data.AddDrawItem( pin1 );
-    std::vector<struct LIB_SYMBOL_UNIT> units = m_part_no_data.GetUnitDrawItems();
-    BOOST_CHECK( units.size() == 1 );
-    BOOST_CHECK( units[0].m_unit == 0 );
-    BOOST_CHECK( units[0].m_bodyStyle == 0 );
-    BOOST_CHECK( units[0].m_items[0] == pin1 );
+
+    units = m_part_no_data.GetUnitDrawItems();
+
+    BOOST_REQUIRE_EQUAL( units.size(), 2u );
+    BOOST_CHECK_EQUAL( units[0].m_unit, 0 );
+    BOOST_CHECK_EQUAL( units[0].m_bodyStyle, 0 );
+    BOOST_REQUIRE_EQUAL( units[0].m_items.size(), 1u );
+    BOOST_CHECK_EQUAL( units[0].m_items[0], pin1 );
+    BOOST_CHECK_EQUAL( units[1].m_unit, 1 );
+    BOOST_CHECK_EQUAL( units[1].m_bodyStyle, 1 );
+    BOOST_CHECK( units[1].m_items.empty() );
+
+    // Units without draw items of their own are still reported
+    m_part_no_data.SetUnitCount( 3, true );
+
+    units = m_part_no_data.GetUnitDrawItems();
+
+    BOOST_REQUIRE_EQUAL( units.size(), 4u );
+    BOOST_CHECK_EQUAL( units[0].m_unit, 0 );
+    BOOST_CHECK_EQUAL( units[1].m_unit, 1 );
+    BOOST_CHECK_EQUAL( units[2].m_unit, 2 );
+    BOOST_CHECK_EQUAL( units[3].m_unit, 3 );
+    BOOST_CHECK( units[1].m_items.empty() );
+    BOOST_CHECK( units[2].m_items.empty() );
+    BOOST_CHECK( units[3].m_items.empty() );
+
+    // Both body styles of every unit are reported once De Morgan is enabled
+    m_part_no_data.SetHasDeMorganBodyStyles( true );
+
+    units = m_part_no_data.GetUnitDrawItems();
+
+    BOOST_REQUIRE_EQUAL( units.size(), 7u );
+    BOOST_CHECK_EQUAL( units[1].m_bodyStyle, 1 );
+    BOOST_CHECK_EQUAL( units[2].m_bodyStyle, 2 );
 }
 
 

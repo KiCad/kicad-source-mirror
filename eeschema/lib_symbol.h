@@ -929,6 +929,10 @@ public:
     /**
      * Return a list of SCH_ITEM objects separated by unit and convert number.
      *
+     * Every unit and body style of the symbol is reported, whether or not it owns any draw
+     * items.  Items that belong to no numbered unit or body style (0 meaning "common to all")
+     * get a record of their own.
+     *
      * @note This does not include SCH_FIELD objects since they are not associated with
      *       unit and/or convert numbers.
      */
