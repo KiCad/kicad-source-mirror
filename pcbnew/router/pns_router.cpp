@@ -679,8 +679,11 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
 
                 clearance = aNode->GetClearance( currentItem, itemToMark );
 
-                if( itemToMark->Layers().IsMultilayer() && !currentItem->Layers().IsMultilayer() )
+                if( itemToMark->Layers().IsMultilayer() && !currentItem->Layers().IsMultilayer()
+                    && !itemToMark->HasUniqueShapeLayers() )
+                {
                     tmp->SetLayer( currentItem->Layer() );
+                }
 
                 if( itemToMark->IsCompoundShapePrimitive() )
                 {
