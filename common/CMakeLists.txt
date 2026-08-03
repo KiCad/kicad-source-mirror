@@ -237,6 +237,8 @@ set( KICOMMON_SRCS
     tool/ui/toolbar_configuration.cpp
     tool/ui/toolbar_context_menu_registry.cpp
 
+    dialogs/eda_list_dialog.cpp
+    dialogs/eda_list_dialog_base.cpp
     dialogs/dialog_fields_table_base.cpp
     dialogs/dialog_fields_table.cpp
     dialogs/dialog_rc_job.cpp
@@ -566,8 +568,6 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_text_entry.cpp
     dialogs/dialog_unit_entry.cpp
     dialogs/dialog_unit_entry_base.cpp
-    dialogs/eda_list_dialog.cpp
-    dialogs/eda_list_dialog_base.cpp
     dialogs/eda_reorderable_list_dialog.cpp
     dialogs/eda_reorderable_list_dialog_base.cpp
     dialogs/eda_view_switcher.cpp
