@@ -17,9 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <chrono>
+#include <condition_variable>
 #include <filesystem>
 #include <fstream>
 #include <memory>
+#include <mutex>
+#include <utility>
 #include <vector>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -27,9 +31,15 @@
 #include <design_block.h>
 #include <design_block_io.h>
 #include <design_block_library_adapter.h>
+#include <frame_type.h>
 #include <ki_exception.h>
+#include <kiway.h>
 #include <libraries/library_manager.h>
 #include <libraries/library_table.h>
+#include <mail_type.h>
+#include <pgm_base.h>
+#include <project.h>
+#include <settings/settings_manager.h>
 
 
 namespace
@@ -90,6 +100,115 @@ struct SCOPED_LIBRARY
     }
 
     std::filesystem::path path;
+};
+
+
+/// Swallows the reload mails a preload sends when it ends, since no frame is open
+class PRELOAD_KIWAY : public KIWAY
+{
+public:
+    PRELOAD_KIWAY() :
+            KIWAY( KFCTL_STANDALONE )
+    {
+    }
+
+    void ExpressMail( FRAME_T, MAIL_T, std::string&, wxWindow*, bool ) override {}
+};
+
+
+/// Holds the first library enumeration after Hold() until Release()
+class GATED_DESIGN_BLOCK_LIBRARY_ADAPTER : public DESIGN_BLOCK_LIBRARY_ADAPTER
+{
+public:
+    using DESIGN_BLOCK_LIBRARY_ADAPTER::DESIGN_BLOCK_LIBRARY_ADAPTER;
+
+    void Hold()
+    {
+        std::lock_guard lock( m_mutex );
+        m_armed = true;
+    }
+
+    bool WaitUntilHeld()
+    {
+        std::unique_lock lock( m_mutex );
+        return m_cv.wait_for( lock, std::chrono::seconds( 20 ), [&]() { return m_holding; } );
+    }
+
+    void Release()
+    {
+        std::lock_guard lock( m_mutex );
+        m_armed = false;
+        m_holding = false;
+        m_cv.notify_all();
+    }
+
+protected:
+    void enumerateLibrary( LIB_DATA* aLib, const wxString& aUri ) override
+    {
+        {
+            std::unique_lock lock( m_mutex );
+
+            if( std::exchange( m_armed, false ) )
+            {
+                m_holding = true;
+                m_cv.notify_all();
+                m_cv.wait( lock, [&]() { return !m_holding; } );
+            }
+        }
+
+        DESIGN_BLOCK_LIBRARY_ADAPTER::enumerateLibrary( aLib, aUri );
+    }
+
+private:
+    std::mutex              m_mutex;
+    std::condition_variable m_cv;
+    bool                    m_armed = false;
+    bool                    m_holding = false;
+};
+
+
+void addGlobalRow( LIBRARY_MANAGER& aManager, const wxString& aNickname, const std::filesystem::path& aPath )
+{
+    std::optional<LIBRARY_TABLE*> table =
+            aManager.Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, LIBRARY_TABLE_SCOPE::GLOBAL );
+
+    BOOST_REQUIRE( table );
+
+    LIBRARY_TABLE_ROW& row = ( *table )->InsertRow();
+    row.SetNickname( aNickname );
+    row.SetType( wxS( "KiCad" ) );
+    row.SetURI( aPath.string() );
+    row.SetOk();
+}
+
+
+/// Puts a gated design block adapter on the program's manager and joins its preload on every exit
+struct GATED_PRELOAD
+{
+    GATED_PRELOAD() :
+            manager( Pgm().GetLibraryManager() )
+    {
+        if( std::optional<LIBRARY_MANAGER_ADAPTER*> existing = manager.Adapter( LIBRARY_TABLE_TYPE::DESIGN_BLOCK ) )
+            manager.RemoveAdapter( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, *existing );
+
+        manager.RegisterAdapter( LIBRARY_TABLE_TYPE::DESIGN_BLOCK,
+                                 std::make_unique<GATED_DESIGN_BLOCK_LIBRARY_ADAPTER>( manager ) );
+
+        adapter = static_cast<GATED_DESIGN_BLOCK_LIBRARY_ADAPTER*>( kiway.Prj().DesignBlockLibs() );
+        manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::DESIGN_BLOCK } );
+    }
+
+    ~GATED_PRELOAD()
+    {
+        adapter->Release();
+        Pgm().WaitForDesignBlockPreload();
+        manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::DESIGN_BLOCK } );
+        manager.RemoveAdapter( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, adapter );
+    }
+
+    LIBRARY_MANAGER&                    manager;
+    PRELOAD_KIWAY                       kiway;
+    GATED_DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = nullptr;
 };
 
 } // namespace
@@ -153,6 +272,29 @@ BOOST_AUTO_TEST_CASE( LoadReportsLibraryNotInTable )
 
     BOOST_REQUIRE( !block );
     BOOST_CHECK_MESSAGE( error.Contains( wxS( "nope" ) ), "the reason must name the missing library, got: " + error );
+}
+
+
+// A table edit while the preload runs asks for another preload, which must not be dropped
+BOOST_AUTO_TEST_CASE( PreloadRequestedWhileRunningLoadsNewRows )
+{
+    SCOPED_LIBRARY first( makeBlockLibrary( "kicad_qa_db_preload_first", "Amp", "{}" ) );
+    SCOPED_LIBRARY added( makeBlockLibrary( "kicad_qa_db_preload_added", "Amp", "{}" ) );
+    GATED_PRELOAD  preload;
+
+    addGlobalRow( preload.manager, wxS( "LoadedFirst" ), first.path );
+
+    preload.adapter->Hold();
+    Pgm().PreloadDesignBlockLibraries( &preload.kiway );
+    BOOST_REQUIRE( preload.adapter->WaitUntilHeld() );
+
+    addGlobalRow( preload.manager, wxS( "AddedDuringPreload" ), added.path );
+    Pgm().PreloadDesignBlockLibraries( &preload.kiway );
+
+    preload.adapter->Release();
+    Pgm().WaitForDesignBlockPreload();
+
+    BOOST_CHECK( preload.adapter->IsLibraryLoaded( wxS( "AddedDuringPreload" ) ) );
 }
 
 

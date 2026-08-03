@@ -387,12 +387,28 @@ set( KICOMMON_SRCS
     api/cross_probe_client.cpp
     api/python_manager.cpp
     api/serializable.cpp
+    mdw/client/mdw_baseline.cpp
+    mdw/client/mdw_bom.cpp
+    mdw/client/mdw_client.cpp
     mdw/client/mdw_compare_doc.cpp
     mdw/client/mdw_overwritten_parts.cpp
+    mdw/client/mdw_paged_read.cpp
+    mdw/client/mdw_pending_changes.cpp
+    mdw/client/mdw_project_follower.cpp
+    mdw/client/mdw_eco.cpp
+    mdw/client/mdw_event_notice.cpp
     mdw/client/mdw_file_lock.cpp
+    mdw/client/mdw_library.cpp
     mdw/client/mdw_lifecycle.cpp
+    mdw/client/mdw_library_sources.cpp
     mdw/client/mdw_op.cpp
+    mdw/client/mdw_part.cpp
+    mdw/client/mdw_part_catalog.cpp
     mdw/client/mdw_item.cpp
+    mdw/client/mdw_release_readiness.cpp
+    mdw/client/mdw_review.cpp
+    mdw/client/mdw_search.cpp
+    mdw/client/mdw_source.cpp
     mdw/mdw_backend.cpp
     mdw/mdw_backend_registry.cpp
     mdw/mdw_backend_supervisor.cpp
@@ -401,7 +417,10 @@ set( KICOMMON_SRCS
     mdw/mdw_dirty_tracker.cpp
     mdw/mdw_event_bus.cpp
     mdw/mdw_event_ingress.cpp
+    mdw/mdw_framework.cpp
     mdw/mdw_lock_tracker.cpp
+    mdw/mdw_setup.cpp
+    mdw/mdw_session.cpp
     mdw/mdw_serial_worker.cpp
     mdw/mdw_types.cpp
     mdw/mdw_workspace_service.cpp

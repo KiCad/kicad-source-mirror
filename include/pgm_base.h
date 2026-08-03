@@ -28,7 +28,10 @@
 #define  PGM_BASE_H_
 
 #include <kicommon.h>
+#include <libraries/library_preload_gate.h>
 #include <singleton.h>
+#include <atomic>
+#include <condition_variable>
 #include <exception>
 #include <map>
 #include <future>
@@ -56,6 +59,34 @@ class LIBRARY_MANAGER;
 
 class API_PLUGIN_MANAGER;
 class KICAD_API_SERVER;
+class MDW_FRAMEWORK;
+class PGM_BASE;
+
+
+/**
+ * Keeps the workspace framework alive while held, so a worker thread may use it during shutdown.
+ * Never hold one while waiting on the UI thread.
+ */
+class KICOMMON_API MDW_FRAMEWORK_LEASE
+{
+public:
+    MDW_FRAMEWORK_LEASE() = default;
+    MDW_FRAMEWORK_LEASE( MDW_FRAMEWORK_LEASE&& aOther ) noexcept;
+    MDW_FRAMEWORK_LEASE( const MDW_FRAMEWORK_LEASE& ) = delete;
+    MDW_FRAMEWORK_LEASE& operator=( const MDW_FRAMEWORK_LEASE& ) = delete;
+    MDW_FRAMEWORK_LEASE& operator=( MDW_FRAMEWORK_LEASE&& ) = delete;
+    ~MDW_FRAMEWORK_LEASE();
+
+    MDW_FRAMEWORK* Get() const { return m_framework; }
+    MDW_FRAMEWORK* operator->() const { return m_framework; }
+    explicit       operator bool() const { return m_framework != nullptr; }
+
+private:
+    friend class PGM_BASE;
+
+    PGM_BASE*      m_pgm = nullptr;
+    MDW_FRAMEWORK* m_framework = nullptr;
+};
 
 /**
  * A small class to handle the list of existing translations.
@@ -142,6 +173,32 @@ public:
     KICAD_API_SERVER& GetApiServer() { return *m_api_server; }
 
     KICAD_API_SERVER* ApiServerOrNull() const { return m_api_server.get(); }
+
+    /// The Managed Design Workspace framework, or null when this process hosts none or Preferences >
+    /// Design Workspace is disabled. It owns backend processes, so it lives beside the API server and
+    /// outlives editor frame recreation.
+    MDW_FRAMEWORK* MdwFrameworkOrNull() const;
+
+    /// True when Preferences > Design Workspace is on, in every process whether or not it hosts the framework
+    bool MdwEnabled() const { return m_mdw_enabled.load(); }
+
+    /// Follow Preferences > Design Workspace. In the host, off stops every backend as an exit does and on
+    /// starts the framework
+    void SetMdwEnabled( bool aEnabled );
+
+    /// The framework for use off the UI thread, null like MdwFrameworkOrNull unless aGated is false
+    MDW_FRAMEWORK_LEASE LeaseMdwFramework( bool aGated = true );
+
+    /// Host the framework in this process. It is built now only if integration is on, so a user without a
+    /// workspace pays for no backend scan or watch thread.
+    void HostMdwFramework();
+
+    /// Build the hosted framework on first use and restart backends that exit on their own. Null when this
+    /// process hosts none. Setup calls this before integration is on, which is often why it is being opened.
+    MDW_FRAMEWORK* StartMdwFramework();
+
+    /// Stop every backend the framework started once its leases are returned. Call before the API server goes away.
+    void DestroyMdwFramework();
 
     virtual void SetTextEditor( const wxString& aFileName );
 
@@ -433,12 +490,17 @@ protected:
     /// Trap all changes in here, simplifies debugging.
     void setLanguageId( int aId )       { m_language_id = aId; }
 
+    /// Stop every backend and the client workers, then destroy the framework once its leases are returned
+    void stopMdwFramework();
+
 #ifdef KICAD_USE_SENTRY
     void     sentryInit();
     wxString sentryCreateUid();
 #endif
 
 protected:
+    friend class MDW_FRAMEWORK_LEASE;
+
     std::unique_ptr<SETTINGS_MANAGER> m_settings_manager;
     std::unique_ptr<LIBRARY_MANAGER> m_library_manager;
     std::unique_ptr<BACKGROUND_JOBS_MONITOR> m_background_jobs_monitor;
@@ -446,6 +508,15 @@ protected:
 
     std::unique_ptr<API_PLUGIN_MANAGER> m_plugin_manager;
     std::unique_ptr<KICAD_API_SERVER> m_api_server;
+    std::unique_ptr<MDW_FRAMEWORK>    m_mdw_framework;
+    std::mutex                        m_mdw_mutex;
+    std::atomic<MDW_FRAMEWORK*>       m_mdw_live = nullptr;   ///< m_mdw_framework once fully built
+    bool                              m_mdw_host = false;
+    std::atomic<bool>                 m_mdw_enabled = false;  ///< The preference, read on worker threads
+    int                               m_mdw_leases = 0;
+    std::condition_variable           m_mdw_drained;
+    bool                              m_mdw_abandoned = false; ///< Shutdown left a workspace thread running
+    bool                              m_mdw_stopping = false;  ///< A stop is running, guarded by m_mdw_mutex
 
     wxString        m_kicad_env;              ///< The KICAD system environment variable.
 
@@ -483,7 +554,7 @@ protected:
 
     std::shared_ptr<BACKGROUND_JOB> m_libraryPreloadBackgroundJob;
     std::future<void>               m_libraryPreloadReturn;
-    std::atomic_bool                m_libraryPreloadInProgress;
+    LIBRARY_PRELOAD_GATE            m_libraryPreloadGate;
     std::atomic_bool                m_libraryPreloadAbort;
 
     std::vector<KISTATUSBAR*>       m_libraryLoadStatusBars;

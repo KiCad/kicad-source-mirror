@@ -259,6 +259,9 @@ public:
     /// The last part of aLocator without its .git suffix, or empty when that is not a safe name
     static wxString DefaultName( const wxString& aLocator );
 
+    /// The name a set-up of aRequirement offers, which is the one the project recorded unless that is unsafe
+    static wxString NameFor( const MDW_LIBRARY_REQUIREMENT& aRequirement );
+
     std::vector<MDW_LIBRARY_SOURCE_CONFIG> Sources() const;
 
     std::optional<MDW_LIBRARY_SOURCE_CONFIG> Find( const wxString& aId ) const;

@@ -45,6 +45,10 @@
 #include <api/api_plugin_manager.h>
 #include <api/api_server.h>
 #include <api/python_manager.h>
+#include <mdw/client/mdw_client.h>
+#include <mdw/client/mdw_library_sources.h>
+#include <mdw/client/mdw_op.h>
+#include <mdw/mdw_framework.h>
 #include <app_monitor.h>
 #include <background_jobs_monitor.h>
 #include <bitmap_store.h>
@@ -56,6 +60,7 @@
 #include <core/arraydim.h>
 #include <id.h>
 #include <kicad_curl/kicad_curl.h>
+#include <kiplatform/app.h>
 #include <kiplatform/policy.h>
 #include <libraries/library_manager.h>
 #include <macros.h>
@@ -192,7 +197,7 @@ void PGM_BASE::Destroy()
     // The preload reads the design block libraries, so it has to stop before they go
     if( m_libraryPreloadReturn.valid() )
     {
-        if( m_libraryPreloadInProgress.load() )
+        if( m_libraryPreloadGate.IsRunning() )
             m_libraryPreloadAbort.store( true );
 
         m_libraryPreloadReturn.wait();
@@ -230,6 +235,9 @@ void PGM_BASE::Destroy()
 void PGM_BASE::ExitIfTeardownUnsafe()
 {
     ExitFastIfAccessWorkerAbandoned( m_runResult );
+
+    if( m_mdw_abandoned )
+        KIPLATFORM::APP::TerminateWithCode( m_runResult );
 }
 
 
@@ -237,6 +245,153 @@ wxApp& PGM_BASE::App()
 {
     wxASSERT( wxTheApp );
     return *wxTheApp;
+}
+
+
+MDW_FRAMEWORK* PGM_BASE::MdwFrameworkOrNull() const
+{
+    // Setup builds the framework while integration is off, so being built does not make it on
+    return m_mdw_enabled.load() ? m_mdw_live.load() : nullptr;
+}
+
+
+void PGM_BASE::SetMdwEnabled( bool aEnabled )
+{
+    m_mdw_enabled.store( aEnabled );
+
+    // Another process's client workers serve its team libraries, and nothing there would restart them
+    if( !m_mdw_host )
+        return;
+
+    if( aEnabled )
+        StartMdwFramework();
+    else
+        stopMdwFramework();
+}
+
+
+void PGM_BASE::HostMdwFramework()
+{
+    m_mdw_host = true;
+
+    if( MdwEnabled() )
+    {
+        StartMdwFramework();
+    }
+}
+
+
+MDW_FRAMEWORK* PGM_BASE::StartMdwFramework()
+{
+    // Setup may start it from a pool thread while the client worker reads it
+    std::lock_guard<std::mutex> lock( m_mdw_mutex );
+
+    // A stop in progress would close the new framework's client workers under it
+    if( !m_mdw_framework && m_mdw_host && !m_mdw_stopping )
+    {
+        // A program that stopped its workers takes client work again only once it has a framework anew
+        MdwStartWorkers();
+        m_mdw_framework = std::make_unique<MDW_FRAMEWORK>();
+        MDW_CLIENT::Get().Listen( *m_mdw_framework );
+
+        // A 5 s reap check, not a round trip. A respawned backend gets 8 s to handshake once the
+        // restart policy's backoff has been waited out
+        m_mdw_framework->WatchBackends( 5000, 8000 );
+        m_mdw_live.store( m_mdw_framework.get() );
+    }
+
+    return m_mdw_framework.get();
+}
+
+
+MDW_FRAMEWORK_LEASE PGM_BASE::LeaseMdwFramework( bool aGated )
+{
+    MDW_FRAMEWORK_LEASE lease;
+
+    if( aGated && !MdwFrameworkOrNull() )
+        return lease;
+
+    std::lock_guard<std::mutex> lock( m_mdw_mutex );
+
+    if( MDW_FRAMEWORK* framework = m_mdw_live.load() )
+    {
+        ++m_mdw_leases;
+        lease.m_pgm = this;
+        lease.m_framework = framework;
+    }
+
+    return lease;
+}
+
+
+MDW_FRAMEWORK_LEASE::MDW_FRAMEWORK_LEASE( MDW_FRAMEWORK_LEASE&& aOther ) noexcept :
+        m_pgm( std::exchange( aOther.m_pgm, nullptr ) ),
+        m_framework( std::exchange( aOther.m_framework, nullptr ) )
+{
+}
+
+
+MDW_FRAMEWORK_LEASE::~MDW_FRAMEWORK_LEASE()
+{
+    if( !m_pgm )
+        return;
+
+    std::lock_guard<std::mutex> lock( m_pgm->m_mdw_mutex );
+
+    if( --m_pgm->m_mdw_leases == 0 )
+        m_pgm->m_mdw_drained.notify_all();
+}
+
+
+void PGM_BASE::DestroyMdwFramework()
+{
+    {
+        std::lock_guard<std::mutex> lock( m_mdw_mutex );
+        m_mdw_host = false;
+    }
+
+    stopMdwFramework();
+}
+
+
+void PGM_BASE::stopMdwFramework()
+{
+    std::unique_ptr<MDW_FRAMEWORK> framework;
+
+    {
+        std::lock_guard<std::mutex> lock( m_mdw_mutex );
+        m_mdw_live.store( nullptr );
+        m_mdw_stopping = true;
+        framework = std::move( m_mdw_framework );
+    }
+
+    // Stopping the backends first fails the calls leaseholders wait on, and a framework leaked below has none
+    if( framework )
+        framework->Shutdown();
+
+    // Client workers resolve sources through the framework, so none may run past it
+    bool stopped = MdwStopWorkers( std::chrono::seconds( 5 ) );
+
+    // Destroyed unlocked, since its worker may still ask for it while it joins
+    {
+        std::unique_lock<std::mutex> lock( m_mdw_mutex );
+
+        // A lease held by a thread stuck behind the UI never returns, so its framework is left to a fast exit
+        if( !m_mdw_drained.wait_for( lock, std::chrono::seconds( 5 ),
+                                     [this]()
+                                     {
+                                         return m_mdw_leases == 0;
+                                     } ) )
+        {
+            MDW_FRAMEWORK* leaked = framework.release();
+            wxLogTrace( traceMdw, wxS( "Workspace framework %p still leased at shutdown" ), leaked );
+            stopped = false;
+        }
+
+        // A stop that left a thread running keeps the exit fast, whatever later stops manage
+        m_mdw_abandoned = m_mdw_abandoned || !stopped;
+        m_mdw_stopping = false;
+    }
 }
 
 
@@ -564,6 +719,7 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aIsUnitTest )
 void PGM_BASE::loadCommonSettings()
 {
     m_text_editor = GetCommonSettings()->m_System.text_editor;
+    m_mdw_enabled.store( GetCommonSettings()->m_Workspace.enable_integration );
 
     for( const std::pair<wxString, ENV_VAR_ITEM> it : GetCommonSettings()->m_Env.vars )
     {
@@ -946,7 +1102,8 @@ void PGM_BASE::WritePdfBrowserInfos()
 
 void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
 {
-    if( m_libraryPreloadInProgress.load() )
+    // A request while a preload runs makes it load again, so rows added since it started still load
+    if( !m_libraryPreloadGate.Enter() )
         return;
 
     m_libraryPreloadBackgroundJob =
@@ -958,10 +1115,14 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
             // A task that starts after its cancel must not reach the project that is going away
             if( m_libraryPreloadAbort.load() )
             {
-                m_libraryPreloadAbort.store( false );
-                Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
-                m_libraryPreloadBackgroundJob.reset();
-                m_libraryPreloadInProgress.store( false );
+                m_libraryPreloadGate.Again( true,
+                        [this]()
+                        {
+                            m_libraryPreloadAbort.store( false );
+                            Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
+                            m_libraryPreloadBackgroundJob.reset();
+                        } );
+
                 return;
             }
 
@@ -969,21 +1130,27 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
                     m_libraryPreloadBackgroundJob->m_reporter;
 
             DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = aKiway->Prj().DesignBlockLibs();
+            bool                          aborted = false;
 
-            reporter->Report( _( "Loading Design Block Libraries" ) );
-            adapter->RunPreload( *reporter, m_libraryPreloadAbort );
+            auto finish =
+                    [&]()
+                    {
+                        Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
+                        m_libraryPreloadBackgroundJob.reset();
 
-            Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
-            m_libraryPreloadBackgroundJob.reset();
-            m_libraryPreloadInProgress.store( false );
+                        std::string payload = "";
+                        aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload, nullptr, true );
+                        aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+                    };
 
-            std::string payload = "";
-            aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload, nullptr, true );
-            aKiway->ExpressMail( FRAME_PCB_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+            do
+            {
+                reporter->Report( _( "Loading Design Block Libraries" ) );
+                aborted = !adapter->RunPreload( *reporter, m_libraryPreloadAbort );
+            } while( m_libraryPreloadGate.Again( aborted, finish ) );
         };
 
     // The preload waits on loads it queues on the pool, so it must not hold a pool thread itself
-    m_libraryPreloadInProgress.store( true );
     m_libraryPreloadReturn = std::async( std::launch::async, preload );
 }
 

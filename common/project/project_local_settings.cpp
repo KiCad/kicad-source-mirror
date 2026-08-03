@@ -21,10 +21,14 @@
 
 #include <lset.h>
 #include <project.h>
+#include <project/project_file.h>
 #include <project/project_local_settings.h>
+#include <remote_provider_utils.h>
 #include <settings/layer_settings_utils.h>
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
+
+#include <wx/filename.h>
 
 const int projectLocalSettingsVersion = 7;
 
@@ -49,6 +53,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         m_OutsideGroupOpacity( aOpacityDefaults.m_OutsideGroupOpacity ),
         m_PcbSelectionFilter(),
         m_GitIntegrationDisabled( false ),
+        m_WorkspaceDisabledHere( false ),
         m_project( aProject ),
         m_wasMigrated( false )
 {
@@ -226,6 +231,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
 
     m_params.emplace_back( new PARAM<bool>( "git.integration_disabled", &m_GitIntegrationDisabled, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "workspace.disabled_here", &m_WorkspaceDisabledHere, false ) );
+
     m_params.emplace_back( new PARAM<wxString>( "net_inspector_panel.filter_text",
                                                 &m_NetInspectorPanel.filter_text, "" ) );
     m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.filter_by_net_name",
@@ -261,6 +268,51 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                                                      &m_NetInspectorPanel.expanded_rows, {} ) );
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "open_jobsets", &m_OpenJobSets, {} ) );
+
+    m_params.emplace_back( new PARAM_WXSTRING_MAP( "workspace.items", &m_workspaceItems, {}, false, true ) );
+    m_params.emplace_back( new PARAM<wxString>( "workspace.items_binding.backend",
+                                                &m_workspaceItemsBinding.backend_id, wxS( "" ) ) );
+    m_params.emplace_back( new PARAM<wxString>( "workspace.items_binding.workspace_id",
+                                                &m_workspaceItemsBinding.workspace_id, wxS( "" ) ) );
+    m_params.emplace_back( new PARAM<wxString>( "workspace.items_binding.binding",
+                                                &m_workspaceItemsBinding.binding, wxS( "" ) ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
+            "workspace.bases",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::object();
+
+                for( const auto& [path, base] : m_workspaceBases )
+                {
+                    ret[path.ToStdString( wxConvUTF8 )] = { { "revision_id", base.revision_id },
+                                                            { "revision_label", base.revision_label } };
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                m_workspaceBases.clear();
+
+                if( !aJson.is_object() )
+                    return;
+
+                for( const auto& [path, entry] : aJson.items() )
+                {
+                    if( !entry.is_object() )
+                        continue;
+
+                    MDW_ITEM_BASE base{ RemoteProviderJsonString( entry, "revision_id" ),
+                                        RemoteProviderJsonString( entry, "revision_label" ) };
+
+                    if( !base.revision_id.IsEmpty() )
+                        m_workspaceBases[wxString::FromUTF8( path )] = base;
+                }
+            },
+            nlohmann::json::object() ) );
+
+    m_params.back()->SetClearUnknownKeys();
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "project.files",
             [&]() -> nlohmann::json
@@ -667,4 +719,151 @@ void PROJECT_LOCAL_SETTINGS::SaveFileState( const wxString& aFileName, const WIN
 void PROJECT_LOCAL_SETTINGS::ClearFileState()
 {
     m_files.clear();
+}
+
+
+wxString PROJECT_LOCAL_SETTINGS::projectRelativePath( const wxString& aLocalPath ) const
+{
+    if( aLocalPath.IsEmpty() )
+        return wxString();
+
+    wxFileName file( aLocalPath );
+
+    if( m_project )
+    {
+        if( file.IsRelative() )
+            file.MakeAbsolute( m_project->GetProjectPath() );
+
+        file.Normalize( wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE );
+
+        // A file outside the project keeps its absolute form and never matches a stored entry
+        file.MakeRelativeTo( m_project->GetProjectPath() );
+    }
+
+    // Keys travel with the project folder, so one separator on every platform. Unix
+    // formatting would drop a Windows volume and collide files on different drives
+    wxString key = file.GetFullPath();
+
+#ifdef __WINDOWS__
+    key.Replace( wxS( "\\" ), wxS( "/" ) );
+#endif
+
+    return key;
+}
+
+
+bool PROJECT_LOCAL_SETTINGS::workspaceItemsCurrent() const
+{
+    return !m_project || m_workspaceItemsBinding == m_project->GetProjectFile().WorkspaceBinding();
+}
+
+
+const std::map<wxString, wxString>& PROJECT_LOCAL_SETTINGS::WorkspaceItems() const
+{
+    static const std::map<wxString, wxString> none;
+
+    return workspaceItemsCurrent() ? m_workspaceItems : none;
+}
+
+
+wxString PROJECT_LOCAL_SETTINGS::GetWorkspaceItemId( const wxString& aLocalPath ) const
+{
+    if( !workspaceItemsCurrent() )
+        return wxString();
+
+    auto it = m_workspaceItems.find( projectRelativePath( aLocalPath ) );
+
+    return it == m_workspaceItems.end() ? wxString() : it->second;
+}
+
+
+void PROJECT_LOCAL_SETTINGS::SetWorkspaceItemId( const wxString& aLocalPath, const wxString& aItemId )
+{
+    const wxString key = projectRelativePath( aLocalPath );
+
+    if( key.IsEmpty() )
+        return;
+
+    // Bound, this file would be uploaded at check in with every checkout and base it records
+    if( !aItemId.IsEmpty() && IsLocalSettingsFile( aLocalPath ) )
+        return;
+
+    if( !workspaceItemsCurrent() )
+        ClearWorkspaceItems();
+
+    auto it = m_workspaceItems.find( key );
+
+    if( it == m_workspaceItems.end() || it->second != aItemId )
+        m_workspaceBases.erase( key );
+
+    if( aItemId.IsEmpty() )
+    {
+        m_workspaceItems.erase( key );
+        return;
+    }
+
+    // A file left by an older checkout of the item would otherwise be found first at check in
+    std::erase_if( m_workspaceItems,
+                   [&]( const auto& aEntry )
+                   {
+                       if( aEntry.second != aItemId || aEntry.first == key )
+                           return false;
+
+                       m_workspaceBases.erase( aEntry.first );
+                       return true;
+                   } );
+
+    m_workspaceItems[key] = aItemId;
+}
+
+
+std::optional<MDW_ITEM_BASE> PROJECT_LOCAL_SETTINGS::GetWorkspaceBase( const wxString& aLocalPath ) const
+{
+    const wxString key = projectRelativePath( aLocalPath );
+    auto           it = m_workspaceBases.find( key );
+
+    // A base hand-edited in without its item belongs to no checkout
+    if( !workspaceItemsCurrent() || it == m_workspaceBases.end() || !m_workspaceItems.count( key ) )
+        return std::nullopt;
+
+    return it->second;
+}
+
+
+void PROJECT_LOCAL_SETTINGS::SetWorkspaceBase( const wxString& aLocalPath, const MDW_ITEM_BASE& aBase )
+{
+    const wxString key = projectRelativePath( aLocalPath );
+
+    if( !workspaceItemsCurrent() )
+        ClearWorkspaceItems();
+
+    if( !m_workspaceItems.count( key ) || aBase.revision_id.IsEmpty() )
+        m_workspaceBases.erase( key );
+    else
+        m_workspaceBases[key] = aBase;
+}
+
+
+void PROJECT_LOCAL_SETTINGS::ClearWorkspaceItems()
+{
+    m_workspaceItems.clear();
+    m_workspaceBases.clear();
+    m_workspaceItemsBinding = m_project ? m_project->GetProjectFile().WorkspaceBinding() : MDW_PROJECT_BINDING();
+}
+
+
+bool PROJECT_LOCAL_SETTINGS::IsLocalSettingsFile( const wxString& aLocalPath ) const
+{
+    if( !m_project || m_project->GetProjectFullName().IsEmpty() || aLocalPath.IsEmpty() )
+        return false;
+
+    wxFileName self( m_project->GetProjectFullName() );
+    wxFileName file( aLocalPath );
+
+    self.SetExt( FILEEXT::ProjectLocalSettingsFileExtension );
+
+    if( file.IsRelative() )
+        file.MakeAbsolute( m_project->GetProjectPath() );
+
+    return file.SameAs( self );
 }

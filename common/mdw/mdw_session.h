@@ -46,6 +46,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <cstdint>
 #include <functional>
 #include <map>
@@ -174,6 +175,12 @@ public:
      */
     MDW_RESULT ListLocks();
 
+    /**
+     * Read every lock into the lock tracker again on the worker, once events flow. A library source's backend
+     * can list them only after its copy is made, which may be after this session started.
+     */
+    void RefreshLocks();
+
     MDW_EVENT_BUS& EventBus() { return *m_eventBus; }
 
     MDW_LOCK_TRACKER& LockTracker() { return *m_lockTracker; }
@@ -204,6 +211,17 @@ public:
 
     /// Moves on with every respawn, so a listener can tell a restarted backend from the one it saw
     std::uint64_t BackendGeneration() const { return m_backendGeneration.load(); }
+
+    /// Whether the framework holds this session and so respawns a backend it loses. False ends every wait
+    void SetRespawnable( bool aRespawnable );
+
+    /**
+     * Wait up to aTimeout for a respawn to replace the backend of generation aGeneration, covering the crash
+     * detection before it, or until the calling thread's MDW_CANCEL_SCOPE is cancelled. True once another backend
+     * runs, so a call the lost backend failed can be sent again. False at once when nothing will respawn this
+     * session, as when the framework no longer holds it or its supervisor gave up.
+     */
+    bool AwaitRespawn( std::uint64_t aGeneration, std::chrono::milliseconds aTimeout );
 
 private:
     void post( std::function<void()> aTask );
@@ -276,6 +294,10 @@ private:
     std::mutex                              m_serviceMutex;
     std::atomic<std::uint64_t>              m_backendGeneration = 0;
     std::shared_ptr<MDW_WORKSPACE_SERVICE>  m_service;
+
+    std::mutex              m_respawnMutex;
+    std::condition_variable m_respawned;
+    bool                    m_respawnable = false; ///< Guarded by m_respawnMutex
 
     std::unique_ptr<MDW_SERIAL_WORKER>      m_worker;
 

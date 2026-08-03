@@ -25,15 +25,18 @@
 #include <project/tuning_profiles.h>
 #include <settings/json_settings_internals.h>
 #include <project/project_file.h>
+#include <mdw/client/mdw_library_sources.h>
+#include <remote_provider_utils.h>
 #include <jobs/job_export_pcb_idf.h>
 #include <project/board_project_settings_params.h>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
 #include <wildcards_and_files_ext.h>
-#include <project/project_file.h>
 #include <wx/config.h>
 #include <wx/filename.h>
 #include <wx/log.h>
+
+#include <set>
 
 
 ///! Update the schema version whenever a migration is required
@@ -59,6 +62,70 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_writeImplicitly = false;
 
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "sheets", &m_sheets, {} ) );
+
+    // Registered unconditionally so the workspace binding round-trips whether or not the framework is enabled
+    m_params.emplace_back( new PARAM<wxString>( "workspace.backend", &m_WorkspaceBackend, wxS( "" ) ) );
+    m_params.emplace_back( new PARAM<wxString>( "workspace.workspace_id", &m_WorkspaceId, wxS( "" ) ) );
+    m_params.emplace_back( new PARAM<wxString>( "workspace.binding", &m_WorkspaceBinding, wxS( "" ) ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "workspace.library_sources",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::array();
+
+                for( const MDW_LIBRARY_REQUIREMENT& source : m_WorkspaceLibrarySources )
+                {
+                    nlohmann::json entry = { { "id", source.id },
+                                             { "backend_id", source.backend_id },
+                                             { "locator", MDW_LIBRARY_SOURCES::StripCredentials( source.locator ) },
+                                             { "name", source.name },
+                                             { "prefix", source.prefix } };
+
+                    if( !source.pin.token.IsEmpty() )
+                        entry["pin"] = { { "token", source.pin.token }, { "label", source.pin.label } };
+
+                    ret.push_back( entry );
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aJson )
+            {
+                m_WorkspaceLibrarySources.clear();
+
+                if( !aJson.is_array() )
+                    return;
+
+                std::set<std::pair<wxString, wxString>> seen;
+
+                for( const nlohmann::json& entry : aJson )
+                {
+                    if( !entry.is_object() )
+                        continue;
+
+                    MDW_LIBRARY_REQUIREMENT source;
+                    source.id = RemoteProviderJsonString( entry, "id" );
+                    source.backend_id = RemoteProviderJsonString( entry, "backend_id" );
+                    source.locator =
+                            MDW_LIBRARY_SOURCES::StripCredentials( RemoteProviderJsonString( entry, "locator" ) );
+                    source.name = RemoteProviderJsonString( entry, "name" );
+                    source.prefix = RemoteProviderJsonString( entry, "prefix" );
+
+                    if( auto pin = entry.find( "pin" ); pin != entry.end() && pin->is_object() )
+                    {
+                        source.pin.token = RemoteProviderJsonString( *pin, "token" );
+                        source.pin.label = RemoteProviderJsonString( *pin, "label" );
+                    }
+
+                    if( source.backend_id.IsEmpty() || source.locator.IsEmpty()
+                        || !seen.emplace( source.backend_id, source.locator ).second )
+                    {
+                        continue;
+                    }
+
+                    m_WorkspaceLibrarySources.push_back( source );
+                }
+            }, nlohmann::json::array() ) );
 
     m_params.emplace_back( new PARAM_LIST<TOP_LEVEL_SHEET_INFO>( "schematic.top_level_sheets",
             &m_topLevelSheets, {} ) );
@@ -832,6 +899,11 @@ bool PROJECT_FILE::LoadFromFile( const wxString& aDirectory )
     bool success = JSON_SETTINGS::LoadFromFile( aDirectory );
 
     m_topLevelSheetsChanged = false;
+
+    // Each copy's items and bases live in its local settings; a shared file's would be a teammate's, so
+    // the next write drops them
+    eraseKey( "workspace.items" );
+    eraseKey( "workspace.bases" );
 
     if( success )
     {

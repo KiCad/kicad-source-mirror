@@ -21,6 +21,7 @@
 
 #include <gestfich.h>
 #include <kiplatform/secrets.h>
+#include <mdw/mdw_framework.h>
 #include <paths.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
@@ -50,13 +51,48 @@ COMMON_SETTINGS* commonSettings()
     services.storeSecret = &KIPLATFORM::SECRETS::StoreSecret;
     services.storeSecretAsync = &KIPLATFORM::SECRETS::StoreSecretAsync;
     services.deleteSecret = &KIPLATFORM::SECRETS::DeleteSecret;
+    services.forgetRealm = []( const wxString& aRealm )
+    {
+        PGM_BASE* pgm = PgmOrNull();
+
+        if( MDW_FRAMEWORK_LEASE lease = pgm ? pgm->LeaseMdwFramework( false ) : MDW_FRAMEWORK_LEASE() )
+            lease->Credentials().Forget( aRealm );
+    };
+    services.getAccount = []( const wxString& aRealm )
+    {
+        COMMON_SETTINGS*            settings = commonSettings();
+        std::lock_guard<std::mutex> lock( COMMON_SETTINGS::AccountsMutex() );
+
+        if( !settings || !settings->m_Workspace.accounts.contains( aRealm ) )
+            return wxString();
+
+        return settings->m_Workspace.accounts.at( aRealm );
+    };
+    services.setAccount = []( const wxString& aRealm, const wxString& aUsername )
+    {
+        auto set = [aRealm, aUsername]()
+        {
+            std::lock_guard<std::mutex> lock( COMMON_SETTINGS::AccountsMutex() );
+
+            if( COMMON_SETTINGS* settings = commonSettings() )
+                settings->m_Workspace.accounts[aRealm] = aUsername;
+        };
+
+        // Saving the settings reads the map on the UI thread without the lock
+        if( wxTheApp && !wxIsMainThread() )
+            wxTheApp->CallAfter( set );
+        else
+            set();
+    };
     services.getAuthorPreference = []()
     {
         COMMON_SETTINGS::GIT prefs{};
         prefs.useDefaultAuthor = true;
 
-        COMMON_SETTINGS* settings = commonSettings();
+        COMMON_SETTINGS*            settings = commonSettings();
+        std::lock_guard<std::mutex> lock( COMMON_SETTINGS::AccountsMutex() );
 
+        // The repository list is rewritten by a settings load without this lock, so only the author is copied
         if( settings )
         {
             prefs.useDefaultAuthor = settings->m_Git.useDefaultAuthor;

@@ -23,6 +23,7 @@
 
 
 #include "mdw_credentials.h"
+#include "mdw_session.h"
 
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
@@ -139,6 +140,21 @@ bool MDW_CREDENTIALS::Save( const wxString& aRealm, const MDW_TYPED_CREDENTIALS&
         m_onSave( aRealm, username );
 
     return stored;
+}
+
+
+MDW_RESULT MDW_CREDENTIALS::SignIn( MDW_SESSION& aSession, const MDW_TYPED_CREDENTIALS& aCredentials, int aTimeoutMs )
+{
+    MDW_RESULT result = aSession.Authenticate( aCredentials, aTimeoutMs );
+
+    // A refused credential is never kept, and one the keychain cannot keep still serves this process
+    if( result.IsOk() )
+    {
+        Save( aSession.Status().realm, aCredentials );
+        aSession.SetUsername( field( aCredentials, wxS( "username" ) ) );
+    }
+
+    return result;
 }
 
 
