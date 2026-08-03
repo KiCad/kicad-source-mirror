@@ -178,7 +178,14 @@ private:
     ///< Lines changed by drag algorithm that weren't selected
     std::unordered_set<SCH_LINE*>       m_changedDragLines;
     ///< Junctions that were hidden during the move
-    std::vector<SCH_JUNCTION*>           m_hiddenJunctions;
+    struct HIDDEN_JUNCTION
+    {
+        SCH_JUNCTION* m_junction;
+        KIID          m_lineId;
+        bool          m_atLineStart;
+    };
+
+    std::vector<HIDDEN_JUNCTION> m_hiddenJunctions;
 
     VECTOR2I              m_moveOffset;
 
