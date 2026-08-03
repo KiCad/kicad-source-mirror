@@ -776,6 +776,12 @@ std::unique_ptr<LIBEVAL::VAR_REF> PCBEXPR_UCODE::CreateVarRef( const wxString& a
     wxString field( aField );
     field.Replace( wxT( "_" ),  wxT( " " ) );
 
+    // Alias renamed properties so that older custom rules keep working.
+    if( !field.CmpNoCase( wxT( "Origin X" ) ) )
+        field = wxT( "Start X" );
+    else if( !field.CmpNoCase( wxT( "Origin Y" ) ) )
+        field = wxT( "Start Y" );
+
     for( const PROPERTY_MANAGER::CLASS_INFO& cls : propMgr.GetAllClasses() )
     {
         if( propMgr.IsOfType( cls.type, TYPE_HASH( BOARD_ITEM ) ) )
