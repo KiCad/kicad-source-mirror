@@ -28,6 +28,7 @@
 
 #include <sch_io/orcad/orcad_converter.h>
 #include <sch_io/orcad/orcad_ole.h>
+#include <sch_io/ole_image.h>
 
 #include <algorithm>
 #include <array>
@@ -1623,7 +1624,7 @@ void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aSc
 
     bool readOk = false;
 
-    if( MakeBmpFromDib( aPrim.data, bmpData ) )
+    if( OleMakeBmpFromDib( aPrim.data, bmpData ) )
     {
         wxLogNull noLog;
         readOk = refImage.ReadImageFile( bmpData );
@@ -1638,7 +1639,7 @@ void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aSc
             wxLogNull noLog;
             readOk = refImage.ReadImageFile( bmpData );
         }
-        else if( preview.type == ORCAD_OLE_PREVIEW_TYPE::DIB && MakeBmpFromDib( preview.data, bmpData ) )
+        else if( preview.type == ORCAD_OLE_PREVIEW_TYPE::DIB && OleMakeBmpFromDib( preview.data, bmpData ) )
         {
             wxLogNull noLog;
             readOk = refImage.ReadImageFile( bmpData );
@@ -1649,7 +1650,7 @@ void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aSc
             int     maxWidth = std::clamp( widthDbu * 2, 1, 4096 );
             int     maxHeight = std::clamp( heightDbu * 2, 1, 4096 );
 
-            if( OrcadRenderWmf( preview.data, maxWidth, maxHeight, image ) )
+            if( OleRenderWmf( preview.data, maxWidth, maxHeight, image ) )
                 readOk = refImage.SetImage( image );
         }
     }
@@ -1681,67 +1682,6 @@ void ORCAD_CONVERTER::placeBitmap( const ORCAD_PRIMITIVE& aPrim, SCH_SCREEN* aSc
         bitmap->Rotate( center, true );
 
     aScreen->Append( bitmap.release() );
-}
-
-
-bool ORCAD_CONVERTER::MakeBmpFromDib( const std::vector<uint8_t>& aDib, wxMemoryBuffer& aOut )
-{
-    // DIB = BITMAPINFOHEADER + optional palette + pixels; prepend 14-byte BITMAPFILEHEADER
-    // with palette-aware pixel offset for loadable .BMP.
-    if( aDib.size() < 40 )
-        return false;
-
-    auto readU16 = [&aDib]( size_t aOffset ) -> uint32_t
-    {
-        return static_cast<uint32_t>( aDib[aOffset] )
-               | ( static_cast<uint32_t>( aDib[aOffset + 1] ) << 8 );
-    };
-
-    auto readU32 = [&aDib]( size_t aOffset ) -> uint32_t
-    {
-        return static_cast<uint32_t>( aDib[aOffset] )
-               | ( static_cast<uint32_t>( aDib[aOffset + 1] ) << 8 )
-               | ( static_cast<uint32_t>( aDib[aOffset + 2] ) << 16 )
-               | ( static_cast<uint32_t>( aDib[aOffset + 3] ) << 24 );
-    };
-
-    uint32_t biSize = readU32( 0 );
-
-    // Header size outside BITMAPINFOHEADER..BITMAPV5HEADER = not DIB (rejects OLE embeds).
-    if( biSize < 40 || biSize > 200 )
-        return false;
-
-    uint32_t bitCount = readU16( 14 );
-    uint32_t compression = readU32( 16 );
-    uint32_t clrUsed = readU32( 32 );
-    uint32_t paletteEntries = clrUsed ? clrUsed : ( bitCount <= 8 ? ( 1u << bitCount ) : 0 );
-    uint32_t pixelOffset = 14 + biSize + paletteEntries * 4;
-
-    if( compression == 3 )  // BI_BITFIELDS, three DWORD channel masks follow header
-        pixelOffset += 12;
-
-    uint32_t fileSize = 14 + static_cast<uint32_t>( aDib.size() );
-
-    uint8_t header[14];
-    header[0] = 'B';
-    header[1] = 'M';
-    header[2] = static_cast<uint8_t>( fileSize );
-    header[3] = static_cast<uint8_t>( fileSize >> 8 );
-    header[4] = static_cast<uint8_t>( fileSize >> 16 );
-    header[5] = static_cast<uint8_t>( fileSize >> 24 );
-    header[6] = 0;
-    header[7] = 0;
-    header[8] = 0;
-    header[9] = 0;
-    header[10] = static_cast<uint8_t>( pixelOffset );
-    header[11] = static_cast<uint8_t>( pixelOffset >> 8 );
-    header[12] = static_cast<uint8_t>( pixelOffset >> 16 );
-    header[13] = static_cast<uint8_t>( pixelOffset >> 24 );
-
-    aOut.AppendData( header, sizeof( header ) );
-    aOut.AppendData( aDib.data(), aDib.size() );
-
-    return true;
 }
 
 

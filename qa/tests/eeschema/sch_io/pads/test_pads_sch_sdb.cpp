@@ -21,6 +21,9 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <sch_io/pads/pads_sch_sdb.h>
+#include <sch_io/ole_image.h>
+
+#include <wx/image.h>
 
 #include <nlohmann/json.hpp>
 
@@ -157,83 +160,81 @@ BOOST_AUTO_TEST_CASE( MinimalV13PhysicalLedger )
 }
 
 
-BOOST_AUTO_TEST_CASE( RejectsEveryInvalidPreviewTrailerGuid )
+BOOST_AUTO_TEST_CASE( EmbeddedOleObjects )
 {
-    std::string path = findExternalSchematic( "SC350430B01.sch" );
+    PADS_SCH_SDB sdb;
+    sdb.Load( loadBinary( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/ole_images.sch" ) );
 
-    if( path.empty() )
+    const auto isContainerItem = []( const PADS_SCH_BINARY::SCH_SDB_BLOCK& aBlock )
     {
-        BOOST_TEST_MESSAGE( "external preview corpus unavailable" );
-        return;
-    }
+        return aBlock.kind == SCH_SDB_BLOCK_KIND::CFB_CONTAINER_ITEM;
+    };
 
-    PADS_SCH_SDB parsed;
-    parsed.Load( loadBinary( path ) );
-    const auto& blocks = parsed.Blocks();
+    const auto&                                        blocks = sdb.Blocks();
+    std::vector<const PADS_SCH_BINARY::SCH_SDB_BLOCK*> items;
 
     for( const auto& block : blocks )
     {
-        if( block.kind != SCH_SDB_BLOCK_KIND::CFB_PREVIEW )
-            continue;
-
-        size_t               trailerOffset = block.End();
-        std::vector<uint8_t> bytes = parsed.Bytes();
-        bytes[trailerOffset] ^= 1;
-        PADS_SCH_SDB sdb;
-        auto         hasOffset = [trailerOffset]( const IO_ERROR& e )
-        {
-            return errorContains( e, "v0x000D", wxString::Format( "0x%zX", trailerOffset ).ToStdString() );
-        };
-        BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR, hasOffset );
+        if( isContainerItem( block ) )
+            items.push_back( &block );
     }
+
+    BOOST_REQUIRE_EQUAL( items.size(), 2 );
+    BOOST_REQUIRE_EQUAL( sdb.OleItems().size(), 2 );
+    BOOST_CHECK( ( sdb.OleItems()[0].extent == std::array<int32_t, 4>{ 30, 30, 350, 210 } ) );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[0].left, -15766 );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[0].bottom, -10366 );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[0].right, -13296 );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[0].top, -11755 );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[0].sheetPlane, 0 );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[0].flags, 1 );
+    BOOST_CHECK( ( sdb.OleItems()[1].extent == std::array<int32_t, 4>{ 30, 30, 170, 84 } ) );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[1].left, -15766 );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[1].bottom, -10366 );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[1].right, -14686 );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[1].top, -10782 );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[1].sheetPlane, 0 );
+    BOOST_CHECK_EQUAL( sdb.OleItems()[1].flags, 1 );
+
+    OLE_IMAGE_PAYLOAD bitmap = ExtractOleImage( sdb.Bytes().data() + items[0]->offset, items[0]->bytes );
+    BOOST_CHECK( bitmap.type == OLE_IMAGE_TYPE::BMP );
+    BOOST_CHECK_EQUAL( bitmap.streamName, "\\x01Ole10Native" );
+    BOOST_REQUIRE_GE( bitmap.data.size(), 2 );
+    BOOST_CHECK_EQUAL( bitmap.data[0], 'B' );
+    BOOST_CHECK_EQUAL( bitmap.data[1], 'M' );
+
+    OLE_IMAGE_PAYLOAD metafile = ExtractOleImage( sdb.Bytes().data() + items[1]->offset, items[1]->bytes );
+    BOOST_CHECK( metafile.type == OLE_IMAGE_TYPE::WMF );
+    BOOST_CHECK_EQUAL( metafile.streamName, "\\x01Ole10Native" );
+    BOOST_REQUIRE_GE( metafile.data.size(), 4 );
+    BOOST_CHECK_EQUAL( metafile.data[0], 0xD7 );
+    BOOST_CHECK_EQUAL( metafile.data[1], 0xCD );
+    BOOST_CHECK_EQUAL( metafile.data[2], 0xC6 );
+    BOOST_CHECK_EQUAL( metafile.data[3], 0x9A );
+    wxImage rendered;
+    BOOST_REQUIRE( OleRenderWmf( metafile.data, 1024, 1024, rendered ) );
+    BOOST_CHECK( rendered.IsOk() );
+    BOOST_CHECK_GT( rendered.GetWidth(), 0 );
+    BOOST_CHECK_GT( rendered.GetHeight(), 0 );
 }
 
 
-BOOST_AUTO_TEST_CASE( ExternalPreviewChains )
+BOOST_AUTO_TEST_CASE( RejectsEmbeddedOleWrongSheet )
 {
-    const std::pair<const char*, uint32_t> previews[] = { { "SC350420B02.sch", 6 },
-                                                          { "SC350430B01.sch", 3 },
-                                                          { "SC350460A01.sch", 6 } };
+    std::vector<uint8_t> bytes =
+            loadBinary( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/ole_images.sch" );
+    PADS_SCH_SDB parsed;
+    parsed.Load( bytes );
+    BOOST_REQUIRE_EQUAL( parsed.OleItems().size(), 2 );
+    size_t sheetOffset = parsed.OleItems()[0].trailerOffset + 38 + 16 + 16;
+    putU32( bytes, sheetOffset, 1 );
 
-    for( const auto& [filename, expectedCount] : previews )
+    PADS_SCH_SDB sdb;
+    auto         hasOffset = [sheetOffset]( const IO_ERROR& e )
     {
-        std::string path = findExternalSchematic( filename );
-
-        if( path.empty() )
-        {
-            BOOST_TEST_MESSAGE( "external preview corpus unavailable" );
-            return;
-        }
-
-        PADS_SCH_SDB sdb;
-        sdb.Load( loadBinary( path ) );
-        const auto& blocks = sdb.Blocks();
-        auto        isPreview = []( const PADS_SCH_BINARY::SCH_SDB_BLOCK& aBlock )
-        {
-            return aBlock.kind == SCH_SDB_BLOCK_KIND::CFB_PREVIEW;
-        };
-        size_t count = std::count_if( blocks.begin(), blocks.end(), isPreview );
-        BOOST_CHECK_EQUAL( count, expectedCount );
-
-        for( size_t i = 1; i + 1 < blocks.size(); ++i )
-        {
-            if( !isPreview( blocks[i] ) )
-                continue;
-
-            BOOST_CHECK( blocks[i - 1].kind == SCH_SDB_BLOCK_KIND::FOOTER_AUX );
-            BOOST_CHECK( blocks[i + 1].kind == SCH_SDB_BLOCK_KIND::FOOTER_AUX );
-            BOOST_CHECK_EQUAL( sdb.Bytes()[blocks[i].offset], 0xD0 );
-            BOOST_CHECK_EQUAL( sdb.Bytes()[blocks[i].offset + 1], 0xCF );
-        }
-
-        auto footerAux = std::find_if( blocks.begin(), blocks.end(),
-                                       []( const auto& aBlock )
-                                       {
-                                           return aBlock.kind == SCH_SDB_BLOCK_KIND::FOOTER_AUX;
-                                       } );
-        BOOST_REQUIRE( footerAux != blocks.end() );
-        BOOST_CHECK_EQUAL( footerAux->count, expectedCount );
-    }
+        return errorContains( e, "v0x000D", wxString::Format( "0x%zX", sheetOffset ).ToStdString() );
+    };
+    BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR, hasOffset );
 }
 
 
@@ -420,8 +421,8 @@ BOOST_AUTO_TEST_CASE( RejectsDerivedSheetCountPastFooter )
 BOOST_AUTO_TEST_CASE( RejectsHugePreviewCountExtent )
 {
     std::vector<uint8_t> bytes = loadPublicFixture();
-    constexpr size_t     previewCountOffset = 0x9938;
-    putU32( bytes, previewCountOffset, UINT32_MAX );
+    constexpr size_t     itemCountOffset = 0x9938;
+    putU32( bytes, itemCountOffset, UINT32_MAX );
 
     PADS_SCH_SDB sdb;
     BOOST_CHECK_EXCEPTION( sdb.Load( std::move( bytes ) ), IO_ERROR,

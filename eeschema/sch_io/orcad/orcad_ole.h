@@ -12,24 +12,10 @@
 #ifndef ORCAD_OLE_H_
 #define ORCAD_OLE_H_
 
-#include <cstdint>
-#include <vector>
+#include <sch_io/ole_image.h>
 
-class wxImage;
-
-enum class ORCAD_OLE_PREVIEW_TYPE
-{
-    NONE,
-    BMP,
-    DIB,
-    WMF
-};
-
-struct ORCAD_OLE_PREVIEW
-{
-    ORCAD_OLE_PREVIEW_TYPE type = ORCAD_OLE_PREVIEW_TYPE::NONE;
-    std::vector<uint8_t>   data;
-};
+using ORCAD_OLE_PREVIEW_TYPE = OLE_IMAGE_TYPE;
+using ORCAD_OLE_PREVIEW = OLE_IMAGE_PAYLOAD;
 
 ORCAD_OLE_PREVIEW OrcadExtractOlePreview( const std::vector<uint8_t>& aPayload );
 

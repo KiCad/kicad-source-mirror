@@ -103,6 +103,7 @@ set( EESCHEMA_SCH_IO
     sch_io/pads/pads_sch_binary_builder.cpp
     sch_io/pads/pads_sch_binary_parser.cpp
     sch_io/pads/pads_sch_sdb.cpp
+    sch_io/ole_image.cpp
 
     # DipTrace IO plugin
     sch_io/diptrace/sch_io_diptrace.cpp

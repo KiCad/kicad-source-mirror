@@ -25,6 +25,7 @@
 #include <sch_io/orcad/orcad_converter.h>
 #include <sch_io/orcad/orcad_ole.h>
 #include <sch_io/orcad/orcad_page.h>
+#include <sch_io/ole_image.h>
 
 #include <schematic.h>
 #include <connection_graph.h>
@@ -425,6 +426,44 @@ BOOST_AUTO_TEST_CASE( OleNativeBitmapExtraction )
     BOOST_REQUIRE_EQUAL( preview.data.size(), native.size() - 4 );
     BOOST_CHECK_EQUAL( preview.data[0], 'B' );
     BOOST_CHECK_EQUAL( preview.data[1], 'M' );
+}
+
+
+BOOST_AUTO_TEST_CASE( SharedOleContentsBitmapExtraction )
+{
+    std::vector<uint8_t> contents( 4096, 0 );
+    contents[0] = 'B';
+    contents[1] = 'M';
+    writeLe32( contents, 2, 58 );
+
+    std::vector<uint16_t> name = { 'C', 'O', 'N', 'T', 'E', 'N', 'T', 'S', 0 };
+    OLE_IMAGE_PAYLOAD     image = ExtractOleImage( makeOlePreviewCfb( name, contents ) );
+
+    BOOST_CHECK( image.type == OLE_IMAGE_TYPE::BMP );
+    BOOST_CHECK_EQUAL( image.streamName, "CONTENTS" );
+    BOOST_REQUIRE_EQUAL( image.data.size(), contents.size() );
+    BOOST_CHECK_EQUAL( image.data[0], 'B' );
+    BOOST_CHECK_EQUAL( image.data[1], 'M' );
+}
+
+
+// A plausible header size is a weak DIB signature on its own. Claiming the stream on it alone hides
+// the OlePres000 preview, because the caller only falls through on an unrecognized type and never
+// on a failed decode.
+BOOST_AUTO_TEST_CASE( OleContentsRejectsBogusDib )
+{
+    std::vector<uint16_t> name = { 'C', 'O', 'N', 'T', 'E', 'N', 'T', 'S' };
+    std::vector<uint8_t>  contents( 64, 0 );
+
+    writeLe32( contents, 0, 40 );    // biSize, the weak signature
+    writeLe32( contents, 4, 16 );    // biWidth
+    writeLe32( contents, 8, 16 );    // biHeight
+    writeLe16( contents, 12, 7 );    // biPlanes, only 1 is ever valid
+    writeLe16( contents, 14, 24 );   // biBitCount
+
+    OLE_IMAGE_PAYLOAD image = ExtractOleImage( makeOlePreviewCfb( name, contents ) );
+
+    BOOST_CHECK( image.type == OLE_IMAGE_TYPE::NONE );
 }
 
 

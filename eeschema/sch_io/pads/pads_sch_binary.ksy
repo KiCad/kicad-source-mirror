@@ -1420,21 +1420,21 @@ types:
 
   footer_aux:
     seq:
-      - id: preview_count
+      - id: container_item_count
         type: u4
-      - id: previews
+      - id: container_items
         type:
-          switch-on: preview_count
+          switch-on: container_item_count
           cases:
-            0: no_cfb_previews
-            _: first_cfb_preview(preview_count)
+            0: no_cfb_container_items
+            _: first_cfb_container_item(container_item_count)
 
-  no_cfb_previews:
+  no_cfb_container_items:
     seq: []
 
-  first_cfb_preview:
+  first_cfb_container_item:
     params:
-      - id: preview_count
+      - id: container_item_count
         type: u4
     seq:
       - id: mfc_class_marker
@@ -1447,13 +1447,13 @@ types:
                    0x42, 0x43, 0x6e, 0x74, 0x72, 0x49, 0x74, 0x65, 0x6d]
       - id: item_state
         size: 18
-        doc: The purpose of this field is not known.
+        doc: Exact MFC OLE-item wrapper bytes from the controlled and private corpora; semantics are UNSUPPORTED and retained by the schema ledger.
       - id: len_cfb
         type: u4
-      - id: preview
-        type: cfb_preview_chain(len_cfb, preview_count)
+      - id: container_item
+        type: cfb_container_item_chain(len_cfb, container_item_count)
 
-  cfb_preview_chain:
+  cfb_container_item_chain:
     params:
       - id: len_cfb
         type: u4
@@ -1467,10 +1467,10 @@ types:
         type:
           switch-on: remaining_count
           cases:
-            1: final_cfb_preview_trailer
-            _: nonfinal_cfb_preview_trailer(remaining_count - 1)
+            1: final_cfb_container_item_trailer
+            _: nonfinal_cfb_container_item_trailer(remaining_count - 1)
 
-  nonfinal_cfb_preview_trailer:
+  nonfinal_cfb_container_item_trailer:
     params:
       - id: remaining_count
         type: u4
@@ -1482,20 +1482,24 @@ types:
                    0x2d, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
                    0x30, 0x30, 0x30, 0x30, 0x30, 0x7d]
       - id: extent
-        size: 16
-        doc: The purpose of this field is not known.
+        type: ole_extent
       - id: rectangle
-        size: 16
+        type: ole_database_box
+      - id: sheet_plane
+        type: u4
+        doc: Zero-based PADS sheet/plane index. CPowerPCBCntrItem::GetOLEObjectExtents filters on this value before returning the database box.
+      - id: flags
+        type: u4
         doc: The purpose of this field is not known.
-      - id: item_state
-        size: 28
-        doc: The purpose of this field is not known.
+      - id: next_item_state
+        size: 20
+        doc: MFC state preceding the next serialized CPowerPCBCntrItem. Semantics are UNSUPPORTED and bytes are retained by the schema ledger.
       - id: next_len_cfb
         type: u4
-      - id: next_preview
-        type: cfb_preview_chain(next_len_cfb, remaining_count)
+      - id: next_container_item
+        type: cfb_container_item_chain(next_len_cfb, remaining_count)
 
-  final_cfb_preview_trailer:
+  final_cfb_container_item_trailer:
     seq:
       - id: class_id
         contents: [0x7b, 0x46, 0x34, 0x39, 0x39, 0x37, 0x44, 0x37,
@@ -1504,14 +1508,39 @@ types:
                    0x2d, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30,
                    0x30, 0x30, 0x30, 0x30, 0x30, 0x7d]
       - id: extent
-        size: 16
-        doc: The purpose of this field is not known.
+        type: ole_extent
       - id: rectangle
-        size: 16
+        type: ole_database_box
+      - id: sheet_plane
+        type: u4
+        doc: Zero-based PADS sheet/plane index. CPowerPCBCntrItem::GetOLEObjectExtents filters on this value before returning the database box.
+      - id: flags
+        type: u4
         doc: The purpose of this field is not known.
-      - id: item_state
-        size: 8
-        doc: The purpose of this field is not known.
+
+  ole_extent:
+    doc: CRect serialized by COleClientItem::Serialize from CPowerPCBCntrItem offset +0x84. Controlled objects use 30,30 followed by the native server extent.
+    seq:
+      - id: left
+        type: s4
+      - id: top
+        type: s4
+      - id: right
+        type: s4
+      - id: bottom
+        type: s4
+
+  ole_database_box:
+    doc: PADS SYS_Box stored at CPowerPCBCntrItem offset +0x94 and returned directly by GetDBBox. Serialize writes left, bottom, right, top in this order.
+    seq:
+      - id: left
+        type: s4
+      - id: bottom
+        type: s4
+      - id: right
+        type: s4
+      - id: top
+        type: s4
 
   database_footer:
     seq:

@@ -48,12 +48,12 @@ namespace
     constexpr size_t   SHEET_POOL_COUNT_OFFSET = 12;
     constexpr size_t   SHEET_POOL_USED_BYTES_OFFSET = 16;
     constexpr size_t   SHEET_POOL_ALLOCATED_BYTES_OFFSET = 8;
-    constexpr size_t   FIRST_PREVIEW_FIXED_STATE_SIZE = 18;
-    constexpr size_t   BETWEEN_PREVIEW_TRAILER_SIZE = 0x66;
-    constexpr size_t   FINAL_PREVIEW_TRAILER_SIZE = 0x4E;
+    constexpr size_t   FIRST_OLE_FIXED_STATE_SIZE = 18;
+    constexpr size_t   BETWEEN_OLE_TRAILER_SIZE = 0x66;
+    constexpr size_t   FINAL_OLE_TRAILER_SIZE = 0x4E;
     constexpr size_t   CFB_HEADER_SIZE = 512;
     constexpr uint8_t  MFC_CLASS_MARKER[] = { 0xFF, 0xFF, 0x01, 0x00 };
-    constexpr char     PREVIEW_CLASS_NAME[] = "CPowerPCBCntrItem";
+    constexpr char     OLE_ITEM_CLASS_NAME[] = "CPowerPCBCntrItem";
     constexpr uint8_t  CFB_MAGIC[] = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 };
     constexpr uint8_t  CFB_ZERO_CLSID[16] = {};
     constexpr uint8_t  CFB_BYTE_ORDER[] = { 0xFE, 0xFF };
@@ -85,6 +85,7 @@ void PADS_SCH_SDB::Load( std::vector<uint8_t> aBytes )
     m_version = m_data.size() >= 4 ? m_cursor.U16At( 2 ) : 0;
     m_pools = {};
     m_blocks.clear();
+    m_oleItems.clear();
     m_payloadOffset = 0;
     m_footerOffset = 0;
 
@@ -266,12 +267,12 @@ void PADS_SCH_SDB::parseBlocks()
     if( m_cursor.U32At( backPointerOffset ) != offset )
         throwAt( backPointerOffset, "container-item back-pointer overlaps derived schematic blocks" );
 
-    uint32_t previewCount = m_cursor.U32At( offset );
-    size_t   previewCountOffset = offset;
-    offset = checkedAdd( offset, 4, previewCountOffset, "preview count extends past footer" );
-    m_blocks.push_back( { SCH_SDB_BLOCK_KIND::FOOTER_AUX, -1, previewCountOffset, 4, previewCount, 4 } );
+    uint32_t containerItemCount = m_cursor.U32At( offset );
+    size_t   containerItemCountOffset = offset;
+    offset = checkedAdd( offset, 4, containerItemCountOffset, "embedded OLE item count extends past footer" );
+    m_blocks.push_back( { SCH_SDB_BLOCK_KIND::FOOTER_AUX, -1, containerItemCountOffset, 4, containerItemCount, 4 } );
 
-    if( previewCount == 0 )
+    if( containerItemCount == 0 )
     {
         if( offset != m_footerOffset )
             throwAt( offset, "unowned bytes before schematic footer" );
@@ -279,66 +280,92 @@ void PADS_SCH_SDB::parseBlocks()
         return;
     }
 
-    constexpr size_t firstPreviewFrameSize = 6 + FIRST_PREVIEW_FIXED_STATE_SIZE + 4;
-    constexpr size_t finalPreviewMinimum = firstPreviewFrameSize + FINAL_PREVIEW_TRAILER_SIZE;
-    size_t           remainingPreviewBytes = m_footerOffset - offset;
-    uint64_t minimumPreviewBytes =
-            finalPreviewMinimum + uint64_t( previewCount - 1 ) * BETWEEN_PREVIEW_TRAILER_SIZE;
+    constexpr size_t firstItemFrameSize = 6 + FIRST_OLE_FIXED_STATE_SIZE + 4;
+    constexpr size_t finalItemMinimum = firstItemFrameSize + FINAL_OLE_TRAILER_SIZE;
+    size_t           remainingItemBytes = m_footerOffset - offset;
+    uint64_t minimumItemBytes = finalItemMinimum + uint64_t( containerItemCount - 1 ) * BETWEEN_OLE_TRAILER_SIZE;
 
-    // A u32 preview count times the 0x66-byte trailer is bounded well below uint64_t.
-    if( minimumPreviewBytes > remainingPreviewBytes )
+    // A u32 item count times the 0x66-byte trailer is bounded well below uint64_t.
+    if( minimumItemBytes > remainingItemBytes )
     {
-        throwAt( previewCountOffset, "preview count extent exceeds schematic payload" );
+        throwAt( containerItemCountOffset, "embedded OLE item count exceeds schematic payload" );
     }
 
-    size_t previewStart = offset;
-    requireBytes( previewStart, MFC_CLASS_MARKER, std::size( MFC_CLASS_MARKER ),
-                  "invalid preview MFC class marker" );
-    uint16_t classNameLength = m_cursor.U16At( previewStart + 4 );
+    size_t itemStart = offset;
+    requireBytes( itemStart, MFC_CLASS_MARKER, std::size( MFC_CLASS_MARKER ), "invalid embedded OLE MFC class marker" );
+    uint16_t classNameLength = m_cursor.U16At( itemStart + 4 );
 
-    if( classNameLength != std::size( PREVIEW_CLASS_NAME ) - 1 )
-        throwAt( previewStart + 4, "invalid preview MFC class name length" );
+    if( classNameLength != std::size( OLE_ITEM_CLASS_NAME ) - 1 )
+        throwAt( itemStart + 4, "invalid embedded OLE MFC class name length" );
 
-    size_t lengthOffset = checkedAdd( previewStart, 6, previewStart, "preview class header extends past footer" );
+    size_t lengthOffset = checkedAdd( itemStart, 6, itemStart, "OLE item class header extends past footer" );
     lengthOffset =
-            checkedAdd( lengthOffset, classNameLength, previewStart + 4, "preview class name extends past footer" );
-    requireBytes( previewStart + 6, PREVIEW_CLASS_NAME, classNameLength, "invalid preview MFC class name" );
-    lengthOffset = checkedAdd( lengthOffset, FIRST_PREVIEW_FIXED_STATE_SIZE, lengthOffset,
-                               "preview item state extends past footer" );
-    size_t firstCfbOffset = checkedAdd( lengthOffset, 4, lengthOffset, "preview length extends past footer" );
-    m_blocks.push_back( { SCH_SDB_BLOCK_KIND::FOOTER_AUX, -1, previewStart, firstCfbOffset - previewStart, 1, 0 } );
+            checkedAdd( lengthOffset, classNameLength, itemStart + 4, "OLE item class name extends past footer" );
+    requireBytes( itemStart + 6, OLE_ITEM_CLASS_NAME, classNameLength, "invalid embedded OLE MFC class name" );
+    lengthOffset =
+            checkedAdd( lengthOffset, FIRST_OLE_FIXED_STATE_SIZE, lengthOffset, "OLE item state extends past footer" );
+    size_t firstCfbOffset = checkedAdd( lengthOffset, 4, lengthOffset, "OLE item length extends past footer" );
+    m_blocks.push_back( { SCH_SDB_BLOCK_KIND::FOOTER_AUX, -1, itemStart, firstCfbOffset - itemStart, 1, 0 } );
 
-    for( uint32_t preview = 0; preview < previewCount; ++preview )
+    for( uint32_t item = 0; item < containerItemCount; ++item )
     {
         uint32_t cfbBytes = m_cursor.U32At( lengthOffset );
 
         if( cfbBytes < CFB_HEADER_SIZE )
-            throwAt( lengthOffset, "preview CFB is smaller than its structural header" );
+            throwAt( lengthOffset, "embedded OLE CFB is smaller than its structural header" );
 
-        size_t cfbOffset = checkedAdd( lengthOffset, 4, lengthOffset, "preview length extends past footer" );
-        size_t cfbEnd = checkedAdd( cfbOffset, cfbBytes, lengthOffset, "preview CFB extends past footer" );
-        requireBytes( cfbOffset, CFB_MAGIC, std::size( CFB_MAGIC ), "invalid preview CFB magic" );
+        size_t cfbOffset = checkedAdd( lengthOffset, 4, lengthOffset, "OLE item length extends past footer" );
+        size_t cfbEnd = checkedAdd( cfbOffset, cfbBytes, lengthOffset, "OLE item CFB extends past footer" );
+        requireBytes( cfbOffset, CFB_MAGIC, std::size( CFB_MAGIC ), "invalid embedded OLE CFB magic" );
         requireBytes( cfbOffset + 8, CFB_ZERO_CLSID, std::size( CFB_ZERO_CLSID ),
-                      "invalid preview CFB reserved class ID" );
-        requireBytes( cfbOffset + 28, CFB_BYTE_ORDER, std::size( CFB_BYTE_ORDER ), "invalid preview CFB byte order" );
+                      "invalid embedded OLE CFB reserved class ID" );
+        requireBytes( cfbOffset + 28, CFB_BYTE_ORDER, std::size( CFB_BYTE_ORDER ),
+                      "invalid embedded OLE CFB byte order" );
         requireBytes( cfbOffset + 34, CFB_ZERO_PADDING, std::size( CFB_ZERO_PADDING ),
-                      "invalid preview CFB header padding" );
-        size_t trailer = preview + 1 == previewCount ? FINAL_PREVIEW_TRAILER_SIZE : BETWEEN_PREVIEW_TRAILER_SIZE;
-        size_t previewEnd = checkedAdd( cfbEnd, trailer, cfbEnd, "preview trailer extends past footer" );
-        requireBytes( cfbEnd, FOOTER_GUID, FOOTER_GUID_SIZE, "invalid preview trailer class ID" );
+                      "invalid embedded OLE CFB header padding" );
+        size_t trailer = item + 1 == containerItemCount ? FINAL_OLE_TRAILER_SIZE : BETWEEN_OLE_TRAILER_SIZE;
+        size_t itemEnd = checkedAdd( cfbEnd, trailer, cfbEnd, "OLE item trailer extends past footer" );
+        requireBytes( cfbEnd, FOOTER_GUID, FOOTER_GUID_SIZE, "invalid embedded OLE trailer class ID" );
 
-        m_blocks.push_back(
-                { SCH_SDB_BLOCK_KIND::CFB_PREVIEW, static_cast<int>( preview ), cfbOffset, cfbBytes, 1, 0 } );
+        SCH_SDB_BLOCK cfbBlock{
+            SCH_SDB_BLOCK_KIND::CFB_CONTAINER_ITEM, static_cast<int>( item ), cfbOffset, cfbBytes, 1, 0
+        };
+        m_blocks.push_back( cfbBlock );
         m_blocks.push_back( { SCH_SDB_BLOCK_KIND::FOOTER_AUX, -1, cfbEnd, trailer, 1, 0 } );
 
-        if( preview + 1 < previewCount )
-            lengthOffset = previewEnd - 4;
+        constexpr size_t extentOffsetInTrailer = FOOTER_GUID_SIZE;
+        constexpr size_t boxOffsetInTrailer = extentOffsetInTrailer + 16;
+        constexpr size_t sheetPlaneOffsetInTrailer = boxOffsetInTrailer + 16;
+        constexpr size_t flagsOffsetInTrailer = sheetPlaneOffsetInTrailer + 4;
+        size_t           extentOffset = cfbEnd + extentOffsetInTrailer;
+        size_t           boxOffset = cfbEnd + boxOffsetInTrailer;
+        SCH_SDB_OLE_ITEM oleItem;
+        oleItem.cfb = cfbBlock;
+        oleItem.extent = { m_cursor.I32At( extentOffset ), m_cursor.I32At( extentOffset + 4 ),
+                           m_cursor.I32At( extentOffset + 8 ), m_cursor.I32At( extentOffset + 12 ) };
+        oleItem.left = m_cursor.I32At( boxOffset );
+        oleItem.bottom = m_cursor.I32At( boxOffset + 4 );
+        oleItem.right = m_cursor.I32At( boxOffset + 8 );
+        oleItem.top = m_cursor.I32At( boxOffset + 12 );
+        oleItem.sheetPlane = m_cursor.U32At( cfbEnd + sheetPlaneOffsetInTrailer );
+        oleItem.flags = m_cursor.U32At( cfbEnd + flagsOffsetInTrailer );
 
-        offset = previewEnd;
+        if( oleItem.sheetPlane >= sheetCount )
+            throwAt( cfbEnd + sheetPlaneOffsetInTrailer, "embedded OLE item sheet index is out of range" );
+
+        oleItem.trailerOffset = cfbEnd;
+        oleItem.extentOffset = extentOffset;
+        oleItem.boxOffset = boxOffset;
+        m_oleItems.push_back( oleItem );
+
+        if( item + 1 < containerItemCount )
+            lengthOffset = itemEnd - 4;
+
+        offset = itemEnd;
     }
 
     if( offset != m_footerOffset )
-        throwAt( offset, "preview data does not end at schematic footer" );
+        throwAt( offset, "embedded OLE items do not end at schematic footer" );
 }
 
 

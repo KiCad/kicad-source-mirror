@@ -43,7 +43,7 @@ enum class SCH_SDB_BLOCK_KIND
     STRING_HEAP,
     FIXED_CONTROLLER,
     SHEET,
-    CFB_PREVIEW,
+    CFB_CONTAINER_ITEM,
     FOOTER_AUX
 };
 
@@ -61,6 +61,22 @@ struct SCH_SDB_BLOCK
 };
 
 
+struct SCH_SDB_OLE_ITEM
+{
+    SCH_SDB_BLOCK          cfb;
+    std::array<int32_t, 4> extent{};
+    int32_t                left = 0;
+    int32_t                bottom = 0;
+    int32_t                right = 0;
+    int32_t                top = 0;
+    uint32_t               sheetPlane = 0;
+    uint32_t               flags = 0;
+    size_t                 trailerOffset = 0;
+    size_t                 extentOffset = 0;
+    size_t                 boxOffset = 0;
+};
+
+
 class PADS_SCH_SDB
 {
 public:
@@ -74,13 +90,14 @@ public:
     static bool HasFamilyMagic( const std::vector<uint8_t>& aBytes );
     static bool IsSupportedVersion( uint16_t aVersion );
 
-    uint16_t                            Version() const { return m_version; }
-    const std::array<SCH_SDB_POOL, 20>& Pools() const { return m_pools; }
-    const PADS_IO::BINARY_CURSOR&       Cursor() const { return m_cursor; }
-    const std::vector<uint8_t>&         Bytes() const { return m_data; }
-    const std::vector<SCH_SDB_BLOCK>&   Blocks() const { return m_blocks; }
-    size_t                              PayloadOffset() const { return m_payloadOffset; }
-    size_t                              FooterOffset() const { return m_footerOffset; }
+    uint16_t                             Version() const { return m_version; }
+    const std::array<SCH_SDB_POOL, 20>&  Pools() const { return m_pools; }
+    const PADS_IO::BINARY_CURSOR&        Cursor() const { return m_cursor; }
+    const std::vector<uint8_t>&          Bytes() const { return m_data; }
+    const std::vector<SCH_SDB_BLOCK>&    Blocks() const { return m_blocks; }
+    const std::vector<SCH_SDB_OLE_ITEM>& OleItems() const { return m_oleItems; }
+    size_t                               PayloadOffset() const { return m_payloadOffset; }
+    size_t                               FooterOffset() const { return m_footerOffset; }
 
 private:
     void              parseHeader();
@@ -89,13 +106,14 @@ private:
     void              parseBlocks();
     [[noreturn]] void throwAt( size_t aOffset, const wxString& aDetail ) const;
 
-    std::vector<uint8_t>         m_data;
-    PADS_IO::BINARY_CURSOR       m_cursor{ m_data };
-    uint16_t                     m_version = 0;
-    std::array<SCH_SDB_POOL, 20> m_pools{};
-    std::vector<SCH_SDB_BLOCK>   m_blocks;
-    size_t                       m_payloadOffset = 0;
-    size_t                       m_footerOffset = 0;
+    std::vector<uint8_t>          m_data;
+    PADS_IO::BINARY_CURSOR        m_cursor{ m_data };
+    uint16_t                      m_version = 0;
+    std::array<SCH_SDB_POOL, 20>  m_pools{};
+    std::vector<SCH_SDB_BLOCK>    m_blocks;
+    std::vector<SCH_SDB_OLE_ITEM> m_oleItems;
+    size_t                        m_payloadOffset = 0;
+    size_t                        m_footerOffset = 0;
 };
 
 } // namespace PADS_SCH_BINARY

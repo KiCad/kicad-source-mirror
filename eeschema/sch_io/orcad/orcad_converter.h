@@ -647,16 +647,6 @@ private:
     void placeDefinitionVectors( const ORCAD_SYMBOL_DEF& aDefinition, int aBaseX, int aBaseY, int aOrient,
                                  SCH_SCREEN* aScreen );
 
-    /**
-     * Synthesize a .BMP in front of a raw DIB (BITMAPINFOHEADER + optional
-     * palette + pixels): pixel data offset = 14 + biSize + 4 * paletteEntries
-     * (paletteEntries = biClrUsed, else 2^biBitCount when biBitCount <= 8, else
-     * 0) + 12 when biCompression == BI_BITFIELDS.  Rejects headers with
-     * biSize < 40 or > 200.
-     * @return false when the DIB is not usable.
-     */
-    static bool MakeBmpFromDib( const std::vector<uint8_t>& aDib, wxMemoryBuffer& aOut );
-
     /// Closest point (DBU) on a wire segment to (aX, aY); exact for H/V wires.
     static VECTOR2I snapToWire( int aX, int aY, const ORCAD_WIRE& aWire );
 
