@@ -1285,3 +1285,72 @@ BOOST_AUTO_TEST_CASE( PNSDiffPairViaGapCopperToHoleClearance )
     sizes.SetDiffPairCopperToHole( 0 );
     BOOST_CHECK_EQUAL( sizes.EffectiveDiffPairViaGap(), 200000 );
 }
+
+
+// Collapsing a padstack via's layer range for the violation highlight orphaned its
+// layer-indexed shapes. Layer 2 is required here: 0, 1 and 5 resolve by accident.
+//
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25139
+namespace
+{
+class PADSTACK_VIA_IFACE : public MOCK_PNS_KICAD_IFACE
+{
+public:
+    PADSTACK_VIA_IFACE( PNS_TEST_FIXTURE* aFixture ) :
+            MOCK_PNS_KICAD_IFACE( aFixture )
+    {
+    }
+
+    void SyncWorld( PNS::NODE* aWorld ) override
+    {
+        aWorld->SetMaxClearance( 10000000 );
+        aWorld->SetRuleResolver( GetRuleResolver() );
+
+        auto via = std::make_unique<PNS::VIA>( VECTOR2I( 0, 0 ), PNS_LAYER_RANGE( 0, 5 ), 400000, 100000,
+                                               (PNS::NET_HANDLE) 1, VIATYPE::THROUGH );
+        via->SetStackMode( PNS::VIA::STACK_MODE::FRONT_INNER_BACK );
+        via->SetDiameter( 0, 400000 );
+        via->SetDiameter( 1, 450000 );
+        via->SetDiameter( 5, 400000 );
+
+        aWorld->Add( std::move( via ) );
+    }
+
+    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false, int aFlags = 0 ) override
+    {
+        if( !aItem->OfKind( PNS::ITEM::VIA_T ) )
+            return;
+
+        m_viasDisplayed++;
+
+        if( !aItem->Shape( -1 ) )
+            m_nullShapes++;
+    }
+
+    int m_viasDisplayed = 0;
+    int m_nullShapes = 0;
+};
+} // namespace
+
+
+BOOST_FIXTURE_TEST_CASE( PNSMarkViolationsKeepsPadstackViaShape, PNS_TEST_FIXTURE )
+{
+    PADSTACK_VIA_IFACE    iface( this );
+    PNS::ROUTING_SETTINGS settings( nullptr, "" );
+    PNS::SIZES_SETTINGS   sizes;
+
+    m_router->SetInterface( &iface );
+    m_router->LoadSettings( &settings );
+    m_router->SetMode( PNS::PNS_MODE_ROUTE_SINGLE );
+
+    sizes.SetTrackWidth( 200000 );
+    sizes.SetBoardMinTrackWidth( 100000 );
+    m_router->UpdateSizes( sizes );
+
+    m_router->SyncWorld();
+
+    BOOST_REQUIRE( !m_router->StartRouting( VECTOR2I( 300000, 0 ), nullptr, 2 ) );
+
+    BOOST_REQUIRE_MESSAGE( iface.m_viasDisplayed > 0, "Via was not highlighted as a violation" );
+    BOOST_CHECK_MESSAGE( iface.m_nullShapes == 0, "Highlighted front/inner/back via has no resolvable shape" );
+}
