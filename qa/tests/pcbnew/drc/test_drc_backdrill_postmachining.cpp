@@ -384,7 +384,7 @@ BOOST_FIXTURE_TEST_CASE( ViaEffectiveShapeOnBackdrilledLayer, BACKDRILL_TEST_FIX
 {
     int netCode = GetNetCode( "TestNet" );
 
-    int backdillSize = pcbIUScale.mmToIU( 0.6 );
+    int backdillSize = pcbIUScale.mmToIU( 0.9 );
     int viaWidth = pcbIUScale.mmToIU( 0.8 );
 
     PCB_VIA* via = CreateBackdrilledVia( VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 10 ) ),
@@ -395,23 +395,37 @@ BOOST_FIXTURE_TEST_CASE( ViaEffectiveShapeOnBackdrilledLayer, BACKDRILL_TEST_FIX
 
     via->SetWidth( PADSTACK::ALL_LAYERS, viaWidth );
 
-    // On a non-affected layer, should return full via size
-    std::shared_ptr<SHAPE> shapeB = via->GetEffectiveShape( B_Cu, FLASHING::DEFAULT, PHYSICAL_CLEARANCE_CONSTRAINT );
-    BOOST_REQUIRE( shapeB );
+    // On a non-affected layer, should always return the via size
+    std::shared_ptr<SHAPE> shape_physicalClearance_back = via->GetEffectiveShape( B_Cu, FLASHING::DEFAULT,
+                                                                                  PHYSICAL_CLEARANCE_CONSTRAINT );
+    BOOST_REQUIRE( shape_physicalClearance_back );
+
+    std::shared_ptr<SHAPE> shape_copperClearance_back = via->GetEffectiveShape( B_Cu, FLASHING::DEFAULT,
+                                                                                CLEARANCE_CONSTRAINT );
+    BOOST_REQUIRE( shape_copperClearance_back );
 
     // On an affected layer, should return backdrill hole size
-    std::shared_ptr<SHAPE> shapeF = via->GetEffectiveShape( F_Cu, FLASHING::DEFAULT, PHYSICAL_CLEARANCE_CONSTRAINT );
-    BOOST_REQUIRE( shapeF );
+    std::shared_ptr<SHAPE> shape_physicalClearance_front = via->GetEffectiveShape( F_Cu, FLASHING::DEFAULT,
+                                                                                   PHYSICAL_CLEARANCE_CONSTRAINT );
+    BOOST_REQUIRE( shape_physicalClearance_front );
+
+    std::shared_ptr<SHAPE> shape_copperClearance_front = via->GetEffectiveShape( F_Cu, FLASHING::DEFAULT,
+                                                                                 CLEARANCE_CONSTRAINT );
+    BOOST_REQUIRE( shape_copperClearance_front );
 
     // The effective shape on the backdrilled layer should be smaller (hole only)
-    BOX2I bboxB = shapeB->BBox();
-    BOX2I bboxF = shapeF->BBox();
+    BOX2I bbox_physicalClearance_back = shape_physicalClearance_back->BBox();
+    BOX2I bbox_copperClearance_back = shape_copperClearance_back->BBox();
+    BOX2I bbox_physicalClearance_front = shape_physicalClearance_front->BBox();
+    BOX2I bbox_copperClearance_front = shape_copperClearance_front->BBox();
 
-    // Shape on B_Cu should be full via size
-    BOOST_CHECK_GE( bboxB.GetWidth(), viaWidth - 100 ); // Allow small tolerance
+    // Shape on B_Cu should be via size
+    BOOST_CHECK_GE( bbox_physicalClearance_back.GetWidth(), viaWidth - 100 ); // Allow small tolerance
+    BOOST_CHECK_GE( bbox_copperClearance_back.GetWidth(), viaWidth - 100 ); // Allow small tolerance
 
-    // Shape on F_Cu should be backdrill size (smaller than via)
-    BOOST_CHECK_LE( bboxF.GetWidth(), backdillSize + 100 );
+    // Shape on F_Cu should be expanded to backdrill size for physical clearance, but not for copper clearance
+    BOOST_CHECK_LE( bbox_physicalClearance_front.GetWidth(), backdillSize + 100 );
+    BOOST_CHECK_LE( bbox_copperClearance_front.GetWidth(), viaWidth + 100 );
 }
 
 
