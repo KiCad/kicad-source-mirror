@@ -2097,6 +2097,7 @@ std::vector<LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
 {
     std::vector<LIB_SYMBOL_UNIT> units;
 
+    // Enforce writing out of all defined unit/body-style combinations
     for( int unit = 1; unit <= GetUnitCount(); unit++ )
     {
         for( int bodyStyle = 1; bodyStyle <= GetBodyStyleCount(); bodyStyle++ )
