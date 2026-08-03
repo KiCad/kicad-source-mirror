@@ -21,6 +21,8 @@
 
 #include "snap_manifold.h"
 
+#include <geometry/nearest.h>
+
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -160,7 +162,7 @@ SNAP_CANDIDATE pathCandidate( const SNAP_OBJECT_PATH& aPath, const VECTOR2I& aSo
                         return;
                     }
                     else
-                        point = aGeometry.Centre();
+                        point = GetNearestPoint( NEARABLE_GEOM( aGeometry ), aSource );
 
                     candidate = SNAP_CANDIDATE::Point(
                             aPath.id, SNAP_PRIORITY_TIER::OBJECT, SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, point,

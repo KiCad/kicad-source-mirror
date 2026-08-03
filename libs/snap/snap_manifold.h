@@ -21,6 +21,7 @@
 #define SNAP_MANIFOLD_H
 
 #include <geometry/intersection.h>
+#include <geometry/nearest.h>
 #include <math/vector2d.h>
 
 #include <cmath>
@@ -51,7 +52,7 @@ inline double snapManifoldDistance( const INTERSECTABLE_GEOM& aGeometry, const V
                 else if constexpr( std::is_same_v<MANIFOLD_TYPE, SHAPE_ARC> )
                     return aShape.NearestPoint( aPoint ).Distance( aPoint );
                 else
-                    return aShape.Distance( aPoint );
+                    return GetNearestPoint( NEARABLE_GEOM( aShape ), aPoint ).Distance( aPoint );
             },
             aGeometry );
 }

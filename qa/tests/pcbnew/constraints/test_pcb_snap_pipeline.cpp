@@ -652,4 +652,25 @@ BOOST_FIXTURE_TEST_CASE( DenseCoincidentTieRetainsPartialBudgetResult, PCB_SNAP_
 }
 
 
+BOOST_FIXTURE_TEST_CASE( RectangleInteriorDoesNotCaptureCursor, PCB_SNAP_FIXTURE )
+{
+    PCB_SHAPE* outline = new PCB_SHAPE( &board, SHAPE_T::RECTANGLE );
+    outline->SetStart( { 0, 0 } );
+    outline->SetEnd( { 40 * MM, 40 * MM } );
+    outline->SetLayer( Edge_Cuts );
+    board.Add( outline );
+    view.Add( outline );
+    view.SetViewport( BOX2D( { 0, 0 }, { 50 * MM, 50 * MM } ) );
+
+    // Deep inside the outline, far from every edge, corner and the centre.
+    const VECTOR2I cursor( 12 * MM, 31 * MM );
+
+    helper->SetUseGrid( false );
+
+    SNAP_RESULT result = helper->ResolveSnap( cursor, LSET( { F_SilkS } ) );
+
+    BOOST_CHECK_EQUAL( result.position, cursor );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
