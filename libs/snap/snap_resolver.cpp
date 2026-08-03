@@ -27,6 +27,7 @@
 #include <array>
 #include <cmath>
 #include <iomanip>
+#include <limits>
 #include <ostream>
 #include <sstream>
 #include <tuple>
@@ -388,6 +389,15 @@ bool solve( const SNAP_SOURCE_CONTEXT& aContext, const std::vector<SNAP_CANDIDAT
         x = points.front().x;
         y = points.front().y;
         aRemainingDof = first || nonlinear.size() >= 2 ? 0 : 1;
+    }
+
+    // Near-parallel line pairs can pass the rank test yet intersect far outside the
+    // integer coordinate space; treat that as an infeasible combination, not a solution.
+    if( !std::isfinite( x ) || !std::isfinite( y )
+        || std::abs( x ) > std::numeric_limits<int>::max()
+        || std::abs( y ) > std::numeric_limits<int>::max() )
+    {
+        return false;
     }
 
     aPosition = VECTOR2I( KiROUND( x ), KiROUND( y ) );

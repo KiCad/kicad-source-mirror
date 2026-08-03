@@ -236,6 +236,55 @@ BOOST_AUTO_TEST_CASE( ConflictingGridAxisLeavesCompatibleAxisAccepted )
 }
 
 
+BOOST_AUTO_TEST_CASE( NearParallelIntersectionOutsideCoordinateRangeIsInfeasible )
+{
+    // Real-world capture: two nearly-collinear track segments pass the rank test but
+    // intersect far outside the int coordinate space, firing the KiROUND assert.
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 142936256, 71674527 };
+
+    SNAP_RESOLVER resolver;
+    resolver.AddCandidate( SNAP_CANDIDATE::Line( id( "segment-a" ), SNAP_PRIORITY_TIER::OBJECT,
+                                                 SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, { 142470148, 74198721 },
+                                                 { 1006370.0, -3755829.0 }, 0.25851349837571413 ) );
+    resolver.AddCandidate( SNAP_CANDIDATE::Line( id( "segment-b" ), SNAP_PRIORITY_TIER::OBJECT,
+                                                 SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, { 141987238, 74262298 },
+                                                 { 1006358.0, -3755779.0 }, 0.31431204619285724 ) );
+
+    SNAP_RESULT result = resolver.Resolve( context );
+
+    BOOST_REQUIRE_EQUAL( result.status, SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_CHECK_EQUAL( result.position, VECTOR2I( 143132419, 71727089 ) );
+    BOOST_CHECK( result.Accepted( id( "segment-a" ) ) );
+    BOOST_CHECK( !result.Accepted( id( "segment-b" ) ) );
+    BOOST_CHECK_EQUAL( result.remainingDof, 1 );
+}
+
+
+BOOST_AUTO_TEST_CASE( NearParallelIntersectionInsideCoordinateRangeComposes )
+{
+    // Artificial pair whose intersection is nonsensically far away but still representable.
+    SNAP_SOURCE_CONTEXT context;
+    context.sourcePoint = { 10, 0 };
+
+    SNAP_RESOLVER resolver;
+    resolver.AddCandidate( SNAP_CANDIDATE::Line( id( "segment-a" ), SNAP_PRIORITY_TIER::OBJECT,
+                                                 SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, { 0, 0 }, { 1.0, 0.0 },
+                                                 0.0 ) );
+    resolver.AddCandidate( SNAP_CANDIDATE::Line( id( "segment-b" ), SNAP_PRIORITY_TIER::OBJECT,
+                                                 SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, { 0, 1000 }, { 1.0, 0.001 },
+                                                 5.0 ) );
+
+    SNAP_RESULT result = resolver.Resolve( context );
+
+    BOOST_REQUIRE_EQUAL( result.status, SNAP_RESULT_STATUS::SUCCESS );
+    BOOST_CHECK_EQUAL( result.position, VECTOR2I( -1000000, 0 ) );
+    BOOST_CHECK( result.Accepted( id( "segment-a" ) ) );
+    BOOST_CHECK( result.Accepted( id( "segment-b" ) ) );
+    BOOST_CHECK_EQUAL( result.remainingDof, 0 );
+}
+
+
 BOOST_AUTO_TEST_CASE( StableIdentityBreaksExactRankTie )
 {
     SNAP_SOURCE_CONTEXT context;
