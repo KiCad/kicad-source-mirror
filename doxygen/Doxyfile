@@ -1065,7 +1065,7 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which Doxygen is
 # run.
 
-EXCLUDE                = ../common/streamwrapper.cpp
+EXCLUDE                = ../common/streamwrapper.cpp    \
                          ../pcbnew/pcb_text_help.md
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
