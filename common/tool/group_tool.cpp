@@ -69,7 +69,7 @@ private:
         bool hasGroup = false;
         bool hasMember = false;
         bool onlyOneGroup = false;
-        bool hasUngroupedItems = false;
+        bool hasNonGroupItems = false;
 
         if( m_selectionTool != nullptr )
         {
@@ -88,8 +88,8 @@ private:
                         hasGroup = true;
                     }
                 }
-                else if( !item->GetParentGroup() )
-                    hasUngroupedItems = true;
+                else
+                    hasNonGroupItems = true;
 
                 if( item->GetParentGroup() )
                     hasMember = true;
@@ -98,7 +98,7 @@ private:
 
         Enable( ACTIONS::group.GetUIId(),           selectionCount >= 2 );
         Enable( ACTIONS::ungroup.GetUIId(),         hasGroup );
-        Enable( ACTIONS::addToGroup.GetUIId(),      onlyOneGroup && hasUngroupedItems );
+        Enable( ACTIONS::addToGroup.GetUIId(), onlyOneGroup && hasNonGroupItems );
         Enable( ACTIONS::removeFromGroup.GetUIId(), hasMember );
     }
 
@@ -213,7 +213,7 @@ int GROUP_TOOL::AddToGroup( const TOOL_EVENT& aEvent )
 
             group = dynamic_cast<EDA_GROUP*>( item );
         }
-        else if( !item->GetParentGroup() && canGroupItem( item, errorMsg ) )
+        else if( canGroupItem( item, errorMsg ) )
         {
             toAdd.push_back( item );
         }
