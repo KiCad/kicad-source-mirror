@@ -89,18 +89,6 @@ private:
     void OnPreviewRefresh( wxCommandEvent& event ) override;
     void PreviewRefresh();
 
-    std::vector<BOM_PRESET> GetUserBomPresets() const;
-    void                    SetUserBomPresets( std::vector<BOM_PRESET>& aPresetList );
-    void                    ApplyBomPreset( const wxString& aPresetName );
-    void                    ApplyBomPreset( const BOM_PRESET& aPreset );
-
-    /// Returns a formatting configuration corresponding to the values in the UI controls
-    /// of the dialog.
-    BOM_FMT_PRESET              GetCurrentBomFmtSettings();
-    std::vector<BOM_FMT_PRESET> GetUserBomFmtPresets() const;
-    void                        SetUserBomFmtPresets( std::vector<BOM_FMT_PRESET>& aPresetList );
-    void                        ApplyBomFmtPreset( const wxString& aPresetName );
-    void                        ApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset );
 
     // Schematic listener event handlers
     void OnSchItemsAdded( SCHEMATIC& aSch, std::vector<SCH_ITEM*>& aSchItem ) override;
@@ -125,20 +113,9 @@ private:
     SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol, SCH_REFERENCE_LIST& aCachedRefs );
     SCH_REFERENCE_LIST getSheetSymbolReferences( SCH_SHEET& aSheet );
 
-    void syncBomPresetSelection();
-    void rebuildBomPresetsWidget();
-    void updateBomPresetSelection( const wxString& aName );
-    void onBomPresetChanged( wxCommandEvent& aEvent );
-    void doApplyBomPreset( const BOM_PRESET& aPreset );
-    void loadDefaultBomPresets();
-
-    void syncBomFmtPresetSelection();
-    void rebuildBomFmtPresetsWidget();
-    void updateBomFmtPresetSelection( const wxString& aName );
-    void onBomFmtPresetChanged( wxCommandEvent& aEvent );
-    void doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset );
-    void loadDefaultBomFmtPresets();
-
+    void doApplyBomPreset( const BOM_PRESET& aPreset ) override;
+    void doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset ) override;
+    BOM_PRESET getDataModelBomPreset() override;
     void savePresetsToSchematic();
 
     void onAddVariant( wxCommandEvent& aEvent ) override;
@@ -155,25 +132,15 @@ private:
     wxString resolveVariant() const;
 
 private:
-    std::map<wxString, BOM_PRESET>     m_bomPresets;
-    BOM_PRESET*                        m_currentBomPreset;
-    BOM_PRESET*                        m_lastSelectedBomPreset;
-    wxArrayString                      m_bomPresetMRU;
-
-    std::map<wxString, BOM_FMT_PRESET> m_bomFmtPresets;
-    BOM_FMT_PRESET*                    m_currentBomFmtPreset;
-    BOM_FMT_PRESET*                    m_lastSelectedBomFmtPreset;
-    wxArrayString                      m_bomFmtPresetMRU;
-
     SCH_EDIT_FRAME*                    m_parent;
 
     // Index in the fields list control for each MANDATORY_FIELD type
     std::map<FIELD_T, int>             m_mandatoryFieldListIndexes;
 
-    VIEW_CONTROLS_GRID_DATA_MODEL*     m_viewControlsDataModel;
+    VIEW_CONTROLS_GRID_DATA_MODEL*     m_viewControlsDataModel = nullptr;
 
     SCH_REFERENCE_LIST                 m_symbolsList;
-    FIELDS_EDITOR_GRID_DATA_MODEL*     m_dataModel;
+    FIELDS_EDITOR_GRID_DATA_MODEL*     m_dataModel = nullptr;
 
     SCHEMATIC_SETTINGS&                m_schSettings;
 

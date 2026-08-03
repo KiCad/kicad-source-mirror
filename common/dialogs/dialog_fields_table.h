@@ -20,7 +20,11 @@
 
 #pragma once
 
+#include <map>
+#include <vector>
+
 #include <dialog_fields_table_base.h>
+#include <settings/bom_settings.h>
 
 class KICOMMON_API DIALOG_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE
 {
@@ -37,6 +41,20 @@ public:
      */
     static wxString GetDefaultBomFileName( const wxString& aInputFileName );
 
+    std::vector<BOM_PRESET> GetUserBomPresets() const;
+    void                    SetUserBomPresets( std::vector<BOM_PRESET>& aPresetList );
+    void                    ApplyBomPreset( const wxString& aPresetName );
+    void                    ApplyBomPreset( const BOM_PRESET& aPreset );
+
+    /// Returns a formatting configuration corresponding to the values in the UI controls
+    /// of the dialog.
+    BOM_FMT_PRESET              GetCurrentBomFmtSettings();
+    std::vector<BOM_FMT_PRESET> GetUserBomFmtPresets() const;
+    void                        SetUserBomFmtPresets( std::vector<BOM_FMT_PRESET>& aPresetList );
+    void                        ApplyBomFmtPreset( const wxString& aPresetName );
+    void                        ApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset );
+
+
 protected:
     // Set bitmap and tooltip according to left panel visibility
     void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
@@ -46,4 +64,32 @@ protected:
     void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
 
     void OnFilterMouseMoved( wxMouseEvent& event ) override;
+
+    void syncBomPresetSelection();
+    void rebuildBomPresetsWidget();
+    void updateBomPresetSelection( const wxString& aName );
+    void onBomPresetChanged( wxCommandEvent& aEvent );
+    void loadDefaultBomPresets();
+    virtual void doApplyBomPreset( const BOM_PRESET& aPreset ) = 0;
+    virtual BOM_PRESET getDataModelBomPreset() = 0;
+
+    void syncBomFmtPresetSelection();
+    void rebuildBomFmtPresetsWidget();
+    void updateBomFmtPresetSelection( const wxString& aName );
+    void onBomFmtPresetChanged( wxCommandEvent& aEvent );
+    void loadDefaultBomFmtPresets();
+    virtual void doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset ) = 0;
+
+
+protected:
+    std::map<wxString, BOM_PRESET>     m_bomPresets;
+    BOM_PRESET*                        m_currentBomPreset = nullptr;
+    BOM_PRESET*                        m_lastSelectedBomPreset = nullptr;
+    wxArrayString                      m_bomPresetMRU;
+
+    std::map<wxString, BOM_FMT_PRESET> m_bomFmtPresets;
+    BOM_FMT_PRESET*                    m_currentBomFmtPreset = nullptr;
+    BOM_FMT_PRESET*                    m_lastSelectedBomFmtPreset = nullptr;
+    wxArrayString                      m_bomFmtPresetMRU;
+
 };
