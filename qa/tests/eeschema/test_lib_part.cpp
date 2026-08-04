@@ -255,6 +255,47 @@ BOOST_AUTO_TEST_CASE( AddedDrawItems )
 }
 
 
+/**
+ * A stacked pin is one drawn pin standing for several numbered contacts, written as a
+ * bracketed list.  Both the list itself and each contact it names are pins of the symbol.
+ */
+BOOST_AUTO_TEST_CASE( StackedPinNumberLookup )
+{
+    SCH_PIN* pin = new SCH_PIN( &m_part_no_data );
+    pin->SetNumber( "[A1,A12,B1,B12]" );
+    m_part_no_data.AddDrawItem( pin );
+
+    BOOST_CHECK( m_part_no_data.HasPinNumber( "[A1,A12,B1,B12]" ) );
+
+    BOOST_CHECK( m_part_no_data.HasPinNumber( "A1" ) );
+    BOOST_CHECK( m_part_no_data.HasPinNumber( "A12" ) );
+    BOOST_CHECK( m_part_no_data.HasPinNumber( "B1" ) );
+    BOOST_CHECK( m_part_no_data.HasPinNumber( "B12" ) );
+
+    BOOST_CHECK( !m_part_no_data.HasPinNumber( "A2" ) );
+    BOOST_CHECK( !m_part_no_data.HasPinNumber( "[A1" ) );
+}
+
+
+/**
+ * The same, for range notation.  The bracketed form must keep matching: it is the spelling
+ * that works today and is stored in existing symbols.
+ */
+BOOST_AUTO_TEST_CASE( RangeStackedPinNumberLookup )
+{
+    SCH_PIN* pin = new SCH_PIN( &m_part_no_data );
+    pin->SetNumber( "[1-4]" );
+    m_part_no_data.AddDrawItem( pin );
+
+    BOOST_CHECK( m_part_no_data.HasPinNumber( "[1-4]" ) );
+
+    BOOST_CHECK( m_part_no_data.HasPinNumber( "1" ) );
+    BOOST_CHECK( m_part_no_data.HasPinNumber( "3" ) );
+
+    BOOST_CHECK( !m_part_no_data.HasPinNumber( "5" ) );
+}
+
+
 struct TEST_LIB_SYMBOL_SUBREF_CASE
 {
     int         m_index;

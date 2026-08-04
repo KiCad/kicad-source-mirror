@@ -737,6 +737,13 @@ public:
     std::vector<SCH_PIN*> GetPinsByNumber( const wxString& aNumber, int aUnit = 0, int aBodyStyle = 0 );
 
     /**
+     * Return true if \a aNumber names a pin of this symbol, in any unit or body style.
+     *
+     * @param aNumber - Pin number to look for.
+     */
+    bool HasPinNumber( const wxString& aNumber ) const;
+
+    /**
      * Return true if this symbol's pins do not match another symbol's pins. This is used to
      * detect whether the project cache is out of sync with the system libs.
      *
