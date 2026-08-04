@@ -80,7 +80,7 @@ private:
 
     void testTrackClearances();
 
-    bool testPadAgainstItem( PAD* pad, SHAPE* padShape, PCB_LAYER_ID layer, BOARD_ITEM* other );
+    bool testPadAgainstItem( PAD* pad, const std::shared_ptr<SHAPE>& padShape, PCB_LAYER_ID layer, BOARD_ITEM* other );
 
     void testPadClearances();
 
@@ -703,8 +703,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 }
 
 
-bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* padShape, PCB_LAYER_ID aLayer,
-                                                             BOARD_ITEM* other )
+bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, const std::shared_ptr<SHAPE>& padShape,
+                                                             PCB_LAYER_ID aLayer, BOARD_ITEM* other )
 {
     bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
     bool testShorting = !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS );
@@ -858,23 +858,21 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         }
     }
 
-    auto doTestHole =
-            [&]( BOARD_ITEM* item, SHAPE* shape, BOARD_ITEM* otherItem, SHAPE* aOtherShape, int aClearance )
-            {
-                if( shape->Collide( aOtherShape, sub_e( aClearance ), &actual, &pos ) )
-                {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-                    drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                                        constraint.GetName(),
-                                                        aClearance,
-                                                        actual ) );
-                    drcItem->SetItems( item, otherItem );
-                    drcItem->SetViolatingRule( constraint.GetParentRule() );
-                    reportTwoShapeGeometry( drcItem, pos, shape, aOtherShape, aLayer, actual );
-                    has_error = true;
-                    testHoles = false;  // No need for multiple violations
-                }
-            };
+    auto doTestHole = [&]( BOARD_ITEM* item, const std::shared_ptr<SHAPE>& shape, BOARD_ITEM* otherItem,
+                           const std::shared_ptr<SHAPE_SEGMENT>& aOtherShape, int aClearance )
+    {
+        if( shape->Collide( aOtherShape.get(), sub_e( aClearance ), &actual, &pos ) )
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+            drcItem->SetErrorDetail(
+                    formatMsg( _( "(%s clearance %s; actual %s)" ), constraint.GetName(), aClearance, actual ) );
+            drcItem->SetItems( item, otherItem );
+            drcItem->SetViolatingRule( constraint.GetParentRule() );
+            reportTwoShapeGeometry( drcItem, pos, shape.get(), aOtherShape.get(), aLayer, actual );
+            has_error = true;
+            testHoles = false; // No need for multiple violations
+        }
+    };
 
     if( testHoles )
     {
@@ -890,8 +888,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
         if( clearance > 0 )
         {
-            SHAPE_SEGMENT* otherHole = otherPad->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT ).get();
-            doTestHole( pad, padShape, otherPad, otherHole, clearance );
+            doTestHole( pad, padShape, otherPad, otherPad->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT ),
+                        clearance );
         }
     }
 
@@ -903,8 +901,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
         if( clearance > 0 )
         {
-            SHAPE_SEGMENT* hole = pad->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT ).get();
-            doTestHole( otherPad, otherShape.get(), pad, hole, clearance );
+            doTestHole( otherPad, otherShape, pad, pad->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT ),
+                        clearance );
         }
     }
 
@@ -917,8 +915,8 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
         if( clearance > 0 )
         {
-            SHAPE_SEGMENT* viaHole = otherVia->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT ).get();
-            doTestHole( pad, padShape, otherVia, viaHole, clearance );
+            doTestHole( pad, padShape, otherVia, otherVia->GetEffectiveHoleShape( aLayer, HOLE_CLEARANCE_CONSTRAINT ),
+                        clearance );
         }
     }
 
@@ -950,7 +948,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
                         std::shared_ptr<SHAPE> padShape = pad->GetEffectiveShape( layer );
 
-                        m_board->m_CopperItemRTreeCache->QueryColliding( pad, layer, layer,
+                        m_board->m_CopperItemRTreeCache->QueryColliding(
+                                pad, layer, layer,
                                 // Filter:
                                 [&]( BOARD_ITEM* other ) -> bool
                                 {
@@ -966,7 +965,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                                 // Visitor
                                 [&]( BOARD_ITEM* other ) -> bool
                                 {
-                                    testPadAgainstItem( pad, padShape.get(), layer, other );
+                                    testPadAgainstItem( pad, padShape, layer, other );
                                     return !m_drcEngine->IsCancelled();
                                 },
                                 m_board->m_DRCMaxClearance );
