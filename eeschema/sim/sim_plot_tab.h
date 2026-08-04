@@ -89,6 +89,8 @@ public:
         m_updateRequired = true;
     }
 
+    virtual void UpdateForNewData() { SetCoordX( m_coords.x ); }
+
     bool Inside( const wxPoint& aPoint ) const override;
 
     void Move( wxPoint aDelta ) override;
@@ -261,6 +263,7 @@ public:
             CURSOR( aTrace, aPlotTab ),
             m_index( -1 ),
             m_gamma( 0.0, 0.0 ),
+            m_requestFreq( 0.0 ),
             m_pendingFreq( false ),
             m_dragging( false )
     {
@@ -276,6 +279,8 @@ public:
 
     void SetCoordX( double aValue ) override;
 
+    void UpdateForNewData() override;
+
     const wxRealPoint& GetGamma() const { return m_gamma; }
 
 private:
@@ -285,6 +290,7 @@ private:
 private:
     int         m_index;
     wxRealPoint m_gamma;
+    double      m_requestFreq;
     bool        m_pendingFreq; // a saved frequency waiting for the sim data to load
     bool        m_dragging;    // the pending update comes from a drag, not a data refresh
 };

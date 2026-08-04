@@ -18,6 +18,8 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <cmath>
+#include <sim/sim_plot_tab.h>
 #include <sim/smith_math.h>
 
 BOOST_AUTO_TEST_SUITE( SmithChartMath )
@@ -224,6 +226,68 @@ BOOST_AUTO_TEST_CASE( SParamPortParsing )
     BOOST_CHECK( !SMITH_MATH::ParseSParamPorts( wxS( "S_1_" ), &response, &drive ) );
     BOOST_CHECK( !SMITH_MATH::ParseSParamPorts( wxS( "S__1" ), &response, &drive ) );
     BOOST_CHECK( !SMITH_MATH::ParseSParamPorts( wxS( "user0" ), &response, &drive ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( SmithCursorSurvivesPartialSweep )
+{
+    std::vector<double> freqs, re, im;
+
+    for( int ii = 0; ii <= 100; ii++ )
+    {
+        freqs.push_back( 1e9 + ii * 10e6 );
+        re.push_back( 0.5 * std::cos( ii * 0.05 ) );
+        im.push_back( 0.5 * std::sin( ii * 0.05 ) );
+    }
+
+    SMITH_TRACE  trace( wxS( "S_1_1" ), (SIM_TRACE_TYPE) ( SPT_VOLTAGE | SPT_SP_SMITH ) );
+    SMITH_CURSOR cursor( &trace, nullptr );
+
+    trace.SetCursor( 1, &cursor );
+    trace.SetFrequencies( freqs );
+    trace.SetData( re, im );
+
+    cursor.SetCoordX( freqs[80] );
+    BOOST_REQUIRE_EQUAL( cursor.GetCoords().x, freqs[80] );
+
+    trace.SetFrequencies( std::vector<double>( freqs.begin(), freqs.begin() + 5 ) );
+    trace.SetData( std::vector<double>( re.begin(), re.begin() + 5 ),
+                   std::vector<double>( im.begin(), im.begin() + 5 ) );
+    cursor.UpdateForNewData();
+
+    trace.SetFrequencies( freqs );
+    trace.SetData( re, im );
+    cursor.UpdateForNewData();
+
+    BOOST_CHECK_EQUAL( cursor.GetCoords().x, freqs[80] );
+    BOOST_CHECK_EQUAL( cursor.GetGamma().x, re[80] );
+    BOOST_CHECK_EQUAL( cursor.GetGamma().y, im[80] );
+}
+
+
+BOOST_AUTO_TEST_CASE( SmithCursorResolvesFrequencyOnceDataArrives )
+{
+    std::vector<double> freqs, re, im;
+
+    for( int ii = 0; ii <= 100; ii++ )
+    {
+        freqs.push_back( 1e9 + ii * 10e6 );
+        re.push_back( 0.5 * std::cos( ii * 0.05 ) );
+        im.push_back( 0.5 * std::sin( ii * 0.05 ) );
+    }
+
+    SMITH_TRACE  trace( wxS( "S_1_1" ), (SIM_TRACE_TYPE) ( SPT_VOLTAGE | SPT_SP_SMITH ) );
+    SMITH_CURSOR cursor( &trace, nullptr );
+
+    trace.SetCursor( 1, &cursor );
+    cursor.SetCoordX( freqs[80] );
+
+    trace.SetFrequencies( freqs );
+    trace.SetData( re, im );
+    cursor.UpdateForNewData();
+
+    BOOST_CHECK_EQUAL( cursor.GetCoords().x, freqs[80] );
+    BOOST_CHECK_EQUAL( cursor.GetGamma().x, re[80] );
 }
 
 

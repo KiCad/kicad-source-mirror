@@ -679,22 +679,30 @@ void SMITH_CURSOR::snapToFrequency( double aFreq )
 
 void SMITH_CURSOR::SetCoordX( double aValue )
 {
+    m_requestFreq = aValue;
+
+    UpdateForNewData();
+
+    if( m_window )
+        m_window->Refresh();
+}
+
+
+void SMITH_CURSOR::UpdateForNewData()
+{
     if( static_cast<SMITH_TRACE*>( m_trace )->GetFrequencies().empty() )
     {
         // no data yet, remember the frequency and resolve it once the sim fills in
-        m_coords.x = aValue;
+        m_coords.x = m_requestFreq;
         m_pendingFreq = true;
         m_updateRequired = false;
         return;
     }
 
-    snapToFrequency( aValue );
+    snapToFrequency( m_requestFreq );
     m_pendingFreq = false;
     m_updateRequired = false;
     m_updateRef = true;
-
-    if( m_window )
-        m_window->Refresh();
 }
 
 
@@ -752,7 +760,7 @@ void SMITH_CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     if( m_pendingFreq )
     {
         // sim data has arrived, restore the frequency saved from the workbook
-        snapToFrequency( m_coords.x );
+        snapToFrequency( m_requestFreq );
         m_pendingFreq = false;
         m_updateRequired = false;
         m_updateRef = true;
@@ -783,7 +791,10 @@ void SMITH_CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
             }
 
             if( best >= 0 )
+            {
                 snapToIndex( best );
+                m_requestFreq = m_coords.x;
+            }
 
             m_dragging = false;
         }
@@ -791,8 +802,7 @@ void SMITH_CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
         {
             // the trace data changed under the cursor, follow the frequency rather than
             // the screen position so a re-run cannot hop to another point of the locus
-            snapToFrequency( m_coords.x );
-            m_updateRef = true;
+            UpdateForNewData();
         }
 
         m_updateRequired = false;
@@ -803,7 +813,10 @@ void SMITH_CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     else
     {
         if( m_index < 0 )
+        {
             snapToIndex( (int) count / 2 );
+            m_requestFreq = m_coords.x;
+        }
 
         m_updateRef = true;
     }
@@ -1851,7 +1864,7 @@ void SIM_PLOT_TAB::SetTraceData( TRACE* trace, std::vector<double>& aX, std::vec
     for( auto& [ cursorId, cursor ] : trace->GetCursors() )
     {
         if( cursor )
-            cursor->SetCoordX( cursor->GetCoords().x );
+            cursor->UpdateForNewData();
     }
 
     UpdateAxisVisibility();
