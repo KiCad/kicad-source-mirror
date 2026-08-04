@@ -24,7 +24,7 @@
 #include <memory>
 
 #include <eeschema_helpers.h>
-#include <fields_data_model.h>
+#include <symbol_fields_data_model.h>
 #include <locale_io.h>
 #include <sch_commit.h>
 #include <sch_field.h>
@@ -61,10 +61,10 @@ struct ISSUE25112_FIXTURE
      * ApplyData follows the model's reference list, so scoping to that first path guarantees a
      * stale entry follows the edited one.
      */
-    std::unique_ptr<FIELDS_EDITOR_GRID_DATA_MODEL> MakeScopedModel( const wxString& aVariantName,
-                                                                    const wxString& aFieldName )
+    std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> MakeScopedModel( const wxString& aVariantName,
+                                                                           const wxString& aFieldName )
     {
-        auto model = std::make_unique<FIELDS_EDITOR_GRID_DATA_MODEL>( m_refs, nullptr );
+        auto model = std::make_unique<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL>( m_refs, nullptr );
 
         model->SetCurrentVariant( aVariantName );
         model->AddColumn( GetCanonicalFieldName( FIELD_T::REFERENCE ), wxS( "Reference" ), false );
@@ -94,7 +94,7 @@ struct ISSUE25112_FIXTURE
         BOOST_REQUIRE( found );
 
         model->SetPath( m_scopePath );
-        model->SetScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_SHEET );
+        model->SetScope( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_SHEET );
         model->RebuildRows();
 
         m_row = -1;
@@ -120,7 +120,7 @@ struct ISSUE25112_FIXTURE
         return model;
     }
 
-    void Apply( FIELDS_EDITOR_GRID_DATA_MODEL& aModel, const wxString& aVariantName )
+    void Apply( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL& aModel, const wxString& aVariantName )
     {
         TOOL_MANAGER toolMgr;
         SCH_COMMIT   commit( &toolMgr );
@@ -142,7 +142,7 @@ struct ISSUE25112_FIXTURE
 
 BOOST_FIXTURE_TEST_CASE( SheetScopedFieldEditSurvivesApply, ISSUE25112_FIXTURE )
 {
-    std::unique_ptr<FIELDS_EDITOR_GRID_DATA_MODEL> model =
+    std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model =
             MakeScopedModel( wxEmptyString, GetCanonicalFieldName( FIELD_T::FOOTPRINT ) );
 
     const wxString newFootprint = wxS( "Resistor_SMD:R_0603_1608Metric" );
@@ -160,7 +160,7 @@ BOOST_FIXTURE_TEST_CASE( SheetScopedVariantEditStaysOnItsPath, ISSUE25112_FIXTUR
 {
     const wxString variant = wxS( "Assembly" );
 
-    std::unique_ptr<FIELDS_EDITOR_GRID_DATA_MODEL> model =
+    std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model =
             MakeScopedModel( variant, GetCanonicalFieldName( FIELD_T::FOOTPRINT ) );
 
     const wxString baseFootprint = m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText();
@@ -183,7 +183,7 @@ BOOST_FIXTURE_TEST_CASE( SheetScopedBoardExclusionSurvivesApply, ISSUE25112_FIXT
 {
     const wxString variant = wxS( "Assembly" );
 
-    std::unique_ptr<FIELDS_EDITOR_GRID_DATA_MODEL> model =
+    std::unique_ptr<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL> model =
             MakeScopedModel( variant, wxS( "${EXCLUDE_FROM_BOARD}" ) );
 
     BOOST_REQUIRE( !m_symbol->GetExcludedFromBoard() );

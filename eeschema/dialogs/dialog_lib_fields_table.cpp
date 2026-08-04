@@ -44,7 +44,6 @@
 #include <tools/sch_actions.h>
 #include <tool/tool_manager.h>
 #include <trace_helpers.h>
-#include <fields_data_model.h>
 #include <dialog_lib_new_symbol.h>
 #include <wx/arrstr.h>
 #include <wx/msgdlg.h>
@@ -394,7 +393,6 @@ void DIALOG_LIB_FIELDS_TABLE::setSideBarButtonLook( bool aIsLeftPanelCollapsed )
         m_sidebarButton->SetToolTip( _( "Collapse left panel" ) );
     }
 }
-
 
 void DIALOG_LIB_FIELDS_TABLE::SetupColumnProperties( int aCol )
 {
@@ -1264,5 +1262,3 @@ void DIALOG_LIB_FIELDS_TABLE::OnViewControlsCellChanged( wxGridEvent& aEvent )
         break;
     }
 }
-
-

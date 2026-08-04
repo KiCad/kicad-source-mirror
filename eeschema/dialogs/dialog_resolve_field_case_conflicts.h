@@ -20,7 +20,7 @@
 #pragma once
 
 #include "dialog_resolve_field_case_conflicts_base.h"
-#include <fields_data_model.h>
+#include <symbol_fields_data_model.h>
 
 class SCH_EDIT_FRAME;
 

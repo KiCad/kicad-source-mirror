@@ -548,6 +548,7 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_design_block_properties_base.cpp
     dialogs/dialog_display_html_text_base.cpp
     dialogs/dialog_edit_library_tables.cpp
+    dialogs/fields_table_data_model.cpp
     dialogs/dialog_grid_settings.cpp
     dialogs/dialog_grid_settings_base.cpp
     dialogs/dialog_group_properties.cpp

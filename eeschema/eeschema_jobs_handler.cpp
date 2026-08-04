@@ -84,7 +84,7 @@
 #include <netlist_exporter_pads.h>
 #include <netlist_exporter_allegro.h>
 
-#include <fields_data_model.h>
+#include <symbol_fields_data_model.h>
 
 #include <dialogs/dialog_export_netlist.h>
 #include <dialogs/dialog_plot_schematic.h>
@@ -622,7 +622,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
 
     // Build our data model
-    FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList, nullptr );
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList, nullptr );
     dataModel.SetCurrentVariant( currentVariant );
 
     // Mandatory fields first
@@ -630,10 +630,12 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         dataModel.AddColumn( GetCanonicalFieldName( fieldId ), GetDefaultFieldName( fieldId, DO_TRANSLATE ), false );
 
     // Generated/virtual fields (e.g. ${QUANTITY}, ${ITEM_NUMBER}) present only in the fields table
-    dataModel.AddColumn( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE,
-                         GetGeneratedFieldDisplayName( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE ), false );
-    dataModel.AddColumn( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE,
-                         GetGeneratedFieldDisplayName( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE ), false );
+    dataModel.AddColumn( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE,
+                         GetGeneratedFieldDisplayName( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE ),
+                         false );
+    dataModel.AddColumn( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE,
+                         GetGeneratedFieldDisplayName( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE ),
+                         false );
 
     // Attribute fields (boolean flags on symbols)
     dataModel.AddColumn( wxS( "${DNP}" ), GetGeneratedFieldDisplayName( wxS( "${DNP}" ) ), false );

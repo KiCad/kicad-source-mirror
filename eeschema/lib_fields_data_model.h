@@ -23,7 +23,7 @@
 #include <wx/grid.h>
 #include <wx/arrstr.h>
 #include <widgets/grid_striped_renderer.h>
-#include <fields_data_model.h>
+#include <widgets/wx_grid.h>
 
 
 struct LIB_DATA_MODEL_ROW

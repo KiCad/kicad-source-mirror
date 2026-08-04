@@ -34,7 +34,7 @@
 #include <sch_sheet_path.h>
 #include "string_utils.h"
 
-#include "fields_data_model.h"
+#include <symbol_fields_data_model.h>
 
 
 /**
@@ -55,7 +55,7 @@ public:
     {
         wxString value = aGrid.GetCellValue( aRow, aCol );
 
-        if( auto* model = dynamic_cast<FIELDS_EDITOR_GRID_DATA_MODEL*>( aGrid.GetTable() ) )
+        if( auto* model = dynamic_cast<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL*>( aGrid.GetTable() ) )
             value = model->GetResolvedValue( aRow, aCol );
 
         wxRect rect = aRect;
@@ -70,7 +70,7 @@ public:
     {
         wxString value = aGrid.GetCellValue( aRow, aCol );
 
-        if( auto* model = dynamic_cast<FIELDS_EDITOR_GRID_DATA_MODEL*>( aGrid.GetTable() ) )
+        if( auto* model = dynamic_cast<SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL*>( aGrid.GetTable() ) )
             value = model->GetResolvedValue( aRow, aCol );
 
         return wxGridCellStringRenderer::DoGetBestSize( aAttr, aDC, value );
@@ -96,11 +96,8 @@ static KIID_PATH makeDataStoreKey( const SCH_SHEET_PATH& aSheetPath, const SCH_S
 }
 
 
-const wxString FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE = wxS( "${QUANTITY}" );
-const wxString FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE = wxS( "${ITEM_NUMBER}" );
-
-
-void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const wxString& aLabel,
+                                                      bool aAddedByUser )
 {
     // Don't add a field twice
     if( GetFieldNameCol( aFieldName ) != -1 )
@@ -113,8 +110,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef,
-                                                                const wxString&      aFieldName )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef,
+                                                                       const wxString&      aFieldName )
 {
     const SCH_SYMBOL* symbol = aSymbolRef.GetSymbol();
 
@@ -153,7 +150,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_REFERE
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
 {
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
@@ -174,12 +171,12 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& newName )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& newName )
 {
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
         SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol();
-        KIID_PATH key = makeDataStoreKey( m_symbolsList[i].GetSheetPath(), *symbol );
+        KIID_PATH   key = makeDataStoreKey( m_symbolsList[i].GetSheetPath(), *symbol );
 
         // Careful; field may have already been renamed from another sheet instance
         if( auto node = m_dataStore[key].extract( m_cols[aCol].m_fieldName ) )
@@ -194,65 +191,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& newN
 }
 
 
-int FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( const wxString& aFieldName ) const
-{
-    for( size_t i = 0; i < m_cols.size(); i++ )
-    {
-        if( FieldNamesAreDuplicates( m_cols[i].m_fieldName, aFieldName ) )
-            return static_cast<int>( i );
-    }
-
-    return -1;
-}
-
-
-std::vector<BOM_FIELD> FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldsOrdered()
-{
-    std::vector<BOM_FIELD> fields;
-
-    for( const DATA_MODEL_COL& col : m_cols )
-        fields.push_back( { col.m_fieldName, col.m_label, col.m_show, col.m_group } );
-
-    return fields;
-}
-
-
-void FIELDS_EDITOR_GRID_DATA_MODEL::SetFieldsOrder( const std::vector<wxString>& aNewOrder )
-{
-    size_t foundCount = 0;
-
-    for( const wxString& newField : aNewOrder )
-    {
-        if( foundCount >= m_cols.size() )
-            break;
-
-        for( DATA_MODEL_COL& col : m_cols )
-        {
-            if( col.m_fieldName == newField )
-            {
-                std::swap( m_cols[foundCount], col );
-                foundCount++;
-                break;
-            }
-        }
-    }
-}
-
-
-bool FIELDS_EDITOR_GRID_DATA_MODEL::IsExpanderColumn( int aCol ) const
-{
-    // Check if aCol is the first visible column
-    for( int col = 0; col < aCol; ++col )
-    {
-        if( m_cols[col].m_show )
-            return false;
-    }
-
-    return true;
-}
-
-
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 {
     GetView()->SetReadOnly( aRow, aCol,
                             IsExpanderColumn( aCol ) || rowAttributeInheritedFromSheet( m_rows[aRow], aCol ) );
@@ -260,13 +199,13 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetResolvedValue( int aRow, int aCol )
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetResolvedValue( int aRow, int aCol )
 {
     return GetValue( m_rows[aRow], aCol, wxT( ", " ), wxT( "-" ), true, false );
 }
 
 
-wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
+wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
     wxGridCellAttr* attr = nullptr;
     bool            needsUrlEditor = false;
@@ -276,7 +215,7 @@ wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGr
 
     // Check if we need URL editor
     if( GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET )
-            || IsURL( GetValue( m_rows[aRow], aCol ) ) )
+        || IsURL( GetValue( m_rows[aRow], aCol ) ) )
     {
         if( m_urlEditor )
             needsUrlEditor = true;
@@ -293,15 +232,15 @@ wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGr
     }
 
     // Check if we need variant highlighting
-    if( !m_currentVariant.IsEmpty() && aRow >= 0 && aRow < (int) m_rows.size()
-            && aCol >= 0 && aCol < (int) m_cols.size() )
+    if( !m_currentVariant.IsEmpty() && aRow >= 0 && aRow < (int) m_rows.size() && aCol >= 0
+        && aCol < (int) m_cols.size() )
     {
         const wxString& fieldName = m_cols[aCol].m_fieldName;
 
         // Skip Reference and generated fields (like ${QUANTITY}) for highlighting
         if( !ColIsReference( aCol ) && !ColIsQuantity( aCol ) && !ColIsItemNumber( aCol ) )
         {
-            const DATA_MODEL_ROW& row = m_rows[aRow];
+            const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row = m_rows[aRow];
 
             // Check if any symbol in this row has a variant-specific value
             for( const SCH_REFERENCE& ref : row.m_Refs )
@@ -421,11 +360,10 @@ wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGr
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, int aCol,
-                                                  const wxString& refDelimiter,
-                                                  const wxString& refRangeDelimiter,
-                                                  bool            resolveVars,
-                                                  bool            listMixedValues )
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& group, int aCol,
+                                                         const wxString& refDelimiter,
+                                                         const wxString& refRangeDelimiter, bool resolveVars,
+                                                         bool listMixedValues )
 {
     std::vector<SCH_REFERENCE> references;
     std::set<wxString>         mixedValues;
@@ -468,7 +406,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
                         return ref.GetSymbol()->ResolveTextVar( &ref.GetSheetPath(), token, m_currentVariant );
                     };
 
-                    refFieldValue = ExpandTextVars( refFieldValue, & symbolResolver );
+                    refFieldValue = ExpandTextVars( refFieldValue, &symbolResolver );
                 }
             }
 
@@ -534,7 +472,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const DATA_MODEL_ROW& group, i
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aValue )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aValue )
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), wxS( "Invalid column number" ) );
 
@@ -548,8 +486,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
     if( aValue == INDETERMINATE_STATE )
         return;
 
-    const DATA_MODEL_ROW& rowGroup = m_rows[aRow];
-    const wxString&       fieldName = m_cols[aCol].m_fieldName;
+    const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rowGroup = m_rows[aRow];
+    const wxString&                           fieldName = m_cols[aCol].m_fieldName;
 
     std::set<const SCH_SYMBOL*> editedSymbols;
 
@@ -581,45 +519,24 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsReference( int aCol )
-{
-    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::REFERENCE );
-}
-
-
-bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::VALUE );
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsQuantity( int aCol )
-{
-    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return m_cols[aCol].m_fieldName == QUANTITY_VARIABLE;
-}
-
-
-bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemNumber( int aCol )
-{
-    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return m_cols[aCol].m_fieldName == ITEM_NUMBER_VARIABLE;
-}
-
-
-bool FIELDS_EDITOR_GRID_DATA_MODEL::ColIsAttribute( int aCol )
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsAttribute( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
     return isAttribute( m_cols[aCol].m_fieldName );
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const DATA_MODEL_ROW&          lhGroup,
-                                         const DATA_MODEL_ROW&          rhGroup,
-                                         FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol,
-                                         bool ascending )
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhGroup,
+                                                const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhGroup,
+                                                SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol,
+                                                bool ascending )
 {
     // Empty rows always go to the bottom, whether ascending or descending
     if( lhGroup.m_Refs.size() == 0 )
@@ -658,13 +575,13 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const DATA_MODEL_ROW&          lhGroup,
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
 {
     CollapseForSort();
 
     // We're going to sort the rows based on their first reference, so the first reference
     // had better be the lowest one.
-    for( DATA_MODEL_ROW& row : m_rows )
+    for( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row : m_rows )
     {
         std::sort( row.m_Refs.begin(), row.m_Refs.end(),
                    []( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs )
@@ -676,7 +593,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
     }
 
     std::sort( m_rows.begin(), m_rows.end(),
-               [this]( const DATA_MODEL_ROW& lhs, const DATA_MODEL_ROW& rhs ) -> bool
+               [this]( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhs, const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhs ) -> bool
                {
                    return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
                } );
@@ -684,7 +601,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
     // Time to renumber the item numbers
     int itemNumber = 1;
 
-    for( DATA_MODEL_ROW& row : m_rows )
+    for( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row : m_rows )
     {
         row.m_ItemNumber = itemNumber++;
     }
@@ -693,7 +610,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
 {
     // If items are unannotated then we can't tell if they're units of the same symbol or not
     if( lhRef.GetRefNumber() == wxT( "?" ) )
@@ -703,7 +620,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhRef, const
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
 {
     int  refCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
     bool matchFound = false;
@@ -770,8 +687,8 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef, cons
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& aRef,
-                                                           const wxString&      aFieldName )
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& aRef,
+                                                                  const wxString&      aFieldName )
 {
     SCH_FIELD* field = aRef.GetSymbol()->GetField( aFieldName );
 
@@ -802,7 +719,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& 
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::isAttribute( const wxString& aFieldName )
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::isAttribute( const wxString& aFieldName )
 {
     return aFieldName == wxS( "${DNP}" ) || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) || aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" )
@@ -810,7 +727,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::isAttribute( const wxString& aFieldName )
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::storageIsSharedAcrossPaths( const wxString& aFieldName ) const
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::storageIsSharedAcrossPaths( const wxString& aFieldName ) const
 {
     // Variant edits are kept on the symbol instance, but SCH_REFERENCE has no variant form of
     // the board exclusion so that one always lands on the symbol
@@ -821,8 +738,9 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::storageIsSharedAcrossPaths( const wxString& 
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName,
-                                                           const wxString& aVariantName )
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFERENCE& aRef,
+                                                                  const wxString&      aAttributeName,
+                                                                  const wxString&      aVariantName )
 {
     if( aAttributeName == wxS( "${DNP}" ) )
         return aRef.GetSymbolDNP( aVariantName ) ? wxS( "1" ) : wxS( "0" );
@@ -843,8 +761,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFERENCE& 
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::attributeInheritedFromSheet( const SCH_REFERENCE& aRef,
-                                                                 const wxString&      aAttributeName ) const
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::attributeInheritedFromSheet( const SCH_REFERENCE& aRef,
+                                                                        const wxString&      aAttributeName ) const
 {
     const SCH_SHEET_PATH& path = aRef.GetSheetPath();
 
@@ -861,7 +779,8 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::attributeInheritedFromSheet( const SCH_REFER
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::rowAttributeInheritedFromSheet( const DATA_MODEL_ROW& aGroup, int aCol )
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::rowAttributeInheritedFromSheet(
+        const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aGroup, int aCol )
 {
     if( !ColIsAttribute( aCol ) || aGroup.m_Refs.empty() )
         return false;
@@ -878,8 +797,8 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::rowAttributeInheritedFromSheet( const DATA_M
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::getDefaultFieldValue( const SCH_REFERENCE& aRef,
-                                                               const wxString& aFieldName )
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getDefaultFieldValue( const SCH_REFERENCE& aRef,
+                                                                     const wxString&      aFieldName )
 {
     const SCH_SYMBOL* symbol = aRef.GetSymbol();
 
@@ -897,8 +816,8 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getDefaultFieldValue( const SCH_REFERENC
             return wxEmptyString;
 
         // Get the field text with empty variant name (default value)
-        wxString value = symbol->Schematic()->ConvertKIIDsToRefs(
-                field->GetText( &aRef.GetSheetPath(), wxEmptyString ) );
+        wxString value =
+                symbol->Schematic()->ConvertKIIDsToRefs( field->GetText( &aRef.GetSheetPath(), wxEmptyString ) );
         return value;
     }
 
@@ -910,7 +829,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::getDefaultFieldValue( const SCH_REFERENC
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_REFERENCE&  aRef,
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_REFERENCE&  aRef,
                                                        const wxString& aAttributeName,
                                                        const wxString& aValue,
                                                        const wxString& aVariantName )
@@ -958,19 +877,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::setAttributeValue( SCH_REFERENCE&  aRef,
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::EnableRebuilds()
-{
-    m_rebuildsEnabled = true;
-}
-
-
-void FIELDS_EDITOR_GRID_DATA_MODEL::DisableRebuilds()
-{
-    m_rebuildsEnabled = false;
-}
-
-
-void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
 {
     if( !m_rebuildsEnabled )
         return;
@@ -1062,12 +969,12 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         // Performance optimization for ungrouped case to skip the N^2 for loop
         if( !m_groupingEnabled && !ref.IsMultiUnit() )
         {
-            m_rows.emplace_back( DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
+            m_rows.emplace_back( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
             continue;
         }
 
         // See if we already have a row which this symbol fits into
-        for( DATA_MODEL_ROW& row : m_rows )
+        for( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row : m_rows )
         {
             // all group members must have identical refs so just use the first one
             SCH_REFERENCE rowRef = row.m_Refs[0];
@@ -1088,7 +995,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         }
 
         if( !matchFound )
-            m_rows.emplace_back( DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
+            m_rows.emplace_back( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
     }
 
     if( GetView() )
@@ -1101,16 +1008,16 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
 {
-    std::vector<DATA_MODEL_ROW> children;
+    std::vector<SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW> children;
 
     for( SCH_REFERENCE& ref : m_rows[aRow].m_Refs )
     {
         bool matchFound = false;
 
         // See if we already have a child group which this symbol fits into
-        for( DATA_MODEL_ROW& child : children )
+        for( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& child : children )
         {
             // group members are by definition all matching, so just check
             // against the first member
@@ -1123,14 +1030,15 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
         }
 
         if( !matchFound )
-            children.emplace_back( DATA_MODEL_ROW( ref, CHILD_ITEM ) );
+            children.emplace_back( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( ref, CHILD_ITEM ) );
     }
 
     if( children.size() < 2 )
         return;
 
     std::sort( children.begin(), children.end(),
-               [this]( const DATA_MODEL_ROW& lhs, const DATA_MODEL_ROW& rhs ) -> bool
+               [this]( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhs,
+                       const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhs ) -> bool
                {
                    return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
                } );
@@ -1143,7 +1051,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::CollapseRow( int aRow )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::CollapseRow( int aRow )
 {
     auto firstChild = m_rows.begin() + aRow + 1;
     auto afterLastChild = firstChild;
@@ -1163,9 +1071,9 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::CollapseRow( int aRow )
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandCollapseRow( int aRow )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandCollapseRow( int aRow )
 {
-    DATA_MODEL_ROW& group = m_rows[aRow];
+    SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& group = m_rows[aRow];
 
     if( group.m_Flag == GROUP_COLLAPSED )
         ExpandRow( aRow );
@@ -1174,7 +1082,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandCollapseRow( int aRow )
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::CollapseForSort()
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::CollapseForSort()
 {
     for( size_t i = 0; i < m_rows.size(); ++i )
     {
@@ -1187,7 +1095,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::CollapseForSort()
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 {
     for( size_t i = 0; i < m_rows.size(); ++i )
     {
@@ -1197,10 +1105,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames,
-                                               const wxString& aVariantName )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames,
+                                                      const wxString& aVariantName )
 {
-    bool symbolModified = false;
+    bool                        symbolModified = false;
     std::unique_ptr<SCH_SYMBOL> symbolCopy;
 
     for( size_t i = 0; i < m_symbolsList.GetCount(); i++ )
@@ -1214,7 +1122,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
         if( i == 0 )
             symbolCopy = std::make_unique<SCH_SYMBOL>( *symbol );
 
-        KIID_PATH key = makeDataStoreKey( m_symbolsList[i].GetSheetPath(), *symbol );
+        KIID_PATH                           key = makeDataStoreKey( m_symbolsList[i].GetSheetPath(), *symbol );
         const std::map<wxString, wxString>& fieldStore = m_dataStore[key];
 
         for( const auto& [srcName, srcValue] : fieldStore )
@@ -1316,7 +1224,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
 }
 
 
-int FIELDS_EDITOR_GRID_DATA_MODEL::GetDataWidth( int aCol )
+int SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetDataWidth( int aCol )
 {
     int width = 0;
 
@@ -1343,166 +1251,7 @@ int FIELDS_EDITOR_GRID_DATA_MODEL::GetDataWidth( int aCol )
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
-{
-    // Hide and un-group everything by default
-    for( size_t i = 0; i < m_cols.size(); i++ )
-    {
-        SetShowColumn( i, false );
-        SetGroupColumn( i, false );
-    }
-
-    std::set<wxString> seen;
-    std::vector<wxString> order;
-
-    // Set columns that are present and shown
-    for( const BOM_FIELD& field : aPreset.fieldsOrdered )
-    {
-        // Ignore empty fields
-        if( !field.name || seen.count( field.name ) )
-            continue;
-
-        seen.insert( field.name );
-        order.emplace_back( field.name );
-
-        int col = GetFieldNameCol( field.name );
-
-        // Add any missing fields, if the user doesn't add any data
-        // they won't be saved to the symbols anyway
-        if( col == -1 )
-        {
-            AddColumn( field.name, field.label, true );
-            col = GetFieldNameCol( field.name );
-        }
-        else
-        {
-            SetColLabelValue( col, field.label );
-        }
-
-        SetGroupColumn( col, field.groupBy );
-        SetShowColumn( col, field.show );
-    }
-
-    // Set grouping columns
-    SetGroupingEnabled( aPreset.groupSymbols );
-
-    SetFieldsOrder( order );
-
-    // Set our sorting
-    int sortCol = GetFieldNameCol( aPreset.sortField );
-
-    if( sortCol == -1 )
-        sortCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
-
-    SetSorting( sortCol, aPreset.sortAsc );
-
-    SetFilter( aPreset.filterString );
-    SetExcludeDNP( aPreset.excludeDNP );
-    SetIncludeExcludedFromBOM( aPreset.includeExcludedFromBOM );
-
-    RebuildRows();
-}
-
-
-BOM_PRESET FIELDS_EDITOR_GRID_DATA_MODEL::GetBomSettings()
-{
-    BOM_PRESET current;
-    current.readOnly = false;
-    current.fieldsOrdered = GetFieldsOrdered();
-
-    if( GetSortCol() >= 0 && GetSortCol() < GetNumberCols() )
-        current.sortField = GetColFieldName( GetSortCol() );
-
-    current.sortAsc = GetSortAsc();
-    current.filterString = GetFilter();
-    current.groupSymbols = GetGroupingEnabled();
-    current.excludeDNP = GetExcludeDNP();
-    current.includeExcludedFromBOM = GetIncludeExcludedFromBOM();
-
-    return current;
-}
-
-
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::Export( const BOM_FMT_PRESET& settings )
-{
-    wxString out;
-
-    if( m_cols.empty() )
-        return out;
-
-    int last_col = -1;
-
-    // Find the location for the line terminator
-    for( size_t col = 0; col < m_cols.size(); col++ )
-    {
-        if( m_cols[col].m_show )
-            last_col = static_cast<int>( col );
-    }
-
-    // No shown columns
-    if( last_col == -1 )
-        return out;
-
-    if( settings.includeByteOrderMark )
-        out.Append( wxString::FromUTF8( "\xEF\xBB\xBF" ) );
-
-    auto formatField =
-            [&]( wxString field, bool last ) -> wxString
-            {
-                if( !settings.keepLineBreaks )
-                {
-                    field.Replace( wxS( "\r" ), wxS( "" ) );
-                    field.Replace( wxS( "\n" ), wxS( "" ) );
-                }
-
-                if( !settings.keepTabs )
-                {
-                    field.Replace( wxS( "\t" ), wxS( "" ) );
-                }
-
-                if( !settings.stringDelimiter.IsEmpty() )
-                {
-                    field.Replace( settings.stringDelimiter,
-                                   settings.stringDelimiter + settings.stringDelimiter );
-                }
-
-                return settings.stringDelimiter + field + settings.stringDelimiter
-                       + ( last ? wxString( wxS( "\n" ) ) : settings.fieldDelimiter );
-            };
-
-    // Column names
-    for( size_t col = 0; col < m_cols.size(); col++ )
-    {
-        if( !m_cols[col].m_show )
-            continue;
-
-        out.Append( formatField( m_cols[col].m_label, col == static_cast<size_t>( last_col ) ) );
-    }
-
-    // Data rows
-    for( size_t row = 0; row < m_rows.size(); row++ )
-    {
-        // Don't output child rows
-        if( GetRowFlags( static_cast<int>( row ) ) == CHILD_ITEM )
-            continue;
-
-        for( size_t col = 0; col < m_cols.size(); col++ )
-        {
-            if( !m_cols[col].m_show )
-                continue;
-
-            // Get the unannotated version of the field, e.g. no ">   " or "v   " by
-            out.Append( formatField( GetExportValue( static_cast<int>( row ), static_cast<int>( col ),
-                                                     settings.refDelimiter, settings.refRangeDelimiter ),
-                                     col == static_cast<size_t>( last_col ) ) );
-        }
-    }
-
-    return out;
-}
-
-
-void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRefs )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRefs )
 {
     bool refListChanged = false;
 
@@ -1540,7 +1289,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRe
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveSymbol( const SCH_SYMBOL& aSymbol )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RemoveSymbol( const SCH_SYMBOL& aSymbol )
 {
     // The schematic event listener passes us the symbol after it has been removed,
     // so we can't just work with a SCH_REFERENCE_LIST like the other handlers as the
@@ -1548,12 +1297,12 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveSymbol( const SCH_SYMBOL& aSymbol )
 
     // Since we now use full KIID_PATH as keys, we need to find and remove all entries
     // that correspond to this symbol (their keys end with the symbol's UUID)
-    KIID symbolUuid = aSymbol.m_Uuid;
+    KIID                   symbolUuid = aSymbol.m_Uuid;
     std::vector<KIID_PATH> keysToRemove;
 
     for( const auto& [key, value] : m_dataStore )
     {
-        if( !key.empty() && ( key.back() ==  symbolUuid ) )
+        if( !key.empty() && ( key.back() == symbolUuid ) )
             keysToRemove.push_back( key );
     }
 
@@ -1570,7 +1319,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveSymbol( const SCH_SYMBOL& aSymbol )
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveReferences( const SCH_REFERENCE_LIST& aRefs )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RemoveReferences( const SCH_REFERENCE_LIST& aRefs )
 {
     for( const SCH_REFERENCE& ref : aRefs )
     {
@@ -1586,7 +1335,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RemoveReferences( const SCH_REFERENCE_LIST& 
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& aRefs )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& aRefs )
 {
     bool refListChanged = false;
 
@@ -1614,7 +1363,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& 
 }
 
 
-wxString FIELDS_EDITOR_GRID_DATA_MODEL::SerializeUndoState() const
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SerializeUndoState() const
 {
     // Serialize the un-applied edit store keyed by symbol identity (sheet path + UUID), so that
     // restoring it is independent of the current row grouping/order.
@@ -1634,7 +1383,7 @@ wxString FIELDS_EDITOR_GRID_DATA_MODEL::SerializeUndoState() const
 }
 
 
-void FIELDS_EDITOR_GRID_DATA_MODEL::RestoreUndoState( const wxString& aState )
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RestoreUndoState( const wxString& aState )
 {
     nlohmann::json j = nlohmann::json::parse( aState.ToStdString(), nullptr, false );
 
@@ -1659,14 +1408,14 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RestoreUndoState( const wxString& aState )
 }
 
 
-bool FIELDS_EDITOR_GRID_DATA_MODEL::DeleteRows( size_t aPosition, size_t aNumRows )
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::DeleteRows( size_t aPosition, size_t aNumRows )
 {
     size_t curNumRows = m_rows.size();
 
     if( aPosition >= curNumRows )
     {
-       wxFAIL_MSG( wxString::Format( wxT( "Called FIELDS_EDITOR_GRID_DATA_MODEL::DeleteRows(aPosition=%lu, "
-                                          "aNumRows=%lu)\nPosition value is invalid for present table with %lu rows" ),
+        wxFAIL_MSG( wxString::Format( wxT( "Called SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::DeleteRows(aPosition=%lu, "
+                                           "aNumRows=%lu)\nPosition value is invalid for present table with %lu rows" ),
                                       (unsigned long) aPosition, (unsigned long) aNumRows,
                                       (unsigned long) curNumRows ) );
 
@@ -1685,7 +1434,7 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::DeleteRows( size_t aPosition, size_t aNumRow
     }
     else
     {
-        const auto first = m_rows.begin() + aPosition;
+        const auto                 first = m_rows.begin() + aPosition;
         std::vector<SCH_REFERENCE> dataMapRefs = first->m_Refs;
         m_rows.erase( first, first + aNumRows );
 

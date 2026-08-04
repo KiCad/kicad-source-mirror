@@ -51,7 +51,7 @@
 #include <dialogs/eda_view_switcher.h>
 #include "dialog_symbol_fields_table.h"
 #include "dialog_resolve_field_case_conflicts.h"
-#include <fields_data_model.h>
+#include <symbol_fields_data_model.h>
 #include <project_sch.h>
 #include <jobs/job_export_bom.h>
 #include <tools/sch_actions.h>
@@ -66,7 +66,7 @@ wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 #define COLUMN_MARGIN 15
 #endif
 
-using SCOPE = FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
+using SCOPE = SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
 
 
 enum
@@ -99,8 +99,8 @@ class FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
 public:
     FIELDS_EDITOR_GRID_TRICKS( DIALOG_SYMBOL_FIELDS_TABLE* aParent, WX_GRID* aGrid,
-                               VIEW_CONTROLS_GRID_DATA_MODEL* aViewFieldsData,
-                               FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel, EMBEDDED_FILES* aFiles ) :
+                               VIEW_CONTROLS_GRID_DATA_MODEL*        aViewFieldsData,
+                               SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel, EMBEDDED_FILES* aFiles ) :
             GRID_TRICKS( aGrid ),
             m_dlg( aParent ),
             m_viewControlsDataModel( aViewFieldsData ),
@@ -225,10 +225,10 @@ protected:
     }
 
 private:
-    DIALOG_SYMBOL_FIELDS_TABLE*    m_dlg;
-    VIEW_CONTROLS_GRID_DATA_MODEL* m_viewControlsDataModel;
-    FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
-    EMBEDDED_FILES*                m_files;
+    DIALOG_SYMBOL_FIELDS_TABLE*           m_dlg;
+    VIEW_CONTROLS_GRID_DATA_MODEL*        m_viewControlsDataModel;
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
+    EMBEDDED_FILES*                       m_files;
 };
 
 
@@ -309,7 +309,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ), { &m_parent->Schematic() } ) );
-    m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList, attr );
+    m_dataModel = new SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList, attr );
 
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
@@ -792,8 +792,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     addMandatoryField( FIELD_T::DESCRIPTION, false,  false  );
 
     // Generated fields present only in the fields table
-    AddField( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE, _( "Qty" ), true, false );
-    AddField( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE, _( "#" ), true, false );
+    AddField( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE, _( "Qty" ), true, false );
+    AddField( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE, _( "#" ), true, false );
 
     // User field names are stored and matched case-sensitively (see issue #24021), so each
     // distinct name gets its own column rather than collapsing case variants together.
@@ -1935,7 +1935,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchSheetChanged( SCHEMATIC& aSch )
 {
     m_dataModel->SetPath( aSch.CurrentSheet() );
 
-    if( m_dataModel->GetScope() != FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_ALL )
+    if( m_dataModel->GetScope() != SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_ALL )
     {
         std::set<wxString> savedSelection = SaveGridSelection();
 

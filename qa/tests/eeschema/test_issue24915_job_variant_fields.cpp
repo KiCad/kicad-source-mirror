@@ -34,7 +34,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <eeschema_helpers.h>
-#include <fields_data_model.h>
+#include <symbol_fields_data_model.h>
 #include <locale_io.h>
 #include <sch_reference_list.h>
 #include <sch_sheet_path.h>
@@ -71,23 +71,25 @@ struct ISSUE24915_FIXTURE
         return m_refs[0];
     }
 
-    wxString ModelValue( FIELDS_EDITOR_GRID_DATA_MODEL& aModel, const wxString& aRef, const wxString& aField ) const
+    wxString ModelValue( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL& aModel, const wxString& aRef,
+                         const wxString& aField ) const
     {
         int col = aModel.GetFieldNameCol( aField );
         BOOST_REQUIRE( col >= 0 );
 
-        DATA_MODEL_ROW group( FindRef( aRef ), GROUP_SINGLETON );
+        SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW group( FindRef( aRef ), GROUP_SINGLETON );
         return aModel.GetValue( group, col );
     }
 
     // The export preview path, generated fields are re-resolved live instead of read
     // from the data store.
-    wxString ExportValue( FIELDS_EDITOR_GRID_DATA_MODEL& aModel, const wxString& aRef, const wxString& aField ) const
+    wxString ExportValue( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL& aModel, const wxString& aRef,
+                          const wxString& aField ) const
     {
         int col = aModel.GetFieldNameCol( aField );
         BOOST_REQUIRE( col >= 0 );
 
-        DATA_MODEL_ROW group( FindRef( aRef ), GROUP_SINGLETON );
+        SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW group( FindRef( aRef ), GROUP_SINGLETON );
         return aModel.GetValue( group, col, wxS( ", " ), wxS( "-" ), true, false );
     }
 
@@ -107,7 +109,7 @@ BOOST_FIXTURE_TEST_CASE( JobVariantDrivesFieldsDataStore, ISSUE24915_FIXTURE )
     // while the reopened job carries its own saved variant.
     m_schematic->SetCurrentVariant( wxEmptyString );
 
-    FIELDS_EDITOR_GRID_DATA_MODEL jobModel( m_refs, nullptr );
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL jobModel( m_refs, nullptr );
     jobModel.SetCurrentVariant( wxS( "H0" ) );
     jobModel.AddColumn( wxS( "Value" ), wxS( "Value" ), false );
     jobModel.AddColumn( wxS( "${DNP}" ), wxS( "DNP" ), false );
@@ -132,7 +134,7 @@ BOOST_FIXTURE_TEST_CASE( SchematicVariantDoesNotLeakIntoDataStore, ISSUE24915_FI
     // schematic, a store populated for the default variant must show base values.
     m_schematic->SetCurrentVariant( wxS( "H0" ) );
 
-    FIELDS_EDITOR_GRID_DATA_MODEL baseModel( m_refs, nullptr );
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL baseModel( m_refs, nullptr );
     baseModel.AddColumn( wxS( "Value" ), wxS( "Value" ), false );
     baseModel.AddColumn( wxS( "${DNP}" ), wxS( "DNP" ), false );
 

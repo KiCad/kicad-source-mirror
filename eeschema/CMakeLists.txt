@@ -419,7 +419,7 @@ set( EESCHEMA_SRCS
     eeschema_helpers.cpp
     eeschema_jobs_handler.cpp
     eeschema_settings.cpp
-    fields_data_model.cpp
+    symbol_fields_data_model.cpp
     fields_grid_table.cpp
     files-io.cpp
     generate_alias_info.cpp

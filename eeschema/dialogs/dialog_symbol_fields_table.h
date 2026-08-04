@@ -26,7 +26,7 @@
 #include <fields_view_controls_grid_data_model.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
-#include <fields_data_model.h>
+#include <symbol_fields_data_model.h>
 
 wxDECLARE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
 
@@ -51,7 +51,7 @@ private:
     void SetupAllColumnProperties();
     void AddField( const wxString& displayName, const wxString& aCanonicalName, bool show,
                    bool groupBy, bool addedByUser = false );
-    void setScope( FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
+    void setScope( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
 
     /**
      * Construct the rows of m_fieldsCtrl and the columns of m_dataModel from a union of all
@@ -140,7 +140,7 @@ private:
     VIEW_CONTROLS_GRID_DATA_MODEL*     m_viewControlsDataModel = nullptr;
 
     SCH_REFERENCE_LIST                 m_symbolsList;
-    FIELDS_EDITOR_GRID_DATA_MODEL*     m_dataModel = nullptr;
+    SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel = nullptr;
 
     SCHEMATIC_SETTINGS&                m_schSettings;
 

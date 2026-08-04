@@ -19,7 +19,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <fields_data_model.h>
+#include <symbol_fields_data_model.h>
 #include <sch_field.h>
 #include <sch_reference_list.h>
 #include <sch_sheet_path.h>
