@@ -1619,6 +1619,14 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
     }
 
     aPin->SetNumber( wxString::Format( wxS( "%d" ), aIndex + 1 ) );
+
+    // Prefer LTspice SpiceOrder for pin numbers
+    wxString spiceOrder = lt_pin.PinAttribute[ wxS( "SpiceOrder" ) ];
+    long     spiceOrderNum = 0;
+
+    if( spiceOrder.ToLong( &spiceOrderNum ) && spiceOrderNum > 0 )
+        aPin->SetNumber( wxString::Format( wxS( "%ld" ), spiceOrderNum ) );
+
     aPin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
     aPin->SetPosition( ToKicadCoords( lt_pin.PinLocation ) );
     aPin->SetLength( 5 );
