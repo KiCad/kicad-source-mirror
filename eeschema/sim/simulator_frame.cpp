@@ -893,6 +893,9 @@ wxString SIMULATOR_FRAME::TakeSimReportMessages()
 
 void SIMULATOR_FRAME::onSimFinished( wxCommandEvent& aEvent )
 {
+    if( IsClosing() )
+        return;
+
     // Sometimes (for instance with a directive like wrdata my_file.csv "my_signal")
     // the simulator is in idle state (simulation is finished), but still running, during
     // the time the file is written. So gives a slice of time to fully finish the work:
