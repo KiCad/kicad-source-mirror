@@ -2241,7 +2241,8 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( int tmp2 = ( *aIt )->compare( *( *bIt ), aCompareFlags ) )
             {
                 retv = tmp2;
-                REPORT( wxString::Format( _( "Graphic item differs: %s; %s." ), ITEM_DESC( *aIt ),
+                REPORT( wxString::Format( _( "Graphic item differs: %s; %s." ),
+                                          ITEM_DESC( *aIt ),
                                           ITEM_DESC( *bIt ) ) );
 
                 if( !aReporter )
@@ -2265,7 +2266,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         else if( int tmp = aPin->SCH_ITEM::compare( *bPin, aCompareFlags ) )
         {
             retv = tmp;
-            REPORT( wxString::Format( _( "Pin %s differs: %s; %s" ), aPin->GetNumber(), ITEM_DESC( aPin ),
+            REPORT( wxString::Format( _( "Pin %s differs: %s; %s" ),
+                                      aPin->GetNumber(),
+                                      ITEM_DESC( aPin ),
                                       ITEM_DESC( bPin ) ) );
 
             if( !aReporter )
@@ -2332,8 +2335,10 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( tmp != 0 )
             {
                 retv = tmp;
-                REPORT( wxString::Format( _( "Field '%s' differs: %s; %s." ), aField->GetName( false ),
-                                          ITEM_DESC( aField ), ITEM_DESC( bField ) ) );
+                REPORT( wxString::Format( _( "Field '%s' differs: %s; %s." ),
+                                          aField->GetName( false ),
+                                          ITEM_DESC( aField ),
+                                          ITEM_DESC( bField ) ) );
 
                 if( !aReporter )
                     return retv;
@@ -2661,15 +2666,13 @@ std::set<KIFONT::OUTLINE_FONT*> LIB_SYMBOL::GetFonts() const
         {
             const SCH_TEXT& text = static_cast<const SCH_TEXT&>( item );
 
-            if( auto* font = text.GetFont(); font && !font->IsStroke() )
+            if( KIFONT::FONT* font = text.GetFont(); font && !font->IsStroke() )
             {
-                auto* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
-                auto  permission = outline->GetEmbeddingPermission();
+                KIFONT::OUTLINE_FONT*                      outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
+                KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION permission = outline->GetEmbeddingPermission();
 
                 if( permission == EMBEDDING_PERMISSION::EDITABLE || permission == EMBEDDING_PERMISSION::INSTALLABLE )
-                {
                     fonts.insert( outline );
-                }
             }
         }
     }
