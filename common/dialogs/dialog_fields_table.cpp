@@ -29,6 +29,8 @@
 #include <widgets/std_bitmap_button.h>
 #include <widgets/ui_common.h>
 #include <wx/filename.h>
+#include <wx/msgdlg.h>
+#include <wx/textdlg.h>
 
 #ifdef __WXMAC__
 #define COLUMN_MARGIN 4
