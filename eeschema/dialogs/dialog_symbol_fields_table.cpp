@@ -636,6 +636,9 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
     ApplyBomFmtPreset( fmtPreset );
     syncBomFmtPresetSelection();
 
+    if( !m_job )
+        m_outputFileName->SetValue( m_parent->Schematic().Settings().m_BomExportFileName );
+
     TOOL_MANAGER*       toolMgr = m_parent->GetToolManager();
     SCH_SELECTION_TOOL* selectionTool = toolMgr->GetTool<SCH_SELECTION_TOOL>();
     SCH_SELECTION&      selection = selectionTool->GetSelection();

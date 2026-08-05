@@ -1523,6 +1523,13 @@ void SCH_EDIT_FRAME::ProjectChanged()
 {
     SCH_BASE_FRAME::ProjectChanged();
 
+    // Drop the symbol fields table so export paths re-bind to the new project (#22395).
+    if( m_symbolFieldsTableDialog )
+    {
+        m_symbolFieldsTableDialog->Destroy();
+        m_symbolFieldsTableDialog = nullptr;
+    }
+
     // Register schematic saver for autosave history
     Kiway().LocalHistory().RegisterSaver( m_schematic,
             [this]( const wxString& aProjectPath, std::vector<HISTORY_FILE_DATA>& aFileData )
