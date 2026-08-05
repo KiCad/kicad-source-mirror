@@ -858,21 +858,23 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, const std
         }
     }
 
-    auto doTestHole = [&]( BOARD_ITEM* item, const std::shared_ptr<SHAPE>& shape, BOARD_ITEM* otherItem,
-                           const std::shared_ptr<SHAPE_SEGMENT>& aOtherShape, int aClearance )
-    {
-        if( shape->Collide( aOtherShape.get(), sub_e( aClearance ), &actual, &pos ) )
-        {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
-            drcItem->SetErrorDetail(
-                    formatMsg( _( "(%s clearance %s; actual %s)" ), constraint.GetName(), aClearance, actual ) );
-            drcItem->SetItems( item, otherItem );
-            drcItem->SetViolatingRule( constraint.GetParentRule() );
-            reportTwoShapeGeometry( drcItem, pos, shape.get(), aOtherShape.get(), aLayer, actual );
-            has_error = true;
-            testHoles = false; // No need for multiple violations
-        }
-    };
+    auto doTestHole =
+            [&]( BOARD_ITEM* item, const std::shared_ptr<SHAPE>& shape, BOARD_ITEM* otherItem,
+                 const std::shared_ptr<SHAPE_SEGMENT>& aOtherShape, int aClearance )
+            {
+                if( shape->Collide( aOtherShape.get(), sub_e( aClearance ), &actual, &pos ) )
+                {
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_CLEARANCE );
+                    drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
+                                             constraint.GetName(),
+                                             aClearance, actual ) );
+                    drcItem->SetItems( item, otherItem );
+                    drcItem->SetViolatingRule( constraint.GetParentRule() );
+                    reportTwoShapeGeometry( drcItem, pos, shape.get(), aOtherShape.get(), aLayer, actual );
+                    has_error = true;
+                    testHoles = false; // No need for multiple violations
+                }
+            };
 
     if( testHoles )
     {
