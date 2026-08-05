@@ -155,8 +155,6 @@ private:
     bool                         m_inRouterTool;         // Re-entrancy guard
     bool                         m_inRouteSelected;
 
-    bool                         m_startWithVia;         // User pressed V before routing started
-
     // A staggered via stack queued mid-route, committed after the PNS world is torn down.
     bool         m_pendingViaStack = false;
     VECTOR2I     m_pendingStackHead;

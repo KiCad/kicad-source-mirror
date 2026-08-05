@@ -29,7 +29,6 @@
 
 #include <functional>
 #include <iomanip>
-#include <utility>
 #include <sstream>
 
 using namespace std::placeholders;
@@ -369,8 +368,7 @@ ROUTER_TOOL::ROUTER_TOOL() :
         m_originalActiveLayer( UNDEFINED_LAYER ),
         m_viaStackResumeLayer( UNDEFINED_LAYER ),
         m_inRouterTool( false ),
-        m_inRouteSelected( false ),
-        m_startWithVia( false )
+        m_inRouteSelected( false )
 {
 }
 
@@ -1880,8 +1878,6 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
 {
     m_router->ClearViewDecorations();
 
-    bool startWithVia = std::exchange( m_startWithVia, false );
-
     if( !prepareInteractive( aStartPosition ) )
         return;
 
@@ -1909,16 +1905,6 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
 
     // Set initial cursor
     setCursor();
-
-    // A via or through pad already reaching the layer 'V' switched to must not gain a second via
-    int  viaTargetLayer = m_iface->GetPNSLayerFromBoardLayer( m_originalActiveLayer );
-    bool startReachesViaTarget = m_startItem && m_startItem->Layers().Overlaps( viaTargetLayer );
-
-    // If the user pressed 'V' before starting to route, enable via placement now
-    if( startWithVia && !startReachesViaTarget )
-    {
-        handleLayerSwitch( ACT_PlaceThroughVia.MakeEvent(), true );
-    }
 
     // Throttle wxEVT_UPDATE_UI during routing. The idle sweep fires between every Wait()
     // iteration and its cost dominates at interactive frame rates.
@@ -2529,7 +2515,6 @@ int ROUTER_TOOL::SpreadTracks( const TOOL_EVENT& aEvent )
 
     m_router->SetMode( mode );
     m_cancelled = false;
-    m_startWithVia = false;
 
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
@@ -2716,7 +2701,6 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
     m_router->SetMode( mode );
     m_cancelled = false;
-    m_startWithVia = false;
 
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
@@ -2785,7 +2769,6 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
-            m_startWithVia = true;
             m_toolMgr->RunAction( PCB_ACTIONS::layerToggle );
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
