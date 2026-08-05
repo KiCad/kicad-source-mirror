@@ -79,6 +79,7 @@
 #include <wildcards_and_files_ext.h>
 #include <functional>
 #include <pcb_barcode.h>
+#include <pcb_griditem.h>
 #include <pcb_painter.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
@@ -3017,6 +3018,10 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 
     case PCB_SHAPE_T:
         ShowGraphicItemPropertiesDialog( static_cast<PCB_SHAPE*>( aItem ) );
+        break;
+
+    case PCB_GRIDITEM_T:
+        ShowGridItemPropertiesDialog( static_cast<PCB_GRIDITEM*>( aItem ) );
         break;
 
     case PCB_ZONE_T:
