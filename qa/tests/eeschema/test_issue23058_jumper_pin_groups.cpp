@@ -201,6 +201,115 @@ BOOST_FIXTURE_TEST_CASE( JumperPinGroupValidPins, JUMPER_PIN_GROUP_FIXTURE )
 }
 
 
+BOOST_FIXTURE_TEST_CASE( JumperPinGroupStackedPinMember, JUMPER_PIN_GROUP_FIXTURE )
+{
+    SCH_SCREEN*    screen = m_schematic->RootScreen();
+    SCH_SHEET_PATH path;
+    path.push_back( &m_schematic->Root() );
+
+    LIB_SYMBOL* libSym = new LIB_SYMBOL( "USB_C", nullptr );
+
+    SCH_PIN* gnd = new SCH_PIN( libSym );
+    gnd->SetNumber( "[A1,A12]" );
+    gnd->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    gnd->SetPosition( VECTOR2I( -508000, 0 ) );
+    libSym->AddDrawItem( gnd );
+
+    SCH_PIN* shield = new SCH_PIN( libSym );
+    shield->SetNumber( "S1" );
+    shield->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    shield->SetPosition( VECTOR2I( 508000, 0 ) );
+    libSym->AddDrawItem( shield );
+
+    // A1 is one contact of the stacked pin [A1,A12], so the group bonds that pin to S1.
+    std::set<wxString> group;
+    group.insert( wxT( "A1" ) );
+    group.insert( wxT( "S1" ) );
+    libSym->JumperPinGroups().push_back( group );
+
+    SCH_SYMBOL* sym = new SCH_SYMBOL( *libSym, libSym->GetLibId(), &path, 0, 0, VECTOR2I( 15621000, 6223000 ) );
+    sym->UpdatePins();
+    screen->Append( sym );
+
+    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+    m_schematic->ConnectionGraph()->Recalculate( sheets, true );
+
+    path = sheets[0];
+
+    SCH_PIN* schGnd = sym->GetPin( wxT( "[A1,A12]" ) );
+    SCH_PIN* schShield = sym->GetPin( wxT( "S1" ) );
+
+    BOOST_REQUIRE( schGnd );
+    BOOST_REQUIRE( schShield );
+
+    bool connected = false;
+
+    for( SCH_ITEM* item : schGnd->ConnectedItems( path ) )
+    {
+        if( item == schShield )
+        {
+            connected = true;
+            break;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( connected, "Stacked pin [A1,A12] and pin S1 should be connected via jumper pin group" );
+
+    delete libSym;
+}
+
+
+BOOST_FIXTURE_TEST_CASE( JumperPinGroupAllContactsOfOnePin, JUMPER_PIN_GROUP_FIXTURE )
+{
+    SCH_SCREEN*    screen = m_schematic->RootScreen();
+    SCH_SHEET_PATH path;
+    path.push_back( &m_schematic->Root() );
+
+    LIB_SYMBOL* libSym = new LIB_SYMBOL( "USB_C", nullptr );
+
+    SCH_PIN* gnd = new SCH_PIN( libSym );
+    gnd->SetNumber( "[A1,A12,B1,B12]" );
+    gnd->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    gnd->SetPosition( VECTOR2I( -508000, 0 ) );
+    libSym->AddDrawItem( gnd );
+
+    // Every member names a contact of the same pin, which is the case from issue 25063.
+    std::set<wxString> group;
+    group.insert( wxT( "A1" ) );
+    group.insert( wxT( "A12" ) );
+    group.insert( wxT( "B1" ) );
+    group.insert( wxT( "B12" ) );
+    libSym->JumperPinGroups().push_back( group );
+
+    SCH_SYMBOL* sym = new SCH_SYMBOL( *libSym, libSym->GetLibId(), &path, 0, 0, VECTOR2I( 15621000, 6223000 ) );
+    sym->UpdatePins();
+    screen->Append( sym );
+
+    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+    BOOST_CHECK_NO_THROW( m_schematic->ConnectionGraph()->Recalculate( sheets, true ) );
+
+    path = sheets[0];
+
+    SCH_PIN* schGnd = sym->GetPin( wxT( "[A1,A12,B1,B12]" ) );
+    BOOST_REQUIRE( schGnd );
+
+    bool selfLinked = false;
+
+    for( SCH_ITEM* item : schGnd->ConnectedItems( path ) )
+    {
+        if( item == schGnd )
+        {
+            selfLinked = true;
+            break;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( !selfLinked, "A pin must not be connected to itself" );
+
+    delete libSym;
+}
+
+
 BOOST_FIXTURE_TEST_CASE( Issue23058FileLoad, JUMPER_PIN_GROUP_FIXTURE )
 {
     LOCALE_IO dummy;
