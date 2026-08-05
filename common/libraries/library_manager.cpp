@@ -294,6 +294,7 @@ void LIBRARY_MANAGER::createEmptyTable( LIBRARY_TABLE_TYPE aType, LIBRARY_TABLE_
 
         m_projectTables[aType] = std::make_unique<LIBRARY_TABLE>( fn, LIBRARY_TABLE_SCOPE::PROJECT );
         m_projectTables[aType]->SetType( aType );
+        m_projectTables[aType]->SetOk();
     }
 }
 

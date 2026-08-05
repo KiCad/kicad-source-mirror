@@ -408,6 +408,67 @@ BOOST_AUTO_TEST_CASE( ReadOnlyTable )
 }
 
 
+/**
+ * Regression test for a new project-scope library not appearing in the symbol editor
+ * library tree until KiCad was restarted.
+ *
+ * A project with no sym-lib-table has no table on disk, so the manager builds one on demand
+ * for a path that does not exist. The table constructor treats a missing file as a parse
+ * failure and flags the table invalid, and Rows() drops every row of an invalid table. A
+ * library added to such a project was written to disk but stayed invisible to everything
+ * that enumerates rows, which is why it only turned up after a restart.
+ */
+BOOST_AUTO_TEST_CASE( RowsAddedToANewProjectTableAreEnumerated )
+{
+    std::error_code       ec;
+    std::filesystem::path dir =
+            std::filesystem::temp_directory_path( ec ) / std::filesystem::path( "kicad_qa_new_project_table" );
+
+    std::filesystem::remove_all( dir, ec );
+    std::filesystem::create_directories( dir, ec );
+
+    std::filesystem::path proPath = dir / "new_project.kicad_pro";
+
+    {
+        std::ofstream proFile( proPath );
+        proFile << R"({ "meta": { "filename": "new_project.kicad_pro", "version": 3 } })";
+    }
+
+    SETTINGS_MANAGER& settings = Pgm().GetSettingsManager();
+    BOOST_REQUIRE( settings.LoadProject( wxString( proPath.string() ) ) );
+
+    wxFileName tableFile( wxString( ( dir / "sym-lib-table" ).string() ) );
+    BOOST_REQUIRE( !tableFile.FileExists() );
+
+    LIBRARY_MANAGER manager;
+
+    std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+    BOOST_REQUIRE( optTable.has_value() );
+
+    LIBRARY_TABLE*     table = optTable.value();
+    LIBRARY_TABLE_ROW& row = table->InsertRow();
+
+    row.SetNickname( wxS( "NewLib" ) );
+    row.SetURI( wxS( "${KIPRJMOD}/NewLib.kicad_sym" ) );
+    row.SetType( wxS( "KiCad" ) );
+
+    auto projectRowCount = [&]() -> size_t
+    {
+        return manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT ).size();
+    };
+
+    BOOST_CHECK_MESSAGE( projectRowCount() == 1,
+                         "A library added to a project with no library table must be visible to "
+                         "Rows(), which is what fills the library tree" );
+
+    BOOST_REQUIRE( table->Save().has_value() );
+    BOOST_CHECK_EQUAL( projectRowCount(), 1 );
+
+    settings.UnloadProject( &settings.Prj(), false );
+    std::filesystem::remove_all( dir, ec );
+}
+
+
 BOOST_AUTO_TEST_CASE( LibOverrideSettings )
 {
     // Test that LIB_OVERRIDE serialization in KICAD_SETTINGS works via the
