@@ -39,6 +39,22 @@ struct DATA_MODEL_COL
 };
 
 
+template <typename ITEM_TYPE>
+struct DATA_MODEL_ROW
+{
+    DATA_MODEL_ROW( const ITEM_TYPE& aFirstReference, GROUP_TYPE aType )
+    {
+        m_ItemNumber = 0;
+        m_Refs.push_back( aFirstReference );
+        m_Flag = aType;
+    }
+
+    int                    m_ItemNumber;
+    GROUP_TYPE             m_Flag;
+    std::vector<ITEM_TYPE> m_Refs;
+};
+
+
 class FIELDS_TABLE_DATA_MODEL_BASE : public WX_GRID_TABLE_BASE
 {
 public:

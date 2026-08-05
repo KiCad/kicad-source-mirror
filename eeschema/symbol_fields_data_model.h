@@ -39,18 +39,9 @@ struct FIELD_CASE_CONFLICT
 std::vector<FIELD_CASE_CONFLICT> DetectFieldCaseConflicts( const SCH_REFERENCE_LIST& aSymbols );
 
 
-struct SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW
+struct SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW : public DATA_MODEL_ROW<SCH_REFERENCE>
 {
-    SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( const SCH_REFERENCE& aFirstReference, GROUP_TYPE aType )
-    {
-        m_ItemNumber = 0;
-        m_Refs.push_back( aFirstReference );
-        m_Flag = aType;
-    }
-
-    int                        m_ItemNumber;
-    GROUP_TYPE                 m_Flag;
-    std::vector<SCH_REFERENCE> m_Refs;
+    using DATA_MODEL_ROW<SCH_REFERENCE>::DATA_MODEL_ROW;
 };
 
 
