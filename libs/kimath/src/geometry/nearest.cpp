@@ -60,11 +60,9 @@ VECTOR2I GetNearestPoint( const NEARABLE_GEOM& aGeom, const VECTOR2I& aPt )
             {
                 using GeomType = std::decay_t<decltype( geom )>;
 
-                if constexpr( std::is_same_v<GeomType, LINE>
-                                || std::is_same_v<GeomType, HALF_LINE>
-                                || std::is_same_v<GeomType, SEG>
-                                || std::is_same_v<GeomType, CIRCLE>
-                                || std::is_same_v<GeomType, SHAPE_ARC> )
+                if constexpr( std::is_same_v<GeomType, LINE> || std::is_same_v<GeomType, HALF_LINE>
+                              || std::is_same_v<GeomType, SEG> || std::is_same_v<GeomType, CIRCLE>
+                              || std::is_same_v<GeomType, SHAPE_ARC> || std::is_same_v<GeomType, SHAPE_ELLIPSE> )
                 {
                     // Same signatures for all these types
                     // But they're not in the same polymorphic hierarchy

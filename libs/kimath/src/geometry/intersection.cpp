@@ -191,6 +191,56 @@ void findIntersections( const SHAPE_ARC& aArc, const HALF_LINE& aHalfLine,
     }
 }
 
+void findIntersections( const SHAPE_ELLIPSE& aEllipse, const SEG& aSeg, std::vector<VECTOR2I>& aIntersections )
+{
+    std::vector<VECTOR2I> intersections = aEllipse.Intersect( aSeg );
+
+    aIntersections.insert( aIntersections.end(), intersections.begin(), intersections.end() );
+}
+
+void findIntersections( const SHAPE_ELLIPSE& aEllipse, const LINE& aLine, std::vector<VECTOR2I>& aIntersections )
+{
+    std::vector<VECTOR2I> intersections = aEllipse.Intersect( aLine.GetContainedSeg(), true );
+
+    aIntersections.insert( aIntersections.end(), intersections.begin(), intersections.end() );
+}
+
+void findIntersections( const SHAPE_ELLIPSE& aEllipse, const HALF_LINE& aHalfLine,
+                        std::vector<VECTOR2I>& aIntersections )
+{
+    std::vector<VECTOR2I> intersections = aEllipse.Intersect( aHalfLine.GetContainedSeg(), true );
+
+    for( const VECTOR2I& intersection : intersections )
+    {
+        if( aHalfLine.Contains( intersection ) )
+        {
+            aIntersections.push_back( intersection );
+        }
+    }
+}
+
+void findIntersections( const SHAPE_ELLIPSE& aEllipse, const CIRCLE& aCircle, std::vector<VECTOR2I>& aIntersections )
+{
+    std::vector<VECTOR2I> intersections = aEllipse.Intersect( aCircle );
+
+    aIntersections.insert( aIntersections.end(), intersections.begin(), intersections.end() );
+}
+
+void findIntersections( const SHAPE_ELLIPSE& aEllipse, const SHAPE_ARC& aArc, std::vector<VECTOR2I>& aIntersections )
+{
+    std::vector<VECTOR2I> intersections = aEllipse.Intersect( aArc );
+
+    aIntersections.insert( aIntersections.end(), intersections.begin(), intersections.end() );
+}
+
+void findIntersections( const SHAPE_ELLIPSE& aEllipseA, const SHAPE_ELLIPSE& aEllipseB,
+                        std::vector<VECTOR2I>& aIntersections )
+{
+    std::vector<VECTOR2I> intersections = aEllipseA.Intersect( aEllipseB );
+
+    aIntersections.insert( aIntersections.end(), intersections.begin(), intersections.end() );
+}
+
 } // namespace
 
 
@@ -225,6 +275,11 @@ void INTERSECTION_VISITOR::operator()( const SEG& aSeg ) const
                         findIntersections( aSeg, aRectSeg, m_intersections );
                     }
                 }
+                else if constexpr( std::is_same_v<OtherGeomType, SHAPE_ELLIPSE> )
+                {
+                    // Ellipse-Seg
+                    findIntersections( otherGeom, aSeg, m_intersections );
+                }
                 else
                 {
                     // In all other segment comparisons, the SEG is the first argument
@@ -242,12 +297,11 @@ void INTERSECTION_VISITOR::operator()( const LINE& aLine ) const
             {
                 using OtherGeomType = std::decay_t<decltype( otherGeom )>;
                 // Dispatch in the correct order
-                if constexpr( std::is_same_v<OtherGeomType, SEG>
-                              || std::is_same_v<OtherGeomType, LINE>
-                              || std::is_same_v<OtherGeomType, CIRCLE>
-                              || std::is_same_v<OtherGeomType, SHAPE_ARC> )
+                if constexpr( std::is_same_v<OtherGeomType, SEG> || std::is_same_v<OtherGeomType, LINE>
+                              || std::is_same_v<OtherGeomType, CIRCLE> || std::is_same_v<OtherGeomType, SHAPE_ARC>
+                              || std::is_same_v<OtherGeomType, SHAPE_ELLIPSE> )
                 {
-                    // Seg-Line, Line-Line, Circle-Line, Arc-Line
+                    // Seg-Line, Line-Line, Circle-Line, Arc-Line, Ellipse-Line
                     findIntersections( otherGeom, aLine, m_intersections );
                 }
                 else if constexpr( std::is_same_v<OtherGeomType, HALF_LINE> )
@@ -280,12 +334,12 @@ void INTERSECTION_VISITOR::operator()( const HALF_LINE& aHalfLine ) const
             {
                 using OtherGeomType = std::decay_t<decltype( otherGeom )>;
                 // Dispatch in the correct order
-                if constexpr( std::is_same_v<OtherGeomType, SEG>
-                              || std::is_same_v<OtherGeomType, HALF_LINE>
-                              || std::is_same_v<OtherGeomType, CIRCLE>
-                              || std::is_same_v<OtherGeomType, SHAPE_ARC> )
+                if constexpr( std::is_same_v<OtherGeomType, SEG> || std::is_same_v<OtherGeomType, HALF_LINE>
+                              || std::is_same_v<OtherGeomType, CIRCLE> || std::is_same_v<OtherGeomType, SHAPE_ARC>
+                              || std::is_same_v<OtherGeomType, SHAPE_ELLIPSE> )
                 {
-                    // Seg-HalfLine, HalfLine-HalfLine, Circle-HalfLine, Arc-HalfLine
+                    // Seg-HalfLine, HalfLine-HalfLine, Circle-HalfLine, Arc-HalfLine,
+                    // Ellipse-HalfLine
                     findIntersections( otherGeom, aHalfLine, m_intersections );
                 }
                 else if constexpr( std::is_same_v<OtherGeomType, LINE> )
@@ -318,10 +372,10 @@ void INTERSECTION_VISITOR::operator()( const CIRCLE& aCircle ) const
             {
                 using OtherGeomType = std::decay_t<decltype( otherGeom )>;
                 // Dispatch in the correct order
-                if constexpr( std::is_same_v<OtherGeomType, SEG>
-                              || std::is_same_v<OtherGeomType, CIRCLE> )
+                if constexpr( std::is_same_v<OtherGeomType, SEG> || std::is_same_v<OtherGeomType, CIRCLE>
+                              || std::is_same_v<OtherGeomType, SHAPE_ELLIPSE> )
                 {
-                    // Seg-Circle, Circle-Circle
+                    // Seg-Circle, Circle-Circle, Ellipse-Circle
                     findIntersections( otherGeom, aCircle, m_intersections );
                 }
                 else if constexpr( std::is_same_v<OtherGeomType, SHAPE_ARC>
@@ -356,11 +410,11 @@ void INTERSECTION_VISITOR::operator()( const SHAPE_ARC& aArc ) const
             {
                 using OtherGeomType = std::decay_t<decltype( otherGeom )>;
                 // Dispatch in the correct order
-                if constexpr( std::is_same_v<OtherGeomType, SEG>
-                              || std::is_same_v<OtherGeomType, CIRCLE>
-                              || std::is_same_v<OtherGeomType, SHAPE_ARC> )
+                if constexpr( std::is_same_v<OtherGeomType, SEG> || std::is_same_v<OtherGeomType, CIRCLE>
+                              || std::is_same_v<OtherGeomType, SHAPE_ARC>
+                              || std::is_same_v<OtherGeomType, SHAPE_ELLIPSE> )
                 {
-                    // Seg-Arc, Circle-Arc, Arc-Arc
+                    // Seg-Arc, Circle-Arc, Arc-Arc, Ellipse-Arc
                     findIntersections( otherGeom, aArc, m_intersections );
                 }
                 else if constexpr( std::is_same_v<OtherGeomType, LINE>
@@ -381,6 +435,38 @@ void INTERSECTION_VISITOR::operator()( const SHAPE_ARC& aArc ) const
                 {
                     static_assert( always_false<OtherGeomType>::value,
                                    "Unhandled other geometry type" );
+                }
+            },
+            m_otherGeometry );
+};
+
+
+void INTERSECTION_VISITOR::operator()( const SHAPE_ELLIPSE& aEllipse ) const
+{
+    // Dispatch to the correct function
+    return std::visit(
+            [&]( const auto& otherGeom )
+            {
+                using OtherGeomType = std::decay_t<decltype( otherGeom )>;
+                // The ellipse is always the first argument
+                if constexpr( std::is_same_v<OtherGeomType, SEG> || std::is_same_v<OtherGeomType, LINE>
+                              || std::is_same_v<OtherGeomType, HALF_LINE> || std::is_same_v<OtherGeomType, CIRCLE>
+                              || std::is_same_v<OtherGeomType, SHAPE_ARC>
+                              || std::is_same_v<OtherGeomType, SHAPE_ELLIPSE> )
+                {
+                    findIntersections( aEllipse, otherGeom, m_intersections );
+                }
+                else if constexpr( std::is_same_v<OtherGeomType, BOX2I> )
+                {
+                    // Ellipse-Rect via decomposition into segments
+                    for( const SEG& aRectSeg : KIGEOM::BoxToSegs( otherGeom ) )
+                    {
+                        findIntersections( aEllipse, aRectSeg, m_intersections );
+                    }
+                }
+                else
+                {
+                    static_assert( always_false<OtherGeomType>::value, "Unhandled other geometry type" );
                 }
             },
             m_otherGeometry );

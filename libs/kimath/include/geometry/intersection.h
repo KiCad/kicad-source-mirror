@@ -30,13 +30,14 @@
 #include <geometry/line.h>
 #include <geometry/seg.h>
 #include <geometry/shape_arc.h>
+#include <geometry/shape_ellipse.h>
 #include <geometry/shape_rect.h>
 
 /**
  * A variant type that can hold any of the supported geometry types
  * for intersection calculations.
  */
-using INTERSECTABLE_GEOM = std::variant<LINE, HALF_LINE, SEG, CIRCLE, SHAPE_ARC, BOX2I>;
+using INTERSECTABLE_GEOM = std::variant<LINE, HALF_LINE, SEG, CIRCLE, SHAPE_ARC, SHAPE_ELLIPSE, BOX2I>;
 
 /**
  * A visitor that visits INTERSECTABLE_GEOM variant objects with another
@@ -66,6 +67,7 @@ public:
     void operator()( const HALF_LINE& aLine ) const;
     void operator()( const CIRCLE& aCircle ) const;
     void operator()( const SHAPE_ARC& aArc ) const;
+    void operator()( const SHAPE_ELLIPSE& aEllipse ) const;
     void operator()( const BOX2I& aArc ) const;
 
 private:

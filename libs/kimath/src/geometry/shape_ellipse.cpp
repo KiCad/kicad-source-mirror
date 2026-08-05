@@ -20,6 +20,8 @@
 #include <geometry/shape_ellipse.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
+#include <geometry/shape_arc.h>
+#include <geometry/circle.h>
 
 #include <algorithm>
 #include <cmath>
@@ -107,6 +109,161 @@ void subdivideEllipseArc( double t0, const VECTOR2I& p0, double t1, const VECTOR
 
     subdivideEllipseArc( t0, p0, tm, pm, aMaxErrSq, aDepth - 1, aEval, aOut );
     subdivideEllipseArc( tm, pm, t1, p1, aMaxErrSq, aDepth - 1, aEval, aOut );
+}
+
+
+constexpr double ROOT_EPSILON = 1e-12;
+
+
+/**
+ * Real roots of aA x^2 + aB x + aC, degenerating to the linear case when aA vanishes.
+ * The second root is formed by division rather than by subtraction, which keeps its
+ * precision when the discriminant nearly cancels the linear term.
+ */
+std::vector<double> quadraticRoots( double aA, double aB, double aC )
+{
+    std::vector<double> roots;
+
+    if( std::abs( aA ) < ROOT_EPSILON )
+    {
+        if( std::abs( aB ) >= ROOT_EPSILON )
+            roots.push_back( -aC / aB );
+
+        return roots;
+    }
+
+    const double disc = aB * aB - 4.0 * aA * aC;
+
+    if( disc < 0.0 )
+        return roots;
+
+    const double sq = std::sqrt( disc );
+    const double q = -0.5 * ( aB + ( aB >= 0.0 ? sq : -sq ) );
+
+    roots.push_back( q / aA );
+
+    if( std::abs( q ) >= ROOT_EPSILON )
+        roots.push_back( aC / q );
+
+    return roots;
+}
+
+
+/**
+ * Real roots of aA x^3 + aB x^2 + aC x + aD.  The three root case uses the
+ * trigonometric form, which avoids taking cube roots of complex numbers.
+ */
+std::vector<double> cubicRoots( double aA, double aB, double aC, double aD )
+{
+    if( std::abs( aA ) < ROOT_EPSILON )
+        return quadraticRoots( aB, aC, aD );
+
+    const double b = aB / aA;
+    const double c = aC / aA;
+    const double d = aD / aA;
+
+    // Depress to y^3 + p y + q, where x is y minus the shift
+    const double shift = b / 3.0;
+    const double p = c - b * b / 3.0;
+    const double q = 2.0 * b * b * b / 27.0 - b * c / 3.0 + d;
+
+    std::vector<double> roots;
+    const double        disc = q * q / 4.0 + p * p * p / 27.0;
+
+    if( std::abs( p ) < ROOT_EPSILON && std::abs( q ) < ROOT_EPSILON )
+    {
+        roots.push_back( -shift );
+    }
+    else if( disc > 0.0 )
+    {
+        const double sq = std::sqrt( disc );
+        roots.push_back( std::cbrt( -q / 2.0 + sq ) + std::cbrt( -q / 2.0 - sq ) - shift );
+    }
+    else
+    {
+        const double r = 2.0 * std::sqrt( -p / 3.0 );
+        const double arg = std::clamp( 3.0 * q / ( p * r ), -1.0, 1.0 );
+        const double phi = std::acos( arg ) / 3.0;
+
+        for( int k = 0; k < 3; ++k )
+            roots.push_back( r * std::cos( phi - 2.0 * M_PI * k / 3.0 ) - shift );
+    }
+
+    return roots;
+}
+
+
+/**
+ * Real roots of aA x^4 + aB x^3 + aC x^2 + aD x + aE by Ferrari's method, which splits
+ * the depressed quartic into two quadratics using a root of its resolvent cubic.
+ */
+std::vector<double> quarticRoots( double aA, double aB, double aC, double aD, double aE )
+{
+    if( std::abs( aA ) < ROOT_EPSILON )
+        return cubicRoots( aB, aC, aD, aE );
+
+    const double b = aB / aA;
+    const double c = aC / aA;
+    const double d = aD / aA;
+    const double e = aE / aA;
+
+    // Depress to y^4 + p y^2 + q y + r, where x is y minus the shift
+    const double shift = b / 4.0;
+    const double p = c - 3.0 * b * b / 8.0;
+    const double q = d - b * c / 2.0 + b * b * b / 8.0;
+    const double r = e - b * d / 4.0 + b * b * c / 16.0 - 3.0 * b * b * b * b / 256.0;
+
+    std::vector<double> roots;
+
+    if( std::abs( q ) < ROOT_EPSILON )
+    {
+        for( double ySq : quadraticRoots( 1.0, p, r ) )
+        {
+            if( ySq >= 0.0 )
+            {
+                const double y = std::sqrt( ySq );
+                roots.push_back( y - shift );
+                roots.push_back( -y - shift );
+            }
+        }
+
+        return roots;
+    }
+
+    double alphaSq = 0.0;
+
+    for( double z : cubicRoots( 1.0, 2.0 * p, p * p - 4.0 * r, -q * q ) )
+    {
+        if( z > alphaSq )
+            alphaSq = z;
+    }
+
+    if( alphaSq <= 0.0 )
+        return roots;
+
+    const double alpha = std::sqrt( alphaSq );
+    const double beta = ( p + alphaSq - q / alpha ) / 2.0;
+    const double gamma = ( p + alphaSq + q / alpha ) / 2.0;
+
+    for( double y : quadraticRoots( 1.0, alpha, beta ) )
+        roots.push_back( y - shift );
+
+    for( double y : quadraticRoots( 1.0, -alpha, gamma ) )
+        roots.push_back( y - shift );
+
+    return roots;
+}
+
+
+void dedupePoints( std::vector<VECTOR2I>& aPoints )
+{
+    std::sort( aPoints.begin(), aPoints.end(),
+               []( const VECTOR2I& aLeft, const VECTOR2I& aRight )
+               {
+                   return aLeft.x != aRight.x ? aLeft.x < aRight.x : aLeft.y < aRight.y;
+               } );
+
+    aPoints.erase( std::unique( aPoints.begin(), aPoints.end() ), aPoints.end() );
 }
 
 } // namespace
@@ -330,21 +487,6 @@ bool SHAPE_ELLIPSE::Collide( const SEG& aSeg, int aClearance, int* aActual, VECT
 
         return false;
     }
-
-    auto toLocal = [&]( const VECTOR2I& p ) -> VECTOR2D
-    {
-        const double dx = p.x - m_ellipse.Center.x;
-        const double dy = p.y - m_ellipse.Center.y;
-        return VECTOR2D( dx * m_cosRot + dy * m_sinRot, -dx * m_sinRot + dy * m_cosRot );
-    };
-
-    auto toWorld = [&]( const VECTOR2D& p ) -> VECTOR2I
-    {
-        const double wx = p.x * m_cosRot - p.y * m_sinRot;
-        const double wy = p.x * m_sinRot + p.y * m_cosRot;
-        return VECTOR2I( m_ellipse.Center.x + static_cast<int>( std::round( wx ) ),
-                         m_ellipse.Center.y + static_cast<int>( std::round( wy ) ) );
-    };
 
     const VECTOR2D Aloc = toLocal( aSeg.A );
     const VECTOR2D Bloc = toLocal( aSeg.B );
@@ -610,25 +752,38 @@ bool SHAPE_ELLIPSE::PointInside( const VECTOR2I& aPt, int aAccuracy, bool /*aUse
 }
 
 
-SEG::ecoord SHAPE_ELLIPSE::SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly ) const
+VECTOR2D SHAPE_ELLIPSE::toLocal( const VECTOR2I& aP ) const
 {
-    // Transform into the ellipse's local frame.
     const double dx = aP.x - m_ellipse.Center.x;
     const double dy = aP.y - m_ellipse.Center.y;
-    const double lx = dx * m_cosRot + dy * m_sinRot;
-    const double ly = -dx * m_sinRot + dy * m_cosRot;
+
+    return VECTOR2D( dx * m_cosRot + dy * m_sinRot, -dx * m_sinRot + dy * m_cosRot );
+}
+
+
+VECTOR2I SHAPE_ELLIPSE::toWorld( const VECTOR2D& aP ) const
+{
+    const double wx = aP.x * m_cosRot - aP.y * m_sinRot;
+    const double wy = aP.x * m_sinRot + aP.y * m_cosRot;
+
+    return VECTOR2I( static_cast<int>( std::round( m_ellipse.Center.x + wx ) ),
+                     static_cast<int>( std::round( m_ellipse.Center.y + wy ) ) );
+}
+
+
+VECTOR2D SHAPE_ELLIPSE::pointAtParam( double aTheta ) const
+{
+    return VECTOR2D( m_ellipse.MajorRadius * std::cos( aTheta ), m_ellipse.MinorRadius * std::sin( aTheta ) );
+}
+
+
+VECTOR2D SHAPE_ELLIPSE::closestLocalPoint( const VECTOR2D& aLocal ) const
+{
+    const double lx = aLocal.x;
+    const double ly = aLocal.y;
 
     const double a = static_cast<double>( m_ellipse.MajorRadius );
     const double b = static_cast<double>( m_ellipse.MinorRadius );
-
-    // Interior of a closed ellipse if val < 1
-    if( !m_isArc && !aOutlineOnly )
-    {
-        const double val = lx * lx * m_invMajorRSq + ly * ly * m_invMinorRSq;
-
-        if( val <= 1.0 )
-            return 0;
-    }
 
     // Closest point on ellipse via Eberly's bisection.
     // Reference: "Distance from a Point to an Ellipse, an Ellipsoid, or a
@@ -713,33 +868,258 @@ SEG::ecoord SHAPE_ELLIPSE::SquaredDistance( const VECTOR2I& aP, bool aOutlineOnl
         }
     }
 
-    const double closestX = ( lx < 0.0 ) ? -x0Local : x0Local;
-    const double closestY = ( ly < 0.0 ) ? -x1Local : x1Local;
+    const VECTOR2D closest( ( lx < 0.0 ) ? -x0Local : x0Local, ( ly < 0.0 ) ? -x1Local : x1Local );
 
-    // Pick the nearest boundary point
+    // An arc that does not reach round to the closest point is nearest at one of its ends
     if( m_isArc )
     {
-        const double closestTheta = std::atan2( closestY / b, closestX / a );
+        const double closestTheta = std::atan2( closest.y / b, closest.x / a );
 
         if( !isAngleInSweep( closestTheta ) )
         {
-            const double s0 = m_ellipse.StartAngle.AsRadians();
-            const double e0 = m_ellipse.EndAngle.AsRadians();
-            const double ex0 = a * std::cos( s0 );
-            const double ey0 = b * std::sin( s0 );
-            const double ex1 = a * std::cos( e0 );
-            const double ey1 = b * std::sin( e0 );
+            const VECTOR2D start = pointAtParam( m_ellipse.StartAngle.AsRadians() );
+            const VECTOR2D end = pointAtParam( m_ellipse.EndAngle.AsRadians() );
 
-            const double d0 = ( lx - ex0 ) * ( lx - ex0 ) + ( ly - ey0 ) * ( ly - ey0 );
-            const double d1 = ( lx - ex1 ) * ( lx - ex1 ) + ( ly - ey1 ) * ( ly - ey1 );
-
-            return static_cast<SEG::ecoord>( std::min( d0, d1 ) );
+            return ( aLocal - start ).SquaredEuclideanNorm() <= ( aLocal - end ).SquaredEuclideanNorm() ? start : end;
         }
     }
 
-    const double dxE = closestX - lx;
-    const double dyE = closestY - ly;
+    return closest;
+}
+
+
+SEG::ecoord SHAPE_ELLIPSE::SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly ) const
+{
+    const VECTOR2D local = toLocal( aP );
+
+    // Interior of a closed ellipse if val < 1
+    if( !m_isArc && !aOutlineOnly )
+    {
+        const double val = local.x * local.x * m_invMajorRSq + local.y * local.y * m_invMinorRSq;
+
+        if( val <= 1.0 )
+            return 0;
+    }
+
+    const VECTOR2D closest = closestLocalPoint( local );
+    const double   dxE = closest.x - local.x;
+    const double   dyE = closest.y - local.y;
+
     return static_cast<SEG::ecoord>( dxE * dxE + dyE * dyE );
+}
+
+
+VECTOR2I SHAPE_ELLIPSE::NearestPoint( const VECTOR2I& aP ) const
+{
+    return toWorld( closestLocalPoint( toLocal( aP ) ) );
+}
+
+
+SHAPE_ELLIPSE::CONIC SHAPE_ELLIPSE::conicOf( const VECTOR2I& aCenter, double aMajorR, double aMinorR,
+                                             const EDA_ANGLE& aRotation ) const
+{
+    // Take a point of this local frame across to the other curve's local frame, then
+    // square out the other curve's own equation to get the coefficients.
+    const double delta = m_ellipse.Rotation.AsRadians() - aRotation.AsRadians();
+    const double cd = std::cos( delta );
+    const double sd = std::sin( delta );
+
+    const double cr = std::cos( aRotation.AsRadians() );
+    const double sr = std::sin( aRotation.AsRadians() );
+
+    const double wx = static_cast<double>( m_ellipse.Center.x - aCenter.x );
+    const double wy = static_cast<double>( m_ellipse.Center.y - aCenter.y );
+
+    const double dx = wx * cr + wy * sr;
+    const double dy = -wx * sr + wy * cr;
+
+    const double p = 1.0 / ( aMajorR * aMajorR );
+    const double q = 1.0 / ( aMinorR * aMinorR );
+
+    CONIC conic;
+    conic.Axx = p * cd * cd + q * sd * sd;
+    conic.Axy = 2.0 * sd * cd * ( q - p );
+    conic.Ayy = p * sd * sd + q * cd * cd;
+    conic.Bx = 2.0 * ( p * dx * cd + q * dy * sd );
+    conic.By = 2.0 * ( q * dy * cd - p * dx * sd );
+    conic.C = p * dx * dx + q * dy * dy - 1.0;
+
+    return conic;
+}
+
+
+std::vector<double> SHAPE_ELLIPSE::conicRoots( const CONIC& aConic ) const
+{
+    const double a = static_cast<double>( m_ellipse.MajorRadius );
+    const double b = static_cast<double>( m_ellipse.MinorRadius );
+
+    // The conic seen along this ellipse, as a function of the parameter angle
+    const double cA = aConic.Axx * a * a;
+    const double cB = aConic.Axy * a * b;
+    const double cC = aConic.Ayy * b * b;
+    const double cD = aConic.Bx * a;
+    const double cE = aConic.By * b;
+    const double cF = aConic.C;
+
+    const auto value = [&]( double aTheta )
+    {
+        const double ct = std::cos( aTheta );
+        const double st = std::sin( aTheta );
+        return cA * ct * ct + cB * ct * st + cC * st * st + cD * ct + cE * st + cF;
+    };
+
+    const auto slope = [&]( double aTheta )
+    {
+        const double ct = std::cos( aTheta );
+        const double st = std::sin( aTheta );
+        return 2.0 * ( cC - cA ) * ct * st + cB * ( ct * ct - st * st ) - cD * st + cE * ct;
+    };
+
+    // The tangent of the half angle turns that into a quartic, at the cost of never
+    // reaching pi.  That one angle is offered below as a candidate like any other.
+    const double k4 = cA - cD + cF;
+    const double k3 = 2.0 * ( cE - cB );
+    const double k2 = 2.0 * ( cF - cA ) + 4.0 * cC;
+    const double k1 = 2.0 * ( cB + cE );
+    const double k0 = cA + cD + cF;
+
+    const double scale = std::max( { std::abs( k4 ), std::abs( k3 ), std::abs( k2 ), std::abs( k1 ), std::abs( k0 ) } );
+
+    // The curves lie on top of each other, so there is no crossing to report
+    if( scale == 0.0 )
+        return {};
+
+    std::vector<double> params;
+
+    for( double u : quarticRoots( k4 / scale, k3 / scale, k2 / scale, k1 / scale, k0 / scale ) )
+        params.push_back( 2.0 * std::atan( u ) );
+
+    params.push_back( M_PI );
+
+    std::vector<double> result;
+
+    for( double theta : params )
+    {
+        // The quartic loses digits when its roots run large, so finish on the exact equation
+        for( int iter = 0; iter < 8; ++iter )
+        {
+            const double f = value( theta );
+            const double df = slope( theta );
+
+            if( df == 0.0 )
+                break;
+
+            const double step = f / df;
+            theta -= step;
+
+            if( std::abs( step ) < 1e-15 )
+                break;
+        }
+
+        if( std::abs( value( theta ) ) > scale * 1e-9 )
+            continue;
+
+        if( m_isArc && !isAngleInSweep( theta ) )
+            continue;
+
+        result.push_back( theta );
+    }
+
+    return result;
+}
+
+
+std::vector<VECTOR2I> SHAPE_ELLIPSE::Intersect( const SHAPE_ELLIPSE& aOther ) const
+{
+    const CONIC conic = conicOf( aOther.m_ellipse.Center, aOther.m_ellipse.MajorRadius, aOther.m_ellipse.MinorRadius,
+                                 aOther.m_ellipse.Rotation );
+
+    std::vector<VECTOR2I> points;
+
+    for( double theta : conicRoots( conic ) )
+    {
+        const VECTOR2I world = m_ellipse.GetPointAtAngle( EDA_ANGLE( theta, RADIANS_T ) );
+
+        if( aOther.m_isArc && !aOther.isAngleInSweep( aOther.m_ellipse.GetAngleAtPoint( world ).AsRadians() ) )
+        {
+            continue;
+        }
+
+        points.push_back( world );
+    }
+
+    dedupePoints( points );
+    return points;
+}
+
+
+std::vector<VECTOR2I> SHAPE_ELLIPSE::intersectCircle( const VECTOR2I& aCenter, double aRadius ) const
+{
+    std::vector<VECTOR2I> points;
+
+    if( aRadius <= 0.0 )
+        return points;
+
+    for( double theta : conicRoots( conicOf( aCenter, aRadius, aRadius, ANGLE_0 ) ) )
+        points.push_back( m_ellipse.GetPointAtAngle( EDA_ANGLE( theta, RADIANS_T ) ) );
+
+    dedupePoints( points );
+    return points;
+}
+
+
+std::vector<VECTOR2I> SHAPE_ELLIPSE::Intersect( const CIRCLE& aCircle ) const
+{
+    return intersectCircle( aCircle.Center, aCircle.Radius );
+}
+
+
+std::vector<VECTOR2I> SHAPE_ELLIPSE::Intersect( const SHAPE_ARC& aArc ) const
+{
+    // The radius is taken as a double, so the arc is not rounded to a CIRCLE first
+    std::vector<VECTOR2I> points = intersectCircle( aArc.GetCenter(), aArc.GetRadius() );
+
+    // Crossings of the full circle that miss the drawn part are pulled back to an end
+    // of the arc, so they fail this test
+    std::erase_if( points,
+                   [&]( const VECTOR2I& aPoint )
+                   {
+                       return aArc.NearestPoint( aPoint ).Distance( aPoint ) > SHAPE::MIN_PRECISION_IU;
+                   } );
+
+    return points;
+}
+
+
+std::vector<VECTOR2I> SHAPE_ELLIPSE::Intersect( const SEG& aSeg, bool aTreatAsLine ) const
+{
+    const VECTOR2D start = toLocal( aSeg.A );
+    const VECTOR2D dir = toLocal( aSeg.B ) - start;
+
+    if( dir.x == 0.0 && dir.y == 0.0 )
+        return {};
+
+    // A straight line is a conic with no squared terms, so the quartic falls away by itself
+    CONIC conic;
+    conic.Axx = 0.0;
+    conic.Axy = 0.0;
+    conic.Ayy = 0.0;
+    conic.Bx = dir.y;
+    conic.By = -dir.x;
+    conic.C = start.y * dir.x - start.x * dir.y;
+
+    std::vector<VECTOR2I> points;
+
+    for( double theta : conicRoots( conic ) )
+    {
+        const VECTOR2I world = m_ellipse.GetPointAtAngle( EDA_ANGLE( theta, RADIANS_T ) );
+
+        if( aTreatAsLine || aSeg.Contains( world ) )
+            points.push_back( world );
+    }
+
+    dedupePoints( points );
+    return points;
 }
 
 

@@ -30,13 +30,14 @@
 #include <geometry/line.h>
 #include <geometry/seg.h>
 #include <geometry/shape_arc.h>
+#include <geometry/shape_ellipse.h>
 
 
 /**
  * A variant type that can hold any of the supported geometry types for
  * nearest point calculations.
  */
-using NEARABLE_GEOM = std::variant<LINE, HALF_LINE, SEG, CIRCLE, SHAPE_ARC, BOX2I, VECTOR2I>;
+using NEARABLE_GEOM = std::variant<LINE, HALF_LINE, SEG, CIRCLE, SHAPE_ARC, SHAPE_ELLIPSE, BOX2I, VECTOR2I>;
 
 /**
  * Get the nearest point on a geometry to a given point.

@@ -84,6 +84,16 @@ std::optional<INTERSECTABLE_GEOM> GetBoardIntersectable( const BOARD_ITEM& aItem
         case SHAPE_T::CIRCLE:    return CIRCLE{ shape.GetCenter(), shape.GetRadius() };
         case SHAPE_T::ARC:       return SHAPE_ARC{ shape.GetStart(), shape.GetArcMid(), shape.GetEnd(), 0 };
         case SHAPE_T::RECTANGLE: return BOX2I::ByCorners( shape.GetStart(), shape.GetEnd() );
+
+        case SHAPE_T::ELLIPSE:
+            return SHAPE_ELLIPSE{ shape.GetEllipseCenter(), shape.GetEllipseMajorRadius(),
+                                  shape.GetEllipseMinorRadius(), shape.GetEllipseRotation() };
+
+        case SHAPE_T::ELLIPSE_ARC:
+            return SHAPE_ELLIPSE{ shape.GetEllipseCenter(),      shape.GetEllipseMajorRadius(),
+                                  shape.GetEllipseMinorRadius(), shape.GetEllipseRotation(),
+                                  shape.GetEllipseStartAngle(),  shape.GetEllipseEndAngle() };
+
         default:                 break;
         }
 

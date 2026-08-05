@@ -19,6 +19,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 #include <chrono>
@@ -31,6 +32,8 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_arc.h>
+#include <geometry/circle.h>
+#include <geometry/intersection.h>
 
 BOOST_AUTO_TEST_SUITE( ShapeEllipse )
 
@@ -1043,6 +1046,105 @@ BOOST_AUTO_TEST_CASE( PointInsideAfterRotationChange )
     // Now (80, 0) should be outside and (0, 80) inside.
     BOOST_CHECK( !e.PointInside( VECTOR2I( 80, 0 ) ) );
     BOOST_CHECK( e.PointInside( VECTOR2I( 0, 80 ) ) );
+}
+
+
+static bool containsPointNear( const std::vector<VECTOR2I>& aPoints, const VECTOR2I& aExpected )
+{
+    return std::any_of( aPoints.begin(), aPoints.end(),
+                        [&]( const VECTOR2I& aPoint )
+                        {
+                            return aPoint.Distance( aExpected ) <= 2;
+                        } );
+}
+
+
+BOOST_AUTO_TEST_CASE( IntersectEllipseWithEllipse )
+{
+    const SHAPE_ELLIPSE first( VECTOR2I( 0, 0 ), 2000000, 1000000, ANGLE_0 );
+    const SHAPE_ELLIPSE second( VECTOR2I( 0, 0 ), 2000000, 1000000, ANGLE_90 );
+
+    const std::vector<VECTOR2I> points = first.Intersect( second );
+
+    BOOST_REQUIRE_EQUAL( points.size(), 4 );
+
+    const int offset = KiROUND( 2000000.0 / std::sqrt( 5.0 ) );
+
+    for( int sx : { -1, 1 } )
+    {
+        for( int sy : { -1, 1 } )
+        {
+            BOOST_CHECK_MESSAGE( containsPointNear( points, VECTOR2I( sx * offset, sy * offset ) ),
+                                 "no crossing near " << sx * offset << ", " << sy * offset );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( IntersectEllipseWithOffsetCircle )
+{
+    const SHAPE_ELLIPSE ellipse( VECTOR2I( 0, 0 ), 2000000, 1000000, ANGLE_0 );
+    const CIRCLE        circle( VECTOR2I( 0, 300000 ), 1500000 );
+
+    const std::vector<VECTOR2I> points = ellipse.Intersect( circle );
+
+    BOOST_REQUIRE_EQUAL( points.size(), 4 );
+
+    for( const VECTOR2I& point : points )
+    {
+        BOOST_CHECK_MESSAGE( ellipse.SquaredDistance( point, true ) <= 4,
+                             "point " << point.x << ", " << point.y << " is off the ellipse" );
+
+        const double radial = std::abs( circle.Center.Distance( point ) - circle.Radius );
+        BOOST_CHECK_MESSAGE( radial <= 2.0, "point " << point.x << ", " << point.y << " is off the circle" );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( IntersectEllipseWithSegment )
+{
+    const SHAPE_ELLIPSE ellipse( VECTOR2I( 0, 0 ), 2000000, 1000000, ANGLE_0 );
+    const SEG           seg( VECTOR2I( -3000000, 0 ), VECTOR2I( 3000000, 0 ) );
+
+    const std::vector<VECTOR2I> points = ellipse.Intersect( seg );
+
+    BOOST_REQUIRE_EQUAL( points.size(), 2 );
+    BOOST_CHECK( containsPointNear( points, VECTOR2I( -2000000, 0 ) ) );
+    BOOST_CHECK( containsPointNear( points, VECTOR2I( 2000000, 0 ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( IntersectEllipseWithEllipticalArc )
+{
+    const SHAPE_ELLIPSE ellipse( VECTOR2I( 0, 0 ), 2000000, 1000000, ANGLE_0 );
+    const SHAPE_ELLIPSE arc( VECTOR2I( 0, 0 ), 2000000, 1000000, ANGLE_90, ANGLE_0, ANGLE_90 );
+
+    const std::vector<VECTOR2I> points = ellipse.Intersect( arc );
+
+    const int offset = KiROUND( 2000000.0 / std::sqrt( 5.0 ) );
+
+    BOOST_REQUIRE_EQUAL( points.size(), 1 );
+    BOOST_CHECK( containsPointNear( points, VECTOR2I( -offset, offset ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( IntersectionVisitorHandlesEllipses )
+{
+    const INTERSECTABLE_GEOM first = SHAPE_ELLIPSE( VECTOR2I( 0, 0 ), 2000000, 1000000, ANGLE_0 );
+    const INTERSECTABLE_GEOM second = SHAPE_ELLIPSE( VECTOR2I( 0, 0 ), 2000000, 1000000, ANGLE_90 );
+    const INTERSECTABLE_GEOM circle = CIRCLE( VECTOR2I( 0, 300000 ), 1500000 );
+
+    std::vector<VECTOR2I> ellipseToEllipse;
+    std::visit( INTERSECTION_VISITOR( first, ellipseToEllipse ), second );
+    BOOST_CHECK_EQUAL( ellipseToEllipse.size(), 4 );
+
+    std::vector<VECTOR2I> visitedCircle;
+    std::visit( INTERSECTION_VISITOR( first, visitedCircle ), circle );
+    BOOST_CHECK_EQUAL( visitedCircle.size(), 4 );
+
+    std::vector<VECTOR2I> visitedEllipse;
+    std::visit( INTERSECTION_VISITOR( circle, visitedEllipse ), first );
+    BOOST_CHECK_EQUAL( visitedEllipse.size(), 4 );
 }
 
 
