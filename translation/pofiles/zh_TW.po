@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-07-31 18:02+0000\n"
+"PO-Revision-Date: 2026-08-06 05:26+0000\n"
 "Last-Translator: Che-Hsien Su <jonassu1101@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.8.1.dev0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -3068,9 +3068,8 @@ msgid "Custom"
 msgstr "自定義"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:48
-#, fuzzy
 msgid "Data Source Name"
-msgstr "信號源 2"
+msgstr "資料來源名稱"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:54
 msgid "Username"
