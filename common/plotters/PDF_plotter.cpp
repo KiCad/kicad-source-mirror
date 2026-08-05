@@ -2708,12 +2708,9 @@ void PDF_PLOTTER::drawOverbars( const std::vector<OVERBAR_INFO>& aOverbars, cons
         // Base vertical offset distance in device units (baseline -> default overbar position)
         double barOffset = aFontMetrics.GetOverbarVerticalPosition( overbar.fontSize.y );
 
-        // Adjust further to match screen drawing.  This is somewhat disturbing, but I can't figure
-        // out why it's needed.
+        // Adjust further for outline fonts
         if( overbar.isOutline )
-            barOffset += overbar.fontSize.y * 0.16;
-        else
-            barOffset += overbar.fontSize.y * 0.32;
+            barOffset += overbar.fontSize.y * 0.25; // extra raise for outline font
 
         // Mirror the text vertical alignment adjustments used for baseline shifting.
         // Earlier logic scales baseline adjustment: CENTER ~2x, TOP ~4x. We apply proportional
