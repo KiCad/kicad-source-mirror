@@ -2310,7 +2310,14 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
     for( const SCH_FIELD* aField : aFields )
     {
+        int fieldCompareFlags = aCompareFlags;
+
+        // SCH_FIELD::compare() injects SKIP_TST_POS for ERC so mirror it here (issue 24657).
+        if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC )
+            fieldCompareFlags |= SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS;
+
         const SCH_FIELD* bField = nullptr;
+        int              field_retv = 0;
 
         if( aField->IsMandatory() )
             bField = aRhs.GetField( aField->GetId() );
@@ -2319,47 +2326,79 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
         if( !bField )
         {
-            retv = 1;
-            REPORT( wxString::Format( _( "Extra field in schematic symbol: %s." ), ITEM_DESC( aField ) ) );
+            retv = field_retv = 1;
+            REPORT( wxString::Format( _( "Extra field in schematic symbol: %s." ), aField->GetName( false ) ) );
 
             if( !aReporter )
                 return retv;
         }
         else
         {
-            int tmp = 0;
-
-            // For EQUALITY comparison, we need to compare field content directly
-            // since SCH_ITEM::compare() returns 0 for EQUALITY flag
-            if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
+            // ERC doesn't check for field content, but EQUALITY does
+            if( fieldCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
             {
-                // Compare field text content
-                tmp = aField->GetText().compare( bField->GetText() );
+                if( int tmp = aField->GetText().compare( bField->GetText() ) )
+                {
+                    retv = field_retv = tmp;
+                    REPORT( wxString::Format( _( "Field '%s' differs: %s; %s." ),
+                                              aField->GetName( false ),
+                                              aField->GetText(),
+                                              bField->GetText() ) );
+
+                    if( !aReporter )
+                        return retv;
+                }
             }
 
-            if( tmp == 0 )
+            if( aField->IsPrivate() != bField->IsPrivate() )
             {
-                int fieldCompareFlags = aCompareFlags;
-
-                // SCH_FIELD::compare() injects SKIP_TST_POS for ERC, but it is bypassed
-                // by the base-class call below, so mirror it here (issue 24657).
-                if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC )
-                    fieldCompareFlags |= SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS;
-
-                // Fall back to base class comparison for other properties
-                tmp = aField->SCH_ITEM::compare( *bField, fieldCompareFlags );
-            }
-
-            if( tmp != 0 )
-            {
-                retv = tmp;
-                REPORT( wxString::Format( _( "Field '%s' differs: %s; %s." ),
-                                          aField->GetName( false ),
-                                          ITEM_DESC( aField ),
-                                          ITEM_DESC( bField ) ) );
+                retv = field_retv = aField->IsPrivate() ? 1 : -1;
+                REPORT( wxString::Format( _( "Field '%s' privacy flags differ." ), aField->GetName( false ) ) );
 
                 if( !aReporter )
                     return retv;
+            }
+
+            if( aField->IsNameShown() != bField->IsNameShown() )
+            {
+                retv = field_retv = aField->IsNameShown() ? 1 : -1;
+                REPORT( wxString::Format( _( "Field '%s' name shown flags differ." ), aField->GetName( false ) ) );
+
+                if( !aReporter )
+                    return retv;
+            }
+
+            if( !( fieldCompareFlags & SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS ) )
+            {
+                int tmp = 0;
+
+                if( aField->GetPosition().x != bField->GetPosition().x )
+                    tmp = field_retv = aField->GetPosition().x - bField->GetPosition().x;
+
+                if( aField->GetPosition().y != bField->GetPosition().y )
+                    tmp = field_retv = aField->GetPosition().y - bField->GetPosition().y;
+
+                if( tmp != 0 )
+                {
+                    retv = field_retv = tmp;
+                    REPORT( wxString::Format( _( "Field '%s' positions differ." ), aField->GetName( false ) ) );
+
+                    if( !aReporter )
+                        return retv;
+                }
+            }
+
+            if( field_retv == 0 )
+            {
+                // Fall back to base class comparison for other properties
+                if( int tmp = aField->SCH_ITEM::compare( *bField, fieldCompareFlags ) )
+                {
+                    retv = field_retv = tmp;
+                    REPORT( wxString::Format( _( "Field '%s' differs." ), aField->GetName( false ) ) );
+
+                    if( !aReporter )
+                        return retv;
+                }
             }
         }
     }
@@ -2376,7 +2415,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         if( !aField )
         {
             retv = 1;
-            REPORT( wxString::Format( _( "Missing field in schematic symbol: %s." ), ITEM_DESC( bField ) ) );
+            REPORT( wxString::Format( _( "Missing field in schematic symbol: %s." ), bField->GetName( false ) ) );
 
             if( !aReporter )
                 return retv;
