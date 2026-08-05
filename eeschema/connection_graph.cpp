@@ -1395,8 +1395,24 @@ void CONNECTION_GRAPH::updateSymbolConnectivity( const SCH_SHEET_PATH& aSheet, S
 
             for( const wxString& pinNumber : group )
             {
-                if( SCH_PIN* pin = aSymbol->GetPin( pinNumber ) )
-                    pins.emplace_back( pin );
+                SCH_PIN* found = aSymbol->GetPin( pinNumber );
+
+                if( !found )
+                {
+                    // A group member can name one contact of a stacked pin like [A1,A12].
+                    for( SCH_PIN* pin : aSymbol->GetPins( &aSheet ) )
+                    {
+                        if( alg::contains( pin->GetStackedPinNumbers(), pinNumber ) )
+                        {
+                            found = pin;
+                            break;
+                        }
+                    }
+                }
+
+                // Several members can name contacts of the same pin, which must be linked once.
+                if( found && !alg::contains( pins, found ) )
+                    pins.emplace_back( found );
             }
 
             linkPinsInVec( pins );
