@@ -116,7 +116,7 @@ public:
      * Convert a schematic symbol library to the latest KiCad format
      */
     static bool ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, const wxString& aOldFilePath,
-                                const wxString& aNewFilepath );
+                                const wxString& aNewFilepath, REPORTER* aReporter = nullptr );
 };
 
 #endif // _SCH_IO_MGR_H_

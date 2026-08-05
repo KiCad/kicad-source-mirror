@@ -1314,7 +1314,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     }
     else
     {
-        if( !SCH_IO_MGR::ConvertLibrary( nullptr, fn.GetAbsolutePath(), upgradeJob->m_outputLibraryPath ) )
+        if( !SCH_IO_MGR::ConvertLibrary( nullptr, fn.GetAbsolutePath(), upgradeJob->m_outputLibraryPath, m_reporter ) )
         {
             m_reporter->Report( ( "Unable to convert library\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;

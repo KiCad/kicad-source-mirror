@@ -239,12 +239,21 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromSchPath( const wxString& a
 
 
 bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, const wxString& aOldFilePath,
-                                 const wxString& aNewFilepath )
+                                 const wxString& aNewFilepath, REPORTER* aReporter )
 {
+    auto report = [&]( const wxString& aMessage, SEVERITY aSeverity )
+    {
+        if( aReporter )
+            aReporter->Report( aMessage, aSeverity );
+    };
+
     SCH_IO_MGR::SCH_FILE_T oldFileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
 
     if( oldFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+    {
+        report( _( "Unrecognized library type" ), RPT_SEVERITY_ERROR );
         return false;
+    }
 
     // A nested library table has no plugin to enumerate it; reject it before the null-plugin
     // path below.
@@ -263,9 +272,14 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
     if( !oldFilePI || !kicadPI )
         return false;
 
+    if( aReporter )
+        oldFilePI->SetReporter( aReporter );
+
     std::vector<LIB_SYMBOL*>           symbols;
     std::vector<LIB_SYMBOL*>           newSymbols;
     std::map<LIB_SYMBOL*, LIB_SYMBOL*> symbolMap;
+
+    report( wxString::Format( _( "Loading symbol library '%s'" ), aOldFilePath ), RPT_SEVERITY_ACTION );
 
     try
     {
@@ -297,17 +311,52 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
 
         // Create a blank library
         kicadPI->SaveLibrary( aNewFilepath );
-
-        // Finally write out newSymbols
-        for( LIB_SYMBOL* symbol : newSymbols )
-        {
-            kicadPI->SaveSymbol( aNewFilepath, symbol );
-        }
+    }
+    catch( const IO_ERROR& io_err )
+    {
+        report( wxString::Format( _( "Library '%s' Convert err: \"%s\"" ), aOldFilePath, io_err.What() ),
+                RPT_SEVERITY_ERROR );
+        return false;
+    }
+    catch( const std::exception& e )
+    {
+        report( wxString::Format( _( "Error loading library '%s': %s" ), aOldFilePath, e.what() ), RPT_SEVERITY_ERROR );
+        return false;
     }
     catch( ... )
     {
+        report( wxString::Format( _( "Error loading library '%s': unknown error" ), aOldFilePath ),
+                RPT_SEVERITY_ERROR );
         return false;
     }
 
-    return true;
+    bool ok = true;
+
+    for( LIB_SYMBOL* symbol : newSymbols )
+    {
+        try
+        {
+            kicadPI->SaveSymbol( aNewFilepath, symbol );
+        }
+        catch( const IO_ERROR& io_err )
+        {
+            report( wxString::Format( _( "Error saving symbol '%s': %s" ), symbol->GetName(), io_err.What() ),
+                    RPT_SEVERITY_ERROR );
+            ok = false;
+        }
+        catch( const std::exception& e )
+        {
+            report( wxString::Format( _( "Error saving symbol '%s': %s" ), symbol->GetName(), e.what() ),
+                    RPT_SEVERITY_ERROR );
+            ok = false;
+        }
+        catch( ... )
+        {
+            report( wxString::Format( _( "Error saving symbol '%s': unknown error" ), symbol->GetName() ),
+                    RPT_SEVERITY_ERROR );
+            ok = false;
+        }
+    }
+
+    return ok;
 }
