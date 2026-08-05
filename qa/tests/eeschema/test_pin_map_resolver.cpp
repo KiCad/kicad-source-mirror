@@ -64,6 +64,8 @@ struct PIN_MAP_RESOLVER_FIXTURE
         addPin( *m_lib, wxS( "1" ) );   // identity in DFN
         addPin( *m_lib, wxS( "4" ) );   // mapped to [4,9]
         addPin( *m_lib, wxS( "8" ) );   // not mapped, no pad -> UNMAPPED
+        addPin( *m_lib, wxS( "[2,3]" ) );   // stacked, both members are pads on the footprint
+        addPin( *m_lib, wxS( "[20,21]" ) ); // stacked, neither member is a pad
 
         PIN_MAP map( wxS( "DFN-8-EP" ) );
         map.SetEntry( wxS( "4" ), wxS( "[4,9]" ) );
@@ -109,6 +111,26 @@ BOOST_AUTO_TEST_CASE( ThreeResolutionStates )
     // UNMAPPED: pin 8 has no entry and pad 8 is absent (set has 1-7 and 9).
     BOOST_CHECK( pin( wxS( "8" ) )->GetEffectivePadNumber( m_sheet, wxEmptyString, m_dfn, &dfnPads,
                                                           &state ).IsEmpty() );
+    BOOST_CHECK( state == PAD_RESOLUTION::UNMAPPED );
+}
+
+
+BOOST_AUTO_TEST_CASE( StackedPinResolvesThroughFootprintPads )
+{
+    std::set<wxString> dfnPads = { wxS( "1" ), wxS( "2" ), wxS( "3" ), wxS( "4" ),
+                                   wxS( "5" ), wxS( "6" ), wxS( "7" ), wxS( "9" ) };
+
+    PAD_RESOLUTION state;
+
+    // A stacked pin's number is the whole list. The footprint carries its members as pads.
+    BOOST_CHECK_EQUAL( pin( wxS( "[2,3]" ) )->GetEffectivePadNumber( m_sheet, wxEmptyString, m_dfn, &dfnPads, &state ),
+                       wxS( "[2,3]" ) );
+    BOOST_CHECK( state == PAD_RESOLUTION::IDENTITY );
+
+    // Brackets alone must not resolve. The members have to be pads on the footprint.
+    BOOST_CHECK( pin( wxS( "[20,21]" ) )
+                         ->GetEffectivePadNumber( m_sheet, wxEmptyString, m_dfn, &dfnPads, &state )
+                         .IsEmpty() );
     BOOST_CHECK( state == PAD_RESOLUTION::UNMAPPED );
 }
 
