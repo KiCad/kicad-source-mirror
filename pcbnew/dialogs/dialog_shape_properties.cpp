@@ -41,14 +41,8 @@
 #include <cstdlib>
 #include <widgets/unit_binder.h>
 
+#include <dialogs/geom_field_helpers.h>
 #include <tools/drawing_tool.h>
-
-
-struct BOUND_CONTROL
-{
-    std::unique_ptr<UNIT_BINDER> m_Binder;
-    wxTextCtrl*                  m_Ctrl;
-};
 
 
 /**
@@ -921,84 +915,6 @@ private:
     std::unique_ptr<GEOM_SYNCER> m_geomSync;
     PCB_SHAPE                    m_workingCopy;
 };
-
-
-static void AddXYPointToSizer( EDA_DRAW_FRAME& aFrame, wxGridBagSizer& aSizer, int row, int col,
-                               const wxString& aName, bool aRelative, std::vector<BOUND_CONTROL>& aBoundCtrls )
-{
-    //    Name
-    // X [Ctrl] mm
-    // Y [Ctrl] mm
-    wxWindow* parent = aSizer.GetContainingWindow();
-
-    wxStaticText* titleLabel = new wxStaticText( parent, wxID_ANY, aName );
-    aSizer.Add( titleLabel, wxGBPosition( row, col ), wxGBSpan( 1, 3 ),
-                wxALIGN_CENTER_VERTICAL | wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND );
-    row++;
-
-    for( size_t coord = 0; coord < 2; ++coord )
-    {
-        wxStaticText* label = new wxStaticText( parent, wxID_ANY, coord == 0 ? _( "X:" ) : _( "Y:" ) );
-        aSizer.Add( label, wxGBPosition( row, col ), wxDefaultSpan,
-                    wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxLEFT, col > 0 ? 20 : 5 );
-
-        wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY, "" );
-        aSizer.Add( ctrl, wxGBPosition( row, col + 1 ), wxDefaultSpan,
-                    wxEXPAND | wxALIGN_CENTER_VERTICAL, 5 );
-
-        wxStaticText* units = new wxStaticText( parent, wxID_ANY, _( "mm" ) );
-        aSizer.Add( units, wxGBPosition( row, col + 2 ), wxDefaultSpan,
-                    wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
-
-        auto binder = std::make_unique<UNIT_BINDER>( &aFrame, label, ctrl, units );
-
-        if( aRelative )
-            binder->SetCoordType( coord == 0 ? ORIGIN_TRANSFORMS::REL_X_COORD : ORIGIN_TRANSFORMS::REL_Y_COORD );
-        else
-            binder->SetCoordType( coord == 0 ? ORIGIN_TRANSFORMS::ABS_X_COORD : ORIGIN_TRANSFORMS::ABS_Y_COORD );
-
-        aBoundCtrls.push_back( BOUND_CONTROL{ std::move( binder ), ctrl } );
-        row++;
-    }
-
-    if( !aSizer.IsColGrowable( col + 1 ) )
-        aSizer.AddGrowableCol( col + 1 );
-}
-
-
-void AddFieldToSizer( EDA_DRAW_FRAME& aFrame, wxGridBagSizer& aSizer, int row, int col,
-                      const wxString& aName, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType,
-                      bool aIsAngle, std::vector<BOUND_CONTROL>& aBoundCtrls )
-{
-    // Name: [Ctrl] mm
-    wxWindow* parent = aSizer.GetContainingWindow();
-
-    wxStaticText* label = new wxStaticText( parent, wxID_ANY, aName + wxS( ":" ) );
-    aSizer.Add( label, wxGBPosition( row, col ), wxDefaultSpan,
-                wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxLEFT, col > 0 ? 20 : 5 );
-
-    wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY );
-    aSizer.Add( ctrl, wxGBPosition( row, col + 1 ), wxDefaultSpan,
-                wxEXPAND | wxALIGN_CENTER_VERTICAL, 5 );
-
-    wxStaticText* units = new wxStaticText( parent, wxID_ANY, _( "mm" ) );
-    aSizer.Add( units, wxGBPosition( row, col + 2 ), wxDefaultSpan,
-                wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
-
-    auto binder = std::make_unique<UNIT_BINDER>( &aFrame, label, ctrl, units );
-    binder->SetCoordType( aCoordType );
-
-    if( aIsAngle )
-    {
-        binder->SetPrecision( 4 );
-        binder->SetUnits( EDA_UNITS::DEGREES );
-    }
-
-    aBoundCtrls.push_back( BOUND_CONTROL{ std::move( binder ), ctrl } );
-
-    if( !aSizer.IsColGrowable( col + 1 ) )
-        aSizer.AddGrowableCol( col + 1 );
-}
 
 
 static std::map<SHAPE_T, int> s_lastTabForShape;
