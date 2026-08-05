@@ -5606,6 +5606,9 @@ SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
 
     for( auto& [name, entry] : syms )
     {
+        if( m_reporter )
+            m_reporter->Report( wxString::Format( _( "Converting symbol '%s'" ), name ), RPT_SEVERITY_ACTION );
+
         std::map<int, SYMBOL_PIN_FRAC> pinFracs;
 
         if( entry.m_pinsFrac )
@@ -5783,6 +5786,14 @@ SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumLibFile )
         symbol->SetName( name );
         ret[name] = symbol;
     }
+
+    if( m_reporter )
+    {
+        for( const auto& [msg, severity] : m_errorMessages )
+            m_reporter->Report( msg, severity );
+    }
+
+    m_errorMessages.clear();
 
     return ret;
 }
