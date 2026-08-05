@@ -82,6 +82,6 @@ BOOST_FIXTURE_TEST_CASE( SheetDNPEffectiveInSymbolFields, ISSUE24663_FIXTURE )
 
     // GetValue with resolveVars off is the path that feeds the on screen checkbox: a
     // value of "1" draws it checked. The stored attribute is still the symbol's own "0".
-    SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW group( r1, GROUP_SINGLETON );
-    BOOST_CHECK_EQUAL( model.GetValue( group, dnpCol ), wxS( "1" ) );
+    SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW row( r1, ROW_STATE::NON_EXPANDABLE );
+    BOOST_CHECK_EQUAL( model.GetValue( row, dnpCol ), wxS( "1" ) );
 }

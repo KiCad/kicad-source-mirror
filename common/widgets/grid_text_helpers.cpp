@@ -105,9 +105,9 @@ void GRID_CELL_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& 
 
     INDICATOR_ICON::ICON_ID state = ROW_ICON_PROVIDER::STATE::OFF;
 
-    if( table->GetGroupType( aRow ) == GROUP_COLLAPSED )
+    if( table->GetRowState( aRow ) == ROW_STATE::COLLAPSED )
         state = ROW_ICON_PROVIDER::STATE::CLOSED;
-    else if( table->GetGroupType( aRow ) == GROUP_EXPANDED )
+    else if( table->GetRowState( aRow ) == ROW_STATE::EXPANDED_PARENT )
         state = ROW_ICON_PROVIDER::STATE::OPEN;
 
     wxBitmap bitmap = static_cast<WX_GRID&>( aGrid ).GetRowIconProvider()->GetIndicatorIcon( state );
@@ -122,7 +122,7 @@ void GRID_CELL_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& 
 
     leftCut += aDC.FromDIP( 4 );
 
-    if( table->GetGroupType( aRow ) == CHILD_ITEM )
+    if( table->GetRowState( aRow ) == ROW_STATE::EXPANDED_CHILD )
         leftCut += aDC.FromDIP( 12 );
 
     rect.x += leftCut;
@@ -151,7 +151,7 @@ wxSize GRID_CELL_TEXT_RENDERER::GetBestSize( wxGrid& grid, wxGridCellAttr& attr,
 
     size.x += bitmap.GetLogicalWidth() + dc.FromDIP( 8 );
 
-    if( table->GetGroupType( row ) == CHILD_ITEM )
+    if( table->GetRowState( row ) == ROW_STATE::EXPANDED_CHILD )
         size.x += dc.FromDIP( 12 );
 
     size.y = std::max( size.y, dc.FromDIP( 2 ) );
@@ -531,5 +531,3 @@ void GRID_CELL_TEXT_BUTTON::SetValidator( const wxValidator& validator )
     m_validator.reset( static_cast< wxValidator* >( validator.Clone() ) );
 }
 #endif
-
-

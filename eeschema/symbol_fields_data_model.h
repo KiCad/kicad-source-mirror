@@ -81,7 +81,7 @@ public:
     wxString        GetResolvedValue( int aRow, int aCol );
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
-    wxString GetValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& group, int aCol,
+    wxString GetValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol,
                        const wxString& refDelimiter = wxT( ", " ),
                        const wxString& refRangDelimiter = wxT( "-" ),
                        bool resolveVars = false,
@@ -95,18 +95,16 @@ public:
 
     void SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
-    GROUP_TYPE GetRowFlags( int aRow ) { return m_rows[aRow].m_Flag; }
-
     std::vector<SCH_REFERENCE> GetRowReferences( int aRow ) const
     {
         wxCHECK( aRow >= 0 && aRow < (int) m_rows.size(), std::vector<SCH_REFERENCE>() );
-        return m_rows[aRow].m_Refs;
+        return m_rows[aRow].m_items;
     }
 
     bool ColIsValue( int aCol );
     bool ColIsAttribute( int aCol );
 
-    GROUP_TYPE GetGroupType( int aRow ) const override { return m_rows[aRow].m_Flag; }
+    ROW_STATE GetRowState( int aRow ) const override { return m_rows[aRow].m_state; }
 
     void RebuildRows() override;
 
@@ -158,9 +156,8 @@ public:
     const std::vector<wxString>& GetVariantNames() const { return m_variantNames; }
 
 private:
-    static bool cmp( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhGroup,
-                     const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhGroup, SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* dataModel,
-                     int sortCol, bool ascending );
+    static bool cmp( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhRow, const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhRow,
+                     SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending );
 
     bool unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
     bool groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
@@ -184,7 +181,7 @@ private:
 
     // True when an ancestor sheet forces this attribute on, not the symbol itself.
     bool attributeInheritedFromSheet( const SCH_REFERENCE& aRef, const wxString& aAttributeName ) const;
-    bool rowAttributeInheritedFromSheet( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aGroup, int aCol );
+    bool rowAttributeInheritedFromSheet( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol );
 
     wxString getAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName,
                                 const wxString& aVariantNames );

@@ -77,8 +77,8 @@ struct ISSUE24915_FIXTURE
         int col = aModel.GetFieldNameCol( aField );
         BOOST_REQUIRE( col >= 0 );
 
-        SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW group( FindRef( aRef ), GROUP_SINGLETON );
-        return aModel.GetValue( group, col );
+        SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW row( FindRef( aRef ), ROW_STATE::NON_EXPANDABLE );
+        return aModel.GetValue( row, col );
     }
 
     // The export preview path, generated fields are re-resolved live instead of read
@@ -89,8 +89,8 @@ struct ISSUE24915_FIXTURE
         int col = aModel.GetFieldNameCol( aField );
         BOOST_REQUIRE( col >= 0 );
 
-        SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW group( FindRef( aRef ), GROUP_SINGLETON );
-        return aModel.GetValue( group, col, wxS( ", " ), wxS( "-" ), true, false );
+        SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW row( FindRef( aRef ), ROW_STATE::NON_EXPANDABLE );
+        return aModel.GetValue( row, col, wxS( ", " ), wxS( "-" ), true, false );
     }
 
     LOCALE_IO          m_locale;

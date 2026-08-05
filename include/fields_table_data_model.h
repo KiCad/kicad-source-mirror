@@ -29,6 +29,22 @@ struct BOM_PRESET;
 struct BOM_FMT_PRESET;
 
 
+/**
+ * DATA_MODEL_COL and DATA_MODEL_ROW are used together in vectors of both (m_cols and m_rows)
+ * to represent the current view of the fields table.
+ *
+ * This is not where the fields data itself is stored. See the data model for that.
+ *
+ * The columns are rebuilt as the user changes the display options, presets, etc.
+ *
+ * The rows are rebuilt according to grouping, filtering, sorting, etc. as well
+ * as user actions like expanding and collapsing rows with groupable fields.
+ *
+ * A row can contain multiple items because they are grouped together because of the
+ * user's grouping settings. Or, a row may contain multiple references to a multi-unit
+ * symbol, etc. So, it does not necessarily represent a single symbol in the schematic.
+ */
+
 struct DATA_MODEL_COL
 {
     wxString m_fieldName;
@@ -42,16 +58,16 @@ struct DATA_MODEL_COL
 template <typename ITEM_TYPE>
 struct DATA_MODEL_ROW
 {
-    DATA_MODEL_ROW( const ITEM_TYPE& aFirstReference, GROUP_TYPE aType )
+    DATA_MODEL_ROW( const ITEM_TYPE& aFirstItem, ROW_STATE aGroupingState )
     {
-        m_ItemNumber = 0;
-        m_Refs.push_back( aFirstReference );
-        m_Flag = aType;
+        m_itemNumber = 0;
+        m_items.push_back( aFirstItem );
+        m_state = aGroupingState;
     }
 
-    int                    m_ItemNumber;
-    GROUP_TYPE             m_Flag;
-    std::vector<ITEM_TYPE> m_Refs;
+    int                    m_itemNumber;
+    ROW_STATE              m_state;
+    std::vector<ITEM_TYPE> m_items;
 };
 
 

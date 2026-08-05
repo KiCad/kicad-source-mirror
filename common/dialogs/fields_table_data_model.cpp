@@ -340,7 +340,7 @@ wxString FIELDS_TABLE_DATA_MODEL_BASE::Export( const BOM_FMT_PRESET& aSettings )
     for( int row = 0; row < GetNumberRows(); row++ )
     {
         // Don't output child rows
-        if( GetGroupType( row ) == CHILD_ITEM )
+        if( GetRowState( row ) == ROW_STATE::EXPANDED_CHILD )
             continue;
 
         for( size_t col = 0; col < m_cols.size(); col++ )

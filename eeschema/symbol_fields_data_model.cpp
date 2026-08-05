@@ -243,7 +243,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
             const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row = m_rows[aRow];
 
             // Check if any symbol in this row has a variant-specific value
-            for( const SCH_REFERENCE& ref : row.m_Refs )
+            for( const SCH_REFERENCE& ref : row.m_items )
             {
                 wxString defaultValue = getDefaultFieldValue( ref, fieldName );
 
@@ -360,7 +360,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
 }
 
 
-wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& group, int aCol,
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol,
                                                          const wxString& refDelimiter,
                                                          const wxString& refRangeDelimiter, bool resolveVars,
                                                          bool listMixedValues )
@@ -369,7 +369,7 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const SYMBOL_FIELDS_TAB
     std::set<wxString>         mixedValues;
     wxString                   fieldValue;
 
-    for( const SCH_REFERENCE& ref : group.m_Refs )
+    for( const SCH_REFERENCE& ref : aRow.m_items )
     {
         if( ColIsReference( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
         {
@@ -412,7 +412,7 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const SYMBOL_FIELDS_TAB
 
             if( listMixedValues )
                 mixedValues.insert( refFieldValue );
-            else if( &ref == &group.m_Refs.front() )
+            else if( &ref == &aRow.m_items.front() )
                 fieldValue = refFieldValue;
             else if( fieldValue != refFieldValue )
                 return INDETERMINATE_STATE;
@@ -465,8 +465,8 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const SYMBOL_FIELDS_TAB
         fieldValue = SCH_REFERENCE_LIST::Shorthand( references, refDelimiter, refRangeDelimiter );
     else if( ColIsQuantity( aCol ) )
         fieldValue = wxString::Format( wxT( "%d" ), (int) references.size() );
-    else if( ColIsItemNumber( aCol ) && group.m_Flag != CHILD_ITEM )
-        fieldValue = wxString::Format( wxT( "%d" ), group.m_ItemNumber );
+    else if( ColIsItemNumber( aCol ) && aRow.m_state != ROW_STATE::EXPANDED_CHILD )
+        fieldValue = wxString::Format( wxT( "%d" ), aRow.m_itemNumber );
 
     return fieldValue;
 }
@@ -486,12 +486,12 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const w
     if( aValue == INDETERMINATE_STATE )
         return;
 
-    const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rowGroup = m_rows[aRow];
+    const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row = m_rows[aRow];
     const wxString&                           fieldName = m_cols[aCol].m_fieldName;
 
     std::set<const SCH_SYMBOL*> editedSymbols;
 
-    for( const SCH_REFERENCE& ref : rowGroup.m_Refs )
+    for( const SCH_REFERENCE& ref : row.m_items )
     {
         editedSymbols.insert( ref.GetSymbol() );
 
@@ -533,15 +533,15 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsAttribute( int aCol )
 }
 
 
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhGroup,
-                                                const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhGroup,
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhRow,
+                                                const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhRow,
                                                 SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol,
                                                 bool ascending )
 {
     // Empty rows always go to the bottom, whether ascending or descending
-    if( lhGroup.m_Refs.size() == 0 )
+    if( lhRow.m_items.size() == 0 )
         return true;
-    else if( rhGroup.m_Refs.size() == 0 )
+    else if( rhRow.m_items.size() == 0 )
         return false;
 
     // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
@@ -559,13 +559,13 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const SYMBOL_FIELDS_TABLE_DATA_M
     if( sortCol < 0 || sortCol >= dataModel->GetNumberCols() )
         sortCol = 0;
 
-    wxString lhs = dataModel->GetValue( lhGroup, sortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
-    wxString rhs = dataModel->GetValue( rhGroup, sortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
+    wxString lhs = dataModel->GetValue( lhRow, sortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
+    wxString rhs = dataModel->GetValue( rhRow, sortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
 
     if( lhs == rhs || dataModel->ColIsReference( sortCol ) )
     {
-        wxString lhRef = lhGroup.m_Refs[0].GetRef() + lhGroup.m_Refs[0].GetRefNumber();
-        wxString rhRef = rhGroup.m_Refs[0].GetRef() + rhGroup.m_Refs[0].GetRefNumber();
+        wxString lhRef = lhRow.m_items[0].GetRef() + lhRow.m_items[0].GetRefNumber();
+        wxString rhRef = rhRow.m_items[0].GetRef() + rhRow.m_items[0].GetRefNumber();
         return local_cmp( StrNumCmp( lhRef, rhRef, true ), 0 );
     }
     else
@@ -583,7 +583,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
     // had better be the lowest one.
     for( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row : m_rows )
     {
-        std::sort( row.m_Refs.begin(), row.m_Refs.end(),
+        std::sort( row.m_items.begin(), row.m_items.end(),
                    []( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs )
                    {
                        wxString lhs_ref( lhs.GetRef() << lhs.GetRefNumber() );
@@ -603,7 +603,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
 
     for( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row : m_rows )
     {
-        row.m_ItemNumber = itemNumber++;
+        row.m_itemNumber = itemNumber++;
     }
 
     ExpandAfterSort();
@@ -780,14 +780,14 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::attributeInheritedFromSheet( const SC
 
 
 bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::rowAttributeInheritedFromSheet(
-        const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aGroup, int aCol )
+        const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol )
 {
-    if( !ColIsAttribute( aCol ) || aGroup.m_Refs.empty() )
+    if( !ColIsAttribute( aCol ) || aRow.m_items.empty() )
         return false;
 
     // Lock the cell only when every symbol in the row inherits it, so a mixed group
     // stays editable and shows the indeterminate state.
-    for( const SCH_REFERENCE& ref : aGroup.m_Refs )
+    for( const SCH_REFERENCE& ref : aRow.m_items )
     {
         if( !attributeInheritedFromSheet( ref, m_cols[aCol].m_fieldName ) )
             return false;
@@ -969,7 +969,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         // Performance optimization for ungrouped case to skip the N^2 for loop
         if( !m_groupingEnabled && !ref.IsMultiUnit() )
         {
-            m_rows.emplace_back( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
+            m_rows.emplace_back( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( ref, ROW_STATE::NON_EXPANDABLE ) );
             continue;
         }
 
@@ -977,25 +977,25 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         for( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row : m_rows )
         {
             // all group members must have identical refs so just use the first one
-            SCH_REFERENCE rowRef = row.m_Refs[0];
+            SCH_REFERENCE rowRef = row.m_items[0];
 
             if( unitMatch( ref, rowRef ) )
             {
                 matchFound = true;
-                row.m_Refs.push_back( ref );
+                row.m_items.push_back( ref );
                 break;
             }
             else if( m_groupingEnabled && groupMatch( ref, rowRef ) )
             {
                 matchFound = true;
-                row.m_Refs.push_back( ref );
-                row.m_Flag = GROUP_COLLAPSED;
+                row.m_items.push_back( ref );
+                row.m_state = ROW_STATE::COLLAPSED;
                 break;
             }
         }
 
         if( !matchFound )
-            m_rows.emplace_back( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
+            m_rows.emplace_back( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( ref, ROW_STATE::NON_EXPANDABLE ) );
     }
 
     if( GetView() )
@@ -1012,7 +1012,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
 {
     std::vector<SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW> children;
 
-    for( SCH_REFERENCE& ref : m_rows[aRow].m_Refs )
+    for( SCH_REFERENCE& ref : m_rows[aRow].m_items )
     {
         bool matchFound = false;
 
@@ -1021,16 +1021,16 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
         {
             // group members are by definition all matching, so just check
             // against the first member
-            if( unitMatch( ref, child.m_Refs[0] ) )
+            if( unitMatch( ref, child.m_items[0] ) )
             {
                 matchFound = true;
-                child.m_Refs.push_back( ref );
+                child.m_items.push_back( ref );
                 break;
             }
         }
 
         if( !matchFound )
-            children.emplace_back( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( ref, CHILD_ITEM ) );
+            children.emplace_back( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( ref, ROW_STATE::EXPANDED_CHILD ) );
     }
 
     if( children.size() < 2 )
@@ -1043,7 +1043,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
                    return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
                } );
 
-    m_rows[aRow].m_Flag = GROUP_EXPANDED;
+    m_rows[aRow].m_state = ROW_STATE::EXPANDED_PARENT;
     m_rows.insert( m_rows.begin() + aRow + 1, children.begin(), children.end() );
 
     wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow, children.size() );
@@ -1057,13 +1057,14 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::CollapseRow( int aRow )
     auto afterLastChild = firstChild;
     int  deleted = 0;
 
-    while( afterLastChild != m_rows.end() && afterLastChild->m_Flag == CHILD_ITEM )
+    while( afterLastChild != m_rows.end()
+           && afterLastChild->m_state == ROW_STATE::EXPANDED_CHILD )
     {
         deleted++;
         afterLastChild++;
     }
 
-    m_rows[aRow].m_Flag = GROUP_COLLAPSED;
+    m_rows[aRow].m_state = ROW_STATE::COLLAPSED;
     m_rows.erase( firstChild, afterLastChild );
 
     wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aRow + 1, deleted );
@@ -1073,11 +1074,11 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::CollapseRow( int aRow )
 
 void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandCollapseRow( int aRow )
 {
-    SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& group = m_rows[aRow];
+    SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row = m_rows[aRow];
 
-    if( group.m_Flag == GROUP_COLLAPSED )
+    if( row.m_state == ROW_STATE::COLLAPSED )
         ExpandRow( aRow );
-    else if( group.m_Flag == GROUP_EXPANDED )
+    else if( row.m_state == ROW_STATE::EXPANDED_PARENT )
         CollapseRow( aRow );
 }
 
@@ -1086,10 +1087,10 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::CollapseForSort()
 {
     for( size_t i = 0; i < m_rows.size(); ++i )
     {
-        if( m_rows[i].m_Flag == GROUP_EXPANDED )
+        if( m_rows[i].m_state == ROW_STATE::EXPANDED_PARENT )
         {
             CollapseRow( i );
-            m_rows[i].m_Flag = GROUP_COLLAPSED_DURING_SORT;
+            m_rows[i].m_state = ROW_STATE::COLLAPSED_DURING_SORT;
         }
     }
 }
@@ -1099,7 +1100,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 {
     for( size_t i = 0; i < m_rows.size(); ++i )
     {
-        if( m_rows[i].m_Flag == GROUP_COLLAPSED_DURING_SORT )
+        if( m_rows[i].m_state == ROW_STATE::COLLAPSED_DURING_SORT )
             ExpandRow( i );
     }
 }
@@ -1435,7 +1436,7 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::DeleteRows( size_t aPosition, size_t 
     else
     {
         const auto                 first = m_rows.begin() + aPosition;
-        std::vector<SCH_REFERENCE> dataMapRefs = first->m_Refs;
+        std::vector<SCH_REFERENCE> dataMapRefs = first->m_items;
         m_rows.erase( first, first + aNumRows );
 
         for( const SCH_REFERENCE& ref : dataMapRefs )

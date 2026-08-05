@@ -28,7 +28,7 @@
 
 struct LIB_DATA_MODEL_ROW
 {
-    LIB_DATA_MODEL_ROW( const LIB_SYMBOL* aFirstReference, GROUP_TYPE aType ) :
+    LIB_DATA_MODEL_ROW( const LIB_SYMBOL* aFirstReference, ROW_STATE aType ) :
             m_ItemNumber( 0 ),
             m_Flag( aType ),
             m_Refs( { aFirstReference } )
@@ -36,7 +36,7 @@ struct LIB_DATA_MODEL_ROW
     }
 
     int                            m_ItemNumber;
-    GROUP_TYPE                     m_Flag;
+    ROW_STATE                      m_Flag;
     std::vector<const LIB_SYMBOL*> m_Refs;
 };
 
@@ -171,10 +171,7 @@ public:
     bool ColIsCheck( int aCol );
 
     bool IsExpanderColumn( int aCol ) const override;
-    GROUP_TYPE GetGroupType( int aRow ) const override
-    {
-        return m_rows[aRow].m_Flag;
-    }
+    ROW_STATE GetRowState( int aRow ) const override { return m_rows[aRow].m_Flag; }
 
     void SetSorting( int aCol, bool ascending )
     {
@@ -257,7 +254,8 @@ public:
     bool IsRowEditable( int aRow )
     {
         wxCHECK_MSG( aRow >= 0 && aRow < (int) m_rows.size(), false, "Invalid Row Number" );
-        return m_rows[aRow].m_Flag == GROUP_SINGLETON || m_rows[aRow].m_Flag == GROUP_SINGLETON;
+        return m_rows[aRow].m_Flag == ROW_STATE::NON_EXPANDABLE
+               || m_rows[aRow].m_Flag == ROW_STATE::NON_EXPANDABLE;
     }
 
     bool IsCellEdited( int aRow, int aCol )
@@ -277,7 +275,8 @@ public:
     bool IsRowSingleSymbol( int aRow )
     {
         wxCHECK_MSG( aRow >= 0 && aRow < (int) m_rows.size(), false, "Invalid Row Number" );
-        return m_rows[aRow].m_Flag == GROUP_SINGLETON || m_rows[aRow].m_Flag == CHILD_ITEM;
+        return m_rows[aRow].m_Flag == ROW_STATE::NON_EXPANDABLE
+               || m_rows[aRow].m_Flag == ROW_STATE::EXPANDED_CHILD;
     }
 
 private:

@@ -838,7 +838,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
         // Performance optimization for ungrouped case to skip the N^2 for loop
         if( !m_groupingEnabled )
         {
-            m_rows.emplace_back( LIB_DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
+            m_rows.emplace_back( LIB_DATA_MODEL_ROW( ref, ROW_STATE::NON_EXPANDABLE ) );
             continue;
         }
 
@@ -852,13 +852,13 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
             {
                 matchFound = true;
                 row.m_Refs.push_back( ref );
-                row.m_Flag = GROUP_COLLAPSED;
+                row.m_Flag = ROW_STATE::COLLAPSED;
                 break;
             }
         }
 
         if( !matchFound )
-            m_rows.emplace_back( LIB_DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
+            m_rows.emplace_back( LIB_DATA_MODEL_ROW( ref, ROW_STATE::NON_EXPANDABLE ) );
     }
 
     if( GetView() )
@@ -881,7 +881,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
         bool matchFound = false;
 
         if( !matchFound )
-            children.emplace_back( LIB_DATA_MODEL_ROW( ref, CHILD_ITEM ) );
+            children.emplace_back( LIB_DATA_MODEL_ROW( ref, ROW_STATE::EXPANDED_CHILD ) );
     }
 
     if( children.size() < 2 )
@@ -893,7 +893,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
                    return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
                } );
 
-    m_rows[aRow].m_Flag = GROUP_EXPANDED;
+    m_rows[aRow].m_Flag = ROW_STATE::EXPANDED_PARENT;
     m_rows.insert( m_rows.begin() + aRow + 1, children.begin(), children.end() );
 
     wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow, (int) children.size() );
@@ -907,13 +907,14 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::CollapseRow( int aRow )
     auto afterLastChild = firstChild;
     int  deleted = 0;
 
-    while( afterLastChild != m_rows.end() && afterLastChild->m_Flag == CHILD_ITEM )
+    while( afterLastChild != m_rows.end()
+           && afterLastChild->m_Flag == ROW_STATE::EXPANDED_CHILD )
     {
         deleted++;
         afterLastChild++;
     }
 
-    m_rows[aRow].m_Flag = GROUP_COLLAPSED;
+    m_rows[aRow].m_Flag = ROW_STATE::COLLAPSED;
     m_rows.erase( firstChild, afterLastChild );
 
     wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aRow + 1, deleted );
@@ -925,9 +926,9 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandCollapseRow( int aRow )
 {
     LIB_DATA_MODEL_ROW& group = m_rows[aRow];
 
-    if( group.m_Flag == GROUP_COLLAPSED )
+    if( group.m_Flag == ROW_STATE::COLLAPSED )
         ExpandRow( aRow );
-    else if( group.m_Flag == GROUP_EXPANDED )
+    else if( group.m_Flag == ROW_STATE::EXPANDED_PARENT )
         CollapseRow( aRow );
 }
 
@@ -936,10 +937,10 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::CollapseForSort()
 {
     for( size_t i = 0; i < m_rows.size(); ++i )
     {
-        if( m_rows[i].m_Flag == GROUP_EXPANDED )
+        if( m_rows[i].m_Flag == ROW_STATE::EXPANDED_PARENT )
         {
             CollapseRow( i );
-            m_rows[i].m_Flag = GROUP_COLLAPSED_DURING_SORT;
+            m_rows[i].m_Flag = ROW_STATE::COLLAPSED_DURING_SORT;
         }
     }
 }
@@ -949,7 +950,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
 {
     for( size_t i = 0; i < m_rows.size(); ++i )
     {
-        if( m_rows[i].m_Flag == GROUP_COLLAPSED_DURING_SORT )
+        if( m_rows[i].m_Flag == ROW_STATE::COLLAPSED_DURING_SORT )
             ExpandRow( i );
     }
 }
