@@ -1311,6 +1311,24 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetPinsByNumber( const wxString& aNumber, int 
 }
 
 
+bool LIB_SYMBOL::HasPinNumber( const wxString& aNumber ) const
+{
+    if( GetPin( aNumber ) )
+        return true;
+
+    for( const SCH_PIN* pin : GetGraphicalPins( 0, 0 ) )
+    {
+        for( const wxString& logicalNumber : pin->GetStackedPinNumbers() )
+        {
+            if( aNumber == logicalNumber )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
 bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums, bool aTestNames, bool aTestType,
                                    bool aTestOrientation, bool aTestLength ) const
 {
