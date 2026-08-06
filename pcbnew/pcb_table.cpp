@@ -432,34 +432,6 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
     BOX2I newBBox = GetBoundingBox();
     Move( targetPos - newBBox.GetPosition() );
-
-    int localWidth = 0;
-    for( int col = 0; col < GetColCount(); ++col )
-        localWidth += m_colWidths[col];
-
-    int localHeight = 0;
-    for( int row = 0; row < GetRowCount(); ++row )
-        localHeight += m_rowHeights[row];
-
-    bool isNowOnFrontSide = IsFrontLayer( GetLayer() );
-
-    VECTOR2I translation( 0, 0 );
-
-    if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
-    {
-        translation.y = -localHeight;
-    }
-    else // LEFT_RIGHT
-    {
-        if( isNowOnFrontSide )
-            translation.x = localWidth;
-        else
-            translation.x = -localWidth;
-    }
-
-    RotatePoint( translation, originalAngle );
-
-    Move( translation );
 }
 
 

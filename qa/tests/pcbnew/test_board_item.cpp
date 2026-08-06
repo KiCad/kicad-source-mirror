@@ -99,14 +99,34 @@ public:
         {
             PCB_TABLE* table = new PCB_TABLE( &m_board, pcbIUScale.mmToIU( 0.1 ) );
 
-            table->SetColCount( 2 );
+            const int colWidths[2] = { pcbIUScale.mmToIU( 20.0 ), pcbIUScale.mmToIU( 30.0 ) };
+            const int rowHeights[2] = { pcbIUScale.mmToIU( 5.0 ), pcbIUScale.mmToIU( 7.0 ) };
 
-            for( int ii = 0; ii < 4; ++ii )
+            table->SetColCount( 2 );
+            table->SetColWidth( 0, colWidths[0] );
+            table->SetColWidth( 1, colWidths[1] );
+            table->SetRowHeight( 0, rowHeights[0] );
+            table->SetRowHeight( 1, rowHeights[1] );
+
+            int y = 0;
+
+            for( int row = 0; row < 2; ++row )
             {
-                PCB_TABLECELL* cell = new PCB_TABLECELL( &m_board );
-                cell->SetRectangleHeight( 0 );
-                cell->SetRectangleWidth( 0 );
-                table->InsertCell( ii, cell );
+                int x = 0;
+
+                for( int col = 0; col < 2; ++col )
+                {
+                    PCB_TABLECELL* cell = new PCB_TABLECELL( &m_board );
+                    cell->SetRectangleHeight( 0 );
+                    cell->SetRectangleWidth( 0 );
+                    cell->SetStart( VECTOR2I( x, y ) );
+                    cell->SetEnd( VECTOR2I( x + colWidths[col], y + rowHeights[row] ) );
+                    table->AddCell( cell );
+
+                    x += colWidths[col];
+                }
+
+                y += rowHeights[row];
             }
 
             return table;
