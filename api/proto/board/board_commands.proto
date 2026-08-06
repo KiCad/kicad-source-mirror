@@ -23,11 +23,12 @@ syntax = "proto3";
 package kiapi.board.commands;
 
 import "common/types/base_types.proto";
+import "google/protobuf/any.proto";
 import "common/types/enums.proto";
 import "common/types/project_settings.proto";
 import "board/board.proto";
 import "board/board_types.proto";
-
+import "common/commands/editor_commands.proto";
 /*
  * Board stackup and properties
  */
@@ -432,6 +433,42 @@ message GetBoardEditorAppearanceSettings
 message SetBoardEditorAppearanceSettings
 {
   BoardEditorAppearanceSettings settings = 1;
+}
+
+enum BoardFlipDirection
+{
+  BFD_UNKNOWN    = 0;
+  BFD_LEFT_RIGHT = 1; // Flip left to right (around the Y axis)
+  BFD_TOP_BOTTOM = 2; // Flip top to bottom (around the X axis)
+}
+
+// Flips one or more board items to the opposite side of the board.  Returns FlipItemsResponse.
+message FlipItems
+{
+  kiapi.common.types.ItemHeader header = 1;
+
+  repeated kiapi.common.types.KIID items = 2;
+
+  // Direction to flip the items; BFD_TOP_BOTTOM if unspecified.
+  BoardFlipDirection direction = 3;
+}
+
+message ItemFlipResult
+{
+  kiapi.common.commands.ItemStatus status = 1;
+
+  // Updated version of the item after the flip (only populated when status.status is ISC_OK)
+  google.protobuf.Any item = 2;
+}
+
+message FlipItemsResponse
+{
+  kiapi.common.types.ItemHeader header = 1;
+
+  // Status of the overall request; may return IRS_OK even if no items were flipped
+  kiapi.common.types.ItemRequestStatus status = 2;
+
+  repeated ItemFlipResult flipped_items = 3;
 }
 
 //// Interactive commands ////

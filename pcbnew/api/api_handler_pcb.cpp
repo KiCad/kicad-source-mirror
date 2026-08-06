@@ -104,6 +104,7 @@ API_HANDLER_PCB::API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame ) :
     registerHandler<GetBoardLayerByName, BoardLayerResponse>( &API_HANDLER_PCB::handleGetBoardLayerByName );
 
     registerHandler<InteractiveMoveItems, Empty>( &API_HANDLER_PCB::handleInteractiveMoveItems );
+    registerHandler<FlipItems, FlipItemsResponse>( &API_HANDLER_PCB::handleFlipItems );
     registerHandler<GetNets, NetsResponse>( &API_HANDLER_PCB::handleGetNets );
     registerHandler<GetConnectedItems, GetItemsResponse>( &API_HANDLER_PCB::handleGetConnectedItems );
     registerHandler<GetItemsByNet, GetItemsResponse>( &API_HANDLER_PCB::handleGetItemsByNet );
@@ -1517,6 +1518,115 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleInteractiveMoveItems(
     mgr->PostAPIAction( PCB_ACTIONS::move, commit );
 
     return Empty();
+}
+
+
+HANDLER_RESULT<FlipItemsResponse> API_HANDLER_PCB::handleFlipItems( const HANDLER_CONTEXT<FlipItems>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    auto containerResult = validateItemHeaderDocument( aCtx.Request.header() );
+
+    if( !containerResult && containerResult.error().status() == ApiStatusCode::AS_UNHANDLED )
+    {
+        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+    else if( !containerResult )
+    {
+        return tl::unexpected( containerResult.error() );
+    }
+
+    FLIP_DIRECTION flipDirection = FromProtoEnum<FLIP_DIRECTION, BoardFlipDirection>(
+            aCtx.Request.direction() );
+
+    FlipItemsResponse response;
+    response.mutable_header()->CopyFrom( aCtx.Request.header() );
+
+    BOARD_COMMIT* commit = static_cast<BOARD_COMMIT*>( getCurrentCommit( aCtx.ClientName ) );
+
+    bool anyModified = false;
+
+    for( const types::KIID& id : aCtx.Request.items() )
+    {
+        ItemFlipResult* result = response.add_flipped_items();
+
+        std::optional<BOARD_ITEM*> optItem = getItemById( KIID( id.value() ) );
+
+        if( !optItem )
+        {
+            result->mutable_status()->set_code( ItemStatusCode::ISC_NONEXISTENT );
+            result->mutable_status()->set_error_message(
+                    fmt::format( "an item with UUID {} does not exist", id.value() ) );
+            continue;
+        }
+
+        BOARD_ITEM* boardItem = *optItem;
+
+        static const std::set<KICAD_T> flippableTypes = {
+            PCB_FOOTPRINT_T,
+            PCB_PAD_T,
+            PCB_SHAPE_T,
+            PCB_REFERENCE_IMAGE_T,
+            PCB_FIELD_T,
+            PCB_GENERATOR_T,
+            PCB_TEXT_T,
+            PCB_TEXTBOX_T,
+            PCB_TABLE_T,
+            PCB_TABLECELL_T,
+            PCB_TRACE_T,
+            PCB_VIA_T,
+            PCB_ARC_T,
+            PCB_ZONE_T,
+            PCB_GROUP_T,
+            PCB_BARCODE_T,
+            PCB_MARKER_T,
+            PCB_POINT_T,
+            PCB_TARGET_T,
+            PCB_DIM_ALIGNED_T,
+            PCB_DIM_LEADER_T,
+            PCB_DIM_CENTER_T,
+            PCB_DIM_RADIAL_T,
+            PCB_DIM_ORTHOGONAL_T,
+        };
+
+        KICAD_T itemType = boardItem->Type();
+
+        if( !flippableTypes.contains( itemType ) )
+        {
+            result->mutable_status()->set_code( ItemStatusCode::ISC_INVALID_TYPE );
+            result->mutable_status()->set_error_message(
+                    fmt::format( "items of type {} cannot be flipped",
+                                 magic_enum::enum_name( itemType ) ) );
+            continue;
+        }
+
+        commit->Modify( boardItem, nullptr, RECURSE_MODE::RECURSE );
+        boardItem->Flip( boardItem->GetPosition(), flipDirection );
+        boardItem->Normalize();
+
+        // Maybe this should be in FOOTPRINT::Normalize?
+        if( boardItem->Type() == PCB_FOOTPRINT_T )
+            static_cast<FOOTPRINT*>( boardItem )->InvalidateComponentClassCache();
+
+        anyModified = true;
+
+        google::protobuf::Any itemBuf;
+        boardItem->Serialize( itemBuf );
+        *result->mutable_item() = std::move( itemBuf );
+
+        result->mutable_status()->set_code( ItemStatusCode::ISC_OK );
+    }
+
+    response.set_status( ItemRequestStatus::IRS_OK );
+
+    if( anyModified && !m_activeClients.count( aCtx.ClientName ) )
+        pushCurrentCommit( aCtx.ClientName, _( "Flipped items via API" ) );
+
+    return response;
 }
 
 

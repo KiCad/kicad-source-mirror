@@ -21,8 +21,10 @@
 #include <import_export.h>
 #include <api/common/types/enums.pb.h>
 #include <api/board/board_types.pb.h>
+#include <api/board/board_commands.pb.h>
 #include <api/schematic/schematic_types.pb.h>
 
+#include <core/mirror.h>
 #include <core/typeinfo.h>
 #include <font/text_attributes.h>
 #include <layer_ids.h>
@@ -553,4 +555,32 @@ types::ElectricalPinType ToProtoEnum( ELECTRICAL_PINTYPE aValue )
         wxCHECK_MSG( false, types::ElectricalPinType::EPT_UNKNOWN,
                      "Unhandled case in ToProtoEnum<ELECTRICAL_PINTYPE>");
     }
+}
+
+
+template<>
+FLIP_DIRECTION FromProtoEnum( board::commands::BoardFlipDirection aValue )
+{
+    switch( aValue )
+    {
+    case board::commands::BoardFlipDirection::BFD_LEFT_RIGHT: return FLIP_DIRECTION::LEFT_RIGHT;
+
+    default:
+    case board::commands::BoardFlipDirection::BFD_UNKNOWN:
+    case board::commands::BoardFlipDirection::BFD_TOP_BOTTOM: return FLIP_DIRECTION::TOP_BOTTOM;
+    }
+}
+
+
+template<>
+board::commands::BoardFlipDirection ToProtoEnum( FLIP_DIRECTION aValue )
+{
+    switch( aValue )
+    {
+    case FLIP_DIRECTION::LEFT_RIGHT: return board::commands::BoardFlipDirection::BFD_LEFT_RIGHT;
+    case FLIP_DIRECTION::TOP_BOTTOM: return board::commands::BoardFlipDirection::BFD_TOP_BOTTOM;
+    }
+
+    wxCHECK_MSG( false, board::commands::BoardFlipDirection::BFD_UNKNOWN,
+                 "Unhandled case in ToProtoEnum<FLIP_DIRECTION>" );
 }

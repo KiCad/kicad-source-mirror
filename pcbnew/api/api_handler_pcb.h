@@ -129,6 +129,8 @@ private:
 
     HANDLER_RESULT<Empty> handleInteractiveMoveItems( const HANDLER_CONTEXT<InteractiveMoveItems>& aCtx );
 
+    HANDLER_RESULT<FlipItemsResponse> handleFlipItems( const HANDLER_CONTEXT<FlipItems>& aCtx );
+
     HANDLER_RESULT<BoardLayerResponse> handleGetBoardLayerByName(
             const HANDLER_CONTEXT<GetBoardLayerByName>& aCtx );
 
