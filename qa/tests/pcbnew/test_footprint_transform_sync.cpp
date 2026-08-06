@@ -2824,6 +2824,230 @@ BOOST_AUTO_TEST_CASE( TableInRotatedFootprintCellsAreVisuallyRotated )
 }
 
 
+// The table from issue 25031: one column, two rows, sitting at the footprint anchor.
+struct FLIPPED_TABLE_CASE
+{
+    FLIPPED_TABLE_CASE()
+    {
+        m_footprint = new FOOTPRINT( &m_board );
+        m_board.Add( m_footprint );
+        m_footprint->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 100.0 ), pcbIUScale.mmToIU( 50.0 ) ) );
+
+        m_table = new PCB_TABLE( m_footprint, pcbIUScale.mmToIU( 0.127 ) );
+        m_table->SetLayer( F_SilkS );
+        m_table->SetColCount( 1 );
+        m_table->SetColWidth( 0, m_colWidth );
+        m_table->SetRowHeight( 0, m_rowHeight );
+        m_table->SetRowHeight( 1, m_rowHeight );
+
+        const VECTOR2I anchor = m_footprint->GetPosition();
+
+        for( int row = 0; row < 2; ++row )
+        {
+            PCB_TABLECELL* cell = new PCB_TABLECELL( m_table );
+            cell->SetStart( anchor + VECTOR2I( 0, row * m_rowHeight ) );
+            cell->SetEnd( anchor + VECTOR2I( m_colWidth, ( row + 1 ) * m_rowHeight ) );
+            cell->SetText( row == 0 ? wxT( "PCB1234" ) : wxT( "Rev A00" ) );
+            m_table->AddCell( cell );
+        }
+
+        m_footprint->Add( m_table, ADD_MODE::APPEND );
+    }
+
+    const int  m_colWidth = pcbIUScale.mmToIU( 5.969 );
+    const int  m_rowHeight = pcbIUScale.mmToIU( 1.397 );
+    BOARD      m_board;
+    FOOTPRINT* m_footprint = nullptr;
+    PCB_TABLE* m_table = nullptr;
+};
+
+
+static BOX2I cellsBox( const PCB_TABLE* aTable )
+{
+    BOX2I box;
+
+    for( PCB_TABLECELL* cell : aTable->GetCells() )
+    {
+        box.Merge( cell->GetStart() );
+        box.Merge( cell->GetEnd() );
+    }
+
+    return box;
+}
+
+
+// On a table whose numbering matches its cells, rebuilding the layout must change nothing.
+static void checkNormalizeIsStable( PCB_TABLE* aTable )
+{
+    std::vector<VECTOR2I> starts;
+    std::vector<VECTOR2I> ends;
+
+    for( PCB_TABLECELL* cell : aTable->GetCells() )
+    {
+        starts.push_back( cell->GetStart() );
+        ends.push_back( cell->GetEnd() );
+    }
+
+    aTable->Normalize();
+
+    for( size_t ii = 0; ii < aTable->GetCells().size(); ++ii )
+    {
+        PCB_TABLECELL* cell = aTable->GetCells()[ii];
+
+        BOOST_CHECK_MESSAGE( ( cell->GetStart() - starts[ii] ).EuclideanNorm() <= 1,
+                             "cell " << ii << " start moved to ( " << cell->GetStart().x << ", " << cell->GetStart().y
+                                     << " ) from ( " << starts[ii].x << ", " << starts[ii].y << " )" );
+        BOOST_CHECK_MESSAGE( ( cell->GetEnd() - ends[ii] ).EuclideanNorm() <= 1,
+                             "cell " << ii << " end moved to ( " << cell->GetEnd().x << ", " << cell->GetEnd().y
+                                     << " ) from ( " << ends[ii].x << ", " << ends[ii].y << " )" );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( TableFlipMirrorsAboutFootprintAnchor )
+{
+    for( FLIP_DIRECTION dir : { FLIP_DIRECTION::TOP_BOTTOM, FLIP_DIRECTION::LEFT_RIGHT } )
+    {
+        const char* dirName = dir == FLIP_DIRECTION::LEFT_RIGHT ? "left/right" : "top/bottom";
+
+        BOOST_TEST_CONTEXT( dirName )
+        {
+            FLIPPED_TABLE_CASE tc;
+            const VECTOR2I     anchor = tc.m_footprint->GetPosition();
+            const BOX2I        before = cellsBox( tc.m_table );
+
+            tc.m_footprint->Flip( anchor, dir );
+
+            const BOX2I after = cellsBox( tc.m_table );
+
+            BOX2I expected = before;
+
+            if( dir == FLIP_DIRECTION::LEFT_RIGHT )
+                expected.SetOrigin( 2 * anchor.x - before.GetRight(), before.GetTop() );
+            else
+                expected.SetOrigin( before.GetLeft(), 2 * anchor.y - before.GetBottom() );
+
+            BOOST_CHECK_MESSAGE( after.GetOrigin() == expected.GetOrigin() && after.GetEnd() == expected.GetEnd(),
+                                 "table box ( " << after.GetLeft() << ", " << after.GetTop() << " ) - ( "
+                                                << after.GetRight() << ", " << after.GetBottom() << " ) expected ( "
+                                                << expected.GetLeft() << ", " << expected.GetTop() << " ) - ( "
+                                                << expected.GetRight() << ", " << expected.GetBottom() << " )" );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( TableFlipKeepsRowNumberingInReadingOrder )
+{
+    for( FLIP_DIRECTION dir : { FLIP_DIRECTION::TOP_BOTTOM, FLIP_DIRECTION::LEFT_RIGHT } )
+    {
+        const char* dirName = dir == FLIP_DIRECTION::LEFT_RIGHT ? "left/right" : "top/bottom";
+
+        BOOST_TEST_CONTEXT( dirName )
+        {
+            FLIPPED_TABLE_CASE tc;
+
+            tc.m_footprint->Flip( tc.m_footprint->GetPosition(), dir );
+
+            BOOST_REQUIRE( tc.m_table->GetCell( 0, 0 ) );
+            BOOST_REQUIRE( tc.m_table->GetCell( 1, 0 ) );
+
+            BOOST_CHECK_EQUAL( tc.m_table->GetCell( 0, 0 )->GetText(), wxString( wxT( "PCB1234" ) ) );
+            BOOST_CHECK_EQUAL( tc.m_table->GetCell( 1, 0 )->GetText(), wxString( wxT( "Rev A00" ) ) );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( TableNormalizeAfterFlipLeavesCellsAlone )
+{
+    for( FLIP_DIRECTION dir : { FLIP_DIRECTION::TOP_BOTTOM, FLIP_DIRECTION::LEFT_RIGHT } )
+    {
+        const char* dirName = dir == FLIP_DIRECTION::LEFT_RIGHT ? "left/right" : "top/bottom";
+
+        BOOST_TEST_CONTEXT( dirName )
+        {
+            FLIPPED_TABLE_CASE tc;
+
+            tc.m_footprint->Flip( tc.m_footprint->GetPosition(), dir );
+            checkNormalizeIsStable( tc.m_table );
+        }
+    }
+}
+
+
+// A single column table cannot see the column reversal, so this one uses three of them.
+BOOST_AUTO_TEST_CASE( TableFlipReversesColumnsAndNotRows )
+{
+    const int colWidths[3] = { pcbIUScale.mmToIU( 8.0 ), pcbIUScale.mmToIU( 4.0 ), pcbIUScale.mmToIU( 6.0 ) };
+    const int rowHeights[2] = { pcbIUScale.mmToIU( 1.4 ), pcbIUScale.mmToIU( 2.2 ) };
+
+    for( FLIP_DIRECTION dir : { FLIP_DIRECTION::TOP_BOTTOM, FLIP_DIRECTION::LEFT_RIGHT } )
+    {
+        const char* dirName = dir == FLIP_DIRECTION::LEFT_RIGHT ? "left/right" : "top/bottom";
+
+        BOOST_TEST_CONTEXT( dirName )
+        {
+            BOARD      board;
+            FOOTPRINT* fp = new FOOTPRINT( &board );
+            board.Add( fp );
+            fp->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 100.0 ), pcbIUScale.mmToIU( 50.0 ) ) );
+
+            PCB_TABLE* table = new PCB_TABLE( fp, pcbIUScale.mmToIU( 0.127 ) );
+            table->SetLayer( F_SilkS );
+            table->SetColCount( 3 );
+
+            for( int col = 0; col < 3; ++col )
+                table->SetColWidth( col, colWidths[col] );
+
+            for( int row = 0; row < 2; ++row )
+                table->SetRowHeight( row, rowHeights[row] );
+
+            const VECTOR2I anchor = fp->GetPosition();
+            int            y = 0;
+
+            for( int row = 0; row < 2; ++row )
+            {
+                int x = 0;
+
+                for( int col = 0; col < 3; ++col )
+                {
+                    PCB_TABLECELL* cell = new PCB_TABLECELL( table );
+                    cell->SetStart( anchor + VECTOR2I( x, y ) );
+                    cell->SetEnd( anchor + VECTOR2I( x + colWidths[col], y + rowHeights[row] ) );
+                    cell->SetText( wxString::Format( wxT( "%c%d" ), 'A' + col, row + 1 ) );
+                    table->AddCell( cell );
+                    x += colWidths[col];
+                }
+
+                y += rowHeights[row];
+            }
+
+            fp->Add( table, ADD_MODE::APPEND );
+
+            fp->Flip( anchor, dir );
+
+            for( int row = 0; row < 2; ++row )
+            {
+                for( int col = 0; col < 3; ++col )
+                {
+                    wxString expected = wxString::Format( wxT( "%c%d" ), 'A' + 2 - col, row + 1 );
+                    BOOST_CHECK_EQUAL( table->GetCell( row, col )->GetText(), expected );
+                }
+            }
+
+            BOOST_CHECK_EQUAL( table->GetColWidth( 0 ), colWidths[2] );
+            BOOST_CHECK_EQUAL( table->GetColWidth( 1 ), colWidths[1] );
+            BOOST_CHECK_EQUAL( table->GetColWidth( 2 ), colWidths[0] );
+            BOOST_CHECK_EQUAL( table->GetRowHeight( 0 ), rowHeights[0] );
+            BOOST_CHECK_EQUAL( table->GetRowHeight( 1 ), rowHeights[1] );
+
+            checkNormalizeIsStable( table );
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( TableRotates90Cleanly )
 {
     BOARD      board;
