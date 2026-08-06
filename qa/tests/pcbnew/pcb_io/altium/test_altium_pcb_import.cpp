@@ -118,6 +118,43 @@ BOOST_AUTO_TEST_CASE( DimensionBoldPropertyParsing )
 }
 
 
+// Altium stores no per-component mounting style, so derive it from the pads.  Leaving it unset
+// drops every footprint from SMD-only placement files and from ODB++/IPC-2581 mount type
+BOOST_AUTO_TEST_CASE( FootprintMountingStyleDerivedFromPads )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/HiFive/HiFive1.B01.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE( !board->Footprints().empty() );
+
+    int smd = 0;
+    int throughHole = 0;
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        const int expected = footprint->GetLikelyAttribute();
+        const int actual = footprint->GetAttributes() & ( FP_SMD | FP_THROUGH_HOLE );
+
+        // Matching the footprint checker's own heuristic is what keeps DRC from reporting a type
+        // mismatch on every footprint we just imported
+        BOOST_CHECK_MESSAGE( actual == expected,
+                             wxString::Format( wxT( "Footprint %s has mounting style %d, expected %d" ),
+                                               footprint->GetReference(), actual, expected ) );
+
+        if( expected == FP_SMD )
+            smd++;
+        else if( expected == FP_THROUGH_HOLE )
+            throughHole++;
+    }
+
+    // Guard against the loop above passing because nothing was classified at all
+    BOOST_CHECK_GT( smd, 0 );
+    BOOST_CHECK_GT( throughHole, 0 );
+}
+
+
 BOOST_AUTO_TEST_CASE( ArcMaskExpansionUsesArcMetadata )
 {
     std::string dataPath = KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc";

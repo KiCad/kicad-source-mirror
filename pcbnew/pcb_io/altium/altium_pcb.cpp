@@ -578,6 +578,10 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&                  altiumP
     // copper that the unions reference has been created and added to the board.
     HelperCreateTuningPatterns();
 
+    // Components6 is parsed before Pads6, so the mounting style can only be derived once every
+    // pad has been attached to its footprint.
+    HelperSetFootprintMountingStyles();
+
     // fixup zone priorities since Altium stores them in the opposite order
     for( ZONE* zone : m_polygons )
     {
@@ -878,6 +882,11 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE& altiumLibFile,
 
     // Auto-position reference and value
     footprint->AutoPositionFields();
+
+    // Altium has no mounting style to copy, so derive it from the pads using the same heuristic
+    // as KiCad's footprint checker.  Unlike the board importer this can be done here, because a
+    // library footprint's pads are converted inline above.
+    footprint->SetAttributes( footprint->GetAttributes() | footprint->GetLikelyAttribute() );
 
     if( parser.HasParsingError() )
         THROW_IO_ERRORF( wxT( "%s stream was not parsed correctly" ), FormatPath( streamName ) );
@@ -4709,6 +4718,28 @@ void ALTIUM_PCB::HelperCreateTuningPatterns()
         m_reporter->Report( wxString::Format( _( "Imported %d length-tuning pattern(s)." ),
                                               created ),
                             RPT_SEVERITY_INFO );
+    }
+}
+
+
+void ALTIUM_PCB::HelperSetFootprintMountingStyles()
+{
+    // Altium has no per-component mounting style to copy, so derive it from the pads the way
+    // KiCad's own footprint checker does.  Using the same heuristic keeps the imported value in
+    // agreement with FOOTPRINT::CheckFootprintAttributes(), which would otherwise report every
+    // footprint we just wrote as a type mismatch.
+    //
+    // Only m_components is walked, so importing into a board that already holds footprints
+    // cannot rewrite them, and only a missing style is filled in.
+    for( FOOTPRINT* footprint : m_components )
+    {
+        if( !footprint )
+            continue;
+
+        if( footprint->GetAttributes() & ( FP_SMD | FP_THROUGH_HOLE ) )
+            continue;
+
+        footprint->SetAttributes( footprint->GetAttributes() | footprint->GetLikelyAttribute() );
     }
 }
 
