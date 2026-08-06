@@ -1432,21 +1432,31 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::DeleteRows( size_t aPosition, size_t 
     {
         m_rows.clear();
         m_dataStore.clear();
+        m_symbolsList.Clear();
+
+        if( GetView() )
+        {
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aPosition, aNumRows );
+            GetView()->ProcessTableMessage( msg );
+        }
     }
     else
     {
-        const auto                 first = m_rows.begin() + aPosition;
-        std::vector<SCH_REFERENCE> dataMapRefs = first->m_items;
-        m_rows.erase( first, first + aNumRows );
+        // Note: this code is currently dead, as all current usage calls the clear path above,
+        // which is left because it is faster. This code *should* be correct but is untested.
+        auto first = m_rows.begin() + aPosition;
+        auto last = first + aNumRows;
 
-        for( const SCH_REFERENCE& ref : dataMapRefs )
-            m_dataStore.erase( ref.GetSheetPath().Path() );
-    }
+        SCH_REFERENCE_LIST refsToDelete;
+        for( auto it = first; it != last && it != m_rows.end(); ++it )
+        {
+            for( const SCH_REFERENCE& ref : it->m_items )
+                refsToDelete.AddItem( ref );
+        }
 
-    if( GetView() )
-    {
-        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aPosition, aNumRows );
-        GetView()->ProcessTableMessage( msg );
+        RemoveReferences( refsToDelete );
+        // This will also notify the view
+        RebuildRows();
     }
 
     return true;
