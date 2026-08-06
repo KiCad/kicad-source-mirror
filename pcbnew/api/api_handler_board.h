@@ -136,6 +136,9 @@ private:
     HANDLER_RESULT<Empty> handleInteractiveMoveItems(
             const HANDLER_CONTEXT<InteractiveMoveItems>& aCtx );
 
+    HANDLER_RESULT<FlipItemsResponse> handleFlipItems(
+            const HANDLER_CONTEXT<FlipItems>& aCtx );
+
     HANDLER_RESULT<commands::SavedDocumentResponse> handleSaveDocumentToString(
             const HANDLER_CONTEXT<commands::SaveDocumentToString>& aCtx );
 

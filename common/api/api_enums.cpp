@@ -18,12 +18,12 @@
  */
 
 #include <api/api_enums.h>
-
+#include <core/mirror.h>
 #include "pad.h"
 
 #include <import_export.h>
 #include <api/common/types/base_types.pb.h>
-#include <api/common/types/enums.pb.h>
+#include <api/board/board_commands.pb.h>
 #include <api/board/board.pb.h>
 #include <api/board/board_types.pb.h>
 #include <api/schematic/schematic_jobs.pb.h>
@@ -799,4 +799,32 @@ types::PageSize ToProtoEnum( PAGE_SIZE_TYPE aValue )
         wxCHECK_MSG( false, types::PageSize::PS_UNKNOWN,
                      "Unhandled case in ToProtoEnum<PAGE_SIZE_TYPE>" );
     }
+}
+
+
+template<>
+FLIP_DIRECTION FromProtoEnum( board::commands::BoardFlipDirection aValue )
+{
+    switch( aValue )
+    {
+    case board::commands::BoardFlipDirection::BFD_LEFT_RIGHT: return FLIP_DIRECTION::LEFT_RIGHT;
+
+    default:
+    case board::commands::BoardFlipDirection::BFD_UNKNOWN:
+    case board::commands::BoardFlipDirection::BFD_TOP_BOTTOM: return FLIP_DIRECTION::TOP_BOTTOM;
+    }
+}
+
+
+template<>
+board::commands::BoardFlipDirection ToProtoEnum( FLIP_DIRECTION aValue )
+{
+    switch( aValue )
+    {
+    case FLIP_DIRECTION::LEFT_RIGHT: return board::commands::BoardFlipDirection::BFD_LEFT_RIGHT;
+    case FLIP_DIRECTION::TOP_BOTTOM: return board::commands::BoardFlipDirection::BFD_TOP_BOTTOM;
+    }
+
+    wxCHECK_MSG( false, board::commands::BoardFlipDirection::BFD_UNKNOWN,
+                 "Unhandled case in ToProtoEnum<FLIP_DIRECTION>" );
 }
