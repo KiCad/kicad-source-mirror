@@ -2937,13 +2937,13 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 int editedIndex = getEditedPointIndex();
 
-                if( shape->GetShape() == SHAPE_T::RECTANGLE && editedIndex >= RECT_TOP_LEFT
-                    && editedIndex <= RECT_BOT_LEFT )
+                if( shape->GetShape() == SHAPE_T::RECTANGLE && m_editPoints->PointsSize() >= RECT_MAX_POINTS
+                    && editedIndex >= RECT_TOP_LEFT && editedIndex <= RECT_BOT_LEFT )
                 {
                     int opposite = ( editedIndex + 2 ) % 4;
                     stationarySelfPoints.push_back( m_editPoints->Point( opposite ).GetPosition() );
                 }
-                else if( shape->GetShape() == SHAPE_T::RECTANGLE )
+                else if( shape->GetShape() == SHAPE_T::RECTANGLE && m_editPoints->LinesSize() >= 4 )
                 {
                     for( unsigned i = 0; i < m_editPoints->LinesSize() && i < 4; ++i )
                     {
