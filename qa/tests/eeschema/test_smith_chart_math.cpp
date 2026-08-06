@@ -118,10 +118,10 @@ BOOST_AUTO_TEST_CASE( ToScreenOverflowSafety )
     view.pan = wxRealPoint( 0.0, 0.0 );
 
     // a huge gamma from an active circuit must clamp, not overflow the int math
-    wxPoint far = view.ToScreen( 1e12, -1e12 );
+    wxPoint farPoint = view.ToScreen( 1e12, -1e12 );
 
-    BOOST_CHECK( far.x > view.center.x );
-    BOOST_CHECK( far.y > view.center.y );
+    BOOST_CHECK( farPoint.x > view.center.x );
+    BOOST_CHECK( farPoint.y > view.center.y );
 
     // non-finite samples land on a defined point instead of feeding NaN to KiROUND
     double nan = std::nan( "" );
