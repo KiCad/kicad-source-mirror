@@ -179,6 +179,10 @@ public:
     CONNECTION_GRAPH* AdoptImportedHierarchy( SCH_SHEET_LIST&& aHierarchy, SCH_SHEET_PATH* aCurrentSheet,
                                                CONNECTION_GRAPH* aConnectionGraph ) noexcept;
 
+    CONNECTION_GRAPH* AdoptImportedTopLevelHierarchy( std::vector<SCH_SHEET*>& aTopLevelSheets,
+                                                      SCH_SHEET_LIST&& aHierarchy, SCH_SHEET_PATH& aCurrentSheet,
+                                                      CONNECTION_GRAPH* aConnectionGraph ) noexcept;
+
     /**
      * Add a new top-level sheet to the schematic.
      *

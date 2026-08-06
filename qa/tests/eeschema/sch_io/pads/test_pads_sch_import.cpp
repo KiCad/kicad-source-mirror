@@ -44,6 +44,7 @@
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_text.h>
+#include <project/project_file.h>
 #include <settings/settings_manager.h>
 
 #include <algorithm>
@@ -289,15 +290,50 @@ static SCH_SHEET_PATH sourceSheetPath( SCHEMATIC& aSchematic, const PADS_SCH_BIN
         return hierarchy.front();
     }
 
-    wxString expectedPage = wxString::Format( wxS( "%zu" ), sourceSheet->index + 2 );
-    auto     path = std::ranges::find_if( hierarchy,
-                                          [&]( const SCH_SHEET_PATH& aPath )
-                                          {
-                                          return aPath.size() > 1 && aPath.GetPageNumber() == expectedPage;
-                                      } );
+    const bool flatTopLevel = aSchematic.GetTopLevelSheets().size() == aModel.sheets.size();
+    wxString   expectedPage = wxString::Format( wxS( "%zu" ), sourceSheet->index + ( flatTopLevel ? 1 : 2 ) );
+    auto path = std::ranges::find_if( hierarchy,
+                                     [&]( const SCH_SHEET_PATH& aPath )
+                                     {
+                                         return aPath.size() == ( flatTopLevel ? 1u : 2u )
+                                                && aPath.GetPageNumber() == expectedPage;
+                                     } );
     BOOST_REQUIRE_MESSAGE( path != hierarchy.end(), "missing typed source sheet index " << sourceSheet->index );
     BOOST_CHECK_EQUAL( path->Last()->GetField( FIELD_T::SHEET_NAME )->GetText(), sourceSheet->name.text );
     return *path;
+}
+
+
+static void roundTripTopLevelSheets( SCHEMATIC& aSchematic, const wxString& aDirectory )
+{
+    SCH_IO_KICAD_SEXPR                io;
+    std::vector<TOP_LEVEL_SHEET_INFO> sheetInfos;
+
+    for( size_t index = 0; index < aSchematic.GetTopLevelSheets().size(); ++index )
+    {
+        SCH_SHEET* sheet = aSchematic.GetTopLevelSheet( index );
+        BOOST_REQUIRE( sheet );
+        wxString file =
+                aDirectory + wxFileName::GetPathSeparator() + wxString::Format( wxS( "top_%zu.kicad_sch" ), index + 1 );
+        BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( file, sheet, &aSchematic ) );
+        sheetInfos.emplace_back( sheet->m_Uuid, sheet->GetName(), file );
+    }
+
+    aSchematic.Reset();
+    std::vector<SCH_SHEET*> loadedSheets;
+
+    for( const TOP_LEVEL_SHEET_INFO& info : sheetInfos )
+    {
+        SCH_SHEET* loaded = nullptr;
+        BOOST_REQUIRE_NO_THROW( loaded = io.LoadSchematicFile( info.filename, &aSchematic ) );
+        BOOST_REQUIRE( loaded );
+        const_cast<KIID&>( loaded->m_Uuid ) = info.uuid;
+        loaded->SetName( info.name );
+        loadedSheets.push_back( loaded );
+    }
+
+    aSchematic.SetTopLevelSheets( loadedSheets );
+    aSchematic.RefreshHierarchy();
 }
 
 
@@ -2010,55 +2046,41 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
     PADS_SCH_BINARY::PADS_SCH_BINARY_BUILDER builder;
     SCH_SHEET*                               originalRoot = m_schematic.GetTopLevelSheet();
     BOOST_REQUIRE( originalRoot );
-    const KIID originalRootUuid = originalRoot->m_Uuid;
-    PADS_SCH_BINARY::BUILD_RESULT            result =
+    const KIID                    originalRootUuid = originalRoot->m_Uuid;
+    PADS_SCH_BINARY::BUILD_RESULT result =
             builder.Build( model, &m_schematic, nullptr, binaryFixture( wxS( "multisheet_connectivity" ) ) );
     BOOST_CHECK_EQUAL( result.counts.sheets, model.sheets.size() );
-    SCH_SHEET* root = m_schematic.GetTopLevelSheet();
-    BOOST_REQUIRE( root );
-    BOOST_REQUIRE( root->GetScreen() );
-    BOOST_CHECK( root == originalRoot );
-    BOOST_CHECK( root->m_Uuid == originalRootUuid );
-    BOOST_CHECK( root->GetScreen()->GetUuid() == originalRootUuid );
-
-    SCH_SHEET_PATH rootPath;
-    rootPath.push_back( root );
-
-    std::vector<SCH_SHEET*> children;
-
-    for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SHEET_T ) )
-        children.push_back( static_cast<SCH_SHEET*>( item ) );
-
-    BOOST_REQUIRE_EQUAL( children.size(), model.sheets.size() );
-    BOOST_CHECK_EQUAL( root->GetScreen()->Items().size(), children.size() );
-    BOOST_CHECK( root->GetScreen()->Items().OfType( SCH_SYMBOL_T ).empty() );
-    BOOST_CHECK( root->GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ).empty() );
+    std::vector<SCH_SHEET*> topSheets = m_schematic.GetTopLevelSheets();
+    BOOST_REQUIRE_EQUAL( topSheets.size(), model.sheets.size() );
+    BOOST_CHECK( std::ranges::none_of( topSheets,
+                                       [&]( const SCH_SHEET* aSheet )
+                                       {
+                                           return aSheet == originalRoot || aSheet->m_Uuid == originalRootUuid;
+                                       } ) );
 
     std::set<wxString> filenames;
 
-    for( size_t i = 0; i < children.size(); ++i )
+    for( size_t i = 0; i < topSheets.size(); ++i )
     {
-        BOOST_CHECK_EQUAL( children[i]->GetField( FIELD_T::SHEET_NAME )->GetText(), model.sheets[i].name.text );
-        wxString filename = children[i]->GetField( FIELD_T::SHEET_FILENAME )->GetText();
+        SCH_SHEET* sheet = topSheets[i];
+        BOOST_REQUIRE( sheet );
+        BOOST_REQUIRE( sheet->GetScreen() );
+        BOOST_CHECK( m_schematic.IsTopLevelSheet( sheet ) );
+        BOOST_CHECK( sheet->GetScreen()->Items().OfType( SCH_SHEET_T ).empty() );
+        BOOST_CHECK_EQUAL( sheet->GetField( FIELD_T::SHEET_NAME )->GetText(), model.sheets[i].name.text );
+        wxString filename = sheet->GetField( FIELD_T::SHEET_FILENAME )->GetText();
         BOOST_CHECK( !filename.Contains( wxS( "/" ) ) );
         BOOST_CHECK( !filename.Contains( wxS( ":" ) ) );
         BOOST_CHECK( !filename.Contains( wxS( "*" ) ) );
         BOOST_CHECK( filenames.insert( filename ).second );
-        const wxString expectedFilename =
-                i == 0 ? wxS( "[1]DUP_SAFE__.kicad_sch" ) : wxS( "[2]DUP_SAFE__.kicad_sch" );
+        const wxString expectedFilename = i == 0 ? wxS( "[1]DUP_SAFE__.kicad_sch" ) : wxS( "[2]DUP_SAFE__.kicad_sch" );
         BOOST_CHECK_EQUAL( filename, expectedFilename );
-        BOOST_REQUIRE( children[i]->GetScreen() );
-        SCH_SHEET_PATH childPath( rootPath );
-        childPath.push_back( children[i] );
-        BOOST_CHECK_EQUAL( childPath.GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 2 ) );
-        BOOST_REQUIRE_EQUAL( children[i]->GetInstances().size(), 1u );
-        BOOST_CHECK( children[i]->GetInstances().front().m_Path == rootPath.Path() );
-        BOOST_REQUIRE_EQUAL( children[i]->GetInstances().front().m_Path.size(), 1u );
-        BOOST_CHECK( children[i]->GetInstances().front().m_Path.front() == originalRootUuid );
-        BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 2 ) );
-        BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageSettings().GetWidthMils(), model.sheets[i].pageSize.x / 2 );
-        BOOST_CHECK_EQUAL( children[i]->GetScreen()->GetPageSettings().GetHeightMils(),
-                           model.sheets[i].pageSize.y / 2 );
+        SCH_SHEET_PATH path;
+        path.push_back( sheet );
+        BOOST_CHECK_EQUAL( path.GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 1 ) );
+        BOOST_CHECK_EQUAL( sheet->GetScreen()->GetPageNumber(), wxString::Format( wxS( "%zu" ), i + 1 ) );
+        BOOST_CHECK_EQUAL( sheet->GetScreen()->GetPageSettings().GetWidthMils(), model.sheets[i].pageSize.x / 2 );
+        BOOST_CHECK_EQUAL( sheet->GetScreen()->GetPageSettings().GetHeightMils(), model.sheets[i].pageSize.y / 2 );
 
         std::multiset<wxString> expectedLabels;
         std::multiset<wxString> builtLabels;
@@ -2069,18 +2091,18 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
                 expectedLabels.insert( label.text.text );
         }
 
-        for( SCH_ITEM* item : children[i]->GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+        for( SCH_ITEM* item : sheet->GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
             builtLabels.insert( static_cast<SCH_GLOBALLABEL*>( item )->GetText() );
 
         BOOST_CHECK( builtLabels == expectedLabels );
 
-        for( SCH_ITEM* item : children[i]->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* item : sheet->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            SCH_SYMBOL*        symbol = static_cast<SCH_SYMBOL*>( item );
+            SCH_SYMBOL*         symbol = static_cast<SCH_SYMBOL*>( item );
             SCH_SYMBOL_INSTANCE instance;
-            BOOST_REQUIRE( symbol->GetInstance( instance, childPath.Path(), false ) );
-            BOOST_CHECK( instance.m_Path == childPath.Path() );
-            BOOST_CHECK_EQUAL( symbol->GetRef( &childPath ), instance.m_Reference );
+            BOOST_REQUIRE( symbol->GetInstance( instance, path.Path(), false ) );
+            BOOST_CHECK( instance.m_Path == path.Path() );
+            BOOST_CHECK_EQUAL( symbol->GetRef( &path ), instance.m_Reference );
         }
     }
 
@@ -2115,7 +2137,8 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
     auto checkSourceOrder = [&]( const SCHEMATIC& aSchematic )
     {
         SCH_SHEET_LIST hierarchy = aSchematic.BuildSheetListSortedByPageNumbers();
-        BOOST_REQUIRE_EQUAL( hierarchy.size(), 12u );
+        BOOST_REQUIRE_EQUAL( hierarchy.size(), 11u );
+        BOOST_REQUIRE_EQUAL( aSchematic.GetTopLevelSheets().size(), 11u );
         std::set<wxString> pageNumbers;
 
         for( const SCH_SHEET_PATH& path : hierarchy )
@@ -2123,8 +2146,10 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
 
         for( size_t sourceIndex = 0; sourceIndex < 11; ++sourceIndex )
         {
-            const SCH_SHEET_PATH& path = hierarchy[sourceIndex + 1];
-            BOOST_CHECK_EQUAL( path.GetPageNumber(), wxString::Format( wxS( "%zu" ), sourceIndex + 2 ) );
+            const SCH_SHEET_PATH& path = hierarchy[sourceIndex];
+            BOOST_REQUIRE_EQUAL( path.size(), 1u );
+            BOOST_CHECK( aSchematic.IsTopLevelSheet( path.Last() ) );
+            BOOST_CHECK_EQUAL( path.GetPageNumber(), wxString::Format( wxS( "%zu" ), sourceIndex + 1 ) );
             BOOST_CHECK_EQUAL( path.Last()->GetField( FIELD_T::SHEET_NAME )->GetText(),
                                wxString::Format( wxS( "[%zu]SOURCE_ORDER" ), sourceIndex + 1 ) );
         }
@@ -2135,28 +2160,39 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
     wxString tempDir = wxFileName::CreateTempFileName( wxS( "pads_binary_sheet_order_" ) );
     BOOST_REQUIRE( wxRemoveFile( tempDir ) );
     BOOST_REQUIRE( wxFileName::Mkdir( tempDir ) );
-    wxString           rootFile = tempDir + wxFileName::GetPathSeparator() + wxS( "root.kicad_sch" );
-    SCH_IO_KICAD_SEXPR io;
+    SCH_IO_KICAD_SEXPR                io;
+    std::vector<wxString>             files;
+    std::vector<TOP_LEVEL_SHEET_INFO> sheetInfos;
 
     for( const SCH_SHEET_PATH& path : m_schematic.BuildSheetListSortedByPageNumbers() )
     {
-        if( path.size() == 1 )
-            continue;
-
-        wxString childFile =
+        wxString file =
                 tempDir + wxFileName::GetPathSeparator() + path.Last()->GetField( FIELD_T::SHEET_FILENAME )->GetText();
-        BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( childFile, path.Last(), &m_schematic ) );
+        BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( file, path.Last(), &m_schematic ) );
+        files.push_back( file );
+        sheetInfos.emplace_back( path.Last()->m_Uuid, path.Last()->GetName(), file );
     }
 
-    BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( rootFile, m_schematic.GetTopLevelSheet(), &m_schematic ) );
     m_schematic.Reset();
-    SCH_SHEET* defaultSheet = m_schematic.GetTopLevelSheet();
-    SCH_SHEET* loaded = nullptr;
-    BOOST_REQUIRE_NO_THROW( loaded = io.LoadSchematicFile( rootFile, &m_schematic ) );
-    BOOST_REQUIRE( loaded );
-    m_schematic.AddTopLevelSheet( loaded );
-    m_schematic.RemoveTopLevelSheet( defaultSheet );
-    delete defaultSheet;
+    SCH_SHEET*              defaultSheet = m_schematic.GetTopLevelSheet();
+    std::vector<SCH_SHEET*> loadedSheets;
+
+    for( size_t index = 0; index < files.size(); ++index )
+    {
+        SCH_SHEET* loaded = nullptr;
+        BOOST_REQUIRE_NO_THROW( loaded = io.LoadSchematicFile( files[index], &m_schematic ) );
+        BOOST_REQUIRE( loaded );
+        const_cast<KIID&>( loaded->m_Uuid ) = sheetInfos[index].uuid;
+        loaded->SetName( sheetInfos[index].name );
+        loadedSheets.push_back( loaded );
+    }
+
+    m_schematic.SetTopLevelSheets( loadedSheets );
+    BOOST_CHECK( std::ranges::none_of( loadedSheets,
+                                       [&]( const SCH_SHEET* aSheet )
+                                       {
+                                           return aSheet == defaultSheet;
+                                       } ) );
     m_schematic.RefreshHierarchy();
     checkSourceOrder( m_schematic );
     BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
@@ -2837,8 +2873,6 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityRoundTrip )
     using namespace PADS_SCH_BINARY;
 
     const PADS_SCH_MODEL model = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
-    SCH_SHEET*           root = m_schematic.GetTopLevelSheet();
-    BOOST_REQUIRE( root );
     PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, nullptr, binaryFixture( wxS( "multisheet_connectivity" ) ) );
     assertSourceConnectivity( model, m_schematic );
     std::multiset<wxString> before = connectivitySnapshot( m_schematic );
@@ -2849,29 +2883,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityRoundTrip )
     wxString tempDir = wxFileName::CreateTempFileName( wxS( "pads_binary_connectivity_" ) );
     BOOST_REQUIRE( wxRemoveFile( tempDir ) );
     BOOST_REQUIRE( wxFileName::Mkdir( tempDir ) );
-    wxString           fileName = tempDir + wxFileName::GetPathSeparator() + wxS( "root.kicad_sch" );
-    SCH_IO_KICAD_SEXPR io;
-
-    for( const SCH_SHEET_PATH& path : m_schematic.BuildSheetListSortedByPageNumbers() )
-    {
-        if( path.size() == 1 )
-            continue;
-
-        wxString childFile =
-                tempDir + wxFileName::GetPathSeparator() + path.Last()->GetField( FIELD_T::SHEET_FILENAME )->GetText();
-        BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( childFile, path.Last(), &m_schematic ) );
-    }
-
-    BOOST_REQUIRE_NO_THROW( io.SaveSchematicFile( fileName, root, &m_schematic ) );
-    m_schematic.Reset();
-    SCH_SHEET* defaultSheet = m_schematic.GetTopLevelSheet();
-    SCH_SHEET* loaded = nullptr;
-    BOOST_REQUIRE_NO_THROW( loaded = io.LoadSchematicFile( fileName, &m_schematic ) );
-    BOOST_REQUIRE( loaded );
-    m_schematic.AddTopLevelSheet( loaded );
-    m_schematic.RemoveTopLevelSheet( defaultSheet );
-    delete defaultSheet;
-    m_schematic.RefreshHierarchy();
+    roundTripTopLevelSheets( m_schematic, tempDir );
     assertSourceConnectivity( model, m_schematic );
     std::multiset<wxString> after = connectivitySnapshot( m_schematic );
 
@@ -2913,8 +2925,6 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityRoundTrip )
         }
 
         m_schematic.Reset();
-        SCH_SHEET* sourceRoot = m_schematic.GetTopLevelSheet();
-        BOOST_REQUIRE( sourceRoot );
         PADS_SCH_BINARY_BUILDER().Build( sourceModel, &m_schematic, nullptr, binaryFixture( fixture ) );
         CONNECTIVITY_ORACLE_COUNTS beforeCounts = assertSourceConnectivity( sourceModel, m_schematic );
         const size_t               expectedPinEndpoints =
@@ -2945,29 +2955,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityRoundTrip )
         wxString fixtureTemp = wxFileName::CreateTempFileName( wxS( "pads_binary_source_oracle_" ) );
         BOOST_REQUIRE( wxRemoveFile( fixtureTemp ) );
         BOOST_REQUIRE( wxFileName::Mkdir( fixtureTemp ) );
-        wxString fixtureRootFile = fixtureTemp + wxFileName::GetPathSeparator() + fixture + wxS( ".kicad_sch" );
-        SCH_IO_KICAD_SEXPR fixtureIo;
-
-        for( const SCH_SHEET_PATH& path : m_schematic.BuildSheetListSortedByPageNumbers() )
-        {
-            if( path.size() == 1 )
-                continue;
-
-            wxString childFile = fixtureTemp + wxFileName::GetPathSeparator()
-                                 + path.Last()->GetField( FIELD_T::SHEET_FILENAME )->GetText();
-            BOOST_REQUIRE_NO_THROW( fixtureIo.SaveSchematicFile( childFile, path.Last(), &m_schematic ) );
-        }
-
-        BOOST_REQUIRE_NO_THROW( fixtureIo.SaveSchematicFile( fixtureRootFile, sourceRoot, &m_schematic ) );
-        m_schematic.Reset();
-        SCH_SHEET* fixtureDefault = m_schematic.GetTopLevelSheet();
-        SCH_SHEET* fixtureLoaded = nullptr;
-        BOOST_REQUIRE_NO_THROW( fixtureLoaded = fixtureIo.LoadSchematicFile( fixtureRootFile, &m_schematic ) );
-        BOOST_REQUIRE( fixtureLoaded );
-        m_schematic.AddTopLevelSheet( fixtureLoaded );
-        m_schematic.RemoveTopLevelSheet( fixtureDefault );
-        delete fixtureDefault;
-        m_schematic.RefreshHierarchy();
+        roundTripTopLevelSheets( m_schematic, fixtureTemp );
         CONNECTIVITY_ORACLE_COUNTS afterCounts = assertSourceConnectivity( sourceModel, m_schematic );
         BOOST_CHECK_EQUAL( afterCounts.pinEndpoints, beforeCounts.pinEndpoints );
         BOOST_CHECK_EQUAL( afterCounts.powerLabels, beforeCounts.powerLabels );
@@ -2990,8 +2978,8 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityRoundTrip )
     SCH_IO_KICAD_SEXPR      graphicsIo;
     BOOST_REQUIRE_NO_THROW( graphicsIo.SaveSchematicFile( graphicsFile, graphicsRoot, &m_schematic ) );
     m_schematic.Reset();
-    defaultSheet = m_schematic.GetTopLevelSheet();
-    loaded = nullptr;
+    SCH_SHEET* defaultSheet = m_schematic.GetTopLevelSheet();
+    SCH_SHEET* loaded = nullptr;
     BOOST_REQUIRE_NO_THROW( loaded = graphicsIo.LoadSchematicFile( graphicsFile, &m_schematic ) );
     BOOST_REQUIRE( loaded );
     m_schematic.AddTopLevelSheet( loaded );

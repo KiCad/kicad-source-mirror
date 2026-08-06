@@ -800,15 +800,19 @@ namespace
 
     struct STAGED_SCHEMATIC
     {
-        SCH_SHEET*                             destinationRoot = nullptr;
-        std::unique_ptr<SCH_SCREEN>            replacementScreen;
-        std::unique_ptr<SCH_SCREEN>            appendCache;
-        EE_RTREE                               appendIndex;
-        std::vector<std::unique_ptr<SCH_ITEM>> appendItems;
-        SCH_SHEET_LIST                         hierarchy;
-        std::optional<SCH_SHEET_PATH>          replacementCurrentSheet;
-        std::unique_ptr<CONNECTION_GRAPH>      connectionGraph;
-        BUILD_RESULT                           result;
+        SCH_SHEET*                              destinationRoot = nullptr;
+        std::unique_ptr<SCH_SCREEN>             replacementScreen;
+        std::unique_ptr<SCH_SCREEN>             appendCache;
+        EE_RTREE                                appendIndex;
+        std::vector<std::unique_ptr<SCH_ITEM>>  appendItems;
+        std::unique_ptr<SCH_SCREEN>             topLevelCache;
+        EE_RTREE                                topLevelIndex;
+        std::vector<std::unique_ptr<SCH_SHEET>> topLevelOwners;
+        std::vector<SCH_SHEET*>                 topLevelSheets;
+        SCH_SHEET_LIST                          hierarchy;
+        std::optional<SCH_SHEET_PATH>           replacementCurrentSheet;
+        std::unique_ptr<CONNECTION_GRAPH>       connectionGraph;
+        BUILD_RESULT                            result;
 
         static void ValidateScreen( const SCH_SCREEN* aScreen )
         {
@@ -845,6 +849,28 @@ namespace
 
         void Validate( bool aAppending ) const
         {
+            if( topLevelCache )
+            {
+                if( replacementScreen || appendCache || topLevelOwners.empty()
+                    || topLevelOwners.size() != topLevelSheets.size() || topLevelSheets.size() != result.counts.sheets )
+                {
+                    THROW_IO_ERROR( wxS( "top-level sheet staging has invalid ownership" ) );
+                }
+
+                for( const std::unique_ptr<SCH_SHEET>& sheet : topLevelOwners )
+                {
+                    if( !sheet || !sheet->GetScreen() || !sheet->GetScreen()->Items().OfType( SCH_SHEET_T ).empty() )
+                        THROW_IO_ERROR( wxS( "staged top-level sheet has invalid content" ) );
+
+                    ValidateScreen( sheet->GetScreen() );
+                }
+
+                if( hierarchy.size() != topLevelSheets.size() || !replacementCurrentSheet || !connectionGraph )
+                    THROW_IO_ERROR( wxS( "top-level sheet staging has incomplete hierarchy state" ) );
+
+                return;
+            }
+
             if( aAppending && ( replacementScreen || !appendCache ) )
                 THROW_IO_ERROR( wxS( "append staging has invalid screen ownership" ) );
 
@@ -917,6 +943,19 @@ namespace
 
                 if( previousScreen->GetRefCount() == 0 )
                     delete previousScreen;
+            }
+            else if( topLevelCache )
+            {
+                aSchematic->Root().GetScreen()->AdoptImportedContent( std::move( topLevelIndex ), *topLevelCache );
+                previousGraph = aSchematic->AdoptImportedTopLevelHierarchy(
+                        topLevelSheets, std::move( hierarchy ), *replacementCurrentSheet, connectionGraph.get() );
+                connectionGraph.release();
+
+                for( std::unique_ptr<SCH_SHEET>& sheet : topLevelOwners )
+                    sheet.release();
+
+                for( SCH_SHEET* oldSheet : topLevelSheets )
+                    delete oldSheet;
             }
             else
             {
@@ -1504,49 +1543,52 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
 
     if( !aAppendToMe )
     {
-        staged.destinationRoot = aSchematic->GetTopLevelSheet();
-
-        if( !staged.destinationRoot || !staged.destinationRoot->GetScreen() )
-            THROW_IO_ERROR( wxS( "cannot replace a schematic without a top-level sheet and screen" ) );
-
-        staged.replacementScreen = std::make_unique<SCH_SCREEN>( aSchematic );
-        staged.replacementScreen->SetImportStagingUuid( staged.destinationRoot->m_Uuid );
-        staged.replacementScreen->SetFileName( aSourcePath );
-        SCH_SCREEN* rootScreen = staged.replacementScreen.get();
-
-        SCH_SHEET_PATH rootPath;
-        rootPath.push_back( staged.destinationRoot );
-        staged.hierarchy.push_back( rootPath );
-        staged.replacementCurrentSheet.emplace( rootPath );
-
         if( !multiSheet )
         {
-            stageSheetContent( staged, aModel, modelIndex, *sourceSheets.front(), rootScreen, rootPath );
+            staged.destinationRoot = aSchematic->GetTopLevelSheet();
+
+            if( !staged.destinationRoot || !staged.destinationRoot->GetScreen() )
+                THROW_IO_ERROR( wxS( "cannot replace a schematic without a top-level sheet and screen" ) );
+
+            staged.replacementScreen = std::make_unique<SCH_SCREEN>( aSchematic );
+            staged.replacementScreen->SetImportStagingUuid( staged.destinationRoot->m_Uuid );
+            staged.replacementScreen->SetFileName( aSourcePath );
+            SCH_SHEET_PATH rootPath;
+            rootPath.push_back( staged.destinationRoot );
+            staged.hierarchy.push_back( rootPath );
+            staged.replacementCurrentSheet.emplace( rootPath );
+            stageSheetContent( staged, aModel, modelIndex, *sourceSheets.front(), staged.replacementScreen.get(),
+                               rootPath );
         }
         else
         {
+            staged.topLevelCache = std::make_unique<SCH_SCREEN>( aSchematic );
+
             for( size_t index = 0; index < sourceSheets.size(); ++index )
             {
                 const MODEL_SHEET& sourceSheet = *sourceSheets[index];
-                VECTOR2I           position( schIUScale.MilsToIU( 500 + static_cast<int>( index % 4 ) * 2500 ),
-                                             schIUScale.MilsToIU( 500 + static_cast<int>( index / 4 ) * 2000 ) );
-                auto               child = std::make_unique<SCH_SHEET>(
-                        staged.destinationRoot, position,
-                        VECTOR2I( schIUScale.MilsToIU( 2000 ), schIUScale.MilsToIU( 1500 ) ) );
-                auto childScreen = new SCH_SCREEN( aSchematic );
-                child->SetScreen( childScreen );
-                child->GetField( FIELD_T::SHEET_NAME )->SetText( sourceSheet.name.text );
+                auto               sheet = std::make_unique<SCH_SHEET>( aSchematic );
+                auto               screen = new SCH_SCREEN( aSchematic );
+                const_cast<KIID&>( sheet->m_Uuid ) = screen->GetUuid();
+                sheet->SetScreen( screen );
+                sheet->SetParent( &aSchematic->Root() );
+                sheet->GetField( FIELD_T::SHEET_NAME )->SetText( sourceSheet.name.text );
                 wxString filename = sanitizedFilename( sourceSheet.name.text, index, usedFilenames );
-                child->GetField( FIELD_T::SHEET_FILENAME )->SetText( filename );
-                childScreen->SetFileName( filename );
-                childScreen->SetPageNumber( wxString::Format( wxS( "%zu" ), firstChildPage + index ) );
-                SCH_SHEET_PATH childPath( rootPath );
-                childPath.push_back( child.get() );
-                childPath.SetPageNumber( wxString::Format( wxS( "%zu" ), firstChildPage + index ) );
-                stageSheetContent( staged, aModel, modelIndex, sourceSheet, childScreen, childPath );
-                staged.hierarchy.push_back( childPath );
-                rootScreen->Append( child.get() );
-                child.release();
+                sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( filename );
+                screen->SetFileName( filename );
+                screen->SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
+                SCH_SHEET_PATH path;
+                path.push_back( sheet.get() );
+                path.SetPageNumber( wxString::Format( wxS( "%zu" ), index + 1 ) );
+                stageSheetContent( staged, aModel, modelIndex, sourceSheet, screen, path );
+                staged.hierarchy.push_back( path );
+
+                if( index == 0 )
+                    staged.replacementCurrentSheet.emplace( path );
+
+                staged.topLevelIndex.insert( sheet.get() );
+                staged.topLevelSheets.push_back( sheet.get() );
+                staged.topLevelOwners.push_back( std::move( sheet ) );
             }
         }
     }
