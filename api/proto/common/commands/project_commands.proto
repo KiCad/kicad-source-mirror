@@ -82,6 +82,10 @@ message SetTextVariables
 }
 
 
+// Opens a document (currently only supported in CLI api-server mode)
+// A document cannot be opened unless no project is currently loaded or it is
+// part of a currently loaded project.  To switch projects, use CloseDocument
+// or CloseAllDocuments to close existing documents.
 message OpenDocument
 {
   kiapi.common.types.DocumentType type = 1;
@@ -99,6 +103,14 @@ message OpenDocumentResponse
 message CloseDocument
 {
   kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+
+// Closes all open documents (currently only supported in CLI api-server mode)
+message CloseAllDocuments
+{
+  // If set, will close documents even if they have been modified and not saved
+  bool force = 1;
 }
 
 

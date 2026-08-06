@@ -66,6 +66,8 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
             &API_HANDLER_COMMON::handleOpenDocument );
     registerHandler<CloseDocument, Empty>(
             &API_HANDLER_COMMON::handleCloseDocument );
+    registerHandler<CloseAllDocuments, Empty>(
+            &API_HANDLER_COMMON::handleCloseAllDocuments );
 
 }
 
@@ -431,4 +433,18 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleCloseDocument(
     }
 
     return m_closeDocumentHandler( aCtx.Request );
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleCloseAllDocuments( const HANDLER_CONTEXT<CloseAllDocuments>& aCtx )
+{
+    if( !m_closeAllDocumentsHandler )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNIMPLEMENTED );
+        e.set_error_message( "CloseAllDocuments is not available in this KiCad mode" );
+        return tl::unexpected( e );
+    }
+
+    return m_closeAllDocumentsHandler( aCtx.Request );
 }

@@ -37,9 +37,11 @@ class API_HANDLER_COMMON : public API_HANDLER
 public:
     using OPEN_DOCUMENT_HANDLER = std::function<HANDLER_RESULT<commands::OpenDocumentResponse>(
             const commands::OpenDocument& )>;
-
     using CLOSE_DOCUMENT_HANDLER = std::function<HANDLER_RESULT<Empty>(
             const commands::CloseDocument& )>;
+    using CLOSE_ALL_DOCUMENTS_HANDLER = std::function<HANDLER_RESULT<Empty>(
+            const commands::CloseAllDocuments& )>;
+
 
     API_HANDLER_COMMON();
 
@@ -53,6 +55,11 @@ public:
     void SetCloseDocumentHandler( CLOSE_DOCUMENT_HANDLER aHandler )
     {
         m_closeDocumentHandler = std::move( aHandler );
+    }
+
+    void SetCloseAllDocumentsHandler( CLOSE_ALL_DOCUMENTS_HANDLER aHandler )
+    {
+        m_closeAllDocumentsHandler = std::move( aHandler );
     }
 
 private:
@@ -94,8 +101,12 @@ private:
     HANDLER_RESULT<Empty> handleCloseDocument(
         const HANDLER_CONTEXT<commands::CloseDocument>& aCtx );
 
+    HANDLER_RESULT<Empty> handleCloseAllDocuments(
+        const HANDLER_CONTEXT<commands::CloseAllDocuments>& aCtx );
+
 private:
     OPEN_DOCUMENT_HANDLER m_openDocumentHandler;
+    CLOSE_ALL_DOCUMENTS_HANDLER m_closeAllDocumentsHandler;
     CLOSE_DOCUMENT_HANDLER m_closeDocumentHandler;
 };
 

@@ -215,6 +215,13 @@ BOOST_FIXTURE_TEST_CASE( SwitchBoards, API_SERVER_E2E_FIXTURE )
     BOOST_REQUIRE_MESSAGE( Client().GetFirstFootprint( documentA, &footprintA ),
                            "GetFirstFootprint for first board failed: " + Client().LastError() );
 
+    // Switching projects requires an explicit close
+    kiapi::common::ApiStatusCode closeStatusA = kiapi::common::AS_UNKNOWN;
+
+    BOOST_REQUIRE_MESSAGE( Client().CloseDocument( &documentA, &closeStatusA ),
+                           "CloseDocument for first board failed: " + Client().LastError() );
+    BOOST_CHECK_EQUAL( closeStatusA, kiapi::common::AS_OK );
+
     kiapi::common::types::DocumentSpecifier documentB;
 
     BOOST_REQUIRE_MESSAGE( Client().OpenDocument( boardPathB.GetFullPath(), &documentB ),
@@ -494,4 +501,58 @@ BOOST_FIXTURE_TEST_CASE( SetCustomDesignRules_RoundTripSingleRule, API_SERVER_E2
 }
 
 
+BOOST_FIXTURE_TEST_CASE( OpenProjectWithBoardAndSchematic, API_SERVER_E2E_FIXTURE )
+{
+    BOOST_REQUIRE_MESSAGE( Start(), LastError() );
+
+    wxString testDataDir = wxString::FromUTF8( KI_TEST::GetTestDataRootDir() ) + wxS( "cli/basic_test/" );
+
+    kiapi::common::types::DocumentSpecifier projectDoc;
+
+    BOOST_REQUIRE_MESSAGE( Client().OpenDocument( testDataDir + wxS( "basic_test.kicad_pro" ),
+                                                  kiapi::common::types::DOCTYPE_PROJECT, &projectDoc ),
+                           "OpenDocument for project failed: " + Client().LastError() );
+
+    BOOST_REQUIRE( projectDoc.type() == kiapi::common::types::DOCTYPE_PROJECT );
+
+    kiapi::common::types::DocumentSpecifier boardDoc;
+
+    BOOST_REQUIRE_MESSAGE( Client().OpenDocument( testDataDir + wxS( "basic_test.kicad_pcb" ),
+                                                  kiapi::common::types::DOCTYPE_PCB, &boardDoc ),
+                           "OpenDocument for board failed: " + Client().LastError() );
+
+    BOOST_REQUIRE( boardDoc.type() == kiapi::common::types::DOCTYPE_PCB );
+    BOOST_REQUIRE( !boardDoc.board_filename().empty() );
+
+    int footprintCount = 0;
+    BOOST_REQUIRE_MESSAGE( Client().GetItemsCount( boardDoc, kiapi::common::types::KOT_PCB_FOOTPRINT, &footprintCount ),
+                           "GetItems for board failed: " + Client().LastError() );
+    BOOST_CHECK_GT( footprintCount, 0 );
+
+    kiapi::common::types::DocumentSpecifier schDoc;
+
+    BOOST_REQUIRE_MESSAGE( Client().OpenDocument( testDataDir + wxS( "basic_test.kicad_sch" ),
+                                                  kiapi::common::types::DOCTYPE_SCHEMATIC, &schDoc ),
+                           "OpenDocument for schematic failed: " + Client().LastError() );
+
+    BOOST_REQUIRE( schDoc.type() == kiapi::common::types::DOCTYPE_SCHEMATIC );
+
+    // Verify the board is still open by querying it again.
+    footprintCount = 0;
+    BOOST_REQUIRE_MESSAGE( Client().GetItemsCount( boardDoc, kiapi::common::types::KOT_PCB_FOOTPRINT, &footprintCount ),
+                           "GetItems for board after opening schematic failed: " + Client().LastError() );
+    BOOST_CHECK_GT( footprintCount, 0 );
+
+    // Verify that opening a document from a different project is rejected.
+    wxString otherDataDir = wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() );
+
+    kiapi::common::types::DocumentSpecifier otherBoardDoc;
+
+    BOOST_REQUIRE_MESSAGE(
+            !Client().OpenDocument( otherDataDir + wxS( "api_kitchen_sink.kicad_pcb" ),
+                                    kiapi::common::types::DOCTYPE_PCB, &otherBoardDoc ),
+            "OpenDocument for a different-project board should have failed" );
+
+    BOOST_CHECK( Client().LastError().Contains( wxS( "already open" ) ) );
+}
 BOOST_AUTO_TEST_SUITE_END()

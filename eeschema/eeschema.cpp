@@ -918,19 +918,22 @@ bool IFACE::HandleApiOpenDocument( const wxString& aPath, KICAD_API_SERVER* aSer
 
     projectPath.MakeAbsolute();
 
-    // Close any existing document before loading a new project. LoadProject with
-    // aSetActive=true destroys the old PROJECT, which would leave the old schematic
-    // and context holding dangling project pointers.
+    // We currently only support one document per type (and each needs to come from
+    // the same project).  This will need evolution once we support MDI and multi-project.
     closeCurrentDocument( aServer );
 
     SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
 
-    if( !settingsManager.LoadProject( projectPath.GetFullPath(), true ) )
-    {
-        wxLogTrace( traceApi, "Warning: no project file found for %s", aPath );
-    }
-
+    // Reuse an already-loaded project if one exists for this path.
     PROJECT* project = settingsManager.GetProject( projectPath.GetFullPath() );
+
+    if( !project )
+    {
+        if( !settingsManager.LoadProject( projectPath.GetFullPath(), true ) )
+            wxLogTrace( traceApi, "Warning: no project file found for %s", aPath );
+
+        project = settingsManager.GetProject( projectPath.GetFullPath() );
+    }
 
     if( !project )
     {
