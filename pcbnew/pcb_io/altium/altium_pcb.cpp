@@ -3500,6 +3500,11 @@ void ALTIUM_PCB::ConvertPads6ToBoardItem( const APAD6& aElem )
         std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
         footprint->SetPosition( aElem.position );
 
+        // This wrapper exists only to carry a free-standing pad; it has no schematic symbol and
+        // nothing to buy or place, so keep it out of the BOM and the placement files.
+        footprint->SetAttributes( FP_BOARD_ONLY | FP_EXCLUDE_FROM_BOM
+                                  | FP_EXCLUDE_FROM_POS_FILES );
+
         ConvertPads6ToFootprintItemOnCopper( footprint.get(), aElem );
 
         m_board->Add( footprint.release(), ADD_MODE::APPEND );
