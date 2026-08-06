@@ -1989,6 +1989,7 @@ DrcErrorType ToProtoEnum( PCB_DRC_CODE aValue )
     case DRCE_CREEPAGE:                      return DrcErrorType::DRCET_CREEPAGE;
     case DRCE_TRACKS_CROSSING:               return DrcErrorType::DRCET_TRACKS_CROSSING;
     case DRCE_EDGE_CLEARANCE:                return DrcErrorType::DRCET_EDGE_CLEARANCE;
+    case DRCE_ZONES_INTERSECT:               return DrcErrorType::DRCET_ZONES_INTERSECT;
     case DRCE_ISOLATED_COPPER:               return DrcErrorType::DRCET_ISOLATED_COPPER;
     case DRCE_STARVED_THERMAL:               return DrcErrorType::DRCET_STARVED_THERMAL;
     case DRCE_DANGLING_VIA:                  return DrcErrorType::DRCET_DANGLING_VIA;
@@ -2035,10 +2036,14 @@ DrcErrorType ToProtoEnum( PCB_DRC_CODE aValue )
     case DRCE_TEXT_THICKNESS:                return DrcErrorType::DRCET_TEXT_THICKNESS;
     case DRCE_LENGTH_OUT_OF_RANGE:           return DrcErrorType::DRCET_LENGTH_OUT_OF_RANGE;
     case DRCE_SKEW_OUT_OF_RANGE:             return DrcErrorType::DRCET_SKEW_OUT_OF_RANGE;
+    case DRCE_NET_CHAIN_STUB_TOO_LONG:       return DrcErrorType::DRCET_NET_CHAIN_STUB_TOO_LONG;
+    case DRCE_NET_CHAIN_RETURN_PATH_BREAK:   return DrcErrorType::DRCET_NET_CHAIN_RETURN_PATH_BREAK;
+    case DRCE_NET_CHAIN_TUNING_PROFILES:     return DrcErrorType::DRCET_NET_CHAIN_TUNING_PROFILES;
     case DRCE_VIA_COUNT_OUT_OF_RANGE:        return DrcErrorType::DRCET_VIA_COUNT_OUT_OF_RANGE;
     case DRCE_DP_GAP_OUT_OF_RANGE:           return DrcErrorType::DRCET_DIFF_PAIR_GAP_OUT_OF_RANGE;
     case DRCE_DP_UNCOUPLED_LENGTH_TOO_LONG:  return DrcErrorType::DRCET_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG;
     case DRCE_FOOTPRINT:                     return DrcErrorType::DRCET_FOOTPRINT;
+    case DRCE_FOOTPRINT_SCALED_WITH_PADS:    return DrcErrorType::DRCET_FOOTPRINT_SCALED_WITH_PADS;
     case DRCE_FOOTPRINT_TYPE_MISMATCH:       return DrcErrorType::DRCET_FOOTPRINT_TYPE_MISMATCH;
     case DRCE_PAD_TH_WITH_NO_HOLE:           return DrcErrorType::DRCET_PAD_TH_WITH_NO_HOLE;
     case DRCE_MIRRORED_TEXT_ON_FRONT_LAYER:  return DrcErrorType::DRCET_MIRRORED_TEXT_ON_FRONT_LAYER;
@@ -2048,7 +2053,7 @@ DrcErrorType ToProtoEnum( PCB_DRC_CODE aValue )
     case DRCE_TRACK_ON_POST_MACHINED_LAYER:  return DrcErrorType::DRCET_TRACK_ON_POST_MACHINED_LAYER;
     case DRCE_TRACK_NOT_CENTERED_ON_VIA:     return DrcErrorType::DRCET_TRACK_NOT_CENTERED_ON_VIA;
     default:
-        wxCHECK_MSG( false, DrcErrorType::DRCET_UNKNOWN, "Unhandled case in ToProtoEnum<PCB_DRC_CODE>" );
+        return DrcErrorType::DRCET_UNKNOWN;
     }
 }
 
@@ -2066,6 +2071,7 @@ PCB_DRC_CODE FromProtoEnum( DrcErrorType aValue )
     case DrcErrorType::DRCET_CREEPAGE:                            return DRCE_CREEPAGE;
     case DrcErrorType::DRCET_TRACKS_CROSSING:                     return DRCE_TRACKS_CROSSING;
     case DrcErrorType::DRCET_EDGE_CLEARANCE:                      return DRCE_EDGE_CLEARANCE;
+    case DrcErrorType::DRCET_ZONES_INTERSECT:                     return DRCE_ZONES_INTERSECT;
     case DrcErrorType::DRCET_ISOLATED_COPPER:                     return DRCE_ISOLATED_COPPER;
     case DrcErrorType::DRCET_STARVED_THERMAL:                     return DRCE_STARVED_THERMAL;
     case DrcErrorType::DRCET_DANGLING_VIA:                        return DRCE_DANGLING_VIA;
@@ -2111,10 +2117,14 @@ PCB_DRC_CODE FromProtoEnum( DrcErrorType aValue )
     case DrcErrorType::DRCET_TEXT_HEIGHT:                         return DRCE_TEXT_HEIGHT;
     case DrcErrorType::DRCET_TEXT_THICKNESS:                      return DRCE_TEXT_THICKNESS;
     case DrcErrorType::DRCET_LENGTH_OUT_OF_RANGE:                 return DRCE_LENGTH_OUT_OF_RANGE;
+    case DrcErrorType::DRCET_NET_CHAIN_STUB_TOO_LONG:             return DRCE_NET_CHAIN_STUB_TOO_LONG;
+    case DrcErrorType::DRCET_NET_CHAIN_RETURN_PATH_BREAK:         return DRCE_NET_CHAIN_RETURN_PATH_BREAK;
+    case DrcErrorType::DRCET_NET_CHAIN_TUNING_PROFILES:           return DRCE_NET_CHAIN_TUNING_PROFILES;
     case DrcErrorType::DRCET_SKEW_OUT_OF_RANGE:                   return DRCE_SKEW_OUT_OF_RANGE;
     case DrcErrorType::DRCET_VIA_COUNT_OUT_OF_RANGE:              return DRCE_VIA_COUNT_OUT_OF_RANGE;
     case DrcErrorType::DRCET_DIFF_PAIR_GAP_OUT_OF_RANGE:          return DRCE_DP_GAP_OUT_OF_RANGE;
     case DrcErrorType::DRCET_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG: return DRCE_DP_UNCOUPLED_LENGTH_TOO_LONG;
+    case DrcErrorType::DRCET_FOOTPRINT_SCALED_WITH_PADS:          return DRCE_FOOTPRINT_SCALED_WITH_PADS;
     case DrcErrorType::DRCET_FOOTPRINT:                           return DRCE_FOOTPRINT;
     case DrcErrorType::DRCET_FOOTPRINT_TYPE_MISMATCH:             return DRCE_FOOTPRINT_TYPE_MISMATCH;
     case DrcErrorType::DRCET_PAD_TH_WITH_NO_HOLE:                 return DRCE_PAD_TH_WITH_NO_HOLE;
