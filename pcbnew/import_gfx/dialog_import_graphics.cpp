@@ -39,6 +39,8 @@
 
 #include <memory>
 
+#include "settings/settings_manager.h"
+
 
 const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
     { DXF_IMPORT_UNITS::INCH, _( "Inches" ) },
@@ -249,6 +251,14 @@ bool DIALOG_IMPORT_GRAPHICS::TransferDataFromWindow()
 
     VECTOR2D origin( m_xOrigin.GetDoubleValue() / xscale, m_yOrigin.GetDoubleValue() / yscale );
 
+    switch( m_originCtrl->GetSelection() )
+    {
+    case 0:                                      break;
+    case 1: origin += m_parent->GetAuxOrigin();  break;     // Drill/place file origin
+    case 2: origin += m_parent->GetGridOrigin(); break;
+    case 3: origin += m_parent->GetUserOrigin(); break;
+    }
+
     if( std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> plugin = m_gfxImportMgr->GetPluginByExt( ext ) )
     {
         DXF_IMPORT_PLUGIN* dxfPlugin = dynamic_cast<DXF_IMPORT_PLUGIN*>( plugin.get() );
@@ -326,6 +336,8 @@ void DIALOG_IMPORT_GRAPHICS::onUpdateUI( wxUpdateUIEvent& event )
 {
     m_xOrigin.Enable( m_placeAtCheckbox->GetValue() );
     m_yOrigin.Enable( m_placeAtCheckbox->GetValue() );
+    m_originLabel->Enable( m_placeAtCheckbox->GetValue() );
+    m_originCtrl->Enable( m_placeAtCheckbox->GetValue() );
 
     m_tolerance.Enable( m_rbFixDiscontinuities->GetValue() );
 

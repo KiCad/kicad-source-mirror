@@ -33,7 +33,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/valtext.h>
 #include <wx/radiobut.h>
 #include <wx/bmpcbox.h>
-#include <wx/gbsizer.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -63,6 +62,8 @@ class DIALOG_IMPORT_GRAPHICS_BASE : public DIALOG_SHIM
 		wxStaticText* m_yLabel;
 		wxTextCtrl* m_yCtrl;
 		wxStaticText* m_yUnits;
+		wxStaticText* m_originLabel;
+		wxChoice* m_originCtrl;
 		wxRadioButton* m_radioBtnCurrentLayer;
 		wxRadioButton* m_radioBtnMapLayers;
 		wxRadioButton* m_radioBtnSingleLayer;

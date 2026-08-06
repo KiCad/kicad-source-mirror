@@ -89,19 +89,17 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline2, 0, wxEXPAND|wxALL, 5 );
 
-	wxGridBagSizer* gbSizer2;
-	gbSizer2 = new wxGridBagSizer( 0, 0 );
-	gbSizer2->SetFlexibleDirection( wxBOTH );
-	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizerPlaceAt;
+	bSizerPlaceAt = new wxBoxSizer( wxHORIZONTAL );
 
 	m_placeAtCheckbox = new wxCheckBox( this, wxID_ANY, _("Place at:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_placeAtCheckbox->SetToolTip( _("If not checked: use interactive placement.") );
 
-	gbSizer2->Add( m_placeAtCheckbox, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	bSizerPlaceAt->Add( m_placeAtCheckbox, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_xLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_xLabel->Wrap( -1 );
-	gbSizer2->Add( m_xLabel, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	bSizerPlaceAt->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_xCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -114,11 +112,11 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	#endif
 	m_xCtrl->SetToolTip( _("DXF origin on PCB Grid, X Coordinate") );
 
-	gbSizer2->Add( m_xCtrl, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bSizerPlaceAt->Add( m_xCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_yLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yLabel->Wrap( -1 );
-	gbSizer2->Add( m_yLabel, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 18 );
+	bSizerPlaceAt->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_yCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -131,33 +129,43 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	#endif
 	m_yCtrl->SetToolTip( _("DXF origin on PCB Grid, Y Coordinate") );
 
-	gbSizer2->Add( m_yCtrl, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
+	bSizerPlaceAt->Add( m_yCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_yUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yUnits->Wrap( -1 );
-	gbSizer2->Add( m_yUnits, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerPlaceAt->Add( m_yUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_radioBtnCurrentLayer = new wxRadioButton( this, wxID_ANY, _("Current Layer"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_originLabel = new wxStaticText( this, wxID_ANY, _("From:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_originLabel->Wrap( -1 );
+	bSizerPlaceAt->Add( m_originLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+
+	wxString m_originCtrlChoices[] = { _("Page origin"), _("Drill/place file origin"), _("Grid origin"), _("User defined origin") };
+	int m_originCtrlNChoices = sizeof( m_originCtrlChoices ) / sizeof( wxString );
+	m_originCtrl = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_originCtrlNChoices, m_originCtrlChoices, 0 );
+	m_originCtrl->SetSelection( 0 );
+	bSizerPlaceAt->Add( m_originCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizerMain->Add( bSizerPlaceAt, 1, wxEXPAND|wxLEFT, 5 );
+
+	wxBoxSizer* bSizerTargetLayer;
+	bSizerTargetLayer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_radioBtnCurrentLayer = new wxRadioButton( this, wxID_ANY, _("Current layer"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_radioBtnCurrentLayer->SetValue( true );
-	gbSizer2->Add( m_radioBtnCurrentLayer, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	bSizerTargetLayer->Add( m_radioBtnCurrentLayer, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_radioBtnMapLayers = new wxRadioButton( this, wxID_ANY, _("Map Layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_radioBtnMapLayers, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	m_radioBtnMapLayers = new wxRadioButton( this, wxID_ANY, _("Map layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerTargetLayer->Add( m_radioBtnMapLayers, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_radioBtnSingleLayer = new wxRadioButton( this, wxID_ANY, _("Single Layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_radioBtnSingleLayer, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	m_radioBtnSingleLayer = new wxRadioButton( this, wxID_ANY, _("Single layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerTargetLayer->Add( m_radioBtnSingleLayer, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	gbSizer2->Add( m_SelLayerBox, wxGBPosition( 1, 3 ), wxGBSpan( 1, 2 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerTargetLayer->Add( m_SelLayerBox, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	gbSizer2->Add( 0, 5, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
-
-
-	gbSizer2->AddGrowableCol( 2 );
-	gbSizer2->AddGrowableCol( 4 );
-
-	bSizerMain->Add( gbSizer2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerMain->Add( bSizerTargetLayer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerGroupOpt;
 	bSizerGroupOpt = new wxBoxSizer( wxVERTICAL );
