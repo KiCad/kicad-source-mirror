@@ -93,12 +93,6 @@ public:
 
     void RebuildRows() override;
 
-    void ExpandRow( int aRow );
-    void CollapseRow( int aRow );
-    void ExpandCollapseRow( int aRow );
-    void CollapseForSort();
-    void ExpandAfterSort();
-
     void ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames, const wxString& aVariantName );
 
     bool IsEdited() { return m_edited; }
@@ -141,10 +135,12 @@ public:
     const std::vector<wxString>& GetVariantNames() const { return m_variantNames; }
 
 private:
-    static bool cmp( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhRow, const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhRow,
-                     SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending );
+    bool cmpRows( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhRow,
+              const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhRow,
+              int sortCol, bool ascending ) override;
+    bool cmpRowItems( const SCH_REFERENCE& lhItem, const SCH_REFERENCE& rhItem ) override;
 
-    bool unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
+    bool unitMatch( const SCH_REFERENCE& lhItem, const SCH_REFERENCE& rhItem ) override;
     bool groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
 
     // Helper functions to deal with translating wxGrid values to and from
@@ -200,8 +196,6 @@ private:
      * in their value because their name is the same as a variable.
      * Example: BOM template provides ${DNP} as a field, but they symbol doesn't have the field. */
     wxString getFieldShownText( const SCH_REFERENCE& aRef, const wxString& aFieldName );
-
-    void Sort();
 
     void updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef, const wxString& aFieldName );
 

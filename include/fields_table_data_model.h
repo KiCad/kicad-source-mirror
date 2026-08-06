@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 
 #include <widgets/wx_grid.h>
 
@@ -169,6 +170,141 @@ public:
         wxCHECK( aRow >= 0 && aRow < (int) m_rows.size(), std::vector<ITEM_TYPE>() );
         return m_rows[aRow].m_items;
     }
+
+    void ExpandRow( int aRow )
+    {
+        std::vector<DATA_MODEL_ROW<ITEM_TYPE>> children;
+
+        for( ITEM_TYPE& ref : m_rows[aRow].m_items )
+        {
+            bool matchFound = false;
+
+            // See if we already have a child group which this symbol fits into
+            for( DATA_MODEL_ROW<ITEM_TYPE>& child : children )
+            {
+                // group members are by definition all matching, so just check
+                // against the first member
+                if( unitMatch( ref, child.m_items[0] ) )
+                {
+                    matchFound = true;
+                    child.m_items.push_back( ref );
+                    break;
+                }
+            }
+
+            if( !matchFound )
+                children.emplace_back( ref, ROW_STATE::EXPANDED_CHILD );
+        }
+
+        if( children.size() < 2 )
+            return;
+
+        std::sort( children.begin(), children.end(),
+                   [this]( const DATA_MODEL_ROW<ITEM_TYPE>& lhs,
+                           const DATA_MODEL_ROW<ITEM_TYPE>& rhs ) -> bool
+                   {
+                       return cmpRows( lhs, rhs, m_sortColumn, m_sortAscending );
+                   } );
+
+        m_rows[aRow].m_state = ROW_STATE::EXPANDED_PARENT;
+        m_rows.insert( m_rows.begin() + aRow + 1, children.begin(), children.end() );
+
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow, children.size() );
+        GetView()->ProcessTableMessage( msg );
+    }
+
+
+    void CollapseRow( int aRow )
+    {
+        auto firstChild = m_rows.begin() + aRow + 1;
+        auto afterLastChild = firstChild;
+        int  deleted = 0;
+
+        while( afterLastChild != m_rows.end() && afterLastChild->m_state == ROW_STATE::EXPANDED_CHILD )
+        {
+            deleted++;
+            afterLastChild++;
+        }
+
+        m_rows[aRow].m_state = ROW_STATE::COLLAPSED;
+        m_rows.erase( firstChild, afterLastChild );
+
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aRow + 1, deleted );
+        GetView()->ProcessTableMessage( msg );
+    }
+
+
+    void ExpandCollapseRow( int aRow )
+    {
+        if( m_rows[aRow].m_state == ROW_STATE::COLLAPSED )
+            ExpandRow( aRow );
+        else if( m_rows[aRow].m_state == ROW_STATE::EXPANDED_PARENT )
+            CollapseRow( aRow );
+    }
+
+
+    void CollapseForSort()
+    {
+        for( size_t i = 0; i < m_rows.size(); ++i )
+        {
+            if( m_rows[i].m_state == ROW_STATE::EXPANDED_PARENT )
+            {
+                CollapseRow( i );
+                m_rows[i].m_state = ROW_STATE::COLLAPSED_DURING_SORT;
+            }
+        }
+    }
+
+
+    void ExpandAfterSort()
+    {
+        for( size_t i = 0; i < m_rows.size(); ++i )
+        {
+            if( m_rows[i].m_state == ROW_STATE::COLLAPSED_DURING_SORT )
+                ExpandRow( i );
+        }
+    }
+
+
+protected:
+    virtual bool cmpRows( const DATA_MODEL_ROW<ITEM_TYPE>& lhRow, const DATA_MODEL_ROW<ITEM_TYPE>& rhRow,
+                     int aSortCol, bool aAscending ) = 0;
+    // Used for sorting row items that are grouped with a single row, e.g. the references
+    virtual bool cmpRowItems( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem ) = 0;
+    virtual bool unitMatch( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem ) = 0;
+
+    void Sort()
+    {
+        CollapseForSort();
+
+        // We're going to sort the rows based on their first reference, so the first reference
+        // had better be the lowest one.
+        for( DATA_MODEL_ROW<ITEM_TYPE>& row : m_rows )
+        {
+            std::sort( row.m_items.begin(), row.m_items.end(),
+                    [this]( const ITEM_TYPE& lhs, const ITEM_TYPE& rhs ) -> bool
+                    {
+                        return cmpRowItems( lhs, rhs );
+                    } );
+        }
+
+        std::sort( m_rows.begin(), m_rows.end(),
+                   [this]( const DATA_MODEL_ROW<ITEM_TYPE>& lhs, const DATA_MODEL_ROW<ITEM_TYPE>& rhs ) -> bool
+                   {
+                       return cmpRows( lhs, rhs, m_sortColumn, m_sortAscending );
+                   } );
+
+        // Time to renumber the item numbers
+        int itemNumber = 1;
+
+        for( DATA_MODEL_ROW<ITEM_TYPE>& row : m_rows )
+        {
+            row.m_itemNumber = itemNumber++;
+        }
+
+        ExpandAfterSort();
+    }
+
 
 protected:
     std::vector<DATA_MODEL_ROW<ITEM_TYPE>> m_rows;

@@ -533,10 +533,10 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsAttribute( int aCol )
 }
 
 
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhRow,
-                                                const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhRow,
-                                                SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol,
-                                                bool ascending )
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmpRows( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhRow,
+                                                    const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhRow,
+                                                    int aSortCol,
+                                                    bool aAscending )
 {
     // Empty rows always go to the bottom, whether ascending or descending
     if( lhRow.m_items.size() == 0 )
@@ -547,22 +547,22 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const SYMBOL_FIELDS_TABLE_DATA_M
     // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
     // to get the opposite sort.  i.e. ~(a<b) != (a>b)
     auto local_cmp =
-            [ ascending ]( const auto a, const auto b )
+            [ aAscending ]( const auto a, const auto b )
             {
-                if( ascending )
+                if( aAscending )
                     return a < b;
                 else
                     return a > b;
             };
 
     // Primary sort key is sortCol; secondary is always REFERENCE (column 0)
-    if( sortCol < 0 || sortCol >= dataModel->GetNumberCols() )
-        sortCol = 0;
+    if( aSortCol < 0 || aSortCol >= this->GetNumberCols() )
+        aSortCol = 0;
 
-    wxString lhs = dataModel->GetValue( lhRow, sortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
-    wxString rhs = dataModel->GetValue( rhRow, sortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
+    wxString lhs = this->GetValue( lhRow, aSortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
+    wxString rhs = this->GetValue( rhRow, aSortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
 
-    if( lhs == rhs || dataModel->ColIsReference( sortCol ) )
+    if( lhs == rhs || this->ColIsReference( aSortCol ) )
     {
         wxString lhRef = lhRow.m_items[0].GetRef() + lhRow.m_items[0].GetRefNumber();
         wxString rhRef = rhRow.m_items[0].GetRef() + rhRow.m_items[0].GetRefNumber();
@@ -575,48 +575,22 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmp( const SYMBOL_FIELDS_TABLE_DATA_M
 }
 
 
-void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::Sort()
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmpRowItems( const SCH_REFERENCE& lhItem,
+                                                        const SCH_REFERENCE& rhItem )
 {
-    CollapseForSort();
-
-    // We're going to sort the rows based on their first reference, so the first reference
-    // had better be the lowest one.
-    for( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row : m_rows )
-    {
-        std::sort( row.m_items.begin(), row.m_items.end(),
-                   []( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs )
-                   {
-                       wxString lhs_ref( lhs.GetRef() << lhs.GetRefNumber() );
-                       wxString rhs_ref( rhs.GetRef() << rhs.GetRefNumber() );
-                       return StrNumCmp( lhs_ref, rhs_ref, true ) < 0;
-                   } );
-    }
-
-    std::sort( m_rows.begin(), m_rows.end(),
-               [this]( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhs, const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhs ) -> bool
-               {
-                   return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
-               } );
-
-    // Time to renumber the item numbers
-    int itemNumber = 1;
-
-    for( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row : m_rows )
-    {
-        row.m_itemNumber = itemNumber++;
-    }
-
-    ExpandAfterSort();
+    wxString lhs_ref( lhItem.GetRef() << lhItem.GetRefNumber() );
+    wxString rhs_ref( rhItem.GetRef() << rhItem.GetRefNumber() );
+    return StrNumCmp( lhs_ref, rhs_ref, true ) < 0;
 }
 
 
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhItem, const SCH_REFERENCE& rhItem )
 {
     // If items are unannotated then we can't tell if they're units of the same symbol or not
-    if( lhRef.GetRefNumber() == wxT( "?" ) )
+    if( lhItem.GetRefNumber() == wxT( "?" ) )
         return false;
 
-    return ( lhRef.GetRef() == rhRef.GetRef() && lhRef.GetRefNumber() == rhRef.GetRefNumber() );
+    return ( lhItem.GetRef() == rhItem.GetRef() && lhItem.GetRefNumber() == rhItem.GetRefNumber() );
 }
 
 
@@ -1005,104 +979,6 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
     }
 
     Sort();
-}
-
-
-void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandRow( int aRow )
-{
-    std::vector<SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW> children;
-
-    for( SCH_REFERENCE& ref : m_rows[aRow].m_items )
-    {
-        bool matchFound = false;
-
-        // See if we already have a child group which this symbol fits into
-        for( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& child : children )
-        {
-            // group members are by definition all matching, so just check
-            // against the first member
-            if( unitMatch( ref, child.m_items[0] ) )
-            {
-                matchFound = true;
-                child.m_items.push_back( ref );
-                break;
-            }
-        }
-
-        if( !matchFound )
-            children.emplace_back( SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW( ref, ROW_STATE::EXPANDED_CHILD ) );
-    }
-
-    if( children.size() < 2 )
-        return;
-
-    std::sort( children.begin(), children.end(),
-               [this]( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhs,
-                       const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhs ) -> bool
-               {
-                   return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
-               } );
-
-    m_rows[aRow].m_state = ROW_STATE::EXPANDED_PARENT;
-    m_rows.insert( m_rows.begin() + aRow + 1, children.begin(), children.end() );
-
-    wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow, children.size() );
-    GetView()->ProcessTableMessage( msg );
-}
-
-
-void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::CollapseRow( int aRow )
-{
-    auto firstChild = m_rows.begin() + aRow + 1;
-    auto afterLastChild = firstChild;
-    int  deleted = 0;
-
-    while( afterLastChild != m_rows.end()
-           && afterLastChild->m_state == ROW_STATE::EXPANDED_CHILD )
-    {
-        deleted++;
-        afterLastChild++;
-    }
-
-    m_rows[aRow].m_state = ROW_STATE::COLLAPSED;
-    m_rows.erase( firstChild, afterLastChild );
-
-    wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aRow + 1, deleted );
-    GetView()->ProcessTableMessage( msg );
-}
-
-
-void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandCollapseRow( int aRow )
-{
-    SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row = m_rows[aRow];
-
-    if( row.m_state == ROW_STATE::COLLAPSED )
-        ExpandRow( aRow );
-    else if( row.m_state == ROW_STATE::EXPANDED_PARENT )
-        CollapseRow( aRow );
-}
-
-
-void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::CollapseForSort()
-{
-    for( size_t i = 0; i < m_rows.size(); ++i )
-    {
-        if( m_rows[i].m_state == ROW_STATE::EXPANDED_PARENT )
-        {
-            CollapseRow( i );
-            m_rows[i].m_state = ROW_STATE::COLLAPSED_DURING_SORT;
-        }
-    }
-}
-
-
-void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ExpandAfterSort()
-{
-    for( size_t i = 0; i < m_rows.size(); ++i )
-    {
-        if( m_rows[i].m_state == ROW_STATE::COLLAPSED_DURING_SORT )
-            ExpandRow( i );
-    }
 }
 
 
