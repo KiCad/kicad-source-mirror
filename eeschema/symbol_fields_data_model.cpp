@@ -519,20 +519,6 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const w
 }
 
 
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsValue( int aCol )
-{
-    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::VALUE );
-}
-
-
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsAttribute( int aCol )
-{
-    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
-    return isAttribute( m_cols[aCol].m_fieldName );
-}
-
-
 bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmpRows( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhRow,
                                                     const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhRow,
                                                     int aSortCol,
@@ -690,14 +676,6 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFE
     }
 
     return wxEmptyString;
-}
-
-
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::isAttribute( const wxString& aFieldName )
-{
-    return aFieldName == wxS( "${DNP}" ) || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
-           || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) || aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" )
-           || aFieldName == wxS( "${EXCLUDE_FROM_SIM}" );
 }
 
 

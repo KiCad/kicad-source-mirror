@@ -52,7 +52,6 @@ public:
 
     SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL( const SCH_REFERENCE_LIST& aSymbolsList, wxGridCellAttr* aURLEditor ) :
             m_symbolsList( aSymbolsList ),
-            m_edited( false ),
             m_scope( SCOPE_ALL ),
             m_urlEditor( aURLEditor ),
             m_textVarRenderer( nullptr )
@@ -88,14 +87,9 @@ public:
 
     void SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
-    bool ColIsValue( int aCol );
-    bool ColIsAttribute( int aCol );
-
     void RebuildRows() override;
 
     void ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames, const wxString& aVariantName );
-
-    bool IsEdited() { return m_edited; }
 
     int GetDataWidth( int aCol );
 
@@ -120,20 +114,6 @@ public:
 
     const SCH_REFERENCE_LIST& GetReferenceList() const { return m_symbolsList; }
 
-    /**
-     * Set the current variant name for highlighting purposes.
-     *
-     * When a variant is set, cells that differ from the default (non-variant) value
-     * will be highlighted.
-     *
-     * @param aVariantName The name of the current variant, or empty string for default.
-     */
-    void            SetCurrentVariant( const wxString& aVariantName ) { m_currentVariant = aVariantName; }
-    const wxString& GetCurrentVariant() const { return m_currentVariant; }
-
-    void SetVariantNames( const std::vector<wxString>& aVariantNames ) { m_variantNames = aVariantNames; }
-    const std::vector<wxString>& GetVariantNames() const { return m_variantNames; }
-
 private:
     bool cmpRows( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhRow,
               const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhRow,
@@ -142,10 +122,6 @@ private:
 
     bool unitMatch( const SCH_REFERENCE& lhItem, const SCH_REFERENCE& rhItem ) override;
     bool groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
-
-    // Helper functions to deal with translating wxGrid values to and from
-    // named field values like ${DNP}
-    bool isAttribute( const wxString& aFieldName );
 
     /**
      * Test whether a field's storage is common to every sheet path that reaches a symbol.
@@ -207,13 +183,10 @@ protected:
      *          commit actions will be broken.
      */
     SCH_REFERENCE_LIST    m_symbolsList;
-    bool                  m_edited;
     SCOPE                 m_scope;
     SCH_SHEET_PATH        m_path;
     wxGridCellAttr*       m_urlEditor;
     wxGridCellRenderer*   m_textVarRenderer; ///< Renderer for cells with text variable references
-    wxString              m_currentVariant;  ///< Current variant name for highlighting
-    std::vector<wxString> m_variantNames;    ///< Variant names for multi-variant DNP filtering
 
     // Data store
     // The data model is fundamentally m_componentRefs X m_fieldNames.

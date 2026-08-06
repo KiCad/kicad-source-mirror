@@ -146,6 +146,20 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsItemNumber( int aCol )
 }
 
 
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsValue( int aCol )
+{
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
+    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::VALUE );
+}
+
+
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsAttribute( int aCol )
+{
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
+    return isAttribute( m_cols[aCol].m_fieldName );
+}
+
+
 bool FIELDS_TABLE_DATA_MODEL_BASE::IsExpanderColumn( int aCol ) const
 {
     // Check if aCol is the first visible column
@@ -355,4 +369,12 @@ wxString FIELDS_TABLE_DATA_MODEL_BASE::Export( const BOM_FMT_PRESET& aSettings )
     }
 
     return out;
+}
+
+
+bool FIELDS_TABLE_DATA_MODEL_BASE::isAttribute( const wxString& aFieldName )
+{
+    return aFieldName == wxS( "${DNP}" ) || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
+           || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) || aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" )
+           || aFieldName == wxS( "${EXCLUDE_FROM_SIM}" );
 }

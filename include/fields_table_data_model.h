@@ -72,6 +72,10 @@ struct DATA_MODEL_ROW
 };
 
 
+/**
+ * Contains everything completly generic to fields tables data models,
+ * as well as column functionality that doesn't touch the internal fields data store.
+ */
 class FIELDS_TABLE_DATA_MODEL_BASE : public WX_GRID_TABLE_BASE
 {
 public:
@@ -79,6 +83,8 @@ public:
 
     static const wxString QUANTITY_VARIABLE;
     static const wxString ITEM_NUMBER_VARIABLE;
+
+    bool IsEdited() { return m_edited; }
 
     virtual void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser ) = 0;
 
@@ -102,6 +108,8 @@ public:
     bool ColIsReference( int aCol );
     bool ColIsQuantity( int aCol );
     bool ColIsItemNumber( int aCol );
+    bool ColIsValue( int aCol );
+    bool ColIsAttribute( int aCol );
 
     bool IsExpanderColumn( int aCol ) const override;
 
@@ -144,7 +152,27 @@ public:
     virtual wxString GetExportValue( int aRow, int aCol, const wxString& aRefDelimiter,
                                      const wxString& aRefRangeDelimiter ) = 0;
 
+    /**
+     * Set the current variant name for highlighting purposes.
+     *
+     * When a variant is set, cells that differ from the default (non-variant) value
+     * will be highlighted.
+     *
+     * @param aVariantName The name of the current variant, or empty string for default.
+     */
+    void            SetCurrentVariant( const wxString& aVariantName ) { m_currentVariant = aVariantName; }
+    const wxString& GetCurrentVariant() const { return m_currentVariant; }
+
+    void SetVariantNames( const std::vector<wxString>& aVariantNames ) { m_variantNames = aVariantNames; }
+    const std::vector<wxString>& GetVariantNames() const { return m_variantNames; }
+
 protected:
+    // Helper functions to deal with translating wxGrid values to and from
+    // named field values like ${DNP}
+    bool isAttribute( const wxString& aFieldName );
+
+protected:
+    bool     m_edited;
     int      m_sortColumn;
     bool     m_sortAscending;
     wxString m_filter;
@@ -153,10 +181,18 @@ protected:
     bool     m_includeExcluded;
     bool     m_rebuildsEnabled;
 
+    wxString              m_currentVariant;  ///< Current variant name for highlighting
+    std::vector<wxString> m_variantNames;    ///< Variant names for multi-variant DNP filtering
+
     std::vector<DATA_MODEL_COL> m_cols;
 };
 
 
+/**
+ * The rest of the generic fields data model stuff, primarily around row functionality.
+ *
+ * Templated because rows differ per model, e.g. SCH_REFERENCE for the schematic fields table.
+ */
 template <typename ITEM_TYPE>
 class FIELDS_TABLE_DATA_MODEL : public FIELDS_TABLE_DATA_MODEL_BASE
 {
