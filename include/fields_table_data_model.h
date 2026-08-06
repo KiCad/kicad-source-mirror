@@ -154,3 +154,22 @@ protected:
 
     std::vector<DATA_MODEL_COL> m_cols;
 };
+
+
+template <typename ITEM_TYPE>
+class FIELDS_TABLE_DATA_MODEL : public FIELDS_TABLE_DATA_MODEL_BASE
+{
+public:
+    int GetNumberRows() override { return (int) m_rows.size(); }
+
+    ROW_STATE GetRowState( int aRow ) const override { return m_rows[aRow].m_state; }
+
+    std::vector<ITEM_TYPE> GetRowReferences( int aRow ) const
+    {
+        wxCHECK( aRow >= 0 && aRow < (int) m_rows.size(), std::vector<ITEM_TYPE>() );
+        return m_rows[aRow].m_items;
+    }
+
+protected:
+    std::vector<DATA_MODEL_ROW<ITEM_TYPE>> m_rows;
+};

@@ -38,14 +38,9 @@ struct FIELD_CASE_CONFLICT
 
 std::vector<FIELD_CASE_CONFLICT> DetectFieldCaseConflicts( const SCH_REFERENCE_LIST& aSymbols );
 
+using SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW = DATA_MODEL_ROW<SCH_REFERENCE>;
 
-struct SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW : public DATA_MODEL_ROW<SCH_REFERENCE>
-{
-    using DATA_MODEL_ROW<SCH_REFERENCE>::DATA_MODEL_ROW;
-};
-
-
-class SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL : public FIELDS_TABLE_DATA_MODEL_BASE
+class SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL : public FIELDS_TABLE_DATA_MODEL<SCH_REFERENCE>
 {
 public:
     enum SCOPE : int
@@ -75,8 +70,6 @@ public:
     void RemoveColumn( int aCol );
     void RenameColumn( int aCol, const wxString& newName );
 
-    int GetNumberRows() override { return (int) m_rows.size(); }
-
     wxString        GetValue( int aRow, int aCol ) override;
     wxString        GetResolvedValue( int aRow, int aCol );
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
@@ -95,16 +88,8 @@ public:
 
     void SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
-    std::vector<SCH_REFERENCE> GetRowReferences( int aRow ) const
-    {
-        wxCHECK( aRow >= 0 && aRow < (int) m_rows.size(), std::vector<SCH_REFERENCE>() );
-        return m_rows[aRow].m_items;
-    }
-
     bool ColIsValue( int aCol );
     bool ColIsAttribute( int aCol );
-
-    ROW_STATE GetRowState( int aRow ) const override { return m_rows[aRow].m_state; }
 
     void RebuildRows() override;
 
@@ -235,8 +220,6 @@ protected:
     wxGridCellRenderer*   m_textVarRenderer; ///< Renderer for cells with text variable references
     wxString              m_currentVariant;  ///< Current variant name for highlighting
     std::vector<wxString> m_variantNames;    ///< Variant names for multi-variant DNP filtering
-
-    std::vector<SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW> m_rows;
 
     // Data store
     // The data model is fundamentally m_componentRefs X m_fieldNames.
