@@ -411,10 +411,10 @@ void PCB_TABLE::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFuncti
 
 const BOX2I PCB_TABLE::GetBoundingBox() const
 {
-    // Note: a table with no cells is not allowed
-    BOX2I bbox = m_cells[0]->GetBoundingBox();
+    BOX2I bbox;
 
-    bbox.Merge( m_cells[m_cells.size() - 1]->GetBoundingBox() );
+    for( PCB_TABLECELL* cell : m_cells )
+        bbox.Merge( cell->GetBoundingBox() );
 
     return bbox;
 }
