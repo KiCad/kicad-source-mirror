@@ -3634,6 +3634,9 @@ void PCB_IO_KICAD_SEXPR::FootprintEnumerate( wxArrayString& aFootprintNames,
     try
     {
         validateCache( aLibPath );
+
+        if( !dir.IsOpened() )
+            THROW_IO_ERRORF( _( "Footprint library '%s' not found." ), aLibPath );
     }
     catch( const IO_ERROR& ioe )
     {

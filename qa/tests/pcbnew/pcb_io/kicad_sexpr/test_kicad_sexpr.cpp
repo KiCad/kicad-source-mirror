@@ -1005,4 +1005,22 @@ BOOST_AUTO_TEST_CASE( Issue24911_CancelledAppendLeavesBoardUntouched )
 }
 
 
+// Enumerating a footprint library that is not on disk must fail every time. The failed
+// load leaves a cache bound to the missing path carrying a zero timestamp, which is also
+// what a missing directory reports, so the cache looks current and the next enumerate
+// answers with an empty library instead of the error.
+BOOST_AUTO_TEST_CASE( MissingLibraryThrowsOnEveryEnumerate )
+{
+    std::filesystem::path libPath = std::filesystem::temp_directory_path() / "kicad_qa_no_such_library.pretty";
+
+    BOOST_REQUIRE( !std::filesystem::exists( libPath ) );
+
+    wxArrayString names;
+
+    BOOST_CHECK_THROW( kicadPlugin.FootprintEnumerate( names, libPath.string(), false ), IO_ERROR );
+
+    BOOST_CHECK_THROW( kicadPlugin.FootprintEnumerate( names, libPath.string(), false ), IO_ERROR );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
