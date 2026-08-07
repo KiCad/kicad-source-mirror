@@ -756,6 +756,20 @@ void PCB_TEXTBOX::OnFootprintRescaled( double aRatioX, double aRatioY, double aL
 }
 
 
+const BOX2I PCB_TEXTBOX::GetBoundingBox() const
+{
+    BOX2I bbox;
+
+    for( const VECTOR2I& pt : GetCorners() )
+        bbox.Merge( pt );
+
+    bbox.Inflate( std::max( 0, GetWidth() ) / 2 );
+    bbox.Normalize();
+
+    return bbox;
+}
+
+
 bool PCB_TEXTBOX::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     BOX2I rect = GetBoundingBox();

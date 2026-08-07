@@ -143,6 +143,8 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
+    const BOX2I GetBoundingBox() const override;
+
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy ) const override;
 
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;

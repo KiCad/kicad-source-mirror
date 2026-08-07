@@ -366,43 +366,58 @@ BOOST_AUTO_TEST_CASE( FlipUpDown )
 }
 
 
+// Two columns and two rows, built at the origin and then turned. Each cell carries its grid
+// position as text so a test can say where it ended up.
+static PCB_TABLE* makeTable( BOARD& aBoard, const int aColWidths[2], const int aRowHeights[2], double aDegrees )
+{
+    PCB_TABLE* table = new PCB_TABLE( &aBoard, pcbIUScale.mmToIU( 0.1 ) );
+
+    table->SetLayer( F_SilkS );
+    table->SetColCount( 2 );
+
+    for( int ii = 0; ii < 2; ++ii )
+    {
+        table->SetColWidth( ii, aColWidths[ii] );
+        table->SetRowHeight( ii, aRowHeights[ii] );
+    }
+
+    int y = 0;
+
+    for( int row = 0; row < 2; ++row )
+    {
+        int x = 0;
+
+        for( int col = 0; col < 2; ++col )
+        {
+            PCB_TABLECELL* cell = new PCB_TABLECELL( &aBoard );
+            cell->SetStart( VECTOR2I( x, y ) );
+            cell->SetEnd( VECTOR2I( x + aColWidths[col], y + aRowHeights[row] ) );
+            cell->SetText( wxString::Format( wxT( "%c%d" ), 'A' + col, row + 1 ) );
+            table->AddCell( cell );
+
+            x += aColWidths[col];
+        }
+
+        y += aRowHeights[row];
+    }
+
+    table->Normalize();
+    aBoard.Add( table );
+
+    if( aDegrees != 0.0 )
+        table->Rotate( table->GetPosition(), EDA_ANGLE( aDegrees, DEGREES_T ) );
+
+    return table;
+}
+
+
 // Flipping a cell turns its text 180 degrees, and the grid is laid out in the frame the cells
 // read in. A top to bottom flip that renumbers its rows as well undoes that turn and swaps the
 // columns instead.
 BOOST_AUTO_TEST_CASE( TableFlipSwapsTheChosenAxis )
 {
-    const int colW = pcbIUScale.mmToIU( 10.0 );
-    const int rowH = pcbIUScale.mmToIU( 4.0 );
-
-    auto buildTable = [&]()
-    {
-        PCB_TABLE* table = new PCB_TABLE( &m_board, pcbIUScale.mmToIU( 0.1 ) );
-
-        table->SetLayer( F_SilkS );
-        table->SetColCount( 2 );
-
-        for( int ii = 0; ii < 2; ++ii )
-        {
-            table->SetColWidth( ii, colW );
-            table->SetRowHeight( ii, rowH );
-        }
-
-        for( int row = 0; row < 2; ++row )
-        {
-            for( int col = 0; col < 2; ++col )
-            {
-                PCB_TABLECELL* cell = new PCB_TABLECELL( &m_board );
-                cell->SetStart( VECTOR2I( col * colW, row * rowH ) );
-                cell->SetEnd( VECTOR2I( ( col + 1 ) * colW, ( row + 1 ) * rowH ) );
-                cell->SetText( wxString::Format( wxT( "%c%d" ), 'A' + col, row + 1 ) );
-                table->AddCell( cell );
-            }
-        }
-
-        table->Normalize();
-        m_board.Add( table );
-        return table;
-    };
+    const int cols[2] = { pcbIUScale.mmToIU( 10.0 ), pcbIUScale.mmToIU( 10.0 ) };
+    const int rows[2] = { pcbIUScale.mmToIU( 4.0 ), pcbIUScale.mmToIU( 4.0 ) };
 
     // Which cell sits in a corner, found by where it ended up rather than by its index.
     auto textAt = []( PCB_TABLE* aTable, bool aRight, bool aBottom )
@@ -430,7 +445,7 @@ BOOST_AUTO_TEST_CASE( TableFlipSwapsTheChosenAxis )
 
     BOOST_TEST_CONTEXT( "left/right" )
     {
-        PCB_TABLE* table = buildTable();
+        PCB_TABLE* table = makeTable( m_board, cols, rows, 0.0 );
 
         table->Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::LEFT_RIGHT );
 
@@ -442,7 +457,7 @@ BOOST_AUTO_TEST_CASE( TableFlipSwapsTheChosenAxis )
 
     BOOST_TEST_CONTEXT( "top/bottom" )
     {
-        PCB_TABLE* table = buildTable();
+        PCB_TABLE* table = makeTable( m_board, cols, rows, 0.0 );
 
         table->Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::TOP_BOTTOM );
 
@@ -450,6 +465,66 @@ BOOST_AUTO_TEST_CASE( TableFlipSwapsTheChosenAxis )
         BOOST_CHECK_EQUAL( textAt( table, true, false ), wxString( wxT( "B2" ) ) );
         BOOST_CHECK_EQUAL( textAt( table, false, true ), wxString( wxT( "A1" ) ) );
         BOOST_CHECK_EQUAL( textAt( table, true, true ), wxString( wxT( "B1" ) ) );
+    }
+}
+
+
+// The table's box is used for hit testing and for working out where a flip should land it, so
+// it has to cover every cell and not just the two on one diagonal.
+BOOST_AUTO_TEST_CASE( TableBoundingBoxCoversEveryCell )
+{
+    const int cols[2] = { pcbIUScale.mmToIU( 10.0 ), pcbIUScale.mmToIU( 30.0 ) };
+    const int rows[2] = { pcbIUScale.mmToIU( 4.0 ), pcbIUScale.mmToIU( 12.0 ) };
+
+    for( double degrees : { 0.0, 30.0, 45.0, 90.0 } )
+    {
+        BOOST_TEST_CONTEXT( "turned " << degrees )
+        {
+            PCB_TABLE* table = makeTable( m_board, cols, rows, degrees );
+            BOX2I      box = table->GetBoundingBox();
+
+            for( PCB_TABLECELL* cell : table->GetCells() )
+            {
+                BOOST_CHECK_MESSAGE(
+                        box.Contains( cell->GetBoundingBox() ),
+                        "cell ( " << cell->GetBoundingBox().GetLeft() << ", " << cell->GetBoundingBox().GetTop()
+                                  << " ) to ( " << cell->GetBoundingBox().GetRight() << ", "
+                                  << cell->GetBoundingBox().GetBottom() << " ) sticks out of the table box ( "
+                                  << box.GetLeft() << ", " << box.GetTop() << " ) to ( " << box.GetRight() << ", "
+                                  << box.GetBottom() << " )" );
+            }
+        }
+    }
+}
+
+
+// A turned text box keeps its rectangle square to the board and carries the turn in its text
+// angle. Its box is what clicking and selection are judged against, so it has to cover the
+// corners the box is actually drawn with.
+BOOST_AUTO_TEST_CASE( TextBoxBoundingBoxFollowsItsRotation )
+{
+    for( double degrees : { 0.0, 30.0, 45.0, 90.0 } )
+    {
+        BOOST_TEST_CONTEXT( "turned " << degrees )
+        {
+            PCB_TEXTBOX* box = new PCB_TEXTBOX( &m_board );
+
+            box->SetLayer( F_SilkS );
+            box->SetStart( VECTOR2I( 0, 0 ) );
+            box->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 40.0 ), pcbIUScale.mmToIU( 8.0 ) ) );
+            box->SetTextAngle( EDA_ANGLE( degrees, DEGREES_T ) );
+            m_board.Add( box );
+
+            BOX2I bbox = box->GetBoundingBox();
+
+            for( const VECTOR2I& corner : box->GetCorners() )
+            {
+                BOOST_CHECK_MESSAGE( bbox.Contains( corner ),
+                                     "corner ( " << corner.x << ", " << corner.y << " ) is outside the box ( "
+                                                 << bbox.GetLeft() << ", " << bbox.GetTop() << " ) to ( "
+                                                 << bbox.GetRight() << ", " << bbox.GetBottom() << " )" );
+            }
+        }
     }
 }
 
