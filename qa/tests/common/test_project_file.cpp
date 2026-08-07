@@ -22,8 +22,11 @@
  * Tests for PROJECT_FILE class.
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <mdw/client/mdw_project_file.h>
 #include <project/project_file.h>
+#include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
@@ -587,6 +590,287 @@ BOOST_AUTO_TEST_CASE( EmptyFieldNameArrayClearsTemplatesOnReload )
 
     BOOST_REQUIRE( project.LoadFromFile() );
     BOOST_CHECK( project.m_TemplateFieldNames.GetTemplateFieldNames( TEMPLATES::SCOPE::PROJECT ).empty() );
+}
+
+
+namespace
+{
+fs::path ctrlBoardProject()
+{
+    return fs::path( KI_TEST::GetTestDataRootDir() ) / "common" / "git" / "mdw_ctrl_board" / "ctrl-board.kicad_pro";
+}
+} // namespace
+
+
+// A checkout into display-path folders, then the same item checked out to the project root
+BOOST_AUTO_TEST_CASE( WorkspaceItemHasOneLocalFile )
+{
+    const fs::path project = m_tempDir / "amp-odoo.kicad_pro";
+
+    fs::copy_file( ctrlBoardProject(), project );
+
+    SETTINGS_MANAGER manager;
+    BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+
+    PROJECT_LOCAL_SETTINGS& local = manager.Prj().GetLocalSettings();
+    const wxString          item = wxS( "1841/amp-board.kicad_sch" );
+
+    local.SetWorkspaceItemId( wxS( "ACME MAC / Projects / PCBA-AMP-001 / amp-board.kicad_sch" ), item );
+    local.SetWorkspaceItemId( wxS( "amp-board.kicad_sch" ), item );
+
+    BOOST_REQUIRE_EQUAL( local.WorkspaceItems().size(), 1 );
+    BOOST_CHECK( local.GetWorkspaceItemId( wxS( "amp-board.kicad_sch" ) ) == item );
+}
+
+
+// A plugin checking out or downloading over the .kicad_prl must not make it an item, or Check In would upload it
+BOOST_AUTO_TEST_CASE( LocalSettingsFileIsNeverAnItem )
+{
+    const fs::path project = m_tempDir / "amp-board.kicad_pro";
+
+    fs::copy_file( ctrlBoardProject(), project );
+
+    SETTINGS_MANAGER manager;
+    BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+
+    PROJECT_LOCAL_SETTINGS& local = manager.Prj().GetLocalSettings();
+    const wxString          prl = wxString( ( m_tempDir / "amp-board.kicad_prl" ).string() );
+
+    BOOST_REQUIRE( MDW_SAVE_GUARD::RecordCheckout( manager, manager.Prj(), prl, wxS( "1898/amp-board.kicad_prl" ),
+                                                   { wxS( "7020" ), wxS( "1" ) },
+                                                   MDW_SAVE_GUARD::ProjectFileSnapshot( manager.Prj() ) ) );
+
+    BOOST_CHECK( local.GetWorkspaceItemId( prl ).IsEmpty() );
+    BOOST_CHECK( local.WorkspaceItems().empty() );
+}
+
+
+// An Odoo check in names the revision its file was checked out at, even after a restart
+BOOST_AUTO_TEST_CASE( CheckinBaseSurvivesARestart )
+{
+    const fs::path project = m_tempDir / "amp-board.kicad_pro";
+    const wxString schematic = wxString( ( m_tempDir / "amp-board.kicad_sch" ).string() );
+    const wxString item = wxS( "1898/amp-board.kicad_sch" );
+
+    fs::copy_file( ctrlBoardProject(), project );
+
+    {
+        SETTINGS_MANAGER manager;
+        BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+
+        const std::string   snapshot = MDW_SAVE_GUARD::ProjectFileSnapshot( manager.Prj() );
+        const MDW_ITEM_BASE base{ wxS( "7001" ), wxS( "1" ) };
+
+        BOOST_REQUIRE( MDW_SAVE_GUARD::RecordCheckout( manager, manager.Prj(), schematic, item, base, snapshot ) );
+    }
+
+    SETTINGS_MANAGER manager;
+    BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+
+    BOOST_CHECK( MDW_SAVE_GUARD::CheckinBase( manager.Prj(), schematic, item ) == wxS( "7001" ) );
+    BOOST_CHECK( MDW_SAVE_GUARD::CheckinBase( manager.Prj(), schematic, wxS( "1898/amp-board.kicad_pcb" ) ).IsEmpty() );
+
+    // The checkout is this copy's, so it must not travel with the shared project file
+    BOOST_CHECK( !nlohmann::json::parse( std::ifstream( project ) ).contains( "workspace" ) );
+    BOOST_CHECK( nlohmann::json::parse( std::ifstream( m_tempDir / "amp-board.kicad_prl" ) )
+                         .contains( nlohmann::json::json_pointer( "/workspace/bases/amp-board.kicad_sch" ) ) );
+}
+
+
+// Copies that checked out different files must still hold the project file as the workspace does
+BOOST_AUTO_TEST_CASE( CheckoutLeavesProjectFileUntouched )
+{
+    const fs::path project = m_tempDir / "amp-board.kicad_pro";
+    const wxString schematic = wxString( ( m_tempDir / "amp-board.kicad_sch" ).string() );
+    const wxString item = wxS( "1898/amp-board.kicad_sch" );
+
+    nlohmann::json shared = nlohmann::json::parse( std::ifstream( ctrlBoardProject() ) );
+
+    shared["workspace"] = { { "backend", "org.kicad.mdw.odoo" },
+                            { "workspace_id", "acme" },
+                            { "binding", "https://odoo.example.com/acme" } };
+    std::ofstream( project ) << shared.dump( 2 ) << '\n';
+
+    // Alice checked in the project file from a build that kept her board's checkout in it
+    nlohmann::json alices = shared;
+
+    alices["workspace"]["items"] = { { "amp-board.kicad_pcb", "1898/amp-board.kicad_pcb" } };
+    alices["workspace"]["bases"] = { { "amp-board.kicad_pcb",
+                                       { { "revision_id", "7012" }, { "revision_label", "5" } } } };
+
+    const std::string alicesBytes = alices.dump( 2 ) + '\n';
+
+    SETTINGS_MANAGER manager;
+    BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+
+    const std::string        before = MDW_SAVE_GUARD::ProjectFileSnapshot( manager.Prj() );
+    const fs::file_time_type written = fs::last_write_time( project );
+
+    BOOST_REQUIRE( MDW_SAVE_GUARD::RecordCheckout( manager, manager.Prj(), schematic, item,
+                                                   { wxS( "7001" ), wxS( "1" ) }, before ) );
+
+    BOOST_CHECK( MDW_SAVE_GUARD::ProjectFileSnapshot( manager.Prj() ) == before );
+    BOOST_CHECK( fs::last_write_time( project ) == written );
+
+    // Then the project file, which the backend writes as Alice checked it in
+    std::ofstream( project, std::ios::binary | std::ios::trunc ) << alicesBytes;
+
+    BOOST_REQUIRE( MDW_SAVE_GUARD::RecordCheckout( manager, manager.Prj(), wxString( project.string() ),
+                                                   wxS( "1898/amp-board.kicad_pro" ), { wxS( "7010" ), wxS( "4" ) },
+                                                   before ) );
+
+    BOOST_CHECK( MDW_SAVE_GUARD::ProjectFileSnapshot( manager.Prj() ) == alicesBytes );
+    BOOST_CHECK( MDW_SAVE_GUARD::CheckinBase( manager.Prj(), schematic, item ) == wxS( "7001" ) );
+    BOOST_CHECK( manager.Prj().GetLocalSettings().GetWorkspaceItemId( wxS( "amp-board.kicad_pcb" ) ).IsEmpty() );
+}
+
+
+// A teammate's checkout arriving in a shared project file must not judge this user's check in
+BOOST_AUTO_TEST_CASE( ProjectFileWorkspaceRecordIsIgnored )
+{
+    const fs::path project = m_tempDir / "amp-board.kicad_pro";
+    const wxString schematic = wxString( ( m_tempDir / "amp-board.kicad_sch" ).string() );
+    const wxString item = wxS( "1898/amp-board.kicad_sch" );
+
+    nlohmann::json json = nlohmann::json::parse( std::ifstream( ctrlBoardProject() ) );
+
+    json["workspace"]["items"]["amp-board.kicad_sch"] = item.ToStdString();
+    json["workspace"]["bases"]["amp-board.kicad_sch"] = { { "revision_id", "7009" }, { "revision_label", "4" } };
+    std::ofstream( project ) << json.dump( 2 );
+
+    SETTINGS_MANAGER manager;
+    BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+
+    BOOST_CHECK( manager.Prj().GetLocalSettings().GetWorkspaceItemId( schematic ).IsEmpty() );
+    BOOST_CHECK( MDW_SAVE_GUARD::CheckinBase( manager.Prj(), schematic, item ).IsEmpty() );
+
+    // The user's own next save of the project file drops the teammate's record
+    BOOST_REQUIRE( manager.Prj().GetProjectFile().SaveToFile( wxString( m_tempDir.string() ), true ) );
+
+    const nlohmann::json saved = nlohmann::json::parse( std::ifstream( project ) );
+
+    BOOST_CHECK( !saved.contains( nlohmann::json::json_pointer( "/workspace/items" ) ) );
+    BOOST_CHECK( !saved.contains( nlohmann::json::json_pointer( "/workspace/bases" ) ) );
+}
+
+
+namespace
+{
+const MDW_PROJECT_BINDING TEST_DATABASE{ wxS( "org.kicad.mdw.odoo" ), wxS( "acme" ),
+                                         wxS( "https://odoo.example.com/?db=test" ) };
+const MDW_PROJECT_BINDING PRODUCTION_DATABASE{ wxS( "org.kicad.mdw.odoo" ), wxS( "acme" ),
+                                               wxS( "https://odoo.example.com/?db=production" ) };
+
+
+void writeBoundProject( const fs::path& aProject, const MDW_PROJECT_BINDING& aBinding )
+{
+    nlohmann::json json = nlohmann::json::parse( std::ifstream( ctrlBoardProject() ) );
+
+    json["workspace"] = { { "backend", aBinding.backend_id.ToStdString() },
+                          { "workspace_id", aBinding.workspace_id.ToStdString() },
+                          { "binding", aBinding.binding.ToStdString() } };
+    std::ofstream( aProject, std::ios::binary | std::ios::trunc ) << json.dump( 2 ) << '\n';
+}
+} // namespace
+
+
+// A checkout recorded against the test database must not check in over whatever has its id in production
+BOOST_AUTO_TEST_CASE( RebindForgetsCheckouts )
+{
+    const fs::path project = m_tempDir / "amp-board.kicad_pro";
+    const wxString schematic = wxString( ( m_tempDir / "amp-board.kicad_sch" ).string() );
+    const wxString item = wxS( "1898/amp-board.kicad_sch" );
+
+    writeBoundProject( project, TEST_DATABASE );
+
+    SETTINGS_MANAGER manager;
+    BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+
+    BOOST_REQUIRE( MDW_SAVE_GUARD::RecordCheckout( manager, manager.Prj(), schematic, item,
+                                                   { wxS( "7001" ), wxS( "1" ) },
+                                                   MDW_SAVE_GUARD::ProjectFileSnapshot( manager.Prj() ) ) );
+
+    BOOST_REQUIRE( MDW_SAVE_GUARD::RecordBinding( manager, manager.Prj(), PRODUCTION_DATABASE ) );
+    BOOST_CHECK( manager.Prj().GetLocalSettings().GetWorkspaceItemId( schematic ).IsEmpty() );
+
+    // Bound back, the old checkout is gone, not hidden
+    BOOST_REQUIRE( MDW_SAVE_GUARD::RecordBinding( manager, manager.Prj(), TEST_DATABASE ) );
+    BOOST_CHECK( manager.Prj().GetLocalSettings().GetWorkspaceItemId( schematic ).IsEmpty() );
+    BOOST_CHECK( MDW_SAVE_GUARD::CheckinBase( manager.Prj(), schematic, item ).IsEmpty() );
+}
+
+
+// A teammate's rebind arrives with a pull while this copy is open, so no code here saw the change
+BOOST_AUTO_TEST_CASE( PulledRebindHidesCheckouts )
+{
+    const fs::path project = m_tempDir / "amp-board.kicad_pro";
+    const wxString schematic = wxString( ( m_tempDir / "amp-board.kicad_sch" ).string() );
+    const wxString item = wxS( "1898/amp-board.kicad_sch" );
+
+    writeBoundProject( project, TEST_DATABASE );
+
+    {
+        SETTINGS_MANAGER manager;
+        BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+
+        BOOST_REQUIRE( MDW_SAVE_GUARD::RecordCheckout( manager, manager.Prj(), schematic, item,
+                                                       { wxS( "7001" ), wxS( "1" ) },
+                                                       MDW_SAVE_GUARD::ProjectFileSnapshot( manager.Prj() ) ) );
+
+        writeBoundProject( project, PRODUCTION_DATABASE );
+        BOOST_REQUIRE( manager.ProjectFileReplaced( manager.Prj() ) );
+
+        BOOST_CHECK( manager.Prj().GetLocalSettings().GetWorkspaceItemId( schematic ).IsEmpty() );
+        BOOST_CHECK( manager.Prj().GetLocalSettings().WorkspaceItems().empty() );
+        BOOST_CHECK( MDW_SAVE_GUARD::CheckinBase( manager.Prj(), schematic, item ).IsEmpty() );
+    }
+
+    SETTINGS_MANAGER manager;
+    BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+
+    BOOST_CHECK( manager.Prj().GetLocalSettings().GetWorkspaceItemId( schematic ).IsEmpty() );
+}
+
+
+// A rebind refused by a briefly locked file must keep the checkouts, which a later save would otherwise write away
+BOOST_AUTO_TEST_CASE( FailedRebindKeepsCheckouts, *boost::unit_test::precondition( KI_TEST::WriteBitsBind ) )
+{
+    const fs::path project = m_tempDir / "amp-board.kicad_pro";
+    const wxString schematic = wxString( ( m_tempDir / "amp-board.kicad_sch" ).string() );
+    const wxString item = wxS( "1898/amp-board.kicad_sch" );
+
+    for( const fs::path& locked : { m_tempDir / "amp-board.kicad_prl", project } )
+    {
+        writeBoundProject( project, TEST_DATABASE );
+
+        {
+            SETTINGS_MANAGER manager;
+            BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+            BOOST_REQUIRE( MDW_SAVE_GUARD::RecordCheckout( manager, manager.Prj(), schematic, item,
+                                                           { wxS( "7001" ), wxS( "1" ) },
+                                                           MDW_SAVE_GUARD::ProjectFileSnapshot( manager.Prj() ) ) );
+
+            const std::string shared = MDW_SAVE_GUARD::ProjectFileSnapshot( manager.Prj() );
+
+            fs::permissions( locked, fs::perms::owner_write | fs::perms::group_write | fs::perms::others_write,
+                             fs::perm_options::remove );
+
+            const bool rebound = MDW_SAVE_GUARD::RecordBinding( manager, manager.Prj(), PRODUCTION_DATABASE );
+
+            fs::permissions( locked, fs::perms::owner_write, fs::perm_options::add );
+
+            BOOST_CHECK_MESSAGE( !rebound, locked.filename().string() );
+            BOOST_CHECK( manager.Prj().GetProjectFile().WorkspaceBinding() == TEST_DATABASE );
+            BOOST_CHECK( MDW_SAVE_GUARD::ProjectFileSnapshot( manager.Prj() ) == shared );
+            BOOST_REQUIRE( manager.SaveProject( wxEmptyString, &manager.Prj() ) );
+        }
+
+        SETTINGS_MANAGER manager;
+        BOOST_REQUIRE( manager.LoadProject( wxString( project.string() ) ) );
+
+        BOOST_CHECK_EQUAL( manager.Prj().GetLocalSettings().GetWorkspaceItemId( schematic ), item );
+        BOOST_CHECK_EQUAL( MDW_SAVE_GUARD::CheckinBase( manager.Prj(), schematic, item ), wxS( "7001" ) );
+    }
 }
 
 

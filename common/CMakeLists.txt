@@ -405,6 +405,9 @@ set( KICOMMON_SRCS
     mdw/client/mdw_part.cpp
     mdw/client/mdw_part_catalog.cpp
     mdw/client/mdw_item.cpp
+    mdw/client/mdw_item_locator.cpp
+    mdw/client/mdw_project_file.cpp
+    mdw/client/mdw_project_ref.cpp
     mdw/client/mdw_release_readiness.cpp
     mdw/client/mdw_review.cpp
     mdw/client/mdw_search.cpp
