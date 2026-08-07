@@ -412,4 +412,47 @@ BOOST_AUTO_TEST_CASE( ProjectChangeDuringAsyncLoad )
 }
 
 
+// A library whose file is missing must report the failure every time it is loaded. The
+// plugin keeps the cache it built for the library even when the load throws, and that
+// cache still answers to the missing path and still looks up to date, so a second load
+// reports an empty library instead of the error and the table row loses its warning icon.
+BOOST_AUTO_TEST_CASE( MissingLibraryReportsErrorOnEveryLoad )
+{
+    if( !wxGetEnv( wxT( "KICAD_CONFIG_HOME_IS_QA" ), nullptr ) )
+    {
+        BOOST_TEST_MESSAGE( "QA test is running using unknown config home; skipping" );
+        return;
+    }
+
+    LIBRARY_MANAGER manager;
+    manager.LoadGlobalTables();
+
+    LoadSchematic( GetTestProjectSchPath().GetFullPath() );
+    PROJECT& project = SettingsManager().Prj();
+    manager.LoadProjectTables( project.GetProjectDirectory() );
+
+    SYMBOL_LIBRARY_ADAPTER* adapter = RegisterSymbolAdapter( manager );
+
+    std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT );
+    BOOST_REQUIRE( optTable.has_value() );
+
+    LIBRARY_TABLE_ROW& row = ( *optTable )->InsertRow();
+    row.SetNickname( wxS( "Missing" ) );
+    row.SetURI( wxS( "${KIPRJMOD}/does_not_exist.kicad_sym" ) );
+    row.SetType( wxS( "KiCad" ) );
+
+    std::optional<LIB_STATUS> first = adapter->LoadOne( wxS( "Missing" ) );
+    BOOST_REQUIRE( first.has_value() );
+    BOOST_REQUIRE( first->load_status == LOAD_STATUS::LOAD_ERROR );
+
+    std::optional<LIB_STATUS> second = adapter->LoadOne( wxS( "Missing" ) );
+    BOOST_REQUIRE( second.has_value() );
+    BOOST_CHECK_MESSAGE( second->load_status == LOAD_STATUS::LOAD_ERROR,
+                         "A library whose file is missing must not come back as loaded" );
+
+    adapter->CheckTableRow( row );
+    BOOST_CHECK_MESSAGE( !row.IsOk(), "A row whose library failed to load must be flagged in the table" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

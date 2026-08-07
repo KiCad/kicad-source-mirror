@@ -37,6 +37,8 @@
 
 /// macro which captures the "call site" values of __FILE_, __FUNCTION__ & __LINE__
 #define THROW_IO_ERROR( msg )   throw IO_ERROR( msg, __FILE__, __FUNCTION__, __LINE__ )
+#define THROW_IO_ERRORF( msg, ... )                                                                                    \
+    throw IO_ERROR( wxString::Format( msg, __VA_ARGS__ ), __FILE__, __FUNCTION__, __LINE__ )
 
 /**
  * Hold a translatable error message and may be used when throwing exceptions containing a

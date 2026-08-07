@@ -1737,6 +1737,9 @@ void SCH_IO_KICAD_SEXPR::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
     cacheLib( aLibraryPath, aProperties );
 
+    if( !isBuffering( aProperties ) && !m_cache->isLibraryPathValid() )
+        THROW_IO_ERRORF( _( "Library '%s' not found." ), aLibraryPath );
+
     const LIB_SYMBOL_MAP& symbols = m_cache->m_symbols;
 
     for( LIB_SYMBOL_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
@@ -1754,6 +1757,9 @@ void SCH_IO_KICAD_SEXPR::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolLi
     bool powerSymbolsOnly = ( aProperties && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly ) );
 
     cacheLib( aLibraryPath, aProperties );
+
+    if( !isBuffering( aProperties ) && !m_cache->isLibraryPathValid() )
+        THROW_IO_ERRORF( _( "Library '%s' not found." ), aLibraryPath );
 
     const LIB_SYMBOL_MAP& symbols = m_cache->m_symbols;
 
