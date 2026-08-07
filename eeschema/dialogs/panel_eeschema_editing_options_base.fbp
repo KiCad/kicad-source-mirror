@@ -339,7 +339,7 @@
                 </object>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxALL</property>
+                  <property name="flag">wxTOP|wxRIGHT|wxLEFT</property>
                   <property name="proportion">0</property>
                   <object class="wxStaticText" expanded="true">
                     <property name="BottomDockable">1</property>
@@ -401,7 +401,17 @@
                 </object>
                 <object class="sizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="flag">wxALL|wxEXPAND</property>
+                  <property name="flag"></property>
+                  <property name="proportion">0</property>
+                  <object class="spacer" expanded="true">
+                    <property name="height">3</property>
+                    <property name="permission">protected</property>
+                    <property name="width">0</property>
+                  </object>
+                </object>
+                <object class="sizeritem" expanded="true">
+                  <property name="border">5</property>
+                  <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                   <property name="proportion">0</property>
                   <object class="wxChoice" expanded="true">
                     <property name="BottomDockable">1</property>
@@ -865,7 +875,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">2</property>
-              <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
+              <property name="flag">wxEXPAND|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxStaticLine" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -927,7 +937,7 @@
               <property name="flag">wxEXPAND|wxLEFT|wxTOP</property>
               <property name="proportion">0</property>
               <object class="wxGridBagSizer" expanded="true">
-                <property name="empty_cell_size"></property>
+                <property name="empty_cell_size">10,-1</property>
                 <property name="flexible_direction">wxBOTH</property>
                 <property name="growablecols"></property>
                 <property name="growablerows"></property>
@@ -941,7 +951,7 @@
                   <property name="border">5</property>
                   <property name="colspan">1</property>
                   <property name="column">0</property>
-                  <property name="flag">wxALL</property>
+                  <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                   <property name="row">0</property>
                   <property name="rowspan">1</property>
                   <object class="wxStaticText" expanded="true">
@@ -1006,7 +1016,7 @@
                   <property name="border">5</property>
                   <property name="colspan">1</property>
                   <property name="column">1</property>
-                  <property name="flag">wxALL</property>
+                  <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                   <property name="row">0</property>
                   <property name="rowspan">1</property>
                   <object class="CustomControl" expanded="true">
@@ -1071,8 +1081,8 @@
                 <object class="gbsizeritem" expanded="true">
                   <property name="border">5</property>
                   <property name="colspan">1</property>
-                  <property name="column">2</property>
-                  <property name="flag">wxALL</property>
+                  <property name="column">3</property>
+                  <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                   <property name="row">0</property>
                   <property name="rowspan">1</property>
                   <object class="wxStaticText" expanded="true">
@@ -1136,8 +1146,8 @@
                 <object class="gbsizeritem" expanded="true">
                   <property name="border">5</property>
                   <property name="colspan">1</property>
-                  <property name="column">3</property>
-                  <property name="flag">wxALL</property>
+                  <property name="column">4</property>
+                  <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                   <property name="row">0</property>
                   <property name="rowspan">1</property>
                   <object class="CustomControl" expanded="true">
@@ -1235,7 +1245,7 @@
                     <property name="gripper">0</property>
                     <property name="hidden">0</property>
                     <property name="id">wxID_ANY</property>
-                    <property name="label">Power Symbols:</property>
+                    <property name="label">Power symbols:</property>
                     <property name="markup">0</property>
                     <property name="max_size"></property>
                     <property name="maximize_button">0</property>
@@ -1266,7 +1276,7 @@
                 </object>
                 <object class="gbsizeritem" expanded="true">
                   <property name="border">5</property>
-                  <property name="colspan">2</property>
+                  <property name="colspan">3</property>
                   <property name="column">1</property>
                   <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND</property>
                   <property name="row">1</property>

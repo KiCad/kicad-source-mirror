@@ -45,13 +45,16 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	m_staticTextArcEdit = new wxStaticText( this, wxID_ANY, _("Arc editing mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextArcEdit->Wrap( -1 );
-	bSizer5->Add( m_staticTextArcEdit, 0, wxALL, 5 );
+	bSizer5->Add( m_staticTextArcEdit, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+
+
+	bSizer5->Add( 0, 3, 0, 0, 5 );
 
 	wxString m_choiceArcModeChoices[] = { _("Keep center, adjust radius"), _("Keep endpoints or direction of starting point"), _("Keep center and radius, adjust endpoints") };
 	int m_choiceArcModeNChoices = sizeof( m_choiceArcModeChoices ) / sizeof( wxString );
 	m_choiceArcMode = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceArcModeNChoices, m_choiceArcModeChoices, 0 );
 	m_choiceArcMode->SetSelection( 1 );
-	bSizer5->Add( m_choiceArcMode, 0, wxALL|wxEXPAND, 5 );
+	bSizer5->Add( m_choiceArcMode, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_mouseDragIsDrag = new wxCheckBox( this, wxID_ANY, _("Mouse drag performs Drag (G) operation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_mouseDragIsDrag->SetToolTip( _("If unchecked, mouse drag will perform move (M) operation") );
@@ -87,32 +90,33 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	bLeftColumn->Add( m_staticText26, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
 
 	m_staticline4 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftColumn->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+	bLeftColumn->Add( m_staticline4, 0, wxEXPAND|wxTOP, 2 );
 
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 0, 0 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	gbSizer1->SetEmptyCellSize( wxSize( 10,-1 ) );
 
 	m_borderColorLabel = new wxStaticText( this, wxID_ANY, _("Sheet border:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderColorLabel->Wrap( -1 );
-	gbSizer1->Add( m_borderColorLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( m_borderColorLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_borderColorSwatch = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_borderColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-	gbSizer1->Add( m_borderColorSwatch, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( m_borderColorSwatch, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_backgroundColorLabel = new wxStaticText( this, wxID_ANY, _("Sheet background:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backgroundColorLabel->Wrap( -1 );
-	gbSizer1->Add( m_backgroundColorLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( m_backgroundColorLabel, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_backgroundColorSwatch = new COLOR_SWATCH( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_backgroundColorSwatch->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-	gbSizer1->Add( m_backgroundColorSwatch, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( m_backgroundColorSwatch, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_powerSymbolLabel = new wxStaticText( this, wxID_ANY, _("Power Symbols:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_powerSymbolLabel = new wxStaticText( this, wxID_ANY, _("Power symbols:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_powerSymbolLabel->Wrap( -1 );
 	gbSizer1->Add( m_powerSymbolLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -122,7 +126,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_choicePower->SetSelection( 0 );
 	m_choicePower->SetToolTip( _("Select the assigned type of new power symbol.\nDefault will follow the symbol definition.\nGlobal will convert new power symbols to global power symbols.\nLocal will convert new power symbols to a local power symbols.") );
 
-	gbSizer1->Add( m_choicePower, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	gbSizer1->Add( m_choicePower, wxGBPosition( 1, 1 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
 	bLeftColumn->Add( gbSizer1, 0, wxEXPAND|wxLEFT|wxTOP, 10 );
