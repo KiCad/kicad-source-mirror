@@ -366,6 +366,94 @@ BOOST_AUTO_TEST_CASE( FlipUpDown )
 }
 
 
+// Flipping a cell turns its text 180 degrees, and the grid is laid out in the frame the cells
+// read in. A top to bottom flip that renumbers its rows as well undoes that turn and swaps the
+// columns instead.
+BOOST_AUTO_TEST_CASE( TableFlipSwapsTheChosenAxis )
+{
+    const int colW = pcbIUScale.mmToIU( 10.0 );
+    const int rowH = pcbIUScale.mmToIU( 4.0 );
+
+    auto buildTable = [&]()
+    {
+        PCB_TABLE* table = new PCB_TABLE( &m_board, pcbIUScale.mmToIU( 0.1 ) );
+
+        table->SetLayer( F_SilkS );
+        table->SetColCount( 2 );
+
+        for( int ii = 0; ii < 2; ++ii )
+        {
+            table->SetColWidth( ii, colW );
+            table->SetRowHeight( ii, rowH );
+        }
+
+        for( int row = 0; row < 2; ++row )
+        {
+            for( int col = 0; col < 2; ++col )
+            {
+                PCB_TABLECELL* cell = new PCB_TABLECELL( &m_board );
+                cell->SetStart( VECTOR2I( col * colW, row * rowH ) );
+                cell->SetEnd( VECTOR2I( ( col + 1 ) * colW, ( row + 1 ) * rowH ) );
+                cell->SetText( wxString::Format( wxT( "%c%d" ), 'A' + col, row + 1 ) );
+                table->AddCell( cell );
+            }
+        }
+
+        table->Normalize();
+        m_board.Add( table );
+        return table;
+    };
+
+    // Which cell sits in a corner, found by where it ended up rather than by its index.
+    auto textAt = []( PCB_TABLE* aTable, bool aRight, bool aBottom )
+    {
+        BOX2I box;
+
+        for( PCB_TABLECELL* cell : aTable->GetCells() )
+        {
+            box.Merge( cell->GetStart() );
+            box.Merge( cell->GetEnd() );
+        }
+
+        VECTOR2I mid = box.GetCenter();
+
+        for( PCB_TABLECELL* cell : aTable->GetCells() )
+        {
+            VECTOR2I centre = ( cell->GetStart() + cell->GetEnd() ) / 2;
+
+            if( ( centre.x > mid.x ) == aRight && ( centre.y > mid.y ) == aBottom )
+                return cell->GetText();
+        }
+
+        return wxString();
+    };
+
+    BOOST_TEST_CONTEXT( "left/right" )
+    {
+        PCB_TABLE* table = buildTable();
+
+        table->Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::LEFT_RIGHT );
+
+        BOOST_CHECK_EQUAL( textAt( table, false, false ), wxString( wxT( "B1" ) ) );
+        BOOST_CHECK_EQUAL( textAt( table, true, false ), wxString( wxT( "A1" ) ) );
+        BOOST_CHECK_EQUAL( textAt( table, false, true ), wxString( wxT( "B2" ) ) );
+        BOOST_CHECK_EQUAL( textAt( table, true, true ), wxString( wxT( "A2" ) ) );
+    }
+
+    BOOST_TEST_CONTEXT( "top/bottom" )
+    {
+        PCB_TABLE* table = buildTable();
+
+        table->Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::TOP_BOTTOM );
+
+        BOOST_CHECK_EQUAL( textAt( table, false, false ), wxString( wxT( "A2" ) ) );
+        BOOST_CHECK_EQUAL( textAt( table, true, false ), wxString( wxT( "B2" ) ) );
+        BOOST_CHECK_EQUAL( textAt( table, false, true ), wxString( wxT( "A1" ) ) );
+        BOOST_CHECK_EQUAL( textAt( table, true, true ), wxString( wxT( "B1" ) ) );
+    }
+}
+
+
 /**
  * Regression test for issue #23234:
  * Changing padstack mode to Custom on a flipped footprint's pad and pressing OK caused an
