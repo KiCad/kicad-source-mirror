@@ -91,7 +91,6 @@ mpLayer::mpLayer() :
         m_type( mpLAYER_UNDEF )
 {
     SetPen( (wxPen&) *wxBLACK_PEN );
-    SetFont( (wxFont&) *wxNORMAL_FONT );
     m_continuous = false;   // Default
     m_showName = true;      // Default
     m_visible = true;
