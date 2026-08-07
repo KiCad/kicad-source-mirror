@@ -1039,7 +1039,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         GetBoard()->SynchronizeNetsAndNetClasses( false );
     }
 
-    wxString   upperTxt;
     wxString   lowerTxt;
 
     // On Windows, ensure the target file is writeable by clearing problematic attributes like
@@ -1061,16 +1060,10 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         return false;
     }
 
-    if( !Kiface().IsSingle() )
-    {
-        WX_STRING_REPORTER backupReporter;
+    WX_STRING_REPORTER backupReporter;
 
-        if( !GetSettingsManager()->TriggerBackupIfNeeded( backupReporter ) )
-        {
-            upperTxt = backupReporter.GetMessages();
-            SetStatusText( upperTxt, 1 );
-        }
-    }
+    if( !Kiface().IsSingle() )
+        GetSettingsManager()->TriggerBackupIfNeeded( backupReporter );
 
     GetBoard()->SetFileName( pcbFileName.GetFullPath() );
 
@@ -1091,6 +1084,12 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     if( m_infoBar->IsShownOnScreen() && m_infoBar->HasCloseButton() )
         m_infoBar->Dismiss();
+
+    if( backupReporter.HasMessage() )
+    {
+        wxString backupMsg = backupReporter.GetMessages();
+        m_infoBar->ShowMessageFor( backupMsg.Trim(), 10000, wxICON_WARNING );
+    }
 
     GetScreen()->SetContentModified( false );
     UpdateTitle();

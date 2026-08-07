@@ -1570,7 +1570,7 @@ bool SETTINGS_MANAGER::BackupProject( REPORTER& aReporter, wxFileName& aTarget )
 
     wxLogTrace( traceSettings, wxT( "Backing up project to %s" ), aTarget.GetPath() );
 
-    return PROJECT_ARCHIVER::Archive( Prj().GetProjectPath(), aTarget.GetFullPath(), aReporter );
+    return PROJECT_ARCHIVER::Archive( Prj().GetProjectPath(), aTarget.GetFullPath(), aReporter, false );
 }
 
 
