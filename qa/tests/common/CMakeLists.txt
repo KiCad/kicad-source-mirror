@@ -74,6 +74,7 @@ set( QA_COMMON_SRCS
     test_lset.cpp
     test_markup_parser.cpp
     test_notifications_manager.cpp
+    test_project_archiver.cpp
     test_property.cpp
     test_property_holder.cpp
     test_reporting.cpp
