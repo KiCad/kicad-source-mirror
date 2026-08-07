@@ -21,6 +21,7 @@
 #pragma once
 
 #include <math/vector2d.h>
+#include <layer_ids.h>
 #include <wx/window.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
@@ -40,6 +41,8 @@ public:
     void OnPageChanged( wxNotebookEvent& aEvent );
 
     void FitCanvasToScreen();
+
+    PCB_LAYER_ID GetCurrentLayer() const;
 
 private:
     PCB_BASE_FRAME* m_pcbFrame;

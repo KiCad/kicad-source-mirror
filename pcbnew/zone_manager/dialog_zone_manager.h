@@ -106,6 +106,9 @@ private:
     void OnIdle( wxIdleEvent& aEvent );
     void NavigateZoneSelection( int aDirection );
     void OnDialogCharHook( wxKeyEvent& aEvent );
+    void SelectZoneOnCanvas( ZONE* aClone, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
+
+    ZONE* GetOriginalZone( ZONE* aClone );
 
 private:
     PCB_BASE_FRAME*                       m_pcbFrame;
@@ -118,4 +121,5 @@ private:
     bool                                  m_isFillingZones;
     bool                                  m_zoneFillComplete;
     std::vector<ZONE*>                    m_zonesToDelete;
+    bool                                  m_canvasSelectReady;
 };

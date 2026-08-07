@@ -178,6 +178,17 @@ void ZONE_PREVIEW_NOTEBOOK::OnPageChanged( wxNotebookEvent& aEvent )
 }
 
 
+PCB_LAYER_ID ZONE_PREVIEW_NOTEBOOK::GetCurrentLayer() const
+{
+    const wxWindow* page = GetCurrentPage();
+
+    if( !page )
+        return UNDEFINED_LAYER;
+
+    return static_cast<PCB_LAYER_ID>( static_cast<const ZONE_PREVIEW_NOTEBOOK_PAGE*>( page )->GetLayer() );
+}
+
+
 void ZONE_PREVIEW_NOTEBOOK::FitCanvasToScreen()
 {
     for( int ii = 0; ii < (int) GetPageCount(); ++ii )
