@@ -1752,10 +1752,19 @@ namespace
 
                 aDefinitionPin.electricalType =
                         pinElectricalType( aCursor.U8At( pinOffset + 21 ), pinSource, aModel.diagnostics );
+                MODEL_GATE_PIN logicalPin;
+                logicalPin.source = pinSource;
+                logicalPin.definitionPin = { aDefinitionPin.id, pinSource };
+                logicalPin.number = aDefinitionPin.number;
+                logicalPin.name = aDefinitionPin.name;
+                logicalPin.electricalType = aDefinitionPin.electricalType;
+                logicalPin.swapGroup = aCursor.U8At( pinOffset + 20 );
+                logicalPin.flags = aCursor.U16At( pinOffset + 22 );
                 aDefinitionPin.properties.push_back(
                         sourceProperty( wxS( "swap_group" ),
                                         wxString::Format( wxS( "%u" ), aCursor.U8At( pinOffset + 20 ) ), pinSource ) );
                 aGate.pins.push_back( { aDefinitionPin.id, pinSource } );
+                aGate.logicalPins.push_back( std::move( logicalPin ) );
             };
 
             auto decodeConnectorPin = [&]( size_t aPinRecord )
@@ -3257,11 +3266,18 @@ bool PADS_SCH_MODEL::AllReferencesResolved() const
             if( definition == index.definitions.end() )
                 continue;
 
-            for( const PIN_REFERENCE& pin : gate.pins )
+            if( !gate.logicalPins.empty() && gate.logicalPins.size() != gate.pins.size() )
+                return false;
+
+            for( size_t pinOrdinal = 0; pinOrdinal < gate.pins.size(); ++pinOrdinal )
             {
+                const PIN_REFERENCE& pin = gate.pins[pinOrdinal];
                 auto pinOwner = index.pinOwners.find( pin.id.Value() );
 
                 if( pinOwner == index.pinOwners.end() || pinOwner->second != definition->second )
+                    return false;
+
+                if( !gate.logicalPins.empty() && gate.logicalPins[pinOrdinal].definitionPin.id != pin.id )
                     return false;
             }
         }
@@ -3548,12 +3564,20 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
             if( definition == index.definitions.end() )
                 continue;
 
-            for( const PIN_REFERENCE& pin : gate.pins )
+            if( !gate.logicalPins.empty() && gate.logicalPins.size() != gate.pins.size() )
+                throwValidationError( gate.source, wxS( "gate logical-pin count does not match definition pins" ) );
+
+            for( size_t pinOrdinal = 0; pinOrdinal < gate.pins.size(); ++pinOrdinal )
             {
+                const PIN_REFERENCE& pin = gate.pins[pinOrdinal];
                 auto pinOwner = index.pinOwners.find( pin.id.Value() );
 
                 if( pinOwner == index.pinOwners.end() || pinOwner->second != definition->second )
                     throwValidationError( pin.source, wxS( "pin does not belong to gate definition" ) );
+
+                if( !gate.logicalPins.empty() && gate.logicalPins[pinOrdinal].definitionPin.id != pin.id )
+                    throwValidationError( gate.logicalPins[pinOrdinal].definitionPin.source,
+                                          wxS( "logical pin does not belong to gate definition pin" ) );
             }
         }
     }

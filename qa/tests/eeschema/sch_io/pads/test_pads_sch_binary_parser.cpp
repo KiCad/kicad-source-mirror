@@ -4026,31 +4026,18 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
                 }
 
                 BOOST_REQUIRE_EQUAL( binaryGate.pins.size(), asciiGateForPart.pins.size() );
+                BOOST_REQUIRE_EQUAL( binaryGate.logicalPins.size(), asciiGateForPart.pins.size() );
 
                 for( size_t pin = 0; pin < binaryGate.pins.size(); ++pin )
                 {
-                    const PIN_REFERENCE&        pinReference = binaryGate.pins[pin];
-                    const MODEL_PIN_DEFINITION* binaryPin = nullptr;
-
-                    for( const MODEL_SYMBOL_DEFINITION& definition : fixtureBinary.definitions )
-                    {
-                        auto found = std::ranges::find( definition.pins, pinReference.id, &MODEL_PIN_DEFINITION::id );
-
-                        if( found != definition.pins.end() )
-                        {
-                            binaryPin = &*found;
-                            break;
-                        }
-                    }
-
-                    BOOST_REQUIRE( binaryPin );
+                    const MODEL_GATE_PIN& binaryPin = binaryGate.logicalPins[pin];
                     BOOST_TEST_CONTEXT( fixture << ": " << binaryPart.name.text << " gate " << gate << " pin " << pin )
                     {
-                        BOOST_CHECK_EQUAL( binaryPin->number.text,
+                        BOOST_CHECK_EQUAL( binaryPin.number.text,
                                            wxString::FromUTF8( asciiGateForPart.pins[pin].pin_id ) );
-                        BOOST_CHECK_EQUAL( binaryPin->name.text,
+                        BOOST_CHECK_EQUAL( binaryPin.name.text,
                                            wxString::FromUTF8( asciiGateForPart.pins[pin].pin_name ) );
-                        BOOST_CHECK( canonicalPinType( binaryPin->electricalType )
+                        BOOST_CHECK( canonicalPinType( binaryPin.electricalType )
                                      == canonicalPinType( asciiGateForPart.pins[pin].pin_type ) );
                     }
                 }

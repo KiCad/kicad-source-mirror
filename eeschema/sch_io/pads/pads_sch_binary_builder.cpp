@@ -554,9 +554,18 @@ namespace
 
         if( pinReferences )
         {
-            for( const PIN_REFERENCE& pinReference : *pinReferences )
+            for( size_t pinOrdinal = 0; pinOrdinal < pinReferences->size(); ++pinOrdinal )
             {
+                const PIN_REFERENCE& pinReference = ( *pinReferences )[pinOrdinal];
                 std::unique_ptr<SCH_PIN> pin = makePin( pinById( aDefinition, pinReference.id ), aLibrary );
+
+                if( aGate && pinOrdinal < aGate->logicalPins.size() )
+                {
+                    const MODEL_GATE_PIN& logicalPin = aGate->logicalPins[pinOrdinal];
+                    pin->SetNumber( logicalPin.number.text );
+                    pin->SetName( logicalPin.name.text );
+                    pin->SetType( pinType( logicalPin.electricalType ) );
+                }
 
                 if( aConnectorPin )
                 {

@@ -422,6 +422,20 @@ struct MODEL_CONNECTOR_PIN
 };
 
 
+struct MODEL_GATE_PIN
+{
+    SOURCE_PROVENANCE source;
+    PIN_REFERENCE     definitionPin;
+    SOURCE_STRING     number;
+    SOURCE_STRING     name;
+    uint32_t          electricalType = 0;
+    uint8_t           swapGroup = 0;
+    uint16_t          flags = 0;
+
+    bool operator==( const MODEL_GATE_PIN& ) const = default;
+};
+
+
 struct MODEL_GATE
 {
     GATE_ID                           id;
@@ -429,6 +443,7 @@ struct MODEL_GATE
     DEFINITION_REFERENCE              definition;
     uint32_t                          unit = 1;
     std::vector<PIN_REFERENCE>        pins;
+    std::vector<MODEL_GATE_PIN>       logicalPins;
     std::vector<DEFINITION_REFERENCE> alternateDefinitions;
     std::vector<DEFINITION_REFERENCE> decalGroupMembers;
     std::vector<MODEL_CONNECTOR_PIN>   connectorPins;

@@ -1687,7 +1687,27 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
 
     m_schematic.Reset();
     destination = m_schematic.GetTopLevelSheet();
-    const PADS_SCH_MODEL pinModel = parseBinaryFixture( wxS( "pin_styles" ) );
+    PADS_SCH_MODEL pinModel = parseBinaryFixture( wxS( "pin_styles" ) );
+    MODEL_PART_TYPE& pinPart = *std::ranges::find_if( pinModel.partTypes,
+                                                       []( const MODEL_PART_TYPE& aPart )
+                                                       {
+                                                           return aPart.name.text == wxS( "BATCHB-PIN-STYLES" );
+                                                       } );
+    BOOST_REQUIRE_EQUAL( pinPart.gates.size(), 1u );
+    BOOST_REQUIRE_EQUAL( pinPart.gates[0].logicalPins.size(), 7u );
+
+    for( MODEL_SYMBOL_DEFINITION& definition : pinModel.definitions )
+    {
+        if( definition.name.text != wxS( "BATCHB_PIN_STYLES" ) )
+            continue;
+
+        for( MODEL_PIN_DEFINITION& pin : definition.pins )
+        {
+            pin.number.text = wxS( "decal-number" );
+            pin.name.text = wxS( "decal-name" );
+        }
+    }
+
     result = builder.Build( pinModel, &m_schematic, destination, binaryFixture( wxS( "pin_styles" ) ) );
     SCH_SHEET_PATH pinPath;
     pinPath.push_back( destination );
@@ -1710,18 +1730,15 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
                                        return aDefinition.name.text == wxS( "BATCHB_PIN_STYLES" );
                                    } );
     std::vector<SCH_PIN*>  builtPins = pinSymbol->GetLibPins();
-    const MODEL_PART_TYPE& pinPart = *std::ranges::find_if( pinModel.partTypes,
-                                                            []( const MODEL_PART_TYPE& aPart )
-                                                            {
-                                                                return aPart.name.text == wxS( "BATCHB-PIN-STYLES" );
-                                                            } );
     BOOST_REQUIRE_EQUAL( builtPins.size(), pinDefinition.pins.size() + pinPart.signalPins.size() );
 
-    for( const MODEL_PIN_DEFINITION& sourcePin : pinDefinition.pins )
+    for( size_t pinOrdinal = 0; pinOrdinal < pinDefinition.pins.size(); ++pinOrdinal )
     {
-        auto built = std::ranges::find( builtPins, sourcePin.number.text, &SCH_PIN::GetNumber );
-        BOOST_REQUIRE_MESSAGE( built != builtPins.end(), sourcePin.number.text );
-        BOOST_CHECK_EQUAL( ( *built )->GetName(), sourcePin.name.text );
+        const MODEL_PIN_DEFINITION& sourcePin = pinDefinition.pins[pinOrdinal];
+        const MODEL_GATE_PIN& logicalPin = pinPart.gates[0].logicalPins[pinOrdinal];
+        auto built = std::ranges::find( builtPins, logicalPin.number.text, &SCH_PIN::GetNumber );
+        BOOST_REQUIRE_MESSAGE( built != builtPins.end(), logicalPin.number.text );
+        BOOST_CHECK_EQUAL( ( *built )->GetName(), logicalPin.name.text );
         BOOST_CHECK_EQUAL( ( *built )->GetPosition(), localPoint( sourcePin.position ) );
         BOOST_CHECK_EQUAL( ( *built )->GetLength(),
                            schIUScale.MilsToIU( static_cast<double>( sourcePin.length ) / 2.0 ) );
@@ -2038,8 +2055,17 @@ BOOST_AUTO_TEST_CASE( BinaryAlternateDefinitionPins )
 
     BOOST_REQUIRE( builtSymbol );
 
-    for( const SCH_PIN* pin : builtSymbol->GetLibPins() )
-        BOOST_CHECK( pin->GetNumber().StartsWith( wxS( "ALT-" ) ) );
+    std::vector<SCH_PIN*> selectedUnitPins = builtSymbol->GetLibPins();
+
+    BOOST_REQUIRE_EQUAL( selectedUnitPins.size(), gate->logicalPins.size() );
+
+    for( const MODEL_GATE_PIN& logicalPin : gate->logicalPins )
+    {
+        auto builtPin = std::ranges::find( selectedUnitPins, logicalPin.number.text, &SCH_PIN::GetNumber );
+        BOOST_REQUIRE_MESSAGE( builtPin != selectedUnitPins.end(), logicalPin.number.text );
+        BOOST_CHECK_EQUAL( ( *builtPin )->GetName(), logicalPin.name.text );
+        BOOST_CHECK( !( *builtPin )->GetNumber().StartsWith( wxS( "ALT-" ) ) );
+    }
 }
 
 
