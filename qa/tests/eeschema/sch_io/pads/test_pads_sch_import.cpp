@@ -846,14 +846,17 @@ allSourceProperties( const PADS_SCH_BINARY::PADS_SCH_MODEL& aModel )
 }
 
 
-static PIN_ORIENTATION pinOrientation( int aAngle )
+static PIN_ORIENTATION pinOrientation( const PADS_SCH_BINARY::MODEL_PIN_DEFINITION& aPin )
 {
-    switch( PADS_SCH_BINARY::NormalizeAngle( aAngle ) )
+    if( aPin.decalName.text.Contains( wxS( "VRT" ) ) )
+        return aPin.side == 2 ? PIN_ORIENTATION::PIN_UP : PIN_ORIENTATION::PIN_DOWN;
+
+    switch( PADS_SCH_BINARY::NormalizeAngle( aPin.angle ) )
     {
-    case 900: return PIN_ORIENTATION::PIN_UP;
-    case 1800: return PIN_ORIENTATION::PIN_LEFT;
-    case 2700: return PIN_ORIENTATION::PIN_DOWN;
-    default: return PIN_ORIENTATION::PIN_RIGHT;
+    case 900: return aPin.side >= 2 ? PIN_ORIENTATION::PIN_DOWN : PIN_ORIENTATION::PIN_UP;
+    case 1800: return ( aPin.side & 1 ) != 0 ? PIN_ORIENTATION::PIN_RIGHT : PIN_ORIENTATION::PIN_LEFT;
+    case 2700: return aPin.side >= 2 ? PIN_ORIENTATION::PIN_UP : PIN_ORIENTATION::PIN_DOWN;
+    default: return ( aPin.side & 1 ) != 0 ? PIN_ORIENTATION::PIN_LEFT : PIN_ORIENTATION::PIN_RIGHT;
     }
 }
 
@@ -1722,7 +1725,7 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
         BOOST_CHECK_EQUAL( ( *built )->GetPosition(), localPoint( sourcePin.position ) );
         BOOST_CHECK_EQUAL( ( *built )->GetLength(),
                            schIUScale.MilsToIU( static_cast<double>( sourcePin.length ) / 2.0 ) );
-        BOOST_CHECK( ( *built )->GetOrientation() == pinOrientation( sourcePin.angle ) );
+        BOOST_CHECK( ( *built )->GetOrientation() == pinOrientation( sourcePin ) );
         BOOST_CHECK( ( *built )->GetType() == pinType( sourcePin.electricalType ) );
         BOOST_CHECK( ( *built )->GetShape() == pinShape( sourcePin.graphicStyle ) );
         BOOST_CHECK_EQUAL( ( *built )->IsVisible(), sourcePin.presentation.visible );
@@ -1886,7 +1889,7 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
             BOOST_CHECK( ( *builtPin )->GetType() == pinType( sourcePin.electricalType ) );
             BOOST_CHECK_EQUAL( ( *builtPin )->GetLength(),
                                schIUScale.MilsToIU( static_cast<double>( graphicPin.length ) / 2.0 ) );
-            BOOST_CHECK( ( *builtPin )->GetOrientation() == pinOrientation( graphicPin.angle ) );
+            BOOST_CHECK( ( *builtPin )->GetOrientation() == pinOrientation( graphicPin ) );
             BOOST_CHECK( ( *builtPin )->GetShape() == pinShape( graphicPin.graphicStyle ) );
             BOOST_CHECK_EQUAL( ( *builtPin )->IsVisible(), graphicPin.presentation.visible );
             BOOST_CHECK_EQUAL(

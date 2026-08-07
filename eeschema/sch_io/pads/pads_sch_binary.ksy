@@ -1024,8 +1024,9 @@ types:
         type: u1
       - id: presentation_class
         type: u1
-      - id: line_width_half_mil
+      - id: component_attribute_index
         type: u2
+        doc: Index within the placement's outer-controller component attribute slice; 0xffff is used by unnamed records.
       - id: height_half_mil
         type: u2
       - id: width_half_mil
@@ -1301,8 +1302,14 @@ types:
         type: s2
       - id: side_and_name_presentation_flags
         type: u2
+        doc: >-
+          Terminal rotation is bit 0 and the side selector is bits 1-2. Bit 8 rotates the pin
+          name; bits 12-15 select its justification class.
       - id: visibility_and_number_presentation_flags
         type: u2
+        doc: >-
+          Bit 0 rotates the pin number, bits 4-7 select its justification, bits 8-11 select the
+          name/number offset presentation, and bits 14-15 are exported as PADS pin visibility flags.
 
   part_type_controller:
     params:

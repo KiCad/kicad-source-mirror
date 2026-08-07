@@ -133,7 +133,7 @@ namespace
         size_t   customX;
         size_t   customAngle;
         size_t   customJustification;
-        size_t   customLineWidth;
+        size_t   customAttributeIndex;
         size_t   customHeight;
         size_t   customWidth;
         size_t   customDisplayFlags;
@@ -179,7 +179,7 @@ namespace
                                                          .customX = 8,
                                                          .customAngle = 12,
                                                          .customJustification = 14,
-                                                         .customLineWidth = 16,
+                                                         .customAttributeIndex = 16,
                                                          .customHeight = 18,
                                                          .customWidth = 20,
                                                          .customDisplayFlags = 21,
@@ -1328,36 +1328,81 @@ namespace
                 const uint16_t presentationFlags = aCursor.U16At( terminalOffset + 22 );
                 const uint16_t visibilityFlags = aCursor.U16At( terminalOffset + 24 );
                 const uint16_t side = presentationFlags & 0x0006;
+                definitionPin.presentationFlags = presentationFlags;
+                definitionPin.visibilityAndNumberPresentationFlags = visibilityFlags;
                 definitionPin.side = side / 2;
 
-                if( ( presentationFlags & ~0x2107 ) != 0 )
+                definitionPin.angle = ( presentationFlags & 0x0001 ) != 0 ? 900 : 0;
+                definitionPin.nameAngle = ( presentationFlags & 0x0100 ) != 0 ? 900 : 0;
+                definitionPin.numberAngle = ( visibilityFlags & 0x0001 ) != 0 ? 900 : 0;
+
+                switch( presentationFlags & 0xF100 )
+                {
+                case 0x0000:
+                case 0x0100: definitionPin.nameJustification = 0; break;
+                case 0x2000: definitionPin.nameJustification = 1; break;
+                case 0x2100: definitionPin.nameJustification = 2; break;
+                case 0x9000: definitionPin.nameJustification = 6; break;
+                default:
+                    PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal name presentation" ),
+                                                               presentationFlags & 0xF100, pinSource,
+                                                               aModel.diagnostics );
+                    break;
+                }
+
+                if( ( presentationFlags & 0x00F8 ) != 0 )
                     PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal side" ), presentationFlags, pinSource,
                                                                aModel.diagnostics );
 
-                definitionPin.angle = ( presentationFlags & 0x2000 ) != 0 ? 900 : 0;
-                definitionPin.nameAngle = ( presentationFlags & 0x2000 ) != 0 ? 900 : 0;
-                definitionPin.numberAngle = 0;
-                definitionPin.nameJustification = ( presentationFlags & 0x0100 ) != 0 ? 2 : 0;
-
-                switch( visibilityFlags & 0x00E0 )
+                switch( visibilityFlags & 0x00F0 )
                 {
                 case 0x0000: definitionPin.numberJustification = 0; break;
+                case 0x0010: definitionPin.numberJustification = 4; break;
+                case 0x0020: definitionPin.numberJustification = 1; break;
                 case 0x0040: definitionPin.numberJustification = 8; break;
                 case 0x0060: definitionPin.numberJustification = 9; break;
                 case 0x0080: definitionPin.numberJustification = 2; break;
                 default:
                     PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal number justification" ),
-                                                               visibilityFlags & 0x00E0, pinSource,
+                                                               visibilityFlags & 0x00F0, pinSource,
                                                                aModel.diagnostics );
                     break;
                 }
-                definitionPin.nameOffsetAngle = definitionPin.nameAngle;
-                definitionPin.numberOffsetAngle = 0;
-                definitionPin.nameOffsetJustification = ( presentationFlags & 0x0100 ) != 0 ? 2
-                                                        : ( visibilityFlags & 0x0400 ) != 0 ? 1
-                                                                                            : 0;
-                definitionPin.numberOffsetJustification = 0;
-                definitionPin.visibilityFlags = ( visibilityFlags & 0x8000 ) != 0 ? 128 : 0;
+                const uint16_t nameOffsetFlags = visibilityFlags & 0x0F00;
+                definitionPin.nameOffsetAngle = ( nameOffsetFlags & 0x0100 ) != 0 ? 900 : 0;
+                definitionPin.numberOffsetAngle = ( nameOffsetFlags & 0x0200 ) != 0 ? 900 : 0;
+
+                switch( visibilityFlags & 0x0F00 )
+                {
+                case 0x0000:
+                case 0x0800: definitionPin.nameOffsetJustification = 0; break;
+                case 0x0400:
+                case 0x0C00: definitionPin.nameOffsetJustification = 1; break;
+                case 0x0500:
+                case 0x0F00: definitionPin.nameOffsetJustification = 2; break;
+                default:
+                    PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal name-offset presentation" ),
+                                                               visibilityFlags & 0x0F00, pinSource,
+                                                               aModel.diagnostics );
+                    break;
+                }
+
+                switch( visibilityFlags & 0xCF00 )
+                {
+                case 0x0000:
+                case 0xC000: definitionPin.numberOffsetJustification = 0; break;
+                case 0x0800:
+                case 0x0C00:
+                case 0xCC00: definitionPin.numberOffsetJustification = 1; break;
+                case 0x0F00: definitionPin.numberOffsetJustification = 2; break;
+                default:
+                    PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "terminal number-offset presentation" ),
+                                                               visibilityFlags & 0xCF00, pinSource,
+                                                               aModel.diagnostics );
+                    break;
+                }
+
+                definitionPin.visibilityFlags = ( visibilityFlags >> 8 ) & 0x00C0;
 
                 if( pinDecalHandle == 0xFFFF )
                 {
@@ -1382,6 +1427,7 @@ namespace
                     }
 
                     const wxString pinDecalName = pinDecal->name.text;
+                    definitionPin.decalName = pinDecal->name;
 
                     int64_t provenLength = 0;
 
@@ -2243,22 +2289,6 @@ namespace
                 throwDecodeError( source, wxS( "placement field ownership does not match controller 17" ) );
             }
 
-            uint16_t namedFieldCount = 0;
-
-            for( size_t fieldOrdinal = 0; fieldOrdinal < customFieldCount; ++fieldOrdinal )
-            {
-                const size_t candidateOffset = fieldBase + ( fieldCursor + fieldOrdinal ) * layout.fieldBytes;
-
-                if( ( aCursor.U8At( candidateOffset + layout.customDisplayFlags ) & 7 ) != 0 )
-                    ++namedFieldCount;
-            }
-
-            if( namedFieldCount > attributeCount - 2 )
-                throwDecodeError( source, wxS( "named placement fields leave component attribute slice" ) );
-
-            const uint32_t customAttributeStart = attributeStart + attributeCount - namedFieldCount;
-            uint16_t       namedFieldOrdinal = 0;
-
             for( size_t fieldOrdinal = 0; fieldOrdinal < customFieldCount; ++fieldOrdinal )
             {
                 const size_t      fieldOffset = fieldBase + fieldCursor * layout.fieldBytes;
@@ -2269,8 +2299,9 @@ namespace
                 SOURCE_STRING value;
 
                 const uint8_t displayFlags = aCursor.U8At( fieldOffset + layout.customDisplayFlags );
+                const uint16_t attributeIndex = aCursor.U16At( fieldOffset + layout.customAttributeIndex );
 
-                if( ( displayFlags & 7 ) == 0 )
+                if( attributeIndex == 0xFFFF )
                 {
                     name.text = wxS( "*" );
                     name.source = fieldSource;
@@ -2278,8 +2309,10 @@ namespace
                 }
                 else
                 {
-                    std::tie( name, value ) = attributeString( customAttributeStart + namedFieldOrdinal, true );
-                    ++namedFieldOrdinal;
+                    if( attributeIndex >= attributeCount )
+                        throwDecodeError( fieldSource, wxS( "placement field attribute index leaves component group" ) );
+
+                    std::tie( name, value ) = attributeString( attributeStart + attributeIndex, true );
                 }
                 MODEL_FIELD field;
                 field.source = fieldSource;
@@ -2310,13 +2343,13 @@ namespace
                       field.presentation, true );
                 field.properties.push_back( sourceProperty(
                         wxS( "display_flags" ), wxString::Format( wxS( "%u" ), displayFlags ), fieldSource ) );
-                SOURCE_PROVENANCE lineWidthSource = fieldSource;
-                lineWidthSource.absoluteOffset += layout.customLineWidth;
-                lineWidthSource.length = 2;
+                SOURCE_PROVENANCE attributeIndexSource = fieldSource;
+                attributeIndexSource.absoluteOffset += layout.customAttributeIndex;
+                attributeIndexSource.length = 2;
                 field.properties.push_back( sourceProperty(
-                        wxS( "line_width_half_mil" ),
-                        wxString::Format( wxS( "%u" ), aCursor.U16At( fieldOffset + layout.customLineWidth ) ),
-                        lineWidthSource ) );
+                        wxS( "component_attribute_index" ),
+                        wxString::Format( wxS( "%u" ), aCursor.U16At( fieldOffset + layout.customAttributeIndex ) ),
+                        attributeIndexSource ) );
                 SOURCE_PROPERTY preservedTail = sourceProperty(
                         wxS( "preserved_field_tail" ),
                         wxString::Format( wxS( "%u" ), aCursor.U16At( fieldOffset + layout.customTail ) ),
@@ -4120,9 +4153,6 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
         int64_t right = decodeDatabaseCoordinate( item.right, boxSource );
         int64_t top = decodeDatabaseCoordinate( item.top, boxSource );
 
-        if( right == left || bottom == top )
-            throwDecodeError( boxSource, wxS( "embedded OLE database box has zero size" ) );
-
         image.position = { left + ( right - left ) / 2, top + ( bottom - top ) / 2, boxSource };
         image.size = { std::abs( right - left ), std::abs( bottom - top ), boxSource };
         image.mirrorHorizontal = right < left;
@@ -4140,6 +4170,13 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
             model.diagnostics.emplace_back( RPT_SEVERITY_WARNING, source,
                                             wxS( "embedded OLE object has no supported BMP, DIB, or WMF stream" ) );
             break;
+        }
+
+        if( right == left || bottom == top )
+        {
+            image.type = MODEL_EMBEDDED_IMAGE_TYPE::UNSUPPORTED;
+            model.diagnostics.emplace_back( RPT_SEVERITY_WARNING, boxSource,
+                                            wxS( "embedded OLE image has a zero-size database box and was skipped" ) );
         }
 
         if( item.flags != 1 )

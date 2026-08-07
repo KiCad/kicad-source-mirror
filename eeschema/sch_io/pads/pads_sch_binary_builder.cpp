@@ -225,14 +225,20 @@ namespace
     }
 
 
-    PIN_ORIENTATION pinOrientation( int aAngle )
+    PIN_ORIENTATION pinOrientation( const MODEL_PIN_DEFINITION& aPin )
     {
-        switch( NormalizeAngle( aAngle ) )
+        const int  angle = NormalizeAngle( aPin.angle );
+        const bool verticalDecal = aPin.decalName.text.Contains( wxS( "VRT" ) );
+
+        if( verticalDecal )
+            return aPin.side == 2 ? PIN_ORIENTATION::PIN_UP : PIN_ORIENTATION::PIN_DOWN;
+
+        switch( angle )
         {
-        case 900: return PIN_ORIENTATION::PIN_UP;
-        case 1800: return PIN_ORIENTATION::PIN_LEFT;
-        case 2700: return PIN_ORIENTATION::PIN_DOWN;
-        default: return PIN_ORIENTATION::PIN_RIGHT;
+        case 900: return aPin.side >= 2 ? PIN_ORIENTATION::PIN_DOWN : PIN_ORIENTATION::PIN_UP;
+        case 1800: return ( aPin.side & 1 ) != 0 ? PIN_ORIENTATION::PIN_RIGHT : PIN_ORIENTATION::PIN_LEFT;
+        case 2700: return aPin.side >= 2 ? PIN_ORIENTATION::PIN_UP : PIN_ORIENTATION::PIN_DOWN;
+        default: return ( aPin.side & 1 ) != 0 ? PIN_ORIENTATION::PIN_LEFT : PIN_ORIENTATION::PIN_RIGHT;
         }
     }
 
@@ -472,7 +478,7 @@ namespace
         pin->SetNumber( aPin.number.text );
         pin->SetName( aPin.name.text );
         pin->SetPosition( localPoint( aPin.position ) );
-        pin->SetOrientation( pinOrientation( aPin.angle ) );
+        pin->SetOrientation( pinOrientation( aPin ) );
         pin->SetLength( toIU( aPin.length ) );
         pin->SetType( pinType( aPin.electricalType ) );
         pin->SetShape( pinShape( aPin.graphicStyle ) );

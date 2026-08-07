@@ -366,9 +366,12 @@ struct MODEL_PIN_DEFINITION
     SOURCE_PROVENANCE            source;
     SOURCE_STRING                number;
     SOURCE_STRING                name;
+    SOURCE_STRING                decalName;
     SOURCE_POINT                 position;
     uint32_t                     side = 0;
     int                          angle = 0;
+    uint16_t                     presentationFlags = 0;
+    uint16_t                     visibilityAndNumberPresentationFlags = 0;
     uint32_t                     electricalType = 0;
     uint32_t                     graphicStyle = 0;
     int64_t                      length = 0;

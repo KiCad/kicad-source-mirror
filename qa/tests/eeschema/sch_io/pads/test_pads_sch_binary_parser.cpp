@@ -40,6 +40,7 @@
 #include <type_traits>
 #include <variant>
 #include <vector>
+#include <wx/filename.h>
 
 using namespace PADS_SCH_BINARY;
 
@@ -1321,12 +1322,16 @@ BOOST_AUTO_TEST_CASE( EmbeddedOleImages )
     std::vector<uint8_t> zeroWidth = bytes;
     writeU32( zeroWidth, sdb.OleItems()[0].boxOffset + 8,
               static_cast<uint32_t>( sdb.OleItems()[0].left ) );
-    BOOST_CHECK_EXCEPTION( parser.Parse( zeroWidth, wxS( "ole-zero-width.sch" ) ), IO_ERROR,
-                           []( const IO_ERROR& aError )
-                           {
-                               return aError.What().Contains( wxS( "embedded OLE image database box" ) )
-                                      && aError.What().Contains( wxS( "zero size" ) );
-                           } );
+    PADS_SCH_MODEL zeroWidthModel = parser.Parse( zeroWidth, wxS( "ole-zero-width.sch" ) );
+    BOOST_REQUIRE_EQUAL( zeroWidthModel.images.size(), 2 );
+    BOOST_CHECK( zeroWidthModel.images[0].type == MODEL_EMBEDDED_IMAGE_TYPE::UNSUPPORTED );
+    BOOST_CHECK( std::ranges::any_of( zeroWidthModel.diagnostics,
+                                     []( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                     {
+                                         return aDiagnostic.source.objectClass
+                                                        == wxS( "embedded OLE image database box" )
+                                                && aDiagnostic.message.Contains( wxS( "zero-size" ) );
+                                     } ) );
 }
 
 
@@ -2697,16 +2702,17 @@ BOOST_AUTO_TEST_CASE( PlacementInstanceFields )
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.visible, false );
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.font.text, wxS( "Bold Verdana" ) );
     BOOST_CHECK_EQUAL( placement.fields[2].source.controller, 17 );
-    BOOST_CHECK_EQUAL( propertyValue( placement.fields[2].properties, wxS( "line_width_half_mil" ) ), wxS( "10" ) );
-    auto lineWidth = std::ranges::find_if( placement.fields[2].properties,
-                                           []( const SOURCE_PROPERTY& aProperty )
-                                           {
-                                               return aProperty.name.text == wxS( "line_width_half_mil" );
-                                           } );
-    BOOST_REQUIRE( lineWidth != placement.fields[2].properties.end() );
-    BOOST_CHECK_EQUAL( lineWidth->source.controller, 17 );
-    BOOST_CHECK_EQUAL( lineWidth->source.absoluteOffset, placement.fields[2].source.absoluteOffset + 16 );
-    BOOST_CHECK_EQUAL( lineWidth->source.length, 2 );
+    BOOST_CHECK_EQUAL( propertyValue( placement.fields[2].properties, wxS( "component_attribute_index" ) ),
+                       wxS( "10" ) );
+    auto attributeIndex = std::ranges::find_if( placement.fields[2].properties,
+                                                []( const SOURCE_PROPERTY& aProperty )
+                                                {
+                                                    return aProperty.name.text == wxS( "component_attribute_index" );
+                                                } );
+    BOOST_REQUIRE( attributeIndex != placement.fields[2].properties.end() );
+    BOOST_CHECK_EQUAL( attributeIndex->source.controller, 17 );
+    BOOST_CHECK_EQUAL( attributeIndex->source.absoluteOffset, placement.fields[2].source.absoluteOffset + 16 );
+    BOOST_CHECK_EQUAL( attributeIndex->source.length, 2 );
 
     for( size_t i = 0; i < placement.fields.size(); ++i )
     {
@@ -2779,6 +2785,15 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
                            []( const IO_ERROR& aError )
                            {
                                return aError.What().Contains( wxS( "placement font handle" ) );
+                           } );
+
+    std::vector<uint8_t> wrongAttribute = loadBinaryFixture( "fields.sch" );
+    writeU16( wrongAttribute, sheetControllerOffset( wrongAttribute, 17 ) + 16, 0xFFFE );
+    BOOST_CHECK_EXCEPTION( parser.Parse( wrongAttribute, wxS( "placement-field-attribute.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "attribute index leaves component group" ) )
+                                      && aError.What().Contains( wxS( "controller 17" ) );
                            } );
 
     PADS_SCH_MODEL wrongSheet =
@@ -2912,7 +2927,7 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                 {
                     BOOST_CHECK_EQUAL( propertyValue( binaryField.properties, wxS( "display_flags" ) ),
                                        wxString::Format( wxS( "%d" ), asciiField.visibility ) );
-                    BOOST_CHECK_EQUAL( propertyValue( binaryField.properties, wxS( "line_width_half_mil" ) ),
+                    BOOST_CHECK_EQUAL( propertyValue( binaryField.properties, wxS( "component_attribute_index" ) ),
                                        fixture == "fields" ? wxS( "10" ) : wxS( "65535" ) );
                 }
             }
@@ -3964,7 +3979,9 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
 
             for( size_t pin = 0; pin < binarySymbol.pins.size(); ++pin )
             {
-                BOOST_TEST_CONTEXT( fixture << ": " << binarySymbol.name.text << " pin " << pin )
+                BOOST_TEST_CONTEXT( fixture << ": " << binarySymbol.name.text << " pin " << pin << " flags "
+                                            << binarySymbol.pins[pin].presentationFlags << "/"
+                                            << binarySymbol.pins[pin].visibilityAndNumberPresentationFlags )
                 {
                     checkPinPresentation( binarySymbol.pins[pin], asciiSymbol->pins[pin] );
                 }
