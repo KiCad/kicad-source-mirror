@@ -75,7 +75,7 @@ BOOST_FIXTURE_TEST_CASE( SheetDNPEffectiveInSymbolFields, ISSUE24663_FIXTURE )
     // path serves the on screen checkbox and the BOM export. The exclude_from_board,
     // exclude_from_bom and exclude_from_sim attributes share it.
     FIELDS_EDITOR_GRID_DATA_MODEL model( refs, nullptr );
-    model.AddColumn( wxS( "${DNP}" ), wxS( "DNP" ), false, wxEmptyString );
+    model.AddColumn( wxS( "${DNP}" ), wxS( "DNP" ), false );
 
     int dnpCol = model.GetFieldNameCol( wxS( "${DNP}" ) );
     BOOST_REQUIRE( dnpCol >= 0 );
