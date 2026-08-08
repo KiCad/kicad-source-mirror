@@ -7,15 +7,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-04-24 15:43+0000\n"
-"Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
+"PO-Revision-Date: 2026-08-09 14:51+0000\n"
+"Last-Translator: Naveenkumar SEKAR <naveenatmit@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v10/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:395
@@ -98,7 +98,7 @@ msgstr "உங்கள் ஓபன்சிஎல் பதிப்பு ஆ
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:587
 #, c-format
 msgid "Last render time %.0f ms"
-msgstr "கடைசியாக வழங்கும் நேரம் %.0f எம்.எச்"
+msgstr "கடைசியாக வழங்கும் நேரம் %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:830
 #, c-format
@@ -152,7 +152,7 @@ msgstr "3D மாடல்களை ஏற்றுகிறது ..."
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1073
 #, c-format
 msgid "Reload time %.3f s"
-msgstr "நேரத்தை மீண்டும் ஏற்றவும் %.3f கள்"
+msgstr "மீண்டும் ஏற்றும் நேரம் %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1661
 #: eeschema/libraries/legacy_symbol_library.cpp:539
@@ -2043,7 +2043,7 @@ msgstr "பநிஇ இலிருந்து மாற்றம்"
 #: common/api/api_plugin.cpp:60
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "தவறான செருகுநிரல் உள்ளமைவு - '%s': %s"
 
 #: common/api/api_plugin.cpp:80
 #, fuzzy, c-format
@@ -2703,6 +2703,8 @@ msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"நீங்கள் சேமித்த கோப்பிற்குப் பதிலாக, தானாகச் சேமிக்கப்பட்ட பதிப்பு மாற்றப்படும். முன்பு "
+"சேமிக்கப்பட்ட உள்ளடக்கம் நிராகரிக்கப்படும்."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
 #, fuzzy
@@ -2712,6 +2714,7 @@ msgstr "நிமிர்ந்து இருங்கள்"
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
+"நீங்கள் சேமித்த கோப்பை மாற்றமின்றி வைத்து, தானாகச் சேமிக்கப்பட்ட மாற்றங்களை நிராகரித்துவிடும்."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
 #, fuzzy
@@ -2723,6 +2726,8 @@ msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"நீங்கள் சேமித்த கோப்பை அப்படியே வைத்துக்கொண்டு, தானாகச் சேமிக்கப்பட்ட பதிப்பை அதனுடன் ஒரு தனி "
+"நேர முத்திரையிடப்பட்ட கோப்பாக உருவாக்கும், அதை நீங்கள் பின்னர் சரிபார்க்கலாம்."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
 #, fuzzy
@@ -2734,10 +2739,13 @@ msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"எந்த மாற்றங்களையும் செய்யாமல் இந்த உரையாடல் பெட்டியை மூடுகிறது. தானாகச் சேமிக்கப்பட்ட கோப்புகள் "
+"வட்டில் அப்படியே இருக்கும், மேலும் அடுத்த முறை நீங்கள் திட்டத்தைத் திறக்கும்போது அவை மீண்டும் "
+"வழங்கப்படும்."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "தானியங்கு சேமிப்பு மீட்பு"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -3059,11 +3067,11 @@ msgstr "தரவுத்தளப் பிழை"
 
 #: common/dialogs/dialog_grid_settings.cpp:85
 msgid "Grid size X out of range."
-msgstr "கட்டம் அளவு ஃச் வரம்பிற்கு வெளியே."
+msgstr "கட்டம் அளவு X வரம்பிற்கு வெளியே."
 
 #: common/dialogs/dialog_grid_settings.cpp:91
 msgid "Grid size Y out of range."
-msgstr "கட்டம் அளவு ஒய் வரம்பிற்கு வெளியே."
+msgstr "கட்டம் அளவு Y வரம்பிற்கு வெளியே."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
 msgid "(optional)"
