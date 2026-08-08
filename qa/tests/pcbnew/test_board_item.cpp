@@ -529,6 +529,60 @@ BOOST_AUTO_TEST_CASE( TextBoxBoundingBoxFollowsItsRotation )
 }
 
 
+// A flip mirrors an item about a board axis, which tilts it the way PCB_TEXTBOX::Mirror already
+// states: 180 minus the angle across a vertical axis, minus the angle across a horizontal one.
+// A table has to follow that too. Reading direction is free, because a table at one angle is the
+// same picture as one at that angle plus 180 with its cells reordered, so compare the lines.
+BOOST_AUTO_TEST_CASE( TableFlipTiltsTheWayEverythingElseDoes )
+{
+    const int cols[2] = { pcbIUScale.mmToIU( 10.0 ), pcbIUScale.mmToIU( 30.0 ) };
+    const int rows[2] = { pcbIUScale.mmToIU( 4.0 ), pcbIUScale.mmToIU( 12.0 ) };
+
+    const VECTOR2I point( pcbIUScale.mmToIU( 100.0 ), pcbIUScale.mmToIU( 50.0 ) );
+
+    auto sameLine = []( const EDA_ANGLE& aFirst, const EDA_ANGLE& aSecond )
+    {
+        double apart = std::fmod( std::abs( aFirst.AsDegrees() - aSecond.AsDegrees() ), 180.0 );
+        return apart < 0.01 || apart > 179.99;
+    };
+
+    for( double degrees : { 30.0, 45.0 } )
+    {
+        for( FLIP_DIRECTION dir : { FLIP_DIRECTION::LEFT_RIGHT, FLIP_DIRECTION::TOP_BOTTOM } )
+        {
+            BOOST_TEST_CONTEXT( "turned " << degrees
+                                          << ( dir == FLIP_DIRECTION::LEFT_RIGHT ? " left/right" : " top/bottom" ) )
+            {
+                PCB_TABLE* table = makeTable( m_board, cols, rows, degrees );
+                EDA_ANGLE  tilt( degrees, DEGREES_T );
+                EDA_ANGLE  reflected = dir == FLIP_DIRECTION::LEFT_RIGHT ? ANGLE_180 - tilt : -tilt;
+
+                std::vector<VECTOR2I> before;
+
+                for( PCB_TABLECELL* cell : table->GetCells() )
+                    before.push_back( cell->GetStart() );
+
+                table->Flip( point, dir );
+
+                BOOST_CHECK_MESSAGE( sameLine( table->GetCell( 0, 0 )->GetTextAngle(), reflected ),
+                                     "table came back at " << table->GetCell( 0, 0 )->GetTextAngle().AsDegrees()
+                                                           << " degrees, expected " << reflected.AsDegrees() );
+
+                // Flipping back about the same point has to undo it exactly.
+                table->Flip( point, dir );
+
+                for( size_t ii = 0; ii < before.size(); ++ii )
+                {
+                    BOOST_CHECK_MESSAGE( ( table->GetCells()[ii]->GetStart() - before[ii] ).EuclideanNorm()
+                                                 <= pcbIUScale.mmToIU( 0.001 ),
+                                         "cell " << ii << " did not come back" );
+                }
+            }
+        }
+    }
+}
+
+
 /**
  * Regression test for issue #23234:
  * Changing padstack mode to Custom on a flipped footprint's pad and pressing OK caused an
