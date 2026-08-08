@@ -4022,7 +4022,13 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                     PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( text );
 
                     if( textbox->IsBorderEnabled() )
-                        addShape( tempFeature, *static_cast<PCB_SHAPE*>( textbox ) );
+                    {
+                        PCB_SHAPE* border = static_cast<PCB_SHAPE*>( textbox );
+                        wxXmlNode* borderFeature = appendNode( tempSetNode, "Features" );
+
+                        addLocationNode( borderFeature, *border );
+                        addShape( borderFeature, *border );
+                    }
                 }
             };
 
