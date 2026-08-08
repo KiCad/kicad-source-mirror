@@ -1871,7 +1871,7 @@ void PCB_IO_IPC2581::addCadHeader( wxXmlNode* aEcadNode )
 
 bool PCB_IO_IPC2581::isValidLayerFor2581( PCB_LAYER_ID aLayer )
 {
-    return ( aLayer >= F_Cu && aLayer <= User_9 ) || aLayer == UNDEFINED_LAYER;
+    return IsCopperLayer( aLayer ) || ( IsNonCopperLayer( aLayer ) && aLayer <= User_9 ) || aLayer == UNDEFINED_LAYER;
 }
 
 
@@ -2051,9 +2051,6 @@ void PCB_IO_IPC2581::generateCadLayers( wxXmlNode* aCadLayerNode )
     for( int i = 0; i < stackup.GetCount(); i++ )
     {
         BOARD_STACKUP_ITEM* stackup_item = layers.at( i );
-
-        if( !isValidLayerFor2581( stackup_item->GetBrdLayerId() ) )
-            continue;
 
         for( int sublayer_id = 0; sublayer_id < stackup_item->GetSublayersCount(); sublayer_id++ )
         {
