@@ -245,7 +245,7 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     if( IsNameShown() && aAllowExtraText )
         text = GetShownName() << wxS( ": " ) << text;
 
-    if( HasTextVars() )
+    if( HasTextVars() || ( !aVariantName.IsEmpty() && text.Contains( wxT( "${" ) ) ) )
         text = ResolveText( text, aPath, aDepth );
 
     if( m_id == FIELD_T::SHEET_FILENAME && aAllowExtraText && !IsNameShown() )

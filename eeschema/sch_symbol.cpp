@@ -27,6 +27,7 @@
 #include <sch_edit_frame.h>
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
+#include <common.h>
 #include <core/mirror.h>
 #include <sch_shape.h>
 #include <pgm_base.h>
@@ -1241,7 +1242,19 @@ const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aInsta
     std::optional variant = GetVariant( *aInstance, aVariantName );
 
     if( variant && variant->m_Fields.contains( GetField( FIELD_T::VALUE )->GetName() ) )
-        return variant->m_Fields[GetField( FIELD_T::VALUE )->GetName()];
+    {
+        const wxString& text = variant->m_Fields[GetField( FIELD_T::VALUE )->GetName()];
+
+        if( !aResolve )
+            return text;
+
+        std::function<bool( wxString* )> resolver = [&]( wxString* token ) -> bool
+        {
+            return ResolveTextVar( aInstance, token, aVariantName, 1 );
+        };
+
+        return ExpandTextVars( text, &resolver );
+    }
 
     // Fall back to default value when variant doesn't have an override
     if( aResolve )
