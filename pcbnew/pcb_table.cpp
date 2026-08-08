@@ -366,7 +366,7 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     Normalize();
 
     if( originalAngle != ANGLE_0 )
-        Rotate( GetPosition(), originalAngle );
+        Rotate( GetPosition(), -originalAngle );
 
     BOX2I newBBox = GetBoundingBox();
     Move( targetPos - newBBox.GetPosition() );
