@@ -3991,6 +3991,13 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                 if( !text_item || !text_item->IsVisible() || text_item->GetShownText( false ).empty() )
                     return;
 
+                bool isWhitespace = text_item->GetShownText( false ).Strip( wxString::both ).empty();
+                bool isKnockout = text->Type() == PCB_TEXT_T && static_cast<PCB_TEXT*>( text )->IsKnockout();
+                bool hasBorder = text->Type() == PCB_TEXTBOX_T && static_cast<PCB_TEXTBOX*>( text )->IsBorderEnabled();
+
+                if( isWhitespace && !isKnockout && !hasBorder )
+                    return;
+
                 wxXmlNode* tempSetNode = appendNode( aLayerNode, "Set" );
 
                 if( m_version > 'B' )
@@ -4009,26 +4016,24 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
                 addAttribute( nonStandardAttributeNode,  "value", text_item->GetShownText( false ) );
                 addAttribute( nonStandardAttributeNode,  "type", "STRING" );
 
-                wxXmlNode* tempFeature = appendNode( tempSetNode, "Features" );
-                addLocationNode( tempFeature, 0.0, 0.0 );
-
-                if( text->Type() == PCB_TEXT_T && static_cast<PCB_TEXT*>( text )->IsKnockout() )
-                    addKnockoutText( tempFeature, static_cast<PCB_TEXT*>( text ) );
-                else
-                    addText( tempFeature, text_item, text->GetFontMetrics() );
-
-                if( text->Type() == PCB_TEXTBOX_T )
+                if( !isWhitespace || isKnockout )
                 {
-                    PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( text );
+                    wxXmlNode* glyphFeature = appendNode( tempSetNode, "Features" );
+                    addLocationNode( glyphFeature, 0.0, 0.0 );
 
-                    if( textbox->IsBorderEnabled() )
-                    {
-                        PCB_SHAPE* border = static_cast<PCB_SHAPE*>( textbox );
-                        wxXmlNode* borderFeature = appendNode( tempSetNode, "Features" );
+                    if( isKnockout )
+                        addKnockoutText( glyphFeature, static_cast<PCB_TEXT*>( text ) );
+                    else
+                        addText( glyphFeature, text_item, text->GetFontMetrics() );
+                }
 
-                        addLocationNode( borderFeature, *border );
-                        addShape( borderFeature, *border );
-                    }
+                if( hasBorder )
+                {
+                    PCB_SHAPE* border = static_cast<PCB_TEXTBOX*>( text );
+                    wxXmlNode* borderFeature = appendNode( tempSetNode, "Features" );
+
+                    addLocationNode( borderFeature, *border );
+                    addShape( borderFeature, *border );
                 }
             };
 
