@@ -4008,25 +4008,27 @@ void PCB_IO_IPC2581::generateLayerSetAuxilliary( wxXmlNode* aStepNode )
             layerNode->AddAttribute( "layerRef", genLayersString( std::get<1>( layers ),
                                                                   std::get<2>( layers ), TO_UTF8( name ) ) );
 
+        wxXmlNode* setNode = appendNode( layerNode, "Set" );
+
         for( BOARD_ITEM* item : vec )
         {
-            if( item->Type() == PCB_VIA_T )
-            {
-                PCB_VIA* via = static_cast<PCB_VIA*>( item );
+            if( item->Type() != PCB_VIA_T )
+                continue;
 
-                PCB_SHAPE shape( nullptr, SHAPE_T::CIRCLE );
+            PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
-                if( hole )
-                    shape.SetEnd( { KiROUND( via->GetDrillValue() / 2.0 ), 0 } );
-                else
-                    shape.SetEnd( { KiROUND( via->GetWidth( std::get<1>( layers ) ) / 2.0 ), 0 } );
+            PCB_SHAPE shape( nullptr, SHAPE_T::CIRCLE );
 
-                wxXmlNode* padNode = appendNode( layerNode, "Pad" );
-                addPadStack( padNode, via );
+            if( hole )
+                shape.SetEnd( { KiROUND( via->GetDrillValue() / 2.0 ), 0 } );
+            else
+                shape.SetEnd( { KiROUND( via->GetWidth( std::get<1>( layers ) ) / 2.0 ), 0 } );
 
-                addLocationNode( padNode, 0.0, 0.0 );
-                addShape( padNode, shape );
-            }
+            wxXmlNode* padNode = appendNode( setNode, "Pad" );
+            addPadStack( padNode, via );
+
+            addLocationNode( padNode, via->GetPosition().x, via->GetPosition().y );
+            addShape( padNode, shape );
         }
     }
 }
