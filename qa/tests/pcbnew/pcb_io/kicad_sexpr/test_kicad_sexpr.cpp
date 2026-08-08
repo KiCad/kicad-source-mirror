@@ -575,6 +575,10 @@ BOOST_AUTO_TEST_CASE( FootprintSave_OmitsNetsOnAllBoardConnectedItems )
     ss << in.rdbuf();
     BOOST_REQUIRE( !in.bad() );
 
+    // Windows refuses to unlink a file that still has an open handle, so release it before the
+    // remove_all() below.
+    in.close();
+
     const std::string contents = ss.str();
     BOOST_REQUIRE( !contents.empty() );
 
