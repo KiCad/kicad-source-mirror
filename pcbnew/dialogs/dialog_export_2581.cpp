@@ -347,6 +347,7 @@ bool DIALOG_EXPORT_2581::GenerateFile( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoa
     {
         IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::IPC2581 ) );
         pi->SetProgressReporter( aProgressReporter );
+        pi->SetReporter( aReporter );
         pi->SaveBoard( tempFile, aBoard, &props );
     }
     catch( const IO_ERROR& ioe )
