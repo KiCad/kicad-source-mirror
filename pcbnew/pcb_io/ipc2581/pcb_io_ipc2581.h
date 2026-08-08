@@ -40,6 +40,7 @@
 
 class BOARD;
 class BOARD_ITEM;
+class BOARD_STACKUP_ITEM;
 class EDA_TEXT;
 class FOOTPRINT;
 class PROGRESS_REPORTER;
@@ -263,6 +264,8 @@ private:
     wxString genString( const wxString& aStr, const char* aPrefix = nullptr ) const;
     wxString genLayerString( PCB_LAYER_ID aLayer, const char* aPrefix ) const;
     wxString genLayersString( PCB_LAYER_ID aTop, PCB_LAYER_ID aBottom, const char* aPrefix ) const;
+
+    wxString stackupLayerName( const BOARD_STACKUP_ITEM* aItem, int aSublayerId, const char* aPrefix ) const;
 
     wxString floatVal( double aVal, int aSigFig = -1 ) const;
 
