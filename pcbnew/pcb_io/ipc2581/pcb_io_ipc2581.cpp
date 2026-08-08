@@ -350,6 +350,29 @@ wxString PCB_IO_IPC2581::genLayerString( PCB_LAYER_ID aLayer, const char* aPrefi
 }
 
 
+wxString PCB_IO_IPC2581::stackupLayerName( const BOARD_STACKUP_ITEM* aItem, int aSublayerId, const char* aPrefix ) const
+{
+    wxString name;
+
+    if( aItem->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+    {
+        name = wxString::Format( "DIELECTRIC_%d", aItem->GetDielectricLayerId() );
+    }
+    else
+    {
+        name = aItem->GetLayerName();
+
+        if( name.IsEmpty() && IsValidLayer( aItem->GetBrdLayerId() ) )
+            name = m_board->GetLayerName( aItem->GetBrdLayerId() );
+    }
+
+    if( aSublayerId > 0 )
+        name += wxString::Format( "_%d", aSublayerId );
+
+    return genString( name, aPrefix );
+}
+
+
 wxString PCB_IO_IPC2581::genLayersString( PCB_LAYER_ID aTop, PCB_LAYER_ID aBottom,
                                           const char* aPrefix ) const
 {
@@ -633,31 +656,12 @@ wxXmlNode* PCB_IO_IPC2581::generateContentStackup( wxXmlNode* aContentNode )
 
     for( BOARD_STACKUP_ITEM* item: stackup.GetList() )
     {
-        wxString layer_name = item->GetLayerName();
-        int sub_layer_count = 1;
-
-        if( layer_name.empty() )
-            layer_name = m_board->GetLayerName( item->GetBrdLayerId() );
-
-        layer_name = genString( layer_name, "LAYER" );
-
-        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+        for( int sub_idx = 0; sub_idx < item->GetSublayersCount(); sub_idx++ )
         {
-            layer_name = genString( wxString::Format( "DIELECTRIC_%d", item->GetDielectricLayerId() ),
-                                    "LAYER" );
-            sub_layer_count = item->GetSublayersCount();
-        }
-        else
-        {
-            m_layer_name_map.emplace( item->GetBrdLayerId(), layer_name );
-        }
+            wxString sub_layer_name = stackupLayerName( item, sub_idx, "LAYER" );
 
-        for( int sub_idx = 0; sub_idx < sub_layer_count; sub_idx++ )
-        {
-            wxString sub_layer_name = layer_name;
-
-            if( sub_idx > 0 )
-                sub_layer_name += wxString::Format( "_%d", sub_idx );
+            if( sub_idx == 0 && item->GetType() != BS_ITEM_TYPE_DIELECTRIC )
+                m_layer_name_map.emplace( item->GetBrdLayerId(), sub_layer_name );
 
             wxXmlNode* node = appendNode( aContentNode, "LayerRef" );
             addAttribute( node,  "name", sub_layer_name );
@@ -1887,23 +1891,7 @@ void PCB_IO_IPC2581::generateCadSpecs( wxXmlNode* aCadLayerNode )
 
         for( int sublayer_id = 0; sublayer_id < stackup_item->GetSublayersCount(); sublayer_id++ )
         {
-            wxString ly_name = stackup_item->GetLayerName();
-
-            if( ly_name.IsEmpty() )
-            {
-                if( IsValidLayer( stackup_item->GetBrdLayerId() ) )
-                    ly_name = m_board->GetLayerName( stackup_item->GetBrdLayerId() );
-
-                if( ly_name.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-                {
-                    ly_name = wxString::Format( "DIELECTRIC_%d", stackup_item->GetDielectricLayerId() );
-
-                    if( sublayer_id > 0 )
-                        ly_name += wxString::Format( "_%d", sublayer_id );
-                }
-            }
-
-            ly_name = genString( ly_name, "SPEC_LAYER" );
+            wxString ly_name = stackupLayerName( stackup_item, sublayer_id, "SPEC_LAYER" );
 
             wxXmlNode* specNode = appendNode( aCadLayerNode, "Spec" );
             addAttribute( specNode,  "name", ly_name );
@@ -2155,24 +2143,8 @@ void PCB_IO_IPC2581::generateStackup( wxXmlNode* aCadLayerNode )
             }
 
             wxXmlNode* stackupLayer = appendNode( stackupGroup, "StackupLayer" );
-            wxString ly_name = stackup_item->GetLayerName();
-
-            if( ly_name.IsEmpty() )
-            {
-                if( IsValidLayer( stackup_item->GetBrdLayerId() ) )
-                    ly_name = m_board->GetLayerName( stackup_item->GetBrdLayerId() );
-
-                if( ly_name.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-                {
-                    ly_name = wxString::Format( "DIELECTRIC_%d", stackup_item->GetDielectricLayerId() );
-
-                    if( sublayer_id > 0 )
-                        ly_name += wxString::Format( "_%d", sublayer_id );
-                }
-            }
-
-            wxString spec_name = genString( ly_name, "SPEC_LAYER" );
-            ly_name = genString( ly_name, "LAYER" );
+            wxString   spec_name = stackupLayerName( stackup_item, sublayer_id, "SPEC_LAYER" );
+            wxString   ly_name = stackupLayerName( stackup_item, sublayer_id, "LAYER" );
 
             addAttribute( stackupLayer,  "layerOrGroupRef", ly_name );
             addAttribute( stackupLayer,  "thickness", floatVal( m_scale * stackup_item->GetThickness() ) );
@@ -2221,24 +2193,7 @@ void PCB_IO_IPC2581::generateCadLayers( wxXmlNode* aCadLayerNode )
         for( int sublayer_id = 0; sublayer_id < stackup_item->GetSublayersCount(); sublayer_id++ )
         {
             wxXmlNode* cadLayerNode = appendNode( aCadLayerNode, "Layer" );
-            wxString ly_name = stackup_item->GetLayerName();
-
-            if( ly_name.IsEmpty() )
-            {
-
-                if( IsValidLayer( stackup_item->GetBrdLayerId() ) )
-                    ly_name = m_board->GetLayerName( stackup_item->GetBrdLayerId() );
-
-                if( ly_name.IsEmpty() && stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-                {
-                    ly_name = wxString::Format( "DIELECTRIC_%d", stackup_item->GetDielectricLayerId() );
-
-                    if( sublayer_id > 0 )
-                        ly_name += wxString::Format( "_%d", sublayer_id );
-                }
-            }
-
-            ly_name = genString( ly_name, "LAYER" );
+            wxString   ly_name = stackupLayerName( stackup_item, sublayer_id, "LAYER" );
 
             addAttribute( cadLayerNode,  "name", ly_name );
 
