@@ -1173,8 +1173,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
             addXY( arc2_node, center, "centerX", "centerY" );
             addAttribute( arc2_node, "clockwise", "true" );
 
-            if( width > 0 )
-                addLineDesc( polyline_node, width, dash, true );
+            addLineDesc( polyline_node, width, dash, true );
 
             break;
         }
@@ -1234,8 +1233,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
             wxXmlNode* close_node = appendNode( polyline_node, "PolyStepSegment" );
             addXY( close_node, corners[0] );
 
-            if( stroke_width > 0 )
-                addLineDesc( polyline_node, stroke_width, dash, true );
+            addLineDesc( polyline_node, stroke_width, dash, true );
 
             break;
         }
@@ -1315,8 +1313,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
                     addXY( close_node, pts[0] );
                 }
 
-                if( stroke_width > 0 )
-                    addLineDesc( polyline_node, stroke_width, dash, true );
+                addLineDesc( polyline_node, stroke_width, dash, true );
             }
 
             break;
@@ -1360,11 +1357,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
         //N.B. because our coordinate system is flipped, we need to flip the arc direction
         addAttribute( arc_node,  "clockwise", !aShape.IsClockwiseArc() ? "true" : "false" );
 
-        if( aShape.GetStroke().GetWidth() > 0 )
-        {
-            addLineDesc( arc_node, aShape.GetStroke().GetWidth(),
-                         aShape.GetStroke().GetLineStyle(), true );
-        }
+        addLineDesc( arc_node, aShape.GetStroke().GetWidth(), aShape.GetStroke().GetLineStyle(), true );
 
         break;
     }
@@ -1387,11 +1380,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
             addXY( seg_node, points[i] );
         }
 
-        if( aShape.GetStroke().GetWidth() > 0 )
-        {
-            addLineDesc( polyline_node, aShape.GetStroke().GetWidth(),
-                         aShape.GetStroke().GetLineStyle(), true );
-        }
+        addLineDesc( polyline_node, aShape.GetStroke().GetWidth(), aShape.GetStroke().GetLineStyle(), true );
 
         break;
     }
@@ -1402,11 +1391,7 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
         addXY( line_node, aShape.GetStart(), "startX", "startY" );
         addXY( line_node, aShape.GetEnd(), "endX", "endY" );
 
-        if( aShape.GetStroke().GetWidth() > 0 )
-        {
-            addLineDesc( line_node, aShape.GetStroke().GetWidth(),
-                         aShape.GetStroke().GetLineStyle(), true );
-        }
+        addLineDesc( line_node, aShape.GetStroke().GetWidth(), aShape.GetStroke().GetLineStyle(), true );
 
         break;
     }
