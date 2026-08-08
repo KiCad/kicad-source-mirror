@@ -528,10 +528,10 @@ BOOST_AUTO_TEST_CASE( TableFlipTiltsTheWayEverythingElseDoes )
                 EDA_ANGLE  tilt( degrees, DEGREES_T );
                 EDA_ANGLE  reflected = dir == FLIP_DIRECTION::LEFT_RIGHT ? ANGLE_180 - tilt : -tilt;
 
-                std::vector<VECTOR2I> before;
+                std::vector<std::vector<VECTOR2I>> before;
 
                 for( PCB_TABLECELL* cell : table->GetCells() )
-                    before.push_back( cell->GetStart() );
+                    before.push_back( cell->GetCorners() );
 
                 table->Flip( point, dir );
 
@@ -544,9 +544,16 @@ BOOST_AUTO_TEST_CASE( TableFlipTiltsTheWayEverythingElseDoes )
 
                 for( size_t ii = 0; ii < before.size(); ++ii )
                 {
-                    BOOST_CHECK_MESSAGE( ( table->GetCells()[ii]->GetStart() - before[ii] ).EuclideanNorm()
-                                                 <= pcbIUScale.mmToIU( 0.001 ),
-                                         "cell " << ii << " did not come back" );
+                    std::vector<VECTOR2I> corners = table->GetCells()[ii]->GetCorners();
+
+                    BOOST_REQUIRE_EQUAL( corners.size(), before[ii].size() );
+
+                    for( size_t jj = 0; jj < corners.size(); ++jj )
+                    {
+                        BOOST_CHECK_MESSAGE( ( corners[jj] - before[ii][jj] ).EuclideanNorm()
+                                                     <= pcbIUScale.mmToIU( 0.001 ),
+                                             "cell " << ii << " corner " << jj << " did not come back" );
+                    }
                 }
             }
         }

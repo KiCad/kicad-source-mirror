@@ -3082,7 +3082,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncVariantSelection( const wxString& aVariantN
 
             if( !commit.Empty() )
             {
-                commit.Push( wxS( "Symbol Fields Table Edit" ) );  // Push clears the commit buffer.
+                commit.Push( wxS( "Symbol Fields Table Edit" ) ); // Push clears the commit buffer.
                 m_parent->OnModify();
             }
         }
