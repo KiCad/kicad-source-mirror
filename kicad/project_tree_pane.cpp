@@ -1512,8 +1512,6 @@ void PROJECT_TREE_PANE::FileWatcherReset()
     wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
 
 #if defined( _WIN32 )
-    KISTATUSBAR* statusBar = static_cast<KISTATUSBAR*>( m_Parent->GetStatusBar() );
-
     if( KIPLATFORM::ENV::IsNetworkPath( prj_dir ) )
     {
         // Due to a combination of a bug in SAMBA sending bad change event IDs and wxWidgets
@@ -1521,13 +1519,13 @@ void PROJECT_TREE_PANE::FileWatcherReset()
         // avoid spawning a filewatcher. Unfortunately this punishes corporate environments with
         // Windows Server shares :/
         m_Parent->m_FileWatcherInfo = _( "Network path: not monitoring folder changes" );
-        statusBar->SetEllipsedTextField( m_Parent->m_FileWatcherInfo, 1 );
+        m_Parent->SetStatusText( m_Parent->m_FileWatcherInfo, 1 );
         return;
     }
     else
     {
         m_Parent->m_FileWatcherInfo = _( "Local path: monitoring folder changes" );
-        statusBar->SetEllipsedTextField( m_Parent->m_FileWatcherInfo, 1 );
+        m_Parent->SetStatusText( m_Parent->m_FileWatcherInfo, 1 );
     }
 #endif
 
@@ -3284,9 +3282,9 @@ void PROJECT_TREE_PANE::onGitStatusTimer( wxTimerEvent& aEvent )
 
 void PROJECT_TREE_PANE::showGitFeedback( const wxString& aText )
 {
-    if( KISTATUSBAR* sb = dynamic_cast<KISTATUSBAR*>( m_Parent->GetStatusBar() ) )
+    if( m_Parent )
     {
-        sb->SetEllipsedTextField( aText, 0 );
+        m_Parent->SetStatusText( aText, 0 );
         m_gitFeedbackTimer.Start( 8000, wxTIMER_ONE_SHOT );
     }
 }

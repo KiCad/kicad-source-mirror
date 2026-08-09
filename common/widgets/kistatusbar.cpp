@@ -72,7 +72,7 @@ private:
 
 
 KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id, STYLE_FLAGS aFlags ) :
-        wxStatusBar( parent, id ),
+        wxStatusBar( parent, id, wxSTB_SIZEGRIP | wxSTB_ELLIPSIZE_MIDDLE | wxSTB_SHOW_TIPS | wxFULL_REPAINT_ON_RESIZE ),
         m_backgroundStopButton( nullptr ),
         m_notificationsButton( nullptr ),
         m_warningButton( nullptr ),
@@ -341,11 +341,14 @@ void KISTATUSBAR::SetBackgroundStatusText( const wxString& aTxt )
     // text, and restore it when the background text is cleared.
     if( m_normalFieldsCount > 1 )
     {
-        int adjacentField = m_normalFieldsCount - 1;
+        int      adjacentField = m_normalFieldsCount - 1;
+        wxString currentText = GetStatusText( adjacentField );
 
         if( !aTxt.empty() )
         {
-            m_savedStatusText = GetStatusText( adjacentField );
+            if( !currentText.empty() )
+                m_savedStatusText = currentText;
+
             SetStatusText( wxEmptyString, adjacentField );
         }
         else if( !m_savedStatusText.empty() )
@@ -584,29 +587,6 @@ void KISTATUSBAR::onLoadWarningsIconClick( wxCommandEvent& aEvent )
 
     dlg.m_Reporter->Flush();
     dlg.ShowModal();
-}
-
-void KISTATUSBAR::SetEllipsedTextField( const wxString& aText, int aFieldId )
-{
-    wxRect       fieldRect;
-    int          width = -1;
-    wxString     etext = aText;
-
-    // Only GetFieldRect() returns the current size for variable size fields
-    // Other methods return -1 for the width of these fields.
-    if( GetFieldRect( aFieldId, fieldRect ) )
-        width = fieldRect.GetWidth();
-
-    if( width > 20 )
-    {
-        wxClientDC dc( this );
-
-        // Gives a margin to the text to be sure it is not clamped at its end
-        int margin = KIUI::GetTextSize( wxT( "XX" ), this ).x;
-        etext = wxControl::Ellipsize( etext, dc, wxELLIPSIZE_MIDDLE, width - margin );
-    }
-
-    SetStatusText( etext, aFieldId );
 }
 
 
