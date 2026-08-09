@@ -105,29 +105,6 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id, ST
     if( showNotification )
         extraFields++;
 
-    SetFieldsCount( aNumberFields + extraFields );
-
-    m_fieldWidths.assign( aNumberFields + extraFields, -1 );
-
-    // Make the first pane wider.
-    if( aNumberFields )
-        m_fieldWidths[0] = -2;
-
-    int padding = KIUI::GetTextSize( wxT( "M" ), this ).x;
-
-#ifdef __WXOSX__
-    // offset from the right edge
-    m_fieldWidths[aNumberFields + extraFields - 1] = padding;
-#endif
-
-    int* styles = new int[aNumberFields + extraFields];
-
-    for( int i = 0; i < aNumberFields + extraFields; i++ )
-        styles[i] = wxSB_FLAT;
-
-    SetStatusStyles( aNumberFields + extraFields, styles );
-    delete[] styles;
-
     m_backgroundTxt = new wxStaticText( this, wxID_ANY, wxT( "" ), wxDefaultPosition,
                                         wxDefaultSize, wxALIGN_RIGHT | wxST_NO_AUTORESIZE );
 
@@ -167,42 +144,18 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id, ST
         m_warningButton->Bind( wxEVT_BUTTON, &KISTATUSBAR::onLoadWarningsIconClick, this );
     }
 
-    if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_LABEL ) )
-        m_fieldWidths[m_normalFieldsCount + *idx] = -1;
+    m_fieldWidths.assign( aNumberFields + extraFields, -1 );
 
-    if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_GAUGE ) )
-    {
-        if( m_backgroundProgressBar )
-            m_fieldWidths[m_normalFieldsCount + *idx] = m_backgroundProgressBar->GetSize().x + padding;
-        else
-            m_fieldWidths[m_normalFieldsCount + *idx] = 0;
-    }
+#ifdef __WXOSX__
+    // offset from the right edge
+    int padding = KIUI::GetTextSize( wxT( "M" ), this ).x;
+    m_fieldWidths[aNumberFields + extraFields - 1] = padding;
+#endif
 
-    if( std::optional<int> idx = fieldIndex( FIELD::BGJOB_CANCEL ) )
-    {
-        if( m_backgroundStopButton )
-            m_fieldWidths[m_normalFieldsCount + *idx] = m_backgroundStopButton->GetSize().x + padding;
-        else
-            m_fieldWidths[m_normalFieldsCount + *idx] = 0;
-    }
+    SetFieldsCount( m_fieldWidths.size(), m_fieldWidths.data() );
 
-    if( std::optional<int> idx = fieldIndex( FIELD::WARNING ) )
-    {
-        if( m_warningButton )
-            m_fieldWidths[m_normalFieldsCount + *idx] = m_warningButton->GetSize().x + padding;
-        else
-            m_fieldWidths[m_normalFieldsCount + *idx] = 0;
-    }
-
-    if( std::optional<int> idx = fieldIndex( FIELD::NOTIFICATION ) )
-    {
-        if( m_notificationsButton )
-            m_fieldWidths[m_normalFieldsCount + *idx] = m_notificationsButton->GetSize().x + padding;
-        else
-            m_fieldWidths[m_normalFieldsCount + *idx] = 0;
-    }
-
-    SetStatusWidths( aNumberFields + extraFields, m_fieldWidths.data() );
+    std::vector<int> styles( aNumberFields + extraFields, wxSB_FLAT );
+    SetStatusStyles( styles.size(), styles.data() );
 
     Bind( wxEVT_SIZE, &KISTATUSBAR::onSize, this );
     m_backgroundProgressBar->Bind( wxEVT_LEFT_DOWN, &KISTATUSBAR::onBackgroundProgressClick, this );
