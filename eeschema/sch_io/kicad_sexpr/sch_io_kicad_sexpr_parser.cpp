@@ -3524,6 +3524,25 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             else
                 existing = symbol->GetField( field->GetName() );
 
+            if( existing && !field->IsMandatory() )
+            {
+                // If there are other fields with the same name, for whatever reason,
+                // try renameing instead of silently discarding them right away.
+                wxString base_name = field->GetName();
+
+                // Arbitrary number of attempts to find a new name (oldname_x)
+                for( int ii = 1; ii < 10 && existing; ii++ )
+                {
+                    wxString newname = base_name;
+                    newname << '_' << ii;
+
+                    existing = symbol->GetField( newname );
+
+                    if( !existing )
+                        field->SetName( newname );
+                }
+            }
+
             if( existing )
                 *existing = *field;
             else
