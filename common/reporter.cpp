@@ -370,8 +370,11 @@ REPORTER& STATUSBAR_REPORTER::Report( const wxString& aText, SEVERITY aSeverity 
 {
     REPORTER::Report( aText, aSeverity );
 
-    // The message will be ellipsized automatically
-    m_statusBar->SetStatusText( aText, m_position );
+    if( m_statusBar )
+    {
+        // The message will be ellipsized automatically
+        m_statusBar->SetStatusText( aText, m_position );
+    }
 
     return *this;
 }
