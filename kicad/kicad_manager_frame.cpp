@@ -624,13 +624,6 @@ void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
     if( m_auimgr.GetManagedWindow() )
         m_auimgr.Update();
 
-    PrintPrjInfo();
-
-#if defined( _WIN32 )
-    KISTATUSBAR* statusBar = static_cast<KISTATUSBAR*>( GetStatusBar() );
-    statusBar->SetEllipsedTextField( m_FileWatcherInfo, 1 );
-#endif
-
     event.Skip();
 }
 
@@ -1353,11 +1346,8 @@ void KICAD_MANAGER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 void KICAD_MANAGER_FRAME::PrintPrjInfo()
 {
-    // wxStatusBar's wxELLIPSIZE_MIDDLE flag doesn't work (at least on Mac).
-
-    wxString     status = wxString::Format( _( "Project: %s" ), Prj().GetProjectFullName() );
-    KISTATUSBAR* statusBar = static_cast<KISTATUSBAR*>( GetStatusBar() );
-    statusBar->SetEllipsedTextField( status, 0 );
+    wxString status = wxString::Format( _( "Project: %s" ), Prj().GetProjectFullName() );
+    SetStatusText( status, 0 );
 }
 
 
