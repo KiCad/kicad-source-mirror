@@ -182,6 +182,7 @@ set( QA_COMMON_SRCS
     test_kigit_common.cpp
     test_scratch_doc.cpp
     test_kigit_orphan_registry.cpp
+    test_mdw_baseline_design.cpp
     test_mdw_claim_text.cpp
     test_mdw_event_notice.cpp
     test_mdw_file_lock.cpp

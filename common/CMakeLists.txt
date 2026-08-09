@@ -388,6 +388,7 @@ set( KICOMMON_SRCS
     api/python_manager.cpp
     api/serializable.cpp
     mdw/client/mdw_baseline.cpp
+    mdw/client/mdw_baseline_design.cpp
     mdw/client/mdw_bom.cpp
     mdw/client/mdw_client.cpp
     mdw/client/mdw_compare_doc.cpp
