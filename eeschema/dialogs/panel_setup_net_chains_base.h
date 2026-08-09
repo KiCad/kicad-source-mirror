@@ -52,7 +52,9 @@ class PANEL_SETUP_NET_CHAINS_BASE : public wxPanel
 		wxListBox* m_membersListBox;
 		STD_BITMAP_BUTTON* m_deleteChainButton;
 		wxPanel* m_classesTab;
-		wxStaticText* m_classesHeader;
+		wxStaticText* m_hintBeforeFunctionCall;
+		wxStaticText* m_functionCall;
+		wxStaticText* m_hintAfterFunctionCall;
 		WX_GRID* m_classesGrid;
 		STD_BITMAP_BUTTON* m_addClassButton;
 		STD_BITMAP_BUTTON* m_renameClassButton;

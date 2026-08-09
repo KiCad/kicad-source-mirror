@@ -118,9 +118,23 @@ PANEL_SETUP_NET_CHAINS_BASE::PANEL_SETUP_NET_CHAINS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bClassesTab;
 	bClassesTab = new wxBoxSizer( wxVERTICAL );
 
-	m_classesHeader = new wxStaticText( m_classesTab, wxID_ANY, _("Group net chains under a class label so DRC rules can target the whole group via inNetChainClass('name')."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_classesHeader->Wrap( 600 );
-	bClassesTab->Add( m_classesHeader, 0, wxLEFT|wxTOP, 8 );
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_hintBeforeFunctionCall = new wxStaticText( m_classesTab, wxID_ANY, _("Group net chains under a class label so DRC rules can target the whole group via "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hintBeforeFunctionCall->Wrap( -1 );
+	bSizer8->Add( m_hintBeforeFunctionCall, 0, wxALIGN_BOTTOM|wxBOTTOM|wxLEFT, 1 );
+
+	m_functionCall = new wxStaticText( m_classesTab, wxID_ANY, _("inNetChainClass('name')"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_functionCall->Wrap( -1 );
+	bSizer8->Add( m_functionCall, 0, wxALIGN_BOTTOM, 5 );
+
+	m_hintAfterFunctionCall = new wxStaticText( m_classesTab, wxID_ANY, _("."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hintAfterFunctionCall->Wrap( -1 );
+	bSizer8->Add( m_hintAfterFunctionCall, 0, wxALIGN_BOTTOM|wxBOTTOM, 1 );
+
+
+	bClassesTab->Add( bSizer8, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	bClassesTab->Add( 0, 3, 0, wxEXPAND, 5 );
@@ -169,6 +183,9 @@ PANEL_SETUP_NET_CHAINS_BASE::PANEL_SETUP_NET_CHAINS_BASE( wxWindow* parent, wxWi
 	m_renameClassButton->SetToolTip( _("Rename the selected class (updates every chain that uses it)") );
 
 	bClassesButtons->Add( m_renameClassButton, 0, wxBOTTOM|wxRIGHT, 5 );
+
+
+	bClassesButtons->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_deleteClassButton = new STD_BITMAP_BUTTON( m_classesTab, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_deleteClassButton->SetToolTip( _("Delete the selected class (chains revert to no class)") );

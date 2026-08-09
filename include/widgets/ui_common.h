@@ -64,7 +64,7 @@ KICOMMON_API int GetStdMargin();
  */
 KICOMMON_API wxSize GetTextSize( const wxString& aSingleLine, wxWindow* aWindow );
 
-KICOMMON_API wxFont GetMonospacedUIFont();
+KICOMMON_API wxFont GetMonospacedUIFont( int aRelativeSize = 0 );
 
 KICOMMON_API wxFont GetControlFont( wxWindow* aWindow );
 KICOMMON_API wxFont GetInfoFont( wxWindow* aWindow );

@@ -90,9 +90,11 @@ wxSize KIUI::GetTextSize( const wxString& aSingleLine, wxWindow* aWindow )
 }
 
 
-wxFont KIUI::GetMonospacedUIFont()
+wxFont KIUI::GetMonospacedUIFont( int aRelativeSize )
 {
     static int guiFontSize = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ).GetPointSize();
+
+    guiFontSize += aRelativeSize;
 
     wxFont font( guiFontSize, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
 
