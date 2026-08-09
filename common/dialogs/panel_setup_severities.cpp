@@ -25,6 +25,7 @@
 #include <wx/scrolwin.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/statline.h>
 #include "confirm.h"
 
 
@@ -50,9 +51,8 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
     wxBoxSizer* scrollWinSizer = new wxBoxSizer( wxVERTICAL );
     scrollWin->SetSizer( scrollWinSizer );
 
-    wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 5 );
+    wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 0 );
     gridSizer->SetFlexibleDirection( wxBOTH );
-    gridSizer->SetVGap( 5 );
 
     for( const std::reference_wrapper<RC_ITEM>& item : m_items )
     {
@@ -65,9 +65,8 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
         if( errorCode == 0 )
         {
             wxStaticText* heading = new wxStaticText( scrollWin, wxID_ANY, msg );
-            wxFont        headingFont = heading->GetFont();
-
-            heading->SetFont( headingFont.Bold() );
+            wxStaticLine* underline1 = new wxStaticLine( scrollWin, wxHORIZONTAL );
+            wxStaticLine* underline2 = new wxStaticLine( scrollWin, wxHORIZONTAL );
 
             if( !firstLine )
             {
@@ -75,13 +74,16 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
                 gridSizer->AddSpacer( 5 );  // col 2
             }
 
-            gridSizer->Add( heading, 0, wxALIGN_BOTTOM | wxALL | wxEXPAND, 4  );
+            gridSizer->Add( heading, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 13  );
             gridSizer->AddSpacer( 0 );  // col 2
+
+            gridSizer->Add( underline1, 0, wxTOP | wxBOTTOM | wxEXPAND, 2 );
+            gridSizer->Add( underline2, 0, wxTOP | wxBOTTOM | wxEXPAND, 2 );     // col 2
         }
         else if( !msg.IsEmpty() )   // items with no message are for internal use only
         {
             wxStaticText* errorLabel = new wxStaticText( scrollWin, wxID_ANY, msg + wxT( ":" ) );
-            gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 15  );
+            gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 7  );
 
             // OSX can't handle more than 100 radio buttons in a single window (yes, seriously),
             // so we have to create a window for each set
@@ -100,7 +102,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
 
             radioPanel->SetSizer( radioSizer );
             radioPanel->Layout();
-            gridSizer->Add( radioPanel, 0, wxALIGN_CENTER_VERTICAL  );
+            gridSizer->Add( radioPanel, 0, wxTOP, 5  );
         }
 
         firstLine = false;
@@ -109,12 +111,15 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
 
     if( m_pinMapSpecialCase )
     {
+        gridSizer->AddSpacer( 5 );  // col 1
+        gridSizer->AddSpacer( 5 );  // col 2
+
         wxString pinMapSeverities[] = { _( "From Pin Conflicts Map" ), wxT( "" ), _( "Ignore" ) };
         int      errorCode          = m_pinMapSpecialCase->GetErrorCode();
         wxString msg                = m_pinMapSpecialCase->GetErrorText( true );
 
         wxStaticText* errorLabel = new wxStaticText( scrollWin, wxID_ANY, msg + wxT( ":" ) );
-        gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 15  );
+        gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 7  );
 
         wxPanel*    radioPanel = new wxPanel( scrollWin );
         wxBoxSizer* radioSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -259,12 +264,9 @@ bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
 
         SEVERITY severity = RPT_SEVERITY_UNDEFINED;
 
-        if( m_buttonMap[ errorCode ][0]->GetValue() )
-            severity = RPT_SEVERITY_ERROR;
-        else if( m_buttonMap[ errorCode ][1]->GetValue() )
-            severity = RPT_SEVERITY_WARNING;
-        else if( m_buttonMap[ errorCode ][2]->GetValue() )
-            severity = RPT_SEVERITY_IGNORE;
+        if( m_buttonMap[ errorCode ][0]->GetValue() )      severity = RPT_SEVERITY_ERROR;
+        else if( m_buttonMap[ errorCode ][1]->GetValue() ) severity = RPT_SEVERITY_WARNING;
+        else if( m_buttonMap[ errorCode ][2]->GetValue() ) severity = RPT_SEVERITY_IGNORE;
 
         m_severities[ errorCode ] = severity;
     }
@@ -274,10 +276,8 @@ bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
         int      pinMapCode = m_pinMapSpecialCase->GetErrorCode();
         SEVERITY severity   = RPT_SEVERITY_UNDEFINED;
 
-        if( m_buttonMap[ pinMapCode ][0]->GetValue() )
-            severity = RPT_SEVERITY_ERROR;
-        else if( m_buttonMap[ pinMapCode ][2]->GetValue() )
-            severity = RPT_SEVERITY_IGNORE;
+        if( m_buttonMap[ pinMapCode ][0]->GetValue() )      severity = RPT_SEVERITY_ERROR;
+        else if( m_buttonMap[ pinMapCode ][2]->GetValue() ) severity = RPT_SEVERITY_IGNORE;
 
         m_severities[ pinMapCode ] = severity;
     }
