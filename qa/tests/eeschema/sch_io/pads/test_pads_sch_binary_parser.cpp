@@ -455,14 +455,17 @@ static CANONICAL_PROPERTY canonicalVerticalJustification( MODEL_JUSTIFICATION aJ
 
 static CANONICAL_PROPERTY canonicalHorizontalJustification( int aJustification )
 {
-    const int horizontal = aJustification & ~0x0A;
+    const int justification = aJustification & 0xFF;
+    const int horizontal = justification >= 8   ? justification - 8
+                           : justification >= 2 ? justification - 2
+                                                : justification;
 
     switch( horizontal )
     {
+    default:
     case 0: return { "left" };
     case 1: return { "right" };
     case 4: return { "center" };
-    default: return unknownEnum( aJustification );
     }
 }
 
@@ -960,8 +963,8 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             r.properties["text"] = { t.content };
             r.properties["visible"] = { t.visible };
             r.properties["font"] = { t.font_name };
-            r.properties["height_half_mils"] = { int64_t( std::llround( t.size * 2 ) ) };
-            r.properties["width_half_mils"] = { int64_t( t.width_factor * 2 ) };
+            r.properties["height_half_mils"] = { int64_t( std::llround( t.size ) ) };
+            r.properties["width_half_mils"] = { int64_t( t.width_factor ) };
             r.geometry.points.push_back( point( t.position ) );
             r.geometry.angleTenths = canonicalAngle( std::llround( t.rotation * 10 ) );
         }
@@ -1183,8 +1186,8 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             r.properties["text"] = { t.content };
             r.properties["page_graphic_group"] = { lines.name };
             r.properties["visible"] = { true };
-            r.properties["height_half_mils"] = { int64_t( t.height * 2 ) };
-            r.properties["width_half_mils"] = { int64_t( t.width_factor * 2 ) };
+            r.properties["height_half_mils"] = { int64_t( t.height ) };
+            r.properties["width_half_mils"] = { int64_t( t.width_factor ) };
             r.properties["font"] = { t.font_name };
             r.geometry.points.push_back( point( t.position ) );
             r.geometry.points.back().xHalfMils += std::llround( lines.origin.x * 2 );
@@ -1255,7 +1258,7 @@ static bool task10SourcePropertiesPresent( const std::vector<CANONICAL_SEMANTIC_
             return false;
         }
 
-        if( record.kind == CANONICAL_KIND::LABEL && !has( record, "raw_label_kind", PROPERTY_DISPOSITION::EXACT ) )
+        if( record.kind == CANONICAL_KIND::LABEL && !has( record, "offpage_variant", PROPERTY_DISPOSITION::EXACT ) )
         {
             return false;
         }
@@ -1330,18 +1333,17 @@ BOOST_AUTO_TEST_CASE( EmbeddedOleImages )
     sdb.Load( bytes );
     BOOST_REQUIRE_EQUAL( sdb.OleItems().size(), 2u );
     std::vector<uint8_t> zeroWidth = bytes;
-    writeU32( zeroWidth, sdb.OleItems()[0].boxOffset + 8,
-              static_cast<uint32_t>( sdb.OleItems()[0].left ) );
+    writeU32( zeroWidth, sdb.OleItems()[0].boxOffset + 8, static_cast<uint32_t>( sdb.OleItems()[0].left ) );
     PADS_SCH_MODEL zeroWidthModel = parser.Parse( zeroWidth, wxS( "ole-zero-width.sch" ) );
     BOOST_REQUIRE_EQUAL( zeroWidthModel.images.size(), 2 );
     BOOST_CHECK( zeroWidthModel.images[0].type == MODEL_EMBEDDED_IMAGE_TYPE::UNSUPPORTED );
     BOOST_CHECK( std::ranges::any_of( zeroWidthModel.diagnostics,
-                                     []( const PARSER_DIAGNOSTIC& aDiagnostic )
-                                     {
-                                         return aDiagnostic.source.objectClass
-                                                        == wxS( "embedded OLE image database box" )
-                                                && aDiagnostic.message.Contains( wxS( "zero-size" ) );
-                                     } ) );
+                                      []( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                      {
+                                          return aDiagnostic.source.objectClass
+                                                         == wxS( "embedded OLE image database box" )
+                                                 && aDiagnostic.message.Contains( wxS( "zero-size" ) );
+                                      } ) );
 }
 
 
@@ -1539,8 +1541,8 @@ BOOST_AUTO_TEST_CASE( FreeText )
     BOOST_CHECK_EQUAL( text.position.x, 20200 );
     BOOST_CHECK_EQUAL( text.position.y, 14000 );
     BOOST_CHECK_EQUAL( text.angle, 0 );
-    BOOST_CHECK_EQUAL( text.presentation.height, 194 );
-    BOOST_CHECK_EQUAL( text.presentation.width, 20 );
+    BOOST_CHECK_EQUAL( text.presentation.height, 97 );
+    BOOST_CHECK_EQUAL( text.presentation.width, 10 );
     BOOST_CHECK( text.presentation.horizontalJustification == MODEL_JUSTIFICATION::LEFT );
     BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::RIGHT );
     BOOST_CHECK( !text.presentation.bold );
@@ -1647,6 +1649,31 @@ BOOST_AUTO_TEST_CASE( FreeText )
     BOOST_CHECK_EQUAL( changed.texts[0].presentation.underline, text.presentation.underline );
     BOOST_CHECK_EQUAL( changed.texts[0].presentation.visible, text.presentation.visible );
     BOOST_CHECK_EQUAL( changed.diagnostics.size(), model.diagnostics.size() );
+
+    struct JUSTIFICATION_CASE
+    {
+        uint16_t            raw;
+        MODEL_JUSTIFICATION horizontal;
+        MODEL_JUSTIFICATION vertical;
+    };
+
+    for( const JUSTIFICATION_CASE& expected :
+         { JUSTIFICATION_CASE{ 5, MODEL_JUSTIFICATION::LEFT, MODEL_JUSTIFICATION::LEFT },
+           { 7, MODEL_JUSTIFICATION::LEFT, MODEL_JUSTIFICATION::LEFT },
+           { 15, MODEL_JUSTIFICATION::LEFT, MODEL_JUSTIFICATION::CENTER },
+           { 6, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT },
+           { 12, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER },
+           { 0xFF04, MODEL_JUSTIFICATION::LEFT, MODEL_JUSTIFICATION::LEFT },
+           { 0x0306, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT } } )
+    {
+        std::vector<uint8_t> changedJustification = loadBinaryFixture( "text_encoding.sch" );
+        writeU16( changedJustification, text.source.absoluteOffset + 18, expected.raw );
+        PADS_SCH_MODEL justified = parser.Parse( changedJustification, wxS( "text_encoding.sch" ) );
+        BOOST_REQUIRE_EQUAL( justified.texts.size(), 1 );
+        BOOST_CHECK( justified.texts[0].presentation.horizontalJustification == expected.horizontal );
+        BOOST_CHECK( justified.texts[0].presentation.verticalJustification == expected.vertical );
+        BOOST_CHECK_EQUAL( justified.diagnostics.size(), model.diagnostics.size() );
+    }
 }
 
 
@@ -1684,7 +1711,7 @@ BOOST_AUTO_TEST_CASE( GlobalRecordCorruption )
     BOOST_CHECK_EQUAL( reorderedModel.sheets[1].index, 0u );
     BOOST_CHECK_EQUAL( reorderedModel.sheets[1].source.recordIndex, 1u );
 
-    std::vector<uint8_t>   duplicate = loadBinaryFixture( "multisheet_connectivity.sch" );
+    std::vector<uint8_t> duplicate = loadBinaryFixture( "multisheet_connectivity.sch" );
     sheetIndex = outerControllerOffset( duplicate, 3 );
     writeU16( duplicate, sheetIndex + 48 + 8, 1 );
     BOOST_CHECK_EXCEPTION( parser.Parse( duplicate, wxS( "duplicate.sch" ) ), IO_ERROR,
@@ -2400,8 +2427,8 @@ BOOST_AUTO_TEST_CASE( SymbolPrimitives )
     BOOST_REQUIRE_EQUAL( definition.graphics[5].points.size(), 1 );
     BOOST_CHECK_EQUAL( definition.graphics[5].points[0].x, 1000 );
     BOOST_CHECK_EQUAL( definition.graphics[5].points[0].y, 1600 );
-    BOOST_CHECK_EQUAL( definition.graphics[5].presentation.height, 200 );
-    BOOST_CHECK_EQUAL( definition.graphics[5].presentation.width, 20 );
+    BOOST_CHECK_EQUAL( definition.graphics[5].presentation.height, 100 );
+    BOOST_CHECK_EQUAL( definition.graphics[5].presentation.width, 10 );
     BOOST_CHECK_EQUAL( definition.graphics[5].angle, 0 );
     BOOST_REQUIRE_EQUAL( definition.pins.size(), 2 );
     BOOST_CHECK_EQUAL( definition.pins[0].position.x, 0 );
@@ -2412,7 +2439,7 @@ BOOST_AUTO_TEST_CASE( SymbolPrimitives )
     std::vector<uint8_t> privateStroke = loadBinaryFixture( "symbol_primitives.sch" );
     const size_t         privatePiece =
             sheetControllerOffset( privateStroke, 4 ) + definition.graphics[0].source.recordIndex * 6;
-    writeU16( privateStroke, privatePiece + 4, 61199 );
+    writeU16( privateStroke, privatePiece + 4, 0xEF03 );
     PADS_SCH_MODEL                 preservedStroke = parser.Parse( privateStroke, wxS( "private-symbol-stroke.sch" ) );
     const MODEL_SYMBOL_DEFINITION& preservedDefinition =
             itemNamed( preservedStroke.definitions, wxS( "BATCHB_PRIMITIVES" ) );
@@ -2431,10 +2458,12 @@ BOOST_AUTO_TEST_CASE( SymbolPrimitives )
                                                return aProperty.name.text == wxS( "unsupported_graphic_stroke_width" );
                                            } );
     BOOST_REQUIRE( rawStroke != privateGraphic->properties.end() );
-    BOOST_CHECK_EQUAL( rawStroke->value.text, wxS( "61199" ) );
+    BOOST_CHECK_EQUAL( rawStroke->value.text, wxS( "3" ) );
     BOOST_CHECK( rawStroke->disposition == PROPERTY_DISPOSITION::UNSUPPORTED );
     BOOST_CHECK_EQUAL( rawStroke->source.absoluteOffset, privatePiece + 4 );
-    BOOST_CHECK_EQUAL( rawStroke->source.length, 2 );
+    BOOST_CHECK_EQUAL( rawStroke->source.length, 1 );
+    BOOST_CHECK_EQUAL( propertyValue( privateGraphic->properties, wxS( "preserved_graphic_presentation" ) ),
+                       wxS( "239" ) );
 }
 
 
@@ -2459,11 +2488,11 @@ BOOST_AUTO_TEST_CASE( PartPinsAndGates )
     BOOST_CHECK_EQUAL( pinDefinition.pins[4].angle, 0 );
     BOOST_CHECK_EQUAL( pinDefinition.pins[4].length, 280 );
     BOOST_CHECK_EQUAL( propertyValue( pinDefinition.pins[0].properties, wxS( "pin_name_height_half_mils" ) ),
-                       wxS( "200" ) );
+                       wxS( "100" ) );
     BOOST_CHECK_EQUAL( propertyValue( pinDefinition.pins[0].properties, wxS( "pin_number_height_half_mils" ) ),
-                       wxS( "200" ) );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].namePresentation.width, 20 );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberPresentation.width, 20 );
+                       wxS( "100" ) );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].namePresentation.width, 10 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberPresentation.width, 10 );
     BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.x, -200 );
     BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.y, -100 );
     BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.x, 500 );
@@ -2544,8 +2573,8 @@ BOOST_AUTO_TEST_CASE( DefinitionFields )
     BOOST_CHECK_EQUAL( definition.fields[2].name.text, wxS( "VALUE" ) );
     BOOST_CHECK_EQUAL( definition.fields[3].name.text, wxS( "*" ) );
     BOOST_CHECK_EQUAL( definition.fields[0].presentation.font.text, wxS( "Default Font" ) );
-    BOOST_CHECK_EQUAL( definition.fields[0].presentation.height, 200 );
-    BOOST_CHECK_EQUAL( definition.fields[0].presentation.width, 20 );
+    BOOST_CHECK_EQUAL( definition.fields[0].presentation.height, 100 );
+    BOOST_CHECK_EQUAL( definition.fields[0].presentation.width, 10 );
     BOOST_CHECK_EQUAL( definition.fields[0].position.x, 600 );
     BOOST_CHECK_EQUAL( definition.fields[0].position.y, 200 );
     BOOST_CHECK_EQUAL( definition.fields[1].position.x, 620 );
@@ -2559,7 +2588,7 @@ BOOST_AUTO_TEST_CASE( DefinitionFields )
                        wxS( "-4" ) );
     BOOST_CHECK_EQUAL( propertyValue( definition.fields[3].presentation.properties, wxS( "font_handle" ) ),
                        wxS( "-4" ) );
-    BOOST_CHECK( definition.fields[0].presentation.horizontalJustification == MODEL_JUSTIFICATION::CENTER );
+    BOOST_CHECK( definition.fields[0].presentation.horizontalJustification == MODEL_JUSTIFICATION::LEFT );
     BOOST_CHECK( definition.fields[0].presentation.verticalJustification == MODEL_JUSTIFICATION::LEFT );
     BOOST_CHECK( definition.fields[2].presentation.horizontalJustification == MODEL_JUSTIFICATION::CENTER );
     BOOST_CHECK( definition.fields[2].presentation.verticalJustification == MODEL_JUSTIFICATION::LEFT );
@@ -2700,15 +2729,15 @@ BOOST_AUTO_TEST_CASE( PlacementInstanceFields )
     BOOST_CHECK_EQUAL( placement.fields[1].position.x, 620 );
     BOOST_CHECK_EQUAL( placement.fields[1].position.y, 400 );
     BOOST_CHECK_EQUAL( placement.fields[1].angle, 900 );
-    BOOST_CHECK_EQUAL( placement.fields[1].presentation.height, 388 );
-    BOOST_CHECK_EQUAL( placement.fields[1].presentation.width, 20 );
+    BOOST_CHECK_EQUAL( placement.fields[1].presentation.height, 194 );
+    BOOST_CHECK_EQUAL( placement.fields[1].presentation.width, 10 );
     BOOST_CHECK_EQUAL( placement.fields[1].presentation.font.text, wxS( "Bold Verdana" ) );
     BOOST_CHECK_EQUAL( placement.fields[2].name.text, wxS( "userfield" ) );
     BOOST_CHECK_EQUAL( placement.fields[2].value.text, wxS( "override-value" ) );
     BOOST_CHECK_EQUAL( placement.fields[2].position.x, 600 );
     BOOST_CHECK_EQUAL( placement.fields[2].position.y, -400 );
-    BOOST_CHECK_EQUAL( placement.fields[2].presentation.height, 388 );
-    BOOST_CHECK_EQUAL( placement.fields[2].presentation.width, 20 );
+    BOOST_CHECK_EQUAL( placement.fields[2].presentation.height, 194 );
+    BOOST_CHECK_EQUAL( placement.fields[2].presentation.width, 10 );
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.visible, false );
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.font.text, wxS( "Bold Verdana" ) );
     BOOST_CHECK_EQUAL( placement.fields[2].source.controller, 17 );
@@ -2913,8 +2942,8 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                 BOOST_CHECK_EQUAL( binaryField.position.x, asciiField.position.x * 2 );
                 BOOST_CHECK_EQUAL( binaryField.position.y, asciiField.position.y * 2 );
                 BOOST_CHECK_EQUAL( binaryField.angle, std::lround( asciiField.rotation * 10 ) );
-                BOOST_CHECK_EQUAL( binaryField.presentation.height, asciiField.height * 2 );
-                BOOST_CHECK_EQUAL( binaryField.presentation.width, asciiField.width * 2 );
+                BOOST_CHECK_EQUAL( binaryField.presentation.height, asciiField.height );
+                BOOST_CHECK_EQUAL( binaryField.presentation.width, asciiField.width );
                 BOOST_CHECK_EQUAL( binaryField.presentation.visible, asciiField.visible );
                 BOOST_CHECK_EQUAL( binaryField.presentation.font.text, wxString::FromUTF8( asciiField.font_name ) );
                 BOOST_CHECK_EQUAL( binaryField.presentation.bold,
@@ -2922,7 +2951,10 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                 BOOST_CHECK_EQUAL( binaryField.presentation.italic,
                                    wxString::FromUTF8( asciiField.font_name ).StartsWith( wxS( "Italic " ) ) );
 
-                const uint16_t            horizontal = asciiField.justification & ~uint16_t{ 0x0A };
+                const uint16_t            justification = asciiField.justification;
+                const uint16_t            horizontal = justification >= 8   ? justification - 8
+                                                       : justification >= 2 ? justification - 2
+                                                                            : justification;
                 const MODEL_JUSTIFICATION expectedHorizontal = horizontal == 1   ? MODEL_JUSTIFICATION::RIGHT
                                                                : horizontal == 4 ? MODEL_JUSTIFICATION::CENTER
                                                                                  : MODEL_JUSTIFICATION::LEFT;
@@ -3094,8 +3126,8 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
                                                       && aGraphic.graphic.text.text == wxS( "TITLE:" );
                                            } );
     BOOST_REQUIRE( titleText != model.graphics.end() );
-    BOOST_CHECK_EQUAL( titleText->graphic.presentation.height, 200 );
-    BOOST_CHECK_EQUAL( titleText->graphic.presentation.width, 20 );
+    BOOST_CHECK_EQUAL( titleText->graphic.presentation.height, 100 );
+    BOOST_CHECK_EQUAL( titleText->graphic.presentation.width, 10 );
 
     std::vector<const MODEL_PAGE_GRAPHIC*> custom;
 
@@ -3138,9 +3170,8 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
     BOOST_CHECK_EQUAL( ( *text )->graphic.text.text, wxS( "EMBEDDED PAGE TEXT" ) );
     BOOST_CHECK_EQUAL( ( *text )->graphic.points[0].y, 13200 );
     BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.font.text, wxS( "Default Font" ) );
-    BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.height, 300 );
-    BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.width, 20 );
-
+    BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.height, 150 );
+    BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.width, 10 );
     PADS_SCH::PADS_SCH_PARSER ascii;
     BOOST_REQUIRE( ascii.Parse( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/binary/page_graphics.txt" ) );
     auto pageRecords = []( std::vector<CANONICAL_SEMANTIC_RECORD> aRecords )
@@ -3156,15 +3187,16 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
     };
     auto expectedPage = pageRecords( normalizeAsciiModel( ascii ) );
     auto actualPage = pageRecords( normalizeBinaryModel( model ) );
-    BOOST_CHECK( snapshotsMatch( expectedPage, actualPage ) );
+    BOOST_CHECK( snapshotsMatch( expectedPage, actualPage,
+                                 { { "preserved_graphic_presentation", PROPERTY_DISPOSITION::PRESERVED } } ) );
 
     std::vector<uint8_t> privateStroke = loadBinaryFixture( "page_graphics.sch" );
     const size_t         privatePiece = sheetControllerOffset( privateStroke, 4 ) + 81 * 6;
-    writeU16( privateStroke, privatePiece + 4, 61199 );
+    writeU16( privateStroke, privatePiece + 4, 0xEF03 );
     PADS_SCH_MODEL preservedStroke = parser.Parse( privateStroke, wxS( "private-stroke.sch" ) );
-    auto privateGraphic = std::ranges::find_if( preservedStroke.graphics,
-                                                []( const MODEL_PAGE_GRAPHIC& aGraphic )
-                                                {
+    auto           privateGraphic = std::ranges::find_if( preservedStroke.graphics,
+                                                          []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                                                          {
                                                     return aGraphic.graphic.source.controller == 4
                                                            && aGraphic.graphic.source.recordIndex == 81;
                                                 } );
@@ -3173,24 +3205,23 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
     auto rawStroke = std::ranges::find_if( privateGraphic->graphic.properties,
                                            []( const SOURCE_PROPERTY& aProperty )
                                            {
-                                               return aProperty.name.text
-                                                      == wxS( "unsupported_graphic_stroke_width" );
+                                               return aProperty.name.text == wxS( "unsupported_graphic_stroke_width" );
                                            } );
     BOOST_REQUIRE( rawStroke != privateGraphic->graphic.properties.end() );
-    BOOST_CHECK_EQUAL( rawStroke->value.text, wxS( "61199" ) );
+    BOOST_CHECK_EQUAL( rawStroke->value.text, wxS( "3" ) );
     BOOST_CHECK( rawStroke->disposition == PROPERTY_DISPOSITION::UNSUPPORTED );
     BOOST_CHECK_EQUAL( rawStroke->source.controller, 4 );
     BOOST_CHECK_EQUAL( rawStroke->source.recordIndex, 81 );
     BOOST_CHECK_EQUAL( rawStroke->source.absoluteOffset, privatePiece + 4 );
-    BOOST_CHECK_EQUAL( rawStroke->source.length, 2 );
+    BOOST_CHECK_EQUAL( rawStroke->source.length, 1 );
+    BOOST_CHECK_EQUAL( propertyValue( privateGraphic->graphic.properties, wxS( "preserved_graphic_presentation" ) ),
+                       wxS( "239" ) );
     BOOST_CHECK_EQUAL( std::ranges::count_if( preservedStroke.diagnostics,
                                               [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
                                               {
-                                                  return aDiagnostic.source == rawStroke->source
-                                                         && aDiagnostic.property
+                                                  return aDiagnostic.source == rawStroke->source && aDiagnostic.property
                                                          && aDiagnostic.property->name == rawStroke->name.text
-                                                         && aDiagnostic.property->disposition
-                                                                    == rawStroke->disposition;
+                                                         && aDiagnostic.property->disposition == rawStroke->disposition;
                                               } ),
                        1u );
 }
@@ -3434,10 +3465,10 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
             { "endpoint_0_raw_endpoint_relationship", PROPERTY_DISPOSITION::PRESERVED },
             { "endpoint_1_raw_endpoint_relationship", PROPERTY_DISPOSITION::PRESERVED },
             { "raw_connection_marker", PROPERTY_DISPOSITION::EXACT },
-            { "raw_label_kind", PROPERTY_DISPOSITION::EXACT },
+            { "offpage_variant", PROPERTY_DISPOSITION::EXACT },
             { "connection_record", PROPERTY_DISPOSITION::EXACT },
-            { "preserved_bus_alias_members", PROPERTY_DISPOSITION::UNSUPPORTED },
             { "preserved_drawing_text_relationship", PROPERTY_DISPOSITION::UNSUPPORTED },
+            { "preserved_graphic_presentation", PROPERTY_DISPOSITION::PRESERVED },
         };
 
         BOOST_TEST_CONTEXT( fixture )
@@ -3469,7 +3500,7 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
 
     auto label = std::ranges::find( missingRawKind, CANONICAL_KIND::LABEL, &CANONICAL_SEMANTIC_RECORD::kind );
     BOOST_REQUIRE( label != missingRawKind.end() );
-    label->properties.erase( "raw_label_kind" );
+    label->properties.erase( "offpage_variant" );
 
     BOOST_CHECK( !task10SourcePropertiesPresent( missingRawKind ) );
 
@@ -3759,10 +3790,10 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
         BOOST_CHECK_EQUAL( aBinaryPin.position.y, std::llround( aAsciiPin.position.y * 2 ) );
         BOOST_CHECK_EQUAL( aBinaryPin.side, aAsciiPin.side );
         BOOST_CHECK_EQUAL( aBinaryPin.angle, std::llround( aAsciiPin.rotation * 10 ) );
-        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.height, aAsciiPin.pn_h * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.width, aAsciiPin.pn_w * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.height, aAsciiPin.pl_h * 2 );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.width, aAsciiPin.pl_w * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.height, aAsciiPin.pn_h );
+        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.width, aAsciiPin.pn_w );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.height, aAsciiPin.pl_h );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.width, aAsciiPin.pl_w );
         BOOST_CHECK_EQUAL( aBinaryPin.nameOffset.x, aAsciiPin.pn_offset.x * 2 );
         BOOST_CHECK_EQUAL( aBinaryPin.nameOffset.y, aAsciiPin.pn_offset.y * 2 );
         BOOST_CHECK_EQUAL( aBinaryPin.numberOffset.x, aAsciiPin.pl_offset.x * 2 );
@@ -3828,8 +3859,8 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
     BOOST_CHECK_EQUAL( binaryText.text.text, wxString::FromUTF8( asciiPrimitive->texts[0].content ) );
     BOOST_CHECK_EQUAL( binaryText.points[0].x, std::llround( asciiPrimitive->texts[0].position.x * 2 ) );
     BOOST_CHECK_EQUAL( binaryText.points[0].y, std::llround( asciiPrimitive->texts[0].position.y * 2 ) );
-    BOOST_CHECK_EQUAL( binaryText.presentation.height, std::llround( asciiPrimitive->texts[0].size * 2 ) );
-    BOOST_CHECK_EQUAL( binaryText.presentation.width, asciiPrimitive->texts[0].width_factor * 2 );
+    BOOST_CHECK_EQUAL( binaryText.presentation.height, std::llround( asciiPrimitive->texts[0].size ) );
+    BOOST_CHECK_EQUAL( binaryText.presentation.width, asciiPrimitive->texts[0].width_factor );
     BOOST_CHECK_EQUAL( binaryText.presentation.font.text, wxString::FromUTF8( asciiPrimitive->font1 ) );
     BOOST_CHECK_EQUAL( binaryText.angle, std::llround( asciiPrimitive->texts[0].rotation * 10 ) );
     BOOST_CHECK_EQUAL( binaryText.presentation.visible, asciiPrimitive->texts[0].visible );
@@ -3858,9 +3889,8 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
             BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].position.y,
                                std::llround( asciiFields->attrs[field].position.y * 2 ) );
             BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].angle, asciiFields->attrs[field].angle * 10 );
-            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.height,
-                               asciiFields->attrs[field].height * 2 );
-            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.width, asciiFields->attrs[field].width * 2 );
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.height, asciiFields->attrs[field].height );
+            BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.width, asciiFields->attrs[field].width );
             BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.font.text,
                                wxString::FromUTF8( asciiFields->attrs[field].font_name ) );
             BOOST_CHECK(

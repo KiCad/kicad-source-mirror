@@ -11,9 +11,11 @@
 
 #include <sch_io/pads/pads_sch_binary_builder.h>
 
+#include <bitmap_base.h>
 #include <lib_id.h>
 #include <lib_symbol.h>
 #include <connection_graph.h>
+#include <font/font.h>
 #include <page_info.h>
 #include <pin_type.h>
 #include <sch_bus_entry.h>
@@ -110,11 +112,9 @@ namespace
         case MODEL_EMBEDDED_IMAGE_TYPE::WMF:
         {
             wxImage image;
-            int width = std::clamp<int64_t>( std::abs( static_cast<int64_t>( aSource.extent[2] )
-                                                       - aSource.extent[0] ),
+            int width = std::clamp<int64_t>( std::abs( static_cast<int64_t>( aSource.extent[2] ) - aSource.extent[0] ),
                                              1, 4096 );
-            int height = std::clamp<int64_t>( std::abs( static_cast<int64_t>( aSource.extent[3] )
-                                                        - aSource.extent[1] ),
+            int height = std::clamp<int64_t>( std::abs( static_cast<int64_t>( aSource.extent[3] ) - aSource.extent[1] ),
                                               1, 4096 );
 
             if( OleRenderWmf( aSource.data, width, height, image ) )
@@ -146,15 +146,23 @@ namespace
         if( targetWidth <= 0 || targetHeight <= 0 )
             THROW_IO_ERROR( FormatParserError( aSource.source, wxS( "embedded image has invalid page size" ) ) );
 
-        refImage.SetWidth( targetWidth );
+        const wxImage* decodedImage = refImage.GetImage().GetImageData();
 
-        if( std::abs( refImage.GetSize().y - targetHeight ) > schIUScale.MilsToIU( 2 ) )
+        if( decodedImage && decodedImage->IsOk() )
         {
-            aDiagnostics.push_back( MakePropertyDiagnostic(
-                    RPT_SEVERITY_WARNING, aSource.source, wxS( "embedded_image_aspect_ratio" ),
-                    PROPERTY_DISPOSITION::APPROXIMATE,
-                    wxS( "embedded image aspect ratio differs from its PADS database box; width retained" ) ) );
+            const int fittedHeight =
+                    std::max( 1, static_cast<int>( std::llround( static_cast<double>( decodedImage->GetWidth() )
+                                                                 * targetHeight / targetWidth ) ) );
+
+            if( fittedHeight != decodedImage->GetHeight() )
+            {
+                wxImage fitted = decodedImage->Copy();
+                fitted.Rescale( fitted.GetWidth(), fittedHeight, wxIMAGE_QUALITY_HIGH );
+                refImage.SetImage( fitted );
+            }
         }
+
+        refImage.SetWidth( targetWidth );
 
         const VECTOR2I center = bitmap->GetPosition();
 
@@ -281,13 +289,8 @@ namespace
             aText->SetTextThickness( toIU( aPresentation.width ) );
 
         if( !aPresentation.font.text.IsEmpty() && aPresentation.font.text != wxS( "Default Font" ) )
-        {
-            aDiagnostics.push_back( MakePropertyDiagnostic(
-                    RPT_SEVERITY_WARNING, aPresentation.source, wxS( "font_substitution" ),
-                    PROPERTY_DISPOSITION::APPROXIMATE,
-                    wxString::Format( wxS( "PADS font '%s' is not embedded; using KiCad stroke font" ),
-                                      aPresentation.font.text ) ) );
-        }
+            aText->SetFont(
+                    KIFONT::FONT::GetFont( aPresentation.font.text, aPresentation.bold, aPresentation.italic ) );
 
         if( aPresentation.underline )
         {
@@ -556,7 +559,7 @@ namespace
         {
             for( size_t pinOrdinal = 0; pinOrdinal < pinReferences->size(); ++pinOrdinal )
             {
-                const PIN_REFERENCE& pinReference = ( *pinReferences )[pinOrdinal];
+                const PIN_REFERENCE&     pinReference = ( *pinReferences )[pinOrdinal];
                 std::unique_ptr<SCH_PIN> pin = makePin( pinById( aDefinition, pinReference.id ), aLibrary );
 
                 if( aGate && pinOrdinal < aGate->logicalPins.size() )
@@ -649,9 +652,9 @@ namespace
 
             for( const MODEL_GATE& gate : part.gates )
             {
-                const MODEL_SYMBOL_DEFINITION& definition = gate.unit == aPlacement.unit
-                                                                    ? definitionById( aModel, aPlacement.definition.id )
-                                                                    : definitionById( aModel, gate.definition.id );
+                const MODEL_SYMBOL_DEFINITION&    definition = gate.unit == aPlacement.unit
+                                                                       ? definitionById( aModel, aPlacement.definition.id )
+                                                                       : definitionById( aModel, gate.definition.id );
                 const std::vector<PIN_REFERENCE>* placementPins =
                         gate.unit == aPlacement.unit ? &aPlacement.pins : nullptr;
                 addDefinitionUnit( library.get(), definition, &gate, static_cast<int>( gate.unit ), aDiagnostics,
@@ -956,8 +959,7 @@ namespace
             {
                 replacementScreen->IncRefCount();
                 SCH_SCREEN* previousScreen = destinationRoot->AdoptImportedScreen( replacementScreen.get() );
-                previousGraph = aSchematic->AdoptImportedHierarchy( std::move( hierarchy ),
-                                                                    &*replacementCurrentSheet,
+                previousGraph = aSchematic->AdoptImportedHierarchy( std::move( hierarchy ), &*replacementCurrentSheet,
                                                                     connectionGraph.get() );
                 replacementScreen.release();
                 connectionGraph.release();
@@ -1008,15 +1010,15 @@ namespace
     {
         for( const SOURCE_PROPERTY& property : aProperties )
         {
-            if( property.disposition == PROPERTY_DISPOSITION::EXACT )
+            if( property.disposition == PROPERTY_DISPOSITION::EXACT
+                || property.disposition == PROPERTY_DISPOSITION::PRESERVED )
                 continue;
 
             aDiagnostics.push_back( MakePropertyDiagnostic(
                     RPT_SEVERITY_WARNING, property,
                     wxString::Format( wxS( "PADS property '%s' retained with %s disposition" ), property.name.text,
-                                      property.disposition == PROPERTY_DISPOSITION::APPROXIMATE ? wxS( "approximate" )
-                                      : property.disposition == PROPERTY_DISPOSITION::PRESERVED
-                                              ? wxS( "preserved" )
+                                      property.disposition == PROPERTY_DISPOSITION::APPROXIMATE
+                                              ? wxS( "approximate" )
                                               : wxS( "unsupported" ) ) ) );
         }
     }
@@ -1223,16 +1225,16 @@ namespace
             return found == aMap.end() ? empty : found->second;
         }
 
-        std::map<SHEET_ID, std::vector<const MODEL_PLACEMENT*>>    placementsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_NET*>>          netsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_BUS*>>          busesBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_LABEL*>>        labelsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_JUNCTION*>>     junctionsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_TEXT*>>         textsBySheet;
-        std::map<SHEET_ID, std::vector<const MODEL_PAGE_GRAPHIC*>> graphicsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_PLACEMENT*>>      placementsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_NET*>>            netsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_BUS*>>            busesBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_LABEL*>>          labelsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_JUNCTION*>>       junctionsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_TEXT*>>           textsBySheet;
+        std::map<SHEET_ID, std::vector<const MODEL_PAGE_GRAPHIC*>>   graphicsBySheet;
         std::map<SHEET_ID, std::vector<const MODEL_EMBEDDED_IMAGE*>> imagesBySheet;
-        std::map<NET_ID, const MODEL_NET*>                         netsById;
-        std::map<POINT_KEY, std::vector<SOURCE_POINT>>             endpointAdjacency;
+        std::map<NET_ID, const MODEL_NET*>                           netsById;
+        std::map<POINT_KEY, std::vector<SOURCE_POINT>>               endpointAdjacency;
     };
 
 
@@ -1294,22 +1296,16 @@ namespace
 
             wxString busLabel = bus->name.text;
 
-            if( !bus->memberNets.empty() )
+            if( !bus->declaredMembers.empty() )
             {
                 busLabel += wxS( "{" );
 
-                for( size_t member = 0; member < bus->memberNets.size(); ++member )
+                for( size_t member = 0; member < bus->declaredMembers.size(); ++member )
                 {
-                    auto net = aIndex.netsById.find( bus->memberNets[member].id );
-
-                    if( net == aIndex.netsById.end() )
-                        THROW_IO_ERROR( FormatParserError( bus->memberNets[member].source,
-                                                           wxS( "resolved bus member is missing during staging" ) ) );
-
                     if( member )
                         busLabel += wxS( " " );
 
-                    busLabel += net->second->name.text;
+                    busLabel += bus->declaredMembers[member].text;
                 }
 
                 busLabel += wxS( "}" );
@@ -1344,7 +1340,7 @@ namespace
                 const int      entrySpan = std::min( span, schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) );
                 const VECTOR2I entryEnd =
                         span == 0 ? end : start + VECTOR2I( delta.x * entrySpan / span, delta.y * entrySpan / span );
-                auto           entryItem = std::make_unique<SCH_BUS_WIRE_ENTRY>( start );
+                auto entryItem = std::make_unique<SCH_BUS_WIRE_ENTRY>( start );
                 entryItem->SetSize( entryEnd - start );
                 aScreen->Append( entryItem.get() );
                 entryItem.release();
@@ -1462,16 +1458,17 @@ namespace
 
             case MODEL_LABEL_KIND::UNSUPPORTED:
             {
-                auto property = std::ranges::find_if( label.properties,
-                                                      []( const SOURCE_PROPERTY& aProperty )
-                                                      {
-                                                          return aProperty.name.text == wxS( "unsupported_label_kind" );
-                                                      } );
+                auto property =
+                        std::ranges::find_if( label.properties,
+                                              []( const SOURCE_PROPERTY& aProperty )
+                                              {
+                                                  return aProperty.name.text == wxS( "unsupported_offpage_decal" );
+                                              } );
 
                 if( property == label.properties.end() )
                 {
                     aStaged.result.diagnostics.push_back( MakePropertyDiagnostic(
-                            RPT_SEVERITY_WARNING, label.source, wxS( "unsupported_label_kind" ),
+                            RPT_SEVERITY_WARNING, label.source, wxS( "unsupported_offpage_decal" ),
                             PROPERTY_DISPOSITION::UNSUPPORTED,
                             wxS( "PADS unsupported label has no KiCad schematic representation" ) ) );
                 }
@@ -1521,8 +1518,7 @@ namespace
             }
         }
 
-        for( const MODEL_EMBEDDED_IMAGE* sourceImage :
-             MODEL_INDEX::ForSheet( aIndex.imagesBySheet, aSourceSheet.id ) )
+        for( const MODEL_EMBEDDED_IMAGE* sourceImage : MODEL_INDEX::ForSheet( aIndex.imagesBySheet, aSourceSheet.id ) )
         {
             std::unique_ptr<SCH_BITMAP> bitmap =
                     makeEmbeddedImage( *sourceImage, pageHeight, aStaged.result.diagnostics );
@@ -1664,7 +1660,7 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
     {
         const MODEL_SHEET& sourceSheet = *sourceSheets.front();
         SCH_SCREEN*        temporaryScreen = staged.appendCache.get();
-        SCH_SHEET_PATH path;
+        SCH_SHEET_PATH     path;
         path.push_back( aAppendToMe );
         stageSheetContent( staged, aModel, modelIndex, sourceSheet, temporaryScreen, path );
 
@@ -1686,7 +1682,6 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
             item->SetParent( aAppendToMe->GetScreen() );
             staged.appendItems.emplace_back( std::move( itemOwner ) );
         }
-
     }
     else
     {

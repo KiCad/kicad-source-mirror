@@ -583,6 +583,7 @@ struct MODEL_BUS
     std::vector<SOURCE_POINT>    vertices;
     std::vector<MODEL_BUS_ENTRY> entries;
     std::vector<SOURCE_STRING>   aliases;
+    std::vector<SOURCE_STRING>   declaredMembers;
     std::vector<NET_REFERENCE>   memberNets;
     std::vector<SOURCE_PROPERTY> properties;
 

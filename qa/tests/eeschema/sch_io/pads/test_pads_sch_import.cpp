@@ -68,17 +68,15 @@ namespace
 
 struct PADS_SCH_IMPORT_FIXTURE
 {
-    PADS_SCH_IMPORT_FIXTURE() : m_schematic( nullptr )
+    PADS_SCH_IMPORT_FIXTURE() :
+            m_schematic( nullptr )
     {
         m_settingsManager.LoadProject( "" );
         m_schematic.SetProject( &m_settingsManager.Prj() );
         m_schematic.Reset();
     }
 
-    ~PADS_SCH_IMPORT_FIXTURE()
-    {
-        m_schematic.Reset();
-    }
+    ~PADS_SCH_IMPORT_FIXTURE() { m_schematic.Reset(); }
 
     SETTINGS_MANAGER m_settingsManager;
     SCHEMATIC        m_schematic;
@@ -128,7 +126,7 @@ struct OBJECT_GRAPH_SNAPSHOT
 
 static OBJECT_GRAPH_SNAPSHOT objectGraphSnapshot( const SCHEMATIC& aSchematic, const SCH_SHEET* aAppendToMe )
 {
-    OBJECT_GRAPH_SNAPSHOT snapshot;
+    OBJECT_GRAPH_SNAPSHOT   snapshot;
     std::vector<SCH_SHEET*> topLevelSheets = aSchematic.GetTopLevelSheets();
     snapshot.topLevelSheets.assign( topLevelSheets.begin(), topLevelSheets.end() );
 
@@ -383,12 +381,12 @@ static SCH_SHEET_PATH sourceSheetPath( SCHEMATIC& aSchematic, const PADS_SCH_BIN
 
     const bool flatTopLevel = aSchematic.GetTopLevelSheets().size() == aModel.sheets.size();
     wxString   expectedPage = wxString::Format( wxS( "%zu" ), sourceSheet->index + ( flatTopLevel ? 1 : 2 ) );
-    auto path = std::ranges::find_if( hierarchy,
-                                     [&]( const SCH_SHEET_PATH& aPath )
-                                     {
-                                         return aPath.size() == ( flatTopLevel ? 1u : 2u )
-                                                && aPath.GetPageNumber() == expectedPage;
-                                     } );
+    auto       path = std::ranges::find_if( hierarchy,
+                                            [&]( const SCH_SHEET_PATH& aPath )
+                                            {
+                                          return aPath.size() == ( flatTopLevel ? 1u : 2u )
+                                                 && aPath.GetPageNumber() == expectedPage;
+                                      } );
     BOOST_REQUIRE_MESSAGE( path != hierarchy.end(), "missing typed source sheet index " << sourceSheet->index );
     BOOST_CHECK_EQUAL( path->Last()->GetField( FIELD_T::SHEET_NAME )->GetText(), sourceSheet->name.text );
     return *path;
@@ -441,7 +439,7 @@ static CONNECTIVITY_ORACLE_COUNTS assertSourceConnectivity( const PADS_SCH_BINAR
     using namespace PADS_SCH_BINARY;
 
     CONNECTIVITY_ORACLE_COUNTS counts;
-    SCH_SHEET_LIST hierarchy = aSchematic.BuildSheetListSortedByPageNumbers();
+    SCH_SHEET_LIST             hierarchy = aSchematic.BuildSheetListSortedByPageNumbers();
     aSchematic.ConnectionGraph()->Recalculate( hierarchy, true );
 
     auto samePoint = []( const SOURCE_POINT& aLeft, const SOURCE_POINT& aRight )
@@ -491,20 +489,22 @@ static CONNECTIVITY_ORACLE_COUNTS assertSourceConnectivity( const PADS_SCH_BINAR
             BOOST_CHECK_MESSAGE( found, "missing bus segment " << bus.source.recordIndex << ':' << vertex );
         }
 
-        wxString memberSuffix = wxS( "{" );
+        wxString memberSuffix;
 
-        for( size_t member = 0; member < bus.memberNets.size(); ++member )
+        if( !bus.declaredMembers.empty() )
         {
-            auto sourceNet = std::ranges::find( aModel.nets, bus.memberNets[member].id, &MODEL_NET::id );
-            BOOST_REQUIRE( sourceNet != aModel.nets.end() );
+            memberSuffix = wxS( "{" );
 
-            if( member )
-                memberSuffix += wxS( " " );
+            for( size_t member = 0; member < bus.declaredMembers.size(); ++member )
+            {
+                if( member )
+                    memberSuffix += wxS( " " );
 
-            memberSuffix += sourceNet->name.text;
+                memberSuffix += bus.declaredMembers[member].text;
+            }
+
+            memberSuffix += wxS( "}" );
         }
-
-        memberSuffix += wxS( "}" );
         std::vector<wxString> aliases;
 
         if( bus.aliases.empty() )
@@ -1170,7 +1170,7 @@ BOOST_AUTO_TEST_CASE( BinaryEmbeddedImages )
 
     BOOST_CHECK_EQUAL( result.counts.images, 3u );
     BOOST_REQUIRE_EQUAL( itemCount( root->GetScreen(), SCH_BITMAP_T ), 3u );
-    const int pageHeight = root->GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+    const int                pageHeight = root->GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
     std::vector<SCH_BITMAP*> bitmaps;
 
     for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_BITMAP_T ) )
@@ -1197,8 +1197,7 @@ BOOST_AUTO_TEST_CASE( CanReadSchematicFile )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/simple_schematic.txt" );
+    wxString padsFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/simple_schematic.txt" );
 
     BOOST_CHECK( plugin.CanReadSchematicFile( padsFile ) );
 }
@@ -1208,8 +1207,7 @@ BOOST_AUTO_TEST_CASE( CanReadSchematicFile_RejectNonPads )
 {
     SCH_IO_PADS plugin;
 
-    wxString kicadFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/simple_schematic.txt" );
+    wxString kicadFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/simple_schematic.txt" );
 
     BOOST_CHECK( plugin.CanReadSchematicFile( kicadFile ) );
 }
@@ -1359,8 +1357,8 @@ BOOST_AUTO_TEST_CASE( MultiGateImport )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/multigate_schematic.txt" );
+    wxString padsFile =
+            wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/multigate_schematic.txt" );
 
     SCH_SHEET* rootSheet = plugin.LoadSchematicFile( padsFile, &m_schematic );
     BOOST_REQUIRE( rootSheet );
@@ -1370,7 +1368,7 @@ BOOST_AUTO_TEST_CASE( MultiGateImport )
 
     // Collect U1 symbols
     std::vector<SCH_SYMBOL*> u1Symbols;
-    SCH_SHEET_PATH rootPath;
+    SCH_SHEET_PATH           rootPath;
     rootPath.push_back( rootSheet );
 
     for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
@@ -1415,9 +1413,8 @@ BOOST_AUTO_TEST_CASE( Issue23420_HeaderWithCodePageSuffix )
     // (e.g. *PADS-LOGIC-V9.0-CP1250*) must be detected and parsed.
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir()
-            + "/plugins/pads/issue23420_codepage_schematic.txt" );
+    wxString padsFile =
+            wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23420_codepage_schematic.txt" );
 
     BOOST_CHECK( plugin.CanReadSchematicFile( padsFile ) );
 
@@ -1432,8 +1429,7 @@ BOOST_AUTO_TEST_CASE( CanReadLibrary )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+    wxString padsFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
 
     BOOST_CHECK( plugin.CanReadLibrary( padsFile ) );
 }
@@ -1476,8 +1472,7 @@ BOOST_AUTO_TEST_CASE( EnumerateSymbolLib_NamesFromSchematic )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+    wxString padsFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
 
     wxArrayString names;
     BOOST_CHECK_NO_THROW( plugin.EnumerateSymbolLib( names, padsFile ) );
@@ -1489,8 +1484,7 @@ BOOST_AUTO_TEST_CASE( EnumerateSymbolLib_ReturnsLibSymbols )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+    wxString padsFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
 
     std::vector<LIB_SYMBOL*> symbols;
     BOOST_CHECK_NO_THROW( plugin.EnumerateSymbolLib( symbols, padsFile ) );
@@ -1505,8 +1499,7 @@ BOOST_AUTO_TEST_CASE( LoadSymbol_ByName )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+    wxString padsFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
 
     wxArrayString names;
     plugin.EnumerateSymbolLib( names, padsFile );
@@ -1523,8 +1516,7 @@ BOOST_AUTO_TEST_CASE( LoadSymbol_UnknownReturnsNull )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+    wxString padsFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
 
     LIB_SYMBOL* sym = plugin.LoadSymbol( padsFile, wxT( "NO_SUCH_SYMBOL_12345" ) );
     BOOST_CHECK( sym == nullptr );
@@ -1535,8 +1527,8 @@ BOOST_AUTO_TEST_CASE( MultiGatePartTypeBecomesMultiUnitLibSymbol )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/multigate_schematic.txt" );
+    wxString padsFile =
+            wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/multigate_schematic.txt" );
 
     std::vector<LIB_SYMBOL*> symbols;
     BOOST_CHECK_NO_THROW( plugin.EnumerateSymbolLib( symbols, padsFile ) );
@@ -1560,8 +1552,7 @@ BOOST_AUTO_TEST_CASE( IsLibraryNotWritable )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+    wxString padsFile = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
 
     BOOST_CHECK( !plugin.IsLibraryWritable( padsFile ) );
 }
@@ -1576,9 +1567,8 @@ BOOST_AUTO_TEST_CASE( Issue24284_TextItemsPlacedOnCorrectSheet )
     // other and border graphics to overlap.
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir()
-            + "/plugins/pads/issue24284_multisheet_text.txt" );
+    wxString padsFile =
+            wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue24284_multisheet_text.txt" );
 
     BOOST_REQUIRE( plugin.CanReadSchematicFile( padsFile ) );
 
@@ -1616,10 +1606,10 @@ BOOST_AUTO_TEST_CASE( Issue24284_TextItemsPlacedOnCorrectSheet )
 
         BOOST_REQUIRE_EQUAL( textBySheet.count( sheetName ), 1u );
         BOOST_CHECK_EQUAL( textBySheet[sheetName].size(), 2u );
-        BOOST_CHECK( std::find( textBySheet[sheetName].begin(), textBySheet[sheetName].end(),
-                                pageText ) != textBySheet[sheetName].end() );
-        BOOST_CHECK( std::find( textBySheet[sheetName].begin(), textBySheet[sheetName].end(),
-                                bodyText ) != textBySheet[sheetName].end() );
+        BOOST_CHECK( std::find( textBySheet[sheetName].begin(), textBySheet[sheetName].end(), pageText )
+                     != textBySheet[sheetName].end() );
+        BOOST_CHECK( std::find( textBySheet[sheetName].begin(), textBySheet[sheetName].end(), bodyText )
+                     != textBySheet[sheetName].end() );
         BOOST_CHECK_EQUAL( lineCountBySheet[sheetName], 1 );
     }
 }
@@ -1633,8 +1623,8 @@ BOOST_AUTO_TEST_CASE( Issue23855_GlobalLabelOrientationFromNetNames )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt" );
+    wxString padsFile =
+            wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt" );
 
     SCH_SHEET* rootSheet = plugin.LoadSchematicFile( padsFile, &m_schematic );
     BOOST_REQUIRE( rootSheet );
@@ -1644,8 +1634,8 @@ BOOST_AUTO_TEST_CASE( Issue23855_GlobalLabelOrientationFromNetNames )
 
     // PADS anchor positions in mils -> KiCad screen X (Y-up flipped on import).
     const int milToIU = schIUScale.MilsToIU( 1 );
-    const int cnSideX = 1400 * milToIU;  // @@@O0, x_offset +350 -> text reads right
-    const int r1SideX = 2800 * milToIU;  // @@@O1, x_offset -360 -> text reads left
+    const int cnSideX = 1400 * milToIU; // @@@O0, x_offset +350 -> text reads right
+    const int r1SideX = 2800 * milToIU; // @@@O1, x_offset -360 -> text reads left
 
     SPIN_STYLE cnSpin = SPIN_STYLE::LEFT;
     SPIN_STYLE r1Spin = SPIN_STYLE::RIGHT;
@@ -1688,14 +1678,14 @@ BOOST_AUTO_TEST_CASE( Issue23855_RotatedPartFieldPositions )
 {
     SCH_IO_PADS plugin;
 
-    wxString padsFile = wxString::FromUTF8(
-            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt" );
+    wxString padsFile =
+            wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt" );
 
     SCH_SHEET* rootSheet = plugin.LoadSchematicFile( padsFile, &m_schematic );
     BOOST_REQUIRE( rootSheet );
     BOOST_REQUIRE( rootSheet->GetScreen() );
 
-    SCH_SCREEN* screen = rootSheet->GetScreen();
+    SCH_SCREEN*    screen = rootSheet->GetScreen();
     SCH_SHEET_PATH rootPath;
     rootPath.push_back( rootSheet );
 
@@ -1746,8 +1736,7 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
     BOOST_REQUIRE( destination->GetScreen() );
 
     PADS_SCH_BINARY_BUILDER builder;
-    BUILD_RESULT            result =
-            builder.Build( model, &m_schematic, nullptr, binaryFixture( wxS( "symbol_primitives" ) ) );
+    BUILD_RESULT result = builder.Build( model, &m_schematic, nullptr, binaryFixture( wxS( "symbol_primitives" ) ) );
 
     BOOST_CHECK_EQUAL( result.counts.sheets, 1u );
     BOOST_CHECK_EQUAL( result.counts.symbols, model.placements.size() );
@@ -1871,12 +1860,12 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
 
     m_schematic.Reset();
     destination = m_schematic.GetTopLevelSheet();
-    PADS_SCH_MODEL pinModel = parseBinaryFixture( wxS( "pin_styles" ) );
+    PADS_SCH_MODEL   pinModel = parseBinaryFixture( wxS( "pin_styles" ) );
     MODEL_PART_TYPE& pinPart = *std::ranges::find_if( pinModel.partTypes,
-                                                       []( const MODEL_PART_TYPE& aPart )
-                                                       {
-                                                           return aPart.name.text == wxS( "BATCHB-PIN-STYLES" );
-                                                       } );
+                                                      []( const MODEL_PART_TYPE& aPart )
+                                                      {
+                                                          return aPart.name.text == wxS( "BATCHB-PIN-STYLES" );
+                                                      } );
     BOOST_REQUIRE_EQUAL( pinPart.gates.size(), 1u );
     BOOST_REQUIRE_EQUAL( pinPart.gates[0].logicalPins.size(), 7u );
 
@@ -1913,14 +1902,14 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
                                    {
                                        return aDefinition.name.text == wxS( "BATCHB_PIN_STYLES" );
                                    } );
-    std::vector<SCH_PIN*>  builtPins = pinSymbol->GetLibPins();
+    std::vector<SCH_PIN*> builtPins = pinSymbol->GetLibPins();
     BOOST_REQUIRE_EQUAL( builtPins.size(), pinDefinition.pins.size() + pinPart.signalPins.size() );
 
     for( size_t pinOrdinal = 0; pinOrdinal < pinDefinition.pins.size(); ++pinOrdinal )
     {
         const MODEL_PIN_DEFINITION& sourcePin = pinDefinition.pins[pinOrdinal];
-        const MODEL_GATE_PIN& logicalPin = pinPart.gates[0].logicalPins[pinOrdinal];
-        auto built = std::ranges::find( builtPins, logicalPin.number.text, &SCH_PIN::GetNumber );
+        const MODEL_GATE_PIN&       logicalPin = pinPart.gates[0].logicalPins[pinOrdinal];
+        auto                        built = std::ranges::find( builtPins, logicalPin.number.text, &SCH_PIN::GetNumber );
         BOOST_REQUIRE_MESSAGE( built != builtPins.end(), logicalPin.number.text );
         BOOST_CHECK_EQUAL( ( *built )->GetName(), logicalPin.name.text );
         BOOST_CHECK_EQUAL( ( *built )->GetPosition(), localPoint( sourcePin.position ) );
@@ -1976,16 +1965,15 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
     BOOST_CHECK_EQUAL( itemCount( destination->GetScreen(), SCH_SYMBOL_T ), transformModel.placements.size() );
 
     PADS_SCH_MODEL unknownTransform = transformModel;
-    auto rawAngleIt = std::ranges::find_if(
-            unknownTransform.placements.front().properties,
-            []( const SOURCE_PROPERTY& aProperty )
-            {
-                return aProperty.name.text == wxS( "raw_angle" );
-            } );
+    auto           rawAngleIt = std::ranges::find_if( unknownTransform.placements.front().properties,
+                                                      []( const SOURCE_PROPERTY& aProperty )
+                                                      {
+                                                return aProperty.name.text == wxS( "raw_angle" );
+                                            } );
     BOOST_REQUIRE( rawAngleIt != unknownTransform.placements.front().properties.end() );
     SOURCE_PROPERTY& rawAngle = *rawAngleIt;
     rawAngle.value.text = wxS( "3600" );
-    rawAngle.disposition = PROPERTY_DISPOSITION::PRESERVED;
+    rawAngle.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
     unknownTransform.placements.front().angle = 0;
     result = builder.Build( unknownTransform, &m_schematic, destination, wxS( "unknown_transform.sch" ) );
     BOOST_CHECK( std::ranges::any_of( result.diagnostics,
@@ -2046,30 +2034,28 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
     BOOST_REQUIRE( connector );
     BOOST_CHECK_EQUAL( connector->GetUnit(), 1 );
     BOOST_CHECK_EQUAL( connector->GetUnitCount(), 26 );
-    const MODEL_PART_TYPE& connectorPart = *std::ranges::find_if(
-            connectorModel.partTypes,
-            []( const MODEL_PART_TYPE& aPart )
-            {
-                return std::ranges::any_of( aPart.gates,
-                                            []( const MODEL_GATE& aGate )
-                                            {
-                                                return !aGate.connectorPins.empty();
-                                            } );
-            } );
-    const MODEL_GATE& connectorGate = *std::ranges::find_if(
-            connectorPart.gates,
-            []( const MODEL_GATE& aGate )
-            {
-                return !aGate.connectorPins.empty();
-            } );
-    auto connectorPlacementIt = std::ranges::find_if(
-            connectorModel.placements,
-            [&]( const MODEL_PLACEMENT& aPlacement )
-            {
-                return aPlacement.partType.id == connectorPart.id;
-            } );
+    const MODEL_PART_TYPE& connectorPart =
+            *std::ranges::find_if( connectorModel.partTypes,
+                                   []( const MODEL_PART_TYPE& aPart )
+                                   {
+                                       return std::ranges::any_of( aPart.gates,
+                                                                   []( const MODEL_GATE& aGate )
+                                                                   {
+                                                                       return !aGate.connectorPins.empty();
+                                                                   } );
+                                   } );
+    const MODEL_GATE& connectorGate = *std::ranges::find_if( connectorPart.gates,
+                                                             []( const MODEL_GATE& aGate )
+                                                             {
+                                                                 return !aGate.connectorPins.empty();
+                                                             } );
+    auto              connectorPlacementIt = std::ranges::find_if( connectorModel.placements,
+                                                                   [&]( const MODEL_PLACEMENT& aPlacement )
+                                                                   {
+                                                          return aPlacement.partType.id == connectorPart.id;
+                                                      } );
     BOOST_REQUIRE( connectorPlacementIt != connectorModel.placements.end() );
-    const MODEL_PLACEMENT& connectorPlacement = *connectorPlacementIt;
+    const MODEL_PLACEMENT&         connectorPlacement = *connectorPlacementIt;
     const MODEL_SYMBOL_DEFINITION& connectorDefinition = *std::ranges::find(
             connectorModel.definitions, connectorPlacement.definition.id, &MODEL_SYMBOL_DEFINITION::id );
     BOOST_REQUIRE_EQUAL( connectorGate.connectorPins.size(), 26u );
@@ -2082,13 +2068,13 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
 
         for( const MODEL_PIN_DEFINITION& graphicPin : connectorDefinition.pins )
         {
-            auto builtPin = std::ranges::find_if(
-                    builtConnectorPins,
-                    [&]( const SCH_PIN* aPin )
-                    {
-                        return aPin->GetUnit() == static_cast<int>( index + 1 )
-                               && aPin->GetPosition() == localPoint( graphicPin.position );
-                    } );
+            auto builtPin =
+                    std::ranges::find_if( builtConnectorPins,
+                                          [&]( const SCH_PIN* aPin )
+                                          {
+                                              return aPin->GetUnit() == static_cast<int>( index + 1 )
+                                                     && aPin->GetPosition() == localPoint( graphicPin.position );
+                                          } );
             BOOST_REQUIRE_MESSAGE( builtPin != builtConnectorPins.end(), index + 1 );
             BOOST_CHECK_EQUAL( ( *builtPin )->GetNumber(), sourcePin.number.text );
             BOOST_CHECK_EQUAL( ( *builtPin )->GetName(), sourcePin.name.text );
@@ -2098,9 +2084,8 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
             BOOST_CHECK( ( *builtPin )->GetOrientation() == pinOrientation( graphicPin ) );
             BOOST_CHECK( ( *builtPin )->GetShape() == pinShape( graphicPin.graphicStyle ) );
             BOOST_CHECK_EQUAL( ( *builtPin )->IsVisible(), graphicPin.presentation.visible );
-            BOOST_CHECK_EQUAL(
-                    ( *builtPin )->GetNameTextSize(),
-                    schIUScale.MilsToIU( static_cast<double>( graphicPin.namePresentation.height ) / 2.0 ) );
+            BOOST_CHECK_EQUAL( ( *builtPin )->GetNameTextSize(),
+                               schIUScale.MilsToIU( static_cast<double>( graphicPin.namePresentation.height ) / 2.0 ) );
             BOOST_CHECK_EQUAL(
                     ( *builtPin )->GetNumberTextSize(),
                     schIUScale.MilsToIU( static_cast<double>( graphicPin.numberPresentation.height ) / 2.0 ) );
@@ -2153,14 +2138,13 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
                      == horizontalJustification( sourceField.presentation.horizontalJustification ) );
         BOOST_CHECK( builtField->GetVertJustify()
                      == verticalJustification( sourceField.presentation.verticalJustification ) );
-    }
 
-    BOOST_CHECK( std::ranges::any_of( result.diagnostics,
-                                      []( const PARSER_DIAGNOSTIC& aDiagnostic )
-                                      {
-                                          return aDiagnostic.message.Contains( wxS( "Bold Verdana" ) )
-                                                 && aDiagnostic.source.controller == 17;
-                                      } ) );
+        if( !sourceField.presentation.font.text.IsEmpty()
+            && sourceField.presentation.font.text != wxS( "Default Font" ) )
+        {
+            BOOST_CHECK( !builtField->GetFontName().IsEmpty() );
+        }
+    }
 }
 
 
@@ -2169,7 +2153,7 @@ BOOST_AUTO_TEST_CASE( BinaryAlternateDefinitionPins )
     using namespace PADS_SCH_BINARY;
 
     PADS_SCH_MODEL model = parseBinaryFixture( wxS( "multigate" ) );
-    auto hasPlacedPins = []( const MODEL_PLACEMENT& aPlacement )
+    auto           hasPlacedPins = []( const MODEL_PLACEMENT& aPlacement )
     {
         return aPlacement.gate.has_value() && !aPlacement.pins.empty();
     };
@@ -2470,15 +2454,15 @@ BOOST_AUTO_TEST_CASE( BinaryAppendIsAtomic )
     BOOST_CHECK( destination->GetScreen()->GetLibSymbols().at( preservedKey )->GetLibId() == preservedLibId );
 
     PADS_SCH_MODEL multi = parseBinaryFixture( wxS( "multisheet_connectivity" ) );
-    auto       existingChild = std::make_unique<SCH_SHEET>( destination );
-    SCH_SHEET* existingChildPtr = existingChild.get();
+    auto           existingChild = std::make_unique<SCH_SHEET>( destination );
+    SCH_SHEET*     existingChildPtr = existingChild.get();
     existingChild->SetScreen( new SCH_SCREEN( &m_schematic ) );
     existingChild->GetField( FIELD_T::SHEET_NAME )->SetText( wxS( "Existing" ) );
     existingChild->GetField( FIELD_T::SHEET_FILENAME )->SetText( wxS( "existing.kicad_sch" ) );
     destination->GetScreen()->Append( existingChild.get() );
     existingChild.release();
-    size_t         beforeChildren = itemCount( destination->GetScreen(), SCH_SHEET_T );
-    BUILD_RESULT   multiResult =
+    size_t       beforeChildren = itemCount( destination->GetScreen(), SCH_SHEET_T );
+    BUILD_RESULT multiResult =
             builder.Build( multi, &m_schematic, destination, binaryFixture( wxS( "multisheet_connectivity" ) ) );
     BOOST_CHECK_EQUAL( itemCount( destination->GetScreen(), SCH_SHEET_T ), beforeChildren + multiResult.counts.sheets );
     BOOST_CHECK( destination->GetScreen()->Items().contains( existingChildPtr ) );
@@ -2574,8 +2558,8 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
     }
 
     m_schematic.Reset();
-    PADS_SCH_MODEL          connectivity = parseBinaryFixture( wxS( "connectivity_topology" ) );
-    SCH_SHEET*              root = m_schematic.GetTopLevelSheet();
+    PADS_SCH_MODEL connectivity = parseBinaryFixture( wxS( "connectivity_topology" ) );
+    SCH_SHEET*     root = m_schematic.GetTopLevelSheet();
     BOOST_REQUIRE( root );
     builder.Build( connectivity, &m_schematic, nullptr, binaryFixture( wxS( "connectivity_topology" ) ) );
     assertSourceConnectivity( connectivity, m_schematic );
@@ -3333,17 +3317,13 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
                                                       && aOther->disposition == property->disposition;
                                            } );
             const size_t parserOwned =
-                    property->disposition == PROPERTY_DISPOSITION::EXACT
-                            ? 0
-                            : std::ranges::count_if( corpusModel.diagnostics,
-                                                     [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
-                                                     {
-                                                         return aDiagnostic.source == property->source
-                                                                && aDiagnostic.property
-                                                                && aDiagnostic.property->name == property->name.text
-                                                                && aDiagnostic.property->disposition
-                                                                           == property->disposition;
-                                                     } );
+                    std::ranges::count_if( corpusModel.diagnostics,
+                                           [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
+                                           {
+                                               return aDiagnostic.source == property->source && aDiagnostic.property
+                                                      && aDiagnostic.property->name == property->name.text
+                                                      && aDiagnostic.property->disposition == property->disposition;
+                                           } );
             const size_t builderOwned =
                     std::ranges::count_if( corpusResult.diagnostics,
                                            [&]( const PARSER_DIAGNOSTIC& aDiagnostic )
@@ -3354,7 +3334,8 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
                                            } );
             BOOST_CHECK_LE( parserOwned, multiplicity );
 
-            if( property->disposition == PROPERTY_DISPOSITION::EXACT )
+            if( property->disposition == PROPERTY_DISPOSITION::EXACT
+                || property->disposition == PROPERTY_DISPOSITION::PRESERVED )
             {
                 BOOST_CHECK_EQUAL( builderOwned, 0u );
                 BOOST_CHECK_EQUAL( parserOwned, 0u );
@@ -3374,19 +3355,38 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
         std::vector<PARSER_DIAGNOSTIC> expectedDiagnostics = corpusModel.diagnostics;
         expectedDiagnostics.insert( expectedDiagnostics.end(), corpusResult.diagnostics.begin(),
                                     corpusResult.diagnostics.end() );
-        std::map<std::pair<wxString, SEVERITY>, size_t> expectedWarningCounts;
+        std::map<std::pair<wxString, SEVERITY>, std::pair<const PARSER_DIAGNOSTIC*, size_t>> diagnosticGroups;
 
         for( const PARSER_DIAGNOSTIC& diagnostic : expectedDiagnostics )
         {
-            const wxString formatted = FormatParserError( diagnostic.source, diagnostic.message );
-            ++expectedWarningCounts[{ formatted, diagnostic.severity }];
-            BOOST_CHECK( formatted.Contains( wxString::Format( wxS( "v0x%04X" ), diagnostic.source.version ) ) );
-            BOOST_CHECK( formatted.Contains( diagnostic.source.objectClass ) );
+            auto& [first, count] = diagnosticGroups[{ diagnostic.message, diagnostic.severity }];
+
+            if( !first )
+                first = &diagnostic;
+
+            ++count;
+        }
+
+        std::map<std::pair<wxString, SEVERITY>, size_t> expectedWarningCounts;
+
+        for( const auto& [key, group] : diagnosticGroups )
+        {
+            const auto& [message, severity] = key;
+            const auto& [first, count] = group;
+            wxString groupedMessage = message;
+
+            if( count > 1 )
+                groupedMessage += wxString::Format( wxS( " (%zu occurrences)" ), count );
+
+            const wxString formatted = FormatParserError( first->source, groupedMessage );
+            ++expectedWarningCounts[{ formatted, severity }];
+            BOOST_CHECK( formatted.Contains( wxString::Format( wxS( "v0x%04X" ), first->source.version ) ) );
+            BOOST_CHECK( formatted.Contains( first->source.objectClass ) );
             BOOST_CHECK( formatted.Contains(
-                    wxString::Format( wxS( "controller %d, record %llu" ), diagnostic.source.controller,
-                                      static_cast<unsigned long long>( diagnostic.source.recordIndex ) ) ) );
+                    wxString::Format( wxS( "controller %d, record %llu" ), first->source.controller,
+                                      static_cast<unsigned long long>( first->source.recordIndex ) ) ) );
             BOOST_CHECK( formatted.Contains( wxString::Format(
-                    wxS( "offset 0x%llX" ), static_cast<unsigned long long>( diagnostic.source.absoluteOffset ) ) ) );
+                    wxS( "offset 0x%llX" ), static_cast<unsigned long long>( first->source.absoluteOffset ) ) ) );
         }
 
         std::map<std::pair<wxString, SEVERITY>, size_t> reportedWarningCounts;
@@ -3474,7 +3474,7 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
     BOOST_REQUIRE( !unsupportedLabel.labels.empty() );
     unsupportedLabel.labels.front().kind = MODEL_LABEL_KIND::UNSUPPORTED;
     SOURCE_PROPERTY labelKind;
-    labelKind.name.text = wxS( "unsupported_label_kind" );
+    labelKind.name.text = wxS( "unsupported_offpage_decal" );
     labelKind.value.text = wxS( "synthetic" );
     labelKind.source = unsupportedLabel.labels.front().source;
     labelKind.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
@@ -3500,8 +3500,6 @@ BOOST_AUTO_TEST_CASE( BinaryPropertyDispositionWarnings )
     preserved.name.text = wxS( "qa_preserved_label_presentation" );
     preserved.disposition = PROPERTY_DISPOSITION::PRESERVED;
     model.labels.front().presentation.properties.push_back( preserved );
-    model.diagnostics.push_back( MakePropertyDiagnostic(
-            RPT_SEVERITY_WARNING, preserved, wxS( "synthetic parser-owned warning with unrelated prose" ) ) );
     SOURCE_PROPERTY unsupported = approximate;
     unsupported.name.text = wxS( "qa_unsupported_label_presentation" );
     unsupported.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;

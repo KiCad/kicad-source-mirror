@@ -283,16 +283,25 @@ namespace
     }
 
 
-    bool isProvenGraphicStrokeWidth( uint16_t aWidth )
+    bool isProvenGraphicStrokeWidth( uint8_t aWidth )
     {
         constexpr std::array<uint16_t, 13> widths{ 1, 2, 5, 7, 8, 10, 11, 15, 20, 25, 30, 31, 40 };
         return std::ranges::binary_search( widths, aWidth );
     }
 
 
-    void decodeGraphicStrokeWidth( uint16_t aRawWidth, const SOURCE_PROVENANCE& aGraphicSource,
-                                   MODEL_GRAPHIC& aGraphic, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    void decodeGraphicStrokeWidth( uint8_t aRawWidth, uint8_t aPackedPresentation,
+                                   const SOURCE_PROVENANCE& aGraphicSource, MODEL_GRAPHIC& aGraphic,
+                                   std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
+        SOURCE_PROVENANCE packedSource = aGraphicSource;
+        packedSource.absoluteOffset += 5;
+        packedSource.length = 1;
+        SOURCE_PROPERTY packed = sourceProperty( wxS( "preserved_graphic_presentation" ),
+                                                 wxString::Format( wxS( "%u" ), aPackedPresentation ), packedSource );
+        packed.disposition = PROPERTY_DISPOSITION::PRESERVED;
+        aGraphic.properties.push_back( std::move( packed ) );
+
         if( isProvenGraphicStrokeWidth( aRawWidth ) )
         {
             aGraphic.strokeWidth = static_cast<int64_t>( aRawWidth ) * 2;
@@ -301,13 +310,12 @@ namespace
 
         SOURCE_PROVENANCE strokeSource = aGraphicSource;
         strokeSource.absoluteOffset += 4;
-        strokeSource.length = 2;
+        strokeSource.length = 1;
         SOURCE_PROPERTY stroke = sourceProperty( wxS( "unsupported_graphic_stroke_width" ),
                                                  wxString::Format( wxS( "%u" ), aRawWidth ), strokeSource );
         stroke.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
         aDiagnostics.push_back( MakePropertyDiagnostic(
-                RPT_SEVERITY_WARNING, stroke,
-                wxS( "unproved private graphic stroke encoding preserved; using hairline" ) ) );
+                RPT_SEVERITY_WARNING, stroke, wxS( "unproved graphic stroke width preserved; using hairline" ) ) );
         aGraphic.properties.push_back( std::move( stroke ) );
     }
 
@@ -365,29 +373,31 @@ namespace
     }
 
 
-    MODEL_JUSTIFICATION horizontalJustification( uint16_t aValue, const SOURCE_PROVENANCE& aSource,
-                                                 std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    MODEL_JUSTIFICATION horizontalJustification( uint16_t aValue )
     {
-        const uint16_t horizontal = aValue & ~uint16_t{ 0x0A };
+        const uint16_t justification = aValue & 0x00FF;
+        const uint16_t horizontal = justification >= 8   ? justification - 8
+                                    : justification >= 2 ? justification - 2
+                                                         : justification;
 
         switch( horizontal )
         {
+        default:
         case 0: return MODEL_JUSTIFICATION::LEFT;
         case 1: return MODEL_JUSTIFICATION::RIGHT;
         case 4: return MODEL_JUSTIFICATION::CENTER;
-        default:
-            PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "text justification" ), aValue, aSource, aDiagnostics );
-            return MODEL_JUSTIFICATION::LEFT;
         }
     }
 
 
     MODEL_JUSTIFICATION verticalJustification( uint16_t aValue )
     {
-        if( aValue >= 8 )
+        const uint16_t justification = aValue & 0x00FF;
+
+        if( justification >= 8 )
             return MODEL_JUSTIFICATION::CENTER;
 
-        if( aValue >= 2 )
+        if( justification >= 2 )
             return MODEL_JUSTIFICATION::LEFT;
 
         return MODEL_JUSTIFICATION::RIGHT;
@@ -1014,9 +1024,8 @@ namespace
                                                                                    : controllers.pools[3].count;
                 const uint16_t groupTextCount = aCursor.U16At( offset + 64 );
                 const uint16_t groupLastText = aCursor.U16At( offset + 66 );
-                const bool     hasContiguousTextOwnership =
-                        groupTextCount == 0
-                        || ( groupLastText < textCount && groupTextCount <= static_cast<size_t>( groupLastText ) + 1 );
+                const bool     hasCircularTextOwnership =
+                        groupTextCount == 0 || ( groupTextCount <= textCount && groupLastText < textCount );
                 SOURCE_PROVENANCE originSource = source;
                 originSource.objectClass = wxS( "page graphic group origin" );
                 originSource.absoluteOffset += 60;
@@ -1043,8 +1052,8 @@ namespace
 
                     MODEL_GRAPHIC graphic;
                     graphic.source = graphicSource;
-                    decodeGraphicStrokeWidth( aCursor.U16At( pieceOffset + 4 ), graphicSource, graphic,
-                                              aModel.diagnostics );
+                    decodeGraphicStrokeWidth( aCursor.U8At( pieceOffset + 4 ), aCursor.U8At( pieceOffset + 5 ),
+                                              graphicSource, graphic, aModel.diagnostics );
 
                     switch( lineStyle )
                     {
@@ -1130,7 +1139,7 @@ namespace
 
                     graphic.properties.push_back( sourceProperty( wxS( "page_graphic_group" ), name.text, source ) );
 
-                    if( !hasContiguousTextOwnership )
+                    if( !hasCircularTextOwnership )
                     {
                         SOURCE_PROVENANCE relationshipSource = source;
                         relationshipSource.absoluteOffset += 64;
@@ -1148,7 +1157,7 @@ namespace
                             { graphicSource, { aModel.sheets[aSheetIndex].id, graphicSource }, std::move( graphic ) } );
                 }
 
-                if( hasContiguousTextOwnership )
+                if( hasCircularTextOwnership )
                     pageGraphicRecords.push_back( record );
                 continue;
             }
@@ -1179,8 +1188,8 @@ namespace
                                   SYMBOL_PIECE_BYTES, static_cast<int>( aSheetIndex ) );
                 MODEL_GRAPHIC graphic;
                 graphic.source = graphicSource;
-                decodeGraphicStrokeWidth( aCursor.U16At( pieceOffset + 4 ), graphicSource, graphic,
-                                          aModel.diagnostics );
+                decodeGraphicStrokeWidth( aCursor.U8At( pieceOffset + 4 ), aCursor.U8At( pieceOffset + 5 ),
+                                          graphicSource, graphic, aModel.diagnostics );
                 graphic.lineStyle = MODEL_LINE_STYLE::SOLID;
 
                 switch( pieceKind )
@@ -1347,16 +1356,16 @@ namespace
                                            decodeTerminalCoordinate( aCursor.U16At( terminalOffset + 4 ) ), pinSource };
                 definitionPin.presentation.source = pinSource;
                 definitionPin.presentation.height =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 6 ) ) ) * 4;
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 6 ) ) ) * 2;
                 definitionPin.presentation.width =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 8 ) ) ) * 4;
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 8 ) ) ) * 2;
                 definitionPin.presentation.visible = ( aCursor.U16At( terminalOffset + 24 ) & 0x8000 ) == 0;
                 definitionPin.namePresentation = definitionPin.presentation;
                 definitionPin.numberPresentation.source = pinSource;
                 definitionPin.numberPresentation.height =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 10 ) ) ) * 4;
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 10 ) ) ) * 2;
                 definitionPin.numberPresentation.width =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 12 ) ) ) * 4;
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 12 ) ) ) * 2;
                 definitionPin.namePresentation.visible = definitionPin.namePresentation.height != 0
                                                          && ( aCursor.U16At( terminalOffset + 24 ) & 0x8000 ) == 0;
                 definitionPin.numberPresentation.visible = definitionPin.numberPresentation.height != 0;
@@ -1592,13 +1601,12 @@ namespace
                 graphic.points.push_back( { decodeLocalCoordinate( aCursor.U16At( offset + 12 ) ),
                                             decodeLocalCoordinate( aCursor.U16At( offset + 14 ) ), source } );
                 graphic.presentation.source = source;
-                graphic.presentation.height = static_cast<int64_t>( aCursor.U16At( offset + 22 ) ) * 2;
-                graphic.presentation.width = static_cast<int64_t>( aCursor.U8At( offset + 30 ) ) * 2;
+                graphic.presentation.height = aCursor.U16At( offset + 22 );
+                graphic.presentation.width = aCursor.U8At( offset + 30 );
                 graphic.presentation.properties.push_back(
                         sourceProperty( wxS( "display_flags" ),
                                         wxString::Format( wxS( "%u" ), aCursor.U8At( offset + 31 ) ), source ) );
-                graphic.presentation.horizontalJustification =
-                        horizontalJustification( aCursor.U16At( offset + 18 ), source, aModel.diagnostics );
+                graphic.presentation.horizontalJustification = horizontalJustification( aCursor.U16At( offset + 18 ) );
                 graphic.presentation.verticalJustification = verticalJustification( aCursor.U16At( offset + 18 ) );
                 SOURCE_PROVENANCE fontSource = source;
                 fontSource.absoluteOffset += 28;
@@ -1620,13 +1628,12 @@ namespace
                                    decodeLocalCoordinate( aCursor.U16At( offset + 14 ) ), source };
                 field.angle = NormalizeAngle( aCursor.U16At( offset + 16 ) );
                 field.presentation.source = source;
-                field.presentation.height = static_cast<int64_t>( aCursor.U16At( offset + 22 ) ) * 2;
-                field.presentation.width = static_cast<int64_t>( aCursor.U8At( offset + 30 ) ) * 2;
+                field.presentation.height = aCursor.U16At( offset + 22 );
+                field.presentation.width = aCursor.U8At( offset + 30 );
                 field.presentation.properties.push_back(
                         sourceProperty( wxS( "display_flags" ),
                                         wxString::Format( wxS( "%u" ), aCursor.U8At( offset + 31 ) ), source ) );
-                field.presentation.horizontalJustification =
-                        horizontalJustification( aCursor.U16At( offset + 18 ), source, aModel.diagnostics );
+                field.presentation.horizontalJustification = horizontalJustification( aCursor.U16At( offset + 18 ) );
                 field.presentation.verticalJustification = verticalJustification( aCursor.U16At( offset + 18 ) );
                 SOURCE_PROVENANCE fontSource = source;
                 fontSource.absoluteOffset += 28;
@@ -1650,8 +1657,7 @@ namespace
             const uint16_t textCountForGroup = aCursor.U16At( offset + 64 );
             const uint16_t lastTextRecord = aCursor.U16At( offset + 66 );
 
-            if( textCountForGroup != 0
-                && ( lastTextRecord >= textCount || textCountForGroup > static_cast<size_t>( lastTextRecord ) + 1 ) )
+            if( textCountForGroup > textCount || ( textCountForGroup != 0 && lastTextRecord >= textCount ) )
                 throwDecodeError( source, wxS( "page-text ownership leaves controller 1" ) );
 
             MODEL_SYMBOL_DEFINITION textOwner;
@@ -1659,9 +1665,12 @@ namespace
 
             if( textCountForGroup != 0 )
             {
-                for( size_t textRecord = static_cast<size_t>( lastTextRecord ) + 1 - textCountForGroup;
-                     textRecord <= lastTextRecord; ++textRecord )
+                const size_t firstTextRecord =
+                        ( static_cast<size_t>( lastTextRecord ) + textCount + 1 - textCountForGroup ) % textCount;
+
+                for( size_t textIndex = 0; textIndex < textCountForGroup; ++textIndex )
                 {
+                    const size_t textRecord = ( firstTextRecord + textIndex ) % textCount;
                     decodeTextRecord( textRecord, true, true, textOwner );
                 }
             }
@@ -1716,9 +1725,8 @@ namespace
                                        fieldSource };
                     field.angle = NormalizeAngle( aCursor.U16At( usedOffset + 64 + standard * 8 ) );
                     field.presentation.source = fieldSource;
-                    field.presentation.height =
-                            static_cast<int64_t>( aCursor.U16At( usedOffset + 88 + standard * 2 ) ) * 2;
-                    field.presentation.width = static_cast<int64_t>( aCursor.U8At( usedOffset + 96 + standard ) ) * 2;
+                    field.presentation.height = aCursor.U16At( usedOffset + 88 + standard * 2 );
+                    field.presentation.width = aCursor.U8At( usedOffset + 96 + standard );
                     SOURCE_PROVENANCE fontSource = fieldSource;
                     fontSource.absoluteOffset = usedOffset + 100 + standard * 2;
                     fontSource.length = 2;
@@ -1727,8 +1735,7 @@ namespace
                     field.presentation.properties.push_back( sourceProperty(
                             wxS( "font_handle" ), wxString::Format( wxS( "%d" ), fontHandle ), fontSource ) );
                     const uint16_t justification = aCursor.U16At( usedOffset + 66 + standard * 8 );
-                    field.presentation.horizontalJustification =
-                            horizontalJustification( justification, fieldSource, aModel.diagnostics );
+                    field.presentation.horizontalJustification = horizontalJustification( justification );
                     field.presentation.verticalJustification = verticalJustification( justification );
                     decal.definition->fields.push_back( std::move( field ) );
                 }
@@ -2319,11 +2326,10 @@ namespace
                                    decodeLocalCoordinate( aCursor.U16At( offset + aXOffset + 2 ) ), fieldSource };
                 field.angle = NormalizeAngle( aCursor.U16At( offset + aAngleOffset ) );
                 field.presentation.source = fieldSource;
-                field.presentation.height = static_cast<int64_t>( aCursor.U16At( offset + aHeightOffset ) ) * 2;
-                field.presentation.width = static_cast<int64_t>( aCursor.U8At( offset + aWidthOffset ) ) * 2;
+                field.presentation.height = aCursor.U16At( offset + aHeightOffset );
+                field.presentation.width = aCursor.U8At( offset + aWidthOffset );
                 const uint16_t justification = aCursor.U16At( offset + aAngleOffset + 2 );
-                field.presentation.horizontalJustification =
-                        horizontalJustification( justification, fieldSource, aModel.diagnostics );
+                field.presentation.horizontalJustification = horizontalJustification( justification );
                 field.presentation.verticalJustification = verticalJustification( justification );
                 SOURCE_PROVENANCE fontSource = fieldSource;
                 fontSource.absoluteOffset = offset + aFontOffset;
@@ -2356,7 +2362,7 @@ namespace
                 SOURCE_STRING name;
                 SOURCE_STRING value;
 
-                const uint8_t displayFlags = aCursor.U8At( fieldOffset + layout.customDisplayFlags );
+                const uint8_t  displayFlags = aCursor.U8At( fieldOffset + layout.customDisplayFlags );
                 const uint16_t attributeIndex = aCursor.U16At( fieldOffset + layout.customAttributeIndex );
 
                 if( attributeIndex == 0xFFFF )
@@ -2368,7 +2374,8 @@ namespace
                 else
                 {
                     if( attributeIndex >= attributeCount )
-                        throwDecodeError( fieldSource, wxS( "placement field attribute index leaves component group" ) );
+                        throwDecodeError( fieldSource,
+                                          wxS( "placement field attribute index leaves component group" ) );
 
                     std::tie( name, value ) = attributeString( attributeStart + attributeIndex, true );
                 }
@@ -2386,12 +2393,10 @@ namespace
 
                 const uint8_t justification = aCursor.U8At( fieldOffset + layout.customJustification );
                 field.presentation.source = fieldSource;
-                field.presentation.horizontalJustification =
-                        horizontalJustification( justification, fieldSource, aModel.diagnostics );
+                field.presentation.horizontalJustification = horizontalJustification( justification );
                 field.presentation.verticalJustification = verticalJustification( justification );
-                field.presentation.height =
-                        static_cast<int64_t>( aCursor.U16At( fieldOffset + layout.customHeight ) ) * 2;
-                field.presentation.width = static_cast<int64_t>( aCursor.U8At( fieldOffset + layout.customWidth ) ) * 2;
+                field.presentation.height = aCursor.U16At( fieldOffset + layout.customHeight );
+                field.presentation.width = aCursor.U8At( fieldOffset + layout.customWidth );
                 field.presentation.visible = ( displayFlags & 8 ) == 0;
                 field.visible = field.presentation.visible;
 
@@ -2975,6 +2980,7 @@ namespace
             bus.sheet = { aModel.sheets[aSheetIndex].id, source };
             bus.name = global.name;
             bus.aliases.push_back( global.name );
+            bus.declaredMembers = global.aliasMembers;
             SOURCE_PROPERTY identity =
                     sourceProperty( wxS( "preserved_net_identity" ),
                                     wxString::Format( wxS( "%u" ), global.preservedIdentity ), global.source );
@@ -3014,26 +3020,6 @@ namespace
             std::ranges::reverse( entryRecords );
 
             const bool exactAliasMapping = entryRecords.size() == global.aliasMembers.size();
-
-            if( !exactAliasMapping )
-            {
-                wxString preservedMembers;
-
-                for( const SOURCE_STRING& member : global.aliasMembers )
-                {
-                    if( !preservedMembers.empty() )
-                        preservedMembers += wxS( "\n" );
-
-                    preservedMembers += member.text;
-                }
-
-                SOURCE_PROPERTY members =
-                        sourceProperty( wxS( "preserved_bus_alias_members" ), preservedMembers, global.source );
-                members.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
-                aModel.diagnostics.push_back( MakePropertyDiagnostic(
-                        RPT_SEVERITY_WARNING, members, wxS( "unsupported expanded bus-alias membership preserved" ) ) );
-                bus.properties.push_back( std::move( members ) );
-            }
 
             for( size_t entry = 0; entry < entryRecords.size(); ++entry )
             {
@@ -3116,22 +3102,81 @@ namespace
             label.position = offpagePosition( record );
             label.angle = NormalizeAngle( aCursor.U16At( offset + 26 ) );
 
-            switch( rawKind )
+            if( rawKind == 0xFE )
             {
-            case 0xFE: label.kind = MODEL_LABEL_KIND::LOCAL; break;
-            case 0:
-            case 1:
+                label.kind = MODEL_LABEL_KIND::LOCAL;
+            }
+            else
             {
-                label.kind = rawKind == 0 ? MODEL_LABEL_KIND::GROUND : MODEL_LABEL_KIND::POWER;
                 const uint16_t decalHandle = aCursor.U16At( offset + 4 );
 
-                if( decalHandle >= controllers.pools[6].count )
-                    throwDecodeError( source, wxS( "power-label decal handle leaves controller 7" ) );
-                break;
-            }
-            case 3:
-                label.kind = MODEL_LABEL_KIND::GLOBAL;
+                if( decalHandle == 0xFFFF )
+                {
+                    label.kind = MODEL_LABEL_KIND::GLOBAL;
+                }
+                else
+                {
+                    if( decalHandle >= controllers.pools[6].count )
+                        throwDecodeError( source, wxS( "off-page decal handle leaves controller 7" ) );
 
+                    SOURCE_PROVENANCE decalSource =
+                            sourceAt( aSourceName, aModel.version, wxS( "used decal" ), 7, decalHandle,
+                                      controllers.offsets[6] + decalHandle * USED_DECAL_BYTES, 40,
+                                      static_cast<int>( aSheetIndex ) );
+                    SOURCE_STRING decalName = decodeFixedString( aBytes, decalSource.absoluteOffset, decalSource.length,
+                                                                 decalSource, aModel.diagnostics );
+                    const uint32_t definitionRecord = aCursor.U32At( decalSource.absoluteOffset + 48 );
+
+                    if( definitionRecord >= controllers.pools[2].count )
+                        throwDecodeError( decalSource, wxS( "off-page decal definition leaves controller 3" ) );
+
+                    const DEFINITION_ID definitionId(
+                            static_cast<uint32_t>( aSheetIndex * 0x100000 + 1 + definitionRecord ) );
+                    auto specialPartOwnsDefinition = [&]( const wxString& aPartName )
+                    {
+                        return std::ranges::any_of(
+                                aModel.partTypes,
+                                [&]( const MODEL_PART_TYPE& aPart )
+                                {
+                                    if( aPart.name.text != aPartName )
+                                        return false;
+
+                                    return std::ranges::any_of(
+                                            aPart.gates,
+                                            [&]( const MODEL_GATE& aGate )
+                                            {
+                                                return aGate.definition.id == definitionId
+                                                       || std::ranges::any_of( aGate.alternateDefinitions,
+                                                                               [&]( const DEFINITION_REFERENCE& aRef )
+                                                                               {
+                                                                                   return aRef.id == definitionId;
+                                                                               } );
+                                            } );
+                                } );
+                    };
+
+                    if( specialPartOwnsDefinition( wxS( "$OSR_SYMS" ) ) )
+                        label.kind = MODEL_LABEL_KIND::GLOBAL;
+                    else if( specialPartOwnsDefinition( wxS( "$GND_SYMS" ) ) )
+                        label.kind = MODEL_LABEL_KIND::GROUND;
+                    else if( specialPartOwnsDefinition( wxS( "$PWR_SYMS" ) ) )
+                        label.kind = MODEL_LABEL_KIND::POWER;
+                    else
+                    {
+                        label.kind = MODEL_LABEL_KIND::UNSUPPORTED;
+                        SOURCE_PROPERTY unsupportedDecal =
+                                sourceProperty( wxS( "unsupported_offpage_decal" ), decalName.text, decalSource );
+                        unsupportedDecal.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                        aModel.diagnostics.push_back(
+                                MakePropertyDiagnostic( RPT_SEVERITY_WARNING, unsupportedDecal,
+                                                        wxS( "unsupported off-page decal class preserved" ) ) );
+                        label.properties.push_back( std::move( unsupportedDecal ) );
+                    }
+                }
+            }
+
+            if( label.kind == MODEL_LABEL_KIND::GLOBAL )
+            {
                 for( uint32_t membership =
                              aGlobals.nets[aCursor.U32At( connectionBase + connectionHandle * CONNECTION_RECORD_BYTES
                                                           + 8 )]
@@ -3149,25 +3194,10 @@ namespace
                     if( peerSheet != aSheetIndex )
                         label.linkedSheets.push_back( { aModel.sheets[peerSheet].id, source } );
                 }
-                break;
-            case 2:
-            case 4:
-            case 5:
-            {
-                label.kind = MODEL_LABEL_KIND::UNSUPPORTED;
-                SOURCE_PROPERTY unsupportedKind = sourceProperty( wxS( "unsupported_label_kind" ),
-                                                                  wxString::Format( wxS( "%u" ), rawKind ), source );
-                unsupportedKind.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
-                aModel.diagnostics.push_back( MakePropertyDiagnostic(
-                        RPT_SEVERITY_WARNING, unsupportedKind, wxS( "unsupported off-page label kind preserved" ) ) );
-                label.properties.push_back( std::move( unsupportedKind ) );
-                break;
-            }
-            default: throwDecodeError( source, wxS( "unknown off-page label kind" ) );
             }
 
             label.properties.push_back(
-                    sourceProperty( wxS( "raw_label_kind" ), wxString::Format( wxS( "%u" ), rawKind ), source ) );
+                    sourceProperty( wxS( "offpage_variant" ), wxString::Format( wxS( "%u" ), rawKind ), source ) );
             aModel.labels.push_back( std::move( label ) );
         }
 
@@ -3175,10 +3205,9 @@ namespace
         {
             MODEL_TEXT_PRESENTATION presentation;
             presentation.source = aSource;
-            presentation.height = static_cast<int64_t>( aCursor.U16At( aOffset + 2 ) ) * 2;
-            presentation.width = static_cast<int64_t>( aCursor.U16At( aOffset + 4 ) ) * 2;
-            presentation.horizontalJustification =
-                    horizontalJustification( aCursor.U16At( aOffset + 26 ), aSource, aModel.diagnostics );
+            presentation.height = aCursor.U16At( aOffset + 2 );
+            presentation.width = aCursor.U16At( aOffset + 4 );
+            presentation.horizontalJustification = horizontalJustification( aCursor.U16At( aOffset + 26 ) );
             presentation.verticalJustification = verticalJustification( aCursor.U16At( aOffset + 26 ) );
             const int16_t     fontHandle = static_cast<int16_t>( aCursor.U16At( aOffset ) );
             SOURCE_PROVENANCE fontSource = aSource;
@@ -3614,7 +3643,7 @@ bool PADS_SCH_MODEL::AllReferencesResolved() const
             for( size_t pinOrdinal = 0; pinOrdinal < gate.pins.size(); ++pinOrdinal )
             {
                 const PIN_REFERENCE& pin = gate.pins[pinOrdinal];
-                auto pinOwner = index.pinOwners.find( pin.id.Value() );
+                auto                 pinOwner = index.pinOwners.find( pin.id.Value() );
 
                 if( pinOwner == index.pinOwners.end() || pinOwner->second != definition->second )
                     return false;
@@ -3912,7 +3941,7 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
             for( size_t pinOrdinal = 0; pinOrdinal < gate.pins.size(); ++pinOrdinal )
             {
                 const PIN_REFERENCE& pin = gate.pins[pinOrdinal];
-                auto pinOwner = index.pinOwners.find( pin.id.Value() );
+                auto                 pinOwner = index.pinOwners.find( pin.id.Value() );
 
                 if( pinOwner == index.pinOwners.end() || pinOwner->second != definition->second )
                     throwValidationError( pin.source, wxS( "pin does not belong to gate definition" ) );
@@ -4463,10 +4492,9 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
                               decodeCoordinate( cursor.U16At( recordOffset + 14 ) ), textSource };
             text.angle = NormalizeAngle( cursor.U16At( recordOffset + 16 ) );
             text.presentation.source = textSource;
-            text.presentation.height = static_cast<int64_t>( cursor.U16At( recordOffset + 22 ) ) * 2;
-            text.presentation.width = static_cast<int64_t>( cursor.U16At( recordOffset + 30 ) ) * 2;
-            text.presentation.horizontalJustification =
-                    horizontalJustification( justification, textSource, model.diagnostics );
+            text.presentation.height = cursor.U16At( recordOffset + 22 );
+            text.presentation.width = cursor.U16At( recordOffset + 30 );
+            text.presentation.horizontalJustification = horizontalJustification( justification );
             text.presentation.verticalJustification = verticalJustification( justification );
 
             SOURCE_PROVENANCE relationshipSource = textSource;

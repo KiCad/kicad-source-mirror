@@ -48,13 +48,13 @@ enums:
     1: dotted
     2: dash_dot
     0xff: solid
-  offpage_kind:
-    0: ground
-    1: power
-    2: preserved_kind_2
-    3: global_label
-    4: preserved_kind_4
-    5: preserved_kind_5
+  offpage_variant:
+    0: variant_0
+    1: variant_1
+    2: variant_2
+    3: variant_3
+    4: variant_4
+    5: variant_5
     0xfe: local
     0xff: bus_entry
   page_size_prefix:
@@ -377,9 +377,10 @@ types:
         type: u2
       - id: justification
         type: u2
+        doc: The low byte is the Logic 9.0 justification code; paired vendor fields prove the high byte carries unrelated packed data.
       - id: string_bytes_including_nul
         type: u2
-      - id: height_mils
+      - id: height_half_mil
         type: u2
       - id: predecessor_ordinal
         type: u2
@@ -650,7 +651,7 @@ types:
     seq:
       - id: font_handle
         type: s2
-      - id: height_mils
+      - id: height_half_mil
         type: u2
       - id: width_factor
         type: u2
@@ -667,6 +668,7 @@ types:
         type: u2
       - id: justification
         type: u2
+        doc: The low byte is the Logic 9.0 justification code; paired vendor fields prove the high byte carries unrelated packed data.
       - id: secondary_x_offset_quarter_mil
         type: s2
       - id: secondary_y_offset_quarter_mil
@@ -807,10 +809,10 @@ types:
       - id: preserved_relationship_1c
         type: u2
         doc: Exact off-page relationship word; label-kind and ownership diffs do not prove semantics, so importer disposition is PRESERVED.
-      - id: kind
+      - id: variant
         type: u1
-        enum: offpage_kind
-        doc: Generated fixtures prove 0 ground, 1 power, 3 global, 0xfe local, and 0xff bus entry; private-only 2, 4, and 5 have importer disposition UNSUPPORTED with raw value preserved.
+        enum: offpage_variant
+        doc: Variant within the controller-7 decal family. Paired Logic 9.0 exports prove $OSR_ variants 0 through 5 are signal off-page references; $GND_ and $PWR_ variants select their corresponding power-symbol presentation. Values 0xfe and 0xff identify local labels and bus entries.
       - id: reserved_zero_1f
         contents: [0]
 
@@ -984,6 +986,7 @@ types:
         type: u2
       - id: reference_justification
         type: u2
+        doc: The low byte is the Logic 9.0 justification code; paired vendor fields prove the high byte carries unrelated packed data.
       - id: part_type_x_half_mil
         type: s2
       - id: part_type_y_half_mil
@@ -992,6 +995,7 @@ types:
         type: u2
       - id: part_type_justification
         type: u2
+        doc: The low byte is the Logic 9.0 justification code; paired vendor fields prove the high byte carries unrelated packed data.
       - id: preserved_instance_properties_38
         size: 10
         doc: Exact placement-instance bytes; transform and field diffs leave these values unchanged or semantically unowned, so importer disposition is PRESERVED.
@@ -1076,6 +1080,7 @@ types:
         type: u2
       - id: justification
         type: u1
+        doc: Logic 9.0 justification code using vertical bands and the shared horizontal fallback.
       - id: presentation_class
         type: u1
       - id: component_attribute_index
@@ -1140,12 +1145,12 @@ types:
       - id: timestamp_or_page_origin
         type: symbol_definition_timestamp_or_page_origin
         doc: Object class 0 stores the page-graphic group origin as biased quarter-mil X/Y words; symbol definitions store the original 32-bit timestamp.
-      - id: embedded_text_count_or_preserved_relationship
+      - id: embedded_text_count
         type: u2
-        doc: Generated definition and page pairs prove the embedded-text count when the adjacent endpoint forms the validated controller-1 slice; otherwise the exact relationship word is retained with importer disposition UNSUPPORTED.
-      - id: embedded_text_last_record_or_preserved_relationship
+        doc: Native Logic 9.0 exports prove the number of embedded controller-1 text records for both generated and legacy DRW groups.
+      - id: embedded_text_last_record
         type: u2
-        doc: Generated definition and page pairs prove the inclusive last controller-1 record for a validated embedded-text slice; unmatched private relationship values remain exact with importer disposition UNSUPPORTED.
+        doc: Inclusive last controller-1 record in the controller's circular record order. Generated groups occupy ordinary contiguous slices; the legacy 58-text WDITBSIZEB group wraps through record zero, proving modulo-count ownership.
       - id: preserved_definition_style_word_44
         type: s2
         doc: Exact definition style word; generated line/fill/text variants expose no ASCII counterpart, so importer disposition is PRESERVED.
@@ -1192,9 +1197,12 @@ types:
         enum: graphic_line_style
       - id: vertex_count
         type: u2
-      - id: stroke_width_mils_or_preserved_private_value
-        type: u2
-        doc: Direct mil width for the native-export-correlated values 1, 2, 5, 7, 8, 10, 11, 15, 20, 25, 30, 31, and 40. Other observed private definition and DRW values do not match the native Logic 9.0 export and are preserved as unsupported rather than rendered as destructive widths.
+      - id: stroke_width_mils
+        type: u1
+        doc: Direct mil width. Native Logic 9.0 exports correlate values 1, 2, 5, 7, 8, 10, 11, 15, 20, 25, 30, 31, and 40 exactly, including legacy DRW groups.
+      - id: preserved_presentation
+        type: u1
+        doc: The purpose of this field is not known.
 
   symbol_vertex_controller:
     params:
@@ -1285,6 +1293,7 @@ types:
         type: u2
       - id: reference_justification
         type: u2
+        doc: The low byte is the Logic 9.0 justification code; paired vendor fields prove the high byte carries unrelated packed data.
       - id: part_type_x_half_mil_divided_by_2
         type: s2
       - id: part_type_y_half_mil_divided_by_2
@@ -1293,6 +1302,7 @@ types:
         type: u2
       - id: part_type_justification
         type: u2
+        doc: The low byte is the Logic 9.0 justification code; paired vendor fields prove the high byte carries unrelated packed data.
       - id: bounding_x1_half_mil_divided_by_2
         type: s2
       - id: bounding_y1_half_mil_divided_by_2
@@ -1307,21 +1317,21 @@ types:
       - id: preserved_decal_word_56
         type: u2
         doc: Exact used-decal presentation word; field geometry is proven by adjacent values, so importer disposition is PRESERVED.
-      - id: reference_height_half_mil_divided_by_2
+      - id: reference_height_half_mil
         type: u2
-      - id: part_type_height_half_mil_divided_by_2
+      - id: part_type_height_half_mil
         type: u2
-      - id: value_height_half_mil_divided_by_2
+      - id: value_height_half_mil
         type: u2
-      - id: wildcard_height_half_mil_divided_by_2
+      - id: wildcard_height_half_mil
         type: u2
-      - id: reference_width_half_mil_divided_by_2
+      - id: reference_width_half_mil
         type: u1
-      - id: part_type_width_half_mil_divided_by_2
+      - id: part_type_width_half_mil
         type: u1
-      - id: value_width_half_mil_divided_by_2
+      - id: value_width_half_mil
         type: u1
-      - id: wildcard_width_half_mil_divided_by_2
+      - id: wildcard_width_half_mil
         type: u1
       - id: definition_font_handles
         type: s2
