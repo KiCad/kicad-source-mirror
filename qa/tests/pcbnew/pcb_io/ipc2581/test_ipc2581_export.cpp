@@ -1219,4 +1219,90 @@ BOOST_AUTO_TEST_CASE( SolderMaskMarginExpandsMaskPrimitive_Issue24749 )
 }
 
 
+/**
+ * Validate the minimal boards attached to issue #25149 against the IPC-2581C schema.
+ */
+BOOST_AUTO_TEST_CASE( SchemaValidation_Issue25149 )
+{
+    static const std::vector<std::string> boards = {
+        "ipc2581/dielectric-sublayer.kicad_pcb",
+        "ipc2581/edgecuts-circles-only.kicad_pcb",
+        "ipc2581/filled-silk-circle.kicad_pcb",
+        "ipc2581/filled-tented-via.kicad_pcb",
+        "ipc2581/textbox-border.kicad_pcb",
+        "ipc2581/thirty-copper-layers.kicad_pcb",
+        "ipc2581/whitespace-text.kicad_pcb",
+    };
+
+    for( const std::string& boardFile : boards )
+    {
+        BOOST_TEST_CONTEXT( "Board: " << boardFile )
+        {
+            std::unique_ptr<BOARD> board = LoadBoard( boardFile );
+            BOOST_REQUIRE( board );
+
+            wxString errorMsg;
+            bool     valid = ExportAndValidate( board.get(), 'C', errorMsg );
+
+            BOOST_CHECK_MESSAGE( valid,
+                                 "IPC-2581C validation failed for " + boardFile + ": " + errorMsg );
+        }
+    }
+}
+
+
+/**
+ * A board with no closed outline must export without crashing and omit Profile
+ * (Issue #25149).
+ */
+BOOST_AUTO_TEST_CASE( NoClosedOutline_Issue25149 )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "ipc2581/edgecuts-circles-only.kicad_pcb" );
+    BOOST_REQUIRE( board );
+
+    wxString tempPath = CreateTempFile();
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "3";
+
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, board.get(), &props ) );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    BOOST_CHECK_MESSAGE( !FileContainsPattern( tempPath, wxT( "<Profile" ) ),
+                         "A board with no closed outline must not write a Profile" );
+}
+
+
+/**
+ * Process-layer via pads must sit in a Set at the via position (Issue #25149).
+ */
+BOOST_AUTO_TEST_CASE( ProcessLayerViaPads_Issue25149 )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "ipc2581/filled-tented-via.kicad_pcb" );
+    BOOST_REQUIRE( board );
+
+    wxString tempPath = CreateTempFile();
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "3";
+
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, board.get(), &props ) );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    std::string xml = ReadFile( tempPath );
+
+    std::string region = LayerFeatureRegion( xml, "F.Cu_2" );
+    BOOST_REQUIRE_MESSAGE( !region.empty(), "Export should contain the F.Cu_2 process layer" );
+
+    BOOST_CHECK_MESSAGE( region.find( "<Set" ) != std::string::npos,
+                         "Process-layer via pads must be wrapped in a Set" );
+    BOOST_CHECK_MESSAGE( region.find( "x=\"120.0\" y=\"-115.0\"" ) != std::string::npos,
+                         "Process-layer via pad must be at the via position" );
+    BOOST_CHECK_MESSAGE( region.find( "x=\"0.0\" y=\"0.0\"" ) == std::string::npos,
+                         "Process-layer via pad must not be at (0,0)" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
