@@ -1402,9 +1402,14 @@ void RENDER_3D_OPENGL::generatePlatedHoleShells( int aPlatingThickness, float aU
 
     SHAPE_POLY_SET tht_outer_holes_poly; // Stores the outer poly of the copper holes
     SHAPE_POLY_SET tht_inner_holes_poly; // Stores the inner poly of the copper holes
+    // Same as ***_holes_poly but for vias that are capped
+    SHAPE_POLY_SET capped_outer_vias_poly;
+    SHAPE_POLY_SET capped_inner_vias_poly;
 
     tht_outer_holes_poly.RemoveAllContours();
     tht_inner_holes_poly.RemoveAllContours();
+    capped_outer_vias_poly.RemoveAllContours();
+    capped_inner_vias_poly.RemoveAllContours();
 
     for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
     {
@@ -1415,12 +1420,13 @@ void RENDER_3D_OPENGL::generatePlatedHoleShells( int aPlatingThickness, float aU
 
         if( via->GetViaType() == VIATYPE::THROUGH )
         {
-            TransformCircleToPolygon( tht_outer_holes_poly, via->GetPosition(),
-                                      via->GetDrill() / 2 + aPlatingThickness,
-                                      via->GetMaxError(), ERROR_INSIDE );
+            const bool capped = via->GetCappingMode() == CAPPING_MODE::CAPPED;
 
-            TransformCircleToPolygon( tht_inner_holes_poly, via->GetPosition(), via->GetDrill() / 2,
-                                      via->GetMaxError(), ERROR_INSIDE );
+            TransformCircleToPolygon( capped ? capped_outer_vias_poly : tht_outer_holes_poly, via->GetPosition(),
+                                      via->GetDrill() / 2 + aPlatingThickness, via->GetMaxError(), ERROR_INSIDE );
+
+            TransformCircleToPolygon( capped ? capped_inner_vias_poly : tht_inner_holes_poly, via->GetPosition(),
+                                      via->GetDrill() / 2, via->GetMaxError(), ERROR_INSIDE );
         }
     }
 
@@ -1442,8 +1448,10 @@ void RENDER_3D_OPENGL::generatePlatedHoleShells( int aPlatingThickness, float aU
     }
 
     tht_outer_holes_poly.BooleanSubtract( tht_inner_holes_poly );
-
     tht_outer_holes_poly.BooleanSubtract( m_antiBoardPolys );
+
+    tht_outer_holes_poly.BooleanAdd( capped_outer_vias_poly );
+    tht_inner_holes_poly.BooleanAdd( capped_inner_vias_poly );
 
     CONTAINER_2D holesContainer;
 

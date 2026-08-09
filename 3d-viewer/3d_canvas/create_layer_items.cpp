@@ -369,6 +369,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 const float    hole_inner_radius = static_cast<float>( holediameter / 2.0f );
                 const float    ring_radius       = static_cast<float>( viasize / 2.0f );
 
+                const bool capped = via->GetCappingMode() == CAPPING_MODE::CAPPED;
+
                 const SFVEC2F via_center( via->GetStart().x * m_biuTo3Dunits,
                                           -via->GetStart().y * m_biuTo3Dunits );
 
@@ -385,8 +387,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 else if( layer == layer_ids[0] ) // it only adds once the THT holes
                 {
                     // Add through hole object
-                    m_TH_ODs.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius + thickness, *track ) );
-                    m_viaTH_ODs.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius + thickness, *track ) );
+                    if( !capped || !( IsFrontLayer( layer ) || IsBackLayer( layer ) ) )
+                    {
+                        m_TH_ODs.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius + thickness, *track ) );
+                        m_viaTH_ODs.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius + thickness, *track ) );
+                    }
 
                     if( cfg.clip_silk_on_via_annuli && ring_radius > 0.0 )
                         m_viaAnnuli.Add( new FILLED_CIRCLE_2D( via_center, ring_radius, *track ) );
