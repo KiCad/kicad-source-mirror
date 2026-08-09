@@ -91,6 +91,8 @@ public:
      */
     void RefreshLibraryIfChanged( const wxString& aNickname );
 
+    void RefreshChangedLibraries();
+
     bool FootprintExists( const wxString& aNickname, const wxString& aName );
 
     /**
@@ -202,9 +204,9 @@ private:
     static LEAK_AT_EXIT<std::map<wxString, std::vector<std::unique_ptr<FOOTPRINT>>>> PreloadedFootprints;
     static std::shared_mutex PreloadedFootprintsMutex;
 
-    /// Per-library filesystem timestamps recorded when PreloadedFootprints was last populated.
-    /// Used by RefreshLibraryIfChanged() to detect external modifications.
-    std::map<wxString, long long> m_preloadedTimestamps;
+    /// Filesystem timestamps from when PreloadedFootprints was last populated, guarded by
+    /// PreloadedFootprintsMutex.  Static so it shares the lifetime of the cache it describes.
+    static LEAK_AT_EXIT<std::map<wxString, long long>> PreloadedTimestamps;
 };
 
 #endif //FOOTPRINT_LIBRARY_ADAPTER_H
