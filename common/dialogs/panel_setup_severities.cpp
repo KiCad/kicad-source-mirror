@@ -41,8 +41,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
     int               severityCount = sizeof( severities ) / sizeof( wxString );
     int               baseID        = 1000;
     wxBoxSizer*       panelSizer    = new wxBoxSizer( wxVERTICAL );
-    wxScrolledWindow* scrollWin     = new wxScrolledWindow( this, wxID_ANY,
-                                                            wxDefaultPosition, wxDefaultSize,
+    wxScrolledWindow* scrollWin     = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                                             wxTAB_TRAVERSAL | wxVSCROLL );
     bool              firstLine     = true;
 
@@ -55,10 +54,10 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
     gridSizer->SetFlexibleDirection( wxBOTH );
     gridSizer->SetVGap( 5 );
 
-    for( const RC_ITEM& item : m_items )
+    for( const std::reference_wrapper<RC_ITEM>& item : m_items )
     {
-        int      errorCode = item.GetErrorCode();
-        wxString msg       = item.GetErrorText( true );
+        int      errorCode = item.get().GetErrorCode();
+        wxString msg       = item.get().GetErrorText( true );
 
         if( m_pinMapSpecialCase && errorCode == m_pinMapSpecialCase->GetErrorCode() )
             continue;
@@ -96,8 +95,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
                                                                  severities[i],
                                                                  wxDefaultPosition, wxDefaultSize,
                                                                  i == 0 ? wxRB_GROUP : 0 );
-                radioSizer->Add( m_buttonMap[ errorCode ][i], 0,
-                                 wxRIGHT | wxALIGN_CENTER_VERTICAL, 30 );
+                radioSizer->Add( m_buttonMap[ errorCode ][i], 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 30 );
             }
 
             radioPanel->SetSizer( radioSizer );
@@ -121,12 +119,12 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( wxWindow* aParentWindow,
         wxPanel*    radioPanel = new wxPanel( scrollWin );
         wxBoxSizer* radioSizer = new wxBoxSizer( wxHORIZONTAL );
 
-        for( size_t i = 0; i < 3; ++i )
+        for( size_t i = 0; i < sizeof( pinMapSeverities ) / sizeof( wxString ); ++i )
         {
             if( pinMapSeverities[i] == wxT( "" ) )
             {
                 wxStaticText* spacer = new wxStaticText( radioPanel, wxID_ANY, wxT( "" ) );
-                radioSizer->Add( spacer, 0, wxRIGHT | wxEXPAND, 17 );
+                radioSizer->Add( spacer, 0, wxRIGHT | wxEXPAND, 22 );
             }
             else
             {
@@ -182,9 +180,9 @@ void PANEL_SETUP_SEVERITIES::checkReload()
 
 void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, SEVERITY>& aSettings )
 {
-    for( const RC_ITEM& item : m_items )
+    for( const std::reference_wrapper<RC_ITEM>& item : m_items )
     {
-        int errorCode = item.GetErrorCode();
+        int errorCode = item.get().GetErrorCode();
 
         wxRadioButton* button = nullptr;
 
@@ -193,7 +191,7 @@ void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, SEVERITY>& aSetti
         case RPT_SEVERITY_ERROR:   button = m_buttonMap[ errorCode ][0]; break;
         case RPT_SEVERITY_WARNING: button = m_buttonMap[ errorCode ][1]; break;
         case RPT_SEVERITY_IGNORE:  button = m_buttonMap[ errorCode ][2]; break;
-        default: break;
+        default:                                                         break;
         }
 
         if( button )    // this entry must actually exist
@@ -215,9 +213,9 @@ bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
 {
     m_lastLoaded = m_severities;
 
-    for( const RC_ITEM& item : m_items )
+    for( const std::reference_wrapper<RC_ITEM>& item : m_items )
     {
-        int errorCode = item.GetErrorCode();
+        int errorCode = item.get().GetErrorCode();
 
         if( !m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
             continue;
@@ -249,9 +247,9 @@ bool PANEL_SETUP_SEVERITIES::TransferDataToWindow()
 
 bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
 {
-    for( const RC_ITEM& item : m_items )
+    for( const std::reference_wrapper<RC_ITEM>& item : m_items )
     {
-        int errorCode = item.GetErrorCode();
+        int errorCode = item.get().GetErrorCode();
 
         if( m_pinMapSpecialCase && m_pinMapSpecialCase->GetErrorCode() == errorCode )
             continue;
