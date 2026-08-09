@@ -16,9 +16,9 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/gbsizer.h>
 #include <wx/checkbox.h>
@@ -41,6 +41,8 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 
 
 	protected:
+		wxStaticText* m_staticText26;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_textSizeLabel;
 		wxTextCtrl* m_textSizeCtrl;
 		wxStaticText* m_textSizeUnits;
@@ -53,12 +55,16 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_labelSizeRatioLabel;
 		wxTextCtrl* m_labelSizeRatioCtrl;
 		wxStaticText* m_labelSizeRatioUnits;
+		wxStaticText* m_staticText27;
+		wxStaticLine* m_staticline2;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;
 		wxStaticText* m_pinSymbolSizeLabel;
 		wxTextCtrl* m_pinSymbolSizeCtrl;
 		wxStaticText* m_pinSymbolSizeUnits;
+		wxStaticText* m_staticText28;
+		wxStaticLine* m_staticline3;
 		wxStaticText* m_junctionDotLabel;
 		wxChoice* m_choiceJunctionDotSize;
 		wxStaticText* m_hopOverLabel;
@@ -66,6 +72,8 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxStaticText* m_connectionGridLabel;
 		wxTextCtrl* m_connectionGridCtrl;
 		wxStaticText* m_connectionGridUnits;
+		wxStaticText* m_staticText29;
+		wxStaticLine* m_staticline4;
 		wxCheckBox* m_showIntersheetsReferences;
 		wxCheckBox* m_listOwnPage;
 		wxRadioButton* m_radioFormatStandard;
@@ -74,11 +82,15 @@ class PANEL_SETUP_FORMATTING_BASE : public wxPanel
 		wxTextCtrl* m_prefixCtrl;
 		wxStaticText* m_suffixLabel;
 		wxTextCtrl* m_suffixCtrl;
+		wxStaticText* m_staticText30;
+		wxStaticLine* m_staticline5;
 		wxStaticText* dashLengthLabel;
 		wxTextCtrl* m_dashLengthCtrl;
 		wxStaticText* gapLengthLabel;
 		wxTextCtrl* m_gapLengthCtrl;
 		wxStaticText* m_dashedLineHelp;
+		wxStaticText* m_staticText31;
+		wxStaticLine* m_staticline6;
 		wxSpinCtrl* m_vPrecisionCtrl;
 		wxChoice* m_vRangeCtrl;
 		wxSpinCtrl* m_iPrecisionCtrl;
