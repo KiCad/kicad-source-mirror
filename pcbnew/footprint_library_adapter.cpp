@@ -42,6 +42,8 @@ LEAK_AT_EXIT<std::map<wxString, std::vector<std::unique_ptr<FOOTPRINT>>>> FOOTPR
 
 std::shared_mutex FOOTPRINT_LIBRARY_ADAPTER::PreloadedFootprintsMutex;
 
+LEAK_AT_EXIT<std::map<wxString, long long>> FOOTPRINT_LIBRARY_ADAPTER::PreloadedTimestamps;
+
 
 FOOTPRINT_LIBRARY_ADAPTER::FOOTPRINT_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager ) :
         LIBRARY_MANAGER_ADAPTER( aManager )
@@ -61,6 +63,8 @@ void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString
     std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
     PCB_IO* plugin = pcbplugin( aLib );
     wxString nickname = aLib->row->Nickname();
+
+    long long timestamp = plugin->GetLibraryTimestamp( aUri );
 
     // Hold across the enumerate-then-borrow sequence: GetEnumeratedFootprint returns borrowed
     // FP_CACHE pointers, so no other thread may rebuild the cache until we finish cloning.
@@ -105,13 +109,10 @@ void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString
         }
     }
 
-    // GetLibraryTimestamp() reads the filesystem, so do it before taking the lock.
-    long long timestamp = plugin->GetLibraryTimestamp( aUri );
-
     {
         std::unique_lock lock( PreloadedFootprintsMutex );
         PreloadedFootprints.Get()[nickname] = std::move( footprints );
-        m_preloadedTimestamps[nickname] = timestamp;
+        PreloadedTimestamps.Get()[nickname] = timestamp;
     }
 
     // Clear the plugin's FP_CACHE now that we've copied footprints to PreloadedFootprints.
@@ -259,15 +260,32 @@ void FOOTPRINT_LIBRARY_ADAPTER::RefreshLibraryIfChanged( const wxString& aNickna
 
     {
         std::shared_lock lock( PreloadedFootprintsMutex );
-        auto tsIt = m_preloadedTimestamps.find( aNickname );
+        auto             tsIt = PreloadedTimestamps.Get().find( aNickname );
 
-        if( tsIt != m_preloadedTimestamps.end() && tsIt->second == currentTimestamp )
+        if( tsIt != PreloadedTimestamps.Get().end() && tsIt->second == currentTimestamp )
             return;
 
         wxLogTrace( traceLibraries, "FP: %s changed on disk, re-enumerating", aNickname );
     }
 
     enumerateLibrary( lib, uri );
+}
+
+
+void FOOTPRINT_LIBRARY_ADAPTER::RefreshChangedLibraries()
+{
+    for( const wxString& nickname : GetLibraryNames() )
+    {
+        // An unreadable library must not stop the others, nor escape into the caller.
+        try
+        {
+            RefreshLibraryIfChanged( nickname );
+        }
+        catch( const IO_ERROR& e )
+        {
+            wxLogTrace( traceLibraries, "FP: %s: refresh failed: %s", nickname, e.What() );
+        }
+    }
 }
 
 

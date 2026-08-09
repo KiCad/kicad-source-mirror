@@ -72,6 +72,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     // chooser is opened from contexts that don't preload libraries (e.g., from Eeschema).
     footprints->AsyncLoad();
     footprints->BlockUntilLoaded();
+    footprints->RefreshChangedLibraries();
 
     m_adapter = FP_TREE_MODEL_ADAPTER::Create( aFrame, footprints );
     FP_TREE_MODEL_ADAPTER* adapter = static_cast<FP_TREE_MODEL_ADAPTER*>( m_adapter.get() );

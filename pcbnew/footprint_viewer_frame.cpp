@@ -51,6 +51,7 @@
 #include <pgm_base.h>
 #include <pcbnew_settings.h>
 #include <project_pcb.h>
+#include <trace_helpers.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <toolbars_footprint_viewer.h>
@@ -670,6 +671,15 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& aEvent )
         return;
 
     wxString name = m_libList->GetBaseString( ii );
+
+    try
+    {
+        PROJECT_PCB::FootprintLibAdapter( &Prj() )->RefreshLibraryIfChanged( name );
+    }
+    catch( const IO_ERROR& e )
+    {
+        wxLogTrace( traceLibraries, "FP: %s: refresh failed: %s", name, e.What() );
+    }
 
     if( getCurNickname() == name )
         return;
