@@ -42,6 +42,7 @@
 #include <sch_io/pcad/sch_io_pcad.h>
 #include <sch_io/orcad/sch_io_orcad.h>
 #include <common.h>     // for ExpandEnvVarSubstitutions
+#include <ki_exception.h>
 
 #include <wildcards_and_files_ext.h>
 #include <kiway_player.h>
