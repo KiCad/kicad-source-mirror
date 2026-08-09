@@ -41,6 +41,9 @@ PANEL_SNAPPING_BASE::PANEL_SNAPPING_BASE( wxWindow* parent, wxWindowID id, const
 
 	mainSizer->Add( fgGridSnapping, 0, wxEXPAND|wxALL, 5 );
 
+
+	mainSizer->Add( 0, 10, 0, wxEXPAND, 5 );
+
 	m_objectSnappingLabel = new wxStaticText( this, wxID_ANY, _("Object Snapping"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_objectSnappingLabel->Wrap( -1 );
 	mainSizer->Add( m_objectSnappingLabel, 0, wxTOP|wxRIGHT|wxLEFT, 13 );
@@ -89,15 +92,18 @@ PANEL_SNAPPING_BASE::PANEL_SNAPPING_BASE( wxWindow* parent, wxWindowID id, const
 	fgObjectSnapping->Add( m_graphicsSnapChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 
 
-	m_sizerObjectSnapping->Add( fgObjectSnapping, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_sizerObjectSnapping->Add( fgObjectSnapping, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 	m_snapAllLayers = new wxCheckBox( this, wxID_ANY, _("Snap to objects on all layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_snapAllLayers->SetToolTip( _("When unchecked, only objects on the active layer are snapped to") );
 
-	m_sizerObjectSnapping->Add( m_snapAllLayers, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_sizerObjectSnapping->Add( m_snapAllLayers, 0, wxALL, 10 );
 
 
 	mainSizer->Add( m_sizerObjectSnapping, 0, wxEXPAND, 0 );
+
+
+	mainSizer->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_snapInferenceLabel = new wxStaticText( this, wxID_ANY, _("Snap Inference"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_snapInferenceLabel->Wrap( -1 );
@@ -129,7 +135,7 @@ PANEL_SNAPPING_BASE::PANEL_SNAPPING_BASE( wxWindow* parent, wxWindowID id, const
 	m_sizerSnapInference->Add( m_snapAlignmentDistribution, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	mainSizer->Add( m_sizerSnapInference, 0, wxEXPAND, 0 );
+	mainSizer->Add( m_sizerSnapInference, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( mainSizer );

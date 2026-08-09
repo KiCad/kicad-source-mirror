@@ -209,7 +209,7 @@
                       </object>
                     </object>
                     <object class="sizeritem" expanded="true">
-                      <property name="border">10</property>
+                      <property name="border">5</property>
                       <property name="flag">wxEXPAND|wxALL</property>
                       <property name="proportion">0</property>
                       <object class="wxGridSizer" expanded="true">
@@ -222,7 +222,7 @@
                         <property name="vgap">4</property>
                         <object class="sizeritem" expanded="true">
                           <property name="border">5</property>
-                          <property name="flag">wxRIGHT</property>
+                          <property name="flag">wxRIGHT|wxLEFT</property>
                           <property name="proportion">0</property>
                           <object class="wxRadioButton" expanded="true">
                             <property name="BottomDockable">1</property>
@@ -287,7 +287,7 @@
                         </object>
                         <object class="sizeritem" expanded="true">
                           <property name="border">5</property>
-                          <property name="flag">wxRIGHT</property>
+                          <property name="flag">wxRIGHT|wxLEFT</property>
                           <property name="proportion">0</property>
                           <object class="wxRadioButton" expanded="true">
                             <property name="BottomDockable">1</property>
@@ -352,7 +352,7 @@
                         </object>
                         <object class="sizeritem" expanded="true">
                           <property name="border">5</property>
-                          <property name="flag">wxRIGHT</property>
+                          <property name="flag">wxRIGHT|wxLEFT</property>
                           <property name="proportion">0</property>
                           <object class="wxRadioButton" expanded="true">
                             <property name="BottomDockable">1</property>
@@ -541,7 +541,7 @@
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
-                  <property name="border">10</property>
+                  <property name="border">5</property>
                   <property name="flag">wxEXPAND|wxALL</property>
                   <property name="proportion">0</property>
                   <object class="wxGridSizer" expanded="true">
@@ -554,7 +554,7 @@
                     <property name="vgap">4</property>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxRIGHT</property>
+                      <property name="flag">wxRIGHT|wxLEFT</property>
                       <property name="proportion">0</property>
                       <object class="wxRadioButton" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -619,7 +619,7 @@
                     </object>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxRIGHT</property>
+                      <property name="flag">wxRIGHT|wxLEFT</property>
                       <property name="proportion">0</property>
                       <object class="wxRadioButton" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -806,7 +806,7 @@
                   </object>
                 </object>
                 <object class="sizeritem" expanded="true">
-                  <property name="border">10</property>
+                  <property name="border">5</property>
                   <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
                   <property name="proportion">1</property>
                   <object class="wxGridSizer" expanded="true">
@@ -819,7 +819,7 @@
                     <property name="vgap">4</property>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxRIGHT</property>
+                      <property name="flag">wxRIGHT|wxLEFT</property>
                       <property name="proportion">0</property>
                       <object class="wxRadioButton" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -884,7 +884,7 @@
                     </object>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxRIGHT</property>
+                      <property name="flag">wxRIGHT|wxLEFT</property>
                       <property name="proportion">0</property>
                       <object class="wxRadioButton" expanded="true">
                         <property name="BottomDockable">1</property>
