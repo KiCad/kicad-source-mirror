@@ -71,7 +71,9 @@ void DESIGN_BLOCK_TREE_MODEL_ADAPTER::AddLibraries( EDA_BASE_FRAME* aParent )
         bool pinned = alg::contains( cfg->m_Session.pinned_design_block_libs, libName )
                       || alg::contains( project.m_PinnedDesignBlockLibs, libName );
 
-        DoAddLibrary( libName, row->Description(), getDesignBlocks( aParent, libName ), pinned, true );
+        // Design blocks come back in filesystem enumeration order, so they are not presorted;
+        // let AssignIntrinsicRanks() sort them by name.
+        DoAddLibrary( libName, row->Description(), getDesignBlocks( aParent, libName ), pinned, false );
     }
 
     m_tree.AssignIntrinsicRanks( m_shownColumns );
