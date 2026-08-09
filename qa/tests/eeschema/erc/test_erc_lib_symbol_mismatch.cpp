@@ -74,8 +74,9 @@ BOOST_FIXTURE_TEST_CASE( Issue22371LegacyLibrary, ERC_LIB_SYMBOL_MISMATCH_FIXTUR
             if( symbol->GetLibId().GetLibItemName() != "74LS00" )
                 continue;
 
-            constexpr int flags = SCH_ITEM::COMPARE_FLAGS::EQUALITY
-                                  | SCH_ITEM::COMPARE_FLAGS::ERC;
+            int flags = ~SCH_ITEM::COMPARE_FLAGS::UUID;
+            flags &= ~SCH_ITEM::COMPARE_FLAGS::UNIT;
+            flags &= ~SCH_ITEM::COMPARE_FLAGS::IDENTITY;
 
             int result = flattenedLibSymbol->Compare( *libSymbolInSchematic, flags );
 

@@ -38,6 +38,26 @@ class REFDES_TRACKER;
 #define DEFAULT_CONNECTION_GRID_MILS 50
 
 
+class SYMBOL_PARITY_SETTINGS
+{
+public:
+    SYMBOL_PARITY_SETTINGS();
+
+    bool m_MissingFields;
+    bool m_ExtraFields;
+    bool m_FieldTexts;
+    bool m_FieldVisibilities;
+    bool m_FieldStyles;
+    bool m_FieldPositions;
+    bool m_PinVisibilities;
+    bool m_PinAltFunctions;
+    bool m_ExcludeFromBoardFlags;
+    bool m_DNPFlags;
+    bool m_ExcludeFromBOMFlags;
+    bool m_ExcludeFromPosFileFlags;
+};
+
+
 /**
  * These are loaded from Eeschema settings but then overwritten by the project settings.
  * All of the values are stored in IU, but the backing file stores in mils.
@@ -60,6 +80,11 @@ public:
      * Accessor that computes the current hop-over size
      */
     double GetHopOverScale();
+
+    /**
+     * @return the set of flags to be used for Compare Symbol with Library (and ERC).
+     */
+    int SymbolCompareFlags();
 
 public:
     // Default sizes are all stored in IU here, and in mils in the JSON file
@@ -118,6 +143,8 @@ public:
 
     /// Max deviation allowable when approximating circles and curves (in IU).
     int                         m_MaxError;
+
+    SYMBOL_PARITY_SETTINGS      m_SymbolParity;
 
     /**
      * Ngspice simulator settings.

@@ -2136,10 +2136,10 @@ int ERC_TESTER::TestLibSymbolIssues()
 {
     wxCHECK( m_schematic, 0 );
 
-    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+    LIBRARY_MANAGER&        manager = Pgm().GetLibraryManager();
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_schematic->Project() );
-    wxString          msg;
-    int               err_count = 0;
+    wxString                msg;
+    int                     err_count = 0;
 
     for( SCH_SCREEN* screen = m_screens.GetFirst(); screen; screen = m_screens.GetNext() )
     {
@@ -2155,8 +2155,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 
             wxString libName = symbol->GetLibId().GetLibNickname();
 
-            std::optional<const LIBRARY_TABLE_ROW*> optRow =
-                    manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, libName );
+            std::optional<const LIBRARY_TABLE_ROW*> optRow = manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, libName );
 
             if( !optRow || ( *optRow )->Disabled() )
             {
@@ -2178,12 +2177,12 @@ int ERC_TESTER::TestLibSymbolIssues()
                 if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
                 {
                     std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
-                    std::optional<wxString> uri =
-                            manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, libName, true );
+                    std::optional<wxString>   uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, libName, true );
                     wxCHECK2( uri.has_value(), uri = wxEmptyString );
                     ercItem->SetItems( symbol );
                     msg.Printf( _( "The symbol library '%s' was not found at '%s'" ),
-                                UnescapeString( libName ), *uri );
+                                UnescapeString( libName ),
+                                *uri );
                     ercItem->SetErrorMessage( msg );
 
                     markers.emplace_back( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
@@ -2213,7 +2212,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             }
 
             std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
-            constexpr int flags = SCH_ITEM::COMPARE_FLAGS::EQUALITY | SCH_ITEM::COMPARE_FLAGS::ERC;
+            int                         flags = m_schematic->Settings().SymbolCompareFlags();
 
             if( m_settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
             {

@@ -571,14 +571,9 @@ double SCH_SHAPE::Similarity( const SCH_ITEM& aOther ) const
 
 int SCH_SHAPE::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
-    int cmpFlags = aCompareFlags;
-
     // The object UUIDs must be compared after the shape coordinates because shapes do not
     // have immutable UUIDs.
-    if( !( cmpFlags & ( SCH_ITEM::COMPARE_FLAGS::EQUALITY | SCH_ITEM::COMPARE_FLAGS::ERC ) ) )
-        cmpFlags |= SCH_ITEM::COMPARE_FLAGS::EQUALITY;
-
-    int retv = SCH_ITEM::compare( aOther, cmpFlags );
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags & ~COMPARE_FLAGS::UUID );
 
     if( retv )
         return retv;
@@ -588,17 +583,14 @@ int SCH_SHAPE::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
     if( retv )
         return retv;
 
-    if( ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
-        || ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) )
+    if( aCompareFlags & COMPARE_FLAGS::UUID )
     {
-        return 0;
+        if( m_Uuid < aOther.m_Uuid )
+            return -1;
+
+        if( m_Uuid > aOther.m_Uuid )
+            return 1;
     }
-
-    if( m_Uuid < aOther.m_Uuid )
-        return -1;
-
-    if( m_Uuid > aOther.m_Uuid )
-        return 1;
 
     return 0;
 }

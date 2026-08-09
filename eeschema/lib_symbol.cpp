@@ -2179,22 +2179,41 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     if( m_me == aRhs.m_me )
         return 0;
 
-    if( !aReporter && ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) == 0 )
+    int retv = 0;
+
+    if( aCompareFlags & COMPARE_FLAGS::IDENTITY )
     {
         if( int tmp = m_name.Cmp( aRhs.m_name ) )
-            return tmp;
+        {
+            retv = tmp;
+            REPORT( _( "Name differs." ) );
+
+            if( !aReporter )
+                return retv;
+        }
 
         if( int tmp = m_libId.compare( aRhs.m_libId ) )
-            return tmp;
+        {
+            retv = tmp;
+            REPORT( _( "Library ID differs." ) );
+
+            if( !aReporter )
+                return retv;
+        }
 
         if( m_parent.lock() < aRhs.m_parent.lock() )
-            return -1;
+            retv = -1;
+        else if( m_parent.lock() > aRhs.m_parent.lock() )
+            retv = 1;
 
-        if( m_parent.lock() > aRhs.m_parent.lock() )
-            return 1;
+        if( retv )
+        {
+            REPORT( _( "Symbol parent differs." ) );
+
+            if( !aReporter )
+                return retv;
+        }
     }
-
-    int retv = 0;
 
     if( m_options != aRhs.m_options )
     {
@@ -2310,14 +2329,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
     for( const SCH_FIELD* aField : aFields )
     {
-        int fieldCompareFlags = aCompareFlags;
-
-        // SCH_FIELD::compare() injects SKIP_TST_POS for ERC so mirror it here (issue 24657).
-        if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC )
-            fieldCompareFlags |= SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS;
-
         const SCH_FIELD* bField = nullptr;
-        int              field_retv = 0;
 
         if( aField->IsMandatory() )
             bField = aRhs.GetField( aField->GetId() );
@@ -2326,20 +2338,22 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
         if( !bField )
         {
-            retv = field_retv = 1;
-            REPORT( wxString::Format( _( "Extra field in schematic symbol: %s." ), aField->GetName( false ) ) );
+            if( aCompareFlags & COMPARE_FLAGS::EXTRA_FIELDS )
+            {
+                retv = 1;
+                REPORT( wxString::Format( _( "Extra field in schematic symbol: %s." ), aField->GetName( false ) ) );
 
-            if( !aReporter )
-                return retv;
+                if( !aReporter )
+                    return retv;
+            }
         }
         else
         {
-            // ERC doesn't check for field content, but EQUALITY does
-            if( fieldCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
+            if( ( aCompareFlags & COMPARE_FLAGS::FIELD_TEXT ) && aField->GetId() != FIELD_T::REFERENCE )
             {
                 if( int tmp = aField->GetText().compare( bField->GetText() ) )
                 {
-                    retv = field_retv = tmp;
+                    retv = tmp;
                     REPORT( wxString::Format( _( "Field '%s' differs: %s; %s." ),
                                               aField->GetName( false ),
                                               aField->GetText(),
@@ -2350,51 +2364,81 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
                 }
             }
 
-            if( aField->IsPrivate() != bField->IsPrivate() )
+            if( aCompareFlags & COMPARE_FLAGS::FIELD_SIZE_AND_STYLE )
             {
-                retv = field_retv = aField->IsPrivate() ? 1 : -1;
-                REPORT( wxString::Format( _( "Field '%s' privacy flags differ." ), aField->GetName( false ) ) );
-
-                if( !aReporter )
-                    return retv;
-            }
-
-            if( aField->IsNameShown() != bField->IsNameShown() )
-            {
-                retv = field_retv = aField->IsNameShown() ? 1 : -1;
-                REPORT( wxString::Format( _( "Field '%s' name shown flags differ." ), aField->GetName( false ) ) );
-
-                if( !aReporter )
-                    return retv;
-            }
-
-            if( !( fieldCompareFlags & SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS ) )
-            {
-                int tmp = 0;
-
-                if( aField->GetPosition().x != bField->GetPosition().x )
-                    tmp = field_retv = aField->GetPosition().x - bField->GetPosition().x;
-
-                if( aField->GetPosition().y != bField->GetPosition().y )
-                    tmp = field_retv = aField->GetPosition().y - bField->GetPosition().y;
-
-                if( tmp != 0 )
+                if( aField->GetFont() != bField->GetFont() )
                 {
-                    retv = field_retv = tmp;
-                    REPORT( wxString::Format( _( "Field '%s' positions differ." ), aField->GetName( false ) ) );
+                    retv = static_cast<int>( aField->GetFont() - bField->GetFont() );
+                    REPORT( wxString::Format( _( "Field '%s' fonts differ." ), aField->GetName( false ) ) );
+
+                    if( !aReporter )
+                        return retv;
+                }
+
+                if( aField->GetTextSize() != bField->GetTextSize() )
+                {
+                    if( aField->GetTextSize().x != bField->GetTextSize().x )
+                        retv = aField->GetTextSize().x - bField->GetTextSize().x;
+                    else
+                        retv = aField->GetTextSize().y - bField->GetTextSize().y;
+
+                    REPORT( wxString::Format( _( "Field '%s' text sizes differ." ), aField->GetName( false ) ) );
+
+                    if( !aReporter )
+                        return retv;
+                }
+
+                if( int tmp = aField->GetAttributes().Compare( bField->GetAttributes() ) )
+                {
+                    retv = tmp;
+                    REPORT( wxString::Format( _( "Field '%s' text styles differ." ), aField->GetName( false ) ) );
 
                     if( !aReporter )
                         return retv;
                 }
             }
 
-            if( field_retv == 0 )
+            if( aCompareFlags & COMPARE_FLAGS::FIELD_VISIBILITY )
             {
-                // Fall back to base class comparison for other properties
-                if( int tmp = aField->SCH_ITEM::compare( *bField, fieldCompareFlags ) )
+                if( aField->IsVisible() != bField->IsVisible() )
                 {
-                    retv = field_retv = tmp;
-                    REPORT( wxString::Format( _( "Field '%s' differs." ), aField->GetName( false ) ) );
+                    retv = aField->IsVisible() ? 1 : -1;
+                    REPORT( wxString::Format( _( "Field '%s' visibility flags differ." ), aField->GetName( false ) ) );
+
+                    if( !aReporter )
+                        return retv;
+                }
+
+                if( aField->IsNameShown() != bField->IsNameShown() )
+                {
+                    retv = aField->IsNameShown() ? 1 : -1;
+                    REPORT( wxString::Format( _( "Field '%s' name shown flags differ." ), aField->GetName( false ) ) );
+
+                    if( !aReporter )
+                        return retv;
+                }
+            }
+
+            if( aField->IsPrivate() != bField->IsPrivate() )
+            {
+                retv = aField->IsPrivate() ? 1 : -1;
+                REPORT( wxString::Format( _( "Field '%s' privacy flags differ." ), aField->GetName( false ) ) );
+
+                if( !aReporter )
+                    return retv;
+            }
+
+            if( aCompareFlags & COMPARE_FLAGS::FIELD_POSITIONS )
+            {
+                if( aField->GetPosition().x != bField->GetPosition().x )
+                    retv = aField->GetPosition().x - bField->GetPosition().x;
+
+                if( aField->GetPosition().y != bField->GetPosition().y )
+                    retv = aField->GetPosition().y - bField->GetPosition().y;
+
+                if( retv )
+                {
+                    REPORT( wxString::Format( _( "Field '%s' positions differ." ), aField->GetName( false ) ) );
 
                     if( !aReporter )
                         return retv;
@@ -2403,22 +2447,25 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         }
     }
 
-    for( const SCH_FIELD* bField : bFields )
+    if( aCompareFlags & COMPARE_FLAGS::MISSING_FIELDS )
     {
-        const SCH_FIELD* aField = nullptr;
-
-        if( bField->IsMandatory() )
-            aField = aRhs.GetField( bField->GetId() );
-        else
-            aField = aRhs.GetField( bField->GetName() );
-
-        if( !aField )
+        for( const SCH_FIELD* bField : bFields )
         {
-            retv = 1;
-            REPORT( wxString::Format( _( "Missing field in schematic symbol: %s." ), bField->GetName( false ) ) );
+            const SCH_FIELD* aField = nullptr;
 
-            if( !aReporter )
-                return retv;
+            if( bField->IsMandatory() )
+                aField = aRhs.GetField( bField->GetId() );
+            else
+                aField = aRhs.GetField( bField->GetName() );
+
+            if( !aField )
+            {
+                retv = 1;
+                REPORT( wxString::Format( _( "Missing field in schematic symbol: %s." ), bField->GetName( false ) ) );
+
+                if( !aReporter )
+                    return retv;
+            }
         }
     }
 
@@ -2497,7 +2544,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             return retv;
     }
 
-    if( ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) == 0 )
+    if( aCompareFlags & COMPARE_FLAGS::PIN_VISIBILITIES )
     {
         if( m_showPinNames != aRhs.m_showPinNames )
         {
@@ -2516,7 +2563,10 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( !aReporter )
                 return retv;
         }
+    }
 
+    if( aCompareFlags & COMPARE_FLAGS::EXCLUDE_FROM_SIM )
+    {
         if( m_excludedFromSim != aRhs.m_excludedFromSim )
         {
             retv = ( m_excludedFromSim ) ? -1 : 1;
@@ -2525,7 +2575,10 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( !aReporter )
                 return retv;
         }
+    }
 
+    if( aCompareFlags & COMPARE_FLAGS::EXCLUDE_FROM_BOM )
+    {
         if( m_excludedFromBOM != aRhs.m_excludedFromBOM )
         {
             retv = ( m_excludedFromBOM ) ? -1 : 1;
@@ -2534,7 +2587,10 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( !aReporter )
                 return retv;
         }
+    }
 
+    if( aCompareFlags & COMPARE_FLAGS::EXCLUDE_FROM_BOARD )
+    {
         if( m_excludedFromBoard != aRhs.m_excludedFromBoard )
         {
             retv = ( m_excludedFromBoard ) ? -1 : 1;
@@ -2543,7 +2599,22 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             if( !aReporter )
                 return retv;
         }
+    }
 
+    if( aCompareFlags & COMPARE_FLAGS::DNP )
+    {
+        if( m_DNP != aRhs.m_DNP )
+        {
+            retv = ( m_DNP ) ? -1 : 1;
+            REPORT( _( "Do not populate settings differ." ) );
+
+            if( !aReporter )
+                return retv;
+        }
+    }
+
+    if( aCompareFlags & COMPARE_FLAGS::EXCLUDE_FROM_POS_FILES )
+    {
         if( m_excludedFromPosFiles != aRhs.m_excludedFromPosFiles )
         {
             retv = ( m_excludedFromPosFiles ) ? -1 : 1;

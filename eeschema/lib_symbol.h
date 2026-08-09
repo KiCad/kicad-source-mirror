@@ -920,7 +920,8 @@ public:
      *         1 if this symbol is greater than \a aRhs
      *         0 if this symbol is the same as \a aRhs
      */
-    int Compare( const LIB_SYMBOL& aRhs, int aCompareFlags = 0, REPORTER* aReporter = nullptr ) const;
+    int Compare( const LIB_SYMBOL& aRhs, int aCompareFlags = ~COMPARE_FLAGS::UNIT,
+                 REPORTER* aReporter = nullptr ) const;
 
     const LIB_SYMBOL& operator=( const LIB_SYMBOL& aSymbol );
 
@@ -974,16 +975,26 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
-private:
-    // We create a different set parent function for this class, so we hide the inherited one.
-    using EDA_ITEM::SetParent;
-
+protected:
     /**
      * The library symbol specific sort order is as follows:
      *
-     *   - The result of #SCH_ITEM::compare()
+     *   - Symbol name
+     *   - Symbol lib_id
+     *   - Symbol parent (if inherited)
+     *   - Power flag
+     *   - Unit count
+     *   - Drawings
+     *   - Pins
+     *   - Fields
+     *   - Attributes
      */
-    int compare( const SCH_ITEM& aOther, int aCompareFlags = SCH_ITEM::COMPARE_FLAGS::EQUALITY ) const override;
+    int compare( const SCH_ITEM& aOther,
+                 int aCompareFlags = ~( COMPARE_FLAGS::UUID | COMPARE_FLAGS::UNIT ) ) const override;
+
+private:
+    // We create a different set parent function for this class, so we hide the inherited one.
+    using EDA_ITEM::SetParent;
 
     void deleteAllFields();
 

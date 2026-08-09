@@ -413,7 +413,9 @@ void SCH_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
 
             flattenedSchSymbol->SetFields( fields );
 
-            if( flattenedSchSymbol->Compare( *flattenedLibSymbol, SCH_ITEM::COMPARE_FLAGS::ERC, r ) == 0 )
+            int flags = schEditorFrame->Schematic().Settings().SymbolCompareFlags();
+
+            if( flattenedSchSymbol->Compare( *flattenedLibSymbol, flags, r ) == 0 )
                 r->Report( _( "No relevant differences detected." ) );
 
             wxPanel*            panel = dialog->AddBlankPage( _( "Visual" ) );

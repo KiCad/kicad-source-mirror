@@ -1975,8 +1975,7 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
     // Ignore the UUID here
     // And the position, which we'll do after the number.
-    int retv = SCH_ITEM::compare( aOther, aCompareFlags | SCH_ITEM::COMPARE_FLAGS::EQUALITY
-                                                  | SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS );
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags & ~( COMPARE_FLAGS::UUID | COMPARE_FLAGS::POSITION ) );
 
     if( retv )
         return retv;

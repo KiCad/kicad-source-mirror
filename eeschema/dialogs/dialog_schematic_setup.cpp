@@ -41,6 +41,8 @@
 #include <widgets/wx_infobar.h>
 #include <widgets/wx_progress_reporters.h>
 #include "dialog_schematic_setup.h"
+
+#include "panel_setup_symbol_parity.h"
 #include "panel_template_fieldnames.h"
 
 
@@ -101,6 +103,13 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
                                                    ercSettings.m_ERCSeverities, m_pinToPinError.get() );
             }, _( "Violation Severity" ) );
 
+    m_symbolParityPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_SYMBOL_PARITY( aParent, m_frame );
+            }, _( "Compare Symbol with Library" ) );
+
     m_pinMapPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
             [this]( wxWindow* aParent ) -> wxWindow*
@@ -115,8 +124,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
             [this]( wxWindow* aParent ) -> wxWindow*
             {
                 SCHEMATIC& schematic = m_frame->Schematic();
-                return new PANEL_SETUP_NETCLASSES( aParent, m_frame,
-                                                   m_frame->Prj().GetProjectFile().NetSettings(),
+                return new PANEL_SETUP_NETCLASSES( aParent, m_frame, m_frame->Prj().GetProjectFile().NetSettings(),
                                                    schematic.GetNetClassAssignmentCandidates(), true );
             }, _( "Net Classes" ) );
 
@@ -219,6 +227,12 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
     {
         static_cast<PANEL_TEMPLATE_FIELDNAMES*>( m_treebook->ResolvePage( m_fieldNameTemplatesPage ) )
                 ->ImportSettingsFrom( &otherSch.Settings().m_TemplateFieldNames );
+    }
+
+    if( importDlg.m_SymbolParityOpt->GetValue() )
+    {
+        static_cast<PANEL_SETUP_SYMBOL_PARITY*>( m_treebook->ResolvePage( m_symbolParityPage ) )
+                ->ImportSettingsFrom( file.m_SchematicSettings->m_SymbolParity );
     }
 
     if( importDlg.m_PinMapOpt->GetValue() )

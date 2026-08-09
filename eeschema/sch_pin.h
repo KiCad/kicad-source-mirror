@@ -408,7 +408,7 @@ public:
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 
-    bool operator>( const SCH_ITEM& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
+    bool operator>( const SCH_ITEM& aRhs ) const { return compare( aRhs, ~COMPARE_FLAGS::UUID ) > 0; }
 
     /**
      * Get the layout cache associated with this pin.
@@ -429,8 +429,7 @@ protected:
         VECTOR2I      m_Extents;
     };
 
-    void validateExtentsCache( KIFONT::FONT* aFont, int aSize, const wxString& aText,
-                               EXTENTS_CACHE* aCache ) const;
+    void validateExtentsCache( KIFONT::FONT* aFont, int aSize, const wxString& aText, EXTENTS_CACHE* aCache ) const;
 
     std::ostream& operator<<( std::ostream& aStream );
 

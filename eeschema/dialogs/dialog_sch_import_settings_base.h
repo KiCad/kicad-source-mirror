@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -59,6 +59,7 @@ class DIALOG_SCH_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_FieldNameTemplatesOpt;
 		wxCheckBox* m_BomPresetsOpt;
 		wxCheckBox* m_BomFmtPresetsOpt;
+		wxCheckBox* m_SymbolParityOpt;
 		wxCheckBox* m_SeveritiesOpt;
 		wxCheckBox* m_PinMapOpt;
 		wxCheckBox* m_NetClassesOpt;

@@ -41,7 +41,10 @@ BOOST_AUTO_TEST_CASE( Issue24657FieldPositionIgnoredForERC )
     LIB_SYMBOL moved( original );
     moved.GetValueField().SetTextPos( VECTOR2I( 0, 254000 ) );
 
-    constexpr int flags = SCH_ITEM::COMPARE_FLAGS::EQUALITY | SCH_ITEM::COMPARE_FLAGS::ERC;
+    int flags = ~SCH_ITEM::COMPARE_FLAGS::UUID;
+    flags &= ~SCH_ITEM::COMPARE_FLAGS::UNIT;
+    flags &= ~SCH_ITEM::COMPARE_FLAGS::IDENTITY;
+    flags &= ~SCH_ITEM::COMPARE_FLAGS::FIELD_POSITIONS;
 
     int result = original.Compare( moved, flags );
 

@@ -1657,22 +1657,15 @@ int SCH_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == SCH_FIELD_T );
 
-    int compareFlags = aCompareFlags;
-
-    // For ERC tests, the field position has no matter, so do not test it
-    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC )
-        compareFlags |= SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS;
-
-    int retv = SCH_ITEM::compare( aOther, compareFlags );
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags );
 
     if( retv )
         return retv;
 
     const SCH_FIELD* tmp = static_cast<const SCH_FIELD*>( &aOther );
 
-    // Equality test will vary depending whether or not the field is mandatory.  Otherwise,
-    // sorting is done by ordinal.
-    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
+    // If we're not testing the UUID then we're looking for an equivalence test
+    if( !( aCompareFlags & COMPARE_FLAGS::UUID ) )
     {
         // Mandatory fields have fixed ordinals and their names can vary due to translated field
         // names.  Optional fields have fixed names and their ordinals can vary.
@@ -1689,21 +1682,13 @@ int SCH_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
                 return retv;
         }
     }
-    else // assume we're sorting
+    else // assume we're sorting for stable file order
     {
         if( m_id != tmp->m_id )
             return (int) m_id - (int) tmp->m_id;
     }
 
-    bool ignoreFieldText = false;
-
-    if( m_id == FIELD_T::REFERENCE && !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY ) )
-        ignoreFieldText = true;
-
-    if( m_id == FIELD_T::VALUE && ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) )
-        ignoreFieldText = true;
-
-    if( !ignoreFieldText )
+    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::FIELD_TEXT )
     {
         retv = GetText().CmpNoCase( tmp->GetText() );
 
@@ -1711,7 +1696,7 @@ int SCH_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
             return retv;
     }
 
-    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
+    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::FIELD_POSITIONS )
     {
         if( GetTextPos().x != tmp->GetTextPos().x )
             return GetTextPos().x - tmp->GetTextPos().x;
@@ -1720,14 +1705,12 @@ int SCH_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
             return GetTextPos().y - tmp->GetTextPos().y;
     }
 
-    // For ERC tests, the field size has no matter, so do not test it
-    if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) )
+    if( aCompareFlags & COMPARE_FLAGS::FIELD_SIZE_AND_STYLE )
     {
-        if( GetTextWidth() != tmp->GetTextWidth() )
-            return GetTextWidth() - tmp->GetTextWidth();
+        retv = GetAttributes().Compare( tmp->GetAttributes() );
 
-        if( GetTextHeight() != tmp->GetTextHeight() )
-            return GetTextHeight() - tmp->GetTextHeight();
+        if( retv )
+            return retv;
     }
 
     return 0;

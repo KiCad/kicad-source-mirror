@@ -698,7 +698,7 @@ bool SCH_ITEM::operator==( const SCH_ITEM& aOther ) const
     if( Type() != aOther.Type() )
         return false;
 
-    return compare( aOther, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) == 0;
+    return compare( aOther, !COMPARE_FLAGS::UUID ) == 0;
 }
 
 
@@ -713,7 +713,7 @@ bool SCH_ITEM::operator<( const SCH_ITEM& aOther ) const
 
 bool SCH_ITEM::cmp_items::operator()( const SCH_ITEM* aFirst, const SCH_ITEM* aSecond ) const
 {
-    return aFirst->compare( *aSecond, COMPARE_FLAGS::EQUALITY ) < 0;
+    return aFirst->compare( *aSecond, !COMPARE_FLAGS::UUID ) < 0;
 }
 
 
@@ -722,16 +722,19 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
     if( Type() != aOther.Type() )
         return Type() - aOther.Type();
 
-    if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::UNIT ) && m_unit != aOther.m_unit )
-        return m_unit - aOther.m_unit;
+    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::UNIT )
+    {
+        if( m_unit != aOther.m_unit )
+            return m_unit - aOther.m_unit;
 
-    if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::UNIT ) && m_bodyStyle != aOther.m_bodyStyle )
-        return m_bodyStyle - aOther.m_bodyStyle;
+        if( m_bodyStyle != aOther.m_bodyStyle )
+            return m_bodyStyle - aOther.m_bodyStyle;
+    }
 
     if( IsPrivate() != aOther.IsPrivate() )
         return IsPrivate() ? 1 : -1;
 
-    if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS ) )
+    if( aCompareFlags & COMPARE_FLAGS::POSITION )
     {
         if( GetPosition().x != aOther.GetPosition().x )
             return GetPosition().x - aOther.GetPosition().x;
@@ -740,17 +743,14 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
             return GetPosition().y - aOther.GetPosition().y;
     }
 
-    if( ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
-        || ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) )
+    if( aCompareFlags & COMPARE_FLAGS::UUID )
     {
-        return 0;
+        if( m_Uuid < aOther.m_Uuid )
+            return -1;
+
+        if( m_Uuid > aOther.m_Uuid )
+            return 1;
     }
-
-    if( m_Uuid < aOther.m_Uuid )
-        return -1;
-
-    if( m_Uuid > aOther.m_Uuid )
-        return 1;
 
     return 0;
 }

@@ -688,25 +688,27 @@ public:
     const std::vector<wxString>* GetEmbeddedFonts() override;
 
     /**
-     * The list of flags used by the #compare function.
-     *
-     * UNIT  This flag relaxes unit, body-style and pin-number constraints.  It is used for
-     *       #SCH_ITEM object unit comparisons.
-     *
-     * EQUALITY  This flag relaxes ordering constraints so that fields, etc. don't have to
-     *           appear in the same order to be considered equal.
-     *
-     * ERC  This flag relaxes constraints on data that is settable in the schematic editor.
-     *      It compares only symbol-editor-only data.
-     *
-     * SKIP_TST_POS   This flag relaxes comparisons on position (mainly for fields) for ERC.
+     * The list of flags used by various compare functions.
      */
     enum COMPARE_FLAGS : int
     {
-        UNIT          = 0x01,
-        EQUALITY      = 0x02,
-        ERC           = 0x04,
-        SKIP_TST_POS  = 0x08
+        UNIT                   = 1 << 0,
+        POSITION               = 1 << 1,
+        UUID                   = 1 << 2,
+        MISSING_FIELDS         = 1 << 3,
+        EXTRA_FIELDS           = 1 << 4,
+        FIELD_TEXT             = 1 << 5,
+        FIELD_VISIBILITY       = 1 << 6,
+        FIELD_SIZE_AND_STYLE   = 1 << 7,
+        FIELD_POSITIONS        = 1 << 8,
+        PIN_VISIBILITIES       = 1 << 9,
+        PIN_ALT_DEFS           = 1 << 10,
+        EXCLUDE_FROM_SIM       = 1 << 11,
+        EXCLUDE_FROM_BOARD     = 1 << 12,
+        DNP                    = 1 << 13,
+        EXCLUDE_FROM_BOM       = 1 << 15,
+        EXCLUDE_FROM_POS_FILES = 1 << 16,
+        IDENTITY               = 1 << 17,
     };
 
     virtual bool operator==( const SCH_ITEM& aOther ) const;
@@ -753,7 +755,7 @@ protected:
      *         zero if the object is equal to \a aOther object, or greater than 0 if the
      *         object is greater than \a aOther object.
      */
-    virtual int compare( const SCH_ITEM& aOther, int aCompareFlags = 0 ) const;
+    virtual int compare( const SCH_ITEM& aOther, int aCompareFlags = ~COMPARE_FLAGS::UNIT ) const;
 
 private:
     friend class CONNECTION_GRAPH;

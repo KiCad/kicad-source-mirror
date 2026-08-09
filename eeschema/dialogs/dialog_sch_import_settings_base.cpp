@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -59,6 +59,9 @@ DIALOG_SCH_IMPORT_SETTINGS_BASE::DIALOG_SCH_IMPORT_SETTINGS_BASE( wxWindow* pare
 
 	m_BomFmtPresetsOpt = new wxCheckBox( this, wxID_ANY, _("BOM format presets"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_BomFmtPresetsOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+	m_SymbolParityOpt = new wxCheckBox( this, wxID_ANY, _("Compare symbol with library settings"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_SymbolParityOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_SeveritiesOpt = new wxCheckBox( this, wxID_ANY, _("Violation severities"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_SeveritiesOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );

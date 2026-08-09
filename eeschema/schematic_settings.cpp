@@ -19,11 +19,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <base_screen.h>
 #include <lib_symbol.h>
 #include <default_values.h>
 #include <eeschema_settings.h>
-#include <macros.h>
 #include <pgm_base.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
@@ -41,6 +39,23 @@ const std::vector<double> hopover_size_mult_list  = { 0.0, 1.7, 4.0, 6.0, 9.0, 1
 const std::vector<double> junction_size_mult_list = { 0.0, 1.7, 4.0, 6.0, 9.0, 12.0 };
 
 const int schSettingsSchemaVersion = 1;
+
+
+SYMBOL_PARITY_SETTINGS::SYMBOL_PARITY_SETTINGS() :
+    m_MissingFields( true ),
+    m_ExtraFields( false ),
+    m_FieldTexts( true ),
+    m_FieldVisibilities( false ),
+    m_FieldStyles( false ),
+    m_FieldPositions( false ),
+    m_PinVisibilities( false ),
+    m_PinAltFunctions( true ),
+    m_ExcludeFromBoardFlags( true ),
+    m_DNPFlags( false ),
+    m_ExcludeFromBOMFlags( false ),
+    m_ExcludeFromPosFileFlags( true )
+{
+};
 
 
 SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
@@ -157,8 +172,7 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             {
                 nlohmann::json ret = nlohmann::json::array();
 
-                for( const TEMPLATE_FIELDNAME& field :
-                        m_TemplateFieldNames.GetTemplateFieldNames( false ) )
+                for( const TEMPLATE_FIELDNAME& field : m_TemplateFieldNames.GetTemplateFieldNames( false ) )
                 {
                     ret.push_back( nlohmann::json( {
                                 { "name",    field.m_Name },
@@ -177,16 +191,13 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
                     for( const nlohmann::json& entry : aJson )
                     {
-                        if( !entry.contains( "name" ) || !entry.contains( "url" )
-                                || !entry.contains( "visible" ) )
+                        if( entry.contains( "name" ) && entry.contains( "url" ) && entry.contains( "visible" ) )
                         {
-                            continue;
+                            TEMPLATE_FIELDNAME field( entry["name"].get<wxString>() );
+                            field.m_URL     = entry["url"].get<bool>();
+                            field.m_Visible = entry["visible"].get<bool>();
+                            m_TemplateFieldNames.AddTemplateFieldName( field, false );
                         }
-
-                        TEMPLATE_FIELDNAME field( entry["name"].get<wxString>() );
-                        field.m_URL     = entry["url"].get<bool>();
-                        field.m_Visible = entry["visible"].get<bool>();
-                        m_TemplateFieldNames.AddTemplateFieldName( field, false );
                     }
                 }
 
@@ -198,11 +209,47 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                 }
             }, {} ) );
 
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.missing_fields",
+            &m_SymbolParity.m_MissingFields, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.extra_fields",
+            &m_SymbolParity.m_ExtraFields, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.field_texts",
+            &m_SymbolParity.m_FieldTexts, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.field_visibilities",
+            &m_SymbolParity.m_FieldVisibilities, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.field_styles",
+            &m_SymbolParity.m_FieldStyles, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.field_positions",
+            &m_SymbolParity.m_FieldPositions, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.pin_name_number_visibilities",
+            &m_SymbolParity.m_PinVisibilities, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.pin_alt_function_definitions",
+            &m_SymbolParity.m_PinAltFunctions, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.exclude_from_board_flags",
+            &m_SymbolParity.m_ExcludeFromBoardFlags, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.dnp_flags",
+            &m_SymbolParity.m_DNPFlags, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.exclude_from_bom_flags",
+            &m_SymbolParity.m_ExcludeFromBOMFlags, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "compare_symbols.exclude_from_position_file_flags",
+            &m_SymbolParity.m_ExcludeFromPosFileFlags, true ) );
+
     m_params.emplace_back( new PARAM<wxString>( "bom_export_filename",
             &m_BomExportFileName, "${PROJECTNAME}.csv" ) );
 
-    m_params.emplace_back(
-            new PARAM<BOM_PRESET>( "bom_settings", &m_BomSettings, BOM_PRESET::DefaultEditing() ) );
+    m_params.emplace_back( new PARAM<BOM_PRESET>( "bom_settings",
+            &m_BomSettings, BOM_PRESET::DefaultEditing() ) );
     m_params.emplace_back( new PARAM_LIST<BOM_PRESET>( "bom_presets",
             &m_BomPresets, {} ) );
 
@@ -362,4 +409,52 @@ int SCHEMATIC_SETTINGS::GetJunctionSize()
 double SCHEMATIC_SETTINGS::GetHopOverScale()
 {
     return hopover_size_mult_list[m_HopOverSizeChoice];
+}
+
+
+int SCHEMATIC_SETTINGS::SymbolCompareFlags()
+{
+    int flags = ~( SCH_ITEM::COMPARE_FLAGS::UUID | SCH_ITEM::COMPARE_FLAGS::UNIT );
+
+    flags &= ~SCH_ITEM::COMPARE_FLAGS::IDENTITY;
+
+    if( !m_SymbolParity.m_MissingFields )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::MISSING_FIELDS;
+
+    if( !m_SymbolParity.m_ExtraFields )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::EXTRA_FIELDS;
+
+    if( !m_SymbolParity.m_FieldTexts )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::FIELD_TEXT;
+
+    if( !m_SymbolParity.m_FieldVisibilities )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::FIELD_VISIBILITY;
+
+    if( !m_SymbolParity.m_FieldStyles )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::FIELD_SIZE_AND_STYLE;
+
+    if( !m_SymbolParity.m_FieldPositions )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::FIELD_POSITIONS;
+
+    if( !m_SymbolParity.m_PinVisibilities )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::PIN_VISIBILITIES;
+
+    if( !m_SymbolParity.m_PinAltFunctions )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::PIN_ALT_DEFS;
+
+    flags &= ~SCH_ITEM::COMPARE_FLAGS::EXCLUDE_FROM_SIM;
+
+    if( !m_SymbolParity.m_ExcludeFromBoardFlags )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::EXCLUDE_FROM_BOARD;
+
+    if( !m_SymbolParity.m_DNPFlags )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::DNP;
+
+    if( !m_SymbolParity.m_ExcludeFromBOMFlags )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::EXCLUDE_FROM_BOM;
+
+    if( !m_SymbolParity.m_ExcludeFromPosFileFlags )
+        flags &= ~SCH_ITEM::COMPARE_FLAGS::EXCLUDE_FROM_POS_FILES;
+
+    return flags;
 }
