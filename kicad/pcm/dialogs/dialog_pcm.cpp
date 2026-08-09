@@ -173,7 +173,12 @@ DIALOG_PCM::DIALOG_PCM( EDA_BASE_FRAME* parent, std::shared_ptr<PLUGIN_CONTENT_M
     m_sdbSizer1Cancel->Bind( wxEVT_UPDATE_UI, &DIALOG_PCM::OnUpdateEventButtons, this );
     m_sdbSizer1Apply->Bind( wxEVT_UPDATE_UI, &DIALOG_PCM::OnUpdateEventButtons, this );
 
-    setRepositoryListFromPcm();
+    // Has to be called after DIALOG_SHIM reads cached values
+    CallAfter(
+            [this]()
+            {
+                setRepositoryListFromPcm();
+            } );
 
     for( int col = 0; col < m_gridPendingActions->GetNumberCols(); col++ )
     {
@@ -273,6 +278,7 @@ void DIALOG_PCM::OnManageRepositoriesClicked( wxCommandEvent& event )
 void DIALOG_PCM::setRepositoryListFromPcm()
 {
     std::vector<std::tuple<wxString, wxString, wxString>> repositories = m_pcm->GetRepositoryList();
+    KICAD_SETTINGS*                                       cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
     m_choiceRepository->Clear();
 
@@ -281,14 +287,27 @@ void DIALOG_PCM::setRepositoryListFromPcm()
 
     if( repositories.size() > 0 )
     {
-        m_choiceRepository->SetSelection( 0 );
-        m_selectedRepositoryId = std::get<0>( repositories[0] );
+        int idx = 0;
+        if( !cfg->m_PcmLastSelectedRepoId.IsEmpty() )
+        {
+            auto it = std::find_if( repositories.begin(), repositories.end(),
+                                    [&cfg]( const auto& repo )
+                                    {
+                                        return std::get<0>( repo ) == cfg->m_PcmLastSelectedRepoId;
+                                    } );
+            if( it != repositories.end() )
+                idx = std::distance( repositories.begin(), it );
+        }
+        m_choiceRepository->SetSelection( idx );
+        m_selectedRepositoryId = std::get<0>( repositories[idx] );
         setRepositoryData( m_selectedRepositoryId );
     }
     else
     {
         m_selectedRepositoryId = "";
     }
+
+    cfg->m_PcmLastSelectedRepoId = m_selectedRepositoryId;
 }
 
 
@@ -329,6 +348,9 @@ void DIALOG_PCM::OnRepositoryChoice( wxCommandEvent& event )
     m_selectedRepositoryId = data->GetData();
 
     setRepositoryData( m_selectedRepositoryId );
+
+    KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" );
+    cfg->m_PcmLastSelectedRepoId = m_selectedRepositoryId;
 }
 
 

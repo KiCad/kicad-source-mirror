@@ -167,6 +167,8 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
 
     m_params.emplace_back( new PARAM<wxString>( "pcm.lib_prefix", &m_PcmLibPrefix,
                                                 wxS( "PCM_" ) ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "pcm.last_selected_repo_id", &m_PcmLastSelectedRepoId, "" ) );
 }
 
 

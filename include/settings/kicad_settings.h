@@ -68,6 +68,8 @@ public:
     bool m_PcmLibAutoRemove;
     // Generated library nickname prefix
     wxString m_PcmLibPrefix;
+    // Last used repository (for pre-selection in dialog)
+    wxString m_PcmLastSelectedRepoId;
 
     bool     m_KiCadUpdateCheck;
     wxString m_lastUpdateCheckTime;
