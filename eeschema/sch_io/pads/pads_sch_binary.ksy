@@ -607,7 +607,11 @@ types:
             0x000d: connection_vertex_controller(pool_directory[21].used_count)
         size: pool_directory[21].used_bytes
       - id: controller_payload_23
-        type: preserved_connectivity_tail_controller
+        type:
+          switch-on: _root.version
+          cases:
+            0x000c: preserved_v12_connectivity_controller
+            0x000d: net_name_controller(pool_directory[22].used_count)
         size: pool_directory[22].used_bytes
 
   preserved_v12_definition_controller:
@@ -631,12 +635,62 @@ types:
         size-eos: true
         doc: All seven v0x000C files contribute exact controller bytes; importer disposition is UNSUPPORTED with raw bytes preserved.
 
-  preserved_connectivity_tail_controller:
-    doc: Exact bounded controller 23 payload; empty in every public v0x000D fixture and preserved if encountered.
+  net_name_controller:
+    params:
+      - id: num_records
+        type: u4
     seq:
-      - id: preserved_payload
-        size-eos: true
-        doc: Controller 23 is empty in all public v0x000D fixtures; nonempty input is retained with importer disposition PRESERVED.
+      - id: records
+        type: net_name_record
+        repeat: expr
+        repeat-expr: num_records
+
+  net_name_record:
+    doc: Exact 48-byte v0x000D *NETNAMES* presentation record. Record counts match every native Logic 9 ASCII sheet in SC350460A01.
+    seq:
+      - id: font_handle
+        type: s2
+      - id: height_mils
+        type: u2
+      - id: width_factor
+        type: u2
+      - id: preserved_presentation_06
+        size: 10
+        doc: Exact presentation bytes; the paired ASCII fields do not distinguish their semantics, so importer disposition is PRESERVED.
+      - id: global_net_record
+        type: u4
+      - id: text_x_offset_quarter_mil
+        type: s2
+      - id: text_y_offset_quarter_mil
+        type: s2
+      - id: rotation_tenths_degree
+        type: u2
+      - id: justification
+        type: u2
+      - id: secondary_x_offset_quarter_mil
+        type: s2
+      - id: secondary_y_offset_quarter_mil
+        type: s2
+      - id: preserved_presentation_20
+        type: u2
+        doc: Exact paired-ASCII presentation word with unproved semantics; importer disposition is PRESERVED.
+      - id: presentation_flags
+        type: u2
+      - id: predecessor_handle
+        type: u2
+      - id: owner_handle
+        type: u2
+        doc: "Typed owner: 0x2xxx controller-20 off-page record, 0x4xxx controller-18 bus record, otherwise controller-15 placement record."
+      - id: owner_child_handle
+        type: u2
+        doc: Bus member ordinal for 0x4xxx owners; placement-local pin ordinal for controller-15 owners.
+      - id: predecessor_record
+        type: u2
+      - id: successor_record
+        type: u2
+      - id: preserved_tail
+        type: u2
+        doc: Exact record tail; paired ASCII does not expose semantics, so importer disposition is PRESERVED.
 
   bus_controller:
     params:
@@ -782,12 +836,12 @@ types:
         type: u2
       - id: endpoint_b_handle
         type: u2
-      - id: preserved_relationship_10
+      - id: endpoint_a_relationship
         type: u4
-        doc: Exact connection relationship word; endpoint and net controlled diffs leave semantics unproved, so importer disposition is PRESERVED.
-      - id: preserved_relationship_14
+        doc: Exact producer-owned endpoint relationship. SC350460A01 pin-to-pin records disprove a pin-ordinal interpretation, so importer disposition is PRESERVED.
+      - id: endpoint_b_relationship
         type: u4
-        doc: Exact connection relationship word; endpoint and net controlled diffs leave semantics unproved, so importer disposition is PRESERVED.
+        doc: Exact producer-owned endpoint relationship. SC350460A01 pin-to-pin records disprove a pin-ordinal interpretation, so importer disposition is PRESERVED.
       - id: bounds_x1_biased_quarter_mil
         type: u2
       - id: bounds_y1_biased_quarter_mil
@@ -1083,8 +1137,9 @@ types:
       - id: preserved_definition_word_38
         type: u4
         doc: Exact definition word; vertex and terminal ownership diffs prove adjacent indexes only, so importer disposition is PRESERVED.
-      - id: timestamp
-        type: u4
+      - id: timestamp_or_page_origin
+        type: symbol_definition_timestamp_or_page_origin
+        doc: Object class 0 stores the page-graphic group origin as biased quarter-mil X/Y words; symbol definitions store the original 32-bit timestamp.
       - id: embedded_text_count_or_preserved_relationship
         type: u2
         doc: Generated definition and page pairs prove the embedded-text count when the adjacent endpoint forms the validated controller-1 slice; otherwise the exact relationship word is retained with importer disposition UNSUPPORTED.
@@ -1109,6 +1164,13 @@ types:
       - id: preserved_definition_style_word_4e
         type: s2
         doc: Exact definition style word; generated line/fill/text variants expose no ASCII counterpart, so importer disposition is PRESERVED.
+
+  symbol_definition_timestamp_or_page_origin:
+    seq:
+      - id: timestamp_low_or_page_origin_x_biased_quarter_mil
+        type: u2
+      - id: timestamp_high_or_page_origin_y_biased_quarter_mil
+        type: u2
 
   symbol_piece_controller:
     params:
@@ -1146,9 +1208,9 @@ types:
 
   symbol_vertex_record:
     seq:
-      - id: x_half_mil_divided_by_2
+      - id: x_quarter_mil
         type: s2
-      - id: y_half_mil_divided_by_2
+      - id: y_quarter_mil
         type: s2
       - id: arc_marker
         type: s2

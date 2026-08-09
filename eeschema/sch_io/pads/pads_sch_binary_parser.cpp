@@ -69,6 +69,7 @@ namespace
     constexpr size_t   OFFPAGE_RECORD_BYTES = 32;
     constexpr size_t   CONNECTION_RECORD_BYTES = 40;
     constexpr size_t   CONNECTION_VERTEX_BYTES = 8;
+    constexpr size_t   NET_NAME_RECORD_BYTES = 48;
     constexpr size_t   PLACEMENT_GROUP_BYTES = 24;
     constexpr size_t   ATTRIBUTE_OFFSET_BYTES = 4;
     constexpr size_t   FONT_RECORD_BYTES = 36;
@@ -94,6 +95,8 @@ namespace
     {
         size_t                         membershipBase = 0;
         uint32_t                       membershipCount = 0;
+        size_t                         fontBase = 0;
+        uint32_t                       fontCount = 0;
         std::vector<uint16_t>          membershipSheets;
         std::vector<GLOBAL_NET_RECORD> nets;
     };
@@ -241,7 +244,13 @@ namespace
 
     int64_t decodeLocalCoordinate( uint16_t aRaw )
     {
-        return static_cast<int64_t>( static_cast<int16_t>( aRaw ) ) * 2;
+        return static_cast<int64_t>( static_cast<int16_t>( aRaw ) ) * 4;
+    }
+
+
+    int64_t decodeTerminalCoordinate( uint16_t aRaw )
+    {
+        return static_cast<int64_t>( static_cast<int16_t>( aRaw ) ) * 4;
     }
 
 
@@ -678,6 +687,7 @@ namespace
         CONNECTIVITY_GLOBALS result;
         const SCH_SDB_POOL&  membershipPool = aSdb.Pools()[4];
         const SCH_SDB_POOL&  netPool = aSdb.Pools()[8];
+        const SCH_SDB_POOL&  fontPool = aSdb.Pools()[19];
 
         if( membershipPool.usedBytes != membershipPool.count * NET_MEMBERSHIP_BYTES )
         {
@@ -693,8 +703,17 @@ namespace
             throwDecodeError( source, wxS( "controller byte count does not match 88-byte records" ) );
         }
 
+        if( fontPool.usedBytes != fontPool.count * FONT_RECORD_BYTES )
+        {
+            SOURCE_PROVENANCE source = sourceAt( aSourceName, aModel.version, wxS( "font directory" ), 19, 0,
+                                                 outerControllerOffset( aSdb, 19 ), fontPool.usedBytes, -1 );
+            throwDecodeError( source, wxS( "controller byte count does not match 36-byte records" ) );
+        }
+
         result.membershipBase = outerControllerOffset( aSdb, 4 );
         result.membershipCount = membershipPool.count;
+        result.fontBase = outerControllerOffset( aSdb, 19 );
+        result.fontCount = fontPool.count;
         result.membershipSheets.reserve( membershipPool.count );
 
         for( size_t record = 0; record < membershipPool.count; ++record )
@@ -998,6 +1017,12 @@ namespace
                 const bool     hasContiguousTextOwnership =
                         groupTextCount == 0
                         || ( groupLastText < textCount && groupTextCount <= static_cast<size_t>( groupLastText ) + 1 );
+                SOURCE_PROVENANCE originSource = source;
+                originSource.objectClass = wxS( "page graphic group origin" );
+                originSource.absoluteOffset += 60;
+                originSource.length = 4;
+                const SOURCE_POINT groupOrigin{ decodeCoordinate( aCursor.U16At( offset + 60 ) ),
+                                                decodeCoordinate( aCursor.U16At( offset + 62 ) ), originSource };
 
                 if( aCursor.U16At( offset + 42 ) != pieceEnd - firstPiece )
                     throwDecodeError( source, wxS( "page-graphic piece count does not match controller 4 slice" ) );
@@ -1085,6 +1110,22 @@ namespace
                                                  decodeLocalCoordinate( aCursor.U16At( arcOffset + 12 ) ), arcSource };
                         graphic.arcCenter = { ( graphic.arcBoundsStart.x + graphic.arcBoundsEnd.x ) / 2,
                                               ( graphic.arcBoundsStart.y + graphic.arcBoundsEnd.y ) / 2, arcSource };
+                    }
+
+                    for( SOURCE_POINT& point : graphic.points )
+                    {
+                        point.x += groupOrigin.x;
+                        point.y += groupOrigin.y;
+                    }
+
+                    if( graphic.kind == MODEL_GRAPHIC_KIND::ARC )
+                    {
+                        graphic.arcBoundsStart.x += groupOrigin.x;
+                        graphic.arcBoundsStart.y += groupOrigin.y;
+                        graphic.arcBoundsEnd.x += groupOrigin.x;
+                        graphic.arcBoundsEnd.y += groupOrigin.y;
+                        graphic.arcCenter.x += groupOrigin.x;
+                        graphic.arcCenter.y += groupOrigin.y;
                     }
 
                     graphic.properties.push_back( sourceProperty( wxS( "page_graphic_group" ), name.text, source ) );
@@ -1302,20 +1343,20 @@ namespace
                 MODEL_PIN_DEFINITION definitionPin;
                 definitionPin.id = PIN_ID( pinIdBase + terminalRecord );
                 definitionPin.source = pinSource;
-                definitionPin.position = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 2 ) ),
-                                           decodeLocalCoordinate( aCursor.U16At( terminalOffset + 4 ) ), pinSource };
+                definitionPin.position = { decodeTerminalCoordinate( aCursor.U16At( terminalOffset + 2 ) ),
+                                           decodeTerminalCoordinate( aCursor.U16At( terminalOffset + 4 ) ), pinSource };
                 definitionPin.presentation.source = pinSource;
                 definitionPin.presentation.height =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 6 ) ) ) * 2;
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 6 ) ) ) * 4;
                 definitionPin.presentation.width =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 8 ) ) ) * 2;
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 8 ) ) ) * 4;
                 definitionPin.presentation.visible = ( aCursor.U16At( terminalOffset + 24 ) & 0x8000 ) == 0;
                 definitionPin.namePresentation = definitionPin.presentation;
                 definitionPin.numberPresentation.source = pinSource;
                 definitionPin.numberPresentation.height =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 10 ) ) ) * 2;
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 10 ) ) ) * 4;
                 definitionPin.numberPresentation.width =
-                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 12 ) ) ) * 2;
+                        static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( terminalOffset + 12 ) ) ) * 4;
                 definitionPin.namePresentation.visible = definitionPin.namePresentation.height != 0
                                                          && ( aCursor.U16At( terminalOffset + 24 ) & 0x8000 ) == 0;
                 definitionPin.numberPresentation.visible = definitionPin.numberPresentation.height != 0;
@@ -1448,7 +1489,7 @@ namespace
                     }
 
                     if( provenLength != 0 )
-                        definitionPin.length = provenLength * 2;
+                        definitionPin.length = provenLength;
                     else
                     {
                         SOURCE_PROPERTY lengthProperty =
@@ -1631,6 +1672,15 @@ namespace
             for( MODEL_GRAPHIC& graphic : textOwner.graphics )
             {
                 graphic.source.objectClass = wxS( "page text" );
+                const SOURCE_POINT groupOrigin{ decodeCoordinate( aCursor.U16At( offset + 60 ) ),
+                                                decodeCoordinate( aCursor.U16At( offset + 62 ) ), source };
+
+                for( SOURCE_POINT& point : graphic.points )
+                {
+                    point.x += groupOrigin.x;
+                    point.y += groupOrigin.y;
+                }
+
                 graphic.properties.push_back( sourceProperty( wxS( "page_graphic_group" ), groupName.text, source ) );
                 aModel.graphics.push_back(
                         { graphic.source, { aModel.sheets[aSheetIndex].id, graphic.source }, std::move( graphic ) } );
@@ -2224,8 +2274,7 @@ namespace
             if( !knownAngle )
                 recordTransformEnum( layout.angle );
 
-            const bool knownMirror =
-                    placement.mirrorFlags == 0 || placement.mirrorFlags == 2 || placement.mirrorFlags == 3;
+            const bool knownMirror = placement.mirrorFlags <= 3;
 
             if( !knownMirror )
                 recordTransformEnum( layout.mirror );
@@ -2419,12 +2468,14 @@ namespace
         requireFixedController( controllers, 20, OFFPAGE_RECORD_BYTES, aSourceName, aModel.version, aSheetIndex );
         requireFixedController( controllers, 21, CONNECTION_RECORD_BYTES, aSourceName, aModel.version, aSheetIndex );
         requireFixedController( controllers, 22, CONNECTION_VERTEX_BYTES, aSourceName, aModel.version, aSheetIndex );
+        requireFixedController( controllers, 23, NET_NAME_RECORD_BYTES, aSourceName, aModel.version, aSheetIndex );
 
         const size_t                 busBase = controllers.offsets[17];
         const size_t                 junctionBase = controllers.offsets[18];
         const size_t                 offpageBase = controllers.offsets[19];
         const size_t                 connectionBase = controllers.offsets[20];
         const size_t                 vertexBase = controllers.offsets[21];
+        const size_t                 netNameBase = controllers.offsets[22];
         std::unordered_set<uint32_t> busGlobalRecords;
 
         for( size_t record = 0; record < controllers.pools[17].count; ++record )
@@ -2494,34 +2545,47 @@ namespace
             }
         }
 
-        struct PLACED_PIN_JOIN
-        {
-            MODEL_PLACEMENT* placement = nullptr;
-            PIN_ID           pin;
-        };
+        std::vector<MODEL_PLACEMENT*>                             placements( controllers.pools[14].count, nullptr );
+        std::unordered_map<uint32_t, const MODEL_PIN_DEFINITION*> definitionPins;
 
-        std::vector<PLACED_PIN_JOIN> placedPins( controllers.pools[15].count );
-        const PLACEMENT_LAYOUT&      placementSchema = placementLayout( aModel.version );
+        for( const MODEL_SYMBOL_DEFINITION& definition : aModel.definitions )
+        {
+            for( const MODEL_PIN_DEFINITION& pin : definition.pins )
+                definitionPins.emplace( pin.id.Value(), &pin );
+        }
 
         for( MODEL_PLACEMENT& placement : aModel.placements )
         {
             if( placement.source.sheet != static_cast<int>( aSheetIndex ) )
                 continue;
 
-            const size_t placementOffset =
-                    controllers.offsets[14] + placement.source.recordIndex * placementSchema.placementBytes;
-            const uint32_t pinStart = aCursor.U32At( placementOffset + placementSchema.pinStart );
-            const uint16_t pinCount = aCursor.U16At( placementOffset + placementSchema.pinCount );
+            if( placement.source.recordIndex >= placements.size() || placements[placement.source.recordIndex] )
+                throwDecodeError( placement.source, wxS( "placement endpoint identity leaves controller 15" ) );
 
-            if( pinStart > placedPins.size() || pinCount > placedPins.size() - pinStart
-                || pinCount != placement.pins.size() )
+            placements[placement.source.recordIndex] = &placement;
+        }
+
+        auto transformedPinPosition = []( const MODEL_PLACEMENT& aPlacement, const MODEL_PIN_DEFINITION& aPin )
+        {
+            int64_t x = aPin.position.x;
+            int64_t y = aPin.position.y;
+
+            switch( NormalizeAngle( aPlacement.angle ) )
             {
-                throwDecodeError( placement.source, wxS( "placement pin join leaves controller 16" ) );
+            case 900: std::tie( x, y ) = std::pair{ -y, x }; break;
+            case 1800: std::tie( x, y ) = std::pair{ -x, -y }; break;
+            case 2700: std::tie( x, y ) = std::pair{ y, -x }; break;
+            default: break;
             }
 
-            for( size_t pin = 0; pin < pinCount; ++pin )
-                placedPins[pinStart + pin] = { &placement, placement.pins[pin].id };
-        }
+            if( aPlacement.mirrorFlags & 1 )
+                x = -x;
+
+            if( aPlacement.mirrorFlags & 2 )
+                y = -y;
+
+            return std::pair{ aPlacement.position.x + x, aPlacement.position.y + y };
+        };
 
         auto offpagePosition = [&]( size_t aRecord )
         {
@@ -2675,32 +2739,68 @@ namespace
             MODEL_CONNECTION connection;
             connection.source = source;
 
-            auto endpoint = [&]( size_t aFieldOffset )
+            appendVertices( connection.vertices, controllers.pools[17].count + record );
+
+            if( connection.vertices.size() < 2 )
+                throwDecodeError( source, wxS( "connection lacks explicit endpoint vertices" ) );
+
+            auto endpoint = [&]( size_t aFieldOffset, size_t aRelationshipOffset, const SOURCE_POINT& aWirePoint )
             {
                 SOURCE_PROVENANCE endpointSource = source;
                 endpointSource.objectClass = wxS( "connection endpoint" );
                 endpointSource.absoluteOffset += aFieldOffset;
                 endpointSource.length = 2;
-                const uint16_t            raw = aCursor.U16At( endpointSource.absoluteOffset );
-                const uint16_t            objectClass = raw >> 12;
-                const uint16_t            objectRecord = raw & 0x0FFF;
+                const uint16_t    raw = aCursor.U16At( endpointSource.absoluteOffset );
+                const uint16_t    objectClass = raw >> 12;
+                const uint16_t    objectRecord = raw & 0x0FFF;
+                SOURCE_PROVENANCE relationshipSource = source;
+                relationshipSource.objectClass = wxS( "connection endpoint relationship" );
+                relationshipSource.absoluteOffset += aRelationshipOffset;
+                relationshipSource.length = 4;
+                const uint32_t            relationship = aCursor.U32At( relationshipSource.absoluteOffset );
                 MODEL_CONNECTION_ENDPOINT result;
                 result.source = endpointSource;
 
                 switch( objectClass )
                 {
                 case 0:
-                    if( objectRecord >= placedPins.size() || !placedPins[objectRecord].placement
-                        || !placedPins[objectRecord].pin.IsValid() )
-                    {
-                        throwDecodeError( endpointSource, wxS( "unresolved placed-pin endpoint" ) );
-                    }
+                    if( objectRecord >= placements.size() || !placements[objectRecord] )
+                        throwDecodeError( endpointSource, wxS( "unresolved placement endpoint" ) );
 
-                    result.kind = MODEL_ENDPOINT_KIND::PIN;
-                    result.placement = PLACEMENT_REFERENCE{ placedPins[objectRecord].placement->id, endpointSource };
-                    result.pin = PIN_REFERENCE{ placedPins[objectRecord].pin, endpointSource };
-                    result.point = { placedPins[objectRecord].placement->position.x,
-                                     placedPins[objectRecord].placement->position.y, endpointSource };
+                    {
+                        MODEL_PLACEMENT&     placement = *placements[objectRecord];
+                        const PIN_REFERENCE* matchedPin = nullptr;
+
+                        for( const PIN_REFERENCE& pin : placement.pins )
+                        {
+                            auto definitionPin = definitionPins.find( pin.id.Value() );
+
+                            if( definitionPin == definitionPins.end() )
+                                throwDecodeError( pin.source, wxS( "placement pin definition is unresolved" ) );
+
+                            const auto position = transformedPinPosition( placement, *definitionPin->second );
+
+                            if( position.first != aWirePoint.x || position.second != aWirePoint.y )
+                                continue;
+
+                            if( matchedPin )
+                                throwDecodeError( endpointSource,
+                                                  wxS( "placement has duplicate pins at connection endpoint" ) );
+
+                            matchedPin = &pin;
+                        }
+
+                        if( !matchedPin )
+                            throwDecodeError( endpointSource,
+                                              wxString::Format( wxS( "placement has no pin at connection endpoint; "
+                                                                     "angle %d mirror %u" ),
+                                                                placement.angle, placement.mirrorFlags ) );
+
+                        result.kind = MODEL_ENDPOINT_KIND::PIN;
+                        result.placement = PLACEMENT_REFERENCE{ placement.id, endpointSource };
+                        result.pin = PIN_REFERENCE{ matchedPin->id, endpointSource };
+                        result.point = aWirePoint;
+                    }
                     break;
 
                 case 2:
@@ -2724,15 +2824,16 @@ namespace
 
                 result.properties.push_back( sourceProperty( wxS( "raw_endpoint_handle" ),
                                                              wxString::Format( wxS( "%u" ), raw ), endpointSource ) );
+                SOURCE_PROPERTY relationshipProperty =
+                        sourceProperty( wxS( "raw_endpoint_relationship" ),
+                                        wxString::Format( wxS( "%u" ), relationship ), relationshipSource );
+                relationshipProperty.disposition = PROPERTY_DISPOSITION::PRESERVED;
+                result.properties.push_back( std::move( relationshipProperty ) );
                 return result;
             };
 
-            connection.endpoints.push_back( endpoint( 12 ) );
-            connection.endpoints.push_back( endpoint( 14 ) );
-            appendVertices( connection.vertices, controllers.pools[17].count + record );
-
-            if( connection.vertices.size() < 2 )
-                throwDecodeError( source, wxS( "connection lacks explicit endpoint vertices" ) );
+            connection.endpoints.push_back( endpoint( 12, 16, connection.vertices.front() ) );
+            connection.endpoints.push_back( endpoint( 14, 20, connection.vertices.back() ) );
 
             for( size_t endpointIndex = 0; endpointIndex < connection.endpoints.size(); ++endpointIndex )
             {
@@ -3068,6 +3169,247 @@ namespace
             label.properties.push_back(
                     sourceProperty( wxS( "raw_label_kind" ), wxString::Format( wxS( "%u" ), rawKind ), source ) );
             aModel.labels.push_back( std::move( label ) );
+        }
+
+        auto netNamePresentation = [&]( size_t aOffset, const SOURCE_PROVENANCE& aSource )
+        {
+            MODEL_TEXT_PRESENTATION presentation;
+            presentation.source = aSource;
+            presentation.height = static_cast<int64_t>( aCursor.U16At( aOffset + 2 ) ) * 2;
+            presentation.width = static_cast<int64_t>( aCursor.U16At( aOffset + 4 ) ) * 2;
+            presentation.horizontalJustification =
+                    horizontalJustification( aCursor.U16At( aOffset + 26 ), aSource, aModel.diagnostics );
+            presentation.verticalJustification = verticalJustification( aCursor.U16At( aOffset + 26 ) );
+            const int16_t     fontHandle = static_cast<int16_t>( aCursor.U16At( aOffset ) );
+            SOURCE_PROVENANCE fontSource = aSource;
+            fontSource.length = 2;
+
+            if( fontHandle == -1 )
+            {
+                presentation.font = decodedDefinitionFont( -1, fontSource );
+            }
+            else
+            {
+                if( fontHandle < 0 || static_cast<uint32_t>( fontHandle ) >= aGlobals.fontCount )
+                    throwDecodeError( fontSource, wxS( "net-name font handle leaves outer controller 19" ) );
+
+                const size_t fontOffset = aGlobals.fontBase + static_cast<size_t>( fontHandle ) * FONT_RECORD_BYTES;
+                SOURCE_PROVENANCE nameSource = sourceAt( aSourceName, aModel.version, wxS( "net-name font" ), 19,
+                                                         fontHandle, fontOffset + 4, 32, -1 );
+                presentation.font = decodeFixedString( aBytes, fontOffset + 4, 32, nameSource, aModel.diagnostics );
+                const uint32_t style = aCursor.U32At( fontOffset );
+                presentation.bold = style & 1;
+                presentation.italic = style & 2;
+
+                if( style & ~3U )
+                {
+                    SOURCE_PROPERTY property =
+                            sourceProperty( wxS( "unsupported_font_style_flags" ),
+                                            wxString::Format( wxS( "%u" ), style & ~3U ), fontSource );
+                    property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+                    presentation.properties.push_back( property );
+                    aModel.diagnostics.push_back(
+                            MakePropertyDiagnostic( RPT_SEVERITY_WARNING, property,
+                                                    wxS( "unsupported net-name font style flags preserved" ) ) );
+                }
+            }
+
+            presentation.properties.push_back(
+                    sourceProperty( wxS( "font_handle" ), wxString::Format( wxS( "%d" ), fontHandle ), fontSource ) );
+            return presentation;
+        };
+
+        for( size_t record = 0; record < controllers.pools[22].count; ++record )
+        {
+            const size_t      offset = netNameBase + record * NET_NAME_RECORD_BYTES;
+            SOURCE_PROVENANCE source =
+                    sourceAt( aSourceName, aModel.version, wxS( "net-name presentation" ), 23, record, offset,
+                              NET_NAME_RECORD_BYTES, static_cast<int>( aSheetIndex ) );
+            const uint32_t               globalRecord = aCursor.U32At( offset + 16 );
+            const uint16_t               ownerHandle = aCursor.U16At( offset + 38 );
+            const uint16_t               childHandle = aCursor.U16At( offset + 40 );
+            std::vector<SOURCE_PROPERTY> preservedPresentation;
+            auto preserve = [&]( const wxString& aName, const wxString& aValue, size_t aRelativeOffset, size_t aLength )
+            {
+                SOURCE_PROVENANCE propertySource = source;
+                propertySource.absoluteOffset += aRelativeOffset;
+                propertySource.length = aLength;
+                SOURCE_PROPERTY property = sourceProperty( aName, aValue, propertySource );
+                property.disposition = PROPERTY_DISPOSITION::PRESERVED;
+                preservedPresentation.push_back( std::move( property ) );
+            };
+            wxString presentation06;
+
+            for( size_t index = 6; index < 16; ++index )
+                presentation06 += wxString::Format( wxS( "%02x" ), aBytes[offset + index] );
+
+            preserve( wxS( "preserved_net_name_presentation_06" ), presentation06, 6, 10 );
+            preserve( wxS( "preserved_net_name_secondary_offset" ),
+                      wxString::Format( wxS( "%d,%d" ), static_cast<int16_t>( aCursor.U16At( offset + 28 ) ),
+                                        static_cast<int16_t>( aCursor.U16At( offset + 30 ) ) ),
+                      28, 4 );
+            preserve( wxS( "preserved_net_name_presentation_20" ),
+                      wxString::Format( wxS( "%u" ), aCursor.U16At( offset + 32 ) ), 32, 2 );
+            preserve( wxS( "preserved_net_name_presentation_flags" ),
+                      wxString::Format( wxS( "%u" ), aCursor.U16At( offset + 34 ) ), 34, 2 );
+            preserve( wxS( "preserved_net_name_predecessor_handle" ),
+                      wxString::Format( wxS( "%u" ), aCursor.U16At( offset + 36 ) ), 36, 2 );
+            preserve( wxS( "preserved_net_name_predecessor_record" ),
+                      wxString::Format( wxS( "%u" ), aCursor.U16At( offset + 42 ) ), 42, 2 );
+            preserve( wxS( "preserved_net_name_successor_record" ),
+                      wxString::Format( wxS( "%u" ), aCursor.U16At( offset + 44 ) ), 44, 2 );
+            preserve( wxS( "preserved_net_name_tail" ), wxString::Format( wxS( "%u" ), aCursor.U16At( offset + 46 ) ),
+                      46, 2 );
+
+            if( ( ownerHandle & 0xF000 ) == 0x4000 )
+            {
+                if( globalRecord >= aGlobals.nets.size() || aGlobals.nets[globalRecord].tombstone )
+                    throwDecodeError( source, wxS( "bus net-name record targets wrong global-net object class" ) );
+
+                const size_t busRecord = ownerHandle & 0x0FFF;
+                auto         bus = std::ranges::find_if( aModel.buses,
+                                                         [&]( const MODEL_BUS& aBus )
+                                                         {
+                                                     return aBus.sheet.id == aModel.sheets[aSheetIndex].id
+                                                            && aBus.source.recordIndex == busRecord;
+                                                 } );
+
+                if( bus == aModel.buses.end() || childHandle == 0 || childHandle > bus->memberNets.size()
+                    || bus->name.text != aGlobals.nets[globalRecord].name.text )
+                {
+                    throwDecodeError( source, wxS( "net-name bus owner targets wrong object class" ) );
+                }
+
+                bus->properties.push_back( sourceProperty( wxS( "net_name_presentation_record" ),
+                                                           wxString::Format( wxS( "%llu" ), record ), source ) );
+                bus->properties.insert( bus->properties.end(), std::make_move_iterator( preservedPresentation.begin() ),
+                                        std::make_move_iterator( preservedPresentation.end() ) );
+                continue;
+            }
+
+            if( globalRecord >= sheetNets.size() || !sheetNets[globalRecord] )
+                throwDecodeError( source, wxS( "net-name record targets wrong or unresolved net object class" ) );
+
+            MODEL_NET&              ownerNet = *sheetNets[globalRecord];
+            const SOURCE_POINT      textOffset{ decodeTerminalCoordinate( aCursor.U16At( offset + 20 ) ),
+                                           decodeTerminalCoordinate( aCursor.U16At( offset + 22 ) ), source };
+            MODEL_TEXT_PRESENTATION presentation = netNamePresentation( offset, source );
+            presentation.properties.insert( presentation.properties.end(),
+                                            std::make_move_iterator( preservedPresentation.begin() ),
+                                            std::make_move_iterator( preservedPresentation.end() ) );
+
+            if( ( ownerHandle & 0xF000 ) == 0x2000 )
+            {
+                const size_t offpageRecord = ownerHandle & 0x0FFF;
+                auto         label = std::ranges::find_if( aModel.labels,
+                                                           [&]( const MODEL_LABEL& aLabel )
+                                                           {
+                                                       return aLabel.sheet.id == aModel.sheets[aSheetIndex].id
+                                                              && aLabel.source.controller == 20
+                                                              && aLabel.source.recordIndex == offpageRecord;
+                                                   } );
+
+                if( label == aModel.labels.end() )
+                {
+                    const MODEL_BUS_ENTRY* busEntry = nullptr;
+
+                    for( const MODEL_BUS& bus : aModel.buses )
+                    {
+                        if( bus.sheet.id != aModel.sheets[aSheetIndex].id )
+                            continue;
+
+                        auto candidate = std::ranges::find_if( bus.entries,
+                                                               [&]( const MODEL_BUS_ENTRY& aEntry )
+                                                               {
+                                                                   return aEntry.source.recordIndex == offpageRecord
+                                                                          && aEntry.memberNet.id == ownerNet.id;
+                                                               } );
+
+                        if( candidate != bus.entries.end() )
+                        {
+                            if( busEntry )
+                                throwDecodeError( source, wxS( "net-name bus-entry owner is ambiguous" ) );
+
+                            busEntry = &*candidate;
+                        }
+                    }
+
+                    if( !busEntry )
+                        throwDecodeError( source, wxS( "net-name off-page owner targets wrong object class" ) );
+
+                    MODEL_TEXT busText;
+                    busText.source = source;
+                    busText.sheet = { aModel.sheets[aSheetIndex].id, source };
+                    busText.text = ownerNet.name;
+                    busText.position = { busEntry->position.x + textOffset.x, busEntry->position.y + textOffset.y,
+                                         source };
+                    busText.angle = NormalizeAngle( aCursor.U16At( offset + 24 ) );
+                    busText.presentation = std::move( presentation );
+                    busText.properties.push_back( sourceProperty(
+                            wxS( "net_name_text_offset" ),
+                            wxString::Format( wxS( "%lld,%lld" ), textOffset.x, textOffset.y ), source ) );
+                    aModel.texts.push_back( std::move( busText ) );
+                    continue;
+                }
+
+                if( label->text.text != ownerNet.name.text )
+                    throwDecodeError( source, wxS( "net-name off-page owner targets wrong net object" ) );
+
+                label->presentation = std::move( presentation );
+                label->properties.push_back(
+                        sourceProperty( wxS( "net_name_text_offset" ),
+                                        wxString::Format( wxS( "%lld,%lld" ), textOffset.x, textOffset.y ), source ) );
+                continue;
+            }
+
+            auto placement = std::ranges::find_if( aModel.placements,
+                                                   [&]( const MODEL_PLACEMENT& aPlacement )
+                                                   {
+                                                       return aPlacement.sheet.id == aModel.sheets[aSheetIndex].id
+                                                              && aPlacement.source.recordIndex == ownerHandle;
+                                                   } );
+
+            if( placement == aModel.placements.end() )
+                throwDecodeError( source, wxS( "net-name placement owner targets wrong object class" ) );
+
+            if( childHandle >= placement->pins.size() )
+                throwDecodeError( source, wxS( "net-name placement pin ordinal leaves placement" ) );
+
+            const PIN_ID ownerPin = placement->pins[childHandle].id;
+
+            const MODEL_CONNECTION_ENDPOINT* endpoint = nullptr;
+
+            for( const MODEL_CONNECTION& connection : ownerNet.connections )
+            {
+                for( const MODEL_CONNECTION_ENDPOINT& candidate : connection.endpoints )
+                {
+                    if( candidate.kind != MODEL_ENDPOINT_KIND::PIN || !candidate.placement || !candidate.pin
+                        || candidate.placement->id != placement->id || candidate.pin->id != ownerPin )
+                    {
+                        continue;
+                    }
+
+                    if( endpoint )
+                        throwDecodeError( source, wxS( "net-name placement pin owner is ambiguous" ) );
+
+                    endpoint = &candidate;
+                }
+            }
+
+            if( !endpoint )
+                throwDecodeError( source, wxS( "net-name placement pin owner is unresolved" ) );
+
+            MODEL_TEXT text;
+            text.source = source;
+            text.sheet = { aModel.sheets[aSheetIndex].id, source };
+            text.text = ownerNet.name;
+            text.position = { endpoint->point.x + textOffset.x, endpoint->point.y + textOffset.y, source };
+            text.angle = NormalizeAngle( aCursor.U16At( offset + 24 ) );
+            text.presentation = std::move( presentation );
+            text.properties.push_back(
+                    sourceProperty( wxS( "net_name_text_offset" ),
+                                    wxString::Format( wxS( "%lld,%lld" ), textOffset.x, textOffset.y ), source ) );
+            aModel.texts.push_back( std::move( text ) );
         }
     }
 

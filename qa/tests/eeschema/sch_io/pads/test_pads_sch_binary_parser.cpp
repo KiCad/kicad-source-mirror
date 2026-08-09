@@ -1130,6 +1130,30 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             out.back().properties["page_graphic_group"] = { lines.name };
             out.back().properties["type"] = canonicalGraphicType( g );
 
+            for( CANONICAL_POINT& graphicPoint : out.back().geometry.points )
+            {
+                graphicPoint.xHalfMils += std::llround( lines.origin.x * 2 );
+                graphicPoint.yHalfMils += std::llround( lines.origin.y * 2 );
+            }
+
+            for( const std::string& name :
+                 { "arc_center_x_half_mils", "arc_bounds_x1_half_mils", "arc_bounds_x2_half_mils" } )
+            {
+                auto property = out.back().properties.find( name );
+
+                if( property != out.back().properties.end() )
+                    std::get<int64_t>( property->second.value ) += std::llround( lines.origin.x * 2 );
+            }
+
+            for( const std::string& name :
+                 { "arc_center_y_half_mils", "arc_bounds_y1_half_mils", "arc_bounds_y2_half_mils" } )
+            {
+                auto property = out.back().properties.find( name );
+
+                if( property != out.back().properties.end() )
+                    std::get<int64_t>( property->second.value ) += std::llround( lines.origin.y * 2 );
+            }
+
             if( g.type == PADS_SCH::GRAPHIC_TYPE::RECTANGLE )
             {
                 out.back().properties["type"] = canonicalGraphicType( MODEL_GRAPHIC_KIND::POLYLINE );
@@ -1144,22 +1168,6 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
                                                    { last.xHalfMils, first.yHalfMils },
                                                    { last.xHalfMils, last.yHalfMils } };
                 }
-            }
-
-            for( CANONICAL_POINT& point : out.back().geometry.points )
-            {
-                point.xHalfMils /= 2;
-                point.yHalfMils /= 2;
-            }
-
-            for( const std::string& name :
-                 { "arc_center_x_half_mils", "arc_center_y_half_mils", "arc_bounds_x1_half_mils",
-                   "arc_bounds_y1_half_mils", "arc_bounds_x2_half_mils", "arc_bounds_y2_half_mils" } )
-            {
-                auto property = out.back().properties.find( name );
-
-                if( property != out.back().properties.end() )
-                    std::get<int64_t>( property->second.value ) /= 2;
             }
 
             out.back().geometry.angleTenths = 0;
@@ -1179,8 +1187,8 @@ static std::vector<CANONICAL_SEMANTIC_RECORD> normalizeAsciiModel( const PADS_SC
             r.properties["width_half_mils"] = { int64_t( t.width_factor * 2 ) };
             r.properties["font"] = { t.font_name };
             r.geometry.points.push_back( point( t.position ) );
-            r.geometry.points.back().xHalfMils /= 2;
-            r.geometry.points.back().yHalfMils /= 2;
+            r.geometry.points.back().xHalfMils += std::llround( lines.origin.x * 2 );
+            r.geometry.points.back().yHalfMils += std::llround( lines.origin.y * 2 );
             r.geometry.angleTenths = canonicalAngle( t.rotation * 10 );
         }
     }
@@ -1240,6 +1248,8 @@ static bool task10SourcePropertiesPresent( const std::vector<CANONICAL_SEMANTIC_
         if( record.kind == CANONICAL_KIND::CONNECTION
             && ( !has( record, "endpoint_0_raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT )
                  || !has( record, "endpoint_1_raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT )
+                 || !has( record, "endpoint_0_raw_endpoint_relationship", PROPERTY_DISPOSITION::PRESERVED )
+                 || !has( record, "endpoint_1_raw_endpoint_relationship", PROPERTY_DISPOSITION::PRESERVED )
                  || !has( record, "raw_connection_marker", PROPERTY_DISPOSITION::EXACT ) ) )
         {
             return false;
@@ -2366,10 +2376,10 @@ BOOST_AUTO_TEST_CASE( SymbolPrimitives )
     BOOST_REQUIRE_EQUAL( definition.graphics.size(), 6 );
     BOOST_CHECK( definition.graphics[0].kind == MODEL_GRAPHIC_KIND::LINE );
     BOOST_REQUIRE_EQUAL( definition.graphics[0].points.size(), 2 );
-    BOOST_CHECK_EQUAL( definition.graphics[0].points[0].x, 100 );
-    BOOST_CHECK_EQUAL( definition.graphics[0].points[0].y, 100 );
-    BOOST_CHECK_EQUAL( definition.graphics[0].points[1].x, 400 );
-    BOOST_CHECK_EQUAL( definition.graphics[0].points[1].y, 100 );
+    BOOST_CHECK_EQUAL( definition.graphics[0].points[0].x, 200 );
+    BOOST_CHECK_EQUAL( definition.graphics[0].points[0].y, 200 );
+    BOOST_CHECK_EQUAL( definition.graphics[0].points[1].x, 800 );
+    BOOST_CHECK_EQUAL( definition.graphics[0].points[1].y, 200 );
     BOOST_CHECK( definition.graphics[1].kind == MODEL_GRAPHIC_KIND::POLYLINE );
     BOOST_CHECK( definition.graphics[2].kind == MODEL_GRAPHIC_KIND::CIRCLE );
     BOOST_CHECK( definition.graphics[3].kind == MODEL_GRAPHIC_KIND::ARC );
@@ -2377,27 +2387,27 @@ BOOST_AUTO_TEST_CASE( SymbolPrimitives )
     BOOST_CHECK( definition.graphics[3].lineStyle == MODEL_LINE_STYLE::SOLID );
     BOOST_CHECK_EQUAL( definition.graphics[3].arcSweepAngle, 1800 );
     BOOST_CHECK( definition.graphics[3].arcClockwise );
-    BOOST_CHECK_EQUAL( definition.graphics[3].arcCenter.x, 650 );
-    BOOST_CHECK_EQUAL( definition.graphics[3].arcCenter.y, 550 );
-    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsStart.x, 500 );
-    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsStart.y, 400 );
-    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsEnd.x, 800 );
-    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsEnd.y, 700 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcCenter.x, 1300 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcCenter.y, 1100 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsStart.x, 1000 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsStart.y, 800 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsEnd.x, 1600 );
+    BOOST_CHECK_EQUAL( definition.graphics[3].arcBoundsEnd.y, 1400 );
     BOOST_CHECK( definition.graphics[4].fill == MODEL_FILL_STYLE::FILLED );
     BOOST_CHECK( definition.graphics[5].kind == MODEL_GRAPHIC_KIND::TEXT );
     BOOST_CHECK_EQUAL( definition.graphics[5].text.text, wxS( "EMBEDDED_TEXT" ) );
     BOOST_CHECK_EQUAL( definition.graphics[5].presentation.font.text, wxS( "Default Font" ) );
     BOOST_REQUIRE_EQUAL( definition.graphics[5].points.size(), 1 );
-    BOOST_CHECK_EQUAL( definition.graphics[5].points[0].x, 500 );
-    BOOST_CHECK_EQUAL( definition.graphics[5].points[0].y, 800 );
+    BOOST_CHECK_EQUAL( definition.graphics[5].points[0].x, 1000 );
+    BOOST_CHECK_EQUAL( definition.graphics[5].points[0].y, 1600 );
     BOOST_CHECK_EQUAL( definition.graphics[5].presentation.height, 200 );
     BOOST_CHECK_EQUAL( definition.graphics[5].presentation.width, 20 );
     BOOST_CHECK_EQUAL( definition.graphics[5].angle, 0 );
     BOOST_REQUIRE_EQUAL( definition.pins.size(), 2 );
     BOOST_CHECK_EQUAL( definition.pins[0].position.x, 0 );
-    BOOST_CHECK_EQUAL( definition.pins[0].position.y, 300 );
-    BOOST_CHECK_EQUAL( definition.pins[1].position.x, 1200 );
-    BOOST_CHECK_EQUAL( definition.pins[1].position.y, 300 );
+    BOOST_CHECK_EQUAL( definition.pins[0].position.y, 600 );
+    BOOST_CHECK_EQUAL( definition.pins[1].position.x, 2400 );
+    BOOST_CHECK_EQUAL( definition.pins[1].position.y, 600 );
 
     std::vector<uint8_t> privateStroke = loadBinaryFixture( "symbol_primitives.sch" );
     const size_t         privatePiece =
@@ -2449,15 +2459,15 @@ BOOST_AUTO_TEST_CASE( PartPinsAndGates )
     BOOST_CHECK_EQUAL( pinDefinition.pins[4].angle, 0 );
     BOOST_CHECK_EQUAL( pinDefinition.pins[4].length, 280 );
     BOOST_CHECK_EQUAL( propertyValue( pinDefinition.pins[0].properties, wxS( "pin_name_height_half_mils" ) ),
-                       wxS( "100" ) );
+                       wxS( "200" ) );
     BOOST_CHECK_EQUAL( propertyValue( pinDefinition.pins[0].properties, wxS( "pin_number_height_half_mils" ) ),
-                       wxS( "100" ) );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].namePresentation.width, 10 );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberPresentation.width, 10 );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.x, -100 );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.y, -50 );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.x, 250 );
-    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.y, -50 );
+                       wxS( "200" ) );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].namePresentation.width, 20 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberPresentation.width, 20 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.x, -200 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.y, -100 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.x, 500 );
+    BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.y, -100 );
     BOOST_CHECK( !pinDefinition.pins[2].namePresentation.visible );
     BOOST_CHECK( !pinDefinition.pins[6].namePresentation.visible );
     BOOST_CHECK( pinDefinition.pins[6].numberPresentation.visible );
@@ -2536,10 +2546,10 @@ BOOST_AUTO_TEST_CASE( DefinitionFields )
     BOOST_CHECK_EQUAL( definition.fields[0].presentation.font.text, wxS( "Default Font" ) );
     BOOST_CHECK_EQUAL( definition.fields[0].presentation.height, 200 );
     BOOST_CHECK_EQUAL( definition.fields[0].presentation.width, 20 );
-    BOOST_CHECK_EQUAL( definition.fields[0].position.x, 300 );
-    BOOST_CHECK_EQUAL( definition.fields[0].position.y, 100 );
-    BOOST_CHECK_EQUAL( definition.fields[1].position.x, 310 );
-    BOOST_CHECK_EQUAL( definition.fields[1].position.y, 200 );
+    BOOST_CHECK_EQUAL( definition.fields[0].position.x, 600 );
+    BOOST_CHECK_EQUAL( definition.fields[0].position.y, 200 );
+    BOOST_CHECK_EQUAL( definition.fields[1].position.x, 620 );
+    BOOST_CHECK_EQUAL( definition.fields[1].position.y, 400 );
     BOOST_CHECK( definition.fields[0].value.text.empty() );
     BOOST_CHECK_EQUAL( propertyValue( definition.fields[0].presentation.properties, wxS( "font_handle" ) ),
                        wxS( "-1" ) );
@@ -2682,21 +2692,21 @@ BOOST_AUTO_TEST_CASE( PlacementInstanceFields )
 
     BOOST_CHECK_EQUAL( placement.fields[0].name.text, wxS( "REF-DES" ) );
     BOOST_CHECK_EQUAL( placement.fields[0].value.text, wxS( "R1" ) );
-    BOOST_CHECK_EQUAL( placement.fields[0].position.x, 300 );
-    BOOST_CHECK_EQUAL( placement.fields[0].position.y, 100 );
+    BOOST_CHECK_EQUAL( placement.fields[0].position.x, 600 );
+    BOOST_CHECK_EQUAL( placement.fields[0].position.y, 200 );
     BOOST_CHECK_EQUAL( placement.fields[0].presentation.font.text, wxS( "Default Font" ) );
     BOOST_CHECK_EQUAL( placement.fields[1].name.text, wxS( "PART-TYPE" ) );
     BOOST_CHECK_EQUAL( placement.fields[1].value.text, wxS( "RES-RESN1" ) );
-    BOOST_CHECK_EQUAL( placement.fields[1].position.x, 310 );
-    BOOST_CHECK_EQUAL( placement.fields[1].position.y, 200 );
+    BOOST_CHECK_EQUAL( placement.fields[1].position.x, 620 );
+    BOOST_CHECK_EQUAL( placement.fields[1].position.y, 400 );
     BOOST_CHECK_EQUAL( placement.fields[1].angle, 900 );
     BOOST_CHECK_EQUAL( placement.fields[1].presentation.height, 388 );
     BOOST_CHECK_EQUAL( placement.fields[1].presentation.width, 20 );
     BOOST_CHECK_EQUAL( placement.fields[1].presentation.font.text, wxS( "Bold Verdana" ) );
     BOOST_CHECK_EQUAL( placement.fields[2].name.text, wxS( "userfield" ) );
     BOOST_CHECK_EQUAL( placement.fields[2].value.text, wxS( "override-value" ) );
-    BOOST_CHECK_EQUAL( placement.fields[2].position.x, 300 );
-    BOOST_CHECK_EQUAL( placement.fields[2].position.y, -200 );
+    BOOST_CHECK_EQUAL( placement.fields[2].position.x, 600 );
+    BOOST_CHECK_EQUAL( placement.fields[2].position.y, -400 );
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.height, 388 );
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.width, 20 );
     BOOST_CHECK_EQUAL( placement.fields[2].presentation.visible, false );
@@ -2839,7 +2849,7 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
                                                   return aDiagnostic.message.Contains(
                                                           wxS( "unknown placement transform" ) );
                                               } ),
-                       2 );
+                       1 );
 }
 
 
@@ -2900,8 +2910,8 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                                             : fieldIndex == 1 ? wxString::FromUTF8( asciiPlacement.part_type )
                                                               : wxString::FromUTF8( asciiField.value );
                 BOOST_CHECK_EQUAL( binaryField.value.text, asciiValue );
-                BOOST_CHECK_EQUAL( binaryField.position.x, asciiField.position.x );
-                BOOST_CHECK_EQUAL( binaryField.position.y, asciiField.position.y );
+                BOOST_CHECK_EQUAL( binaryField.position.x, asciiField.position.x * 2 );
+                BOOST_CHECK_EQUAL( binaryField.position.y, asciiField.position.y * 2 );
                 BOOST_CHECK_EQUAL( binaryField.angle, std::lround( asciiField.rotation * 10 ) );
                 BOOST_CHECK_EQUAL( binaryField.presentation.height, asciiField.height * 2 );
                 BOOST_CHECK_EQUAL( binaryField.presentation.width, asciiField.width * 2 );
@@ -3109,24 +3119,24 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
     auto line = customKind( MODEL_GRAPHIC_KIND::LINE );
     BOOST_REQUIRE( line != custom.end() );
     BOOST_REQUIRE_EQUAL( ( *line )->graphic.points.size(), 2 );
-    BOOST_CHECK_EQUAL( ( *line )->graphic.points[0].x, 0 );
-    BOOST_CHECK_EQUAL( ( *line )->graphic.points[1].x, 800 );
+    BOOST_CHECK_EQUAL( ( *line )->graphic.points[0].x, 12000 );
+    BOOST_CHECK_EQUAL( ( *line )->graphic.points[1].x, 13600 );
     BOOST_CHECK_EQUAL( ( *line )->graphic.strokeWidth, 20 );
     BOOST_CHECK( ( *line )->graphic.lineStyle == MODEL_LINE_STYLE::SOLID );
     auto circle = customKind( MODEL_GRAPHIC_KIND::CIRCLE );
     BOOST_REQUIRE( circle != custom.end() );
-    BOOST_CHECK_EQUAL( ( *circle )->graphic.points[0].x, 1600 );
-    BOOST_CHECK_EQUAL( ( *circle )->graphic.points[1].y, 400 );
+    BOOST_CHECK_EQUAL( ( *circle )->graphic.points[0].x, 15200 );
+    BOOST_CHECK_EQUAL( ( *circle )->graphic.points[1].y, 12800 );
     auto arc = customKind( MODEL_GRAPHIC_KIND::ARC );
     BOOST_REQUIRE( arc != custom.end() );
     BOOST_CHECK_EQUAL( ( *arc )->graphic.arcSweepAngle, 1800 );
     BOOST_CHECK( ( *arc )->graphic.arcClockwise );
-    BOOST_CHECK_EQUAL( ( *arc )->graphic.arcCenter.x, 2400 );
-    BOOST_CHECK_EQUAL( ( *arc )->graphic.arcCenter.y, 200 );
+    BOOST_CHECK_EQUAL( ( *arc )->graphic.arcCenter.x, 16800 );
+    BOOST_CHECK_EQUAL( ( *arc )->graphic.arcCenter.y, 12400 );
     auto text = customKind( MODEL_GRAPHIC_KIND::TEXT );
     BOOST_REQUIRE( text != custom.end() );
     BOOST_CHECK_EQUAL( ( *text )->graphic.text.text, wxS( "EMBEDDED PAGE TEXT" ) );
-    BOOST_CHECK_EQUAL( ( *text )->graphic.points[0].y, 600 );
+    BOOST_CHECK_EQUAL( ( *text )->graphic.points[0].y, 13200 );
     BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.font.text, wxS( "Default Font" ) );
     BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.height, 300 );
     BOOST_CHECK_EQUAL( ( *text )->graphic.presentation.width, 20 );
@@ -3206,6 +3216,17 @@ BOOST_AUTO_TEST_CASE( ConnectivityHandleErrors )
                            {
                                return aError.What().Contains( wxS( "controller 21" ) )
                                       && aError.What().Contains( wxS( "unresolved off-page endpoint" ) );
+                           } );
+
+    std::vector<uint8_t> unresolvedPlacement = loadBinaryFixture( "minimal_v13.sch" );
+    const size_t         minimalConnection = sheetControllerOffset( unresolvedPlacement, 21 );
+    BOOST_REQUIRE_EQUAL( readU16( unresolvedPlacement, minimalConnection + 12 ), 0u );
+    writeU16( unresolvedPlacement, minimalConnection + 12, 0x0FFF );
+    BOOST_CHECK_EXCEPTION( parser.Parse( unresolvedPlacement, wxS( "unresolved-placement.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains( wxS( "controller 21" ) )
+                                      && aError.What().Contains( wxS( "unresolved placement endpoint" ) );
                            } );
 
     std::vector<uint8_t> duplicateMembership = loadBinaryFixture( "connectivity_topology.sch" );
@@ -3410,6 +3431,8 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
             { "preserved_net_relationship", PROPERTY_DISPOSITION::PRESERVED },
             { "endpoint_0_raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT },
             { "endpoint_1_raw_endpoint_handle", PROPERTY_DISPOSITION::EXACT },
+            { "endpoint_0_raw_endpoint_relationship", PROPERTY_DISPOSITION::PRESERVED },
+            { "endpoint_1_raw_endpoint_relationship", PROPERTY_DISPOSITION::PRESERVED },
             { "raw_connection_marker", PROPERTY_DISPOSITION::EXACT },
             { "raw_label_kind", PROPERTY_DISPOSITION::EXACT },
             { "connection_record", PROPERTY_DISPOSITION::EXACT },
@@ -3450,7 +3473,9 @@ BOOST_AUTO_TEST_CASE( CorpusSemanticSnapshot )
 
     BOOST_CHECK( !task10SourcePropertiesPresent( missingRawKind ) );
 
-    for( const std::string& endpoint : { "endpoint_0_raw_endpoint_handle", "endpoint_1_raw_endpoint_handle" } )
+    for( const std::string& endpoint :
+         { "endpoint_0_raw_endpoint_handle", "endpoint_1_raw_endpoint_handle", "endpoint_0_raw_endpoint_relationship",
+           "endpoint_1_raw_endpoint_relationship" } )
     {
         auto missingEndpoint = allActual;
         auto connection =
@@ -3730,18 +3755,18 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
         BOOST_CHECK( canonicalPinStyle( aBinaryPin.graphicStyle )
                      == canonicalPinStyle( aAsciiPin.inverted, aAsciiPin.clock ) );
         BOOST_CHECK_EQUAL( aBinaryPin.length, std::llround( aAsciiPin.length * 2 ) );
-        BOOST_CHECK_EQUAL( aBinaryPin.position.x, std::llround( aAsciiPin.position.x ) );
-        BOOST_CHECK_EQUAL( aBinaryPin.position.y, std::llround( aAsciiPin.position.y ) );
+        BOOST_CHECK_EQUAL( aBinaryPin.position.x, std::llround( aAsciiPin.position.x * 2 ) );
+        BOOST_CHECK_EQUAL( aBinaryPin.position.y, std::llround( aAsciiPin.position.y * 2 ) );
         BOOST_CHECK_EQUAL( aBinaryPin.side, aAsciiPin.side );
         BOOST_CHECK_EQUAL( aBinaryPin.angle, std::llround( aAsciiPin.rotation * 10 ) );
-        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.height, aAsciiPin.pn_h );
-        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.width, aAsciiPin.pn_w );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.height, aAsciiPin.pl_h );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.width, aAsciiPin.pl_w );
-        BOOST_CHECK_EQUAL( aBinaryPin.nameOffset.x, aAsciiPin.pn_offset.x );
-        BOOST_CHECK_EQUAL( aBinaryPin.nameOffset.y, aAsciiPin.pn_offset.y );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberOffset.x, aAsciiPin.pl_offset.x );
-        BOOST_CHECK_EQUAL( aBinaryPin.numberOffset.y, aAsciiPin.pl_offset.y );
+        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.height, aAsciiPin.pn_h * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.namePresentation.width, aAsciiPin.pn_w * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.height, aAsciiPin.pl_h * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberPresentation.width, aAsciiPin.pl_w * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.nameOffset.x, aAsciiPin.pn_offset.x * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.nameOffset.y, aAsciiPin.pn_offset.y * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberOffset.x, aAsciiPin.pl_offset.x * 2 );
+        BOOST_CHECK_EQUAL( aBinaryPin.numberOffset.y, aAsciiPin.pl_offset.y * 2 );
         BOOST_CHECK_EQUAL( aBinaryPin.nameAngle, aAsciiPin.pn_angle * 10 );
         BOOST_CHECK_EQUAL( aBinaryPin.numberAngle, aAsciiPin.pl_angle * 10 );
         BOOST_CHECK_EQUAL( aBinaryPin.nameJustification, aAsciiPin.pn_just );
@@ -3792,17 +3817,17 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
         for( size_t pointIndex = 0; pointIndex < asciiPrimitive->graphics[graphic].points.size(); ++pointIndex )
         {
             BOOST_CHECK_EQUAL( primitiveDefinition.graphics[graphic].points[pointIndex].x,
-                               std::llround( asciiPrimitive->graphics[graphic].points[pointIndex].coord.x ) );
+                               std::llround( asciiPrimitive->graphics[graphic].points[pointIndex].coord.x * 2 ) );
             BOOST_CHECK_EQUAL( primitiveDefinition.graphics[graphic].points[pointIndex].y,
-                               std::llround( asciiPrimitive->graphics[graphic].points[pointIndex].coord.y ) );
+                               std::llround( asciiPrimitive->graphics[graphic].points[pointIndex].coord.y * 2 ) );
         }
     }
 
     const MODEL_GRAPHIC& binaryText = primitiveDefinition.graphics.back();
     BOOST_REQUIRE_EQUAL( asciiPrimitive->texts.size(), 1 );
     BOOST_CHECK_EQUAL( binaryText.text.text, wxString::FromUTF8( asciiPrimitive->texts[0].content ) );
-    BOOST_CHECK_EQUAL( binaryText.points[0].x, std::llround( asciiPrimitive->texts[0].position.x ) );
-    BOOST_CHECK_EQUAL( binaryText.points[0].y, std::llround( asciiPrimitive->texts[0].position.y ) );
+    BOOST_CHECK_EQUAL( binaryText.points[0].x, std::llround( asciiPrimitive->texts[0].position.x * 2 ) );
+    BOOST_CHECK_EQUAL( binaryText.points[0].y, std::llround( asciiPrimitive->texts[0].position.y * 2 ) );
     BOOST_CHECK_EQUAL( binaryText.presentation.height, std::llround( asciiPrimitive->texts[0].size * 2 ) );
     BOOST_CHECK_EQUAL( binaryText.presentation.width, asciiPrimitive->texts[0].width_factor * 2 );
     BOOST_CHECK_EQUAL( binaryText.presentation.font.text, wxString::FromUTF8( asciiPrimitive->font1 ) );
@@ -3829,9 +3854,9 @@ BOOST_AUTO_TEST_CASE( SymbolDefinitionSemanticSnapshot )
                                wxString::FromUTF8( asciiFields->attrs[field].attr_name ) );
             BOOST_CHECK( fieldsDefinition.fields[field].value.text.empty() );
             BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].position.x,
-                               std::llround( asciiFields->attrs[field].position.x ) );
+                               std::llround( asciiFields->attrs[field].position.x * 2 ) );
             BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].position.y,
-                               std::llround( asciiFields->attrs[field].position.y ) );
+                               std::llround( asciiFields->attrs[field].position.y * 2 ) );
             BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].angle, asciiFields->attrs[field].angle * 10 );
             BOOST_CHECK_EQUAL( fieldsDefinition.fields[field].presentation.height,
                                asciiFields->attrs[field].height * 2 );

@@ -730,9 +730,10 @@ namespace
         symbol->SetLibSymbol( libraryCopy.release() );
         symbol->SetPosition( pagePoint( aPlacement.position, aPageHeight ) );
 
-        int orientation = SYM_ORIENT_0;
+        const int angle = NormalizeAngle( aPlacement.angle );
+        int       orientation = SYM_ORIENT_0;
 
-        switch( NormalizeAngle( aPlacement.angle ) )
+        switch( angle )
         {
         case 900: orientation = SYM_ORIENT_90; break;
         case 1800: orientation = SYM_ORIENT_180; break;
@@ -740,16 +741,22 @@ namespace
         default: break;
         }
 
-        if( aPlacement.mirrored )
+        if( aPlacement.mirrorFlags & 1 )
+            orientation |= SYM_MIRROR_Y;
+
+        if( aPlacement.mirrorFlags & 2 )
             orientation |= SYM_MIRROR_X;
 
         symbol->SetOrientation( orientation );
+
         symbol->SetUnit( unit );
         symbol->SetRef( &aPath, reference );
         symbol->AddHierarchicalReference( aPath.Path(), reference, unit );
 
         for( const MODEL_FIELD& field : aPlacement.fields )
             applyField( symbol.get(), field, aDiagnostics );
+
+        symbol->SetExcludedFromBoard( library->GetPins().empty() );
 
         return symbol;
     }
@@ -1332,10 +1339,26 @@ namespace
 
                 const VECTOR2I start = pagePoint( entry.position, pageHeight );
                 const VECTOR2I end = pagePoint( adjacency->second.front(), pageHeight );
+                const VECTOR2I delta = end - start;
+                const int      span = std::max( std::abs( delta.x ), std::abs( delta.y ) );
+                const int      entrySpan = std::min( span, schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) );
+                const VECTOR2I entryEnd =
+                        span == 0 ? end : start + VECTOR2I( delta.x * entrySpan / span, delta.y * entrySpan / span );
                 auto           entryItem = std::make_unique<SCH_BUS_WIRE_ENTRY>( start );
-                entryItem->SetSize( end - start );
+                entryItem->SetSize( entryEnd - start );
                 aScreen->Append( entryItem.get() );
                 entryItem.release();
+
+                if( entryEnd != end )
+                {
+                    auto wire = std::make_unique<SCH_LINE>( entryEnd, LAYER_WIRE );
+                    wire->SetEndPoint( end );
+                    wire->SetStroke( STROKE_PARAMS( toIU( aSourceSheet.defaultLineWidth ), LINE_STYLE::SOLID ) );
+                    aScreen->Append( wire.get() );
+                    wire.release();
+                    ++aStaged.result.counts.wires;
+                }
+
                 busEntrySegments.insert(
                         segmentKey( aSourceSheet.id, entry.memberNet.id, entry.position, adjacency->second.front() ) );
                 ++aStaged.result.counts.busEntries;
@@ -1366,6 +1389,36 @@ namespace
                     aScreen->Append( line.get() );
                     line.release();
                     ++aStaged.result.counts.wires;
+                }
+
+                SOURCE_POINT labelPoint = connection.vertices.front();
+                auto         pinEndpoint = std::ranges::find( connection.endpoints, MODEL_ENDPOINT_KIND::PIN,
+                                                              &MODEL_CONNECTION_ENDPOINT::kind );
+
+                if( pinEndpoint != connection.endpoints.end() )
+                    labelPoint = pinEndpoint->point;
+                else if( connection.vertices.size() >= 2
+                         && busEntrySegments.contains( segmentKey( aSourceSheet.id, net->id, connection.vertices[0],
+                                                                   connection.vertices[1] ) ) )
+                    labelPoint = connection.vertices[1];
+
+                const bool hasSourceLabel = std::ranges::any_of(
+                        MODEL_INDEX::ForSheet( aIndex.labelsBySheet, aSourceSheet.id ),
+                        [&]( const MODEL_LABEL* aLabel )
+                        {
+                            return ( aLabel->kind == MODEL_LABEL_KIND::GLOBAL || aLabel->kind == MODEL_LABEL_KIND::POWER
+                                     || aLabel->kind == MODEL_LABEL_KIND::GROUND )
+                                   && aLabel->text.text == net->name.text && aLabel->position.x == labelPoint.x
+                                   && aLabel->position.y == labelPoint.y;
+                        } );
+
+                if( !hasSourceLabel )
+                {
+                    auto label =
+                            std::make_unique<SCH_GLOBALLABEL>( pagePoint( labelPoint, pageHeight ), net->name.text );
+                    label->SetTextSize( VECTOR2I( 1, 1 ) );
+                    aScreen->Append( label.get() );
+                    label.release();
                 }
             }
         }

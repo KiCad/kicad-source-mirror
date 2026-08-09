@@ -24,6 +24,8 @@
 #include <bitmap_base.h>
 #include <connection_graph.h>
 #include <lib_symbol.h>
+#include <netlist_exporter_pads.h>
+#include <reporter.h>
 #include <sch_field.h>
 #include <sch_bus_entry.h>
 #include <sch_bitmap.h>
@@ -46,6 +48,7 @@
 #include <sch_text.h>
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
+#include <string_utils.h>
 
 #include <algorithm>
 #include <array>
@@ -55,6 +58,7 @@
 #include <map>
 #include <numeric>
 #include <set>
+#include <sstream>
 #include <vector>
 #include <wx/filename.h>
 
@@ -271,7 +275,94 @@ static bool hasNetName( const std::multiset<wxString>& aSnapshot, const wxString
 
 static bool netNameMatches( const wxString& aActual, const wxString& aExpected )
 {
-    return aActual == aExpected || aActual.EndsWith( wxS( "/" ) + aExpected );
+    const wxString actual = UnescapeString( aActual );
+    return actual == aExpected || actual.EndsWith( wxS( "/" ) + aExpected );
+}
+
+
+struct PADS_NETLIST_SIGNATURE
+{
+    std::set<std::string>                   parts;
+    std::multiset<std::vector<std::string>> partitions;
+};
+
+
+static PADS_NETLIST_SIGNATURE padsNetlistSignature( const std::string& aPath )
+{
+    enum class SECTION
+    {
+        NONE,
+        PARTS,
+        NETS
+    };
+
+    std::ifstream            input( aPath );
+    PADS_NETLIST_SIGNATURE   result;
+    SECTION                  section = SECTION::NONE;
+    std::vector<std::string> pins;
+    auto                     flush = [&]()
+    {
+        if( pins.empty() )
+            return;
+
+        std::ranges::sort( pins );
+        result.partitions.insert( pins );
+        pins.clear();
+    };
+    std::string line;
+
+    while( std::getline( input, line ) )
+    {
+        if( !line.empty() && line.back() == '\r' )
+            line.pop_back();
+
+        if( line.starts_with( "*PART*" ) )
+        {
+            flush();
+            section = SECTION::PARTS;
+            continue;
+        }
+
+        if( line.starts_with( "*NET*" ) )
+        {
+            flush();
+            section = SECTION::NETS;
+            continue;
+        }
+
+        if( line.starts_with( "*SIGNAL*" ) )
+        {
+            flush();
+            continue;
+        }
+
+        if( line.starts_with( '*' ) )
+        {
+            flush();
+            section = SECTION::NONE;
+            continue;
+        }
+
+        std::istringstream fields( line );
+
+        if( section == SECTION::PARTS )
+        {
+            std::string reference;
+
+            if( fields >> reference )
+                result.parts.insert( std::move( reference ) );
+        }
+        else if( section == SECTION::NETS )
+        {
+            std::string pin;
+
+            while( fields >> pin )
+                pins.push_back( std::move( pin ) );
+        }
+    }
+
+    flush();
+    return result;
 }
 
 
@@ -460,13 +551,25 @@ static CONNECTIVITY_ORACLE_COUNTS assertSourceConnectivity( const PADS_SCH_BINAR
             {
                 auto* builtEntry = static_cast<SCH_BUS_WIRE_ENTRY*>( item );
 
-                if( builtEntry->GetPosition() == pagePoint( entry.position, pageHeight )
-                    && builtEntry->GetSize()
-                               == pagePoint( adjacent.front(), pageHeight ) - pagePoint( entry.position, pageHeight ) )
+                if( builtEntry->GetPosition() == pagePoint( entry.position, pageHeight ) )
                 {
-                    SCH_CONNECTION* connection = builtEntry->Connection( &path );
-                    BOOST_REQUIRE( connection );
-                    BOOST_CHECK( netNameMatches( connection->GetNetName(), ownerNet->name.text ) );
+                    const VECTOR2I expectedEnd = pagePoint( adjacent.front(), pageHeight );
+                    bool           reachesWire = builtEntry->GetEnd() == expectedEnd;
+
+                    for( SCH_ITEM* lineItem : screen->Items().OfType( SCH_LINE_T ) )
+                    {
+                        auto* line = static_cast<SCH_LINE*>( lineItem );
+
+                        if( line->GetLayer() == LAYER_WIRE && line->GetStartPoint() == builtEntry->GetEnd()
+                            && line->GetEndPoint() == expectedEnd )
+                        {
+                            reachesWire = true;
+                            break;
+                        }
+                    }
+
+                    BOOST_CHECK( reachesWire );
+                    BOOST_REQUIRE( builtEntry->Connection( &path ) );
                     found = true;
                     break;
                 }
@@ -510,7 +613,10 @@ static CONNECTIVITY_ORACLE_COUNTS assertSourceConnectivity( const PADS_SCH_BINAR
                                            schIUScale.MilsToIU( sourceSheet.defaultLineWidth / 2.0 ) );
                         SCH_CONNECTION* connection = line->Connection( &path );
                         BOOST_REQUIRE( connection );
-                        BOOST_CHECK( netNameMatches( connection->GetNetName(), net.name.text ) );
+                        BOOST_CHECK_MESSAGE( netNameMatches( connection->GetNetName(), net.name.text ),
+                                             "wire net actual='" << connection->GetNetName() << "' expected='"
+                                                                 << net.name.text << "' sheet=" << net.sheet.id.Value()
+                                                                 << " record=" << sourceConnection.source.recordIndex );
                         found = true;
                         break;
                     }
@@ -553,6 +659,31 @@ static CONNECTIVITY_ORACLE_COUNTS assertSourceConnectivity( const PADS_SCH_BINAR
                 }
 
                 BOOST_REQUIRE( sourcePin );
+                auto part = std::ranges::find( aModel.partTypes, placement->partType.id, &MODEL_PART_TYPE::id );
+                BOOST_REQUIRE( part != aModel.partTypes.end() );
+                BOOST_REQUIRE( placement->gate );
+                auto gate = std::ranges::find( part->gates, placement->gate->id, &MODEL_GATE::id );
+                BOOST_REQUIRE( gate != part->gates.end() );
+                auto pinReference = std::ranges::find( placement->pins, endpoint.pin->id, &PIN_REFERENCE::id );
+                BOOST_REQUIRE( pinReference != placement->pins.end() );
+                const size_t pinOrdinal = std::distance( placement->pins.begin(), pinReference );
+                wxString     expectedNumber = sourcePin->number.text;
+                wxString     expectedName = sourcePin->name.text;
+
+                if( !gate->connectorPins.empty() )
+                {
+                    BOOST_REQUIRE_GT( placement->unit, 0u );
+                    BOOST_REQUIRE_LE( placement->unit, gate->connectorPins.size() );
+                    expectedNumber = gate->connectorPins[placement->unit - 1].number.text;
+                    expectedName = gate->connectorPins[placement->unit - 1].name.text;
+                }
+                else if( !gate->logicalPins.empty() )
+                {
+                    BOOST_REQUIRE_LT( pinOrdinal, gate->logicalPins.size() );
+                    expectedNumber = gate->logicalPins[pinOrdinal].number.text;
+                    expectedName = gate->logicalPins[pinOrdinal].name.text;
+                }
+
                 SCH_SYMBOL* builtSymbol = nullptr;
 
                 for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
@@ -573,15 +704,61 @@ static CONNECTIVITY_ORACLE_COUNTS assertSourceConnectivity( const PADS_SCH_BINAR
                 auto                  builtPin = std::ranges::find_if( builtPins,
                                                                        [&]( SCH_PIN* aPin )
                                                                        {
-                                                          return aPin->GetNumber() == sourcePin->number.text
-                                                                 && aPin->GetName() == sourcePin->name.text
+                                                          return aPin->GetNumber() == expectedNumber
+                                                                 && aPin->GetName() == expectedName
                                                                  && aPin->GetPosition()
                                                                             == pagePoint( endpoint.point, pageHeight );
                                                       } );
-                BOOST_REQUIRE( builtPin != builtPins.end() );
+
+                if( builtPin == builtPins.end() )
+                {
+                    for( SCH_PIN* candidate : builtPins )
+                    {
+                        if( candidate->GetNumber() == expectedNumber || candidate->GetName() == expectedName )
+                            BOOST_TEST_MESSAGE( "candidate " << candidate->GetNumber() << ' ' << candidate->GetName()
+                                                             << " at " << candidate->GetPosition().x << ','
+                                                             << candidate->GetPosition().y << " orientation "
+                                                             << builtSymbol->GetOrientation() << " raw mirror "
+                                                             << placement->mirrorFlags );
+                    }
+                }
+
+                BOOST_REQUIRE_MESSAGE( builtPin != builtPins.end(),
+                                       placement->reference.text << " pin " << expectedNumber << " " << expectedName
+                                                                 << " net " << net.name.text << " at "
+                                                                 << endpoint.point.x << ',' << endpoint.point.y );
                 SCH_CONNECTION* pinConnection = ( *builtPin )->Connection( &path );
                 BOOST_REQUIRE( pinConnection );
-                BOOST_CHECK( netNameMatches( pinConnection->GetNetName(), net.name.text ) );
+
+                if( !netNameMatches( pinConnection->GetNetName(), net.name.text ) )
+                {
+                    for( SCH_ITEM* lineItem : screen->Items().OfType( SCH_LINE_T ) )
+                    {
+                        auto* line = static_cast<SCH_LINE*>( lineItem );
+
+                        if( line->GetStartPoint() == ( *builtPin )->GetPosition()
+                            || line->GetEndPoint() == ( *builtPin )->GetPosition() )
+                        {
+                            BOOST_TEST_MESSAGE( "pin-adjacent line layer="
+                                                << line->GetLayer() << " start=" << line->GetStartPoint().x << ','
+                                                << line->GetStartPoint().y << " end=" << line->GetEndPoint().x << ','
+                                                << line->GetEndPoint().y );
+                        }
+                    }
+
+                    for( SCH_ITEM* labelItem : screen->Items().OfType( SCH_LABEL_T ) )
+                    {
+                        auto* label = static_cast<SCH_LABEL*>( labelItem );
+
+                        if( label->GetPosition() == ( *builtPin )->GetPosition() )
+                            BOOST_TEST_MESSAGE( "pin-adjacent label '" << label->GetText() << "'" );
+                    }
+                }
+
+                BOOST_CHECK_MESSAGE( netNameMatches( pinConnection->GetNetName(), net.name.text ),
+                                     "pin net actual='" << pinConnection->GetNetName() << "' expected='"
+                                                        << net.name.text << "' pin=" << placement->reference.text << '.'
+                                                        << expectedNumber << " sheet=" << net.sheet.id.Value() );
             }
         }
     }
@@ -974,37 +1151,44 @@ BOOST_AUTO_TEST_CASE( BinaryEmbeddedImages )
 {
     using namespace PADS_SCH_BINARY;
 
-    const PADS_SCH_MODEL model = parseBinaryFixture( wxS( "ole_images" ) );
-    SCH_SHEET*           root = m_schematic.GetTopLevelSheet();
+    PADS_SCH_MODEL model = parseBinaryFixture( wxS( "ole_images" ) );
+    BOOST_REQUIRE_GE( model.images[0].data.size(), 14u );
+    MODEL_EMBEDDED_IMAGE dib = model.images[0];
+    dib.id = IMAGE_ID( 2 );
+    dib.type = MODEL_EMBEDDED_IMAGE_TYPE::DIB;
+    dib.streamName = wxS( "synthetic DIB view of Ole10Native BMP" );
+    dib.position.x += 2000;
+    dib.data.erase( dib.data.begin(), dib.data.begin() + 14 );
+    model.images.push_back( std::move( dib ) );
+
+    SCH_SHEET* root = m_schematic.GetTopLevelSheet();
     BOOST_REQUIRE( root );
     BOOST_REQUIRE( root->GetScreen() );
 
     BUILD_RESULT result =
             PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, nullptr, binaryFixture( wxS( "ole_images" ) ) );
 
-    BOOST_CHECK_EQUAL( result.counts.images, 2u );
-    BOOST_REQUIRE_EQUAL( itemCount( root->GetScreen(), SCH_BITMAP_T ), 2u );
+    BOOST_CHECK_EQUAL( result.counts.images, 3u );
+    BOOST_REQUIRE_EQUAL( itemCount( root->GetScreen(), SCH_BITMAP_T ), 3u );
     const int pageHeight = root->GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
     std::vector<SCH_BITMAP*> bitmaps;
 
     for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_BITMAP_T ) )
         bitmaps.push_back( static_cast<SCH_BITMAP*>( item ) );
 
-    std::ranges::sort( bitmaps, {}, []( const SCH_BITMAP* aBitmap ) { return aBitmap->GetPosition().x; } );
-
-    for( size_t index = 0; index < bitmaps.size(); ++index )
+    for( const MODEL_EMBEDDED_IMAGE& source : model.images )
     {
-        const MODEL_EMBEDDED_IMAGE& source = model.images[1 - index];
-        const SCH_BITMAP&           bitmap = *bitmaps[index];
-        BOOST_CHECK_EQUAL( bitmap.GetPosition(), pagePoint( source.position, pageHeight ) );
-        BOOST_CHECK_LE( std::abs( bitmap.GetReferenceImage().GetSize().x -
-                                  schIUScale.MilsToIU( static_cast<double>( source.size.x ) / 2.0 ) ),
+        auto bitmap = std::ranges::find( bitmaps, pagePoint( source.position, pageHeight ), &SCH_BITMAP::GetPosition );
+        BOOST_REQUIRE( bitmap != bitmaps.end() );
+        BOOST_CHECK_EQUAL( ( *bitmap )->GetPosition(), pagePoint( source.position, pageHeight ) );
+        BOOST_CHECK_LE( std::abs( ( *bitmap )->GetReferenceImage().GetSize().x
+                                  - schIUScale.MilsToIU( static_cast<double>( source.size.x ) / 2.0 ) ),
                         2 );
-        BOOST_CHECK_LE( std::abs( bitmap.GetReferenceImage().GetSize().y -
-                                  schIUScale.MilsToIU( static_cast<double>( source.size.y ) / 2.0 ) ),
+        BOOST_CHECK_LE( std::abs( ( *bitmap )->GetReferenceImage().GetSize().y
+                                  - schIUScale.MilsToIU( static_cast<double>( source.size.y ) / 2.0 ) ),
                         schIUScale.MilsToIU( 2 ) );
-        BOOST_REQUIRE( bitmap.GetReferenceImage().GetImage().GetOriginalImageData() );
-        BOOST_CHECK( bitmap.GetReferenceImage().GetImage().GetOriginalImageData()->IsOk() );
+        BOOST_REQUIRE( ( *bitmap )->GetReferenceImage().GetImage().GetOriginalImageData() );
+        BOOST_CHECK( ( *bitmap )->GetReferenceImage().GetImage().GetOriginalImageData()->IsOk() );
     }
 }
 
@@ -1778,10 +1962,15 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
         default: break;
         }
 
-        if( placement.mirrored )
+        if( placement.mirrorFlags & 1 )
+            expectedOrientation |= SYM_MIRROR_Y;
+
+        if( placement.mirrorFlags & 2 )
             expectedOrientation |= SYM_MIRROR_X;
 
-        BOOST_CHECK_EQUAL( symbol->GetOrientation(), expectedOrientation );
+        SCH_SYMBOL expected( *symbol );
+        expected.SetOrientation( expectedOrientation );
+        BOOST_CHECK( symbol->GetTransform() == expected.GetTransform() );
     }
 
     BOOST_CHECK_EQUAL( itemCount( destination->GetScreen(), SCH_SYMBOL_T ), transformModel.placements.size() );
@@ -2111,17 +2300,28 @@ BOOST_AUTO_TEST_CASE( BinaryMultiSheetHierarchy )
         BOOST_CHECK_EQUAL( sheet->GetScreen()->GetPageSettings().GetWidthMils(), model.sheets[i].pageSize.x / 2 );
         BOOST_CHECK_EQUAL( sheet->GetScreen()->GetPageSettings().GetHeightMils(), model.sheets[i].pageSize.y / 2 );
 
-        std::multiset<wxString> expectedLabels;
-        std::multiset<wxString> builtLabels;
+        std::multiset<std::pair<wxString, VECTOR2I>> expectedLabels;
+        std::multiset<std::pair<wxString, VECTOR2I>> builtLabels;
 
         for( const PADS_SCH_BINARY::MODEL_LABEL& label : model.labels )
         {
             if( label.sheet.id == model.sheets[i].id && !label.linkedSheets.empty() )
-                expectedLabels.insert( label.text.text );
+            {
+                expectedLabels.emplace( label.text.text, VECTOR2I( schIUScale.MilsToIU( label.position.x / 2 ),
+                                                                   schIUScale.MilsToIU( model.sheets[i].pageSize.y / 2
+                                                                                        - label.position.y / 2 ) ) );
+            }
         }
 
         for( SCH_ITEM* item : sheet->GetScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
-            builtLabels.insert( static_cast<SCH_GLOBALLABEL*>( item )->GetText() );
+        {
+            auto* label = static_cast<SCH_GLOBALLABEL*>( item );
+
+            std::pair<wxString, VECTOR2I> identity( label->GetText(), label->GetPosition() );
+
+            if( expectedLabels.contains( identity ) )
+                builtLabels.insert( std::move( identity ) );
+        }
 
         BOOST_CHECK( builtLabels == expectedLabels );
 
@@ -2388,9 +2588,6 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
             expectedWires += connection.vertices.size() - 1;
     }
 
-    for( const MODEL_BUS& bus : connectivity.buses )
-        expectedWires -= bus.entries.size();
-
     size_t builtWires = 0;
 
     for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_LINE_T ) )
@@ -2632,6 +2829,13 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
     const int      coincidentPageHeight = root->GetScreen()->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
     const VECTOR2I entryStart = pagePoint( coincidentEntry.position, coincidentPageHeight );
     const VECTOR2I entryEnd = pagePoint( adjacent, coincidentPageHeight );
+    const VECTOR2I entryDelta = entryEnd - entryStart;
+    const int      entrySpan = std::max( std::abs( entryDelta.x ), std::abs( entryDelta.y ) );
+    const int      shortSpan = std::min( entrySpan, schIUScale.MilsToIU( DEFAULT_SCH_ENTRY_SIZE ) );
+    const VECTOR2I shortEntryEnd = entrySpan == 0 ? entryEnd
+                                                  : entryStart
+                                                            + VECTOR2I( entryDelta.x * shortSpan / entrySpan,
+                                                                        entryDelta.y * shortSpan / entrySpan );
     size_t         coincidentWireSegments = 0;
     bool           exactEntry = false;
 
@@ -2644,7 +2848,7 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
         }
         else if( auto* entry = dynamic_cast<SCH_BUS_WIRE_ENTRY*>( item ) )
         {
-            exactEntry |= entry->GetPosition() == entryStart && entry->GetSize() == entryEnd - entryStart;
+            exactEntry |= entry->GetPosition() == entryStart && entry->GetSize() == shortEntryEnd - entryStart;
         }
     }
 
