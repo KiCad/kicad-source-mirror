@@ -44,7 +44,7 @@ DIALOG_MULTICHANNEL_REPEAT_LAYOUT::DIALOG_MULTICHANNEL_REPEAT_LAYOUT( PCB_BASE_F
 
     m_raGrid->PushEventHandler( new GRID_TRICKS( static_cast<WX_GRID*>( m_raGrid ) ) );
     m_raGrid->ClearGrid();
-    m_raGrid->EnableEditing( true );
+    m_raGrid->EnableEditing( false );
     m_raGrid->AutoSizeColumn( 1 );
     m_raGrid->SetupColumnAutosizer( 1 );
 
