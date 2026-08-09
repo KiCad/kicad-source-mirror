@@ -226,6 +226,16 @@ BOOST_AUTO_TEST_CASE( BoardStackupLayerType )
     testEnums<BOARD_STACKUP_ITEM_TYPE, kiapi::board::BoardStackupLayerType>();
 }
 
+BOOST_AUTO_TEST_CASE( DielectricModel )
+{
+    testEnums<DIELECTRIC_MODEL, kiapi::board::DielectricModel>();
+}
+
+BOOST_AUTO_TEST_CASE( BoardEdgeConnectorType )
+{
+    testEnums<BS_EDGE_CONNECTOR_CONSTRAINTS, kiapi::board::BoardEdgeConnectorType>();
+}
+
 BOOST_AUTO_TEST_CASE( DrcSeverity )
 {
     testEnums<SEVERITY, kiapi::board::commands::DrcSeverity>();

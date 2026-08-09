@@ -1111,6 +1111,68 @@ BOARD_STACKUP_ITEM_TYPE FromProtoEnum( BoardStackupLayerType aValue )
 
 
 template<>
+DielectricModel ToProtoEnum( DIELECTRIC_MODEL aValue )
+{
+    switch( aValue )
+    {
+    case DIELECTRIC_MODEL::CONSTANT:          return DielectricModel::DM_CONSTANT;
+    case DIELECTRIC_MODEL::DJORDJEVIC_SARKAR: return DielectricModel::DM_DJORDJEVIC_SARKAR;
+
+    default:
+        wxCHECK_MSG( false, DielectricModel::DM_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<DIELECTRIC_MODEL>" );
+    }
+}
+
+
+template<>
+DIELECTRIC_MODEL FromProtoEnum( DielectricModel aValue )
+{
+    switch( aValue )
+    {
+    case DielectricModel::DM_CONSTANT:          return DIELECTRIC_MODEL::CONSTANT;
+    case DielectricModel::DM_DJORDJEVIC_SARKAR: return DIELECTRIC_MODEL::DJORDJEVIC_SARKAR;
+
+    default:
+        wxCHECK_MSG( false, DIELECTRIC_MODEL::CONSTANT,
+                     "Unhandled case in FromProtoEnum<DielectricModel>" );
+    }
+}
+
+
+template<>
+BoardEdgeConnectorType ToProtoEnum( BS_EDGE_CONNECTOR_CONSTRAINTS aValue )
+{
+    switch( aValue )
+    {
+    case BS_EDGE_CONNECTOR_NONE:     return BoardEdgeConnectorType::BECT_NONE;
+    case BS_EDGE_CONNECTOR_IN_USE:   return BoardEdgeConnectorType::BECT_PLAIN;
+    case BS_EDGE_CONNECTOR_BEVELLED: return BoardEdgeConnectorType::BECT_BEVELED;
+
+    default:
+        wxCHECK_MSG( false, BoardEdgeConnectorType::BECT_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<BS_EDGE_CONNECTOR_CONSTRAINTS>" );
+    }
+}
+
+
+template<>
+BS_EDGE_CONNECTOR_CONSTRAINTS FromProtoEnum( BoardEdgeConnectorType aValue )
+{
+    switch( aValue )
+    {
+    case BoardEdgeConnectorType::BECT_NONE:    return BS_EDGE_CONNECTOR_NONE;
+    case BoardEdgeConnectorType::BECT_PLAIN:   return BS_EDGE_CONNECTOR_IN_USE;
+    case BoardEdgeConnectorType::BECT_BEVELED: return BS_EDGE_CONNECTOR_BEVELLED;
+
+    default:
+        wxCHECK_MSG( false, BS_EDGE_CONNECTOR_NONE,
+                     "Unhandled case in FromProtoEnum<BoardEdgeConnectorType>" );
+    }
+}
+
+
+template<>
 DrcSeverity ToProtoEnum( SEVERITY aValue )
 {
     switch( aValue )
