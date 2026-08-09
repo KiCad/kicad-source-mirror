@@ -35,13 +35,23 @@ message BoardImpedanceControl
   bool is_controlled = 1;
 }
 
-message BoardEdgeConnector
+enum BoardEdgeConnectorType
 {
+  BECT_UNKNOWN = 0;
+  BECT_NONE = 1;
+  BECT_PLAIN = 2;
+  BECT_BEVELED = 3;
 }
 
+// Currently unused; castellation is not set board-level at the moment
 message Castellation
 {
-  bool has_castellated_pads = 1;
+  reserved 1;
+}
+
+message BoardEdgeConnector
+{
+  BoardEdgeConnectorType type = 1;
 }
 
 message EdgePlating
@@ -52,13 +62,24 @@ message EdgePlating
 message BoardEdgeSettings
 {
   BoardEdgeConnector connector = 1;
+  // currenly unused; this field will never be set by KiCad
   Castellation castellation = 2;
   EdgePlating plating = 3;
 }
 
-message BoardStackupCopperLayer
+enum BoardStackupDielectricType
 {
+  BSDT_UNKNOWN = 0;
+  BSDT_NONE = 1;
+  BSDT_CORE = 2;
+  BSDT_PREPREG = 3;
+}
 
+enum DielectricModel
+{
+  DM_UNKNOWN = 0;
+  DM_CONSTANT = 1;
+  DM_DJORDJEVIC_SARKAR = 2;
 }
 
 enum BoardStackupLayerType
@@ -78,12 +99,30 @@ message BoardStackupDielectricProperties
   double loss_tangent = 2;
   string material_name = 3;
   kiapi.common.types.Distance thickness = 4;
+  bool thickness_locked = 5;
+  optional double spec_frequency = 6;
+  DielectricModel dielectric_model = 7;
 }
 
 message BoardStackupDielectricLayer
 {
   // A single dielectric slot (between copper layers) can be made up of multiple physical layers
   repeated BoardStackupDielectricProperties layer = 1;
+
+  BoardStackupDielectricType type = 2;
+}
+
+message BoardStackupSoldermaskLayer
+{
+  double epsilon_r = 1;
+  double loss_tangent = 2;
+  string material_name = 3;
+  kiapi.common.types.Distance thickness = 4;
+}
+
+message BoardStackupSilkscreenLayer
+{
+  string material_name = 1;
 }
 
 message BoardStackupLayer
@@ -92,7 +131,14 @@ message BoardStackupLayer
   kiapi.board.types.BoardLayer layer = 2;
   bool enabled = 3;
   BoardStackupLayerType type = 4;
-  BoardStackupDielectricLayer dielectric = 5;
+
+  oneof details
+  {
+    BoardStackupDielectricLayer dielectric = 5;
+    BoardStackupSoldermaskLayer soldermask = 9;
+    BoardStackupSilkscreenLayer silkscreen = 10;
+  }
+
   kiapi.common.types.Color color = 6;
   string material_name = 7;
 
