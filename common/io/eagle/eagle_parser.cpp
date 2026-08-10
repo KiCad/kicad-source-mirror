@@ -76,12 +76,16 @@ wxString interpretText( const wxString& aText )
             continue;
         }
 
-        // Escape ~ for KiCAD
+        // Escape ~ for KiCAD when it would otherwise be interpreted as markup
         if( aText[i] == '~' )
         {
-            text.Append( '~' );
-            text.Append( '~' );
-            continue;
+            if(   ( i+1 < aText.size() && aText[i+1] == '{' )   // overbar opening sequence
+               || ( aText == "~" ) )                            // legacy empty string token
+            {
+                text.Append( '~' );
+                text.Append( '~' );
+                continue;
+            }
         }
 
         if( aText[ i ] == '!' )
