@@ -150,13 +150,9 @@ KIID_PATH SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getDataStoreKey( const SCH_REFER
 
 void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
 {
-    for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
+    for( auto& [unused, fieldsStore] : m_dataStore )
     {
-        if( m_symbolsList[i].GetSymbol() )
-        {
-            KIID_PATH key = getDataStoreKey( m_symbolsList[i] );
-            m_dataStore[key].erase( m_cols[aCol].m_fieldName );
-        }
+        fieldsStore.erase( m_cols[aCol].m_fieldName );
     }
 
     m_cols.erase( m_cols.begin() + aCol );
@@ -171,15 +167,14 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RemoveColumn( int aCol )
 
 void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& newName )
 {
-    for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
+    for( auto& [unused, fieldsStore] : m_dataStore )
     {
-        KIID_PATH key = getDataStoreKey( m_symbolsList[i] );
+        auto node = fieldsStore.extract( m_cols[aCol].m_fieldName );
 
-        // Careful; field may have already been renamed from another sheet instance
-        if( auto node = m_dataStore[key].extract( m_cols[aCol].m_fieldName ) )
+        if( !node.empty() )
         {
             node.key() = newName;
-            m_dataStore[key].insert( std::move( node ) );
+            fieldsStore.insert( std::move( node ) );
         }
     }
 
@@ -1083,11 +1078,12 @@ int SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetDataWidth( int aCol )
     {
         wxString fieldName = GetColFieldName( aCol ); // symbol fieldName or Qty string
 
-        for( unsigned symbolRef = 0; symbolRef < m_symbolsList.GetCount(); ++symbolRef )
+        for( auto& [unused, fieldStore] : m_dataStore )
         {
-            wxString text = m_dataStore[getDataStoreKey( m_symbolsList[symbolRef] )][fieldName];
+            auto it = fieldStore.find( fieldName );
 
-            width = std::max( width, KIUI::GetTextSize( text, GetView() ).x );
+            if( it != fieldStore.end() )
+                width = std::max( width, KIUI::GetTextSize( it->second, GetView() ).x );
         }
     }
 
