@@ -276,6 +276,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( SCH_ACTIONS::drawEllipseArc );
     placeMenu->Add( SCH_ACTIONS::drawArc );
     placeMenu->Add( SCH_ACTIONS::drawBezier );
+    placeMenu->Add( SCH_ACTIONS::drawPolygon );
     placeMenu->Add( SCH_ACTIONS::drawLines );
     placeMenu->Add( SCH_ACTIONS::placeImage );
 

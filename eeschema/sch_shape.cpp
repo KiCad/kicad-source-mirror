@@ -112,6 +112,21 @@ void SCH_SHAPE::SetFilled( bool aFilled )
 }
 
 
+void SCH_SHAPE::UpdateHatching() const
+{
+    if( !IsMoving() )
+    {
+        EDA_SHAPE::UpdateHatching();
+        return;
+    }
+
+    SCH_SHAPE* movingShape = const_cast<SCH_SHAPE*>( this );
+    movingShape->ClearFlags( IS_MOVING );
+    EDA_SHAPE::UpdateHatching();
+    movingShape->SetFlags( IS_MOVING );
+}
+
+
 void SCH_SHAPE::Move( const VECTOR2I& aOffset )
 {
     move( aOffset );
@@ -604,10 +619,13 @@ static struct SCH_SHAPE_DESC
 
         if( fillEnum.Choices().GetCount() == 0 )
         {
-            fillEnum.Map( FILL_T::NO_FILL,                  _HKI( "None" ) )
-                    .Map( FILL_T::FILLED_SHAPE,             _HKI( "Body outline color" ) )
+            fillEnum.Map( FILL_T::NO_FILL, _HKI( "None" ) )
+                    .Map( FILL_T::FILLED_SHAPE, _HKI( "Body outline color" ) )
                     .Map( FILL_T::FILLED_WITH_BG_BODYCOLOR, _HKI( "Body background color" ) )
-                    .Map( FILL_T::FILLED_WITH_COLOR,        _HKI( "Fill color" ) );
+                    .Map( FILL_T::FILLED_WITH_COLOR, _HKI( "Fill color" ) )
+                    .Map( FILL_T::HATCH, _HKI( "Hatch" ) )
+                    .Map( FILL_T::REVERSE_HATCH, _HKI( "Reverse hatch" ) )
+                    .Map( FILL_T::CROSS_HATCH, _HKI( "Cross hatch" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();

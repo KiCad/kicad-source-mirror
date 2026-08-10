@@ -140,6 +140,7 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
                             .AddAction( SCH_ACTIONS::drawArc )
                             .AddAction( SCH_ACTIONS::drawEllipseArc ) )
               .AppendAction( SCH_ACTIONS::drawBezier )
+              .AppendAction( SCH_ACTIONS::drawPolygon )
               .AppendAction( SCH_ACTIONS::drawLines )
               .AppendAction( SCH_ACTIONS::placeImage )
               .AppendAction( ACTIONS::deleteTool );

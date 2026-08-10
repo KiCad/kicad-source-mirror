@@ -77,6 +77,8 @@ public:
         return GetHatchLineWidth() * 40;
     }
 
+    void UpdateHatching() const override;
+
     void SetFilled( bool aFilled ) override;
 
     const BOX2I GetBoundingBox() const override;

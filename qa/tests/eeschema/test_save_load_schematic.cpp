@@ -26,11 +26,13 @@
 #include <eeschema_test_utils.h>
 
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
+#include <sch_shape.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <sch_symbol.h>
 #include <schematic.h>
 #include <kiid.h>
+#include <geometry/shape_segment.h>
 #include <sch_file_versions.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
@@ -240,6 +242,89 @@ BOOST_AUTO_TEST_CASE( TestSaveLoadHierarchicalSchematic )
         // Verify the file was created
         BOOST_CHECK( wxFileExists( mainFileName2 ) );
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( TestSaveLoadHatchedPolygonPreservesClosingEdge )
+{
+    m_schematic->CreateDefaultScreens();
+
+    std::vector<SCH_SHEET*> topSheets = m_schematic->GetTopLevelSheets();
+    BOOST_REQUIRE( !topSheets.empty() );
+
+    SCH_SCREEN* screen = topSheets[0]->GetScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    screen->SetFileName( "polygon_test.kicad_sch" );
+
+    std::unique_ptr<SCH_SHAPE> polygon = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY );
+    polygon->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
+    polygon->SetFillMode( FILL_T::HATCH );
+
+    polygon->AddPoint( VECTOR2I( schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 0 ) ) );
+    polygon->AddPoint( VECTOR2I( schIUScale.MilsToIU( 1000 ), schIUScale.MilsToIU( 0 ) ) );
+    polygon->AddPoint( VECTOR2I( schIUScale.MilsToIU( 500 ), schIUScale.MilsToIU( 1000 ) ) );
+
+    // Emulate the polygon tool's double-click closure artifact: the final point duplicates the
+    // previous one rather than the first.  Reload should normalize that back into an explicit
+    // closing segment while keeping the stored outline open.
+    polygon->AddPoint( VECTOR2I( schIUScale.MilsToIU( 500 ), schIUScale.MilsToIU( 1000 ) ) );
+
+    screen->Append( polygon.release() );
+
+    wxString fileName = GetTempFileName( "test_polygon_reload" );
+    fileName += ".kicad_sch";
+    m_tempFiles.push_back( fileName );
+
+    SCH_IO_KICAD_SEXPR io;
+    BOOST_CHECK_NO_THROW( io.SaveSchematicFile( fileName, topSheets[0], m_schematic.get() ) );
+    BOOST_CHECK( wxFileExists( fileName ) );
+
+    m_schematic->Reset();
+
+    SCH_SHEET* loadedSheet = nullptr;
+    BOOST_CHECK_NO_THROW( loadedSheet = io.LoadSchematicFile( fileName, m_schematic.get() ) );
+    BOOST_REQUIRE( loadedSheet != nullptr );
+
+    SCH_SHAPE* loadedPolygon = nullptr;
+
+    for( SCH_ITEM* item : loadedSheet->GetScreen()->Items().OfType( SCH_SHAPE_T ) )
+    {
+        SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
+
+        if( shape->GetShape() == SHAPE_T::POLY )
+        {
+            loadedPolygon = shape;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( loadedPolygon != nullptr );
+
+    const SHAPE_LINE_CHAIN& outline = loadedPolygon->GetPolyShape().COutline( 0 );
+    BOOST_REQUIRE_EQUAL( outline.PointCount(), 4 );
+    BOOST_CHECK_EQUAL( outline.CLastPoint(), outline.CPoint( 0 ) );
+    BOOST_CHECK_NE( outline.CLastPoint(), outline.CPoint( outline.PointCount() - 2 ) );
+    BOOST_CHECK( !outline.IsClosed() );
+
+    loadedPolygon->UpdateHatching();
+    BOOST_CHECK( !loadedPolygon->GetHatchLines().empty() );
+
+    loadedPolygon->SetFlags( IS_MOVING );
+    loadedPolygon->SetHatchingDirty();
+    loadedPolygon->UpdateHatching();
+    BOOST_CHECK( !loadedPolygon->GetHatchLines().empty() );
+    loadedPolygon->ClearFlags( IS_MOVING );
+
+    std::vector<SHAPE*> segments = loadedPolygon->MakeEffectiveShapes( true );
+    BOOST_REQUIRE_EQUAL( segments.size(), 3 );
+
+    const SEG& closingSeg = static_cast<SHAPE_SEGMENT*>( segments.back() )->GetSeg();
+    BOOST_CHECK_EQUAL( closingSeg.A, outline.CPoint( outline.PointCount() - 2 ) );
+    BOOST_CHECK_EQUAL( closingSeg.B, outline.CPoint( 0 ) );
+
+    for( SHAPE* segment : segments )
+        delete segment;
 }
 
 

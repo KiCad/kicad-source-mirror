@@ -94,6 +94,7 @@ public:
     static TOOL_ACTION drawEllipseArc;
     static TOOL_ACTION drawArc;
     static TOOL_ACTION drawBezier;
+    static TOOL_ACTION drawPolygon;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
     static TOOL_ACTION undoLastSegment;

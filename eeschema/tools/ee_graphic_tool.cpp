@@ -1011,6 +1011,7 @@ void EE_GRAPHIC_TOOL::setTransitions()
     Go( &EE_GRAPHIC_TOOL::DrawEllipseArc,   SCH_ACTIONS::drawEllipseArc.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawArc,          SCH_ACTIONS::drawArc.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawBezier,       SCH_ACTIONS::drawBezier.MakeEvent() );
+    Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawPolygon.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawTextBox.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolLines.MakeEvent() );
     Go( &EE_GRAPHIC_TOOL::DrawShape,        SCH_ACTIONS::drawSymbolPolygon.MakeEvent() );

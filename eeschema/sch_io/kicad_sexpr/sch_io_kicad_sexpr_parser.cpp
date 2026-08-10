@@ -2185,6 +2185,16 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPolyLine()
         }
     }
 
+    if( poly->GetFillMode() != FILL_T::NO_FILL && poly->GetPolyShape().OutlineCount() > 0 )
+    {
+        SHAPE_LINE_CHAIN& outline = poly->GetPolyShape().Outline( 0 );
+
+        if( outline.PointCount() >= 3 && outline.CLastPoint() == outline.CPoint( outline.PointCount() - 2 ) )
+        {
+            outline.SetPoint( outline.PointCount() - 1, outline.CPoint( 0 ) );
+        }
+    }
+
     return poly.release();
 }
 
@@ -4642,6 +4652,16 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchPolyLine()
 
         default:
             Expecting( "pts, uuid, stroke, fill or locked" );
+        }
+    }
+
+    if( polyline->GetFillMode() != FILL_T::NO_FILL && polyline->GetPolyShape().OutlineCount() > 0 )
+    {
+        SHAPE_LINE_CHAIN& outline = polyline->GetPolyShape().Outline( 0 );
+
+        if( outline.PointCount() >= 3 && outline.CLastPoint() == outline.CPoint( outline.PointCount() - 2 ) )
+        {
+            outline.SetPoint( outline.PointCount() - 1, outline.CPoint( 0 ) );
         }
     }
 

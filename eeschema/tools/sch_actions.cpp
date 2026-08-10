@@ -769,6 +769,15 @@ TOOL_ACTION SCH_ACTIONS::drawBezier( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( SHAPE_T::BEZIER ) );
 
+TOOL_ACTION SCH_ACTIONS::drawPolygon( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawPolygon" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Polygons" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_graphical_polygon )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SHAPE_T::POLY ) );
+
 TOOL_ACTION SCH_ACTIONS::placeImage( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeImage" )
         .Scope( AS_GLOBAL )

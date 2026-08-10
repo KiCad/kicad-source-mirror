@@ -789,10 +789,24 @@ void EDA_SHAPE::UpdateHatching() const
         break;
 
     case SHAPE_T::POLY:
-        if( !IsClosed() )
+        if( GetPolyShape().OutlineCount() == 0 )
             return;
 
         shapeBuffer = GetPolyShape().CloneDropTriangulation();
+
+        for( int ii = 0; ii < shapeBuffer.OutlineCount(); ++ii )
+        {
+            SHAPE_LINE_CHAIN& outline = shapeBuffer.Outline( ii );
+
+            if( outline.IsClosed() )
+                continue;
+
+            if( outline.PointCount() < 3 )
+                continue;
+
+            outline.SetClosed( true );
+        }
+
         break;
 
     case SHAPE_T::ELLIPSE:
