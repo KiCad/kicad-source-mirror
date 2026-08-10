@@ -67,6 +67,7 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline1;
 		wxBoxSizer* m_sizerBottom;
 		wxCheckBox* m_checkRepour;
+		wxCheckBox* m_checkAutoSelect;
 		wxButton* m_updateDisplayedZones;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

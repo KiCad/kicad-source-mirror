@@ -156,6 +156,12 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 
 	m_sizerBottom->Add( m_checkRepour, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
+	m_checkAutoSelect = new wxCheckBox( this, wxID_ANY, _("Select on canvas"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkAutoSelect->SetValue(true);
+	m_checkAutoSelect->SetToolTip( _("Select and focus the highlighted zone on the board canvas") );
+
+	m_sizerBottom->Add( m_checkAutoSelect, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
 
 	m_sizerBottom->Add( 100, 0, 1, wxEXPAND, 5 );
 

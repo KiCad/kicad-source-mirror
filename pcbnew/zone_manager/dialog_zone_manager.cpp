@@ -290,7 +290,7 @@ ZONE* DIALOG_ZONE_MANAGER::GetOriginalZone( ZONE* aClone )
 
 void DIALOG_ZONE_MANAGER::SelectZoneOnCanvas( ZONE* aClone, PCB_LAYER_ID aLayer )
 {
-    if( !m_canvasSelectReady || !aClone )
+    if( !m_canvasSelectReady || !m_checkAutoSelect->IsChecked() || !aClone )
         return;
 
     ZONE* originalZone = GetOriginalZone( aClone );
@@ -686,6 +686,9 @@ void DIALOG_ZONE_MANAGER::OnCheckBoxClicked( wxCommandEvent& aEvent )
 
     if( ( sender == m_checkName || sender == m_checkNet ) && !m_filterCtrl->IsEmpty() )
         m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(), m_viewZonesOverview->GetSelection() );
+
+    if( sender == m_checkAutoSelect && aEvent.IsChecked() )
+        SelectZoneOnCanvas( m_panelZoneProperties->GetZone(), m_zonePreviewNotebook->GetCurrentLayer() );
 }
 
 
