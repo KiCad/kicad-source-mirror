@@ -32,15 +32,17 @@
 #include <io/pads/pads_common.h>
 
 #include <algorithm>
+#include <array>
 #include <cctype>
 #include <cmath>
+#include <tuple>
 
 
 namespace PADS_SCH
 {
 
 PADS_SCH_SYMBOL_BUILDER::PADS_SCH_SYMBOL_BUILDER( const PARAMETERS& aParams ) :
-    m_params( aParams )
+        m_params( aParams )
 {
 }
 
@@ -108,7 +110,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateSymbol( const SYMBOL_DEF& aSymbo
 }
 
 
-LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol( const PARTTYPE_DEF& aPartType,
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol( const PARTTYPE_DEF&            aPartType,
                                                            const std::vector<SYMBOL_DEF>& aSymbolDefs )
 {
     // Build a lookup from CAEDECAL name to definition
@@ -117,7 +119,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol( const PARTTYPE_DEF& a
     for( const SYMBOL_DEF& sd : aSymbolDefs )
         symDefByName[sd.name] = &sd;
 
-    int gateCount = static_cast<int>( aPartType.gates.size() );
+    int         gateCount = static_cast<int>( aPartType.gates.size() );
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxString::FromUTF8( aPartType.name ) );
     libSymbol->SetUnitCount( gateCount, false );
     libSymbol->LockUnits( true );
@@ -125,7 +127,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol( const PARTTYPE_DEF& a
     for( int gi = 0; gi < gateCount; gi++ )
     {
         const GATE_DEF& gate = aPartType.gates[gi];
-        int unit = gi + 1;
+        int             unit = gi + 1;
 
         // Resolve the CAEDECAL for this gate
         std::string decalName;
@@ -190,7 +192,7 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol( const PARTTYPE_DEF& a
 }
 
 
-LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitSymbol( const PARTTYPE_DEF& aPartType,
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitSymbol( const PARTTYPE_DEF&            aPartType,
                                                                  const std::vector<SYMBOL_DEF>& aSymbolDefs )
 {
     // Use a prefixed key to avoid collision with CAEDECAL symbols that may
@@ -209,13 +211,13 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitSymbol( const PARTTYPE_
 
 
 LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol( const PARTTYPE_DEF& aPartType,
-                                                                const SYMBOL_DEF& aSymbolDef )
+                                                                const SYMBOL_DEF&   aSymbolDef )
 {
     // Cache by PARTTYPE + CAEDECAL pair. A single-gate PARTTYPE with multiple decal
     // variants (e.g. horizontal vs vertical resistor) needs a separate LIB_SYMBOL per
     // variant because the graphics and pin positions differ.
     std::string cacheKey = aPartType.name + ":" + aSymbolDef.name;
-    auto it = m_symbolCache.find( cacheKey );
+    auto        it = m_symbolCache.find( cacheKey );
 
     if( it != m_symbolCache.end() )
         return it->second.get();
@@ -286,11 +288,11 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol( const PARTTYPE_D
 
 
 LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateConnectorPinSymbol( const PARTTYPE_DEF& aPartType,
-                                                                    const SYMBOL_DEF& aSymbolDef,
-                                                                    const std::string& aPinNumber )
+                                                                    const SYMBOL_DEF&   aSymbolDef,
+                                                                    const std::string&  aPinNumber )
 {
     std::string cacheKey = aPartType.name + ":" + aSymbolDef.name + ":" + aPinNumber;
-    auto it = m_symbolCache.find( cacheKey );
+    auto        it = m_symbolCache.find( cacheKey );
 
     if( it != m_symbolCache.end() )
         return it->second.get();
@@ -340,11 +342,11 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateConnectorPinSymbol( const PARTTY
 }
 
 
-LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol( const PARTTYPE_DEF& aPartType,
-                                                                    const SYMBOL_DEF& aSymbolDef,
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol( const PARTTYPE_DEF&             aPartType,
+                                                                    const SYMBOL_DEF&               aSymbolDef,
                                                                     const std::vector<std::string>& aPinNumbers )
 {
-    int unitCount = static_cast<int>( aPinNumbers.size() );
+    int         unitCount = static_cast<int>( aPinNumbers.size() );
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxString::FromUTF8( aPartType.name ) );
     libSymbol->SetUnitCount( unitCount, false );
     libSymbol->LockUnits( true );
@@ -413,10 +415,10 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol( const PARTTY
 }
 
 
-LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitConnectorSymbol( const PARTTYPE_DEF& aPartType,
-                                                                          const SYMBOL_DEF& aSymbolDef,
+LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateMultiUnitConnectorSymbol( const PARTTYPE_DEF&             aPartType,
+                                                                          const SYMBOL_DEF&               aSymbolDef,
                                                                           const std::vector<std::string>& aPinNumbers,
-                                                                          const std::string& aCacheKey )
+                                                                          const std::string&              aCacheKey )
 {
     auto it = m_symbolCache.find( aCacheKey );
 
@@ -471,7 +473,7 @@ SCH_SHAPE* PADS_SCH_SYMBOL_BUILDER::createShape( const SYMBOL_GRAPHIC& aGraphic 
         {
             shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
 
-            for( const GRAPHIC_POINT& pt : aGraphic.points )
+            for( const auto& pt : aGraphic.points )
                 shape->AddPoint( VECTOR2I( toKiCadUnits( pt.coord.x ), -toKiCadUnits( pt.coord.y ) ) );
         }
         else
@@ -505,7 +507,7 @@ SCH_SHAPE* PADS_SCH_SYMBOL_BUILDER::createShape( const SYMBOL_GRAPHIC& aGraphic 
         shape = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
 
         VECTOR2I center( toKiCadUnits( aGraphic.center.x ), -toKiCadUnits( aGraphic.center.y ) );
-        int radius = toKiCadUnits( aGraphic.radius );
+        int      radius = toKiCadUnits( aGraphic.radius );
 
         shape->SetStart( center );
         shape->SetEnd( VECTOR2I( center.x + radius, center.y ) );
@@ -518,7 +520,7 @@ SCH_SHAPE* PADS_SCH_SYMBOL_BUILDER::createShape( const SYMBOL_GRAPHIC& aGraphic 
         shape = new SCH_SHAPE( SHAPE_T::ARC, LAYER_DEVICE );
 
         VECTOR2I center( toKiCadUnits( aGraphic.center.x ), -toKiCadUnits( aGraphic.center.y ) );
-        int radius = toKiCadUnits( aGraphic.radius );
+        int      radius = toKiCadUnits( aGraphic.radius );
 
         // Convert angles from PADS format to KiCad
         // PADS uses degrees, KiCad uses tenths of degrees for arc definition
@@ -585,9 +587,9 @@ std::vector<SCH_SHAPE*> PADS_SCH_SYMBOL_BUILDER::createShapes( const SYMBOL_GRAP
         if( cur.arc.has_value() )
         {
             const ARC_DATA& ad = *cur.arc;
-            double cx = ( ad.bbox_x1 + ad.bbox_x2 ) / 2.0;
-            double cy = ( ad.bbox_y1 + ad.bbox_y2 ) / 2.0;
-            VECTOR2I center( toKiCadUnits( cx ), -toKiCadUnits( cy ) );
+            double          cx = ( ad.bbox_x1 + ad.bbox_x2 ) / 2.0;
+            double          cy = ( ad.bbox_y1 + ad.bbox_y2 ) / 2.0;
+            VECTOR2I        center( toKiCadUnits( cx ), -toKiCadUnits( cy ) );
 
             VECTOR2I midPt = padsSchArcMidpoint( startPt, endPt, center );
 
@@ -636,9 +638,8 @@ SCH_TEXT* PADS_SCH_SYMBOL_BUILDER::createSymbolText( const SYMBOL_TEXT& aText, i
     if( aText.content.empty() )
         return nullptr;
 
-    SCH_TEXT* schText = new SCH_TEXT(
-            VECTOR2I( toKiCadUnits( aText.position.x ), -toKiCadUnits( aText.position.y ) ),
-            wxString::FromUTF8( aText.content ), LAYER_DEVICE );
+    SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( aText.position.x ), -toKiCadUnits( aText.position.y ) ),
+                                      wxString::FromUTF8( aText.content ), LAYER_DEVICE );
 
     if( aText.size > 0.0 )
     {
@@ -697,29 +698,24 @@ SCH_PIN* PADS_SCH_SYMBOL_BUILDER::createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL*
 
     if( isVerticalDecal )
     {
-        orientation = ( aPin.side == 2 ) ? PIN_ORIENTATION::PIN_UP
-                                         : PIN_ORIENTATION::PIN_DOWN;
+        orientation = ( aPin.side == 2 ) ? PIN_ORIENTATION::PIN_UP : PIN_ORIENTATION::PIN_DOWN;
     }
     else if( angle >= 45 && angle < 135 )
     {
         // Sides 0,1 (horizontal edges) point up; sides 2,3 (vertical edges) point down
-        orientation = ( aPin.side >= 2 ) ? PIN_ORIENTATION::PIN_DOWN
-                                         : PIN_ORIENTATION::PIN_UP;
+        orientation = ( aPin.side >= 2 ) ? PIN_ORIENTATION::PIN_DOWN : PIN_ORIENTATION::PIN_UP;
     }
     else if( angle >= 225 && angle < 315 )
     {
-        orientation = ( aPin.side >= 2 ) ? PIN_ORIENTATION::PIN_UP
-                                         : PIN_ORIENTATION::PIN_DOWN;
+        orientation = ( aPin.side >= 2 ) ? PIN_ORIENTATION::PIN_UP : PIN_ORIENTATION::PIN_DOWN;
     }
     else if( angle >= 135 && angle < 225 )
     {
-        orientation = ( aPin.side & 1 ) ? PIN_ORIENTATION::PIN_RIGHT
-                                        : PIN_ORIENTATION::PIN_LEFT;
+        orientation = ( aPin.side & 1 ) ? PIN_ORIENTATION::PIN_RIGHT : PIN_ORIENTATION::PIN_LEFT;
     }
     else
     {
-        orientation = ( aPin.side & 1 ) ? PIN_ORIENTATION::PIN_LEFT
-                                        : PIN_ORIENTATION::PIN_RIGHT;
+        orientation = ( aPin.side & 1 ) ? PIN_ORIENTATION::PIN_LEFT : PIN_ORIENTATION::PIN_RIGHT;
     }
 
     pin->SetOrientation( orientation );
@@ -749,11 +745,10 @@ SCH_PIN* PADS_SCH_SYMBOL_BUILDER::createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL*
 LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildKiCadPowerSymbol( const std::string& aKiCadName )
 {
     // Convert mm coordinates from KiCad power symbol library to internal units
-    auto mm =
-            [&]( double v )
-            {
-                return schIUScale.mmToIU( v );
-            };
+    auto mm = [&]( double v )
+    {
+        return schIUScale.mmToIU( v );
+    };
 
     LIB_SYMBOL* sym = new LIB_SYMBOL( wxString::FromUTF8( aKiCadName ) );
     sym->SetGlobalPower();
@@ -780,16 +775,24 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildKiCadPowerSymbol( const std::string& a
 
     if( isGround )
     {
-        // Standard GND chevron: polyline (0,0)→(0,-1.27)→(1.27,-1.27)→(0,-2.54)→(-1.27,-1.27)→(0,-1.27)
-        SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        shape->AddPoint( VECTOR2I( mm( 0 ), mm( 0 ) ) );
-        shape->AddPoint( VECTOR2I( mm( 0 ), mm( -1.27 ) ) );
-        shape->AddPoint( VECTOR2I( mm( 1.27 ), mm( -1.27 ) ) );
-        shape->AddPoint( VECTOR2I( mm( 0 ), mm( -2.54 ) ) );
-        shape->AddPoint( VECTOR2I( mm( -1.27 ), mm( -1.27 ) ) );
-        shape->AddPoint( VECTOR2I( mm( 0 ), mm( -1.27 ) ) );
-        shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( shape );
+        const std::array<std::tuple<double, double, double>, 3> bars{ std::tuple{ -1.27, 1.27, -1.27 },
+                                                                      std::tuple{ -0.762, 0.762, -1.778 },
+                                                                      std::tuple{ -0.254, 0.254, -2.286 } };
+
+        for( const auto& [x1, x2, y] : bars )
+        {
+            SCH_SHAPE* bar = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
+            bar->AddPoint( VECTOR2I( mm( x1 ), mm( y ) ) );
+            bar->AddPoint( VECTOR2I( mm( x2 ), mm( y ) ) );
+            bar->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+            sym->AddDrawItem( bar );
+        }
+
+        SCH_SHAPE* stem = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
+        stem->AddPoint( VECTOR2I( 0, 0 ) );
+        stem->AddPoint( VECTOR2I( 0, mm( -1.27 ) ) );
+        stem->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+        sym->AddDrawItem( stem );
 
         SCH_PIN* pin = new SCH_PIN( sym );
         pin->SetNumber( wxT( "1" ) );
@@ -953,24 +956,18 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildKiCadPowerSymbol( const std::string& a
     }
     else if( isVCC )
     {
-        // VCC style: open arrow pointing up + vertical stem
-        SCH_SHAPE* arrow1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        arrow1->AddPoint( VECTOR2I( mm( -0.762 ), mm( 1.27 ) ) );
-        arrow1->AddPoint( VECTOR2I( mm( 0 ), mm( 2.54 ) ) );
-        arrow1->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( arrow1 );
+        SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
+        circle->SetCenter( VECTOR2I( 0, mm( 2.032 ) ) );
+        circle->SetEnd( VECTOR2I( mm( 0.635 ), mm( 2.032 ) ) );
+        circle->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+        circle->SetFillMode( FILL_T::NO_FILL );
+        sym->AddDrawItem( circle );
 
-        SCH_SHAPE* arrow2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        arrow2->AddPoint( VECTOR2I( mm( 0 ), mm( 2.54 ) ) );
-        arrow2->AddPoint( VECTOR2I( mm( 0.762 ), mm( 1.27 ) ) );
-        arrow2->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( arrow2 );
-
-        SCH_SHAPE* stemLine = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-        stemLine->AddPoint( VECTOR2I( mm( 0 ), mm( 0 ) ) );
-        stemLine->AddPoint( VECTOR2I( mm( 0 ), mm( 2.54 ) ) );
-        stemLine->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
-        sym->AddDrawItem( stemLine );
+        SCH_SHAPE* stem = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
+        stem->AddPoint( VECTOR2I( 0, 0 ) );
+        stem->AddPoint( VECTOR2I( 0, mm( 1.397 ) ) );
+        stem->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+        sym->AddDrawItem( stem );
 
         SCH_PIN* pin = new SCH_PIN( sym );
         pin->SetNumber( wxT( "1" ) );
@@ -1027,7 +1024,7 @@ std::string PADS_SCH_SYMBOL_BUILDER::GetPowerStyleFromVariant( const std::string
 }
 
 
-void PADS_SCH_SYMBOL_BUILDER::AddHiddenPowerPins( LIB_SYMBOL* aSymbol,
+void PADS_SCH_SYMBOL_BUILDER::AddHiddenPowerPins( LIB_SYMBOL*                              aSymbol,
                                                   const std::vector<PARTTYPE_DEF::SIGPIN>& aSigpins )
 {
     if( !aSymbol )
@@ -1068,16 +1065,16 @@ int PADS_SCH_SYMBOL_BUILDER::mapPinType( PIN_TYPE aPadsType )
 {
     switch( aPadsType )
     {
-    case PIN_TYPE::INPUT:           return static_cast<int>( ELECTRICAL_PINTYPE::PT_INPUT );
-    case PIN_TYPE::OUTPUT:          return static_cast<int>( ELECTRICAL_PINTYPE::PT_OUTPUT );
-    case PIN_TYPE::BIDIRECTIONAL:   return static_cast<int>( ELECTRICAL_PINTYPE::PT_BIDI );
-    case PIN_TYPE::TRISTATE:        return static_cast<int>( ELECTRICAL_PINTYPE::PT_TRISTATE );
-    case PIN_TYPE::OPEN_COLLECTOR:  return static_cast<int>( ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR );
-    case PIN_TYPE::OPEN_EMITTER:    return static_cast<int>( ELECTRICAL_PINTYPE::PT_OPENEMITTER );
-    case PIN_TYPE::POWER:           return static_cast<int>( ELECTRICAL_PINTYPE::PT_POWER_IN );
-    case PIN_TYPE::PASSIVE:         return static_cast<int>( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    case PIN_TYPE::INPUT: return static_cast<int>( ELECTRICAL_PINTYPE::PT_INPUT );
+    case PIN_TYPE::OUTPUT: return static_cast<int>( ELECTRICAL_PINTYPE::PT_OUTPUT );
+    case PIN_TYPE::BIDIRECTIONAL: return static_cast<int>( ELECTRICAL_PINTYPE::PT_BIDI );
+    case PIN_TYPE::TRISTATE: return static_cast<int>( ELECTRICAL_PINTYPE::PT_TRISTATE );
+    case PIN_TYPE::OPEN_COLLECTOR: return static_cast<int>( ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR );
+    case PIN_TYPE::OPEN_EMITTER: return static_cast<int>( ELECTRICAL_PINTYPE::PT_OPENEMITTER );
+    case PIN_TYPE::POWER: return static_cast<int>( ELECTRICAL_PINTYPE::PT_POWER_IN );
+    case PIN_TYPE::PASSIVE: return static_cast<int>( ELECTRICAL_PINTYPE::PT_PASSIVE );
     case PIN_TYPE::UNSPECIFIED:
-    default:                        return static_cast<int>( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
+    default: return static_cast<int>( ELECTRICAL_PINTYPE::PT_UNSPECIFIED );
     }
 }
 
@@ -1093,15 +1090,15 @@ bool PADS_SCH_SYMBOL_BUILDER::IsPowerSymbol( const std::string& aName )
                     } );
 
     // Check for ground variants
-    if( upper == "GND" || upper == "AGND" || upper == "DGND" || upper == "PGND" ||
-        upper == "EARTH" || upper == "CHASSIS" || upper == "VSS" || upper == "0V" )
+    if( upper == "GND" || upper == "AGND" || upper == "DGND" || upper == "PGND" || upper == "EARTH"
+        || upper == "CHASSIS" || upper == "VSS" || upper == "0V" )
     {
         return true;
     }
 
     // Check for power supply variants
-    if( upper == "VCC" || upper == "VDD" || upper == "VEE" || upper == "VPP" ||
-        upper == "VBAT" || upper == "VBUS" || upper == "V+" || upper == "V-" )
+    if( upper == "VCC" || upper == "VDD" || upper == "VEE" || upper == "VPP" || upper == "VBAT" || upper == "VBUS"
+        || upper == "V+" || upper == "V-" )
     {
         return true;
     }
@@ -1132,34 +1129,12 @@ std::optional<LIB_ID> PADS_SCH_SYMBOL_BUILDER::GetKiCadPowerSymbolId( const std:
     };
 
     static const PowerMapping mappings[] = {
-        { "GND",     "GND" },
-        { "AGND",    "GND" },
-        { "DGND",    "GNDD" },
-        { "PGND",    "GNDPWR" },
-        { "EARTH",   "Earth" },
-        { "CHASSIS", "Chassis" },
-        { "VSS",     "VSS" },
-        { "0V",      "GND" },
-        { "VCC",     "VCC" },
-        { "VDD",     "VDD" },
-        { "VEE",     "VEE" },
-        { "VPP",     "VPP" },
-        { "VBAT",    "VBAT" },
-        { "VBUS",    "VBUS" },
-        { "V+",      "VCC" },
-        { "V-",      "VEE" },
-        { "+5V",     "+5V" },
-        { "-5V",     "-5V" },
-        { "+3V3",    "+3V3" },
-        { "+3.3V",   "+3V3" },
-        { "+12V",    "+12V" },
-        { "-12V",    "-12V" },
-        { "+15V",    "+15V" },
-        { "-15V",    "-15V" },
-        { "+1V8",    "+1V8" },
-        { "+2V5",    "+2V5" },
-        { "+9V",     "+9V" },
-        { "+24V",    "+24V" },
+        { "GND", "GND" },         { "AGND", "GND" },  { "DGND", "GNDD" }, { "PGND", "GNDPWR" }, { "EARTH", "Earth" },
+        { "CHASSIS", "Chassis" }, { "VSS", "VSS" },   { "0V", "GND" },    { "VCC", "VCC" },     { "VDD", "VDD" },
+        { "VEE", "VEE" },         { "VPP", "VPP" },   { "VBAT", "VBAT" }, { "VBUS", "VBUS" },   { "V+", "VCC" },
+        { "V-", "VEE" },          { "+5V", "+5V" },   { "-5V", "-5V" },   { "+3V3", "+3V3" },   { "+3.3V", "+3V3" },
+        { "+12V", "+12V" },       { "-12V", "-12V" }, { "+15V", "+15V" }, { "-15V", "-15V" },   { "+1V8", "+1V8" },
+        { "+2V5", "+2V5" },       { "+9V", "+9V" },   { "+24V", "+24V" },
     };
 
     for( const auto& mapping : mappings )

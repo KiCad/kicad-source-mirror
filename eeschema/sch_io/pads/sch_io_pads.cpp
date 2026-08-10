@@ -49,6 +49,7 @@
 #include <locale_io.h>
 #include <progress_reporter.h>
 #include <reporter.h>
+#include <trace_helpers.h>
 
 #include <fstream>
 #include <map>
@@ -1335,15 +1336,12 @@ SCH_SHEET* SCH_IO_PADS::loadBinarySchematicFile( const wxString& aFileName, SCHE
             m_reporter->Report( PADS_SCH_BINARY::FormatParserError( first->source, report ), severity );
         }
 
-        m_reporter->Report(
-                wxString::Format( _( "Imported PADS Logic binary schematic '%s': %zu sheets, %zu symbols, %zu wires, "
-                                     "%zu buses, %zu bus entries, %zu junctions, %zu labels, %zu texts, %zu graphics, "
-                                     "%zu images." ),
-                                  aFileName, result.counts.sheets, result.counts.symbols, result.counts.wires,
-                                  result.counts.buses, result.counts.busEntries, result.counts.junctions,
-                                  result.counts.labels, result.counts.texts, result.counts.graphics,
-                                  result.counts.images ),
-                RPT_SEVERITY_INFO );
+        wxLogTrace( tracePadsIo,
+                    wxS( "Imported PADS Logic binary schematic '%s': %zu sheets, %zu symbols, %zu wires, %zu buses, "
+                         "%zu bus entries, %zu junctions, %zu labels, %zu texts, %zu graphics, %zu images." ),
+                    aFileName, result.counts.sheets, result.counts.symbols, result.counts.wires, result.counts.buses,
+                    result.counts.busEntries, result.counts.junctions, result.counts.labels, result.counts.texts,
+                    result.counts.graphics, result.counts.images );
     }
 
     return aAppendToMe ? aAppendToMe : aSchematic->GetTopLevelSheet();

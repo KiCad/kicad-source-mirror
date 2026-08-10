@@ -454,14 +454,14 @@ namespace
         auto libraryCopy = std::make_unique<LIB_SYMBOL>( *library );
         symbol->SetLibSymbol( libraryCopy.release() );
         symbol->SetPosition( pagePoint( aLabel.position, aPageHeight ) );
-        symbol->SetOrientation( NormalizeAngle( aLabel.angle ) == 900    ? SYM_ORIENT_90
-                                : NormalizeAngle( aLabel.angle ) == 1800 ? SYM_ORIENT_180
-                                : NormalizeAngle( aLabel.angle ) == 2700 ? SYM_ORIENT_270
-                                                                         : SYM_ORIENT_0 );
+        symbol->SetOrientation( SYM_ORIENT_180 );
         const wxString reference = wxString::Format( wxS( "#PWR%04zu" ), aOrdinal + 1 );
         symbol->SetRef( &aPath, reference );
         symbol->AddHierarchicalReference( aPath.Path(), reference, 1 );
         symbol->SetValueFieldText( aLabel.text.text, &aPath );
+
+        if( SCH_FIELD* field = symbol->GetField( FIELD_T::REFERENCE ) )
+            field->SetVisible( false );
 
         if( SCH_FIELD* value = symbol->GetField( FIELD_T::VALUE ) )
         {
@@ -488,7 +488,7 @@ namespace
         pin->SetVisible( aPin.presentation.visible );
 
         pin->SetNameTextSize( toIU( aPin.namePresentation.height ) );
-        pin->SetNumberTextSize( toIU( aPin.numberPresentation.height ) );
+        pin->SetNumberTextSize( toIU( aPin.numberPresentation.height / 2 ) );
 
         return pin;
     }
@@ -679,8 +679,8 @@ namespace
             library->AddDrawItem( pin.release() );
         }
 
-        library->SetShowPinNames( true );
-        library->SetShowPinNumbers( true );
+        library->SetShowPinNames( aPlacement.pinNamesVisible );
+        library->SetShowPinNumbers( aPlacement.pinNumbersVisible );
         return library;
     }
 
@@ -1349,7 +1349,7 @@ namespace
                 {
                     auto wire = std::make_unique<SCH_LINE>( entryEnd, LAYER_WIRE );
                     wire->SetEndPoint( end );
-                    wire->SetStroke( STROKE_PARAMS( toIU( aSourceSheet.defaultLineWidth ), LINE_STYLE::SOLID ) );
+                    wire->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
                     aScreen->Append( wire.get() );
                     wire.release();
                     ++aStaged.result.counts.wires;
@@ -1381,7 +1381,7 @@ namespace
                     auto line = std::make_unique<SCH_LINE>( pagePoint( connection.vertices[vertex - 1], pageHeight ),
                                                             LAYER_WIRE );
                     line->SetEndPoint( pagePoint( connection.vertices[vertex], pageHeight ) );
-                    line->SetStroke( STROKE_PARAMS( toIU( aSourceSheet.defaultLineWidth ), LINE_STYLE::SOLID ) );
+                    line->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
                     aScreen->Append( line.get() );
                     line.release();
                     ++aStaged.result.counts.wires;

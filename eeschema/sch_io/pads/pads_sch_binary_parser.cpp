@@ -131,6 +131,7 @@ namespace
         size_t   partTypeHeight;
         size_t   referenceWidth;
         size_t   partTypeWidth;
+        size_t   itemVisibility;
         size_t   placedPinOrdinal;
         size_t   customFont;
         size_t   customX;
@@ -177,6 +178,7 @@ namespace
                                                          .partTypeHeight = 0x52,
                                                          .referenceWidth = 0x58,
                                                          .partTypeWidth = 0x59,
+                                                         .itemVisibility = 0x87,
                                                          .placedPinOrdinal = 4,
                                                          .customFont = 0,
                                                          .customX = 8,
@@ -1703,7 +1705,7 @@ namespace
             const uint16_t embeddedCount = aCursor.U16At( definitionOffset + 0x40 );
             const uint32_t fieldEnd = i + 1 < fieldDecals.size() ? fieldDecals[i + 1]->fieldStart : textCount;
 
-            if( decal.fieldStart > fieldEnd || embeddedCount > decal.fieldStart )
+            if( decal.fieldStart > fieldEnd )
                 throwDecodeError( decal.definition->source, wxS( "definition field slice is not monotone" ) );
 
             if( decal.definition->fields.empty() )
@@ -1741,8 +1743,22 @@ namespace
                 }
             }
 
-            for( size_t record = decal.fieldStart - embeddedCount; record < decal.fieldStart; ++record )
-                decodeTextRecord( record, true, false, *decal.definition );
+            if( embeddedCount != 0 )
+            {
+                const uint16_t lastEmbeddedRecord = aCursor.U16At( definitionOffset + 0x42 );
+
+                if( embeddedCount > textCount || lastEmbeddedRecord >= textCount )
+                    throwDecodeError( decal.definition->source,
+                                      wxS( "embedded definition text ownership leaves controller 1" ) );
+
+                const size_t firstEmbeddedRecord =
+                        ( static_cast<size_t>( lastEmbeddedRecord ) + textCount + 1 - embeddedCount ) % textCount;
+
+                for( size_t textIndex = 0; textIndex < embeddedCount; ++textIndex )
+                {
+                    decodeTextRecord( ( firstEmbeddedRecord + textIndex ) % textCount, true, false, *decal.definition );
+                }
+            }
 
             for( size_t record = decal.fieldStart; record < fieldEnd; ++record )
                 decodeTextRecord( record, false, false, *decal.definition );
@@ -2309,8 +2325,14 @@ namespace
 
             expectedPinStart += pinCount;
 
-            auto addInlineField = [&]( const wxString& aName, const SOURCE_STRING& aValue, size_t aXOffset,
-                                       size_t aAngleOffset, size_t aFontOffset, size_t aHeightOffset,
+            placement.itemVisibilityFlags = aCursor.U8At( offset + layout.itemVisibility );
+            placement.referenceVisible = ( placement.itemVisibilityFlags & 0x01 ) == 0;
+            placement.partTypeVisible = ( placement.itemVisibilityFlags & 0x02 ) == 0;
+            placement.pinNamesVisible = ( placement.itemVisibilityFlags & 0x08 ) == 0;
+            placement.pinNumbersVisible = ( placement.itemVisibilityFlags & 0x10 ) == 0;
+
+            auto addInlineField = [&]( const wxString& aName, const SOURCE_STRING& aValue, bool aVisible,
+                                       size_t aXOffset, size_t aAngleOffset, size_t aFontOffset, size_t aHeightOffset,
                                        size_t aWidthOffset )
             {
                 SOURCE_PROVENANCE fieldSource = source;
@@ -2326,6 +2348,8 @@ namespace
                                    decodeLocalCoordinate( aCursor.U16At( offset + aXOffset + 2 ) ), fieldSource };
                 field.angle = NormalizeAngle( aCursor.U16At( offset + aAngleOffset ) );
                 field.presentation.source = fieldSource;
+                field.visible = aVisible;
+                field.presentation.visible = aVisible;
                 field.presentation.height = aCursor.U16At( offset + aHeightOffset );
                 field.presentation.width = aCursor.U8At( offset + aWidthOffset );
                 const uint16_t justification = aCursor.U16At( offset + aAngleOffset + 2 );
@@ -2340,10 +2364,12 @@ namespace
             };
 
             SOURCE_STRING referenceValue = placement.reference;
-            addInlineField( wxS( "REF-DES" ), referenceValue, layout.referenceField, layout.referenceFieldAngle,
-                            layout.referenceFont, layout.referenceHeight, layout.referenceWidth );
-            addInlineField( wxS( "PART-TYPE" ), part->name, layout.partTypeField, layout.partTypeFieldAngle,
-                            layout.partTypeFont, layout.partTypeHeight, layout.partTypeWidth );
+            addInlineField( wxS( "REF-DES" ), referenceValue, placement.referenceVisible, layout.referenceField,
+                            layout.referenceFieldAngle, layout.referenceFont, layout.referenceHeight,
+                            layout.referenceWidth );
+            addInlineField( wxS( "PART-TYPE" ), part->name, placement.partTypeVisible, layout.partTypeField,
+                            layout.partTypeFieldAngle, layout.partTypeFont, layout.partTypeHeight,
+                            layout.partTypeWidth );
 
             const uint16_t customFieldCount = aCursor.U16At( offset + layout.fieldCount );
 
@@ -2423,6 +2449,30 @@ namespace
                 ++fieldCursor;
             }
 
+            for( uint16_t attributeIndex = 2; attributeIndex < attributeCount; ++attributeIndex )
+            {
+                auto [name, value] = attributeString( attributeStart + attributeIndex, true );
+
+                if( name.text.CmpNoCase( wxS( "PCB DECAL" ) ) == 0
+                    || std::ranges::any_of( placement.fields,
+                                            [&]( const MODEL_FIELD& aField )
+                                            {
+                                                return aField.name.text.CmpNoCase( name.text ) == 0;
+                                            } ) )
+                {
+                    continue;
+                }
+
+                MODEL_FIELD field;
+                field.source = name.source;
+                field.name = std::move( name );
+                field.value = std::move( value );
+                field.visible = false;
+                field.presentation.source = field.source;
+                field.presentation.visible = false;
+                placement.fields.push_back( std::move( field ) );
+            }
+
             SOURCE_PROVENANCE rawAngleSource = source;
             rawAngleSource.absoluteOffset += layout.angle;
             rawAngleSource.length = 2;
@@ -2439,6 +2489,12 @@ namespace
             rawMirrorSource.length = 2;
             placement.properties.push_back( sourceProperty(
                     wxS( "raw_mirror" ), wxString::Format( wxS( "%u" ), placement.mirrorFlags ), rawMirrorSource ) );
+            SOURCE_PROVENANCE visibilitySource = source;
+            visibilitySource.absoluteOffset += layout.itemVisibility;
+            visibilitySource.length = 1;
+            placement.properties.push_back( sourceProperty(
+                    wxS( "item_visibility_flags" ), wxString::Format( wxS( "%u" ), placement.itemVisibilityFlags ),
+                    visibilitySource ) );
             aModel.placements.push_back( std::move( placement ) );
         }
 

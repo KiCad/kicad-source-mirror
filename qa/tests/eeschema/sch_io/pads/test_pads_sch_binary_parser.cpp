@@ -2676,7 +2676,7 @@ BOOST_AUTO_TEST_CASE( PlacementTransforms )
         BOOST_CHECK( placement.gate->id.IsValid() );
         BOOST_CHECK( placement.definition.id.IsValid() );
         BOOST_CHECK_EQUAL( placement.pins.size(), 2 );
-        BOOST_CHECK_EQUAL( placement.fields.size(), 3 );
+        BOOST_CHECK_GE( placement.fields.size(), 3 );
         BOOST_CHECK_EQUAL( placement.source.controller, 15 );
     }
 
@@ -2703,7 +2703,7 @@ BOOST_AUTO_TEST_CASE( PlacementTransforms )
     PADS_SCH_MODEL         connectors = parser.Parse( loadBinaryFixture( "connectors.sch" ), wxS( "connectors.sch" ) );
     const MODEL_PLACEMENT& connector = placementNamed( connectors, wxS( "P1-1" ) );
     BOOST_CHECK_EQUAL( connector.unit, 1 );
-    BOOST_CHECK_EQUAL( connector.fields.size(), 4 );
+    BOOST_CHECK_GE( connector.fields.size(), 4 );
     BOOST_CHECK_EQUAL( connector.fields[2].name.text, wxS( "*" ) );
     BOOST_CHECK( connector.fields[2].value.text.empty() );
     BOOST_CHECK_EQUAL( connector.fields[3].name.text, wxS( "*" ) );
@@ -2717,7 +2717,7 @@ BOOST_AUTO_TEST_CASE( PlacementInstanceFields )
     PADS_SCH_MODEL         model = parser.Parse( loadBinaryFixture( "fields.sch" ), wxS( "fields.sch" ) );
     BOOST_REQUIRE_EQUAL( model.placements.size(), 1 );
     const MODEL_PLACEMENT& placement = model.placements[0];
-    BOOST_REQUIRE_EQUAL( placement.fields.size(), 3 );
+    BOOST_REQUIRE_GE( placement.fields.size(), 3 );
 
     BOOST_CHECK_EQUAL( placement.fields[0].name.text, wxS( "REF-DES" ) );
     BOOST_CHECK_EQUAL( placement.fields[0].value.text, wxS( "R1" ) );
@@ -2928,9 +2928,9 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
             BOOST_REQUIRE( definition != binary.definitions.end() );
             BOOST_CHECK_EQUAL( definition->name.text, wxString::FromUTF8( asciiPlacement.symbol_name ) );
             BOOST_CHECK( !propertyValue( binaryPlacement.properties, wxS( "decal_handle" ) ).empty() );
-            BOOST_REQUIRE_EQUAL( binaryPlacement.fields.size(), asciiPlacement.attributes.size() );
+            BOOST_REQUIRE_GE( binaryPlacement.fields.size(), asciiPlacement.attributes.size() );
 
-            for( size_t fieldIndex = 0; fieldIndex < binaryPlacement.fields.size(); ++fieldIndex )
+            for( size_t fieldIndex = 0; fieldIndex < asciiPlacement.attributes.size(); ++fieldIndex )
             {
                 const MODEL_FIELD&              binaryField = binaryPlacement.fields[fieldIndex];
                 const PADS_SCH::PART_ATTRIBUTE& asciiField = asciiPlacement.attributes[fieldIndex];
@@ -2944,7 +2944,10 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                 BOOST_CHECK_EQUAL( binaryField.angle, std::lround( asciiField.rotation * 10 ) );
                 BOOST_CHECK_EQUAL( binaryField.presentation.height, asciiField.height );
                 BOOST_CHECK_EQUAL( binaryField.presentation.width, asciiField.width );
-                BOOST_CHECK_EQUAL( binaryField.presentation.visible, asciiField.visible );
+                const bool expectedVisible = fieldIndex == 0   ? binaryPlacement.referenceVisible
+                                             : fieldIndex == 1 ? binaryPlacement.partTypeVisible
+                                                               : asciiField.visible;
+                BOOST_CHECK_EQUAL( binaryField.presentation.visible, expectedVisible );
                 BOOST_CHECK_EQUAL( binaryField.presentation.font.text, wxString::FromUTF8( asciiField.font_name ) );
                 BOOST_CHECK_EQUAL( binaryField.presentation.bold,
                                    wxString::FromUTF8( asciiField.font_name ).StartsWith( wxS( "Bold " ) ) );

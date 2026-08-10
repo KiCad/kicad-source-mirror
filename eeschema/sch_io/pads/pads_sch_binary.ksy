@@ -1030,9 +1030,11 @@ types:
         type: strz
         size: 40
         encoding: windows-1252
-      - id: preserved_instance_tail
-        size: 2
-        doc: Exact placement tail; all generated transform tuples leave semantics unproved, so importer disposition is PRESERVED.
+      - id: reserved_instance_tail_zero
+        contents: [0]
+      - id: item_visibility_flags
+        type: u1
+        doc: Logic 9 paired placements prove bit 1 hides PART-TYPE, bit 3 hides pin names, and bit 4 hides pin numbers; bit 0 hides REF-DES.
 
   placed_pin_controller:
     params:

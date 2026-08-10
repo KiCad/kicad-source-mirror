@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE( BussesSection )
 
 BOOST_AUTO_TEST_CASE( ParseBussesClearsPriorState )
 {
-    const std::string root = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/";
+    const std::string         root = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/";
     PADS_SCH::PADS_SCH_PARSER parser;
     BOOST_REQUIRE( parser.Parse( root + "buses.txt" ) );
     BOOST_REQUIRE_EQUAL( parser.GetBuses().size(), 1 );
@@ -1133,13 +1133,11 @@ BOOST_AUTO_TEST_CASE( BuildKiCadPowerSymbol_Styles )
     params.units = PADS_SCH::UNIT_TYPE::MILS;
     PADS_SCH::PADS_SCH_SYMBOL_BUILDER builder( params );
 
-    // GND style: chevron ground, pin facing down
     std::unique_ptr<LIB_SYMBOL> gnd( builder.BuildKiCadPowerSymbol( "GND" ) );
     BOOST_REQUIRE( gnd != nullptr );
     BOOST_CHECK( gnd->IsPower() );
     BOOST_CHECK_EQUAL( gnd->GetName(), "GND" );
 
-    // VCC style: arrow up, pin facing up
     std::unique_ptr<LIB_SYMBOL> vcc( builder.BuildKiCadPowerSymbol( "VCC" ) );
     BOOST_REQUIRE( vcc != nullptr );
     BOOST_CHECK( vcc->IsPower() );
@@ -1178,6 +1176,22 @@ BOOST_AUTO_TEST_CASE( BuildKiCadPowerSymbol_Styles )
     BOOST_CHECK_EQUAL( earth->GetPins().size(), 1u );
     BOOST_CHECK_EQUAL( pwrBar->GetPins().size(), 1u );
     BOOST_CHECK_EQUAL( pwrTri->GetPins().size(), 1u );
+    BOOST_CHECK( !gnd->GetReferenceField().IsVisible() );
+    BOOST_CHECK( !vcc->GetReferenceField().IsVisible() );
+
+    size_t gndShapes = 0;
+    size_t vccCircles = 0;
+
+    for( const SCH_ITEM& item : gnd->GetDrawItems() )
+        gndShapes += item.Type() == SCH_SHAPE_T;
+
+    for( const SCH_ITEM& item : vcc->GetDrawItems() )
+    {
+        vccCircles += item.Type() == SCH_SHAPE_T && static_cast<const SCH_SHAPE&>( item ).GetShape() == SHAPE_T::CIRCLE;
+    }
+
+    BOOST_CHECK_EQUAL( gndShapes, 4u );
+    BOOST_CHECK_EQUAL( vccCircles, 1u );
 }
 
 
@@ -1224,7 +1238,7 @@ BOOST_AUTO_TEST_CASE( SheetNumbers_FromParts )
     BOOST_REQUIRE( parser.Parse( testFile ) );
 
     std::set<int> sheets = parser.GetSheetNumbers();
-    BOOST_CHECK( sheets.count( 1 ) > 0 );  // At least sheet 1 should exist
+    BOOST_CHECK( sheets.count( 1 ) > 0 ); // At least sheet 1 should exist
 }
 
 
@@ -1527,7 +1541,7 @@ BOOST_AUTO_TEST_CASE( SymbolBuilder_MultiUnitConnectorSymbol )
     symDef.pins.push_back( symPin );
 
     std::vector<std::string> pinNumbers = { "1", "2", "3", "4" };
-    std::string cacheKey = "TEST_MULTICONN:conn:J1";
+    std::string              cacheKey = "TEST_MULTICONN:conn:J1";
 
     LIB_SYMBOL* multiSym = builder.GetOrCreateMultiUnitConnectorSymbol( connPt, symDef, pinNumbers, cacheKey );
     BOOST_REQUIRE( multiSym != nullptr );
@@ -1640,7 +1654,7 @@ BOOST_AUTO_TEST_CASE( CreateNetLabel_FromSignal )
     wire.end.y = 2000.0;
     signal.wires.push_back( wire );
 
-    VECTOR2I pos( 1000, 2000 );
+    VECTOR2I         pos( 1000, 2000 );
     SCH_GLOBALLABEL* label = builder.CreateNetLabel( signal, pos );
     BOOST_REQUIRE( label != nullptr );
 
@@ -1662,7 +1676,7 @@ BOOST_AUTO_TEST_CASE( CreateNetLabel_PreservesSpecialChars )
     PADS_SCH::SCH_SIGNAL signal;
     signal.name = "NET 1";
 
-    VECTOR2I pos( 1000, 2000 );
+    VECTOR2I         pos( 1000, 2000 );
     SCH_GLOBALLABEL* label = builder.CreateNetLabel( signal, pos );
     BOOST_REQUIRE( label != nullptr );
 
@@ -1748,7 +1762,7 @@ BOOST_AUTO_TEST_CASE( ApplyPartAttributes_Reference )
 
     // Create a minimal symbol for testing
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "TEST" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "TEST" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "TEST" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -1790,7 +1804,7 @@ BOOST_AUTO_TEST_CASE( ApplyPartAttributes_Footprint )
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( parser.GetParameters(), &schematic );
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "CAP" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "CAP" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "CAP" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -1835,7 +1849,7 @@ BOOST_AUTO_TEST_CASE( ApplyFieldSettings_Visibility )
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( parser.GetParameters(), &schematic );
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "74HC00" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "74HC00" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "74HC00" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -1865,7 +1879,7 @@ BOOST_AUTO_TEST_CASE( ApplyPartAttributes_NullSymbol )
     // Should not crash when called with nullptr
     builder.ApplyPartAttributes( nullptr, placement );
 
-    BOOST_CHECK( true );  // If we get here, we passed
+    BOOST_CHECK( true ); // If we get here, we passed
 }
 
 
@@ -1900,7 +1914,7 @@ BOOST_AUTO_TEST_CASE( CreateCustomFields_ManufacturerAndMPN )
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( parser.GetParameters(), &schematic );
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "74HC00" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "74HC00" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "74HC00" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -1937,12 +1951,12 @@ BOOST_AUTO_TEST_CASE( CreateCustomFields_SkipsStandardFields )
 
     // Add standard field attributes (should be skipped by CreateCustomFields)
     PADS_SCH::PART_ATTRIBUTE refAttr;
-    refAttr.name = "Ref.Des.";  // Standard field
+    refAttr.name = "Ref.Des."; // Standard field
     refAttr.value = "R1";
     placement.attributes.push_back( refAttr );
 
     PADS_SCH::PART_ATTRIBUTE valAttr;
-    valAttr.name = "Part Type";  // Standard field
+    valAttr.name = "Part Type"; // Standard field
     valAttr.value = "10K";
     placement.attributes.push_back( valAttr );
 
@@ -1959,7 +1973,7 @@ BOOST_AUTO_TEST_CASE( CreateCustomFields_SkipsStandardFields )
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( parser.GetParameters(), &schematic );
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "RES" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "RES" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "RES" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -2007,7 +2021,7 @@ BOOST_AUTO_TEST_CASE( CreateCustomFields_SkipsEmptyValues )
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( parser.GetParameters(), &schematic );
 
     LIB_SYMBOL* libSymbol = new LIB_SYMBOL( wxS( "IC" ) );
-    LIB_ID libId( wxS( "test" ), wxS( "IC" ) );
+    LIB_ID      libId( wxS( "test" ), wxS( "IC" ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSymbol, libId, &schematic.CurrentSheet(), 0 );
 
@@ -2106,7 +2120,7 @@ BOOST_AUTO_TEST_CASE( CreateTitleBlock_NullScreen )
     // Should not crash with nullptr
     builder.CreateTitleBlock( nullptr );
 
-    BOOST_CHECK( true );  // If we get here, we passed
+    BOOST_CHECK( true ); // If we get here, we passed
 }
 
 
@@ -2193,7 +2207,7 @@ BOOST_AUTO_TEST_CASE( CreateHierarchicalSheet_ReturnsValidSheet )
     schematic.Reset();
 
     // Create root sheet
-    SCH_SHEET* rootSheet = new SCH_SHEET( &schematic );
+    SCH_SHEET*  rootSheet = new SCH_SHEET( &schematic );
     SCH_SCREEN* rootScreen = new SCH_SCREEN( &schematic );
     rootSheet->SetScreen( rootScreen );
 
@@ -2226,7 +2240,7 @@ BOOST_AUTO_TEST_CASE( CreateHierarchicalSheet_SetsFilename )
     SCHEMATIC schematic( nullptr );
     schematic.Reset();
 
-    SCH_SHEET* rootSheet = new SCH_SHEET( &schematic );
+    SCH_SHEET*  rootSheet = new SCH_SHEET( &schematic );
     SCH_SCREEN* rootScreen = new SCH_SCREEN( &schematic );
     rootSheet->SetScreen( rootScreen );
 
@@ -2253,7 +2267,7 @@ BOOST_AUTO_TEST_CASE( CreateHierarchicalSheet_SetsSheetName )
     SCHEMATIC schematic( nullptr );
     schematic.Reset();
 
-    SCH_SHEET* rootSheet = new SCH_SHEET( &schematic );
+    SCH_SHEET*  rootSheet = new SCH_SHEET( &schematic );
     SCH_SCREEN* rootScreen = new SCH_SCREEN( &schematic );
     rootSheet->SetScreen( rootScreen );
 
@@ -2359,7 +2373,7 @@ BOOST_AUTO_TEST_CASE( CreateHierLabel_ValidLabel )
 
     PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER builder( params, &schematic );
 
-    VECTOR2I pos( 1000, 2000 );
+    VECTOR2I       pos( 1000, 2000 );
     SCH_HIERLABEL* label = builder.CreateHierLabel( "DATA_OUT", pos, &screen );
     BOOST_REQUIRE( label != nullptr );
 
@@ -2470,7 +2484,7 @@ BOOST_AUTO_TEST_CASE( Issue23855_ConnectorShowsPinNumbers )
     BOOST_REQUIRE( symDef != nullptr );
 
     PADS_SCH::PADS_SCH_SYMBOL_BUILDER builder( parser.GetParameters() );
-    LIB_SYMBOL* connSym = builder.GetOrCreatePartTypeSymbol( ptIt->second, *symDef );
+    LIB_SYMBOL*                       connSym = builder.GetOrCreatePartTypeSymbol( ptIt->second, *symDef );
     BOOST_REQUIRE( connSym != nullptr );
     BOOST_CHECK( connSym->GetShowPinNumbers() );
 

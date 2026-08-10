@@ -511,6 +511,11 @@ struct MODEL_PLACEMENT
     int                           angle = 0;
     bool                          mirrored = false;
     uint16_t                      mirrorFlags = 0;
+    uint8_t                       itemVisibilityFlags = 0;
+    bool                          referenceVisible = true;
+    bool                          partTypeVisible = true;
+    bool                          pinNamesVisible = true;
+    bool                          pinNumbersVisible = true;
     std::vector<MODEL_FIELD>      fields;
     std::vector<SOURCE_PROPERTY>  properties;
 
