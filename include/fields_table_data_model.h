@@ -21,8 +21,11 @@
 
 #include <vector>
 #include <algorithm>
+#include <map>
 
 #include <widgets/wx_grid.h>
+
+#include <kiid.h>
 
 
 struct BOM_FIELD;
@@ -185,6 +188,21 @@ protected:
     std::vector<wxString> m_variantNames;    ///< Variant names for multi-variant DNP filtering
 
     std::vector<DATA_MODEL_COL> m_cols;
+
+    // Data store
+    //
+    // This is the storage of the dialog's currently edited field values for each item in the table.
+    // Having a store separate from the live values in the symbols/footprints objects
+    // allows us to keep our edits separate from the actual sch/pcb until the user explicitly
+    // applies them.
+    //
+    // Items (symbols/footprints) are both identified by KIID_PATH, which for a symbol
+    // is the sheet path + symbol UUID (symbols have multiple instances),
+    // and for a footprint is the footprint UUID.
+    //
+    // m_rows and m_cols are just a generated view based on the data store,
+    // and are rebuilt as the user changes grouping, sorting, filtering, etc.
+    std::map<KIID_PATH, std::map<wxString, wxString>> m_dataStore;
 };
 
 
@@ -341,6 +359,7 @@ protected:
         ExpandAfterSort();
     }
 
+    virtual KIID_PATH getDataStoreKey( const ITEM_TYPE& aItem ) const = 0;
 
 protected:
     std::vector<DATA_MODEL_ROW<ITEM_TYPE>> m_rows;

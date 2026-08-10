@@ -175,6 +175,8 @@ private:
 
     void updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef, const wxString& aFieldName );
 
+    KIID_PATH getDataStoreKey( const SCH_REFERENCE& aItem ) const override;
+
 protected:
     /**
      * The flattened by hierarchy list of symbols.
@@ -187,10 +189,4 @@ protected:
     SCH_SHEET_PATH        m_path;
     wxGridCellAttr*       m_urlEditor;
     wxGridCellRenderer*   m_textVarRenderer; ///< Renderer for cells with text variable references
-
-    // Data store
-    // The data model is fundamentally m_componentRefs X m_fieldNames.
-    // A map of compID : fieldSet, where fieldSet is a map of fieldName : fieldValue
-    // The compID is now the full KIID_PATH (sheet path + symbol UUID) as a string
-    std::map<KIID_PATH, std::map<wxString, wxString>> m_dataStore;
 };
