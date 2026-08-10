@@ -66,4 +66,65 @@ int GetRefDesNumber( const wxString& aRefDes )
     return retval;
 }
 
+
+wxString FormatRefDesRanges( const std::vector<wxString>& aReferences, const wxString& aRefDelimiter,
+                             const wxString& aRefRangeDelimiter )
+{
+    wxString retVal;
+    size_t   i = 0;
+
+    while( i < aReferences.size() )
+    {
+        const wxString& reference = aReferences[i];
+        wxString        prefix = GetRefDesPrefix( reference );
+        wxString        numberText = reference.Mid( prefix.length() );
+        long            number;
+        bool            hasNumber = numberText.ToLong( &number );
+        size_t          range = 1;
+
+        while( hasNumber && i + range < aReferences.size() )
+        {
+            const wxString& nextReference = aReferences[i + range];
+            wxString        nextPrefix = GetRefDesPrefix( nextReference );
+            wxString        nextNumberText = nextReference.Mid( nextPrefix.length() );
+            long            nextNumber;
+
+            if( nextPrefix != prefix || !nextNumberText.ToLong( &nextNumber )
+                || nextNumber != number + static_cast<long>( range ) )
+            {
+                break;
+            }
+
+            range++;
+
+            if( range == 2 && aRefRangeDelimiter.IsEmpty() )
+                break;
+        }
+
+        if( !retVal.IsEmpty() )
+            retVal << aRefDelimiter;
+
+        if( range == 1 )
+        {
+            retVal << reference;
+        }
+        else if( range == 2 || aRefRangeDelimiter.IsEmpty() )
+        {
+            retVal << reference;
+            retVal << aRefDelimiter;
+            retVal << aReferences[i + 1];
+        }
+        else
+        {
+            retVal << reference;
+            retVal << aRefRangeDelimiter;
+            retVal << aReferences[i + range - 1];
+        }
+
+        i += range;
+    }
+
+    return retVal;
+}
+
 } // namespace UTIL

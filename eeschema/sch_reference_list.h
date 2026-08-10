@@ -594,14 +594,6 @@ public:
     void Show( const char* aPrefix = "" );
 #endif
 
-    /**
-     * Return a shorthand string representing all the references in the list.  For instance,
-     * "R1, R2, R4 - R7, U1"
-     * @param spaced Add spaces between references
-     */
-    static wxString Shorthand( std::vector<SCH_REFERENCE> aList, const wxString& refDelimiter,
-                               const wxString& refRangeDelimiter );
-
     std::shared_ptr<REFDES_TRACKER> GetRefDesTracker() const
     {
         return m_refDesTracker;

@@ -25,6 +25,8 @@
 #ifndef REFDES_UTILS__H
 #define REFDES_UTILS__H
 
+#include <vector>
+
 #include <wx/string.h>
 
 namespace UTIL
@@ -59,6 +61,13 @@ wxString GetRefDesUnannotated( const wxString& aRefDes );
  * @return         the suffix, or -1 if nothing found
  */
 int GetRefDesNumber( const wxString& aRefDes );
+
+/**
+ * Format a sorted list of reference designators, shortening consecutive sequences of three or
+ * more references into ranges.
+ */
+wxString FormatRefDesRanges( const std::vector<wxString>& aReferences, const wxString& aRefDelimiter,
+                             const wxString& aRefRangeDelimiter );
 
 } // namespace UTIL
 

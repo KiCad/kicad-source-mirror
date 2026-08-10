@@ -25,6 +25,7 @@
 #include <wx/grid.h>
 #include <wx/settings.h>
 #include <common.h>
+#include <refdes_utils.h>
 #include <widgets/wx_grid.h>
 #include <sch_reference_list.h>
 #include <sch_commit.h>
@@ -382,7 +383,14 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetGroupedValue( const SYMBOL_FIE
     }
 
     if( ColIsReference( aCol ) )
-        fieldValue = SCH_REFERENCE_LIST::Shorthand( references, refDelimiter, refRangeDelimiter );
+    {
+        std::vector<wxString> referenceDesignators;
+
+        for( const SCH_REFERENCE& reference : references )
+            referenceDesignators.push_back( reference.GetRef() + reference.GetRefNumber() );
+
+        fieldValue = UTIL::FormatRefDesRanges( referenceDesignators, refDelimiter, refRangeDelimiter );
+    }
     else if( ColIsQuantity( aCol ) )
         fieldValue = wxString::Format( wxT( "%d" ), (int) references.size() );
     else if( ColIsItemNumber( aCol ) && aRow.m_state != ROW_STATE::EXPANDED_CHILD )
