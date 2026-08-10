@@ -67,15 +67,16 @@ std::unique_ptr<BOARD> makeBoardWithCourtyard()
 
 
 /// Add a hatch-filled rectangle covering the courtyard area on the requested layer.
-HATCH_KNOCKOUT_SHAPE* addHatchedRect( BOARD& aBoard, PCB_LAYER_ID aLayer )
+HATCH_KNOCKOUT_SHAPE* addHatchedRect( BOARD& aBoard, PCB_LAYER_ID aLayer, const VECTOR2I& aOffset = VECTOR2I( 0, 0 ),
+                                      FILL_T aFill = FILL_T::HATCH )
 {
     HATCH_KNOCKOUT_SHAPE* shape = new HATCH_KNOCKOUT_SHAPE( &aBoard, SHAPE_T::RECTANGLE );
 
     shape->SetLayer( aLayer );
-    shape->SetStart( VECTOR2I( pcbIUScale.mmToIU( -20 ), pcbIUScale.mmToIU( -20 ) ) );
-    shape->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) );
+    shape->SetStart( VECTOR2I( pcbIUScale.mmToIU( -20 ), pcbIUScale.mmToIU( -20 ) ) + aOffset );
+    shape->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) + aOffset );
     shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.2 ), LINE_STYLE::SOLID ) );
-    shape->SetFillMode( FILL_T::HATCH );
+    shape->SetFillMode( aFill );
 
     aBoard.Add( shape );
     return shape;
@@ -113,6 +114,25 @@ BOOST_AUTO_TEST_CASE( CourtyardLayerKnocksOutCourtyard )
 
     BOOST_CHECK_GT( knockouts.OutlineCount(), 0 );
     BOOST_CHECK_GT( knockouts.Area(), 0.0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( HatchingIsBuiltWithoutRendering )
+{
+    std::unique_ptr<BOARD> board = makeBoardWithCourtyard();
+    HATCH_KNOCKOUT_SHAPE*  shape = addHatchedRect( *board, User_1 );
+
+    BOOST_CHECK_GT( shape->GetHatchLines().size(), 0u );
+    BOOST_CHECK_GT( shape->GetHatching().OutlineCount(), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( CrossHatchingIsBuiltWithoutRendering )
+{
+    std::unique_ptr<BOARD> board = makeBoardWithCourtyard();
+    HATCH_KNOCKOUT_SHAPE*  shape = addHatchedRect( *board, User_1, VECTOR2I( 0, 0 ), FILL_T::CROSS_HATCH );
+
+    BOOST_CHECK_GT( shape->GetHatching().OutlineCount(), 0 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
