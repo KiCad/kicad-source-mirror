@@ -49,6 +49,17 @@ public:
     static git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError = nullptr,
                                                  wxString* aTrustCommand = nullptr );
 
+    // Writes core.longpaths into a new repository, as Windows refuses paths past MAX_PATH without it.
+    // Windows only
+    static int AllowLongPaths( git_repository* aRepo );
+
+    // Gives a handle core.longpaths from a separate config file, leaving the repository's own config alone.
+    // Windows only
+    static int AttachLongPaths( git_repository* aRepo );
+
+    // The file AttachLongPaths keeps its setting in
+    static wxString LongPathsConfigPath();
+
     /**
      * Create a new branch based on HEAD.
      *
@@ -171,6 +182,10 @@ public:
     /// aCommit also includes that commit's attributes when judging a version before checkout,
     /// with libgit2 1.3 or later. Older versions only check the index and working tree.
     static bool PathUsesGitLfs( git_repository* aRepo, const wxString& aPath, const git_oid* aCommit = nullptr );
+
+    /// The filter driver git add would run on @p aPath, such as lfs, which libgit2 cannot run. Empty for
+    /// none, nothing when the attributes cannot be read.
+    static std::optional<wxString> FilterDriver( git_repository* aRepo, const wxString& aPath );
 
     /**
      * Whether any committed file in the project's folder goes through Git LFS.

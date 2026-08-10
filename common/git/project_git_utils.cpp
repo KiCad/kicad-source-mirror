@@ -17,22 +17,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <text_eval/text_eval_environment.h>
 #include "project_git_utils.h"
 #include "git_backend.h"
 #include "kicad_git_common.h"
+#include "kigit_trace.h"
 
 #include <wx/file.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 
 #include "kicad_git_memory.h"
 #include <git/kicad_git_compat.h>
 #include <trace_helpers.h>
 #include <wx/log.h>
 #include <wx/string.h>
-#include <string_utils.h>
+#include <wx/intl.h>
 
-#ifndef __WINDOWS__
+#include <string>
+
+#ifdef __WINDOWS__
+#include <shlobj.h>
+#else
 #include <climits>
 #include <cstdlib>
 #endif
@@ -49,6 +54,133 @@ git_repository* PROJECT_GIT_UTILS::GetRepositoryForFile( const char* aFilename, 
         return nullptr;
 
     return backend->GetRepositoryForFile( aFilename, aError, aTrustCommand );
+}
+
+
+int PROJECT_GIT_UTILS::AllowLongPaths( git_repository* aRepo )
+{
+#ifdef __WINDOWS__
+    git_config* config = nullptr;
+
+    if( int rc = git_repository_config( &config, aRepo ) )
+        return rc;
+
+    GitConfigPtr configPtr( config );
+    int          allowed = 0;
+
+    if( git_config_get_bool( &allowed, config, "core.longpaths" ) == GIT_OK && allowed )
+        return GIT_OK;
+
+    return git_config_set_bool( config, "core.longpaths", true );
+#else
+    return GIT_OK;
+#endif
+}
+
+
+wxString PROJECT_GIT_UTILS::LongPathsConfigPath()
+{
+#ifdef __WINDOWS__
+    // The backend has no wxApp, which wxStandardPaths needs. The shell answers for the account, where an
+    // environment variable can be redirected
+    PWSTR    known = nullptr;
+    wxString base;
+
+    if( SHGetKnownFolderPath( FOLDERID_LocalAppData, KF_FLAG_DEFAULT, nullptr, &known ) == S_OK )
+        base = wxString( known );
+
+    CoTaskMemFree( known );
+
+    if( base.IsEmpty() )
+        return wxEmptyString;
+
+    wxFileName file( base, wxS( "kicad-longpaths.gitconfig" ) );
+    file.AppendDir( wxS( "kicad" ) );
+    return file.GetFullPath();
+#else
+    return wxEmptyString;
+#endif
+}
+
+
+int PROJECT_GIT_UTILS::AttachLongPaths( git_repository* aRepo )
+{
+#ifdef __WINDOWS__
+    static const std::string expected = "[core]\n\tlongpaths = true\n";
+    const wxString           path = LongPathsConfigPath();
+
+    if( path.IsEmpty() )
+    {
+        wxLogTrace( traceKigit, "No per-user folder for the long path config" );
+        return GIT_ERROR;
+    }
+
+    // libgit2 honours include and url settings from this file, so only the exact content is ever attached
+    auto matches = [&]()
+    {
+        wxFile in( path );
+        std::string content( expected.size() + 1, '\0' );
+
+        return in.IsOpened() && in.Length() == static_cast<wxFileOffset>( expected.size() )
+               && in.Read( content.data(), content.size() ) == static_cast<wxFileOffset>( expected.size() )
+               && content.compare( 0, expected.size(), expected ) == 0;
+    };
+
+    if( !matches() )
+    {
+        wxFileName dir( path );
+
+        if( !dir.DirExists() && !dir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        {
+            wxLogTrace( traceKigit, "Cannot make the folder for the long path config %s", path );
+            return GIT_ERROR;
+        }
+
+        const wxString temp =
+                wxFileName::CreateTempFileName( dir.GetPath() + wxFileName::GetPathSeparator() + wxS( "lp" ) );
+
+        if( temp.IsEmpty() )
+        {
+            wxLogTrace( traceKigit, "Cannot stage the long path config for %s", path );
+            return GIT_ERROR;
+        }
+
+        wxFile out( temp, wxFile::write );
+        bool   written = out.IsOpened() && out.Write( expected.data(), expected.size() ) == expected.size();
+
+        out.Close();
+
+        if( !written || !wxRenameFile( temp, path, true ) )
+        {
+            wxRemoveFile( temp );
+            wxLogTrace( traceKigit, "Cannot write the long path config %s", path );
+            return GIT_ERROR;
+        }
+
+        if( !matches() )
+        {
+            wxLogTrace( traceKigit, "The long path config %s changed after it was written", path );
+            return GIT_ERROR;
+        }
+    }
+
+    git_config* config = nullptr;
+
+    if( int rc = git_repository_config( &config, aRepo ) )
+        return rc;
+
+    GitConfigPtr configPtr( config );
+
+    // Adding a level does not clear libgit2's cached settings, so this must come before any lookup
+    int rc = git_config_add_file_ondisk( config, path.utf8_str(), GIT_CONFIG_LEVEL_APP, aRepo, 0 );
+
+    if( rc != GIT_OK && rc != GIT_EEXISTS )
+        wxLogTrace( traceKigit, "Cannot attach the long path config: %s", KIGIT_COMMON::GetLastGitError() );
+
+    return rc == GIT_EEXISTS ? GIT_OK : rc;
+#else
+    return GIT_OK;
+#endif
 }
 
 
@@ -72,57 +204,6 @@ bool PROJECT_GIT_UTILS::RemoveVCS( git_repository*& aRepo, const wxString& aProj
         return false;
 
     return backend->RemoveVCS( aRepo, aProjectPath, aRemoveGitDir, aErrors );
-}
-
-
-git_oid PROJECT_GIT_UTILS::GetCapturedHeadOid( git_repository* aRepo )
-{
-    if( !aRepo )
-        return {};
-
-    using ENVIRONMENT = TEXT_EVAL::ENVIRONMENT;
-    const auto read = [&]() -> ENVIRONMENT::VCS_VALUE
-    {
-        git_oid oid{};
-
-        if( git_reference_name_to_id( &oid, aRepo, "HEAD" ) != 0 )
-            return {};
-
-        char hash[GIT_OID_HEXSZ + 1];
-        git_oid_tostr( hash, sizeof( hash ), &oid );
-        return { hash };
-    };
-    auto* environment = ENVIRONMENT::Current();
-    const char* path = git_repository_path( aRepo );
-    const auto value = environment && path
-            ? environment->VcsValue( { ENVIRONMENT::VCS_QUERY::HEAD, wxString::FromUTF8( path ), "", 0, false }, read )
-            : read();
-    git_oid oid{};
-
-    if( value.text.empty() || git_oid_fromstr( &oid, value.text.c_str() ) != 0 )
-        return {};
-
-    return oid;
-}
-
-
-wxString PROJECT_GIT_UTILS::GetCurrentHash( const wxString& aProjectFile, bool aShort )
-{
-    const auto read = [&]
-    {
-        GitRepositoryPtr repo( GetRepositoryForFile( TO_UTF8( aProjectFile ) ) );
-        const git_oid oid = GetCapturedHeadOid( repo.get() );
-
-        if( git_oid_is_zero( &oid ) )
-            return wxString( "no hash" );
-
-        char hash[GIT_OID_HEXSZ + 1];
-        git_oid_tostr( hash, sizeof( hash ), &oid );
-        return wxString::FromUTF8( hash );
-    };
-    auto*          environment = TEXT_EVAL::ENVIRONMENT::Current();
-    const wxString hash = environment ? environment->GitHash( aProjectFile, read ) : read();
-    return aShort ? hash.Left( 8 ) : hash;
 }
 
 
@@ -326,6 +407,22 @@ bool PROJECT_GIT_UTILS::PathUsesGitLfs( git_repository* aRepo, const wxString& a
 #endif
 
     return git_attr_value( value ) == GIT_ATTR_VALUE_STRING && strcmp( value, "lfs" ) == 0;
+}
+
+
+std::optional<wxString> PROJECT_GIT_UTILS::FilterDriver( git_repository* aRepo, const wxString& aPath )
+{
+    const char* filter = nullptr;
+
+    if( !aRepo
+        || git_attr_get( &filter, aRepo, GIT_ATTR_CHECK_FILE_THEN_INDEX, aPath.utf8_string().c_str(), "filter" )
+                   != GIT_OK )
+    {
+        return std::nullopt;
+    }
+
+    // A bare "filter" names no driver, so git runs none
+    return GIT_ATTR_HAS_VALUE( filter ) ? wxString::FromUTF8( filter ) : wxString();
 }
 
 
@@ -595,7 +692,7 @@ void PROJECT_GIT_UTILS::SafeFreeRepository( std::shared_ptr<KIGIT_COMMON> aCommo
     }
 
     {
-        std::unique_lock<std::mutex> gitLock = aCommon->TryLockAction();
+        KIGIT::ACTION_LOCK gitLock = aCommon->TryLockActionLocal();
 
         if( gitLock.owns_lock() )
         {
@@ -609,7 +706,7 @@ void PROJECT_GIT_UTILS::SafeFreeRepository( std::shared_ptr<KIGIT_COMMON> aCommo
     // finishes. The orphan registry frees it once the mutex is released.
     auto cleanup = [repo, old = std::move( aCommon )]() mutable
     {
-        std::unique_lock<std::mutex> g = old->LockAction();
+        KIGIT::ACTION_LOCK g = old->LockActionLocal();
         old->SetRepo( nullptr );
         git_repository_free( repo );
     };

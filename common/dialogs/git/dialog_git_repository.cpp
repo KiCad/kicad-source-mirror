@@ -299,7 +299,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
         context.url = url;
 
         KIGIT_FAILURE_REPORT report =
-                KIGIT::DescribeGitFailure( KIGIT_COMMON::GetLastGitErrorInfo( result ), {}, context );
+                KIGIT::DescribeGitFailure( KIGIT::GetLastGitErrorInfo( result ), {}, context );
         error = report.summary;
         details = report.details;
     }

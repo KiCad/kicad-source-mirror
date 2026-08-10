@@ -276,7 +276,7 @@ struct GIT_BACKEND_FIXTURE : KI_TEST::GIT_TEST_FIXTURE
     static std::vector<FILE_CHECKLIST_ENTRY> changeEntries( git_repository* aRepo, const wxString& aProjectPath )
     {
         KIGIT_COMMON                 common( aRepo, aProjectPath );
-        std::unique_lock<std::mutex> lock = common.LockAction();
+        KIGIT::ACTION_LOCK lock = common.LockAction();
         return BuildGitChangeEntries( common, aProjectPath, false );
     }
 
@@ -1349,7 +1349,7 @@ BOOST_AUTO_TEST_CASE( PerformPull_ExplainsWhenActionLockHeld )
     KIGIT_COMMON     common( repo );
     GIT_PULL_HANDLER handler( &common );
 
-    std::unique_lock<std::mutex> held = common.LockAction();
+    KIGIT::ACTION_LOCK held = common.LockAction();
 
     PullResult result = std::async( std::launch::async,
                                     [&handler]()
@@ -2501,7 +2501,7 @@ BOOST_AUTO_TEST_CASE( BusyOperationDoesNotConsumeAnotherCancellation )
         tokenA->store( true );
 
         // A is holding the action lock, so B cannot start.
-        std::unique_lock<std::mutex> heldByA = common.LockAction();
+        KIGIT::ACTION_LOCK heldByA = common.LockAction();
 
         GIT_PUSH_HANDLER           pushB( &common );
         KIGIT_COMMON::CANCEL_TOKEN tokenB = pushB.CancelToken();
@@ -3178,7 +3178,7 @@ BOOST_AUTO_TEST_CASE( ProjectGitCommon_ReleaseDefersFreeWhileActionMutexHeld )
     std::thread worker(
             [&]()
             {
-                std::unique_lock<std::mutex> lock = common->LockAction();
+                KIGIT::ACTION_LOCK lock = common->LockAction();
                 lockHeld.set_value();
                 allowUnlock.get_future().wait();
             } );
@@ -3309,7 +3309,7 @@ BOOST_AUTO_TEST_CASE( BuildGitChangeEntries_KeepsTrackedAndStagedTransientFiles 
     auto checkEntries = [&repo, &expected]( const wxString& aProjectPath )
     {
         KIGIT_COMMON                 common( repo.get(), aProjectPath );
-        std::unique_lock<std::mutex> lock = common.LockAction();
+        KIGIT::ACTION_LOCK lock = common.LockAction();
         std::set<wxString>           paths;
 
         for( const FILE_CHECKLIST_ENTRY& entry : BuildGitChangeEntries( common, aProjectPath, false ) )

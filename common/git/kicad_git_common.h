@@ -24,7 +24,9 @@
 #include <git/git_compare_handler.h>
 #include <git/git_transfer_busy.h>
 #include <git/kicad_git_errors.h>
+#include <git/kigit_action_lock.h>
 #include <git/kigit_known_hosts.h>
+#include <git/kigit_remote_url.h>
 #include <import_export.h>
 
 #include <git2.h>
@@ -43,15 +45,6 @@
 
 class LIBGIT_BACKEND;
 struct KIGIT_AUTH_ATTEMPT;
-
-
-/// What libgit2 reported for a failed call, read before anything else can replace it.
-struct KIGIT_ERROR_INFO
-{
-    int      klass = 0; ///< git_error_t
-    int      code = 0;  ///< The failed call's return value
-    wxString message;
-};
 
 
 // One entry in the commit history, as shown by the advanced git window's History page.
@@ -299,26 +292,10 @@ public:
         GIT_STATUS_LAST
     };
 
-    enum class GIT_CONN_TYPE
-    {
-        GIT_CONN_HTTPS = 0,
-        GIT_CONN_SSH,
-        GIT_CONN_LOCAL,
-        GIT_CONN_LAST
-    };
+    using GIT_CONN_TYPE = KIGIT::GIT_CONN_TYPE;
+    using REMOTE_URL = KIGIT::REMOTE_URL;
 
-    /// A transport address with any embedded credentials extracted.
-    struct REMOTE_URL
-    {
-        wxString      url; ///< Keeps the SSH username, scheme and port, but never a password.
-        wxString      username;
-        wxString      password;
-        wxString      hostname;
-        int           port = 0; ///< 0 when the address names none.
-        GIT_CONN_TYPE connType = GIT_CONN_TYPE::GIT_CONN_LOCAL;
-    };
-
-    static REMOTE_URL ParseRemoteURL( const wxString& aURL );
+    static REMOTE_URL ParseRemoteURL( const wxString& aURL ) { return KIGIT::ParseRemoteURL( aURL ); }
 
     wxString GetUsername() const
     {
@@ -337,6 +314,19 @@ public:
      */
     static bool DeferForSecret( const std::shared_ptr<KIGIT_COMMON>& aCommon, const std::weak_ptr<bool>& aOwner,
                                 std::function<void()> aRetry );
+
+    /**
+     * Tell open sessions on realm aRealm that a password for aUsername was saved. A session naming no user
+     * adopts aUsername when it is the server's account, and one naming aUsername reads the keyring again.
+     */
+    static void CredentialSaved( const wxString& aRealm, const wxString& aUsername );
+
+    /**
+     * Read the secret for aUsername from the legacy full remote URL entry, or else from aRemote's credential
+     * realm. aDone runs on the UI thread.
+     */
+    static void ReadSecretAsync( const wxString& aRemote, const wxString& aUsername,
+                                 std::function<void( bool aFound, const wxString& aSecret )> aDone );
 
     /// False while the keyring has not been read for the current remote
     bool SecretRead() const
@@ -406,6 +396,17 @@ public:
      * starts over with these. Returns false, leaving everything alone, when the identity moved.
      */
     bool ApplyPromptedCredentials( const CREDENTIAL_IDENTITY& aFor, const PROMPTED_CREDENTIALS& aEntered );
+
+    /// Saves a credential under the remote a server accepted it for. Transfer threads hold and drop it, so it may
+    /// capture plain values only, never a window or anything else wx owns
+    using CREDENTIAL_SAVER =
+            std::function<void( const wxString& aRemote, const wxString& aUsername, const wxString& aPassword )>;
+
+    /**
+     * Run aSave on the main thread with the next password or passphrase a server accepts, so one it refuses is
+     * never kept. A refusal cancels it, a later call replaces it, and an empty one cancels it.
+     */
+    void SaveWhenAccepted( CREDENTIAL_SAVER aSave );
 
     /// True when HEAD has commits its upstream does not, or has no upstream yet.
     /// False for a detached or unborn HEAD.
@@ -605,8 +606,9 @@ public:
     /// remote moved up.
     void ResetNextKey();
 
-    /// Remember the key that connected for @p aAttempt, so the next connection offers it first.
-    void RememberWorkingSSHKey( const KIGIT_AUTH_ATTEMPT& aAttempt );
+    /// Remember the key that connected for @p aAttempt, so the next connection offers it first, and save the
+    /// password it sent if SaveWhenAccepted() asked.
+    void RememberWorkingCredential( const KIGIT_AUTH_ATTEMPT& aAttempt );
 
     /// By value, so the caller never holds a pointer into the vector.
     wxString GetNextPublicKey();
@@ -634,10 +636,6 @@ public:
 
     /// libgit2's last message, without credentials from any URL it quotes, so it is safe to show or trace.
     static wxString GetLastGitError();
-
-    /// The error libgit2 holds for a call that returned aCode. Read it straight after the call, because the
-    /// callbacks and cleanup that follow can replace it.
-    static KIGIT_ERROR_INFO GetLastGitErrorInfo( int aCode );
 
     /// One token per operation. Born uncancelled, so nothing has to be reset before an
     /// operation starts and one operation's cancel cannot reach another.
@@ -701,19 +699,32 @@ public:
     /// another host or its port is not valid.
     int SSHPortFor( const wxString& aHost ) const;
 
-    std::unique_lock<std::mutex> TryLockAction()
-    {
-        return std::unique_lock<std::mutex>( m_gitActionMutex, std::try_to_lock );
-    }
+    /// Take the action lock now or not at all, whether this process or another holds it
+    KIGIT::ACTION_LOCK TryLockAction();
 
     /// Long enough for a status read to finish, short enough that a window does not look hung.
     static constexpr std::chrono::milliseconds ACTION_LOCK_WAIT{ 2000 };
 
     /// TryLockAction that keeps trying for aWait before giving up. For the UI thread, where a
     /// blocking LockAction could wait out a whole network timeout.
-    std::unique_lock<std::mutex> TryLockActionFor( std::chrono::milliseconds aWait );
+    KIGIT::ACTION_LOCK TryLockActionFor( std::chrono::milliseconds aWait );
 
-    std::unique_lock<std::mutex> LockAction() { return std::unique_lock<std::mutex>( m_gitActionMutex ); }
+    /// This process's holders only, so another process's git action never delays it. For reading
+    /// the repository or freeing it, never for changing it.
+    KIGIT::ACTION_LOCK TryLockActionLocal()
+    {
+        return KIGIT::ACTION_LOCK( std::unique_lock<std::mutex>( m_gitActionMutex, std::try_to_lock ) );
+    }
+
+    KIGIT::ACTION_LOCK LockActionLocal()
+    {
+        return KIGIT::ACTION_LOCK( std::unique_lock<std::mutex>( m_gitActionMutex ) );
+    }
+
+    /// Wait for this process's holder, then for a while for another process. The mutex stays held
+    /// either way; owns_lock() is false when another process kept the repository past the wait or
+    /// the repository's lock file cannot be used.
+    KIGIT::ACTION_LOCK LockAction();
 
     // Views showing working-tree state register here, so a commit, push or pull in one of them
     // refreshes the others. UI thread only, so the list needs no lock.
@@ -740,6 +751,10 @@ protected:
     wxString m_username;
     wxString m_password;
 
+    /// The repository's lock shared with other processes, or null when there is no repository yet.
+    /// Call with m_gitActionMutex held.
+    std::unique_ptr<KIGIT::REPO_ACTION_LOCK> repoActionLock() const;
+
     std::mutex m_gitActionMutex;
 
     /// Serializes the credential fields between the UI thread and the authentication
@@ -747,7 +762,10 @@ protected:
     /// it. Separate from m_gitActionMutex, which the worker holds while the callback runs.
     mutable std::mutex m_credentialsMutex;
 
+    CREDENTIAL_SAVER m_saveWhenAccepted; ///< Guarded by m_credentialsMutex
+
     std::vector<std::pair<void*, std::function<void()>>> m_refreshListeners;
+    bool                                                 m_notifying = false;
 
     GIT_TRANSFER_BUSY m_transfers;
 
@@ -830,7 +848,7 @@ APIEXPORT wxWindow*& ActiveAdvancedGitWindow();
  *
  * Runs git_revparse_single followed by git_object_peel( GIT_OBJECT_TREE ), so a
  * commit, tag or tree ref all resolve to the underlying tree.  Returns nullptr
- * on error and logs via wxLogTrace( traceGit ).
+ * on error and logs via wxLogTrace( KIGIT::traceKigit ).
  *
  * The caller owns the returned tree and must free it with git_tree_free (wrap
  * in KIGIT::GitTreePtr for RAII).  The return type is a raw pointer rather than
@@ -873,6 +891,13 @@ APIEXPORT wxString ComposeCommitMessage( const wxString& aSummary, const wxStrin
 
 /// Split a commit message into its first line and the description after the first blank line.
 APIEXPORT void SplitCommitMessage( const wxString& aMessage, wxString& aSummary, wxString& aDescription );
+
+/// The trailers git interpret-trailers finds at the end of aMessage, as key and value, in order
+APIEXPORT std::vector<std::pair<std::string, std::string>> MessageTrailers( const std::string& aMessage );
+
+/// True for a full ref name under which a Design Workspace keeps its records, such as claims and release tags.
+/// Moving or deleting one by hand would rewrite what the team agreed on.
+APIEXPORT bool IsKicadRecordRef( const wxString& aName );
 
 /// Empty when aName is a branch name git would accept, otherwise why it would not, in the
 /// words to show the user.

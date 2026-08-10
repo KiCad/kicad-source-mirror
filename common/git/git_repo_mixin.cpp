@@ -19,7 +19,7 @@
 
 #include "git_repo_mixin.h"
 
-#include <trace_helpers.h>
+#include <git/kigit_trace.h>
 
 #include <wx/log.h>
 
@@ -109,7 +109,7 @@ KIGIT_FAILURE_REPORT KIGIT_REPO_MIXIN::ReportTransferFailure( const KIGIT_ERROR_
     // The credential prompt that follows asks for this key's passphrase. An older answer may name a revoked key
     m_common->SetAcceptedSSHKey( m_authAttempt.acceptedKey );
 
-    wxLogTrace( traceGit, "Transfer failed with code %d, class %d, kind %d: %s", aError.code, aError.klass,
+    wxLogTrace( KIGIT::traceKigit, "Transfer failed with code %d, class %d, kind %d: %s", aError.code, aError.klass,
                 static_cast<int>( report.kind ), KIGIT::PrintableServerText( aError.message ) );
 
     if( KIGIT::IsCredentialFailure( report.kind ) )

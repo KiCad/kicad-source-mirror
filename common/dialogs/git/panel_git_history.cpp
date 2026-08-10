@@ -1055,7 +1055,7 @@ void PANEL_GIT_HISTORY::restoreVersion( const wxString& aCommitHash, const KIGIT
     KIGIT_ERROR_MESSAGE error;
 
     {
-        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
+        KIGIT::ACTION_LOCK lock = KIGIT::TryLockAction( *common, this );
 
         if( !lock.owns_lock() )
             return;

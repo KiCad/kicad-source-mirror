@@ -1240,7 +1240,7 @@ void KICAD_MANAGER_FRAME::OnCompareProjectBranches( wxCommandEvent& event )
 
     // libgit2 is not safe for concurrent use of one repository, so read the refs under the git
     // action lock. If a background operation holds it, fall back to HEAD.
-    if( std::unique_lock<std::mutex> lock = gitCommon->TryLockAction(); lock.owns_lock() )
+    if( KIGIT::ACTION_LOCK lock = gitCommon->TryLockAction(); lock.owns_lock() )
         refs = KIGIT::CompareBranchRefs( repo );
 
     if( refs.empty() )

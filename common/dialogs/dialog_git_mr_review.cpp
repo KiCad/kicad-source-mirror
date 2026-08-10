@@ -111,7 +111,7 @@ void DIALOG_GIT_MR_REVIEW::populateFileList()
     }
 
     // Hold the lock while resolving and comparing refs.
-    std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *m_common, this );
+    KIGIT::ACTION_LOCK lock = KIGIT::TryLockAction( *m_common, this );
 
     if( !lock.owns_lock() )
         return;
@@ -218,7 +218,7 @@ void DIALOG_GIT_MR_REVIEW::openFileDiff( long aListIndex )
     }
 
     // Extract both versions under the lock, then release it before opening the diff.
-    std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *m_common, this );
+    KIGIT::ACTION_LOCK lock = KIGIT::TryLockAction( *m_common, this );
 
     if( !lock.owns_lock() )
         return;

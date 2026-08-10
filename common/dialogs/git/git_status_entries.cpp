@@ -511,7 +511,7 @@ void SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxS
                 KIGIT_ERROR_MESSAGE resultError;
 
                 {
-                    std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, parent );
+                    KIGIT::ACTION_LOCK lock = KIGIT::TryLockAction( *common, parent );
 
                     if( !lock.owns_lock() )
                         return;
@@ -1129,7 +1129,7 @@ void ChangeGitIgnore( EDA_BASE_FRAME* aFrame, wxWindow* aParent, GIT_IGNORE_CHAN
 
     {
         // Only to explain the result, so a busy repository is not worth waiting for.
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        KIGIT::ACTION_LOCK lock = common->TryLockAction();
 
         if( !lock.owns_lock() )
             return;

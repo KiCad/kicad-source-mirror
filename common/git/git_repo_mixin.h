@@ -20,7 +20,7 @@
 #include "git_progress.h"
 #include <import_export.h>
 
-class APIEXPORT KIGIT_REPO_MIXIN: public KIGIT_ERRORS, public GIT_PROGRESS
+class APIEXPORT KIGIT_REPO_MIXIN : public KIGIT_ERRORS, public GIT_PROGRESS, public KIGIT::TRANSPORT_SESSION
 {
 public:
     KIGIT_REPO_MIXIN( KIGIT_COMMON* aCommon ) :
@@ -68,19 +68,13 @@ public:
      * @brief Get the connection type
      * @return The connection type
      */
-    KIGIT_COMMON::GIT_CONN_TYPE GetConnType() const
-    {
-        return m_common->GetConnType();
-    }
+    KIGIT_COMMON::GIT_CONN_TYPE GetConnType() const override { return m_common->GetConnType(); }
 
     /**
      * @brief Get the username
      * @return The username
      */
-    wxString GetUsername() const
-    {
-        return m_common->GetUsername();
-    }
+    wxString GetUsername() const override { return m_common->GetUsername(); }
 
     /**
      * @brief Set the username
@@ -127,6 +121,16 @@ public:
         return m_common->GetProjectDir();
     }
 
+    wxString GetPassword() override { return m_common->GetPassword(); }
+
+    wxString GetNextPublicKey() override { return m_common->GetNextPublicKey(); }
+
+    int SSHPortFor( const wxString& aHost ) const override { return m_common->SSHPortFor( aHost ); }
+
+    void SyncRemoteUrl( const wxString& aUrl ) override { m_common->SyncRemoteUrl( aUrl ); }
+
+    void FollowRewrittenUrl( const wxString& aUrl ) override { m_common->FollowRewrittenUrl( aUrl ); }
+
     void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override
     {
         // The transfer callbacks poll this token and abort on their next tick.
@@ -151,7 +155,7 @@ public:
     /// A UI caller retrying confirmed input waits this long for a background read instead of failing at once.
     void SetActionLockWait( std::chrono::milliseconds aWait ) { m_actionLockWait = aWait; }
 
-    std::unique_lock<std::mutex> GetActionLock() const
+    KIGIT::ACTION_LOCK GetActionLock() const
     {
         if( m_waitForActionLock )
             return m_common->LockAction();
@@ -166,14 +170,16 @@ public:
     /// operation so an overlapping transfer on the same session cannot clear or replace it. Only the
     /// operation's own thread writes it, and readers wait for the transfer to return.
     std::optional<KIGIT::HOST_KEY_FAILURE> GetHostKeyFailure() const { return m_hostKeyFailure; }
-    void SetHostKeyFailure( const KIGIT::HOST_KEY_FAILURE& aFailure ) { m_hostKeyFailure = aFailure; }
+    void SetHostKeyFailure( const KIGIT::HOST_KEY_FAILURE& aFailure ) override { m_hostKeyFailure = aFailure; }
     void ClearHostKeyFailure() { m_hostKeyFailure.reset(); }
 
-    void            SetHostKeyRefusal( const wxString& aReason ) { m_hostKeyRefusal = aReason; }
+    /// Why the transfer refused the server's host key, since libgit2 replaces the error it set
+    const wxString& GetHostKeyRefusal() const { return m_hostKeyRefusal; }
+    void            SetHostKeyRefusal( const wxString& aReason ) override { m_hostKeyRefusal = aReason; }
 
     /// Start a transfer with nothing left from an earlier one on this handler or session: the first key
     /// offered next, and no refused host key, offered key, server text or failure on record.
-    void ResetTransferState()
+    void ResetTransferState() override
     {
         m_common->ResetNextKey();
         ClearHostKeyFailure();
@@ -187,20 +193,30 @@ public:
         m_failureKind.reset();
     }
 
-    KIGIT_AUTH_ATTEMPT&       AuthAttempt() { return m_authAttempt; }
+    KIGIT_AUTH_ATTEMPT& AuthAttempt() override { return m_authAttempt; }
 
-    /// Call once the transfer has connected, so the key that worked is offered first next time.
-    void RememberWorkingSSHKey() { m_common->RememberWorkingSSHKey( m_authAttempt ); }
+    /// Call once the transfer has connected, so the key that worked is offered first next time and a waiting
+    /// save keeps the password that worked.
+    void RememberWorkingCredential() override { m_common->RememberWorkingCredential( m_authAttempt ); }
 
     /// Set when the server refused every credential offered, so the caller can prompt and retry.
     bool WasAuthFailure() const { return m_authFailed; }
-    void SetAuthFailure() { m_authFailed = true; }
+    void SetAuthFailure() override
+    {
+        m_authFailed = true;
+
+        // The refused password must not be saved by the next connect that works with another
+        m_common->SaveWhenAccepted( nullptr );
+    }
 
     /// Keep sideband text the server sent for the user, such as why it refused a pushed branch, and show
     /// each complete line as progress.
-    void ReceiveSideband( const char* aData, size_t aLength );
+    void ReceiveSideband( const char* aData, size_t aLength ) override;
 
-    void            SetPushRefusal( const wxString& aStatus );
+    /// The whole lines of sideband text this transfer kept, such as a hook's reason for declining a branch.
+    const wxString& ServerMessage() const { return m_serverMessage; }
+
+    void SetPushRefusal( const wxString& aStatus ) override;
 
     /// Classify a failed libgit2 transfer call and queue its summary and details. Call it straight after
     /// the failing call, before anything else can replace libgit2's error.
@@ -210,7 +226,7 @@ public:
     /// The kind of the last failure ReportTransferFailure classified, or none.
     std::optional<KIGIT_FAILURE> GetFailureKind() const { return m_failureKind; }
 
-    bool IsThisOperationCancelled() const { return m_cancelToken->load(); }
+    bool IsThisOperationCancelled() const override { return m_cancelToken->load(); }
 
     void CancelThisOperation() { m_cancelToken->store( true ); }
 

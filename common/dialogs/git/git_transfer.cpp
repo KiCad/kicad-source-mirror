@@ -257,7 +257,7 @@ void KIGIT_QUERY::start( REQUEST aRequest )
                         if( !session || aCancel->load() || session->IsShuttingDown() )
                             return;
 
-                        std::unique_lock<std::mutex> lock = session->LockAction();
+                        KIGIT::ACTION_LOCK lock = session->LockAction();
 
                         if( aCancel->load() || session->IsShuttingDown() || !session->GetRepo() )
                             return;

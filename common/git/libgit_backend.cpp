@@ -174,11 +174,12 @@ static void reportRemoteLookupFailure( KIGIT_ERRORS* aHandler, int aRc, const wx
 bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
 {
     KIGIT_COMMON* common = aHandler->GetCommon();
-    std::unique_lock<std::mutex> lock = aHandler->GetActionLock();
+    KIGIT::ACTION_LOCK lock = aHandler->GetActionLock();
 
     if( !lock.owns_lock() )
     {
-        wxLogTrace( traceGit, "GIT_CLONE_HANDLER::PerformClone() could not lock" );
+        wxLogTrace( KIGIT::traceKigit, "GIT_CLONE_HANDLER::PerformClone() could not lock" );
+        aHandler->AddErrorString( KIGIT::BusyMessage() );
         return false;
     }
 
@@ -1073,11 +1074,11 @@ UndoCommitResult LIBGIT_BACKEND::UndoLastCommit( GIT_COMMIT_HANDLER* aHandler, c
 PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 {
     KIGIT_COMMON*                common = aHandler->GetCommon();
-    std::unique_lock<std::mutex> lock = aHandler->GetActionLock();
+    KIGIT::ACTION_LOCK           lock = aHandler->GetActionLock();
 
     if( !lock.owns_lock() )
     {
-        wxLogTrace( traceGit, "GIT_PUSH_HANDLER::PerformPush: Could not lock mutex" );
+        wxLogTrace( KIGIT::traceKigit, "GIT_PUSH_HANDLER::PerformPush: Could not lock mutex" );
         return PushResult::Busy;
     }
 
@@ -1499,8 +1500,7 @@ bool LIBGIT_BACKEND::SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig
         context.remoteName = wxS( "origin" );
         context.url = parsed.url;
 
-        KIGIT_FAILURE_REPORT report =
-                KIGIT::DescribeGitFailure( KIGIT_COMMON::GetLastGitErrorInfo( error ), {}, context );
+        KIGIT_FAILURE_REPORT report = KIGIT::DescribeGitFailure( KIGIT::GetLastGitErrorInfo( error ), {}, context );
         aHandler->AddError( report.summary, report.details );
         return false;
     }
@@ -1749,7 +1749,7 @@ static bool adoptRemoteBranch( git_repository* aRepo, const wxString& aRemoteNam
 static bool fetchRemote( GIT_PULL_HANDLER* aHandler, bool aSkipLock, bool* aRemoteHasBranches )
 {
     // A pull already holds the lock when it fetches, and relocking from the owner is undefined.
-    std::unique_lock<std::mutex> lock;
+    KIGIT::ACTION_LOCK lock;
 
     if( !aSkipLock )
     {
@@ -2190,11 +2190,11 @@ static PullResult adoptRemoteHistory( GIT_PULL_HANDLER* aHandler, const git_oid&
 PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 {
     PullResult result = PullResult::Success;
-    std::unique_lock<std::mutex> lock = aHandler->GetActionLock();
+    KIGIT::ACTION_LOCK lock = aHandler->GetActionLock();
 
     if( !lock.owns_lock() )
     {
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Could not lock mutex" );
+        wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformPull() - Could not lock mutex" );
         aHandler->AddErrorString( KIGIT::BusyMessage() );
         return PullResult::Error;
     }

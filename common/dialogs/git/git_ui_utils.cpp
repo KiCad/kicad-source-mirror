@@ -43,9 +43,9 @@ void KIGIT::ShowBusyMessage( wxWindow* aParent )
 }
 
 
-std::unique_lock<std::mutex> KIGIT::TryLockAction( KIGIT_COMMON& aCommon, wxWindow* aParent )
+KIGIT::ACTION_LOCK KIGIT::TryLockAction( KIGIT_COMMON& aCommon, wxWindow* aParent )
 {
-    std::unique_lock<std::mutex> lock = aCommon.TryLockAction();
+    KIGIT::ACTION_LOCK lock = aCommon.TryLockAction();
 
     if( !lock.owns_lock() )
         ShowBusyMessage( aParent );
@@ -54,9 +54,9 @@ std::unique_lock<std::mutex> KIGIT::TryLockAction( KIGIT_COMMON& aCommon, wxWind
 }
 
 
-std::unique_lock<std::mutex> KIGIT::WaitForActionLock( KIGIT_COMMON& aCommon, wxWindow* aParent )
+KIGIT::ACTION_LOCK KIGIT::WaitForActionLock( KIGIT_COMMON& aCommon, wxWindow* aParent )
 {
-    std::unique_lock<std::mutex> lock;
+    KIGIT::ACTION_LOCK lock;
 
     {
         wxBusyCursor busy;

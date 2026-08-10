@@ -21,6 +21,7 @@
 #include <dialogs/git/dialog_git_credentials.h>
 #include <dialogs/git/dialog_git_identity.h>
 #include <dialogs/git/git_ui_utils.h>
+#include <wx/msgdlg.h>
 #include <confirm.h>
 #include <eda_base_frame.h>
 #include <wx/app.h>
@@ -47,7 +48,7 @@ static void resolveMissingRemote( KIGIT_COMMON* aCommon )
 
     // A status read holds the lock for moments at a time, so a short wait usually gets it
     wxBusyCursor                 busy;
-    std::unique_lock<std::mutex> lock = aCommon->TryLockActionFor( KIGIT_COMMON::ACTION_LOCK_WAIT );
+    KIGIT::ACTION_LOCK lock = aCommon->TryLockActionFor( KIGIT_COMMON::ACTION_LOCK_WAIT );
 
     if( !lock.owns_lock() )
     {
@@ -382,7 +383,7 @@ bool KIGIT::EditGitIdentity( wxWindow* aParent, EDA_BASE_FRAME* aFrame, const st
     bool saved = false;
 
     {
-        std::unique_lock<std::mutex> lock = KIGIT::WaitForActionLock( *aCommon, aParent );
+        KIGIT::ACTION_LOCK lock = KIGIT::WaitForActionLock( *aCommon, aParent );
 
         if( !lock.owns_lock() )
             return false;

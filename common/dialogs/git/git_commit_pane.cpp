@@ -1385,7 +1385,7 @@ void GIT_COMMIT_PANE::onChecklistContextMenu( wxDataViewEvent& aEvent )
 
     {
         std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
-        std::unique_lock<std::mutex>  lock = common->TryLockAction();
+        KIGIT::ACTION_LOCK  lock = common->TryLockAction();
 
         if( lock.owns_lock() )
         {
@@ -1523,7 +1523,7 @@ void GIT_COMMIT_PANE::confirmDiscardFile( std::shared_ptr<KIGIT_COMMON> aCommon,
 
     // Dropping the staged entry before touching the file means a contended lock or an index
     // failure leaves everything unchanged.
-    std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *aCommon, this );
+    KIGIT::ACTION_LOCK lock = KIGIT::TryLockAction( *aCommon, this );
 
     if( !lock.owns_lock() )
         return;
@@ -1803,7 +1803,7 @@ void GIT_COMMIT_PANE::finishAbandonOperation( std::shared_ptr<KIGIT_COMMON> aCom
     bool            ok = false;
 
     {
-        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *aCommon, this );
+        KIGIT::ACTION_LOCK lock = KIGIT::TryLockAction( *aCommon, this );
 
         if( !lock.owns_lock() )
             return;
@@ -1859,7 +1859,7 @@ void GIT_COMMIT_PANE::onUndoCommit( wxCommandEvent& aEvent )
     wxString            message;
 
     {
-        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
+        KIGIT::ACTION_LOCK lock = KIGIT::TryLockAction( *common, this );
 
         if( !lock.owns_lock() )
             return;
@@ -2194,7 +2194,7 @@ void GIT_COMMIT_PANE::finishCommit( std::shared_ptr<KIGIT_COMMON> common, const 
     {
         // Keep the lock through branch creation and the commit. Closing the identity prompt wakes a
         // status read, so a bare try loses to it
-        std::unique_lock<std::mutex> lock = KIGIT::WaitForActionLock( *common, this );
+        KIGIT::ACTION_LOCK lock = KIGIT::WaitForActionLock( *common, this );
 
         if( !lock.owns_lock() )
             return;
@@ -3040,7 +3040,7 @@ void GIT_COMMIT_PANE::finishPullConflictPreparation( std::shared_ptr<KIGIT_COMMO
             return;
         }
 
-        std::unique_lock<std::mutex> lock;
+        KIGIT::ACTION_LOCK lock;
 
         // Saving the copies into the project wakes a status read, so give it time to let go
         {

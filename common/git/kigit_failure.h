@@ -32,20 +32,6 @@
 #include <wx/string.h>
 
 
-/// What the credential callback handed out during one operation, kept to explain a rejection.
-struct KIGIT_AUTH_ATTEMPT
-{
-    KIGIT_COMMON::GIT_CONN_TYPE connType = KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL;
-    std::vector<wxString>       keysTried;          ///< Key files offered, in order.
-    bool                        agentTried = false; ///< The SSH agent was offered before any key file.
-    bool                        passphraseGiven = false; ///< A passphrase went with the last key file offered.
-    wxString                    acceptedKey;             ///< An encrypted key whose public half the server accepted.
-    bool                        lastKeyRefused = false;  ///< The server refused the last key's public half.
-    wxString                    probing; ///< The encrypted key whose public half is out to the server now.
-    bool                        passwordGiven = false;   ///< A password went with the last username offered.
-};
-
-
 /// Why a transfer failed, in terms of what the user can do about it.
 enum class KIGIT_FAILURE
 {

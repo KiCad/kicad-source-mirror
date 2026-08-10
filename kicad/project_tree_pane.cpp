@@ -1125,7 +1125,7 @@ void PROJECT_TREE_PANE::showContextMenu()
             m_gitMenuSession = common;
 
             {
-                std::unique_lock<std::mutex> branchLock = common->TryLockAction();
+                KIGIT::ACTION_LOCK branchLock = common->TryLockAction();
 
                 if( branchLock.owns_lock() )
                     branches = common->GetBranches();
@@ -1798,14 +1798,14 @@ void PROJECT_TREE_PANE::WaitForGitOperations()
         std::shared_ptr<KIGIT_COMMON> common = gitCommon();
         common->SetShuttingDown( true );
 
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        KIGIT::ACTION_LOCK lock = common->TryLockAction();
 
         constexpr auto kGraceMs = std::chrono::seconds( 2 );
         auto           graceEnd = std::chrono::steady_clock::now() + kGraceMs;
 
         while( !lock.owns_lock() && std::chrono::steady_clock::now() < graceEnd )
         {
-            if( lock.try_lock() )
+            if( ( lock = common->TryLockActionLocal() ).owns_lock() )
                 break;
             std::this_thread::sleep_for( std::chrono::milliseconds( 50 ) );
         }
@@ -1823,7 +1823,7 @@ void PROJECT_TREE_PANE::WaitForGitOperations()
                                            100, this,
                                            wxPD_APP_MODAL | wxPD_SMOOTH );
 
-                while( !lock.try_lock()
+                while( !( lock = common->TryLockActionLocal() ).owns_lock()
                        && std::chrono::steady_clock::now() < intervalEnd )
                 {
                     progress.Pulse();
@@ -2101,7 +2101,7 @@ void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
 
     {
         // Read the remote under the lock, then release it before opening the dialog.
-        std::unique_lock<std::mutex> lock = KIGIT::TryLockAction( *common, this );
+        KIGIT::ACTION_LOCK lock = KIGIT::TryLockAction( *common, this );
 
         if( !lock.owns_lock() )
             return;
@@ -2179,7 +2179,7 @@ void PROJECT_TREE_PANE::showGitRemoteSettings( const wxString& aExistingURL, con
 
     {
         // Update the remote config and cached branch info under the same lock.
-        std::unique_lock<std::mutex> lock = KIGIT::WaitForActionLock( *common, this );
+        KIGIT::ACTION_LOCK lock = KIGIT::WaitForActionLock( *common, this );
 
         if( !lock.owns_lock() )
             return;
@@ -2300,7 +2300,7 @@ void PROJECT_TREE_PANE::switchGitBranch( std::shared_ptr<KIGIT_COMMON> aCommon, 
         wxString error;
 
         {
-            std::unique_lock<std::mutex> lock = KIGIT::WaitForActionLock( *aCommon, this );
+            KIGIT::ACTION_LOCK lock = KIGIT::WaitForActionLock( *aCommon, this );
 
             if( !lock.owns_lock() )
                 return;
@@ -2334,7 +2334,7 @@ wxMenu* PROJECT_TREE_PANE::buildIgnoreSubmenu( const std::vector<PROJECT_TREE_IT
     if( !Prj().GetLocalSettings().m_GitIntegrationDisabled && common->GetRepo() )
     {
         // Reading the state walks the index, so a busy repository leaves the submenu disabled.
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        KIGIT::ACTION_LOCK lock = common->TryLockAction();
 
         if( lock.owns_lock() )
             ignore = gitIgnoreSelection( *common, Prj().GetProjectPath(), aSelection );
@@ -2642,7 +2642,7 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aG
 
     // Acquire the git action mutex to synchronize with EmptyTreePrj() shutdown.
     // This ensures the repository isn't freed while we're using it.
-    std::unique_lock<std::mutex> gitLock = aGitCommon->TryLockAction();
+    KIGIT::ACTION_LOCK gitLock = aGitCommon->TryLockAction();
 
     if( !gitLock.owns_lock() )
     {
