@@ -139,9 +139,7 @@ bool FONTCONFIG::isLanguageMatch( const wxString& aSearchLang, const wxString& a
     // if either side of the comparison have only one section, then its a broad match but fine
     // i.e. the haystack is declaring broad support or the search language is broad
     if( searhcLangBits.size() == 1 || supportedLangBits.size() == 1 )
-    {
         return searhcLangBits[0] == supportedLangBits[0];
-    }
 
     // the full two part comparison should have passed the initial shortcut
 
@@ -161,7 +159,7 @@ std::string FONTCONFIG::getFcString( FONTCONFIG_PAT& aPat, const char* aObj, int
 }
 
 
-void FONTCONFIG::getAllFamilyStrings( FONTCONFIG_PAT&                               aPat,
+void FONTCONFIG::getAllFamilyStrings( FONTCONFIG_PAT& aPat,
                                       std::unordered_map<std::string, std::string>& aFamStringMap )
 {
     std::string famLang;
@@ -182,8 +180,7 @@ void FONTCONFIG::getAllFamilyStrings( FONTCONFIG_PAT&                           
             fam = getFcString( aPat, FC_FAMILY, langIdx );
             aFamStringMap.insert_or_assign( famLang, fam );
         }
-    } while( langIdx++ < std::numeric_limits<
-                     int8_t>::max() ); //arbitrary to avoid getting stuck for any reason
+    } while( langIdx++ < std::numeric_limits<int8_t>::max() ); //arbitrary to avoid getting stuck for any reason
 }
 
 
@@ -198,9 +195,7 @@ std::string FONTCONFIG::getFamilyStringByLang( FONTCONFIG_PAT& aPat, const wxStr
     for( auto const& [key, val] : famStrings )
     {
         if( isLanguageMatch( aDesiredLang, From_UTF8( key.c_str() ) ) )
-        {
             return val;
-        }
     }
 
     // fall back to the first and maybe only available name
@@ -234,13 +229,11 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString& aFontName, wxString&
 
     if( aEmbeddedFiles )
     {
-        for( const auto& file : *aEmbeddedFiles )
-        {
+        for( const wxString& file : *aEmbeddedFiles )
             FcConfigAppFontAddFile( config, (const FcChar8*) file.c_str().AsChar() );
-        }
     }
 
-    wxString qualifiedFontName = aFontName;
+    const wxString& qualifiedFontName = aFontName;
 
     wxScopedCharBuffer const fcBuffer = qualifiedFontName.ToUTF8();
 
@@ -363,8 +356,7 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString& aFontName, wxString&
     if( retval == FF_RESULT::FF_ERROR )
     {
         if( s_reporter )
-            s_reporter->Report( wxString::Format( _( "Error loading font '%s'." ),
-                                                  qualifiedFontName ) );
+            s_reporter->Report( wxString::Format( _( "Error loading font '%s'." ), qualifiedFontName ) );
     }
     else if( retval == FF_RESULT::FF_SUBSTITUTE )
     {
@@ -373,10 +365,15 @@ FONTCONFIG::FF_RESULT FONTCONFIG::FindFont( const wxString& aFontName, wxString&
         // If we missed a case but the matching found the original font name, then we are
         // not substituting
         if( fontName.CmpNoCase( qualifiedFontName ) == 0 )
+        {
             retval = FF_RESULT::FF_OK;
+        }
         else if( s_reporter )
+        {
             s_reporter->Report( wxString::Format( _( "Font '%s' not found; substituting '%s'." ),
-                                                  qualifiedFontName, fontName ) );
+                                                  qualifiedFontName,
+                                                  fontName ) );
+        }
     }
 
     FcPatternDestroy( pat );
@@ -397,15 +394,12 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string&
 
         if( aEmbeddedFiles )
         {
-            for( const auto& file : *aEmbeddedFiles )
-            {
+            for( const wxString& file : *aEmbeddedFiles )
                 FcConfigAppFontAddFile( config, (const FcChar8*) file.c_str().AsChar() );
-            }
         }
 
         FcPattern*   pat = FcPatternCreate();
-        FcObjectSet* os = FcObjectSetBuild( FC_FAMILY, FC_FAMILYLANG, FC_STYLE, FC_LANG, FC_FILE,
-                                            FC_OUTLINE, nullptr );
+        FcObjectSet* os = FcObjectSetBuild( FC_FAMILY, FC_FAMILYLANG, FC_STYLE, FC_LANG, FC_FILE, FC_OUTLINE, nullptr );
         FcFontSet*   fs = FcFontList( config, pat, os );
 
         for( int i = 0; fs && i < fs->nfont; ++i )
@@ -425,8 +419,7 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string&
                     continue;
 
                 FONTCONFIG_PAT patHolder{ font };
-                std::string    theFamily =
-                        getFamilyStringByLang( patHolder, From_UTF8( aDesiredLang.c_str() ) );
+                std::string    theFamily = getFamilyStringByLang( patHolder, From_UTF8( aDesiredLang.c_str() ) );
 
 #ifdef __WXMAC__
                 // On Mac (at least) some of the font names are in their own language.  If
@@ -467,8 +460,7 @@ void FONTCONFIG::ListFonts( std::vector<std::string>& aFonts, const std::string&
                     }
                     else
                     {
-                        wxLogTrace( traceFonts,
-                                    wxS( "Font '%s' language '%s' not supported by OS." ),
+                        wxLogTrace( traceFonts, wxS( "Font '%s' language '%s' not supported by OS." ),
                                     theFamily, langWxStr );
                     }
 
