@@ -168,11 +168,7 @@ private:
     bool setAttributeValue( SCH_REFERENCE& aRef, const wxString& aAttributeName, const wxString& aValue,
                             const wxString& aVariantName = wxEmptyString );
 
-    /* Helper function to get the resolved field value.
-     * Handles symbols that are missing fields that would have a variable
-     * in their value because their name is the same as a variable.
-     * Example: BOM template provides ${DNP} as a field, but they symbol doesn't have the field. */
-    wxString getFieldShownText( const SCH_REFERENCE& aRef, const wxString& aFieldName );
+    wxString getFieldResolvedLiveValue( const SCH_REFERENCE& aRef, const wxString& aFieldName ) override;
 
     void updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef, const wxString& aFieldName );
 

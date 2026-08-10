@@ -372,6 +372,17 @@ protected:
 
     virtual KIID_PATH getDataStoreKey( const ITEM_TYPE& aItem ) const = 0;
 
+    /**
+     * Explicitly bypasses the data store's field values and retries them from
+     * the item's current field value on the editing canvas. Will also handle generated
+     * fields as necessary. Returns empty string for private/missing fields.
+     *
+     * Example: BOM template provides ${DNP} as a field, but they symbol doesn't have the field.
+     *
+     * @return Resolved display text for the field's live value from the canvas.
+     */
+    virtual wxString getFieldResolvedLiveValue( const ITEM_TYPE& aRef, const wxString& aFieldName ) = 0;
+
 protected:
     std::vector<DATA_MODEL_ROW<ITEM_TYPE>> m_rows;
 };

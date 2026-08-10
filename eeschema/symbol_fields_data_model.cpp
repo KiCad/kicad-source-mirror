@@ -324,7 +324,7 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetGroupedValue( const SYMBOL_FIE
                 {
                     // Generated fields (e.g. ${QUANTITY}) can't have un-applied values as they're
                     // read-only.  Resolve them against the field.
-                    refFieldValue = getFieldShownText( ref, m_cols[aCol].m_fieldName );
+                    refFieldValue = getFieldResolvedLiveValue( ref, m_cols[aCol].m_fieldName );
                 }
                 else if( refFieldValue.Contains( wxT( "${" ) ) )
                 {
@@ -538,7 +538,7 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRe
         if( IsGeneratedField( m_cols[i].m_fieldName )
             || IsGeneratedField( m_dataStore[lhRefKey][m_cols[i].m_fieldName] ) )
         {
-            lh = getFieldShownText( lhRef, m_cols[i].m_fieldName );
+            lh = getFieldResolvedLiveValue( lhRef, m_cols[i].m_fieldName );
         }
         else
         {
@@ -548,7 +548,7 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRe
         if( IsGeneratedField( m_cols[i].m_fieldName )
             || IsGeneratedField( m_dataStore[rhRefKey][m_cols[i].m_fieldName] ) )
         {
-            rh = getFieldShownText( rhRef, m_cols[i].m_fieldName );
+            rh = getFieldResolvedLiveValue( rhRef, m_cols[i].m_fieldName );
         }
         else
         {
@@ -565,8 +565,8 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRe
 }
 
 
-wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldShownText( const SCH_REFERENCE& aRef,
-                                                                  const wxString&      aFieldName )
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( const SCH_REFERENCE& aRef,
+                                                                          const wxString&      aFieldName )
 {
     SCH_FIELD* field = aRef.GetSymbol()->GetField( aFieldName );
 
