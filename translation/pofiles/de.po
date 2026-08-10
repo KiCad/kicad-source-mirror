@@ -32,13 +32,15 @@
 # ulikoehler <weblate@techoverflow.net>, 2026.
 # Till Donner <isntyourbusiness@proton.me>, 2026.
 # The Hobbit <dasfilter@posteo.de>, 2026.
+# genericprinter0815 <genericprinter0815@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-08-07 13:51+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-08-11 07:52+0000\n"
+"Last-Translator: genericprinter0815 "
+"<genericprinter0815@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -46,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.8.1.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2820,7 +2822,6 @@ msgstr ""
 "Zuvor gespeicherter Inhalt wird verworfen."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep Current"
 msgstr "Aktuelle behalten"
 
@@ -12536,8 +12537,9 @@ msgid "Close Other Tabs"
 msgstr "Andere Tabs schließen"
 
 #: common/widgets/editor_tabs_panel.cpp:641
+#, fuzzy
 msgid "Close Tabs to the Right"
-msgstr ""
+msgstr "Tabs rechts von Diesem schließen"
 
 #: common/widgets/editor_tabs_panel.cpp:642
 msgid "Close All Tabs"
