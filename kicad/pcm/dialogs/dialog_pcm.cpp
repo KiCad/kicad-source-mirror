@@ -39,7 +39,6 @@
 #include <kiplatform/ui.h>
 #include <launch_ext.h>
 #include <sstream>
-#include <vector>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 
@@ -285,24 +284,35 @@ void DIALOG_PCM::setRepositoryListFromPcm()
     for( const auto& [id, url, name] : repositories )
         m_choiceRepository->Append( url, new wxStringClientData( id ) );
 
+    if( repositories.size() > 1 )
+        m_choiceRepository->Append( _( "-- All repositories --" ), new wxStringClientData( "ALL_REPOSITORIES" ) );
+
     if( repositories.size() > 0 )
     {
         int idx = 0;
 
         if( cfg && !cfg->m_PcmLastSelectedRepoId.IsEmpty() )
         {
-            auto it = std::find_if( repositories.begin(), repositories.end(),
-                                    [&cfg]( const auto& repo )
-                                    {
-                                        return std::get<0>( repo ) == cfg->m_PcmLastSelectedRepoId;
-                                    } );
+            if( cfg->m_PcmLastSelectedRepoId == "ALL_REPOSITORIES" && repositories.size() > 1 )
+            {
+                idx = repositories.size();
+            }
+            else
+            {
+                auto it = std::find_if( repositories.begin(), repositories.end(),
+                                        [&cfg]( const auto& repo )
+                                        {
+                                            return std::get<0>( repo ) == cfg->m_PcmLastSelectedRepoId;
+                                        } );
 
-            if( it != repositories.end() )
-                idx = std::distance( repositories.begin(), it );
+                if( it != repositories.end() )
+                    idx = std::distance( repositories.begin(), it );
+            }
         }
 
         m_choiceRepository->SetSelection( idx );
-        m_selectedRepositoryId = std::get<0>( repositories[idx] );
+        wxStringClientData* data = static_cast<wxStringClientData*>( m_choiceRepository->GetClientObject( idx ) );
+        m_selectedRepositoryId = data->GetData();
         setRepositoryData( m_selectedRepositoryId );
     }
     else
@@ -360,85 +370,171 @@ void DIALOG_PCM::OnRepositoryChoice( wxCommandEvent& event )
 
 void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
 {
+    if( aRepositoryId == "ALL_REPOSITORIES" )
+    {
+        setRepositoryDataMulti();
+        return;
+    }
+
     m_dialogNotebook->Freeze();
+
+    for( const auto& [packageType, packagesView] : m_repositoryContentPanels )
+        packagesView->ClearData();
+
+    std::unordered_map<wxString, PCM_PACKAGE> packagesMap;
+    std::unordered_map<wxString, wxString>    repoIds;
+    std::unordered_map<wxString, wxString>    repoNames;
 
     if( m_pcm->CacheRepository( aRepositoryId ) )
     {
-        for( const auto& [ packageType, packagesView ] : m_repositoryContentPanels )
-            packagesView->ClearData();
-
         m_packageBitmaps = m_pcm->GetRepositoryPackageBitmaps( aRepositoryId );
+        wxString repoName = m_choiceRepository->GetStringSelection();
 
-        const std::vector<PCM_PACKAGE> packages = m_pcm->GetRepositoryPackages( aRepositoryId );
+        for( const PCM_PACKAGE& pkg : m_pcm->GetRepositoryPackages( aRepositoryId ) )
+        {
+            if( pkg.type == PT_INVALID )
+                continue;
 
-        std::unordered_map<PCM_PACKAGE_TYPE, std::vector<PACKAGE_VIEW_DATA>> data;
+            packagesMap[pkg.identifier] = pkg;
+            repoIds[pkg.identifier] = aRepositoryId;
+            repoNames[pkg.identifier] = repoName;
+        }
+    }
+
+    renderPackageGrids( packagesMap, repoIds, repoNames );
+
+    m_dialogNotebook->Thaw();
+}
+
+void DIALOG_PCM::setRepositoryDataMulti()
+{
+    m_dialogNotebook->Freeze();
+
+    for( const auto& [packageType, packagesView] : m_repositoryContentPanels )
+        packagesView->ClearData();
+
+    std::unordered_map<wxString, PCM_PACKAGE> bestPackages;
+    std::unordered_map<wxString, wxString>    bestRepositoryId;
+    std::unordered_map<wxString, wxString>    bestRepositoryName;
+
+    m_packageBitmaps.clear();
+
+    for( const auto& [repo_id, repo_url, repo_name] : m_pcm->GetRepositoryList() )
+    {
+        if( !m_pcm->CacheRepository( repo_id ) )
+            continue;
+
+        std::unordered_map<wxString, wxBitmap> repo_bitmaps = m_pcm->GetRepositoryPackageBitmaps( repo_id );
+        const std::vector<PCM_PACKAGE>         packages = m_pcm->GetRepositoryPackages( repo_id );
 
         for( const PCM_PACKAGE& pkg : packages )
         {
             if( pkg.type == PT_INVALID )
                 continue;
 
-            PACKAGE_VIEW_DATA package_data( pkg );
+            bool isBetter = false;
+            auto it = bestPackages.find( pkg.identifier );
 
-            if( m_packageBitmaps.count( package_data.package.identifier ) > 0 )
-                package_data.bitmap = &m_packageBitmaps.at( package_data.package.identifier );
+            if( it == bestPackages.end() )
+            {
+                isBetter = true;
+            }
             else
-                package_data.bitmap = &m_defaultBitmap;
-
-            package_data.state = m_pcm->GetPackageState( aRepositoryId, pkg.identifier );
-
-            if( package_data.state == PPS_INSTALLED || package_data.state == PPS_UPDATE_AVAILABLE )
             {
-                package_data.current_version = m_pcm->GetInstalledPackageVersion( pkg.identifier );
-                package_data.pinned = m_pcm->IsPackagePinned( pkg.identifier );
-                package_data.swig_warning = m_pcm->UsesSWIGRuntime( pkg, package_data.current_version );
-            }
-            else if( !pkg.versions.empty() )
-            {
-                package_data.swig_warning = m_pcm->UsesSWIGRuntime( pkg, pkg.versions[0].version );
-            }
-
-            if( package_data.state == PPS_UPDATE_AVAILABLE )
-                package_data.update_version = m_pcm->GetPackageUpdateVersion( pkg );
-
-            for( const PENDING_ACTION& action : m_pendingActions )
-            {
-                if( action.package.identifier != pkg.identifier )
-                    continue;
-
-                switch( action.action )
+                const PCM_PACKAGE& best = it->second;
+                if( !pkg.versions.empty() && !best.versions.empty() )
                 {
-                case PPA_INSTALL: package_data.state = PPS_PENDING_INSTALL; break;
-                case PPA_UPDATE: package_data.state = PPS_PENDING_UPDATE; break;
-                case PPA_UNINSTALL: package_data.state = PPS_PENDING_UNINSTALL; break;
+                    if( pkg.versions[0].parsed_version > best.versions[0].parsed_version )
+                        isBetter = true;
                 }
-
-                break;
             }
 
-            package_data.repository_id = aRepositoryId;
-            package_data.repository_name = m_choiceRepository->GetStringSelection();
+            if( isBetter )
+            {
+                bestPackages[pkg.identifier] = pkg;
+                bestRepositoryId[pkg.identifier] = repo_id;
+                bestRepositoryName[pkg.identifier] = repo_name;
 
-            // Fabrication plugins are displayed in a different tab although they are still plugins
-            PCM_PACKAGE_TYPE type = pkg.category == PC_FAB ? PT_FAB : pkg.type;
-
-            data[type].emplace_back( package_data );
+                if( repo_bitmaps.count( pkg.identifier ) > 0 )
+                    m_packageBitmaps[pkg.identifier] = repo_bitmaps.at( pkg.identifier );
+            }
         }
-
-        for( size_t i = 0; i < PACKAGE_TYPE_LIST.size(); i++ )
-        {
-            PCM_PACKAGE_TYPE type = PACKAGE_TYPE_LIST[i].first;
-            const wxString&  label = PACKAGE_TYPE_LIST[i].second;
-            m_repositoryContentPanels[type]->SetData( data[type] );
-            m_contentNotebook->SetPageText( i, wxString::Format( wxGetTranslation( label ),
-                                                                 (int) data[type].size() ) );
-        }
-
-        m_dialogNotebook->SetPageText( 0, wxString::Format( _( "Repository (%d)" ),
-                                                            (int) packages.size() ) );
     }
 
+    renderPackageGrids( bestPackages, bestRepositoryId, bestRepositoryName );
+
     m_dialogNotebook->Thaw();
+}
+
+
+void DIALOG_PCM::renderPackageGrids( const std::unordered_map<wxString, PCM_PACKAGE>& aPackages,
+                                     const std::unordered_map<wxString, wxString>&    aPackageRepoIds,
+                                     const std::unordered_map<wxString, wxString>&    aPackageRepoNames )
+{
+    std::unordered_map<PCM_PACKAGE_TYPE, std::vector<PACKAGE_VIEW_DATA>> data;
+    int                                                                  totalPackages = 0;
+
+    for( const auto& [pkg_id, best_pkg] : aPackages )
+    {
+        wxString repo_id = aPackageRepoIds.at( pkg_id );
+        wxString repo_name = aPackageRepoNames.at( pkg_id );
+
+        PACKAGE_VIEW_DATA package_data( best_pkg );
+
+        if( m_packageBitmaps.count( package_data.package.identifier ) > 0 )
+            package_data.bitmap = &m_packageBitmaps.at( package_data.package.identifier );
+        else
+            package_data.bitmap = &m_defaultBitmap;
+
+        package_data.state = m_pcm->GetPackageState( repo_id, pkg_id );
+
+        if( package_data.state == PPS_INSTALLED || package_data.state == PPS_UPDATE_AVAILABLE )
+        {
+            package_data.current_version = m_pcm->GetInstalledPackageVersion( pkg_id );
+            package_data.pinned = m_pcm->IsPackagePinned( pkg_id );
+            package_data.swig_warning = m_pcm->UsesSWIGRuntime( best_pkg, package_data.current_version );
+        }
+        else if( !best_pkg.versions.empty() )
+        {
+            package_data.swig_warning = m_pcm->UsesSWIGRuntime( best_pkg, best_pkg.versions[0].version );
+        }
+
+        if( package_data.state == PPS_UPDATE_AVAILABLE )
+            package_data.update_version = m_pcm->GetPackageUpdateVersion( best_pkg );
+
+        for( const PENDING_ACTION& action : m_pendingActions )
+        {
+            if( action.package.identifier != pkg_id )
+                continue;
+
+            switch( action.action )
+            {
+            case PPA_INSTALL: package_data.state = PPS_PENDING_INSTALL; break;
+            case PPA_UPDATE: package_data.state = PPS_PENDING_UPDATE; break;
+            case PPA_UNINSTALL: package_data.state = PPS_PENDING_UNINSTALL; break;
+            }
+
+            break;
+        }
+
+        package_data.repository_id = repo_id;
+        package_data.repository_name = repo_name;
+
+        // Fabrication plugins are displayed in a different tab although they are still plugins
+        PCM_PACKAGE_TYPE type = best_pkg.category == PC_FAB ? PT_FAB : best_pkg.type;
+        data[type].emplace_back( package_data );
+        totalPackages++;
+    }
+
+    for( size_t i = 0; i < PACKAGE_TYPE_LIST.size(); i++ )
+    {
+        PCM_PACKAGE_TYPE type = PACKAGE_TYPE_LIST[i].first;
+        const wxString&  label = PACKAGE_TYPE_LIST[i].second;
+        m_repositoryContentPanels[type]->SetData( data[type] );
+        m_contentNotebook->SetPageText( i, wxString::Format( wxGetTranslation( label ), (int) data[type].size() ) );
+    }
+
+    m_dialogNotebook->SetPageText( 0, wxString::Format( _( "Repository (%d)" ), totalPackages ) );
 }
 
 

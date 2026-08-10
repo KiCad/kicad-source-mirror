@@ -28,6 +28,7 @@
 #include "pcm.h"
 #include "pcm_data.h"
 
+#include <unordered_map>
 #include <vector>
 
 class EDA_BASE_FRAME;
@@ -92,6 +93,22 @@ private:
      * @param aRepositoryId id of the repository
      */
     void setRepositoryData( const wxString& aRepositoryId );
+
+    /**
+     * @brief Aggregates and deduplicates packages from all configured repositories
+     */
+    void setRepositoryDataMulti();
+
+    /**
+     * @brief Shared logic to render a given set of packages to the UI notebooks
+     *
+     * @param aPackages is the set of packages to render
+     * @param aPackageRepoIds is a mapping of package id to the repository id it came from
+     * @param aPackageRepoNames is a mapping of package id to the repository name it came from
+     */
+    void renderPackageGrids( const std::unordered_map<wxString, PCM_PACKAGE>& aPackages,
+                             const std::unordered_map<wxString, wxString>&    aPackageRepoIds,
+                             const std::unordered_map<wxString, wxString>&    aPackageRepoNames );
 
     ///< Sets repository choice list values
     void setRepositoryListFromPcm();
