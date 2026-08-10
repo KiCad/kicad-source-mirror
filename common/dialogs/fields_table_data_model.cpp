@@ -19,10 +19,14 @@
 
 #include <algorithm>
 #include <set>
+#include <utility>
 
 #include <fields_table_data_model.h>
 #include <settings/bom_settings.h>
 #include <template_fieldnames.h>
+
+#include <nlohmann/json.hpp>
+#include <widgets/ui_common.h>
 
 
 const wxString FIELDS_TABLE_DATA_MODEL_BASE::QUANTITY_VARIABLE = wxS( "${QUANTITY}" );
@@ -59,6 +63,41 @@ void FIELDS_TABLE_DATA_MODEL_BASE::MoveColumn( int aCol, int aNewPos )
 }
 
 
+void FIELDS_TABLE_DATA_MODEL_BASE::RemoveColumn( int aCol )
+{
+    for( auto& [unused, fieldsStore] : m_dataStore )
+    {
+        fieldsStore.erase( m_cols[aCol].m_fieldName );
+    }
+
+    m_cols.erase( m_cols.begin() + aCol );
+
+    if( wxGrid* grid = GetView() )
+    {
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_COLS_DELETED, aCol, 1 );
+        grid->ProcessTableMessage( msg );
+    }
+}
+
+
+void FIELDS_TABLE_DATA_MODEL_BASE::RenameColumn( int aCol, const wxString& newName )
+{
+    for( auto& [unused, fieldsStore] : m_dataStore )
+    {
+        auto node = fieldsStore.extract( m_cols[aCol].m_fieldName );
+
+        if( !node.empty() )
+        {
+            node.key() = newName;
+            fieldsStore.insert( std::move( node ) );
+        }
+    }
+
+    m_cols[aCol].m_fieldName = newName;
+    m_cols[aCol].m_label = newName;
+}
+
+
 void FIELDS_TABLE_DATA_MODEL_BASE::SetColLabelValue( int aCol, const wxString& aLabel )
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
@@ -77,6 +116,32 @@ wxString FIELDS_TABLE_DATA_MODEL_BASE::GetColFieldName( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), wxString() );
     return m_cols[aCol].m_fieldName;
+}
+
+
+int FIELDS_TABLE_DATA_MODEL_BASE::GetColDataWidth( int aCol )
+{
+    int width = 0;
+
+    if( ColIsReference( aCol ) )
+    {
+        for( int row = 0; row < GetNumberRows(); ++row )
+            width = std::max( width, KIUI::GetTextSize( GetValue( row, aCol ), GetView() ).x );
+    }
+    else
+    {
+        wxString fieldName = GetColFieldName( aCol ); // symbol fieldName or Qty string
+
+        for( auto& [unused, fieldStore] : m_dataStore )
+        {
+            auto it = fieldStore.find( fieldName );
+
+            if( it != fieldStore.end() )
+                width = std::max( width, KIUI::GetTextSize( it->second, GetView() ).x );
+        }
+    }
+
+    return width;
 }
 
 
@@ -377,4 +442,49 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::isAttribute( const wxString& aFieldName )
     return aFieldName == wxS( "${DNP}" ) || aFieldName == wxS( "${EXCLUDE_FROM_BOARD}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_BOM}" ) || aFieldName == wxS( "${EXCLUDE_FROM_POS_FILES}" )
            || aFieldName == wxS( "${EXCLUDE_FROM_SIM}" );
+}
+
+
+wxString FIELDS_TABLE_DATA_MODEL_BASE::SerializeUndoState() const
+{
+    // Serialize the un-applied edit store keyed by symbol identity (sheet path + UUID), so that
+    // restoring it is independent of the current row grouping/order.
+    nlohmann::json j = nlohmann::json::object();
+
+    for( const auto& [key, fields] : m_dataStore )
+    {
+        nlohmann::json jfields = nlohmann::json::object();
+
+        for( const auto& [name, value] : fields )
+            jfields[std::string( name.ToUTF8() )] = std::string( value.ToUTF8() );
+
+        j[std::string( key.AsString().ToUTF8() )] = jfields;
+    }
+
+    return wxString( j.dump() );
+}
+
+
+void FIELDS_TABLE_DATA_MODEL_BASE::RestoreUndoState( const wxString& aState )
+{
+    nlohmann::json j = nlohmann::json::parse( aState.ToStdString(), nullptr, false );
+
+    if( !j.is_object() )
+        return;
+
+    for( auto it = j.begin(); it != j.end(); ++it )
+    {
+        KIID_PATH                     key( wxString::FromUTF8( it.key().c_str() ) );
+        std::map<wxString, wxString>& fields = m_dataStore[key];
+
+        for( auto fit = it.value().begin(); fit != it.value().end(); ++fit )
+            fields[wxString::FromUTF8( fit.key().c_str() )] =
+                    wxString::FromUTF8( fit.value().get<std::string>().c_str() );
+    }
+
+    m_edited = true;
+    RebuildRows();
+
+    if( GetView() )
+        GetView()->ForceRefresh();
 }

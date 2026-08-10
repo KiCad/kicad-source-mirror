@@ -92,12 +92,15 @@ public:
     virtual void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser ) = 0;
 
     void MoveColumn( int aCol, int aNewPos );
+    void RemoveColumn( int aCol );
+    void RenameColumn( int aCol, const wxString& newName );
 
     int GetNumberCols() override { return static_cast<int>( m_cols.size() ); }
 
     void     SetColLabelValue( int aCol, const wxString& aLabel ) override;
     wxString GetColLabelValue( int aCol ) override;
     wxString GetColFieldName( int aCol );
+    int      GetColDataWidth( int aCol );
     int      GetFieldNameCol( const wxString& aFieldName ) const;
 
     std::vector<BOM_FIELD> GetFieldsOrdered();
@@ -168,6 +171,12 @@ public:
 
     void SetVariantNames( const std::vector<wxString>& aVariantNames ) { m_variantNames = aVariantNames; }
     const std::vector<wxString>& GetVariantNames() const { return m_variantNames; }
+
+    // Identity-based undo serialization (keyed by symbol, not row position) for the dialog's
+    // Ctrl+Z, so it stays correct as rows are grouped/sorted/reordered.
+    bool     HasUndoStateSerialization() const override { return true; }
+    wxString SerializeUndoState() const override;
+    void     RestoreUndoState( const wxString& aState ) override;
 
 protected:
     // Helper functions to deal with translating wxGrid values to and from

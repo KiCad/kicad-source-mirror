@@ -553,7 +553,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::SetupAllColumnProperties()
             }
             else
             {
-                int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
+                int textWidth = m_dataModel->GetColDataWidth( col ) + COLUMN_MARGIN;
                 int maxWidth = defaultDlgSize.x / 3;
 
                 m_grid->SetColSize( col, std::clamp( textWidth, 100, maxWidth ) );

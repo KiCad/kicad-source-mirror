@@ -66,8 +66,6 @@ public:
     }
 
     void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser ) override;
-    void RemoveColumn( int aCol );
-    void RenameColumn( int aCol, const wxString& newName );
 
     wxString        GetValue( int aRow, int aCol ) override;
     wxString        GetResolvedValue( int aRow, int aCol );
@@ -91,8 +89,6 @@ public:
 
     void ApplyData( SCH_COMMIT& aCommit, TEMPLATES& aTemplateFieldnames, const wxString& aVariantName );
 
-    int GetDataWidth( int aCol );
-
     void  SetScope( SCOPE aScope ) { m_scope = aScope; }
     SCOPE GetScope() { return m_scope; }
 
@@ -103,12 +99,6 @@ public:
     void RemoveReferences( const SCH_REFERENCE_LIST& aRefs );
     void RemoveSymbol( const SCH_SYMBOL& aSymbol );
     void UpdateReferences( const SCH_REFERENCE_LIST& aRefs );
-
-    // Identity-based undo serialization (keyed by symbol, not row position) for the dialog's
-    // Ctrl+Z, so it stays correct as rows are grouped/sorted/reordered.
-    bool     HasUndoStateSerialization() const override { return true; }
-    wxString SerializeUndoState() const override;
-    void     RestoreUndoState( const wxString& aState ) override;
 
     bool DeleteRows( size_t aPosition = 0, size_t aNumRows = 1 ) override;
 
