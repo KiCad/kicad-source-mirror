@@ -29,6 +29,7 @@
 #include <dialog_migrate_buses.h>
 #include <dialog_symbol_remap.h>
 #include <dialog_import_choose_project.h>
+#include <embedded_files.h>
 #include <eeschema_settings.h>
 #include <id.h>
 #include <kiface_base.h>
@@ -1612,11 +1613,27 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                     errorReporter.ShowModal();
                 }
 
-                // Non-KiCad schematics do not use a drawing-sheet (or if they do, it works
-                // differently to KiCad), so set it to an empty one.
-                DS_DATA_MODEL& drawingSheet = DS_DATA_MODEL::GetTheInstance();
-                drawingSheet.SetEmptyLayout();
-                BASE_SCREEN::m_DrawingSheetFileName = DS_DATA_MODEL::EmptyLayoutName();
+                const wxString drawingSheetName = Schematic().Settings().m_SchDrawingSheetFileName;
+                const wxString embeddedPrefix = wxS( "kicad-embed://" );
+                const EMBEDDED_FILES::EMBEDDED_FILE* embeddedWorksheet = nullptr;
+
+                if( drawingSheetName.StartsWith( embeddedPrefix ) )
+                {
+                    embeddedWorksheet = Schematic().GetEmbeddedFiles()->GetEmbeddedFile(
+                            drawingSheetName.Mid( embeddedPrefix.length() ) );
+                }
+
+                if( !embeddedWorksheet
+                    || embeddedWorksheet->type != EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::WORKSHEET )
+                {
+                    DS_DATA_MODEL::GetTheInstance().SetEmptyLayout();
+                    BASE_SCREEN::m_DrawingSheetFileName = DS_DATA_MODEL::EmptyLayoutName();
+                }
+                else
+                {
+                    BASE_SCREEN::m_DrawingSheetFileName = Schematic().Settings().m_SchDrawingSheetFileName;
+                    LoadDrawingSheet();
+                }
 
                 newfilename.SetPath( Prj().GetProjectPath() );
                 newfilename.SetName( Prj().GetProjectName() );

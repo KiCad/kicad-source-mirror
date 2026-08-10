@@ -1026,6 +1026,7 @@ namespace
                                                                                    : controllers.pools[3].count;
                 const uint16_t groupTextCount = aCursor.U16At( offset + 64 );
                 const uint16_t groupLastText = aCursor.U16At( offset + 66 );
+                const bool     worksheetCandidate = pieceEnd - firstPiece == 69 && groupTextCount == 58;
                 const bool     hasCircularTextOwnership =
                         groupTextCount == 0 || ( groupTextCount <= textCount && groupLastText < textCount );
                 SOURCE_PROVENANCE originSource = source;
@@ -1140,6 +1141,9 @@ namespace
                     }
 
                     graphic.properties.push_back( sourceProperty( wxS( "page_graphic_group" ), name.text, source ) );
+
+                    if( worksheetCandidate )
+                        graphic.properties.push_back( sourceProperty( wxS( "worksheet_group" ), name.text, source ) );
 
                     if( !hasCircularTextOwnership )
                     {
@@ -1658,6 +1662,7 @@ namespace
             SOURCE_STRING  groupName = decodeFixedString( aBytes, offset, 38, nameSource, aModel.diagnostics );
             const uint16_t textCountForGroup = aCursor.U16At( offset + 64 );
             const uint16_t lastTextRecord = aCursor.U16At( offset + 66 );
+            const bool     worksheetCandidate = aCursor.U16At( offset + 42 ) == 69 && textCountForGroup == 58;
 
             if( textCountForGroup > textCount || ( textCountForGroup != 0 && lastTextRecord >= textCount ) )
                 throwDecodeError( source, wxS( "page-text ownership leaves controller 1" ) );
@@ -1693,9 +1698,142 @@ namespace
                 }
 
                 graphic.properties.push_back( sourceProperty( wxS( "page_graphic_group" ), groupName.text, source ) );
+
+                if( worksheetCandidate )
+                    graphic.properties.push_back( sourceProperty( wxS( "worksheet_group" ), groupName.text, source ) );
+
                 aModel.graphics.push_back(
                         { graphic.source, { aModel.sheets[aSheetIndex].id, graphic.source }, std::move( graphic ) } );
             }
+
+            static const std::set<wxString> worksheetFields = {
+                wxS( "Approved" ),   wxS( "Checked By" ),       wxS( "Designed" ),   wxS( "Drawing Number" ),
+                wxS( "Drawn By" ),   wxS( "Number of Sheets" ), wxS( "Revision" ),   wxS( "Scale" ),
+                wxS( "Sheet Name" ), wxS( "Sheet Number" ),     wxS( "Sheet Size" ), wxS( "Title" )
+            };
+            std::set<wxString> groupFields;
+            auto               belongsToGroup = [&]( const MODEL_PAGE_GRAPHIC& aGraphic )
+            {
+                if( aGraphic.sheet.id != aModel.sheets[aSheetIndex].id )
+                    return false;
+
+                return std::ranges::any_of( aGraphic.graphic.properties,
+                                            [&]( const SOURCE_PROPERTY& aProperty )
+                                            {
+                                                return aProperty.name.text == wxS( "page_graphic_group" )
+                                                       && aProperty.value.text == groupName.text;
+                                            } );
+            };
+
+            for( const MODEL_PAGE_GRAPHIC& pageGraphic : aModel.graphics )
+            {
+                if( belongsToGroup( pageGraphic ) && pageGraphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT
+                    && worksheetFields.contains( pageGraphic.graphic.text.text ) )
+                {
+                    groupFields.insert( pageGraphic.graphic.text.text );
+                }
+            }
+
+            if( groupFields == worksheetFields )
+            {
+                MODEL_WORKSHEET worksheet;
+                worksheet.source = source;
+                worksheet.sheet = { aModel.sheets[aSheetIndex].id, source };
+                worksheet.name = groupName;
+
+                for( auto graphic = aModel.graphics.begin(); graphic != aModel.graphics.end(); )
+                {
+                    if( belongsToGroup( *graphic ) )
+                    {
+                        worksheet.graphics.push_back( std::move( graphic->graphic ) );
+                        graphic = aModel.graphics.erase( graphic );
+                    }
+                    else
+                    {
+                        ++graphic;
+                    }
+                }
+
+                aModel.worksheets.push_back( std::move( worksheet ) );
+            }
+        }
+
+        auto canonicalWorksheet = std::ranges::find( aModel.worksheets, wxS( "DRW5982" ),
+                                                      []( const MODEL_WORKSHEET& aWorksheet )
+                                                      {
+                                                          return aWorksheet.name.text;
+                                                      } );
+
+        if( canonicalWorksheet != aModel.worksheets.end() )
+        {
+            using GROUP_KEY = std::pair<uint32_t, wxString>;
+            std::map<GROUP_KEY, std::vector<const MODEL_GRAPHIC*>> candidates;
+            std::vector<const MODEL_GRAPHIC*>                     canonicalGeometry;
+
+            for( const MODEL_GRAPHIC& graphic : canonicalWorksheet->graphics )
+            {
+                if( graphic.kind != MODEL_GRAPHIC_KIND::TEXT )
+                    canonicalGeometry.push_back( &graphic );
+            }
+
+            for( const MODEL_PAGE_GRAPHIC& pageGraphic : aModel.graphics )
+            {
+                auto groupProperty = std::ranges::find( pageGraphic.graphic.properties, wxS( "worksheet_group" ),
+                                                        []( const SOURCE_PROPERTY& aProperty )
+                                                        {
+                                                            return aProperty.name.text;
+                                                        } );
+
+                if( groupProperty != pageGraphic.graphic.properties.end()
+                    && pageGraphic.graphic.kind != MODEL_GRAPHIC_KIND::TEXT )
+                {
+                    candidates[{ pageGraphic.sheet.id.Value(), groupProperty->value.text }].push_back(
+                            &pageGraphic.graphic );
+                }
+            }
+
+            auto samePoint = []( const SOURCE_POINT& aLeft, const SOURCE_POINT& aRight )
+            {
+                return aLeft.x == aRight.x && aLeft.y == aRight.y;
+            };
+            auto sameGeometry = [&]( const MODEL_GRAPHIC& aLeft, const MODEL_GRAPHIC& aRight )
+            {
+                return aLeft.kind == aRight.kind && aLeft.lineStyle == aRight.lineStyle
+                       && aLeft.strokeWidth == aRight.strokeWidth && aLeft.fill == aRight.fill
+                       && aLeft.angle == aRight.angle && aLeft.arcSweepAngle == aRight.arcSweepAngle
+                       && aLeft.arcClockwise == aRight.arcClockwise
+                       && samePoint( aLeft.arcCenter, aRight.arcCenter )
+                       && samePoint( aLeft.arcBoundsStart, aRight.arcBoundsStart )
+                       && samePoint( aLeft.arcBoundsEnd, aRight.arcBoundsEnd )
+                       && std::ranges::equal( aLeft.points, aRight.points, samePoint );
+            };
+            std::set<GROUP_KEY> equivalentGroups;
+
+            for( const auto& [key, geometry] : candidates )
+            {
+                if( geometry.size() == canonicalGeometry.size()
+                    && std::ranges::equal( geometry, canonicalGeometry,
+                                           [&]( const MODEL_GRAPHIC* aLeft, const MODEL_GRAPHIC* aRight )
+                                           {
+                                               return sameGeometry( *aLeft, *aRight );
+                                           } ) )
+                {
+                    equivalentGroups.insert( key );
+                }
+            }
+
+            std::erase_if( aModel.graphics,
+                           [&]( const MODEL_PAGE_GRAPHIC& aGraphic )
+                           {
+                               return std::ranges::any_of(
+                                       aGraphic.graphic.properties,
+                                       [&]( const SOURCE_PROPERTY& aProperty )
+                                       {
+                                           return aProperty.name.text == wxS( "worksheet_group" )
+                                                  && equivalentGroups.contains(
+                                                          { aGraphic.sheet.id.Value(), aProperty.value.text } );
+                                       } );
+                           } );
         }
 
         for( size_t i = 0; i < fieldDecals.size(); ++i )
@@ -3870,6 +4008,12 @@ bool PADS_SCH_MODEL::AllReferencesResolved() const
             return false;
     }
 
+    for( const MODEL_WORKSHEET& worksheet : worksheets )
+    {
+        if( !index.sheets.contains( worksheet.sheet.id.Value() ) )
+            return false;
+    }
+
     for( const MODEL_EMBEDDED_IMAGE& image : images )
     {
         if( !index.sheets.contains( image.sheet.id.Value() ) )
@@ -4222,6 +4366,20 @@ void PADS_SCH_MODEL::ValidateOrThrow() const
     {
         if( !index.sheets.contains( graphic.sheet.id.Value() ) )
             throwValidationError( graphic.sheet.source, wxS( "unresolved page-graphic sheet reference" ) );
+    }
+
+    std::set<uint32_t> worksheetSheets;
+
+    for( const MODEL_WORKSHEET& worksheet : worksheets )
+    {
+        if( !index.sheets.contains( worksheet.sheet.id.Value() ) )
+            throwValidationError( worksheet.sheet.source, wxS( "unresolved worksheet sheet reference" ) );
+
+        if( !worksheetSheets.insert( worksheet.sheet.id.Value() ).second )
+            throwValidationError( worksheet.source, wxS( "duplicate worksheet for sheet" ) );
+
+        if( worksheet.graphics.empty() )
+            throwValidationError( worksheet.source, wxS( "worksheet has no graphics" ) );
     }
 
     for( const MODEL_EMBEDDED_IMAGE& image : images )

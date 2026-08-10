@@ -23,6 +23,8 @@
 #include <base_units.h>
 #include <bitmap_base.h>
 #include <connection_graph.h>
+#include <drawing_sheet/ds_data_model.h>
+#include <embedded_files.h>
 #include <lib_symbol.h>
 #include <netlist_exporter_pads.h>
 #include <reporter.h>
@@ -1018,6 +1020,15 @@ allSourceProperties( const PADS_SCH_BINARY::PADS_SCH_MODEL& aModel )
         appendPresentation( graphic.graphic.presentation );
     }
 
+    for( const MODEL_WORKSHEET& worksheet : aModel.worksheets )
+    {
+        for( const MODEL_GRAPHIC& graphic : worksheet.graphics )
+        {
+            append( graphic.properties );
+            appendPresentation( graphic.presentation );
+        }
+    }
+
     return result;
 }
 
@@ -1717,8 +1728,26 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
 {
     using namespace PADS_SCH_BINARY;
 
-    const PADS_SCH_MODEL model = parseBinaryFixture( wxS( "symbol_primitives" ) );
-    SCH_SHEET*           destination = m_schematic.GetTopLevelSheet();
+    PADS_SCH_MODEL model = parseBinaryFixture( wxS( "symbol_primitives" ) );
+    auto setTitleField = [&]( const wxString& aName, const wxString& aValue )
+    {
+        auto field = std::ranges::find( model.sheets.front().titleBlockFields, aName,
+                                        []( const MODEL_FIELD& aField )
+                                        {
+                                            return aField.name.text;
+                                        } );
+        BOOST_REQUIRE( field != model.sheets.front().titleBlockFields.end() );
+        field->value.text = aValue;
+    };
+    setTitleField( wxS( "Drawn By" ), wxS( "DB" ) );
+    setTitleField( wxS( "QC By" ), wxS( "QB" ) );
+    setTitleField( wxS( "Released By" ), wxS( "RB" ) );
+    setTitleField( wxS( "QC Date" ), wxS( "QD" ) );
+    setTitleField( wxS( "Release Date" ), wxS( "RD" ) );
+    setTitleField( wxS( "Company Name" ), wxS( "Company" ) );
+    setTitleField( wxS( "Code" ), wxS( "Code" ) );
+
+    SCH_SHEET* destination = m_schematic.GetTopLevelSheet();
     BOOST_REQUIRE( destination );
     BOOST_REQUIRE( destination->GetScreen() );
 
@@ -1818,22 +1847,16 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
                        model.sheets.front().pageSize.y / 2 );
     BOOST_CHECK_EQUAL( destination->GetScreen()->GetTitleBlock().GetTitle(), model.sheets.front().title.text );
     const TITLE_BLOCK& titleBlock = destination->GetScreen()->GetTitleBlock();
-    int                commentIndex = 0;
-
-    for( const MODEL_FIELD& field : model.sheets.front().titleBlockFields )
-    {
-        if( field.name.text.CmpNoCase( wxS( "Title" ) ) == 0 )
-            BOOST_CHECK_EQUAL( titleBlock.GetTitle(), field.value.text );
-        else if( field.name.text.CmpNoCase( wxS( "Revision" ) ) == 0 )
-            BOOST_CHECK_EQUAL( titleBlock.GetRevision(), field.value.text );
-        else if( field.name.text.CmpNoCase( wxS( "Drawn Date" ) ) == 0 )
-            BOOST_CHECK_EQUAL( titleBlock.GetDate(), field.value.text );
-        else if( field.name.text.CmpNoCase( wxS( "Company Name" ) ) == 0 )
-            BOOST_CHECK_EQUAL( titleBlock.GetCompany(), field.value.text );
-        else
-            BOOST_CHECK_EQUAL( titleBlock.GetComment( commentIndex++ ),
-                               wxString::Format( wxS( "%s: %s" ), field.name.text, field.value.text ) );
-    }
+    BOOST_CHECK_EQUAL( titleBlock.GetCompany(), wxS( "Company" ) );
+    BOOST_CHECK_EQUAL( titleBlock.GetComment( 0 ), wxS( "QB" ) );
+    BOOST_CHECK_EQUAL( titleBlock.GetComment( 1 ), wxS( "RB" ) );
+    BOOST_CHECK_EQUAL( titleBlock.GetComment( 2 ), wxS( "DB" ) );
+    BOOST_CHECK_EQUAL( titleBlock.GetComment( 3 ), wxString() );
+    BOOST_CHECK_EQUAL( titleBlock.GetComment( 4 ), wxString() );
+    BOOST_CHECK_EQUAL( titleBlock.GetComment( 5 ), wxS( "QD" ) );
+    BOOST_CHECK_EQUAL( titleBlock.GetComment( 6 ), wxS( "RD" ) );
+    BOOST_CHECK_EQUAL( titleBlock.GetComment( 7 ), wxString() );
+    BOOST_CHECK_EQUAL( titleBlock.GetComment( 8 ), wxString() );
 
     size_t builtGraphics = itemCount( destination->GetScreen(), SCH_SHAPE_T );
 

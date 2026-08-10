@@ -1132,8 +1132,10 @@ types:
         doc: Exact definition name/class byte; all generated primitive classes leave its semantics unproved, so importer disposition is PRESERVED.
       - id: object_class
         type: u1
+        doc: Class 0 owns page drawing groups; class 6 owns reusable symbol definitions.
       - id: graphic_piece_count
         type: u2
+        doc: Exact controller-4 piece count. Paired DRW5982 is a 69-piece drawing-sheet group with 58 embedded texts and is promoted to an embedded KiCad worksheet.
       - id: preserved_definition_word_2c
         type: u4
         doc: Exact definition word; primitive count and ownership diffs prove adjacent fields only, so importer disposition is PRESERVED.

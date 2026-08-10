@@ -360,6 +360,17 @@ struct MODEL_PAGE_GRAPHIC
 };
 
 
+struct MODEL_WORKSHEET
+{
+    SOURCE_PROVENANCE          source;
+    SHEET_REFERENCE            sheet;
+    SOURCE_STRING              name;
+    std::vector<MODEL_GRAPHIC> graphics;
+
+    bool operator==( const MODEL_WORKSHEET& ) const = default;
+};
+
+
 struct MODEL_PIN_DEFINITION
 {
     PIN_ID                       id;
@@ -706,6 +717,7 @@ struct PADS_SCH_MODEL
     std::vector<MODEL_JUNCTION>               junctions;
     std::vector<MODEL_TEXT>                   texts;
     std::vector<MODEL_PAGE_GRAPHIC>           graphics;
+    std::vector<MODEL_WORKSHEET>              worksheets;
     std::vector<MODEL_EMBEDDED_IMAGE>         images;
     std::vector<PRESERVED_CONTROLLER_PAYLOAD> preservedControllerPayloads;
     std::vector<PARSER_DIAGNOSTIC>            diagnostics;

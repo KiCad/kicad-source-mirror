@@ -15,6 +15,7 @@
 #include <lib_id.h>
 #include <lib_symbol.h>
 #include <connection_graph.h>
+#include <embedded_files.h>
 #include <font/font.h>
 #include <page_info.h>
 #include <pin_type.h>
@@ -32,6 +33,7 @@
 #include <sch_symbol.h>
 #include <sch_text.h>
 #include <schematic.h>
+#include <schematic_settings.h>
 #include <sch_io/pads/pads_sch_symbol_builder.h>
 #include <sch_io/ole_image.h>
 #include <stroke_params.h>
@@ -41,12 +43,15 @@
 #include <wildcards_and_files_ext.h>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <functional>
 #include <limits>
+#include <locale>
 #include <map>
 #include <memory>
 #include <set>
+#include <sstream>
 #include <tuple>
 #include <utility>
 #include <wx/buffer.h>
@@ -784,25 +789,250 @@ namespace
     {
         TITLE_BLOCK title;
         title.SetTitle( aSheet.title.text );
-        int commentIndex = 0;
+
+        static const std::map<wxString, int> commentFields = {
+            { wxS( "designed" ), 0 },   { wxS( "des date" ), 1 },       { wxS( "drawn by" ), 2 },
+            { wxS( "checked by" ), 3 }, { wxS( "checked date" ), 4 },   { wxS( "approved" ), 5 },
+            { wxS( "app date" ), 6 },   { wxS( "drawing number" ), 7 }, { wxS( "scale" ), 8 }
+        };
+        std::array<bool, 9>              reservedComments{};
+        std::vector<const MODEL_FIELD*> fallbackComments;
+        wxString                        companyName;
+        wxString                        code;
 
         for( const MODEL_FIELD& field : aSheet.titleBlockFields )
         {
-            if( field.name.text.CmpNoCase( wxS( "Title" ) ) == 0 )
+            const wxString name = field.name.text.Lower();
+
+            if( name == wxS( "title" ) )
                 title.SetTitle( field.value.text );
-            else if( field.name.text.CmpNoCase( wxS( "Revision" ) ) == 0 )
+            else if( name == wxS( "revision" ) )
                 title.SetRevision( field.value.text );
-            else if( field.name.text.CmpNoCase( wxS( "Date" ) ) == 0
-                     || field.name.text.CmpNoCase( wxS( "Drawn Date" ) ) == 0 )
+            else if( name == wxS( "date" ) || name == wxS( "drawn date" ) )
                 title.SetDate( field.value.text );
-            else if( field.name.text.CmpNoCase( wxS( "Company Name" ) ) == 0 )
-                title.SetCompany( field.value.text );
+            else if( name == wxS( "company name" ) )
+                companyName = field.value.text;
+            else if( name == wxS( "code" ) )
+                code = field.value.text;
+            else if( auto comment = commentFields.find( name ); comment != commentFields.end() )
+            {
+                reservedComments[comment->second] = true;
+                title.SetComment( comment->second, field.value.text );
+            }
             else
-                title.SetComment( commentIndex++,
-                                  wxString::Format( wxS( "%s: %s" ), field.name.text, field.value.text ) );
+            {
+                fallbackComments.push_back( &field );
+            }
+        }
+
+        title.SetCompany( companyName.IsEmpty() ? code : companyName );
+
+        auto fallback = fallbackComments.begin();
+
+        for( size_t comment = 0; comment < reservedComments.size() && fallback != fallbackComments.end(); ++comment )
+        {
+            if( !reservedComments[comment] )
+                title.SetComment( comment, ( *fallback++ )->value.text );
         }
 
         aScreen->SetTitleBlock( title );
+    }
+
+
+    std::string quoteWorksheetText( const wxString& aText )
+    {
+        std::string result;
+
+        for( char character : std::string( aText.utf8_str() ) )
+        {
+            if( character == '\\' || character == '"' )
+                result.push_back( '\\' );
+
+            if( character == '\n' )
+                result += "\\n";
+            else if( character != '\r' )
+                result.push_back( character );
+        }
+
+        return result;
+    }
+
+
+    std::string worksheetVariable( const wxString& aText )
+    {
+        static const std::map<wxString, std::string> variables = {
+            { wxS( "Title" ), "${TITLE}" },           { wxS( "Revision" ), "${REVISION}" },
+            { wxS( "Drawn Date" ), "${ISSUE_DATE}" }, { wxS( "Code" ), "${COMPANY}" },
+            { wxS( "Designed" ), "${COMMENT1}" },     { wxS( "Des Date" ), "${COMMENT2}" },
+            { wxS( "Drawn By" ), "${COMMENT3}" },     { wxS( "Checked By" ), "${COMMENT4}" },
+            { wxS( "Checked Date" ), "${COMMENT5}" }, { wxS( "Approved" ), "${COMMENT6}" },
+            { wxS( "App Date" ), "${COMMENT7}" },     { wxS( "Drawing Number" ), "${COMMENT8}" },
+            { wxS( "Scale" ), "${COMMENT9}" },        { wxS( "Sheet Number" ), "${#}" },
+            { wxS( "Number of Sheets" ), "${##}" },   { wxS( "Sheet Name" ), "${SHEETNAME}" },
+            { wxS( "Sheet Size" ), "${PAPER}" }
+        };
+        auto found = variables.find( aText );
+        return found == variables.end() ? quoteWorksheetText( aText ) : found->second;
+    }
+
+
+    double worksheetX( const SOURCE_POINT& aPoint, const SOURCE_POINT& aPageSize )
+    {
+        return static_cast<double>( aPageSize.x - aPoint.x ) * 0.0127;
+    }
+
+
+    double worksheetY( const SOURCE_POINT& aPoint )
+    {
+        return static_cast<double>( aPoint.y ) * 0.0127;
+    }
+
+
+    void appendWorksheetLine( std::ostringstream& aOutput, const SOURCE_POINT& aStart, const SOURCE_POINT& aEnd,
+                              const SOURCE_POINT& aPageSize, int64_t aWidth )
+    {
+        aOutput << "  (line (name \"\") (start " << worksheetX( aStart, aPageSize ) << ' ' << worksheetY( aStart )
+                << ") (end " << worksheetX( aEnd, aPageSize ) << ' ' << worksheetY( aEnd ) << ')';
+
+        if( aWidth > 0 )
+            aOutput << " (linewidth " << static_cast<double>( aWidth ) * 0.0127 << ')';
+
+        aOutput << ")\n";
+    }
+
+
+    std::string serializeWorksheet( const MODEL_WORKSHEET& aWorksheet, const MODEL_SHEET& aSheet )
+    {
+        std::ostringstream output;
+        output.imbue( std::locale::classic() );
+        output.precision( 8 );
+        output << "(kicad_wks (version 20220228) (generator pads_import)\n"
+                  "  (setup (textsize 1.27 1.27) (linewidth 0) (textlinewidth 0)"
+                  " (left_margin 0) (right_margin 0) (top_margin 0) (bottom_margin 0))\n";
+
+        for( const MODEL_GRAPHIC& graphic : aWorksheet.graphics )
+        {
+            if( graphic.kind == MODEL_GRAPHIC_KIND::TEXT )
+            {
+                if( graphic.points.empty() || !graphic.presentation.visible )
+                    continue;
+
+                output << "  (tbtext \"" << worksheetVariable( graphic.text.text ) << "\" (name \"\") (pos "
+                       << worksheetX( graphic.points.front(), aSheet.pageSize ) << ' '
+                       << worksheetY( graphic.points.front() );
+
+                if( graphic.angle != 0 )
+                    output << ") (rotate " << static_cast<double>( graphic.angle ) / 10.0;
+
+                output << ") (font (size " << static_cast<double>( graphic.presentation.height ) * 0.0127 << ' '
+                       << static_cast<double>( graphic.presentation.height ) * 0.0127 << ')';
+
+                if( graphic.presentation.width > 0 )
+                    output << " (linewidth " << static_cast<double>( graphic.presentation.width ) * 0.0127 << ')';
+
+                if( graphic.presentation.bold )
+                    output << " bold";
+
+                if( graphic.presentation.italic )
+                    output << " italic";
+
+                output << ')';
+
+                if( graphic.presentation.horizontalJustification != MODEL_JUSTIFICATION::LEFT
+                    || graphic.presentation.verticalJustification != MODEL_JUSTIFICATION::CENTER )
+                {
+                    output << " (justify";
+
+                    if( graphic.presentation.horizontalJustification == MODEL_JUSTIFICATION::CENTER )
+                        output << " center";
+                    else if( graphic.presentation.horizontalJustification == MODEL_JUSTIFICATION::RIGHT )
+                        output << " right";
+
+                    if( graphic.presentation.verticalJustification == MODEL_JUSTIFICATION::LEFT )
+                        output << " top";
+                    else if( graphic.presentation.verticalJustification == MODEL_JUSTIFICATION::RIGHT )
+                        output << " bottom";
+
+                    output << ')';
+                }
+
+                output << ")\n";
+                continue;
+            }
+
+            if( graphic.kind == MODEL_GRAPHIC_KIND::CIRCLE && graphic.points.size() >= 2 )
+            {
+                const SOURCE_POINT& first = graphic.points[0];
+                const SOURCE_POINT& second = graphic.points[1];
+                const double        centerX = ( static_cast<double>( first.x ) + second.x ) / 2.0;
+                const double        centerY = ( static_cast<double>( first.y ) + second.y ) / 2.0;
+                const double        radius = std::hypot( static_cast<double>( second.x - first.x ),
+                                                         static_cast<double>( second.y - first.y ) )
+                                      / 2.0;
+                constexpr int segments = 64;
+
+                for( int segment = 0; segment < segments; ++segment )
+                {
+                    const double firstAngle = 2.0 * M_PI * segment / segments;
+                    const double secondAngle = 2.0 * M_PI * ( segment + 1 ) / segments;
+                    SOURCE_POINT start{ KiROUND( centerX + radius * std::cos( firstAngle ) ),
+                                        KiROUND( centerY + radius * std::sin( firstAngle ) ), graphic.source };
+                    SOURCE_POINT end{ KiROUND( centerX + radius * std::cos( secondAngle ) ),
+                                      KiROUND( centerY + radius * std::sin( secondAngle ) ), graphic.source };
+                    appendWorksheetLine( output, start, end, aSheet.pageSize, graphic.strokeWidth );
+                }
+
+                continue;
+            }
+
+            if( graphic.kind == MODEL_GRAPHIC_KIND::ARC )
+            {
+                const double startAngle =
+                        std::atan2( static_cast<double>( graphic.arcBoundsStart.y - graphic.arcCenter.y ),
+                                    static_cast<double>( graphic.arcBoundsStart.x - graphic.arcCenter.x ) );
+                const double sweep = static_cast<double>( graphic.arcSweepAngle ) * M_PI / 1800.0
+                                     * ( graphic.arcClockwise ? -1.0 : 1.0 );
+                const int    segments = std::max( 1, static_cast<int>( std::ceil( std::abs( sweep ) * 16.0 / M_PI ) ) );
+                const double radius =
+                        std::hypot( static_cast<double>( graphic.arcBoundsStart.x - graphic.arcCenter.x ),
+                                    static_cast<double>( graphic.arcBoundsStart.y - graphic.arcCenter.y ) );
+
+                for( int segment = 0; segment < segments; ++segment )
+                {
+                    const double angle1 = startAngle + sweep * segment / segments;
+                    const double angle2 = startAngle + sweep * ( segment + 1 ) / segments;
+                    SOURCE_POINT start{ KiROUND( graphic.arcCenter.x + radius * std::cos( angle1 ) ),
+                                        KiROUND( graphic.arcCenter.y + radius * std::sin( angle1 ) ), graphic.source };
+                    SOURCE_POINT end{ KiROUND( graphic.arcCenter.x + radius * std::cos( angle2 ) ),
+                                      KiROUND( graphic.arcCenter.y + radius * std::sin( angle2 ) ), graphic.source };
+                    appendWorksheetLine( output, start, end, aSheet.pageSize, graphic.strokeWidth );
+                }
+
+                continue;
+            }
+
+            if( graphic.kind == MODEL_GRAPHIC_KIND::RECTANGLE && graphic.points.size() >= 2 )
+            {
+                const SOURCE_POINT topLeft{ graphic.points[0].x, graphic.points[0].y, graphic.source };
+                const SOURCE_POINT topRight{ graphic.points[1].x, graphic.points[0].y, graphic.source };
+                const SOURCE_POINT bottomRight{ graphic.points[1].x, graphic.points[1].y, graphic.source };
+                const SOURCE_POINT bottomLeft{ graphic.points[0].x, graphic.points[1].y, graphic.source };
+                appendWorksheetLine( output, topLeft, topRight, aSheet.pageSize, graphic.strokeWidth );
+                appendWorksheetLine( output, topRight, bottomRight, aSheet.pageSize, graphic.strokeWidth );
+                appendWorksheetLine( output, bottomRight, bottomLeft, aSheet.pageSize, graphic.strokeWidth );
+                appendWorksheetLine( output, bottomLeft, topLeft, aSheet.pageSize, graphic.strokeWidth );
+                continue;
+            }
+
+            for( size_t point = 1; point < graphic.points.size(); ++point )
+            {
+                appendWorksheetLine( output, graphic.points[point - 1], graphic.points[point], aSheet.pageSize,
+                                     graphic.strokeWidth );
+            }
+        }
+
+        output << ")\n";
+        return output.str();
     }
 
 
@@ -843,6 +1073,8 @@ namespace
         SCH_SHEET_LIST                          hierarchy;
         std::optional<SCH_SHEET_PATH>           replacementCurrentSheet;
         std::unique_ptr<CONNECTION_GRAPH>       connectionGraph;
+        std::unique_ptr<EMBEDDED_FILES>         replacementEmbeddedFiles;
+        wxString                                replacementDrawingSheet;
         BUILD_RESULT                            result;
 
         static void ValidateScreen( const SCH_SCREEN* aScreen )
@@ -880,6 +1112,16 @@ namespace
 
         void Validate( bool aAppending ) const
         {
+            if( replacementEmbeddedFiles
+                && ( aAppending || replacementDrawingSheet.IsEmpty()
+                     || !replacementEmbeddedFiles->HasFile( wxS( "pads_import.kicad_wks" ) ) ) )
+            {
+                THROW_IO_ERROR( wxS( "embedded worksheet staging is incomplete" ) );
+            }
+
+            if( !replacementEmbeddedFiles && !replacementDrawingSheet.IsEmpty() )
+                THROW_IO_ERROR( wxS( "worksheet path has no staged embedded file" ) );
+
             if( topLevelCache )
             {
                 if( replacementScreen || appendCache || topLevelOwners.empty()
@@ -996,6 +1238,12 @@ namespace
 
                 for( std::unique_ptr<SCH_ITEM>& item : appendItems )
                     item.release();
+            }
+
+            if( replacementEmbeddedFiles )
+            {
+                *aSchematic->GetEmbeddedFiles() = std::move( *replacementEmbeddedFiles );
+                aSchematic->Settings().m_SchDrawingSheetFileName.swap( replacementDrawingSheet );
             }
 
             delete previousGraph;
@@ -1148,6 +1396,15 @@ namespace
         {
             collectDispositionDiagnostics( graphic.graphic.properties, aDiagnostics );
             collectPresentationDiagnostics( graphic.graphic.presentation, aDiagnostics );
+        }
+
+        for( const MODEL_WORKSHEET& worksheet : aModel.worksheets )
+        {
+            for( const MODEL_GRAPHIC& graphic : worksheet.graphics )
+            {
+                collectDispositionDiagnostics( graphic.properties, aDiagnostics );
+                collectPresentationDiagnostics( graphic.presentation, aDiagnostics );
+            }
         }
 
         for( const MODEL_EMBEDDED_IMAGE& image : aModel.images )
@@ -1570,6 +1827,38 @@ BUILD_RESULT PADS_SCH_BINARY_BUILDER::Build( const PADS_SCH_MODEL& aModel, SCHEM
     staged.result.counts.sheets = aModel.sheets.size();
     staged.connectionGraph = std::make_unique<CONNECTION_GRAPH>( aSchematic );
     validatePropertyDispositions( aModel, staged.result.diagnostics );
+
+    if( !aAppendToMe && !aModel.worksheets.empty() )
+    {
+        auto worksheet = std::ranges::find( aModel.worksheets, wxS( "DRW5982" ),
+                                            []( const MODEL_WORKSHEET& aWorksheet )
+                                            {
+                                                return aWorksheet.name.text;
+                                            } );
+
+        if( worksheet == aModel.worksheets.end() )
+            worksheet = aModel.worksheets.begin();
+
+        auto sourceSheet = std::ranges::find( aModel.sheets, worksheet->sheet.id, &MODEL_SHEET::id );
+
+        if( sourceSheet == aModel.sheets.end() )
+            THROW_IO_ERROR( FormatParserError( worksheet->source, wxS( "worksheet references an unknown sheet" ) ) );
+
+        const std::string serialized = serializeWorksheet( *worksheet, *sourceSheet );
+        auto              embeddedWorksheet = std::make_shared<EMBEDDED_FILES::EMBEDDED_FILE>();
+        embeddedWorksheet->name = wxS( "pads_import.kicad_wks" );
+        embeddedWorksheet->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::WORKSHEET;
+        embeddedWorksheet->decompressedData.assign( serialized.begin(), serialized.end() );
+
+        if( EMBEDDED_FILES::CompressAndEncode( *embeddedWorksheet ) != EMBEDDED_FILES::RETURN_CODE::OK )
+            THROW_IO_ERROR( FormatParserError( worksheet->source, wxS( "could not embed the PADS worksheet" ) ) );
+
+        embeddedWorksheet->is_valid = true;
+        staged.replacementEmbeddedFiles = std::make_unique<EMBEDDED_FILES>();
+        staged.replacementEmbeddedFiles->SetFileAddedCallback( aSchematic->GetEmbeddedFiles()->GetFileAddedCallback() );
+        staged.replacementEmbeddedFiles->AddFile( embeddedWorksheet );
+        staged.replacementDrawingSheet = embeddedWorksheet->GetLink();
+    }
 
     const bool         multiSheet = aModel.sheets.size() > 1;
     std::set<wxString> usedFilenames;
