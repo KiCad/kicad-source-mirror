@@ -149,13 +149,13 @@ KIID_PATH SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getDataStoreKey( const SCH_REFER
 
 wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 {
-    return GetValue( m_rows[aRow], aCol );
+    return GetGroupedValue( m_rows[aRow], aCol );
 }
 
 
 wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetResolvedValue( int aRow, int aCol )
 {
-    return GetValue( m_rows[aRow], aCol, wxT( ", " ), wxT( "-" ), true, false );
+    return GetGroupedValue( m_rows[aRow], aCol, wxT( ", " ), wxT( "-" ), true, false );
 }
 
 
@@ -170,7 +170,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
 
     // Check if we need URL editor
     if( GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET )
-        || IsURL( GetValue( m_rows[aRow], aCol ) ) )
+        || IsURL( GetGroupedValue( m_rows[aRow], aCol ) ) )
     {
         if( m_urlEditor )
             needsUrlEditor = true;
@@ -180,7 +180,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
     if( aRow >= 0 && aRow < (int) m_rows.size() && aCol >= 0 && aCol < (int) m_cols.size() && !ColIsReference( aCol )
         && !ColIsQuantity( aCol ) && !ColIsItemNumber( aCol ) )
     {
-        wxString rawValue = GetValue( m_rows[aRow], aCol );
+        wxString rawValue = GetGroupedValue( m_rows[aRow], aCol );
 
         if( rawValue.Contains( wxT( "${" ) ) )
             needsTextVarRenderer = true;
@@ -319,10 +319,10 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
 }
 
 
-wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol,
-                                                         const wxString& refDelimiter,
-                                                         const wxString& refRangeDelimiter, bool resolveVars,
-                                                         bool listMixedValues )
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetGroupedValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow,
+                                                                int aCol, const wxString& refDelimiter,
+                                                                const wxString& refRangeDelimiter, bool resolveVars,
+                                                                bool listMixedValues )
 {
     std::vector<SCH_REFERENCE> references;
     std::set<wxString>         mixedValues;
@@ -501,8 +501,8 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmpRows( const SYMBOL_FIELDS_TABLE_DA
     if( aSortCol < 0 || aSortCol >= this->GetNumberCols() )
         aSortCol = 0;
 
-    wxString lhs = this->GetValue( lhRow, aSortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
-    wxString rhs = this->GetValue( rhRow, aSortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
+    wxString lhs = this->GetGroupedValue( lhRow, aSortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
+    wxString rhs = this->GetGroupedValue( rhRow, aSortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
 
     if( lhs == rhs || this->ColIsReference( aSortCol ) )
     {

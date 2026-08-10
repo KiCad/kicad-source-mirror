@@ -71,16 +71,24 @@ public:
     wxString        GetResolvedValue( int aRow, int aCol );
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
-    wxString GetValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol,
-                       const wxString& refDelimiter = wxT( ", " ),
-                       const wxString& refRangDelimiter = wxT( "-" ),
-                       bool resolveVars = false,
-                       bool listMixedValues = false );
+    /**
+     * Takes a row and column index, then returns the cell contents.
+     *
+     * Cell contents are very likely to be grouped/ranged things like "R1..R3, R5",
+     * or mixed values, when the cell is part of a collapsed group row. See #ROW_STATE::COLLAPSED.
+     *
+     * @return Grouped/ranged cell contents, or a single value if the row is not grouped.
+     */
+    wxString GetGroupedValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol,
+                              const wxString& refDelimiter = wxT( ", " ),
+                              const wxString& refRangDelimiter = wxT( "-" ),
+                              bool resolveVars = false,
+                              bool listMixedValues = false );
 
     wxString GetExportValue( int aRow, int aCol, const wxString& refDelimiter,
                              const wxString& refRangeDelimiter ) override
     {
-        return GetValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter, true, true );
+        return GetGroupedValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter, true, true );
     }
 
     void SetValue( int aRow, int aCol, const wxString& aValue ) override;
