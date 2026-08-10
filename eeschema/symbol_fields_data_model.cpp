@@ -96,40 +96,11 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName
 void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef,
                                                                        const wxString&      aFieldName )
 {
-    const SCH_SYMBOL* symbol = aSymbolRef.GetSymbol();
-
-    if( !symbol )
+    if( !aSymbolRef.GetSymbol() )
         return;
 
     KIID_PATH key = getDataStoreKey( aSymbolRef );
-
-    if( isAttribute( aFieldName ) )
-    {
-        m_dataStore[key][aFieldName] = getAttributeValue( aSymbolRef, aFieldName, m_currentVariant );
-    }
-    else if( const SCH_FIELD* field = symbol->GetField( aFieldName ) )
-    {
-        if( field->IsPrivate() )
-        {
-            m_dataStore[key][aFieldName] = wxEmptyString;
-            return;
-        }
-
-        wxString value = symbol->Schematic()->ConvertKIIDsToRefs(
-                field->GetText( &aSymbolRef.GetSheetPath(), m_currentVariant ) );
-
-        m_dataStore[key][aFieldName] = value;
-    }
-    else if( IsGeneratedField( aFieldName ) )
-    {
-        // Handle generated fields with variables as names (e.g. ${QUANTITY}) that are not present in
-        // the symbol by giving them the correct value
-        m_dataStore[key][aFieldName] = aFieldName;
-    }
-    else
-    {
-        m_dataStore[key][aFieldName] = wxEmptyString;
-    }
+    m_dataStore[key][aFieldName] = getFieldValueForVariant( aSymbolRef, aFieldName, m_currentVariant );
 }
 
 
@@ -162,6 +133,7 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetResolvedValue( int aRow, int a
 wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
     wxGridCellAttr* attr = nullptr;
+    wxString        rawValue = GetGroupedValue( m_rows[aRow], aCol );
     bool            needsReadOnly = isCellReadOnly( aRow, aCol );
     bool            needsUrlEditor = false;
     bool            needsVariantHighlight = false;
@@ -170,7 +142,7 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
 
     // Check if we need URL editor
     if( GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET )
-        || IsURL( GetGroupedValue( m_rows[aRow], aCol ) ) )
+        || IsURL( rawValue ) )
     {
         if( m_urlEditor )
             needsUrlEditor = true;
@@ -180,8 +152,6 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
     if( aRow >= 0 && aRow < (int) m_rows.size() && aCol >= 0 && aCol < (int) m_cols.size() && !ColIsReference( aCol )
         && !ColIsQuantity( aCol ) && !ColIsItemNumber( aCol ) )
     {
-        wxString rawValue = GetGroupedValue( m_rows[aRow], aCol );
-
         if( rawValue.Contains( wxT( "${" ) ) )
             needsTextVarRenderer = true;
     }
@@ -397,24 +367,15 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetGroupedValue( const SYMBOL_FIE
     {
         // Remove duplicates (other units of multi-unit parts)
         std::sort( references.begin(), references.end(),
-                []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
+                [this]( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs ) -> bool
                 {
-                    wxString l_ref( l.GetRef() << l.GetRefNumber() );
-                    wxString r_ref( r.GetRef() << r.GetRefNumber() );
-                    return StrNumCmp( l_ref, r_ref, true ) < 0;
+                    return cmpRowItems( lhs, rhs );
                 } );
 
         auto logicalEnd = std::unique( references.begin(), references.end(),
-                []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
+                [this]( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs ) -> bool
                 {
-                    // If unannotated then we can't tell what units belong together
-                    // so we have to leave them all
-                    if( l.GetRefNumber() == wxT( "?" ) )
-                        return false;
-
-                    wxString l_ref( l.GetRef() << l.GetRefNumber() );
-                    wxString r_ref( r.GetRef() << r.GetRefNumber() );
-                    return l_ref == r_ref;
+                    return unitMatch( lhs, rhs );
                 } );
 
         references.erase( logicalEnd, references.end() );
@@ -506,9 +467,10 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmpRows( const SYMBOL_FIELDS_TABLE_DA
 
     if( lhs == rhs || this->ColIsReference( aSortCol ) )
     {
-        wxString lhRef = lhRow.m_items[0].GetRef() + lhRow.m_items[0].GetRefNumber();
-        wxString rhRef = rhRow.m_items[0].GetRef() + rhRow.m_items[0].GetRefNumber();
-        return local_cmp( StrNumCmp( lhRef, rhRef, true ), 0 );
+        if( aAscending )
+            return cmpRowItems( lhRow.m_items[0], rhRow.m_items[0] );
+        else
+            return cmpRowItems( rhRow.m_items[0], lhRow.m_items[0] );
     }
     else
     {
@@ -712,28 +674,24 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::isCellReadOnly( int aRow, int aCol )
 }
 
 
-wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getDefaultFieldValue( const SCH_REFERENCE& aRef,
-                                                                     const wxString&      aFieldName )
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldValueForVariant( const SCH_REFERENCE& aRef,
+                                                                        const wxString&      aFieldName,
+                                                                        const wxString&      aVariantName )
 {
     const SCH_SYMBOL* symbol = aRef.GetSymbol();
 
     if( !symbol )
         return wxEmptyString;
 
-    // For attributes, get the default (non-variant) value
     if( isAttribute( aFieldName ) )
-        return getAttributeValue( aRef, aFieldName, wxEmptyString );
+        return getAttributeValue( aRef, aFieldName, aVariantName );
 
-    // For regular fields, get the text without variant override
     if( const SCH_FIELD* field = symbol->GetField( aFieldName ) )
     {
         if( field->IsPrivate() )
             return wxEmptyString;
 
-        // Get the field text with empty variant name (default value)
-        wxString value =
-                symbol->Schematic()->ConvertKIIDsToRefs( field->GetText( &aRef.GetSheetPath(), wxEmptyString ) );
-        return value;
+        return symbol->Schematic()->ConvertKIIDsToRefs( field->GetText( &aRef.GetSheetPath(), aVariantName ) );
     }
 
     // For generated fields, return the field name itself
@@ -741,6 +699,13 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getDefaultFieldValue( const SCH_R
         return aFieldName;
 
     return wxEmptyString;
+}
+
+
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getDefaultFieldValue( const SCH_REFERENCE& aRef,
+                                                                     const wxString&      aFieldName )
+{
+    return getFieldValueForVariant( aRef, aFieldName, wxEmptyString );
 }
 
 
