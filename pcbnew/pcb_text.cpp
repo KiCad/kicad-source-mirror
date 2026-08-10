@@ -82,6 +82,9 @@ PCB_TEXT::PCB_TEXT( const PCB_TEXT& aOther, KICAD_T idtype ) :
         EDA_TEXT( aOther ),
         m_libTextAngle( aOther.m_libTextAngle )
 {
+    SetLayer( aOther.GetLayer() );
+    SetIsKnockout( aOther.IsKnockout() );
+    SetLocked( aOther.IsLocked() );
 }
 
 
