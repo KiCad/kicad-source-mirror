@@ -78,7 +78,7 @@ struct ISSUE24915_FIXTURE
         BOOST_REQUIRE( col >= 0 );
 
         SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW row( FindRef( aRef ), ROW_STATE::NON_EXPANDABLE );
-        return aModel.GetValue( row, col );
+        return aModel.GetGroupedValue( row, col );
     }
 
     // The export preview path, generated fields are re-resolved live instead of read
@@ -90,7 +90,7 @@ struct ISSUE24915_FIXTURE
         BOOST_REQUIRE( col >= 0 );
 
         SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW row( FindRef( aRef ), ROW_STATE::NON_EXPANDABLE );
-        return aModel.GetValue( row, col, wxS( ", " ), wxS( "-" ), true, false );
+        return aModel.GetGroupedValue( row, col, wxS( ", " ), wxS( "-" ), true, false );
     }
 
     LOCALE_IO          m_locale;

@@ -108,8 +108,6 @@ private:
 
     // True when an ancestor sheet forces this attribute on, not the symbol itself.
     bool attributeInheritedFromSheet( const SCH_REFERENCE& aRef, const wxString& aAttributeName ) const override;
-    bool rowAttributeInheritedFromSheet( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol );
-    bool isCellReadOnly( int aRow, int aCol ) override;
 
     wxString getAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName,
                                 const wxString& aVariantNames );

@@ -25,6 +25,7 @@
 #include <map>
 
 #include <widgets/wx_grid.h>
+#include <widgets/ui_common.h>
 
 #include <common.h>
 #include <kiid.h>
@@ -463,6 +464,30 @@ protected:
     {
         return false;
     }
+
+
+    bool rowAttributeInheritedFromSheet( const DATA_MODEL_ROW<ITEM_TYPE>& aRow, int aCol )
+    {
+        if( !ColIsAttribute( aCol ) || aRow.m_items.empty() )
+            return false;
+
+        // Lock the cell only when every symbol in the row inherits it, so a mixed group
+        // stays editable and shows the indeterminate state.
+        for( const ITEM_TYPE& item : aRow.m_items )
+        {
+            if( !attributeInheritedFromSheet( item, m_cols[aCol].m_fieldName ) )
+                return false;
+        }
+
+        return true;
+    }
+
+    bool isCellReadOnly( int aRow, int aCol ) override
+    {
+        return FIELDS_TABLE_DATA_MODEL_BASE::isCellReadOnly( aRow, aCol )
+               || rowAttributeInheritedFromSheet( m_rows[aRow], aCol );
+    }
+
 
     bool cmpRows( const DATA_MODEL_ROW<ITEM_TYPE>& lhRow, const DATA_MODEL_ROW<ITEM_TYPE>& rhRow,
                   int aSortCol, bool aAscending )

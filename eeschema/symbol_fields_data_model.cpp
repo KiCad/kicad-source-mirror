@@ -438,31 +438,6 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::attributeInheritedFromSheet( const SC
 }
 
 
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::rowAttributeInheritedFromSheet(
-        const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol )
-{
-    if( !ColIsAttribute( aCol ) || aRow.m_items.empty() )
-        return false;
-
-    // Lock the cell only when every symbol in the row inherits it, so a mixed group
-    // stays editable and shows the indeterminate state.
-    for( const SCH_REFERENCE& ref : aRow.m_items )
-    {
-        if( !attributeInheritedFromSheet( ref, m_cols[aCol].m_fieldName ) )
-            return false;
-    }
-
-    return true;
-}
-
-
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::isCellReadOnly( int aRow, int aCol )
-{
-    return FIELDS_TABLE_DATA_MODEL_BASE::isCellReadOnly( aRow, aCol )
-           || rowAttributeInheritedFromSheet( m_rows[aRow], aCol );
-}
-
-
 wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldValueForVariant( const SCH_REFERENCE& aRef,
                                                                         const wxString&      aFieldName,
                                                                         const wxString&      aVariantName )
