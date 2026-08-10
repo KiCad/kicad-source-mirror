@@ -67,29 +67,7 @@ public:
 
     void AddColumn( const wxString& aFieldName, const wxString& aLabel, bool aAddedByUser ) override;
 
-    wxString        GetValue( int aRow, int aCol ) override;
-    wxString        GetResolvedValue( int aRow, int aCol );
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
-
-    /**
-     * Takes a row and column index, then returns the cell contents.
-     *
-     * Cell contents are very likely to be grouped/ranged things like "R1..R3, R5",
-     * or mixed values, when the cell is part of a collapsed group row. See #ROW_STATE::COLLAPSED.
-     *
-     * @return Grouped/ranged cell contents, or a single value if the row is not grouped.
-     */
-    wxString GetGroupedValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol,
-                              const wxString& refDelimiter = wxT( ", " ),
-                              const wxString& refRangDelimiter = wxT( "-" ),
-                              bool resolveVars = false,
-                              bool listMixedValues = false );
-
-    wxString GetExportValue( int aRow, int aCol, const wxString& refDelimiter,
-                             const wxString& refRangeDelimiter ) override
-    {
-        return GetGroupedValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter, true, true );
-    }
 
     void SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
@@ -135,7 +113,7 @@ private:
     bool storageIsSharedAcrossPaths( const wxString& aFieldName ) const;
 
     // True when an ancestor sheet forces this attribute on, not the symbol itself.
-    bool attributeInheritedFromSheet( const SCH_REFERENCE& aRef, const wxString& aAttributeName ) const;
+    bool attributeInheritedFromSheet( const SCH_REFERENCE& aRef, const wxString& aAttributeName ) const override;
     bool rowAttributeInheritedFromSheet( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow, int aCol );
     bool isCellReadOnly( int aRow, int aCol ) override;
 
@@ -169,10 +147,12 @@ private:
                             const wxString& aVariantName = wxEmptyString );
 
     wxString getFieldResolvedLiveValue( const SCH_REFERENCE& aRef, const wxString& aFieldName ) override;
+    wxString resolveTextVars( const SCH_REFERENCE& aRef, const wxString& aText ) override;
 
     void updateDataStoreSymbolField( const SCH_REFERENCE& aSymbolRef, const wxString& aFieldName );
 
     KIID_PATH getDataStoreKey( const SCH_REFERENCE& aItem ) const override;
+    wxString  getItemReference( const SCH_REFERENCE& aItem ) const override;
 
 protected:
     /**

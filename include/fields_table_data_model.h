@@ -19,13 +19,18 @@
 
 #pragma once
 
+#include <set>
 #include <vector>
 #include <algorithm>
 #include <map>
 
 #include <widgets/wx_grid.h>
 
+#include <common.h>
 #include <kiid.h>
+#include <refdes_utils.h>
+#include <string_utils.h>
+#include <wx/debug.h>
 
 
 struct BOM_FIELD;
@@ -330,8 +335,135 @@ public:
         }
     }
 
+    wxString GetGroupedValue( const DATA_MODEL_ROW<ITEM_TYPE>& aRow, int aCol,
+                              const wxString& refDelimiter = wxT( ", " ),
+                              const wxString& refRangeDelimiter = wxT( "-" ),
+                              bool resolveVars = false, bool listMixedValues = false )
+    {
+        std::vector<ITEM_TYPE> items;
+        std::set<wxString>     mixedValues;
+        wxString               fieldValue;
+
+        for( const ITEM_TYPE& item : aRow.m_items )
+        {
+            if( ColIsReference( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
+            {
+                items.push_back( item );
+            }
+            else // Other columns are either a single value or ROW_MULTI_ITEMS
+            {
+                KIID_PATH key = getDataStoreKey( item );
+
+                if( !m_dataStore.contains( key ) || !m_dataStore[key].contains( m_cols[aCol].m_fieldName ) )
+                    return INDETERMINATE_STATE;
+
+                wxString itemFieldValue = m_dataStore[key][m_cols[aCol].m_fieldName];
+
+                // Show the effective state when a sheet forces it on, but do not change
+                // the stored value so the symbol is never stamped on apply.
+                if( ColIsAttribute( aCol ) && attributeInheritedFromSheet( item, m_cols[aCol].m_fieldName ) )
+                    itemFieldValue = wxS( "1" );
+
+                if( resolveVars )
+                {
+                    // Generated fields (e.g. ${FOOTPRINT_LIBRARY}) can't have un-applied values as they're
+                    // read-only.  Resolve them against the field.
+                    if( IsGeneratedField( m_cols[aCol].m_fieldName ) )
+                    {
+                        itemFieldValue = getFieldResolvedLiveValue( item, m_cols[aCol].m_fieldName );
+                    }
+                    // We have a field that contains both non-variable text and a variable
+                    else if( itemFieldValue.Contains( wxT( "${" ) ) )
+                    {
+                        // Resolve variables in the un-applied value using the parent symbol and instance
+                        // data.
+                        itemFieldValue = resolveTextVars( item, itemFieldValue );
+                    }
+                }
+
+                if( listMixedValues )
+                    mixedValues.insert( itemFieldValue );
+                else if( &item == &aRow.m_items.front() )
+                    fieldValue = itemFieldValue;
+                else if( fieldValue != itemFieldValue )
+                    return INDETERMINATE_STATE;
+            }
+        }
+
+        if( listMixedValues )
+        {
+            fieldValue = wxEmptyString;
+
+            for( const wxString& value : mixedValues )
+            {
+                if( value.IsEmpty() )
+                    continue;
+                else if( fieldValue.IsEmpty() )
+                    fieldValue = value;
+                else
+                    fieldValue += "," + value;
+            }
+        }
+
+        if( ColIsReference( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
+        {
+            // Remove duplicates (other units of multi-unit parts)
+            std::sort( items.begin(), items.end(),
+                    [this]( const ITEM_TYPE& lhs, const ITEM_TYPE& rhs ) -> bool
+                    {
+                        return cmpRowItems( lhs, rhs );
+                    } );
+
+            auto logicalEnd = std::unique( items.begin(), items.end(),
+                    [this]( const ITEM_TYPE& lhs, const ITEM_TYPE& rhs ) -> bool
+                    {
+                        return unitMatch( lhs, rhs );
+                    } );
+
+            items.erase( logicalEnd, items.end() );
+        }
+
+        if( ColIsReference( aCol ) )
+        {
+            std::vector<wxString> references;
+
+            for( const ITEM_TYPE& item : items )
+                references.push_back( getItemReference( item ) );
+
+            fieldValue = UTIL::FormatRefDesRanges( references, refDelimiter, refRangeDelimiter );
+        }
+        else if( ColIsQuantity( aCol ) )
+            fieldValue = wxString::Format( wxT( "%d" ), (int) items.size() );
+        else if( ColIsItemNumber( aCol ) && aRow.m_state != ROW_STATE::EXPANDED_CHILD )
+            fieldValue = wxString::Format( wxT( "%d" ), aRow.m_itemNumber );
+
+        return fieldValue;
+    }
+
+
+    wxString GetValue( int aRow, int aCol ) override
+    {
+        return GetGroupedValue( m_rows[aRow], aCol );
+    }
+
+    wxString GetResolvedValue( int aRow, int aCol )
+    {
+        return GetGroupedValue( m_rows[aRow], aCol, wxT( ", " ), wxT( "-" ), true, false );
+    }
+
+    wxString GetExportValue( int aRow, int aCol, const wxString& refDelimiter,
+                             const wxString& refRangeDelimiter ) override
+    {
+        return GetGroupedValue( m_rows[aRow], aCol, refDelimiter, refRangeDelimiter, true, true );
+    }
+
 
 protected:
+    virtual bool attributeInheritedFromSheet( const ITEM_TYPE& aItem, const wxString& aAttributeName ) const
+    {
+        return false;
+    }
+
     virtual bool cmpRows( const DATA_MODEL_ROW<ITEM_TYPE>& lhRow, const DATA_MODEL_ROW<ITEM_TYPE>& rhRow,
                      int aSortCol, bool aAscending ) = 0;
     // Used for sorting row items that are grouped with a single row, e.g. the references
@@ -371,6 +503,7 @@ protected:
     }
 
     virtual KIID_PATH getDataStoreKey( const ITEM_TYPE& aItem ) const = 0;
+    virtual wxString  getItemReference( const ITEM_TYPE& aItem ) const = 0;
 
     /**
      * Explicitly bypasses the data store's field values and retries them from
@@ -381,7 +514,9 @@ protected:
      *
      * @return Resolved display text for the field's live value from the canvas.
      */
-    virtual wxString getFieldResolvedLiveValue( const ITEM_TYPE& aRef, const wxString& aFieldName ) = 0;
+    virtual wxString getFieldResolvedLiveValue( const ITEM_TYPE& aItem, const wxString& aFieldName ) = 0;
+
+    virtual wxString resolveTextVars( const ITEM_TYPE& aItem, const wxString& aText ) = 0;
 
 protected:
     std::vector<DATA_MODEL_ROW<ITEM_TYPE>> m_rows;

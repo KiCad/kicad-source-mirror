@@ -25,7 +25,6 @@
 #include <wx/grid.h>
 #include <wx/settings.h>
 #include <common.h>
-#include <refdes_utils.h>
 #include <widgets/wx_grid.h>
 #include <sch_reference_list.h>
 #include <sch_commit.h>
@@ -119,15 +118,9 @@ KIID_PATH SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getDataStoreKey( const SCH_REFER
 }
 
 
-wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getItemReference( const SCH_REFERENCE& aItem ) const
 {
-    return GetGroupedValue( m_rows[aRow], aCol );
-}
-
-
-wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetResolvedValue( int aRow, int aCol )
-{
-    return GetGroupedValue( m_rows[aRow], aCol, wxT( ", " ), wxT( "-" ), true, false );
+    return aItem.GetRef() + aItem.GetRefNumber();
 }
 
 
@@ -287,116 +280,6 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
     }
 
     return enhanceAttr( attr, aRow, aCol, aKind );
-}
-
-
-wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetGroupedValue( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& aRow,
-                                                                int aCol, const wxString& refDelimiter,
-                                                                const wxString& refRangeDelimiter, bool resolveVars,
-                                                                bool listMixedValues )
-{
-    std::vector<SCH_REFERENCE> references;
-    std::set<wxString>         mixedValues;
-    wxString                   fieldValue;
-
-    for( const SCH_REFERENCE& ref : aRow.m_items )
-    {
-        if( ColIsReference( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
-        {
-            references.push_back( ref );
-        }
-        else // Other columns are either a single value or ROW_MULTI_ITEMS
-        {
-            KIID_PATH symbolKey = getDataStoreKey( ref );
-
-            if( !m_dataStore.contains( symbolKey ) || !m_dataStore[symbolKey].contains( m_cols[aCol].m_fieldName ) )
-                return INDETERMINATE_STATE;
-
-            wxString refFieldValue = m_dataStore[symbolKey][m_cols[aCol].m_fieldName];
-
-            // Show the effective state when a sheet forces it on, but do not change
-            // the stored value so the symbol is never stamped on apply.
-            if( ColIsAttribute( aCol ) && attributeInheritedFromSheet( ref, m_cols[aCol].m_fieldName ) )
-                refFieldValue = wxS( "1" );
-
-            if( resolveVars )
-            {
-                if( IsGeneratedField( m_cols[aCol].m_fieldName ) )
-                {
-                    // Generated fields (e.g. ${QUANTITY}) can't have un-applied values as they're
-                    // read-only.  Resolve them against the field.
-                    refFieldValue = getFieldResolvedLiveValue( ref, m_cols[aCol].m_fieldName );
-                }
-                else if( refFieldValue.Contains( wxT( "${" ) ) )
-                {
-                    // Resolve variables in the un-applied value using the parent symbol and instance
-                    // data.
-                    std::function<bool( wxString* )> symbolResolver = [&]( wxString* token ) -> bool
-                    {
-                        return ref.GetSymbol()->ResolveTextVar( &ref.GetSheetPath(), token, m_currentVariant );
-                    };
-
-                    refFieldValue = ExpandTextVars( refFieldValue, &symbolResolver );
-                }
-            }
-
-            if( listMixedValues )
-                mixedValues.insert( refFieldValue );
-            else if( &ref == &aRow.m_items.front() )
-                fieldValue = refFieldValue;
-            else if( fieldValue != refFieldValue )
-                return INDETERMINATE_STATE;
-        }
-    }
-
-    if( listMixedValues )
-    {
-        fieldValue = wxEmptyString;
-
-        for( const wxString& value : mixedValues )
-        {
-            if( value.IsEmpty() )
-                continue;
-            else if( fieldValue.IsEmpty() )
-                fieldValue = value;
-            else
-                fieldValue += "," + value;
-        }
-    }
-
-    if( ColIsReference( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
-    {
-        // Remove duplicates (other units of multi-unit parts)
-        std::sort( references.begin(), references.end(),
-                [this]( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs ) -> bool
-                {
-                    return cmpRowItems( lhs, rhs );
-                } );
-
-        auto logicalEnd = std::unique( references.begin(), references.end(),
-                [this]( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs ) -> bool
-                {
-                    return unitMatch( lhs, rhs );
-                } );
-
-        references.erase( logicalEnd, references.end() );
-    }
-
-    if( ColIsReference( aCol ) )
-    {
-        std::vector<wxString> referenceDesignators;
-
-        for( const SCH_REFERENCE& reference : references )
-            referenceDesignators.push_back( reference.GetRef() + reference.GetRefNumber() );
-
-        fieldValue = UTIL::FormatRefDesRanges( referenceDesignators, refDelimiter, refRangeDelimiter );
-    }
-    else if( ColIsQuantity( aCol ) )
-        fieldValue = wxString::Format( wxT( "%d" ), (int) references.size() );
-    else if( ColIsItemNumber( aCol ) && aRow.m_state != ROW_STATE::EXPANDED_CHILD )
-        fieldValue = wxString::Format( wxT( "%d" ), aRow.m_itemNumber );
-
-    return fieldValue;
 }
 
 
@@ -602,6 +485,23 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( const 
     }
 
     return wxEmptyString;
+}
+
+
+wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::resolveTextVars( const SCH_REFERENCE& aRef, const wxString& aText )
+{
+    // TODO: this isn't technically correct, this should resolve against the
+    // data store's copy of variables whenever whenever possible,
+    // but currently it is resolving against the symbol's current values.
+    // For instance, if you have "My value is ${VALUE}" in the description field,
+    // ${VALUE} will be resolved against the symbol's live value, not the Value field
+    // stored in the data store.
+    std::function<bool( wxString* )> symbolResolver = [&]( wxString* token ) -> bool
+    {
+        return aRef.GetSymbol()->ResolveTextVar( &aRef.GetSheetPath(), token, m_currentVariant );
+    };
+
+    return ExpandTextVars( aText, &symbolResolver );
 }
 
 
