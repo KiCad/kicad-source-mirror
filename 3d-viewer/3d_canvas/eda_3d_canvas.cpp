@@ -361,6 +361,11 @@ void EDA_3D_CANVAS::ReloadRequest( BOARD* aBoard , S3D_CACHE* aCachePointer )
 
     m_boardAdapter.ReloadColorSettings();
 
+    m_currentRollOverItem = nullptr;
+
+    if( m_3d_render_opengl )
+        m_3d_render_opengl->SetCurrentRollOverItem( nullptr );
+
     if( m_3d_render )
         m_3d_render->ReloadRequest();
 }

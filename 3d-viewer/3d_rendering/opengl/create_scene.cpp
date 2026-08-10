@@ -849,6 +849,9 @@ void RENDER_3D_OPENGL::renderExtrudedBodies()
 
 void RENDER_3D_OPENGL::reload()
 {
+    // Reset the rollover pointer, it would no longer be valid
+    m_currentRollOverItem = nullptr;
+
     m_reloadRequested = false;
 
     // Ensure previous reload worker is finished before freeing/rebuilding render data.

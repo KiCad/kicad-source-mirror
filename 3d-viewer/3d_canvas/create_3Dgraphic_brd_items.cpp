@@ -306,8 +306,12 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
 
 
 void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
-                                           PCB_LAYER_ID aLayer, int aMargin )
+                                           PCB_LAYER_ID aLayer, int aMargin, const BOARD_ITEM* aOwner )
 {
+    // aTrack can be an object created on the stack; the 2D objects keep a pointer to the
+    // owner passed here.
+    const BOARD_ITEM& owner = aOwner ? *aOwner : *aTrack;
+
     SFVEC2F start3DU = TO_SFVEC2F( aTrack->GetStart() );
     SFVEC2F end3DU = TO_SFVEC2F( aTrack->GetEnd() );
 
@@ -318,7 +322,7 @@ void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D
         const PCB_VIA* via = static_cast<const PCB_VIA*>( aTrack );
         float          width3DU = TO_3DU( via->GetWidth( aLayer ) + aMargin * 2 );
 
-        addFILLED_CIRCLE_2D( aDstContainer, start3DU, width3DU / 2.0, *aTrack );
+        addFILLED_CIRCLE_2D( aDstContainer, start3DU, width3DU / 2.0, owner );
         break;
     }
 
@@ -328,14 +332,15 @@ void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D
 
         if( arc->IsDegenerated() )
         {
-            // Draw this very small arc like a track segment (a PCB_TRACE_T)
+            // Draw this very small arc like a track segment (a PCB_TRACE_T).  The stand-in
+            // track is created on the stack, so attribute the geometry to the arc itself.
             PCB_TRACK track( arc->GetParent() );
             track.SetStart( arc->GetStart() );
             track.SetEnd( arc->GetEnd() );
             track.SetWidth( arc->GetWidth() );
             track.SetLayer( arc->GetLayer() );
 
-            createTrackWithMargin( &track, aDstContainer, aLayer, aMargin );
+            createTrackWithMargin( &track, aDstContainer, aLayer, aMargin, arc );
             return;
         }
 
@@ -369,7 +374,7 @@ void BOARD_ADAPTER::createTrackWithMargin( const PCB_TRACK* aTrack, CONTAINER_2D
     case PCB_TRACE_T:    // Track is a usual straight segment
     {
         float width3DU = TO_3DU( aTrack->GetWidth() + aMargin * 2 );
-        addROUND_SEGMENT_2D( aDstContainer, start3DU, end3DU, width3DU, *aTrack );
+        addROUND_SEGMENT_2D( aDstContainer, start3DU, end3DU, width3DU, owner );
         break;
     }
 

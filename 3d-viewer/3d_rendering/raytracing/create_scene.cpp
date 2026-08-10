@@ -789,8 +789,9 @@ void RENDER_3D_RAYTRACE_BASE::Reload( bool aOnlyLoadCopperAndShapes, std::stop_t
             return;
     } // for each layer on map
 
-    // Create plated copper
-    if( m_boardAdapter.m_Cfg->m_Render.differentiate_plated_copper )
+    // Create plated copper.  Skip it in the picking scene: the overlay goes nowhere and
+    // blocks cross-probe on the pads under it.
+    if( m_boardAdapter.m_Cfg->m_Render.differentiate_plated_copper && !aOnlyLoadCopperAndShapes )
     {
         createItemsFromContainer( m_boardAdapter.GetPlatedPadsFront(), F_Cu, &m_materials.m_Copper,
                                   m_boardAdapter.m_CopperColor,
