@@ -183,6 +183,8 @@ protected:
     // named field values like ${DNP}
     bool isAttribute( const wxString& aFieldName );
 
+    virtual bool isCellReadOnly( int aRow, int aCol );
+
 protected:
     bool     m_edited;
     int      m_sortColumn;

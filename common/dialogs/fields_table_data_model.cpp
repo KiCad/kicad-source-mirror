@@ -238,6 +238,12 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::IsExpanderColumn( int aCol ) const
 }
 
 
+bool FIELDS_TABLE_DATA_MODEL_BASE::isCellReadOnly( int, int aCol )
+{
+    return IsExpanderColumn( aCol );
+}
+
+
 void FIELDS_TABLE_DATA_MODEL_BASE::SetSorting( int aCol, bool aAscending )
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );

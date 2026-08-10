@@ -149,8 +149,6 @@ KIID_PATH SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getDataStoreKey( const SCH_REFER
 
 wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
 {
-    GetView()->SetReadOnly( aRow, aCol,
-                            IsExpanderColumn( aCol ) || rowAttributeInheritedFromSheet( m_rows[aRow], aCol ) );
     return GetValue( m_rows[aRow], aCol );
 }
 
@@ -164,6 +162,7 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetResolvedValue( int aRow, int a
 wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind )
 {
     wxGridCellAttr* attr = nullptr;
+    bool            needsReadOnly = isCellReadOnly( aRow, aCol );
     bool            needsUrlEditor = false;
     bool            needsVariantHighlight = false;
     bool            needsTextVarRenderer = false;
@@ -254,17 +253,21 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
     }
 
     // If we don't need any custom attributes, use the base class behavior
-    if( !needsUrlEditor && !needsVariantHighlight && !needsTextVarRenderer )
+    if( !needsReadOnly && !needsUrlEditor && !needsVariantHighlight && !needsTextVarRenderer )
         return WX_GRID_TABLE_BASE::GetAttr( aRow, aCol, aKind );
 
-    // URL cells: use m_urlEditor as base, potentially with variant highlight overlay
+    // URL cells: use m_urlEditor as base, potentially with read-only or variant overlays
     if( needsUrlEditor )
     {
-        if( needsVariantHighlight )
+        if( needsReadOnly || needsVariantHighlight )
         {
-            // Clone the URL editor attribute and add highlight color
             attr = m_urlEditor->Clone();
-            attr->SetBackgroundColour( highlightColor );
+
+            if( needsReadOnly )
+                attr->SetReadOnly();
+
+            if( needsVariantHighlight )
+                attr->SetBackgroundColour( highlightColor );
         }
         else
         {
@@ -286,6 +289,9 @@ wxGridCellAttr* SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCo
     {
         attr = new wxGridCellAttr();
     }
+
+    if( needsReadOnly )
+        attr->SetReadOnly();
 
     if( needsVariantHighlight )
         attr->SetBackgroundColour( highlightColor );
@@ -696,6 +702,13 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::rowAttributeInheritedFromSheet(
     }
 
     return true;
+}
+
+
+bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::isCellReadOnly( int aRow, int aCol )
+{
+    return FIELDS_TABLE_DATA_MODEL_BASE::isCellReadOnly( aRow, aCol )
+           || rowAttributeInheritedFromSheet( m_rows[aRow], aCol );
 }
 
 
