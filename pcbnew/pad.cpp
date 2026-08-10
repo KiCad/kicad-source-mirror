@@ -448,6 +448,7 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
     google::protobuf::Any padStackWrapper;
     padStackWrapper.PackFrom( pad.pad_stack() );
     m_padStack.Deserialize( padStackWrapper );
+    SetOrientation( m_padStack.GetOrientation() );
 
     SetLayer( m_padStack.StartLayer() );
 
