@@ -26,7 +26,7 @@
 #include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 
-const int projectLocalSettingsVersion = 5;
+const int projectLocalSettingsVersion = 6;
 
 
 PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxString& aFilename ) :
@@ -520,6 +520,26 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                     }
 
                     At( ptr ) = newLayers;
+                    m_wasMigrated = true;
+                }
+
+                return true;
+            } );
+
+    registerMigration( 5, 6,
+            [&]()
+            {
+                // Schema version 5 to 6: LAYER_GRIDITEMS added to visibility controls
+
+                std::string ptr( "board.visible_items" );
+
+                if( Contains( ptr ) )
+                {
+                    if( At( ptr ).is_array() && !At( ptr ).empty() )
+                        At( ptr ).push_back( VisibilityLayerToString( VISIBILITY_LAYER::GRID_ITEMS ) );
+                    else
+                        At( "board" ).erase( "visible_items" );
+
                     m_wasMigrated = true;
                 }
 

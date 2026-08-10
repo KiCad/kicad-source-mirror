@@ -2554,6 +2554,10 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
+    // Turn grid items on if they are off, so that the created object will be visible after
+    // completion
+    m_frame->SetObjectVisible( LAYER_GRIDITEMS );
+
     m_frame->PushTool( aEvent );
 
     auto setCursor = [&]()
