@@ -552,84 +552,6 @@ bool KIGIT::IsCredentialFailure( KIGIT_FAILURE aKind )
 }
 
 
-wxString KIGIT::DecodeServerText( const char* aData, size_t aLength )
-{
-    wxString text = wxString::FromUTF8( aData, aLength );
-
-    // An empty result would drop the line, and with it the scheme the scrub looks for
-    if( text.IsEmpty() && aLength > 0 )
-        text = wxString::From8BitData( aData, aLength );
-
-    return text;
-}
-
-
-wxString KIGIT::StripEmbeddedUserinfo( const wxString& aText )
-{
-    wxString result;
-    size_t   lineStart = 0;
-
-    result.reserve( aText.length() );
-
-    while( true )
-    {
-        size_t lineEnd = aText.find_first_of( wxS( "\r\n" ), lineStart );
-
-        if( lineEnd == wxString::npos )
-            lineEnd = aText.length();
-
-        // A password can hold anything but a line break, even what looks like another URL, so the whole line from
-        // its first "://" to its last "@" goes
-        wxString     line = aText.Mid( lineStart, lineEnd - lineStart );
-        const size_t sep = line.find( wxS( "://" ) );
-        const size_t at = line.rfind( '@' );
-
-        if( sep != wxString::npos && at != wxString::npos && at >= sep + 3 )
-            line.erase( sep + 3, at - sep - 2 );
-
-        result << line;
-
-        if( lineEnd == aText.length() )
-            return result;
-
-        result << aText[lineEnd];
-        lineStart = lineEnd + 1;
-    }
-}
-
-
-wxString KIGIT::PrintableServerText( const wxString& aText )
-{
-    static thread_local const wxRegEx escapes( wxS( "\x1B\\[[0-?]*[ -/]*[@-~]" ), wxRE_ADVANCED );
-
-    wxString text = aText;
-
-    // wxRegEx stops replacing at a NUL, which would leave the rest of a password in place
-    text.Replace( wxString( wxUniChar( 0 ) ), wxEmptyString );
-
-    // An escape can end in the "@" that closes a userinfo, so the raw text is scrubbed first
-    text = StripEmbeddedUserinfo( text );
-    escapes.ReplaceAll( &text, wxEmptyString );
-
-    wxString printable;
-
-    for( wxUniChar c : text )
-    {
-        const wxUint32 code = c.GetValue();
-        const bool     control = code < 0x20 || code == 0x7F || ( code >= 0x80 && code <= 0x9F );
-        const bool     bidi = ( code >= 0x202A && code <= 0x202E ) || ( code >= 0x2066 && code <= 0x2069 );
-
-        if( code == '\t' )
-            printable << wxS( " " );
-        else if( ( !control && !bidi ) || code == '\n' || code == '\r' )
-            printable << c;
-    }
-
-    // Removing escapes and controls can join a "://" the raw text split
-    return StripEmbeddedUserinfo( printable );
-}
-
-
 /// aDir spelled as libgit2 1.9's p_realpath spells the working folder it checks safe.directory against
 static wxFileName resolveLikeLibgit2( const wxString& aDir )
 {
@@ -702,6 +624,7 @@ static bool isRootedLikeLibgit2( const wxString& aPath )
 
 KIGIT_OWNERSHIP_REFUSAL KIGIT::DescribeOwnershipRefusal( const wxString& aStartDir, const wxString& aGitDir )
 {
+    LIBGIT2_SCOPE    libgit2;
     const wxFileName gitDir = wxFileName::DirName( aGitDir );
     wxFileName       trusted = gitDir;
     wxFileName       dir = resolveLikeLibgit2( aStartDir );

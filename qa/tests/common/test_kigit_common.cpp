@@ -26,6 +26,7 @@
 #include <git/git_config_handler.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
+#include <git/kigit_ssh_keys.h>
 #include <git/project_git_utils.h>
 #include <git/git_branch_handler.h>
 #include <git/git_push_handler.h>

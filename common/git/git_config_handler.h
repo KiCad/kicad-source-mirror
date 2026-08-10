@@ -47,6 +47,7 @@ APIEXPORT bool ReadConfigString( git_config* aConfig, const char* aKey, wxString
 
 /**
  * Read the author set in a repository's own config and the one set in the global, XDG or system config.
+ * A null repository reads only the global levels.
  * A value counts as set only when it is not empty, and the has flags say so.
  */
 APIEXPORT void ReadAuthorConfig( git_repository* aRepo, GitUserConfig& aLocal, GitUserConfig& aGlobal );
@@ -68,6 +69,12 @@ APIEXPORT void ReadAuthorConfig( git_repository* aRepo, GitUserConfig& aLocal, G
 APIEXPORT GitUserConfig ResolveAuthor( const COMMON_SETTINGS::GIT& aPrefs, const GitUserConfig& aLocal,
                                        const GitUserConfig& aGlobal, const wxString& aAccountName = wxEmptyString,
                                        const wxString& aAccountEmail = wxEmptyString );
+
+/**
+ * Whether aAfter changes the author ResolveAuthor gives against aBefore. The default mode ignores the stored name
+ * and email, so a change to them alone counts only while the preference is custom.
+ */
+APIEXPORT bool AuthorPreferenceChanged( const COMMON_SETTINGS::GIT& aBefore, const COMMON_SETTINGS::GIT& aAfter );
 } // namespace KIGIT
 
 class APIEXPORT GIT_CONFIG_HANDLER : public KIGIT_REPO_MIXIN

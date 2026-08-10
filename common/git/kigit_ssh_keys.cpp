@@ -19,8 +19,6 @@
 
 #include "kigit_ssh_keys.h"
 
-#include <trace_helpers.h>
-
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
@@ -744,7 +742,7 @@ wxString KIGIT::EnsurePublicKeyFile( const wxString& aKey )
     if( out.IsOpened() && out.Write( wxString::FromUTF8( line ), wxConvUTF8 ) && out.Commit() )
         return derived;
 
-    wxLogTrace( traceGit, "Could not write the public key for %s to %s", aKey, derived );
+    wxLogTrace( traceKigit, "Could not write the public key for %s to %s", aKey, derived );
     return wxEmptyString;
 }
 
@@ -801,7 +799,7 @@ void KIGIT::RememberSSHKey( const wxString& aRemote, const wxString& aKey )
     }
     else
     {
-        wxLogTrace( traceGit, "Could not save remembered SSH keys to %s", store.path );
+        wxLogTrace( traceKigit, "Could not save remembered SSH keys to %s", store.path );
     }
 }
 
@@ -814,4 +812,73 @@ void KIGIT::SetRememberedSSHKeyStore( const wxString& aPath )
     store.loaded = false;
     store.keys.clear();
     store.pending.clear();
+}
+
+
+bool KIGIT::IsPrivateKeyEncrypted( const wxString& aKeyText )
+{
+    wxArrayString lines = wxSplit( aKeyText, '\n', '\0' );
+
+    if( lines.IsEmpty() || !lines[0].Contains( wxS( "PRIVATE KEY" ) ) )
+        return false;
+
+    if( lines[0].Contains( wxS( "ENCRYPTED" ) ) )
+        return true;
+
+    // A PEM key carries Proc-Type in the header block, which ends at the blank line
+    for( size_t ii = 1; ii < lines.GetCount(); ++ii )
+    {
+        if( lines[ii].Trim().IsEmpty() )
+            break;
+
+        if( lines[ii].StartsWith( wxS( "Proc-Type:" ) ) && lines[ii].Contains( wxS( "ENCRYPTED" ) ) )
+            return true;
+    }
+
+    if( !lines[0].Contains( wxS( "OPENSSH PRIVATE KEY" ) ) )
+        return false;
+
+    // An OpenSSH key carries its cipher name in the body, right after the magic
+    wxString body;
+
+    for( size_t ii = 1; ii < lines.GetCount(); ++ii )
+    {
+        if( lines[ii].StartsWith( wxS( "-----" ) ) )
+            break;
+
+        body += lines[ii];
+    }
+
+    wxMemoryBuffer raw = wxBase64Decode( body, wxBase64DecodeMode_SkipWS );
+
+    const char           magic[] = "openssh-key-v1";
+    const size_t         magicLen = sizeof( magic );
+    const unsigned char* data = static_cast<const unsigned char*>( raw.GetData() );
+
+    if( raw.GetDataLen() < magicLen + 4 || std::memcmp( data, magic, magicLen ) != 0 )
+        return false;
+
+    uint32_t nameLen =
+            ( static_cast<uint32_t>( data[magicLen] ) << 24 ) | ( static_cast<uint32_t>( data[magicLen + 1] ) << 16 )
+            | ( static_cast<uint32_t>( data[magicLen + 2] ) << 8 ) | static_cast<uint32_t>( data[magicLen + 3] );
+
+    if( nameLen == 0 || raw.GetDataLen() < magicLen + 4 + nameLen )
+        return false;
+
+    std::string cipher( reinterpret_cast<const char*>( data + magicLen + 4 ), nameLen );
+
+    return cipher != "none";
+}
+
+
+bool KIGIT::IsPrivateKeyFileEncrypted( const wxString& aKey )
+{
+    // wxFFile reports an unopenable file to the user, and a key that is gone is simply not encrypted
+    if( aKey.IsEmpty() || !wxFileName::IsFileReadable( aKey ) )
+        return false;
+
+    wxFFile  file( aKey, wxS( "rb" ) );
+    wxString text;
+
+    return file.IsOpened() && file.ReadAll( &text ) && IsPrivateKeyEncrypted( text );
 }

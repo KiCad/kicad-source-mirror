@@ -20,6 +20,8 @@
 #include <git/git_transfer_busy.h>
 #include <git/kicad_git_common.h>
 
+#include <wx/intl.h>
+
 #include <utility>
 #include <vector>
 
@@ -93,4 +95,19 @@ void GIT_TRANSFER_BUSY::CancelAll()
     // Collect first, since a cancel may end its transfer and erase it from m_live
     for( std::function<void()>& cancel : cancels )
         cancel();
+}
+
+
+wxString GIT_TRANSFER_BUSY::WaitingMessage() const
+{
+    wxString status = m_live.empty() ? wxString() : m_live.rbegin()->second.status;
+
+    if( status.IsEmpty() )
+        return _( "Waiting for another git operation to finish..." );
+
+    // The status is a progress line that ends in an ellipsis of its own
+    if( !status.EndsWith( wxS( "..." ), &status ) )
+        status.EndsWith( wxS( "\u2026" ), &status );
+
+    return wxString::Format( _( "Waiting for %s to finish..." ), status );
 }

@@ -20,12 +20,13 @@
 #ifndef KIGIT_SSH_KEYS_H_
 #define KIGIT_SSH_KEYS_H_
 
+#include <git/kigit_trace.h>
 #include <import_export.h>
 
 #include <string>
 #include <vector>
 
-#include <wx/string.h>
+#include <wx/arrstr.h>
 
 namespace KIGIT
 {
@@ -125,6 +126,12 @@ APIEXPORT void RememberSSHKey( const wxString& aRemote, const wxString& aKey );
  * user's cache folder is not safe off the main thread, so the caller resolves it.
  */
 APIEXPORT void SetRememberedSSHKeyStore( const wxString& aPath );
+
+/// Whether the private key file text @p aKeyText is protected by a passphrase. Anything else reads as unencrypted.
+APIEXPORT bool IsPrivateKeyEncrypted( const wxString& aKeyText );
+
+/// IsPrivateKeyEncrypted for the key file @p aKey. A file that cannot be read is reported as unencrypted.
+APIEXPORT bool IsPrivateKeyFileEncrypted( const wxString& aKey );
 
 } // namespace KIGIT
 

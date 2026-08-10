@@ -34,7 +34,7 @@
 
 #include <wx/log.h>
 
-#include <trace_helpers.h>
+#include <git/kigit_trace.h>
 
 /**
  * Registry of background git cleanup threads that outlive the owning project
@@ -116,9 +116,7 @@ public:
                         }
                         catch( ... )
                         {
-                            wxLogTrace( traceGit,
-                                        "Orphan git thread [%s] threw an exception",
-                                        label.c_str() );
+                            wxLogTrace( KIGIT::traceKigit, "Orphan git thread [%s] threw an exception", label.c_str() );
                         }
 
                         {
@@ -135,7 +133,7 @@ public:
             throw;
         }
 
-        wxLogTrace( traceGit, "Registered orphan git thread [%s]", aLabel.c_str() );
+        wxLogTrace( KIGIT::traceKigit, "Registered orphan git thread [%s]", aLabel.c_str() );
         return true;
     }
 

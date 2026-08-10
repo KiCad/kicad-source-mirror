@@ -21,6 +21,7 @@
 #include "kigit_ssh_keys.h"
 
 #include <git/kicad_git_compat.h>
+#include <git/kicad_git_memory.h>
 
 #include <boost/uuid/detail/sha1.hpp>
 #include <boost/version.hpp>
@@ -359,7 +360,8 @@ wxString KIGIT::HostKeyFingerprint( const std::string& aRawKey )
 
 wxString KIGIT::KnownHostsPath()
 {
-    wxString home;
+    LIBGIT2_SCOPE libgit2;
+    wxString      home;
 
     // libgit2 picks the first existing folder of this list, so asking it is the only way to agree
 #if KIGIT_HAS_HOMEDIR_OPT

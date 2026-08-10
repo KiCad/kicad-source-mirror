@@ -22,6 +22,8 @@
 
 #include <git/kicad_git_common.h>
 #include <git/kigit_known_hosts.h>
+#include <git/kigit_remote_url.h>
+#include <git/kigit_transport.h>
 #include <import_export.h>
 
 #include <optional>
@@ -139,18 +141,6 @@ APIEXPORT bool IsCredentialFailure( KIGIT_FAILURE aKind );
 
 /// The longest server text a failure keeps. A refusal's explanation comes last, after any transfer progress.
 constexpr size_t MAX_SERVER_TEXT = 4096;
-
-/// Bytes a server sent, as UTF-8 or, when they are not valid UTF-8, one character for each byte.
-APIEXPORT wxString DecodeServerText( const char* aData, size_t aLength );
-
-/// Remove the user and password from every URL quoted in a message, since the remote's can carry a password.
-APIEXPORT wxString StripEmbeddedUserinfo( const wxString& aText );
-
-/**
- * Text a server sent, made safe to show: no terminal escapes, control or bidi characters, and no URL userinfo.
- * Line breaks are kept.
- */
-APIEXPORT wxString PrintableServerText( const wxString& aText );
 
 /**
  * The message for a repository git refuses to open because another user owns it.

@@ -88,6 +88,9 @@ public:
     /// Call each live transfer's cancel once. They stay live until their owners end them.
     void CancelAll();
 
+    /// What a read waiting for the action lock waits for, named after the latest transfer.
+    wxString WaitingMessage() const;
+
 private:
     struct LIVE
     {

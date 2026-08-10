@@ -20,6 +20,19 @@
 namespace KIGIT
 {
 /**
+ * Holds libgit2 initialized while it lives, for a helper that can run before any git backend exists.
+ * Declare it before the libgit2 objects it guards, so they are freed first.
+ */
+struct LIBGIT2_SCOPE
+{
+    LIBGIT2_SCOPE() { git_libgit2_init(); }
+    ~LIBGIT2_SCOPE() { git_libgit2_shutdown(); }
+
+    LIBGIT2_SCOPE( const LIBGIT2_SCOPE& ) = delete;
+    LIBGIT2_SCOPE& operator=( const LIBGIT2_SCOPE& ) = delete;
+};
+
+/**
 * @brief A unique pointer for git_repository objects with automatic cleanup.
 */
 using GitRepositoryPtr = std::unique_ptr<git_repository,

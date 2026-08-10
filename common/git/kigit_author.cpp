@@ -40,12 +40,15 @@ bool KIGIT::ReadConfigString( git_config* aConfig, const char* aKey, wxString& a
 
 void KIGIT::ReadAuthorConfig( git_repository* aRepo, GitUserConfig& aLocal, GitUserConfig& aGlobal )
 {
+    LIBGIT2_SCOPE libgit2;
+
     aLocal = GitUserConfig();
     aGlobal = GitUserConfig();
 
     git_config* config = nullptr;
 
-    if( !aRepo || git_repository_config( &config, aRepo ) != GIT_OK )
+    // Without a repository only the levels above it exist
+    if( ( aRepo ? git_repository_config( &config, aRepo ) : git_config_open_default( &config ) ) != GIT_OK )
         return;
 
     GitConfigPtr configPtr( config );
@@ -106,4 +109,14 @@ GitUserConfig KIGIT::ResolveAuthor( const COMMON_SETTINGS::GIT& aPrefs, const Gi
     author.hasName = !author.authorName.IsEmpty();
     author.hasEmail = !author.authorEmail.IsEmpty();
     return author;
+}
+
+
+bool KIGIT::AuthorPreferenceChanged( const COMMON_SETTINGS::GIT& aBefore, const COMMON_SETTINGS::GIT& aAfter )
+{
+    if( aBefore.useDefaultAuthor != aAfter.useDefaultAuthor )
+        return true;
+
+    return !aAfter.useDefaultAuthor
+           && ( aBefore.authorName != aAfter.authorName || aBefore.authorEmail != aAfter.authorEmail );
 }
