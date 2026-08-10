@@ -77,8 +77,8 @@ PCB_TEXT::PCB_TEXT( FOOTPRINT* aParent, KICAD_T idtype ) :
 }
 
 
-PCB_TEXT::PCB_TEXT( const PCB_TEXT& aOther ) :
-        BOARD_ITEM( aOther ),
+PCB_TEXT::PCB_TEXT( const PCB_TEXT& aOther, KICAD_T idtype ) :
+        BOARD_ITEM( aOther.GetParent(), idtype ),
         EDA_TEXT( aOther ),
         m_libTextAngle( aOther.m_libTextAngle )
 {

@@ -50,7 +50,7 @@ public:
 
     PCB_TEXT( FOOTPRINT* aParent, KICAD_T idtype = PCB_TEXT_T );
 
-    PCB_TEXT( const PCB_TEXT& aOther );
+    PCB_TEXT( const PCB_TEXT& aOther, KICAD_T idtype = PCB_TEXT_T );
     PCB_TEXT& operator=( const PCB_TEXT& aOther );
 
     PCB_TEXT( PCB_TEXT&& ) noexcept = default;
