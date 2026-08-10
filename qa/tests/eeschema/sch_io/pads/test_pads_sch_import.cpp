@@ -2993,7 +2993,10 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
             }
             else if( expectedType == SHAPE_T::CIRCLE )
             {
-                const VECTOR2I expectedCenter = pagePoint( aGraphic.points.front(), graphicsPageHeight );
+                SOURCE_POINT center;
+                center.x = ( aGraphic.points.front().x + aGraphic.points.back().x ) / 2;
+                center.y = ( aGraphic.points.front().y + aGraphic.points.back().y ) / 2;
+                const VECTOR2I expectedCenter = pagePoint( center, graphicsPageHeight );
                 const VECTOR2I expectedEdge = pagePoint( aGraphic.points.back(), graphicsPageHeight );
                 const int      expectedRadius =
                         KiROUND( std::hypot( static_cast<double>( expectedEdge.x - expectedCenter.x ),

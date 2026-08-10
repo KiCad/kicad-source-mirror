@@ -615,6 +615,7 @@ struct MODEL_LABEL
     MODEL_LABEL_KIND             kind = MODEL_LABEL_KIND::LOCAL;
     SOURCE_STRING                text;
     SOURCE_POINT                 position;
+    SOURCE_POINT                 textOffset;
     int                          angle = 0;
     MODEL_TEXT_PRESENTATION      presentation;
     std::vector<SHEET_REFERENCE> linkedSheets;

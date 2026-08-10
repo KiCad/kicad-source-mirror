@@ -1411,9 +1411,9 @@ types:
       - id: preserved_part_type_word_38
         type: u4
         doc: Exact part-type word; multigate and connector diffs prove adjacent prefix indexes only, so importer disposition is PRESERVED.
-      - id: preserved_part_type_word_3c
+      - id: pin_name_heap_base
         type: u4
-        doc: Exact part-type word; multigate and connector diffs prove adjacent prefix indexes only, so importer disposition is PRESERVED.
+        doc: Controller-11 pin-name offsets are relative to this byte offset in controller 14; the SC350460 301212 and 301211 records prove independent consecutive name slices.
       - id: timestamp
         type: u4
       - id: gate_count

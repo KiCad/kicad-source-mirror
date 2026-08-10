@@ -330,8 +330,11 @@ namespace
         }
         else if( aGraphic.kind == MODEL_GRAPHIC_KIND::CIRCLE && aGraphic.points.size() >= 2 )
         {
-            shape->SetStart( convert( aGraphic.points[0] ) );
-            shape->SetEnd( convert( aGraphic.points[1] ) );
+            SOURCE_POINT center;
+            center.x = ( aGraphic.points[0].x + aGraphic.points[1].x ) / 2;
+            center.y = ( aGraphic.points[0].y + aGraphic.points[1].y ) / 2;
+            shape->SetStart( convert( center ) );
+            shape->SetEnd( convert( aGraphic.points[0] ) );
         }
         else if( aGraphic.kind == MODEL_GRAPHIC_KIND::ARC && aGraphic.points.size() >= 2 )
         {
@@ -466,7 +469,10 @@ namespace
         if( SCH_FIELD* value = symbol->GetField( FIELD_T::VALUE ) )
         {
             value->SetText( aLabel.text.text );
-            value->SetPosition( symbol->GetPosition() );
+            SOURCE_POINT textPosition = aLabel.position;
+            textPosition.x += aLabel.textOffset.x;
+            textPosition.y += aLabel.textOffset.y;
+            value->SetPosition( pagePoint( textPosition, aPageHeight ) );
             value->SetTextAngle( EDA_ANGLE( aLabel.angle, TENTHS_OF_A_DEGREE_T ) );
             applyTextPresentation( value, aLabel.presentation, aLabel.presentation.visible, aDiagnostics );
         }

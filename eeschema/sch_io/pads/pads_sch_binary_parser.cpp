@@ -1797,6 +1797,10 @@ namespace
 
             size_t   partPinCursor = pinStart;
             uint32_t unitCursor = 0;
+            const uint32_t pinNameHeapBase = aCursor.U32At( offset + 60 );
+
+            if( pinNameHeapBase > pinNameBytes )
+                throwDecodeError( source, wxS( "part-type pin-name base leaves controller 14" ) );
 
             auto decodePartPin = [&]( MODEL_PIN_DEFINITION& aDefinitionPin, size_t aPinRecord, MODEL_GATE& aGate )
             {
@@ -1812,15 +1816,17 @@ namespace
 
                 if( nameOffset != 0xFFFFFFFF )
                 {
-                    if( nameOffset >= pinNameBytes )
+                    if( nameOffset >= pinNameBytes - pinNameHeapBase )
                         throwDecodeError( pinSource, wxS( "pin-name offset leaves controller 14" ) );
 
                     SOURCE_PROVENANCE pinNameSource = sourceAt(
-                            aSourceName, aModel.version, wxS( "pin name" ), 14, aPinRecord, pinNameBase + nameOffset,
-                            pinNameBytes - nameOffset, static_cast<int>( aSheetIndex ) );
+                            aSourceName, aModel.version, wxS( "pin name" ), 14, aPinRecord,
+                            pinNameBase + pinNameHeapBase + nameOffset, pinNameBytes - pinNameHeapBase - nameOffset,
+                            static_cast<int>( aSheetIndex ) );
                     aDefinitionPin.name =
-                            decodeFixedString( aBytes, pinNameBase + nameOffset, pinNameBytes - nameOffset,
-                                               pinNameSource, aModel.diagnostics );
+                            decodeFixedString( aBytes, pinNameBase + pinNameHeapBase + nameOffset,
+                                               pinNameBytes - pinNameHeapBase - nameOffset, pinNameSource,
+                                               aModel.diagnostics );
                 }
 
                 aDefinitionPin.electricalType =
@@ -1856,14 +1862,16 @@ namespace
 
                 if( nameOffset != 0xFFFFFFFF )
                 {
-                    if( nameOffset >= pinNameBytes )
+                    if( nameOffset >= pinNameBytes - pinNameHeapBase )
                         throwDecodeError( pinSource, wxS( "pin-name offset leaves controller 14" ) );
 
                     SOURCE_PROVENANCE pinNameSource = sourceAt(
                             aSourceName, aModel.version, wxS( "connector pin name" ), 14, aPinRecord,
-                            pinNameBase + nameOffset, pinNameBytes - nameOffset, static_cast<int>( aSheetIndex ) );
-                    pin.name = decodeFixedString( aBytes, pinNameBase + nameOffset, pinNameBytes - nameOffset,
-                                                  pinNameSource, aModel.diagnostics );
+                            pinNameBase + pinNameHeapBase + nameOffset, pinNameBytes - pinNameHeapBase - nameOffset,
+                            static_cast<int>( aSheetIndex ) );
+                    pin.name = decodeFixedString( aBytes, pinNameBase + pinNameHeapBase + nameOffset,
+                                                  pinNameBytes - pinNameHeapBase - nameOffset, pinNameSource,
+                                                  aModel.diagnostics );
                 }
 
                 pin.swapGroup = aCursor.U8At( pinOffset + 20 );
@@ -3441,6 +3449,7 @@ namespace
                     throwDecodeError( source, wxS( "net-name off-page owner targets wrong net object" ) );
 
                 label->presentation = std::move( presentation );
+                label->textOffset = textOffset;
                 label->properties.push_back(
                         sourceProperty( wxS( "net_name_text_offset" ),
                                         wxString::Format( wxS( "%lld,%lld" ), textOffset.x, textOffset.y ), source ) );
