@@ -52,6 +52,18 @@ BOOST_AUTO_TEST_CASE( Issue24657FieldPositionIgnoredForERC )
                          "ERC lib-symbol comparison flagged a pure field position change "
                          "(Compare returned " << result << "); expected 0 to match the "
                          "schematic-side move behavior (issue #24657)." );
+
+    // And, one more time to check the less-used case (where the user *does* want it to
+    // flag field position changes).
+    flags = ~SCH_ITEM::COMPARE_FLAGS::UUID;
+    flags &= ~SCH_ITEM::COMPARE_FLAGS::UNIT;
+    flags &= ~SCH_ITEM::COMPARE_FLAGS::IDENTITY;
+
+    result = original.Compare( moved, flags );
+
+    BOOST_CHECK_MESSAGE( result != 0,
+                         "ERC lib-symbol comparison failed to flag a pure field position "
+                         "change when asked to check positions." );
 }
 
 

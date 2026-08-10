@@ -81,6 +81,14 @@ BOOST_FIXTURE_TEST_CASE( Issue22371LegacyLibrary, ERC_LIB_SYMBOL_MISMATCH_FIXTUR
             int result = flattenedLibSymbol->Compare( *libSymbolInSchematic, flags );
 
             BOOST_CHECK_EQUAL( result, 0 );
+
+            // The default Compare Symbol settings should also not find changes
+            SCHEMATIC_SETTINGS defaultSettings( nullptr, "empty" );
+            int defaultFlags = defaultSettings.SymbolCompareFlags();
+
+            result = flattenedLibSymbol->Compare( *libSymbolInSchematic, defaultFlags );
+
+            BOOST_CHECK_EQUAL( result, 0 );
             return;
         }
     }
