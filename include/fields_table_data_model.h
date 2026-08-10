@@ -464,11 +464,135 @@ protected:
         return false;
     }
 
-    virtual bool cmpRows( const DATA_MODEL_ROW<ITEM_TYPE>& lhRow, const DATA_MODEL_ROW<ITEM_TYPE>& rhRow,
-                     int aSortCol, bool aAscending ) = 0;
+    bool cmpRows( const DATA_MODEL_ROW<ITEM_TYPE>& lhRow, const DATA_MODEL_ROW<ITEM_TYPE>& rhRow,
+                  int aSortCol, bool aAscending )
+    {
+        // Empty rows always go to the bottom, whether ascending or descending
+        if( lhRow.m_items.empty() )
+            return false;
+        else if( rhRow.m_items.empty() )
+            return true;
+
+        // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
+        // to get the opposite sort.  i.e. ~(a<b) != (a>b)
+        auto local_cmp =
+                [aAscending]( const auto a, const auto b )
+                {
+                    if( aAscending )
+                        return a < b;
+                    else
+                        return a > b;
+                };
+
+        // Primary sort key is sortCol; secondary is always REFERENCE (column 0)
+        if( aSortCol < 0 || aSortCol >= this->GetNumberCols() )
+            aSortCol = 0;
+
+        wxString lhs = this->GetGroupedValue( lhRow, aSortCol, wxT( ", " ), wxT( "-" ), true )
+                               .Trim( true )
+                               .Trim( false );
+        wxString rhs = this->GetGroupedValue( rhRow, aSortCol, wxT( ", " ), wxT( "-" ), true )
+                               .Trim( true )
+                               .Trim( false );
+
+        if( lhs == rhs || this->ColIsReference( aSortCol ) )
+        {
+            if( aAscending )
+                return cmpRowItems( lhRow.m_items[0], rhRow.m_items[0] );
+            else
+                return cmpRowItems( rhRow.m_items[0], lhRow.m_items[0] );
+        }
+        else
+        {
+            return local_cmp( ValueStringCompare( lhs, rhs ), 0 );
+        }
+    }
+
     // Used for sorting row items that are grouped with a single row, e.g. the references
-    virtual bool cmpRowItems( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem ) = 0;
+    virtual bool cmpRowItems( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem )
+    {
+        return StrNumCmp( getItemReference( lhItem ), getItemReference( rhItem ), true ) < 0;
+    }
+
     virtual bool unitMatch( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem ) = 0;
+
+    bool groupMatch( const ITEM_TYPE& lhItem, const ITEM_TYPE& rhItem )
+    {
+        int  refCol = -1;
+        bool matchFound = false;
+
+        for( size_t i = 0; i < m_cols.size(); ++i )
+        {
+            if( ColIsReference( static_cast<int>( i ) ) )
+            {
+                refCol = static_cast<int>( i );
+                break;
+            }
+        }
+
+        if( refCol == -1 )
+            return false;
+
+        // First check the reference column.  This can be done directly from the items as
+        // references can't be edited in the grid.
+        if( m_cols[refCol].m_group )
+        {
+            // If we're grouping by reference, then only the prefix must match.
+            if( UTIL::GetRefDesPrefix( getItemReference( lhItem ) )
+                != UTIL::GetRefDesPrefix( getItemReference( rhItem ) ) )
+            {
+                return false;
+            }
+
+            matchFound = true;
+        }
+
+        KIID_PATH lhItemKey = getDataStoreKey( lhItem );
+        KIID_PATH rhItemKey = getDataStoreKey( rhItem );
+
+        // Now check all the other columns.
+        for( size_t i = 0; i < m_cols.size(); ++i )
+        {
+            // Handled already
+            if( static_cast<int>( i ) == refCol )
+                continue;
+
+            if( !m_cols[i].m_group )
+                continue;
+
+            // If the field is generated (e.g. ${QUANTITY}), we need to resolve it through the
+            // item to get the actual current value; otherwise we need to pull it out of the store
+            // so the refresh can regroup based on values that haven't been applied yet.
+            wxString lh, rh;
+
+            if( IsGeneratedField( m_cols[i].m_fieldName )
+                || IsGeneratedField( m_dataStore[lhItemKey][m_cols[i].m_fieldName] ) )
+            {
+                lh = getFieldResolvedLiveValue( lhItem, m_cols[i].m_fieldName );
+            }
+            else
+            {
+                lh = m_dataStore[lhItemKey][m_cols[i].m_fieldName];
+            }
+
+            if( IsGeneratedField( m_cols[i].m_fieldName )
+                || IsGeneratedField( m_dataStore[rhItemKey][m_cols[i].m_fieldName] ) )
+            {
+                rh = getFieldResolvedLiveValue( rhItem, m_cols[i].m_fieldName );
+            }
+            else
+            {
+                rh = m_dataStore[rhItemKey][m_cols[i].m_fieldName];
+            }
+
+            if( lh != rh )
+                return false;
+
+            matchFound = true;
+        }
+
+        return matchFound;
+    }
 
     void Sort()
     {

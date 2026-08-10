@@ -327,58 +327,6 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const w
 }
 
 
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmpRows( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhRow,
-                                                    const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhRow,
-                                                    int aSortCol,
-                                                    bool aAscending )
-{
-    // Empty rows always go to the bottom, whether ascending or descending
-    if( lhRow.m_items.size() == 0 )
-        return true;
-    else if( rhRow.m_items.size() == 0 )
-        return false;
-
-    // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
-    // to get the opposite sort.  i.e. ~(a<b) != (a>b)
-    auto local_cmp =
-            [ aAscending ]( const auto a, const auto b )
-            {
-                if( aAscending )
-                    return a < b;
-                else
-                    return a > b;
-            };
-
-    // Primary sort key is sortCol; secondary is always REFERENCE (column 0)
-    if( aSortCol < 0 || aSortCol >= this->GetNumberCols() )
-        aSortCol = 0;
-
-    wxString lhs = this->GetGroupedValue( lhRow, aSortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
-    wxString rhs = this->GetGroupedValue( rhRow, aSortCol, wxT( ", " ), wxT( "-" ), true ).Trim( true ).Trim( false );
-
-    if( lhs == rhs || this->ColIsReference( aSortCol ) )
-    {
-        if( aAscending )
-            return cmpRowItems( lhRow.m_items[0], rhRow.m_items[0] );
-        else
-            return cmpRowItems( rhRow.m_items[0], lhRow.m_items[0] );
-    }
-    else
-    {
-        return local_cmp( ValueStringCompare( lhs, rhs ), 0 );
-    }
-}
-
-
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::cmpRowItems( const SCH_REFERENCE& lhItem,
-                                                        const SCH_REFERENCE& rhItem )
-{
-    wxString lhs_ref( lhItem.GetRef() << lhItem.GetRefNumber() );
-    wxString rhs_ref( rhItem.GetRef() << rhItem.GetRefNumber() );
-    return StrNumCmp( lhs_ref, rhs_ref, true ) < 0;
-}
-
-
 bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhItem, const SCH_REFERENCE& rhItem )
 {
     // If items are unannotated then we can't tell if they're units of the same symbol or not
@@ -386,73 +334,6 @@ bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const SCH_REFERENCE& lhIte
         return false;
 
     return ( lhItem.GetRef() == rhItem.GetRef() && lhItem.GetRefNumber() == rhItem.GetRefNumber() );
-}
-
-
-bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
-{
-    int  refCol = GetFieldNameCol( GetCanonicalFieldName( FIELD_T::REFERENCE ) );
-    bool matchFound = false;
-
-    if( refCol == -1 )
-        return false;
-
-    // First check the reference column.  This can be done directly out of the
-    // SCH_REFERENCEs as the references can't be edited in the grid.
-    if( m_cols[refCol].m_group )
-    {
-        // if we're grouping by reference, then only the prefix must match
-        if( lhRef.GetRef() != rhRef.GetRef() )
-            return false;
-
-        matchFound = true;
-    }
-
-    KIID_PATH lhRefKey = getDataStoreKey( lhRef );
-    KIID_PATH rhRefKey = getDataStoreKey( rhRef );
-
-    // Now check all the other columns.
-    for( size_t i = 0; i < m_cols.size(); ++i )
-    {
-        //Handled already
-        if( static_cast<int>( i ) == refCol )
-            continue;
-
-        if( !m_cols[i].m_group )
-            continue;
-
-        // If the field is generated (e.g. ${QUANTITY}), we need to resolve it through the symbol
-        // to get the actual current value; otherwise we need to pull it out of the store so the
-        // refresh can regroup based on values that haven't been applied to the schematic yet.
-        wxString lh, rh;
-
-        if( IsGeneratedField( m_cols[i].m_fieldName )
-            || IsGeneratedField( m_dataStore[lhRefKey][m_cols[i].m_fieldName] ) )
-        {
-            lh = getFieldResolvedLiveValue( lhRef, m_cols[i].m_fieldName );
-        }
-        else
-        {
-            lh = m_dataStore[lhRefKey][m_cols[i].m_fieldName];
-        }
-
-        if( IsGeneratedField( m_cols[i].m_fieldName )
-            || IsGeneratedField( m_dataStore[rhRefKey][m_cols[i].m_fieldName] ) )
-        {
-            rh = getFieldResolvedLiveValue( rhRef, m_cols[i].m_fieldName );
-        }
-        else
-        {
-            rh = m_dataStore[rhRefKey][m_cols[i].m_fieldName];
-        }
-
-        if( lh != rh )
-            return false;
-
-        matchFound = true;
-    }
-
-    return matchFound;
 }
 
 

@@ -91,13 +91,7 @@ public:
     const SCH_REFERENCE_LIST& GetReferenceList() const { return m_symbolsList; }
 
 private:
-    bool cmpRows( const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& lhRow,
-              const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& rhRow,
-              int sortCol, bool ascending ) override;
-    bool cmpRowItems( const SCH_REFERENCE& lhItem, const SCH_REFERENCE& rhItem ) override;
-
     bool unitMatch( const SCH_REFERENCE& lhItem, const SCH_REFERENCE& rhItem ) override;
-    bool groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef );
 
     /**
      * Test whether a field's storage is common to every sheet path that reaches a symbol.
