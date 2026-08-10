@@ -142,6 +142,9 @@ private:
     SCH_SHEET* findTargetSheet( const SCH_SELECTION& aSelection, const VECTOR2I& aCursorPos,
                                 bool aHasSheetPins, bool aIsGraphicsOnly, bool aCtrlDown );
 
+    ///< True when dropping the selection into aTargetSheet would make a sheet its own descendant
+    bool dropWouldRecurse( const SCH_SELECTION& aSelection, const SCH_SHEET* aTargetSheet );
+
     ///< Perform the actual move of items by delta, handling split moves and orthogonal dragging
     void performItemMove( SCH_SELECTION& aSelection, const VECTOR2I& aDelta,
                           SCH_COMMIT* aCommit, int& aXBendCount, int& aYBendCount,
