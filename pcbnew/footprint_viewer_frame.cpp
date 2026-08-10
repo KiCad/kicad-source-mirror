@@ -952,7 +952,9 @@ void FOOTPRINT_VIEWER_FRAME::HardRedraw()
 {
     ReCreateLibraryList();
     ReCreateFootprintList();
-    ReloadFootprint( GetBoard()->GetFirstFootprint() );
+
+    if( FOOTPRINT* footprint = GetBoard()->GetFirstFootprint() )
+        ReloadFootprint( footprint );
 }
 
 void FOOTPRINT_VIEWER_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
