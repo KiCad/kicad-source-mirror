@@ -63,10 +63,10 @@ wxString interpretText( const wxString& aText )
     for( wxString::size_type i = 0; i < aText.size(); i++ )
     {
         // Interpret escaped characters
-        if( aText[ i ] == '\\' )
+        if( aText[i] == '\\' )
         {
-            if( i + 1 != aText.size() )
-                text.Append( aText[ i + 1 ] );
+            if( i+1 < aText.size() )
+                text.Append( aText[i+1] );
 
             i++;
             continue;
@@ -84,7 +84,7 @@ wxString interpretText( const wxString& aText )
             }
         }
 
-        if( aText[ i ] == '!' )
+        if( aText[i] == '!' )
         {
             if( sectionOpen )
             {
@@ -95,14 +95,14 @@ wxString interpretText( const wxString& aText )
 
             static wxString escapeChars( wxT( " )]}'\"" ) );
 
-            if( i + 1 != aText.size() && escapeChars.Find( aText[i + 1] ) == wxNOT_FOUND )
+            if( i+1 < aText.size() && escapeChars.Find( aText[i+1] ) == wxNOT_FOUND )
             {
                 sectionOpen = true;
                 text.Append( '~' );
             }
             else
             {
-                text.Append( aText[ i ] );
+                text.Append( aText[i] );
             }
 
             continue;
@@ -114,7 +114,7 @@ wxString interpretText( const wxString& aText )
             sectionOpen = false;
         }
 
-        text.Append( aText[ i ] );
+        text.Append( aText[i] );
     }
 
     return text;
@@ -210,8 +210,7 @@ size_t GetNodeCount( const wxXmlNode* aNode )
 
     timer.Stop();
 
-    wxLogTrace( traceEagleIo, wxS( "XML node '%s' count = %zu took %0.4f ms." ),
-                aNode->GetName(), cnt, timer.msecs() );
+    wxLogTrace( traceEagleIo, wxS( "XML node '%s' count = %zu took %0.4f ms." ), aNode->GetName(), cnt, timer.msecs() );
 
     return cnt;
 }
@@ -240,8 +239,7 @@ ECOORD::ECOORD( const wxString& aValue, enum ECOORD::EAGLE_UNIT aUnit )
 
     // %n is used to find out how many digits contains the fraction part, e.g. 0.001 contains 3
     // digits.
-    int ret = sscanf( aValue.c_str(), "%d.%n%llu%n", &integer, &pre_fraction, &fraction,
-                      &post_fraction );
+    int ret = sscanf( aValue.c_str(), "%d.%n%llu%n", &integer, &pre_fraction, &fraction, &post_fraction );
 
     if( ret == 0 )
         throw XML_PARSER_ERROR( "Invalid coordinate" );
@@ -278,10 +276,10 @@ long long int ECOORD::ConvertToNm( int aValue, enum EAGLE_UNIT aUnit )
     switch( aUnit )
     {
         default:
-        case EU_NM:    ret = aValue; break;
-        case EU_MM:    ret = (long long) aValue * 1000000; break;
-        case EU_INCH:  ret = (long long) aValue * 25400000; break;
-        case EU_MIL:   ret = (long long) aValue * 25400; break;
+        case EU_NM:    ret = aValue;                         break;
+        case EU_MM:    ret = (long long) aValue * 1000000;   break;
+        case EU_INCH:  ret = (long long) aValue * 25400000;  break;
+        case EU_MIL:   ret = (long long) aValue * 25400;     break;
     }
 
     if( ( ret > 0 ) != ( aValue > 0 ) )
@@ -372,8 +370,7 @@ double Convert<double>( const wxString& aValue )
     if( aValue.ToCDouble( &value ) )
         return value;
     else
-        throw XML_PARSER_ERROR( "Conversion to double failed. Original value: '" +
-                                aValue.ToStdString() + "'." );
+        throw XML_PARSER_ERROR( "Conversion to double failed. Original value: '" + aValue.ToStdString() + "'." );
 }
 
 
@@ -391,9 +388,10 @@ template <>
 bool Convert<bool>( const wxString& aValue )
 {
     if( aValue != "yes" && aValue != "no" )
-        throw XML_PARSER_ERROR( "Conversion to bool failed. Original value, '" +
-                                aValue.ToStdString() +
+    {
+        throw XML_PARSER_ERROR( "Conversion to bool failed. Original value, '" + aValue.ToStdString() +
                                 "', is neither 'yes' nor 'no'." );
+    }
 
     return aValue == "yes";
 }
@@ -465,11 +463,14 @@ T parseRequiredAttribute( wxXmlNode* aNode, const wxString& aAttribute )
     wxString value;
 
     if( aNode->GetAttribute( aAttribute, &value ) )
+    {
         return Convert<T>( value );
+    }
     else
+    {
         throw XML_PARSER_ERROR( "The required attribute " + aAttribute + " is missing at "
-                                "line " + wxString::Format( "%d", aNode->GetLineNumber() ) +
-                                "." );
+                                "line " + wxString::Format( "%d", aNode->GetLineNumber() ) + "." );
+    }
 }
 
 
