@@ -25,7 +25,10 @@ if(KICAD_BUILD_FUZZ_TESTS)
             target_compile_definitions(${target_name} PRIVATE KICAD_FUZZING)
         elseif(MSVC)
             target_compile_options(${target_name} PRIVATE /fsanitize=fuzzer /fsanitize=address)
-            target_compile_definitions(${target_name} PRIVATE KICAD_FUZZING _DISABLE_VECTOR_ANNOTATION _DISABLE_STRING_ANNOTATION)
+            # The rest of KiCad is built without ASan, so the STL container annotations must be
+            # off here too or the /fsanitize=address objects trip detect_mismatch at link time.
+            # _DISABLE_STL_ANNOTATION is equivalent to disabling the various type annotations individually
+            target_compile_definitions(${target_name} PRIVATE KICAD_FUZZING _DISABLE_STL_ANNOTATION)
         endif()
     endfunction()
 
