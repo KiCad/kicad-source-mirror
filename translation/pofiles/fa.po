@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Farsi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-08-03 21:01+0000\n"
+"PO-Revision-Date: 2026-08-12 14:51+0000\n"
 "Last-Translator: Mahdi Ahmadzadeh <mahdiahmadi83427@gmail.com>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/kicad/v10/fa/>\n"
 "Language: fa\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.8.1.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:395
@@ -5177,7 +5177,7 @@ msgstr "%s%s (%s)"
 #: common/dialogs/panel_grid_settings.cpp:317
 #, c-format
 msgid "Grid size '%s' already exists."
-msgstr ""
+msgstr "اندازه شبکۀ راهنما (Grid) '%s' از قبل وجود دارد."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
 #: common/eda_base_frame.cpp:1634 common/eda_base_frame.cpp:1644
@@ -5185,40 +5185,40 @@ msgstr ""
 #: common/eda_base_frame.cpp:1716 common/eda_base_frame.cpp:1735
 #: common/tool/common_tools.cpp:617
 msgid "Grids"
-msgstr ""
+msgstr "شبکه های راهنما (Grid)"
 
 #: common/dialogs/panel_grid_settings_base.cpp:67
 msgid "Fast Grid Switching"
-msgstr ""
+msgstr "تغییر سریع شبکۀ راهنما (Grid)"
 
 #: common/dialogs/panel_grid_settings_base.cpp:80
 msgid "Grid 1:"
-msgstr ""
+msgstr "شبکۀ راهنما (Grid) اول:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:89
 #: common/dialogs/panel_grid_settings_base.cpp:102
 msgid "(hotkey)"
-msgstr ""
+msgstr "(کلید میانبر)"
 
 #: common/dialogs/panel_grid_settings_base.cpp:93
 msgid "Grid 2:"
-msgstr ""
+msgstr "شبکۀ راهنما (Grid) دوم:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:109 common/tool/actions.cpp:1090
 msgid "Grid Overrides"
-msgstr ""
+msgstr "نادیده گرفتن برخی از قوانین شبکۀ راهنما (Grid Overrides)"
 
 #: common/dialogs/panel_grid_settings_base.cpp:122
 msgid "Connected items:"
-msgstr ""
+msgstr "اِلمان های متصل:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:130
 msgid "Wires:"
-msgstr ""
+msgstr "سیم کشی ها:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:138
 msgid "Vias:"
-msgstr ""
+msgstr "سوراخ های ارتباطی (Vias):"
 
 #: common/dialogs/panel_grid_settings_base.cpp:146
 #: eeschema/dialogs/dialog_field_properties_base.cpp:33
@@ -5230,24 +5230,24 @@ msgstr ""
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:26
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:25
 msgid "Text:"
-msgstr ""
+msgstr "متن ها:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:154
 msgid "Graphics:"
-msgstr ""
+msgstr "گرافیک ها:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:75
 #: common/dialogs/rule_editor_dialog_base.cpp:107
 msgid "Type filter text"
-msgstr ""
+msgstr "متن فیلتر را وارد کنید"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid "Undo All Changes"
-msgstr ""
+msgstr "لغو همۀ تغییرات"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:127
 msgid "Undo all changes made so far in this dialog"
-msgstr ""
+msgstr "همۀ تغییرات اعمال شده تا کنون در این پنجره را لغو کن"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:135
 msgid "Import Hotkeys..."
