@@ -428,6 +428,7 @@ set( KICOMMON_SRCS
     mdw/mdw_serial_worker.cpp
     mdw/mdw_types.cpp
     mdw/mdw_workspace_service.cpp
+    mdw_part_link.cpp
 
     startwizard/startwizard.cpp
     startwizard/startwizard_provider_libraries.cpp

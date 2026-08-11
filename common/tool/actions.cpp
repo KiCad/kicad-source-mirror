@@ -121,6 +121,56 @@ TOOL_ACTION ACTIONS::revert( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::restore_from_file )
         );
 
+TOOL_ACTION ACTIONS::checkInTeamLibrary( TOOL_ACTION_ARGS()
+        .Name( "common.Control.checkInTeamLibrary" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Check In Team Library Changes..." ) )
+        .Tooltip( _( "List the local changes to every library of this team library, with this library's ticked, and "
+                     "check in those you keep ticked. Pinned copies are snapshots and cannot be checked in." ) ) );
+
+TOOL_ACTION ACTIONS::updateTeamLibrary( TOOL_ACTION_ARGS()
+        .Name( "common.Control.updateTeamLibrary" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Get Library Updates" ) )
+        .Tooltip( _( "Bring the team library's local copy up to date with its source" ) ) );
+
+TOOL_ACTION ACTIONS::teamPartCheckIn( TOOL_ACTION_ARGS()
+        .Name( "common.Control.teamPartCheckIn" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Check In..." ) )
+        .Tooltip( _( "Check in the local changes of the part's team library" ) ) );
+
+TOOL_ACTION ACTIONS::teamPartRevise( TOOL_ACTION_ARGS()
+        .Name( "common.Control.teamPartRevise" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Revise" ) )
+        .Tooltip( _( "Open the released part and claim it for edits" ) ) );
+
+TOOL_ACTION ACTIONS::teamPartCancelRevision( TOOL_ACTION_ARGS()
+        .Name( "common.Control.teamPartCancelRevision" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Cancel Revision" ) )
+        .Tooltip( _( "Give up the claim on a revised part, discarding any change since its release" ) ) );
+
+TOOL_ACTION ACTIONS::teamPartRelease( TOOL_ACTION_ARGS()
+        .Name( "common.Control.teamPartRelease" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Release..." ) )
+        .Tooltip( _( "Save the selected parts and release each as its next revision" ) ) );
+
+TOOL_ACTION ACTIONS::teamPartTransition( TOOL_ACTION_ARGS()
+        .Name( "common.Control.teamPartTransition" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Change State..." ) )
+        .Tooltip( _( "Move the part's latest revision to another lifecycle state" ) )
+        .Parameter<wxString>( wxString() ) );
+
+TOOL_ACTION ACTIONS::teamPartHistory( TOOL_ACTION_ARGS()
+        .Name( "common.Control.teamPartHistory" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "History..." ) )
+        .Tooltip( _( "List the part's versions and compare two of them" ) ) );
+
 TOOL_ACTION ACTIONS::pageSettings( TOOL_ACTION_ARGS()
         .Name( "common.Control.pageSettings" )
         .Scope( AS_GLOBAL )

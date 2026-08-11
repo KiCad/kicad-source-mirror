@@ -19,9 +19,15 @@
  */
 
 #include <algorithm>
+#include <atomic>
+#include <chrono>
 #include <filesystem>
 #include <fstream>
+#include <functional>
+#include <limits>
 #include <optional>
+#include <shared_mutex>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -34,6 +40,7 @@
 #include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <settings/settings_manager.h>
+#include <thread_pool.h>
 #include <pegtl/contrib/analyze.hpp>
 
 #include <env_vars.h>
@@ -333,6 +340,207 @@ BOOST_AUTO_TEST_CASE( InsertRowPreservesExistingRowPointers )
                             j, i + 1, seededUris[j], seededPointers[j]->URI() ) );
         }
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( RepeatedTableTypeLoadsOnce )
+{
+    wxFileName dir( KI_TEST::GetTestDataRootDir(), wxEmptyString );
+    dir.AppendDir( "libraries" );
+
+    LIBRARY_MANAGER manager;
+    manager.LoadProjectTables( dir.GetPath(), { LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_TYPE::SYMBOL } );
+
+    BOOST_CHECK_EQUAL( manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT, true ).size(), 224 );
+}
+
+
+BOOST_AUTO_TEST_CASE( ColdRowLookupsListRowsOnce )
+{
+    wxFileName dir( KI_TEST::GetTestDataRootDir(), wxEmptyString );
+    dir.AppendDir( "libraries" );
+
+    LIBRARY_MANAGER manager;
+    manager.LoadProjectTables( dir.GetPath(), { LIBRARY_TABLE_TYPE::SYMBOL } );
+
+    std::vector<wxString> nicknames;
+
+    for( LIBRARY_TABLE_ROW* row : manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT, true ) )
+    {
+        nicknames.push_back( row->Nickname() );
+        nicknames.push_back( row->Nickname() + wxS( "_absent" ) );
+    }
+
+    BOOST_REQUIRE_GT( nicknames.size(), 400 );
+
+    auto elapsedMs = []( const std::function<void()>& aWork )
+    {
+        auto start = std::chrono::steady_clock::now();
+        aWork();
+        return std::chrono::duration<double, std::milli>( std::chrono::steady_clock::now() - start ).count();
+    };
+
+    auto listRows = [&]()
+    {
+        manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::PROJECT, true );
+    };
+
+    auto lookUpAll = [&]()
+    {
+        for( const wxString& nickname : nicknames )
+            manager.GetRow( LIBRARY_TABLE_TYPE::SYMBOL, nickname, LIBRARY_TABLE_SCOPE::PROJECT );
+    };
+
+    // A tree refresh looks up every library right after a table load, so cold lookups are timed against one listing
+    double listingMs = std::numeric_limits<double>::max();
+    double lookupsMs = std::numeric_limits<double>::max();
+
+    for( int ii = 0; ii < 20; ++ii )
+    {
+        manager.LoadProjectTables( dir.GetPath(), { LIBRARY_TABLE_TYPE::SYMBOL } );
+        listingMs = std::min( listingMs, elapsedMs( listRows ) );
+        lookupsMs = std::min( lookupsMs, elapsedMs( lookUpAll ) );
+    }
+
+    BOOST_TEST_MESSAGE( nicknames.size() << " lookups " << lookupsMs << " ms, one listing " << listingMs << " ms" );
+    BOOST_CHECK_LT( lookupsMs / listingMs, 20.0 );
+}
+
+
+namespace
+{
+
+class FAKE_IO : public IO_BASE
+{
+public:
+    FAKE_IO() :
+            IO_BASE( wxS( "fake" ) )
+    {
+    }
+
+    const IO_FILE_DESC GetLibraryDesc() const override { return IO_FILE_DESC(); }
+};
+
+
+/// Each library takes 10 ms to load, like a slow plugin that only stops between libraries
+class SLOW_LIBRARY_ADAPTER : public LIBRARY_MANAGER_ADAPTER
+{
+public:
+    SLOW_LIBRARY_ADAPTER( LIBRARY_MANAGER& aManager, LIBRARY_TABLE_TYPE aType ) :
+            LIBRARY_MANAGER_ADAPTER( aManager ),
+            m_type( aType )
+    {
+    }
+
+    ~SLOW_LIBRARY_ADAPTER() override { AbortAsyncLoad(); }
+
+    LIBRARY_TABLE_TYPE Type() const override { return m_type; }
+
+    std::optional<LIB_STATUS> LoadOne( LIB_DATA* aLib ) override { return std::nullopt; }
+
+    int Loaded() const { return m_loaded.load(); }
+
+protected:
+    std::map<wxString, LIB_DATA>& globalLibs() override { return m_globalLibs; }
+    std::map<wxString, LIB_DATA>& globalLibs() const override { return m_globalLibs; }
+    std::shared_mutex&            globalLibsMutex() override { return m_globalLibsMutex; }
+    std::shared_mutex&            globalLibsMutex() const override { return m_globalLibsMutex; }
+
+    void enumerateLibrary( LIB_DATA* aLib, const wxString& aUri ) override
+    {
+        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+        ++m_loaded;
+    }
+
+    LIBRARY_RESULT<IO_BASE*> createPlugin( const LIBRARY_TABLE_ROW* row ) override { return new FAKE_IO(); }
+
+    IO_BASE* plugin( const LIB_DATA* aRow ) override { return aRow->plugin.get(); }
+
+private:
+    LIBRARY_TABLE_TYPE                   m_type;
+    std::atomic<int>                     m_loaded{ 0 };
+    mutable std::map<wxString, LIB_DATA> m_globalLibs;
+    mutable std::shared_mutex            m_globalLibsMutex;
+};
+
+} // namespace
+
+
+BOOST_AUTO_TEST_CASE( AbortReachesAdapterQueuedBehindAnother )
+{
+    KI_TEST::SCOPED_TEMP_DIR dir( "kicad_qa_abort_queued_adapter" );
+
+    {
+        std::ofstream proFile( dir.Path() / "abort.kicad_pro" );
+        proFile << R"({ "meta": { "filename": "abort.kicad_pro", "version": 3 } })";
+    }
+
+    SETTINGS_MANAGER& settings = Pgm().GetSettingsManager();
+    BOOST_REQUIRE( settings.LoadProject( dir.ChildPathStr( wxS( "abort.kicad_pro" ) ) ) );
+
+    // Matches the worker cap in asyncLoadLocked(), and gives each busy worker 2 s of libraries
+    thread_pool& tp = GetKiCadThreadPool();
+    const size_t poolSize = tp.get_thread_count();
+    const size_t busyWorkers = poolSize > 2 ? poolSize - 2 : 1;
+    const int    busyLibraries = static_cast<int>( busyWorkers ) * 200;
+
+    {
+        LIBRARY_MANAGER manager;
+
+        for( auto [type, count] :
+             { std::pair( LIBRARY_TABLE_TYPE::SYMBOL, 4 ), std::pair( LIBRARY_TABLE_TYPE::FOOTPRINT, busyLibraries ) } )
+        {
+            LIBRARY_TABLE* table = manager.Table( type, LIBRARY_TABLE_SCOPE::PROJECT ).value();
+
+            for( int ii = 0; ii < count; ++ii )
+            {
+                LIBRARY_TABLE_ROW& row = table->InsertRow();
+                row.SetNickname( wxString::Format( wxS( "lib%d" ), ii ) );
+                row.SetType( wxS( "KiCad" ) );
+                row.SetURI( wxString::Format( wxS( "/nowhere/lib%d" ), ii ) );
+            }
+
+            manager.RegisterAdapter( type, std::make_unique<SLOW_LIBRARY_ADAPTER>( manager, type ) );
+        }
+
+        auto& queued = static_cast<SLOW_LIBRARY_ADAPTER&>( *manager.Adapter( LIBRARY_TABLE_TYPE::SYMBOL ).value() );
+        auto& busy = static_cast<SLOW_LIBRARY_ADAPTER&>( *manager.Adapter( LIBRARY_TABLE_TYPE::FOOTPRINT ).value() );
+
+        // Hold the threads the busy adapter leaves free, so the other adapter's workers can only queue, but no
+        // more, so threads freed by finished busy workers stay free and the abort cannot hang
+        std::atomic<size_t> started = 0;
+        std::atomic<bool>   release = false;
+
+        busy.AsyncLoad();
+
+        for( size_t ii = busyWorkers; ii < poolSize; ++ii )
+        {
+            tp.detach_task(
+                    [&started, &release]()
+                    {
+                        ++started;
+
+                        while( !release.load() )
+                            std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+                    } );
+        }
+
+        while( started.load() < poolSize - busyWorkers
+               || ( tp.get_tasks_running() < poolSize && busy.Loaded() < busyLibraries ) )
+        {
+            std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+        }
+
+        queued.AsyncLoad();
+        manager.AbortAsyncLoads();
+        release.store( true );
+        tp.wait();
+
+        BOOST_TEST_MESSAGE( busy.Loaded() << " of " << busyLibraries << " libraries loaded before the abort" );
+        BOOST_CHECK_LT( busy.Loaded(), busyLibraries );
+    }
+
+    settings.UnloadProject( &settings.Prj(), false );
 }
 
 

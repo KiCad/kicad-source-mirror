@@ -69,6 +69,10 @@ struct MDW_LOCAL_CHANGE
     wxString          base_revision_id;   ///< What the copy holds; empty for ADDED
     wxString          base_relative_path; ///< The file the source holds it in; empty when unknown or ADDED
 
+    /// The format version the source holds the member's file in at the copy's snapshot, read at base_relative_path
+    /// or else relative_path. Empty when it holds no such file or cannot tell.
+    wxString base_format;
+
     /// Whether the member may be checked in. DENIED disables its row with the reason; UNKNOWN leaves it to the call
     kiapi::workspace::Permission checkin;
 
@@ -79,9 +83,9 @@ struct MDW_LOCAL_CHANGE
     /// checks in the file as it is on disk.
     wxString format_digest;
 
-    /// The digest of the text listed for relative_path when its other changes only reformatted symbols, and how many
-    /// rows edit that file. Checking in all of them checks in the file as it is on disk, so the source holds the
-    /// re-save too and the copy no longer differs from it.
+    /// The digest of the text listed for relative_path when it was re-saved, its other changes only reformatting
+    /// symbols or its format newer than the source holds, and how many rows edit that file. Checking in all of them
+    /// checks in the file as it is on disk, so the source holds the re-save too and the copy no longer differs from it.
     wxString file_digest;
     size_t   file_edits = 0;
 };

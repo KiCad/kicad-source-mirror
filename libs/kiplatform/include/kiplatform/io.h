@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -360,6 +361,15 @@ namespace IO
      */
     bool AtomicWriteFile( const wxString& aTargetPath, const void* aData, size_t aSize,
                           wxString* aError = nullptr );
+
+    /**
+     * AtomicWriteFile() that asks @p aCommit, once the temp file is durable and just before
+     * the rename, whether to go on. Checking the target there leaves only the rename between
+     * the check and the replacement. When @p aCommit returns false the temp file is removed,
+     * @p aTargetPath is left as it is, and the call returns false with @p aError unset.
+     */
+    bool AtomicWriteFile( const wxString& aTargetPath, const void* aData, size_t aSize, wxString* aError,
+                          const std::function<bool()>& aCommit );
 } // namespace IO
 } // namespace KIPLATFORM
 

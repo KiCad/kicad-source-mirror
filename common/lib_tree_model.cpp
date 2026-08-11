@@ -76,11 +76,15 @@ void LIB_TREE_NODE::AssignIntrinsicRanks( const std::vector<wxString>& aShownCol
 
 void LIB_TREE_NODE::SortNodes( bool aUseScores )
 {
-    std::sort( m_Children.begin(), m_Children.end(),
-            [&]( std::unique_ptr<LIB_TREE_NODE>& a, std::unique_ptr<LIB_TREE_NODE>& b )
-            {
-                return Compare( *a, *b, aUseScores );
-            } );
+    // An outside search ranked its own results, so neither scores nor columns may reorder them
+    if( !m_IsExternalResultsGroup )
+    {
+        std::sort( m_Children.begin(), m_Children.end(),
+                [&]( std::unique_ptr<LIB_TREE_NODE>& a, std::unique_ptr<LIB_TREE_NODE>& b )
+                {
+                    return Compare( *a, *b, aUseScores );
+                } );
+    }
 
     for( std::unique_ptr<LIB_TREE_NODE>& node: m_Children )
         node->SortNodes( aUseScores );
@@ -92,30 +96,22 @@ bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& a
     if( aNode1.m_Type != aNode2.m_Type )
         return aNode1.m_Type < aNode2.m_Type;
 
-    // Recently used sorts at top
-    if( aNode1.m_IsRecentlyUsedGroup )
-    {
-        if( aNode2.m_IsRecentlyUsedGroup )
-        {
-            // Make sure "-- Recently Used" is always at the top
-            // Start by checking the name of aNode2, because we want to satisfy the irreflexive
-            // property of the strict weak ordering.
-            if( aNode2.m_IsRecentlyUsedGroup )
-                return false;
-            else if( aNode1.m_IsRecentlyUsedGroup )
-                return true;
+    auto groupRank =
+            []( LIB_TREE_NODE const& aNode )
+            {
+                if( aNode.m_IsRecentlyUsedGroup )
+                    return 3;
+                else if( aNode.m_IsAlreadyPlacedGroup )
+                    return 2;
+                else if( aNode.m_IsExternalResultsGroup )
+                    return 1;
 
-            return aNode1.m_IntrinsicRank > aNode2.m_IntrinsicRank;
-        }
-        else
-        {
-            return true;
-        }
-    }
-    else if( aNode2.m_Name.StartsWith( wxT( "-- " ) ) )
-    {
-        return false;
-    }
+                return 0;
+            };
+
+    // Synthetic groups sort at top in a fixed order, whatever their scores
+    if( groupRank( aNode1 ) != groupRank( aNode2 ) )
+        return groupRank( aNode1 ) > groupRank( aNode2 );
 
     // Pinned nodes go next
     if( aNode1.m_Pinned && !aNode2.m_Pinned )
@@ -152,7 +148,9 @@ LIB_TREE_NODE::LIB_TREE_NODE() :
         m_IsRoot( false ),
         m_IsPower( false ),
         m_IsRecentlyUsedGroup( false ),
-        m_IsAlreadyPlacedGroup( false )
+        m_IsAlreadyPlacedGroup( false ),
+        m_IsExternalResultsGroup( false ),
+        m_Unavailable( false )
 {}
 
 
@@ -298,7 +296,19 @@ LIB_TREE_NODE_ITEM& LIB_TREE_NODE_LIBRARY::AddItem( LIB_TREE_ITEM* aItem )
 void LIB_TREE_NODE_LIBRARY::UpdateScore( const std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>>& aMatchers,
                                          std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
-    if( m_Children.empty() )
+    if( m_IsExternalResultsGroup )
+    {
+        m_Score = 0;
+        m_ExactMatch = false;
+
+        // Scored as if the search were empty, since the local terms may never appear in a result
+        for( std::unique_ptr<LIB_TREE_NODE>& child : m_Children )
+        {
+            child->UpdateScore( {}, aFilter );
+            m_Score = std::max( m_Score, child->m_Score );
+        }
+    }
+    else if( m_Children.empty() )
     {
         m_Score = 1;
         m_ExactMatch = false;

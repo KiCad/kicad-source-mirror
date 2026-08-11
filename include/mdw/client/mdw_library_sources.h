@@ -44,12 +44,14 @@
 #include <mutex>
 #include <optional>
 #include <set>
+#include <string>
 #include <tuple>
 #include <utility>
 #include <vector>
 
 #include <wx/string.h>
 
+class KIWAY;
 class LIB_ID;
 class LIBRARY_MANAGER;
 class LIBRARY_TABLE;
@@ -194,6 +196,15 @@ struct MDW_CONFLICT_SIDES_RESULT
 {
     MDW_RESULT                      result;
     std::vector<MDW_CONFLICT_SIDES> sides;
+};
+
+
+/// A symbol library's files as a format upgrade read them and as it saved them aside, by path
+struct MDW_FORMAT_UPGRADE
+{
+    wxString                        library; ///< The .kicad_sym file or .kicad_symdir folder
+    std::map<wxString, std::string> before;
+    std::map<wxString, std::string> after;
 };
 
 
@@ -588,11 +599,45 @@ public:
     /// The text of the member aConflict names in the file at aPath, or nothing when it cannot be read
     static std::optional<std::string> ReadMember( const wxString& aPath, const MDW_UPDATE_CONFLICT& aConflict );
 
+    /// Library file text holding the member a member file holds, saved whole in the current format as
+    /// SYM_LIB_DIFFER::UpgradedWithMember() does; given the library text, the texts of the other files of its folder,
+    /// the member file text and the member's name
+    using UPGRADE = std::function<std::optional<std::string>( const std::string&, const std::vector<std::string>&,
+                                                              const std::string&, const wxString& )>;
+
+    /// UPGRADE as the schematic kiface aKiway loads does it, loaded only once a symbol needs it
+    static UPGRADE SymbolUpgrade( KIWAY& aKiway );
+
+    /**
+     * Library file text aDestination with its symbol aName as aMemberFile, a file holding only that symbol, has it.
+     * A symbol reads by its file's header, so it is spliced in as is only where both texts name the same format
+     * version. Otherwise aUpgrade saves both whole in the current format, as a first save would, finding parents
+     * also in aFolder, the texts of the other files of aDestination's .kicad_symdir folder. Nothing when the symbol
+     * cannot be placed.
+     */
+    static std::optional<std::string> SpliceMember( const std::string&              aDestination,
+                                                    const std::vector<std::string>& aFolder,
+                                                    const std::string& aMemberFile, const wxString& aName,
+                                                    const UPGRADE& aUpgrade );
+
     /**
      * Replace the member aConflict names in the library file at aPath with aAnswer, a file holding only that member
-     * as a conflict prompt answered it. False when either lacks the member or aPath cannot be written.
+     * as a conflict prompt answered it, by SpliceMember() for a symbol. False when either lacks the member or aPath
+     * cannot be written.
      */
-    static bool WriteMember( const wxString& aPath, const MDW_UPDATE_CONFLICT& aConflict, const std::string& aAnswer );
+    static bool WriteMember( const wxString& aPath, const MDW_UPDATE_CONFLICT& aConflict, const std::string& aAnswer,
+                             const UPGRADE& aUpgrade );
+
+    /**
+     * aResolutions, whose merged files each hold only the member aConflicts names for it, as the backend may place
+     * them in the copy at aLocalRoot. A symbol answer is spliced as is only into a library file of its own format, and
+     * only when it does not extend another. Every answer to any other file goes into that whole file instead, which
+     * aUpgrade saves in the current format where formats differ, and each such resolution carries the file with
+     * whole_file_of set to the blob id of the file it was built from. Nothing when an answer cannot be placed.
+     */
+    static std::optional<std::vector<MDW_CONFLICT_RESOLUTION>>
+    PlacedAnswers( const wxString& aLocalRoot, const std::vector<MDW_UPDATE_CONFLICT>& aConflicts,
+                   const std::vector<MDW_CONFLICT_RESOLUTION>& aResolutions, const UPGRADE& aUpgrade );
 
     /**
      * Connect to the source of aCopy and check in aChanges, rows LibraryChangesFor listed. The members the
@@ -612,6 +657,45 @@ public:
                                                           const MDW_LIBRARY_COPY&              aCopy,
                                                           const std::vector<MDW_LOCAL_CHANGE>& aChanges,
                                                           const wxString&                      aComment );
+
+    /**
+     * The files of the symbol library at aPath, a .kicad_sym file or a .kicad_symdir folder, whose header names a
+     * format version older than aVersion. A file naming none is older, and one that is no symbol library is not.
+     */
+    static std::vector<wxString> OutdatedSymbolFiles( const wxString& aPath, long aVersion );
+
+    /// True when the source at aLocator last said this user may not check in
+    static bool CheckInKnownDenied( const wxString& aLocator );
+
+    /**
+     * Read the symbol library at aPath, have aSave write it in the current file format to the path it is given, and
+     * answer both, or nothing with aError set. The library's files are left alone. aSave may run editor code, so
+     * call this on the UI thread.
+     */
+    static std::optional<MDW_FORMAT_UPGRADE>
+    StageFormatUpgrade( const wxString& aPath, const std::function<bool( const wxString& )>& aSave, wxString& aError );
+
+    /// Ok when aDiffSymbols reads every symbol of aUpgrade the same before and after, parents included
+    static MDW_RESULT CheckFormatUpgrade( const MDW_FORMAT_UPGRADE&        aUpgrade,
+                                          const KIGIT::LIBRARY_FILES_DIFF& aDiffSymbols );
+
+    /**
+     * Save aUpgrade's files of the library in aCopy and check them in with aComment as one format upgrade, which
+     * revises no symbol and leaves released ones released. Every file must name format aVersion or later. Holds the
+     * copy's lock throughout, and refuses while the library has changes or a file no longer holds what the upgrade
+     * read. A file the upgrade saved is put back when nothing was committed, unless it changed since. Nothing is
+     * checked in when the files already were current.
+     */
+    static MDW_LIBRARY_CHECKIN_RESULT CheckInFormatUpgrade( const MDW_LIBRARY_COPY&   aCopy,
+                                                            const MDW_FORMAT_UPGRADE& aUpgrade, long aVersion,
+                                                            const wxString& aComment );
+
+    /// CheckInFormatUpgrade() through aSource and the index aSources, as a caller that holds both has them
+    static MDW_LIBRARY_CHECKIN_RESULT CheckInFormatUpgrade( MDW_LIBRARY_SOURCES&               aSources,
+                                                            const std::shared_ptr<MDW_SOURCE>& aSource,
+                                                            const MDW_LIBRARY_COPY&            aCopy,
+                                                            const MDW_FORMAT_UPGRADE& aUpgrade, long aVersion,
+                                                            const wxString& aComment );
 
     /**
      * Move the unpinned copy of aMarker to aTo, the snapshot a release committed, so its members list as its files

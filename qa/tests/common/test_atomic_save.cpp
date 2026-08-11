@@ -219,6 +219,32 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_OverwritePreservesOriginalOnFailure )
 }
 
 
+// The commit check sees the new bytes already written aside, and a refusal leaves the target as it was
+BOOST_AUTO_TEST_CASE( AtomicWriteFile_CommitCheckRunsJustBeforeRename )
+{
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad-atomicsave-commitcheck" ) );
+    const wxString           target = tempDir.PathStr() + wxFileName::GetPathSeparator() + wxT( "target" );
+    const std::string        original = "saved meanwhile\n";
+    const std::string        payload = "replacement\n";
+    unsigned                 temps = 0;
+
+    writeFileContents( target, original );
+
+    wxString err;
+    bool     ok = KIPLATFORM::IO::AtomicWriteFile( target, payload.data(), payload.size(), &err,
+                                                   [&]()
+                                                   {
+                                                   temps = countSiblingTemps( target );
+                                                   return false;
+                                               } );
+
+    BOOST_CHECK( !ok );
+    BOOST_CHECK_EQUAL( temps, 1u );
+    BOOST_CHECK_EQUAL( KI_TEST::LoadStringData( target ), original );
+    BOOST_CHECK_EQUAL( countSiblingTemps( target ), 0u );
+}
+
+
 BOOST_AUTO_TEST_CASE( PrettifiedFormatter_ExplicitFinishThrowsOnCommitFailure )
 {
     // Target path is a pre-existing directory so rename() fails with EISDIR during commit.

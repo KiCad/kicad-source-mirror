@@ -150,6 +150,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM_LIST<wxString>( "lib_tree.columns",
             &m_LibTree.columns, {} ) );
 
+    m_params.emplace_back( new PARAM_LIST<wxString>( "lib_tree.offered_columns",
+            &m_LibTree.offered_columns, {} ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "lib_tree.column_widths",
             [&]() -> nlohmann::json
             {

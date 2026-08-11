@@ -148,6 +148,12 @@ public:
     bool                         m_IsRecentlyUsedGroup;
     bool                         m_IsAlreadyPlacedGroup;
 
+    /// Children were matched by an outside search; they skip local scoring and keep their order
+    bool                         m_IsExternalResultsGroup;
+
+    /// Shown greyed because it cannot be chosen here
+    bool                         m_Unavailable;
+
 protected:
     std::vector<SEARCH_TERM> m_sourceSearchTerms;
 };

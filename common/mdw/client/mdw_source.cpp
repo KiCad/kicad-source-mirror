@@ -471,6 +471,7 @@ MDW_OP MDW_SOURCE::LocalChanges( const wxString& aLocalRoot, const MDW_PAGE& aPa
                     change.provisional = row.provisional();
                     change.base_revision_id = MdwFromUtf8( row.base_revision_id() );
                     change.base_relative_path = MdwFromUtf8( row.base_relative_path() );
+                    change.base_format = MdwFromUtf8( row.base_format() );
                     change.checkin = row.checkin();
                     MdwSanitize( change.checkin );
                 }

@@ -263,6 +263,13 @@ bool KIPLATFORM::IO::CommitTempFile( const wxString& aTempPath, const wxString& 
 bool KIPLATFORM::IO::AtomicWriteFile( const wxString& aTargetPath, const void* aData, size_t aSize,
                                       wxString* aError )
 {
+    return AtomicWriteFile( aTargetPath, aData, aSize, aError, {} );
+}
+
+
+bool KIPLATFORM::IO::AtomicWriteFile( const wxString& aTargetPath, const void* aData, size_t aSize, wxString* aError,
+                                      const std::function<bool()>& aCommit )
+{
     wxString target = ResolveSymlinkTarget( aTargetPath );
     wxString tempPath;
     FILE*    fp = OpenUniqueSiblingTempFile( target, wxT( "wb" ), &tempPath, aError );
@@ -302,6 +309,12 @@ bool KIPLATFORM::IO::AtomicWriteFile( const wxString& aTargetPath, const void* a
                                         wxString::FromUTF8( strerror( err ) ) );
         }
 
+        wxRemoveFile( tempPath );
+        return false;
+    }
+
+    if( aCommit && !aCommit() )
+    {
         wxRemoveFile( tempPath );
         return false;
     }
