@@ -1763,14 +1763,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardEditorAppearanceSettings(
             FromProtoEnum<HIGH_CONTRAST_MODE>( newSettings.inactive_layer_display() );
     options.m_NetColorMode =
             FromProtoEnum<NET_COLOR_MODE>( newSettings.net_color_display() );
-
-    bool flip = newSettings.board_flip() == BoardFlipMode::BFM_FLIPPED_X;
-
-    if( flip != view->IsMirroredX() )
-    {
-        view->SetMirror( !view->IsMirroredX(), view->IsMirroredY() );
-        view->RecacheAllItems();
-    }
+    options.m_FlipBoardView = newSettings.board_flip() == BoardFlipMode::BFM_FLIPPED_X;
 
     editorSettings->m_Display.m_RatsnestMode =
             FromProtoEnum<RATSNEST_MODE>( newSettings.ratsnest_display() );
