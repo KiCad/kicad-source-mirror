@@ -268,6 +268,7 @@ public:
     KIFONT::FONT* GetFont() const               { return m_attributes.m_Font; }
 
     void SetUnresolvedFontName( const wxString& aFontName ) { m_unresolvedFontName = aFontName; }
+    wxString GetUnresolvedFontName() const { return m_unresolvedFontName; }
     bool ResolveFont( const std::vector<wxString>* aEmbeddedFonts );
 
     wxString GetFontName() const;

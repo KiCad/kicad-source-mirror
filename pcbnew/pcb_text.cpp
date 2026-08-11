@@ -77,14 +77,11 @@ PCB_TEXT::PCB_TEXT( FOOTPRINT* aParent, KICAD_T idtype ) :
 }
 
 
-PCB_TEXT::PCB_TEXT( const PCB_TEXT& aOther, KICAD_T idtype ) :
-        BOARD_ITEM( aOther.GetParent(), idtype ),
+PCB_TEXT::PCB_TEXT( const PCB_TEXT& aOther ) :
+        BOARD_ITEM( aOther ),
         EDA_TEXT( aOther ),
         m_libTextAngle( aOther.m_libTextAngle )
 {
-    SetLayer( aOther.GetLayer() );
-    SetIsKnockout( aOther.IsKnockout() );
-    SetLocked( aOther.IsLocked() );
 }
 
 
