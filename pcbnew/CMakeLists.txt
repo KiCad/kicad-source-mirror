@@ -424,6 +424,7 @@ set( PCBNEW_CLASS_SRCS
     footprint_libraries_utils.cpp
     footprint_viewer_frame.cpp
     fp_tree_model_adapter.cpp
+    footprint_fields_data_model.cpp
     generate_footprint_info.cpp
     graphics_cleaner.cpp
     grid_layer_box_helpers.cpp
