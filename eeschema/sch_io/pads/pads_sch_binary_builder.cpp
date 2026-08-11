@@ -775,9 +775,9 @@ namespace
 
             for( const MODEL_GATE& gate : part.gates )
             {
-                const MODEL_SYMBOL_DEFINITION&    definition = gate.unit == aPlacement.unit
-                                                                       ? definitionById( aModel, aPlacement.definition.id )
-                                                                       : definitionById( aModel, gate.definition.id );
+                const MODEL_SYMBOL_DEFINITION&           definition = gate.unit == aPlacement.unit
+                                                                              ? definitionById( aModel, aPlacement.definition.id )
+                                                                              : definitionById( aModel, gate.definition.id );
                 const std::vector<PLACED_PIN_REFERENCE>* placementPins =
                         gate.unit == aPlacement.unit ? &aPlacement.pins : nullptr;
                 addDefinitionUnit( library.get(), definition, &gate, static_cast<int>( gate.unit ), aDiagnostics,
@@ -922,7 +922,7 @@ namespace
             { wxS( "checked by" ), 3 }, { wxS( "checked date" ), 4 },   { wxS( "approved" ), 5 },
             { wxS( "app date" ), 6 },   { wxS( "drawing number" ), 7 }, { wxS( "scale" ), 8 }
         };
-        std::array<bool, 9>              reservedComments{};
+        std::array<bool, 9>             reservedComments{};
         std::vector<const MODEL_FIELD*> fallbackComments;
         wxString                        companyName;
         wxString                        code;
@@ -1003,23 +1003,23 @@ namespace
     }
 
 
-    double worksheetX( const SOURCE_POINT& aPoint )
+    double worksheetX( const SOURCE_POINT& aPoint, const SOURCE_POINT& aPageSize )
     {
-        return static_cast<double>( aPoint.x ) * 0.0127;
+        return static_cast<double>( aPageSize.x - aPoint.x ) * 0.0127;
     }
 
 
-    double worksheetY( const SOURCE_POINT& aPoint, const SOURCE_POINT& aPageSize )
+    double worksheetY( const SOURCE_POINT& aPoint )
     {
-        return static_cast<double>( aPageSize.y - aPoint.y ) * 0.0127;
+        return static_cast<double>( aPoint.y ) * 0.0127;
     }
 
 
     void appendWorksheetLine( std::ostringstream& aOutput, const SOURCE_POINT& aStart, const SOURCE_POINT& aEnd,
                               const SOURCE_POINT& aPageSize, int64_t aWidth )
     {
-        aOutput << "  (line (name \"\") (start " << worksheetX( aStart ) << ' ' << worksheetY( aStart, aPageSize )
-                << ") (end " << worksheetX( aEnd ) << ' ' << worksheetY( aEnd, aPageSize ) << ')';
+        aOutput << "  (line (name \"\") (start " << worksheetX( aStart, aPageSize ) << ' ' << worksheetY( aStart )
+                << ") (end " << worksheetX( aEnd, aPageSize ) << ' ' << worksheetY( aEnd ) << ')';
 
         if( aWidth > 0 )
             aOutput << " (linewidth " << static_cast<double>( aWidth ) * 0.0127 << ')';
@@ -1045,8 +1045,8 @@ namespace
                     continue;
 
                 output << "  (tbtext \"" << worksheetVariable( graphic.text.text ) << "\" (name \"\") (pos "
-                       << worksheetX( graphic.points.front() ) << ' '
-                       << worksheetY( graphic.points.front(), aSheet.pageSize );
+                       << worksheetX( graphic.points.front(), aSheet.pageSize ) << ' '
+                       << worksheetY( graphic.points.front() );
 
                 if( graphic.angle != 0 )
                     output << ") (rotate " << static_cast<double>( graphic.angle ) / 10.0;

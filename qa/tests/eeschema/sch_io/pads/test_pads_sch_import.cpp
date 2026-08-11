@@ -1774,10 +1774,10 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
     worksheet.name.text = wxS( "CI_WORKSHEET" );
     worksheet.name.source = worksheet.source;
     const std::array<std::pair<wxString, SOURCE_POINT>, 4> worksheetMarkers = {
-        std::pair{ wxS( "TOP_LEFT" ), SOURCE_POINT{ 0, model.sheets.front().pageSize.y } },
-        std::pair{ wxS( "TOP_RIGHT" ), model.sheets.front().pageSize },
-        std::pair{ wxS( "BOTTOM_LEFT" ), SOURCE_POINT{ 0, 0 } },
-        std::pair{ wxS( "BOTTOM_RIGHT" ), SOURCE_POINT{ model.sheets.front().pageSize.x, 0 } }
+        std::pair{ wxS( "TOP_LEFT" ), SOURCE_POINT{ model.sheets.front().pageSize.x, 0 } },
+        std::pair{ wxS( "TOP_RIGHT" ), SOURCE_POINT{ 0, 0 } },
+        std::pair{ wxS( "BOTTOM_LEFT" ), model.sheets.front().pageSize },
+        std::pair{ wxS( "BOTTOM_RIGHT" ), SOURCE_POINT{ 0, model.sheets.front().pageSize.y } }
     };
 
     for( const auto& [text, position] : worksheetMarkers )
