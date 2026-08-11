@@ -37,9 +37,8 @@
 #include <geometry/shape_poly_set.h>
 
 
-void RENDER_3D_OPENGL::addObjectTriangles( const FILLED_CIRCLE_2D* aCircle,
-                                           TRIANGLE_DISPLAY_LIST* aDstLayer, float aZtop,
-                                           float aZbot )
+void RENDER_3D_OPENGL::addObjectTriangles( const FILLED_CIRCLE_2D*                aCircle,
+                                           std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer, float aZtop, float aZbot )
 {
     const SFVEC2F& center = aCircle->GetCenter();
     const float radius = aCircle->GetRadius() * 2.0f; // Double because the render triangle
@@ -67,9 +66,8 @@ void RENDER_3D_OPENGL::addObjectTriangles( const FILLED_CIRCLE_2D* aCircle,
 }
 
 
-void RENDER_3D_OPENGL::addObjectTriangles( const POLYGON_4PT_2D* aPoly,
-                                           TRIANGLE_DISPLAY_LIST* aDstLayer,
-                                           float aZtop, float aZbot )
+void RENDER_3D_OPENGL::addObjectTriangles( const POLYGON_4PT_2D*                  aPoly,
+                                           std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer, float aZtop, float aZbot )
 {
     const SFVEC2F& v0 = aPoly->GetV0();
     const SFVEC2F& v1 = aPoly->GetV1();
@@ -115,7 +113,7 @@ void RENDER_3D_OPENGL::generateRing( const SFVEC2F& aCenter, float aInnerRadius,
 }
 
 
-void RENDER_3D_OPENGL::addObjectTriangles( const RING_2D* aRing, TRIANGLE_DISPLAY_LIST* aDstLayer,
+void RENDER_3D_OPENGL::addObjectTriangles( const RING_2D* aRing, std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                                            float aZtop, float aZbot )
 {
     const SFVEC2F& center = aRing->GetCenter();
@@ -149,7 +147,7 @@ void RENDER_3D_OPENGL::addObjectTriangles( const RING_2D* aRing, TRIANGLE_DISPLA
 }
 
 
-void RENDER_3D_OPENGL::addObjectTriangles( const TRIANGLE_2D* aTri, TRIANGLE_DISPLAY_LIST* aDstLayer,
+void RENDER_3D_OPENGL::addObjectTriangles( const TRIANGLE_2D* aTri, std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                                            float aZtop, float aZbot )
 {
     const SFVEC2F& v1 = aTri->GetP1();
@@ -160,9 +158,8 @@ void RENDER_3D_OPENGL::addObjectTriangles( const TRIANGLE_2D* aTri, TRIANGLE_DIS
 }
 
 
-void RENDER_3D_OPENGL::addObjectTriangles( const ROUND_SEGMENT_2D* aSeg,
-                                           TRIANGLE_DISPLAY_LIST* aDstLayer,
-                                           float aZtop, float aZbot )
+void RENDER_3D_OPENGL::addObjectTriangles( const ROUND_SEGMENT_2D*                aSeg,
+                                           std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer, float aZtop, float aZbot )
 {
     const SFVEC2F& leftStart   = aSeg->GetLeftStar();
     const SFVEC2F& leftEnd     = aSeg->GetLeftEnd();
@@ -245,15 +242,15 @@ void RENDER_3D_OPENGL::addObjectTriangles( const ROUND_SEGMENT_2D* aSeg,
 }
 
 
-OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateHoles( const LIST_OBJECT2D& aListHolesObject2d,
-                                                     const SHAPE_POLY_SET& aPoly, float aZtop, float aZbot,
-                                                     bool aInvertFaces, const BVH_CONTAINER_2D* aThroughHoles )
+std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> RENDER_3D_OPENGL::generateHoles( const LIST_OBJECT2D&  aListHolesObject2d,
+                                                                              const SHAPE_POLY_SET& aPoly, float aZtop,
+                                                                              float aZbot, bool aInvertFaces,
+                                                                              const BVH_CONTAINER_2D* aThroughHoles )
 {
     if( aListHolesObject2d.size() == 0 )
         return nullptr;
 
-    OPENGL_RENDER_LIST*    ret = nullptr;
-    TRIANGLE_DISPLAY_LIST* layerTriangles = new TRIANGLE_DISPLAY_LIST( aListHolesObject2d.size() * 2 );
+    auto layerTriangles = std::make_shared<TRIANGLE_DISPLAY_LIST>( aListHolesObject2d.size() * 2 );
 
     // Convert the list of objects(filled circles) to triangle layer structure
     for( const OBJECT_2D* object2d : aListHolesObject2d )
@@ -282,17 +279,13 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateHoles( const LIST_OBJECT2D& aListH
                                              aThroughHoles );
     }
 
-    ret = new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture, aZbot, aZtop );
-
-    delete layerTriangles;
-
-    return ret;
+    return std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( layerTriangles, m_circleTexture, aZbot, aZtop );
 }
 
 
-OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D* aContainer,
-                                                         const SHAPE_POLY_SET* aPolyList, PCB_LAYER_ID aLayer,
-                                                         const BVH_CONTAINER_2D* aThroughHoles )
+std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED>
+RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D* aContainer, const SHAPE_POLY_SET* aPolyList,
+                                     PCB_LAYER_ID aLayer, const BVH_CONTAINER_2D* aThroughHoles )
 {
     if( aContainer == nullptr )
         return nullptr;
@@ -310,7 +303,7 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D*
     // Calculate an estimation for the nr of triangles based on the nr of objects
     unsigned int nrTrianglesEstimation = listObject2d.size() * 8;
 
-    TRIANGLE_DISPLAY_LIST* layerTriangles = new TRIANGLE_DISPLAY_LIST( nrTrianglesEstimation );
+    auto layerTriangles = std::make_shared<TRIANGLE_DISPLAY_LIST>( nrTrianglesEstimation );
 
     // store in a list so it will be latter deleted
     m_triangles.push_back( layerTriangles );
@@ -353,31 +346,32 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateLayerList( const BVH_CONTAINER_2D*
     }
 
     // Create display list
-    return new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture, zBot, zTop );
+    return std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( layerTriangles, m_circleTexture, zBot, zTop );
 }
 
 
-OPENGL_RENDER_LIST* RENDER_3D_OPENGL::generateEmptyLayerList( PCB_LAYER_ID aLayer )
+std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> RENDER_3D_OPENGL::generateEmptyLayerList( PCB_LAYER_ID aLayer )
 {
     float layer_z_bot = 0.0f;
     float layer_z_top = 0.0f;
 
     getLayerZPos( aLayer, layer_z_top, layer_z_bot );
 
-    TRIANGLE_DISPLAY_LIST* layerTriangles = new TRIANGLE_DISPLAY_LIST( 1 );
+    auto layerTriangles = std::make_shared<TRIANGLE_DISPLAY_LIST>( 1 );
 
     // store in a list so it will be latter deleted
     m_triangles.push_back( layerTriangles );
 
-    return new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture, layer_z_bot, layer_z_top );
+    return std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( layerTriangles, m_circleTexture, layer_z_bot, layer_z_top );
 }
 
 
-OPENGL_RENDER_LIST* RENDER_3D_OPENGL::createBoard( const SHAPE_POLY_SET& aBoardPoly,
-                                                   const BVH_CONTAINER_2D* aThroughHoles )
+std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> RENDER_3D_OPENGL::createBoard( const SHAPE_POLY_SET&   aBoardPoly,
+                                                                            const BVH_CONTAINER_2D* aThroughHoles,
+                                                                            bool                    aTransparent )
 {
-    OPENGL_RENDER_LIST* dispLists = nullptr;
-    CONTAINER_2D boardContainer;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> dispLists;
+    CONTAINER_2D                                 boardContainer;
 
     ConvertPolygonToTriangles( aBoardPoly, boardContainer, m_boardAdapter.BiuTo3dUnits(),
                                (const BOARD_ITEM &)*m_boardAdapter.GetBoard() );
@@ -391,8 +385,7 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::createBoard( const SHAPE_POLY_SET& aBoardP
         const float layer_z_top = 1.0f;
         const float layer_z_bot = 0.0f;
 
-        TRIANGLE_DISPLAY_LIST* layerTriangles =
-                new TRIANGLE_DISPLAY_LIST( listBoardObject2d.size() );
+        auto layerTriangles = std::make_shared<TRIANGLE_DISPLAY_LIST>( listBoardObject2d.size() );
 
         // Convert the list of objects(triangles) to triangle layer structure
         for( const OBJECT_2D* itemOnLayer : listBoardObject2d )
@@ -416,11 +409,9 @@ OPENGL_RENDER_LIST* RENDER_3D_OPENGL::createBoard( const SHAPE_POLY_SET& aBoardP
                                                  m_boardAdapter.BiuTo3dUnits(), false,
                                                  aThroughHoles );
 
-            dispLists = new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture,
-                                                layer_z_top, layer_z_top );
+            dispLists = std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( layerTriangles, m_circleTexture, layer_z_top,
+                                                                       layer_z_top, aTransparent );
         }
-
-        delete layerTriangles;
     }
 
     return dispLists;
@@ -456,7 +447,7 @@ void RENDER_3D_OPENGL::backfillPostMachine()
     };
 
     // We'll accumulate all plug geometry into a single triangle list
-    TRIANGLE_DISPLAY_LIST* plugTriangles = new TRIANGLE_DISPLAY_LIST( 1024 );
+    std::shared_ptr<TRIANGLE_DISPLAY_LIST> plugTriangles = std::make_shared<TRIANGLE_DISPLAY_LIST>( 1024 );
 
     // Process vias for backdrill and post-machining plugs
     for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
@@ -673,12 +664,8 @@ void RENDER_3D_OPENGL::backfillPostMachine()
 
         // Create a render list for the plugs using the same Z range as the board
         // This will be scaled and drawn alongside m_boardWithHoles in renderBoardBody()
-        m_postMachinePlugs = new OPENGL_RENDER_LIST( *plugTriangles, m_circleTexture,
-                                                     boardZTop, boardZTop );
-    }
-    else
-    {
-        delete plugTriangles;
+        m_postMachinePlugs =
+                std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( plugTriangles, m_circleTexture, boardZTop, boardZTop );
     }
 }
 
@@ -740,7 +727,7 @@ void RENDER_3D_OPENGL::renderExtrudedBodies()
         if( triList.empty() )
             continue;
 
-        TRIANGLE_DISPLAY_LIST* layerTri = new TRIANGLE_DISPLAY_LIST( triList.size() );
+        std::shared_ptr<TRIANGLE_DISPLAY_LIST> layerTri = std::make_shared<TRIANGLE_DISPLAY_LIST>( triList.size() );
 
         for( const OBJECT_2D* obj : triList )
         {
@@ -750,7 +737,8 @@ void RENDER_3D_OPENGL::renderExtrudedBodies()
 
         layerTri->AddToMiddleContours( outline, zBot, zTop, biuTo3d, false );
 
-        OPENGL_RENDER_LIST* renderList = new OPENGL_RENDER_LIST( *layerTri, m_circleTexture, zTop, zBot );
+        std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> renderList =
+                std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( layerTri, m_circleTexture, zTop, zBot );
 
         m_triangles.push_back( layerTri );
         m_extrudedBodyLists[fp] = renderList;
@@ -787,7 +775,7 @@ void RENDER_3D_OPENGL::renderExtrudedBodies()
 
                 if( !pinTriList.empty() )
                 {
-                    TRIANGLE_DISPLAY_LIST* pinLayerTri = new TRIANGLE_DISPLAY_LIST( pinTriList.size() );
+                    auto pinLayerTri = std::make_shared<TRIANGLE_DISPLAY_LIST>( pinTriList.size() );
 
                     for( const OBJECT_2D* obj : pinTriList )
                     {
@@ -798,8 +786,9 @@ void RENDER_3D_OPENGL::renderExtrudedBodies()
 
                     pinLayerTri->AddToMiddleContours( pinPoly, pinZBot, pinZTop, biuTo3d, false );
 
-                    OPENGL_RENDER_LIST* pinRenderList =
-                            new OPENGL_RENDER_LIST( *pinLayerTri, m_circleTexture, pinZTop, pinZBot );
+                    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> pinRenderList =
+                            std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( pinLayerTri, m_circleTexture, pinZTop,
+                                                                           pinZBot );
 
                     m_triangles.push_back( pinLayerTri );
                     m_extrudedPadLists[fp] = pinRenderList;
@@ -822,6 +811,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
     int64_t stats_startReloadTime = GetRunningMicroSecs();
 
     m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
+    m_boardAdapter.CreateLayers( aStatusReporter );
 
     SFVEC3F camera_pos = m_boardAdapter.GetBoardCenter();
     m_camera.SetBoardLookAtPos( camera_pos );
@@ -841,7 +831,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
     m_antiBoardPolys.Outline( 0 ).SetClosed( true );
 
     m_antiBoardPolys.BooleanSubtract( m_boardAdapter.GetBoardPoly() );
-    m_antiBoard = createBoard( m_antiBoardPolys );
+    m_antiBoard = createBoard( m_antiBoardPolys, nullptr, true );
 
     SHAPE_POLY_SET board_poly_with_holes = m_boardAdapter.GetBoardPoly().CloneDropTriangulation();
     board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetTH_ODPolys() );
@@ -871,9 +861,6 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     // Create plugs for backdrilled and post-machined areas
     backfillPostMachine();
-
-    if( m_antiBoard )
-        m_antiBoard->SetItIsTransparent( true );
 
     // Create Through Holes and vias
     if( aStatusReporter )
@@ -1001,8 +988,8 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
             }
         }
 
-        OPENGL_RENDER_LIST* oglList = generateLayerList( container2d, polyList, layer,
-                                                         &m_boardAdapter.GetTH_IDs() );
+        std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> oglList =
+                generateLayerList( container2d, polyList, layer, &m_boardAdapter.GetTH_IDs() );
 
         if( oglList != nullptr )
             m_layers[layer] = oglList;
@@ -1076,9 +1063,8 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 }
 
 
-void RENDER_3D_OPENGL::addTopAndBottomTriangles( TRIANGLE_DISPLAY_LIST* aDst, const SFVEC2F& v0,
-                                                 const SFVEC2F& v1, const SFVEC2F& v2, float top,
-                                                 float bot )
+void RENDER_3D_OPENGL::addTopAndBottomTriangles( std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDst, const SFVEC2F& v0,
+                                                 const SFVEC2F& v1, const SFVEC2F& v2, float top, float bot )
 {
     aDst->m_layer_bot_triangles->AddTriangle( SFVEC3F( v0.x, v0.y, bot ),
                                               SFVEC3F( v1.x, v1.y, bot ),
@@ -1104,10 +1090,9 @@ void RENDER_3D_OPENGL::getLayerZPos( PCB_LAYER_ID aLayer, float& aOutZtop, float
 }
 
 
-void RENDER_3D_OPENGL::generateCylinder( const SFVEC2F& aCenter, float aInnerRadius,
-                                         float aOuterRadius, float aZtop, float aZbot,
-                                         unsigned int aNr_sides_per_circle,
-                                         TRIANGLE_DISPLAY_LIST* aDstLayer )
+void RENDER_3D_OPENGL::generateCylinder( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius, float aZtop,
+                                         float aZbot, unsigned int aNr_sides_per_circle,
+                                         std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer )
 {
     std::vector< SFVEC2F > innerContour;
     std::vector< SFVEC2F > outerContour;
@@ -1138,10 +1123,9 @@ void RENDER_3D_OPENGL::generateCylinder( const SFVEC2F& aCenter, float aInnerRad
 }
 
 
-void RENDER_3D_OPENGL::generateInvCone( const SFVEC2F& aCenter, float aInnerRadius,
-                                        float aOuterRadius, float aZtop, float aZbot,
-                                        unsigned int aNr_sides_per_circle,
-                                        TRIANGLE_DISPLAY_LIST* aDstLayer, EDA_ANGLE aAngle )
+void RENDER_3D_OPENGL::generateInvCone( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius, float aZtop,
+                                        float aZbot, unsigned int aNr_sides_per_circle,
+                                        std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer, EDA_ANGLE aAngle )
 {
     // For a countersink cone:
     // - The outer contour goes from aZbot to aZtop (full height)
@@ -1201,9 +1185,8 @@ void RENDER_3D_OPENGL::generateInvCone( const SFVEC2F& aCenter, float aInnerRadi
 }
 
 
-void RENDER_3D_OPENGL::generateDisk( const SFVEC2F& aCenter, float aRadius, float aZ,
-                                     unsigned int aNr_sides_per_circle, TRIANGLE_DISPLAY_LIST* aDstLayer,
-                                     bool aTop )
+void RENDER_3D_OPENGL::generateDisk( const SFVEC2F& aCenter, float aRadius, float aZ, unsigned int aNr_sides_per_circle,
+                                     std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer, bool aTop )
 {
     const float delta = 2.0f * glm::pi<float>() / (float) aNr_sides_per_circle;
 
@@ -1225,9 +1208,9 @@ void RENDER_3D_OPENGL::generateDisk( const SFVEC2F& aCenter, float aRadius, floa
 }
 
 
-void RENDER_3D_OPENGL::generateDimple( const SFVEC2F& aCenter, float aRadius, float aZ,
-                                       float aDepth, unsigned int aNr_sides_per_circle,
-                                       TRIANGLE_DISPLAY_LIST* aDstLayer, bool aTop )
+void RENDER_3D_OPENGL::generateDimple( const SFVEC2F& aCenter, float aRadius, float aZ, float aDepth,
+                                       unsigned int                           aNr_sides_per_circle,
+                                       std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer, bool aTop )
 {
     const float delta = 2.0f * glm::pi<float>() / (float) aNr_sides_per_circle;
     const SFVEC3F c( aCenter.x, aCenter.y, aTop ? aZ - aDepth : aZ + aDepth );
@@ -1249,7 +1232,7 @@ void RENDER_3D_OPENGL::generateDimple( const SFVEC2F& aCenter, float aRadius, fl
 }
 
 
-bool RENDER_3D_OPENGL::appendPostMachiningGeometry( TRIANGLE_DISPLAY_LIST* aDstLayer,
+bool RENDER_3D_OPENGL::appendPostMachiningGeometry( std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                                                     const SFVEC2F& aHoleCenter,
                                                     PAD_DRILL_POST_MACHINING_MODE aMode,
                                                     int aSizeIU,
@@ -1356,7 +1339,7 @@ void RENDER_3D_OPENGL::generateViaBarrels( float aPlatingThickness3d, float aUni
     unsigned int averageSegCount = m_boardAdapter.GetCircleSegmentCount( averageDiameter );
     unsigned int trianglesEstimate = averageSegCount * 8 * m_boardAdapter.GetViaCount();
 
-    TRIANGLE_DISPLAY_LIST* layerTriangleVIA = new TRIANGLE_DISPLAY_LIST( trianglesEstimate );
+    std::shared_ptr<TRIANGLE_DISPLAY_LIST> layerTriangleVIA = std::make_shared<TRIANGLE_DISPLAY_LIST>( trianglesEstimate );
 
     for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
     {
@@ -1514,9 +1497,7 @@ void RENDER_3D_OPENGL::generateViaBarrels( float aPlatingThickness3d, float aUni
         }
     }
 
-    m_microviaHoles = new OPENGL_RENDER_LIST( *layerTriangleVIA, 0, 0.0f, 0.0f );
-
-    delete layerTriangleVIA;
+    m_microviaHoles = std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( layerTriangleVIA, 0, 0.0f, 0.0f );
 }
 
 
@@ -1595,7 +1576,7 @@ void RENDER_3D_OPENGL::generatePlatedHoleShells( int aPlatingThickness, float aU
         getLayerZPos( F_Cu, layer_z_top, dummy );
         getLayerZPos( B_Cu, dummy, layer_z_bot );
 
-        TRIANGLE_DISPLAY_LIST* layerTriangles = new TRIANGLE_DISPLAY_LIST( holes2D.size() );
+        std::shared_ptr<TRIANGLE_DISPLAY_LIST> layerTriangles = std::make_shared<TRIANGLE_DISPLAY_LIST>( holes2D.size() );
 
         for( const OBJECT_2D* itemOnLayer : holes2D )
         {
@@ -1620,11 +1601,9 @@ void RENDER_3D_OPENGL::generatePlatedHoleShells( int aPlatingThickness, float aU
                                                  layer_z_bot, layer_z_top,
                                                  aUnitScale, false );
 
-            m_padHoles = new OPENGL_RENDER_LIST( *layerTriangles, m_circleTexture,
-                                                 layer_z_top, layer_z_top );
+            m_padHoles = std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( layerTriangles, m_circleTexture, layer_z_top,
+                                                                        layer_z_top );
         }
-
-        delete layerTriangles;
     }
 }
 
@@ -1634,8 +1613,8 @@ void RENDER_3D_OPENGL::generateViaCovers( float aPlatingThickness3d, float aUnit
     if( !m_boardAdapter.GetBoard() || m_boardAdapter.GetViaCount() <= 0 )
         return;
 
-    TRIANGLE_DISPLAY_LIST* frontCover = new TRIANGLE_DISPLAY_LIST( m_boardAdapter.GetViaCount() );
-    TRIANGLE_DISPLAY_LIST* backCover = new TRIANGLE_DISPLAY_LIST( m_boardAdapter.GetViaCount() );
+    std::shared_ptr<TRIANGLE_DISPLAY_LIST> frontCover = std::make_shared<TRIANGLE_DISPLAY_LIST>( m_boardAdapter.GetViaCount() );
+    std::shared_ptr<TRIANGLE_DISPLAY_LIST> backCover = std::make_shared<TRIANGLE_DISPLAY_LIST>( m_boardAdapter.GetViaCount() );
 
     for( const PCB_TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
     {
@@ -1698,13 +1677,10 @@ void RENDER_3D_OPENGL::generateViaCovers( float aPlatingThickness3d, float aUnit
     }
 
     if( frontCover->m_layer_top_triangles->GetVertexSize() > 0 )
-        m_viaFrontCover = new OPENGL_RENDER_LIST( *frontCover, 0, 0.0f, 0.0f );
+        m_viaFrontCover = std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( frontCover, 0, 0.0f, 0.0f );
 
     if( backCover->m_layer_bot_triangles->GetVertexSize() > 0 )
-        m_viaBackCover = new OPENGL_RENDER_LIST( *backCover, 0, 0.0f, 0.0f );
-
-    delete frontCover;
-    delete backCover;
+        m_viaBackCover = std::make_shared<OPENGL_RENDER_LIST_DEFERRED>( backCover, 0, 0.0f, 0.0f );
 }
 
 
@@ -1813,8 +1789,8 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
                     // only add it if the return is not NULL
                     if( modelPtr )
                     {
-                        MATERIAL_MODE materialMode = m_boardAdapter.m_Cfg->m_Render.material_mode;
-                        MODEL_3D*     model        = new MODEL_3D( *modelPtr, materialMode );
+                        MATERIAL_MODE             materialMode = m_boardAdapter.m_Cfg->m_Render.material_mode;
+                        std::shared_ptr<MODEL_3D> model = std::make_shared<MODEL_3D>( *modelPtr, materialMode );
 
                         m_3dModelMap[ fp_model.m_Filename ] = model;
                     }

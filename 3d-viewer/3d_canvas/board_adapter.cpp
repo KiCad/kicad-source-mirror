@@ -566,7 +566,11 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     boardMax.z = m_layerZcoordTop[F_Adhes];
 
     m_boardBoundingBox = BBOX_3D( boardMin, boardMax );
+}
 
+
+void BOARD_ADAPTER::CreateLayers( REPORTER* aStatusReporter )
+{
 #ifdef PRINT_STATISTICS_3D_VIEWER
     int64_t stats_startCreateBoardPolyTime = GetRunningMicroSecs();
 #endif

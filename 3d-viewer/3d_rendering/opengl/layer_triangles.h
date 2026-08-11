@@ -189,14 +189,13 @@ public:
      *
      * @param zCameraPos is the camera z axis position.
      */
-    void DrawCulled( bool aDrawMiddle,
-                        const OPENGL_RENDER_LIST* aSubtractList = nullptr,
-                        const OPENGL_RENDER_LIST* bSubtractList = nullptr,
-                        const OPENGL_RENDER_LIST* cSubtractList = nullptr,
-                        const OPENGL_RENDER_LIST* dSubtractList = nullptr ) const;
+    void DrawCulled( bool aDrawMiddle, const std::shared_ptr<OPENGL_RENDER_LIST> aSubtractList = nullptr,
+                     const std::shared_ptr<OPENGL_RENDER_LIST> bSubtractList = nullptr,
+                     const std::shared_ptr<OPENGL_RENDER_LIST> cSubtractList = nullptr,
+                     const std::shared_ptr<OPENGL_RENDER_LIST> dSubtractList = nullptr ) const;
 
     void ApplyScalePosition( float aZposition, float aZscale );
-    void ApplyScalePosition( OPENGL_RENDER_LIST* aOtherList );
+    void ApplyScalePosition( std::shared_ptr<OPENGL_RENDER_LIST> aOtherList );
 
     void ClearScalePosition() { m_haveTransformation = false; }
 
@@ -234,5 +233,72 @@ private:
 
     bool    m_draw_it_transparent;
 };
+
+
+/**
+ * Allows to defer the creation of the OpenGL render list until it is needed.
+ */
+class OPENGL_RENDER_LIST_DEFERRED
+{
+public:
+    OPENGL_RENDER_LIST_DEFERRED( std::shared_ptr<TRIANGLE_DISPLAY_LIST> aLayerTriangles, GLuint aTextureIndexForSegEnds,
+                                 float aZBot, float aZTop, bool aTransparent = false ) :
+            m_layerTriangles( std::move( aLayerTriangles ) ),
+            m_textureIndexForSegEnds( aTextureIndexForSegEnds ),
+            m_zBot( aZBot ),
+            m_zTop( aZTop ),
+            m_defaultTransparent( aTransparent )
+    {
+    }
+
+    ~OPENGL_RENDER_LIST_DEFERRED() {}
+
+    void MakeShared()
+    {
+        std::lock_guard<std::recursive_mutex> lock( m_mutex );
+
+        if( !m_openglRenderList && !m_layerTriangles )
+        {
+            throw std::runtime_error( "Both OpenGL render list and layer triangles are null" );
+        }
+
+        if( !m_openglRenderList )
+        {
+            m_openglRenderList =
+                    std::make_shared<OPENGL_RENDER_LIST>( *m_layerTriangles, m_textureIndexForSegEnds, m_zBot, m_zTop );
+
+            m_openglRenderList->SetItIsTransparent( m_defaultTransparent );
+        }
+    }
+
+    void Reset()
+    {
+        std::lock_guard<std::recursive_mutex> lock( m_mutex );
+
+        m_openglRenderList.reset();
+        m_layerTriangles.reset();
+    }
+
+    std::shared_ptr<OPENGL_RENDER_LIST> MakeOrGet()
+    {
+        std::lock_guard<std::recursive_mutex> lock( m_mutex );
+
+        MakeShared();
+        m_layerTriangles.reset();
+
+        return m_openglRenderList;
+    }
+
+private:
+    std::shared_ptr<OPENGL_RENDER_LIST> m_openglRenderList;
+    std::recursive_mutex                m_mutex;
+
+    std::shared_ptr<TRIANGLE_DISPLAY_LIST> m_layerTriangles;
+    GLuint                                 m_textureIndexForSegEnds{ 0 };
+    float                                  m_zBot{ 0 };
+    float                                  m_zTop{ 0 };
+    bool                                   m_defaultTransparent{ false };
+};
+
 
 #endif // TRIANGLE_DISPLAY_LIST_H

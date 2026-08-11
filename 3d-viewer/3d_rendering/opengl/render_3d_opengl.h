@@ -42,9 +42,10 @@
 #include <pad.h> // For PAD_DRILL_POST_MACHINING_MODE
 
 #include <map>
+#include <memory>
 
-typedef std::map< PCB_LAYER_ID, OPENGL_RENDER_LIST* > MAP_OGL_DISP_LISTS;
-typedef std::list<TRIANGLE_DISPLAY_LIST* > LIST_TRIANGLES;
+typedef std::map<PCB_LAYER_ID, std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED>> MAP_OGL_DISP_LISTS;
+typedef std::list<std::shared_ptr<TRIANGLE_DISPLAY_LIST>>                    LIST_TRIANGLES;
 
 #define SIZE_OF_CIRCLE_TEXTURE 1024
 
@@ -81,33 +82,33 @@ public:
     void                                resetSelectedGizmoSphere();
 
 private:
-    OPENGL_RENDER_LIST* generateHoles( const LIST_OBJECT2D& aListHolesObject2d,
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> generateHoles( const LIST_OBJECT2D& aListHolesObject2d,
                                        const SHAPE_POLY_SET& aPoly, float aZtop, float aZbot,
                                        bool aInvertFaces,
                                        const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
-    OPENGL_RENDER_LIST* generateLayerList( const BVH_CONTAINER_2D* aContainer,
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> generateLayerList( const BVH_CONTAINER_2D* aContainer,
                                            const SHAPE_POLY_SET* aPolyList, PCB_LAYER_ID aLayer,
                                            const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
-    OPENGL_RENDER_LIST* generateEmptyLayerList( PCB_LAYER_ID aLayer );
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> generateEmptyLayerList( PCB_LAYER_ID aLayer );
 
-    void addTopAndBottomTriangles( TRIANGLE_DISPLAY_LIST* aDst, const SFVEC2F& v0,
+    void addTopAndBottomTriangles( std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDst, const SFVEC2F& v0,
                                    const SFVEC2F& v1, const SFVEC2F& v2, float top, float bot );
 
-    void addObjectTriangles( const RING_2D* aRing, TRIANGLE_DISPLAY_LIST* aDstLayer,
+    void addObjectTriangles( const RING_2D* aRing, std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                              float aZtop, float aZbot );
 
-    void addObjectTriangles( const POLYGON_4PT_2D* aPoly, TRIANGLE_DISPLAY_LIST* aDstLayer,
+    void addObjectTriangles( const POLYGON_4PT_2D* aPoly, std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                              float aZtop, float aZbot );
 
-    void addObjectTriangles( const FILLED_CIRCLE_2D* aCircle, TRIANGLE_DISPLAY_LIST* aDstLayer,
+    void addObjectTriangles( const FILLED_CIRCLE_2D* aCircle, std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                              float aZtop, float aZbot );
 
-    void addObjectTriangles( const TRIANGLE_2D* aTri, TRIANGLE_DISPLAY_LIST* aDstLayer,
+    void addObjectTriangles( const TRIANGLE_2D* aTri, std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                              float aZtop, float aZbot );
 
-    void addObjectTriangles( const ROUND_SEGMENT_2D* aSeg, TRIANGLE_DISPLAY_LIST* aDstLayer,
+    void addObjectTriangles( const ROUND_SEGMENT_2D* aSeg, std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                              float aZtop, float aZbot );
 
     void renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos, bool aShowThickness,
@@ -124,23 +125,23 @@ private:
 
     void generateCylinder( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius,
                            float aZtop, float aZbot, unsigned int aNr_sides_per_circle,
-                           TRIANGLE_DISPLAY_LIST* aDstLayer );
+                           std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer );
 
     void generateInvCone( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius,
                           float aZtop, float aZbot, unsigned int aNr_sides_per_circle,
-                          TRIANGLE_DISPLAY_LIST* aDstLayer, EDA_ANGLE aAngle );
+                          std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer, EDA_ANGLE aAngle );
 
     void generateDisk( const SFVEC2F& aCenter, float aRadius, float aZ,
-                       unsigned int aNr_sides_per_circle, TRIANGLE_DISPLAY_LIST* aDstLayer,
+                       unsigned int aNr_sides_per_circle, std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                        bool aTop );
 
     void generateDimple( const SFVEC2F& aCenter, float aRadius, float aZ, float aDepth,
-                         unsigned int aNr_sides_per_circle, TRIANGLE_DISPLAY_LIST* aDstLayer,
+                         unsigned int aNr_sides_per_circle, std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                          bool aTop );
 
     void generateViasAndPads();
 
-    bool appendPostMachiningGeometry( TRIANGLE_DISPLAY_LIST* aDstLayer,
+    bool appendPostMachiningGeometry( std::shared_ptr<TRIANGLE_DISPLAY_LIST> aDstLayer,
                                       const SFVEC2F& aHoleCenter,
                                       PAD_DRILL_POST_MACHINING_MODE aMode,
                                       int aSizeIU,
@@ -171,18 +172,18 @@ private:
     struct MODELTORENDER
     {
         glm::mat4 m_modelWorldMat;
-        const MODEL_3D* m_model;
+        std::shared_ptr<MODEL_3D> m_model;
         float m_opacity;
         bool m_isTransparent;
         bool m_isSelected;
 
         MODELTORENDER( glm::mat4 aModelWorldMat,
-                       const MODEL_3D* aNodel,
+                       std::shared_ptr<MODEL_3D> aModel,
                        float aOpacity,
                        bool aIsTransparent,
                        bool aIsSelected ) :
                        m_modelWorldMat( std::move( aModelWorldMat ) ),
-                       m_model( aNodel ),
+                       m_model( std::move( aModel ) ),
                        m_opacity( aOpacity ),
                        m_isTransparent( aIsTransparent ),
                        m_isSelected( aIsSelected )
@@ -229,8 +230,10 @@ private:
     void setLayerMaterial( PCB_LAYER_ID aLayerID );
 
     bool initializeOpenGL();
-    OPENGL_RENDER_LIST* createBoard( const SHAPE_POLY_SET& aBoardPoly,
-                                     const BVH_CONTAINER_2D* aThroughHoles = nullptr );
+
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> createBoard( const SHAPE_POLY_SET&   aBoardPoly,
+                                                              const BVH_CONTAINER_2D* aThroughHoles = nullptr,
+                                                              bool                    aTransparent = false );
 
     /**
      * Create ring-shaped plugs for holes that have backdrill or post-machining.
@@ -261,19 +264,19 @@ private:
     EDA_3D_CANVAS* m_canvas;
 
     MAP_OGL_DISP_LISTS  m_layers;
-    OPENGL_RENDER_LIST* m_platedPadsFront;
-    OPENGL_RENDER_LIST* m_platedPadsBack;
-    OPENGL_RENDER_LIST* m_offboardPadsFront;
-    OPENGL_RENDER_LIST* m_offboardPadsBack;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_platedPadsFront;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_platedPadsBack;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_offboardPadsFront;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_offboardPadsBack;
     MAP_OGL_DISP_LISTS  m_outerLayerHoles;
     MAP_OGL_DISP_LISTS  m_innerLayerHoles;
-    OPENGL_RENDER_LIST* m_board;
-    OPENGL_RENDER_LIST* m_boardWithHoles;
-    OPENGL_RENDER_LIST* m_postMachinePlugs;     ///< Board material plugs for backdrill/counterbore/countersink
-    OPENGL_RENDER_LIST* m_antiBoard;
-    OPENGL_RENDER_LIST* m_outerThroughHoles;
-    OPENGL_RENDER_LIST* m_outerViaThroughHoles;
-    OPENGL_RENDER_LIST* m_outerThroughHoleRings;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_board;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_boardWithHoles;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_postMachinePlugs;     ///< Board material plugs for backdrill/counterbore/countersink
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_antiBoard;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_outerThroughHoles;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_outerViaThroughHoles;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_outerThroughHoleRings;
 
     LIST_TRIANGLES      m_triangles;       ///< store pointers so can be deleted latter
     GLuint              m_circleTexture;
@@ -281,13 +284,13 @@ private:
     GLuint              m_grid;             ///< oGL list that stores current grid
     GRID3D_TYPE         m_lastGridType;     ///< Stores the last grid type.
 
-    OPENGL_RENDER_LIST* m_microviaHoles;
-    OPENGL_RENDER_LIST* m_padHoles;
-    OPENGL_RENDER_LIST* m_viaFrontCover;
-    OPENGL_RENDER_LIST* m_viaBackCover;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_microviaHoles;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_padHoles;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_viaFrontCover;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> m_viaBackCover;
 
     // Caches
-    std::map<wxString, MODEL_3D*>           m_3dModelMap;
+    std::map<wxString, std::shared_ptr<MODEL_3D>>           m_3dModelMap;
     std::map<std::vector<float>, glm::mat4> m_3dModelMatrixMap;
 
     BOARD_ITEM*         m_currentRollOverItem;
@@ -295,10 +298,10 @@ private:
     SHAPE_POLY_SET m_antiBoardPolys; ///< The negative polygon representation of the board
                                      ///< outline.
     SPHERES_GIZMO* m_spheres_gizmo;
-    MODEL_3D*      m_placeholderModel = nullptr;
+    std::shared_ptr<MODEL_3D>      m_placeholderModel = nullptr;
 
-    std::map<const FOOTPRINT*, OPENGL_RENDER_LIST*> m_extrudedBodyLists;
-    std::map<const FOOTPRINT*, OPENGL_RENDER_LIST*> m_extrudedPadLists;
+    std::map<const FOOTPRINT*, std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED>> m_extrudedBodyLists;
+    std::map<const FOOTPRINT*, std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED>> m_extrudedPadLists;
 
     void renderExtrudedBodies();
 };

@@ -91,7 +91,7 @@ RENDER_3D_OPENGL::~RENDER_3D_OPENGL()
 
     freeAllLists();
 
-    delete m_placeholderModel;
+    m_placeholderModel.reset();
 
     glDeleteTextures( 1, &m_circleTexture );
 
@@ -473,30 +473,37 @@ void RENDER_3D_OPENGL::renderBoardBody( bool aSkipRenderHoles )
 
     OglSetMaterial( m_materials.m_EpoxyBoard, 1.0f );
 
-    OPENGL_RENDER_LIST* ogl_disp_list = nullptr;
+    std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> board_disp_list_def = nullptr;
 
     if( aSkipRenderHoles )
-        ogl_disp_list = m_board;
+        board_disp_list_def = m_board;
     else
-        ogl_disp_list = m_boardWithHoles;
+        board_disp_list_def = m_boardWithHoles;
 
-    if( ogl_disp_list )
+    if( board_disp_list_def )
     {
-        ogl_disp_list->ApplyScalePosition( -m_boardAdapter.GetBoardBodyThickness() / 2.0f,
-                                           m_boardAdapter.GetBoardBodyThickness() );
+        // Constructs the actual OpenGL render list with correct GL context we're in
+        if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_disp_list = board_disp_list_def->MakeOrGet() )
+        {
+            ogl_disp_list->ApplyScalePosition( -m_boardAdapter.GetBoardBodyThickness() / 2.0f,
+                                               m_boardAdapter.GetBoardBodyThickness() );
 
-        ogl_disp_list->SetItIsTransparent( true );
-        ogl_disp_list->DrawAll();
+            ogl_disp_list->SetItIsTransparent( true );
+            ogl_disp_list->DrawAll();
+        }
     }
 
     // Also render post-machining plugs (board material that remains after backdrill/counterbore/countersink)
     if( !aSkipRenderHoles && m_postMachinePlugs )
     {
-        m_postMachinePlugs->ApplyScalePosition( -m_boardAdapter.GetBoardBodyThickness() / 2.0f,
-                                                m_boardAdapter.GetBoardBodyThickness() );
+        if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_disp_list = m_postMachinePlugs->MakeOrGet() )
+        {
+            ogl_disp_list->ApplyScalePosition( -m_boardAdapter.GetBoardBodyThickness() / 2.0f,
+                                               m_boardAdapter.GetBoardBodyThickness() );
 
-        m_postMachinePlugs->SetItIsTransparent( true );
-        m_postMachinePlugs->DrawAll();
+            ogl_disp_list->SetItIsTransparent( true );
+            ogl_disp_list->DrawAll();
+        }
     }
 }
 
@@ -619,10 +626,16 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     setLayerMaterial( B_Cu );
 
     if( !( skipRenderMicroVias || skipRenderHoles ) && m_microviaHoles )
-        m_microviaHoles->DrawAll();
+    {
+        if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_disp_list = m_microviaHoles->MakeOrGet() )
+            ogl_disp_list->DrawAll();
+    }
 
     if( !skipRenderHoles && m_padHoles )
-        m_padHoles->DrawAll();
+    {
+        if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_disp_list = m_padHoles->MakeOrGet() )
+            ogl_disp_list->DrawAll();
+    }
 
     // Display copper and tech layers
     for( MAP_OGL_DISP_LISTS::const_iterator ii = m_layers.begin(); ii != m_layers.end(); ++ii )
@@ -652,7 +665,8 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         glPushMatrix();
 
-        OPENGL_RENDER_LIST* pLayerDispList = static_cast<OPENGL_RENDER_LIST*>( ii->second );
+        std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED> pLayerDispListDef = ii->second;
+        std::shared_ptr<OPENGL_RENDER_LIST>          pLayerDispList = pLayerDispListDef->MakeOrGet();
 
         if( IsCopperLayer( layer ) )
         {
@@ -661,22 +675,24 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             else
                 setLayerMaterial( layer );
 
-            OPENGL_RENDER_LIST* outerTH = nullptr;
-            OPENGL_RENDER_LIST* viaHoles = nullptr;
+            std::shared_ptr<OPENGL_RENDER_LIST> anti_board = m_antiBoard ? m_antiBoard->MakeOrGet() : nullptr;
+
+            std::shared_ptr<OPENGL_RENDER_LIST> outerTH = nullptr;
+            std::shared_ptr<OPENGL_RENDER_LIST> viaHoles = nullptr;
 
             if( !skipRenderHoles )
             {
-                outerTH = m_outerThroughHoles;
-                viaHoles = m_outerLayerHoles[layer];
+                outerTH = m_outerThroughHoles ? m_outerThroughHoles->MakeOrGet() : nullptr;
+                viaHoles = m_outerLayerHoles[layer] ? m_outerLayerHoles[layer]->MakeOrGet() : nullptr;
             }
 
-            if( m_antiBoard )
-                m_antiBoard->ApplyScalePosition( pLayerDispList );
+            if( anti_board )
+                anti_board->ApplyScalePosition( pLayerDispList );
 
             if( outerTH )
                 outerTH->ApplyScalePosition( pLayerDispList );
 
-            pLayerDispList->DrawCulled( showThickness, outerTH, viaHoles, m_antiBoard );
+            pLayerDispList->DrawCulled( showThickness, outerTH, viaHoles, anti_board );
 
             // Draw plated & offboard pads
             if( layer == F_Cu && ( m_platedPadsFront || m_offboardPadsFront ) )
@@ -684,20 +700,32 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                 setPlatedCopperAndDepthOffset( layer );
 
                 if( m_platedPadsFront )
-                    m_platedPadsFront->DrawCulled( showThickness, outerTH, viaHoles, m_antiBoard );
+                {
+                    if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_disp_list = m_platedPadsFront->MakeOrGet() )
+                        ogl_disp_list->DrawCulled( showThickness, outerTH, viaHoles, anti_board );
+                }
 
                 if( m_offboardPadsFront )
-                    m_offboardPadsFront->DrawCulled( showThickness, outerTH, viaHoles );
+                {
+                    if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_disp_list = m_offboardPadsFront->MakeOrGet() )
+                        ogl_disp_list->DrawCulled( showThickness, outerTH, viaHoles );
+                }
             }
             else if( layer == B_Cu && ( m_platedPadsBack || m_offboardPadsBack ) )
             {
                 setPlatedCopperAndDepthOffset( layer );
 
                 if( m_platedPadsBack )
-                    m_platedPadsBack->DrawCulled( showThickness, outerTH, viaHoles, m_antiBoard );
+                {
+                    if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_disp_list = m_platedPadsBack->MakeOrGet() )
+                        ogl_disp_list->DrawCulled( showThickness, outerTH, viaHoles, anti_board );
+                }
 
                 if( m_offboardPadsBack )
-                    m_offboardPadsBack->DrawCulled( showThickness, outerTH, viaHoles );
+                {
+                    if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_disp_list = m_offboardPadsBack->MakeOrGet() )
+                        ogl_disp_list->DrawCulled( showThickness, outerTH, viaHoles );
+                }
             }
 
             unsetDepthOffset();
@@ -706,25 +734,28 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         {
             setLayerMaterial( layer );
 
-            OPENGL_RENDER_LIST* throughHolesOuter = nullptr;
-            OPENGL_RENDER_LIST* anti_board = nullptr;
-            OPENGL_RENDER_LIST* solder_mask = nullptr;
+            std::shared_ptr<OPENGL_RENDER_LIST> throughHolesOuter = nullptr;
+            std::shared_ptr<OPENGL_RENDER_LIST> anti_board = nullptr;
+            std::shared_ptr<OPENGL_RENDER_LIST> solder_mask = nullptr;
 
             if( !skipRenderHoles )
             {
                 if( isSilkLayer && cfg.clip_silk_on_via_annuli )
-                    throughHolesOuter = m_outerThroughHoleRings;
+                    throughHolesOuter = m_outerThroughHoleRings ? m_outerThroughHoleRings->MakeOrGet() : nullptr;
                 else
-                    throughHolesOuter = m_outerThroughHoles;
+                    throughHolesOuter = m_outerThroughHoles ? m_outerThroughHoles->MakeOrGet() : nullptr;
             }
 
             if( isSilkLayer && cfg.show_off_board_silk )
                 anti_board = nullptr;
             else if( LSET::PhysicalLayersMask().test( layer ) )
-                anti_board = m_antiBoard;
+                anti_board = m_antiBoard ? m_antiBoard->MakeOrGet() : nullptr;
 
             if( isSilkLayer && cfg.subtract_mask_from_silk && !cfg.show_off_board_silk )
-                solder_mask = m_layers[ ( layer == B_SilkS) ? B_Mask : F_Mask ];
+            {
+                PCB_LAYER_ID maskLayer = ( layer == B_SilkS ) ? B_Mask : F_Mask;
+                solder_mask = m_layers[maskLayer] ? m_layers[maskLayer]->MakeOrGet() : nullptr;
+            }
 
             if( throughHolesOuter )
                 throughHolesOuter->ApplyScalePosition( pLayerDispList );
@@ -761,72 +792,82 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         const SFVEC3F                            extSelColor = m_boardAdapter.GetColor( extCfg.opengl_selection_color );
 
         // Render extruded pad standoffs (metallic pins)
-        for( auto& [fp, renderList] : m_extrudedPadLists )
+        for( auto& [fp, renderListDef] : m_extrudedPadLists )
         {
-            if( renderList )
+            if( !renderListDef )
+                continue;
+
+            std::shared_ptr<OPENGL_RENDER_LIST> renderList = renderListDef->MakeOrGet();
+
+            if( !renderList )
+                continue;
+
+            bool highlight = false;
+
+            if( m_boardAdapter.m_IsBoardView )
             {
-                bool highlight = false;
+                if( fp->IsSelected() )
+                    highlight = true;
 
-                if( m_boardAdapter.m_IsBoardView )
-                {
-                    if( fp->IsSelected() )
-                        highlight = true;
-
-                    if( extCfg.highlight_on_rollover && fp == m_currentRollOverItem )
-                        highlight = true;
-                }
-
-                SMATERIAL mat = m_materials.m_Copper;
-                mat.m_Diffuse = SFVEC3F( 0.75f, 0.75f, 0.75f );
-                mat.m_Specular = SFVEC3F( 0.85f, 0.85f, 0.85f );
-                mat.m_Shininess = 0.6f * 128.0f;
-                mat.m_Transparency = 0.0f;
-
-                OglSetMaterial( mat, 1.0f, highlight, extSelColor );
-                renderList->DrawAll();
+                if( extCfg.highlight_on_rollover && fp == m_currentRollOverItem )
+                    highlight = true;
             }
+
+            SMATERIAL mat = m_materials.m_Copper;
+            mat.m_Diffuse = SFVEC3F( 0.75f, 0.75f, 0.75f );
+            mat.m_Specular = SFVEC3F( 0.85f, 0.85f, 0.85f );
+            mat.m_Shininess = 0.6f * 128.0f;
+            mat.m_Transparency = 0.0f;
+
+            OglSetMaterial( mat, 1.0f, highlight, extSelColor );
+            renderList->DrawAll();
         }
 
-        for( auto& [fp, renderList] : m_extrudedBodyLists )
+        for( auto& [fp, renderListDef] : m_extrudedBodyLists )
         {
             const EXTRUDED_3D_BODY* body = fp->GetExtrudedBody();
 
             if( !body )
                 continue;
 
-            if( renderList )
+            if( !renderListDef )
+                continue;
+
+            std::shared_ptr<OPENGL_RENDER_LIST> renderList = renderListDef->MakeOrGet();
+
+            if( !renderList )
+                continue;
+
+            bool highlight = false;
+
+            if( m_boardAdapter.m_IsBoardView )
             {
-                bool highlight = false;
+                if( fp->IsSelected() )
+                    highlight = true;
 
-                if( m_boardAdapter.m_IsBoardView )
-                {
-                    if( fp->IsSelected() )
-                        highlight = true;
-
-                    if( extCfg.highlight_on_rollover && fp == m_currentRollOverItem )
-                        highlight = true;
-                }
-
-                KIGFX::COLOR4D c = body->m_color;
-
-                if( c == KIGFX::COLOR4D::UNSPECIFIED )
-                    c = EXTRUDED_3D_BODY::GetDefaultColor( body->m_material );
-
-                SMATERIAL mat;
-
-                SFVEC3F                  diffuse( c.r, c.g, c.b );
-                EXTRUSION_MATERIAL_PROPS props = GetMaterialProps( body->m_material, diffuse );
-
-                mat.m_Diffuse = diffuse;
-                mat.m_Ambient = props.m_Ambient;
-                mat.m_Specular = props.m_Specular;
-                mat.m_Shininess = props.m_Shininess;
-                mat.m_Emissive = SFVEC3F( 0.0f );
-                mat.m_Transparency = 1.0f - c.a;
-
-                OglSetMaterial( mat, 1.0f, highlight, extSelColor );
-                renderList->DrawAll();
+                if( extCfg.highlight_on_rollover && fp == m_currentRollOverItem )
+                    highlight = true;
             }
+
+            KIGFX::COLOR4D c = body->m_color;
+
+            if( c == KIGFX::COLOR4D::UNSPECIFIED )
+                c = EXTRUDED_3D_BODY::GetDefaultColor( body->m_material );
+
+            SMATERIAL mat;
+
+            SFVEC3F                  diffuse( c.r, c.g, c.b );
+            EXTRUSION_MATERIAL_PROPS props = GetMaterialProps( body->m_material, diffuse );
+
+            mat.m_Diffuse = diffuse;
+            mat.m_Ambient = props.m_Ambient;
+            mat.m_Specular = props.m_Specular;
+            mat.m_Shininess = props.m_Shininess;
+            mat.m_Emissive = SFVEC3F( 0.0f );
+            mat.m_Transparency = 1.0f - c.a;
+
+            OglSetMaterial( mat, 1.0f, highlight, extSelColor );
+            renderList->DrawAll();
         }
     }
 
@@ -1011,14 +1052,13 @@ void RENDER_3D_OPENGL::freeAllLists()
 {
 #define DELETE_AND_FREE( ptr ) \
     {                          \
-        delete ptr;            \
-        ptr = nullptr;         \
+        ptr.reset();           \
     }                          \
 
 #define DELETE_AND_FREE_MAP( map )        \
     {                                     \
         for( auto& [ layer, ptr ] : map ) \
-            delete ptr;                   \
+            ptr.reset();                  \
                                           \
         map.clear();                      \
     }
@@ -1038,8 +1078,8 @@ void RENDER_3D_OPENGL::freeAllLists()
     DELETE_AND_FREE_MAP( m_outerLayerHoles )
     DELETE_AND_FREE_MAP( m_innerLayerHoles )
 
-    for( TRIANGLE_DISPLAY_LIST* list : m_triangles )
-        delete list;
+    for( std::shared_ptr<TRIANGLE_DISPLAY_LIST>& list : m_triangles )
+        list.reset();
 
     m_triangles.clear();
 
@@ -1074,27 +1114,36 @@ void RENDER_3D_OPENGL::renderSolderMaskLayer( PCB_LAYER_ID aLayerID, float aZPos
 
     if( m_board )
     {
-        OPENGL_RENDER_LIST* solder_mask = m_layers[ aLayerID ];
-        OPENGL_RENDER_LIST* via_holes = aSkipRenderHoles ? nullptr : m_outerThroughHoles;
+        std::shared_ptr<OPENGL_RENDER_LIST> board_list = m_board->MakeOrGet();
+        std::shared_ptr<OPENGL_RENDER_LIST> solder_mask =
+                m_layers[aLayerID] ? m_layers[aLayerID]->MakeOrGet() : nullptr;
+        std::shared_ptr<OPENGL_RENDER_LIST> via_holes =
+                !aSkipRenderHoles && m_outerThroughHoles ? m_outerThroughHoles->MakeOrGet() : nullptr;
 
         if( via_holes )
             via_holes->ApplyScalePosition( aZPos, m_boardAdapter.GetNonCopperLayerThickness() );
 
-        m_board->ApplyScalePosition( aZPos, m_boardAdapter.GetNonCopperLayerThickness() );
+        board_list->ApplyScalePosition( aZPos, m_boardAdapter.GetNonCopperLayerThickness() );
 
         setLayerMaterial( aLayerID );
-        m_board->SetItIsTransparent( true );
-        m_board->DrawCulled( aShowThickness, solder_mask, via_holes );
+        board_list->SetItIsTransparent( true );
+        board_list->DrawCulled( aShowThickness, solder_mask, via_holes );
 
         if( aLayerID == F_Mask && m_viaFrontCover )
         {
-            m_viaFrontCover->ApplyScalePosition( aZPos, 4 * m_boardAdapter.GetNonCopperLayerThickness() );
-            m_viaFrontCover->DrawTop();
+            if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_draw_list = m_viaFrontCover->MakeOrGet() )
+            {
+                ogl_draw_list->ApplyScalePosition( aZPos, 4 * m_boardAdapter.GetNonCopperLayerThickness() );
+                ogl_draw_list->DrawTop();
+            }
         }
         else if( aLayerID == B_Mask && m_viaBackCover )
         {
-            m_viaBackCover->ApplyScalePosition( aZPos, 4 * m_boardAdapter.GetNonCopperLayerThickness() );
-            m_viaBackCover->DrawBot();
+            if( std::shared_ptr<OPENGL_RENDER_LIST> ogl_draw_list = m_viaBackCover->MakeOrGet() )
+            {
+                ogl_draw_list->ApplyScalePosition( aZPos, 4 * m_boardAdapter.GetNonCopperLayerThickness() );
+                ogl_draw_list->DrawBot();
+            }
         }
     }
 }
@@ -1193,7 +1242,7 @@ void RENDER_3D_OPENGL::get3dModelsFromFootprint( std::list<MODELTORENDER> &aDstR
                 continue;
             }
 
-            if( const MODEL_3D* modelPtr = cache_i->second )
+            if( const std::shared_ptr<MODEL_3D>& modelPtr = cache_i->second )
             {
                 bool opaque = sM.m_Opacity >= 1.0;
 
@@ -1768,5 +1817,5 @@ void RENDER_3D_OPENGL::createPlaceholderModel()
 
     static S3DMODEL model = { 1, &mesh, 1, &material };
 
-    m_placeholderModel = new MODEL_3D( model, MATERIAL_MODE::NORMAL );
+    m_placeholderModel = std::make_shared<MODEL_3D>( model, MATERIAL_MODE::NORMAL );
 }

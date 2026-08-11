@@ -453,10 +453,10 @@ void OPENGL_RENDER_LIST::DrawAll( bool aDrawMiddle ) const
 
 
 void OPENGL_RENDER_LIST::DrawCulled( bool aDrawMiddle,
-                                     const OPENGL_RENDER_LIST* aSubtractList,
-                                     const OPENGL_RENDER_LIST* bSubtractList,
-                                     const OPENGL_RENDER_LIST* cSubtractList,
-                                     const OPENGL_RENDER_LIST* dSubtractList ) const
+                                     const std::shared_ptr<OPENGL_RENDER_LIST> aSubtractList,
+                                     const std::shared_ptr<OPENGL_RENDER_LIST> bSubtractList,
+                                     const std::shared_ptr<OPENGL_RENDER_LIST> cSubtractList,
+                                     const std::shared_ptr<OPENGL_RENDER_LIST> dSubtractList ) const
 {
     glClearStencil( 0x00 );
     glClear( GL_STENCIL_BUFFER_BIT );
@@ -550,7 +550,7 @@ void OPENGL_RENDER_LIST::ApplyScalePosition( float aZposition, float aZscale )
 }
 
 
-void OPENGL_RENDER_LIST::ApplyScalePosition( OPENGL_RENDER_LIST* aOtherList )
+void OPENGL_RENDER_LIST::ApplyScalePosition( std::shared_ptr<OPENGL_RENDER_LIST> aOtherList )
 {
     ApplyScalePosition( aOtherList->GetZBot(), aOtherList->GetZTop() - aOtherList->GetZBot() );
 }

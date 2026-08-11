@@ -592,6 +592,7 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
         }
 
         m_boardAdapter.InitSettings( nullptr, nullptr );
+        m_boardAdapter.CreateLayers( nullptr );
 
         if( m_appearancePanel )
             m_appearancePanel->CommonSettingsChanged();
@@ -866,6 +867,7 @@ wxImage EDA_3D_VIEWER_FRAME::captureRaytracingScreenshot( BOARD_ADAPTER& aAdapte
     tempadapter.SetBoard( GetBoard() );
     tempadapter.m_Cfg = aAdapter.m_Cfg;
     tempadapter.InitSettings( nullptr, nullptr );
+    tempadapter.CreateLayers( nullptr );
     tempadapter.Set3dCacheManager( aAdapter.Get3dCacheManager() );
 
     RENDER_3D_RAYTRACE_RAM raytrace( tempadapter, aCamera );
@@ -929,6 +931,7 @@ wxImage EDA_3D_VIEWER_FRAME::captureOpenGLScreenshot( BOARD_ADAPTER& aAdapter, T
     tempadapter.SetBoard( GetBoard() );
     tempadapter.m_Cfg = aAdapter.m_Cfg;
     tempadapter.InitSettings( nullptr, nullptr );
+    tempadapter.CreateLayers( nullptr );
     tempadapter.Set3dCacheManager( aAdapter.Get3dCacheManager() );
 
     auto canvas = std::make_unique<EDA_3D_CANVAS>( &temp,

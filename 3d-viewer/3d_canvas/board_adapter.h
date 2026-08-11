@@ -127,6 +127,13 @@ public:
     void InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     /**
+     * Creates the layers for the board, should be called after InitSettings
+     *
+     * @param aStatusReporter the pointer for the status reporter.
+     */
+    void CreateLayers( REPORTER* aStatusReporter );
+
+    /**
      * Board integer units To 3D units.
      *
      * @return the conversion factor to transform a position from the board to 3D units.

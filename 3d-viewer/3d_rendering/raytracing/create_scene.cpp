@@ -416,6 +416,7 @@ void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarn
     if( !aOnlyLoadCopperAndShapes )
     {
         m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
+        m_boardAdapter.CreateLayers( aStatusReporter );
 
         SFVEC3F camera_pos = m_boardAdapter.GetBoardCenter();
         m_camera.SetBoardLookAtPos( camera_pos );
