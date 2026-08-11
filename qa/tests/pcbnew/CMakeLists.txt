@@ -104,6 +104,7 @@ set( QA_PCBNEW_SRCS
     test_triangulation.cpp
     test_tuning_pattern_layer.cpp
     test_multichannel.cpp
+    test_pns_tuning_path_through_pad.cpp
     test_variant.cpp
     test_zone.cpp
     test_zone_filler.cpp
