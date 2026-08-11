@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -128,8 +128,9 @@ DIALOG_IMPORT_GFX_SCH_BASE::DIALOG_IMPORT_GFX_SCH_BASE( wxWindow* parent, wxWind
 	m_importScaleLabel->Wrap( -1 );
 	fgSizerImportSettings->Add( m_importScaleLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_importScaleCtrl = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerImportSettings->Add( m_importScaleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+    m_importScaleCtrl =
+            new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, _( "1.0" ), wxDefaultPosition, wxDefaultSize, 0 );
+    fgSizerImportSettings->Add( m_importScaleCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 
 
 	fgSizerImportSettings->Add( 0, 0, 0, 0, 5 );

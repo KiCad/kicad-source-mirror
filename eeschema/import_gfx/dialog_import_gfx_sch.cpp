@@ -185,6 +185,13 @@ bool DIALOG_IMPORT_GFX_SCH::TransferDataFromWindow()
 
     wxString ext = wxFileName( m_textCtrlFileName->GetValue() ).GetExt();
     double   scale = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_importScaleCtrl->GetValue() );
+
+    if( scale <= 0.0 )
+    {
+        wxMessageBox( _( "Import scale must be a positive number." ) );
+        return false;
+    }
+
     double           xscale = scale;
     double           yscale = scale;
 
