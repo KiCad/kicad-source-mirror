@@ -52,6 +52,8 @@
 #include <confirm.h>
 #include <footprint.h>
 #include <footprint_utils.h>
+#include <footprint_library_adapter.h>
+#include <project_pcb.h>
 #include <lset.h>
 #include <trace_helpers.h>
 #include <pcbnew_id.h>
@@ -2263,6 +2265,9 @@ void PCB_EDIT_FRAME::OnModify()
 
 void PCB_EDIT_FRAME::HardRedraw()
 {
+    // The libraries were read once and then cached. A refresh is where they need to be refreshed
+    PROJECT_PCB::FootprintLibAdapter( &Prj() )->RefreshChangedLibraries();
+
     Update3DView( true, true );
 
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = GetBoard()->GetConnectivity();
