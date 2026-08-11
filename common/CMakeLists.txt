@@ -111,7 +111,6 @@ set( KICOMMON_SRCS
     git/kigit_driver_registry.cpp
     git/kigit_merge_blob_utils.cpp
     git/git_init_handler.cpp
-    git/git_pull_handler.cpp
     git/project_git_hash.cpp
     git/git_remove_vcs_handler.cpp
     git/git_switch_branch_handler.cpp
@@ -419,6 +418,7 @@ list( APPEND KICOMMON_SRCS
 set( KIGIT_SRCS
     git/git_backend.cpp
     git/git_commit_handler.cpp
+    git/git_pull_handler.cpp
     git/git_push_handler.cpp
     git/git_repo_mixin.cpp
     git/git_status_handler.cpp
@@ -436,6 +436,8 @@ set( KIGIT_SRCS
     git/kigit_ssh_keys.cpp
     git/kigit_transport.cpp
     git/libgit_backend.cpp
+    git/libgit_backend_history.cpp
+    git/libgit_backend_refs.cpp
     git/project_git_utils.cpp
     )
 

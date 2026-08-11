@@ -21,7 +21,12 @@
 #define _GIT_PULL_HANDLER_H_
 
 #include <git/git_repo_mixin.h>
+#include <git/kigit_transport.h>
 #include <import_export.h>
+
+#include <vector>
+
+#include <wx/string.h>
 
 // Enum for result codes, error codes are negative, success codes are positive
 enum class PullResult : int
@@ -42,6 +47,7 @@ public:
     ~GIT_PULL_HANDLER();
 
     bool       PerformFetch( bool aSkipLock = false );
+
     PullResult PerformPull();
 };
 

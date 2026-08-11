@@ -31,18 +31,17 @@
 #include "kicad_git_common.h"
 #include "kicad_git_memory.h"
 #include "kigit_failure.h"
+#include "kigit_lock_retry.h"
 #include "kigit_ssh_keys.h"
 #include "kigit_transport.h"
-#include "trace_helpers.h"
+#include <git/kigit_trace.h>
 
 #include "kicad_git_compat.h"
 #include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/log.h>
-#include <gestfich.h>
-#include <paths.h>
-#include <pgm_base.h>
-#include <settings/common_settings.h>
+#include <wx/intl.h>
+#include <git/kigit_platform.h>
 #include <algorithm>
 #include <cstring>
 #include <fstream>
@@ -59,24 +58,20 @@ void LIBGIT_BACKEND::Init()
 {
     git_libgit2_init();
 
-    KIGIT::SetRememberedSSHKeyStore(
-            wxFileName( PATHS::GetUserCachePath(), wxS( "git_ssh_keys.json" ) ).GetFullPath() );
-    KIGIT::SetDerivedPublicKeyFolder( wxFileName( PATHS::GetUserCachePath(), wxS( "ssh_public_keys" ) ).GetFullPath() );
-
-    // libgit2 sets no timeout of its own, so an unreachable remote parks a fetch in connect()
-    // or recv() for as long as the OS allows.  SSH remotes stay bounded only by libssh2.
-
-#if ( LIBGIT2_VER_MAJOR > 1 ) || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 7 )
-    constexpr int connectTimeoutMs = 10000;
-    constexpr int transferTimeoutMs = 30000;
-
-    if( git_libgit2_opts( GIT_OPT_SET_SERVER_CONNECT_TIMEOUT, connectTimeoutMs ) != GIT_OK
-            || git_libgit2_opts( GIT_OPT_SET_SERVER_TIMEOUT, transferTimeoutMs ) != GIT_OK )
+    if( const KIGIT::PLATFORM_SERVICES& services = KIGIT::PlatformServices(); services.userCachePath )
     {
-        wxLogTrace( traceGit, "LIBGIT_BACKEND::Init(): could not set server timeouts: %s",
+        const wxString cache = services.userCachePath();
+
+        KIGIT::SetRememberedSSHKeyStore( wxFileName( cache, wxS( "git_ssh_keys.json" ) ).GetFullPath() );
+        KIGIT::SetDerivedPublicKeyFolder( wxFileName( cache, wxS( "ssh_public_keys" ) ).GetFullPath() );
+    }
+
+    // SSH remotes stay bounded only by libssh2
+    if( !KIGIT::SetServerTimeouts() )
+    {
+        wxLogTrace( KIGIT::traceKigit, "LIBGIT_BACKEND::Init(): could not set server timeouts: %s",
                     KIGIT_COMMON::GetLastGitError() );
     }
-#endif
 }
 
 
@@ -94,8 +89,9 @@ void LIBGIT_BACKEND::Shutdown()
 
     if( stuck > 0 )
     {
-        wxLogTrace( traceGit, "LIBGIT_BACKEND::Shutdown(): %zu orphan git thread(s) did not finish within %lld ms; "
-                              "skipping libgit2 shutdown",
+        wxLogTrace( KIGIT::traceKigit,
+                    "LIBGIT_BACKEND::Shutdown(): %zu orphan git thread(s) did not finish within %lld ms; "
+                    "skipping libgit2 shutdown",
                     stuck, static_cast<long long>( kOrphanJoinTimeout.count() ) );
 
         // A stuck worker is still executing inside libgit2.  Calling
@@ -142,8 +138,8 @@ static int defaultSignature( git_signature** aSignature, git_repository* aRepo )
     COMMON_SETTINGS::GIT prefs{};
     prefs.useDefaultAuthor = true;
 
-    if( PGM_BASE* pgm = PgmOrNull(); pgm && pgm->GetCommonSettings() )
-        prefs = pgm->GetCommonSettings()->m_Git;
+    if( auto& getPreference = KIGIT::PlatformServices().getAuthorPreference )
+        prefs = getPreference();
 
     GitUserConfig author = KIGIT::ResolveAuthor( prefs, local, global );
 
@@ -384,7 +380,7 @@ static bool applySelectedPaths( git_repository* aRepo, git_index* aIndex, const 
 }
 
 
-// A commit landing between the tree build and the parent lookup would be undone by this one.
+// A branch that moved since the start makes the tree stale, so give up before anything is written
 static bool branchMovedSince( git_repository* aRepo, const git_oid& aHeadAtStart, bool aHadHead )
 {
     git_oid headNow;
@@ -417,20 +413,28 @@ enum class REPUBLISH_RESULT
 {
     UPDATED,
     CHANGED_EXTERNALLY,
+    BUSY,
     WRITE_FAILED
 };
 
 
-// Reread and compare before writing, or staging done elsewhere is overwritten.
-static REPUBLISH_RESULT republishIndex( git_index* aIndex, const std::vector<STAGED_ENTRY>& aCommitted,
-                                        const std::set<std::string>& aSelected )
-{
-    for( int attempt = 0; attempt < 3; attempt++ )
-    {
-        if( git_index_read( aIndex, 1 ) != 0 )
-            return REPUBLISH_RESULT::WRITE_FAILED;
+/// Distinct from libgit2's codes, so the edit can say staging moved under it
+constexpr int RESTAGED = -1000;
 
-        std::map<std::string, SELECTED_STATE> readState = readWholeState( aIndex );
+
+// Holding index.lock from the fresh read to the rename keeps whatever another writer stages
+static REPUBLISH_RESULT republishIndex( git_repository* aRepo, const std::vector<STAGED_ENTRY>& aCommitted,
+                                        const std::set<std::string>&                 aSelected,
+                                        const std::map<std::string, SELECTED_STATE>& aSelectedAtStart,
+                                        const std::map<std::string, SELECTED_STATE>* aIndexAtStart )
+{
+    auto edit = [&]( git_index* aIndex )
+    {
+        if( readSelectedState( aIndex, aSelected ) != aSelectedAtStart
+            || ( aIndexAtStart && readWholeState( aIndex ) != *aIndexAtStart ) )
+        {
+            return RESTAGED;
+        }
 
         for( const std::string& path : aSelected )
             git_index_remove_bypath( aIndex, path.c_str() );
@@ -440,25 +444,22 @@ static REPUBLISH_RESULT republishIndex( git_index* aIndex, const std::vector<STA
             git_index_entry entry = staged.entry;
             entry.path = staged.path.c_str();
 
-            if( git_index_add( aIndex, &entry ) != 0 )
-                return REPUBLISH_RESULT::WRITE_FAILED;
+            if( int rc = git_index_add( aIndex, &entry ) )
+                return rc;
         }
 
-        std::map<std::string, SELECTED_STATE> diskState;
+        return 0;
+    };
 
-        if( !wholeStateOnDisk( aIndex, diskState ) )
-            return REPUBLISH_RESULT::WRITE_FAILED;
+    int rc = KIGIT::EditIndexLocked( aRepo, edit );
 
-        if( diskState != readState )
-            continue;
+    if( rc == 0 )
+        return REPUBLISH_RESULT::UPDATED;
 
-        if( git_index_write( aIndex ) == 0 )
-            return REPUBLISH_RESULT::UPDATED;
+    if( rc == RESTAGED )
+        return REPUBLISH_RESULT::CHANGED_EXTERNALLY;
 
-        return REPUBLISH_RESULT::WRITE_FAILED;
-    }
-
-    return REPUBLISH_RESULT::CHANGED_EXTERNALLY;
+    return KIGIT::IsLockContention( rc ) ? REPUBLISH_RESULT::BUSY : REPUBLISH_RESULT::WRITE_FAILED;
 }
 
 
@@ -508,6 +509,7 @@ struct COMMIT_STAGING
     bool                                  hadHeadAtStart = false;
     SCRATCH_INDEX_GUARD                   scratchGuard;
     std::vector<STAGED_ENTRY>             committedEntries;
+    bool                                  raced = false; ///< Another writer moved the branch or index
 
     /// Read the index, record what it holds and take it over. False leaves the reason in aError.
     bool Begin( git_repository* aRepo, const std::vector<wxString>& aFiles, KIGIT_ERROR_MESSAGE& aError )
@@ -583,6 +585,7 @@ struct COMMIT_STAGING
         // Nothing is written yet, so the scratch guard puts the real index back on the way out.
         if( branchMovedSince( aRepo, headAtStart, hadHeadAtStart ) )
         {
+            raced = true;
             aError = { _( "The branch moved while this was running, so nothing was "
                           "committed. Review the changes and try again." ),
                        wxEmptyString };
@@ -592,6 +595,7 @@ struct COMMIT_STAGING
         if( selectedPathsRestaged( index, selectedPaths, selectedAtStart )
             || ( haveIndexAtStart && indexChangedSince( index, indexAtStart ) ) )
         {
+            raced = true;
             aError = { _( "The staged files changed outside KiCad while this ran. Nothing "
                           "was committed. Review the changes and try again." ),
                        wxEmptyString };
@@ -603,14 +607,21 @@ struct COMMIT_STAGING
 };
 
 
-CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles,
-                                     const wxString& aMessage, const wxString& aAuthorName,
-                                     const wxString& aAuthorEmail )
+// One attempt at Commit; aRaced is set when another writer held a lock or moved the branch first
+static CommitResult commitOnce( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles,
+                                const wxString& aMessage, const wxString& aAuthorName, const wxString& aAuthorEmail,
+                                bool& aRaced )
 {
     git_repository* repo = aHandler->GetRepo();
 
+    aRaced = false;
+    aHandler->SetCreatedCommit( std::string() );
+
     if( !repo )
         return CommitResult::Error;
+
+    if( aHandler->CommitCancelled() )
+        return CommitResult::Cancelled;
 
     COMMIT_STAGING      staging;
     KIGIT_ERROR_MESSAGE stagingError;
@@ -621,23 +632,24 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
         return CommitResult::Error;
     }
 
-    git_index* index = staging.index;
+    git_index*  index = staging.index;
+    git_commit* parent = nullptr;
+
+    // One HEAD gives both the tree and the parent, or a commit landing between two reads would be undone
+    if( staging.hadHeadAtStart && git_commit_lookup( &parent, repo, &staging.headAtStart ) != 0 )
+    {
+        aHandler->AddGitError( _( "Could not read the current commit." ) );
+        return CommitResult::Error;
+    }
+
+    KIGIT::GitCommitPtr parentPtr( parent );
 
     // Start from the HEAD tree, not the index, so the commit holds exactly the listed files.
-    if( git_repository_head_unborn( repo ) == 0 )
+    if( parent )
     {
-        git_reference* headRef = nullptr;
+        git_tree* headTree = nullptr;
 
-        if( git_repository_head( &headRef, repo ) != 0 )
-        {
-            aHandler->AddGitError( _( "Could not read the current commit." ) );
-            return CommitResult::Error;
-        }
-
-        KIGIT::GitReferencePtr headRefPtr( headRef );
-        git_tree*              headTree = nullptr;
-
-        if( git_reference_peel( (git_object**) &headTree, headRef, GIT_OBJECT_TREE ) != 0 )
+        if( git_commit_tree( &headTree, parent ) != 0 )
         {
             aHandler->AddGitError( _( "Could not read the current commit." ) );
             return CommitResult::Error;
@@ -661,34 +673,15 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 
     if( !staging.BuildTree( repo, aFiles, treePtr, stagingError ) )
     {
+        aRaced = staging.raced;
         aHandler->AddError( stagingError );
         return CommitResult::Error;
     }
 
     git_tree* tree = treePtr.get();
 
-    git_commit* parent = nullptr;
-
-    if( git_repository_head_unborn( repo ) == 0 )
-    {
-        git_reference* headRef = nullptr;
-
-        if( git_repository_head( &headRef, repo ) != 0 )
-        {
-            aHandler->AddGitError( _( "Could not read the current commit." ) );
-            return CommitResult::Error;
-        }
-
-        KIGIT::GitReferencePtr headRefPtr( headRef );
-
-        if( git_reference_peel( (git_object**) &parent, headRef, GIT_OBJECT_COMMIT ) != 0 )
-        {
-            aHandler->AddGitError( _( "Could not read the current commit." ) );
-            return CommitResult::Error;
-        }
-    }
-
-    KIGIT::GitCommitPtr parentPtr( parent );
+    if( aHandler->SkipUnchanged() && parent && git_oid_equal( git_tree_id( tree ), git_commit_tree_id( parent ) ) )
+        return CommitResult::Unchanged;
 
     git_signature* author = nullptr;
 
@@ -711,28 +704,34 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
     const git_commit** parentsPtr = parent ? parents : nullptr;
 #endif
 
-    if( git_commit_create( &oid, repo, "HEAD", author, author, nullptr, aMessage.utf8_string().c_str(), tree,
-                           parentsCount, parentsPtr )
-        != 0 )
+    if( aHandler->CommitCancelled() )
+        return CommitResult::Cancelled;
+
+    // HEAD moves only while it still names the parent, so a writer that got there first fails this
+    if( int rc = git_commit_create( &oid, repo, "HEAD", author, author, nullptr, aMessage.utf8_string().c_str(), tree,
+                                    parentsCount, parentsPtr ) )
     {
+        aRaced = KIGIT::IsLockContention( rc );
         aHandler->AddGitError( _( "Could not create the commit." ) );
         return CommitResult::Error;
     }
 
+    aHandler->SetCreatedCommit( git_oid_tostr_s( &oid ) );
+
     // The commit exists, so only the index is left. If anything restaged meanwhile, leave it.
-    if( selectedPathsRestaged( index, staging.selectedPaths, staging.selectedAtStart )
-        || ( staging.haveIndexAtStart && indexChangedSince( index, staging.indexAtStart ) ) )
+    REPUBLISH_RESULT republished =
+            republishIndex( repo, staging.committedEntries, staging.selectedPaths, staging.selectedAtStart,
+                            staging.haveIndexAtStart ? &staging.indexAtStart : nullptr );
+
+    if( republished == REPUBLISH_RESULT::CHANGED_EXTERNALLY )
     {
-        git_index_read( index, 1 );
         aHandler->AddErrorString( _( "The commit was created, but the list of staged files was left "
                                      "alone, because the staged files changed outside KiCad while "
                                      "this ran." ) );
         return CommitResult::SuccessIndexStale;
     }
 
-    REPUBLISH_RESULT republished = republishIndex( index, staging.committedEntries, staging.selectedPaths );
-
-    if( republished == REPUBLISH_RESULT::CHANGED_EXTERNALLY )
+    if( republished == REPUBLISH_RESULT::BUSY )
     {
         aHandler->AddErrorString( _( "The commit was created, but the list of staged files was left "
                                      "alone, because another program kept changing it." ) );
@@ -751,11 +750,54 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::ve
 }
 
 
-CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles,
-                                    const wxString& aMessage, const wxString& aAuthorName,
-                                    const wxString& aAuthorEmail )
+using COMMIT_ATTEMPT = CommitResult ( * )( GIT_COMMIT_HANDLER*, const std::vector<wxString>&, const wxString&,
+                                          const wxString&, const wxString&, bool& );
+
+
+// Run aAttempt again while it races another writer, for as long as the handler allows
+static CommitResult attemptWithRetry( COMMIT_ATTEMPT aAttempt, GIT_COMMIT_HANDLER* aHandler,
+                                      const std::vector<wxString>& aFiles, const wxString& aMessage,
+                                      const wxString& aAuthorName, const wxString& aAuthorEmail )
+{
+    bool raced = false;
+
+    if( aHandler->LockRetry().count() == 0 )
+        return aAttempt( aHandler, aFiles, aMessage, aAuthorName, aAuthorEmail, raced );
+
+    CommitResult result = CommitResult::Error;
+    const size_t errorsAtStart = aHandler->GetErrorStrings().size();
+
+    KIGIT::WithLockRetry( aHandler->LockRetry(),
+                          [&]()
+                          {
+                              // Only the last attempt's errors describe how it ended
+                              while( aHandler->GetErrorStrings().size() > errorsAtStart )
+                                  aHandler->PopError();
+
+                              result = aAttempt( aHandler, aFiles, aMessage, aAuthorName, aAuthorEmail, raced );
+                              return raced ? GIT_ELOCKED : GIT_OK;
+                          } );
+
+    return raced ? CommitResult::Busy : result;
+}
+
+
+CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles,
+                                     const wxString& aMessage, const wxString& aAuthorName,
+                                     const wxString& aAuthorEmail )
+{
+    return attemptWithRetry( commitOnce, aHandler, aFiles, aMessage, aAuthorName, aAuthorEmail );
+}
+
+
+// One attempt at Amend, with aRaced as for commitOnce
+static CommitResult amendOnce( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles,
+                               const wxString& aMessage, const wxString& aAuthorName, const wxString& aAuthorEmail,
+                               bool& aRaced )
 {
     git_repository* repo = aHandler->GetRepo();
+
+    aRaced = false;
 
     if( !repo )
         return CommitResult::Error;
@@ -816,6 +858,7 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 
     if( !staging.BuildTree( repo, aFiles, treePtr, stagingError ) )
     {
+        aRaced = staging.raced;
         aHandler->AddError( stagingError );
         return CommitResult::Error;
     }
@@ -833,27 +876,28 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
     KIGIT::GitSignaturePtr authorPtr( author );
     git_oid                oid;
 
-    if( git_commit_amend( &oid, headCommit, "HEAD", author, author, nullptr, aMessage.utf8_string().c_str(), tree )
-        != 0 )
+    if( int rc = git_commit_amend( &oid, headCommit, "HEAD", author, author, nullptr,
+                                   aMessage.utf8_string().c_str(), tree ) )
     {
+        aRaced = KIGIT::IsLockContention( rc );
         aHandler->AddGitError( _( "Could not amend the commit." ) );
         return CommitResult::Error;
     }
 
     // The commit exists, so only the index is left. If anything restaged meanwhile, leave it.
-    if( selectedPathsRestaged( index, staging.selectedPaths, staging.selectedAtStart )
-        || ( staging.haveIndexAtStart && indexChangedSince( index, staging.indexAtStart ) ) )
+    REPUBLISH_RESULT republished =
+            republishIndex( repo, staging.committedEntries, staging.selectedPaths, staging.selectedAtStart,
+                            staging.haveIndexAtStart ? &staging.indexAtStart : nullptr );
+
+    if( republished == REPUBLISH_RESULT::CHANGED_EXTERNALLY )
     {
-        git_index_read( index, 1 );
         aHandler->AddErrorString( _( "The commit was amended, but the list of staged files was left "
                                      "alone, because the staged files changed outside KiCad while "
                                      "this ran." ) );
         return CommitResult::SuccessIndexStale;
     }
 
-    REPUBLISH_RESULT republished = republishIndex( index, staging.committedEntries, staging.selectedPaths );
-
-    if( republished == REPUBLISH_RESULT::CHANGED_EXTERNALLY )
+    if( republished == REPUBLISH_RESULT::BUSY )
     {
         aHandler->AddErrorString( _( "The commit was amended, but the list of staged files was left "
                                      "alone, because another program kept changing it." ) );
@@ -869,6 +913,14 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
     staging.scratchGuard.armed = false;
 
     return CommitResult::Success;
+}
+
+
+CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles,
+                                    const wxString& aMessage, const wxString& aAuthorName,
+                                    const wxString& aAuthorEmail )
+{
+    return attemptWithRetry( amendOnce, aHandler, aFiles, aMessage, aAuthorName, aAuthorEmail );
 }
 
 
@@ -1143,9 +1195,6 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
         return PushResult::Error;
     }
 
-    if( pushUrl )
-        common->SyncRemoteUrl( wxString::FromUTF8( pushUrl ) );
-
     // Cancelled while this task was still queued, so it must not start network work.
     if( aHandler->IsThisOperationCancelled() )
         return PushResult::Error;
@@ -1227,10 +1276,13 @@ static bool isGitlink( const git_diff_delta* aDelta )
 
 
 std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER* aHandler, const wxString& aPathspec,
-                                                              bool aChangedOnly )
+                                                              bool aChangedOnly, bool* aReadOk )
 {
     std::map<wxString, FileStatus> fileStatusMap;
     git_repository* repo = aHandler->GetRepo();
+
+    if( aReadOk )
+        *aReadOk = false;
 
     if( !repo )
         return fileStatusMap;
@@ -1267,11 +1319,14 @@ std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER
 
     if( git_status_list_new( &status_list, repo, &status_options ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to get git status list: %s", KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( KIGIT::traceKigit, "Failed to get git status list: %s", KIGIT_COMMON::GetLastGitError() );
         return fileStatusMap;
     }
 
     KIGIT::GitStatusListPtr statusListPtr( status_list );
+
+    if( aReadOk )
+        *aReadOk = true;
 
     size_t count = git_status_list_entrycount( status_list );
     wxString repoWorkDir = aHandler->GetProjectDir();
@@ -1291,7 +1346,7 @@ std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER
         const bool isDirectory =
                 trailingSlash || isGitlink( entry->head_to_index ) || isGitlink( entry->index_to_workdir );
 
-        wxString absPath = repoWorkDir + path;
+        wxString absPath = repoWorkDir + wxString::FromUTF8( path );
         fileStatusMap[absPath] = FileStatus{ absPath, aHandler->ConvertStatus( entry->status ),
                                              static_cast<unsigned int>( entry->status ), isDirectory };
     }
@@ -1321,7 +1376,7 @@ wxString LIBGIT_BACKEND::GetCurrentBranchName( GIT_STATUS_HANDLER* aHandler )
     }
     else
     {
-        wxLogTrace( traceGit, "Failed to lookup current branch: %s", KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( KIGIT::traceKigit, "Failed to lookup current branch: %s", KIGIT_COMMON::GetLastGitError() );
         return wxEmptyString;
     }
 }
@@ -1367,6 +1422,38 @@ void LIBGIT_BACKEND::UpdateRemoteStatus( GIT_STATUS_HANDLER* aHandler,
 wxString LIBGIT_BACKEND::GetWorkingDirectory( GIT_STATUS_HANDLER* aHandler )
 {
     return aHandler->GetProjectDir();
+}
+
+
+bool LIBGIT_BACKEND::GetConfigString( git_repository* aRepo, const wxString& aKey, wxString& aValue )
+{
+    if( !aRepo )
+        return false;
+
+    git_config* config = nullptr;
+
+    if( git_repository_config( &config, aRepo ) != GIT_OK )
+    {
+        wxLogTrace( KIGIT::traceKigit, "Failed to get repository config: %s", KIGIT_COMMON::GetLastGitError() );
+        return false;
+    }
+
+    KIGIT::GitConfigPtr configPtr( config );
+
+    return KIGIT::ReadConfigString( config, aKey.utf8_string().c_str(), aValue );
+}
+
+
+bool LIBGIT_BACKEND::SetConfigString( git_repository* aRepo, const wxString& aKey, const wxString& aValue )
+{
+    git_config* config = nullptr;
+
+    if( !aRepo || git_repository_config( &config, aRepo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitConfigPtr configPtr( config );
+
+    return git_config_set_string( config, aKey.utf8_string().c_str(), aValue.utf8_string().c_str() ) == GIT_OK;
 }
 
 
@@ -1451,6 +1538,7 @@ InitResult LIBGIT_BACKEND::InitializeRepository( GIT_INIT_HANDLER* aHandler, con
         return InitResult::Error;
     }
 
+    KIGIT::PROJECT_GIT_UTILS::AllowLongPaths( repo );
     aHandler->GetCommon()->SetRepo( repo );
 
     if( !markForRemoteBranchAdoption( repo ) )
@@ -1459,7 +1547,7 @@ InitResult LIBGIT_BACKEND::InitializeRepository( GIT_INIT_HANDLER* aHandler, con
         return InitResult::Error;
     }
 
-    wxLogTrace( traceGit, "Successfully initialized Git repository at %s", aPath );
+    wxLogTrace( KIGIT::traceKigit, "Successfully initialized Git repository at %s", aPath );
     return InitResult::Success;
 }
 
@@ -1513,7 +1601,7 @@ bool LIBGIT_BACKEND::SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig
     common->SetPassword( aConfig.password.IsEmpty() ? parsed.password : aConfig.password );
     common->SetSSHKey( aConfig.sshKey );
 
-    wxLogTrace( traceGit, "Successfully set up remote origin" );
+    wxLogTrace( KIGIT::traceKigit, "Successfully set up remote origin" );
     return true;
 }
 
@@ -1643,7 +1731,7 @@ BranchResult LIBGIT_BACKEND::SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const
         return BranchResult::Error;
     }
 
-    wxLogTrace( traceGit, "Successfully switched to branch '%s'", aBranchName );
+    wxLogTrace( KIGIT::traceKigit, "Successfully switched to branch '%s'", aBranchName );
     return BranchResult::Success;
 }
 
@@ -1734,13 +1822,13 @@ static bool adoptRemoteBranch( git_repository* aRepo, const wxString& aRemoteNam
         || git_transaction_commit( transaction ) != GIT_OK
         || git_repository_set_head( aRepo, ( wxS( "refs/heads/" ) + branch ).utf8_str() ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "adoptRemoteBranch: could not move %s to %s: %s", localName, branch,
+        wxLogTrace( KIGIT::traceKigit, "adoptRemoteBranch: could not move %s to %s: %s", localName, branch,
                     KIGIT_COMMON::GetLastGitError() );
         return false;
     }
 
     git_config_delete_entry( local, ADOPT_REMOTE_BRANCH_KEY );
-    wxLogTrace( traceGit, "adoptRemoteBranch: first commit goes to %s instead of %s", branch, localName );
+    wxLogTrace( KIGIT::traceKigit, "adoptRemoteBranch: first commit goes to %s instead of %s", branch, localName );
     return true;
 }
 
@@ -1757,7 +1845,7 @@ static bool fetchRemote( GIT_PULL_HANDLER* aHandler, bool aSkipLock, bool* aRemo
 
         if( !lock.owns_lock() )
         {
-            wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Could not lock mutex" );
+            wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformFetch() - Could not lock mutex" );
             aHandler->AddErrorString( KIGIT::BusyMessage() );
             return false;
         }
@@ -1779,16 +1867,12 @@ static bool fetchRemote( GIT_PULL_HANDLER* aHandler, bool aSkipLock, bool* aRemo
 
     if( int rc = git_remote_lookup( &remote, aHandler->GetRepo(), remoteNameUtf8.c_str() ); rc != GIT_OK )
     {
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to lookup remote '%s'", remoteName );
+        wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformFetch() - Failed to lookup remote '%s'", remoteName );
         reportRemoteLookupFailure( aHandler, rc, remoteName );
         return false;
     }
 
     KIGIT::GitRemotePtr remotePtr( remote );
-
-    // The URL may have changed outside KiCad, so the credentials follow what libgit2 connects to
-    if( const char* url = git_remote_url( remote ) )
-        aHandler->GetCommon()->SyncRemoteUrl( wxString::FromUTF8( url ) );
 
     // Do not SetShuttingDown( false ) here. A close or a preference change can raise the flag
     // after this fetch starts, and clearing it would strand the caller on the transfer.
@@ -1817,7 +1901,7 @@ static bool fetchRemote( GIT_PULL_HANDLER* aHandler, bool aSkipLock, bool* aRemo
         return false;
     }
 
-    wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Fetch completed successfully" );
+    wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformFetch() - Fetch completed successfully" );
     return true;
 }
 
@@ -2322,26 +2406,26 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 
     if( merge_analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE )
     {
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Repository is up to date" );
+        wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformPull() - Repository is up to date" );
         git_repository_state_cleanup( aHandler->GetRepo() );
         return PullResult::UpToDate;
     }
 
     if( merge_analysis & GIT_MERGE_ANALYSIS_FASTFORWARD )
     {
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Fast-forward merge" );
+        wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformPull() - Fast-forward merge" );
         return handleFastForward( aHandler );
     }
 
     if( merge_analysis & GIT_MERGE_ANALYSIS_NORMAL )
     {
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Normal merge" );
+        wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformPull() - Normal merge" );
 
         git_config* config = nullptr;
 
         if( git_repository_config( &config, aHandler->GetRepo() ) != GIT_OK )
         {
-            wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Failed to get repository config" );
+            wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformPull() - Failed to get repository config" );
             aHandler->AddGitError( _( "Could not read the repository settings." ) );
             return PullResult::Error;
         }
@@ -2353,15 +2437,15 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 
         if( ret == GIT_OK && rebase_value )
         {
-            wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Using rebase based on config" );
+            wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformPull() - Using rebase based on config" );
             return handleRebase( aHandler, merge_commits, 1 );
         }
 
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Using merge based on config" );
+        wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformPull() - Using merge based on config" );
         return handleMerge( aHandler, merge_commits, 1 );
     }
 
-    wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Merge needs resolution" );
+    wxLogTrace( KIGIT::traceKigit, "GIT_PULL_HANDLER::PerformPull() - Merge needs resolution" );
     return result;
 }
 
@@ -2464,19 +2548,19 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
                 switch( why )
                 {
                 case GIT_CHECKOUT_NOTIFY_CONFLICT:
-                    wxLogTrace( traceGit, "Checkout conflict: %s", path ? path : "unknown" );
+                    wxLogTrace( KIGIT::traceKigit, "Checkout conflict: %s", path ? path : "unknown" );
                     break;
                 case GIT_CHECKOUT_NOTIFY_DIRTY:
-                    wxLogTrace( traceGit, "Checkout dirty: %s", path ? path : "unknown" );
+                    wxLogTrace( KIGIT::traceKigit, "Checkout dirty: %s", path ? path : "unknown" );
                     break;
                 case GIT_CHECKOUT_NOTIFY_UPDATED:
-                    wxLogTrace( traceGit, "Checkout updated: %s", path ? path : "unknown" );
+                    wxLogTrace( KIGIT::traceKigit, "Checkout updated: %s", path ? path : "unknown" );
                     break;
                 case GIT_CHECKOUT_NOTIFY_UNTRACKED:
-                    wxLogTrace( traceGit, "Checkout untracked: %s", path ? path : "unknown" );
+                    wxLogTrace( KIGIT::traceKigit, "Checkout untracked: %s", path ? path : "unknown" );
                     break;
                 case GIT_CHECKOUT_NOTIFY_IGNORED:
-                    wxLogTrace( traceGit, "Checkout ignored: %s", path ? path : "unknown" );
+                    wxLogTrace( KIGIT::traceKigit, "Checkout ignored: %s", path ? path : "unknown" );
                     break;
                 default:
                     break;
@@ -2536,7 +2620,7 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
     if( git_repository_state_cleanup( aHandler->GetRepo() ) != GIT_OK )
     {
         // Branch and files already match, so this is leftover merge state, not a failed pull.
-        wxLogTrace( traceGit, "handleFastForward: state cleanup failed after a completed fast-forward: %s",
+        wxLogTrace( KIGIT::traceKigit, "handleFastForward: state cleanup failed after a completed fast-forward: %s",
                     KIGIT_COMMON::GetLastGitError() );
     }
 
@@ -2544,7 +2628,7 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 }
 
 
-// A rebase aborts with a hard reset of the whole tree, so it needs every tracked change committed.
+// A rebase aborts with a hard reset of the whole tree, so it needs every tracked change committed
 // A merge commits the whole index, so it needs only the staged ones
 static std::optional<PullResult> refuseUncommittedChanges( GIT_PULL_HANDLER* aHandler, bool aStagedOnly )
 {
@@ -2824,7 +2908,7 @@ git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename, wxS
     // finds keeps a linked .git from moving the working folder to the link's target
     if( int rc = git_repository_open_ext( &repo, aFilename, 0, nullptr ); rc != GIT_OK )
     {
-        wxLogTrace( traceGit, "Can't open repo for %s: %s", aFilename, KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( KIGIT::traceKigit, "Can't open repo for %s: %s", aFilename, KIGIT_COMMON::GetLastGitError() );
 
 #if KIGIT_HAS_EOWNER
         // Left unexplained, a repository git refuses to open looks like no repository at all.
@@ -2853,6 +2937,7 @@ git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename, wxS
         return nullptr;
     }
 
+    KIGIT::PROJECT_GIT_UTILS::AttachLongPaths( repo );
     return repo;
 }
 
@@ -2865,7 +2950,8 @@ int LIBGIT_BACKEND::CreateBranch( git_repository* aRepo, const wxString& aBranch
 
     if( int error = git_revparse_single( &startObj, aRepo, start.c_str() ); error != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to resolve branch start point '%s': %s", start, KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( KIGIT::traceKigit, "Failed to resolve branch start point '%s': %s", start,
+                    KIGIT_COMMON::GetLastGitError() );
         return error;
     }
 
@@ -2874,7 +2960,7 @@ int LIBGIT_BACKEND::CreateBranch( git_repository* aRepo, const wxString& aBranch
 
     if( int error = git_object_peel( &peeled, startObj, GIT_OBJECT_COMMIT ); error != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to lookup commit: %s", KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( KIGIT::traceKigit, "Failed to lookup commit: %s", KIGIT_COMMON::GetLastGitError() );
         return error;
     }
 
@@ -2886,7 +2972,7 @@ int LIBGIT_BACKEND::CreateBranch( git_repository* aRepo, const wxString& aBranch
 
     if( int error = git_branch_create( &branchRef, aRepo, name.c_str(), commit, 0 ); error != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to create branch: %s", KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( KIGIT::traceKigit, "Failed to create branch: %s", KIGIT_COMMON::GetLastGitError() );
         return error;
     }
 
@@ -3029,10 +3115,16 @@ bool LIBGIT_BACKEND::CreateTag( git_repository* aRepo, const wxString& aName, co
         return false;
 
     KIGIT::GitObjectPtr targetPtr( target );
-    git_oid             oid;
+    const std::string   name = aName.utf8_string();
+    const std::string   head = git_oid_tostr_s( git_object_id( target ) );
+    int                 valid = 0;
 
+    if( git_tag_name_is_valid( &valid, name.c_str() ) != GIT_OK || !valid )
+        return false;
+
+    // Published through a swap from nothing, which unlike force=0 cannot replace a tag made meanwhile
     if( aMessage.IsEmpty() )
-        return git_tag_create_lightweight( &oid, aRepo, aName.utf8_string().c_str(), target, 0 ) == GIT_OK;
+        return SetReference( aRepo, "refs/tags/" + name, head, std::string(), "tag: " + name ) == GIT_OK;
 
     // An annotated tag carries the message, and who made it, from the repository's identity.
     git_signature* tagger = nullptr;
@@ -3041,10 +3133,10 @@ bool LIBGIT_BACKEND::CreateTag( git_repository* aRepo, const wxString& aName, co
         return false;
 
     KIGIT::GitSignaturePtr taggerPtr( tagger );
-    std::string            name = aName.utf8_string();
-    std::string            message = aMessage.utf8_string();
+    std::string            tagOid;
 
-    return git_tag_create( &oid, aRepo, name.c_str(), target, tagger, message.c_str(), 0 ) == GIT_OK;
+    return CreateAnnotatedTag( aRepo, name, head, aMessage.utf8_string(), tagger->name, tagger->email, tagOid )
+           == GIT_OK;
 }
 
 
@@ -3403,7 +3495,7 @@ static PUBLISH_RESULT publishPreparedCommit( git_repository* aRepo, git_tree* aT
         return PUBLISH_RESULT::CHECKOUT_FAILED_ROLLED_BACK;
     }
 
-    // Forced, so only the paths the commit changes, or uncommitted edits elsewhere are reverted.
+    // Forced, so only the paths the commit changes, or uncommitted edits elsewhere are reverted
     // No paths at all would mean every path
     std::vector<char*> paths;
 
@@ -4277,19 +4369,20 @@ bool LIBGIT_BACKEND::RemoveVCS( git_repository*& aRepo, const wxString& aProject
 
         if( gitDir.DirExists() )
         {
-            wxString errors;
+            const KIGIT::PLATFORM_SERVICES& services = KIGIT::PlatformServices();
+            wxString                        errors;
 
-            if( !RmDirRecursive( gitDir.GetPath(), &errors ) )
+            if( !services.removeDirectory || !services.removeDirectory( gitDir.GetPath(), &errors ) )
             {
                 if( aErrors )
                     *aErrors = errors;
 
-                wxLogTrace( traceGit, "Failed to remove .git directory: %s", errors );
+                wxLogTrace( KIGIT::traceKigit, "Failed to remove .git directory: %s", errors );
                 return false;
             }
         }
     }
 
-    wxLogTrace( traceGit, "Successfully removed VCS from project" );
+    wxLogTrace( KIGIT::traceKigit, "Successfully removed VCS from project" );
     return true;
 }

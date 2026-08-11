@@ -2704,6 +2704,35 @@ BOOST_AUTO_TEST_CASE( Amend_MessageOnlyRewritesHeadKeepsTree )
 }
 
 
+// A branch lock held for a moment must not fail an amend that is allowed to wait, as it does not fail a commit
+BOOST_AUTO_TEST_CASE( Amend_RetriesWhileBranchLockHeld )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    KIGIT::GitRepositoryPtr repo( openRepo() );
+    BOOST_TEST_REQUIRE( repo );
+
+    wxString refLock = repoPath() + wxS( "/.git/refs/heads/master.lock" );
+    KI_TEST::WriteGitFile( repoPath(), wxT( ".git/refs/heads/master.lock" ), "locked\n" );
+
+    std::thread releaser(
+            [&refLock]()
+            {
+                std::this_thread::sleep_for( std::chrono::milliseconds( 300 ) );
+                wxRemoveFile( refLock );
+            } );
+
+    GIT_COMMIT_HANDLER handler( repo.get() );
+    handler.SetLockRetry( std::chrono::milliseconds( 5000 ) );
+
+    CommitResult result = handler.PerformAmend( {}, wxT( "Amended late" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+    releaser.join();
+    wxRemoveFile( refLock );
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( CommitResult::Success ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( Amend_StagedFileChangesTreeAndKeepsParent )
 {
     BOOST_TEST_REQUIRE( ready() );

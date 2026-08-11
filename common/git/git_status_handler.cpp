@@ -29,9 +29,10 @@ GIT_STATUS_HANDLER::~GIT_STATUS_HANDLER()
 {}
 
 
-std::map<wxString, FileStatus> GIT_STATUS_HANDLER::GetFileStatus( const wxString& aPathspec, bool aChangedOnly )
+std::map<wxString, FileStatus> GIT_STATUS_HANDLER::GetFileStatus( const wxString& aPathspec, bool aChangedOnly,
+                                                                  bool* aReadOk )
 {
-    return GetGitBackend()->GetFileStatus( this, aPathspec, aChangedOnly );
+    return GetGitBackend()->GetFileStatus( this, aPathspec, aChangedOnly, aReadOk );
 }
 
 
