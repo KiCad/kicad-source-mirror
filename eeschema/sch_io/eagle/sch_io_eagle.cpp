@@ -2005,9 +2005,13 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         }
     }
 
+    wxString reference = aInstance->part;
+    bool     referenceVisible = !reference.IsEmpty();
+
     // If there is no footprint assigned, then prepend the reference value
     // with a hash character to mute netlist updater complaints
-    wxString reference = package.IsEmpty() ? '#' + aInstance->part : aInstance->part;
+    if( package.IsEmpty() )
+        reference.Prepend( '#' );
 
     // reference must end with a number but EAGLE does not enforce this
     if( reference.find_last_not_of( wxT( "0123456789" ) ) == ( reference.Length()-1 ) )
@@ -2025,6 +2029,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         reference.Prepend( wxT( "UNK" ) );
 
     SCH_FIELD* referenceField = symbol->GetField( FIELD_T::REFERENCE );
+    referenceField->SetVisible( referenceVisible );
     referenceField->SetText( reference );
 
     SCH_FIELD* valueField = symbol->GetField( FIELD_T::VALUE );
@@ -2060,7 +2065,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         if( attr->value )
             newField.SetText( *attr->value );
 
-        newField.SetVisible( ( attr->display == EATTR::Off ) ? false : true );
+        newField.SetVisible( ( attr->display != (int) EATTR::Off ) );
 
         symbol->AddField( newField );
     }
@@ -2097,7 +2102,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
                 field->SetTextSize( ConvertEagleTextSize( eattr->font, eattr->size.Get() ) );
 
             int  align      = eattr->align ? *eattr->align : ETEXT::BOTTOM_LEFT;
-            int  absdegrees = eattr->rot ? eattr->rot->degrees : 0;
+            int  absdegrees = eattr->rot ? KiROUND( eattr->rot->degrees ) : 0;
             bool mirror     = eattr->rot ? eattr->rot->mirror : false;
 
             if( aInstance->rot && aInstance->rot->mirror )
@@ -2105,11 +2110,11 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
 
             bool spin = eattr->rot ? eattr->rot->spin : false;
 
-            if( eattr->display == EATTR::Off || eattr->display == EATTR::NAME )
+            if( eattr->display == (int) EATTR::Off || eattr->display == (int) EATTR::NAME )
                 field->SetVisible( false );
 
-            int rotation   = aInstance->rot ? aInstance->rot->degrees : 0;
-            int reldegrees = ( absdegrees - rotation + 360.0 );
+            int rotation   = aInstance->rot ? KiROUND( aInstance->rot->degrees ) : 0;
+            int reldegrees = KiROUND( absdegrees - rotation + 360.0 );
             reldegrees %= 360;
 
             eagleToKicadAlignment( field, align, reldegrees, mirror, spin, absdegrees );
@@ -2421,7 +2426,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                     std::map<std::string, UTF8> properties;
                     properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
 
-                    LIB_SYMBOL* parentSymbol = new LIB_SYMBOL( *libSymbol.get() );
+                    LIB_SYMBOL* parentSymbol = new LIB_SYMBOL( *libSymbol );
                     m_pi->SaveSymbol( getLibFileName().GetFullPath(), parentSymbol, &properties );
 
                     for( std::unique_ptr<LIB_SYMBOL>& symbol : derivedSymbols )
@@ -2433,7 +2438,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                             symbol->SetName( tmp );
                         }
 
-                        LIB_SYMBOL* derivedSymbol = new LIB_SYMBOL( *symbol.get() );
+                        LIB_SYMBOL* derivedSymbol = new LIB_SYMBOL( *symbol );
 
                         derivedSymbol->SetParent( parentSymbol );
                         m_pi->SaveSymbol( getLibFileName().GetFullPath(), derivedSymbol, &properties );
@@ -2709,7 +2714,7 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
         arc->SetParent( aSymbol.get() );
 
         // this emulates the filled semicircles created by a thick arc with flat ends caps.
-        if( aWire->cap == EWIRE::FLAT && aWire->width.ToSchUnits() >= 2 * radius )
+        if( aWire->cap == (int) EWIRE::FLAT && aWire->width.ToSchUnits() >= 2 * radius )
         {
             VECTOR2I centerStartVector = ( begin - center ) * ( aWire->width.ToSchUnits() / radius );
             begin = center + centerStartVector;
@@ -2807,14 +2812,14 @@ SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     pin->SetName( extractNetName( aPin->name ) );
     pin->SetUnit( aGateNumber );
 
-    int roti = aPin->rot ? aPin->rot->degrees : 0;
+    int roti = aPin->rot ? KiROUND( aPin->rot->degrees ) : 0;
 
     switch( roti )
     {
     case 0:   pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT ); break;
-    case 90:  pin->SetOrientation( PIN_ORIENTATION::PIN_UP ); break;
-    case 180: pin->SetOrientation( PIN_ORIENTATION::PIN_LEFT ); break;
-    case 270: pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN ); break;
+    case 90:  pin->SetOrientation( PIN_ORIENTATION::PIN_UP );    break;
+    case 180: pin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );  break;
+    case 270: pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );  break;
     default:  wxFAIL_MSG( wxString::Format( wxT( "Unhandled orientation (%d degrees)." ), roti ) );
     }
 
@@ -2958,7 +2963,7 @@ void SCH_IO_EAGLE::loadTextAttributes( EDA_TEXT* aText, const std::unique_ptr<ET
         aText->SetBold( true );
 
     int  align   = aAttributes->align ? *aAttributes->align : ETEXT::BOTTOM_LEFT;
-    int  degrees = aAttributes->rot ? aAttributes->rot->degrees : 0;
+    int  degrees = aAttributes->rot ? KiROUND( aAttributes->rot->degrees ) : 0;
     bool mirror  = aAttributes->rot ? aAttributes->rot->mirror : false;
     bool spin    = aAttributes->rot ? aAttributes->rot->spin : false;
 
@@ -2995,8 +3000,7 @@ void SCH_IO_EAGLE::adjustNetLabels()
     auto onIntersection =
             [&]( const VECTOR2I& aPos )
             {
-                return std::binary_search( m_wireIntersections.begin(),
-                                           m_wireIntersections.end(), aPos );
+                return std::binary_search( m_wireIntersections.begin(), m_wireIntersections.end(), aPos );
             };
 
     for( SEG_DESC& segDesc : m_segments )
@@ -3012,8 +3016,7 @@ void SCH_IO_EAGLE::adjustNetLabels()
             // Move the label to the nearest wire
             if( !segAttached )
             {
-                std::tie( labelPos, segAttached ) = findNearestLinePoint( label->GetPosition(),
-                                                                          segDesc.segs );
+                std::tie( labelPos, segAttached ) = findNearestLinePoint( label->GetPosition(), segDesc.segs );
 
                 if( !segAttached ) // we cannot do anything
                     continue;
