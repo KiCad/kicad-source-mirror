@@ -28,6 +28,8 @@
 #include <board.h>
 #include <board_commit.h>
 #include <pcb_shape.h>
+#include <project.h>
+#include <settings/settings_manager.h>
 #include <constraints/pcb_constraint.h>
 #include <constraints/constraint_builder.h>
 
@@ -346,6 +348,71 @@ BOOST_AUTO_TEST_CASE( InitialValueDoesNotMixTypes )
                        5.0 * MM, 1e-6 );
     BOOST_CHECK_CLOSE( InitialConstraintValue( PCB_CONSTRAINT_TYPE::ARC_ANGLE, 90.0, remembered ), 60.0,
                        1e-6 );
+}
+
+
+// Hiding a layer takes its shapes out of the picker even when one lies nearer the click
+BOOST_AUTO_TEST_CASE( OutlinePickerSkipsHiddenLayers )
+{
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+
+    BOARD board;
+    board.SetProject( &settingsManager.Prj() );
+
+    PCB_SHAPE* shown = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+    shown->SetLayer( F_SilkS );
+
+    PCB_SHAPE* hidden = addSegment( board, { 0, 3 * MM }, { 10 * MM, 3 * MM } );
+    hidden->SetLayer( B_SilkS );
+
+    LSET layers = LSET::AllLayersMask();
+    board.SetVisibleLayers( layers );
+
+    const VECTOR2I probe{ 5 * MM, 2 * MM };
+    const double   tol = 3 * MM;
+
+    BOOST_REQUIRE( board.IsLayerVisible( F_SilkS ) && board.IsLayerVisible( B_SilkS ) );
+    BOOST_REQUIRE( NearestOutlineShape( &board, probe, tol, false ) == hidden->m_Uuid );
+
+    layers.set( B_SilkS, false );
+    board.SetVisibleLayers( layers );
+    BOOST_REQUIRE( !board.IsLayerVisible( B_SilkS ) );
+
+    BOOST_CHECK( NearestOutlineShape( &board, probe, tol, false ) == shown->m_Uuid );
+}
+
+
+BOOST_AUTO_TEST_CASE( AnchorPickerSkipsHiddenLayers )
+{
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+
+    BOARD board;
+    board.SetProject( &settingsManager.Prj() );
+
+    PCB_SHAPE* shown = addSegment( board, { 0, 0 }, { 10 * MM, 0 } );
+    shown->SetLayer( F_SilkS );
+
+    PCB_SHAPE* hidden = addSegment( board, { 0, 3 * MM }, { 10 * MM, 3 * MM } );
+    hidden->SetLayer( B_SilkS );
+
+    LSET layers = LSET::AllLayersMask();
+    board.SetVisibleLayers( layers );
+
+    const VECTOR2I probe{ 0, 2 * MM };
+    const double   tol = 3 * MM;
+
+    std::optional<CONSTRAINT_MEMBER> first = NearestConstraintAnchor( &board, probe, tol );
+    BOOST_REQUIRE( first.has_value() && first->m_item == hidden->m_Uuid );
+
+    layers.set( B_SilkS, false );
+    board.SetVisibleLayers( layers );
+
+    std::optional<CONSTRAINT_MEMBER> picked = NearestConstraintAnchor( &board, probe, tol );
+    BOOST_REQUIRE( picked.has_value() );
+    BOOST_CHECK( picked->m_item == shown->m_Uuid );
+    BOOST_CHECK( picked->m_anchor == CONSTRAINT_ANCHOR::START );
 }
 
 

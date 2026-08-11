@@ -451,16 +451,21 @@ std::vector<PCB_SHAPE*> CollectConstraintShapes( BOARD* aBoard )
 
     for( BOARD_ITEM* item : aBoard->Drawings() )
     {
-        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
+        if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ); shape && aBoard->IsLayerVisible( shape->GetLayer() ) )
+        {
             shapes.push_back( shape );
+        }
     }
 
     for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {
-            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item ) )
+            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
+                shape && aBoard->IsLayerVisible( shape->GetLayer() ) )
+            {
                 shapes.push_back( shape );
+            }
         }
     }
 
@@ -480,8 +485,11 @@ std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard )
             {
                 for( BOARD_ITEM* item : aContainer )
                 {
-                    if( item->Type() == PCB_SHAPE_T || dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
+                    if( ( item->Type() == PCB_SHAPE_T || dynamic_cast<PCB_DIMENSION_BASE*>( item ) )
+                        && aBoard->IsLayerVisible( item->GetLayer() ) )
+                    {
                         items.push_back( item );
+                    }
                 }
             };
 

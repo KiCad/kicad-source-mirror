@@ -84,12 +84,12 @@ std::vector<CONSTRAINT_ANCHOR_POINT> ConstraintShapeAnchors( const PCB_SHAPE* aS
 std::optional<CONSTRAINT_ANCHOR_POINT> ConstraintShapeVertex( const PCB_SHAPE* aShape, int aIndex );
 
 
-/// Every PCB_SHAPE on the board (drawings plus footprint graphics) -- the candidates constraints
+/// Every PCB_SHAPE on a visible layer (drawings plus footprint graphics) -- the candidates constraints
 /// can reference.  Shared by the anchor and segment hit-tests so the board walk lives in one place.
 std::vector<PCB_SHAPE*> CollectConstraintShapes( BOARD* aBoard );
 
 
-/// Every constrainable item on the board -- shapes plus dimensions -- for board-wide anchor picking.
+/// Every constrainable item on a visible layer -- shapes plus dimensions -- for board-wide anchor picking.
 std::vector<BOARD_ITEM*> CollectConstrainableItems( BOARD* aBoard );
 
 
