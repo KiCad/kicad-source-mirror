@@ -170,6 +170,21 @@ static VECTOR2I localPoint( const PADS_SCH_BINARY::SOURCE_POINT& aPoint )
 }
 
 
+static VECTOR2I placedFieldOffset( const PADS_SCH_BINARY::MODEL_PLACEMENT& aPlacement,
+                                   const PADS_SCH_BINARY::MODEL_FIELD&     aField )
+{
+    PADS_SCH_BINARY::SOURCE_POINT point = aField.position;
+
+    if( aPlacement.mirrorFlags & 1 )
+        point.x = -point.x;
+
+    if( aPlacement.mirrorFlags & 2 )
+        point.y = -point.y;
+
+    return localPoint( point );
+}
+
+
 static VECTOR2I pagePoint( const PADS_SCH_BINARY::SOURCE_POINT& aPoint, int aPageHeight )
 {
     return { schIUScale.MilsToIU( static_cast<double>( aPoint.x ) / 2.0 ),
@@ -642,7 +657,7 @@ static CONNECTIVITY_ORACLE_COUNTS assertSourceConnectivity( const PADS_SCH_BINAR
                 BOOST_REQUIRE( placement != aModel.placements.end() );
                 BOOST_CHECK_EQUAL( placement->sheet.id.Value(), net.sheet.id.Value() );
                 BOOST_CHECK( std::ranges::any_of( placement->pins,
-                                                  [&]( const PIN_REFERENCE& aPin )
+                                                  [&]( const PLACED_PIN_REFERENCE& aPin )
                                                   {
                                                       return aPin.id == endpoint.pin->id;
                                                   } ) );
@@ -1747,6 +1762,34 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
     setTitleField( wxS( "Company Name" ), wxS( "Company" ) );
     setTitleField( wxS( "Code" ), wxS( "Code" ) );
 
+    auto worksheetTemplate = std::ranges::find_if( model.graphics,
+                                                   []( const MODEL_PAGE_GRAPHIC& aGraphic )
+                                                   {
+                                                       return aGraphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT;
+                                                   } );
+    BOOST_REQUIRE( worksheetTemplate != model.graphics.end() );
+    MODEL_WORKSHEET worksheet;
+    worksheet.source = worksheetTemplate->graphic.source;
+    worksheet.sheet = { model.sheets.front().id, worksheet.source };
+    worksheet.name.text = wxS( "CI_WORKSHEET" );
+    worksheet.name.source = worksheet.source;
+    const std::array<std::pair<wxString, SOURCE_POINT>, 4> worksheetMarkers = {
+        std::pair{ wxS( "TOP_LEFT" ), SOURCE_POINT{ 0, model.sheets.front().pageSize.y } },
+        std::pair{ wxS( "TOP_RIGHT" ), model.sheets.front().pageSize },
+        std::pair{ wxS( "BOTTOM_LEFT" ), SOURCE_POINT{ 0, 0 } },
+        std::pair{ wxS( "BOTTOM_RIGHT" ), SOURCE_POINT{ model.sheets.front().pageSize.x, 0 } }
+    };
+
+    for( const auto& [text, position] : worksheetMarkers )
+    {
+        MODEL_GRAPHIC graphic = worksheetTemplate->graphic;
+        graphic.text.text = text;
+        graphic.points = { position };
+        worksheet.graphics.push_back( std::move( graphic ) );
+    }
+
+    model.worksheets = { std::move( worksheet ) };
+
     SCH_SHEET* destination = m_schematic.GetTopLevelSheet();
     BOOST_REQUIRE( destination );
     BOOST_REQUIRE( destination->GetScreen() );
@@ -1846,6 +1889,26 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
     BOOST_CHECK_EQUAL( destination->GetScreen()->GetPageSettings().GetHeightMils(),
                        model.sheets.front().pageSize.y / 2 );
     BOOST_CHECK_EQUAL( destination->GetScreen()->GetTitleBlock().GetTitle(), model.sheets.front().title.text );
+    const EMBEDDED_FILES::EMBEDDED_FILE* embeddedWorksheet =
+            m_schematic.GetEmbeddedFiles()->GetEmbeddedFile( wxS( "pads_import.kicad_wks" ) );
+    BOOST_REQUIRE( embeddedWorksheet );
+    const std::string  worksheetData( embeddedWorksheet->decompressedData.begin(),
+                                      embeddedWorksheet->decompressedData.end() );
+    const double       pageWidthMm = model.sheets.front().pageSize.x * 0.0127;
+    const double       pageHeightMm = model.sheets.front().pageSize.y * 0.0127;
+    std::ostringstream topRight;
+    std::ostringstream bottomLeft;
+    std::ostringstream bottomRight;
+    topRight.imbue( std::locale::classic() );
+    bottomLeft.imbue( std::locale::classic() );
+    bottomRight.imbue( std::locale::classic() );
+    topRight << "(tbtext \"TOP_RIGHT\" (name \"\") (pos " << pageWidthMm << " 0";
+    bottomLeft << "(tbtext \"BOTTOM_LEFT\" (name \"\") (pos 0 " << pageHeightMm;
+    bottomRight << "(tbtext \"BOTTOM_RIGHT\" (name \"\") (pos " << pageWidthMm << ' ' << pageHeightMm;
+    BOOST_CHECK_NE( worksheetData.find( "(tbtext \"TOP_LEFT\" (name \"\") (pos 0 0" ), std::string::npos );
+    BOOST_CHECK_NE( worksheetData.find( topRight.str() ), std::string::npos );
+    BOOST_CHECK_NE( worksheetData.find( bottomLeft.str() ), std::string::npos );
+    BOOST_CHECK_NE( worksheetData.find( bottomRight.str() ), std::string::npos );
     const TITLE_BLOCK& titleBlock = destination->GetScreen()->GetTitleBlock();
     BOOST_CHECK_EQUAL( titleBlock.GetCompany(), wxS( "Company" ) );
     BOOST_CHECK_EQUAL( titleBlock.GetComment( 0 ), wxS( "QB" ) );
@@ -1915,6 +1978,9 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
     std::vector<SCH_PIN*> builtPins = pinSymbol->GetLibPins();
     BOOST_REQUIRE_EQUAL( builtPins.size(), pinDefinition.pins.size() + pinPart.signalPins.size() );
 
+    size_t sizedNamePins = 0;
+    size_t sizedNumberPins = 0;
+
     for( size_t pinOrdinal = 0; pinOrdinal < pinDefinition.pins.size(); ++pinOrdinal )
     {
         const MODEL_PIN_DEFINITION& sourcePin = pinDefinition.pins[pinOrdinal];
@@ -1932,8 +1998,19 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
         BOOST_CHECK_EQUAL( ( *built )->GetNameTextSize(),
                            schIUScale.MilsToIU( static_cast<double>( sourcePin.namePresentation.height ) / 2.0 ) );
         BOOST_CHECK_EQUAL( ( *built )->GetNumberTextSize(),
-                           schIUScale.MilsToIU( static_cast<double>( sourcePin.numberPresentation.height ) / 4.0 ) );
+                           schIUScale.MilsToIU( static_cast<double>( sourcePin.numberPresentation.height ) / 2.0 ) );
+
+        if( sourcePin.namePresentation.height > 0 )
+            sizedNamePins++;
+
+        if( sourcePin.numberPresentation.height > 0 )
+            sizedNumberPins++;
     }
+
+    // Each check compares a derived value against a derived value, so it passes on a zero height no
+    // matter what the builder does
+    BOOST_CHECK_GT( sizedNamePins, 0u );
+    BOOST_CHECK_GT( sizedNumberPins, 0u );
 
     m_schematic.Reset();
     destination = m_schematic.GetTopLevelSheet();
@@ -2104,7 +2181,9 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
 
     m_schematic.Reset();
     destination = m_schematic.GetTopLevelSheet();
-    const PADS_SCH_MODEL fieldModel = parseBinaryFixture( wxS( "fields" ) );
+    PADS_SCH_MODEL fieldModel = parseBinaryFixture( wxS( "fields" ) );
+    fieldModel.placements.front().mirrored = true;
+    fieldModel.placements.front().mirrorFlags = 3;
     result = builder.Build( fieldModel, &m_schematic, destination, binaryFixture( wxS( "fields" ) ) );
     BOOST_REQUIRE_EQUAL( result.counts.symbols, fieldModel.placements.size() );
 
@@ -2121,6 +2200,9 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
     }
 
     BOOST_REQUIRE( r1 );
+
+    size_t sizedFields = 0;
+    size_t strokedFields = 0;
 
     for( const MODEL_FIELD& sourceField : fieldModel.placements.front().fields )
     {
@@ -2140,26 +2222,131 @@ BOOST_AUTO_TEST_CASE( BinarySymbolsAndSheets )
         {
             BOOST_CHECK_EQUAL( builtField->GetTextHeight(),
                                schIUScale.MilsToIU( static_cast<double>( sourceField.presentation.height ) / 2.0 ) );
+            sizedFields++;
         }
 
         if( sourceField.presentation.width != 0 )
         {
             BOOST_CHECK_EQUAL( builtField->GetTextThickness(),
                                schIUScale.MilsToIU( static_cast<double>( sourceField.presentation.width ) / 2.0 ) );
+            strokedFields++;
         }
         BOOST_CHECK_EQUAL( builtField->GetTextAngle().AsTenthsOfADegree(), sourceField.angle );
-        BOOST_CHECK_EQUAL( builtField->GetPosition(), r1->GetPosition() + localPoint( sourceField.position ) );
+        BOOST_CHECK_EQUAL( builtField->GetPosition(),
+                           r1->GetPosition() + placedFieldOffset( fieldModel.placements.front(), sourceField ) );
         BOOST_CHECK_EQUAL( builtField->IsBold(), sourceField.presentation.bold );
         BOOST_CHECK_EQUAL( builtField->IsItalic(), sourceField.presentation.italic );
-        BOOST_CHECK( builtField->GetHorizJustify()
-                     == horizontalJustification( sourceField.presentation.horizontalJustification ) );
-        BOOST_CHECK( builtField->GetVertJustify()
-                     == verticalJustification( sourceField.presentation.verticalJustification ) );
+        BOOST_CHECK(
+                builtField->GetHorizJustify()
+                == GetFlippedAlignment( horizontalJustification( sourceField.presentation.horizontalJustification ) ) );
+        BOOST_CHECK(
+                builtField->GetVertJustify()
+                == GetFlippedAlignment( verticalJustification( sourceField.presentation.verticalJustification ) ) );
 
         if( !sourceField.presentation.font.text.IsEmpty()
             && sourceField.presentation.font.text != wxS( "Default Font" ) )
         {
             BOOST_CHECK( !builtField->GetFontName().IsEmpty() );
+        }
+    }
+
+    // Both size checks are skipped on a zero presentation, so a decoder that emitted nothing but
+    // zeros would satisfy the loop without comparing anything
+    BOOST_CHECK_GT( sizedFields, 0u );
+    BOOST_CHECK_GT( strokedFields, 0u );
+}
+
+
+// Mirroring has to negate the field offsets. Comparing against a helper that recomputes the
+// production formula cannot detect a wrong transform, so build the same model twice and compare.
+BOOST_AUTO_TEST_CASE( BinaryMirroredFieldOffsetsAreNegated )
+{
+    using namespace PADS_SCH_BINARY;
+
+    auto offsetsFor =
+            [&]( uint32_t aMirrorFlags )
+            {
+                m_schematic.Reset();
+
+                SCH_SHEET*     destination = m_schematic.GetTopLevelSheet();
+                PADS_SCH_MODEL model = parseBinaryFixture( wxS( "fields" ) );
+
+                model.placements.front().mirrored = aMirrorFlags != 0;
+                model.placements.front().mirrorFlags = aMirrorFlags;
+
+                PADS_SCH_BINARY_BUILDER().Build( model, &m_schematic, destination,
+                                                 binaryFixture( wxS( "fields" ) ) );
+
+                SCH_SHEET_PATH path;
+
+                path.push_back( destination );
+
+                std::map<wxString, VECTOR2I> offsets;
+
+                for( SCH_ITEM* item : destination->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+                {
+                    // The const overload is deliberate; the mutable GetField( FIELD_T ) creates a
+                    // missing mandatory field and would hide its absence
+                    const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( item );
+
+                    if( static_cast<SCH_SYMBOL*>( item )->GetRef( &path ) != wxS( "R1" ) )
+                        continue;
+
+                    for( const MODEL_FIELD& sourceField : model.placements.front().fields )
+                    {
+                        const SCH_FIELD* field = nullptr;
+
+                        if( sourceField.name.text == wxS( "REF-DES" ) )
+                            field = symbol->GetField( FIELD_T::REFERENCE );
+                        else if( sourceField.name.text == wxS( "PART-TYPE" ) )
+                            field = symbol->GetField( FIELD_T::VALUE );
+                        else
+                            field = symbol->GetField( sourceField.name.text );
+
+                        if( field )
+                            offsets[field->GetName()] = field->GetPosition() - symbol->GetPosition();
+                    }
+                }
+
+                return offsets;
+            };
+
+    std::map<wxString, VECTOR2I> plain = offsetsFor( 0 );
+
+    BOOST_REQUIRE( !plain.empty() );
+
+    // Each axis is checked on its own, so a build that swapped the two flag meanings fails here
+    // where a 0-against-3 comparison alone would not
+    struct MIRROR_CASE
+    {
+        uint32_t flags;
+        bool     negateX;
+        bool     negateY;
+    };
+
+    for( const MIRROR_CASE& mirrorCase : { MIRROR_CASE{ 1, true, false }, MIRROR_CASE{ 2, false, true },
+                                           MIRROR_CASE{ 3, true, true } } )
+    {
+        BOOST_TEST_CONTEXT( mirrorCase.flags )
+        {
+            std::map<wxString, VECTOR2I> mirrored = offsetsFor( mirrorCase.flags );
+            size_t                       compared = 0;
+
+            for( const auto& [name, offset] : plain )
+            {
+                auto it = mirrored.find( name );
+
+                BOOST_REQUIRE( it != mirrored.end() );
+                BOOST_CHECK_EQUAL( it->second.x, mirrorCase.negateX ? -offset.x : offset.x );
+                BOOST_CHECK_EQUAL( it->second.y, mirrorCase.negateY ? -offset.y : offset.y );
+
+                if( offset.x != 0 || offset.y != 0 )
+                    compared++;
+            }
+
+            // A field on the symbol origin negates to itself, so an all-zero set would satisfy the
+            // loop under any transform
+            BOOST_CHECK_GT( compared, 0u );
         }
     }
 }
@@ -2201,7 +2388,7 @@ BOOST_AUTO_TEST_CASE( BinaryAlternateDefinitionPins )
     gate->alternateDefinitions.push_back( { alternate.id, gate->source } );
     placement->definition = { alternate.id, placement->definition.source };
 
-    for( PIN_REFERENCE& pin : placement->pins )
+    for( PLACED_PIN_REFERENCE& pin : placement->pins )
     {
         auto alternatePin = alternatePinIds.find( pin.id.Value() );
         BOOST_REQUIRE( alternatePin != alternatePinIds.end() );
@@ -2576,10 +2763,34 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
 
     m_schematic.Reset();
     PADS_SCH_MODEL connectivity = parseBinaryFixture( wxS( "connectivity_topology" ) );
+    const PADS_SCH_MODEL connectivityOracle = connectivity;
+    auto groundTemplate = std::ranges::find( connectivity.labels, MODEL_LABEL_KIND::GROUND, &MODEL_LABEL::kind );
+    auto powerTemplate = std::ranges::find( connectivity.labels, MODEL_LABEL_KIND::POWER, &MODEL_LABEL::kind );
+    BOOST_REQUIRE( groundTemplate != connectivity.labels.end() );
+    BOOST_REQUIRE( powerTemplate != connectivity.labels.end() );
+
+    for( uint8_t variant = 0; variant < 3; ++variant )
+    {
+        MODEL_LABEL label = *groundTemplate;
+        label.position = { 1000 + 500 * variant, 1000 };
+        label.symbolVariant = variant;
+        label.text.text = wxString::Format( wxS( "TEST_GND_%u" ), variant );
+        connectivity.labels.push_back( std::move( label ) );
+    }
+
+    for( uint8_t variant = 0; variant < 5; ++variant )
+    {
+        MODEL_LABEL label = *powerTemplate;
+        label.position = { 1000 + 500 * variant, 2000 };
+        label.symbolVariant = variant;
+        label.text.text = wxString::Format( wxS( "TEST_PWR_%u" ), variant );
+        connectivity.labels.push_back( std::move( label ) );
+    }
+
     SCH_SHEET*     root = m_schematic.GetTopLevelSheet();
     BOOST_REQUIRE( root );
     builder.Build( connectivity, &m_schematic, nullptr, binaryFixture( wxS( "connectivity_topology" ) ) );
-    assertSourceConnectivity( connectivity, m_schematic );
+    assertSourceConnectivity( connectivityOracle, m_schematic );
 
     size_t expectedWires = 0;
 
@@ -2636,6 +2847,114 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
 
     BOOST_CHECK_EQUAL( builtPower, expectedPower );
 
+    auto builtPowerSymbol = [&]( const wxString& aValue ) -> SCH_SYMBOL*
+    {
+        for( SCH_ITEM* item : root->GetScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            auto* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            if( symbol->GetValue( false, &m_schematic.CurrentSheet(), false ) == aValue )
+                return symbol;
+        }
+
+        return nullptr;
+    };
+    auto polyPoints = []( const SCH_SHAPE& aShape )
+    {
+        std::vector<VECTOR2I> points;
+
+        for( size_t vertex = 0; vertex < aShape.GetPolyShape().VertexCount(); ++vertex )
+            points.push_back( aShape.GetPolyShape().CVertex( vertex ) );
+
+        return points;
+    };
+    auto shapeByType = []( const SCH_SYMBOL& aSymbol, SHAPE_T aType )
+    {
+        std::vector<const SCH_SHAPE*> shapes;
+
+        for( const SCH_ITEM& item : aSymbol.GetLibSymbolRef()->GetDrawItems() )
+        {
+            if( item.Type() == SCH_SHAPE_T && static_cast<const SCH_SHAPE&>( item ).GetShape() == aType )
+                shapes.push_back( &static_cast<const SCH_SHAPE&>( item ) );
+        }
+
+        return shapes;
+    };
+    auto hasPoly = [&]( const std::vector<const SCH_SHAPE*>& aShapes, const std::vector<VECTOR2I>& aPoints )
+    {
+        return std::ranges::any_of( aShapes,
+                                    [&]( const SCH_SHAPE* aShape )
+                                    {
+                                        return polyPoints( *aShape ) == aPoints;
+                                    } );
+    };
+    auto mil = []( int aMils )
+    {
+        return schIUScale.MilsToIU( aMils );
+    };
+
+    SCH_SYMBOL* gnd = builtPowerSymbol( wxS( "TEST_GND_0" ) );
+    BOOST_REQUIRE( gnd );
+    auto gndLines = shapeByType( *gnd, SHAPE_T::POLY );
+    BOOST_REQUIRE_EQUAL( gndLines.size(), 4u );
+    BOOST_CHECK( hasPoly( gndLines, { { 0, 0 }, { 0, -mil( 100 ) } } ) );
+    BOOST_CHECK( hasPoly( gndLines, { { -mil( 100 ), -mil( 100 ) }, { mil( 100 ), -mil( 100 ) } } ) );
+    BOOST_CHECK( hasPoly( gndLines, { { -mil( 60 ), -mil( 150 ) }, { mil( 60 ), -mil( 150 ) } } ) );
+    BOOST_CHECK( hasPoly( gndLines, { { -mil( 20 ), -mil( 200 ) }, { mil( 20 ), -mil( 200 ) } } ) );
+
+    SCH_SYMBOL* gnda = builtPowerSymbol( wxS( "TEST_GND_1" ) );
+    BOOST_REQUIRE( gnda );
+    auto gndaLines = shapeByType( *gnda, SHAPE_T::POLY );
+    BOOST_REQUIRE_EQUAL( gndaLines.size(), 1u );
+    BOOST_CHECK_EQUAL( polyPoints( *gndaLines.front() ), ( std::vector<VECTOR2I>{ { 0, 0 },
+                                                                                  { 0, -mil( 50 ) },
+                                                                                  { -mil( 100 ), -mil( 50 ) },
+                                                                                  { 0, -mil( 200 ) },
+                                                                                  { mil( 100 ), -mil( 50 ) },
+                                                                                  { 0, -mil( 50 ) } } ) );
+
+    SCH_SYMBOL* gndch = builtPowerSymbol( wxS( "TEST_GND_2" ) );
+    BOOST_REQUIRE( gndch );
+    auto gndchLines = shapeByType( *gndch, SHAPE_T::POLY );
+    BOOST_REQUIRE_EQUAL( gndchLines.size(), 5u );
+    BOOST_CHECK( hasPoly( gndchLines, { { 0, 0 }, { 0, -mil( 100 ) } } ) );
+    BOOST_CHECK( hasPoly( gndchLines, { { -mil( 100 ), -mil( 100 ) }, { mil( 100 ), -mil( 100 ) } } ) );
+    BOOST_CHECK( hasPoly( gndchLines, { { -mil( 100 ), -mil( 100 ) }, { -mil( 150 ), -mil( 200 ) } } ) );
+    BOOST_CHECK( hasPoly( gndchLines, { { 0, -mil( 100 ) }, { -mil( 50 ), -mil( 200 ) } } ) );
+    BOOST_CHECK( hasPoly( gndchLines, { { mil( 100 ), -mil( 100 ) }, { mil( 50 ), -mil( 200 ) } } ) );
+
+    for( uint8_t variant : { 0, 2 } )
+    {
+        SCH_SYMBOL* power = builtPowerSymbol( wxString::Format( wxS( "TEST_PWR_%u" ), variant ) );
+        BOOST_REQUIRE( power );
+        auto circles = shapeByType( *power, SHAPE_T::CIRCLE );
+        auto lines = shapeByType( *power, SHAPE_T::POLY );
+        BOOST_REQUIRE_EQUAL( circles.size(), 1u );
+        BOOST_REQUIRE_EQUAL( lines.size(), 1u );
+        BOOST_CHECK_EQUAL( circles.front()->GetCenter(), VECTOR2I( 0, mil( 150 ) ) );
+        BOOST_CHECK_EQUAL( circles.front()->GetRadius(), mil( 50 ) );
+        BOOST_CHECK_EQUAL( polyPoints( *lines.front() ), ( std::vector<VECTOR2I>{ { 0, 0 }, { 0, mil( 100 ) } } ) );
+    }
+
+    for( const auto& [variant, stem] : { std::pair<uint8_t, int>{ 1, 250 }, { 3, 250 }, { 4, 200 } } )
+    {
+        SCH_SYMBOL* power = builtPowerSymbol( wxString::Format( wxS( "TEST_PWR_%u" ), variant ) );
+        BOOST_REQUIRE( power );
+        auto polygons = shapeByType( *power, SHAPE_T::POLY );
+        BOOST_REQUIRE_EQUAL( polygons.size(), 2u );
+        BOOST_CHECK( hasPoly( polygons, { { 0, 0 }, { 0, mil( stem ) } } ) );
+        const std::vector<VECTOR2I> triangle{
+            { 0, mil( stem ) }, { -mil( 50 ), mil( 100 ) }, { mil( 50 ), mil( 100 ) }, { 0, mil( stem ) }
+        };
+        auto triangleShape = std::ranges::find_if( polygons,
+                                                   [&]( const SCH_SHAPE* aShape )
+                                                   {
+                                                       return polyPoints( *aShape ) == triangle;
+                                                   } );
+        BOOST_REQUIRE( triangleShape != polygons.end() );
+        BOOST_CHECK( ( *triangleShape )->GetFillMode() == FILL_T::FILLED_SHAPE );
+    }
+
     const SCH_SHEET_PATH& rootPath = m_schematic.CurrentSheet();
 
     for( const MODEL_LABEL& sourceLabel : connectivity.labels )
@@ -2654,6 +2973,12 @@ BOOST_AUTO_TEST_CASE( BinaryConnectivityAndGraphics )
                 if( symbol->GetPosition() == pagePoint( sourceLabel.position, pageHeight )
                     && symbol->GetValue( false, &rootPath, false ) == sourceLabel.text.text )
                 {
+                    SOURCE_POINT expectedTextPosition = sourceLabel.position;
+                    expectedTextPosition.x += sourceLabel.textOffset.x;
+                    expectedTextPosition.y += sourceLabel.textOffset.y;
+                    BOOST_REQUIRE( symbol->GetField( FIELD_T::VALUE ) );
+                    BOOST_CHECK_EQUAL( symbol->GetField( FIELD_T::VALUE )->GetPosition(),
+                                       pagePoint( expectedTextPosition, pageHeight ) );
                     found = true;
                     break;
                 }

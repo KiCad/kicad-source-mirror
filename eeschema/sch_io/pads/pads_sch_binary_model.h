@@ -212,7 +212,6 @@ struct CONTROLLER_REFERENCE
 
 using SHEET_REFERENCE = CONTROLLER_REFERENCE<SHEET_ID>;
 using DEFINITION_REFERENCE = CONTROLLER_REFERENCE<DEFINITION_ID>;
-using PIN_REFERENCE = CONTROLLER_REFERENCE<PIN_ID>;
 using PART_TYPE_REFERENCE = CONTROLLER_REFERENCE<PART_TYPE_ID>;
 using GATE_REFERENCE = CONTROLLER_REFERENCE<GATE_ID>;
 using PLACEMENT_REFERENCE = CONTROLLER_REFERENCE<PLACEMENT_ID>;
@@ -239,6 +238,36 @@ struct SOURCE_POINT
     SOURCE_PROVENANCE source;
 
     bool operator==( const SOURCE_POINT& ) const = default;
+};
+
+
+struct PIN_REFERENCE
+{
+    PIN_REFERENCE() = default;
+    PIN_REFERENCE( PIN_ID aId, SOURCE_PROVENANCE aSource ) :
+            id( aId ),
+            source( std::move( aSource ) )
+    {
+    }
+
+    PIN_ID            id;
+    SOURCE_PROVENANCE source;
+
+    bool operator==( const PIN_REFERENCE& ) const = default;
+};
+
+
+struct PLACED_PIN_REFERENCE : PIN_REFERENCE
+{
+    using PIN_REFERENCE::PIN_REFERENCE;
+
+    SOURCE_POINT numberOffset;
+    int          numberAngle = 0;
+    uint16_t     numberJustification = 0;
+    uint16_t     numberPresentationFlags = 0;
+    bool         hasNumberPlacement = false;
+
+    bool operator==( const PLACED_PIN_REFERENCE& ) const = default;
 };
 
 
@@ -515,7 +544,7 @@ struct MODEL_PLACEMENT
     PART_TYPE_REFERENCE           partType;
     std::optional<GATE_REFERENCE> gate;
     DEFINITION_REFERENCE          definition;
-    std::vector<PIN_REFERENCE>    pins;
+    std::vector<PLACED_PIN_REFERENCE> pins;
     uint32_t                      unit = 1;
     SOURCE_STRING                 reference;
     SOURCE_POINT                  position;
@@ -628,6 +657,7 @@ struct MODEL_LABEL
     SOURCE_POINT                 position;
     SOURCE_POINT                 textOffset;
     int                          angle = 0;
+    uint8_t                      symbolVariant = 0xFF;
     MODEL_TEXT_PRESENTATION      presentation;
     std::vector<SHEET_REFERENCE> linkedSheets;
     std::vector<SOURCE_PROPERTY> properties;

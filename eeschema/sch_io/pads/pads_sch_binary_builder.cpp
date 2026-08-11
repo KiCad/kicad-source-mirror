@@ -34,7 +34,6 @@
 #include <sch_text.h>
 #include <schematic.h>
 #include <schematic_settings.h>
-#include <sch_io/pads/pads_sch_symbol_builder.h>
 #include <sch_io/ole_image.h>
 #include <stroke_params.h>
 #include <title_block.h>
@@ -442,14 +441,125 @@ namespace
     }
 
 
+    std::unique_ptr<LIB_SYMBOL> makePadsPowerLibrary( const MODEL_LABEL& aLabel )
+    {
+        wxString name;
+
+        if( aLabel.kind == MODEL_LABEL_KIND::GROUND )
+            name = aLabel.symbolVariant == 1   ? wxS( "PADS_GNDA" )
+                   : aLabel.symbolVariant == 2 ? wxS( "PADS_GNDCH" )
+                                               : wxS( "PADS_GND" );
+        else
+            name = wxString::Format( wxS( "PADS_POWER_%u" ), aLabel.symbolVariant );
+
+        auto symbol = std::make_unique<LIB_SYMBOL>( name );
+        symbol->SetGlobalPower();
+        symbol->SetShowPinNumbers( false );
+        symbol->SetShowPinNames( false );
+
+        auto mil = []( int aMils )
+        {
+            return schIUScale.MilsToIU( aMils );
+        };
+        auto addLine = [&]( std::initializer_list<VECTOR2I> aPoints )
+        {
+            auto line = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE );
+
+            for( const VECTOR2I& point : aPoints )
+                line->AddPoint( point );
+
+            line->SetStroke( STROKE_PARAMS( mil( 10 ), LINE_STYLE::SOLID ) );
+            symbol->AddDrawItem( line.release() );
+        };
+        auto addTriangle = [&]( int aStemLength )
+        {
+            addLine( { { 0, 0 }, { 0, mil( aStemLength ) } } );
+            auto triangle = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE );
+            triangle->AddPoint( { 0, mil( aStemLength ) } );
+            triangle->AddPoint( { -mil( 50 ), mil( 100 ) } );
+            triangle->AddPoint( { mil( 50 ), mil( 100 ) } );
+            triangle->AddPoint( { 0, mil( aStemLength ) } );
+            triangle->SetStroke( STROKE_PARAMS( mil( 10 ), LINE_STYLE::SOLID ) );
+            triangle->SetFillMode( FILL_T::FILLED_SHAPE );
+            symbol->AddDrawItem( triangle.release() );
+        };
+
+        if( aLabel.kind == MODEL_LABEL_KIND::GROUND )
+        {
+            switch( aLabel.symbolVariant )
+            {
+            case 1:
+                addLine( { { 0, 0 },
+                           { 0, -mil( 50 ) },
+                           { -mil( 100 ), -mil( 50 ) },
+                           { 0, -mil( 200 ) },
+                           { mil( 100 ), -mil( 50 ) },
+                           { 0, -mil( 50 ) } } );
+                break;
+
+            case 2:
+                addLine( { { 0, 0 }, { 0, -mil( 100 ) } } );
+                addLine( { { -mil( 100 ), -mil( 100 ) }, { mil( 100 ), -mil( 100 ) } } );
+                addLine( { { -mil( 100 ), -mil( 100 ) }, { -mil( 150 ), -mil( 200 ) } } );
+                addLine( { { 0, -mil( 100 ) }, { -mil( 50 ), -mil( 200 ) } } );
+                addLine( { { mil( 100 ), -mil( 100 ) }, { mil( 50 ), -mil( 200 ) } } );
+                break;
+
+            default:
+                addLine( { { 0, 0 }, { 0, -mil( 100 ) } } );
+                addLine( { { -mil( 100 ), -mil( 100 ) }, { mil( 100 ), -mil( 100 ) } } );
+                addLine( { { -mil( 60 ), -mil( 150 ) }, { mil( 60 ), -mil( 150 ) } } );
+                addLine( { { -mil( 20 ), -mil( 200 ) }, { mil( 20 ), -mil( 200 ) } } );
+                break;
+            }
+        }
+        else if( aLabel.symbolVariant == 1 || aLabel.symbolVariant == 3 )
+        {
+            addTriangle( 250 );
+        }
+        else if( aLabel.symbolVariant == 4 )
+        {
+            addTriangle( 200 );
+        }
+        else
+        {
+            addLine( { { 0, 0 }, { 0, mil( 100 ) } } );
+            auto circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE, LAYER_DEVICE );
+            circle->SetCenter( { 0, mil( 150 ) } );
+            circle->SetEnd( { mil( 50 ), mil( 150 ) } );
+            circle->SetStroke( STROKE_PARAMS( mil( 10 ), LINE_STYLE::SOLID ) );
+            circle->SetFillMode( FILL_T::NO_FILL );
+            symbol->AddDrawItem( circle.release() );
+        }
+
+        auto pin = std::make_unique<SCH_PIN>( symbol.get() );
+        pin->SetNumber( wxS( "1" ) );
+        pin->SetName( name );
+        pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+        pin->SetVisible( false );
+        pin->SetLength( 0 );
+        pin->SetPosition( { 0, 0 } );
+        pin->SetOrientation( aLabel.kind == MODEL_LABEL_KIND::GROUND ? PIN_ORIENTATION::PIN_DOWN
+                                                                     : PIN_ORIENTATION::PIN_UP );
+        symbol->AddDrawItem( pin.release() );
+        symbol->GetReferenceField().SetText( wxS( "#PWR" ) );
+        symbol->GetReferenceField().SetVisible( false );
+        return symbol;
+    }
+
+
     std::unique_ptr<SCH_SYMBOL> makePowerSymbol( const MODEL_LABEL& aLabel, const SCH_SHEET_PATH& aPath,
                                                  int aPageHeight, size_t aOrdinal,
                                                  std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
-        PADS_SCH::PARAMETERS              params;
-        PADS_SCH::PADS_SCH_SYMBOL_BUILDER symbolBuilder( params );
-        const std::string                 style = aLabel.kind == MODEL_LABEL_KIND::GROUND ? "GND" : "VCC";
-        std::unique_ptr<LIB_SYMBOL>       library( symbolBuilder.BuildKiCadPowerSymbol( style ) );
+        int orientation = SYM_ORIENT_180;
+
+        if( aLabel.kind == MODEL_LABEL_KIND::POWER && ( aLabel.symbolVariant == 2 || aLabel.symbolVariant == 3 ) )
+        {
+            orientation = SYM_ORIENT_0;
+        }
+
+        std::unique_ptr<LIB_SYMBOL> library = makePadsPowerLibrary( aLabel );
 
         if( !library )
             THROW_IO_ERROR( FormatParserError( aLabel.source, wxS( "could not construct power symbol" ) ) );
@@ -462,7 +572,7 @@ namespace
         auto libraryCopy = std::make_unique<LIB_SYMBOL>( *library );
         symbol->SetLibSymbol( libraryCopy.release() );
         symbol->SetPosition( pagePoint( aLabel.position, aPageHeight ) );
-        symbol->SetOrientation( SYM_ORIENT_180 );
+        symbol->SetOrientation( orientation );
         const wxString reference = wxString::Format( wxS( "#PWR%04zu" ), aOrdinal + 1 );
         symbol->SetRef( &aPath, reference );
         symbol->AddHierarchicalReference( aPath.Path(), reference, 1 );
@@ -498,8 +608,10 @@ namespace
         pin->SetShape( pinShape( aPin.graphicStyle ) );
         pin->SetVisible( aPin.presentation.visible );
 
+        // toIU already halves, the same as applyTextPresentation; a second /2 here made pin text
+        // half the size of every other imported string
         pin->SetNameTextSize( toIU( aPin.namePresentation.height ) );
-        pin->SetNumberTextSize( toIU( aPin.numberPresentation.height / 2 ) );
+        pin->SetNumberTextSize( toIU( aPin.numberPresentation.height ) );
 
         return pin;
     }
@@ -540,8 +652,8 @@ namespace
 
     void addDefinitionUnit( LIB_SYMBOL* aLibrary, const MODEL_SYMBOL_DEFINITION& aDefinition, const MODEL_GATE* aGate,
                             int aUnit, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics,
-                            const std::vector<PIN_REFERENCE>* aPlacementPins = nullptr,
-                            const MODEL_CONNECTOR_PIN*        aConnectorPin = nullptr )
+                            const std::vector<PLACED_PIN_REFERENCE>* aPlacementPins = nullptr,
+                            const MODEL_CONNECTOR_PIN*               aConnectorPin = nullptr )
     {
         for( const MODEL_GRAPHIC& graphic : aDefinition.graphics )
         {
@@ -559,38 +671,38 @@ namespace
             }
         }
 
-        const std::vector<PIN_REFERENCE>* pinReferences = nullptr;
+        auto addPin = [&]( const PIN_REFERENCE& aPinReference, size_t aPinOrdinal )
+        {
+            std::unique_ptr<SCH_PIN> pin = makePin( pinById( aDefinition, aPinReference.id ), aLibrary );
+
+            if( aGate && aPinOrdinal < aGate->logicalPins.size() )
+            {
+                const MODEL_GATE_PIN& logicalPin = aGate->logicalPins[aPinOrdinal];
+                pin->SetNumber( logicalPin.number.text );
+                pin->SetName( logicalPin.name.text );
+                pin->SetType( pinType( logicalPin.electricalType ) );
+            }
+
+            if( aConnectorPin )
+            {
+                pin->SetNumber( aConnectorPin->number.text );
+                pin->SetName( aConnectorPin->name.text );
+                pin->SetType( pinType( aConnectorPin->electricalType ) );
+            }
+
+            pin->SetUnit( aUnit );
+            aLibrary->AddDrawItem( pin.release() );
+        };
 
         if( aPlacementPins && !aPlacementPins->empty() )
-            pinReferences = aPlacementPins;
-        else if( aGate && !aGate->pins.empty() )
-            pinReferences = &aGate->pins;
-
-        if( pinReferences )
         {
-            for( size_t pinOrdinal = 0; pinOrdinal < pinReferences->size(); ++pinOrdinal )
-            {
-                const PIN_REFERENCE&     pinReference = ( *pinReferences )[pinOrdinal];
-                std::unique_ptr<SCH_PIN> pin = makePin( pinById( aDefinition, pinReference.id ), aLibrary );
-
-                if( aGate && pinOrdinal < aGate->logicalPins.size() )
-                {
-                    const MODEL_GATE_PIN& logicalPin = aGate->logicalPins[pinOrdinal];
-                    pin->SetNumber( logicalPin.number.text );
-                    pin->SetName( logicalPin.name.text );
-                    pin->SetType( pinType( logicalPin.electricalType ) );
-                }
-
-                if( aConnectorPin )
-                {
-                    pin->SetNumber( aConnectorPin->number.text );
-                    pin->SetName( aConnectorPin->name.text );
-                    pin->SetType( pinType( aConnectorPin->electricalType ) );
-                }
-
-                pin->SetUnit( aUnit );
-                aLibrary->AddDrawItem( pin.release() );
-            }
+            for( size_t pinOrdinal = 0; pinOrdinal < aPlacementPins->size(); ++pinOrdinal )
+                addPin( ( *aPlacementPins )[pinOrdinal], pinOrdinal );
+        }
+        else if( aGate && !aGate->pins.empty() )
+        {
+            for( size_t pinOrdinal = 0; pinOrdinal < aGate->pins.size(); ++pinOrdinal )
+                addPin( aGate->pins[pinOrdinal], pinOrdinal );
         }
         else
         {
@@ -666,7 +778,7 @@ namespace
                 const MODEL_SYMBOL_DEFINITION&    definition = gate.unit == aPlacement.unit
                                                                        ? definitionById( aModel, aPlacement.definition.id )
                                                                        : definitionById( aModel, gate.definition.id );
-                const std::vector<PIN_REFERENCE>* placementPins =
+                const std::vector<PLACED_PIN_REFERENCE>* placementPins =
                         gate.unit == aPlacement.unit ? &aPlacement.pins : nullptr;
                 addDefinitionUnit( library.get(), definition, &gate, static_cast<int>( gate.unit ), aDiagnostics,
                                    placementPins );
@@ -696,7 +808,8 @@ namespace
     }
 
 
-    void applyField( SCH_SYMBOL* aSymbol, const MODEL_FIELD& aSource, std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    void applyField( SCH_SYMBOL* aSymbol, const MODEL_PLACEMENT& aPlacement, const MODEL_FIELD& aSource,
+                     std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
     {
         SCH_FIELD* field = nullptr;
 
@@ -720,11 +833,25 @@ namespace
         if( !field )
             THROW_IO_ERROR( FormatParserError( aSource.source, wxS( "could not stage symbol field" ) ) );
 
+        SOURCE_POINT position = aSource.position;
+
+        if( aPlacement.mirrorFlags & 1 )
+            position.x = -position.x;
+
+        if( aPlacement.mirrorFlags & 2 )
+            position.y = -position.y;
+
         field->SetText( aSource.value.text );
-        field->SetPosition( aSymbol->GetPosition() + localPoint( aSource.position ) );
+        field->SetPosition( aSymbol->GetPosition() + localPoint( position ) );
         field->SetTextAngle( EDA_ANGLE( aSource.angle, TENTHS_OF_A_DEGREE_T ) );
         applyTextPresentation( field, aSource.presentation, aSource.visible && aSource.presentation.visible,
                                aDiagnostics );
+
+        if( aPlacement.mirrorFlags & 1 )
+            field->SetHorizJustify( GetFlippedAlignment( field->GetHorizJustify() ) );
+
+        if( aPlacement.mirrorFlags & 2 )
+            field->SetVertJustify( GetFlippedAlignment( field->GetVertJustify() ) );
     }
 
 
@@ -768,7 +895,7 @@ namespace
         symbol->AddHierarchicalReference( aPath.Path(), reference, unit );
 
         for( const MODEL_FIELD& field : aPlacement.fields )
-            applyField( symbol.get(), field, aDiagnostics );
+            applyField( symbol.get(), aPlacement, field, aDiagnostics );
 
         symbol->SetExcludedFromBoard( library->GetPins().empty() );
 
@@ -876,23 +1003,23 @@ namespace
     }
 
 
-    double worksheetX( const SOURCE_POINT& aPoint, const SOURCE_POINT& aPageSize )
+    double worksheetX( const SOURCE_POINT& aPoint )
     {
-        return static_cast<double>( aPageSize.x - aPoint.x ) * 0.0127;
+        return static_cast<double>( aPoint.x ) * 0.0127;
     }
 
 
-    double worksheetY( const SOURCE_POINT& aPoint )
+    double worksheetY( const SOURCE_POINT& aPoint, const SOURCE_POINT& aPageSize )
     {
-        return static_cast<double>( aPoint.y ) * 0.0127;
+        return static_cast<double>( aPageSize.y - aPoint.y ) * 0.0127;
     }
 
 
     void appendWorksheetLine( std::ostringstream& aOutput, const SOURCE_POINT& aStart, const SOURCE_POINT& aEnd,
                               const SOURCE_POINT& aPageSize, int64_t aWidth )
     {
-        aOutput << "  (line (name \"\") (start " << worksheetX( aStart, aPageSize ) << ' ' << worksheetY( aStart )
-                << ") (end " << worksheetX( aEnd, aPageSize ) << ' ' << worksheetY( aEnd ) << ')';
+        aOutput << "  (line (name \"\") (start " << worksheetX( aStart ) << ' ' << worksheetY( aStart, aPageSize )
+                << ") (end " << worksheetX( aEnd ) << ' ' << worksheetY( aEnd, aPageSize ) << ')';
 
         if( aWidth > 0 )
             aOutput << " (linewidth " << static_cast<double>( aWidth ) * 0.0127 << ')';
@@ -918,8 +1045,8 @@ namespace
                     continue;
 
                 output << "  (tbtext \"" << worksheetVariable( graphic.text.text ) << "\" (name \"\") (pos "
-                       << worksheetX( graphic.points.front(), aSheet.pageSize ) << ' '
-                       << worksheetY( graphic.points.front() );
+                       << worksheetX( graphic.points.front() ) << ' '
+                       << worksheetY( graphic.points.front(), aSheet.pageSize );
 
                 if( graphic.angle != 0 )
                     output << ") (rotate " << static_cast<double>( graphic.angle ) / 10.0;

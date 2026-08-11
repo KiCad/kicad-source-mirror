@@ -384,8 +384,10 @@ types:
         type: u2
       - id: predecessor_ordinal
         type: u2
+        doc: Previous record in an embedded page-text ownership chain. Paired DRW5982 follows this link backward from controller-3's terminal record.
       - id: successor_ordinal
         type: u2
+        doc: Preserved record relationship distinct from the embedded page-text chain; free text uses self ordinals.
       - id: relationship_word_28
         type: u2
         doc: Preserved relationship/ordinal-like word; paired ASCII proves this is not a presentation flag.
@@ -812,7 +814,7 @@ types:
       - id: variant
         type: u1
         enum: offpage_variant
-        doc: Variant within the controller-7 decal family. Paired Logic 9.0 exports prove $OSR_ variants 0 through 5 are signal off-page references; $GND_ and $PWR_ variants select their corresponding power-symbol presentation. Values 0xfe and 0xff identify local labels and bus entries.
+        doc: Variant within the controller-7 decal family. Paired Logic 9.0 exports prove $OSR_ variants 0 through 5 are signal off-page references; $GND_SYMS variants select GND/GNDA/GNDCH, and $PWR_SYMS variants select +5V/+12V/-5V/-12V/+5VA circle or filled-triangle presentations. Values 0xfe and 0xff identify local labels and bus entries.
       - id: reserved_zero_1f
         contents: [0]
 
@@ -1053,9 +1055,15 @@ types:
         doc: Exact placed-pin link prefix; controller-16 ordinal diffs prove only the adjacent pin ordinal, so importer disposition is PRESERVED.
       - id: definition_pin_ordinal
         type: u2
-      - id: preserved_pin_link_tail
-        size: 6
-        doc: Exact placed-pin link tail; controller-16 ordinal diffs do not expose these bytes in ASCII, so importer disposition is PRESERVED.
+      - id: number_offset_x_half_mil_divided_by_2
+        type: s2
+        doc: Paired Logic 9 placement pin records prove this signed value times two is the pin-number X offset in source half-mils.
+      - id: number_offset_y_half_mil_divided_by_2
+        type: s2
+        doc: Paired Logic 9 placement pin records prove this signed value times two is the pin-number Y offset in source half-mils.
+      - id: number_presentation_flags
+        type: u2
+        doc: Paired Logic 9 placement pin records prove bit 0 rotates the number and low-byte 0x00/0x20/0x90 selects justification 0/1/6; remaining bits are retained.
 
   placement_field_controller:
     params:
@@ -1154,7 +1162,7 @@ types:
         doc: Native Logic 9.0 exports prove the number of embedded controller-1 text records for both generated and legacy DRW groups.
       - id: embedded_text_last_record
         type: u2
-        doc: Inclusive last controller-1 record in the controller's circular record order. Generated groups occupy ordinary contiguous slices; the legacy 58-text WDITBSIZEB group wraps through record zero, proving modulo-count ownership.
+        doc: Terminal controller-1 record of the embedded-text chain. The declared count and each record's predecessor ordinal recover exact generated and legacy DRW ownership without assuming contiguous controller order.
       - id: preserved_definition_style_word_44
         type: s2
         doc: Exact definition style word; generated line/fill/text variants expose no ASCII counterpart, so importer disposition is PRESERVED.

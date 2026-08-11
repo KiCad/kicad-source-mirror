@@ -1375,7 +1375,6 @@ namespace
                 definitionPin.namePresentation.visible = definitionPin.namePresentation.height != 0
                                                          && ( aCursor.U16At( terminalOffset + 24 ) & 0x8000 ) == 0;
                 definitionPin.numberPresentation.visible = definitionPin.numberPresentation.height != 0;
-                definitionPin.presentation = definitionPin.namePresentation;
                 definitionPin.nameOffset = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 14 ) ),
                                              decodeLocalCoordinate( aCursor.U16At( terminalOffset + 16 ) ), pinSource };
                 definitionPin.numberOffset = { decodeLocalCoordinate( aCursor.U16At( terminalOffset + 18 ) ),
@@ -1672,14 +1671,35 @@ namespace
 
             if( textCountForGroup != 0 )
             {
-                const size_t firstTextRecord =
-                        ( static_cast<size_t>( lastTextRecord ) + textCount + 1 - textCountForGroup ) % textCount;
+                std::vector<size_t> textRecords( textCountForGroup );
+                std::vector<bool>   visitedTextRecords( textCount, false );
+                size_t              textRecord = lastTextRecord;
 
-                for( size_t textIndex = 0; textIndex < textCountForGroup; ++textIndex )
+                for( size_t reverseIndex = textCountForGroup; reverseIndex != 0; --reverseIndex )
                 {
-                    const size_t textRecord = ( firstTextRecord + textIndex ) % textCount;
-                    decodeTextRecord( textRecord, true, true, textOwner );
+                    if( textRecord >= textCount )
+                        throwDecodeError( source, wxS( "page-text predecessor leaves controller 1" ) );
+
+                    if( visitedTextRecords[textRecord] )
+                        throwDecodeError( source, wxS( "page-text predecessor repeats controller 1 record" ) );
+
+                    visitedTextRecords[textRecord] = true;
+
+                    textRecords[reverseIndex - 1] = textRecord;
+
+                    if( reverseIndex != 1 )
+                    {
+                        const size_t predecessor = aCursor.U16At( textBase + textRecord * TEXT_RECORD_BYTES + 24 );
+
+                        if( predecessor >= textCount )
+                            throwDecodeError( source, wxS( "page-text predecessor leaves controller 1" ) );
+
+                        textRecord = predecessor;
+                    }
                 }
+
+                for( size_t textRecordIndex : textRecords )
+                    decodeTextRecord( textRecordIndex, true, true, textOwner );
             }
 
             if( textOwner.graphics.size() != textCountForGroup )
@@ -2466,7 +2486,28 @@ namespace
                 if( pinOrdinal >= definition->pins.size() || pinOrdinal != pin )
                     throwDecodeError( pinSource, wxS( "placed-pin handle leaves placement definition" ) );
 
-                placement.pins.push_back( { definition->pins[pinOrdinal].id, pinSource } );
+                PLACED_PIN_REFERENCE pinReference{ definition->pins[pinOrdinal].id, pinSource };
+                pinReference.numberOffset = {
+                    static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( pinOffset + 6 ) ) ) * 2,
+                    static_cast<int64_t>( static_cast<int16_t>( aCursor.U16At( pinOffset + 8 ) ) ) * 2, pinSource
+                };
+                pinReference.numberPresentationFlags = aCursor.U16At( pinOffset + 10 );
+                pinReference.numberAngle = ( pinReference.numberPresentationFlags & 0x0001 ) != 0 ? 900 : 0;
+
+                switch( pinReference.numberPresentationFlags & 0x00F0 )
+                {
+                case 0x0000: pinReference.numberJustification = 0; break;
+                case 0x0020: pinReference.numberJustification = 1; break;
+                case 0x0090: pinReference.numberJustification = 6; break;
+                default:
+                    PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "placed-pin number presentation" ),
+                                                               pinReference.numberPresentationFlags, pinSource,
+                                                               aModel.diagnostics );
+                    break;
+                }
+
+                pinReference.hasNumberPlacement = true;
+                placement.pins.push_back( std::move( pinReference ) );
             }
 
             expectedPinStart += pinCount;
@@ -3303,6 +3344,7 @@ namespace
             label.text = ownerNet->name;
             label.position = offpagePosition( record );
             label.angle = NormalizeAngle( aCursor.U16At( offset + 26 ) );
+            label.symbolVariant = rawKind;
 
             if( rawKind == 0xFE )
             {

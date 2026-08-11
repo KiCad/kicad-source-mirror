@@ -2497,6 +2497,7 @@ BOOST_AUTO_TEST_CASE( PartPinsAndGates )
     BOOST_CHECK_EQUAL( pinDefinition.pins[0].nameOffset.y, -100 );
     BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.x, 500 );
     BOOST_CHECK_EQUAL( pinDefinition.pins[0].numberOffset.y, -100 );
+    BOOST_CHECK( pinDefinition.pins[2].presentation.visible );
     BOOST_CHECK( !pinDefinition.pins[2].namePresentation.visible );
     BOOST_CHECK( !pinDefinition.pins[6].namePresentation.visible );
     BOOST_CHECK( pinDefinition.pins[6].numberPresentation.visible );
@@ -2679,6 +2680,15 @@ BOOST_AUTO_TEST_CASE( PlacementTransforms )
         BOOST_CHECK_GE( placement.fields.size(), 3 );
         BOOST_CHECK_EQUAL( placement.source.controller, 15 );
     }
+
+    BOOST_CHECK_EQUAL( model.placements[0].pins[0].numberOffset.x, 34 );
+    BOOST_CHECK_EQUAL( model.placements[0].pins[0].numberOffset.y, 16 );
+    BOOST_CHECK_EQUAL( model.placements[0].pins[0].numberAngle, 0 );
+    BOOST_CHECK_EQUAL( model.placements[0].pins[0].numberJustification, 0 );
+    BOOST_CHECK_EQUAL( model.placements[0].pins[0].numberPresentationFlags, 0x0100 );
+    BOOST_CHECK_EQUAL( model.placements[0].pins[1].numberOffset.x, 0 );
+    BOOST_CHECK_EQUAL( model.placements[0].pins[1].numberOffset.y, 20 );
+    BOOST_CHECK_EQUAL( model.placements[0].pins[1].numberPresentationFlags, 0 );
 
     auto placementNamed = []( const PADS_SCH_MODEL& aModel, const wxString& aReference ) -> const MODEL_PLACEMENT&
     {
@@ -3131,6 +3141,51 @@ BOOST_AUTO_TEST_CASE( PageGraphics )
     BOOST_REQUIRE( titleText != model.graphics.end() );
     BOOST_CHECK_EQUAL( titleText->graphic.presentation.height, 100 );
     BOOST_CHECK_EQUAL( titleText->graphic.presentation.width, 10 );
+    auto titleGroup = std::ranges::find( titleText->graphic.properties, wxS( "page_graphic_group" ),
+                                         []( const SOURCE_PROPERTY& aProperty )
+                                         {
+                                             return aProperty.name.text;
+                                         } );
+    BOOST_REQUIRE( titleGroup != titleText->graphic.properties.end() );
+    const uint16_t titleTextCount =
+            readU16( loadBinaryFixture( "page_graphics.sch" ), titleGroup->source.absoluteOffset + 64 );
+    BOOST_REQUIRE_GT( titleTextCount, 1u );
+
+    std::vector<uint8_t> repeatedPredecessor = loadBinaryFixture( "page_graphics.sch" );
+    const uint16_t       lastTextRecord = readU16( repeatedPredecessor, titleGroup->source.absoluteOffset + 66 );
+    writeU16( repeatedPredecessor, sheetControllerOffset( repeatedPredecessor, 1 ) + lastTextRecord * 32 + 24,
+              lastTextRecord );
+    BOOST_CHECK_EXCEPTION( parser.Parse( repeatedPredecessor, wxS( "page-text-cycle.sch" ) ), IO_ERROR,
+                           []( const IO_ERROR& aError )
+                           {
+                               return aError.What().Contains(
+                                       wxS( "page-text predecessor repeats controller 1 record" ) );
+                           } );
+
+    std::vector<uint8_t> noncontiguousPredecessor = loadBinaryFixture( "page_graphics.sch" );
+    const size_t         textController = sheetControllerOffset( noncontiguousPredecessor, 1 );
+    const uint16_t       predecessor1 = readU16( noncontiguousPredecessor, textController + lastTextRecord * 32 + 24 );
+    const uint16_t       predecessor2 = readU16( noncontiguousPredecessor, textController + predecessor1 * 32 + 24 );
+    const uint16_t       predecessor3 = readU16( noncontiguousPredecessor, textController + predecessor2 * 32 + 24 );
+    writeU16( noncontiguousPredecessor, textController + lastTextRecord * 32 + 24, predecessor2 );
+    writeU16( noncontiguousPredecessor, textController + predecessor2 * 32 + 24, predecessor1 );
+    writeU16( noncontiguousPredecessor, textController + predecessor1 * 32 + 24, predecessor3 );
+    PADS_SCH_MODEL      noncontiguous = parser.Parse( noncontiguousPredecessor, wxS( "page-text-noncontiguous.sch" ) );
+    std::vector<size_t> recoveredRecords;
+
+    for( const MODEL_PAGE_GRAPHIC& graphic : noncontiguous.graphics )
+    {
+        if( graphic.graphic.kind == MODEL_GRAPHIC_KIND::TEXT
+            && propertyValue( graphic.graphic.properties, wxS( "page_graphic_group" ) ) == titleGroup->value.text )
+        {
+            recoveredRecords.push_back( graphic.graphic.source.recordIndex );
+        }
+    }
+
+    BOOST_REQUIRE_EQUAL( recoveredRecords.size(), titleTextCount );
+    BOOST_CHECK_EQUAL( recoveredRecords[recoveredRecords.size() - 3], predecessor1 );
+    BOOST_CHECK_EQUAL( recoveredRecords[recoveredRecords.size() - 2], predecessor2 );
+    BOOST_CHECK_EQUAL( recoveredRecords.back(), lastTextRecord );
 
     std::vector<const MODEL_PAGE_GRAPHIC*> custom;
 
