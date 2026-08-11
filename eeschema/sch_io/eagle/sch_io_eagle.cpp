@@ -1000,8 +1000,10 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
     }
 
     for( const std::unique_ptr<EINSTANCE>& einstance : aSheet->instances )
+    {
         loadInstance( einstance, ( m_modules.size() ) ? m_modules.back()->parts
                                                       : m_eagleDoc->drawing->schematic->parts );
+    }
 
     // Loop through all buses
     // From the DTD: "Buses receive names which determine which signals they include.
@@ -1296,10 +1298,8 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
     if( !( aFrame->border_left == false ) )
     {
         lines = new SCH_SHAPE( SHAPE_T::POLY, aLayer );
-        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ),
-                                   yMin + schIUScale.MilsToIU( 150 ) ) );
-        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ),
-                                   yMax - schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ), yMin + schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ), yMax - schIUScale.MilsToIU( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
@@ -1329,8 +1329,7 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
             legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
             legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
-                                               schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ), schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosY += rowSpacing;
@@ -1340,10 +1339,8 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
     if( !( aFrame->border_right == false ) )
     {
         lines = new SCH_SHAPE( SHAPE_T::POLY, aLayer );
-        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
-                                   yMin + schIUScale.MilsToIU( 150 ) ) );
-        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
-                                   yMax - schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ), yMin + schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ), yMax - schIUScale.MilsToIU( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
@@ -1373,8 +1370,7 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
             legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
             legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
-                                               schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ), schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosY += rowSpacing;
@@ -1384,10 +1380,8 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
     if( !( aFrame->border_top == false ) )
     {
         lines = new SCH_SHAPE( SHAPE_T::POLY, aLayer );
-        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
-                                   yMin + schIUScale.MilsToIU( 150 ) ) );
-        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ),
-                                   yMin + schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ), yMin + schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ), yMin + schIUScale.MilsToIU( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
@@ -1417,8 +1411,7 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
             legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
             legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
-                                               schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ), schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosX += columnSpacing;
@@ -1428,10 +1421,8 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
     if( !( aFrame->border_bottom == false ) )
     {
         lines = new SCH_SHAPE( SHAPE_T::POLY, aLayer );
-        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ),
-                                   yMax - schIUScale.MilsToIU( 150 ) ) );
-        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ),
-                                   yMax - schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMax - schIUScale.MilsToIU( 150 ), yMax - schIUScale.MilsToIU( 150 ) ) );
+        lines->AddPoint( VECTOR2I( xMin + schIUScale.MilsToIU( 150 ), yMax - schIUScale.MilsToIU( 150 ) ) );
         aItems.push_back( lines );
 
         int i;
@@ -1461,8 +1452,7 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
             legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
             legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
             legendText->SetText( wxString( legendChar ) );
-            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
-                                               schIUScale.MilsToIU( 100 ) ) );
+            legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ), schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
             legendChar++;
             legendPosX += columnSpacing;
@@ -1472,12 +1462,10 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
 
 
 void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& aSegments,
-                                 const wxString& netName,
-                                 const wxString& aNetClass,
-                                 bool aIsBus )
+                                 const wxString& netName, const wxString& aNetClass, bool aIsBus )
 {
     // Loop through all segments
-    SCH_SCREEN* screen         = getCurrentScreen();
+    SCH_SCREEN* screen = getCurrentScreen();
 
     wxCHECK( screen, /* void */ );
 
@@ -1534,8 +1522,7 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
             SCH_LABEL_BASE* label = loadLabel( elabel, netName, aIsBus );
             screen->Append( label );
 
-            wxASSERT( segDesc.labels.empty()
-                    || segDesc.labels.front()->GetText() == label->GetText() );
+            wxASSERT( segDesc.labels.empty() || segDesc.labels.front()->GetText() == label->GetText() );
 
             segDesc.labels.push_back( label );
             labelled = true;
@@ -1548,11 +1535,8 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
 
             auto powerPort = m_powerPorts.find( wxT( "#" ) + part );
 
-            if( powerPort != m_powerPorts.end()
-              && powerPort->second == EscapeString( pin, CTX_NETNAME ) )
-            {
+            if( powerPort != m_powerPorts.end() && powerPort->second == EscapeString( pin, CTX_NETNAME ) )
                 labelled = true;
-            }
         }
 
         // Add a small label to the net segment if it hasn't been labeled already or is not
@@ -1584,8 +1568,7 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
             {
                 label->SetPosition( firstWire.A );
                 label->SetText( escapeName( netName ) );
-                label->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 40 ),
-                                              schIUScale.MilsToIU( 40 ) ) );
+                label->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 40 ), schIUScale.MilsToIU( 40 ) ) );
 
                 if( firstWire.A.y == firstWire.B.y )         // Horizontal wire.
                 {
@@ -1772,7 +1755,7 @@ SCH_LABEL_BASE* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
 
     if( port )
     {
-        auto hierLabel = std::make_unique<SCH_HIERLABEL>();
+        std::unique_ptr<SCH_HIERLABEL> hierLabel = std::make_unique<SCH_HIERLABEL>();
 
         if( port->direction )
         {
@@ -1819,18 +1802,10 @@ SCH_LABEL_BASE* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
 
         switch( angle )
         {
-        case 90:
-            label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::BOTTOM : SPIN_STYLE::UP );
-            break;
-        case 180:
-            label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::RIGHT : SPIN_STYLE::LEFT );
-            break;
-        case 270:
-            label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::UP : SPIN_STYLE::BOTTOM );
-            break;
-        default:
-            label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::LEFT : SPIN_STYLE::RIGHT );
-            break;
+        case 90:  label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::BOTTOM : SPIN_STYLE::UP );     break;
+        case 180: label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::RIGHT  : SPIN_STYLE::LEFT );   break;
+        case 270: label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::UP     : SPIN_STYLE::BOTTOM ); break;
+        default:  label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::LEFT   : SPIN_STYLE::RIGHT );  break;
         }
     }
 
@@ -1838,9 +1813,8 @@ SCH_LABEL_BASE* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
 }
 
 
-std::pair<VECTOR2I, const SEG*>
-SCH_IO_EAGLE::findNearestLinePoint( const VECTOR2I&         aPoint,
-                                    const std::vector<SEG>& aLines ) const
+std::pair<VECTOR2I, const SEG*> SCH_IO_EAGLE::findNearestLinePoint( const VECTOR2I& aPoint,
+                                                                    const std::vector<SEG>& aLines ) const
 {
     VECTOR2I   nearestPoint;
     const SEG* nearestLine = nullptr;
@@ -1897,8 +1871,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     if( epart->libraryUrn )
         libName += wxS( "_" ) + epart->libraryUrn->assetId;
 
-    wxString gatename    = epart->deviceset + wxS( "_" ) + epart->device + wxS( "_" ) +
-                           aInstance->gate;
+    wxString gatename    = epart->deviceset + wxS( "_" ) + epart->device + wxS( "_" ) + aInstance->gate;
     wxString symbolname  = wxString( epart->deviceset + epart->device );
     wxString kiPackageName = epart->deviceset + epart->device;
 
@@ -2196,7 +2169,8 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
             if( eDeviceSetIt == eLibIt->second->devicesets.end() )
             {
                 Report( wxString::Format( wxS( "Device set '%s' not found in library '%s'." ),
-                                          epart->deviceset, epart->library ) );
+                                          epart->deviceset,
+                                          epart->library ) );
                 continue;
             }
 
@@ -2205,7 +2179,9 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
             if( eDeviceIt == eDeviceSetIt->second->devices.end() )
             {
                 Report( wxString::Format( wxS( "Device '%s' not found in device set '%s' in library '%s'." ),
-                                          epart->device, epart->deviceset, epart->library ) );
+                                          epart->device,
+                                          epart->deviceset,
+                                          epart->library ) );
                 continue;
             }
 
@@ -2215,11 +2191,14 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
             {
                 Report( wxString::Format( wxS( "Technology '%s' not found in device '%s'  in device set '%s' "
                                                "in library '%s'." ),
-                                          *variant->technology, epart->device, epart->deviceset, epart->library ) );
+                                          *variant->technology,
+                                          epart->device,
+                                          epart->deviceset,
+                                          epart->library ) );
                 continue;
             }
 
-            for( const auto& attr : eTechnologyIt->second->attributes )
+            for( const std::unique_ptr<EATTR>& attr : eTechnologyIt->second->attributes )
             {
                 wxString attrValue;
 
@@ -2310,12 +2289,12 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 if( it == aLibrary->symbols.end() )
                 {
                     Report( wxString::Format( wxS( "Eagle symbol '%s' not found in library '%s'." ),
-                                              egate->symbol, aLibrary->GetName() ) );
+                                              egate->symbol,
+                                              aLibrary->GetName() ) );
                     continue;
                 }
 
-                wxString gateMapName = edeviceset->name + wxS( "_" ) + edevice->name +
-                                       wxS( "_" ) + egate->name;
+                wxString gateMapName = edeviceset->name + wxS( "_" ) + edevice->name + wxS( "_" ) + egate->name;
                 aEagleLibrary->GateToUnitMap[gateMapName] = gateindex;
                 ispower = loadSymbol( it->second, libSymbol, edevice, gateindex, egate->name );
 
@@ -2486,10 +2465,8 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
 }
 
 
-bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol,
-                               std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                               const std::unique_ptr<EDEVICE>& aDevice, int aGateNumber,
-                               const wxString& aGateName )
+bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol, std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                               const std::unique_ptr<EDEVICE>& aDevice, int aGateNumber, const wxString& aGateName )
 {
     wxCHECK( aEsymbol && aSymbol && aDevice, false );
 
@@ -2568,8 +2545,10 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol,
     }
 
     for( const std::unique_ptr<EPOLYGON>& epolygon : aEsymbol->polygons )
+    {
         if( SCH_SHAPE* shape = loadSymbolPolyLine( aSymbol, epolygon, aGateNumber ) )
             aSymbol->AddDrawItem( shape );
+    }
 
     for( const std::unique_ptr<ERECT>& erectangle : aEsymbol->rectangles )
         aSymbol->AddDrawItem( loadSymbolRectangle( aSymbol, erectangle, aGateNumber ) );
@@ -2642,8 +2621,7 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol,
 
 
 SCH_SHAPE* SCH_IO_EAGLE::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                           const std::unique_ptr<ECIRCLE>& aCircle,
-                                           int aGateNumber )
+                                           const std::unique_ptr<ECIRCLE>& aCircle, int aGateNumber )
 {
     wxCHECK( aSymbol && aCircle, nullptr );
 
@@ -2672,8 +2650,7 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
 
 SCH_SHAPE* SCH_IO_EAGLE::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                              const std::unique_ptr<ERECT>& aRectangle,
-                                              int aGateNumber )
+                                              const std::unique_ptr<ERECT>& aRectangle, int aGateNumber )
 {
     wxCHECK( aSymbol && aRectangle, nullptr );
 
@@ -2734,8 +2711,7 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
         // this emulates the filled semicircles created by a thick arc with flat ends caps.
         if( aWire->cap == EWIRE::FLAT && aWire->width.ToSchUnits() >= 2 * radius )
         {
-            VECTOR2I centerStartVector = ( begin - center ) *
-                                         ( aWire->width.ToSchUnits() / radius );
+            VECTOR2I centerStartVector = ( begin - center ) * ( aWire->width.ToSchUnits() / radius );
             begin = center + centerStartVector;
 
             arc->SetStroke( STROKE_PARAMS( 1, LINE_STYLE::SOLID ) );
@@ -2770,8 +2746,7 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
 
 SCH_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                             const std::unique_ptr<EPOLYGON>& aPolygon,
-                                             int aGateNumber )
+                                             const std::unique_ptr<EPOLYGON>& aPolygon, int aGateNumber )
 {
     wxCHECK( aSymbol && aPolygon, nullptr );
 
@@ -2972,8 +2947,7 @@ SCH_TEXT* SCH_IO_EAGLE::loadPlainText( const std::unique_ptr<ETEXT>& aText )
 }
 
 
-void SCH_IO_EAGLE::loadTextAttributes( EDA_TEXT* aText,
-                                       const std::unique_ptr<ETEXT>& aAttributes ) const
+void SCH_IO_EAGLE::loadTextAttributes( EDA_TEXT* aText, const std::unique_ptr<ETEXT>& aAttributes ) const
 {
     wxCHECK( aText && aAttributes, /* void */ );
 
@@ -3736,7 +3710,7 @@ bool SCH_IO_EAGLE::checkConnections( const SCH_SYMBOL* aSymbol, const SCH_PIN* a
     if( pointIt == m_connPoints.end() )
         return false;
 
-    const auto& items = pointIt->second;
+    const std::set<const EDA_ITEM*>& items = pointIt->second;
 
     wxCHECK( items.find( aPin ) != items.end(), false );
 
@@ -3744,8 +3718,7 @@ bool SCH_IO_EAGLE::checkConnections( const SCH_SYMBOL* aSymbol, const SCH_PIN* a
 }
 
 
-void SCH_IO_EAGLE::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScreen,
-                                           bool aUpdateSet )
+void SCH_IO_EAGLE::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScreen, bool aUpdateSet )
 {
     wxCHECK( aSymbol && aScreen && aSymbol->GetLibSymbolRef(), /*void*/ );
 
@@ -3775,24 +3748,15 @@ void SCH_IO_EAGLE::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScr
                     SCH_GLOBALLABEL* netLabel = new SCH_GLOBALLABEL;
                     netLabel->SetPosition( aSymbol->GetPinPhysicalPosition( pin ) );
                     netLabel->SetText( extractNetName( pin->GetName() ) );
-                    netLabel->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 40 ),
-                                                     schIUScale.MilsToIU( 40 ) ) );
+                    netLabel->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 40 ), schIUScale.MilsToIU( 40 ) ) );
 
                     switch( pin->GetOrientation() )
                     {
                     default:
-                    case PIN_ORIENTATION::PIN_RIGHT:
-                        netLabel->SetSpinStyle( SPIN_STYLE::LEFT );
-                        break;
-                    case PIN_ORIENTATION::PIN_LEFT:
-                        netLabel->SetSpinStyle( SPIN_STYLE::RIGHT );
-                        break;
-                    case PIN_ORIENTATION::PIN_UP:
-                        netLabel->SetSpinStyle( SPIN_STYLE::BOTTOM );
-                        break;
-                    case PIN_ORIENTATION::PIN_DOWN:
-                        netLabel->SetSpinStyle( SPIN_STYLE::UP );
-                        break;
+                    case PIN_ORIENTATION::PIN_RIGHT: netLabel->SetSpinStyle( SPIN_STYLE::LEFT );   break;
+                    case PIN_ORIENTATION::PIN_LEFT:  netLabel->SetSpinStyle( SPIN_STYLE::RIGHT );  break;
+                    case PIN_ORIENTATION::PIN_UP:    netLabel->SetSpinStyle( SPIN_STYLE::BOTTOM ); break;
+                    case PIN_ORIENTATION::PIN_DOWN:  netLabel->SetSpinStyle( SPIN_STYLE::UP );     break;
                     }
 
                     aScreen->Append( netLabel );
@@ -3877,8 +3841,7 @@ wxString SCH_IO_EAGLE::translateEagleBusName( const wxString& aEagleName ) const
 
 const ESYMBOL* SCH_IO_EAGLE::getEagleSymbol( const std::unique_ptr<EINSTANCE>& aInstance )
 {
-    wxCHECK( m_eagleDoc && m_eagleDoc->drawing && m_eagleDoc->drawing->schematic && aInstance,
-             nullptr );
+    wxCHECK( m_eagleDoc && m_eagleDoc->drawing && m_eagleDoc->drawing->schematic && aInstance, nullptr );
 
     std::unique_ptr<EPART>& epart = m_eagleDoc->drawing->schematic->parts[aInstance->part];
 
