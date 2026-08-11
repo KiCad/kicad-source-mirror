@@ -190,6 +190,11 @@ public:
      */
     bool EndsWith( const KIID_PATH& aPath ) const;
 
+    bool IsContainedWithin( const KIID_PATH& aParentPath ) const
+    {
+        return size() >= aParentPath.size() && std::equal( aParentPath.begin(), aParentPath.end(), begin() );
+    }
+
     wxString AsString() const;
 
     bool operator==( KIID_PATH const& rhs ) const
