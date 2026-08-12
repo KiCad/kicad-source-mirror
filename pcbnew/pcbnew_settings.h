@@ -139,6 +139,16 @@ public:
         int   design_blocks_panel_float_height;
     };
 
+    struct PANEL_FOOTPRINT_FIELDS_TABLE
+    {
+        std::map<std::string, int> field_widths;
+        wxString                   export_filename;
+        int                        selection_mode;
+        int                        sash_pos;
+        bool                       sidebar_collapsed;
+        int                        variant_sash_pos;
+    };
+
     struct DIALOG_EXPORT_D356
     {
         // Export D356 uses wxFileDialog, so there's no DIALOG_SHIM to save/restore control state
@@ -224,6 +234,8 @@ public:
     WINDOW_SETTINGS    m_FootprintWizard;
 
     DISPLAY_OPTIONS    m_Display;
+
+    PANEL_FOOTPRINT_FIELDS_TABLE m_FieldEditorPanel;
 
     MAGNETIC_SETTINGS  m_MagneticItems;
     SNAP_INFERENCE_SETTINGS m_SnapInference;

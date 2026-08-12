@@ -48,6 +48,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() :
         m_FootprintViewer(),
         m_FootprintWizard(),
         m_Display(),
+        m_FieldEditorPanel(),
         m_TrackDragAction( TRACK_DRAG_ACTION::DRAG ),
         m_ArcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ),
         m_CtrlClickHighlight( false ),
@@ -290,6 +291,24 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.show_page_borders",
             &m_ShowPageLimits, true ) );
+
+    m_params.emplace_back( new PARAM_MAP<int>( "field_editor.field_widths",
+            &m_FieldEditorPanel.field_widths, {} ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "field_editor.export_filename",
+            &m_FieldEditorPanel.export_filename, wxT( "" ) ) );
+
+    m_params.emplace_back( new PARAM<int>( "field_editor.selection_mode",
+            &m_FieldEditorPanel.selection_mode, 0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "field_editor.sash_pos",
+            &m_FieldEditorPanel.sash_pos, 400 ) );
+
+    m_params.emplace_back( new PARAM<int>( "field_editor.variant_sash_pos",
+            &m_FieldEditorPanel.variant_sash_pos, 500 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "field_editor.sidebar_collapsed",
+            &m_FieldEditorPanel.sidebar_collapsed, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "export_d356.doNotExportUnconnectedPads",
             &m_ExportD356.doNotExportUnconnectedPads, false ) );
