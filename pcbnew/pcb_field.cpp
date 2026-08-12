@@ -49,7 +49,7 @@ PCB_FIELD::PCB_FIELD( const PCB_TEXT& aText, FIELD_T aFieldId, const wxString& a
         m_ordinal( static_cast<int>( aFieldId ) ),
         m_name( aName )
 {
-    EDA_TEXT::operator=( aText );
+    PCB_TEXT::operator=( aText );
 }
 
 
