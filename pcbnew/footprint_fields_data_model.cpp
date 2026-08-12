@@ -279,6 +279,15 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, cons
 }
 
 
+bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::isCellReadOnly( int aRow, int aCol )
+{
+    return FIELDS_TABLE_DATA_MODEL<FOOTPRINT_REF>::isCellReadOnly( aRow, aCol )
+           || ColIsFootprint( aCol )
+           || GetColFieldName( aCol ) == wxS( "${EXCLUDE_FROM_BOARD}" )
+           || GetColFieldName( aCol ) == wxS( "${EXCLUDE_FROM_SIM}" );
+}
+
+
 bool FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::unitMatch( const FOOTPRINT_REF& lhItem, const FOOTPRINT_REF& rhItem )
 {
     // Footprints are just pointers and never have multiple units unlike symbols
@@ -638,6 +647,10 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( BOARD_COMMIT& aCommit, 
             // Skip generated fields with variables as names (e.g. ${QUANTITY});
             // they can't be edited
             if( IsGeneratedField( srcName ) )
+                continue;
+
+            // Don't apply footprint fields to footprints
+            if( srcName == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
                 continue;
 
             PCB_FIELD* destField = footprint.GetField( srcName );

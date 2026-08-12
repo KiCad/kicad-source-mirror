@@ -218,6 +218,13 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsValue( int aCol )
 }
 
 
+bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsFootprint( int aCol )
+{
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
+    return m_cols[aCol].m_fieldName == GetCanonicalFieldName( FIELD_T::FOOTPRINT );
+}
+
+
 bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsAttribute( int aCol )
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );

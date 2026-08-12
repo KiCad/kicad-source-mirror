@@ -121,6 +121,7 @@ public:
     bool ColIsQuantity( int aCol );
     bool ColIsItemNumber( int aCol );
     bool ColIsValue( int aCol );
+    bool ColIsFootprint( int aCol );
     bool ColIsAttribute( int aCol );
 
     bool IsExpanderColumn( int aCol ) const override;
