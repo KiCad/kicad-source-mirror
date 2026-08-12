@@ -196,6 +196,21 @@
       "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. The source follows production-observed asymmetric multi-gate syntax and uses only fixture-owned decals. A clean new-design import reported NO ERRORS FOUND; native v13 save and all-section Logic 9.0 re-export retained U3-A and U3-B, gate pin counts 7 and 2, the distinct BATCHD_SPECIAL_GATE decal, gate swap flag 1, pin swap group 1, and SIGPIN 15 VCC_HIDDEN. No third-party design content"
     },
     {
+      "binary": "text_options.sch",
+      "ascii": "text_options.txt",
+      "binary_sha256": "43786e9da2fdf8d41de05cac9d8373047f03402a6897098b268349a3cfbffe21",
+      "ascii_sha256": "2e8995395131568aac5121f048902c94df0e45b5d5b8d77d883acfc34daffe27",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "free_text_justification_codes_0_through_15",
+        "free_text_rotations_0_90_180_270",
+        "regular_bold_italic_bold_italic_fonts",
+        "free_text_hidden_flag",
+        "native_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained 26 uniquely named free-text records: all justification codes 0 through 15, rotations 0/90/180/270, regular/bold/italic/bold-italic font requests, and display flags 0/1. PADS font replacement normalized regular Verdana to Default Font and bold-italic Verdana to Bold Arial; the fixture records that vendor normalization rather than claiming the source font survived. No third-party design content"
+    },
+    {
       "binary": "ole_images.sch",
       "ascii": "ole_images.txt",
       "binary_sha256": "e73c5dbe9248cac458ef6528ecb817d56431bf1f616d779a97c63458c9bc3d71",

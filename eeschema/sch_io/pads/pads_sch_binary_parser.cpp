@@ -405,6 +405,25 @@ namespace
         return MODEL_JUSTIFICATION::RIGHT;
     }
 
+
+    MODEL_JUSTIFICATION freeTextHorizontalJustification( uint16_t aValue )
+    {
+        switch( aValue & 0x000F )
+        {
+        case 0:
+        case 2:
+        case 8: return MODEL_JUSTIFICATION::LEFT;
+
+        case 4:
+        case 6:
+        case 10:
+        case 12:
+        case 14: return MODEL_JUSTIFICATION::CENTER;
+
+        default: return MODEL_JUSTIFICATION::RIGHT;
+        }
+    }
+
     constexpr uint32_t CP1252_HIGH[] = { 0x20AC, 0xFFFD, 0x201A, 0x0192, 0x201E, 0x2026, 0x2020, 0x2021,
                                          0x02C6, 0x2030, 0x0160, 0x2039, 0x0152, 0xFFFD, 0x017D, 0xFFFD,
                                          0xFFFD, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014,
@@ -689,6 +708,66 @@ namespace
         result.fontBase = outerControllerOffset( aSdb, 19 );
         result.fontCount = aSdb.Pools()[19].count;
         return result;
+    }
+
+
+    void decodeGlobalFont( const std::vector<uint8_t>& aBytes, const PADS_IO::BINARY_CURSOR& aCursor,
+                           const PLACEMENT_GLOBALS& aGlobals, const wxString& aSourceName, uint16_t aVersion,
+                           int16_t aHandle, const SOURCE_PROVENANCE& aHandleSource,
+                           MODEL_TEXT_PRESENTATION& aPresentation, bool aStrictHandle,
+                           std::vector<PARSER_DIAGNOSTIC>& aDiagnostics )
+    {
+        if( aHandle == -1 || aHandle == -4 )
+        {
+            aPresentation.font = decodedDefinitionFont( aHandle, aHandleSource );
+            return;
+        }
+
+        if( aHandle < 0 || static_cast<uint32_t>( aHandle ) >= aGlobals.fontCount )
+        {
+            if( aStrictHandle )
+                throwDecodeError( aHandleSource, wxS( "placement font handle leaves outer controller 19" ) );
+
+            SOURCE_PROPERTY property = sourceProperty(
+                    wxS( "inline_font_payload" ), wxString::Format( wxS( "%u" ), uint16_t( aHandle ) ), aHandleSource );
+            property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+            aDiagnostics.push_back( MakePropertyDiagnostic(
+                    RPT_SEVERITY_WARNING, property, wxS( "unsupported inline placement font payload preserved" ) ) );
+            aPresentation.properties.push_back( std::move( property ) );
+            return;
+        }
+
+        const size_t      fontOffset = aGlobals.fontBase + static_cast<size_t>( aHandle ) * FONT_RECORD_BYTES;
+        SOURCE_PROVENANCE fontSource = sourceAt( aSourceName, aVersion, wxS( "placement font" ), 19, aHandle,
+                                                 fontOffset, FONT_RECORD_BYTES, -1 );
+        const uint32_t    style = aCursor.U32At( fontOffset );
+
+        SOURCE_PROVENANCE nameSource = fontSource;
+        nameSource.absoluteOffset += 4;
+        nameSource.length = 32;
+        SOURCE_STRING name = decodeFixedString( aBytes, fontOffset + 4, 32, nameSource, aDiagnostics );
+        aPresentation.bold = ( style & 2 ) != 0;
+        aPresentation.italic = ( style & 1 ) != 0;
+        aPresentation.font = name;
+
+        if( aPresentation.bold )
+            aPresentation.font.text.Prepend( wxS( "Bold " ) );
+
+        if( aPresentation.italic )
+            aPresentation.font.text.Prepend( wxS( "Italic " ) );
+
+        aPresentation.properties.push_back(
+                sourceProperty( wxS( "font_handle" ), wxString::Format( wxS( "%d" ), aHandle ), fontSource ) );
+
+        if( ( style & ~uint32_t{ 3 } ) != 0 )
+        {
+            SOURCE_PROPERTY property = sourceProperty( wxS( "unsupported_font_style_flags" ),
+                                                       wxString::Format( wxS( "%u" ), style & ~3U ), fontSource );
+            property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
+            aDiagnostics.push_back( MakePropertyDiagnostic(
+                    RPT_SEVERITY_WARNING, property, wxS( "unsupported placement font style flags preserved" ) ) );
+            aPresentation.properties.push_back( std::move( property ) );
+        }
     }
 
 
@@ -2209,59 +2288,8 @@ namespace
         auto font = [&]( int16_t aHandle, const SOURCE_PROVENANCE& aHandleSource,
                          MODEL_TEXT_PRESENTATION& aPresentation, bool aStrictHandle )
         {
-            if( aHandle == -1 || aHandle == -4 )
-            {
-                aPresentation.font = decodedDefinitionFont( aHandle, aHandleSource );
-                return;
-            }
-
-            if( aHandle < 0 || static_cast<uint32_t>( aHandle ) >= aGlobals.fontCount )
-            {
-                if( aStrictHandle )
-                    throwDecodeError( aHandleSource, wxS( "placement font handle leaves outer controller 19" ) );
-
-                SOURCE_PROPERTY property =
-                        sourceProperty( wxS( "inline_font_payload" ),
-                                        wxString::Format( wxS( "%u" ), uint16_t( aHandle ) ), aHandleSource );
-                property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
-                aModel.diagnostics.push_back(
-                        MakePropertyDiagnostic( RPT_SEVERITY_WARNING, property,
-                                                wxS( "unsupported inline placement font payload preserved" ) ) );
-                aPresentation.properties.push_back( std::move( property ) );
-                return;
-            }
-
-            const size_t      fontOffset = aGlobals.fontBase + static_cast<size_t>( aHandle ) * FONT_RECORD_BYTES;
-            SOURCE_PROVENANCE fontSource = sourceAt( aSourceName, aModel.version, wxS( "placement font" ), 19, aHandle,
-                                                     fontOffset, FONT_RECORD_BYTES, -1 );
-            const uint32_t    style = aCursor.U32At( fontOffset );
-
-            SOURCE_PROVENANCE nameSource = fontSource;
-            nameSource.absoluteOffset += 4;
-            nameSource.length = 32;
-            SOURCE_STRING name = decodeFixedString( aBytes, fontOffset + 4, 32, nameSource, aModel.diagnostics );
-            aPresentation.bold = ( style & 2 ) != 0;
-            aPresentation.italic = ( style & 1 ) != 0;
-            aPresentation.font = name;
-
-            if( aPresentation.bold )
-                aPresentation.font.text.Prepend( wxS( "Bold " ) );
-
-            if( aPresentation.italic )
-                aPresentation.font.text.Prepend( wxS( "Italic " ) );
-
-            aPresentation.properties.push_back(
-                    sourceProperty( wxS( "font_handle" ), wxString::Format( wxS( "%d" ), aHandle ), fontSource ) );
-
-            if( ( style & ~uint32_t{ 3 } ) != 0 )
-            {
-                SOURCE_PROPERTY property = sourceProperty( wxS( "unsupported_font_style_flags" ),
-                                                           wxString::Format( wxS( "%u" ), style & ~3U ), fontSource );
-                property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
-                aModel.diagnostics.push_back( MakePropertyDiagnostic(
-                        RPT_SEVERITY_WARNING, property, wxS( "unsupported placement font style flags preserved" ) ) );
-                aPresentation.properties.push_back( std::move( property ) );
-            }
+            decodeGlobalFont( aBytes, aCursor, aGlobals, aSourceName, aModel.version, aHandle, aHandleSource,
+                              aPresentation, aStrictHandle, aModel.diagnostics );
         };
 
         auto attributeString = [&]( uint32_t aOffsetIndex, bool aRequireValue )
@@ -4758,9 +4786,24 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
             text.angle = NormalizeAngle( cursor.U16At( recordOffset + 16 ) );
             text.presentation.source = textSource;
             text.presentation.height = cursor.U16At( recordOffset + 22 );
-            text.presentation.width = cursor.U16At( recordOffset + 30 );
-            text.presentation.horizontalJustification = horizontalJustification( justification );
-            text.presentation.verticalJustification = verticalJustification( justification );
+            text.presentation.width = cursor.U8At( recordOffset + 30 );
+            const uint8_t displayFlags = cursor.U8At( recordOffset + 31 );
+            text.presentation.visible = ( displayFlags & 1 ) == 0;
+            text.presentation.horizontalJustification = freeTextHorizontalJustification( justification );
+            text.presentation.verticalJustification = MODEL_JUSTIFICATION::RIGHT;
+
+            SOURCE_PROVENANCE fontHandleSource = textSource;
+            fontHandleSource.absoluteOffset += 0;
+            fontHandleSource.length = 2;
+            decodeGlobalFont( aBytes, cursor, *placementData, aSourceName, model.version,
+                              static_cast<int16_t>( cursor.U16At( recordOffset ) ), fontHandleSource, text.presentation,
+                              false, model.diagnostics );
+
+            SOURCE_PROVENANCE displaySource = textSource;
+            displaySource.absoluteOffset += 31;
+            displaySource.length = 1;
+            text.presentation.properties.push_back( sourceProperty(
+                    wxS( "display_flags" ), wxString::Format( wxS( "%u" ), displayFlags ), displaySource ) );
 
             SOURCE_PROVENANCE relationshipSource = textSource;
             relationshipSource.objectClass = wxS( "free text relationship" );

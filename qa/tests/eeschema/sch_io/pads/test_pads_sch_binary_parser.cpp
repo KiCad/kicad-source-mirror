@@ -1658,13 +1658,13 @@ BOOST_AUTO_TEST_CASE( FreeText )
     };
 
     for( const JUSTIFICATION_CASE& expected :
-         { JUSTIFICATION_CASE{ 5, MODEL_JUSTIFICATION::LEFT, MODEL_JUSTIFICATION::LEFT },
-           { 7, MODEL_JUSTIFICATION::LEFT, MODEL_JUSTIFICATION::LEFT },
-           { 15, MODEL_JUSTIFICATION::LEFT, MODEL_JUSTIFICATION::CENTER },
-           { 6, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT },
-           { 12, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER },
-           { 0xFF04, MODEL_JUSTIFICATION::LEFT, MODEL_JUSTIFICATION::LEFT },
-           { 0x0306, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::LEFT } } )
+         { JUSTIFICATION_CASE{ 5, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::RIGHT },
+           { 7, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::RIGHT },
+           { 15, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::RIGHT },
+           { 6, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT },
+           { 12, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT },
+           { 0xFF04, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT },
+           { 0x0306, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT } } )
     {
         std::vector<uint8_t> changedJustification = loadBinaryFixture( "text_encoding.sch" );
         writeU16( changedJustification, text.source.absoluteOffset + 18, expected.raw );
@@ -1674,6 +1674,87 @@ BOOST_AUTO_TEST_CASE( FreeText )
         BOOST_CHECK( justified.texts[0].presentation.verticalJustification == expected.vertical );
         BOOST_CHECK_EQUAL( justified.diagnostics.size(), model.diagnostics.size() );
     }
+
+    struct FONT_CASE
+    {
+        uint32_t style;
+        bool     bold;
+        bool     italic;
+    };
+
+    for( const FONT_CASE& expected : { FONT_CASE{ 0, false, false }, FONT_CASE{ 1, false, true },
+                                       FONT_CASE{ 2, true, false }, FONT_CASE{ 3, true, true } } )
+    {
+        std::vector<uint8_t> changedFont = loadBinaryFixture( "text_encoding.sch" );
+        writeU16( changedFont, text.source.absoluteOffset, 0 );
+        writeU32( changedFont, outerControllerOffset( changedFont, 19 ), expected.style );
+        PADS_SCH_MODEL styled = parser.Parse( changedFont, wxS( "text_encoding.sch" ) );
+        BOOST_REQUIRE_EQUAL( styled.texts.size(), 1 );
+        BOOST_CHECK_EQUAL( styled.texts[0].presentation.bold, expected.bold );
+        BOOST_CHECK_EQUAL( styled.texts[0].presentation.italic, expected.italic );
+        BOOST_CHECK_EQUAL( styled.texts[0].presentation.width, 10 );
+    }
+
+    std::vector<uint8_t> hiddenText = loadBinaryFixture( "text_encoding.sch" );
+    hiddenText[text.source.absoluteOffset + 31] = 1;
+    PADS_SCH_MODEL hidden = parser.Parse( hiddenText, wxS( "text_encoding.sch" ) );
+    BOOST_REQUIRE_EQUAL( hidden.texts.size(), 1 );
+    BOOST_CHECK( !hidden.texts[0].presentation.visible );
+    BOOST_CHECK_EQUAL( hidden.texts[0].presentation.width, 10 );
+}
+
+
+BOOST_AUTO_TEST_CASE( TextOptionMatrix )
+{
+    PADS_SCH_BINARY_PARSER parser;
+    PADS_SCH_MODEL         model = parser.Parse( loadBinaryFixture( "text_options.sch" ), wxS( "text_options.sch" ) );
+
+    BOOST_REQUIRE_EQUAL( model.texts.size(), 26 );
+
+    auto textByName = [&]( const wxString& aName ) -> const MODEL_TEXT&
+    {
+        auto found = std::ranges::find_if( model.texts,
+                                           [&]( const MODEL_TEXT& aText )
+                                           {
+                                               return aText.text.text == aName;
+                                           } );
+        BOOST_REQUIRE( found != model.texts.end() );
+        return *found;
+    };
+
+    const std::array<MODEL_JUSTIFICATION, 16> horizontal = { MODEL_JUSTIFICATION::LEFT,   MODEL_JUSTIFICATION::RIGHT,
+                                                             MODEL_JUSTIFICATION::LEFT,   MODEL_JUSTIFICATION::RIGHT,
+                                                             MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT,
+                                                             MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT,
+                                                             MODEL_JUSTIFICATION::LEFT,   MODEL_JUSTIFICATION::RIGHT,
+                                                             MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT,
+                                                             MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT,
+                                                             MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT };
+
+    for( size_t ii = 0; ii < horizontal.size(); ++ii )
+    {
+        const MODEL_TEXT& text = textByName( wxString::Format( wxS( "JUST_%02zu" ), ii ) );
+        BOOST_CHECK( text.presentation.horizontalJustification == horizontal[ii] );
+        BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::RIGHT );
+    }
+
+    for( const auto& [name, angle] : { std::pair{ wxS( "ANGLE_000" ), 0 }, std::pair{ wxS( "ANGLE_090" ), 900 },
+                                       std::pair{ wxS( "ANGLE_180" ), 1800 }, std::pair{ wxS( "ANGLE_270" ), 2700 } } )
+    {
+        BOOST_CHECK_EQUAL( textByName( name ).angle, angle );
+    }
+
+    BOOST_CHECK( !textByName( wxS( "STYLE_REGULAR" ) ).presentation.bold );
+    BOOST_CHECK( !textByName( wxS( "STYLE_REGULAR" ) ).presentation.italic );
+    BOOST_CHECK( textByName( wxS( "STYLE_BOLD" ) ).presentation.bold );
+    BOOST_CHECK( textByName( wxS( "STYLE_ITALIC" ) ).presentation.italic );
+    BOOST_CHECK( textByName( wxS( "STYLE_BOLD_ITALIC" ) ).presentation.bold );
+    BOOST_CHECK( !textByName( wxS( "STYLE_BOLD_ITALIC" ) ).presentation.italic );
+
+    BOOST_CHECK( textByName( wxS( "VISIBLE_0" ) ).presentation.visible );
+    BOOST_CHECK( !textByName( wxS( "VISIBLE_1" ) ).presentation.visible );
+    BOOST_CHECK_EQUAL( textByName( wxS( "VISIBLE_0" ) ).presentation.width, 10 );
+    BOOST_CHECK_EQUAL( textByName( wxS( "VISIBLE_1" ) ).presentation.width, 10 );
 }
 
 

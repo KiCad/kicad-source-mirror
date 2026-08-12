@@ -363,6 +363,7 @@ types:
     seq:
       - id: link_state
         type: u2
+        doc: Free-text records use this as a signed outer controller-19 font handle. Controlled Logic 9.0 save/re-export proves handles for regular, bold, italic, and bold-italic fonts; page-owned text records use the word as relationship state instead.
       - id: object_state
         type: u2
       - id: owner_state
@@ -377,7 +378,7 @@ types:
         type: u2
       - id: justification
         type: u2
-        doc: The low byte is the Logic 9.0 justification code; paired vendor fields prove the high byte carries unrelated packed data.
+        doc: The low byte is the Logic 9.0 justification code; paired vendor fields prove the high byte carries unrelated packed data. For free text, controlled crosshair fixtures prove low-nibble horizontal classes 0/2/8 left, 4/6/10/12/14 center, and the remaining codes right. All 16 codes use the same baseline anchor. Other controller-1 record classes use their own justification interpretation.
       - id: string_bytes_including_nul
         type: u2
       - id: height_half_mil
@@ -393,8 +394,10 @@ types:
         doc: Preserved relationship/ordinal-like word; paired ASCII proves this is not a presentation flag.
       - id: width_factor
         type: u1
+        doc: Logic 9.0 text width factor. This is independent from the following display byte.
       - id: display_flags
         type: u1
+        doc: Controlled Logic 9.0 free text proves bit 0 marks hidden text; remaining bits are not present in the observed corpus.
 
   page_size_slot:
     seq:
