@@ -123,6 +123,11 @@ wxString interpretText( const wxString& aText )
 
 bool substituteVariable( wxString* aText )
 {
+    int x;
+
+    if( aText->Contains( wxT( "DRAWING_" ) ) )
+        x=5;
+
     if( aText->StartsWith( '>' ) && aText->AfterFirst( ' ' ).IsEmpty() )
     {
         wxString token = aText->Upper();
@@ -143,11 +148,49 @@ bool substituteVariable( wxString* aText )
         else if( token == wxT( ">DRAWING_NAME" ) )     *aText = wxT( "${PROJECTNAME}" );
         else if( token == wxT( ">LAST_DATE_TIME" ) )   *aText = wxT( "${CURRENT_DATE}" );
         else if( token == wxT( ">PLOT_DATE_TIME" ) )   *aText = wxT( "${CURRENT_DATE}" );
+        else if( token == wxT( ">DATE" ) )             *aText = wxT( "${ISSUE_DATE}" );
         else *aText = wxString::Format( wxS( "${%s}" ), aText->Mid( 1 ).Trim() );
 
         return true;
     }
 
+    /*
+    if( aToken->IsSameAs( wxT( "ISSUE_DATE" ) ) )
+    {
+        *aToken = GetDate();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "CURRENT_DATE" ) ) )
+    {
+        *aToken = GetCurrentDate();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "CURRENT_TIME_HH_MM_SS" ) ) )
+    {
+        *aToken = GetCurrentTimeHHMMSS();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "CURRENT_TIME_LOCALE" ) ) )
+    {
+        *aToken = GetCurrentTimeLocale();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "REVISION" ) ) )
+    {
+        *aToken = GetRevision();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "TITLE" ) ) )
+    {
+        *aToken = GetTitle();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "COMPANY" ) ) )
+    {
+        *aToken = GetCompany();
+        tokenUpdated = true;
+    }
+*/
     return false;
 }
 

@@ -2565,7 +2565,7 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol, std::un
         if( libtext->GetText() == wxT( "${REFERENCE}" ) )
         {
             // Move text & attributes to Reference field and discard LIB_TEXT item
-            loadFieldAttributes( &aSymbol->GetReferenceField(), libtext.get() );
+            aSymbol->GetReferenceField().EDA_TEXT::operator=( *libtext );
 
             // Show Reference field if Eagle reference was uppercase
             showRefDes = etext->text == wxT( ">NAME" );
@@ -2573,7 +2573,7 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol, std::un
         else if( libtext->GetText() == wxT( "${VALUE}" ) )
         {
             // Move text & attributes to Value field and discard LIB_TEXT item
-            loadFieldAttributes( &aSymbol->GetValueField(), libtext.get() );
+            aSymbol->GetValueField().EDA_TEXT::operator=( *libtext );
 
             // Show Value field if Eagle reference was uppercase
             showValue = etext->text == wxT( ">VALUE" );
@@ -2588,7 +2588,7 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol, std::un
             {
                 SCH_FIELD* field = new SCH_FIELD( aSymbol.get(), FIELD_T::USER, fieldName );
 
-                loadFieldAttributes( field, libtext.get() );
+                field->EDA_TEXT::operator=( *libtext );
 
                 // Field visibility is determined by the symbol instance attributes.
                 field->SetVisible( false );
@@ -2648,7 +2648,8 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
         circle->SetStroke( STROKE_PARAMS( aCircle->width.ToSchUnits(), LINE_STYLE::SOLID ) );
     }
 
-    circle->SetUnit( aGateNumber );
+    if( aSymbol->IsMultiUnit() )
+        circle->SetUnit( aGateNumber );
 
     return circle;
 }
@@ -2678,7 +2679,8 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymb
         rectangle->SetEnd( end );
     }
 
-    rectangle->SetUnit( aGateNumber );
+    if( aSymbol->IsMultiUnit() )
+        rectangle->SetUnit( aGateNumber );
 
     // Eagle rectangles are filled and have vanishing line width by definition.
     rectangle->SetFillMode( FILL_T::FILLED_SHAPE );
@@ -2732,7 +2734,9 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
         // KiCad rotates the other way.
         arc->SetArcAngleAndEnd( -EDA_ANGLE( *aWire->curve, DEGREES_T ), true );
-        arc->SetUnit( aGateNumber );
+
+        if( aSymbol->IsMultiUnit() )
+            arc->SetUnit( aGateNumber );
 
         return arc;
     }
@@ -2742,7 +2746,10 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
         poly->AddPoint( begin );
         poly->AddPoint( end );
-        poly->SetUnit( aGateNumber );
+
+        if( aSymbol->IsMultiUnit() )
+            poly->SetUnit( aGateNumber );
+
         poly->SetStroke( STROKE_PARAMS( aWire->width.ToSchUnits(), LINE_STYLE::SOLID ) );
 
         return poly;
@@ -2792,7 +2799,9 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbo
 
     poly->SetStroke( STROKE_PARAMS( aPolygon->width.ToSchUnits(), LINE_STYLE::SOLID ) );
     poly->SetFillMode( FILL_T::FILLED_SHAPE );
-    poly->SetUnit( aGateNumber );
+
+    if( aSymbol->IsMultiUnit() )
+        poly->SetUnit( aGateNumber );
 
     return poly;
 }
@@ -2810,7 +2819,9 @@ SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     // duplicate names within a symbol. It is metadata, not visible text, so strip it
     // from the displayed name. The full Eagle name is still used to match <connect>.
     pin->SetName( extractNetName( aPin->name ) );
-    pin->SetUnit( aGateNumber );
+
+    if( aSymbol->IsMultiUnit() )
+        pin->SetUnit( aGateNumber );
 
     int roti = aPin->rot ? KiROUND( aPin->rot->degrees ) : 0;
 
@@ -2894,7 +2905,10 @@ SCH_TEXT* SCH_IO_EAGLE::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
     libtext->SetLayer( LAYER_DEVICE );
     libtext->SetParent( aSymbol.get() );
-    libtext->SetUnit( aGateNumber );
+
+    if( aSymbol->IsMultiUnit() )
+        libtext->SetUnit( aGateNumber );
+
     libtext->SetPosition( VECTOR2I( aText->x.ToSchUnits(), -aText->y.ToSchUnits() ) );
 
     const wxString&   eagleText = aText->text;
@@ -2968,23 +2982,6 @@ void SCH_IO_EAGLE::loadTextAttributes( EDA_TEXT* aText, const std::unique_ptr<ET
     bool spin    = aAttributes->rot ? aAttributes->rot->spin : false;
 
     eagleToKicadAlignment( aText, align, degrees, mirror, spin, 0 );
-}
-
-
-void SCH_IO_EAGLE::loadFieldAttributes( SCH_FIELD* aField, const SCH_TEXT* aText ) const
-{
-    wxCHECK( aField && aText, /* void */ );
-
-    aField->SetTextPos( aText->GetPosition() );
-    aField->SetTextSize( aText->GetTextSize() );
-    aField->SetTextAngle( aText->GetTextAngle() );
-
-    // Must come after SetTextSize()
-    aField->SetBold( aText->IsBold() );
-    aField->SetItalic( false );
-
-    aField->SetVertJustify( aText->GetVertJustify() );
-    aField->SetHorizJustify( aText->GetHorizJustify() );
 }
 
 

@@ -145,44 +145,33 @@ private:
     std::pair<VECTOR2I, const SEG*> findNearestLinePoint( const VECTOR2I&         aPoint,
                                                           const std::vector<SEG>& aLines ) const;
 
-    void          loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& aSegments,
-                                const wxString& aNetName,
-                                const wxString& aNetClass,
-                                bool aIsBus = false );
+    void          loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& aSegments, const wxString& aNetName,
+                                const wxString& aNetClass, bool aIsBus = false );
     SCH_SHAPE*    loadPolyLine( const std::unique_ptr<EPOLYGON>& aPolygon );
     SCH_ITEM*     loadWire( const std::unique_ptr<EWIRE>& aWire, SEG& endpoints );
     SCH_SHAPE*    loadCircle( const std::unique_ptr<ECIRCLE>& aCircle );
     SCH_SHAPE*    loadRectangle( const std::unique_ptr<ERECT>& aRect );
-    SCH_LABEL_BASE* loadLabel( const std::unique_ptr<ELABEL>& aLabel, const wxString& aNetName,
-                               bool aIsBus = false );
+    SCH_LABEL_BASE* loadLabel( const std::unique_ptr<ELABEL>& aLabel, const wxString& aNetName, bool aIsBus = false );
     SCH_JUNCTION* loadJunction( const std::unique_ptr<EJUNCTION>&  aJunction );
     SCH_TEXT*     loadPlainText( const std::unique_ptr<ETEXT>& aSchText );
     void          loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector<SCH_ITEM*>& aItems,
                              SCH_LAYER_ID aLayer = LAYER_NOTES );
 
-    bool          loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol,
-                              std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                              const std::unique_ptr<EDEVICE>& aDevice, int aGateNumber,
-                              const wxString& aGateName );
-    SCH_SHAPE*    loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                    const std::unique_ptr<ECIRCLE>& aCircle,
+    bool          loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol, std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                              const std::unique_ptr<EDEVICE>& aDevice, int aGateNumber, const wxString& aGateName );
+    SCH_SHAPE*    loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol, const std::unique_ptr<ECIRCLE>& aCircle,
                                     int aGateNumber );
-    SCH_SHAPE*    loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                       const std::unique_ptr<ERECT>& aRectangle,
+    SCH_SHAPE*    loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol, const std::unique_ptr<ERECT>& aRectangle,
                                        int aGateNumber );
-    SCH_SHAPE*    loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                      const std::unique_ptr<EPOLYGON>& aPolygon, int aGateNumber );
-    SCH_ITEM*     loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                  const std::unique_ptr<EWIRE>& aWire,
+    SCH_SHAPE*    loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol, const std::unique_ptr<EPOLYGON>& aPolygon,
+                                      int aGateNumber );
+    SCH_ITEM*     loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol, const std::unique_ptr<EWIRE>& aWire,
                                   int aGateNumber );
     SCH_PIN*      loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, const std::unique_ptr<EPIN>& aPin,
                            int aGateNumber );
-    SCH_TEXT*     loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                  const std::unique_ptr<ETEXT>& aText,
+    SCH_TEXT*     loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol, const std::unique_ptr<ETEXT>& aText,
                                   int aGateNumber );
-    void          loadTextAttributes( EDA_TEXT* aText,
-                                      const std::unique_ptr<ETEXT>& aAttributes ) const;
-    void          loadFieldAttributes( SCH_FIELD* aField, const SCH_TEXT* aText ) const;
+    void          loadTextAttributes( EDA_TEXT* aText, const std::unique_ptr<ETEXT>& aAttributes ) const;
 
     ///< Move net labels that are detached from any wire to the nearest wire
     void adjustNetLabels();

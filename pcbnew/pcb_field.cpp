@@ -49,13 +49,14 @@ PCB_FIELD::PCB_FIELD( const PCB_TEXT& aText, FIELD_T aFieldId, const wxString& a
         m_ordinal( static_cast<int>( aFieldId ) ),
         m_name( aName )
 {
-    // Copy the text properties from the PCB_TEXT
-    SetText( aText.GetText() );
-    SetVisible( aText.IsVisible() );
-    SetLayer( aText.GetLayer() );
-    SetPosition( aText.GetPosition() );
-    SetAttributes( aText.GetAttributes() );
-    SetUnresolvedFontName( aText.GetUnresolvedFontName() );
+    EDA_TEXT::operator=( aText );
+}
+
+
+PCB_FIELD::PCB_FIELD( const PCB_FIELD& aField ):
+        PCB_TEXT( aField.GetParent(), PCB_FIELD_T )
+{
+    *this = aField;
 }
 
 
