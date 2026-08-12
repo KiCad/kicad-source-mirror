@@ -1746,7 +1746,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         m_mouseTrailTracer.Clear();
         m_mouseTrailTracer.SetTolerance( m_head.Width() );
         m_mouseTrailTracer.AddTrailPoint( m_currentStart );
-        m_mouseTrailTracer.SetDefaultDirections( lastSegDir, DIRECTION_45::UNDEFINED );
+        m_mouseTrailTracer.SetDefaultDirections( lastSegDir, lastSegDir );
 
         m_placementCorrect = true;
     }
