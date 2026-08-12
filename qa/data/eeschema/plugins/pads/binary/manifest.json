@@ -224,6 +224,20 @@
         "save_reopen_persistence"
       ],
       "provenance": "Created from fixture-owned SVG artwork exported as BMP3 and WMF, then inserted through Edit > Insert New Object in PADS Logic VX.2.4. PADS renders the BMP as a Paintbrush Picture. The guest has no registered WMF presentation server, so PADS preserves the WMF as a package/icon rather than claiming a rendered metafile. Native v13 save, close/reopen, and all-section Logic 9.0 export were completed through vncdo. No third-party design content"
+    },
+    {
+      "binary": "visibility_options.sch",
+      "ascii": "visibility_options.txt",
+      "binary_sha256": "b20f7f26a2a108c98cb493e95d6cb10c92543e101bceb1379a3577446c28e259",
+      "ascii_sha256": "ad1ddf80b096b603b4ff9d68431825e88423f3fc22824024b0f8c8b75fc6f73e",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "placement_visibility_flags_0_through_31",
+        "free_text_underline_font_style",
+        "font_substitution_normalization",
+        "native_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained 32 uniquely referenced placements with item-visibility flags 0 through 31. A free-text Underline Verdana request retained font style bit 4. PADS substituted unavailable combined underline fonts with Arial variants; the fixture records that vendor normalization rather than claiming those source fonts survived. No third-party design content"
     }
   ]
 }
