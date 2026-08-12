@@ -939,6 +939,7 @@ types:
     seq:
       - id: style_flags
         type: u4
+        doc: Logic 9 native save/re-export proves bit 0 italic, bit 1 bold, and bit 2 underline.
       - id: family
         type: strz
         size: 32
@@ -1039,7 +1040,7 @@ types:
         contents: [0]
       - id: item_visibility_flags
         type: u1
-        doc: Logic 9 paired placements prove bit 1 hides PART-TYPE, bit 3 hides pin names, and bit 4 hides pin numbers; bit 0 hides REF-DES.
+        doc: Logic 9 paired placements prove bit 0 hides REF-DES, bit 1 hides PART-TYPE, bit 3 hides pin names, and bit 4 hides pin numbers. Controlled native records retain all values 0 through 31; bit 2 has no observed presentation effect and remains preserved only.
 
   placed_pin_controller:
     params:

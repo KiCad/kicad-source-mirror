@@ -748,6 +748,7 @@ namespace
         SOURCE_STRING name = decodeFixedString( aBytes, fontOffset + 4, 32, nameSource, aDiagnostics );
         aPresentation.bold = ( style & 2 ) != 0;
         aPresentation.italic = ( style & 1 ) != 0;
+        aPresentation.underline = ( style & 4 ) != 0;
         aPresentation.font = name;
 
         if( aPresentation.bold )
@@ -759,10 +760,10 @@ namespace
         aPresentation.properties.push_back(
                 sourceProperty( wxS( "font_handle" ), wxString::Format( wxS( "%d" ), aHandle ), fontSource ) );
 
-        if( ( style & ~uint32_t{ 3 } ) != 0 )
+        if( ( style & ~uint32_t{ 7 } ) != 0 )
         {
             SOURCE_PROPERTY property = sourceProperty( wxS( "unsupported_font_style_flags" ),
-                                                       wxString::Format( wxS( "%u" ), style & ~3U ), fontSource );
+                                                       wxString::Format( wxS( "%u" ), style & ~7U ), fontSource );
             property.disposition = PROPERTY_DISPOSITION::UNSUPPORTED;
             aDiagnostics.push_back( MakePropertyDiagnostic(
                     RPT_SEVERITY_WARNING, property, wxS( "unsupported placement font style flags preserved" ) ) );

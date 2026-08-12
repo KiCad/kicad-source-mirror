@@ -1758,6 +1758,42 @@ BOOST_AUTO_TEST_CASE( TextOptionMatrix )
 }
 
 
+BOOST_AUTO_TEST_CASE( VisibilityAndUnderlineOptionMatrix )
+{
+    PADS_SCH_MODEL model = PADS_SCH_BINARY_PARSER().Parse( loadBinaryFixture( "visibility_options.sch" ),
+                                                           wxS( "visibility_options.sch" ) );
+
+    auto underlined = std::ranges::find( model.texts, wxS( "STYLE_UNDERLINE" ),
+                                        []( const MODEL_TEXT& aText )
+                                        {
+                                            return aText.text.text;
+                                        } );
+    BOOST_REQUIRE( underlined != model.texts.end() );
+    BOOST_CHECK( underlined->presentation.underline );
+    BOOST_CHECK( !underlined->presentation.bold );
+    BOOST_CHECK( !underlined->presentation.italic );
+    BOOST_CHECK_EQUAL( underlined->presentation.font.text, wxS( "Verdana" ) );
+
+    BOOST_REQUIRE_EQUAL( model.placements.size(), 32 );
+
+    for( uint8_t flags = 0; flags < 32; ++flags )
+    {
+        const wxString reference = wxString::Format( wxS( "R%u" ), flags + 1 );
+        auto placement = std::ranges::find( model.placements, reference,
+                                            []( const MODEL_PLACEMENT& aPlacement )
+                                            {
+                                                return aPlacement.reference.text;
+                                            } );
+        BOOST_REQUIRE_MESSAGE( placement != model.placements.end(), reference );
+        BOOST_CHECK_EQUAL( placement->itemVisibilityFlags, flags );
+        BOOST_CHECK_EQUAL( placement->referenceVisible, ( flags & 0x01 ) == 0 );
+        BOOST_CHECK_EQUAL( placement->partTypeVisible, ( flags & 0x02 ) == 0 );
+        BOOST_CHECK_EQUAL( placement->pinNamesVisible, ( flags & 0x08 ) == 0 );
+        BOOST_CHECK_EQUAL( placement->pinNumbersVisible, ( flags & 0x10 ) == 0 );
+    }
+}
+
+
 BOOST_AUTO_TEST_CASE( TextEncodingWarnings )
 {
     SOURCE_PROVENANCE              source{ wxS( "text_encoding.sch" ), 0x000D, wxS( "free text" ), 2, 0, 0x6250, 2, 0 };
