@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <fmt/format.h>
 #include <wx/filename.h>
 #include <wx/string.h>
 #include <wx/tokenzr.h>
@@ -754,7 +755,7 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
     {
         m_schematic->AddVariant( name );
 
-        if( variantDef->current && *variantDef->current )
+        if( variantDef->current.value_or( false ) )
             m_schematic->SetCurrentVariant( name );
     }
 
@@ -1195,22 +1196,19 @@ void SCH_IO_EAGLE::loadModuleInstance( const std::unique_ptr<EMODULEINST>& aModu
 
         LABEL_FLAG_SHAPE pinType = LABEL_FLAG_SHAPE::L_UNSPECIFIED;
 
-        if( port->direction )
+        if( port->direction.has_value() )
         {
-            if( *port->direction == "in" )
+            if( port->direction.value() == "in" )
                 pinType = LABEL_FLAG_SHAPE::L_INPUT;
-            else if( *port->direction == "out" )
+            else if( port->direction.value() == "out" )
                 pinType = LABEL_FLAG_SHAPE::L_OUTPUT;
-            else if( *port->direction == "io" )
+            else if( port->direction.value() == "io" )
                 pinType = LABEL_FLAG_SHAPE::L_BIDI;
-            else if( *port->direction == "hiz" )
+            else if( port->direction.value() == "hiz" )
                 pinType = LABEL_FLAG_SHAPE::L_TRISTATE;
-            else
-                pinType = LABEL_FLAG_SHAPE::L_UNSPECIFIED;
 
-            // KiCad does not support passive, power, open collector, or no-connect sheet
-            // pins that Eagle ports support.  They are set to unspecified to minimize
-            // ERC issues.
+            // KiCad does not support passive, power, open collector, or no-connect sheet pins that
+            // Eagle ports support.  They are left set to L_UNSPECIFIED to minimize ERC issues.
         }
 
         SCH_SHEET_PIN* sheetPin = new SCH_SHEET_PIN( newSheet.get(), VECTOR2I( 0, 0 ), portName );
@@ -1401,7 +1399,7 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
             aItems.push_back( lines );
         }
 
-        char legendChar = '1';
+        int legendNo = 1;
 
         for( i = 0; i < aFrame->columns; i++ )
         {
@@ -1410,10 +1408,9 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
             legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
             legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
             legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-            legendText->SetText( wxString( legendChar ) );
+            legendText->SetText( fmt::format( "{}", legendNo++ ) );
             legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ), schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
-            legendChar++;
             legendPosX += columnSpacing;
         }
     }
@@ -1442,7 +1439,7 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
             aItems.push_back( lines );
         }
 
-        char legendChar = '1';
+        int legendNo = 1;
 
         for( i = 0; i < aFrame->columns; i++ )
         {
@@ -1451,10 +1448,9 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame, std::vector
             legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
             legendText->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
             legendText->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-            legendText->SetText( wxString( legendChar ) );
+            legendText->SetText( fmt::format( "{}", legendNo++ ) );
             legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ), schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
-            legendChar++;
             legendPosX += columnSpacing;
         }
     }
@@ -1599,16 +1595,16 @@ SCH_SHAPE* SCH_IO_EAGLE::loadPolyLine( const std::unique_ptr<EPOLYGON>& aPolygon
 
     std::unique_ptr<SCH_SHAPE> poly = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY );
     VECTOR2I   pt, prev_pt;
-    opt_double prev_curve;
+    std::optional<double> prev_curve;
 
     for( const std::unique_ptr<EVERTEX>& evertex : aPolygon->vertices )
     {
         pt = VECTOR2I( evertex->x.ToSchUnits(), -evertex->y.ToSchUnits() );
 
-        if( prev_curve )
+        if( prev_curve.has_value() )
         {
             SHAPE_ARC arc;
-            arc.ConstructFromStartEndAngle( prev_pt, pt, -EDA_ANGLE( *prev_curve, DEGREES_T ) );
+            arc.ConstructFromStartEndAngle( prev_pt, pt, -EDA_ANGLE( prev_curve.value(), DEGREES_T ) );
             poly->GetPolyShape().Append( arc, -1, -1, ARC_ACCURACY );
         }
         else
@@ -1696,14 +1692,14 @@ SCH_SHAPE* SCH_IO_EAGLE::loadRectangle( const std::unique_ptr<ERECT>& aRectangle
     rectangle->SetPosition( VECTOR2I( aRectangle->x1.ToSchUnits(), -aRectangle->y1.ToSchUnits() ) );
     rectangle->SetEnd( VECTOR2I( aRectangle->x2.ToSchUnits(), -aRectangle->y2.ToSchUnits() ) );
 
-    if( aRectangle->rot )
+    if( aRectangle->rot.has_value() )
     {
         VECTOR2I pos( rectangle->GetPosition() );
         VECTOR2I end( rectangle->GetEnd() );
         VECTOR2I center( rectangle->GetCenter() );
 
-        RotatePoint( pos, center, EDA_ANGLE( aRectangle->rot->degrees, DEGREES_T ) );
-        RotatePoint( end,  center, EDA_ANGLE( aRectangle->rot->degrees, DEGREES_T ) );
+        RotatePoint( pos, center, EDA_ANGLE( aRectangle->rot.value().degrees, DEGREES_T ) );
+        RotatePoint( end, center, EDA_ANGLE( aRectangle->rot.value().degrees, DEGREES_T ) );
 
         rectangle->SetPosition( pos );
         rectangle->SetEnd( end );
@@ -1756,28 +1752,21 @@ SCH_LABEL_BASE* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
     if( port )
     {
         std::unique_ptr<SCH_HIERLABEL> hierLabel = std::make_unique<SCH_HIERLABEL>();
+        LABEL_SHAPE                    type = LABEL_SHAPE::LABEL_PASSIVE;
 
-        if( port->direction )
+        if( port->direction.has_value() )
         {
-            wxString direction = *port->direction;
-            LABEL_SHAPE type;
-
-            if( direction == "in" )
+            if( port->direction.value() == "in" )
                 type = LABEL_SHAPE::LABEL_INPUT;
-            else if( direction == "out" )
+            else if( port->direction.value() == "out" )
                 type = LABEL_SHAPE::LABEL_OUTPUT;
-            else if( direction == "io" )
+            else if( port->direction.value() == "io" )
                 type = LABEL_SHAPE::LABEL_BIDI;
-            else if( direction == "hiz" )
+            else if( port->direction.value() == "hiz" )
                 type = LABEL_SHAPE::LABEL_TRISTATE;
-            else
-                type = LABEL_SHAPE::LABEL_PASSIVE;
-
-            // KiCad does not support passive, power, open collector, or no-connect sheet
-            // pins that Eagle ports support.  They are set to unspecified to minimize
-            // ERC issues.
-            hierLabel->SetLabelShape( type );
         }
+
+        hierLabel->SetLabelShape( type );
 
         label = std::move( hierLabel );
     }
@@ -1795,17 +1784,17 @@ SCH_LABEL_BASE* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
     label->SetTextSize( textSize );
     label->SetSpinStyle( SPIN_STYLE::RIGHT );
 
-    if( aLabel->rot )
+    if( aLabel->rot.has_value() )
     {
         // According to the Eagle DTD, labels can only be rotated in 90 degree increments.
-        int angle = KiROUND( aLabel->rot->degrees );
+        int angle = KiROUND( aLabel->rot.value().degrees );
 
         switch( angle )
         {
-        case 90:  label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::BOTTOM : SPIN_STYLE::UP );     break;
-        case 180: label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::RIGHT  : SPIN_STYLE::LEFT );   break;
-        case 270: label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::UP     : SPIN_STYLE::BOTTOM ); break;
-        default:  label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::LEFT   : SPIN_STYLE::RIGHT );  break;
+        case 90:  label->SetSpinStyle( aLabel->rot.value().mirror ? SPIN_STYLE::BOTTOM : SPIN_STYLE::UP );     break;
+        case 180: label->SetSpinStyle( aLabel->rot.value().mirror ? SPIN_STYLE::RIGHT  : SPIN_STYLE::LEFT );   break;
+        case 270: label->SetSpinStyle( aLabel->rot.value().mirror ? SPIN_STYLE::UP     : SPIN_STYLE::BOTTOM ); break;
+        default:  label->SetSpinStyle( aLabel->rot.value().mirror ? SPIN_STYLE::LEFT   : SPIN_STYLE::RIGHT );  break;
         }
     }
 
@@ -1868,15 +1857,15 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     wxString libName = epart->library;
 
     // Correctly handle versioned libraries.
-    if( epart->libraryUrn )
-        libName += wxS( "_" ) + epart->libraryUrn->assetId;
+    if( epart->libraryUrn.has_value() )
+        libName += wxS( "_" ) + epart->libraryUrn.value().assetId;
 
     wxString gatename    = epart->deviceset + wxS( "_" ) + epart->device + wxS( "_" ) + aInstance->gate;
     wxString symbolname  = wxString( epart->deviceset + epart->device );
     wxString kiPackageName = epart->deviceset + epart->device;
 
-    if( epart->technology )
-        symbolname += *epart->technology;
+    if( epart->technology.has_value() )
+        symbolname += epart->technology.value();
 
     symbolname.Replace( wxT( "*" ), wxEmptyString );
     kiPackageName.Replace( wxT( "*" ), wxEmptyString );
@@ -1965,11 +1954,11 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         symbol->GetField( FIELD_T::FOOTPRINT )->SetText( footprint );
     }
 
-    if( aInstance->rot )
+    if( aInstance->rot.has_value() )
     {
-        symbol->SetOrientation( kiCadComponentRotation( aInstance->rot->degrees ) );
+        symbol->SetOrientation( kiCadComponentRotation( aInstance->rot.value().degrees ) );
 
-        if( aInstance->rot->mirror )
+        if( aInstance->rot.value().mirror )
             symbol->MirrorHorizontally( aInstance->x.ToSchUnits() );
     }
 
@@ -2041,9 +2030,9 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         getEagleSymbolFieldAttributes( aInstance, wxS( ">VALUE" ), valueField );
     }
 
-    if( epart->value && !epart->value.CGet().IsEmpty() )
+    if( epart->value.has_value() && !epart->value.value().IsEmpty() )
     {
-        valueField->SetText( *epart->value );
+        valueField->SetText( epart->value.value() );
     }
     else
     {
@@ -2062,10 +2051,11 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         if( !symbol->GetFields().empty() )
             newField.SetTextPos( symbol->GetFields().back().GetPosition() );
 
-        if( attr->value )
-            newField.SetText( *attr->value );
+        if( attr->value.has_value() )
+            newField.SetText( attr->value.value() );
 
-        newField.SetVisible( ( attr->display != (int) EATTR::Off ) );
+        if( attr->display.has_value() && attr->display.value() == EATTR::Off )
+            newField.SetVisible( false );
 
         symbol->AddField( newField );
     }
@@ -2098,22 +2088,24 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
             field->SetVisible( true );
             field->SetPosition( VECTOR2I( eattr->x->ToSchUnits(), -eattr->y->ToSchUnits() ) );
 
-            if( eattr->size )
-                field->SetTextSize( ConvertEagleTextSize( eattr->font, eattr->size.Get() ) );
+            if( eattr->size.has_value() )
+                field->SetTextSize( ConvertEagleTextSize( eattr->font, eattr->size.value() ) );
 
-            int  align      = eattr->align ? *eattr->align : ETEXT::BOTTOM_LEFT;
-            int  absdegrees = eattr->rot ? KiROUND( eattr->rot->degrees ) : 0;
-            bool mirror     = eattr->rot ? eattr->rot->mirror : false;
+            int  align      = eattr->align.value_or( ETEXT::BOTTOM_LEFT );
+            int  absdegrees = eattr->rot.has_value() ? KiROUND( eattr->rot.value().degrees ) : 0;
+            bool mirror     = eattr->rot.has_value() ? eattr->rot.value().mirror : false;
+            bool spin       = eattr->rot.has_value() ? eattr->rot.value().spin : false;
 
-            if( aInstance->rot && aInstance->rot->mirror )
+            if( aInstance->rot.has_value() && aInstance->rot.value().mirror )
                 mirror = !mirror;
 
-            bool spin = eattr->rot ? eattr->rot->spin : false;
-
-            if( eattr->display == (int) EATTR::Off || eattr->display == (int) EATTR::NAME )
+            if( eattr->display.has_value() && (    eattr->display.value() == EATTR::Off
+                                                || eattr->display.value() == EATTR::NAME ) )
+            {
                 field->SetVisible( false );
+            }
 
-            int rotation   = aInstance->rot ? KiROUND( aInstance->rot->degrees ) : 0;
+            int rotation   = aInstance->rot.has_value() ? KiROUND( aInstance->rot.value().degrees ) : 0;
             int reldegrees = KiROUND( absdegrees - rotation + 360.0 );
             reldegrees %= 360;
 
@@ -2122,7 +2114,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     }
 
     // Use the instance attribute to determine the reference and value field visibility.
-    if( aInstance->smashed && aInstance->smashed.Get() )
+    if( aInstance->smashed.has_value() && aInstance->smashed.value() )
     {
         symbol->GetField( FIELD_T::VALUE )->SetVisible( valueAttributeFound );
         symbol->GetField( FIELD_T::REFERENCE )->SetVisible( nameAttributeFound );
@@ -2153,13 +2145,13 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     {
         SCH_SYMBOL_VARIANT symbolVariant( name );
 
-        if( variant->populate && !*variant->populate )
+        if( variant->populate.has_value() && variant->populate.value() == false )
             symbolVariant.m_DNP = true;
 
         if( variant->value )
             symbolVariant.m_Fields[GetCanonicalFieldName( FIELD_T::VALUE )] = *variant->value;
 
-        if( variant->technology )
+        if( variant->technology.has_value() )
         {
             auto eLibIt = m_eagleDoc->drawing->schematic->libraries.find( epart->library );
 
@@ -2190,13 +2182,13 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
                 continue;
             }
 
-            auto eTechnologyIt = eDeviceIt->second->technologies.find( *variant->technology );
+            auto eTechnologyIt = eDeviceIt->second->technologies.find( variant->technology.value() );
 
             if( eTechnologyIt == eDeviceIt->second->technologies.end() )
             {
                 Report( wxString::Format( wxS( "Technology '%s' not found in device '%s'  in device set '%s' "
                                                "in library '%s'." ),
-                                          *variant->technology,
+                                          variant->technology.value(),
                                           epart->device,
                                           epart->deviceset,
                                           epart->library ) );
@@ -2207,8 +2199,8 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
             {
                 wxString attrValue;
 
-                if( attr->value )
-                    attrValue = *attr->value;
+                if( attr->value.has_value() )
+                    attrValue = attr->value.value();
 
                 symbolVariant.m_Fields[attr->name] = attrValue;
             }
@@ -2238,7 +2230,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
     for( const auto& [name, edeviceset] : aLibrary->devicesets )
     {
         // Get Device set information
-        wxString prefix = edeviceset->prefix ? edeviceset->prefix.Get() : wxString( wxT( "" ) );
+        wxString prefix = edeviceset->prefix.value_or( wxEmptyString );
         wxString deviceSetDescr;
 
         if( edeviceset->description )
@@ -2255,8 +2247,8 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
             wxASSERT( !symbolName.IsEmpty() );
             symbolName = EscapeString( symbolName, CTX_LIBID );
 
-            if( edevice->package )
-                aEagleLibrary->package[symbolName] = edevice->package.Get();
+            if( edevice->package.has_value() )
+                aEagleLibrary->package[symbolName] = edevice->package.value();
 
             // Create KiCad symbol.
             std::unique_ptr<LIB_SYMBOL> libSymbol = std::make_unique<LIB_SYMBOL>( symbolName );
@@ -2279,7 +2271,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
             {
                 // If there is no footprint assigned, then prepend the reference value
                 // with a hash character to mute netlist updater complaints
-                reference->SetText( edevice->package ? prefix : '#' + prefix );
+                reference->SetText( edevice->package.has_value() ? prefix : '#' + prefix );
             }
 
             libSymbol->GetValueField().SetVisible( true );
@@ -2335,7 +2327,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
 
                 for( const std::unique_ptr<EATTR>& attr : technology->attributes )
                 {
-                    if( !attr->value )
+                    if( !attr->value.has_value() )
                         continue;
 
                     SCH_FIELD* field = nullptr;
@@ -2347,7 +2339,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
 
                     if( field )
                     {
-                        field->SetText( *attr->value );
+                        field->SetText( attr->value.value() );
                     }
                     else
                     {
@@ -2363,7 +2355,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                         }
 
                         nextFieldPosition.y += newField->GetTextHeight() + schIUScale.MilsToIU( 10 );
-                        newField->SetText( *attr->value );
+                        newField->SetText( attr->value.value() );
                         newField->SetVisible( false );
                         newField->SetPosition( nextFieldPosition );
                         newField->SetCanAutoplace( canAutoplace );
@@ -2386,7 +2378,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 libSymbol->SetGlobalPower();
 
             // Don't set the footprint field if no package is defined in the Eagle schematic.
-            if( edevice->package )
+            if( edevice->package.has_value() && !edevice->package.value().IsEmpty() )
             {
                 wxString libName;
 
@@ -2456,11 +2448,11 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
 
             // Store information on whether the value of FIELD_T::VALUE for a part should be
             // part/@value or part/@deviceset + part/@device.
-            m_userValue.emplace( std::make_pair( libName, edeviceset->uservalue == true ) );
+            m_userValue.emplace( std::make_pair( libName, edeviceset->uservalue.value_or( false ) ) );
 
             for( std::unique_ptr<LIB_SYMBOL>& symbol : derivedSymbols )
             {
-                m_userValue.emplace( std::make_pair( symbol->GetName(), edeviceset->uservalue == true ) );
+                m_userValue.emplace( std::make_pair( symbol->GetName(), edeviceset->uservalue.value_or( false ) ) );
                 aEagleLibrary->KiCadSymbols[symbol->GetName()] = std::move( symbol );
             }
         }
@@ -2492,11 +2484,11 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol, std::un
 
         pin->SetType( ELECTRICAL_PINTYPE::PT_BIDI );
 
-        if( epin->direction )
+        if( epin->direction.has_value() )
         {
             for( const auto& pinDir : pinDirectionsMap )
             {
-                if( epin->direction->Lower() == pinDir.first )
+                if( epin->direction.value().Lower() == pinDir.first )
                 {
                     pin->SetType( pinDir.second );
 
@@ -2506,7 +2498,6 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol, std::un
                     break;
                 }
             }
-
         }
 
         if( aDevice->connects.size() != 0 )
@@ -2666,14 +2657,14 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymb
     rectangle->SetPosition( VECTOR2I( aRectangle->x1.ToSchUnits(), -aRectangle->y1.ToSchUnits() ) );
     rectangle->SetEnd( VECTOR2I( aRectangle->x2.ToSchUnits(), -aRectangle->y2.ToSchUnits() ) );
 
-    if( aRectangle->rot )
+    if( aRectangle->rot.has_value() )
     {
         VECTOR2I pos( rectangle->GetPosition() );
         VECTOR2I end( rectangle->GetEnd() );
         VECTOR2I center( rectangle->GetCenter() );
 
-        RotatePoint( pos, center, EDA_ANGLE( aRectangle->rot->degrees, DEGREES_T ) );
-        RotatePoint( end,  center, EDA_ANGLE( aRectangle->rot->degrees, DEGREES_T ) );
+        RotatePoint( pos, center, EDA_ANGLE( aRectangle->rot.value().degrees, DEGREES_T ) );
+        RotatePoint( end, center, EDA_ANGLE( aRectangle->rot.value().degrees, DEGREES_T ) );
 
         rectangle->SetPosition( pos );
         rectangle->SetEnd( end );
@@ -2716,7 +2707,7 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
         arc->SetParent( aSymbol.get() );
 
         // this emulates the filled semicircles created by a thick arc with flat ends caps.
-        if( aWire->cap == (int) EWIRE::FLAT && aWire->width.ToSchUnits() >= 2 * radius )
+        if( aWire->cap.has_value() && aWire->cap.value() == EWIRE::FLAT && aWire->width.ToSchUnits() >= 2 * radius )
         {
             VECTOR2I centerStartVector = ( begin - center ) * ( aWire->width.ToSchUnits() / radius );
             begin = center + centerStartVector;
@@ -2765,9 +2756,10 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbo
     if( !aPolygon->IsValidOutline() )
         return nullptr;
 
-    SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
-    VECTOR2I   pt, prev_pt;
-    opt_double prev_curve;
+    SCH_SHAPE*              poly = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
+    VECTOR2I                pt;
+    VECTOR2I                prev_pt;
+    std::optional<double>   prev_curve;
     std::optional<VECTOR2I> first_pt;
 
     poly->SetParent( aSymbol.get() );
@@ -2779,10 +2771,10 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbo
         if( !first_pt.has_value() )
             first_pt = pt;
 
-        if( prev_curve )
+        if( prev_curve.has_value() )
         {
             SHAPE_ARC arc;
-            arc.ConstructFromStartEndAngle( prev_pt, pt, -EDA_ANGLE( *prev_curve, DEGREES_T ) );
+            arc.ConstructFromStartEndAngle( prev_pt, pt, -EDA_ANGLE( prev_curve.value(), DEGREES_T ) );
             poly->GetPolyShape().Append( arc, -1, -1, ARC_ACCURACY );
         }
         else
@@ -2823,7 +2815,7 @@ SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     if( aSymbol->IsMultiUnit() )
         pin->SetUnit( aGateNumber );
 
-    int roti = aPin->rot ? KiROUND( aPin->rot->degrees ) : 0;
+    int roti = aPin->rot.has_value() ? KiROUND( aPin->rot.value().degrees ) : 0;
 
     switch( roti )
     {
@@ -2836,17 +2828,15 @@ SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
     pin->SetLength( schIUScale.MilsToIU( 300 ) );  // Default pin length when not defined.
 
-    if( aPin->length )
+    if( aPin->length.has_value() )
     {
-        wxString length = aPin->length.Get();
-
-        if( length == wxT( "short" ) )
+        if( aPin->length.value() == wxT( "short" ) )
             pin->SetLength( schIUScale.MilsToIU( 100 ) );
-        else if( length == wxT( "middle" ) )
+        else if( aPin->length.value() == wxT( "middle" ) )
             pin->SetLength( schIUScale.MilsToIU( 200 ) );
-        else if( length == wxT( "long" ) )
+        else if( aPin->length.value() == wxT( "long" ) )
             pin->SetLength( schIUScale.MilsToIU( 300 ) );
-        else if( length == wxT( "point" ) )
+        else if( aPin->length.value() == wxT( "point" ) )
             pin->SetLength( schIUScale.MilsToIU( 0 ) );
     }
 
@@ -2855,20 +2845,18 @@ SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     pin->SetNameTextSize( schIUScale.MilsToIU( 60 ) );
 
     // emulate the visibility of pin elements
-    if( aPin->visible )
+    if( aPin->visible.has_value() )
     {
-        wxString visible = aPin->visible.Get();
-
-        if( visible == wxT( "off" ) )
+        if( aPin->visible.value() == wxT( "off" ) )
         {
             pin->SetNameTextSize( 0 );
             pin->SetNumberTextSize( 0 );
         }
-        else if( visible == wxT( "pad" ) )
+        else if( aPin->visible.value() == wxT( "pad" ) )
         {
             pin->SetNameTextSize( 0 );
         }
-        else if( visible == wxT( "pin" ) )
+        else if( aPin->visible.value() == wxT( "pin" ) )
         {
             pin->SetNumberTextSize( 0 );
         }
@@ -2880,15 +2868,13 @@ SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
          */
     }
 
-    if( aPin->function )
+    if( aPin->function.has_value() )
     {
-        wxString function = aPin->function.Get();
-
-        if( function == wxT( "dot" ) )
+        if( aPin->function.value() == wxT( "dot" ) )
             pin->SetShape( GRAPHIC_PINSHAPE::INVERTED );
-        else if( function == wxT( "clk" ) )
+        else if( aPin->function.value() == wxT( "clk" ) )
             pin->SetShape( GRAPHIC_PINSHAPE::CLOCK );
-        else if( function == wxT( "dotclk" ) )
+        else if( aPin->function.value() == wxT( "dotclk" ) )
             pin->SetShape( GRAPHIC_PINSHAPE::INVERTED_CLOCK );
     }
 
@@ -2973,13 +2959,13 @@ void SCH_IO_EAGLE::loadTextAttributes( EDA_TEXT* aText, const std::unique_ptr<ET
     aText->SetTextSize( aAttributes->ConvertSize() );
 
     // Must come after SetTextSize()
-    if( aAttributes->ratio && aAttributes->ratio.CGet() > 12 )
+    if( aAttributes->ratio.value_or( 8 ) > 12 )
         aText->SetBold( true );
 
-    int  align   = aAttributes->align ? *aAttributes->align : ETEXT::BOTTOM_LEFT;
-    int  degrees = aAttributes->rot ? KiROUND( aAttributes->rot->degrees ) : 0;
-    bool mirror  = aAttributes->rot ? aAttributes->rot->mirror : false;
-    bool spin    = aAttributes->rot ? aAttributes->rot->spin : false;
+    int  align   = aAttributes->align.value_or( ETEXT::BOTTOM_LEFT );
+    int  degrees = aAttributes->rot.has_value() ? KiROUND( aAttributes->rot.value().degrees ) : 0;
+    bool mirror  = aAttributes->rot.has_value() ? aAttributes->rot.value().mirror : false;
+    bool spin    = aAttributes->rot.has_value() ? aAttributes->rot.value().spin : false;
 
     eagleToKicadAlignment( aText, align, degrees, mirror, spin, 0 );
 }
@@ -3892,7 +3878,7 @@ void SCH_IO_EAGLE::getEagleSymbolFieldAttributes( const std::unique_ptr<EINSTANC
 
                 bool mirror = text->rot ? text->rot->mirror : false;
 
-                if( aInstance->rot && aInstance->rot->mirror )
+                if( aInstance->rot.has_value() && aInstance->rot.value().mirror )
                     mirror = !mirror;
 
                 if( mirror )

@@ -188,176 +188,6 @@ template <>
 wxString Convert<wxString>( const wxString& aValue );
 
 /**
- * Model an optional XML attribute.
- *
- * This was implemented as an alternative to std::optional. This class should be replaced with a
- * simple typedef per type using std::optional when C++17 is published.
- */
-template <typename T>
-class OPTIONAL_XML_ATTRIBUTE
-{
-private:
-    /// A boolean indicating if the data is present or not.
-    bool m_isAvailable;
-
-    /// The actual data if m_isAvailable is true; otherwise, garbage.
-    T m_data;
-
-public:
-    /**
-     * Construct a default OPTIONAL_XML_ATTRIBUTE, whose data is not available.
-     */
-    OPTIONAL_XML_ATTRIBUTE() :
-        m_isAvailable( false ),
-        m_data( T() )
-    {}
-
-    /**
-     * @param aData is a wxString containing the value that should be converted to type T. If
-     *              aData is empty, the attribute is understood as unavailable; otherwise, the
-     *              conversion to T is tried.
-     */
-    OPTIONAL_XML_ATTRIBUTE( const wxString& aData )
-    {
-        m_data = T();
-        m_isAvailable = !aData.IsEmpty();
-
-        if( m_isAvailable )
-            Set( aData );
-    }
-
-    /**
-     * @param aData is the value of the XML attribute. If this constructor is called, the
-     *              attribute is available.
-     */
-    template<typename V = T>
-    OPTIONAL_XML_ATTRIBUTE( T aData ) :
-        m_isAvailable( true ),
-        m_data( aData )
-    {}
-
-    /**
-     * @return bool the availability of the attribute.
-     */
-    operator bool() const
-    {
-        return m_isAvailable;
-    }
-
-    /**
-     * Assign to a string (optionally) containing the data.
-     *
-     * @param aData is a wxString that should be converted to T. If the string is empty, the
-     *              attribute is set to unavailable.
-     */
-    OPTIONAL_XML_ATTRIBUTE<T>& operator =( const wxString& aData )
-    {
-        m_isAvailable = !aData.IsEmpty();
-
-        if( m_isAvailable )
-            Set( aData );
-
-        return *this;
-    }
-
-    /**
-     * Assign to an object of the base type containing the data.
-     *
-     * @param aData is the actual value of the attribute. Calling this assignment, the attribute
-     *              is automatically made available.
-     */
-    OPTIONAL_XML_ATTRIBUTE<T>& operator =( T aData )
-    {
-        m_data = aData;
-        m_isAvailable = true;
-
-        return *this;
-    }
-
-    /**
-     * @param aOther is the object of the base type that should be compared with this one.
-     */
-    bool operator ==( const T& aOther ) const
-    {
-        return m_isAvailable && ( aOther == m_data );
-    }
-
-    /**
-     * Attempt to convert a string to the base type.
-     *
-     * @param aString is the string that will be converted to the base type.
-     */
-    void Set( const wxString& aString )
-    {
-        m_data = Convert<T>( aString );
-        m_isAvailable = !aString.IsEmpty();
-    }
-
-    /**
-     * Return a reference to the value of the attribute assuming it is available.
-     *
-     * @return T& - the value of the attribute.
-     */
-    T& Get()
-    {
-        assert( m_isAvailable );
-        return m_data;
-    }
-
-    /**
-     * Return a constant reference to the value of the attribute assuming it is available.
-     *
-     * @return const T& - the value of the attribute.
-     */
-    const T& CGet() const
-    {
-        assert( m_isAvailable );
-        return m_data;
-    }
-
-    /**
-     * Return a reference to the value of the attribute assuming it is available.
-     *
-     * @return T& - the value of the attribute.
-     */
-    T& operator*()
-    {
-        return Get();
-    }
-
-    /**
-     * Return a constant reference to the value of the attribute assuming it is available.
-     *
-     * @return const T& - the value of the attribute.
-     */
-    const T& operator*() const
-    {
-        return CGet();
-    }
-
-    /**
-     * Return a pointer to the value of the attribute assuming it is available.
-     *
-     * @return T* - the value of the attribute.
-     */
-    T* operator->()
-    {
-        return &Get();
-    }
-
-    /**
-     * Return a constant pointer to the value of the attribute assuming it is available.
-     *
-     * @return const T* - the value of the attribute.
-     */
-    const T* operator->() const
-    {
-        return &CGet();
-    }
-};
-
-
-/**
  * Fetch the number of XML nodes within \a aNode.
  *
  * @param aNode is the parent node of the children to count.
@@ -384,16 +214,8 @@ struct EROT;
 struct ECOORD;
 struct EURN;
 
-typedef OPTIONAL_XML_ATTRIBUTE<wxString> opt_wxString;
-typedef OPTIONAL_XML_ATTRIBUTE<int>      opt_int;
-typedef OPTIONAL_XML_ATTRIBUTE<double>   opt_double;
-typedef OPTIONAL_XML_ATTRIBUTE<bool>     opt_bool;
-typedef OPTIONAL_XML_ATTRIBUTE<EROT>     opt_erot;
-typedef OPTIONAL_XML_ATTRIBUTE<ECOORD>   opt_ecoord;
-typedef OPTIONAL_XML_ATTRIBUTE<EURN>     opt_eurn;
-
 /// Converts Eagle's text size to KiCad text size depending on the font used.
-VECTOR2I ConvertEagleTextSize( const opt_wxString& font, const ECOORD& size );
+VECTOR2I ConvertEagleTextSize( const std::optional<wxString>& font, const ECOORD& size );
 
 struct EAGLE_BASE
 {
@@ -472,7 +294,7 @@ struct EDESCRIPTION : public EAGLE_BASE
      */
 
     wxString text;
-    opt_wxString language;
+    std::optional<wxString> language;
 
     EDESCRIPTION( wxXmlNode* aDescription, IO_BASE* aIo = nullptr );
 };
@@ -611,9 +433,9 @@ struct EVERTEX : public EAGLE_BASE
      *           >
      *           <!-- curve: The curvature from this vertex to the next one -->
      */
-    ECOORD      x;
-    ECOORD      y;
-    opt_double  curve;      ///< range is -359.9..359.9
+    ECOORD                 x;
+    ECOORD                 y;
+    std::optional<double>  curve;      ///< range is -359.9..359.9
 
     EVERTEX( wxXmlNode* aVertex, IO_BASE* aIo = nullptr );
 };
@@ -653,15 +475,15 @@ struct EWIRE : public EAGLE_BASE
            SHORTDASH,
            DASHDOT };
 
-    opt_wxString extent;
-    opt_int      style;
-    opt_double   curve; ///< range is -359.9..359.9
+    std::optional<wxString> extent;
+    std::optional<int>      style;
+    std::optional<double>   curve; ///< range is -359.9..359.9
 
     // for cap: (flat | round)
     enum { FLAT,
            ROUND };
 
-    opt_int     cap;
+    std::optional<int>     cap;
 
     // TODO add grouprefs
 
@@ -709,15 +531,15 @@ struct ELABEL : public EAGLE_BASE
      *           <!-- xref: Only in <net> context -->
      */
 
-    ECOORD       x;
-    ECOORD       y;
-    ECOORD       size;
-    int          layer;
-    opt_wxString font;
-    opt_int      ratio;
-    opt_erot     rot;
-    opt_bool     xref;
-    opt_wxString align;
+    ECOORD                  x;
+    ECOORD                  y;
+    ECOORD                  size;
+    int                     layer;
+    std::optional<wxString> font;
+    std::optional<int>      ratio;
+    std::optional<EROT>     rot;
+    std::optional<bool>     xref;
+    std::optional<wxString> align;
 
     // TODO Add grouprefs
 
@@ -741,14 +563,14 @@ struct EVIA : public EAGLE_BASE
      *           grouprefs     IDREFS         #IMPLIED
      *           >
      */
-    ECOORD       x;
-    ECOORD       y;
-    int          layer_front_most;   /// < extent
-    int          layer_back_most;    /// < inclusive
-    ECOORD       drill;
-    opt_ecoord   diam;
-    opt_wxString shape;
-    opt_bool     alwaysStop;
+    ECOORD                  x;
+    ECOORD                  y;
+    int                     layer_front_most;   /// < extent
+    int                     layer_back_most;    /// < inclusive
+    ECOORD                  drill;
+    std::optional<ECOORD>   diam;
+    std::optional<wxString> shape;
+    std::optional<bool>     alwaysStop;
 
     // TODO add grouprefs
 
@@ -797,12 +619,12 @@ struct ERECT : public EAGLE_BASE
      *           grouprefs     IDREFS         #IMPLIED
      *           >
      */
-    ECOORD   x1;
-    ECOORD   y1;
-    ECOORD   x2;
-    ECOORD   y2;
-    int      layer;
-    opt_erot rot;
+    ECOORD              x1;
+    ECOORD              y1;
+    ECOORD              x2;
+    ECOORD              y2;
+    int                 layer;
+    std::optional<EROT> rot;
 
     ERECT( wxXmlNode* aRect, IO_BASE* aIo = nullptr );
 };
@@ -853,15 +675,15 @@ struct EATTR : public EAGLE_BASE
      *           <!-- display: Only in <element> or <instance> context -->
      *           <!-- constant:Only in <device> context -->
      */
-    wxString     name;
-    opt_wxString value;
-    opt_ecoord   x;
-    opt_ecoord   y;
-    opt_ecoord   size;
-    opt_int      layer;
-    opt_wxString font;
-    opt_double   ratio;
-    opt_erot     rot;
+    wxString                name;
+    std::optional<wxString> value;
+    std::optional<ECOORD>   x;
+    std::optional<ECOORD>   y;
+    std::optional<ECOORD>   size;
+    std::optional<int>      layer;
+    std::optional<wxString> font;
+    std::optional<double>   ratio;
+    std::optional<EROT>     rot;
 
     enum {  // for 'display'
         Off,
@@ -870,9 +692,9 @@ struct EATTR : public EAGLE_BASE
         BOTH,
     };
 
-    opt_bool     constant;
-    opt_int      display;
-    opt_int      align;
+    std::optional<bool>     constant;
+    std::optional<int>      display;
+    std::optional<int>      align;
 
     // TODO add groupdefs
 
@@ -907,23 +729,23 @@ struct EDIMENSION : public EAGLE_BASE
      *           grouprefs     IDREFS         #IMPLIED
      *           >
      */
-    ECOORD       x1;
-    ECOORD       y1;
-    ECOORD       x2;
-    ECOORD       y2;
-    ECOORD       x3;
-    ECOORD       y3;
-    opt_ecoord   textsize;
-    int          layer;
-    opt_wxString dimensionType;
-    opt_double   width;
-    opt_double   extwidth;
-    opt_double   extlength;
-    opt_double   extoffset;
-    opt_int      textratio;
-    opt_wxString unit;
-    opt_int      precision;
-    opt_bool     visible;
+    ECOORD                  x1;
+    ECOORD                  y1;
+    ECOORD                  x2;
+    ECOORD                  y2;
+    ECOORD                  x3;
+    ECOORD                  y3;
+    std::optional<ECOORD>   textsize;
+    int                     layer;
+    std::optional<wxString> dimensionType;
+    std::optional<double>   width;
+    std::optional<double>   extwidth;
+    std::optional<double>   extlength;
+    std::optional<double>   extoffset;
+    std::optional<int>      textratio;
+    std::optional<wxString> unit;
+    std::optional<int>      precision;
+    std::optional<bool>     visible;
 
     // TODO add grouprefs
 
@@ -949,14 +771,14 @@ struct ETEXT : public EAGLE_BASE
      *           grouprefs     IDREFS         #IMPLIED
      *           >
      */
-    wxString     text;
-    ECOORD       x;
-    ECOORD       y;
-    ECOORD       size;
-    int          layer;
-    opt_wxString font;
-    opt_double   ratio;
-    opt_erot     rot;
+    wxString                text;
+    ECOORD                  x;
+    ECOORD                  y;
+    ECOORD                  size;
+    int                     layer;
+    std::optional<wxString> font;
+    std::optional<double>   ratio;
+    std::optional<EROT>     rot;
 
     enum {          // for align
         CENTER = 0,
@@ -972,8 +794,8 @@ struct ETEXT : public EAGLE_BASE
         BOTTOM_RIGHT  = -TOP_LEFT,
     };
 
-    opt_int align;
-    opt_int distance;
+    std::optional<int> align;
+    std::optional<int> distance;
 
     // TODO add grouprefs
 
@@ -1013,10 +835,10 @@ struct EFRAME : public EAGLE_BASE
     int      columns;
     int      rows;
     int      layer;
-    opt_bool border_left;
-    opt_bool border_top;
-    opt_bool border_right;
-    opt_bool border_bottom;
+    std::optional<bool> border_left;
+    std::optional<bool> border_top;
+    std::optional<bool> border_right;
+    std::optional<bool> border_bottom;
 
     EFRAME( wxXmlNode* aFrameNode, IO_BASE* aIo = nullptr );
 };
@@ -1025,11 +847,12 @@ struct EFRAME : public EAGLE_BASE
 /// Structure holding common properties for through-hole and SMD pads
 struct EPAD_COMMON : public EAGLE_BASE
 {
-    wxString   name;
-    ECOORD     x, y;
-    opt_erot   rot;
-    opt_bool   stop;
-    opt_bool   thermals;
+    wxString            name;
+    ECOORD              x;
+    ECOORD              y;
+    std::optional<EROT> rot;
+    std::optional<bool> stop;
+    std::optional<bool> thermals;
 
     EPAD_COMMON( wxXmlNode* aPad, IO_BASE* aIo = nullptr );
 };
@@ -1053,8 +876,8 @@ struct EPAD : public EPAD_COMMON
      *           first         %Bool;         "no"
      *           >
      */
-    opt_ecoord drill;
-    opt_ecoord diameter;
+    std::optional<ECOORD> drill;
+    std::optional<ECOORD> diameter;
 
     // for shape: (square | round | octagon | long | offset)
     enum {
@@ -1066,8 +889,8 @@ struct EPAD : public EPAD_COMMON
         OFFSET,
     };
 
-    opt_int  shape;
-    opt_bool first;
+    std::optional<int>  shape;
+    std::optional<bool> first;
 
     EPAD( wxXmlNode* aPad, IO_BASE* aIo = nullptr );
 };
@@ -1092,11 +915,11 @@ struct ESMD : public EPAD_COMMON
      *           cream         %Bool;         "yes"
      *           >
      */
-    ECOORD   dx;
-    ECOORD   dy;
-    int      layer;
-    opt_int  roundness;
-    opt_bool cream;
+    ECOORD              dx;
+    ECOORD              dy;
+    int                 layer;
+    std::optional<int>  roundness;
+    std::optional<bool> cream;
 
     ESMD( wxXmlNode* aSMD, IO_BASE* aIo = nullptr );
 };
@@ -1123,12 +946,12 @@ struct EPIN : public EAGLE_BASE
     ECOORD   x;
     ECOORD   y;
 
-    opt_wxString visible;
-    opt_wxString length;
-    opt_wxString direction;
-    opt_wxString function;
-    opt_int      swaplevel;
-    opt_erot     rot;
+    std::optional<wxString> visible;
+    std::optional<wxString> length;
+    std::optional<wxString> direction;
+    std::optional<wxString> function;
+    std::optional<int>      swaplevel;
+    std::optional<EROT>     rot;
 
     EPIN( wxXmlNode* aPin, IO_BASE* aIo = nullptr );
 };
@@ -1157,9 +980,9 @@ struct EPOLYGON : public EAGLE_BASE
      *           <!-- thermals:Only in <signal> context -->
      *           <!-- rank:    1..6 in <signal> context, 0 or 7 in <package> context -->
      */
-    ECOORD     width;
-    int        layer;
-    opt_ecoord spacing;
+    ECOORD                width;
+    int                   layer;
+    std::optional<ECOORD> spacing;
 
     // KiCad priority is opposite of Eagle rank, that is:
     //  - Eagle Low rank drawn first
@@ -1174,11 +997,11 @@ struct EPOLYGON : public EAGLE_BASE
         ECUTOUT,
     };
 
-    int        pour;
-    opt_ecoord isolate;
-    opt_bool   orphans;
-    opt_bool   thermals;
-    opt_int    rank;
+    int                   pour;
+    std::optional<ECOORD> isolate;
+    std::optional<bool>   orphans;
+    std::optional<bool>   thermals;
+    std::optional<int>    rank;
 
     std::vector<std::unique_ptr<EVERTEX>> vertices;
 
@@ -1225,9 +1048,9 @@ struct EVARIANT : public EAGLE_BASE
      *           <!-- technology: Only in part context -->
      */
     wxString     name;
-    opt_bool     populate;
-    opt_wxString value;
-    opt_wxString technology;
+    std::optional<bool>     populate;
+    std::optional<wxString> value;
+    std::optional<wxString> technology;
 
     EVARIANT( wxXmlNode* aVariant, IO_BASE* aIo = nullptr );
 };
@@ -1262,9 +1085,9 @@ struct EPINMAPPING : public EAGLE_BASE
      *           >
      */
     std::vector<std::unique_ptr<EPINMAP>> pinmaps;
-    opt_bool                              isusermap;
-    opt_bool                              iddevicewide;
-    opt_wxString                          spiceprefix;
+    std::optional<bool>                   isusermap;
+    std::optional<bool>                   iddevicewide;
+    std::optional<wxString>               spiceprefix;
 
     EPINMAPPING( wxXmlNode* aPinMap, IO_BASE* aIo = nullptr );
 };
@@ -1326,19 +1149,19 @@ struct EELEMENT : public EAGLE_BASE
     std::map<wxString, std::unique_ptr<EATTR>>    attributes;
     std::map<wxString, std::unique_ptr<EVARIANT>> variants;
 
-    wxString     name;
-    wxString     library;
-    opt_eurn     library_urn;
-    wxString     package;
-    opt_wxString package3d_urn;
-    opt_wxString override_package3d_urn;
-    opt_bool     override_locally_modified;
-    wxString     value;
-    ECOORD       x;
-    ECOORD       y;
-    opt_bool     locked;
-    opt_bool     smashed;
-    opt_erot     rot;
+    wxString                name;
+    wxString                library;
+    std::optional<EURN>     library_urn;
+    wxString                package;
+    std::optional<wxString> package3d_urn;
+    std::optional<wxString> override_package3d_urn;
+    std::optional<bool>     override_locally_modified;
+    wxString                value;
+    ECOORD                  x;
+    ECOORD                  y;
+    std::optional<bool>     locked;
+    std::optional<bool>     smashed;
+    std::optional<EROT>     rot;
 
     // TODO add grouprefs
 
@@ -1359,12 +1182,12 @@ struct ELAYER : public EAGLE_BASE
      *           active        %Bool;         "yes"
      *           >
      */
-    int      number;
-    wxString name;
-    int      color;
-    int      fill;
-    opt_bool visible;
-    opt_bool active;
+    int                 number;
+    wxString            name;
+    int                 color;
+    int                 fill;
+    std::optional<bool> visible;
+    std::optional<bool> active;
 
     ELAYER( wxXmlNode* aLayer, IO_BASE* aIo = nullptr );
 };
@@ -1471,8 +1294,8 @@ struct EGATE : public EAGLE_BASE
     ECOORD  x;
     ECOORD  y;
 
-    opt_int addlevel;
-    opt_int swaplevel;
+    std::optional<int> addlevel;
+    std::optional<int> swaplevel;
 
     enum
     {
@@ -1510,17 +1333,17 @@ struct EPART : public EAGLE_BASE
     std::map<wxString, std::unique_ptr<EVARIANT>> variants;
     std::unique_ptr<ESPICE>                       spice;
 
-    wxString     name;
-    wxString     library;
-    opt_eurn     libraryUrn;
-    wxString     deviceset;
-    wxString     device;
-    opt_wxString package3d_urn;
-    opt_wxString override_package3d_urn;
-    opt_wxString override_package_urn;
-    opt_bool     override_locally_modified;
-    opt_wxString technology;
-    opt_wxString value;
+    wxString                name;
+    wxString                library;
+    std::optional<EURN>     libraryUrn;
+    wxString                deviceset;
+    wxString                device;
+    std::optional<wxString> package3d_urn;
+    std::optional<wxString> override_package3d_urn;
+    std::optional<wxString> override_package_urn;
+    std::optional<bool>     override_locally_modified;
+    std::optional<wxString> technology;
+    std::optional<wxString> value;
 
     EPART( wxXmlNode* aPart, IO_BASE* aIo = nullptr );
 };
@@ -1542,12 +1365,12 @@ struct EINSTANCE : public EAGLE_BASE
      *           <!-- rot: Only 0, 90, 180 or 270 -->
      */
 
-    wxString part;
-    wxString gate;
-    ECOORD   x;
-    ECOORD   y;
-    opt_bool smashed;
-    opt_erot rot;
+    wxString            part;
+    wxString            gate;
+    ECOORD              x;
+    ECOORD              y;
+    std::optional<bool> smashed;
+    std::optional<EROT> rot;
 
     // TODO: add grouprefs
 
@@ -1568,10 +1391,10 @@ struct ECONNECT : public EAGLE_BASE
      *         route         %ContactRoute; "all"
      *         >
      */
-    wxString     gate;
-    wxString     pin;
-    wxString     pad;
-    opt_wxString contactroute;
+    wxString                gate;
+    wxString                pin;
+    wxString                pad;
+    std::optional<wxString> contactroute;
 
     ECONNECT( wxXmlNode* aConnect, IO_BASE* aIo = nullptr );
 };
@@ -1616,8 +1439,8 @@ struct EDEVICE : public EAGLE_BASE
      *           package       %String;       #IMPLIED
      *           >
      */
-    wxString     name;
-    opt_wxString package;
+    wxString                name;
+    std::optional<wxString> package;
 
     std::vector<std::unique_ptr<ECONNECT>>           connects;
     std::vector<std::unique_ptr<EPACKAGE3DINST>>     package3dinstances;
@@ -1644,13 +1467,13 @@ struct EDEVICE_SET : public EAGLE_BASE
      *                inside boards or schematics -->
      */
 
-    wxString     name;
-    opt_eurn     urn;
-    opt_bool     locally_modified;
-    opt_wxString prefix;
-    opt_bool     uservalue;
-    opt_int      library_version;
-    opt_bool     library_locally_modified;
+    wxString                name;
+    std::optional<EURN>     urn;
+    std::optional<bool>     locally_modified;
+    std::optional<wxString> prefix;
+    std::optional<bool>     uservalue;
+    std::optional<int>      library_version;
+    std::optional<bool>     library_locally_modified;
 
     std::optional<EDESCRIPTION>                  description;
     std::map<wxString, std::unique_ptr<EGATE>>   gates;
@@ -1673,10 +1496,10 @@ struct ECLASS : public EAGLE_BASE
      *           >
      */
 
-    wxString number;
-    wxString name;
-    opt_ecoord width;
-    opt_ecoord drill;
+    wxString              number;
+    wxString              name;
+    std::optional<ECOORD> width;
+    std::optional<ECOORD> drill;
 
     std::map<wxString, ECOORD> clearanceMap;
 
@@ -1699,10 +1522,10 @@ struct EPORT : public EAGLE_BASE
      * string that defines the side of the module rectangle the port is located.  Valid values
      * are "top", "bottom", "right", and "left".
      */
-    wxString     name;
-    wxString     side;
-    ECOORD       coord;
-    opt_wxString direction;
+    wxString                name;
+    wxString                side;
+    ECOORD                  coord;
+    std::optional<wxString> direction;
 
     EPORT( wxXmlNode* aPort, IO_BASE* aIo = nullptr );
 };
@@ -1717,8 +1540,8 @@ struct EVARIANTDEF : public EAGLE_BASE
      *           current       %Bool;         "no"
      *           >
      */
-    wxString name;
-    opt_bool current;
+    wxString            name;
+    std::optional<bool> current;
 
     EVARIANTDEF( wxXmlNode* aVariantDef, IO_BASE* aIo = nullptr );
 };
@@ -1741,14 +1564,14 @@ struct ESCHEMATIC_GROUP : public EAGLE_BASE
      *           >
      */
     wxString     name;
-    opt_bool     selectable;
-    opt_ecoord   width;
-    opt_ecoord   titleSize;
-    opt_wxString titleFont;
-    opt_wxString wireStyle;
-    opt_bool     showAnnotations;
-    opt_int      layer;
-    opt_wxString grouprefs;
+    std::optional<bool>     selectable;
+    std::optional<ECOORD>   width;
+    std::optional<ECOORD>   titleSize;
+    std::optional<wxString> titleFont;
+    std::optional<wxString> wireStyle;
+    std::optional<bool>     showAnnotations;
+    std::optional<int>      layer;
+    std::optional<wxString> grouprefs;
 
     std::optional<EDESCRIPTION>         description;
     std::vector<std::unique_ptr<EATTR>> attributes;
@@ -1795,14 +1618,14 @@ struct EMODULEINST : public EAGLE_BASE
      *           <!-- rot: Only 0, 90, 180 or 270 -->
      */
 
-    wxString     name;
-    wxString     moduleinst;
-    opt_wxString moduleVariant;
-    ECOORD       x;
-    ECOORD       y;
-    opt_int      offset;
-    opt_bool     smashed;
-    opt_erot     rotation;
+    wxString                name;
+    wxString                moduleinst;
+    std::optional<wxString> moduleVariant;
+    ECOORD                  x;
+    ECOORD                  y;
+    std::optional<int>      offset;
+    std::optional<bool>     smashed;
+    std::optional<EROT>     rotation;
 
     EMODULEINST( wxXmlNode* aModuleInst, IO_BASE* aIo = nullptr );
 };
@@ -1860,14 +1683,14 @@ struct EPROBE : public EAGLE_BASE
      *         <!-- rot:  Only 0, 90, 180 or 270 -->
      *         <!-- xref: Only in <net> context -->
      */
-    ECOORD       x;
-    ECOORD       y;
-    double       size;
-    int          layer;
-    opt_wxString font;
-    int          ratio;
-    opt_erot     rot;
-    opt_bool     xref;
+    ECOORD                  x;
+    ECOORD                  y;
+    double                  size;
+    int                     layer;
+    std::optional<wxString> font;
+    std::optional<int>      ratio;
+    std::optional<EROT>     rot;
+    std::optional<bool>     xref;
 
     // TODO add grouprefs
 
@@ -1936,10 +1759,10 @@ struct EMODULE : public EAGLE_BASE
      *           dy            %Coord;        #REQUIRED
      *           >
      */
-    wxString     name;
-    opt_wxString prefix;
-    ECOORD       dx;
-    ECOORD       dy;
+    wxString                name;
+    std::optional<wxString> prefix;
+    ECOORD                  dx;
+    ECOORD                  dy;
 
     std::optional<EDESCRIPTION>                           description;
     std::map<wxString, std::unique_ptr<EPORT>>            ports;
@@ -1991,9 +1814,9 @@ struct ESETTING : public EAGLE_BASE
      *           keepoldvectorfont %Bool;         "no"
      *           >
      */
-    opt_bool     alwaysvectorfont;
-    opt_wxString verticaltext;
-    opt_bool     keepoldvectorfont;
+    std::optional<bool>     alwaysvectorfont;
+    std::optional<wxString> verticaltext;
+    std::optional<bool>     keepoldvectorfont;
 
     ESETTING( wxXmlNode* aSetting, IO_BASE* aIo = nullptr );
 };
@@ -2015,15 +1838,15 @@ struct EGRID : public EAGLE_BASE
      *           altunit       %GridUnit;     #IMPLIED
      *           >
      */
-    opt_double   distance;
-    opt_wxString unitdist;
-    opt_wxString unit;
-    opt_wxString style;
-    opt_int      multiple;
-    opt_bool     display;
-    opt_double   altdistance;
-    opt_wxString altunitdist;
-    opt_wxString altunit;
+    std::optional<double>   distance;
+    std::optional<wxString> unitdist;
+    std::optional<wxString> unit;
+    std::optional<wxString> style;
+    std::optional<int>      multiple;
+    std::optional<bool>     display;
+    std::optional<double>   altdistance;
+    std::optional<wxString> altunitdist;
+    std::optional<wxString> altunit;
 
     EGRID( wxXmlNode* aGrid, IO_BASE* aIo = nullptr );
 };
@@ -2061,10 +1884,10 @@ struct EPACKAGE : public EAGLE_BASE
      *                inside boards or schematics -->
      */
     wxString     name;
-    opt_eurn     urn;
-    opt_bool     locally_modified;
-    opt_int      library_version;
-    opt_bool     library_locally_modified;
+    std::optional<EURN>     urn;
+    std::optional<bool>     locally_modified;
+    std::optional<int>      library_version;
+    std::optional<bool>     library_locally_modified;
 
     std::optional<EDESCRIPTION>              description;
     std::vector<std::unique_ptr<EPOLYGON>>   polygons;
@@ -2110,11 +1933,11 @@ struct EPACKAGE3D : public EAGLE_BASE
      *           <!-- library_version and library_locally_modified: Only in managed libraries
      *                inside boards or schematics -->
      */
-    wxString name;
-    EURN     urn;
-    wxString type;
-    opt_int  library_version;
-    opt_bool library_locally_modified;
+    wxString            name;
+    EURN                urn;
+    wxString            type;
+    std::optional<int>  library_version;
+    std::optional<bool> library_locally_modified;
 
     std::optional<EDESCRIPTION>                    description;
     std::vector<std::unique_ptr<EPACKAGEINSTANCE>> packageinstances;
@@ -2140,10 +1963,10 @@ struct ESYMBOL : public EAGLE_BASE
      */
 
     wxString     name;
-    opt_eurn     urn;
-    opt_bool     locally_modified;
-    opt_int      library_version;
-    opt_bool     library_locally_modified;
+    std::optional<EURN>     urn;
+    std::optional<bool>     locally_modified;
+    std::optional<int>      library_version;
+    std::optional<bool>     library_locally_modified;
 
     std::optional<EDESCRIPTION>              description;
     std::vector<std::unique_ptr<EPOLYGON>>   polygons;
@@ -2170,8 +1993,8 @@ struct ELIBRARY : public EAGLE_BASE
      *           <!-- name: Only in libraries used inside boards or schematics -->
      *           <!-- urn: Only in online libraries used inside boards or schematics -->
      */
-    wxString     name;
-    opt_eurn     urn;
+    wxString                name;
+    std::optional<EURN>     urn;
 
     std::optional<EDESCRIPTION>                      description;
     std::map<wxString, std::unique_ptr<EPACKAGE>>    packages;
@@ -2213,8 +2036,8 @@ struct ESCHEMATIC : public EAGLE_BASE
      *           xrefpart      %String;       #IMPLIED
      *           >
      */
-    opt_wxString xreflabel;
-    opt_wxString xrefpart;
+    std::optional<wxString> xreflabel;
+    std::optional<wxString> xrefpart;
 
     std::optional<EDESCRIPTION>                           description;
     std::map<wxString, std::unique_ptr<ELIBRARY>>         libraries;

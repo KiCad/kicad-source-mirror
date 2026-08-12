@@ -657,7 +657,7 @@ void PCB_IO_EAGLE::loadLayerDefs( wxXmlNode* aLayers )
         m_eagleLayersIds.insert( std::make_pair( elayer.name, elayer.number ) );
 
         // find the subset of layers that are copper and active
-        if( elayer.number >= 1 && elayer.number <= 16 && ( !elayer.active || *elayer.active ) )
+        if( elayer.number >= 1 && elayer.number <= 16 && elayer.active.value_or( true ) )
             cu.push_back( elayer );
 
         layerNode = layerNode->GetNext();
@@ -817,20 +817,21 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
 
                 m_board->Add( shape, ADD_MODE::APPEND );
 
-                if( !w.curve )
+                if( w.curve.has_value() )
                 {
-                    shape->SetShape( SHAPE_T::SEGMENT );
-                    shape->SetStart( start );
-                    shape->SetEnd( end );
-                }
-                else
-                {
-                    VECTOR2I center = ConvertArcCenter( start, end, *w.curve );
+                    VECTOR2I center = ConvertArcCenter( start, end, w.curve.value() );
 
                     shape->SetShape( SHAPE_T::ARC );
                     shape->SetCenter( center );
                     shape->SetStart( start );
-                    shape->SetArcAngleAndEnd( -EDA_ANGLE( *w.curve, DEGREES_T ), true ); // KiCad rotates the other way
+                    shape->SetArcAngleAndEnd( -EDA_ANGLE( w.curve.value(), DEGREES_T ),  // KiCad rotates the other way
+                                              true );
+                }
+                else
+                {
+                    shape->SetShape( SHAPE_T::SEGMENT );
+                    shape->SetStart( start );
+                    shape->SetEnd( end );
                 }
 
                 shape->SetLayer( layer );
@@ -855,7 +856,7 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                 wxString kicadText = interpretText( t.text );
                 pcbtxt->SetText( kicadText );
 
-                double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
+                double ratio = t.ratio.value_or( 8 );     // DTD says 8 is default
                 int textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100.0 );
                 pcbtxt->SetTextThickness( textThickness );
                 pcbtxt->SetTextSize( kicad_fontsize( t.size, textThickness ) );
@@ -864,10 +865,10 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                 VECTOR2I eagleAnchor( kicad_x( t.x ), kicad_y( t.y ) );
                 pcbtxt->SetTextPos( eagleAnchor );
 
-                int    align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
-                double degrees = t.rot ? t.rot->degrees : 0.0;
-                bool   mirror = t.rot ? t.rot->mirror : false;
-                bool   spin = t.rot ? t.rot->spin : false;
+                int    align = t.align.value_or( ETEXT::BOTTOM_LEFT );
+                double degrees = t.rot.has_value() ? t.rot.value().degrees : 0.0;
+                bool   mirror = t.rot.has_value() ? t.rot.value().mirror : false;
+                bool   spin = t.rot.has_value() ? t.rot.value().spin : false;
 
                 EaglePcbTextToKiCadAlignment( pcbtxt, align, degrees, mirror, spin );
             }
@@ -979,11 +980,11 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                 zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
                 zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
-                if( r.rot )
+                if( r.rot.has_value() )
                 {
                     VECTOR2I center( ( kicad_x( r.x1 ) + kicad_x( r.x2 ) ) / 2,
                                      ( kicad_y( r.y1 ) + kicad_y( r.y2 ) ) / 2 );
-                    zone->Rotate( center, EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
+                    zone->Rotate( center, EDA_ANGLE( r.rot.value().degrees, DEGREES_T ) );
                 }
 
                 // this is not my fault:
@@ -1034,20 +1035,20 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
             VECTOR2I     textSize = designSettings.GetTextSize( layer );
             int          textThickness = designSettings.GetLineThickness( layer );
 
-            if( d.textsize )
+            if( d.textsize.has_value() )
             {
                 double ratio = 8;     // DTD says 8 is default
-                textThickness = KiROUND( d.textsize->ToPcbUnits() * ratio / 100.0 );
-                textSize = kicad_fontsize( *d.textsize, textThickness );
+                textThickness = KiROUND( d.textsize.value().ToPcbUnits() * ratio / 100.0 );
+                textSize = kicad_fontsize( d.textsize.value(), textThickness );
             }
 
             if( layer != UNDEFINED_LAYER )
             {
-                if( d.dimensionType == wxT( "angle" ) )
+                if( d.dimensionType.value_or( wxEmptyString ) == wxT( "angle" ) )
                 {
-                    // Kicad doesn't (at present) support angle dimensions
+                    // TODO
                 }
-                else if( d.dimensionType == wxT( "radius" ) )
+                else if( d.dimensionType.value_or( wxEmptyString ) == wxT( "radius" ) )
                 {
                     PCB_DIM_RADIAL* dimension = new PCB_DIM_RADIAL( m_board );
                     m_board->Add( dimension, ADD_MODE::APPEND );
@@ -1063,7 +1064,7 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                     dimension->SetLineThickness( designSettings.GetLineThickness( layer ) );
                     dimension->SetUnits( EDA_UNITS::MM );
                 }
-                else if( d.dimensionType == wxT( "leader" ) )
+                else if( d.dimensionType.value_or( wxEmptyString ) == wxT( "leader" ) )
                 {
                     PCB_DIM_LEADER* leader = new PCB_DIM_LEADER( m_board );
                     m_board->Add( leader, ADD_MODE::APPEND );
@@ -1084,23 +1085,20 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                     PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board, PCB_DIM_ALIGNED_T );
                     m_board->Add( dimension, ADD_MODE::APPEND );
 
-                    if( d.dimensionType )
+                    // Eagle dimension graphic arms may have different lengths, but they look
+                    // incorrect in KiCad (the graphic is tilted). Make them even length in
+                    // such case.
+                    if( d.dimensionType.value_or( wxEmptyString ) == wxT( "horizontal" ) )
                     {
-                        // Eagle dimension graphic arms may have different lengths, but they look
-                        // incorrect in KiCad (the graphic is tilted). Make them even length in
-                        // such case.
-                        if( *d.dimensionType == wxT( "horizontal" ) )
-                        {
-                            int newY = ( pt1.y + pt2.y ) / 2;
-                            pt1.y = newY;
-                            pt2.y = newY;
-                        }
-                        else if( *d.dimensionType == wxT( "vertical" ) )
-                        {
-                            int newX = ( pt1.x + pt2.x ) / 2;
-                            pt1.x = newX;
-                            pt2.x = newX;
-                        }
+                        int newY = ( pt1.y + pt2.y ) / 2;
+                        pt1.y = newY;
+                        pt2.y = newY;
+                    }
+                    else if( d.dimensionType.value_or( wxEmptyString ) == wxT( "vertical" ) )
+                    {
+                        int newX = ( pt1.x + pt2.x ) / 2;
+                        pt1.x = newX;
+                        pt2.x = newX;
                     }
 
                     dimension->SetLayer( layer );
@@ -1301,8 +1299,8 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
         // multiple managed-library versions resolve to the right footprint.
         wxString libKey = e.library;
 
-        if( e.library_urn )
-            libKey += wxS( "_" ) + e.library_urn->assetId;
+        if( e.library_urn.has_value() )
+            libKey += wxS( "_" ) + e.library_urn.value().assetId;
 
         wxString pkg_key = makeKey( libKey, e.package );
         auto     it = m_templates.find( pkg_key );
@@ -1366,7 +1364,7 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
         footprint->SetReference( reference );
         footprint->SetValue( e.value );
 
-        if( !e.smashed )
+        if( !e.smashed.has_value() )
         {
             // Not smashed so show NAME & VALUE
             if( valueNamePresetInPackageLayout )
@@ -1375,7 +1373,7 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
             if( refanceNamePresetInPackageLayout )
                 footprint->Reference().SetVisible( true ); // Only if place holder in package layout
         }
-        else if( *e.smashed == true )
+        else if( e.smashed.value() == true )
         {
             // Smashed so set default to no show for NAME and VALUE
             footprint->Value().SetVisible( false );
@@ -1410,10 +1408,10 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
                     nameAttr = &name;
 
                     // do we have a display attribute ?
-                    if( a.display )
+                    if( a.display.has_value() )
                     {
                         // Yes!
-                        switch( *a.display )
+                        switch( a.display.value() )
                         {
                         case EATTR::VALUE :
                         {
@@ -1464,13 +1462,13 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
                     value = a;
                     valueAttr = &value;
 
-                    if( a.display )
+                    if( a.display.has_value() )
                     {
                         // Yes!
-                        switch( *a.display )
+                        switch( a.display.value() )
                         {
                         case EATTR::VALUE :
-                            valueAttr->value = opt_wxString( e.value );
+                            valueAttr->value = e.value;
                             footprint->SetValue( e.value );
 
                             if( valueNamePresetInPackageLayout )
@@ -1489,7 +1487,7 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
                             if( valueNamePresetInPackageLayout )
                                 footprint->Value().SetVisible( true );
 
-                            valueAttr->value = opt_wxString( wxT( "VALUE = " ) + e.value );
+                            valueAttr->value = wxT( "VALUE = " ) + e.value;
                             footprint->SetValue( wxT( "VALUE = " ) + e.value );
                             break;
 
@@ -1498,7 +1496,7 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
                             break;
 
                         default:
-                            valueAttr->value = opt_wxString( e.value );
+                            valueAttr->value = e.value;
 
                             if( valueNamePresetInPackageLayout )
                                 footprint->Value().SetVisible( true );
@@ -1574,16 +1572,17 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
 
     // According to Eagle's doc, by default, the orphans (islands in KiCad parlance)
     // are always removed
-    if( !p.orphans || !p.orphans.Get() )
-        zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::ALWAYS );
-    else
+    if( p.orphans.value_or( false ) )
         zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+    else
+        zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::ALWAYS );
 
     if( vertices.size() < 3 )
     {
         Report( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): less than 3 vertices" ),
                                   eagle_layer_name( p.layer ),
-                                  p.layer ) , RPT_SEVERITY_INFO );
+                                  p.layer ) ,
+                RPT_SEVERITY_INFO );
         return nullptr;
     }
 
@@ -1599,17 +1598,17 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
         // Append the corner
         polygon.Append( kicad_x( v1.x ), kicad_y( v1.y ) );
 
-        if( v1.curve )
+        if( v1.curve.has_value() )
         {
             EVERTEX  v2 = vertices[i + 1];
             VECTOR2I center = ConvertArcCenter( VECTOR2I( kicad_x( v1.x ), kicad_y( v1.y ) ),
-                                                VECTOR2I( kicad_x( v2.x ), kicad_y( v2.y ) ), *v1.curve );
-            double angle = DEG2RAD( *v1.curve );
+                                                VECTOR2I( kicad_x( v2.x ), kicad_y( v2.y ) ), v1.curve.value() );
+            double angle = DEG2RAD( v1.curve.value() );
             double end_angle = atan2( kicad_y( v2.y ) - center.y, kicad_x( v2.x ) - center.x );
             double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 ) + pow( center.y - kicad_y( v1.y ), 2 ) );
 
             int    segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF,
-                                                    EDA_ANGLE( *v1.curve, DEGREES_T ) );
+                                                    EDA_ANGLE( v1.curve.value(), DEGREES_T ) );
             double delta_angle = angle / segCount;
 
             for( double a = end_angle + angle; fabs( a - end_angle ) > fabs( delta_angle ); a -= delta_angle )
@@ -1629,7 +1628,8 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
     {
         Report( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): outline count is not 1" ),
                                   eagle_layer_name( p.layer ),
-                                  p.layer ) , RPT_SEVERITY_INFO );
+                                  p.layer ) ,
+                RPT_SEVERITY_INFO );
 
         return nullptr;
     }
@@ -1649,7 +1649,7 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
     }
     else if( p.pour == EPOLYGON::EHATCH )
     {
-        int spacing = p.spacing ? p.spacing->ToPcbUnits() : 50 * pcbIUScale.IU_PER_MILS;
+        int spacing = p.spacing.has_value() ? p.spacing.value().ToPcbUnits() : 50 * pcbIUScale.IU_PER_MILS;
 
         zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
         zone->SetHatchThickness( p.width.ToPcbUnits() );
@@ -1662,13 +1662,13 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
     zone->SetMinThickness( std::max<int>( ZONE_THICKNESS_MIN_VALUE_MM * pcbIUScale.IU_PER_MM,
                                           p.width.ToPcbUnits() / 2 ) );
 
-    if( p.isolate )
-        zone->SetLocalClearance( p.isolate->ToPcbUnits() );
+    if( p.isolate.has_value() )
+        zone->SetLocalClearance( p.isolate.value().ToPcbUnits() );
     else
         zone->SetLocalClearance( 1 ); // @todo: set minimum clearance value based on board settings
 
-    // missing == yes per DTD.
-    bool thermals = !p.thermals || *p.thermals;
+
+    bool thermals = p.thermals.value_or( true );    // missing == yes per DTD.
     zone->SetPadConnection( thermals ? ZONE_CONNECTION::THERMAL : ZONE_CONNECTION::FULL );
 
     if( thermals )
@@ -1681,7 +1681,7 @@ ZONE* PCB_IO_EAGLE::loadPolygon( wxXmlNode* aPolyNode )
         zone->SetThermalReliefSpokeWidth( p.width.ToPcbUnits() + 50000 );
     }
 
-    int rank = p.rank ? (p.max_priority - *p.rank) : p.max_priority;
+    int rank = p.rank.has_value() ? ( p.max_priority - p.rank.value() ) : p.max_priority;
     zone->SetAssignedPriority( rank );
 
     ZONE* zonePtr = zone.release();
@@ -1715,16 +1715,16 @@ void PCB_IO_EAGLE::orientFootprintAndText( FOOTPRINT* aFootprint, const EELEMENT
                                                                                          defSpin, attr ) );
     }
 
-    if( e.rot )
+    if( e.rot.has_value() )
     {
-        if( e.rot->mirror )
+        if( e.rot.value().mirror )
         {
-            aFootprint->SetOrientation( EDA_ANGLE( e.rot->degrees + 180.0, DEGREES_T ) );
+            aFootprint->SetOrientation( EDA_ANGLE( e.rot.value().degrees + 180.0, DEGREES_T ) );
             aFootprint->Flip( aFootprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
         }
         else
         {
-            aFootprint->SetOrientation( EDA_ANGLE( e.rot->degrees, DEGREES_T ) );
+            aFootprint->SetOrientation( EDA_ANGLE( e.rot.value().degrees, DEGREES_T ) );
         }
     }
 
@@ -1750,45 +1750,38 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
         // Yes
         const EATTR& a = *aAttr;
 
-        if( a.value )
-            aFPText->SetText( *a.value );
+        if( a.value.has_value() )
+            aFPText->SetText( a.value.value() );
 
-        if( a.x && a.y )    // std::optional
+        if( a.x.has_value() && a.y.has_value() )
         {
-            VECTOR2I pos( kicad_x( *a.x ), kicad_y( *a.y ) );
+            VECTOR2I pos( kicad_x( a.x.value() ), kicad_y( a.y.value() ) );
             aFPText->SetTextPos( pos );
         }
 
         // Even though size and ratio are both optional, I am not seeing
         // a case where ratio is present but size is not.
-        double  ratio = 8;
-
-        if( a.ratio )
-            ratio = *a.ratio;
-
-        VECTOR2I fontz = aFPText->GetTextSize();
-        int      textThickness = KiROUND( fontz.y * ratio / 100.0 );
+        double   ratio = a.ratio.value_or( 8 );
+        VECTOR2I fontSize = aFPText->GetTextSize();
+        int      textThickness = KiROUND( fontSize.y * ratio / 100.0 );
 
         aFPText->SetTextThickness( textThickness );
 
-        if( a.size )
+        if( a.size.has_value() )
         {
-            fontz = kicad_fontsize( *a.size, textThickness );
-            aFPText->SetTextSize( fontz );
+            fontSize = kicad_fontsize( a.size.value(), textThickness );
+            aFPText->SetTextSize( fontSize );
         }
 
-        int align = ETEXT::BOTTOM_LEFT;     // bottom-left is eagle default
-
-        if( a.align )
-            align = *a.align;
+        int align = a.align.value_or( ETEXT::BOTTOM_LEFT );     // bottom-left is eagle default
 
         // The "rot" in a EATTR seems to be assumed to be zero if it is not
         // present, and this zero rotation becomes an override to the
         // package's text field.  If they did not want zero, they specify
         // what they want explicitly.
-        double  degrees  = a.rot ? a.rot->degrees : 0.0;
-        bool    mirror = a.rot ? a.rot->mirror : false;
-        bool    spin = a.rot ? a.rot->spin : false;
+        double  degrees  = a.rot.has_value() ? a.rot.value().degrees : 0.0;
+        bool    mirror = a.rot.has_value() ? a.rot.value().mirror : false;
+        bool    spin = a.rot.has_value() ? a.rot.value().spin : false;
 
         EaglePcbTextToKiCadAlignment( aFPText, align, degrees, mirror, spin );
     }
@@ -1799,9 +1792,9 @@ void PCB_IO_EAGLE::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, PCB_T
         int align = EagleAlignmentFromKiCad( std::tuple<GR_TEXT_V_ALIGN_T, GR_TEXT_H_ALIGN_T>(
                 aFPText->GetVertJustify(), aFPText->GetHorizJustify() ) );
 
-        double elementAngle = e.rot ? e.rot->degrees : 0.0;
-        bool   elementMirror = e.rot ? e.rot->mirror : false;
-        bool   elementSpin = e.rot ? e.rot->spin : false;
+        double elementAngle = e.rot.has_value() ? e.rot.value().degrees : 0.0;
+        bool   elementMirror = e.rot.has_value() ? e.rot.value().mirror : false;
+        bool   elementSpin = e.rot.has_value() ? e.rot.value().spin : false;
 
         // To mimic EAGLE correctly, we need to know here in addition to the element rotation specification
         // the rotation specification (i.e. angle, mirror flag and spin flag) of the original <text ...>
@@ -1963,21 +1956,21 @@ void PCB_IO_EAGLE::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     // FIXME: the cap attribute is ignored because KiCad can't create lines with flat ends.
     PCB_SHAPE* dwg;
 
-    if( !w.curve )
+    if( w.curve.has_value() )
+    {
+        dwg = new PCB_SHAPE( aFootprint, SHAPE_T::ARC );
+        VECTOR2I center = ConvertArcCenter( start, end, w.curve.value() );
+
+        dwg->SetCenter( center );
+        dwg->SetStart( start );
+        dwg->SetArcAngleAndEnd( -EDA_ANGLE( w.curve.value(), DEGREES_T ), true ); // KiCad rotates the other way
+    }
+    else
     {
         dwg = new PCB_SHAPE( aFootprint, SHAPE_T::SEGMENT );
 
         dwg->SetStart( start );
         dwg->SetEnd( end );
-    }
-    else
-    {
-        dwg = new PCB_SHAPE( aFootprint, SHAPE_T::ARC );
-        VECTOR2I center = ConvertArcCenter( start, end, *w.curve );
-
-        dwg->SetCenter( center );
-        dwg->SetStart( start );
-        dwg->SetArcAngleAndEnd( -EDA_ANGLE( *w.curve, DEGREES_T ), true ); // KiCad rotates the other way
     }
 
     dwg->SetLayer( layer );
@@ -1994,34 +1987,34 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
     // this is thru hole technology here, no SMDs
     EPAD e( aTree );
     int  shape = EPAD::UNDEF;
-    int  eagleDrillz = e.drill ? e.drill->ToPcbUnits() : 0;
+    int  drillSize = e.drill.has_value() ? e.drill.value().ToPcbUnits() : 0;
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
     transferPad( e, pad.get() );
 
-    if( e.first && *e.first && m_rules->psFirst != EPAD::UNDEF )
+    if( e.first.has_value() && e.first.value() == true && m_rules->psFirst != EPAD::UNDEF )
         shape = m_rules->psFirst;
     else if( aFootprint->GetLayer() == F_Cu && m_rules->psTop != EPAD::UNDEF )
         shape = m_rules->psTop;
     else if( aFootprint->GetLayer() == B_Cu && m_rules->psBottom != EPAD::UNDEF )
         shape = m_rules->psBottom;
 
-    pad->SetDrillSize( VECTOR2I( eagleDrillz, eagleDrillz ) );
+    pad->SetDrillSize( VECTOR2I( drillSize, drillSize ) );
     pad->SetLayerSet( LSET::AllCuMask() );
 
-    if( eagleDrillz < m_min_hole )
-        m_min_hole = eagleDrillz;
+    if( drillSize > 0 && drillSize < m_min_hole )
+        m_min_hole = drillSize;
 
     // Solder mask
-    if( !e.stop || *e.stop == true )         // enabled by default
+    if( e.stop.value_or( true ) )         // enabled by default
         pad->SetLayerSet( pad->GetLayerSet().set( B_Mask ).set( F_Mask ) );
 
     if( shape == EPAD::ROUND || shape == EPAD::SQUARE || shape == EPAD::OCTAGON )
         e.shape = shape;
 
-    if( e.shape )
+    if( e.shape.has_value() )
     {
-        switch( *e.shape )
+        switch( e.shape.value() )
         {
         case EPAD::ROUND:
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
@@ -2051,9 +2044,9 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         // if shape is not present, our default is circle and that matches their default "round"
     }
 
-    if( e.diameter && e.diameter->value > 0 )
+    if( e.diameter.has_value() && e.diameter.value().value > 0 )
     {
-        int diameter = e.diameter->ToPcbUnits();
+        int diameter = e.diameter.value().ToPcbUnits();
         pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( diameter, diameter ) );
     }
     else
@@ -2072,15 +2065,15 @@ void PCB_IO_EAGLE::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
         sz.x = ( sz.x * ( 100 + m_rules->psElongationLong ) ) / 100;
         pad->SetSize( PADSTACK::ALL_LAYERS, sz );
 
-        if( e.shape && *e.shape == EPAD::OFFSET )
+        if( e.shape.has_value() && e.shape.value() == EPAD::OFFSET )
         {
             int offset = KiROUND( ( sz.x - sz.y ) / 2.0 );
             pad->SetOffset( PADSTACK::ALL_LAYERS, VECTOR2I( offset, 0 ) );
         }
     }
 
-    if( e.rot )
-        pad->SetOrientation( EDA_ANGLE( e.rot->degrees, DEGREES_T ) );
+    if( e.rot.has_value() )
+        pad->SetOrientation( EDA_ANGLE( e.rot.value().degrees, DEGREES_T ) );
 
     // Eagle spokes are always '+'
     pad->SetThermalSpokeAngle( ANGLE_0 );
@@ -2143,20 +2136,20 @@ void PCB_IO_EAGLE::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     textItem->SetPosition( pos );
     textItem->SetLayer( layer );
 
-    double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
+    double ratio = t.ratio.value_or( 8 );  // DTD says 8 is default
     int    textThickness = KiROUND( t.size.ToPcbUnits() * ratio / 100.0 );
 
     textItem->SetTextThickness( textThickness );
     textItem->SetTextSize( kicad_fontsize( t.size, textThickness ) );
 
-    int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
+    int align = t.align.value_or( ETEXT::BOTTOM_LEFT );  // bottom-left is eagle default
 
     // An eagle package is never rotated, the DTD does not allow it.
     // angle -= aFootprint->GetOrienation();
 
-    double degrees = t.rot ? t.rot->degrees : 0.0; // range used by EAGLE is [0° ; 360°[
-    bool   mirror = t.rot ? t.rot->mirror : false;
-    bool   spin = t.rot ? t.rot->spin : false;
+    double degrees = t.rot.has_value() ? t.rot.value().degrees : 0.0; // range used by EAGLE is [0° ; 360°[
+    bool   mirror = t.rot.has_value() ? t.rot.value().mirror : false;
+    bool   spin = t.rot.has_value() ? t.rot.value().spin : false;
 
     textItem->SetKeepUpright( !spin );
 
@@ -2193,11 +2186,11 @@ void PCB_IO_EAGLE::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
         zone->AppendCorner( VECTOR2I( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
         zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
-        if( r.rot )
+        if( r.rot.has_value() )
         {
             VECTOR2I center( ( kicad_x( r.x1 ) + kicad_x( r.x2 ) ) / 2,
                              ( kicad_y( r.y1 ) + kicad_y( r.y2 ) ) / 2 );
-            zone->Rotate( center, EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
+            zone->Rotate( center, EDA_ANGLE( r.rot.value().degrees, DEGREES_T ) );
         }
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
@@ -2235,8 +2228,8 @@ void PCB_IO_EAGLE::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) c
 
         dwg->SetPolyPoints( pts );
 
-        if( r.rot )
-            dwg->Rotate( dwg->GetCenter(), EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
+        if( r.rot.has_value() )
+            dwg->Rotate( dwg->GetCenter(), EDA_ANGLE( r.rot.value().degrees, DEGREES_T ) );
 
         dwg->Rotate( { 0, 0 }, aFootprint->GetOrientation() );
         dwg->Move( aFootprint->GetPosition() );
@@ -2273,7 +2266,8 @@ void PCB_IO_EAGLE::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
     {
         Report( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): less than 3 vertices" ),
                                   eagle_layer_name( p.layer ),
-                                  p.layer ) , RPT_SEVERITY_INFO );
+                                  p.layer ) ,
+                RPT_SEVERITY_INFO );
         return;
     }
 
@@ -2286,13 +2280,12 @@ void PCB_IO_EAGLE::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
         // Append the corner
         pts.emplace_back( kicad_x( v1.x ), kicad_y( v1.y ) );
 
-        if( v1.curve )
+        if( v1.curve.has_value() )
         {
             EVERTEX  v2 = vertices[i + 1];
             VECTOR2I center = ConvertArcCenter( VECTOR2I( kicad_x( v1.x ), kicad_y( v1.y ) ),
-                                                VECTOR2I( kicad_x( v2.x ), kicad_y( v2.y ) ),
-                                                *v1.curve );
-            double angle = DEG2RAD( *v1.curve );
+                                                VECTOR2I( kicad_x( v2.x ), kicad_y( v2.y ) ), v1.curve.value() );
+            double angle = DEG2RAD( v1.curve.value() );
             double end_angle = atan2( kicad_y( v2.y ) - center.y, kicad_x( v2.x ) - center.x );
             double radius = sqrt( pow( center.x - kicad_x( v1.x ), 2 ) + pow( center.y - kicad_y( v1.y ), 2 ) );
 
@@ -2301,7 +2294,7 @@ void PCB_IO_EAGLE::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
                 radius = 1.0;
 
             int segCount = GetArcToSegmentCount( KiROUND( radius ), ARC_HIGH_DEF,
-                                                 EDA_ANGLE( *v1.curve, DEGREES_T ) );
+                                                 EDA_ANGLE( v1.curve.value(), DEGREES_T ) );
             double delta = angle / segCount;
 
             for( double a = end_angle + angle; fabs( a - end_angle ) > fabs( delta ); a -= delta )
@@ -2522,20 +2515,20 @@ void PCB_IO_EAGLE::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
                                   (int) ( minPadSize * m_rules->srRoundness ),
                                   m_rules->srMaxRoundness * 2 );
 
-    if( e.roundness || roundRadius > 0 )
+    if( e.roundness.has_value() || roundRadius > 0 )
     {
         double roundRatio = (double) roundRadius / minPadSize / 2.0;
 
         // Eagle uses a different definition of roundness, hence division by 200
-        if( e.roundness )
-            roundRatio = std::fmax( *e.roundness / 200.0, roundRatio );
+        if( e.roundness.has_value() )
+            roundRatio = std::fmax( e.roundness.value() / 200.0, roundRatio );
 
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
         pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS, roundRatio );
     }
 
-    if( e.rot )
-        pad->SetOrientation( EDA_ANGLE( e.rot->degrees, DEGREES_T ) );
+    if( e.rot.has_value() )
+        pad->SetOrientation( EDA_ANGLE( e.rot.value().degrees, DEGREES_T ) );
 
     // Eagle spokes are always '+'
     pad->SetThermalSpokeAngle( ANGLE_0 );
@@ -2545,7 +2538,7 @@ void PCB_IO_EAGLE::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
                                                  m_rules->mlMaxCreamFrame ) );
 
     // Solder mask
-    if( e.stop && *e.stop == false )         // enabled by default
+    if( e.stop.has_value() && e.stop.value() == false )         // enabled by default
     {
         if( layer == F_Cu )
             pad->SetLayerSet( pad->GetLayerSet().set( F_Mask, false ) );
@@ -2554,7 +2547,7 @@ void PCB_IO_EAGLE::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     }
 
     // Solder paste (only for SMD pads)
-    if( e.cream && *e.cream == false )         // enabled by default
+    if( e.cream.has_value() && e.cream.value() == false )         // enabled by default
     {
         if( layer == F_Cu )
             pad->SetLayerSet( pad->GetLayerSet().set( F_Paste, false ) );
@@ -2578,7 +2571,7 @@ void PCB_IO_EAGLE::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
                                                 m_rules->mlMaxStopFrame ) );
 
     // Solid connection to copper zones
-    if( aEaglePad.thermals && !*aEaglePad.thermals )
+    if( aEaglePad.thermals.has_value() && aEaglePad.thermals.value() == false )
         aPad->SetLocalZoneConnection( ZONE_CONNECTION::FULL );
 
     FOOTPRINT* footprint = aPad->GetParentFootprint();
@@ -2783,9 +2776,9 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
                     if( netclass && width < netclass->GetTrackWidth() )
                         netclass->SetTrackWidth( width );
 
-                    if( w.curve )
+                    if( w.curve.has_value() )
                     {
-                        VECTOR2I center = ConvertArcCenter( start, end, *w.curve );
+                        VECTOR2I center = ConvertArcCenter( start, end, w.curve.value() );
                         double   radius = sqrt( pow( center.x - kicad_x( w.x1 ), 2 ) +
                                                 pow( center.y - kicad_y( w.y1 ), 2 ) );
                         VECTOR2I mid = CalcArcMid( start, end, center, true );
@@ -2843,36 +2836,36 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
                         && layer_front_most != layer_back_most )
                 {
                     int      kidiam;
-                    int      drillz = v.drill.ToPcbUnits();
+                    int      drillSize = v.drill.ToPcbUnits();
                     PCB_VIA* via = new PCB_VIA( m_board );
                     m_board->Add( via );
 
-                    if( v.diam )
+                    if( v.diam.has_value() )
                     {
-                        kidiam = v.diam->ToPcbUnits();
+                        kidiam = v.diam.value().ToPcbUnits();
                         via->SetWidth( PADSTACK::ALL_LAYERS, kidiam );
                     }
                     else
                     {
-                        double annulus = drillz * m_rules->rvViaOuter;  // eagle "restring"
+                        double annulus = drillSize * m_rules->rvViaOuter;  // eagle "restring"
                         annulus = eagleClamp( m_rules->rlMinViaOuter, annulus, m_rules->rlMaxViaOuter );
-                        kidiam = KiROUND( drillz + 2 * annulus );
+                        kidiam = KiROUND( drillSize + 2 * annulus );
                         via->SetWidth( PADSTACK::ALL_LAYERS, kidiam );
                     }
 
-                    via->SetDrill( drillz );
+                    via->SetDrill( drillSize );
 
                     // make sure the via diameter respects the restring rules
 
                     int via_width = via->GetWidth( PADSTACK::ALL_LAYERS );
 
-                    if( !v.diam || via_width <= via->GetDrill() )
+                    if( !v.diam.has_value() || via_width <= via->GetDrill() )
                     {
                         double annular_width = ( via_width - via->GetDrill() ) / 2.0;
                         double clamped_annular_width = eagleClamp( m_rules->rlMinViaOuter,
                                                                    annular_width,
                                                                    m_rules->rlMaxViaOuter );
-                        via->SetWidth( PADSTACK::ALL_LAYERS, drillz + 2 * clamped_annular_width );
+                        via->SetWidth( PADSTACK::ALL_LAYERS, drillSize + 2 * clamped_annular_width );
                     }
 
                     if( kidiam < m_min_via )
@@ -2881,14 +2874,14 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
                     if( netclass && kidiam < netclass->GetViaDiameter() )
                         netclass->SetViaDiameter( kidiam );
 
-                    if( drillz < m_min_hole )
-                        m_min_hole = drillz;
+                    if( ( drillSize > 0 ) && ( drillSize < m_min_hole ) )
+                        m_min_hole = drillSize;
 
-                    if( netclass && drillz < netclass->GetViaDrill() )
-                        netclass->SetViaDrill( drillz );
+                    if( netclass && ( drillSize > 0 ) && ( drillSize < netclass->GetViaDrill() ) )
+                        netclass->SetViaDrill( drillSize );
 
-                    if( ( kidiam - drillz ) / 2 < m_min_annulus )
-                        m_min_annulus = ( kidiam - drillz ) / 2;
+                    if( ( kidiam - drillSize ) / 2 < m_min_annulus )
+                        m_min_annulus = ( kidiam - drillSize ) / 2;
 
                     if( layer_front_most == F_Cu && layer_back_most == B_Cu )
                     {
