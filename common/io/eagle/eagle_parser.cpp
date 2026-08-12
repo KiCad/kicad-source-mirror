@@ -123,11 +123,6 @@ wxString interpretText( const wxString& aText )
 
 bool substituteVariable( wxString* aText )
 {
-    int x;
-
-    if( aText->Contains( wxT( "DRAWING_" ) ) )
-        x=5;
-
     if( aText->StartsWith( '>' ) && aText->AfterFirst( ' ' ).IsEmpty() )
     {
         wxString token = aText->Upper();
@@ -154,43 +149,6 @@ bool substituteVariable( wxString* aText )
         return true;
     }
 
-    /*
-    if( aToken->IsSameAs( wxT( "ISSUE_DATE" ) ) )
-    {
-        *aToken = GetDate();
-        tokenUpdated = true;
-    }
-    else if( aToken->IsSameAs( wxT( "CURRENT_DATE" ) ) )
-    {
-        *aToken = GetCurrentDate();
-        tokenUpdated = true;
-    }
-    else if( aToken->IsSameAs( wxT( "CURRENT_TIME_HH_MM_SS" ) ) )
-    {
-        *aToken = GetCurrentTimeHHMMSS();
-        tokenUpdated = true;
-    }
-    else if( aToken->IsSameAs( wxT( "CURRENT_TIME_LOCALE" ) ) )
-    {
-        *aToken = GetCurrentTimeLocale();
-        tokenUpdated = true;
-    }
-    else if( aToken->IsSameAs( wxT( "REVISION" ) ) )
-    {
-        *aToken = GetRevision();
-        tokenUpdated = true;
-    }
-    else if( aToken->IsSameAs( wxT( "TITLE" ) ) )
-    {
-        *aToken = GetTitle();
-        tokenUpdated = true;
-    }
-    else if( aToken->IsSameAs( wxT( "COMPANY" ) ) )
-    {
-        *aToken = GetCompany();
-        tokenUpdated = true;
-    }
-*/
     return false;
 }
 
@@ -200,8 +158,7 @@ wxString convertDescription( wxString aDescr )
     aDescr.Replace( wxS( "\n" ), wxS( " " ) );
     aDescr.Replace( wxS( "\r" ), wxEmptyString );
 
-    wxRegEx( wxS( "<a\\s+(?:[^>]*?\\s+)?href=\"([^\"]*)\"[^>]*>" ) )
-            .ReplaceAll( &aDescr, wxS( "\\1 " ) );
+    wxRegEx( wxS( "<a\\s+(?:[^>]*?\\s+)?href=\"([^\"]*)\"[^>]*>" ) ).ReplaceAll( &aDescr, wxS( "\\1 " ) );
 
     aDescr.Replace( wxS( "<p>" ), wxS( "\n\n" ) );
     aDescr.Replace( wxS( "</p>" ), wxS( "\n\n" ) );
