@@ -3012,8 +3012,8 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
 BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
 {
     PADS_SCH_BINARY_PARSER           binaryParser;
-    const std::array<std::string, 5> fixtures = { "placement_transform", "fields", "connectors", "multigate",
-                                                  "field_justification" };
+    const std::array<std::string, 6> fixtures = { "placement_transform", "fields",           "connectors", "multigate",
+                                                  "field_justification", "pin_justification" };
 
     for( const std::string& fixture : fixtures )
     {
@@ -3057,6 +3057,19 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
             BOOST_CHECK_EQUAL( definition->name.text, wxString::FromUTF8( asciiPlacement.symbol_name ) );
             BOOST_CHECK( !propertyValue( binaryPlacement.properties, wxS( "decal_handle" ) ).empty() );
             BOOST_REQUIRE_GE( binaryPlacement.fields.size(), asciiPlacement.attributes.size() );
+
+            if( !asciiPlacement.pin_overrides.empty() )
+            {
+                BOOST_REQUIRE_EQUAL( binaryPlacement.pins.size(), asciiPlacement.pin_overrides.size() );
+
+                for( size_t pinIndex = 0; pinIndex < binaryPlacement.pins.size(); ++pinIndex )
+                {
+                    BOOST_CHECK_EQUAL( binaryPlacement.pins[pinIndex].numberAngle,
+                                       asciiPlacement.pin_overrides[pinIndex].angle * 10 );
+                    BOOST_CHECK_EQUAL( binaryPlacement.pins[pinIndex].numberJustification,
+                                       asciiPlacement.pin_overrides[pinIndex].justification );
+                }
+            }
 
             for( size_t fieldIndex = 0; fieldIndex < asciiPlacement.attributes.size(); ++fieldIndex )
             {

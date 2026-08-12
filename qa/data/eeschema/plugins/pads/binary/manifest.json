@@ -251,6 +251,19 @@
         "native_reopen_persistence"
       ],
       "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. Two rejected setup attempts were discarded: negative placement coordinates were corrected by PADS, and a redundant built-in SIZEB drawing was rejected. The final clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained 16 uniquely referenced placements whose reference, part-type, and user fields use justification codes 0 through 15. No third-party design content"
+    },
+    {
+      "binary": "pin_justification.sch",
+      "ascii": "pin_justification.txt",
+      "binary_sha256": "222935ea7860a966c76b3440c286b07eeb75367ce327bbfb6c463a845ede07ca",
+      "ascii_sha256": "385ab28650dadf1bb9d8b39db04d04213113c45e11a5e9f82bed685a8a4932f1",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "placed_pin_number_justification_codes_0_through_15",
+        "seven_pin_override_records_per_placement",
+        "native_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained 16 uniquely referenced placements, each with seven placed-pin overrides using one justification code from 0 through 15. No third-party design content"
     }
   ]
 }

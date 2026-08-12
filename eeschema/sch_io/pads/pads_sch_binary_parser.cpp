@@ -2523,17 +2523,10 @@ namespace
                 pinReference.numberPresentationFlags = aCursor.U16At( pinOffset + 10 );
                 pinReference.numberAngle = ( pinReference.numberPresentationFlags & 0x0001 ) != 0 ? 900 : 0;
 
-                switch( pinReference.numberPresentationFlags & 0x00F0 )
-                {
-                case 0x0000: pinReference.numberJustification = 0; break;
-                case 0x0020: pinReference.numberJustification = 1; break;
-                case 0x0090: pinReference.numberJustification = 6; break;
-                default:
-                    PADS_SCH_BINARY_PARSER::RecordUnknownEnum( wxS( "placed-pin number presentation" ),
-                                                               pinReference.numberPresentationFlags, pinSource,
-                                                               aModel.diagnostics );
-                    break;
-                }
+                static constexpr std::array<uint16_t, 16> justificationByNibble = { 0, 4, 1, 5, 8,  12, 9,  13,
+                                                                                    2, 6, 3, 7, 10, 14, 11, 15 };
+                pinReference.numberJustification =
+                        justificationByNibble[( pinReference.numberPresentationFlags >> 4 ) & 0x0F];
 
                 pinReference.hasNumberPlacement = true;
                 placement.pins.push_back( std::move( pinReference ) );

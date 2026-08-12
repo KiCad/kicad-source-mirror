@@ -1067,7 +1067,10 @@ types:
         doc: Paired Logic 9 placement pin records prove this signed value times two is the pin-number Y offset in source half-mils.
       - id: number_presentation_flags
         type: u2
-        doc: Paired Logic 9 placement pin records prove bit 0 rotates the number and low-byte 0x00/0x20/0x90 selects justification 0/1/6; remaining bits are retained.
+        doc: >-
+          Bit 0 rotates the pin number. A native-reopened controlled fixture proves bits 4-7
+          encode Logic 9 justification codes 0-15 through nibble values
+          0,2,8,A,1,3,9,B,4,6,C,E,5,7,D,F. Remaining bits are retained.
 
   placement_field_controller:
     params:
