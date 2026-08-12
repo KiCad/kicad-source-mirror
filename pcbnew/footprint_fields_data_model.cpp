@@ -259,6 +259,9 @@ void FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, cons
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), wxS( "Invalid column number" ) );
 
+    if( isCellReadOnly( aRow, aCol ) )
+        return;
+
     // Can't modify references or generated fields (e.g. ${QUANTITY})
     if( ColIsReference( aCol )
         || ( IsGeneratedField( m_cols[aCol].m_fieldName ) && !ColIsAttribute( aCol ) ) )

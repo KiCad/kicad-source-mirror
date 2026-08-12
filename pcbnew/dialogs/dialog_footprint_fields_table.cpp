@@ -108,6 +108,14 @@ public:
     {}
 
 protected:
+    bool toggleCell( int aRow, int aCol, bool aPreserveSelection = false ) override
+    {
+        if( !m_grid->IsEditable() || m_dataModel->IsCellReadOnly( aRow, aCol ) )
+            return false;
+
+        return GRID_TRICKS::toggleCell( aRow, aCol, aPreserveSelection );
+    }
+
     void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override
     {
         int col = m_grid->GetGridCursorCol();

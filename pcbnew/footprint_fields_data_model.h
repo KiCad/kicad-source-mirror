@@ -82,6 +82,8 @@ public:
 
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
+    bool IsCellReadOnly( int aRow, int aCol ) { return isCellReadOnly( aRow, aCol ); }
+
     void SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
     void RebuildRows() override;
