@@ -395,6 +395,9 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldValueForVariant( const
     if( isAttribute( aFieldName ) )
         return getAttributeValue( aRef, aFieldName, aVariantName );
 
+    if( aFieldName == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
+        return footprint.GetFPIDAsString();
+
     if( const PCB_FIELD* field = footprint.GetField( aFieldName ) )
     {
         if( field->IsPrivate() )

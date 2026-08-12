@@ -233,7 +233,7 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
     m_filter->SetDescriptiveText( _( "Filter" ) );
 
     attr = new wxGridCellAttr;
-    //attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_PCB::PcbSearchS( &Prj() ), { &m_parent->GetBoard()->} ) );
+    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, nullptr, { m_parent->GetBoard() } ) );
     m_dataModel = new FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL( m_footprintsList, attr );
 
     m_grid->UseNativeColHeader( true );
@@ -280,6 +280,8 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
         SetTitle( m_job->GetSettingsDialogTitle() );
     else
         SetTitle( _( "Footprint Fields Table" ) );
+
+    m_buttonApply->SetLabel( _( "Apply, Save Board && Continue" ) );
 
     // DIALOG_SHIM needs a unique hash_key because classname will be the same for both job and
     // non-job versions (which have different sizes).
@@ -383,7 +385,7 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::~DIALOG_FOOTPRINT_FIELDS_TABLE()
     // Disconnect Events
     m_grid->GetGridWindow()->Unbind( wxEVT_MOTION, &DIALOG_FOOTPRINT_FIELDS_TABLE::OnGridMouseMove, this );
     m_grid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_FOOTPRINT_FIELDS_TABLE::OnColSort, this );
-    m_grid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_FOOTPRINT_FIELDS_TABLE::OnColMove, this );
+    m_grid->Unbind( wxEVT_GRID_COL_MOVE, &DIALOG_FOOTPRINT_FIELDS_TABLE::OnColMove, this );
     m_cbBomPresets->Unbind( wxEVT_CHOICE, &DIALOG_FOOTPRINT_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Unbind( wxEVT_CHOICE, &DIALOG_FOOTPRINT_FIELDS_TABLE::onBomFmtPresetChanged, this );
     m_viewControlsGrid->Unbind( wxEVT_GRID_CELL_CHANGED, &DIALOG_FOOTPRINT_FIELDS_TABLE::OnViewControlsCellChanged, this );
@@ -1266,7 +1268,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent
     }
     else if( cfg.selection_mode == 1 )
     {
-        m_parent->GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, focusItems );
+        m_parent->GetToolManager()->RunAction( PCB_ACTIONS::syncSelection, &focusItems );
     }
 }
 
@@ -2025,16 +2027,12 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aE
 
 void DIALOG_FOOTPRINT_FIELDS_TABLE::updateVariantButtonStates()
 {
-    int selection = m_variantListBox->GetSelection();
-
-    // Copy, rename, and delete are disabled for the PCB footprint fields table
-    bool canModify = false;
-
-    m_addVariantButton->Enable( canModify );
-    m_copyVariantButton->Enable( canModify );
-    m_renameVariantButton->Enable( canModify );
-    m_editVariantDescButton->Enable( canModify );
-    m_deleteVariantButton->Enable( canModify );
+    // All variant modifications are disabled for the footprint fields table
+    m_addVariantButton->Enable( false );
+    m_copyVariantButton->Enable( false );
+    m_renameVariantButton->Enable( false );
+    m_editVariantDescButton->Enable( false );
+    m_deleteVariantButton->Enable( false );
 }
 
 

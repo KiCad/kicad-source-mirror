@@ -443,7 +443,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     // Disconnect Events
     m_grid->GetGridWindow()->Unbind( wxEVT_MOTION, &DIALOG_SYMBOL_FIELDS_TABLE::OnGridMouseMove, this );
     m_grid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_FIELDS_TABLE::OnColSort, this );
-    m_grid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_FIELDS_TABLE::OnColMove, this );
+    m_grid->Unbind( wxEVT_GRID_COL_MOVE, &DIALOG_SYMBOL_FIELDS_TABLE::OnColMove, this );
     m_cbBomPresets->Unbind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Unbind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
     m_viewControlsGrid->Unbind( wxEVT_GRID_CELL_CHANGED, &DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged, this );
