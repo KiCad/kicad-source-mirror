@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:09+0300\n"
-"PO-Revision-Date: 2026-08-11 07:51+0000\n"
+"PO-Revision-Date: 2026-08-12 14:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -10247,7 +10247,7 @@ msgstr "Lo schema manifesto del provider remoto '%s' non è leggibile."
 #: common/remote_provider_models.cpp:109
 #, c-format
 msgid "Remote provider manifest failed schema validation: %s"
-msgstr ""
+msgstr "Convalida schema manifesto del provider remoto non riuscita: %s"
 
 #: common/remote_provider_models.cpp:136
 msgid "assets[].download_url"
@@ -10264,6 +10264,8 @@ msgid ""
 "%s must use HTTPS unless allow_insecure_localhost is enabled for a loopback "
 "URL."
 msgstr ""
+"%s deve usare HTTPS a meno che non sia abilitata l'opzione "
+"allow_insecure_localhost per un URL di loopback."
 
 #: common/richio.cpp:59 eeschema/tools/sch_drawing_tools.cpp:3270
 #, c-format
