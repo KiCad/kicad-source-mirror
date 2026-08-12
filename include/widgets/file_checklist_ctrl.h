@@ -44,6 +44,8 @@ struct KICOMMON_API FILE_CHECKLIST_ENTRY
     wxColour statusColour; ///< Text colour for the status, or the default when not set.
     BITMAPS  icon = BITMAPS::INVALID_BITMAP;
     bool     checked = false;
+    wxString owner;        ///< Who is editing the file, e.g. "You", or empty for nobody.
+    wxString ownerNote;    ///< Hover text for the owner, e.g. how long they have been editing.
 };
 
 
@@ -65,6 +67,13 @@ public:
     const std::vector<FILE_CHECKLIST_ENTRY>& Rows( const wxString& aSection ) const;
 
     void SetChecked( const wxString& aPath, bool aChecked );
+
+    /// False when no row has aPath.
+    bool SetOwner( const wxString& aPath, const wxString& aOwner, const wxString& aNote );
+
+    /// The row for aPath, or null.
+    const FILE_CHECKLIST_ENTRY* Find( const wxString& aPath ) const;
+
     void SetSectionChecked( const wxString& aSection, bool aChecked );
 
     /// True when the section has rows and every one of them is ticked. Drives its header
@@ -106,8 +115,29 @@ public:
     /// Path of the file row for aItem, or empty for a section header or invalid item.
     wxString GetItemPath( const wxDataViewItem& aItem ) const;
 
+    /// Show or hide the column naming who is editing each file. Hidden by default, since
+    /// ownership exists only for a project in a design workspace.
+    void ShowOwners( bool aShow );
+
+    /**
+     * Change who is editing each file without rebuilding the rows, so selection and scroll stay. aOwners
+     * maps a path to its owner and hover note; a row it does not name has no owner.
+     */
+    void SetOwners( const std::map<wxString, std::pair<wxString, wxString>>& aOwners );
+
+    /// WX_DATAVIEWCTRL drops tooltips for every data view it is the base of. This one shows
+    /// them, and remembers what the owner asked for so the row tooltip can give way to it.
+    void DoSetToolTipText( const wxString& aTip ) override;
+
 private:
+    /// wxDataViewCtrl sends no mouse moves, so the hovered row is read on idle.
+    void onIdle( wxIdleEvent& aEvent );
+
     wxObjectDataPtr<FILE_CHECKLIST_MODEL> m_model;
+    wxDataViewColumn*                     m_ownerColumn = nullptr;
+
+    wxString m_ownerTooltip; ///< What the owner set, shown when no row has more to say.
+    wxString m_shownTooltip; ///< What is on screen, so an unchanged hover is left alone.
 };
 
 #endif // FILE_CHECKLIST_CTRL_H

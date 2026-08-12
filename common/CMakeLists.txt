@@ -387,6 +387,7 @@ set( KICOMMON_SRCS
     api/cross_probe_client.cpp
     api/python_manager.cpp
     api/serializable.cpp
+
     mdw/client/mdw_baseline.cpp
     mdw/client/mdw_baseline_design.cpp
     mdw/client/mdw_bom.cpp
@@ -428,6 +429,10 @@ set( KICOMMON_SRCS
     mdw/mdw_serial_worker.cpp
     mdw/mdw_types.cpp
     mdw/mdw_workspace_service.cpp
+    widgets/mdw_document_tracker.cpp
+    widgets/mdw_editing.cpp
+    widgets/mdw_status_pill.cpp
+    widgets/mdw_part_state.cpp
     mdw_part_link.cpp
 
     startwizard/startwizard.cpp
@@ -828,6 +833,7 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_checkbox.cpp
     widgets/grid_color_swatch_helpers.cpp
     widgets/wx_infobar.cpp
+    widgets/mdw_save_prompt.cpp
     widgets/editor_tabs_panel.cpp
     widgets/kicad_tab_art.cpp
     widgets/layer_box_selector.cpp

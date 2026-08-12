@@ -66,6 +66,40 @@ void FILE_CHECKLIST_DATA::SetChecked( const wxString& aPath, bool aChecked )
 }
 
 
+bool FILE_CHECKLIST_DATA::SetOwner( const wxString& aPath, const wxString& aOwner, const wxString& aNote )
+{
+    for( auto& [section, rows] : m_rowsBySection )
+    {
+        for( FILE_CHECKLIST_ENTRY& row : rows )
+        {
+            if( row.path == aPath )
+            {
+                row.owner = aOwner;
+                row.ownerNote = aNote;
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
+const FILE_CHECKLIST_ENTRY* FILE_CHECKLIST_DATA::Find( const wxString& aPath ) const
+{
+    for( const auto& [section, rows] : m_rowsBySection )
+    {
+        for( const FILE_CHECKLIST_ENTRY& row : rows )
+        {
+            if( row.path == aPath )
+                return &row;
+        }
+    }
+
+    return nullptr;
+}
+
+
 void FILE_CHECKLIST_DATA::SetSectionChecked( const wxString& aSection, bool aChecked )
 {
     auto it = m_rowsBySection.find( aSection );
@@ -133,6 +167,7 @@ public:
         COL_CHECK = 0,
         COL_NAME,
         COL_STATUS,
+        COL_OWNER,
         COL_COUNT
     };
 
@@ -159,6 +194,30 @@ public:
     }
 
     std::vector<wxString> CheckedPaths() const { return m_data.CheckedPaths(); }
+
+    const FILE_CHECKLIST_ENTRY* Find( const wxString& aPath ) const { return m_data.Find( aPath ); }
+
+    void SetOwners( const std::map<wxString, std::pair<wxString, wxString>>& aOwners )
+    {
+        static const std::pair<wxString, wxString> nobody;
+
+        for( const std::unique_ptr<CHECKLIST_NODE>& section : m_sectionNodes )
+        {
+            for( const std::unique_ptr<CHECKLIST_NODE>& child : section->children )
+            {
+                const FILE_CHECKLIST_ENTRY& row = m_data.Rows( child->section )[child->index];
+                auto                        it = aOwners.find( row.path );
+                const auto& [owner, note] = it == aOwners.end() ? nobody : it->second;
+
+                // Every refresh sets every row, so only a change repaints one
+                if( row.owner == owner && row.ownerNote == note )
+                    continue;
+
+                m_data.SetOwner( row.path, owner, note );
+                ValueChanged( wxDataViewItem( child.get() ), COL_OWNER );
+            }
+        }
+    }
 
     wxString PathFor( const wxDataViewItem& aItem ) const
     {
@@ -197,6 +256,7 @@ public:
             {
             case COL_CHECK: aVariant = row.checked; break;
             case COL_NAME: aVariant << wxDataViewIconText( row.path, KiBitmapBundle( row.icon ) ); break;
+            case COL_OWNER: aVariant = row.owner; break;
             default: aVariant = row.status; break;
             }
         }
@@ -327,6 +387,70 @@ FILE_CHECKLIST_CTRL::FILE_CHECKLIST_CTRL( wxWindow* aParent, wxWindowID aId ) :
                         wxCOL_WIDTH_AUTOSIZE );
     AppendIconTextColumn( _( "File" ), FILE_CHECKLIST_MODEL::COL_NAME, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
     AppendTextColumn( _( "Status" ), FILE_CHECKLIST_MODEL::COL_STATUS, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
+
+    Bind( wxEVT_IDLE, &FILE_CHECKLIST_CTRL::onIdle, this );
+}
+
+
+void FILE_CHECKLIST_CTRL::ShowOwners( bool aShow )
+{
+    if( aShow == ( m_ownerColumn != nullptr ) )
+        return;
+
+    if( aShow )
+    {
+        m_ownerColumn = AppendTextColumn( _( "Editing" ), FILE_CHECKLIST_MODEL::COL_OWNER, wxDATAVIEW_CELL_INERT,
+                                          wxCOL_WIDTH_AUTOSIZE );
+    }
+    else
+    {
+        DeleteColumn( m_ownerColumn );
+        m_ownerColumn = nullptr;
+    }
+}
+
+
+void FILE_CHECKLIST_CTRL::SetOwners( const std::map<wxString, std::pair<wxString, wxString>>& aOwners )
+{
+    m_model->SetOwners( aOwners );
+}
+
+
+void FILE_CHECKLIST_CTRL::DoSetToolTipText( const wxString& aTip )
+{
+    m_ownerTooltip = aTip;
+    m_shownTooltip = aTip;
+    wxDataViewCtrl::DoSetToolTipText( aTip );
+}
+
+
+// The owner column's hover note says more than the owner's name
+void FILE_CHECKLIST_CTRL::onIdle( wxIdleEvent& aEvent )
+{
+    aEvent.Skip();
+
+    wxString tip = m_ownerTooltip;
+    wxPoint  screenPos = wxGetMousePosition();
+
+    if( IsShownOnScreen() && GetScreenRect().Contains( screenPos ) )
+    {
+        wxDataViewItem    item;
+        wxDataViewColumn* column = nullptr;
+
+        HitTest( ScreenToClient( screenPos ), item, column );
+
+        wxString                    path = GetItemPath( item );
+        const FILE_CHECKLIST_ENTRY* row = path.IsEmpty() ? nullptr : m_model->Find( path );
+
+        if( m_ownerColumn && column == m_ownerColumn && row && !row->ownerNote.IsEmpty() )
+            tip = row->ownerNote;
+    }
+
+    if( tip == m_shownTooltip )
+        return;
+
+    m_shownTooltip = tip;
+    wxDataViewCtrl::DoSetToolTipText( tip );
 }
 
 

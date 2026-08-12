@@ -131,7 +131,9 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     if( ( aStyle & wxFRAME_NO_TASKBAR ) == 0 )
     {
-        CreateStatusBar( 8 )->SetDoubleBuffered( true );
+        // Field 7 is reserved for the Design Workspace status pill. It has no width on frames that
+        // do not show the pill, and the constraint field stays last so a background job label clears it
+        CreateStatusBar( 9 )->SetDoubleBuffered( true );
 
         GetStatusBar()->SetFont( KIUI::GetStatusFont( this ) );
 
@@ -694,7 +696,7 @@ void EDA_DRAW_FRAME::DisplayConstraintsMsg( const wxString& msg )
     if( m_isClosing )
         return;
 
-    SetStatusText( msg, 7 );
+    SetStatusText( msg, 8 );
 }
 
 
@@ -745,7 +747,7 @@ void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 void EDA_DRAW_FRAME::updateStatusBarWidths()
 {
-    constexpr int numLocalFields = 8;
+    constexpr int numLocalFields = 9;
 
     wxStatusBar* stsbar = GetStatusBar();
     int spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x;
@@ -778,8 +780,11 @@ void EDA_DRAW_FRAME::updateStatusBarWidths()
         // Size for the "Current Tool" panel
         -1,
 
+        // Design Workspace status pill, which sizes its own field while shown
+        std::max( stsbar->GetStatusWidth( 7 ), 0 ),
+
         // constraint mode
-        KIUI::GetTextSize(  _( "Constrain to H, V, 45" ), stsbar).x + spacer
+        KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x + spacer
     };
 
     for( int idx = numLocalFields; idx < totalFields; ++idx )
