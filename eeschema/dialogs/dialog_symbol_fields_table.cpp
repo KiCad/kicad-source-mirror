@@ -1836,7 +1836,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<S
 
             // Add all fields again in case this symbol has a new one
             for( SCH_FIELD& field : symbol->GetFields() )
-                AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
+            {
+                if( !field.IsMandatory() && !field.IsPrivate() )
+                    AddField( field.GetCanonicalName(), field.GetName(), true, false, false );
+            }
 
             m_dataModel->AddReferences( getSymbolReferences( symbol, allRefs ) );
         }
@@ -1852,7 +1855,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<S
             {
                 // Add all fields again in case this symbol has a new one
                 for( SCH_FIELD& field : symbol->GetFields() )
-                    AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
+                {
+                    if( !field.IsMandatory() && !field.IsPrivate() )
+                        AddField( field.GetCanonicalName(), field.GetName(), true, false, false );
+                }
             }
 
             m_dataModel->AddReferences( refs );
@@ -1904,7 +1910,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
 
             // Add all fields again in case this symbol has a new one
             for( SCH_FIELD& field : symbol->GetFields() )
-                AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
+            {
+                if( !field.IsMandatory() && !field.IsPrivate() )
+                    AddField( field.GetCanonicalName(), field.GetName(), true, false, false );
+            }
 
             m_dataModel->UpdateReferences( getSymbolReferences( symbol, allRefs ) );
         }
@@ -1920,7 +1929,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
             {
                 // Add all fields again in case this symbol has a new one
                 for( SCH_FIELD& field : symbol->GetFields() )
-                    AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
+                {
+                    if( !field.IsMandatory() && !field.IsPrivate() )
+                        AddField( field.GetCanonicalName(), field.GetName(), true, false, false );
+                }
             }
 
             m_dataModel->UpdateReferences( refs );
