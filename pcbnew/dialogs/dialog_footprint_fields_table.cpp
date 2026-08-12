@@ -288,6 +288,13 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
     // Set the current variant for highlighting variant-specific field values
     m_dataModel->SetCurrentVariant( resolveVariant() );
 
+    // Disable variant editing controls in for footprint fields table, variants come only from the schematic
+    m_addVariantButton->Hide();
+    m_copyVariantButton->Hide();
+    m_renameVariantButton->Hide();
+    m_editVariantDescButton->Hide();
+    m_deleteVariantButton->Hide();
+
     SetInitialFocus( m_grid );
     m_grid->ClearSelection();
 
@@ -2023,6 +2030,7 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::updateVariantButtonStates()
     // Copy, rename, and delete are disabled for the PCB footprint fields table
     bool canModify = false;
 
+    m_addVariantButton->Enable( canModify );
     m_copyVariantButton->Enable( canModify );
     m_renameVariantButton->Enable( canModify );
     m_editVariantDescButton->Enable( canModify );
