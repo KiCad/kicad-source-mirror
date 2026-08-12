@@ -93,7 +93,7 @@ private:
     void OnBoardItemsAdded( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
     void OnBoardItemsRemoved( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
     void OnBoardItemsChanged( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
-    void OnSchSheetChanged( BOARD& aPcb );
+    void OnCurrentSchematicSheetChanged( wxCommandEvent& aEvent );
 
     void EnableSelectionEvents();
     void DisableSelectionEvents();

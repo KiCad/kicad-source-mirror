@@ -157,6 +157,8 @@
 
 using namespace std::placeholders;
 
+wxDEFINE_EVENT( EDA_EVT_PCB_LAST_SCH_SHEET_CHANGED, wxCommandEvent );
+
 
 #define INSPECT_DRC_ERROR_DIALOG_NAME   wxT( "InspectDrcErrorDialog" )
 #define INSPECT_CLEARANCE_DIALOG_NAME   wxT( "InspectClearanceDialog" )

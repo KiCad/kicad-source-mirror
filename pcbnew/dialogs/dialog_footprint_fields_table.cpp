@@ -334,6 +334,8 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
     {
         // Start listening for board changes
         m_parent->GetBoard()->AddListener( this );
+        m_parent->Bind( EDA_EVT_PCB_LAST_SCH_SHEET_CHANGED,
+                        &DIALOG_FOOTPRINT_FIELDS_TABLE::OnCurrentSchematicSheetChanged, this );
     }
     else
     {
@@ -347,6 +349,12 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
 
 DIALOG_FOOTPRINT_FIELDS_TABLE::~DIALOG_FOOTPRINT_FIELDS_TABLE()
 {
+    if( !m_job )
+    {
+        m_parent->Unbind( EDA_EVT_PCB_LAST_SCH_SHEET_CHANGED,
+                          &DIALOG_FOOTPRINT_FIELDS_TABLE::OnCurrentSchematicSheetChanged, this );
+    }
+
     savePresetsToBoard();
 
     PCBNEW_SETTINGS::PANEL_FOOTPRINT_FIELDS_TABLE& cfg = m_parent->GetPcbNewSettings()->m_FieldEditorPanel;
@@ -1807,8 +1815,10 @@ void DIALOG_FOOTPRINT_FIELDS_TABLE::OnBoardItemsChanged( BOARD& aPcb, std::vecto
 }
 
 
-void DIALOG_FOOTPRINT_FIELDS_TABLE::OnSchSheetChanged( BOARD& aPcb )
+void DIALOG_FOOTPRINT_FIELDS_TABLE::OnCurrentSchematicSheetChanged( wxCommandEvent& aEvent )
 {
+    wxUnusedVar( aEvent );
+
     m_dataModel->SetPath( m_parent->GetLastSchematicSheetPath() );
 
     if( m_dataModel->GetScope() != FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE::SCOPE_ALL )

@@ -477,6 +477,18 @@ void PCB_EDIT_FRAME::SendCrossProbeItem( BOARD_ITEM* aSyncItem )
     }
 }
 
+void PCB_EDIT_FRAME::SetLastSchematicSheetPath( const KIID_PATH& aPath )
+{
+    if( m_lastSchematicSheetPath == aPath )
+        return;
+
+    m_lastSchematicSheetPath = aPath;
+
+    wxCommandEvent event( EDA_EVT_PCB_LAST_SCH_SHEET_CHANGED, GetId() );
+    event.SetEventObject( this );
+    wxPostEvent( this, event );
+}
+
 
 std::vector<BOARD_ITEM*> PCB_EDIT_FRAME::FindItemsFromSyncSelection( std::string syncStr )
 {
@@ -571,7 +583,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
     switch( mail.Command() )
     {
     case MAIL_SCH_SHEET_CHANGED:
-        m_lastSchematicSheetPath = KIID_PATH( wxString::FromUTF8( payload.c_str() ) );
+        SetLastSchematicSheetPath( KIID_PATH( wxString::FromUTF8( payload.c_str() ) ) );
         break;
 
     case MAIL_PCB_GET_NETLIST:
@@ -916,4 +928,3 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         ;
     }
 }
-

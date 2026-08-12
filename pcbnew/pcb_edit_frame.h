@@ -73,6 +73,8 @@ enum LAST_PATH_TYPE : unsigned int;
 
 namespace PCB { struct IFACE; }     // KIFACE is in pcbnew.cpp
 
+wxDECLARE_EVENT( EDA_EVT_PCB_LAST_SCH_SHEET_CHANGED, wxCommandEvent );
+
 /**
  * The main frame for Pcbnew.
  *
@@ -112,6 +114,7 @@ public:
 
     void KiwayMailIn( KIWAY_MAIL_EVENT& aEvent ) override;
 
+    void      SetLastSchematicSheetPath( const KIID_PATH& aPath );
     KIID_PATH GetLastSchematicSheetPath() const { return m_lastSchematicSheetPath; }
 
     /**
