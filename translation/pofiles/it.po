@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-21 21:08+0300\n"
-"PO-Revision-Date: 2026-08-11 07:52+0000\n"
+"PO-Revision-Date: 2026-08-12 14:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -11004,7 +11004,7 @@ msgstr "Lo schema manifesto del provider remoto '%s' non è leggibile."
 #: common/remote_provider_models.cpp:109
 #, c-format
 msgid "Remote provider manifest failed schema validation: %s"
-msgstr ""
+msgstr "Convalida schema manifesto del provider remoto non riuscita: %s"
 
 #: common/remote_provider_models.cpp:147
 #, fuzzy, c-format
@@ -11017,6 +11017,8 @@ msgid ""
 "%s must use HTTPS unless allow_insecure_localhost is enabled for a loopback "
 "URL."
 msgstr ""
+"%s deve usare HTTPS a meno che non sia abilitata l'opzione "
+"allow_insecure_localhost per un URL di loopback."
 
 #: common/richio.cpp:59 eeschema/tools/sch_drawing_tools.cpp:2843
 #, c-format
@@ -11739,7 +11741,7 @@ msgstr "Commuta postura arco"
 
 #: common/tool/actions.cpp:612
 msgid "Switch arc posture between clockwise and counter-clockwise"
-msgstr ""
+msgstr "Cambia la postura dell'arco tra orario e antiorario."
 
 #: common/tool/actions.cpp:618
 msgid "Cycle Arc Editing Mode"
@@ -12648,7 +12650,7 @@ msgstr "Ignora altri magnetismi"
 
 #: common/widgets/editor_tabs_panel.cpp:641
 msgid "Close Tabs to the Right"
-msgstr ""
+msgstr "Chiudi le schede a destra"
 
 #: common/widgets/editor_tabs_panel.cpp:642
 #, fuzzy
@@ -14456,7 +14458,7 @@ msgstr "Crea"
 #: eeschema/dialogs/dialog_create_net_chain.cpp:129
 #, c-format
 msgid "Chain created (%d total). Select another or close."
-msgstr ""
+msgstr "Catena creata (%d in totale). Selezionane un'altra o chiudi."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
 #, fuzzy
@@ -14485,7 +14487,7 @@ msgstr "Il nome catena non può contenere spazi, virgolette o parentesi."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:178
 msgid "Connection graph not available."
-msgstr ""
+msgstr "Grafico connessione non disponibile."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:184
 #, c-format
