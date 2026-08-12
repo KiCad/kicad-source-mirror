@@ -238,6 +238,19 @@
         "native_reopen_persistence"
       ],
       "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. A clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained 32 uniquely referenced placements with item-visibility flags 0 through 31. A free-text Underline Verdana request retained font style bit 4. PADS substituted unavailable combined underline fonts with Arial variants; the fixture records that vendor normalization rather than claiming those source fonts survived. No third-party design content"
+    },
+    {
+      "binary": "field_justification.sch",
+      "ascii": "field_justification.txt",
+      "binary_sha256": "60779b22ef07867fed1e4d9ffcdf53e250ee3364b12073fdab982f0e60f84cd6",
+      "ascii_sha256": "b1017a997dad827b8e18ab24a3177d7b15ab4f23d674a33fafac9b96df8ea889",
+      "pads_binary_version": "0x000D",
+      "features": [
+        "placement_field_justification_codes_0_through_15",
+        "reference_value_user_field_parity",
+        "native_reopen_persistence"
+      ],
+      "provenance": "Created from fixture-owned Logic 9.0 ASCII in PADS Logic VX.2.4. Two rejected setup attempts were discarded: negative placement coordinates were corrected by PADS, and a redundant built-in SIZEB drawing was rejected. The final clean new-design import reported NO ERRORS FOUND. Native v13 save, native reopen, and all-section Logic 9.0 re-export retained 16 uniquely referenced placements whose reference, part-type, and user fields use justification codes 0 through 15. No third-party design content"
     }
   ]
 }

@@ -992,7 +992,7 @@ types:
         type: u2
       - id: reference_justification
         type: u2
-        doc: The low byte is the Logic 9.0 justification code; paired vendor fields prove the high byte carries unrelated packed data.
+        doc: Controlled native-save/reopen parity covers low-byte codes 0 through 15. Codes 0/1 are bottom left/right, 2/3/4/5/6/7 are top left/right/center/right/left/right, and 8/9/10/11/12/13/14/15 are center left/right/center/right/center/right/center/right. The high byte carries unrelated packed data.
       - id: part_type_x_half_mil
         type: s2
       - id: part_type_y_half_mil
@@ -1001,7 +1001,7 @@ types:
         type: u2
       - id: part_type_justification
         type: u2
-        doc: The low byte is the Logic 9.0 justification code; paired vendor fields prove the high byte carries unrelated packed data.
+        doc: Controlled native-save/reopen parity covers low-byte codes 0 through 15 using the same vertical-band mapping as reference fields. The high byte carries unrelated packed data.
       - id: preserved_instance_properties_38
         size: 10
         doc: Exact placement-instance bytes; transform and field diffs leave these values unchanged or semantically unowned, so importer disposition is PRESERVED.
@@ -1094,7 +1094,7 @@ types:
         type: u2
       - id: justification
         type: u1
-        doc: Logic 9.0 justification code using vertical bands and the shared horizontal fallback.
+        doc: Controlled native-save/reopen parity covers codes 0 through 15. Codes 0/1 are bottom left/right, 2/3/4/5/6/7 are top left/right/center/right/left/right, and 8/9/10/11/12/13/14/15 are center left/right/center/right/center/right/center/right.
       - id: presentation_class
         type: u1
       - id: component_attribute_index

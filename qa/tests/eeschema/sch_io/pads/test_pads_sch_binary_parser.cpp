@@ -3012,7 +3012,8 @@ BOOST_AUTO_TEST_CASE( PlacementHandleErrors )
 BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
 {
     PADS_SCH_BINARY_PARSER           binaryParser;
-    const std::array<std::string, 4> fixtures = { "placement_transform", "fields", "connectors", "multigate" };
+    const std::array<std::string, 5> fixtures = { "placement_transform", "fields", "connectors", "multigate",
+                                                  "field_justification" };
 
     for( const std::string& fixture : fixtures )
     {
@@ -3099,8 +3100,10 @@ BOOST_AUTO_TEST_CASE( PlacementSemanticSnapshot )
                 {
                     BOOST_CHECK_EQUAL( propertyValue( binaryField.properties, wxS( "display_flags" ) ),
                                        wxString::Format( wxS( "%d" ), asciiField.visibility ) );
+                    const wxString expectedAttributeIndex =
+                            fixture == "fields" || fixture == "field_justification" ? wxS( "10" ) : wxS( "65535" );
                     BOOST_CHECK_EQUAL( propertyValue( binaryField.properties, wxS( "component_attribute_index" ) ),
-                                       fixture == "fields" ? wxS( "10" ) : wxS( "65535" ) );
+                                       expectedAttributeIndex );
                 }
             }
         }
