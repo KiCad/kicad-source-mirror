@@ -21,6 +21,7 @@
 #pragma once
 
 #include <set>
+#include <vector>
 
 #include <dialogs/dialog_fields_table.h>
 #include <fields_view_controls_grid_data_model.h>
@@ -93,6 +94,38 @@ private:
     void OnBoardItemsAdded( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
     void OnBoardItemsRemoved( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
     void OnBoardItemsChanged( BOARD& aPcb, std::vector<BOARD_ITEM*>& aPcbItem ) override;
+
+    void OnBoardItemAdded( BOARD& aPcb, BOARD_ITEM* aPcbItem ) override
+    {
+        std::vector<BOARD_ITEM*> items{ aPcbItem };
+        OnBoardItemsAdded( aPcb, items );
+    }
+
+    void OnBoardItemRemoved( BOARD& aPcb, BOARD_ITEM* aPcbItem ) override
+    {
+        std::vector<BOARD_ITEM*> items{ aPcbItem };
+        OnBoardItemsRemoved( aPcb, items );
+    }
+
+    void OnBoardItemChanged( BOARD& aPcb, BOARD_ITEM* aPcbItem ) override
+    {
+        std::vector<BOARD_ITEM*> items{ aPcbItem };
+        OnBoardItemsChanged( aPcb, items );
+    }
+
+    void OnBoardCompositeUpdate( BOARD& aPcb, std::vector<BOARD_ITEM*>& aAdded,
+                                 std::vector<BOARD_ITEM*>& aRemoved,
+                                 std::vector<BOARD_ITEM*>& aChanged ) override
+    {
+        // Be careful here because footprint exchanging will give a footprint
+        // the same UUID but a different pointer. Remove first so we get
+        // rid of the old footprint/pointer from the data model and the fp ref list
+        // before we add the new-same-UUID footprint.
+        if( !aRemoved.empty() ) OnBoardItemsRemoved( aPcb, aRemoved );
+        if( !aAdded.empty() ) OnBoardItemsAdded( aPcb, aAdded );
+        if( !aChanged.empty() ) OnBoardItemsChanged( aPcb, aChanged );
+    }
+
     void OnCurrentSchematicSheetChanged( wxCommandEvent& aEvent );
 
     void EnableSelectionEvents();
