@@ -49,6 +49,7 @@
 #include <dialogs/dialog_page_settings.h>
 #include <dialogs/dialog_update_pcb.h>
 #include <dialogs/dialog_assign_netclass.h>
+#include <dialogs/dialog_footprint_fields_table.h>
 #include <dialog_plot.h>
 #include <dialogs/rule_editor_dialog_base.h>
 #include <dialogs/dialog_find_by_properties.h>
@@ -562,6 +563,44 @@ int BOARD_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 {
     DIALOG_PLOT dlg( m_frame );
     dlg.ShowQuasiModal();
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::EditFootprintFields( const TOOL_EVENT& aEvent )
+{
+    DIALOG_FOOTPRINT_FIELDS_TABLE* dlg = m_frame->GetFootprintFieldsTableDialog();
+
+    if( !dlg )
+        return 0;
+
+    // Needed at least on Windows. Raise() is not enough
+    dlg->Show( true );
+
+    // Bring it to the top if already open.  Dual monitor users need this.
+    dlg->Raise();
+
+    dlg->ShowEditTab();
+
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::GenerateBOM( const TOOL_EVENT& aEvent )
+{
+    DIALOG_FOOTPRINT_FIELDS_TABLE* dlg = m_frame->GetFootprintFieldsTableDialog();
+
+    if( !dlg )
+        return 0;
+
+    // Needed at least on Windows. Raise() is not enough
+    dlg->Show( true );
+
+    // Bring it to the top if already open.  Dual monitor users need this.
+    dlg->Raise();
+
+    dlg->ShowExportTab();
+
     return 0;
 }
 
@@ -2311,6 +2350,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ExportSpecctraDSN,      PCB_ACTIONS::exportSpecctraDSN.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::EditFootprintFields,    PCB_ACTIONS::editFootprintFields.MakeEvent() );
 
     if( ADVANCED_CFG::GetCfg().m_ShowPcbnewExportNetlist && m_frame && m_frame->GetExportNetlistAction() )
         Go( &BOARD_EDITOR_CONTROL::ExportNetlist, m_frame->GetExportNetlistAction()->MakeEvent() );
@@ -2320,7 +2360,8 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::GeneratePosFile,        PCB_ACTIONS::generatePosFile.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenFootprintsReport,    PCB_ACTIONS::generateReportFile.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenD356File,            PCB_ACTIONS::generateD356File.MakeEvent() );
-    Go( &BOARD_EDITOR_CONTROL::GenBOMFileFromBoard,    PCB_ACTIONS::generateBOM.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateBOM,            PCB_ACTIONS::generateBOM.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenBOMFileFromBoard,    PCB_ACTIONS::generateBOMLegacy.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenIPC2581File,         PCB_ACTIONS::generateIPC2581File.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::GenerateODBPPFiles,     PCB_ACTIONS::generateODBPPFile.MakeEvent() );
 

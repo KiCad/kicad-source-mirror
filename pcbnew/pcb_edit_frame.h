@@ -60,6 +60,7 @@ class BOARD_NETLIST_UPDATER;
 class ACTION_MENU;
 class TOOL_ACTION;
 class DIALOG_BOARD_SETUP;
+class DIALOG_FOOTPRINT_FIELDS_TABLE;
 class PCB_DESIGN_BLOCK_PANE;
 class PANEL_CONSTRAINTS;
 class WX_INFOBAR;
@@ -667,6 +668,9 @@ public:
 
     DIALOG_BOOK_REPORTER* GetFootprintDiffDialog();
 
+    DIALOG_FOOTPRINT_FIELDS_TABLE* GetFootprintFieldsTableDialog();
+    bool                           CloseFootprintFieldsTableDialog();
+
     /**
      * Perform auto save when the board has been modified and not saved within the
      * auto save interval.
@@ -787,6 +791,7 @@ protected:
     void saveProjectSettings() override;
 
     void onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent );
+    void onCloseFootprintFieldsTableDialog( wxCommandEvent& aEvent );
 
     void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
 
@@ -842,6 +847,7 @@ private:
     DIALOG_BOOK_REPORTER*      m_inspectConstraintsDlg;
     DIALOG_BOOK_REPORTER*      m_footprintDiffDlg;
     DIALOG_BOARD_SETUP*        m_boardSetupDlg;
+    DIALOG_FOOTPRINT_FIELDS_TABLE* m_footprintFieldsTableDialog;
 
     std::vector<LIB_ID>    m_designBlockHistoryList;
     PCB_DESIGN_BLOCK_PANE* m_designBlocksPane;

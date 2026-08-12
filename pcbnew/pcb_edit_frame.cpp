@@ -62,6 +62,7 @@
 #include <footprint_edit_frame.h>
 #include <dialog_find.h>
 #include <dialogs/dialog_find_by_properties.h>
+#include <dialogs/dialog_footprint_fields_table.h>
 #include <dialog_footprint_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
 #include <dialogs/dialog_migrate_3d_models.h>
@@ -211,6 +212,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_inspectConstraintsDlg( nullptr ),
         m_footprintDiffDlg( nullptr ),
         m_boardSetupDlg( nullptr ),
+        m_footprintFieldsTableDialog( nullptr ),
         m_designBlocksPane( nullptr ),
         m_importProperties( nullptr ),
         m_eventCounterTimer( nullptr )
@@ -627,6 +629,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     DragAcceptFiles( true );
 
     Bind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs, this );
+    Bind( EDA_EVT_CLOSE_DIALOG_FOOTPRINT_FIELDS_TABLE, &PCB_EDIT_FRAME::onCloseFootprintFieldsTableDialog, this );
 }
 
 
@@ -1611,6 +1614,9 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
+    if( !CloseFootprintFieldsTableDialog() )
+        return false;
+
     if( IsContentModified() )
     {
         wxFileName fileName = GetBoard()->GetFileName();
@@ -1664,6 +1670,7 @@ void PCB_EDIT_FRAME::doCloseWindow()
 
     // Clean up mode-less dialogs.
     Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs, this );
+    Unbind( EDA_EVT_CLOSE_DIALOG_FOOTPRINT_FIELDS_TABLE, &PCB_EDIT_FRAME::onCloseFootprintFieldsTableDialog, this );
 
     wxWindow* drcDlg = wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME );
 
@@ -1709,6 +1716,12 @@ void PCB_EDIT_FRAME::doCloseWindow()
     {
         m_footprintDiffDlg->Destroy();
         m_footprintDiffDlg = nullptr;
+    }
+
+    if( m_footprintFieldsTableDialog )
+    {
+        m_footprintFieldsTableDialog->Destroy();
+        m_footprintFieldsTableDialog = nullptr;
     }
 
     // Delete the auto save file if it exists.  Only sweep when the board was actually dirtied in this session;
@@ -2888,6 +2901,25 @@ DIALOG_BOOK_REPORTER* PCB_EDIT_FRAME::GetFootprintDiffDialog()
 }
 
 
+DIALOG_FOOTPRINT_FIELDS_TABLE* PCB_EDIT_FRAME::GetFootprintFieldsTableDialog()
+{
+    if( !m_footprintFieldsTableDialog )
+    {
+        auto* dlg = new DIALOG_FOOTPRINT_FIELDS_TABLE( this );
+
+        if( dlg->WasAborted() )
+        {
+            dlg->Destroy();
+            return nullptr;
+        }
+
+        m_footprintFieldsTableDialog = dlg;
+    }
+
+    return m_footprintFieldsTableDialog;
+}
+
+
 void PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent )
 {
     if( m_inspectDrcErrorDlg && aEvent.GetString() == INSPECT_DRC_ERROR_DIALOG_NAME )
@@ -2928,6 +2960,36 @@ void PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent 
 
         m_footprintDiffDlg->Destroy();
         m_footprintDiffDlg = nullptr;
+    }
+}
+
+
+bool PCB_EDIT_FRAME::CloseFootprintFieldsTableDialog()
+{
+    if( !m_footprintFieldsTableDialog )
+        return true;
+
+    DIALOG_FOOTPRINT_FIELDS_TABLE* dlg = m_footprintFieldsTableDialog;
+
+    if( !dlg->Close( false ) )
+        return false;
+
+    if( m_footprintFieldsTableDialog == dlg )
+    {
+        dlg->Destroy();
+        m_footprintFieldsTableDialog = nullptr;
+    }
+
+    return true;
+}
+
+
+void PCB_EDIT_FRAME::onCloseFootprintFieldsTableDialog( wxCommandEvent& aEvent )
+{
+    if( m_footprintFieldsTableDialog )
+    {
+        m_footprintFieldsTableDialog->Destroy();
+        m_footprintFieldsTableDialog = nullptr;
     }
 }
 

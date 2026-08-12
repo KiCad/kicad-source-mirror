@@ -1514,6 +1514,13 @@ TOOL_ACTION PCB_ACTIONS::exportSpecctraDSN( TOOL_ACTION_ARGS()
         .Tooltip( _( "Export Specctra DSN routing info" ) )
         .Icon( BITMAPS::export_dsn ) );
 
+TOOL_ACTION PCB_ACTIONS::editFootprintFields( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.editFootprintFields" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Bulk Edit Footprint Fields..." ) )
+        .Tooltip( _( "Edit a table of fields from all footprints in the board" ) )
+        .Icon( BITMAPS::spreadsheet ) );
+
 TOOL_ACTION PCB_ACTIONS::generateGerbers( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.generateGerbers" )
         .Scope( AS_GLOBAL )
@@ -1569,6 +1576,13 @@ TOOL_ACTION PCB_ACTIONS::generateBOM( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Bill of Materials..." ) )
         .Tooltip( _( "Create bill of materials from board" ) )
         .Icon( BITMAPS::post_bom ) );
+
+TOOL_ACTION PCB_ACTIONS::generateBOMLegacy( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.generateBOMLegacy" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Generate Legacy Bill of Materials..." ) )
+        .Tooltip( _( "Generate a bill of materials for the current board using the legacy exporter" ) )
+        .Icon( BITMAPS::file_bom ) );
 
 TOOL_ACTION PCB_ACTIONS::exportGenCAD( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.exportGenCAD" )

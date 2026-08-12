@@ -160,6 +160,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     submenuFabOutputs->Add( PCB_ACTIONS::generateReportFile );
     submenuFabOutputs->Add( PCB_ACTIONS::generateD356File );
     submenuFabOutputs->Add( PCB_ACTIONS::generateBOM );
+    submenuFabOutputs->Add( PCB_ACTIONS::generateBOMLegacy );
     fileMenu->Add( submenuFabOutputs );
 
     fileMenu->AppendSeparator();
@@ -433,6 +434,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->Add( ACTIONS::showFootprintEditor );
     toolsMenu->Add( PCB_ACTIONS::updateFootprints );
     toolsMenu->Add( PCB_ACTIONS::migrate3DModels );
+    toolsMenu->Add( PCB_ACTIONS::editFootprintFields );
 
     //Zones management
     toolsMenu->AppendSeparator();

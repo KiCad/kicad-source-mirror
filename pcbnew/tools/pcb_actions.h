@@ -435,6 +435,8 @@ public:
     static TOOL_ACTION importSpecctraSession;
     static TOOL_ACTION exportSpecctraDSN;
 
+    static TOOL_ACTION editFootprintFields;
+
     static TOOL_ACTION generateGerbers;
     static TOOL_ACTION generateDrillFiles;
     static TOOL_ACTION generatePosFile;
@@ -443,6 +445,7 @@ public:
     static TOOL_ACTION generateODBPPFile;
     static TOOL_ACTION generateD356File;
     static TOOL_ACTION generateBOM;
+    static TOOL_ACTION generateBOMLegacy;
 
     static TOOL_ACTION exportGenCAD;
     static TOOL_ACTION exportVRML;

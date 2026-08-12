@@ -373,7 +373,8 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
         else
             config.AppendAction( PCB_ACTIONS::importNetlist );
 
-        config.AppendAction( PCB_ACTIONS::runDRC );
+        config.AppendAction( PCB_ACTIONS::runDRC )
+              .AppendAction( PCB_ACTIONS::editFootprintFields );
 
         config.AppendSeparator();
         config.AppendAction( PCB_ACTIONS::showEeschema );

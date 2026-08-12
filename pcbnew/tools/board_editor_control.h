@@ -69,8 +69,10 @@ public:
     int ImportSpecctraSession( const TOOL_EVENT& aEvent );
     int ExportSpecctraDSN( const TOOL_EVENT& aEvent );
     int ExportNetlist( const TOOL_EVENT& aEvent );
+    int EditFootprintFields( const TOOL_EVENT& aEvent );
     int GenerateDrillFiles( const TOOL_EVENT& aEvent );
     int GeneratePosFile( const TOOL_EVENT& aEvent );
+    int GenerateBOM( const TOOL_EVENT& aEvent );
     int GenerateGerbers( const TOOL_EVENT& aEvent );
     int ExportGenCAD( const TOOL_EVENT& aEvent );
     int ExportVRML( const TOOL_EVENT& aEvent );

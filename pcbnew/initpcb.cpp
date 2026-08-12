@@ -40,6 +40,9 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges, bool aFinal )
     if( GetBoard() == nullptr )
         return false;
 
+    if( !CloseFootprintFieldsTableDialog() )
+        return false;
+
     if( doAskAboutUnsavedChanges && !GetBoard()->IsEmpty() )
     {
         if( !IsOK( this, _( "Current Board will be lost and this operation cannot be undone. "

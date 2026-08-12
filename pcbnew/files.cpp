@@ -332,6 +332,9 @@ int BOARD_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
     if( !Kiface().IsSingle() )
         return false;
 
+    if( !m_frame->CloseFootprintFieldsTableDialog() )
+        return false;
+
     if( m_frame->IsContentModified() )
     {
         wxFileName fileName = m_frame->GetBoard()->GetFileName();
@@ -522,6 +525,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             lock->OverrideLock();
         }
     }
+
+    if( !CloseFootprintFieldsTableDialog() )
+        return false;
 
     if( IsContentModified() )
     {
