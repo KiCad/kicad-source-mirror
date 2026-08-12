@@ -537,6 +537,7 @@ void PCB_EDIT_FRAME::UpdateVariantSelectionCtrl()
 void PCB_EDIT_FRAME::SetCurrentVariant( const wxString& aVariantName )
 {
     GetBoard()->SetCurrentVariant( aVariantName );
+    UpdateVariantSelectionCtrl();
 
     if( PCB_DRAW_PANEL_GAL* canvas = dynamic_cast<PCB_DRAW_PANEL_GAL*>( GetCanvas() ) )
     {
