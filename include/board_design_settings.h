@@ -28,6 +28,7 @@
 #include <eda_units.h>
 #include <lset.h>
 #include <settings/nested_settings.h>
+#include <settings/bom_settings.h>
 #include <widgets/ui_common.h>
 #include <zone_settings.h>
 #include <teardrop/teardrop_parameters.h>
@@ -777,6 +778,16 @@ public:
 
     /// Enable inclusion of stackup height in track length measurements and length tuning
     bool       m_UseHeightForLengthCalcs;
+
+    wxString  m_BomExportFileName;
+
+    /// List of stored BOM presets
+    BOM_PRESET                  m_BomSettings;
+    std::vector<BOM_PRESET>     m_BomPresets;
+
+    /// List of stored BOM format presets
+    BOM_FMT_PRESET              m_BomFmtSettings;
+    std::vector<BOM_FMT_PRESET> m_BomFmtPresets;
 
 private:
     VECTOR2I   m_auxOrigin;  ///< origin for plot exports
