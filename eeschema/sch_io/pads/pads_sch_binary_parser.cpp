@@ -4784,7 +4784,7 @@ PADS_SCH_MODEL PADS_SCH_BINARY_PARSER::Parse( const std::vector<uint8_t>& aBytes
             const uint8_t displayFlags = cursor.U8At( recordOffset + 31 );
             text.presentation.visible = ( displayFlags & 1 ) == 0;
             text.presentation.horizontalJustification = freeTextHorizontalJustification( justification );
-            text.presentation.verticalJustification = MODEL_JUSTIFICATION::RIGHT;
+            text.presentation.verticalJustification = MODEL_JUSTIFICATION::CENTER;
 
             SOURCE_PROVENANCE fontHandleSource = textSource;
             fontHandleSource.absoluteOffset += 0;

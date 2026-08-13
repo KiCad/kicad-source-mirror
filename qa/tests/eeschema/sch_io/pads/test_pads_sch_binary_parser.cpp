@@ -1544,7 +1544,7 @@ BOOST_AUTO_TEST_CASE( FreeText )
     BOOST_CHECK_EQUAL( text.presentation.height, 97 );
     BOOST_CHECK_EQUAL( text.presentation.width, 10 );
     BOOST_CHECK( text.presentation.horizontalJustification == MODEL_JUSTIFICATION::LEFT );
-    BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::RIGHT );
+    BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::CENTER );
     BOOST_CHECK( !text.presentation.bold );
     BOOST_CHECK( !text.presentation.italic );
     BOOST_CHECK( !text.presentation.underline );
@@ -1658,13 +1658,13 @@ BOOST_AUTO_TEST_CASE( FreeText )
     };
 
     for( const JUSTIFICATION_CASE& expected :
-         { JUSTIFICATION_CASE{ 5, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::RIGHT },
-           { 7, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::RIGHT },
-           { 15, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::RIGHT },
-           { 6, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT },
-           { 12, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT },
-           { 0xFF04, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT },
-           { 0x0306, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::RIGHT } } )
+         { JUSTIFICATION_CASE{ 5, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::CENTER },
+           { 7, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::CENTER },
+           { 15, MODEL_JUSTIFICATION::RIGHT, MODEL_JUSTIFICATION::CENTER },
+           { 6, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER },
+           { 12, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER },
+           { 0xFF04, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER },
+           { 0x0306, MODEL_JUSTIFICATION::CENTER, MODEL_JUSTIFICATION::CENTER } } )
     {
         std::vector<uint8_t> changedJustification = loadBinaryFixture( "text_encoding.sch" );
         writeU16( changedJustification, text.source.absoluteOffset + 18, expected.raw );
@@ -1735,7 +1735,7 @@ BOOST_AUTO_TEST_CASE( TextOptionMatrix )
     {
         const MODEL_TEXT& text = textByName( wxString::Format( wxS( "JUST_%02zu" ), ii ) );
         BOOST_CHECK( text.presentation.horizontalJustification == horizontal[ii] );
-        BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::RIGHT );
+        BOOST_CHECK( text.presentation.verticalJustification == MODEL_JUSTIFICATION::CENTER );
     }
 
     for( const auto& [name, angle] : { std::pair{ wxS( "ANGLE_000" ), 0 }, std::pair{ wxS( "ANGLE_090" ), 900 },
