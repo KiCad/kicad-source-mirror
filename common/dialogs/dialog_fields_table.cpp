@@ -1177,6 +1177,13 @@ void DIALOG_FIELDS_TABLE::OnRemoveField( wxCommandEvent& aEvent )
 
                 m_viewControlsDataModel->DeleteRow( row );
 
+                for( auto& [name, preset] : m_bomPresets )
+                    std::erase_if( preset.fieldsOrdered,
+                                   [&]( BOM_FIELD const& f )
+                                   {
+                                       return f.name == fieldName;
+                                   } );
+
                 syncBomPresetSelection();
                 OnModify();
             } );
