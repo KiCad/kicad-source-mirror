@@ -21,7 +21,6 @@
 #include <advanced_config.h>
 #include <common.h>
 #include <base_units.h>
-#include <bitmaps.h>
 #include <confirm.h>
 #include <eda_doc.h>
 #include <wildcards_and_files_ext.h>
@@ -36,7 +35,6 @@
 #include <tools/board_editor_control.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
-#include <widgets/bitmap_button.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
 #include <wx/debug.h>
@@ -67,24 +65,6 @@ enum
     MYID_SET_VARIANT_FOOTPRINT,
     MYID_CLEAR_VARIANT_FOOTPRINT
 };
-
-class VIEW_CONTROLS_GRID_TRICKS : public GRID_TRICKS
-{
-public:
-    VIEW_CONTROLS_GRID_TRICKS( WX_GRID* aGrid ) :
-            GRID_TRICKS( aGrid )
-    {}
-
-protected:
-    void doPopupSelection( wxCommandEvent& event ) override
-    {
-        if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
-            m_grid->PostSizeEvent();
-
-        GRID_TRICKS::doPopupSelection( event );
-    }
-};
-
 
 class FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
@@ -180,59 +160,7 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
         m_footprintsList.emplace_back( *fp );
     }
 
-    m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
-    m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
-    m_bRefreshPreview->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
-    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
-
-    m_addFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-    m_removeFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
-    m_renameFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
-
-    m_addVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
-    m_deleteVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
-    m_renameVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
-    m_copyVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::copy ) );
-    m_editVariantDescButton->SetBitmap( KiBitmapBundle( BITMAPS::text ) );
-
-    m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
-
-    // Do not OptOut the notebook. That would also exclude its child controls such as the
-    // scope selector from being persisted. The active page is forced by the opening tool.
-
-    m_viewControlsDataModel = new VIEW_CONTROLS_GRID_DATA_MODEL( true );
-
-    m_viewControlsGrid->UseNativeColHeader( true );
-    m_viewControlsGrid->SetTable( m_viewControlsDataModel, true );
-
-    // must be done after SetTable(), which appears to re-set it
-    m_viewControlsGrid->SetSelectionMode( wxGrid::wxGridSelectCells );
-
-    // add Cut, Copy, and Paste to wxGrid
-    m_viewControlsGrid->PushEventHandler( new VIEW_CONTROLS_GRID_TRICKS( m_viewControlsGrid ) );
-
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetReadOnly( true );
-    m_viewControlsDataModel->SetColAttr( attr, DISPLAY_NAME_COLUMN );
-
-    attr = new wxGridCellAttr;
-    attr->SetRenderer( new wxGridCellBoolRenderer() );
-    attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
-    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-    m_viewControlsDataModel->SetColAttr( attr, SHOW_FIELD_COLUMN );
-
-    attr = new wxGridCellAttr;
-    attr->SetRenderer( new wxGridCellBoolRenderer() );
-    attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
-    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-    m_viewControlsDataModel->SetColAttr( attr, GROUP_BY_COLUMN );
-
-    // Compress the view controls grid.  (We want it to look different from the fields grid.)
-    m_viewControlsGrid->SetDefaultRowSize( m_viewControlsGrid->GetDefaultRowSize() - FromDIP( 4 ) );
-
-    m_filter->SetDescriptiveText( _( "Filter" ) );
-
-    attr = new wxGridCellAttr;
     attr->SetEditor( createDatasheetEditor() );
     m_dataModel = new FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL( m_footprintsList, attr );
 
@@ -362,7 +290,6 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::~DIALOG_FOOTPRINT_FIELDS_TABLE()
     m_cbBomFmtPresets->Unbind( wxEVT_CHOICE, &DIALOG_FOOTPRINT_FIELDS_TABLE::onBomFmtPresetChanged, this );
 
     // Delete the GRID_TRICKS.
-    m_viewControlsGrid->PopEventHandler( true );
     m_grid->PopEventHandler( true );
 
     // we gave ownership of m_viewControlsDataModel & m_dataModel to the wxGrids...

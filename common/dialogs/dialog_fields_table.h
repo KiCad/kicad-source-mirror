@@ -37,6 +37,7 @@ class DIALOG_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE
 {
 public:
     DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings );
+    ~DIALOG_FIELDS_TABLE() override;
 
     void ShowEditTab();
     void ShowExportTab();

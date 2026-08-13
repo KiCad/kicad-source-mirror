@@ -28,6 +28,7 @@
 #include <confirm.h>
 #include <eda_list_dialog.h>
 #include <fields_table_data_model.h>
+#include <grid_tricks.h>
 #include <settings/app_settings.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
@@ -48,10 +49,89 @@
 #endif
 
 
+namespace
+{
+class VIEW_CONTROLS_GRID_TRICKS : public GRID_TRICKS
+{
+public:
+    VIEW_CONTROLS_GRID_TRICKS( WX_GRID* aGrid ) :
+            GRID_TRICKS( aGrid )
+    {
+    }
+
+protected:
+    void doPopupSelection( wxCommandEvent& aEvent ) override
+    {
+        if( aEvent.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE )
+            m_grid->PostSizeEvent();
+
+        GRID_TRICKS::doPopupSelection( aEvent );
+    }
+};
+} // namespace
+
+
 DIALOG_FIELDS_TABLE::DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTINGS& aPanelSettings ) :
         DIALOG_FIELDS_TABLE_BASE( aParent ),
         m_panelSettings( aPanelSettings )
 {
+    m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
+    m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
+    m_bRefreshPreview->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
+    m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
+
+    m_addFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_removeFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_renameFieldButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
+
+    m_addVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
+    m_deleteVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    m_renameVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
+    m_copyVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::copy ) );
+    m_editVariantDescButton->SetBitmap( KiBitmapBundle( BITMAPS::text ) );
+
+    m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
+
+    // Do not OptOut the notebook. That would also exclude its child controls such as the
+    // scope selector from being persisted. The active page is forced by the opening tool.
+
+    m_viewControlsDataModel = new VIEW_CONTROLS_GRID_DATA_MODEL( true );
+
+    m_viewControlsGrid->UseNativeColHeader( true );
+    m_viewControlsGrid->SetTable( m_viewControlsDataModel, true );
+
+    // must be done after SetTable(), which appears to re-set it
+    m_viewControlsGrid->SetSelectionMode( wxGrid::wxGridSelectCells );
+
+    // add Cut, Copy, and Paste to wxGrid
+    m_viewControlsGrid->PushEventHandler( new VIEW_CONTROLS_GRID_TRICKS( m_viewControlsGrid ) );
+
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetReadOnly( true );
+    m_viewControlsDataModel->SetColAttr( attr, DISPLAY_NAME_COLUMN );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+    m_viewControlsDataModel->SetColAttr( attr, SHOW_FIELD_COLUMN );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
+    attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+    m_viewControlsDataModel->SetColAttr( attr, GROUP_BY_COLUMN );
+
+    // Compress the view controls grid.  (We want it to look different from the fields grid.)
+    m_viewControlsGrid->SetDefaultRowSize( m_viewControlsGrid->GetDefaultRowSize() - FromDIP( 4 ) );
+
+    m_filter->SetDescriptiveText( _( "Filter" ) );
+}
+
+
+DIALOG_FIELDS_TABLE::~DIALOG_FIELDS_TABLE()
+{
+    m_viewControlsGrid->PopEventHandler( true );
 }
 
 
