@@ -62,12 +62,12 @@ enum
     MYID_CLEAR_VARIANT_FOOTPRINT
 };
 
-class FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
+class FOOTPRINT_FIELD_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FIELDS_EDITOR_GRID_TRICKS( DIALOG_FOOTPRINT_FIELDS_TABLE* aParent, WX_GRID* aGrid,
-                               VIEW_CONTROLS_GRID_DATA_MODEL*           aViewFieldsData,
-                               FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel, EMBEDDED_FILES* aFiles ) :
+    FOOTPRINT_FIELD_EDITOR_GRID_TRICKS( DIALOG_FOOTPRINT_FIELDS_TABLE* aParent, WX_GRID* aGrid,
+                                        VIEW_CONTROLS_GRID_DATA_MODEL*           aViewFieldsData,
+                                        FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel, EMBEDDED_FILES* aFiles ) :
             GRID_TRICKS( aGrid ),
             m_dlg( aParent ),
             m_viewControlsDataModel( aViewFieldsData ),
@@ -171,8 +171,8 @@ DIALOG_FOOTPRINT_FIELDS_TABLE::DIALOG_FOOTPRINT_FIELDS_TABLE( PCB_EDIT_FRAME* pa
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
     // add Cut, Copy, and Paste to wxGrid
-    m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_viewControlsDataModel, m_dataModel,
-                                                             m_parent->GetBoard()->GetEmbeddedFiles() ) );
+    m_grid->PushEventHandler( new FOOTPRINT_FIELD_EDITOR_GRID_TRICKS(
+            this, m_grid, m_viewControlsDataModel, m_dataModel, m_parent->GetBoard()->GetEmbeddedFiles() ) );
 
     m_variantListBox->Set( parent->GetBoard()->GetVariantNamesForUI() );
 

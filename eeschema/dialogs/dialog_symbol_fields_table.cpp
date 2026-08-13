@@ -63,12 +63,12 @@ enum
     MYID_CLEAR_VARIANT_SYMBOL
 };
 
-class FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
+class SYMBOL_FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FIELDS_EDITOR_GRID_TRICKS( DIALOG_SYMBOL_FIELDS_TABLE* aParent, WX_GRID* aGrid,
-                               VIEW_CONTROLS_GRID_DATA_MODEL*        aViewFieldsData,
-                               SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel, EMBEDDED_FILES* aFiles ) :
+    SYMBOL_FIELDS_EDITOR_GRID_TRICKS( DIALOG_SYMBOL_FIELDS_TABLE* aParent, WX_GRID* aGrid,
+                                      VIEW_CONTROLS_GRID_DATA_MODEL*        aViewFieldsData,
+                                      SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL* aDataModel, EMBEDDED_FILES* aFiles ) :
             GRID_TRICKS( aGrid ),
             m_dlg( aParent ),
             m_viewControlsDataModel( aViewFieldsData ),
@@ -238,8 +238,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 
     // add Cut, Copy, and Paste to wxGrid
-    m_grid->PushEventHandler( new FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_viewControlsDataModel, m_dataModel,
-                                                             &m_parent->Schematic() ) );
+    m_grid->PushEventHandler( new SYMBOL_FIELDS_EDITOR_GRID_TRICKS( this, m_grid, m_viewControlsDataModel, m_dataModel,
+                                                                    &m_parent->Schematic() ) );
 
     m_variantListBox->Set( parent->Schematic().GetVariantNamesForUI() );
 
