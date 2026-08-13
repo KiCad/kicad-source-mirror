@@ -45,8 +45,7 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    void SetupColumnProperties( int aCol ) override;
-    void SetupAllColumnProperties();
+    wxGridCellEditor* createDatasheetEditor() override;
 
     void setScope( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
 
@@ -56,7 +55,6 @@ private:
      */
     void LoadFieldNames();
 
-    void OnColMove( wxGridEvent& aEvent );
     void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent );
 
     void OnScope( wxCommandEvent& event ) override;
@@ -98,7 +96,6 @@ private:
     SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol, SCH_REFERENCE_LIST& aCachedRefs );
     SCH_REFERENCE_LIST getSheetSymbolReferences( SCH_SHEET& aSheet );
 
-    void doApplyBomPreset( const BOM_PRESET& aPreset ) override;
     void savePresetsToSchematic();
 
     void onAddVariant( wxCommandEvent& aEvent ) override;
@@ -110,7 +107,7 @@ private:
 
     void updateVariantButtonStates();
 
-    wxString resolveVariant() const;
+    wxString resolveVariant() const override;
 
 private:
     SCH_EDIT_FRAME*                    m_parent;

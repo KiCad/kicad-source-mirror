@@ -45,8 +45,7 @@ public:
     bool TransferDataFromWindow() override;
 
 private:
-    void SetupColumnProperties( int aCol ) override;
-    void SetupAllColumnProperties();
+    wxGridCellEditor* createDatasheetEditor() override;
 
     void setScope( FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE aScope );
 
@@ -56,7 +55,6 @@ private:
      */
     void LoadFieldNames();
 
-    void OnColMove( wxGridEvent& aEvent );
     void OnTableRangeSelected( wxGridRangeSelectEvent& aEvent );
 
     void OnScope( wxCommandEvent& event ) override;
@@ -127,7 +125,6 @@ private:
 private:
     FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const override { return m_dataModel; }
 
-    void doApplyBomPreset( const BOM_PRESET& aPreset ) override;
     void savePresetsToBoard();
 
     void onAddVariant( wxCommandEvent& aEvent ) override;
@@ -139,7 +136,7 @@ private:
 
     void updateVariantButtonStates();
 
-    wxString resolveVariant() const;
+    wxString resolveVariant() const override;
 
 private:
     PCB_EDIT_FRAME* m_parent;

@@ -31,6 +31,7 @@ enum class FIELD_T : int;
 
 class FIELDS_TABLE_DATA_MODEL_BASE;
 class VIEW_CONTROLS_GRID_DATA_MODEL;
+class wxGridCellEditor;
 
 class DIALOG_FIELDS_TABLE : public DIALOG_FIELDS_TABLE_BASE
 {
@@ -72,8 +73,12 @@ protected:
 
     void RestorePanelLayout();
     void SavePanelLayout();
+    void SaveColumnWidths();
 
-    virtual void SetupColumnProperties( int aCol ) = 0;
+    void SetupColumnProperties( int aCol );
+    void SetupAllColumnProperties();
+
+    virtual wxGridCellEditor* createDatasheetEditor() = 0;
 
     // Set bitmap and tooltip according to left panel visibility
     void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
@@ -92,6 +97,7 @@ protected:
     void OnGroupSymbolsToggled( wxCommandEvent& aEvent ) override;
     void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
     void OnColSort( wxGridEvent& aEvent );
+    void OnColMove( wxGridEvent& aEvent );
     void OnGridMouseMove( wxMouseEvent& aEvent );
 
     void OnPageChanged( wxNotebookEvent& aEvent ) override;
@@ -107,8 +113,8 @@ protected:
     void updateBomPresetSelection( const wxString& aName );
     void onBomPresetChanged( wxCommandEvent& aEvent );
     void loadDefaultBomPresets();
-    virtual void doApplyBomPreset( const BOM_PRESET& aPreset ) = 0;
-    BOM_PRESET   getDataModelBomPreset();
+    void       doApplyBomPreset( const BOM_PRESET& aPreset );
+    BOM_PRESET getDataModelBomPreset();
 
     void syncBomFmtPresetSelection();
     void rebuildBomFmtPresetsWidget();
@@ -118,6 +124,7 @@ protected:
     void doApplyBomFmtPreset( const BOM_FMT_PRESET& aPreset );
 
     virtual FIELDS_TABLE_DATA_MODEL_BASE* getDataModel() const = 0;
+    virtual wxString                      resolveVariant() const = 0;
 
 protected:
     FIELDS_TABLE_SETTINGS& m_panelSettings;

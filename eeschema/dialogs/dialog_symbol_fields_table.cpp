@@ -37,11 +37,9 @@
 #include <tools/sch_editor_control.h>
 #include <kiplatform/ui.h>
 #include <widgets/grid_text_button_helpers.h>
-#include <widgets/grid_text_helpers.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
-#include <widgets/grid_checkbox.h>
 #include <wx/debug.h>
 #include <wx/ffile.h>
 #include <wx/grid.h>
@@ -59,12 +57,6 @@
 #include <sch_sheet_path.h>
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_SYMBOL_FIELDS_TABLE, wxCommandEvent );
-
-#ifdef __WXMAC__
-#define COLUMN_MARGIN 4
-#else
-#define COLUMN_MARGIN 15
-#endif
 
 using SCOPE = SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SCOPE;
 
@@ -308,7 +300,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_filter->SetDescriptiveText( _( "Filter" ) );
 
     attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ), { &m_parent->Schematic() } ) );
+    attr->SetEditor( createDatasheetEditor() );
     m_dataModel = new SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList, attr );
 
     m_grid->UseNativeColHeader( true );
@@ -410,17 +402,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     savePresetsToSchematic();
 
     SavePanelLayout();
-
-    FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
-
-    for( int i = 0; i < m_grid->GetNumberCols(); i++ )
-    {
-        if( m_grid->IsColShown( i ) )
-        {
-            std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
-            cfg.field_widths[fieldName] = m_grid->GetColSize( i );
-        }
-    }
+    SaveColumnWidths();
 
     // Disconnect Events
     m_grid->GetGridWindow()->Unbind( wxEVT_MOTION, &DIALOG_SYMBOL_FIELDS_TABLE::OnGridMouseMove, this );
@@ -437,116 +419,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
 }
 
 
-void DIALOG_SYMBOL_FIELDS_TABLE::SetupColumnProperties( int aCol )
+wxGridCellEditor* DIALOG_SYMBOL_FIELDS_TABLE::createDatasheetEditor()
 {
-    wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetReadOnly( false );
-
-    // Set some column types to specific editors
-    if( m_dataModel->ColIsReference( aCol ) )
-    {
-        attr->SetReadOnly();
-        attr->SetRenderer( new GRID_CELL_TEXT_RENDERER() );
-        m_dataModel->SetColAttr( attr, aCol );
-    }
-    else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::FOOTPRINT ) )
-    {
-        attr->SetEditor( new GRID_CELL_FPID_EDITOR( this, wxEmptyString ) );
-        m_dataModel->SetColAttr( attr, aCol );
-    }
-    else if( m_dataModel->GetColFieldName( aCol ) == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
-    {
-        // set datasheet column viewer button
-        attr->SetEditor( new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ),
-                                                   { &m_parent->Schematic() } ) );
-        m_dataModel->SetColAttr( attr, aCol );
-    }
-    else if( m_dataModel->ColIsQuantity( aCol ) || m_dataModel->ColIsItemNumber( aCol ) )
-    {
-        attr->SetReadOnly();
-        attr->SetAlignment( wxALIGN_RIGHT, wxALIGN_CENTER );
-        attr->SetRenderer( new wxGridCellNumberRenderer() );
-        m_dataModel->SetColAttr( attr, aCol );
-    }
-    else if( m_dataModel->ColIsAttribute( aCol ) )
-    {
-        attr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-        attr->SetRenderer( new GRID_CELL_CHECKBOX_RENDERER() );
-        attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-        m_dataModel->SetColAttr( attr, aCol );
-    }
-    else if( IsGeneratedField( m_dataModel->GetColFieldName( aCol ) ) )
-    {
-        attr->SetReadOnly();
-        m_dataModel->SetColAttr( attr, aCol );
-    }
-    else
-    {
-        attr->SetRenderer( new GRID_CELL_TEXT_RENDERER() );
-        attr->SetEditor( m_grid->GetDefaultEditor() );
-        m_dataModel->SetColAttr( attr, aCol );
-    }
-}
-
-
-void DIALOG_SYMBOL_FIELDS_TABLE::SetupAllColumnProperties()
-{
-    FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
-    wxSize                 defaultDlgSize = GetDefaultDialogSize();
-
-    // Restore column sorting order and widths
-    m_grid->AutoSizeColumns( false );
-    int  sortCol = 0;
-    bool sortAscending = true;
-
-    for( int col = 0; col < m_grid->GetNumberCols(); ++col )
-    {
-        SetupColumnProperties( col );
-
-        if( col == m_dataModel->GetSortCol() )
-        {
-            sortCol = col;
-            sortAscending = m_dataModel->GetSortAsc();
-        }
-    }
-
-    // sync m_grid's column visibilities to Show checkboxes in m_viewControlsGrid
-    for( int i = 0; i < m_viewControlsDataModel->GetNumberRows(); ++i )
-    {
-        int col = m_dataModel->GetFieldNameCol( m_viewControlsDataModel->GetCanonicalFieldName( i ) );
-
-        if( col == -1 )
-            continue;
-
-        bool show = m_viewControlsDataModel->GetValueAsBool( i, SHOW_FIELD_COLUMN );
-        m_dataModel->SetShowColumn( col, show );
-
-        if( show )
-        {
-            m_grid->ShowCol( col );
-
-            std::string key( m_dataModel->GetColFieldName( col ).ToUTF8() );
-
-            if( cfg.field_widths.count( key ) && ( cfg.field_widths.at( key ) > 0 ) )
-            {
-                m_grid->SetColSize( col, cfg.field_widths.at( key ) );
-            }
-            else
-            {
-                int textWidth = m_dataModel->GetColDataWidth( col ) + COLUMN_MARGIN;
-                int maxWidth = defaultDlgSize.x / 3;
-
-                m_grid->SetColSize( col, std::clamp( textWidth, 100, maxWidth ) );
-            }
-        }
-        else
-        {
-            m_grid->HideCol( col );
-        }
-    }
-
-    m_dataModel->SetSorting( sortCol, sortAscending );
-    m_grid->SetSortingColumn( sortCol, sortAscending );
+    return new GRID_CELL_URL_EDITOR( this, PROJECT_SCH::SchSearchS( &Prj() ), { &m_parent->Schematic() } );
 }
 
 
@@ -859,47 +734,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnMenu( wxCommandEvent& event )
         else
             cfg.selection_mode = 2;
     }
-}
-
-
-void DIALOG_SYMBOL_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
-{
-    int origPos = aEvent.GetCol();
-
-    // Save column widths since the setup function uses the saved config values
-    FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
-
-    for( int i = 0; i < m_grid->GetNumberCols(); i++ )
-    {
-        if( m_grid->IsColShown( i ) )
-        {
-            std::string fieldName( m_dataModel->GetColFieldName( i ).ToUTF8() );
-            cfg.field_widths[fieldName] = m_grid->GetColSize( i );
-        }
-    }
-
-    CallAfter(
-            [origPos, this]()
-            {
-                int newPos = m_grid->GetColPos( origPos );
-
-#ifdef __WXMAC__
-                if( newPos < origPos )
-                    newPos += 1;
-#endif
-
-                m_dataModel->MoveColumn( origPos, newPos );
-
-                // "Unmove" the column since we've moved the column internally
-                m_grid->ResetColPos();
-
-                // We need to reset all the column attr's to the correct column order
-                SetupAllColumnProperties();
-
-                m_grid->ForceRefresh();
-            } );
-
-    syncBomPresetSelection();
 }
 
 
@@ -1225,93 +1059,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
 
     if( wxWindow* parent = GetParent() )
         wxQueueEvent( parent, evt );
-}
-
-
-void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
-{
-    // Disable rebuilds while we're applying the preset otherwise we'll be
-    // rebuilding the model constantly while firing off wx events
-    m_dataModel->DisableRebuilds();
-
-    // Basically, we apply the BOM preset to the data model and then
-    // update our UI to reflect resulting the data model state, not the preset.
-    m_dataModel->SetCurrentVariant( resolveVariant() );
-    m_dataModel->ApplyBomPreset( aPreset );
-
-    // BOM Presets can add, but not remove, columns, so make sure the view controls
-    // grid has all of them before starting
-    for( int i = 0; i < m_dataModel->GetColsCount(); i++ )
-    {
-        const wxString& fieldName( m_dataModel->GetColFieldName( i ) );
-        bool            found = false;
-
-        for( int j = 0; j < m_viewControlsDataModel->GetNumberRows(); j++ )
-        {
-            if( m_viewControlsDataModel->GetCanonicalFieldName( j ) == fieldName )
-            {
-                found = true;
-                break;
-            }
-        }
-
-        // Properties like label, etc. will be added in the next loop
-        if( !found )
-            AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), false, false );
-    }
-
-    // Sync all fields
-    for( int i = 0; i < m_viewControlsDataModel->GetNumberRows(); i++ )
-    {
-        const wxString& fieldName( m_viewControlsDataModel->GetCanonicalFieldName( i ) );
-        int             col = m_dataModel->GetFieldNameCol( fieldName );
-
-        if( col == -1 )
-        {
-            wxASSERT_MSG( true, "Fields control has a field not found in the data model." );
-            continue;
-        }
-
-        FIELDS_TABLE_SETTINGS& cfg = GetPanelSettings();
-        std::string            fieldNameStr( fieldName.ToUTF8() );
-
-        // Set column labels
-        const wxString& label = m_dataModel->GetColLabelValue( col );
-        m_viewControlsDataModel->SetValue( i, LABEL_COLUMN, label );
-        m_grid->SetColLabelValue( col, label );
-
-        if( cfg.field_widths.count( fieldNameStr ) )
-            m_grid->SetColSize( col, cfg.field_widths.at( fieldNameStr ) );
-
-        // Set shown columns
-        bool show = m_dataModel->GetShowColumn( col );
-        m_viewControlsDataModel->SetValueAsBool( i, SHOW_FIELD_COLUMN, show );
-
-        if( show )
-            m_grid->ShowCol( col );
-        else
-            m_grid->HideCol( col );
-
-        // Set grouped columns
-        bool groupBy = m_dataModel->GetGroupColumn( col );
-        m_viewControlsDataModel->SetValueAsBool( i, GROUP_BY_COLUMN, groupBy );
-    }
-
-    m_grid->SetSortingColumn( m_dataModel->GetSortCol(), m_dataModel->GetSortAsc() );
-    m_groupSymbolsBox->SetValue( m_dataModel->GetGroupingEnabled() );
-    m_filter->ChangeValue( m_dataModel->GetFilter() );
-
-    SetupAllColumnProperties();
-
-    // This will rebuild all rows and columns in the model such that the order
-    // and labels are right, then we refresh the shown grid data to match
-    m_dataModel->EnableRebuilds();
-    m_dataModel->RebuildRows();
-
-    if( m_nbPages->GetSelection() == 1 )
-        PreviewRefresh();
-    else
-        m_grid->ForceRefresh();
 }
 
 
