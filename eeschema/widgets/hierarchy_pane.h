@@ -124,6 +124,14 @@ private:
 
     void onTreeItemRightClick( wxTreeEvent& aEvent );
     void onRightClick( wxTreeItemId aItem );
+
+    /**
+     * Bring the editor back in sync after a top-level sheet was added or removed.
+     *
+     * @param aPreviousSheet is the sheet path that was displayed before the change.
+     */
+    void resyncAfterTopLevelSheetChange( const SCH_SHEET_PATH& aPreviousSheet );
+
     void onContextMenu( wxContextMenuEvent& aEvent );
     void onCharHook( wxKeyEvent& aKeyStroke );
     void onTreeRightClick( wxTreeEvent& event );
